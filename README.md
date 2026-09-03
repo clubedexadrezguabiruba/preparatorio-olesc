@@ -18,6 +18,26 @@ node scripts/criar-professor.ts doug "Douglas Vieira"
 npm run dev
 ```
 
+## Publicar
+
+O repositório mora em **`clubedexadrezguabiruba/preparatorio-olesc`**, e o
+projeto na Vercel está ligado a ele: **push em `main` publica em produção**,
+em https://preparatorio-olesc.vercel.app.
+
+Isso levou uma transferência de dono para funcionar. A conta da Vercel entra
+pelo GitHub `clubedexadrezguabiruba`, e enquanto o repositório esteve numa
+conta pessoal ela simplesmente não o enxergava — o erro que a CLI mostrava
+falava de "typos e repositório privado" e não tinha nada a ver.
+
+Para subir sem passar pelo Git (o que se usou até a F1):
+
+```bash
+npx vercel deploy --prod    # de dentro desta pasta, nunca da pasta pessoal
+```
+
+A ressalva importa: rodado de `C:UsersLenovo`, o comando oferece publicar a
+pasta de usuário inteira.
+
 ## Gates
 
 ```bash
