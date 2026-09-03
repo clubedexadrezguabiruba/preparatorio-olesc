@@ -16,7 +16,9 @@
   size: A4;
   /* A margem de baixo é maior: é onde o rodapé do Chromium desenha o número da
      página, e ele mora dentro da margem, não dentro do corpo. */
-  margin: 18mm 17mm 20mm;
+  /* Enxugada de 18/17/20 para caber mais folha em cada página: doze cópias,
+     frente e verso, é o que decide. 15 mm ainda é margem de grampeador. */
+  margin: 15mm 14mm 17mm;
 }
 
 :root {
@@ -30,10 +32,20 @@
 }
 
 html {
-  /* 12,5pt. Subiu de 11,5 depois da conferência do primeiro PDF: para leitor de
-     8 a 10 anos a faixa é 12–14pt, e 11,5 estava no piso, sem folga nenhuma
-     para a cópia de segunda geração. */
-  font-size: 12.5pt;
+  /*
+    12 pt, que é um meio-termo declarado.
+
+    A conferência do primeiro PDF pedia 12,5 a 13: para leitor de 8 a 10 anos a
+    faixa é 12–14, e os 11,5 originais estavam no piso. O Doug pediu letra menor,
+    porque são doze cópias e a tinta é dele.
+
+    12 pt é o piso da faixa recomendada, e não abaixo dela. A folga que se perdeu
+    aqui foi recuperada em outro lugar: a Cambria tem traço mais uniforme e
+    altura-x maior que a serifada original, e a coluna dupla encurtou a linha
+    para ~46 caracteres. Abaixo de 12 eu não desço sem o Doug ver uma cópia de
+    segunda geração impressa.
+  */
+  font-size: 12pt;
 }
 
 body {
@@ -100,22 +112,51 @@ body {
   max-width: var(--medida);
 }
 
-/* Só a seção que pede é que começa em folha nova — o porquê está em
-   `lib/apostila/caderno.ts`, no campo `novaPagina`. */
-section.folha-nova {
+/* Quebrar folha é decisão de lugar, e quem edita o caderno a escreve onde
+   quiser com `@folha`. As seções, por si, correm. */
+.quebra {
   break-before: page;
 }
 
-/* A primeira seção segue a capa, que já quebrou a folha; uma segunda quebra
-   deixaria uma página em branco no meio do caderno. */
-section:first-of-type {
-  break-before: auto;
+/* Ar antes do título de uma seção que veio correndo depois da anterior. */
+section + section h2 {
+  margin-top: 10mm;
 }
 
-/* Ar antes do título de uma seção que veio correndo depois da anterior. Na que
-   abre folha nova ele não faz falta e empurraria o título para baixo. */
-section + section:not(.folha-nova) h2 {
-  margin-top: 11mm;
+/*
+  A prosa corre em duas colunas; o exercício, não.
+
+  Duas colunas de 84 mm dão linha de ~46 caracteres — dentro da faixa
+  confortável para leitor iniciante, e melhor que os 115 mm de coluna única. E
+  cortam pela metade as folhas de texto, que é o que o professor paga em tinta.
+
+  A seção que tem grade de exercícios ou planilha fica fora: a grade usa a folha
+  inteira, e uma planilha partida ao meio por uma coluna não é planilha. Já o
+  diagrama solitário de ensino tem 78 mm e cabe dentro de uma coluna de 84 —
+  então a seção da anotação corre em duas colunas como as outras.
+*/
+section:not(:has(.diagramas:not(.sozinho))):not(:has(.planilha)):not(:has(.gabarito)) {
+  column-count: 2;
+  column-gap: 8mm;
+}
+
+/*
+  O título e a régua dele atravessam as duas colunas.
+
+  A régua ficou 115 mm por uma rodada inteira: era a medida certa quando o texto
+  era uma coluna só de 115 mm, e virou defeito no instante em que a prosa foi
+  para duas de 84. Ela morria 23 mm dentro da coluna da direita, o que lê como
+  fio esquecido. Fora da trava de medida, ela acompanha a mancha.
+*/
+h2 {
+  column-span: all;
+  max-width: none;
+}
+
+/* Depois de uma quebra o título já está no alto da folha; o ar sobraria. */
+.quebra + h2,
+section:has(> .quebra:first-child) h2 {
+  margin-top: 0;
 }
 
 /*
@@ -168,7 +209,6 @@ p,
 ul,
 ol,
 .destaque,
-h2,
 h3 {
   /*
     `border-box` porque a lista e a caixa de destaque têm recuo próprio. Com o
@@ -195,6 +235,13 @@ ol {
 
 li {
   margin-bottom: 1.5mm;
+  /* Item partido no salto de coluna vira duas frases sem sujeito. */
+  break-inside: avoid;
+}
+
+/* Idem para o subtítulo, que sozinho no pé de uma coluna não anuncia nada. */
+h3 {
+  break-inside: avoid;
 }
 
 /*
@@ -204,11 +251,24 @@ li {
   fotocópia de segunda geração. A barra grossa sustenta a identidade da caixa
   sozinha, e sem a moldura o bloco fica mais limpo do que estava.
 */
+.destaque,
+.destaque p {
+  /*
+    Nos dois, e não só na caixa.
+
+    Em coluna dupla o Chromium partia a caixa entre a linha 2 e a linha 3 do
+    **mesmo parágrafo**: duas linhas dentro da barra, duas soltas no topo da
+    coluna seguinte, com a frase cortada no meio. `break-inside` no contêiner não
+    alcança a fragmentação de linha do parágrafo de dentro — quem tem de recusar
+    a quebra é ele.
+  */
+  break-inside: avoid;
+}
+
 .destaque {
   margin: 4mm 0 5mm;
   padding: 1mm 0 1mm 4mm;
   border-left: 3pt solid #000;
-  break-inside: avoid;
 }
 
 .destaque .rotulo {
@@ -228,16 +288,65 @@ li {
   margin: 5mm 0 6mm;
 }
 
+/*
+  Dois por linha, a 70 mm — e o porquê de não serem três.
+
+  A tentação era óbvia: doze cópias frente e verso, três por linha corta o
+  caderno de exercícios de dez páginas para sete. Foi tentado e **reprovado por
+  medida**, e a razão é aritmética, não de gosto.
+
+  A 55 mm a casa cai para 6,1 mm e a peça para 4,9 mm de altura. O contorno,
+  porém, não pode encolher junto: ele tem de ficar acima de 0,25 mm ou não
+  sobrevive à fotocópia. Resultado: a razão traço/peça salta de 4,9% para 7,1%,
+  e as peças **brancas** — que são puro contorno — se enchem de tinta. Medido no
+  PDF de 55 mm: rei branco 35,2% de cobertura, rei preto 35,6%. Os dois reis
+  ficaram com a mesma quantidade de tinta, num exercício cujo enunciado é "ache
+  o mate". A torre branca (50,9%) chegou a ficar mais escura que o rei preto.
+  Não existe espessura que resolva: baixar o traço salva a distinção e mata a
+  fotocópia; subir faz o contrário.
+
+  Os dois vínculos, então, mandam no tamanho:
+
+      traço >= 0,30 mm   e   traço/peça <= 4,9%
+      => peça >= 6,1 mm  => casa >= 7,75 mm  => figura >= 70 mm
+
+  E 3 × 70 mm não cabe nos 176 mm da mancha. Dois cabem, centrados, e ainda
+  entram três fileiras por folha — seis exercícios por página, contra quatro da
+  versão de 84 mm. As três páginas que isso custa são o preço de a criança saber
+  qual rei é o dela.
+*/
 .grade {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6mm 8mm;
+  grid-template-columns: repeat(2, 70mm);
+  justify-content: center;
+  gap: 4mm 8mm;
+}
+
+/*
+  As coordenadas crescem quando o diagrama encolhe.
+
+  O SVG nasce com 15 unidades, que a 84 mm de largura dão 8,8 pt. A 70 mm as
+  mesmas 15 dariam 7,3 pt — abaixo do que uma criança lê letra por letra, e
+  coordenada é justamente o que ela lê letra por letra para escrever o lance. 18
+  unidades devolvem os 8,8 pt.
+
+  O ajuste mora no CSS, e não numa opção do gerador, pelo mesmo motivo do traço
+  das peças: quem sabe o tamanho final é a folha, não o desenho.
+*/
+.grade svg text {
+  font-size: 18px;
 }
 
 /* Um diagrama sozinho não estica para a folha inteira: um tabuleiro de 17 cm
    de lado impresso é maior que o do torneio e vira uma página só de xadrez. */
 .diagramas.sozinho .grade {
   grid-template-columns: 78mm;
+}
+
+/* O diagrama solitário é de ensino, não de exercício: ele fica grande, e as
+   coordenadas e o traço dele voltam ao natural. */
+.diagramas.sozinho .grade svg text {
+  font-size: 15px;
 }
 
 /*
@@ -300,6 +409,39 @@ figure svg [stroke-width="1.5"] {
 }
 
 /*
+  Na grade de exercícios a figura tem 70 mm, e 1,8 unidade viraria 0,31 mm — já
+  passa, mas com a razão traço/peça em 5,3%, acima dos 4,9% que mantêm a peça
+  branca clara. 1,75 põe o traço em 0,303 mm com razão de 4,9%: os dois vínculos
+  atendidos no fio, que é onde eles se encontram.
+*/
+.diagramas:not(.sozinho) svg [stroke-width="1.5"] {
+  stroke-width: 1.75;
+}
+
+/*
+  O detalhe claro das peças pretas **não** engrossa junto.
+
+  As cinco peças pretas de figura — cavalo, bispo, torre, dama e rei — têm o
+  corpo preto e os detalhes desenhados por cima em `#ececec`: a coroa e as três
+  faixas da base do rei, a crina do cavalo, os aros da torre. Esses traços
+  herdavam o `stroke-width` do grupo, então cada vez que eu engrossava o contorno
+  para o papel, engrossava também as riscas claras — e o rei preto **clareava**.
+
+  É o que explicava o número mais feio de todas as conferências: rei branco 27,7%
+  de tinta contra rei preto 40,3%, razão de 1,45×, quando o peão preto contra o
+  branco dá 3×. A causa não era o desenho do cburnett; era a minha compensação
+  batendo nos dois lados.
+
+  Fixando o detalhe em 1 unidade, o contorno engorda e o miolo escurece. O
+  desenho continua o mesmo — `pecas.ts` segue byte a byte igual ao da tela, e o
+  teste que prova isso segue de pé. O que mudou é só a caneta com que o papel o
+  desenha.
+*/
+figure svg [stroke="#ececec"] {
+  stroke-width: 1;
+}
+
+/*
   De quem é a vez, colada na borda de baixo do tabuleiro.
 
   Semibold e a 1 mm das coordenadas, porque é pré-condição do exercício: sem
@@ -309,14 +451,14 @@ figure svg [stroke-width="1.5"] {
   coisa que já tinha acabado.
 */
 figure .vez {
-  margin-top: 1mm;
+  margin-top: 0.8mm;
   font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  line-height: 1.35;
-  /* Uma linha ou duas, a caixa é a mesma: numa grade de dois em dois, altura
-     desigual desalinha a célula vizinha. */
-  min-height: 4.6mm;
+  line-height: 1.25;
+  /* Uma linha ou duas, a caixa é a mesma: numa grade, altura desigual
+     desalinha a célula vizinha. */
+  min-height: 3.4mm;
 }
 
 /*
@@ -333,15 +475,33 @@ figure .vez {
 .pauta {
   display: flex;
   align-items: flex-end;
-  gap: 2mm;
-  margin: 3mm 5.45% 6mm;
-  height: 8mm;
-  border-bottom: 1pt dashed #000;
+  gap: 1.5mm;
+  margin: 1mm 5.45% 0;
+  height: 7mm;
+  /*
+    A tracejada é desenhada à mão, e não com `border: dashed`, porque a borda
+    tracejada do navegador não deixa escolher o tamanho do traço: ela saía com
+    vão de 0,44 mm, e o ganho de ponto de uma fotocópia de segunda geração
+    (~0,1 mm por lado) fecha um vão desse tamanho. A linha voltaria a ser
+    contínua — e contínua ela lê como régua divisória, que é justamente o que
+    ela veio deixar de ser.
+
+    Traço de 1,5 mm e vão de 1,0 mm sobrevivem à cópia com folga.
+  */
+  background-image: repeating-linear-gradient(
+    to right,
+    #000 0 1.5mm,
+    transparent 1.5mm 2.5mm
+  );
+  background-size: 100% 0.35mm;
+  background-position: left bottom;
+  background-repeat: repeat-x;
 }
 
 .pauta .rotulo {
   font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
+  font-weight: 700;
   line-height: 1;
   padding-bottom: 0.8mm;
 }
@@ -353,6 +513,43 @@ figure .vez {
   font-size: 0.68rem;
   font-style: italic;
   line-height: 1.3;
+}
+
+/* ------------------------------------------------------------------ *
+   O gabarito
+
+   Sessenta linhas de seis palavras. Em coluna única desperdiçaria dois terços
+   da folha; em três, cabe numa página com folga.
+ * ------------------------------------------------------------------ */
+
+.gabarito {
+  column-count: 3;
+  column-gap: 8mm;
+  max-width: none;
+  margin: 4mm 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gabarito li {
+  break-inside: avoid;
+  margin-bottom: 1.2mm;
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+
+.gabarito .n {
+  display: inline-block;
+  width: 8mm;
+  font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
+  font-weight: 700;
+}
+
+.gabarito .sol {
+  /* Monoespaçado: numa lista de sessenta respostas o olho procura pela forma da
+     linha, e `1...Cc2#` só tem forma estável em tipo de largura fixa. */
+  font-family: Consolas, "DejaVu Sans Mono", monospace;
+  font-size: 0.92em;
 }
 
 /* ------------------------------------------------------------------ *

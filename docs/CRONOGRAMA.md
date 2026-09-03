@@ -34,9 +34,10 @@ com duas partidas anotadas de próprio punho.
 ### Antes de sair de casa
 
 - [ ] **Cadernos 1 impressos**, um por aluno, mais 2 de sobra.
-      `npm run apostila 1` gera `public/apostila/caderno-1.pdf`. São 26 páginas
-      — imprimir **frente e verso** e grampear. As duas últimas folhas são as
-      planilhas de anotação; se faltar papel, elas são as que valem a pena
+      `npm run apostila 1` gera `public/apostila/caderno-1.pdf`. São 23 páginas
+      com 60 exercícios — imprimir **frente e verso** e grampear, o que dá 12
+      folhas por aluno. As duas penúltimas são as planilhas de anotação e a
+      última é o gabarito; se faltar papel, as planilhas são as que valem a pena
       imprimir soltas em papel comum.
 - [ ] **Contas dos alunos criadas**, uma por aluno, em `/professor`. Cada aluno
       recebe um papelzinho com **usuário e PIN** — o PIN aparece uma vez só na
@@ -68,8 +69,9 @@ com duas partidas anotadas de próprio punho.
   estáticos e o site é leve, mas o primeiro carregamento de cada aluno puxa o
   tabuleiro. Se travar: metade resolve no site, metade nos diagramas do caderno
   1, e trocam depois de 10 minutos.
-- **Aluno sem celular.** O caderno 1 tem 25 diagramas impressos justamente por
-  isto. Ele faz a tarefa no papel e o professor lança as respostas depois.
+- **Aluno sem celular.** O caderno 1 tem 60 exercícios impressos justamente por
+  isto, com o gabarito no fim. Ele faz a tarefa no papel e o professor lança as
+  respostas depois.
 - **O diagnóstico atrasa.** É o bloco que mais estoura. Se a segunda rodada não
   couber, corte-a: uma partida anotada já dá o material do bloco das 2:25. Não
   corte o bloco das três perguntas — ele é o conteúdo do dia.

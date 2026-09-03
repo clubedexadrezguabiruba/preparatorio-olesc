@@ -50,6 +50,14 @@ export type BlocoDiagrama = {
    * aparece com a folha na mão, no domingo.
    */
   readonly pauta?: boolean;
+  /**
+   * O número do exercício, impresso na linha de resposta.
+   *
+   * É o que liga o diagrama ao gabarito do fim do caderno. Sem ele, "a resposta
+   * do terceiro da segunda fileira" seria a única forma de o aluno se achar — e
+   * ele se acharia errado.
+   */
+  readonly numero?: number;
 };
 
 export type Bloco =
@@ -81,23 +89,35 @@ export type Bloco =
    * declarar linhas e colunas à mão em cada caderno — e a quarta planilha
    * sairia com uma coluna a menos que as outras três.
    */
-  | { readonly tipo: "planilha"; readonly lances: number };
+  | { readonly tipo: "planilha"; readonly lances: number }
+  /**
+   * Daqui em diante, folha nova.
+   *
+   * Substituiu o `novaPagina` que ficava na seção: quebrar folha é decisão de
+   * **lugar**, não de seção, e quem edita o caderno quer poder pôr a quebra no
+   * meio de uma seção longa sem partir a seção em duas.
+   */
+  | { readonly tipo: "quebra" }
+  /**
+   * As respostas, no fim do caderno.
+   *
+   * Bloco próprio, e não uma lista comum, por duas razões que só aparecem no
+   * papel: ele imprime em três colunas (são cinquenta linhas de seis palavras
+   * cada, e uma coluna só desperdiçaria dois terços da folha), e a solução sai
+   * em tipo monoespaçado, onde `1...Cc2#` não vira `1...Cc2#` com o `1` da
+   * altura de uma minúscula.
+   */
+  | {
+      readonly tipo: "gabarito";
+      readonly itens: readonly {
+        readonly numero: number;
+        readonly tema: string;
+        readonly solucao: string;
+      }[];
+    };
 
 export type Secao = {
   readonly titulo: string;
-  /**
-   * A seção começa em folha nova?
-   *
-   * O padrão é **não**. A primeira versão quebrava em toda seção, e o caderno
-   * saiu com 27 páginas — várias delas com um terço de texto e dois terços de
-   * branco, porque um tema de tática curto não enche uma folha. Papel em branco
-   * num caderno que vai ser fotocopiado para doze alunos é custo real.
-   *
-   * Quem ganha a quebra é a seção que o aluno **procura**: as regras, a
-   * anotação, a tarefa da semana, a planilha que ele vai destacar. Os temas de
-   * tática correm em sequência, como capítulo de livro.
-   */
-  readonly novaPagina?: boolean;
   readonly blocos: readonly Bloco[];
 };
 
@@ -129,8 +149,9 @@ function figura(d: BlocoDiagrama): string {
   // A ordem é a de quem resolve: o tabuleiro, de quem é a vez, onde escrever, e
   // só então de onde veio a posição.
   const vez = d.vez === undefined ? "" : `<figcaption class="vez">${enfase(d.vez)}</figcaption>`;
+  const rotulo = d.numero === undefined ? "Lance:" : `${d.numero}.`;
   const pauta =
-    d.pauta === true ? `<div class="pauta"><span class="rotulo">Lance:</span></div>` : "";
+    d.pauta === true ? `<div class="pauta"><span class="rotulo">${rotulo}</span></div>` : "";
   const fonte = d.fonte === undefined ? "" : `<p class="fonte">${escaparHtml(d.fonte)}</p>`;
 
   return (
@@ -170,6 +191,10 @@ function bloco(b: Bloco): string {
     }
     case "planilha":
       return planilha(b.lances);
+    case "quebra":
+      return `<div class="quebra"></div>`;
+    case "gabarito":
+      return gabarito(b.itens);
   }
 }
 
@@ -198,6 +223,21 @@ function planilha(lances: number): string {
   );
 }
 
+function gabarito(
+  itens: readonly { numero: number; tema: string; solucao: string }[],
+): string {
+  if (itens.length === 0) return `<p>Este caderno não tem exercícios numerados.</p>`;
+
+  const linhas = itens
+    .map(
+      (i) =>
+        `<li><span class="n">${i.numero}.</span>` +
+        `<span class="sol">${escaparHtml(i.solucao)}</span></li>`,
+    )
+    .join("");
+  return `<ol class="gabarito">${linhas}</ol>`;
+}
+
 function capa(c: Caderno): string {
   return (
     `<div class="capa">` +
@@ -213,10 +253,7 @@ function capa(c: Caderno): string {
 /** O documento inteiro, com o CSS embutido. É o que o Chromium recebe. */
 export function cadernoEmHtml(c: Caderno, css: string): string {
   const corpo = c.secoes
-    .map((s) => {
-      const classe = s.novaPagina === true ? ' class="folha-nova"' : "";
-      return `<section${classe}><h2>${escaparHtml(s.titulo)}</h2>${s.blocos.map(bloco).join("")}</section>`;
-    })
+    .map((s) => `<section><h2>${escaparHtml(s.titulo)}</h2>${s.blocos.map(bloco).join("")}</section>`)
     .join("");
 
   return (

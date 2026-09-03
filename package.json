@@ -15,6 +15,7 @@
     "db:rls": "node scripts/verificar-rls.ts",
     "db:tatica": "node --conditions=react-server scripts/verificar-tatica.ts",
     "apostila": "node --conditions=react-server apostila/build.ts",
+    "apostila:ver": "node --conditions=react-server apostila/build.ts --abrir",
     "apostila:conferir": "node scripts/conferir-caderno.ts"
   },
   "dependencies": {
