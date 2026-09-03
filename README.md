@@ -55,6 +55,9 @@ npm run db:rls       # o aluno lê o seu, não lê o do outro, e não grava sozi
 npm run db:tatica    # a corrente inteira: disco -> juiz -> banco -> relatório
 ```
 
+`db:rls` **pula o passo do professor sem o PIN**. Para rodar completo:
+`node scripts/verificar-rls.ts <PIN do doug>`.
+
 ## O curso de tática
 
 Cada tema tem três etapas: **aquecimento** (5 puzzles fáceis), **série** (24 em
@@ -79,6 +82,34 @@ node scripts/aluno-de-teste.ts criar    # usuário alunoteste, PIN 112233
 node scripts/aluno-de-teste.ts contar   # o que ficou gravado, com os tempos
 node scripts/aluno-de-teste.ts apagar
 ```
+
+## A apostila
+
+Um caderno por sábado, em PDF, gerado do **mesmo conteúdo do site**:
+
+```bash
+npm run apostila 1              # gera public/apostila/caderno-1.pdf
+npm run apostila:conferir 1     # recorta os PNGs de conferência em .conferencia/
+```
+
+O texto dos temas sai de `content/temas.json`, os problemas do mesmo banco de
+puzzles que o site serve, e as tarefas de `content/tarefas.json` — as três
+coisas que o aluno também vê na tela. O que o caderno escreve por conta própria
+é só o que é do papel: as regras da OLESC, a anotação, as três perguntas.
+Diagrama é FEN → SVG no servidor ([`lib/diagrama/`](lib/diagrama/)), com as
+peças **cburnett extraídas do chessground** — as mesmas da tela, byte a byte,
+com um teste que reprova se um upgrade mudar o desenho.
+
+O PDF fica versionado em `public/apostila/` porque o painel do aluno leva a ele
+por link, e a Vercel não tem Chromium para regerá-lo na build. O HTML
+intermediário fica em `apostila/saida/`, fora do versionamento: ele é para abrir
+no navegador e apertar Ctrl+P quando a paginação sair torta.
+
+**Legibilidade impressa é medida, não estimada.** `npm test` mede peça contra
+casa em P&B pela mesma régua de contraste do site
+([`lib/diagrama/tabuleiro.test.ts`](lib/diagrama/tabuleiro.test.ts)) — mas
+contraste não responde *tamanho*, e por isso `apostila:conferir` recorta em
+coordenada medida para um subagente descrever.
 
 ## Os puzzles
 

@@ -1,4 +1,4 @@
-import tarefasJson from "../../content/tarefas.json";
+import tarefasJson from "../../content/tarefas.json" with { type: "json" };
 import { validarTarefas, type Tarefa } from "./tarefas.ts";
 
 /**

@@ -1,0 +1,418 @@
+/*
+  O caderno impresso.
+
+  Escrito para uma coisa só: a impressora a laser P&B da escola, em A4,
+  frente e verso. Por isso não há cor nenhuma aqui — nem nas bordas, nem nos
+  fundos. Um cinza claro de fundo que fica bonito na tela sai como uma mancha
+  suja no laser, e uma tarja colorida sai como um cinza médio que come o texto.
+  Tudo o que separa uma coisa da outra nesta folha é traço, espaço ou peso.
+
+  Não é o `globals.css` do site e não deve virar: o site é retroiluminado e tem
+  a marca do preparatório; o papel é reflexivo e é lido por um aluno de 8 a 15
+  anos, possivelmente numa cópia de segunda geração.
+*/
+
+@page {
+  size: A4;
+  /* A margem de baixo é maior: é onde o rodapé do Chromium desenha o número da
+     página, e ele mora dentro da margem, não dentro do corpo. */
+  margin: 18mm 17mm 20mm;
+}
+
+:root {
+  /*
+    A medida do texto. Uma variável, e não o número repetido em seis regras,
+    porque ela é uma decisão só: a 176 mm a linha saía com 94 a 100 caracteres,
+    e a faixa confortável para leitor iniciante é 50 a 60. A 115 mm ela mede
+    entre 49 e 59, mediana 56.
+  */
+  --medida: 115mm;
+}
+
+html {
+  /* 12,5pt. Subiu de 11,5 depois da conferência do primeiro PDF: para leitor de
+     8 a 10 anos a faixa é 12–14pt, e 11,5 estava no piso, sem folga nenhuma
+     para a cópia de segunda geração. */
+  font-size: 12.5pt;
+}
+
+body {
+  margin: 0;
+  /* Cambria à frente da Georgia por duas razões medidas na conferência do
+     primeiro PDF: ela foi desenhada para imprimir em baixa resolução (traço
+     mais uniforme, serifa mais robusta), e os **numerais dela são altos**. Os
+     da Georgia são de estilo antigo — o "1" tem altura de minúscula, e num
+     caderno onde "mate em 1", "casa 4" e "fileira 8" são conteúdo, um numeral
+     que parece letra é erro de leitura, não de gosto. */
+  font-family: Cambria, Georgia, Charter, "Noto Serif", "Liberation Serif", serif;
+  font-variant-numeric: lining-nums;
+  line-height: 1.5;
+  color: #000;
+  background: #fff;
+  /* Alinhamento à esquerda, não justificado: justificar em coluna estreita
+     abre rios de espaço, e rio de espaço atrapalha justamente quem lê devagar. */
+  text-align: left;
+  hyphens: none;
+}
+
+/* ------------------------------------------------------------------ *
+   Capa e cabeçalhos
+ * ------------------------------------------------------------------ */
+
+.capa {
+  /* A capa ocupa a folha inteira e o conteúdo começa na seguinte. */
+  break-after: page;
+  padding-top: 42mm;
+}
+
+.capa .numero {
+  font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.capa h1 {
+  margin: 4mm 0 0;
+  font-size: 2.5rem;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.capa .subtitulo {
+  margin-top: 5mm;
+  font-size: 1.15rem;
+  font-style: italic;
+  max-width: var(--medida);
+}
+
+.capa .regua {
+  margin-top: 8mm;
+  width: 40mm;
+  border-top: 2pt solid #000;
+}
+
+.capa .rodape {
+  margin-top: 14mm;
+  font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  max-width: var(--medida);
+}
+
+/* Só a seção que pede é que começa em folha nova — o porquê está em
+   `lib/apostila/caderno.ts`, no campo `novaPagina`. */
+section.folha-nova {
+  break-before: page;
+}
+
+/* A primeira seção segue a capa, que já quebrou a folha; uma segunda quebra
+   deixaria uma página em branco no meio do caderno. */
+section:first-of-type {
+  break-before: auto;
+}
+
+/* Ar antes do título de uma seção que veio correndo depois da anterior. Na que
+   abre folha nova ele não faz falta e empurraria o título para baixo. */
+section + section:not(.folha-nova) h2 {
+  margin-top: 11mm;
+}
+
+/*
+  Os títulos moram na mesma medida do texto, e a régua do `h2` com eles.
+
+  Na primeira versão a régua atravessava os 176 mm da folha enquanto a prosa
+  parava em 115: a página abria declarando uma coluna larga que o texto não
+  alcançava, e 61 mm de branco à direita ficavam sem função nenhuma. Medido na
+  conferência, isso lê como defeito de diagramação, não como escolha.
+
+  Agora a folha tem **uma** regra, e ela é fácil de ler: texto vive em 115 mm, e
+  a única coisa que rompe essa coluna é a grade de diagramas. Um rompimento
+  consistente é intenção; dois rompimentos diferentes eram descuido.
+*/
+h2 {
+  font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.25;
+  margin: 0 0 5mm;
+  padding-bottom: 2mm;
+  border-bottom: 1.5pt solid #000;
+  /* Um título sozinho no pé da folha é o defeito mais comum de PDF gerado. */
+  break-after: avoid;
+}
+
+h3 {
+  font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
+  font-size: 1.05rem;
+  margin: 7mm 0 2mm;
+  break-after: avoid;
+}
+
+/* ------------------------------------------------------------------ *
+   Corpo
+ * ------------------------------------------------------------------ */
+
+/*
+  A mancha do texto tem 115 mm, não os 176 mm da folha.
+
+  Medido no primeiro PDF: a 176 mm a linha saía com 95 a 100 caracteres. A
+  faixa confortável para leitor iniciante é 50 a 60 — e linha longa demais
+  produz exatamente o defeito que atrapalha quem lê devagar, que é perder a
+  linha na volta do olho. A 115 mm a linha fica em ~59 caracteres.
+
+  Os diagramas **não** entram nesta trava: eles continuam usando os 176 mm, e
+  é isso que permite dois de 84 mm lado a lado. A sobra à direita do texto é de
+  propósito, e é onde as notas de margem vão caber quando existirem.
+*/
+p,
+ul,
+ol,
+.destaque,
+h2,
+h3 {
+  /*
+    `border-box` porque a lista e a caixa de destaque têm recuo próprio. Com o
+    padrão `content-box` a medida valeria só para o texto **depois** do recuo, e
+    a margem direita delas caía 5,6 mm além da dos parágrafos — irregularidade
+    medida na conferência do segundo PDF.
+  */
+  box-sizing: border-box;
+  max-width: var(--medida);
+}
+
+p {
+  margin: 0 0 3.5mm;
+  /* Nunca uma linha sozinha separada do resto do parágrafo. */
+  orphans: 2;
+  widows: 2;
+}
+
+ul,
+ol {
+  margin: 0 0 4mm;
+  padding-left: 6mm;
+}
+
+li {
+  margin-bottom: 1.5mm;
+}
+
+/*
+  Só a barra da esquerda, sem os outros três fios.
+
+  Os fios finos mediam 0,18 mm no primeiro PDF — abaixo do que sobrevive a uma
+  fotocópia de segunda geração. A barra grossa sustenta a identidade da caixa
+  sozinha, e sem a moldura o bloco fica mais limpo do que estava.
+*/
+.destaque {
+  margin: 4mm 0 5mm;
+  padding: 1mm 0 1mm 4mm;
+  border-left: 3pt solid #000;
+  break-inside: avoid;
+}
+
+.destaque .rotulo {
+  font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
+  font-weight: 700;
+}
+
+.destaque p:last-child {
+  margin-bottom: 0;
+}
+
+/* ------------------------------------------------------------------ *
+   Diagramas
+ * ------------------------------------------------------------------ */
+
+.diagramas {
+  margin: 5mm 0 6mm;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6mm 8mm;
+}
+
+/* Um diagrama sozinho não estica para a folha inteira: um tabuleiro de 17 cm
+   de lado impresso é maior que o do torneio e vira uma página só de xadrez. */
+.diagramas.sozinho .grade {
+  grid-template-columns: 78mm;
+}
+
+/*
+  O que se pede, uma vez, acima da grade.
+
+  Era uma linha por diagrama, em negrito, repetida quatro vezes idênticas na
+  mesma página. Duas coisas ruins de uma vez: negrito repetido deixa de ser lido
+  a partir da segunda ocorrência, e a linha extra por célula engordou a seção em
+  21 mm — o bastante para ela passar a ocupar a folha inteira sozinha.
+
+  Ele quebra a medida de 115 mm de propósito: é o rótulo da grade, e a grade tem
+  176 mm.
+*/
+.pedido {
+  margin: 0 0 3mm;
+  max-width: none;
+  font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+figure {
+  margin: 0;
+  /* Diagrama partido entre duas folhas é diagrama perdido. */
+  break-inside: avoid;
+}
+
+figure svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/*
+  O traço das peças engorda **só no papel**.
+
+  As cburnett vêm com `stroke-width="1.5"` no grupo de fora, o que num tabuleiro
+  de 84 mm dá pouco mais de 0,3 mm de tinta. Foi o item que a conferência
+  apontou como o mais frágil: é esse traço, e só ele, que separa a peça branca
+  da casa clara — as duas são brancas —, e 0,3 mm é o fio do limiar de uma
+  cópia de cópia.
+
+  O ajuste mora aqui, e não em `pecas.ts`, de propósito: `pecas.ts` é gerado do
+  chessground e tem de continuar sendo o desenho da tela, byte a byte. Papel e
+  tela mostram a mesma peça; o papel só a desenha com a caneta mais grossa.
+
+  O seletor casa pelo **valor**, e não pela posição na árvore, porque as doze
+  peças não têm a mesma forma: o peão traz o `stroke-width` no próprio `<path>`,
+  o cavalo num `<g>`, o bispo em dois `<g>` aninhados. O que todas têm em comum é
+  o 1.5 do contorno.
+
+  E casar pelo valor deixa de fora, de graça, o que tem de ficar de fora: a torre
+  preta traz um `stroke-width="1"` nas faixas de dentro. Aquilo é detalhe
+  interno, não silhueta — engordá-lo fecharia o vazado e a torre viraria um
+  bloco preto.
+*/
+figure svg [stroke-width="1.5"] {
+  stroke-width: 1.8;
+}
+
+/*
+  De quem é a vez, colada na borda de baixo do tabuleiro.
+
+  Semibold e a 1 mm das coordenadas, porque é pré-condição do exercício: sem
+  saber de quem é a vez o puzzle é insolúvel. Numa versão anterior ela estava
+  depois da linha de escrever, no peso mais leve da figura — e a linha, sangrada
+  de borda a borda, lia como divisor de seção. O aviso virava rodapé de uma
+  coisa que já tinha acabado.
+*/
+figure .vez {
+  margin-top: 1mm;
+  font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.35;
+  /* Uma linha ou duas, a caixa é a mesma: numa grade de dois em dois, altura
+     desigual desalinha a célula vizinha. */
+  min-height: 4.6mm;
+}
+
+/*
+  A linha de escrever o lance.
+
+  **Tracejada**, e não contínua: contínua e sangrada de ponta a ponta ela lia
+  como régua divisória — o sinal universal de "a seção acabou aqui" — em vez de
+  "escreva aqui". Tracejado não é confundido com divisor por ninguém.
+
+  E **da largura da moldura**, não da figura: 22 das 404 unidades do SVG são
+  margem de coordenada de cada lado, o que dá 5,45%. Antes ela era mais larga
+  que o próprio tabuleiro que serve.
+*/
+.pauta {
+  display: flex;
+  align-items: flex-end;
+  gap: 2mm;
+  margin: 3mm 5.45% 6mm;
+  height: 8mm;
+  border-bottom: 1pt dashed #000;
+}
+
+.pauta .rotulo {
+  font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
+  font-size: 0.72rem;
+  line-height: 1;
+  padding-bottom: 0.8mm;
+}
+
+.fonte {
+  margin: 0;
+  max-width: none;
+  font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
+  font-size: 0.68rem;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+/* ------------------------------------------------------------------ *
+   Planilha de anotação
+   Ela é para escrever à caneta, não para ler: a linha tem de ser alta o
+   bastante para caber a letra de um aluno de 8 anos, e o traço tem de ser fino
+   o bastante para a caneta ganhar dele.
+ * ------------------------------------------------------------------ */
+
+.planilha {
+  break-inside: avoid;
+  margin: 4mm 0 6mm;
+}
+
+.planilha .campos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3mm 5mm;
+  margin-bottom: 5mm;
+}
+
+.planilha .campo {
+  border-bottom: 0.5pt solid #000;
+  padding-bottom: 5mm;
+}
+
+.planilha .campo span {
+  font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
+  font-size: 0.72rem;
+}
+
+.planilha .colunas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6mm;
+}
+
+.planilha table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Segoe UI", Arial, "Liberation Sans", sans-serif;
+  font-size: 0.75rem;
+}
+
+.planilha th {
+  text-align: left;
+  border-bottom: 1pt solid #000;
+  padding: 0 1mm 1mm;
+}
+
+.planilha td {
+  border-bottom: 0.5pt solid #000;
+  /* 7 mm de altura de linha: cabe a caneta de um aluno de 8 anos sem ele ter de
+     escrever miúdo, que é quando a anotação vira rabisco e a partida se perde. */
+  height: 7mm;
+  padding: 0 1mm;
+}
+
+.planilha td.n {
+  width: 7mm;
+  color: #000;
+  text-align: right;
+}

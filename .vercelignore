@@ -34,5 +34,8 @@ next-env.d.ts
 # Artefatos de inspeção do navegador.
 /.playwright-mcp/
 
-# A apostila é gerada em PDF na máquina do professor; o site não a serve.
-/apostila/pdf/
+# O *fonte* da apostila não é enviado: ele só roda na máquina do professor, com
+# Chromium, e a build da Vercel não o executa. O PDF gerado é outra história —
+# ele mora em public/apostila/ e o site o serve, porque a tarefa "ler o caderno"
+# do painel leva o aluno a um link.
+/apostila/

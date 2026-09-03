@@ -55,6 +55,6 @@
     "tipo": "marcar",
     "titulo": "Ler o caderno 1",
     "detalhe": "As regras que pegam em torneio e as três perguntas antes de mover.",
-    "onde": { "rotulo": "Caderno 1 em PDF", "url": null }
+    "onde": { "rotulo": "Caderno 1 em PDF", "url": "/apostila/caderno-1.pdf" }
   }
 ]

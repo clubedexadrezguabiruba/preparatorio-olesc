@@ -1,4 +1,4 @@
-import temasJson from "../../content/temas.json";
+import temasJson from "../../content/temas.json" with { type: "json" };
 import { validarTemas, type TemaEscrito } from "./temas.ts";
 
 /**

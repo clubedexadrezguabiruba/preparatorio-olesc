@@ -46,3 +46,9 @@ next-env.d.ts
 # a ignorar o arquivo que documenta os nomes das chaves. Uma linha silenciosa
 # apagando a exceção da linha de cima.
 .vercel
+
+# O HTML intermediário do caderno e os recortes de conferência. O que fica
+# versionado é o PDF em public/apostila/ — ele é o material entregue, e a
+# Vercel não tem Chromium para regerá-lo na build.
+/apostila/saida/
+/.conferencia/
