@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Barra } from "@/components/Barra";
 import { perfilAtual } from "@/lib/auth/perfil";
+import { porExtenso, sabadoDaSemana } from "@/lib/curso/calendario";
 import { BLOCOS } from "@/lib/tatica/blocos";
 import { temaAberto } from "@/lib/tatica/conteudo";
 import { progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
 
 export const metadata: Metadata = { title: "Tática — Preparatório OLESC" };
-
-const DATA_DO_SABADO: Record<1 | 2 | 3, string> = {
-  1: "12 de setembro",
-  2: "19 de setembro",
-  3: "26 de setembro",
-};
 
 export default async function Tatica() {
   await perfilAtual();
@@ -64,7 +60,8 @@ export default async function Tatica() {
                     <div className="flex-1">
                       <p className="text-sm font-medium text-tinta-fraca">{tema.nome}</p>
                       <p className="text-xs text-tinta-muda">
-                        Abre no Sábado {bloco.sabado}, {DATA_DO_SABADO[bloco.sabado]}.
+                        Abre no Sábado {bloco.sabado},{" "}
+                        {porExtenso(sabadoDaSemana(bloco.sabado).data)}.
                       </p>
                     </div>
                   </li>
@@ -80,7 +77,9 @@ export default async function Tatica() {
                     <div className="flex flex-1 flex-col gap-1">
                       <p className="text-sm font-medium text-tinta">{tema.nome}</p>
                       <p className="text-xs text-tinta-fraca">{tema.resumo}</p>
-                      <Barra feitos={p.tentativas} />
+                      <div className="mt-0.5">
+                        <Barra feitos={p.tentativas} de={PUZZLES_POR_TEMA} />
+                      </div>
                     </div>
                     <div className="flex w-16 shrink-0 flex-col items-end">
                       <span className="text-sm font-semibold text-tinta tabular-nums">
@@ -109,19 +108,3 @@ export default async function Tatica() {
   );
 }
 
-function Barra({ feitos }: { feitos: number }) {
-  const parte = Math.min(1, feitos / PUZZLES_POR_TEMA);
-  return (
-    <div
-      className="mt-0.5 h-1 w-full overflow-hidden rounded-full bg-carta-alta"
-      /* A barra é decoração: o número ao lado dela já diz a mesma coisa em
-         texto, e um leitor de tela que lesse os dois diria tudo duas vezes. */
-      aria-hidden
-    >
-      <div
-        className="h-full rounded-full bg-metodo-superficie transition-[width]"
-        style={{ width: `${parte * 100}%` }}
-      />
-    </div>
-  );
-}

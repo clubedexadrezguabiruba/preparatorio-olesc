@@ -1,0 +1,60 @@
+[
+  {
+    "id": "s1-tatica",
+    "semana": 1,
+    "tipo": "tatica",
+    "titulo": "60 puzzles dos blocos 1 e 2",
+    "detalhe": "Mates curtos, peça de graça e os padrões de mate. Faça um pouco por dia — vinte de uma vez no domingo cansa o olho e não ensina.",
+    "meta": { "blocos": [1, 2], "puzzles": 60, "acerto": 70 },
+    "onde": { "rotulo": "Resolver agora", "url": "/tatica" }
+  },
+  {
+    "id": "s1-partidas",
+    "semana": 1,
+    "tipo": "marcar",
+    "titulo": "2 partidas de 15+10 na Lichess Class do clube",
+    "detalhe": "Anote as duas à mão, na planilha de papel, como no sábado. Guarde as planilhas: elas voltam no Sábado 2.",
+    "onde": { "rotulo": "Lichess Class do clube", "url": null }
+  },
+  {
+    "id": "s1-anotacao",
+    "semana": 1,
+    "tipo": "marcar",
+    "titulo": "Vídeo: como anotar uma partida",
+    "detalhe": "Rafael Leitão, notação algébrica. Em português, uns 15 minutos.",
+    "onde": {
+      "rotulo": "Assistir no YouTube",
+      "url": "https://www.youtube.com/watch?v=ISJtGZvxG9o"
+    }
+  },
+  {
+    "id": "s1-coordenadas",
+    "semana": 1,
+    "tipo": "marcar",
+    "titulo": "10 minutos de Coordenadas no Lichess",
+    "detalhe": "É o treino que faz você anotar sem parar para pensar onde fica f6.",
+    "onde": {
+      "rotulo": "lichess.org/training/coordinate",
+      "url": "https://lichess.org/training/coordinate"
+    }
+  },
+  {
+    "id": "s1-bartholomew",
+    "semana": 1,
+    "tipo": "marcar",
+    "titulo": "Vídeo: \"Undefended Pieces\", de John Bartholomew",
+    "detalhe": "É o episódio 1 e é em inglês: no YouTube, ligue Legendas → Traduzir automaticamente → Português. Casa com as três perguntas do sábado.",
+    "onde": {
+      "rotulo": "Assistir no YouTube",
+      "url": "https://www.youtube.com/playlist?list=PLIoUX4ry8XlvbHprhXtCjW4Ins4oIIaiK"
+    }
+  },
+  {
+    "id": "s1-caderno",
+    "semana": 1,
+    "tipo": "marcar",
+    "titulo": "Ler o caderno 1",
+    "detalhe": "As regras que pegam em torneio e as três perguntas antes de mover.",
+    "onde": { "rotulo": "Caderno 1 em PDF", "url": null }
+  }
+]

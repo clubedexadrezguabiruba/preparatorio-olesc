@@ -23,7 +23,21 @@
  *   4. nem o aluno nem o professor conseguem **gravar** uma tentativa de
  *      puzzle — a tabela não tem política de `insert` para ninguém, e quem
  *      grava é a server action com a chave de serviço, depois de reconferir o
- *      lance.
+ *      lance;
+ *   5. na tarefa de casa, ao contrário, o aluno **grava a dele** — e não
+ *      consegue gravar no nome do outro, nem ler o que o outro marcou, nem
+ *      desmarcar o que o outro fez.
+ *
+ * O item 5 é o que esta rodada acrescentou, e é o que precisava de prova:
+ * `tarefa_conclusao` é a primeira tabela do projeto em que o aluno escreve.
+ * O `with check` da política é a linha inteira da defesa — sem ele, um
+ * `insert` com o `aluno` trocado passaria, a política de `select` esconderia a
+ * linha de quem a escreveu, e ela apareceria no painel da vítima.
+ *
+ * O PIN do professor entra como argumento (`node scripts/verificar-rls.ts
+ * 123456`). Sem ele, as afirmações que dependem do professor são **puladas**,
+ * com aviso — o que se perde é a leitura de cima, e o que se ganha é o script
+ * rodar de graça no meio de uma tarefa.
  */
 
 import { readFileSync } from "node:fs";
@@ -140,18 +154,75 @@ try {
     .insert({ aluno: criados[0], puzzle_id: "00008", tema: "fork", acertou: true, tempo_ms: 1 });
   afirmar(Boolean(erroInsert), `o insert do aluno é recusado (${erroInsert?.code ?? "sem erro!"})`);
 
-  console.log("\n5. O professor lê os dois alunos");
-  const professor = await entrar("doug", process.argv[2] ?? "");
-  const { data: vistosPeloProfessor } = await professor
-    .from("perfis")
-    .select("usuario")
-    .in("usuario", COBAIAS.map((c) => c.usuario));
-  afirmar(vistosPeloProfessor?.length === 2, `o professor vê os 2 (viu ${vistosPeloProfessor?.length})`);
+  console.log("\n5. Na tarefa de casa, o aluno grava — a sua, e só a sua");
+  const alunoB = await entrar("zz.teste.b", PIN);
 
-  const { error: erroInsertProfessor } = await professor
-    .from("tentativas_puzzle")
-    .insert({ aluno: criados[0], puzzle_id: "00008", tema: "fork", acertou: true, tempo_ms: 1 });
-  afirmar(Boolean(erroInsertProfessor), "nem o professor grava tentativa direto");
+  const { error: erroMarcarA } = await alunoA
+    .from("tarefa_conclusao")
+    .insert({ aluno: criados[0], tarefa: "s1-coordenadas" });
+  afirmar(!erroMarcarA, `A marca a tarefa dele (${erroMarcarA?.message ?? "sem erro"})`);
+
+  await alunoB.from("tarefa_conclusao").insert({ aluno: criados[1], tarefa: "s1-caderno" });
+
+  // A linha que a política `with check` recusa. Sem ela, A escreveria no
+  // painel de B — e B nunca saberia de onde veio.
+  const { error: erroMarcarNoNomeDeB } = await alunoA
+    .from("tarefa_conclusao")
+    .insert({ aluno: criados[1], tarefa: "s1-partidas" });
+  afirmar(
+    Boolean(erroMarcarNoNomeDeB),
+    `A não marca no nome de B (${erroMarcarNoNomeDeB?.code ?? "PASSOU!"})`,
+  );
+
+  const { data: marcadasPorA } = await alunoA.from("tarefa_conclusao").select("aluno, tarefa");
+  afirmar(marcadasPorA?.length === 1, `A vê 1 marcação (viu ${marcadasPorA?.length})`);
+  afirmar(marcadasPorA?.[0]?.tarefa === "s1-coordenadas", "e a marcação que A vê é a de A");
+
+  // `delete` que não alcança nada não é erro no Postgres: some, calado. Por
+  // isso a prova é contar do outro lado, e não olhar o `error`.
+  await alunoA.from("tarefa_conclusao").delete().eq("tarefa", "s1-caderno");
+  const { count: sobrouDeB } = await admin
+    .from("tarefa_conclusao")
+    .select("*", { count: "exact", head: true })
+    .eq("aluno", criados[1]);
+  afirmar(sobrouDeB === 1, `A não apagou a marcação de B (sobrou ${sobrouDeB})`);
+
+  await alunoA.from("tarefa_conclusao").delete().eq("tarefa", "s1-coordenadas");
+  const { count: sobrouDeA } = await admin
+    .from("tarefa_conclusao")
+    .select("*", { count: "exact", head: true })
+    .eq("aluno", criados[0]);
+  afirmar(sobrouDeA === 0, "A desmarca a própria tarefa");
+
+  const pinDoProfessor = process.argv[2];
+  if (!pinDoProfessor) {
+    console.log("\n6. O professor — PULADO: rode `node scripts/verificar-rls.ts <PIN do doug>`");
+  } else {
+    console.log("\n6. O professor lê os dois alunos");
+    const professor = await entrar("doug", pinDoProfessor);
+    const { data: vistosPeloProfessor } = await professor
+      .from("perfis")
+      .select("usuario")
+      .in("usuario", COBAIAS.map((c) => c.usuario));
+    afirmar(
+      vistosPeloProfessor?.length === 2,
+      `o professor vê os 2 (viu ${vistosPeloProfessor?.length})`,
+    );
+
+    const { error: erroInsertProfessor } = await professor
+      .from("tentativas_puzzle")
+      .insert({ aluno: criados[0], puzzle_id: "00008", tema: "fork", acertou: true, tempo_ms: 1 });
+    afirmar(Boolean(erroInsertProfessor), "nem o professor grava tentativa direto");
+
+    const { data: tarefasPeloProfessor } = await professor
+      .from("tarefa_conclusao")
+      .select("aluno")
+      .in("aluno", criados);
+    afirmar(
+      tarefasPeloProfessor?.length === 1,
+      `o professor vê a marcação que sobrou (viu ${tarefasPeloProfessor?.length})`,
+    );
+  }
 } finally {
   await limpar();
   console.log("\nContas de mentira apagadas.");
