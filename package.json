@@ -11,7 +11,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "node --test \"lib/**/*.test.ts\"",
     "puzzles:filtrar": "node scripts/filtrar-puzzles.ts",
-    "db:migrar": "node scripts/aplicar-migration.ts"
+    "db:migrar": "node scripts/aplicar-migration.ts",
+    "db:rls": "node scripts/verificar-rls.ts"
   },
   "dependencies": {
     "@lichess-org/chessground": "^10.1.1",

@@ -16,7 +16,7 @@ export async function renovarSessao(request: NextRequest) {
   let resposta = NextResponse.next({ request });
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const chave = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const chave = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   // Este é o **primeiro** erro que uma máquina nova produz, e ele acontece em
   // toda rota ao mesmo tempo: o guarda roda antes de qualquer página. Sem esta
@@ -25,7 +25,7 @@ export async function renovarSessao(request: NextRequest) {
   // falta aqui é o arquivo local onde elas são coladas.
   if (!url || !chave) {
     throw new Error(
-      "Faltam NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY. " +
+      "Faltam NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY. " +
         "Copie .env.example para .env.local, preencha com as chaves do projeto " +
         "Supabase (Settings > API) e reinicie o `npm run dev` — o Next só lê " +
         ".env.local ao subir.",
