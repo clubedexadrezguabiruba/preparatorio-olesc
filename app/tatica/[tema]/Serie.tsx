@@ -15,6 +15,7 @@ import {
   isSoundOn,
   playComplete,
   playForMove,
+  playMate,
   playRefusal,
   playSuccess,
   setSoundOn,
@@ -58,8 +59,12 @@ import { registrarTentativa } from "../acoes";
  * Os seis efeitos vêm do laboratório de finais, sintetizados em WebAudio — não
  * há arquivo de áudio nenhum no projeto. Quem toca o quê está em uma frase por
  * efeito no `lib/sound-catalog.ts`; a regra que não é óbvia é **mate não toca
- * xeque**: o lance que dá mate toca o som de prêmio no lugar do som de lance,
+ * xeque**: o lance que dá mate toca o som de mate no lugar do som de lance,
  * senão o fim do puzzle soaria igual a um lance qualquer.
+ *
+ * O mate tem som próprio — duas batidas, a segunda mais grave. Antes ele tocava
+ * o acorde da `conclusao`, que agora fica reservado para o fim da **rodada**: o
+ * aluno ouve o acorde uma vez, na tela do placar, e não a cada puzzle.
  *
  * **O primeiro lance da abertura pode sair mudo, e isso é do navegador.** Nenhum
  * áudio toca antes de um gesto na página, e o erro do adversário acontece 600 ms
@@ -161,6 +166,13 @@ export function Serie({
     },
     [etapa, tema],
   );
+
+  // O prêmio da rodada inteira, na tela do placar. Não é `setState` num efeito:
+  // é um efeito colateral disparado por uma transição de estado que já
+  // aconteceu, que é para isso que o `useEffect` serve.
+  useEffect(() => {
+    if (fim) playComplete();
+  }, [fim]);
 
   const avancar = useCallback(() => {
     setIndice((i) => {
@@ -387,7 +399,7 @@ function NoTabuleiro({
         // pode soar igual a um lance qualquer. É a mesma regra do laboratório.
         if (matou) {
           setReiMatado(toBoardColor(depois.game.turn()));
-          playComplete();
+          playMate();
         } else {
           playSuccess();
         }

@@ -316,43 +316,67 @@ export const VARIANTS: Record<EffectName, Record<string, (ctx: BaseAudioContext)
   },
 
   /**
-   * Captura: o mesmo impacto do lance, mais alto e com corpo ressonante.
+   * Captura: **duas peças se tocando**, e não um lance mais alto.
    *
-   * Medido na referência: ataque 10 ms, −20 dB em 30 ms, −40 dB em 95 ms;
-   * achatamento 0,017 (tonal); parciais 215 · 624 · 926 · 1141 · 1249 · 1464 Hz
-   * no ataque, migrando para 474 · 732 · 883 na cauda — ou seja, as parciais
-   * altas morrem primeiro, e é isso que faz o centro espectral cair de 2200 para
-   * 2100 Hz. Daí cada parcial ter duração própria, decrescente com a altura.
+   * Foi o segundo desenho deste som. O primeiro perseguia o `capture.mp3` do
+   * Chess.com — um golpe só, com cacho ressonante sobre ruído filtrado — e o
+   * Doug reprovou em uso: "horrível". Pedido dele, a referência passou a ser o
+   * `standard/Capture.mp3` do **Lichess**, e a medição explicou o problema em
+   * dois números.
+   *
+   * **Nenhum byte de nenhum dos dois entra aqui.** O arquivo do Lichess é
+   * não-livre (o `COPYING.md` deles põe `public/sound/standard` em *Exceptions
+   * (non-free)*) e o do Chess.com é proprietário. O que entra são as medidas, e
+   * esta síntese escrita a partir delas.
+   *
+   * O que a medição do Lichess disse, e o ouvido sozinho não diria:
+   *
+   * 1. **São dois impactos, não um.** A curva de envelope tem o golpe em 0 ms e
+   *    um segundo em 35 ms, a −10 dB do primeiro. É a peça que empurra a outra e
+   *    depois pousa. O desenho anterior tinha um golpe só — daí soar como um
+   *    lance mais alto, que é exatamente a reclamação.
+   * 2. **É quase tom puro.** Achatamento 0,002, contra 0,063 do desenho
+   *    anterior: trinta vezes menos ruído. Aqui o ruído é só a borda do ataque.
+   *
+   * Medido na referência: ataque 4 ms, −20 dB em 15, −40 dB em 65; centroide
+   * 1605 Hz no ataque, 1309 a 70 ms, 735 a 130 ms — escurece muito, então as
+   * parciais altas têm de morrer primeiro. Parciais: 94 · 844 · 1102 · 1477 ·
+   * 1875 no primeiro golpe, 609 · 727 · 1383 no segundo.
+   *
+   * **O id continua `v3` de propósito**, e não foi renumerado: é o nome pelo
+   * qual a decisão foi tomada. As duas descartadas, com as medidas, para ninguém
+   * repetir o experimento:
+   *
+   * | | hipótese | audível | pico | achatamento |
+   * |---|---|---|---|---|
+   * | v1 | um golpe só, cacho 215–1464 Hz sobre ruído (alvo Chess.com) | 95 ms | −11,7 dBFS | 0,063 |
+   * | v2 | o duplo toque fiel: golpes a 35 ms, corpo grave de 150 ms | 85 ms | −7,9 dBFS | — |
+   *
+   * A v2 era a leitura literal da referência; esta v3 é ela 28 ms mais junta,
+   * com uma parcial a mais em 2320 Hz e corpo grave de 100 ms. O Doug ouviu as
+   * duas lado a lado e escolheu a mais clara — que é também a que sobrevive ao
+   * alto-falante de um celular, que é onde o aluno joga.
    */
   captura: {
-    v1: (ctx) => {
-      // A borda do impacto. O ganho do ruído é baixo de propósito: a primeira
-      // versão usava 0,15 e mediu achatamento 0,063 contra 0,017 da referência —
-      // ruidosa demais. Menos ruído é o que traz o achatamento para baixo.
-      thud(ctx, 0.022, 0.1, 3000);
-      // O corpo, na região dos 215 Hz medidos.
-      tone(ctx, { freq: 215, to: 165, type: "triangle", duration: 0.16, gain: 0.2 });
-      // O cacho inarmônico. Não é série harmônica de propósito: madeira não é
-      // corda. A parcial mais alta é a que dura menos — é o que faz o centro
-      // espectral **descer** da fatia de ataque para a de cauda, como na
-      // referência (2209 → 2100 Hz). A primeira versão errou o sinal disso: as
-      // parciais eram curtas demais e a 100 ms não sobrava nada, então a medição
-      // pegava resíduo numérico e a cauda saiu em 3194 Hz, mais clara que o ataque.
-      tone(ctx, { freq: 624, type: "sine", duration: 0.15, gain: 0.09 });
-      tone(ctx, { freq: 926, type: "sine", duration: 0.13, gain: 0.075 });
-      tone(ctx, { freq: 1141, type: "sine", duration: 0.115, gain: 0.055 });
-      tone(ctx, { freq: 1464, type: "sine", duration: 0.095, gain: 0.04 });
-      // A camada de ar no agudo: `bandpass` estreito, não `highpass`. `shape: 3`
-      // apaga rápido, então ela sobe o centroide do ataque sem clarear a cauda —
-      // que é a direção da referência (2209 → 2100 Hz).
-      noise(ctx, {
-        duration: 0.055,
-        gain: 0.022,
-        type: "bandpass",
-        cutoff: 3400,
-        q: 1.2,
-        shape: 3,
-      });
+    v3: (ctx) => {
+      // **Os ganhos estão 1,33x acima dos da audição (+2,5 dB), e isso é
+      // medição, não gosto.** As três hipóteses foram comparadas niveladas, para
+      // a escolha ser de timbre; nivelada, esta media RMS −43,0 dBFS, só 2,5 dB
+      // acima do lance. A captura tem de ficar ~6 dB acima — abaixo disso ela
+      // volta a soar como "um lance mais alto", que foi a reclamação que
+      // derrubou o desenho anterior. Nenhuma frequência e nenhuma duração
+      // mudaram: só o nível.
+      thud(ctx, 0.008, 0.08, 2400);
+      tone(ctx, { freq: 104, to: 92, type: "triangle", duration: 0.1, gain: 0.16 });
+      tone(ctx, { freq: 868, type: "sine", duration: 0.062, gain: 0.13 });
+      tone(ctx, { freq: 1148, type: "sine", duration: 0.054, gain: 0.122 });
+      tone(ctx, { freq: 1532, type: "sine", duration: 0.042, gain: 0.104 });
+      tone(ctx, { freq: 1932, type: "sine", duration: 0.032, gain: 0.074 });
+      tone(ctx, { freq: 2320, type: "sine", duration: 0.024, gain: 0.045 });
+      thud(ctx, 0.006, 0.047, 1900, 0.028);
+      tone(ctx, { freq: 632, type: "sine", duration: 0.055, gain: 0.08, delay: 0.028 });
+      tone(ctx, { freq: 752, type: "sine", duration: 0.044, gain: 0.061, delay: 0.028 });
+      tone(ctx, { freq: 1436, type: "sine", duration: 0.03, gain: 0.043, delay: 0.028 });
     },
   },
 
@@ -457,6 +481,56 @@ export const VARIANTS: Record<EffectName, Record<string, (ctx: BaseAudioContext)
     },
   },
 
+  /**
+   * Xeque-mate: **duas batidas, a segunda mais grave.**
+   *
+   * O Doug pediu um som próprio para o mate — até aqui ele tocava o acorde de
+   * `conclusao` — e apontou o `game-end.mp3` do Chess.com como referência. O
+   * arquivo é proprietário e **nada dele entra no projeto**: o que entra são as
+   * medidas abaixo, e síntese nossa escrita a partir delas. Alterar o arquivo
+   * deles "um por cento" não faria outra obra — faria obra **derivada**, que é
+   * exatamente o que a licença deles proíbe. Medir e recompor, não.
+   *
+   * O que a medição diz, em janelas de 5 ms e dB relativos ao pico:
+   *
+   * ```
+   *    0 -12 -43 -53 … -49  -1  -4 -20 -42
+   *    0   5  10  15 … 120 125 130 135 140 ms
+   * ```
+   *
+   * Duas batidas curtíssimas — −40 dB em 10 ms cada — separadas por **125 ms**
+   * de quase silêncio, a segunda tão alta quanto a primeira. E a direção que
+   * decide o gesto: o centroide cai de 862 Hz na primeira para 484 Hz na
+   * segunda. **Desce.** É o que faz aquilo soar como "acabou" em vez de um
+   * lance duplo: a segunda batida é mais grave, mais pesada, e fecha.
+   *
+   * Parciais medidas: 609 · 1008 · 1125 · 1430 · 1758 Hz na primeira; 375 ·
+   * 586 · 703 · 211 na segunda. Achatamento 0,008 — tonal, quase sem ruído.
+   *
+   * A hipótese descartada, para ninguém repetir o experimento: uma **v2** com as
+   * mesmas duas batidas e uma nota de 98 Hz atravessando por baixo, sustentada
+   * 200 ms além da segunda batida (audível 335 ms contra 130 da v1, RMS 1 dB
+   * acima). Era o mate com mais peso; o Doug ouviu as duas e ficou com a seca.
+   */
+  mate: {
+    v1: (ctx) => {
+      // Batida 1: o cacho claro, curto.
+      thud(ctx, 0.01, 0.06, 2200);
+      tone(ctx, { freq: 122, to: 110, type: "triangle", duration: 0.13, gain: 0.15 });
+      tone(ctx, { freq: 609, type: "sine", duration: 0.1, gain: 0.13 });
+      tone(ctx, { freq: 1008, type: "sine", duration: 0.075, gain: 0.085 });
+      tone(ctx, { freq: 1430, type: "sine", duration: 0.055, gain: 0.05 });
+      // Batida 2, 125 ms depois e mais grave: a direção medida na referência.
+      // Dura o dobro da primeira — é a que fica no ar, e é ela que fecha.
+      thud(ctx, 0.012, 0.07, 1600, 0.125);
+      tone(ctx, { freq: 96, to: 84, type: "triangle", duration: 0.22, gain: 0.16, delay: 0.125 });
+      tone(ctx, { freq: 375, type: "sine", duration: 0.2, gain: 0.14, delay: 0.125 });
+      tone(ctx, { freq: 586, type: "sine", duration: 0.15, gain: 0.09, delay: 0.125 });
+      tone(ctx, { freq: 703, type: "sine", duration: 0.11, gain: 0.06, delay: 0.125 });
+    },
+
+  },
+
   conclusao: {
     /** Etapa concluída: o acorde de dó maior, quebrado. Aprovado — não mexer. */
     v1: (ctx) => {
@@ -514,7 +588,12 @@ export function playSuccess(): void {
   play("acerto");
 }
 
-/** O mate que fecha o puzzle: o acorde de dó maior, quebrado. */
+/** Xeque-mate: as duas batidas, a segunda mais grave. */
+export function playMate(): void {
+  play("mate");
+}
+
+/** A rodada inteira concluída: o acorde de dó maior, quebrado. */
 export function playComplete(): void {
   play("conclusao");
 }

@@ -25,11 +25,11 @@ import { VARIANTS } from "./sound.ts";
  * `RESPOSTA_MS` no futuro para o gate, em vez de estragar o som calado.
  */
 
-test("os seis efeitos existem, uma vez cada", () => {
+test("os sete efeitos existem, uma vez cada", () => {
   const nomes = CATALOG.map((effect) => effect.name);
   assert.deepEqual(
     [...nomes].sort(),
-    ["acerto", "captura", "conclusao", "lance", "recusa", "xeque"],
+    ["acerto", "captura", "conclusao", "lance", "mate", "recusa", "xeque"],
     `o catálogo tem [${nomes}]`,
   );
   assert.equal(new Set(nomes).size, nomes.length, "efeito repetido no catálogo");

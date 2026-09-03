@@ -36,7 +36,14 @@
  *   de "sounds" nominalmente.
  */
 
-export type EffectName = "lance" | "captura" | "xeque" | "recusa" | "acerto" | "conclusao";
+export type EffectName =
+  | "lance"
+  | "captura"
+  | "xeque"
+  | "recusa"
+  | "acerto"
+  | "mate"
+  | "conclusao";
 
 /**
  * A medição de um som de referência que a síntese imita.
@@ -133,26 +140,26 @@ export const CATALOG: Effect[] = [
   {
     name: "captura",
     title: "Captura",
-    when: "Lance que come uma peça. Tem de ser mais áspero e mais longo que o lance.",
-    maxDurationMs: 200,
-    chosenVariant: "v1",
+    when: "Lance que come uma peça. Tem de soar como duas peças se tocando, não como um lance mais alto.",
+    maxDurationMs: 220,
+    chosenVariant: "v3",
     variants: [
       {
-        id: "v1",
-        title: "Impacto com corpo",
-        note: "O toc do lance, mais alto e com cacho inarmônico ressonante (215 · 624 · 926 · 1141 · 1464 Hz). As parciais altas morrem primeiro, então o som escurece enquanto some — a direção da referência.",
+        id: "v3",
+        title: "Duplo toque, mais claro",
+        note: "Dois impactos a 28 ms um do outro, o segundo mais grave — a estrutura medida no Capture do Lichess, 7 ms mais junta que a leitura literal. Quase sem ruído (a referência mede achatamento 0,002) e escurecendo rápido, de 1605 para 735 Hz. Escolhida de ouvido entre três, contra um golpe só (v1, reprovada em uso) e o duplo toque mais escuro e mais longo (v2).",
       },
     ],
     reference: {
-      source: "capture.mp3 (Chess.com, tema padrão)",
-      attackMs: 10,
-      decay40Ms: 85,
-      centroidAttackHz: 2209,
-      centroidTailHz: 2100,
-      flatness: 0.017,
-      peaksHz: [215, 624, 926, 1141, 1249, 1464],
+      source: "standard/Capture.mp3 (Lichess) — arquivo não-livre, medido e não copiado",
+      attackMs: 4,
+      decay40Ms: 65,
+      centroidAttackHz: 1605,
+      centroidTailHz: 735,
+      flatness: 0.002,
+      peaksHz: [94, 844, 1102, 1477, 1875],
       lesson:
-        "É tonal, não ruído: achatamento 0,017 é cacho inarmônico ressonante. As parciais altas morrem primeiro, e é isso que faz o centro espectral descer.",
+        "São dois impactos, não um: o golpe em 0 ms e outro em 35 ms, a −10 dB. E é quase tom puro — achatamento 0,002 contra 0,063 da v1. A captura não é um lance mais alto; é uma peça empurrando a outra e depois pousando.",
     },
   },
   {
@@ -223,10 +230,38 @@ export const CATALOG: Effect[] = [
     ],
   },
   {
-    name: "conclusao",
-    title: "Mate",
+    name: "mate",
+    title: "Xeque-mate",
     when:
-      "O mate que fecha o puzzle. Toca junto com o pulso do rei matado — tem de soar como prêmio.",
+      "O mate que fecha o puzzle. Toca junto com o pulso do rei matado, e no lugar do som de lance — o fim não pode soar como um lance qualquer.",
+    // Toca com a linha encerrada: o teto não é a resposta do adversário, e sim
+    // o `FIM_COM_MATE_MS` de `lib/tatica/tempos.ts`, que é 1500 ms.
+    maxDurationMs: 600,
+    chosenVariant: "v1",
+    variants: [
+      {
+        id: "v1",
+        title: "Duas batidas, a segunda mais grave",
+        note: "A estrutura medida no game-end do Chess.com: duas batidas curtíssimas separadas por 125 ms, com a segunda mais grave e mais longa que a primeira. É a queda de altura — centroide de 862 para 484 Hz — que faz o som dizer 'acabou' em vez de 'lance duplo'.",
+      },
+    ],
+    reference: {
+      source: "game-end.mp3 (Chess.com, tema padrão) — arquivo proprietário, medido e não copiado",
+      attackMs: 0,
+      decay40Ms: 10,
+      centroidAttackHz: 862,
+      centroidTailHz: 484,
+      flatness: 0.008,
+      peaksHz: [211, 375, 609, 703, 1008, 1430],
+      lesson:
+        "Duas batidas de 10 ms separadas por 125 ms de quase silêncio, a segunda tão alta quanto a primeira e um oitava e meia mais grave. O gesto de fim é a descida, não a duração: o som inteiro cabe em 285 ms.",
+    },
+  },
+  {
+    name: "conclusao",
+    title: "Rodada concluída",
+    when:
+      "A rodada inteira encerrada: a tela do placar. É o único som que o aluno ouve depois de fechar o último puzzle — tem de soar como prêmio.",
     maxDurationMs: 900,
     chosenVariant: "v1",
     variants: [
