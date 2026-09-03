@@ -567,53 +567,77 @@ export const VARIANTS: Record<EffectName, Record<string, (ctx: BaseAudioContext)
   },
 
   /**
-   * Xeque-mate: **duas batidas, a segunda mais grave.**
+   * Xeque-mate: **duas batidas, a segunda mais grave — e sem borda.**
    *
-   * O Doug pediu um som próprio para o mate — até aqui ele tocava o acorde de
-   * `conclusao` — e apontou o `game-end.mp3` do Chess.com como referência. O
-   * arquivo é proprietário e **nada dele entra no projeto**: o que entra são as
-   * medidas abaixo, e síntese nossa escrita a partir delas. Alterar o arquivo
-   * deles "um por cento" não faria outra obra — faria obra **derivada**, que é
-   * exatamente o que a licença deles proíbe. Medir e recompor, não.
-   *
-   * O que a medição diz, em janelas de 5 ms e dB relativos ao pico:
+   * O gesto vem do `game-end.mp3` do Chess.com, medido e não copiado (o arquivo
+   * é proprietário; nenhum byte dele entra aqui). A curva de envelope da
+   * referência, em janelas de 5 ms e dB relativos ao pico:
    *
    * ```
    *    0 -12 -43 -53 … -49  -1  -4 -20 -42
    *    0   5  10  15 … 120 125 130 135 140 ms
    * ```
    *
-   * Duas batidas curtíssimas — −40 dB em 10 ms cada — separadas por **125 ms**
-   * de quase silêncio, a segunda tão alta quanto a primeira. E a direção que
-   * decide o gesto: o centroide cai de 862 Hz na primeira para 484 Hz na
-   * segunda. **Desce.** É o que faz aquilo soar como "acabou" em vez de um
-   * lance duplo: a segunda batida é mais grave, mais pesada, e fecha.
+   * Duas batidas curtíssimas separadas por **125 ms** de quase silêncio, a
+   * segunda tão alta quanto a primeira e mais grave — o centroide cai de 862
+   * para 484 Hz. É a **descida** que faz o som dizer "acabou" em vez de "lance
+   * duplo", e é a única coisa da referência que sobreviveu a três audições.
    *
-   * Parciais medidas: 609 · 1008 · 1125 · 1430 · 1758 Hz na primeira; 375 ·
-   * 586 · 703 · 211 na segunda. Achatamento 0,008 — tonal, quase sem ruído.
+   * **O que mudou depois de o som estar no ar.** O Doug pediu o mate "um pouco
+   * mais grave, um pouco mais suave", e a resposta acabou não sendo altura: as
+   * frequências são exatamente as mesmas de antes. O que saiu foi a **borda** —
+   * as duas camadas de ruído passa-baixa que davam o "tec" do impacto — e o que
+   * entrou foi ataque mais lento: 14 e 16 ms contra os 8 ms padrão, mais o agudo
+   * a 75%. O som ficou macio sem ficar grave, e sem perder o gesto.
    *
-   * A hipótese descartada, para ninguém repetir o experimento: uma **v2** com as
-   * mesmas duas batidas e uma nota de 98 Hz atravessando por baixo, sustentada
-   * 200 ms além da segunda batida (audível 335 ms contra 130 da v1, RMS 1 dB
-   * acima). Era o mate com mais peso; o Doug ouviu as duas e ficou com a seca.
+   * Cinco hipóteses foram medidas, niveladas em −36 dBFS e ouvidas sozinhas e no
+   * fim de um puzzle. As quatro descartadas, para ninguém repetir o experimento:
+   *
+   * | | hipótese | brilho | audível |
+   * |---|---|---|---|
+   * | M1 | tudo 16% mais grave, bordas menores | 559 Hz | 130 ms |
+   * | M2 | 28% mais grave, bordas pela metade, ataque de 15 ms | 454 Hz | 135 ms |
+   * | M3 | feltro: sem borda e ataque de 24 ms | 433 Hz | 150 ms |
+   * | M4 | as parciais da captura no gesto do mate | 404 Hz | 365 ms |
+   * | **v3** | **o de antes sem borda, ataque de 14 ms** | **620 Hz** | **135 ms** |
+   *
+   * Vale registrar que a M4 era a aposta de quem escreveu: ela usava as parciais
+   * da captura aprovada, e faria mate e captura soarem como o mesmo instrumento.
+   * Foi descartada de ouvido — coerência de timbre entre dois sons não venceu o
+   * som que o Doug já conhecia com a aspereza retirada.
+   *
+   * As duas versões anteriores, também descartadas: a **v1**, igual a esta mais
+   * duas camadas de ruído no ataque; e a **v2**, a v1 com uma nota de 98 Hz
+   * sustentando 200 ms além da segunda batida (audível 335 ms contra 135).
+   *
+   * **Os ids são rótulos históricos, não índices.**
    */
   mate: {
-    v1: (ctx) => {
-      // Batida 1: o cacho claro, curto.
-      thud(ctx, 0.01, 0.06, 2200);
-      tone(ctx, { freq: 122, to: 110, type: "triangle", duration: 0.13, gain: 0.15 });
-      tone(ctx, { freq: 609, type: "sine", duration: 0.1, gain: 0.13 });
-      tone(ctx, { freq: 1008, type: "sine", duration: 0.075, gain: 0.085 });
-      tone(ctx, { freq: 1430, type: "sine", duration: 0.055, gain: 0.05 });
-      // Batida 2, 125 ms depois e mais grave: a direção medida na referência.
-      // Dura o dobro da primeira — é a que fica no ar, e é ela que fecha.
-      thud(ctx, 0.012, 0.07, 1600, 0.125);
-      tone(ctx, { freq: 96, to: 84, type: "triangle", duration: 0.22, gain: 0.16, delay: 0.125 });
-      tone(ctx, { freq: 375, type: "sine", duration: 0.2, gain: 0.14, delay: 0.125 });
-      tone(ctx, { freq: 586, type: "sine", duration: 0.15, gain: 0.09, delay: 0.125 });
-      tone(ctx, { freq: 703, type: "sine", duration: 0.11, gain: 0.06, delay: 0.125 });
+    v3: (ctx) => {
+      // Primeira batida. **Sem `thud` nenhum**, e é essa a diferença: o ruído
+      // passa-baixa que as outras versões tinham era o "tec" do impacto, e era
+      // ele que soava áspero. O ataque de 14 ms faz o resto — ver `attack` em
+      // ToneSpec.
+      tone(ctx, { freq: 122, to: 110, type: "triangle", duration: 0.13, gain: 0.15, attack: 0.014 });
+      tone(ctx, { freq: 609, duration: 0.1, gain: 0.13, attack: 0.014 });
+      // O agudo a 75% do que era: é o que tira o brilho sem mexer na altura.
+      tone(ctx, { freq: 1008, duration: 0.075, gain: 0.0638, attack: 0.014 });
+      tone(ctx, { freq: 1430, duration: 0.055, gain: 0.0375, attack: 0.014 });
+      // Segunda batida, 125 ms depois, mais grave e com o ataque ainda mais
+      // lento. Dura o dobro da primeira: é ela que fica no ar e fecha.
+      tone(ctx, {
+        freq: 96,
+        to: 84,
+        type: "triangle",
+        duration: 0.242,
+        gain: 0.16,
+        attack: 0.016,
+        delay: 0.125,
+      });
+      tone(ctx, { freq: 375, duration: 0.22, gain: 0.14, attack: 0.016, delay: 0.125 });
+      tone(ctx, { freq: 586, duration: 0.165, gain: 0.09, attack: 0.016, delay: 0.125 });
+      tone(ctx, { freq: 703, duration: 0.121, gain: 0.045, attack: 0.016, delay: 0.125 });
     },
-
   },
 
   conclusao: {

@@ -237,12 +237,12 @@ export const CATALOG: Effect[] = [
     // Toca com a linha encerrada: o teto não é a resposta do adversário, e sim
     // o `FIM_COM_MATE_MS` de `lib/tatica/tempos.ts`, que é 1500 ms.
     maxDurationMs: 600,
-    chosenVariant: "v1",
+    chosenVariant: "v3",
     variants: [
       {
-        id: "v1",
-        title: "Duas batidas, a segunda mais grave",
-        note: "A estrutura medida no game-end do Chess.com: duas batidas curtíssimas separadas por 125 ms, com a segunda mais grave e mais longa que a primeira. É a queda de altura — centroide de 862 para 484 Hz — que faz o som dizer 'acabou' em vez de 'lance duplo'.",
+        id: "v3",
+        title: "Duas batidas, sem borda",
+        note: "O gesto medido no game-end do Chess.com — duas batidas a 125 ms, a segunda mais grave — sem nenhuma camada de ruído no ataque e com o ataque de cada parcial em 14 ms contra os 8 ms padrão. Escolhida entre cinco hipóteses niveladas em −36 dBFS: o pedido era 'mais grave e mais suave', e a resposta acabou sendo maciez pura — as frequências não mudaram, saiu a aspereza.",
       },
     ],
     reference: {
@@ -254,7 +254,7 @@ export const CATALOG: Effect[] = [
       flatness: 0.008,
       peaksHz: [211, 375, 609, 703, 1008, 1430],
       lesson:
-        "Duas batidas de 10 ms separadas por 125 ms de quase silêncio, a segunda tão alta quanto a primeira e um oitava e meia mais grave. O gesto de fim é a descida, não a duração: o som inteiro cabe em 285 ms.",
+        "Duas batidas de 10 ms separadas por 125 ms de quase silêncio, a segunda tão alta quanto a primeira e uma oitava e meia mais grave. O gesto de fim é a descida, não a duração: o som inteiro cabe em 285 ms. O que a medição não previu foi a aspereza: três versões foram reprovadas de ouvido até sair a camada de ruído do ataque, que nenhum número apontava como problema.",
     },
   },
   {
