@@ -145,6 +145,16 @@ type ToneSpec = {
    * **platô** e não um decaimento — ver o corpo de `recusa` em `SYNTHESIS`.
    */
   hold?: number;
+  /**
+   * Segundos até o pico. O padrão de 8 ms é o do resto da família: abaixo disso
+   * o alto-falante estala, e é o suficiente para soar percussivo.
+   *
+   * Subir este número é o que faz um som soar **macio**. Não é o mesmo que
+   * abaixar o agudo: um ataque de 22 ms tira a "unha" do som — o clique do
+   * primeiro instante — sem mexer em parcial nenhuma. É a alavanca que a
+   * captura de hoje usa.
+   */
+  attack?: number;
 };
 
 function tone(ctx: BaseAudioContext, spec: ToneSpec): void {
@@ -159,7 +169,7 @@ function tone(ctx: BaseAudioContext, spec: ToneSpec): void {
   // Ataque de 8 ms e queda exponencial: sem o ataque o alto-falante estala.
   const envelope = ctx.createGain();
   envelope.gain.setValueAtTime(0.0001, start);
-  envelope.gain.exponentialRampToValueAtTime(spec.gain, start + 0.008);
+  envelope.gain.exponentialRampToValueAtTime(spec.gain, start + (spec.attack ?? 0.008));
   if (spec.hold) {
     // Segura no pico até 12 ms do fim, no máximo: o `exponentialRampToValueAtTime`
     // precisa de tempo para descer, senão o corte estala.
@@ -229,6 +239,60 @@ function noise(ctx: BaseAudioContext, spec: NoiseSpec): void {
 
   source.connect(filter).connect(envelope).connect(ctx.destination);
   source.start(start);
+}
+
+/**
+ * Um cacho de parciais tocado em **duas camadas**: um impacto curto e alto, e um
+ * anel longo e baixo por baixo dele.
+ *
+ * Existe porque essa é a forma de um som de captura gravado, e ela não sai de
+ * uma camada só. A referência do Chess.com cai 23 dB nos primeiros 30 ms — isso
+ * é o impacto — e depois **fica**: um platô perto de −32 dB até os 100 ms, que
+ * ainda se ouve aos 200. Uma camada única ou morre cedo demais (e o som fica
+ * seco) ou sustenta alto demais (e vira sino).
+ *
+ * As duas camadas usam **o mesmo cacho**, e isso também é medido: o centroide da
+ * referência quase não se move da cabeça para a cauda (2252 → 2165 Hz). Se o
+ * anel tivesse só as parciais graves, o som escureceria ao morrer — que é o que
+ * a captura anterior fazia (1605 → 735 Hz).
+ *
+ * O anel entra 12 ms depois do impacto: dá para ouvir o golpe antes de o anel
+ * começar, e é o que separa "peça batendo" de "peça ressoando".
+ */
+function cluster(
+  ctx: BaseAudioContext,
+  partials: readonly { freq: number; type?: OscillatorType; weight: number }[],
+  layers: {
+    impact: number;
+    ring: number;
+    impactMs: number;
+    ringMs: number;
+    /** Segundos até o pico de cada parcial. Ver `attack` em `ToneSpec`. */
+    attack?: number;
+    /** Segundos de atraso do golpe inteiro — é o que põe o segundo golpe no ar. */
+    delay?: number;
+  },
+): void {
+  const delay = layers.delay ?? 0;
+  for (const partial of partials) {
+    const spec = {
+      freq: partial.freq,
+      type: partial.type ?? ("sine" as OscillatorType),
+      attack: layers.attack,
+    };
+    tone(ctx, {
+      ...spec,
+      duration: layers.impactMs / 1000,
+      gain: layers.impact * partial.weight,
+      delay,
+    });
+    tone(ctx, {
+      ...spec,
+      duration: layers.ringMs / 1000,
+      gain: layers.ring * partial.weight,
+      delay: delay + 0.012,
+    });
+  }
 }
 
 /** O "toc" da peça na madeira: ruído passa-baixa que apaga rápido. */
@@ -306,6 +370,26 @@ function play(name: EffectName): void {
  * descartadas continuam clicáveis na `/sons` do laboratório, com as medidas,
  * porque é lá que um som volta a ser questionado.
  */
+/**
+ * Os dois golpes da captura. Cada peça tem o seu cacho, e o segundo é **mais
+ * grave** que o primeiro: é a peça capturada pousando depois de ser empurrada.
+ *
+ * Não há parcial nenhuma acima de 800 Hz nos dois, e isso é a escolha, não um
+ * descuido — ver a história no comentário de `captura`.
+ */
+const GOLPE_DA_PECA = [
+  { freq: 112, type: "triangle" as OscillatorType, weight: 1.0 },
+  { freq: 336, weight: 0.42 },
+  { freq: 520, weight: 0.3 },
+  { freq: 760, weight: 0.18 },
+] as const;
+
+const GOLPE_DA_CAPTURADA = [
+  { freq: 96, type: "triangle" as OscillatorType, weight: 1.0 },
+  { freq: 288, weight: 0.38 },
+  { freq: 448, weight: 0.24 },
+] as const;
+
 export const VARIANTS: Record<EffectName, Record<string, (ctx: BaseAudioContext) => void>> = {
   lance: {
     /** Peça pousando: um toc seco e grave. Aprovado — não mexer. */
@@ -316,67 +400,68 @@ export const VARIANTS: Record<EffectName, Record<string, (ctx: BaseAudioContext)
   },
 
   /**
-   * Captura: **duas peças se tocando**, e não um lance mais alto.
+   * Captura: **duas peças graves se tocando.**
    *
-   * Foi o segundo desenho deste som. O primeiro perseguia o `capture.mp3` do
-   * Chess.com — um golpe só, com cacho ressonante sobre ruído filtrado — e o
-   * Doug reprovou em uso: "horrível". Pedido dele, a referência passou a ser o
-   * `standard/Capture.mp3` do **Lichess**, e a medição explicou o problema em
-   * dois números.
+   * Este som levou quatro reprovações, e a lição que sobrou não é sobre timbre —
+   * é sobre método:
    *
-   * **Nenhum byte de nenhum dos dois entra aqui.** O arquivo do Lichess é
-   * não-livre (o `COPYING.md` deles põe `public/sound/standard` em *Exceptions
-   * (non-free)*) e o do Chess.com é proprietário. O que entra são as medidas, e
-   * esta síntese escrita a partir delas.
+   * | | o que era | alvo | veredito |
+   * |---|---|---|---|
+   * | v1 | um golpe, cacho 215–1464 Hz sobre ruído | `capture.mp3` do Chess.com | "horrível" |
+   * | v3 | duplo toque claro, 28 ms, brilho 1000 Hz | `Capture.mp3` do Lichess | reprovada em uso |
+   * | v4 | duas camadas, anel de 240 ms, brilho 2150 | `capture.mp3` do Chess.com | reprovada |
+   * | v5 | igual à v4, anel de 160 ms | `capture.mp3` do Chess.com | reprovada |
+   * | **v6** | **dois golpes graves, nada acima de 800 Hz** | **nenhum** | **aprovada** |
    *
-   * O que a medição do Lichess disse, e o ouvido sozinho não diria:
+   * As três primeiras eram cada vez mais fiéis à referência — a v4 fechou o
+   * envelope e o centroide do Chess.com quase em cima (−40 dB em 100 ms contra
+   * 105; brilho 2152 contra 2252) — e **nenhuma foi aprovada**. Fidelidade não
+   * era o pedido: o pedido era um som que não incomode uma criança resolvendo
+   * vinte puzzles seguidos no celular. As duas referências são de sites onde o
+   * som toca uma vez por lance de uma partida, não vinte vezes em cinco minutos.
    *
-   * 1. **São dois impactos, não um.** A curva de envelope tem o golpe em 0 ms e
-   *    um segundo em 35 ms, a −10 dB do primeiro. É a peça que empurra a outra e
-   *    depois pousa. O desenho anterior tinha um golpe só — daí soar como um
-   *    lance mais alto, que é exatamente a reclamação.
-   * 2. **É quase tom puro.** Achatamento 0,002, contra 0,063 do desenho
-   *    anterior: trinta vezes menos ruído. Aqui o ruído é só a borda do ataque.
+   * **O que a v6 mantém da medição** é a única coisa que se provou estrutural: a
+   * captura são **dois** impactos, não um — a peça que empurra a outra e depois
+   * pousa, que foi o que a curva de envelope do Lichess mostrou (golpe em 0 ms,
+   * outro em 35, a −10 dB). O resto desceu: nada acima de 800 Hz nos dois
+   * cachos, contra parciais até 6100 Hz na v4. O centro espectral mede 430 Hz,
+   * onde a v3 media 1000 e a v4 media 2150.
    *
-   * Medido na referência: ataque 4 ms, −20 dB em 15, −40 dB em 65; centroide
-   * 1605 Hz no ataque, 1309 a 70 ms, 735 a 130 ms — escurece muito, então as
-   * parciais altas têm de morrer primeiro. Parciais: 94 · 844 · 1102 · 1477 ·
-   * 1875 no primeiro golpe, 609 · 727 · 1383 no segundo.
+   * **Como foi escolhida.** Seis hipóteses graves, todas niveladas em −38,5
+   * dBFS para a comparação ser de timbre e não de volume, ouvidas sozinhas e
+   * dentro de uma mini-partida. As cinco descartadas, para ninguém repetir o
+   * experimento: madeira seca (brilho 376, 70 ms) · a mesma com anel de 380 ms
+   * (407, 210 ms) · feltro, sem ruído e com ataque de 22 ms (278, 105 ms) ·
+   * suave e curta, sem anel (362, 55 ms) · a v3 um tom abaixo (604, 95 ms).
    *
-   * **O id continua `v3` de propósito**, e não foi renumerado: é o nome pelo
-   * qual a decisão foi tomada. As duas descartadas, com as medidas, para ninguém
-   * repetir o experimento:
-   *
-   * | | hipótese | audível | pico | achatamento |
-   * |---|---|---|---|---|
-   * | v1 | um golpe só, cacho 215–1464 Hz sobre ruído (alvo Chess.com) | 95 ms | −11,7 dBFS | 0,063 |
-   * | v2 | o duplo toque fiel: golpes a 35 ms, corpo grave de 150 ms | 85 ms | −7,9 dBFS | — |
-   *
-   * A v2 era a leitura literal da referência; esta v3 é ela 28 ms mais junta,
-   * com uma parcial a mais em 2320 Hz e corpo grave de 100 ms. O Doug ouviu as
-   * duas lado a lado e escolheu a mais clara — que é também a que sobrevive ao
-   * alto-falante de um celular, que é onde o aluno joga.
+   * **O id `v6` é rótulo histórico**, não índice: é o nome pelo qual a decisão
+   * foi tomada, e renomear faria a conversa não bater mais com o código.
    */
   captura: {
-    v3: (ctx) => {
-      // **Os ganhos estão 1,33x acima dos da audição (+2,5 dB), e isso é
-      // medição, não gosto.** As três hipóteses foram comparadas niveladas, para
-      // a escolha ser de timbre; nivelada, esta media RMS −43,0 dBFS, só 2,5 dB
-      // acima do lance. A captura tem de ficar ~6 dB acima — abaixo disso ela
-      // volta a soar como "um lance mais alto", que foi a reclamação que
-      // derrubou o desenho anterior. Nenhuma frequência e nenhuma duração
-      // mudaram: só o nível.
-      thud(ctx, 0.008, 0.08, 2400);
-      tone(ctx, { freq: 104, to: 92, type: "triangle", duration: 0.1, gain: 0.16 });
-      tone(ctx, { freq: 868, type: "sine", duration: 0.062, gain: 0.13 });
-      tone(ctx, { freq: 1148, type: "sine", duration: 0.054, gain: 0.122 });
-      tone(ctx, { freq: 1532, type: "sine", duration: 0.042, gain: 0.104 });
-      tone(ctx, { freq: 1932, type: "sine", duration: 0.032, gain: 0.074 });
-      tone(ctx, { freq: 2320, type: "sine", duration: 0.024, gain: 0.045 });
-      thud(ctx, 0.006, 0.047, 1900, 0.028);
-      tone(ctx, { freq: 632, type: "sine", duration: 0.055, gain: 0.08, delay: 0.028 });
-      tone(ctx, { freq: 752, type: "sine", duration: 0.044, gain: 0.061, delay: 0.028 });
-      tone(ctx, { freq: 1436, type: "sine", duration: 0.03, gain: 0.043, delay: 0.028 });
+    v6: (ctx) => {
+      // O golpe da peça que come. O corte do ruído em 900 Hz é o que tira o
+      // "tic" de cima do impacto: o mesmo thud a 3000 Hz soa como unha na mesa.
+      thud(ctx, 0.014, 0.0805, 900);
+      cluster(ctx, GOLPE_DA_PECA, {
+        impact: 0.249,
+        ring: 0.0146,
+        impactMs: 60,
+        ringMs: 150,
+        // 10 ms em vez de 8: dois milissegundos que tiram a borda do ataque sem
+        // tirar a percussão. É a alavanca do "macio" — ver `attack` em ToneSpec.
+        attack: 0.01,
+      });
+      // A peça capturada pousando, 34 ms depois: mais grave, mais fraca e com o
+      // ataque ainda mais lento. É a segunda peça, não um eco da primeira.
+      thud(ctx, 0.012, 0.0439, 800, 0.034);
+      cluster(ctx, GOLPE_DA_CAPTURADA, {
+        impact: 0.139,
+        ring: 0.0117,
+        impactMs: 70,
+        ringMs: 170,
+        attack: 0.012,
+        delay: 0.034,
+      });
     },
   },
 

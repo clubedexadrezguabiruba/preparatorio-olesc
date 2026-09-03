@@ -142,12 +142,12 @@ export const CATALOG: Effect[] = [
     title: "Captura",
     when: "Lance que come uma peça. Tem de soar como duas peças se tocando, não como um lance mais alto.",
     maxDurationMs: 220,
-    chosenVariant: "v3",
+    chosenVariant: "v6",
     variants: [
       {
-        id: "v3",
-        title: "Duplo toque, mais claro",
-        note: "Dois impactos a 28 ms um do outro, o segundo mais grave — a estrutura medida no Capture do Lichess, 7 ms mais junta que a leitura literal. Quase sem ruído (a referência mede achatamento 0,002) e escurecendo rápido, de 1605 para 735 Hz. Escolhida de ouvido entre três, contra um golpe só (v1, reprovada em uso) e o duplo toque mais escuro e mais longo (v2).",
+        id: "v6",
+        title: "Duas peças graves",
+        note: "Dois golpes a 34 ms um do outro, o segundo mais grave e mais fraco — a peça que empurra a outra e depois pousa. Nada acima de 800 Hz: o centro espectral mede 430 Hz, contra 1000 da anterior e 2250 da referência do Chess.com. Escolhida de ouvido entre seis hipóteses graves niveladas em −38,5 dBFS, depois de quatro tentativas fiéis às referências serem reprovadas em uso.",
       },
     ],
     reference: {
@@ -159,7 +159,7 @@ export const CATALOG: Effect[] = [
       flatness: 0.002,
       peaksHz: [94, 844, 1102, 1477, 1875],
       lesson:
-        "São dois impactos, não um: o golpe em 0 ms e outro em 35 ms, a −10 dB. E é quase tom puro — achatamento 0,002 contra 0,063 da v1. A captura não é um lance mais alto; é uma peça empurrando a outra e depois pousando.",
+        "Só uma coisa da referência se provou estrutural: são dois impactos, não um — o golpe em 0 ms e outro em 35 ms, a −10 dB. O resto (o brilho em 1605 Hz, o achatamento de 0,002) foi reproduzido fielmente e reprovado de ouvido, assim como as duas tentativas fiéis ao Chess.com. Num site onde a criança ouve o som vinte vezes em cinco minutos, fidelidade à referência não é o critério: o som escolhido é bem mais grave e mais macio que as duas.",
     },
   },
   {
