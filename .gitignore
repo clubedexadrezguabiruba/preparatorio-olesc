@@ -1,0 +1,41 @@
+# dependências
+/node_modules
+/.pnp
+.pnp.*
+
+# testes
+/coverage
+
+# next.js
+/.next/
+/out/
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+.pnpm-debug.log*
+
+# variáveis de ambiente — as chaves do Supabase moram aqui e em nenhum
+# lugar versionado. `.env.example` é a exceção: ele lista os nomes, nunca
+# os valores.
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# artefatos de inspeção do navegador (Playwright MCP)
+/.playwright-mcp/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# O CSV bruto do Lichess (~700 MB descompactado, ~5 milhões de linhas). O que
+# o repositório versiona é o *recorte* em content/puzzles/, não a fonte.
+/dados/

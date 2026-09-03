@@ -1,0 +1,971 @@
+{
+  "fonte": "lichess.org/training - banco público de puzzles, CC0",
+  "geradoEm": "2026-09-03",
+  "filtros": {
+    "rating": [
+      600,
+      1800
+    ],
+    "popularidadeMinima": 50,
+    "jogadasMinimas": 100,
+    "desvioMaximo": 100,
+    "tetoPorArquivo": 2000
+  },
+  "totalNoSite": 166623,
+  "temas": [
+    {
+      "tag": "mateIn1",
+      "bloco": 1,
+      "faixas": [
+        {
+          "de": 600,
+          "ate": 800,
+          "arquivo": "mateIn1/600-800.json",
+          "total": 2000
+        },
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "mateIn1/800-1000.json",
+          "total": 2000
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "mateIn1/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1300,
+          "arquivo": "mateIn1/1200-1300.json",
+          "total": 2000
+        }
+      ],
+      "total": 8000,
+      "noBanco": 91759
+    },
+    {
+      "tag": "mateIn2",
+      "bloco": 1,
+      "faixas": [
+        {
+          "de": 600,
+          "ate": 800,
+          "arquivo": "mateIn2/600-800.json",
+          "total": 2000
+        },
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "mateIn2/800-1000.json",
+          "total": 2000
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "mateIn2/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1300,
+          "arquivo": "mateIn2/1200-1300.json",
+          "total": 2000
+        }
+      ],
+      "total": 8000,
+      "noBanco": 144989
+    },
+    {
+      "tag": "hangingPiece",
+      "bloco": 1,
+      "faixas": [
+        {
+          "de": 600,
+          "ate": 800,
+          "arquivo": "hangingPiece/600-800.json",
+          "total": 2000
+        },
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "hangingPiece/800-1000.json",
+          "total": 2000
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "hangingPiece/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1300,
+          "arquivo": "hangingPiece/1200-1300.json",
+          "total": 2000
+        }
+      ],
+      "total": 8000,
+      "noBanco": 31656
+    },
+    {
+      "tag": "backRankMate",
+      "bloco": 2,
+      "faixas": [
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "backRankMate/800-1000.json",
+          "total": 2000
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "backRankMate/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "backRankMate/1200-1400.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 28802
+    },
+    {
+      "tag": "smotheredMate",
+      "bloco": 2,
+      "faixas": [
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "smotheredMate/800-1000.json",
+          "total": 1517
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "smotheredMate/1000-1200.json",
+          "total": 757
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "smotheredMate/1200-1400.json",
+          "total": 1588
+        }
+      ],
+      "total": 3862,
+      "noBanco": 3862
+    },
+    {
+      "tag": "arabianMate",
+      "bloco": 2,
+      "faixas": [
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "arabianMate/800-1000.json",
+          "total": 551
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "arabianMate/1000-1200.json",
+          "total": 664
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "arabianMate/1200-1400.json",
+          "total": 430
+        }
+      ],
+      "total": 1645,
+      "noBanco": 1645
+    },
+    {
+      "tag": "anastasiaMate",
+      "bloco": 2,
+      "faixas": [
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "anastasiaMate/800-1000.json",
+          "total": 533
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "anastasiaMate/1000-1200.json",
+          "total": 430
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "anastasiaMate/1200-1400.json",
+          "total": 366
+        }
+      ],
+      "total": 1329,
+      "noBanco": 1329
+    },
+    {
+      "tag": "hookMate",
+      "bloco": 2,
+      "faixas": [
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "hookMate/800-1000.json",
+          "total": 357
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "hookMate/1000-1200.json",
+          "total": 718
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "hookMate/1200-1400.json",
+          "total": 599
+        }
+      ],
+      "total": 1674,
+      "noBanco": 1674
+    },
+    {
+      "tag": "bodenMate",
+      "bloco": 3,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "bodenMate/1000-1200.json",
+          "total": 101
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "bodenMate/1200-1400.json",
+          "total": 28
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "bodenMate/1400-1600.json",
+          "total": 37
+        }
+      ],
+      "total": 166,
+      "noBanco": 166
+    },
+    {
+      "tag": "doubleBishopMate",
+      "bloco": 3,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "doubleBishopMate/1000-1200.json",
+          "total": 11
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "doubleBishopMate/1200-1400.json",
+          "total": 11
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "doubleBishopMate/1400-1600.json",
+          "total": 29
+        }
+      ],
+      "total": 51,
+      "noBanco": 51
+    },
+    {
+      "tag": "dovetailMate",
+      "bloco": 3,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "dovetailMate/1000-1200.json",
+          "total": 234
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "dovetailMate/1200-1400.json",
+          "total": 225
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "dovetailMate/1400-1600.json",
+          "total": 206
+        }
+      ],
+      "total": 665,
+      "noBanco": 665
+    },
+    {
+      "tag": "mateIn3",
+      "bloco": 3,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "mateIn3/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "mateIn3/1200-1400.json",
+          "total": 2000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "mateIn3/1400-1600.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 35751
+    },
+    {
+      "tag": "fork",
+      "bloco": 4,
+      "faixas": [
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "fork/800-1000.json",
+          "total": 2000
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "fork/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "fork/1200-1400.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 153105
+    },
+    {
+      "tag": "pin",
+      "bloco": 4,
+      "faixas": [
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "pin/800-1000.json",
+          "total": 2000
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "pin/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "pin/1200-1400.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 39807
+    },
+    {
+      "tag": "skewer",
+      "bloco": 4,
+      "faixas": [
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "skewer/800-1000.json",
+          "total": 2000
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "skewer/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "skewer/1200-1400.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 21680
+    },
+    {
+      "tag": "discoveredAttack",
+      "bloco": 4,
+      "faixas": [
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "discoveredAttack/800-1000.json",
+          "total": 2000
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "discoveredAttack/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "discoveredAttack/1200-1400.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 54021
+    },
+    {
+      "tag": "doubleCheck",
+      "bloco": 4,
+      "faixas": [
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "doubleCheck/800-1000.json",
+          "total": 470
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "doubleCheck/1000-1200.json",
+          "total": 1069
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "doubleCheck/1200-1400.json",
+          "total": 1588
+        }
+      ],
+      "total": 3127,
+      "noBanco": 3127
+    },
+    {
+      "tag": "capturingDefender",
+      "bloco": 5,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "capturingDefender/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "capturingDefender/1200-1400.json",
+          "total": 2000
+        },
+        {
+          "de": 1400,
+          "ate": 1500,
+          "arquivo": "capturingDefender/1400-1500.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 8672
+    },
+    {
+      "tag": "deflection",
+      "bloco": 5,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "deflection/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "deflection/1200-1400.json",
+          "total": 2000
+        },
+        {
+          "de": 1400,
+          "ate": 1500,
+          "arquivo": "deflection/1400-1500.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 36068
+    },
+    {
+      "tag": "attraction",
+      "bloco": 5,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "attraction/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "attraction/1200-1400.json",
+          "total": 2000
+        },
+        {
+          "de": 1400,
+          "ate": 1500,
+          "arquivo": "attraction/1400-1500.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 24183
+    },
+    {
+      "tag": "trappedPiece",
+      "bloco": 5,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "trappedPiece/1000-1200.json",
+          "total": 1635
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "trappedPiece/1200-1400.json",
+          "total": 2000
+        },
+        {
+          "de": 1400,
+          "ate": 1500,
+          "arquivo": "trappedPiece/1400-1500.json",
+          "total": 2000
+        }
+      ],
+      "total": 5635,
+      "noBanco": 9518
+    },
+    {
+      "tag": "xRayAttack",
+      "bloco": 5,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "xRayAttack/1000-1200.json",
+          "total": 1119
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "xRayAttack/1200-1400.json",
+          "total": 1431
+        },
+        {
+          "de": 1400,
+          "ate": 1500,
+          "arquivo": "xRayAttack/1400-1500.json",
+          "total": 964
+        }
+      ],
+      "total": 3514,
+      "noBanco": 3514
+    },
+    {
+      "tag": "exposedKing",
+      "bloco": 6,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "exposedKing/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "exposedKing/1200-1400.json",
+          "total": 2000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "exposedKing/1400-1600.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 15614
+    },
+    {
+      "tag": "attackingF2F7",
+      "bloco": 6,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "attackingF2F7/1000-1200.json",
+          "total": 1850
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "attackingF2F7/1200-1400.json",
+          "total": 1900
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "attackingF2F7/1400-1600.json",
+          "total": 2000
+        }
+      ],
+      "total": 5750,
+      "noBanco": 5752
+    },
+    {
+      "tag": "kingsideAttack",
+      "bloco": 6,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "kingsideAttack/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "kingsideAttack/1200-1400.json",
+          "total": 2000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "kingsideAttack/1400-1600.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 69200
+    },
+    {
+      "tag": "sacrifice",
+      "bloco": 6,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "sacrifice/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "sacrifice/1200-1400.json",
+          "total": 2000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "sacrifice/1400-1600.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 52848
+    },
+    {
+      "tag": "intermezzo",
+      "bloco": 7,
+      "faixas": [
+        {
+          "de": 1100,
+          "ate": 1300,
+          "arquivo": "intermezzo/1100-1300.json",
+          "total": 2000
+        },
+        {
+          "de": 1300,
+          "ate": 1500,
+          "arquivo": "intermezzo/1300-1500.json",
+          "total": 2000
+        },
+        {
+          "de": 1500,
+          "ate": 1700,
+          "arquivo": "intermezzo/1500-1700.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 14730
+    },
+    {
+      "tag": "quietMove",
+      "bloco": 7,
+      "faixas": [
+        {
+          "de": 1100,
+          "ate": 1300,
+          "arquivo": "quietMove/1100-1300.json",
+          "total": 1651
+        },
+        {
+          "de": 1300,
+          "ate": 1500,
+          "arquivo": "quietMove/1300-1500.json",
+          "total": 2000
+        },
+        {
+          "de": 1500,
+          "ate": 1700,
+          "arquivo": "quietMove/1500-1700.json",
+          "total": 2000
+        }
+      ],
+      "total": 5651,
+      "noBanco": 10362
+    },
+    {
+      "tag": "clearance",
+      "bloco": 7,
+      "faixas": [
+        {
+          "de": 1100,
+          "ate": 1300,
+          "arquivo": "clearance/1100-1300.json",
+          "total": 2000
+        },
+        {
+          "de": 1300,
+          "ate": 1500,
+          "arquivo": "clearance/1300-1500.json",
+          "total": 2000
+        },
+        {
+          "de": 1500,
+          "ate": 1700,
+          "arquivo": "clearance/1500-1700.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 9306
+    },
+    {
+      "tag": "interference",
+      "bloco": 7,
+      "faixas": [
+        {
+          "de": 1100,
+          "ate": 1300,
+          "arquivo": "interference/1100-1300.json",
+          "total": 959
+        },
+        {
+          "de": 1300,
+          "ate": 1500,
+          "arquivo": "interference/1300-1500.json",
+          "total": 1380
+        },
+        {
+          "de": 1500,
+          "ate": 1700,
+          "arquivo": "interference/1500-1700.json",
+          "total": 1458
+        }
+      ],
+      "total": 3797,
+      "noBanco": 3797
+    },
+    {
+      "tag": "zugzwang",
+      "bloco": 7,
+      "faixas": [
+        {
+          "de": 1100,
+          "ate": 1300,
+          "arquivo": "zugzwang/1100-1300.json",
+          "total": 1083
+        },
+        {
+          "de": 1300,
+          "ate": 1500,
+          "arquivo": "zugzwang/1300-1500.json",
+          "total": 1125
+        },
+        {
+          "de": 1500,
+          "ate": 1700,
+          "arquivo": "zugzwang/1500-1700.json",
+          "total": 1196
+        }
+      ],
+      "total": 3404,
+      "noBanco": 3404
+    },
+    {
+      "tag": "defensiveMove",
+      "bloco": 8,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "defensiveMove/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "defensiveMove/1200-1400.json",
+          "total": 2000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "defensiveMove/1400-1600.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 20717
+    },
+    {
+      "tag": "advancedPawn",
+      "bloco": 8,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "advancedPawn/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "advancedPawn/1200-1400.json",
+          "total": 2000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "advancedPawn/1400-1600.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 41971
+    },
+    {
+      "tag": "promotion",
+      "bloco": 8,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "promotion/1000-1200.json",
+          "total": 2000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "promotion/1200-1400.json",
+          "total": 2000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "promotion/1400-1600.json",
+          "total": 2000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 17223
+    },
+    {
+      "tag": "underPromotion",
+      "bloco": 8,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "underPromotion/1000-1200.json",
+          "total": 37
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "underPromotion/1200-1400.json",
+          "total": 30
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "underPromotion/1400-1600.json",
+          "total": 19
+        }
+      ],
+      "total": 86,
+      "noBanco": 86
+    },
+    {
+      "tag": "enPassant",
+      "bloco": 8,
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "enPassant/1000-1200.json",
+          "total": 8
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "enPassant/1200-1400.json",
+          "total": 50
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "enPassant/1400-1600.json",
+          "total": 209
+        }
+      ],
+      "total": 267,
+      "noBanco": 267
+    }
+  ]
+}

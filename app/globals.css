@@ -1,0 +1,627 @@
+@import "tailwindcss";
+
+
+/* --------------------------------------------------------------------------
+   Fontes
+
+   Este bloco é `inline` por obrigação: `--font-sans: var(--font-sans)` seria
+   auto-referente se virasse propriedade de `:root`, e o Next escreve o nome da
+   família numa variável de mesmo nome. `inline` faz o Tailwind assar o valor
+   literal na utilitária, e a auto-referência some.
+
+   **Cor nenhuma entra aqui.** Um `--color-*` dentro de `@theme inline` não
+   segue redefinição por subárvore nem por tema: o valor vai assado na classe,
+   e `[data-direcao]` ou `prefers-color-scheme` deixariam de ter efeito. Isso
+   mataria a rota de comparação do B6.3 e o tema escuro depois. Há um teste que
+   cobra isto em `lib/tema/guardas.test.ts`.
+   -------------------------------------------------------------------------- */
+
+@theme inline {
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+}
+
+/* --------------------------------------------------------------------------
+   A paleta
+
+   Trinta e dois tokens em português, e nenhuma classe de cor crua no site: o
+   significado (verde é método, âmbar é aviso, rosa é erro, azul é dica) deixa
+   de existir por disciplina e passa a existir por estrutura.
+
+   **`--color-*: initial` apaga a paleta de fábrica do Tailwind.** Depois desta
+   linha `bg-slate-900` não gera CSS nenhum. A falha é silenciosa — a classe
+   some, o elemento fica sem fundo, nada quebra e nada avisa —, então ela vem em
+   par com um teste que faz o grep e conta: `lib/tema/guardas.test.ts` exige
+   zero ocorrências em `app/` e `components/`.
+
+   **Estes valores chegaram aqui sem nenhum componente ser reescrito.** Eles
+   nasceram como uma das três direções candidatas do B6.3, foram escolhidos na
+   tela e promovidos trocando só valor — que era a promessa da taxonomia, e
+   agora é fato verificado. O tema escuro que o site teve até aqui cabe no
+   mesmo lugar: são trinta linhas de valores dentro de
+   `@media (prefers-color-scheme: dark)`, e zero componentes tocados.
+
+   **A página é cinza-esverdeada e o cartão é quase branco**, e não o contrário
+   do que a maioria dos temas claros faz. O motivo é medido: o site inteiro se
+   apoia na diferença entre os dois — sete arquivos usam o cartão neutro —, e
+   com a página em branco puro essa diferença cai para 1,04, contra os 1,13 que
+   o tema escuro tinha. Aqui ela é 1,14: o cartão levanta.
+
+   **`foco` e `metodo` continuam com o mesmo valor de propósito**, assim como
+   `metodo-cheio-toque` e `metodo-superficie`. Continua sendo uma linha separar
+   quando divergirem, e o foco responde a um piso diferente (3:1, WCAG 1.4.11).
+   -------------------------------------------------------------------------- */
+
+@theme {
+  --color-*: initial;
+
+  /* Superfícies — o papel e o que se empilha sobre ele. */
+  --color-papel: oklch(95% 0.008 150);
+  --color-carta: oklch(99.5% 0.003 150);
+  --color-carta-alta: oklch(91.2% 0.011 150);
+  --color-carta-toque: oklch(86.5% 0.014 150);
+  --color-veu: color-mix(in oklab, oklch(26% 0.015 160) 62%, transparent);
+
+  /* Tinta — três degraus, a dez pontos de claridade um do outro. Eram cinco,
+     e dois pares deles ficavam a quatro e cinco pontos: distinção que existia
+     no nome e não na tela. `tinta-muda` fica de fora da escada — é a única
+     que não carrega informação, e por isso é a única isenta do piso. */
+  --color-tinta: oklch(26% 0.015 160);
+  --color-tinta-media: oklch(36% 0.0135 160);
+  --color-tinta-fraca: oklch(46% 0.012 160);
+  --color-tinta-muda: oklch(66% 0.01 160);
+  --color-tinta-inversa: oklch(99% 0.004 150);
+
+  /* Estrutura — o alfa vai assado no token: `border-borda`, sem modificador. */
+  --color-borda: color-mix(in oklab, oklch(26% 0.015 160) 16%, transparent);
+  --color-borda-fraca: color-mix(in oklab, oklch(26% 0.015 160) 9%, transparent);
+  --color-borda-forte: color-mix(in oklab, oklch(26% 0.015 160) 28%, transparent);
+  --color-foco: oklch(46% 0.115 152);
+
+  /* Método — o verde. Cinco faces porque a tinta sobre painel tingido não é
+     derivável por alfa: no escuro ela é clara, no claro terá de ser escura. A
+     superfície, essa sim, é o mesmo tom com alfa (`bg-metodo-superficie/10`). */
+  --color-metodo: oklch(39.5% 0.093 152);
+  --color-metodo-superficie: oklch(58% 0.105 152);
+  --color-metodo-tinta: oklch(31% 0.07 152);
+  --color-metodo-tinta-alta: oklch(26% 0.058 152);
+  --color-metodo-cheio: oklch(40% 0.092 152);
+  --color-metodo-cheio-toque: oklch(34% 0.082 152);
+
+  /* Aviso — o âmbar. Ganha, mas não é a aula. */
+  --color-aviso: oklch(60% 0.125 72);
+  --color-aviso-superficie: oklch(70% 0.135 72);
+  --color-aviso-tinta: oklch(35% 0.08 62);
+
+  /* Erro — o rosa. `erro-texto` é a quarta face: erro escrito direto sobre a
+     página, sem painel embaixo. */
+  --color-erro: oklch(50% 0.165 25);
+  --color-erro-superficie: oklch(57% 0.185 25);
+  --color-erro-tinta: oklch(35% 0.125 25);
+  --color-erro-texto: oklch(43% 0.155 25);
+
+  /* Dica — o azul. Só duas faces: não existe matiz de dica solta na página. */
+  --color-dica-superficie: oklch(54% 0.12 235);
+  --color-dica-tinta: oklch(34% 0.095 235);
+
+  /* ------------------------------------------------------------------------
+     O tabuleiro
+
+     **As casas são quentes de propósito, num site frio.** O verde da
+     identidade significa *método* — é o que a aula usa para dizer "isto está
+     certo". Um tabuleiro verde gastaria esse significado no cenário, e o
+     tabuleiro é o objeto morno sobre a parede fria, que é como um tabuleiro de
+     verdade se comporta em cima de uma mesa.
+
+     A distância entre as duas casas é 1,58:1 — exatamente a que o tema marrom
+     do pacote produzia. Não é coincidência: é a folga que as peças cburnett
+     precisam nas duas pontas, brancas na casa clara e pretas na escura.
+
+     **Toda marca do tabuleiro é mais escura que as duas casas, e isso é
+     geometria, não gosto.** Uma marca só bate 3:1 contra as duas se estiver
+     *fora* do intervalo entre elas, e acima da casa clara não há espaço — ela
+     já está a 88,5% de claridade. Então destaque aqui é sombra, nunca brilho.
+     Foi o que matou o realce amarelo-claro de último lance que o pacote traz:
+     ele mede 1,50:1 e é invisível para quem precisa dele.
+     ------------------------------------------------------------------------ */
+  --color-casa-clara: oklch(88.5% 0.019 86);
+  --color-casa-escura: oklch(75% 0.027 78);
+  --color-coordenada: oklch(26% 0.015 160);
+
+  --color-destino: oklch(38% 0.14 152);
+  --color-ultimo-lance: oklch(41% 0.1 88);
+  --color-xeque: oklch(34% 0.19 25);
+  --color-premove: oklch(40% 0.15 262);
+}
+
+/* --------------------------------------------------------------------------
+   Os quatro pincéis pedagógicos
+
+   Ficam **fora** do `@theme` de propósito. Nenhuma classe do Tailwind usa
+   estas cores, e o `@theme` do v4 poda variável que nenhuma utilitária
+   referencia — o token sumiria da folha e o `getComputedStyle` leria vazio.
+   Como propriedade de `:root` ela existe sempre.
+
+   Elas não entram por CSS: o `svg.js` do chessground grava `stroke` como
+   atributo de apresentação, onde `var()` é inválido. A única porta é
+   `drawable.brushes`, em `components/board/ChessBoard.tsx`, que as lê daqui na
+   montagem, e cada um leva o próprio alfa na tabela `PINCEIS` de lá — o
+   multiplicador escondido de `.cg-shapes { opacity: .6 }` foi a 1.
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* **A claridade vai toda para o par que se confunde.** Os quatro têm matizes
+     distintos, mas matiz não basta: em escala de cinza, ou para quem tem
+     deficiência de cor, sobra a claridade. E ela é um recurso escasso aqui —
+     como toda marca precisa ser 3:1 mais escura que as duas casas, a faixa
+     inteira em que os pincéis podem viver tem 2,26:1 de ponta a ponta. Separar
+     os quatro por 3:1 entre si é geometricamente impossível.
+
+     Então a faixa vai para onde dói: `pendurada` e `defendida` são o mesmo
+     desenho — um aro em volta de uma casa — com sentidos opostos, e são
+     vermelho e verde. Elas ficam nas duas pontas, a 2,16:1, e ainda se separam
+     pela espessura do traço em `ChessBoard.tsx` (14 contra 9). `corte` é uma
+     parede de seis a oito casas e `seta` é uma flecha entre duas: a forma já
+     as distingue, e elas ficam no meio.
+
+     No pacote, `corte` e `pendurada` eram o **mesmo** `#882020`. */
+  --color-pincel-corte: oklch(24% 0.17 305);
+  --color-pincel-pendurada: oklch(22% 0.19 25);
+  --color-pincel-seta: oklch(36% 0.16 250);
+  --color-pincel-defendida: oklch(44% 0.15 152);
+}
+
+/* --------------------------------------------------------------------------
+   Três utilitárias próprias
+
+   Três utilitárias, vinte e um sítios que repetiam a mesma sequência literal.
+   Repetição de receita não é reuso — é vinte e um lugares para esquecer de
+   mudar.
+   -------------------------------------------------------------------------- */
+
+/* O anel de foco. `outline-offset` positivo joga o anel para **fora** do
+   botão, então ele é lido contra o fundo atrás, e não contra o botão. */
+@utility foco {
+  &:focus-visible {
+    outline: 2px solid var(--color-foco);
+    outline-offset: 2px;
+  }
+}
+
+/* O título de página, e o único lugar onde a serifa aparece.
+
+   Ela **não** entra por seletor de elemento (`h1, h2, h3`) de propósito. Três
+   dos cabeçalhos do site têm 14 px — o cabeçalho de cartão do laboratório do
+   motor, a manchete do selo de domínio e o rótulo em caixa-alta do critério —,
+   e serifa a 14 px lê pior que sans a 14 px. Uma utilitária deixa a decisão
+   explícita em cada sítio, em vez de depender de qual elemento alguém escolheu.
+
+   O peso é 600 e não 700: a Newsreader em corpo grande fica pesada no negrito
+   cheio, e o tamanho já dá a hierarquia. */
+@utility titulo {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: var(--text-2xl);
+  line-height: var(--text-2xl--line-height);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+
+  @media (width >= 40rem) {
+    font-size: var(--text-3xl);
+    line-height: var(--text-3xl--line-height);
+  }
+}
+
+/* O rótulo em caixa-alta que abre cada bloco da aula. */
+@utility rotulo {
+  font-size: var(--text-xs);
+  line-height: var(--text-xs--line-height);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+html {
+  /* Evita o zoom por duplo toque atrapalhar o arraste das peças no celular. */
+  touch-action: manipulation;
+}
+
+body {
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   O tabuleiro
+
+   O `chessground.brown.css` **não é importado**. Ele foi largado em vez de
+   sobrescrito, e o argumento decisivo é contraintuitivo: a zona sensível ficou
+   mais simples. O `!important` que morava no seletor de coordenada existia só
+   para vencer os `nth-child` do arquivo do pacote; sem o arquivo, ele sai.
+   Ficam o `base.css` (layout) e o `cburnett.css` (as peças).
+
+   O tabuleiro do Lichess nasceu para um tamanho fixo, e o CSS do pacote traz
+   deslocamentos em pixels calibrados para aquele tamanho. Aqui o tabuleiro é
+   fluido (ocupa a largura disponível, do celular ao desktop), então esses
+   pixels saem do lugar. Tudo que envolve posição abaixo troca pixel por
+   porcentagem, que escala junto com a casa.
+   -------------------------------------------------------------------------- */
+
+.cg-wrap {
+  box-sizing: content-box;
+}
+
+/* O chessground arredonda o tabuleiro para um múltiplo de 8 pixels (para as
+   casas ficarem nítidas), o que deixa uma sobra de até 7px. Sem isto a sobra
+   fica toda à direita e embaixo, e a margem do tabuleiro sai torta. */
+.cg-wrap cg-container {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* …e o arredondamento da sobra, que é meio pixel quando ela é ímpar.
+
+   Medido: num celular de 390px o `cg-wrap` mede 343 e o tabuleiro 336, então
+   sobram 3,5px de cada lado e a origem cai em x,5. Toda fronteira de casa passa
+   a cair em meio pixel — e é ali que a parada dura do gradiente cônico borra,
+   virando costura. As peças, que são posicionadas a partir deste contêiner,
+   também saem meio pixel fora do lugar e perdem nitidez.
+
+   **O arredondamento vai no `left`/`top`, e não no `translate`.** É uma
+   distinção que custou uma medição errada: a porcentagem do `translate` resolve
+   contra a largura do **próprio** contêiner (336, e 168 já é inteiro), enquanto
+   a do `left` resolve contra a do **pai** (343, e 171,5 não é). Arredondar o
+   translate era um no-op perfeito, e passava despercebido.
+
+   Vem em `@supports` porque `round()` é recente: onde não existir, as
+   declarações acima continuam valendo e nada quebra. */
+@supports (top: round(50%, 1px)) {
+  .cg-wrap cg-container {
+    top: round(50%, 1px);
+    left: round(50%, 1px);
+  }
+}
+
+/* A camada de desenho por cima do tabuleiro — hoje só a caixa do rei.
+
+   Ela repete, de propósito, as três regras acima: mesmo tamanho do tabuleiro
+   de verdade (`---cg-width`/`---cg-height`, que o chessground publica no
+   invólucro), mesma centralização e mesmo arredondamento. Herdar a geometria
+   do invólucro em vez de copiá-la daria um retângulo até 7px maior que o
+   tabuleiro, e o erro se espalha: 7px repartidos entre oito casas põem a
+   parede da caixa quase meia casa fora do lugar nas colunas do fim.
+
+   O padrão de 100% é para o caso de o `@supports` nem chegar a valer: sem as
+   variáveis a camada cobre o invólucro, que é o mesmo quadrado a menos da
+   sobra. `pointer-events: none` porque a etapa 3 desenha a caixa **e** deixa o
+   aluno arrastar peça por cima dela. */
+.tabuleiro-camada {
+  position: absolute;
+  width: var(---cg-width, 100%);
+  height: var(---cg-height, 100%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+@supports (top: round(50%, 1px)) {
+  .tabuleiro-camada {
+    top: round(50%, 1px);
+    left: round(50%, 1px);
+  }
+}
+
+/* A caixa do rei: a prisão retangular de onde o rei defensor não sai.
+
+   Borda opaca e fundo quase transparente, e não o contrário: o que ensina é a
+   **parede**, e o miolo tem de continuar deixando ver as casas e as peças que
+   estão presas ali dentro. 8% é o suficiente para o olho separar dentro de
+   fora sem lavar a cor das casas.
+
+   `border-box` porque o retângulo vem em porcentagem, casado com as fronteiras
+   de casa: sem isso a borda de 3px cresceria para fora e a parede sairia da
+   linha. Os mesmos 3px do aro de `pulso-anel` — é a espessura que o projeto
+   usa para "aresta que se vê sobre papel claro". */
+.caixa-rei {
+  position: absolute;
+  box-sizing: border-box;
+  border: 3px solid var(--color-pincel-corte);
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--color-pincel-corte) 8%, transparent);
+}
+
+/* As casas.
+
+   O pacote pinta a casa clara e sobrepõe um SVG em que a escura é preto a 20%
+   — o que **amarra** escura = 80% da clara, e tira a liberdade de escolher as
+   duas. `repeating-conic-gradient` dá duas cores independentes, cada uma no seu
+   token, e é o que permite o par acima ter sido escolhido por medida.
+
+   O `background-size` de 25% dá quatro ladrilhos por lado, e cada ladrilho tem
+   duas casas — oito ao todo. */
+cg-board {
+  background-color: var(--color-casa-clara);
+  background-image: repeating-conic-gradient(
+    var(--color-casa-escura) 0deg 90deg,
+    var(--color-casa-clara) 90deg 180deg
+  );
+  background-size: 25% 25%;
+}
+
+/* Os dez estados. Não são os cinco óbvios: cada destino tem a variante `.oc.`
+   (casa ocupada, isto é, captura) e a variante sob o ponteiro. */
+
+/* Destino livre: um ponto no meio da casa. */
+cg-board square.move-dest {
+  background: radial-gradient(var(--color-destino) 22%, transparent 22%);
+}
+
+cg-board square.premove-dest {
+  background: radial-gradient(var(--color-premove) 22%, transparent 22%);
+}
+
+/* Destino ocupado: um aro na borda, porque o meio tem uma peça para capturar. */
+cg-board square.oc.move-dest {
+  background: radial-gradient(transparent 78%, var(--color-destino) 78%);
+}
+
+cg-board square.oc.premove-dest {
+  background: radial-gradient(transparent 78%, var(--color-premove) 78%);
+}
+
+/* Sob o ponteiro a casa inteira acende. É retorno transitório de ponteiro, e
+   por isso o único estado do tabuleiro que não responde ao piso de 3:1 — quem
+   está com o ponteiro em cima já sabe onde ele está. */
+cg-board square.move-dest:hover,
+cg-board square.move-dest.hover {
+  background: color-mix(in oklab, var(--color-destino) 45%, transparent);
+}
+
+cg-board square.premove-dest:hover,
+cg-board square.premove-dest.hover {
+  background: color-mix(in oklab, var(--color-premove) 45%, transparent);
+}
+
+/* Último lance e casa selecionada: a casa inteira. Opacas de propósito — a
+   peça é desenhada por cima delas, e translucidez aqui clarearia a marca até
+   abaixo do piso. O realce amarelo-claro do pacote media 1,50:1. */
+cg-board square.last-move {
+  background-color: var(--color-ultimo-lance);
+}
+
+cg-board square.selected {
+  background-color: var(--color-destino);
+}
+
+cg-board square.current-premove {
+  background-color: var(--color-premove);
+}
+
+/* O xeque: um clarão que morre antes da borda, para o rei ficar dentro dele e
+   a casa vizinha não parecer marcada também. */
+cg-board square.check {
+  background: radial-gradient(
+    ellipse at center,
+    var(--color-xeque) 0%,
+    var(--color-xeque) 28%,
+    color-mix(in oklab, var(--color-xeque) 45%, transparent) 60%,
+    transparent 84%
+  );
+}
+
+/* Os desenhos da aula.
+
+   O `.cg-shapes { opacity: .6 }` do pacote é um multiplicador escondido sobre
+   **todos** os pincéis de uma vez: dois pincéis com o mesmo número na tabela
+   saíam com transparências diferentes do que a tabela dizia, e ninguém
+   conseguia ajustar um sem mexer no outro. Vai a 1, e cada pincel passa a
+   carregar o próprio alfa em `components/board/ChessBoard.tsx`. */
+.cg-wrap .cg-shapes {
+  opacity: 1;
+}
+
+/* O fantasma do arraste — a peça que fica para trás enquanto o aluno arrasta.
+   É funcionalidade, não enfeite: é ela que diz de onde a peça saiu. O pacote a
+   declara a 0,3, o que sobre papel claro é quase nada; a 0,55 o contorno dela
+   mede 4,34:1 na casa clara e 3,73:1 na escura.
+
+   **0,55 e não 0,5** de propósito: 0,5 é o que o pacote usa em `piece.fading`,
+   a peça que está sendo capturada. Fantasma do arraste e peça sumindo dizem
+   coisas diferentes e não podem ficar com a mesma transparência.
+
+   Declarar `opacity` aqui é seguro. O que a regra 3 do `CLAUDE.md` proíbe é
+   **animar** `opacity` em elemento do chessground, porque o pacote a escreve
+   ele mesmo em `piece.ghost` e `piece.fading`. */
+.cg-wrap piece.ghost {
+  opacity: 0.55;
+}
+
+/* As coordenadas.
+
+   ---cg-width é a largura real do tabuleiro, publicada pelo próprio chessground
+   (o nome tem três traços mesmo). Dividida por 8 dá a casa. */
+.cg-wrap coords {
+  font-size: clamp(9px, calc(var(---cg-width, 512px) / 8 * 0.28), 14px);
+  font-weight: 600;
+  line-height: 1;
+  opacity: 1;
+}
+
+/* Uma tinta só para as duas casas, e **sem `!important`**.
+
+   O pacote alternava branco e escuro conforme a casa, por uma pilha de
+   `nth-child` que errava de casa neste posicionamento — metade dos rótulos
+   saía branco sobre casa clara, a 1,4:1. Aquelas regras eram mais específicas
+   que qualquer seletor razoável escrito aqui, e daí o `!important`. Elas foram
+   embora com o `brown.css`.
+
+   A tinta única é o que amarra o par de casas: ela precisa de 4,5:1 contra as
+   **duas**, e é por isso que a casa escura não pode escurecer à vontade. Mede
+   10,94:1 na clara e 6,93:1 na escura, e fica igual quando o aluno gira o
+   tabuleiro. */
+.cg-wrap coords coord {
+  color: var(--color-coordenada);
+}
+
+/* Números das linhas: no canto superior esquerdo da casa da coluna a. */
+.cg-wrap coords.ranks {
+  top: 0;
+  left: 0;
+  width: 12.5%;
+  box-sizing: border-box;
+  padding: 0.6% 0 0 0.8%;
+}
+
+.cg-wrap coords.ranks coord {
+  transform: none;
+}
+
+/* Letras das colunas: centradas na base de cada coluna, minúsculas. */
+.cg-wrap coords.files {
+  left: 0;
+  bottom: 0.6%;
+  width: 100%;
+  height: auto;
+  text-transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   Animações da aula
+
+   Três regras, para quem vier depois:
+
+   1. Todo `@keyframes` do projeto mora aqui. Nada de animação declarada solta
+      dentro de componente — a lista completa do que a aula pode mexer na tela
+      tem de ser legível num lugar só.
+   2. **Toda** declaração `animation:` fica dentro de
+      `@media (prefers-reduced-motion: no-preference)`. A guarda é por adesão,
+      não por exceção: quem esquecer de guardar faz a animação simplesmente não
+      rodar, que é o lado seguro do erro.
+   3. **Nunca animar `transform` nem `opacity`** em elemento do chessground. A
+      posição de cada peça é `style.transform = translate(Xpx,Ypx)` inline, e
+      um `@keyframes` ganha da declaração inline pela cascata: a peça salta
+      para o canto do tabuleiro. `opacity` o próprio pacote já usa em
+      `piece.ghost` e `piece.fading`. A propriedade segura é `filter`, que o
+      pacote nunca escreve em `<piece>`.
+
+   As três cores daqui eram tríades RGB soltas — `52 211 153` e companhia —,
+   necessárias porque `rgb(var(--x) / .55)` exige a cor em canais crus. Cada cor
+   teria de existir em duas formas, e as tríades tinham ficado para trás na
+   paleta v3 do Tailwind: o comentário dizia `emerald-400` e o número era o
+   emerald-400 de outra versão. `color-mix()` resolve com uma forma só, e o
+   halo passa a ser de fato a cor que o rótulo dele promete.
+   -------------------------------------------------------------------------- */
+
+/* O anel em volta do tabuleiro: tinta que transborda, sem entrar no layout.
+   `box-shadow` com spread e não `outline`, `border`, `scale` ou `inset`
+   negativo — no celular a coluna do tabuleiro já é `88vw` dentro de um `px-4`,
+   e qualquer coisa que ocupe espaço geraria barra de rolagem horizontal.
+
+   **São duas sombras, e a de dentro não tem desfoque.** Sobre o fundo escuro
+   antigo, um halo difuso bastava: ele acendia contra o preto. Sobre papel claro
+   um halo difuso é quase nada — clarear ainda mais só o aproxima da cor da
+   página. A correção não é brilho, é **aresta**: um aro sólido de 3px, spread
+   sem blur, mais o halo por fora. O aro é o que se vê; o halo é o que dá o
+   movimento. Nenhum dos dois ocupa layout. */
+@keyframes pulso-anel {
+  0% {
+    box-shadow:
+      0 0 0 0 transparent,
+      0 0 0 0 transparent;
+  }
+  35% {
+    box-shadow:
+      0 0 0 3px var(--cor-anel),
+      0 0 22px 7px color-mix(in oklab, var(--cor-anel) 45%, transparent);
+  }
+  100% {
+    box-shadow:
+      0 0 0 5px transparent,
+      0 0 30px 11px transparent;
+  }
+}
+
+/* O rei matado. `drop-shadow()` acompanha o alpha do SVG, então o brilho
+   contorna a silhueta da peça — não um quadrado em volta dela.
+   3 × 480ms = 1,44s, e sem `fill-mode`: volta a `filter: none` sozinho, então
+   o atributo `data-mate` pode ficar setado para sempre sem repetir nada.
+
+   **O `brightness(1.12)` saiu.** Ele clareava a peça inteira, e o rei matado
+   pode ser o branco, sobre casa clara: clarear ali lava a peça em vez de
+   destacá-la. Pior, era receita que dependia do tema — funcionava no escuro
+   por acidente. No lugar entram dois `drop-shadow` empilhados: um curto e
+   opaco, que cola tinta na silhueta e é o que se enxerga sobre fundo claro, e
+   um longo e translúcido, que faz o halo. A receita vale em qualquer fundo, e
+   só a cor é token. */
+@keyframes pulso-rei {
+  0%,
+  100% {
+    filter: none;
+  }
+  50% {
+    filter: drop-shadow(0 0 2px var(--color-erro))
+      drop-shadow(0 0 9px color-mix(in oklab, var(--color-erro) 70%, transparent));
+  }
+}
+
+/* O selo de etapa concluída no painel: um bloom de um disparo. Não precisa de
+   remontagem — começa quando o atributo passa de ausente a presente. */
+@keyframes destaque-conclusao {
+  0% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  30% {
+    box-shadow: 0 0 26px 4px color-mix(in oklab, var(--color-metodo) 40%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+/* Um mapa de tom → cor, uma animação só. O tom vem de `data-tom`, que é o
+   mesmo `good`/`warn`/`bad` que o painel já usa. */
+.anel-pulso {
+  --cor-anel: var(--color-metodo);
+  border-radius: 0.25rem;
+}
+
+.anel-pulso[data-tom="warn"] {
+  --cor-anel: var(--color-aviso);
+}
+
+.anel-pulso[data-tom="bad"] {
+  --cor-anel: var(--color-erro);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .anel-pulso {
+    animation: pulso-anel 620ms ease-out 1;
+  }
+
+  /* O seletor exclui de propósito o fantasma do arraste e as peças de
+     anotação, que são irmãos de `cg-board` e não filhos dele. */
+  .cg-wrap[data-mate="black"] cg-board piece.king.black,
+  .cg-wrap[data-mate="white"] cg-board piece.king.white {
+    animation: pulso-rei 480ms ease-in-out 3;
+  }
+
+  [data-enfase="conclusao"] {
+    animation: destaque-conclusao 900ms ease-out 1;
+  }
+
+  /* A caixa encolhendo é a única coisa que o aluno precisa ver acontecer na
+     etapa 2 — parada, ela é só um retângulo; deslizando, ela é a técnica.
+     180ms é a mesma duração da animação de peça do chessground
+     (`ChessBoard.tsx`), então a parede e a torre chegam juntas.
+
+     `transition` e não `animation`, mas a guarda vale igual: o movimento tem
+     de sumir inteiro para quem pediu menos movimento, e ficar dentro do
+     `@media` é o que faz esquecer falhar para o lado seguro. */
+  .caixa-rei {
+    transition:
+      left 180ms ease,
+      top 180ms ease,
+      width 180ms ease,
+      height 180ms ease;
+  }
+}

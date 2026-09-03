@@ -1,0 +1,54 @@
+# Preparatório OLESC 2026
+
+Preparatório de torneio de xadrez para as equipes masculina e feminina, rumo à
+25ª OLESC (Lages, xadrez de 11 a 16 de outubro de 2026). Site com login por
+**nome de usuário e PIN** — sem e-mail e sem cadastro, porque os alunos têm de 8
+a 15 anos e a conta é criada pelo professor.
+
+O plano do curso, o cronograma dos quatro sábados e as decisões de conteúdo
+estão em [`docs/`](docs/).
+
+## Rodar
+
+```bash
+npm install
+cp .env.example .env.local   # e preencher com as chaves do projeto Supabase
+npm run db:migrar            # aplica as migrations pendentes
+node scripts/criar-professor.ts doug "Douglas Vieira"
+npm run dev
+```
+
+## Gates
+
+```bash
+npm run typecheck
+npm test        # régua de contraste, FEN e lance, ponte usuário↔PIN
+npm run lint
+npm run build
+```
+
+## Os puzzles
+
+Os 166.623 puzzles de `public/puzzles/` são um recorte do banco público do
+Lichess (CC0), gerado por `npm run puzzles:filtrar` a partir do CSV bruto em
+`dados/` — que tem 570 MB e **não** é versionado.
+
+O recorte é por tema do currículo (`lib/tatica/blocos.ts`) e por faixa de
+rating. Dentro de cada tema, os puzzles saem **em rating crescente**, e as
+faixas vêm na ordem: a série que o aluno resolve sobe de dificuldade sozinha.
+
+Refazer o recorte:
+
+```bash
+bzip2 -dkc ~/Desktop/Ccdxdatalichess_db_puzzle.csv.bz2 > dados/lichess_db_puzzle.csv
+npm run puzzles:filtrar
+```
+
+## Licenças
+
+- **chessground** e **Stockfish**: GPL-3.0 — este site é GPL por consequência.
+- **Puzzles do Lichess**: CC0.
+- **Peças cburnett**: CC BY-SA 3.0 (Colin M.L. Burnett), como no Lichess.
+- Posições vindas de livros comprados entram como **fato com proveniência**
+  (livro, edição, página, diagrama) em `content/sources.json`. Nenhuma prosa é
+  copiada, e nenhum PDF é versionado.
