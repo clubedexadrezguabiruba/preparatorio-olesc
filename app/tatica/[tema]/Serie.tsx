@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Chess, type Square } from "chess.js";
@@ -9,10 +9,27 @@ import type { Color, Key } from "@lichess-org/chessground/types";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { PromotionPicker, type PromotionChoice } from "@/components/board/PromotionPicker";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
-import { applyUci } from "@/lib/chess/fen";
+import { applyUci, type Applied } from "@/lib/chess/fen";
+import {
+  armAudioOnFirstGesture,
+  isSoundOn,
+  playComplete,
+  playForMove,
+  playRefusal,
+  playSuccess,
+  setSoundOn,
+  subscribeSound,
+} from "@/lib/sound";
 import { lanceCerto } from "@/lib/tatica/conferir";
 import type { PuzzleServido } from "@/lib/tatica/puzzles";
 import { NOME_DA_ETAPA, type Etapa } from "@/lib/tatica/serie";
+import {
+  ABERTURA_MS,
+  FIM_COM_MATE_MS,
+  FIM_MS,
+  RESPOSTA_MS,
+  VOLTA_MS,
+} from "@/lib/tatica/tempos";
 import { registrarTentativa } from "../acoes";
 
 /**
@@ -35,6 +52,20 @@ import { registrarTentativa } from "../acoes";
  * action, reconferindo com a mesma função que este componente usa para dizer
  * "certo" na tela (`lib/tatica/conferir.ts`). Um juiz só, dois lugares: o
  * tabuleiro não tem como dizer verde e o relatório contar vermelho.
+ *
+ * ## O som
+ *
+ * Os seis efeitos vêm do laboratório de finais, sintetizados em WebAudio — não
+ * há arquivo de áudio nenhum no projeto. Quem toca o quê está em uma frase por
+ * efeito no `lib/sound-catalog.ts`; a regra que não é óbvia é **mate não toca
+ * xeque**: o lance que dá mate toca o som de prêmio no lugar do som de lance,
+ * senão o fim do puzzle soaria igual a um lance qualquer.
+ *
+ * **O primeiro lance da abertura pode sair mudo, e isso é do navegador.** Nenhum
+ * áudio toca antes de um gesto na página, e o erro do adversário acontece 600 ms
+ * depois da montagem, sem que o aluno tenha tocado em nada *aqui* — o clique que
+ * abriu a série ficou na página anterior. Do segundo puzzle em diante já houve
+ * gesto, e todos soam.
  *
  * ## Por que são dois componentes
  *
@@ -88,6 +119,10 @@ export function Serie({
   cuidado,
 }: SerieProps) {
   const router = useRouter();
+
+  // Destrava o `AudioContext` no primeiro toque ou tecla desta página — sem
+  // isso o navegador emudece tudo. Devolve o removedor dos ouvintes.
+  useEffect(() => armAudioOnFirstGesture(), []);
 
   const [indice, setIndice] = useState(0);
   const [placar, setPlacar] = useState({ certos: 0, total: 0 });
@@ -173,12 +208,15 @@ export function Serie({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-baseline justify-between gap-3">
+      <div className="flex items-center justify-between gap-3">
         <p className="rotulo text-metodo-tinta">{NOME_DA_ETAPA[etapa]}</p>
-        <p className="text-xs text-tinta-fraca tabular-nums">
-          {Math.min(jaFeitosNaEtapa + indice + 1, metaDaEtapa)} de {metaDaEtapa} · tema{" "}
-          {feitosNoTema + indice + 1}/{totalNoTema}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="text-xs text-tinta-fraca tabular-nums">
+            {Math.min(jaFeitosNaEtapa + indice + 1, metaDaEtapa)} de {metaDaEtapa} · tema{" "}
+            {feitosNoTema + indice + 1}/{totalNoTema}
+          </p>
+          <BotaoDeSom />
+        </div>
       </div>
 
       <NoTabuleiro
@@ -216,9 +254,43 @@ export function Serie({
   );
 }
 
+/**
+ * Liga e desliga o som. A preferência mora no `localStorage`, fora do React —
+ * por isso `useSyncExternalStore`: no servidor o som é "ligado", e a leitura
+ * real do armazenamento entra na hidratação sem acusar divergência.
+ */
+function BotaoDeSom() {
+  const ligado = useSyncExternalStore(subscribeSound, isSoundOn, () => true);
+  return (
+    <button
+      type="button"
+      onClick={() => setSoundOn(!ligado)}
+      aria-pressed={ligado}
+      className="foco min-h-11 shrink-0 rounded-lg px-2 text-lg leading-none transition-colors hover:bg-carta-toque"
+    >
+      <span aria-hidden>{ligado ? "🔊" : "🔇"}</span>
+      <span className="sr-only">{ligado ? "Desligar o som" : "Ligar o som"}</span>
+    </button>
+  );
+}
+
 /* ------------------------------------------------------------------ *
  * Um puzzle
  * ------------------------------------------------------------------ */
+
+/**
+ * O som de um lance que acabou de ser aplicado.
+ *
+ * A captura sai do **histórico da partida**, e não de comparar duas FENs: a
+ * `applyUci` devolve a `Chess` com o lance já dentro, e a `Move` que ela guarda
+ * é o único lugar onde "este lance comeu alguma coisa" existe escrito. Um en
+ * passant, por exemplo, tira uma peça de uma casa em que ninguém pousou —
+ * comparar posições acertaria isso por acidente, e erraria a promoção.
+ */
+function somDoLance({ game }: Applied): void {
+  const lance = game.history({ verbose: true }).at(-1);
+  playForMove({ capture: Boolean(lance?.captured), check: game.inCheck() });
+}
 
 function NoTabuleiro({
   puzzle,
@@ -267,6 +339,7 @@ function NoTabuleiro({
       setTimeout(() => {
         const depois = applyUci(puzzle.fen, puzzle.lances[0]);
         if (!depois) return;
+        somDoLance(depois);
         setFen(depois.fen);
         setUltimoLance([
           puzzle.lances[0].slice(0, 2) as Key,
@@ -274,7 +347,7 @@ function NoTabuleiro({
         ]);
         setFase("jogando");
         inicioRef.current = Date.now();
-      }, 600),
+      }, ABERTURA_MS),
     );
 
     return () => {
@@ -291,13 +364,14 @@ function NoTabuleiro({
         // A peça volta: `revisao` força a ressincronização mesmo com a FEN
         // igual — o chessground já a moveu na tela por conta própria.
         setRevisao((r) => r + 1);
+        playRefusal();
         setFase("errado");
         setErros((n) => n + 1);
         if (!decididoRef.current) {
           decididoRef.current = true;
           aoDecidir(puzzle, [...jogadosRef.current, uci], Date.now() - inicioRef.current);
         }
-        agendar(() => setFase("jogando"), 850);
+        agendar(() => setFase("jogando"), VOLTA_MS);
         return;
       }
 
@@ -309,20 +383,30 @@ function NoTabuleiro({
 
       const matou = depois.game.isCheckmate();
       if (matou || passo + 1 >= puzzle.lances.length) {
-        if (matou) setReiMatado(toBoardColor(depois.game.turn()));
+        // Prêmio **no lugar** do som do lance, não junto: o fim do puzzle não
+        // pode soar igual a um lance qualquer. É a mesma regra do laboratório.
+        if (matou) {
+          setReiMatado(toBoardColor(depois.game.turn()));
+          playComplete();
+        } else {
+          playSuccess();
+        }
         setFase("resolvido");
         if (!decididoRef.current) {
           decididoRef.current = true;
           aoDecidir(puzzle, [...jogadosRef.current], Date.now() - inicioRef.current);
         }
-        agendar(aoTerminar, matou ? 1500 : 1100);
+        agendar(aoTerminar, matou ? FIM_COM_MATE_MS : FIM_MS);
         return;
       }
+
+      somDoLance(depois);
 
       setFase("respondendo");
       agendar(() => {
         const resposta = applyUci(depois.fen, puzzle.lances[passo + 1]);
         if (!resposta) return;
+        somDoLance(resposta);
         setFen(resposta.fen);
         setUltimoLance([
           puzzle.lances[passo + 1].slice(0, 2) as Key,
@@ -330,7 +414,7 @@ function NoTabuleiro({
         ]);
         setPasso(passo + 2);
         setFase("jogando");
-      }, 480);
+      }, RESPOSTA_MS);
     },
     [agendar, aoDecidir, aoTerminar, fen, passo, puzzle],
   );
