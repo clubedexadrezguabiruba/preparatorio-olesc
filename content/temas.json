@@ -1,0 +1,102 @@
+[
+  {
+    "tag": "mateIn1",
+    "explicacao": [
+      "Mate em 1 é o exercício mais simples do xadrez e o mais mal treinado. A posição já está ganha: falta enxergar qual das suas peças encosta no rei sem poder ser capturada, e com todas as casas de fuga fechadas.",
+      "Treinar isto não é decorar mates — é acostumar o olho a olhar primeiro para o rei do adversário. Em torneio, quem tem esse hábito ganha partidas que o relógio já ia decidir."
+    ],
+    "procure": [
+      "Quais casas o rei dele tem para fugir? Conte, uma por uma.",
+      "Que peça sua chega perto do rei sem ser capturada?",
+      "Quem defende a casa em que você quer dar o xeque?"
+    ],
+    "cuidado": "Xeque não é mate. Antes de jogar, pergunte o que ele responderia — se existe resposta, não era mate."
+  },
+  {
+    "tag": "mateIn2",
+    "explicacao": [
+      "O mate em 2 tem uma forma quase sempre igual: o primeiro lance **obriga** — é xeque, ou é uma ameaça que ele não pode ignorar —, e o segundo mata. É por isso que se procura o lance forçado primeiro, e não o lance bonito.",
+      "Quando o primeiro lance dá ao adversário duas respostas diferentes, você tem de ver o mate depois das duas. Se depois de uma delas não há mate, o lance está errado, por mais forte que pareça."
+    ],
+    "procure": [
+      "Comece pelos xeques. Liste todos, mesmo os que parecem absurdos.",
+      "Depois, os lances que ameaçam mate no lance seguinte.",
+      "Sacrifício que tira o defensor do rei costuma ser o primeiro lance."
+    ],
+    "cuidado": "Não pare quando achar um xeque forte: confira a resposta dele antes de mover a peça."
+  },
+  {
+    "tag": "hangingPiece",
+    "explicacao": [
+      "Peça de graça é a peça que ninguém defende, e é o erro número um em partidas entre 1000 e 1400. Metade das partidas do seu torneio vai ser decidida por isto: alguém deixou uma peça e o outro pegou — ou não viu.",
+      "Este tema treina os dois lados da mesma coisa. Olhar as peças **dele** que estão sem defesa, e olhar as **suas** antes de mover. É a primeira das três perguntas que a gente usa antes de cada lance."
+    ],
+    "procure": [
+      "Depois do lance dele: alguma peça ficou sem defensor?",
+      "Alguma peça dele está atacada mais vezes do que defendida?",
+      "Antes de mover: a peça que eu vou tirar dali estava defendendo alguém?"
+    ],
+    "cuidado": "Capturar de graça só vale se a peça que captura não for capturada de volta por algo maior. Conte antes."
+  },
+  {
+    "tag": "backRankMate",
+    "explicacao": [
+      "O rei rocado fica atrás dos próprios três peões. Enquanto nenhum deles avança, a única entrada para o rei é pela primeira fileira — e é exatamente por ali que a torre ou a dama chegam.",
+      "É o mate mais comum de todo o xadrez de clube, e ele quase nunca aparece de repente: aparece quando as peças da defesa saem para atacar e ninguém volta a olhar para casa."
+    ],
+    "procure": [
+      "O rei dele tem 'janela' — algum peão da frente já avançou?",
+      "Quem defende a primeira fileira dele? Uma torre só? Dá para desviá-la ou capturá-la?",
+      "Antes de trocar torres, veja de que lado o corredor fica desprotegido."
+    ],
+    "cuidado": "O corredor é uma ameaça sua e um perigo seu. Fazer a janela do próprio rei em algum momento da partida custa um lance e evita a derrota."
+  },
+  {
+    "tag": "smotheredMate",
+    "explicacao": [
+      "O mate sufocado é o cavalo dando mate num rei cercado pelas **próprias** peças. Elas não podem sair a tempo, e nenhuma consegue capturar o cavalo — porque cavalo não se bloqueia.",
+      "A forma clássica começa com um xeque de dama que empurra o rei para o canto, um sacrifício de dama que obriga a torre a ocupar a última casa livre, e o cavalo fechando. Vale a pena conhecer a sequência inteira: ela aparece pronta em partidas rápidas."
+    ],
+    "procure": [
+      "O rei dele está no canto com as próprias peças em volta?",
+      "Você tem um cavalo que chega a uma casa de xeque perto dele?",
+      "Falta tapar uma casa? Um sacrifício de dama costuma ser o que a tapa."
+    ]
+  },
+  {
+    "tag": "arabianMate",
+    "explicacao": [
+      "Torre e cavalo, juntos, contra o rei no canto. O cavalo cobre as casas de fuga e defende a torre; a torre dá o xeque colada ao rei. Nenhum dos dois faria isso sozinho — este é o padrão de dupla mais antigo que se conhece, daí o nome.",
+      "Reconhecer o desenho vale mais que calcular: quando você vê cavalo e torre perto do rei encurralado, já sabe o que procurar antes de começar a contar variantes."
+    ],
+    "procure": [
+      "Rei no canto, com pouca ou nenhuma casa de fuga.",
+      "Um cavalo a duas casas do rei, defendendo a casa onde a torre vai entrar.",
+      "A torre com caminho livre até a casa colada no rei."
+    ]
+  },
+  {
+    "tag": "anastasiaMate",
+    "explicacao": [
+      "O cavalo pousa perto do rei e tira dele as casas de fuga do lado de dentro; a torre entra pela coluna aberta ao lado e dá o xeque. O rei fica preso entre o próprio peão e a borda do tabuleiro.",
+      "Aparece muito depois de um ataque na ala do rei em que uma coluna abriu. Quando você tem cavalo em e7 (ou e2, do outro lado) e uma torre livre, vale sempre olhar."
+    ],
+    "procure": [
+      "O cavalo pode ir para a casa que tira as fugas do rei?",
+      "Existe coluna aberta encostando no rei — a coluna h, quase sempre?",
+      "A torre chega lá em um lance, ou precisa de um sacrifício para abrir o caminho?"
+    ]
+  },
+  {
+    "tag": "hookMate",
+    "explicacao": [
+      "O mate do gancho junta três peças: a torre dá o xeque, o cavalo defende a torre e tapa uma fuga, e um peão seu tapa a outra. O nome vem do desenho — as peças formam um gancho em volta do rei.",
+      "É um mate de ataque, aquele que aparece quando você empurrou os peões na ala do rei dele. Vale conhecer porque ele mostra o motivo de o peão avançado valer o risco."
+    ],
+    "procure": [
+      "Você tem um peão avançado perto do rei dele?",
+      "Um cavalo consegue apoiar a torre de dentro do ataque?",
+      "Quais casas o rei ainda tem — e quem as cobre?"
+    ]
+  }
+]

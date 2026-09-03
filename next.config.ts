@@ -2,6 +2,23 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /**
+   * Os arquivos de puzzle viajam junto com o servidor.
+   *
+   * O Next monta o pacote de cada rota a partir do que ele **enxerga** nos
+   * imports. `public/puzzles/**` é lido por caminho, em tempo de execução
+   * (`lib/tatica/banco.ts`), então ele não enxerga nada — e o pacote sobe sem
+   * os arquivos. Localmente funciona, porque o processo roda dentro do
+   * repositório inteiro; na Vercel, a página do tema responderia
+   * `ENOENT: index.json` no primeiro aluno que abrisse a tarefa.
+   *
+   * São 33 MB no pacote do servidor, contra o teto de 250 MB. O que se compra
+   * com eles: o servidor escolhe os 24 puzzles da série (em vez de mandar 1,4
+   * MB ao celular para ele sortear) e reconfere o lance antes de gravar.
+   */
+  outputFileTracingIncludes: {
+    "/tatica/[tema]": ["./public/puzzles/**"],
+  },
+  /**
    * O motor da etapa 5 são 7,3 MB servidos de `public/engine/`. O padrão do
    * Next para `public/` é `max-age=0, must-revalidate`: correto para conteúdo
    * que muda, caro para um binário que nunca muda — cada aluno que reabre a

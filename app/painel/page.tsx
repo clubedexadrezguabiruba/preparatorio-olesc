@@ -83,8 +83,14 @@ export default async function Painel() {
             </li>
           ))}
         </ol>
+        <Link
+          href="/tatica"
+          className="foco self-start rounded-lg bg-metodo-cheio px-4 py-2.5 text-sm font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque"
+        >
+          Resolver puzzles
+        </Link>
         <p className="rounded-lg bg-dica-superficie/12 px-3 py-2 text-sm text-dica-tinta">
-          Os blocos abrem no Sábado 1. Dentro de cada tema os puzzles vêm em ordem de
+          Os blocos 1 e 2 estão abertos. Dentro de cada tema os puzzles vêm em ordem de
           dificuldade: começam fáceis e vão subindo.
         </p>
       </section>

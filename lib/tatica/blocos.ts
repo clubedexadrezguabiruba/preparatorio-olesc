@@ -31,6 +31,15 @@ export type Bloco = {
   readonly id: number;
   readonly nome: string;
   readonly faixa: readonly [number, number];
+  /**
+   * Em que sábado o bloco abre — 1, 2 ou 3, do cronograma do preparatório.
+   *
+   * Mora aqui porque é o mesmo dado em três lugares: o cartão trancado diz
+   * "abre no Sábado 2", o painel diz o que é para fazer esta semana, e a
+   * apostila imprime o caderno daquele sábado. Uma tabela separada de
+   * bloco → sábado seria a quarta opinião sobre a mesma coisa.
+   */
+  readonly sabado: 1 | 2 | 3;
   readonly temas: readonly Tema[];
 };
 
@@ -39,6 +48,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 1,
     nome: "Mates curtos e peça de graça",
     faixa: [600, 1300],
+    sabado: 1,
     temas: [
       { tag: "mateIn1", nome: "Mate em 1", resumo: "Um lance e acabou. O olho treina aqui." },
       { tag: "mateIn2", nome: "Mate em 2", resumo: "O lance que obriga, e depois o mate." },
@@ -49,6 +59,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 2,
     nome: "Padrões de mate I",
     faixa: [800, 1400],
+    sabado: 1,
     temas: [
       { tag: "backRankMate", nome: "Mate do corredor", resumo: "O rei preso atrás dos próprios peões." },
       { tag: "smotheredMate", nome: "Mate sufocado", resumo: "O cavalo mata o rei cercado pelas próprias peças." },
@@ -61,6 +72,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 3,
     nome: "Padrões de mate II",
     faixa: [1000, 1600],
+    sabado: 2,
     temas: [
       { tag: "bodenMate", nome: "Mate de Boden", resumo: "Os dois bispos em diagonais que se cruzam." },
       { tag: "doubleBishopMate", nome: "Mate dos dois bispos", resumo: "Bispos paralelos sobre o rei no canto." },
@@ -72,6 +84,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 4,
     nome: "Motivos fundamentais",
     faixa: [800, 1400],
+    sabado: 2,
     temas: [
       { tag: "fork", nome: "Garfo", resumo: "Uma peça ataca duas ao mesmo tempo." },
       { tag: "pin", nome: "Cravada", resumo: "A peça que não pode sair porque atrás dela há coisa melhor." },
@@ -84,6 +97,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 5,
     nome: "Remover a defesa",
     faixa: [1000, 1500],
+    sabado: 2,
     temas: [
       { tag: "capturingDefender", nome: "Capturar o defensor", resumo: "Tire quem segura, e o resto cai." },
       { tag: "deflection", nome: "Desvio", resumo: "Obrigue a peça a sair do posto que ela guarda." },
@@ -96,6 +110,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 6,
     nome: "Ataque ao rei",
     faixa: [1000, 1600],
+    sabado: 3,
     temas: [
       { tag: "exposedKing", nome: "Rei exposto", resumo: "Rei sem casas e sem defensores: procure o xeque." },
       { tag: "attackingF2F7", nome: "Ataque em f2/f7", resumo: "A casa mais fraca do começo de partida." },
@@ -107,6 +122,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 7,
     nome: "Lances finos",
     faixa: [1100, 1700],
+    sabado: 3,
     temas: [
       { tag: "intermezzo", nome: "Lance intermediário", resumo: "Antes de recapturar, um xeque que muda tudo." },
       { tag: "quietMove", nome: "Lance quieto", resumo: "Sem xeque e sem captura — e a ameaça é imparável." },
@@ -119,6 +135,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 8,
     nome: "Defesa e conversão",
     faixa: [1000, 1600],
+    sabado: 3,
     temas: [
       { tag: "defensiveMove", nome: "Lance defensivo", resumo: "O único lance que segura — treinar não desistir." },
       { tag: "advancedPawn", nome: "Peão avançado", resumo: "O peão que vai virar dama e decide a partida." },

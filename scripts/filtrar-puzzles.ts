@@ -38,6 +38,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { applyUci, fenProblem } from "../lib/chess/fen.ts";
 import { BLOCOS } from "../lib/tatica/blocos.ts";
+import { chaveDe } from "../lib/tatica/chave.ts";
 
 const RAIZ = fileURLToPath(new URL("..", import.meta.url));
 
@@ -74,16 +75,6 @@ const LARGURA_DA_FAIXA = 200;
 /* ------------------------------------------------------------------ *
  * Amostra determinística
  * ------------------------------------------------------------------ */
-
-/** FNV-1a de 32 bits. Não é criptografia: é só um espalhador estável. */
-function chaveDe(id: string): number {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < id.length; i++) {
-    h ^= id.charCodeAt(i);
-    h = Math.imul(h, 0x01000193);
-  }
-  return h >>> 0;
-}
 
 type Bruto = {
   id: string;

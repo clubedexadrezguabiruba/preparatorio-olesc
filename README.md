@@ -22,9 +22,42 @@ npm run dev
 
 ```bash
 npm run typecheck
-npm test        # régua de contraste, FEN e lance, ponte usuário↔PIN
+npm test        # contraste, FEN e lance, juiz do puzzle, sorteio da série, conteúdo
 npm run lint
 npm run build
+```
+
+E os dois que falam com o banco de verdade — ficam fora da CI porque precisam
+das chaves, e rodam na máquina antes de cada deploy:
+
+```bash
+npm run db:rls       # o aluno lê o seu, não lê o do outro, e não grava sozinho
+npm run db:tatica    # a corrente inteira: disco -> juiz -> banco -> relatório
+```
+
+## O curso de tática
+
+Cada tema tem três etapas: **aquecimento** (5 puzzles fáceis), **série** (24 em
+rating crescente) e **prova** (10 misturados com temas já vistos). O currículo
+— oito blocos, 31 temas — está em [`lib/tatica/blocos.ts`](lib/tatica/blocos.ts),
+que é a única fonte da taxonomia; o texto que o aluno lê está em
+[`content/temas.json`](content/temas.json), e **ter texto escrito é o que abre o
+tema**.
+
+Quem escolhe os puzzles de cada rodada é o servidor, semeado pelo id do aluno:
+dois alunos veem séries diferentes, e o mesmo aluno que recarrega a página vê a
+mesma. E quem decide se o aluno acertou é o servidor também — o navegador manda
+os **lances jogados**, nunca um "acertei".
+
+Só a **primeira tentativa** de cada puzzle vira linha no banco. Depois do
+primeiro erro o puzzle continua na tela para o aluno aprender, e não conta mais.
+
+### Ensaiar como aluno
+
+```bash
+node scripts/aluno-de-teste.ts criar    # usuário alunoteste, PIN 112233
+node scripts/aluno-de-teste.ts contar   # o que ficou gravado, com os tempos
+node scripts/aluno-de-teste.ts apagar
 ```
 
 ## Os puzzles
