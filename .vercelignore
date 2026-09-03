@@ -1,0 +1,38 @@
+# O que **não** sobe no deploy.
+#
+# Este arquivo existe porque a CLI da Vercel não leu o `.gitignore`: o primeiro
+# `vercel deploy` subiu 576 MB e morreu no limite de 100 MB por arquivo. O
+# culpado era `dados/lichess_db_puzzle.csv`, o CSV bruto do Lichess — 570 MB de
+# fonte de onde já saiu o recorte que o site usa.
+#
+# **Quando existe um `.vercelignore`, ele substitui o `.gitignore` inteiro**
+# como filtro do upload. Então a lista abaixo precisa repetir tudo, e não só a
+# linha que faltava.
+
+# O CSV bruto do Lichess. O que o site serve é o recorte em `public/puzzles/`.
+/dados/
+
+# Reinstalado no servidor a partir do package-lock.json.
+/node_modules
+
+# Refeito na build.
+/.next
+/out
+/build
+*.tsbuildinfo
+next-env.d.ts
+
+# O histórico não é servido.
+/.git
+
+# Segredo. As chaves de produção moram nas variáveis de ambiente do projeto na
+# Vercel, nunca num arquivo enviado.
+.env
+.env.local
+.env.*.local
+
+# Artefatos de inspeção do navegador.
+/.playwright-mcp/
+
+# A apostila é gerada em PDF na máquina do professor; o site não a serve.
+/apostila/pdf/

@@ -39,3 +39,10 @@ next-env.d.ts
 # O CSV bruto do Lichess (~700 MB descompactado, ~5 milhões de linhas). O que
 # o repositório versiona é o *recorte* em content/puzzles/, não a fonte.
 /dados/
+
+# Acrescentada pela CLI da Vercel no `vercel link`. O `.vercel` fica: é o par
+# projeto/organização, e ele é local. O `.env*` que ela também escreveu saiu —
+# ele já existe lá em cima, e escrito **depois** do `!.env.example` ele voltava
+# a ignorar o arquivo que documenta os nomes das chaves. Uma linha silenciosa
+# apagando a exceção da linha de cima.
+.vercel
