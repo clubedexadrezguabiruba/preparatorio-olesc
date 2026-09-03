@@ -89,8 +89,8 @@ test("tarefa de tática sem meta reprova", () => {
 });
 
 test("os links que ainda estão em branco ficam listados", () => {
-  // Este teste não reprova nada: `url` nula é estado previsto (a Lichess Class
-  // do clube e o caderno em PDF ainda não existem). Ele **imprime** o que está
+  // Este teste não reprova nada: `url` nula é estado previsto (o clube da OLESC
+  // no chess.com e o caderno em PDF ainda não existem). Ele **imprime** o que está
   // pendente, para a lista aparecer no `npm test` de toda quinta-feira em vez
   // de ser lembrada na manhã do sábado.
   const emBranco = validarTarefas(lerConteudo()).filter((t) => t.onde && !t.onde.url);

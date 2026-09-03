@@ -57,7 +57,7 @@ const Base = {
   /**
    * Para onde a tarefa manda o aluno.
    *
-   * `url` nula é um estado **previsto**: a Lichess Class do clube e o caderno
+   * `url` nula é um estado **previsto**: o clube do chess.com e o caderno
    * em PDF ainda não existem quando a tarefa é escrita. A tarefa aparece com o
    * destino em branco e um aviso, em vez de um link que leva a lugar nenhum —
    * e o teste de conteúdo lista o que está em branco, para não passar batido

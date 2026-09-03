@@ -163,7 +163,7 @@ function Selo({ feita }: { feita: boolean }) {
 /**
  * O destino da tarefa — ou o aviso de que ele ainda não existe.
  *
- * `url` nula não é falha: a Lichess Class do clube e o caderno em PDF são
+ * `url` nula não é falha: o clube da OLESC no chess.com e o caderno em PDF são
  * combinados com o aluno no sábado e ainda estão sendo feitos. Dizer isso é
  * melhor que um link morto, e melhor que esconder a linha — o aluno lê que a
  * tarefa existe e que o caminho vem.

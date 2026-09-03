@@ -12,9 +12,9 @@
     "id": "s1-partidas",
     "semana": 1,
     "tipo": "marcar",
-    "titulo": "2 partidas de 15+10 na Lichess Class do clube",
-    "detalhe": "Anote as duas à mão, na planilha de papel, como no sábado. Guarde as planilhas: elas voltam no Sábado 2.",
-    "onde": { "rotulo": "Lichess Class do clube", "url": null }
+    "titulo": "2 partidas de 15+10 no clube do chess.com",
+    "detalhe": "Anote as duas à mão na planilha de papel, como no sábado: a data, o nome do adversário, se você jogou de brancas ou de pretas, e o resultado. Guarde as planilhas — elas voltam no Sábado 2.",
+    "onde": { "rotulo": "Clube da OLESC no chess.com", "url": null }
   },
   {
     "id": "s1-anotacao",

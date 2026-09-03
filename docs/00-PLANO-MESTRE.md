@@ -98,10 +98,10 @@ Dois grupos (M e F) no mesmo conteúdo; separam-se só nas partidas de prática.
 | 3:50–4:00 | Tarefas da semana; entregar caderno 1 da apostila. |
 
 **Casa S1:** tática blocos 1–2 no site (meta: 60 puzzles, ≥70% acerto); 2 partidas
-15+10 na **Lichess Class** do clube, anotadas à mão na planilha e PGN enviado pelo
-site; vídeo "Como anotar uma partida" (Rafael Leitão) + 10 min de Coordenadas no
-Lichess; Bartholomew "Undefended Pieces" (legenda automática); ler caderno 1 (regras
-+ as 3 perguntas).
+15+10 no **clube do chess.com**, anotadas à mão na planilha (data, adversário, a cor
+que jogou, resultado); vídeo "Como anotar uma partida" (Rafael Leitão) + 10 min de
+Coordenadas no Lichess; Bartholomew "Undefended Pieces" (legenda automática); ler
+caderno 1 (regras + as 3 perguntas).
 
 ### Sábado 2 (19/9) — "Abertura sem susto e tática que ganha peça"
 
@@ -117,7 +117,7 @@ Lichess; Bartholomew "Undefended Pieces" (legenda automática); ler caderno 1 (r
 
 **Casa S2:** treinador de repertório no site (repetir cada linha até acertar 3×);
 tática blocos 3–5 (meta 80 puzzles); **finais no laboratório do de la Villa**
-(capítulos elementares indicados pelo Doug); **suíço 15+10 do time no Lichess**
+(capítulos elementares indicados pelo Doug); **torneio 15+10 do clube no chess.com**
 (quinta à noite) + 1 partida livre anotada; vídeos: Rafael Leitão "Aberturas" (os 2
 do repertório) e Evandro Barbosa "Aberturas em 15 min" (1); Smithy's Opening
 Fundamentals para quem lê inglês.
@@ -135,7 +135,7 @@ Fundamentals para quem lê inglês.
 | 3:50–4:00 | Tarefas; caderno 3. |
 
 **Casa S3:** tática blocos 6–7 (meta 80); **1 partida 60+30 online anotada** no fim
-de semana (a única longa antes do torneio); **suíço 3+2 do time no Lichess**; finais
+de semana (a única longa antes do torneio); **torneio 3+2 do clube no chess.com**; finais
 capítulos indicados; Rafael Leitão "Treinando Finais" (2) e "Treinando o Cálculo"
 (1); ler 1 partida do Chernev no caderno 3.
 
@@ -349,21 +349,39 @@ Pesquisa de 2026-09-03. Durações dos vídeos em PT-BR não confirmadas (estima
 | **Estudos Lichess em PT-BR:** "Tática para Iniciantes V – Garfos" (`lichess.org/study/4MW1gECQ`), "Guia Definitivo" (`…/study/6jRcEHCh`) | — | Reforço para quem está abaixo da turma |
 | Xadrez Brasil — "As Partidas Imortais"; Supi — "Partidas Explicativas" | `youtube.com/@xadrezbrasil` · canal do Supi | "Vídeo de prazer": 1 por semana, não conta como tarefa |
 
-Deixados de fora: Chess.com grátis (3 puzzles/dia, Classroom só com 1 aluno), ChessKid
-grátis (muito limitado), Aimchess, Krikor (lives longas), Gérson Peres (funil de curso
-pago). Nenhum curso gratuito em português no Chessable.
+Deixados de fora: **Chess.com como fonte de estudo** (3 puzzles por dia no grátis,
+Classroom só com 1 aluno) — o clube dele entra, mas para jogar, não para treinar;
+ChessKid grátis (muito limitado), Aimchess, Krikor (lives longas), Gérson Peres
+(funil de curso pago). Nenhum curso gratuito em português no Chessable.
 
 ### Ferramentas do professor
 
-- **Lichess Classes** (`lichess.org/class`, grátis): professor com 2FA cria a turma
-  e **cria contas dos alunos sem e-mail**, controla senhas, contas em modo criança,
-  vê partidas e puzzles, publica tarefas no mural. **É onde as partidas de casa
-  acontecem.** Criar na F0; os PGNs das partidas chegam ao nosso site por envio do
-  aluno (ou, F4 opcional, pela API pública do Lichess por nome de usuário).
-- **Lichess Team + Suíço** (`lichess.org/swiss`): time do clube; suíço **15+10 com 7
-  rodadas** (simula rápido) e **3+2** (blitz); emparceiramento FIDE, desempate
-  Sonneborn-Berger. Arena só para aquecer (berserk cancela incremento). Team Battle
-  para M × F.
+- **Clube no chess.com** (grátis): **é onde as partidas de casa acontecem**, e é onde
+  rodam os torneios fechados entre os alunos. O Doug cria um clube só da OLESC, os
+  alunos entram, e ele vê todos num lugar só.
+
+  **Decidido em 3/9/2026, e é uma correção do plano original.** Ele previa a
+  *Lichess Class*, que cria contas sem e-mail e mostra partidas e puzzles do aluno.
+  A vantagem some diante de um fato mais forte: **os alunos do Doug já jogam no
+  chess.com**, e já têm conta lá. Levá-los para o Lichess seria um cadastro a mais,
+  uma senha a mais e uma plataforma a menos conhecida, para ganhar um painel que o
+  clube do chess.com também dá. O Lichess continua no projeto pelo que ele faz de
+  melhor e de graça: os puzzles (CC0) que alimentam o nosso curso, o treino de
+  Coordenadas e a análise com Stockfish.
+
+  Consequência prática: **a anotação da partida passa a ser do aluno**, no papel —
+  data, adversário, a cor que jogou e o resultado. O envio de PGN pelo site continua
+  previsto para a F2; a leitura automática de partidas pela API (que no Lichess era
+  possível por nome de usuário) **não** tem equivalente aberto no chess.com, então o
+  relatório do professor conta com o que o aluno declara e com o que o Doug vê no
+  painel do clube.
+
+  **A confirmar com o Doug** (ele tem a conta; eu não): que formatos de torneio o
+  clube grátis oferece. O plano usava suíço no Lichess de propósito, porque suíço é
+  o formato da OLESC — 7 rodadas, emparceiramento por pontuação. Se o clube só
+  oferecer arena (entrada e saída contínua, sem número fixo de rodadas), o torneio
+  do clube treina relógio mas **não** treina o formato da prova, e o simulado do
+  Sábado 4 passa a ser o único ensaio de suíço de verdade.
 - **Simulado presencial (S4):** emparceiramento com **Lucas Chess** (grátis, em
   PT-BR, suporta suíço) ou à mão para 12 jogadores; planilha de resultados no site
   (`/professor`).
@@ -457,7 +475,13 @@ tática blocos 1–2 e caderno 1 feito à mão; painel e relatório ficam para a
 - **Amazon:** preços/Kindle .com.br não confirmados. **Chessable:** gratuidade dos
   cursos citados não confirmada em set/2026. Durações dos vídeos PT-BR não
   confirmadas.
-- **Lichess Class exige 2FA** na conta do professor — ativar na F0.
-- **Dois logins para o aluno** (site do preparatório + Lichess Class). Mitigação:
-  mesmo nome de usuário nos dois; PIN do site e senha do Lichess entregues juntos em
-  papel no S1.
+- **Formato do torneio do clube no chess.com não confirmado** (suíço ou só arena).
+  Ver §Ferramentas do professor. Se for só arena, o ensaio de suíço fica todo no
+  simulado do Sábado 4.
+- **Sem leitura automática das partidas de casa.** A partida acontece no chess.com e
+  chega ao professor pelo que o aluno anota no papel (S1) e, da F2 em diante, pelo
+  PGN que ele envia no site. Não há API aberta equivalente à do Lichess para puxar
+  as partidas por nome de usuário — o que o plano original assumia.
+- **O aluno já tem conta no chess.com**, então o segundo login deixou de ser um
+  problema novo: o que ele recebe em papel no S1 é só o usuário e o PIN do nosso
+  site. (Antes eram dois cadastros, um deles criado do zero.)
