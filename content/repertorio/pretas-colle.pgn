@@ -1,0 +1,25 @@
+; Colle, Jobava e 2.e3 — 1 linha do Base, o buraco 8 da secao 8. Pela tabela da
+; secao 6, depois de 1.d4 d5 ele joga 2.Cf3 14,4 por cento, 2.e3 12,2 e 2.Cc3
+; 11,9: somados sao 38,5, e o orcamento da secao 1 da uma linha para os tres.
+;
+; A linha escrita e a do Colle, que e a montagem comum aos tres: e3, Bd3, c3,
+; Cbd2 e o estouro e3-e4. O Jobava (2.Cc3 e 3.Bf4) poe o bispo fora, e ali vale
+; a mesma receita do pretas-londres.pgn: …c5, …Cc6 e a dama em b6 assim que o
+; c3 dele aparecer.
+;
+; O motor poe 5.b3 (Zukertort) na frente do 5.c3 depois de 4…c5; escrevemos o
+; c3 porque e o Colle que se ensina nesta faixa. Contra 5.b3 o motor troca o
+; nosso …Bd6 por …Be7 e a avaliacao continua igual — o plano nao muda.
+
+[Abertura "colle"]
+[Nome "Colle e Jobava"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 8 da secao 8 de docs/REPERTORIO.md: o Short & Sweet do Kushager tem zero capitulos de Colle e de Jobava. A linha inteira e do motor e fica em igualdade."]
+[Result "*"]
+
+1. d4 d5 2. Nf3 Nf6 3. e3 e6 4. Bd3 c5 5. c3 Bd6 6. Nbd2 Nc6 7. O-O O-O 8.
+dxc5 Bxc5 {O Colle e uma montagem sempre igual: e3, Bd3, c3, Cbd2 — e depois o
+estouro e3-e4, que e a unica ideia dele. O nosso bispo em d6 fica cara a cara
+com o dele e vigia a casa e5; com …Cc6 e o roque, o e4 nao sai de graca. Se ele
+trocar em c5, o bispo recaptura e ganha diagonal em vez de perder tempo.} *

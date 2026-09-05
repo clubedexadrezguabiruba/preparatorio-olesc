@@ -50,9 +50,37 @@
   },
   {
     "cor": "pretas",
+    "abertura": "colle",
+    "nome": "Colle e Jobava",
+    "linhas": 1,
+    "arquivo": "/repertorio/pretas/colle.json"
+  },
+  {
+    "cor": "pretas",
+    "abertura": "londres",
+    "nome": "Londres 2.Bf4",
+    "linhas": 2,
+    "arquivo": "/repertorio/pretas/londres.json"
+  },
+  {
+    "cor": "pretas",
+    "abertura": "manhattan",
+    "nome": "Manhattan",
+    "linhas": 3,
+    "arquivo": "/repertorio/pretas/manhattan.json"
+  },
+  {
+    "cor": "pretas",
+    "abertura": "outras",
+    "nome": "1.c4 e as outras primeiras",
+    "linhas": 1,
+    "arquivo": "/repertorio/pretas/outras.json"
+  },
+  {
+    "cor": "pretas",
     "abertura": "siciliana",
     "nome": "Siciliana",
-    "linhas": 3,
+    "linhas": 13,
     "arquivo": "/repertorio/pretas/siciliana.json"
   }
 ]

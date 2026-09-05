@@ -1,0 +1,30 @@
+; 1.c4, 1.Cf3, 1.b3, 1.f4 e 1.g3 — 1 linha do Base. Pela tabela da secao 6 sao
+; 2,1, 2,3 e menos de 1 por cento cada na raiz; somados ficam perto de 8 por
+; cento, e nenhum deles alcanca sozinho os 4 por cento que a secao 4 exige para
+; uma abertura entrar no Base com linha propria.
+;
+; Por isso a linha nao ensina um sistema novo: ensina a regra de voltar para
+; casa. Contra qualquer um desses primeiros lances jogamos …e6 e …d5 e
+; esperamos; quase sempre ele acaba jogando d4, e o jogo vira o nosso Manhattan.
+;
+; A linha comeca em 1.c4 porque e o unico do grupo que pede resposta diferente:
+; depois de 1.Cf3 d5 2.d4 ja estamos no repertorio de 1.d4, sem nada de novo.
+;
+; Uma correcao ao documento: a secao 1 credita esta linha ao draft English
+; Opening do Grigoryan, mas aquele arquivo joga 1...c5 com …g6 e …Bg7 — outro
+; sistema, e marcado como avancado na importacao. O que vale e a coluna do
+; sistema ("mesma estrutura do GDR"), e a proveniencia abaixo diz a verdade.
+
+[Abertura "outras"]
+[Nome "1.c4 e as outras primeiras"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Nao vem do draft English Opening do Grigoryan, que joga outro sistema (1...c5). A linha e a transposicao para o Manhattan, e a ponta fica em brancas +0,33, o mesmo numero da linha principal do pretas-manhattan.pgn."]
+[Result "*"]
+
+1. c4 e6 2. Nc3 d5 3. d4 Nf6 4. Nf3 Nbd7 5. Bg5 Bb4 6. e3 c5 {Contra 1.c4,
+1.Cf3, 1.b3, 1.f4 e 1.g3 a regra e uma so: …e6 e …d5, e espere. Quase sempre
+ele joga d4 em algum momento, e o jogo vira o nosso Manhattan — foi o que
+aconteceu aqui. Depois de 6…c5 esta e exatamente a posicao da linha principal
+do arquivo do Manhattan, so que comecando por 1.c4. Voce nao precisou aprender
+nada novo.} *

@@ -39,3 +39,115 @@ acaba.})
 sair, e no caminho nos abrimos o centro.} 5. exd5 exd5 6. Bb5 Nf6 7. d4 Be7 8.
 Nc3 O-O {Roque, e olhe o tabuleiro: o bispo que mirava f7 foi parar em b5, o
 centro esta aberto e todas as nossas pecas sairam. Foi isso que o d5 comprou.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana — Dragao Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "GM Avetik Grigoryan (ChessMood) — draft 'Sicilian Defence - Accelerated Dragon', tronco 5.Cc3 Bg7 6.Be3 Cf6 7.Bc4 O-O 8.Bb3 Te8."]
+[Result "*"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. Bc4 O-O 8.
+Bb3 Re8 {A torre sai para e8 preparando …e6 e depois …d5 de uma vez so. E este
+o motivo do nome "Acelerado": nos guardamos o peao de d7 em casa para joga-lo
+dois passos num lance so, em vez de gastar …d6 e depois …d5 em dois. Enquanto
+isso o bispo de g7 ja atravessa o tabuleiro pela diagonal grande.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana — Dragao Acelerado, o 5o lance dele"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 3 da secao 8 de docs/REPERTORIO.md: 5.Cxc6 e 36 por cento das respostas a 4...g6, mais que o 5.Cc3, e o arquivo do Grigoryan nao o cobre. As tres linhas sao a escolha do motor: 5...bxc6 empata e 5...dxc6 fica meio peao atras; contra 5.Be3 e 5.Bc4 o desenvolvimento normal custa cerca de um terco de peao contra o 6...Da5+ do motor, e a troca foi feita de proposito para repetir os lances da linha principal."]
+[Result "*"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nxc6
+(5. Be3 Nf6 6. Nc3 Bg7 {O bispo dele saiu antes do cavalo, e nada muda para
+nos: Cf6 e Bg7, e esta e exatamente a mesma posicao da linha do 5.Cc3. Contra o
+Dragao Acelerado a ordem dos lances das brancas quase nunca importa — o nosso
+plano e sempre o mesmo: g6, Bg7, Cf6, roque.})
+(5. Bc4 Bg7 6. Be3 Nf6 7. Nc3 O-O {De novo o bispo em c4 mirando f7, e de novo
+a resposta e so desenvolver. Depois do roque esta e a mesma posicao da linha
+principal, numa ordem diferente. O motor tem aqui um lance mais preciso, o
+xeque 6…Da5+, que iguala na hora; ele custa um terco de peao a menos, mas custa
+tambem uma ideia nova para decorar — e nos preferimos repetir os lances que
+voce ja treinou nas outras linhas.})
+5... bxc6 {Repare em qual peao recaptura. Com o de b7 os nossos peoes ficam
+feios, mas o de d7 continua livre para ir a d5 ou d6; com o de d7 o motor poe as
+brancas meio peao a frente, porque a nossa dama sai do tabuleiro e o rei nao
+roca mais.} 6. Qd4 Nf6 7. e5 Nd5 8. Nc3 Qb6 {Ele trocou o cavalo para estragar
+os nossos peoes e centralizou a dama. Nos oferecemos a troca: sem damas, o peao
+dobrado em c6 deixa de ser um problema, e depois de 9.Dxb6 axb6 a coluna a abre
+para a nossa torre. Este e o jeito mais simples de jogar a posicao — o outro,
+8…Bg7, exige dar um peao para ter iniciativa.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana — Rossolimo 3.Bb5"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "GM Avetik Grigoryan (ChessMood) — draft 'Nightmare of Rossolimo', tronco 4.Bxc6 dxc6 5.d3 Bg7 6.h3 Cf6 7.Cc3 Cd7 8.Be3 e5."]
+[Result "*"]
+
+1. e4 c5 2. Nf3 Nc6 3. Bb5 g6 4. Bxc6 dxc6 5. d3 Bg7 6. h3 Nf6 7. Nc3 Nd7 8. Be3
+e5 {Ele trocou em c6 e nos recapturamos com o peao de d7, de proposito: assim
+ficamos com os dois bispos e com a coluna d aberta para a dama. O cavalo recuou
+a d7 para nao tapar o bispo de g7, e agora o peao chega a e5 e trava o centro.
+Com o centro travado ninguem tem pressa — e quem tem os dois bispos joga para
+abrir o jogo mais tarde.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana — Rossolimo com 4.O-O"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. O 4.O-O e 22,9 por cento das respostas a 3...g6 pela tabela da secao 6 e o arquivo do Grigoryan so cobre o 4.Bxc6. O 4...Bg7 e o primeiro lance do motor, e a ponta fica em brancas +0,35."]
+[Result "*"]
+
+1. e4 c5 2. Nf3 Nc6 3. Bb5 g6 4. O-O Bg7 5. c3 Nf6 6. Re1 O-O 7. d4 d5 8. e5
+Ne4 {Ele guardou o bispo e montou o centro com c3 e d4. A resposta e …d5 na
+hora, antes que esse centro fique grande. Depois de 8.e5 o cavalo pula para e4:
+casa central, defendida, e para expulsa-lo dali ele so tem f3 — que abre a casa
+do proprio rei.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana — 2.Cc3"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Pela tabela da secao 6, depois de 2.Cc3 Cc6 ele joga 3.Cf3 46,9 por cento e 3.Bc4 18,1 por cento, e sao esses dois que entram. O 3...g6 contra 3.Cf3 e o 3...e6 contra 3.Bc4 sao lances do motor e transpoem, um para o Dragao Acelerado e o outro para a estrutura do bispo em c4 que abre este arquivo; a ideia do ...e6 esta no draft 'Sicilian Sidelines Homework' do Grigoryan, que a deixa sem continuacao."]
+[Result "*"]
+
+1. e4 c5 2. Nc3 Nc6 3. Nf3
+(3. Bc4 e6 4. Nf3 Nf6 5. d4 d5 6. exd5 exd5 7. Bb5 Be7 8. O-O O-O {O bispo em
+c4 de novo, e a mesma receita das tres primeiras linhas deste arquivo: …e6 e
+depois …d5, o peao bate no bispo e ele vai parar em b5. Compare com a linha do
+2.Bc4: os lances sao quase iguais. Uma ideia so resolve as duas.})
+3... g6 4. d4 cxd4 5. Nxd4 Bg7 6. Be3 Nf6 {Ele pos o cavalo em c3 antes de d4 e
+mesmo assim caiu no Dragao Acelerado: esta e a mesma posicao da linha do 5.Cc3,
+com os lances em outra ordem. E o melhor tipo de linha que existe para decorar —
+nao tem nada de novo dentro dela.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana — Alapin 2.c3"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "GM Avetik Grigoryan (ChessMood) — draft 'Alapin', tronco 2...Cf6 3.e5 Cd5 4.d4 cxd4 5.cxd4 d6 6.Cf3 Cc6 7.Bc4 Cb6 8.Bb5 dxe5."]
+[Result "*"]
+
+1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. cxd4 d6 6. Nf3 Nc6 7. Bc4 Nb6 8. Bb5
+dxe5 {O cavalo em d5 e o coracao da linha: ele para no meio do tabuleiro e o
+peao de e5, que parecia o orgulho das brancas, e justamente o que cai primeiro.
+Quando o bispo dele chegou em c4 nos o empurramos com …Cb6, e agora …dxe5
+desfaz o centro dele. Ele recaptura, mas o jogo abre com as nossas pecas
+prontas.} *
+
+[Abertura "siciliana"]
+[Nome "Siciliana — Gambito Morra 2.d4"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. O draft 'Sicilian Sidelines Homework' do Grigoryan chega a 2.d4 cxd4 3.c3 e para ali. O 3...Cf6 e o lance que o motor poe em igualdade junto com o 3...dxc3, e foi escolhido porque transpoe exatamente para a linha da Alapin acima."]
+[Result "*"]
+
+1. e4 c5 2. d4 cxd4 3. c3 Nf6 4. e5 Nd5 5. Nf3 Nc6 6. cxd4 d6 7. Bc4 Nb6 8. Bb5
+dxe5 {Este e o truque do arquivo inteiro: recusamos o peao com …Cf6 e caimos na
+mesma posicao da linha da Alapin — confira os dois diagramas, sao iguais, so os
+lances vieram em outra ordem. Quem estudou a Alapin ganhou o Gambito Morra de
+graca. Aceitar com 3…dxc3 tambem empata pelo motor, mas ai voce joga uma
+posicao nova, com ele desenvolvido e voce nao.} *

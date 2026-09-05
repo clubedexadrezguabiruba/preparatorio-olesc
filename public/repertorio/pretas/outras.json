@@ -1,0 +1,53 @@
+[
+  {
+    "id": "pretas-outras-2ffa3251",
+    "cor": "pretas",
+    "abertura": "outras",
+    "nivel": "base",
+    "nome": "1.c4 e as outras primeiras — 5...Bb4 6.e3 c5",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r1bqk2r/pp1n1ppp/4pn2/2pp2B1/1bPP4/2N1PN2/PP3PPP/R2QKB1R w KQkq - 0 7",
+    "lances": [
+      "c2c4",
+      "e7e6",
+      "b1c3",
+      "d7d5",
+      "d2d4",
+      "g8f6",
+      "g1f3",
+      "b8d7",
+      "c1g5",
+      "f8b4",
+      "e2e3",
+      "c7c5"
+    ],
+    "sans": [
+      "c4",
+      "e6",
+      "Nc3",
+      "d5",
+      "d4",
+      "Nf6",
+      "Nf3",
+      "Nbd7",
+      "Bg5",
+      "Bb4",
+      "e3",
+      "c5"
+    ],
+    "meus": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      11
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "11": "Contra 1.c4,\n1.Cf3, 1.b3, 1.f4 e 1.g3 a regra e uma so: …e6 e …d5, e espere. Quase sempre\nele joga d4 em algum momento, e o jogo vira o nosso Manhattan — foi o que\naconteceu aqui. Depois de 6…c5 esta e exatamente a posicao da linha principal\ndo arquivo do Manhattan, so que comecando por 1.c4. Voce nao precisou aprender\nnada novo."
+    },
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Nao vem do draft English Opening do Grigoryan, que joga outro sistema (1...c5). A linha e a transposicao para o Manhattan, e a ponta fica em brancas +0,33, o mesmo numero da linha principal do pretas-manhattan.pgn."
+  }
+]

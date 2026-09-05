@@ -1,0 +1,36 @@
+; Londres 2.Bf4 — 2 linhas do Base. Pela tabela da secao 6, depois de 2.Bf4 c5
+; ele joga 3.e3 40,9 por cento e 3.c3 23,5 por cento: duas linhas cobrem 64 por
+; cento da posicao.
+;
+; Este arquivo fecha o buraco 6 da secao 8, e o fecha com uma correcao. O
+; documento previa "2…c5, …Cc6, …Db6" como uma receita so. Medido no motor, a
+; dama em b6 so funciona depois que ele joga c3:
+;
+;   3.e3 Cc6 4.Cf3 Db6? 5.Cc3! — brancas +1,40
+;   3.e3 Cc6 4.Cf3 Cf6 5.c3 Db6  — igual, e o 6.Db3 c4 poe as pretas +0,25
+;   3.c3 Db6 de cara             — igual, e o 5.Db3 c4 do motor iguala
+;
+; A razao e uma so, e da para explicar a uma crianca: quem defende b2 e o
+; cavalo indo a c3. Enquanto essa casa estiver livre, a dama em b6 nao
+; incomoda; assim que o peao dele ocupa c3, ela incomoda de graca.
+
+[Abertura "londres"]
+[Nome "Londres 2.Bf4"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 6 da secao 8 de docs/REPERTORIO.md: o Short & Sweet do Kushager tem um unico capitulo de Londres e ele comeca por 2...Cf6, nao pelo 2...c5 que a secao 2.9 decidiu. As duas linhas sao do motor, e a ordem do ...Db6 foi medida: cedo demais ela perde (4...Db6 5.Cc3! poe as brancas +1,40), depois do c3 dele empata."]
+[Result "*"]
+
+1. d4 d5 2. Bf4 c5 3. e3
+(3. c3 Qb6 4. Nf3 Nf6 5. Qb3 c4 6. Qxb6 axb6 7. Na3 Bd7 8. Ne5 Ba4 {Aqui o c3
+veio ja no lance 3, entao a dama vai a b6 de cara: ela ataca b2 e o cavalo dele
+nao tem mais como chegar a c3 para defender. Ele oferece a troca com 5.Db3 e
+nos avancamos …c4!, ganhando espaco e obrigando a troca mesmo assim. Depois de
+…axb6 a coluna a e da nossa torre, e o bispo em a4 vigia a casa b3 — que e por
+onde ele tentaria desfazer o nosso peao de c4.})
+3... Nc6 4. Nf3 Nf6 5. c3 Qb6 6. Qc2 g6 7. h3 Bg7 8. Nbd2 O-O {Repare no
+momento: a dama so vai a b6 depois que ele joga c3. Com o peao dele nessa casa,
+o cavalo de b1 nao chega mais a c3 para defender b2, e a dama incomoda de
+graca. Um lance antes disso seria erro grave: 4…Db6 5.Cc3! e o motor da mais de
+um peao para as brancas. Com a dama ja instalada, completamos a montagem — g6,
+Bg7 e roque.} *

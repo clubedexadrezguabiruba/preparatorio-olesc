@@ -11,10 +11,13 @@ armadilhas conhecidas.*
   rascunhos** importados dos cursos em `content/repertorio/rascunhos/`.
 - O que o **B3** escreveu: as **22 linhas do Base das brancas**, em sete arquivos
   `content/repertorio/brancas-*.pgn`, já compiladas para `public/repertorio/`.
-- O que o **B4** começou: as **3 linhas do bispo em c4** das pretas, em
-  `content/repertorio/pretas-siciliana.pgn` — o ⚠ mais frequente da lista.
-- O que **não** existe: as outras **17 linhas das pretas**, e a tela em que o
-  aluno treina. Nenhum arquivo de `app/` lê o repertório ainda.
+- O que o **B4** escreveu: as **20 linhas do Base das pretas**, em cinco
+  arquivos — `pretas-siciliana.pgn` (13, contando as 3 do bispo em c4),
+  `pretas-manhattan.pgn` (3), `pretas-londres.pgn` (2), `pretas-colle.pgn` (1) e
+  `pretas-outras.pgn` (1).
+- O que **não** existe: a tela em que o aluno treina. Nenhum arquivo de `app/`
+  lê o repertório ainda. **O Base está fechado: 42 linhas**, as 22 das brancas e
+  as 20 das pretas, todas compiladas para `public/repertorio/`.
 
 ---
 
@@ -46,19 +49,29 @@ motor**, marcado ⚠ e com a proveniência dizendo isso. Nada é inventado.
 |---|---|---|---|---|
 | 1.e4 (68,2 % da raiz) | | **1…c5** | | **13** |
 | · 2.Bc4 e 2.Nf3 Nc6 3.Bc4 | ~31 % das sicilianas | …Nc6, …e6, e expulsar o bispo | livro + motor | **3** ✔ |
-| · 2.Nf3 Nc6 3.d4 Aberta | ~12 % | **Dragão Acelerado** 4…g6 | Grigoryan | **4** |
-| · 3.Bb5 Rossolimo | ~5 % | 3…g6 4.Bxc6 dxc6 | Grigoryan | **2** |
-| · 2.Nc3 Grand Prix / Fechada | 8,3 % | …Nc6, …g6, …Bg7 | Grigoryan (sidelines) | **2** |
-| · 2.c3 Alapin | 3,9 % | 2…Nf6 3.e5 Nd5 | Grigoryan | **1** |
-| · 2.d4 Morra | 10,4 % (quase tudo transpõe) | 2…cxd4 | Grigoryan (sidelines) | **1** |
+| · 2.Nf3 Nc6 3.d4 Aberta | ~12 % | **Dragão Acelerado** 4…g6 | Grigoryan + livro/motor | **4** ✔ |
+| · 3.Bb5 Rossolimo | ~5 % | 3…g6 4.Bxc6 dxc6 | Grigoryan + livro/motor | **2** ✔ |
+| · 2.Nc3 Grand Prix / Fechada | 8,3 % | 3.Nf3 →…g6 (transpõe); 3.Bc4 →…e6 | livro + motor | **2** ✔ |
+| · 2.c3 Alapin | 3,9 % | 2…Nf6 3.e5 Nd5 | Grigoryan | **1** ✔ |
+| · 2.d4 Morra | 10,4 % (quase tudo transpõe) | 2…cxd4 3.c3 **Nf6** (transpõe p/ Alapin) | livro + motor | **1** ✔ |
 | 1.d4 (20,8 % da raiz) | | | | **6** |
-| · 2.c4 e6 | 29,4 % de 1.d4 d5 | **Manhattan** …Nbd7/…Bb4 | Kushager | **3** |
-| · 2.Bf4 Londres | 21,8 % | 2…c5, …Nc6, …Qb6 ⚠ | Kushager (1 capítulo) | **2** |
-| · 2.Nf3/2.e3/2.Nc3 Colle, Jobava | 38,5 % somados | ⚠ sem fonte | livro + motor | **1** |
-| 1.c4, 1.Nf3, 1.b3, 1.f4, 1.g3 | ~8 % da raiz | mesma estrutura do GDR | Grigoryan (Inglesa) | **1** |
+| · 2.c4 e6 | 29,4 % de 1.d4 d5 | **Manhattan** …Nbd7/…Bb4 | Kushager + livro/motor | **3** ✔ |
+| · 2.Bf4 Londres | 21,8 % | 2…c5, …Nc6, …Qb6 **depois do c3 dele** | livro + motor | **2** ✔ |
+| · 2.Nf3/2.e3/2.Nc3 Colle, Jobava | 38,5 % somados | …e6, …c5, …Bd6 | livro + motor | **1** ✔ |
+| 1.c4, 1.Nf3, 1.b3, 1.f4, 1.g3 | ~8 % da raiz | 1…e6 e …d5, transpõe p/ Manhattan | livro + motor | **1** ✔ |
 
-**Soma do Base das pretas: 20 linhas**, das quais **3 escritas** — o bispo em c4.
-Total geral: **42**, contra a meta de ~40.
+**Soma do Base das pretas: 20 linhas, todas escritas no B4.**
+Total geral: **42**, contra a meta de ~40. **O Base está fechado.**
+
+Duas correções que o B4 mediu e esta tabela já traz:
+
+- **Londres.** A receita "2…c5, …Nc6, …Qb6" só vale **depois** que as brancas
+  jogam c3. Jogada antes, a dama em b6 perde: `3.e3 Nc6 4.Nf3 Qb6? 5.Nc3!` põe
+  as brancas **+1,40** no motor. Detalhe na §2.9.
+- **1.c4 e as outras primeiras.** A fonte não é o draft `English Opening` do
+  Grigoryan: aquele arquivo joga `1…c5` com `…g6` e `…Bg7`, que é outro sistema
+  (e entrou como *avançado* na importação). O que vale é a coluna do sistema —
+  `…e6` e `…d5`, transpondo para o Manhattan —, e é **livro + motor**.
 
 ---
 
@@ -118,6 +131,16 @@ Depois de `4…g6` (325 k jogos): **5.Nxc6 é 36 %** — mais que 5.Nc3 (33,1 %)
 arquivo do Grigoryan não tem 5.Nxc6 (só o `7.Nxc6`, dois lances depois).
 
 **Decisão:** ⚠ **livro + motor**, e é a primeira linha das pretas a escrever.
+
+**Escrito no B4.** `5.Nxc6 bxc6!` — e qual peão recaptura é a lição: com o de d7
+o motor põe as brancas **meio peão à frente** (+0,52), porque a dama sai e o rei
+não roca. Depois de `6.Qd4 Nf6 7.e5 Nd5 8.Nc3`, o Base termina em `8…Qb6`,
+oferecendo a troca de damas: iguala sem dar peão, enquanto o `8…Bg7` do motor
+iguala **dando** um peão por iniciativa — o que não é linha para um aluno de
+1200. As outras três respostas do lance 5 (`5.Nc3` da fonte, `5.Be3`, `5.Bc4`)
+**convergem para a mesma posição**: `…Bg7`, `…Nf6`, `…O-O`. Contra `5.Bc4` isso
+custa um terço de peão contra o `6…Qa5+` do motor, e a troca foi feita de
+propósito — "poucas ideias" é o critério da §4.
 
 ### 2.6 O bispo em c4 é o que a criança mais faz contra a Siciliana
 
@@ -187,6 +210,20 @@ Jobava, e **duas** de Catalã — que é 10,5 % de 16,5 % de 29,4 %, ou seja ~0,
 motor); a Catalã vai para o Avançado. Contra a Londres, `2…c5` é a resposta
 prevista, e o explorer mostra que ela leva a `3.e3` 40,9 % / `3.c3` 23,5 % —
 duas linhas cobrem 64 %.
+
+**Correção do B4: a dama em b6 tem hora.** O documento previa "`2…c5`, `…Nc6`,
+`…Qb6`" como uma receita só. Medido no motor:
+
+| linha | avaliação |
+|---|---|
+| `3.e3 Nc6 4.Nf3 Qb6?` **5.Nc3!** | brancas **+1,40** |
+| `3.e3 Nc6 4.Nf3 Nf6 5.c3 Qb6` | igual (e `6.Qb3 c4` põe as pretas +0,25) |
+| `3.c3 Qb6` de cara | igual |
+
+A razão é uma só, e cabe numa frase para a criança: **quem defende b2 é o cavalo
+indo a c3.** Enquanto essa casa estiver livre, a dama em b6 não incomoda; assim
+que o peão dele ocupa c3, ela incomoda de graça. É por isso que contra `3.c3` a
+dama sai no lance 3, e contra `3.e3` ela espera até o lance 5.
 
 ### 2.10 Três defesas não entram em nível nenhum
 
@@ -398,27 +435,36 @@ está na lista de ⚠ abaixo.
 ## 8. Os ⚠ abertos
 
 Doze pontos em que a fonte não responde e alguém tem de escrever a linha por
-livro + motor. Em ordem de quanto o aluno vai encontrar. **Cinco fecharam** — os
-quatro das brancas no B3 e o Bowdler no B4 —, e estão riscados; os sete abertos
-são das pretas e do texto de princípios.
+livro + motor. Em ordem de quanto o aluno vai encontrar. **Nove fecharam** — os
+quatro das brancas no B3, e no B4 o Bowdler, o Dragão, a Londres, o Colle e o
+Manhattan `4.Bf4`. Sobram **três**, e nenhum deles é linha do Base.
 
 | # | ⚠ | Frequência | §|
 |---|---|---|---|
 | ~~1~~ | ~~Bowdler `2.Bc4` e `3.Bc4` — resposta e plano~~ — **fechado no B4**, é `…e6` | ~31 % das sicilianas | 2.6 |
 | ~~2~~ | ~~Escocesa `4…Nxd4 5.Qxd4 c5` e `…b6`~~ — **fechado no B3** | 25 % de 52 % | 2.1 |
-| 3 | Dragão `5.Nxc6` | 36 % de 4…g6 | 2.5 |
+| ~~3~~ | ~~Dragão `5.Nxc6`~~ — **fechado no B4**, é `…bxc6` e `8…Qb6`, igualdade | 36 % de 4…g6 | 2.5 |
 | ~~4~~ | ~~Francesa `3…c5` — escolher **um** dos três `!?`~~ — **fechado no B3**, é o `5.c3` | 38 % de 3.Bd3 | 2.7 |
 | ~~5~~ | ~~Caro `4…Nf6`~~ — **fechado no B3**, é o `5.c3` | 31 % de 4.Bd3 | 2.8 |
-| 6 | Londres `2.Bf4` — confirmar `2…c5, …Nc6, …Qb6` | 22 % de 1.d4 d5 | 2.9 |
-| 7 | Alapin pelas pretas `4.Bc4` e `4.c4` | 27 % de 3…Nd5 | 2.3 |
-| 8 | Colle, Jobava, `2.e3` | 24 % de 1.d4 d5 | 2.9 |
+| ~~6~~ | ~~Londres `2.Bf4` — confirmar `2…c5, …Nc6, …Qb6`~~ — **fechado no B4, com correção**: a dama só depois do c3 dele | 22 % de 1.d4 d5 | 2.9 |
+| **7** | **Alapin pelas pretas `4.Bc4` e `4.c4` — continua aberto** | 27 % de 3…Nd5 | 2.3 |
+| ~~8~~ | ~~Colle, Jobava, `2.e3`~~ — **fechado no B4**, é `…e6, …c5, …Bd6`, igualdade | 24 % de 1.d4 d5 | 2.9 |
 | ~~9~~ | ~~Francesa `3…Nc6`~~ — **fechado no B3**, é o `4.Nf3` | 14 % de 3.Bd3 | 2.7 |
-| 10 | Manhattan `4.Bf4` | 6,9 % de 3.Nc3 Nf6 | — |
-| 11 | Maroczy — recortar só a sub-árvore do `6.e4` | Avançado | 2.4 |
-| 12 | Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios | < 4,2 % cada | 2.10 |
+| ~~10~~ | ~~Manhattan `4.Bf4`~~ — **fora do Base pelo corte** (5ª resposta da posição); vai para o Avançado | 6,9 % de 3.Nc3 Nf6 | — |
+| **11** | **Maroczy — recortar só a sub-árvore do `6.e4`** | Avançado | 2.4 |
+| **12** | **Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios** | < 4,2 % cada | 2.10 |
 
 Os itens 1 a 5 eram o caminho crítico: sozinhos, são o que os alunos mais vão
-encontrar e o que nenhuma fonte do Doug responde.
+encontrar e o que nenhuma fonte do Doug responde. Todos fecharam.
+
+**Sobre o 7, que é o único ⚠ do Base ainda em aberto.** O orçamento da §1 dá
+**uma** linha à Alapin pelas pretas, e ela foi para o `4.d4` (61,8 %). Quem
+fecha a porta aqui é o orçamento, não a régua: pela §4 a posição pediria três
+respostas (`d4` 61,8 + `Bc4` 17,5 + `c4` 10 = 89,3 %). O preço, medido: `4.Bc4`
+e `4.c4` juntos são 27 % de uma abertura que é 3,9 % das Sicilianas, que são
+10,1 % de 1.e4, que é 68,2 % da raiz — **menos de um jogo em mil**. É o menor
+número de toda esta tabela, e por isso ele espera o Avançado. Os itens 11 e 12
+já eram, por decisão, fora do Base.
 
 ---
 
@@ -437,8 +483,15 @@ npm test                        # 208 testes, 61 deles do repertório
 Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variações),
 `arvore.ts` (árvore → linhas), `linhas.ts` (schema e regras), `explorer.ts`.
 
-**25 linhas** compiladas para `public/repertorio/`: as 22 das brancas, que são o
-Base inteiro daquele lado, e as 3 primeiras das pretas.
+**42 linhas** compiladas para `public/repertorio/`, em 12 arquivos: as 22 das
+brancas e as 20 das pretas. **O Base está completo dos dois lados.**
+
+As pontas, medidas com `--pontas` em 5/9: a pior das 42 é uma das pretas e está
+**0,44 atrás** — o tronco do Dragão, que é a linha da própria fonte. O plano
+falava em acusar pior que −0,80; o script apenas **reporta** a pior ponta, não
+reprova por ela, e nenhuma linha chega perto desse número. Nove das 20 linhas
+das pretas fecham em igualdade, e uma — a Armadilha do Elefante — fecha em
+**pretas +3,19**, uma peça.
 
 O motor do repertório é o mesmo Stockfish 18 de `public/engine/` que serve a
 etapa 5 da aula: a cola dele roda em `node` direto, e foi assim que as linhas
