@@ -1,0 +1,24 @@
+; Alapin 2.c3 — 3 linhas do Base. As tres respostas mais jogadas na faixa
+; 1000-1400 sao 2...Cc6, 2...d6 e 2...e6, e sao essas que entram. Os capitulos
+; do Krikor sobre 2...Cf6 e 2...d5 ficam para o Avancado: pela tabela da secao 6
+; eles sao 6,1 por cento e 6,6 por cento, abaixo do corte do Base.
+
+[Abertura "alapin"]
+[Nome "Alapin 2.c3"]
+[Cor "brancas"]
+[Nivel "base"]
+[Fonte "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'"]
+[Result "*"]
+
+1. e4 c5 2. c3 Nc6
+(2... d6 3. d4 Nf6 4. Bd3 {Ele nao brigou pelo centro, entao os dois peoes do
+meio ficam nossos e o bispo sai para d3 apoiando e4. Se ele trocar em d4, o peao
+de c3 recaptura e o centro fica ainda maior.})
+(2... e6 3. d4 d5 4. e5 {O peao avanca e trava o centro. O bispo dele de c8 fica
+preso atras dos proprios peoes, e nos ganhamos espaco para jogar do lado do
+rei.})
+3. d4 cxd4 4. cxd4 {Este e o lance que da nome a abertura toda: o peao de c3
+recaptura e ficamos com dois peoes no centro, e4 e d4, contra nenhum.} 4... d6
+5. Nc3 g6 6. d5 Nb8 7. Nf3 Bg7 8. h3 {Antes de rocar, tiramos a casa g4 do bispo
+dele. Repare no centro: peoes em e4 e d5 e o cavalo dele de volta para casa — e
+isso que o 2.c3 constroi.} *

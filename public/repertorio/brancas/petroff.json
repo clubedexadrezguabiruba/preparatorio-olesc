@@ -1,0 +1,62 @@
+[
+  {
+    "id": "brancas-petroff-934fd6a6",
+    "cor": "brancas",
+    "abertura": "petroff",
+    "nivel": "base",
+    "nome": "Petroff — 7.Be3 O-O 8.Qd2",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "rnbq1rk1/ppp1bppp/3p4/8/8/2P1BN2/PPPQ1PPP/R3KB1R b KQ - 4 8",
+    "lances": [
+      "e2e4",
+      "e7e5",
+      "g1f3",
+      "g8f6",
+      "f3e5",
+      "d7d6",
+      "e5f3",
+      "f6e4",
+      "b1c3",
+      "e4c3",
+      "d2c3",
+      "f8e7",
+      "c1e3",
+      "e8g8",
+      "d1d2"
+    ],
+    "sans": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nf6",
+      "Nxe5",
+      "d6",
+      "Nf3",
+      "Nxe4",
+      "Nc3",
+      "Nxc3",
+      "dxc3",
+      "Be7",
+      "Be3",
+      "O-O",
+      "Qd2"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "8": "Oferecemos a troca dos\ncavalos. Parece que estamos ajudando ele, mas a recaptura e que e o ponto.",
+      "14": "Dobramos o peao em c3 de proposito: a\ncoluna d abriu inteira para a dama e para a torre. Com bispo em e3 e dama em d2\nfalta so o roque grande — e o mesmo plano da Escocesa e da Philidor."
+    },
+    "fonte": "GM Avetik Grigoryan (ChessMood) — 'PGN file and Homework'"
+  }
+]

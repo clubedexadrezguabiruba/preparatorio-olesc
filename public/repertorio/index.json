@@ -1,0 +1,51 @@
+[
+  {
+    "cor": "brancas",
+    "abertura": "alapin",
+    "nome": "Alapin 2.c3",
+    "linhas": 3,
+    "arquivo": "/repertorio/brancas/alapin.json"
+  },
+  {
+    "cor": "brancas",
+    "abertura": "caro-kann",
+    "nome": "Caro-Kann Trocas",
+    "linhas": 2,
+    "arquivo": "/repertorio/brancas/caro-kann.json"
+  },
+  {
+    "cor": "brancas",
+    "abertura": "escandinava",
+    "nome": "Escandinava",
+    "linhas": 2,
+    "arquivo": "/repertorio/brancas/escandinava.json"
+  },
+  {
+    "cor": "brancas",
+    "abertura": "escocesa",
+    "nome": "Escocesa",
+    "linhas": 9,
+    "arquivo": "/repertorio/brancas/escocesa.json"
+  },
+  {
+    "cor": "brancas",
+    "abertura": "francesa",
+    "nome": "Francesa 3.Bd3",
+    "linhas": 2,
+    "arquivo": "/repertorio/brancas/francesa.json"
+  },
+  {
+    "cor": "brancas",
+    "abertura": "petroff",
+    "nome": "Petroff",
+    "linhas": 1,
+    "arquivo": "/repertorio/brancas/petroff.json"
+  },
+  {
+    "cor": "brancas",
+    "abertura": "philidor",
+    "nome": "Philidor",
+    "linhas": 2,
+    "arquivo": "/repertorio/brancas/philidor.json"
+  }
+]

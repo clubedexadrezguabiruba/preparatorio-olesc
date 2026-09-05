@@ -1,0 +1,16 @@
+; Petroff — 1 linha do Base. A fonte e o Grigoryan, por decisao de 5/9: o
+; capitulo do Krikor joga 3.d4 e ficou de fora para nao dar ao aluno dois
+; terceiros lances para a mesma posicao.
+
+[Abertura "petroff"]
+[Nome "Petroff"]
+[Cor "brancas"]
+[Nivel "base"]
+[Fonte "GM Avetik Grigoryan (ChessMood) — 'PGN file and Homework'"]
+[Result "*"]
+
+1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. Nc3 {Oferecemos a troca dos
+cavalos. Parece que estamos ajudando ele, mas a recaptura e que e o ponto.}
+5... Nxc3 6. dxc3 Be7 7. Be3 O-O 8. Qd2 {Dobramos o peao em c3 de proposito: a
+coluna d abriu inteira para a dama e para a torre. Com bispo em e3 e dama em d2
+falta so o roque grande — e o mesmo plano da Escocesa e da Philidor.} *

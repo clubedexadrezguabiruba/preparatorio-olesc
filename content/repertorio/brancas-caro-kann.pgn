@@ -1,0 +1,29 @@
+; Caro-Kann Trocas — 2 linhas do Base. Depois de 4.Bd3 a fonte so cobre
+; 4...Cc6, com 57,5 por cento. O 4...Cf6, com 30,9 por cento, e a segunda
+; resposta mais comum e nenhum curso do Doug responde: sai por livro + motor,
+; no segundo jogo deste arquivo.
+
+[Abertura "caro-kann"]
+[Nome "Caro-Kann Trocas"]
+[Cor "brancas"]
+[Nivel "base"]
+[Fonte "GM Avetik Grigoryan (ChessMood) — 'Caro Kann'"]
+[Result "*"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3 Nf6 6. Bf4 Bg4 7. Qb3 {A dama
+em b3 bate em b7 e em d5 ao mesmo tempo. Ele vai ter de gastar um lance para
+defender.} 7... Qd7 8. Nd2 {O cavalo entra por d2 porque c3 esta ocupado pelo
+nosso peao, e de d2 ele segue para f3. Com dama em b3 e bispo em d3 nos
+apertamos os dois lados do tabuleiro — e uma posicao para jogar devagar, sem
+pressa de trocar pecas.} *
+
+[Abertura "caro-kann"]
+[Nome "Caro-Kann Trocas"]
+[Cor "brancas"]
+[Nivel "base"]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 5 da secao 8 de docs/REPERTORIO.md: o arquivo do Grigoryan so cobre 4...Cc6. O 5.c3 e o primeiro lance do motor, e a variante principal dele transpoe para a linha do 4...Cc6 deste mesmo arquivo."]
+[Result "*"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nf6 5. c3 {Nao muda nada para nos. O peao
+em c3 segura o de d4, e o plano segue igual: bispo para f4, cavalo por d2 e dama
+para b3. A ordem dos lances dele nao muda a nossa.} *

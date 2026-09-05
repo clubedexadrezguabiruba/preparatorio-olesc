@@ -1,0 +1,499 @@
+[
+  {
+    "id": "brancas-escocesa-903edd82",
+    "cor": "brancas",
+    "abertura": "escocesa",
+    "nivel": "base",
+    "nome": "Escocesa — 7.Qe2 d6 8.Be3",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r1bqk2r/ppp2ppp/1bnp1n2/8/4P3/1NN1B3/PPP1QPPP/R3KB1R b KQkq - 1 8",
+    "lances": [
+      "e2e4",
+      "e7e5",
+      "g1f3",
+      "b8c6",
+      "d2d4",
+      "e5d4",
+      "f3d4",
+      "f8c5",
+      "d4b3",
+      "c5b6",
+      "b1c3",
+      "g8f6",
+      "d1e2",
+      "d7d6",
+      "c1e3"
+    ],
+    "sans": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "exd4",
+      "Nxd4",
+      "Bc5",
+      "Nb3",
+      "Bb6",
+      "Nc3",
+      "Nf6",
+      "Qe2",
+      "d6",
+      "Be3"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "14": "O bispo em e3 encara o dele e\ndefende f2. Se ele trocar, a dama recaptura em e3 e o roque grande vem logo em\nseguida."
+    },
+    "fonte": "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"
+  },
+  {
+    "id": "brancas-escocesa-fe195431",
+    "cor": "brancas",
+    "abertura": "escocesa",
+    "nivel": "base",
+    "nome": "Escocesa — 6.e5 Qe7 7.Qe2",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r1b1kb1r/p1ppqppp/2p2n2/4P3/8/8/PPP1QPPP/RNB1KB1R b KQkq - 2 7",
+    "lances": [
+      "e2e4",
+      "e7e5",
+      "g1f3",
+      "b8c6",
+      "d2d4",
+      "e5d4",
+      "f3d4",
+      "g8f6",
+      "d4c6",
+      "b7c6",
+      "e4e5",
+      "d8e7",
+      "d1e2"
+    ],
+    "sans": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "exd4",
+      "Nxd4",
+      "Nf6",
+      "Nxc6",
+      "bxc6",
+      "e5",
+      "Qe7",
+      "Qe2"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "12": "A dama entra na coluna e, atras do peao\nde e5 e de frente para a dama dele. Enquanto esse peao ficar em pe, o bispo dele\nde f8 nao sai, e nos desenvolvemos de graca."
+    },
+    "fonte": "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"
+  },
+  {
+    "id": "brancas-escocesa-724ae4ca",
+    "cor": "brancas",
+    "abertura": "escocesa",
+    "nivel": "base",
+    "nome": "Escocesa — 5.Qxd4 Nf6 6.e5",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r1bqkb1r/pppp1ppp/5n2/4P3/3Q4/8/PPP2PPP/RNB1KB1R b KQkq - 0 6",
+    "lances": [
+      "e2e4",
+      "e7e5",
+      "g1f3",
+      "b8c6",
+      "d2d4",
+      "e5d4",
+      "f3d4",
+      "c6d4",
+      "d1d4",
+      "g8f6",
+      "e4e5"
+    ],
+    "sans": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "exd4",
+      "Nxd4",
+      "Nxd4",
+      "Qxd4",
+      "Nf6",
+      "e5"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "10": "O peao avanca e expulsa o cavalo antes que ele se instale.\nGanhamos espaco e um tempo — e por isso que esse cavalo cedo nao e o melhor\nlance dele."
+    },
+    "fonte": "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"
+  },
+  {
+    "id": "brancas-escocesa-5250fcfd",
+    "cor": "brancas",
+    "abertura": "escocesa",
+    "nivel": "base",
+    "nome": "Escocesa — 7.Bf4 Be7 8.O-O-O",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r1bqk2r/ppp1bppp/3p1n2/8/3QPB2/2N5/PPP2PPP/2KR1B1R b kq - 5 8",
+    "lances": [
+      "e2e4",
+      "e7e5",
+      "g1f3",
+      "b8c6",
+      "d2d4",
+      "e5d4",
+      "f3d4",
+      "c6d4",
+      "d1d4",
+      "d7d6",
+      "b1c3",
+      "g8f6",
+      "c1f4",
+      "f8e7",
+      "e1c1"
+    ],
+    "sans": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "exd4",
+      "Nxd4",
+      "Nxd4",
+      "Qxd4",
+      "d6",
+      "Nc3",
+      "Nf6",
+      "Bf4",
+      "Be7",
+      "O-O-O"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "12": "O bispo vai para f4 mirando o peao de d6 e libera a casa c1\npara o roque grande.",
+      "14": "Roque grande. O rei sai do centro e a\ntorre cai na coluna d, bem em frente ao peao de d6. Daqui o plano e sempre o\nmesmo: f3, g4 e os peoes avancam contra o rei dele."
+    },
+    "fonte": "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"
+  },
+  {
+    "id": "brancas-escocesa-7b8467ff",
+    "cor": "brancas",
+    "abertura": "escocesa",
+    "nivel": "base",
+    "nome": "Escocesa — 7.Bf4 Nf6 8.O-O-O",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r2qkb1r/pbpp1ppp/1p3n2/8/3QPB2/2N5/PPP2PPP/2KR1B1R b kq - 5 8",
+    "lances": [
+      "e2e4",
+      "e7e5",
+      "g1f3",
+      "b8c6",
+      "d2d4",
+      "e5d4",
+      "f3d4",
+      "c6d4",
+      "d1d4",
+      "b7b6",
+      "b1c3",
+      "c8b7",
+      "c1f4",
+      "g8f6",
+      "e1c1"
+    ],
+    "sans": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "exd4",
+      "Nxd4",
+      "Nxd4",
+      "Qxd4",
+      "b6",
+      "Nc3",
+      "Bb7",
+      "Bf4",
+      "Nf6",
+      "O-O-O"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "14": "Ele armou o bispo na diagonal grande\npara bater em e4, e nos simplesmente defendemos com o cavalo e seguimos o plano\nde sempre: bispo em f4 e roque grande. O peao de e4 esta seguro."
+    },
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 2 da secao 8 de docs/REPERTORIO.md: nenhum curso do Doug responde a 5...c5 nem a 5...b6. O motor poe 6.De3 a 7 centesimos do primeiro lance dele, e 7.e5 e 8.Df3 sao a variante principal dele."
+  },
+  {
+    "id": "brancas-escocesa-a46c0bd6",
+    "cor": "brancas",
+    "abertura": "escocesa",
+    "nivel": "base",
+    "nome": "Escocesa — 7.e5 Nd5 8.Qf3",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r1bqkb1r/pp1p1ppp/8/2pnP3/8/5Q2/PPP2PPP/RNB1KB1R b KQkq - 2 8",
+    "lances": [
+      "e2e4",
+      "e7e5",
+      "g1f3",
+      "b8c6",
+      "d2d4",
+      "e5d4",
+      "f3d4",
+      "c6d4",
+      "d1d4",
+      "c7c5",
+      "d4e3",
+      "g8f6",
+      "e4e5",
+      "f6d5",
+      "e3f3"
+    ],
+    "sans": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "exd4",
+      "Nxd4",
+      "Nxd4",
+      "Qxd4",
+      "c5",
+      "Qe3",
+      "Nf6",
+      "e5",
+      "Nd5",
+      "Qf3"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "10": "A dama sai do ataque do peao e fica na coluna e, ainda ativa e de olho\nno peao de c5.",
+      "12": "O mesmo golpe da outra linha: o peao avanca e\nexpulsa o cavalo antes que ele se instale. Vale reparar que este truque aparece\nduas vezes na Escocesa.",
+      "14": "De f3 a dama ataca o cavalo de d5 de\nnovo e ainda olha para f7. Enquanto ele decide onde por esse cavalo, o nosso\npeao de e5 vai tomando o espaco do lado do rei."
+    },
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 2 da secao 8 de docs/REPERTORIO.md: nenhum curso do Doug responde a 5...c5 nem a 5...b6. O motor poe 6.De3 a 7 centesimos do primeiro lance dele, e 7.e5 e 8.Df3 sao a variante principal dele."
+  },
+  {
+    "id": "brancas-escocesa-1778f8cb",
+    "cor": "brancas",
+    "abertura": "escocesa",
+    "nivel": "base",
+    "nome": "Escocesa — 5.Bc4 Nc5 6.Nc3",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r1bqkb1r/pppp1ppp/2n5/2n1P3/2B5/2N2N2/PPP2PPP/R1BQK2R b KQkq - 3 6",
+    "lances": [
+      "e2e4",
+      "e7e5",
+      "g1f3",
+      "b8c6",
+      "d2d4",
+      "g8f6",
+      "d4e5",
+      "f6e4",
+      "f1c4",
+      "e4c5",
+      "b1c3"
+    ],
+    "sans": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "Nf6",
+      "dxe5",
+      "Nxe4",
+      "Bc4",
+      "Nc5",
+      "Nc3"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10
+    ],
+    "alternativas": {
+      "10": [
+        "d1e2"
+      ]
+    },
+    "errosNomeados": {},
+    "comentarios": {
+      "10": "Ele pegou o peao de e4 mas\no cavalo ja teve de andar duas vezes. Nos temos um peao forte em e5 e todas as\npecas saindo com tempo."
+    },
+    "fonte": "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'"
+  },
+  {
+    "id": "brancas-escocesa-0f2ad8b2",
+    "cor": "brancas",
+    "abertura": "escocesa",
+    "nivel": "base",
+    "nome": "Escocesa — 3.d4 f6 4.Bc4",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r1bqkbnr/pppp2pp/2n2p2/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq - 1 4",
+    "lances": [
+      "e2e4",
+      "e7e5",
+      "g1f3",
+      "b8c6",
+      "d2d4",
+      "f7f6",
+      "f1c4"
+    ],
+    "sans": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "f6",
+      "Bc4"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "6": "Com o peao em f6 ele tapou a saida do proprio cavalo e\nenfraqueceu a diagonal que chega em f7 — e e exatamente para la que o bispo vai.\nNem precisa correr: basta desenvolver, o centro ja e nosso."
+    },
+    "fonte": "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'"
+  },
+  {
+    "id": "brancas-escocesa-6ca49100",
+    "cor": "brancas",
+    "abertura": "escocesa",
+    "nivel": "base",
+    "nome": "Escocesa — 7.O-O Be7 8.Nxc6",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r2qk2r/pppbbppp/2Np1n2/1B6/4P3/2N5/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+    "lances": [
+      "e2e4",
+      "e7e5",
+      "g1f3",
+      "b8c6",
+      "d2d4",
+      "d7d6",
+      "b1c3",
+      "g8f6",
+      "f1b5",
+      "e5d4",
+      "f3d4",
+      "c8d7",
+      "e1g1",
+      "f8e7",
+      "d4c6"
+    ],
+    "sans": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "d6",
+      "Nc3",
+      "Nf6",
+      "Bb5",
+      "exd4",
+      "Nxd4",
+      "Bd7",
+      "O-O",
+      "Be7",
+      "Nxc6"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "alternativas": {
+      "6": [
+        "d4d5"
+      ]
+    },
+    "errosNomeados": {},
+    "comentarios": {
+      "14": "Trocamos\nem c6 de proposito: o peao dele vira peao dobrado, o bispo de d7 perde a\nserventia e a nossa diagonal abre. Depois vem bispo para d3 e o avanco f4."
+    },
+    "fonte": "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'"
+  }
+]

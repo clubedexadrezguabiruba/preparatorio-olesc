@@ -1,0 +1,140 @@
+[
+  {
+    "id": "brancas-alapin-cba5a868",
+    "cor": "brancas",
+    "abertura": "alapin",
+    "nivel": "base",
+    "nome": "Alapin 2.c3 — 3.d4 Nf6 4.Bd3",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "rnbqkb1r/pp2pppp/3p1n2/2p5/3PP3/2PB4/PP3PPP/RNBQK1NR b KQkq - 2 4",
+    "lances": [
+      "e2e4",
+      "c7c5",
+      "c2c3",
+      "d7d6",
+      "d2d4",
+      "g8f6",
+      "f1d3"
+    ],
+    "sans": [
+      "e4",
+      "c5",
+      "c3",
+      "d6",
+      "d4",
+      "Nf6",
+      "Bd3"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "6": "Ele nao brigou pelo centro, entao os dois peoes do\nmeio ficam nossos e o bispo sai para d3 apoiando e4. Se ele trocar em d4, o peao\nde c3 recaptura e o centro fica ainda maior."
+    },
+    "fonte": "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'"
+  },
+  {
+    "id": "brancas-alapin-0987f03c",
+    "cor": "brancas",
+    "abertura": "alapin",
+    "nivel": "base",
+    "nome": "Alapin 2.c3 — 3.d4 d5 4.e5",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+    "lances": [
+      "e2e4",
+      "c7c5",
+      "c2c3",
+      "e7e6",
+      "d2d4",
+      "d7d5",
+      "e4e5"
+    ],
+    "sans": [
+      "e4",
+      "c5",
+      "c3",
+      "e6",
+      "d4",
+      "d5",
+      "e5"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "6": "O peao avanca e trava o centro. O bispo dele de c8 fica\npreso atras dos proprios peoes, e nos ganhamos espaco para jogar do lado do\nrei."
+    },
+    "fonte": "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'"
+  },
+  {
+    "id": "brancas-alapin-c8e4c146",
+    "cor": "brancas",
+    "abertura": "alapin",
+    "nivel": "base",
+    "nome": "Alapin 2.c3 — 7.Nf3 Bg7 8.h3",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "rnbqk1nr/pp2ppbp/3p2p1/3P4/4P3/2N2N1P/PP3PP1/R1BQKB1R b KQkq - 0 8",
+    "lances": [
+      "e2e4",
+      "c7c5",
+      "c2c3",
+      "b8c6",
+      "d2d4",
+      "c5d4",
+      "c3d4",
+      "d7d6",
+      "b1c3",
+      "g7g6",
+      "d4d5",
+      "c6b8",
+      "g1f3",
+      "f8g7",
+      "h2h3"
+    ],
+    "sans": [
+      "e4",
+      "c5",
+      "c3",
+      "Nc6",
+      "d4",
+      "cxd4",
+      "cxd4",
+      "d6",
+      "Nc3",
+      "g6",
+      "d5",
+      "Nb8",
+      "Nf3",
+      "Bg7",
+      "h3"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "6": "Este e o lance que da nome a abertura toda: o peao de c3\nrecaptura e ficamos com dois peoes no centro, e4 e d4, contra nenhum.",
+      "14": "Antes de rocar, tiramos a casa g4 do bispo\ndele. Repare no centro: peoes em e4 e d5 e o cavalo dele de volta para casa — e\nisso que o 2.c3 constroi."
+    },
+    "fonte": "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'"
+  }
+]

@@ -1,0 +1,24 @@
+; Francesa 3.Bd3 — 2 linhas do Base, as duas respostas mais frequentes a 3.Bd3:
+; 3...c5 com 38,2 por cento e 3...dxe4 com 22,2 por cento.
+;
+; No lance 5 da linha do 3...c5 a fonte oferece tres lances marcados como
+; interessantes e nao escolhe nenhum. A escolha do c3 e nossa, por livro e
+; motor. Os outros dois entram como alternativa aceita: o treinador nao cobra
+; quem jogar um deles.
+
+[Abertura "francesa"]
+[Nome "Francesa 3.Bd3"]
+[Cor "brancas"]
+[Nivel "base"]
+[Fonte "GM Avetik Grigoryan (ChessMood) — 'French with 3.Bd3'. No lance 5 contra 3...c5 a escolha entre os tres lances marcados pela fonte e nossa, por livro + motor: Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026 poe os tres a menos de um decimo de peao um do outro, entao a escolha e pedagogica, nao de avaliacao."]
+[Result "*"]
+
+1. e4 e6 2. d4 d5 3. Bd3 dxe4
+(3... c5 4. exd5 exd5 5. c3 $5 (5. dxc5 $5) (5. Nf3 $5) {Ele abriu o jogo cedo.
+Nos seguramos o peao de d4 com o de c3 e ficamos com um centro solido e o bispo
+ja apontado para o lado do rei dele. Os outros dois lances da fonte tambem
+servem — este e o mais facil de jogar depois.})
+4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 7. Be3 cxd4 8. Nxd4 {O cavalo fica no meio do
+tabuleiro e tudo esta desenvolvido. Repare no bispo de f3: ele atravessa o
+tabuleiro inteiro, e e justamente a peca que o jogador de Francesa menos gosta
+de enfrentar, porque o bispo dele de c8 continua preso.} *

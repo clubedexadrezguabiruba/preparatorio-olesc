@@ -1,0 +1,106 @@
+[
+  {
+    "id": "brancas-caro-kann-d2337d9b",
+    "cor": "brancas",
+    "abertura": "caro-kann",
+    "nivel": "base",
+    "nome": "Caro-Kann Trocas — 7.Qb3 Qd7 8.Nd2",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r3kb1r/pp1qpppp/2n2n2/3p4/3P1Bb1/1QPB4/PP1N1PPP/R3K1NR b KQkq - 6 8",
+    "lances": [
+      "e2e4",
+      "c7c6",
+      "d2d4",
+      "d7d5",
+      "e4d5",
+      "c6d5",
+      "f1d3",
+      "b8c6",
+      "c2c3",
+      "g8f6",
+      "c1f4",
+      "c8g4",
+      "d1b3",
+      "d8d7",
+      "b1d2"
+    ],
+    "sans": [
+      "e4",
+      "c6",
+      "d4",
+      "d5",
+      "exd5",
+      "cxd5",
+      "Bd3",
+      "Nc6",
+      "c3",
+      "Nf6",
+      "Bf4",
+      "Bg4",
+      "Qb3",
+      "Qd7",
+      "Nd2"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "12": "A dama\nem b3 bate em b7 e em d5 ao mesmo tempo. Ele vai ter de gastar um lance para\ndefender.",
+      "14": "O cavalo entra por d2 porque c3 esta ocupado pelo\nnosso peao, e de d2 ele segue para f3. Com dama em b3 e bispo em d3 nos\napertamos os dois lados do tabuleiro — e uma posicao para jogar devagar, sem\npressa de trocar pecas."
+    },
+    "fonte": "GM Avetik Grigoryan (ChessMood) — 'Caro Kann'"
+  },
+  {
+    "id": "brancas-caro-kann-054a0df4",
+    "cor": "brancas",
+    "abertura": "caro-kann",
+    "nivel": "base",
+    "nome": "Caro-Kann Trocas — 4.Bd3 Nf6 5.c3",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "rnbqkb1r/pp2pppp/5n2/3p4/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq - 0 5",
+    "lances": [
+      "e2e4",
+      "c7c6",
+      "d2d4",
+      "d7d5",
+      "e4d5",
+      "c6d5",
+      "f1d3",
+      "g8f6",
+      "c2c3"
+    ],
+    "sans": [
+      "e4",
+      "c6",
+      "d4",
+      "d5",
+      "exd5",
+      "cxd5",
+      "Bd3",
+      "Nf6",
+      "c3"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "8": "Nao muda nada para nos. O peao\nem c3 segura o de d4, e o plano segue igual: bispo para f4, cavalo por d2 e dama\npara b3. A ordem dos lances dele nao muda a nossa."
+    },
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 5 da secao 8 de docs/REPERTORIO.md: o arquivo do Grigoryan so cobre 4...Cc6. O 5.c3 e o primeiro lance do motor, e a variante principal dele transpoe para a linha do 4...Cc6 deste mesmo arquivo."
+  }
+]
