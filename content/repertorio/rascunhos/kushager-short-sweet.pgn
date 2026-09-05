@@ -1,0 +1,115 @@
+; RASCUNHO — gerado por `npm run repertorio:importar`. Ainda não é repertório.
+;
+; O que falta antes de virar content/repertorio/pretas-kushager.pgn:
+;   1. cortar os ramos que o explorer mostrar como raros;
+;   2. fechar toda linha que hoje termina em lance do adversário;
+;   3. escrever o comentário do último lance nosso, redigido do zero.
+;
+; Os lances vieram da fonte (fato com proveniência). A prosa do autor NÃO
+; entra no repositório — ela foi descartada na importação, de propósito.
+
+[Abertura "kushager"]
+[Nome "1.d4 d5"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Short & Sweet: Kushager's 1.d4 d5 (IM Kushager Krishnater, Chessable) — Short & Sweet Kushager - The Manhattan #1"]
+[Result "*"]
+
+1. d4 d5 2. c4 e6 3. Nf3 Nf6 4. Nc3 Nbd7 5. Bg5 Bb4 6. e3 c5 7. cxd5 exd5 8.
+dxc5 Qa5 9. Rc1 Ne4 10. Qxd5 Nxc3 11. bxc3 Bxc3+ 12. Kd1 O-O 13. Bc4 b5 14. Bb3
+Nf6 15. Bxf6 gxf6 16. Qxa8 Rd8+ 17. Ke2 b4 18. Bc4 Qxa2+ 19. Bxa2 Ba6+ 20. Bc4
+Bxc4# *
+
+[Abertura "kushager"]
+[Nome "1.d4 d5"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Short & Sweet: Kushager's 1.d4 d5 (IM Kushager Krishnater, Chessable) — Short & Sweet Kushager - The Manhattan #2"]
+[Result "*"]
+
+1. d4 d5 2. c4 e6 3. Nf3 Nf6 4. Nc3 Nbd7 5. Bg5 Bb4 6. e3 c5 7. cxd5 exd5 8. Bd3
+Qa5 9. Qc2 c4 10. Bf5 O-O 11. O-O Re8 12. Nd2 g6 13. Bh3 Kg7 14. Bh4 Nb6 15. Nb3
+cxb3 16. axb3 Bxc3 17. Rxa5 Bxa5 18. Qc5 Bxh3 19. gxh3 g5 20. Bg3 Bd2 *
+
+[Abertura "kushager"]
+[Nome "1.d4 d5"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Short & Sweet: Kushager's 1.d4 d5 (IM Kushager Krishnater, Chessable) — Short & Sweet Kushager - The Manhattan #3"]
+[Result "*"]
+
+1. d4 d5 2. c4 e6 3. Nf3 Nf6 4. Nc3 Nbd7 5. Bg5 Bb4 6. e3 c5 7. Bd3 cxd4 8. exd4
+dxc4 9. Bxc4 h6 10. Bh4 O-O 11. O-O Qa5 12. Rc1 Bxc3 13. Rxc3 b5 *
+
+[Abertura "kushager"]
+[Nome "1.d4 d5"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Short & Sweet: Kushager's 1.d4 d5 (IM Kushager Krishnater, Chessable) — Short & Sweet Kushager - The Catalan #1"]
+[Result "*"]
+
+1. d4 d5 2. c4 e6 3. Nf3 Nf6 4. g3 Be7 5. Bg2 O-O 6. O-O dxc4 7. Qc2 b5 8. a4 b4
+9. Nfd2 Nd5 10. Nxc4 c5 11. dxc5 Bxc5 12. Rd1 Nd7 13. Bxd5 exd5 14. Rxd5 Bb7 15.
+Rd1 Qc8 *
+
+[Abertura "kushager"]
+[Nome "1.d4 d5"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Short & Sweet: Kushager's 1.d4 d5 (IM Kushager Krishnater, Chessable) — Short & Sweet Kushager - The Catalan #2"]
+[Result "*"]
+
+1. d4 d5 2. c4 e6 3. Nf3 Nf6 4. g3 Be7 5. Bg2 O-O 6. O-O dxc4 7. Ne5 Nd5 8. Nxc4
+b5 9. Ne5 Bb7 10. Qb3 a6 11. a4 Nd7 12. axb5 Nxe5 13. dxe5 axb5 14. Rxa8 Qxa8
+15. Qxb5 Ba6 16. Bxd5 exd5 17. Qd7 Qd8 18. Qxd8 Rxd8 19. Re1 d4 20. Nd2 Bb4 *
+
+[Abertura "kushager"]
+[Nome "1.d4 d5"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Short & Sweet: Kushager's 1.d4 d5 (IM Kushager Krishnater, Chessable) — Short & Sweet Kushager - The Gukesh QGD Main Line #1"]
+[Result "*"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. cxd5 exd5 5. Bg5 Bb4 6. e3 h6 7. Bh4 g5 8. Bg3
+Ne4 9. Ne2 h5 10. h4 Bg4 11. Qa4+ Nc6 *
+
+[Abertura "kushager"]
+[Nome "1.d4 d5"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Short & Sweet: Kushager's 1.d4 d5 (IM Kushager Krishnater, Chessable) — Short & Sweet Kushager - The Gukesh QGD Main Line #2"]
+[Result "*"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. cxd5 exd5 5. Bg5 Bb4 6. e3 h6 7. Bh4 g5 8. Bg3
+Ne4 9. Ne2 h5 10. h4 Bg4 11. Qb3 Nxg3 12. Nxg3 Nc6 13. Ne2 Qd6 14. hxg5 O-O-O
+15. a3 Ba5 16. O-O-O Kb8 17. f3 Bc8 18. Nf4 Ne7 19. Nxh5 c5 20. Be2 Nf5 *
+
+[Abertura "kushager"]
+[Nome "1.d4 d5"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Short & Sweet: Kushager's 1.d4 d5 (IM Kushager Krishnater, Chessable) — Short & Sweet Kushager - The Gukesh QGD #3"]
+[Result "*"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. cxd5 exd5 5. Bg5 Bb4 6. e3 h6 7. Bxf6 Qxf6 8.
+Qa4+ Nc6 9. Nf3 O-O 10. Rc1 Qg6 11. Qd1 Ne7 12. a3 Ba5 *
+
+[Abertura "kushager"]
+[Nome "1.d4 d5"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Short & Sweet: Kushager's 1.d4 d5 (IM Kushager Krishnater, Chessable) — Short & Sweet Kushager - The London"]
+[Result "*"]
+
+1. d4 d5 2. Bf4 Nf6 3. e3 e6 4. Nf3 c5 5. Nbd2 Nc6 6. c3 cxd4 7. exd4 Nh5 8. Be3
+Bd6 9. Bb5 O-O 10. O-O Ne7 11. Bd3 Nf5 12. Bxf5 exf5 *
+
+[Abertura "kushager"]
+[Nome "1.d4 d5"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Short & Sweet: Kushager's 1.d4 d5 (IM Kushager Krishnater, Chessable) — Short & Sweet Kushager - The Pseudo-Trompowsky"]
+[Result "*"]
+
+1. d4 d5 2. Bg5 c5 3. dxc5 h6 4. Bh4 g5 5. Bg3 Bg7 6. c3 Na6 7. Qa4+ Bd7 8. Qa3
+Qc8 9. b4 Nc7 10. Qb2 f5 11. e3 e5 *

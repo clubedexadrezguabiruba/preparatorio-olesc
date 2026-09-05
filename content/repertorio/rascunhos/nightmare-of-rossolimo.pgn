@@ -1,0 +1,30 @@
+; RASCUNHO — gerado por `npm run repertorio:importar`. Ainda não é repertório.
+;
+; O que falta antes de virar content/repertorio/pretas-rossolimo.pgn:
+;   1. cortar os ramos que o explorer mostrar como raros;
+;   2. fechar toda linha que hoje termina em lance do adversário;
+;   3. escrever o comentário do último lance nosso, redigido do zero.
+;
+; Os lances vieram da fonte (fato com proveniência). A prosa do autor NÃO
+; entra no repositório — ela foi descartada na importação, de propósito.
+
+[Abertura "rossolimo"]
+[Nome "Rossolimo 3.Bb5"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "GM Avetik Grigoryan (ChessMood) — draft 'Nightmare of Rossolimo'"]
+[Result "*"]
+
+1. e4 c5 2. Nf3 Nc6 3. Bb5 g6 4. Bxc6 dxc6 5. d3 Bg7 6. h3 (6. Nc3 c4 7. d4 Bg4
+8. Be3 Bxf3 9. Qxf3 Bxd4 ) 6... Nf6 7. Nc3 (7. Be3 $2 Nxe4 8. dxe4 Qxd1+ 9. Kxd1
+Bxb2 10. c3 Bxa1 11. Kc2 b6 12. Nbd2 Bxc3 13. Kxc3 f6) (7. O-O c4) 7... Nd7 8.
+Be3 e5 9. Qd2 h6 $1 ( 9... Qe7 10. Bh6) 10. O-O b6 $1 11. Nh2 Nf8 12. f4 exf4
+13. Bxf4 (13. Rxf4 Be6 14. Raf1 g5 (14... Qd6 $5 15. e5 Qc7 (15... Qxe5 16.
+Ng4)) 15. R4f2 Qd6 16. Ng4 O-O-O (16... Nd7 17. e5 Nxe5 18. Ne4) 17. Nf6 Nd7 18.
+Nh5 Be5 19. g4 f6 $17) 13... Ne6 14. Bg3 (14. Be3 Nd4 15. Rae1 Be6 (15... g5 $6
+16. e5 O-O 17. h4) 16. e5 Nf5 (16... Bxe5 17. Ng4 Bg7 18. Nxh6 ) 17. Bf2 (17.
+Nf3 Nxe3) 17... Qc7 ) 14... Qg5 15. Qe1 Nd4 16. Qf2 O-O 17. Bh4 (17. Bd6 Bxh3
+(17... Nf5 18. Nf3) 18. Bf4 (18. Bxf8 Rxf8 $17) 18... Qxg2+ 19. Qxg2 Bxg2 20.
+Kxg2 g5 $1 (20... Nxc2 21. Rad1 Rad8 22. Rd2 Nd4 23. e5) 21. Bd2 (21. Bd6 Rfd8
+22. Be7 Rd7 23. Bf6 Nxc2) (21. Bg3 Nxc2) 21... Nxc2 22. Rad1 Rad8 ) (17. Rae1 f5
+$5 ) 17... Qe5 18. Rae1 c4 $1 19. dxc4 Qc5 20. e5 Nxc2 $1 21. Qxc5 bxc5 $15 *

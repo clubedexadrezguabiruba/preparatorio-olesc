@@ -1,0 +1,29 @@
+; RASCUNHO — gerado por `npm run repertorio:importar`. Ainda não é repertório.
+;
+; O que falta antes de virar content/repertorio/pretas-dragao-acelerado.pgn:
+;   1. cortar os ramos que o explorer mostrar como raros;
+;   2. fechar toda linha que hoje termina em lance do adversário;
+;   3. escrever o comentário do último lance nosso, redigido do zero.
+;
+; Os lances vieram da fonte (fato com proveniência). A prosa do autor NÃO
+; entra no repositório — ela foi descartada na importação, de propósito.
+
+[Abertura "dragao-acelerado"]
+[Nome "Dragão Acelerado"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "GM Avetik Grigoryan (ChessMood) — draft 'Sicilian Defence - Accelerated Dragon'"]
+[Result "*"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 ( 5. c4) 5... Bg7 6. Be3 Nf6 7.
+Bc4 (7. Be2 O-O 8. O-O (8. Nb3 d6 9. O-O Be6 10. f4 Rc8 11. Kh1 (11. f5 Bd7)
+11... Na5 12. f5 Nc4) (8. f4 d6 9. O-O Qb6 $1 10. Qd3 Ng4) 8... d5 9. exd5 Nxd5
+10. Nxd5 Nxd4 11. Bxd4 Qxd5 12. Bxg7 Qxd1 13. Rfxd1 Kxg7 14. Bf3 Bf5 $11) (7. f3
+O-O 8. Bc4 Qb6 $1) (7. Nxc6 bxc6 8. e5 Ng8 9. f4 (9. Bd4 Qa5 10. f4 (10. e6 Nf6)
+10... f6 (10... Nh6 11. e6 f6 12. exd7+ Bxd7 )) 9... Nh6 10. Qd2 O-O 11. O-O-O
+d6 12. exd6 Nf5 13. Bf2 Rb8 $1 $146) 7... O-O 8. Bb3 Re8 9. f3 (9. a3 d6) (9.
+Nxc6 dxc6 10. Qxd8 Rxd8 11. f3 Ne8 $1) (9. Qd2 Ng4) (9. h4 d5 10. exd5 Na5) (9.
+h3 d6) 9... e6 10. f4 ( 10. O-O d5 11. exd5 Nxd5 12. Nxd5 exd5 13. Bf2 Qg5 14.
+Kh1 Qh5 15. c3 Be5 16. Bg1 Nxd4 17. cxd4 Bd6) (10. Qd2 d5 11. Nxc6 (11. O-O-O
+Nxd4 12. Bxd4 e5 ) 11... bxc6 12. O-O-O Bb7 ) 10... d6 11. Ndb5 (11. O-O a6 12.
+Qf3 Nxd4 13. Bxd4 b5) 11... Bf8 12. Qf3 a6 13. Nd4 Na5 *

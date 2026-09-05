@@ -1,0 +1,154 @@
+{
+  "white": 19648892,
+  "draws": 1626799,
+  "black": 21162393,
+  "moves": [
+    {
+      "uci": "g1f3",
+      "san": "Nf3",
+      "averageRating": 1410,
+      "white": 8541602,
+      "draws": 700744,
+      "black": 8468517,
+      "game": null,
+      "opening": {
+        "eco": "B27",
+        "name": "Sicilian Defense"
+      }
+    },
+    {
+      "uci": "f1c4",
+      "san": "Bc4",
+      "averageRating": 1388,
+      "white": 3668431,
+      "draws": 290349,
+      "black": 4170308,
+      "game": null,
+      "opening": {
+        "eco": "B20",
+        "name": "Sicilian Defense: Bowdler Attack"
+      }
+    },
+    {
+      "uci": "d2d4",
+      "san": "d4",
+      "averageRating": 1365,
+      "white": 2019840,
+      "draws": 169516,
+      "black": 2237382,
+      "game": null,
+      "opening": {
+        "eco": "B21",
+        "name": "Sicilian Defense: Smith-Morra Gambit"
+      }
+    },
+    {
+      "uci": "b1c3",
+      "san": "Nc3",
+      "averageRating": 1359,
+      "white": 1595999,
+      "draws": 138666,
+      "black": 1780719,
+      "game": null,
+      "opening": {
+        "eco": "B23",
+        "name": "Sicilian Defense: Closed"
+      }
+    },
+    {
+      "uci": "c2c3",
+      "san": "c3",
+      "averageRating": 1419,
+      "white": 824521,
+      "draws": 65302,
+      "black": 779178,
+      "game": null,
+      "opening": {
+        "eco": "B22",
+        "name": "Sicilian Defense: Alapin Variation"
+      }
+    },
+    {
+      "uci": "d2d3",
+      "san": "d3",
+      "averageRating": 1354,
+      "white": 507906,
+      "draws": 49317,
+      "black": 648237,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c2c4",
+      "san": "c4",
+      "averageRating": 1360,
+      "white": 510504,
+      "draws": 49805,
+      "black": 640545,
+      "game": null,
+      "opening": {
+        "eco": "B20",
+        "name": "Sicilian Defense: Staunton-Cochrane Variation"
+      }
+    },
+    {
+      "uci": "f2f4",
+      "san": "f4",
+      "averageRating": 1424,
+      "white": 450573,
+      "draws": 31332,
+      "black": 465646,
+      "game": null,
+      "opening": {
+        "eco": "B21",
+        "name": "Sicilian Defense: McDonnell Attack"
+      }
+    },
+    {
+      "uci": "d1h5",
+      "san": "Qh5",
+      "averageRating": 1297,
+      "white": 361106,
+      "draws": 30875,
+      "black": 500424,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e4e5",
+      "san": "e5",
+      "averageRating": 1355,
+      "white": 344351,
+      "draws": 29657,
+      "black": 408962,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1f3",
+      "san": "Qf3",
+      "averageRating": 1336,
+      "white": 264480,
+      "draws": 21267,
+      "black": 331556,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1b5",
+      "san": "Bb5",
+      "averageRating": 1317,
+      "white": 81002,
+      "draws": 8001,
+      "black": 137317,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B20",
+    "name": "Sicilian Defense"
+  }
+}

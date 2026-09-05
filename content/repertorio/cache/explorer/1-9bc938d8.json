@@ -1,0 +1,169 @@
+{
+  "white": 211746368,
+  "draws": 17423655,
+  "black": 192870783,
+  "moves": [
+    {
+      "uci": "e7e5",
+      "san": "e5",
+      "averageRating": 1343,
+      "white": 129681825,
+      "draws": 10556394,
+      "black": 114075258,
+      "game": null,
+      "opening": {
+        "eco": "C20",
+        "name": "King's Pawn Game"
+      }
+    },
+    {
+      "uci": "c7c5",
+      "san": "c5",
+      "averageRating": 1405,
+      "white": 19667100,
+      "draws": 1637159,
+      "black": 21248335,
+      "game": null,
+      "opening": {
+        "eco": "B20",
+        "name": "Sicilian Defense"
+      }
+    },
+    {
+      "uci": "d7d5",
+      "san": "d5",
+      "averageRating": 1330,
+      "white": 18458536,
+      "draws": 1552289,
+      "black": 16392056,
+      "game": null,
+      "opening": {
+        "eco": "B01",
+        "name": "Scandinavian Defense"
+      }
+    },
+    {
+      "uci": "e7e6",
+      "san": "e6",
+      "averageRating": 1373,
+      "white": 13924230,
+      "draws": 1188375,
+      "black": 13791779,
+      "game": null,
+      "opening": {
+        "eco": "C00",
+        "name": "French Defense"
+      }
+    },
+    {
+      "uci": "c7c6",
+      "san": "c6",
+      "averageRating": 1376,
+      "white": 9368123,
+      "draws": 826235,
+      "black": 9788908,
+      "game": null,
+      "opening": {
+        "eco": "B10",
+        "name": "Caro-Kann Defense"
+      }
+    },
+    {
+      "uci": "d7d6",
+      "san": "d6",
+      "averageRating": 1351,
+      "white": 5471424,
+      "draws": 470437,
+      "black": 4924430,
+      "game": null,
+      "opening": {
+        "eco": "B00",
+        "name": "Pirc Defense"
+      }
+    },
+    {
+      "uci": "b8c6",
+      "san": "Nc6",
+      "averageRating": 1332,
+      "white": 3648637,
+      "draws": 285107,
+      "black": 3029296,
+      "game": null,
+      "opening": {
+        "eco": "B00",
+        "name": "Nimzowitsch Defense"
+      }
+    },
+    {
+      "uci": "g7g6",
+      "san": "g6",
+      "averageRating": 1372,
+      "white": 3317241,
+      "draws": 282240,
+      "black": 3193034,
+      "game": null,
+      "opening": {
+        "eco": "B06",
+        "name": "Modern Defense"
+      }
+    },
+    {
+      "uci": "g8f6",
+      "san": "Nf6",
+      "averageRating": 1286,
+      "white": 2880309,
+      "draws": 227802,
+      "black": 2225144,
+      "game": null,
+      "opening": {
+        "eco": "B02",
+        "name": "Alekhine Defense"
+      }
+    },
+    {
+      "uci": "b7b6",
+      "san": "b6",
+      "averageRating": 1382,
+      "white": 2630554,
+      "draws": 204524,
+      "black": 2414276,
+      "game": null,
+      "opening": {
+        "eco": "B00",
+        "name": "Owen Defense"
+      }
+    },
+    {
+      "uci": "a7a6",
+      "san": "a6",
+      "averageRating": 1373,
+      "white": 603768,
+      "draws": 47053,
+      "black": 515333,
+      "game": null,
+      "opening": {
+        "eco": "B00",
+        "name": "St. George Defense"
+      }
+    },
+    {
+      "uci": "f7f5",
+      "san": "f5",
+      "averageRating": 1330,
+      "white": 357017,
+      "draws": 23348,
+      "black": 267057,
+      "game": null,
+      "opening": {
+        "eco": "B00",
+        "name": "Duras Gambit"
+      }
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B00",
+    "name": "King's Pawn Game"
+  }
+}

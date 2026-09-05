@@ -1,0 +1,213 @@
+{
+  "_leia": [
+    "O mapa arquivo de fonte -> abertura. Lido por scripts/importar-fontes.ts.",
+    "",
+    "Por que a chave é o NOME DO ARQUIVO e não o capítulo: o 'capítulo' mora em",
+    "tags diferentes em cada fonte. No chess.com (Krikor) ele é [White] + [Black]",
+    "('Defesa Siciliana - Alapin' / '2.c3 d5!'); no ChessMood (Grigoryan) é só",
+    "[White] ('Scotch Game'), e 6 dos 13 arquivos dele não têm [Event] nenhuma.",
+    "O nome do arquivo é o que não é ambíguo. O nome do capítulo vai no texto de",
+    "'fonte', que é a proveniência que sai no JSON de cada linha.",
+    "",
+    "'abertura' é o slug: vira o nome do rascunho e o nome do arquivo revisado em",
+    "content/repertorio/<cor>-<abertura>.pgn. Vários arquivos podem apontar para a",
+    "mesma abertura (a Escocesa tem dois, a Alapin das brancas tem três) — cada um",
+    "gera o seu rascunho, e a fusão é feita à mão na revisão. O ESTADO de 5/9 dizia",
+    "'uma fonte por abertura, sem sobreposição'; medido, isso é falso.",
+    "",
+    "'nivel' é o padrão do arquivo, e serve só para o relatório dizer o que está",
+    "acima da profundidade. Quem decide nível ramo a ramo é a revisão."
+  ],
+
+  "excluir": [
+    {
+      "alvo": "fora-do-repertorio",
+      "porque": "Os 5 'Anti-Sicilian with Nc3' (5 partes de ataque de GM — o critério é 'poucas ideias, linhas curtas', e a Alapin é uma ideia só) e o 'Engine's match, French Be7.pgn', que é base de 72 partidas de motor, não repertório."
+    },
+    {
+      "alvo": "partidas-modelo",
+      "porque": "Os 8 itens do módulo 9 do Krikor são partidas inteiras de GM. Servem para a aula do Sábado 2 e para a apostila, não para o treinador de linhas."
+    },
+    {
+      "alvo": "--Defesa Petroff--_vs_Alternativas no lance 3_2025.11.05.pgn",
+      "porque": "Conflito de repertório: o Krikor joga 3.d4 contra a Petroff e o Grigoryan joga 3.Nxe5 d6 4.Nf3 Nxe4 5.Nc3. A decisão do Doug em 5/9 foi Grigoryan. Importar os dois daria ao aluno dois terceiros lances para a mesma posição."
+    }
+  ],
+
+  "arquivos": [
+    {
+      "arquivo": "Scotch Game + Homework.pgn",
+      "abertura": "escocesa",
+      "nome": "Escocesa",
+      "cor": "brancas",
+      "nivel": "base",
+      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'Scotch Game + Homework'",
+      "nota": "O tronco é 4…Bc5 5.Nb3. Medido no explorer: 4…Nxd4 é 52% na faixa e aqui está numa sub-variante marcada $2, sem 5…c5 nem 5…b6. O Base precisa ser construído em torno de 4…Nxd4; a fonte dá um lance e meio."
+    },
+    {
+      "arquivo": "--Abertura Escocesa--_vs_Respostas sem 3...exd4_2025.11.05.pgn",
+      "abertura": "escocesa",
+      "nome": "Escocesa",
+      "cor": "brancas",
+      "nivel": "base",
+      "fonte": "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'",
+      "nota": "Cobre 3…d6 (13,8%), 3…Nf6, 3…Nxd4, 3…d5, 3…f6 (5,5%), 3…Bd6. Funde com o arquivo do Grigoryan na revisão."
+    },
+    {
+      "arquivo": "PGN file and Homework.pgn",
+      "abertura": "petroff",
+      "nome": "Petroff",
+      "cor": "brancas",
+      "nivel": "base",
+      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'PGN file and Homework'"
+    },
+    {
+      "arquivo": "Caro Kann_Grigoryan_PGN.pgn",
+      "abertura": "caro-kann",
+      "nome": "Caro-Kann Trocas",
+      "cor": "brancas",
+      "nivel": "base",
+      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'Caro Kann'",
+      "nota": "Só 4…Nc6. Falta 4…Nf6, que é 31% depois de 4.Bd3."
+    },
+    {
+      "arquivo": "French with Bd3.pgn",
+      "abertura": "francesa",
+      "nome": "Francesa 3.Bd3",
+      "cor": "brancas",
+      "nivel": "base",
+      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'French with 3.Bd3'",
+      "nota": "O tronco é 3…dxe4 (22%). A resposta mais comum, 3…c5 (38%), tem três lances nossos marcados !? e só um com continuação; 3…Nc6 (14%) não existe."
+    },
+    {
+      "arquivo": "Scandinavian Defense.pgn",
+      "abertura": "escandinava",
+      "nome": "Escandinava",
+      "cor": "brancas",
+      "nivel": "base",
+      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'Scandinavian Defense'"
+    },
+    {
+      "arquivo": "Defesa Escandinava_vs_2.exd5_2025.11.05.pgn",
+      "abertura": "escandinava",
+      "nome": "Escandinava",
+      "cor": "brancas",
+      "nivel": "base",
+      "fonte": "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'"
+    },
+    {
+      "arquivo": "PGN for Pirc Defense.pgn",
+      "abertura": "pirc",
+      "nome": "Pirc",
+      "cor": "brancas",
+      "nivel": "avancado",
+      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'Review and PGN' (Pirc)",
+      "nota": "1…d6/1…g6 somam 4,2% na faixa. Candidato a virar princípios em notas/, sem linha. E o arquivo começa em 1…d6: 1…g6 sem …Nf6 não transpõe."
+    },
+    {
+      "arquivo": "Countering Nimzowitsch Defense.pgn",
+      "abertura": "nimzowitsch",
+      "nome": "Nimzowitsch 1…Nc6",
+      "cor": "brancas",
+      "nivel": "avancado",
+      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'Countering Nimzowitsch Defense'",
+      "nota": "1…Nc6 é 1,6% na faixa. Pelo corte do próprio plano não entra em nível nenhum; candidato a princípios."
+    },
+    {
+      "arquivo": "Defesa do Peão Rei_vs_1.e4 e5 2.Cf3_2025.09.16.pgn",
+      "abertura": "peao-rei",
+      "nome": "Desvios do 2º lance contra 1…e5",
+      "cor": "brancas",
+      "nivel": "base",
+      "fonte": "Curso Krikor 2025 — cap. 'Defesa do Peão Rei vs 1.e4 e5 2.Cf3'",
+      "nota": "Inclui a Philidor 2…d6, que é 13,7% depois de 2.Nf3 — mais que a Petroff. O arquivo sozinho dá 41 linhas dentro do Base; a poda por frequência é obrigatória aqui."
+    },
+    {
+      "arquivo": "Defesa Siciliana - Alapin_vs_2.c3 d5_2025.11.05.pgn",
+      "abertura": "alapin-brancas",
+      "nome": "Alapin 2.c3",
+      "cor": "brancas",
+      "nivel": "base",
+      "fonte": "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs 2.c3 d5!'"
+    },
+    {
+      "arquivo": "Defesa Siciliana - Alapin_vs_2.c3 Nf6_2025.11.05.pgn",
+      "abertura": "alapin-brancas",
+      "nome": "Alapin 2.c3",
+      "cor": "brancas",
+      "nivel": "base",
+      "fonte": "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs 2.c3 Cf6!'",
+      "nota": "Aqui as brancas do clube jogam 4.Bc4 — e as pretas do clube não têm resposta a 4.Bc4 no arquivo alapin.pgn. Os dois lados do clube não se encontram até isso ser escrito."
+    },
+    {
+      "arquivo": "Defesa Siciliana - Alapin_vs_Alternativas no lance 2_2025.11.05.pgn",
+      "abertura": "alapin-brancas",
+      "nome": "Alapin 2.c3",
+      "cor": "brancas",
+      "nivel": "base",
+      "fonte": "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'"
+    },
+    {
+      "arquivo": "Sicilian Defense, Accelerated Dragon.pgn",
+      "abertura": "dragao-acelerado",
+      "nome": "Dragão Acelerado",
+      "cor": "pretas",
+      "nivel": "base",
+      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'Sicilian Defence - Accelerated Dragon'",
+      "nota": "Falta 5.Nxc6, que é o lance mais comum depois de 4…g6 (36%)."
+    },
+    {
+      "arquivo": "Maroczy Bind.pgn",
+      "abertura": "maroczy",
+      "nome": "Maroczy",
+      "cor": "pretas",
+      "nivel": "avancado",
+      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'Maroczy Bind'",
+      "nota": "ATENÇÃO: o arquivo entra por 1.c4 c5 2.Nf3 Nf6 3.d4, com o peão em e2. Nosso repertório chega por 1.e4 c5 … 5.c4, com o peão já em e4. A linha principal do arquivo (6.g3, 9.Nb3 Qh5) NÃO é alcançável; só a sub-variante 6.e4 Bg7 7.Be3 d6 8.Be2 O-O 9.O-O transpõe. E 5.c4 é 3% do Acelerado na faixa."
+    },
+    {
+      "arquivo": "Nightmare of Rossolimo.pgn",
+      "abertura": "rossolimo",
+      "nome": "Rossolimo 3.Bb5",
+      "cor": "pretas",
+      "nivel": "base",
+      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'Nightmare of Rossolimo'"
+    },
+    {
+      "arquivo": "alapin.pgn",
+      "abertura": "alapin-pretas",
+      "nome": "Alapin 2.c3, pelas pretas",
+      "cor": "pretas",
+      "nivel": "base",
+      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'Alapin'",
+      "nota": "Cobre 4.d4 e 4.Nf3. Faltam 4.Bc4 (17,5%) e 4.c4 (10%) depois de 3.e5 Nd5."
+    },
+    {
+      "arquivo": "coutering sicilian's sidelines.pgn",
+      "abertura": "sicilianas-sidelines",
+      "nome": "Anti-sicilianas",
+      "cor": "pretas",
+      "nivel": "base",
+      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'Sicilian Sidelines Homework'",
+      "nota": "O arquivo mais aberto do lote. O Bowdler 2.Bc4 é 19% das sicilianas na faixa e aqui é o ramo mais vazio ('4. e5 {Where the Knight goes?}')."
+    },
+    {
+      "arquivo": "countering the English.pgn",
+      "abertura": "inglesa",
+      "nome": "Inglesa 1.c4",
+      "cor": "pretas",
+      "nivel": "avancado",
+      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'English Opening'",
+      "nota": "1.c4 é 2,1% da raiz. Candidato a princípios com uma linha só."
+    },
+    {
+      "arquivo": "kushager-short-sweet.pgn",
+      "abertura": "kushager",
+      "nome": "1.d4 d5",
+      "cor": "pretas",
+      "nivel": "base",
+      "fonte": "Short & Sweet: Kushager's 1.d4 d5 (IM Kushager Krishnater, Chessable)",
+      "nota": "Slug de guarda: o arquivo tem 10 jogos que viram quatro aberturas (Manhattan, Catalã, Gukesh QGD/Trocas, Londres, Pseudo-Trompowsky). O rascunho sai inteiro e a separação é feita na revisão, jogo a jogo pelo [Event]. Transcrito de captura de tela — todo lance passa pelo teste de legalidade aqui."
+    }
+  ]
+}

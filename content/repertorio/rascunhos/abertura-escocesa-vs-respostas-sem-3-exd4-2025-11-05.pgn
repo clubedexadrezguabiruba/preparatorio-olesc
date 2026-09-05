@@ -1,0 +1,24 @@
+; RASCUNHO — gerado por `npm run repertorio:importar`. Ainda não é repertório.
+;
+; O que falta antes de virar content/repertorio/brancas-escocesa.pgn:
+;   1. cortar os ramos que o explorer mostrar como raros;
+;   2. fechar toda linha que hoje termina em lance do adversário;
+;   3. escrever o comentário do último lance nosso, redigido do zero.
+;
+; Os lances vieram da fonte (fato com proveniência). A prosa do autor NÃO
+; entra no repositório — ela foi descartada na importação, de propósito.
+
+[Abertura "escocesa"]
+[Nome "Escocesa"]
+[Cor "brancas"]
+[Nivel "base"]
+[Fonte "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'"]
+[Result "*"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 3... d6 (3... Nf6 $2 4. dxe5 $1 4... Nxe4 5. Bc4 $1
+5... Nc5 (5... d6 6. Bxf7+ $1 (6. Qd5 $2 6... Be6 $1 7. Qxe4 d5 $15 ) 6... Kxf7
+7. Qd5+ Be6 8. Qxe4 ) 6. Nc3 (6. Qe2 $5 )) (3... f6 $2 4. Bc4 $1 $16 ) (3... d5
+$2 4. Nxe5 $1 4... Nxe5 5. dxe5 dxe4 6. Qxd8+ Kxd8 7. Nc3 Bf5 8. Bc4 $18) (3...
+Bd6 $2 ) (3... Nxd4 $6 4. Nxd4 exd4 5. Qxd4 $16) 4. Nc3 (4. d5 $5 ) 4... Nf6
+(4... exd4 5. Nxd4 $14) 5. Bb5 5... exd4 6. Nxd4 Bd7 7. O-O Be7 8. Nxc6 $1 8...
+bxc6 9. Bd3 O-O 10. f4 $1 $16 1-0

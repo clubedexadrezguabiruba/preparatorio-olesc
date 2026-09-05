@@ -1,0 +1,133 @@
+{
+  "white": 49434,
+  "draws": 3941,
+  "black": 50495,
+  "moves": [
+    {
+      "uci": "c7c5",
+      "san": "c5",
+      "averageRating": 1401,
+      "white": 18557,
+      "draws": 1435,
+      "black": 19655,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d5e4",
+      "san": "dxe4",
+      "averageRating": 1393,
+      "white": 10306,
+      "draws": 981,
+      "black": 11771,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b8c6",
+      "san": "Nc6",
+      "averageRating": 1346,
+      "white": 7272,
+      "draws": 499,
+      "black": 6737,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g8f6",
+      "san": "Nf6",
+      "averageRating": 1371,
+      "white": 6577,
+      "draws": 499,
+      "black": 6843,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c7c6",
+      "san": "c6",
+      "averageRating": 1364,
+      "white": 1151,
+      "draws": 104,
+      "black": 970,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8b4",
+      "san": "Bb4+",
+      "averageRating": 1285,
+      "white": 1029,
+      "draws": 84,
+      "black": 727,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a6",
+      "san": "a6",
+      "averageRating": 1406,
+      "white": 824,
+      "draws": 62,
+      "black": 751,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g8e7",
+      "san": "Ne7",
+      "averageRating": 1365,
+      "white": 428,
+      "draws": 36,
+      "black": 372,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8d6",
+      "san": "Bd6",
+      "averageRating": 1266,
+      "white": 429,
+      "draws": 29,
+      "black": 317,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8d7",
+      "san": "Bd7",
+      "averageRating": 1384,
+      "white": 406,
+      "draws": 28,
+      "black": 319,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f7f5",
+      "san": "f5",
+      "averageRating": 1249,
+      "white": 354,
+      "draws": 32,
+      "black": 277,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b7b6",
+      "san": "b6",
+      "averageRating": 1337,
+      "white": 327,
+      "draws": 24,
+      "black": 267,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C00",
+    "name": "French Defense: Schlechter Variation"
+  }
+}

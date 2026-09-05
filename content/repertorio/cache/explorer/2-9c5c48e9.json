@@ -1,0 +1,154 @@
+{
+  "white": 2792983,
+  "draws": 247768,
+  "black": 2673172,
+  "moves": [
+    {
+      "uci": "d2d4",
+      "san": "d4",
+      "averageRating": 1355,
+      "white": 1199360,
+      "draws": 105563,
+      "black": 1093861,
+      "game": null,
+      "opening": {
+        "eco": "D02",
+        "name": "Queen's Pawn Game: Zukertort Variation"
+      }
+    },
+    {
+      "uci": "g2g3",
+      "san": "g3",
+      "averageRating": 1358,
+      "white": 485567,
+      "draws": 43231,
+      "black": 432114,
+      "game": null,
+      "opening": {
+        "eco": "A07",
+        "name": "King's Indian Attack"
+      }
+    },
+    {
+      "uci": "e2e4",
+      "san": "e4",
+      "averageRating": 1369,
+      "white": 274049,
+      "draws": 20268,
+      "black": 245375,
+      "game": null,
+      "opening": {
+        "eco": "A06",
+        "name": "Zukertort Opening: Tennison Gambit"
+      }
+    },
+    {
+      "uci": "b1c3",
+      "san": "Nc3",
+      "averageRating": 1259,
+      "white": 166007,
+      "draws": 20469,
+      "black": 230999,
+      "game": null,
+      "opening": {
+        "eco": "A06",
+        "name": "Zukertort Opening: Reversed Mexican Defense"
+      }
+    },
+    {
+      "uci": "c2c4",
+      "san": "c4",
+      "averageRating": 1409,
+      "white": 207498,
+      "draws": 14255,
+      "black": 158680,
+      "game": null,
+      "opening": {
+        "eco": "A09",
+        "name": "Réti Opening"
+      }
+    },
+    {
+      "uci": "e2e3",
+      "san": "e3",
+      "averageRating": 1339,
+      "white": 177178,
+      "draws": 15968,
+      "black": 181396,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2d3",
+      "san": "d3",
+      "averageRating": 1326,
+      "white": 98689,
+      "draws": 9667,
+      "black": 102094,
+      "game": null,
+      "opening": {
+        "eco": "A06",
+        "name": "Zukertort Opening: Old Indian Attack"
+      }
+    },
+    {
+      "uci": "b2b3",
+      "san": "b3",
+      "averageRating": 1390,
+      "white": 62421,
+      "draws": 4672,
+      "black": 53745,
+      "game": null,
+      "opening": {
+        "eco": "A06",
+        "name": "Nimzo-Larsen Attack: Classical Variation"
+      }
+    },
+    {
+      "uci": "c2c3",
+      "san": "c3",
+      "averageRating": 1344,
+      "white": 31987,
+      "draws": 2825,
+      "black": 34784,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h3",
+      "san": "h3",
+      "averageRating": 1342,
+      "white": 31636,
+      "draws": 2882,
+      "black": 32692,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f3e5",
+      "san": "Ne5",
+      "averageRating": 1250,
+      "white": 19494,
+      "draws": 2506,
+      "black": 33928,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f3d4",
+      "san": "Nd4",
+      "averageRating": 1223,
+      "white": 11332,
+      "draws": 1821,
+      "black": 24772,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "A06",
+    "name": "Zukertort Opening"
+  }
+}

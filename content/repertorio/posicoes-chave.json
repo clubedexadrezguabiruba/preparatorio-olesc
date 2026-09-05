@@ -1,0 +1,155 @@
+{
+  "_leia": [
+    "As posições em que O ADVERSÁRIO escolhe, e que decidem o orçamento de linhas.",
+    "Lidas por scripts/explorer-repertorio.ts.",
+    "",
+    "'cor' é a cor que O ALUNO joga. 'play' é o caminho em UCI a partir da posição",
+    "inicial; no fim dele é a vez do adversário. 'porque' diz o que a resposta",
+    "muda no repertório — uma posição que não muda decisão nenhuma não devia estar",
+    "aqui.",
+    "",
+    "A lista é a do B2: os nós de decisão do repertório. O B6 acrescenta a posição",
+    "final de cada linha escrita, que é outra pergunta (avaliação, não frequência)."
+  ],
+
+  "posicoes": [
+    {
+      "rotulo": "raiz — o que as brancas abrem",
+      "cor": "pretas",
+      "play": [],
+      "porque": "Decide quanto do orçamento das pretas vai para 1.e4, 1.d4 e o resto."
+    },
+    {
+      "rotulo": "1.e4 — a resposta das pretas",
+      "cor": "brancas",
+      "play": ["e2e4"],
+      "porque": "Decide quais defesas entram no Base e quais viram princípios em notas/."
+    },
+    {
+      "rotulo": "1.e4 e5 2.Nf3 — o 2º lance das pretas",
+      "cor": "brancas",
+      "play": ["e2e4", "e7e5", "g1f3"],
+      "porque": "Philidor 2…d6 x Petroff 2…Nf6: qual das duas merece mais linha."
+    },
+    {
+      "rotulo": "Escocesa 3.d4 — o 3º lance das pretas",
+      "cor": "brancas",
+      "play": ["e2e4", "e7e5", "g1f3", "b8c6", "d2d4"],
+      "porque": "Quantas respostas sem 3…exd4 o Base precisa (o capítulo do Krikor tem seis)."
+    },
+    {
+      "rotulo": "Escocesa 4.Nxd4 — o 4º lance das pretas",
+      "cor": "brancas",
+      "play": ["e2e4", "e7e5", "g1f3", "b8c6", "d2d4", "e5d4", "f3d4"],
+      "porque": "O nó mais importante do repertório de brancas. O tronco da fonte é 4…Bc5; se 4…Nxd4 for muito mais comum, o Base tem de ser construído em torno dele."
+    },
+    {
+      "rotulo": "Escocesa 4…Nxd4 5.Qxd4 — o 5º lance das pretas",
+      "cor": "brancas",
+      "play": ["e2e4", "e7e5", "g1f3", "b8c6", "d2d4", "e5d4", "f3d4", "c6d4", "d1d4"],
+      "porque": "A fonte só dá 5…d6 e 5…Nf6. Diz quanto falta escrever por livro + motor."
+    },
+    {
+      "rotulo": "Caro Trocas 4.Bd3 — o 4º lance das pretas",
+      "cor": "brancas",
+      "play": ["e2e4", "c7c6", "d2d4", "d7d5", "e4d5", "c6d5", "f1d3"],
+      "porque": "A fonte só tem 4…Nc6. Mede o buraco do 4…Nf6."
+    },
+    {
+      "rotulo": "Francesa 3.Bd3 — o 3º lance das pretas",
+      "cor": "brancas",
+      "play": ["e2e4", "e7e6", "d2d4", "d7d5", "f1d3"],
+      "porque": "O tronco da fonte é 3…dxe4. Mede 3…c5 e 3…Nc6, que a fonte quase não cobre."
+    },
+    {
+      "rotulo": "Escandinava 2.exd5 — o 2º lance das pretas",
+      "cor": "brancas",
+      "play": ["e2e4", "d7d5", "e4d5"],
+      "porque": "2…Qxd5 x 2…Nf6: quantas linhas cada um leva."
+    },
+    {
+      "rotulo": "Alapin 2.c3 — o 2º lance das pretas",
+      "cor": "brancas",
+      "play": ["e2e4", "c7c5", "c2c3"],
+      "porque": "Os três capítulos do Krikor (2…d5, 2…Nf6, alternativas) somam 80 ramos para um Base de três linhas."
+    },
+    {
+      "rotulo": "1.e4 c5 — o 2º lance das brancas",
+      "cor": "pretas",
+      "play": ["e2e4", "c7c5"],
+      "porque": "Na faixa do clube as anti-sicilianas são mais frequentes que a Aberta. Ordena as 14 sidelines por quem aparece."
+    },
+    {
+      "rotulo": "1.e4 c5 2.Nf3 Nc6 — o 3º lance das brancas",
+      "cor": "pretas",
+      "play": ["e2e4", "c7c5", "g1f3", "b8c6"],
+      "porque": "3.d4 (Aberta) x 3.Bc4 x 3.Bb5 (Rossolimo): qual das três o aluno vê mais."
+    },
+    {
+      "rotulo": "Dragão Acelerado 4…g6 — o 5º lance das brancas",
+      "cor": "pretas",
+      "play": ["e2e4", "c7c5", "g1f3", "b8c6", "d2d4", "c5d4", "f3d4", "g7g6"],
+      "porque": "Mede 5.Nxc6 (ausente da fonte) e 5.c4 Maroczy, que tem um arquivo inteiro."
+    },
+    {
+      "rotulo": "Bowdler 2.Bc4 Nc6 — o 3º lance das brancas",
+      "cor": "pretas",
+      "play": ["e2e4", "c7c5", "f1c4", "b8c6"],
+      "porque": "O anti-siciliano de criança. A fonte deixa este ramo quase vazio."
+    },
+    {
+      "rotulo": "Alapin pelas pretas 3.e5 Nd5 — o 4º lance das brancas",
+      "cor": "pretas",
+      "play": ["e2e4", "c7c5", "c2c3", "g8f6", "e4e5", "f6d5"],
+      "porque": "A fonte cobre 4.d4 e 4.Nf3. Mede 4.Bc4 — que é o que o Krikor manda as brancas do clube jogarem."
+    },
+    {
+      "rotulo": "Rossolimo 3.Bb5 g6 — o 4º lance das brancas",
+      "cor": "pretas",
+      "play": ["e2e4", "c7c5", "g1f3", "b8c6", "f1b5", "g7g6"],
+      "porque": "4.Bxc6 é o tronco da fonte; mede quanto sobra para 4.O-O e 4.Bxc6 dxc6."
+    },
+    {
+      "rotulo": "Grand Prix 2.Nc3 Nc6 — o 3º lance das brancas",
+      "cor": "pretas",
+      "play": ["e2e4", "c7c5", "b1c3", "b8c6"],
+      "porque": "3.f4 x 3.g3 x 3.Nf3: se convergem, é uma linha só em vez de três."
+    },
+    {
+      "rotulo": "1.d4 d5 — o 2º lance das brancas",
+      "cor": "pretas",
+      "play": ["d2d4", "d7d5"],
+      "porque": "O número que decide o repertório de 1.d4: quanto de 1.d4 d5 NÃO é 2.c4. O Kushager tem uma linha de Londres e nenhuma de Colle ou Jobava."
+    },
+    {
+      "rotulo": "Manhattan 2.c4 e6 — o 3º lance das brancas",
+      "cor": "pretas",
+      "play": ["d2d4", "d7d5", "c2c4", "e7e6"],
+      "porque": "3.Nc3 x 3.Nf3 x 3.cxd5 (Trocas): as três ordens de lance do mesmo tronco."
+    },
+    {
+      "rotulo": "Manhattan 3.Nc3 Nf6 — o 4º lance das brancas",
+      "cor": "pretas",
+      "play": ["d2d4", "d7d5", "c2c4", "e7e6", "b1c3", "g8f6"],
+      "porque": "4.Bg5 (a Armadilha do Elefante) x 4.Bf4 x 4.cxd5. O ⚠ do 4.Bf4 do plano se resolve aqui."
+    },
+    {
+      "rotulo": "Londres 2.Bf4 c5 — o 3º lance das brancas",
+      "cor": "pretas",
+      "play": ["d2d4", "d7d5", "c1f4", "c7c5"],
+      "porque": "Se a Londres é 22 % de 1.d4 d5, ela merece mais que a única linha que o Kushager dá. O 2…c5 é a resposta que o plano previa; se ela mudar no B5, esta posição muda junto."
+    },
+    {
+      "rotulo": "Inglesa 1.c4 c5 — o 2º lance das brancas",
+      "cor": "pretas",
+      "play": ["c2c4", "c7c5"],
+      "porque": "Decide se a Inglesa é linha ou princípios. 1.c4 é ~2 % da raiz."
+    },
+    {
+      "rotulo": "1.Nf3 d5 — o 2º lance das brancas",
+      "cor": "pretas",
+      "play": ["g1f3", "d7d5"],
+      "porque": "Quanto de 1.Nf3 transpõe para 1.d4 e quanto é sistema próprio."
+    }
+  ]
+}

@@ -15,7 +15,10 @@
     "db:rls": "node scripts/verificar-rls.ts",
     "db:tatica": "node --conditions=react-server scripts/verificar-tatica.ts",
     "apostila": "node --conditions=react-server apostila/build.ts",
-    "apostila:conferir": "node scripts/conferir-caderno.ts"
+    "apostila:conferir": "node scripts/conferir-caderno.ts",
+    "repertorio:importar": "node scripts/importar-fontes.ts",
+    "repertorio:compilar": "node scripts/compilar-repertorio.ts",
+    "repertorio:explorer": "node scripts/explorer-repertorio.ts"
   },
   "dependencies": {
     "@lichess-org/chessground": "^10.1.1",

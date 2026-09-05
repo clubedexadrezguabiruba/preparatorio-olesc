@@ -1,0 +1,145 @@
+{
+  "white": 3581557,
+  "draws": 317421,
+  "black": 3139919,
+  "moves": [
+    {
+      "uci": "c6d4",
+      "san": "Nxd4",
+      "averageRating": 1378,
+      "white": 1977415,
+      "draws": 174114,
+      "black": 1507984,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8c5",
+      "san": "Bc5",
+      "averageRating": 1404,
+      "white": 528028,
+      "draws": 46945,
+      "black": 549600,
+      "game": null,
+      "opening": {
+        "eco": "C45",
+        "name": "Scotch Game: Classical Variation"
+      }
+    },
+    {
+      "uci": "g8f6",
+      "san": "Nf6",
+      "averageRating": 1380,
+      "white": 417659,
+      "draws": 41542,
+      "black": 457348,
+      "game": null,
+      "opening": {
+        "eco": "C45",
+        "name": "Scotch Game: Schmidt Variation"
+      }
+    },
+    {
+      "uci": "d8f6",
+      "san": "Qf6",
+      "averageRating": 1425,
+      "white": 157899,
+      "draws": 11968,
+      "black": 157308,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c6e5",
+      "san": "Ne5",
+      "averageRating": 1404,
+      "white": 107338,
+      "draws": 7096,
+      "black": 92576,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d7d6",
+      "san": "d6",
+      "averageRating": 1427,
+      "white": 77942,
+      "draws": 7389,
+      "black": 76477,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8b4",
+      "san": "Bb4+",
+      "averageRating": 1322,
+      "white": 73835,
+      "draws": 6177,
+      "black": 58490,
+      "game": null,
+      "opening": {
+        "eco": "C45",
+        "name": "Scotch Game: Malaniuk Variation"
+      }
+    },
+    {
+      "uci": "d7d5",
+      "san": "d5",
+      "averageRating": 1337,
+      "white": 55036,
+      "draws": 5294,
+      "black": 47214,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8h4",
+      "san": "Qh4",
+      "averageRating": 1399,
+      "white": 41168,
+      "draws": 4272,
+      "black": 54533,
+      "game": null,
+      "opening": {
+        "eco": "C45",
+        "name": "Scotch Game: Steinitz Variation"
+      }
+    },
+    {
+      "uci": "g8e7",
+      "san": "Nge7",
+      "averageRating": 1439,
+      "white": 46381,
+      "draws": 3877,
+      "black": 47771,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8e7",
+      "san": "Qe7",
+      "averageRating": 1375,
+      "white": 47759,
+      "draws": 4274,
+      "black": 45592,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8e7",
+      "san": "Be7",
+      "averageRating": 1451,
+      "white": 12944,
+      "draws": 1518,
+      "black": 14750,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C45",
+    "name": "Scotch Game"
+  }
+}

@@ -1,0 +1,21 @@
+; RASCUNHO — gerado por `npm run repertorio:importar`. Ainda não é repertório.
+;
+; O que falta antes de virar content/repertorio/brancas-nimzowitsch.pgn:
+;   1. cortar os ramos que o explorer mostrar como raros;
+;   2. fechar toda linha que hoje termina em lance do adversário;
+;   3. escrever o comentário do último lance nosso, redigido do zero.
+;
+; Os lances vieram da fonte (fato com proveniência). A prosa do autor NÃO
+; entra no repositório — ela foi descartada na importação, de propósito.
+
+[Abertura "nimzowitsch"]
+[Nome "Nimzowitsch 1…Nc6"]
+[Cor "brancas"]
+[Nivel "avancado"]
+[Fonte "GM Avetik Grigoryan (ChessMood) — draft 'Countering Nimzowitsch Defense'"]
+[Result "*"]
+
+1. e4 Nc6 2. Nf3 d6 (2... d5 ) (2... e6 $2 3. d4 d5 4. e5 ) (2... Nf6 $2 3. e5
+Nd5 (3... Ng4 4. d4) 4. d4 d6 5. c4 Nb6 ) (2... f5 ) (2... e5 3. d4 ) 3. d4 Nf6
+(3... e5 ) 4. Nc3 Bg4 (4... g6 5. Be3 Bg7 (5... Ng4 6. Bg5) 6. Qd2 O-O 7. d5 Nb8
+8. Bh6 $40) 5. Be3 $1 e5 (5... e6 6. h3 Bh5 ) 6. Bb5 exd4 *

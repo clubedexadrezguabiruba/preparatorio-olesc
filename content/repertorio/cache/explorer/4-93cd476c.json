@@ -1,0 +1,142 @@
+{
+  "white": 640557,
+  "draws": 55558,
+  "black": 736698,
+  "moves": [
+    {
+      "uci": "g1f3",
+      "san": "Nf3",
+      "averageRating": 1350,
+      "white": 300730,
+      "draws": 27219,
+      "black": 343383,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1c4",
+      "san": "Bc4",
+      "averageRating": 1360,
+      "white": 114828,
+      "draws": 9513,
+      "black": 135039,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1b5",
+      "san": "Bb5",
+      "averageRating": 1384,
+      "white": 72326,
+      "draws": 6186,
+      "black": 77078,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f2f4",
+      "san": "f4",
+      "averageRating": 1435,
+      "white": 53205,
+      "draws": 3690,
+      "black": 50061,
+      "game": null,
+      "opening": {
+        "eco": "B23",
+        "name": "Sicilian Defense: Grand Prix Attack"
+      }
+    },
+    {
+      "uci": "d2d3",
+      "san": "d3",
+      "averageRating": 1332,
+      "white": 32439,
+      "draws": 3139,
+      "black": 45406,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g2g3",
+      "san": "g3",
+      "averageRating": 1436,
+      "white": 21102,
+      "draws": 1694,
+      "black": 18934,
+      "game": null,
+      "opening": {
+        "eco": "B24",
+        "name": "Sicilian Defense: Closed, Fianchetto Variation"
+      }
+    },
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1395,
+      "white": 12149,
+      "draws": 1017,
+      "black": 14036,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c3d5",
+      "san": "Nd5",
+      "averageRating": 1249,
+      "white": 4323,
+      "draws": 416,
+      "black": 8250,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b2b3",
+      "san": "b3",
+      "averageRating": 1343,
+      "white": 5086,
+      "draws": 469,
+      "black": 6803,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2d4",
+      "san": "d4",
+      "averageRating": 1305,
+      "white": 4015,
+      "draws": 365,
+      "black": 7496,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g1e2",
+      "san": "Nge2",
+      "averageRating": 1406,
+      "white": 4275,
+      "draws": 332,
+      "black": 3784,
+      "game": null,
+      "opening": {
+        "eco": "B23",
+        "name": "Sicilian Defense: Closed, Chameleon Variation"
+      }
+    },
+    {
+      "uci": "d1f3",
+      "san": "Qf3",
+      "averageRating": 1318,
+      "white": 3413,
+      "draws": 270,
+      "black": 4651,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B23",
+    "name": "Sicilian Defense: Closed, Traditional"
+  }
+}
