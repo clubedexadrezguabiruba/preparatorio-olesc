@@ -22,3 +22,15 @@ servem — este e o mais facil de jogar depois.})
 tabuleiro e tudo esta desenvolvido. Repare no bispo de f3: ele atravessa o
 tabuleiro inteiro, e e justamente a peca que o jogador de Francesa menos gosta
 de enfrentar, porque o bispo dele de c8 continua preso.} *
+
+[Abertura "francesa"]
+[Nome "Francesa 3.Bd3"]
+[Cor "brancas"]
+[Nivel "base"]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 9 da secao 8 de docs/REPERTORIO.md: o arquivo do Grigoryan nao cobre 3...Cc6. O 4.Cf3 e o primeiro lance do motor e o 6.Bg5 tambem, com folga sobre o segundo."]
+[Result "*"]
+
+1. e4 e6 2. d4 d5 3. Bd3 Nc6 4. Nf3 dxe4 5. Bxe4 Nf6 6. Bg5 {O bispo prega o
+cavalo na dama: se ele comer o nosso bispo de e4, nos comemos a dama dele em d8.
+Ele vai ter de gastar um lance desfazendo a pregacao, e nos desenvolvemos de
+graca enquanto isso.} *

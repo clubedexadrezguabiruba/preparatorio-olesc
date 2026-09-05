@@ -9,8 +9,10 @@ armadilhas conhecidas.*
 
 - O que existe hoje: a ferramenta (`lib/repertorio/`, `scripts/`) e **20
   rascunhos** importados dos cursos em `content/repertorio/rascunhos/`.
-- O que **não** existe: nenhuma linha revisada. `content/repertorio/*.pgn` está
-  vazio, e é isso que o B3–B5 vai preencher.
+- O que o **B3** escreveu: as **22 linhas do Base das brancas**, em sete arquivos
+  `content/repertorio/brancas-*.pgn`, já compiladas para `public/repertorio/`.
+- O que **não** existe: as linhas das **pretas** — B4 —, e a tela em que o aluno
+  treina. Nenhum arquivo de `app/` lê o repertório ainda.
 
 ---
 
@@ -28,12 +30,13 @@ motor**, marcado ⚠ e com a proveniência dizendo isso. Nada é inventado.
 | 1…e5 2…Nf6 Petroff | 11 % de 1…e5 | 3.Nxe5 d6 4.Nf3 Nxe4 5.Nc3 | Grigoryan | **1** |
 | 1…c5 | 10,1 % | **Alapin** 2.c3 | Krikor (3 capítulos) | **3** |
 | 1…d5 Escandinava | 8,6 % | 2.exd5 Qxd5 3.Nc3 | Grigoryan + Krikor | **2** |
-| 1…e6 Francesa | 6,8 % | **3.Bd3** | Grigoryan | **2** |
+| 1…e6 Francesa | 6,8 % | **3.Bd3** | Grigoryan + livro/motor | **3** |
 | 1…c6 Caro-Kann | 4,7 % | Trocas 3.exd5 cxd5 4.Bd3 | Grigoryan | **2** |
 | 1…d6/g6 Pirc | 4,2 % | — | — | **princípios** |
 | 1…Nc6, 1…Nf6, 1…b6 | < 2 % cada | — | — | **princípios** |
 
-**Soma do Base das brancas: 21 linhas.**
+**Soma do Base das brancas: 22 linhas.** Escritas no B3, em
+`content/repertorio/brancas-*.pgn`.
 
 ### Pretas
 
@@ -52,7 +55,7 @@ motor**, marcado ⚠ e com a proveniência dizendo isso. Nada é inventado.
 | · 2.Nf3/2.e3/2.Nc3 Colle, Jobava | 38,5 % somados | ⚠ sem fonte | livro + motor | **1** |
 | 1.c4, 1.Nf3, 1.b3, 1.f4, 1.g3 | ~8 % da raiz | mesma estrutura do GDR | Grigoryan (Inglesa) | **1** |
 
-**Soma do Base das pretas: 20 linhas.** Total geral: **41**, contra a meta de ~40.
+**Soma do Base das pretas: 20 linhas.** Total geral: **42**, contra a meta de ~40.
 
 ---
 
@@ -139,8 +142,13 @@ Trocas, uma estrutura só". Depois de `3.Bd3` (104 k):
 - **3…Nc6 14 %** — não existe no arquivo;
 - 3…Nf6 13,4 % — a fonte vai para `4.e5`, que é estrutura de **Avanço**.
 
-**Decisão:** 2 linhas (3…c5 e 3…dxe4). `3…c5` precisa de **uma** escolha entre
-os três `!?` — ⚠ decisão nossa, não da fonte. `3…Nc6` ⚠ livro + motor.
+**Decisão:** 3 linhas (3…c5, 3…dxe4 e 3…Nc6). `3…c5` precisa de **uma** escolha
+entre os três `!?` — ⚠ decisão nossa, não da fonte; o B3 escolheu `5.c3`, e o
+motor põe os três a menos de um décimo de peão um do outro. `3…Nc6` saiu por
+livro + motor: `4.Nf3 dxe4 5.Bxe4 Nf6 6.Bg5`, cravando o cavalo na dama.
+
+Esta linha era 2 até 5/9. Subiu para 3 por decisão do Doug: `3…Nc6` é 14 %, mais
+frequente que respostas que já tinham linha, e a fonte não a cobre.
 
 ### 2.8 Na Caro falta a segunda resposta mais comum
 
@@ -370,19 +378,21 @@ está na lista de ⚠ abaixo.
 ## 8. Os ⚠ abertos
 
 Doze pontos em que a fonte não responde e alguém tem de escrever a linha por
-livro + motor. Em ordem de quanto o aluno vai encontrar:
+livro + motor. Em ordem de quanto o aluno vai encontrar. **Quatro fecharam no
+B3** — todos os das brancas —, e estão riscados; os oito abertos são das pretas
+e do texto de princípios.
 
 | # | ⚠ | Frequência | §|
 |---|---|---|---|
 | 1 | Bowdler `2.Bc4` e `3.Bc4` — resposta e plano | ~31 % das sicilianas | 2.6 |
-| 2 | Escocesa `4…Nxd4 5.Qxd4 c5` e `…b6` | 25 % de 52 % | 2.1 |
+| ~~2~~ | ~~Escocesa `4…Nxd4 5.Qxd4 c5` e `…b6`~~ — **fechado no B3** | 25 % de 52 % | 2.1 |
 | 3 | Dragão `5.Nxc6` | 36 % de 4…g6 | 2.5 |
-| 4 | Francesa `3…c5` — escolher **um** dos três `!?` | 38 % de 3.Bd3 | 2.7 |
-| 5 | Caro `4…Nf6` | 31 % de 4.Bd3 | 2.8 |
+| ~~4~~ | ~~Francesa `3…c5` — escolher **um** dos três `!?`~~ — **fechado no B3**, é o `5.c3` | 38 % de 3.Bd3 | 2.7 |
+| ~~5~~ | ~~Caro `4…Nf6`~~ — **fechado no B3**, é o `5.c3` | 31 % de 4.Bd3 | 2.8 |
 | 6 | Londres `2.Bf4` — confirmar `2…c5, …Nc6, …Qb6` | 22 % de 1.d4 d5 | 2.9 |
 | 7 | Alapin pelas pretas `4.Bc4` e `4.c4` | 27 % de 3…Nd5 | 2.3 |
 | 8 | Colle, Jobava, `2.e3` | 24 % de 1.d4 d5 | 2.9 |
-| 9 | Francesa `3…Nc6` | 14 % de 3.Bd3 | 2.7 |
+| ~~9~~ | ~~Francesa `3…Nc6`~~ — **fechado no B3**, é o `4.Nf3` | 14 % de 3.Bd3 | 2.7 |
 | 10 | Manhattan `4.Bf4` | 6,9 % de 3.Nc3 Nf6 | — |
 | 11 | Maroczy — recortar só a sub-árvore do `6.e4` | Avançado | 2.4 |
 | 12 | Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios | < 4,2 % cada | 2.10 |
@@ -405,5 +415,10 @@ npm test                        # 208 testes, 61 deles do repertório
 Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variações),
 `arvore.ts` (árvore → linhas), `linhas.ts` (schema e regras), `explorer.ts`.
 
-**Nada em `content/repertorio/*.pgn` ainda.** O compilador diz isso e sai em paz
-— é o estado honesto no fim do B2.
+**22 linhas em `content/repertorio/brancas-*.pgn`**, compiladas para
+`public/repertorio/` — o Base inteiro das brancas, escrito no B3. Das pretas,
+nada ainda.
+
+O motor do repertório é o mesmo Stockfish 18 de `public/engine/` que serve a
+etapa 5 da aula: a cola dele roda em `node` direto, e foi assim que as linhas
+de livro + motor foram escolhidas e as pontas conferidas.

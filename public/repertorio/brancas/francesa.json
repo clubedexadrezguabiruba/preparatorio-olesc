@@ -106,5 +106,54 @@
       "14": "O cavalo fica no meio do\ntabuleiro e tudo esta desenvolvido. Repare no bispo de f3: ele atravessa o\ntabuleiro inteiro, e e justamente a peca que o jogador de Francesa menos gosta\nde enfrentar, porque o bispo dele de c8 continua preso."
     },
     "fonte": "GM Avetik Grigoryan (ChessMood) — 'French with 3.Bd3'. No lance 5 contra 3...c5 a escolha entre os tres lances marcados pela fonte e nossa, por livro + motor: Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026 poe os tres a menos de um decimo de peao um do outro, entao a escolha e pedagogica, nao de avaliacao."
+  },
+  {
+    "id": "brancas-francesa-9d4caf37",
+    "cor": "brancas",
+    "abertura": "francesa",
+    "nivel": "base",
+    "nome": "Francesa 3.Bd3 — 5.Bxe4 Nf6 6.Bg5",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r1bqkb1r/ppp2ppp/2n1pn2/6B1/3PB3/5N2/PPP2PPP/RN1QK2R b KQkq - 2 6",
+    "lances": [
+      "e2e4",
+      "e7e6",
+      "d2d4",
+      "d7d5",
+      "f1d3",
+      "b8c6",
+      "g1f3",
+      "d5e4",
+      "d3e4",
+      "g8f6",
+      "c1g5"
+    ],
+    "sans": [
+      "e4",
+      "e6",
+      "d4",
+      "d5",
+      "Bd3",
+      "Nc6",
+      "Nf3",
+      "dxe4",
+      "Bxe4",
+      "Nf6",
+      "Bg5"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "10": "O bispo prega o\ncavalo na dama: se ele comer o nosso bispo de e4, nos comemos a dama dele em d8.\nEle vai ter de gastar um lance desfazendo a pregacao, e nos desenvolvemos de\ngraca enquanto isso."
+    },
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 9 da secao 8 de docs/REPERTORIO.md: o arquivo do Grigoryan nao cobre 3...Cc6. O 4.Cf3 e o primeiro lance do motor e o 6.Bg5 tambem, com folga sobre o segundo."
   }
 ]
