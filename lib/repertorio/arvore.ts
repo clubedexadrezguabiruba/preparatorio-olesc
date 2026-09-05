@@ -19,7 +19,8 @@ import { idDaLinha, meiosLances, type Cor, type Linha, type Nivel } from "./linh
  * ## A classificação dos irmãos nossos — e por que ela é o contrário do plano
  *
  * O plano dizia: "só irmão sem marca, `!` ou `!?` é alternativa aceita". Medido
- * nos 21 arquivos de fonte: **34 irmãos nossos não têm marca nenhuma**, e vários
+ * nos 20 arquivos de fonte importados: **33 irmãos nossos não têm marca nenhuma**,
+ * e vários
  * deles são lances que o próprio autor chama de piores — **em prosa, não em
  * NAG**. Exemplos reais: `PGN for Pirc Defense.pgn` traz
  * `4. Bc4 $1 ({Why 4.Nf3 is worse?} 4. Nf3)`, e `countering the English.pgn`

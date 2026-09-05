@@ -170,7 +170,7 @@ test("roque grande com zero, e com xeque colado", () => {
 });
 
 test("`0-0` dentro de comentário continua sendo prosa do autor", () => {
-  // Nos 21 arquivos de fonte deste projeto as duas únicas ocorrências de `0-0`
+  // Nos 20 arquivos de fonte deste projeto as duas únicas ocorrências de `0-0`
   // estão em comentário. Uma troca cega de texto reescreveria o que o autor
   // escreveu; a correção é no token, e por isso este teste existe.
   const { lances } = lerPgn("1. e4 {depois do 0-0 as brancas atacam} e5");

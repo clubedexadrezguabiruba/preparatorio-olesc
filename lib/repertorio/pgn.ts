@@ -21,7 +21,7 @@
  *    escrito com o algarismo zero, como saem alguns exportadores) sem token e
  *    sem aviso: o lance simplesmente some da linha. Aqui ele é reconhecido e
  *    normalizado para a letra `O`, que é o que a `chess.js` aceita. A correção
- *    é **no token**, não numa troca de texto antes de ler — nos 21 arquivos de
+ *    é **no token**, não numa troca de texto antes de ler — nos 20 arquivos de
  *    fonte deste projeto as duas únicas ocorrências de `0-0` estão **dentro de
  *    comentário**, e uma troca cega reescreveria a prosa do autor.
  * 2. **`lerPgns` — vários jogos num arquivo.** O plano original mandava separar
