@@ -14,7 +14,10 @@
     "tipo": "marcar",
     "titulo": "2 partidas de 15+10 no clube do chess.com",
     "detalhe": "Anote as duas à mão na planilha de papel, como no sábado: a data, o nome do adversário, se você jogou de brancas ou de pretas, e o resultado. Guarde as planilhas — elas voltam no Sábado 2.",
-    "onde": { "rotulo": "Clube da OLESC no chess.com", "url": null }
+    "onde": {
+      "rotulo": "Entrar no clube da OLESC",
+      "url": "https://www.chess.com/club/olesc-2026-equipe-guabiruba/join"
+    }
   },
   {
     "id": "s1-anotacao",

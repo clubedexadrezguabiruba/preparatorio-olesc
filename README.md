@@ -114,6 +114,12 @@ O PDF fica versionado em `public/apostila/` porque o painel do aluno leva a ele
 por link, e a Vercel não tem Chromium para regerá-lo na build. O HTML
 intermediário fica em `apostila/saida/`, fora do versionamento.
 
+Duas builds do mesmo `.md` dão PDFs que **diferem em 4 bytes** — o carimbo de
+data que o Chromium embute. Então `git status` acusa o PDF como alterado depois
+de todo `npm run apostila`, mesmo sem nada ter mudado no caderno. Antes de
+versionar a diferença, vale conferir se o conteúdo mudou de verdade; se forem só
+os 4 bytes, `git checkout public/apostila/caderno-1.pdf` descarta o ruído.
+
 **Legibilidade impressa é medida, não estimada.** `npm test` mede peça contra
 casa em P&B pela mesma régua de contraste do site
 ([`lib/diagrama/tabuleiro.test.ts`](lib/diagrama/tabuleiro.test.ts)) — mas
