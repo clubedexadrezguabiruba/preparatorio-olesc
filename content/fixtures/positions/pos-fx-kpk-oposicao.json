@@ -1,0 +1,18 @@
+{
+  "id": "pos-fx-kpk-oposicao",
+  "fen": "4k3/8/8/4K3/4P3/8/8/8 b - - 0 1",
+  "expectedResult": "draw",
+  "tags": ["fixture", "rei-e-peao", "oposicao", "defesa"],
+  "status": "fixture",
+  "provenance": {
+    "externalHumanSource": null,
+    "bibliographicSource": null,
+    "originalGame": null,
+    "authorComposer": null,
+    "license": null,
+    "editionFile": null,
+    "fenMethod": null,
+    "qaApplied": null,
+    "pendingRisk": null
+  }
+}

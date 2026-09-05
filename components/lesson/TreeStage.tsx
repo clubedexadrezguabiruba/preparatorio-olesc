@@ -21,10 +21,35 @@ import { LessonButton } from "./LessonButton";
 import { PulseRing } from "./PulseRing";
 
 /**
+ * As palavras que mudam com o objetivo da árvore (FN1/B2).
+ *
+ * Metade dos 49 finais da trilha se ganha e a outra metade se segura. Os textos
+ * fixos desta tela — "sem a vitória não há o que treinar", "o mate não saiu" —
+ * foram escritos quando só existiam os dois mates da N0, e ditos a quem só
+ * precisava empatar viram a aula cobrando o que ela mesma não pediu.
+ *
+ * Só o vocabulário muda. A mecânica é a mesma: quem decide se o lance preserva
+ * o objetivo continua sendo a lista `winningMoves` do arquivo, gerada pela
+ * tablebase na autoria.
+ */
+const ALVOS = {
+  win: {
+    /** "Sem ___ não há o que treinar." */
+    oQue: "a vitória",
+    /** "O teto de N lances acabou e ___." */
+    oFim: "o mate não saiu",
+  },
+  draw: {
+    oQue: "o empate",
+    oFim: "o empate não veio",
+  },
+} as const;
+
+/**
  * Etapas 3 e 4 — a árvore de lances (plano da F1, §3). A mesma mecânica serve
  * às duas; o que muda é a configuração: a etapa 3 tem dica, destaques e
  * retentativa ilimitada, a etapa 4 tira a ajuda, conta os lances e encerra a
- * tentativa no primeiro lance que joga a vitória fora (§3.3).
+ * tentativa no primeiro lance que joga o objetivo fora (§3.3).
  *
  * Nenhum lance é avaliado aqui: `judgeMove` compara com as listas do arquivo.
  * A chess.js entra só para dizer o que é legal e para mover as peças.
@@ -67,6 +92,9 @@ export function TreeStage({
   onFinish?: () => void;
   finishLabel?: string;
 }) {
+  /** Ganhar ou segurar: vem da árvore, escrito no arquivo da aula. */
+  const alvo = ALVOS[tree.goal];
+
   const state = useLessonStore((s) => s.trees[treeKey]);
   const message = useLessonStore((s) => s.message);
   const say = useLessonStore((s) => s.say);
@@ -194,7 +222,7 @@ export function TreeStage({
         playRefusal();
         const fatal = moveLimit !== undefined && throwsWinAway(verdict);
         if (fatal) {
-          const text = `${verdict.text} Sem a vitória não há o que treinar: a tentativa acabou.`;
+          const text = `${verdict.text} Sem ${alvo.oQue} não há o que treinar: a tentativa acabou.`;
           treeFail(treeKey, { tone: "bad", text });
           say("bad", text, dest);
         } else {
@@ -255,13 +283,14 @@ export function TreeStage({
         treeAdvance(treeKey, next);
         setBusy(false);
         if (outOfMoves) {
-          const text = `O teto de ${moveLimit} lances acabou e o mate não saiu. Recomece: o método precisa caber no limite.`;
+          const text = `O teto de ${moveLimit} lances acabou e ${alvo.oFim}. Recomece: o método precisa caber no limite.`;
           treeFail(treeKey, { tone: "warn", text });
           say("warn", text);
         }
       }, REPLY_DELAY_MS);
     },
     [
+      alvo,
       attempt,
       busy,
       celebrate,
@@ -375,7 +404,7 @@ export function TreeStage({
           placeholder={
             allowHelp
               ? "Faça o lance no tabuleiro. Errar aqui não custa nada — a resposta vem escrita."
-              : "Sem dica e sem destaque. Um lance que jogue a vitória fora encerra a tentativa."
+              : `Sem dica e sem destaque. Um lance que jogue ${alvo.oQue} fora encerra a tentativa.`
           }
         />
 

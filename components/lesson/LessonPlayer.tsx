@@ -241,7 +241,18 @@ export function LessonPlayer({
             intro="Agora é partida de verdade: o computador defende com tudo o que sabe, e nenhum lance é corrigido no caminho. Quem decide é o resultado."
             seal={
               <MasterySeal
-                report={masteryReport({ soloCleared: cleared.solo, practiceWon: cleared.practice })}
+                report={masteryReport({
+                  // O critério é o das etapas que **esta** aula tem: das 49 da
+                  // trilha, 8 são completas (etapa 4 + etapa 5) e ~39 são curtas
+                  // (só a etapa 5). Cobrar de uma aula curta a etapa sem ajuda
+                  // seria mandar o aluno a uma aba que não existe.
+                  hasSolo: lesson.stages.solo !== undefined,
+                  hasPractice: true,
+                  soloCleared: cleared.solo,
+                  practiceWon: cleared.practice,
+                  soloGoal: lesson.stages.solo?.goal,
+                  practiceGoal: lesson.stages.practice.goal,
+                })}
                 onGoToSolo={
                   lesson.stages.solo ? () => goToStage("solo") : undefined
                 }

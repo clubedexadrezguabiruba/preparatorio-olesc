@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "source": "https://tablebase.lichess.ovh/standard",
+  "fen": "8/4k3/8/4K3/4P3/8/8/8 w - - 0 1",
+  "entry": {
+    "category": "draw",
+    "dtm": 0,
+    "checkmate": false,
+    "stalemate": false,
+    "moves": [
+      {
+        "uci": "e5d4",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e5f4",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e5d5",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e5f5",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      }
+    ]
+  }
+}

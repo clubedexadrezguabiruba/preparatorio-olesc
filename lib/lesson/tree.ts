@@ -78,9 +78,9 @@ export type MoveVerdict =
    * autor escreveu para **este** lance.
    */
   | { kind: "author-alternative"; uci: string; text: string; preservesWin: true }
-  /** Fora das listas de autoria, mas a tablebase diz que ainda ganha. */
+  /** Fora das listas de autoria, mas a tablebase diz que ainda serve. */
   | { kind: "off-method"; uci: string; text: string; preservesWin: true }
-  /** Fora das listas e fora de `winningMoves`: joga a vitória fora. */
+  /** Fora das listas e fora de `winningMoves`: joga o objetivo fora. */
   | { kind: "loses-win"; uci: string; text: string; preservesWin: false };
 
 /** `true` quando o lance não avança a aula — a peça volta e o painel fala. */
@@ -161,8 +161,15 @@ export function judgeMove(lesson: Lesson, node: TreeNode, uci: string): MoveVerd
 }
 
 /**
- * O lance recusado joga a vitória fora? É este — e não o veredito escrito —
- * que encerra a tentativa na etapa 4 (§3.3): a fonte é a tablebase.
+ * O lance recusado joga **o objetivo da aula** fora? É este — e não o veredito
+ * escrito — que encerra a tentativa na etapa 4 (§3.3): a fonte é a tablebase.
+ *
+ * O nome ficou de quando só existiam aulas de mate. Desde a FN1/B2 a lista
+ * `winningMoves` do arquivo guarda os lances que preservam o `goal` da árvore
+ * — a vitória numa aula de mate, o empate numa de Filidor —, e este predicado
+ * mudou de sentido junto com ela, sem mudar de linha. Renomeá-lo custaria um
+ * diff em toda a etapa 4 para não dizer nada de novo; o que precisava mudar de
+ * palavra foi o que o aluno lê, e isso está em `TreeStage`.
  */
 export function throwsWinAway(verdict: MoveVerdict): boolean {
   return verdict.kind !== "method" && !verdict.preservesWin;

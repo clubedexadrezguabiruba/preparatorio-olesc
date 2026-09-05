@@ -175,6 +175,36 @@ export const PROTECTED_SOURCE_CAP = 2;
  * ------------------------------------------------------------------ */
 
 /**
+ * O objetivo de uma árvore de lances (FN1/B2).
+ *
+ * Até aqui o motor só sabia uma coisa: ganhar. Isso bastava para os dois mates
+ * da N0 e deixava de fora metade dos finais que o curso vai ensinar — Filidor
+ * é empate, e o aluno que "não perde" acertou a aula. Como o campo nasce com
+ * `.default("win")`, nenhum arquivo já escrito muda um byte: quem não fala do
+ * objetivo continua ensinando a ganhar.
+ */
+export const treeGoalSchema = z.enum(["win", "draw"]);
+
+/**
+ * Como a linha acaba, no lance que encerra a árvore.
+ *
+ * Antes havia uma resposta só, implícita e não escrita: **mate**. O gate cobrava
+ * `TERMINAL_SEM_MATE` de todo lance sem resposta do defensor, e por isso Lucena
+ * — que termina em promoção, com a partida bem viva — não cabia no formato.
+ *
+ * | valor | o que o autor está afirmando |
+ * |---|---|
+ * | `mate` | o lance dá xeque-mate (o padrão, e o que a N0 sempre fez) |
+ * | `promotion` | o lance promove, e daí para a frente é técnica já aprendida |
+ * | `draw-secured` | a posição resultante é empate pela tablebase: o aluno segurou |
+ * | `tablebase-win` | a posição resultante é ganha e o mate cabe em 40 lances |
+ *
+ * O gate confere cada uma dessas afirmações contra a tablebase — nenhuma delas
+ * é palavra do autor (§7.3 do plano).
+ */
+export const endsSchema = z.enum(["mate", "promotion", "draw-secured", "tablebase-win"]);
+
+/**
  * Uma variante do defensor: a resposta, e para onde a linha segue depois dela
  * (B9/E1).
  *
@@ -217,6 +247,13 @@ export const expectSchema = z
      * tentativas muda, que é o ponto.
      */
     replies: z.array(replySchema).min(2).max(4).optional(),
+    /**
+     * Como a linha acaba — **só no lance terminal** (FN1/B2). Ausente quer
+     * dizer `"mate"`, que é o que toda aula escrita até aqui afirma sem
+     * escrever. Num expect que tem resposta do defensor o campo é proibido: a
+     * linha não acaba ali, e dizer como ela acaba seria mentira no arquivo.
+     */
+    ends: endsSchema.optional(),
     feedback: texto,
     /**
      * Escrito pelo gerador de ramos equivalentes, **nunca à mão**: marca o que
@@ -225,6 +262,16 @@ export const expectSchema = z
     generated: z.literal(true).optional(),
   })
   .superRefine((e, ctx) => {
+    // `ends` descreve o fim da linha. Num expect que continua — com `reply` ou
+    // com `replies` — não há fim para descrever, e o campo passaria batido pelo
+    // gate (que só olha `ends` no terminal) sem nunca ser conferido.
+    if (e.ends !== undefined && (e.reply !== undefined || e.replies !== undefined)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["ends"],
+        message: "`ends` só existe no lance terminal: um expect com resposta do defensor não acaba a linha",
+      });
+    }
     if (e.replies !== undefined) {
       // Misturar as duas escritas deixaria duas verdades sobre a mesma linha, e
       // quem lê o arquivo não teria como saber qual delas o motor obedece.
@@ -305,8 +352,14 @@ export const treeNodeSchema = z.strictObject({
    */
   authorAlternatives: z.array(authorAlternativeSchema).min(1).optional(),
   /**
-   * Todos os lances legais do nó que preservam a vitória.
+   * Todos os lances legais do nó que preservam o **objetivo da árvore** — a
+   * vitória quando `goal` é `"win"`, o empate quando é `"draw"`.
    * **Gerado pelo validador a partir da tablebase — nunca escrito à mão.**
+   *
+   * O nome não mudou junto com o sentido (FN1/B2, §7.2 do plano): ele é lido
+   * por oito lugares e escrito em todo arquivo de aula, e renomear um campo de
+   * dado para melhorar uma palavra reescreveria o corpus inteiro sem trocar
+   * nenhum lance de lugar.
    */
   winningMoves: z.array(uciSchema),
   /** Nó inteiro derivado pelo gerador de ramos. Nunca escrito à mão. */
@@ -316,6 +369,17 @@ export const treeNodeSchema = z.strictObject({
 const treeBaseSchema = z.strictObject({
   positionId: positionIdSchema,
   root: nodeIdSchema,
+  /**
+   * O que a árvore pede do aluno (FN1/B2). `win` é o padrão e o que os dois
+   * mates da N0 sempre foram; `draw` é a metade do curso que ainda não cabia —
+   * Filidor, o peão de torre, os bispos de cores opostas.
+   *
+   * O default é o que mantém os arquivos já escritos intactos: o campo entra no
+   * tipo, não no JSON. E o gate confere a coerência com a posição da raiz
+   * (`OBJETIVO_INCOERENTE`): prometer empate onde a tablebase dá vitória é
+   * ensinar o aluno a se contentar com menos.
+   */
+  goal: treeGoalSchema.default("win"),
   nodes: z.record(nodeIdSchema, treeNodeSchema),
 });
 
@@ -406,6 +470,13 @@ export const exampleSceneSchema = z.strictObject({
   /** Desenhar a caixa do rei durante a cena inteira. */
   showBox: z.boolean().optional(),
   phases: z.array(examplePhaseSchema).min(1).optional(),
+  /**
+   * Como a cena acaba (FN1/B2) — o mesmo vocabulário do lance terminal da
+   * árvore. Ausente numa cena que sai de posição ganha quer dizer `"mate"`, que
+   * é o que o gate sempre cobrou; numa cena de empate, ausente quer dizer que a
+   * cena não afirma nada sobre o fim, e o gate não cobra nada.
+   */
+  ends: endsSchema.optional(),
   steps: z.array(exampleStepSchema).min(1),
 });
 
@@ -527,9 +598,27 @@ export const lessonIdSchema = z
   .string()
   .regex(/^N[0-9]+-[A-Z0-9-]+$/, "id de aula fora do padrão (ex.: N0-R-MATE)");
 
+/**
+ * A classe de força a que a aula pertence (`docs/TRILHA-FINAIS.md` §1). São as
+ * classes da USCF — E até 1199, D 1200–1399, C 1400–1599, B 1600–1799 —, e não
+ * invenção de autor nenhum.
+ *
+ * Fica **separada do id** porque o id é o do currículo (`N0-`…`N5-`) e as duas
+ * aulas prontas já o usam: renomeá-las para `E-…` invalidaria as posições e os
+ * 106 arquivos de cache da tablebase.
+ */
+export const lessonClassSchema = z.enum(["E", "D", "C", "B"]);
+
 const lessonBaseSchema = z.strictObject({
   id: lessonIdSchema,
   title: texto,
+  /**
+   * Opcional no schema, **obrigatória para publicar** (a `superRefine` abaixo).
+   * Não é frouxidão: a regra de rotação de livros da §4 da trilha conta aulas
+   * *publicadas* por classe, e uma aula em rascunho ainda não escolheu a sua.
+   * Publicar sem classe deixaria a aula fora da conta e a rotação cega.
+   */
+  class: lessonClassSchema.optional(),
   orientation: z.enum(["white", "black"]),
   domainCriterion: z.enum(["D1", "D2", "D3", "D4"]),
   /**
@@ -570,6 +659,18 @@ const lessonBaseSchema = z.strictObject({
  * fase começa dentro da linha — é do gate, que já monta os quadros.
  */
 export const lessonSchema = lessonBaseSchema.superRefine((lesson, ctx) => {
+  // A rotação de livros-base (§4 da trilha) é contada por classe, sobre as
+  // aulas publicadas. Publicar sem declarar a classe é sair da conta.
+  if (lesson.status === "published" && lesson.class === undefined) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["class"],
+      message:
+        'aula publicada precisa declarar a classe ("E", "D", "C" ou "B") — ' +
+        "é por ela que a rotação de livros-base é contada",
+    });
+  }
+
   const { objective, example } = lesson.stages;
 
   // A etapa 1 ilustra as regras com quadros da etapa 2: sem exemplo, não há
@@ -637,6 +738,9 @@ export type Provenance = z.infer<typeof provenanceSchema>;
 export type PositionStatus = z.infer<typeof positionStatusSchema>;
 export type Position = z.infer<typeof positionSchema>;
 
+export type TreeGoal = z.infer<typeof treeGoalSchema>;
+export type TerminalEnd = z.infer<typeof endsSchema>;
+export type LessonClass = z.infer<typeof lessonClassSchema>;
 export type Reply = z.infer<typeof replySchema>;
 export type Expect = z.infer<typeof expectSchema>;
 export type Mistake = z.infer<typeof mistakeSchema>;

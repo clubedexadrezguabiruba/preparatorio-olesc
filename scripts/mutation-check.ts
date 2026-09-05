@@ -1,9 +1,18 @@
 import { spawnSync } from "node:child_process";
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { Chess } from "chess.js";
-import { Tablebase, winningMovesOf } from "./tablebase.ts";
+import { goalMovesOf, Tablebase, winningMovesOf } from "./tablebase.ts";
 
 /**
  * O gate testado contra si mesmo (plano da F1, §3.4).
@@ -37,6 +46,12 @@ type Mutation = {
    * mutação ficaria verde por não ter sido lida — o pior tipo de verde.
    */
   flags?: string[];
+  /**
+   * Instalar `content/fixtures/` nesta cópia antes de aplicar a mutação (B2).
+   * Sem isto a aula sintética nem existe no `lessons/`, e a mutação ficaria
+   * vermelha por arquivo faltando — vermelho que não prova regra nenhuma.
+   */
+  fixtures?: boolean;
   aplicar: (dir: string) => Promise<string>;
 };
 
@@ -86,6 +101,44 @@ function promover(dir: string, id: string, editionFile: string) {
 
 /** A posição de ensino da aula — a que a maior parte das mutações estraga. */
 const ENSINO = "pos-n0-rmate-rogers-xvi";
+
+/* ------------------------------------------------------------------ *
+ * FN1/B2 — as fixtures
+ * ------------------------------------------------------------------ */
+
+/**
+ * Instala `content/fixtures/` na cópia de trabalho, como se fosse conteúdo.
+ *
+ * As regras que a FN1/B2 acrescentou — objetivo de empate, lance terminal que
+ * promove, a régua de DTM — não têm o que julgar no corpus de hoje: as duas
+ * aulas prontas são mates de vitória. Sem conteúdo que as exercite, as seis
+ * mutações novas ficariam vermelhas por não encontrar arquivo nenhum, que é o
+ * pior tipo de vermelho: o que não prova regra alguma.
+ *
+ * A pasta é **irmã** de `lessons/` e `positions/`, e não filha, para que nem o
+ * gate nem o site a varram sozinhos (o mesmo desenho de `content/rascunhos/`).
+ * Aqui ela é copiada para dentro, e a partir daí é conteúdo comum, julgado
+ * pelas mesmas ~50 regras.
+ */
+function instalarFixtures(dir: string) {
+  const fixtures = path.join(dir, "fixtures");
+  cpSync(path.join(fixtures, "lessons"), path.join(dir, "lessons"), { recursive: true });
+  cpSync(path.join(fixtures, "positions"), path.join(dir, "positions", "FX"), { recursive: true });
+  // O cache das fixtures viaja junto: é ele que deixa o teste de mutações rodar
+  // sem rede, do mesmo jeito que o cache versionado deixa o gate rodar no CI.
+  const cache = path.join(fixtures, "tablebase-cache");
+  if (existsSync(cache)) {
+    for (const arquivo of readdirSync(cache)) {
+      cpSync(path.join(cache, arquivo), path.join(dir, "tablebase-cache", arquivo));
+    }
+  }
+}
+
+/** Lê uma aula de fixture **já instalada** na cópia de trabalho. */
+function lerFixture(dir: string, id: string) {
+  const file = path.join(dir, "lessons", `${id}.json`);
+  return { file, json: JSON.parse(readFileSync(file, "utf8")) };
+}
 
 type Variante = { reply: string; next: string };
 
@@ -200,8 +253,11 @@ const MUTACOES: Mutation[] = [
       gravar(posicao.file, posicao.json);
       const { file, json } = lerAula(dir);
       json.status = "published";
+      // Desde a FN1/B2 o schema cobra a classe de quem publica: sem ela a
+      // mutação morreria em SCHEMA_AULA e a regra sob teste nunca rodaria.
+      json.class = "E";
       gravar(file, json);
-      return `status da aula → "published" com ${ENSINO} rebaixada a "candidate"`;
+      return `status da aula → "published" (classe E) com ${ENSINO} rebaixada a "candidate"`;
     },
   },
   {
@@ -431,26 +487,32 @@ const MUTACOES: Mutation[] = [
     },
   },
   {
-    // Só testável a partir da segunda aula: com uma aula só no repositório, nenhuma
-    // obra pode ser livro-base de duas. Entrou junto com a N0-Q-MATE.
-    titulo: "mesma obra protegida como livro-base de duas aulas do mesmo nível",
+    // FN1/B2: a regra deixou de ser "uma aula por nível" e passou a ser
+    // `max(2, floor(N/3))` aulas **publicadas** por classe. Com o piso de 2, duas
+    // aulas do mesmo autor são legítimas — a mutação precisa de **três**.
+    titulo: "obra protegida como livro-base de 3 das 3 aulas publicadas da classe",
     codigo: "FONTE_DIDATICA_DOMINA",
+    contem: "max(2, floor(3/3))",
     aplicar: async (dir) => {
-      // O estrago realista é escolher, para as duas aulas, o livro que já fornece uma
-      // cena a cada uma: assim a `FONTE_DIDATICA_DIVERGE` fica satisfeita e só a regra
-      // da rotação reclama — que é exatamente o que a mutação quer provar.
+      // O estrago realista é escolher o livro que já fornece uma cena a cada
+      // aula: assim a `FONTE_DIDATICA_DIVERGE` fica satisfeita e só a regra da
+      // rotação reclama — que é exatamente o que a mutação quer provar.
       const alvo = "pandolfini-endgame-course";
-      const r = lerAula(dir, "N0-R-MATE");
-      const q = lerAula(dir, "N0-Q-MATE");
-      const antesR = r.json.stages.objective.source;
-      const antesQ = q.json.stages.objective.source;
-      r.json.stages.objective.source = alvo;
-      q.json.stages.objective.source = alvo;
-      gravar(r.file, r.json);
-      gravar(q.file, q.json);
+      for (const id of ["N0-R-MATE", "N0-Q-MATE"]) {
+        const { file, json } = lerAula(dir, id);
+        json.stages.objective.source = alvo;
+        json.status = "published";
+        json.class = "E";
+        gravar(file, json);
+      }
+      // A terceira: cópia byte a byte de uma das duas, com id próprio. Duas
+      // aulas ainda caberiam no piso de 2; é a terceira que estoura o teto.
+      const { json } = lerAula(dir, "N0-R-MATE");
+      json.id = "N0-R-MATE-BIS";
+      gravar(path.join(dir, "lessons", "N0-R-MATE-BIS.json"), json);
       return (
-        `livro-base das duas aulas de N0 vira "${alvo}" ("${antesR}" na R-MATE, ` +
-        `"${antesQ}" na Q-MATE) — a rotação pede uma obra protegida por nível`
+        `as 3 aulas publicadas da classe E declaram "${alvo}" como livro-base — ` +
+        "o teto de max(2, floor(3/3)) é 2"
       );
     },
   },
@@ -706,6 +768,99 @@ const MUTACOES: Mutation[] = [
       return `${id}: replies escrito sem apagar reply/next`;
     },
   },
+  /* ------------------------------------------------------------------ *
+   * FN1/B2 — empate, promoção e a régua de DTM
+   *
+   * As seis mutações abaixo julgam regras que **nenhuma aula do curso exercita
+   * hoje**: as duas prontas são mates de vitória, e a primeira aula de empate
+   * só chega na FN2. Sem conteúdo que as ative, as regras novas passariam meses
+   * verdes por falta de assunto — e ninguém saberia se funcionam.
+   *
+   * Daí as fixtures (`content/fixtures/`, `flag fixtures: true`): duas aulas
+   * sintéticas, instaladas na cópia de trabalho como conteúdo comum e julgadas
+   * pelas mesmas ~50 regras. O controle com fixtures, logo antes do laço, prova
+   * que elas passam intactas — sem isso um vermelho aqui não distinguiria a
+   * regra funcionando da fixture torta.
+   * ------------------------------------------------------------------ */
+  {
+    titulo: "árvore de vitória declarada como objetivo de empate",
+    codigo: "OBJETIVO_INCOERENTE",
+    fixtures: true,
+    aplicar: async (dir) => {
+      const { file, json } = lerFixture(dir, "N1-FIXTURE-PROMOCAO");
+      json.stages.solo.goal = "draw";
+      // A mentira é plantada **inteira**: trocar o objetivo troca a lista de
+      // lances que o preservam, e deixar a lista velha faria a mutação ficar
+      // vermelha por WINNING_MOVES_DESATUALIZADO — um vermelho verdadeiro pelo
+      // motivo errado, que não provaria nada sobre a regra sob teste.
+      const tablebase = new Tablebase(path.join(dir, "tablebase-cache"), true);
+      const node = json.stages.solo.nodes.p1;
+      node.winningMoves = goalMovesOf(await tablebase.lookup(node.fen), "draw");
+      gravar(file, json);
+      return 'stages.solo.goal → "draw" numa posição que a tablebase dá como ganha para as brancas';
+    },
+  },
+  {
+    titulo: "prática de mate declarada como objetivo de empate",
+    codigo: "OBJETIVO_INCOERENTE",
+    contem: "practice",
+    aplicar: async (dir) => {
+      const { file, json } = lerAula(dir);
+      json.stages.practice.goal = "draw";
+      gravar(file, json);
+      return 'stages.practice.goal → "draw" numa posição ganha — o aluno seria aprovado por empatar';
+    },
+  },
+  {
+    titulo: "terminal que promete promoção e não promove",
+    codigo: "TERMINAL_SEM_PROMOCAO",
+    fixtures: true,
+    aplicar: async (dir) => {
+      const { file, json } = lerFixture(dir, "N1-FIXTURE-PROMOCAO");
+      const expect = json.stages.solo.nodes.p1.expects[0];
+      const antes = expect.moves[0];
+      // "e6d7" ganha e está em winningMoves: o único defeito é não promover.
+      expect.moves = ["e6d7"];
+      gravar(file, json);
+      return `o lance terminal "${antes}" vira "e6d7" — ainda ganha, e ends continua "promotion"`;
+    },
+  },
+  {
+    titulo: "terminal que promete empate seguro numa posição ganha",
+    codigo: "TERMINAL_NAO_SEGURA",
+    fixtures: true,
+    aplicar: async (dir) => {
+      const { file, json } = lerFixture(dir, "N1-FIXTURE-PROMOCAO");
+      json.stages.solo.nodes.p1.expects[0].ends = "draw-secured";
+      gravar(file, json);
+      return 'ends do terminal → "draw-secured" depois de e7e8q, que deixa posição ganha, não empatada';
+    },
+  },
+  {
+    titulo: "terminal que promete vitória de tablebase e para num empate",
+    codigo: "TERMINAL_FORA_DO_OBJETIVO",
+    fixtures: true,
+    aplicar: async (dir) => {
+      const { file, json } = lerFixture(dir, "N1-FIXTURE-EMPATE");
+      json.stages.guided.nodes.n2.expects[0].ends = "tablebase-win";
+      gravar(file, json);
+      return 'ends do terminal → "tablebase-win" numa posição que a tablebase dá como empate';
+    },
+  },
+  {
+    titulo: "terminal de vitória sem DTM para medir os 40 lances",
+    codigo: "TERMINAL_LONGE_DEMAIS",
+    fixtures: true,
+    aplicar: async (dir) => {
+      const { file, json } = lerFixture(dir, "N1-FIXTURE-PROMOCAO");
+      json.stages.solo.nodes.p1.expects[0].ends = "tablebase-win";
+      gravar(file, json);
+      return (
+        'ends → "tablebase-win" numa posição de 7 peças: a posição é ganha mesmo, ' +
+        "mas a API só dá DTM até 5 peças e a régua fica sem o que medir"
+      );
+    },
+  },
 ];
 
 function rodarValidador(dir: string, flags: string[] = []) {
@@ -752,11 +907,27 @@ if (resultadoControle.status === 0) {
   console.log(limpar(resultadoControle.saida));
   process.exit(1);
 }
+
+// Segundo controle (B2): as fixtures **intactas** também precisam passar. Sem
+// ele, um vermelho nas seis mutações novas não distinguiria "a regra pegou o
+// estrago" de "a aula sintética estava torta desde o começo".
+const controleFx = path.join(base, "controle-fixtures");
+cpSync(source, controleFx, { recursive: true });
+instalarFixtures(controleFx);
+const resultadoFx = rodarValidador(controleFx);
+if (resultadoFx.status === 0) {
+  console.log(`  ${VERDE}✔${NORMAL} controle — as fixtures da B2, instaladas e intactas, passam também`);
+} else {
+  console.log(`  ${VERMELHO}✖ controle — as fixtures da B2 já falham intactas; o teste não vale${NORMAL}`);
+  console.log(limpar(resultadoFx.saida));
+  process.exit(1);
+}
 console.log("");
 
 for (const [i, mutacao] of MUTACOES.entries()) {
   const dir = path.join(base, `m${i + 1}`);
   cpSync(source, dir, { recursive: true });
+  if (mutacao.fixtures) instalarFixtures(dir);
   const detalhe = await mutacao.aplicar(dir);
   const { status, saida } = rodarValidador(dir, mutacao.flags);
   const achados = linhasDoCodigo(saida, mutacao.codigo);

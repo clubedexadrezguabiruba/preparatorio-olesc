@@ -23,6 +23,8 @@ import {
   type MoveTree,
   type Position,
   type Source,
+  type TerminalEnd,
+  type TreeGoal,
 } from "../lib/lesson/schema.ts";
 import {
   alternativesDiffer,
@@ -36,7 +38,7 @@ import {
   type GeneratedTree,
 } from "./branches.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
-import { CacheMissError, Tablebase, winningMovesOf, type TbEntry } from "./tablebase.ts";
+import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
 
 /**
  * O gate de conteúdo (plano da F1, §3.4).
@@ -434,6 +436,141 @@ async function checkPosition(position: Position) {
 }
 
 /* ------------------------------------------------------------------ *
+ * O lance terminal — o que ele declara, e o que a tablebase confirma
+ * ------------------------------------------------------------------ */
+
+/**
+ * Teto de DTM para um terminal `tablebase-win`, em lances do aluno.
+ *
+ * Quarenta é o número da regra dos 50 lances com folga: o aluno que sai da
+ * posição terminal ainda precisa dar o mate antes de a partida ser declarada
+ * empatada. Acima disso, "daqui você ganha" é verdade de tablebase e mentira
+ * de tabuleiro.
+ */
+const TETO_DE_DTM_EM_LANCES = 40;
+
+/** O resultado da posição **visto pelo aluno**, seja de quem for a vez. */
+function resultadoParaOAluno(
+  entry: TbEntry,
+  fen: string,
+  orientation: "white" | "black",
+): "win" | "draw" | "loss" | "indefinido" {
+  const bruto =
+    entry.category === "win"
+      ? "win"
+      : entry.category === "loss"
+        ? "loss"
+        : entry.category === "draw"
+          ? "draw"
+          : "indefinido";
+  if (bruto === "draw" || bruto === "indefinido") return bruto;
+  // A categoria é sempre vista por quem está na vez. Quando não é o aluno, o
+  // resultado dele é o contrário.
+  const alunoNaVez = new Chess(fen).turn() === (orientation === "white" ? "w" : "b");
+  if (alunoNaVez) return bruto;
+  return bruto === "win" ? "loss" : "win";
+}
+
+/**
+ * O lance terminal entrega o que o arquivo diz que ele entrega? (§7.3 do plano)
+ *
+ * Até a FN1/B2 havia uma resposta só, e implícita: **mate**. Quem escrevesse um
+ * expect sem resposta do defensor estava afirmando "aqui acaba em mate", e o
+ * gate cobrava exatamente isso. Lucena termina em promoção com a partida bem
+ * viva, e Filidor termina num empate segurado — nenhuma das duas cabia.
+ *
+ * Cada valor de `ends` é uma afirmação diferente, e cada uma é conferida contra
+ * a tablebase, nunca aceita como palavra do autor. O código de erro diz **qual**
+ * afirmação caiu, e é por isso que são quatro e não um só.
+ */
+async function checkTerminal(
+  where: string,
+  goal: TreeGoal,
+  ends: TerminalEnd,
+  uci: string,
+  after: { fen: string; game: Chess },
+  orientation: "white" | "black",
+) {
+  /*
+   * Não há aqui nenhuma tabela de "qual `ends` combina com qual `goal`". Cada
+   * afirmação é conferida contra o tabuleiro, e a incoerência aparece por ela
+   * mesma: um `draw-secured` numa árvore de vitória cai em `TERMINAL_NAO_SEGURA`
+   * (a posição é ganha, não empatada) ou já caiu antes em `METODO_NAO_GANHA`.
+   * Uma tabela seria um segundo juiz, com opinião própria e sem tablebase.
+   */
+  if (ends === "mate") {
+    if (!after.game.isCheckmate()) {
+      fail("TERMINAL_SEM_MATE", where, `"${uci}" encerra o nó sem dar mate`);
+    }
+    return;
+  }
+
+  if (ends === "promotion" && uci.length !== 5) {
+    fail(
+      "TERMINAL_SEM_PROMOCAO",
+      where,
+      `"${uci}" é declarado como "promotion" e não promove peça nenhuma — ` +
+        `um lance de promoção em UCI tem cinco caracteres (ex.: e7e8q)`,
+    );
+    return;
+  }
+
+  const entry = await ask(after.fen, where);
+  if (!entry) return;
+  const resultado = resultadoParaOAluno(entry, after.fen, orientation);
+
+  if (ends === "draw-secured") {
+    if (resultado !== "draw") {
+      fail(
+        "TERMINAL_NAO_SEGURA",
+        where,
+        `"${uci}" é declarado como "draw-secured" e a tablebase dá a posição resultante como ` +
+          `"${entry.category}" (para o aluno: ${resultado}) — o empate não está seguro ali`,
+      );
+    }
+    return;
+  }
+
+  if (ends === "tablebase-win") {
+    if (resultado !== "win") {
+      fail(
+        "TERMINAL_FORA_DO_OBJETIVO",
+        where,
+        `"${uci}" é declarado como "tablebase-win" e a posição resultante não é ganha para o ` +
+          `aluno (tablebase: "${entry.category}", para o aluno: ${resultado})`,
+      );
+      return;
+    }
+    const lances = entry.dtm === null ? null : Math.ceil(Math.abs(entry.dtm) / 2);
+    if (lances === null || lances > TETO_DE_DTM_EM_LANCES) {
+      fail(
+        "TERMINAL_LONGE_DEMAIS",
+        where,
+        entry.dtm === null
+          ? `"${uci}" para numa posição ganha sem DTM na tablebase (a API só dá DTM até 5 peças) — ` +
+            `sem régua não há como afirmar que o mate cabe em ${TETO_DE_DTM_EM_LANCES} lances`
+          : `"${uci}" para numa posição cujo mate leva ${lances} lances, e o teto é ` +
+            `${TETO_DE_DTM_EM_LANCES} — deixar o aluno ali é deixá-lo com a regra dos 50 lances pela frente`,
+      );
+    }
+    return;
+  }
+
+  // Sobrou `promotion`: promover é meio caminho, e o outro meio é a posição
+  // resultante continuar valendo o objetivo da aula.
+  const preserva =
+    goal === "win" ? resultado === "win" : resultado === "win" || resultado === "draw";
+  if (!preserva) {
+    fail(
+      "TERMINAL_FORA_DO_OBJETIVO",
+      where,
+      `"${uci}" promove, mas a posição resultante não entrega o objetivo "${goal}" ` +
+        `(tablebase: "${entry.category}", para o aluno: ${resultado})`,
+    );
+  }
+}
+
+/* ------------------------------------------------------------------ *
  * Conferência das árvores de lances
  * ------------------------------------------------------------------ */
 
@@ -458,7 +595,31 @@ async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options:
     fail("FEN_DO_NO", `${where} / ${tree.root}`, `a FEN do nó raiz não é a da posição ${start.id}`);
   }
 
-  if (options.moveLimit !== undefined) {
+  // O objetivo da árvore tem de ser o que a tablebase diz da posição da raiz.
+  // Prometer empate onde há vitória ensina o aluno a se contentar com menos;
+  // prometer vitória onde só há empate o faz perder a tarde tentando ganhar
+  // uma posição empatada.
+  const esperado = tree.goal === "win" ? `win-${lesson.orientation}` : "draw";
+  if (start.expectedResult !== esperado) {
+    fail(
+      "OBJETIVO_INCOERENTE",
+      where,
+      `a árvore tem goal "${tree.goal}", que pede uma posição "${esperado}", e ` +
+        `"${start.id}" é "${start.expectedResult}"`,
+    );
+  }
+
+  /**
+   * A régua de DTM só serve a **um** caso: árvore de vitória cujas linhas todas
+   * acabam em mate. Fora dele o DTM da raiz não mede o que a aula pede — numa
+   * árvore de empate ele é 0 e não diz nada, e numa que acaba em promoção ele
+   * conta lances que o aluno nunca vai jogar dentro da aula. Nesses casos quem
+   * mede é o `LINHA_ESTOURA_TETO`, que conta os lances escritos.
+   */
+  const soAcabaEmMate = Object.values(tree.nodes).every((node) =>
+    node.expects.every((e) => respostasDe(e).length > 0 || (e.ends ?? "mate") === "mate"),
+  );
+  if (options.moveLimit !== undefined && tree.goal === "win" && soAcabaEmMate) {
     const entry = await ask(start.fen, where);
     if (entry) {
       if (entry.dtm === null) {
@@ -499,7 +660,10 @@ async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options:
 
     // winningMoves: gerado pela tablebase, conferido contra o arquivo.
     const entry = await ask(node.fen, nodeWhere);
-    const winning = entry ? winningMovesOf(entry) : null;
+    // "winningMoves" manteve o nome e mudou de sentido: são os lances que
+    // preservam o **objetivo** da árvore (§7.2 do plano). Numa árvore de
+    // vitória a lista é a mesma de sempre.
+    const winning = entry ? goalMovesOf(entry, tree.goal) : null;
     if (winning) {
       if (writeBack) {
         node.winningMoves = winning;
@@ -558,14 +722,20 @@ async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options:
           fail(
             "METODO_NAO_GANHA",
             nodeWhere,
-            `"${move}" está em expects mas não preserva a vitória (não está em winningMoves)`,
+            `"${move}" está em expects mas não preserva ` +
+              `${tree.goal === "win" ? "a vitória" : "o empate"} (não está em winningMoves)`,
           );
         }
 
         if (respostas.length === 0) {
-          if (!afterMove.game.isCheckmate()) {
-            fail("TERMINAL_SEM_MATE", nodeWhere, `"${move}" encerra o nó sem dar mate`);
-          }
+          await checkTerminal(
+            nodeWhere,
+            tree.goal,
+            expect.ends ?? "mate",
+            move,
+            afterMove,
+            lesson.orientation,
+          );
           continue;
         }
 
@@ -1022,18 +1192,36 @@ async function checkLesson(loaded: LoadedLesson) {
       const start = positions.get(scene.positionId);
       if (!start || fenProblem(start.fen)) continue;
       const sceneWhere = `${where} / example / cena "${scene.id}"`;
-      const ganha = start.expectedResult === `win-${lesson.orientation}`;
+      /**
+       * O que a cena mostra: a vitória do aluno, o empate que ele segura, ou
+       * nada disso — uma cena que sai de posição perdida existe (mostrar o erro
+       * do outro lado), e sobre ela o gate não tem o que cobrar.
+       */
+      const objetivo: TreeGoal | null =
+        start.expectedResult === `win-${lesson.orientation}`
+          ? "win"
+          : start.expectedResult === "draw"
+            ? "draw"
+            : null;
+      const ganha = objetivo === "win";
 
       let fen = start.fen;
+      let ultimo: { fen: string; game: Chess } | null = null;
       let quebrou = false;
       for (const [index, step] of scene.steps.entries()) {
         const stepWhere = `${sceneWhere} / lance ${index + 1} (${step.move})`;
         const beforeTurn = new Chess(fen).turn();
         const isStudentSide = beforeTurn === (lesson.orientation === "white" ? "w" : "b");
-        if (isStudentSide && ganha) {
+        if (isStudentSide && objetivo) {
           const entry = await ask(fen, stepWhere);
-          if (entry && !winningMovesOf(entry).includes(step.move)) {
-            fail("EXEMPLO_NAO_GANHA", stepWhere, "o lance mostrado como técnica joga a vitória fora");
+          if (entry && !goalMovesOf(entry, objetivo).includes(step.move)) {
+            fail(
+              "EXEMPLO_NAO_GANHA",
+              stepWhere,
+              objetivo === "win"
+                ? "o lance mostrado como técnica joga a vitória fora"
+                : "o lance mostrado como técnica joga o empate fora",
+            );
           }
         }
         const applied = applyUci(fen, step.move);
@@ -1043,6 +1231,7 @@ async function checkLesson(loaded: LoadedLesson) {
           break;
         }
         fen = applied.fen;
+        ultimo = applied;
 
         // A caixa desenhada é geometria de KRK/KQK. Uma cena que a peça e
         // passe por posição fora de escopo mostraria um retângulo em alguns
@@ -1063,13 +1252,30 @@ async function checkLesson(loaded: LoadedLesson) {
         }
       }
 
-      // O currículo pede que o iniciante veja a técnica **acabar**. Uma cena de
-      // vitória que para dois lances antes do mate ensina o meio do caminho.
-      if (!quebrou && ganha && !new Chess(fen).isCheckmate()) {
+      /**
+       * O currículo pede que o iniciante veja a técnica **acabar**. Uma cena de
+       * vitória que para dois lances antes do mate ensina o meio do caminho.
+       *
+       * A cena que não declara `ends` cai no que o gate sempre cobrou — mate,
+       * e só quando a posição é ganha pelo aluno. Declarar `ends` liga o mesmo
+       * juiz do lance terminal da árvore, e aí a cena de empate também precisa
+       * mostrar o fim: o quadro em que a posição está segura.
+       */
+      const fim = scene.ends ?? (ganha ? "mate" : null);
+      if (!quebrou && ultimo && fim === "mate" && !ultimo.game.isCheckmate()) {
         fail(
           "EXEMPLO_SEM_MATE",
           sceneWhere,
           "a cena sai de posição ganha e não termina em mate — o exemplo tem de mostrar o fim",
+        );
+      } else if (!quebrou && ultimo && fim && fim !== "mate") {
+        await checkTerminal(
+          sceneWhere,
+          objetivo ?? "win",
+          fim,
+          scene.steps[scene.steps.length - 1].move,
+          ultimo,
+          lesson.orientation,
         );
       }
 
@@ -1164,6 +1370,23 @@ async function checkLesson(loaded: LoadedLesson) {
     }
   }
 
+  // A etapa 5 tem o mesmo campo `goal` das árvores desde o começo, e nunca teve
+  // quem conferisse: uma prática de objetivo "win" numa posição empatada manda
+  // o aluno tentar ganhar o impossível até desistir.
+  const practice = lesson.stages.practice;
+  const posicaoDaPratica = practice ? positions.get(practice.positionId) : undefined;
+  if (practice && posicaoDaPratica) {
+    const esperado = practice.goal === "win" ? `win-${lesson.orientation}` : "draw";
+    if (posicaoDaPratica.expectedResult !== esperado) {
+      fail(
+        "OBJETIVO_INCOERENTE",
+        `${where} / practice`,
+        `a prática tem goal "${practice.goal}", que pede uma posição "${esperado}", e ` +
+          `"${posicaoDaPratica.id}" é "${posicaoDaPratica.expectedResult}"`,
+      );
+    }
+  }
+
   if (lesson.stages.guided) {
     await checkTree(lesson, "guided", lesson.stages.guided, { allowHelp: true });
   }
@@ -1174,38 +1397,68 @@ async function checkLesson(loaded: LoadedLesson) {
 }
 
 /**
- * A rotação dos livros-base, cobrada mecanicamente.
+ * A rotação dos livros-base, cobrada mecanicamente (§4 de `docs/TRILHA-FINAIS.md`).
  *
  * A regra editorial de 2026-08-19 diz que o objetivo e o exemplo de toda aula
  * saem de uma rotação de obras didáticas, **alternando** entre elas. Alternar
  * não é gentileza: obra protegida cujo método inteiro fosse copiado aula após
  * aula deixaria de ser citação e passaria a ser a coleção do autor — que é
  * exatamente o que a §12.7 evita no varejo, com o teto por aula, e o que esta
- * regra evita no atacado, com o teto por nível.
+ * regra evita no atacado.
+ *
+ * ## O que mudou na FN1/B2, e por quê
+ *
+ * A regra antiga era "uma obra protegida é base de no máximo **uma** aula por
+ * nível". Ela cabia num corpus de duas aulas e é aritmeticamente impossível no
+ * curso desenhado: são cinco livros didáticos para ~12 aulas por classe. A nova:
+ *
+ * > Nenhuma obra protegida é livro-base de mais de `max(2, floor(N/3))` aulas
+ * > **publicadas** de uma mesma classe, onde `N` é o número de aulas publicadas
+ * > daquela classe.
+ *
+ * Duas coisas na fórmula não são enfeite:
+ *
+ * - **`floor`, e não `ceil`** — `ceil(16/3)` é 6, que já seria 37,5% de uma
+ *   classe de 16, e a regra diz "um terço";
+ * - **o piso de 2** — as classes abrem em fatias (a classe C começa com quatro
+ *   aulas na FN2 e só fecha na FN3). Sem o piso, uma classe recém-aberta com
+ *   duas aulas do mesmo autor seria reprovada, e a regra viraria obstáculo à
+ *   publicação incremental em vez de regra editorial.
+ *
+ * E conta **aula publicada**, não aula escrita: a regra é sobre o que chega ao
+ * aluno. Rascunho ainda não escolheu classe, e por isso o schema só cobra o
+ * campo `class` de quem publica.
  *
  * Domínio público não entra na conta: não há coleção protegida a copiar.
  */
+export function tetoDeRotacao(publicadasNaClasse: number): number {
+  return Math.max(2, Math.floor(publicadasNaClasse / 3));
+}
+
 function checkDidacticRotation() {
-  const porNivel = new Map<string, Map<string, string[]>>();
+  const porClasse = new Map<string, { total: number; porObra: Map<string, string[]> }>();
   for (const { lesson } of lessons) {
+    // Rascunho não conta: a regra é sobre o que o aluno vê.
+    if (lesson.status !== "published" || !lesson.class) continue;
+    const daClasse = porClasse.get(lesson.class) ?? { total: 0, porObra: new Map<string, string[]>() };
+    daClasse.total += 1;
+    porClasse.set(lesson.class, daClasse);
+
     const source = lesson.stages.objective?.source;
     if (!source) continue;
     const obra = sourcesByKey.get(source);
     if (!obra?.protected) continue;
-    // O nível é o prefixo do id da aula: "N0-R-MATE" → "N0".
-    const nivel = lesson.id.split("-")[0];
-    const doNivel = porNivel.get(nivel) ?? new Map<string, string[]>();
-    doNivel.set(obra.slug, [...(doNivel.get(obra.slug) ?? []), lesson.id]);
-    porNivel.set(nivel, doNivel);
+    daClasse.porObra.set(obra.slug, [...(daClasse.porObra.get(obra.slug) ?? []), lesson.id]);
   }
-  for (const [nivel, obras] of porNivel) {
-    for (const [slug, aulas] of obras) {
-      if (aulas.length > 1) {
+  for (const [classe, { total, porObra }] of porClasse) {
+    const teto = tetoDeRotacao(total);
+    for (const [slug, aulas] of porObra) {
+      if (aulas.length > teto) {
         fail(
           "FONTE_DIDATICA_DOMINA",
-          `nível ${nivel}`,
-          `"${slug}" é livro-base de ${aulas.length} aulas do mesmo nível ` +
-            `(${aulas.sort().join(", ")}) — a rotação pede uma obra protegida por nível`,
+          `classe ${classe}`,
+          `"${slug}" é livro-base de ${aulas.length} das ${total} aulas publicadas da classe ` +
+            `(${aulas.sort().join(", ")}) e o teto é ${teto} — max(2, floor(${total}/3))`,
         );
       }
     }

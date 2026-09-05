@@ -203,12 +203,42 @@ export class Tablebase {
   }
 }
 
-/** Todos os lances legais que preservam a vitória de quem está na vez. */
-export function winningMovesOf(entry: TbEntry): string[] {
+/**
+ * Todos os lances legais que preservam o **objetivo** de quem está na vez.
+ *
+ * A categoria de um lance é o resultado visto por quem joga *depois* dele — o
+ * adversário. Daí a assimetria das duas listas:
+ *
+ * | objetivo | categorias que contam | por quê |
+ * |---|---|---|
+ * | `win` | `loss` | o adversário perde, isto é: o lance ganha |
+ * | `draw` | `loss`, `draw`, `blessed-loss` | não perder é o pedido; ganhar é mais do que o pedido, e `blessed-loss` é o teórico perdido que a regra dos 50 lances salva — do lado de lá, empate |
+ *
+ * **`cursed-win` não conta em objetivo nenhum**, e é a única exclusão que
+ * precisa de argumento: é a vitória teórica que a regra dos 50 lances tira. Num
+ * objetivo `win` ela não ganha de verdade; num objetivo `draw` ela é o
+ * adversário ganhando, e chamar isso de empate seguro seria mentir para o
+ * aluno sobre uma posição em que ele está teoricamente perdido.
+ */
+export function goalMovesOf(entry: TbEntry, goal: "win" | "draw"): string[] {
+  const conta =
+    goal === "win"
+      ? (c: TbCategory) => c === "loss"
+      : (c: TbCategory) => c === "loss" || c === "draw" || c === "blessed-loss";
   return entry.moves
-    .filter((m) => m.category === "loss")
+    .filter((m) => conta(m.category))
     .map((m) => m.uci)
     .sort();
+}
+
+/**
+ * Todos os lances legais que preservam a vitória de quem está na vez.
+ * É `goalMovesOf(entry, "win")` com o nome antigo: o gerador de ramos
+ * (`branches.ts`) só trabalha em KRK/KQK, onde objetivo nenhum além de ganhar
+ * faz sentido.
+ */
+export function winningMovesOf(entry: TbEntry): string[] {
+  return goalMovesOf(entry, "win");
 }
 
 /** Plies até o mate depois de um lance. Lance que dá mate conta 0. */

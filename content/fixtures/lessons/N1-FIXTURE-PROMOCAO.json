@@ -1,0 +1,34 @@
+{
+  "id": "N1-FIXTURE-PROMOCAO",
+  "title": "Fixture: a aula que acaba na promoção",
+  "orientation": "white",
+  "domainCriterion": "D1",
+  "status": "draft",
+  "errors": {},
+  "fallbacks": {
+    "winningOffMethod": "Esse lance ainda ganha, mas não é o método da aula.",
+    "losesWin": "Esse lance joga a vitória fora.",
+    "methodAlternative": "Esse lance é a mesma ideia por outro caminho."
+  },
+  "stages": {
+    "solo": {
+      "positionId": "pos-fx-promocao-7p",
+      "goal": "win",
+      "root": "p1",
+      "moveLimit": 2,
+      "nodes": {
+        "p1": {
+          "fen": "8/4Pnk1/4K3/7p/8/p7/P7/8 w - - 0 1",
+          "expects": [
+            {
+              "moves": ["e7e8q"],
+              "ends": "promotion",
+              "feedback": "Dama nova no tabuleiro. Daqui para a frente é dama contra cavalo e peão — técnica que a aula não precisa repetir."
+            }
+          ],
+          "winningMoves": ["e6d5", "e6d7", "e7e8q", "e7e8r"]
+        }
+      }
+    }
+  }
+}

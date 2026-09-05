@@ -128,7 +128,15 @@ export function PracticeStage({
   }, [startFen, moves]);
 
   const boardFen = game.fen();
-  const outcome = readOutcome(game);
+  /**
+   * A prática de empate precisa de um fim que a chess.js não conhece: torre
+   * contra torre, sem peões, não é "material insuficiente" para ela — e sem
+   * isto a aula de Filidor arrastaria até os 50 lances depois de o aluno já ter
+   * conseguido o que a aula pediu. Ligada **só** aqui: numa prática de vitória
+   * ela roubaria do aluno a partida que ele ainda podia ganhar.
+   */
+  const leitura = { balancedPawnlessIsDraw: goal === "draw" };
+  const outcome = readOutcome(game, leitura);
   const verdict = judgePractice(outcome, goal, orientation === "white" ? "white" : "black");
   const turn = toBoardColor(game.turn());
   const progress = fiftyMoveProgress(game);
@@ -196,7 +204,7 @@ export function PracticeStage({
           promotion: feito.length > 4 ? feito.slice(4) : undefined,
         });
       }
-      const fim = readOutcome(completo);
+      const fim = readOutcome(completo, { balancedPawnlessIsDraw: goal === "draw" });
       const julgado = judgePractice(fim, goal, orientation === "white" ? "white" : "black");
 
       if (julgado.kind === "playing") {
