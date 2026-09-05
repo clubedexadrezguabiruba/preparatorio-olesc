@@ -18,7 +18,8 @@
     "apostila:conferir": "node scripts/conferir-caderno.ts",
     "repertorio:importar": "node scripts/importar-fontes.ts",
     "repertorio:compilar": "node scripts/compilar-repertorio.ts",
-    "repertorio:explorer": "node scripts/explorer-repertorio.ts"
+    "repertorio:explorer": "node scripts/explorer-repertorio.ts",
+    "repertorio:motor": "node scripts/motor-repertorio.ts"
   },
   "dependencies": {
     "@lichess-org/chessground": "^10.1.1",

@@ -429,6 +429,8 @@ npm run repertorio:importar     # fontes -> rascunhos + relatório da §7
 npm run repertorio:explorer     # a tabela da §6 (cache versionado)
 npm run repertorio:compilar     # PGN revisados -> public/repertorio/*.json
 npm run repertorio:compilar -- --check   # só confere; sai com erro se algo falha
+npm run repertorio:motor -- "1.e4 c5 2.Bc4 Cc6"   # as 5 melhores da posição
+npm run repertorio:motor -- --pontas              # avalia a ponta de cada linha
 npm test                        # 208 testes, 61 deles do repertório
 ```
 
