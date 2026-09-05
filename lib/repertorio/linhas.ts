@@ -102,6 +102,30 @@ export type Linha = z.infer<typeof LinhaSchema>;
 
 export const BancoSchema = z.array(LinhaSchema);
 
+/**
+ * Uma abertura no `index.json`: o que a lista de `/aberturas` precisa saber
+ * **sem abrir os doze arquivos**.
+ *
+ * O `linhas` é a contagem, e existe para a barrinha de progresso: com ele a
+ * lista faz doze barras lendo um arquivo só. O `arquivo` é URL a partir da raiz
+ * do site (`/repertorio/brancas/petroff.json`), porque quem primeiro o leu foi
+ * o navegador; o servidor tira o `/repertorio/` da frente para chegar ao
+ * caminho em disco (ver `lib/repertorio/banco.ts`).
+ */
+export const EntradaDoIndiceSchema = z
+  .object({
+    cor: z.enum(CORES),
+    abertura: z.string().regex(/^[a-z0-9-]+$/),
+    nome: z.string().min(3),
+    linhas: z.number().int().positive(),
+    arquivo: z.string().regex(/^\/repertorio\/(brancas|pretas)\/[a-z0-9-]+\.json$/),
+  })
+  .strict();
+
+export const IndiceSchema = z.array(EntradaDoIndiceSchema);
+
+export type EntradaDoIndice = z.infer<typeof EntradaDoIndiceSchema>;
+
 /** O que a conferência achou de errado, sem estourar no meio. */
 export type Problema = { linha: string; erro: string };
 

@@ -34,6 +34,7 @@ import {
   NIVEIS,
   validarBanco,
   type Cor,
+  type EntradaDoIndice,
   type Linha,
   type Nivel,
 } from "../lib/repertorio/linhas.ts";
@@ -153,7 +154,7 @@ if (SO_CONFERIR) {
 }
 
 rmSync(DESTINO, { recursive: true, force: true });
-const indice: Array<{ cor: Cor; abertura: string; nome: string; linhas: number; arquivo: string }> = [];
+const indice: EntradaDoIndice[] = [];
 
 const grupos = new Map<string, Linha[]>();
 for (const linha of todas) {

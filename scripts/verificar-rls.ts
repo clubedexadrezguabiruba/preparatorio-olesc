@@ -23,7 +23,8 @@
  *   4. nem o aluno nem o professor conseguem **gravar** uma tentativa de
  *      puzzle — a tabela não tem política de `insert` para ninguém, e quem
  *      grava é a server action com a chave de serviço, depois de reconferir o
- *      lance;
+ *      lance. O mesmo vale para `repertorio_progresso`, pelo mesmo motivo: o
+ *      lance certo da linha está no JSON, e o servidor sabe conferi-lo;
  *   5. na tarefa de casa, ao contrário, o aluno **grava a dele** — e não
  *      consegue gravar no nome do outro, nem ler o que o outro marcou, nem
  *      desmarcar o que o outro fez.
@@ -153,6 +154,26 @@ try {
     .from("tentativas_puzzle")
     .insert({ aluno: criados[0], puzzle_id: "00008", tema: "fork", acertou: true, tempo_ms: 1 });
   afirmar(Boolean(erroInsert), `o insert do aluno é recusado (${erroInsert?.code ?? "sem erro!"})`);
+
+  console.log("\n4b. Gravar progresso de repertório também é recusado");
+  // A mesma decisão de `tentativas_puzzle`, e pelo mesmo motivo: o lance certo
+  // da linha está no JSON, e o servidor sabe conferi-lo. Se o `upsert` fosse do
+  // aluno, "aprendi as 42 linhas" seria uma chamada de rede a escrever.
+  const { error: erroRepertorio } = await alunoA
+    .from("repertorio_progresso")
+    .insert({ aluno: criados[0], linha: "brancas-petroff-934fd6a6", acertos_seguidos: 3 });
+  afirmar(
+    Boolean(erroRepertorio),
+    `o insert do aluno é recusado (${erroRepertorio?.code ?? "sem erro!"})`,
+  );
+
+  // `update` não tem política nenhuma, e sem linha para alcançar ele some
+  // calado. A prova é a de sempre: contar do outro lado.
+  const { count: linhasDeRepertorio } = await admin
+    .from("repertorio_progresso")
+    .select("*", { count: "exact", head: true })
+    .eq("aluno", criados[0]);
+  afirmar(linhasDeRepertorio === 0, `nada foi gravado (achou ${linhasDeRepertorio})`);
 
   console.log("\n5. Na tarefa de casa, o aluno grava — a sua, e só a sua");
   const alunoB = await entrar("zz.teste.b", PIN);
