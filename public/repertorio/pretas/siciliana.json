@@ -1,0 +1,173 @@
+[
+  {
+    "id": "pretas-siciliana-336144b9",
+    "cor": "pretas",
+    "abertura": "siciliana",
+    "nivel": "base",
+    "nome": "Siciliana — bispo em c4 — 5...Nxc4 6.Qxc4 Nf6",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r1bqkb1r/pp1p1ppp/4pn2/2p5/2Q1P3/8/PPPPNPPP/RNB1K2R w KQkq - 1 7",
+    "lances": [
+      "e2e4",
+      "c7c5",
+      "f1c4",
+      "b8c6",
+      "d1f3",
+      "e7e6",
+      "g1e2",
+      "c6e5",
+      "f3c3",
+      "e5c4",
+      "c3c4",
+      "g8f6"
+    ],
+    "sans": [
+      "e4",
+      "c5",
+      "Bc4",
+      "Nc6",
+      "Qf3",
+      "e6",
+      "Ne2",
+      "Ne5",
+      "Qc3",
+      "Nxc4",
+      "Qxc4",
+      "Nf6"
+    ],
+    "meus": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      11
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "7": "O cavalo pula no meio e ataca duas pecas de uma vez: a\ndama em f3 e o bispo em c4. Ele salva a dama, mas o bispo que mirava f7 vai ser\ntrocado de qualquer jeito. Contra 3.Dh5 a ideia e a mesma, so que ai o cavalo\nvai para f6 primeiro.",
+      "11": "A dama saiu cedo e pagou o\npreco: perdeu o bispo bom e ainda teve de andar duas vezes. Nos trocamos a peca\nque nos incomodava e agora desenvolvemos em paz."
+    },
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 22, MultiPV 5, medido em 5/9/2026. Buraco 1 da secao 8 de docs/REPERTORIO.md: o arquivo do Grigoryan tem 2...Cc6 e 3...e6 mas nenhuma resposta ao lance 3 das brancas. O 3...e6 e o primeiro lance do motor contra 3.Cf3 e contra 3.d3, e o segundo contra 3.Df3, a 4 centesimos do primeiro."
+  },
+  {
+    "id": "pretas-siciliana-092f6068",
+    "cor": "pretas",
+    "abertura": "siciliana",
+    "nivel": "base",
+    "nome": "Siciliana — bispo em c4 — 6...Bb7 7.O-O Na5",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r2qkbnr/1b1p1ppp/p3p3/npp5/4P3/1BNP1N2/PPP2PPP/R1BQ1RK1 w kq - 4 8",
+    "lances": [
+      "e2e4",
+      "c7c5",
+      "f1c4",
+      "b8c6",
+      "d2d3",
+      "e7e6",
+      "b1c3",
+      "a7a6",
+      "g1f3",
+      "b7b5",
+      "c4b3",
+      "c8b7",
+      "e1g1",
+      "c6a5"
+    ],
+    "sans": [
+      "e4",
+      "c5",
+      "Bc4",
+      "Nc6",
+      "d3",
+      "e6",
+      "Nc3",
+      "a6",
+      "Nf3",
+      "b5",
+      "Bb3",
+      "Bb7",
+      "O-O",
+      "Na5"
+    ],
+    "meus": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      11,
+      13
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "7": "Com o peao em d3 o lance d5 nao sai de graca, entao\ntrocamos de ferramenta: a6 e b5 empurram o bispo pelo lado.",
+      "13": "O cavalo vai para a beirada de proposito. Ele caca o bispo de\nb3, que e a peca que mais atrapalha, e sem esse bispo o ataque das brancas em f7\nacaba."
+    },
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 22, MultiPV 5, medido em 5/9/2026. Buraco 1 da secao 8 de docs/REPERTORIO.md: o arquivo do Grigoryan tem 2...Cc6 e 3...e6 mas nenhuma resposta ao lance 3 das brancas. O 3...e6 e o primeiro lance do motor contra 3.Cf3 e contra 3.d3, e o segundo contra 3.Df3, a 4 centesimos do primeiro."
+  },
+  {
+    "id": "pretas-siciliana-31cff340",
+    "cor": "pretas",
+    "abertura": "siciliana",
+    "nivel": "base",
+    "nome": "Siciliana — bispo em c4 — 7...Be7 8.Nc3 O-O",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r1bq1rk1/pp2bppp/2n2n2/1Bpp4/3P4/2N2N2/PPP2PPP/R1BQ1RK1 w - - 3 9",
+    "lances": [
+      "e2e4",
+      "c7c5",
+      "f1c4",
+      "b8c6",
+      "g1f3",
+      "e7e6",
+      "e1g1",
+      "d7d5",
+      "e4d5",
+      "e6d5",
+      "c4b5",
+      "g8f6",
+      "d2d4",
+      "f8e7",
+      "b1c3",
+      "e8g8"
+    ],
+    "sans": [
+      "e4",
+      "c5",
+      "Bc4",
+      "Nc6",
+      "Nf3",
+      "e6",
+      "O-O",
+      "d5",
+      "exd5",
+      "exd5",
+      "Bb5",
+      "Nf6",
+      "d4",
+      "Be7",
+      "Nc3",
+      "O-O"
+    ],
+    "meus": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      11,
+      13,
+      15
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "7": "O lance da regra: o peao bate no bispo de c4. Ele tem de\nsair, e no caminho nos abrimos o centro.",
+      "15": "Roque, e olhe o tabuleiro: o bispo que mirava f7 foi parar em b5, o\ncentro esta aberto e todas as nossas pecas sairam. Foi isso que o d5 comprou."
+    },
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 22, MultiPV 5, medido em 5/9/2026. Buraco 1 da secao 8 de docs/REPERTORIO.md: o arquivo do Grigoryan tem 2...Cc6 e 3...e6 mas nenhuma resposta ao lance 3 das brancas. O 3...e6 e o primeiro lance do motor contra 3.Cf3 e contra 3.d3, e o segundo contra 3.Df3, a 4 centesimos do primeiro."
+  }
+]

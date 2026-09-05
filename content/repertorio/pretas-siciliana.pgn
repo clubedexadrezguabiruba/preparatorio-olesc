@@ -1,0 +1,41 @@
+; Siciliana pelas pretas. Este arquivo abre com o ramo do bispo em c4 — o
+; buraco 1 da secao 8 do docs/REPERTORIO.md, ~31 por cento das sicilianas e o
+; ponto mais vazio de todas as fontes. O resto do orcamento das pretas contra
+; 1.e4 c5 entra aqui como jogos novos, um por sistema.
+;
+; A regra que organiza as tres linhas e uma so: o bispo em c4 mira f7 e tem de
+; ser obrigado a sair. Contra 3.Cf3 quem o expulsa e o peao d5; contra 3.d3,
+; que segura essa casa, sao os peoes a6 e b5 mais o cavalo em a5.
+;
+; O 2...Cc6 e o 3...e6 estao no arquivo do Grigoryan, mas la a linha morre no
+; lance 3 das brancas, sem nenhuma resposta nossa. Tudo a partir dai e livro +
+; motor, e a tag Fonte diz isso.
+;
+; O corte e o da secao 4, aplicado a tabela da secao 6: depois de 2.Bc4 Cc6 as
+; brancas jogam Cf3 36,4 por cento, Df3 14,7, d3 11,1 e Dh5 11,0. Cabem tres, e
+; entram as tres mais frequentes. O Dh5 fica de fora por um decimo de ponto
+; percentual, e a resposta a ele e a mesma do Df3 — esta escrita no comentario.
+
+[Abertura "siciliana"]
+[Nome "Siciliana — bispo em c4"]
+[Cor "pretas"]
+[Nivel "base"]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 22, MultiPV 5, medido em 5/9/2026. Buraco 1 da secao 8 de docs/REPERTORIO.md: o arquivo do Grigoryan tem 2...Cc6 e 3...e6 mas nenhuma resposta ao lance 3 das brancas. O 3...e6 e o primeiro lance do motor contra 3.Cf3 e contra 3.d3, e o segundo contra 3.Df3, a 4 centesimos do primeiro."]
+[Result "*"]
+
+1. e4 c5 2. Bc4 Nc6 3. Nf3
+(3. Qf3 e6 4. Ne2 Ne5 {O cavalo pula no meio e ataca duas pecas de uma vez: a
+dama em f3 e o bispo em c4. Ele salva a dama, mas o bispo que mirava f7 vai ser
+trocado de qualquer jeito. Contra 3.Dh5 a ideia e a mesma, so que ai o cavalo
+vai para f6 primeiro.} 5. Qc3 Nxc4 6. Qxc4 Nf6 {A dama saiu cedo e pagou o
+preco: perdeu o bispo bom e ainda teve de andar duas vezes. Nos trocamos a peca
+que nos incomodava e agora desenvolvemos em paz.})
+(3. d3 e6 4. Nc3 a6 {Com o peao em d3 o lance d5 nao sai de graca, entao
+trocamos de ferramenta: a6 e b5 empurram o bispo pelo lado.} 5. Nf3 b5 6. Bb3
+Bb7 7. O-O Na5 {O cavalo vai para a beirada de proposito. Ele caca o bispo de
+b3, que e a peca que mais atrapalha, e sem esse bispo o ataque das brancas em f7
+acaba.})
+3... e6 4. O-O d5 {O lance da regra: o peao bate no bispo de c4. Ele tem de
+sair, e no caminho nos abrimos o centro.} 5. exd5 exd5 6. Bb5 Nf6 7. d4 Be7 8.
+Nc3 O-O {Roque, e olhe o tabuleiro: o bispo que mirava f7 foi parar em b5, o
+centro esta aberto e todas as nossas pecas sairam. Foi isso que o d5 comprou.} *

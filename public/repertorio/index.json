@@ -47,5 +47,12 @@
     "nome": "Philidor",
     "linhas": 2,
     "arquivo": "/repertorio/brancas/philidor.json"
+  },
+  {
+    "cor": "pretas",
+    "abertura": "siciliana",
+    "nome": "Siciliana",
+    "linhas": 3,
+    "arquivo": "/repertorio/pretas/siciliana.json"
   }
 ]

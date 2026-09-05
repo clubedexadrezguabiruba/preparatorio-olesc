@@ -11,8 +11,10 @@ armadilhas conhecidas.*
   rascunhos** importados dos cursos em `content/repertorio/rascunhos/`.
 - O que o **B3** escreveu: as **22 linhas do Base das brancas**, em sete arquivos
   `content/repertorio/brancas-*.pgn`, já compiladas para `public/repertorio/`.
-- O que **não** existe: as linhas das **pretas** — B4 —, e a tela em que o aluno
-  treina. Nenhum arquivo de `app/` lê o repertório ainda.
+- O que o **B4** começou: as **3 linhas do bispo em c4** das pretas, em
+  `content/repertorio/pretas-siciliana.pgn` — o ⚠ mais frequente da lista.
+- O que **não** existe: as outras **17 linhas das pretas**, e a tela em que o
+  aluno treina. Nenhum arquivo de `app/` lê o repertório ainda.
 
 ---
 
@@ -43,7 +45,7 @@ motor**, marcado ⚠ e com a proveniência dizendo isso. Nada é inventado.
 | Contra | % | Sistema | Fonte | Base |
 |---|---|---|---|---|
 | 1.e4 (68,2 % da raiz) | | **1…c5** | | **13** |
-| · 2.Bc4 e 2.Nf3 Nc6 3.Bc4 | ~31 % das sicilianas | …Nc6, …e6, …d5 rápido ⚠ | fonte quase vazia | **3** |
+| · 2.Bc4 e 2.Nf3 Nc6 3.Bc4 | ~31 % das sicilianas | …Nc6, …e6, e expulsar o bispo | livro + motor | **3** ✔ |
 | · 2.Nf3 Nc6 3.d4 Aberta | ~12 % | **Dragão Acelerado** 4…g6 | Grigoryan | **4** |
 | · 3.Bb5 Rossolimo | ~5 % | 3…g6 4.Bxc6 dxc6 | Grigoryan | **2** |
 | · 2.Nc3 Grand Prix / Fechada | 8,3 % | …Nc6, …g6, …Bg7 | Grigoryan (sidelines) | **2** |
@@ -55,7 +57,8 @@ motor**, marcado ⚠ e com a proveniência dizendo isso. Nada é inventado.
 | · 2.Nf3/2.e3/2.Nc3 Colle, Jobava | 38,5 % somados | ⚠ sem fonte | livro + motor | **1** |
 | 1.c4, 1.Nf3, 1.b3, 1.f4, 1.g3 | ~8 % da raiz | mesma estrutura do GDR | Grigoryan (Inglesa) | **1** |
 
-**Soma do Base das pretas: 20 linhas.** Total geral: **42**, contra a meta de ~40.
+**Soma do Base das pretas: 20 linhas**, das quais **3 escritas** — o bispo em c4.
+Total geral: **42**, contra a meta de ~40.
 
 ---
 
@@ -129,6 +132,23 @@ E a posição é espalhada: depois de `2.Bc4 Nc6`, as quatro respostas mais comu
 cobrem só **73,2 %** — o menor número da tabela inteira.
 
 **Decisão:** **3 linhas**, a maior fatia das pretas, ⚠ **livro + motor**.
+
+**Escrito no B4, e como.** O `2…Nc6` fica: é o lance do arquivo do Grigoryan e é
+a posição que a §6 mediu — trocá-lo por `2…e6` invalidaria aquela linha da tabela
+e obrigaria a uma consulta nova ao explorer. O `3…e6` também está no arquivo, sem
+continuação, e o motor o confirma: é o **primeiro** lance dele contra `3.Nf3` e
+contra `3.d3`, e o segundo contra `3.Qf3`, a 4 centésimos do primeiro. Uma
+resposta só para os três.
+
+Pelo corte da §4 aplicado à linha da §6, cabem os três mais frequentes: `3.Nf3`
+36,4 %, `3.Qf3` 14,7 % e `3.d3` 11,1 %. O `3.Qh5`, 11,0 %, cai por um décimo de
+ponto percentual — e a resposta a ele é a do `3.Qf3`, dita no comentário da
+linha.
+
+O que muda de linha para linha não é o lance, é **quem expulsa o bispo**: contra
+`3.Nf3` é o peão `…d5`; contra `3.d3`, que segura d5, são `…a6`, `…b5` e o cavalo
+a a5. Medido nas pontas: pretas **+0,67** contra `3.Qf3`, **+0,24** contra `3.d3`,
+e igualdade contra `3.Nf3`.
 
 ### 2.7 A Francesa 3.Bd3 são três estruturas, não uma
 
@@ -378,13 +398,13 @@ está na lista de ⚠ abaixo.
 ## 8. Os ⚠ abertos
 
 Doze pontos em que a fonte não responde e alguém tem de escrever a linha por
-livro + motor. Em ordem de quanto o aluno vai encontrar. **Quatro fecharam no
-B3** — todos os das brancas —, e estão riscados; os oito abertos são das pretas
-e do texto de princípios.
+livro + motor. Em ordem de quanto o aluno vai encontrar. **Cinco fecharam** — os
+quatro das brancas no B3 e o Bowdler no B4 —, e estão riscados; os sete abertos
+são das pretas e do texto de princípios.
 
 | # | ⚠ | Frequência | §|
 |---|---|---|---|
-| 1 | Bowdler `2.Bc4` e `3.Bc4` — resposta e plano | ~31 % das sicilianas | 2.6 |
+| ~~1~~ | ~~Bowdler `2.Bc4` e `3.Bc4` — resposta e plano~~ — **fechado no B4**, é `…e6` | ~31 % das sicilianas | 2.6 |
 | ~~2~~ | ~~Escocesa `4…Nxd4 5.Qxd4 c5` e `…b6`~~ — **fechado no B3** | 25 % de 52 % | 2.1 |
 | 3 | Dragão `5.Nxc6` | 36 % de 4…g6 | 2.5 |
 | ~~4~~ | ~~Francesa `3…c5` — escolher **um** dos três `!?`~~ — **fechado no B3**, é o `5.c3` | 38 % de 3.Bd3 | 2.7 |
@@ -397,7 +417,7 @@ e do texto de princípios.
 | 11 | Maroczy — recortar só a sub-árvore do `6.e4` | Avançado | 2.4 |
 | 12 | Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios | < 4,2 % cada | 2.10 |
 
-Os itens 1 a 5 são o caminho crítico: sozinhos, são o que os alunos mais vão
+Os itens 1 a 5 eram o caminho crítico: sozinhos, são o que os alunos mais vão
 encontrar e o que nenhuma fonte do Doug responde.
 
 ---
@@ -415,9 +435,8 @@ npm test                        # 208 testes, 61 deles do repertório
 Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variações),
 `arvore.ts` (árvore → linhas), `linhas.ts` (schema e regras), `explorer.ts`.
 
-**22 linhas em `content/repertorio/brancas-*.pgn`**, compiladas para
-`public/repertorio/` — o Base inteiro das brancas, escrito no B3. Das pretas,
-nada ainda.
+**25 linhas** compiladas para `public/repertorio/`: as 22 das brancas, que são o
+Base inteiro daquele lado, e as 3 primeiras das pretas.
 
 O motor do repertório é o mesmo Stockfish 18 de `public/engine/` que serve a
 etapa 5 da aula: a cola dele roda em `node` direto, e foi assim que as linhas
