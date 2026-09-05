@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-qmate-silman-d16",
+  "fen": "8/8/8/3k4/8/8/8/6QK w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KQK",
+    "ensino"
+  ],
+  "provenance": {
+    "externalHumanSource": "Jeremy Silman — Diagrama 16 da seção \"King and Queen vs. Lone King\", cuja legenda impressa é \"White needs to use both Queen and King\". É a posição com que o autor abre a técnica que ele chama de \"the Box\", e sobre a qual escreve que ela não é o caminho mais rápido para o mate, e sim o mais fácil de aprender",
+    "bibliographicSource": "Silman, Silman's Complete Endgame Course: From Beginner to Master, Siles Press, Los Angeles, 2007, p. impressa 12 (PDF p. 26, offset 14), Parte Um \"Endgames for Beginners (Unrated-999)\", seção \"King and Queen vs. Lone King\", Diagrama 16",
+    "originalGame": "não se aplica — posição de ensino de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar didático, não é estudo composto",
+    "license": "obra protegida por direito autoral; uso como citação de posição isolada, com teto de 2 posições por aula (§12.7 do currículo). O texto da aula é original em português; nada da prosa do autor é reproduzido.",
+    "editionFile": "silman-complete-endgame-course.pdf",
+    "fenMethod": "transcrição do diagrama por leitura de imagem cega ao texto da página, com a grade do tabuleiro localizada por medição de pixel (bordas achadas pelo perfil de escuridão a 600 dpi, casa de ~127,8 × 126,9 px) e a tinta medida na janela central de 70% de cada uma das 64 casas; confirmada pelo replay de quatro linhas impressas independentes.",
+    "qaApplied": "garimpo de 2026-08-24. (1) A leitura de imagem deu rei preto d5, dama branca g1, rei branco h1, e a orientação está **provada por rótulo impresso**, não por convenção: o diagrama traz a–h embaixo e 8–1 à esquerda. (2) A trava da linha impressa pegou um erro de OCR e o corrigiu: o texto do autor sai como \"1...Ke4\", que é **ilegal** nesta FEN (e4 é vizinha da dama em e3); lido como \"1...Kc4\", os 15 meios-lances da linha principal rodam inteiros e terminam em mate no 8º lance, que é o que o autor anuncia. (3) As duas sub-variantes impressas (5...Ka4 6.Kc5 Ka5 7.Qa3 mate; 7...Ka7 8.Qb7 mate) também fecham em mate. (4) A linha alternativa que o autor imprime por extenso (1.Qg4, 15 lances) roda inteira e mata no 15º, como anunciado. Quatro linhas independentes sobre a mesma FEN. Tablebase: win-white, DTM 17 meios-lances — mate em 9 com defesa perfeita, contra os 15 lances da linha alternativa do autor, coerente com ele escrever que a Caixa troca rapidez por facilidade.",
+    "pendingRisk": "nenhum conhecido"
+  },
+  "status": "approved"
+}

@@ -1,0 +1,1639 @@
+{
+  "id": "N0-Q-MATE",
+  "title": "Mate de dama e rei",
+  "orientation": "white",
+  "domainCriterion": "D1",
+  "status": "draft",
+  "errors": {
+    "afogamento": {
+      "verdict": "loses-win",
+      "text": "Afogamento: o rei preto não está em xeque e não tem nenhum lance legal. A partida acaba empatada — com dama a mais. É o erro que mais rouba vitória neste final. Antes de apertar a caixa, conte as casas que sobram para ele."
+    },
+    "dama-solta": {
+      "verdict": "loses-win",
+      "text": "A dama ficou ao alcance do rei preto, e nenhuma peça a defende. Sem a dama não há mate: é empate."
+    },
+    "rei-distante": {
+      "verdict": "off-method",
+      "text": "A dama sozinha não dá mate — ela só prende. Quem tira as últimas casas é o seu rei, e ele precisa começar a andar."
+    },
+    "cheque-inutil": {
+      "verdict": "off-method",
+      "text": "Xeque sem plano não progride: o rei foge e a caixa continua do mesmo tamanho. Nesta técnica o primeiro xeque é o do mate."
+    }
+  },
+  "fallbacks": {
+    "winningOffMethod": "Esse lance ainda ganha, mas não é o método da aula. Volte e tente o lance da técnica.",
+    "losesWin": "Esse lance joga a vitória fora. Volte e tente de novo.",
+    "methodAlternative": "Esse lance é a mesma técnica por outro caminho: ele aperta a caixa tão bem quanto o da aula. Aqui a linha escrita continua pelo lance do roteiro — mas guarde essa ideia, porque na etapa sem ajuda ela vale."
+  },
+  "generatedTemplates": {
+    "cut": "Corte feito: a caixa do rei preto ficou menor.",
+    "approach": "O rei branco se aproxima — é ele quem fecha a caixa.",
+    "tempo": "A dama espera sem largar o corte: a caixa continua do mesmo tamanho, e agora é a vez do rei preto se mexer.",
+    "mate": "Xeque-mate. A mesma receita chegou ao fim por outro caminho.",
+    "other": "O rei toma a posição: sem se aproximar, ele tira as casas que sobravam."
+  },
+  "stages": {
+    "objective": {
+      "source": "silman-endgame-course",
+      "technique": {
+        "name": "A caixa",
+        "summary": "A dama corta uma fileira e uma coluna no mesmo lance. O que sobra do outro lado das duas linhas é a prisão do rei adversário — e a cada lance certo ela fica menor."
+      },
+      "why": "Esta é a primeira técnica do curso, e é a mais rentável: dama a mais é a vantagem que mais aparece quando um peão vira dama, e não saber convertê-la é o jeito mais bobo de não ganhar uma partida ganha. Sem método dá empate — por afogamento ou pela regra dos 50 lances. Com método o mate sai de qualquer posição em no máximo dez lances.",
+      "rules": [
+        {
+          "title": "Desenhe a caixa",
+          "text": "A dama vale por torre e bispo juntos, e é por isso que ela corta duas linhas de uma vez: a fileira e a coluna em que está. O rei preto não atravessa nenhuma das duas. Um lance só, e a prisão dele caiu de 42 casas para 24.",
+          "frame": {
+            "scene": "caminho-inteiro",
+            "step": 1
+          },
+          "box": true
+        },
+        {
+          "title": "Aperte a caixa",
+          "text": "Sempre que o rei preto cede uma fileira ou uma coluna, a dama toma. São nove lances de dama seguidos, e a prisão vai de 24 casas a 4 — sem um único xeque. Xeque não encolhe caixa nenhuma: só faz o rei mudar de casa.",
+          "frame": {
+            "scene": "caminho-inteiro",
+            "step": 13
+          },
+          "box": true
+        },
+        {
+          "title": "Nunca tire a última casa",
+          "text": "Aqui mora o perigo deste final, e ele é maior com a dama do que com a torre: se o rei preto ficar sem nenhum lance legal e não estiver em xeque, a partida acaba empatada por afogamento — com dama a mais. Neste quadro sobrou exatamente uma casa para ele. Conte antes de apertar.",
+          "frame": {
+            "scene": "caminho-inteiro",
+            "step": 19
+          },
+          "box": true
+        },
+        {
+          "title": "Traga o rei",
+          "text": "A caixa parou de encolher em 4 casas, e a dama não consegue mais nada sozinha. Agora é o rei branco que atravessa o tabuleiro — dama nenhuma dá mate sem ajuda.",
+          "frame": {
+            "scene": "caminho-inteiro",
+            "step": 25
+          },
+          "box": true
+        },
+        {
+          "title": "Mate na borda",
+          "text": "O mate sai sempre com o mesmo desenho: o rei preto na borda, a dama na fileira vizinha à borda, e o rei branco defendendo a dama. Sem o rei defendendo, a dama seria capturada e o mate viraria empate.",
+          "frame": {
+            "scene": "caminho-inteiro",
+            "step": 29
+          }
+        }
+      ],
+      "mastery": "Dominado = dar o mate numa posição que você nunca viu, sem dica, sem afogar o adversário, sem largar a dama e dentro do limite de lances — e depois vencer o computador na prática."
+    },
+    "example": {
+      "scenes": [
+        {
+          "id": "como-termina",
+          "title": "Como termina",
+          "positionId": "pos-n0-qmate-pandolfini-eg4",
+          "intro": "Comece pelo fim. O rei preto já está no canto e as brancas dão mate em dois lances. Guarde este desenho: ele é igual em todo mate de dama, mude a posição que mudar.",
+          "steps": [
+            {
+              "move": "d5c6",
+              "text": "O primeiro lance não é de dama. Sem o rei branco ao lado, a dama não dá mate nenhum — então é ele quem chega.",
+              "arrows": [
+                [
+                  "d5",
+                  "c6"
+                ]
+              ],
+              "highlights": [
+                "c6"
+              ]
+            },
+            {
+              "move": "a8b8",
+              "text": "Obrigado: a dama cobre a fileira 7 inteira e o rei branco tomou o resto. Sobrou uma casa só — e repare que sobrou uma, não zero. Zero seria afogamento."
+            },
+            {
+              "move": "d7b7",
+              "text": "Xeque-mate. Rei preto na borda, dama na fileira vizinha à borda, rei branco defendendo a dama. É esta a fórmula, e é ela que você vai reconhecer no fim de todas as outras posições.",
+              "highlights": [
+                "b7",
+                "c6"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "caminho-inteiro",
+          "title": "O caminho inteiro",
+          "positionId": "pos-n0-qmate-silman-d16",
+          "intro": "Agora do começo, com o rei preto solto no meio do tabuleiro e a dama no canto. São quinze lances até o mate, nas cinco fases que você acabou de ler — e nenhum deles é xeque, até o último. O retângulo desenhado é a prisão do rei preto: acompanhe-o encolher.",
+          "showBox": true,
+          "phases": [
+            {
+              "title": "Desenhe a caixa",
+              "fromStep": 1
+            },
+            {
+              "title": "Aperte a caixa",
+              "fromStep": 5
+            },
+            {
+              "title": "Nunca tire a última casa",
+              "fromStep": 19
+            },
+            {
+              "title": "Traga o rei",
+              "fromStep": 21
+            },
+            {
+              "title": "Mate na borda",
+              "fromStep": 29
+            }
+          ],
+          "steps": [
+            {
+              "move": "g1g4",
+              "text": "Fase 1. A dama corta a fileira 4 e a coluna g no mesmo lance — é isso que ela tem a mais que a torre. A prisão do rei preto caiu de 42 casas para 24.",
+              "arrows": [
+                [
+                  "g1",
+                  "g4"
+                ]
+              ],
+              "highlights": [
+                "g4"
+              ]
+            },
+            {
+              "move": "d5c5",
+              "text": "O rei preto anda dentro da prisão. Ele não pode cruzar nenhuma das duas linhas da dama: elas valem como parede."
+            },
+            {
+              "move": "h1g2",
+              "text": "O rei branco sai do canto. Ele ainda não faz falta, mas vai fazer — e quem começa a caminhada cedo não perde lance depois.",
+              "arrows": [
+                [
+                  "h1",
+                  "g2"
+                ]
+              ],
+              "highlights": [
+                "g2"
+              ]
+            },
+            {
+              "move": "c5d5",
+              "text": "De volta ao meio. É a melhor defesa que existe: quanto mais longe da borda, mais tempo ele aguenta."
+            },
+            {
+              "move": "g4f4",
+              "text": "Fase 2, e é aqui que a técnica trabalha. O rei preto está na coluna d; a dama toma a coluna e, colada nele. A caixa vai de 24 casas para 20.",
+              "arrows": [
+                [
+                  "g4",
+                  "f4"
+                ]
+              ],
+              "highlights": [
+                "f4"
+              ]
+            },
+            {
+              "move": "d5e6",
+              "text": "Ele foge para cima e para o lado, procurando espaço. Não tem: a parede vai junto."
+            },
+            {
+              "move": "f4g5",
+              "text": "Um lance que parece recuo e não é. A dama devolve uma coluna para ganhar uma fileira — e fileira, aqui, vale mais: 20 casas viram 18.",
+              "arrows": [
+                [
+                  "f4",
+                  "g5"
+                ]
+              ],
+              "highlights": [
+                "g5"
+              ]
+            },
+            {
+              "move": "e6d6",
+              "text": "O rei preto desce um degrau. Cada degrau que ele desce é uma coluna que ele entrega."
+            },
+            {
+              "move": "g5f5",
+              "text": "E a dama toma. 15 casas.",
+              "arrows": [
+                [
+                  "g5",
+                  "f5"
+                ]
+              ],
+              "highlights": [
+                "f5"
+              ]
+            },
+            {
+              "move": "d6c6",
+              "text": "Ele anda; ela toma. Este é o pêndulo da técnica inteira."
+            },
+            {
+              "move": "f5e5",
+              "text": "12 casas. Note que a dama nunca chega a ficar ao alcance do rei preto — sempre uma casa de folga.",
+              "arrows": [
+                [
+                  "f5",
+                  "e5"
+                ]
+              ],
+              "highlights": [
+                "e5"
+              ]
+            },
+            {
+              "move": "c6b6",
+              "text": "Ele encosta na coluna b. Já não tem para onde crescer."
+            },
+            {
+              "move": "e5d5",
+              "text": "9 casas. Metade do caminho feita, e ainda sem nenhum xeque.",
+              "arrows": [
+                [
+                  "e5",
+                  "d5"
+                ]
+              ],
+              "highlights": [
+                "d5"
+              ]
+            },
+            {
+              "move": "b6c7",
+              "text": "Ele sobe, que é o único lado que sobrou."
+            },
+            {
+              "move": "d5e6",
+              "text": "A dama sobe junto e troca a coluna d pela fileira 6: 8 casas.",
+              "arrows": [
+                [
+                  "d5",
+                  "e6"
+                ]
+              ],
+              "highlights": [
+                "e6"
+              ]
+            },
+            {
+              "move": "c7b7",
+              "text": "Ele volta para a coluna b."
+            },
+            {
+              "move": "e6d6",
+              "text": "6 casas. A prisão já cabe numa esquina do tabuleiro.",
+              "arrows": [
+                [
+                  "e6",
+                  "d6"
+                ]
+              ],
+              "highlights": [
+                "d6"
+              ]
+            },
+            {
+              "move": "b7c8",
+              "text": "Ele é empurrado para a última fileira — e é lá que todo mate de dama acontece."
+            },
+            {
+              "move": "d6e7",
+              "text": "Fase 3. 4 casas, e agora conte: o rei preto tem exatamente um lance legal. Um, não zero. Se a dama tivesse tomado também a casa b8, seria afogamento e empate.",
+              "arrows": [
+                [
+                  "d6",
+                  "e7"
+                ]
+              ],
+              "highlights": [
+                "e7",
+                "b8"
+              ]
+            },
+            {
+              "move": "c8b8",
+              "text": "O lance obrigado."
+            },
+            {
+              "move": "g2f3",
+              "text": "Fase 4. A dama fez tudo o que podia — a caixa não encolhe mais. Agora é a caminhada do rei branco, que estava esperando desde o terceiro lance.",
+              "arrows": [
+                [
+                  "g2",
+                  "f3"
+                ]
+              ],
+              "highlights": [
+                "f3"
+              ]
+            },
+            {
+              "move": "b8c8",
+              "text": "O rei preto vai e volta nas quatro casas que sobraram. Não há mais nada que ele possa fazer."
+            },
+            {
+              "move": "f3e4",
+              "text": "O rei branco atravessa em diagonal, que é o caminho mais curto.",
+              "arrows": [
+                [
+                  "f3",
+                  "e4"
+                ]
+              ],
+              "highlights": [
+                "e4"
+              ]
+            },
+            {
+              "move": "c8b8",
+              "text": "Vai e volta."
+            },
+            {
+              "move": "e4d5",
+              "text": "Mais um passo. Repare que a dama não se mexe: ela está segurando a prisão, e sair de lá seria abrir a porta.",
+              "arrows": [
+                [
+                  "e4",
+                  "d5"
+                ]
+              ],
+              "highlights": [
+                "d5"
+              ]
+            },
+            {
+              "move": "b8c8",
+              "text": "Vai e volta."
+            },
+            {
+              "move": "d5c6",
+              "text": "Chegou. O rei branco em c6 é o que faltava: é ele quem vai defender a dama no lance do mate.",
+              "arrows": [
+                [
+                  "d5",
+                  "c6"
+                ]
+              ],
+              "highlights": [
+                "c6"
+              ]
+            },
+            {
+              "move": "c8b8",
+              "text": "A última vez que ele anda."
+            },
+            {
+              "move": "e7b7",
+              "text": "Fase 5. Xeque-mate — o primeiro xeque da partida inteira, e ele é o último lance. Rei preto na borda, dama colada a ele na fileira 7, rei branco defendendo a dama: é o mesmo desenho da primeira cena.",
+              "arrows": [
+                [
+                  "e7",
+                  "b7"
+                ]
+              ],
+              "highlights": [
+                "b7",
+                "c6"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "guided": {
+      "positionId": "pos-n0-qmate-silman-d16",
+      "showBox": true,
+      "intro": "A mesma posição e a mesma linha que você acabou de assistir — agora com você no comando. O retângulo continua desenhado, as casas marcadas mostram a ideia, e a dica está aí se travar.",
+      "root": "n1",
+      "nodes": {
+        "n1": {
+          "fen": "8/8/8/3k4/8/8/8/6QK w - - 0 1",
+          "hint": "Comece pela dama. Um lance dela corta uma fileira e uma coluna ao mesmo tempo — procure o que aperta mais sem chegar ao alcance do rei preto.",
+          "highlights": [
+            "g4"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "g1g4"
+              ],
+              "feedback": "Isso. A caixa nasceu: de 42 casas para 24, num lance só.",
+              "reply": "d5c5",
+              "next": "n2"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "g1d4",
+                "g1c5"
+              ],
+              "errorId": "dama-solta"
+            },
+            {
+              "moves": [
+                "g1d1",
+                "g1g2"
+              ],
+              "errorId": "cheque-inutil"
+            }
+          ],
+          "winningMoves": [
+            "g1a1",
+            "g1a7",
+            "g1b1",
+            "g1b6",
+            "g1c1",
+            "g1d1",
+            "g1e1",
+            "g1e3",
+            "g1f1",
+            "g1f2",
+            "g1g2",
+            "g1g3",
+            "g1g4",
+            "g1g5",
+            "g1g6",
+            "g1g7",
+            "g1g8",
+            "g1h2",
+            "h1g2",
+            "h1h2"
+          ],
+          "methodAlternatives": [
+            "g1e3"
+          ]
+        },
+        "n2": {
+          "fen": "8/8/8/2k5/6Q1/8/8/7K w - - 2 2",
+          "hint": "A caixa está feita e o rei preto anda dentro dela. Aproveite o tempo para tirar o seu rei do canto.",
+          "highlights": [
+            "g2"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "h1g2"
+              ],
+              "feedback": "O rei branco começou a caminhada. Ele só vai fazer falta no fim, mas quem sai do canto cedo não perde lance depois.",
+              "reply": "c5d5",
+              "next": "n3"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "g4b4",
+                "g4c4",
+                "g4d4"
+              ],
+              "errorId": "dama-solta"
+            }
+          ],
+          "winningMoves": [
+            "g4a4",
+            "g4c8",
+            "g4d1",
+            "g4d7",
+            "g4e2",
+            "g4e4",
+            "g4e6",
+            "g4f3",
+            "g4f4",
+            "g4f5",
+            "g4g1",
+            "g4g2",
+            "g4g3",
+            "g4g5",
+            "g4g6",
+            "g4g7",
+            "g4g8",
+            "g4h3",
+            "g4h4",
+            "g4h5",
+            "h1g1",
+            "h1g2",
+            "h1h2"
+          ]
+        },
+        "n3": {
+          "fen": "8/8/8/3k4/6Q1/8/6K1/8 w - - 4 3",
+          "hint": "O rei preto está na coluna d. Tome a coluna vizinha com a dama — colada nele, mas nunca ao alcance dele.",
+          "highlights": [
+            "f4"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "g4f4"
+              ],
+              "feedback": "24 viram 20. Este é o pêndulo da técnica: ele anda, você toma.",
+              "reply": "d5e6",
+              "next": "n4"
+            }
+          ],
+          "winningMoves": [
+            "g2f1",
+            "g2f2",
+            "g2f3",
+            "g2g1",
+            "g2g3",
+            "g2h1",
+            "g2h2",
+            "g2h3",
+            "g4a4",
+            "g4b4",
+            "g4c8",
+            "g4d1",
+            "g4d7",
+            "g4e2",
+            "g4f3",
+            "g4f4",
+            "g4f5",
+            "g4g3",
+            "g4g5",
+            "g4g6",
+            "g4g7",
+            "g4g8",
+            "g4h3",
+            "g4h4",
+            "g4h5"
+          ]
+        },
+        "n4": {
+          "fen": "8/8/4k3/8/5Q2/8/6K1/8 w - - 6 4",
+          "hint": "Ele subiu para a fileira 6. Tome a fileira 5 — mesmo que para isso a dama tenha de andar para o lado.",
+          "highlights": [
+            "g5"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "f4g5"
+              ],
+              "feedback": "Parece recuo e não é: a dama devolveu uma coluna para ganhar uma fileira. 20 viram 18.",
+              "reply": "e6d6",
+              "next": "n5"
+            }
+          ],
+          "winningMoves": [
+            "f4a4",
+            "f4b4",
+            "f4b8",
+            "f4c1",
+            "f4c4",
+            "f4c7",
+            "f4d2",
+            "f4d4",
+            "f4e3",
+            "f4e4",
+            "f4f1",
+            "f4f2",
+            "f4f3",
+            "f4f8",
+            "f4g3",
+            "f4g4",
+            "f4g5",
+            "f4h2",
+            "f4h4",
+            "f4h6",
+            "g2f1",
+            "g2f2",
+            "g2f3",
+            "g2g1",
+            "g2g3",
+            "g2h1",
+            "g2h2",
+            "g2h3"
+          ]
+        },
+        "n5": {
+          "fen": "8/8/3k4/6Q1/8/8/6K1/8 w - - 8 5",
+          "hint": "Ele desceu uma coluna. Tome.",
+          "highlights": [
+            "f5"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "g5f5"
+              ],
+              "feedback": "15 casas.",
+              "reply": "d6c6",
+              "next": "n6"
+            }
+          ],
+          "winningMoves": [
+            "g2f1",
+            "g2f2",
+            "g2f3",
+            "g2g1",
+            "g2g3",
+            "g2h1",
+            "g2h2",
+            "g2h3",
+            "g5a5",
+            "g5b5",
+            "g5c1",
+            "g5d2",
+            "g5d8",
+            "g5e3",
+            "g5f4",
+            "g5f5",
+            "g5f6",
+            "g5g3",
+            "g5g4",
+            "g5g6",
+            "g5g7",
+            "g5g8",
+            "g5h4",
+            "g5h5",
+            "g5h6"
+          ]
+        },
+        "n6": {
+          "fen": "8/8/2k5/5Q2/8/8/6K1/8 w - - 10 6",
+          "hint": "O mesmo lance de sempre: a coluna que ele deixou.",
+          "highlights": [
+            "e5"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "f5e5"
+              ],
+              "feedback": "12 casas, e a dama nunca ficou ao alcance dele: sempre uma casa de folga.",
+              "reply": "c6b6",
+              "next": "n7"
+            }
+          ],
+          "winningMoves": [
+            "f5a5",
+            "f5b1",
+            "f5c2",
+            "f5c8",
+            "f5d3",
+            "f5e4",
+            "f5e5",
+            "f5e6",
+            "f5f1",
+            "f5f2",
+            "f5f3",
+            "f5f4",
+            "f5f6",
+            "f5f7",
+            "f5f8",
+            "f5g4",
+            "f5g5",
+            "f5g6",
+            "f5h3",
+            "f5h5",
+            "f5h7",
+            "g2f1",
+            "g2f2",
+            "g2f3",
+            "g2g1",
+            "g2g3",
+            "g2h1",
+            "g2h2",
+            "g2h3"
+          ]
+        },
+        "n7": {
+          "fen": "8/8/1k6/4Q3/8/8/6K1/8 w - - 12 7",
+          "hint": "Ele encostou na coluna b. Tome a coluna c.",
+          "highlights": [
+            "d5"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "e5d5"
+              ],
+              "feedback": "9 casas. Metade do caminho, e ainda sem um único xeque.",
+              "reply": "b6c7",
+              "next": "n8"
+            }
+          ],
+          "winningMoves": [
+            "e5a1",
+            "e5b2",
+            "e5b8",
+            "e5c3",
+            "e5d4",
+            "e5d5",
+            "e5d6",
+            "e5e1",
+            "e5e2",
+            "e5e3",
+            "e5e4",
+            "e5e6",
+            "e5e7",
+            "e5e8",
+            "e5f4",
+            "e5f5",
+            "e5f6",
+            "e5g3",
+            "e5g5",
+            "e5g7",
+            "e5h2",
+            "e5h5",
+            "e5h8",
+            "g2f1",
+            "g2f2",
+            "g2f3",
+            "g2g1",
+            "g2g3",
+            "g2h1",
+            "g2h2",
+            "g2h3"
+          ]
+        },
+        "n8": {
+          "fen": "8/2k5/8/3Q4/8/8/6K1/8 w - - 14 8",
+          "hint": "Ele subiu. A prisão encolhe mais pela fileira do que pela coluna: suba junto.",
+          "highlights": [
+            "e6"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "d5e6"
+              ],
+              "feedback": "8 casas. A dama trocou a coluna d pela fileira 6 — o que vale mais agora é empurrar para cima.",
+              "reply": "c7b7",
+              "next": "n9"
+            }
+          ],
+          "winningMoves": [
+            "d5a2",
+            "d5a5",
+            "d5a8",
+            "d5b3",
+            "d5b5",
+            "d5c4",
+            "d5c5",
+            "d5d1",
+            "d5d2",
+            "d5d3",
+            "d5d4",
+            "d5e4",
+            "d5e5",
+            "d5e6",
+            "d5f3",
+            "d5f5",
+            "d5f7",
+            "d5g5",
+            "d5g8",
+            "d5h5",
+            "g2f1",
+            "g2f2",
+            "g2f3",
+            "g2g1",
+            "g2g3",
+            "g2h1",
+            "g2h2",
+            "g2h3"
+          ]
+        },
+        "n9": {
+          "fen": "8/1k6/4Q3/8/8/8/6K1/8 w - - 16 9",
+          "hint": "Tome a fileira que ele deixou.",
+          "highlights": [
+            "d6"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "e6d6"
+              ],
+              "feedback": "6 casas. A prisão já cabe numa esquina.",
+              "reply": "b7c8",
+              "next": "n10"
+            }
+          ],
+          "winningMoves": [
+            "e6a2",
+            "e6b3",
+            "e6c4",
+            "e6d5",
+            "e6d6",
+            "e6d7",
+            "e6e1",
+            "e6e2",
+            "e6e3",
+            "e6e4",
+            "e6e5",
+            "e6e7",
+            "e6e8",
+            "e6f5",
+            "e6f6",
+            "e6f7",
+            "e6g4",
+            "e6g6",
+            "e6g8",
+            "e6h3",
+            "e6h6",
+            "g2f1",
+            "g2f2",
+            "g2f3",
+            "g2g1",
+            "g2g3",
+            "g2h1",
+            "g2h2",
+            "g2h3"
+          ]
+        },
+        "n10": {
+          "fen": "2k5/8/3Q4/8/8/8/6K1/8 w - - 18 10",
+          "hint": "Ele chegou à última fileira. Tome a fileira 7 — e antes de soltar a peça, conte quantas casas vão sobrar para o rei preto.",
+          "highlights": [
+            "e7"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "d6e7"
+              ],
+              "feedback": "4 casas — e agora conte: sobrou exatamente um lance legal para ele. Um, não zero. Zero seria afogamento e empate.",
+              "reply": "c8b8",
+              "next": "n11"
+            }
+          ],
+          "winningMoves": [
+            "d6a3",
+            "d6a6",
+            "d6b4",
+            "d6b6",
+            "d6c5",
+            "d6c6",
+            "d6d1",
+            "d6d2",
+            "d6d3",
+            "d6d4",
+            "d6d5",
+            "d6e5",
+            "d6e6",
+            "d6e7",
+            "d6f4",
+            "d6f6",
+            "d6f8",
+            "d6g3",
+            "d6g6",
+            "d6h2",
+            "d6h6",
+            "g2f1",
+            "g2f2",
+            "g2f3",
+            "g2g1",
+            "g2g3",
+            "g2h1",
+            "g2h2",
+            "g2h3"
+          ]
+        },
+        "n11": {
+          "fen": "1k6/4Q3/8/8/8/8/6K1/8 w - - 20 11",
+          "hint": "A caixa não encolhe mais. Falta a outra metade da técnica.",
+          "highlights": [
+            "f3"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "g2f3"
+              ],
+              "feedback": "Certo. A dama fez tudo o que podia; daqui em diante quem trabalha é o rei.",
+              "reply": "b8c8",
+              "next": "n12"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "e7a7",
+                "e7b7",
+                "e7c7"
+              ],
+              "errorId": "dama-solta"
+            },
+            {
+              "moves": [
+                "e7d7",
+                "e7f7"
+              ],
+              "errorId": "rei-distante"
+            }
+          ],
+          "winningMoves": [
+            "e7a3",
+            "e7b4",
+            "e7c5",
+            "e7d6",
+            "e7d7",
+            "e7d8",
+            "e7e1",
+            "e7e2",
+            "e7e3",
+            "e7e4",
+            "e7e5",
+            "e7e6",
+            "e7e8",
+            "e7f6",
+            "e7f7",
+            "e7f8",
+            "e7g5",
+            "e7g7",
+            "e7h4",
+            "e7h7",
+            "g2f1",
+            "g2f2",
+            "g2f3",
+            "g2g1",
+            "g2g3",
+            "g2h1",
+            "g2h2",
+            "g2h3"
+          ]
+        },
+        "n12": {
+          "fen": "2k5/4Q3/8/8/8/5K2/8/8 w - - 22 12",
+          "hint": "Continue andando com o rei, na direção do rei preto.",
+          "highlights": [
+            "e4"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "f3e4"
+              ],
+              "feedback": "Em diagonal, que é o caminho mais curto.",
+              "reply": "c8b8",
+              "next": "n13"
+            }
+          ],
+          "winningMoves": [
+            "e7a3",
+            "e7a7",
+            "e7b4",
+            "e7c5",
+            "e7d6",
+            "e7e1",
+            "e7e2",
+            "e7e3",
+            "e7e4",
+            "e7e5",
+            "e7e6",
+            "e7e8",
+            "e7f6",
+            "e7f7",
+            "e7f8",
+            "e7g5",
+            "e7g7",
+            "e7h4",
+            "e7h7",
+            "f3e2",
+            "f3e3",
+            "f3e4",
+            "f3f2",
+            "f3f4",
+            "f3g2",
+            "f3g3",
+            "f3g4"
+          ]
+        },
+        "n13": {
+          "fen": "1k6/4Q3/8/8/4K3/8/8/8 w - - 24 13",
+          "hint": "Mais um passo do rei. Não mexa na dama — sair dali abre a prisão.",
+          "highlights": [
+            "d5"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "e4d5"
+              ],
+              "feedback": "Mais um passo. A dama não se mexe: ela está segurando a porta.",
+              "reply": "b8c8",
+              "next": "n14"
+            }
+          ],
+          "winningMoves": [
+            "e4d3",
+            "e4d4",
+            "e4d5",
+            "e4e3",
+            "e4e5",
+            "e4f3",
+            "e4f4",
+            "e4f5",
+            "e7a3",
+            "e7b4",
+            "e7c5",
+            "e7d6",
+            "e7d7",
+            "e7d8",
+            "e7e5",
+            "e7e6",
+            "e7e8",
+            "e7f6",
+            "e7f7",
+            "e7f8",
+            "e7g5",
+            "e7g7",
+            "e7h4",
+            "e7h7"
+          ]
+        },
+        "n14": {
+          "fen": "2k5/4Q3/8/3K4/8/8/8/8 w - - 26 14",
+          "hint": "Falta um passo. Leve o rei para a casa de onde ele consegue defender a dama na fileira 7.",
+          "highlights": [
+            "c6"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "d5c6"
+              ],
+              "feedback": "Chegou. É deste quadrado que o rei branco vai defender a dama no lance do mate.",
+              "reply": "c8b8",
+              "next": "n15"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "e7b7",
+                "e7c7",
+                "e7d7",
+                "e7d8"
+              ],
+              "errorId": "dama-solta"
+            }
+          ],
+          "winningMoves": [
+            "d5c4",
+            "d5c5",
+            "d5c6",
+            "d5d4",
+            "d5d6",
+            "d5e4",
+            "d5e5",
+            "d5e6",
+            "e7a3",
+            "e7a7",
+            "e7b4",
+            "e7c5",
+            "e7d6",
+            "e7e1",
+            "e7e2",
+            "e7e3",
+            "e7e4",
+            "e7e5",
+            "e7e6",
+            "e7e8",
+            "e7f6",
+            "e7f7",
+            "e7f8",
+            "e7g5",
+            "e7g7",
+            "e7h4",
+            "e7h7"
+          ]
+        },
+        "n15": {
+          "fen": "1k6/4Q3/2K5/8/8/8/8/8 w - - 28 15",
+          "hint": "Agora sim, o xeque. Cole a dama no rei preto, na casa que o seu rei defende.",
+          "highlights": [
+            "b7"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "e7b7"
+              ],
+              "feedback": "Xeque-mate. O primeiro xeque da partida inteira, e ele é o último lance: rei preto na borda, dama colada a ele, rei branco defendendo a dama."
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "e7a7"
+              ],
+              "errorId": "dama-solta"
+            }
+          ],
+          "winningMoves": [
+            "c6b5",
+            "c6b6",
+            "c6c5",
+            "c6d5",
+            "c6d6",
+            "c6d7",
+            "e7a3",
+            "e7b4",
+            "e7b7",
+            "e7c5",
+            "e7c7",
+            "e7d6",
+            "e7d7",
+            "e7d8",
+            "e7e1",
+            "e7e2",
+            "e7e3",
+            "e7e4",
+            "e7e5",
+            "e7e6",
+            "e7e8",
+            "e7f6",
+            "e7f7",
+            "e7f8",
+            "e7g5",
+            "e7g7",
+            "e7h4",
+            "e7h7"
+          ]
+        }
+      }
+    },
+    "solo": {
+      "positionId": "pos-n0-qmate-capablanca-ex4",
+      "root": "s1",
+      "moveLimit": 10,
+      "nodes": {
+        "s1": {
+          "fen": "8/8/8/4k3/8/8/8/4K2Q w - - 0 1",
+          "expects": [
+            {
+              "moves": [
+                "h1c6"
+              ],
+              "feedback": "A dama corta a coluna c e a fileira 6 de uma vez: 56 casas viram 25.",
+              "reply": "e5d4",
+              "next": "s2"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "h1e4",
+                "h1d5"
+              ],
+              "errorId": "dama-solta"
+            },
+            {
+              "moves": [
+                "h1h5",
+                "h1h8",
+                "h1h2"
+              ],
+              "errorId": "cheque-inutil"
+            }
+          ],
+          "winningMoves": [
+            "e1d1",
+            "e1d2",
+            "e1e2",
+            "e1f1",
+            "e1f2",
+            "h1a8",
+            "h1b7",
+            "h1c6",
+            "h1f1",
+            "h1f3",
+            "h1g1",
+            "h1g2",
+            "h1h2",
+            "h1h3",
+            "h1h4",
+            "h1h5",
+            "h1h6",
+            "h1h7",
+            "h1h8"
+          ]
+        },
+        "s2": {
+          "fen": "8/8/2Q5/8/3k4/8/8/4K3 w - - 2 2",
+          "expects": [
+            {
+              "moves": [
+                "e1d2"
+              ],
+              "feedback": "Com a caixa feita, é a vez do rei. Depois deste lance o rei preto tem um único lance legal.",
+              "reply": "d4e5",
+              "next": "s3"
+            }
+          ],
+          "winningMoves": [
+            "c6a4",
+            "c6a6",
+            "c6a8",
+            "c6b5",
+            "c6b6",
+            "c6b7",
+            "c6c1",
+            "c6c2",
+            "c6c7",
+            "c6c8",
+            "c6d6",
+            "c6d7",
+            "c6e6",
+            "c6e8",
+            "c6f3",
+            "c6f6",
+            "c6g2",
+            "c6g6",
+            "c6h1",
+            "c6h6",
+            "e1d1",
+            "e1d2",
+            "e1e2",
+            "e1f1",
+            "e1f2"
+          ]
+        },
+        "s3": {
+          "fen": "8/8/2Q5/4k3/8/8/3K4/8 w - - 4 3",
+          "expects": [
+            {
+              "moves": [
+                "d2e3"
+              ],
+              "feedback": "De novo o rei, e de novo sobra uma casa só para ele.",
+              "reply": "e5f5",
+              "next": "s4"
+            }
+          ],
+          "winningMoves": [
+            "c6a4",
+            "c6a6",
+            "c6a8",
+            "c6b5",
+            "c6b6",
+            "c6b7",
+            "c6c1",
+            "c6c2",
+            "c6c3",
+            "c6c4",
+            "c6c5",
+            "c6c7",
+            "c6c8",
+            "c6d7",
+            "c6e8",
+            "c6f3",
+            "c6g2",
+            "c6g6",
+            "c6h1",
+            "c6h6",
+            "d2c1",
+            "d2c2",
+            "d2c3",
+            "d2d1",
+            "d2d3",
+            "d2e1",
+            "d2e2",
+            "d2e3"
+          ]
+        },
+        "s4": {
+          "fen": "8/8/2Q5/5k2/8/4K3/8/8 w - - 6 4",
+          "expects": [
+            {
+              "moves": [
+                "c6d6"
+              ],
+              "feedback": "A dama toma a coluna d. 25 casas viram 20.",
+              "reply": "f5g5",
+              "next": "s5"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "c6e6",
+                "c6f6",
+                "c6g6"
+              ],
+              "errorId": "dama-solta"
+            }
+          ],
+          "winningMoves": [
+            "c6a4",
+            "c6a6",
+            "c6a8",
+            "c6b5",
+            "c6b6",
+            "c6b7",
+            "c6c1",
+            "c6c2",
+            "c6c3",
+            "c6c4",
+            "c6c5",
+            "c6c7",
+            "c6c8",
+            "c6d5",
+            "c6d6",
+            "c6d7",
+            "c6e4",
+            "c6e8",
+            "c6f3",
+            "c6g2",
+            "c6h1",
+            "c6h6",
+            "e3d2",
+            "e3d3",
+            "e3d4",
+            "e3e2",
+            "e3f2",
+            "e3f3"
+          ]
+        },
+        "s5": {
+          "fen": "8/8/3Q4/6k1/8/4K3/8/8 w - - 8 5",
+          "expects": [
+            {
+              "moves": [
+                "e3f3"
+              ],
+              "feedback": "O rei acompanha. Sem ele não há mate.",
+              "reply": "g5f5",
+              "next": "s6"
+            }
+          ],
+          "winningMoves": [
+            "d6a3",
+            "d6a6",
+            "d6b4",
+            "d6b6",
+            "d6b8",
+            "d6c5",
+            "d6c6",
+            "d6c7",
+            "d6d1",
+            "d6d2",
+            "d6d3",
+            "d6d4",
+            "d6d5",
+            "d6d7",
+            "d6d8",
+            "d6e5",
+            "d6e6",
+            "d6e7",
+            "d6f4",
+            "d6f8",
+            "d6g3",
+            "d6h2",
+            "e3d2",
+            "e3d3",
+            "e3d4",
+            "e3e2",
+            "e3e4",
+            "e3f2",
+            "e3f3"
+          ]
+        },
+        "s6": {
+          "fen": "8/8/3Q4/5k2/8/5K2/8/8 w - - 10 6",
+          "expects": [
+            {
+              "moves": [
+                "d6e7"
+              ],
+              "feedback": "A dama toma a fileira 7. Repare que ela não encostou no rei preto: e6 e f6 pareciam melhores e as duas perdem a dama.",
+              "reply": "f5g6",
+              "next": "s7"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "d6e5",
+                "d6e6",
+                "d6f6",
+                "d6g6"
+              ],
+              "errorId": "dama-solta"
+            }
+          ],
+          "winningMoves": [
+            "d6a3",
+            "d6a6",
+            "d6b4",
+            "d6b6",
+            "d6b8",
+            "d6c5",
+            "d6c6",
+            "d6c7",
+            "d6d1",
+            "d6d2",
+            "d6d3",
+            "d6d4",
+            "d6d5",
+            "d6d7",
+            "d6d8",
+            "d6e7",
+            "d6f4",
+            "d6f8",
+            "d6g3",
+            "d6h2",
+            "d6h6",
+            "f3e2",
+            "f3e3",
+            "f3f2",
+            "f3g2",
+            "f3g3"
+          ]
+        },
+        "s7": {
+          "fen": "8/4Q3/6k1/8/8/5K2/8/8 w - - 12 7",
+          "expects": [
+            {
+              "moves": [
+                "f3f4"
+              ],
+              "feedback": "O rei sobe. A dama já segura a fileira 7 — quem precisa andar agora é ele.",
+              "reply": "g6h6",
+              "next": "s8"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "e7g5",
+                "e7f6",
+                "e7f7",
+                "e7g7",
+                "e7h7"
+              ],
+              "errorId": "dama-solta"
+            }
+          ],
+          "winningMoves": [
+            "e7a3",
+            "e7a7",
+            "e7b4",
+            "e7b7",
+            "e7c5",
+            "e7c7",
+            "e7d6",
+            "e7d7",
+            "e7d8",
+            "e7e1",
+            "e7e2",
+            "e7e3",
+            "e7e4",
+            "e7e5",
+            "e7e6",
+            "e7e8",
+            "e7f8",
+            "e7h4",
+            "f3e2",
+            "f3e3",
+            "f3e4",
+            "f3f2",
+            "f3f4",
+            "f3g2",
+            "f3g3",
+            "f3g4"
+          ]
+        },
+        "s8": {
+          "fen": "8/4Q3/7k/8/5K2/8/8/8 w - - 14 8",
+          "expects": [
+            {
+              "moves": [
+                "f4f5"
+              ],
+              "feedback": "Mais um passo, e o rei preto fica com um lance só. Cuidado: aqui Qf7 tira esse último lance sem dar xeque — é afogamento e empate.",
+              "reply": "h6h5",
+              "next": "s9"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "e7f7"
+              ],
+              "errorId": "afogamento"
+            },
+            {
+              "moves": [
+                "e7g7",
+                "e7h7"
+              ],
+              "errorId": "dama-solta"
+            }
+          ],
+          "winningMoves": [
+            "e7a3",
+            "e7a7",
+            "e7b4",
+            "e7b7",
+            "e7c5",
+            "e7c7",
+            "e7d6",
+            "e7d7",
+            "e7d8",
+            "e7e1",
+            "e7e2",
+            "e7e3",
+            "e7e4",
+            "e7e5",
+            "e7e6",
+            "e7e8",
+            "e7f6",
+            "e7f8",
+            "e7g5",
+            "e7h4",
+            "f4e3",
+            "f4e4",
+            "f4e5",
+            "f4f3",
+            "f4f5",
+            "f4g3",
+            "f4g4"
+          ]
+        },
+        "s9": {
+          "fen": "8/4Q3/8/5K1k/8/8/8/8 w - - 16 9",
+          "expects": [
+            {
+              "moves": [
+                "e7g5"
+              ],
+              "feedback": "Xeque-mate. Dama colada ao rei preto, defendida pelo seu rei — a mesma fórmula da primeira cena."
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "e7f6"
+              ],
+              "errorId": "afogamento"
+            },
+            {
+              "moves": [
+                "e7h4"
+              ],
+              "errorId": "dama-solta"
+            }
+          ],
+          "winningMoves": [
+            "e7a3",
+            "e7a7",
+            "e7b4",
+            "e7b7",
+            "e7c5",
+            "e7c7",
+            "e7d6",
+            "e7d7",
+            "e7d8",
+            "e7e1",
+            "e7e2",
+            "e7e3",
+            "e7e4",
+            "e7e5",
+            "e7e6",
+            "e7e8",
+            "e7f7",
+            "e7f8",
+            "e7g5",
+            "e7g7",
+            "e7h7",
+            "f5e4",
+            "f5e5",
+            "f5e6",
+            "f5f4",
+            "f5f6"
+          ]
+        }
+      }
+    },
+    "practice": {
+      "positionId": "pos-n0-qmate-freeborough-145",
+      "goal": "win",
+      "engine": {
+        "skill": 20,
+        "moveTimeMs": 300
+      }
+    },
+    "review": {
+      "reviewPositionIds": [
+        "pos-n0-qmate-cook-d1",
+        "pos-n0-qmate-muller-l1-d1"
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-rmate-staunton-d2",
+  "fen": "4k3/8/8/8/8/8/8/4K2R w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KRK",
+    "pratica"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Howard Staunton — Diagrama 2 da seção 'King and Rook against King'",
+    "bibliographicSource": "Staunton, The Chess-Player's Handbook, Henry G. Bohn, Londres, 1848, p. impressa 404 (PDF p. 396, offset 8), Livro VI 'Endings of Games', cap. I, seção 'King and Rook against King', Diagrama 2",
+    "originalGame": "não se aplica — posição teórica de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar de manual, não é estudo composto",
+    "license": "domínio público (obra de 1848, Reino Unido)",
+    "editionFile": "staunton-chess-players-handbook-1848.pdf",
+    "fenMethod": "transcrição do diagrama por duas leituras de imagem independentes (recortes a 300–2400 dpi, com a grade das casas localizada por medição das linhas da moldura, não a olho). A página traz dois diagramas lado a lado — Diagrama 1, de rei e dama, e Diagrama 2, este — e os dois leitores identificaram cada um pela legenda impressa e pelos rótulos BLACK/WHITE. O campo de roque da FEN é '-' de propósito: é posição de estudo, e o direito de roque das brancas com Re1/Th1 não faz parte do que o livro põe no diagrama.",
+    "qaApplied": "garimpo B5 da F1, 2026-08-18: duas leituras de imagem independentes, cegas ao texto da página; replay da linha impressa completa (23 meios-lances, todos legais, termina em mate, 12 lances de brancas como o livro escreve, incluindo o lance 8 que o próprio Staunton anota como inferior); tablebase confirma win-white, DTM 21 meios-lances",
+    "pendingRisk": "nenhum conhecido; a linha do livro leva 12 lances e a tablebase dá mate em 11 — o próprio autor registra em nota que seu lance 8 não é o melhor, e escolhe-o por clareza didática"
+  }
+}

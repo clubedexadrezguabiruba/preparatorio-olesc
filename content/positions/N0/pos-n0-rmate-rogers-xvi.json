@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-rmate-rogers-xvi",
+  "fen": "8/8/8/1k6/8/8/8/RK6 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KRK",
+    "revisao"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Charlotte Boardman Rogers, compiladora do manual — DIAGRAM XVI do capítulo de finais",
+    "bibliographicSource": "Rogers, How to Play Chess, Thomas Y. Crowell & Co., Nova York, 1907 (Lowell's Handy Information Series), p. impressa 121 (PDF p. 131, offset 10), 'EXAMPLE II — WHITE KING AND ROOK AGAINST BLACK KING', DIAGRAM XVI",
+    "originalGame": "não se aplica — posição teórica de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar de manual, não é estudo composto",
+    "license": "domínio público (obra de 1907, EUA)",
+    "editionFile": "rogers-how-to-play-chess-1907.pdf",
+    "fenMethod": "transcrição do diagrama por duas leituras de imagem independentes (recortes a 300–600 dpi, varredura fileira a fileira com conferência de paridade da cor de casa), mais a lista de peças que o próprio livro imprime em texto ('The Black King occupies QKt.4, the White King QKt. sq., and the White Rook QRsq.'). A perspectiva da notação descritiva — QKt4 contado do lado das pretas, logo b5 e não b4 — foi provada à parte pela variante de Berger citada no Freeborough 1891: com o rei preto em d5 a tablebase dá os 16 lances impressos, com d4 daria 15. O replay da linha impressa de 11 lances é legal e termina em mate, mas não discrimina b4 de b5 (as duas convergem após 1.Kb2 Kc4); quem decide são as duas leituras de imagem e a convenção provada.",
+    "qaApplied": "garimpo B5 da F1, 2026-08-18: duas leituras de imagem independentes, cegas ao texto da página; replay da linha impressa (21 meios-lances, legal, termina em mate, 11 lances de brancas como o livro promete); tablebase confirma win-white, DTM 25 meios-lances",
+    "pendingRisk": "o diagrama não traz coordenadas; a orientação vem dos rótulos BLACK/WHITE impressos acima e abaixo do tabuleiro, que os dois leitores viram"
+  }
+}

@@ -14,6 +14,8 @@
     "db:migrar": "node scripts/aplicar-migration.ts",
     "db:rls": "node scripts/verificar-rls.ts",
     "db:tatica": "node --conditions=react-server scripts/verificar-tatica.ts",
+    "validate:content": "node scripts/validate-content.ts",
+    "validate:mutations": "node scripts/mutation-check.ts",
     "apostila": "node --conditions=react-server apostila/build.ts",
     "apostila:ver": "node --conditions=react-server apostila/build.ts --abrir",
     "apostila:conferir": "node scripts/conferir-caderno.ts"

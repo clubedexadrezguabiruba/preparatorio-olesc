@@ -78,13 +78,21 @@
   --color-borda-forte: color-mix(in oklab, oklch(26% 0.015 160) 28%, transparent);
   --color-foco: oklch(46% 0.115 152);
 
-  /* Método — o verde. Cinco faces porque a tinta sobre painel tingido não é
+  /* Método — o verde. Seis faces porque a tinta sobre painel tingido não é
      derivável por alfa: no escuro ela é clara, no claro terá de ser escura. A
-     superfície, essa sim, é o mesmo tom com alfa (`bg-metodo-superficie/10`). */
+     superfície, essa sim, é o mesmo tom com alfa (`bg-metodo-superficie/10`).
+
+     `metodo-selo` é a sexta, e chegou com o motor de aula: é a tinta do selo
+     de etapa concluída, que vive sobre **três** camadas empilhadas (a pastilha
+     verde sobre o painel verde sobre a página). Cada camada come contraste, e
+     `metodo-tinta` — que basta sobre uma camada só — cai abaixo do piso ali.
+     Não é preciosismo de paleta: é o único lugar do site com três verdes um
+     sobre o outro, e a régua de `lib/tema/pares.ts` mede a pilha inteira. */
   --color-metodo: oklch(39.5% 0.093 152);
   --color-metodo-superficie: oklch(58% 0.105 152);
   --color-metodo-tinta: oklch(31% 0.07 152);
   --color-metodo-tinta-alta: oklch(26% 0.058 152);
+  --color-metodo-selo: oklch(29% 0.066 152);
   --color-metodo-cheio: oklch(40% 0.092 152);
   --color-metodo-cheio-toque: oklch(34% 0.082 152);
 

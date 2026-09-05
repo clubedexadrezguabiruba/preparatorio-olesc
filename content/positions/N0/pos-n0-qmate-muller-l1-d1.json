@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-qmate-muller-l1-d1",
+  "fen": "8/8/8/4k3/8/8/1K6/Q7 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KQK",
+    "revisao"
+  ],
+  "provenance": {
+    "externalHumanSource": "Karsten Müller — Diagrama (1) da Lição 1, \"Mate with the Queen\", cujo subtítulo impresso é \"Throw a rope around the king, but beware of stalemate\". O autor descreve a posição como \"a relatively bad starting position\" para as brancas e ensina que a peça mais fraca, o rei, avança primeiro",
+    "bibliographicSource": "Müller, Chess Endgames for Kids, Gambit Publications, Londres, 2015, p. impressa 12 (PDF p. 13, offset 1), Endgame Lesson 1 \"Mate with the Queen\", Diagrama (1), legenda \"White to move\"",
+    "originalGame": "não se aplica — posição de ensino de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar didático, não é estudo composto",
+    "license": "obra protegida por direito autoral; uso como citação de posição isolada, com teto de 2 posições por aula (§12.7 do currículo). O texto da aula é original em português; nada da prosa do autor é reproduzido.",
+    "editionFile": "muller-chess-endgames-for-kids.pdf",
+    "fenMethod": "transcrição do diagrama por leitura de imagem a 600 dpi, com as quatro bordas da moldura ajustadas por reta (o scan tem 0,38° de inclinação, corrigida no mapeamento) e as 64 casas amostradas por interpolação bilinear entre os cantos medidos; a orientação está ancorada em rótulo impresso, não em convenção de sombreado.",
+    "qaApplied": "garimpo de 2026-08-24, com uma trava incomum e forte. (1) A orientação não depende de convenção nenhuma: este diagrama imprime a-h nas duas bordas horizontais e 8-1 nas duas verticais, e a grade foi ancorada nos rótulos. (2) A distinção entre peça branca e peça preta foi medida, não olhada: a fração de pixels muito escuros dentro da casa é de 7,3% no rei preto contra 0,1-0,3% nas duas peças brancas — uma ordem de grandeza. (3) A trava: o Diagrama (2) da **mesma lição** foi lido em separado, e a leitura independente devolveu dama ainda em a1, rei branco em d3 e rei preto em c5. Jogando nesta FEN os dois lances de rei que a prosa anuncia (\"a peça mais fraca, o rei, avança primeiro\", e na legenda do (2) \"a Fase 1 está completa, agora a dama pode dar xeque\"), chega-se à FEN do Diagrama (2) **caractere por caractere** — e o lance seguinte que o livro imprime, 3.Qd4+, é legal e é mesmo xeque. Duas leituras de imagem independentes, de dois diagramas diferentes, ligadas pela prosa. Tablebase: win-white, DTM 15 meios-lances — mate em 8, coerente com o autor escrever que as brancas ainda matam depressa a partir de uma posição de partida ruim.",
+    "pendingRisk": "a linha impressa completa não foi replayada: ela corre por seis diagramas da lição e o OCR desta obra não resolve com segurança os símbolos de peça (troca dama, rei e torre entre si). O que sustenta a FEN são os rótulos impressos e o casamento com o Diagrama (2), não o replay integral"
+  },
+  "status": "approved"
+}

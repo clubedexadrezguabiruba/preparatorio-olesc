@@ -1,0 +1,220 @@
+{
+  "_leia": "Registro canônico das obras que podem originar posição (§12.2 e §12.4 do CURRICULO.md). O gate de conteúdo lê este arquivo: o campo provenance.editionFile de toda posição não-fixture precisa casar com o 'file' ou o 'slug' de uma entrada daqui, e obra com protected:true tem teto de 2 posições por aula (§12.7). Obra com \"didactic\": true é livro-base didático: dela sai o objetivo e o exemplo (etapas 1 e 2) de uma aula, e não só posição de prática — e o gate cobra que nenhuma obra protegida seja base de mais de uma aula por nível. A face humana deste registro — legibilidade medida, mapa de cobertura e regras editoriais — é docs/SOURCE-CORPUS.md.",
+  "sources": [
+    {
+      "slug": "capablanca-1921",
+      "title": "Chess Fundamentals",
+      "author": "José Raúl Capablanca",
+      "edition": "Harcourt, Brace and Company, Nova York, 1921",
+      "protected": false,
+      "license": "domínio público",
+      "file": "capablanca-chess-fundamentals-1921.pdf",
+      "role": "Cânone histórico primário. Capítulo I, §1 'Some Simple Mates', cobre os três mates de N0."
+    },
+    {
+      "slug": "kling-horwitz-1889",
+      "title": "Chess Studies and End-Games",
+      "author": "Bernhard Horwitz e Josef Kling",
+      "edition": "2ª edição, revista por W. Wayte, G. Bell and Sons, Londres, 1889",
+      "protected": false,
+      "license": "domínio público",
+      "file": "kling-horwitz-chess-studies-1889.pdf",
+      "role": "Cânone histórico primário — a edição que a §12.4 do currículo pede. Finais de peças menores e estudos."
+    },
+    {
+      "slug": "kling-horwitz-1851-mott",
+      "title": "Chess Studies; or, Endings of Games",
+      "author": "Bernhard Horwitz e Josef Kling",
+      "edition": "1ª edição, org. Henry C. Mott",
+      "protected": false,
+      "license": "domínio público",
+      "file": "kling-horwitz-chess-studies-1851-mott.pdf",
+      "role": "Mesma obra na 1ª edição. Fica registrada porque a proveniência grava edição: posição transcrita daqui não pode citar a de 1889."
+    },
+    {
+      "slug": "freeborough-1891",
+      "title": "Chess Endings: A Companion to Chess Openings Ancient and Modern",
+      "author": "Edward Freeborough",
+      "edition": "Kegan Paul, Trench, Trübner & Co., Londres, 1891",
+      "protected": false,
+      "license": "domínio público",
+      "file": "freeborough-chess-endings-1891.pdf",
+      "role": "Cânone histórico. Cap. VII 'The Rook', seções I e II: rei e torre, e rei e duas torres contra rei — as duas com diagrama numerado."
+    },
+    {
+      "slug": "walker-1832",
+      "title": "A New Treatise on Chess: containing the rudiments of the science",
+      "author": "George Walker",
+      "edition": "Messrs. Walker, Londres, 1832",
+      "protected": false,
+      "license": "domínio público",
+      "file": "walker-new-treatise-on-chess-1832.pdf",
+      "role": "Cap. \"On Various Checkmates at the End of the Game\": No. I torre (e a dama, pela mesma técnica), No. II dois bispos. Dá a posição como lista de peças em texto, não só no diagrama."
+    },
+    {
+      "slug": "staunton-1848",
+      "title": "The Chess-Player's Handbook",
+      "author": "Howard Staunton",
+      "edition": "Henry G. Bohn, Londres, 1848",
+      "protected": false,
+      "license": "domínio público",
+      "file": "staunton-chess-players-handbook-1848.pdf",
+      "role": "Livro VI, 'Endings of Games', cap. I: dama, torre, dois bispos, bispo+cavalo e dois cavalos contra rei. É a fonte de onde o Cook 1880 declara tirar as posições dele."
+    },
+    {
+      "slug": "cook-1880",
+      "title": "The Chess Primer: A Stepping-Stone for Beginners",
+      "author": "William Cook",
+      "edition": "Smart and Allen, Londres / J. and W. Griffin, Walsall, 1880",
+      "protected": false,
+      "license": "domínio público",
+      "file": "cook-chess-primer-1880.pdf",
+      "role": "Cap. VII 'Endings of Games': I rei e dama, II rei e torre. O autor declara que as posições vêm do Handbook do Staunton — a proveniência tem de registrar isso."
+    },
+    {
+      "slug": "rogers-1907",
+      "title": "How to Play Chess",
+      "author": "Charlotte Boardman Rogers",
+      "edition": "Thomas Y. Crowell & Co., Nova York, 1907 (Lowell's Handy Information Series)",
+      "protected": false,
+      "license": "domínio público",
+      "file": "rogers-how-to-play-chess-1907.pdf",
+      "role": "Manual de iniciante com exemplos numerados: I rei e dama, II rei e torre, V rei e dois bispos contra rei."
+    },
+    {
+      "slug": "cunnington-1903",
+      "title": "Selected Chess Endings",
+      "author": "Rev. E. E. Cunnington (org.)",
+      "edition": "George Routledge & Sons, Londres / E. P. Dutton, Nova York, 1903",
+      "protected": false,
+      "license": "domínio público",
+      "file": "cunnington-selected-chess-endings-1903.pdf",
+      "role": "Coletânea de finais organizada por material, não por técnica. Cap. I rei e peão (N1), cap. III torres (N3). Não traz os mates elementares de N0."
+    },
+    {
+      "slug": "lichess-open-database",
+      "title": "Lichess Open Database",
+      "author": "Lichess.org",
+      "edition": "exports públicos, sem arquivo local",
+      "protected": false,
+      "license": "CC0",
+      "file": null,
+      "role": "PGN e FEN de partida real. Posição de prática e transferência, derivada mecanicamente do PGN."
+    },
+    {
+      "slug": "de-la-villa-100",
+      "title": "100 Endgames You Must Know",
+      "author": "Jesús de la Villa",
+      "edition": null,
+      "protected": true,
+      "license": "obra protegida — uso sob o teto da §12.7",
+      "file": "de-la-villa-100-endgames.pdf",
+      "role": "Livro-base didático de N1 em diante — o próprio autor declara que não cobre os mates elementares (\"I assume the reader knows the basic mates\"). Progressão graduada; origina posição sob teto.",
+      "didactic": true
+    },
+    {
+      "slug": "de-la-villa-workbook",
+      "title": "The 100 Endgames You Must Know Workbook",
+      "author": "Jesús de la Villa",
+      "edition": null,
+      "protected": true,
+      "license": "obra protegida — uso sob o teto da §12.7",
+      "file": "de-la-villa-100-endgames-workbook.pdf",
+      "role": "Exercícios graduados. Origina posição sob teto; útil para prova de domínio e transferência."
+    },
+    {
+      "slug": "de-la-villa-amostra",
+      "title": "100 Basic Endgames You Must Know (excerto)",
+      "author": "Jesús de la Villa",
+      "edition": "excerto promocional, 31 páginas",
+      "protected": true,
+      "license": "obra protegida — uso sob o teto da §12.7",
+      "file": "de-la-villa-100-basic-endgames-amostra.pdf",
+      "role": "Excerto, não o livro. Serve de referência de voz e diagramação; cobertura mínima."
+    },
+    {
+      "slug": "silman-endgame-course",
+      "title": "Silman's Complete Endgame Course",
+      "author": "Jeremy Silman",
+      "edition": "Siles Press, Los Angeles, 2007",
+      "protected": true,
+      "license": "obra protegida — uso sob o teto da §12.7",
+      "file": "silman-complete-endgame-course.pdf",
+      "role": "Livro-base didático. A Parte 1 nomeia as duas técnicas (\"the Staircase\" e \"the Box\") e ensina de trás para frente, mostrando o mate antes do caminho. Base didática do N0-Q-MATE; origina posição sob teto.",
+      "didactic": true
+    },
+    {
+      "slug": "rabinovich-russian",
+      "title": "The Russian Endgame Handbook",
+      "author": "Ilya Rabinovich",
+      "edition": null,
+      "protected": true,
+      "license": "obra protegida — uso sob o teto da §12.7",
+      "file": "rabinovich-russian-endgame-handbook.pdf",
+      "role": "Sistemática soviética, ampla. Origina posição sob teto."
+    },
+    {
+      "slug": "averbakh-essential",
+      "title": "Chess Endings: Essential Knowledge",
+      "author": "Yuri Averbakh",
+      "edition": null,
+      "protected": true,
+      "license": "obra protegida — uso sob o teto da §12.7",
+      "file": "averbakh-essential-knowledge.pdf",
+      "role": "Teoria concisa — o mínimo que um final exige. Origina posição sob teto."
+    },
+    {
+      "slug": "nunn-understanding",
+      "title": "Understanding Chess Endgames",
+      "author": "John Nunn",
+      "edition": null,
+      "protected": true,
+      "license": "obra protegida — uso sob o teto da §12.7",
+      "file": "nunn-understanding-chess-endgames.pdf",
+      "role": "Princípios em vez de landmarks decoráveis. Origina posição sob teto."
+    },
+    {
+      "slug": "muller-lamprecht-fce",
+      "title": "Fundamental Chess Endings",
+      "author": "Karsten Müller e Frank Lamprecht",
+      "edition": null,
+      "protected": true,
+      "license": "obra protegida — uso sob o teto da §12.7",
+      "file": "muller-lamprecht-fundamental-chess-endings.pdf",
+      "role": "Referência de cobertura — usada para achar lacuna do currículo. Origina posição sob teto."
+    },
+    {
+      "slug": "muller-kids",
+      "title": "Chess Endgames for Kids",
+      "author": "Karsten Müller",
+      "edition": "Gambit Publications, Londres, 2015",
+      "protected": true,
+      "license": "obra protegida — uso sob o teto da §12.7",
+      "file": "muller-chess-endgames-for-kids.pdf",
+      "role": "Livro-base didático. Lições numeradas com fases explícitas e slogan-metáfora (\"rectangle prison\", \"rope\"), escritas para criança. Base didática do N0-R-MATE; origina posição sob teto.",
+      "didactic": true
+    },
+    {
+      "slug": "pandolfini-endgame-course",
+      "title": "Pandolfini's Endgame Course",
+      "author": "Bruce Pandolfini",
+      "edition": "Fireside / Simon & Schuster, Nova York, 1988",
+      "protected": true,
+      "license": "obra protegida — uso sob o teto da §12.7",
+      "file": "pandolfini-endgame-course.pdf",
+      "role": "Livro-base didático. Uma posição por página, dada em texto (\"W: Ke6, Re2 B: Ke8\"), mate em 2 a 5 lances, um padrão nomeado por posição. Base didática do N0-LADDER; origina posição sob teto.",
+      "didactic": true
+    },
+    {
+      "slug": "seirawan-winning-chess-endings",
+      "title": "Winning Chess Endings",
+      "author": "Yasser Seirawan",
+      "edition": null,
+      "protected": true,
+      "didactic": true,
+      "license": "obra protegida — uso sob o teto da §12.7",
+      "file": "seirawan-winning-chess-endings.pdf",
+      "role": "Livro-base didático. O cap. I \"Basic Mates\" ensina os mates elementares pelo método da caixa (\"Boxing the King\"), com princípios numerados e prosa de iniciante. Base didática do N0-2B-MATE; origina posição sob teto."
+    }
+  ]
+}
