@@ -4,6 +4,7 @@ import { Chess } from "chess.js";
 import {
   apenasLances,
   embrulhar,
+  lancesComProsa,
   lerPgn,
   lerPgns,
   recortarJogos,
@@ -258,6 +259,52 @@ test("o que `apenasLances` devolve o leitor lê de volta igual", () => {
     ["c5", "Nf3"],
   );
   assert.equal(contaComentarios(relido.lances), 0, "nenhuma palavra do autor sobrou");
+});
+
+test("`lancesComProsa` guarda a frase do autor e joga fora o que é do visualizador", () => {
+  const bruto = `[Event "?"]
+[White "Defesa do Peão Rei"]
+
+1. e4 e5 2. Nf3 d6 {[#] A defesa Phillidor} (2... Qf6 $2 {[%c_effect
+f6;square;f6;type;Mistake;persistent;true] a dama cedo demais fica exposta}
+3. Nc3 $1 {[%c_effect c3;square;c3;type;GreatFind;persistent;true]}) *`;
+  assert.equal(
+    lancesComProsa(bruto),
+    "1. e4 e5 2. Nf3 d6 {A defesa Phillidor} (2... Qf6 $2 " +
+      "{a dama cedo demais fica exposta} 3. Nc3 $1 ) *",
+  );
+});
+
+test("`lancesComProsa` desfaz o `$146` que o chess.com pôs no lugar do N", () => {
+  // 146 é o NAG da novidade, e o exportador do chess.com converte o "N" de
+  // "Não" para ele. Dentro da prosa isso é ruído; fora dela continua sendo NAG.
+  const bruto = `1. e4 d5 {$146ão é uma defesa ruim} 2. exd5 $146 *`;
+  assert.equal(lancesComProsa(bruto), "1. e4 d5 {Não é uma defesa ruim} 2. exd5 $146 *");
+});
+
+test("`lancesComProsa` não corta a frase no ponto e vírgula que o autor escreveu", () => {
+  // O `;` abre comentário até o fim da linha no PGN — mas não dentro de `{}`.
+  // Fazer as três limpezas em sequência comeria o resto da frase; a alternância
+  // numa passada só, com o `{}` casando primeiro, é o que impede isso.
+  const bruto = `1. e4 e5 {troque as damas; o final é nosso} ; nota solta
+2. Nf3 *`;
+  assert.equal(lancesComProsa(bruto), "1. e4 e5 {troque as damas; o final é nosso} 2. Nf3 *");
+});
+
+test("o que `lancesComProsa` devolve o leitor lê de volta com os comentários", () => {
+  const bruto = `[Event "?"]
+
+1. e4 e5 {prosa} (1... c5 {mais prosa} 2. Nf3) 2. Nf3 Nc6 *`;
+  const relido = lerPgn(lancesComProsa(bruto));
+  assert.deepEqual(
+    relido.lances.map((l) => l.san),
+    ["e4", "e5", "Nf3", "Nc6"],
+  );
+  assert.deepEqual(
+    relido.lances[1].variacoes[0].map((l) => l.san),
+    ["c5", "Nf3"],
+  );
+  assert.equal(contaComentarios(relido.lances), 2, "as duas frases do autor voltaram");
 });
 
 test("`embrulhar` quebra sem cortar lance no meio", () => {

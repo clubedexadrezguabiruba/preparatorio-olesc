@@ -19,7 +19,8 @@
     "repertorio:importar": "node scripts/importar-fontes.ts",
     "repertorio:compilar": "node scripts/compilar-repertorio.ts",
     "repertorio:explorer": "node scripts/explorer-repertorio.ts",
-    "repertorio:motor": "node scripts/motor-repertorio.ts"
+    "repertorio:motor": "node scripts/motor-repertorio.ts",
+    "repertorio:fidelidade": "node scripts/medir-fidelidade.ts"
   },
   "dependencies": {
     "@lichess-org/chessground": "^10.1.1",

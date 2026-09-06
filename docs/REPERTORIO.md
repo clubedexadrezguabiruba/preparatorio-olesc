@@ -305,17 +305,25 @@ aqui para o cronograma não tratar os dois como o mesmo poste.
 
 ## 5. Proveniência e formato
 
-**Os lances são fato com proveniência; o texto é redigido do zero.** É a política
-que o projeto já segue para posições de livro.
+**Os lances são fato com proveniência; o texto é escrito com as nossas palavras,
+carregando o argumento da fonte.** É a política que o projeto já segue para
+posições de livro. Não é "redigir do zero": essa leitura custou os 103
+comentários do B6, e a §9 conta o preço.
 
 - Os PGN originais ficam **fora do repositório**, nas pastas de
   `REPERTORIO_FONTES` (hoje `Downloads\repertorio-fontes` e `Downloads\krikor`).
   Prosa de curso pago não entra no Git nem no site.
-- `npm run repertorio:importar` escreve **um rascunho por arquivo de fonte** em
-  `content/repertorio/rascunhos/`, sem uma palavra de prosa, com os NAGs
-  mantidos e a tag `[Fonte]` preenchida. Nunca sobrescreve.
+- `npm run repertorio:importar` escreve **dois rascunhos por arquivo de fonte**.
+  O de `content/repertorio/rascunhos/` é o versionado: sem uma palavra de prosa,
+  com os NAGs mantidos e a tag `[Fonte]` preenchida, e nunca sobrescreve. O de
+  `content/repertorio/rascunhos-anotados/` é o mesmo PGN **com** a prosa da
+  fonte, está no `.gitignore` — o repositório é público — e é reescrito a cada
+  importação.
 - O rascunho é revisado à mão e vira `content/repertorio/<cor>-<abertura>.pgn`.
-  `npm run repertorio:compilar` transforma isso em `public/repertorio/*.json`.
+  Quem escreve o comentário lê o **argumento** no gêmeo anotado e o reescreve em
+  português de criança de 10 anos; copiar a frase do autor é que não pode.
+  `npm run repertorio:compilar` transforma isso em `public/repertorio/*.json`, e
+  `npm run repertorio:fidelidade` diz onde a fonte fala e nós estamos calados.
 
 Cabeçalho de cada PGN revisado: `[Abertura]` (o slug, igual ao nome do arquivo),
 `[Nome]`, `[Cor]` (a cor que **o aluno** joga), `[Nivel]`, `[Fonte]`
@@ -477,9 +485,11 @@ npm run repertorio:compilar     # PGN revisados -> public/repertorio/*.json
 npm run repertorio:compilar -- --check   # só confere; sai com erro se algo falha
 npm run repertorio:motor -- "1.e4 c5 2.Bc4 Cc6"   # as 5 melhores da posição
 npm run repertorio:motor -- --pontas              # avalia a ponta de cada linha
+npm run repertorio:fidelidade   # onde a fonte fala numa posição nossa, e o que dizemos ali
+npm run repertorio:fidelidade -- --pares         # a folha: fonte e nosso, lado a lado
 npm run db:migrar               # aplica 0004_repertorio.sql
 npm run db:rls                  # prova que o aluno não grava progresso
-npm test                        # 251 testes, 104 deles do repertório
+npm test                        # 255 testes, 108 deles do repertório
 ```
 
 Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variações),
@@ -519,30 +529,104 @@ para 9. Vários textos caem em lance de **tronco** e por isso valem por muitos: 
 é hash dos lances, então acentuar e comentar não órfã progresso nenhum — os 42
 ids são byte a byte os de antes.
 
-**⚠ Os comentários não carregam o raciocínio das fontes.** Este é o buraco
-aberto do B6, e ele é maior do que parece. O que vem do Krikor e do Grigoryan
-são os **lances**; a justificativa de cada lance foi escrita aqui, olhando o
-tabuleiro. Isso derrota metade do motivo de usar os cursos deles — eles
-explicam **por quê**, e esse porquê está sendo jogado fora.
+**O raciocínio das fontes, e o buraco que o B6 abriu.** O que vem do Krikor e
+do Grigoryan são os **lances**; até 6/9/2026 a justificativa de cada lance era
+escrita aqui, olhando o tabuleiro. Isso derrotava metade do motivo de usar os
+cursos deles — eles explicam **por quê**, e esse porquê estava sendo jogado
+fora na porta de entrada.
 
-**A causa é o importador.** `importar-fontes.ts` corta a prosa ao gerar os
-rascunhos: os 20 arquivos de `content/repertorio/rascunhos/` têm **zero**
-comentários. Quem escreveu os textos nunca teve o argumento da fonte na mão. Os
-originais estão intactos fora do Git (`REPERTORIO_FONTES`), com **452
+**A causa era o importador, e ela está fechada.** `importar-fontes.ts` cortava
+a prosa ao gerar os rascunhos: os 20 arquivos de `content/repertorio/rascunhos/`
+tinham **zero** comentários, e quem escreveu os textos nunca teve o argumento da
+fonte na mão. Agora cada rascunho sai **duas vezes**. O de `rascunhos/` continua
+sem uma palavra de prosa — ele é versionado, e **este repositório é público**,
+então a prosa de curso pago não pode entrar nele. O gêmeo, em
+`content/repertorio/rascunhos-anotados/`, tem a prosa limpa dos artefatos do
+exportador e está no `.gitignore`: **406 comentários** onde antes havia zero. O
+cabeçalho dos 20 rascunhos versionados aponta para o gêmeo, e é esse ponteiro —
+não a boa vontade de quem escreve — que impede o erro de voltar no Avançado.
+
+A limpeza é `lancesComProsa`, em `pgn.ts`, irmão de `apenasLances`. Sai o que o
+exportador escreveu para si mesmo: `[%c_effect …]`, `[%cal …]`, `[%csl …]` e
+`[#]`. E o `$146` vira `N` — 146 é o NAG da novidade, e o chess.com converte
+para ele o **N** de "Não", que é como `$146ão é uma defesa ruim` foi parar no
+PGN do Krikor. A alternância é numa passada só, com o `{}` casando primeiro:
+fazer as três limpezas em sequência cortaria a frase no primeiro ponto e vírgula
+que o autor escrevesse.
+
+Os originais continuam intactos fora do Git (`REPERTORIO_FONTES`), com **452
 explicações**: Krikor 332 — Philidor 119, Alapin-d5 52, Escandinava 50,
 Alapin-Cf6 36, Alapin-alternativas 33, Escocesa 25, Petroff 17 — e Grigoryan
 120 — Escocesa 31, Sidelines 58, English 30, Rossolimo 11, Petroff 13,
 Caro-Kann 8, Dragão 4, Francesa 3. O Kushager é o único que vem sem prosa no
-PGN; a dele está no site do curso.
+PGN; a dele está no site do curso. **393 delas** sobrevivem como comentário de
+lance no gêmeo anotado — o resto é introdução de arquivo ou marca de
+visualizador, e some na limpeza.
 
-**Quatro dos 103 já foram corrigidos**, em 6/9/2026, e servem de amostra do
-tamanho do erro. Em `4…Cbd7` do Manhattan o texto dizia que o cavalo evita
-trancar o peão de c7; a razão do Kushager é outra e melhor — sem o cavalo em
-d7, o `Da4` das brancas vem **com xeque** e nos obriga a `…Cc6`, e é o xeque
-que estraga tudo. No `8…Da5` o texto falava em recuperar o peão de c5; para ele
-o peão é o de menos, o que decide é que rocamos no lance seguinte e o rei branco
-fica no meio do tabuleiro. Em `2…c5` da Londres entrou a razão estratégica dele
-(`2.Bf4` desenvolve mas, ao contrário do `2.c4`, não disputa espaço no centro).
+**Onde a fonte de fato encosta nas nossas linhas: 39 pontos.** É o que
+`npm run repertorio:fidelidade` mede, e a conta é pequena por um motivo bom: as
+nossas linhas param no lance 8 e os cursos anotam no 12, 15, 20 — a maior parte
+das 452 fala de posições que o aluno do Base nunca vê. O casamento é por **FEN**
+(as 4 primeiras partes, sem contadores) e nunca por slug: os slugs do
+`fontes.json` são por capítulo de origem e não batem com os nossos —
+`peao-rei` não é `philidor`, e `alapin-brancas`, `alapin-pretas`,
+`dragao-acelerado`, `rossolimo` e `sicilianas-sidelines` caem todos no nosso
+`siciliana`. Casar por FEN resolve transposição de graça, que é o que os cursos
+mais fazem.
+
+**Dos 39, só 9 valiam redação.** Os outros 30 se dividem em quatro tipos, e
+nenhum deles é argumento: **ponteiro de capítulo** ("está analisado no capítulo
+da defesa escocesa"), **pergunta de homework** ("Do you remember how do we play
+here?"), **rótulo sem conteúdo** ("Transposition", "com boa vantagem branca",
+"lance bastante jogado aqui") e — o grupo que surpreendeu — **o nosso texto já
+diz mais que a fonte**, o que é a `pretas-siciliana` inteira: as transposições
+que o Grigoryan resolve com a palavra "Transposition" nós explicamos em três
+parágrafos. Aqui a regra é a mesma que rege o resto: nem todo ponto merece uma
+tela, senão o aluno lê parede de texto. A regra de densidade que decidiu os
+casos de dúvida foi **reforçar um comentário vizinho em vez de abrir um novo
+colado nele**.
+
+**A regra do texto, corrigida.** O B3 dizia "nenhuma prosa de curso entra
+aqui", e isso foi lido como "escreva do zero". A leitura certa é: **carregar o
+argumento, com as nossas palavras**, em português de criança de 10 anos. Nunca
+colar o texto deles no repositório — é curso pago, e a anotação do Krikor é
+telegráfica de adulto ("com boa vantagem branca"), que não ensina ninguém.
+
+**De 4 posições para 13.** Em 6/9/2026 quatro comentários foram corrigidos, e
+servem de amostra do tamanho do erro. Em `4…Cbd7` do Manhattan o texto dizia que
+o cavalo evita trancar o peão de c7; a razão do Kushager é outra e melhor — sem
+o cavalo em d7, o `Da4` das brancas vem **com xeque** e nos obriga a `…Cc6`, e é
+o xeque que estraga tudo. No `8…Da5` o texto falava em recuperar o peão de c5;
+para ele o peão é o de menos, o que decide é que rocamos no lance seguinte e o
+rei branco fica no meio do tabuleiro. Em `2…c5` da Londres entrou a razão
+estratégica dele (`2.Bf4` desenvolve mas, ao contrário do `2.c4`, não disputa
+espaço no centro).
+
+As outras nove entraram depois, com o gêmeo anotado na mão:
+
+| Arquivo | Lance | O argumento que veio da fonte |
+|---|---|---|
+| escandinava | `1…d5` ✚ | não é defesa ruim — entrega uma posição tranquila com lances naturais |
+| escandinava | `5.Cf3` ✚ | ele vem de `…Bg4` aqui, que prega o cavalo e **não** é o melhor |
+| escandinava | `5…c6` ✚ | abre c7 como refúgio da dama |
+| escandinava | `7.Bd2` ✎ | a dama foi para a5 **para ficar longe** — é isso que Bd2 desfaz |
+| escocesa | `5.Bc4` ✚ | mira f7, e a ameaça de verdade é `Dd5`, batendo em f7 e no cavalo |
+| escocesa | `4.Cc3` ✚ | manter a tensão; `4.d5` fecha, e fechado é mais fácil **para ele** |
+| escocesa | `5.Bb5` ✎ | ataca **indiretamente e5** — quem o segura é o cavalo cravado |
+| philidor | `6.Bf4` ✎ | havia `Be2` e roque pequeno; este desenho foi escolhido por ser o agressivo |
+| pretas-siciliana | `3…Cd5` ✚ | por que d5 e não `…Ce4`, que "perde o cavalo em um lance" |
+
+✚ texto novo, ✎ reescrita. Duas afirmações táticas foram medidas no motor antes
+de virar texto, e não copiadas: depois de `3…Ce4 4.d3` as duas fugas naturais do
+cavalo, `…Cf6` e `…Cd6`, são casas que o peão de e5 come, e a melhor tentativa
+preta é dar a peça em f2 (brancas +2,55) — a anotação `$4` do Krikor era exata.
+E `…Bg4` na Escandinava é o **quinto** dos cinco lances do motor, 25 centésimos
+atrás do melhor: "não é a melhor jogada aqui", como o Krikor escreve, tem
+número.
+
+Os comentários foram de **103 para 110** telas nas 42 linhas (91 textos
+distintos), e as que carregam o argumento da fonte foram de **6 para 16**. Os
+ids continuam byte a byte os mesmos: comentário não entra no hash.
 
 **Onde ser fiel não se aplica.** A Londres e o Colle das pretas são escolha
 nossa contra a fonte — a §2.9 decidiu `2…c5`, e o capítulo 'The London' do

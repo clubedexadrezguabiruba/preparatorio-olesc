@@ -1,7 +1,8 @@
 ; Escocesa — 9 linhas do Base. Revisado a partir dos rascunhos, com os cortes
 ; da seção 2.1 do docs/REPERTORIO.md: o tronco é 4...Cxd4 5.Dxd4, com as quatro
 ; respostas do lance 5. As respostas sem 3...exd4 vêm do capítulo do Krikor.
-; Comentários redigidos do zero. Nenhuma prosa de curso entra aqui.
+; Comentários escritos com as nossas palavras, carregando o argumento da fonte
+; quando ela tem um. Nenhuma prosa de curso é copiada aqui.
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -65,15 +66,24 @@ peão de e5 vai tomando o espaço do lado do rei.} *
 …exd4, e é disso que trata o resto do arquivo. Este jogo reúne as três respostas
 em que ele não come — e a regra é sempre a mesma: quem não briga pelo centro,
 entrega o centro.} 3... d6
-(3... Nf6 4. dxe5 Nxe4 5. Bc4 Nc5 6. Nc3 (6. Qe2 $5) {Ele pegou o peão de e4 mas
+(3... Nf6 4. dxe5 Nxe4 5. Bc4 {O bispo aponta para f7, e a ameaça de verdade é
+Dd5: de d5 a dama bate em f7 e no cavalo de e4 ao mesmo tempo, e f7 só tem o rei
+para defender. Repare que é a mesma dama em d5 da Philidor — o golpe aparece nas
+duas aberturas, com as peças quase nos mesmos lugares.} 5... Nc5 6. Nc3 (6. Qe2 $5) {Ele pegou o peão de e4 mas
 o cavalo já teve de andar duas vezes. Nós temos um peão forte em e5 e todas as
 peças saindo com tempo.})
 (3... f6 4. Bc4 {Com o peão em f6 ele tapou a saída do próprio cavalo e
 enfraqueceu a diagonal que chega em f7 — e é exatamente para lá que o bispo vai.
 Nem precisa correr: basta desenvolver, o centro já é nosso.})
-4. Nc3 (4. d5 $5) 4... Nf6 5. Bb5 {O bispo prega o cavalo de c6 contra o rei: ele
-não pode sair do lugar. E é justamente esse cavalo que briga com o nosso peão de
-d4. Guarde o lance — no oitavo nós vamos trocar essa peça de propósito.} 5... exd4
+4. Nc3 {Dá para empurrar 4.d5 e ganhar espaço, e o computador até gosta — mas
+nós não fazemos isso. Peão em d5 fecha o centro, e centro fechado ajuda quem
+está apertado, que é ele. Deixando a tensão de pé, quem tem de decidir a hora de
+comer é ele, e cada decisão dessas é uma chance de errar.} (4. d5 $5) 4... Nf6
+5. Bb5 {O bispo prega o cavalo de c6 contra o rei: ele
+não pode sair do lugar. E esse cavalo é a peça mais ocupada do tabuleiro dele —
+é ele que briga com o nosso peão de d4 e é ele que ajuda o peão de d6 a segurar
+e5. Pregando o cavalo, atacamos as duas coisas sem encostar em nenhuma. Guarde o
+lance: no oitavo nós vamos trocar essa peça de propósito.} 5... exd4
 6. Nxd4 Bd7 7. O-O Be7 8. Nxc6 {Trocamos
 em c6 de propósito: o peão dele vira peão dobrado, o bispo de d7 perde a
 serventia e a nossa diagonal abre. Depois vem bispo para d3 e o avanço f4.} *

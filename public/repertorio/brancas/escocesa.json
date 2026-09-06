@@ -398,6 +398,7 @@
     "errosNomeados": {},
     "comentarios": {
       "4": "O lance que abre o jogo. O normal é ele comer com\n…exd4, e é disso que trata o resto do arquivo. Este jogo reúne as três respostas\nem que ele não come — e a regra é sempre a mesma: quem não briga pelo centro,\nentrega o centro.",
+      "8": "O bispo aponta para f7, e a ameaça de verdade é\nDd5: de d5 a dama bate em f7 e no cavalo de e4 ao mesmo tempo, e f7 só tem o rei\npara defender. Repare que é a mesma dama em d5 da Philidor — o golpe aparece nas\nduas aberturas, com as peças quase nos mesmos lugares.",
       "10": "Ele pegou o peão de e4 mas\no cavalo já teve de andar duas vezes. Nós temos um peão forte em e5 e todas as\npeças saindo com tempo."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'"
@@ -502,7 +503,8 @@
     "errosNomeados": {},
     "comentarios": {
       "4": "O lance que abre o jogo. O normal é ele comer com\n…exd4, e é disso que trata o resto do arquivo. Este jogo reúne as três respostas\nem que ele não come — e a regra é sempre a mesma: quem não briga pelo centro,\nentrega o centro.",
-      "8": "O bispo prega o cavalo de c6 contra o rei: ele\nnão pode sair do lugar. E é justamente esse cavalo que briga com o nosso peão de\nd4. Guarde o lance — no oitavo nós vamos trocar essa peça de propósito.",
+      "6": "Dá para empurrar 4.d5 e ganhar espaço, e o computador até gosta — mas\nnós não fazemos isso. Peão em d5 fecha o centro, e centro fechado ajuda quem\nestá apertado, que é ele. Deixando a tensão de pé, quem tem de decidir a hora de\ncomer é ele, e cada decisão dessas é uma chance de errar.",
+      "8": "O bispo prega o cavalo de c6 contra o rei: ele\nnão pode sair do lugar. E esse cavalo é a peça mais ocupada do tabuleiro dele —\né ele que briga com o nosso peão de d4 e é ele que ajuda o peão de d6 a segurar\ne5. Pregando o cavalo, atacamos as duas coisas sem encostar em nenhuma. Guarde o\nlance: no oitavo nós vamos trocar essa peça de propósito.",
       "14": "Trocamos\nem c6 de propósito: o peão dele vira peão dobrado, o bispo de d7 perde a\nserventia e a nossa diagonal abre. Depois vem bispo para d3 e o avanço f4."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'"

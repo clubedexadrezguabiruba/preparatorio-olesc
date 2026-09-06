@@ -54,7 +54,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "1": "A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de\ncomeçar — mas repare no que ela nos entrega: daqui para a frente são lances\nnaturais, um atrás do outro, e uma posição tranquila sem nada difícil para\ndecorar. É por isso que ela aparece tanto nesta faixa de rating, e é por isso\nque a gente gosta de vê-la.",
       "4": "O cavalo sai atacando a dama. Este é o presente\nque a Escandinava nos dá: desenvolvemos com tempo, e ela ainda vai ter de andar\nmais uma vez.",
+      "8": "Espere o bispo dele em g4 agora: é o lance mais\nnatural do mundo, ele sai atacando e ainda prega o nosso cavalo contra a dama.\nE é exatamente o que a gente quer. O bispo parece ativo em g4 e está indo para\no lugar errado — o próximo lance começa a mostrar por quê.",
       "10": "Começa a caçada ao bispo. O h3 faz uma\npergunta simples — troca ou recua? — e as duas respostas nos servem: se ele\ntrocar, ganhamos os dois bispos; se recuar para h5, vem g4 e ele fica na\ndiagonal errada.",
       "14": "Empurramos o bispo\ndele até g6 com h3 e g4, e agora o cavalo pousa em e5, bem no meio do tabuleiro.\nO mesmo remédio serve quando a dama recua para d8."
     },
@@ -115,8 +117,10 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "1": "A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de\ncomeçar — mas repare no que ela nos entrega: daqui para a frente são lances\nnaturais, um atrás do outro, e uma posição tranquila sem nada difícil para\ndecorar. É por isso que ela aparece tanto nesta faixa de rating, e é por isso\nque a gente gosta de vê-la.",
       "4": "O cavalo sai atacando a dama. Este é o presente\nque a Escandinava nos dá: desenvolvemos com tempo, e ela ainda vai ter de andar\nmais uma vez.",
-      "12": "Parece um lance pequeno, e não é: o bispo\nem d2 fica na mesma diagonal da dama dele em a5.",
+      "9": "Esse peãozinho de c6 não ataca nada e tem endereço certo:\nele abre a casa c7 para a dama fugir quando alguém a incomodar. Ele já está se\npreparando — e o nosso plano dos próximos lances é justamente incomodá-la.",
+      "12": "Ele pôs a dama em a5 para ela ficar longe de todo mundo, e até\nagora estava dando certo. É este bispinho que acaba com a história: de d2 ele\nentra na mesma diagonal da dama, e ela deixou de estar longe.",
       "14": "Agora dá para\npular no meio do tabuleiro sem medo: se ele comer o cavalo, o bispo de d2 come a\ndama. Ele vai ter de recuar de novo."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'"

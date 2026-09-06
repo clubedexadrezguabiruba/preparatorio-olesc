@@ -17,6 +17,24 @@
  * nomeado). Os lances são fato com proveniência — a política que o projeto já
  * segue para posições de livro —, e a proveniência vai na tag `[Fonte]`.
  *
+ * ## O rascunho anotado, e por que ele existe
+ *
+ * Cada rascunho sai **duas vezes**. O de `rascunhos/` é o versionado, sem
+ * prosa. O de `rascunhos-anotados/` é o mesmo PGN **com** o comentário do
+ * autor, limpo dos artefatos do exportador, e está no `.gitignore`.
+ *
+ * A causa: até 6/9/2026 o importador só escrevia o primeiro, e por isso quem
+ * escreveu os 103 comentários do repertório nunca teve o argumento da fonte na
+ * mão — a justificativa de cada lance saiu de olhar o tabuleiro, e só 4 dos 103
+ * carregavam o raciocínio do autor. Os lances vêm do curso; o **porquê** vinha
+ * junto e estava sendo jogado fora na porta de entrada.
+ *
+ * A pasta anotada fica fora do Git porque o repositório é público e a prosa é
+ * de curso pago. Ela é derivada, não revisada: ao contrário de `rascunhos/`,
+ * é **reescrita** a cada importação. Some com um `git clone` e volta com um
+ * `npm run repertorio:importar`, desde que `REPERTORIO_FONTES` aponte para os
+ * originais — que é a mesma condição que o rascunho versionado já tinha.
+ *
  * ## Um rascunho por ARQUIVO de fonte, não por abertura
  *
  * A Escocesa tem dois arquivos, a Alapin das brancas tem três, o do Kushager
@@ -37,13 +55,20 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSy
 import path from "node:path";
 import { carregarEnv, RAIZ } from "./env-local.ts";
 import { expandir, type Aviso, type TipoDeAviso } from "../lib/repertorio/arvore.ts";
-import { apenasLances, embrulhar, lerPgns, recortarJogos } from "../lib/repertorio/pgn.ts";
+import {
+  apenasLances,
+  embrulhar,
+  lancesComProsa,
+  lerPgns,
+  recortarJogos,
+} from "../lib/repertorio/pgn.ts";
 import { CORES, NIVEIS, type Cor, type Nivel } from "../lib/repertorio/linhas.ts";
 
 carregarEnv();
 
 const SO_RELATORIO = process.argv.includes("--relatorio");
 const DESTINO = path.join(RAIZ, "content", "repertorio", "rascunhos");
+const DESTINO_ANOTADO = path.join(RAIZ, "content", "repertorio", "rascunhos-anotados");
 const MAPA = path.join(RAIZ, "content", "repertorio", "fontes.json");
 
 type Entrada = {
@@ -134,6 +159,8 @@ type Medida = {
   perguntas: string[];
   armadilhas: string[];
   escrito: string | null;
+  /** Quantos `{comentários}` da fonte sobreviveram no rascunho anotado. */
+  comentarios: number;
 };
 
 const zerado = (): Record<TipoDeAviso, number> => ({
@@ -148,7 +175,10 @@ const medidas: Medida[] = [];
 const foraDoMapa: string[] = [];
 const naoEncontrados = new Set(porArquivo.keys());
 
-if (!SO_RELATORIO) mkdirSync(DESTINO, { recursive: true });
+if (!SO_RELATORIO) {
+  mkdirSync(DESTINO, { recursive: true });
+  mkdirSync(DESTINO_ANOTADO, { recursive: true });
+}
 
 for (const cheio of encontrados) {
   const base = path.basename(cheio);
@@ -188,40 +218,55 @@ for (const cheio of encontrados) {
     }
   }
 
-  // O rascunho: cabeçalho nosso + os lances de cada jogo, sem prosa.
-  const destino = path.join(DESTINO, `${slug(path.basename(base, ".pgn"))}.pgn`);
+  // Os dois rascunhos: cabeçalho nosso + os lances de cada jogo, uma vez sem a
+  // prosa (o versionado) e uma vez com ela (o anotado, fora do Git).
+  const nome = `${slug(path.basename(base, ".pgn"))}.pgn`;
+  const destino = path.join(DESTINO, nome);
   let escrito: string | null = null;
+  let comentarios = 0;
   if (!SO_RELATORIO) {
-    if (existsSync(destino)) {
-      escrito = null; // Nunca sobrescreve: o rascunho pode já ter sido revisado.
-    } else {
-      const { pedacos, confere } = recortarJogos(texto, jogos.length);
-      if (!confere) {
-        problemas.push(
-          `o arquivo tem ${jogos.length} jogos para o leitor mas ${pedacos.length} pelo corte ` +
-            "no [Event]; o rascunho saiu num bloco só, para separar à mão",
-        );
-      }
-      const partes = pedacos.map((pedaco, i) => {
-        const jogo = confere ? jogos[i] : jogos[0];
-        const capitulo = jogo?.tags.Event ?? jogo?.tags.White ?? `parte ${i + 1}`;
-        const cabecalho = [
-          `[Abertura "${entrada.abertura}"]`,
-          `[Nome "${entrada.nome}"]`,
-          `[Cor "${entrada.cor}"]`,
-          `[Nivel "${entrada.nivel}"]`,
-          `[Fonte "${entrada.fonte}${confere && jogos.length > 1 ? ` — ${capitulo}` : ""}"]`,
-          `[Result "*"]`,
-        ].join("\n");
-        return `${cabecalho}\n\n${embrulhar(apenasLances(pedaco))}`;
-      });
+    const { pedacos, confere } = recortarJogos(texto, jogos.length);
+    if (!confere) {
+      problemas.push(
+        `o arquivo tem ${jogos.length} jogos para o leitor mas ${pedacos.length} pelo corte ` +
+          "no [Event]; o rascunho saiu num bloco só, para separar à mão",
+      );
+    }
+    const montar = (corpo: (pedaco: string) => string): string =>
+      pedacos
+        .map((pedaco, i) => {
+          const jogo = confere ? jogos[i] : jogos[0];
+          const capitulo = jogo?.tags.Event ?? jogo?.tags.White ?? `parte ${i + 1}`;
+          const cabecalho = [
+            `[Abertura "${entrada.abertura}"]`,
+            `[Nome "${entrada.nome}"]`,
+            `[Cor "${entrada.cor}"]`,
+            `[Nivel "${entrada.nivel}"]`,
+            `[Fonte "${entrada.fonte}${confere && jogos.length > 1 ? ` — ${capitulo}` : ""}"]`,
+            `[Result "*"]`,
+          ].join("\n");
+          return `${cabecalho}\n\n${embrulhar(corpo(pedaco))}`;
+        })
+        .join("\n\n");
+
+    // Nunca sobrescreve: o rascunho versionado pode já ter sido revisado à mão.
+    if (!existsSync(destino)) {
       writeFileSync(
         destino,
-        `${AVISO_DO_RASCUNHO(entrada)}\n${partes.join("\n\n")}\n`,
+        `${AVISO_DO_RASCUNHO(entrada, nome)}\n${montar(apenasLances)}\n`,
         "utf8",
       );
       escrito = path.relative(RAIZ, destino);
     }
+
+    // O anotado é derivado, não revisado: sai por cima toda vez.
+    const anotado = montar(lancesComProsa);
+    comentarios = (anotado.match(/\{/g) ?? []).length;
+    writeFileSync(
+      path.join(DESTINO_ANOTADO, nome),
+      `${AVISO_DO_ANOTADO(entrada, nome)}\n${anotado}\n`,
+      "utf8",
+    );
   }
 
   medidas.push({
@@ -233,10 +278,11 @@ for (const cheio of encontrados) {
     perguntas,
     armadilhas,
     escrito,
+    comentarios,
   });
 }
 
-function AVISO_DO_RASCUNHO(entrada: Entrada): string {
+function AVISO_DO_RASCUNHO(entrada: Entrada, nome: string): string {
   return [
     "; RASCUNHO — gerado por `npm run repertorio:importar`. Ainda não é repertório.",
     ";",
@@ -244,10 +290,34 @@ function AVISO_DO_RASCUNHO(entrada: Entrada): string {
       `${entrada.cor}-${entrada.abertura}.pgn:`,
     ";   1. cortar os ramos que o explorer mostrar como raros;",
     ";   2. fechar toda linha que hoje termina em lance do adversário;",
-    ";   3. escrever o comentário do último lance nosso, redigido do zero.",
+    ";   3. escrever o comentário do último lance nosso — com as NOSSAS palavras,",
+    ";      mas carregando o ARGUMENTO da fonte, que está no arquivo gêmeo:",
+    `;      content/repertorio/rascunhos-anotados/${nome} (fora do Git).`,
     ";",
     "; Os lances vieram da fonte (fato com proveniência). A prosa do autor NÃO",
-    "; entra no repositório — ela foi descartada na importação, de propósito.",
+    "; entra no repositório — ela foi descartada aqui, de propósito, porque este",
+    "; arquivo é versionado e o repositório é público. Ela não foi jogada fora:",
+    "; mora no gêmeo acima, que o `.gitignore` mantém local.",
+    "",
+  ].join("\n");
+}
+
+function AVISO_DO_ANOTADO(entrada: Entrada, nome: string): string {
+  return [
+    "; RASCUNHO ANOTADO — gerado por `npm run repertorio:importar`. FORA DO GIT.",
+    ";",
+    `; É o gêmeo, com a prosa da fonte, de:`,
+    `;   content/repertorio/rascunhos/${nome}`,
+    "; Existe para uma coisa só: quem escreve o comentário de",
+    `;   content/repertorio/${entrada.cor}-${entrada.abertura}.pgn`,
+    "; precisa do ARGUMENTO do autor na mão, e não de um tabuleiro para olhar",
+    "; sozinho.",
+    ";",
+    "; NÃO copie o texto do autor para o repositório: é curso pago, e a anotação",
+    "; é telegráfica de adulto. Leia o porquê, entenda, e escreva com as nossas",
+    "; palavras, em português de criança de 10 anos.",
+    ";",
+    "; Reescrito a cada importação — não edite este arquivo, o seu trabalho some.",
     "",
   ].join("\n");
 }
@@ -330,6 +400,11 @@ if (SO_RELATORIO) {
   const pulados = medidas.length - novos.length;
   console.log(`\n${novos.length} rascunhos escritos em content/repertorio/rascunhos/.`);
   if (pulados > 0) console.log(`${pulados} já existiam e foram deixados como estão.`);
+  const prosa = medidas.reduce((t, m) => t + m.comentarios, 0);
+  console.log(
+    `${medidas.length} rascunhos anotados reescritos em content/repertorio/rascunhos-anotados/ ` +
+      `(fora do Git), com ${prosa} comentários da fonte.`,
+  );
 }
 
 // Um SAN ilegal é erro de transcrição ou de leitura, e tem de aparecer como

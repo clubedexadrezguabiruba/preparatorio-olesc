@@ -52,3 +52,11 @@ next-env.d.ts
 # Vercel não tem Chromium para regerá-lo na build.
 /apostila/saida/
 /.conferencia/
+
+# Os rascunhos COM a prosa do Krikor e do Grigoryan. O gêmeo sem prosa, em
+# content/repertorio/rascunhos/, é o versionado; este existe para quem escreve
+# o comentário ter o argumento do autor na mão, e não pode entrar no Git —
+# este repositório é público e a prosa é de curso pago. É derivado: volta
+# inteiro com `npm run repertorio:importar`, como os originais que o
+# REPERTORIO_FONTES aponta.
+/content/repertorio/rascunhos-anotados/

@@ -9,16 +9,27 @@
 [Fonte "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'"]
 [Result "*"]
 
-1. e4 d5 2. exd5 Qxd5 3. Nc3 {O cavalo sai atacando a dama. Este é o presente
+1. e4 d5 {A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de
+começar — mas repare no que ela nos entrega: daqui para a frente são lances
+naturais, um atrás do outro, e uma posição tranquila sem nada difícil para
+decorar. É por isso que ela aparece tanto nesta faixa de rating, e é por isso
+que a gente gosta de vê-la.} 2. exd5 Qxd5 3. Nc3 {O cavalo sai atacando a dama. Este é o presente
 que a Escandinava nos dá: desenvolvemos com tempo, e ela ainda vai ter de andar
 mais uma vez.} 3... Qa5
-(3... Qd6 4. d4 Nf6 5. Nf3 Bg4 6. h3 {Começa a caçada ao bispo. O h3 faz uma
+(3... Qd6 4. d4 Nf6 5. Nf3 {Espere o bispo dele em g4 agora: é o lance mais
+natural do mundo, ele sai atacando e ainda prega o nosso cavalo contra a dama.
+E é exatamente o que a gente quer. O bispo parece ativo em g4 e está indo para
+o lugar errado — o próximo lance começa a mostrar por quê.} 5... Bg4 6. h3 {Começa a caçada ao bispo. O h3 faz uma
 pergunta simples — troca ou recua? — e as duas respostas nos servem: se ele
 trocar, ganhamos os dois bispos; se recuar para h5, vem g4 e ele fica na
 diagonal errada.} 6... Bh5 7. g4 Bg6 8. Ne5 {Empurramos o bispo
 dele até g6 com h3 e g4, e agora o cavalo pousa em e5, bem no meio do tabuleiro.
 O mesmo remédio serve quando a dama recua para d8.})
-4. d4 Nf6 5. Nf3 c6 6. Bc4 Bf5 7. Bd2 {Parece um lance pequeno, e não é: o bispo
-em d2 fica na mesma diagonal da dama dele em a5.} 7... e6 8. Nd5 {Agora dá para
+4. d4 Nf6 5. Nf3 c6 {Esse peãozinho de c6 não ataca nada e tem endereço certo:
+ele abre a casa c7 para a dama fugir quando alguém a incomodar. Ele já está se
+preparando — e o nosso plano dos próximos lances é justamente incomodá-la.}
+6. Bc4 Bf5 7. Bd2 {Ele pôs a dama em a5 para ela ficar longe de todo mundo, e até
+agora estava dando certo. É este bispinho que acaba com a história: de d2 ele
+entra na mesma diagonal da dama, e ela deixou de estar longe.} 7... e6 8. Nd5 {Agora dá para
 pular no meio do tabuleiro sem medo: se ele comer o cavalo, o bispo de d2 come a
 dama. Ele vai ter de recuar de novo.} *

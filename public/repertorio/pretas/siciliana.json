@@ -709,6 +709,7 @@
     },
     "comentarios": {
       "3": "O cavalo ataca o peão de e4 antes que o de c3 vire peão de\nd4. Ele quase sempre responde 3.e5 — e é o que queremos: o peão avança sozinho,\nsem nenhum peão vizinho para protegê-lo, e vira o alvo da linha inteira.",
+      "5": "Para d5, e nunca para e4. Em e4 o cavalo fica sem casa no lance seguinte:\nele joga 4.d3, e as duas fugas que parecem naturais — f6 e d6 — são justamente\nas duas casas que o peão de e5 come. Em d5 é o contrário, o cavalo para firme no\nmeio do tabuleiro.",
       "9": "Este …d6 é a conta que apresentamos ao peão de e5. Ou\nele come em d6 e abre o jogo cedo, ou fica parado esperando a hora em que somos\nnós que comemos — que é como esta linha termina.",
       "15": "O cavalo em d5 é o coração da linha: ele para no meio do tabuleiro e o\npeão de e5, que parecia o orgulho das brancas, é justamente o que cai primeiro.\nQuando o bispo dele chegou em c4 nós o empurramos com …Cb6, e agora …dxe5\ndesfaz o centro dele. Ele recaptura, mas o jogo abre com as nossas peças\nprontas."
     },

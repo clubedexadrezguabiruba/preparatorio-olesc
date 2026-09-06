@@ -149,7 +149,10 @@ não tem nada de novo dentro dela.} *
 1. e4 c5 2. c3 Nf6 {O cavalo ataca o peão de e4 antes que o de c3 vire peão de
 d4. Ele quase sempre responde 3.e5 — e é o que queremos: o peão avança sozinho,
 sem nenhum peão vizinho para protegê-lo, e vira o alvo da linha inteira.} 3. e5
-Nd5 (3... Ne4 $4) 4. d4 cxd4 5. cxd4 d6 {Este …d6 é a conta que apresentamos ao peão de e5. Ou
+Nd5 {Para d5, e nunca para e4. Em e4 o cavalo fica sem casa no lance seguinte:
+ele joga 4.d3, e as duas fugas que parecem naturais — f6 e d6 — são justamente
+as duas casas que o peão de e5 come. Em d5 é o contrário, o cavalo para firme no
+meio do tabuleiro.} (3... Ne4 $4) 4. d4 cxd4 5. cxd4 d6 {Este …d6 é a conta que apresentamos ao peão de e5. Ou
 ele come em d6 e abre o jogo cedo, ou fica parado esperando a hora em que somos
 nós que comemos — que é como esta linha termina.} 6. Nf3 Nc6 7. Bc4 Nb6 8. Bb5
 dxe5 {O cavalo em d5 é o coração da linha: ele para no meio do tabuleiro e o

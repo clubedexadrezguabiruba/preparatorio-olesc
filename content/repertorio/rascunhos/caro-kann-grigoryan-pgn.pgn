@@ -3,10 +3,14 @@
 ; O que falta antes de virar content/repertorio/brancas-caro-kann.pgn:
 ;   1. cortar os ramos que o explorer mostrar como raros;
 ;   2. fechar toda linha que hoje termina em lance do adversário;
-;   3. escrever o comentário do último lance nosso, redigido do zero.
+;   3. escrever o comentário do último lance nosso — com as NOSSAS palavras,
+;      mas carregando o ARGUMENTO da fonte, que está no arquivo gêmeo:
+;      content/repertorio/rascunhos-anotados/caro-kann-grigoryan-pgn.pgn (fora do Git).
 ;
 ; Os lances vieram da fonte (fato com proveniência). A prosa do autor NÃO
-; entra no repositório — ela foi descartada na importação, de propósito.
+; entra no repositório — ela foi descartada aqui, de propósito, porque este
+; arquivo é versionado e o repositório é público. Ela não foi jogada fora:
+; mora no gêmeo acima, que o `.gitignore` mantém local.
 
 [Abertura "caro-kann"]
 [Nome "Caro-Kann Trocas"]

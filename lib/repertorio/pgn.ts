@@ -30,8 +30,11 @@
  *    aqui é por **token**: começa jogo novo quando aparece uma tag depois de já
  *    ter aparecido lance. Não é por linha começando com `[` — há linhas que
  *    começam com `[%cal …]}` e com `[#]`, que são pedaços de comentário.
- * 3. **`apenasLances`** — a cirurgia de texto que o importador usa para escrever
- *    o rascunho: tira as tags da fonte e toda a prosa, mantém lances e NAGs.
+ * 3. **`apenasLances` e `lancesComProsa`** — a cirurgia de texto que o
+ *    importador usa para escrever os dois rascunhos. O primeiro tira as tags da
+ *    fonte e toda a prosa, e é o que entra no Git; o segundo guarda a prosa,
+ *    limpa dos artefatos do exportador, e é o que fica fora do Git para quem
+ *    escreve o comentário ter o argumento do autor na mão.
  * 4. **Sem `paraPares` e sem escritor.** `paraPares` é da mecânica do Estúdio do
  *    Laboratório (pares aluno/resposta) e não tem uso aqui — quem converte
  *    SAN→UCI no repertório é `arvore.ts`. E não há escritor porque o rascunho
@@ -316,6 +319,61 @@ export function apenasLances(texto: string): string {
     .replace(/\{[^}]*\}/g, " ") // a prosa, e tudo que mora dentro dela
     .replace(/\[\s*\w+\s*"[^"]*"\s*\]/g, " ") // as tags da fonte
     .replace(/;[^\n]*/g, " ") // comentário até o fim da linha
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * O que sobra de um `{comentário}` da fonte depois de tirar o que o exportador
+ * escreveu para si mesmo.
+ *
+ * Sai: `[%c_effect …]`, `[%cal …]`, `[%csl …]` — as setas e as casas pintadas
+ * do chess.com, que só fazem sentido dentro do visualizador dele — e `[#]`, a
+ * marca de "põe um diagrama aqui". Fica a frase.
+ *
+ * O `$146` vira `N`: 146 é o NAG da novidade, e o exportador do chess.com
+ * converte a letra **N** no começo de palavra para ele. No PGN do Krikor isso
+ * aparece como `$146ão é uma defesa ruim`, que é "Não é uma defesa ruim".
+ * Desfazer aqui é seguro porque este texto é prosa — dentro dos lances, `$146`
+ * continua sendo NAG e nem chega nesta função.
+ */
+function limparComentario(dentro: string): string {
+  return dentro
+    .replace(/\[%[^\]]*\]/g, " ")
+    .replace(/\[#\]/g, " ")
+    .replace(/\$146/g, "N")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
+ * Devolve os lances **com** a prosa da fonte, limpa dos artefatos do
+ * exportador. É o irmão de `apenasLances`, e existe pelo motivo oposto.
+ *
+ * `apenasLances` protege o repositório: o rascunho versionado não pode carregar
+ * o texto de um curso pago. Mas quem escreve o comentário do repertório precisa
+ * do **argumento** do autor na mão — sem ele a justificativa de cada lance é
+ * escrita do zero olhando o tabuleiro, que foi exatamente o buraco medido em
+ * 6/9/2026: 4 de 103 comentários carregavam o raciocínio da fonte. O importador
+ * escreve esta versão num gêmeo **fora do Git**, e o rascunho versionado aponta
+ * para ela.
+ *
+ * A ordem da alternância é a mesma da varredura, e pelo mesmo motivo: o
+ * `{comentário}` casa primeiro, então um `;` ou um `[%… "…"]` que more dentro
+ * da prosa é engolido por ela antes de as outras alternativas terem chance. Ao
+ * contrário de fazer as três trocas em sequência, isto não corta uma frase no
+ * primeiro ponto e vírgula que a fonte escrever.
+ *
+ * Comentário que fica vazio depois da limpeza — os `{[%c_effect …]}` sozinhos,
+ * que são a maioria no Krikor — some, em vez de virar um `{}` sem palavra.
+ */
+export function lancesComProsa(texto: string): string {
+  return texto
+    .replace(/\{[^}]*\}|\[\s*\w+\s*"[^"]*"\s*\]|;[^\n]*/g, (achado) => {
+      if (!achado.startsWith("{")) return " ";
+      const limpo = limparComentario(achado.slice(1, -1));
+      return limpo === "" ? " " : ` {${limpo}} `;
+    })
     .replace(/\s+/g, " ")
     .trim();
 }
