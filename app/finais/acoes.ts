@@ -55,3 +55,27 @@ export async function marcarLeitura(aula: string, lida: boolean): Promise<void> 
 
   revalidatePath("/finais");
 }
+
+/**
+ * A aula de leitura já foi marcada por quem está logado?
+ *
+ * Existe porque `/finais/[aula]` é **estática**: o HTML da aula é o mesmo para
+ * a turma inteira, e por isso não pode carregar dentro dele o que só vale para
+ * um aluno. A alternativa seria renderizar a aula sob demanda — e cobrar de
+ * todas as 49 uma ida ao banco na abertura para servir às duas que são de
+ * leitura.
+ *
+ * Então quem pergunta é o controle, do navegador, ao montar: uma ida de rede
+ * nas aulas que têm o controle, nenhuma nas outras.
+ */
+export async function leituraDaAula(aula: string): Promise<boolean> {
+  const perfil = await perfilAtual();
+  const supabase = await criarClienteServidor();
+  const { data } = await supabase
+    .from("aula_lida")
+    .select("aula")
+    .eq("aluno", perfil.id)
+    .eq("aula", aula)
+    .maybeSingle();
+  return data !== null;
+}

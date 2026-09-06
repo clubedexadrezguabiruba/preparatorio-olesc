@@ -1,7 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type { ProgressoDoTema } from "../tatica/progresso.ts";
-import { estadoDasTarefas, quantasFeitas, somarBlocos } from "./estado.ts";
+import {
+  estadoDasTarefas,
+  quantasFeitas,
+  somarBlocos,
+  somarFinais,
+  type EstadoDaTarefa,
+  type MedidaDeTatica,
+} from "./estado.ts";
 import type { Tarefa } from "./tarefas.ts";
 
 /**
@@ -23,6 +30,21 @@ const TAREFA_TATICA: Tarefa = {
   tipo: "tatica",
   titulo: "60 puzzles dos blocos 1 e 2",
   meta: { blocos: [1, 2], puzzles: 60, acerto: 70 },
+  onde: null,
+};
+
+/** A medida da tarefa de tática, já estreitada — o teste diz qual espera. */
+function deTatica(estado: EstadoDaTarefa): MedidaDeTatica {
+  assert.equal(estado.medida?.tipo, "tatica");
+  return estado.medida as MedidaDeTatica;
+}
+
+const TAREFA_FINAIS: Tarefa = {
+  id: "s2-finais",
+  semana: 2,
+  tipo: "finais",
+  titulo: "Dominar 6 finais das classes E e D",
+  meta: { classes: ["E", "D"], dominar: 6 },
   onde: null,
 };
 
@@ -55,6 +77,7 @@ test("a tarefa de tática fecha pela contagem, não pelo acerto", () => {
 
   assert.equal(estado.feita, true);
   assert.deepEqual(estado.medida, {
+    tipo: "tatica",
     feitos: 60,
     meta: 60,
     acerto: 50,
@@ -71,14 +94,66 @@ test("a tarefa de tática no meio do caminho", () => {
 
   assert.equal(estado.feita, false);
   assert.equal(estado.medida?.feitos, 24);
-  assert.equal(estado.medida?.acerto, 75);
+  assert.equal(deTatica(estado).acerto, 75);
 });
 
 test("sem puzzle nenhum, o acerto é nulo e não zero", () => {
   // Zero por cento é uma afirmação sobre o aluno — a de que ele errou tudo.
   // Quem não começou não errou nada, e a tela mostra um traço.
   const [estado] = estadoDasTarefas([TAREFA_TATICA], new Set(), new Map());
-  assert.equal(estado.medida?.acerto, null);
+  assert.equal(deTatica(estado).acerto, null);
+  assert.equal(estado.feita, false);
+});
+
+/* ------------------------------------------------------------------ *
+ * A tarefa de finais
+ * ------------------------------------------------------------------ */
+
+test("somar finais conta só as aulas dominadas das classes pedidas", () => {
+  // `N0-R-MATE` é da classe E, `N1-KEY-SQUARES` da D e `N3-LUCENA` da C —
+  // as classes saem da trilha, e não da tarefa.
+  const feitas = new Set(["N0-R-MATE", "N1-KEY-SQUARES", "N3-LUCENA"]);
+  assert.equal(somarFinais(feitas, ["E", "D"]), 2);
+  assert.equal(somarFinais(feitas, ["C"]), 1);
+  assert.equal(somarFinais(feitas, ["B"]), 0);
+});
+
+test("id que não é da trilha não conta para tarefa nenhuma", () => {
+  assert.equal(somarFinais(new Set(["N9-INVENTADA"]), ["E", "D", "C", "B"]), 0);
+});
+
+test("a tarefa de finais fecha na contagem de aulas dominadas", () => {
+  const cinco = new Set([
+    "N0-Q-MATE",
+    "N0-R-MATE",
+    "N0-LADDER",
+    "N0-STALEMATE",
+    "N1-SQUARE",
+  ]);
+  const [quase] = estadoDasTarefas([TAREFA_FINAIS], new Set(), new Map(), cinco);
+  assert.equal(quase.feita, false);
+  assert.deepEqual(quase.medida, { tipo: "finais", feitos: 5, meta: 6 });
+
+  const [fechada] = estadoDasTarefas(
+    [TAREFA_FINAIS],
+    new Set(),
+    new Map(),
+    new Set([...cinco, "N1-DIRECT-OPPOSITION"]),
+  );
+  assert.equal(fechada.feita, true);
+});
+
+test("aula de outra classe não fecha a tarefa de finais", () => {
+  const daClasseB = new Set(["N2-TRIANGULATION", "N2-OUTFLANKING", "N2-RETI"]);
+  const [estado] = estadoDasTarefas([TAREFA_FINAIS], new Set(), new Map(), daClasseB);
+  assert.equal(estado.medida?.feitos, 0);
+  assert.equal(estado.feita, false);
+});
+
+test("marcar a tarefa de finais não a fecha", () => {
+  // Mesmo motivo da de tática: quem conta é o servidor, e a marcação não tem
+  // voto numa tarefa medida.
+  const [estado] = estadoDasTarefas([TAREFA_FINAIS], new Set(["s2-finais"]), new Map());
   assert.equal(estado.feita, false);
 });
 

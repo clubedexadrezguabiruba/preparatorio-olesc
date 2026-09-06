@@ -16,16 +16,19 @@ const nextConfig: NextConfig = {
    * MB ao celular para ele sortear) e reconfere o lance antes de gravar.
    */
   /**
-   * As aulas de finais viajam junto pelo mesmo motivo, com uma diferença: hoje
-   * as duas rotas de `/finais` são **estáticas**, e conteúdo estático já foi
-   * lido na build — em tese não precisariam de nada aqui.
+   * As aulas de finais viajam junto pelo mesmo motivo — e a previsão de que a
+   * estaticidade cairia sozinha se cumpriu pela metade no B4:
    *
-   * Estão aqui porque a estaticidade é uma escolha de hoje, e ela cai sozinha:
-   * no B3 a aula passa a mostrar o que o aluno já dominou, e mostrar isso exige
-   * renderizar sob demanda. No dia em que isso acontecer, o build continua
-   * verde, o deploy sobe, e a primeira aula aberta responde `ENOENT` em
-   * produção — o tipo de quebra que só aparece longe de quem a causou. São
-   * ~700 KB de JSON contra o teto de 250 MB do pacote.
+   * - `/finais` virou **dinâmica**: a trilha mostra o estado de cada aula para
+   *   *aquele* aluno, e para isso lê o `content/` por caminho a cada pedido.
+   *   Sem esta entrada, a lista responderia `ENOENT` na Vercel.
+   * - `/finais/[aula]` continua **estática**: o único pedaço de aula que depende
+   *   do aluno é o controle da aula de leitura, e ele busca o próprio estado do
+   *   navegador (`Leitura.tsx`) em vez de cobrar uma consulta na abertura das 49.
+   *   Ela fica listada assim mesmo, porque a próxima aula que precise do aluno
+   *   na renderização derruba a estaticidade sem que ninguém lembre daqui.
+   *
+   * São ~700 KB de JSON contra o teto de 250 MB do pacote.
    */
   outputFileTracingIncludes: {
     "/tatica/[tema]": ["./public/puzzles/**"],

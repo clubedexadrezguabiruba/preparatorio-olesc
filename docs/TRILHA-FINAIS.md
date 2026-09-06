@@ -228,10 +228,17 @@ cada.
 
 | Fase | Fecha em | Aulas | Total no ar | Semana |
 |---|---|---|---|---|
-| FN1/B5 | qui 17/9 | 1–8, 10, 11 | 10 | 2 (19/9) |
+| FN1/B4 | sáb 12/9 | 1, 2 (as prontas) | 2 | **1** (12/9) |
+| FN1/B5 | qui 17/9 | 3–8, 10, 11 | 10 | 2 (19/9) |
 | FN2 | qui 24/9 | 9, 12–22 | 22 | 3 (26/9) |
 | FN3 | qui 1/10 | 23–36 | 36 | 4 (3/10) |
 | FN4 | sex 9/10 | 37–49 | 49 | 4 |
+
+As aulas 1 e 2 abrem uma semana antes do lote da B5 e é decisão da FN1/B4: elas
+já existem, já passaram pelo gate e já jogam — a coluna "Fase" delas diz "pronta".
+Deixá-las trancadas até 19/9 seria o site escondendo o que ele tem, e quem
+entrasse no domingo seguinte ao Sábado 1 encontraria um curso de finais com zero
+aulas abertas.
 
 FN3 e FN4 caem as duas na semana 4 porque o calendário do preparatório tem quatro
 sábados e a semana 4 vai de 3/10 até a véspera do torneio. Não é problema: o aluno

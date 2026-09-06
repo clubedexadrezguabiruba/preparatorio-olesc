@@ -100,6 +100,7 @@ export function TreeStage({
   const say = useLessonStore((s) => s.say);
   const celebrate = useLessonStore((s) => s.celebrate);
   const fadeFlash = useLessonStore((s) => s.fadeFlash);
+  const treeTry = useLessonStore((s) => s.treeTry);
   const treeAdvance = useLessonStore((s) => s.treeAdvance);
   const treeFail = useLessonStore((s) => s.treeFail);
   const treeRestart = useLessonStore((s) => s.treeRestart);
@@ -202,6 +203,10 @@ export function TreeStage({
       if (!node || !state || status !== "playing" || busy) return;
 
       const uci = toUci(orig, dest, promoted);
+      // Antes de julgar: o histórico guarda o que a mão do aluno fez, e o
+      // recusado também é lance jogado. É esta lista que a FN1/B4 manda ao
+      // servidor no fim da etapa, para ele reconferir em vez de acreditar.
+      treeTry(treeKey, uci);
       const verdict = judgeMove(lesson, node, uci);
 
       if (verdict.kind !== "method") {
@@ -303,6 +308,7 @@ export function TreeStage({
       treeAdvance,
       treeFail,
       treeKey,
+      treeTry,
     ],
   );
 

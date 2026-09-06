@@ -10,6 +10,16 @@ import {
   sabadoDaSemana,
   semanaAtual,
 } from "@/lib/curso/calendario";
+import { aulasPublicadas } from "@/lib/finais/conteudo";
+import { progressoDeFinais } from "@/lib/finais/progresso";
+import {
+  aulasAbertas,
+  CLASSE,
+  CLASSES,
+  daClasse,
+  dominadas,
+  proximaAula,
+} from "@/lib/finais/trilha";
 import { TAREFAS } from "@/lib/tarefas/conteudo";
 import { estadoDasTarefas } from "@/lib/tarefas/estado";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
@@ -42,8 +52,20 @@ export default async function Painel() {
   const sabado = sabadoDaSemana(semana);
   const tarefasDaSemana = daSemana(TAREFAS, semana);
 
-  const [progresso, marcadas] = await Promise.all([progressoPorTema(), tarefasMarcadas()]);
-  const estados = estadoDasTarefas(tarefasDaSemana, marcadas, progresso);
+  const [progresso, marcadas, finais] = await Promise.all([
+    progressoPorTema(perfil.id),
+    tarefasMarcadas(perfil.id),
+    progressoDeFinais(perfil.id),
+  ]);
+
+  // A trilha de finais: o que está aberto nesta semana, e o que dele já foi
+  // dominado. As duas contas são as mesmas de `/finais` — a tela lá e o cartão
+  // aqui não podem discordar, e é por isso que nenhuma das duas as refaz.
+  const aulasDeFinais = aulasAbertas(aulasPublicadas(), semana);
+  const finaisFeitos = dominadas(aulasDeFinais, finais);
+  const proximoFinal = proximaAula(aulasDeFinais, finais);
+
+  const estados = estadoDasTarefas(tarefasDaSemana, marcadas, progresso, finaisFeitos);
 
   const abertos = BLOCOS.map((bloco) => ({
     ...bloco,
@@ -169,6 +191,70 @@ export default async function Painel() {
           subindo. Os blocos seguintes abrem nos próximos sábados.
         </p>
       </section>
+
+      {/* ----------------------------------------------------------------- *
+       * Os finais
+       * ----------------------------------------------------------------- */}
+      {aulasDeFinais.length > 0 ? (
+        <section className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+            <h2 className="rotulo text-tinta-fraca">Curso de finais</h2>
+            <Link
+              href="/finais"
+              className="foco text-sm font-medium text-metodo-tinta hover:underline"
+            >
+              Ver a trilha →
+            </Link>
+          </div>
+
+          <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+            <div className="flex flex-col gap-1.5">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+                <span className="text-sm font-medium text-tinta">Aulas dominadas</span>
+                <span className="text-sm text-tinta-media tabular-nums">
+                  {finaisFeitos.size} de {aulasDeFinais.length}
+                </span>
+              </div>
+              <Barra
+                feitos={finaisFeitos.size}
+                de={aulasDeFinais.length}
+                tom={finaisFeitos.size === aulasDeFinais.length ? "completo" : "metodo"}
+              />
+            </div>
+
+            {/* Por classe, e só as que já têm aula aberta: a classe C com "0 de
+                0" seria uma reprovação por algo que ainda não foi escrito. */}
+            <ul className="flex flex-wrap gap-x-4 gap-y-1">
+              {CLASSES.map((classe) => {
+                const daqui = daClasse(aulasDeFinais, classe);
+                if (daqui.length === 0) return null;
+                const feitasAqui = daqui.filter((a) => finaisFeitos.has(a.id)).length;
+                return (
+                  <li key={classe} className="text-xs text-tinta-fraca tabular-nums">
+                    {CLASSE[classe].nome}:{" "}
+                    <span className="text-tinta-media">
+                      {feitasAqui} de {daqui.length}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {proximoFinal ? (
+              <Link
+                href={`/finais/${proximoFinal.id}`}
+                className="foco w-fit text-sm font-medium text-metodo-tinta hover:underline"
+              >
+                Próxima aula: {proximoFinal.nome} →
+              </Link>
+            ) : (
+              <p className="text-sm text-metodo-tinta">
+                Você dominou tudo o que está aberto. O próximo lote vem no sábado.
+              </p>
+            )}
+          </div>
+        </section>
+      ) : null}
     </main>
   );
 }

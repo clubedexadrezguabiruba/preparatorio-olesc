@@ -4,6 +4,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { SABADOS } from "../curso/calendario.ts";
+import { CLASSES, TRILHA } from "../finais/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { daSemana, validarTarefas } from "./tarefas.ts";
 
@@ -52,6 +53,46 @@ test("as metas de tática apontam para blocos do currículo, já abertos", () =>
       );
     }
   }
+});
+
+test("as metas de finais apontam para classes que a trilha tem, com aula a abrir", () => {
+  // O erro real é pedir "6 da classe C" numa semana em que nenhuma aula da C
+  // abriu: a barra ficaria parada no zero e o aluno concluiria que o site não
+  // conta o que ele faz.
+  for (const tarefa of validarTarefas(lerConteudo())) {
+    if (tarefa.tipo !== "finais") continue;
+    for (const classe of tarefa.meta.classes) {
+      assert.ok(CLASSES.includes(classe), `a tarefa "${tarefa.id}" pede a classe ${classe}`);
+    }
+    const disponiveis = TRILHA.filter(
+      (aula) => tarefa.meta.classes.includes(aula.classe) && aula.sabado <= tarefa.semana,
+    ).length;
+    assert.ok(
+      disponiveis >= tarefa.meta.dominar,
+      `a tarefa "${tarefa.id}" pede ${tarefa.meta.dominar} aulas e só ${disponiveis} ` +
+        `estão na trilha até a semana ${tarefa.semana}`,
+    );
+  }
+});
+
+test("a semana 2 manda o aluno aos finais", () => {
+  // É a entrega da FN1/B4: o curso de finais só vira tarefa de casa quando
+  // alguma tarefa o nomeia. Sem isto, a trilha existe e ninguém é mandado nela.
+  const semana2 = daSemana(validarTarefas(lerConteudo()), 2);
+  assert.ok(
+    semana2.some((t) => t.tipo === "finais"),
+    "a semana 2 tem de ter a tarefa de finais",
+  );
+});
+
+test("tarefa de finais sem classe nenhuma reprova", () => {
+  assert.throws(
+    () =>
+      validarTarefas([
+        { id: "s2-finais", semana: 2, tipo: "finais", titulo: "Finais", meta: { classes: [], dominar: 6 } },
+      ]),
+    /conferência/,
+  );
 });
 
 test("id repetido reprova", () => {

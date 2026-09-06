@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LessonPlayer } from "@/components/lesson/LessonPlayer";
 import { idsDeAula, lerPacote } from "@/lib/finais/conteudo";
+import { aulaDaTrilha } from "@/lib/finais/trilha";
+import { registrarEtapa } from "../acoes";
+import { Leitura } from "./Leitura";
 
 /**
  * A aula. Roda no servidor: lê o arquivo de `content/`, valida com o schema e
@@ -13,9 +16,12 @@ import { idsDeAula, lerPacote } from "@/lib/finais/conteudo";
  * false` fecha a porta: um id que não existe é 404 na hora, não uma tentativa
  * de renderizar sob demanda.
  *
- * Quando o B3 trouxer o banco, a etapa concluída passa a ser gravada por uma
- * server action chamada do cliente — a página continua estática, porque quem
- * grava é a ação, não a renderização.
+ * **E continua estática depois do banco.** A etapa concluída é gravada por
+ * `registrarEtapa`, que desce daqui como referência de ação e é chamada do
+ * navegador quando a etapa acaba: quem grava é a ação, não a renderização. O
+ * único pedaço de aula que depende do aluno é o controle da aula de leitura, e
+ * ele busca o próprio estado ao montar (`Leitura.tsx`) — uma ida de rede nas
+ * duas aulas que o têm, nenhuma nas outras 47.
  */
 
 export function generateStaticParams() {
@@ -37,11 +43,20 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
   const pacote = lerPacote(aula);
   if (!pacote) notFound();
 
+  // Quem sabe o formato é a trilha, não o arquivo da aula: uma curta rebaixada
+  // para leitura muda de linha lá, e o arquivo continua o mesmo. Aula fora da
+  // trilha — um rascunho que o Doug abre para revisar — não recebe o controle.
+  const formato = aulaDaTrilha(aula)?.formato;
+
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8 sm:py-10">
       {/* O caminho de volta é o do próprio motor (LessonPlayer:121): dois links
           de voltar na mesma tela seriam duas respostas para a mesma pergunta. */}
-      <LessonPlayer bundle={pacote} />
+      <LessonPlayer
+        bundle={pacote}
+        onStageDone={registrarEtapa}
+        leitura={formato === "leitura" ? <Leitura aula={aula} /> : undefined}
+      />
     </main>
   );
 }

@@ -59,5 +59,14 @@
     "titulo": "Ler o caderno 1",
     "detalhe": "As regras que pegam em torneio e as três perguntas antes de mover.",
     "onde": { "rotulo": "Caderno 1 em PDF", "url": "/apostila/caderno-1.pdf" }
+  },
+  {
+    "id": "s2-finais",
+    "semana": 2,
+    "tipo": "finais",
+    "titulo": "Dominar 6 finais das classes E e D",
+    "detalhe": "Cada aula explica a técnica, mostra um exemplo animado e devolve o tabuleiro para você jogar contra o computador. Faça uma por dia, no celular — seis de uma vez no sábado à noite não fixa nada.",
+    "meta": { "classes": ["E", "D"], "dominar": 6 },
+    "onde": { "rotulo": "Abrir o curso de finais", "url": "/finais" }
   }
 ]

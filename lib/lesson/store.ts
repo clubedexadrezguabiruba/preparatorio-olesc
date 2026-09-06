@@ -86,6 +86,32 @@ export type TreeState = {
   rootId: string;
   /** Lances do aluno aceitos nesta tentativa — é o que o `moveLimit` conta. */
   studentMoves: number;
+  /**
+   * Os lances que o aluno **tentou** nesta tentativa, em UCI, na ordem — os
+   * aceitos e os recusados.
+   *
+   * Existe por causa da FN1/B4: o fim da etapa 4 vira linha em
+   * `tentativas_aula`, e o que o servidor recebe são os lances, nunca um
+   * "dominei" (`lib/finais/rejulgar.ts`). Sem esta lista, o navegador só teria
+   * o contador `studentMoves` para mandar — e um número não se reconfere.
+   *
+   * **Inclusive os recusados**, e não é descuido: o `rejulgarSolo` reproduz a
+   * tentativa pelo mesmo caminho que o `TreeStage` percorreu, e ali o lance
+   * recusado não gasta lance do teto mas *aconteceu*. Uma lista só com os
+   * aceitos não bateria com a que o juiz espera.
+   *
+   * O que **não** entra é o lance ilegal: o `handleMove` o recusa antes de
+   * chegar ao juiz, e o servidor trata lance ilegal como lista inventada.
+   */
+  moves: string[];
+  /**
+   * Quando esta tentativa começou, em `Date.now()`. Vira o `tempo_ms` da linha.
+   *
+   * Medido do início da tentativa e não do primeiro lance: uma aula "dominada"
+   * em onze segundos é justamente o que o relatório do professor precisa ver, e
+   * começar o relógio no primeiro lance esconderia metade disso.
+   */
+  startedAt: number;
   /** Quantas vezes a etapa 4 recomeçou do zero. */
   attempt: number;
   status: TreeStatus;
@@ -101,6 +127,8 @@ function freshTree(rootId: string, attempt = 1): TreeState {
     nodeId: rootId,
     rootId,
     studentMoves: 0,
+    moves: [],
+    startedAt: Date.now(),
     attempt,
     status: "playing",
     hintOpen: false,
@@ -163,13 +191,23 @@ export type PracticeState = {
   startFen: string;
   /** Os lances da partida em UCI, dos dois lados, na ordem. */
   moves: string[];
+  /** Quando esta partida começou, em `Date.now()`. Vira o `tempo_ms` da linha. */
+  startedAt: number;
   attempt: number;
   status: "playing" | "passed" | "failed";
   end: PracticeEnd | null;
 };
 
 function freshPractice(positionId: string, startFen: string, attempt = 1): PracticeState {
-  return { positionId, startFen, moves: [], attempt, status: "playing", end: null };
+  return {
+    positionId,
+    startFen,
+    moves: [],
+    startedAt: Date.now(),
+    attempt,
+    status: "playing",
+    end: null,
+  };
 }
 
 /** O espelho de `restingMessage` para a partida. */
@@ -229,6 +267,15 @@ type LessonStore = {
   clearMessage: () => void;
   /** Apaga só o reforço visual; o texto do painel continua na tela. */
   fadeFlash: () => void;
+  /**
+   * Um lance que o aluno tentou, antes de saber se ele passa.
+   *
+   * Separada do `treeAdvance` porque as duas contam coisas diferentes: o avanço
+   * conta os lances que o método aceitou (é o que o teto mede), e esta guarda o
+   * que a mão do aluno fez — que é o que o servidor reconfere. Juntá-las
+   * perderia justamente o lance recusado.
+   */
+  treeTry: (key: TreeKey, uci: string) => void;
   /**
    * Um lance do aluno aceito. `nextNodeId` `null` é o lance terminal — e aí o
    * `end` é obrigatório na prática, porque é a única cópia da posição do mate.
@@ -292,6 +339,16 @@ export const useLessonStore = create<LessonStore>((set) => ({
   clearMessage: () => set({ message: null }),
   fadeFlash: () =>
     set((state) => (state.message ? { message: { ...state.message, square: undefined } } : state)),
+
+  treeTry: (key, uci) =>
+    set((state) => {
+      const tree = state.trees[key];
+      // Etapa já encerrada não recebe lance: o `TreeStage` também barra, e as
+      // duas guardas juntas impedem que um clique atrasado entre na lista
+      // depois do mate — o servidor recusaria a tentativa inteira por isso.
+      if (!tree || tree.status !== "playing") return state;
+      return { trees: { ...state.trees, [key]: { ...tree, moves: [...tree.moves, uci] } } };
+    }),
 
   treeAdvance: (key, nextNodeId, end) =>
     set((state) => {

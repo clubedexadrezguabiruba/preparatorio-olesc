@@ -1,9 +1,10 @@
 {
   "id": "N0-Q-MATE",
   "title": "Mate de dama e rei",
+  "class": "E",
   "orientation": "white",
   "domainCriterion": "D1",
-  "status": "draft",
+  "status": "published",
   "errors": {
     "afogamento": {
       "verdict": "loses-win",

@@ -1,9 +1,10 @@
 {
   "id": "N0-R-MATE",
   "title": "Mate de torre e rei",
+  "class": "E",
   "orientation": "white",
   "domainCriterion": "D1",
-  "status": "draft",
+  "status": "published",
   "errors": {
     "cheque-inutil": {
       "verdict": "off-method",

@@ -1,3 +1,4 @@
+import { aulaDaTrilha, type Classe } from "../finais/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import type { ProgressoDoTema } from "../tatica/progresso.ts";
 import type { Tarefa } from "./tarefas.ts";
@@ -13,6 +14,7 @@ import type { Tarefa } from "./tarefas.ts";
  */
 
 export type MedidaDeTatica = {
+  readonly tipo: "tatica";
   readonly feitos: number;
   readonly meta: number;
   /** Em porcento, ou `null` enquanto o aluno não resolveu nada. */
@@ -20,11 +22,29 @@ export type MedidaDeTatica = {
   readonly acertoEsperado: number;
 };
 
+/**
+ * A medida da tarefa de finais. Sem acerto, e não por esquecimento: a aula
+ * dominada já é o acerto — não existe "dominou 6 aulas com 64% de acerto".
+ */
+export type MedidaDeFinais = {
+  readonly tipo: "finais";
+  readonly feitos: number;
+  readonly meta: number;
+};
+
+/**
+ * As duas medidas carregam a etiqueta do seu tipo porque a tela desenha a mesma
+ * barra para as duas e escreve palavras diferentes embaixo — "puzzles" de um
+ * lado, "aulas dominadas" do outro. Sem a etiqueta, a tela teria de reabrir a
+ * tarefa para descobrir o que a barra está medindo.
+ */
+export type Medida = MedidaDeTatica | MedidaDeFinais;
+
 export type EstadoDaTarefa = {
   readonly tarefa: Tarefa;
   readonly feita: boolean;
-  /** Só nas tarefas de tática. Nas outras, `null`. */
-  readonly medida: MedidaDeTatica | null;
+  /** Só nas tarefas medidas. Nas de marcar, `null`. */
+  readonly medida: Medida | null;
 };
 
 /** Quantos puzzles o aluno resolveu nos temas destes blocos, e quantos certos. */
@@ -46,14 +66,48 @@ export function somarBlocos(
   return { feitos, certos };
 }
 
+/**
+ * Quantas das aulas dominadas pertencem a estas classes.
+ *
+ * `dominadas` já vem calculada — é `dominadas()` da trilha, aplicada às aulas
+ * **abertas**. Aqui só resta a filtragem por classe, e ela consulta a trilha
+ * pelo id: a classe de uma aula é dado do curso, não algo que a tarefa repita.
+ */
+export function somarFinais(
+  dominadas: ReadonlySet<string>,
+  classes: readonly Classe[],
+): number {
+  let total = 0;
+  for (const id of dominadas) {
+    const aula = aulaDaTrilha(id);
+    if (aula && classes.includes(aula.classe)) total += 1;
+  }
+  return total;
+}
+
 export function estadoDasTarefas(
   tarefas: readonly Tarefa[],
   marcadas: ReadonlySet<string>,
   progresso: ReadonlyMap<string, ProgressoDoTema>,
+  /**
+   * As aulas de finais que o aluno dominou, entre as abertas. Vazio por padrão
+   * para que as telas que não têm finais nenhum — a apostila, um teste de
+   * tática — não tenham de inventar um conjunto.
+   */
+  finais: ReadonlySet<string> = new Set(),
 ): EstadoDaTarefa[] {
   return tarefas.map((tarefa) => {
-    if (tarefa.tipo !== "tatica") {
+    if (tarefa.tipo === "marcar") {
       return { tarefa, feita: marcadas.has(tarefa.id), medida: null };
+    }
+
+    if (tarefa.tipo === "finais") {
+      const feitos = somarFinais(finais, tarefa.meta.classes);
+      return {
+        tarefa,
+        feita: feitos >= tarefa.meta.dominar,
+        medida: { tipo: "finais", feitos, meta: tarefa.meta.dominar },
+      };
     }
 
     const { feitos, certos } = somarBlocos(progresso, tarefa.meta.blocos);
@@ -64,6 +118,7 @@ export function estadoDasTarefas(
       // marcar por mais que trabalhe é uma caixa que ensina a desistir.
       feita: feitos >= tarefa.meta.puzzles,
       medida: {
+        tipo: "tatica",
         feitos,
         meta: tarefa.meta.puzzles,
         acerto: feitos ? Math.round((100 * certos) / feitos) : null,

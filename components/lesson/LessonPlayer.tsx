@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore, type ReactNode } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import Link from "next/link";
 import type { PacoteDeAula } from "@/lib/finais/conteudo";
+import type { TentativaDeAula } from "@/lib/finais/gravar";
 import { masteryReport } from "@/lib/lesson/mastery";
 import {
   reviewKey,
@@ -31,6 +32,8 @@ export function LessonPlayer({
   bundle,
   startAt,
   marcacao,
+  onStageDone,
+  leitura,
 }: {
   bundle: PacoteDeAula;
   /**
@@ -56,6 +59,30 @@ export function LessonPlayer({
    * 3 e diz o que desenhar. O aluno nunca recebe isto, e sem isto nada muda.
    */
   marcacao?: { shapes: DrawShape[] | null; onChange: (shapes: DrawShape[]) => void };
+  /**
+   * O que fazer quando uma etapa jogada termina — a server action que grava
+   * (`app/finais/acoes.ts`), passada de fora.
+   *
+   * De fora, e não importada aqui, porque este componente é o motor de aula e
+   * não sabe o que é Supabase: quem sabe é a rota. A mesma divisão do
+   * `seal={<MasterySeal …/>}` logo abaixo — o motor diz *onde* e *quando*, o
+   * site diz *o quê*.
+   *
+   * O que sobe são **os lances**, nunca um "dominei": quem decide se a etapa
+   * saiu é `lib/finais/rejulgar.ts`, no servidor. Sem esta prop nada quebra —
+   * é assim que a aula roda no modo autor, sem gravar linha nenhuma.
+   */
+  onStageDone?: (tentativa: TentativaDeAula) => void | Promise<unknown>;
+  /**
+   * O que a aula de **leitura** oferece no fim do exemplo: o controle de "eu li
+   * até o fim".
+   *
+   * Vem pronto de fora pelo mesmo motivo que o `onStageDone`, e como elemento e
+   * não como par de callbacks porque ele tem estado próprio (o que o banco já
+   * sabe, e o toque otimista) que não é da aula. Aula que não é de leitura não
+   * recebe nada, e nada aparece.
+   */
+  leitura?: ReactNode;
 }) {
   const { lesson, positions } = bundle;
   const stage = useLessonStore((s) => s.stage);
@@ -65,6 +92,8 @@ export function LessonPlayer({
   const setExample = useLessonStore((s) => s.setExample);
   const treeSeek = useLessonStore((s) => s.treeSeek);
   const cleared = useLessonStore((s) => s.cleared);
+  const solo = useLessonStore((s) => s.trees.solo);
+  const practice = useLessonStore((s) => s.practices.practice);
 
   const available = STAGE_ORDER.filter((key) => lesson.stages[key] !== undefined);
 
@@ -108,6 +137,48 @@ export function LessonPlayer({
     // Reabrir a aula é o que zera o estado; o resto vem da store.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lesson.id]);
+
+  /**
+   * A tentativa já mandada, para não mandá-la duas vezes.
+   *
+   * O `useEffect` roda de novo a cada mudança da fatia observada, e em modo
+   * estrito roda duas vezes na montagem. A chave é `etapa:aula:tentativa`:
+   * recomeçar a etapa vira uma tentativa nova (o `attempt` sobe) e volta a
+   * gravar, que é o comportamento certo — o professor vê a evolução na
+   * sequência de linhas, e é para isso que `tentativas_aula` não tem `update`.
+   */
+  const enviadas = useRef(new Set<string>());
+
+  useEffect(() => {
+    // `lessonId` é a trava contra o quadro em que a store ainda fala da aula
+    // anterior e o `lesson.id` já é o da nova: sem ela, trocar de aula gravaria
+    // os lances de uma no nome da outra.
+    if (!onStageDone || lessonId !== lesson.id) return;
+
+    const fim = (
+      etapa: TentativaDeAula["etapa"],
+      attempt: number,
+      lances: string[],
+      startedAt: number,
+    ) => {
+      const chave = `${etapa}:${lesson.id}:${attempt}`;
+      if (enviadas.current.has(chave)) return;
+      enviadas.current.add(chave);
+      // Sem `await` e sem tela de espera: a gravação é o registro do que
+      // aconteceu, não um passo da aula. O aluno já viu o selo, e uma falha de
+      // rede aqui não pode travar o tabuleiro dele.
+      void onStageDone({ aula: lesson.id, etapa, lances, tempoMs: Date.now() - startedAt });
+    };
+
+    // Fracasso grava tanto quanto acerto: é a tentativa que o professor precisa
+    // ver. Quem decide o veredito é o servidor; daqui sobem só os lances.
+    if (solo && solo.status !== "playing") {
+      fim("solo", solo.attempt, solo.moves, solo.startedAt);
+    }
+    if (practice && practice.status !== "playing") {
+      fim("pratica", practice.attempt, practice.moves, practice.startedAt);
+    }
+  }, [lesson.id, lessonId, onStageDone, practice, solo]);
 
   // Enquanto o efeito acima não rodou, a store ainda fala da aula anterior.
   if (lessonId !== lesson.id) return null;
@@ -191,6 +262,10 @@ export function LessonPlayer({
               marcacao={marcacao}
             />
             <StageFooter next={nextStage("example")} onGo={goToStage} label="Agora é a sua vez" />
+            {/* Na aula de leitura não há etapa seguinte, e o rodapé acima não
+                desenha nada: o fim do exemplo é o fim da aula, e é aqui que ela
+                pergunta se foi lida. */}
+            {leitura}
           </div>
         )}
 

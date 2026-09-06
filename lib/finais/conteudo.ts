@@ -114,11 +114,12 @@ export function lerPacote(id: string): PacoteDeAula | null {
  * O cabeçalho de cada aula — o que a lista de `/finais` precisa.
  *
  * **Devolve rascunho junto, de propósito.** Quem decide o que o aluno enxerga é
- * a trilha (`lib/finais/trilha.ts`, no bloco B4): aula aberta é a que está na
- * trilha, tem `status: "published"` e teve o sábado dela chegado. Enquanto a
- * trilha não existe, esta lista é a bancada de conferência do professor, e
- * esconder o rascunho aqui só esconderia o que ele precisa abrir para revisar.
- * O `status` vai junto para a tela poder dizê-lo em voz alta.
+ * a trilha (`lib/finais/trilha.ts`): aula aberta é a que está na trilha, tem
+ * `status: "published"` e teve o sábado dela chegado. Esta lista é a matéria-
+ * prima das duas leituras que a tela faz em cima disso — o conjunto de
+ * publicadas (`aulasPublicadas`) e a bancada do professor, onde o rascunho
+ * *precisa* aparecer para ser revisado antes do sábado. O `status` vai junto
+ * para a tela poder dizê-lo em voz alta.
  */
 export function indiceDeAulas(): Array<{
   id: string;
@@ -134,4 +135,16 @@ export function indiceDeAulas(): Array<{
       etapas: Object.keys(aula.stages).length,
       status: aula.status,
     }));
+}
+
+/**
+ * Os ids das aulas com `status: "published"`.
+ *
+ * É metade da regra da aula aberta (`lib/finais/trilha.ts`): a trilha diz o que
+ * é curso e quando abre, e este conjunto diz o que já passou pelo gate. Sai
+ * daqui, e não da trilha, porque quem publica é quem edita o arquivo — a lista
+ * de aulas do curso não muda quando uma delas fica pronta.
+ */
+export function aulasPublicadas(): Set<string> {
+  return new Set(indiceDeAulas().filter((a) => a.status === "published").map((a) => a.id));
 }
