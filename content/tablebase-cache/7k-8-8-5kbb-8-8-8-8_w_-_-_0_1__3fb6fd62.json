@@ -1,0 +1,174 @@
+{
+  "schema": 1,
+  "source": "https://tablebase.lichess.ovh/standard",
+  "fen": "7k/8/8/5KBB/8/8/8/8 w - - 0 1",
+  "entry": {
+    "category": "win",
+    "dtm": 9,
+    "checkmate": false,
+    "stalemate": false,
+    "moves": [
+      {
+        "uci": "f5g6",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g5h6",
+        "category": "loss",
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f5f6",
+        "category": "loss",
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g5c1",
+        "category": "loss",
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g5d2",
+        "category": "loss",
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g5e3",
+        "category": "loss",
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g5f4",
+        "category": "loss",
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g5f6",
+        "category": "loss",
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g5e7",
+        "category": "loss",
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h5d1",
+        "category": "loss",
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h5e2",
+        "category": "loss",
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h5f3",
+        "category": "loss",
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h5g6",
+        "category": "loss",
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h5f7",
+        "category": "loss",
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h5e8",
+        "category": "loss",
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f5e6",
+        "category": "loss",
+        "dtm": -14,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g5h4",
+        "category": "loss",
+        "dtm": -16,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g5d8",
+        "category": "loss",
+        "dtm": -16,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h5g4",
+        "category": "loss",
+        "dtm": -16,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f5e4",
+        "category": "loss",
+        "dtm": -16,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f5f4",
+        "category": "loss",
+        "dtm": -16,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f5g4",
+        "category": "loss",
+        "dtm": -16,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f5e5",
+        "category": "loss",
+        "dtm": -16,
+        "checkmate": false,
+        "stalemate": false
+      }
+    ]
+  }
+}

@@ -3,18 +3,63 @@
     "id": "s1-tatica",
     "semana": 1,
     "tipo": "tatica",
-    "titulo": "60 puzzles dos blocos 1 e 2",
-    "detalhe": "Mates curtos, peça de graça e os padrões de mate. Faça um pouco por dia — vinte de uma vez no domingo cansa o olho e não ensina.",
-    "meta": { "blocos": [1, 2], "puzzles": 60, "acerto": 70 },
-    "onde": { "rotulo": "Resolver agora", "url": "/tatica" }
+    "titulo": "120 puzzles dos blocos 1 e 2, e a revisão do dia todo dia",
+    "detalhe": "São 45 minutos por dia, seis dias — e a revisão vem primeiro: o que você errou volta dois dias depois, e é ali que o padrão gruda. Vinte de uma vez no domingo cansa o olho e não ensina.",
+    "meta": {
+      "blocos": [
+        1,
+        2
+      ],
+      "puzzles": 120,
+      "acerto": 70
+    },
+    "onde": {
+      "rotulo": "Resolver agora",
+      "url": "/tatica"
+    }
+  },
+  {
+    "id": "s1-finais",
+    "semana": 1,
+    "tipo": "finais",
+    "titulo": "Dominar as 2 primeiras aulas de finais (classe E)",
+    "detalhe": "São só duas nesta semana — a trilha abre o resto no Sábado 2. Domine as duas e depois volte nelas pela revisão: elas voltam três dias depois de dominadas. O tempo que sobrar do bloco de finais vai para a tática, que é o assunto da semana.",
+    "meta": {
+      "classes": [
+        "E"
+      ],
+      "dominar": 2
+    },
+    "onde": {
+      "rotulo": "Abrir o curso de finais",
+      "url": "/finais"
+    }
+  },
+  {
+    "id": "s1-meiojogo",
+    "semana": 1,
+    "tipo": "meiojogo",
+    "titulo": "Ler 6 dicas de meio-jogo do degrau até 1000",
+    "detalhe": "Quinze minutos por dia: uma dica. Leia, olhe o diagrama, responda à pergunta e marque. São as seis primeiras — peça parada, rei seguro, o centro, a coluna aberta, a dama sozinha e os peões do roque.",
+    "meta": {
+      "nivel": "ate-1000",
+      "ler": 6
+    },
+    "onde": {
+      "rotulo": "Abrir o meio-jogo",
+      "url": "/meio-jogo"
+    }
   },
   {
     "id": "s1-partidas",
     "semana": 1,
     "tipo": "marcar",
-    "titulo": "2 partidas de 15+10 no clube do chess.com",
-    "detalhe": "Anote as duas à mão na planilha de papel, como no sábado: a data, o nome do adversário, se você jogou de brancas ou de pretas, e o resultado. Guarde as planilhas — elas voltam no Sábado 2.",
-    "onde": { "rotulo": "Clube da OLESC no chess.com", "url": null }
+    "titulo": "6 partidas de 15+10 no clube do chess.com — uma por dia",
+    "detalhe": "A partida é o último bloco do dia, sempre: treina-se primeiro, joga-se para aplicar. Anote as seis à mão na planilha de papel, como no sábado — data, adversário, a cor que você jogou, resultado. Guarde as planilhas; elas voltam no Sábado 2.",
+    "onde": {
+      "rotulo": "Entrar no clube da OLESC",
+      "url": "https://www.chess.com/club/olesc-2026-equipe-guabiruba/join"
+    }
   },
   {
     "id": "s1-anotacao",
@@ -39,22 +84,291 @@
     }
   },
   {
-    "id": "s1-bartholomew",
-    "semana": 1,
-    "tipo": "marcar",
-    "titulo": "Vídeo: \"Undefended Pieces\", de John Bartholomew",
-    "detalhe": "É o episódio 1 e é em inglês: no YouTube, ligue Legendas → Traduzir automaticamente → Português. Casa com as três perguntas do sábado.",
-    "onde": {
-      "rotulo": "Assistir no YouTube",
-      "url": "https://www.youtube.com/playlist?list=PLIoUX4ry8XlvbHprhXtCjW4Ins4oIIaiK"
-    }
-  },
-  {
     "id": "s1-caderno",
     "semana": 1,
     "tipo": "marcar",
     "titulo": "Ler o caderno 1",
-    "detalhe": "As regras que pegam em torneio e as três perguntas antes de mover.",
-    "onde": { "rotulo": "Caderno 1 em PDF", "url": "/apostila/caderno-1.pdf" }
+    "detalhe": "A rotina de duas horas, as três perguntas antes de mover, e as regras de torneio para consultar.",
+    "onde": {
+      "rotulo": "Caderno 1 em PDF",
+      "url": "/apostila/caderno-1.pdf"
+    }
+  },
+  {
+    "id": "s2-tatica",
+    "semana": 2,
+    "tipo": "tatica",
+    "titulo": "120 puzzles dos blocos 3 a 5, e a revisão do dia",
+    "detalhe": "Garfo, cravada, espeto, descoberto, xeque duplo e remover a defesa. A partir desta semana a revisão tem fila de verdade: os puzzles que você errou no Sábado 1 vencem agora. Faça a revisão antes da série — ela é curta e é a que mais rende.",
+    "meta": {
+      "blocos": [
+        3,
+        4,
+        5
+      ],
+      "puzzles": 120,
+      "acerto": 70
+    },
+    "onde": {
+      "rotulo": "Revisão do dia",
+      "url": "/tatica/revisao"
+    }
+  },
+  {
+    "id": "s2-finais",
+    "semana": 2,
+    "tipo": "finais",
+    "titulo": "Dominar 8 finais das classes E e D",
+    "detalhe": "Agora são dez abertas, e a meta é oito. Uma por dia, e no sétimo dia a revisão das que você já dominou — elas voltam três dias depois, e o site diz quais.",
+    "meta": {
+      "classes": [
+        "E",
+        "D"
+      ],
+      "dominar": 8
+    },
+    "onde": {
+      "rotulo": "Abrir o curso de finais",
+      "url": "/finais"
+    }
+  },
+  {
+    "id": "s2-meiojogo",
+    "semana": 2,
+    "tipo": "meiojogo",
+    "titulo": "Ler 6 dicas de meio-jogo do degrau 1000–1200",
+    "detalhe": "Melhorar a pior peça, o peão fraco, trocar quando se está na frente, a sétima fileira, o peão dobrado e o bloqueio do passado.",
+    "meta": {
+      "nivel": "1000-1200",
+      "ler": 6
+    },
+    "onde": {
+      "rotulo": "Abrir o meio-jogo",
+      "url": "/meio-jogo"
+    }
+  },
+  {
+    "id": "s2-partidas",
+    "semana": 2,
+    "tipo": "marcar",
+    "titulo": "Torneio 15+10 do clube na quinta, e partida diária nos outros dias",
+    "detalhe": "O torneio do clube é na quinta à noite. Nos outros dias, uma partida de 15+10, sempre depois do treino. Anote pelo menos duas à mão.",
+    "onde": {
+      "rotulo": "Entrar no clube da OLESC",
+      "url": "https://www.chess.com/club/olesc-2026-equipe-guabiruba/join"
+    }
+  },
+  {
+    "id": "s2-repertorio",
+    "semana": 2,
+    "tipo": "marcar",
+    "titulo": "Repertório do clube: repetir cada linha até acertar 3 vezes",
+    "detalhe": "Dez minutos por dia, dentro do bloco de tática. Ideias, não decoreba: se você não sabe dizer o que a linha quer, repetir de novo não adianta.",
+    "onde": null
+  },
+  {
+    "id": "s2-videos",
+    "semana": 2,
+    "tipo": "marcar",
+    "titulo": "Vídeos de abertura: Rafael Leitão (2) e Evandro Barbosa (1)",
+    "detalhe": "Os dois do repertório do clube, mais o \"Aberturas em 15 min\". Assista uma vez inteira, e depois de novo com o tabuleiro na mão.",
+    "onde": null
+  },
+  {
+    "id": "s2-caderno",
+    "semana": 2,
+    "tipo": "marcar",
+    "titulo": "Ler o caderno 2",
+    "detalhe": "O repertório do clube e as armadilhas de abertura que aparecem nesta faixa.",
+    "onde": {
+      "rotulo": "Caderno 2 em PDF",
+      "url": null
+    }
+  },
+  {
+    "id": "s3-tatica",
+    "semana": 3,
+    "tipo": "tatica",
+    "titulo": "120 puzzles dos blocos 6 a 8, e a revisão do dia",
+    "detalhe": "Os blocos mais difíceis do curso. Se o acerto cair abaixo de 70%, não acelere: a fila de revisão vai crescer, e é ela que conserta.",
+    "meta": {
+      "blocos": [
+        6,
+        7,
+        8
+      ],
+      "puzzles": 120,
+      "acerto": 70
+    },
+    "onde": {
+      "rotulo": "Revisão do dia",
+      "url": "/tatica/revisao"
+    }
+  },
+  {
+    "id": "s3-finais",
+    "semana": 3,
+    "tipo": "finais",
+    "titulo": "Dominar 12 finais das classes D e C",
+    "detalhe": "É a semana dos finais de torre — os que decidem partida de 15+10. Duas por dia nos dias em que a revisão estiver curta. A classe C tem quatro aulas abertas nesta semana; o resto da meta sai da D.",
+    "meta": {
+      "classes": [
+        "D",
+        "C"
+      ],
+      "dominar": 12
+    },
+    "onde": {
+      "rotulo": "Abrir o curso de finais",
+      "url": "/finais"
+    }
+  },
+  {
+    "id": "s3-meiojogo",
+    "semana": 3,
+    "tipo": "meiojogo",
+    "titulo": "Ler 8 dicas de meio-jogo do degrau 1200–1400",
+    "detalhe": "Posto avançado, bispo bom e bispo mau, o lance útil, contar antes de capturar, os dois bispos, em que ala atacar, o peão retardatário e a base da cadeia.",
+    "meta": {
+      "nivel": "1200-1400",
+      "ler": 8
+    },
+    "onde": {
+      "rotulo": "Abrir o meio-jogo",
+      "url": "/meio-jogo"
+    }
+  },
+  {
+    "id": "s3-longa",
+    "semana": 3,
+    "tipo": "marcar",
+    "titulo": "1 partida de 60+30 anotada, no fim de semana",
+    "detalhe": "É a única partida longa antes do torneio, e é a que mais se parece com a prova de equipe. Anote todos os lances e traga a planilha no Sábado 4.",
+    "onde": {
+      "rotulo": "Entrar no clube da OLESC",
+      "url": "https://www.chess.com/club/olesc-2026-equipe-guabiruba/join"
+    }
+  },
+  {
+    "id": "s3-blitz",
+    "semana": 3,
+    "tipo": "marcar",
+    "titulo": "Torneio 3+2 do clube, e partida diária nos outros dias",
+    "detalhe": "O blitz é para o relógio, não para a qualidade. Depois dele, olhe uma partida sua e ache o lance em que o tempo decidiu.",
+    "onde": {
+      "rotulo": "Entrar no clube da OLESC",
+      "url": "https://www.chess.com/club/olesc-2026-equipe-guabiruba/join"
+    }
+  },
+  {
+    "id": "s3-videos",
+    "semana": 3,
+    "tipo": "marcar",
+    "titulo": "Vídeos: \"Treinando Finais\" (2) e \"Treinando o Cálculo\" (1)",
+    "detalhe": "Rafael Leitão, em português. Assista dentro do bloco de finais, não no lugar dele.",
+    "onde": null
+  },
+  {
+    "id": "s3-caderno",
+    "semana": 3,
+    "tipo": "marcar",
+    "titulo": "Ler o caderno 3 e uma partida do Chernev",
+    "detalhe": "A partida comentada lance a lance é o modelo do que você vai fazer sozinho na análise do Sábado 3.",
+    "onde": {
+      "rotulo": "Caderno 3 em PDF",
+      "url": null
+    }
+  },
+  {
+    "id": "s4-revisao",
+    "semana": 4,
+    "tipo": "tatica",
+    "titulo": "Semana de manutenção: 120 puzzles, e nenhum tema novo",
+    "detalhe": "Esta semana o número é o mesmo e a natureza muda: a revisão do dia primeiro (a fila está cheia), depois 20 puzzles no modo torneio, com relógio. Nada de tema novo — o que você começar agora não fica pronto a tempo, e ocupa o lugar do que já está.",
+    "meta": {
+      "blocos": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "puzzles": 120,
+      "acerto": 70
+    },
+    "onde": {
+      "rotulo": "Revisão do dia",
+      "url": "/tatica/revisao"
+    }
+  },
+  {
+    "id": "s4-finais",
+    "semana": 4,
+    "tipo": "finais",
+    "titulo": "Revisar 6 finais já dominados",
+    "detalhe": "A fila de revisão devolve cada aula três dias depois de dominada, depois em sete e em catorze. Nesta semana ela é o bloco de finais inteiro. As 27 aulas novas que abriram são o curso que continua depois da OLESC — quem quiser adianta, mas elas não são a tarefa.",
+    "meta": {
+      "classes": [
+        "E",
+        "D",
+        "C"
+      ],
+      "dominar": 6
+    },
+    "onde": {
+      "rotulo": "Abrir o curso de finais",
+      "url": "/finais"
+    }
+  },
+  {
+    "id": "s4-meiojogo",
+    "semana": 4,
+    "tipo": "meiojogo",
+    "titulo": "Ler 6 dicas de meio-jogo do degrau 1400–1600",
+    "detalhe": "As seis mais difíceis do módulo: casas fracas de uma cor, ataque de minoria, profilaxia, romper no centro, sacrifício de qualidade e a iniciativa. Leitura não é assunto novo — é a única coisa desta semana que ainda entra.",
+    "meta": {
+      "nivel": "1400-1600",
+      "ler": 6
+    },
+    "onde": {
+      "rotulo": "Abrir o meio-jogo",
+      "url": "/meio-jogo"
+    }
+  },
+  {
+    "id": "s4-partidas",
+    "semana": 4,
+    "tipo": "marcar",
+    "titulo": "1 partida de 15+10 por dia, e 10 min de repertório",
+    "detalhe": "Ritmo de rodada, todo dia, para chegar no torneio com a mão quente. Nenhuma linha nova de repertório: só as que você já sabe.",
+    "onde": {
+      "rotulo": "Entrar no clube da OLESC",
+      "url": "https://www.chess.com/club/olesc-2026-equipe-guabiruba/join"
+    }
+  },
+  {
+    "id": "s4-vespera",
+    "semana": 4,
+    "tipo": "marcar",
+    "titulo": "Véspera (10/10): 1 hora leve, e a mochila pronta",
+    "detalhe": "Dez puzzles fáceis, uma olhada no repertório, e para. Mochila: caneta, planilha, água, lanche. Dormir cedo é parte do treino.",
+    "onde": {
+      "rotulo": "Caderno do torneio",
+      "url": null
+    }
+  },
+  {
+    "id": "s4-caderno",
+    "semana": 4,
+    "tipo": "marcar",
+    "titulo": "Ler o caderno do torneio",
+    "detalhe": "Rotina do dia, checklists, desempates e o que fazer entre rodadas. Leia antes de 11/10, não no ônibus.",
+    "onde": {
+      "rotulo": "Caderno 4 em PDF",
+      "url": null
+    }
   }
 ]

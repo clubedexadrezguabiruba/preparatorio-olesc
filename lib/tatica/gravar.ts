@@ -2,7 +2,7 @@ import "server-only";
 import { criarClienteAdmin } from "../supabase/admin.ts";
 import { puzzlePorId } from "./banco.ts";
 import { conferirSolucao } from "./conferir.ts";
-import { ETAPAS, type Etapa } from "./serie.ts";
+import { MODOS_GRAVAVEIS, type Modo } from "./serie.ts";
 
 /** O que o navegador manda: o que foi **jogado**, nunca um "acertei". */
 export type Tentativa = {
@@ -11,7 +11,12 @@ export type Tentativa = {
   tema: string;
   /** O tema por cujo arquivo o puzzle foi servido. Na prova, os dois diferem. */
   origem: string;
-  modo: Etapa;
+  /**
+   * As três etapas do tema, ou `revisao`. O `torneio` do CHECK do banco fica
+   * de fora de propósito: o modo torneio ainda não existe, e aceitar um modo
+   * que nenhuma tela serve seria uma porta aberta sem sala atrás.
+   */
+  modo: Modo;
   /** Os lances do aluno, em UCI, na primeira tentativa deste puzzle. */
   lances: string[];
   tempoMs: number;
@@ -63,7 +68,7 @@ const TEMPO_MAXIMO_MS = 30 * 60 * 1000;
 export async function gravarTentativa(aluno: string, tentativa: Tentativa): Promise<Resultado> {
   const { puzzleId, tema, origem, modo, lances, tempoMs } = tentativa;
 
-  if (!ETAPAS.includes(modo)) return { erro: "modo desconhecido" };
+  if (!MODOS_GRAVAVEIS.includes(modo)) return { erro: "modo desconhecido" };
   if (typeof puzzleId !== "string" || typeof tema !== "string" || typeof origem !== "string") {
     return { erro: "tentativa malformada" };
   }
@@ -82,6 +87,9 @@ export async function gravarTentativa(aluno: string, tentativa: Tentativa): Prom
     aluno,
     puzzle_id: puzzle.id,
     tema,
+    // Gravada desde a 0005: é por ela que a revisão do dia reencontra no disco
+    // um puzzle que a prova serviu do arquivo de outro tema.
+    origem,
     acertou,
     tempo_ms: Math.min(Math.max(0, Math.round(tempoMs) || 0), TEMPO_MAXIMO_MS),
     modo,

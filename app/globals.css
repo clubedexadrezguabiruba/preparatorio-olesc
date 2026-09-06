@@ -78,13 +78,21 @@
   --color-borda-forte: color-mix(in oklab, oklch(26% 0.015 160) 28%, transparent);
   --color-foco: oklch(46% 0.115 152);
 
-  /* Método — o verde. Cinco faces porque a tinta sobre painel tingido não é
+  /* Método — o verde. Seis faces porque a tinta sobre painel tingido não é
      derivável por alfa: no escuro ela é clara, no claro terá de ser escura. A
-     superfície, essa sim, é o mesmo tom com alfa (`bg-metodo-superficie/10`). */
+     superfície, essa sim, é o mesmo tom com alfa (`bg-metodo-superficie/10`).
+
+     `metodo-selo` é a sexta, e chegou com o motor de aula: é a tinta do selo
+     de etapa concluída, que vive sobre **três** camadas empilhadas (a pastilha
+     verde sobre o painel verde sobre a página). Cada camada come contraste, e
+     `metodo-tinta` — que basta sobre uma camada só — cai abaixo do piso ali.
+     Não é preciosismo de paleta: é o único lugar do site com três verdes um
+     sobre o outro, e a régua de `lib/tema/pares.ts` mede a pilha inteira. */
   --color-metodo: oklch(39.5% 0.093 152);
   --color-metodo-superficie: oklch(58% 0.105 152);
   --color-metodo-tinta: oklch(31% 0.07 152);
   --color-metodo-tinta-alta: oklch(26% 0.058 152);
+  --color-metodo-selo: oklch(29% 0.066 152);
   --color-metodo-cheio: oklch(40% 0.092 152);
   --color-metodo-cheio-toque: oklch(34% 0.082 152);
 
@@ -113,19 +121,39 @@
      tabuleiro é o objeto morno sobre a parede fria, que é como um tabuleiro de
      verdade se comporta em cima de uma mesa.
 
-     A distância entre as duas casas é 1,58:1 — exatamente a que o tema marrom
-     do pacote produzia. Não é coincidência: é a folga que as peças cburnett
-     precisam nas duas pontas, brancas na casa clara e pretas na escura.
-
      **Toda marca do tabuleiro é mais escura que as duas casas, e isso é
      geometria, não gosto.** Uma marca só bate 3:1 contra as duas se estiver
-     *fora* do intervalo entre elas, e acima da casa clara não há espaço — ela
-     já está a 88,5% de claridade. Então destaque aqui é sombra, nunca brilho.
-     Foi o que matou o realce amarelo-claro de último lance que o pacote traz:
-     ele mede 1,50:1 e é invisível para quem precisa dele.
+     *fora* do intervalo entre elas, e acima da casa clara não há espaço para
+     uma marca clara. Então destaque aqui é sombra, nunca brilho. Foi o que
+     matou o realce amarelo-claro de último lance que o pacote traz: ele mede
+     1,50:1 e é invisível para quem precisa dele.
+
+     **A distância entre as casas era 1,58:1, e hoje é 1,81:1.** O valor antigo
+     era o do `chessground.brown.css` do pacote, que pinta a casa escura como
+     preto a 20% sobre a clara — 1,58:1 por construção. A revisão das capturas
+     mediu o tabuleiro de verdade do lichess.org, `#f0d9b5` sobre `#b58863`, e
+     achou 2,29:1: as duas coisas se chamam "marrom do Lichess" e não são a
+     mesma.
+
+     Chegar aos 2,29:1 é escurecer a casa escura até 65% de claridade — e a
+     conta acima cobra o preço na hora. A 65% caem abaixo de 3:1 o destino de
+     lance legal, o realce do último lance, o pré-lance e o pincel da peça
+     defendida; e o conserto deles seria empurrar `pincel-defendida` de 44% para
+     35%, onde ele encosta em `destino` (38%) e os dois verdes do vocabulário
+     pedagógico deixam de ser distinguíveis. Um tabuleiro mais bonito não vale
+     duas marcas que dizem coisas diferentes com a mesma cor.
+
+     O que **é** de graça é o outro lado do par: a marca precisa contrastar com
+     a casa *escura*, então clarear a casa clara não custa nada ao orçamento —
+     medido, e não suposto: a pior folga continua sendo os mesmos +0,11 do
+     pincel do corte, antes e depois. A casa clara subiu de 88,5% para 93% de
+     claridade e de 0,019 para 0,04 de croma, e a escura ganhou o mesmo croma
+     sem mexer na claridade. O ganho é 1,58 → 1,81:1 (+15%), com o matiz quente
+     que a revisão pediu. O resto da distância fica registrado aqui como o que
+     é: uma dívida com preço conhecido.
      ------------------------------------------------------------------------ */
-  --color-casa-clara: oklch(88.5% 0.019 86);
-  --color-casa-escura: oklch(75% 0.027 78);
+  --color-casa-clara: oklch(93% 0.04 86);
+  --color-casa-escura: oklch(75% 0.04 78);
   --color-coordenada: oklch(26% 0.015 160);
 
   --color-destino: oklch(38% 0.14 152);

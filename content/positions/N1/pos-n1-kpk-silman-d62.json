@@ -1,0 +1,21 @@
+{
+  "id": "pos-n1-kpk-silman-d62",
+  "fen": "8/8/8/3k4/8/3K4/3P4/8 b - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KPK",
+    "ensino"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Jeremy Silman — Diagrama 62, que ele legenda 'Whoever moves fails to achieve his goal' e usa para mostrar que, com o rei uma casa à frente do peão, tudo se decide pela oposição",
+    "bibliographicSource": "Silman, Silman's Complete Endgame Course: From Beginner to Master, Siles Press, Los Angeles, 2007, p. impressa 62 (PDF p. 76, offset 14), Parte Três \"Endgames for Class 'D' (1200-1399)\", seção 'King and Pawn vs. Lone King (Stronger Side's King is in Front of its Pawn)', Diagrama 62",
+    "originalGame": "não se aplica — posição teórica de manual, não vem de partida",
+    "authorComposer": "não se aplica — é o zugzwang recíproco elementar de rei e peão contra rei, um fato do final e não uma composição autoral",
+    "license": "obra protegida — uso sob o teto da §12.7 (esta aula usa 1 posição desta obra, contra o teto de 2)",
+    "editionFile": "silman-complete-endgame-course.pdf",
+    "fenMethod": "leitura de imagem da página rasterizada a 200 dpi. Moldura medida em pixels (casa de 42,75 × 42,0), varredura das 64 casas com erosão 3×3 para separar traço de peça da trama do fundo: exatamente três casas ocupadas e zero pixels de peça fora delas, o que dispensa qualquer desempate entre casas rivais. ESTE DIAGRAMA IMPRIME COORDENADAS a-h e 1-8 nas bordas, e por isso a orientação foi lida, não assumida. O QUE O DIAGRAMA NÃO DIZ É A VEZ: ele é apresentado como zugzwang recíproco ('quem move falha no seu objetivo'), e o lado a jogar fica indefinido no próprio diagrama. A FEN registrada aqui fixa **as pretas na vez**, que é o caso que o próprio autor analisa em seguida como a vitória das brancas — 'If Black moves first (from diagram 62), though, things are very, very different'. A mesma posição com as brancas na vez é empate, e é por isso que esta escolha precisa estar escrita e não subentendida.",
+    "qaApplied": "garimpo FN1/B5.4, 2026-09-05: a legenda impressa é uma afirmação forte e conferível, e ela se confirma exatamente. A tablebase devolve, para a mesma disposição de peças: **brancas na vez, draw (DTM 0); pretas na vez, loss para as pretas (DTM 40)**. Isto é, quem move falha no seu objetivo — as brancas perdem a vitória, as pretas perdem o empate —, que é literalmente o que está impresso embaixo do diagrama. Uma leitura de imagem errada não produziria um zugzwang recíproco por acaso. A linha do autor a partir daqui (1…Re5 2.Re4) também é legal e mantém a vitória.",
+    "pendingRisk": "nenhum conhecido; a vez das pretas é decisão de autoria, tomada a partir do texto do próprio Silman, e está declarada acima"
+  }
+}

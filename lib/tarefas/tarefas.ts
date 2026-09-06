@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { SEMANAS } from "../curso/calendario.ts";
+import { CLASSES } from "../finais/trilha.ts";
 
 /**
  * As tarefas de casa: o que o aluno tem de fazer entre um sábado e o outro.
@@ -26,11 +27,21 @@ import { SEMANAS } from "../curso/calendario.ts";
  * O que **é** do banco é a outra metade: quem marcou o quê. Isso muda por
  * aluno e por dia, e mora em `tarefa_conclusao`.
  *
- * ## Dois tipos, e a diferença entre medir e declarar
+ * ## Três tipos, e a diferença entre medir e declarar
  *
  * - `tatica` — o site **mede**. Quantos puzzles dos blocos combinados o aluno
  *   resolveu, contados de `tentativas_puzzle`. Não tem caixa para marcar:
  *   marcar seria o aluno opinando sobre um número que o servidor já sabe.
+ * - `finais` — o site **mede** também, e pela mesma razão: quantas aulas das
+ *   classes combinadas o aluno dominou, contadas de `tentativas_aula` e
+ *   `aula_lida` pelo critério de formato da trilha. O que a torna um tipo
+ *   próprio e não uma variação da de tática é a unidade do que se conta —
+ *   puzzle resolvido e aula dominada não somam na mesma barra.
+ * - `meiojogo` — o site **conta** quantas dicas daquele degrau o aluno declarou
+ *   ter lido. É a única das medidas cuja matéria-prima é declaração, e não
+ *   medição: em meio-jogo não há lance para reconferir. Ela é medida mesmo
+ *   assim porque a declaração já foi dada **dica por dica**, na página de cada
+ *   uma; uma caixa aqui pediria a mesma coisa uma segunda vez.
  * - `marcar` — o aluno **declara**. "Assisti o vídeo", "joguei duas partidas".
  *   Não existe verdade no servidor para conferir isso, e fingir que existe
  *   (um botão que só o professor libera) transformaria a tarefa de casa em
@@ -89,13 +100,56 @@ const MetaSchema = z
   })
   .strict();
 
+/**
+ * O que fecha uma tarefa de finais.
+ *
+ * `classes` e não uma lista de aulas: a tarefa da semana é "domine 6 finais da
+ * classe E e D", e não "domine estas seis". A diferença importa porque o aluno
+ * estuda no próprio ritmo — quem começou pelo mate da escada e quem começou
+ * pela regra do quadrado fizeram a mesma tarefa. Nomear as aulas também
+ * quebraria a tarefa no dia em que uma delas mudasse de formato ou de sábado.
+ */
+const MetaDeFinaisSchema = z
+  .object({
+    classes: z.array(z.enum(CLASSES)).min(1),
+    /** Quantas aulas dessas classes fecham a tarefa. */
+    dominar: z.number().int().min(1),
+  })
+  .strict();
+
+/**
+ * O que fecha uma tarefa de meio-jogo.
+ *
+ * `nivel` e não uma lista de dicas, pelo motivo de `MetaDeFinaisSchema`: a
+ * tarefa é "leia 6 dicas do degrau até-1000", e o aluno escolhe quais. Nomear
+ * as seis quebraria a tarefa no dia em que uma delas mudasse de degrau.
+ *
+ * **É medida, e não marcada** — ainda que o que ela mede seja uma declaração.
+ * A distinção importa: o aluno já declarou dica por dica, na página de cada
+ * uma, e uma segunda caixa dizendo "li as seis" seria pedir a mesma declaração
+ * duas vezes, com a segunda podendo contradizer a primeira. A tarefa conta o
+ * que está em `dica_lida`, e é por isso que ela não tem caixa.
+ */
+const MetaDeMeioJogoSchema = z
+  .object({
+    /** O id do degrau em `lib/curso/trilha.ts` (`ate-1000`, `1000-1200`…). */
+    nivel: z.string().min(3),
+    /** Quantas dicas daquele degrau fecham a tarefa. */
+    ler: z.number().int().min(1),
+  })
+  .strict();
+
 export const TarefaSchema = z.discriminatedUnion("tipo", [
+  z.object({ ...Base, tipo: z.literal("meiojogo"), meta: MetaDeMeioJogoSchema }).strict(),
   z.object({ ...Base, tipo: z.literal("tatica"), meta: MetaSchema }).strict(),
+  z.object({ ...Base, tipo: z.literal("finais"), meta: MetaDeFinaisSchema }).strict(),
   z.object({ ...Base, tipo: z.literal("marcar") }).strict(),
 ]);
 
 export type Tarefa = z.infer<typeof TarefaSchema>;
 export type MetaDeTatica = z.infer<typeof MetaSchema>;
+export type MetaDeFinais = z.infer<typeof MetaDeFinaisSchema>;
+export type MetaDeMeioJogo = z.infer<typeof MetaDeMeioJogoSchema>;
 
 export const TarefasSchema = z.array(TarefaSchema).min(1);
 

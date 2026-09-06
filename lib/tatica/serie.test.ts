@@ -5,10 +5,13 @@ import {
   candidatosDeAquecimento,
   emOrdemDeRating,
   etapaAtual,
+  idsErradosParaAProva,
   METAS,
   misturar,
   quantosFaltam,
+  semRepetidos,
   sortear,
+  vagasParaErrados,
 } from "./serie.ts";
 
 /** Cem puzzles de mentira: só o `id` e o `rating` importam para o sorteio. */
@@ -83,6 +86,33 @@ test("o aquecimento prefere os de um lance só", () => {
   // serve, e o aquecimento vira "os mais fáceis que existem aqui".
   const semCurtos = candidatosDeAquecimento(banco(20, false));
   assert.equal(semCurtos.length, 20);
+});
+
+test("os errados da série voltam na prova, e só até ela", () => {
+  // A promessa da tela: "os que você errou voltam misturados na prova". O que
+  // conta é erro no aquecimento ou na série; acerto não volta, e o errado que
+  // já foi à prova (F5 no meio dela) não entra de novo.
+  const linhas = [
+    { puzzle_id: "a", modo: "aquecimento", acertou: false },
+    { puzzle_id: "b", modo: "serie", acertou: true },
+    { puzzle_id: "c", modo: "serie", acertou: false },
+    { puzzle_id: "d", modo: "serie", acertou: false },
+    { puzzle_id: "d", modo: "prova", acertou: false },
+    { puzzle_id: "e", modo: "revisao", acertou: false },
+  ];
+  assert.deepEqual(idsErradosParaAProva(linhas), ["a", "c"]);
+});
+
+test("os errados ocupam no máximo metade da prova", () => {
+  assert.equal(vagasParaErrados(10, 7), 5);
+  assert.equal(vagasParaErrados(3, 7), 2);
+  assert.equal(vagasParaErrados(10, 1), 1);
+  assert.equal(vagasParaErrados(10, 0), 0);
+});
+
+test("sem repetidos mantém a primeira ocorrência", () => {
+  const b = banco(3);
+  assert.deepEqual(ids(semRepetidos([b[0], b[1], b[0], b[2], b[1]])), ["p0", "p1", "p2"]);
 });
 
 test("a etapa anda sozinha, e o tema acaba", () => {

@@ -1,0 +1,138 @@
+{
+  "id": "N0-STALEMATE",
+  "title": "Afogamento: como não empatar a partida ganha",
+  "class": "E",
+  "orientation": "white",
+  "domainCriterion": "D1",
+  "status": "published",
+  "errors": {},
+  "fallbacks": {
+    "winningOffMethod": "Esse lance ainda ganha, mas não é o método da aula. Volte e tente o lance da técnica.",
+    "losesWin": "Esse lance joga a vitória fora. Volte e tente de novo.",
+    "methodAlternative": "Esse lance é a mesma ideia por outro caminho: ele deixa uma casa livre do mesmo jeito."
+  },
+  "stages": {
+    "objective": {
+      "source": "muller-kids",
+      "technique": {
+        "name": "Uma casa livre",
+        "summary": "Afogamento é empate: o rei adversário não está em xeque e não tem lance nenhum. Enquanto o mate não chega, ele precisa ter sempre uma casa para onde ir — e a última casa só se tira junto com o xeque."
+      },
+      "why": "Este é o único jeito de perder meio ponto com uma dama a mais, e ele acontece toda semana. O aluno aperta a caixa lance após lance, tira a última casa sem dar xeque, e a partida acaba empatada com dama de vantagem. O afogamento não é azar nem armadilha do adversário: é uma conta que quem estava ganhando deixou de fazer. Com a dama é onde mais dói, porque ela tira casas depressa demais — e é também onde é mais fácil de evitar, porque quase sempre basta um lance de espera.",
+      "rules": [
+        {
+          "title": "Antes de mexer, conte as casas do rei preto",
+          "text": "Se ele tem uma casa só e o seu lance tira essa casa sem dar xeque, o lance é empate. Esta cena começa exatamente num lance desses: o rei branco andando para e6 pareceria o lance mais natural do mundo, e é afogamento na hora.",
+          "frame": {
+            "scene": "o-lance-que-empata",
+            "step": 1
+          }
+        },
+        {
+          "title": "Deixe uma casa livre e traga o seu rei",
+          "text": "Em vez de apertar mais, a dama se planta na fileira de trás e deixa uma casa de saída. Quem encolhe daqui em diante é o rei, que se aproxima para dar o apoio de que o mate precisa. A dama já fez a parte dela.",
+          "frame": {
+            "scene": "o-lance-que-empata",
+            "step": 3
+          }
+        },
+        {
+          "title": "A última casa só sai junto com o xeque",
+          "text": "O mate é a última casa e o xeque no mesmo lance. Se o xeque não vem junto, o que você fez foi empatar. É a mesma conta do começo, feita uma última vez.",
+          "frame": {
+            "scene": "o-lance-que-empata",
+            "step": 5
+          }
+        }
+      ],
+      "frame": {
+        "scene": "o-lance-que-empata",
+        "step": 5
+      },
+      "mastery": "Dominado = vencer o computador na prática, dando o mate sem afogar. Se a partida acabar empatada por afogamento, a tentativa não conta — e é justamente essa a graça."
+    },
+    "example": {
+      "scenes": [
+        {
+          "id": "o-lance-que-empata",
+          "title": "O lance que empata a partida ganha",
+          "positionId": "pos-n0-stalemate-muller-l1-d5",
+          "intro": "Dama a mais, rei preto na borda, mate em três. É aqui que o meio ponto se perde: o rei preto tem uma casa só, e existe um lance branco de aparência excelente que acaba a partida em empate. Antes de assistir, conte as casas que sobraram para ele.",
+          "phases": [
+            {
+              "title": "Antes de mexer, conte as casas do rei preto",
+              "fromStep": 1
+            },
+            {
+              "title": "Deixe uma casa livre e traga o seu rei",
+              "fromStep": 3
+            },
+            {
+              "title": "A última casa só sai junto com o xeque",
+              "fromStep": 5
+            }
+          ],
+          "steps": [
+            {
+              "move": "f6g7",
+              "text": "A dama vai para g7 e fecha a 7ª fileira, deixando d8 aberta de propósito. O lance que empataria é o outro, o do rei: com o rei branco em e6 o rei preto perde d7, e7 e f7 de uma vez, não fica em xeque e não tem mais nada para jogar — afogamento, empate, dama a mais.",
+              "arrows": [
+                [
+                  "f6",
+                  "g7"
+                ]
+              ],
+              "highlights": [
+                "g7",
+                "e6",
+                "d8"
+              ]
+            },
+            {
+              "move": "e8d8",
+              "text": "Ele vai para d8, que é a casa que a dama deixou. É esta casa que mantém a partida viva para as brancas."
+            },
+            {
+              "move": "d5d6",
+              "text": "Agora o rei branco se aproxima. Repare que a dama parou de encolher a caixa: quem tira as duas últimas casas é o rei, e ele faz isso sem risco nenhum de afogar, porque não dá xeque.",
+              "arrows": [
+                [
+                  "d5",
+                  "d6"
+                ]
+              ],
+              "highlights": [
+                "d6"
+              ]
+            },
+            {
+              "move": "d8e8",
+              "text": "Ele volta para e8. Se fosse para c8, o mate sairia em c7 pela mesma receita — a dama entra na 7ª fileira ao lado do rei branco."
+            },
+            {
+              "move": "g7e7",
+              "text": "Xeque-mate. A dama entra em e7, colada no rei preto e protegida pelo rei branco. A última casa e o xeque no mesmo lance: é essa a diferença entre mate e afogamento.",
+              "arrows": [
+                [
+                  "g7",
+                  "e7"
+                ]
+              ],
+              "highlights": [
+                "e7"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "practice": {
+      "positionId": "pos-n0-stalemate-freeborough-144",
+      "goal": "win",
+      "engine": {
+        "skill": 20,
+        "moveTimeMs": 300
+      }
+    }
+  }
+}

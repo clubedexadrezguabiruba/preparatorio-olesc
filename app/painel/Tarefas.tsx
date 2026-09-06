@@ -7,6 +7,20 @@ import type { EstadoDaTarefa } from "@/lib/tarefas/estado";
 import { alternarTarefa } from "./acoes";
 
 /**
+ * O que a barra de cada tipo de tarefa está contando.
+ *
+ * As três palavras existem porque as três barras têm o mesmo desenho e pesos
+ * diferentes: puzzle resolvido o servidor mediu, aula dominada a tablebase
+ * certificou, e dica lida foi o aluno que declarou. A tela não pode chamar as
+ * três de "feitas".
+ */
+const UNIDADE: Record<"tatica" | "finais" | "meiojogo", string> = {
+  tatica: "puzzles",
+  finais: "aulas dominadas",
+  meiojogo: "dicas lidas",
+};
+
+/**
  * A lista de tarefas da semana.
  *
  * **A caixa tem de responder na hora.** O aluno marca a tarefa no celular, no
@@ -15,8 +29,9 @@ import { alternarTarefa } from "./acoes";
  * que o primeiro marcou. O estado otimista é o que faz o toque valer antes da
  * resposta, e a contagem do cabeçalho anda junto com ele pelo mesmo motivo.
  *
- * A tarefa de tática não tem caixa. Ela é contada de `tentativas_puzzle`, e
- * uma caixa ali seria o aluno opinando sobre um número que o servidor já sabe.
+ * As tarefas medidas — tática e finais — não têm caixa. Elas são contadas de
+ * `tentativas_puzzle` e de `tentativas_aula`, e uma caixa ali seria o aluno
+ * opinando sobre um número que o servidor já sabe.
  */
 export function Tarefas({ estados }: { estados: EstadoDaTarefa[] }) {
   const [marcadas, aplicar] = useOptimistic(
@@ -31,7 +46,9 @@ export function Tarefas({ estados }: { estados: EstadoDaTarefa[] }) {
   const [, transicao] = useTransition();
 
   function estaFeita(estado: EstadoDaTarefa): boolean {
-    return estado.tarefa.tipo === "tatica" ? estado.feita : marcadas.has(estado.tarefa.id);
+    // Só a tarefa de marcar responde ao toque otimista; as medidas respondem ao
+    // que o servidor contou, e por isso não passam pelo conjunto local.
+    return estado.tarefa.tipo === "marcar" ? marcadas.has(estado.tarefa.id) : estado.feita;
   }
 
   const feitas = estados.filter(estaFeita).length;
@@ -113,8 +130,8 @@ export function Tarefas({ estados }: { estados: EstadoDaTarefa[] }) {
                   />
                   <p className="text-xs text-tinta-media tabular-nums">
                     {Math.min(estado.medida.feitos, estado.medida.meta)} de {estado.medida.meta}{" "}
-                    puzzles
-                    {estado.medida.acerto !== null ? (
+                    {UNIDADE[estado.medida.tipo]}
+                    {estado.medida.tipo === "tatica" && estado.medida.acerto !== null ? (
                       <>
                         {" · "}
                         <span
@@ -126,7 +143,7 @@ export function Tarefas({ estados }: { estados: EstadoDaTarefa[] }) {
                         >
                           {estado.medida.acerto}% de acerto
                         </span>
-                        <span className="text-tinta-muda">
+                        <span className="text-tinta-fraca">
                           {" "}
                           (meta {estado.medida.acertoEsperado}%)
                         </span>

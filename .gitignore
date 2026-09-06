@@ -60,3 +60,7 @@ next-env.d.ts
 # inteiro com `npm run repertorio:importar`, como os originais que o
 # REPERTORIO_FONTES aponta.
 /content/repertorio/rascunhos-anotados/
+
+# Rascunho de sessão: scripts de conferência, capturas de tela, geradores.
+# Nada aqui é fonte de verdade — o que vale está em content/, lib/ e docs/.
+.scratch/

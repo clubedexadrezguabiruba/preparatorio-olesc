@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-qmate-cook-d1",
+  "fen": "2k5/8/1Q2K3/8/8/8/8/8 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KQK",
+    "revisao"
+  ],
+  "provenance": {
+    "externalHumanSource": "William Cook — Diagrama 1 do capítulo de finais, sob a rubrica \"I.—King and Queen against King. This is the most simple of all the check mates\", com a legenda \"In this position White to move and mate in two moves\" e o aviso do autor de que \"there is great danger in this ending of stale-mating the adversary\"",
+    "bibliographicSource": "Cook, The Chess Primer, Smart and Allen, Londres / J. and W. Griffin, Walsall, 1880, p. impressa 49 (PDF p. 54, offset 5), Cap. VII \"Endings of Games\", seção I, Diagrama 1",
+    "originalGame": "não se aplica — posição de ensino de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar didático, não é estudo composto",
+    "license": "domínio público (obra de 1880); não gasta teto de citação",
+    "editionFile": "cook-chess-primer-1880.pdf",
+    "fenMethod": "transcrição do diagrama por leitura de imagem com a grade medida em pixel (largura 468 px = 8 × 58,5 exatos) e a fração de tinta medida no miolo de 76% de cada casa impressa; as fileiras vazias que o livro não imprime foram completadas pela convenção do próprio livro, e o resultado foi conferido pelo replay da linha impressa e pela tablebase.",
+    "qaApplied": "garimpo de 2026-08-24, com um achado de método. (1) Os diagramas deste livro são truncados: o No. 1 imprime só três fileiras, ancoradas na 8ª, e o diagrama seguinte imprime cinco — o autor corta fora as fileiras de baixo que estão vazias. Não é defeito de varredura, é convenção editorial, e ela foi conferida no diagrama vizinho. (2) A leitura deu rei preto c8, dama branca b6, rei branco e6, com cada peça inteira dentro da própria coluna medida. (3) A orientação vem de rótulo: a palavra BLACK está impressa na borda de cima, centrada no eixo do tabuleiro (centro do texto e centro do tabuleiro coincidem em x = 560), e as duas palavras abaixo pertencem às colunas de lances, não à borda. (4) O replay de 1.Qa7 Kd8 2.Qb8 mate roda legal e termina em mate, e depois de 1.Qa7 as pretas têm um único lance legal. Tablebase: win-white, DTM 3 meios-lances — mate em 2, exatamente o que a legenda promete.",
+    "pendingRisk": "as fileiras 1 a 5 não são impressas no diagrama; a FEN as declara vazias por convenção do livro e pela concordância da tablebase com o \"mate em dois\" da legenda, não por leitura direta"
+  },
+  "status": "approved"
+}

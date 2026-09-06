@@ -1,0 +1,230 @@
+{
+  "schema": 1,
+  "source": "https://tablebase.lichess.ovh/standard",
+  "fen": "8/4Q3/6k1/8/8/5K2/8/8 w - - 0 1",
+  "entry": {
+    "category": "win",
+    "dtm": 5,
+    "checkmate": false,
+    "stalemate": false,
+    "moves": [
+      {
+        "uci": "f3f4",
+        "category": "loss",
+        "dtm": -4,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f3g4",
+        "category": "loss",
+        "dtm": -4,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f3e4",
+        "category": "loss",
+        "dtm": -6,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7d7",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7f8",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f3e2",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f3f2",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f3g2",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f3e3",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f3g3",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7e3",
+        "category": "loss",
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7e4",
+        "category": "loss",
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7e5",
+        "category": "loss",
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7d6",
+        "category": "loss",
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7e6",
+        "category": "loss",
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7e8",
+        "category": "loss",
+        "dtm": -10,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7e1",
+        "category": "loss",
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7e2",
+        "category": "loss",
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7a3",
+        "category": "loss",
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7b4",
+        "category": "loss",
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7h4",
+        "category": "loss",
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7c5",
+        "category": "loss",
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7a7",
+        "category": "loss",
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7b7",
+        "category": "loss",
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7c7",
+        "category": "loss",
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7d8",
+        "category": "loss",
+        "dtm": -12,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7g5",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7f6",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7f7",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7g7",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "e7h7",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      }
+    ]
+  }
+}

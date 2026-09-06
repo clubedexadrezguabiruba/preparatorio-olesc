@@ -87,10 +87,13 @@ const CARTA_TOQUE = ["carta-toque"];
  * cedo ou tarde alguém acrescentar uma marca e lembrar de só uma das casas.
  *
  * É esta regra que amarra o par de casas inteiro: como toda marca precisa ser
- * 3:1 **mais escura que as duas**, e acima da casa clara não sobra espaço, a
- * casa escura não pode escurecer à vontade — cada ponto que ela desce puxa para
- * baixo o teto de claridade de todas as marcas. As duas ficaram a 1,58:1 uma da
- * outra, que é exatamente a distância que o tema do pacote produzia.
+ * 3:1 **mais escura que as duas**, quem cobra o orçamento é sempre a casa
+ * *escura* — cada ponto que ela desce puxa para baixo o teto de claridade de
+ * todas as marcas. O outro lado do par é livre, e foi por onde a F2 comprou
+ * contraste: clarear a casa clara não mexe em folga nenhuma. As duas estão a
+ * **1,81:1** (eram 1,58:1, a distância do tema do pacote); o porquê de não
+ * serem os 2,29:1 do tabuleiro do lichess.org está escrito em `globals.css`,
+ * com o nome das quatro marcas que cairiam.
  */
 const MARCAS: { onde: string; token: string; piso: number }[] = [
   {
@@ -128,11 +131,17 @@ const NAS_DUAS_CASAS: Par[] = MARCAS.flatMap(({ onde, token, piso }) => [
 /**
  * Os pares deste site.
  *
- * **A lista foi reescrita ao herdar a paleta, e isso é o ponto.** A tabela veio
- * do Laboratório de Finais junto com os tokens, e citava `FeedbackPanel`,
- * `MasterySeal`, `PracticeStage` — componentes que não vieram. Uma tabela de
- * contraste apontando para telas que não existem é um teste verde que não mede
- * nada, e é o pior estado que um gate pode ter.
+ * **A lista foi reescrita ao herdar a paleta, e agora foi reaberta.** A tabela
+ * veio do Laboratório de Finais junto com os tokens e citava `FeedbackPanel`,
+ * `MasterySeal`, `PracticeStage` — componentes que não tinham vindo. Uma tabela
+ * de contraste apontando para telas que não existem é um teste verde que não
+ * mede nada, e é o pior estado que um gate pode ter; por isso as linhas saíram.
+ *
+ * No transplante do motor de aula (FN1/B1) as telas chegaram, e as linhas
+ * voltaram — **remedidas neste repositório**, arquivo e linha conferidos aqui,
+ * não copiados da tabela de lá. As pilhas de fundo do motor são as mais fundas
+ * do site: o selo de etapa concluída são três camadas, e o painel de feedback
+ * troca de tingimento a cada lance julgado.
  *
  * Cada linha aqui aponta para um arquivo que existe. Quando uma tela nova
  * trouxer uma combinação nova, a linha entra junto — é isso, ou o par passa sem
@@ -149,13 +158,13 @@ export const PARES: Par[] = [
     piso: AA_TEXTO,
   },
   {
-    onde: "parágrafo de apoio, e o rótulo do botão neutro de borda — app/page.tsx, app/entrar/page.tsx, o link Área do professor e o Voltar ao painel",
+    onde: "parágrafo de apoio, e o rótulo do botão neutro de borda — app/page.tsx, app/entrar/page.tsx, o link Área do professor, o Voltar ao painel; e o corpo de cada etapa da aula — ObjectiveStage:107, :110 e :148, PracticeStage:365, TreeStage:363, ReviewStage:58, LessonPlayer:123",
     texto: "tinta-media",
     fundo: PAGINA,
     piso: AA_TEXTO,
   },
   {
-    onde: "rótulo de seção e texto secundário sobre a página — app/page.tsx, entrar/Formulario.tsx, painel/page.tsx, professor/page.tsx",
+    onde: "rótulo de seção e texto secundário sobre a página — app/page.tsx, entrar/Formulario.tsx, painel/page.tsx, professor/page.tsx; e os rótulos das etapas — ObjectiveStage:99 e :113, ExampleStage:201 e :248, PracticeStage:368, TreeStage:367, ReviewStage:88, LessonPlayer:152",
     texto: "tinta-fraca",
     fundo: PAGINA,
     piso: AA_TEXTO,
@@ -172,42 +181,66 @@ export const PARES: Par[] = [
     fundo: PAGINA,
     piso: AA_TEXTO,
   },
+  {
+    // O motor pensando é informação: enquanto esse texto está na tela, o
+    // tabuleiro não aceita lance. Se o aluno não o lê, ele acha que travou.
+    onde: "“· pensando…” do computador na etapa da prática (PracticeStage:374)",
+    texto: "metodo/80",
+    fundo: PAGINA,
+    piso: AA_TEXTO,
+  },
 
   // -------------------------------------------------------------------------
   // Tinta sobre o cartão
   // -------------------------------------------------------------------------
   {
-    onde: "valor dentro do cartão — o número do painel, a célula da tabela de alunos, o texto digitado no campo",
+    onde: "valor dentro do cartão — o número do painel, a célula da tabela de alunos, o texto digitado no campo, o título da regra escolhida (ObjectiveStage:134)",
     texto: "tinta",
     fundo: CARTA,
     piso: AA_TEXTO,
   },
   {
-    onde: "rótulo dentro do cartão — legenda do número, cabeçalho da tabela, rótulo de campo",
+    onde: "rótulo dentro do cartão — legenda do número, cabeçalho da tabela, rótulo de campo, o painel de feedback em repouso (FeedbackPanel:61), a legenda da revisão (ReviewStage:48) e a aba de velocidade inativa (ExampleStage:266)",
     texto: "tinta-fraca",
     fundo: CARTA,
     piso: AA_TEXTO,
   },
   {
-    onde: "texto de exemplo dentro do campo vazio (`placeholder:`) — entrar/Formulario.tsx, professor/CadastroDeAluno.tsx",
+    // É o corpo de leitura do motor: o texto de cada lance do exemplo, o
+    // feedback neutro, a regra ainda não escolhida. O cartão da aula é onde o
+    // aluno de fato lê — mais texto passa por aqui do que por qualquer outra
+    // superfície do site.
+    onde: "corpo dentro do cartão — texto do lance (ExampleStage:209), painel neutro (FeedbackPanel:15), regra não escolhida (ObjectiveStage:129), aba de etapa (LessonPlayer:145), revisão (ReviewStage:78), selo sem domínio (MasterySeal:37 e :46)",
+    texto: "tinta-media",
+    fundo: CARTA,
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "o número da fase e o da regra, dentro do cartão — ExampleStage:216, ObjectiveStage:132",
+    texto: "metodo",
+    fundo: CARTA,
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "texto de exemplo dentro do campo vazio (`placeholder:`) — entrar/Formulario.tsx, professor/CadastroDeAluno.tsx; e os travessões `aria-hidden` de MasterySeal:47, /trilha e /meio-jogo/[dica]",
     texto: "tinta-muda",
     fundo: CARTA,
     piso: AA_TEXTO,
     isencao:
-      "3,06:1, e nenhuma informação passa por ele: cada `placeholder` do site repete o que o rótulo acima do campo já diz por extenso, em `tinta-fraca`. O texto de exemplo some no instante em que o aluno digita — e some sem levar nada junto. A dica do campo e a faixa de rating do bloco *carregavam* informação e estavam nesta tinta: subiram para `tinta-fraca` quando esta régua as pegou.",
+      "3,06:1, e nenhuma informação passa por ele: cada `placeholder` do site repete o que o rótulo acima do campo já diz por extenso, em `tinta-fraca`. O texto de exemplo some no instante em que o aluno digita — e some sem levar nada junto. Os travessões são `aria-hidden`, são marcador de item de lista, e o texto que eles antecedem está em `tinta-media` ao lado. **A isenção encolheu na F2**: a revisão das capturas pegou a proveniência do diagrama de meio-jogo e a pastilha fechada da `/trilha` nesta tinta a 2,69:1 e 3,06:1, e a varredura que se seguiu achou mais vinte e duas — \"abre no Sábado 3\", \"Não começou\", \"(meta 70%)\", o número do bloco, a contagem do professor. Todas subiram para `tinta-fraca`. O que sobra em `tinta-muda` hoje é o que a isenção sempre disse que era: `placeholder` e travessão.",
   },
 
   // -------------------------------------------------------------------------
   // O que é botão
   // -------------------------------------------------------------------------
   {
-    onde: "botão primário em repouso — Entrar na home, Entrar no formulário, Criar conta",
+    onde: "botão primário em repouso — Entrar na home, Entrar no formulário, Criar conta, e o botão que avança a aula (LessonButton:22, LessonPlayer:144 e :303, ReviewStage:77)",
     texto: "tinta-inversa",
     fundo: ["metodo-cheio"],
     piso: AA_TEXTO,
   },
   {
-    onde: "botão primário sob o ponteiro — os mesmos três",
+    onde: "botão primário sob o ponteiro — os mesmos, mais o da aula (LessonButton:22, LessonPlayer:303)",
     texto: "tinta-inversa",
     fundo: ["metodo-cheio-toque"],
     piso: AA_TEXTO,
@@ -262,6 +295,33 @@ export const PARES: Par[] = [
     fundo: CARTA_ALTA,
     piso: AA_TEXTO,
   },
+  {
+    // O motor usa tinta cheia nos controles neutros, e não `tinta-media`: são
+    // botões que o aluno aperta dezenas de vezes numa aula (Avançar, Voltar,
+    // Repetir a cena), e o rótulo deles é a instrução, não um apoio.
+    onde: "botão neutro em repouso — LessonButton:23",
+    texto: "tinta",
+    fundo: CARTA_ALTA,
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "botão neutro sob o ponteiro, e a aba de velocidade ativa — LessonButton:23, ExampleStage:265, regra escolhida em ObjectiveStage:128 e :134",
+    texto: "tinta",
+    fundo: CARTA_TOQUE,
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "aba de velocidade inativa sob o ponteiro (ExampleStage:266)",
+    texto: "tinta-fraca",
+    fundo: CARTA_ALTA,
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "o número da regra escolhida, no botão sob o ponteiro (ObjectiveStage:132)",
+    texto: "metodo",
+    fundo: CARTA_TOQUE,
+    piso: AA_TEXTO,
+  },
 
   // -------------------------------------------------------------------------
   // Os painéis tingidos — a tinta compõe com o que está atrás, não com o tom cheio
@@ -303,7 +363,7 @@ export const PARES: Par[] = [
     piso: AA_TEXTO,
   },
   {
-    onde: "o verde a meia altura sobre painel tingido leve — reservado ao rótulo de tema em /tatica",
+    onde: "o verde a meia altura sobre painel tingido leve — o rótulo de tema em /tatica e o do critério de domínio (ObjectiveStage:145)",
     texto: "metodo",
     fundo: ["metodo-superficie/5", ...PAGINA],
     piso: AA_TEXTO,
@@ -312,6 +372,85 @@ export const PARES: Par[] = [
     onde: "campo de formulário: papel dentro do cartão (professor/CadastroDeAluno.tsx) — o inverso do resto do site",
     texto: "tinta",
     fundo: ["papel", ...CARTA],
+    piso: AA_TEXTO,
+  },
+
+  // -------------------------------------------------------------------------
+  // O motor de aula — os painéis que trocam de cor a cada lance julgado
+  //
+  // O painel de feedback é **um** elemento que muda de tingimento conforme o
+  // veredito (`TONE`, FeedbackPanel:11-17), e o selo de conclusão empilha uma
+  // pastilha verde sobre o painel verde sobre a página. São as únicas pilhas de
+  // três camadas do site, e a única tinta que existe só para elas
+  // (`metodo-selo`). Medi-las é medir o que a criança lê no instante em que
+  // erra ou acerta — que é o pior momento para um texto ficar fraco.
+  // -------------------------------------------------------------------------
+  {
+    onde: "feedback do método: o lance certo (FeedbackPanel:12)",
+    texto: "metodo-tinta",
+    fundo: ["metodo-superficie/10", ...PAGINA],
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "feedback de erro: o lance que perde (FeedbackPanel:13)",
+    texto: "erro-tinta",
+    fundo: ["erro-superficie/10", ...PAGINA],
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "feedback de aviso: o lance legal que não é o método (FeedbackPanel:14)",
+    texto: "aviso-tinta",
+    fundo: ["aviso-superficie/10", ...PAGINA],
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "feedback de conclusão: a etapa acabou (FeedbackPanel:16)",
+    texto: "metodo-tinta-alta",
+    fundo: ["metodo-superficie/20", ...PAGINA],
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "selo “Etapa concluída.” — três camadas (FeedbackPanel:54 sobre :16 sobre a página)",
+    texto: "metodo-selo",
+    fundo: ["metodo/20", "metodo-superficie/20", ...PAGINA],
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "manchete do selo de domínio, com domínio (MasterySeal:31 e :37)",
+    texto: "metodo-selo",
+    fundo: ["metodo-superficie/10", ...PAGINA],
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "lista do que ainda falta, no selo com domínio (MasterySeal:46)",
+    texto: "tinta-media",
+    fundo: ["metodo-superficie/10", ...PAGINA],
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "travessão da mesma lista, no selo com domínio (MasterySeal:47)",
+    texto: "tinta-muda",
+    fundo: ["metodo-superficie/10", ...PAGINA],
+    piso: AA_TEXTO,
+    isencao:
+      "é o mesmo travessão `aria-hidden` de MasterySeal:47 medido sobre o cartão, agora na variante tingida do selo: marcador de item de lista, sem informação própria, com o texto em `tinta-media` ao lado.",
+  },
+  {
+    onde: "texto do critério de domínio, no quadro verde da etapa 1 (ObjectiveStage:148)",
+    texto: "tinta-media",
+    fundo: ["metodo-superficie/5", ...PAGINA],
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "dica do computador — o lance sugerido na prática e na árvore (PracticeStage:383, TreeStage:390)",
+    texto: "dica-tinta",
+    fundo: ["dica-superficie/5", ...PAGINA],
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "aviso de fim de prática — empate por 50 lances, repetição (PracticeStage:391)",
+    texto: "aviso-tinta",
+    fundo: ["aviso-superficie/5", ...PAGINA],
     piso: AA_TEXTO,
   },
 
@@ -341,7 +480,7 @@ export const PARES: Par[] = [
     piso: AA_COMPONENTE,
   },
   {
-    onde: "anel de foco sobre o cartão — os campos do formulário do professor",
+    onde: "anel de foco sobre o cartão — os campos do formulário do professor, a escolha da promoção (PromotionPicker:39) e as abas dentro do cartão da aula",
     texto: "foco",
     fundo: CARTA,
     piso: AA_COMPONENTE,

@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-ladder-pandolfini-eg3",
+  "fen": "6k1/8/8/8/8/8/7R/5K1R w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KRRK",
+    "ensino"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Bruce Pandolfini — posição do ENDGAME 3, que ele intitula 'Rook Barrier'",
+    "bibliographicSource": "Pandolfini, Pandolfini's Endgame Course, Fireside / Simon & Schuster, Nova York, 1988, p. impressa 20, Parte 'Pieces in Action', ENDGAME 3 'Rook Barrier'. O PDF da biblioteca foi digitalizado com duas páginas impressas por página de PDF: este diagrama está na metade esquerda da p. 11 do PDF, cujo cabeçalho de corrida imprime '20 · PANDOLFINI'S ENDGAME COURSE' à esquerda e 'PIECES IN ACTION · 21' à direita",
+    "originalGame": "não se aplica — posição teórica de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar de duas torres, um fato do final e não uma composição autoral",
+    "license": "obra protegida — uso sob o teto da §12.7 (2 posições por obra por aula; esta aula usa 2 do Pandolfini, ENDGAME 3 e ENDGAME 1, que não são diagramas consecutivos)",
+    "editionFile": "pandolfini-endgame-course.pdf",
+    "fenMethod": "o Pandolfini abre cada exercício com a posição **em texto** — aqui 'W: Kf1, Rh2, Rh1 B: Kg8' —, e é dela que a FEN foi derivada; o OCR desta linha saiu limpo (nenhum dígito virou letra, ao contrário do que acontece em outras páginas do mesmo arquivo). A linha de texto foi então conferida contra o diagrama por leitura de imagem independente, cega ao texto: grade medida pela moldura (casa de 56,0 × 56,3 px na página rasterizada a 250 dpi), cor de cada casa medida pelo anel de borda fora da silhueta da peça. A leitura de imagem devolveu exatamente Kg8 (preto), Kf1, Th2 e Th1 (brancas), e descartou por medição as duas casas rivais plausíveis — h8 para o rei preto e g1 para o rei branco, as duas hachuradas e limpas. Este diagrama imprime coordenadas a-h e 1-8 nas bordas, então a orientação não precisou de argumento indireto.",
+    "qaApplied": "garimpo FN1/B5.1, 2026-09-05: a posição é falsificada pelas **duas** soluções que o próprio livro imprime, e não por uma. Linha A — 1.Rf2 Kg7 2.Rg1+ Kh6 3.Rh2 mate — e linha B — 1.Rh7 Kf8 2.Rg1 Ke8 3.Rg8 mate — são as duas legais nesta FEN e as duas terminam em xeque-mate no terceiro lance, como o livro promete. Duas linhas independentes que só fecham na posição certa é trava mais forte que uma. A tablebase confirma win-white com DTM 5 meios-lances, isto é mate em 3 — o número impresso.",
+    "pendingRisk": "nenhum conhecido"
+  }
+}

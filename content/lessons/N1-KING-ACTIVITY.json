@@ -1,0 +1,265 @@
+{
+  "id": "N1-KING-ACTIVITY",
+  "title": "O rei é peça: use-o",
+  "class": "E",
+  "orientation": "white",
+  "domainCriterion": "D1",
+  "status": "published",
+  "errors": {},
+  "fallbacks": {
+    "winningOffMethod": "Esse lance ainda ganha, mas não é o método da aula. Volte e tente o lance da técnica.",
+    "losesWin": "Esse lance joga a vitória fora. Volte e tente de novo.",
+    "methodAlternative": "Esse lance leva o rei para a frente do mesmo jeito: é a mesma ideia por outro caminho."
+  },
+  "stages": {
+    "objective": {
+      "source": "silman-endgame-course",
+      "technique": {
+        "name": "O rei na frente",
+        "summary": "No final o rei deixa de ser um problema e vira a peça mais forte que sobrou no tabuleiro. Quem leva o rei para a frente decide a partida — e quem o deixa para trás não ganha nem com peão a mais."
+      },
+      "why": "Na abertura o rei é um estorvo: esconde-se atrás dos peões e reza. No final é o contrário, e é aqui que a maior parte das partidas de 1000 a 1400 se decide — não na tática, no rei. A conta é velha e é simples: o rei anda em oito direções e cobre oito casas; o peão anda em uma e cobre duas. Nesta aula você vai ver as brancas com um peão a mais **não ganharem**, e o motivo é um só: o rei branco nunca chegou à frente do peão. Depois, na prática, você faz o contrário — e o mesmo peão promove.",
+      "rules": [
+        {
+          "title": "O rei é a peça mais forte do final",
+          "text": "Repare em quem está fazendo o trabalho nesta posição: os dois reis, cara a cara na coluna do peão. O peão está parado e vai continuar quase parado a cena inteira. É o rei que ganha e é o rei que salva.",
+          "frame": {
+            "scene": "o-peao-sozinho-nao-ganha",
+            "step": 1
+          }
+        },
+        {
+          "title": "Empurrar o peão não conquista nada",
+          "text": "Quando o peão anda, ele deixa de ocupar a casa em que estava e não tira casa nenhuma do rei preto — ele só dá xeque e empurra o adversário para onde o adversário já queria ir. Peão que avança sem o rei atrás avança sozinho.",
+          "frame": {
+            "scene": "o-peao-sozinho-nao-ganha",
+            "step": 4
+          }
+        },
+        {
+          "title": "Quem chega na frente primeiro decide",
+          "text": "O rei preto chega antes e planta-se na frente do peão. Daí em diante não há mais o que fazer: cada vez que o peão avança, o rei preto recua uma casa e volta a ficar de frente. O rei branco está sempre um passo atrás — e um passo atrás é tudo.",
+          "frame": {
+            "scene": "o-peao-sozinho-nao-ganha",
+            "step": 13
+          }
+        },
+        {
+          "title": "Sem o rei na frente, o peão só empata",
+          "text": "A partida acaba em afogamento, com peão a mais. Não foi um erro no último lance: foi o rei branco que não saiu na hora certa, lá no começo. Guarde a posição do fim e compare com a da prática, que é a mesma ideia feita direito.",
+          "frame": {
+            "scene": "o-peao-sozinho-nao-ganha",
+            "step": 18
+          }
+        }
+      ],
+      "frame": {
+        "scene": "o-peao-sozinho-nao-ganha",
+        "step": 18
+      },
+      "mastery": "Dominado = vencer o computador na prática, promovendo o peão. Lá o rei branco já está onde faltou estar aqui: na sexta fileira, à frente do peão."
+    },
+    "example": {
+      "scenes": [
+        {
+          "id": "o-peao-sozinho-nao-ganha",
+          "title": "Um peão a mais, e empate",
+          "positionId": "pos-n1-king-silman-d43",
+          "intro": "As brancas têm um peão a mais e não vão ganhar. Nada de tática, nada de armadilha: o peão anda até a sétima fileira e a partida acaba empatada. Enquanto assiste, olhe só para os dois reis — o peão é figurante.",
+          "ends": "draw-secured",
+          "phases": [
+            {
+              "title": "O rei é a peça mais forte do final",
+              "fromStep": 1
+            },
+            {
+              "title": "Empurrar o peão não conquista nada",
+              "fromStep": 4
+            },
+            {
+              "title": "Quem chega na frente primeiro decide",
+              "fromStep": 13
+            },
+            {
+              "title": "Sem o rei na frente, o peão só empata",
+              "fromStep": 18
+            }
+          ],
+          "steps": [
+            {
+              "move": "d5d6",
+              "text": "As pretas jogam e o rei recua um passo. Ele não foge para o lado: fica na coluna do peão, de frente para ele.",
+              "highlights": [
+                "d6"
+              ]
+            },
+            {
+              "move": "d3e4",
+              "text": "O rei branco sai de trás do peão e tenta contornar pela direita. É a coisa certa a fazer — tarde demais.",
+              "arrows": [
+                [
+                  "d3",
+                  "e4"
+                ]
+              ],
+              "highlights": [
+                "e4"
+              ]
+            },
+            {
+              "move": "d6e6",
+              "text": "E o rei preto vai junto, parando exatamente de frente. Dois reis frente a frente com uma casa entre eles, e a vez sendo das brancas: quem tem de ceder é quem joga.",
+              "highlights": [
+                "e6"
+              ]
+            },
+            {
+              "move": "d4d5",
+              "text": "Como o rei não passa, as brancas empurram o peão com xeque. Parece progresso e não é: o peão trocou d4 por d5 e o rei preto continua no controle.",
+              "arrows": [
+                [
+                  "d4",
+                  "d5"
+                ]
+              ],
+              "highlights": [
+                "d5"
+              ]
+            },
+            {
+              "move": "e6d6",
+              "text": "O rei preto volta para a frente do peão. Este é o lance que ele vai repetir a cena inteira."
+            },
+            {
+              "move": "e4d4",
+              "text": "O rei branco tenta de novo, agora pelo mesmo lado.",
+              "arrows": [
+                [
+                  "e4",
+                  "d4"
+                ]
+              ],
+              "highlights": [
+                "d4"
+              ]
+            },
+            {
+              "move": "d6d7",
+              "text": "E o rei preto recua um passo, sem sair da coluna. Ele nunca vai para o lado — sair da coluna do peão seria o único erro possível aqui."
+            },
+            {
+              "move": "d4e5",
+              "text": "As brancas contornam pela direita outra vez.",
+              "arrows": [
+                [
+                  "d4",
+                  "e5"
+                ]
+              ],
+              "highlights": [
+                "e5"
+              ]
+            },
+            {
+              "move": "d7e7",
+              "text": "E outra vez o rei preto chega primeiro à casa de frente. Sempre um passo à frente, sempre com a vez sendo das brancas."
+            },
+            {
+              "move": "d5d6",
+              "text": "Peão para a sexta, com xeque. Restam duas casas para ele andar, e nenhuma delas resolve nada.",
+              "arrows": [
+                [
+                  "d5",
+                  "d6"
+                ]
+              ],
+              "highlights": [
+                "d6"
+              ]
+            },
+            {
+              "move": "e7d7",
+              "text": "Na frente do peão de novo."
+            },
+            {
+              "move": "e5d5",
+              "text": "O rei branco encosta. É o máximo que ele consegue.",
+              "arrows": [
+                [
+                  "e5",
+                  "d5"
+                ]
+              ],
+              "highlights": [
+                "d5"
+              ]
+            },
+            {
+              "move": "d7d8",
+              "text": "O rei preto recua para a última fileira, ainda na coluna do peão. Repare no desenho: o peão em d6, o rei branco em d5 atrás dele, o rei preto em d8 na frente. É esse atrás que perde a partida."
+            },
+            {
+              "move": "d5c6",
+              "text": "Última tentativa: o rei branco contorna pela esquerda.",
+              "arrows": [
+                [
+                  "d5",
+                  "c6"
+                ]
+              ],
+              "highlights": [
+                "c6"
+              ]
+            },
+            {
+              "move": "d8c8",
+              "text": "E o rei preto vai junto, de frente outra vez."
+            },
+            {
+              "move": "d6d7",
+              "text": "Peão para a sétima, com xeque. Agora o peão está a um passo de promover e não vai promover nunca.",
+              "arrows": [
+                [
+                  "d6",
+                  "d7"
+                ]
+              ],
+              "highlights": [
+                "d7"
+              ]
+            },
+            {
+              "move": "c8d8",
+              "text": "O rei preto se põe na frente do peão pela última vez. Ele não pode ser expulso de d8: a casa de promoção está trancada pelo próprio peão."
+            },
+            {
+              "move": "c6d6",
+              "text": "Afogamento — empate. O rei preto não está em xeque e não tem lance nenhum: c7, d7 e e7 são do peão e do rei branco, c8 e e8 são do rei branco. Um peão a mais, meia partida de trabalho, e meio ponto.",
+              "arrows": [
+                [
+                  "c6",
+                  "d6"
+                ]
+              ],
+              "highlights": [
+                "d8",
+                "c8",
+                "e8",
+                "c7",
+                "e7"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "practice": {
+      "positionId": "pos-n1-king-freeborough-57",
+      "goal": "win",
+      "engine": {
+        "skill": 20,
+        "moveTimeMs": 300
+      }
+    }
+  }
+}

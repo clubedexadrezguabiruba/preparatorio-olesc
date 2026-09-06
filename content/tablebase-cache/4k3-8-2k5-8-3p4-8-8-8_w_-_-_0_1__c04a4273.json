@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "source": "https://tablebase.lichess.ovh/standard",
+  "fen": "4k3/8/2K5/8/3P4/8/8/8 w - - 0 1",
+  "entry": {
+    "category": "win",
+    "dtm": 25,
+    "checkmate": false,
+    "stalemate": false,
+    "moves": [
+      {
+        "uci": "c6c7",
+        "category": "loss",
+        "dtm": -24,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d4d5",
+        "category": "loss",
+        "dtm": -26,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "c6d6",
+        "category": "loss",
+        "dtm": -26,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "c6c5",
+        "category": "loss",
+        "dtm": -30,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "c6b5",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "c6d5",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "c6b6",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "c6b7",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      }
+    ]
+  }
+}

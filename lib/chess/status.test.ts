@@ -98,3 +98,71 @@ test("o contador de progresso lê meios-lances e devolve lances", () => {
     limit: 50,
   });
 });
+
+/* ------------------------------------------------------------------ *
+ * FN1/B2 — o fim que a chess.js não conhece
+ *
+ * Torre contra torre, sem peões, é empate morto e `isInsufficientMaterial()` é
+ * `false` ali — com razão, porque em tese uma torre se ganha. Numa prática de
+ * objetivo empate isso deixava a partida arrastar até os 50 lances depois de o
+ * aluno já ter conseguido o que a aula pediu.
+ *
+ * A opção é ligada **só** na prática de empate, e os testes abaixo existem para
+ * cercar os dois riscos dela: encerrar cedo demais, e encerrar onde não devia.
+ * ------------------------------------------------------------------ */
+
+/** Torre contra torre, nada pendurado, nenhum peão. Brancas na vez. */
+const TORRE_x_TORRE = "7k/8/8/7r/8/8/R7/K7 w - - 0 1";
+
+test("forças iguais e sem peões encerram a partida quando a opção está ligada", () => {
+  const o = readOutcome(new Chess(TORRE_x_TORRE), { balancedPawnlessIsDraw: true });
+  assert.equal(o.over, true);
+  assert.equal(o.over && o.result, "draw");
+  assert.equal(o.over && o.reason, "Forças iguais e sem peões — não há mais o que ganhar: empate.");
+});
+
+test("a mesma posição continua em jogo com a opção desligada", () => {
+  // É o padrão, e é o que protege a prática de vitória: numa aula de mate a
+  // opção roubaria do aluno a partida que ele ainda podia ganhar.
+  assert.equal(readOutcome(new Chess(TORRE_x_TORRE)).over, false);
+});
+
+test("com peão no tabuleiro a partida continua, mesmo com a opção ligada", () => {
+  // O peão é o que ainda pode virar dama: enquanto houver um, há o que ganhar.
+  const o = readOutcome(new Chess("7k/8/8/7r/8/P7/R7/K7 w - - 0 1"), {
+    balancedPawnlessIsDraw: true,
+  });
+  assert.equal(o.over, false);
+});
+
+test("forças diferentes não encerram: torre contra bispo continua", () => {
+  const o = readOutcome(new Chess("7k/8/8/7b/8/8/R7/K7 w - - 0 1"), {
+    balancedPawnlessIsDraw: true,
+  });
+  assert.equal(o.over, false);
+});
+
+test("peça pendurada não é empate: a captura disponível segura a partida", () => {
+  // As duas torres na coluna a, uma podendo tomar a outra. Sem esta trava, o
+  // aluno que acabou de pendurar a torre seria aprovado por "empate".
+  const o = readOutcome(new Chess("r6k/8/8/8/8/8/R7/K7 w - - 0 1"), {
+    balancedPawnlessIsDraw: true,
+  });
+  assert.equal(o.over, false);
+});
+
+test("dama contra dama fica de fora: espeto e enfiada ainda decidem", () => {
+  const o = readOutcome(new Chess("7k/8/8/7q/8/8/Q7/K7 w - - 0 1"), {
+    balancedPawnlessIsDraw: true,
+  });
+  assert.equal(o.over, false);
+});
+
+test("um fim de verdade tem precedência sobre a opção", () => {
+  // A mesma torre contra torre, com o relógio dos 50 lances estourado: quem
+  // nomeia o empate é a regra que de fato o produziu, não a trava nova.
+  const o = readOutcome(new Chess("7k/8/8/7r/8/8/R7/K7 w - - 100 60"), {
+    balancedPawnlessIsDraw: true,
+  });
+  assert.equal(o.over && o.reason, "50 lances sem progresso — empate.");
+});

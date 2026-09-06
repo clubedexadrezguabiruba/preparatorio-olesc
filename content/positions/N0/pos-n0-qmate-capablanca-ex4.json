@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-qmate-capablanca-ex4",
+  "fen": "8/8/8/4k3/8/8/8/4K2Q w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KQK",
+    "sem-ajuda"
+  ],
+  "provenance": {
+    "externalHumanSource": "José Raúl Capablanca — diagrama do Exemplo 4, \"Queen and King against King\", que o autor apresenta como o mais fácil dos três mates elementares e que \"deve sempre sair em menos de dez lances\"",
+    "bibliographicSource": "Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921, p. impressa 8 (PDF p. 26, offset 18), Cap. I §1 \"Some Simple Mates\", Exemplo 4. O diagrama é impresso sem número, encaixado entre o parágrafo que o anuncia e o que dá a solução",
+    "originalGame": "não se aplica — posição de ensino de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar didático, não é estudo composto",
+    "license": "domínio público (obra de 1921); não gasta teto de citação",
+    "editionFile": "capablanca-chess-fundamentals-1921.pdf",
+    "fenMethod": "transcrição do diagrama por leitura de imagem cega ao texto da página, com a grade localizada por medição de pixel a 600 dpi (casa de 137,4 × 135,8 px) e a fração de tinta medida no miolo de 70% das 64 casas; a orientação, que o diagrama não rotula, foi decidida pelo replay da linha impressa.",
+    "qaApplied": "garimpo de 2026-08-24, em três camadas. (1) A leitura de imagem deu rei branco e1, dama branca h1, rei preto e5: das 64 casas, exatamente três destoam da linha de base (casa clara vazia = 0,000; casa hachurada vazia = 0,556 a 0,625), e são e5, e1 e h1. (2) Este diagrama não imprime rótulo nenhum — nem a-h, nem 1-8, nem BLACK/WHITE —, então a paridade dos cantos exclui o espelho mas não o giro de 180° (§3.2.1 item 4 do SOURCE-CORPUS). Quem fixa a orientação é a prosa, e ela fixa duas vezes: o autor escreve que depois do 2º lance o rei preto já tem uma única casa disponível, e a linha reconstruída (1.Qc6 Kd4 2.Kd2) produz exatamente um lance legal para as pretas — e de novo um só depois de 3.Ke3. Duas afirmações verificáveis do autor, ambas satisfeitas. (3) Tablebase: win-white, DTM 13 meios-lances — mate em 7 com jogo ótimo, contra os 8 lances da linha do autor, coerente com ele prometer \"menos de dez\".",
+    "pendingRisk": "nenhum conhecido"
+  },
+  "status": "approved"
+}

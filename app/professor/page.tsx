@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { professorAtual } from "@/lib/auth/perfil";
+import { semanaAtual } from "@/lib/curso/calendario";
+import { aulasPublicadas } from "@/lib/finais/conteudo";
+import { finaisDaTurma } from "@/lib/finais/progresso";
+import { aulasAbertas, CLASSES, daClasse, dominadas } from "@/lib/finais/trilha";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { CadastroDeAluno } from "./CadastroDeAluno";
 
@@ -20,6 +24,20 @@ export default async function Professor() {
     .eq("papel", "aluno")
     .order("equipe", { nullsFirst: false })
     .order("nome");
+
+  /*
+   * A coluna "Finais": quantas aulas abertas cada aluno já domina.
+   *
+   * Uma consulta para a turma inteira, e não uma por aluno — com doze alunos,
+   * doze idas ao banco na renderização de uma tabela é o tipo de lentidão que
+   * ninguém investiga, porque cada consulta sozinha é rápida.
+   *
+   * A conta é a mesma do painel e da trilha (`dominadas()` sobre as aulas
+   * abertas), e é justamente por ser a mesma que o professor pode dizer o
+   * número em voz alta com o aluno na frente.
+   */
+  const abertas = aulasAbertas(aulasPublicadas(), semanaAtual());
+  const finais = await finaisDaTurma();
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-5 py-10">
@@ -55,16 +73,33 @@ export default async function Professor() {
                   <Th>Equipe</Th>
                   <Th>Tab.</Th>
                   <Th>Rating</Th>
+                  <Th>Finais</Th>
                 </tr>
               </thead>
               <tbody>
                 {alunos.map((aluno) => (
                   <tr key={aluno.id} className="border-b border-borda-fraca last:border-0">
-                    <Td>{aluno.nome}</Td>
+                    <Td>
+                      {/* O nome é a porta do relatório: a tabela responde
+                          "como vai a turma?", e a conversa de sábado é sempre
+                          sobre um aluno. */}
+                      <Link
+                        href={`/professor/${aluno.id}`}
+                        className="foco font-medium text-metodo-tinta hover:underline"
+                      >
+                        {aluno.nome}
+                      </Link>
+                    </Td>
                     <Td mono>{aluno.usuario}</Td>
                     <Td>{aluno.equipe ? EQUIPE[aluno.equipe as "M" | "F"] : "—"}</Td>
                     <Td>{aluno.tabuleiro ?? "—"}</Td>
                     <Td>{aluno.rating ?? "—"}</Td>
+                    <Td>
+                      <Finais
+                        feitas={dominadas(abertas, finais.get(aluno.id) ?? new Map())}
+                        abertas={abertas}
+                      />
+                    </Td>
                   </tr>
                 ))}
               </tbody>
@@ -77,6 +112,40 @@ export default async function Professor() {
         )}
       </section>
     </main>
+  );
+}
+
+/**
+ * Quantas aulas de finais este aluno domina, no total e por classe.
+ *
+ * O total vem primeiro porque é o que se lê de relance na coluna; a quebra por
+ * classe vem embaixo, miúda, porque é ela que diz *onde* o aluno está — seis de
+ * seis na classe E e zero na D é uma conversa diferente de três e três.
+ */
+function Finais({
+  feitas,
+  abertas,
+}: {
+  feitas: ReadonlySet<string>;
+  abertas: ReturnType<typeof aulasAbertas>;
+}) {
+  if (abertas.length === 0) return <span className="text-tinta-fraca">—</span>;
+
+  return (
+    <span className="flex flex-col gap-0.5 tabular-nums">
+      <span className={feitas.size > 0 ? "text-tinta" : "text-tinta-fraca"}>
+        {feitas.size} de {abertas.length}
+      </span>
+      <span className="text-xs text-tinta-fraca">
+        {CLASSES.map((classe) => {
+          const daqui = daClasse(abertas, classe);
+          if (daqui.length === 0) return null;
+          return `${classe} ${daqui.filter((a) => feitas.has(a.id)).length}/${daqui.length}`;
+        })
+          .filter(Boolean)
+          .join(" · ")}
+      </span>
+    </span>
   );
 }
 

@@ -2,29 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { perfilAtual } from "@/lib/auth/perfil";
-import {
-  amostraDeTemas,
-  faixaMaisFacil,
-  puzzlesDoTema,
-} from "@/lib/tatica/banco";
 import { BLOCOS, temaPorTag } from "@/lib/tatica/blocos";
 import { temaAberto, temaEscrito } from "@/lib/tatica/conteudo";
+import { escolherPuzzles } from "@/lib/tatica/escolher";
 import {
+  linhasDoTema,
   progressoPorTema,
   puzzlesJaVistos,
   PUZZLES_POR_TEMA,
   temaZerado,
 } from "@/lib/tatica/progresso";
-import type { PuzzleServido } from "@/lib/tatica/puzzles";
-import {
-  candidatosDeAquecimento,
-  emOrdemDeRating,
-  etapaAtual,
-  METAS,
-  misturar,
-  quantosFaltam,
-  sortear,
-} from "@/lib/tatica/serie";
+import { etapaAtual, idsErradosParaAProva, METAS, quantosFaltam } from "@/lib/tatica/serie";
 import { Serie } from "./Serie";
 
 export async function generateMetadata({ params }: PageProps<"/tatica/[tema]">): Promise<Metadata> {
@@ -94,6 +82,10 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
   const jaVistos = await puzzlesJaVistos();
   const semente = `${perfil.id}:${tag}:${etapa}`;
 
+  // Só a prova relê as linhas do tema: é nela que os errados voltam. A regra
+  // inteira mora em `lib/tatica/escolher.ts`, que o script `db:tatica` prova.
+  const errados = etapa === "prova" ? idsErradosParaAProva(await linhasDoTema(tag)) : [];
+
   const puzzles = await escolherPuzzles({
     tag,
     etapa,
@@ -101,6 +93,7 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
     semente,
     jaVistos,
     outrosTemas: [...todosOsProgressos.keys()].filter((t) => t !== tag && temaAberto(t)),
+    errados,
   });
 
   return (
@@ -130,71 +123,6 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
       />
     </Moldura>
   );
-}
-
-/* ------------------------------------------------------------------ *
- * A escolha dos puzzles
- * ------------------------------------------------------------------ */
-
-async function escolherPuzzles({
-  tag,
-  etapa,
-  faltam,
-  semente,
-  jaVistos,
-  outrosTemas,
-}: {
-  tag: string;
-  etapa: "aquecimento" | "serie" | "prova";
-  faltam: number;
-  semente: string;
-  jaVistos: Set<string>;
-  outrosTemas: string[];
-}): Promise<PuzzleServido[]> {
-  if (etapa === "aquecimento") {
-    const candidatos = candidatosDeAquecimento(await faixaMaisFacil(tag));
-    return emOrdemDeRating(sortear(candidatos, faltam, semente, jaVistos)).map((p) => ({
-      ...p,
-      origem: tag,
-    }));
-  }
-
-  if (etapa === "serie") {
-    return emOrdemDeRating(sortear(await puzzlesDoTema(tag), faltam, semente, jaVistos)).map(
-      (p) => ({ ...p, origem: tag }),
-    );
-  }
-
-  // A prova: metade do tema, metade dos temas que o aluno já viu, tudo fora de
-  // ordem de rating. Reconhecer o motivo sem que ninguém diga o nome dele é o
-  // que acontece na partida — dez garfos em fila treinam outra coisa.
-  //
-  // Três temas anteriores, e não todos: cada um custa a leitura de um arquivo,
-  // e a prova tem cinco vagas para dividir.
-  const anteriores = outrosTemas.slice(0, 3);
-  const quantosDaqui = anteriores.length ? Math.ceil(faltam / 2) : faltam;
-
-  const doTema = sortear(await puzzlesDoTema(tag), quantosDaqui, semente, jaVistos).map((p) => ({
-    ...p,
-    origem: tag,
-  }));
-
-  const deOutros = anteriores.length
-    ? sortear(
-        await amostraDeTemas(anteriores),
-        faltam - doTema.length,
-        `${semente}:mistura`,
-        jaVistos,
-      ).map((p) => ({
-        ...p,
-        // A origem é o tema de onde o arquivo veio. Sem ela, o servidor
-        // procuraria a solução no arquivo do tema atual e recusaria a
-        // tentativa como "puzzle desconhecido".
-        origem: anteriores.find((t) => p.temas.includes(t)) ?? anteriores[0],
-      }))
-    : [];
-
-  return misturar([...doTema, ...deOutros], semente);
 }
 
 /* ------------------------------------------------------------------ *

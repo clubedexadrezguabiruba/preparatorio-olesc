@@ -1,8 +1,11 @@
+import { spawn } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 import { cadernoEmHtml, nomeDoArquivo, type Caderno } from "../lib/apostila/caderno.ts";
+import { analisar } from "../lib/apostila/markdown.ts";
+import { contarExercicios, montarCaderno } from "../lib/apostila/montar.ts";
 
 /**
  * Monta um caderno da apostila em PDF.
@@ -72,14 +75,46 @@ export function contarPaginas(pdf: Buffer): number {
   return folhas;
 }
 
+/**
+ * O caderno vem de um `.md` que o professor edita, não de um módulo.
+ *
+ * O porquê está em `lib/apostila/markdown.ts`. O que importa aqui: erro de
+ * sintaxe no arquivo estoura **com o número da linha**, e é essa mensagem que
+ * quem estava editando vai ler.
+ */
 async function montar(numero: number): Promise<Caderno> {
-  const modulo = (await import(`./caderno-${numero}.ts`)) as { montar: () => Promise<Caderno> };
-  return modulo.montar();
+  const fonte = await readFile(path.join(AQUI, `caderno-${numero}.md`), "utf8");
+  const analisado = analisar(fonte);
+  if (analisado.cabecalho.numero !== numero) {
+    throw new Error(
+      `caderno-${numero}.md diz "numero: ${analisado.cabecalho.numero}" no cabeçalho`,
+    );
+  }
+  return montarCaderno(analisado);
+}
+
+/**
+ * Abre o PDF no visualizador padrão do sistema.
+ *
+ * Existe porque quem edita o caderno não quer procurar o arquivo na pasta a cada
+ * frase mudada: ele salva o `.md`, roda o comando, e o PDF abre. É a diferença
+ * entre iterar e desistir de iterar.
+ */
+function abrir(arquivo: string): void {
+  const [cmd, args] =
+    process.platform === "win32"
+      ? ["cmd", ["/c", "start", "", arquivo]]
+      : process.platform === "darwin"
+        ? ["open", [arquivo]]
+        : ["xdg-open", [arquivo]];
+  spawn(cmd, args, { detached: true, stdio: "ignore" }).unref();
 }
 
 async function principal(): Promise<void> {
-  const numero = Number(process.argv[2] ?? 1);
-  if (!Number.isInteger(numero)) throw new Error(`caderno "${process.argv[2]}" não é um número`);
+  const argumentos = process.argv.slice(2).filter((a) => a !== "--abrir");
+  const querAbrir = process.argv.includes("--abrir");
+  const numero = Number(argumentos[0] ?? 1);
+  if (!Number.isInteger(numero)) throw new Error(`caderno "${argumentos[0]}" não é um número`);
 
   const caderno = await montar(numero);
   const css = await readFile(path.join(AQUI, "impressao.css"), "utf8");
@@ -103,7 +138,17 @@ async function principal(): Promise<void> {
       // O tamanho e as margens vêm do `@page` do CSS, que é onde eles estão
       // escritos e explicados. Duas fontes dariam duas paginações.
       preferCSSPageSize: true,
-      printBackground: false,
+      /*
+        Ligado por causa da pauta tracejada: ela é desenhada com um gradiente de
+        fundo, e não com `border: dashed`, para poder escolher o tamanho do vão.
+        Com `printBackground: false` o Chromium a apagaria do PDF **sem erro
+        nenhum** — a linha de escrever o lance simplesmente não existiria na
+        folha, e ninguém descobriria antes de imprimir.
+
+        Não traz junto nenhum fundo indesejado: o caderno inteiro é tinta sobre
+        o branco do papel, e `impressao.css` não pinta um único fundo.
+      */
+      printBackground: true,
       displayHeaderFooter: true,
       headerTemplate: "<div></div>",
       footerTemplate:
@@ -117,9 +162,14 @@ async function principal(): Promise<void> {
     await writeFile(arquivoPdf, pdf);
 
     const diagramas = html.match(/<svg /g)?.length ?? 0;
+    const exercicios = contarExercicios(caderno);
     console.log(`${path.relative(RAIZ, arquivoPdf)}`);
-    console.log(`  ${contarPaginas(pdf)} páginas, ${diagramas} diagramas, ${(pdf.length / 1024).toFixed(0)} KB`);
+    console.log(
+      `  ${contarPaginas(pdf)} páginas, ${diagramas} diagramas ` +
+        `(${exercicios} numerados, com resposta no gabarito), ${(pdf.length / 1024).toFixed(0)} KB`,
+    );
     console.log(`  HTML para conferir a paginação: ${path.relative(RAIZ, arquivoHtml)}`);
+    if (querAbrir) abrir(arquivoPdf);
   } finally {
     await navegador.close();
   }

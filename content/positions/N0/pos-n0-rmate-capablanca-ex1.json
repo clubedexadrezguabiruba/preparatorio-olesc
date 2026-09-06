@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-rmate-capablanca-ex1",
+  "fen": "7k/8/8/8/8/8/8/R6K w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KRK",
+    "fading"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "José Raúl Capablanca — diagrama do Exemplo 1 do capítulo de abertura",
+    "bibliographicSource": "Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921, p. impressa 3 (PDF p. 21, offset 18), Parte I cap. I §1 'Some Simple Mates', Exemplo 1",
+    "originalGame": "não se aplica — posição teórica de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar de manual, não é estudo composto",
+    "license": "domínio público (obra de 1921, EUA)",
+    "editionFile": "capablanca-chess-fundamentals-1921.pdf",
+    "fenMethod": "transcrição do diagrama por duas leituras de imagem independentes (recortes a 300–1200 dpi, varredura fileira a fileira com conferência de paridade da cor de casa nos quatro cantos). O diagrama não imprime BLACK/WHITE nem coordenadas; a orientação foi fixada pela paridade das casas (canto inferior esquerdo escuro) e confirmada pelo replay. Nenhuma FEN saiu do OCR: o OCR desta página está corrompido justamente nos lances (grava 'sK-Qs' onde está '5 K-Q 5'), e por isso a linha impressa foi decodificada à mão da notação descritiva antes de ser executada.",
+    "qaApplied": "garimpo B5 da F1, 2026-08-18: duas leituras de imagem independentes, cegas ao texto da página; replay de três linhas impressas distintas na mesma FEN — a principal de 10 lances e as duas variantes que o próprio Capablanca escreve (6...K-Q1 com 7.R-R8 mate, e 5...K-K1 com mate no 10) — todas legais e todas terminando em mate; tablebase confirma win-white, DTM 17 meios-lances",
+    "pendingRisk": "nenhum conhecido; a linha do livro leva 10 lances e a tablebase dá mate em 9 — diferença esperada, porque o método de Capablanca é didático e não o mais curto"
+  }
+}

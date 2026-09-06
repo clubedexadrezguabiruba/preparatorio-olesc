@@ -31,6 +31,16 @@ import type { BlocoDiagrama } from "./caderno.ts";
 export type PuzzleImpresso = BlocoDiagrama & {
   readonly id: string;
   readonly rating: number;
+  /**
+   * O puzzle de onde a posição saiu, inteiro.
+   *
+   * Ele viaja junto porque o gabarito precisa da **linha da solução**, e a linha
+   * mora no puzzle, não no diagrama. A alternativa seria o gabarito ir buscar o
+   * puzzle de novo pelo id — uma segunda leitura do banco para responder sobre a
+   * mesma posição, com a chance de as duas leituras discordarem no dia em que o
+   * recorte for refeito.
+   */
+  readonly puzzle: Puzzle;
 };
 
 /** Um puzzle do banco vira um diagrama com a vez e a proveniência. */
@@ -45,10 +55,14 @@ export function paraDiagrama(p: Puzzle): PuzzleImpresso {
     // colado na borda de baixo do tabuleiro.
     orientacao: brancasJogam ? "brancas" : "pretas",
     vez: brancasJogam ? "Brancas jogam." : "Pretas jogam — tabuleiro virado.",
-    fonte: `Lichess ${p.id} · CC0`,
+    // Sem crédito por diagrama. Os puzzles do Lichess são CC0, que não exige
+    // atribuição, e a capa já credita a fonte inteira. Uma linha de crédito
+    // debaixo de cada um dos sessenta custava mais de uma página do caderno —
+    // papel que sai da impressora da escola doze vezes.
     pauta: true,
     id: p.id,
     rating: p.rating,
+    puzzle: p,
   };
 }
 

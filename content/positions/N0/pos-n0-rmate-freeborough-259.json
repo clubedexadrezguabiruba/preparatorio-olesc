@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-rmate-freeborough-259",
+  "fen": "R7/8/8/8/3k4/8/8/7K w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KRK",
+    "revisao"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Edward Freeborough, que a publica como diagrama No. 259 da seção da torre e a atribui à Stratégie Raisonnée como 'the strongest for the Black King' — a cadeia de fonte é anterior a ele",
+    "bibliographicSource": "Freeborough, Chess Endings: A Companion to Chess Openings Ancient and Modern, Kegan Paul, Trench, Trübner & Co., Londres, 1891, p. impressa 122 (PDF p. 127, offset 5), cap. VII 'The Rook', Seção I 'King and Rook against King', diagrama No. 259",
+    "originalGame": "não se aplica — posição teórica de tratado, não vem de partida",
+    "authorComposer": "não se aplica — é a posição de resistência máxima do final rei e torre contra rei, um fato do final e não uma composição autoral; Freeborough a credita à Stratégie Raisonnée",
+    "license": "domínio público (obra de 1891, Reino Unido)",
+    "editionFile": "freeborough-chess-endings-1891.pdf",
+    "fenMethod": "transcrição do bitmap do diagrama, extraído do PDF em resolução nativa com pdfimages (o Freeborough guarda cada diagrama como objeto de imagem próprio, o que dispensa rasterizar a página). Duas leituras de imagem independentes, com a grade das casas medida por perfil de pixels da moldura, e um segundo detector estrutural — maior corrida horizontal de pixels escuros por casa — rodado para não deixar passar peça branca vazada sobre casa hachurada. A legenda 'White plays and mates in 16 moves' está impressa dentro do próprio bitmap. A ORIENTAÇÃO exigiu argumento à parte, e os dois leitores avisaram disso: este diagrama não imprime BLACK/WHITE nem coordenadas. A paridade das casas exclui espelhamento e giros de 90 graus, mas NÃO exclui o giro de 180 graus, que preserva a cor de cada canto e produz uma posição de mesmo DTM. Quem exclui o giro de 180 é o texto: o segundo lance impresso é 'K-Kt2', e o rei branco só alcança g2 partindo de h1; na leitura girada ele estaria em a8, de onde nem g2 nem b2 são lance de rei. As duas conferências juntas — paridade contra espelho, texto contra giro — fixam a orientação.",
+    "qaApplied": "garimpo B5 da F1, 2026-08-18: leitura de imagem cega ao texto da página; a tablebase devolve DTM 31 meios-lances, isto é mate em 16 — exatamente o número impresso no diagrama, e o máximo teórico do final rei e torre contra rei, o que torna a coincidência praticamente impossível por acaso. Conferência independente: a variante que o Freeborough atribui a Berger no mesmo parágrafo (rei branco em a1, torre em b1, rei preto em Q4) também dá mate em 16 quando Q4 é lido como d5, do lado das pretas",
+    "pendingRisk": "é a posição mais difícil que existe neste final (mate em 16, a resistência máxima) — cabe na revisão porque a etapa não tem teto de lances, mas se o QA de aula achar dura demais, o No. 256 do mesmo capítulo é a alternativa branda já localizada"
+  }
+}

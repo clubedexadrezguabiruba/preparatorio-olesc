@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-stalemate-muller-l1-d5",
+  "fen": "4k3/8/5Q2/3K4/8/8/8/8 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KQK",
+    "ensino"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Karsten Müller — Diagrama (5) da Lição 1, que ele apresenta como 'the dangerous transition point from Phase 3 to 4' e onde imprime, ao lado do lance certo, o lance que afoga",
+    "bibliographicSource": "Müller, Chess Endgames for Kids, Gambit Publications, Londres, 2015, p. impressa 13 (PDF p. 14, offset 1), Lição 1 'Mate with the Queen', Diagrama (5)",
+    "originalGame": "não se aplica — quadro de uma linha didática de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar de dama, não é estudo composto",
+    "license": "obra protegida — uso sob o teto da §12.7 (esta aula usa 1 posição desta obra, contra o teto de 2)",
+    "editionFile": "muller-chess-endgames-for-kids.pdf",
+    "fenMethod": "leitura de imagem da página rasterizada a 200 dpi. A moldura de cada um dos quatro diagramas da página foi localizada por varredura de pixels escuros (Diagrama 5: x 317–723, y 1162–1566,5, casa de 50,8 px), e a grade medida foi conferida contra as coordenadas a-h e 1-8 que este livro imprime nas quatro bordas — aqui a orientação é lida, não assumida. A ocupação de cada casa foi medida pela fração de tinta no núcleo central (peça preta 70–80%, peça branca sobre casa clara 33–38%, casa vazia ≤ 6%: não houve faixa intermediária em nenhuma das 64 casas) e a cor da casa pelo anel de borda fora da silhueta. Rei e dama foram separados pelo glifo — coroa com cruz contra coroa larga de pontas — e pela assinatura de tinta.",
+    "qaApplied": "garimpo FN1/B5.3, 2026-09-05: o livro faz três afirmações sobre esta posição e as três se confirmam na FEN transcrita. (1) 'but not 8 Ke6?? stalemate' — 8.Re6 nesta FEN é afogamento conferido pela chess.js. (2) A linha principal 8.Dg7 Rd8 9.Rd6 Re8 10.De7 é legal e termina em xeque-mate. (3) A variante entre parênteses, 9…Rc8 10.Dc7, também é legal e termina em mate. A tablebase confirma win-white com DTM 5 meios-lances, isto é mate em 3 a partir daqui — o que bate com o livro estar no oitavo lance de uma linha mais longa. Três afirmações independentes fechando na mesma posição é trava mais forte que uma; e o OCR do texto desta página é ruim ao ponto de trocar as figuras, por isso a linha foi transcrita pela leitura de imagem e não pelo texto extraído.",
+    "pendingRisk": "nenhum conhecido"
+  }
+}

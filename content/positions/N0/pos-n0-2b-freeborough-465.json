@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-2b-freeborough-465",
+  "fen": "7k/8/8/5KBB/8/8/8/8 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KBBK",
+    "ensino"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Edward Freeborough, que a publica como diagrama No. 465, com a legenda 'White plays and mates in five moves'",
+    "bibliographicSource": "Freeborough, Chess Endings: A Companion to Chess Openings Ancient and Modern, Kegan Paul, Trench, Trübner & Co., Londres, 1891, p. impressa 206 (PDF p. 211, offset 5), cap. X 'Minor Pieces', Seção V 'Two Bishops against King', diagrama No. 465",
+    "originalGame": "não se aplica — posição teórica de tratado, não vem de partida",
+    "authorComposer": "não se aplica — é o quadro final do mate de dois bispos, um fato do final e não uma composição autoral",
+    "license": "domínio público (obra de 1891, Reino Unido)",
+    "editionFile": "freeborough-chess-endings-1891.pdf",
+    "fenMethod": "transcrição do bitmap do diagrama, extraído do PDF em resolução nativa com pdfimages. Leitura de imagem cega ao texto da página: moldura medida por perfil de pixels escuros (campo de 571 × 570 px, casa de 71,4 × 71,25), erosão 4×4 para isolar tinta sólida, e o perfil de cada peça descrito antes de nomeá-la — coroa com cruz patê nos dois reis, mitra com fenda vertical e base bipartida nos dois bispos, o que exclui peão e cavalo. A legenda 'No. 465.' está impressa dentro do próprio recorte, acima do tabuleiro, o que dispensa localizar o diagrama pelo entorno. Este diagrama não imprime coordenadas nem BLACK/WHITE; a paridade (canto inferior esquerdo escuro) exclui espelhamento e quem exclui o giro de 180° é a linha impressa, cujo primeiro lance é 'K-Kt6' — na leitura girada o rei branco estaria em c4, de onde g6 não é lance de rei.",
+    "qaApplied": "garimpo FN1/B5.2, 2026-09-05: falsificada por duas derivações independentes que convergiram. (1) A linha impressa — 1.Rg6 Rg8 2.Bh6 Rh8 3.Bg4 Rg8 4.Be6+ Rh8 5.Bg7 mate — foi usada como filtro sobre uma varredura de todas as posições de rei e dois bispos contra rei em que ela é legal e termina em mate no quinto lance: sobraram 582 candidatas, com o rei branco em uma de sete casas e o preto em f8 ou h8. (2) A leitura de imagem, feita sem conhecimento dessa lista, devolveu Rh8 preto e Rf5, Bg5 e Bh5 brancos — que é uma das 582. A tablebase fecha: win-white, DTM 9 meios-lances, isto é mate em 5, exatamente o número impresso. Toda a defesa preta da linha do livro é forçada — o rei preto tem um único lance legal em cada um dos quatro momentos.",
+    "pendingRisk": "nenhum conhecido"
+  }
+}

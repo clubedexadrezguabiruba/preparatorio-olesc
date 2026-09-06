@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "source": "https://tablebase.lichess.ovh/standard",
+  "fen": "8/8/8/8/4k3/8/8/6KR w - - 0 1",
+  "entry": {
+    "category": "win",
+    "dtm": 27,
+    "checkmate": false,
+    "stalemate": false,
+    "moves": [
+      {
+        "uci": "g1f2",
+        "category": "loss",
+        "dtm": -26,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h1h4",
+        "category": "loss",
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h1h5",
+        "category": "loss",
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h1h8",
+        "category": "loss",
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g1f1",
+        "category": "loss",
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g1g2",
+        "category": "loss",
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g1h2",
+        "category": "loss",
+        "dtm": -28,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h1h2",
+        "category": "loss",
+        "dtm": -30,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h1h3",
+        "category": "loss",
+        "dtm": -30,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h1h6",
+        "category": "loss",
+        "dtm": -30,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h1h7",
+        "category": "loss",
+        "dtm": -30,
+        "checkmate": false,
+        "stalemate": false
+      }
+    ]
+  }
+}

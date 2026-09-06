@@ -1,0 +1,21 @@
+{
+  "id": "pos-n1-king-freeborough-57",
+  "fen": "4k3/8/4K3/4P3/8/8/8/8 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KPK",
+    "pratica"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Edward Freeborough, que a publica como diagrama No. 57, o primeiro da seção de rei e peão contra rei, e escreve dela que é 'a win for White with or without the move'",
+    "bibliographicSource": "Freeborough, Chess Endings: A Companion to Chess Openings Ancient and Modern, Kegan Paul, Trench, Trübner & Co., Londres, 1891, p. impressa 38 (PDF p. 43, offset 5), cap. II 'The Kings in Opposition', Seção I 'King and Pawn against King', diagrama No. 57",
+    "originalGame": "não se aplica — posição teórica de tratado, não vem de partida",
+    "authorComposer": "não se aplica — é a posição elementar do rei na sexta fileira à frente do peão, um fato do final e não uma composição autoral",
+    "license": "domínio público (obra de 1891, Reino Unido)",
+    "editionFile": "freeborough-chess-endings-1891.pdf",
+    "fenMethod": "transcrição do bitmap extraído com pdfimages em resolução nativa, por leitura de imagem cega ao texto. Moldura medida por perfil de escuridão (campo de 568 × 568 px, casa de 71,0 px exatos, sem sobra), varredura das 64 casas pela maior corrida horizontal de tinta: só três casas tinham peça, as outras 61 mediram hachura pura. A identificação do PEÃO em e5 foi o único ponto que exigiu medição extra — base semicircular, corpo bulboso, aba cônica e uma esfera solta acima dela, sem mitra (o que exclui bispo) e sem perfil de cabeça (o que exclui cavalo), com largura de 24 px contra 38–39 px dos dois reis. O recorte não traz coordenadas nem legenda; a paridade (canto inferior esquerdo escuro) exclui espelhamento, e quem exclui o giro de 180° é o texto — as duas linhas impressas começam com 'K-Q6' e 'K-Qsq', e nenhuma delas é legal na leitura girada.",
+    "qaApplied": "garimpo FN1/B5.3, 2026-09-05: a página impressa 38 traz dois diagramas no texto, o No. 57 e o No. 58, e só um bitmap — o que ficou desambiguado sem esforço, porque o autor descreve o No. 58 como 'the men are placed on their original squares' (rei em e1 e peão em e2), que não é o que este bitmap mostra. As duas linhas impressas do No. 57 foram replayadas nesta FEN e as duas são legais: com as pretas na vez, 1…Rd8 2.Rf7 'and the Pawn queens'; com as brancas na vez, 1.Rd6 Rd8 2.e6 Re8 3.e7 Rf7 4.Rd7. A tablebase confirma a afirmação mais forte do autor, a de que a posição ganha **de quem quer que seja a vez**: com as brancas na vez, win, DTM 21; com as pretas na vez, loss para elas, DTM 24.",
+    "pendingRisk": "nenhum conhecido"
+  }
+}

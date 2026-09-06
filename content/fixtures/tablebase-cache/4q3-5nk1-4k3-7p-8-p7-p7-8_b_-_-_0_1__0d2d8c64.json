@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "source": "https://tablebase.lichess.ovh/standard",
+  "fen": "4Q3/5nk1/4K3/7p/8/p7/P7/8 b - - 0 1",
+  "entry": {
+    "category": "loss",
+    "dtm": null,
+    "checkmate": false,
+    "stalemate": false,
+    "moves": [
+      {
+        "uci": "f7g5",
+        "category": "win",
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f7e5",
+        "category": "win",
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f7d6",
+        "category": "win",
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f7h6",
+        "category": "win",
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f7d8",
+        "category": "win",
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "f7h8",
+        "category": "win",
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g7g6",
+        "category": "win",
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g7h6",
+        "category": "win",
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "g7h7",
+        "category": "win",
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "h5h4",
+        "category": "win",
+        "dtm": null,
+        "checkmate": false,
+        "stalemate": false
+      }
+    ]
+  }
+}

@@ -5,22 +5,39 @@ import { Barra } from "@/components/Barra";
 import { perfilAtual } from "@/lib/auth/perfil";
 import {
   fimDaSemana,
+  hojeNoBrasil,
   intervaloPorExtenso,
   porExtenso,
   sabadoDaSemana,
   semanaAtual,
+  somarDias,
 } from "@/lib/curso/calendario";
+import { minutosDeHoje, sequenciaDeDias } from "@/lib/curso/hoje";
+import { minutosPorDia, partidaDoDiaMarcada } from "@/lib/curso/minutos";
+import { aulasPublicadas } from "@/lib/finais/conteudo";
+import { eventosDeAulas, progressoDeFinais } from "@/lib/finais/progresso";
+import { revisoesDevidas } from "@/lib/finais/revisao";
+import {
+  aulasAbertas,
+  CLASSE,
+  CLASSES,
+  daClasse,
+  dominadas,
+  proximaAula,
+} from "@/lib/finais/trilha";
 import { lerIndice } from "@/lib/repertorio/banco";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
 import { aprendidasDaAbertura, aRevisarNaAbertura } from "@/lib/repertorio/treino";
 import { TAREFAS } from "@/lib/tarefas/conteudo";
+import { dicasLidas } from "@/lib/meiojogo/progresso";
 import { estadoDasTarefas } from "@/lib/tarefas/estado";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
 import { daSemana } from "@/lib/tarefas/tarefas";
 import { BLOCOS } from "@/lib/tatica/blocos";
 import { temaAberto } from "@/lib/tatica/conteudo";
-import { progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
+import { progressoPorTema, PUZZLES_POR_TEMA, revisaoDeHoje, temaZerado } from "@/lib/tatica/progresso";
 import { etapaAtual, METAS, NOME_DA_ETAPA } from "@/lib/tatica/serie";
+import { Hoje } from "./Hoje";
 import { Tarefas } from "./Tarefas";
 
 export const metadata: Metadata = { title: "Painel — Preparatório OLESC" };
@@ -44,14 +61,51 @@ export default async function Painel() {
   const semana = semanaAtual();
   const sabado = sabadoDaSemana(semana);
   const tarefasDaSemana = daSemana(TAREFAS, semana);
+  const hoje = hojeNoBrasil();
 
-  const [progresso, marcadas, indice, repertorio] = await Promise.all([
-    progressoPorTema(),
-    tarefasMarcadas(),
+  // As duas últimas são do repertório, e entram na **mesma** rajada: elas
+  // vinham de um `Promise.all` próprio, num ramo paralelo, e deixá-las de fora
+  // custaria dois round-trips em série na página inicial do aluno.
+  const [
+    progresso,
+    marcadas,
+    finais,
+    devidosDeTatica,
+    eventos,
+    lidas,
+    minutos,
+    jogouHoje,
+    indice,
+    repertorio,
+  ] = await Promise.all([
+    progressoPorTema(perfil.id),
+    tarefasMarcadas(perfil.id),
+    progressoDeFinais(perfil.id),
+    revisaoDeHoje(perfil.id),
+    eventosDeAulas(perfil.id),
+    dicasLidas(perfil.id),
+    // Trinta dias bastam para a sequência: o preparatório inteiro tem quatro
+    // semanas, e ninguém precisa ver "48 dias seguidos" numa tela de celular.
+    minutosPorDia(perfil.id, somarDias(hoje, -30)),
+    partidaDoDiaMarcada(perfil.id, hoje),
     lerIndice(),
     progressoDoRepertorio(),
   ]);
-  const estados = estadoDasTarefas(tarefasDaSemana, marcadas, progresso);
+
+  // A trilha de finais: o que está aberto nesta semana, e o que dele já foi
+  // dominado. As duas contas são as mesmas de `/finais` — a tela lá e o cartão
+  // aqui não podem discordar, e é por isso que nenhuma das duas as refaz.
+  const aulasDeFinais = aulasAbertas(aulasPublicadas(), semana);
+  const finaisFeitos = dominadas(aulasDeFinais, finais);
+  const proximoFinal = proximaAula(aulasDeFinais, finais);
+
+  const estados = estadoDasTarefas(tarefasDaSemana, marcadas, progresso, finaisFeitos, lidas);
+
+  // As aulas devidas hoje na revisão espaçada, com o nome que o cartão mostra.
+  const revisoesDeFinais = revisoesDevidas(aulasDeFinais, eventos, hoje).map((devida) => ({
+    id: devida.aula,
+    nome: aulasDeFinais.find((a) => a.id === devida.aula)?.nome ?? devida.aula,
+  }));
 
   const aberturas = indice.length;
   const linhasDoRepertorio = indice.reduce((soma, e) => soma + e.linhas, 0);
@@ -104,6 +158,16 @@ export default async function Painel() {
         </div>
       </header>
 
+      {/* O dia, em primeiro lugar: é o que o aluno abre o site para ver. Os
+          totais do curso vêm depois — eles não mudam o que fazer agora. */}
+      <Hoje
+        minutos={minutosDeHoje(minutos, hoje)}
+        sequencia={sequenciaDeDias(minutos, hoje)}
+        revisaoDeTatica={devidosDeTatica.length}
+        revisaoDeFinais={revisoesDeFinais}
+        partidaFeita={jogouHoje}
+      />
+
       <section className="flex gap-3">
         <Numero rotulo="Puzzles resolvidos" valor={feitos} />
         <Numero
@@ -151,7 +215,7 @@ export default async function Painel() {
         {abertos.map((bloco) => (
           <div key={bloco.id} className="flex flex-col gap-2">
             <p className="text-sm font-semibold text-tinta">
-              <span className="text-tinta-muda tabular-nums">{bloco.id}.</span> {bloco.nome}
+              <span className="text-tinta-fraca tabular-nums">{bloco.id}.</span> {bloco.nome}
             </p>
             <ul className="flex flex-col gap-2">
               {bloco.temas.map((tema) => {
@@ -236,6 +300,70 @@ export default async function Painel() {
           </span>
         </div>
       </section>
+
+      {/* ----------------------------------------------------------------- *
+       * Os finais
+       * ----------------------------------------------------------------- */}
+      {aulasDeFinais.length > 0 ? (
+        <section className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+            <h2 className="rotulo text-tinta-fraca">Curso de finais</h2>
+            <Link
+              href="/finais"
+              className="foco text-sm font-medium text-metodo-tinta hover:underline"
+            >
+              Ver a trilha →
+            </Link>
+          </div>
+
+          <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+            <div className="flex flex-col gap-1.5">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+                <span className="text-sm font-medium text-tinta">Aulas dominadas</span>
+                <span className="text-sm text-tinta-media tabular-nums">
+                  {finaisFeitos.size} de {aulasDeFinais.length}
+                </span>
+              </div>
+              <Barra
+                feitos={finaisFeitos.size}
+                de={aulasDeFinais.length}
+                tom={finaisFeitos.size === aulasDeFinais.length ? "completo" : "metodo"}
+              />
+            </div>
+
+            {/* Por classe, e só as que já têm aula aberta: a classe C com "0 de
+                0" seria uma reprovação por algo que ainda não foi escrito. */}
+            <ul className="flex flex-wrap gap-x-4 gap-y-1">
+              {CLASSES.map((classe) => {
+                const daqui = daClasse(aulasDeFinais, classe);
+                if (daqui.length === 0) return null;
+                const feitasAqui = daqui.filter((a) => finaisFeitos.has(a.id)).length;
+                return (
+                  <li key={classe} className="text-xs text-tinta-fraca tabular-nums">
+                    {CLASSE[classe].nome}:{" "}
+                    <span className="text-tinta-media">
+                      {feitasAqui} de {daqui.length}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {proximoFinal ? (
+              <Link
+                href={`/finais/${proximoFinal.id}`}
+                className="foco w-fit text-sm font-medium text-metodo-tinta hover:underline"
+              >
+                Próxima aula: {proximoFinal.nome} →
+              </Link>
+            ) : (
+              <p className="text-sm text-metodo-tinta">
+                Você dominou tudo o que está aberto. O próximo lote vem no sábado.
+              </p>
+            )}
+          </div>
+        </section>
+      ) : null}
     </main>
   );
 }

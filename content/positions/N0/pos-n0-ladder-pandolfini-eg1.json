@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-ladder-pandolfini-eg1",
+  "fen": "8/8/8/4k3/5R2/8/8/3QK3 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KQRK",
+    "pratica"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Bruce Pandolfini — posição do ENDGAME 1, que ele intitula 'Queen and Rook Roll'",
+    "bibliographicSource": "Pandolfini, Pandolfini's Endgame Course, Fireside / Simon & Schuster, Nova York, 1988, p. impressa 18, Parte 'Pieces in Action', ENDGAME 1 'Queen and Rook Roll'. No PDF da biblioteca, que traz duas páginas impressas por página, o diagrama está na metade esquerda da p. 10, com o cabeçalho de corrida '18 · PANDOLFINI'S ENDGAME COURSE'",
+    "originalGame": "não se aplica — posição teórica de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar de dama e torre, um fato do final e não uma composição autoral",
+    "license": "obra protegida — uso sob o teto da §12.7 (2 posições por obra por aula; esta aula usa 2 do Pandolfini, ENDGAME 1 e ENDGAME 3, que não são diagramas consecutivos)",
+    "editionFile": "pandolfini-endgame-course.pdf",
+    "fenMethod": "derivada da posição **em texto** com que o Pandolfini abre o exercício — 'W: Ke1, Qd1, Rf4 B: Ke5' —, e conferida contra o diagrama por leitura de imagem independente, cega ao texto: grade medida pela moldura (casa de 55,56 × 55,69 px na página rasterizada a 250 dpi), varredura das 64 casas, cor de casa medida no anel de borda. A leitura devolveu Re5 (preto), Tf4, Dd1 e Re1 (brancas) e nenhuma outra casa desviou do padrão. O diagrama imprime coordenadas a-h e 1-8, o que fixa a orientação sem argumento indireto. As casas rivais candidatas (e4, e6, f5, g4, c1, f1) mediram limpas.",
+    "qaApplied": "garimpo FN1/B5.1, 2026-09-05: a linha impressa — 1.Dd4+ Re6 2.Tf6+ Re7 3.Dd6+ Re8 4.Tf8 mate — é inteiramente legal nesta FEN e termina em xeque-mate no quarto lance, como o livro promete. A tablebase confirma win-white com DTM 7 meios-lances, isto é mate em 4 — o mesmo número. Um erro de impressão foi registrado e não corrigido no livro: a solução imprime '2… Ke7+', com um sinal de xeque que um lance de rei preto não pode dar; o leitor de imagem o viu no close e a transcrição aqui usa 'Re7', sem o sinal.",
+    "pendingRisk": "nenhum conhecido; o '+' espúrio do segundo lance preto é erro tipográfico do livro, sem efeito sobre a posição"
+  }
+}

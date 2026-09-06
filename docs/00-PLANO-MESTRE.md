@@ -37,6 +37,57 @@ time).
   divulgados: pensado (equipe) **60 min + 30 s**, rápidas **15 min + 10 s**, blitz
   **3 min + 2 s**.
 
+### Revisão de 2026-09-06 — a turma real, e o que ela mudou
+
+As decisões de 03/09 foram tomadas sobre uma turma imaginada. Em 06/09 o Doug
+descreveu a turma **real**, e ela não é a mesma:
+
+| | Imaginado em 03/09 | Real, medido em 06/09 |
+|---|---|---|
+| Força | 1000–1400 | **600 a 1500** de rápidas no chess.com |
+| Idade | 8 a 15 | **11 a 15** (o mais novo faz 12) |
+| Experiência | primeiro ou segundo torneio | **todos com dois ou mais torneios oficiais** |
+| Treino em casa | "um pouco por dia" | **2 horas por dia, 6 dias por semana, obrigatório** |
+
+As quatro linhas mudam coisas diferentes, e é por isso que a tabela existe. A
+faixa mais larga derruba a ideia de um nível único; a idade e a experiência
+tornam o bloco de "o que é a OLESC" quase supérfluo (eles já jogaram torneio); e
+as 2 horas por dia mudam **toda** meta de casa, que fora dimensionada para uma
+fração disso.
+
+**Decisões do Doug nessa conversa, todas já no código:**
+
+- **Sem faixa por aluno, e sem corte de currículo.** Todos começam de baixo e
+  sobem pela série. Os 36 temas de tática, as 49 aulas de finais e as 30 dicas
+  de meio-jogo ficam inteiros.
+- **A partida vem por último.** Treina-se primeiro, joga-se para aplicar — é a
+  ordem do cartão "Hoje" (`app/painel/Hoje.tsx`), e não uma sugestão.
+- **O aluno vê o que vem depois.** A trilha inteira na tela, numerada, por
+  nível: `/trilha`, com tática, finais e meio-jogo lado a lado.
+- **Meio-jogo entra como módulo próprio**, com posição verificada, quiz e vídeo
+  gratuito. ChessMood fica fora: curso pago.
+- **Repetição espaçada** em tática e em finais — era o que a tela prometia e o
+  banco não fazia.
+
+### A rotina de 2 horas
+
+É a régua que o site mede (`lib/curso/hoje.ts`) e a ordem em que o painel a
+desenha. **Duas sessões, não 120 minutos seguidos:** meia hora de puzzle já
+cansa o olho de uma criança de doze anos, e uma hora seguida vira chute.
+
+| # | Bloco | Minutos | O que é |
+|---|---|---|---|
+| 1 | **Tática** | 45 | A revisão do dia primeiro (o que ele errou, de volta), depois a série do tema |
+| 2 | **Finais** | 30 | Uma aula por dia, ou a revisão de uma já dominada |
+| 3 | **Meio-jogo** | 15 | Uma dica: ler, responder à pergunta, marcar |
+| 4 | **Partida** | 30 | 15+10 no clube do chess.com, anotada — **depois** do treino |
+
+**A meta do dia é 120 minutos; o mínimo que mantém a sequência viva é 60.** Os
+dois números são diferentes de propósito: a sequência premia constância, não
+volume, e um dia curto não pode zerar duas semanas de trabalho. Quem faz a conta
+é o site, a partir do `tempo_ms` que já era gravado desde a primeira migration —
+não há caixinha de "treinei hoje" para o aluno marcar.
+
 ## Regras do torneio (OLESC xadrez)
 
 Fonte: Regulamento Técnico Fesporte 2026, Cap. XXXVII – Xadrez (PDF oficial,
@@ -89,19 +140,34 @@ Dois grupos (M e F) no mesmo conteúdo; separam-se só nas partidas de prática.
 
 | Hora | Bloco |
 |---|---|
-| 0:00–0:25 | **A OLESC explicada:** equipe, 7 rodadas, 3 provas, pontuação triplicada, tabuleiros e cores, desempates. Regras que pegam: anotação, peça tocada, lance ilegal (blitz/rápido), relógio e incremento, como reclamar empate, comportamento. |
-| 0:25–1:25 | **Diagnóstico:** 2 rodadas de 15+10 com **anotação obrigatória**. Professor recolhe as planilhas (viram material do bloco 4 e do relatório). |
-| 1:25–1:40 | Pausa |
-| 1:40–2:25 | **Site + curso de tática:** login, painel, blocos 1–2 (mates curtos, peça de graça, padrões de mate I). 20 min resolvendo em conjunto no projetor, 20 min cada um no celular. |
+| 0:00–0:10 | **A OLESC em dez minutos:** só o que muda a decisão — tabuleiros e cores, a prova de equipe valendo o triplo, e as quatro regras que pegam (anotação, peça tocada, lance ilegal, como se pede empate). **Todos já jogaram torneio oficial**; explicar o que é uma rodada suíça seria repetir o que eles viveram. O resto está no caderno 1, como consulta. |
+| 0:10–1:20 | **Diagnóstico:** 2 rodadas de 15+10 com **anotação obrigatória**. Professor recolhe as planilhas (viram material do bloco das 2:25 e do relatório). Ganhou os 10 minutos que saíram do bloco da OLESC — é o bloco que sempre estoura. |
+| 1:20–1:35 | Pausa |
+| 1:35–2:25 | **Site, a trilha e o curso de tática:** login, painel, e **a trilha** (`/trilha`) — os quatro degraus com tática, finais e meio-jogo lado a lado, e o "você está aqui". Mostrar a trilha antes dos puzzles é o que responde à pergunta que eles fazem no primeiro dia ("o que eu vou aprender?"). Depois blocos 1–2: 20 min no projetor, 20 min no celular. |
 | 2:25–3:10 | **Processo de pensamento:** as 3 perguntas antes de mover (o que o adversário ameaça? minhas peças estão seguras? posso capturar de graça?) — o "contar" de Heisman. Exercício: achar o erro nas próprias partidas do diagnóstico. |
 | 3:10–3:50 | **Prática:** 1 rodada 15+10 aplicando as 3 perguntas, anotada. |
-| 3:50–4:00 | Tarefas da semana; entregar caderno 1 da apostila. |
+| 3:50–4:00 | **A rotina de 2 horas** lida em voz alta, com o cartão "Hoje" no projetor; tarefas da semana; entregar caderno 1 da apostila. |
 
-**Casa S1:** tática blocos 1–2 no site (meta: 60 puzzles, ≥70% acerto); 2 partidas
-15+10 no **clube do chess.com**, anotadas à mão na planilha (data, adversário, a cor
+**Casa S1** (rotina de 2 h × 6 dias): tática blocos 1–2 no site — **120 puzzles**,
+≥70% de acerto, mais a revisão do dia todo dia; **as 2 aulas de finais** que abrem
+no Sábado 1 (classe E — são só duas; ver a nota abaixo); **6 dicas de meio-jogo**
+(as do degrau "até 1000"); **6 partidas de 15+10** no
+clube do chess.com, uma por dia, anotadas à mão na planilha (data, adversário, a cor
 que jogou, resultado); vídeo "Como anotar uma partida" (Rafael Leitão) + 10 min de
-Coordenadas no Lichess; Bartholomew "Undefended Pieces" (legenda automática); ler
-caderno 1 (regras + as 3 perguntas).
+Coordenadas no Lichess; ler caderno 1 (a rotina e as 3 perguntas).
+
+*Por que 120 e não 60:* quarenta e cinco minutos de tática por dia, seis dias,
+resolvem de 100 a 150 puzzles num aluno desta faixa. Sessenta era a meta de uma hora
+por dia — pedir sessenta a quem treina duas horas é ensinar que a tarefa acaba na
+terça.
+
+*E por que só 2 finais na semana 1, com meia hora por dia reservada a eles:* porque
+é o que a trilha abre. As 49 aulas entram por sábado — 2, 8, 12 e 27 —, e na primeira
+semana existem duas. O teste de `content/tarefas.json` reprova a tarefa que pedir
+mais do que abriu, e foi ele que pegou este erro quando a meta foi escrita como 6.
+Na semana 1 o bloco de finais é curto de propósito: as duas aulas, a revisão delas
+três dias depois, e o tempo que sobrar vai para a tática — que é o assunto do Sábado
+1. A partir da semana 2 o bloco enche.
 
 ### Sábado 2 (19/9) — "Abertura sem susto e tática que ganha peça"
 
@@ -115,12 +181,13 @@ caderno 1 (regras + as 3 perguntas).
 | 2:45–3:50 | **Mini-torneio blitz 3+2** (5 rodadas suíço): aprender relógio, incremento, o que é "cair de tempo", quando o lance ilegal perde. Professor observa gestão do relógio. |
 | 3:50–4:00 | Tarefas; caderno 2. |
 
-**Casa S2:** treinador de repertório no site (repetir cada linha até acertar 3×);
-tática blocos 3–5 (meta 80 puzzles); **finais no laboratório do de la Villa**
-(capítulos elementares indicados pelo Doug); **torneio 15+10 do clube no chess.com**
-(quinta à noite) + 1 partida livre anotada; vídeos: Rafael Leitão "Aberturas" (os 2
-do repertório) e Evandro Barbosa "Aberturas em 15 min" (1); Smithy's Opening
-Fundamentals para quem lê inglês.
+**Casa S2** (rotina de 2 h × 6 dias): tática blocos 3–5 — **120 puzzles** mais a
+revisão do dia, que a partir desta semana já tem fila de verdade (os erros do Sábado
+1 vencem aqui); **8 aulas de finais** (o resto da classe D e as primeiras da C);
+**6 dicas de meio-jogo** do degrau 1000–1200; treinador de repertório (repetir cada
+linha até acertar 3×); **torneio 15+10 do clube no chess.com** na quinta à noite, e
+partida diária nos outros dias; vídeos: Rafael Leitão "Aberturas" (os 2 do
+repertório) e Evandro Barbosa "Aberturas em 15 min".
 
 ### Sábado 3 (26/9) — "O que fazer quando não tem tática"
 
@@ -134,10 +201,12 @@ Fundamentals para quem lê inglês.
 | 3:30–3:50 | **Análise pós-partida em duplas** com o motor do site: achar o lance perdedor, não decorar variações. Como usar motor sem virar muleta. |
 | 3:50–4:00 | Tarefas; caderno 3. |
 
-**Casa S3:** tática blocos 6–7 (meta 80); **1 partida 60+30 online anotada** no fim
-de semana (a única longa antes do torneio); **torneio 3+2 do clube no chess.com**; finais
-capítulos indicados; Rafael Leitão "Treinando Finais" (2) e "Treinando o Cálculo"
-(1); ler 1 partida do Chernev no caderno 3.
+**Casa S3** (rotina de 2 h × 6 dias): tática blocos 6–8 — **120 puzzles** mais a
+revisão do dia; **12 aulas de finais** (classe C, os finais de torre que decidem
+partida); **8 dicas de meio-jogo** do degrau 1200–1400; **1 partida 60+30 online
+anotada** no fim de semana (a única longa antes do torneio) e **torneio 3+2 do
+clube**; Rafael Leitão "Treinando Finais" (2) e "Treinando o Cálculo" (1); ler 1
+partida do Chernev no caderno 3.
 
 ### Sábado 4 (3/10) — Simulado de torneio
 
@@ -152,10 +221,22 @@ capítulos indicados; Rafael Leitão "Treinando Finais" (2) e "Treinando o Cálc
 | 3:35–3:55 | **Rotina do dia de torneio:** sono, café, aquecimento com 10 puzzles, checklist da mochila (caneta, planilha, água, lanche), tabela e desempates, falar com o técnico antes de aceitar empate. Debrief do simulado. |
 | 3:55–4:00 | **Escalação definitiva** proposta com base no desempenho medido nos 4 sábados (site gera o ranking); caderno 4 (caderno do torneio). |
 
-**Casa S4 (4–10/10, manutenção):** 20 puzzles/dia no **modo torneio** com relógio;
-repertório 10 min/dia; 1 partida 15+10/dia; **nada novo**. Véspera 10/10: 1 h leve.
-Durante o torneio (11–16/10): 10 puzzles fáceis de aquecimento antes de cada rodada,
-pelo site.
+**Casa S4 (4–10/10, manutenção):** a rotina continua, e o que muda é a **natureza**
+do conteúdo — nada de tema novo de tática e nada de linha nova de repertório. O dia
+vira: **revisão do dia** de tática (a fila espaçada, que nesta semana está cheia), 20
+puzzles no **modo torneio** com relógio, **revisão das aulas de finais já dominadas**
+(a fila de +3, +7 e +14 dias), 10 min de repertório e 1 partida 15+10. Véspera 10/10:
+1 h leve. Durante o torneio (11–16/10): 10 puzzles fáceis de aquecimento antes de
+cada rodada, pelo site.
+
+**A contradição que havia aqui, resolvida.** A trilha abre 27 aulas de finais no
+Sábado 4, e esta seção dizia "nada novo" — as duas coisas não cabiam na mesma semana.
+Elas cabem quando se separa **o que é preparação para a OLESC** do **que é o curso**:
+os 27 finais das classes C e B são o curso que continua *depois* do torneio, e por
+isso abrem — o aluno vê o que vem, e quem quiser adianta. O que a semana de
+manutenção proíbe é **começar assunto novo às vésperas de jogar**, e isso vale para
+tática e repertório, que são o que ele vai usar na rodada de domingo. Está escrito
+assim na tarefa da semana 4, e não só aqui.
 
 ## Aberturas — proposta de repertório do clube (a validar com o Doug)
 
@@ -281,13 +362,22 @@ livros de finais em `Desktop\biblioteca_livros_de_finais`.
 - **Autoridade no servidor** (regra herdada da Academia 64): a conferência do puzzle
   roda no cliente para dar resposta instantânea, mas a **gravação** passa por RPC que
   reconfere o lance contra o JSON do puzzle antes de contar — impede "acerto" forjado.
-- **Rotas:** `/entrar` · `/painel` (aluno: semana atual, tarefas, progresso por
-  tema) · `/tatica`, `/tatica/[tema]`, `/tatica/torneio` · `/aberturas` (treinador
-  de repertório: repetir linha até acertar) · `/torneio` (quiz, anotação,
-  checklists, desempates, cenários de equipe) · `/jogar` (contra Stockfish com
-  relógio) · `/partidas` (enviar PGN, ver análise) · `/professor` (alunos e PINs,
-  lançar tarefas, relatório por aluno e por tema, ranking para escalação, exportar
-  CSV).
+- **Rotas.** No ar hoje: `/entrar` · `/painel` (semana atual, cartão "Hoje" com a
+  rotina de 2 h, tarefas, progresso por tema) · `/trilha` (o mapa por nível, com
+  tática, finais e meio-jogo lado a lado) · `/tatica`, `/tatica/[tema]`,
+  `/tatica/revisao` · `/finais`, `/finais/[aula]` · `/meio-jogo`,
+  `/meio-jogo/[dica]` · `/professor`, `/professor/[aluno]`. Ainda por escrever:
+  `/aberturas` (treinador de repertório), `/torneio` (quiz, anotação, checklists,
+  desempates), `/jogar` e `/partidas`.
+- **Meio-jogo — o módulo sem juiz de máquina.** Uma aula de finais é certificada
+  pela tablebase Syzygy; uma posição de meio-jogo tem 24 peças e nenhuma máquina
+  diz qual é o plano. Chamar isso de aula, com selo de domínio, seria vender
+  julgamento como fato. Então a unidade é a **dica**: técnica em uma frase,
+  diagrama com legenda, "o que procurar", um quiz cujo juiz é o autor (e a tela
+  escreve isso), e um vídeo gratuito. O aluno declara que leu, como na aula de
+  leitura. O que **é** conferido por máquina é a legenda: cada afirmação dela —
+  coluna aberta, peão isolado, posto, cor das casas — é medida por chess.js em
+  `lib/meiojogo/afirmacoes.ts`, e o gate reprova a que for falsa.
 - **Conteúdo é dado:** puzzles em JSON; textos dos temas, repertório (PGN + notas),
   quiz e checklists em arquivos `content/*.json|md` validados por zod
   (`npm run validate:content`, versão simplificada da do Lab).

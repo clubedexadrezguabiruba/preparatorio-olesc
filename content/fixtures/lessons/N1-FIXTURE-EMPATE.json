@@ -1,0 +1,74 @@
+{
+  "id": "N1-FIXTURE-EMPATE",
+  "title": "Fixture: o rei que segura o empate",
+  "orientation": "black",
+  "domainCriterion": "D1",
+  "status": "draft",
+  "errors": {},
+  "fallbacks": {
+    "winningOffMethod": "Esse lance ainda segura o empate, mas não é o método da aula.",
+    "losesWin": "Esse lance joga o empate fora: depois dele o peão promove.",
+    "methodAlternative": "Esse lance é a mesma ideia por outro caminho."
+  },
+  "stages": {
+    "example": {
+      "scenes": [
+        {
+          "id": "segurar",
+          "title": "A oposição segura o peão",
+          "positionId": "pos-fx-kpk-oposicao",
+          "intro": "As pretas não têm peça nenhuma e mesmo assim não perdem: basta o rei ficar na frente do peão e tomar a oposição a cada lance.",
+          "ends": "draw-secured",
+          "steps": [
+            {
+              "move": "e8e7",
+              "text": "O rei preto vai ao encontro do branco: reis na mesma coluna, com uma casa entre eles. Isso é a oposição, e quem tem de mover é quem cede."
+            },
+            {
+              "move": "e5d5",
+              "text": "O rei branco desvia para o lado, tentando entrar por d6."
+            },
+            {
+              "move": "e7d7",
+              "text": "O rei preto acompanha e toma a oposição de novo. Daqui não há entrada: a posição é empate pela tablebase."
+            }
+          ]
+        }
+      ]
+    },
+    "guided": {
+      "positionId": "pos-fx-kpk-oposicao",
+      "goal": "draw",
+      "root": "n1",
+      "nodes": {
+        "n1": {
+          "fen": "4k3/8/8/4K3/4P3/8/8/8 b - - 0 1",
+          "hint": "Um lance só empata. Vá ao encontro do rei branco, na mesma coluna.",
+          "highlights": ["e7"],
+          "expects": [
+            {
+              "moves": ["e8e7"],
+              "reply": "e5d5",
+              "next": "n2",
+              "feedback": "Oposição tomada. O rei branco desvia para d5 e tenta entrar pelo outro lado."
+            }
+          ],
+          "winningMoves": ["e8e7"]
+        },
+        "n2": {
+          "fen": "8/4k3/8/3K4/4P3/8/8/8 b - - 2 2",
+          "hint": "De novo: acompanhe o rei branco e fique de frente para ele.",
+          "highlights": ["d7"],
+          "expects": [
+            {
+              "moves": ["e7d7"],
+              "ends": "draw-secured",
+              "feedback": "Empate segurado. O rei branco não tem por onde entrar, e o peão não anda sozinho."
+            }
+          ],
+          "winningMoves": ["e7d7"]
+        }
+      }
+    }
+  }
+}

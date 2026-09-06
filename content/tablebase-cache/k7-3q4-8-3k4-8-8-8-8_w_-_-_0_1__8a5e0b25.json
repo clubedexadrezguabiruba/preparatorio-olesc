@@ -1,0 +1,195 @@
+{
+  "schema": 1,
+  "source": "https://tablebase.lichess.ovh/standard",
+  "fen": "k7/3Q4/8/3K4/8/8/8/8 w - - 0 1",
+  "entry": {
+    "category": "win",
+    "dtm": 3,
+    "checkmate": false,
+    "stalemate": false,
+    "moves": [
+      {
+        "uci": "d5c6",
+        "category": "loss",
+        "dtm": -2,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7b5",
+        "category": "loss",
+        "dtm": -4,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7e7",
+        "category": "loss",
+        "dtm": -4,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7f7",
+        "category": "loss",
+        "dtm": -4,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7g7",
+        "category": "loss",
+        "dtm": -4,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7h7",
+        "category": "loss",
+        "dtm": -4,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d5c5",
+        "category": "loss",
+        "dtm": -4,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d5d6",
+        "category": "loss",
+        "dtm": -4,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7c6",
+        "category": "loss",
+        "dtm": -6,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7d8",
+        "category": "loss",
+        "dtm": -6,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d5c4",
+        "category": "loss",
+        "dtm": -6,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d5d4",
+        "category": "loss",
+        "dtm": -6,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d5e4",
+        "category": "loss",
+        "dtm": -6,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d5e5",
+        "category": "loss",
+        "dtm": -6,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d5e6",
+        "category": "loss",
+        "dtm": -6,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7h3",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7a4",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7g4",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7f5",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7d6",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7e6",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7c8",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7e8",
+        "category": "loss",
+        "dtm": -8,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7c7",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true
+      },
+      {
+        "uci": "d7a7",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d7b7",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      }
+    ]
+  }
+}

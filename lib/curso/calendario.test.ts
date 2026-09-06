@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   COMECO_DO_TORNEIO,
+  diasEntre,
   fimDaSemana,
   hojeNoBrasil,
   intervaloPorExtenso,
@@ -9,6 +10,7 @@ import {
   SABADOS,
   sabadoDaSemana,
   semanaAtual,
+  somarDias,
 } from "./calendario.ts";
 
 test("os quatro sábados são mesmo sábados", () => {
@@ -51,6 +53,17 @@ test("o fuso é o de Guabiruba, e não o do servidor da Vercel", () => {
   const sextaANoite = new Date("2026-09-19T00:30:00Z");
   assert.equal(hojeNoBrasil(sextaANoite), "2026-09-18");
   assert.equal(semanaAtual(hojeNoBrasil(sextaANoite)), 1);
+});
+
+test("somar dias atravessa o mês e volta a véspera", () => {
+  // A revisão espaçada é literalmente esta conta: "errou dia 30, volta dia 2".
+  assert.equal(somarDias("2026-09-30", 2), "2026-10-02");
+  assert.equal(somarDias("2026-09-12", 7), "2026-09-19");
+  assert.equal(somarDias("2026-10-01", -1), "2026-09-30");
+  assert.equal(somarDias("2026-09-12", 0), "2026-09-12");
+  assert.equal(diasEntre("2026-09-12", "2026-09-19"), 7);
+  assert.equal(diasEntre("2026-09-19", "2026-09-12"), -7);
+  assert.equal(diasEntre("2026-09-30", "2026-10-02"), 2);
 });
 
 test("as datas por extenso", () => {

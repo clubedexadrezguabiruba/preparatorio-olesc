@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-rmate-muller-l3-d1",
+  "fen": "8/8/8/8/4k3/8/8/6KR w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KRK",
+    "ensino"
+  ],
+  "provenance": {
+    "externalHumanSource": "Karsten Müller — Diagrama (1) da Lição 3, \"Mate with the Rook: Method 1\", cujo lema impresso é a prisão retangular que encolhe",
+    "bibliographicSource": "Müller, Chess Endgames for Kids, Gambit Publications, Londres, 2015, p. impressa 16 (PDF p. 17, offset 1), Lição 3 \"Mate with the Rook: Method 1\", Diagrama (1), legenda \"White to move\"",
+    "originalGame": "não se aplica — posição de ensino de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar didático, não é estudo composto",
+    "license": "obra protegida por direito autoral; uso como citação de posição isolada, com teto de 2 posições por aula (§12.7 do currículo). O texto da aula é original em português; nada da prosa do autor é reproduzido.",
+    "editionFile": "muller-chess-endgames-for-kids.pdf",
+    "fenMethod": "transcrição do diagrama por leitura de imagem, com a grade ancorada nos 32 rótulos impressos do próprio diagrama (a–h nas duas bordas horizontais, 8–1 nas duas verticais) e cada pixel de tinta atribuído por Voronoi à casa mais próxima nessa grade; confirmada pelo replay da linha impressa da lição.",
+    "qaApplied": "garimpo de 2026-08-19, **com a terceira camada refeita em 2026-08-24** (ver adiante). (1) Duas leituras independentes concordaram em rei preto e4, rei branco g1, torre branca h1. (2) O replay dos 29 meios-lances impressos (1 Kf2 Kf4 … 15 Ra6#) roda inteiro e termina em mate sobre esta FEN, e o **espelho** quebra já no primeiro lance (com a torre em a1 e o rei em b1, o Kf2 impresso é ilegal) — é o que exclui o giro e o espelhamento. A variação impressa 10...Kc8 11 Rb6 Kd8 12 Rb8# também fecha em mate. (3) O replay **não** separa g1 de f1 nem e4 de e5: medido em 2026-08-24, as quatro combinações rodam a linha inteira até o mesmo mate. Quem separa é a leitura da grade, e ela foi refeita do zero nessa data, ancorada **só nos rótulos impressos** — nenhuma casa atribuída por sombreado. O centroide de tinta do rei branco cai na coordenada de coluna 6,017, a 0,017 casa do centro de g1 e a 1,017 de f1 (razão 60×); o do rei preto cai na coordenada de fileira 4,111, a 0,111 da fileira 4 e a 1,111 da fileira 5 (razão 10×), e esse desvio de +0,11 é o viés do próprio glifo de rei, calibrado em quatro reis de duas páginas diferentes. Nenhuma peça encosta em fronteira de casa. Tablebase: win-white, DTM 27 meios-lances — 14 lances contra os 15 do método do autor, coerente com ele escrever que o método não busca o mate mais curto. **O que foi corrigido em 2026-08-24:** o registro anterior dizia que este livro hachura as casas claras e usava isso como prova. É o contrário — ele hachura as escuras, medido nos quatro cantos de quatro tabuleiros de duas páginas. O erro tem causa nomeada: a casa h1 mede 207,8 de cinza quando medida inteira, indistinguível de hachura, **porque a torre branca está em cima dela**; medida pelo anel de borda dá 246,7, que é papel liso. Medir cor de casa pela casa inteira, e não pelo anel, foi o que inverteu a convenção. A FEN não mudou.",
+    "pendingRisk": "nenhum conhecido"
+  },
+  "status": "approved"
+}

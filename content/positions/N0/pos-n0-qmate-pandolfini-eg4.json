@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-qmate-pandolfini-eg4",
+  "fen": "k7/3Q4/8/3K4/8/8/8/8 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KQK",
+    "ensino"
+  ],
+  "provenance": {
+    "externalHumanSource": "Bruce Pandolfini — \"ENDGAME 4\", intitulado pelo autor Closing In, cuja fórmula impressa é o \"one, two, three\": o rei perdedor preso na borda (1), a dama na fileira vizinha à borda (2) e o rei atacante na fileira seguinte, defendendo a dama (3)",
+    "bibliographicSource": "Pandolfini, Pandolfini's Endgame Course, Fireside/Simon & Schuster, Nova York, 1988, p. impressa 21 (PDF p. 11 — a digitalização traz duas páginas impressas por página de PDF, aqui as 20 e 21; o diagrama está na 21), seção \"Pieces in Action\", Endgame 4",
+    "originalGame": "não se aplica — posição de exercício de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar didático, não é estudo composto",
+    "license": "obra protegida por direito autoral; uso como citação de posição isolada, com teto de 2 posições por aula (§12.7 do currículo). O texto da aula é original em português; nada da prosa do autor é reproduzido.",
+    "editionFile": "pandolfini-endgame-course.pdf",
+    "fenMethod": "posição dada pelo autor como lista de peças em texto — \"W: Kd5, Qd7 B: Ka8\" —, conferida contra o desenho por leitura de imagem cega à lista, porque o OCR desta obra troca letra por dígito em silêncio (foi o que quase estragou a posição do Endgame 9, na aula da torre).",
+    "qaApplied": "garimpo de 2026-08-24, em três camadas. (1) A lista impressa dá Kd5, Qd7, Ka8. (2) A leitura de imagem, cega à lista, confirmou as três casas com a grade ancorada nos rótulos impressos — os oito dígitos da borda esquerda e as oito letras da borda inferior caem no centro das linhas e colunas previstas, com desvio máximo de 0,04 casa — e mediu que as três peças cabem inteiras dentro da própria casa (centroide vertical entre 0,46 e 0,51), o que exclui a confusão d7/d6 e d5/d4. Essa checagem era necessária: a linha impressa **não** separa Kd5 de Kd6, porque o mate sai igual das duas. (3) O replay de 1.Kc6 Kb8 2.Qb7 mate roda legal e termina em mate, e depois de 1.Kc6 as pretas têm **um único** lance legal. Tablebase: win-white, DTM 3 meios-lances — mate em 2, exatamente o que o autor promete.",
+    "pendingRisk": "nenhum conhecido"
+  },
+  "status": "approved"
+}

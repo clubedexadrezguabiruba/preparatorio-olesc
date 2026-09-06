@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-qmate-freeborough-145",
+  "fen": "8/8/4k3/8/8/8/8/KQ6 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KQK",
+    "pratica"
+  ],
+  "provenance": {
+    "externalHumanSource": "Edward Freeborough — diagrama No. 145, que ele atribui a Durand e Preti como \"a posição mais forte para o rei sozinho\". A legenda impressa é \"White to play and mate in 9 moves\", e o texto registra a divergência: os dois autores franceses davam mate em 10, e Freeborough apresenta a linha de 9",
+    "bibliographicSource": "Freeborough, Chess Endings: A Companion to Chess Openings Ancient and Modern, Kegan Paul, Trench, Trübner & Co., Londres, 1891, p. impressa 75 (PDF p. 80, offset 5), Cap. V \"The Queen\", Seção I \"Power of the Queen\", diagrama No. 145",
+    "originalGame": "não se aplica — posição de análise de manual, não vem de partida",
+    "authorComposer": "Durand e Preti, a quem Freeborough credita a posição como a de resistência máxima do rei sozinho",
+    "license": "domínio público (obra de 1891); não gasta teto de citação",
+    "editionFile": "freeborough-chess-endings-1891.pdf",
+    "fenMethod": "o diagrama é objeto de imagem próprio no PDF, extraído na resolução nativa por pdfimages (§3.2.2 do SOURCE-CORPUS); leitura cega ao texto, com a grade medida por perfil de intensidade e cada peça confirmada pela maior sequência horizontal de tinta no miolo de 60% da casa (peça 19 a 40 px contra 0 a 3 px da hachura). A orientação, que o diagrama não rotula, foi decidida pelo replay da linha impressa.",
+    "qaApplied": "garimpo de 2026-08-24, em quatro camadas. (1) A leitura de imagem devolveu as três peças sem ambiguidade de casa (centroides a menos de 0,09 casa do centro) e declarou a orientação indecidida: o diagrama não imprime a-h, nem 1-8, nem BLACK/WHITE, e o giro de 180° preserva a cor dos quatro cantos. (2) Quem decidiu foi a linha impressa: na leitura girada, o primeiro lance do autor (1.Q-QKt6ch = Qb6+) é ilegal, porque a dama não alcança b6; na leitura com as brancas embaixo ele é legal e dá xeque, e a alternativa que o autor oferece na mesma frase (1.Q-KKt6ch = Qg6+) também. (3) Os seis lances seguintes da linha impressa rodam todos legais. (4) Tablebase: win-white, DTM 17 meios-lances — mate em 9, exatamente o número da legenda. Isso resolve a divergência impressa na própria página a favor de Freeborough e contra Durand e Preti. Registre-se, porém, que a posição não é a de resistência máxima do final: o máximo teórico de KQK é 10 lances, e esta aguenta 9.",
+    "pendingRisk": "nenhum conhecido"
+  },
+  "status": "approved"
+}

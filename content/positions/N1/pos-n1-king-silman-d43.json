@@ -1,0 +1,21 @@
+{
+  "id": "pos-n1-king-silman-d43",
+  "fen": "8/8/8/3k4/3P4/3K4/8/8 b - - 0 1",
+  "expectedResult": "draw",
+  "tags": [
+    "KPK",
+    "ensino"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Jeremy Silman — Diagrama 43, o primeiro diagrama da seção em que ele manda o aluno levar o rei para o centro, e que ele apresenta como 'a critically important endgame that occurs all the time'",
+    "bibliographicSource": "Silman, Silman's Complete Endgame Course: From Beginner to Master, Siles Press, Los Angeles, 2007, p. impressa 41 (PDF p. 55, offset 14), Parte Dois \"Endgames for Class 'E' (1000-1199)\", seção 'Understanding the King' / 'Use Your King!', Diagrama 43, com a legenda 'Black to move'",
+    "originalGame": "não se aplica — posição teórica de manual, não vem de partida",
+    "authorComposer": "não se aplica — é a posição elementar de rei e peão contra rei, um fato do final e não uma composição autoral",
+    "license": "obra protegida — uso sob o teto da §12.7 (esta aula usa 1 posição desta obra, contra o teto de 2)",
+    "editionFile": "silman-complete-endgame-course.pdf",
+    "fenMethod": "leitura de imagem da página rasterizada a 200 dpi, cega à linha de lances impressa no texto. Moldura medida por varredura de pixels (área de jogo de 342 × 342 px, casa de 42,75 px, quadrada), varredura das 64 casas comparando o núcleo com o anel de borda: só três casas destoaram, e todas as demais ficaram em 0% (claras) ou na faixa da hachura (escuras). ESTE DIAGRAMA IMPRIME COORDENADAS a-h e 1-8 nas bordas, e por isso a orientação foi lida e não assumida — não há aqui a ambiguidade de giro de 180° que os diagramas do Freeborough impõem. A legenda 'Black to move', também impressa, fixa a vez.",
+    "qaApplied": "garimpo FN1/B5.3, 2026-09-05: a linha impressa completa — 1…Rd6 2.Re4 Re6 3.d5+ Rd6 4.Rd4 Rd7 5.Re5 Re7 6.d6+ Rd7 7.Rd5 Rd8 8.Rc6 Rc8 9.d7+ Rd8 10.Rd6 afogamento — é legal do começo ao fim nesta FEN e termina em afogamento, exatamente como o autor escreve. Mais: cada um dos dezoito meios-lances da linha foi conferido contra a tablebase, e **todos** preservam o empate — dos dois lados. A tablebase confirma draw, DTM 0: as brancas têm um peão a mais e não ganham.",
+    "pendingRisk": "nenhum conhecido"
+  }
+}

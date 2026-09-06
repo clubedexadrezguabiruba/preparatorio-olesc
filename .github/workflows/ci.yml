@@ -38,6 +38,23 @@ jobs:
       - name: Testes
         run: npm test
 
+      # A verdade xadrezística das aulas de finais: cada posição legal, cada
+      # lance do método ganhando de fato, cada nó terminal dando mate — julgado
+      # contra a tablebase Syzygy.
+      #
+      # **Roda sem rede, e é isso que o torna um gate.** As respostas da
+      # tablebase estão versionadas em `content/tablebase-cache/`; o validador
+      # só sai para a internet com `--refresh-cache`, que ninguém passa aqui.
+      # Um gate que depende da rede fica vermelho por motivo alheio ao código, e
+      # em pouco tempo todo mundo aprende a ignorá-lo.
+      #
+      # O irmão dele, `npm run validate:mutations` (30 estragos plantados que
+      # precisam ficar vermelhos, cada um pelo código de erro certo), roda na
+      # máquina da autoria: são 30 execuções do validador, minutos de CI para
+      # provar algo que só muda quando o próprio gate muda.
+      - name: Conteúdo (tablebase, offline)
+        run: npm run validate:content
+
       - name: Lint
         run: npm run lint
 
