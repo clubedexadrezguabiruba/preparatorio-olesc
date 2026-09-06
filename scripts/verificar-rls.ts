@@ -24,7 +24,9 @@
  *      puzzle — a tabela não tem política de `insert` para ninguém, e quem
  *      grava é a server action com a chave de serviço, depois de reconferir o
  *      lance. O mesmo vale para `repertorio_progresso`, pelo mesmo motivo: o
- *      lance certo da linha está no JSON, e o servidor sabe conferi-lo;
+ *      lance certo da linha está no JSON, e o servidor sabe conferi-lo — e,
+ *      gravado pela chave de serviço, o progresso de um aluno **só é lido por
+ *      ele**, senão o site diria a cada um quantas linhas a turma inteira sabe;
  *   5. na tarefa de casa, ao contrário, o aluno **grava a dele** — e não
  *      consegue gravar no nome do outro, nem ler o que o outro marcou, nem
  *      desmarcar o que o outro fez.
@@ -155,7 +157,7 @@ try {
     .insert({ aluno: criados[0], puzzle_id: "00008", tema: "fork", acertou: true, tempo_ms: 1 });
   afirmar(Boolean(erroInsert), `o insert do aluno é recusado (${erroInsert?.code ?? "sem erro!"})`);
 
-  console.log("\n4b. Gravar progresso de repertório também é recusado");
+  console.log("\n4b. No repertório o aluno também não grava — e só lê o dele");
   // A mesma decisão de `tentativas_puzzle`, e pelo mesmo motivo: o lance certo
   // da linha está no JSON, e o servidor sabe conferi-lo. Se o `upsert` fosse do
   // aluno, "aprendi as 42 linhas" seria uma chamada de rede a escrever.
@@ -174,6 +176,23 @@ try {
     .select("*", { count: "exact", head: true })
     .eq("aluno", criados[0]);
   afirmar(linhasDeRepertorio === 0, `nada foi gravado (achou ${linhasDeRepertorio})`);
+
+  // Agora a chave de serviço grava — que é o único caminho que existe — e a
+  // pergunta passa a ser a da **leitura**: o progresso de um aluno é dele.
+  // Sem isto, o site diria a cada aluno quantas linhas a turma inteira sabe.
+  await admin.from("repertorio_progresso").insert([
+    { aluno: criados[0], linha: "brancas-petroff-934fd6a6", acertos_seguidos: 3, tentativas: 3 },
+    { aluno: criados[1], linha: "pretas-colle-f0590dc0", acertos_seguidos: 1, tentativas: 1 },
+  ]);
+
+  const { data: repertorioDeA } = await alunoA
+    .from("repertorio_progresso")
+    .select("aluno, linha");
+  afirmar(repertorioDeA?.length === 1, `A vê 1 linha de repertório (viu ${repertorioDeA?.length})`);
+  afirmar(
+    repertorioDeA?.[0]?.linha === "brancas-petroff-934fd6a6",
+    "e a linha que A vê é a de A",
+  );
 
   console.log("\n5. Na tarefa de casa, o aluno grava — a sua, e só a sua");
   const alunoB = await entrar("zz.teste.b", PIN);
