@@ -17,6 +17,16 @@ const nextConfig: NextConfig = {
    */
   outputFileTracingIncludes: {
     "/tatica/[tema]": ["./public/puzzles/**"],
+    // O mesmo, para as 42 linhas do repertório: `lib/repertorio/banco.ts` as lê
+    // por caminho, então o Next não as enxerga. São poucos KB — o que se compra
+    // com eles é o servidor julgar os lances antes de gravar, em vez de
+    // acreditar num "acertei" vindo do navegador.
+    "/aberturas": ["./public/repertorio/**"],
+    "/aberturas/[cor]/[abertura]": ["./public/repertorio/**"],
+    // O painel entra na lista porque também conta linhas aprendidas, e para
+    // isso lê o `index.json`. Esquecê-lo aqui derrubaria a **página inicial do
+    // aluno** na Vercel, que é o pior lugar para um ENOENT.
+    "/painel": ["./public/repertorio/**"],
   },
   /**
    * O motor da etapa 5 são 7,3 MB servidos de `public/engine/`. O padrão do

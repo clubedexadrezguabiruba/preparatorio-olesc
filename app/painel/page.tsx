@@ -10,6 +10,9 @@ import {
   sabadoDaSemana,
   semanaAtual,
 } from "@/lib/curso/calendario";
+import { lerIndice } from "@/lib/repertorio/banco";
+import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
+import { aprendidasDaAbertura } from "@/lib/repertorio/treino";
 import { TAREFAS } from "@/lib/tarefas/conteudo";
 import { estadoDasTarefas } from "@/lib/tarefas/estado";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
@@ -42,8 +45,20 @@ export default async function Painel() {
   const sabado = sabadoDaSemana(semana);
   const tarefasDaSemana = daSemana(TAREFAS, semana);
 
-  const [progresso, marcadas] = await Promise.all([progressoPorTema(), tarefasMarcadas()]);
+  const [progresso, marcadas, indice, repertorio] = await Promise.all([
+    progressoPorTema(),
+    tarefasMarcadas(),
+    lerIndice(),
+    progressoDoRepertorio(),
+  ]);
   const estados = estadoDasTarefas(tarefasDaSemana, marcadas, progresso);
+
+  const aberturas = indice.length;
+  const linhasDoRepertorio = indice.reduce((soma, e) => soma + e.linhas, 0);
+  const linhasAprendidas = indice.reduce(
+    (soma, e) => soma + aprendidasDaAbertura(repertorio, e.cor, e.abertura),
+    0,
+  );
 
   const abertos = BLOCOS.map((bloco) => ({
     ...bloco,
@@ -168,6 +183,42 @@ export default async function Painel() {
           Dentro de cada tema os puzzles vêm em ordem de dificuldade: começam fáceis e vão
           subindo. Os blocos seguintes abrem nos próximos sábados.
         </p>
+      </section>
+
+      {/* ----------------------------------------------------------------- *
+       * O repertório
+       *
+       * Irmã da seção de tática, e com a mesma forma — mas a barra mede outra
+       * coisa: aqui conta **linha aprendida**, três acertos seguidos, e não
+       * linha tentada. Na tática um puzzle tentado é um puzzle pensado; aqui o
+       * exercício é decorar, e "abri a linha" não quer dizer nada.
+       * ----------------------------------------------------------------- */}
+      <section className="flex flex-col gap-3">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+          <h2 className="rotulo text-tinta-fraca">Repertório do clube</h2>
+          <Link
+            href="/aberturas"
+            className="foco text-sm font-medium text-metodo-tinta hover:underline"
+          >
+            Treinar →
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+            <p className="text-sm font-medium text-tinta">
+              {aberturas} aberturas, de brancas e de pretas
+            </p>
+            <Barra
+              feitos={linhasAprendidas}
+              de={linhasDoRepertorio}
+              tom={linhasAprendidas >= linhasDoRepertorio ? "completo" : "metodo"}
+            />
+          </div>
+          <span className="w-28 shrink-0 text-right text-xs text-tinta-fraca tabular-nums">
+            {linhasAprendidas}/{linhasDoRepertorio} aprendidas
+          </span>
+        </div>
       </section>
     </main>
   );
