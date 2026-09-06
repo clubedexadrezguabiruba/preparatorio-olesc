@@ -54,8 +54,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "8": "A dama ataca o cavalo de e4 e o peao de f7 ao\nmesmo tempo. O cavalo tem de recuar.",
-      "14": "O cavalo defende a nossa dama, entao a troca de damas nao assusta: se ele\ntrocar, recapturamos com o cavalo caindo em d5, e de la ele ataca c7 e o bispo\nde e7 ao mesmo tempo."
+      "4": "O …d6 dele defende o peão de e5, mas tranca a saída do\npróprio bispo de f8. Nós batemos no centro na hora, sem esperar: ou ele come em\nd4 e nos entrega o meio do tabuleiro, ou fica apertado por muitos lances.",
+      "8": "A dama ataca o cavalo de e4 e o peão de f7 ao\nmesmo tempo. O cavalo tem de recuar.",
+      "14": "O cavalo defende a nossa dama, então a troca de damas não assusta: se ele\ntrocar, recapturamos com o cavalo caindo em d5, e de lá ele ataca c7 e o bispo\nde e7 ao mesmo tempo."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Defesa do Peão Rei vs 1.e4 e5 2.Cf3'"
   },
@@ -114,7 +115,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "14": "O desenho de sempre:\nbispo em f4, dama em d2, roque grande. Os dois reis foram para lados opostos, e\nquem chegar primeiro com os peoes leva a partida."
+      "4": "O …d6 dele defende o peão de e5, mas tranca a saída do\npróprio bispo de f8. Nós batemos no centro na hora, sem esperar: ou ele come em\nd4 e nos entrega o meio do tabuleiro, ou fica apertado por muitos lances.",
+      "10": "Comece a reconhecer o desenho: bispo em f4\nmirando o peão de d6, dama em d2 atrás dele e a casa c1 livre para a torre. É a\nmesma montagem da Escocesa e da Petroff — três aberturas diferentes, um plano\nsó.",
+      "14": "O desenho de sempre:\nbispo em f4, dama em d2, roque grande. Os dois reis foram para lados opostos, e\nquem chegar primeiro com os peões leva a partida."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Defesa do Peão Rei vs 1.e4 e5 2.Cf3'"
   }

@@ -509,6 +509,51 @@ de olhar, botão "Próximo" (ou a tecla →), e o comentário do professor onde
 existe. Cobrar de cara uma linha que o aluno nunca viu não é treino, é
 adivinhação. O botão "Ver a linha" continua disponível depois, e não grava nada.
 
+**Os comentários, depois do B6.** Os 12 PGN foram acentuados — 427 trocas, entre
+elas `nós` por `nos` no sujeito e `é` por `e`, que a lista original não previa —
+e ganharam **32 textos novos no meio das linhas**. Antes, 28 das 42 linhas
+andavam até a última tela sem uma palavra; agora nenhuma anda. Os comentários
+intermediários foram de 14 para 61 e a maior corrida de telas mudas caiu de 15
+para 9. Vários textos caem em lance de **tronco** e por isso valem por muitos: o
+`4.Cxd4` da Escocesa aparece em quatro linhas, o `2…c5` da Londres em duas. O id
+é hash dos lances, então acentuar e comentar não órfã progresso nenhum — os 42
+ids são byte a byte os de antes.
+
+**⚠ Os comentários não carregam o raciocínio das fontes.** Este é o buraco
+aberto do B6, e ele é maior do que parece. O que vem do Krikor e do Grigoryan
+são os **lances**; a justificativa de cada lance foi escrita aqui, olhando o
+tabuleiro. Isso derrota metade do motivo de usar os cursos deles — eles
+explicam **por quê**, e esse porquê está sendo jogado fora.
+
+**A causa é o importador.** `importar-fontes.ts` corta a prosa ao gerar os
+rascunhos: os 20 arquivos de `content/repertorio/rascunhos/` têm **zero**
+comentários. Quem escreveu os textos nunca teve o argumento da fonte na mão. Os
+originais estão intactos fora do Git (`REPERTORIO_FONTES`), com **452
+explicações**: Krikor 332 — Philidor 119, Alapin-d5 52, Escandinava 50,
+Alapin-Cf6 36, Alapin-alternativas 33, Escocesa 25, Petroff 17 — e Grigoryan
+120 — Escocesa 31, Sidelines 58, English 30, Rossolimo 11, Petroff 13,
+Caro-Kann 8, Dragão 4, Francesa 3. O Kushager é o único que vem sem prosa no
+PGN; a dele está no site do curso.
+
+**Quatro dos 103 já foram corrigidos**, em 6/9/2026, e servem de amostra do
+tamanho do erro. Em `4…Cbd7` do Manhattan o texto dizia que o cavalo evita
+trancar o peão de c7; a razão do Kushager é outra e melhor — sem o cavalo em
+d7, o `Da4` das brancas vem **com xeque** e nos obriga a `…Cc6`, e é o xeque
+que estraga tudo. No `8…Da5` o texto falava em recuperar o peão de c5; para ele
+o peão é o de menos, o que decide é que rocamos no lance seguinte e o rei branco
+fica no meio do tabuleiro. Em `2…c5` da Londres entrou a razão estratégica dele
+(`2.Bf4` desenvolve mas, ao contrário do `2.c4`, não disputa espaço no centro).
+
+**Onde ser fiel não se aplica.** A Londres e o Colle das pretas são escolha
+nossa contra a fonte — a §2.9 decidiu `2…c5`, e o capítulo 'The London' do
+Kushager joga `2…Cf6` com `…Ch5` e `…Bd6`, outro plano. O Colle não tem capítulo
+nenhum no curso (lista conferida em 6/9/2026: 10 capítulos, Manhattan x3,
+Catalan x2, Gukesh QGD x3, The London, Pseudo-Trompowsky). E os 12 buracos da §8
+não têm fonte por definição. Nesses casos o comentário é nosso, e a tag
+`[Fonte]` já diz "Livro + motor".
+
+**Nada disso foi revisado por professor de xadrez.**
+
 **Quem escolhe a linha é o servidor** (`proximaLinha`): nunca vistas na ordem do
 PGN — que é a ordem pedagógica, o tronco primeiro —, depois as que estão mais
 longe dos três acertos, depois a revisão mais antiga. A lista fica na tela para
@@ -527,17 +572,30 @@ errado para este fim. No lugar do "mate conta" ficam os dois canais do arquivo:
 clube entra no lugar, com recado) e `errosNomeados` (a fonte mostra de propósito
 como errados, e o aluno ouve *por quê* em vez de só "não").
 
-**`errosNomeados` está vazio nas 42 linhas.** O caminho existe, tem teste
-unitário e foi medido na tela com uma linha fabricada; quem escrever o Avançado
-só precisa preencher o campo.
+**`errosNomeados` tem três linhas preenchidas**, e o critério foi estreito de
+propósito: só entra armadilha que já está anotada como ruim numa fonte do
+repositório **ou** medida no motor com folga. As três, com o número:
+
+| Linha | Nosso lance certo | O erro | Medido |
+|---|---|---|---|
+| `pretas-londres-53d5b431` | 4…Cf6 | `4…Db6 $2` | brancas +1,37 depois de 5.Cc3 |
+| `pretas-siciliana-97331249` | 3…Cd5 | `3…Ce4 $4` | brancas +2,53; o rascunho do Krikor já marca `$4` |
+| `pretas-siciliana-2d329919` | 5…bxc6 | `5…dxc6 $6` | brancas +0,58 (troca de damas e o rei não roca) |
+
+Jogada na tela em 6/9 com a conta `alunoteste`: 4…Db6 devolve *"Qb6 é o lance
+que a fonte mostra de propósito como errado. Olhe de novo."*, e 5…Db6 — o mesmo
+lance, um lance depois — é aceito. É exatamente a lição que o comentário da
+linha ensina.
+
+**Por que só três, e não uma por linha.** Varrendo os 20 rascunhos, quase toda
+marca de lance ruim está no lance do **adversário**: os cursos de brancas anotam
+os erros das pretas e vice-versa. É por isso que o campo nasceu vazio, e não
+porque ninguém preencheu. O `6.Dd5?` que este documento cita como exemplo existe
+mesmo no rascunho da Escocesa, mas mora depois de `5…d6` — um ramo que a revisão
+cortou. Hospedá-lo pediria uma linha nova, que é decisão de repertório, não de
+redação.
 
 ### O que ficou por fazer
-
-**Os comentários estão sem acento** — "peao", "proposito", "e" por "é". Vêm
-assim dos PGN, e o problema é do teclado/compilador de quem os escreveu, não da
-tela: `semQuebras` só tira as quebras de linha que o PGN insere na coluna 80. A
-correção é uma varredura nos `content/repertorio/*.pgn` seguida de
-`npm run repertorio:compilar` — nada no código muda.
 
 **O ⚠12 fechou.** Os princípios para Pirc, Nimzowitsch, Alekhine e Owen estão em
 `content/repertorio/notas.json`, com página em `/aberturas/notas/[abertura]` e

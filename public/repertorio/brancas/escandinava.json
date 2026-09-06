@@ -54,8 +54,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "4": "O cavalo sai atacando a dama. Este e o presente\nque a Escandinava nos da: desenvolvemos com tempo, e ela ainda vai ter de andar\nmais uma vez.",
-      "14": "Empurramos o bispo\ndele ate g6 com h3 e g4, e agora o cavalo pousa em e5, bem no meio do tabuleiro.\nO mesmo remedio serve quando a dama recua para d8."
+      "4": "O cavalo sai atacando a dama. Este é o presente\nque a Escandinava nos dá: desenvolvemos com tempo, e ela ainda vai ter de andar\nmais uma vez.",
+      "10": "Começa a caçada ao bispo. O h3 faz uma\npergunta simples — troca ou recua? — e as duas respostas nos servem: se ele\ntrocar, ganhamos os dois bispos; se recuar para h5, vem g4 e ele fica na\ndiagonal errada.",
+      "14": "Empurramos o bispo\ndele até g6 com h3 e g4, e agora o cavalo pousa em e5, bem no meio do tabuleiro.\nO mesmo remédio serve quando a dama recua para d8."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'"
   },
@@ -114,9 +115,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "4": "O cavalo sai atacando a dama. Este e o presente\nque a Escandinava nos da: desenvolvemos com tempo, e ela ainda vai ter de andar\nmais uma vez.",
-      "12": "Parece um lance pequeno, e nao e: o bispo\nem d2 fica na mesma diagonal da dama dele em a5.",
-      "14": "Agora da para\npular no meio do tabuleiro sem medo: se ele comer o cavalo, o bispo de d2 come a\ndama. Ele vai ter de recuar de novo."
+      "4": "O cavalo sai atacando a dama. Este é o presente\nque a Escandinava nos dá: desenvolvemos com tempo, e ela ainda vai ter de andar\nmais uma vez.",
+      "12": "Parece um lance pequeno, e não é: o bispo\nem d2 fica na mesma diagonal da dama dele em a5.",
+      "14": "Agora dá para\npular no meio do tabuleiro sem medo: se ele comer o cavalo, o bispo de d2 come a\ndama. Ele vai ter de recuar de novo."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'"
   }

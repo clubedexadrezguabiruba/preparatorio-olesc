@@ -54,6 +54,8 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "6": "O cavalo recaptura e para bem no meio do\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
+      "8": "O bispo dele mira o nosso cavalo, e nós não trocamos: recuamos\npara b3. Parece um lance perdido e não é — quem tem de andar é o bispo dele, e\nem b6 ele morde bem menos, enquanto nós armamos Cc3, De2 e Be3 em paz.",
       "14": "O bispo em e3 encara o dele e\ndefende f2. Se ele trocar, a dama recaptura em e3 e o roque grande vem logo em\nseguida."
     },
     "fonte": "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"
@@ -108,7 +110,8 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "12": "A dama entra na coluna e, atras do peao\nde e5 e de frente para a dama dele. Enquanto esse peao ficar em pe, o bispo dele\nde f8 nao sai, e nos desenvolvemos de graca."
+      "6": "O cavalo recaptura e para bem no meio do\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
+      "12": "A dama entra na coluna e, atrás do peão\nde e5 e de frente para a dama dele. Enquanto esse peão ficar em pé, o bispo dele\nde f8 não sai, e nós desenvolvemos de graça."
     },
     "fonte": "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"
   },
@@ -157,7 +160,8 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "10": "O peao avanca e expulsa o cavalo antes que ele se instale.\nGanhamos espaco e um tempo — e por isso que esse cavalo cedo nao e o melhor\nlance dele."
+      "6": "O cavalo recaptura e para bem no meio do\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
+      "10": "O peão avança e expulsa o cavalo antes que ele se instale.\nGanhamos espaço e um tempo — é por isso que esse cavalo cedo não é o melhor\nlance dele."
     },
     "fonte": "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"
   },
@@ -216,8 +220,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "12": "O bispo vai para f4 mirando o peao de d6 e libera a casa c1\npara o roque grande.",
-      "14": "Roque grande. O rei sai do centro e a\ntorre cai na coluna d, bem em frente ao peao de d6. Daqui o plano e sempre o\nmesmo: f3, g4 e os peoes avancam contra o rei dele."
+      "6": "O cavalo recaptura e para bem no meio do\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
+      "12": "O bispo vai para f4 mirando o peão de d6 e libera a casa c1\npara o roque grande.",
+      "14": "Roque grande. O rei sai do centro e a\ntorre cai na coluna d, bem em frente ao peão de d6. Daqui o plano é sempre o\nmesmo: f3, g4 e os peões avançam contra o rei dele."
     },
     "fonte": "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"
   },
@@ -276,9 +281,10 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "14": "Ele armou o bispo na diagonal grande\npara bater em e4, e nos simplesmente defendemos com o cavalo e seguimos o plano\nde sempre: bispo em f4 e roque grande. O peao de e4 esta seguro."
+      "8": "Agora é a dama que fica no\nmeio do tabuleiro, e isso costuma ser perigoso: dama cedo apanha. Aqui não —\nnão há peça dele pronta para expulsá-la de graça. Ele vai empurrá-la com peão, e\ncada peão que anda é um lance que ele não usou para desenvolver.",
+      "14": "Ele armou o bispo na diagonal grande\npara bater em e4, e nós simplesmente defendemos com o cavalo e seguimos o plano\nde sempre: bispo em f4 e roque grande. O peão de e4 está seguro."
     },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 2 da secao 8 de docs/REPERTORIO.md: nenhum curso do Doug responde a 5...c5 nem a 5...b6. O motor poe 6.De3 a 7 centesimos do primeiro lance dele, e 7.e5 e 8.Df3 sao a variante principal dele."
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 2 da seção 8 de docs/REPERTORIO.md: nenhum curso do Doug responde a 5...c5 nem a 5...b6. O motor põe 6.De3 a 7 centésimos do primeiro lance dele, e 7.e5 e 8.Df3 são a variante principal dele."
   },
   {
     "id": "brancas-escocesa-a46c0bd6",
@@ -335,11 +341,12 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "10": "A dama sai do ataque do peao e fica na coluna e, ainda ativa e de olho\nno peao de c5.",
-      "12": "O mesmo golpe da outra linha: o peao avanca e\nexpulsa o cavalo antes que ele se instale. Vale reparar que este truque aparece\nduas vezes na Escocesa.",
-      "14": "De f3 a dama ataca o cavalo de d5 de\nnovo e ainda olha para f7. Enquanto ele decide onde por esse cavalo, o nosso\npeao de e5 vai tomando o espaco do lado do rei."
+      "8": "Agora é a dama que fica no\nmeio do tabuleiro, e isso costuma ser perigoso: dama cedo apanha. Aqui não —\nnão há peça dele pronta para expulsá-la de graça. Ele vai empurrá-la com peão, e\ncada peão que anda é um lance que ele não usou para desenvolver.",
+      "10": "A dama sai do ataque do peão e fica na coluna e, ainda ativa e de olho\nno peão de c5.",
+      "12": "O mesmo golpe da outra linha: o peão avança e\nexpulsa o cavalo antes que ele se instale. Vale reparar que este truque aparece\nduas vezes na Escocesa.",
+      "14": "De f3 a dama ataca o cavalo de d5 de\nnovo e ainda olha para f7. Enquanto ele decide onde pôr esse cavalo, o nosso\npeão de e5 vai tomando o espaço do lado do rei."
     },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 2 da secao 8 de docs/REPERTORIO.md: nenhum curso do Doug responde a 5...c5 nem a 5...b6. O motor poe 6.De3 a 7 centesimos do primeiro lance dele, e 7.e5 e 8.Df3 sao a variante principal dele."
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 2 da seção 8 de docs/REPERTORIO.md: nenhum curso do Doug responde a 5...c5 nem a 5...b6. O motor põe 6.De3 a 7 centésimos do primeiro lance dele, e 7.e5 e 8.Df3 são a variante principal dele."
   },
   {
     "id": "brancas-escocesa-1778f8cb",
@@ -390,7 +397,8 @@
     },
     "errosNomeados": {},
     "comentarios": {
-      "10": "Ele pegou o peao de e4 mas\no cavalo ja teve de andar duas vezes. Nos temos um peao forte em e5 e todas as\npecas saindo com tempo."
+      "4": "O lance que abre o jogo. O normal é ele comer com\n…exd4, e é disso que trata o resto do arquivo. Este jogo reúne as três respostas\nem que ele não come — e a regra é sempre a mesma: quem não briga pelo centro,\nentrega o centro.",
+      "10": "Ele pegou o peão de e4 mas\no cavalo já teve de andar duas vezes. Nós temos um peão forte em e5 e todas as\npeças saindo com tempo."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'"
   },
@@ -429,7 +437,8 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "6": "Com o peao em f6 ele tapou a saida do proprio cavalo e\nenfraqueceu a diagonal que chega em f7 — e e exatamente para la que o bispo vai.\nNem precisa correr: basta desenvolver, o centro ja e nosso."
+      "4": "O lance que abre o jogo. O normal é ele comer com\n…exd4, e é disso que trata o resto do arquivo. Este jogo reúne as três respostas\nem que ele não come — e a regra é sempre a mesma: quem não briga pelo centro,\nentrega o centro.",
+      "6": "Com o peão em f6 ele tapou a saída do próprio cavalo e\nenfraqueceu a diagonal que chega em f7 — e é exatamente para lá que o bispo vai.\nNem precisa correr: basta desenvolver, o centro já é nosso."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'"
   },
@@ -492,7 +501,9 @@
     },
     "errosNomeados": {},
     "comentarios": {
-      "14": "Trocamos\nem c6 de proposito: o peao dele vira peao dobrado, o bispo de d7 perde a\nserventia e a nossa diagonal abre. Depois vem bispo para d3 e o avanco f4."
+      "4": "O lance que abre o jogo. O normal é ele comer com\n…exd4, e é disso que trata o resto do arquivo. Este jogo reúne as três respostas\nem que ele não come — e a regra é sempre a mesma: quem não briga pelo centro,\nentrega o centro.",
+      "8": "O bispo prega o cavalo de c6 contra o rei: ele\nnão pode sair do lugar. E é justamente esse cavalo que briga com o nosso peão de\nd4. Guarde o lance — no oitavo nós vamos trocar essa peça de propósito.",
+      "14": "Trocamos\nem c6 de propósito: o peão dele vira peão dobrado, o bispo de d7 perde a\nserventia e a nossa diagonal abre. Depois vem bispo para d3 e o avanço f4."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'"
   }

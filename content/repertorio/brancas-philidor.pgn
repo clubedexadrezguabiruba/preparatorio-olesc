@@ -1,5 +1,5 @@
-; Philidor — 2 linhas do Base. O sistema e o mesmo desenho do resto do
-; repertorio de brancas: bispo em f4, dama em d2, roque grande.
+; Philidor — 2 linhas do Base. O sistema é o mesmo desenho do resto do
+; repertório de brancas: bispo em f4, dama em d2, roque grande.
 
 [Abertura "philidor"]
 [Nome "Philidor"]
@@ -8,12 +8,18 @@
 [Fonte "Curso Krikor 2025 — cap. 'Defesa do Peão Rei vs 1.e4 e5 2.Cf3'"]
 [Result "*"]
 
-1. e4 e5 2. Nf3 d6 3. d4 exd4
-(3... Nf6 4. dxe5 Nxe4 5. Qd5 {A dama ataca o cavalo de e4 e o peao de f7 ao
+1. e4 e5 2. Nf3 d6 3. d4 {O …d6 dele defende o peão de e5, mas tranca a saída do
+próprio bispo de f8. Nós batemos no centro na hora, sem esperar: ou ele come em
+d4 e nos entrega o meio do tabuleiro, ou fica apertado por muitos lances.} 3...
+exd4
+(3... Nf6 4. dxe5 Nxe4 5. Qd5 {A dama ataca o cavalo de e4 e o peão de f7 ao
 mesmo tempo. O cavalo tem de recuar.} 5... Nc5 6. Bg5 Be7 7. exd6 Qxd6 8. Nc3
-{O cavalo defende a nossa dama, entao a troca de damas nao assusta: se ele
-trocar, recapturamos com o cavalo caindo em d5, e de la ele ataca c7 e o bispo
+{O cavalo defende a nossa dama, então a troca de damas não assusta: se ele
+trocar, recapturamos com o cavalo caindo em d5, e de lá ele ataca c7 e o bispo
 de e7 ao mesmo tempo.})
-4. Nxd4 Nf6 5. Nc3 Be7 6. Bf4 O-O 7. Qd2 Nc6 8. O-O-O {O desenho de sempre:
+4. Nxd4 Nf6 5. Nc3 Be7 6. Bf4 {Comece a reconhecer o desenho: bispo em f4
+mirando o peão de d6, dama em d2 atrás dele e a casa c1 livre para a torre. É a
+mesma montagem da Escocesa e da Petroff — três aberturas diferentes, um plano
+só.} 6... O-O 7. Qd2 Nc6 8. O-O-O {O desenho de sempre:
 bispo em f4, dama em d2, roque grande. Os dois reis foram para lados opostos, e
-quem chegar primeiro com os peoes leva a partida.} *
+quem chegar primeiro com os peões leva a partida.} *

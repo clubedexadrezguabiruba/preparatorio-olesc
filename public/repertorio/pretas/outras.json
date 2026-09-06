@@ -46,8 +46,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "11": "Contra 1.c4,\n1.Cf3, 1.b3, 1.f4 e 1.g3 a regra e uma so: …e6 e …d5, e espere. Quase sempre\nele joga d4 em algum momento, e o jogo vira o nosso Manhattan — foi o que\naconteceu aqui. Depois de 6…c5 esta e exatamente a posicao da linha principal\ndo arquivo do Manhattan, so que comecando por 1.c4. Voce nao precisou aprender\nnada novo."
+      "4": "Pronto: ele jogou d4 e a partida deixou de ser\ninglesa. Olhe o tabuleiro sem olhar o placar de lances — peões brancos em c4 e\nd4, pretos em d5 e e6. É o nosso Manhattan, exatamente, só que os lances vieram\nem outra ordem.",
+      "11": "Contra 1.c4,\n1.Cf3, 1.b3, 1.f4 e 1.g3 a regra é uma só: …e6 e …d5, e espere. Quase sempre\nele joga d4 em algum momento, e o jogo vira o nosso Manhattan — foi o que\naconteceu aqui. Depois de 6…c5 esta é exatamente a posição da linha principal\ndo arquivo do Manhattan, só que começando por 1.c4. Você não precisou aprender\nnada novo."
     },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Nao vem do draft English Opening do Grigoryan, que joga outro sistema (1...c5). A linha e a transposicao para o Manhattan, e a ponta fica em brancas +0,33, o mesmo numero da linha principal do pretas-manhattan.pgn."
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Não vem do draft English Opening do Grigoryan, que joga outro sistema (1...c5). A linha é a transposição para o Manhattan, e a ponta fica em brancas +0,33, o mesmo número da linha principal do pretas-manhattan.pgn."
   }
 ]

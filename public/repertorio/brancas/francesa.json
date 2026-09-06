@@ -44,9 +44,10 @@
     },
     "errosNomeados": {},
     "comentarios": {
-      "8": "Ele abriu o jogo cedo.\nNos seguramos o peao de d4 com o de c3 e ficamos com um centro solido e o bispo\nja apontado para o lado do rei dele. Os outros dois lances da fonte tambem\nservem — este e o mais facil de jogar depois."
+      "4": "Quase todo mundo joga 3.Cc3 ou 3.e5 aqui, e as duas\ndão posições cheias de teoria. Nós fazemos o mais simples: pomos o bispo em d3,\napontado para o rei dele, e deixamos o centro decidir sozinho. Se ele comer em\ne4, o bispo recaptura já desenvolvido; se ele bater com …c5, o jogo abre — e num\njogo aberto quem tem o bispo bom é quem manda.",
+      "8": "Ele abriu o jogo cedo.\nNós seguramos o peão de d4 com o de c3 e ficamos com um centro sólido e o bispo\njá apontado para o lado do rei dele. Os outros dois lances da fonte também\nservem — este é o mais fácil de jogar depois."
     },
-    "fonte": "GM Avetik Grigoryan (ChessMood) — 'French with 3.Bd3'. No lance 5 contra 3...c5 a escolha entre os tres lances marcados pela fonte e nossa, por livro + motor: Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026 poe os tres a menos de um decimo de peao um do outro, entao a escolha e pedagogica, nao de avaliacao."
+    "fonte": "GM Avetik Grigoryan (ChessMood) — 'French with 3.Bd3'. No lance 5 contra 3...c5 a escolha entre os três lances marcados pela fonte é nossa, por livro + motor: Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026 põe os três a menos de um décimo de peão um do outro, então a escolha é pedagógica, não de avaliação."
   },
   {
     "id": "brancas-francesa-c384ccc4",
@@ -103,9 +104,11 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "14": "O cavalo fica no meio do\ntabuleiro e tudo esta desenvolvido. Repare no bispo de f3: ele atravessa o\ntabuleiro inteiro, e e justamente a peca que o jogador de Francesa menos gosta\nde enfrentar, porque o bispo dele de c8 continua preso."
+      "4": "Quase todo mundo joga 3.Cc3 ou 3.e5 aqui, e as duas\ndão posições cheias de teoria. Nós fazemos o mais simples: pomos o bispo em d3,\napontado para o rei dele, e deixamos o centro decidir sozinho. Se ele comer em\ne4, o bispo recaptura já desenvolvido; se ele bater com …c5, o jogo abre — e num\njogo aberto quem tem o bispo bom é quem manda.",
+      "8": "O cavalo dele atacou o bispo, e em vez de trocar ou voltar\npara d3 nós recuamos para f3. Daqui o bispo atravessa o tabuleiro inteiro até\nb7, que é onde o bispo dele de c8 gostaria de morar — e não vai poder.",
+      "14": "O cavalo fica no meio do\ntabuleiro e tudo está desenvolvido. Repare no bispo de f3: ele atravessa o\ntabuleiro inteiro, e é justamente a peça que o jogador de Francesa menos gosta\nde enfrentar, porque o bispo dele de c8 continua preso."
     },
-    "fonte": "GM Avetik Grigoryan (ChessMood) — 'French with 3.Bd3'. No lance 5 contra 3...c5 a escolha entre os tres lances marcados pela fonte e nossa, por livro + motor: Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026 poe os tres a menos de um decimo de peao um do outro, entao a escolha e pedagogica, nao de avaliacao."
+    "fonte": "GM Avetik Grigoryan (ChessMood) — 'French with 3.Bd3'. No lance 5 contra 3...c5 a escolha entre os três lances marcados pela fonte é nossa, por livro + motor: Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026 põe os três a menos de um décimo de peão um do outro, então a escolha é pedagógica, não de avaliação."
   },
   {
     "id": "brancas-francesa-9d4caf37",
@@ -152,8 +155,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "10": "O bispo prega o\ncavalo na dama: se ele comer o nosso bispo de e4, nos comemos a dama dele em d8.\nEle vai ter de gastar um lance desfazendo a pregacao, e nos desenvolvemos de\ngraca enquanto isso."
+      "4": "O mesmo lance de sempre contra a Francesa: bispo em\nd3, apontado para o rei dele, e o centro fica de pé. Ele tentou uma ordem\ndiferente com …Cc6, e a nossa resposta não muda — desenvolver e esperar.",
+      "10": "O bispo prega o\ncavalo na dama: se ele comer o nosso bispo de e4, nós comemos a dama dele em d8.\nEle vai ter de gastar um lance desfazendo a pregação, e nós desenvolvemos de\ngraça enquanto isso."
     },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 9 da secao 8 de docs/REPERTORIO.md: o arquivo do Grigoryan nao cobre 3...Cc6. O 4.Cf3 e o primeiro lance do motor e o 6.Bg5 tambem, com folga sobre o segundo."
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 9 da seção 8 de docs/REPERTORIO.md: o arquivo do Grigoryan não cobre 3...Cc6. O 4.Cf3 é o primeiro lance do motor e o 6.Bg5 também, com folga sobre o segundo."
   }
 ]

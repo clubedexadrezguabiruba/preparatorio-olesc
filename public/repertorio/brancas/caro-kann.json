@@ -54,8 +54,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "6": "Depois das trocas os dois lados ficam\ncom os mesmos peões, então quem faz a diferença é o bispo. O nosso sai primeiro,\npara d3, já olhando para h7. O dele, o de c8, é a peça que o jogador de\nCaro-Kann mais sofre para colocar em jogo — e o …c6 do primeiro lance fechou a\nsaída natural dela.",
       "12": "A dama\nem b3 bate em b7 e em d5 ao mesmo tempo. Ele vai ter de gastar um lance para\ndefender.",
-      "14": "O cavalo entra por d2 porque c3 esta ocupado pelo\nnosso peao, e de d2 ele segue para f3. Com dama em b3 e bispo em d3 nos\napertamos os dois lados do tabuleiro — e uma posicao para jogar devagar, sem\npressa de trocar pecas."
+      "14": "O cavalo entra por d2 porque c3 está ocupado pelo\nnosso peão, e de d2 ele segue para f3. Com dama em b3 e bispo em d3 nós\napertamos os dois lados do tabuleiro — é uma posição para jogar devagar, sem\npressa de trocar peças."
     },
     "fonte": "GM Avetik Grigoryan (ChessMood) — 'Caro Kann'"
   },
@@ -99,8 +100,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "8": "Nao muda nada para nos. O peao\nem c3 segura o de d4, e o plano segue igual: bispo para f4, cavalo por d2 e dama\npara b3. A ordem dos lances dele nao muda a nossa."
+      "4": "Trocar aqui é escolha nossa, e é a mais fácil de\njogar: acaba a briga no centro antes de ela começar. Sobram peões iguais dos\ndois lados e uma posição limpa, em que ganha quem coloca as peças nos lugares\ncertos.",
+      "8": "Não muda nada para nós. O peão\nem c3 segura o de d4, e o plano segue igual: bispo para f4, cavalo por d2 e dama\npara b3. A ordem dos lances dele não muda a nossa."
     },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 5 da secao 8 de docs/REPERTORIO.md: o arquivo do Grigoryan so cobre 4...Cc6. O 5.c3 e o primeiro lance do motor, e a variante principal dele transpoe para a linha do 4...Cc6 deste mesmo arquivo."
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 5 da seção 8 de docs/REPERTORIO.md: o arquivo do Grigoryan só cobre 4...Cc6. O 5.c3 é o primeiro lance do motor, e a variante principal dele transpõe para a linha do 4...Cc6 deste mesmo arquivo."
   }
 ]

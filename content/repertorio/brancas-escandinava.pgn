@@ -1,4 +1,4 @@
-; Escandinava — 2 linhas do Base. Pela tabela da secao 6, depois de 2.exd5 so
+; Escandinava — 2 linhas do Base. Pela tabela da seção 6, depois de 2.exd5 só
 ; 2...Dxd5 entra no corte, com 80,8 por cento. As duas linhas cobrem os dois
 ; recuos mais comuns da dama depois de 3.Cc3.
 
@@ -9,13 +9,16 @@
 [Fonte "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'"]
 [Result "*"]
 
-1. e4 d5 2. exd5 Qxd5 3. Nc3 {O cavalo sai atacando a dama. Este e o presente
-que a Escandinava nos da: desenvolvemos com tempo, e ela ainda vai ter de andar
+1. e4 d5 2. exd5 Qxd5 3. Nc3 {O cavalo sai atacando a dama. Este é o presente
+que a Escandinava nos dá: desenvolvemos com tempo, e ela ainda vai ter de andar
 mais uma vez.} 3... Qa5
-(3... Qd6 4. d4 Nf6 5. Nf3 Bg4 6. h3 Bh5 7. g4 Bg6 8. Ne5 {Empurramos o bispo
-dele ate g6 com h3 e g4, e agora o cavalo pousa em e5, bem no meio do tabuleiro.
-O mesmo remedio serve quando a dama recua para d8.})
-4. d4 Nf6 5. Nf3 c6 6. Bc4 Bf5 7. Bd2 {Parece um lance pequeno, e nao e: o bispo
-em d2 fica na mesma diagonal da dama dele em a5.} 7... e6 8. Nd5 {Agora da para
+(3... Qd6 4. d4 Nf6 5. Nf3 Bg4 6. h3 {Começa a caçada ao bispo. O h3 faz uma
+pergunta simples — troca ou recua? — e as duas respostas nos servem: se ele
+trocar, ganhamos os dois bispos; se recuar para h5, vem g4 e ele fica na
+diagonal errada.} 6... Bh5 7. g4 Bg6 8. Ne5 {Empurramos o bispo
+dele até g6 com h3 e g4, e agora o cavalo pousa em e5, bem no meio do tabuleiro.
+O mesmo remédio serve quando a dama recua para d8.})
+4. d4 Nf6 5. Nf3 c6 6. Bc4 Bf5 7. Bd2 {Parece um lance pequeno, e não é: o bispo
+em d2 fica na mesma diagonal da dama dele em a5.} 7... e6 8. Nd5 {Agora dá para
 pular no meio do tabuleiro sem medo: se ele comer o cavalo, o bispo de d2 come a
 dama. Ele vai ter de recuar de novo.} *

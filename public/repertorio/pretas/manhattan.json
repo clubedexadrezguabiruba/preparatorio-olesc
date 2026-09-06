@@ -56,9 +56,10 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "15": "A dama em a5 e o bispo em b4 pregam o cavalo de c3 dos dois lados, e\nsem esse cavalo o peao dele em c5 fica sem quem o defenda: nos o recuperamos\ncom …b6 ou com o cavalo, e o jogo iguala com as nossas pecas mais soltas que as\ndele. Foi o …c5 do lance 6 que abriu tudo isso."
+      "7": "O cavalo parece mal posto: em c6 ele\nestaria mais no meio. O motivo de ir para d7 é um lance que ainda nem\naconteceu. Se fôssemos direto de …Bb4, ele responderia Da4+ — com xeque — e nós\nseríamos obrigados a tapar com …Cc6. Cavalo em c6 tranca o peão de c7, e sem o\n…c5 a nossa ideia inteira morre. Com o cavalo já em d7, aquele Da4 deixa de ser\nxeque, e o bispo vai para b4 em paz. Guarde a ordem: …Cbd7, depois …Bb4, depois\n…c5.",
+      "15": "A dama sai e ameaça …Bxc3. Mas a ameaça não é o mais importante: o\nmais importante é que nós rocamos no lance seguinte e o rei dele continua\nparado no meio do tabuleiro, com o nosso bispo de b4 e a nossa dama de a5\napontados para lá. Ele está com um peão a mais e o rei no meio — e é o rei que\ndecide. Foi o …c5 do lance 6 que abriu tudo isso."
     },
-    "fonte": "Short & Sweet: 1.d4 d5 do IM Kushager Krishnater (Chessable) — capitulo The Manhattan, tronco 4.Cf3 Cbd7 5.Bg5 Bb4 6.e3 c5 7.cxd5 exd5 8.dxc5 Da5."
+    "fonte": "Short & Sweet: 1.d4 d5 do IM Kushager Krishnater (Chessable) — capítulo The Manhattan, tronco 4.Cf3 Cbd7 5.Bg5 Bb4 6.e3 c5 7.cxd5 exd5 8.dxc5 Da5."
   },
   {
     "id": "pretas-manhattan-6ac84e24",
@@ -117,9 +118,10 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "15": "A Armadilha do\nElefante, e o motivo de o cavalo ir para d7 antes de qualquer coisa. O cavalo\nde f6 parecia pregado na dama, mas nao estava: 6…Cxd5 e possivel porque, quando\nele pegar a dama com 7.Bxd8, vem o xeque 7…Bb4+. Ele tem de tapar com 8.Dd2,\nnos trocamos, e no lance seguinte o nosso rei come o bispo em d8 — com uma peca\na mais no bolso. E se ele nao pegar a dama, tambem nao adianta: o cavalo dele ja\nfoi embora."
+      "7": "Cavalo em d7 antes de qualquer outra\ncoisa, de novo — e aqui ele faz dois trabalhos. Um é o de sempre: tira o xeque\ndo Da4, que é o que nos obrigaria a pôr o cavalo em c6 e a perder o …c5. O\noutro é este: com ele no lugar, o cavalo de f6 não está pregado de verdade,\nmesmo com o bispo dele em g5. Quem tentar provar o contrário cai na armadilha\nda variante ao lado.",
+      "15": "A Armadilha do\nElefante, é o motivo de o cavalo ir para d7 antes de qualquer coisa. O cavalo\nde f6 parecia pregado na dama, mas não estava: 6…Cxd5 é possível porque, quando\nele pegar a dama com 7.Bxd8, vem o xeque 7…Bb4+. Ele tem de tapar com 8.Dd2,\nnós trocamos, e no lance seguinte o nosso rei come o bispo em d8 — com uma peça\na mais no bolso. E se ele não pegar a dama, também não adianta: o cavalo dele já\nfoi embora."
     },
-    "fonte": "Livro + motor — a Armadilha do Elefante e posicao de livro, conferida no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026: depois de 6.Cxd5 Cxd5 as pretas ficam +3,43, uma peca. O ramo do 5.e3 e o mesmo tronco do Kushager numa ordem diferente, e a ponta fica em brancas +0,33."
+    "fonte": "Livro + motor — a Armadilha do Elefante é posição de livro, conferida no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026: depois de 6.Cxd5 Cxd5 as pretas ficam +3,43, uma peça. O ramo do 5.e3 é o mesmo tronco do Kushager numa ordem diferente, e a ponta fica em brancas +0,33."
   },
   {
     "id": "pretas-manhattan-3e9e876d",
@@ -168,8 +170,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "11": "Ele adiantou o bispo para g5 antes do cavalo de f3, e a\nnossa resposta nao muda em nada: …Cbd7, …Bb4 pregando o cavalo, …c5 batendo no\ncentro. Compare com a linha principal deste arquivo: a posicao e exatamente a\nmesma. E sempre a mesma montagem, em qualquer ordem que ele jogue."
+      "7": "Cavalo em d7 antes de qualquer outra\ncoisa, de novo — e aqui ele faz dois trabalhos. Um é o de sempre: tira o xeque\ndo Da4, que é o que nos obrigaria a pôr o cavalo em c6 e a perder o …c5. O\noutro é este: com ele no lugar, o cavalo de f6 não está pregado de verdade,\nmesmo com o bispo dele em g5. Quem tentar provar o contrário cai na armadilha\nda variante ao lado.",
+      "11": "Ele adiantou o bispo para g5 antes do cavalo de f3, e a\nnossa resposta não muda em nada: …Cbd7, …Bb4 pregando o cavalo, …c5 batendo no\ncentro. Compare com a linha principal deste arquivo: a posição é exatamente a\nmesma. É sempre a mesma montagem, em qualquer ordem que ele jogue."
     },
-    "fonte": "Livro + motor — a Armadilha do Elefante e posicao de livro, conferida no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026: depois de 6.Cxd5 Cxd5 as pretas ficam +3,43, uma peca. O ramo do 5.e3 e o mesmo tronco do Kushager numa ordem diferente, e a ponta fica em brancas +0,33."
+    "fonte": "Livro + motor — a Armadilha do Elefante é posição de livro, conferida no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026: depois de 6.Cxd5 Cxd5 as pretas ficam +3,43, uma peça. O ramo do 5.e3 é o mesmo tronco do Kushager numa ordem diferente, e a ponta fica em brancas +0,33."
   }
 ]

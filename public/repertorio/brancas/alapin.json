@@ -34,7 +34,8 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "6": "Ele nao brigou pelo centro, entao os dois peoes do\nmeio ficam nossos e o bispo sai para d3 apoiando e4. Se ele trocar em d4, o peao\nde c3 recaptura e o centro fica ainda maior."
+      "2": "O lance mais estranho do repertório, e o mais simples de\nentender: o peão de c3 não ataca nada, ele só guarda lugar para o de d2 avançar\ndois passos. Se ele comer em d4, quem recaptura é o peão de c3 — e o centro\ncontinua nosso.",
+      "6": "Ele não brigou pelo centro, então os dois peões do\nmeio ficam nossos e o bispo sai para d3 apoiando e4. Se ele trocar em d4, o peão\nde c3 recaptura e o centro fica ainda maior."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'"
   },
@@ -73,7 +74,8 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "6": "O peao avanca e trava o centro. O bispo dele de c8 fica\npreso atras dos proprios peoes, e nos ganhamos espaco para jogar do lado do\nrei."
+      "2": "O lance mais estranho do repertório, e o mais simples de\nentender: o peão de c3 não ataca nada, ele só guarda lugar para o de d2 avançar\ndois passos. Se ele comer em d4, quem recaptura é o peão de c3 — e o centro\ncontinua nosso.",
+      "6": "O peão avança e trava o centro. O bispo dele de c8 fica\npreso atrás dos próprios peões, e nós ganhamos espaço para jogar do lado do\nrei."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'"
   },
@@ -132,8 +134,10 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "6": "Este e o lance que da nome a abertura toda: o peao de c3\nrecaptura e ficamos com dois peoes no centro, e4 e d4, contra nenhum.",
-      "14": "Antes de rocar, tiramos a casa g4 do bispo\ndele. Repare no centro: peoes em e4 e d5 e o cavalo dele de volta para casa — e\nisso que o 2.c3 constroi."
+      "2": "O lance mais estranho do repertório, e o mais simples de\nentender: o peão de c3 não ataca nada, ele só guarda lugar para o de d2 avançar\ndois passos. Se ele comer em d4, quem recaptura é o peão de c3 — e o centro\ncontinua nosso.",
+      "6": "Este é o lance que dá nome à abertura toda: o peão de c3\nrecaptura e ficamos com dois peões no centro, e4 e d4, contra nenhum.",
+      "10": "O peão anda mais um e o cavalo dele não tem para onde ir a não\nser voltar para casa — os dois lances que ele gastou com essa peça foram para o\nlixo. E o centro virou uma parede em e4 e d5, sem nenhum peão dele por perto\npara empurrá-la.",
+      "14": "Antes de rocar, tiramos a casa g4 do bispo\ndele. Repare no centro: peões em e4 e d5 e o cavalo dele de volta para casa — é\nisso que o 2.c3 constrói."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'"
   }

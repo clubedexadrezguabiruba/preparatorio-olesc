@@ -1,5 +1,5 @@
-; Caro-Kann Trocas — 2 linhas do Base. Depois de 4.Bd3 a fonte so cobre
-; 4...Cc6, com 57,5 por cento. O 4...Cf6, com 30,9 por cento, e a segunda
+; Caro-Kann Trocas — 2 linhas do Base. Depois de 4.Bd3 a fonte só cobre
+; 4...Cc6, com 57,5 por cento. O 4...Cf6, com 30,9 por cento, é a segunda
 ; resposta mais comum e nenhum curso do Doug responde: sai por livro + motor,
 ; no segundo jogo deste arquivo.
 
@@ -10,20 +10,27 @@
 [Fonte "GM Avetik Grigoryan (ChessMood) — 'Caro Kann'"]
 [Result "*"]
 
-1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3 Nf6 6. Bf4 Bg4 7. Qb3 {A dama
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 {Depois das trocas os dois lados ficam
+com os mesmos peões, então quem faz a diferença é o bispo. O nosso sai primeiro,
+para d3, já olhando para h7. O dele, o de c8, é a peça que o jogador de
+Caro-Kann mais sofre para colocar em jogo — e o …c6 do primeiro lance fechou a
+saída natural dela.} 4... Nc6 5. c3 Nf6 6. Bf4 Bg4 7. Qb3 {A dama
 em b3 bate em b7 e em d5 ao mesmo tempo. Ele vai ter de gastar um lance para
-defender.} 7... Qd7 8. Nd2 {O cavalo entra por d2 porque c3 esta ocupado pelo
-nosso peao, e de d2 ele segue para f3. Com dama em b3 e bispo em d3 nos
-apertamos os dois lados do tabuleiro — e uma posicao para jogar devagar, sem
-pressa de trocar pecas.} *
+defender.} 7... Qd7 8. Nd2 {O cavalo entra por d2 porque c3 está ocupado pelo
+nosso peão, e de d2 ele segue para f3. Com dama em b3 e bispo em d3 nós
+apertamos os dois lados do tabuleiro — é uma posição para jogar devagar, sem
+pressa de trocar peças.} *
 
 [Abertura "caro-kann"]
 [Nome "Caro-Kann Trocas"]
 [Cor "brancas"]
 [Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 5 da secao 8 de docs/REPERTORIO.md: o arquivo do Grigoryan so cobre 4...Cc6. O 5.c3 e o primeiro lance do motor, e a variante principal dele transpoe para a linha do 4...Cc6 deste mesmo arquivo."]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 5 da seção 8 de docs/REPERTORIO.md: o arquivo do Grigoryan só cobre 4...Cc6. O 5.c3 é o primeiro lance do motor, e a variante principal dele transpõe para a linha do 4...Cc6 deste mesmo arquivo."]
 [Result "*"]
 
-1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nf6 5. c3 {Nao muda nada para nos. O peao
+1. e4 c6 2. d4 d5 3. exd5 {Trocar aqui é escolha nossa, e é a mais fácil de
+jogar: acaba a briga no centro antes de ela começar. Sobram peões iguais dos
+dois lados e uma posição limpa, em que ganha quem coloca as peças nos lugares
+certos.} 3... cxd5 4. Bd3 Nf6 5. c3 {Não muda nada para nós. O peão
 em c3 segura o de d4, e o plano segue igual: bispo para f4, cavalo por d2 e dama
-para b3. A ordem dos lances dele nao muda a nossa.} *
+para b3. A ordem dos lances dele não muda a nossa.} *

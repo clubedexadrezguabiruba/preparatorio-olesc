@@ -1,6 +1,6 @@
-; Petroff — 1 linha do Base. A fonte e o Grigoryan, por decisao de 5/9: o
-; capitulo do Krikor joga 3.d4 e ficou de fora para nao dar ao aluno dois
-; terceiros lances para a mesma posicao.
+; Petroff — 1 linha do Base. A fonte é o Grigoryan, por decisão de 5/9: o
+; capítulo do Krikor joga 3.d4 e ficou de fora para não dar ao aluno dois
+; terceiros lances para a mesma posição.
 
 [Abertura "petroff"]
 [Nome "Petroff"]
@@ -9,8 +9,12 @@
 [Fonte "GM Avetik Grigoryan (ChessMood) — 'PGN file and Homework'"]
 [Result "*"]
 
-1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. Nc3 {Oferecemos a troca dos
-cavalos. Parece que estamos ajudando ele, mas a recaptura e que e o ponto.}
-5... Nxc3 6. dxc3 Be7 7. Be3 O-O 8. Qd2 {Dobramos o peao em c3 de proposito: a
+1. e4 e5 2. Nf3 Nf6 3. Nxe5 {Ele copiou o nosso lance, e nós comemos primeiro.
+Não é para ganhar peão — ele recupera já já. É pela ordem: quem come primeiro
+escolhe o que acontece depois. E repare que ele não pode copiar de novo com
+3…Cxe4; precisa gastar um lance em …d6 para expulsar o nosso cavalo antes.}
+3... d6 4. Nf3 Nxe4 5. Nc3 {Oferecemos a troca dos
+cavalos. Parece que estamos ajudando ele, mas a recaptura é que é o ponto.}
+5... Nxc3 6. dxc3 Be7 7. Be3 O-O 8. Qd2 {Dobramos o peão em c3 de propósito: a
 coluna d abriu inteira para a dama e para a torre. Com bispo em e3 e dama em d2
-falta so o roque grande — e o mesmo plano da Escocesa e da Philidor.} *
+falta só o roque grande — é o mesmo plano da Escocesa e da Philidor.} *

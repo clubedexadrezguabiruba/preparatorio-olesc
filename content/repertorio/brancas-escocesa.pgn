@@ -1,7 +1,7 @@
 ; Escocesa — 9 linhas do Base. Revisado a partir dos rascunhos, com os cortes
-; da secao 2.1 do docs/REPERTORIO.md: o tronco e 4...Cxd4 5.Dxd4, com as quatro
-; respostas do lance 5. As respostas sem 3...exd4 vem do capitulo do Krikor.
-; Comentarios redigidos do zero. Nenhuma prosa de curso entra aqui.
+; da seção 2.1 do docs/REPERTORIO.md: o tronco é 4...Cxd4 5.Dxd4, com as quatro
+; respostas do lance 5. As respostas sem 3...exd4 vêm do capítulo do Krikor.
+; Comentários redigidos do zero. Nenhuma prosa de curso entra aqui.
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -10,39 +10,49 @@
 [Fonte "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"]
 [Result "*"]
 
-1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4
-(4... Bc5 5. Nb3 Bb6 6. Nc3 Nf6 7. Qe2 d6 8. Be3 {O bispo em e3 encara o dele e
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 {O cavalo recaptura e para bem no meio do
+tabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a
+peça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A
+partir daqui ele tem três respostas de verdade, e as três estão neste arquivo.}
+4... Nxd4
+(4... Bc5 5. Nb3 {O bispo dele mira o nosso cavalo, e nós não trocamos: recuamos
+para b3. Parece um lance perdido e não é — quem tem de andar é o bispo dele, e
+em b6 ele morde bem menos, enquanto nós armamos Cc3, De2 e Be3 em paz.} 5... Bb6
+6. Nc3 Nf6 7. Qe2 d6 8. Be3 {O bispo em e3 encara o dele e
 defende f2. Se ele trocar, a dama recaptura em e3 e o roque grande vem logo em
 seguida.})
-(4... Nf6 5. Nxc6 bxc6 6. e5 Qe7 7. Qe2 {A dama entra na coluna e, atras do peao
-de e5 e de frente para a dama dele. Enquanto esse peao ficar em pe, o bispo dele
-de f8 nao sai, e nos desenvolvemos de graca.})
+(4... Nf6 5. Nxc6 bxc6 6. e5 Qe7 7. Qe2 {A dama entra na coluna e, atrás do peão
+de e5 e de frente para a dama dele. Enquanto esse peão ficar em pé, o bispo dele
+de f8 não sai, e nós desenvolvemos de graça.})
 5. Qxd4 d6
-(5... Nf6 6. e5 {O peao avanca e expulsa o cavalo antes que ele se instale.
-Ganhamos espaco e um tempo — e por isso que esse cavalo cedo nao e o melhor
+(5... Nf6 6. e5 {O peão avança e expulsa o cavalo antes que ele se instale.
+Ganhamos espaço e um tempo — é por isso que esse cavalo cedo não é o melhor
 lance dele.})
-6. Nc3 Nf6 7. Bf4 {O bispo vai para f4 mirando o peao de d6 e libera a casa c1
+6. Nc3 Nf6 7. Bf4 {O bispo vai para f4 mirando o peão de d6 e libera a casa c1
 para o roque grande.} 7... Be7 8. O-O-O {Roque grande. O rei sai do centro e a
-torre cai na coluna d, bem em frente ao peao de d6. Daqui o plano e sempre o
-mesmo: f3, g4 e os peoes avancam contra o rei dele.} *
+torre cai na coluna d, bem em frente ao peão de d6. Daqui o plano é sempre o
+mesmo: f3, g4 e os peões avançam contra o rei dele.} *
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
 [Cor "brancas"]
 [Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 2 da secao 8 de docs/REPERTORIO.md: nenhum curso do Doug responde a 5...c5 nem a 5...b6. O motor poe 6.De3 a 7 centesimos do primeiro lance dele, e 7.e5 e 8.Df3 sao a variante principal dele."]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 2 da seção 8 de docs/REPERTORIO.md: nenhum curso do Doug responde a 5...c5 nem a 5...b6. O motor põe 6.De3 a 7 centésimos do primeiro lance dele, e 7.e5 e 8.Df3 são a variante principal dele."]
 [Result "*"]
 
-1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4 5. Qxd4 c5
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4 5. Qxd4 {Agora é a dama que fica no
+meio do tabuleiro, e isso costuma ser perigoso: dama cedo apanha. Aqui não —
+não há peça dele pronta para expulsá-la de graça. Ele vai empurrá-la com peão, e
+cada peão que anda é um lance que ele não usou para desenvolver.} 5... c5
 (5... b6 6. Nc3 Bb7 7. Bf4 Nf6 8. O-O-O {Ele armou o bispo na diagonal grande
-para bater em e4, e nos simplesmente defendemos com o cavalo e seguimos o plano
-de sempre: bispo em f4 e roque grande. O peao de e4 esta seguro.})
-6. Qe3 {A dama sai do ataque do peao e fica na coluna e, ainda ativa e de olho
-no peao de c5.} 6... Nf6 7. e5 {O mesmo golpe da outra linha: o peao avanca e
+para bater em e4, e nós simplesmente defendemos com o cavalo e seguimos o plano
+de sempre: bispo em f4 e roque grande. O peão de e4 está seguro.})
+6. Qe3 {A dama sai do ataque do peão e fica na coluna e, ainda ativa e de olho
+no peão de c5.} 6... Nf6 7. e5 {O mesmo golpe da outra linha: o peão avança e
 expulsa o cavalo antes que ele se instale. Vale reparar que este truque aparece
 duas vezes na Escocesa.} 7... Nd5 8. Qf3 {De f3 a dama ataca o cavalo de d5 de
-novo e ainda olha para f7. Enquanto ele decide onde por esse cavalo, o nosso
-peao de e5 vai tomando o espaco do lado do rei.} *
+novo e ainda olha para f7. Enquanto ele decide onde pôr esse cavalo, o nosso
+peão de e5 vai tomando o espaço do lado do rei.} *
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -51,13 +61,19 @@ peao de e5 vai tomando o espaco do lado do rei.} *
 [Fonte "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'"]
 [Result "*"]
 
-1. e4 e5 2. Nf3 Nc6 3. d4 d6
-(3... Nf6 4. dxe5 Nxe4 5. Bc4 Nc5 6. Nc3 (6. Qe2 $5) {Ele pegou o peao de e4 mas
-o cavalo ja teve de andar duas vezes. Nos temos um peao forte em e5 e todas as
-pecas saindo com tempo.})
-(3... f6 4. Bc4 {Com o peao em f6 ele tapou a saida do proprio cavalo e
-enfraqueceu a diagonal que chega em f7 — e e exatamente para la que o bispo vai.
-Nem precisa correr: basta desenvolver, o centro ja e nosso.})
-4. Nc3 (4. d5 $5) 4... Nf6 5. Bb5 exd4 6. Nxd4 Bd7 7. O-O Be7 8. Nxc6 {Trocamos
-em c6 de proposito: o peao dele vira peao dobrado, o bispo de d7 perde a
-serventia e a nossa diagonal abre. Depois vem bispo para d3 e o avanco f4.} *
+1. e4 e5 2. Nf3 Nc6 3. d4 {O lance que abre o jogo. O normal é ele comer com
+…exd4, e é disso que trata o resto do arquivo. Este jogo reúne as três respostas
+em que ele não come — e a regra é sempre a mesma: quem não briga pelo centro,
+entrega o centro.} 3... d6
+(3... Nf6 4. dxe5 Nxe4 5. Bc4 Nc5 6. Nc3 (6. Qe2 $5) {Ele pegou o peão de e4 mas
+o cavalo já teve de andar duas vezes. Nós temos um peão forte em e5 e todas as
+peças saindo com tempo.})
+(3... f6 4. Bc4 {Com o peão em f6 ele tapou a saída do próprio cavalo e
+enfraqueceu a diagonal que chega em f7 — e é exatamente para lá que o bispo vai.
+Nem precisa correr: basta desenvolver, o centro já é nosso.})
+4. Nc3 (4. d5 $5) 4... Nf6 5. Bb5 {O bispo prega o cavalo de c6 contra o rei: ele
+não pode sair do lugar. E é justamente esse cavalo que briga com o nosso peão de
+d4. Guarde o lance — no oitavo nós vamos trocar essa peça de propósito.} 5... exd4
+6. Nxd4 Bd7 7. O-O Be7 8. Nxc6 {Trocamos
+em c6 de propósito: o peão dele vira peão dobrado, o bispo de d7 perde a
+serventia e a nossa diagonal abre. Depois vem bispo para d3 e o avanço f4.} *

@@ -56,9 +56,11 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "15": "Aqui o c3\nveio ja no lance 3, entao a dama vai a b6 de cara: ela ataca b2 e o cavalo dele\nnao tem mais como chegar a c3 para defender. Ele oferece a troca com 5.Db3 e\nnos avancamos …c4!, ganhando espaco e obrigando a troca mesmo assim. Depois de\n…axb6 a coluna a e da nossa torre, e o bispo em a4 vigia a casa b3 — que e por\nonde ele tentaria desfazer o nosso peao de c4."
+      "3": "Repare no que o 2.Bf4 faz e no que ele não faz. Desenvolve\numa peça, sim — mas, ao contrário do 2.c4, não disputa espaço nenhum no centro.\nÉ por isso que batemos em d4 na mesma hora com …c5, sem esperar convite. E o\nbispo, ao sair de casa, deixou b2 sem ninguém tomando conta: é em torno dessa\ncasa que giram as duas linhas deste arquivo.",
+      "9": "Ele oferece a troca de damas para se livrar da\npressão. Antes de trocar, empurramos: …c4! ganha espaço, tranca o bispo de f1\ndentro de casa, e a troca vai acontecer do mesmo jeito no lance seguinte — só\nque agora nos termos que nós escolhemos.",
+      "15": "Aqui o c3\nveio já no lance 3, então a dama vai a b6 de cara: ela ataca b2 e o cavalo dele\nnão tem mais como chegar a c3 para defender. Ele oferece a troca com 5.Db3 e\nnós avançamos …c4!, ganhando espaço e obrigando a troca mesmo assim. Depois de\n…axb6 a coluna a é da nossa torre, e o bispo em a4 vigia a casa b3 — que é por\nonde ele tentaria desfazer o nosso peão de c4."
     },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 6 da secao 8 de docs/REPERTORIO.md: o Short & Sweet do Kushager tem um unico capitulo de Londres e ele comeca por 2...Cf6, nao pelo 2...c5 que a secao 2.9 decidiu. As duas linhas sao do motor, e a ordem do ...Db6 foi medida: cedo demais ela perde (4...Db6 5.Cc3! poe as brancas +1,40), depois do c3 dele empata."
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 6 da seção 8 de docs/REPERTORIO.md: o Short & Sweet do Kushager tem um único capítulo de Londres e ele começa por 2...Cf6, não pelo 2...c5 que a seção 2.9 decidiu. Conferido no curso em 6/9/2026: o capítulo 'The London' joga 2...Cf6 3.e3 e6 4.Cf3 c5 5.Cbd2 Cc6 6.c3 cxd4 7.exd4 Ch5, caçando o bispo de f4 para pôr o nosso em d6 — outro plano, não o do ...Db6. As duas linhas são do motor, e a ordem do ...Db6 foi medida: cedo demais ela perde (4...Db6 5.Cc3! põe as brancas +1,40), depois do c3 dele empata."
   },
   {
     "id": "pretas-londres-53d5b431",
@@ -115,10 +117,16 @@
       15
     ],
     "alternativas": {},
-    "errosNomeados": {},
-    "comentarios": {
-      "15": "Repare no\nmomento: a dama so vai a b6 depois que ele joga c3. Com o peao dele nessa casa,\no cavalo de b1 nao chega mais a c3 para defender b2, e a dama incomoda de\ngraca. Um lance antes disso seria erro grave: 4…Db6 5.Cc3! e o motor da mais de\num peao para as brancas. Com a dama ja instalada, completamos a montagem — g6,\nBg7 e roque."
+    "errosNomeados": {
+      "7": [
+        "d8b6"
+      ]
     },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 6 da secao 8 de docs/REPERTORIO.md: o Short & Sweet do Kushager tem um unico capitulo de Londres e ele comeca por 2...Cf6, nao pelo 2...c5 que a secao 2.9 decidiu. As duas linhas sao do motor, e a ordem do ...Db6 foi medida: cedo demais ela perde (4...Db6 5.Cc3! poe as brancas +1,40), depois do c3 dele empata."
+    "comentarios": {
+      "3": "Repare no que o 2.Bf4 faz e no que ele não faz. Desenvolve\numa peça, sim — mas, ao contrário do 2.c4, não disputa espaço nenhum no centro.\nÉ por isso que batemos em d4 na mesma hora com …c5, sem esperar convite. E o\nbispo, ao sair de casa, deixou b2 sem ninguém tomando conta: é em torno dessa\ncasa que giram as duas linhas deste arquivo.",
+      "7": "Ainda não é hora da dama. Se ela fosse a b6 agora, o cavalo\nde b1 pularia para c3, defenderia b2 e ganharia um tempo em cima dela. Então\ndesenvolvemos e esperamos — o Londres quase sempre acaba jogando c3, e no lance\nem que ele jogar, aquela casa fecha para o cavalo.",
+      "15": "Repare no\nmomento: a dama só vai a b6 depois que ele joga c3. Com o peão dele nessa casa,\no cavalo de b1 não chega mais a c3 para defender b2, e a dama incomoda de\ngraça. Um lance antes disso seria erro grave: 4…Db6 5.Cc3! e o motor dá mais de\num peão para as brancas. Com a dama já instalada, completamos a montagem — g6,\nBg7 e roque."
+    },
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 6 da seção 8 de docs/REPERTORIO.md: o Short & Sweet do Kushager tem um único capítulo de Londres e ele começa por 2...Cf6, não pelo 2...c5 que a seção 2.9 decidiu. Conferido no curso em 6/9/2026: o capítulo 'The London' joga 2...Cf6 3.e3 e6 4.Cf3 c5 5.Cbd2 Cc6 6.c3 cxd4 7.exd4 Ch5, caçando o bispo de f4 para pôr o nosso em d6 — outro plano, não o do ...Db6. As duas linhas são do motor, e a ordem do ...Db6 foi medida: cedo demais ela perde (4...Db6 5.Cc3! põe as brancas +1,40), depois do c3 dele empata."
   }
 ]

@@ -56,8 +56,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "15": "O Colle e uma montagem sempre igual: e3, Bd3, c3, Cbd2 — e depois o\nestouro e3-e4, que e a unica ideia dele. O nosso bispo em d6 fica cara a cara\ncom o dele e vigia a casa e5; com …Cc6 e o roque, o e4 nao sai de graca. Se ele\ntrocar em c5, o bispo recaptura e ganha diagonal em vez de perder tempo."
+      "7": "Ele já mostrou o que quer: e3, Bd3 e\ndepois o estouro e3-e4. Nós batemos no centro na mesma hora com …c5. Enquanto o\npeão de d4 dele tiver de se preocupar com este aqui, o e4 não sai — e um Colle\nsem o e4 fica sem plano nenhum.",
+      "15": "O Colle é uma montagem sempre igual: e3, Bd3, c3, Cbd2 — e depois o\nestouro e3-e4, que é a única ideia dele. O nosso bispo em d6 fica cara a cara\ncom o dele e vigia a casa e5; com …Cc6 e o roque, o e4 não sai de graça. Se ele\ntrocar em c5, o bispo recaptura e ganha diagonal em vez de perder tempo."
     },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 8 da secao 8 de docs/REPERTORIO.md: o Short & Sweet do Kushager tem zero capitulos de Colle e de Jobava. A linha inteira e do motor e fica em igualdade."
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 8 da seção 8 de docs/REPERTORIO.md: o Short & Sweet do Kushager tem zero capítulos de Colle e de Jobava. A linha inteira é do motor e fica em igualdade."
   }
 ]

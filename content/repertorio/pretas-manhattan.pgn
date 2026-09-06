@@ -1,52 +1,64 @@
-; Manhattan — o nosso 1.d4 d5 2.c4 e6. Tres linhas do Base, e todas as tres
+; Manhattan — o nosso 1.d4 d5 2.c4 e6. Três linhas do Base, e todas as três
 ; terminam na mesma montagem: …Cbd7, …Bb4 pregando o cavalo de c3, e …c5
-; batendo no centro. E de proposito: uma ideia so para todas as ordens de
+; batendo no centro. É de propósito: uma ideia só para todas as ordens de
 ; lance.
 ;
-; O corte da secao 4 aplicado a tabela da secao 6. Depois de 3.Cc3 Cf6 ele joga
-; Bg5 30,7 por cento, Cf3 26,4, e3 12,3 e cxd5 10,8. As tres vagas vao para
+; O corte da seção 4 aplicado à tabela da seção 6. Depois de 3.Cc3 Cf6 ele joga
+; Bg5 30,7 por cento, Cf3 26,4, e3 12,3 e cxd5 10,8. As três vagas vão para
 ; Bg5 e Cf3 — os dois mais frequentes, 57 por cento somados — e o Bg5 leva
-; duas porque depois dele as brancas tem dois quintos lances de verdade
-; diferentes, e um deles e a armadilha do elefante, que o criterio do
-; repertorio ("armadilhas conhecidas") manda escrever.
+; duas porque depois dele as brancas têm dois quintos lances de verdade
+; diferentes, e um deles é a armadilha do elefante, que o critério do
+; repertório ("armadilhas conhecidas") manda escrever.
 ;
-; O 4.e3 ficou de fora com um argumento medido: contra ele os nossos lances sao
-; os mesmos do 4.Cf3 — …Cbd7, …Bb4, …c5 —, entao a vaga nao compraria ideia
+; O 4.e3 ficou de fora com um argumento medido: contra ele os nossos lances são
+; os mesmos do 4.Cf3 — …Cbd7, …Bb4, …c5 —, então a vaga não compraria ideia
 ; nova. O 4.cxd5, que muda a estrutura de verdade, e o 4.Bf4 (6,9 por cento,
-; abaixo do corte, buraco 10 da secao 8) ficam para o Avancado.
+; abaixo do corte, buraco 10 da seção 8) ficam para o Avançado.
 ;
-; O 3.Cf3 no lugar do 3.Cc3 transpoe: depois de 3...Cf6 4.Cc3 e a mesma
-; posicao da linha principal.
+; O 3.Cf3 no lugar do 3.Cc3 transpõe: depois de 3...Cf6 4.Cc3 é a mesma
+; posição da linha principal.
 
 [Abertura "manhattan"]
 [Nome "Manhattan — tronco"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "Short & Sweet: 1.d4 d5 do IM Kushager Krishnater (Chessable) — capitulo The Manhattan, tronco 4.Cf3 Cbd7 5.Bg5 Bb4 6.e3 c5 7.cxd5 exd5 8.dxc5 Da5."]
+[Fonte "Short & Sweet: 1.d4 d5 do IM Kushager Krishnater (Chessable) — capítulo The Manhattan, tronco 4.Cf3 Cbd7 5.Bg5 Bb4 6.e3 c5 7.cxd5 exd5 8.dxc5 Da5."]
 [Result "*"]
 
-1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 Nbd7 5. Bg5 Bb4 6. e3 c5 7. cxd5 exd5 8.
-dxc5 Qa5 {A dama em a5 e o bispo em b4 pregam o cavalo de c3 dos dois lados, e
-sem esse cavalo o peao dele em c5 fica sem quem o defenda: nos o recuperamos
-com …b6 ou com o cavalo, e o jogo iguala com as nossas pecas mais soltas que as
-dele. Foi o …c5 do lance 6 que abriu tudo isso.} *
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 Nbd7 {O cavalo parece mal posto: em c6 ele
+estaria mais no meio. O motivo de ir para d7 é um lance que ainda nem
+aconteceu. Se fôssemos direto de …Bb4, ele responderia Da4+ — com xeque — e nós
+seríamos obrigados a tapar com …Cc6. Cavalo em c6 tranca o peão de c7, e sem o
+…c5 a nossa ideia inteira morre. Com o cavalo já em d7, aquele Da4 deixa de ser
+xeque, e o bispo vai para b4 em paz. Guarde a ordem: …Cbd7, depois …Bb4, depois
+…c5.} 5. Bg5 Bb4 6. e3 c5 7. cxd5 exd5 8.
+dxc5 Qa5 {A dama sai e ameaça …Bxc3. Mas a ameaça não é o mais importante: o
+mais importante é que nós rocamos no lance seguinte e o rei dele continua
+parado no meio do tabuleiro, com o nosso bispo de b4 e a nossa dama de a5
+apontados para lá. Ele está com um peão a mais e o rei no meio — e é o rei que
+decide. Foi o …c5 do lance 6 que abriu tudo isso.} *
 
 [Abertura "manhattan"]
 [Nome "Manhattan — 4.Bg5"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "Livro + motor — a Armadilha do Elefante e posicao de livro, conferida no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026: depois de 6.Cxd5 Cxd5 as pretas ficam +3,43, uma peca. O ramo do 5.e3 e o mesmo tronco do Kushager numa ordem diferente, e a ponta fica em brancas +0,33."]
+[Fonte "Livro + motor — a Armadilha do Elefante é posição de livro, conferida no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026: depois de 6.Cxd5 Cxd5 as pretas ficam +3,43, uma peça. O ramo do 5.e3 é o mesmo tronco do Kushager numa ordem diferente, e a ponta fica em brancas +0,33."]
 [Result "*"]
 
-1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Nbd7 5. e3
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Nbd7 {Cavalo em d7 antes de qualquer outra
+coisa, de novo — e aqui ele faz dois trabalhos. Um é o de sempre: tira o xeque
+do Da4, que é o que nos obrigaria a pôr o cavalo em c6 e a perder o …c5. O
+outro é este: com ele no lugar, o cavalo de f6 não está pregado de verdade,
+mesmo com o bispo dele em g5. Quem tentar provar o contrário cai na armadilha
+da variante ao lado.} 5. e3
 (5. cxd5 exd5 6. Nxd5 $2 Nxd5 7. Bxd8 Bb4+ 8. Qd2 Bxd2+ {A Armadilha do
-Elefante, e o motivo de o cavalo ir para d7 antes de qualquer coisa. O cavalo
-de f6 parecia pregado na dama, mas nao estava: 6…Cxd5 e possivel porque, quando
+Elefante, é o motivo de o cavalo ir para d7 antes de qualquer coisa. O cavalo
+de f6 parecia pregado na dama, mas não estava: 6…Cxd5 é possível porque, quando
 ele pegar a dama com 7.Bxd8, vem o xeque 7…Bb4+. Ele tem de tapar com 8.Dd2,
-nos trocamos, e no lance seguinte o nosso rei come o bispo em d8 — com uma peca
-a mais no bolso. E se ele nao pegar a dama, tambem nao adianta: o cavalo dele ja
+nós trocamos, e no lance seguinte o nosso rei come o bispo em d8 — com uma peça
+a mais no bolso. E se ele não pegar a dama, também não adianta: o cavalo dele já
 foi embora.})
 5... Bb4 6. Nf3 c5 {Ele adiantou o bispo para g5 antes do cavalo de f3, e a
-nossa resposta nao muda em nada: …Cbd7, …Bb4 pregando o cavalo, …c5 batendo no
-centro. Compare com a linha principal deste arquivo: a posicao e exatamente a
-mesma. E sempre a mesma montagem, em qualquer ordem que ele jogue.} *
+nossa resposta não muda em nada: …Cbd7, …Bb4 pregando o cavalo, …c5 batendo no
+centro. Compare com a linha principal deste arquivo: a posição é exatamente a
+mesma. É sempre a mesma montagem, em qualquer ordem que ele jogue.} *

@@ -1,7 +1,7 @@
-; Alapin 2.c3 — 3 linhas do Base. As tres respostas mais jogadas na faixa
-; 1000-1400 sao 2...Cc6, 2...d6 e 2...e6, e sao essas que entram. Os capitulos
-; do Krikor sobre 2...Cf6 e 2...d5 ficam para o Avancado: pela tabela da secao 6
-; eles sao 6,1 por cento e 6,6 por cento, abaixo do corte do Base.
+; Alapin 2.c3 — 3 linhas do Base. As três respostas mais jogadas na faixa
+; 1000-1400 são 2...Cc6, 2...d6 e 2...e6, e são essas que entram. Os capítulos
+; do Krikor sobre 2...Cf6 e 2...d5 ficam para o Avançado: pela tabela da seção 6
+; eles são 6,1 por cento e 6,6 por cento, abaixo do corte do Base.
 
 [Abertura "alapin"]
 [Nome "Alapin 2.c3"]
@@ -10,15 +10,22 @@
 [Fonte "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'"]
 [Result "*"]
 
-1. e4 c5 2. c3 Nc6
-(2... d6 3. d4 Nf6 4. Bd3 {Ele nao brigou pelo centro, entao os dois peoes do
-meio ficam nossos e o bispo sai para d3 apoiando e4. Se ele trocar em d4, o peao
+1. e4 c5 2. c3 {O lance mais estranho do repertório, e o mais simples de
+entender: o peão de c3 não ataca nada, ele só guarda lugar para o de d2 avançar
+dois passos. Se ele comer em d4, quem recaptura é o peão de c3 — e o centro
+continua nosso.} 2... Nc6
+(2... d6 3. d4 Nf6 4. Bd3 {Ele não brigou pelo centro, então os dois peões do
+meio ficam nossos e o bispo sai para d3 apoiando e4. Se ele trocar em d4, o peão
 de c3 recaptura e o centro fica ainda maior.})
-(2... e6 3. d4 d5 4. e5 {O peao avanca e trava o centro. O bispo dele de c8 fica
-preso atras dos proprios peoes, e nos ganhamos espaco para jogar do lado do
+(2... e6 3. d4 d5 4. e5 {O peão avança e trava o centro. O bispo dele de c8 fica
+preso atrás dos próprios peões, e nós ganhamos espaço para jogar do lado do
 rei.})
-3. d4 cxd4 4. cxd4 {Este e o lance que da nome a abertura toda: o peao de c3
-recaptura e ficamos com dois peoes no centro, e4 e d4, contra nenhum.} 4... d6
-5. Nc3 g6 6. d5 Nb8 7. Nf3 Bg7 8. h3 {Antes de rocar, tiramos a casa g4 do bispo
-dele. Repare no centro: peoes em e4 e d5 e o cavalo dele de volta para casa — e
-isso que o 2.c3 constroi.} *
+3. d4 cxd4 4. cxd4 {Este é o lance que dá nome à abertura toda: o peão de c3
+recaptura e ficamos com dois peões no centro, e4 e d4, contra nenhum.} 4... d6
+5. Nc3 g6 6. d5 {O peão anda mais um e o cavalo dele não tem para onde ir a não
+ser voltar para casa — os dois lances que ele gastou com essa peça foram para o
+lixo. E o centro virou uma parede em e4 e d5, sem nenhum peão dele por perto
+para empurrá-la.} 6... Nb8 7. Nf3
+Bg7 8. h3 {Antes de rocar, tiramos a casa g4 do bispo
+dele. Repare no centro: peões em e4 e d5 e o cavalo dele de volta para casa — é
+isso que o 2.c3 constrói.} *
