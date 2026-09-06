@@ -1,7 +1,17 @@
 import { Chess } from "chess.js";
 import type { ChavePeca } from "./extrair.ts";
-import { LADO_PECA } from "./extrair.ts";
 import { PECAS } from "./pecas.ts";
+
+/**
+ * O lado do quadrado em que a peça cburnett foi desenhada.
+ *
+ * É o mesmo `LADO_PECA` de `extrair.ts`, e está repetido aqui de propósito: lá
+ * ele mora ao lado de um `readFileSync`, e importar o valor de lá arrastaria
+ * `node:fs` para dentro de todo componente de servidor que desenhe um
+ * diagrama. `tabuleiro.test.ts` confere que os dois números continuam iguais —
+ * é a cópia que o teste vigia, não a que se descobre quebrada em produção.
+ */
+const LADO_PECA = 45;
 
 /**
  * FEN → SVG, no servidor, para o diagrama impresso da apostila.
@@ -84,6 +94,32 @@ const COLUNAS = ["a", "b", "c", "d", "e", "f", "g", "h"] as const;
 
 export type Orientacao = "brancas" | "pretas";
 
+/**
+ * As três cores do diagrama.
+ *
+ * O padrão é o do **papel** (§ acima): casa clara é o branco da folha, escura é
+ * o cinza de 21%. A tela passa os tokens do site em `var(--color-…)`, e ganha
+ * o mesmo tabuleiro morno que o chessground desenha na aula — em vez de um
+ * diagrama cinza colado numa página que não é cinza.
+ *
+ * Isto é um parâmetro e não um segundo módulo porque a **geometria** é a mesma:
+ * duplicar o desenho para trocar três cores seria duas opiniões sobre onde fica
+ * a casa d4, e a divergência só apareceria com o aluno comparando a tela com a
+ * apostila.
+ */
+export type Paleta = {
+  readonly clara: string;
+  readonly escura: string;
+  readonly tinta: string;
+};
+
+/** A paleta do site, em tokens. Só serve dentro de um HTML que os define. */
+export const PALETA_DA_TELA: Paleta = {
+  clara: "var(--color-casa-clara)",
+  escura: "var(--color-casa-escura)",
+  tinta: "var(--color-coordenada)",
+};
+
 export type OpcoesDiagrama = {
   /** De que lado o aluno olha. O padrão é o lado de quem tem a vez na FEN. */
   readonly orientacao?: Orientacao;
@@ -91,6 +127,8 @@ export type OpcoesDiagrama = {
   readonly coordenadas?: boolean;
   /** Vira `<title>` — o que um leitor de tela leria, se o SVG for reusado na tela. */
   readonly titulo?: string;
+  /** As três cores. O padrão é o papel; a tela passa `PALETA_DA_TELA`. */
+  readonly paleta?: Paleta;
 };
 
 function escapar(texto: string): string {
@@ -113,6 +151,7 @@ export function diagrama(fen: string, opcoes: OpcoesDiagrama = {}): string {
   const jogo = new Chess(fen); // FEN inválida estoura aqui, não no PDF.
   const orientacao = opcoes.orientacao ?? (jogo.turn() === "w" ? "brancas" : "pretas");
   const comCoordenadas = opcoes.coordenadas ?? true;
+  const paleta = opcoes.paleta ?? { clara: CASA_CLARA, escura: CASA_ESCURA, tinta: TINTA };
   const daVezDasBrancas = orientacao === "brancas";
 
   const margem = comCoordenadas ? MARGEM : BORDA;
@@ -136,7 +175,7 @@ export function diagrama(fen: string, opcoes: OpcoesDiagrama = {}): string {
       partes.push(
         `<rect x="${margem + coluna * LADO_CASA}" y="${margem + linha * LADO_CASA}"` +
           ` width="${LADO_CASA}" height="${LADO_CASA}"` +
-          ` fill="${clara ? CASA_CLARA : CASA_ESCURA}" shape-rendering="crispEdges"/>`,
+          ` fill="${clara ? paleta.clara : paleta.escura}" shape-rendering="crispEdges"/>`,
       );
     }
   }
@@ -146,7 +185,7 @@ export function diagrama(fen: string, opcoes: OpcoesDiagrama = {}): string {
   partes.push(
     `<rect x="${margem + BORDA / 2}" y="${margem + BORDA / 2}"` +
       ` width="${tabuleiro - BORDA}" height="${tabuleiro - BORDA}"` +
-      ` fill="none" stroke="${TINTA}" stroke-width="${BORDA}"/>`,
+      ` fill="none" stroke="${paleta.tinta}" stroke-width="${BORDA}"/>`,
   );
 
   if (comCoordenadas) {
@@ -155,7 +194,7 @@ export function diagrama(fen: string, opcoes: OpcoesDiagrama = {}): string {
     // porque sans aguenta baixa resolução melhor que serifada de traço fino.
     const fonte =
       `font-family="'Segoe UI', Arial, 'Liberation Sans', sans-serif"` +
-      ` font-size="15" font-weight="600" fill="${TINTA}"`;
+      ` font-size="15" font-weight="600" fill="${paleta.tinta}"`;
     for (let i = 0; i < 8; i += 1) {
       const { coluna } = naTela(i, 0);
       partes.push(

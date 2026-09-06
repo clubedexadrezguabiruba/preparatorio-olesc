@@ -32,15 +32,24 @@
  *   7. nas aulas de finais a mesma fronteira aparece **dentro da mesma
  *      feature**: `tentativas_aula` não aceita `insert` de ninguém, porque há
  *      lances para o servidor reconferir, e `aula_lida` é do aluno, porque
- *      "li o exemplo até o fim" não tem o que reconferir.
+ *      "li o exemplo até o fim" não tem o que reconferir;
+ *   8. as duas declarações que a F2 acrescentou — `partida_do_dia` e
+ *      `dica_lida` — seguem o mesmo molde, e a view `minutos_por_dia` mostra
+ *      a cada um só o que é dele.
  *
- * O `with check` é a linha inteira da defesa nas duas tabelas em que o aluno
+ * O `with check` é a linha inteira da defesa nas tabelas em que o aluno
  * escreve — sem ele, um `insert` com o `aluno` trocado passaria, a política de
  * `select` esconderia a linha de quem a escreveu, e ela apareceria no painel da
  * vítima. O item 5 provou isso em `tarefa_conclusao`, a primeira tabela do
  * projeto em que o aluno escreveu; o item 7 (FN1/B3) prova o mesmo em
  * `aula_lida` — e prova, ao lado, que a porta de `tentativas_aula` continua
- * fechada para ele.
+ * fechada para ele. O item 8 (F2) repete a prova nas duas tabelas novas, e
+ * acrescenta a que faltava: **uma view não tem RLS própria**. A
+ * `minutos_por_dia` só não vaza o dia do vizinho porque foi criada com
+ * `security_invoker = on` — sem isso ela rodaria com os privilégios de quem a
+ * criou, a RLS das tabelas de baixo não seria consultada, e o painel de cada
+ * aluno mostraria a soma da turma inteira. É a espécie de furo que nenhum
+ * teste de TypeScript alcança, porque não há TypeScript envolvido.
  *
  * O PIN do professor entra como argumento (`node scripts/verificar-rls.ts
  * 123456`). Sem ele, as afirmações que dependem do professor são **puladas**,
@@ -277,6 +286,103 @@ try {
     .select("*", { count: "exact", head: true })
     .eq("aluno", criados[1]);
   afirmar(leituraDeBSobrou === 1, `A não apagou a leitura de B (sobrou ${leituraDeBSobrou})`);
+
+  console.log("\n8. As duas declarações novas da F2, pelo mesmo molde");
+
+  // `partida_do_dia`: o dia vem do servidor, mas a RLS é sobre o `aluno`. Um
+  // dia fixo e absurdo (2000-01-01) para que a linha nunca se confunda com
+  // dado real de ninguém, mesmo se a limpeza falhar.
+  const DIA = "2000-01-01";
+  const { error: erroPartidaDeA } = await alunoA
+    .from("partida_do_dia")
+    .insert({ aluno: criados[0], dia: DIA });
+  afirmar(!erroPartidaDeA, `A marca a partida dele (${erroPartidaDeA?.message ?? "sem erro"})`);
+
+  await alunoB.from("partida_do_dia").insert({ aluno: criados[1], dia: DIA });
+
+  const { error: erroPartidaNoNomeDeB } = await alunoA
+    .from("partida_do_dia")
+    .insert({ aluno: criados[1], dia: "2000-01-02" });
+  afirmar(
+    Boolean(erroPartidaNoNomeDeB),
+    `A não marca partida no nome de B (${erroPartidaNoNomeDeB?.code ?? "PASSOU!"})`,
+  );
+
+  const { data: partidasPorA } = await alunoA.from("partida_do_dia").select("aluno, dia");
+  afirmar(partidasPorA?.length === 1, `A vê 1 partida (viu ${partidasPorA?.length})`);
+  afirmar(partidasPorA?.[0]?.aluno === criados[0], "e a partida que A vê é a de A");
+
+  // `dica_lida`: o gêmeo de `aula_lida`, e a tabela que a `/trilha` e o cartão
+  // "Hoje" leem para contar meio-jogo.
+  const { error: erroDicaDeA } = await alunoA
+    .from("dica_lida")
+    .insert({ aluno: criados[0], dica: "m1" });
+  afirmar(!erroDicaDeA, `A declara a dica dele (${erroDicaDeA?.message ?? "sem erro"})`);
+
+  await alunoB.from("dica_lida").insert({ aluno: criados[1], dica: "m2" });
+
+  const { error: erroDicaNoNomeDeB } = await alunoA
+    .from("dica_lida")
+    .insert({ aluno: criados[1], dica: "m3" });
+  afirmar(
+    Boolean(erroDicaNoNomeDeB),
+    `A não declara dica no nome de B (${erroDicaNoNomeDeB?.code ?? "PASSOU!"})`,
+  );
+
+  const { data: dicasPorA } = await alunoA.from("dica_lida").select("aluno, dica");
+  afirmar(dicasPorA?.length === 1, `A vê 1 dica lida (viu ${dicasPorA?.length})`);
+  afirmar(dicasPorA?.[0]?.dica === "m1", "e a dica que A vê é a de A");
+
+  await alunoA.from("dica_lida").delete().eq("dica", "m2");
+  const { count: dicaDeBSobrou } = await admin
+    .from("dica_lida")
+    .select("*", { count: "exact", head: true })
+    .eq("aluno", criados[1]);
+  afirmar(dicaDeBSobrou === 1, `A não apagou a dica de B (sobrou ${dicaDeBSobrou})`);
+
+  console.log("\n9. A view `minutos_por_dia` mostra a cada um só o dia dele");
+
+  // A prova precisa de linha nos dois alunos, e `tentativas_puzzle` não aceita
+  // `insert` de aluno nenhum (item 4) — quem grava é a server action com a
+  // chave de serviço. Então é o admin que semeia, que é exatamente o caminho
+  // do site.
+  for (const [i, id] of criados.entries()) {
+    const { error } = await admin.from("tentativas_puzzle").insert({
+      aluno: id,
+      puzzle_id: `zz0000${i}`,
+      tema: "fork",
+      origem: "fork",
+      modo: "serie",
+      acertou: true,
+      tempo_ms: 60_000 * (i + 1),
+    });
+    if (error) throw new Error(`não semeou tentativa de ${id}: ${error.message}`);
+  }
+
+  const { data: viewPorA, error: erroView } = await alunoA
+    .from("minutos_por_dia")
+    .select("aluno, dia, bloco, tempo_ms, itens");
+  afirmar(!erroView, `A consegue ler a view (${erroView?.message ?? "sem erro"})`);
+  afirmar(
+    (viewPorA?.length ?? 0) > 0 && (viewPorA ?? []).every((l) => l.aluno === criados[0]),
+    `toda linha que A lê da view é de A (leu ${viewPorA?.length} linha(s))`,
+  );
+
+  // O que a `security_invoker = on` compra, dito em número: o admin vê as duas
+  // linhas, o aluno vê uma. Se a view rodasse com os privilégios do criador, os
+  // dois números seriam iguais e o painel do aluno mostraria a soma da turma.
+  const { data: viewPeloAdmin } = await admin
+    .from("minutos_por_dia")
+    .select("aluno, tempo_ms")
+    .in("aluno", criados);
+  afirmar(
+    viewPeloAdmin?.length === 2,
+    `o admin vê as duas linhas semeadas (viu ${viewPeloAdmin?.length})`,
+  );
+  afirmar(
+    (viewPorA ?? []).reduce((soma, l) => soma + l.tempo_ms, 0) === 60_000,
+    "e o total de A é o dele, não o da dupla",
+  );
 } finally {
   await limpar();
   console.log("\nContas de mentira apagadas.");

@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-ladder-freeborough-260",
+  "fen": "8/8/8/3k4/8/8/8/KRR5 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KRRK",
+    "ensino"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Edward Freeborough, que a publica como diagrama No. 260, o primeiro da seção de rei e duas torres contra rei, com a legenda 'White to play' e a promessa de mate em sete lances",
+    "bibliographicSource": "Freeborough, Chess Endings: A Companion to Chess Openings Ancient and Modern, Kegan Paul, Trench, Trübner & Co., Londres, 1891, p. impressa 123 (PDF p. 128, offset 5), cap. VII 'The Rook', Seção II 'King and Two Rooks against King', diagrama No. 260",
+    "originalGame": "não se aplica — posição teórica de tratado, não vem de partida",
+    "authorComposer": "não se aplica — é a posição de partida com que o tratado ensina o mate das duas torres, um fato do final e não uma composição autoral",
+    "license": "domínio público (obra de 1891, Reino Unido)",
+    "editionFile": "freeborough-chess-endings-1891.pdf",
+    "fenMethod": "transcrição do bitmap do diagrama, extraído do PDF em resolução nativa com pdfimages (o Freeborough guarda cada diagrama como objeto de imagem próprio, o que dispensa rasterizar a página). Leitura de imagem cega ao texto da página, com a grade das casas medida pelo perfil de tinta da moldura — campo de jogo de 568 × 573 px, casa de 71,0 × 71,6 px —, varredura das 64 casas por dois testes independentes (tinta pesada por casa e detecção de mancha branca dentro da hachura) e centróide de cada peça conferido contra o centro da casa (desvio máximo de 6% de casa). Este diagrama NÃO imprime coordenadas nem os rótulos BLACK/WHITE, e a paridade das casas (canto inferior esquerdo escuro) exclui espelhamento mas não o giro de 180°. Quem exclui o giro é a linha impressa: o primeiro lance é 'R-Ksq', e uma torre só alcança e1 partindo de c1 — na leitura girada as torres estariam em f8 e g8, de onde e1 não é lance de torre.",
+    "qaApplied": "garimpo FN1/B5.1, 2026-09-05: a linha impressa completa — 1.Te1 Rd4 2.Tbd1+ Rc3 3.Te2 Rc4 4.Tc2+ Rb3 5.Tc8, 'K moves', 6.Tb1, 'K moves', 7.Ta8 mate — é legal do começo ao fim nesta FEN e termina em xeque-mate no sétimo lance, exatamente o número que o livro imprime. A tablebase confirma win-white com DTM 13 meios-lances, isto é mate em 7 — o mesmo número, e a defesa que o livro escolhe só perde 2 meios-lances contra a melhor defesa da tablebase em um único ponto da linha (2…Rc3 em vez de 2…Rc4), o que cabe no teto de 2 do defensor resistente. Os dois lances que o livro deixa abertos ('K moves') foram fechados pela tablebase com a defesa mais resistente: 5…Ra3 e 6…Ra4.",
+    "pendingRisk": "nenhum conhecido"
+  }
+}

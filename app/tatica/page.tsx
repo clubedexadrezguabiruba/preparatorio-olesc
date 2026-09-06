@@ -39,7 +39,7 @@ export default async function Tatica() {
         <section key={bloco.id} className="flex flex-col gap-3">
           <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
             <h2 className="text-base font-semibold text-tinta">
-              <span className="text-tinta-muda tabular-nums">{bloco.id}.</span> {bloco.nome}
+              <span className="text-tinta-fraca tabular-nums">{bloco.id}.</span> {bloco.nome}
             </h2>
             <span className="text-xs text-tinta-fraca tabular-nums">
               rating {bloco.faixa[0]}–{bloco.faixa[1]}
@@ -59,7 +59,7 @@ export default async function Tatica() {
                   >
                     <div className="flex-1">
                       <p className="text-sm font-medium text-tinta-fraca">{tema.nome}</p>
-                      <p className="text-xs text-tinta-muda">
+                      <p className="text-xs text-tinta-fraca">
                         Abre no Sábado {bloco.sabado},{" "}
                         {porExtenso(sabadoDaSemana(bloco.sabado).data)}.
                       </p>
@@ -84,7 +84,7 @@ export default async function Tatica() {
                     <div className="flex w-16 shrink-0 flex-col items-end">
                       <span className="text-sm font-semibold text-tinta tabular-nums">
                         {Math.min(p.tentativas, PUZZLES_POR_TEMA)}
-                        <span className="text-tinta-muda">/{PUZZLES_POR_TEMA}</span>
+                        <span className="text-tinta-fraca">/{PUZZLES_POR_TEMA}</span>
                       </span>
                       {p.tentativas > 0 ? (
                         <span className="text-xs text-tinta-fraca tabular-nums">
@@ -100,7 +100,7 @@ export default async function Tatica() {
         </section>
       ))}
 
-      <p className="text-xs text-tinta-muda">
+      <p className="text-xs text-tinta-fraca">
         Os puzzles vêm do banco público do Lichess (CC0), recortados por tema e por faixa de
         rating.
       </p>

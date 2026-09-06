@@ -79,13 +79,28 @@ export function sabadoDaSemana(semana: Semana): Sabado {
 /** O último dia da semana: a véspera do sábado seguinte, ou do torneio. */
 export function fimDaSemana(semana: Semana): string {
   const seguinte = SABADOS.find((s) => s.semana === semana + 1);
-  return vespera(seguinte?.data ?? COMECO_DO_TORNEIO);
+  return somarDias(seguinte?.data ?? COMECO_DO_TORNEIO, -1);
 }
 
-function vespera(dia: string): string {
+/**
+ * `AAAA-MM-DD` mais `n` dias (ou menos, com `n` negativo).
+ *
+ * É a aritmética de que a revisão espaçada vive: "errou hoje, volta em 2
+ * dias". Feita ao meio-dia UTC de propósito — a data já é um dia inteiro sem
+ * fuso, e somar 24 h a partir do meio-dia nunca cruza uma meia-noite por
+ * causa de horário de verão em lugar nenhum.
+ */
+export function somarDias(dia: string, n: number): string {
   const d = new Date(`${dia}T12:00:00Z`);
-  d.setUTCDate(d.getUTCDate() - 1);
+  d.setUTCDate(d.getUTCDate() + n);
   return d.toISOString().slice(0, 10);
+}
+
+/** Quantos dias de `de` até `ate` (negativo se `ate` vem antes). */
+export function diasEntre(de: string, ate: string): number {
+  const a = Date.UTC(Number(de.slice(0, 4)), Number(de.slice(5, 7)) - 1, Number(de.slice(8, 10)));
+  const b = Date.UTC(Number(ate.slice(0, 4)), Number(ate.slice(5, 7)) - 1, Number(ate.slice(8, 10)));
+  return Math.round((b - a) / 86_400_000);
 }
 
 const MESES = [

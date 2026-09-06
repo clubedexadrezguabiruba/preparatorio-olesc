@@ -92,6 +92,16 @@
       "role": "Coletânea de finais organizada por material, não por técnica. Cap. I rei e peão (N1), cap. III torres (N3). Não traz os mates elementares de N0."
     },
     {
+      "slug": "posicoes-do-preparatorio",
+      "title": "Posições compostas pela autoria do preparatório",
+      "author": "Preparatório OLESC 2026 (Douglas Vieira dos Santos)",
+      "edition": "conteúdo do repositório, sem arquivo na biblioteca",
+      "protected": false,
+      "license": "CC0",
+      "file": null,
+      "role": "Não é livro: é o registro da autoria própria. Posição de meio-jogo montada casa a casa para isolar um traço (coluna aberta, peão isolado, posto, cor das casas), sem transcrever diagrama de obra nenhuma. Cada uma é conferida por chess.js e tem a afirmação da legenda medida em lib/meiojogo/afirmacoes.ts — é isso, e não a autoridade de um autor, que sustenta a proveniência. Existe porque §12.2 exige que toda posição cite obra registrada, e uma posição composta precisa dizer com todas as letras que foi composta."
+    },
+    {
       "slug": "lichess-open-database",
       "title": "Lichess Open Database",
       "author": "Lichess.org",

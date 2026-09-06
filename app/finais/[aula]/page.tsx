@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { LessonPlayer } from "@/components/lesson/LessonPlayer";
+import { Suspense } from "react";
 import { idsDeAula, lerPacote } from "@/lib/finais/conteudo";
 import { aulaDaTrilha } from "@/lib/finais/trilha";
-import { registrarEtapa } from "../acoes";
+import { AulaNoNavegador } from "./AulaNoNavegador";
 import { Leitura } from "./Leitura";
 
 /**
@@ -22,6 +22,11 @@ import { Leitura } from "./Leitura";
  * único pedaço de aula que depende do aluno é o controle da aula de leitura, e
  * ele busca o próprio estado ao montar (`Leitura.tsx`) — uma ida de rede nas
  * duas aulas que o têm, nenhuma nas outras 47.
+ *
+ * **E continua estática com o `?revisao=1` da F2.** Quem lê o parâmetro é a
+ * casca de cliente (`AulaNoNavegador.tsx`), no navegador; lê-lo aqui via
+ * `searchParams` derrubaria a estaticidade das 49 para servir a um parâmetro
+ * que só muda em qual etapa a aula abre.
  */
 
 export function generateStaticParams() {
@@ -52,11 +57,15 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8 sm:py-10">
       {/* O caminho de volta é o do próprio motor (LessonPlayer:121): dois links
           de voltar na mesma tela seriam duas respostas para a mesma pergunta. */}
-      <LessonPlayer
-        bundle={pacote}
-        onStageDone={registrarEtapa}
-        leitura={formato === "leitura" ? <Leitura aula={aula} /> : undefined}
-      />
+      {/* O Suspense é obrigatório: `useSearchParams` numa rota estática exige
+          um limite de suspense, ou a build reprova. O `null` no fallback é o
+          que já acontecia — o motor devolve `null` até a store abrir a aula. */}
+      <Suspense fallback={null}>
+        <AulaNoNavegador
+          pacote={pacote}
+          leitura={formato === "leitura" ? <Leitura aula={aula} /> : undefined}
+        />
+      </Suspense>
     </main>
   );
 }

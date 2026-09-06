@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { contraste, parseCor } from "../tema/cor.ts";
+import { LADO_PECA } from "./extrair.ts";
 import { PECAS } from "./pecas.ts";
 import {
   BORDA,
@@ -129,4 +130,12 @@ test("a paleta do papel não é a da tela", () => {
   // viram dois cinzas parecidos no laser P&B da escola.
   assert.equal(CASA_CLARA, "#ffffff");
   assert.equal(parseCor(CASA_ESCURA).r, parseCor(CASA_ESCURA).b);
+});
+
+test("o lado da casa continua igual ao lado da peça cburnett", () => {
+  // `tabuleiro.ts` guarda a própria cópia do 45 para não arrastar `node:fs`
+  // até o componente de servidor que desenha o diagrama na tela. Cópia sem
+  // vigia diverge: um upgrade do chessground que desenhasse em 40 faria a peça
+  // vazar da casa, e em silêncio.
+  assert.equal(LADO_CASA, LADO_PECA);
 });

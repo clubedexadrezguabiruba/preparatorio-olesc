@@ -21,6 +21,8 @@ function tema(tentativas: number, certos: number): ProgressoDoTema {
     acertos: { aquecimento: 0, serie: certos, prova: 0 },
     tentativas,
     certos,
+    tempoMedioMs: { aquecimento: null, serie: null, prova: null },
+    ultima: null,
   };
 }
 

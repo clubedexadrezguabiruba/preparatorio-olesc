@@ -38,6 +38,8 @@ import {
   type GeneratedTree,
 } from "./branches.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
+import { problemasDaPosicao } from "../lib/meiojogo/afirmacoes.ts";
+import { validarDicas, type Dica } from "../lib/meiojogo/dicas.ts";
 import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
 
 /**
@@ -149,6 +151,7 @@ const positionsDir = path.join(contentDir, "positions");
 const lessonsDir = path.join(contentDir, "lessons");
 const cacheDir = path.join(contentDir, "tablebase-cache");
 const sourcesFile = path.join(contentDir, "sources.json");
+const meioJogoFile = path.join(contentDir, "meio-jogo.json");
 /**
  * A pasta do modo autor. É **irmã** de `lessons/` e `positions/`, e não filha:
  * dentro delas a varredura recursiva de `lib/lesson/content.ts` levaria
@@ -1466,6 +1469,90 @@ function checkDidacticRotation() {
 }
 
 /* ------------------------------------------------------------------ *
+ * O meio-jogo (F2)
+ * ------------------------------------------------------------------ */
+
+/**
+ * As dicas de meio-jogo passam pelo mesmo gate das aulas de finais — no que
+ * cabe.
+ *
+ * **O que não cabe:** a tablebase. Uma posição de 24 peças não é julgável por
+ * ela, e é justamente essa ausência que faz a dica precisar de um juiz próprio.
+ * Quem julga a verdade da legenda é `lib/meiojogo/afirmacoes.ts`, e ele é
+ * chamado daqui **e** de `lib/meiojogo/dicas.test.ts` — a mesma função, para
+ * não haver duas opiniões sobre o que é uma legenda verdadeira.
+ *
+ * **O que cabe, e é o que este bloco cobra:**
+ *
+ * - `FEN_ILEGAL` e `AFIRMACAO_FALSA`, pelo verificador;
+ * - `OBRA_NAO_REGISTRADA`, a mesma âncora da §12.2 que vale para as posições;
+ * - `TETO_DE_CITACAO`, o teto de {@link PROTECTED_SOURCE_CAP} posições por obra
+ *   protegida — aqui por **dica**, que é a unidade equivalente à aula.
+ *
+ * O teto não morde hoje, porque as 30 posições são compostas pela autoria e a
+ * obra `posicoes-do-preparatorio` não é protegida. Ele existe para o dia em que
+ * uma posição vier do Znosko-Borovsky ou do Lasker — e nesse dia ninguém vai
+ * lembrar de escrever a regra.
+ */
+const dicas: Dica[] = [];
+
+{
+  const where = relative(meioJogoFile);
+  if (!existsSync(meioJogoFile)) {
+    fail("MEIO_JOGO_AUSENTE", where, "o módulo de meio-jogo perdeu o arquivo de conteúdo");
+  } else {
+    try {
+      dicas.push(...validarDicas(JSON.parse(readFileSync(meioJogoFile, "utf8"))));
+    } catch (error) {
+      fail("SCHEMA_DICA", where, error instanceof Error ? error.message : String(error));
+    }
+  }
+
+  for (const dica of dicas) {
+    const onde = `dica ${dica.id}`;
+
+    for (const [i, posicao] of dica.posicoes.entries()) {
+      const naDica = `${onde} / posição ${i + 1}`;
+      for (const problema of problemasDaPosicao(posicao)) {
+        // A FEN ilegal já vem rotulada pelo verificador, e ela é a causa: as
+        // afirmações nem chegam a ser medidas numa posição impossível.
+        const codigo = problema.startsWith("FEN ilegal") ? "FEN_ILEGAL" : "AFIRMACAO_FALSA";
+        fail(codigo, naDica, problema);
+      }
+
+      const chave = posicao.provenance.editionFile;
+      if (!sourcesByKey.has(chave)) {
+        fail(
+          "OBRA_NAO_REGISTRADA",
+          naDica,
+          `provenance.editionFile "${chave}" não está em content/sources.json — ` +
+            `cite o arquivo ou o slug de uma obra registrada`,
+        );
+      }
+    }
+
+    const porObra = new Map<string, { source: Source; quantas: number }>();
+    for (const posicao of dica.posicoes) {
+      const source = sourcesByKey.get(posicao.provenance.editionFile);
+      if (!source) continue; // já reportado como OBRA_NAO_REGISTRADA
+      const balde = porObra.get(source.slug) ?? { source, quantas: 0 };
+      balde.quantas += 1;
+      porObra.set(source.slug, balde);
+    }
+    for (const { source, quantas } of porObra.values()) {
+      if (source.protected && quantas > PROTECTED_SOURCE_CAP) {
+        fail(
+          "TETO_DE_CITACAO",
+          onde,
+          `${quantas} posições saem de "${source.title}", obra protegida, e o teto da §12.7 é ` +
+            `${PROTECTED_SOURCE_CAP} por dica — misture fontes`,
+        );
+      }
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ *
  * Execução
  * ------------------------------------------------------------------ */
 
@@ -1549,6 +1636,11 @@ console.log(
     `(${[...new Set(sourcesByKey.values())].filter((s) => s.protected).length} com teto)`,
 );
 console.log(
+  `  meio-jogo: ${dicas.length} dica(s), ` +
+    `${dicas.reduce((soma, d) => soma + d.posicoes.length, 0)} posição(ões), ` +
+    `${dicas.reduce((soma, d) => soma + d.posicoes.reduce((n, p) => n + p.afirma.length, 0), 0)} afirmação(ões) medida(s)`,
+);
+console.log(
   `  tablebase: ${tablebase.usedFiles().size} posições consultadas ` +
     `(${tablebase.hits} do cache, ${tablebase.fetched} pela rede)`,
 );
@@ -1572,7 +1664,10 @@ if (orphanCache.length > 0) {
 console.log("");
 
 if (issues.length === 0) {
-  console.log(`${VERDE}✔ tudo verde — ${positions.size} posições e ${lessons.length} aula(s) sem nenhum problema${NORMAL}`);
+  console.log(
+    `${VERDE}✔ tudo verde — ${positions.size} posições, ${lessons.length} aula(s) e ` +
+      `${dicas.length} dica(s) de meio-jogo sem nenhum problema${NORMAL}`,
+  );
   process.exit(0);
 }
 

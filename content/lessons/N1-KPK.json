@@ -1,0 +1,605 @@
+{
+  "id": "N1-KPK",
+  "title": "Rei e peão contra rei: o rei na frente do peão",
+  "class": "D",
+  "orientation": "white",
+  "domainCriterion": "D1",
+  "status": "published",
+  "errors": {
+    "peao-na-frente": {
+      "verdict": "loses-win",
+      "text": "O peão não pode passar na frente do rei. Empurrado sozinho, ele chega à casa de promoção com o rei preto plantado ali — e a partida acaba empatada. Quem anda primeiro é o rei."
+    },
+    "rei-para-tras": {
+      "verdict": "loses-win",
+      "text": "O rei recuou ou andou de lado, e com isso entregou a oposição. Daqui o rei preto se planta na frente do peão e não sai mais: empate."
+    },
+    "rei-para-o-lado": {
+      "verdict": "loses-win",
+      "text": "Andar para o lado sem ganhar fileira devolve a vez ao adversário na hora errada. Com os dois reis se olhando, quem tem de mexer é quem perde terreno — e agora quem tem de mexer é você."
+    }
+  },
+  "fallbacks": {
+    "winningOffMethod": "Esse lance ainda ganha, mas não é o caminho da aula. Volte e tente o lance da técnica.",
+    "losesWin": "Esse lance joga a vitória fora. Volte e tente de novo.",
+    "methodAlternative": "Esse lance é a mesma ideia pelo outro lado: ele leva o rei para a frente do peão do mesmo jeito."
+  },
+  "stages": {
+    "objective": {
+      "source": "silman-endgame-course",
+      "technique": {
+        "name": "O rei primeiro",
+        "summary": "Rei e peão contra rei sozinho não é uma corrida de peão: é uma disputa entre os dois reis. Quem consegue pôr o próprio rei à frente do peão ganha; quem empurra o peão sem o rei empata."
+      },
+      "why": "Este é o final que decide mais partidas de 1000 a 1400 do que qualquer outro, e é o que sustenta metade do curso: torres, bispos e cavalos acabam trocados, e o que sobra é isto. A aula anterior mostrou um peão a mais que não ganhou; esta mostra o mesmo material ganhando, e a diferença inteira está em uma coisa — o rei branco chegar à frente do peão, com a oposição. Aprender isto é aprender também quando **não** dá: você vai saber, olhando, se aquele peão a mais vale meio ponto ou um ponto inteiro.",
+      "rules": [
+        {
+          "title": "O rei vai na frente; o peão fica onde está",
+          "text": "O primeiro lance não é do peão. Enquanto os dois reis disputam terreno, o peão é um recurso guardado: cada lance dele é um tempo gasto que não volta, e é justamente de tempo que esta disputa se trata.",
+          "frame": {
+            "scene": "o-rei-decide",
+            "step": 1
+          }
+        },
+        {
+          "title": "O peão só anda quando o rei já passou",
+          "text": "O peão avança quando o rei branco já está à frente dele e o rei preto já foi empurrado para trás. Aí o peão anda protegido, e cada casa que ele ganha é definitiva.",
+          "frame": {
+            "scene": "o-rei-decide",
+            "step": 8
+          }
+        },
+        {
+          "title": "A oposição é o que abre a passagem",
+          "text": "Dois reis na mesma coluna, com uma casa entre eles: quem tem de mexer cede. É por isso que o lance de espera do peão existe — ele passa a vez para o adversário no momento em que ceder custa caro.",
+          "frame": {
+            "scene": "o-rei-decide",
+            "step": 14
+          }
+        },
+        {
+          "title": "Com o caminho aberto, o peão promove",
+          "text": "Quando o rei preto é obrigado a sair da coluna do peão, acabou. O peão desce a coluna livre e vira dama, e o que vem depois é o mate da caixa, que você já sabe dar.",
+          "frame": {
+            "scene": "o-rei-decide",
+            "step": 24
+          }
+        }
+      ],
+      "frame": {
+        "scene": "o-rei-decide",
+        "step": 24
+      },
+      "mastery": "Dominado = completar a etapa sem ajuda numa posição que você não viu, sem nenhum lance que jogue a vitória fora, e depois vencer o computador na prática."
+    },
+    "example": {
+      "scenes": [
+        {
+          "id": "o-rei-decide",
+          "title": "O rei na frente, e o peão promove",
+          "positionId": "pos-n1-kpk-silman-d62",
+          "intro": "Rei branco em d3, peão em d2, rei preto em d5, e as pretas na vez. Esta posição é curiosa: quem tiver de jogar perde o que queria — as brancas perdem a vitória, as pretas perdem o empate. Como quem joga é o preto, está ganho. Acompanhe treze lances e repare: o peão só sai do lugar no quinto.",
+          "ends": "promotion",
+          "phases": [
+            {
+              "title": "O rei vai na frente; o peão fica onde está",
+              "fromStep": 1
+            },
+            {
+              "title": "O peão só anda quando o rei já passou",
+              "fromStep": 8
+            },
+            {
+              "title": "A oposição é o que abre a passagem",
+              "fromStep": 14
+            },
+            {
+              "title": "Com o caminho aberto, o peão promove",
+              "fromStep": 18
+            }
+          ],
+          "steps": [
+            {
+              "move": "d5c5",
+              "text": "As pretas têm de mexer e não querem: qualquer lance solta a coluna do peão. O rei preto vai para c5."
+            },
+            {
+              "move": "d3e4",
+              "text": "O rei branco avança pelo lado que ficou livre. Este é o lance da aula inteira — o rei sobe, o peão espera.",
+              "arrows": [
+                [
+                  "d3",
+                  "e4"
+                ]
+              ],
+              "highlights": [
+                "e4"
+              ]
+            },
+            {
+              "move": "c5d6",
+              "text": "O rei preto volta a se pôr na frente do peão. Ele vai fazer isso o tempo todo; a questão é se consegue."
+            },
+            {
+              "move": "e4d4",
+              "text": "E o rei branco toma a oposição: mesma coluna, uma casa entre eles, e a vez é do preto.",
+              "arrows": [
+                [
+                  "e4",
+                  "d4"
+                ]
+              ],
+              "highlights": [
+                "d4",
+                "d6"
+              ]
+            },
+            {
+              "move": "d6c6",
+              "text": "Obrigado a ceder, ele sai para o lado."
+            },
+            {
+              "move": "d4e5",
+              "text": "O rei branco ganha uma fileira. Repare no padrão: o preto cede para um lado, o branco avança pelo outro.",
+              "arrows": [
+                [
+                  "d4",
+                  "e5"
+                ]
+              ],
+              "highlights": [
+                "e5"
+              ]
+            },
+            {
+              "move": "c6d7",
+              "text": "O rei preto recua para a frente do peão outra vez, agora na 7ª."
+            },
+            {
+              "move": "d2d3",
+              "text": "Só agora o peão anda, e por um motivo exato: ele é um lance de espera. Com o peão em d3 a vez volta para o preto na posição em que ceder dói.",
+              "arrows": [
+                [
+                  "d2",
+                  "d3"
+                ]
+              ],
+              "highlights": [
+                "d3"
+              ]
+            },
+            {
+              "move": "d7c6",
+              "text": "O rei preto tenta atacar por c6."
+            },
+            {
+              "move": "d3d4",
+              "text": "Outro lance de espera do peão, e o rei branco continua parado em e5 — no lugar certo.",
+              "arrows": [
+                [
+                  "d3",
+                  "d4"
+                ]
+              ],
+              "highlights": [
+                "d4"
+              ]
+            },
+            {
+              "move": "c6d7",
+              "text": "De volta à frente do peão."
+            },
+            {
+              "move": "e5d5",
+              "text": "Agora o rei branco pega a oposição na 5ª fileira, com o peão já em d4 atrás dele.",
+              "arrows": [
+                [
+                  "e5",
+                  "d5"
+                ]
+              ],
+              "highlights": [
+                "d5",
+                "d7"
+              ]
+            },
+            {
+              "move": "d7e7",
+              "text": "Ele cede para o lado, como antes."
+            },
+            {
+              "move": "d5c6",
+              "text": "E o rei branco avança pelo lado contrário. É sempre este o mecanismo: a oposição obriga o preto a escolher um lado, e o branco toma o outro.",
+              "arrows": [
+                [
+                  "d5",
+                  "c6"
+                ]
+              ],
+              "highlights": [
+                "c6"
+              ]
+            },
+            {
+              "move": "e7e8",
+              "text": "O rei preto recua para a última fileira."
+            },
+            {
+              "move": "c6c7",
+              "text": "O rei branco chega à 7ª fileira, ao lado da casa de promoção. Daqui não há mais defesa.",
+              "arrows": [
+                [
+                  "c6",
+                  "c7"
+                ]
+              ],
+              "highlights": [
+                "c7",
+                "d8"
+              ]
+            },
+            {
+              "move": "e8e7",
+              "text": "Ele volta, mas tarde: a casa d8 já é do rei branco."
+            },
+            {
+              "move": "d4d5",
+              "text": "Agora sim o peão marcha, com o rei branco cobrindo a chegada.",
+              "arrows": [
+                [
+                  "d4",
+                  "d5"
+                ]
+              ],
+              "highlights": [
+                "d5"
+              ]
+            },
+            {
+              "move": "e7f6",
+              "text": "O rei preto corre atrás do peão, e não alcança."
+            },
+            {
+              "move": "d5d6",
+              "text": "Peão à 6ª.",
+              "arrows": [
+                [
+                  "d5",
+                  "d6"
+                ]
+              ],
+              "highlights": [
+                "d6"
+              ]
+            },
+            {
+              "move": "f6e5",
+              "text": "Ele continua correndo."
+            },
+            {
+              "move": "d6d7",
+              "text": "Peão à 7ª, e a casa de promoção está guardada pelo rei branco em c7.",
+              "arrows": [
+                [
+                  "d6",
+                  "d7"
+                ]
+              ],
+              "highlights": [
+                "d7",
+                "d8"
+              ]
+            },
+            {
+              "move": "e5d4",
+              "text": "Último lance das pretas, sem efeito nenhum."
+            },
+            {
+              "move": "d7d8q",
+              "text": "Dama. Daqui em diante é o mate da caixa, que você já sabe dar — e o peão só existiu porque o rei chegou primeiro.",
+              "arrows": [
+                [
+                  "d7",
+                  "d8"
+                ]
+              ],
+              "highlights": [
+                "d8"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "guided": {
+      "positionId": "pos-n1-kpk-rogers-iv",
+      "root": "n1",
+      "intro": "Rei e peão nas casas de origem, contra o rei sozinho. Duas obras de 1891 e 1907 dão esta posição, e as duas dizem a mesma coisa: com as brancas na vez, ganha; com as pretas, empata. Você tem a vez. Não empurre o peão.",
+      "nodes": {
+        "n1": {
+          "fen": "4k3/8/8/8/8/8/4P3/4K3 w - - 0 1",
+          "hint": "O peão sozinho não passa. Comece pelo rei — e para o lado, não para a frente: e2 é do peão.",
+          "highlights": [
+            "d2",
+            "f2"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "e1d2"
+              ],
+              "feedback": "Isso. O rei sai primeiro, e sai pelo lado, porque a casa da frente é do peão.",
+              "reply": "e8d7",
+              "next": "n2"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "e2e3",
+                "e2e4"
+              ],
+              "errorId": "peao-na-frente"
+            },
+            {
+              "moves": [
+                "e1d1",
+                "e1f1"
+              ],
+              "errorId": "rei-para-tras"
+            }
+          ],
+          "authorAlternatives": [
+            {
+              "moves": [
+                "e1f2"
+              ],
+              "feedback": "Também ganha, e pelo mesmo motivo: o rei saiu primeiro. Este é o caminho espelhado — a aula segue pelo outro lado, mas guarde a ideia, porque ela vale igual."
+            }
+          ],
+          "winningMoves": [
+            "e1d2",
+            "e1f2"
+          ]
+        },
+        "n2": {
+          "fen": "8/3k4/8/8/8/8/3KP3/8 w - - 2 2",
+          "hint": "Continue subindo com o rei. O peão ainda não tem nada a fazer.",
+          "highlights": [
+            "e3"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "d2e3"
+              ],
+              "feedback": "O rei ganha mais uma fileira. Repare que o peão continua em e2 — ele é o lance de espera que você vai precisar depois.",
+              "reply": "d7d6",
+              "next": "n3"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "e2e3",
+                "e2e4"
+              ],
+              "errorId": "peao-na-frente"
+            },
+            {
+              "moves": [
+                "d2c1",
+                "d2d1",
+                "d2e1"
+              ],
+              "errorId": "rei-para-tras"
+            },
+            {
+              "moves": [
+                "d2c2"
+              ],
+              "errorId": "rei-para-o-lado"
+            }
+          ],
+          "winningMoves": [
+            "d2c3",
+            "d2d3",
+            "d2e3"
+          ]
+        },
+        "n3": {
+          "fen": "8/8/3k4/8/8/4K3/4P3/8 w - - 4 3",
+          "hint": "Mais uma fileira para o rei. Ele precisa chegar à frente do peão, não ao lado dele.",
+          "highlights": [
+            "e4"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "e3e4"
+              ],
+              "feedback": "Agora o rei branco está duas fileiras à frente do peão, e é o rei preto que tem de decidir por onde vir.",
+              "reply": "d6e6",
+              "next": "n4"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "e3d2",
+                "e3f2"
+              ],
+              "errorId": "rei-para-tras"
+            },
+            {
+              "moves": [
+                "e3d3"
+              ],
+              "errorId": "rei-para-o-lado"
+            }
+          ],
+          "winningMoves": [
+            "e3d4",
+            "e3e4",
+            "e3f3",
+            "e3f4"
+          ]
+        },
+        "n4": {
+          "fen": "8/8/4k3/8/4K3/8/4P3/8 w - - 6 4",
+          "hint": "Os dois reis se olham com uma casa entre eles, e quem tem de mexer é você. Existe um lance que passa a vez sem largar terreno nenhum.",
+          "highlights": [
+            "e3"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "e2e3"
+              ],
+              "feedback": "Este é o lance. O peão anda uma casa, o rei branco fica onde está, e a vez volta para o preto na posição em que ceder custa a partida. Daqui a vitória é técnica: o rei branco entra por um lado e o peão promove.",
+              "ends": "tablebase-win"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "e4d3",
+                "e4e3",
+                "e4f3"
+              ],
+              "errorId": "rei-para-tras"
+            }
+          ],
+          "winningMoves": [
+            "e2e3",
+            "e4d4",
+            "e4f4"
+          ]
+        }
+      }
+    },
+    "solo": {
+      "positionId": "pos-n1-kpk-staunton-p410",
+      "root": "n1",
+      "moveLimit": 6,
+      "nodes": {
+        "n1": {
+          "fen": "4k3/8/8/4K3/4P3/8/8/8 w - - 0 1",
+          "expects": [
+            {
+              "moves": [
+                "e5e6"
+              ],
+              "feedback": "Sexta fileira, à frente do peão. É a casa que decide o final.",
+              "replies": [
+                {
+                  "reply": "e8d8",
+                  "next": "n2"
+                },
+                {
+                  "reply": "e8f8",
+                  "next": "n3"
+                }
+              ]
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "e5d4",
+                "e5f4"
+              ],
+              "errorId": "rei-para-tras"
+            },
+            {
+              "moves": [
+                "e5d5",
+                "e5f5"
+              ],
+              "errorId": "rei-para-o-lado"
+            }
+          ],
+          "winningMoves": [
+            "e5d6",
+            "e5e6",
+            "e5f6"
+          ]
+        },
+        "n2": {
+          "fen": "3k4/8/4K3/8/4P3/8/8/8 w - - 2 2",
+          "expects": [
+            {
+              "moves": [
+                "e6d6"
+              ],
+              "feedback": "Oposição tomada na sexta fileira: o rei preto tem de sair da coluna do peão, e a partida está ganha.",
+              "ends": "tablebase-win"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "e6e5"
+              ],
+              "errorId": "rei-para-tras"
+            },
+            {
+              "moves": [
+                "e6d5"
+              ],
+              "errorId": "rei-para-o-lado"
+            }
+          ],
+          "winningMoves": [
+            "e4e5",
+            "e6d6",
+            "e6f5",
+            "e6f6",
+            "e6f7"
+          ]
+        },
+        "n3": {
+          "fen": "5k2/8/4K3/8/4P3/8/8/8 w - - 2 2",
+          "expects": [
+            {
+              "moves": [
+                "e6f6"
+              ],
+              "feedback": "Mesma ideia pelo outro lado: oposição na sexta, e o rei preto cede a coluna.",
+              "ends": "tablebase-win"
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "e6e5"
+              ],
+              "errorId": "rei-para-tras"
+            },
+            {
+              "moves": [
+                "e6f5"
+              ],
+              "errorId": "rei-para-o-lado"
+            }
+          ],
+          "winningMoves": [
+            "e4e5",
+            "e6d5",
+            "e6d6",
+            "e6d7",
+            "e6f6"
+          ]
+        }
+      }
+    },
+    "practice": {
+      "positionId": "pos-n1-kpk-silman-d62",
+      "goal": "win",
+      "engine": {
+        "skill": 20,
+        "moveTimeMs": 300
+      }
+    }
+  }
+}

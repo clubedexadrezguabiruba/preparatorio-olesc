@@ -3,8 +3,10 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { SABADOS } from "../curso/calendario.ts";
+import { SABADOS, SEMANAS } from "../curso/calendario.ts";
 import { CLASSES, TRILHA } from "../finais/trilha.ts";
+import { NIVEIS } from "../curso/trilha.ts";
+import { dicasDoNivel } from "../meiojogo/conteudo.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { daSemana, validarTarefas } from "./tarefas.ts";
 
@@ -72,6 +74,43 @@ test("as metas de finais apontam para classes que a trilha tem, com aula a abrir
       `a tarefa "${tarefa.id}" pede ${tarefa.meta.dominar} aulas e só ${disponiveis} ` +
         `estão na trilha até a semana ${tarefa.semana}`,
     );
+  }
+});
+
+test("as metas de meio-jogo apontam para degraus que existem, com dica escrita", () => {
+  // O gêmeo do teste acima, e pelo mesmo erro real: pedir "8 dicas do degrau
+  // 1400-1600" quando só 6 estão escritas deixaria a barra parada em 6 de 8 e
+  // o aluno concluiria que marcar não funciona.
+  const degraus = new Set(NIVEIS.map((n) => n.id));
+  for (const tarefa of validarTarefas(lerConteudo())) {
+    if (tarefa.tipo !== "meiojogo") continue;
+    assert.ok(
+      degraus.has(tarefa.meta.nivel),
+      `a tarefa "${tarefa.id}" pede o degrau "${tarefa.meta.nivel}", que não existe`,
+    );
+    const escritas = dicasDoNivel(tarefa.meta.nivel).length;
+    assert.ok(
+      escritas >= tarefa.meta.ler,
+      `a tarefa "${tarefa.id}" pede ${tarefa.meta.ler} dicas e só ${escritas} ` +
+        `estão escritas no degrau ${tarefa.meta.nivel}`,
+    );
+  }
+});
+
+test("toda semana do curso tem tarefa dos quatro blocos da rotina", () => {
+  // A rotina de 2 h tem quatro blocos — tática, finais, meio-jogo e partida —,
+  // e uma semana sem tarefa de um deles é meia hora por dia sem destino. O
+  // bloco da partida é sempre `marcar`: não há API do chess.com para conferir.
+  const tarefas = validarTarefas(lerConteudo());
+  for (const semana of SEMANAS) {
+    const daqui = tarefas.filter((t) => t.semana === semana);
+    if (daqui.length === 0) continue; // semana ainda não escrita
+    for (const tipo of ["tatica", "finais", "meiojogo"] as const) {
+      assert.ok(
+        daqui.some((t) => t.tipo === tipo),
+        `a semana ${semana} não tem tarefa de ${tipo}`,
+      );
+    }
   }
 });
 

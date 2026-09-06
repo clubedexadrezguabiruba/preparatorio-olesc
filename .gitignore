@@ -52,3 +52,7 @@ next-env.d.ts
 # Vercel não tem Chromium para regerá-lo na build.
 /apostila/saida/
 /.conferencia/
+
+# Rascunho de sessão: scripts de conferência, capturas de tela, geradores.
+# Nada aqui é fonte de verdade — o que vale está em content/, lib/ e docs/.
+.scratch/

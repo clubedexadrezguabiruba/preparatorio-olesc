@@ -21,9 +21,10 @@ import {
   setSoundOn,
   subscribeSound,
 } from "@/lib/sound";
+import { temaPorTag } from "@/lib/tatica/blocos";
 import { lanceCerto } from "@/lib/tatica/conferir";
 import type { PuzzleServido } from "@/lib/tatica/puzzles";
-import { NOME_DA_ETAPA, type Etapa } from "@/lib/tatica/serie";
+import { NOME_DO_MODO, type Modo } from "@/lib/tatica/serie";
 import {
   ABERTURA_MS,
   FIM_COM_MATE_MS,
@@ -97,14 +98,19 @@ type Fase =
   | "resolvido";
 
 export type SerieProps = {
-  tema: string;
+  /**
+   * O tema em que o aluno está, ou `null` na **revisao do dia**, que mistura
+   * temas: ali cada tentativa e gravada no tema de origem do proprio puzzle.
+   */
+  tema: string | null;
   nomeDoTema: string;
-  etapa: Etapa;
+  etapa: Modo;
   puzzles: PuzzleServido[];
   jaFeitosNaEtapa: number;
   metaDaEtapa: number;
-  feitosNoTema: number;
-  totalNoTema: number;
+  /** `null` fora de um tema (revisao): nao ha "tema 12/39" a mostrar. */
+  feitosNoTema: number | null;
+  totalNoTema: number | null;
   explicacao: string[];
   procure: string[];
   cuidado: string | null;
@@ -148,7 +154,9 @@ export function Serie({
     async (p: PuzzleServido, lances: string[], tempoMs: number) => {
       const resposta = await registrarTentativa({
         puzzleId: p.id,
-        tema,
+        // Na revisao nao ha tema: a linha e gravada no tema de origem do
+        // puzzle, que e onde ele conta desde a primeira vez.
+        tema: tema ?? p.origem,
         origem: p.origem,
         modo: etapa,
         lances,
@@ -187,7 +195,7 @@ export function Serie({
   if (fim || !puzzle) {
     return (
       <div className="flex flex-col gap-4 rounded-xl border border-borda-fraca bg-carta px-5 py-6">
-        <p className="rotulo text-metodo-tinta">{NOME_DA_ETAPA[etapa]} — fim</p>
+        <p className="rotulo text-metodo-tinta">{NOME_DO_MODO[etapa]} — fim</p>
         <p className="titulo text-tinta tabular-nums">
           {placar.certos} de {placar.total} de primeira
         </p>
@@ -195,8 +203,21 @@ export function Serie({
           {placar.total === 0
             ? "Nenhum puzzle entrou na conta."
             : placar.certos === placar.total
-              ? "Nenhum erro. Pode seguir."
-              : "Os que você errou voltam misturados na prova deste tema."}
+              ? etapa === "revisao"
+                ? "Nenhum erro. Os certos voltam daqui a uma semana, para provar que ficaram."
+                : "Nenhum erro. Pode seguir."
+              : /*
+                 * Cada modo diz para onde o erro vai — e diz a verdade. Ate a
+                 * F2 a frase da serie prometia "voltam na prova" enquanto o
+                 * sorteio excluia todo puzzle ja visto. Agora a prova puxa os
+                 * errados (`lib/tatica/escolher.ts`) e os da prova entram na
+                 * fila espacada (`lib/tatica/revisao.ts`).
+                 */
+                etapa === "revisao"
+                ? "Os que você errou voltam em 2 dias; os certos, em uma semana."
+                : etapa === "prova"
+                  ? "Os que você errou voltam na revisão do dia, daqui a 2 dias."
+                  : "Os que você errou voltam misturados na prova deste tema."}
         </p>
         {falhaAoGravar ? <Falha erro={falhaAoGravar} /> : null}
         <div className="flex flex-wrap gap-3">
@@ -208,10 +229,10 @@ export function Serie({
             Continuar
           </button>
           <Link
-            href="/tatica"
+            href={etapa === "revisao" ? "/painel" : "/tatica"}
             className="foco rounded-lg border border-borda px-4 py-2.5 text-sm font-medium text-tinta-media hover:bg-carta-toque"
           >
-            Escolher outro tema
+            {etapa === "revisao" ? "Voltar ao painel" : "Escolher outro tema"}
           </Link>
         </div>
       </div>
@@ -221,11 +242,13 @@ export function Serie({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between gap-3">
-        <p className="rotulo text-metodo-tinta">{NOME_DA_ETAPA[etapa]}</p>
+        <p className="rotulo text-metodo-tinta">{NOME_DO_MODO[etapa]}</p>
         <div className="flex items-center gap-2">
           <p className="text-xs text-tinta-fraca tabular-nums">
-            {Math.min(jaFeitosNaEtapa + indice + 1, metaDaEtapa)} de {metaDaEtapa} · tema{" "}
-            {feitosNoTema + indice + 1}/{totalNoTema}
+            {Math.min(jaFeitosNaEtapa + indice + 1, metaDaEtapa)} de {metaDaEtapa}
+            {feitosNoTema !== null && totalNoTema !== null
+              ? ` · tema ${feitosNoTema + indice + 1}/${totalNoTema}`
+              : ""}
           </p>
           <BotaoDeSom />
         </div>
@@ -237,12 +260,29 @@ export function Serie({
         aoDecidir={decidir}
         aoTerminar={avancar}
         falhaAoGravar={falhaAoGravar}
+        /*
+         * Na prova e na revisao o tema e revelado **depois** de resolver: o
+         * aluno reconhece o padrao sem o nome (que e o que acontece na
+         * partida), e o nome chega para fixar o que ele acabou de ver. Na
+         * serie ele ja esta dentro do tema, e dize-lo de novo e ruido.
+         */
+        nomeDoPadrao={etapa === "prova" || etapa === "revisao" ? nomeDoPadrao(puzzle) : null}
       />
 
-      <details className="rounded-xl border border-borda-fraca bg-carta px-4 py-3">
-        <summary className="foco cursor-pointer text-sm font-medium text-tinta">
-          {nomeDoTema}: o que procurar
-        </summary>
+      {explicacao.length > 0 ? (
+        /*
+         * Aberto no primeiro aquecimento: quem chega ao tema pela primeira vez
+         * le o que procurar **antes** do primeiro puzzle, e nao escondido num
+         * bloco fechado embaixo do tabuleiro. Depois disso, dobrado — ele ja
+         * leu, e o tabuleiro e o que importa.
+         */
+        <details
+          open={etapa === "aquecimento" && jaFeitosNaEtapa === 0}
+          className="rounded-xl border border-borda-fraca bg-carta px-4 py-3"
+        >
+          <summary className="foco cursor-pointer text-sm font-medium text-tinta">
+            {nomeDoTema}: o que procurar
+          </summary>
         <div className="mt-3 flex flex-col gap-3 text-sm text-tinta-media">
           {explicacao.map((paragrafo) => (
             <p key={paragrafo.slice(0, 24)}>{paragrafo}</p>
@@ -260,10 +300,16 @@ export function Serie({
               {cuidado}
             </p>
           ) : null}
-        </div>
-      </details>
+          </div>
+        </details>
+      ) : null}
     </div>
   );
+}
+
+/** O nome em portugues do tema de que o puzzle veio — o que a prova revela. */
+function nomeDoPadrao(p: PuzzleServido): string {
+  return temaPorTag(p.origem)?.nome ?? p.origem;
 }
 
 /**
@@ -309,11 +355,14 @@ function NoTabuleiro({
   aoDecidir,
   aoTerminar,
   falhaAoGravar,
+  nomeDoPadrao,
 }: {
   puzzle: PuzzleServido;
   aoDecidir: (p: PuzzleServido, lances: string[], tempoMs: number) => void;
   aoTerminar: () => void;
   falhaAoGravar: string | null;
+  /** O tema a revelar depois de resolver, ou `null` para nao revelar. */
+  nomeDoPadrao: string | null;
 }) {
   const [fen, setFen] = useState(puzzle.fen);
   const [passo, setPasso] = useState(1);
@@ -507,7 +556,13 @@ function NoTabuleiro({
       {falhaAoGravar ? (
         <Falha erro={falhaAoGravar} />
       ) : (
-        <Recado fase={fase} erros={erros} meuLado={meuLado} rating={puzzle.rating} />
+        <Recado
+          fase={fase}
+          erros={erros}
+          meuLado={meuLado}
+          rating={puzzle.rating}
+          nomeDoPadrao={nomeDoPadrao}
+        />
       )}
     </>
   );
@@ -525,11 +580,13 @@ function Recado({
   erros,
   meuLado,
   rating,
+  nomeDoPadrao,
 }: {
   fase: Fase;
   erros: number;
   meuLado: Color;
   rating: number;
+  nomeDoPadrao: string | null;
 }) {
   if (fase === "abrindo") {
     return <Linha tom="calma">Olhe a posição. O adversário vai jogar.</Linha>;
@@ -545,13 +602,15 @@ function Recado({
       </Linha>
     );
   }
-  if (fase === "resolvido") return <Linha tom="bom">Certo.</Linha>;
+  if (fase === "resolvido") {
+    return <Linha tom="bom">Certo.{nomeDoPadrao ? ` Era: ${nomeDoPadrao}.` : ""}</Linha>;
+  }
   if (fase === "respondendo") return <Linha tom="calma">Certo. Veja a resposta dele.</Linha>;
 
   return (
     <Linha tom="calma">
       Você joga de {meuLado === "white" ? "brancas" : "pretas"}.{" "}
-      <span className="text-tinta-muda tabular-nums">({rating})</span>
+      <span className="text-tinta-fraca tabular-nums">({rating})</span>
     </Linha>
   );
 }

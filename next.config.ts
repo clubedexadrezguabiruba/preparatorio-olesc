@@ -30,10 +30,25 @@ const nextConfig: NextConfig = {
    *
    * São ~700 KB de JSON contra o teto de 250 MB do pacote.
    */
+  /**
+   * F2: toda rota que lê disco por caminho entra aqui, e a lista é o lugar em
+   * que se descobre uma rota nova que esqueceu de entrar — em produção, como
+   * `ENOENT`, no primeiro aluno. Por isso as rotas que só chamam
+   * `aulasPublicadas()` (painel, professor, trilha) também estão listadas: a
+   * varredura devolve `[]` numa pasta que não existe, e o painel diria
+   * "0 aulas abertas" sem erro nenhum.
+   */
   outputFileTracingIncludes: {
     "/tatica/[tema]": ["./public/puzzles/**"],
+    "/tatica/revisao": ["./public/puzzles/**"],
     "/finais": ["./content/**"],
     "/finais/[aula]": ["./content/**"],
+    "/painel": ["./content/**"],
+    "/trilha": ["./content/**"],
+    "/meio-jogo": ["./content/**"],
+    "/meio-jogo/[dica]": ["./content/**"],
+    "/professor": ["./content/**"],
+    "/professor/[aluno]": ["./content/**", "./public/puzzles/**"],
   },
   /**
    * O motor da etapa 5 são 7,3 MB servidos de `public/engine/`. O padrão do

@@ -235,6 +235,8 @@ export type ProgressoDaAula = {
   readonly praticaOk: boolean;
   readonly tentativas: number;
   readonly lida: boolean;
+  /** Quando foi a última tentativa nesta aula (ISO), ou `null`. */
+  readonly ultima: string | null;
 };
 
 export const AULA_ZERADA: ProgressoDaAula = {
@@ -242,6 +244,7 @@ export const AULA_ZERADA: ProgressoDaAula = {
   praticaOk: false,
   tentativas: 0,
   lida: false,
+  ultima: null,
 };
 
 export type EstadoDeAula = "nao-comecou" | "praticando" | "dominada";

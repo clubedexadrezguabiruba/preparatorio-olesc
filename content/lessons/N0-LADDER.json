@@ -1,0 +1,282 @@
+{
+  "id": "N0-LADDER",
+  "title": "Mate da escada",
+  "class": "E",
+  "orientation": "white",
+  "domainCriterion": "D1",
+  "status": "published",
+  "errors": {},
+  "fallbacks": {
+    "winningOffMethod": "Esse lance ainda ganha, mas não é a escada. Volte e tente o lance da técnica.",
+    "losesWin": "Esse lance joga a vitória fora. Volte e tente de novo.",
+    "methodAlternative": "Esse lance é a mesma escada subindo pelo outro lado: ele corta tão bem quanto o da aula."
+  },
+  "stages": {
+    "objective": {
+      "source": "pandolfini-endgame-course",
+      "technique": {
+        "name": "A escada",
+        "summary": "Duas peças pesadas se revezam: uma corta uma linha, a outra corta a linha do lado. A cada par de lances o rei adversário sobe um degrau — e o último degrau é fora do tabuleiro."
+      },
+      "why": "É o mate mais rápido que existe, e o que mais aparece de verdade: no instante em que você promove um peão e fica com dama e torre, ou com duas torres, a partida termina em quatro ou cinco lances — se você souber a escada. Quem não sabe fica dando xeques ao acaso, deixa a contagem dos 50 lances chegar e empata uma posição ganha de sobra. E há uma economia grande em relação aos mates de uma peça só: aqui o seu rei não precisa sair do lugar. Duas peças pesadas se bastam.",
+      "rules": [
+        {
+          "title": "Uma torre corta uma linha",
+          "text": "A primeira torre se planta numa fileira ou numa coluna e vira uma parede: o rei adversário não atravessa mais. Não é xeque, e não precisa ser — é só a parede sendo levantada.",
+          "frame": {
+            "scene": "caminho-inteiro",
+            "step": 1
+          }
+        },
+        {
+          "title": "A outra torre corta a linha vizinha",
+          "text": "Agora a segunda torre toma a linha colada na parede, com xeque. O rei é obrigado a recuar, e a prisão dele encolheu uma linha inteira. As duas torres nunca trabalham na mesma linha: é assim que uma não atrapalha a outra.",
+          "frame": {
+            "scene": "caminho-inteiro",
+            "step": 3
+          }
+        },
+        {
+          "title": "Um degrau de cada vez",
+          "text": "Repita. A torre que ficou para trás pula para a próxima linha, dá xeque, e o rei recua outra vez. Cada par de lances é um degrau — e a escada só anda para um lado, empurrando o rei até a borda.",
+          "frame": {
+            "scene": "caminho-inteiro",
+            "step": 7
+          }
+        },
+        {
+          "title": "Se o rei ameaçar uma torre, mande-a para longe",
+          "text": "Rei sozinho tem um único contra-ataque: chegar perto e atacar uma torre. A resposta não é recuar nem defender — é deslizar a torre pela mesma linha até o outro extremo do tabuleiro. O corte continua de pé, a torre fica fora de alcance, e quem perdeu o lance foi o rei.",
+          "frame": {
+            "scene": "caminho-inteiro",
+            "step": 9
+          }
+        },
+        {
+          "title": "O mate na borda",
+          "text": "O rei acaba encostado na borda, sem linha nenhuma para onde ir. Uma torre entra na linha da borda e dá o xeque; a outra cobre a linha colada. Duas linhas grudadas e o rei entre elas — é sempre este o desenho, com duas torres ou com dama e torre.",
+          "frame": {
+            "scene": "como-termina",
+            "step": 5
+          }
+        }
+      ],
+      "frame": {
+        "scene": "como-termina",
+        "step": 5
+      },
+      "mastery": "Dominado = vencer o computador na prática, dando o mate com dama e torre. É a mesma escada que você vai ver aqui com duas torres: quem entendeu o degrau ganha com as duas."
+    },
+    "example": {
+      "scenes": [
+        {
+          "id": "como-termina",
+          "title": "Como termina",
+          "positionId": "pos-n0-ladder-pandolfini-eg3",
+          "intro": "Comece pelo fim. As duas torres brancas estão empilhadas no canto e o rei preto já está na última fileira. São três lances até o mate. Guarde este desenho: duas linhas coladas, e o rei preso entre elas.",
+          "steps": [
+            {
+              "move": "h2h7",
+              "text": "A torre de baixo sobe para a 7ª fileira. Não é xeque — é a parede. Daqui para baixo o rei preto não desce mais.",
+              "arrows": [
+                [
+                  "h2",
+                  "h7"
+                ]
+              ],
+              "highlights": [
+                "h7"
+              ]
+            },
+            {
+              "move": "g8f8",
+              "text": "Ele anda pela última fileira, a única que sobrou. Repare que o rei branco não fez nada até agora — e não vai fazer."
+            },
+            {
+              "move": "h1g1",
+              "text": "A outra torre desce para a coluna g. Ainda não é xeque: ela está se pondo em posição, e de quebra tira g8 do rei preto.",
+              "arrows": [
+                [
+                  "h1",
+                  "g1"
+                ]
+              ],
+              "highlights": [
+                "g1"
+              ]
+            },
+            {
+              "move": "f8e8",
+              "text": "Só sobrou e8. Ele não tem escolha nenhuma."
+            },
+            {
+              "move": "g1g8",
+              "text": "Xeque-mate. A torre que chegou dá o xeque na 8ª fileira; a que já estava lá cobre a 7ª. Duas fileiras coladas, e o rei entre elas."
+            }
+          ]
+        },
+        {
+          "id": "caminho-inteiro",
+          "title": "O caminho inteiro",
+          "positionId": "pos-n0-ladder-freeborough-260",
+          "intro": "Agora do começo, com o rei preto solto no meio do tabuleiro e as duas torres no canto. São sete lances até o mate, nas cinco fases que você acabou de ler. Desta vez a escada anda deitada — de coluna em coluna, da direita para a esquerda.",
+          "phases": [
+            {
+              "title": "Uma torre corta uma linha",
+              "fromStep": 1
+            },
+            {
+              "title": "A outra torre corta a linha vizinha",
+              "fromStep": 3
+            },
+            {
+              "title": "Um degrau de cada vez",
+              "fromStep": 5
+            },
+            {
+              "title": "Se o rei ameaçar uma torre, mande-a para longe",
+              "fromStep": 9
+            },
+            {
+              "title": "O mate na borda",
+              "fromStep": 13
+            }
+          ],
+          "steps": [
+            {
+              "move": "c1e1",
+              "text": "Fase 1. Uma torre sai do canto e toma a coluna e. Não é xeque; é a parede. Daqui em diante o rei preto não passa para a direita.",
+              "arrows": [
+                [
+                  "c1",
+                  "e1"
+                ]
+              ],
+              "highlights": [
+                "e1"
+              ]
+            },
+            {
+              "move": "d5d4",
+              "text": "O rei preto desce, procurando o meio do tabuleiro. É onde ele resiste mais tempo."
+            },
+            {
+              "move": "b1d1",
+              "text": "Fase 2. A segunda torre toma a coluna d, com xeque. A parede andou uma coluna para a esquerda, e o rei tem de andar junto.",
+              "arrows": [
+                [
+                  "b1",
+                  "d1"
+                ]
+              ],
+              "highlights": [
+                "d1"
+              ]
+            },
+            {
+              "move": "d4c3",
+              "text": "Ele sai da coluna d, obrigado pelo xeque, e vai para c3."
+            },
+            {
+              "move": "e1e2",
+              "text": "Fase 3. A torre de trás sobe para a 2ª fileira. Ainda não dá xeque: ela está se pondo em posição para tomar a coluna c no lance seguinte, e de um lugar onde o rei preto não a alcança.",
+              "arrows": [
+                [
+                  "e1",
+                  "e2"
+                ]
+              ],
+              "highlights": [
+                "e2"
+              ]
+            },
+            {
+              "move": "c3c4",
+              "text": "O rei sobe para c4. Para baixo é a fileira da torre, para a direita é a coluna da outra: sobrou este lado."
+            },
+            {
+              "move": "e2c2",
+              "text": "E aqui está o degrau: a torre de e2 toma a coluna c, com xeque. Cada corte novo empurra o rei uma coluna para a esquerda.",
+              "arrows": [
+                [
+                  "e2",
+                  "c2"
+                ]
+              ],
+              "highlights": [
+                "c2"
+              ]
+            },
+            {
+              "move": "c4b3",
+              "text": "Ele recua para b3 — e de lá ataca a torre de c2. É o único contra-ataque que um rei sozinho tem.",
+              "highlights": [
+                "c2"
+              ]
+            },
+            {
+              "move": "c2c8",
+              "text": "Fase 4. A torre não recua e não é defendida: ela desliza pela mesma coluna até o outro extremo do tabuleiro. O corte da coluna c continua de pé, e o rei preto ficou sem o que atacar.",
+              "arrows": [
+                [
+                  "c2",
+                  "c8"
+                ]
+              ],
+              "highlights": [
+                "c8"
+              ]
+            },
+            {
+              "move": "b3a3",
+              "text": "Ele anda para a3. b4 e a4 dariam no mesmo: desse lado o tabuleiro está acabando."
+            },
+            {
+              "move": "d1b1",
+              "text": "A outra torre toma a coluna b. Agora o rei preto está preso na coluna a, com a parede colada nele.",
+              "arrows": [
+                [
+                  "d1",
+                  "b1"
+                ]
+              ],
+              "highlights": [
+                "b1"
+              ]
+            },
+            {
+              "move": "a3a4",
+              "text": "Só resta subir pela coluna a. É o último lance que ele tem."
+            },
+            {
+              "move": "c8a8",
+              "text": "Fase 5. Xeque-mate. A torre de c8 entra na coluna a e dá o xeque; a de b1 cobre a coluna colada. É o mesmo desenho da primeira cena, agora deitado — duas linhas grudadas, e o rei entre elas.",
+              "arrows": [
+                [
+                  "c8",
+                  "a8"
+                ]
+              ],
+              "highlights": [
+                "a8"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "practice": {
+      "positionId": "pos-n0-ladder-pandolfini-eg1",
+      "goal": "win",
+      "engine": {
+        "skill": 20,
+        "moveTimeMs": 300
+      }
+    },
+    "review": {
+      "reviewPositionIds": [
+        "pos-n0-ladder-freeborough-262"
+      ]
+    }
+  }
+}

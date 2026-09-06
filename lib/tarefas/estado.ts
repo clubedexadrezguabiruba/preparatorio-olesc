@@ -1,4 +1,5 @@
 import { aulaDaTrilha, type Classe } from "../finais/trilha.ts";
+import { dicasDoNivel } from "../meiojogo/conteudo.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import type { ProgressoDoTema } from "../tatica/progresso.ts";
 import type { Tarefa } from "./tarefas.ts";
@@ -33,12 +34,25 @@ export type MedidaDeFinais = {
 };
 
 /**
- * As duas medidas carregam a etiqueta do seu tipo porque a tela desenha a mesma
- * barra para as duas e escreve palavras diferentes embaixo — "puzzles" de um
- * lado, "aulas dominadas" do outro. Sem a etiqueta, a tela teria de reabrir a
- * tarefa para descobrir o que a barra está medindo.
+ * A medida da tarefa de meio-jogo: quantas dicas daquele degrau o aluno já
+ * declarou ter lido. Sem acerto, como a de finais — e por um motivo mais duro:
+ * aqui não existe acerto nenhum a medir.
  */
-export type Medida = MedidaDeTatica | MedidaDeFinais;
+export type MedidaDeMeioJogo = {
+  readonly tipo: "meiojogo";
+  readonly feitos: number;
+  readonly meta: number;
+};
+
+/**
+ * As três medidas carregam a etiqueta do seu tipo porque a tela desenha a mesma
+ * barra para todas e escreve palavras diferentes embaixo — "puzzles", "aulas
+ * dominadas", "dicas lidas". Sem a etiqueta, a tela teria de reabrir a tarefa
+ * para descobrir o que a barra está medindo. E as três contam coisas de peso
+ * diferente: puzzle resolvido é medido, aula dominada é certificada pela
+ * tablebase, dica lida é declaração.
+ */
+export type Medida = MedidaDeTatica | MedidaDeFinais | MedidaDeMeioJogo;
 
 export type EstadoDaTarefa = {
   readonly tarefa: Tarefa;
@@ -85,6 +99,11 @@ export function somarFinais(
   return total;
 }
 
+/** Quantas das dicas lidas pertencem a este degrau. */
+export function somarMeioJogo(lidas: ReadonlySet<string>, nivel: string): number {
+  return dicasDoNivel(nivel).filter((d) => lidas.has(d.id)).length;
+}
+
 export function estadoDasTarefas(
   tarefas: readonly Tarefa[],
   marcadas: ReadonlySet<string>,
@@ -95,10 +114,21 @@ export function estadoDasTarefas(
    * tática — não tenham de inventar um conjunto.
    */
   finais: ReadonlySet<string> = new Set(),
+  /** As dicas de meio-jogo declaradas lidas. Vazio pelo mesmo motivo. */
+  dicas: ReadonlySet<string> = new Set(),
 ): EstadoDaTarefa[] {
   return tarefas.map((tarefa) => {
     if (tarefa.tipo === "marcar") {
       return { tarefa, feita: marcadas.has(tarefa.id), medida: null };
+    }
+
+    if (tarefa.tipo === "meiojogo") {
+      const feitos = somarMeioJogo(dicas, tarefa.meta.nivel);
+      return {
+        tarefa,
+        feita: feitos >= tarefa.meta.ler,
+        medida: { tipo: "meiojogo", feitos, meta: tarefa.meta.ler },
+      };
     }
 
     if (tarefa.tipo === "finais") {

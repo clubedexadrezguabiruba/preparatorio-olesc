@@ -1,5 +1,6 @@
 import "server-only";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
+import type { EventoDeAula } from "@/lib/finais/revisao";
 import { AULA_ZERADA, type ProgressoDaAula } from "@/lib/finais/trilha";
 
 /**
@@ -32,6 +33,7 @@ type LinhaDaView = {
   solo_ok: boolean | null;
   pratica_ok: boolean | null;
   tentativas: number | null;
+  ultima: string | null;
 };
 
 type LinhaDeLeitura = { aluno: string; aula: string };
@@ -48,7 +50,9 @@ type LinhaDeLeitura = { aluno: string; aula: string };
 async function ler(aluno?: string): Promise<Map<string, Map<string, ProgressoDaAula>>> {
   const supabase = await criarClienteServidor();
 
-  let daView = supabase.from("progresso_aula").select("aluno, aula, solo_ok, pratica_ok, tentativas");
+  let daView = supabase
+    .from("progresso_aula")
+    .select("aluno, aula, solo_ok, pratica_ok, tentativas, ultima");
   let daLeitura = supabase.from("aula_lida").select("aluno, aula");
   if (aluno) {
     daView = daView.eq("aluno", aluno);
@@ -70,6 +74,7 @@ async function ler(aluno?: string): Promise<Map<string, Map<string, ProgressoDaA
       soloOk: linha.solo_ok === true,
       praticaOk: linha.pratica_ok === true,
       tentativas: linha.tentativas ?? 0,
+      ultima: linha.ultima,
     });
   }
 
@@ -116,4 +121,33 @@ export async function progressoDeFinais(aluno?: string): Promise<Map<string, Pro
  */
 export async function finaisDaTurma(): Promise<Map<string, Map<string, ProgressoDaAula>>> {
   return ler();
+}
+
+/**
+ * Os eventos por aula, com data — o que a **revisão espaçada** lê.
+ *
+ * A view não serve aqui, e não é descuido: `progresso_aula.ultima` é o máximo
+ * de `criada_em` por aula, e responde "quando ele mexeu nisto pela última
+ * vez". A fila precisa de outra coisa — *quando dominou* e *quantas revisões
+ * já venceu* —, e isso são eventos, não um agregado.
+ *
+ * Quem filtra por aluno é a RLS, como em tudo aqui; o parâmetro escolhe *qual*
+ * aluno o relatório do professor está olhando.
+ */
+export async function eventosDeAulas(aluno?: string): Promise<Map<string, EventoDeAula[]>> {
+  const supabase = await criarClienteServidor();
+  let consulta = supabase
+    .from("tentativas_aula")
+    .select("aula, etapa, sucesso, criada_em")
+    .order("criada_em");
+  if (aluno) consulta = consulta.eq("aluno", aluno);
+
+  const { data } = await consulta;
+  const porAula = new Map<string, EventoDeAula[]>();
+  for (const linha of (data ?? []) as Array<EventoDeAula & { aula: string }>) {
+    const atual = porAula.get(linha.aula) ?? [];
+    atual.push({ etapa: linha.etapa, sucesso: linha.sucesso, criada_em: linha.criada_em });
+    porAula.set(linha.aula, atual);
+  }
+  return porAula;
 }

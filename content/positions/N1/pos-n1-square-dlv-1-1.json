@@ -1,0 +1,21 @@
+{
+  "id": "pos-n1-square-dlv-1-1",
+  "fen": "6k1/8/8/8/8/8/P7/7K w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KPK",
+    "ensino"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Jesús de la Villa — Position 1.1, o diagrama com que ele abre o Ending 1 e enuncia a regra do quadrado",
+    "bibliographicSource": "de la Villa, 100 Endgames You Must Know, p. impressa 27 (PDF p. 27, offset 0), cap. 1 'Basic endings', ENDING 1 'The rule of the square', Position 1.1",
+    "originalGame": "não se aplica — posição teórica de manual, não vem de partida",
+    "authorComposer": "não se aplica — é a corrida elementar entre peão e rei, um fato do final e não uma composição autoral",
+    "license": "obra protegida — uso sob o teto da §12.7 (esta aula usa 1 posição desta obra, contra o teto de 2)",
+    "editionFile": "de-la-villa-100-endgames.pdf",
+    "fenMethod": "leitura de imagem da página rasterizada a 200 dpi, cega ao lance impresso. Moldura detectada por varredura de linhas (área de jogo de 420 × 428 px, casa de 52,5 × 53,5), e a alternância clara/escura conferida nas 64 casas — as claras deram anel 255 uniforme e as escuras 170–195, sem nenhuma casa intermediária. Três peças, e as outras 61 casas limpas. O diagrama NÃO imprime coordenadas nem indicação de vez: o leitor varreu as quatro margens e não achou nem quadradinho nem triângulo, só o rótulo 'Position 1.1' à direita. A orientação é a padrão assumida, e quem a confirma é o resultado — ver o QA. A vez é das brancas, que é o que o texto do autor afirma ao imprimir '1.a4!' como continuação da posição.",
+    "qaApplied": "garimpo FN1/B5.4, 2026-09-05: a trava aqui é a mais forte que apareceu em todo o B5. O autor imprime um único lance, com exclamação — '1.a4!' —, e a tablebase diz que **a4 é o único lance de todo o tabuleiro que ganha** nesta FEN: 1.a3 empata, e todos os lances de rei empatam. Uma leitura de imagem errada em uma casa qualquer dificilmente produziria uma posição em que exatamente um lance ganha e é exatamente o lance impresso. A linha completa que o autor dá adiante — 1.a4 Rf7 2.a5 Re6 3.a6 Rd6 4.a7 Rc7 5.a8D 1-0 — é legal do começo ao fim e termina com a dama no tabuleiro; a tablebase confirma win-white com DTM 27, e a defesa preta que o livro escolhe está entre as mais resistentes em cada lance.",
+    "pendingRisk": "o diagrama não imprime a vez; ela vem do texto do autor, que continua a posição com '1.a4!'"
+  }
+}

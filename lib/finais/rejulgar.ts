@@ -42,10 +42,17 @@ import { judgeMove, throwsWinAway } from "../lesson/tree.ts";
  * escritos na autoria e certificados pelo gate.
  */
 
-export type EtapaDeAula = "solo" | "pratica";
+export type EtapaDeAula = "solo" | "pratica" | "revisao";
 
-/** As duas etapas que viram linha. A leitura é declaração e mora em `aula_lida`. */
-export const ETAPAS_DE_AULA: readonly EtapaDeAula[] = ["solo", "pratica"];
+/**
+ * As três etapas que viram linha. A leitura é declaração e mora em `aula_lida`.
+ *
+ * `revisao` entrou na F2, com a repetição espaçada: é a **mesma partida** da
+ * etapa 5, jogada dias depois numa posição que o aluno não viu, para provar
+ * que a técnica ficou. Ela não afere domínio (quem afere é `dominou()` na
+ * trilha) — o que ela produz é a data que a fila de revisão lê.
+ */
+export const ETAPAS_DE_AULA: readonly EtapaDeAula[] = ["solo", "pratica", "revisao"];
 
 /**
  * `erro` é o que **não vira linha**: aula que não existe, lance ilegal, arquivo
@@ -259,6 +266,48 @@ export function rejulgarPratica(
   const pratica = lesson.stages.practice;
   if (!pratica) return { erro: "a aula não tem prática" };
   if (posicao.id !== pratica.positionId) return { erro: "a posição não é a da prática" };
+  return rejulgarPartida(lesson, posicao, lances);
+}
+
+/**
+ * As posições que a **revisão** aceita.
+ *
+ * São as da etapa 6, que o gate garante serem diferentes das de ensino
+ * (`POSICAO_REAPROVEITADA`). Quando a aula não tem etapa 6 — a maioria das
+ * curtas —, a revisão joga de novo a posição da prática: pior que uma posição
+ * nova, e muito melhor que não revisar. Escrever uma posição de revisão para
+ * cada aula nova é o que faz esta lista deixar de ter o segundo braço.
+ */
+export function posicoesDeRevisao(lesson: Lesson): string[] {
+  const daRevisao = lesson.stages.review?.reviewPositionIds ?? [];
+  if (daRevisao.length > 0) return [...daRevisao];
+  const pratica = lesson.stages.practice;
+  return pratica ? [pratica.positionId] : [];
+}
+
+/**
+ * Uma partida de **revisão**: a mesma prática, noutra posição.
+ *
+ * A conferência que muda é só a da posição — e ela não é zelo: sem ela a
+ * chamada viraria "jogue qualquer posição do acervo e diga que revisou a
+ * aula", e a fila de revisão passaria a contar uma revisão que não houve.
+ */
+export function rejulgarRevisao(
+  lesson: Lesson,
+  posicao: Position,
+  lances: string[],
+): Rejulgamento {
+  if (!lesson.stages.practice) return { erro: "a aula não tem prática" };
+  if (!posicoesDeRevisao(lesson).includes(posicao.id)) {
+    return { erro: "a posição não é de revisão desta aula" };
+  }
+  return rejulgarPartida(lesson, posicao, lances);
+}
+
+/** O corpo comum da prática e da revisão: a partida reproduzida e julgada. */
+function rejulgarPartida(lesson: Lesson, posicao: Position, lances: string[]): Rejulgamento {
+  // O `!` é seguro: os dois chamadores conferem a existência da prática antes.
+  const pratica = lesson.stages.practice!;
   if (lances.length === 0) return { erro: "partida sem lance nenhum" };
   if (lances.length > LANCES_MAXIMOS) return { erro: "lances demais para uma partida" };
 

@@ -1,0 +1,21 @@
+{
+  "id": "pos-n1-kpk-staunton-p410",
+  "fen": "4k3/8/8/4K3/4P3/8/8/8 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KPK",
+    "sem-ajuda"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Howard Staunton, que dá esta posição **em prosa**, como uma variação do Diagrama 9 que ele manda o leitor montar: 'Recurring to the last position (Diagram 9), place your King and Pawn each one square further back, that is, King at his 5th, and Pawn at King's 4th square'",
+    "bibliographicSource": "Staunton, The Chess-Player's Handbook, Henry G. Bohn, Londres, 1848, p. impressa 410 (PDF p. 402, offset 8), Livro VI 'Endings of Games', cap. I, seção 'King and Pawn, — King, Bishop, and Pawn, — and King, Knight, and Pawn, — against King', parágrafo imediatamente posterior ao Diagrama 9",
+    "originalGame": "não se aplica — posição teórica de manual, não vem de partida",
+    "authorComposer": "não se aplica — é rei e peão contra rei com o rei à frente do peão, um fato do final e não uma composição autoral",
+    "license": "domínio público (obra de 1848, Reino Unido)",
+    "editionFile": "staunton-chess-players-handbook-1848.pdf",
+    "fenMethod": "esta posição NÃO É UM DIAGRAMA: é a posição que o autor manda montar em prosa, recuando em uma casa o rei e o peão do Diagrama 9. O ponto de partida — o Diagrama 9 — foi transcrito por leitura de imagem da página rasterizada a 200 dpi, com a grade medida pela moldura (casa de 37,75 px) e com a orientação **lida e não assumida**, porque este livro imprime 'BLACK.' acima e 'WHITE.' abaixo de cada tabuleiro; a leitura devolveu Re8 preto, Re6 e Pe5 brancos, que é a mesma posição que o Freeborough publica no No. 57 e que já está no acervo. Sobre ela foi aplicado o recuo de uma casa que o texto instrui, chegando a Re5 e Pe4 brancos, com o rei preto onde estava, em e8. A vez das brancas vem da própria frase do autor: 'If now you have to move you win'.",
+    "qaApplied": "garimpo FN1/B5.4, 2026-09-05: o autor faz três afirmações sobre esta posição e a tablebase confirma as três. (1) 'If now you have to move you win, by playing King to his 6th as before' — com as brancas na vez a tablebase dá win, DTM 25, e Re6 é o lance mais rápido dos três que ganham (Rd6 e Rf6 também ganham; todo o resto empata, inclusive por o peão estar trancado atrás do próprio rei). (2) 'but if Black play first he will draw the game' — com as pretas na vez a tablebase dá draw. (3) A linha de empate que ele imprime — 1…Re7 2.Rf5 Rf7 3.e5 Re7 4.e6 Re8 5.Rf6 Rf8 'and draws as before' — é legal do começo ao fim e a posição resultante é empate pela tablebase.",
+    "pendingRisk": "quem procurar esta posição desenhada no livro não vai encontrá-la: ela é a modificação em prosa do Diagrama 9, transcrita literalmente acima, e por isso está declarada aqui como derivada e não como diagrama"
+  }
+}

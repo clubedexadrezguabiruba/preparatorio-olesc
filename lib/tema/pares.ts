@@ -87,10 +87,13 @@ const CARTA_TOQUE = ["carta-toque"];
  * cedo ou tarde alguém acrescentar uma marca e lembrar de só uma das casas.
  *
  * É esta regra que amarra o par de casas inteiro: como toda marca precisa ser
- * 3:1 **mais escura que as duas**, e acima da casa clara não sobra espaço, a
- * casa escura não pode escurecer à vontade — cada ponto que ela desce puxa para
- * baixo o teto de claridade de todas as marcas. As duas ficaram a 1,58:1 uma da
- * outra, que é exatamente a distância que o tema do pacote produzia.
+ * 3:1 **mais escura que as duas**, quem cobra o orçamento é sempre a casa
+ * *escura* — cada ponto que ela desce puxa para baixo o teto de claridade de
+ * todas as marcas. O outro lado do par é livre, e foi por onde a F2 comprou
+ * contraste: clarear a casa clara não mexe em folga nenhuma. As duas estão a
+ * **1,81:1** (eram 1,58:1, a distância do tema do pacote); o porquê de não
+ * serem os 2,29:1 do tabuleiro do lichess.org está escrito em `globals.css`,
+ * com o nome das quatro marcas que cairiam.
  */
 const MARCAS: { onde: string; token: string; piso: number }[] = [
   {
@@ -218,12 +221,12 @@ export const PARES: Par[] = [
     piso: AA_TEXTO,
   },
   {
-    onde: "texto de exemplo dentro do campo vazio (`placeholder:`) — entrar/Formulario.tsx, professor/CadastroDeAluno.tsx; e o travessão do que falta no selo, sem domínio (MasterySeal:47)",
+    onde: "texto de exemplo dentro do campo vazio (`placeholder:`) — entrar/Formulario.tsx, professor/CadastroDeAluno.tsx; e os travessões `aria-hidden` de MasterySeal:47, /trilha e /meio-jogo/[dica]",
     texto: "tinta-muda",
     fundo: CARTA,
     piso: AA_TEXTO,
     isencao:
-      "3,06:1, e nenhuma informação passa por ele: cada `placeholder` do site repete o que o rótulo acima do campo já diz por extenso, em `tinta-fraca`. O texto de exemplo some no instante em que o aluno digita — e some sem levar nada junto. A dica do campo e a faixa de rating do bloco *carregavam* informação e estavam nesta tinta: subiram para `tinta-fraca` quando esta régua as pegou. O travessão do selo é `aria-hidden`, é marcador de item de lista, e o texto que ele antecede está em `tinta-media` ao lado.",
+      "3,06:1, e nenhuma informação passa por ele: cada `placeholder` do site repete o que o rótulo acima do campo já diz por extenso, em `tinta-fraca`. O texto de exemplo some no instante em que o aluno digita — e some sem levar nada junto. Os travessões são `aria-hidden`, são marcador de item de lista, e o texto que eles antecedem está em `tinta-media` ao lado. **A isenção encolheu na F2**: a revisão das capturas pegou a proveniência do diagrama de meio-jogo e a pastilha fechada da `/trilha` nesta tinta a 2,69:1 e 3,06:1, e a varredura que se seguiu achou mais vinte e duas — \"abre no Sábado 3\", \"Não começou\", \"(meta 70%)\", o número do bloco, a contagem do professor. Todas subiram para `tinta-fraca`. O que sobra em `tinta-muda` hoje é o que a isenção sempre disse que era: `placeholder` e travessão.",
   },
 
   // -------------------------------------------------------------------------

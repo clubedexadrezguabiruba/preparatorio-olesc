@@ -1,0 +1,1945 @@
+[
+  {
+    "id": "m1",
+    "titulo": "Peça parada não joga",
+    "nivel": "ate-1000",
+    "resumo": "Nos dez primeiros lances, cada lance tira uma peça nova do lugar. Quem sai primeiro decide primeiro.",
+    "explicacao": [
+      "No começo da partida as peças estão todas atrás dos peões, e nenhuma delas faz nada ali. Desenvolver é isso e só isso: tirar cavalos e bispos para casas de onde eles olham o centro, e depois rocar. Não é uma regra de bom comportamento — é uma conta. Quem tem quatro peças jogadas e o outro tem duas ataca com o dobro de força.",
+      "O erro que mais custa nesta idade não é jogar o lance errado: é jogar duas vezes com a mesma peça enquanto o adversário tira outra. Cada lance de peão de borda, cada bispo que sai e volta, é um tempo que não volta."
+    ],
+    "procure": [
+      "Quantas peças suas já saíram, e quantas as dele saíram? Conte, agora.",
+      "Existe alguma peça sua que ainda não se mexeu e tem casa boa?",
+      "Você já rocou? Se não, esse costuma ser o lance."
+    ],
+    "cuidado": "Desenvolver não é sair com a dama. Dama cedo vira alvo, e cada ataque a ela é um lance de graça para o adversário.",
+    "posicoes": [
+      {
+        "fen": "r1bqkbnr/1ppp1pp1/p1n4p/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+        "legenda": "As brancas têm o bispo em c4 e o cavalo em f3, e o roque curto é lance legal agora. As pretas gastaram dois lances com peões de borda e têm uma peça fora: o cavalo de c6.",
+        "afirma": [
+          {
+            "o": "vez",
+            "lado": "brancas"
+          },
+          {
+            "o": "peca",
+            "casa": "c4",
+            "peca": "bispo",
+            "lado": "brancas"
+          },
+          {
+            "o": "peca",
+            "casa": "f3",
+            "peca": "cavalo",
+            "lado": "brancas"
+          },
+          {
+            "o": "peca",
+            "casa": "c6",
+            "peca": "cavalo",
+            "lado": "pretas"
+          },
+          {
+            "o": "roque-disponivel",
+            "lado": "brancas",
+            "tipo": "curto"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é a diferença de desenvolvimento depois de quatro lances.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. O material é igual dos dois lados."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas jogam. Qual é o lance do plano?",
+      "opcoes": [
+        "Rocar",
+        "Recuar o bispo de c4 para f1",
+        "Avançar o peão de h para h3"
+      ],
+      "certa": 0,
+      "porque": "Rocar põe o rei em segurança e liga as torres no mesmo lance — é o que sobra de desenvolvimento para fazer. Recuar o bispo desfaz um lance já jogado; h3 não tira peça nenhuma do lugar."
+    },
+    "video": {
+      "titulo": "Cuidado com o teu desenvolvimento - Xadrez Pensado — Raffael Chess",
+      "url": "https://www.youtube.com/watch?v=dEl32-CgGEo"
+    }
+  },
+  {
+    "id": "m2",
+    "titulo": "Rei seguro antes de atacar",
+    "nivel": "ate-1000",
+    "resumo": "Ataque com o rei no centro é ataque que volta contra você. Roque primeiro; o ataque continua existindo depois.",
+    "explicacao": [
+      "O rei no centro é o alvo mais fácil que existe, porque é para o centro que todas as peças olham. Enquanto ele estiver lá, qualquer coluna ou diagonal que abrir é uma estrada até ele — e quem abre costuma ser você mesmo, atacando.",
+      "A regra prática vale para os dois lados do tabuleiro: antes de começar um ataque, olhe para o **seu** rei. Se ele ainda está em e1 ou e8, o ataque espera um lance."
+    ],
+    "procure": [
+      "O seu rei já rocou? E o dele?",
+      "Alguma peça dele mira a casa do seu rei, ou a diagonal em que ele está?",
+      "Se as colunas do centro abrirem agora, quem sofre?"
+    ],
+    "posicoes": [
+      {
+        "fen": "r1bq1rk1/ppp2ppp/2n2n2/3pp3/1b2P3/2NP1N2/PPP2PPP/R1BQK2R w KQ - 0 7",
+        "legenda": "As pretas rocaram; o rei branco continua em e1 — e o bispo de b4 já crava o cavalo de c3 contra ele. Os dois lados têm oito peões.",
+        "afirma": [
+          {
+            "o": "rei-em",
+            "lado": "brancas",
+            "casa": "e1"
+          },
+          {
+            "o": "rei-em",
+            "lado": "pretas",
+            "casa": "g8"
+          },
+          {
+            "o": "cravada",
+            "casa": "c3",
+            "por": "b4",
+            "contra": "e1"
+          },
+          {
+            "o": "peoes",
+            "brancas": 8,
+            "pretas": 8
+          },
+          {
+            "o": "roque-disponivel",
+            "lado": "brancas",
+            "tipo": "curto"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é o rei que ficou no centro depois de o adversário rocar.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. A cravada foi medida pela linha b4–c3–e1, com d2 vazia."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas jogam. O que fazer antes de qualquer outra coisa?",
+      "opcoes": [
+        "Rocar",
+        "Capturar em d5, abrindo o centro",
+        "Levar a dama para e2, para ligar as torres"
+      ],
+      "certa": 0,
+      "porque": "Abrir o centro com o rei em e1 é abrir a estrada para o próprio rei. E a dama em e2 é pior ainda: põe mais uma peça na coluna do rei e ainda tranca o bispo de f1. Depois do roque a mesma captura pode ser boa — o que muda não é o lance, é a ordem."
+    },
+    "video": {
+      "titulo": "A Segurança do Rei | [Xadrez] Dicas para Principiantes #06 — MF Adriano Valle (Academia XadrezValle)",
+      "url": "https://www.youtube.com/watch?v=Uug3TUkJwIY"
+    }
+  },
+  {
+    "id": "m3",
+    "titulo": "O centro é o terreno alto",
+    "nivel": "ate-1000",
+    "resumo": "Peça no centro alcança mais casas, e peão no centro tira do adversário as casas de onde ele quer jogar.",
+    "explicacao": [
+      "Um cavalo no meio do tabuleiro cobre oito casas; no canto, duas. É a mesma peça, e a diferença é só onde ela está. Por isso o centro decide: quem o ocupa joga com peças que fazem quatro vezes mais.",
+      "Peão no centro faz outra coisa, e é ainda mais importante: ele **tira casas**. Não é ocupação, é negação — a peça preta que quiser uma casa negada tem de ser trocada, expulsa, ou não vai para lá nunca."
+    ],
+    "procure": [
+      "Quem tem mais peões nas colunas c, d e e?",
+      "Que casa do seu campo um peão dele já não alcança mais?",
+      "As suas peças alcançam casas do centro, ou estão olhando para a borda?"
+    ],
+    "cuidado": "Centro não é para ser empurrado até o fim. Peão que avança demais deixa de controlar as casas de trás, e vira alvo.",
+    "posicoes": [
+      {
+        "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 0 10",
+        "legenda": "As brancas têm três peões nas colunas c, d e e; as pretas, dois. Duas casas — b5 e d5 — só peão branco alcança: peão preto nenhum chega lá, hoje nem depois.",
+        "afirma": [
+          {
+            "o": "casas-negadas",
+            "casas": [
+              "b5",
+              "d5"
+            ],
+            "por": "brancas"
+          },
+          {
+            "o": "peoes-nas-colunas",
+            "colunas": [
+              "c",
+              "d",
+              "e"
+            ],
+            "brancas": 3,
+            "pretas": 2
+          },
+          {
+            "o": "vez",
+            "lado": "brancas"
+          },
+          {
+            "o": "peoes",
+            "brancas": 8,
+            "pretas": 7
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é o centro de peões que nega casas ao adversário.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. As casas negadas foram medidas peão a peão, dos dois lados."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "O que os peões brancos de c4, d4 e e4 tiram das pretas?",
+      "opcoes": [
+        "As casas b5 e d5, para sempre: peão preto nenhum as alcança",
+        "Nada: peão no centro só atrapalha as próprias peças",
+        "O direito de rocar"
+      ],
+      "certa": 0,
+      "porque": "As pretas não têm peão nas colunas a, c nem e capaz de atacar b5 ou d5 — o peão de c foi trocado e o de d já passou. Uma peça branca que chegue a d5 não pode ser expulsa por peão; é isso que vale mais que a ocupação em si."
+    },
+    "video": {
+      "titulo": "Ensinando o conceito do centro - Desafio rapidchess Ep#46 — GMEvandroBarbosa",
+      "url": "https://www.youtube.com/watch?v=l3WWoO7-F2s"
+    }
+  },
+  {
+    "id": "m4",
+    "titulo": "Coluna aberta é da torre",
+    "nivel": "ate-1000",
+    "resumo": "Torre atrás dos próprios peões não faz nada. Quando uma coluna abre, ela é de quem chegar primeiro.",
+    "explicacao": [
+      "A torre é a peça mais forte depois da dama e a mais fácil de esquecer: ela nasce no canto, atrás de tudo, e fica lá a partida inteira se ninguém a chamar. O que a acorda é uma coluna sem peões.",
+      "Quando uma coluna abre, ela vira a estrada da torre até o campo do adversário — e as duas torres querem a mesma. É por isso que tomá-la primeiro vale um lance inteiro, mesmo sem ameaça nenhuma no lance seguinte."
+    ],
+    "procure": [
+      "Existe alguma coluna sem peão nenhum? De quem é ela agora?",
+      "Qual das suas torres chega lá em um lance?",
+      "Se você não tomar a coluna, ele toma no lance dele?"
+    ],
+    "posicoes": [
+      {
+        "fen": "r2q1rk1/ppp1bppp/2n2n2/4p3/4P3/2N2N2/PPP1BPPP/R3QRK1 w - - 0 11",
+        "legenda": "Material igual dos dois lados, e a coluna d sem peão nenhum. As brancas jogam, e a torre de a1 chega a d1 em um lance.",
+        "afirma": [
+          {
+            "o": "coluna-aberta",
+            "coluna": "d"
+          },
+          {
+            "o": "material-igual"
+          },
+          {
+            "o": "peca",
+            "casa": "a1",
+            "peca": "torre",
+            "lado": "brancas"
+          },
+          {
+            "o": "vez",
+            "lado": "brancas"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é uma coluna aberta só, para isolar a decisão da torre.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. O material foi comparado peça a peça, e a coluna d conferida sem peão dos dois lados."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas jogam. Qual lance vale mais?",
+      "opcoes": [
+        "Torre de a1 para d1",
+        "Peão de h para h3",
+        "Cavalo de f3 para g5"
+      ],
+      "certa": 0,
+      "porque": "A coluna d é a única aberta, e é de quem chegar primeiro. Depois de Tad1 as pretas ainda podem disputá-la, mas terão de fazê-lo com a torre chegando depois — e quem chega depois troca em terreno pior."
+    },
+    "video": {
+      "titulo": "O CANHÃO DO ALEKHINE: Como Dominar a Coluna Aberta e Ganhar Partidas de Xadrez — Tr. André Basso",
+      "url": "https://www.youtube.com/watch?v=37GVyPUW62U"
+    }
+  },
+  {
+    "id": "m5",
+    "titulo": "A dama não ataca sozinha",
+    "nivel": "ate-1000",
+    "resumo": "Dama cedo no ataque não ganha nada e perde tempo: cada lance que a expulsa é um lance de graça para o adversário.",
+    "explicacao": [
+      "Aos nove e dez anos todo mundo aprende o mate do pastor, e por um tempo a dama sai cedo em toda partida. Funciona contra quem não sabe defender e para de funcionar no primeiro adversário que sabe — porque a dama sozinha ameaça uma casa por vez, e quem defende ganha um lance a cada ameaça.",
+      "A conta é a mesma da primeira dica, vista pelo avesso: enquanto a dama passeia, o outro desenvolve. Três lances de dama contra três peças fora é uma posição perdida antes do lance dez."
+    ],
+    "procure": [
+      "A dama dele ameaça alguma coisa de verdade, ou só parece perigosa?",
+      "Você tem um lance que defende e desenvolve ao mesmo tempo?",
+      "Quantos lances ele já gastou com a dama? Cada um é um seu de vantagem."
+    ],
+    "cuidado": "Expulsar a dama com peão à frente do próprio rei é remédio pior que a doença. Prefira expulsá-la com peça.",
+    "posicoes": [
+      {
+        "fen": "rnb1kbnr/pppp1ppp/8/4p3/4P2q/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+        "legenda": "A dama preta está em h4 e nenhuma outra peça preta saiu de casa. As brancas já têm o cavalo em c3, e os dois lados têm oito peões.",
+        "afirma": [
+          {
+            "o": "peca",
+            "casa": "h4",
+            "peca": "dama",
+            "lado": "pretas"
+          },
+          {
+            "o": "peca",
+            "casa": "c3",
+            "peca": "cavalo",
+            "lado": "brancas"
+          },
+          {
+            "o": "vez",
+            "lado": "brancas"
+          },
+          {
+            "o": "peoes",
+            "brancas": 8,
+            "pretas": 8
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é a dama que saiu antes das peças.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. A posição sai de 1.e4 e5 2.Cc3 Dh4, e o contador de lances reflete isso."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As pretas trouxeram a dama para h4. Qual é o melhor lance das brancas?",
+      "opcoes": [
+        "Cavalo de g1 para f3, atacando a dama e desenvolvendo",
+        "Peão de g2 para g3, para expulsar a dama",
+        "Peão de h2 para h3, para dar janela ao rei"
+      ],
+      "certa": 0,
+      "porque": "Cf3 faz as duas coisas num lance só: tira uma peça de casa e ataca a dama. Ela não pode responder Dxe4+, porque o cavalo de c3 defende e4. Já g3 expulsa a dama enfraquecendo justo as casas ao lado do rei branco, e h3 não faz nem uma coisa nem outra."
+    },
+    "video": {
+      "titulo": "Como punir quem ataca cedo com a Dama!! — Gato Mexicano",
+      "url": "https://www.youtube.com/watch?v=gJONaU8d_LI"
+    }
+  },
+  {
+    "id": "m6",
+    "titulo": "Não enfraqueça os peões do roque",
+    "nivel": "ate-1000",
+    "resumo": "Os três peões na frente do rei são a casa dele. Peão que avança não volta, e cada um que avança abre uma porta.",
+    "explicacao": [
+      "Depois do roque curto, f2, g2 e h2 (ou f7, g7, h7) formam uma parede. Ela não precisa fazer nada: basta ficar onde está. Todo lance de h6, g5 ou f5 tem um motivo local que parece bom no momento — expulsar um bispo, ganhar espaço — e um custo que só aparece dez lances depois, quando uma peça entra pela casa que o peão deixou.",
+      "A regra prática é conservadora de propósito: mexa nos peões do roque quando **precisar**, nunca por iniciativa. Ganhar um tempo ali costuma custar a partida."
+    ],
+    "procure": [
+      "Os três peões à frente do seu rei ainda estão na fileira de origem?",
+      "E os dele? A resposta diz de que lado atacar.",
+      "Esse lance de peão que você quer jogar: qual casa ele abre para sempre?"
+    ],
+    "posicoes": [
+      {
+        "fen": "r1bq1rk1/pppnbp2/2np3p/4p1p1/3PP3/2N2N2/PPP1BPPP/R1BQ1RK1 w - - 0 11",
+        "legenda": "Os três peões do roque branco continuam em f2, g2 e h2. Das pretas sobrou um: g7 e h7 já avançaram. Material e número de peões são iguais.",
+        "afirma": [
+          {
+            "o": "escudo-do-rei",
+            "lado": "brancas",
+            "intactos": 3
+          },
+          {
+            "o": "escudo-do-rei",
+            "lado": "pretas",
+            "intactos": 1
+          },
+          {
+            "o": "rei-em",
+            "lado": "brancas",
+            "casa": "g1"
+          },
+          {
+            "o": "rei-em",
+            "lado": "pretas",
+            "casa": "g8"
+          },
+          {
+            "o": "peoes",
+            "brancas": 8,
+            "pretas": 8
+          },
+          {
+            "o": "material-igual"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é a diferença entre os dois escudos de roque, com todo o resto igual.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. O escudo foi medido contando peões nas três colunas à frente de cada rei, na fileira de origem."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "Quem tem o rei mais seguro, e por quê?",
+      "opcoes": [
+        "As brancas: os três peões do roque continuam no lugar",
+        "As pretas: h6 e g5 dão ar ao rei",
+        "Os dois estão iguais — o material é o mesmo"
+      ],
+      "certa": 0,
+      "porque": "Material igual não é segurança igual. O rei branco tem três peões à frente; o preto, um. As casas f6, h5 e f5 ficaram sem guarda de peão, e é por ali que uma peça branca entra — nesta posição ou dez lances depois."
+    },
+    "video": {
+      "titulo": "APRENDA COMO ATACAR UM ROQUE DEBILITADO — NEY DO XADREZ",
+      "url": "https://www.youtube.com/watch?v=P3P4CQnrQVo"
+    }
+  },
+  {
+    "id": "m7",
+    "titulo": "Torres ligadas",
+    "nivel": "ate-1000",
+    "resumo": "Duas torres que se enxergam valem muito mais que duas torres soltas. Tirar a última peça da última fileira é um lance que vale por si.",
+    "explicacao": [
+      "Torres ligadas são duas torres na mesma fileira ou coluna, sem nada entre elas: cada uma defende a outra. É o que permite pôr a primeira numa casa avançada sem medo, porque a segunda a segura.",
+      "Ligá-las é, quase sempre, tirar a dama ou o bispo da última fileira. Esse lance não ameaça nada e é, ainda assim, um dos lances mais úteis do meio-jogo — o sinal de que o desenvolvimento acabou de verdade."
+    ],
+    "procure": [
+      "As suas duas torres se enxergam? O que está entre elas?",
+      "Que peça sua ainda está na primeira fileira sem precisar estar?",
+      "Depois de ligá-las, qual coluna as duas querem?"
+    ],
+    "posicoes": [
+      {
+        "fen": "r2r2k1/ppp1qppp/2np1n2/4p3/4P3/2NP1N2/PPP2PPP/R2Q1RK1 w - - 0 12",
+        "legenda": "As torres pretas de a8 e d8 se enxergam: nada entre elas. As brancas, não: a dama de d1 fica entre a torre de a1 e a de f1. O material é igual.",
+        "afirma": [
+          {
+            "o": "torres-ligadas",
+            "lado": "pretas",
+            "ligadas": true
+          },
+          {
+            "o": "torres-ligadas",
+            "lado": "brancas",
+            "ligadas": false
+          },
+          {
+            "o": "material-igual"
+          },
+          {
+            "o": "vez",
+            "lado": "brancas"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é um lado com as torres ligadas e o outro não, com o resto igual.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. A ligação foi medida casa a casa entre as duas torres de cada lado."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas jogam. Que lance liga as torres?",
+      "opcoes": [
+        "Dama de d1 para d2",
+        "Torre de a1 para b1",
+        "Cavalo de f3 para g5"
+      ],
+      "certa": 0,
+      "porque": "A dama é a única peça entre as duas torres. Saindo para d2, as casas b1, c1, d1 e e1 ficam vazias e as torres se enxergam. Tb1 não resolve: a dama continua em d1, entre elas. E c2 tem peão — Dc2 nem é lance legal aqui."
+    },
+    "video": {
+      "titulo": "Aprenda a Jogar Corretamente com as Torres!! (Com Exercícios!!) — Gato Mexicano",
+      "url": "https://www.youtube.com/watch?v=2bzSWsjYgnw"
+    }
+  },
+  {
+    "id": "m8",
+    "titulo": "O rei é peça: use-o quando as damas saírem",
+    "nivel": "ate-1000",
+    "resumo": "Com as damas no tabuleiro, o rei se esconde. Sem elas, ele é a peça mais forte que sobrou — e tem de andar.",
+    "explicacao": [
+      "A criança aprende cedo que o rei se esconde, e aprende bem: com damas no tabuleiro, rei exposto é partida perdida. O problema é que ninguém desliga essa regra depois. Trocadas as damas, o rei vira uma peça de ataque que vale perto de um cavalo, e deixá-lo no canto é jogar com uma peça a menos.",
+      "O caminho é sempre o mesmo: para o centro, uma casa por lance, antes de os peões começarem a correr. Quem chega primeiro com o rei ganha finais que pareciam empatados."
+    ],
+    "procure": [
+      "Ainda há damas no tabuleiro? Se não há, o rei anda.",
+      "Qual é o caminho mais curto do seu rei até o centro?",
+      "O rei dele já começou a andar? Se sim, você está atrasado."
+    ],
+    "cuidado": "\"Sem damas\" não é o mesmo que \"sem perigo\". Duas torres ativas ainda dão mate, e um rei que anda cedo demais no meio delas se perde.",
+    "posicoes": [
+      {
+        "fen": "6k1/ppp2ppp/8/3p4/3P4/8/PPP2PPP/6K1 w - - 0 30",
+        "legenda": "Não sobrou peça nenhuma: só reis e sete peões de cada lado, com material idêntico. As brancas jogam, e o rei está em g1.",
+        "afirma": [
+          {
+            "o": "pecas",
+            "peca": "dama",
+            "brancas": 0,
+            "pretas": 0
+          },
+          {
+            "o": "pecas",
+            "peca": "torre",
+            "brancas": 0,
+            "pretas": 0
+          },
+          {
+            "o": "material-igual"
+          },
+          {
+            "o": "rei-em",
+            "lado": "brancas",
+            "casa": "g1"
+          },
+          {
+            "o": "rei-em",
+            "lado": "pretas",
+            "casa": "g8"
+          },
+          {
+            "o": "peoes",
+            "brancas": 7,
+            "pretas": 7
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é o extremo do argumento: um final sem peça nenhuma, em que só o rei decide.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. A ausência de damas e torres foi contada, e o material comparado peça a peça."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas jogam. Qual é o plano?",
+      "opcoes": [
+        "Levar o rei para o centro, por f1 e e2",
+        "Deixar o rei em g1, onde está seguro",
+        "Avançar os peões do roque para ganhar espaço"
+      ],
+      "certa": 0,
+      "porque": "A posição é simétrica: quem ganha é quem tiver o rei melhor colocado quando os peões começarem a andar. O rei que chega a e3 ou d4 primeiro decide o final. Avançar peões antes de trazer o rei é criar fraqueza sem ter quem as defenda."
+    },
+    "video": {
+      "titulo": "Avançar o rei ou o peão??? Conceito importante! - 100 finais #2 — GM Krikor",
+      "url": "https://www.youtube.com/watch?v=W_F8YDO1VBE"
+    }
+  },
+  {
+    "id": "m9",
+    "titulo": "Melhore a sua pior peça",
+    "nivel": "1000-1200",
+    "resumo": "Quando não há tática, olhe as suas peças uma por uma e ache a que está fazendo menos. O lance é dela.",
+    "explicacao": [
+      "Este é o conselho mais útil que existe para uma posição parada, e é fácil de aplicar: passe o olho pelas suas peças e pergunte de cada uma o que ela está fazendo. Quase sempre há uma que não faz nada — o bispo trancado atrás dos próprios peões, a torre que nunca saiu do canto, o cavalo na borda.",
+      "Melhorar essa peça costuma valer mais que qualquer ameaça pequena, porque muda a posição inteira em vez de um lance. E é um plano que nunca falta: sempre existe uma pior peça."
+    ],
+    "procure": [
+      "Qual das suas peças alcança menos casas agora? Conte os lances dela.",
+      "Para onde ela iria, se você pudesse pô-la à mão?",
+      "Quantos lances custa levá-la até lá?"
+    ],
+    "posicoes": [
+      {
+        "fen": "r1bq1rk1/pp2bppp/2n2n2/2pp4/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 0 11",
+        "legenda": "O bispo branco de c1 tem exatamente um lance legal: d2. Os próprios peões de b2 e e3 fecham as duas diagonais dele.",
+        "afirma": [
+          {
+            "o": "peca",
+            "casa": "c1",
+            "peca": "bispo",
+            "lado": "brancas"
+          },
+          {
+            "o": "lances-da-peca",
+            "casa": "c1",
+            "quantos": 1
+          },
+          {
+            "o": "vez",
+            "lado": "brancas"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é o bispo trancado pelos próprios peões.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. Os lances do bispo foram contados pelo gerador de lances legais: são um só."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas jogam. Qual é a pior peça branca, e o que fazer com ela?",
+      "opcoes": [
+        "O bispo de c1: b3 e depois Bb2, para abrir a diagonal longa",
+        "O cavalo de f3: levá-lo a h4",
+        "A torre de f1: levá-la a e1"
+      ],
+      "certa": 0,
+      "porque": "Conte os lances de cada peça: o bispo de c1 tem um só, e ele nem melhora nada (d2 continua sem diagonal). O plano de duas partes — b3 e Bb2 — abre a diagonal a1–h8 inteira para ele. Custa dois lances, e é o melhor negócio da posição."
+    },
+    "video": {
+      "titulo": "How To Fix Bad Pieces in Chess! - Chess Strategy Explained — Dr. Can's Chess Clinic (em inglês)",
+      "url": "https://www.youtube.com/watch?v=h-6HxL5G458"
+    }
+  },
+  {
+    "id": "m10",
+    "titulo": "Peão fraco é alvo fixo",
+    "nivel": "1000-1200",
+    "resumo": "Peão que nenhum outro peão pode defender não sai do lugar e não se defende sozinho. Bloqueie primeiro; ataque depois.",
+    "explicacao": [
+      "Um peão isolado — sem peão amigo nas colunas vizinhas — só pode ser defendido por peça. Isso é o que o torna caro: cada peça que o defende deixa de fazer outra coisa, e ele nem precisa cair para você ganhar a partida.",
+      "O jeito de jogar contra ele tem duas partes, e a segunda é a que quase ninguém faz: primeiro se bloqueia a casa à frente dele, com uma peça que não pode ser expulsa; depois se ataca o peão com quantas peças forem precisas."
+    ],
+    "procure": [
+      "Ele tem algum peão sem vizinho nas colunas do lado?",
+      "Que peça sua pode se plantar na casa à frente desse peão?",
+      "Quantas peças ele precisa gastar para defendê-lo?"
+    ],
+    "cuidado": "Peão isolado também dá espaço e casas ativas a quem o tem. Bloquear vem antes de atacar — sem bloqueio, ele avança e o problema vira dele para você.",
+    "posicoes": [
+      {
+        "fen": "r2q1rk1/pp3ppp/4bn2/3p4/3N4/4B3/PPP1QPPP/R4RK1 w - - 0 15",
+        "legenda": "O peão preto de d5 é isolado: as pretas não têm peão nem na coluna c nem na e. O cavalo branco está em d4, a casa exatamente à frente dele.",
+        "afirma": [
+          {
+            "o": "peao-isolado",
+            "casa": "d5"
+          },
+          {
+            "o": "bloqueio",
+            "peao": "d5",
+            "por": "brancas"
+          },
+          {
+            "o": "peca",
+            "casa": "d4",
+            "peca": "cavalo",
+            "lado": "brancas"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é o par bloqueio-e-ataque contra o peão isolado.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. O isolamento foi medido nas colunas vizinhas, e o bloqueio, na casa à frente do peão."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas jogam. Devem capturar o bispo em e6 com o cavalo?",
+      "opcoes": [
+        "Não: depois de Cxe6 fxe6 o peão de d5 ganha vizinho e deixa de ser isolado",
+        "Sim: cavalo por bispo é sempre um bom negócio",
+        "Sim: a captura ganha um tempo sobre a dama preta"
+      ],
+      "certa": 0,
+      "porque": "A captura conserta a posição do adversário. Depois de fxe6 as pretas têm peões em d5 e e6, nas colunas vizinhas — o peão que as brancas iam atacar a partida inteira passa a ter quem o defenda, e o cavalo bloqueador sai do tabuleiro no mesmo lance."
+    },
+    "video": {
+      "titulo": "ESTRUTURA DE PEÕES | EP#2 | PEÃO DAMA ISOLADO - Jogando CONTRA — MF Julia Alboredo",
+      "url": "https://www.youtube.com/watch?v=DJxMSFUwYa4"
+    }
+  },
+  {
+    "id": "m11",
+    "titulo": "Na frente, troque peças",
+    "nivel": "1000-1200",
+    "resumo": "Com uma peça a mais, cada troca aumenta a sua vantagem. Com uma a menos, cada troca é ruim para você.",
+    "explicacao": [
+      "A conta é simples e ninguém a faz na hora: com peça a mais, quanto menos coisa houver no tabuleiro, maior é a diferença. Cinco peças contra quatro é uma vantagem; duas contra uma é o dobro dela. Trocar não é covardia — é o que transforma vantagem em ponto.",
+      "O contrário também vale, e é o lado que mais dói: quando você está atrás, cada troca aproxima o final que você perde. Ali o caminho é o oposto — manter peças no tabuleiro e complicar."
+    ],
+    "procure": [
+      "Quem está na frente em material, você ou ele? Conte de novo.",
+      "Existe uma troca disponível agora? Ela ajuda quem?",
+      "Trocar damas ajuda quem está na frente — quase sempre."
+    ],
+    "cuidado": "Trocar peças é bom; trocar **peões** quando você está na frente, nem sempre. Sem peões, muito final com peça a mais é empate.",
+    "posicoes": [
+      {
+        "fen": "r4rk1/pp3ppp/2p5/3n4/3P4/2N2N2/PP3PPP/R4RK1 w - - 0 18",
+        "legenda": "As brancas têm um cavalo a mais e o resto do material é idêntico: duas torres e seis peões de cada lado. As brancas jogam.",
+        "afirma": [
+          {
+            "o": "material-a-mais",
+            "lado": "brancas",
+            "peca": "cavalo",
+            "quantas": 1
+          },
+          {
+            "o": "peoes",
+            "brancas": 6,
+            "pretas": 6
+          },
+          {
+            "o": "vez",
+            "lado": "brancas"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é a decisão de trocar com uma peça a mais, sem nenhum outro desequilíbrio.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. A sobra de material foi medida tipo a tipo: só o cavalo difere."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas têm um cavalo a mais e jogam. O que fazer?",
+      "opcoes": [
+        "Trocar os cavalos em d5",
+        "Guardar as peças e atacar o rei",
+        "Avançar o peão de d"
+      ],
+      "certa": 0,
+      "porque": "Cada troca aumenta o peso do cavalo extra. Depois de Cxd5 cxd5 sobram torres e peões, e as brancas jogam um final com peça a mais — que é a maneira mais segura de converter. Atacar o rei com material a mais é procurar o único jeito de perder."
+    },
+    "video": {
+      "titulo": "TRANSFORME VANTAGEM EM VITÓRIA NO XADREZ!! — Gato Mexicano",
+      "url": "https://www.youtube.com/watch?v=0SvJjZd5pL0"
+    }
+  },
+  {
+    "id": "m12",
+    "titulo": "Rei no centro: abra o jogo",
+    "nivel": "1000-1200",
+    "resumo": "Fechado, o rei no centro sobrevive. Assim que as colunas abrem, ele é o alvo — e vale peão para abri-las.",
+    "explicacao": [
+      "Esta é a irmã mais velha do \"roque primeiro\", vista do lado de quem ataca: quando o rei **dele** ainda está no centro, abrir o jogo é exatamente o plano. Cada coluna que abre passa pela casa do rei dele.",
+      "E o preço vale a pena. Um peão custa um peão; um rei preso no centro custa a partida. A pressa também é parte do plano: cada lance que ele ganha para rocar, o seu ataque vale menos."
+    ],
+    "procure": [
+      "O rei dele já rocou? Se não, essa é a informação mais importante do tabuleiro.",
+      "Que peão seu, avançando, abre a coluna em que o rei dele está?",
+      "Você tem torre nessa coluna? Se não, ponha uma antes de abrir."
+    ],
+    "posicoes": [
+      {
+        "fen": "r1bqr1k1/ppp1bppp/2np1n2/8/2B1P3/2NP1N2/PPP2PPP/R1BQK2R b KQ - 0 9",
+        "legenda": "O rei branco continua em e1 e a torre preta já está em e8. As pretas não têm peão na coluna e; as brancas têm, em e4. As brancas têm um peão a mais.",
+        "afirma": [
+          {
+            "o": "vez",
+            "lado": "pretas"
+          },
+          {
+            "o": "rei-em",
+            "lado": "brancas",
+            "casa": "e1"
+          },
+          {
+            "o": "coluna-semiaberta",
+            "coluna": "e",
+            "lado": "pretas"
+          },
+          {
+            "o": "peoes",
+            "brancas": 8,
+            "pretas": 7
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é a coluna semiaberta apontada para o rei que não rocou.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. A coluna e foi conferida sem peão preto e com peão branco em e4."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As pretas jogam, com um peão a menos. Qual é o plano?",
+      "opcoes": [
+        "Romper com ...d5, para abrir a coluna e contra o rei de e1",
+        "Trocar as damas e ir para o final, onde o peão a menos importa menos",
+        "Avançar ...b5, ganhando espaço na ala da dama"
+      ],
+      "certa": 0,
+      "porque": "...d5 ataca o bispo de c4 e o peão de e4 no mesmo lance, e depois da captura em d5 a coluna e fica aberta — com a torre preta de e8 de um lado e o rei branco de e1 do outro. Trocar damas é o contrário do plano: com o rei dele no centro, o que vale é abrir, não simplificar."
+    },
+    "video": {
+      "titulo": "Qual o problema de deixar o Rei no Centro?? | #Grandes Partidas — Raffael Chess",
+      "url": "https://www.youtube.com/watch?v=ZWgkVfdF-u4"
+    }
+  },
+  {
+    "id": "m13",
+    "titulo": "A sétima fileira",
+    "nivel": "1000-1200",
+    "resumo": "Torre na sétima come os peões que nunca andaram e prende o rei na última fileira. Vale um peão para chegar lá.",
+    "explicacao": [
+      "A sétima fileira (a segunda, para as pretas) é onde moram os peões que ainda não se mexeram — e eles estão quase todos indefesos, porque quem os defendia eram peças que já saíram. Uma torre ali ataca vários de uma vez.",
+      "E há o segundo efeito, que decide finais: a torre na sétima corta o rei adversário na última fileira. Ele deixa de ajudar na defesa, e cada peão que cai não é reposto."
+    ],
+    "procure": [
+      "Existe caminho para a sua torre chegar à sétima fileira?",
+      "Quais peões dele ainda estão na fileira de origem, e quem os defende?",
+      "Depois que a torre chegar, o rei dele consegue sair da última fileira?"
+    ],
+    "posicoes": [
+      {
+        "fen": "r5k1/pp2Rppp/8/8/8/8/PP3PPP/6K1 w - - 0 30",
+        "legenda": "A torre branca está na sétima fileira. O peão preto de b7 é atacado uma vez e defendido nenhuma. O material é idêntico: torre e cinco peões de cada lado.",
+        "afirma": [
+          {
+            "o": "torre-na-setima",
+            "lado": "brancas",
+            "casa": "e7"
+          },
+          {
+            "o": "material-igual"
+          },
+          {
+            "o": "atacantes",
+            "casa": "b7",
+            "brancas": 1,
+            "pretas": 0
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é a torre na sétima, sem mais nenhum desequilíbrio.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. A fileira foi conferida, e os atacantes e defensores de b7, contados peça a peça."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas jogam. Qual lance ganha material?",
+      "opcoes": [
+        "Torre captura em b7",
+        "Torre captura em f7",
+        "Torre para e8, dando xeque"
+      ],
+      "certa": 0,
+      "porque": "b7 é atacado uma vez e defendido nenhuma: Txb7 ganha um peão limpo. f7 está defendido pelo rei, então Txf7 dá torre por peão. E Te8+ é pior ainda: a torre preta captura em e8 e as brancas ficam sem torre."
+    },
+    "video": {
+      "titulo": "A MELHOR FILEIRA para você colocar sua TORRE no Xadrez! — Tr. André Basso",
+      "url": "https://www.youtube.com/watch?v=ugi2ZNc-h0s"
+    }
+  },
+  {
+    "id": "m14",
+    "titulo": "Peão dobrado",
+    "nivel": "1000-1200",
+    "resumo": "Dois peões na mesma coluna não se defendem, não fazem peão passado sozinhos, e a coluna deles é da torre do adversário.",
+    "explicacao": [
+      "Peão dobrado é dois peões seus na mesma coluna. O problema não é o número, é a geometria: peão defende na diagonal, e um peão que está atrás do outro na mesma coluna nunca defende o da frente. Ele fica dependendo de peça a partida inteira.",
+      "E há o custo que quase ninguém vê: a coluna dobrada é uma coluna a menos. Quatro peões em três colunas contra três peões em três colunas não é uma maioria — é a mesma coisa com um peão a mais para defender."
+    ],
+    "procure": [
+      "Você tem duas peças de peão na mesma coluna? Quem as defende?",
+      "A coluna deles está semiaberta para o adversário?",
+      "Vale a pena aceitar o dobrado em troca da coluna que a captura abre para você?"
+    ],
+    "cuidado": "Peão dobrado nem sempre é ruim: se vier junto com a coluna aberta e o par de bispos, costuma valer o preço. O que nunca é bom é ficar com o dobrado **e** sem compensação nenhuma.",
+    "posicoes": [
+      {
+        "fen": "2r3k1/pp3ppp/3p1n2/8/8/2P2N2/PPP2PPP/2R3K1 w - - 0 22",
+        "legenda": "As brancas têm dois peões na coluna c e um peão a mais no total (sete contra seis). As pretas não têm peão nenhum na coluna c, e a torre de c8 já ataca c3 — que só o peão de b2 defende.",
+        "afirma": [
+          {
+            "o": "peao-dobrado",
+            "coluna": "c",
+            "lado": "brancas"
+          },
+          {
+            "o": "coluna-semiaberta",
+            "coluna": "c",
+            "lado": "pretas"
+          },
+          {
+            "o": "peoes",
+            "brancas": 7,
+            "pretas": 6
+          },
+          {
+            "o": "atacantes",
+            "casa": "c3",
+            "brancas": 1,
+            "pretas": 1
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é o peão dobrado com a coluna semiaberta do outro lado.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. O dobrado, a coluna e a conta de c3 foram medidos peça a peça."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas têm um peão a mais. Qual é, mesmo assim, o defeito da posição delas?",
+      "opcoes": [
+        "Os dois peões de c: não se defendem entre si, e a coluna deles é da torre preta",
+        "O cavalo de f3, que não tem casa avançada nenhuma",
+        "O rei de g1, que está mais exposto que o preto"
+      ],
+      "certa": 0,
+      "porque": "O peão a mais está na coluna errada: quatro peões na ala da dama em três colunas não fazem peão passado mais depressa que três. E c3 depende do peão de b2 — enquanto b2 estiver defendendo, ele não anda. Os dois reis estão igualmente abrigados, então a terceira opção não separa nada."
+    },
+    "video": {
+      "titulo": "A verdade sobre peões dobrados! - SleepRun S03E122 — GM Krikor",
+      "url": "https://www.youtube.com/watch?v=Gem1QQrkQMM"
+    }
+  },
+  {
+    "id": "m15",
+    "titulo": "Bloqueie o peão passado",
+    "nivel": "1000-1200",
+    "resumo": "Peão passado quer andar. Uma peça parada na casa à frente dele o transforma em pedra — e o cavalo é a melhor peça para isso.",
+    "explicacao": [
+      "Peão passado é peão sem nenhum peão inimigo à frente, nem na coluna dele nem nas vizinhas. Deixado em paz, ele promove. O erro comum é tentar cercá-lo com peças de longe: enquanto ele anda, cada casa que ganha o torna mais forte.",
+      "A resposta é parar em cima da casa à frente dele. A peça bloqueadora ganha uma casa em que peão nenhum a expulsa, e o peão passado deixa de ser uma ameaça e vira um peão que atrapalha as próprias peças."
+    ],
+    "procure": [
+      "Existe peão passado no tabuleiro? De quem?",
+      "Qual peça sua pode se plantar na casa à frente dele e ficar lá?",
+      "Se você trocar essa peça, quem bloqueia depois?"
+    ],
+    "posicoes": [
+      {
+        "fen": "r5k1/pp3ppp/4b3/3p4/3N4/8/PP3PPP/R5K1 w - - 0 28",
+        "legenda": "O peão preto de d5 é passado: não há peão branco nas colunas c, d ou e à frente dele. O cavalo branco de d4 está exatamente na casa que ele quer ocupar. As pretas têm seis peões contra cinco.",
+        "afirma": [
+          {
+            "o": "peao-passado",
+            "casa": "d5"
+          },
+          {
+            "o": "bloqueio",
+            "peao": "d5",
+            "por": "brancas"
+          },
+          {
+            "o": "peoes",
+            "brancas": 5,
+            "pretas": 6
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é o bloqueador único de um peão passado.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. O peão passado foi medido nas três colunas à frente dele, e o bloqueio, na casa d4."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas jogam. Devem capturar o bispo em e6?",
+      "opcoes": [
+        "Não: o cavalo de d4 é o único bloqueador, e sem ele o peão anda",
+        "Sim: bispo vale mais que cavalo",
+        "Sim: a captura ganha um tempo"
+      ],
+      "certa": 0,
+      "porque": "Depois de Cxe6 fxe6 as brancas trocaram o cavalo pelo bispo e ficaram sem quem pare o peão — e as pretas já estão um peão à frente. Num final com peão passado, a peça que bloqueia vale mais que a tabela de valores diz."
+    },
+    "video": {
+      "titulo": "Usando a Técnica do Bloqueio — Julio Lapertosa",
+      "url": "https://www.youtube.com/watch?v=B6QAduT74Kg"
+    }
+  },
+  {
+    "id": "m16",
+    "titulo": "Troque os defensores do rei",
+    "nivel": "1000-1200",
+    "resumo": "Antes de atacar o rei, olhe quem o defende. Tirar o melhor defensor vale bispo por cavalo, e às vezes vale mais.",
+    "explicacao": [
+      "Ataque ao rei não é somar peças de um lado: é comparar atacantes com defensores. E os defensores não são todos iguais — o cavalo em f6 (ou f3) costuma ser o melhor deles, porque cobre sozinho h7, h5 e g4, que são as três portas de entrada.",
+      "Por isso a troca de bispo por cavalo, que em posição parada seria uma concessão, num ataque é o primeiro lance do plano. O que se compra não é material: é a casa que ficou sem guarda."
+    ],
+    "procure": [
+      "Conte: quantas peças suas olham a casa do rei dele, e quantas a defendem?",
+      "Qual peça dele defende mais casas em volta do rei?",
+      "Você consegue trocá-la sem perder tempo?"
+    ],
+    "posicoes": [
+      {
+        "fen": "3q1rk1/pbp1bppp/1p3n2/3p2B1/3P4/3B1N2/PPPQ1PPP/5RK1 w - - 0 14",
+        "legenda": "A casa h7 é atacada uma vez, pelo bispo de d3, e defendida duas: pelo rei de g8 e pelo cavalo de f6. O material é igual dos dois lados.",
+        "afirma": [
+          {
+            "o": "atacantes",
+            "casa": "h7",
+            "brancas": 1,
+            "pretas": 2
+          },
+          {
+            "o": "peca",
+            "casa": "f6",
+            "peca": "cavalo",
+            "lado": "pretas"
+          },
+          {
+            "o": "material-igual"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é a conta de atacantes e defensores em volta do rei.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. Os atacantes e defensores de h7 foram contados peça a peça."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas querem atacar o rei preto. Qual peça preta mais atrapalha?",
+      "opcoes": [
+        "O cavalo de f6",
+        "O bispo de b7",
+        "A torre de f8"
+      ],
+      "certa": 0,
+      "porque": "O cavalo de f6 é o segundo defensor de h7, e ainda cobre h5 e g4 — as casas por onde uma dama ou um cavalo entrariam. Depois de Bxf6 Bxf6, h7 fica defendido só pelo rei. O bispo de b7 está trancado pelos próprios peões de c e d, e a torre de f8 não defende nada em volta do rei."
+    },
+    "video": {
+      "titulo": "Táticas - Remover a Defesa — Iniciativa Xadrez",
+      "url": "https://www.youtube.com/watch?v=qqOzFayr6Mw"
+    }
+  },
+  {
+    "id": "m17",
+    "titulo": "Cavalo quer casa que peão nenhum ataca",
+    "nivel": "1200-1400",
+    "resumo": "Cavalo bom é cavalo que não pode ser expulso por peão. Ache essa casa, e leve o cavalo até lá, mesmo que custe três lances.",
+    "explicacao": [
+      "O cavalo é a peça mais lenta do tabuleiro, e por isso a mais cara de mudar de lugar. O que faz um cavalo valer mais que um bispo é justamente onde ele está: uma casa avançada, defendida por um peão seu, que nenhum peão dele consegue atacar. Isso se chama posto avançado, e um cavalo plantado ali costuma valer mais que uma torre inativa.",
+      "A conta que diz se a casa serve é sobre os peões **dele**, não sobre as peças: se os peões que poderiam expulsar o cavalo já passaram, ou já não existem, a casa é permanente."
+    ],
+    "procure": [
+      "Que casa no campo dele um peão seu defende?",
+      "Algum peão dele ainda pode atacar essa casa? Se não, é um posto.",
+      "Quantos lances leva o seu cavalo mais perto até lá?"
+    ],
+    "posicoes": [
+      {
+        "fen": "r2q1rk1/pp1b1ppp/5b2/2pNp3/4P3/2P5/PP3PPP/R1BQ1RK1 w - - 0 15",
+        "legenda": "A casa d5 é um posto branco: o peão de e4 a defende, e nenhum peão preto pode atacá-la — os das colunas c e e já passaram. As pretas têm o par de bispos, e cada lado tem sete peões.",
+        "afirma": [
+          {
+            "o": "posto",
+            "casa": "d5",
+            "lado": "brancas"
+          },
+          {
+            "o": "peca",
+            "casa": "d5",
+            "peca": "cavalo",
+            "lado": "brancas"
+          },
+          {
+            "o": "peoes",
+            "brancas": 7,
+            "pretas": 7
+          },
+          {
+            "o": "par-de-bispos",
+            "lado": "pretas"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é o posto avançado permanente.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. O posto foi medido pelos dois critérios: peão amigo que defende, e nenhum peão inimigo capaz de atacar."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "Por que o cavalo de d5 é permanente?",
+      "opcoes": [
+        "Porque peão preto nenhum pode mais atacá-lo: os de c e de e já passaram",
+        "Porque ele está defendido pela dama branca",
+        "Porque ele dá xeque ao rei preto"
+      ],
+      "certa": 0,
+      "porque": "Peão anda para a frente e não volta. Os peões pretos de c5 e e5 nunca mais alcançarão d5, e não há mais peão nas colunas c e e para vir de trás. O cavalo fica ali até o fim da partida, e é por isso que ele vale mais que o par de bispos que as pretas têm."
+    },
+    "video": {
+      "titulo": "Como GANHAR um POSTO AVANÇADO com Smyslov no Xadrez! — Tr. André Basso",
+      "url": "https://www.youtube.com/watch?v=-RsMV2yYWu0"
+    }
+  },
+  {
+    "id": "m18",
+    "titulo": "Bispo bom, bispo ruim",
+    "nivel": "1200-1400",
+    "resumo": "Bispo anda numa cor só. Se os seus peões estiverem nessa cor, o bispo é uma peça grande que não vai a lugar nenhum.",
+    "explicacao": [
+      "Cada bispo vive metade do tabuleiro — as casas claras, ou as escuras. Os seus próprios peões, quando estão nas casas da cor dele, fecham exatamente as diagonais que ele usaria. É a peça mais fácil de estragar sem perceber, e o estrago dura a partida inteira.",
+      "Duas consequências práticas: ponha os peões na cor **oposta** à do seu bispo, e, quando o bispo já estiver ruim, considere trocá-lo — um bispo ruim vale menos que um cavalo, e trocar não é abrir mão de nada."
+    ],
+    "procure": [
+      "De que cor é o seu bispo? Olhe a casa em que ele está.",
+      "Quantos dos seus peões estão nessa mesma cor? Conte.",
+      "E os dele? Se o bispo dele for ruim e o seu bom, o final é seu."
+    ],
+    "posicoes": [
+      {
+        "fen": "r4rk1/pp2bppp/2p1p3/3pP3/3P4/2P5/PP1B1PPP/R4RK1 w - - 0 18",
+        "legenda": "Os dois bispos andam nas casas escuras, e cada lado tem oito peões. Seis dos peões brancos estão em casas escuras — a cor do próprio bispo. Dos pretos, só dois.",
+        "afirma": [
+          {
+            "o": "peoes-na-cor-do-bispo",
+            "bispo": "d2",
+            "quantos": 6
+          },
+          {
+            "o": "peoes-na-cor-do-bispo",
+            "bispo": "e7",
+            "quantos": 2
+          },
+          {
+            "o": "peoes",
+            "brancas": 8,
+            "pretas": 8
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Mesmo material e mesmo número de peões dos dois lados: a diferença inteira está na cor das casas.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. A cor de cada casa foi calculada pela soma coluna+fileira, e os peões de cada cor, contados."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "Quem tem o melhor bispo?",
+      "opcoes": [
+        "As pretas",
+        "As brancas",
+        "Os dois são iguais: material igual"
+      ],
+      "certa": 0,
+      "porque": "Os dois bispos são de casas escuras. Seis peões brancos estão em casas escuras — c3, d4 e e5 fecham a diagonal do bispo de d2 por dentro. Dos peões pretos, só dois estão em casas escuras, e os de c6, d5 e e6 estão todos em casas claras, deixando o bispo de e7 livre."
+    },
+    "video": {
+      "titulo": "Tu sabe o que é Bispo bom e Bispo mau??? | # Aprendendo Xadrez — Raffael Chess",
+      "url": "https://www.youtube.com/watch?v=gSGhPHVdmEU"
+    }
+  },
+  {
+    "id": "m19",
+    "titulo": "Sem plano, faça o lance útil",
+    "nivel": "1200-1400",
+    "resumo": "Nem toda posição tem um plano à mão. Quando não tiver, jogue o lance que você faria de qualquer jeito — e não um lance qualquer.",
+    "explicacao": [
+      "Existem posições em que não há ataque, não há peão fraco e não há coluna aberta. É onde a maioria das partidas de clube é perdida, porque o jogador inventa um plano ruim só para ter um. A alternativa não é passar a vez: é fazer o lance que serviria a qualquer plano futuro.",
+      "Os lances úteis são quase sempre os mesmos: abrir a janela do rei, pôr a torre na coluna que pode abrir, tirar uma peça de uma casa em que ela pode ser atacada, melhorar a pior peça. Nenhum ameaça nada, e todos deixam a posição melhor para o lance seguinte."
+    ],
+    "procure": [
+      "Existe algum lance forçado — xeque, captura ou ameaça? Se não, é posição parada.",
+      "O seu rei tem janela? Se não tem, esse é o lance útil.",
+      "Que peça sua ficaria melhor uma casa adiante, sem risco nenhum?"
+    ],
+    "cuidado": "Lance útil não é lance de peão na frente do próprio rei. h3 abre janela; g4 abre a porta.",
+    "posicoes": [
+      {
+        "fen": "r2q1rk1/pp2bppp/2n1pn2/3p4/3P4/2NBPN2/PP3PPP/R1BQ1RK1 w - - 0 12",
+        "legenda": "Nenhuma peça está atacada e nenhuma coluna está aberta. A casa d5 é atacada uma vez e defendida três. O rei branco não tem janela: f2, g2 e h2 estão todos ocupados.",
+        "afirma": [
+          {
+            "o": "janela-do-rei",
+            "lado": "brancas",
+            "tem": false
+          },
+          {
+            "o": "atacantes",
+            "casa": "d5",
+            "brancas": 1,
+            "pretas": 3
+          },
+          {
+            "o": "peoes",
+            "brancas": 7,
+            "pretas": 7
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Estrutura fechada e material igual, para que a única pergunta seja qual lance útil jogar.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. A janela do rei e a conta de d5 foram medidas casa a casa."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas jogam e não há nada forçado. Qual lance é útil de qualquer jeito?",
+      "opcoes": [
+        "h3, que dá janela ao rei",
+        "Cxd5, que ganha um peão",
+        "g4, para começar um ataque"
+      ],
+      "certa": 0,
+      "porque": "Cxd5 não ganha nada: d5 tem três defensores e um atacante — depois de exd5 as brancas deram um cavalo por um peão. g4 enfraquece justamente os peões do próprio rei. h3 não ameaça nada, serve a qualquer plano, e tira do tabuleiro o mate da última fileira antes que ele exista."
+    },
+    "video": {
+      "titulo": "3 Passos Simples para Encontrar o Melhor Lance em Qualquer Posição no Xadrez — GMEvandroBarbosa",
+      "url": "https://www.youtube.com/watch?v=DHOCWEXZd-M"
+    }
+  },
+  {
+    "id": "m20",
+    "titulo": "Conte antes de capturar",
+    "nivel": "1200-1400",
+    "resumo": "Antes de capturar numa casa, conte quantas peças a atacam e quantas a defendem. A conta é do tabuleiro, não da vontade.",
+    "explicacao": [
+      "A captura que parece boa e não é tem sempre a mesma forma: você olha para o alvo e não olha para quem o defende. A conta correta é de duas mãos — quantas peças suas atacam a casa, quantas peças dele a defendem — e ela precisa ser feita **antes** de a mão sair do lugar.",
+      "E há a segunda metade, que quase ninguém faz: a ordem importa. Capturar primeiro com a peça mais barata muda o resultado da mesma sequência, porque o que você perde no meio do caminho é diferente."
+    ],
+    "procure": [
+      "Quantas peças suas atacam a casa? Conte apontando.",
+      "Quantas peças dele defendem? Inclua as que defendem por trás de outra.",
+      "Se estiver empatado, quem começa a troca sai perdendo — e quem começa é você."
+    ],
+    "cuidado": "Peça cravada não defende de verdade. Antes de contar um defensor, veja se ele pode mesmo sair do lugar.",
+    "posicoes": [
+      {
+        "fen": "r2q1rk1/pp2bppp/2n1pn2/3p4/3P4/2N1PN2/PP2BPPP/R2Q1RK1 w - - 0 12",
+        "legenda": "A casa d5 é atacada uma vez, pelo cavalo de c3, e defendida três: pelo peão de e6, pelo cavalo de f6 e pela dama de d8.",
+        "afirma": [
+          {
+            "o": "atacantes",
+            "casa": "d5",
+            "brancas": 1,
+            "pretas": 3
+          },
+          {
+            "o": "vez",
+            "lado": "brancas"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é uma conta de ataque e defesa com resultado claro.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. Os atacantes e defensores de d5 foram contados peça a peça pelo gerador de ataques."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas jogam. O cavalo captura em d5?",
+      "opcoes": [
+        "Não: d5 tem três defensores e um atacante",
+        "Sim: ganha um peão",
+        "Sim, e depois a dama recaptura"
+      ],
+      "certa": 0,
+      "porque": "Depois de Cxd5 exd5 as brancas deram um cavalo por um peão. A conta é 1 contra 3, e ela não depende de quem recaptura primeiro — depende de haver mais defensores que atacantes."
+    },
+    "video": {
+      "titulo": "Aprenda o Valor das Peças e como fazer Trocas Corretamente — Xadrez no Tabuleiro",
+      "url": "https://www.youtube.com/watch?v=mP-v287vc30"
+    }
+  },
+  {
+    "id": "m21",
+    "titulo": "Dois bispos em posição aberta",
+    "nivel": "1200-1400",
+    "resumo": "Um bispo cobre metade do tabuleiro; dois cobrem o tabuleiro inteiro. Com o centro aberto, o par vale mais que bispo e cavalo.",
+    "explicacao": [
+      "O par de bispos não é forte porque bispo seja melhor que cavalo — em posição fechada não é. É forte porque os dois juntos deixam de ter buraco: cada casa do tabuleiro é da cor de um deles. Contra bispo e cavalo, metade das casas fica para sempre fora do alcance do bispo adversário.",
+      "A condição é o tabuleiro aberto. Com poucos peões e diagonais longas, os bispos alcançam de um canto ao outro num lance; com o centro travado, o cavalo pula por cima e o par não vale nada."
+    ],
+    "procure": [
+      "Você tem os dois bispos? E ele?",
+      "Quantos peões ainda há no tabuleiro? Menos peões, mais valem os bispos.",
+      "As diagonais longas estão livres, ou trancadas pelos seus próprios peões?"
+    ],
+    "cuidado": "O par de bispos é uma vantagem de longo prazo, não uma ameaça. Ele se cobra em vinte lances, não em dois — e some no lance em que você troca um deles sem motivo.",
+    "posicoes": [
+      {
+        "fen": "4r1k1/p1p1bppp/1pn5/8/2B5/3P4/PBP2PPP/4R1K1 w - - 0 24",
+        "legenda": "As brancas têm os dois bispos, em b2 e c4; as pretas têm um bispo e um cavalo. Cada lado tem seis peões, e a coluna e não tem peão nenhum.",
+        "afirma": [
+          {
+            "o": "par-de-bispos",
+            "lado": "brancas"
+          },
+          {
+            "o": "peoes",
+            "brancas": 6,
+            "pretas": 6
+          },
+          {
+            "o": "peca",
+            "casa": "c4",
+            "peca": "bispo",
+            "lado": "brancas"
+          },
+          {
+            "o": "peca",
+            "casa": "b2",
+            "peca": "bispo",
+            "lado": "brancas"
+          },
+          {
+            "o": "coluna-aberta",
+            "coluna": "e"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é o par de bispos contra bispo e cavalo, com o tabuleiro aberto e o material igual em número.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. O par foi contado nos dois lados, e a coluna e conferida sem peão."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "Por que os dois bispos valem mais aqui?",
+      "opcoes": [
+        "Porque o tabuleiro está aberto: juntos eles cobrem as casas das duas cores",
+        "Porque bispo vale mais que cavalo em qualquer posição",
+        "Porque as brancas têm um peão a mais"
+      ],
+      "certa": 0,
+      "porque": "O número de peões é o mesmo: seis de cada lado. O que muda é que com o centro vazio o bispo de b2 varre a diagonal longa inteira e o de c4 mira f7 — e o cavalo preto, para valer o mesmo, precisaria de uma casa avançada que peão nenhum atacasse. Não há nenhuma."
+    },
+    "video": {
+      "titulo": "Como CONVERTER VANTAGENS com PAR de BISPOS? — Tr. André Basso",
+      "url": "https://www.youtube.com/watch?v=RcpaH5vDIXg"
+    }
+  },
+  {
+    "id": "m22",
+    "titulo": "Ataque na ala onde você tem espaço",
+    "nivel": "1200-1400",
+    "resumo": "Os seus peões apontam para um lado do tabuleiro. É desse lado que o seu ataque funciona — e do outro que funciona o dele.",
+    "explicacao": [
+      "Numa estrutura travada, cada lado tem uma ala em que os peões estão mais adiantados. Ali sobra espaço para as peças manobrarem por trás, e é ali que um avanço de peão abre linhas contra o adversário em vez de contra você mesmo.",
+      "A consequência prática é dura de aceitar: os dois lados atacam ao mesmo tempo, em alas opostas, e a partida vira uma corrida. Quem gasta lances no lado errado — defendendo onde não vai ser atacado, ou atacando onde não tem espaço — perde a corrida por um tempo."
+    ],
+    "procure": [
+      "Em que ala os seus peões estão mais adiantados?",
+      "E os dele? É de lá que vem o ataque contra você.",
+      "O seu avanço abre linha contra ele, ou contra o seu próprio rei?"
+    ],
+    "posicoes": [
+      {
+        "fen": "2r3k1/pp2bppp/1qn1p3/2ppP3/3P1P2/2P1BN2/PP2Q1PP/5RK1 b - - 0 18",
+        "legenda": "Os peões brancos de e5 e f4 apontam para a ala do rei, e o de e5 é o único peão do tabuleiro que já cruzou o meio. O peão preto de c5 aponta para d4, a base do centro branco, que é atacado duas vezes e defendido três.",
+        "afirma": [
+          {
+            "o": "vez",
+            "lado": "pretas"
+          },
+          {
+            "o": "peoes",
+            "brancas": 8,
+            "pretas": 8
+          },
+          {
+            "o": "atacantes",
+            "casa": "d4",
+            "brancas": 3,
+            "pretas": 2
+          },
+          {
+            "o": "peca",
+            "casa": "e5",
+            "peca": "peao",
+            "lado": "brancas"
+          },
+          {
+            "o": "peca",
+            "casa": "f4",
+            "peca": "peao",
+            "lado": "brancas"
+          },
+          {
+            "o": "peca",
+            "casa": "c5",
+            "peca": "peao",
+            "lado": "pretas"
+          },
+          {
+            "o": "peoes-alem-do-meio",
+            "lado": "brancas",
+            "quantos": 1
+          },
+          {
+            "o": "peoes-alem-do-meio",
+            "lado": "pretas",
+            "quantos": 0
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é a estrutura travada em que cada lado tem espaço numa ala diferente.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. O espaço foi medido contando peões além do meio do tabuleiro, e a conta de d4, peça a peça."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As pretas jogam. Em que ala devem jogar?",
+      "opcoes": [
+        "Na ala da dama, onde o peão de c5 já aponta para d4",
+        "Na ala do rei, atacando o rei branco de frente",
+        "No centro, capturando já em d4"
+      ],
+      "certa": 0,
+      "porque": "Atacar na ala do rei é atacar onde as brancas têm espaço: os peões de e5 e f4 já estão adiantados ali, e cada peão preto que avançar abre linha contra o próprio rei. E capturar já em d4 não ganha nada — três defensores contra dois atacantes. O jogo preto é ...c4, ...Tc8 e a pressão na coluna c."
+    },
+    "video": {
+      "titulo": "Ala da Dama, Ala do Rei || De Olho no Lance — Xadrez Brasil",
+      "url": "https://www.youtube.com/watch?v=-p5Dc0fMHjo"
+    }
+  },
+  {
+    "id": "m23",
+    "titulo": "Peão retardatário",
+    "nivel": "1200-1400",
+    "resumo": "Peão que ficou para trás dos vizinhos, com a casa da frente vigiada por peão inimigo, não anda e não se defende. A coluna dele é o plano do adversário.",
+    "explicacao": [
+      "Retardatário é o peão que ficou atrás: os vizinhos das colunas do lado já passaram por ele, então nenhum deles pode voltar para defendê-lo. E a casa à frente dele está controlada por um peão inimigo, então ele também não avança para se juntar aos outros. Fica parado, defendido por peça, na coluna semiaberta do adversário.",
+      "Ele traz um segundo problema, quase sempre pior que ele mesmo: a casa à frente dele vira um posto permanente para as peças do adversário. Atacar o peão é o pretexto; ocupar a casa é o plano."
+    ],
+    "procure": [
+      "Ele tem peão que os vizinhos já ultrapassaram?",
+      "A casa à frente desse peão é controlada por um peão seu?",
+      "A coluna dele está semiaberta para você? Ponha torre lá."
+    ],
+    "posicoes": [
+      {
+        "fen": "3r2k1/p3bppp/1p1p1n2/4p3/4P3/2N1B3/PPP2PPP/3R2K1 w - - 0 20",
+        "legenda": "O peão preto de d6 é retardatário: não há peão preto nas colunas c ou e que possa defendê-lo, e o peão branco de e4 vigia d5. As brancas não têm peão na coluna d, e d5 é um posto branco permanente. Sete peões de cada lado.",
+        "afirma": [
+          {
+            "o": "peao-retardatario",
+            "casa": "d6"
+          },
+          {
+            "o": "coluna-semiaberta",
+            "coluna": "d",
+            "lado": "brancas"
+          },
+          {
+            "o": "posto",
+            "casa": "d5",
+            "lado": "brancas"
+          },
+          {
+            "o": "peoes",
+            "brancas": 7,
+            "pretas": 7
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é o par retardatário-e-posto, que anda sempre junto.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. O retardatário foi medido pelos dois critérios (nenhum vizinho capaz de defender, e a casa da frente vigiada por peão inimigo), e o posto, pelos seus."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "Como as brancas jogam contra o peão de d6?",
+      "opcoes": [
+        "Dobrar as torres na coluna d e plantar o cavalo em d5",
+        "Trocar as torres na coluna d para simplificar",
+        "Avançar o peão de e4 para e5, atacando o peão de d6"
+      ],
+      "certa": 0,
+      "porque": "Trocar as torres tira justamente a peça que ataca o peão — é o que as pretas querem. E e5 desfaz tudo: o peão de e4 é quem vigia d5, e sem ele as pretas jogam ...d5 e o peão fraco deixa de existir. Manter e4 no lugar, ocupar d5 e empilhar na coluna d é o plano inteiro."
+    },
+    "video": {
+      "titulo": "Jogando contra o PEÃO ATRASADO! — Xadrez Brasil",
+      "url": "https://www.youtube.com/watch?v=K0LDclTqdq8"
+    }
+  },
+  {
+    "id": "m24",
+    "titulo": "A base da cadeia de peões",
+    "nivel": "1200-1400",
+    "resumo": "Numa cadeia de peões, ataque o de trás. É ele que sustenta os outros, e é o único que nenhum peão da cadeia pode defender.",
+    "explicacao": [
+      "Cadeia de peões é uma fila na diagonal, cada peão defendido pelo de trás. A ponta é o peão mais avançado, e é o que incomoda mais — mas atacá-lo é o pior negócio: ele está defendido, e quem tiver de capturá-lo o faz em terreno do adversário.",
+      "A base é o peão de trás, e é ele que não tem quem o defenda com peão. Derrubada a base, a cadeia inteira fica sem sustentação e cai em pé. É por isso que o ataque se faz **por baixo**, com um peão seu vindo atacar a base."
+    ],
+    "procure": [
+      "Onde começa e onde termina a cadeia dele? A base é o peão de trás.",
+      "Que peão seu pode avançar para atacar essa base?",
+      "E a sua própria cadeia: qual é a base dela, e quem a ataca?"
+    ],
+    "posicoes": [
+      {
+        "fen": "2r3k1/pppnbppp/4p3/3pP3/3P4/2PB1N2/PP3PPP/5RK1 b - - 0 15",
+        "legenda": "Duas cadeias de peões: a branca vai de c3 a e5, a preta de f7 a d5. A base branca é c3; a preta, f7. Oito peões de cada lado.",
+        "afirma": [
+          {
+            "o": "corrente-de-peoes",
+            "lado": "brancas",
+            "casas": [
+              "c3",
+              "d4",
+              "e5"
+            ]
+          },
+          {
+            "o": "corrente-de-peoes",
+            "lado": "pretas",
+            "casas": [
+              "f7",
+              "e6",
+              "d5"
+            ]
+          },
+          {
+            "o": "vez",
+            "lado": "pretas"
+          },
+          {
+            "o": "peoes",
+            "brancas": 8,
+            "pretas": 8
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço são as duas cadeias, uma de frente para a outra.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. Cada cadeia foi conferida peão a peão: cada um defendido pelo anterior."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As pretas jogam. Onde atacar a cadeia branca?",
+      "opcoes": [
+        "Na base, com ...c5 atacando d4",
+        "Na ponta, com ...f6 atacando e5",
+        "Em lugar nenhum: trocar as torres primeiro"
+      ],
+      "certa": 0,
+      "porque": "d4 é quem segura e5, e c3 é quem segura d4. Depois de ...c5 o peão de d4 é atacado por um peão, e para se defender as brancas ou o trocam (e e5 fica solto) ou o avançam (e a casa que ele controlava fica vaga). ...f6 também existe, mas ataca a ponta: é o peão mais defendido da cadeia, e abre a coluna f na frente do próprio rei preto."
+    },
+    "video": {
+      "titulo": "QUANDO ROMPER UMA CADEIA DE PEÕES NO XADREZ!? DOS 0 AOS 2000 PASSO A PASSO — Miya Chess",
+      "url": "https://www.youtube.com/watch?v=Nv-opwOUmT4"
+    }
+  },
+  {
+    "id": "m25",
+    "titulo": "Casas fracas de uma cor",
+    "nivel": "1400-1600",
+    "resumo": "Peões só andam para a frente. Se todos os seus estiverem numa cor de casa, as casas da outra cor ficam sem guarda — para sempre.",
+    "explicacao": [
+      "Esta é a fraqueza mais difícil de ver, porque não há nenhum peão fraco: cada um deles pode estar bem defendido. O que está fraco é o que **não** está lá — as casas de uma cor, que peão nenhum alcança mais.",
+      "O diagnóstico é uma conta de dez segundos: veja de que cor estão os peões dele, e se ele ainda tem o bispo da outra cor. Peões todos nas claras e bispo escuro trocado significa que as casas escuras são suas, e nenhum lance dele muda isso."
+    ],
+    "procure": [
+      "De que cor estão os peões dele? Conte as duas cores.",
+      "Ele ainda tem o bispo da cor das casas fracas?",
+      "Que casa fraca fica perto do rei dele? É por ali que se entra."
+    ],
+    "cuidado": "Casas fracas só valem se você tiver como ocupá-las. Trocar o seu bispo da cor certa devolve a posição ao empate no mesmo lance.",
+    "posicoes": [
+      {
+        "fen": "6k1/1b2qp2/p1p1pnp1/1p1p4/3P4/4BN2/PPPQ1PPP/6K1 w - - 0 22",
+        "legenda": "Os sete peões pretos estão todos em casas claras: nenhum em casa escura. E o bispo preto é o de b7, que anda nas claras — as sete casas de peão estão justamente na diagonal dele. As brancas têm o bispo das escuras. Material igual.",
+        "afirma": [
+          {
+            "o": "peoes-na-cor",
+            "lado": "pretas",
+            "cor": "escuras",
+            "quantos": 0
+          },
+          {
+            "o": "peoes-na-cor-do-bispo",
+            "bispo": "b7",
+            "quantos": 7
+          },
+          {
+            "o": "material-igual"
+          },
+          {
+            "o": "peoes",
+            "brancas": 7,
+            "pretas": 7
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é o caso extremo: todos os peões de um lado numa cor só.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. A cor de cada casa foi calculada pela soma coluna+fileira, e os peões de cada cor, contados."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "Todos os peões pretos estão em casas claras. O que isso significa?",
+      "opcoes": [
+        "As casas escuras são de quem tiver o bispo escuro — e ele é branco",
+        "Que o bispo preto de b7 está ótimo, com a diagonal toda livre",
+        "Nada: peão não escolhe cor de casa"
+      ],
+      "certa": 0,
+      "porque": "Peão não anda para trás: nenhum peão preto vai ocupar ou defender uma casa escura nunca mais. E o bispo de b7 é o pior possível — os próprios peões de c6 e d5 estão em cima da diagonal dele. As brancas jogam nas casas escuras com o bispo de e3 e a dama, contra um adversário que não tem com o que respondê-las."
+    },
+    "video": {
+      "titulo": "Como explorar casas fracas nos 1800 de rating! - Desafio Rapidchess Ep#77 — GMEvandroBarbosa",
+      "url": "https://www.youtube.com/watch?v=SykKWCJm8fw"
+    }
+  },
+  {
+    "id": "m26",
+    "titulo": "Ataque de minoria",
+    "nivel": "1400-1600",
+    "resumo": "Dois peões avançando contra três não ganham material: ganham uma fraqueza. Troque um peão para deixar o dele fraco.",
+    "explicacao": [
+      "Parece contraintuitivo atacar onde se tem menos peões, e é justamente por isso que o plano funciona: você não quer capturar nada, quer forçar uma troca que deixe um peão dele sem vizinho. Avança o peão de b até b5, troca em c6, e o peão que recapturar fica isolado ou retardatário, numa coluna semiaberta.",
+      "É um plano lento — cinco ou seis lances até a troca — e é o plano certo justamente porque o adversário não consegue impedi-lo sem criar outra fraqueza. A recompensa não aparece no material: aparece vinte lances depois, no final."
+    ],
+    "procure": [
+      "Numa das alas você tem menos peões que ele? É lá que o plano mora.",
+      "Qual peão dele fica sem vizinho depois da troca?",
+      "A sua torre já está na coluna por onde o peão vai avançar?"
+    ],
+    "cuidado": "Enquanto você avança na ala da dama, ele avança no centro ou na ala do rei. O ataque de minoria é uma corrida, e quem o começa não pode se distrair.",
+    "posicoes": [
+      {
+        "fen": "4r1k1/pp2bppp/2pq1n2/3p4/3P4/3BPN2/PPQ2PPP/1R4K1 w - - 0 16",
+        "legenda": "Nas colunas a, b e c as brancas têm dois peões e as pretas, três — a minoria é branca. As brancas não têm peão na coluna c, e o material é igual: sete peões de cada lado.",
+        "afirma": [
+          {
+            "o": "peoes-nas-colunas",
+            "colunas": [
+              "a",
+              "b",
+              "c"
+            ],
+            "brancas": 2,
+            "pretas": 3
+          },
+          {
+            "o": "peoes",
+            "brancas": 7,
+            "pretas": 7
+          },
+          {
+            "o": "coluna-semiaberta",
+            "coluna": "c",
+            "lado": "brancas"
+          },
+          {
+            "o": "material-igual"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é a estrutura clássica do ataque de minoria, isolada do resto.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. Os peões de cada ala foram contados coluna a coluna."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas jogam. Qual é o plano na ala da dama?",
+      "opcoes": [
+        "b4 e b5, para trocar em c6 e deixar o peão preto de c fraco",
+        "a4 e a5, para prender o peão de a7 no lugar",
+        "Nenhum: dois peões contra três não atacam nada"
+      ],
+      "certa": 0,
+      "porque": "O objetivo não é ganhar peão, é fabricar um. Depois de b5 cxb5, o peão que sobrar na coluna c fica sem vizinho e na coluna semiaberta da torre de b1 — que já está posicionada. Prender o peão de a7 não cria fraqueza nenhuma: ele já está defendido pelo de b7."
+    },
+    "video": {
+      "titulo": "Estratégia - O Ataque da Minoria — Iniciativa Xadrez",
+      "url": "https://www.youtube.com/watch?v=nx1euLIO-AU"
+    }
+  },
+  {
+    "id": "m27",
+    "titulo": "Profilaxia: o lance dele antes do seu",
+    "nivel": "1400-1600",
+    "resumo": "Antes de escolher o seu lance, pergunte o que ele quer jogar. Impedir a ideia dele costuma valer mais que executar a sua.",
+    "explicacao": [
+      "Profilaxia é o hábito de fazer a pergunta ao contrário: em vez de \"qual é o meu melhor lance?\", \"o que ele jogaria se fosse a vez dele?\". O lance profilático é o que apaga essa resposta — e é quase sempre um lance que não ameaça nada, o que o torna invisível para quem só procura ameaças.",
+      "A forma mais barata de profilaxia é a janela do rei. Ela custa um lance, não enfraquece nada quando é h3 ou h6, e o que ela impede — o mate da última fileira — é a razão de metade das partidas de clube acabarem antes da hora."
+    ],
+    "procure": [
+      "Se fosse a vez dele agora, qual seria o lance dele?",
+      "O seu rei tem casa para onde fugir de um xeque na última fileira?",
+      "Que peça sua está presa defendendo, e ficaria livre com um lance de peão?"
+    ],
+    "posicoes": [
+      {
+        "fen": "3r2k1/pp3ppp/8/8/8/8/PP3PPP/2R3K1 w - - 0 25",
+        "legenda": "Nenhum dos dois reis tem janela: os três peões à frente de cada um estão no lugar. Material idêntico — torre e cinco peões de cada lado.",
+        "afirma": [
+          {
+            "o": "janela-do-rei",
+            "lado": "brancas",
+            "tem": false
+          },
+          {
+            "o": "janela-do-rei",
+            "lado": "pretas",
+            "tem": false
+          },
+          {
+            "o": "material-igual"
+          },
+          {
+            "o": "peoes",
+            "brancas": 5,
+            "pretas": 5
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é a última fileira sem janela dos dois lados.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. A janela foi medida nas três casas à frente de cada rei."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas querem levar a torre para c7. Qual é o lance antes dele?",
+      "opcoes": [
+        "h3: sem a janela, a torre não pode sair da primeira fileira",
+        "Tc7 direto — a sétima fileira vale mais que um lance de peão",
+        "a4, começando a avançar na ala da dama"
+      ],
+      "certa": 0,
+      "porque": "Depois de Tc7?? vem ...Td1 mate: o rei branco não tem casa nenhuma e a torre já não está lá para capturar. A primeira fileira só está segura **porque** a torre branca está nela — é ela que hoje responde ...Td1+ com Txd1. h3 dá a janela e liberta a torre para o lance seguinte. Um lance de peão que compra a sétima fileira é barato."
+    },
+    "video": {
+      "titulo": "4 Conceitos da ESTRATÉGIA | Ep#4 | PROFILAXIA — MF Julia Alboredo",
+      "url": "https://www.youtube.com/watch?v=V7ZM1X8_mYs"
+    }
+  },
+  {
+    "id": "m28",
+    "titulo": "Ataque de flanco se responde no centro",
+    "nivel": "1400-1600",
+    "resumo": "Quando ele avança peões na sua ala, não responda na mesma ala: rompa no centro. As linhas abrem contra o rei que saiu de casa.",
+    "explicacao": [
+      "É a regra mais antiga do meio-jogo, e vale porque o centro é o caminho mais curto entre as duas alas. O ataque de flanco leva quatro ou cinco lances de peão para chegar; a ruptura central abre colunas em um, e as peças chegam por elas antes.",
+      "O detalhe que decide é quem tem o rei melhor abrigado quando as linhas abrem. Cada peão que ele avançou na frente do próprio rei é uma casa a menos de proteção — e é para lá que as suas peças vão."
+    ],
+    "procure": [
+      "Ele está avançando peões na sua ala? Conte quantos peões ele já tirou da frente do rei dele.",
+      "Que peão seu do centro pode avançar ou capturar, abrindo uma coluna?",
+      "Depois de abrir, qual rei está mais exposto?"
+    ],
+    "cuidado": "A regra pressupõe centro móvel. Com o centro travado a peão contra peão, aí sim o jogo é de flanco — e vale a dica sobre atacar onde há espaço.",
+    "posicoes": [
+      {
+        "fen": "5rk1/pppnbp2/2npp3/6pp/3PP3/2NB1N2/PPP2PPP/5RK1 w - - 0 17",
+        "legenda": "As pretas avançaram g e h e sobrou um peão à frente do rei delas; à frente do rei branco continuam os três. Cada lado tem oito peões e dois peões nas colunas d e e. O material é igual.",
+        "afirma": [
+          {
+            "o": "escudo-do-rei",
+            "lado": "pretas",
+            "intactos": 1
+          },
+          {
+            "o": "escudo-do-rei",
+            "lado": "brancas",
+            "intactos": 3
+          },
+          {
+            "o": "peoes",
+            "brancas": 8,
+            "pretas": 8
+          },
+          {
+            "o": "peoes-nas-colunas",
+            "colunas": [
+              "d",
+              "e"
+            ],
+            "brancas": 2,
+            "pretas": 2
+          },
+          {
+            "o": "material-igual"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é o ataque de flanco de um lado e o centro ainda móvel do outro.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. Os dois escudos de roque foram contados, e os peões do centro, coluna a coluna."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As pretas avançaram g5 e h5 no flanco. Como as brancas respondem?",
+      "opcoes": [
+        "Rompendo no centro com d5",
+        "Avançando h3 e g4 para travar a ala do rei",
+        "Levando a torre de f1 para e1"
+      ],
+      "certa": 0,
+      "porque": "d5 ataca o cavalo de c6 e o peão de e6 no mesmo lance e abre o centro em um tempo — contra um rei que já ficou com um peão só à frente. Travar com g4 é jogar no terreno escolhido pelo adversário, e ainda mexe nos peões do próprio roque. Te1 é lento: o ataque preto chega antes."
+    },
+    "video": {
+      "titulo": "Contra-atacando no centro | [#Xadrez] Jogo Rápido #256 — MF Adriano Valle (Academia XadrezValle)",
+      "url": "https://www.youtube.com/watch?v=Im3rdq6_fN8"
+    }
+  },
+  {
+    "id": "m29",
+    "titulo": "Qualidade por casa forte",
+    "nivel": "1400-1600",
+    "resumo": "Torre por cavalo é dois pontos de prejuízo. Vale a pena quando o que se compra é a casa em que o rei dele mora.",
+    "explicacao": [
+      "Sacrificar a qualidade é dar torre por bispo ou cavalo. Em material é sempre ruim, e é por isso que o lance nunca aparece na conta: ele aparece na pergunta seguinte, que é o que a posição vira depois.",
+      "O caso clássico é o cavalo que defende o rei com roques opostos. Trocar a torre por ele obriga o peão a recapturar, e o peão que recaptura sai da frente do rei. O que se compra é a diagonal, a coluna aberta e um alvo fixo a um lance do rei — por dois pontos."
+    ],
+    "procure": [
+      "Que peça dele segura a posição inteira? Quanto vale tirá-la?",
+      "Depois da recaptura, qual peão sai da frente do rei dele?",
+      "As suas peças chegam nessa casa em um ou dois lances? Se levam cinco, o sacrifício é fantasia."
+    ],
+    "cuidado": "Sacrifício de qualidade sem alvo é só material a menos. Antes de dar a torre, aponte a casa que você vai ocupar e a peça que vai ocupá-la.",
+    "posicoes": [
+      {
+        "fen": "2rq2k1/p2nppbp/1p1p2p1/7n/4P3/2N1BN2/PPPQ1PPP/1K1R4 b - - 0 16",
+        "legenda": "Roques opostos: o rei branco está em b1. O cavalo de c3 é atacado duas vezes — pela torre de c8 e pelo bispo de g7 — e defendido duas: pelo peão de b2 e pela dama de d2. Material igual, sete peões de cada lado.",
+        "afirma": [
+          {
+            "o": "vez",
+            "lado": "pretas"
+          },
+          {
+            "o": "rei-em",
+            "lado": "brancas",
+            "casa": "b1"
+          },
+          {
+            "o": "peca",
+            "casa": "c3",
+            "peca": "cavalo",
+            "lado": "brancas"
+          },
+          {
+            "o": "peca",
+            "casa": "c8",
+            "peca": "torre",
+            "lado": "pretas"
+          },
+          {
+            "o": "atacantes",
+            "casa": "c3",
+            "brancas": 2,
+            "pretas": 2
+          },
+          {
+            "o": "material-igual"
+          },
+          {
+            "o": "peoes",
+            "brancas": 7,
+            "pretas": 7
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é o cavalo defendido o suficiente — o que faz de ...Txc3 sacrifício, e não ganho de material.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. Os atacantes e defensores de c3 foram contados peça a peça: dois de cada lado."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As pretas jogam. Qual captura em c3?",
+      "opcoes": [
+        "A torre: ...Txc3, dando qualidade para quebrar os peões do rei",
+        "O bispo: ...Bxc3, que é peça por peça e sai de graça",
+        "Nenhuma: c3 está defendido duas vezes, e a conta não fecha"
+      ],
+      "certa": 0,
+      "porque": "...Bxc3 bxc3 também quebra os peões, mas entrega justamente o bispo que ia jogar nas casas escuras que a quebra abre — é o preço certo pelo objeto errado. ...Txc3 dá torre por cavalo e obriga bxc3: o peão de b2 sai da frente do rei, a coluna b abre, e o bispo de g7 passa a olhar c3 com o rei branco logo atrás. E 2.Dxc3? perde a dama para ...Bxc3."
+    },
+    "video": {
+      "titulo": "Quando Sacrificar a Qualidade no Xadrez!! — Gato Mexicano",
+      "url": "https://www.youtube.com/watch?v=orzaLL4a1lI"
+    }
+  },
+  {
+    "id": "m30",
+    "titulo": "Iniciativa vale um peão",
+    "nivel": "1400-1600",
+    "resumo": "Um peão é um peão. Um adversário que só responde, com o rei no centro, é a partida. Iniciativa tem prazo de validade — gaste-a.",
+    "explicacao": [
+      "Iniciativa é o estado em que todos os lances dele são obrigados. Ela não aparece no placar de material e é a vantagem mais difícil de guardar: cada lance calmo que você joga, ele usa para desenvolver, e a iniciativa vira nada.",
+      "A regra prática é dura: quem tem iniciativa não conta pontos, conta tempos. Recuperar o peão com um lance lento é quase sempre o pior negócio da posição — o certo é gastar a iniciativa antes que ela acabe, mesmo que isso custe outro peão."
+    ],
+    "procure": [
+      "Os lances dele são escolhas, ou obrigações? Se são obrigações, você tem iniciativa.",
+      "Quantos lances ele precisa para rocar e ligar as torres? Esse é o seu prazo.",
+      "Existe um lance seu que ameace e desenvolva ao mesmo tempo? É esse."
+    ],
+    "cuidado": "Iniciativa não é ataque de qualquer jeito. Se depois de três lances forçados ele estiver seguro e você um peão atrás, o peão volta a ser um peão.",
+    "posicoes": [
+      {
+        "fen": "3qkb1r/ppp2ppp/4pn2/3p4/3P4/1BN5/PPP1QPPP/4R1K1 w k - 0 12",
+        "legenda": "As brancas estão um peão atrás — sete contra oito — e todas as peças fora; as pretas ainda têm o rei em e8, com o bispo de f8 em casa atravancando o roque. As brancas não têm peão na coluna e, e a dama e a torre já estão nela.",
+        "afirma": [
+          {
+            "o": "rei-em",
+            "lado": "pretas",
+            "casa": "e8"
+          },
+          {
+            "o": "coluna-semiaberta",
+            "coluna": "e",
+            "lado": "brancas"
+          },
+          {
+            "o": "material-a-mais",
+            "lado": "pretas",
+            "peca": "peao",
+            "quantas": 1
+          },
+          {
+            "o": "vez",
+            "lado": "brancas"
+          }
+        ],
+        "provenance": {
+          "bibliographicSource": "Posição composta pela autoria do preparatório para isolar um traço só, sem transcrever diagrama de obra nenhuma. Aqui o traço é a iniciativa contra o rei no centro, comprada por um peão.",
+          "editionFile": "posicoes-do-preparatorio",
+          "originalGame": null,
+          "fenMethod": "Montada casa a casa e conferida por chess.js: posição legal, e a afirmação da legenda medida pelo verificador de lib/meiojogo/afirmacoes.ts. A sobra de material foi medida tipo a tipo (só peões diferem), e a coluna e conferida sem peão branco."
+        }
+      }
+    ],
+    "quiz": {
+      "pergunta": "As brancas estão um peão atrás. O que fazer?",
+      "opcoes": [
+        "Abrir o jogo contra o rei preto, que ainda está em e8",
+        "Trocar as damas para simplificar e recuperar o peão no final",
+        "Recuar o bispo e esperar uma chance melhor"
+      ],
+      "certa": 0,
+      "porque": "O rei preto precisa de dois lances para ficar seguro: tirar o bispo de f8 e rocar. Esses dois lances são o prazo de validade da iniciativa branca — a dama e a torre já estão na coluna e. Trocar damas ou esperar entrega os dois lances de graça, e aí o peão a menos passa a ser a única coisa que resta na posição."
+    },
+    "video": {
+      "titulo": "Material ou Iniciativa no Xadrez? Pense como Neuris Delgado Ep. 03 — Tr. André Basso",
+      "url": "https://www.youtube.com/watch?v=Ze6iUM53m80"
+    }
+  }
+]

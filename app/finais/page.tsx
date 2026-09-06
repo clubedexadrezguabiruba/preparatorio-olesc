@@ -34,12 +34,17 @@ import {
  * e as desenha — é o mesmo desenho de `/tatica`, e é o que impede a trilha de
  * dizer 6 e o painel dizer 5 com o aluno na frente.
  *
- * ## Por que a aula fechada não aparece
+ * ## A trilha inteira aparece — decisão revista na F2
  *
- * A lista mostra o que está **aberto**, e nunca o cadeado de uma aula que ainda
- * não foi escrita. Uma trilha com 49 cartões, 39 deles cinzas, ensina a criança
- * a medir o que falta em vez do que ela fez — e mudaria de tamanho a cada
- * sábado sem ela ter feito nada. O rodapé diz, em uma frase, que o curso cresce.
+ * Até aqui esta lista mostrava só o que estava aberto, com o argumento de que
+ * 39 cartões cinzas ensinam a criança a medir o que falta. A turma real
+ * respondeu o contrário: o aluno quer **saber o que vem depois**, e um curso
+ * que esconde o próprio tamanho não deixa ninguém planejar o mês. Então as 49
+ * aparecem, numeradas, por classe de força, e cada uma diz em que estado está
+ * — inclusive "abre no Sábado 3" e "em escrita".
+ *
+ * O que **não** mudou: a barra de progresso conta sobre as **abertas**. Medir o
+ * aluno contra 49 aulas em 12 de setembro seria dizer-lhe que ele está em 4%.
  *
  * ## A bancada do professor
  *
@@ -57,6 +62,7 @@ export default async function Finais() {
 
   const publicadas = aulasPublicadas();
   const abertas = aulasAbertas(publicadas, semana);
+  const idsAbertos = new Set(abertas.map((a) => a.id));
   const progresso = await progressoDeFinais(perfil.id);
   const feitas = dominadas(abertas, progresso);
   const proxima = proximaAula(abertas, progresso);
@@ -80,71 +86,82 @@ export default async function Finais() {
         </p>
       </header>
 
+      {/* Sem aula aberta, o aviso substitui a barra — mas a lista das 49
+          continua embaixo. É justamente quando o aluno mais quer ver o que vem. */}
       {abertas.length === 0 ? (
         <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
           As primeiras aulas de finais abrem no Sábado {semana}, {porExtenso(sabadoDaSemana(semana).data)}.
         </p>
       ) : (
-        <>
-          <section className="flex flex-col gap-2 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
-            <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-              <span className="rotulo text-tinta-fraca">Aulas dominadas</span>
-              <span className="text-sm text-tinta-media tabular-nums">
-                {feitas.size} de {abertas.length}
-              </span>
-            </div>
-            <Barra
-              feitos={feitas.size}
-              de={abertas.length}
-              tom={feitas.size === abertas.length ? "completo" : "metodo"}
-            />
-            {proxima ? (
-              <p className="text-xs text-tinta-fraca">
-                Próxima da trilha: <span className="text-tinta-media">{proxima.nome}</span>
-              </p>
-            ) : (
-              <p className="text-xs text-metodo-tinta">
-                Você dominou tudo o que está aberto. O próximo lote vem no sábado.
-              </p>
-            )}
-          </section>
-
-          {CLASSES.map((classe) => {
-            const aulas = daClasse(abertas, classe);
-            if (aulas.length === 0) return null;
-            const dominadasAqui = aulas.filter((a) => feitas.has(a.id)).length;
-
-            return (
-              <section key={classe} className="flex flex-col gap-3">
-                <div className="flex flex-col gap-0.5">
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-                    <h2 className="rotulo text-tinta-fraca">
-                      {CLASSE[classe].nome} · {CLASSE[classe].faixa}
-                    </h2>
-                    <span className="text-xs text-tinta-fraca tabular-nums">
-                      {dominadasAqui} de {aulas.length} dominadas
-                    </span>
-                  </div>
-                  <p className="text-sm text-tinta-media">{CLASSE[classe].resumo}</p>
-                </div>
-
-                <ul className="flex flex-col gap-2">
-                  {aulas.map((aula) => (
-                    <li key={aula.id}>
-                      <Cartao aula={aula} progresso={progresso.get(aula.id) ?? AULA_ZERADA} />
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            );
-          })}
-
-          <p className="rounded-lg bg-dica-superficie/12 px-3 py-2 text-sm text-dica-tinta">
-            A trilha inteira tem {TRILHA.length} aulas, em quatro classes de força. As que ainda
-            não aparecem aqui estão sendo escritas — cada sábado abre mais um lote.
-          </p>
-        </>
+        <section className="flex flex-col gap-2 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+            <span className="rotulo text-tinta-fraca">Aulas dominadas</span>
+            <span className="text-sm text-tinta-media tabular-nums">
+              {feitas.size} de {abertas.length} abertas
+            </span>
+          </div>
+          <Barra
+            feitos={feitas.size}
+            de={abertas.length}
+            tom={feitas.size === abertas.length ? "completo" : "metodo"}
+          />
+          {proxima ? (
+            <p className="text-xs text-tinta-fraca">
+              Próxima da trilha: <span className="text-tinta-media">{proxima.nome}</span>
+            </p>
+          ) : (
+            <p className="text-xs text-metodo-tinta">
+              Você dominou tudo o que está aberto. O próximo lote vem no sábado.
+            </p>
+          )}
+        </section>
       )}
+
+      {CLASSES.map((classe) => {
+        // A classe inteira, aberta ou não: é o mapa do curso. A contagem ao
+        // lado continua sobre as abertas, que é o que dá para fazer hoje.
+        const aulas = daClasse(TRILHA, classe);
+        const abertasAqui = aulas.filter((a) => idsAbertos.has(a.id));
+        const dominadasAqui = abertasAqui.filter((a) => feitas.has(a.id)).length;
+
+        return (
+          <section key={classe} className="flex flex-col gap-3">
+            <div className="flex flex-col gap-0.5">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+                <h2 className="rotulo text-tinta-fraca">
+                  {CLASSE[classe].nome} · {CLASSE[classe].faixa}
+                </h2>
+                <span className="text-xs text-tinta-fraca tabular-nums">
+                  {dominadasAqui} de {abertasAqui.length} dominadas
+                  {abertasAqui.length < aulas.length ? ` · ${aulas.length} no total` : ""}
+                </span>
+              </div>
+              <p className="text-sm text-tinta-media">{CLASSE[classe].resumo}</p>
+            </div>
+
+            <ul className="flex flex-col gap-2">
+              {aulas.map((aula) => (
+                <li key={aula.id}>
+                  {idsAbertos.has(aula.id) ? (
+                    <Cartao aula={aula} progresso={progresso.get(aula.id) ?? AULA_ZERADA} />
+                  ) : (
+                    <Fechado aula={aula} publicada={publicadas.has(aula.id)} />
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })}
+
+      <p className="rounded-lg bg-dica-superficie/12 px-3 py-2 text-sm text-dica-tinta">
+        São {TRILHA.length} aulas em quatro classes de força, e você vê todas: as que ainda não
+        abriram dizem quando abrem.{" "}
+        <Link href="/trilha" className="font-medium underline">
+          Veja a trilha do curso inteiro
+        </Link>{" "}
+        — tática, finais e meio-jogo, por nível.
+      </p>
 
       {bancada.length > 0 ? (
         <section className="flex flex-col gap-3">
@@ -193,7 +210,7 @@ function Cartao({ aula, progresso }: { aula: AulaDaTrilha; progresso: ProgressoD
         className={`flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-bold tabular-nums ${
           estado === "dominada"
             ? "border-metodo-cheio bg-metodo-cheio text-tinta-inversa"
-            : "border-borda-forte text-tinta-muda"
+            : "border-borda-forte text-tinta-fraca"
         }`}
       >
         {estado === "dominada" ? "✓" : aula.ordem}
@@ -212,6 +229,37 @@ function Cartao({ aula, progresso }: { aula: AulaDaTrilha; progresso: ProgressoD
 }
 
 /**
+ * A aula que ainda não abriu: sem link, e dizendo **por quê**.
+ *
+ * As duas razões são diferentes para o aluno. "Abre no Sábado 3" é uma data
+ * que ele pode esperar; "em escrita" é uma aula que ainda não existe. Um
+ * cadeado mudo para as duas faria ele perguntar ao professor o que já estaria
+ * escrito na tela.
+ */
+function Fechado({ aula, publicada }: { aula: AulaDaTrilha; publicada: boolean }) {
+  return (
+    <div className="flex items-center gap-3 rounded-xl border border-dashed border-borda bg-carta/50 px-4 py-3">
+      <span
+        aria-hidden
+        className="flex size-6 shrink-0 items-center justify-center rounded-full border border-borda text-xs font-bold text-tinta-fraca tabular-nums"
+      >
+        {aula.ordem}
+      </span>
+
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <p className="truncate text-sm font-medium text-tinta-fraca">{aula.nome}</p>
+        <p className="text-xs text-tinta-fraca">
+          {FORMATO[aula.formato].nome} ·{" "}
+          {publicada
+            ? `abre no Sábado ${aula.sabado}, ${porExtenso(sabadoDaSemana(aula.sabado).data)}`
+            : "em escrita"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/**
  * O estado em palavras, ao lado do numeral.
  *
  * "Não começou" fica em `tinta-fraca` e sem moldura de propósito: é o estado de
@@ -225,5 +273,5 @@ function Estado({ estado }: { estado: EstadoDeAula }) {
   if (estado === "praticando") {
     return <span className="shrink-0 text-xs font-medium text-aviso-tinta">Praticando</span>;
   }
-  return <span className="shrink-0 text-xs text-tinta-muda">Não começou</span>;
+  return <span className="shrink-0 text-xs text-tinta-fraca">Não começou</span>;
 }

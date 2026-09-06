@@ -1,0 +1,205 @@
+{
+  "id": "N0-MATING-MATERIAL",
+  "title": "O que dá mate e o que não dá",
+  "class": "E",
+  "orientation": "white",
+  "domainCriterion": "D1",
+  "status": "published",
+  "errors": {},
+  "fallbacks": {
+    "winningOffMethod": "Esse lance ainda ganha, mas não é o método da aula.",
+    "losesWin": "Esse lance joga a vitória fora.",
+    "methodAlternative": "Esse lance é a mesma ideia por outro caminho."
+  },
+  "stages": {
+    "objective": {
+      "source": "seirawan-winning-chess-endings",
+      "technique": {
+        "name": "O material que dá mate",
+        "summary": "Peça a mais nem sempre é vitória. Rei e bispo contra rei é empate; rei e cavalo contra rei é empate; e mesmo dois cavalos contra rei sozinho não dão mate à força. Dois bispos dão."
+      },
+      "why": "Esta é a aula que evita a derrota mais boba do xadrez — a que nem é derrota: é meio ponto entregue. O aluno troca tudo achando que \"peça a mais ganha\", fica com rei e cavalo contra rei sozinho e descobre que ali não existe mate nenhum. Vale para os dois lados: quem está perdendo às vezes salva a partida trocando na direção certa, e quem está ganhando precisa saber o que não pode deixar sobrar no tabuleiro. Aqui não há o que deduzir, há o que saber: bispo sozinho, não dá mate; cavalo sozinho, não dá; dois cavalos, não dão à força; dois bispos, dão; bispo e cavalo, dá — mas é o mate mais difícil que existe, e ele fica fora desta trilha de propósito.",
+      "rules": [
+        {
+          "title": "Com dois bispos, o rei vai junto",
+          "text": "Nos mates de peça pesada o rei do lado forte ajuda. Com dois bispos ele não ajuda: ele trabalha. Sem o rei branco de perto, os dois bispos não tiram casa nenhuma do rei adversário.",
+          "frame": {
+            "scene": "dois-bispos",
+            "step": 1
+          }
+        },
+        {
+          "title": "Um bispo fecha a saída",
+          "text": "Os dois bispos andam em cores diferentes, e por isso cada um cuida de metade das casas. O primeiro se planta numa diagonal que fecha a saída do rei preto e não sai mais de lá.",
+          "frame": {
+            "scene": "dois-bispos",
+            "step": 3
+          }
+        },
+        {
+          "title": "O outro dá o xeque, e o primeiro dá o mate",
+          "text": "O segundo bispo se reposiciona sem pressa e entra dando xeque, empurrando o rei para o canto. O mate é sempre no canto — dois bispos não matam na borda, como a torre faz: eles precisam das duas paredes.",
+          "frame": {
+            "scene": "dois-bispos",
+            "step": 9
+          }
+        },
+        {
+          "title": "Dois cavalos não dão mate à força",
+          "text": "Com dois cavalos o quadro de mate existe, e é fácil de montar. O que não existe é o lance do meio: quando a rede fecha, o rei adversário fica sem lance nenhum e a partida acaba empatada por afogamento. Dois cavalos a mais, e meio ponto.",
+          "frame": {
+            "scene": "dois-cavalos",
+            "step": 1
+          }
+        }
+      ],
+      "frame": {
+        "scene": "dois-bispos",
+        "step": 9
+      },
+      "mastery": "Esta aula é de leitura: não há tabuleiro para jogar. Dominada quando você ler o objetivo, ver as duas cenas até o fim e marcar a caixa no fim do exemplo."
+    },
+    "example": {
+      "scenes": [
+        {
+          "id": "dois-bispos",
+          "title": "O que dá mate: dois bispos",
+          "positionId": "pos-n0-2b-freeborough-465",
+          "intro": "Dois bispos dão mate, e o mate é no canto. O rei preto já está em h8 e são cinco lances. Repare em quem trabalha: os dois bispos e o rei branco, os três juntos, o tempo inteiro. Em cada um dos quatro lances que ele tem, o rei preto vai ter uma casa só.",
+          "phases": [
+            {
+              "title": "Com dois bispos, o rei vai junto",
+              "fromStep": 1
+            },
+            {
+              "title": "Um bispo fecha a saída",
+              "fromStep": 3
+            },
+            {
+              "title": "O outro dá o xeque, e o primeiro dá o mate",
+              "fromStep": 7
+            }
+          ],
+          "steps": [
+            {
+              "move": "f5g6",
+              "text": "O rei branco toma g6, e dali tira g7 e h7 do rei preto de uma vez. É o lance mais importante da posição, e não é de bispo nenhum.",
+              "arrows": [
+                [
+                  "f5",
+                  "g6"
+                ]
+              ],
+              "highlights": [
+                "g6"
+              ]
+            },
+            {
+              "move": "h8g8",
+              "text": "Só resta g8. Daqui até o fim o rei preto vai ter sempre uma casa só."
+            },
+            {
+              "move": "g5h6",
+              "text": "O bispo de casas escuras vai para h6 e fecha f8. Agora a prisão do rei preto tem duas casas: g8 e h8.",
+              "arrows": [
+                [
+                  "g5",
+                  "h6"
+                ]
+              ],
+              "highlights": [
+                "h6",
+                "f8"
+              ]
+            },
+            {
+              "move": "g8h8",
+              "text": "De volta ao canto, obrigado."
+            },
+            {
+              "move": "h5g4",
+              "text": "O outro bispo recua para g4. É um lance de espera com endereço: de g4 ele alcança e6, e de e6 ele enxerga g8.",
+              "arrows": [
+                [
+                  "h5",
+                  "g4"
+                ]
+              ],
+              "highlights": [
+                "g4"
+              ]
+            },
+            {
+              "move": "h8g8",
+              "text": "O rei preto vai e volta entre as duas casas que sobraram. Não há mais nada que ele possa fazer."
+            },
+            {
+              "move": "g4e6",
+              "text": "Xeque em e6, pela diagonal que termina em g8. O rei preto perde a casa boa e volta ao canto pela última vez.",
+              "arrows": [
+                [
+                  "g4",
+                  "e6"
+                ],
+                [
+                  "e6",
+                  "g8"
+                ]
+              ],
+              "highlights": [
+                "e6"
+              ]
+            },
+            {
+              "move": "g8h8",
+              "text": "h8. É o canto — e é onde o mate de dois bispos sempre acontece."
+            },
+            {
+              "move": "h6g7",
+              "text": "Xeque-mate. O bispo entra em g7 protegido pelo rei branco, e o de e6 já tinha tirado g8. Nenhum dos três dispensa os outros dois: tire o rei branco e não há mate; tire um bispo e não há mate.",
+              "arrows": [
+                [
+                  "h6",
+                  "g7"
+                ]
+              ],
+              "highlights": [
+                "g7"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dois-cavalos",
+          "title": "O que não dá mate: dois cavalos",
+          "positionId": "pos-n0-2n-seirawan-d20-e2",
+          "intro": "Agora o contrário, e é o fato que mais surpreende quem aprende: dois cavalos a mais não ganham. O rei preto já está no canto e o quadro de mate existe mesmo — bastaria o cavalo de e2 chegar a c2, passando por d4. Veja o que acontece no caminho.",
+          "phases": [
+            {
+              "title": "Dois cavalos não dão mate à força",
+              "fromStep": 1
+            }
+          ],
+          "steps": [
+            {
+              "move": "e2d4",
+              "text": "O cavalo vai a d4 para completar a rede — e a partida acaba aqui, empatada por afogamento. O rei preto não está em xeque e não tem lance nenhum: a2 e b2 são do rei branco, b1 é do cavalo de d2. Para o mate sair no lance seguinte seria preciso que o rei preto tivesse alguma coisa para jogar agora, e ele não tem. É por isso que dois cavalos não dão mate à força: o mate depende de o adversário colaborar.",
+              "arrows": [
+                [
+                  "e2",
+                  "d4"
+                ]
+              ],
+              "highlights": [
+                "a1",
+                "a2",
+                "b1",
+                "b2"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

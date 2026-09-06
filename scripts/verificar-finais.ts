@@ -29,7 +29,16 @@
  *      mesmo que a tabela;
  *   6. a view diz `solo_ok` e `pratica_ok` verdadeiros — que é o que a trilha
  *      vai ler para dizer "dominada";
- *   7. o vizinho lê **zero**, e não consegue gravar por conta própria.
+ *   7. o vizinho lê **zero**, e não consegue gravar por conta própria;
+ *   8. **(F2)** a revisão numa posição de revisão da aula vira linha, e a linha
+ *      guarda **qual** posição foi jogada — sem isso a partida não se
+ *      reconstrói, porque a aula tem duas;
+ *   9. **(F2)** a mesma chamada é recusada quando a posição não é de revisão
+ *      (a da prática, por exemplo) e quando não vem posição nenhuma. É o que
+ *      impede a revisão de virar "joguei qualquer posição e revisei a aula";
+ *  10. **(F2)** dominada hoje, a aula volta em hoje+3 — o primeiro dos
+ *      `INTERVALOS_DE_FINAIS`, agora calculado sobre eventos lidos do banco e
+ *      não sobre objetos de mentira.
  *
  * ## O defensor da prática coopera, e está dito
  *
@@ -49,8 +58,15 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { emailDoUsuario } from "../lib/auth/usuario.ts";
+import { hojeNoBrasil, somarDias } from "../lib/curso/calendario.ts";
 import { lerPacote } from "../lib/finais/conteudo.ts";
 import { gravarTentativaDeAula } from "../lib/finais/gravar.ts";
+import {
+  agendaDeRevisao,
+  INTERVALOS_DE_FINAIS,
+  type EventoDeAula,
+} from "../lib/finais/revisao.ts";
+import { aulaDaTrilha } from "../lib/finais/trilha.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
 
 const RAIZ = fileURLToPath(new URL("..", import.meta.url));
@@ -99,6 +115,17 @@ const PRATICA_QUE_MATA = [
   "d8e8", "e5e6", "e8d8", "h1h7", "d8e8", "h7h8",
 ];
 const PRATICA_QUE_ENTREGA_A_TORRE = ["h1h6", "e8e7", "h6g6", "e7f7", "g6g7", "f7g7"];
+
+/**
+ * A primeira das duas posições de revisão da aula, e uma partida que a mata.
+ *
+ * A FEN é `8/8/8/1k6/8/8/8/RK6 w - - 0 1` (Rogers, XVI), e os sete lances
+ * abaixo saíram de uma busca exaustiva de mate cooperativo a partir dela. O
+ * defensor ajuda, como nos itens 3 e 4, e pelo mesmo motivo: o que se afirma é
+ * que **o servidor lê a partida e a julga**, não que a técnica seja boa.
+ */
+const REVISAO = "pos-n0-rmate-rogers-xvi";
+const REVISAO_QUE_MATA = ["a1a5", "b5b4", "a5b5", "b4a3", "b1c2", "a3a2", "b5a5"];
 
 type Conta = { id: string; usuario: string };
 
@@ -274,6 +301,116 @@ try {
   // metades, em qualquer momento — e o fracasso ao lado não desfaz nenhuma.
   afirmar(daAula?.solo_ok === true, "a view diz que a etapa sem ajuda saiu");
   afirmar(daAula?.pratica_ok === true, "a view diz que a prática saiu");
+
+  /* ---------------------------------------------------------------- *
+   * 8, 9 e 10. A revisão espaçada (F2)
+   * ---------------------------------------------------------------- */
+  console.log("\nA revisão da aula:");
+
+  const revisao = pacote.lesson.stages.review;
+  afirmar(
+    (revisao?.reviewPositionIds ?? []).includes(REVISAO),
+    `a aula declara ${REVISAO} como posição de revisão`,
+  );
+
+  const revisaoGanha = await gravarTentativaDeAula(ana.id, {
+    aula: AULA,
+    etapa: "revisao",
+    posicaoId: REVISAO,
+    lances: REVISAO_QUE_MATA,
+    tempoMs: 110_000,
+  });
+  afirmar(
+    "sucesso" in revisaoGanha && revisaoGanha.sucesso,
+    `a revisão que termina em mate é sucesso (${JSON.stringify(revisaoGanha)})`,
+  );
+
+  console.log("\nO que a revisão recusa:");
+
+  // A posição da prática existe no pacote — `pacote.positions` a traz —, e é
+  // justamente por isso que a recusa tem de vir de outro lugar: o que
+  // `rejulgarRevisao` cobra é a lista `reviewPositionIds`, não a existência.
+  // Sem essa conferência, "revisei a aula" viraria "joguei de novo a posição
+  // que eu acabei de treinar", e a revisão espaçada mediria repetição imediata.
+  const posicaoDaPratica = pacote.lesson.stages.practice!.positionId;
+  afirmar(
+    Boolean(pacote.positions[posicaoDaPratica]),
+    "a posição da prática está no pacote (senão a recusa abaixo não provaria nada)",
+  );
+  const revisaoNaPratica = await gravarTentativaDeAula(ana.id, {
+    aula: AULA,
+    etapa: "revisao",
+    posicaoId: posicaoDaPratica,
+    lances: PRATICA_QUE_MATA,
+    tempoMs: 30_000,
+  });
+  afirmar(
+    "erro" in revisaoNaPratica,
+    `a posição da prática é recusada na revisão (${JSON.stringify(revisaoNaPratica)})`,
+  );
+
+  const revisaoSemPosicao = await gravarTentativaDeAula(ana.id, {
+    aula: AULA,
+    etapa: "revisao",
+    lances: REVISAO_QUE_MATA,
+    tempoMs: 30_000,
+  });
+  afirmar(
+    "erro" in revisaoSemPosicao,
+    `revisão sem posição é recusada (${JSON.stringify(revisaoSemPosicao)})`,
+  );
+
+  const revisaoInventada = await gravarTentativaDeAula(ana.id, {
+    aula: AULA,
+    etapa: "revisao",
+    posicaoId: "pos-que-nao-existe",
+    lances: REVISAO_QUE_MATA,
+    tempoMs: 30_000,
+  });
+  afirmar("erro" in revisaoInventada, "posição inventada é recusada");
+
+  console.log("\nA linha da revisão, lida de volta:");
+
+  const { data: todas } = await comoAna
+    .from("tentativas_aula")
+    .select("aula, etapa, sucesso, posicao, criada_em")
+    .order("criada_em");
+  const linhasComRevisao = todas ?? [];
+
+  // Cinco: as quatro de antes mais a revisão. As três recusadas não viraram
+  // linha — é o que separa "recusado" de "gravado como fracasso".
+  afirmar(
+    linhasComRevisao.length === 5,
+    `a Ana passa a ter 5 tentativas (leu ${linhasComRevisao.length})`,
+  );
+
+  const daRevisao = linhasComRevisao.filter((l) => l.etapa === "revisao");
+  afirmar(daRevisao.length === 1, `uma linha de revisão (${daRevisao.length})`);
+  afirmar(
+    daRevisao[0]?.posicao === REVISAO,
+    `e ela guarda a posição jogada (guardou ${daRevisao[0]?.posicao})`,
+  );
+  // A outra metade da coluna: fora da revisão ela é nula, porque ali a posição
+  // é a da aula e está no arquivo.
+  afirmar(
+    linhasComRevisao.filter((l) => l.etapa !== "revisao").every((l) => l.posicao === null),
+    "e as outras quatro têm `posicao` nula",
+  );
+
+  console.log(`\nA agenda: dominada hoje, volta em hoje+${INTERVALOS_DE_FINAIS[0]}:`);
+
+  const formato = aulaDaTrilha(AULA)!.formato;
+  const agenda = agendaDeRevisao(formato, linhasComRevisao as EventoDeAula[]);
+  const hoje = hojeNoBrasil();
+  afirmar(agenda !== null, `a aula ${AULA} (${formato}) entrou na agenda`);
+  afirmar(
+    agenda?.devidoEm === somarDias(hoje, INTERVALOS_DE_FINAIS[0]),
+    `volta em ${somarDias(hoje, INTERVALOS_DE_FINAIS[0])} (a agenda disse ${agenda?.devidoEm})`,
+  );
+  // A revisão de hoje foi jogada **antes** do prazo — é o botão "ir para a
+  // revisão" no fim da prática, na mesma sessão. Continuar não é recordar, e
+  // por isso a rodada não anda.
+  afirmar(agenda?.rodada === 1, `e continua na primeira rodada (está na ${agenda?.rodada})`);
 
   /* ---------------------------------------------------------------- *
    * 7. O que o Bruno **não** lê

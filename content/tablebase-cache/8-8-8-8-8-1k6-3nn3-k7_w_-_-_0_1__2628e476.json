@@ -1,0 +1,132 @@
+{
+  "schema": 1,
+  "source": "https://tablebase.lichess.ovh/standard",
+  "fen": "8/8/8/8/8/1K6/3NN3/k7 w - - 0 1",
+  "entry": {
+    "category": "draw",
+    "dtm": 0,
+    "checkmate": false,
+    "stalemate": false,
+    "moves": [
+      {
+        "uci": "e2c1",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true
+      },
+      {
+        "uci": "e2g1",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true
+      },
+      {
+        "uci": "e2c3",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true
+      },
+      {
+        "uci": "e2g3",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true
+      },
+      {
+        "uci": "e2d4",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true
+      },
+      {
+        "uci": "e2f4",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true
+      },
+      {
+        "uci": "b3a3",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": true
+      },
+      {
+        "uci": "d2b1",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d2f1",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d2f3",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d2c4",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "d2e4",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "b3c2",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "b3c3",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "b3a4",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "b3b4",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      },
+      {
+        "uci": "b3c4",
+        "category": "draw",
+        "dtm": 0,
+        "checkmate": false,
+        "stalemate": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "pos-n1-kpk-rogers-iv",
+  "fen": "4k3/8/8/8/8/8/4P3/4K3 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KPK",
+    "sem-ajuda"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Charlotte Boardman Rogers, que dá esta posição **em texto corrido** — 'The White King occupies Ksq., the White Pawn K2, and the Black King Ksq.' — e a ilustra no DIAGRAMA XVIII",
+    "bibliographicSource": "Rogers, How to Play Chess, Thomas Y. Crowell & Co., Nova York, 1907 (Lowell's Handy Information Series), p. impressa 125, cap. XI 'End Games', EXAMPLE IV 'White King and Pawn against Black King', com o DIAGRAMA XVIII na p. impressa 126",
+    "originalGame": "não se aplica — posição teórica de manual, não vem de partida",
+    "authorComposer": "não se aplica — é rei e peão nas casas de origem, um fato do final e não uma composição autoral",
+    "license": "domínio público (obra de 1907, EUA)",
+    "editionFile": "rogers-how-to-play-chess-1907.pdf",
+    "fenMethod": "derivada da posição **dada em texto corrido** pela autora, sem passar por diagrama nenhum: 'The White King occupies Ksq., the White Pawn K2, and the Black King Ksq.', mais a observação dela de que 'both Kings occupy their original positions at the beginning of the game'. Em notação descritiva, Ksq. do lado branco é e1, K2 é e2, e Ksq. do lado preto é e8 — e a autora remove a ambiguidade ao dizer que são as casas de origem. Texto corrido é o caminho de transcrição mais seguro que existe (§6, critério 4 do SOURCE-CORPUS): não há leitura de imagem, e portanto não há erro de leitura de imagem. Uma segunda obra de domínio público descreve a mesma posição de forma independente — o Freeborough, no diagrama No. 58, escreve 'the men are placed on their original squares'.",
+    "qaApplied": "garimpo FN1/B5.4, 2026-09-05: quatro afirmações impressas, de duas obras diferentes, conferidas de uma vez contra a tablebase. (1) Rogers: com as brancas na vez, as brancas ganham — a tablebase dá win, DTM 43. (2) Rogers: com as pretas na vez, é empate ('White gives stalemate in the fifteenth move and the game is a draw') — a tablebase dá draw. (3) Freeborough, sobre a mesma posição: 'White's first aim must be to place his King in front of his Pawn… 1 K-B or Q2' — a tablebase diz que **os dois únicos lances que ganham são Rd2 e Rf2**, que é exatamente K-Q2 e K-B2, e nenhum outro. (4) Freeborough anota '1 P-K4?' com interrogação — e de fato 1.e4 empata, assim como 1.e3. Quatro asserções independentes, todas verdadeiras na mesma FEN.",
+    "pendingRisk": "nenhum conhecido"
+  }
+}

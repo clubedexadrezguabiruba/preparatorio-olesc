@@ -79,7 +79,17 @@ export default async function Professor() {
               <tbody>
                 {alunos.map((aluno) => (
                   <tr key={aluno.id} className="border-b border-borda-fraca last:border-0">
-                    <Td>{aluno.nome}</Td>
+                    <Td>
+                      {/* O nome é a porta do relatório: a tabela responde
+                          "como vai a turma?", e a conversa de sábado é sempre
+                          sobre um aluno. */}
+                      <Link
+                        href={`/professor/${aluno.id}`}
+                        className="foco font-medium text-metodo-tinta hover:underline"
+                      >
+                        {aluno.nome}
+                      </Link>
+                    </Td>
                     <Td mono>{aluno.usuario}</Td>
                     <Td>{aluno.equipe ? EQUIPE[aluno.equipe as "M" | "F"] : "—"}</Td>
                     <Td>{aluno.tabuleiro ?? "—"}</Td>
@@ -119,11 +129,11 @@ function Finais({
   feitas: ReadonlySet<string>;
   abertas: ReturnType<typeof aulasAbertas>;
 }) {
-  if (abertas.length === 0) return <span className="text-tinta-muda">—</span>;
+  if (abertas.length === 0) return <span className="text-tinta-fraca">—</span>;
 
   return (
     <span className="flex flex-col gap-0.5 tabular-nums">
-      <span className={feitas.size > 0 ? "text-tinta" : "text-tinta-muda"}>
+      <span className={feitas.size > 0 ? "text-tinta" : "text-tinta-fraca"}>
         {feitas.size} de {abertas.length}
       </span>
       <span className="text-xs text-tinta-fraca">

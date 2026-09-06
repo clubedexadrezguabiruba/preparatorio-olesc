@@ -1,7 +1,13 @@
 import "server-only";
 import { criarClienteAdmin } from "../supabase/admin.ts";
 import { lerPacote } from "./conteudo.ts";
-import { ETAPAS_DE_AULA, rejulgarPratica, rejulgarSolo, type EtapaDeAula } from "./rejulgar.ts";
+import {
+  ETAPAS_DE_AULA,
+  rejulgarPratica,
+  rejulgarRevisao,
+  rejulgarSolo,
+  type EtapaDeAula,
+} from "./rejulgar.ts";
 
 /** O que o navegador manda: o que foi **jogado**, nunca um "dominei". */
 export type TentativaDeAula = {
@@ -15,6 +21,15 @@ export type TentativaDeAula = {
    */
   lances: string[];
   tempoMs: number;
+  /**
+   * Qual posição foi jogada. **Obrigatório em `revisao`**, ignorado nas outras.
+   *
+   * Uma aula tem até duas posições de revisão, e `lances` não se reconstrói
+   * sem saber de qual FEN a partida saiu. É também o que impede a chamada de
+   * virar "joguei qualquer posição e revisei a aula": o servidor confere a
+   * posição contra a lista da aula antes de rejulgar.
+   */
+  posicaoId?: string;
 };
 
 export type ResultadoDeAula = { sucesso: boolean } | { erro: string };
@@ -59,7 +74,7 @@ export async function gravarTentativaDeAula(
   aluno: string,
   tentativa: TentativaDeAula,
 ): Promise<ResultadoDeAula> {
-  const { aula, etapa, lances, tempoMs } = tentativa;
+  const { aula, etapa, lances, tempoMs, posicaoId } = tentativa;
 
   if (typeof aula !== "string" || !ETAPAS_DE_AULA.includes(etapa)) {
     return { erro: "etapa desconhecida" };
@@ -76,6 +91,13 @@ export async function gravarTentativaDeAula(
   let julgamento;
   if (etapa === "solo") {
     julgamento = rejulgarSolo(pacote.lesson, lances);
+  } else if (etapa === "revisao") {
+    if (typeof posicaoId !== "string") return { erro: "revisão sem posição" };
+    const posicao = pacote.positions[posicaoId];
+    // Posição que a aula não referencia: nem chegou a ser carregada, então
+    // nem existe para esta aula. Não vira linha.
+    if (!posicao) return { erro: "posição desconhecida" };
+    julgamento = rejulgarRevisao(pacote.lesson, posicao, lances);
   } else {
     const pratica = pacote.lesson.stages.practice;
     const posicao = pratica ? pacote.positions[pratica.positionId] : undefined;
@@ -94,6 +116,8 @@ export async function gravarTentativaDeAula(
     sucesso: julgamento.sucesso,
     lances,
     tempo_ms: Math.min(Math.max(0, Math.round(tempoMs) || 0), TEMPO_MAXIMO_MS),
+    // Nula fora da revisão: ali a posição é a da aula, e está no arquivo.
+    posicao: etapa === "revisao" ? posicaoId : null,
   });
 
   if (error) return { erro: error.message };

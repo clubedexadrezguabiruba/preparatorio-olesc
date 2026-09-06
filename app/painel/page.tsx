@@ -5,13 +5,18 @@ import { Barra } from "@/components/Barra";
 import { perfilAtual } from "@/lib/auth/perfil";
 import {
   fimDaSemana,
+  hojeNoBrasil,
   intervaloPorExtenso,
   porExtenso,
   sabadoDaSemana,
   semanaAtual,
+  somarDias,
 } from "@/lib/curso/calendario";
+import { minutosDeHoje, sequenciaDeDias } from "@/lib/curso/hoje";
+import { minutosPorDia, partidaDoDiaMarcada } from "@/lib/curso/minutos";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
-import { progressoDeFinais } from "@/lib/finais/progresso";
+import { eventosDeAulas, progressoDeFinais } from "@/lib/finais/progresso";
+import { revisoesDevidas } from "@/lib/finais/revisao";
 import {
   aulasAbertas,
   CLASSE,
@@ -21,13 +26,15 @@ import {
   proximaAula,
 } from "@/lib/finais/trilha";
 import { TAREFAS } from "@/lib/tarefas/conteudo";
+import { dicasLidas } from "@/lib/meiojogo/progresso";
 import { estadoDasTarefas } from "@/lib/tarefas/estado";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
 import { daSemana } from "@/lib/tarefas/tarefas";
 import { BLOCOS } from "@/lib/tatica/blocos";
 import { temaAberto } from "@/lib/tatica/conteudo";
-import { progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
+import { progressoPorTema, PUZZLES_POR_TEMA, revisaoDeHoje, temaZerado } from "@/lib/tatica/progresso";
 import { etapaAtual, METAS, NOME_DA_ETAPA } from "@/lib/tatica/serie";
+import { Hoje } from "./Hoje";
 import { Tarefas } from "./Tarefas";
 
 export const metadata: Metadata = { title: "Painel — Preparatório OLESC" };
@@ -51,12 +58,21 @@ export default async function Painel() {
   const semana = semanaAtual();
   const sabado = sabadoDaSemana(semana);
   const tarefasDaSemana = daSemana(TAREFAS, semana);
+  const hoje = hojeNoBrasil();
 
-  const [progresso, marcadas, finais] = await Promise.all([
-    progressoPorTema(perfil.id),
-    tarefasMarcadas(perfil.id),
-    progressoDeFinais(perfil.id),
-  ]);
+  const [progresso, marcadas, finais, devidosDeTatica, eventos, lidas, minutos, jogouHoje] =
+    await Promise.all([
+      progressoPorTema(perfil.id),
+      tarefasMarcadas(perfil.id),
+      progressoDeFinais(perfil.id),
+      revisaoDeHoje(perfil.id),
+      eventosDeAulas(perfil.id),
+      dicasLidas(perfil.id),
+      // Trinta dias bastam para a sequência: o preparatório inteiro tem quatro
+      // semanas, e ninguém precisa ver "48 dias seguidos" numa tela de celular.
+      minutosPorDia(perfil.id, somarDias(hoje, -30)),
+      partidaDoDiaMarcada(perfil.id, hoje),
+    ]);
 
   // A trilha de finais: o que está aberto nesta semana, e o que dele já foi
   // dominado. As duas contas são as mesmas de `/finais` — a tela lá e o cartão
@@ -65,7 +81,13 @@ export default async function Painel() {
   const finaisFeitos = dominadas(aulasDeFinais, finais);
   const proximoFinal = proximaAula(aulasDeFinais, finais);
 
-  const estados = estadoDasTarefas(tarefasDaSemana, marcadas, progresso, finaisFeitos);
+  const estados = estadoDasTarefas(tarefasDaSemana, marcadas, progresso, finaisFeitos, lidas);
+
+  // As aulas devidas hoje na revisão espaçada, com o nome que o cartão mostra.
+  const revisoesDeFinais = revisoesDevidas(aulasDeFinais, eventos, hoje).map((devida) => ({
+    id: devida.aula,
+    nome: aulasDeFinais.find((a) => a.id === devida.aula)?.nome ?? devida.aula,
+  }));
 
   const abertos = BLOCOS.map((bloco) => ({
     ...bloco,
@@ -105,6 +127,16 @@ export default async function Painel() {
           </form>
         </div>
       </header>
+
+      {/* O dia, em primeiro lugar: é o que o aluno abre o site para ver. Os
+          totais do curso vêm depois — eles não mudam o que fazer agora. */}
+      <Hoje
+        minutos={minutosDeHoje(minutos, hoje)}
+        sequencia={sequenciaDeDias(minutos, hoje)}
+        revisaoDeTatica={devidosDeTatica.length}
+        revisaoDeFinais={revisoesDeFinais}
+        partidaFeita={jogouHoje}
+      />
 
       <section className="flex gap-3">
         <Numero rotulo="Puzzles resolvidos" valor={feitos} />
@@ -153,7 +185,7 @@ export default async function Painel() {
         {abertos.map((bloco) => (
           <div key={bloco.id} className="flex flex-col gap-2">
             <p className="text-sm font-semibold text-tinta">
-              <span className="text-tinta-muda tabular-nums">{bloco.id}.</span> {bloco.nome}
+              <span className="text-tinta-fraca tabular-nums">{bloco.id}.</span> {bloco.nome}
             </p>
             <ul className="flex flex-col gap-2">
               {bloco.temas.map((tema) => {

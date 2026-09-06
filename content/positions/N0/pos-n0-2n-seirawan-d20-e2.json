@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-2n-seirawan-d20-e2",
+  "fen": "8/8/8/8/8/1K6/3NN3/k7 w - - 0 1",
+  "expectedResult": "draw",
+  "tags": [
+    "KNNK",
+    "ensino"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Yasser Seirawan — o Diagrama 20 do cap. I 'Basic Mates', seção 'The Impossible: King and Two Knights vs. King', com o deslocamento de uma peça que o próprio texto dele instrui em voz alta",
+    "bibliographicSource": "Seirawan, Winning Chess Endings, p. impressa 17 (PDF p. 25, offset 8), cap. I 'Basic Mates', seção 'King and Two Knights vs. King', Diagrama 20 e o parágrafo imediatamente abaixo dele",
+    "originalGame": "não se aplica — quadro didático de manual, não vem de partida",
+    "authorComposer": "não se aplica — é a demonstração clássica de que dois cavalos não forçam mate, um fato do final e não uma composição autoral",
+    "license": "obra protegida — uso sob o teto da §12.7 (esta aula usa 1 posição desta obra, contra o teto de 2)",
+    "editionFile": "seirawan-winning-chess-endings.pdf",
+    "fenMethod": "ATENÇÃO — esta FEN não é o diagrama tal como impresso, e sim o diagrama depois do deslocamento de UMA peça que o autor manda fazer no texto: 'Take a look at Diagram 20 and imagine that White's c2-Knight is on the e2-square, covering the c1-square. White's last move, Nd2+, forced Black's King into the corner. Now the coup de grace is to play Ne2-d4-c2 checkmate. But, unfortunately, Black's King is left stalemated!'. O Diagrama 20 impresso foi transcrito por leitura de imagem cega ao texto — bitmap extraído com pdfimages, grade medida pela moldura (casa de 40,33 × 40,25 px), cor de casa medida pela mediana do anel de borda fora da silhueta, casas rivais (a3/c3 para o rei branco, c3/d3 para os cavalos, a2/b1 para o rei preto) descartadas por medição de centróide — e devolveu Ra1 preto, Rb3, Cc2 e Cd2 brancos. Sobre essa transcrição foi aplicado o único deslocamento do texto, c2 para e2, e a vez é das brancas, que é o que o autor descreve ('agora o coup de grâce seria Ce2-d4-c2'). O diagrama não imprime coordenadas nem legenda dentro do recorte; a orientação padrão é a suposição, e ela é confirmada pelo resultado — ver o QA.",
+    "qaApplied": "garimpo FN1/B5.2, 2026-09-05: a transcrição do diagrama impresso é falsificada pelo que o autor afirma sobre ela. Ele diz que o Diagrama 20 é xeque-mate ('There's checkmate!'), e a posição transcrita — Ra1; Rb3, Cc2, Cd2, pretas na vez — é xeque-mate conferido pela chess.js. Ele diz que, com o cavalo em e2, o mate vira afogamento, e a posição desta FEN depois de 1.Ce2-d4 é afogamento conferido pela chess.js e devolvido pela tablebase com stalemate=true. As duas afirmações do texto se confirmam na mesma leitura de imagem, e é isso que fixa a orientação — na leitura girada de 180° nem o mate nem o afogamento apareceriam. A tablebase confirma draw, DTM 0: dois cavalos contra rei sozinho não ganham.",
+    "pendingRisk": "quem for conferir o diagrama no livro vai encontrar o cavalo em c2, não em e2 — o deslocamento é do texto do autor, está transcrito literalmente acima, e por isso a posição é declarada aqui como derivada e não como o diagrama impresso"
+  }
+}

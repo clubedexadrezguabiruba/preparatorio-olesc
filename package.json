@@ -19,7 +19,8 @@
     "validate:mutations": "node scripts/mutation-check.ts",
     "apostila": "node --conditions=react-server apostila/build.ts",
     "apostila:ver": "node --conditions=react-server apostila/build.ts --abrir",
-    "apostila:conferir": "node scripts/conferir-caderno.ts"
+    "apostila:conferir": "node scripts/conferir-caderno.ts",
+    "db:f2": "node --conditions=react-server scripts/quatro-numeros-da-f2.ts"
   },
   "dependencies": {
     "@lichess-org/chessground": "^10.1.1",

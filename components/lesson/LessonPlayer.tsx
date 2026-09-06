@@ -32,6 +32,7 @@ export function LessonPlayer({
   bundle,
   startAt,
   marcacao,
+  revisao = false,
   onStageDone,
   leitura,
 }: {
@@ -59,6 +60,16 @@ export function LessonPlayer({
    * 3 e diz o que desenhar. O aluno nunca recebe isto, e sem isto nada muda.
    */
   marcacao?: { shapes: DrawShape[] | null; onChange: (shapes: DrawShape[]) => void };
+  /**
+   * A aula foi aberta pelo cartão de **revisão** do painel (`?revisao=1`).
+   *
+   * Muda uma coisa só, e só nas aulas que **não** têm etapa 6: ali a revisão é
+   * a própria prática jogada de novo, dias depois, e a linha precisa dizer
+   * `revisao` para a fila espaçada (`lib/finais/revisao.ts`) contá-la. Numa
+   * aula com etapa 6 a prática continua sendo prática — o que conta como
+   * revisão são as partidas da etapa 6.
+   */
+  revisao?: boolean;
   /**
    * O que fazer quando uma etapa jogada termina — a server action que grava
    * (`app/finais/acoes.ts`), passada de fora.
@@ -93,7 +104,11 @@ export function LessonPlayer({
   const treeSeek = useLessonStore((s) => s.treeSeek);
   const cleared = useLessonStore((s) => s.cleared);
   const solo = useLessonStore((s) => s.trees.solo);
-  const practice = useLessonStore((s) => s.practices.practice);
+  // O mapa inteiro, e não só `practices.practice`: as partidas da etapa 6
+  // moram aqui sob `review:<posição>`, e até a F2 elas nunca subiam ao
+  // servidor — o aluno revisava e o banco não sabia.
+  const practices = useLessonStore((s) => s.practices);
+  const practice = practices.practice;
 
   const available = STAGE_ORDER.filter((key) => lesson.stages[key] !== undefined);
 
@@ -160,14 +175,21 @@ export function LessonPlayer({
       attempt: number,
       lances: string[],
       startedAt: number,
+      posicaoId?: string,
     ) => {
-      const chave = `${etapa}:${lesson.id}:${attempt}`;
+      const chave = `${etapa}:${posicaoId ?? ""}:${lesson.id}:${attempt}`;
       if (enviadas.current.has(chave)) return;
       enviadas.current.add(chave);
       // Sem `await` e sem tela de espera: a gravação é o registro do que
       // aconteceu, não um passo da aula. O aluno já viu o selo, e uma falha de
       // rede aqui não pode travar o tabuleiro dele.
-      void onStageDone({ aula: lesson.id, etapa, lances, tempoMs: Date.now() - startedAt });
+      void onStageDone({
+        aula: lesson.id,
+        etapa,
+        lances,
+        tempoMs: Date.now() - startedAt,
+        posicaoId,
+      });
     };
 
     // Fracasso grava tanto quanto acerto: é a tentativa que o professor precisa
@@ -175,10 +197,31 @@ export function LessonPlayer({
     if (solo && solo.status !== "playing") {
       fim("solo", solo.attempt, solo.moves, solo.startedAt);
     }
-    if (practice && practice.status !== "playing") {
-      fim("pratica", practice.attempt, practice.moves, practice.startedAt);
+
+    // As partidas da etapa 6, uma por posição. Elas viram linha `revisao` — e é
+    // a data delas que a fila espaçada lê para saber quando a aula volta.
+    for (const id of lesson.stages.review?.reviewPositionIds ?? []) {
+      const partida = practices[reviewKey(id)];
+      if (partida && partida.status !== "playing") {
+        fim("revisao", partida.attempt, partida.moves, partida.startedAt, id);
+      }
     }
-  }, [lesson.id, lessonId, onStageDone, practice, solo]);
+
+    if (practice && practice.status !== "playing") {
+      // Aula sem etapa 6 aberta pelo cartão de revisão: a prática **é** a
+      // revisão do dia, e é assim que ela precisa ser gravada.
+      const comoRevisao = revisao && lesson.stages.review === undefined;
+      fim(
+        comoRevisao ? "revisao" : "pratica",
+        practice.attempt,
+        practice.moves,
+        practice.startedAt,
+        comoRevisao ? practice.positionId : undefined,
+      );
+    }
+    // `practices` muda a cada lance, então este efeito roda muito — e é a
+    // trava `enviadas` que segura, não a lista de dependências.
+  }, [lesson.id, lesson.stages.review, lessonId, onStageDone, practice, practices, revisao, solo]);
 
   // Enquanto o efeito acima não rodou, a store ainda fala da aula anterior.
   if (lessonId !== lesson.id) return null;

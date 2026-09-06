@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-ladder-freeborough-262",
+  "fen": "8/8/8/3k4/8/3K4/6R1/R7 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KRRK",
+    "revisao"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Edward Freeborough, que a publica como diagrama No. 262, com a legenda 'White plays and mates in three moves'",
+    "bibliographicSource": "Freeborough, Chess Endings: A Companion to Chess Openings Ancient and Modern, Kegan Paul, Trench, Trübner & Co., Londres, 1891, p. impressa 124 (PDF p. 129, offset 5), cap. VII 'The Rook', Seção II 'King and Two Rooks against King', diagrama No. 262",
+    "originalGame": "não se aplica — posição teórica de tratado, não vem de partida",
+    "authorComposer": "não se aplica — posição didática do tratado, não é estudo composto (o No. 263, da mesma página, é assinado por J. Phoenix; este não traz assinatura)",
+    "license": "domínio público (obra de 1891, Reino Unido)",
+    "editionFile": "freeborough-chess-endings-1891.pdf",
+    "fenMethod": "transcrição do bitmap do diagrama extraído com pdfimages em resolução nativa, por leitura de imagem cega ao texto da página. Grade localizada pelo perfil de densidade de tinta das faixas hachuradas — passo de 70,2 px, confirmado por um segundo modelo ancorado no filete interno da moldura, com os dois modelos concordando casa a casa. Casa clara mede 0,00 de tinta e casa hachurada mede 0,22–0,33, de modo que as quatro casas ocupadas se isolam sem ambiguidade; a cor da casa de cada peça foi medida no anel de borda, fora da silhueta. Como no No. 260, o diagrama não imprime coordenadas nem BLACK/WHITE, e a paridade (canto inferior esquerdo escuro) exclui espelhamento mas não o giro de 180°. Quem exclui o giro é o texto: o Freeborough escreve que as brancas jogam '1 R-R6, to make a cordon', e uma torre só alcança a6 partindo de a1 — na leitura girada as torres estariam em h8 e b7, de onde a6 não sai em um lance.",
+    "qaApplied": "garimpo FN1/B5.1, 2026-09-05: o texto do livro descreve a solução em prosa em vez de tabulá-la — '1 R-R6, to make a cordon, and follows with R to KB2, or QKt2, according to Black's play, mating on the third move' —, e as duas ramificações que ele nomeia foram replayadas nesta FEN: 1.Ta6 Rc5 2.Tb2 Rd5 3.Tb5 mate e 1.Ta6 Re5 2.Tf2 Rd5 3.Tf5 mate. As duas são legais e as duas dão mate no terceiro lance, como o livro promete. A tablebase confirma win-white com DTM 5 meios-lances, isto é mate em 3 — o mesmo número.",
+    "pendingRisk": "nenhum conhecido"
+  }
+}

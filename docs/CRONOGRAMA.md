@@ -18,9 +18,11 @@ sábado é mudar lá — não aqui, e não nas telas.
 | Véspera | sáb 10/10 | Opcional, 1–2 h leves | — |
 | Torneio | 11 a 16/10 | Manutenção diária | — |
 
-**Estado deste arquivo:** o Sábado 1 está escrito minuto a minuto. Os sábados 2
+**Estado deste arquivo:** o Sábado 1 está escrito minuto a minuto, e foi
+**refeito na F2** (2026-09-06) depois que a turma real se mostrou diferente da
+imaginada — todos já jogaram torneio oficial, e treinam 2 h por dia. Os sábados 2
 a 4 estão no esqueleto que veio do plano, e cada um ganha o seu detalhe na fase
-dele (F2, F3, F4) — detalhar agora seria escrever a condução de uma aula cujo
+dele (F3, F4) — detalhar agora seria escrever a condução de uma aula cujo
 material ainda não existe.
 
 ---
@@ -55,13 +57,13 @@ com duas partidas anotadas de próprio punho.
 
 | Hora | Bloco | O que o professor faz |
 |---|---|---|
-| 0:00–0:25 | **A OLESC explicada** | Quadro, sem slide. Equipe de 4+2, 7 rodadas, três provas, a de equipe valendo o triplo. Tabuleiros e cores (1 e 3 com a cor da equipe, 2 e 4 com a contrária) — desenhe isso, é o que mais gera pergunta. Regras que pegam: anotação, peça tocada, lance ilegal, relógio e incremento, como se pede empate, comportamento. Desempates em 5 minutos, sem entrar na conta. |
-| 0:25–1:25 | **Diagnóstico: 2 rodadas de 15+10** | Anotação **obrigatória** desde a primeira. Circular olhando duas coisas: quem parou de anotar, e quem está gastando tempo demais na abertura. **Recolher as planilhas no fim** — elas são o material do bloco das 2:25 e entram no relatório. |
-| 1:25–1:40 | Pausa | Aproveitar para escrever no quadro os pares da rodada 2, se houver. |
-| 1:40–2:25 | **Site e curso de tática** | 20 min no projetor, resolvendo em conjunto e **falando o raciocínio em voz alta** — é o modelo que eles vão copiar. Depois 20 min cada um no celular, no bloco 1. Distribuir os papéis de usuário e PIN aqui, não antes: com o papel na mão eles entram no site em vez de ouvir. |
+| 0:00–0:10 | **A OLESC em dez minutos** | Quadro, sem slide, e **rápido**: eles já jogaram torneio oficial, todos. Só o que muda a decisão deles no dia: tabuleiros e cores (1 e 3 com a cor da equipe, 2 e 4 com a contrária — desenhe, é o que mais gera pergunta), a prova de equipe valendo o triplo, e as quatro regras que pegam: anotação, peça tocada, lance ilegal, como se pede empate. **Não** entre em desempates nem em rodada suíça: está no caderno 1, como consulta, e quem precisar consulta. Era um bloco de 25 minutos; os 15 que sobraram foram para o diagnóstico e para a trilha. |
+| 0:10–1:20 | **Diagnóstico: 2 rodadas de 15+10** | Anotação **obrigatória** desde a primeira. Circular olhando duas coisas: quem parou de anotar, e quem está gastando tempo demais na abertura. **Recolher as planilhas no fim** — elas são o material do bloco das 2:25 e entram no relatório. |
+| 1:20–1:35 | Pausa | Aproveitar para escrever no quadro os pares da rodada 2, se houver. |
+| 1:35–2:25 | **Site, a trilha e o curso de tática** | Distribuir os papéis de usuário e PIN **aqui**, não antes: com o papel na mão eles entram no site em vez de ouvir. Primeiros 10 min em `/trilha`, no projetor: os quatro degraus, os 36 temas, as 49 aulas e as 30 dicas, e o selo "você está aqui". É a resposta à pergunta do primeiro dia — *o que eu vou aprender?* — e é ela que faz o resto do mês fazer sentido. Depois 20 min de puzzles no projetor, **falando o raciocínio em voz alta** (é o modelo que eles vão copiar), e 20 min cada um no celular, no bloco 1. |
 | 2:25–3:10 | **As três perguntas** | O "contar" de Heisman: o que ele ameaça, minhas peças estão seguras, posso capturar de graça. Depois, **as planilhas do diagnóstico de volta nas mãos deles**: cada um procura na própria partida o lance em que deixou uma peça. Ninguém corrige a partida do outro em voz alta. |
 | 3:10–3:50 | **Prática: 1 rodada 15+10** | Anotada, aplicando as três perguntas. Peça que cada um marque com um ponto na planilha os lances em que parou para fazer as três perguntas. |
-| 3:50–4:00 | **Fechamento** | Entregar o caderno 1. Ler em voz alta a lista da tarefa da semana (ela está no caderno **e** no painel do site). Combinar de trazer as duas planilhas preenchidas no Sábado 2. |
+| 3:50–4:00 | **Fechamento: a rotina de 2 horas** | Entregar o caderno 1. Abrir o painel no projetor e ler o cartão **"Hoje"** em voz alta, na ordem: tática (com a revisão do dia), finais, meio-jogo, **partida por último**. Dizer os dois números e a diferença entre eles: a meta do dia é 120 minutos, e 60 é o mínimo que mantém a sequência viva — dia curto não zera duas semanas. Ler a lista da tarefa da semana (ela está no caderno **e** no painel). Combinar de trazer as planilhas preenchidas no Sábado 2. |
 
 ### O que costuma dar errado, e o que fazer
 
@@ -72,9 +74,13 @@ com duas partidas anotadas de próprio punho.
 - **Aluno sem celular.** O caderno 1 tem 60 exercícios impressos justamente por
   isto, com o gabarito no fim. Ele faz a tarefa no papel e o professor lança as
   respostas depois.
-- **O diagnóstico atrasa.** É o bloco que mais estoura. Se a segunda rodada não
+- **O diagnóstico atrasa.** É o bloco que mais estoura, e por isso ele ganhou os
+  10 minutos que saíram da OLESC explicada. Se mesmo assim a segunda rodada não
   couber, corte-a: uma partida anotada já dá o material do bloco das 2:25. Não
   corte o bloco das três perguntas — ele é o conteúdo do dia.
+- **Sobra tempo no bloco da OLESC.** Provável, e é o desenho: eles já jogaram
+  torneio. Não encha os 10 minutos — devolva o tempo ao diagnóstico, que é onde
+  sai o material do resto do dia.
 - **Ninguém anota até o fim.** Esperado na primeira vez. Não brigue: mostre uma
   planilha incompleta e pergunte quem ganhou a partida, sem a memória de quem
   jogou. O argumento é esse.
@@ -82,7 +88,9 @@ com duas partidas anotadas de próprio punho.
 ### Depois do sábado
 
 - [ ] Conferir em `/professor` que todos os alunos aparecem e que pelo menos um
-      puzzle foi gravado por cada um.
+      puzzle foi gravado por cada um. O nome de cada aluno leva ao relatório dele
+      (`/professor/[aluno]`): tema a tema, aula a aula, e os minutos por dia dos
+      últimos 14 — é ali que se vê quem cumpriu as 2 horas e quem não.
 - [ ] Guardar as planilhas do diagnóstico — elas voltam no Sábado 3, no bloco de
       análise.
 - [ ] Criar o **clube da OLESC no chess.com** e mandar o link para os alunos.

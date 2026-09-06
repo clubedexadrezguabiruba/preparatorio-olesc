@@ -54,6 +54,25 @@ subagente consegue achar página por busca de texto (teste da §4).
 | 19 | `muller-kids` | Müller, _Chess Endgames for Kids_ | Gambit Publications, Londres, 2015 | 2 | OCR em 2026-08-18 |
 | 20 | `pandolfini-endgame-course` | Pandolfini, _Endgame Course_ | Fireside / Simon & Schuster, Nova York, 1988 | 2 | OCR em 2026-08-18 |
 | 21 | `seirawan-winning-chess-endings` | Seirawan, _Winning Chess Endings_ | a confirmar na folha de rosto | 2 | sim (240 pág., 6.959 caracteres) |
+| 22 | `posicoes-do-preparatorio` | Posições compostas pela autoria do preparatório | conteúdo do repositório, sem arquivo | sem teto (CC0) | n/a |
+
+**A entrada 22 não é um livro.** `posicoes-do-preparatorio` é o registro da
+**autoria própria**, e ela existe porque a §12.2 exige que toda posição cite
+obra registrada — inclusive a que não veio de obra nenhuma. Sem ela, a única
+saída honesta para uma posição composta seria deixar `editionFile` vazio, e aí a
+proveniência deixaria de ser conferível justamente onde ela mais precisa ser
+lida com atenção.
+
+O que a sustenta não é a autoridade de um autor: é a medida. Toda posição
+registrada nela é montada casa a casa, conferida como legal por chess.js, e tem
+a afirmação da própria legenda medida por `lib/meiojogo/afirmacoes.ts` — coluna
+aberta sem peão, peão isolado sem vizinho, casa de posto inatacável por peão,
+cor das casas contra a cor do bispo. O gate reprova `AFIRMACAO_FALSA` do mesmo
+jeito que reprova `RESULTADO_ERRADO` numa aula de finais.
+
+Ela é CC0 e sem teto porque a coleção é nossa; não há coleção de terceiro a
+proteger. **O que ela não autoriza:** transcrever diagrama de livro e chamar de
+composta. Posição que vier de obra cita a obra, e cai sob o teto dela.
 
 **"A confirmar na folha de rosto"** não é descuido: os PDFs dessas obras não
 trazem metadados de edição, e a proveniência grava edição. O campo `edition` do

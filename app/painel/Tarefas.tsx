@@ -7,6 +7,20 @@ import type { EstadoDaTarefa } from "@/lib/tarefas/estado";
 import { alternarTarefa } from "./acoes";
 
 /**
+ * O que a barra de cada tipo de tarefa está contando.
+ *
+ * As três palavras existem porque as três barras têm o mesmo desenho e pesos
+ * diferentes: puzzle resolvido o servidor mediu, aula dominada a tablebase
+ * certificou, e dica lida foi o aluno que declarou. A tela não pode chamar as
+ * três de "feitas".
+ */
+const UNIDADE: Record<"tatica" | "finais" | "meiojogo", string> = {
+  tatica: "puzzles",
+  finais: "aulas dominadas",
+  meiojogo: "dicas lidas",
+};
+
+/**
  * A lista de tarefas da semana.
  *
  * **A caixa tem de responder na hora.** O aluno marca a tarefa no celular, no
@@ -116,7 +130,7 @@ export function Tarefas({ estados }: { estados: EstadoDaTarefa[] }) {
                   />
                   <p className="text-xs text-tinta-media tabular-nums">
                     {Math.min(estado.medida.feitos, estado.medida.meta)} de {estado.medida.meta}{" "}
-                    {estado.medida.tipo === "finais" ? "aulas dominadas" : "puzzles"}
+                    {UNIDADE[estado.medida.tipo]}
                     {estado.medida.tipo === "tatica" && estado.medida.acerto !== null ? (
                       <>
                         {" · "}
@@ -129,7 +143,7 @@ export function Tarefas({ estados }: { estados: EstadoDaTarefa[] }) {
                         >
                           {estado.medida.acerto}% de acerto
                         </span>
-                        <span className="text-tinta-muda">
+                        <span className="text-tinta-fraca">
                           {" "}
                           (meta {estado.medida.acertoEsperado}%)
                         </span>
