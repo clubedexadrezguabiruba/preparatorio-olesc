@@ -47,12 +47,13 @@ npm run lint
 npm run build
 ```
 
-E os dois que falam com o banco de verdade — ficam fora da CI porque precisam
+E os três que falam com o banco de verdade — ficam fora da CI porque precisam
 das chaves, e rodam na máquina antes de cada deploy:
 
 ```bash
 npm run db:rls       # o aluno lê o seu, não lê o do outro, e não grava sozinho
 npm run db:tatica    # a corrente inteira: disco -> juiz -> banco -> relatório
+npm run db:finais    # a mesma corrente nas aulas de finais, com o rejulgamento
 ```
 
 `db:rls` **pula o passo do professor sem o PIN**. Para rodar completo:

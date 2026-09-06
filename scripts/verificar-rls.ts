@@ -26,13 +26,21 @@
  *      lance;
  *   5. na tarefa de casa, ao contrário, o aluno **grava a dele** — e não
  *      consegue gravar no nome do outro, nem ler o que o outro marcou, nem
- *      desmarcar o que o outro fez.
+ *      desmarcar o que o outro fez;
+ *   6. o professor lê os dois alunos (pulado sem o PIN — ver o fim deste
+ *      comentário);
+ *   7. nas aulas de finais a mesma fronteira aparece **dentro da mesma
+ *      feature**: `tentativas_aula` não aceita `insert` de ninguém, porque há
+ *      lances para o servidor reconferir, e `aula_lida` é do aluno, porque
+ *      "li o exemplo até o fim" não tem o que reconferir.
  *
- * O item 5 é o que esta rodada acrescentou, e é o que precisava de prova:
- * `tarefa_conclusao` é a primeira tabela do projeto em que o aluno escreve.
- * O `with check` da política é a linha inteira da defesa — sem ele, um
- * `insert` com o `aluno` trocado passaria, a política de `select` esconderia a
- * linha de quem a escreveu, e ela apareceria no painel da vítima.
+ * O `with check` é a linha inteira da defesa nas duas tabelas em que o aluno
+ * escreve — sem ele, um `insert` com o `aluno` trocado passaria, a política de
+ * `select` esconderia a linha de quem a escreveu, e ela apareceria no painel da
+ * vítima. O item 5 provou isso em `tarefa_conclusao`, a primeira tabela do
+ * projeto em que o aluno escreveu; o item 7 (FN1/B3) prova o mesmo em
+ * `aula_lida` — e prova, ao lado, que a porta de `tentativas_aula` continua
+ * fechada para ele.
  *
  * O PIN do professor entra como argumento (`node scripts/verificar-rls.ts
  * 123456`). Sem ele, as afirmações que dependem do professor são **puladas**,
@@ -223,6 +231,52 @@ try {
       `o professor vê a marcação que sobrou (viu ${tarefasPeloProfessor?.length})`,
     );
   }
+
+  console.log("\n7. Nas aulas de finais: a tentativa é do servidor, a leitura é do aluno");
+
+  // A metade fechada: os lances existem para serem reconferidos, então o aluno
+  // não escreve aqui nem no nome dele. É o desenho de `tentativas_puzzle`.
+  const { error: erroTentativaDeAula } = await alunoA.from("tentativas_aula").insert({
+    aluno: criados[0],
+    aula: "N0-R-MATE",
+    etapa: "solo",
+    sucesso: true,
+    lances: ["h1h8"],
+    tempo_ms: 1,
+  });
+  afirmar(
+    Boolean(erroTentativaDeAula),
+    `o aluno não grava tentativa de aula (${erroTentativaDeAula?.code ?? "PASSOU!"})`,
+  );
+
+  // A metade aberta: "li o exemplo" é declaração, e o aluno declara a dele.
+  const { error: erroLeituraDeA } = await alunoA
+    .from("aula_lida")
+    .insert({ aluno: criados[0], aula: "N0-R-MATE" });
+  afirmar(!erroLeituraDeA, `A declara a leitura dele (${erroLeituraDeA?.message ?? "sem erro"})`);
+
+  await alunoB.from("aula_lida").insert({ aluno: criados[1], aula: "N0-Q-MATE" });
+
+  const { error: erroLeituraNoNomeDeB } = await alunoA
+    .from("aula_lida")
+    .insert({ aluno: criados[1], aula: "N0-R-MATE" });
+  afirmar(
+    Boolean(erroLeituraNoNomeDeB),
+    `A não declara leitura no nome de B (${erroLeituraNoNomeDeB?.code ?? "PASSOU!"})`,
+  );
+
+  const { data: lidasPorA } = await alunoA.from("aula_lida").select("aluno, aula");
+  afirmar(lidasPorA?.length === 1, `A vê 1 leitura (viu ${lidasPorA?.length})`);
+  afirmar(lidasPorA?.[0]?.aula === "N0-R-MATE", "e a leitura que A vê é a de A");
+
+  // Como no item 5: `delete` que não alcança nada some calado, então a prova é
+  // contar do outro lado.
+  await alunoA.from("aula_lida").delete().eq("aula", "N0-Q-MATE");
+  const { count: leituraDeBSobrou } = await admin
+    .from("aula_lida")
+    .select("*", { count: "exact", head: true })
+    .eq("aluno", criados[1]);
+  afirmar(leituraDeBSobrou === 1, `A não apagou a leitura de B (sobrou ${leituraDeBSobrou})`);
 } finally {
   await limpar();
   console.log("\nContas de mentira apagadas.");

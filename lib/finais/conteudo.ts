@@ -1,8 +1,8 @@
 import "server-only";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { referencedPositionIds } from "@/lib/lesson/refs";
-import { lessonSchema, positionSchema, type Lesson, type Position } from "@/lib/lesson/schema";
+import { referencedPositionIds } from "../lesson/refs.ts";
+import { lessonSchema, positionSchema, type Lesson, type Position } from "../lesson/schema.ts";
 
 /**
  * A carga das aulas de finais, **do disco, no servidor**.
@@ -28,6 +28,13 @@ import { lessonSchema, positionSchema, type Lesson, type Position } from "@/lib/
  * nó terminal dá mate, a proveniência existe); aqui se confere só a **forma**,
  * para o motor nunca receber um arquivo torto sem dizer por quê. Um arquivo que
  * passa aqui e não passa no gate é exatamente o que o CI existe para barrar.
+ *
+ * ## Por que os imports são relativos e com `.ts`
+ *
+ * O alias `@/` é coisa do bundler do Next. Desde a FN1/B3 este arquivo também
+ * roda **fora** do Next: `scripts/verificar-finais.ts` o carrega direto no Node
+ * para provar a corrente inteira contra o banco de verdade, e ali o alias não
+ * resolve. É a mesma escolha de `lib/tatica/banco.ts`, pelo mesmo motivo.
  */
 
 const RAIZ = path.join(process.cwd(), "content");
