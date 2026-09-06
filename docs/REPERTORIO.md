@@ -15,9 +15,9 @@ armadilhas conhecidas.*
   arquivos — `pretas-siciliana.pgn` (13, contando as 3 do bispo em c4),
   `pretas-manhattan.pgn` (3), `pretas-londres.pgn` (2), `pretas-colle.pgn` (1) e
   `pretas-outras.pgn` (1).
-- O que **não** existe: a tela em que o aluno treina. Nenhum arquivo de `app/`
-  lê o repertório ainda. **O Base está fechado: 42 linhas**, as 22 das brancas e
-  as 20 das pretas, todas compiladas para `public/repertorio/`.
+- O que o **B5** escreveu: **a tela em que o aluno treina** — `/aberturas`, o
+  juiz, a tabela de progresso e a gravação. **O Base está fechado: 42 linhas**,
+  as 22 das brancas e as 20 das pretas, e agora elas são jogáveis.
 
 ---
 
@@ -477,14 +477,72 @@ npm run repertorio:compilar     # PGN revisados -> public/repertorio/*.json
 npm run repertorio:compilar -- --check   # só confere; sai com erro se algo falha
 npm run repertorio:motor -- "1.e4 c5 2.Bc4 Cc6"   # as 5 melhores da posição
 npm run repertorio:motor -- --pontas              # avalia a ponta de cada linha
-npm test                        # 208 testes, 61 deles do repertório
+npm run db:migrar               # aplica 0004_repertorio.sql
+npm run db:rls                  # prova que o aluno não grava progresso
+npm test                        # 246 testes, 99 deles do repertório
 ```
 
 Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variações),
-`arvore.ts` (árvore → linhas), `linhas.ts` (schema e regras), `explorer.ts`.
+`arvore.ts` (árvore → linhas), `linhas.ts` (schema e regras), `explorer.ts`,
+`motor.ts` (leitura de lances e apresentação, sem processo), e os quatro do
+treinador — `treino.ts` (o juiz e a ordem), `banco.ts`, `progresso.ts`,
+`gravar.ts`.
 
 **42 linhas** compiladas para `public/repertorio/`, em 12 arquivos: as 22 das
 brancas e as 20 das pretas. **O Base está completo dos dois lados.**
+
+### A tela
+
+`/aberturas` lista as 12 aberturas em dois grupos, com a conta de linhas
+aprendidas; `/aberturas/[cor]/[abertura]` é onde se treina. A rota tem `[cor]`
+antes de `[abertura]` porque o slug pode repetir entre as duas.
+
+**Como uma linha é aprendida.** Três passadas inteiras sem erro, seguidas; errar
+zera a conta. O **primeiro erro** decide a passada na hora — grava, e a linha
+continua na tela com dicas: dois erros acendem a casa, três desenham a seta. A
+data de quando aprendeu **nunca volta a nulo**: errar depois vira revisão, não
+recomeço.
+
+**Na primeira vez em cada linha o site mostra antes de cobrar** — tabuleiro só
+de olhar, botão "Próximo" (ou a tecla →), e o comentário do professor onde
+existe. Cobrar de cara uma linha que o aluno nunca viu não é treino, é
+adivinhação. O botão "Ver a linha" continua disponível depois, e não grava nada.
+
+**Quem escolhe a linha é o servidor** (`proximaLinha`): nunca vistas na ordem do
+PGN — que é a ordem pedagógica, o tronco primeiro —, depois as que estão mais
+longe dos três acertos, depois a revisão mais antiga. A lista fica na tela para
+o aluno trocar.
+
+**Quem julga é o servidor, sempre.** O navegador manda os lances jogados, nunca
+um "acertei", e `lib/repertorio/gravar.ts` reconfere contra o JSON com a mesma
+função que o tabuleiro usou. `repertorio_progresso` não tem política de `insert`
+nem de `update` para ninguém — só a chave de serviço escreve, e a `db:rls` prova
+isso contra o banco de verdade.
+
+**O juiz daqui não é o da tática.** Lá qualquer mate conta, porque há uma solução
+a encontrar; aqui há uma linha a decorar, e um lance bom fora do repertório é
+errado para este fim. No lugar do "mate conta" ficam os dois canais do arquivo:
+`alternativas` (o autor marcou como igualmente boas — a peça volta e a linha do
+clube entra no lugar, com recado) e `errosNomeados` (a fonte mostra de propósito
+como errados, e o aluno ouve *por quê* em vez de só "não").
+
+**`errosNomeados` está vazio nas 42 linhas.** O caminho existe, tem teste
+unitário e foi medido na tela com uma linha fabricada; quem escrever o Avançado
+só precisa preencher o campo.
+
+### Duas coisas que ficaram por fazer
+
+**Os comentários estão sem acento** — "peao", "proposito", "e" por "é". Vêm
+assim dos PGN, e o problema é do teclado/compilador de quem os escreveu, não da
+tela: `semQuebras` só tira as quebras de linha que o PGN insere na coluna 80. A
+correção é uma varredura nos `content/repertorio/*.pgn` seguida de
+`npm run repertorio:compilar` — nada no código muda.
+
+**Falta o ⚠12**: os princípios para Pirc, Nimzowitsch, Alekhine e Owen, que são
+texto e não linha. A porta prevista é `content/repertorio/notas/<abertura>.json`
+com página própria, linkada no fim da lista de `/aberturas`.
+
+### As pontas
 
 As pontas, medidas com `--pontas` em 5/9: a pior das 42 é uma das pretas e está
 **0,44 atrás** — o tronco do Dragão, que é a linha da própria fonte. O plano
@@ -495,4 +553,6 @@ das pretas fecham em igualdade, e uma — a Armadilha do Elefante — fecha em
 
 O motor do repertório é o mesmo Stockfish 18 de `public/engine/` que serve a
 etapa 5 da aula: a cola dele roda em `node` direto, e foi assim que as linhas
-de livro + motor foram escolhidas e as pontas conferidas.
+de livro + motor foram escolhidas e as pontas conferidas. As funções puras dele
+saíram do script para `lib/repertorio/motor.ts` — um script não tem teste, e foi
+justamente o sinal da avaliação que quase entrou invertido neste documento.
