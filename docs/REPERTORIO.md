@@ -435,9 +435,10 @@ está na lista de ⚠ abaixo.
 ## 8. Os ⚠ abertos
 
 Doze pontos em que a fonte não responde e alguém tem de escrever a linha por
-livro + motor. Em ordem de quanto o aluno vai encontrar. **Nove fecharam** — os
-quatro das brancas no B3, e no B4 o Bowdler, o Dragão, a Londres, o Colle e o
-Manhattan `4.Bf4`. Sobram **três**, e nenhum deles é linha do Base.
+livro + motor. Em ordem de quanto o aluno vai encontrar. **Dez fecharam** — os
+quatro das brancas no B3; no B4 o Bowdler, o Dragão, a Londres, o Colle e o
+Manhattan `4.Bf4`; e no B5 o 12, que virou página de princípios em vez de
+linha. Sobram **dois**, e nenhum deles é linha do Base.
 
 | # | ⚠ | Frequência | §|
 |---|---|---|---|
@@ -452,7 +453,7 @@ Manhattan `4.Bf4`. Sobram **três**, e nenhum deles é linha do Base.
 | ~~9~~ | ~~Francesa `3…Nc6`~~ — **fechado no B3**, é o `4.Nf3` | 14 % de 3.Bd3 | 2.7 |
 | ~~10~~ | ~~Manhattan `4.Bf4`~~ — **fora do Base pelo corte** (5ª resposta da posição); vai para o Avançado | 6,9 % de 3.Nc3 Nf6 | — |
 | **11** | **Maroczy — recortar só a sub-árvore do `6.e4`** | Avançado | 2.4 |
-| **12** | **Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios** | < 4,2 % cada | 2.10 |
+| ~~12~~ | ~~Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios~~ — **fechado no B5**, em `/aberturas/notas/` | < 4,2 % cada | 2.10 |
 
 Os itens 1 a 5 eram o caminho crítico: sozinhos, são o que os alunos mais vão
 encontrar e o que nenhuma fonte do Doug responde. Todos fecharam.
@@ -463,8 +464,7 @@ fecha a porta aqui é o orçamento, não a régua: pela §4 a posição pediria 
 respostas (`d4` 61,8 + `Bc4` 17,5 + `c4` 10 = 89,3 %). O preço, medido: `4.Bc4`
 e `4.c4` juntos são 27 % de uma abertura que é 3,9 % das Sicilianas, que são
 10,1 % de 1.e4, que é 68,2 % da raiz — **menos de um jogo em mil**. É o menor
-número de toda esta tabela, e por isso ele espera o Avançado. Os itens 11 e 12
-já eram, por decisão, fora do Base.
+número de toda esta tabela, e por isso ele espera o Avançado. O item 11 já era, por decisão, fora do Base.
 
 ---
 
@@ -479,14 +479,15 @@ npm run repertorio:motor -- "1.e4 c5 2.Bc4 Cc6"   # as 5 melhores da posição
 npm run repertorio:motor -- --pontas              # avalia a ponta de cada linha
 npm run db:migrar               # aplica 0004_repertorio.sql
 npm run db:rls                  # prova que o aluno não grava progresso
-npm test                        # 246 testes, 99 deles do repertório
+npm test                        # 251 testes, 104 deles do repertório
 ```
 
 Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variações),
 `arvore.ts` (árvore → linhas), `linhas.ts` (schema e regras), `explorer.ts`,
 `motor.ts` (leitura de lances e apresentação, sem processo), e os quatro do
 treinador — `treino.ts` (o juiz e a ordem), `banco.ts`, `progresso.ts`,
-`gravar.ts`.
+`gravar.ts`. O texto das quatro aberturas raras: `notas.ts` (schema) e
+`conteudo.ts` (leitura conferida na importação).
 
 **42 linhas** compiladas para `public/repertorio/`, em 12 arquivos: as 22 das
 brancas e as 20 das pretas. **O Base está completo dos dois lados.**
@@ -530,7 +531,7 @@ como errados, e o aluno ouve *por quê* em vez de só "não").
 unitário e foi medido na tela com uma linha fabricada; quem escrever o Avançado
 só precisa preencher o campo.
 
-### Duas coisas que ficaram por fazer
+### O que ficou por fazer
 
 **Os comentários estão sem acento** — "peao", "proposito", "e" por "é". Vêm
 assim dos PGN, e o problema é do teclado/compilador de quem os escreveu, não da
@@ -538,9 +539,14 @@ tela: `semQuebras` só tira as quebras de linha que o PGN insere na coluna 80. A
 correção é uma varredura nos `content/repertorio/*.pgn` seguida de
 `npm run repertorio:compilar` — nada no código muda.
 
-**Falta o ⚠12**: os princípios para Pirc, Nimzowitsch, Alekhine e Owen, que são
-texto e não linha. A porta prevista é `content/repertorio/notas/<abertura>.json`
-com página própria, linkada no fim da lista de `/aberturas`.
+**O ⚠12 fechou.** Os princípios para Pirc, Nimzowitsch, Alekhine e Owen estão em
+`content/repertorio/notas.json`, com página em `/aberturas/notas/[abertura]` e
+link no fim da lista. Um arquivo só, e não um por abertura como o plano dizia:
+é a forma de `content/temas.json`, e a conferência de "não há slug repetido"
+precisa vê-los juntos. **Não há tabuleiro nessas páginas** — o `lib/diagrama`
+que a apostila usa é paleta de papel por decisão escrita lá, e trazê-la para a
+tela traria as cores erradas; os lances em SAN no alto dizem que posição é essa,
+que é o que um livro de princípios faz.
 
 ### As pontas
 

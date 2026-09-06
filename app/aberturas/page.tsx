@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Barra } from "@/components/Barra";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { lerIndice } from "@/lib/repertorio/banco";
+import { notas } from "@/lib/repertorio/conteudo";
 import { CORES, type Cor } from "@/lib/repertorio/linhas";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
 import { aprendidasDaAbertura } from "@/lib/repertorio/treino";
@@ -104,6 +105,39 @@ export default async function Aberturas() {
           </section>
         );
       })}
+
+      {/* ------------------------------------------------------------------ *
+       * As que não viraram linha
+       *
+       * Ficam no fim, e não misturadas às aberturas, porque não têm treino: são
+       * texto. Escondê-las seria pior — o aluno encontra um 1…d6 por torneio, e
+       * precisa saber que existe uma página dizendo o que fazer.
+       * ------------------------------------------------------------------ */}
+      <section className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-base font-semibold text-tinta">As raras, por princípio</h2>
+          <p className="text-xs text-tinta-fraca">
+            Aparecem menos de uma vez por torneio. Não há linha para decorar — há o que
+            fazer, escrito.
+          </p>
+        </div>
+
+        <ul className="flex flex-col gap-1.5">
+          {notas().map((nota) => (
+            <li key={nota.slug}>
+              <Link
+                href={`/aberturas/notas/${nota.slug}`}
+                className="foco flex items-baseline justify-between gap-3 rounded-lg border border-borda-fraca bg-carta px-3 py-2.5 transition-colors hover:bg-carta-toque"
+              >
+                <span className="text-sm text-tinta">{nota.nome}</span>
+                <span className="shrink-0 text-xs text-tinta-fraca tabular-nums">
+                  {nota.lances}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <p className="text-xs text-tinta-muda">
         As linhas vêm dos cursos do clube e do motor, e cada uma diz de onde veio. Se você

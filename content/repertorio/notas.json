@@ -1,0 +1,70 @@
+[
+  {
+    "slug": "pirc",
+    "nome": "Defesa Pirc",
+    "lances": "1.e4 d6 (ou 1.e4 g6)",
+    "frequencia": "4,2% — a mais comum destas quatro. Espere encontrá-la umas duas vezes por torneio.",
+    "explicacao": [
+      "Ele não disputa o centro: joga d6 ou g6, põe o bispo em g7 apontando para a diagonal longa, e deixa você montar os dois peões no meio. A ideia dele é atacar esse centro depois, com c5 ou e5, quando as peças estiverem prontas.",
+      "Isso quer dizer que os primeiros lances são fáceis para você — e é justamente aí que mora a armadilha. O jogador que ganha centro de graça costuma achar que já ganhou, empurra os peões, e o bispo de g7 come a diagonal que ficou aberta."
+    ],
+    "faca": [
+      "Monte o centro grande: e4 e d4, os dois peões lado a lado.",
+      "Desenvolva antes de avançar: Nc3, Nf3, Be2 (ou Bc4) e o roque pequeno.",
+      "Só depois de rocado pense em e5 ou f4 — nunca antes.",
+      "Vigie a diagonal do bispo dele. Um peão em e5 sem apoio vira alvo."
+    ],
+    "cuidado": "Peão empurrado antes do roque não volta. Se você avançar e4-e5 com o rei no meio, o bispo de g7 e o cavalo dele passam a jogar sozinhos."
+  },
+  {
+    "slug": "nimzowitsch",
+    "nome": "Defesa Nimzowitsch",
+    "lances": "1.e4 Nc6",
+    "frequencia": "1,6% — talvez uma vez por torneio, e quase sempre de alguém que decorou a surpresa.",
+    "explicacao": [
+      "O cavalo em c6 tranca o próprio peão de c, que é o peão com que quase toda defesa contra 1.e4 disputa o centro. Ele abriu mão da ferramenta principal dele no primeiro lance.",
+      "Quem joga isto conta com a surpresa: espera que você pare para pensar e escolha um lance tímido. O lance certo é o mais natural do tabuleiro, e é bom por um motivo que se explica em uma linha."
+    ],
+    "faca": [
+      "Jogue 2.d4. Você fica com dois peões no centro e ele com nenhum.",
+      "Se ele responder 2…d5, troque em d5 e desenvolva com Nc3 ganhando tempo na dama.",
+      "Se ele responder 2…e5, jogue 3.d5 e o cavalo dele tem de voltar.",
+      "Depois é o de sempre: cavalos para fora, bispo, roque."
+    ],
+    "cuidado": "Não fique procurando refutação. A vantagem aqui é o centro, e ela se junta sozinha se você só desenvolver bem."
+  },
+  {
+    "slug": "alekhine",
+    "nome": "Defesa Alekhine",
+    "lances": "1.e4 Nf6",
+    "frequencia": "1,3% — a mais rara das que você vai ver de verdade.",
+    "explicacao": [
+      "Ele ataca o seu peão de e4 com o cavalo, sabendo que você vai empurrá-lo. E é isso que ele quer: cada peão que avança para caçar o cavalo é um peão que sai da defesa dos outros. A defesa inteira é uma provocação.",
+      "Contra ele o erro não é avançar — é continuar avançando. Um peão a mais no centro é vantagem; quatro peões avançados com as peças em casa é uma vantagem que desmorona no lance 12."
+    ],
+    "faca": [
+      "Avance uma vez: 2.e5, e o cavalo vai para d5.",
+      "Agora pare de empurrar. Jogue 3.d4 e desenvolva: Nf3, Be2, roque.",
+      "Deixe o cavalo dele em d5 em paz — ele não ameaça nada sozinho.",
+      "Só volte a avançar quando as peças estiverem fora e o rei rocado."
+    ],
+    "cuidado": "Depois de 2.e5 Nd5, o lance 3.c4 parece forte e é o começo de uma linha longa que ele conhece e você não. Prefira 3.d4."
+  },
+  {
+    "slug": "owen",
+    "nome": "Defesa Owen",
+    "lances": "1.e4 b6",
+    "frequencia": "menos de 1% — pode ser que você nunca a veja. Está aqui para você não travar se vier.",
+    "explicacao": [
+      "Ele vai pôr o bispo em b7, mirando a diagonal longa e o seu peão de e4. É o mesmo bispo do fianchetto da Pirc, só que sem o peão de g e sem o roque perto.",
+      "A diferença é que aqui ele demorou dois lances para desenvolver uma peça só, e não tocou no centro. Você tem tempo de sobra para montar tudo antes de o bispo dele virar problema."
+    ],
+    "faca": [
+      "Jogue 2.d4 e monte o centro grande.",
+      "Defenda o peão de e4 antes que o bispo chegue: Bd3 ou Nc3.",
+      "Desenvolva pelo caminho normal — Nf3, roque pequeno.",
+      "Com o centro montado e o rei seguro, o bispo dele em b7 fica olhando para uma parede."
+    ],
+    "cuidado": "Não deixe e4 pendurado achando que sobra tempo. O bispo em b7 ataca de longe, e um peão perdido no lance 4 vira uma partida difícil."
+  }
+]
