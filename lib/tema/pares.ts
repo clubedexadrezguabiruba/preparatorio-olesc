@@ -117,6 +117,7 @@ const MARCAS: { onde: string; token: string; piso: number }[] = [
   { onde: "pincel da peça pendurada", token: "pincel-pendurada", piso: AA_COMPONENTE },
   { onde: "pincel da peça defendida", token: "pincel-defendida", piso: AA_COMPONENTE },
   { onde: "pincel da seta do exemplo", token: "pincel-seta", piso: AA_COMPONENTE },
+  { onde: "selo de alternativa do repertório", token: "pincel-alternativa", piso: AA_COMPONENTE },
 ];
 
 const NAS_DUAS_CASAS: Par[] = MARCAS.flatMap(({ onde, token, piso }) => [
@@ -210,6 +211,44 @@ export const PARES: Par[] = [
     texto: "tinta-inversa",
     fundo: ["metodo-cheio-toque"],
     piso: AA_TEXTO,
+  },
+  // -------------------------------------------------------------------------
+  // O cartão de comando do treinador de repertório
+  //
+  // A tradução do cartão branco do Move Trainer para um tema claro é a
+  // **inversão**: lá ele é a única superfície branca de uma tela escura; aqui
+  // é a única escura de uma tela clara. É a mesma ideia — um lugar fixo, com a
+  // instrução, que o olho acha sem ler a página.
+  // -------------------------------------------------------------------------
+  {
+    onde: "cartão de comando do treino de repertório — as duas linhas de texto",
+    texto: "tinta-inversa",
+    fundo: ["tinta"],
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "borda de 2 px e ícone do cartão de comando — o tom do estado bom",
+    texto: "metodo-superficie",
+    fundo: ["tinta"],
+    piso: AA_COMPONENTE,
+  },
+  {
+    onde: "borda de 2 px e ícone do cartão de comando — o tom de aviso",
+    texto: "aviso-superficie",
+    fundo: ["tinta"],
+    piso: AA_COMPONENTE,
+  },
+  {
+    onde: "borda de 2 px e ícone do cartão de comando — o tom de erro",
+    texto: "erro-superficie",
+    fundo: ["tinta"],
+    piso: AA_COMPONENTE,
+  },
+  {
+    onde: "borda de 2 px e ícone do cartão de comando — o tom calmo, sem veredito",
+    texto: "tinta-muda",
+    fundo: ["tinta"],
+    piso: AA_COMPONENTE,
   },
   {
     onde: "botão neutro sob o ponteiro (`hover:bg-carta-toque`) — os mesmos dois",

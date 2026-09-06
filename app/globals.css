@@ -169,6 +169,17 @@
   --color-pincel-pendurada: oklch(22% 0.19 25);
   --color-pincel-seta: oklch(36% 0.16 250);
   --color-pincel-defendida: oklch(44% 0.15 152);
+
+  /* O quinto, e o único que não é da tática: o selo de **alternativa** do
+     treinador de repertório, que marca o lance que o autor deu por igualmente
+     bom. Ele entra pelo `yellow` do chessground, que é o pincel que sobrava.
+
+     Precisava existir porque os três vereditos do repertório são três, e não
+     dois: certo, alternativa e errado. Com dois pincéis, "também vale" sairia
+     verde como "certo" — e o aluno nunca aprenderia que a linha do clube é
+     outra — ou vermelho como "errado", que é pior ainda. É o mesmo aro de
+     `pendurada` e `defendida`, na claridade do meio, entre as duas. */
+  --color-pincel-alternativa: oklch(45% 0.135 75);
 }
 
 /* --------------------------------------------------------------------------

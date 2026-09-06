@@ -27,6 +27,8 @@ type LinhaDaTabela = {
   erros: number;
   aprendida_em: string | null;
   ultima_em: string | null;
+  degrau: number;
+  revisar_em: string | null;
 };
 
 /** O progresso por id de linha. Linha que o aluno nunca abriu não aparece. */
@@ -36,7 +38,9 @@ export async function progressoDoRepertorio(
   const supabase = await criarClienteServidor();
   let consulta = supabase
     .from("repertorio_progresso")
-    .select("linha, acertos_seguidos, tentativas, erros, aprendida_em, ultima_em");
+    .select(
+      "linha, acertos_seguidos, tentativas, erros, aprendida_em, ultima_em, degrau, revisar_em",
+    );
   if (aluno) consulta = consulta.eq("aluno", aluno);
 
   const { data } = await consulta;
@@ -49,6 +53,8 @@ export async function progressoDoRepertorio(
       erros: l.erros,
       aprendidaEm: l.aprendida_em,
       ultimaEm: l.ultima_em,
+      degrau: l.degrau,
+      revisarEm: l.revisar_em,
     });
   }
 

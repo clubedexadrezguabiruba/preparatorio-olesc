@@ -40,6 +40,10 @@ const PINCEIS = [
   { nome: "red", token: "--color-pincel-pendurada", opacity: 1, lineWidth: 14 },
   { nome: "blue", token: "--color-pincel-seta", opacity: 1, lineWidth: 10 },
   { nome: "paleRed", token: "--color-pincel-corte", opacity: 0.55, lineWidth: 15 },
+  // O selo de "alternativa" do treinador de repertório. Mesma espessura de
+  // `defendida`: os três selos do repertório são o mesmo aro, e o que os separa
+  // é a cor — quem precisa da espessura é o par vermelho/verde da tática.
+  { nome: "yellow", token: "--color-pincel-alternativa", opacity: 1, lineWidth: 9 },
 ] as const;
 
 function pinceis(host: HTMLElement): Partial<DrawBrushes> {

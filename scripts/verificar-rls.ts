@@ -26,7 +26,11 @@
  *      lance. O mesmo vale para `repertorio_progresso`, pelo mesmo motivo: o
  *      lance certo da linha está no JSON, e o servidor sabe conferi-lo — e,
  *      gravado pela chave de serviço, o progresso de um aluno **só é lido por
- *      ele**, senão o site diria a cada um quantas linhas a turma inteira sabe;
+ *      ele**, senão o site diria a cada um quantas linhas a turma inteira sabe.
+ *      Desde a 0005 há uma segunda coisa a proteger ali: a **data de revisão**.
+ *      Uma escada de repetição espaçada que o próprio aluno remarca não agenda
+ *      nada, e um `update` numa linha que já existe é o caso que o teste do
+ *      `insert` não alcançava;
  *   5. na tarefa de casa, ao contrário, o aluno **grava a dele** — e não
  *      consegue gravar no nome do outro, nem ler o que o outro marcou, nem
  *      desmarcar o que o outro fez.
@@ -157,7 +161,7 @@ try {
     .insert({ aluno: criados[0], puzzle_id: "00008", tema: "fork", acertou: true, tempo_ms: 1 });
   afirmar(Boolean(erroInsert), `o insert do aluno é recusado (${erroInsert?.code ?? "sem erro!"})`);
 
-  console.log("\n4b. No repertório o aluno também não grava — e só lê o dele");
+  console.log("\n4b. No repertório o aluno não grava, não adia a revisão, e só lê o dele");
   // A mesma decisão de `tentativas_puzzle`, e pelo mesmo motivo: o lance certo
   // da linha está no JSON, e o servidor sabe conferi-lo. Se o `upsert` fosse do
   // aluno, "aprendi as 42 linhas" seria uma chamada de rede a escrever.
@@ -180,10 +184,32 @@ try {
   // Agora a chave de serviço grava — que é o único caminho que existe — e a
   // pergunta passa a ser a da **leitura**: o progresso de um aluno é dele.
   // Sem isto, o site diria a cada aluno quantas linhas a turma inteira sabe.
-  await admin.from("repertorio_progresso").insert([
-    { aluno: criados[0], linha: "brancas-petroff-934fd6a6", acertos_seguidos: 3, tentativas: 3 },
-    { aluno: criados[1], linha: "pretas-colle-f0590dc0", acertos_seguidos: 1, tentativas: 1 },
+  const { error: erroAoSemear } = await admin.from("repertorio_progresso").insert([
+    {
+      aluno: criados[0],
+      linha: "brancas-petroff-934fd6a6",
+      acertos_seguidos: 3,
+      tentativas: 3,
+      degrau: 3,
+      revisar_em: "2026-09-13T03:00:00.000Z",
+    },
+    // As duas linhas nomeiam **as mesmas** colunas de propósito: num `insert`
+    // de várias linhas o PostgREST monta um conjunto único de colunas e manda
+    // `null` no que faltar numa delas — e `degrau` é `not null`. Omitir aqui
+    // não cai no `default`, cai no erro.
+    {
+      aluno: criados[1],
+      linha: "pretas-colle-f0590dc0",
+      acertos_seguidos: 1,
+      tentativas: 1,
+      degrau: 1,
+      revisar_em: "2026-09-07T03:00:00.000Z",
+    },
   ]);
+  // Sem isto, uma coluna que o PostgREST ainda não conhece derruba as três
+  // afirmações abaixo sem dizer por quê — foi o que aconteceu na primeira
+  // execução depois da 0005, com o cache de schema ainda velho.
+  afirmar(!erroAoSemear, `a chave de serviço semeou as duas linhas (${erroAoSemear?.message ?? "sem erro"})`);
 
   const { data: repertorioDeA } = await alunoA
     .from("repertorio_progresso")
@@ -192,6 +218,27 @@ try {
   afirmar(
     repertorioDeA?.[0]?.linha === "brancas-petroff-934fd6a6",
     "e a linha que A vê é a de A",
+  );
+
+  // A escada da revisão é agenda, e agenda que o próprio aluno remarca não
+  // agenda nada. Com a linha **já existindo** — o caso que o `insert` acima não
+  // cobria —, um `update` do aluno teria alvo para alcançar: sem política de
+  // `update`, a RLS o faz sumir calado. A prova é contar do outro lado.
+  await alunoA
+    .from("repertorio_progresso")
+    .update({ revisar_em: "2030-01-01T00:00:00.000Z", degrau: 5 })
+    .eq("aluno", criados[0])
+    .eq("linha", "brancas-petroff-934fd6a6");
+
+  const { data: aindaDeA } = await admin
+    .from("repertorio_progresso")
+    .select("degrau, revisar_em")
+    .eq("aluno", criados[0])
+    .eq("linha", "brancas-petroff-934fd6a6")
+    .maybeSingle();
+  afirmar(
+    aindaDeA?.degrau === 3 && Date.parse(aindaDeA?.revisar_em ?? "") === Date.parse("2026-09-13T03:00:00.000Z"),
+    `A não adiou a própria revisão (degrau ${aindaDeA?.degrau}, revisar_em ${aindaDeA?.revisar_em})`,
   );
 
   console.log("\n5. Na tarefa de casa, o aluno grava — a sua, e só a sua");

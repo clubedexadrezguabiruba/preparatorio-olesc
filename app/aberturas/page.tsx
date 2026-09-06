@@ -6,7 +6,7 @@ import { lerIndice } from "@/lib/repertorio/banco";
 import { notas } from "@/lib/repertorio/conteudo";
 import { CORES, type Cor } from "@/lib/repertorio/linhas";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
-import { aprendidasDaAbertura } from "@/lib/repertorio/treino";
+import { aprendidasDaAbertura, aRevisarNaAbertura } from "@/lib/repertorio/treino";
 
 export const metadata: Metadata = { title: "Aberturas — Preparatório OLESC" };
 
@@ -25,7 +25,12 @@ const RESUMO: Record<Cor, string> = {
  *
  * **A barra conta linhas aprendidas, não linhas tentadas.** É a diferença entre
  * "abri" e "sei": a tática mede tentativas porque um puzzle tentado é um puzzle
- * pensado, e aqui o exercício é decorar — três acertos seguidos, e errar zera.
+ * pensado, e aqui o exercício é decorar — três degraus da escada de revisão, em
+ * três dias distintos, e errar derruba.
+ *
+ * **O que a barra não mede é o trabalho de hoje.** Com repetição espaçada, um
+ * repertório inteiro aprendido ainda tem linhas vencendo — por isso "a revisar
+ * hoje" vai ao lado dela, e é a única coisa desta tela que muda de cor.
  *
  * A contagem sai do `index.json` mais o mapa de progresso filtrado pelo
  * prefixo do id, e não da leitura dos doze arquivos: desenhar doze barrinhas
@@ -35,8 +40,13 @@ export default async function Aberturas() {
   await perfilAtual();
   const [indice, progresso] = await Promise.all([lerIndice(), progressoDoRepertorio()]);
 
+  const agora = new Date().toISOString();
   const aprendidas = indice.reduce(
     (soma, e) => soma + aprendidasDaAbertura(progresso, e.cor, e.abertura),
+    0,
+  );
+  const aRevisar = indice.reduce(
+    (soma, e) => soma + aRevisarNaAbertura(progresso, e.cor, e.abertura, agora),
     0,
   );
   const total = indice.reduce((soma, e) => soma + e.linhas, 0);
@@ -50,11 +60,19 @@ export default async function Aberturas() {
         <h1 className="titulo text-tinta">Repertório do clube</h1>
         <p className="text-sm text-tinta-media">
           {total} linhas curtas, até o lance 8. Uma linha é aprendida quando você a acerta{" "}
-          <strong className="font-semibold text-tinta">três vezes seguidas</strong> — errar
-          zera a conta.
+          <strong className="font-semibold text-tinta">em três dias diferentes</strong> — e
+          depois ela volta de vez em quando, para você não esquecer.
         </p>
         <p className="text-sm text-tinta-fraca tabular-nums">
           {aprendidas} de {total} aprendidas
+          {aRevisar > 0 ? (
+            <>
+              {" · "}
+              <strong className="font-semibold text-aviso-tinta">
+                {aRevisar} a revisar hoje
+              </strong>
+            </>
+          ) : null}
         </p>
       </header>
 
@@ -72,7 +90,8 @@ export default async function Aberturas() {
             <ul className="flex flex-col gap-2">
               {daCor.map((abertura) => {
                 const feitas = aprendidasDaAbertura(progresso, cor, abertura.abertura);
-                const completa = feitas >= abertura.linhas;
+                const vencendo = aRevisarNaAbertura(progresso, cor, abertura.abertura, agora);
+                const completa = feitas >= abertura.linhas && vencendo === 0;
 
                 return (
                   <li key={`${cor}/${abertura.abertura}`}>
@@ -93,8 +112,16 @@ export default async function Aberturas() {
                           {feitas}
                           <span className="text-tinta-muda">/{abertura.linhas}</span>
                         </span>
-                        <span className="text-xs text-tinta-fraca">
-                          {completa ? "aprendida" : abertura.linhas === 1 ? "1 linha" : "linhas"}
+                        <span
+                          className={`text-xs ${vencendo > 0 ? "text-aviso-tinta" : "text-tinta-fraca"}`}
+                        >
+                          {vencendo > 0
+                            ? `${vencendo} a revisar`
+                            : completa
+                              ? "em dia"
+                              : abertura.linhas === 1
+                                ? "1 linha"
+                                : "linhas"}
                         </span>
                       </div>
                     </Link>
@@ -140,8 +167,9 @@ export default async function Aberturas() {
       </section>
 
       <p className="text-xs text-tinta-muda">
-        As linhas vêm dos cursos do clube e do motor, e cada uma diz de onde veio. Se você
-        esquecer no meio, o site mostra a linha de novo antes de cobrar.
+        As linhas vêm dos cursos do clube e do motor, e cada uma diz de onde veio. Na
+        primeira vez, o site joga a linha com você e desenha a seta; depois cobra de
+        memória, e o botão &ldquo;Dica&rdquo; acende a peça quando você travar.
       </p>
     </main>
   );

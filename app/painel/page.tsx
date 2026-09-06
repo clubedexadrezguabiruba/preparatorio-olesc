@@ -12,7 +12,7 @@ import {
 } from "@/lib/curso/calendario";
 import { lerIndice } from "@/lib/repertorio/banco";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
-import { aprendidasDaAbertura } from "@/lib/repertorio/treino";
+import { aprendidasDaAbertura, aRevisarNaAbertura } from "@/lib/repertorio/treino";
 import { TAREFAS } from "@/lib/tarefas/conteudo";
 import { estadoDasTarefas } from "@/lib/tarefas/estado";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
@@ -57,6 +57,11 @@ export default async function Painel() {
   const linhasDoRepertorio = indice.reduce((soma, e) => soma + e.linhas, 0);
   const linhasAprendidas = indice.reduce(
     (soma, e) => soma + aprendidasDaAbertura(repertorio, e.cor, e.abertura),
+    0,
+  );
+  const agoraNoRepertorio = new Date().toISOString();
+  const linhasARevisar = indice.reduce(
+    (soma, e) => soma + aRevisarNaAbertura(repertorio, e.cor, e.abertura, agoraNoRepertorio),
     0,
   );
 
@@ -189,9 +194,15 @@ export default async function Painel() {
        * O repertório
        *
        * Irmã da seção de tática, e com a mesma forma — mas a barra mede outra
-       * coisa: aqui conta **linha aprendida**, três acertos seguidos, e não
-       * linha tentada. Na tática um puzzle tentado é um puzzle pensado; aqui o
-       * exercício é decorar, e "abri a linha" não quer dizer nada.
+       * coisa: aqui conta **linha aprendida**, três degraus da escada de
+       * revisão, e não linha tentada. Na tática um puzzle tentado é um puzzle
+       * pensado; aqui o exercício é decorar, e "abri a linha" não quer dizer
+       * nada.
+       *
+       * O que a barra **não** mostra é o trabalho do dia: com repetição
+       * espaçada, um repertório inteiro aprendido ainda tem linhas vencendo.
+       * Por isso a contagem de "a revisar hoje" vai ao lado, e é ela que muda
+       * de cor — é a única parte desta seção que pede uma ação agora.
        * ----------------------------------------------------------------- */}
       <section className="flex flex-col gap-3">
         <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
@@ -209,6 +220,11 @@ export default async function Painel() {
             <p className="text-sm font-medium text-tinta">
               {aberturas} aberturas, de brancas e de pretas
             </p>
+            {linhasARevisar > 0 ? (
+              <p className="text-xs font-semibold text-aviso-tinta tabular-nums">
+                {linhasARevisar} {linhasARevisar === 1 ? "linha" : "linhas"} a revisar hoje
+              </p>
+            ) : null}
             <Barra
               feitos={linhasAprendidas}
               de={linhasDoRepertorio}

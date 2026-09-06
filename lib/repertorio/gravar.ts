@@ -55,6 +55,14 @@ const UCI = /^[a-h][1-8][a-h][1-8][qrbn]?$/;
  * O que se paga: duas abas do mesmo aluno terminando a mesma linha no mesmo
  * segundo perdem **um** incremento. É o pior caso, e ele custa uma repetição a
  * mais numa linha que o aluno acabou de acertar duas vezes.
+ *
+ * ## A dica pedida antes do erro chega aqui como lista curta
+ *
+ * O cliente manda os lances até o ponto em que a dica foi pedida, e não um
+ * "pedi ajuda". `conferirLinha` reprova lista curta por conta própria — parar
+ * no meio não é acertar a linha —, então o custo da dica não precisou de uma
+ * linha de código deste lado. É a mesma disciplina do resto do arquivo: o
+ * servidor julga lances, e nada mais.
  */
 export async function gravarTreino(aluno: string, treino: Treino): Promise<Resultado> {
   const { cor, abertura, linhaId, lances } = treino;
@@ -78,7 +86,7 @@ export async function gravarTreino(aluno: string, treino: Treino): Promise<Resul
   const admin = criarClienteAdmin();
   const { data: atual, error: erroAoLer } = await admin
     .from("repertorio_progresso")
-    .select("acertos_seguidos, tentativas, erros, aprendida_em, ultima_em")
+    .select("acertos_seguidos, tentativas, erros, aprendida_em, ultima_em, degrau, revisar_em")
     .eq("aluno", aluno)
     .eq("linha", linha.id)
     .maybeSingle();
@@ -92,6 +100,8 @@ export async function gravarTreino(aluno: string, treino: Treino): Promise<Resul
         erros: atual.erros,
         aprendidaEm: atual.aprendida_em,
         ultimaEm: atual.ultima_em,
+        degrau: atual.degrau,
+        revisarEm: atual.revisar_em,
       }
     : zerado();
 
@@ -106,6 +116,8 @@ export async function gravarTreino(aluno: string, treino: Treino): Promise<Resul
       erros: progresso.erros,
       aprendida_em: progresso.aprendidaEm,
       ultima_em: progresso.ultimaEm,
+      degrau: progresso.degrau,
+      revisar_em: progresso.revisarEm,
     },
     { onConflict: "aluno,linha" },
   );

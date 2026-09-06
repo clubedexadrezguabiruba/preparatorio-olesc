@@ -3,9 +3,16 @@
 Documento de decisão. Quem for escrever os PGN abre este arquivo e sabe **o que
 responder, com que fonte, e quantas linhas cabem**. Escrito em 5/9/2026.
 
-Público: **12 alunos, 8 a 15 anos, força ~1000–1400**. Critério que vale para
-tudo: *poucas ideias, mesma estrutura em várias aberturas, linhas curtas,
-armadilhas conhecidas.*
+Público: **12 alunos, 12 a 15 anos, força ~700–1700** (rápidas, chess.com).
+Critério que vale para tudo: *poucas ideias, mesma estrutura em várias
+aberturas, linhas curtas, armadilhas conhecidas.*
+
+**A faixa foi corrigida em 6/9/2026**, e ela era o eixo de duas decisões deste
+documento. O recorte de *quais linhas existem* — a tabela da §6 e o corte dos
+80 % da §4 — foi medido em **1000–1400**, que é a faixa que estava escrita aqui
+antes. Alargar para 700–1700 muda as frequências, e por isso o ⚠13 da §8 existe.
+A idade também muda o tom dos comentários: a §5 dizia "português de criança de
+10 anos", e o aluno mais novo tem 12.
 
 - O que existe hoje: a ferramenta (`lib/repertorio/`, `scripts/`) e **20
   rascunhos** importados dos cursos em `content/repertorio/rascunhos/`.
@@ -321,7 +328,11 @@ comentários do B6, e a §9 conta o preço.
   importação.
 - O rascunho é revisado à mão e vira `content/repertorio/<cor>-<abertura>.pgn`.
   Quem escreve o comentário lê o **argumento** no gêmeo anotado e o reescreve em
-  português de criança de 10 anos; copiar a frase do autor é que não pode.
+  **português de adolescente de 12 anos** — frase curta, sem jargão de adulto e
+  sem falar com o aluno como se ele tivesse 8; copiar a frase do autor é que não
+  pode. (Era "criança de 10 anos" até 6/9/2026, quando o público foi corrigido
+  para 12–15. Os 110 comentários que já estão escritos **não** foram revistos
+  sob a régua nova: é tarefa de conteúdo, e está no ⚠14 da §8.)
   `npm run repertorio:compilar` transforma isso em `public/repertorio/*.json`, e
   `npm run repertorio:fidelidade` diz onde a fonte fala e nós estamos calados.
 
@@ -446,7 +457,13 @@ Doze pontos em que a fonte não responde e alguém tem de escrever a linha por
 livro + motor. Em ordem de quanto o aluno vai encontrar. **Dez fecharam** — os
 quatro das brancas no B3; no B4 o Bowdler, o Dragão, a Londres, o Colle e o
 Manhattan `4.Bf4`; e no B5 o 12, que virou página de princípios em vez de
-linha. Sobram **dois**, e nenhum deles é linha do Base.
+linha. Sobram **dois** dos doze, e nenhum deles é linha do Base.
+
+Em 6/9/2026 entraram **dois novos**, e eles não são buraco de fonte: são
+consequência da correção do público no alto deste documento. O 13 é o que
+custa mais — ele pode mudar *quais* linhas existem, e o id de uma linha é o
+hash dos lances, então mexer nelas órfã o progresso de quem já treinou. Por
+isso ele é a tarefa logo depois do treinador, e não depois do Avançado.
 
 | # | ⚠ | Frequência | §|
 |---|---|---|---|
@@ -462,6 +479,8 @@ linha. Sobram **dois**, e nenhum deles é linha do Base.
 | ~~10~~ | ~~Manhattan `4.Bf4`~~ — **fora do Base pelo corte** (5ª resposta da posição); vai para o Avançado | 6,9 % de 3.Nc3 Nf6 | — |
 | **11** | **Maroczy — recortar só a sub-árvore do `6.e4`** | Avançado | 2.4 |
 | ~~12~~ | ~~Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios~~ — **fechado no B5**, em `/aberturas/notas/` | < 4,2 % cada | 2.10 |
+| **13** | **O recorte de frequência foi medido na faixa errada** — a §6 e o corte dos 80 % da §4 saíram do explorer em **1000–1400**; o público é **700–1700**. Refazer o explorer na faixa nova e comparar linha a linha. | todo o Base | 4, 6 |
+| **14** | **O tom dos 110 comentários** — foram escritos para "criança de 10 anos"; o aluno mais novo tem 12. Reler sob a régua nova da §5. | todo o Base | 5 |
 
 Os itens 1 a 5 eram o caminho crítico: sozinhos, são o que os alunos mais vão
 encontrar e o que nenhuma fonte do Doug responde. Todos fecharam.
@@ -487,16 +506,18 @@ npm run repertorio:motor -- "1.e4 c5 2.Bc4 Cc6"   # as 5 melhores da posição
 npm run repertorio:motor -- --pontas              # avalia a ponta de cada linha
 npm run repertorio:fidelidade   # onde a fonte fala numa posição nossa, e o que dizemos ali
 npm run repertorio:fidelidade -- --pares         # a folha: fonte e nosso, lado a lado
-npm run db:migrar               # aplica 0004_repertorio.sql
-npm run db:rls                  # prova que o aluno não grava progresso
-npm test                        # 255 testes, 108 deles do repertório
+npm run db:migrar               # aplica as migrations, 0005_repertorio_revisao.sql inclusive
+npm run db:rls                  # prova que o aluno não grava progresso nem adia a revisão
+npm test                        # 292 testes, 145 deles do repertório
 ```
 
 Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variações),
 `arvore.ts` (árvore → linhas), `linhas.ts` (schema e regras), `explorer.ts`,
 `motor.ts` (leitura de lances e apresentação, sem processo), e os quatro do
-treinador — `treino.ts` (o juiz e a ordem), `banco.ts`, `progresso.ts`,
-`gravar.ts`. O texto das quatro aberturas raras: `notas.ts` (schema) e
+treinador — `treino.ts` (o juiz, a escada e a ordem), `banco.ts`, `progresso.ts`,
+`gravar.ts`, mais `passada.ts` — o redutor puro de uma passada pela linha, que
+tirou a máquina de estado de dentro do componente. O texto das quatro aberturas
+raras: `notas.ts` (schema) e
 `conteudo.ts` (leitura conferida na importação).
 
 **42 linhas** compiladas para `public/repertorio/`, em 12 arquivos: as 22 das
@@ -508,16 +529,75 @@ brancas e as 20 das pretas. **O Base está completo dos dois lados.**
 aprendidas; `/aberturas/[cor]/[abertura]` é onde se treina. A rota tem `[cor]`
 antes de `[abertura]` porque o slug pode repetir entre as duas.
 
-**Como uma linha é aprendida.** Três passadas inteiras sem erro, seguidas; errar
-zera a conta. O **primeiro erro** decide a passada na hora — grava, e a linha
-continua na tela com dicas: dois erros acendem a casa, três desenham a seta. A
-data de quando aprendeu **nunca volta a nulo**: errar depois vira revisão, não
-recomeço.
+**Uma sessão são duas fases, na mesma tela.** Na primeira vez em cada linha
+(`tentativas = 0`) o aluno entra na **passada assistida**: o cartão diz o lance
+por extenso, a seta do lance certo fica desenhada, e o aluno **executa**. Outro
+lance não conta — a peça volta e o cartão repete "siga a seta". Onde há
+comentário do professor a passada **trava** até o aluno continuar, inclusive nos
+comentários que caem em lance do adversário. No fim, sem prêmio sonoro e sem
+"muito bom", o botão "Começar o quiz" emenda a **segunda fase**: a mesma linha,
+de memória, sem seta e sem o nome do lance. Nada da fase assistida sobe ao
+servidor.
 
-**Na primeira vez em cada linha o site mostra antes de cobrar** — tabuleiro só
-de olhar, botão "Próximo" (ou a tecla →), e o comentário do professor onde
-existe. Cobrar de cara uma linha que o aluno nunca viu não é treino, é
-adivinhação. O botão "Ver a linha" continua disponível depois, e não grava nada.
+**Como uma linha é aprendida: a escada.** `DEGRAUS_EM_DIAS = [0, 1, 3, 7, 14,
+30]`, e o degrau é o índice. A linha entra no degrau 1 na **primeira passada
+limpa**; dali em diante só sobe quando é acertada **vencida** — a data de
+revisão já passou. O degrau **3 é "aprendida"**, e ele só se alcança em três
+dias diferentes e espaçados, que é o que "três acertos seguidos" queria dizer e
+não dizia. Acerto adiantado ("Jogar de novo" na mesma tarde) soma tentativa e
+acertos seguidos, mas não sobe nem empurra a data. Errar **antes** do degrau 3
+volta ao 0; errar **depois** desce dois degraus, com piso no 1 — um só era
+pouco, e zerar apagaria um mês por um dedo errado no celular. A data de quando
+aprendeu **nunca volta a nulo**: errar depois vira revisão, não recomeço.
+
+**O primeiro erro decide a passada na hora** — grava, e os acertos seguidos
+voltam a zero. O que mudou é que a linha **vai até o fim** mesmo assim: a peça
+volta, a linha do clube entra no lugar e o aluno vê os lances que faltavam. No
+fim, um **boletim lance a lance** — um selo por lance nosso, verde ou vermelho,
+com a acurácia ao lado. O boletim é do cliente e não é gravado: o que o servidor
+grava continua sendo o veredito do primeiro erro.
+
+**A dica é pedida, e antes do primeiro erro ela custa.** Botão "Dica" no quiz,
+um nível só: acende a casa de origem, sem seta e sem escalonar. Pedida **antes**
+de qualquer erro, ela decide a passada — os lances até ali sobem ao servidor,
+`conferirLinha` reprova a lista curta, e a passada fica gravada como treino sem
+acerto. Depois do primeiro erro é de graça, porque a passada já foi decidida.
+
+### As quatro revogações de 6/9/2026
+
+Este documento é de decisão, e mudança de ideia sem registro é o que ele existe
+para impedir. Quatro coisas que ele afirmava deixaram de valer:
+
+1. **"Na primeira vez o site mostra antes de cobrar", com o tabuleiro só de
+   olhar.** Revogado. Assistir não é treinar: o aluno via a linha andar sozinha
+   e chegava ao quiz sem ter movido uma peça. A primeira vez agora é **jogar com
+   a seta na tela** — o mesmo conteúdo, com a mão dentro. O botão "Ver a linha"
+   virou **"Jogar com a seta"**: a saída de emergência continua existindo, para o
+   aluno que esqueceu a linha inteira e para quem a dica de uma casa não basta,
+   mas ela também é jogada, e continua sem gravar nada.
+2. **"Dois erros acendem a casa, três desenham a seta."** Revogado. A escada
+   automática de dicas foi escrita para um aluno de 10 anos que "não deduz isso
+   sozinho"; o público é de 12 a 15. E, com a escada de revisão, dica de graça
+   virou buraco: fechar a linha apertando Dica a cada lance produziria uma
+   passada limpa que o servidor não teria como distinguir, porque ele só vê
+   lances. A dica passa a ser pedida, e a primeira custa a passada.
+3. **A ordem de `proximaLinha`.** Era: nunca vistas, depois as mais longe dos
+   três acertos, depois a revisão mais antiga. Com revisão agendada, isso
+   quebra dos dois lados — nunca-vista sempre primeiro e as revisões nunca
+   acontecem; vencida sempre primeiro e o aluno nunca chega à linha 30. Agora
+   ela **alterna**, sem estado de sessão: se a última linha treinada era uma
+   revisão, a próxima é nunca-vista; senão, é a vencida mais vencida. E a linha
+   que acabou de ser treinada não volta na chamada seguinte, que é o que impede
+   o loop de errar-e-repetir a mesma linha.
+4. **"Abertura aprendida" querendo dizer "nada a fazer".** Revogado. Com a
+   escada, uma abertura inteira aprendida ainda tem linhas vencendo. O cartão só
+   aparece quando não há **nenhuma** vencida.
+
+E uma coisa que **não** mudou, apesar de o Move Trainer fazer diferente: a
+gravação continua sendo **uma por linha**, e não uma por lance. Lá são oito
+`POST` por sessão; aqui o primeiro erro decide a passada na hora e é isso que
+protege a verdade gravada contra a aba fechada no meio. A referência medida está
+em [REFERENCIA-MOVE-TRAINER.md](REFERENCIA-MOVE-TRAINER.md).
 
 **Os comentários, depois do B6.** Os 12 PGN foram acentuados — 427 trocas, entre
 elas `nós` por `nos` no sujeito e `é` por `e`, que a lista original não previa —
@@ -638,10 +718,14 @@ não têm fonte por definição. Nesses casos o comentário é nosso, e a tag
 
 **Nada disso foi revisado por professor de xadrez.**
 
-**Quem escolhe a linha é o servidor** (`proximaLinha`): nunca vistas na ordem do
-PGN — que é a ordem pedagógica, o tronco primeiro —, depois as que estão mais
-longe dos três acertos, depois a revisão mais antiga. A lista fica na tela para
-o aluno trocar.
+**Quem escolhe a linha é o servidor** (`proximaLinha`), e ele **alterna** entre
+revisar e avançar: se a última linha treinada era uma revisão, a próxima é uma
+nunca-vista, na ordem do PGN — que é a ordem pedagógica, o tronco primeiro;
+senão, é a vencida há mais tempo. Sem nenhuma vencida, valem os três grupos
+antigos: nunca-vista, depois a mais longe do degrau 3, depois a revisão mais
+antiga. A linha que acabou de ser treinada nunca é a próxima, e é isso que
+impede o loop de errar e receber a mesma linha de volta. A lista fica na tela
+para o aluno trocar.
 
 **Quem julga é o servidor, sempre.** O navegador manda os lances jogados, nunca
 um "acertei", e `lib/repertorio/gravar.ts` reconfere contra o JSON com a mesma

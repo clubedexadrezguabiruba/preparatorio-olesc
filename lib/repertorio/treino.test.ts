@@ -5,13 +5,22 @@ import {
   ACERTOS_PARA_APRENDER,
   aprendida,
   aprendidasDaAbertura,
+  aRevisarNaAbertura,
   conferirLinha,
+  DEGRAU_APRENDIDA,
+  DEGRAU_MAXIMO,
+  DEGRAUS_EM_DIAS,
   depoisDoTreino,
+  diasAteRevisar,
   lanceCerto,
   proximaLinha,
   resumo,
+  sanEmPortugues,
   semQuebras,
   todasAprendidas,
+  vencida,
+  vencidas,
+  QUEDA_POR_ERRO,
   vereditoDoLance,
   zerado,
   type ProgressoDaLinha,
@@ -146,6 +155,22 @@ const T2 = "2026-09-05T11:00:00.000Z";
 const T3 = "2026-09-05T12:00:00.000Z";
 const T4 = "2026-09-06T09:00:00.000Z";
 
+/** Dias distintos, para subir a escada: cada um vence o agendamento anterior. */
+const DIA_1 = "2026-09-05T14:00:00.000Z";
+const DIA_2 = "2026-09-07T14:00:00.000Z";
+const DIA_3 = "2026-09-12T14:00:00.000Z";
+const DIA_4 = "2026-09-25T14:00:00.000Z";
+const DIA_5 = "2026-10-20T14:00:00.000Z";
+
+/** Uma linha subida até o degrau pedido, em dias distintos e vencidos. */
+function naEscada(ate: number): ProgressoDaLinha {
+  const dias = [DIA_1, DIA_2, DIA_3, DIA_4, DIA_5];
+  let p = zerado();
+  for (let d = 0; d < ate; d++) p = depoisDoTreino(p, true, dias[d]);
+  assert.equal(p.degrau, ate, `a montagem do teste devia parar no degrau ${ate}`);
+  return p;
+}
+
 test("acertar soma; errar zera os seguidos e soma um erro", () => {
   let p = depoisDoTreino(zerado(), true, T1);
   assert.deepEqual(p, {
@@ -154,6 +179,8 @@ test("acertar soma; errar zera os seguidos e soma um erro", () => {
     erros: 0,
     aprendidaEm: null,
     ultimaEm: T1,
+    degrau: 1,
+    revisarEm: "2026-09-06T03:00:00.000Z",
   });
 
   p = depoisDoTreino(p, false, T2);
@@ -163,18 +190,29 @@ test("acertar soma; errar zera os seguidos e soma um erro", () => {
   assert.equal(p.ultimaEm, T2);
 });
 
-test("o terceiro acerto seguido marca `aprendidaEm`, e o erro seguinte não a desmarca", () => {
+test("três acertos na mesma tarde **não** aprendem a linha", () => {
+  // É a mentira que a escada consertou. Antes de 6/9/2026 isto marcava
+  // `aprendidaEm` na terceira passada — com a posição ainda na retina do aluno.
   let p = zerado();
-  for (const t of [T1, T2]) p = depoisDoTreino(p, true, t);
-  assert.equal(aprendida(p), false, `${ACERTOS_PARA_APRENDER - 1} acertos ainda não é aprendida`);
+  for (const t of [T1, T2, T3]) p = depoisDoTreino(p, true, t);
+  assert.equal(p.acertosSeguidos, 3, "os acertos seguidos contam as três");
+  assert.equal(p.degrau, 1, "e a escada não saiu do primeiro degrau");
+  assert.equal(aprendida(p), false);
+});
 
-  p = depoisDoTreino(p, true, T3);
-  assert.equal(p.aprendidaEm, T3);
+test("o terceiro degrau marca `aprendidaEm`, e o erro seguinte não a desmarca", () => {
+  let p = naEscada(DEGRAU_APRENDIDA - 1);
+  assert.equal(aprendida(p), false, `o degrau ${DEGRAU_APRENDIDA - 1} ainda não é aprendida`);
+
+  p = depoisDoTreino(p, true, DIA_3);
+  assert.equal(p.degrau, DEGRAU_APRENDIDA);
+  assert.equal(p.aprendidaEm, DIA_3);
+  assert.equal(p.acertosSeguidos, ACERTOS_PARA_APRENDER);
 
   // A regra que a tela depende: errar depois vira revisão, não recomeço.
-  p = depoisDoTreino(p, false, T4);
+  p = depoisDoTreino(p, false, DIA_4);
   assert.equal(p.acertosSeguidos, 0);
-  assert.equal(p.aprendidaEm, T3, "a data de quando aprendeu não volta a nulo");
+  assert.equal(p.aprendidaEm, DIA_3, "a data de quando aprendeu não volta a nulo");
   assert.equal(aprendida(p), true);
 });
 
@@ -260,7 +298,7 @@ test("o resumo conta as aprendidas, não as tentadas", () => {
     [a.id]: { tentativas: 9, acertosSeguidos: 2, ultimaEm: T1 },
     [b.id]: { tentativas: 3, acertosSeguidos: 3, aprendidaEm: T2, ultimaEm: T2 },
   });
-  assert.deepEqual(resumo([a, b, c], progresso), { aprendidas: 1, total: 3 });
+  assert.deepEqual(resumo([a, b, c], progresso, T3), { aprendidas: 1, total: 3, aRevisar: 0 });
 });
 
 test("a contagem por abertura filtra pelo prefixo do id, com a cor dentro", () => {
@@ -286,4 +324,248 @@ test("as quebras do PGN saem, e as palavras não se colam", () => {
   assert.equal(semQuebras("Dobramos o peao\nem c3 de proposito."), "Dobramos o peao em c3 de proposito.");
   assert.equal(semQuebras("  uma linha só  "), "uma linha só");
   assert.equal(semQuebras("a\n\nb"), "a b");
+});
+
+/* ------------------------------------------------------------------ *
+ * A escada da revisão
+ * ------------------------------------------------------------------ */
+
+test("a linha entra na escada na primeira passada limpa e vence no dia seguinte", () => {
+  const p = depoisDoTreino(zerado(), true, T1);
+  assert.equal(p.degrau, 1, "a primeira passada limpa põe a linha no degrau 1");
+  assert.equal(p.revisarEm, "2026-09-06T03:00:00.000Z", "e ela vence amanhã, meia-noite no Brasil");
+  assert.equal(vencida(p, T2), false, "hoje ainda não venceu");
+  assert.equal(vencida(p, "2026-09-06T12:00:00.000Z"), true, "amanhã venceu");
+});
+
+test("só sobe quem acerta uma linha vencida: 1 → 2 → 3 em três dias", () => {
+  let p = depoisDoTreino(zerado(), true, DIA_1);
+  assert.equal(p.degrau, 1);
+  assert.equal(diasAteRevisar(p, DIA_1), 1, "vence amanhã");
+
+  p = depoisDoTreino(p, true, DIA_2);
+  assert.equal(p.degrau, 2);
+  assert.equal(diasAteRevisar(p, DIA_2), DEGRAUS_EM_DIAS[2]);
+
+  p = depoisDoTreino(p, true, DIA_3);
+  assert.equal(p.degrau, DEGRAU_APRENDIDA);
+  assert.equal(diasAteRevisar(p, DIA_3), DEGRAUS_EM_DIAS[3]);
+});
+
+test("acerto adiantado soma tentativa e não empurra a data", () => {
+  // O "Jogar de novo" oito vezes numa tarde. É o buraco que faria a escada
+  // valer nada: sem esta regra, o aluno fecha o mês de intervalo antes do
+  // jantar.
+  const p = depoisDoTreino(zerado(), true, DIA_1);
+  let q = p;
+  for (let i = 0; i < 8; i++) q = depoisDoTreino(q, true, DIA_1);
+
+  assert.equal(q.tentativas, 9);
+  assert.equal(q.acertosSeguidos, 9);
+  assert.equal(q.degrau, p.degrau, "o degrau não se mexeu");
+  assert.equal(q.revisarEm, p.revisarEm, "e a data também não");
+});
+
+test("no teto a data anda e o número fica", () => {
+  let p = naEscada(DEGRAU_MAXIMO);
+  const antes = p.revisarEm;
+  const bemDepois = "2027-01-10T14:00:00.000Z";
+
+  assert.equal(vencida(p, bemDepois), true);
+  p = depoisDoTreino(p, true, bemDepois);
+  assert.equal(p.degrau, DEGRAU_MAXIMO, "o teto não sobe");
+  assert.notEqual(p.revisarEm, antes, "mas a linha é reagendada");
+  assert.equal(diasAteRevisar(p, bemDepois), DEGRAUS_EM_DIAS[DEGRAU_MAXIMO]);
+});
+
+test("errar antes de aprendida volta ao degrau 0, e a linha sai da escada", () => {
+  let p = naEscada(2);
+  p = depoisDoTreino(p, false, DIA_3);
+  assert.equal(p.degrau, 0);
+  assert.equal(p.revisarEm, null);
+  assert.equal(vencida(p, DIA_5), false, "fora da escada não vence nunca");
+});
+
+test("errar depois de aprendida desce dois, com piso no 1, e a data segue junto", () => {
+  // 30 → 7, 14 → 3, 7 → 1. Um só era pouco; zerar apagaria um mês de intervalo
+  // por um dedo errado no celular.
+  const quedas: [number, number][] = [
+    [DEGRAU_MAXIMO, DEGRAU_MAXIMO - QUEDA_POR_ERRO],
+    [4, 2],
+    [3, 1],
+  ];
+  for (const [de, para] of quedas) {
+    const antes = naEscada(de);
+    const depois = depoisDoTreino(antes, false, DIA_5);
+    assert.equal(depois.degrau, para, `o degrau ${de} devia cair para ${para}`);
+    assert.equal(
+      diasAteRevisar(depois, DIA_5),
+      DEGRAUS_EM_DIAS[para],
+      "a data segue o degrau também para baixo",
+    );
+    assert.equal(depois.aprendidaEm, antes.aprendidaEm, "errar não apaga a data de aprendida");
+  }
+});
+
+test("a linha errada não volta a vencer no mesmo dia", () => {
+  // O outro lado do anti-loop: mesmo caindo para um degrau de um dia, a data
+  // mínima é a meia-noite seguinte no Brasil.
+  const p = depoisDoTreino(naEscada(DEGRAU_APRENDIDA), false, DIA_5);
+  assert.equal(vencida(p, DIA_5), false);
+  assert.equal(vencida(p, "2026-10-21T14:00:00.000Z"), true);
+});
+
+test("`vencida` lê `+00:00` do Postgres e `Z` do TypeScript como o mesmo instante", () => {
+  // O bug que um `localeCompare` teria: as duas strings são o mesmo momento e
+  // são diferentes byte a byte.
+  const doBanco: ProgressoDaLinha = {
+    ...zerado(),
+    degrau: 1,
+    revisarEm: "2026-09-06T03:00:00+00:00",
+  };
+  const doCliente: ProgressoDaLinha = { ...doBanco, revisarEm: "2026-09-06T03:00:00.000Z" };
+  for (const agora of ["2026-09-06T02:59:00.000Z", "2026-09-06T03:00:00.000Z", DIA_2]) {
+    assert.equal(
+      vencida(doBanco, agora),
+      vencida(doCliente, agora),
+      `as duas escritas discordaram em ${agora}`,
+    );
+  }
+});
+
+test("a invariante do `check` da migration: degrau 0 se e só se sem data", () => {
+  // O mesmo `repertorio_escada_coerente` escrito em TypeScript. Se a aritmética
+  // daqui puder violá-lo, o banco recusa a gravação e o aluno vê "não deu para
+  // gravar" sem ter feito nada de errado.
+  let p = zerado();
+  const roteiro: [boolean, string][] = [
+    [true, DIA_1], [true, DIA_1], [true, DIA_2], [false, DIA_2],
+    [true, DIA_3], [true, DIA_4], [true, DIA_5], [false, DIA_5],
+  ];
+  assert.equal(p.degrau === 0, p.revisarEm === null);
+  for (const [acertou, quando] of roteiro) {
+    p = depoisDoTreino(p, acertou, quando);
+    assert.equal(
+      p.degrau === 0,
+      p.revisarEm === null,
+      `degrau ${p.degrau} com revisarEm ${p.revisarEm}`,
+    );
+    assert.ok(p.degrau >= 0 && p.degrau <= DEGRAU_MAXIMO, `degrau ${p.degrau} fora da escada`);
+  }
+});
+
+test("`diasAteRevisar` é nulo fora da escada e zero quando já venceu", () => {
+  assert.equal(diasAteRevisar(zerado(), DIA_1), null);
+  const p = depoisDoTreino(zerado(), true, DIA_1);
+  assert.equal(diasAteRevisar(p, DIA_1), 1);
+  assert.equal(diasAteRevisar(p, DIA_5), 0, "vencida há semanas continua sendo zero, não negativo");
+});
+
+/* ------------------------------------------------------------------ *
+ * A ordem, com a escada dentro
+ * ------------------------------------------------------------------ */
+
+test("a mais vencida vem primeiro na lista de vencidas", () => {
+  const [a, b, c] = tres();
+  const progresso = progressoDe({
+    // `b` venceu antes de `a`; `c` está em dia.
+    [a.id]: { tentativas: 4, degrau: 2, revisarEm: "2026-09-09T03:00:00.000Z", ultimaEm: DIA_1 },
+    [b.id]: { tentativas: 3, degrau: 1, revisarEm: "2026-09-08T03:00:00.000Z", ultimaEm: DIA_1 },
+    [c.id]: { tentativas: 2, degrau: 3, revisarEm: "2026-09-30T03:00:00.000Z", ultimaEm: DIA_2 },
+  });
+  assert.deepEqual(
+    vencidas([a, b, c], progresso, DIA_3).map((l) => l.id),
+    [b.id, a.id],
+  );
+});
+
+test("a vencida ganha da nunca-vista quando a última passada não foi revisão", () => {
+  const [a, b, c] = tres();
+  const progresso = progressoDe({
+    // `a` está vencida há dias. `b` acabou de ser vista **pela primeira vez** —
+    // é a mais recente, sai da disputa, e não foi revisão.
+    [a.id]: { tentativas: 4, degrau: 2, revisarEm: "2026-09-08T03:00:00.000Z", ultimaEm: DIA_1 },
+    [b.id]: { tentativas: 1, degrau: 1, revisarEm: "2026-09-13T03:00:00.000Z", ultimaEm: DIA_3 },
+  });
+  assert.equal(proximaLinha([a, b, c], progresso, DIA_3)?.id, a.id, "revisar antes de avançar");
+});
+
+test("depois de uma revisão vem uma nunca-vista — a alternância", () => {
+  const [a, b, c] = tres();
+  const progresso = progressoDe({
+    // `a` acabou de ser revisada (degrau 2, mais de uma tentativa).
+    [a.id]: { tentativas: 3, degrau: 2, revisarEm: "2026-09-14T03:00:00.000Z", ultimaEm: DIA_3 },
+    // `b` está vencida e adoraria ser escolhida.
+    [b.id]: { tentativas: 2, degrau: 1, revisarEm: "2026-09-08T03:00:00.000Z", ultimaEm: DIA_2 },
+  });
+  assert.equal(proximaLinha([a, b, c], progresso, DIA_3)?.id, c.id, "a vez é da nunca-vista");
+
+  // E depois da nunca-vista a vencida volta a ganhar: `c` acabou de entrar na
+  // escada com uma tentativa só, então não foi revisão.
+  const depois = progressoDe({
+    ...Object.fromEntries(progresso),
+    [c.id]: { tentativas: 1, degrau: 1, revisarEm: "2026-09-13T03:00:00.000Z", ultimaEm: DIA_3 },
+  });
+  assert.equal(proximaLinha([a, b, c], depois, DIA_3)?.id, b.id);
+});
+
+test("a linha recém-errada não volta na chamada seguinte", () => {
+  // O loop que a escada sozinha não impede: errar joga a linha para o degrau 0,
+  // e o grupo dos "mais longe do degrau 3" a devolveria para sempre.
+  const [a, b, c] = tres();
+  const errada = depoisDoTreino({ ...zerado(), tentativas: 1, ultimaEm: DIA_1 }, false, DIA_2);
+  const progresso = progressoDe({
+    [a.id]: errada,
+    [b.id]: { tentativas: 2, acertosSeguidos: 1, degrau: 1, revisarEm: "2026-09-30T03:00:00.000Z", ultimaEm: DIA_1 },
+    [c.id]: { tentativas: 2, acertosSeguidos: 1, degrau: 1, revisarEm: "2026-09-30T03:00:00.000Z", ultimaEm: DIA_1 },
+  });
+  assert.notEqual(proximaLinha([a, b, c], progresso, DIA_2)?.id, a.id);
+});
+
+test("numa abertura de uma linha só, a recém-treinada volta — não há outra", () => {
+  const [a] = tres();
+  const progresso = progressoDe({ [a.id]: depoisDoTreino(zerado(), true, DIA_1) });
+  assert.equal(proximaLinha([a], progresso, DIA_1)?.id, a.id);
+});
+
+test("abertura inteira aprendida com uma linha vencida não é `todasAprendidas`", () => {
+  const [a, b, c] = tres();
+  const emDia = { tentativas: 3, degrau: 3, aprendidaEm: DIA_3, revisarEm: "2026-09-30T03:00:00.000Z", ultimaEm: DIA_3 };
+  const vencendo = { ...emDia, revisarEm: "2026-09-08T03:00:00.000Z" };
+
+  const tudoEmDia = progressoDe({ [a.id]: emDia, [b.id]: emDia, [c.id]: emDia });
+  assert.equal(todasAprendidas([a, b, c], tudoEmDia, DIA_3), true);
+
+  const umaVencida = progressoDe({ [a.id]: emDia, [b.id]: emDia, [c.id]: vencendo });
+  assert.equal(todasAprendidas([a, b, c], umaVencida, DIA_3), false, "há o que fazer");
+});
+
+test("a contagem de vencidas por abertura usa o mesmo prefixo do id", () => {
+  const progresso = progressoDe({
+    [idDaLinha("brancas", "francesa", LANCES)]: {
+      degrau: 2, revisarEm: "2026-09-08T03:00:00.000Z", ultimaEm: DIA_1,
+    },
+    [idDaLinha("pretas", "francesa", LANCES)]: {
+      degrau: 2, revisarEm: "2026-09-30T03:00:00.000Z", ultimaEm: DIA_1,
+    },
+  });
+  assert.equal(aRevisarNaAbertura(progresso, "brancas", "francesa", DIA_3), 1);
+  assert.equal(aRevisarNaAbertura(progresso, "pretas", "francesa", DIA_3), 0);
+});
+
+/* ------------------------------------------------------------------ *
+ * O SAN em português
+ * ------------------------------------------------------------------ */
+
+test("o SAN vira português, e o bispo é o que não muda", () => {
+  assert.equal(sanEmPortugues("Nf6"), "Cf6");
+  assert.equal(sanEmPortugues("Bc4"), "Bc4");
+  assert.equal(sanEmPortugues("Rxd8+"), "Txd8+");
+  assert.equal(sanEmPortugues("Qd5"), "Dd5");
+  assert.equal(sanEmPortugues("Kf1"), "Rf1");
+  assert.equal(sanEmPortugues("e4"), "e4", "lance de peão passa inteiro");
+  assert.equal(sanEmPortugues("O-O"), "O-O", "o roque não tem inicial de peça");
+  assert.equal(sanEmPortugues("e8=Q"), "e8=D", "a promoção também é peça");
+  // A casa `b`, minúscula, não é o bispo: a troca é só na primeira letra.
+  assert.equal(sanEmPortugues("nb4"), "nb4");
 });

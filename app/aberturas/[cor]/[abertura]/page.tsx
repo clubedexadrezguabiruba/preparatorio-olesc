@@ -6,6 +6,7 @@ import { aberturaNoIndice, linhasDaAbertura } from "@/lib/repertorio/banco";
 import { CORES, type Cor } from "@/lib/repertorio/linhas";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
 import {
+  diasAteRevisar,
   proximaLinha,
   resumo,
   todasAprendidas,
@@ -33,9 +34,13 @@ export async function generateMetadata({
  *
  * **Quem escolhe a linha é o servidor.** A lista continua embaixo para o aluno
  * trocar quando quiser — mas o padrão tem de ser a linha certa, senão o aluno
- * de 10 anos treina três vezes a primeira da lista e nunca chega à décima. A
- * ordem está em `proximaLinha`: nunca vistas na ordem do PGN, depois as que
- * estão mais longe dos três acertos, depois a revisão mais antiga.
+ * treina três vezes a primeira da lista e nunca chega à décima. A ordem está em
+ * `proximaLinha`, e ela **alterna** entre revisar e avançar.
+ *
+ * **O `agora` é calculado uma vez, aqui, e desce inteiro.** A escada de revisão
+ * é comparação de instantes, e três funções chamando `new Date()` por conta
+ * própria produziriam três "agoras" na mesma renderização — o suficiente para
+ * uma linha estar vencida na lista e em dia no cartão, na mesma tela.
  *
  * **A `key` do `Treino` é o que faz "Próxima linha" funcionar.** O botão chama
  * `router.refresh()`, que troca as props vindas do servidor mas não desmonta o
@@ -62,14 +67,15 @@ export default async function Abertura({
     progressoDoRepertorio(),
   ]);
 
+  const agora = new Date().toISOString();
   const de = (id: string): ProgressoDaLinha => progresso.get(id) ?? zerado();
-  const contas = resumo(linhas, progresso);
+  const contas = resumo(linhas, progresso, agora);
 
   // A linha pedida na URL só vale se ela existir **nesta** abertura — senão o
   // aluno cairia numa tela sem tabuleiro por causa de um link velho.
   const { linha: pedida } = await searchParams;
   const escolhida = typeof pedida === "string" ? linhas.find((l) => l.id === pedida) : undefined;
-  const sugerida = proximaLinha(linhas, progresso);
+  const sugerida = proximaLinha(linhas, progresso, agora);
   const linha = escolhida ?? sugerida;
 
   /**
@@ -78,19 +84,27 @@ export default async function Abertura({
    * "nesta tela" ali seria apontar para o que não existe.
    */
   const lista = (atual: string | null) => (
-    <ListaDeLinhas cor={cor} abertura={abertura} linhas={linhas} progressoDe={de} atual={atual} />
+    <ListaDeLinhas
+      cor={cor}
+      abertura={abertura}
+      linhas={linhas}
+      progressoDe={de}
+      atual={atual}
+      agora={agora}
+    />
   );
 
-  // Tudo aprendido e nenhuma linha pedida: a tela para e diz isso, em vez de
-  // servir uma revisão que o aluno não pediu. "Revisar" cai na mais antiga.
-  if (!escolhida && todasAprendidas(linhas, progresso)) {
+  // Tudo aprendido **e nada vencendo**: a tela para e diz isso, em vez de servir
+  // uma revisão que o aluno não pediu. Com a escada, a segunda metade da
+  // condição é o que impede este cartão de esconder o trabalho do dia.
+  if (!escolhida && todasAprendidas(linhas, progresso, agora)) {
     return (
       <Moldura nome={entrada.nome} cor={cor}>
         <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-6 text-center">
-          <p className="titulo text-tinta">Abertura aprendida</p>
+          <p className="titulo text-tinta">Abertura em dia</p>
           <p className="text-sm text-tinta-media tabular-nums">
-            {contas.total} {contas.total === 1 ? "linha" : "linhas"}, todas com três acertos
-            seguidos.
+            {contas.total} {contas.total === 1 ? "linha" : "linhas"}, todas aprendidas e
+            nenhuma vencendo hoje.
           </p>
           {sugerida ? (
             <Link
@@ -130,10 +144,12 @@ export default async function Abertura({
         abertura={abertura}
         linha={linha}
         progresso={p}
-        // Primeira vez nesta linha: o site **mostra** antes de cobrar. Cobrar
-        // de cara uma linha que o aluno nunca viu não é treino, é adivinhação.
-        modoInicial={p.tentativas === 0 ? "ver" : "treinar"}
+        // Primeira vez nesta linha: a passada **assistida** — o lance por
+        // extenso, a seta na tela, e o aluno executando. Cobrar de memória uma
+        // linha que ele nunca viu não é treino, é adivinhação.
+        modoInicial={p.tentativas === 0 ? "assistido" : "quiz"}
         posicao={{ indice: indice + 1, total: linhas.length }}
+        agora={agora}
       />
       {lista(linha.id)}
     </Moldura>
@@ -150,12 +166,14 @@ function ListaDeLinhas({
   linhas,
   progressoDe,
   atual,
+  agora,
 }: {
   cor: Cor;
   abertura: string;
   linhas: { id: string; nome: string }[];
   progressoDe: (id: string) => ProgressoDaLinha;
   atual: string | null;
+  agora: string;
 }) {
   return (
     <section className="flex flex-col gap-2">
@@ -189,7 +207,18 @@ function ListaDeLinhas({
                 {ehAtual ? (
                   <span className="rotulo shrink-0 text-metodo-tinta">nesta tela</span>
                 ) : (
-                  <Bolinhas progresso={progressoDe(l.id)} />
+                  <span className="flex shrink-0 items-center gap-2">
+                    {/*
+                     * "hoje" é o único rótulo de agenda que cabe numa lista de
+                     * doze linhas. O número de dias vai no fim da passada, onde
+                     * há espaço e onde ele responde a uma pergunta que o aluno
+                     * acabou de fazer.
+                     */}
+                    {diasAteRevisar(progressoDe(l.id), agora) === 0 ? (
+                      <span className="rotulo text-aviso-tinta">hoje</span>
+                    ) : null}
+                    <Bolinhas progresso={progressoDe(l.id)} />
+                  </span>
                 )}
               </Link>
             </li>
