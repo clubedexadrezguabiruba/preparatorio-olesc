@@ -6,7 +6,9 @@ import {
   consultar,
   enderecoDe,
   RECORTES,
+  recuoDe,
   resumir,
+  TETO_DO_RECUO,
   type Cache,
 } from "./explorer.ts";
 
@@ -198,4 +200,111 @@ test("um recorte nunca lê o cache do outro", () => {
   const chaves = Object.values(RECORTES).map((faixas) => chaveDoCache(play, faixas));
   assert.equal(new Set(chaves).size, chaves.length, "três recortes, três chaves");
   assert.equal(chaveDoCache(play), chaveDoCache(play, RECORTES["lichess-1000-1599"]));
+});
+
+/* ------------------------------------------------------------------ *
+ * Quando o explorer manda esperar
+ * ------------------------------------------------------------------ */
+
+/** Um `fetch` de mentira que devolve a fila combinada e conta as chamadas. */
+const filaDe = (...respostas: Array<() => Response>) => {
+  const f = {
+    idas: 0,
+    buscar: async () => {
+      const proxima = respostas[Math.min(f.idas, respostas.length - 1)];
+      f.idas += 1;
+      return proxima();
+    },
+  };
+  return f;
+};
+
+const recusa = (status: number, retryAfter?: string) =>
+  new Response("", { status, ...(retryAfter ? { headers: { "Retry-After": retryAfter } } : {}) });
+
+test("429 é adiamento, não resposta: a consulta espera e insiste", async () => {
+  // Antes, o 429 virava `null` e a posição saía "sem dados" — do lado de fora,
+  // indistinguível de uma posição que o explorer não conhece. Quem lesse a
+  // tabela cortaria conteúdo por causa de um limite de requisições.
+  const rede = filaDe(
+    () => recusa(429),
+    () => Response.json(DEPOIS_DE_E4),
+  );
+  const ditos: string[] = [];
+  const lido = await consultar(["e2e4"], {
+    token: "bom",
+    intervalo: 0,
+    recuo: 0,
+    buscar: rede.buscar,
+    avisar: (m) => ditos.push(m),
+  });
+  assert.equal(lido?.jogos, 360_000_000, "a segunda ida é que vale");
+  assert.equal(rede.idas, 2);
+  assert.match(ditos[0], /429 — esperando .* tentando de novo/);
+});
+
+test("o 429 que não passa desiste, e o aviso diz que insistiu", async () => {
+  const rede = filaDe(() => recusa(429));
+  const ditos: string[] = [];
+  const lido = await consultar(["e2e4"], {
+    token: "bom",
+    intervalo: 0,
+    recuo: 0,
+    tentativas: 3,
+    buscar: rede.buscar,
+    avisar: (m) => ditos.push(m),
+  });
+  assert.equal(lido, null);
+  assert.equal(rede.idas, 3, "`tentativas` conta a primeira ida junto");
+  assert.match(ditos.at(-1)!, /respondeu 429.*desisti depois de 3 tentativas/);
+});
+
+test("o tropeço de servidor também é passageiro; o 401 não", async () => {
+  const tropeco = filaDe(
+    () => recusa(503),
+    () => Response.json(DEPOIS_DE_E4),
+  );
+  assert.equal(
+    (await consultar(["e2e4"], { token: "bom", intervalo: 0, recuo: 0, buscar: tropeco.buscar }))
+      ?.jogos,
+    360_000_000,
+  );
+  assert.equal(tropeco.idas, 2);
+
+  // Token ruim não melhora com insistência — repetir daria a mesma coisa, mais
+  // devagar, e ainda gastaria a paciência de um serviço gratuito.
+  const ruim = filaDe(() => recusa(401));
+  assert.equal(
+    await consultar(["e2e4"], { token: "ruim", intervalo: 0, recuo: 0, buscar: ruim.buscar }),
+    null,
+  );
+  assert.equal(ruim.idas, 1);
+});
+
+test("o `Retry-After` do servidor ganha do palpite, com teto", () => {
+  const com = (status: number, cabecalho?: string) => recusa(status, cabecalho);
+  assert.equal(recuoDe(com(429, "5"), 1, 60_000), 5_000, "segundos, como o servidor pediu");
+  assert.equal(recuoDe(com(429), 1, 60_000), 60_000, "sem cabeçalho, o minuto do Lichess");
+  assert.equal(recuoDe(com(503), 1, 60_000), 2_000, "tropeço de servidor não merece o minuto");
+  assert.equal(recuoDe(com(503), 3, 60_000), 6_000, "e sobe a cada tentativa");
+  assert.equal(recuoDe(com(429, "99999"), 1, 60_000), TETO_DO_RECUO, "nem que ele peça o dia");
+  // `Retry-After` também aceita uma data HTTP. `Number` dá `NaN` ali, e a conta
+  // tem de cair no padrão em vez de virar espera de tempo indefinido.
+  assert.equal(recuoDe(com(429, "Wed, 09 Sep 2026 12:00:00 GMT"), 1, 60_000), 60_000);
+});
+
+test("`semRede` é escolha de quem rodou, não falta de token", async () => {
+  // O `--sem-rede` do script mandava `token: undefined`, e o aviso saía
+  // "sem LICHESS_TOKEN" mesmo com token no `.env.local` — culpa no lugar errado.
+  const ditos: string[] = [];
+  const lido = await consultar(["e2e4"], {
+    semRede: true,
+    token: "existe",
+    avisar: (m) => ditos.push(m),
+    buscar: () => {
+      throw new Error("--sem-rede não pode ir à rede");
+    },
+  });
+  assert.equal(lido, null);
+  assert.deepEqual(ditos, [], "não é falha: não avisa");
 });

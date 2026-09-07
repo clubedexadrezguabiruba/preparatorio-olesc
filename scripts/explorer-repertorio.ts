@@ -7,6 +7,10 @@
  *   node scripts/explorer-repertorio.ts --recorte=NOME  mede noutra faixa
  *   node scripts/explorer-repertorio.ts --comparar      as faixas, lado a lado
  *
+ * Sai com código 1 quando alguma posição ficou sem dados por falha de rede — a
+ * tabela que sai daqui vira orçamento de linhas, e uma tabela furada não pode
+ * passar por medição só porque o furo estava numa linha de stderr.
+ *
  * ## Por que este script existe antes do documento
  *
  * O plano punha a medição no B6, **depois** de as linhas estarem escritas. Isso
@@ -136,6 +140,48 @@ const avisar = (m: string) => {
 };
 
 /**
+ * A leitura de uma posição — e o que fazer quando ela falha.
+ *
+ * **Um "sem dados" com a rede liberada não é resultado: é buraco.** A tabela
+ * daqui vira orçamento de linhas no `docs/REPERTORIO.md`, e uma posição furada
+ * por 429 é indistinguível, ali dentro, de uma posição que o explorer não
+ * conhece — o corte sairia por limite de requisição em vez de por frequência.
+ * Antes, isso saía com código 0 e uma linha no stderr.
+ *
+ * Depois da primeira falha o script para de ir à rede. A `consultar` já recuou
+ * e insistiu; se ainda assim não passou, insistir nas 22 posições seguintes
+ * custaria minutos em cada uma para devolver a mesma tabela furada. O cache do
+ * que deu certo fica gravado, então rodar de novo retoma de onde parou.
+ */
+let desistiu = false;
+let buracos = 0;
+
+async function ler(
+  play: readonly string[],
+  cacheDaFaixa: Cache,
+  faixas: readonly number[],
+): Promise<Posicao | null> {
+  const semRede = SEM_REDE || desistiu;
+  const lido = await consultar(play, { cache: cacheDaFaixa, faixas, semRede, avisar });
+  if (lido === null && !semRede) {
+    buracos += 1;
+    desistiu = true;
+  }
+  return lido;
+}
+
+/** O que dizer no fim, e com que código sair, quando houve buraco. */
+function denunciarBuracos(semDados: number): void {
+  if (buracos === 0) return;
+  console.error(
+    `\nA medição não fechou: ${semDados} de ${posicoes.length} posições sem dados por ` +
+      "falha de rede, e o resto veio só do cache. A tabela acima está furada — não " +
+      "use para cortar conteúdo. O que deu certo ficou no cache; rode de novo.",
+  );
+  process.exit(1);
+}
+
+/**
  * A comparação entre recortes — o que o ⚠13 pede.
  *
  * **A pergunta não é se 60,3 % virou 58,1 %.** É se muda o *conjunto de lances
@@ -148,14 +194,7 @@ async function medir(recorte: Recorte): Promise<(Posicao | null)[]> {
   const daFaixa = cacheEm(path.join(CACHE, recorte));
   const saida: (Posicao | null)[] = [];
   for (const p of posicoes) {
-    saida.push(
-      await consultar(p.play, {
-        cache: daFaixa,
-        faixas: RECORTES[recorte],
-        ...(SEM_REDE ? { token: undefined } : {}),
-        avisar,
-      }),
-    );
+    saida.push(await ler(p.play, daFaixa, RECORTES[recorte]));
   }
   return saida;
 }
@@ -252,6 +291,7 @@ ${detalhe.length > 0 ? `\n${detalhe.join("\n")}\n` : ""}`);
   console.error(
     `\n${mudamDeConjunto} de ${posicoes.length} posições mudam o conjunto que entra no Base.`,
   );
+  denunciarBuracos(semDadosNaComparacao);
   process.exit(0);
 }
 
@@ -262,12 +302,7 @@ const linhas: string[] = [];
 let semDados = 0;
 
 for (const posicao of posicoes) {
-  const lido: Posicao | null = await consultar(posicao.play, {
-    cache,
-    faixas: FAIXAS,
-    ...(SEM_REDE ? { token: undefined } : {}),
-    avisar,
-  });
+  const lido: Posicao | null = await ler(posicao.play, cache, FAIXAS);
 
   if (!lido) {
     semDados += 1;
@@ -317,3 +352,5 @@ if (orfaos.length > 0) {
       `(pode apagar): ${orfaos.join(", ")}`,
   );
 }
+
+denunciarBuracos(semDados);

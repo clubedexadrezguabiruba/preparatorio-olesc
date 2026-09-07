@@ -36,6 +36,11 @@ import { chaveDe } from "../tatica/chave.ts";
  * Sem token, com 401, com a rede fora, com o formato mudado: a consulta devolve
  * `null` e quem chamou escreve "sem dados". Compilar e validar o repertório não
  * dependem disto — medir é uma coisa, e provar que os lances são legais é outra.
+ *
+ * **Mas "sem dados" tem de significar "o explorer não sabe", e não "o explorer
+ * pediu para eu esperar".** Um 429 não é resposta: é adiamento, e virar `null`
+ * ali faz a tabela mentir para quem corta conteúdo por causa dela. Por isso a
+ * consulta recua e insiste nos códigos que pedem tempo — ver `recuoDe`.
  */
 
 export type RespostaDoExplorer = {
@@ -197,6 +202,15 @@ export type Opcoes = {
   avisar?: (mensagem: string) => void;
   /** A faixa de rating desta consulta. Entra na chave do cache. */
   faixas?: readonly number[];
+  /**
+   * Só o cache: nem token, nem rede, e nenhum aviso — foi escolha de quem
+   * rodou, não falha. Diferente de `token: undefined`, que **é** falha e avisa.
+   */
+  semRede?: boolean;
+  /** Quantas idas à rede no máximo, contando a primeira. */
+  tentativas?: number;
+  /** O recuo depois de um 429 que não diz quanto esperar. Zero no teste. */
+  recuo?: number;
 };
 
 /**
@@ -213,6 +227,47 @@ export const chaveDoCache = (
 ): string =>
   `${play.length}-${chaveDe(enderecoDe(play, faixas)).toString(16).padStart(8, "0")}`;
 
+/* ------------------------------------------------------------------ *
+ * Quando o explorer manda esperar
+ * ------------------------------------------------------------------ */
+
+/**
+ * Os códigos em que insistir faz sentido.
+ *
+ * `429` é o explorer dizendo "devagar" — a documentação do Lichess pede um
+ * minuto inteiro de pausa antes de voltar. `5xx` é o servidor tropeçando, que
+ * por definição é passageiro. Todo o resto (401 com token ruim, 404) é
+ * resposta definitiva: repetir daria a mesma coisa, mais devagar.
+ */
+const pedeTempo = (status: number): boolean => status === 429 || status >= 500;
+
+/** Nenhum recuo passa disto, nem que o servidor peça. */
+export const TETO_DO_RECUO = 120_000;
+
+/** O recuo padrão de um 429 — o minuto que a documentação do Lichess pede. */
+export const RECUO_PADRAO = 60_000;
+
+/**
+ * Quanto esperar antes de tentar de novo.
+ *
+ * O `Retry-After` do servidor ganha de qualquer palpite nosso, quando vem em
+ * segundos; ele também aceita uma **data** HTTP, e aí `Number` dá `NaN` e a
+ * conta cai no padrão em vez de virar espera de tempo indefinido.
+ */
+export function recuoDe(
+  resposta: { status: number; headers: { get(nome: string): string | null } },
+  tentativa: number,
+  base: number,
+): number {
+  const pedido = Number(resposta.headers.get("retry-after"));
+  if (Number.isFinite(pedido) && pedido > 0) return Math.min(pedido * 1000, TETO_DO_RECUO);
+  // O 429 custa o minuto cheio; o tropeço de servidor não merece tanto.
+  return resposta.status === 429 ? base : Math.min(base, 2_000 * tentativa);
+}
+
+const dormir = (ms: number): Promise<void> =>
+  ms <= 0 ? Promise.resolve() : new Promise((pronto) => setTimeout(pronto, ms));
+
 let ultimaIda = 0;
 
 /**
@@ -221,6 +276,12 @@ let ultimaIda = 0;
  * Cache primeiro, rede depois — e a espera do intervalo só acontece quando a
  * rede é mesmo necessária. Uma segunda rodada do script não faz requisição
  * nenhuma, que é o que torna a tabela reproduzível.
+ *
+ * **Um 429 não é resposta, é adiamento.** Antes, ele virava `null` e a posição
+ * saía "sem dados" — indistinguível, na tabela, de uma posição que o explorer
+ * realmente não conhece. Quem lesse a tabela cortaria conteúdo por causa de um
+ * limite de requisições. Agora a consulta espera o que o servidor pedir e
+ * insiste; só desiste depois de `tentativas` idas, e aí o aviso diz o código.
  */
 export async function consultar(
   play: readonly string[],
@@ -233,36 +294,64 @@ export async function consultar(
     intervalo = 1500,
     avisar = () => {},
     faixas = FAIXAS,
+    semRede = false,
+    tentativas = 3,
+    recuo: recuoBase = RECUO_PADRAO,
   } = opcoes;
 
   const chave = chaveDoCache(play, faixas);
   const guardado = cache?.ler(chave);
   if (guardado !== undefined) return resumir(guardado);
 
+  if (semRede) return null;
+
   if (!token) {
     avisar("sem LICHESS_TOKEN no .env.local — a cobertura sai como “sem dados”");
     return null;
   }
 
-  const espera = ultimaIda + intervalo - Date.now();
-  if (espera > 0) await new Promise((pronto) => setTimeout(pronto, espera));
-  ultimaIda = Date.now();
+  const onde = play.join(",") || "(início)";
 
-  try {
-    const resposta = await buscar(enderecoDe(play, faixas), {
-      headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
-    });
-    if (!resposta.ok) {
-      avisar(`o explorer respondeu ${resposta.status} em ${play.join(",") || "(início)"}`);
+  for (let tentativa = 1; ; tentativa += 1) {
+    const espera = ultimaIda + intervalo - Date.now();
+    if (espera > 0) await dormir(espera);
+    ultimaIda = Date.now();
+
+    let resposta: Awaited<ReturnType<typeof fetch>>;
+    try {
+      resposta = await buscar(enderecoDe(play, faixas), {
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+      });
+    } catch (erro) {
+      avisar(`o explorer não respondeu (${String(erro)})`);
       return null;
     }
-    const bruto: unknown = await resposta.json();
-    const lido = resumir(bruto);
-    if (lido) cache?.gravar(chave, bruto);
-    else avisar(`resposta do explorer em formato inesperado em ${play.join(",") || "(início)"}`);
-    return lido;
-  } catch (erro) {
-    avisar(`o explorer não respondeu (${String(erro)})`);
-    return null;
+
+    if (resposta.ok) {
+      let bruto: unknown;
+      try {
+        bruto = await resposta.json();
+      } catch (erro) {
+        avisar(`o explorer não respondeu (${String(erro)})`);
+        return null;
+      }
+      const lido = resumir(bruto);
+      if (lido) cache?.gravar(chave, bruto);
+      else avisar(`resposta do explorer em formato inesperado em ${onde}`);
+      return lido;
+    }
+
+    if (!pedeTempo(resposta.status) || tentativa >= tentativas) {
+      const insistiu = tentativa > 1 ? ` (desisti depois de ${tentativa} tentativas)` : "";
+      avisar(`o explorer respondeu ${resposta.status} em ${onde}${insistiu}`);
+      return null;
+    }
+
+    const quanto = recuoDe(resposta, tentativa, recuoBase);
+    avisar(
+      `o explorer respondeu ${resposta.status} — esperando ${Math.round(quanto / 1000)} s ` +
+        `e tentando de novo (${tentativa} de ${tentativas - 1})`,
+    );
+    await dormir(quanto);
   }
 }

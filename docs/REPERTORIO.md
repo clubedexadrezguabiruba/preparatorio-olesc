@@ -422,6 +422,14 @@ Para refazer: `npm run repertorio:explorer`. Para acrescentar posição, edite
 `content/repertorio/posicoes-chave.json` — o script recusa posição em que quem
 joga é o aluno, e joga os lances no tabuleiro antes de consultar.
 
+**Confira o código de saída antes de copiar a tabela.** Até 6/9/2026 um `429`
+do Lichess — o "devagar" dele quando a rodada é grande — virava "sem dados" na
+linha da posição, com saída 0: dentro da tabela, indistinguível de uma posição
+que o explorer não conhece, e o corte sairia por limite de requisição em vez de
+por frequência. Agora a consulta recua o que o servidor pedir e insiste, e o
+script sai com 1 se ainda assim ficou buraco. O cache do que deu certo fica
+gravado, então rodar de novo retoma de onde parou.
+
 ## 6.1 As três faixas, lado a lado — a medição do ⚠13
 
 Feita em 6/9/2026. Três recortes, definidos em `RECORTES`
