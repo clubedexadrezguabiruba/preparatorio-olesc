@@ -1,0 +1,139 @@
+{
+  "white": 437290,
+  "draws": 36067,
+  "black": 434886,
+  "moves": [
+    {
+      "uci": "e2e3",
+      "san": "e3",
+      "averageRating": 1519,
+      "white": 196676,
+      "draws": 16234,
+      "black": 185259,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c2c3",
+      "san": "c3",
+      "averageRating": 1506,
+      "white": 103179,
+      "draws": 8659,
+      "black": 98374,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4c5",
+      "san": "dxc5",
+      "averageRating": 1443,
+      "white": 53134,
+      "draws": 4524,
+      "black": 63423,
+      "game": null,
+      "opening": {
+        "eco": "D00",
+        "name": "Queen's Pawn Game: Accelerated London System, Steinitz Countergambit Accepted"
+      }
+    },
+    {
+      "uci": "g1f3",
+      "san": "Nf3",
+      "averageRating": 1485,
+      "white": 56471,
+      "draws": 4461,
+      "black": 56088,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b1c3",
+      "san": "Nc3",
+      "averageRating": 1446,
+      "white": 14654,
+      "draws": 967,
+      "black": 15952,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c2c4",
+      "san": "c4",
+      "averageRating": 1497,
+      "white": 4505,
+      "draws": 419,
+      "black": 5443,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f4b8",
+      "san": "Bxb8",
+      "averageRating": 1539,
+      "white": 3833,
+      "draws": 397,
+      "black": 4334,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e2e4",
+      "san": "e4",
+      "averageRating": 1502,
+      "white": 1916,
+      "draws": 125,
+      "black": 1997,
+      "game": null,
+      "opening": {
+        "eco": "D00",
+        "name": "Queen's Pawn Game: Accelerated London System, Steinitz Countergambit, Morris Countergambit"
+      }
+    },
+    {
+      "uci": "h2h3",
+      "san": "h3",
+      "averageRating": 1527,
+      "white": 871,
+      "draws": 71,
+      "black": 954,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b2b3",
+      "san": "b3",
+      "averageRating": 1502,
+      "white": 470,
+      "draws": 41,
+      "black": 652,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1556,
+      "white": 391,
+      "draws": 36,
+      "black": 437,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1d3",
+      "san": "Qd3",
+      "averageRating": 1317,
+      "white": 152,
+      "draws": 25,
+      "black": 303,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "D00",
+    "name": "Queen's Pawn Game: Accelerated London System, Steinitz Countergambit"
+  }
+}

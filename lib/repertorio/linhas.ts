@@ -111,6 +111,13 @@ export const BancoSchema = z.array(LinhaSchema);
  * do site (`/repertorio/brancas/petroff.json`), porque quem primeiro o leu foi
  * o navegador; o servidor tira o `/repertorio/` da frente para chegar ao
  * caminho em disco (ver `lib/repertorio/banco.ts`).
+ *
+ * O `ids` é a **lista de quem existe**, e é por causa dela que a contagem de
+ * progresso não precisa adivinhar. O id de uma linha é o hash dos lances, então
+ * uma linha reescrita deixa no banco um registro que ninguém mais alcança;
+ * contar por prefixo de texto (`brancas-escocesa-`) contaria esse fantasma, e a
+ * tela mostraria "3 de 2". Com o `ids` aqui, a lista continua fazendo doze
+ * barras lendo um arquivo só — e conta certo.
  */
 export const EntradaDoIndiceSchema = z
   .object({
@@ -118,9 +125,17 @@ export const EntradaDoIndiceSchema = z
     abertura: z.string().regex(/^[a-z0-9-]+$/),
     nome: z.string().min(3),
     linhas: z.number().int().positive(),
+    ids: z.array(z.string().regex(/^(brancas|pretas)-[a-z0-9-]+-[0-9a-f]{8}$/)).nonempty(),
     arquivo: z.string().regex(/^\/repertorio\/(brancas|pretas)\/[a-z0-9-]+\.json$/),
   })
-  .strict();
+  .strict()
+  // Dois campos dizendo a mesma coisa podem divergir, e divergiriam calados: a
+  // barra usa `linhas` e a conta usa `ids`, então a tela mostraria denominador
+  // de um e numerador do outro.
+  .refine((e) => e.linhas === e.ids.length, {
+    message: "`linhas` e o tamanho de `ids` têm de bater",
+    path: ["linhas"],
+  });
 
 export const IndiceSchema = z.array(EntradaDoIndiceSchema);
 

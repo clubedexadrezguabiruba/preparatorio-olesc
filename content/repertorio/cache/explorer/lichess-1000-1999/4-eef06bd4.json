@@ -1,0 +1,139 @@
+{
+  "white": 10220019,
+  "draws": 953966,
+  "black": 10030440,
+  "moves": [
+    {
+      "uci": "d2d4",
+      "san": "d4",
+      "averageRating": 1702,
+      "white": 4000534,
+      "draws": 378226,
+      "black": 3656362,
+      "game": null,
+      "opening": {
+        "eco": "B32",
+        "name": "Sicilian Defense: Open"
+      }
+    },
+    {
+      "uci": "f1c4",
+      "san": "Bc4",
+      "averageRating": 1601,
+      "white": 2274666,
+      "draws": 202017,
+      "black": 2474683,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1b5",
+      "san": "Bb5",
+      "averageRating": 1660,
+      "white": 1343560,
+      "draws": 123903,
+      "black": 1246680,
+      "game": null,
+      "opening": {
+        "eco": "B30",
+        "name": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack"
+      }
+    },
+    {
+      "uci": "c2c3",
+      "san": "c3",
+      "averageRating": 1696,
+      "white": 1042583,
+      "draws": 95899,
+      "black": 948026,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b1c3",
+      "san": "Nc3",
+      "averageRating": 1563,
+      "white": 908516,
+      "draws": 88603,
+      "black": 989661,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2d3",
+      "san": "d3",
+      "averageRating": 1608,
+      "white": 129416,
+      "draws": 14184,
+      "black": 147913,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c2c4",
+      "san": "c4",
+      "averageRating": 1611,
+      "white": 92152,
+      "draws": 9959,
+      "black": 103342,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1e2",
+      "san": "Be2",
+      "averageRating": 1690,
+      "white": 81099,
+      "draws": 8483,
+      "black": 83462,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g2g3",
+      "san": "g3",
+      "averageRating": 1658,
+      "white": 80951,
+      "draws": 8189,
+      "black": 81339,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1669,
+      "white": 69233,
+      "draws": 6610,
+      "black": 72342,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e4e5",
+      "san": "e5",
+      "averageRating": 1510,
+      "white": 57622,
+      "draws": 5248,
+      "black": 72192,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b2b3",
+      "san": "b3",
+      "averageRating": 1657,
+      "white": 53083,
+      "draws": 5143,
+      "black": 55117,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B30",
+    "name": "Sicilian Defense: Old Sicilian"
+  }
+}

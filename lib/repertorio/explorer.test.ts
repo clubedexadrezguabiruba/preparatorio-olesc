@@ -5,6 +5,7 @@ import {
   chaveDoCache,
   consultar,
   enderecoDe,
+  RECORTES,
   resumir,
   type Cache,
 } from "./explorer.ts";
@@ -173,4 +174,28 @@ test("o endereço traz as faixas e os ritmos escolhidos", () => {
   assert.match(endereco, /speeds=rapid%2Cclassical/);
   assert.match(endereco, /ratings=1000%2C1200%2C1400/);
   assert.match(endereco, /play=e2e4%2Cc7c5/);
+});
+
+test("outro recorte é outro endereço — e o balde do piso é o 0", () => {
+  // O Lichess não tem balde abaixo de 1000: o piso é um só, de 0 a 999. É por
+  // isso que "700–1700" não existe como pedido, e o ⚠13 não se resolve
+  // traduzindo o número do clube para dentro do `ratings`.
+  assert.match(
+    enderecoDe(["e2e4"], RECORTES["lichess-0-1799"]),
+    /ratings=0%2C1000%2C1200%2C1400%2C1600/,
+  );
+  assert.match(
+    enderecoDe(["e2e4"], RECORTES["lichess-1000-1999"]),
+    /ratings=1000%2C1200%2C1400%2C1600%2C1800/,
+  );
+});
+
+test("um recorte nunca lê o cache do outro", () => {
+  // A chave é o hash do endereço inteiro, e o endereço carrega `ratings=`. Sem
+  // isto, medir a faixa nova serviria calado o número da faixa velha — que é
+  // exatamente o erro que o ⚠13 existe para desfazer.
+  const play = ["e2e4", "c7c5"];
+  const chaves = Object.values(RECORTES).map((faixas) => chaveDoCache(play, faixas));
+  assert.equal(new Set(chaves).size, chaves.length, "três recortes, três chaves");
+  assert.equal(chaveDoCache(play), chaveDoCache(play, RECORTES["lichess-1000-1599"]));
 });

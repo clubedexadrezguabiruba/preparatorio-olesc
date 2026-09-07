@@ -1,5 +1,5 @@
 import { hojeNoBrasil } from "../curso/calendario.ts";
-import type { Cor, Linha } from "./linhas.ts";
+import type { EntradaDoIndice, Linha } from "./linhas.ts";
 
 /**
  * O juiz do repertório e a ordem em que as linhas voltam.
@@ -433,31 +433,30 @@ export function resumo(
 
 /**
  * O mesmo resumo para quem **não carregou as linhas**: a lista de aberturas
- * sabe quantas linhas cada uma tem pelo `index.json`, e não precisa abrir os
+ * sabe pelo `index.json` quais linhas cada abertura tem, e não precisa abrir os
  * doze arquivos para desenhar doze barrinhas.
  *
- * O filtro é o prefixo do id (`brancas-petroff-`), que é como `idDaLinha` o
- * monta. Cor e abertura entram as duas porque o slug pode repetir entre as
- * cores — há uma "francesa" de brancas e poderia haver uma de pretas.
+ * **A varredura vai do conteúdo para o progresso, e não ao contrário.** Até
+ * 6/9/2026 estas duas funções percorriam o banco de progresso e adivinhavam a
+ * abertura pelo prefixo do id (`brancas-petroff-`). O id é o hash dos lances:
+ * uma linha reescrita deixa um registro que nenhuma linha reclama, e o prefixo
+ * o adotava. A tela mostrava "3 de 2", a abertura virava "em dia" sem o aluno
+ * ter visto a linha nova, e o painel prometia uma revisão sem onde ser feita —
+ * enquanto a página da abertura, que sempre contou pelas linhas, discordava das
+ * outras duas. Agora as três contam do mesmo jeito, que é o de `resumo` aqui em
+ * cima.
  */
-export function aprendidasDaAbertura(progresso: Progresso, cor: Cor, abertura: string): number {
-  const prefixo = `${cor}-${abertura}-`;
-  let conta = 0;
-  for (const [id, p] of progresso) if (id.startsWith(prefixo) && aprendida(p)) conta++;
-  return conta;
+export function aprendidasDaAbertura(progresso: Progresso, abertura: EntradaDoIndice): number {
+  return abertura.ids.filter((id) => aprendida(progressoDe(progresso, id))).length;
 }
 
-/** Quantas linhas desta abertura vencem hoje. Mesmo filtro, outra pergunta. */
+/** Quantas linhas desta abertura vencem hoje. Mesma varredura, outra pergunta. */
 export function aRevisarNaAbertura(
   progresso: Progresso,
-  cor: Cor,
-  abertura: string,
+  abertura: EntradaDoIndice,
   agora: string,
 ): number {
-  const prefixo = `${cor}-${abertura}-`;
-  let conta = 0;
-  for (const [id, p] of progresso) if (id.startsWith(prefixo) && vencida(p, agora)) conta++;
-  return conta;
+  return abertura.ids.filter((id) => vencida(progressoDe(progresso, id), agora)).length;
 }
 
 /* ------------------------------------------------------------------ *

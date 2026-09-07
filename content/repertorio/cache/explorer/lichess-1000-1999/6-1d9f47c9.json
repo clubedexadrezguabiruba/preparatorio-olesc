@@ -1,0 +1,145 @@
+{
+  "white": 2889977,
+  "draws": 294575,
+  "black": 2490808,
+  "moves": [
+    {
+      "uci": "c1g5",
+      "san": "Bg5",
+      "averageRating": 1709,
+      "white": 1005836,
+      "draws": 106760,
+      "black": 850109,
+      "game": null,
+      "opening": {
+        "eco": "D50",
+        "name": "Queen's Gambit Declined: Modern Variation"
+      }
+    },
+    {
+      "uci": "g1f3",
+      "san": "Nf3",
+      "averageRating": 1684,
+      "white": 745277,
+      "draws": 73932,
+      "black": 623652,
+      "game": null,
+      "opening": {
+        "eco": "D37",
+        "name": "Queen's Gambit Declined: Three Knights Variation"
+      }
+    },
+    {
+      "uci": "c4d5",
+      "san": "cxd5",
+      "averageRating": 1724,
+      "white": 385381,
+      "draws": 40182,
+      "black": 316643,
+      "game": null,
+      "opening": {
+        "eco": "D35",
+        "name": "Queen's Gambit Declined: Exchange Variation"
+      }
+    },
+    {
+      "uci": "e2e3",
+      "san": "e3",
+      "averageRating": 1658,
+      "white": 298338,
+      "draws": 31204,
+      "black": 274775,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1f4",
+      "san": "Bf4",
+      "averageRating": 1667,
+      "white": 176390,
+      "draws": 17052,
+      "black": 154905,
+      "game": null,
+      "opening": {
+        "eco": "D35",
+        "name": "Queen's Gambit Declined: Harrwitz Attack"
+      }
+    },
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1650,
+      "white": 131690,
+      "draws": 11795,
+      "black": 114795,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c4c5",
+      "san": "c5",
+      "averageRating": 1650,
+      "white": 42906,
+      "draws": 4071,
+      "black": 46053,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f2f3",
+      "san": "f3",
+      "averageRating": 1645,
+      "white": 26817,
+      "draws": 2267,
+      "black": 27465,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g2g3",
+      "san": "g3",
+      "averageRating": 1651,
+      "white": 26224,
+      "draws": 2567,
+      "black": 23996,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e2e4",
+      "san": "e4",
+      "averageRating": 1552,
+      "white": 16090,
+      "draws": 1399,
+      "black": 18902,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1c2",
+      "san": "Qc2",
+      "averageRating": 1657,
+      "white": 10097,
+      "draws": 852,
+      "black": 10302,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h3",
+      "san": "h3",
+      "averageRating": 1654,
+      "white": 6185,
+      "draws": 633,
+      "black": 6214,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "D35",
+    "name": "Queen's Gambit Declined: Normal Defense"
+  }
+}

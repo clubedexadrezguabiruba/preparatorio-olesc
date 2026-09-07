@@ -171,6 +171,7 @@ for (const [chave, linhas] of [...grupos].sort()) {
     abertura: linhas[0].abertura,
     nome: linhas[0].nome.split(" — ")[0],
     linhas: linhas.length,
+    ids: linhas.map((l) => l.id) as [string, ...string[]],
     arquivo: `/repertorio/${chave}.json`,
   });
 }

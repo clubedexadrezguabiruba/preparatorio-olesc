@@ -110,12 +110,12 @@ export default async function Painel() {
   const aberturas = indice.length;
   const linhasDoRepertorio = indice.reduce((soma, e) => soma + e.linhas, 0);
   const linhasAprendidas = indice.reduce(
-    (soma, e) => soma + aprendidasDaAbertura(repertorio, e.cor, e.abertura),
+    (soma, e) => soma + aprendidasDaAbertura(repertorio, e),
     0,
   );
   const agoraNoRepertorio = new Date().toISOString();
   const linhasARevisar = indice.reduce(
-    (soma, e) => soma + aRevisarNaAbertura(repertorio, e.cor, e.abertura, agoraNoRepertorio),
+    (soma, e) => soma + aRevisarNaAbertura(repertorio, e, agoraNoRepertorio),
     0,
   );
 

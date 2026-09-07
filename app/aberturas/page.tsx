@@ -32,23 +32,17 @@ const RESUMO: Record<Cor, string> = {
  * repertório inteiro aprendido ainda tem linhas vencendo — por isso "a revisar
  * hoje" vai ao lado dela, e é a única coisa desta tela que muda de cor.
  *
- * A contagem sai do `index.json` mais o mapa de progresso filtrado pelo
- * prefixo do id, e não da leitura dos doze arquivos: desenhar doze barrinhas
- * não é motivo para abrir doze JSON.
+ * A contagem sai do `index.json` — que traz os ids de cada abertura — cruzado
+ * com o mapa de progresso, e não da leitura dos doze arquivos: desenhar doze
+ * barrinhas não é motivo para abrir doze JSON.
  */
 export default async function Aberturas() {
   await perfilAtual();
   const [indice, progresso] = await Promise.all([lerIndice(), progressoDoRepertorio()]);
 
   const agora = new Date().toISOString();
-  const aprendidas = indice.reduce(
-    (soma, e) => soma + aprendidasDaAbertura(progresso, e.cor, e.abertura),
-    0,
-  );
-  const aRevisar = indice.reduce(
-    (soma, e) => soma + aRevisarNaAbertura(progresso, e.cor, e.abertura, agora),
-    0,
-  );
+  const aprendidas = indice.reduce((soma, e) => soma + aprendidasDaAbertura(progresso, e), 0);
+  const aRevisar = indice.reduce((soma, e) => soma + aRevisarNaAbertura(progresso, e, agora), 0);
   const total = indice.reduce((soma, e) => soma + e.linhas, 0);
 
   return (
@@ -89,8 +83,8 @@ export default async function Aberturas() {
 
             <ul className="flex flex-col gap-2">
               {daCor.map((abertura) => {
-                const feitas = aprendidasDaAbertura(progresso, cor, abertura.abertura);
-                const vencendo = aRevisarNaAbertura(progresso, cor, abertura.abertura, agora);
+                const feitas = aprendidasDaAbertura(progresso, abertura);
+                const vencendo = aRevisarNaAbertura(progresso, abertura, agora);
                 const completa = feitas >= abertura.linhas && vencendo === 0;
 
                 return (

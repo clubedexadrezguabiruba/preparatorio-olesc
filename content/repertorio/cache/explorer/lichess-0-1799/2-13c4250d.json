@@ -1,0 +1,160 @@
+{
+  "white": 57426826,
+  "draws": 5096862,
+  "black": 49849314,
+  "moves": [
+    {
+      "uci": "c2c4",
+      "san": "c4",
+      "averageRating": 1495,
+      "white": 19005121,
+      "draws": 1501114,
+      "black": 14623277,
+      "game": null,
+      "opening": {
+        "eco": "D06",
+        "name": "Queen's Gambit"
+      }
+    },
+    {
+      "uci": "c1f4",
+      "san": "Bf4",
+      "averageRating": 1423,
+      "white": 12451998,
+      "draws": 1055626,
+      "black": 10234720,
+      "game": null,
+      "opening": {
+        "eco": "D00",
+        "name": "Queen's Pawn Game: Accelerated London System"
+      }
+    },
+    {
+      "uci": "g1f3",
+      "san": "Nf3",
+      "averageRating": 1418,
+      "white": 8259106,
+      "draws": 761297,
+      "black": 7254373,
+      "game": null,
+      "opening": {
+        "eco": "D02",
+        "name": "Queen's Pawn Game: Zukertort Variation"
+      }
+    },
+    {
+      "uci": "e2e3",
+      "san": "e3",
+      "averageRating": 1369,
+      "white": 6281334,
+      "draws": 639867,
+      "black": 6188479,
+      "game": null,
+      "opening": {
+        "eco": "D00",
+        "name": "Queen's Pawn Game"
+      }
+    },
+    {
+      "uci": "b1c3",
+      "san": "Nc3",
+      "averageRating": 1316,
+      "white": 5929736,
+      "draws": 582266,
+      "black": 5826902,
+      "game": null,
+      "opening": {
+        "eco": "D00",
+        "name": "Queen's Pawn Game: Chigorin Variation"
+      }
+    },
+    {
+      "uci": "e2e4",
+      "san": "e4",
+      "averageRating": 1396,
+      "white": 1575848,
+      "draws": 136468,
+      "black": 1560191,
+      "game": null,
+      "opening": {
+        "eco": "D00",
+        "name": "Blackmar-Diemer Gambit"
+      }
+    },
+    {
+      "uci": "c2c3",
+      "san": "c3",
+      "averageRating": 1304,
+      "white": 862038,
+      "draws": 98939,
+      "black": 959921,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1g5",
+      "san": "Bg5",
+      "averageRating": 1443,
+      "white": 659369,
+      "draws": 58734,
+      "black": 595880,
+      "game": null,
+      "opening": {
+        "eco": "D00",
+        "name": "Queen's Pawn Game: Levitsky Attack"
+      }
+    },
+    {
+      "uci": "g2g3",
+      "san": "g3",
+      "averageRating": 1452,
+      "white": 541418,
+      "draws": 51624,
+      "black": 487498,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h3",
+      "san": "h3",
+      "averageRating": 1470,
+      "white": 447957,
+      "draws": 41464,
+      "black": 413886,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f2f4",
+      "san": "f4",
+      "averageRating": 1360,
+      "white": 329609,
+      "draws": 35690,
+      "black": 342828,
+      "game": null,
+      "opening": {
+        "eco": "D00",
+        "name": "Queen's Pawn Game: Mason Attack"
+      }
+    },
+    {
+      "uci": "d1d3",
+      "san": "Qd3",
+      "averageRating": 1167,
+      "white": 224749,
+      "draws": 30517,
+      "black": 323191,
+      "game": null,
+      "opening": {
+        "eco": "D00",
+        "name": "Amazon Attack"
+      }
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "D00",
+    "name": "Queen's Pawn Game"
+  }
+}

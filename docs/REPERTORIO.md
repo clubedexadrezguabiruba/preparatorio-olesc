@@ -14,6 +14,24 @@ antes. Alargar para 700–1700 muda as frequências, e por isso o ⚠13 da §8 e
 A idade também muda o tom dos comentários: a §5 dizia "português de criança de
 10 anos", e o aluno mais novo tem 12.
 
+**E "medir em 700–1700" não é coisa que se possa pedir.** Duas descobertas de
+6/9/2026, na hora de fazer:
+
+1. **O explorer não tem balde abaixo de 1000.** Os valores que ele aceita são
+   `0, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500`, cada um indo até o
+   próximo. O piso é um balde só, de **0 a 999**. Não existe "700".
+2. **O número do explorer é o do Lichess; o do clube é o do chess.com.** Não são
+   a mesma escala: o Lichess começa todo mundo em 1500, então, para a mesma
+   força, o número dele é maior — e a diferença é maior justamente embaixo. Um
+   aluno de 700 no chess.com não é um jogador de 700 no Lichess; é algo perto de
+   1000 a 1200.
+
+Somadas, elas viram o ⚠13 do avesso: traduzir "700–1700" para dentro do
+`ratings` daria `0,1000,1200,1400,1600`, que enche a medição de gente **abaixo**
+do aluno mais fraco do clube e ainda corta o topo da turma — faixa mais errada
+que a que estava lá. Por isso a resposta não foi trocar a faixa por teoria, e
+sim **medir três e comparar**: §6.1.
+
 - O que existe hoje: a ferramenta (`lib/repertorio/`, `scripts/`) e **20
   rascunhos** importados dos cursos em `content/repertorio/rascunhos/`.
 - O que o **B3** escreveu: as **22 linhas do Base das brancas**, em sete arquivos
@@ -359,7 +377,12 @@ Nf3)`. Pela regra antiga, `4.Nf3` viraria resposta aceita.
 
 ---
 
-## 6. O que a faixa 1000–1400 joga de verdade
+## 6. O que a faixa medida joga de verdade
+
+O título desta seção dizia "a faixa 1000–1400", e estava errado duas vezes: os
+baldes pedidos cobrem **1000 a 1599**, e o número é o do **Lichess**, não o do
+chess.com. A tabela continua aqui como está porque é o registro do que de fato
+construiu o repertório. O que a faixa certa diria está na §6.1, medido.
 
 <!-- Gerado por `npm run repertorio:explorer` em 2026-09-05.
      Explorer do Lichess, rapid + classical, faixas 1000/1200/1400 — que são os
@@ -397,6 +420,83 @@ Nf3)`. Pela regra antiga, `4.Nf3` viraria resposta aceita.
 Para refazer: `npm run repertorio:explorer`. Para acrescentar posição, edite
 `content/repertorio/posicoes-chave.json` — o script recusa posição em que quem
 joga é o aluno, e joga os lances no tabuleiro antes de consultar.
+
+## 6.1 As três faixas, lado a lado — a medição do ⚠13
+
+Feita em 6/9/2026. Três recortes, definidos em `RECORTES`
+([lib/repertorio/explorer.ts](../lib/repertorio/explorer.ts)), cada um com seu
+cache versionado numa subpasta própria:
+
+| nome | baldes | o que é |
+|---|---|---|
+| `lichess-1000-1599` | 1000/1200/1400 | o que a §6 mediu, e de onde saiu o repertório |
+| `lichess-1000-1999` | 1000/1200/1400/1600/1800 | ≈ chess.com 700–1700, o público do clube |
+| `lichess-0-1799` | 0/1000/1200/1400/1600 | a leitura literal do ⚠13 |
+
+**A pergunta não é se 60,3 % virou 58,1 %.** É se muda o *conjunto de lances que
+entra*: percentual que anda não custa linha nenhuma, e resposta que entra ou sai
+custa — e, como o id de uma linha é o hash dos lances, custa junto o progresso de
+quem já treinou. Por isso o veredito compara conjuntos, e os percentuais ficam de
+apoio.
+
+`=` mesmo conjunto e mesma ordem · `~` mesmo conjunto, outra ordem · `≠` o
+conjunto muda. O `⚠` marca cobertura abaixo dos 80 % da §4.
+
+| posição (o adversário escolhe) | ? | `1000-1599` | `1000-1999` | `0-1799` |
+|---|---|---|---|---|
+| raiz — o que as brancas abrem | = | e4 d4 · 89% | e4 d4 · 89% | e4 d4 · 88.8% |
+| 1.e4 — a resposta das pretas | ~ | e5 c5 d5 e6 · 85.8% | e5 c5 e6 d5 · 84.6% | e5 c5 d5 e6 · 85.1% |
+| 1.e4 e5 2.Nf3 | = | Nc6 d6 Nf6 · 88% | Nc6 d6 Nf6 · 89.7% | Nc6 d6 Nf6 · 88.4% |
+| Escocesa 3.d4 | ≠ | exd4 d6 Nf6 **f6** · 83.3% | exd4 d6 Nf6 · 83.2% | exd4 d6 Nf6 · 80.5% |
+| Escocesa 4.Nxd4 | ≠ | Nxd4 Bc5 Nf6 · 81% | Nxd4 Bc5 Nf6 **Qf6** · 84% | Nxd4 Bc5 Nf6 **Qf6** · 84.7% |
+| Escocesa 4…Nxd4 5.Qxd4 | ≠ | Nf6 d6 c5 b6 · 81.1% | d6 Nf6 c5 **Qf6** · 79.5% ⚠ | d6 Nf6 c5 b6 · 79.9% ⚠ |
+| Caro Trocas 4.Bd3 | = | Nc6 Nf6 · 88.4% | Nc6 Nf6 · 90.7% | Nc6 Nf6 · 89.4% |
+| Francesa 3.Bd3 | ≠ | c5 dxe4 Nc6 Nf6 · 87.8% | c5 dxe4 Nf6 · 82.3% | c5 dxe4 Nf6 Nc6 · 88.9% |
+| **Escandinava 2.exd5** | ≠ | Qxd5 · 80.8% | Qxd5 **Nf6** · 92.9% | Qxd5 **Nf6** · 92.7% |
+| Alapin 2.c3 | ≠ | Nc6 d6 e6 e5 · 78.1% ⚠ | Nc6 d6 e6 **d5** · 76.9% ⚠ | Nc6 d6 e6 **d5** · 77.6% ⚠ |
+| 1.e4 c5 | = | Nf3 Bc4 d4 Nc3 · 79.6% ⚠ | Nf3 Bc4 d4 Nc3 · 80.4% | Nf3 Bc4 d4 Nc3 · 80% |
+| 1.e4 c5 2.Nf3 Nc6 | ≠ | d4 Bc4 Nc3 Bb5 · 84.6% | d4 Bc4 Bb5 **c3** · 83.9% | d4 Bc4 Bb5 Nc3 · 84.1% |
+| Dragão Acelerado 4…g6 | ≠ | Nxc6 Nc3 Be3 Bc4 · 83.1% | Nc3 Nxc6 Be3 **c4** · 82.6% | Nc3 Nxc6 Be3 Bc4 · 83% |
+| Bowdler 2.Bc4 Nc6 | ≠ | Nf3 Qf3 d3 Qh5 · 73.2% ⚠ | Nf3 d3 **c3** Qf3 · 68.7% ⚠ | Nf3 Qf3 d3 **c3** · 70.2% ⚠ |
+| **Alapin pelas pretas 3.e5 Nd5** | ≠ | d4 Bc4 c4 · 89.3% | d4 Bc4 · 81% | d4 Bc4 · 80.3% |
+| Rossolimo 3.Bb5 g6 | ≠ | Bxc6 O-O Nc3 d4 · 84.9% | Bxc6 O-O **c3** Nc3 · 85.9% | Bxc6 O-O Nc3 d4 · 84.8% |
+| Grand Prix 2.Nc3 Nc6 | ~ | Nf3 Bc4 Bb5 f4 · 83.4% | Nf3 Bc4 f4 Bb5 · 81.2% | Nf3 Bc4 Bb5 f4 · 82.5% |
+| 1.d4 d5 | = | c4 Bf4 Nf3 e3 · 77.8% ⚠ | c4 Bf4 Nf3 e3 · 81% | c4 Bf4 Nf3 e3 · 78.6% ⚠ |
+| Manhattan 2.c4 e6 | = | Nc3 Nf3 cxd5 e3 · 85.6% | Nc3 Nf3 cxd5 e3 · 87.7% | Nc3 Nf3 cxd5 e3 · 86.3% |
+| Manhattan 3.Nc3 Nf6 | ~ | Bg5 Nf3 e3 cxd5 · 80.2% | Bg5 Nf3 cxd5 e3 · 83.7% | Bg5 Nf3 cxd5 e3 · 82% |
+| Londres 2.Bf4 c5 | ≠ | e3 c3 dxc5 Nf3 · 92.7% | e3 c3 Nf3 · 82% | e3 c3 dxc5 · 80.2% |
+| Inglesa 1.c4 c5 | ≠ | Nc3 g3 Nf3 e4 · 78.2% ⚠ | Nc3 g3 Nf3 **e3** · 84.6% | Nc3 g3 Nf3 **e3** · 80.7% |
+| 1.Nf3 d5 | ≠ | d4 g3 e4 Nc3 · 75.5% ⚠ | d4 g3 **c4** e4 · 78.6% ⚠ | d4 g3 e4 **c4** · 75.5% ⚠ |
+
+**23 posições · 14 mudam de conjunto · 3 trocam de ordem.**
+
+Refazer: `npm run repertorio:explorer -- --comparar` — 0 consultas, porque o
+cache dos três está versionado.
+
+### O que os 14 querem dizer
+
+Catorze parece muito, e não é: **dez deles são o teto de 4 cortando entre dois
+lances quase empatados na quarta vaga.** No Bowdler entra `c3` com 10,7 % e sai
+`Qh5` com 8,6 %; no Rossolimo entra `c3` 8,9 % e sai `d4` 7,6 %; na Inglesa entra
+`e3` 7 % e sai `e4` 5,2 %. Nenhum é erro de repertório: é a régua tendo de cortar
+em algum lugar, e o lugar andando meio ponto.
+
+**Quatro são estruturais — o número de respostas muda, e as duas faixas novas
+concordam entre si.** Que elas concordem é o resultado mais forte daqui: a
+conclusão não depende de a conversão entre as escalas estar certa.
+
+| posição | o que muda | custa o quê |
+|---|---|---|
+| **Escandinava 2.exd5** | `2…Nf6` **entra**, com 15,4–18,7 % — de 1 resposta para 2 | uma linha **nova**. O `Qxd5` sozinho fechava 80,8 % e o corte parava nele; nas faixas novas não fecha, e o `…Nf6` — quase 1 em 5 escandinavas — fica sem resposta no Base |
+| **Alapin pelas pretas 3.e5 Nd5** | `4.c4` **sai** — de 3 respostas para 2 | nada a escrever: **encolhe o ⚠7**, que era "`4.Bc4` e `4.c4`" |
+| Escocesa 3.d4 | `3…f6` **sai** (3,8–4,5 %) — de 4 para 3 | nada: o Base cobre algo mais raro do que se pensava |
+| Escocesa 4.Nxd4 | `4…Qf6` **entra** (5,3–5,6 %) — de 3 para 4 | uma linha nova, de frequência baixa |
+
+**A assimetria que decide o risco: resposta que *entra* não órfã ninguém.** Uma
+linha nova tem lances novos, logo id novo, e os 42 ids de hoje ficam byte a byte
+onde estão. Quem órfã progresso é **mudar ou apagar** linha existente — e nenhuma
+das quatro estruturais pede isso. A Escandinava `2…Nf6` pode ser escrita a
+qualquer momento sem custar o treino de ninguém.
 
 ---
 
@@ -460,10 +560,15 @@ Manhattan `4.Bf4`; e no B5 o 12, que virou página de princípios em vez de
 linha. Sobram **dois** dos doze, e nenhum deles é linha do Base.
 
 Em 6/9/2026 entraram **dois novos**, e eles não são buraco de fonte: são
-consequência da correção do público no alto deste documento. O 13 é o que
-custa mais — ele pode mudar *quais* linhas existem, e o id de uma linha é o
-hash dos lances, então mexer nelas órfã o progresso de quem já treinou. Por
-isso ele é a tarefa logo depois do treinador, e não depois do Avançado.
+consequência da correção do público no alto deste documento. O 13 foi feito
+primeiro, e não depois do Avançado, exatamente porque podia mudar *quais* linhas
+existem: o id de uma linha é o hash dos lances, e mexer nelas órfã o progresso de
+quem já treinou.
+
+**Medido em 6/9/2026, o medo não se confirmou — e a razão é uma assimetria.** As
+mudanças que a faixa certa traz são de *acrescentar* resposta, e linha nova tem
+id novo: os 42 ids de hoje ficam onde estão. O que órfã é mudar ou apagar linha
+existente, e a medição não pede isso em lugar nenhum. A conta está na §6.1.
 
 | # | ⚠ | Frequência | §|
 |---|---|---|---|
@@ -473,13 +578,13 @@ isso ele é a tarefa logo depois do treinador, e não depois do Avançado.
 | ~~4~~ | ~~Francesa `3…c5` — escolher **um** dos três `!?`~~ — **fechado no B3**, é o `5.c3` | 38 % de 3.Bd3 | 2.7 |
 | ~~5~~ | ~~Caro `4…Nf6`~~ — **fechado no B3**, é o `5.c3` | 31 % de 4.Bd3 | 2.8 |
 | ~~6~~ | ~~Londres `2.Bf4` — confirmar `2…c5, …Nc6, …Qb6`~~ — **fechado no B4, com correção**: a dama só depois do c3 dele | 22 % de 1.d4 d5 | 2.9 |
-| **7** | **Alapin pelas pretas `4.Bc4` e `4.c4` — continua aberto** | 27 % de 3…Nd5 | 2.3 |
+| **7** | **Alapin pelas pretas `4.Bc4` — continua aberto.** O `4.c4` saiu junto na §6.1: nas duas faixas novas ele não entra mais no corte, e o ⚠ encolheu para um lance só | 17,5 % de 3…Nd5 | 2.3, 6.1 |
 | ~~8~~ | ~~Colle, Jobava, `2.e3`~~ — **fechado no B4**, é `…e6, …c5, …Bd6`, igualdade | 24 % de 1.d4 d5 | 2.9 |
 | ~~9~~ | ~~Francesa `3…Nc6`~~ — **fechado no B3**, é o `4.Nf3` | 14 % de 3.Bd3 | 2.7 |
 | ~~10~~ | ~~Manhattan `4.Bf4`~~ — **fora do Base pelo corte** (5ª resposta da posição); vai para o Avançado | 6,9 % de 3.Nc3 Nf6 | — |
 | **11** | **Maroczy — recortar só a sub-árvore do `6.e4`** | Avançado | 2.4 |
 | ~~12~~ | ~~Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios~~ — **fechado no B5**, em `/aberturas/notas/` | < 4,2 % cada | 2.10 |
-| **13** | **O recorte de frequência foi medido na faixa errada** — a §6 e o corte dos 80 % da §4 saíram do explorer em **1000–1400**; o público é **700–1700**. Refazer o explorer na faixa nova e comparar linha a linha. | todo o Base | 4, 6 |
+| **13** | **Medido em 6/9/2026 — a medição fechou, a escrita não.** Três faixas comparadas na §6.1: 14 das 23 posições mudam de conjunto, mas dez são o teto de 4 cortando entre quase-empates. Das quatro estruturais, a única que pede conteúdo é a **Escandinava `2…Nf6`** (15–19 % das escandinavas, hoje sem resposta no Base). É **aditivo: não órfã progresso.** | 1 linha nova | 6.1 |
 | **14** | **O tom dos 110 comentários** — foram escritos para "criança de 10 anos"; o aluno mais novo tem 12. Reler sob a régua nova da §5. | todo o Base | 5 |
 
 Os itens 1 a 5 eram o caminho crítico: sozinhos, são o que os alunos mais vão
@@ -487,11 +592,18 @@ encontrar e o que nenhuma fonte do Doug responde. Todos fecharam.
 
 **Sobre o 7, que é o único ⚠ do Base ainda em aberto.** O orçamento da §1 dá
 **uma** linha à Alapin pelas pretas, e ela foi para o `4.d4` (61,8 %). Quem
-fecha a porta aqui é o orçamento, não a régua: pela §4 a posição pediria três
-respostas (`d4` 61,8 + `Bc4` 17,5 + `c4` 10 = 89,3 %). O preço, medido: `4.Bc4`
-e `4.c4` juntos são 27 % de uma abertura que é 3,9 % das Sicilianas, que são
-10,1 % de 1.e4, que é 68,2 % da raiz — **menos de um jogo em mil**. É o menor
-número de toda esta tabela, e por isso ele espera o Avançado. O item 11 já era, por decisão, fora do Base.
+fechava a porta aqui era o orçamento, não a régua: na faixa antiga a posição
+pediria três respostas (`d4` 61,8 + `Bc4` 17,5 + `c4` 10 = 89,3 %). O preço,
+medido: `4.Bc4` e `4.c4` juntos são 27 % de uma abertura que é 3,9 % das
+Sicilianas, que são 10,1 % de 1.e4, que é 68,2 % da raiz — **menos de um jogo em
+mil**. É o menor número de toda esta tabela, e por isso ele espera o Avançado. O
+item 11 já era, por decisão, fora do Base.
+
+**A §6.1 encolheu o 7 sem custar nada.** Nas duas faixas novas o `4.c4` sai do
+corte — a posição pede **duas** respostas, não três, e `d4` + `Bc4` já fecham 80 %
+sozinhos. O ⚠ que era "escolher o que fazer contra dois lances" virou "contra
+um", e é o mesmo `4.Bc4` que o Krikor manda as brancas do clube jogarem. Continua
+esperando o Avançado, agora pela metade do tamanho.
 
 ---
 
@@ -500,6 +612,8 @@ número de toda esta tabela, e por isso ele espera o Avançado. O item 11 já er
 ```
 npm run repertorio:importar     # fontes -> rascunhos + relatório da §7
 npm run repertorio:explorer     # a tabela da §6 (cache versionado)
+npm run repertorio:explorer -- --recorte=lichess-1000-1999   # noutra faixa
+npm run repertorio:explorer -- --comparar    # as três faixas, lado a lado (§6.1)
 npm run repertorio:compilar     # PGN revisados -> public/repertorio/*.json
 npm run repertorio:compilar -- --check   # só confere; sai com erro se algo falha
 npm run repertorio:motor -- "1.e4 c5 2.Bc4 Cc6"   # as 5 melhores da posição
@@ -508,7 +622,7 @@ npm run repertorio:fidelidade   # onde a fonte fala numa posição nossa, e o qu
 npm run repertorio:fidelidade -- --pares         # a folha: fonte e nosso, lado a lado
 npm run db:migrar               # aplica as migrations, 0005_repertorio_revisao.sql inclusive
 npm run db:rls                  # prova que o aluno não grava progresso nem adia a revisão
-npm test                        # 292 testes, 145 deles do repertório
+npm test                        # 577 testes
 ```
 
 Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variações),
@@ -528,6 +642,21 @@ brancas e as 20 das pretas. **O Base está completo dos dois lados.**
 `/aberturas` lista as 12 aberturas em dois grupos, com a conta de linhas
 aprendidas; `/aberturas/[cor]/[abertura]` é onde se treina. A rota tem `[cor]`
 antes de `[abertura]` porque o slug pode repetir entre as duas.
+
+**A conta das barrinhas mudou de direção em 6/9/2026, e era um bug.** Ela varria
+o banco de progresso e adivinhava a abertura pelo **prefixo do id**
+(`brancas-escocesa-`). Como o id é o hash dos lances, uma linha reescrita deixa
+para trás um registro que nenhuma linha reclama — e o prefixo o adotava. O
+resultado, se algum dia uma linha mudasse: `/aberturas` mostrando **"3 de 2"**, a
+abertura virando **"em dia"** sem o aluno ter visto a linha nova, e o painel
+prometendo **"a revisar hoje"** para sempre, sem onde ser feita — enquanto a
+página da abertura, que sempre contou pelas linhas de verdade, discordava das
+outras duas. É o modo de falha que `progresso.ts` existe para impedir, entrando
+por outra porta. Agora o `index.json` carrega os **ids** de cada abertura, e as
+três telas contam do mesmo jeito: percorrendo o conteúdo e perguntando o
+progresso, nunca o contrário. O órfão fica no banco — não há chave estrangeira
+nem política de `delete`, e a `0004` diz que é de propósito —, mas parou de
+aparecer.
 
 **Uma sessão são duas fases, na mesma tela.** Na primeira vez em cada linha
 (`tentativas = 0`) o aluno entra na **passada assistida**: o cartão diz o lance

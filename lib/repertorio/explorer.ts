@@ -5,7 +5,7 @@ import { chaveDe } from "../tatica/chave.ts";
  *
  * É o número que decide o repertório, e por isso ele subiu de bloco. As fontes
  * são draft de GM: troncos até o lance 15–17, o ramo principal escolhido pela
- * verdade teórica. Numa sala de 1000–1400 a verdade é outra — na Escocesa, por
+ * verdade teórica. Numa sala de clube a verdade é outra — na Escocesa, por
  * exemplo, o `4…Bc5` do tronco do Grigoryan aparece em 16 % dos jogos e o
  * `4…Nxd4?!`, que ele mostra numa sub-variante marcada `$2`, aparece em 52 %.
  * Escrever as linhas antes de medir seria podar 336 ramos para 40 no chute e
@@ -16,10 +16,17 @@ import { chaveDe } from "../tatica/chave.ts";
  * - **explorer** — o banco de partidas online do Lichess, com um endereço que
  *   responde "nesta posição, o que cada faixa de rating joga, e em quantos
  *   jogos".
- * - **faixa** (`ratings`) — o explorer agrupa de 200 em 200 pelo piso: pedir
- *   `1000,1200,1400` traz jogadores de **1000 a 1599**, não de 1000 a 1400.
- *   Está escrito aqui porque a diferença some fácil e mudaria a leitura da
- *   tabela.
+ * - **faixa** (`ratings`) — o explorer agrupa em **baldes fixos**, nomeados
+ *   pelo piso: `0, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500`, cada um
+ *   indo até o próximo. Duas consequências que somem fácil e mudam a leitura
+ *   da tabela inteira. A primeira: pedir `1000,1200,1400` traz jogadores de
+ *   **1000 a 1599**, não de 1000 a 1400. A segunda: **não existe balde abaixo
+ *   de 1000** — o piso é um só, de 0 a 999, e não há como pedir "700".
+ * - **a escala** — o número é o do **Lichess**, que não é o do chess.com. Lá
+ *   todo mundo começa em 1500, então, para a mesma força, o número do Lichess
+ *   é maior. Ler um recorte daqui como se fosse a força do clube foi o erro
+ *   que gerou o ⚠13 do `docs/REPERTORIO.md`; por isso os nomes abaixo dizem
+ *   `lichess-` na cara.
  * - **cache** — a resposta guardada em arquivo. O explorer é gentil mas tem
  *   limite; e uma medição que muda sozinha entre duas rodadas não serve para
  *   justificar corte de conteúdo.
@@ -45,7 +52,39 @@ export type Posicao = {
   respostas: RespostaDoExplorer[];
 };
 
-export const FAIXAS = [1000, 1200, 1400] as const;
+/**
+ * As faixas candidatas, nomeadas.
+ *
+ * O ⚠13 pede comparar o recorte medido com o do público de verdade. Elas vivem
+ * aqui juntas, e não numa constante trocada na mão, porque a comparação só vale
+ * se as três puderem ser medidas **na mesma rodada** — e porque o cache em
+ * disco é separado por este nome.
+ */
+export const RECORTES = {
+  /** O que a §6 mediu até 6/9/2026, e o que está commitado no cache. */
+  "lichess-1000-1599": [1000, 1200, 1400],
+  /** ≈ chess.com 700–1700 — o público do clube, convertido entre as escalas. */
+  "lichess-1000-1999": [1000, 1200, 1400, 1600, 1800],
+  /** A leitura literal do ⚠13, que arrasta o balde do piso inteiro junto. */
+  "lichess-0-1799": [0, 1000, 1200, 1400, 1600],
+} as const;
+
+export type Recorte = keyof typeof RECORTES;
+
+export const RECORTES_NOMES = Object.keys(RECORTES) as Recorte[];
+
+/**
+ * O recorte que vale quando ninguém pede outro.
+ *
+ * Enquanto ele apontar para o que já está medido, a tabela da §6 continua
+ * reproduzível sem tocar na rede — e é essa reprodutibilidade que dá direito de
+ * comparar. Movê-lo **muda a §6**: é decisão de documento, não de código, e a
+ * medição vem antes.
+ */
+export const RECORTE_PADRAO: Recorte = "lichess-1000-1599";
+
+export const FAIXAS: readonly number[] = RECORTES[RECORTE_PADRAO];
+
 export const RITMOS = ["rapid", "classical"] as const;
 
 /** Abaixo disto o percentual é ruído, e a tabela diz "poucos jogos". */
@@ -54,11 +93,14 @@ export const JOGOS_MINIMOS = 200;
 const ENDERECO = "https://explorer.lichess.ovh/lichess";
 
 /** O endereço completo de uma consulta. É também a chave do cache. */
-export function enderecoDe(play: readonly string[]): string {
+export function enderecoDe(
+  play: readonly string[],
+  faixas: readonly number[] = FAIXAS,
+): string {
   const busca = new URLSearchParams({
     variant: "standard",
     speeds: RITMOS.join(","),
-    ratings: FAIXAS.join(","),
+    ratings: faixas.join(","),
     play: play.join(","),
     moves: "12",
     topGames: "0",
@@ -153,11 +195,23 @@ export type Opcoes = {
   intervalo?: number;
   /** Para onde vão os avisos. */
   avisar?: (mensagem: string) => void;
+  /** A faixa de rating desta consulta. Entra na chave do cache. */
+  faixas?: readonly number[];
 };
 
-/** Um nome de arquivo estável para a consulta. */
-export const chaveDoCache = (play: readonly string[]): string =>
-  `${play.length}-${chaveDe(enderecoDe(play)).toString(16).padStart(8, "0")}`;
+/**
+ * Um nome de arquivo estável para a consulta.
+ *
+ * O hash é do **endereço inteiro**, que carrega `ratings=` — então dois
+ * recortes nunca colidem, e nenhum lê o cache do outro. O hash não conhece o
+ * caminho em disco: mover os arquivos para uma subpasta por recorte não muda
+ * chave nenhuma.
+ */
+export const chaveDoCache = (
+  play: readonly string[],
+  faixas: readonly number[] = FAIXAS,
+): string =>
+  `${play.length}-${chaveDe(enderecoDe(play, faixas)).toString(16).padStart(8, "0")}`;
 
 let ultimaIda = 0;
 
@@ -178,9 +232,10 @@ export async function consultar(
     buscar = fetch,
     intervalo = 1500,
     avisar = () => {},
+    faixas = FAIXAS,
   } = opcoes;
 
-  const chave = chaveDoCache(play);
+  const chave = chaveDoCache(play, faixas);
   const guardado = cache?.ler(chave);
   if (guardado !== undefined) return resumir(guardado);
 
@@ -194,7 +249,7 @@ export async function consultar(
   ultimaIda = Date.now();
 
   try {
-    const resposta = await buscar(enderecoDe(play), {
+    const resposta = await buscar(enderecoDe(play, faixas), {
       headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
     });
     if (!resposta.ok) {
