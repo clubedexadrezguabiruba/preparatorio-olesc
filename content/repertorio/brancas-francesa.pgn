@@ -10,7 +10,7 @@
 [Nome "Francesa 3.Bd3"]
 [Cor "brancas"]
 [Nivel "base"]
-[Fonte "GM Avetik Grigoryan (ChessMood) — 'French with 3.Bd3'. No lance 5 contra 3...c5 a escolha entre os três lances marcados pela fonte é nossa, por livro + motor: Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026 põe os três a menos de um décimo de peão um do outro, então a escolha é pedagógica, não de avaliação."]
+[Fonte "3...dxe4: GM Niclas Huschenbeth — 'Short & Sweet: 1.e4' (Chess.com), variante 'French #2'. Os 15 meios-lances batem um a um com o curso, que segue além até 13.Cxc3. O arquivo do Grigoryan dá os mesmos lances mas tem zero prosa; o Huschenbeth explica o 3.Bd3 (flexibilidade e surpresa) e o 5.Bf3 (o bispo toma f3, então o cavalo vai a e2). Conferido em 7/9/2026. || 3...c5: a escolha do lance 5 entre os três marcados pela fonte continua nossa, por livro + motor, Stockfish 18 profundidade 20 MultiPV 3, medido em 5/9/2026 — os três a menos de um décimo de peão. Esta ponta espera fonte."]
 [Result "*"]
 
 1. e4 e6 2. d4 d5 3. Bd3 {Quase todo mundo joga 3.Cc3 ou 3.e5 aqui, e as duas

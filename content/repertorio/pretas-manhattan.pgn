@@ -22,7 +22,7 @@
 [Nome "Manhattan — tronco"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "Short & Sweet: 1.d4 d5 do IM Kushager Krishnater (Chessable) — capítulo The Manhattan, tronco 4.Cf3 Cbd7 5.Bg5 Bb4 6.e3 c5 7.cxd5 exd5 8.dxc5 Da5."]
+[Fonte "IM Kushager Krishnater — 'Short & Sweet: 1.d4 d5', capítulo 'The Manhattan #1'. Tronco 4.Cf3 Cbd7 5.Bg5 Bb4 6.e3 c5 7.cxd5 exd5 8.dxc5 Da5, que bate com o nosso por transposição na ordem Cc3/Cf3. ATENÇÃO: o PGN exportado do curso tem ZERO comentários, mas a versão no chess.com tem 263 — inclusive a explicação do …Cbd7 (o Da4+ deixaria de ser xeque) e do …Da5 (roque no lance seguinte, rei dele parado no meio). Medido em 7/9/2026."]
 [Result "*"]
 
 1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 Nbd7 {O cavalo parece mal posto: em c6 ele

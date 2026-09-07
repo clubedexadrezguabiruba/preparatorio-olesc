@@ -47,7 +47,7 @@
       "4": "Quase todo mundo joga 3.Cc3 ou 3.e5 aqui, e as duas\ndão posições cheias de teoria. Nós fazemos o mais simples: pomos o bispo em d3,\napontado para o rei dele, e deixamos o centro decidir sozinho. Se ele comer em\ne4, o bispo recaptura já desenvolvido; se ele bater com …c5, o jogo abre — e num\njogo aberto quem tem o bispo bom é quem manda.",
       "8": "Ele abriu o jogo cedo.\nNós seguramos o peão de d4 com o de c3 e ficamos com um centro sólido e o bispo\njá apontado para o lado do rei dele. Os outros dois lances da fonte também\nservem — este é o mais fácil de jogar depois."
     },
-    "fonte": "GM Avetik Grigoryan (ChessMood) — 'French with 3.Bd3'. No lance 5 contra 3...c5 a escolha entre os três lances marcados pela fonte é nossa, por livro + motor: Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026 põe os três a menos de um décimo de peão um do outro, então a escolha é pedagógica, não de avaliação."
+    "fonte": "3...dxe4: GM Niclas Huschenbeth — 'Short & Sweet: 1.e4' (Chess.com), variante 'French #2'. Os 15 meios-lances batem um a um com o curso, que segue além até 13.Cxc3. O arquivo do Grigoryan dá os mesmos lances mas tem zero prosa; o Huschenbeth explica o 3.Bd3 (flexibilidade e surpresa) e o 5.Bf3 (o bispo toma f3, então o cavalo vai a e2). Conferido em 7/9/2026. || 3...c5: a escolha do lance 5 entre os três marcados pela fonte continua nossa, por livro + motor, Stockfish 18 profundidade 20 MultiPV 3, medido em 5/9/2026 — os três a menos de um décimo de peão. Esta ponta espera fonte."
   },
   {
     "id": "brancas-francesa-c384ccc4",
@@ -108,7 +108,7 @@
       "8": "O cavalo dele atacou o bispo, e em vez de trocar ou voltar\npara d3 nós recuamos para f3. Daqui o bispo atravessa o tabuleiro inteiro até\nb7, que é onde o bispo dele de c8 gostaria de morar — e não vai poder.",
       "14": "O cavalo fica no meio do\ntabuleiro e tudo está desenvolvido. Repare no bispo de f3: ele atravessa o\ntabuleiro inteiro, e é justamente a peça que o jogador de Francesa menos gosta\nde enfrentar, porque o bispo dele de c8 continua preso."
     },
-    "fonte": "GM Avetik Grigoryan (ChessMood) — 'French with 3.Bd3'. No lance 5 contra 3...c5 a escolha entre os três lances marcados pela fonte é nossa, por livro + motor: Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026 põe os três a menos de um décimo de peão um do outro, então a escolha é pedagógica, não de avaliação."
+    "fonte": "3...dxe4: GM Niclas Huschenbeth — 'Short & Sweet: 1.e4' (Chess.com), variante 'French #2'. Os 15 meios-lances batem um a um com o curso, que segue além até 13.Cxc3. O arquivo do Grigoryan dá os mesmos lances mas tem zero prosa; o Huschenbeth explica o 3.Bd3 (flexibilidade e surpresa) e o 5.Bf3 (o bispo toma f3, então o cavalo vai a e2). Conferido em 7/9/2026. || 3...c5: a escolha do lance 5 entre os três marcados pela fonte continua nossa, por livro + motor, Stockfish 18 profundidade 20 MultiPV 3, medido em 5/9/2026 — os três a menos de um décimo de peão. Esta ponta espera fonte."
   },
   {
     "id": "brancas-francesa-9d4caf37",

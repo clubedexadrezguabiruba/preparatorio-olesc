@@ -38,7 +38,7 @@ mesmo: f3, g4 e os peões avançam contra o rei dele.} *
 [Nome "Escocesa"]
 [Cor "brancas"]
 [Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 2 da seção 8 de docs/REPERTORIO.md: nenhum curso do Doug responde a 5...c5 nem a 5...b6. O motor põe 6.De3 a 7 centésimos do primeiro lance dele, e 7.e5 e 8.Df3 são a variante principal dele."]
+[Fonte "5...b6: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variante 'The Popular 4...Nxd4?!'. Os 15 meios-lances batem um a um com o curso, que segue além até 11.Thd1; o autor lista 5...d6, 5...Cf6, 5...c5, 5...Df6 e 5...b6 como as cinco respostas populares. Conferido em 7/9/2026. || 5...c5: ainda Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. O curso cita o 5...c5 em prosa mas não dá linha; esta ponta espera fonte."]
 [Result "*"]
 
 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4 5. Qxd4 {Agora é a dama que fica no

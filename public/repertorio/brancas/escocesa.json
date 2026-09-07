@@ -284,7 +284,7 @@
       "8": "Agora é a dama que fica no\nmeio do tabuleiro, e isso costuma ser perigoso: dama cedo apanha. Aqui não —\nnão há peça dele pronta para expulsá-la de graça. Ele vai empurrá-la com peão, e\ncada peão que anda é um lance que ele não usou para desenvolver.",
       "14": "Ele armou o bispo na diagonal grande\npara bater em e4, e nós simplesmente defendemos com o cavalo e seguimos o plano\nde sempre: bispo em f4 e roque grande. O peão de e4 está seguro."
     },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 2 da seção 8 de docs/REPERTORIO.md: nenhum curso do Doug responde a 5...c5 nem a 5...b6. O motor põe 6.De3 a 7 centésimos do primeiro lance dele, e 7.e5 e 8.Df3 são a variante principal dele."
+    "fonte": "5...b6: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variante 'The Popular 4...Nxd4?!'. Os 15 meios-lances batem um a um com o curso, que segue além até 11.Thd1; o autor lista 5...d6, 5...Cf6, 5...c5, 5...Df6 e 5...b6 como as cinco respostas populares. Conferido em 7/9/2026. || 5...c5: ainda Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. O curso cita o 5...c5 em prosa mas não dá linha; esta ponta espera fonte."
   },
   {
     "id": "brancas-escocesa-a46c0bd6",
@@ -346,7 +346,7 @@
       "12": "O mesmo golpe da outra linha: o peão avança e\nexpulsa o cavalo antes que ele se instale. Vale reparar que este truque aparece\nduas vezes na Escocesa.",
       "14": "De f3 a dama ataca o cavalo de d5 de\nnovo e ainda olha para f7. Enquanto ele decide onde pôr esse cavalo, o nosso\npeão de e5 vai tomando o espaço do lado do rei."
     },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 2 da seção 8 de docs/REPERTORIO.md: nenhum curso do Doug responde a 5...c5 nem a 5...b6. O motor põe 6.De3 a 7 centésimos do primeiro lance dele, e 7.e5 e 8.Df3 são a variante principal dele."
+    "fonte": "5...b6: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variante 'The Popular 4...Nxd4?!'. Os 15 meios-lances batem um a um com o curso, que segue além até 11.Thd1; o autor lista 5...d6, 5...Cf6, 5...c5, 5...Df6 e 5...b6 como as cinco respostas populares. Conferido em 7/9/2026. || 5...c5: ainda Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. O curso cita o 5...c5 em prosa mas não dá linha; esta ponta espera fonte."
   },
   {
     "id": "brancas-escocesa-1778f8cb",

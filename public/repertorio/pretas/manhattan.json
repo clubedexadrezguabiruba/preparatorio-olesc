@@ -59,7 +59,7 @@
       "7": "O cavalo parece mal posto: em c6 ele\nestaria mais no meio. O motivo de ir para d7 é um lance que ainda nem\naconteceu. Se fôssemos direto de …Bb4, ele responderia Da4+ — com xeque — e nós\nseríamos obrigados a tapar com …Cc6. Cavalo em c6 tranca o peão de c7, e sem o\n…c5 a nossa ideia inteira morre. Com o cavalo já em d7, aquele Da4 deixa de ser\nxeque, e o bispo vai para b4 em paz. Guarde a ordem: …Cbd7, depois …Bb4, depois\n…c5.",
       "15": "A dama sai e ameaça …Bxc3. Mas a ameaça não é o mais importante: o\nmais importante é que nós rocamos no lance seguinte e o rei dele continua\nparado no meio do tabuleiro, com o nosso bispo de b4 e a nossa dama de a5\napontados para lá. Ele está com um peão a mais e o rei no meio — e é o rei que\ndecide. Foi o …c5 do lance 6 que abriu tudo isso."
     },
-    "fonte": "Short & Sweet: 1.d4 d5 do IM Kushager Krishnater (Chessable) — capítulo The Manhattan, tronco 4.Cf3 Cbd7 5.Bg5 Bb4 6.e3 c5 7.cxd5 exd5 8.dxc5 Da5."
+    "fonte": "IM Kushager Krishnater — 'Short & Sweet: 1.d4 d5', capítulo 'The Manhattan #1'. Tronco 4.Cf3 Cbd7 5.Bg5 Bb4 6.e3 c5 7.cxd5 exd5 8.dxc5 Da5, que bate com o nosso por transposição na ordem Cc3/Cf3. ATENÇÃO: o PGN exportado do curso tem ZERO comentários, mas a versão no chess.com tem 263 — inclusive a explicação do …Cbd7 (o Da4+ deixaria de ser xeque) e do …Da5 (roque no lance seguinte, rei dele parado no meio). Medido em 7/9/2026."
   },
   {
     "id": "pretas-manhattan-6ac84e24",
