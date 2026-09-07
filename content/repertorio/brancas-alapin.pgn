@@ -1,7 +1,17 @@
-; Alapin 2.c3 — 3 linhas do Base. As três respostas mais jogadas na faixa
-; 1000-1400 são 2...Cc6, 2...d6 e 2...e6, e são essas que entram. Os capítulos
-; do Krikor sobre 2...Cf6 e 2...d5 ficam para o Avançado: pela tabela da seção 6
-; eles são 6,1 por cento e 6,6 por cento, abaixo do corte do Base.
+; Alapin 2.c3 — 1 linha do Base. Eram três até 7/9/2026: o 2...Cc6 (37,6 por
+; cento), o 2...d6 (21,3) e o 2...e6 (12,2).
+;
+; A PODA de 7/9/2026 (seção 23 do docs/REVISAO-FONTES.md) deixou só o 2...Cc6, e
+; o motivo é o mesmo do bispo em c4 na seção 2.6 do docs/REPERTORIO.md: depois
+; de 2.c3 as quatro respostas mais comuns somam 78,1 por cento — a posição se
+; espalha, e posição espalhada não rende sequência para decorar, rende uma
+; ideia. As respostas dele viraram a página de princípios 'alapin-centro-grande'
+; em content/repertorio/notas.json, que cobre 2...d6 e 2...e6 (que tinham linha)
+; e mais 2...Cf6 e 2...d5 (que nunca tiveram).
+;
+; O que sobra aqui é a linha que ENSINA a ideia, jogada contra a resposta mais
+; comum: o peão de c3 recaptura em d4 e o centro fica com dois peões contra
+; nenhum. Quem entendeu isso responde as outras quatro sozinho.
 
 [Abertura "alapin"]
 [Nome "Alapin 2.c3"]
@@ -14,12 +24,6 @@
 entender: o peão de c3 não ataca nada, ele só guarda lugar para o de d2 avançar
 dois passos. Se ele comer em d4, quem recaptura é o peão de c3 — e o centro
 continua nosso.} 2... Nc6
-(2... d6 3. d4 Nf6 4. Bd3 {Ele não brigou pelo centro, então os dois peões do
-meio ficam nossos e o bispo sai para d3 apoiando e4. Se ele trocar em d4, o peão
-de c3 recaptura e o centro fica ainda maior.})
-(2... e6 3. d4 d5 4. e5 {O peão avança e trava o centro. O bispo dele de c8 fica
-preso atrás dos próprios peões, e nós ganhamos espaço para jogar do lado do
-rei.})
 3. d4 cxd4 4. cxd4 {Este é o lance que dá nome à abertura toda: o peão de c3
 recaptura e ficamos com dois peões no centro, e4 e d4, contra nenhum.} 4... d6
 5. Nc3 g6 6. d5 {O peão anda mais um e o cavalo dele não tem para onde ir a não

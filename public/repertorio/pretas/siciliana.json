@@ -62,122 +62,13 @@
     "fonte": "FM Kamil Plichta — 'Short & Sweet: Plichta's Accelerated Dragon' (Chess.com), variantes #12 (9.h3) e #13 (9.f3 d5!). Os 16 meios-lances batem um a um com as duas. O draft do Grigoryan dá os mesmos lances mas tem zero prosa; o Plichta explica o 8...Te8 e nomeia o erro 8...Ca5?? 9.e5. Medido em 7/9/2026."
   },
   {
-    "id": "pretas-siciliana-71793593",
+    "id": "pretas-siciliana-75cca098",
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana — Dragão Acelerado, o 5º lance dele — 5...Nf6 6.Nc3 Bg7",
+    "nome": "Siciliana — Dragão Acelerado, o 5º lance dele — 6...Nf6 7.e5 Nd5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 4 7",
-    "lances": [
-      "e2e4",
-      "c7c5",
-      "g1f3",
-      "b8c6",
-      "d2d4",
-      "c5d4",
-      "f3d4",
-      "g7g6",
-      "c1e3",
-      "g8f6",
-      "b1c3",
-      "f8g7"
-    ],
-    "sans": [
-      "e4",
-      "c5",
-      "Nf3",
-      "Nc6",
-      "d4",
-      "cxd4",
-      "Nxd4",
-      "g6",
-      "Be3",
-      "Nf6",
-      "Nc3",
-      "Bg7"
-    ],
-    "meus": [
-      1,
-      3,
-      5,
-      7,
-      9,
-      11
-    ],
-    "alternativas": {},
-    "errosNomeados": {},
-    "comentarios": {
-      "7": "Os mesmos …g6 e …Bg7 da linha de\ncima. Este jogo reúne os quintos lances dele que não são o 5.Cc3 — e a graça é\nque quase todos dão na mesma posição, com os lances em outra ordem.",
-      "11": "O bispo dele saiu antes do cavalo e nada muda para nós:\nCf6 e Bg7, e esta é exatamente a posição da linha do 5.Cc3, só que por outra\nordem. O curso explica por que esse bispo acaba sempre em e3: é o único lance\nque defende o cavalo de d4 e desenvolve no mesmo tempo — qualquer outro obriga\no cavalo a andar de novo. Do nosso lado o plano é o de sempre, e é ele que dá\nnome ao Acelerado: segurar o peão de d7 em casa o máximo que der, rocar, e só\nentão jogar …d5 de uma vez."
-    },
-    "fonte": "5.Be3 e 5.Bc4: FM Kamil Plichta — 'Short & Sweet: Plichta's Accelerated Dragon' (Chess.com), tronco 5.Cc3 Bg7 6.Be3 Cf6 7.Bc4 O-O das variantes #2 a #13. As duas transpõem para ele: a do 5.Be3 volta a bater em 6...Bg7 e a do 5.Bc4 em 7.Cc3, e é ali que o curso explica o Be3 (o único lance que defende o cavalo de d4 e desenvolve no mesmo tempo) e o roque (preferido ao 7...Da5 que o autor jogou por anos). O motor prefere 6...Da5+ nas duas, cerca de um terço de peão melhor; repetir os lances do curso foi escolha de propósito, para não acrescentar ideia nova. Conferido em 7/9/2026. || 5.Cxc6: Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 3 da seção 8 de docs/REPERTORIO.md: 5.Cxc6 é 36 por cento das respostas a 4...g6, mais que o 5.Cc3. O 5...bxc6 empata e o 5...dxc6 fica meio peão atrás. O Plichta cobre o 5.Cxc6 na variante #5, mas sai da nossa linha no 8.Cc3 dele; ver a seção 17 de docs/REVISAO-FONTES.md."
-  },
-  {
-    "id": "pretas-siciliana-1dc3b0cb",
-    "cor": "pretas",
-    "abertura": "siciliana",
-    "nivel": "base",
-    "nome": "Siciliana — Dragão Acelerado, o 5º lance dele — 6...Nf6 7.Nc3 O-O",
-    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1bq1rk1/pp1pppbp/2n2np1/8/2BNP3/2N1B3/PPP2PPP/R2QK2R w KQ - 6 8",
-    "lances": [
-      "e2e4",
-      "c7c5",
-      "g1f3",
-      "b8c6",
-      "d2d4",
-      "c5d4",
-      "f3d4",
-      "g7g6",
-      "f1c4",
-      "f8g7",
-      "c1e3",
-      "g8f6",
-      "b1c3",
-      "e8g8"
-    ],
-    "sans": [
-      "e4",
-      "c5",
-      "Nf3",
-      "Nc6",
-      "d4",
-      "cxd4",
-      "Nxd4",
-      "g6",
-      "Bc4",
-      "Bg7",
-      "Be3",
-      "Nf6",
-      "Nc3",
-      "O-O"
-    ],
-    "meus": [
-      1,
-      3,
-      5,
-      7,
-      9,
-      11,
-      13
-    ],
-    "alternativas": {},
-    "errosNomeados": {},
-    "comentarios": {
-      "7": "Os mesmos …g6 e …Bg7 da linha de\ncima. Este jogo reúne os quintos lances dele que não são o 5.Cc3 — e a graça é\nque quase todos dão na mesma posição, com os lances em outra ordem.",
-      "13": "O bispo em c4 é o lance mais forte que ele\ntem aqui, e o curso diz por quê: é o único que dá às brancas um jogo parecido\ncom o do Dragão comum, e enquanto o bispo estiver nessa diagonal o nosso …d5\nnão sai. Então tire o …d5 da cabeça por enquanto e roque. O autor escolhe o\nroque no lugar de …Da5 depois de anos jogando a dama: rocar termina o\ndesenvolvimento e deixa o plano em aberto, para decidir olhando o lance seguinte\ndele. E repare que esta é a mesma posição da linha principal — ele jogou Bc4 no\nquinto lance, o curso joga no sétimo, e dá no mesmo."
-    },
-    "fonte": "5.Be3 e 5.Bc4: FM Kamil Plichta — 'Short & Sweet: Plichta's Accelerated Dragon' (Chess.com), tronco 5.Cc3 Bg7 6.Be3 Cf6 7.Bc4 O-O das variantes #2 a #13. As duas transpõem para ele: a do 5.Be3 volta a bater em 6...Bg7 e a do 5.Bc4 em 7.Cc3, e é ali que o curso explica o Be3 (o único lance que defende o cavalo de d4 e desenvolve no mesmo tempo) e o roque (preferido ao 7...Da5 que o autor jogou por anos). O motor prefere 6...Da5+ nas duas, cerca de um terço de peão melhor; repetir os lances do curso foi escolha de propósito, para não acrescentar ideia nova. Conferido em 7/9/2026. || 5.Cxc6: Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 3 da seção 8 de docs/REPERTORIO.md: 5.Cxc6 é 36 por cento das respostas a 4...g6, mais que o 5.Cc3. O 5...bxc6 empata e o 5...dxc6 fica meio peão atrás. O Plichta cobre o 5.Cxc6 na variante #5, mas sai da nossa linha no 8.Cc3 dele; ver a seção 17 de docs/REVISAO-FONTES.md."
-  },
-  {
-    "id": "pretas-siciliana-2d329919",
-    "cor": "pretas",
-    "abertura": "siciliana",
-    "nivel": "base",
-    "nome": "Siciliana — Dragão Acelerado, o 5º lance dele — 7...Nd5 8.Nc3 Qb6",
-    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1b1kb1r/p2ppp1p/1qp3p1/3nP3/3Q4/2N5/PPP2PPP/R1B1KB1R w KQkq - 3 9",
+    "fenFinal": "r1bqkb1r/p2ppp1p/2p3p1/3nP3/3Q4/8/PPP2PPP/RNB1KB1R w KQkq - 1 8",
     "lances": [
       "e2e4",
       "c7c5",
@@ -192,9 +83,7 @@
       "d1d4",
       "g8f6",
       "e4e5",
-      "f6d5",
-      "b1c3",
-      "d8b6"
+      "f6d5"
     ],
     "sans": [
       "e4",
@@ -210,9 +99,7 @@
       "Qd4",
       "Nf6",
       "e5",
-      "Nd5",
-      "Nc3",
-      "Qb6"
+      "Nd5"
     ],
     "meus": [
       1,
@@ -221,8 +108,7 @@
       7,
       9,
       11,
-      13,
-      15
+      13
     ],
     "alternativas": {},
     "errosNomeados": {
@@ -233,7 +119,7 @@
     "comentarios": {
       "7": "Os mesmos …g6 e …Bg7 da linha de\ncima. Este jogo reúne os quintos lances dele que não são o 5.Cc3 — e a graça é\nque quase todos dão na mesma posição, com os lances em outra ordem.",
       "9": "Repare em qual peão recaptura. Com o de b7 os nossos peões ficam\nfeios, mas o de d7 continua livre para ir a d5 ou d6; com o de d7 o motor põe as\nbrancas meio peão à frente, porque a nossa dama sai do tabuleiro e o rei não\nroca mais.",
-      "15": "Ele trocou o cavalo para estragar\nos nossos peões e centralizou a dama. Nós oferecemos a troca: sem damas, o peão\ndobrado em c6 deixa de ser um problema, e depois de 9.Dxb6 axb6 a coluna a abre\npara a nossa torre. Este é o jeito mais simples de jogar a posição — o outro,\n8…Bg7, exige dar um peão para ter iniciativa."
+      "13": "O cavalo vai para d5 no estilo Alekhine, e o curso avisa: não o\nponha em h5 nem o devolva a g8, que é o que a maioria faz — as duas dão às\nbrancas jogo excelente. De d5 ele fica no meio do tabuleiro, e é ELE quem tem de\ntomar cuidado agora para igualar. Daqui o plano é simples: quando ele jogar\n9.Cc3, ofereça a troca de damas com …Db6. Sem damas o peão dobrado em c6 deixa\nde ser problema, e a coluna a abre para a nossa torre."
     },
     "fonte": "5.Be3 e 5.Bc4: FM Kamil Plichta — 'Short & Sweet: Plichta's Accelerated Dragon' (Chess.com), tronco 5.Cc3 Bg7 6.Be3 Cf6 7.Bc4 O-O das variantes #2 a #13. As duas transpõem para ele: a do 5.Be3 volta a bater em 6...Bg7 e a do 5.Bc4 em 7.Cc3, e é ali que o curso explica o Be3 (o único lance que defende o cavalo de d4 e desenvolve no mesmo tempo) e o roque (preferido ao 7...Da5 que o autor jogou por anos). O motor prefere 6...Da5+ nas duas, cerca de um terço de peão melhor; repetir os lances do curso foi escolha de propósito, para não acrescentar ideia nova. Conferido em 7/9/2026. || 5.Cxc6: Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 3 da seção 8 de docs/REPERTORIO.md: 5.Cxc6 é 36 por cento das respostas a 4...g6, mais que o 5.Cc3. O 5...bxc6 empata e o 5...dxc6 fica meio peão atrás. O Plichta cobre o 5.Cxc6 na variante #5, mas sai da nossa linha no 8.Cc3 dele; ver a seção 17 de docs/REVISAO-FONTES.md."
   },
@@ -320,7 +206,7 @@
     "id": "pretas-siciliana-e6e1e081",
     "cor": "pretas",
     "abertura": "siciliana",
-    "nivel": "base",
+    "nivel": "avancado",
     "nome": "Siciliana — Rossolimo com 4.O-O — 7...d5 8.e5 Ne4",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bq1rk1/pp2ppbp/2n3p1/1BppP3/3Pn3/2P2N2/PP3PPP/RNBQR1K1 w - - 1 9",
@@ -377,69 +263,6 @@
       "15": "Ele guardou o bispo e montou o centro com c3 e d4. A resposta é …d5 na\nhora, antes que esse centro fique grande. Depois de 8.e5 o cavalo pula para e4:\ncasa central, defendida, e para expulsá-lo dali ele só tem f3 — que abre a casa\ndo próprio rei."
     },
     "fonte": "Recomendação do professor, assinada pelo Doug em 7/9/2026 — a segunda do repertório, depois do 6.Bf4 da Caro-Kann (seção 19 de docs/REVISAO-FONTES.md). O argumento tem três pernas, e as três estão medidas. (1) A fonte natural desta posição declara que está chutando: no 5.c3, o IM Christof Sielecki ('Short & Sweet: Magnus Sicilian', variante 'S&S Magnus Sicilian - Rossolimo' do 4.O-O) escreve que o lance 'ainda não foi tentado contra o Magnus Carlsen, então não sabemos o que ele teria planejado', e que ELE decidiu recomendar 5...e5 por coerência com o resto do curso dele. (2) O motor põe a nossa linha inteira como variante principal: Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 — o 5...Cf6 dá brancas +0,32 com a continuação 6.Te1 O-O 7.d4 d5 8.e5 Ce4, que é esta linha lance por lance até o fim; o 5...e5 do curso dá +0,34 e fica em segundo. (3) A linha do curso pede que o aluno segure um peão a mais contra compensação que o próprio autor declara suficiente, por um 8...a6 que ele chama de 'menos comum' e apostando que as brancas não saberão conduzir a posição sem preparação de computador, e termina com o rei preto em f8 sem direito a roque. Não é posição para 12 a 15 anos. O 4.O-O é 22,9 por cento das respostas a 3...g6 pela tabela da seção 6 de docs/REPERTORIO.md."
-  },
-  {
-    "id": "pretas-siciliana-2bfe81e8",
-    "cor": "pretas",
-    "abertura": "siciliana",
-    "nivel": "base",
-    "nome": "Siciliana — 2.Cc3 — 7...Be7 8.O-O O-O",
-    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1bq1rk1/pp2bppp/2n2n2/1Bpp4/3P4/2N2N2/PPP2PPP/R1BQ1RK1 w - - 4 9",
-    "lances": [
-      "e2e4",
-      "c7c5",
-      "b1c3",
-      "b8c6",
-      "f1c4",
-      "e7e6",
-      "g1f3",
-      "g8f6",
-      "d2d4",
-      "d7d5",
-      "e4d5",
-      "e6d5",
-      "c4b5",
-      "f8e7",
-      "e1g1",
-      "e8g8"
-    ],
-    "sans": [
-      "e4",
-      "c5",
-      "Nc3",
-      "Nc6",
-      "Bc4",
-      "e6",
-      "Nf3",
-      "Nf6",
-      "d4",
-      "d5",
-      "exd5",
-      "exd5",
-      "Bb5",
-      "Be7",
-      "O-O",
-      "O-O"
-    ],
-    "meus": [
-      1,
-      3,
-      5,
-      7,
-      9,
-      11,
-      13,
-      15
-    ],
-    "alternativas": {},
-    "errosNomeados": {},
-    "comentarios": {
-      "3": "Ele guardou o cavalo em c3 antes de abrir o centro. O curso\nresponde …Cc6 e escreve o motivo: é este lance, e não outro, que nos deixa\nresponder 3.Cf3 com 3…g6 e cair no Dragão Acelerado de sempre. Com um segundo\nlance qualquer, ele teria como nos empurrar para uma Siciliana aberta que você\nnão treinou. Os dois lances que ele tem daqui levam a posições que já estão\nneste mesmo arquivo.",
-      "9": "O …d5 só é possível porque o peão de e6 está lá\nembaixo para segurá-lo. É por isso que a ordem é …e6 primeiro e …d5 depois, e\nnunca ao contrário.",
-      "15": "O bispo em\nc4 de novo, e a receita é a da página \"Siciliana — o bispo em c4\": …e6 e depois\n…d5, o peão bate no bispo e ele vai parar em b5. Lá aquilo não vira linha porque\nas brancas jogam qualquer coisa; aqui vira, porque o 2.Cc3 prende a ordem. A\nideia é a mesma nas duas — leia a página e esta linha sai sozinha."
-    },
-    "fonte": "2...Cc6 e 3.Cf3 g6: FM Kamil Plichta — 'Short & Sweet: Plichta's Accelerated Dragon' (Chess.com), variantes #30 a #32. O curso recomenda o 2...Cc6 justamente para poder responder 3.Cf3 com 3...g6, e escreve que, ao pôr o cavalo em c3 cedo, as brancas abrem mão do Maróczy. A linha transpõe para o tronco do Acelerado a partir do 5.Cxd4. Conferido em 7/9/2026. || 3.Bc4 e6: Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Pela tabela da seção 6, depois de 2.Cc3 Cc6 ele joga 3.Cf3 46,9 por cento e 3.Bc4 18,1 por cento, e são esses dois que entram. O 3...e6 é lance do motor e transpõe para a estrutura do bispo em c4, que saiu deste arquivo e virou a página de princípios de slug 'bispo-em-c4'; a ideia está no draft 'Sicilian Sidelines Homework' do Grigoryan, que a deixa sem continuação. Nenhum curso do corpus entra no 3.Bc4 — ver a seção 17 de docs/REVISAO-FONTES.md."
   },
   {
     "id": "pretas-siciliana-685348cf",
@@ -577,83 +400,5 @@
       "21": "O peão volta, e volta com peça: o bispo sai de f8 direto para d6, que é\ncasa boa, e a nossa estrutura fica limpa. Agora olhe os peões dele: a2, b2, d4,\nf2, g2, h2. O de d4 ficou sozinho — os dois peões de c sumiram na troca do lance\n4, e o de e foi trocado no lance 9. Isso é um peão isolado, e peão isolado se\ntrata sempre do mesmo jeito: bloqueia-se a casa da frente e cobra-se o peão com\nas peças. A casa da frente é d5, e o lance seguinte da variante do Sielecki é\n…Cb4, que ele explica assim: trocar peças aqui não nos incomoda, porque trocar\najuda a dominar as casas claras — em especial a que fica na frente do peão\nisolado. Não é ataque, é cobrança."
     },
     "fonte": "2.c3 e 2...Cf6: IM Andras Toth — 'Short & Sweet: 1.e4 for Club Players' (Chess.com). É repertório de BRANCAS, e é de propósito: quem explica o que o 2.c3 quer é quem o joga. O curso escreve que com 2.c3 as brancas sinalizam a vontade de tomar o centro inteiro com d2-d4, e que as duas respostas principais, 2...d5 e 2...Cf6, atacam e4 justamente para impedir esse par de peões. Do 6...Cc6 ao 11...Bxd6: IM Christof Sielecki — 'Short & Sweet: Magnus Sicilian' (Chess.com), variante 'S&S Magnus Sicilian - Alapin'. Ele joga 4.Cf3 Cc6 5.d4 cxd4 6.cxd4 d6 e escreve com todas as letras que a NOSSA ordem — 4.d4 cxd4 5.cxd4 d6 6.Cf3 Cc6 — chega na mesma posição; daí em diante bate lance a lance até o fim da nossa linha, que para dois meios-lances antes do fim da variante dele — o 12...Cb4, citado no comentário do 11...Bxd6 como o lance seguinte. Dele são: a observação de que os dois peões de c sumiram e por isso o c4 não existe para expulsar o cavalo de d5, escrita na posição depois do nosso 6...Cc6 e trazida para o comentário do 5...d6; o 8...Bd7, que ele prefere ao 8...dxe5 mesmo chamando este de linha principal das pretas, porque guarda mais chances de jogar para ganhar e foi o que o campeão do mundo jogou; e o motivo da troca de peças menores que ele escreve no 12...Cb4 — dominar as casas claras, em especial d5, a que fica na frente do peão isolado. DECLARADO: o comentário do 9...e6 é NOSSO. O curso joga o lance sem explicá-lo, e o número é do Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 — o 9...e6 é o único lance que segura a igualdade, o natural 9...exd6 põe as brancas +0,35 e o 9...a6, +0,55. TROCA DE CAUDA, decidida pelo Doug em 7/9/2026: até esta data a linha terminava em 8...dxe5, com o argumento do peão isolado escrito por nós e a pendência declarada nesta tag. O professor recusou assinar aquele argumento e mandou seguir o curso. O peão isolado de d4 não se perdeu na troca: ele continua isolado na posição final, e agora quem ensina a cobrá-lo é o Sielecki."
-  },
-  {
-    "id": "pretas-siciliana-a23cd1f7",
-    "cor": "pretas",
-    "abertura": "siciliana",
-    "nivel": "base",
-    "nome": "Siciliana — Gambito Morra 2.d4 — 10...f6 11.Bh4 Bxd6",
-    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r2qk2r/pp1b2pp/1nnbpp2/1B6/3P3B/5N2/PP3PPP/RN1QK2R w KQkq - 0 12",
-    "lances": [
-      "e2e4",
-      "c7c5",
-      "d2d4",
-      "c5d4",
-      "c2c3",
-      "g8f6",
-      "e4e5",
-      "f6d5",
-      "g1f3",
-      "b8c6",
-      "c3d4",
-      "d7d6",
-      "f1c4",
-      "d5b6",
-      "c4b5",
-      "c8d7",
-      "e5d6",
-      "e7e6",
-      "c1g5",
-      "f7f6",
-      "g5h4",
-      "f8d6"
-    ],
-    "sans": [
-      "e4",
-      "c5",
-      "d4",
-      "cxd4",
-      "c3",
-      "Nf6",
-      "e5",
-      "Nd5",
-      "Nf3",
-      "Nc6",
-      "cxd4",
-      "d6",
-      "Bc4",
-      "Nb6",
-      "Bb5",
-      "Bd7",
-      "exd6",
-      "e6",
-      "Bg5",
-      "f6",
-      "Bh4",
-      "Bxd6"
-    ],
-    "meus": [
-      1,
-      3,
-      5,
-      7,
-      9,
-      11,
-      13,
-      15,
-      17,
-      19,
-      21
-    ],
-    "alternativas": {},
-    "errosNomeados": {},
-    "comentarios": {
-      "5": "Ele está oferecendo um peão, e o motivo de não\npegar não é o que parece. Pegar não é erro: o motor põe o 3…dxc3 em igualdade e\nem primeiro lugar, empatado com o …Cf6. O motivo é de estudo, e é do Sielecki —\no campeão do mundo enfrentou este gambito uma vez na vida, aos onze anos, e\naceitar o peão não é uma linha para decorar, é um curso inteiro. Contra uma\nabertura que você vai ver poucas vezes, a resposta certa é a que já está na sua\ncabeça: o …Cf6 ataca o peão de e4, obriga o 4.e5 — e daí em diante é a Alapin,\nque você já sabe.",
-      "15": "Este é o truque do arquivo inteiro: recusamos o peão com …Cf6 e caímos na\nmesma posição da linha da Alapin — confira os dois diagramas, são iguais, só os\nlances vieram em outra ordem. Quem estudou a Alapin ganhou o Gambito Morra de\ngraça, e daqui até o fim os dois textos são o mesmo: …e6 sem recapturar, …f6\npara expulsar o bispo e …Bxd6 pegando o peão com peça.",
-      "21": "Mesma posição final da Alapin, e o motivo é o mesmo: o peão de d4 dele\nficou isolado, sem peão de c e sem peão de e para ajudar. Bloqueia-se d5 e\ncobra-se o peão com as peças. Se você chegou aqui pelo Morra, leia o texto do\n11…Bxd6 da linha da Alapin — é o mesmo tabuleiro."
-    },
-    "fonte": "IM Christof Sielecki — 'Short & Sweet: Magnus Sicilian' (Chess.com), variantes 'S&S Magnus Sicilian - Morra Gambit' e 'S&S Magnus Sicilian - Alapin'. O curso joga a NOSSA ordem inteira: 2.d4 cxd4 3.c3 Cf6 4.e5 Cd5 e, pela Alapin, 5.Cf3 Cc6 6.cxd4 d6 7.Bc4 Cb6 8.Bb5 Bd7 — daí até o fim a cauda é a mesma da linha da Alapin acima, e o texto de lá vale aqui. Dele é o argumento do 3...Cf6: o Magnus enfrentou o Morra uma vez na vida, aos 11 anos, jogou 3...Cc6 e não serve de guia; ele recomenda transpor para a Alapin por economia de estudo, porque aceitar o peão não é uma linha para decorar e sim um curso inteiro (ele manda quem quiser estudar isso para o 'Mop up the Morra' do Logozar), e para quem já carrega as linhas principais da Siciliana a solução barata contra sidelines é a que faz sentido. CORRIGIDO em 7/9/2026, dois pontos. (1) A tag dizia 'Livro + motor' e citava o draft 'Sicilian Sidelines Homework' do Grigoryan, que para no 3.c3 — estava desatualizada, porque o Magnus Sicilian está no corpus desde a importação e cobre 15 dos 16 meios-lances antigos. (2) O comentário do 3...Cf6 dizia que aceitar com 3...dxc3 faria o aluno 'jogar o resto da partida correndo atrás'. Não faz: Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026, põe o 3...dxc3 em igualdade e em PRIMEIRO lugar, empatado com o 3...Cf6. O motivo de recusar é o do Sielecki, e é de estudo, não de posição. O 9...e6 segue declarado como nosso, pelo mesmo motivo escrito na tag da Alapin."
   }
 ]

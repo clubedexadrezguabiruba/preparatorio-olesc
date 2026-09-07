@@ -8,6 +8,13 @@
 ; docs/REVISAO-FONTES.md: o Base joga 6.h3, que vem com a regra escrita na
 ; fonte, e o 6.Bf4 do Doug fica no Avançado.
 
+;
+; PODA de 7/9/2026 (seção 23 do docs/REVISAO-FONTES.md): a linha do 4...Cf6 5.c3
+; SAIU. Ela era a única das três em "livro + motor", e não precisava existir: a
+; regra que o próprio curso escreve — "c3 contra ...Cc6, h3 contra ...Cf6" — já
+; gera a resposta sozinha, e o comentário do 6.h3 da linha que ficou diz isso. O
+; aluno que entendeu a regra responde as duas ordens; decorar a segunda era
+; decorar a mesma ideia duas vezes.
 [Abertura "caro-kann"]
 [Nome "Caro-Kann Trocas"]
 [Cor "brancas"]
@@ -43,22 +50,6 @@ inteira. Daqui a montagem é sempre a mesma, e é ela que você tem de saber de
 cor: torre para e1, na coluna semiaberta — nós não temos peão em e e ele tem —,
 dama para e2, e o cavalo pulando para e5. Ele ficou sólido, mas o único plano
 que tem é empurrar …e5 uma hora; até lá o tabuleiro é nosso.} *
-
-[Abertura "caro-kann"]
-[Nome "Caro-Kann Trocas"]
-[Cor "brancas"]
-[Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 5 da seção 8 de docs/REPERTORIO.md: nem o arquivo do Grigoryan nem o curso 'Caro Kann't' cobrem o 4...Cf6 — as oito variantes do curso gratuito jogam 4...Cc6. O 5.c3 é o primeiro lance do motor, e a variante principal dele transpõe para a linha do 4...Cc6 deste mesmo arquivo."]
-[Result "*"]
-
-1. e4 c6 2. d4 d5 3. exd5 {Trocar aqui é escolha nossa, e é a mais fácil de
-jogar: acaba a briga no centro antes de ela começar. Sobram peões iguais dos
-dois lados e uma posição limpa, em que ganha quem coloca as peças nos lugares
-certos.} 3... cxd5 4. Bd3 Nf6 5. c3 {Não muda nada para nós. O peão em c3 segura
-o de d4, e a regra segue valendo: o cavalo dele já está em f6, então o h3 vem no
-lance seguinte, e depois Cf3, roque e torre para e1. Se ele jogar …Cc6 a
-qualquer momento, caímos exatamente na linha do 4…Cc6 deste mesmo arquivo — é a
-mesma casa por outra porta.} *
 
 [Abertura "caro-kann"]
 [Nome "Caro-Kann Trocas"]

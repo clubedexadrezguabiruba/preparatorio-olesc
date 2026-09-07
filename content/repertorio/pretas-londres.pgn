@@ -39,7 +39,37 @@ uma peça, sim — mas, ao contrário do 2.c4, não disputa espaço nenhum no ce
 É por isso que batemos em d4 na mesma hora com …c5, sem esperar convite. E o
 bispo, ao sair de casa, deixou b2 sem ninguém tomando conta: é em torno dessa
 casa que giram as duas linhas deste arquivo.} 3. e3
-(3. c3 Nc6 {Ele adiantou o c3 e a tentação é sacar a dama na hora. Não saque: o
+3... Nc6 4. Nf3 Nf6 (4... Qb6 $2) {Ainda não é hora da dama, e o motivo não é b2 — é d5.
+Enquanto a dama está em d8, é ela quem defende o nosso peão de d5. Se ela sair
+agora, o peão fica sem defensor nenhum, e o cavalo de b1 pula para c3 atacando
+justamente ele: 4…Db6? 5.Cc3! e o motor já dá +1,40 para as brancas. Pegar o
+peão de b2 é pior ainda — 5…Dxb2 6.Cxd5! e são quase quatro peões. Então
+desenvolvemos, e o …Cf6 não é só esperar: o cavalo em f6 passa a defender d5, e
+com ele lá o Cc3 deixa de ganhar peão nenhum. O Londres quase sempre acaba
+jogando c3, e no lance em que ele jogar, aquela casa fecha para o cavalo — é aí
+que a dama sai.} 5. c3 Qb6 6. Qc2 g6 7. h3 Bg7 8. Nbd2 O-O {Deu certo: com o
+peão dele em c3, o cavalo de b1 não chega mais àquela casa, d5 está em paz, e
+agora é b2 que fica pendurado. Ele foi obrigado a gastar um lance de dama só
+para segurar o peão — 6.Dc2 aqui; Dc1 e Db3 são os outros dois. E repare no que
+veio depois. O …g6 não é enfeite: o …Bf5, que parece o lance da vida para o
+nosso bispo, tropeça em dxc5!, que ataca a nossa dama e a tira de cima de b2 —
+e aí o bispo de f5 fica de graça para a dama dele. Então fianchetamos, e o
+bispo vai para f5 mais tarde, quando der. O h3 dele também tem motivo: fecha
+g4 e abre a casa h2, para o bispo de f4 ter para onde fugir quando o nosso
+cavalo pular para h5. Roque feito, ele escolhe entre rocar do mesmo lado ou
+trocar as damas e rocar do lado da dama — e nós estamos prontos para os dois.} *
+
+[Abertura "londres"]
+[Nome "Londres 2.Bf4 — 3.c3 com 5.dxc5"]
+[Cor "pretas"]
+[Nivel "avancado"]
+[Fonte "PASSOU PARA O AVANÇADO em 7/9/2026, pela poda da seção 23 de docs/REVISAO-FONTES.md — os lances são os mesmos, o id não mudou, e a fonte também não. O motivo está escrito no comentário da própria linha: o curso diz que o 3.c3 quase sempre TRANSPÕE para as variantes com peões em e3 e c3, que é a outra linha deste arquivo, e esta só existe para o 5.dxc5, o único lance dele que não transpõe. Uma linha que cobre a exceção da exceção não é Base. A regra que vale sempre — …e6 antes de pegar o peão de volta — foi para o comentário do 2…c5 da linha que ficou. || FM Viktor Neustroev — 'Short & Sweet: Anti-London System' (Chess.com, grátis), variante 'The Solid 3.c3: 4.Nf3, 5.dxc5'. Os 20 meios-lances batem um a um com ela, do primeiro ao último. Dele são: o motivo do 3...Cc6 (controlar e5 e deixar a ameaça de ...Db6 guardada em vez de gastá-la); o 5...e6, com a medida de que, recuperando o peão assim, o melhor que as brancas conseguem é igualdade; o 6.b4 como tentativa de segurar o peão e o ...a5 como o lance típico que mina a corrente; o ...Cg6 como ataque duplo; e o plano do 10...O-O (...b6, ...Bb7, ...Bd6 e ...e5)."]
+[Result "*"]
+
+1. d4 d5 2. Bf4 c5 {O mesmo …c5 de sempre contra o 2.Bf4: ele desenvolveu uma
+peça sem disputar espaço nenhum no centro, então batemos em d4 na hora. Aqui ele
+tenta segurar o peão de outro jeito — e é a única maneira de sair da linha que
+você já treina.} 3. c3 Nc6 {Ele adiantou o c3 e a tentação é sacar a dama na hora. Não saque: o
 curso joga …Cc6 primeiro, e por dois motivos. O primeiro é o de sempre nesta
 abertura — o cavalo toma conta de e5, e a ameaça de …Db6 fica de pé, guardada
 para quando servir. O segundo é o desenho do arquivo: o curso escreve que o 3.c3
@@ -62,23 +92,4 @@ seguido de …e5. Sobra 9.Bg3 — e aí, finalmente, comemos em c5.} 9. Bg3 Bxc5
 linha só: …b6 e …Bb7 pondo o bispo na diagonal grande, …Bd6 realinhando o outro
 bispo, e …e5 no centro. É a mesma ideia da outra linha desta página vista de
 outro ângulo: ele gastou a abertura mexendo peões no flanco da dama, e nós
-ficamos com as peças apontadas para o meio do tabuleiro.})
-3... Nc6 4. Nf3 Nf6 (4... Qb6 $2) {Ainda não é hora da dama, e o motivo não é b2 — é d5.
-Enquanto a dama está em d8, é ela quem defende o nosso peão de d5. Se ela sair
-agora, o peão fica sem defensor nenhum, e o cavalo de b1 pula para c3 atacando
-justamente ele: 4…Db6? 5.Cc3! e o motor já dá +1,40 para as brancas. Pegar o
-peão de b2 é pior ainda — 5…Dxb2 6.Cxd5! e são quase quatro peões. Então
-desenvolvemos, e o …Cf6 não é só esperar: o cavalo em f6 passa a defender d5, e
-com ele lá o Cc3 deixa de ganhar peão nenhum. O Londres quase sempre acaba
-jogando c3, e no lance em que ele jogar, aquela casa fecha para o cavalo — é aí
-que a dama sai.} 5. c3 Qb6 6. Qc2 g6 7. h3 Bg7 8. Nbd2 O-O {Deu certo: com o
-peão dele em c3, o cavalo de b1 não chega mais àquela casa, d5 está em paz, e
-agora é b2 que fica pendurado. Ele foi obrigado a gastar um lance de dama só
-para segurar o peão — 6.Dc2 aqui; Dc1 e Db3 são os outros dois. E repare no que
-veio depois. O …g6 não é enfeite: o …Bf5, que parece o lance da vida para o
-nosso bispo, tropeça em dxc5!, que ataca a nossa dama e a tira de cima de b2 —
-e aí o bispo de f5 fica de graça para a dama dele. Então fianchetamos, e o
-bispo vai para f5 mais tarde, quando der. O h3 dele também tem motivo: fecha
-g4 e abre a casa h2, para o bispo de f4 ter para onde fugir quando o nosso
-cavalo pular para h5. Roque feito, ele escolhe entre rocar do mesmo lado ou
-trocar as damas e rocar do lado da dama — e nós estamos prontos para os dois.} *
+ficamos com as peças apontadas para o meio do tabuleiro.} *

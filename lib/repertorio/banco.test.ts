@@ -30,8 +30,13 @@ function ler(relativo: string): unknown {
 
 const indice = IndiceSchema.parse(ler("index.json"));
 
-test("o índice tem as doze aberturas, sem repetir cor e slug", () => {
-  assert.equal(indice.length, 12);
+test("o índice tem as onze aberturas, sem repetir cor e slug", () => {
+  // Eram doze até 7/9/2026. A poda da §23 de `docs/REVISAO-FONTES.md` apagou
+  // `pretas/outras` inteira: a única linha dela terminava na MESMA posição do
+  // 6º lance da `pretas-manhattan-7945d4d3`, conferido casa a casa — o aluno
+  // chega lá treinando o Manhattan, e uma abertura só para a outra porta cobrava
+  // duas vezes pela mesma ideia.
+  assert.equal(indice.length, 11);
   const chaves = new Set(indice.map((e) => `${e.cor}/${e.abertura}`));
   assert.equal(chaves.size, indice.length, "há uma abertura repetida no índice");
 });
@@ -67,7 +72,7 @@ test("cor e abertura de cada linha batem com a pasta em que ela está", () => {
   }
 });
 
-test("o Base publicado tem 41 linhas, e o primeiro lance é sempre das brancas", () => {
+test("o Base publicado tem 20 linhas, e o primeiro lance é sempre das brancas", () => {
   const todas = indice.flatMap((e) =>
     validarBanco(ler(e.arquivo.replace(/^\/repertorio\//, "")), e.abertura),
   );
@@ -76,13 +81,16 @@ test("o Base publicado tem 41 linhas, e o primeiro lance é sempre das brancas",
   // de ser o mesmo. Contar o total faria esta afirmação virar "quantas linhas
   // existem", que não é contrato de nada.
   //
-  // **Foi 40 até 7/9/2026**, quando o Doug decidiu dar DUAS linhas ao arquivo
-  // do Colle em vez de uma (§22 de `docs/REVISAO-FONTES.md`): o Colle cobre
-  // 2.Cf3 e 2.e3, que transpõem um no outro, e o Jobava do 2.Cc3 não transpõe
-  // em nenhum dos dois. Nada morreu para isso entrar — 41 ids antes, 42 depois.
+  // **Foi 41 até 7/9/2026, e caiu para 20 na mesma tarde** (§23 de
+  // `docs/REVISAO-FONTES.md`). O motivo não foi orçamento: 42 linhas custavam
+  // ao aluno **205 decisões distintas**, das quais 188 lances sem comentário
+  // nenhum — decoreba, que é o contrário do que o repertório existe para
+  // ensinar. O Base agora custa 127 decisões, e o que saiu não morreu todo: 7
+  // linhas foram para o Avançado, que abre quando o Base estiver aprendido.
+  //
   // Este número é a meta pedagógica do Base; ele não tem relação com o `teto`
   // de `aberturasInchadas`, que conta linhas **por abertura** e continua em 40.
-  assert.equal(todas.filter((l) => l.nivel === "base").length, 41);
+  assert.equal(todas.filter((l) => l.nivel === "base").length, 20);
 
   for (const linha of todas) {
     // O contrato de que a tela depende para saber quando auto-jogar: `meus`

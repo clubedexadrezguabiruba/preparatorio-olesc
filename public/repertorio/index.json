@@ -3,10 +3,8 @@
     "cor": "brancas",
     "abertura": "alapin",
     "nome": "Alapin 2.c3",
-    "linhas": 3,
+    "linhas": 1,
     "ids": [
-      "brancas-alapin-cba5a868",
-      "brancas-alapin-0987f03c",
       "brancas-alapin-c8e4c146"
     ],
     "idsAvancado": [],
@@ -16,10 +14,9 @@
     "cor": "brancas",
     "abertura": "caro-kann",
     "nome": "Caro-Kann Trocas",
-    "linhas": 3,
+    "linhas": 2,
     "ids": [
       "brancas-caro-kann-428a7cce",
-      "brancas-caro-kann-054a0df4",
       "brancas-caro-kann-d2337d9b"
     ],
     "idsAvancado": [
@@ -33,41 +30,39 @@
     "nome": "Escandinava",
     "linhas": 3,
     "ids": [
-      "brancas-escandinava-63b15bec",
       "brancas-escandinava-8d9a2cac",
-      "brancas-escandinava-60e836c1"
+      "brancas-escandinava-60e836c1",
+      "brancas-escandinava-63b15bec"
     ],
-    "idsAvancado": [],
+    "idsAvancado": [
+      "brancas-escandinava-63b15bec"
+    ],
     "arquivo": "/repertorio/brancas/escandinava.json"
   },
   {
     "cor": "brancas",
     "abertura": "escocesa",
     "nome": "Escocesa",
-    "linhas": 9,
+    "linhas": 5,
     "ids": [
       "brancas-escocesa-903edd82",
-      "brancas-escocesa-73290a81",
-      "brancas-escocesa-724ae4ca",
+      "brancas-escocesa-3c8bdb81",
       "brancas-escocesa-5250fcfd",
-      "brancas-escocesa-7b8467ff",
-      "brancas-escocesa-a46c0bd6",
-      "brancas-escocesa-1778f8cb",
-      "brancas-escocesa-0f2ad8b2",
-      "brancas-escocesa-6ca49100"
+      "brancas-escocesa-6ca49100",
+      "brancas-escocesa-1778f8cb"
     ],
-    "idsAvancado": [],
+    "idsAvancado": [
+      "brancas-escocesa-1778f8cb"
+    ],
     "arquivo": "/repertorio/brancas/escocesa.json"
   },
   {
     "cor": "brancas",
     "abertura": "francesa",
     "nome": "Francesa 3.Bd3",
-    "linhas": 3,
+    "linhas": 1,
     "ids": [
-      "brancas-francesa-746ed04d",
-      "brancas-francesa-c384ccc4",
-      "brancas-francesa-9d4caf37"
+      "brancas-francesa-c384ccc4"
     ],
     "idsAvancado": [],
     "arquivo": "/repertorio/brancas/francesa.json"
@@ -104,7 +99,9 @@
       "pretas-colle-f0590dc0",
       "pretas-colle-0e2f8d38"
     ],
-    "idsAvancado": [],
+    "idsAvancado": [
+      "pretas-colle-0e2f8d38"
+    ],
     "arquivo": "/repertorio/pretas/colle.json"
   },
   {
@@ -113,54 +110,44 @@
     "nome": "Londres 2.Bf4",
     "linhas": 2,
     "ids": [
-      "pretas-londres-0fdb1535",
-      "pretas-londres-53d5b431"
+      "pretas-londres-53d5b431",
+      "pretas-londres-0fdb1535"
     ],
-    "idsAvancado": [],
+    "idsAvancado": [
+      "pretas-londres-0fdb1535"
+    ],
     "arquivo": "/repertorio/pretas/londres.json"
   },
   {
     "cor": "pretas",
     "abertura": "manhattan",
     "nome": "Manhattan",
-    "linhas": 3,
+    "linhas": 2,
     "ids": [
       "pretas-manhattan-7945d4d3",
-      "pretas-manhattan-6ac84e24",
-      "pretas-manhattan-3e9e876d"
+      "pretas-manhattan-6ac84e24"
     ],
-    "idsAvancado": [],
+    "idsAvancado": [
+      "pretas-manhattan-6ac84e24"
+    ],
     "arquivo": "/repertorio/pretas/manhattan.json"
-  },
-  {
-    "cor": "pretas",
-    "abertura": "outras",
-    "nome": "1.c4 e as outras primeiras",
-    "linhas": 1,
-    "ids": [
-      "pretas-outras-2ffa3251"
-    ],
-    "idsAvancado": [],
-    "arquivo": "/repertorio/pretas/outras.json"
   },
   {
     "cor": "pretas",
     "abertura": "siciliana",
     "nome": "Siciliana",
-    "linhas": 10,
+    "linhas": 6,
     "ids": [
       "pretas-siciliana-345142b0",
-      "pretas-siciliana-71793593",
-      "pretas-siciliana-1dc3b0cb",
-      "pretas-siciliana-2d329919",
+      "pretas-siciliana-75cca098",
       "pretas-siciliana-08323cca",
       "pretas-siciliana-e6e1e081",
-      "pretas-siciliana-2bfe81e8",
       "pretas-siciliana-685348cf",
-      "pretas-siciliana-ddf21e1b",
-      "pretas-siciliana-a23cd1f7"
+      "pretas-siciliana-ddf21e1b"
     ],
-    "idsAvancado": [],
+    "idsAvancado": [
+      "pretas-siciliana-e6e1e081"
+    ],
     "arquivo": "/repertorio/pretas/siciliana.json"
   }
 ]

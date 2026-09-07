@@ -39,29 +39,15 @@ isso o bispo de g7 já atravessa o tabuleiro pela diagonal grande.} *
 1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 {Os mesmos …g6 e …Bg7 da linha de
 cima. Este jogo reúne os quintos lances dele que não são o 5.Cc3 — e a graça é
 que quase todos dão na mesma posição, com os lances em outra ordem.} 5. Nxc6
-(5. Be3 Nf6 6. Nc3 Bg7 {O bispo dele saiu antes do cavalo e nada muda para nós:
-Cf6 e Bg7, e esta é exatamente a posição da linha do 5.Cc3, só que por outra
-ordem. O curso explica por que esse bispo acaba sempre em e3: é o único lance
-que defende o cavalo de d4 e desenvolve no mesmo tempo — qualquer outro obriga
-o cavalo a andar de novo. Do nosso lado o plano é o de sempre, e é ele que dá
-nome ao Acelerado: segurar o peão de d7 em casa o máximo que der, rocar, e só
-então jogar …d5 de uma vez.})
-(5. Bc4 Bg7 6. Be3 Nf6 7. Nc3 O-O {O bispo em c4 é o lance mais forte que ele
-tem aqui, e o curso diz por quê: é o único que dá às brancas um jogo parecido
-com o do Dragão comum, e enquanto o bispo estiver nessa diagonal o nosso …d5
-não sai. Então tire o …d5 da cabeça por enquanto e roque. O autor escolhe o
-roque no lugar de …Da5 depois de anos jogando a dama: rocar termina o
-desenvolvimento e deixa o plano em aberto, para decidir olhando o lance seguinte
-dele. E repare que esta é a mesma posição da linha principal — ele jogou Bc4 no
-quinto lance, o curso joga no sétimo, e dá no mesmo.})
 5... bxc6 (5... dxc6 $6) {Repare em qual peão recaptura. Com o de b7 os nossos peões ficam
 feios, mas o de d7 continua livre para ir a d5 ou d6; com o de d7 o motor põe as
 brancas meio peão à frente, porque a nossa dama sai do tabuleiro e o rei não
-roca mais.} 6. Qd4 Nf6 7. e5 Nd5 8. Nc3 Qb6 {Ele trocou o cavalo para estragar
-os nossos peões e centralizou a dama. Nós oferecemos a troca: sem damas, o peão
-dobrado em c6 deixa de ser um problema, e depois de 9.Dxb6 axb6 a coluna a abre
-para a nossa torre. Este é o jeito mais simples de jogar a posição — o outro,
-8…Bg7, exige dar um peão para ter iniciativa.} *
+roca mais.} 6. Qd4 Nf6 7. e5 Nd5 {O cavalo vai para d5 no estilo Alekhine, e o curso avisa: não o
+ponha em h5 nem o devolva a g8, que é o que a maioria faz — as duas dão às
+brancas jogo excelente. De d5 ele fica no meio do tabuleiro, e é ELE quem tem de
+tomar cuidado agora para igualar. Daqui o plano é simples: quando ele jogar
+9.Cc3, ofereça a troca de damas com …Db6. Sem damas o peão dobrado em c6 deixa
+de ser problema, e a coluna a abre para a nossa torre.} *
 
 [Abertura "siciliana"]
 [Nome "Siciliana — Rossolimo 3.Bb5"]
@@ -99,7 +85,7 @@ posição escrevendo que as pretas têm excelente contrajogo.} *
 [Abertura "siciliana"]
 [Nome "Siciliana — Rossolimo com 4.O-O"]
 [Cor "pretas"]
-[Nivel "base"]
+[Nivel "avancado"]
 [Fonte "Recomendação do professor, assinada pelo Doug em 7/9/2026 — a segunda do repertório, depois do 6.Bf4 da Caro-Kann (seção 19 de docs/REVISAO-FONTES.md). O argumento tem três pernas, e as três estão medidas. (1) A fonte natural desta posição declara que está chutando: no 5.c3, o IM Christof Sielecki ('Short & Sweet: Magnus Sicilian', variante 'S&S Magnus Sicilian - Rossolimo' do 4.O-O) escreve que o lance 'ainda não foi tentado contra o Magnus Carlsen, então não sabemos o que ele teria planejado', e que ELE decidiu recomendar 5...e5 por coerência com o resto do curso dele. (2) O motor põe a nossa linha inteira como variante principal: Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 — o 5...Cf6 dá brancas +0,32 com a continuação 6.Te1 O-O 7.d4 d5 8.e5 Ce4, que é esta linha lance por lance até o fim; o 5...e5 do curso dá +0,34 e fica em segundo. (3) A linha do curso pede que o aluno segure um peão a mais contra compensação que o próprio autor declara suficiente, por um 8...a6 que ele chama de 'menos comum' e apostando que as brancas não saberão conduzir a posição sem preparação de computador, e termina com o rei preto em f8 sem direito a roque. Não é posição para 12 a 15 anos. O 4.O-O é 22,9 por cento das respostas a 3...g6 pela tabela da seção 6 de docs/REPERTORIO.md."]
 [Result "*"]
 
@@ -125,13 +111,6 @@ responder 3.Cf3 com 3…g6 e cair no Dragão Acelerado de sempre. Com um segundo
 lance qualquer, ele teria como nos empurrar para uma Siciliana aberta que você
 não treinou. Os dois lances que ele tem daqui levam a posições que já estão
 neste mesmo arquivo.} 3. Nf3
-(3. Bc4 e6 4. Nf3 Nf6 5. d4 d5 {O …d5 só é possível porque o peão de e6 está lá
-embaixo para segurá-lo. É por isso que a ordem é …e6 primeiro e …d5 depois, e
-nunca ao contrário.} 6. exd5 exd5 7. Bb5 Be7 8. O-O O-O {O bispo em
-c4 de novo, e a receita é a da página "Siciliana — o bispo em c4": …e6 e depois
-…d5, o peão bate no bispo e ele vai parar em b5. Lá aquilo não vira linha porque
-as brancas jogam qualquer coisa; aqui vira, porque o 2.Cc3 prende a ordem. A
-ideia é a mesma nas duas — leia a página e esta linha sai sozinha.})
 3... g6 4. d4 cxd4 5. Nxd4 Bg7 6. Be3 Nf6 {Ele pôs o cavalo em c3 antes de d4 e
 mesmo assim caiu no Dragão Acelerado: esta é a mesma posição da linha do 5.Cc3,
 com os lances em outra ordem. E ele pagou caro pela ordem. O curso diz que o
@@ -189,29 +168,3 @@ as peças. A casa da frente é d5, e o lance seguinte da variante do Sielecki é
 …Cb4, que ele explica assim: trocar peças aqui não nos incomoda, porque trocar
 ajuda a dominar as casas claras — em especial a que fica na frente do peão
 isolado. Não é ataque, é cobrança.} *
-
-[Abertura "siciliana"]
-[Nome "Siciliana — Gambito Morra 2.d4"]
-[Cor "pretas"]
-[Nivel "base"]
-[Fonte "IM Christof Sielecki — 'Short & Sweet: Magnus Sicilian' (Chess.com), variantes 'S&S Magnus Sicilian - Morra Gambit' e 'S&S Magnus Sicilian - Alapin'. O curso joga a NOSSA ordem inteira: 2.d4 cxd4 3.c3 Cf6 4.e5 Cd5 e, pela Alapin, 5.Cf3 Cc6 6.cxd4 d6 7.Bc4 Cb6 8.Bb5 Bd7 — daí até o fim a cauda é a mesma da linha da Alapin acima, e o texto de lá vale aqui. Dele é o argumento do 3...Cf6: o Magnus enfrentou o Morra uma vez na vida, aos 11 anos, jogou 3...Cc6 e não serve de guia; ele recomenda transpor para a Alapin por economia de estudo, porque aceitar o peão não é uma linha para decorar e sim um curso inteiro (ele manda quem quiser estudar isso para o 'Mop up the Morra' do Logozar), e para quem já carrega as linhas principais da Siciliana a solução barata contra sidelines é a que faz sentido. CORRIGIDO em 7/9/2026, dois pontos. (1) A tag dizia 'Livro + motor' e citava o draft 'Sicilian Sidelines Homework' do Grigoryan, que para no 3.c3 — estava desatualizada, porque o Magnus Sicilian está no corpus desde a importação e cobre 15 dos 16 meios-lances antigos. (2) O comentário do 3...Cf6 dizia que aceitar com 3...dxc3 faria o aluno 'jogar o resto da partida correndo atrás'. Não faz: Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026, põe o 3...dxc3 em igualdade e em PRIMEIRO lugar, empatado com o 3...Cf6. O motivo de recusar é o do Sielecki, e é de estudo, não de posição. O 9...e6 segue declarado como nosso, pelo mesmo motivo escrito na tag da Alapin."]
-[Result "*"]
-
-1. e4 c5 2. d4 cxd4 3. c3 Nf6 {Ele está oferecendo um peão, e o motivo de não
-pegar não é o que parece. Pegar não é erro: o motor põe o 3…dxc3 em igualdade e
-em primeiro lugar, empatado com o …Cf6. O motivo é de estudo, e é do Sielecki —
-o campeão do mundo enfrentou este gambito uma vez na vida, aos onze anos, e
-aceitar o peão não é uma linha para decorar, é um curso inteiro. Contra uma
-abertura que você vai ver poucas vezes, a resposta certa é a que já está na sua
-cabeça: o …Cf6 ataca o peão de e4, obriga o 4.e5 — e daí em diante é a Alapin,
-que você já sabe.} 4. e5 Nd5 5. Nf3 Nc6 6. cxd4 d6 7. Bc4 Nb6 8. Bb5
-Bd7 {Este é o truque do arquivo inteiro: recusamos o peão com …Cf6 e caímos na
-mesma posição da linha da Alapin — confira os dois diagramas, são iguais, só os
-lances vieram em outra ordem. Quem estudou a Alapin ganhou o Gambito Morra de
-graça, e daqui até o fim os dois textos são o mesmo: …e6 sem recapturar, …f6
-para expulsar o bispo e …Bxd6 pegando o peão com peça.} 9. exd6 e6 10. Bg5 f6
-11. Bh4
-Bxd6 {Mesma posição final da Alapin, e o motivo é o mesmo: o peão de d4 dele
-ficou isolado, sem peão de c e sem peão de e para ajudar. Bloqueia-se d5 e
-cobra-se o peão com as peças. Se você chegou aqui pelo Morra, leia o texto do
-11…Bxd6 da linha da Alapin — é o mesmo tabuleiro.} *

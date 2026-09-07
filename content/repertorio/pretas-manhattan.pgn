@@ -41,8 +41,8 @@ decide. Foi o …c5 do lance 6 que abriu tudo isso.} *
 [Abertura "manhattan"]
 [Nome "Manhattan — 4.Bg5"]
 [Cor "pretas"]
-[Nivel "base"]
-[Fonte "5.e3: IM Kushager Krishnater — 'Short & Sweet: Kushager's 1.d4 d5' (Chess.com), variantes 'The Manhattan #1' a '#3'. O tronco dele é 3.Cf3 Cf6 4.Cc3 Cbd7 5.Bg5 Bb4 6.e3 c5 e o nosso é 3.Cc3 Cf6 4.Bg5 Cbd7 5.e3 Bb4 6.Cf3 c5: no 6º lance a posição é a MESMA, só a ordem mudou. Dele são o argumento do ...Cbd7 (com o cavalo em d7 o Da4 deixa de ser xeque, e sem o xeque o cavalo não é empurrado para c6, onde trancaria o ...c5) e o do ...c5 ('o ponto da variante: ao contrário das outras linhas da Recusada, aqui vamos minar o centro na hora'). O 4.Bg5 dele é explicado por IM Christof Sielecki — 'Short & Sweet: Sielecki's Queen's Gambit Declined', que conta por que as brancas jogam esse bispo e por que ele saiu de moda no topo. ATENÇÃO, para não citar a mais do que a fonte diz: contra todo bispo cedo o Sielecki recomenda 4...dxc4, e não o nosso 4...Cbd7 — dele vem a explicação do lance DELE, não do nosso. Medido em 7/9/2026. || 5.cxd5 (Armadilha do Elefante): recomendação do professor, assinada pelo Doug em 7/9/2026 — a terceira do repertório, depois do 6.Bf4 da Caro-Kann (seção 19 de docs/REVISAO-FONTES.md) e do 5...Cf6 do Rossolimo com 4.O-O. O argumento tem três pernas, e as três estão medidas. (1) Não há cauda para trocar aqui sem trocar de abertura. O 4...Cbd7 É o Manhattan, e os DOIS ids deste jogo saem dele: trocá-lo pelo 4...dxc4 que o Sielecki recomenda contra bispo cedo mataria junto a linha do 5.e3, aprovada com o Kushager, e tiraria o Manhattan do repertório — que é o nome deste arquivo e o tronco de três linhas. (2) O lance que abre a armadilha é ERRO DELE, não escolha de repertório. Medido em 7/9/2026 com repertorio:mapear: do 4...Cbd7 em diante nenhum dos onze cursos do corpus acompanha, e a razão é simples — curso nenhum perde peça de propósito para mostrar como se pune. Isto é posição de livro, com nome próprio, e o resultado é conferível por qualquer um. (3) Conferido no Stockfish 18 lite-single de public/engine/, profundidade 20: depois de 6.Cxd5 Cxd5 as pretas ficam +3,43 (medido em 5/9/2026) e, no fim da linha, depois de 8...Bxd2+ 9.Rxd2 Rxd8, +3,17 (re-medido em 7/9/2026) — uma peça limpa nos dois pontos. E a armadilha é a justificativa da ordem de lances do arquivo inteiro: o ...Cbd7 vem antes de qualquer coisa porque com ele o cavalo de f6 não fica pregado de verdade."]
+[Nivel "avancado"]
+[Fonte "PODA DE 7/9/2026 (seção 23 de docs/REVISAO-FONTES.md): este jogo tinha DUAS linhas e agora tem uma. A do 5.e3 saiu — ela terminava na MESMA posição da linha principal deste arquivo, conferido casa a casa na chess.js, e treinar a mesma posição por duas portas cobra duas vezes pela mesma ideia; a observação da ordem foi para o comentário final. A que ficou é a Armadilha do Elefante, e ela passou para o AVANÇADO: é uma punição a um erro dele, não uma linha que o aluno vá encontrar toda semana. || O que era a fonte do 5.e3, guardado porque explica o ...Cbd7 que a linha que ficou também joga: IM Kushager Krishnater — 'Short & Sweet: Kushager's 1.d4 d5' (Chess.com), variantes 'The Manhattan #1' a '#3'. O tronco dele é 3.Cf3 Cf6 4.Cc3 Cbd7 5.Bg5 Bb4 6.e3 c5 e o nosso é 3.Cc3 Cf6 4.Bg5 Cbd7 5.e3 Bb4 6.Cf3 c5: no 6º lance a posição é a MESMA, só a ordem mudou. Dele são o argumento do ...Cbd7 (com o cavalo em d7 o Da4 deixa de ser xeque, e sem o xeque o cavalo não é empurrado para c6, onde trancaria o ...c5) e o do ...c5 ('o ponto da variante: ao contrário das outras linhas da Recusada, aqui vamos minar o centro na hora'). O 4.Bg5 dele é explicado por IM Christof Sielecki — 'Short & Sweet: Sielecki's Queen's Gambit Declined', que conta por que as brancas jogam esse bispo e por que ele saiu de moda no topo. ATENÇÃO, para não citar a mais do que a fonte diz: contra todo bispo cedo o Sielecki recomenda 4...dxc4, e não o nosso 4...Cbd7 — dele vem a explicação do lance DELE, não do nosso. Medido em 7/9/2026. || 5.cxd5 (Armadilha do Elefante): recomendação do professor, assinada pelo Doug em 7/9/2026 — a terceira do repertório, depois do 6.Bf4 da Caro-Kann (seção 19 de docs/REVISAO-FONTES.md) e do 5...Cf6 do Rossolimo com 4.O-O. O argumento tem três pernas, e as três estão medidas. (1) Não há cauda para trocar aqui sem trocar de abertura. O 4...Cbd7 É o Manhattan, e os DOIS ids deste jogo saem dele: trocá-lo pelo 4...dxc4 que o Sielecki recomenda contra bispo cedo mataria junto a linha do 5.e3, aprovada com o Kushager, e tiraria o Manhattan do repertório — que é o nome deste arquivo e o tronco de três linhas. (2) O lance que abre a armadilha é ERRO DELE, não escolha de repertório. Medido em 7/9/2026 com repertorio:mapear: do 4...Cbd7 em diante nenhum dos onze cursos do corpus acompanha, e a razão é simples — curso nenhum perde peça de propósito para mostrar como se pune. Isto é posição de livro, com nome próprio, e o resultado é conferível por qualquer um. (3) Conferido no Stockfish 18 lite-single de public/engine/, profundidade 20: depois de 6.Cxd5 Cxd5 as pretas ficam +3,43 (medido em 5/9/2026) e, no fim da linha, depois de 8...Bxd2+ 9.Rxd2 Rxd8, +3,17 (re-medido em 7/9/2026) — uma peça limpa nos dois pontos. E a armadilha é a justificativa da ordem de lances do arquivo inteiro: o ...Cbd7 vem antes de qualquer coisa porque com ele o cavalo de f6 não fica pregado de verdade."]
 [Result "*"]
 
 1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Nbd7 {Cavalo em d7 antes de qualquer outra
@@ -50,21 +50,13 @@ coisa, de novo — e aqui ele faz dois trabalhos. Um é o de sempre: tira o xequ
 do Da4, que é o que nos obrigaria a pôr o cavalo em c6 e a perder o …c5. O
 outro é este: com ele no lugar, o cavalo de f6 não está pregado de verdade,
 mesmo com o bispo dele em g5. Quem tentar provar o contrário cai na armadilha
-da variante ao lado.} 5. e3
-(5. cxd5 exd5 6. Nxd5 $2 Nxd5 7. Bxd8 Bb4+ 8. Qd2 Bxd2+ {A Armadilha do
-Elefante, é o motivo de o cavalo ir para d7 antes de qualquer coisa. O cavalo
-de f6 parecia pregado na dama, mas não estava: 6…Cxd5 é possível porque, quando
-ele pegar a dama com 7.Bxd8, vem o xeque 7…Bb4+. Ele tem de tapar com 8.Dd2,
-nós trocamos, e no lance seguinte o nosso rei come o bispo em d8 — com uma peça
-a mais no bolso. E se ele não pegar a dama, também não adianta: o cavalo dele já
-foi embora.})
-5... Bb4 6. Nf3 c5 {Ele adiantou o bispo para g5 antes do cavalo de f3, e a
-nossa resposta não muda em nada: …Cbd7, …Bb4, …c5. Compare com a linha
-principal deste arquivo: a posição é exatamente a mesma, só os lances vieram em
-outra ordem. E cada um dos três tem um trabalho. O bispo em b4 prega o cavalo
-de c3 contra o rei dele — e como é justamente esse cavalo que estava batendo em
-d5, pregar aqui é o mesmo que defender o peão. O …c5 é o ponto da variante
-inteira: em quase todas as outras linhas da Recusada as pretas passam a
-abertura arrumando a casa, com o bispo de c8 preso atrás do peão de e6; nesta,
-nós batemos no centro dele na hora, e é isso que abre o jogo para as nossas
-peças.} *
+que vem agora.} 5. cxd5 exd5 6. Nxd5 $2 Nxd5 7. Bxd8 Bb4+ 8. Qd2
+Bxd2+ {A Armadilha do Elefante, e é o motivo de o cavalo ir para d7 antes de
+qualquer coisa. O cavalo de f6 parecia pregado na dama, mas não estava: 6…Cxd5
+é possível porque, quando ele pegar a dama com 7.Bxd8, vem o xeque 7…Bb4+. Ele
+tem de tapar com 8.Dd2, nós trocamos, e no lance seguinte o nosso rei come o
+bispo em d8 — com uma peça a mais no bolso. E se ele não pegar a dama, também
+não adianta: o cavalo dele já foi embora. Se ele NÃO cair na armadilha e jogar
+5.e3, não mude nada: …Bb4, …Cf3, …c5 na mesma ordem, e você cai na mesma
+posição da linha principal deste arquivo — só os lances vieram por outra
+porta.} *

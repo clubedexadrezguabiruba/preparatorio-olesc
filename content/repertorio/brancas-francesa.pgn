@@ -1,16 +1,23 @@
-; Francesa 3.Bd3 — 2 linhas do Base, as duas respostas mais frequentes a 3.Bd3:
-; 3...c5 com 38,2 por cento e 3...dxe4 com 22,2 por cento.
+; Francesa 3.Bd3 — 1 linha do Base, a do 3...dxe4 (22,2 por cento).
 ;
-; No lance 5 da linha do 3...c5 a fonte oferece três lances marcados como
-; interessantes e não escolhe nenhum. A escolha do c3 é nossa, por livro e
-; motor. Os outros dois entram como alternativa aceita: o treinador não cobra
-; quem jogar um deles.
+; A PODA de 7/9/2026 (seção 23 do docs/REVISAO-FONTES.md) tirou daqui as duas
+; linhas que estavam em "livro + motor": o 3...c5 (38,2 por cento) e o 3...Cc6
+; (14). As duas viraram a página de princípios 'francesa-bd3' em
+; content/repertorio/notas.json.
+;
+; O que decidiu foi o que a própria fonte fazia no 3...c5: no lance 5 ela oferece
+; TRÊS lances marcados como interessantes e não escolhe nenhum. Fonte que não
+; escolhe está dizendo que ali é ideia, não lance — e ideia se escreve, não se
+; decora. A página cobre também o 3...Cf6 (13,4 por cento), que nunca teve linha
+; e entra no corte da faixa do clube.
+;
+; Fica no treinador a linha em que a fonte de fato escolhe e explica.
 
 [Abertura "francesa"]
 [Nome "Francesa 3.Bd3"]
 [Cor "brancas"]
 [Nivel "base"]
-[Fonte "3...dxe4: GM Niclas Huschenbeth — 'Short & Sweet: 1.e4' (Chess.com), variante 'French #2'. Os 15 meios-lances batem um a um com o curso, que segue além até 13.Cxc3. O arquivo do Grigoryan dá os mesmos lances mas tem zero prosa; o Huschenbeth explica o 3.Bd3 (flexibilidade e surpresa) e o 5.Bf3 (o bispo toma f3, então o cavalo vai a e2). Conferido em 7/9/2026. || 3...c5: a escolha do lance 5 entre os três marcados pela fonte continua nossa, por livro + motor, Stockfish 18 profundidade 20 MultiPV 3, medido em 5/9/2026 — os três a menos de um décimo de peão. Esta ponta espera fonte."]
+[Fonte "GM Niclas Huschenbeth — 'Short & Sweet: 1.e4' (Chess.com), variante 'French #2'. Os 15 meios-lances batem um a um com o curso, que segue além até 13.Cxc3. O arquivo do Grigoryan dá os mesmos lances mas tem zero prosa; o Huschenbeth explica o 3.Bd3 (flexibilidade e surpresa) e o 5.Bf3 (o bispo toma f3, então o cavalo vai a e2). Conferido em 7/9/2026. Até a poda de 7/9/2026 esta tag carregava também a ponta do 3...c5, que era nossa por livro + motor; aquela linha saiu do treinador e virou a página de princípios 'francesa-bd3'."]
 [Result "*"]
 
 1. e4 e6 2. d4 d5 3. Bd3 {Quase todo mundo joga 3.Cc3 ou 3.e5 aqui, e as duas
@@ -18,10 +25,6 @@ dão posições cheias de teoria. Nós fazemos o mais simples: pomos o bispo em 
 apontado para o rei dele, e deixamos o centro decidir sozinho. Se ele comer em
 e4, o bispo recaptura já desenvolvido; se ele bater com …c5, o jogo abre — e num
 jogo aberto quem tem o bispo bom é quem manda.} 3... dxe4
-(3... c5 4. exd5 exd5 5. c3 $5 (5. dxc5 $5) (5. Nf3 $5) {Ele abriu o jogo cedo.
-Nós seguramos o peão de d4 com o de c3 e ficamos com um centro sólido e o bispo
-já apontado para o lado do rei dele. Os outros dois lances da fonte também
-servem — este é o mais fácil de jogar depois.})
 4. Bxe4 Nf6 5. Bf3 {O cavalo dele atacou o bispo, e em vez de trocar ou voltar
 para d3 nós recuamos para f3. Daqui o bispo atravessa o tabuleiro inteiro até
 b7, que é onde o bispo dele de c8 gostaria de morar — e não vai poder.} 5... c5
@@ -29,18 +32,3 @@ b7, que é onde o bispo dele de c8 gostaria de morar — e não vai poder.} 5...
 tabuleiro e tudo está desenvolvido. Repare no bispo de f3: ele atravessa o
 tabuleiro inteiro, e é justamente a peça que o jogador de Francesa menos gosta
 de enfrentar, porque o bispo dele de c8 continua preso.} *
-
-[Abertura "francesa"]
-[Nome "Francesa 3.Bd3"]
-[Cor "brancas"]
-[Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 9 da seção 8 de docs/REPERTORIO.md: o arquivo do Grigoryan não cobre 3...Cc6. O 4.Cf3 é o primeiro lance do motor e o 6.Bg5 também, com folga sobre o segundo."]
-[Result "*"]
-
-1. e4 e6 2. d4 d5 3. Bd3 {O mesmo lance de sempre contra a Francesa: bispo em
-d3, apontado para o rei dele, e o centro fica de pé. Ele tentou uma ordem
-diferente com …Cc6, e a nossa resposta não muda — desenvolver e esperar.} 3...
-Nc6 4. Nf3 dxe4 5. Bxe4 Nf6 6. Bg5 {O bispo prega o
-cavalo na dama: se ele comer o nosso bispo de e4, nós comemos a dama dele em d8.
-Ele vai ter de gastar um lance desfazendo a pregação, e nós desenvolvemos de
-graça enquanto isso.} *
