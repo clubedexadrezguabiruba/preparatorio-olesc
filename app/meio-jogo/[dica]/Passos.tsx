@@ -99,19 +99,51 @@ export function Passos({
               type="button"
               onClick={() => setAtivo(i)}
               aria-pressed={i === ativo}
-              className={`foco flex w-full flex-col gap-1 rounded-lg border-l-3 px-3 py-2.5 text-left transition-colors ${
+              // A borda tem a mesma espessura nos dois estados e o que muda é a
+              // cor: com espessura variável a lista inteira anda um pixel a cada
+              // toque, e o passo que o aluno está lendo se mexe embaixo do dedo.
+              //
+              // ## Por que a borda é clara, e o que carrega o estado
+              //
+              // O escolhido é `carta` sobre `papel` (1,14:1 — o degrau do site
+              // inteiro) com borda em `borda-forte` (1,56:1). Os dois estão
+              // abaixo dos 3:1 que a WCAG 1.4.11 pede de um sinal **gráfico** de
+              // estado, e escurecer a borda até cruzar o piso foi tentado e
+              // medido: em `tinta-fraca` ela dá 6,14:1 e passa a pesar 2,16× uma
+              // linha de rótulo, contra 0,93× da borda clara. Nada mais nesta
+              // página passa de 1,35:1 — um contorno fechado escuro sai do
+              // sistema de traços e lê como campo de formulário ou anel de foco,
+              // que é justamente o que ele **não** é.
+              //
+              // A saída não é tinta, é **palavra**: o rótulo do escolhido diz
+              // "agora no tabuleiro" e o dos outros diz "acende". O estado deixa
+              // de depender de cor nenhuma — some no preto e branco, some para
+              // quem não distingue tom, e é lido por leitor de tela junto com o
+              // `aria-pressed`. A borda e o fundo viram reforço.
+              className={`foco flex w-full flex-col gap-1 rounded-lg border px-3 py-2.5 text-left transition-colors ${
                 i === ativo
-                  ? "border-tinta bg-carta"
-                  : "border-borda-fraca bg-transparent hover:bg-carta"
+                  ? "border-borda-forte bg-carta"
+                  : "border-transparent bg-transparent hover:bg-carta"
               }`}
             >
-              {/* O rótulo diz o que o botão faz, e não só onde ele está. Sem
-                  isto, quem usa leitor de tela ouve "botão" e um parágrafo. */}
-              <span className="rotulo text-tinta-fraca">
-                Passo {i + 1}
-                {passo.realce.length > 0
-                  ? ` · acende ${passo.realce.join(", ")}`
-                  : " · sem casa a acender"}
+              {/* O rótulo diz o que o botão faz, e não só onde ele está — sem
+                  isto quem usa leitor de tela ouve "botão" e um parágrafo. E é
+                  ele que carrega o estado, em palavra e em tom: "agora no
+                  tabuleiro" contra "acende". */}
+              <span className={`rotulo ${i === ativo ? "text-tinta" : "text-tinta-fraca"}`}>
+                {/* "aceso ·" contra "· acende" — a palavra do escolhido é um
+                    caractere **mais curta** que a do não escolhido, de propósito.
+                    Medido: com "agora no tabuleiro" o rótulo de m12 quebrava em
+                    duas linhas e o cartão crescia 16 px ao ser tocado, que é o
+                    mesmo defeito da borda de espessura variável — o passo se
+                    mexe embaixo do dedo de quem acabou de escolhê-lo. */}
+                {i === ativo
+                  ? `Passo ${i + 1} aceso · ${passo.realce.join(", ") || "nenhuma casa"}`
+                  : `Passo ${i + 1} · ${
+                      passo.realce.length > 0
+                        ? `acende ${passo.realce.join(", ")}`
+                        : "sem casa a acender"
+                    }`}
               </span>
               <span className="text-sm leading-relaxed text-tinta">
                 <Negrito>{passo.texto}</Negrito>
