@@ -1,5 +1,5 @@
 import type { ItemDeReconhecimento } from "./dicas.ts";
-import { respostaDaTarefa, tarefaPorId, type Casa } from "./exercicios.ts";
+import { respostaDaTarefa, tarefaPorId, type Casa, type Contrato } from "./exercicios.ts";
 
 /**
  * O que acontece entre o aluno tocar numa casa e a linha ir para o banco.
@@ -61,9 +61,25 @@ export const COMECO: EstadoDoItem = { apoio: 0, tentativa: 0, tocadas: [], acert
  * inventar um fallback esconderia justamente o que o gate existe para gritar.
  */
 export function casasAceitas(item: ItemJulgavel): Casa[] {
+  return respostaDaTarefa(item.fen, tarefaDo(item), item.lado);
+}
+
+/**
+ * O contrato da tarefa do item — o enunciado que o aluno lê e a linha que entra
+ * depois do acerto.
+ *
+ * Ele vem daqui e não do conteúdo da dica de propósito: o enunciado é
+ * propriedade da **tarefa**, e três itens da mesma tarefa perguntando com
+ * palavras diferentes seriam três exercícios diferentes medindo a mesma coisa.
+ */
+export function contratoDoItem(item: ItemJulgavel): Contrato {
+  return tarefaDo(item).contrato;
+}
+
+function tarefaDo(item: ItemJulgavel) {
   const tarefa = tarefaPorId(item.tarefa);
   if (!tarefa) throw new Error(`a tarefa "${item.tarefa}" não existe em exercicios.ts`);
-  return respostaDaTarefa(item.fen, tarefa, item.lado);
+  return tarefa;
 }
 
 /** Sobe um degrau da escada. No topo, fica no topo — pedir de novo não regride. */

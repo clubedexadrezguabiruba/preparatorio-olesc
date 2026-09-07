@@ -10,6 +10,7 @@ import { DICAS, dicaPorId, ordemDaDica } from "@/lib/meiojogo/conteudo";
 import { dicasLidas } from "@/lib/meiojogo/progresso";
 import { Li } from "../Li";
 import { Passos } from "./Passos";
+import { Treino } from "./Treino";
 import { Quiz } from "../Quiz";
 
 /**
@@ -149,6 +150,17 @@ export default async function DicaDeMeioJogo({ params }: PageProps<"/meio-jogo/[
           <Negrito>{dica.cuidado}</Negrito>
         </p>
       ) : null}
+
+      {/* O treino das oito dicas curadas (m9–m16). Nas outras 22 `treino` é
+          `null`, e o estado correto delas hoje é não ter exercício nenhum: a
+          expansão para os 30 é pós-torneio.
+
+          Ele vem **depois** da explicação, e não antes: testar antes de ensinar
+          funciona para quem tem o que ativar, e quem testa antes aqui é a
+          revisão espaçada, dias depois. E vem **antes** da pergunta de plano,
+          que continua sendo julgamento do autor e continua não sendo gravada —
+          a ordem separa o que a máquina julga do que o autor julga. */}
+      {dica.treino ? <Treino treino={dica.treino} /> : null}
 
       <Quiz
         pergunta={dica.quiz.pergunta}
