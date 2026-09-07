@@ -589,7 +589,7 @@ linha existente, e a medição não pediu isso em lugar nenhum. A conta está na
 | **11** | **Maroczy — recortar só a sub-árvore do `6.e4`** | Avançado | 2.4 |
 | ~~12~~ | ~~Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios~~ — **fechado no B5**, em `/aberturas/notas/` | < 4,2 % cada | 2.10 |
 | ~~13~~ | ~~**O recorte de frequência foi medido na faixa errada**~~ — **medido e escrito em 6/9/2026**. A §6.1 tem as três faixas: 14 das 23 posições mudam de conjunto, e dez delas são o teto de 4 cortando entre quase-empates. Das quatro estruturais, a **Escandinava `2…Cf6`** virou a 43ª linha e as outras três não pedem escrita. **0 ids perdidos, 1 acrescentado.** Sobra uma decisão de orçamento, não de medição: o `4…Df6` da Escocesa | 1 decisão | 6.1 |
-| **14** | **O tom dos 110 comentários** — foram escritos para "criança de 10 anos"; o aluno mais novo tem 12. Reler sob a régua nova da §5. | todo o Base | 5 |
+| **14** | **O tom dos comentários** — 110 dos 116 foram escritos para "criança de 10 anos"; o aluno mais novo tem 12. Reler sob a régua nova da §5. Os 6 da Escandinava `2…Cf6` já nasceram sob a régua nova e ficam fora. Comentário não entra no hash do id: reescrever os 110 não órfã ninguém. | todo o Base | 5 |
 
 Os itens 1 a 5 eram o caminho crítico: sozinhos, são o que os alunos mais vão
 encontrar e o que nenhuma fonte do Doug responde. Todos fecharam.
