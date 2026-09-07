@@ -609,7 +609,138 @@ onde e qual **ainda espera fonte**:
 
 A primeira escrita dos PGN converteu **378 quebras de linha de LF para CRLF**
 (Python em modo texto no Windows), o que sujou os comentários compilados com
-``. Pego no diff, revertido, recompilado. O diff final tem **10 linhas**, todas
+`
+`. Pego no diff, revertido, recompilado. O diff final tem **10 linhas**, todas
 de `fonte`.
 
 **Placar da régua: de 11 linhas aprovadas para 15.**
+
+---
+
+## 16. Bloco F/Bowdler entregue — o maior buraco vira página, 7/9/2026
+
+O grupo F da §14 tinha 5 linhas sem fonte nenhuma, e **3 delas eram o mesmo
+bispo em c4**. Este bloco fecha essas três.
+
+### O que se decidiu, e por quê
+
+Não houve fonte para procurar. Isso não é desistência — é medição: **nenhum
+dos 11 cursos do corpus entra na posição**, porque os autores escrevem para
+1200+ e nessa faixa o `2.Bc4` quase não aparece. A régua da §1 exige que a fonte
+explique o motivo; quando fonte nenhuma existe, cumprir a régua **não pode ser
+inventar uma**.
+
+E a própria medição da §2.6 do `REPERTORIO.md` dava a saída. Depois de `2.Bc4
+Cc6` as quatro respostas mais comuns das brancas somam **73,2 %**, o número mais
+espalhado da tabela inteira. **Posição que se dispersa em quatro não rende
+sequência para decorar — rende uma ideia.** Decorar oito meios-lances dela era
+exatamente o que a régua nova condena, mesmo que houvesse fonte.
+
+A ideia cabe numa frase e tem motivo tático visível para uma criança de 12: **o
+mate em f7 só existe porque o bispo de c4 defende a casa em que a dama pousa.**
+Tire o bispo da diagonal com `…e6` e `4.Dxf7+ Rxf7` é uma dama de graça. E `…e6`
+é o mesmo lance que prepara o `…d5` que expulsa o bispo: defesa e plano no mesmo
+lance.
+
+### O xadrez, medido em 7/9/2026
+
+Mesma build da §8 (`stockfish-18.0.8-lite-single`, profundidade 20, MultiPV 5):
+
+| Posição | O que o motor diz |
+|---|---|
+| `1.e4 c5 2.Bc4` | `2…Cc6` é a 1ª escolha, **igual**, e a linha dele é `…e6` + `…d5` batendo no bispo |
+| `2.Bc4 Cc6 3.Dh5` | `3…e6!` — **pretas +0,96**; as 4 melhores das brancas depois dele ficam entre **+1,03 e +1,19 para as pretas**, e o `4.Dxc5` nem entra no corte |
+| `2.Bc4 Cc6 3.d3` | `3…e6` é a 1ª escolha, **igual**, com `…a6`, `…b5`, `…Ca5` — o mesmo plano que estava na linha apagada |
+| `3.Dh5 Cf6??` | `4.Dxf7#` — conferido na `chess.js`, é mate |
+| `3.Dh5 d6?` | `4.Bxf7+` — **brancas +2,95**, e o rei nunca mais roca |
+
+As duas últimas linhas viraram o campo `cuidado` da página. O número grande de
+`3…e6` é o argumento pedagógico inteiro: **contra a dama que sai cedo, quem joga
+o lance necessário antes do lance bonito ganha quase um peão de graça.**
+
+### A moldura das notas estava errada, e teve de mudar junto
+
+As quatro notas antigas eram "as raras": a tela dizia, em texto fixo, *"juntas
+somam menos de 8 % das partidas"*. O bispo em c4 é o oposto — **~31 % das
+sicilianas, a posição mais frequente do repertório inteiro**. Publicá-lo sob
+aquele rótulo seria a página nascer mentindo.
+
+Daí dois campos novos no schema (`lib/repertorio/notas.ts`):
+
+- **`porque`** — cada nota diz **o seu** motivo de não ter linha. Quatro por
+  raridade, uma por ausência de teoria. O rodapé fixo da tela sumiu; no lugar
+  dele há um bloco "Por que não há linha para decorar" alimentado pelo dado.
+- **`cor`** — as quatro raras são das brancas, esta é das pretas, e a página
+  inteira fala em "ele" e "você". Sem o campo, o aluno abriria a nota achando
+  que é ele quem joga `2.Bc4`.
+
+O teste que dizia *"toda nota começa por 1.e4 — são respostas ao nosso primeiro
+lance"* passava por acaso (a do bispo em c4 também começa por `1.e4`, só que do
+outro lado). Foi trocado por um que **prende de verdade**: cada nota tem de parar
+na vez do aluno, e a vez tem de bater com o campo `cor`.
+
+### Um defeito antigo que a página nova tornou insustentável
+
+As notas mostravam lance em **notação inglesa** — `Nc3`, `Nf3`, `Be2` — enquanto
+o treinador, três cliques ao lado, fala português: `sanEmPortugues`, em
+`lib/repertorio/treino.ts`, existe exatamente para isso. Nas quatro notas raras
+eram seis referências soltas e o defeito passava. A do bispo em c4 tem **oito**,
+e duas delas são o argumento inteiro da página (`3.Dh5`, `4.Dxf7+ Rxf7`): em
+inglês a criança lê uma coisa na tela e escreve outra na planilha do torneio.
+
+Consertado nas **cinco**, em duas metades:
+
+- **A prosa** foi reescrita em português, direto no JSON.
+- **O campo `lances`** continua em SAN inglês, e a tela é que traduz, por
+  `lancesEmPortugues` (novo, em `notas.ts`). Inglês é o que a `chess.js` joga, e
+  é só por isso que o teste consegue provar que o texto do alto da página é
+  lance legal — um `Cf3` digitado errado passaria batido pelo zod e pela
+  `chess.js`. Dado conferido de um lado, tela na língua do aluno do outro.
+
+A armadilha, que o teste prende: **`R` é torre em inglês e rei em português.** Por
+isso a tradução é a mesma função do treinador, e não uma segunda.
+
+### O que mudou nos arquivos
+
+| Arquivo | O quê |
+|---|---|
+| `content/repertorio/notas.json` | nota `bispo-em-c4` acrescentada em 1º lugar (a ordem do arquivo é a ordem de frequência); `cor` e `porque` nas cinco |
+| `lib/repertorio/notas.ts` | schema com os dois campos novos, e o docstring com os **dois** motivos de uma nota existir |
+| `lib/repertorio/notas.ts` | mais `lancesEmPortugues`, que traduz o campo `lances` na leitura |
+| `lib/repertorio/notas.test.ts` | 5 slugs na ordem; teste novo de "para na vez do aluno"; teste novo de `porque` obrigatório |
+| `content/repertorio/pretas-siciliana.pgn` | o jogo `Siciliana — bispo em c4` **apagado**; cabeçalho reescrito dizendo para onde ele foi; **duas referências cruzadas órfãs** consertadas (a tag `[Fonte]` do jogo `2.Cc3` e o comentário dele que citava "as três primeiras linhas deste arquivo") |
+| `app/aberturas/page.tsx` | seção deixou de se chamar "As raras, por princípio"; cada item mostra "Você de brancas/pretas" |
+| `app/aberturas/notas/[abertura]/page.tsx` | bloco "Por que não há linha para decorar"; selo da cor; rodapé falso removido |
+| `lib/repertorio/banco.ts`, `gravar.ts`, `banco.test.ts` | a contagem 43 → 40 |
+| `docs/REPERTORIO.md` | §2.6 reescrita; §2.10 e as tabelas de orçamento; ⚠1 e ⚠12 da §8 |
+
+### Verificação
+
+- `repertorio:compilar` → **40 linhas** em 12 arquivos (`pretas-siciliana` foi de
+  13 para 10)
+- **43 ids antes, 40 depois. Sumiram exatamente os 3 do Bowdler**
+  (`336144b9`, `092f6068`, `31cff340`), **0 novos, 0 alterados** — conferido
+  contra o `HEAD` arquivo por arquivo
+- os 7 trechos SAN das 5 notas jogados na `chess.js`: **todos legais**
+- as 5 notas varridas atrás de `N`, `Q` e `K` na prosa — as três letras que não
+  existem em português: **nenhuma**
+- as duas telas vistas de pé no `next dev`, logado como `alunoteste`: a nota
+  inteira renderiza, e `/aberturas` diz **40 linhas**
+- typecheck ✔ · lint ✔ · **585 testes, 585 passando** (eram 582; os 3 novos são
+  os das notas: `porque` obrigatório, "para na vez do aluno" e a tradução) ✔ · `validate:content` ✔ · `compilar --check` sem diferença ✔ ·
+  `build` ✔, com a rota `/aberturas/notas/[abertura]` no manifesto
+
+### O preço, dito por inteiro
+
+**3 ids sumiram** — e id que some órfa o progresso de quem treinou aquela linha,
+pela §7.3. Coube agora porque **ainda não há progresso de aluno de verdade
+gravado**, só contas de teste, e a janela fecha na aula de 19/9. Depois dela, uma
+troca dessas custa o progresso da turma.
+
+**Placar da régua: de 15 linhas aprovadas em 43 para 15 em 40** — o denominador
+caiu, o numerador não. As 3 que saíram eram reprovadas, e a página que as
+substitui não entra no placar: ela não pede que o aluno decore lance nenhum, que
+é exatamente o que a régua da §1 cobra.
+
+**Sobra do grupo F: 2 linhas** — `pretas-colle-f0590dc0` e `pretas-outras-2ffa3251`
+— e o Colle continua sendo a única abertura do repertório sem fonte alguma (§9).

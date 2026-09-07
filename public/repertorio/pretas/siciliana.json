@@ -1,176 +1,5 @@
 [
   {
-    "id": "pretas-siciliana-336144b9",
-    "cor": "pretas",
-    "abertura": "siciliana",
-    "nivel": "base",
-    "nome": "Siciliana — bispo em c4 — 5...Nxc4 6.Qxc4 Nf6",
-    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1bqkb1r/pp1p1ppp/4pn2/2p5/2Q1P3/8/PPPPNPPP/RNB1K2R w KQkq - 1 7",
-    "lances": [
-      "e2e4",
-      "c7c5",
-      "f1c4",
-      "b8c6",
-      "d1f3",
-      "e7e6",
-      "g1e2",
-      "c6e5",
-      "f3c3",
-      "e5c4",
-      "c3c4",
-      "g8f6"
-    ],
-    "sans": [
-      "e4",
-      "c5",
-      "Bc4",
-      "Nc6",
-      "Qf3",
-      "e6",
-      "Ne2",
-      "Ne5",
-      "Qc3",
-      "Nxc4",
-      "Qxc4",
-      "Nf6"
-    ],
-    "meus": [
-      1,
-      3,
-      5,
-      7,
-      9,
-      11
-    ],
-    "alternativas": {},
-    "errosNomeados": {},
-    "comentarios": {
-      "7": "O cavalo pula no meio e ataca duas peças de uma vez: a\ndama em f3 e o bispo em c4. Ele salva a dama, mas o bispo que mirava f7 vai ser\ntrocado de qualquer jeito. Contra 3.Dh5 a ideia é a mesma, só que aí o cavalo\nvai para f6 primeiro.",
-      "11": "A dama saiu cedo e pagou o\npreço: perdeu o bispo bom e ainda teve de andar duas vezes. Nós trocamos a peça\nque nos incomodava e agora desenvolvemos em paz."
-    },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 22, MultiPV 5, medido em 5/9/2026. Buraco 1 da seção 8 de docs/REPERTORIO.md: o arquivo do Grigoryan tem 2...Cc6 e 3...e6 mas nenhuma resposta ao lance 3 das brancas. O 3...e6 é o primeiro lance do motor contra 3.Cf3 e contra 3.d3, e o segundo contra 3.Df3, a 4 centésimos do primeiro."
-  },
-  {
-    "id": "pretas-siciliana-092f6068",
-    "cor": "pretas",
-    "abertura": "siciliana",
-    "nivel": "base",
-    "nome": "Siciliana — bispo em c4 — 6...Bb7 7.O-O Na5",
-    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r2qkbnr/1b1p1ppp/p3p3/npp5/4P3/1BNP1N2/PPP2PPP/R1BQ1RK1 w kq - 4 8",
-    "lances": [
-      "e2e4",
-      "c7c5",
-      "f1c4",
-      "b8c6",
-      "d2d3",
-      "e7e6",
-      "b1c3",
-      "a7a6",
-      "g1f3",
-      "b7b5",
-      "c4b3",
-      "c8b7",
-      "e1g1",
-      "c6a5"
-    ],
-    "sans": [
-      "e4",
-      "c5",
-      "Bc4",
-      "Nc6",
-      "d3",
-      "e6",
-      "Nc3",
-      "a6",
-      "Nf3",
-      "b5",
-      "Bb3",
-      "Bb7",
-      "O-O",
-      "Na5"
-    ],
-    "meus": [
-      1,
-      3,
-      5,
-      7,
-      9,
-      11,
-      13
-    ],
-    "alternativas": {},
-    "errosNomeados": {},
-    "comentarios": {
-      "7": "Com o peão em d3 o lance d5 não sai de graça, então\ntrocamos de ferramenta: a6 e b5 empurram o bispo pelo lado.",
-      "13": "O cavalo vai para a beirada de propósito. Ele caça o bispo de\nb3, que é a peça que mais atrapalha, e sem esse bispo o ataque das brancas em f7\nacaba."
-    },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 22, MultiPV 5, medido em 5/9/2026. Buraco 1 da seção 8 de docs/REPERTORIO.md: o arquivo do Grigoryan tem 2...Cc6 e 3...e6 mas nenhuma resposta ao lance 3 das brancas. O 3...e6 é o primeiro lance do motor contra 3.Cf3 e contra 3.d3, e o segundo contra 3.Df3, a 4 centésimos do primeiro."
-  },
-  {
-    "id": "pretas-siciliana-31cff340",
-    "cor": "pretas",
-    "abertura": "siciliana",
-    "nivel": "base",
-    "nome": "Siciliana — bispo em c4 — 7...Be7 8.Nc3 O-O",
-    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1bq1rk1/pp2bppp/2n2n2/1Bpp4/3P4/2N2N2/PPP2PPP/R1BQ1RK1 w - - 3 9",
-    "lances": [
-      "e2e4",
-      "c7c5",
-      "f1c4",
-      "b8c6",
-      "g1f3",
-      "e7e6",
-      "e1g1",
-      "d7d5",
-      "e4d5",
-      "e6d5",
-      "c4b5",
-      "g8f6",
-      "d2d4",
-      "f8e7",
-      "b1c3",
-      "e8g8"
-    ],
-    "sans": [
-      "e4",
-      "c5",
-      "Bc4",
-      "Nc6",
-      "Nf3",
-      "e6",
-      "O-O",
-      "d5",
-      "exd5",
-      "exd5",
-      "Bb5",
-      "Nf6",
-      "d4",
-      "Be7",
-      "Nc3",
-      "O-O"
-    ],
-    "meus": [
-      1,
-      3,
-      5,
-      7,
-      9,
-      11,
-      13,
-      15
-    ],
-    "alternativas": {},
-    "errosNomeados": {},
-    "comentarios": {
-      "7": "O lance da regra: o peão bate no bispo de c4. Ele tem de\nsair, e no caminho nós abrimos o centro.",
-      "15": "Roque, e olhe o tabuleiro: o bispo que mirava f7 foi parar em b5, o\ncentro está aberto e todas as nossas peças saíram. Foi isso que o d5 comprou."
-    },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 22, MultiPV 5, medido em 5/9/2026. Buraco 1 da seção 8 de docs/REPERTORIO.md: o arquivo do Grigoryan tem 2...Cc6 e 3...e6 mas nenhuma resposta ao lance 3 das brancas. O 3...e6 é o primeiro lance do motor contra 3.Cf3 e contra 3.d3, e o segundo contra 3.Df3, a 4 centésimos do primeiro."
-  },
-  {
     "id": "pretas-siciliana-345142b0",
     "cor": "pretas",
     "abertura": "siciliana",
@@ -591,9 +420,9 @@
     "comentarios": {
       "3": "Ele guardou o cavalo em c3 antes de abrir o centro. Nós\nrespondemos …Cc6 e esperamos, sem inventar nada: os dois lances que ele tem\ndaqui levam a posições que você já treinou neste mesmo arquivo.",
       "9": "O …d5 só é possível porque o peão de e6 está lá\nembaixo para segurá-lo. É por isso que a ordem é …e6 primeiro e …d5 depois, e\nnunca ao contrário.",
-      "15": "O bispo em\nc4 de novo, é a mesma receita das três primeiras linhas deste arquivo: …e6 e\ndepois …d5, o peão bate no bispo e ele vai parar em b5. Compare com a linha do\n2.Bc4: os lances são quase iguais. Uma ideia só resolve as duas."
+      "15": "O bispo em\nc4 de novo, e a receita é a da página \"Siciliana — o bispo em c4\": …e6 e depois\n…d5, o peão bate no bispo e ele vai parar em b5. Lá aquilo não vira linha porque\nas brancas jogam qualquer coisa; aqui vira, porque o 2.Cc3 prende a ordem. A\nideia é a mesma nas duas — leia a página e esta linha sai sozinha."
     },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Pela tabela da seção 6, depois de 2.Cc3 Cc6 ele joga 3.Cf3 46,9 por cento e 3.Bc4 18,1 por cento, e são esses dois que entram. O 3...g6 contra 3.Cf3 e o 3...e6 contra 3.Bc4 são lances do motor e transpõem, um para o Dragão Acelerado e o outro para a estrutura do bispo em c4 que abre este arquivo; a ideia do ...e6 está no draft 'Sicilian Sidelines Homework' do Grigoryan, que a deixa sem continuação."
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Pela tabela da seção 6, depois de 2.Cc3 Cc6 ele joga 3.Cf3 46,9 por cento e 3.Bc4 18,1 por cento, e são esses dois que entram. O 3...g6 contra 3.Cf3 e o 3...e6 contra 3.Bc4 são lances do motor e transpõem, um para o Dragão Acelerado e o outro para a estrutura do bispo em c4, que saiu deste arquivo e virou a página de princípios de slug 'bispo-em-c4'; a ideia do ...e6 está no draft 'Sicilian Sidelines Homework' do Grigoryan, que a deixa sem continuação."
   },
   {
     "id": "pretas-siciliana-685348cf",
@@ -645,7 +474,7 @@
       "3": "Ele guardou o cavalo em c3 antes de abrir o centro. Nós\nrespondemos …Cc6 e esperamos, sem inventar nada: os dois lances que ele tem\ndaqui levam a posições que você já treinou neste mesmo arquivo.",
       "11": "Ele pôs o cavalo em c3 antes de d4 e\nmesmo assim caiu no Dragão Acelerado: esta é a mesma posição da linha do 5.Cc3,\ncom os lances em outra ordem. É o melhor tipo de linha que existe para decorar —\nnão tem nada de novo dentro dela."
     },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Pela tabela da seção 6, depois de 2.Cc3 Cc6 ele joga 3.Cf3 46,9 por cento e 3.Bc4 18,1 por cento, e são esses dois que entram. O 3...g6 contra 3.Cf3 e o 3...e6 contra 3.Bc4 são lances do motor e transpõem, um para o Dragão Acelerado e o outro para a estrutura do bispo em c4 que abre este arquivo; a ideia do ...e6 está no draft 'Sicilian Sidelines Homework' do Grigoryan, que a deixa sem continuação."
+    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Pela tabela da seção 6, depois de 2.Cc3 Cc6 ele joga 3.Cf3 46,9 por cento e 3.Bc4 18,1 por cento, e são esses dois que entram. O 3...g6 contra 3.Cf3 e o 3...e6 contra 3.Bc4 são lances do motor e transpõem, um para o Dragão Acelerado e o outro para a estrutura do bispo em c4, que saiu deste arquivo e virou a página de princípios de slug 'bispo-em-c4'; a ideia do ...e6 está no draft 'Sicilian Sidelines Homework' do Grigoryan, que a deixa sem continuação."
   },
   {
     "id": "pretas-siciliana-97331249",

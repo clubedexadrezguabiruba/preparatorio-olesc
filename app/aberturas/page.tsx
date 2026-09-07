@@ -5,6 +5,7 @@ import { perfilAtual } from "@/lib/auth/perfil";
 import { lerIndice } from "@/lib/repertorio/banco";
 import { notas } from "@/lib/repertorio/conteudo";
 import { CORES, type Cor } from "@/lib/repertorio/linhas";
+import { lancesEmPortugues } from "@/lib/repertorio/notas";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
 import { aprendidasDaAbertura, aRevisarNaAbertura } from "@/lib/repertorio/treino";
 
@@ -132,14 +133,19 @@ export default async function Aberturas() {
        *
        * Ficam no fim, e não misturadas às aberturas, porque não têm treino: são
        * texto. Escondê-las seria pior — o aluno encontra um 1…d6 por torneio, e
-       * precisa saber que existe uma página dizendo o que fazer.
+       * o bispo em c4 em quase um terço das sicilianas.
+       *
+       * **Não chame o bloco de "as raras".** Quatro são; a do bispo em c4 é o
+       * contrário — ~31 % das sicilianas, a posição mais frequente do repertório
+       * inteiro. Ela está aqui por não ter teoria, e não por ser rara. Cada nota
+       * diz o seu próprio motivo no campo `porque`, e é por isso que ele existe.
        * ------------------------------------------------------------------ */}
       <section className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
-          <h2 className="text-base font-semibold text-tinta">As raras, por princípio</h2>
+          <h2 className="text-base font-semibold text-tinta">Sem linha para decorar</h2>
           <p className="text-xs text-tinta-fraca">
-            Aparecem menos de uma vez por torneio. Não há linha para decorar — há o que
-            fazer, escrito.
+            Quatro porque são raras demais, e uma porque é a mais comum de todas e mesmo
+            assim não tem teoria. Em vez de lances, o que fazer — escrito.
           </p>
         </div>
 
@@ -150,9 +156,12 @@ export default async function Aberturas() {
                 href={`/aberturas/notas/${nota.slug}`}
                 className="foco flex items-baseline justify-between gap-3 rounded-lg border border-borda-fraca bg-carta px-3 py-2.5 transition-colors hover:bg-carta-toque"
               >
-                <span className="text-sm text-tinta">{nota.nome}</span>
+                <span className="flex flex-col gap-0.5">
+                  <span className="text-sm text-tinta">{nota.nome}</span>
+                  <span className="text-xs text-tinta-muda">Você de {nota.cor}</span>
+                </span>
                 <span className="shrink-0 text-xs text-tinta-fraca tabular-nums">
-                  {nota.lances}
+                  {lancesEmPortugues(nota.lances)}
                 </span>
               </Link>
             </li>

@@ -41,8 +41,13 @@ sim **medir três e comparar**: §6.1.
   `pretas-manhattan.pgn` (3), `pretas-londres.pgn` (2), `pretas-colle.pgn` (1) e
   `pretas-outras.pgn` (1).
 - O que o **B5** escreveu: **a tela em que o aluno treina** — `/aberturas`, o
-  juiz, a tabela de progresso e a gravação. **O Base está fechado: 43 linhas**,
-  as 23 das brancas e as 20 das pretas, e agora elas são jogáveis.
+  juiz, a tabela de progresso e a gravação. **O Base fechou em 43 linhas**, as 23
+  das brancas e as 20 das pretas, e agora elas são jogáveis.
+- O que a **revisão de fontes** (7/9/2026) fez: a régua nova do
+  `docs/REVISAO-FONTES.md` — *toda linha tem de vir de fonte que explique o
+  motivo* — tirou as **3 do bispo em c4** do treinador e as transformou em
+  página de princípios. **São 40 linhas hoje**, e cinco páginas em
+  `/aberturas/notas/`.
 
 ---
 
@@ -59,21 +64,22 @@ motor**, marcado ⚠ e com a proveniência dizendo isso. Nada é inventado.
 | 1…e5 2…d6 Philidor | 13,7 % de 1…e5 | 3.d4, Bf4 + Qd2 + O-O-O | Krikor (Peão Rei) | **2** |
 | 1…e5 2…Nf6 Petroff | 11 % de 1…e5 | 3.Nxe5 d6 4.Nf3 Nxe4 5.Nc3 | Grigoryan | **1** |
 | 1…c5 | 10,1 % | **Alapin** 2.c3 | Krikor (3 capítulos) | **3** |
-| 1…d5 Escandinava | 8,6 % | 2.exd5 Qxd5 3.Nc3 | Grigoryan + Krikor | **2** |
+| 1…d5 Escandinava | 8,6 % | 2.exd5 Qxd5 3.Nc3 | Grigoryan + Krikor | **3** |
 | 1…e6 Francesa | 6,8 % | **3.Bd3** | Grigoryan + livro/motor | **3** |
 | 1…c6 Caro-Kann | 4,7 % | Trocas 3.exd5 cxd5 4.Bd3 | Grigoryan | **2** |
 | 1…d6/g6 Pirc | 4,2 % | — | — | **princípios** |
 | 1…Nc6, 1…Nf6, 1…b6 | < 2 % cada | — | — | **princípios** |
 
-**Soma do Base das brancas: 22 linhas.** Escritas no B3, em
-`content/repertorio/brancas-*.pgn`.
+**Soma do Base das brancas: 23 linhas.** 22 escritas no B3 em
+`content/repertorio/brancas-*.pgn`, mais a Escandinava `2…Cf6` que a §6.1
+acrescentou em 6/9/2026.
 
 ### Pretas
 
 | Contra | % | Sistema | Fonte | Base |
 |---|---|---|---|---|
-| 1.e4 (68,2 % da raiz) | | **1…c5** | | **13** |
-| · 2.Bc4 e 2.Nf3 Nc6 3.Bc4 | ~31 % das sicilianas | …Nc6, …e6, e expulsar o bispo | livro + motor | **3** ✔ |
+| 1.e4 (68,2 % da raiz) | | **1…c5** | | **10** |
+| · 2.Bc4 e 2.Nf3 Nc6 3.Bc4 | ~31 % das sicilianas | …e6, e o …d5 que expulsa o bispo | — | **princípios** |
 | · 2.Nf3 Nc6 3.d4 Aberta | ~12 % | **Dragão Acelerado** 4…g6 | Grigoryan + livro/motor | **4** ✔ |
 | · 3.Bb5 Rossolimo | ~5 % | 3…g6 4.Bxc6 dxc6 | Grigoryan + livro/motor | **2** ✔ |
 | · 2.Nc3 Grand Prix / Fechada | 8,3 % | 3.Nf3 →…g6 (transpõe); 3.Bc4 →…e6 | livro + motor | **2** ✔ |
@@ -85,8 +91,12 @@ motor**, marcado ⚠ e com a proveniência dizendo isso. Nada é inventado.
 | · 2.Nf3/2.e3/2.Nc3 Colle, Jobava | 38,5 % somados | …e6, …c5, …Bd6 | livro + motor | **1** ✔ |
 | 1.c4, 1.Nf3, 1.b3, 1.f4, 1.g3 | ~8 % da raiz | 1…e6 e …d5, transpõe p/ Manhattan | livro + motor | **1** ✔ |
 
-**Soma do Base das pretas: 20 linhas, todas escritas no B4.**
-Total geral: **42**, contra a meta de ~40. **O Base está fechado.**
+**Soma do Base das pretas: 17 linhas.** As 20 do B4 menos as 3 do bispo em c4,
+que em 7/9/2026 saíram do treinador e viraram página de princípios (§2.6 aqui,
+§16 do `docs/REVISAO-FONTES.md`).
+
+Total geral hoje: **40** — 23 das brancas e 17 das pretas, contra a meta de ~40.
+**O Base está fechado.**
 
 Duas correções que o B4 mediu e esta tabela já traz:
 
@@ -179,7 +189,8 @@ arquivo: `4. e5 {Where the Knight goes?} (4. d3 {How to fight for the center?})
 E a posição é espalhada: depois de `2.Bc4 Nc6`, as quatro respostas mais comuns
 cobrem só **73,2 %** — o menor número da tabela inteira.
 
-**Decisão:** **3 linhas**, a maior fatia das pretas, ⚠ **livro + motor**.
+**Decisão do B4, revista em 7/9/2026:** eram **3 linhas** ⚠ livro + motor. Hoje
+são **0 linhas e uma página de princípios** — a virada está no fim desta seção.
 
 **Escrito no B4, e como.** O `2…Nc6` fica: é o lance do arquivo do Grigoryan e é
 a posição que a §6 mediu — trocá-lo por `2…e6` invalidaria aquela linha da tabela
@@ -197,6 +208,34 @@ O que muda de linha para linha não é o lance, é **quem expulsa o bispo**: con
 `3.Nf3` é o peão `…d5`; contra `3.d3`, que segura d5, são `…a6`, `…b5` e o cavalo
 a a5. Medido nas pontas: pretas **+0,67** contra `3.Qf3`, **+0,24** contra `3.d3`,
 e igualdade contra `3.Nf3`.
+
+#### O que a régua nova fez com estas três — 7/9/2026
+
+A régua da §1 do `docs/REVISAO-FONTES.md` reprovou as três: o lance é do motor, e
+motor não dá motivo. Procurar fonte não resolveu — **nenhum dos onze cursos do
+corpus entra na posição**, porque os autores escrevem para 1200+ e nessa faixa o
+`2.Bc4` quase não aparece. Não é falta de procurar: é estrutural.
+
+E aí a própria medição desta seção vira o argumento. **73,2 % é o número mais
+espalhado da tabela inteira** — quatro respostas comuns, nenhuma dominante. Uma
+posição que se dispersa em quatro não rende sequência para decorar: rende uma
+ideia. E a ideia cabe numa frase, com um motivo tático que a criança consegue
+ver: **o mate em f7 só existe porque o bispo de c4 defende a dama que pousa
+lá**; tire o bispo da diagonal com `…e6` e `4.Dxf7+ Rxf7` é uma dama de graça.
+`…e6` é também o lance que prepara o `…d5` que expulsa o bispo — defesa e plano
+no mesmo lance.
+
+**Decisão, executada em 7/9/2026:** as 3 linhas saíram do treinador e a posição
+virou página de princípios, `/aberturas/notas/bispo-em-c4`. É o mesmo formato do
+⚠12, por um motivo oposto: aquelas são raras demais para decorar, esta é
+espalhada demais. Medido no motor em 7/9/2026, com a mesma build da §8: depois de
+`3.Dh5 e6` as quatro melhores das brancas deixam as pretas **+1,03 a +1,19** (o
+`4.Dxc5` não entra no corte), e contra `3.d3` a primeira escolha do motor é
+exatamente `…e6`, `…a6`, `…b5`, `…Ca5`, em igualdade. As armadilhas estão
+escritas na página: `3.Dh5 Cf6??` é mate em f7, e `3.Dh5 d6?` leva `4.Bxf7+`,
+brancas **+2,95**.
+
+O detalhe da §16 do `docs/REVISAO-FONTES.md`.
 
 ### 2.7 A Francesa 3.Bd3 são três estruturas, não uma
 
@@ -250,7 +289,7 @@ indo a c3.** Enquanto essa casa estiver livre, a dama em b6 não incomoda; assim
 que o peão dele ocupa c3, ela incomoda de graça. É por isso que contra `3.c3` a
 dama sai no lance 3, e contra `3.e3` ela espera até o lance 5.
 
-### 2.10 Três defesas não entram em nível nenhum
+### 2.10 Quatro defesas não entram em nível nenhum
 
 Pirc (1…d6 2,6 % + 1…g6 1,6 % = 4,2 %), Nimzowitsch (1…Nc6 1,6 %), Alekhine
 (1…Nf6 1,3 %), Owen (1…b6 < 1 %). Pelo corte da §4 nenhuma chega ao Base, e o
@@ -260,9 +299,15 @@ Grigoryan (16 linhas) prontos para eles.
 Detalhe do Pirc: o arquivo começa em `1…d6`. O `1…g6` sem `…Nf6` **não transpõe**
 para ele, então nem essa cobertura é inteira.
 
-**Decisão:** **princípios em `content/repertorio/notas/`**, uma página de texto,
-sem exercício no treinador. Libera ~16 linhas do orçamento — que é exatamente o
-que a Escocesa e o Bowdler precisam.
+**Decisão:** **princípios em `content/repertorio/notas.json`**, uma página de
+texto, sem exercício no treinador. Libera ~16 linhas do orçamento — que é
+exatamente o que a Escocesa e o Bowdler precisam.
+
+**E em 7/9/2026 o próprio Bowdler veio para cá** (§2.6), pelo motivo oposto: não
+por ser raro — é o mais frequente do repertório —, mas por não haver teoria que
+renda linha. São cinco notas, e cada uma diz o seu próprio motivo: o campo
+`porque` existe porque um rodapé fixo do tipo "estas são as raras" mentiria
+justamente para a que o aluno mais encontra.
 
 ---
 
@@ -585,7 +630,7 @@ linha existente, e a medição não pediu isso em lugar nenhum. A conta está na
 
 | # | ⚠ | Frequência | §|
 |---|---|---|---|
-| ~~1~~ | ~~Bowdler `2.Bc4` e `3.Bc4` — resposta e plano~~ — **fechado no B4**, é `…e6` | ~31 % das sicilianas | 2.6 |
+| ~~1~~ | ~~Bowdler `2.Bc4` e `3.Bc4` — resposta e plano~~ — **fechado no B4** como 3 linhas de motor; **reaberto e fechado de outro jeito em 7/9/2026**: a régua nova as reprovou, nenhum dos 11 cursos entra na posição, e ela virou **página de princípios** | ~31 % das sicilianas | 2.6 |
 | ~~2~~ | ~~Escocesa `4…Nxd4 5.Qxd4 c5` e `…b6`~~ — **fechado no B3** | 25 % de 52 % | 2.1 |
 | ~~3~~ | ~~Dragão `5.Nxc6`~~ — **fechado no B4**, é `…bxc6` e `8…Qb6`, igualdade | 36 % de 4…g6 | 2.5 |
 | ~~4~~ | ~~Francesa `3…c5` — escolher **um** dos três `!?`~~ — **fechado no B3**, é o `5.c3` | 38 % de 3.Bd3 | 2.7 |
@@ -596,7 +641,7 @@ linha existente, e a medição não pediu isso em lugar nenhum. A conta está na
 | ~~9~~ | ~~Francesa `3…Nc6`~~ — **fechado no B3**, é o `4.Nf3` | 14 % de 3.Bd3 | 2.7 |
 | ~~10~~ | ~~Manhattan `4.Bf4`~~ — **fora do Base pelo corte** (5ª resposta da posição); vai para o Avançado | 6,9 % de 3.Nc3 Nf6 | — |
 | **11** | **Maroczy — recortar só a sub-árvore do `6.e4`** | Avançado | 2.4 |
-| ~~12~~ | ~~Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios~~ — **fechado no B5**, em `/aberturas/notas/` | < 4,2 % cada | 2.10 |
+| ~~12~~ | ~~Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios~~ — **fechado no B5**, em `/aberturas/notas/`. Em 7/9/2026 o bispo em c4 entrou no mesmo formato, e são **cinco** | < 4,2 % cada | 2.10 |
 | ~~13~~ | ~~**O recorte de frequência foi medido na faixa errada**~~ — **medido e escrito em 6/9/2026**. A §6.1 tem as três faixas: 14 das 23 posições mudam de conjunto, e dez delas são o teto de 4 cortando entre quase-empates. Das quatro estruturais, a **Escandinava `2…Cf6`** virou a 43ª linha e as outras três não pedem escrita. **0 ids perdidos, 1 acrescentado.** Sobra uma decisão de orçamento, não de medição: o `4…Df6` da Escocesa | 1 decisão | 6.1 |
 | ~~14~~ | ~~**O tom dos comentários** — escritos para "criança de 10 anos"~~ — **medido em 6/9/2026, e a premissa não sobreviveu**. O cabeçalho dizia 10 anos; o texto não desceu junto. Dos 98 comentários, **3** tinham registro de criança, e estão corrigidos. Sobra uma deriva de sinal contrário: **20 quebram a "frase curta"** da §5 | 3 corrigidos, 20 em aberto | 5, 8.1 |
 
@@ -681,15 +726,17 @@ Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variaçõ
 `motor.ts` (leitura de lances e apresentação, sem processo), e os quatro do
 treinador — `treino.ts` (o juiz, a escada e a ordem), `banco.ts`, `progresso.ts`,
 `gravar.ts`, mais `passada.ts` — o redutor puro de uma passada pela linha, que
-tirou a máquina de estado de dentro do componente. O texto das quatro aberturas
-raras: `notas.ts` (schema) e
+tirou a máquina de estado de dentro do componente. O texto das cinco aberturas
+sem linha: `notas.ts` (schema) e
 `conteudo.ts` (leitura conferida na importação).
 
-**43 linhas** compiladas para `public/repertorio/`, em 12 arquivos: as 23 das
-brancas e as 20 das pretas. **O Base está completo dos dois lados.** A 43ª é a
-Escandinava `2…Cf6`, escrita em 6/9/2026 pelo que a §6.1 mediu — e ela entrou
-sem mover nenhum dos 42 ids anteriores, que é a prova da assimetria descrita
-lá.
+**40 linhas** compiladas para `public/repertorio/`, em 12 arquivos: as 23 das
+brancas e as 17 das pretas. **O Base está completo dos dois lados.** Foram 43 até
+7/9/2026: a 43ª era a Escandinava `2…Cf6`, escrita em 6/9 pelo que a §6.1 mediu,
+e ela entrou **sem mover nenhum dos 42 ids anteriores** — a prova da assimetria
+descrita lá. As três que saíram depois são as do bispo em c4 (§2.6): aí a
+assimetria cobrou o preço dela, e **3 ids sumiram**. Cabia agora porque ainda
+não há progresso de aluno de verdade gravado.
 
 ### A tela
 

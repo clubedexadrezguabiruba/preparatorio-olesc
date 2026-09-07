@@ -1,44 +1,17 @@
-; Siciliana pelas pretas. Este arquivo abre com o ramo do bispo em c4 — o
-; buraco 1 da seção 8 do docs/REPERTORIO.md, ~31 por cento das sicilianas é o
-; ponto mais vazio de todas as fontes. O resto do orçamento das pretas contra
-; 1.e4 c5 entra aqui como jogos novos, um por sistema.
+; Siciliana pelas pretas. Um jogo por sistema: Dragão Acelerado, Rossolimo,
+; 2.Cc3, Alapin e o Morra declinado.
 ;
-; A regra que organiza as três linhas é uma só: o bispo em c4 mira f7 e tem de
-; ser obrigado a sair. Contra 3.Cf3 quem o expulsa é o peão d5; contra 3.d3,
-; que segura essa casa, são os peões a6 e b5 mais o cavalo em a5.
-;
-; O 2...Cc6 e o 3...e6 estão no arquivo do Grigoryan, mas lá a linha morre no
-; lance 3 das brancas, sem nenhuma resposta nossa. Tudo a partir daí é livro +
-; motor, e a tag Fonte diz isso.
-;
-; O corte é o da seção 4, aplicado à tabela da seção 6: depois de 2.Bc4 Cc6 as
-; brancas jogam Cf3 36,4 por cento, Df3 14,7, d3 11,1 e Dh5 11,0. Cabem três, e
-; entram as três mais frequentes. O Dh5 fica de fora por um décimo de ponto
-; percentual, e a resposta a ele é a mesma do Df3 — está escrita no comentário.
-
-[Abertura "siciliana"]
-[Nome "Siciliana — bispo em c4"]
-[Cor "pretas"]
-[Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 22, MultiPV 5, medido em 5/9/2026. Buraco 1 da seção 8 de docs/REPERTORIO.md: o arquivo do Grigoryan tem 2...Cc6 e 3...e6 mas nenhuma resposta ao lance 3 das brancas. O 3...e6 é o primeiro lance do motor contra 3.Cf3 e contra 3.d3, e o segundo contra 3.Df3, a 4 centésimos do primeiro."]
-[Result "*"]
-
-1. e4 c5 2. Bc4 Nc6 3. Nf3
-(3. Qf3 e6 4. Ne2 Ne5 {O cavalo pula no meio e ataca duas peças de uma vez: a
-dama em f3 e o bispo em c4. Ele salva a dama, mas o bispo que mirava f7 vai ser
-trocado de qualquer jeito. Contra 3.Dh5 a ideia é a mesma, só que aí o cavalo
-vai para f6 primeiro.} 5. Qc3 Nxc4 6. Qxc4 Nf6 {A dama saiu cedo e pagou o
-preço: perdeu o bispo bom e ainda teve de andar duas vezes. Nós trocamos a peça
-que nos incomodava e agora desenvolvemos em paz.})
-(3. d3 e6 4. Nc3 a6 {Com o peão em d3 o lance d5 não sai de graça, então
-trocamos de ferramenta: a6 e b5 empurram o bispo pelo lado.} 5. Nf3 b5 6. Bb3
-Bb7 7. O-O Na5 {O cavalo vai para a beirada de propósito. Ele caça o bispo de
-b3, que é a peça que mais atrapalha, e sem esse bispo o ataque das brancas em f7
-acaba.})
-3... e6 4. O-O d5 {O lance da regra: o peão bate no bispo de c4. Ele tem de
-sair, e no caminho nós abrimos o centro.} 5. exd5 exd5 6. Bb5 Nf6 7. d4 Be7 8.
-Nc3 O-O {Roque, e olhe o tabuleiro: o bispo que mirava f7 foi parar em b5, o
-centro está aberto e todas as nossas peças saíram. Foi isso que o d5 comprou.} *
+; O que NÃO está aqui é decisão, e é a maior deste arquivo: o ramo do bispo em
+; c4 — 2.Bc4 e 2.Cf3 Cc6 3.Bc4, ~31 por cento das sicilianas — saiu do treinador
+; e virou página de princípios, em content/repertorio/notas.json, slug
+; "bispo-em-c4". Ele era o mais frequente do repertório inteiro e mesmo assim
+; não rende linha: depois de 2.Bc4 Cc6 as quatro respostas mais comuns das
+; brancas somam 73,2 por cento, o número mais espalhado da tabela da seção 6, e
+; nenhum dos onze cursos do corpus entra na posição — os autores escrevem para
+; 1200+, e nessa faixa o lance quase não aparece. Decorar oito meios-lances de
+; uma posição que se dispersa em quatro não ensina nada; a ideia ensina, e cabe
+; numa frase: ...e6 fecha a diagonal c4-f7 e prepara o ...d5 que expulsa o
+; bispo. Seção 16 do docs/REVISAO-FONTES.md.
 
 [Abertura "siciliana"]
 [Nome "Siciliana — Dragão Acelerado"]
@@ -122,7 +95,7 @@ do próprio rei.} *
 [Nome "Siciliana — 2.Cc3"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Pela tabela da seção 6, depois de 2.Cc3 Cc6 ele joga 3.Cf3 46,9 por cento e 3.Bc4 18,1 por cento, e são esses dois que entram. O 3...g6 contra 3.Cf3 e o 3...e6 contra 3.Bc4 são lances do motor e transpõem, um para o Dragão Acelerado e o outro para a estrutura do bispo em c4 que abre este arquivo; a ideia do ...e6 está no draft 'Sicilian Sidelines Homework' do Grigoryan, que a deixa sem continuação."]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Pela tabela da seção 6, depois de 2.Cc3 Cc6 ele joga 3.Cf3 46,9 por cento e 3.Bc4 18,1 por cento, e são esses dois que entram. O 3...g6 contra 3.Cf3 e o 3...e6 contra 3.Bc4 são lances do motor e transpõem, um para o Dragão Acelerado e o outro para a estrutura do bispo em c4, que saiu deste arquivo e virou a página de princípios de slug 'bispo-em-c4'; a ideia do ...e6 está no draft 'Sicilian Sidelines Homework' do Grigoryan, que a deixa sem continuação."]
 [Result "*"]
 
 1. e4 c5 2. Nc3 Nc6 {Ele guardou o cavalo em c3 antes de abrir o centro. Nós
@@ -131,9 +104,10 @@ daqui levam a posições que você já treinou neste mesmo arquivo.} 3. Nf3
 (3. Bc4 e6 4. Nf3 Nf6 5. d4 d5 {O …d5 só é possível porque o peão de e6 está lá
 embaixo para segurá-lo. É por isso que a ordem é …e6 primeiro e …d5 depois, e
 nunca ao contrário.} 6. exd5 exd5 7. Bb5 Be7 8. O-O O-O {O bispo em
-c4 de novo, é a mesma receita das três primeiras linhas deste arquivo: …e6 e
-depois …d5, o peão bate no bispo e ele vai parar em b5. Compare com a linha do
-2.Bc4: os lances são quase iguais. Uma ideia só resolve as duas.})
+c4 de novo, e a receita é a da página "Siciliana — o bispo em c4": …e6 e depois
+…d5, o peão bate no bispo e ele vai parar em b5. Lá aquilo não vira linha porque
+as brancas jogam qualquer coisa; aqui vira, porque o 2.Cc3 prende a ordem. A
+ideia é a mesma nas duas — leia a página e esta linha sai sozinha.})
 3... g6 4. d4 cxd4 5. Nxd4 Bg7 6. Be3 Nf6 {Ele pôs o cavalo em c3 antes de d4 e
 mesmo assim caiu no Dragão Acelerado: esta é a mesma posição da linha do 5.Cc3,
 com os lances em outra ordem. É o melhor tipo de linha que existe para decorar —
