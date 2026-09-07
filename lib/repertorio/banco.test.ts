@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { notas as NOTAS_FN } from "./conteudo.ts";
 import { IndiceSchema, meiosLances, validarBanco, type Linha } from "./linhas.ts";
 
 /**
@@ -105,4 +106,47 @@ test("o Base publicado tem 20 linhas, e o primeiro lance é sempre das brancas",
       `${linha.id} passa do teto do nível`,
     );
   }
+});
+
+test("nenhum lance NOSSO do repertório publicado está sem comentário", () => {
+  // O número que a §23 de `docs/REVISAO-FONTES.md` fechou. `conferirRegras` já
+  // reprova isto — mas ele roda sobre o que o compilador acabou de montar, e
+  // este arquivo existe justamente para o caso da edição à mão no JSON
+  // publicado, que não passa pelo compilador. Aqui o número é conferido no que
+  // o servidor vai abrir no sábado.
+  let nossos = 0;
+  for (const entrada of indice) {
+    const relativo = entrada.arquivo.replace(/^\/repertorio\//, "");
+    for (const linha of validarBanco(ler(relativo), relativo)) {
+      for (const ply of linha.meus) {
+        nossos++;
+        assert.ok(
+          linha.comentarios[String(ply)]?.trim(),
+          `${linha.id}: "${linha.sans[ply]}" (meio-lance ${ply}) está sem comentário`,
+        );
+      }
+    }
+  }
+  // Se este número cair, alguém encurtou uma linha; se subir, alguém a alongou.
+  // Nos dois casos vale reler a §23 antes de trocar o número aqui.
+  assert.equal(nossos, 222, "o repertório tem 222 lances nossos, em 27 linhas");
+});
+
+test("as páginas de princípios ligadas a uma abertura apontam para abertura viva", () => {
+  // O link é de mão única e falha CALADO: uma nota apontando para slug que não
+  // existe some da tela da abertura sem erro nenhum, e volta a ser invisível
+  // fora do rodapé de `/aberturas` — que é o problema que a §23 consertou. O
+  // `repertorio:compilar` reprova isto; aqui a mesma regra é medida no
+  // publicado, e o número declara quantas estão de fato ligadas.
+  const chaves = new Set(indice.map((e) => `${e.cor}/${e.abertura}`));
+  const ligadas = NOTAS_FN().filter((n) => n.abertura);
+  for (const nota of ligadas) {
+    assert.ok(
+      chaves.has(`${nota.cor}/${nota.abertura}`),
+      `a nota "${nota.slug}" aponta para ${nota.cor}/${nota.abertura}, que não existe`,
+    );
+  }
+  // Quatro das nove: as outras cinco (Pirc, Nimzowitsch, Alekhine, Owen e as
+  // outras primeiras) não são ramo de abertura nenhuma do treinador.
+  assert.equal(ligadas.length, 4);
 });

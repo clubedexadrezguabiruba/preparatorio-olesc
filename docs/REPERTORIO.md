@@ -46,8 +46,14 @@ sim **medir três e comparar**: §6.1.
 - O que a **revisão de fontes** (7/9/2026) fez: a régua nova do
   `docs/REVISAO-FONTES.md` — *toda linha tem de vir de fonte que explique o
   motivo* — tirou as **3 do bispo em c4** do treinador e as transformou em
-  página de princípios. **São 42 linhas hoje** (41 do Base, 1 do Avançado),
-  e cinco páginas em `/aberturas/notas/`.
+  página de princípios. Depois disso a poda da §23 continuou o serviço, e o
+  número de hoje é outro: **27 linhas** (20 do Base, 7 do Avançado) em **11
+  aberturas**, e **nove páginas** em `/aberturas/notas/`. As 15 linhas que
+  saíram não foram jogadas fora — as que eram ideia viraram página, e as que
+  eram para depois viraram Avançado.
+- **O número que fecha o repertório, medido em 7/9/2026:** nenhum dos **222
+  lances que o aluno joga** está sem comentário. Era 80 antes desta sessão, e
+  quem impede a volta é o `conferirRegras` de `lib/repertorio/linhas.ts`.
 
 ---
 
@@ -727,7 +733,7 @@ npm run repertorio:fidelidade   # onde a fonte fala numa posição nossa, e o qu
 npm run repertorio:fidelidade -- --pares         # a folha: fonte e nosso, lado a lado
 npm run db:migrar               # aplica as migrations, 0005_repertorio_revisao.sql inclusive
 npm run db:rls                  # prova que o aluno não grava progresso nem adia a revisão
-npm test                        # 577 testes
+npm test                        # 592 testes
 ```
 
 Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variações),
@@ -739,21 +745,43 @@ tirou a máquina de estado de dentro do componente. O texto das cinco aberturas
 sem linha: `notas.ts` (schema) e
 `conteudo.ts` (leitura conferida na importação).
 
-**42 linhas** compiladas para `public/repertorio/`, em 12 arquivos: as 24 das
-brancas e as 18 das pretas — 41 do Base e 1 do Avançado. **O Base está completo
-dos dois lados.** Foram 43 até 7/9/2026: a 43ª era a Escandinava `2…Cf6`, escrita
-em 6/9 pelo que a §6.1 mediu, e ela entrou **sem mover nenhum dos 42 ids
-anteriores** — a prova da assimetria descrita lá. As três que saíram depois são
-as do bispo em c4 (§2.6): aí a assimetria cobrou o preço dela, e **3 ids
-sumiram**. Cabia agora porque ainda não há progresso de aluno de verdade
-gravado. A 42ª é o Jobava, entrada em 7/9/2026 pela §22 do docs/REVISAO-FONTES.md
-— e ela também entrou **sem mover nenhum id**.
+**27 linhas** compiladas para `public/repertorio/`, em 11 arquivos: as 15 das
+brancas e as 12 das pretas — **20 do Base e 7 do Avançado**. **O Base está
+completo dos dois lados**, e nenhum dos **222 lances que o aluno joga** está sem
+comentário.
+
+O caminho até esses números, porque ele explica por que os textos mais antigos
+deste documento falam em 42 e 43. O Base fechou em **43** linhas em 6/9/2026. A
+régua nova tirou as **3 do bispo em c4** (§2.6), que viraram página de
+princípios, e a §22 acrescentou o Jobava: **42**. Em 7/9/2026 a **poda da §23**
+cortou 15 — onze viraram as quatro páginas novas de princípios e quatro foram
+para o Avançado, junto com três que já estavam no treinador. Sobraram **27**, e
+o Avançado deixou de ser um nome numa tag: são 7 linhas, trancadas até o aluno
+fechar o Base inteiro.
+
+**Nenhum corte moveu um id que ficou.** O id é o hash dos lances: linha
+encurtada ganha id novo, linha só reclassificada mantém o dela. As 15 da poda
+levaram os seus embora; as 27 que ficaram têm os mesmos ids de antes. Cabia
+fazer isso agora porque ainda não há progresso de aluno de verdade gravado — a
+janela está medida na §23 do `docs/REVISAO-FONTES.md`.
 
 ### A tela
 
-`/aberturas` lista as 12 aberturas em dois grupos, com a conta de linhas
+`/aberturas` lista as 11 aberturas em dois grupos, com a conta de linhas
 aprendidas; `/aberturas/[cor]/[abertura]` é onde se treina. A rota tem `[cor]`
 antes de `[abertura]` porque o slug pode repetir entre as duas.
+
+**As páginas de princípios aparecem em DOIS lugares desde 7/9/2026.** Elas
+continuam no rodapé de `/aberturas`, todas as nove — e quatro delas aparecem
+também dentro da abertura de onde saíram, logo abaixo da lista de linhas. O que
+liga uma coisa à outra é o campo `abertura` de `notas.ts`, e o motivo está na
+§23 do `docs/REVISAO-FONTES.md`: essas quatro são ramos podados de aberturas que
+o aluno TREINA, cobrem perto de um terço do que ele encontra no tabuleiro, e
+quem entra direto para treinar nunca descia até um rodapé abaixo de onze
+cartões. As outras cinco não têm abertura para onde voltar — são defesas
+inteiras que nunca viraram linha —, e por isso o campo é opcional. Slug errado
+ali falharia **calado**, com o link sumindo da tela sem erro nenhum; quem
+reprova é o `repertorio:compilar`.
 
 **A conta das barrinhas mudou de direção em 6/9/2026, e era um bug.** Ela varria
 o banco de progresso e adivinhava a abertura pelo **prefixo do id**

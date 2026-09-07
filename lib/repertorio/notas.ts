@@ -5,19 +5,24 @@ import { sanEmPortugues } from "./treino.ts";
 /**
  * As aberturas que não viram linha: princípios em vez de lances decorados.
  *
- * São cinco, e elas chegam aqui por **dois motivos opostos**:
+ * São **nove** desde a poda de 7/9/2026 (§23 do `docs/REVISAO-FONTES.md`), e
+ * eram cinco quando este arquivo nasceu. Elas chegam aqui por **dois motivos
+ * opostos** — e as quatro que a poda trouxe são todas do segundo tipo:
  *
  * - **Quatro por raridade.** Pirc, Nimzowitsch, Alekhine e Owen, defesas contra
  *   o nosso 1.e4, ficaram fora pela frequência (§2.10 do `docs/REPERTORIO.md`).
  *   Juntas somam menos de 8 % das partidas, e escrevê-las como linha custaria
  *   ~16 das 42 vagas do orçamento.
- * - **Uma por ausência de teoria.** O bispo em c4 contra a nossa Siciliana
+ * - **Cinco por ausência de teoria.** O bispo em c4 contra a nossa Siciliana
  *   (§2.6) é o contrário: **~31 % das sicilianas**, o lance mais frequente do
  *   repertório inteiro. Ele sai daqui não por ser raro, mas porque **não há o
  *   que decorar** — depois de `2.Bc4 Cc6` as quatro respostas mais comuns das
  *   brancas somam só 73,2 %, o número mais espalhado da tabela da §6, e nenhum
  *   dos onze cursos do corpus entra nele: os autores escrevem para 1200+, e
- *   nessa faixa o lance quase não aparece.
+ *   nessa faixa o lance quase não aparece. A poda de 7/9/2026 achou mais quatro
+ *   posições com o mesmo perfil — a dama em d4 da Escocesa, o centro grande da
+ *   Alapin, o bispo em d3 da Francesa e as primeiras jogadas que não são 1.e4
+ *   nem 1.d4 com c4 — e trocou onze linhas do treinador por elas.
  *
  * É por isso que existe o campo `porque`. Sem ele a página teria de escolher
  * uma moldura só — "as raras" — e ela seria falsa para a linha que o aluno mais
@@ -55,6 +60,28 @@ export const NotaSchema = z
      * `2.Bc4`. As quatro raras são das brancas; a do bispo em c4 é das pretas.
      */
     cor: z.enum(CORES),
+    /**
+     * A abertura do treinador de onde esta página saiu — o slug do `index.json`,
+     * lido junto com `cor`: `brancas` + `escocesa` dá `/aberturas/brancas/escocesa`.
+     *
+     * **Existe para a página ser ENCONTRADA.** Até 7/9/2026 as nove notas viviam
+     * num bloco no rodapé de `/aberturas`, e só ali. Só que quatro delas são
+     * ramos podados de uma abertura que o aluno TREINA — a dama em d4 saiu da
+     * Escocesa, o centro grande saiu da Alapin, o bispo em d3 saiu da Francesa,
+     * o bispo em c4 saiu da Siciliana —, e juntas cobrem perto de um terço do
+     * que ele vai encontrar no tabuleiro. Quem entra direto na abertura e treina
+     * nunca descia até o rodapé, e nunca as lia. Com este campo, a própria
+     * página da abertura mostra o que foi podado dela.
+     *
+     * **É opcional, e o que fica de fora não é sobra.** As outras cinco — Pirc,
+     * Nimzowitsch, Alekhine, Owen e as outras primeiras — não são ramo de
+     * abertura nenhuma do treinador: são defesas inteiras que nunca viraram
+     * linha. Elas seguem só no rodapé de `/aberturas`, que é onde fazem sentido.
+     *
+     * Quem confere que o par `cor`+`abertura` existe de verdade é o
+     * `validate:content`: o schema não pode ler o `index.json`, que é gerado.
+     */
+    abertura: z.string().regex(/^[a-z0-9-]+$/).optional(),
     /** Os lances que identificam a abertura, em SAN: "1.e4 d6". */
     lances: z.string().min(4),
     /** Quanto ela aparece, em palavras que o aluno entende. */

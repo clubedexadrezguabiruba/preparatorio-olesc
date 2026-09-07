@@ -27,6 +27,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync
 import path from "node:path";
 import { RAIZ } from "./env-local.ts";
 import { expandir } from "../lib/repertorio/arvore.ts";
+import { notas } from "../lib/repertorio/conteudo.ts";
 import { lerPgns } from "../lib/repertorio/pgn.ts";
 import {
   aberturasInchadas,
@@ -133,6 +134,30 @@ if (problemas.length === 0) {
 }
 
 avisos.push(...aberturasInchadas(todas).map((a) => `acima da meta do Base — ${a}`));
+
+/* ------------------------------------------------------------------ *
+ * O campo `abertura` das páginas de princípios aponta para abertura viva
+ *
+ * Uma nota com `abertura: "escocesa"` faz a página da Escocesa mostrar o link
+ * para ela. Se o slug estiver errado — ou se a abertura sair do repertório num
+ * corte futuro —, o link simplesmente **não aparece**: a página não quebra,
+ * ninguém vê erro nenhum, e a nota volta a ser invisível fora do rodapé de
+ * `/aberturas`. Foi exatamente esse silêncio que a §23 de 7/9/2026 veio
+ * consertar, então ele não pode voltar por descuido de slug.
+ *
+ * É aqui e não no `validate:content` porque o par `cor`+`abertura` só existe
+ * depois de compilar: é este script que decide quais aberturas há. E é ANTES do
+ * `--check` para o gate valer também quando nada é escrito.
+ * ------------------------------------------------------------------ */
+const aberturasVivas = new Set(todas.map((l) => `${l.cor}/${l.abertura}`));
+for (const nota of notas()) {
+  if (nota.abertura && !aberturasVivas.has(`${nota.cor}/${nota.abertura}`)) {
+    problemas.push(
+      `a página de princípios "${nota.slug}" aponta para ${nota.cor}/${nota.abertura}, ` +
+        "que não é abertura do repertório. O link para ela sumiria calado da tela da abertura.",
+    );
+  }
+}
 
 for (const aviso of avisos) console.log(`  aviso: ${aviso}`);
 

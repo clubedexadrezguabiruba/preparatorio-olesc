@@ -1642,3 +1642,279 @@ acionável continua sendo a de 9 da §17**, e ela não mudou.
 
 **Nenhuma linha do repertório está sem fonte.** O grupo "sem fonte" do mapa tem
 uma entrada, e ela é a que esta seção explica.
+
+---
+
+## 23. A poda, e o fim dos lances mudos — 7/9/2026
+
+Esta seção é **dívida paga**: os quatro commits da poda já a citavam quando ela
+ainda não existia, e as tags `[Fonte]` de nove arquivos apontam para cá. Ela
+conta duas coisas que aconteceram no mesmo dia — o corte de 42 linhas para 27, e
+o fim dos 80 lances que o treinador cobrava sem dizer por quê.
+
+### 23.1 Por que podar: o objetivo do Doug, medido contra o repertório
+
+A frase que decide tudo é dele:
+
+> *"O repertório não é para o aluno saber todas as melhores linhas, mas os
+> princípios e planos de cada abertura."*
+
+Medido contra as 42 linhas de então, o repertório dizia o contrário:
+
+```
+42 linhas = 319 lances que o aluno tem de produzir, 205 decisões distintas
+188 desses 319 lances (59 %) SEM COMENTÁRIO NENHUM — decoreba pura
+Siciliana (10 linhas) + Escocesa (9) carregavam 43 % da carga inteira
+```
+
+Não é corte inventado: as 42 saíram da regra da §4 do `docs/REPERTORIO.md` — *até
+cobrir 80 % da posição, no máximo 4 respostas*. Podar é apertar essa mesma
+regra, e há dois precedentes que o próprio Doug executou: o bispo em c4 (§2.6) e
+o ⚠12 (§2.10), que viraram páginas de princípios em vez de linhas.
+
+### 23.2 O corte, e o que ele NÃO custou
+
+```
+             linhas   decisões   lances do aluno   mudos
+antes            42        205               319     188
+BASE             20        127               164      97
+AVANÇADO          7         54                58      28
+```
+
+Os cortes que **não custam cobertura de tabuleiro**, todos conferidos casa a
+casa na `chess.js`:
+
+- **Dragão Acelerado:** `5.Be3` e `5.Bc4` transpõem para a posição do `5.Cc3`.
+  Eram três portas para o mesmo quarto; ficou uma, e o comentário do `4…g6`
+  passa a dizer isso.
+- **Morra (`2.d4`)** termina na MESMA posição final da Alapin (`2.c3`).
+- **`pretas/outras` inteira** terminava na mesma posição do 6º lance da
+  `manhattan-7945d4d3`. A abertura foi apagada: o índice foi de 12 para **11**.
+- **Manhattan `5.e3`** termina na mesma posição da linha principal do arquivo.
+- **Caro-Kann `4…Cf6`** é gerada pela regra que a própria fonte escreve — *"c3
+  contra …Cc6, h3 contra …Cf6"* —, e o comentário do `6.h3` da linha que ficou
+  já a ensina.
+
+O **corte grande** foi o da Escocesa `4…Cxd4 5.Dxd4`: quatro respostas dele
+(30,8 / 25,4 / 16,4 / 8,5 %) e nenhuma domina — o mesmo perfil do bispo em c4.
+Ficou o `5…d6`, que é a mais frequente COM linha e ensina a montagem inteira
+(`Cc3`, `Bf4`, `O-O-O`); as outras três foram para a página
+`escocesa-dama-em-d4`. A fonte do `5…d6` usa o **precedente do Colle da §22**:
+os LANCES BRANCOS são os mesmos três da variante do `5…b6`, cuja prosa do *S&S
+Scotch* explica a montagem, e a tag declara o vão — o mapa casa por posição e
+não vai confirmar.
+
+**Sete linhas foram para o Avançado em vez de morrer**, e isso não custou id
+nenhum: o id é o hash dos LANCES, e `[Nivel]` não é lance. São a Escandinava
+`2…Cf6`, a Escocesa `3…Cf6`, a Caro-Kann `6.Bf4`, o Rossolimo `4.O-O`, a
+Armadilha do Elefante, o Londres `3.c3` e o Jobava.
+
+**Balanço de ids:** 42 antes, 27 depois. 17 morreram, 2 nasceram — as duas que
+foram encurtadas, e as duas encurtaram por motivo da própria fonte (a Escocesa
+`4…Cf6` para no `9.O-O`, onde o curso escreve que daí em diante vale mais
+entender o plano do que decorar lance; o Dragão `5.Cxc6` para no `7…Cd5`, que é
+onde o Plichta para de cobrir). Dos 25 sobreviventes, **zero** mudou `lances`,
+`sans`, `fenFinal` ou `meus`.
+
+**A janela de órfãos, re-medida antes de cortar:** 5 linhas em
+`repertorio_progresso`, todas de `alunoteste`; 3 contas no Auth; **zero alunos
+reais**. Nenhum aluno órfão. É a mesma janela da §22, e ela não fica aberta para
+sempre — a aula é em 19/9/2026.
+
+### 23.3 O Avançado passa a existir de verdade
+
+Até a poda, `nivel` era rótulo de arquivo. `EntradaDoIndiceSchema` é `.strict()`
+e não tinha onde carregá-lo, então o `index.json` — o único arquivo que
+`/aberturas` abre — não sabia o nível de ninguém, e marcar uma linha como
+`avancado` não a escondia de nada. O sintoma estava no ar:
+`brancas-caro-kann-428a7cce` (Base, `6.h3`) e `brancas-caro-kann-d2337d9b`
+(Avançado, `6.Bf4`) ensinam lances DIFERENTES na MESMA posição, e o aluno
+treinava as duas sem saber por quê.
+
+Decisão do Doug: *"construir o avançado e só desbloqueia quando o aluno terminou
+todas as linhas com acerto"*. **"Com acerto" é o `aprendida` que já existia** —
+degrau 3, três passadas limpas em três dias diferentes —, e não uma régua nova:
+duas definições de "sei esta linha" na mesma tela seria pior que o portão.
+
+**O preço de entrada, medido.** O portão conta o Base INTEIRO, então mexer no
+tamanho do Base muda o preço: 3N passadas limpas, e errar antes do degrau 3
+**zera** a linha (`lib/repertorio/treino.ts:222`). O esperado real a 80 % de
+acerto é ~4,8 passadas por linha — para 20 linhas, **23 a 32 sessões**.
+
+### 23.4 As quatro páginas de princípios que a poda pediu
+
+Onze das quinze linhas cortadas eram posições em que a resposta não é uma
+sequência, é uma ideia. Viraram texto, no formato que já existia:
+
+1. **`escocesa-dama-em-d4`** — duas regras cobrem as quatro respostas, e as duas
+   estão medidas no Stockfish 18, profundidade 20: `5…Cf6` → `6.e5` expulsa,
+   brancas **+1,52**; `5…c5` → `6.De3`, brancas **+1,37**.
+2. **`alapin-centro-grande`** — cobre `2…d6` e `2…e6` (que tinham linha) e mais
+   `2…Cf6` e `2…d5` (que nunca tiveram).
+3. **`francesa-bd3`** — o motivo do corte é da própria fonte: no 5º lance ela
+   oferece TRÊS lances marcados como interessantes e não escolhe nenhum. Fonte
+   que não escolhe está dizendo que ali é ideia, não lance.
+4. **`outras-primeiras`** — absorve a abertura `pretas/outras` inteira e mais o
+   Jobava. É a página "um plano para todos" na forma mais pura.
+
+**Gate que faltava, achado ao escrever essas quatro:** o `validate:content`
+**não** conferia o `notas.json`. Só o `build` conferia, e por tabela — um `faca`
+com seis passos (o teto é cinco) derrubava o `next build` com a mensagem
+escondida dentro de um *"Failed to collect page data"*. Agora o gate lê o
+arquivo e devolve o erro com o nome do campo.
+
+### 23.5 Os 80 lances mudos, e por que eles eram o trabalho principal
+
+Depois da poda sobravam **97 lances mudos no Base** e 28 no Avançado. A primeira
+fatia foi medida antes de escrever, e a medida mudou a ordem do trabalho: a
+maioria dos lances calados não eram difíceis — eram os **primeiros**.
+
+```
+1.e4     mudo em 12 das 20 linhas      2...Cc6  mudo em 3
+2.Cf3    mudo em 7                     1...d5   mudo em 3
+1...c5   mudo em 5                     e mais 2.exd5, 3...cxd4 e 5...Bg7
+```
+
+Contadas como **decisões distintas** — o aluno encontra `1.e4` uma vez, não doze
+—, as 65 decisões mudas do Base tinham só **8 de tronco**, e essas 8 valiam **40
+dos 97** lances calados. São justamente os lances em que o motivo é princípio e
+não variante, e por isso o texto deles é **idêntico em todos os arquivos**: um
+comentário por JOGO, servindo todas as linhas que passam por ali.
+
+Sobraram 80 — 57 no Base e 23 no Avançado —, e a partir daí não havia mais
+atalho de tronco: cada um aparecia em UMA linha só. Foram escritos em três
+blocos, linha a linha, e a regra de onde tirar o argumento foi sempre a mesma:
+
+1. **A tag `[Fonte]` diz qual curso e qual variante.** `repertorio:mapear <id>`
+   imprime a prosa da fonte lance a lance, e é a matéria-prima. Para as linhas
+   do Krikor e do Grigoryan, que não estão no corpus do chess.com, a prosa está
+   em `content/repertorio/rascunhos-anotados/`, fora do Git.
+2. **Onde a fonte fala, o argumento é dela** — reescrito com as nossas palavras,
+   para 12 a 15 anos. Nenhuma prosa de curso é copiada.
+3. **Onde ela não fala, o argumento sai da posição**, e é conferível no
+   tabuleiro. Exemplo, o mecanismo do `g4` na Escandinava: com o bispo em h5 o
+   nosso cavalo de f3 está pregado contra a dama de d1; o empurrão obriga o
+   bispo a g6, a prega acaba, e o cavalo pula em e5.
+4. **Onde a afirmação é de avaliação, ela vem do motor com a medida declarada** —
+   build, profundidade e data, como as tags já fazem.
+
+**Uma afirmação foi escrita e depois retirada por medição.** O curso do Scotch
+diz que, na variante Clássica, `…Df6` perde o bispo para `Cd5` — mas ele diz
+isso na posição com a dama em e2, e a nossa ordem tem a dama em d1. Medido nessa
+posição (Stockfish 18 lite-single, profundidade 20): `7.Cd5` **não** está entre
+os três primeiros; o motor joga `7.De2`, brancas +0,37. O comentário do `6.Cc3`
+ficou com o que a fonte de fato sustenta — a ordem de lances —, sem a tática.
+
+**Três comentários foram MOVIDOS, não escritos.** O argumento existia, mas
+amontoado no último lance da linha, onde o aluno só chega depois de acertar os
+outros seis no escuro: os três motivos do `7.De2` da Escocesa estavam no
+`8.Be3`; a história de b2, do `…g6` e do `h3` do Londres estavam todos no
+`8…O-O`; o aviso do `10.Bg5` da Alapin estava no `9…e6`, dois lances antes de
+acontecer. Cada um foi para o lance que ele explica.
+
+### 23.6 A Petroff tinha fonte o tempo todo — o segundo caso do padrão da §22
+
+A §22 achou que o Colle tinha fonte, em posição vizinha, e que o mapa não a
+enxergava. **O mesmo aconteceu com a Petroff**, e ela era a última linha das 27
+cuja fonte não explicava nada.
+
+A tag dizia *"GM Avetik Grigoryan (ChessMood) — 'PGN file and Homework'"*, e o
+arquivo do Grigoryan tem **140 comentários, 4 que explicam** (§10). Só que o
+corpus tem outro curso que joga a nossa linha inteira, na nossa ordem, e comenta
+lance a lance: **IM Andras Toth, "1.e4 for Club Players"**, variante *Petroff
+Defense*. Ele explica `3.Cxe5`, `4.Cf3`, `5.Cc3`, `6.dxc3` e `7.Be3` — **14 dos
+nossos 16 meios-lances**.
+
+O vão, declarado como manda o precedente do Colle: no 7º lance dele o curso joga
+`7…Cc6` e nós jogamos `7…O-O`, então o `8.Dd2` final está explicado **em posição
+vizinha**, a um lance preto de distância. O `repertorio:mapear` marca a linha
+como cauda a partir do `7…O-O` — e mesmo assim ela é a de melhor cobertura
+contígua do grupo, **13/15**.
+
+**Nenhum lance mudou para isso.** O que mudou foi a tag, e o achado não reabre a
+decisão de 7/9 sobre o `3.d4` do Krikor: aquela troca continua rejeitada, pelo
+motivo que o commit da poda registrou — o capítulo dele não cobre `3…Cxe4`, que
+é a resposta principal.
+
+### 23.7 O link que faltava: as páginas de princípios eram invisíveis
+
+Nove páginas de princípios, e todas viviam **num bloco no rodapé de
+`/aberturas`**, abaixo de onze cartões. Quatro delas são ramos podados de uma
+abertura que o aluno TREINA — a dama em d4 saiu da Escocesa, o centro grande da
+Alapin, o bispo em d3 da Francesa, o bispo em c4 da Siciliana — e juntas cobrem
+perto de um terço do que ele encontra no tabuleiro. **Quem entrava direto para
+treinar nunca descia até o rodapé, e nunca as lia.**
+
+`NotaSchema` ganhou o campo **`abertura`**, opcional, lido junto com `cor`: a
+página `/aberturas/[cor]/[abertura]` mostra, logo abaixo da lista de linhas, o
+que a poda tirou dali — com o rótulo *"para ler"*, porque a diferença entre
+treino cobrado e leitura tem de estar clara antes do clique. As outras cinco
+notas não são ramo de abertura nenhuma do treinador, e por isso o campo é
+opcional; elas seguem só no rodapé, que é onde fazem sentido.
+
+**O gate, e por que ele fica no compilador.** Um slug errado ali falha
+**calado**: o link some da tela sem erro nenhum, e a nota volta a ser invisível.
+Quem reprova é o `repertorio:compilar` — é ele que decide quais aberturas
+existem, e a conferência roda **antes** do `--check`, para valer também quando
+nada é escrito.
+
+### 23.8 O gate dos lances mudos
+
+Até 7/9/2026 o `conferirRegras` (`lib/repertorio/linhas.ts`) cobrava comentário
+**só no último lance** de cada linha. É por isso que 80 dos 222 lances do aluno
+podiam estar calados sem que nada reprovasse — e estavam. Agora ele cobra
+**todos os lances nossos** e devolve a lista de quais faltam, em notação.
+
+**Os lances DELE seguem podendo ser mudos, de propósito:** o aluno não os joga,
+e comentar todos viraria ruído. Os que têm comentário hoje o têm porque a
+resposta dele é o que dá sentido ao nosso lance seguinte.
+
+O `banco.test.ts` confere a mesma regra no **publicado**, que é o caminho que o
+compilador não cobre: entre ele e o servidor cabe uma edição à mão no JSON.
+
+### 23.9 Os números, medidos em 7/9/2026
+
+A coluna "antes" é o estado no fim da §22 — 42 linhas, antes do primeiro corte.
+As duas linhas de âncoras são a exceção e estão marcadas: elas foram medidas
+**depois** da poda e dos comentários de tronco, que é quando o `repertorio:mapear`
+foi rodado pela última vez antes desta escrita.
+
+| | antes | depois |
+|---|---:|---:|
+| linhas | 42 | **27** (20 Base + 7 Avançado) |
+| aberturas no índice | 12 | **11** |
+| páginas de princípios | 5 | **9** |
+| lances que o aluno joga | 319 | **222** |
+| **lances mudos** | **188** | **0** |
+| âncoras de comentário *(medida pós-poda)* | 149 | **230** |
+| âncoras em posição com prosa da fonte *(idem)* | 99 | **136** |
+| testes | 585 | **592** |
+
+O **corpus não mudou**, e é assim que se sabe que nada foi inventado: 11 cursos,
+165 variantes, 2.434 comentários, 2.890 posições distintas — os mesmos números
+da §22.
+
+**Ids: 27 antes desta escrita, 27 depois, zero alterados.** Comentário não entra
+no hash dos lances, e essa é a prova de que nenhum lance foi tocado por
+descuido.
+
+### 23.10 O que fica pendente, declarado
+
+1. **Os comentários novos das três linhas assinadas são rascunho do assistente**
+   até o professor ler. São cinco: o `6…O-O` e o `7…d5` do Rossolimo `4.O-O`, e
+   o `5…exd5`, `6…Cxd5` e `7…Bb4+` da Armadilha do Elefante. É o mesmo estado em
+   que a Caro-Kann do Avançado ficou entre a §19 e a assinatura de 7/9 — e nas
+   duas linhas os LANCES já estavam assinados; o que falta é a leitura do texto
+   novo.
+2. **As 7 de "a fonte não cobre o ramo"** continuam onde estavam: quem sai do
+   roteiro é o adversário, e resolver isso depende de comprar curso, não de
+   escrever melhor. A Petroff SAIU dessa lista pela §23.6 — as duas Philidor e
+   a Alapin, que a encabeçam com 3/15 de cobertura contígua, são do Krikor, e a
+   régua as aprova pela fonte delas.
+3. **`gravar.ts` não confere o portão do Avançado no servidor.** Um POST forjado
+   gravaria progresso numa linha trancada. Não destrava nada — o portão conta o
+   Base —, mas é buraco declarado desde o commit do Avançado.
+4. **O mapa mente de propósito em 4 pontos**, e vai continuar mentindo: as três
+   linhas assinadas e a Escocesa `5…d6` (citada pelo molde do Colle) aparecem em
+   cauda ou sem-fonte para sempre, porque o `repertorio:mapear` casa por posição.
+   **Quem quer o número certo lê a tag `[Fonte]`, não o mapa.**

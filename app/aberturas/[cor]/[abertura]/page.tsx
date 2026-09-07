@@ -3,7 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { aberturaNoIndice, lerIndice, linhasDaAbertura } from "@/lib/repertorio/banco";
+import { notasDaAbertura } from "@/lib/repertorio/conteudo";
 import { CORES, type Cor } from "@/lib/repertorio/linhas";
+import { lancesEmPortugues, type Nota } from "@/lib/repertorio/notas";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
 import {
   baseCompleto,
@@ -102,15 +104,26 @@ export default async function Abertura({
    * "abertura aprendida" não há tabuleiro nenhum, e marcar uma linha como
    * "nesta tela" ali seria apontar para o que não existe.
    */
+  /**
+   * As páginas de princípios saem GRUDADAS na lista, e não numa terceira
+   * chamada espalhada pelos `return`. São o resto da mesma abertura: os ramos
+   * que a poda de 7/9/2026 tirou daqui por não renderem sequência para decorar.
+   * Quem lê "as 5 linhas" tem de ler, no lance seguinte, "e mais isto, que não
+   * é linha" — senão a página promete cobrir a abertura e cobre dois terços.
+   */
+  const podadas = notasDaAbertura(cor, abertura);
   const lista = (atual: string | null) => (
-    <ListaDeLinhas
-      cor={cor}
-      abertura={abertura}
-      linhas={linhas}
-      progressoDe={de}
-      atual={atual}
-      agora={agora}
-    />
+    <>
+      <ListaDeLinhas
+        cor={cor}
+        abertura={abertura}
+        linhas={linhas}
+        progressoDe={de}
+        atual={atual}
+        agora={agora}
+      />
+      <Podadas notas={podadas} />
+    </>
   );
 
   // Tudo aprendido **e nada vencendo**: a tela para e diz isso, em vez de servir
@@ -249,6 +262,50 @@ function ListaDeLinhas({
             </li>
           );
         })}
+      </ul>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * O que a poda tirou desta abertura
+ *
+ * Quatro das nove páginas de princípios são ramos de uma abertura que o aluno
+ * TREINA, e até 7/9/2026 elas só existiam num bloco no rodapé de `/aberturas`,
+ * abaixo de onze cartões. Quem entra direto para treinar nunca descia até lá —
+ * e essas quatro cobrem perto de um terço do que ele encontra no tabuleiro.
+ *
+ * O cartão diz de cara que ali NÃO há lance para decorar. É a diferença que o
+ * aluno precisa entender antes de clicar: a lista de cima é treino cobrado; isto
+ * é leitura. Sem essa frase o link parece mais uma linha, e a página de texto
+ * chega como decepção.
+ *
+ * Some quando não há nenhuma, que é o caso de sete das onze aberturas.
+ * ------------------------------------------------------------------ */
+
+function Podadas({ notas }: { notas: readonly Nota[] }) {
+  if (notas.length === 0) return null;
+
+  return (
+    <section className="flex flex-col gap-2">
+      <h2 className="rotulo text-tinta-fraca">Nesta abertura, sem linha para decorar</h2>
+      <ul className="flex flex-col gap-1.5">
+        {notas.map((nota) => (
+          <li key={nota.slug}>
+            <Link
+              href={`/aberturas/notas/${nota.slug}`}
+              className="foco flex flex-col gap-1 rounded-lg border border-dashed border-borda-fraca bg-carta px-3 py-2.5 transition-colors hover:bg-carta-toque"
+            >
+              <span className="flex items-baseline justify-between gap-3">
+                <span className="min-w-0 flex-1 truncate text-sm text-tinta">{nota.nome}</span>
+                <span className="rotulo shrink-0 text-tinta-muda">para ler</span>
+              </span>
+              <span className="text-xs text-tinta-muda tabular-nums">
+                {lancesEmPortugues(nota.lances)}
+              </span>
+            </Link>
+          </li>
+        ))}
       </ul>
     </section>
   );
