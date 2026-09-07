@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { perfilAtual } from "@/lib/auth/perfil";
-import { aberturaNoIndice, linhasDaAbertura } from "@/lib/repertorio/banco";
+import { aberturaNoIndice, lerIndice, linhasDaAbertura } from "@/lib/repertorio/banco";
 import { CORES, type Cor } from "@/lib/repertorio/linhas";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
 import {
+  baseCompleto,
   diasAteRevisar,
   proximaLinha,
   resumo,
@@ -62,10 +63,28 @@ export default async function Abertura({
   if (!entrada) notFound();
 
   await perfilAtual();
-  const [linhas, progresso] = await Promise.all([
+  const [todasAsLinhas, progresso, indiceInteiro] = await Promise.all([
     linhasDaAbertura(cor, abertura),
     progressoDoRepertorio(),
+    lerIndice(),
   ]);
+
+  /**
+   * O portão do Avançado, aplicado uma vez e no lugar mais alto possível.
+   *
+   * Filtrar aqui, logo depois de carregar, é o que faz o resto desta tela ficar
+   * intacto: `resumo`, `proximaLinha`, a `ListaDeLinhas` e até o `?linha=` da URL
+   * passam a enxergar só o que o aluno pode treinar, sem cada um precisar saber
+   * que existe um portão. Um id trancado vindo de link velho simplesmente não é
+   * achado, e a tela cai na linha sugerida — que é o mesmo caminho que já existia
+   * para id de linha apagada.
+   *
+   * O portão é do repertório INTEIRO, e não desta abertura: o professor pediu
+   * que o Avançado abrisse quando o aluno terminasse **todas** as linhas do Base
+   * (7/9/2026), então é preciso o índice inteiro, não só esta entrada.
+   */
+  const avancadoLiberado = baseCompleto(progresso, indiceInteiro);
+  const linhas = todasAsLinhas.filter((l) => l.nivel !== "avancado" || avancadoLiberado);
 
   const agora = new Date().toISOString();
   const de = (id: string): ProgressoDaLinha => progresso.get(id) ?? zerado();
@@ -124,10 +143,16 @@ export default async function Abertura({
   }
 
   if (!linha) {
+    // Duas maneiras de chegar aqui, e elas dizem coisas opostas ao aluno. Sem
+    // separá-las, uma abertura inteira de Avançado — que existe e ele vai ganhar
+    // — apareceria como "não tem linhas publicadas", que soa a defeito do site.
+    const trancada = todasAsLinhas.length > 0 && !avancadoLiberado;
     return (
       <Moldura nome={entrada.nome} cor={cor}>
         <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
-          Esta abertura ainda não tem linhas publicadas.
+          {trancada
+            ? "Esta abertura é do Avançado. Ela abre quando você tiver aprendido todas as linhas do Base."
+            : "Esta abertura ainda não tem linhas publicadas."}
         </p>
       </Moldura>
     );

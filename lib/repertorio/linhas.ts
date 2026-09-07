@@ -129,6 +129,22 @@ export const BancoSchema = z.array(LinhaSchema);
  * contar por prefixo de texto (`brancas-escocesa-`) contaria esse fantasma, e a
  * tela mostraria "3 de 2". Com o `ids` aqui, a lista continua fazendo doze
  * barras lendo um arquivo só — e conta certo.
+ *
+ * ## Por que `idsAvancado` existe, e por que ele é um SUBCONJUNTO de `ids`
+ *
+ * Acrescentado em 7/9/2026. Até então o campo `nivel` de cada linha **não
+ * chegava à tela**: este schema é `.strict()` e não tinha onde carregá-lo, então
+ * marcar uma linha como `avancado` não a escondia de ninguém. O sintoma era
+ * concreto — `brancas-caro-kann-428a7cce` (base, `6.h3`) e
+ * `brancas-caro-kann-d2337d9b` (avançado, `6.Bf4`) ensinam lances **diferentes
+ * na mesma posição**, e o aluno treinava os dois sem saber por quê.
+ *
+ * É subconjunto, e não uma segunda lista paralela, por causa de
+ * `lib/repertorio/banco.test.ts`: ele exige `linhas === tamanho do arquivo`.
+ * Separar em duas listas obrigaria `linhas` a contar só o Base, e aí o teste que
+ * pega "alguém apagou uma linha do JSON e esqueceu o índice" pararia de pegar.
+ * Assim `ids` continua sendo tudo que existe, `linhas` continua batendo com o
+ * arquivo, e quem quer só o Base filtra — ver `idsLiberados` em `treino.ts`.
  */
 export const EntradaDoIndiceSchema = z
   .object({
@@ -137,6 +153,8 @@ export const EntradaDoIndiceSchema = z
     nome: z.string().min(3),
     linhas: z.number().int().positive(),
     ids: z.array(z.string().regex(/^(brancas|pretas)-[a-z0-9-]+-[0-9a-f]{8}$/)).nonempty(),
+    /** Os ids de `ids` que são do Avançado. Vazio quando a abertura é toda Base. */
+    idsAvancado: z.array(z.string().regex(/^(brancas|pretas)-[a-z0-9-]+-[0-9a-f]{8}$/)),
     arquivo: z.string().regex(/^\/repertorio\/(brancas|pretas)\/[a-z0-9-]+\.json$/),
   })
   .strict()
@@ -146,6 +164,13 @@ export const EntradaDoIndiceSchema = z
   .refine((e) => e.linhas === e.ids.length, {
     message: "`linhas` e o tamanho de `ids` têm de bater",
     path: ["linhas"],
+  })
+  // Um id de Avançado fora de `ids` seria uma linha trancada que não existe: a
+  // tela subtrairia do total um id que nunca esteve lá, e a barra do Base ficaria
+  // com denominador menor do que o número de linhas que o aluno vê.
+  .refine((e) => e.idsAvancado.every((id) => e.ids.includes(id)), {
+    message: "`idsAvancado` tem id que não está em `ids`",
+    path: ["idsAvancado"],
   });
 
 export const IndiceSchema = z.array(EntradaDoIndiceSchema);

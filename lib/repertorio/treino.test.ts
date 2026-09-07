@@ -6,14 +6,18 @@ import {
   aprendida,
   aprendidasDaAbertura,
   aRevisarNaAbertura,
+  baseCompleto,
   conferirLinha,
   DEGRAU_APRENDIDA,
   DEGRAU_MAXIMO,
   DEGRAUS_EM_DIAS,
   depoisDoTreino,
   diasAteRevisar,
+  faltamNoBase,
+  idsLiberados,
   lanceCerto,
   proximaLinha,
+  quantasNoAvancado,
   resumo,
   sanEmPortugues,
   semQuebras,
@@ -301,14 +305,26 @@ test("o resumo conta as aprendidas, não as tentadas", () => {
   assert.deepEqual(resumo([a, b, c], progresso, T3), { aprendidas: 1, total: 3, aRevisar: 0 });
 });
 
-/** Uma entrada do `index.json`, com os ids que aquela abertura tem. */
-function entrada(cor: Cor, abertura: string, ids: [string, ...string[]]): EntradaDoIndice {
+/**
+ * Uma entrada do `index.json`, com os ids que aquela abertura tem.
+ *
+ * O `idsAvancado` é opcional e vazio por padrão porque a esmagadora maioria
+ * destes testes é sobre contagem, e não sobre o portão: obrigar cada um a
+ * declarar uma lista vazia faria o assunto de cada teste ficar menos visível.
+ */
+function entrada(
+  cor: Cor,
+  abertura: string,
+  ids: [string, ...string[]],
+  idsAvancado: string[] = [],
+): EntradaDoIndice {
   return {
     cor,
     abertura,
     nome: abertura,
     linhas: ids.length,
     ids,
+    idsAvancado,
     arquivo: `/repertorio/${cor}/${abertura}.json`,
   };
 }
@@ -323,10 +339,14 @@ test("a contagem por abertura não cruza as cores", () => {
     [daPreta]: { aprendidaEm: T1, ultimaEm: T1 },
     [idDaLinha("brancas", "italiana", LANCES)]: { aprendidaEm: T1, ultimaEm: T1 },
   });
-  assert.equal(aprendidasDaAbertura(progresso, entrada("brancas", "francesa", [daBranca])), 1);
-  assert.equal(aprendidasDaAbertura(progresso, entrada("pretas", "francesa", [daPreta])), 1);
+  assert.equal(aprendidasDaAbertura(progresso, entrada("brancas", "francesa", [daBranca]), false), 1);
+  assert.equal(aprendidasDaAbertura(progresso, entrada("pretas", "francesa", [daPreta]), false), 1);
   assert.equal(
-    aprendidasDaAbertura(progresso, entrada("brancas", "escocesa", [idDaLinha("brancas", "escocesa", LANCES)])),
+    aprendidasDaAbertura(
+      progresso,
+      entrada("brancas", "escocesa", [idDaLinha("brancas", "escocesa", LANCES)]),
+      false,
+    ),
     0,
   );
 });
@@ -351,12 +371,12 @@ test("órfão não conta: o registro da linha que mudou de lances some da conta"
 
   const escocesa = entrada("brancas", "escocesa", [viva1, viva2]);
   assert.equal(
-    aprendidasDaAbertura(progresso, escocesa),
+    aprendidasDaAbertura(progresso, escocesa, false),
     2,
     "a abertura tem duas linhas; o órfão não é uma terceira",
   );
   assert.equal(
-    aRevisarNaAbertura(progresso, escocesa, T4),
+    aRevisarNaAbertura(progresso, escocesa, T4, false),
     0,
     "o órfão vence e nunca desvence — não pode virar revisão fantasma",
   );
@@ -593,8 +613,90 @@ test("a contagem de vencidas por abertura olha só as linhas daquela abertura", 
     [daBranca]: { degrau: 2, revisarEm: "2026-09-08T03:00:00.000Z", ultimaEm: DIA_1 },
     [daPreta]: { degrau: 2, revisarEm: "2026-09-30T03:00:00.000Z", ultimaEm: DIA_1 },
   });
-  assert.equal(aRevisarNaAbertura(progresso, entrada("brancas", "francesa", [daBranca]), DIA_3), 1);
-  assert.equal(aRevisarNaAbertura(progresso, entrada("pretas", "francesa", [daPreta]), DIA_3), 0);
+  assert.equal(
+    aRevisarNaAbertura(progresso, entrada("brancas", "francesa", [daBranca]), DIA_3, false),
+    1,
+  );
+  assert.equal(
+    aRevisarNaAbertura(progresso, entrada("pretas", "francesa", [daPreta]), DIA_3, false),
+    0,
+  );
+});
+
+/* ------------------------------------------------------------------ *
+ * O portão do Avançado
+ *
+ * O campo `nivel` existia desde o começo e não escondia nada: o `index.json` não
+ * o carregava, e marcar uma linha como `avancado` era rótulo de arquivo. O
+ * sintoma era a Caro-Kann ensinando `6.h3` e `6.Bf4` na MESMA posição, uma em
+ * cada nível, e o aluno treinando as duas. Estes testes provam as duas metades
+ * do conserto: que trancado esconde, e que o portão abre pelo Base.
+ * ------------------------------------------------------------------ */
+
+test("trancado, o Avançado some das contas; destravado, ele volta", () => {
+  const base1 = idDaLinha("brancas", "caro-kann", LANCES.slice(0, 3));
+  const base2 = idDaLinha("brancas", "caro-kann", LANCES.slice(0, 5));
+  const avancada = idDaLinha("brancas", "caro-kann", LANCES);
+  const caro = entrada("brancas", "caro-kann", [base1, base2, avancada], [avancada]);
+
+  assert.deepEqual(idsLiberados(caro, false), [base1, base2], "trancado mostra só o Base");
+  assert.deepEqual(idsLiberados(caro, true), [base1, base2, avancada], "destravado mostra tudo");
+
+  // A linha do Avançado está aprendida — e mesmo assim não pode entrar na conta
+  // enquanto o portão está fechado. Se entrasse, a barra do aluno andaria por
+  // uma linha que ele não pode nem abrir.
+  const progresso = progressoDe({
+    [base1]: { aprendidaEm: T1, ultimaEm: T1, degrau: 4, revisarEm: DIA_5 },
+    [avancada]: { aprendidaEm: T1, ultimaEm: T1, degrau: 4, revisarEm: DIA_5 },
+  });
+  assert.equal(aprendidasDaAbertura(progresso, caro, false), 1);
+  assert.equal(aprendidasDaAbertura(progresso, caro, true), 2);
+});
+
+test("o portão conta o Base do repertório inteiro, não o da abertura aberta", () => {
+  // O professor pediu que o Avançado abrisse quando o aluno terminasse **todas**
+  // as linhas — não as de uma abertura. Uma abertura pronta com outra pendente
+  // tem de manter o portão fechado.
+  const a1 = idDaLinha("brancas", "petroff", LANCES.slice(0, 3));
+  const b1 = idDaLinha("pretas", "londres", LANCES.slice(0, 5));
+  const indice = [entrada("brancas", "petroff", [a1]), entrada("pretas", "londres", [b1])];
+
+  const soUma = progressoDe({ [a1]: { aprendidaEm: T1, ultimaEm: T1 } });
+  assert.equal(faltamNoBase(soUma, indice), 1);
+  assert.equal(baseCompleto(soUma, indice), false, "falta a Londres");
+
+  const asDuas = progressoDe({
+    [a1]: { aprendidaEm: T1, ultimaEm: T1 },
+    [b1]: { aprendidaEm: T1, ultimaEm: T1 },
+  });
+  assert.equal(faltamNoBase(asDuas, indice), 0);
+  assert.equal(baseCompleto(asDuas, indice), true);
+});
+
+test("linha do Avançado não aprendida NÃO segura o portão", () => {
+  // O portão é do Base. Se o Avançado contasse para si mesmo, ele se trancaria
+  // para sempre: o aluno precisaria aprender o que ainda não pode abrir.
+  const base = idDaLinha("brancas", "escocesa", LANCES.slice(0, 3));
+  const avancada = idDaLinha("brancas", "escocesa", LANCES);
+  const indice = [entrada("brancas", "escocesa", [base, avancada], [avancada])];
+
+  const progresso = progressoDe({ [base]: { aprendidaEm: T1, ultimaEm: T1 } });
+  assert.equal(faltamNoBase(progresso, indice), 0, "a do Avançado não entra na conta");
+  assert.equal(baseCompleto(progresso, indice), true, "o Base fechou; o portão abre");
+});
+
+test("sem progresso nenhum o portão está fechado, e o número que falta é o Base inteiro", () => {
+  const ids: [string, ...string[]] = [
+    idDaLinha("pretas", "siciliana", LANCES.slice(0, 1)),
+    idDaLinha("pretas", "siciliana", LANCES.slice(0, 3)),
+    idDaLinha("pretas", "siciliana", LANCES.slice(0, 5)),
+  ];
+  const indice = [entrada("pretas", "siciliana", ids, [ids[2]])];
+  const vazio = progressoDe({});
+
+  assert.equal(faltamNoBase(vazio, indice), 2, "duas de Base; a terceira é do Avançado");
+  assert.equal(baseCompleto(vazio, indice), false);
+  assert.equal(quantasNoAvancado(indice), 1);
 });
 
 /* ------------------------------------------------------------------ *

@@ -172,6 +172,10 @@ for (const [chave, linhas] of [...grupos].sort()) {
     nome: linhas[0].nome.split(" — ")[0],
     linhas: linhas.length,
     ids: linhas.map((l) => l.id) as [string, ...string[]],
+    // O `nivel` de cada linha só chega à tela por aqui: o índice é o único
+    // arquivo que `/aberturas` abre, e sem esta lista marcar uma linha como
+    // `avancado` não a esconde de ninguém. Ver o schema em `lib/repertorio/linhas.ts`.
+    idsAvancado: linhas.filter((l) => l.nivel === "avancado").map((l) => l.id),
     arquivo: `/repertorio/${chave}.json`,
   });
 }

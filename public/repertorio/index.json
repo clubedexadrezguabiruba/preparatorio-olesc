@@ -9,6 +9,7 @@
       "brancas-alapin-0987f03c",
       "brancas-alapin-c8e4c146"
     ],
+    "idsAvancado": [],
     "arquivo": "/repertorio/brancas/alapin.json"
   },
   {
@@ -19,6 +20,9 @@
     "ids": [
       "brancas-caro-kann-428a7cce",
       "brancas-caro-kann-054a0df4",
+      "brancas-caro-kann-d2337d9b"
+    ],
+    "idsAvancado": [
       "brancas-caro-kann-d2337d9b"
     ],
     "arquivo": "/repertorio/brancas/caro-kann.json"
@@ -33,6 +37,7 @@
       "brancas-escandinava-8d9a2cac",
       "brancas-escandinava-60e836c1"
     ],
+    "idsAvancado": [],
     "arquivo": "/repertorio/brancas/escandinava.json"
   },
   {
@@ -51,6 +56,7 @@
       "brancas-escocesa-0f2ad8b2",
       "brancas-escocesa-6ca49100"
     ],
+    "idsAvancado": [],
     "arquivo": "/repertorio/brancas/escocesa.json"
   },
   {
@@ -63,6 +69,7 @@
       "brancas-francesa-c384ccc4",
       "brancas-francesa-9d4caf37"
     ],
+    "idsAvancado": [],
     "arquivo": "/repertorio/brancas/francesa.json"
   },
   {
@@ -73,6 +80,7 @@
     "ids": [
       "brancas-petroff-934fd6a6"
     ],
+    "idsAvancado": [],
     "arquivo": "/repertorio/brancas/petroff.json"
   },
   {
@@ -84,6 +92,7 @@
       "brancas-philidor-e0cf1d11",
       "brancas-philidor-7f7f4bd2"
     ],
+    "idsAvancado": [],
     "arquivo": "/repertorio/brancas/philidor.json"
   },
   {
@@ -95,6 +104,7 @@
       "pretas-colle-f0590dc0",
       "pretas-colle-0e2f8d38"
     ],
+    "idsAvancado": [],
     "arquivo": "/repertorio/pretas/colle.json"
   },
   {
@@ -106,6 +116,7 @@
       "pretas-londres-0fdb1535",
       "pretas-londres-53d5b431"
     ],
+    "idsAvancado": [],
     "arquivo": "/repertorio/pretas/londres.json"
   },
   {
@@ -118,6 +129,7 @@
       "pretas-manhattan-6ac84e24",
       "pretas-manhattan-3e9e876d"
     ],
+    "idsAvancado": [],
     "arquivo": "/repertorio/pretas/manhattan.json"
   },
   {
@@ -128,6 +140,7 @@
     "ids": [
       "pretas-outras-2ffa3251"
     ],
+    "idsAvancado": [],
     "arquivo": "/repertorio/pretas/outras.json"
   },
   {
@@ -147,6 +160,7 @@
       "pretas-siciliana-ddf21e1b",
       "pretas-siciliana-a23cd1f7"
     ],
+    "idsAvancado": [],
     "arquivo": "/repertorio/pretas/siciliana.json"
   }
 ]
