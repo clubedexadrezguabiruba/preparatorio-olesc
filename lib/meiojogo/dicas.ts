@@ -520,8 +520,24 @@ export const DicasSchema = z.array(DicaSchema).min(1);
  *
  * Aprovado pelo Doug em 2026-09-07; o raciocínio inteiro está em
  * `content/sources.json`, ao lado das licenças.
+ *
+ * ## Por que 3, e não 2
+ *
+ * Nasceu 2, pelo paralelo com o teto das aulas de finais. A execução do Bloco 3
+ * mostrou que o número apertava a coisa errada: no meio-jogo o capítulo passou a
+ * ser, na prática, **uma partida ilustrada** do Capablanca, e uma partida tem de
+ * duas a seis figuras. Com teto 2, dois conceitos que precisavam do mesmo tema
+ * disputavam a mesma partida, e um dos dois ficava sem posição de livro —
+ * `torre-na-setima` tem as três figuras do acervo alcançável na mesma partida.
+ *
+ * **Aprovado pelo Doug em 2026-09-07, junto com o registro das duas obras do
+ * Lasker**, e é aumento de folga, não de licença: o que protege o aluno de ver
+ * duas telas parecidas continua sendo o teto de semelhança de
+ * {@link SEMELHANCA_MAXIMA}, que mede o tabuleiro em vez da bibliografia. Este
+ * teto protege outra coisa — a seleção do autor —, e três de seis figuras de uma
+ * partida não a reproduzem.
  */
-export const CAPITULO_CAP = 2;
+export const CAPITULO_CAP = 3;
 
 /** O que a conferência de citação precisa saber de uma obra registrada. */
 export type ObraCitada = { readonly slug: string; readonly temArquivo: boolean };

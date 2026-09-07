@@ -345,10 +345,10 @@ test("adversarial: duas posições quase iguais reprovam", () => {
   );
 });
 
-test("adversarial: três posições de treino do mesmo capítulo reprovam", () => {
-  // O teto do módulo, e não o da dica: três dicas tirando uma posição cada da
+test("adversarial: posições de treino além do teto do capítulo reprovam", () => {
+  // O teto do módulo, e não o da dica: quatro dicas tirando uma posição cada da
   // mesma partida esvaziam o capítulo sem estourar nenhum teto por dica.
-  const dicas = ["m9", "m10", "m12"].map((id) => {
+  const dicas = ["m9", "m10", "m11", "m12"].map((id) => {
     const d = JSON.parse(JSON.stringify(DICAS.find((x) => x.id === id))) as Dica;
     d.treino!.reconhecimento[0].provenance.editionFile = "capablanca-1921";
     d.treino!.reconhecimento[0].provenance.capitulo = "Illustrative Games — Game 7";

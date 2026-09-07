@@ -77,6 +77,11 @@ export function normalizar(token: string): string {
   // anotação de lance duvidoso e sai.
   t = t.replace(/(?<=[A-Za-z0-9)])\?(?=[A-Za-z0-9(])/g, "x");
   t = t.replace(/\?/g, "").replace(/×/g, "x");
+  // Cada impressao usa um traco diferente, e o OCR inventa outros: o hifen do
+  // Capablanca, o travessao do Lasker, o meia-risca de quem digitalizou. Todos
+  // significam a mesma coisa — "vai para" —, e normaliza-los aqui evita treze
+  // variantes espalhadas pelas expressoes regulares abaixo.
+  t = t.replace(/[‐-―−]/g, "-");
   t = t.replace(/(dis\.ch|dbl\.ch|ch|mate|e\.p\.|\.)+$/gi, "");
   return t.toUpperCase();
 }

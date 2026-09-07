@@ -58,6 +58,8 @@ subagente consegue achar página por busca de texto (teste da §4).
 | 23 | `capablanca-fundamentals-reimpressao` | Capablanca, _Chess Fundamentals_ | Harcourt, Brace, Nova York / G. Bell and Sons, Londres; reimpressão com copyright de 1921 e prefácio datável de 1934 | sem teto | sim (270 pág., 2.551 caracteres) |
 | 24 | `nimzowitsch-my-system-1930` | Nimzowitsch, _My System_ | Harcourt, Brace, Nova York, 1930; versão inglesa de Philip Hereford | 2 | sim (330 pág., 7.220 caracteres) |
 | 25 | `znosko-middle-game-1930` | Znosko-Borovsky, _The Middle Game in Chess_ | G. Bell and Sons, Londres, 1930 — reimpressão de julho de 1930 do texto de 1922 | 2 | sim (248 pág., 6.576 caracteres) |
+| 26 | `lasker-common-sense-1910` | Lasker, _Common Sense in Chess_ | J. S. Ogilvie, Nova York, [1910] — reimpressão das doze palestras de Londres, 1895 | sem teto | sim (148 pág., 4.926 caracteres) |
+| 27 | `lasker-manual-1927` | Lasker, _Lasker's Manual of Chess_ | E. P. Dutton, Nova York, 1927, com 306 diagramas — versão inglesa do _Lehrbuch des Schachspiels_ (1926) | sem teto | sim (424 pág., 5.953 caracteres) |
 
 **As entradas 23 a 25 são o meio-jogo, e são as três primeiras obras do corpus
 que não são de finais.** As trinta dicas de `content/meio-jogo.json` saem delas:

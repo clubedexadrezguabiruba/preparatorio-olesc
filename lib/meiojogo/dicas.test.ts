@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { NIVEIS } from "../curso/trilha.ts";
 import { sourceRegistrySchema } from "../lesson/schema.ts";
 import { problemasDaPosicao } from "./afirmacoes.ts";
-import { problemasDeCitacao, validarDicas } from "./dicas.ts";
+import { CAPITULO_CAP, problemasDeCitacao, validarDicas } from "./dicas.ts";
 
 /**
  * O conteúdo do meio-jogo, conferido a cada `npm test`.
@@ -237,19 +237,37 @@ test("as 30 dicas passam no teto por capítulo", () => {
   assert.deepEqual(problemas, []);
 });
 
-test("a terceira posição do mesmo capítulo reprova", () => {
-  // O caso que a política nova existe para pegar: esvaziar um capítulo é
-  // reproduzir a seleção do autor, e é a seleção que a lei protege — não a FEN.
+test("a posição que passa do teto do capítulo reprova", () => {
+  // O caso que a política existe para pegar: esvaziar um capítulo é reproduzir
+  // a seleção do autor, e é a seleção que a lei protege — não a FEN.
+  //
+  // O teto subiu de 2 para 3 em 2026-09-07, e com isso ele deixou de caber nas
+  // posições de **ensino**: `posicoes` tem máximo 3 no esquema, então três do
+  // mesmo capítulo é o limite do que se pode escrever ali. Quem o faz morder
+  // hoje é o **treino**, que soma até seis posições à mesma dica — e é por esse
+  // caminho que o teste passa a exercitá-lo.
+  const base = DICAS.find((d) => d.id === "m12");
+  assert.ok(base?.treino, "m12 precisa ter treino para este teste existir");
+  const dica = JSON.parse(JSON.stringify(base)) as typeof base;
   const capitulo = "Parte II, cap. III, §1 — The isolated queen's pawn";
-  const dica = dicaCom([
-    { editionFile: "nimzowitsch-my-system-1930", capitulo },
-    { editionFile: "nimzowitsch-my-system-1930", capitulo },
-    { editionFile: "nimzowitsch-my-system-1930", capitulo },
-  ]);
+  for (const posicao of dica.posicoes) {
+    posicao.provenance.editionFile = "nimzowitsch-my-system-1930";
+    posicao.provenance.capitulo = capitulo;
+  }
+  for (const item of dica.treino!.reconhecimento) {
+    item.provenance.editionFile = "nimzowitsch-my-system-1930";
+    item.provenance.capitulo = capitulo;
+  }
+  const quantas = dica.posicoes.length + dica.treino!.reconhecimento.length;
+  assert.ok(quantas > CAPITULO_CAP, `são ${quantas} posições para um teto de ${CAPITULO_CAP}`);
+
   const problemas = problemasDeCitacao(dica, LIVRO);
-  assert.equal(problemas.length, 1);
+  assert.equal(problemas.length, quantas - CAPITULO_CAP);
   assert.equal(problemas[0].codigo, "TETO_DE_CAPITULO");
-  assert.match(problemas[0].mensagem, /3 posições saem de .*e o teto é 2 por capítulo/);
+  assert.match(
+    problemas[0].mensagem,
+    new RegExp(`${CAPITULO_CAP + 1} posições saem de .*e o teto é ${CAPITULO_CAP} por capítulo`),
+  );
 });
 
 test("três posições da mesma obra, de capítulos diferentes, passam", () => {
