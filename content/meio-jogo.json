@@ -1993,6 +1993,181 @@
       "titulo": "Como GANHAR um POSTO AVANÇADO com Smyslov no Xadrez! — Tr. André Basso",
       "ressalva": null,
       "url": "https://www.youtube.com/watch?v=-RsMV2yYWu0"
+    },
+    "treino": {
+      "ficha": {
+        "objetivo": "Achar, sozinho, a casa que um peão seu defende e que nenhum peão do adversário consegue atacar — nem agora, nem andando — e entender que é só isso que a palavra posto quer dizer.",
+        "prerequisitos": [
+          "Saber quais casas um peão defende: as duas diagonais à frente, e nenhuma outra.",
+          "Saber que peão não anda para trás, e que por isso uma casa perdida não volta.",
+          "Ter lido a dica: posto é geometria, e não promessa de vantagem."
+        ],
+        "vocabulario": [
+          {
+            "termo": "posto",
+            "significa": "casa defendida por um peão seu que nenhum peão dele alcança. A peça que sentar ali não é expulsa por peão — só por troca."
+          },
+          {
+            "termo": "peão que nunca mais alcança",
+            "significa": "para atacar uma casa, o peão dele precisaria estar numa coluna vizinha e atrás dela. Se não há peão nessa coluna, ou se ele já passou, a casa está fora do alcance para sempre."
+          }
+        ],
+        "erroMaisProvavel": {
+          "qual": "apontar uma casa boa para o cavalo — avançada, central, no meio do campo dele — sem conferir se algum peão dele ainda a alcança.",
+          "feedback": "Casa avançada e casa segura são coisas diferentes. Se um peão dele pode chegar à coluna vizinha e avançar, ele expulsa a sua peça de graça — e a casa deixa de valer no lance em que ele quiser."
+        },
+        "limitesDaEvidencia": "O acerto prova que o aluno faz a conta geométrica: peão seu defende, peão dele não alcança. Não prova que ele saberia levar uma peça até lá, em quantos lances, nem que a casa vale a viagem — que é a pergunta seguinte, e é da autoria."
+      },
+      "reconhecimento": [
+        {
+          "id": "m15-d2-a",
+          "degrau": 2,
+          "fen": "r1b2k1r/pp3pp1/2n1p2p/q3P3/4Q3/2p5/P1P1NPPP/R1B2RK1 w - - 1 15",
+          "lado": "brancas",
+          "tarefa": "posto",
+          "resposta": [
+            "d6"
+          ],
+          "legenda": "Chajes contra Capablanca, torneio Rice Memorial de 1916. Jogam as brancas, e a casa que você procura está vazia.",
+          "material": "As pretas têm um peão a mais — sete contra seis.",
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "A casa tem de ser defendida por um peão seu e inalcançável por qualquer peão dele. Acendemos os peões pretos: olhe as colunas em que eles estão, e as em que não estão.",
+            "modo": "contorno",
+            "realce": [
+              "a7",
+              "b7",
+              "c3",
+              "e6",
+              "f7",
+              "g7",
+              "h6"
+            ],
+            "solucao": "Os sete peões pretos estão acesos. Não há peão preto na coluna c — o de c3 já passou e não volta — nem outro na coluna e além do de e6, que também não anda para trás. Então a casa da coluna d, na sexta fileira, é defendida pelo seu peão de e5 e não pode ser atacada por peão nenhum: é ali que um cavalo branco moraria."
+          },
+          "curadoria": {
+            "perceptivel": "O peão branco de e5 está avançado e sozinho no centro, o que torna visível o que ele defende. E os dois peões pretos que poderiam disputar a casa já passaram dela — o de c3 está lá embaixo e o de e6 está à frente —, o que dá ao aluno a imagem exata do que 'não alcança' quer dizer.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 28
+            },
+            "adequacao": "Vinte e cinco peças, meio-jogo cheio, com o rei preto ainda no meio. O peão a mais das pretas está declarado, e ele é do lado contrário ao do posto — o que impede a leitura de que a casa forte é prêmio de quem está ganhando."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 6 (Chajes–Capablanca, torneio Rice Memorial, 1916), diagrama impresso na p. 190, depois do 14º lance das pretas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 190 — Chajes–Capablanca",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 6, Chajes–Capablanca, Rice Memorial 1916",
+            "originalGame": "Chajes–Capablanca, torneio Rice Memorial, 1916",
+            "fenMethod": "Reconstruída pelos 28 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — e4 e6 d4 d5 Nc3 Nf6 Bg5 Bb4 e5 h6 Bd2 Bxc3 bxc3 Ne4 Qg4 Kf8 Bc1 c5 Bd3 Qa5 Ne2 cxd4 O-O dxc3 Bxe4 dxe4 Qxe4 Nc6. Todo lance é legal por construção, e o avanço e5 do quinto lance é o que criou o posto. A página 190 do exemplar de 1921 (PDF 208) foi lida em texto e traz \"iQO GAME 6\" — o OCR lê o 190 como iQO."
+          }
+        },
+        {
+          "id": "m15-d2-b",
+          "degrau": 2,
+          "fen": "3r4/p4ppk/5b1p/2pp1P2/qp4P1/2P5/PP1R2QP/1K1R4 w - - 0 36",
+          "lado": "pretas",
+          "tarefa": "posto",
+          "resposta": [
+            "e4"
+          ],
+          "legenda": "Mieses contra Capablanca, Berlim 1913. Jogam as brancas, e agora você procura a casa forte **das pretas**.",
+          "material": "As brancas têm uma torre a mais; as pretas, um bispo e um peão. Na conta clássica isso dá um peão de vantagem para as brancas.",
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "Agora a casa é sua sendo das pretas: defendida por um peão preto e fora do alcance de qualquer peão branco. Acendemos os peões brancos.",
+            "modo": "contorno",
+            "realce": [
+              "a2",
+              "b2",
+              "c3",
+              "f5",
+              "g4",
+              "h2"
+            ],
+            "solucao": "Os seis peões brancos estão acesos. Não há peão branco nas colunas d nem e, e nenhum dos acesos chega lá: peão não anda para trás, e os de f5 e g4 já passaram. A casa da coluna e, na quarta fileira, é defendida pelo peão preto de d5 e nenhum peão branco a alcança."
+          },
+          "curadoria": {
+            "perceptivel": "As duas colunas do centro estão vazias de peão branco, e isso se vê de uma olhada com os seis peões acesos. O item troca o lado em relação ao anterior de propósito: o posto não é uma casa do tabuleiro, é uma relação entre os peões dos dois lados, e trocar a cor é o teste disso.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 48
+            },
+            "adequacao": "Vinte e uma peças, com as damas ainda em jogo. É a mesma partida do item de m10, trinta e cinco lances depois, e as duas posições têm 48% das peças nas mesmas casas — bem abaixo do teto de 70%."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 8 (Mieses–Capablanca, Berlim 1913), diagrama impresso na p. 207, depois do 35º lance das pretas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 207 — Mieses–Capablanca",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 8, Mieses–Capablanca, Berlim 1913",
+            "originalGame": "Mieses–Capablanca, Berlim 1913",
+            "fenMethod": "Reconstruída pelos 70 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — os 48 do item de m10 mais Qf3 Be7 Rde2 Bf6 Qh5 h6 g4 Kh7 Kb1 Rd8 Rd1 c5 Qh3 Qa4 Red2 Qe4+ Ka1 b5 Qg2 Qa4 Kb1 b4. Todo lance é legal por construção. A página 207 do exemplar de 1921 (PDF 225) foi lida em texto e traz o cabeçalho \"CENTRE GAME 207\"."
+          }
+        },
+        {
+          "id": "m15-d3-a",
+          "degrau": 3,
+          "fen": "5rk1/ppq3bp/2n2pp1/2Q1p3/4P3/5BP1/PPPr1P1P/R4RK1 w - - 0 17",
+          "lado": "brancas",
+          "tarefa": "posto",
+          "resposta": [
+            "d5"
+          ],
+          "legenda": "Partida de dois jogadores comuns, sem anotação e sem diagrama. Jogam as brancas, e você está do lado delas.",
+          "material": "As pretas têm um cavalo a mais e um peão a menos.",
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "Ninguém arrumou esta posição para a pergunta. Acendemos os peões pretos: ache a casa que um peão branco defende e que nenhum deles alcança, nem agora nem andando.",
+            "modo": "contorno",
+            "realce": [
+              "a7",
+              "b7",
+              "e5",
+              "f6",
+              "g6",
+              "h7"
+            ],
+            "solucao": "Os seis peões pretos estão acesos. Nas colunas c e e não sobra peão preto capaz de atacar a quinta fileira: não há peão preto na coluna c, e o de e5 já passou da casa que interessa. A casa da coluna d, na quinta fileira, é defendida pelo peão branco de e4 e está fora do alcance de todos eles."
+          },
+          "curadoria": {
+            "perceptivel": "A casa está no centro, defendida por um peão branco encostado nela, e o cavalo preto de c6 está justamente a um lance de disputá-la — o que dá ao aluno a razão concreta de a casa importar. Nenhuma peça branca está lá ainda: ninguém montou a cena.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 22
+            },
+            "adequacao": "Vinte e quatro peças, damas em jogo, sem xeque e sem peça pendurada. O desequilíbrio de material é contra o lado do aluno e está declarado, e a torre preta infiltrada em d2 é ruído honesto — a posição não foi limpa para a pergunta."
+          },
+          "provenance": {
+            "bibliographicSource": "Recorte CC0 da base aberta do Lichess, puzzle S242x (lichess.org/training/S242x): posição ao fim da linha tática do puzzle, quando a combinação já acabou. Os jogadores não são identificados no recorte.",
+            "citacaoCurta": "Lichess, puzzle S242x — posição ao fim da linha",
+            "editionFile": "lichess-open-database",
+            "capitulo": null,
+            "originalGame": "lichess.org/training/S242x",
+            "fenMethod": "A FEN guardada no recorte é a posição antes do erro do adversário; esta é a do fim da linha, obtida jogando os lances do puzzle na chess.js (scripts/escolher-exercicios.ts). Passou pela porta 1 — sem xeque, sem mate em 1 e sem peça de cavalo ou mais pendurada — e pela porta 2, com Stockfish 18 na profundidade 12 medindo 22 centésimos entre a melhor linha e a segunda. A resposta única foi conferida por respostaDaTarefa, o mesmo juiz que vai julgar o clique."
+          }
+        }
+      ],
+      "aplicacao": {
+        "id": "m15-d4",
+        "usa": "m15-d3-a",
+        "pergunta": "A casa d5 é um posto das brancas: o peão de e4 a defende e nenhum peão preto a alcança. O que isso garante, e o que não garante?",
+        "opcoes": [
+          {
+            "texto": "Garante que uma peça branca ali só sai por troca, e não por peão — mas não diz que alguma peça branca consegue chegar lá.",
+            "certa": true,
+            "porque": "Posto é uma afirmação sobre peões, e só sobre eles: nenhum peão preto chega a c6 ou e6 para expulsar quem sentar em d5. Quem chega lá, em quantos lances e ao custo de quê é a conta seguinte — e aqui ela não é trivial, porque o cavalo preto de c6 disputa a casa e as peças brancas ainda estão longe dela."
+          },
+          {
+            "texto": "Garante que instalar o cavalo em d5 dá vantagem às brancas, porque casa forte no centro decide a partida.",
+            "certa": false,
+            "porque": "\"Decide a partida\" é o tipo de frase que esta dica existe para desmontar. As pretas estão com dois peões a mais nesta posição, e nenhuma casa forte apaga isso sozinha. O posto é geometria — uma casa que peão nenhum dele ataca —, e o que ele vale depende de qual peça chega, quando, e do que está acontecendo no resto do tabuleiro."
+          }
+        ]
+      },
+      "reservas": []
     }
   },
   {
