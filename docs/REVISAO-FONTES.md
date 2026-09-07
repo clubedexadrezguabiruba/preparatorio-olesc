@@ -1048,10 +1048,13 @@ linha só, então cada `[Fonte]` fala por si.
 
 ### Três coisas que ficam declaradas
 
-1. **O texto do Avançado é rascunho até o Doug ler.** A tag diz "recomendação do
-   professor" e "o argumento é dele" — quem redigiu as frases foi o assistente.
-   Enquanto o Doug não passar os olhos, a linha está **verde no compilador e
-   pendente na régua**.
+1. ~~**O texto do Avançado é rascunho até o Doug ler.**~~ **Fechado em 7/9/2026.**
+   A tag dizia "recomendação do professor" e "o argumento é dele", mas quem
+   redigiu as frases foi o assistente, e por isso a linha estava **verde no
+   compilador e pendente na régua**. O Doug leu os cinco comentários — `4.Bd3`,
+   `5.c3`, `6.Bf4`, `7.Db3` e `8.Cd2` — e **assinou o texto como está**, sem
+   ajuste. A tag `[Fonte]` passou a registrar a data da assinatura. **Nenhum
+   lance, id ou comentário mudou**: o único campo tocado foi `fonte`.
 2. **`nivel` não separa nada na tela, hoje.** Medido: a palavra `nivel` não
    aparece em `app/aberturas/`, em `components/` nem no `index.json` — o campo é
    só o teto de profundidade (`PROFUNDIDADE`) e um rótulo no JSON. Marcar a linha
@@ -1095,5 +1098,5 @@ segue de pé: 41 linhas = 40 do Base + 1 do Avançado.
 - typecheck ✔ · lint ✔ · **585 testes, 585 passando** ✔ · `validate:content` ✔ ·
   `compilar --check` sem diferença ✔ · `build` ✔
 
-**Placar da régua: de 20 linhas aprovadas para 21** — e **22** no instante em que
-o Doug assinar o texto do Avançado.
+**Placar da régua: de 20 linhas aprovadas para 21** — e **22** com a assinatura do
+Doug, dada em 7/9/2026 (ver a pendência 1 acima, agora fechada).
