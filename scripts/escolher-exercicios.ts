@@ -1,7 +1,8 @@
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { Chess, type Color, type Square } from "chess.js";
+import { Chess } from "chess.js";
 import { TAREFAS, respostaDaTarefa, type Lado } from "../lib/meiojogo/exercicios.ts";
+import { julgarVariantes, porta1, SALTO_PADRAO } from "../lib/meiojogo/portas.ts";
 import { RAIZ } from "./env-local.ts";
 import { Motor, prepararMotor } from "./motor.ts";
 
@@ -36,7 +37,7 @@ import { Motor, prepararMotor } from "./motor.ts";
  *
  * | porta | o que reprova | quem julga |
  * |---|---|---|
- * | 1 estática | rei em xeque, mate em 1, peça de cavalo ou mais pendurada | `chess.js`, aqui |
+ * | 1 estática | rei em xeque, mate em 1, peça de cavalo ou mais pendurada | `chess.js`, em `lib/meiojogo/portas.ts` |
  * | 2 motor | melhor lance que dá mate, ou avaliação que salta entre as candidatas | Stockfish 18 offline |
  * | 3 humana | os seis passos da curadoria | a autoria, fora daqui |
  *
@@ -66,7 +67,7 @@ const numero = (bandeira: string, padrao: number): number => {
 const AMOSTRA = numero("--amostra", 1200);
 const PROFUNDIDADE = numero("--profundidade", 12);
 /** Centésimos de peão entre a melhor linha e a segunda que denunciam tática. */
-const SALTO = numero("--salto", 100);
+const SALTO = numero("--salto", SALTO_PADRAO);
 const SEM_MOTOR = argv.includes("--sem-motor");
 const EXPORTAR = argv.indexOf("--exportar") >= 0 ? argv[argv.indexOf("--exportar") + 1] : null;
 /** Quantas posições vão ao motor. Ele é a parte cara: ~1 posição por segundo. */
@@ -130,63 +131,6 @@ function fimDaLinha(puzzle: Puzzle): string | null {
     }
   }
   return jogo.fen();
-}
-
-/* ------------------------------------------------------------------ *
- * Porta 1 — estática
- * ------------------------------------------------------------------ */
-
-/** Peça de cavalo para cima: é a partir daí que "pendurada" muda a posição. */
-const PESADAS = "nbrq";
-
-type Reprovacao = "xeque" | "mate-em-1" | "pendurada" | null;
-
-export function porta1(fen: string): Reprovacao {
-  const jogo = new Chess(fen);
-  if (jogo.isCheck()) return "xeque";
-
-  for (const lance of jogo.moves({ verbose: true })) {
-    const tentativa = new Chess(fen);
-    tentativa.move(lance);
-    if (tentativa.isCheckmate()) return "mate-em-1";
-  }
-
-  for (const fileira of jogo.board()) {
-    for (const casa of fileira) {
-      if (casa === null || !PESADAS.includes(casa.type)) continue;
-      const inimiga: Color = casa.color === "w" ? "b" : "w";
-      const atacada = jogo.attackers(casa.square as Square, inimiga).length > 0;
-      const defendida = jogo.attackers(casa.square as Square, casa.color).length > 0;
-      if (atacada && !defendida) return "pendurada";
-    }
-  }
-  return null;
-}
-
-/* ------------------------------------------------------------------ *
- * Porta 2 — o motor
- * ------------------------------------------------------------------ */
-
-type VereditoDoMotor = { passou: boolean; motivo: string; salto: number | null };
-
-export function julgarVariantes(
-  variantes: { centesimos: number | null }[],
-): VereditoDoMotor {
-  if (variantes.length === 0) return { passou: false, motivo: "motor mudo", salto: null };
-  if (variantes[0].centesimos === null) {
-    return { passou: false, motivo: "melhor lance dá mate", salto: null };
-  }
-  if (variantes.length === 1) {
-    // Lance único é posição forçada: não há o que decidir além dele.
-    return { passou: false, motivo: "lance único", salto: null };
-  }
-  if (variantes[1].centesimos === null) {
-    return { passou: false, motivo: "segunda linha é mate", salto: null };
-  }
-  const salto = Math.abs(variantes[0].centesimos - variantes[1].centesimos);
-  return salto > SALTO
-    ? { passou: false, motivo: `salta ${salto} centésimos`, salto }
-    : { passou: true, motivo: "", salto };
 }
 
 /* ------------------------------------------------------------------ *
@@ -272,7 +216,7 @@ if (!SEM_MOTOR && passaramNa1.length > 0) {
 
   for (const [i, candidato] of aoMotor.entries()) {
     const variantes = await motor.pensar(`fen ${candidato.fen}`, PROFUNDIDADE);
-    const veredito = julgarVariantes(variantes);
+    const veredito = julgarVariantes(variantes, SALTO);
     // O salto medido vai junto: é ele que a `curadoria.portas` de cada posição
     // grava, e re-medi-lo depois seria uma segunda opinião sobre o mesmo dado.
     if (veredito.passou) aprovadas.push({ ...candidato, salto: veredito.salto });

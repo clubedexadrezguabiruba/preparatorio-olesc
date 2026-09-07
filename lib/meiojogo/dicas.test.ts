@@ -28,11 +28,36 @@ const DICAS = validarDicas(
   JSON.parse(readFileSync(path.join(RAIZ, "content/meio-jogo.json"), "utf8")),
 );
 
-const OBRAS = new Set(
-  sourceRegistrySchema
-    .parse(JSON.parse(readFileSync(path.join(RAIZ, "content/sources.json"), "utf8")))
-    .sources.flatMap((s) => (s.file === null ? [s.slug] : [s.slug, s.file])),
+const REGISTRO = sourceRegistrySchema.parse(
+  JSON.parse(readFileSync(path.join(RAIZ, "content/sources.json"), "utf8")),
 );
+
+const OBRAS = new Set(
+  REGISTRO.sources.flatMap((s) => (s.file === null ? [s.slug] : [s.slug, s.file])),
+);
+
+/**
+ * A busca de obra do jeito que o gate a faz — e a distinção que o teste
+ * confundia.
+ *
+ * `temArquivo` é "esta obra tem PDF na biblioteca", e não "esta obra está
+ * registrada". As duas coisas coincidiram enquanto nenhuma dica citou o recorte
+ * do Lichess, que é registrado e não tem arquivo; a primeira posição de partida
+ * real acusou a diferença, cobrando um capítulo de uma obra que não tem
+ * capítulo nenhum.
+ */
+const COM_ARQUIVO = new Map(
+  REGISTRO.sources.flatMap((s) =>
+    s.file === null
+      ? ([[s.slug, false]] as [string, boolean][])
+      : ([
+          [s.slug, true],
+          [s.file, true],
+        ] as [string, boolean][]),
+  ),
+);
+
+const obraDoRegistro = (chave: string) => ({ slug: chave, temArquivo: COM_ARQUIVO.get(chave) === true });
 
 test("o conteúdo do meio-jogo passa no esquema", () => {
   assert.ok(DICAS.length >= 30, `são ${DICAS.length} dicas, e o combinado foram 30`);
@@ -205,7 +230,7 @@ const LIVRO = (chave: string) => ({ slug: chave, temArquivo: true });
 
 test("as 30 dicas passam no teto por capítulo", () => {
   const problemas = DICAS.flatMap((dica) =>
-    problemasDeCitacao(dica, (chave) => ({ slug: chave, temArquivo: OBRAS.has(chave) })).map(
+    problemasDeCitacao(dica, obraDoRegistro).map(
       (p) => `${dica.id}: ${p.codigo} — ${p.mensagem}`,
     ),
   );

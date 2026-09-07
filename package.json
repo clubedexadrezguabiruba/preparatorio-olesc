@@ -18,6 +18,7 @@
     "validate:content": "node scripts/validate-content.ts",
     "meiojogo:funil": "node scripts/escolher-exercicios.ts",
     "meiojogo:prosa": "node scripts/varrer-prosa.ts",
+    "meiojogo:portas": "node scripts/medir-portas.ts",
     "validate:mutations": "node scripts/mutation-check.ts",
     "apostila": "node --conditions=react-server apostila/build.ts",
     "apostila:ver": "node --conditions=react-server apostila/build.ts --abrir",

@@ -895,6 +895,175 @@
       "titulo": "ESTRUTURA DE PEÕES | EP#2 | PEÃO DAMA ISOLADO - Jogando CONTRA — MF Julia Alboredo",
       "ressalva": null,
       "url": "https://www.youtube.com/watch?v=DJxMSFUwYa4"
+    },
+    "treino": {
+      "ficha": {
+        "objetivo": "Achar, num tabuleiro que ninguém montou para ele, o peão do adversário que não tem peão amigo nas colunas ao lado — e dizer o que isso muda: quem pode defendê-lo.",
+        "prerequisitos": [
+          "Saber que peão defende peão só na diagonal, e só para a frente.",
+          "Ler a estrutura por colunas, e não peça por peça.",
+          "Ter lido a dica: peão isolado é descrição da estrutura, não veredito sobre o peão."
+        ],
+        "vocabulario": [
+          {
+            "termo": "peão isolado",
+            "significa": "peão que não tem nenhum peão do mesmo lado nas duas colunas vizinhas. É uma descrição da estrutura, e não uma nota de qualidade."
+          },
+          {
+            "termo": "coluna vizinha",
+            "significa": "a coluna imediatamente à esquerda e a imediatamente à direita. A do próprio peão não conta."
+          }
+        ],
+        "erroMaisProvavel": {
+          "qual": "tocar num peão que está sozinho na fileira, ou longe dos outros, em vez de num peão sem vizinho de coluna.",
+          "feedback": "Distância não é isolamento. O que decide é a coluna ao lado: um peão avançado, com um companheiro na coluna vizinha, ainda pode receber defesa de peão quando esse companheiro chegar."
+        },
+        "limitesDaEvidencia": "O acerto prova que o aluno acha o peão sem vizinho. Não prova que ele sabe atacá-lo, que ele veria o mesmo traço com o tabuleiro girado, nem que reconheceria o isolado próprio, que é m28. E não prova nada sobre retenção: a revisão espaçada deste conceito só existe a partir do Bloco 6."
+      },
+      "reconhecimento": [
+        {
+          "id": "m12-d2-a",
+          "degrau": 2,
+          "fen": "2r3k1/1b2bppp/p4n2/1p1p2B1/3N4/4P3/PP2NPPP/3R2K1 w - - 1 20",
+          "lado": "pretas",
+          "tarefa": "peao-isolado",
+          "resposta": [
+            "d5"
+          ],
+          "legenda": "Capablanca contra Teichmann, Berlim 1913. As brancas jogam; as pretas têm seis peões no tabuleiro.",
+          "material": null,
+          "apoio": {
+            "convite": "Olhe os peões pretos coluna por coluna. Em qual delas não há peão preto nenhum nas duas colunas do lado?",
+            "realce": [
+              "a6",
+              "b5",
+              "d5",
+              "f7",
+              "g7",
+              "h7"
+            ],
+            "solucao": "Os peões pretos estão em a6, b5, d5, f7, g7 e h7. Nas colunas c e e não há peão preto nenhum — então o peão da coluna d é o único que não pode receber defesa de peão. Repare que b5 tem a6 do lado, e f7 tem g7."
+          },
+          "curadoria": {
+            "perceptivel": "Os seis peões pretos ocupam quatro colunas, e as duas colunas vazias em volta da coluna d se veem sem contar casa a casa. As brancas não têm nenhum peão isolado, então não existe segunda resposta plausível para quem se confundir de lado.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 48
+            },
+            "adequacao": "Vinte e duas peças e material igual: é meio-jogo de verdade, e o aluno não pode explicar o peão fraco por alguém estar perdendo. O traço está no centro do tabuleiro, que é onde o olho de quem está aprendendo já procura."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 9 (Capablanca–Teichmann, Berlim 1913), posição impressa na p. 161 do texto e reproduzida na p. 211, depois do 19º lance das pretas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 211 — Capablanca–Teichmann",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 9, Capablanca–Teichmann, Berlim 1913",
+            "originalGame": "Capablanca–Teichmann, Berlim 1913",
+            "fenMethod": "Reconstruída, e não transcrita: os 38 meios-lances impressos foram convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — d4 d5 Nf3 Nf6 c4 e6 Bg5 Be7 Nc3 Nbd7 e3 O-O Rc1 b6 cxd5 exd5 Bb5 Bb7 O-O a6 Ba4 Rc8 Qe2 c5 dxc5 Nxc5 Rfd1 Nxa4 Nxa4 b5 Rxc8 Qxc8 Nc3 Qc4 Nd4 Qxe2 Ncxe2 Rc8. Cada lance é legal por construção, o que fecha o buraco de uma leitura de imagem: erro de leitura vira lance ilegal, e não FEN plausível e errada. A página 211 do exemplar de 1921 (PDF 229) foi lida em texto e traz o cabeçalho \"QUEEN'S GAMBIT DECLINED 211\", a frase \"The student should examine this position carefully\" e o lance seguinte, \"20. Kt-B5!\" — que é a continuação desta posição."
+          }
+        },
+        {
+          "id": "m12-d2-b",
+          "degrau": 2,
+          "fen": "r1b2rk1/p3qppp/1p3n2/2pp4/P2P4/Q1PBPN2/5PPP/R3K2R w KQ - 0 14",
+          "lado": "brancas",
+          "tarefa": "peao-isolado",
+          "resposta": [
+            "a4"
+          ],
+          "legenda": "Marshall contra Capablanca, match de 1909. Jogam as brancas, que têm sete peões no tabuleiro.",
+          "material": null,
+          "apoio": {
+            "convite": "Agora o peão sem vizinho é branco. Percorra as colunas uma a uma: em qual delas há peão branco sem nenhum peão branco nas colunas do lado?",
+            "realce": [
+              "a4",
+              "c3",
+              "d4",
+              "e3",
+              "f2",
+              "g2",
+              "h2"
+            ],
+            "solucao": "Os peões brancos estão em a4, c3, d4, e3, f2, g2 e h2. A coluna b está vazia dos dois lados, então o peão da coluna a não tem companheiro à direita — e à esquerda não existe coluna. Ele é o único peão branco sem vizinho."
+          },
+          "curadoria": {
+            "perceptivel": "A coluna b vazia é um vão largo e visível, e o peão fica sozinho num canto do tabuleiro em que nada mais acontece. Serve de contraexemplo ao item anterior de propósito: o isolado não mora sempre no centro, e não é sempre do adversário de cima.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 22
+            },
+            "adequacao": "Vinte e seis peças, material igual, e as duas estruturas de peões inteiras à vista. É a segunda vez que o aluno faz a mesma pergunta, agora com a cor trocada — o que testa se ele achou o traço ou decorou a casa."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 1 (Marshall–Capablanca, match de 1909), posição impressa na p. 161, depois do 13º lance das pretas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 161 — Marshall–Capablanca",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 1, Marshall–Capablanca, match de 1909",
+            "originalGame": "Marshall–Capablanca, match de 1909",
+            "fenMethod": "Reconstruída pelos 26 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 Ne4 Bxe7 Qxe7 Bd3 Nxc3 bxc3 Nd7 Nf3 O-O cxd5 exd5 Qb3 Nf6 a4 c5 Qa3 b6. Todo lance é legal por construção. A página 161 do exemplar de 1921 (PDF 179) foi lida em texto e traz \"QUEEN'S GAMBIT DECLINED i6i\", a sequência até \"13- Q-R3 P-QKt3\" e o comentário sobre a maioria de peões na ala da dama — que é o que produziu o peão isolado da coluna a."
+          }
+        },
+        {
+          "id": "m12-d3-a",
+          "degrau": 3,
+          "fen": "5rk1/r2q1ppp/p7/1p1p2b1/3P4/2P2Q2/PP3PPP/R3R1K1 w - - 0 20",
+          "lado": "pretas",
+          "tarefa": "peao-isolado",
+          "resposta": [
+            "d5"
+          ],
+          "legenda": "Partida de dois jogadores comuns, sem anotação e sem diagrama: ninguém montou esta posição para ensinar nada. Jogam as brancas.",
+          "material": "As pretas têm um bispo a mais e um peão a menos — a posição saiu de uma combinação, e o material não está igual.",
+          "apoio": {
+            "convite": "São seis peões pretos. Percorra as colunas da esquerda para a direita e pare na que tem peão preto sem nenhum peão preto nas colunas vizinhas.",
+            "realce": [
+              "a6",
+              "b5",
+              "d5",
+              "f7",
+              "g7",
+              "h7"
+            ],
+            "solucao": "Os peões pretos estão em a6, b5, d5, f7, g7 e h7. Não há peão preto nas colunas c nem e, então o da coluna d é o único sem vizinho. Ele está travado pelo peão branco da frente, e quem o defende hoje é a dama."
+          },
+          "curadoria": {
+            "perceptivel": "O peão está no centro, parado, com o peão branco encostado na frente dele — e as duas colunas ao lado estão vazias de peão preto. As brancas não têm nenhum peão isolado, então nenhum clique honesto no lado errado é recusado.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 7
+            },
+            "adequacao": "Vinte e duas peças, sem xeque e sem peça pendurada, e o salto de 7 centésimos entre as duas melhores linhas diz que não há lance urgente competindo com a pergunta. O desequilíbrio de material está declarado na legenda, para o aluno não gastar o exercício procurando por que um lado tem uma peça a mais."
+          },
+          "provenance": {
+            "bibliographicSource": "Recorte CC0 da base aberta do Lichess, puzzle 49bmR (lichess.org/training/49bmR): posição ao fim da linha tática do puzzle, quando a combinação já acabou. Os jogadores não são identificados no recorte.",
+            "citacaoCurta": "Lichess, puzzle 49bmR — posição ao fim da linha",
+            "editionFile": "lichess-open-database",
+            "capitulo": null,
+            "originalGame": "lichess.org/training/49bmR",
+            "fenMethod": "A FEN guardada no recorte é a posição antes do erro do adversário; esta é a do fim da linha, obtida jogando os lances do puzzle na chess.js (scripts/escolher-exercicios.ts). Passou pela porta 1 — sem xeque, sem mate em 1 e sem peça de cavalo ou mais pendurada — e pela porta 2, com Stockfish 18 na profundidade 12 medindo 7 centésimos entre a melhor linha e a segunda. A resposta única foi conferida por respostaDaTarefa, que é o mesmo juiz que vai julgar o clique do aluno."
+          }
+        }
+      ],
+      "aplicacao": {
+        "id": "m12-d4",
+        "usa": "m12-d3-a",
+        "pergunta": "Você achou o peão preto de d5, que não tem peão preto nas colunas ao lado. Nesta posição, o que essa ausência muda de concreto?",
+        "opcoes": [
+          {
+            "texto": "Nenhum peão preto consegue chegar a c6 ou e6 para defendê-lo, então quem o defende é a dama.",
+            "certa": true,
+            "porque": "Peão defende peão em diagonal: para cobrir d5 seria preciso um peão preto em c6 ou em e6. Não há peão preto nas colunas c e e — nem agora, nem depois de andar, porque não existe peão para andar. Sobra a dama de d7, e é isso que a dica quer dizer com transformar o isolado em alvo: cada atacante a mais obriga um defensor a mais, e defensor de peça é peça presa."
+          },
+          {
+            "texto": "Ele está travado pelo peão branco da frente, e peão travado não anda.",
+            "certa": false,
+            "porque": "É verdade que ele está travado, mas isso não vem de faltar vizinho — vem do peão branco que está na frente dele. Um peão com vizinho nas duas colunas também pode ficar travado, e continuaria podendo receber defesa de peão. Misturar as duas coisas faz procurar bloqueio quando a pergunta é sobre defesa, e são dois passos diferentes do mesmo plano."
+          }
+        ]
+      },
+      "reservas": []
     }
   },
   {
