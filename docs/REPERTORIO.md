@@ -46,8 +46,8 @@ sim **medir três e comparar**: §6.1.
 - O que a **revisão de fontes** (7/9/2026) fez: a régua nova do
   `docs/REVISAO-FONTES.md` — *toda linha tem de vir de fonte que explique o
   motivo* — tirou as **3 do bispo em c4** do treinador e as transformou em
-  página de princípios. **São 40 linhas hoje**, e cinco páginas em
-  `/aberturas/notas/`.
+  página de princípios. **São 42 linhas hoje** (41 do Base, 1 do Avançado),
+  e cinco páginas em `/aberturas/notas/`.
 
 ---
 
@@ -270,10 +270,19 @@ já marcava esse ⚠; o `00-ESTADO.md` o apagou ao consolidar.
 O Short & Sweet do Kushager tem **uma** linha de Londres, **zero** de Colle e de
 Jobava, e **duas** de Catalã — que é 10,5 % de 16,5 % de 29,4 %, ou seja ~0,5 %.
 
-**Decisão:** Londres ganha 2 linhas; Colle/Jobava/2.e3 ganham 1 (⚠ livro +
-motor); a Catalã vai para o Avançado. Contra a Londres, `2…c5` é a resposta
-prevista, e o explorer mostra que ela leva a `3.e3` 40,9 % / `3.c3` 23,5 % —
-duas linhas cobrem 64 %.
+**Decisão:** Londres ganha 2 linhas; Colle/Jobava/2.e3 ganham 1; a Catalã vai
+para o Avançado. Contra a Londres, `2…c5` é a resposta prevista, e o explorer
+mostra que ela leva a `3.e3` 40,9 % / `3.c3` 23,5 % — duas linhas cobrem 64 %.
+
+**Revisto em 7/9/2026 (§22 do `docs/REVISAO-FONTES.md`): Colle/Jobava/2.e3
+passaram de 1 para 2 linhas, e as duas saíram do ⚠ livro + motor.** O Colle
+cobre `2.Cf3` e `2.e3` num jogo só, porque as duas ordens transpõem na mesma
+posição final — 26,6 %. O `2.Cc3` **não** transpõe (com o cavalo dele em c3, o
+peão dele não cabe mais em c3) e por isso ganhou jogo próprio: o Jobava, que
+transpõe exato para o capítulo `Jobava Attack: 4.e4` do Anti-London gratuito.
+A frase acima sobre o Kushager continua verdadeira e deixou de ser o problema:
+ele não tem capítulo de Colle, mas a variante `The London` dele joga os cinco
+primeiros lances pretos do nosso Colle, na nossa ordem, e explica cada um.
 
 **Correção do B4: a dama em b6 tem hora.** O documento previa "`2…c5`, `…Nc6`,
 `…Qb6`" como uma receita só. Medido no motor:
@@ -637,7 +646,7 @@ linha existente, e a medição não pediu isso em lugar nenhum. A conta está na
 | ~~5~~ | ~~Caro `4…Nf6`~~ — **fechado no B3**, é o `5.c3` | 31 % de 4.Bd3 | 2.8 |
 | ~~6~~ | ~~Londres `2.Bf4` — confirmar `2…c5, …Nc6, …Qb6`~~ — **fechado no B4, com correção**: a dama só depois do c3 dele | 22 % de 1.d4 d5 | 2.9 |
 | **7** | **Alapin pelas pretas `4.Bc4` — continua aberto.** O `4.c4` saiu junto na §6.1: nas duas faixas novas ele não entra mais no corte, e o ⚠ encolheu para um lance só | 17,5 % de 3…Nd5 | 2.3, 6.1 |
-| ~~8~~ | ~~Colle, Jobava, `2.e3`~~ — **fechado no B4**, é `…e6, …c5, …Bd6`, igualdade | 24 % de 1.d4 d5 | 2.9 |
+| ~~8~~ | ~~Colle, Jobava, `2.e3`~~ — **fechado no B4**, é `…e6, …c5, …Bd6`, igualdade. **A fonte fechou depois, em 7/9/2026 (§22 do `docs/REVISAO-FONTES.md`)**: virou 2 linhas, com 3 cursos gratuitos | 24 % de 1.d4 d5 | 2.9 |
 | ~~9~~ | ~~Francesa `3…Nc6`~~ — **fechado no B3**, é o `4.Nf3` | 14 % de 3.Bd3 | 2.7 |
 | ~~10~~ | ~~Manhattan `4.Bf4`~~ — **fora do Base pelo corte** (5ª resposta da posição); vai para o Avançado | 6,9 % de 3.Nc3 Nf6 | — |
 | **11** | **Maroczy — recortar só a sub-árvore do `6.e4`** | Avançado | 2.4 |
@@ -730,13 +739,15 @@ tirou a máquina de estado de dentro do componente. O texto das cinco aberturas
 sem linha: `notas.ts` (schema) e
 `conteudo.ts` (leitura conferida na importação).
 
-**40 linhas** compiladas para `public/repertorio/`, em 12 arquivos: as 23 das
-brancas e as 17 das pretas. **O Base está completo dos dois lados.** Foram 43 até
-7/9/2026: a 43ª era a Escandinava `2…Cf6`, escrita em 6/9 pelo que a §6.1 mediu,
-e ela entrou **sem mover nenhum dos 42 ids anteriores** — a prova da assimetria
-descrita lá. As três que saíram depois são as do bispo em c4 (§2.6): aí a
-assimetria cobrou o preço dela, e **3 ids sumiram**. Cabia agora porque ainda
-não há progresso de aluno de verdade gravado.
+**42 linhas** compiladas para `public/repertorio/`, em 12 arquivos: as 24 das
+brancas e as 18 das pretas — 41 do Base e 1 do Avançado. **O Base está completo
+dos dois lados.** Foram 43 até 7/9/2026: a 43ª era a Escandinava `2…Cf6`, escrita
+em 6/9 pelo que a §6.1 mediu, e ela entrou **sem mover nenhum dos 42 ids
+anteriores** — a prova da assimetria descrita lá. As três que saíram depois são
+as do bispo em c4 (§2.6): aí a assimetria cobrou o preço dela, e **3 ids
+sumiram**. Cabia agora porque ainda não há progresso de aluno de verdade
+gravado. A 42ª é o Jobava, entrada em 7/9/2026 pela §22 do docs/REVISAO-FONTES.md
+— e ela também entrou **sem mover nenhum id**.
 
 ### A tela
 

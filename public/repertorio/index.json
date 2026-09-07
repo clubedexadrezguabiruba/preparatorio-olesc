@@ -90,9 +90,10 @@
     "cor": "pretas",
     "abertura": "colle",
     "nome": "Colle e Jobava",
-    "linhas": 1,
+    "linhas": 2,
     "ids": [
-      "pretas-colle-f0590dc0"
+      "pretas-colle-f0590dc0",
+      "pretas-colle-0e2f8d38"
     ],
     "arquivo": "/repertorio/pretas/colle.json"
   },

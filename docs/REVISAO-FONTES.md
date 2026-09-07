@@ -145,7 +145,7 @@ Legenda: **✅ confirmado na tela** · **◐ índice lido, linha específica nã
 | 8 | `2.Cc3 Cc6` vs `3.Cf3`/`3.Bc4` | motor | **King's Anti-Sicilians** (Grand Prix, Fechada) | **grátis** | ✅ |
 | 9 | Morra `2.d4 cxd4 3.c3` | motor | **King's Anti-Sicilians** (Smith-Morra, Alapin) | **grátis** | ✅ |
 | 10 | Londres `…c5` + `…Db6` | motor | **Anti-London System** (Neustroev) | **grátis** | ✅ |
-| 11 | Colle e Jobava | motor | **Anti-London System** cobre Jobava; Colle sem fonte dedicada | **grátis** (parcial) | ✅ / ○ |
+| 11 | Colle e Jobava | motor | **Anti-London System** cobre Jobava; Colle sem fonte dedicada | **grátis** (parcial) | ✅ **fechado na §22** |
 | 12 | Inglesa, transposição | motor | `Short & Sweet: Sielecki's QGD` (cobre 1.c4 com `…e6`/`…d5`); `Short & Sweet: Anti-English` | **grátis** | ○ |
 
 **Resumo do custo:** dos 12 buracos, **6 fecham de graça** (3 cursos a resgatar +
@@ -795,7 +795,7 @@ jogou o lance que quebrou**, e se a fonte volta a bater depois.
 | **Só ordem de lances** | **8** | A fonte chega na mesma posição por outra porta e volta a bater. | **não** |
 | **Cauda de verdade** | **7** | Nós jogamos um lance que a fonte não joga, e ela não volta. | sim |
 | **A fonte não cobre o ramo** | **9** | Quem sai da fonte é **ele**, não nós. Não há cauda para trocar. | não — falta fonte |
-| **Sem fonte** | **1** | O Colle. | decisão dura |
+| **Sem fonte** | **1** | O Colle. | ~~decisão dura~~ — **fechado na §22** |
 
 #### Só ordem de lances — 8
 
@@ -1473,3 +1473,172 @@ bloco.
    lances e o Avançado em 12, a diferença entre os dois níveis ficou de um lance
    só — se o filtro for construído, vale rever se 12 ainda é o número certo para
    o Avançado.
+
+---
+
+## 22. O Colle tinha fonte o tempo todo — e o Jobava virou linha, 7/9/2026
+
+Fecha a última linha sem fonte do repertório. Era para ser uma decisão dura
+entre três saídas ruins — assinar, trocar de abertura ou comprar curso. Não foi:
+**as fontes já estavam no corpus**, como no Anti-London da §20 e no Magnus
+Sicilian da §21. O que mudou é *por que* o mapa não as via.
+
+### O achado: o mapa casa por POSIÇÃO, e a prosa estava na posição vizinha
+
+O `repertorio:mapear` dá **2/16** ao Colle e vai continuar dando. Ele casa
+linha e curso pela FEN, e nenhum dos 11 cursos do corpus joga um Colle: do
+`2.Cf3` em diante, o corpus inteiro de `1.d4` vira Londres (`2.Bf4`, 21
+variantes) ou Gambito da Dama (`2.c4`, 14). Só que **três cursos gratuitos
+recomendam e explicam esta linha em prosa**, e dois deles a nomeiam.
+
+**1. O Sielecki nomeia a nossa ordem branca inteira.** No comentário do `1…d5`,
+que o `Short & Sweet: Sielecki's QGD` repete nas 8 variantes:
+
+> *"Besides these two main options, White may play various offbeat systems on
+> move 2 or on move 3, after 2.Nf3 Nf6 has been played. As a general concept, I
+> recommend meeting these lines with a quick …c5 push, for example: A) 2.Nc3
+> Nf6 3.Bf4 c5 **B) 2.Nf3 Nf6 3.e3 c5** C) 2.Nf3 Nf6 3.g3 c5 … playing with
+> …Nf6 and …c5 is a logical response, attacking White's centre."*
+
+O caso **B é o nosso Colle** e o **A é o nosso Jobava**, com o motivo escrito.
+
+**2. O Kushager joga os nossos cinco primeiros lances pretos, na nossa ordem, e
+explica cada um.** A variante *The London* do `Short & Sweet: 1.d4 d5` faz
+`…d5, …Cf6, …e6, …c5, …Cc6` — idêntico a nós — e no `…e6` escreve a frase que
+autoriza levar a receita dele do Londres para o Colle:
+
+> *"The best move order for our setup. **Whatever White plays in the next couple
+> of moves**, we would like to play …c5 and …Nc6 whenever possible."*
+
+**3. O Neustroev chega na nossa posição final.** Medido casa a casa na
+`chess.js`, na variante *The Impatient 3.dxc5: Mainline - 6.Nbd2, 7.Bd3* do
+`Anti-London System`, depois do `8.O-O` dele:
+
+```
+nossa final (8...Bxc5), pretas : bc5 bc8 kg8 nc6 nf6 pa7 pb7 pd5 pe6 pf7 pg7 ph7 qd8 ra8 rf8
+curso, após 8.O-O,      pretas : IDÊNTICAS, casa por casa
+   brancas — só no curso : bf4 pc2
+   brancas — só em nós   : bc1 pc3
+```
+
+**Duas unidades de diferença**: o bispo dele (f4 lá, ainda em c1 aqui) e o
+peão-c (c2 lá, c3 aqui). Todo o resto — rei em g1, torres em a1 e f1, `Bd3`,
+`Cd2`, `Cf3`, dama em d1, peões a2 b2 e3 f2 g2 h2 — bate. E o plano que ele
+escreve ali é o nosso: *"The plan for black is to push the e5 pawn."*
+
+> **Isto é diferente de uma assinatura do professor.** Nas três linhas assinadas
+> (§19 e §21) a fonte **não tinha o que dizer**. Aqui ela tem, e diz — só não na
+> posição que o mapa lê. A tag `[Fonte]` do Colle declara isso por escrito,
+> porque o mapa vai mostrar `2/16, âncoras 0/3` para sempre.
+
+### A decisão do Doug: duas linhas, não uma
+
+O orçamento da §1 dava **uma** linha para os três sistemas (`2.Cf3` 14,4 %,
+`2.e3` 12,2 %, `2.Cc3` 11,9 % — 38,5 % somados). Em 7/9/2026 o Doug deu **duas**,
+e o motivo é medido: uma linha só não alcança as três fatias.
+
+```
+1.d4 d5 2.Cf3 Cf6 3.e3 e6 4.Bd3 c5 5.c3 Bd6 6.Cbd2 Cc6 7.O-O O-O 8.dxc5 Bxc5
+1.d4 d5 2.e3  Cf6 3.Cf3 e6 4.Bd3 c5 5.c3 Bd6 6.Cbd2 Cc6 7.O-O O-O 8.dxc5 Bxc5
+   -> MESMA posição final. O Colle cobre 26,6 % num jogo só.
+
+1.d4 d5 2.Cc3 Cf6 3.e3 e6 4.Bd3 c5 …
+   -> NÃO transpõe: com o cavalo dele em c3, o peão dele não cabe mais em c3.
+```
+
+O Jobava ganhou jogo próprio porque a ordem dele transpõe, **exata**, para um
+capítulo de curso gratuito:
+
+```
+1.d4 d5 2.Bf4 c5 3.Cc3 Cc6 4.e4   (a ordem do curso, chegando pelo Londres)
+1.d4 d5 2.Cc3 c5 3.Bf4 Cc6 4.e4   (a nossa, o Jobava de verdade)
+   -> MESMA FEN, conferida na chess.js.
+```
+
+### O que o motor disse, e as três coisas que ele obrigou a declarar
+
+Stockfish 18 lite-single de `public/engine/`, profundidade 20, MultiPV 5, em
+7/9/2026.
+
+| Posição | Medida | O que fizemos |
+|---|---|---|
+| Colle, final `8…Bxc5` | **igual** nas 5 primeiras; em 3 delas o lance preto seguinte é `…e5` | confirma o plano do Neustroev |
+| Colle, 1ª linha do motor | `9.e4 Dc7 10.De2 Bd7 11.e5 Cg4 12.Bxh7+!` — e **igual** | o sacrifício em h7 entrou no comentário como aviso |
+| Jobava, após `4.e4` | `4…cxd4` **igual** e 1º; as outras dão brancas +0,73 ou pior | é o nosso lance |
+| Jobava, o aviso do curso | `4…dxe4 5.d5` dá **brancas +1,49** | o aviso confere, e entrou com o número |
+| Jobava, após `4…cxd4` | `5.exd5` **igual**, `5.Cb5` pretas +0,38, **`5.Cxd5` pretas +0,40** | ⚠ o lance do curso é o **terceiro** |
+| Jobava, após `8.Bg5` | `8…Cxd5` **pretas +1,17** e 1º | a armadilha confere |
+| Jobava, após `9…Bb4+` | `10.Re2` pretas +1,18, **`10.Dd2` pretas +1,84** | ⚠ o lance do curso **não é o melhor dele** |
+| Jobava, após `10.Dd2` | `10…Bxd2+` **pretas +2,08** e 1º; a continuação do motor é a nossa | é o nosso lance |
+| Jobava, final `11…Cdb4` | **pretas +2,18** | ponto de parada bom |
+
+As duas linhas com ⚠ são declaradas na tag `[Fonte]` **e no comentário que o
+aluno lê**, porque mudam o que ele deve esperar do tabuleiro:
+
+- **A armadilha só existe se ele jogar o `5.Cxd5`.** Os outros dois quintos
+  lances não caem nela. O comentário do `4…cxd4` diz isso, com os três números.
+- **O `10.Dd2` do curso não é o melhor dele.** Escolhemos o `10.Dd2` porque é o
+  lance humano — bloquear o xeque oferecendo troca de damas — e a resposta ao
+  `10.Re2` (`…Cf4+` e `…Txd8`) está escrita no comentário do `8…Cxd5`.
+
+### A janela de órfãos, re-medida antes de escrever
+
+| | número |
+|---|---:|
+| linhas em `repertorio_progresso` | **5** |
+| contas com progresso | **1** — `alunoteste@alunos.olesc.local` |
+| contas no Auth inteiro | **2** — `alunoteste` e `doug` |
+| linhas do progresso que apontam para o Colle | **0** |
+
+**Zero alunos reais**, e nenhuma linha gravada tocava o arquivo do Colle. No
+fim não foi preciso gastar a janela: **nada morreu**.
+
+### O contrato de 40 linhas do Base virou 41
+
+`lib/repertorio/banco.test.ts:70` afirmava `nivel === "base"` em **40** — a meta
+pedagógica do Base. A linha do Jobava a levou a **41**, e o teste, o título e o
+comentário foram atualizados. Aproveitou-se para corrigir uma frase errada do
+comentário: ele dizia que os 40 eram *"a mesma do teto de `aberturasInchadas`"*,
+e não são — o `teto` daquela função conta linhas **por abertura** e continua em
+40 (`lib/repertorio/linhas.ts:244`).
+
+### Verificação
+
+- `repertorio:compilar` → **42 linhas em 12 arquivos** (41 base, 1 avançado)
+- **41 ids antes, 42 depois: 0 morreram, 1 nasceu** (`pretas-colle-0e2f8d38`).
+  **0 alunos órfãos**
+- diff do compilado conferido campo a campo por id: dos **41 sobreviventes**,
+  **1** mudou — o `pretas-colle-f0590dc0`, e só em `nome`, `comentarios` e
+  `fonte`. **Zero** mudança em `lances`, `sans`, `fenFinal` ou `meus` em
+  qualquer linha
+- `repertorio:mapear`: corpus **igual** (11 cursos / 165 variantes / 2.434
+  comentários / 2.890 posições) e o repertório sobe de **128 âncoras / 71 em
+  prosa** para **139 / 78**
+- onde as duas caíram no mapa: o Jobava em **"só ordem de lances"**
+  (`2/22` contígua, `20/22` total, volta no lance 3, **âncoras 7/10**) e o Colle
+  segue em **"sem fonte"** (`2/16`, âncoras `0/3`) — **de propósito**, como a
+  tag `[Fonte]` dele declara
+- typecheck ✔ · lint ✔ · **585 testes, 585 passando** ✔ · `validate:content` ✔ ·
+  `compilar --check` sem diferença ✔ · `build` ✔
+
+**Placar da régua: de 31 linhas aprovadas para 33, de 42.** As duas novas são o
+Colle (prosa de três fontes gratuitas, em posição vizinha — o mapa não confirma,
+a tag declara) e o Jobava (posição, 20 de 22 meios-lances no curso).
+
+### Cuidado ao ler o mapa daqui em diante
+
+O grupo **"a fonte não cobre o ramo"** agora imprime **16 linhas**, e a §17 fala
+em **9**. Não é regressão: o script agrupa as 42 linhas e a §17 tirava as 11 do
+Krikor. As 7 a mais são justamente as do Krikor — `alapin` ×2, `escandinava` ×2,
+`escocesa` ×1 e `philidor` ×2 —, que passam na régua pela fonte delas. **A lista
+acionável continua sendo a de 9 da §17**, e ela não mudou.
+
+### O que sobra
+
+1. As **9 de "a fonte não cobre o ramo"** — quem sai do roteiro é o adversário.
+   Dependem de comprar curso, não de escrever melhor. Lista na §17.
+2. O campo `nivel` **ainda não separa nada na tela**. Com o Base em 11 lances e o
+   Avançado em 12, os níveis seguem a um lance de distância.
+
+**Nenhuma linha do repertório está sem fonte.** O grupo "sem fonte" do mapa tem
+uma entrada, e ela é a que esta seção explica.

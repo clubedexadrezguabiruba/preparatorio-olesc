@@ -67,16 +67,22 @@ test("cor e abertura de cada linha batem com a pasta em que ela está", () => {
   }
 });
 
-test("o Base publicado tem 40 linhas, e o primeiro lance é sempre das brancas", () => {
+test("o Base publicado tem 41 linhas, e o primeiro lance é sempre das brancas", () => {
   const todas = indice.flatMap((e) =>
     validarBanco(ler(e.arquivo.replace(/^\/repertorio\//, "")), e.abertura),
   );
   // Conta o **Base**, não o total. Desde que o `6.Bf4` da Caro-Kann virou linha
   // do Avançado (§11.1 de `docs/REVISAO-FONTES.md`), os dois números deixaram
-  // de ser o mesmo — e o que vale 40 é a meta pedagógica do Base, a mesma do
-  // teto de `aberturasInchadas`. Contar o total faria esta afirmação virar
-  // "quantas linhas existem", que não é contrato de nada.
-  assert.equal(todas.filter((l) => l.nivel === "base").length, 40);
+  // de ser o mesmo. Contar o total faria esta afirmação virar "quantas linhas
+  // existem", que não é contrato de nada.
+  //
+  // **Foi 40 até 7/9/2026**, quando o Doug decidiu dar DUAS linhas ao arquivo
+  // do Colle em vez de uma (§22 de `docs/REVISAO-FONTES.md`): o Colle cobre
+  // 2.Cf3 e 2.e3, que transpõem um no outro, e o Jobava do 2.Cc3 não transpõe
+  // em nenhum dos dois. Nada morreu para isso entrar — 41 ids antes, 42 depois.
+  // Este número é a meta pedagógica do Base; ele não tem relação com o `teto`
+  // de `aberturasInchadas`, que conta linhas **por abertura** e continua em 40.
+  assert.equal(todas.filter((l) => l.nivel === "base").length, 41);
 
   for (const linha of todas) {
     // O contrato de que a tela depende para saber quando auto-jogar: `meus`
