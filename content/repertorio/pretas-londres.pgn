@@ -10,15 +10,20 @@
 ;   3.e3 Cc6 4.Cf3 Cf6 5.c3 Db6  — igual, e o 6.Db3 c4 põe as pretas +0,25
 ;   3.c3 Db6 de cara             — igual, e o 5.Db3 c4 do motor iguala
 ;
-; A razão é uma só, e dá para explicar a uma criança: quem defende b2 é o
-; cavalo indo a c3. Enquanto essa casa estiver livre, a dama em b6 não
-; incomoda; assim que o peão dele ocupa c3, ela incomoda de graça.
+; A razão está no cavalo de b1, e dá para explicar a uma criança — mas não é a
+; que este cabeçalho dizia até 7/9/2026. Cc3 NÃO defende b2: de c3 o cavalo não
+; alcança aquela casa. O que ele faz é atacar d5, que fica sem defensor nenhum
+; assim que a dama sai de d8. Se as pretas pegarem o peão, 6.Cxd5 põe as brancas
+; +3,79 (mesma build e profundidade, medido em 7/9/2026). Quando o peão dele
+; ocupa c3, aquela casa fecha para o cavalo, d5 volta a estar em paz, e aí sim
+; b2 fica pendurado: ele tem de gastar um lance de dama — Dc1, Dc2 ou Db3 — só
+; para segurar o peão.
 
 [Abertura "londres"]
 [Nome "Londres 2.Bf4"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 6 da seção 8 de docs/REPERTORIO.md: o Short & Sweet do Kushager tem um único capítulo de Londres e ele começa por 2...Cf6, não pelo 2...c5 que a seção 2.9 decidiu. Conferido no curso em 6/9/2026: o capítulo 'The London' joga 2...Cf6 3.e3 e6 4.Cf3 c5 5.Cbd2 Cc6 6.c3 cxd4 7.exd4 Ch5, caçando o bispo de f4 para pôr o nosso em d6 — outro plano, não o do ...Db6. As duas linhas são do motor, e a ordem do ...Db6 foi medida: cedo demais ela perde (4...Db6 5.Cc3! põe as brancas +1,40), depois do c3 dele empata."]
+[Fonte "3.e3: FM Viktor Neustroev — 'Short & Sweet: Anti-London System' (Chess.com, grátis), variantes '4.Nf3 with Early Qc2: 7.h3' e '4.Nf3 with Early Qc2: 7.Nbd2, 8.O-O-O'. As 18 variantes do curso respondem 2.Bf4 com 2...c5: é a fonte do sistema que este arquivo já jogava, e fecha o buraco 10 da seção 5 de docs/REVISAO-FONTES.md. Ele chega à nossa posição por 3...Cf6 4.Cf3 Cc6 e nós por 3...Cc6 4.Cf3 Cf6 — 14 dos 16 meios-lances têm fonte e, do 5.c3 em diante, bate lance a lance até o 8...O-O, que é o último dele também. Dele são: o ...Db6 ('ataca o peão de b2, e aqui as brancas têm 3 lances típicos para defendê-lo'), o motivo do h3 (fecha g4 e abre h2 para o bispo depois de ...Ch5), e o porquê do ...g6 em vez do ...Bf5. Continua nosso: a ORDEM ...Cc6 antes de ...Cf6, que o curso não joga e por isso não explica — o motivo dela é medido no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, em 7/9/2026. || 3.c3 Db6: ainda Livro + motor, mesma build, medido em 5/9/2026. O curso cobre o 3.c3 na variante 'The Solid 3.c3' e joga 3...Cc6 primeiro, não o ...Db6 de cara; trocar ou não esta ponta é decisão de xadrez do professor, e ela está no grupo 'cauda de verdade' da seção 17 de docs/REVISAO-FONTES.md."]
 [Result "*"]
 
 1. d4 d5 2. Bf4 c5 {Repare no que o 2.Bf4 faz e no que ele não faz. Desenvolve
@@ -35,12 +40,22 @@ não tem mais como chegar a c3 para defender. Ele oferece a troca com 5.Db3 e
 nós avançamos …c4!, ganhando espaço e obrigando a troca mesmo assim. Depois de
 …axb6 a coluna a é da nossa torre, e o bispo em a4 vigia a casa b3 — que é por
 onde ele tentaria desfazer o nosso peão de c4.})
-3... Nc6 4. Nf3 Nf6 (4... Qb6 $2) {Ainda não é hora da dama. Se ela fosse a b6 agora, o cavalo
-de b1 pularia para c3, defenderia b2 e ganharia um tempo em cima dela. Então
-desenvolvemos e esperamos — o Londres quase sempre acaba jogando c3, e no lance
-em que ele jogar, aquela casa fecha para o cavalo.} 5. c3 Qb6 6. Qc2 g6 7. h3 Bg7 8. Nbd2 O-O {Repare no
-momento: a dama só vai a b6 depois que ele joga c3. Com o peão dele nessa casa,
-o cavalo de b1 não chega mais a c3 para defender b2, e a dama incomoda de
-graça. Um lance antes disso seria erro grave: 4…Db6 5.Cc3! e o motor dá mais de
-um peão para as brancas. Com a dama já instalada, completamos a montagem — g6,
-Bg7 e roque.} *
+3... Nc6 4. Nf3 Nf6 (4... Qb6 $2) {Ainda não é hora da dama, e o motivo não é b2 — é d5.
+Enquanto a dama está em d8, é ela quem defende o nosso peão de d5. Se ela sair
+agora, o peão fica sem defensor nenhum, e o cavalo de b1 pula para c3 atacando
+justamente ele: 4…Db6? 5.Cc3! e o motor já dá +1,40 para as brancas. Pegar o
+peão de b2 é pior ainda — 5…Dxb2 6.Cxd5! e são quase quatro peões. Então
+desenvolvemos, e o …Cf6 não é só esperar: o cavalo em f6 passa a defender d5, e
+com ele lá o Cc3 deixa de ganhar peão nenhum. O Londres quase sempre acaba
+jogando c3, e no lance em que ele jogar, aquela casa fecha para o cavalo — é aí
+que a dama sai.} 5. c3 Qb6 6. Qc2 g6 7. h3 Bg7 8. Nbd2 O-O {Deu certo: com o
+peão dele em c3, o cavalo de b1 não chega mais àquela casa, d5 está em paz, e
+agora é b2 que fica pendurado. Ele foi obrigado a gastar um lance de dama só
+para segurar o peão — 6.Dc2 aqui; Dc1 e Db3 são os outros dois. E repare no que
+veio depois. O …g6 não é enfeite: o …Bf5, que parece o lance da vida para o
+nosso bispo, tropeça em dxc5!, que ataca a nossa dama e a tira de cima de b2 —
+e aí o bispo de f5 fica de graça para a dama dele. Então fianchetamos, e o
+bispo vai para f5 mais tarde, quando der. O h3 dele também tem motivo: fecha
+g4 e abre a casa h2, para o bispo de f4 ter para onde fugir quando o nosso
+cavalo pular para h5. Roque feito, ele escolhe entre rocar do mesmo lado ou
+trocar as damas e rocar do lado da dama — e nós estamos prontos para os dois.} *

@@ -129,23 +129,34 @@ decorar, e o lance mais chato do adversário já saiu do tabuleiro.} *
 [Nome "Siciliana — Alapin 2.c3"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "GM Avetik Grigoryan (ChessMood) — draft 'Alapin', tronco 2...Cf6 3.e5 Cd5 4.d4 cxd4 5.cxd4 d6 6.Cf3 Cc6 7.Bc4 Cb6 8.Bb5 dxe5."]
+[Fonte "2.c3 e 2...Cf6: IM Andras Toth — 'Short & Sweet: 1.e4 for Club Players' (Chess.com). É repertório de BRANCAS, e é de propósito: quem explica o que o 2.c3 quer é quem o joga. O curso escreve que com 2.c3 as brancas sinalizam a vontade de tomar o centro inteiro com d2-d4, e que as duas respostas principais, 2...d5 e 2...Cf6, atacam e4 justamente para impedir esse par de peões. Do 6...Cc6 ao 8.Bb5: IM Christof Sielecki — 'Short & Sweet: Magnus Sicilian' (Chess.com), variante 'S&S Magnus Sicilian - Alapin'. Ele joga 4.Cf3 Cc6 5.d4 cxd4 6.cxd4 d6 e escreve com todas as letras que a NOSSA ordem — 4.d4 cxd4 5.cxd4 d6 6.Cf3 Cc6 — chega na mesma posição; daí em diante bate lance a lance até o 8.Bb5. Dele é também a observação de que os dois peões de c sumiram e por isso o c4 não existe para expulsar o cavalo de d5, escrita na posição depois do nosso 6...Cc6 e trazida para o comentário do 5...d6. PENDÊNCIA DECLARADA, e é o último meio-lance: o 8...dxe5 é NOSSO. O Sielecki chama o 8...dxe5 de linha principal das pretas e mesmo assim escolhe 8...Bd7, porque guarda mais chances de jogar para ganhar — critério de campeão do mundo, não de aluno de 12 a 15 anos. O draft 'Alapin' do GM Avetik Grigoryan (ChessMood) dá o 8...dxe5 sem explicar lance nenhum. Então o argumento do comentário final é nosso, e não de curso: fechá-lo na régua da seção 1 de docs/REVISAO-FONTES.md pede uma de duas coisas, o professor assinar o argumento ou um bloco futuro trocar o lance por 8...Bd7. Medido em 7/9/2026."]
 [Result "*"]
 
-1. e4 c5 2. c3 Nf6 {O cavalo ataca o peão de e4 antes que o de c3 vire peão de
-d4. Ele quase sempre responde 3.e5 — e é o que queremos: o peão avança sozinho,
-sem nenhum peão vizinho para protegê-lo, e vira o alvo da linha inteira.} 3. e5
+1. e4 c5 2. c3 Nf6 {O 2.c3 não desenvolve nada e não ataca nada. Ele quer uma
+coisa só: jogar d4 no lance seguinte e ficar com os dois peões lado a lado em
+e4 e d4, que é o centro com que todo mundo sonha. O …Cf6 ataca e4 antes que
+isso aconteça e obriga a escolher. Ele quase sempre responde 3.e5 — e é o que
+queremos: o peão sai da fila e vai sozinho para a frente, onde deixa de ser
+muralha e vira alvo. É esse peão de e5 que a linha inteira persegue.} 3. e5
 Nd5 {Para d5, e nunca para e4. Em e4 o cavalo fica sem casa no lance seguinte:
 ele joga 4.d3, e as duas fugas que parecem naturais — f6 e d6 — são justamente
 as duas casas que o peão de e5 come. Em d5 é o contrário, o cavalo para firme no
 meio do tabuleiro.} (3... Ne4 $4) 4. d4 cxd4 5. cxd4 d6 {Este …d6 é a conta que apresentamos ao peão de e5. Ou
 ele come em d6 e abre o jogo cedo, ou fica parado esperando a hora em que somos
-nós que comemos — que é como esta linha termina.} 6. Nf3 Nc6 7. Bc4 Nb6 8. Bb5
-dxe5 {O cavalo em d5 é o coração da linha: ele para no meio do tabuleiro e o
-peão de e5, que parecia o orgulho das brancas, é justamente o que cai primeiro.
-Quando o bispo dele chegou em c4 nós o empurramos com …Cb6, e agora …dxe5
-desfaz o centro dele. Ele recaptura, mas o jogo abre com as nossas peças
-prontas.} *
+nós que comemos — que é como esta linha termina. E repare numa coisa que vale
+daqui até o fim da partida: na troca do lance 4 os dois peões de c sumiram do
+tabuleiro. Sem peão em c2, ele não tem como jogar c4, que é o lance normal para
+expulsar um cavalo de d5. Sobra fazer isso com peça — é o que ele tenta no
+lance 7 com Bc4 —, e aí nós recuamos …Cb6 atacando o bispo e ganhamos o tempo
+de volta.} 6. Nf3 Nc6 7. Bc4 Nb6 8. Bb5
+dxe5 {Chegou a hora de cobrar. O peão de e5, que parecia o orgulho das brancas,
+cai — e o que fica no lugar dele é o que esta linha toda perseguia. Ele
+recaptura com 9.Cxe5, e agora olhe os peões dele: a2, b2, d4, f2, g2, h2. O de
+d4 ficou sozinho, sem peão de c e sem peão de e para ajudar. Isso é um peão
+isolado, e peão isolado se trata sempre do mesmo jeito: bloqueia-se a casa da
+frente, que aqui é d5, e cobra-se o peão com as peças. Não é ataque, é
+cobrança — e é por isso que valeu a pena trocar em e5 em vez de deixar o centro
+dele de pé.} *
 
 [Abertura "siciliana"]
 [Nome "Siciliana — Gambito Morra 2.d4"]

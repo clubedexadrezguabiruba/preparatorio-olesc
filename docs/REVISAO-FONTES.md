@@ -1100,3 +1100,178 @@ segue de pé: 41 linhas = 40 do Base + 1 do Avançado.
 
 **Placar da régua: de 20 linhas aprovadas para 21** — e **22** com a assinatura do
 Doug, dada em 7/9/2026 (ver a pendência 1 acima, agora fechada).
+
+---
+
+## 20. As 3 que faltavam de "só ordem de lances" — e o Anti-London finalmente citado, 7/9/2026
+
+Fecha o grupo C. São as três linhas que o §18 deixou de fora porque **só parte**
+das âncoras cai em prosa da fonte. Nenhuma muda lance, então **nenhuma muda id**:
+o trabalho foi escrever o argumento, trocar a citação e — onde a fonte não fala —
+dizer isso em vez de inventar.
+
+| Linha | Quebra em | A fonte nova | Âncoras |
+|---|---|---|---:|
+| `pretas-londres-53d5b431` | `3…Cc6` (nosso) | **FM Viktor Neustroev, "Anti-London System"** (grátis), variantes *7.h3* e *7.Nbd2* | 3 |
+| `pretas-manhattan-3e9e876d` | `4…Cbd7` (nosso) | **Kushager, "1.d4 d5"**, *The Manhattan #1–#3* + **Sielecki, "QGD"** para o `4.Bg5` dele | 2 |
+| `pretas-siciliana-97331249` | `5.cxd4` (dele) | **Toth, "1.e4 for Club Players"** até o `4…cxd4` + **Sielecki, "Magnus Sicilian"** do `6…Cc6` ao `8.Bb5` | 4 |
+
+### O achado do bloco: a Londres estava citando o curso errado há dois blocos
+
+O `pretas-londres.pgn` dizia **"Livro + motor"** e explicava por quê: o *Short &
+Sweet* do Kushager tem **um** capítulo de Londres e ele começa por `2…Cf6`, não
+pelo `2…c5` que a §2.9 decidiu. A tag estava certa sobre o Kushager e **errada
+sobre o corpus** — o `anti-london` está lá desde a importação, e:
+
+| | `anti-london` | Kushager *S&S* |
+|---|---|---|
+| Variantes de Londres | **18** | 1 |
+| Resposta ao `2.Bf4` | `2…c5` em **todas as 18** | `2…Cf6` |
+| Plano | `…c5`, `…Cc6`, `…Db6` batendo em b2 | `…Ch5` caçando o bispo, `…Bd6` |
+| Cobre a nossa linha | sim, variantes **#7** e **#8** | não |
+
+A §4 já tinha escrito que o Anti-London é *"o melhor achado da revisão"* e a §5
+já marcava o **buraco 10 como ✅ com ele**. Faltava executar. Executado aqui: as
+variantes #7 e #8 são a nossa posição até o `8…O-O`, que é o último lance delas
+também. **O buraco 10 fecha de graça** — o curso é gratuito.
+
+O Doug perguntou no meio do bloco se valia adotar. A resposta medida foi sim, e
+adotar **não custou lance nenhum**: a fonte chega por `3…Cf6 4.Cf3 Cc6` e nós por
+`3…Cc6 4.Cf3 Cf6`; do `5.c3` em diante bate um a um.
+
+### Um erro de xadrez que estava em dois lugares, e a medida que o derruba
+
+O comentário do `4…Cf6` e o **cabeçalho do arquivo** diziam a mesma coisa:
+
+> *"o cavalo de b1 pularia para c3, defenderia b2 e ganharia um tempo em cima
+> dela"* · *"quem defende b2 é o cavalo indo a c3"*
+
+**`Cc3` não defende `b2`.** De c3 um cavalo alcança a2, b1, b5, d1, d5, e2 e e4 —
+b2 não está na lista. A conclusão do arquivo estava certa por acidente; o
+mecanismo, não. O que `5.Cc3` faz é **atacar d5**, que fica sem defensor nenhum
+no instante em que a dama sai de d8. Medido no Stockfish 18 lite-single de
+`public/engine/`, profundidade 20, em 7/9/2026:
+
+- `4…Db6? 5.Cc3!` → **brancas +1,40**, com a linha do motor `6.dxc5 Dxc5 7.Cb5
+  Bg4 8.Cc7+ Rd7 9.Cxa8` — o garfo em c7, não uma defesa de b2
+- `5…Dxb2 6.Cxd5!` → **brancas +3,79**
+
+E o texto novo fecha com a fonte em vez de contra ela: quando o **peão** dele
+ocupa c3, o cavalo perde a casa, d5 volta a estar em paz e **aí sim** b2 fica
+pendurado — que é exatamente por que o Neustroev escreve, nessa posição, que as
+brancas têm *"3 lances típicos para defender b2"*. A nossa linha vê o `6.Dc2`;
+os outros dois são `Dc1` e `Db3`.
+
+De quebra, o `…Cf6` deixou de ser lance de espera e virou lance com motivo: **o
+cavalo em f6 defende d5**, e com ele lá o `Cc3` não ganha peão nenhum.
+
+### O que cada linha ganhou de argumento
+
+- **Londres `8…O-O`** — o comentário repetia o do `4…Cf6`. Trocado pelo que a
+  fonte de fato ensina ali: por que `…g6` e não `…Bf5` (`7.dxc5!` ataca a dama,
+  tira-a de cima de b2 e o bispo de f5 fica de graça), por que o `h3` **dele**
+  existe (fecha g4 e abre h2 para o bispo fugir do `…Ch5`), e as duas escolhas
+  que ele tem depois do nosso roque.
+- **Manhattan `6…c5`** — ganhou os dois argumentos do Kushager: o bispo de b4
+  prega o cavalo de c3 **contra o rei**, e como é esse cavalo que batia em d5,
+  pregar é o mesmo que defender o peão; e o `…c5` é *o ponto da variante* — nas
+  outras linhas da Recusada as pretas arrumam a casa com o bispo de c8 preso, e
+  nesta se bate no centro na hora.
+- **Alapin `2…Cf6`** — trocado um erro pequeno por um argumento. O texto dizia
+  que depois de `3.e5` o peão fica *"sem nenhum peão vizinho para protegê-lo"*,
+  o que deixa de ser verdade um lance depois, no `4.d4`. O argumento das duas
+  fontes é melhor e não vence: o `2.c3` quer o par `e4`+`d4`, e o `…Cf6` ataca
+  e4 **antes** que ele exista, obrigando o peão a ir sozinho para a frente,
+  onde deixa de ser muralha e vira alvo.
+- **Alapin `5…d6`** — recebeu a observação do Sielecki, escrita por ele na
+  posição depois do nosso `6…Cc6`: sumiram **os dois peões de c**, então `c4`,
+  que é o lance normal para expulsar um cavalo de d5, não existe mais. Sobra
+  fazer isso com peça, e é o `7.Bc4` — que devolvemos com `…Cb6`, ganhando o
+  tempo de volta.
+
+### O `8…dxe5` da Alapin: decidido antes de escrever, e declarado
+
+Era o ponto duvidoso do bloco. A fonte **sai de novo** no último meio-lance, que
+é nosso e fecha a linha. A decisão foi **manter o lance** e declarar o
+comentário, porque a prosa que existe ali não é argumento para ele:
+
+> *"Black's main line is actually 8…dxe5, but the bishop move has gained some
+> momentum recently and was successfully employed by the World Champion… One key
+> advantage over 8…dxe5 is that Black retains more chances to play for a win."*
+
+Ou seja: o Sielecki **chama o nosso lance de linha principal das pretas** e mesmo
+assim escolhe `8…Bd7`, por um critério de campeão do mundo — jogar para ganhar —
+que não é o critério de um aluno de 12 a 15 anos. E o draft do Grigoryan dá o
+`8…dxe5` sem explicar lance nenhum. Então o argumento do comentário é **nosso**,
+está dito na tag com essas palavras, e fechá-lo na régua pede **uma de duas
+coisas**: o professor assinar o argumento, como fez com a Caro-Kann, ou um bloco
+futuro trocar o lance por `8…Bd7` — e aí a linha sai deste grupo e vira troca de
+cauda, com id novo.
+
+O comentário foi reescrito para ser **conferível** em vez de opinativo: depois de
+`9.Cxe5` os peões brancos são `a2 b2 d4 f2 g2 h2`, lidos da FEN da `chess.js`, e
+o `d4` é **isolado**. O plano do aluno vira um enunciado curto: bloquear d5 e
+cobrar d4.
+
+> O `pretas-siciliana-f9fa14c5` (Gambito Morra) termina na **mesma posição** por
+> transposição e tem o **mesmo** `8…dxe5`. Ele está no grupo "cauda de verdade" e
+> não foi tocado aqui — mas o que se decidir para um vale para os dois.
+
+### As tags `[Fonte]` de dois jogos foram partidas com `||`
+
+Como no bloco A (§15) e no §18 — e ao contrário da Caro-Kann (§19), onde cada
+jogo carregava uma linha só. Conferido antes de escrever, no compilado:
+
+- **Londres, jogo único** — carrega as **duas** linhas do arquivo. A metade do
+  `3.c3 Db6` segue em Livro + motor: o curso cobre o `3.c3` na variante *The
+  Solid 3.c3* e joga `3…Cc6` primeiro, não o `…Db6` de cara. É decisão de xadrez
+  do professor, e está no grupo "cauda de verdade" da §17.
+- **Manhattan, jogo do `4.Bg5`** — carrega a linha do `5.e3` e a **Armadilha do
+  Elefante**. Medido com o `repertorio:mapear`: do `4…Cbd7` até o fim, **nenhum**
+  curso do corpus acompanha a armadilha. Ela não é caso de trocar cauda — é ramo
+  que a fonte não cobre.
+- **Alapin** — **não** precisou: o jogo carrega uma linha só. O `(3…Ce4 $4)` é
+  folha marcada como erro e não vira linha compilada.
+
+### Uma citação que se recusou a esticar
+
+O Sielecki (*QGD*) explica o `4.Bg5` **das brancas**, e é por isso que ele entra
+na tag do Manhattan. Mas contra todo bispo cedo ele recomenda `4…dxc4`, e **não**
+o nosso `4…Cbd7`. A tag diz isso com todas as letras: dele vem a explicação do
+lance **dele**, não do nosso. O nosso é do Kushager.
+
+### O `2…c5` da Londres e o `4…Cbd7` do Manhattan ficaram como estavam
+
+Mesmo motivo do §18: são nós **compartilhados** com a outra linha do mesmo jogo,
+e os dois textos **já carregavam o argumento da fonte** — o `2…c5` diz o que o
+Kushager escreve sobre o `2.Bf4` ("ao contrário do `2.c4`, não disputa espaço no
+centro") e o `4…Cbd7` diz o que o Kushager escreve sobre o `…Cbd7` (sem o xeque
+`Da4+`, o cavalo não é empurrado para c6). Reescrever seria mexer em duas linhas
+para ganhar zero. A citação entrou; o texto ficou.
+
+### Verificação
+
+- `repertorio:compilar` → **41 linhas em 12 arquivos** (40 base, 1 avançado)
+- **41 ids antes, 41 depois, 0 alterados, 0 sumidos, 0 novos**
+- diff do compilado conferido campo a campo por id: mudaram **só** `fonte` e
+  `comentarios`, em 5 linhas — as 3 do bloco mais as 2 que dividem o mesmo jogo
+  PGN (`pretas-londres-1c8d69bc` e `pretas-manhattan-6ac84e24`, só `fonte`).
+  **Zero** mudança em `lances`, `sans`, `fen` ou `meus`
+- `repertorio:mapear`: corpus **igual** (11 cursos / 165 variantes / 2.434
+  comentários) e repertório **igual** — **41 linhas, 118 âncoras, 58 em prosa**.
+  Nenhuma âncora foi criada nem mudou de lugar
+- typecheck ✔ · lint ✔ · **585 testes, 585 passando** ✔ · `validate:content` ✔ ·
+  `compilar --check` sem diferença ✔ · `build` ✔
+
+**Placar da régua: de 22 linhas aprovadas para 24** — e **25** se o professor
+assinar o `8…dxe5` da Alapin. O grupo "só ordem de lances" está fechado.
+
+### O que sobra, e é tudo decisão de xadrez do professor
+
+1. As **6 de "cauda de verdade"** que são trabalho de verdade: `escocesa-fe195431`,
+   `siciliana-a6563193`, `siciliana-e6e1e081`, `siciliana-f9fa14c5`,
+   `londres-1c8d69bc`, `manhattan-6ac84e24`. Duas delas ganharam informação neste
+   bloco: a `londres-1c8d69bc` agora tem uma fonte que joga `3.c3 Cc6` em vez do
+   `…Db6` de cara, e a `siciliana-f9fa14c5` compartilha o `8…dxe5` acima.
+2. O **Colle** (`pretas-colle-f0590dc0`), única linha sem fonte alguma.
+3. O `8…dxe5` da Alapin — assinar ou trocar.
