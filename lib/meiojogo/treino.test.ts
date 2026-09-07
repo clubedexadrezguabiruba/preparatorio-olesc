@@ -6,7 +6,8 @@ import { fileURLToPath } from "node:url";
 import { Chess } from "chess.js";
 import { lancesDescritivos, lerPartida, normalizar } from "./descritiva.ts";
 import {
-  capitulosRepetidosNoTreino,
+  problemasEntreDicas,
+  semelhancaDePosicoes,
   problemasDoTreino,
   saldoDeMaterial,
   validarDicas,
@@ -311,35 +312,109 @@ test("a normalização tira anotação e conserta o sinal de captura do OCR", ()
  * O capítulo dividido entre dicas
  * ------------------------------------------------------------------ */
 
-test("nenhum capítulo do treino é dividido entre duas dicas", () => {
-  const problemas = capitulosRepetidosNoTreino(DICAS);
+test("nenhum par de posições de treino passa do teto de semelhança", () => {
+  const problemas = problemasEntreDicas(DICAS);
   assert.deepEqual(problemas, [], problemas.map((p) => `${p.onde}: ${p.mensagem}`).join(" | "));
 });
 
-test("adversarial: duas dicas com posição da mesma partida reprovam", () => {
-  // O defeito que eu quase publiquei nesta sessão: m9 e m10 saindo da mesma
-  // partida do Capablanca, a sete meios-lances de distância. Os dois passavam
-  // no teto por capítulo, que conta por dica e não enxerga a repetição.
+test("a semelhança é medida por peça na mesma casa, sobre a posição mais cheia", () => {
+  const a = "r1b2rk1/p3qppp/1p3n2/2pp4/P2P4/Q1PBPN2/5PPP/R3K2R w KQ - 0 14";
+  assert.equal(semelhancaDePosicoes(a, a), 1);
+  // Nada em comum: dois reis em casas diferentes.
+  assert.equal(semelhancaDePosicoes("4k3/8/8/8/8/8/8/4K3 w - - 0 1", "8/4k3/8/8/8/8/4K3/8 w - - 0 1"), 0);
+  // Metade em comum, e o denominador é a posição mais cheia.
+  const um = "4k3/8/8/8/8/8/P7/4K3 w - - 0 1";
+  const dois = "4k3/8/8/8/8/8/P1P5/4K3 w - - 0 1";
+  assert.equal(Math.round(semelhancaDePosicoes(um, dois) * 100), 75);
+});
+
+test("adversarial: duas posições quase iguais reprovam", () => {
+  // O defeito que eu quase publiquei na parada 3, agora medido em vez de
+  // adivinhado pela bibliografia: m9-d2-a e m10-d2-a saíam da mesma partida do
+  // Capablanca, a sete meios-lances de distância — 77% das peças nas mesmas
+  // casas. As duas passavam no teto por capítulo, que conta por dica.
   const m9 = DICAS.find((d) => d.id === "m9");
   const m10 = DICAS.find((d) => d.id === "m10");
   assert.ok(m9?.treino && m10?.treino);
   const copia = JSON.parse(JSON.stringify([m9, m10])) as Dica[];
-  copia[1].treino!.reconhecimento[0].provenance.capitulo =
-    copia[0].treino!.reconhecimento[0].provenance.capitulo;
-  copia[1].treino!.reconhecimento[0].provenance.editionFile =
-    copia[0].treino!.reconhecimento[0].provenance.editionFile;
-  const problemas = capitulosRepetidosNoTreino(copia);
-  assert.equal(problemas.length, 1, JSON.stringify(problemas));
-  assert.equal(problemas[0].codigo, "CAPITULO_DIVIDIDO_ENTRE_DICAS");
+  copia[1].treino!.reconhecimento[0].fen = copia[0].treino!.reconhecimento[0].fen;
+  const problemas = problemasEntreDicas(copia);
+  assert.ok(
+    problemas.some((p) => p.codigo === "POSICOES_QUASE_IGUAIS"),
+    JSON.stringify(problemas),
+  );
 });
 
-test("duas posições do mesmo capítulo **na mesma dica** continuam passando", () => {
-  // O teto por dica é 2, e ele continua valendo: o que a regra nova proíbe é
-  // dividir um capítulo entre dicas, não usá-lo duas vezes no mesmo conceito.
+test("adversarial: três posições de treino do mesmo capítulo reprovam", () => {
+  // O teto do módulo, e não o da dica: três dicas tirando uma posição cada da
+  // mesma partida esvaziam o capítulo sem estourar nenhum teto por dica.
+  const dicas = ["m9", "m10", "m12"].map((id) => {
+    const d = JSON.parse(JSON.stringify(DICAS.find((x) => x.id === id))) as Dica;
+    d.treino!.reconhecimento[0].provenance.editionFile = "capablanca-1921";
+    d.treino!.reconhecimento[0].provenance.capitulo = "Illustrative Games — Game 7";
+    return d;
+  });
+  const problemas = problemasEntreDicas(dicas);
+  assert.ok(
+    problemas.some((p) => p.codigo === "CAPITULO_DRENADO"),
+    JSON.stringify(problemas),
+  );
+});
+
+test("duas posições do mesmo capítulo, em dicas diferentes, passam se forem diferentes", () => {
+  // A regra nova permite o que a antiga proibia: mesma partida, tabuleiros
+  // distintos. É por isso que ela existe — o critério é o que o aluno vê.
   const m9 = DICAS.find((d) => d.id === "m9");
-  assert.ok(m9?.treino);
-  const copia = JSON.parse(JSON.stringify(m9)) as Dica;
-  copia.treino!.reconhecimento[1].provenance.capitulo =
-    copia.treino!.reconhecimento[0].provenance.capitulo;
-  assert.deepEqual(capitulosRepetidosNoTreino([copia]), []);
+  const m12 = DICAS.find((d) => d.id === "m12");
+  const copia = JSON.parse(JSON.stringify([m9, m12])) as Dica[];
+  const cap = "Illustrative Games — Game 7";
+  copia[0].treino!.reconhecimento[0].provenance.capitulo = cap;
+  copia[1].treino!.reconhecimento[0].provenance.capitulo = cap;
+  copia[0].treino!.reconhecimento[0].provenance.editionFile = "capablanca-1921";
+  copia[1].treino!.reconhecimento[0].provenance.editionFile = "capablanca-1921";
+  assert.deepEqual(problemasEntreDicas(copia), []);
+});
+
+/* ------------------------------------------------------------------ *
+ * O corte da §5, declarado
+ * ------------------------------------------------------------------ */
+
+test("adversarial: guiada de partida real sem exceção escrita reprova", () => {
+  const dica = m12Sadio();
+  const item = dica.treino!.reconhecimento[0];
+  item.provenance.capitulo = null;
+  item.provenance.originalGame = "lichess.org/training/xxxxx";
+  item.provenance.editionFile = "lichess-open-database";
+  assert.ok(codigos(dica).includes("GUIADA_SEM_CAPITULO"), codigos(dica).join(","));
+});
+
+test("a guiada de partida real passa quando a exceção está escrita", () => {
+  // O corte que a §5 prevê — "cai uma das duas posições guiadas antes de cair a
+  // independente" — existe para o conceito cujo acervo não tem dois diagramas.
+  // Ele é permitido; o que não é permitido é ele acontecer calado.
+  const dica = m12Sadio();
+  const item = dica.treino!.reconhecimento[0];
+  item.provenance.capitulo = null;
+  item.provenance.originalGame = "lichess.org/training/xxxxx";
+  item.provenance.editionFile = "lichess-open-database";
+  item.excecaoDeFonte =
+    "O acervo não tem um segundo diagrama deste conceito em obra diferente da do exemplo, e a §5 manda cortar a guiada antes da independente.";
+  assert.deepEqual(codigos(dica), []);
+});
+
+test("adversarial: exceção declarada numa posição que veio de livro reprova", () => {
+  const dica = m12Sadio();
+  dica.treino!.reconhecimento[0].excecaoDeFonte =
+    "Uma justificativa longa o bastante para o esquema aceitar, e sem motivo nenhum para existir.";
+  assert.ok(codigos(dica).includes("EXCECAO_SEM_EXCECAO"), codigos(dica).join(","));
+});
+
+test("adversarial: exceção declarada no degrau 3 reprova", () => {
+  // No degrau 3 partida real é a regra, e não a exceção — declarar uma ali é
+  // sinal de que quem escreveu não entendeu qual dos dois degraus estava
+  // preenchendo.
+  const dica = m12Sadio();
+  dica.treino!.reconhecimento[2].excecaoDeFonte =
+    "Uma justificativa longa o bastante para o esquema aceitar, no degrau errado.";
+  assert.ok(codigos(dica).includes("EXCECAO_NO_DEGRAU_3"), codigos(dica).join(","));
 });

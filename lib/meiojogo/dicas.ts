@@ -318,6 +318,22 @@ export const ItemDeReconhecimentoSchema = z
      * procurando por que um dos lados está com uma torre a mais.
      */
     material: z.string().min(10).nullable().default(null),
+    /**
+     * Por que este item do degrau 2 vem de partida real, e não de livro — ou
+     * `null`, que é o caso normal.
+     *
+     * A §3.2 manda a guiada sair de livro, porque o diagrama que o autor
+     * escolheu tem o traço **encenado**, e encenado é o certo enquanto há
+     * apoio. Só que o estoque de livro não é infinito nem uniforme: um
+     * conceito pode não ter dois diagramas no acervo, e a §5 já previu o corte
+     * — "cai uma das duas posições guiadas antes de cair a independente".
+     *
+     * Este campo é esse corte, **declarado**. O gate exige que ele exista
+     * quando um item do degrau 2 não tem capítulo, e proíbe que exista quando
+     * tem: a exceção fica no arquivo, contada no número do bloco, em vez de
+     * virar uma regra que silenciosamente deixou de valer.
+     */
+    excecaoDeFonte: z.string().min(40).nullable().default(null),
     apoio: ApoioSchema,
     curadoria: CuradoriaSchema,
     provenance: ProvenienciaSchema,
@@ -610,44 +626,128 @@ export function saldoDeMaterial(fen: string): number {
 }
 
 /**
- * As posições de treino que dividem capítulo entre dicas diferentes.
+ * O teto de semelhança entre duas posições de treino, e de onde ele saiu.
  *
- * O teto de citação é **por dica**, e por isso não vê isto: duas posições da
- * mesma partida do Capablanca, uma em m9 e outra em m10, passam nos dois tetos
- * e chegam ao aluno como quase o mesmo tabuleiro em duas semanas seguidas.
- * Aconteceu nesta sessão — Fig145 e Fig147 são a mesma partida a sete
- * meios-lances de distância —, e foi pego a olho. Passa a ser pego aqui.
+ * Duas posições da mesma partida, a poucos lances de distância, chegam ao aluno
+ * como quase o mesmo tabuleiro. Ele responde a segunda pela memória da
+ * primeira, o registro conta isso como reconhecimento, e o relatório chama de
+ * transferência o que foi lembrança.
  *
- * O risco é o pior tipo: o aluno responde o segundo item pela memória da tela
- * do primeiro, o registro conta isso como reconhecimento, e o relatório afirma
- * transferência onde houve lembrança. É o mesmo raciocínio do achado do Bloco 2
- * sobre as cinco posições do §22 do Capablanca, agora com gate.
+ * A primeira versão desta regra proibia **capítulo repetido entre dicas**, que
+ * é um proxy — e proxy erra dos dois lados. Duas posições da mesma partida a
+ * vinte lances de distância são tabuleiros diferentes; duas posições de
+ * partidas diferentes poderiam, em tese, cair parecidas. O que importa é a
+ * semelhança, e ela se mede.
+ *
+ * **Medido nesta sessão**, sobre pares reais do acervo — peças na mesma casa,
+ * sobre a posição mais cheia das duas:
+ *
+ * | par | distância | semelhança |
+ * |---|---|---:|
+ * | Fig112 × Fig113 | 2 meios-lances | 92% |
+ * | Fig149 × Fig150 | 4 meios-lances | 78% |
+ * | **Fig145 × Fig147** | 7 meios-lances | **77%** |
+ * | Fig106 × Fig107 | 10 meios-lances | 71% |
+ * | Fig124 × Fig125 | 22 meios-lances | 48% |
+ * | Fig148 × Fig149 | 6 meios-lances | 47% |
+ * | partidas diferentes | — | 8% a 42% |
+ *
+ * O par em negrito é o que eu escolhi sem ver e recusei a olho na parada 3. O
+ * corte em 70% pega ele e os três acima dele, e deixa passar as posições da
+ * mesma partida em que de fato houve trocas — que é o critério certo, porque é
+ * o tabuleiro que o aluno vê, e não a bibliografia.
  */
-export function capitulosRepetidosNoTreino(
+export const SEMELHANCA_MAXIMA = 0.7;
+
+/** A fração de peças que duas posições têm na mesma casa, sobre a mais cheia. */
+export function semelhancaDePosicoes(fenA: string, fenB: string): number {
+  const mapa = (fen: string): Map<string, string> => {
+    const casas = new Map<string, string>();
+    for (const [i, linha] of fen.split(" ")[0].split("/").entries()) {
+      let coluna = 0;
+      for (const letra of linha) {
+        if (/[1-8]/.test(letra)) {
+          coluna += Number(letra);
+          continue;
+        }
+        casas.set(`${String.fromCharCode(97 + coluna)}${8 - i}`, letra);
+        coluna += 1;
+      }
+    }
+    return casas;
+  };
+  const a = mapa(fenA);
+  const b = mapa(fenB);
+  const maior = Math.max(a.size, b.size);
+  if (maior === 0) return 1;
+  let iguais = 0;
+  for (const [casa, peca] of a) if (b.get(casa) === peca) iguais += 1;
+  return iguais / maior;
+}
+
+/**
+ * Os pares de posições de treino perto demais um do outro, no módulo inteiro —
+ * e os capítulos drenados além do teto.
+ *
+ * As duas conferências moram juntas porque atravessam dicas, e
+ * `problemasDoTreino` só enxerga uma dica por vez. A segunda é a §3.1 aplicada
+ * onde a preocupação dela de fato vive: "esvaziar os diagramas de um capítulo é
+ * reproduzir a curadoria do autor" fala do **capítulo**, e não da dica. O teto
+ * por dica deixava três dicas tirarem duas posições cada da mesma partida, o
+ * que drena seis diagramas de uma partida só sem nenhum aviso.
+ */
+export function problemasEntreDicas(
   dicas: readonly Dica[],
 ): { codigo: string; onde: string; mensagem: string }[] {
-  const porCapitulo = new Map<string, { dica: string; item: string }[]>();
+  const itens: { dica: string; id: string; fen: string; capitulo: string | null }[] = [];
   for (const dica of dicas) {
     for (const item of [...(dica.treino?.reconhecimento ?? []), ...(dica.treino?.reservas ?? [])]) {
-      const capitulo = item.provenance.capitulo;
-      if (capitulo === null) continue;
-      const chave = `${item.provenance.editionFile} · ${capitulo}`;
-      porCapitulo.set(chave, [...(porCapitulo.get(chave) ?? []), { dica: dica.id, item: item.id }]);
+      itens.push({
+        dica: dica.id,
+        id: item.id,
+        fen: item.fen,
+        capitulo:
+          item.provenance.capitulo === null
+            ? null
+            : `${item.provenance.editionFile} · ${item.provenance.capitulo}`,
+      });
     }
   }
+
   const problemas: { codigo: string; onde: string; mensagem: string }[] = [];
-  for (const [chave, usos] of porCapitulo) {
-    const dicasDistintas = new Set(usos.map((u) => u.dica));
-    if (dicasDistintas.size < 2) continue;
+
+  for (let i = 0; i < itens.length; i += 1) {
+    for (let k = i + 1; k < itens.length; k += 1) {
+      const quanto = semelhancaDePosicoes(itens[i].fen, itens[k].fen);
+      if (quanto < SEMELHANCA_MAXIMA) continue;
+      problemas.push({
+        codigo: "POSICOES_QUASE_IGUAIS",
+        onde: `${itens[i].id} × ${itens[k].id}`,
+        mensagem:
+          `as duas posições têm ${Math.round(quanto * 100)}% das peças nas mesmas casas, e o ` +
+          `teto é ${Math.round(SEMELHANCA_MAXIMA * 100)}% — o aluno responde a segunda pela ` +
+          `memória da primeira, e o registro chama isso de reconhecimento`,
+      });
+    }
+  }
+
+  const porCapitulo = new Map<string, string[]>();
+  for (const item of itens) {
+    if (item.capitulo === null) continue;
+    porCapitulo.set(item.capitulo, [...(porCapitulo.get(item.capitulo) ?? []), item.id]);
+  }
+  for (const [capitulo, usos] of porCapitulo) {
+    if (usos.length <= CAPITULO_CAP) continue;
     problemas.push({
-      codigo: "CAPITULO_DIVIDIDO_ENTRE_DICAS",
-      onde: chave,
+      codigo: "CAPITULO_DRENADO",
+      onde: capitulo,
       mensagem:
-        `os itens ${usos.map((u) => u.item).join(", ")} saem do mesmo capítulo em dicas ` +
-        `diferentes — duas posições da mesma partida chegam ao aluno como quase o mesmo ` +
-        `tabuleiro, e ele responde a segunda pela memória da primeira`,
+        `${usos.length} posições de treino saem deste capítulo (${usos.join(", ")}) e o teto do ` +
+        `módulo é ${CAPITULO_CAP} — esvaziar um capítulo é reproduzir a seleção do autor, que é ` +
+        `a camada protegida (§3.1)`,
     });
   }
+
   return problemas;
 }
 
@@ -790,8 +890,19 @@ export function problemasDoTreino(dica: Dica): { codigo: string; mensagem: strin
 
     const p = item.provenance;
     if (item.degrau === 2) {
-      if (p.capitulo === null) {
-        erro("GUIADA_SEM_CAPITULO", `${onde} é do degrau 2 e não diz de que capítulo saiu`);
+      if (p.capitulo === null && item.excecaoDeFonte === null) {
+        erro(
+          "GUIADA_SEM_CAPITULO",
+          `${onde} é do degrau 2 e não sai de livro — o corte da §5 é permitido, mas tem de ` +
+            `estar escrito em "excecaoDeFonte", com o motivo`,
+        );
+      }
+      if (p.capitulo !== null && item.excecaoDeFonte !== null) {
+        erro(
+          "EXCECAO_SEM_EXCECAO",
+          `${onde} sai de livro e mesmo assim declara uma exceção de fonte — a exceção existe ` +
+            `para o caso em que o livro faltou`,
+        );
       }
       if (obraDoExemplo !== undefined && mesmaObra(p.editionFile, obraDoExemplo)) {
         erro(
@@ -800,6 +911,11 @@ export function problemasDoTreino(dica: Dica): { codigo: string; mensagem: strin
             `diferente, e esvaziar um autor é copiar a seleção dele`,
         );
       }
+    } else if (item.excecaoDeFonte !== null) {
+      erro(
+        "EXCECAO_NO_DEGRAU_3",
+        `${onde} é do degrau 3, onde partida real é a regra — não há exceção a declarar`,
+      );
     } else if (p.originalGame === null) {
       erro(
         "INDEPENDENTE_SEM_PARTIDA",

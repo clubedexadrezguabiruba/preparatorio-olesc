@@ -742,7 +742,8 @@
             "capitulo": "Illustrative Games — Game 2, Rubinstein–Capablanca, San Sebastián 1911",
             "originalGame": "Rubinstein–Capablanca, San Sebastián 1911",
             "fenMethod": "Reconstruída pelos 28 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — d4 d5 Nf3 c5 c4 e6 cxd5 exd5 Nc3 Nc6 g3 Be6 Bg2 Be7 O-O Rc8 dxc5 Bxc5 Ng5 Nf6 Nxe6 fxe6 Bh3 Qe7 Bg5 O-O Bxf6 Qxf6. Todo lance é legal por construção, e a troca cxd5 exd5 do quarto lance é o que abriu a coluna. A página 165 do exemplar de 1921 (PDF 183) foi lida em texto e traz o cabeçalho \"QUEEN'S GAMBIT DECLINED 165\" e o lance \"14. BxKt QxB\", que é o último desta linha."
-          }
+          },
+          "excecaoDeFonte": null
         },
         {
           "id": "m9-d2-b",
@@ -787,7 +788,8 @@
             "capitulo": "Illustrative Games — Game 13, Morrison–Capablanca, Nova York 1918",
             "originalGame": "Morrison–Capablanca, Nova York 1918",
             "fenMethod": "Reconstruída pelos 44 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — e4 e5 Nf3 Nc6 Bb5 d6 Nc3 Bd7 d4 exd4 Nxd4 g6 Nf3 Bg7 Bg5 Nf6 Qd2 h6 Bh4 O-O O-O-O Re8 Rhe1 g5 Bg3 Nh5 Nd5 a6 Bd3 Be6 c3 f5 h4 f4 hxg5 hxg5 Rh1 Bf7 Kb1 Ne5 Nxe5 Rxe5 Bh2 Nf6. A troca hxg5 hxg5 é o lance que abriu a coluna, e ela está na própria linha impressa. A página 236 do exemplar de 1921 (PDF 254) foi lida em texto e traz \"236 GAME 13\" com o comentário sobre a torre."
-          }
+          },
+          "excecaoDeFonte": null
         },
         {
           "id": "m9-d3-a",
@@ -833,7 +835,8 @@
             "capitulo": null,
             "originalGame": "lichess.org/training/45LOl",
             "fenMethod": "A FEN guardada no recorte é a posição antes do erro do adversário; esta é a do fim da linha, obtida jogando os lances do puzzle na chess.js (scripts/escolher-exercicios.ts). Passou pela porta 1 — sem xeque, sem mate em 1 e sem peça de cavalo ou mais pendurada — e pela porta 2, com Stockfish 18 na profundidade 12 medindo 15 centésimos entre a melhor linha e a segunda. A resposta única foi conferida por respostaDaTarefa, o mesmo juiz que vai julgar o clique."
-          }
+          },
+          "excecaoDeFonte": null
         }
       ],
       "aplicacao": {
@@ -957,44 +960,45 @@
         {
           "id": "m10-d2-a",
           "degrau": 2,
-          "fen": "r2r2k1/pb1nqppp/1pp1p3/8/2BPP3/2Q2N2/PP3PPP/2R1R1K1 w - - 3 15",
+          "fen": "r5k1/pp1q1ppp/2p5/2bp1P2/4Q3/2P5/PP1R2PP/2K1R3 w - - 0 25",
           "lado": "brancas",
           "tarefa": "peao-na-semiaberta",
           "resposta": [
-            "c6"
+            "d5"
           ],
-          "legenda": "Marshall contra Capablanca, Nova York 1918. Jogam as brancas; as pretas têm sete peões no tabuleiro.",
-          "material": null,
+          "legenda": "Mieses contra Capablanca, Berlim 1913. Jogam as brancas; as pretas têm sete peões no tabuleiro.",
+          "material": "As brancas têm uma torre a mais, e um bispo e um peão a menos.",
+          "excecaoDeFonte": null,
           "apoio": {
             "convite": "Ache primeiro a coluna em que as brancas não têm peão nenhum e as pretas têm. O peão preto que estiver nela é a resposta.",
             "modo": "contem",
             "realce": [
               "a7",
-              "b6",
+              "b7",
               "c6",
-              "e6",
+              "d5",
               "f7",
               "g7",
               "h7"
             ],
-            "solucao": "Os sete peões pretos estão acesos. As brancas têm peão em a, b, d, e, f, g e h — falta só uma coluna, e é nela que está o peão preto que nenhuma torre branca precisa contornar para enxergar."
+            "solucao": "Os sete peões pretos estão acesos. As brancas têm peão em a, b, c, f, g e h; falta uma coluna, e o peão preto parado nela é o alvo. Repare que ele já está defendido por um peão preto vizinho — e é exatamente por isso que a torre branca que aponta para ele ainda não pode capturá-lo."
           },
           "curadoria": {
-            "perceptivel": "A torre branca já está no pé da coluna, o que dá o segundo sinal a quem não achou pelo primeiro. E o peão alvo está encostado em outros dois peões pretos, o que impede a leitura fácil de 'o alvo é o peão que está sozinho' — que é confusão com o conceito da m12.",
+            "perceptivel": "A torre branca já está no pé da coluna, apontada para o alvo, o que dá o segundo sinal a quem não achou pelo primeiro. E o alvo está defendido por outro peão preto — a imagem exata do que a dica ensina, que é a torre sozinha na frente do peão não bastar.",
             "portas": {
               "porta1": "passou",
               "profundidade": 12,
-              "salto": 0
+              "salto": 15
             },
-            "adequacao": "Vinte e seis peças e material igual, com as duas estruturas inteiras à vista. O salto de 0 centésimo entre as duas melhores linhas diz que a posição não tem lance urgente escondido competindo com a pergunta."
+            "adequacao": "Vinte e uma peças, com as damas ainda em jogo. O desequilíbrio de material está declarado, e ele é atípico — torre contra bispo e peão —, o que impede a leitura de que o alvo aparece só quando se está ganhando."
           },
           "provenance": {
-            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 14 (Marshall–Capablanca, Nova York 1918), diagrama impresso na p. 239, depois do 14º lance das pretas.",
-            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 239 — Marshall–Capablanca",
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 8 (Mieses–Capablanca, Berlim 1913), diagrama impresso na p. 205, depois do 24º lance das pretas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 205 — Mieses–Capablanca",
             "editionFile": "capablanca-1921",
-            "capitulo": "Illustrative Games — Game 14, Marshall–Capablanca, Nova York 1918",
-            "originalGame": "Marshall–Capablanca, Nova York 1918",
-            "fenMethod": "Reconstruída pelos 28 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — d4 d5 Nf3 Nf6 c4 e6 Nc3 Nbd7 Bg5 Be7 e3 O-O Rc1 c6 Qc2 dxc4 Bxc4 Nd5 Bxe7 Qxe7 O-O Nxc3 Qxc3 b6 e4 Bb7 Rfe1 Rfd8. Todo lance é legal por construção. A página 239 do exemplar de 1921 (PDF 257) foi lida em texto e traz o cabeçalho \"QUEEN'S GAMBIT DECLINED 239\"."
+            "capitulo": "Illustrative Games — Game 8, Mieses–Capablanca, Berlim 1913",
+            "originalGame": "Mieses–Capablanca, Berlim 1913",
+            "fenMethod": "Reconstruída pelos 48 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — e4 e5 d4 exd4 Qxd4 Nc6 Qe3 Nf6 Nc3 Bb4 Bd2 O-O O-O-O Re8 Qg3 Nxe4 Nxe4 Rxe4 Bf4 Qf6 Nh3 d6 Bd3 Nd4 Be3 Bg4 Ng5 Rxe3 Qxg4 Ne2+ Bxe2 Rxe2 Ne4 Rxe4 Qxe4 Qg5+ f4 Qb5 c3 Bc5 Rhe1 Qc6 Rd5 Qd7 f5 c6 Rd2 d5. Todo lance é legal por construção, e o último, d5, é o que pôs o peão na coluna semiaberta. A paginação foi conferida pelos vizinhos: o PDF 222 traz \"204 GAME 8\" e o PDF 224 traz \"2o6 GAME 8\", o que fixa o PDF 223 na página impressa 205 — a extração em texto dessa página devolve só \"??\", porque ela é quase toda diagrama."
           }
         },
         {
@@ -1038,7 +1042,8 @@
             "capitulo": "Illustrative Games — Game 11, Capablanca–Janowski, São Petersburgo 1914",
             "originalGame": "Capablanca–Janowski, São Petersburgo 1914",
             "fenMethod": "Reconstruída pelos 35 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 Nc3 Bc5 d3 Bg4 Be3 Bxe3 fxe3 Qe7 O-O O-O-O Qe1 Nh6 Rb1 f6 b4 Nf7 a4 Bxf3 Rxf3 b6 b5 cxb5 axb5 a5 Nd5 Qc5 c4. Todo lance é legal por construção, e a troca b5 cxb5 axb5 é o que limpou a coluna do aluno. A página 223 do exemplar de 1921 (PDF 241) foi lida em texto e traz \"RUY LOPEZ 223\" com o lance 14 desta partida."
-          }
+          },
+          "excecaoDeFonte": null
         },
         {
           "id": "m10-d3-a",
@@ -1080,7 +1085,8 @@
             "capitulo": null,
             "originalGame": "lichess.org/training/0UQkF",
             "fenMethod": "A FEN guardada no recorte é a posição antes do erro do adversário; esta é a do fim da linha, obtida jogando os lances do puzzle na chess.js (scripts/escolher-exercicios.ts). Passou pela porta 1 — sem xeque, sem mate em 1 e sem peça de cavalo ou mais pendurada — e pela porta 2, com Stockfish 18 na profundidade 12 medindo 2 centésimos entre a melhor linha e a segunda. A resposta única foi conferida por respostaDaTarefa, o mesmo juiz que vai julgar o clique."
-          }
+          },
+          "excecaoDeFonte": null
         }
       ],
       "aplicacao": {
@@ -1179,6 +1185,175 @@
       "titulo": "Avançar o rei ou o peão??? Conceito importante! - 100 finais #2 — GM Krikor",
       "ressalva": "Este vídeo é de finais de torre, não de meio-jogo: ele mostra a torre na sétima fileira, que é o assunto da dica, mas com poucas peças no tabuleiro. Assista pensando na fileira, não no final.",
       "url": "https://www.youtube.com/watch?v=W_F8YDO1VBE"
+    },
+    "treino": {
+      "ficha": {
+        "objetivo": "Achar, sozinho, a torre sua que chegou à fileira onde moram os peões do adversário — e, antes de capturar qualquer um deles, contar quem ataca e quem defende.",
+        "prerequisitos": [
+          "Saber contar atacantes e defensores de uma casa.",
+          "Saber que capturar peça defendida é legal, e que o que muda é o preço.",
+          "Ter lido a dica anterior sobre coluna aberta, que é por onde a torre chega lá."
+        ],
+        "vocabulario": [
+          {
+            "termo": "sétima fileira",
+            "significa": "a fileira onde os peões do adversário começam a partida — a 7 quando você é das brancas, a 2 quando é das pretas. Ela tem nome porque é contada do seu lado."
+          },
+          {
+            "termo": "atacar não é ganhar",
+            "significa": "a torre pode estar mirando um peão e ainda assim não valer a pena capturá-lo, porque a recaptura custa mais do que o peão vale."
+          }
+        ],
+        "erroMaisProvavel": {
+          "qual": "tocar numa torre que está na fileira 7 do tabuleiro sem reparar em de quem é a fileira — para as pretas, a fileira dos peões brancos é a 2.",
+          "feedback": "A sétima é contada do seu lado. Jogando de pretas, a fileira onde moram os peões brancos é a de baixo, a 2 — e é lá que a sua torre precisa chegar. O nome vem da conta, não do número impresso no tabuleiro."
+        },
+        "limitesDaEvidencia": "O acerto prova que o aluno acha a torre na fileira dos peões do adversário. Não prova que ele faria a conta de atacantes e defensores antes de capturar — que é a metade da dica que mais importa —, nem que ele saberia como levar a torre até lá."
+      },
+      "reconhecimento": [
+        {
+          "id": "m11-d2-a",
+          "degrau": 2,
+          "fen": "4r1k1/pb3p1p/1pN5/4P1p1/8/2R5/PP1r1PPP/1R4K1 w - - 0 23",
+          "lado": "pretas",
+          "tarefa": "torre-na-setima",
+          "resposta": [
+            "d2"
+          ],
+          "legenda": "Marshall contra Capablanca, Nova York 1918. As damas já saíram; jogam as brancas, e as pretas têm duas torres no tabuleiro.",
+          "material": "As brancas têm um peão a mais — seis contra cinco.",
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "Você está jogando de pretas. Ache primeiro a fileira onde moram os peões brancos, e depois veja qual peça sua já está nela.",
+            "modo": "contorno",
+            "realce": [
+              "a2",
+              "b2",
+              "f2",
+              "g2",
+              "h2"
+            ],
+            "solucao": "Acendemos os cinco peões brancos que ainda estão na fileira onde nasceram — essa é a sétima das pretas. Uma torre preta já está nessa mesma fileira, entre eles, e é nela que você toca."
+          },
+          "curadoria": {
+            "perceptivel": "Os cinco peões brancos acesos desenham a fileira inteira, e a torre preta está no meio deles, com casa vazia de cada lado. A outra torre preta está longe, na oitava fileira, o que dá ao item uma escolha real entre duas peças do mesmo tipo.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 13
+            },
+            "adequacao": "Dezenove peças, sem damas: é o estágio em que a torre na sétima de fato aparece, e é mais cheio que o diagrama do próprio exemplo desta dica, que tem treze. O peão a mais das brancas está declarado."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 14 (Marshall–Capablanca, Nova York 1918), diagrama impresso na p. 243, depois do 22º lance das pretas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 243 — Marshall–Capablanca",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 14, Marshall–Capablanca, Nova York 1918",
+            "originalGame": "Marshall–Capablanca, Nova York 1918",
+            "fenMethod": "Reconstruída pelos 44 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — d4 d5 Nf3 Nf6 c4 e6 Nc3 Nbd7 Bg5 Be7 e3 O-O Rc1 c6 Qc2 dxc4 Bxc4 Nd5 Bxe7 Qxe7 O-O Nxc3 Qxc3 b6 e4 Bb7 Rfe1 Rfd8 d5 Nc5 dxe6 Nxe6 Bxe6 Qxe6 Nd4 Qe5 Nxc6 Qxc3 Rxc3 Rd2 Rb1 Re8 e5 g5. Todo lance é legal por construção, e o lance Rd2 da própria linha é o que pôs a torre na sétima. A página 243 do exemplar de 1921 (PDF 261) foi lida em texto e traz o cabeçalho \"QUEEN'S GAMBIT DECLINED\" com o comentário sobre o 22º lance."
+          }
+        },
+        {
+          "id": "m11-d2-b",
+          "degrau": 2,
+          "fen": "8/pb3pkp/2N3r1/1p2P3/1P5p/P1R5/r4PP1/2R2K2 w - - 3 29",
+          "lado": "pretas",
+          "tarefa": "torre-na-setima",
+          "resposta": [
+            "a2"
+          ],
+          "legenda": "A mesma partida, seis lances adiante: Marshall contra Capablanca, Nova York 1918. Jogam as brancas.",
+          "material": null,
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "De novo de pretas. Sobraram poucos peões brancos na fileira onde eles nasceram — ache-a, e veja qual das suas duas torres está nela.",
+            "modo": "contorno",
+            "realce": [
+              "f2",
+              "g2"
+            ],
+            "solucao": "Só dois peões brancos continuam na fileira onde nasceram, e são eles que a marcam. Uma torre preta está nessa fileira, encostada na borda; a outra está no meio do tabuleiro, e não conta."
+          },
+          "curadoria": {
+            "perceptivel": "É o item mais difícil dos três de propósito, e por um motivo declarado: só dois peões brancos sobraram para desenhar a fileira, e a torre preta está no canto, longe deles. Quem achou a primeira pela imagem dos peões enfileirados tem de achar esta pela conta.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 46
+            },
+            "adequacao": "Dezoito peças e material igual. É a mesma partida do item anterior, seis lances depois, e as duas posições têm 47% das peças nas mesmas casas — abaixo do teto de 70%, porque no meio houve troca de torres, avanço dos peões da ala da dama e a ida do rei preto para g7. O aluno não responde a segunda pela memória da primeira."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 14 (Marshall–Capablanca, Nova York 1918), diagrama impresso na p. 244, depois do 28º lance das pretas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 244 — Marshall–Capablanca",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 14, Marshall–Capablanca, Nova York 1918",
+            "originalGame": "Marshall–Capablanca, Nova York 1918",
+            "fenMethod": "Reconstruída pelos 56 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — os 44 do item anterior mais h4 gxh4 Re1 Re6 Rec1 Kg7 b4 b5 a3 Rg6 Kf1 Ra2. Todo lance é legal por construção. A página 244 do exemplar de 1921 (PDF 262) foi lida em texto e traz \"244 GAME 14\"."
+          }
+        },
+        {
+          "id": "m11-d3-a",
+          "degrau": 3,
+          "fen": "r4rk1/pppR1ppp/1b3q2/8/2Q5/2N5/PPP3PP/2K2B1R b - - 0 14",
+          "lado": "brancas",
+          "tarefa": "torre-na-setima",
+          "resposta": [
+            "d7"
+          ],
+          "legenda": "Partida de dois jogadores comuns, sem anotação e sem diagrama. Jogam as pretas, e agora você está do lado das brancas.",
+          "material": "As brancas têm um cavalo a mais e um peão a menos.",
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "Agora você é das brancas, e a fileira que interessa é a de cima. Ache a fileira onde moram os peões pretos e veja qual peça sua já chegou nela.",
+            "modo": "contorno",
+            "realce": [
+              "a7",
+              "b7",
+              "c7",
+              "f7",
+              "g7",
+              "h7"
+            ],
+            "solucao": "Os seis peões pretos continuam na fileira onde nasceram, e são eles que a marcam. Uma torre branca já está no meio dessa fileira — e de lá ela olha para dois desses peões ao mesmo tempo, um de cada lado."
+          },
+          "curadoria": {
+            "perceptivel": "Os seis peões pretos acesos formam uma linha contínua com um buraco no meio, e a torre branca está exatamente no buraco. O item inverte a cor em relação aos dois anteriores, o que testa se o aluno entendeu que a sétima é contada do lado de quem joga — que é o erro que a ficha prevê.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 1
+            },
+            "adequacao": "Vinte e duas peças com as damas ainda no tabuleiro, e um salto de 1 centésimo entre as duas melhores linhas: nada urgente competindo. O desequilíbrio de material está declarado, e a posição é bem mais cheia que as duas de livro — que é o certo para o degrau em que ninguém arruma nada."
+          },
+          "provenance": {
+            "bibliographicSource": "Recorte CC0 da base aberta do Lichess, puzzle 031pC (lichess.org/training/031pC): posição ao fim da linha tática do puzzle, quando a combinação já acabou. Os jogadores não são identificados no recorte.",
+            "citacaoCurta": "Lichess, puzzle 031pC — posição ao fim da linha",
+            "editionFile": "lichess-open-database",
+            "capitulo": null,
+            "originalGame": "lichess.org/training/031pC",
+            "fenMethod": "A FEN guardada no recorte é a posição antes do erro do adversário; esta é a do fim da linha, obtida jogando os lances do puzzle na chess.js (scripts/escolher-exercicios.ts). Passou pela porta 1 — sem xeque, sem mate em 1 e sem peça de cavalo ou mais pendurada — e pela porta 2, com Stockfish 18 na profundidade 12 medindo 1 centésimo entre a melhor linha e a segunda. A resposta única foi conferida por respostaDaTarefa, o mesmo juiz que vai julgar o clique."
+          }
+        }
+      ],
+      "aplicacao": {
+        "id": "m11-d4",
+        "usa": "m11-d3-a",
+        "pergunta": "A torre branca de d7 ataca dois peões pretos pela sétima fileira. Tomar em c7 ganha um peão?",
+        "opcoes": [
+          {
+            "texto": "Não: o bispo preto de b6 defende c7, e depois de Txc7 Bxc7 as brancas trocaram uma torre por um peão.",
+            "certa": true,
+            "porque": "Capturar peça defendida nunca é ilegal — é caro. A conta aqui é um atacante e um defensor, e a torre vale muito mais que o peão. Parada onde está, a torre olha c7 e f7 ao mesmo tempo e prende as peças pretas à defesa; capturando, ela vira um peão e some do tabuleiro."
+          },
+          {
+            "texto": "Sim: na sétima fileira a torre come o peão que quiser, porque peão não pode fugir.",
+            "certa": false,
+            "porque": "Peão não foge mesmo, e é por isso que ele é alvo — mas alvo defendido continua defendido. A sétima fileira dá o endereço; quem dá a resposta é a conta de quem ataca e quem defende, e neste caso ela empata. É exatamente a conta que a dica manda fazer antes de capturar."
+          }
+        ]
+      },
+      "reservas": []
     }
   },
   {
@@ -1316,7 +1491,8 @@
             "capitulo": "Illustrative Games — Game 9, Capablanca–Teichmann, Berlim 1913",
             "originalGame": "Capablanca–Teichmann, Berlim 1913",
             "fenMethod": "Reconstruída, e não transcrita: os 38 meios-lances impressos foram convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — d4 d5 Nf3 Nf6 c4 e6 Bg5 Be7 Nc3 Nbd7 e3 O-O Rc1 b6 cxd5 exd5 Bb5 Bb7 O-O a6 Ba4 Rc8 Qe2 c5 dxc5 Nxc5 Rfd1 Nxa4 Nxa4 b5 Rxc8 Qxc8 Nc3 Qc4 Nd4 Qxe2 Ncxe2 Rc8. Cada lance é legal por construção, o que fecha o buraco de uma leitura de imagem: erro de leitura vira lance ilegal, e não FEN plausível e errada. A página 211 do exemplar de 1921 (PDF 229) foi lida em texto e traz o cabeçalho \"QUEEN'S GAMBIT DECLINED 211\", a frase \"The student should examine this position carefully\" e o lance seguinte, \"20. Kt-B5!\" — que é a continuação desta posição."
-          }
+          },
+          "excecaoDeFonte": null
         },
         {
           "id": "m12-d2-b",
@@ -1359,7 +1535,8 @@
             "capitulo": "Illustrative Games — Game 1, Marshall–Capablanca, match de 1909",
             "originalGame": "Marshall–Capablanca, match de 1909",
             "fenMethod": "Reconstruída pelos 26 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 Ne4 Bxe7 Qxe7 Bd3 Nxc3 bxc3 Nd7 Nf3 O-O cxd5 exd5 Qb3 Nf6 a4 c5 Qa3 b6. Todo lance é legal por construção. A página 161 do exemplar de 1921 (PDF 179) foi lida em texto e traz \"QUEEN'S GAMBIT DECLINED i6i\", a sequência até \"13- Q-R3 P-QKt3\" e o comentário sobre a maioria de peões na ala da dama — que é o que produziu o peão isolado da coluna a."
-          }
+          },
+          "excecaoDeFonte": null
         },
         {
           "id": "m12-d3-a",
@@ -1401,7 +1578,8 @@
             "capitulo": null,
             "originalGame": "lichess.org/training/49bmR",
             "fenMethod": "A FEN guardada no recorte é a posição antes do erro do adversário; esta é a do fim da linha, obtida jogando os lances do puzzle na chess.js (scripts/escolher-exercicios.ts). Passou pela porta 1 — sem xeque, sem mate em 1 e sem peça de cavalo ou mais pendurada — e pela porta 2, com Stockfish 18 na profundidade 12 medindo 7 centésimos entre a melhor linha e a segunda. A resposta única foi conferida por respostaDaTarefa, que é o mesmo juiz que vai julgar o clique do aluno."
-          }
+          },
+          "excecaoDeFonte": null
         }
       ],
       "aplicacao": {
@@ -1486,6 +1664,187 @@
       "titulo": "A verdade sobre peões dobrados! - SleepRun S03E122 — GM Krikor",
       "ressalva": null,
       "url": "https://www.youtube.com/watch?v=Gem1QQrkQMM"
+    },
+    "treino": {
+      "ficha": {
+        "objetivo": "Achar, sozinho, os dois peões do adversário que estão na mesma coluna — e dizer o que a dobra tirou dele, sem transformar isso em veredito sobre a posição.",
+        "prerequisitos": [
+          "Saber que peão defende peão na diagonal, e nunca na coluna.",
+          "Saber que a dobra quase sempre vem de uma captura, e que a captura trouxe alguma coisa junto.",
+          "Ter lido a dica: peão dobrado é característica da estrutura, não sentença."
+        ],
+        "vocabulario": [
+          {
+            "termo": "peões dobrados",
+            "significa": "dois peões do mesmo lado na mesma coluna, um atrás do outro. Não precisam estar em casas vizinhas para serem dobrados."
+          },
+          {
+            "termo": "defesa mútua",
+            "significa": "dois peões que se protegem em diagonal. Peões da mesma coluna não conseguem fazer isso, e essa é a perda concreta da dobra."
+          }
+        ],
+        "erroMaisProvavel": {
+          "qual": "procurar dois peões colados, um em cima do outro, e não achar a dobra quando os dois estão separados por uma casa vazia na mesma coluna.",
+          "feedback": "Dobrado é estar na mesma coluna, com ou sem casa vazia no meio. O que a dobra tira é a defesa mútua e o avanço em bloco, e isso vale igual se eles estão colados ou a duas casas de distância."
+        },
+        "limitesDaEvidencia": "O acerto prova que o aluno acha os dois peões da mesma coluna. Não prova que ele saberia dizer se a dobra pesa nesta posição — que é a comparação que a dica ensina e que nenhum clique mede —, nem que ele veria o que o adversário ganhou em troca."
+      },
+      "reconhecimento": [
+        {
+          "id": "m13-d2-a",
+          "degrau": 2,
+          "fen": "r6r/ppq2pp1/2p1nkp1/4p3/1P2Q3/4PN1P/P1P2PP1/R2R2K1 w - - 2 19",
+          "lado": "pretas",
+          "tarefa": "peao-dobrado",
+          "resposta": [
+            "g6",
+            "g7"
+          ],
+          "legenda": "Janowski contra Capablanca, Havana 1913. Jogam as brancas; o rei preto está no meio do tabuleiro e as pretas têm sete peões.",
+          "material": null,
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "Percorra as colunas do tabuleiro e conte quantos peões pretos há em cada uma. Uma delas tem dois.",
+            "modo": "contem",
+            "realce": [
+              "a7",
+              "b7",
+              "c6",
+              "e5",
+              "f7",
+              "g6",
+              "g7"
+            ],
+            "solucao": "Os sete peões pretos estão acesos. Contando por coluna: a tem um, b tem um, c tem um, e tem um, f tem um — e uma delas tem dois, um atrás do outro. Repare que eles não se defendem: peão defende na diagonal, e dois peões da mesma coluna nunca se alcançam."
+          },
+          "curadoria": {
+            "perceptivel": "Os dois peões estão colados, um em cima do outro, na coluna ao lado do rei preto — é a imagem mais fácil da dobra, e é por isso que ela vem primeiro. A dobra nasceu de uma captura da própria partida, hxg6, o que dá ao professor uma história para contar.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 0
+            },
+            "adequacao": "Vinte e quatro peças e material igual, com as duas estruturas de peões inteiras à vista. O salto de 0 centésimo entre as duas melhores linhas diz que não há lance urgente escondido competindo com a pergunta."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 3 (Janowski–Capablanca, Havana 1913), diagrama impresso na p. 172, depois do 18º lance das pretas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 172 — Janowski–Capablanca",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 3, Janowski–Capablanca, Havana 1913",
+            "originalGame": "Janowski–Capablanca, Havana 1913",
+            "fenMethod": "Reconstruída pelos 36 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — d4 Nf6 Nf3 d6 Bg5 Nbd7 e3 e5 Nc3 c6 Bd3 Be7 Qe2 Qa5 O-O Nf8 Rfd1 Bg4 h3 Bh5 dxe5 dxe5 Ne4 Nxe4 Bxe7 Kxe7 Bxe4 Bg6 Qc4 Ne6 b4 Qc7 Bxg6 hxg6 Qe4 Kf6. Todo lance é legal por construção, e a captura hxg6 da própria linha é o que dobrou os peões. A página 172 do exemplar de 1921 (PDF 190) foi lida em texto e traz \"172 GAME 3\" com o lance 19."
+          }
+        },
+        {
+          "id": "m13-d2-b",
+          "degrau": 2,
+          "fen": "r1b1r1k1/2p1n1pp/pppb1p2/5P2/4PB2/1NN5/PPP3PP/R4RK1 b - - 1 13",
+          "lado": "pretas",
+          "tarefa": "peao-dobrado",
+          "resposta": [
+            "c6",
+            "c7"
+          ],
+          "legenda": "Lasker contra Capablanca, São Petersburgo 1914. Jogam as pretas; as damas já saíram do tabuleiro.",
+          "material": null,
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "De novo, coluna por coluna, contando só os peões pretos. Desta vez a dobra está na ala da dama, do outro lado do tabuleiro.",
+            "modo": "contem",
+            "realce": [
+              "a6",
+              "b6",
+              "c6",
+              "c7",
+              "f6",
+              "g7",
+              "h7"
+            ],
+            "solucao": "Os sete peões pretos estão acesos. A coluna com dois é a c, e os dois estão colados. Repare no vizinho: o peão de b6 defende c5, e não c6 nem c7 — ele não alcança nenhum dos dobrados de onde está."
+          },
+          "curadoria": {
+            "perceptivel": "A dobra está num bloco de quatro peões pretos na ala da dama, o que é mais difícil que o item anterior: ali os dois estavam isolados do resto, aqui eles estão no meio de outros dois. É o passo de dificuldade que separa achar a imagem de fazer a conta.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 24
+            },
+            "adequacao": "Vinte e seis peças e material igual. A dobra veio da troca Bxc6 dxc6 da própria abertura, que é como um aluno de doze anos vai encontrá-la na partida dele — é a estrutura mais comum da Ruy Lopez."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 5 (Lasker–Capablanca, São Petersburgo 1914), diagrama impresso na p. 184, depois do 13º lance das brancas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 184 — Lasker–Capablanca",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 5, Lasker–Capablanca, São Petersburgo 1914",
+            "originalGame": "Lasker–Capablanca, São Petersburgo 1914",
+            "fenMethod": "Reconstruída pelos 25 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 d4 exd4 Qxd4 Qxd4 Nxd4 Bd6 Nc3 Ne7 O-O O-O f4 Re8 Nb3 f6 f5 b6 Bf4. Todo lance é legal por construção, e a troca Bxc6 dxc6 do quarto lance é o que dobrou os peões. A página 184 do exemplar de 1921 (PDF 202) foi lida em texto e traz \"i84 GAME s\" — o OCR troca dígitos por letras no cabeçalho — com o comentário sobre este lance."
+          }
+        },
+        {
+          "id": "m13-d3-a",
+          "degrau": 3,
+          "fen": "r4rk1/pbqn1ppp/1pp5/3pP3/PBpP4/6P1/1P2NPBP/R2QR1K1 b - - 0 14",
+          "lado": "pretas",
+          "tarefa": "peao-dobrado",
+          "resposta": [
+            "c4",
+            "c6"
+          ],
+          "legenda": "Partida de dois jogadores comuns, sem anotação e sem diagrama. Jogam as pretas, com oito peões no tabuleiro.",
+          "material": "As brancas têm um bispo a mais e um peão a menos.",
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "São oito peões pretos, e nenhuma dobra está colada desta vez. Conte por coluna: uma delas tem dois peões pretos, com uma casa vazia entre eles.",
+            "modo": "contem",
+            "realce": [
+              "a7",
+              "b6",
+              "c4",
+              "c6",
+              "d5",
+              "f7",
+              "g7",
+              "h7"
+            ],
+            "solucao": "Os oito peões pretos estão acesos. A coluna com dois é a c, e eles estão separados por uma casa vazia — o que não muda nada: dobrado é estar na mesma coluna. Nenhum dos dois defende o outro, e nenhum peão preto atual alcança o que está mais à frente."
+          },
+          "curadoria": {
+            "perceptivel": "É o item mais difícil dos três, e de propósito: os dois peões da coluna estão separados por uma casa vazia, que é justamente o caso que o erro previsto na ficha não enxerga. Vinte e oito peças, o tabuleiro mais cheio de toda a fatia, sem nada arrumado para a pergunta.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 3
+            },
+            "adequacao": "Vinte e oito peças e as damas ainda em jogo — meio-jogo cheio, e o salto de 3 centésimos diz que não há tática pendente disputando a atenção. O desequilíbrio de material está declarado, e a dobra é do lado que está com um peão a mais, o que impede a leitura de que peão dobrado é sinal de quem está pior."
+          },
+          "provenance": {
+            "bibliographicSource": "Recorte CC0 da base aberta do Lichess, puzzle GUIqw (lichess.org/training/GUIqw): posição ao fim da linha tática do puzzle, quando a combinação já acabou. Os jogadores não são identificados no recorte.",
+            "citacaoCurta": "Lichess, puzzle GUIqw — posição ao fim da linha",
+            "editionFile": "lichess-open-database",
+            "capitulo": null,
+            "originalGame": "lichess.org/training/GUIqw",
+            "fenMethod": "A FEN guardada no recorte é a posição antes do erro do adversário; esta é a do fim da linha, obtida jogando os lances do puzzle na chess.js (scripts/escolher-exercicios.ts). Passou pela porta 1 — sem xeque, sem mate em 1 e sem peça de cavalo ou mais pendurada — e pela porta 2, com Stockfish 18 na profundidade 12 medindo 3 centésimos entre a melhor linha e a segunda. A resposta única foi conferida por respostaDaTarefa, o mesmo juiz que vai julgar o clique."
+          }
+        }
+      ],
+      "aplicacao": {
+        "id": "m13-d4",
+        "usa": "m13-d3-a",
+        "pergunta": "As pretas têm dois peões na coluna c. O que a dobra tirou delas, de concreto, nesta posição?",
+        "opcoes": [
+          {
+            "texto": "Tirou a defesa mútua: os dois peões da coluna c não se defendem, porque peão defende na diagonal e não na coluna.",
+            "certa": true,
+            "porque": "O peão de c6 cobre b5 e d5; o de c4 cobre b3 e d3. Nenhum dos dois alcança o outro, e nenhum outro peão preto está em posição de defender o da frente sem que as pretas mexam na estrutura de novo. É esta a metade da conta que a dobra sempre cobra — e a outra metade, o que ela deu em troca, é por isso que a dica pede comparação e não veredito."
+          },
+          {
+            "texto": "Tirou um peão de vantagem: dois peões na mesma coluna valem como um só.",
+            "certa": false,
+            "porque": "Eles continuam sendo dois peões, e cada um continua podendo capturar, bloquear uma casa e, no fim, virar dama. \"Valem como um\" é o tipo de regra fácil que esta dica existe para desmontar: peão dobrado é uma característica da estrutura, e quanto ela custa depende das peças que estão no tabuleiro."
+          }
+        ]
+      },
+      "reservas": []
     }
   },
   {

@@ -41,7 +41,7 @@ import { respostasDe } from "../lib/lesson/tree.ts";
 import { problemasDaPosicao } from "../lib/meiojogo/afirmacoes.ts";
 import {
   CAPITULO_CAP,
-  capitulosRepetidosNoTreino,
+  problemasEntreDicas,
   posicoesCitadas,
   problemasDeCitacao,
   problemasDoTreino,
@@ -1566,9 +1566,10 @@ const dicas: Dica[] = [];
     }
   }
 
-  // O capítulo dividido entre dicas: o teto por dica não o vê, e ele produz
-  // duas telas quase iguais em semanas seguidas.
-  for (const { codigo, onde, mensagem } of capitulosRepetidosNoTreino(dicas)) {
+  // O que atravessa dicas: posições parecidas demais entre si, e capítulo
+  // drenado além do teto do módulo. Nenhuma das duas é visível de dentro de
+  // uma dica só.
+  for (const { codigo, onde, mensagem } of problemasEntreDicas(dicas)) {
     fail(codigo, onde, mensagem);
   }
 
