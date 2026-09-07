@@ -71,7 +71,12 @@ test("o Base publicado tem 40 linhas, e o primeiro lance é sempre das brancas",
   const todas = indice.flatMap((e) =>
     validarBanco(ler(e.arquivo.replace(/^\/repertorio\//, "")), e.abertura),
   );
-  assert.equal(todas.length, 40);
+  // Conta o **Base**, não o total. Desde que o `6.Bf4` da Caro-Kann virou linha
+  // do Avançado (§11.1 de `docs/REVISAO-FONTES.md`), os dois números deixaram
+  // de ser o mesmo — e o que vale 40 é a meta pedagógica do Base, a mesma do
+  // teto de `aberturasInchadas`. Contar o total faria esta afirmação virar
+  // "quantas linhas existem", que não é contrato de nada.
+  assert.equal(todas.filter((l) => l.nivel === "base").length, 40);
 
   for (const linha of todas) {
     // O contrato de que a tela depende para saber quando auto-jogar: `meus`

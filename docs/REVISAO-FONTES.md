@@ -348,6 +348,10 @@ existem*, e isso não é medição.
 > ⚠️ **Pendência aberta:** o `6.Bf4` **continua sem fonte que explique**. O
 > arquivo do Grigoryan joga o lance, mas tem **um** comentário, que é a
 > assinatura. Pela régua da §1 essa linha reprova enquanto estiver assim.
+>
+> **Resolvida em 7/9 pela §19, por outro caminho:** o Doug decidiu ser ele a
+> fonte. A linha é recomendação do professor, e o argumento passa a ser escrito
+> aqui em vez de procurado fora.
 
 ### 11.2 Rossolimo: adotado o `3…Cf6` do Daniel King
 
@@ -846,6 +850,11 @@ grupo inteiro: fecha a pendência da §11.4 *no Base* e passa na régua da §1.
 O `6.Bf4` do Avançado continua sem fonte — a pendência da §11.4 não morre, só
 deixa de contaminar o Base.
 
+> **Executada em 7/9 — ver §19.** E com um desfecho melhor do que o previsto
+> aqui: o `6.Bf4` **não saiu**, virou a primeira linha do Avançado, com o
+> professor como fonte. Como os lances dela não mudaram, o id não mudou, e o
+> bloco fechou com **0 órfãos** em vez de 1.
+
 ### Correção 2 — `pretas-outras-2ffa3251` não é órfã de fonte
 
 A §14 põe essa linha no grupo F, "nenhuma fonte entra nesta abertura". Medido
@@ -942,3 +951,149 @@ reescrito: ali a prosa do Plichta é argumento de lance de verdade.
   `compilar --check` sem diferença ✔ · `build` ✔
 
 **Placar da régua: de 15 linhas aprovadas para 20.**
+
+---
+
+## 19. Caro-Kann entregue — o Base troca de lance e o Avançado ganha autor, 7/9/2026
+
+Executa a correção 1 da §17 e fecha a §11.1. O Base passa a jogar `6.h3`, com a
+fonte gratuita que explica; o `6.Bf4` do Doug vira a **primeira linha do
+Avançado** do repertório.
+
+### A decisão do Doug mudou o custo do bloco inteiro
+
+O plano previa que o `6.Bf4` sairia do repertório, e por isso previa órfão: "1
+id some, 1 nasce". O Doug decidiu outra coisa — **o `6.Bf4` fica, no Avançado, e
+a fonte dele passa a ser o professor.** Como o id sai do hash dos *lances*
+(`lib/repertorio/linhas.ts:59`) e os lances dessa linha não mudaram, mudar
+`nivel` e `fonte` **não mexe no id**.
+
+**Resultado medido: 40 ids antes, 41 depois, 0 alterados, 0 órfãos.** A janela da
+§7.3 nem precisou ser gasta.
+
+> A janela foi conferida assim mesmo: a §7.3 mediu "nenhum progresso de aluno
+> real" em **7/9**, que é o mesmo dia deste bloco, e a aula é 19/9. Uma consulta
+> direta ao Postgres de produção foi tentada e **bloqueada** pelo classificador
+> do modo automático; não se insistiu, porque a medição é do próprio dia.
+
+### As três linhas do arquivo, e de quem é cada uma
+
+| Linha | Nível | Fonte | Estado |
+|---|---|---|---|
+| `brancas-caro-kann-428a7cce` **nova** | base | "Caro Kann't" (Chess.com, **grátis**) | ✅ passa na régua |
+| `brancas-caro-kann-d2337d9b` | **avancado** | **Recomendação do professor** | ✅ assim que o Doug assinar o texto |
+| `brancas-caro-kann-054a0df4` | base | Livro + motor | ❌ segue sem fonte |
+
+A linha nova é `1.e4 c6 2.d4 d5 3.exd5 cxd5 4.Bd3 Cc6 5.c3 Cf6 6.h3 e6 7.Cf3
+Bd6 8.O-O` — os **15 meios-lances inteiros** saem das variantes *the Passive
+6…e6* #1 e #2 do curso, sem furo nenhum. O `repertorio:mapear` a classifica em
+**COBERTA INTEIRA, 15/15**.
+
+### O argumento que a fonte deu, e o que ele ensina
+
+A regra está escrita literal no curso, e é o que o aluno leva embora em vez de
+decorar:
+
+> *"We can formulate two rules: play c3 against …Nc6, play h3 against …Nf6."*
+
+E os dois lances de bispo viram um plano só: `Bd3` fecha `f5`, `h3` fecha `g4`, e
+o bispo de c8 — a peça pela qual a Caro-Kann existe — não sai. O `5.c3` ganhou o
+argumento inteiro do autor: **não** se joga `5.Cf3` ali, porque `5…Bg4` prega o
+cavalo, e o problema não é a troca — é que depois de `h3 Bh5` vem `…Bg6`, e quem
+sai do tabuleiro é o **nosso** bispo de d3.
+
+### Duas âncoras de 6 não têm prosa da fonte, de propósito
+
+O mapa dá **4/6** para a linha nova. As duas que faltam são as únicas em que o
+curso não comenta o lance:
+
+- **`7.Cf3`** — o argumento é a outra metade do `5.c3` do próprio autor: o lance
+  que era ruim dois lances atrás ficou bom porque o `h3` tirou o `…Bg4`.
+- **`8.O-O`** — carrega a prosa que o curso escreve **um lance adiante**, no
+  `9.Te1` ("*the rook is well placed on the semi-open e-file… ready to use the
+  e5-square*"). Trazida para cá porque a linha do Base tem de terminar em lance
+  nosso, e `8.O-O` é o último.
+
+### Dois erros de xadrez achados no texto antigo, e corrigidos
+
+O bloco não era para mexer nisso, mas os dois estavam no comentário que ia ser
+reaproveitado.
+
+1. **O `…c6` não fecha a saída do bispo — abre.** O texto dizia *"o …c6 do
+   primeiro lance fechou a saída natural dela"*. É a lógica da **Francesa**
+   aplicada à Caro-Kann: o preto joga `…c6` em vez de `…e6` **justamente** para
+   deixar o bispo de c8 livre, e o próprio curso diz isso (*"Caro-Kann players
+   love developing their bishop to f5"*). Corrigido nas duas linhas, e o texto
+   novo usa a diferença como argumento em vez de escondê-la. De quebra entrou um
+   fato conferido na `chess.js`: **`4…Bf5` perde peça** — depois de `5.Bxf5` há
+   **zero** recapturas em f5, porque não há peão em e6 nem em g6.
+2. **Quem vai para f3 é o cavalo de g1, não o de d2.** O comentário do `8.Cd2`
+   dizia *"de d2 ele segue para f3"*. Medido com o `repertorio:motor` (Stockfish
+   18, profundidade 20, 5 linhas) na posição exata: nas **cinco** continuações o
+   lance é **`Cgf3`**. Corrigido para o que é certo — o cavalo da dama vai por d2
+   porque `c3` está ocupado, e quem ocupa f3 é o outro.
+
+### O `054a0df4` teve de mudar junto, mesmo não sendo alvo
+
+O comentário do `5.c3` dele mandava o aluno para *"bispo para f4, cavalo por d2 e
+dama para b3"* — um plano que o Base deixou de jogar. Reescrito para o plano do
+`h3`, com a transposição dita por extenso. A tag `[Fonte]` também: **nem** o
+Grigoryan **nem** o "Caro Kann't" cobrem o `4…Cf6` — as oito variantes do curso
+gratuito jogam `4…Cc6`. Ele continua no grupo "a fonte não cobre o ramo".
+
+### Nenhuma tag precisou do `||`
+
+Ao contrário do bloco A (§15) e do §18: aqui cada jogo do PGN carrega **uma**
+linha só, então cada `[Fonte]` fala por si.
+
+### Três coisas que ficam declaradas
+
+1. **O texto do Avançado é rascunho até o Doug ler.** A tag diz "recomendação do
+   professor" e "o argumento é dele" — quem redigiu as frases foi o assistente.
+   Enquanto o Doug não passar os olhos, a linha está **verde no compilador e
+   pendente na régua**.
+2. **`nivel` não separa nada na tela, hoje.** Medido: a palavra `nivel` não
+   aparece em `app/aberturas/`, em `components/` nem no `index.json` — o campo é
+   só o teto de profundidade (`PROFUNDIDADE`) e um rótulo no JSON. Marcar a linha
+   como `avancado` **não a esconde do aluno**; ela segue na mesma lista da
+   Caro-Kann. Se a intenção for que o Base venha antes, isso é trabalho de tela e
+   ainda não existe.
+3. **A linha do Avançado tem 15 dos 23 meios-lances que o nível permite.** Não
+   foi esticada de propósito: os 8 que faltam seriam escolha de xadrez do
+   professor, e inventá-los seria assinar em nome dele.
+
+### O `repertorio:mapear` não enxerga "recomendação do professor"
+
+Ele casa o repertório com o corpus de cursos do chess.com. O `d2337d9b` vai
+continuar aparecendo em **CAUDA DE VERDADE, "a fonte joga: h3"** para sempre —
+não é regressão, é o mapa dizendo que nenhum *curso* joga aquilo. Quem quiser o
+número certo lê a tag `[Fonte]`, não o mapa.
+
+E a §11.4 muda de estado: comprar o "Combat the Caro-Kann" (US$ 6,99) **deixou de
+ser necessário** para esta linha. Vira opcional — serve para conferir o `6.Bf4`
+contra um GM, não para a linha existir.
+
+### Um teste teve de mudar, e o nome dele estava certo o tempo todo
+
+`lib/repertorio/banco.test.ts:70` se chama *"o **Base** publicado tem 40 linhas"*
+e afirmava `todas.length === 40`. Os dois números eram o mesmo só porque **não
+havia nenhuma linha do Avançado no repertório inteiro** — esta é a primeira.
+Passou a contar `nivel === "base"`, que é o que o nome sempre prometeu. O 40
+segue de pé: 41 linhas = 40 do Base + 1 do Avançado.
+
+### Verificação
+
+- `repertorio:compilar` → **41 linhas em 12 arquivos** (40 base, 1 avançado)
+- **40 ids antes, 41 depois, 0 alterados, 0 sumidos.** O novo é
+  `brancas-caro-kann-428a7cce`. **Nenhum aluno fica órfão**
+- diff do compilado, conferido campo a campo por id: `d2337d9b` mudou
+  `nivel`, `fonte`, `comentarios`; `054a0df4` mudou `fonte`, `comentarios`.
+  **Zero** mudança em `lances`, `sans`, `fen` ou `meus` em quem já existia
+- `repertorio:mapear`: corpus **igual** (11 cursos / 165 variantes / 2.434
+  comentários) e o repertório sobe de **110 âncoras / 53 em prosa** para
+  **118 / 58**, que é o esperado — a linha nova entrou com 6 âncoras, 4 em prosa
+- typecheck ✔ · lint ✔ · **585 testes, 585 passando** ✔ · `validate:content` ✔ ·
+  `compilar --check` sem diferença ✔ · `build` ✔
+
+**Placar da régua: de 20 linhas aprovadas para 21** — e **22** no instante em que
+o Doug assinar o texto do Avançado.

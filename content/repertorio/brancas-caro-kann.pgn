@@ -1,36 +1,89 @@
-; Caro-Kann Trocas — 2 linhas do Base. Depois de 4.Bd3 a fonte só cobre
-; 4...Cc6, com 57,5 por cento. O 4...Cf6, com 30,9 por cento, é a segunda
-; resposta mais comum e nenhum curso do Doug responde: sai por livro + motor,
-; no segundo jogo deste arquivo.
+; Caro-Kann Trocas — 3 linhas: duas do Base e a primeira do Avançado.
+;
+; Depois de 4.Bd3 as fontes só cobrem 4...Cc6, com 57,5 por cento. O 4...Cf6,
+; com 30,9 por cento, é a segunda resposta mais comum e nenhum curso do Doug
+; responde: sai por livro + motor, no segundo jogo deste arquivo.
+;
+; No 6º lance o Base e o Avançado se separam, por decisão da §11.1 de
+; docs/REVISAO-FONTES.md: o Base joga 6.h3, que vem com a regra escrita na
+; fonte, e o 6.Bf4 do Doug fica no Avançado.
 
 [Abertura "caro-kann"]
 [Nome "Caro-Kann Trocas"]
 [Cor "brancas"]
 [Nivel "base"]
-[Fonte "GM Avetik Grigoryan (ChessMood) — 'Caro Kann'"]
+[Fonte "Curso gratuito 'Caro Kann't' (Chess.com), capítulo 4...Cc6 5.c3 Cf6 6.h3, variantes 'the Passive 6...e6' #1 e #2 — a fonte joga e explica os 15 meios-lances desta linha, sem furo. A regra 'c3 contra ...Cc6, h3 contra ...Cf6' é dela; o texto aqui é reescrito com as nossas palavras. Entra no lugar do 6.Bf4 por decisão da §11.1 de docs/REVISAO-FONTES.md."]
 [Result "*"]
 
 1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 {Depois das trocas os dois lados ficam
-com os mesmos peões, então quem faz a diferença é o bispo. O nosso sai primeiro,
-para d3, já olhando para h7. O dele, o de c8, é a peça que o jogador de
-Caro-Kann mais sofre para colocar em jogo — e o …c6 do primeiro lance fechou a
-saída natural dela.} 4... Nc6 5. c3 Nf6 6. Bf4 Bg4 7. Qb3 {A dama
-em b3 bate em b7 e em d5 ao mesmo tempo. Ele vai ter de gastar um lance para
-defender.} 7... Qd7 8. Nd2 {O cavalo entra por d2 porque c3 está ocupado pelo
-nosso peão, e de d2 ele segue para f3. Com dama em b3 e bispo em d3 nós
-apertamos os dois lados do tabuleiro — é uma posição para jogar devagar, sem
-pressa de trocar peças.} *
+com os mesmos peões, então quem faz a diferença é o bispo. Repare no que ele
+fez no primeiro lance: jogou …c6, e não …e6, justamente para deixar o bispo de
+c8 livre — é essa a diferença entre a Caro-Kann e a Francesa, e é o orgulho da
+abertura dele. O nosso bispo sai primeiro, para d3, e desmancha o plano: a casa
+que ele queria era f5, e agora 4…Bf5 perde peça, porque depois de 5.Bxf5 não há
+peão em e6 nem em g6 para recapturar.} 4... Nc6 5. c3 {O peão em c3 segura o de
+d4, que o cavalo dele acabou de atacar. E há um motivo maior para não jogar
+5.Cf3 aqui: viria 5…Bg4, pregando o cavalo, e o bispo problemático dele estaria
+resolvido. Trocar esse bispo pelo nosso cavalo nem seria ruim; o problema é sair
+da prega. Depois de h3 ele recua Bh5, e na sequência …Bg6 põe o bispo dele de
+frente para o nosso — e quem sai do tabuleiro na troca é o de d3, que é a nossa
+melhor peça.} 5... Nf6 6. h3 {Com o cavalo em f6 o …Bg4 voltou a ameaçar, e é
+por isso que o h3 vem agora e não antes. A regra vale para a variante inteira e
+é a coisa mais útil desta página: c3 contra …Cc6, h3 contra …Cf6. Um lance
+segura o peão de d4, o outro fecha a casa g4. Com f5 e g4 fechadas o bispo de c8
+não tem por onde sair, e ele vai ter de gastar alguma coisa para resolver isso:
+…e6, que é seguro e passivo, …g6, que arma o …Bf5 de novo, ou …e5, que aceita
+peão isolado.} 6... e6 {Escolheu o seguro, que é o que mais aparece no clube. O
+preço aparece depois: com o cavalo já comprometido em f6, ele perde a montagem
+com …Cge7 e …f6, que é a maneira ativa de preparar o …e5.} 7. Nf3 {Agora sim o
+cavalo sai. É o mesmo lance que era ruim dois lances atrás, e a única coisa que
+mudou foi o h3 — não há mais …Bg4. Guardar essa diferença vale mais do que
+guardar os dois lances soltos.} 7... Bd6 8. O-O {Roque, e a ala do rei está
+inteira. Daqui a montagem é sempre a mesma, e é ela que você tem de saber de
+cor: torre para e1, na coluna semiaberta — nós não temos peão em e e ele tem —,
+dama para e2, e o cavalo pulando para e5. Ele ficou sólido, mas o único plano
+que tem é empurrar …e5 uma hora; até lá o tabuleiro é nosso.} *
 
 [Abertura "caro-kann"]
 [Nome "Caro-Kann Trocas"]
 [Cor "brancas"]
 [Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 5 da seção 8 de docs/REPERTORIO.md: o arquivo do Grigoryan só cobre 4...Cc6. O 5.c3 é o primeiro lance do motor, e a variante principal dele transpõe para a linha do 4...Cc6 deste mesmo arquivo."]
+[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 5 da seção 8 de docs/REPERTORIO.md: nem o arquivo do Grigoryan nem o curso 'Caro Kann't' cobrem o 4...Cf6 — as oito variantes do curso gratuito jogam 4...Cc6. O 5.c3 é o primeiro lance do motor, e a variante principal dele transpõe para a linha do 4...Cc6 deste mesmo arquivo."]
 [Result "*"]
 
 1. e4 c6 2. d4 d5 3. exd5 {Trocar aqui é escolha nossa, e é a mais fácil de
 jogar: acaba a briga no centro antes de ela começar. Sobram peões iguais dos
 dois lados e uma posição limpa, em que ganha quem coloca as peças nos lugares
-certos.} 3... cxd5 4. Bd3 Nf6 5. c3 {Não muda nada para nós. O peão
-em c3 segura o de d4, e o plano segue igual: bispo para f4, cavalo por d2 e dama
-para b3. A ordem dos lances dele não muda a nossa.} *
+certos.} 3... cxd5 4. Bd3 Nf6 5. c3 {Não muda nada para nós. O peão em c3 segura
+o de d4, e a regra segue valendo: o cavalo dele já está em f6, então o h3 vem no
+lance seguinte, e depois Cf3, roque e torre para e1. Se ele jogar …Cc6 a
+qualquer momento, caímos exatamente na linha do 4…Cc6 deste mesmo arquivo — é a
+mesma casa por outra porta.} *
+
+[Abertura "caro-kann"]
+[Nome "Caro-Kann Trocas"]
+[Cor "brancas"]
+[Nivel "avancado"]
+[Fonte "Recomendação do professor. O 6.Bf4 e o plano com Db3 e Cd2 são escolha do Doug, e o argumento dos comentários é dele, não de curso. A ordem de lances também aparece em GM Avetik Grigoryan (ChessMood) — 'Caro Kann', que joga a linha mas não explica por quê: o arquivo inteiro tem um comentário, e é a assinatura. Vai para o Avançado por decisão da §11.1 de docs/REVISAO-FONTES.md; no Base o aluno aprende o 6.h3, que vem com a regra escrita."]
+[Result "*"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 {Depois das trocas os dois lados ficam
+com os mesmos peões, então quem faz a diferença é o bispo. Ele jogou …c6, e não
+…e6, justamente para deixar o bispo de c8 livre — é o orgulho da Caro-Kann. O
+nosso sai primeiro, para d3, e tira dele a casa que ele queria: 4…Bf5 perde
+peça, porque depois de 5.Bxf5 não há com o que recapturar em f5.} 4... Nc6
+5. c3 {O peão em c3 segura o de d4, que o cavalo dele acabou de atacar — e de
+quebra tira c3 do nosso próprio cavalo, o que decide por onde ele vai sair.}
+5... Nf6 6. Bf4 {É aqui que o Avançado se separa do Base. Lá nós fechamos a casa
+g4 com h3; aqui deixamos o …Bg4 acontecer, de propósito. O bispo tem de sair
+agora, antes de qualquer peão nosso ir para e3 — depois disso ele ficaria
+trancado dentro da própria corrente, que é o problema que o adversário tem e nós
+não queremos ter. De f4 ele olha para e5 e para a diagonal que termina em b8. E
+a resposta ao …Bg4 não é impedir: é cobrar, com Db3.} 6... Bg4 7. Qb3 {A dama em
+b3 bate em b7 e em d5 ao mesmo tempo, e é assim que se cobra o passeio do bispo
+dele: enquanto o bispo está em g4, ninguém está olhando para b7. Ele vai ter de
+gastar um lance para defender.} 7... Qd7 8. Nd2 {O cavalo da dama entra por d2
+porque c3 está ocupado pelo nosso peão. De d2 ele não atrapalha ninguém, e quem
+vai para f3 é o outro cavalo, o de g1 — Cgf3 no lance seguinte. Com dama em b3 e
+bispo em d3 nós apertamos os dois lados do tabuleiro: é posição para jogar
+devagar, sem pressa de trocar peças.} *

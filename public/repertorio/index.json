@@ -15,10 +15,11 @@
     "cor": "brancas",
     "abertura": "caro-kann",
     "nome": "Caro-Kann Trocas",
-    "linhas": 2,
+    "linhas": 3,
     "ids": [
-      "brancas-caro-kann-d2337d9b",
-      "brancas-caro-kann-054a0df4"
+      "brancas-caro-kann-428a7cce",
+      "brancas-caro-kann-054a0df4",
+      "brancas-caro-kann-d2337d9b"
     ],
     "arquivo": "/repertorio/brancas/caro-kann.json"
   },
