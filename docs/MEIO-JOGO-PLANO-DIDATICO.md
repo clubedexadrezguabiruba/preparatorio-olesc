@@ -750,8 +750,15 @@ unitário favorável e adversarial.
   de rating, e a anterior era outra. A ordem de grandeza se manteve;
 - **cinco das 30 posições saem do mesmo §22 do Capablanca** (m4, m20, m25, m26,
   m30), e todas do Exemplo 52 — que é **uma** partida comentada. O teto aprovado
-  é por dica e não vê isso; o gate imprime a concentração e não reprova. Se for
-  para apertar, a decisão é sua, e é da mesma natureza da §3.1.
+  é por dica e não vê isso; o gate imprime a concentração e não reprova.
+
+  **E isto não é questão jurídica** — eu cheguei a escrever que era, e estava
+  errado. Capablanca morreu em 1942 e a obra é domínio público no Brasil desde
+  2013; `capablanca-fundamentals-reimpressao` já está registrada como livre, sem
+  teto nenhum. O que sobra é **didático**: cinco das trinta dicas mostram
+  momentos de um jogo só, e a pergunta é se o aluno aprende o conceito ou aquela
+  partida. **Nenhuma das cinco está na fatia do piloto**, então não afeta
+  setembro; o momento de olhar é a expansão de 8 para 30, depois do torneio.
 
 ### Bloco 3 — a fatia de 8 conceitos, curada (até 15/9)
 24 posições novas — **16 transcritas de livro** (7 conceitos do *My System*, 1 do
@@ -785,6 +792,23 @@ do apoio, interação, e os exercícios iniciais.
 **O que ele NÃO valida, e o relatório dirá isso:** retenção, transferência
 tardia, e os intervalos 2‑7‑14 — a revisão espaçada só existe no Bloco 6. E doze
 alunos numa semana detectam problema de uso; não provam eficácia.
+
+**O que o professor tem de observar com os olhos, e nenhum número dirá:**
+
+1. **O aluno descobre que dá para tocar nos passos?** A explicação está cortada
+   em cartões, e tocar num deles acende no tabuleiro as casas que ele cita. O
+   cartão escolhido se distingue por fundo de cartão, contorno claro e pela
+   palavra do rótulo — "Passo 3 **aceso**" contra "Passo 3 · **acende**".
+   **Decisão adiada para depois do piloto, pelo Doug, em 2026-09-07:** se os
+   alunos não perceberem que os passos são tocáveis, entra uma barra fina e
+   escura na beirada esquerda do cartão escolhido, como reforço. Ela foi tirada
+   por ser o padrão que o conferidor de design reprova, e volta com o aval dele
+   e a exceção registrada. Ver o commit `ea54d85` para o caminho inteiro.
+2. **O aluno olha o tabuleiro enquanto lê?** É o que o tabuleiro grudado existe
+   para permitir, e ninguém mediu isso com criança.
+3. **Um passo por vez faria diferença no celular?** É a hipótese da §8, que não
+   foi construída de propósito — construí-la antes seria decidir o que o piloto
+   decide.
 
 → **Número:** por aluno, itens de reconhecimento com e sem apoio, e **cinco
 sinais examinados** — erro alto, acerto quase universal, uso frequente de apoio,
@@ -904,11 +928,12 @@ duplicam; migration verificada antes do deploy.
    - **"Um passo por vez" no celular não foi construído.** A §8 o declara
      hipótese a testar no piloto, e o número do Bloco 1 é atendido pelo tabuleiro
      grudado. Construí-lo antes do piloto seria decidir o que o piloto decide.
-   - **A barra lateral do passo escolhido tem um argumento a favor que ficou sem
-     dono.** A leitura da tela recomendou voltar a ela com 2 px e tinta escura —
-     mesmos 6,14:1 com o peso da borda clara, e "barra à esquerda" é a gramática
-     de *item atual*. Mas é o padrão que o hook de design reprova, e suprimi-lo
-     exige sua confirmação. Fica aqui para não se perder.
+   - ~~**A barra lateral do passo escolhido.**~~ **Adiada pelo Doug em
+     2026-09-07, para depois do piloto**, e agora é o item 1 da lista de
+     observação do Bloco 5. A leitura da tela recomendava voltar a ela com 2 px
+     e tinta escura — mesmos 6,14:1 com o peso da borda clara, e "barra à
+     esquerda" é a gramática de *item atual* —, mas é o padrão que o conferidor
+     de design reprova. Quem decide é a criança tocando, não o argumento.
    - **`npm run lint` estava vermelho antes do Bloco 1**, por um `verify.ts` que
      o resgate do Bloco 0 trouxe para `.scratch/`. Resolvido ignorando
      `.scratch/**`, pelo motivo do `.garimpo/**`.
