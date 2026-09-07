@@ -39,7 +39,11 @@ uma peça, sim — mas, ao contrário do 2.c4, não disputa espaço nenhum no ce
 É por isso que batemos em d4 na mesma hora com …c5, sem esperar convite. E o
 bispo, ao sair de casa, deixou b2 sem ninguém tomando conta: é em torno dessa
 casa que giram as duas linhas deste arquivo.} 3. e3
-3... Nc6 4. Nf3 Nf6 (4... Qb6 $2) {Ainda não é hora da dama, e o motivo não é b2 — é d5.
+Nc6 {Cavalo antes de dama, e por dois motivos. O primeiro é o que o curso
+escreve na linha irmã: o cavalo toma conta de e5 — a casa em que o bispo de f4
+dele sonha em se apoiar — e deixa a ameaça de …Db6 GUARDADA, em vez de gastá-la
+agora. O segundo é o peão de d4, que passa a ter duas peças nossas em cima: o
+peão de c5 e este cavalo.} 4. Nf3 Nf6 (4... Qb6 $2) {Ainda não é hora da dama, e o motivo não é b2 — é d5.
 Enquanto a dama está em d8, é ela quem defende o nosso peão de d5. Se ela sair
 agora, o peão fica sem defensor nenhum, e o cavalo de b1 pula para c3 atacando
 justamente ele: 4…Db6? 5.Cc3! e o motor já dá +1,40 para as brancas. Pegar o
@@ -47,17 +51,27 @@ peão de b2 é pior ainda — 5…Dxb2 6.Cxd5! e são quase quatro peões. Entã
 desenvolvemos, e o …Cf6 não é só esperar: o cavalo em f6 passa a defender d5, e
 com ele lá o Cc3 deixa de ganhar peão nenhum. O Londres quase sempre acaba
 jogando c3, e no lance em que ele jogar, aquela casa fecha para o cavalo — é aí
-que a dama sai.} 5. c3 Qb6 6. Qc2 g6 7. h3 Bg7 8. Nbd2 O-O {Deu certo: com o
-peão dele em c3, o cavalo de b1 não chega mais àquela casa, d5 está em paz, e
-agora é b2 que fica pendurado. Ele foi obrigado a gastar um lance de dama só
-para segurar o peão — 6.Dc2 aqui; Dc1 e Db3 são os outros dois. E repare no que
-veio depois. O …g6 não é enfeite: o …Bf5, que parece o lance da vida para o
-nosso bispo, tropeça em dxc5!, que ataca a nossa dama e a tira de cima de b2 —
-e aí o bispo de f5 fica de graça para a dama dele. Então fianchetamos, e o
-bispo vai para f5 mais tarde, quando der. O h3 dele também tem motivo: fecha
-g4 e abre a casa h2, para o bispo de f4 ter para onde fugir quando o nosso
-cavalo pular para h5. Roque feito, ele escolhe entre rocar do mesmo lado ou
-trocar as damas e rocar do lado da dama — e nós estamos prontos para os dois.} *
+que a dama sai.} 5. c3
+Qb6 {AGORA. Ele acabou de pôr o peão em c3, e com aquela casa ocupada o cavalo
+de b1 não chega mais lá — d5 deixou de correr risco e a dama pode sair. Ela sai
+batendo em b2, que o bispo abandonou no segundo lance, e o curso diz que daqui
+ele tem três lances típicos para defender o peão: Dc2, Dc1 e Db3. Repare no que
+conseguimos: ele vai gastar um lance de dama, na abertura, só para não perder
+um peão.} 6. Qc2
+g6 {Por que não …Bf5, que parece o lance da vida para o bispo preso? Porque
+tropeça: 6…Bf5 7.dxc5! ataca a nossa dama, ela é obrigada a sair de cima de b2,
+e o bispo de f5 fica de graça na frente da dama dele em c2. Então fianchetamos.
+O bispo vai para a diagonal grande agora e para f5 mais tarde, quando o …dxc5
+não tiver mais essa graça.} 7. h3
+Bg7 {O bispo na diagonal grande, apontado para o centro e para o rei dele. E
+entenda o h3 que ele acabou de jogar, porque é o lance típico da abertura:
+fecha a casa g4 e abre h2 para o bispo de f4 ter para onde fugir quando o nosso
+cavalo pular para h5. Ele já está se defendendo de um plano que a gente nem
+começou.} 8. Nbd2
+O-O {Rei guardado, desenvolvimento pronto, e agora é ele que escolhe: rocar do
+mesmo lado que nós, ou oferecer a troca de damas e rocar do lado da dama. Nós
+estamos prontos para os dois — o …c5 já está no tabuleiro, e é dele que sai o
+nosso jogo em qualquer um dos dois casos.} *
 
 [Abertura "londres"]
 [Nome "Londres 2.Bf4 — 3.c3 com 5.dxc5"]
@@ -76,19 +90,34 @@ para quando servir. O segundo é o desenho do arquivo: o curso escreve que o 3.c
 quase sempre acaba transpondo para as variantes com peões em e3 e c3, que é
 exatamente a outra linha desta página. Se ele jogar 5.e3 aqui, caímos nela e
 você já sabe o resto. Esta linha existe para o único lance que NÃO transpõe, e é
-o próximo.} 4. Nf3 Nf6 5. dxc5
+o próximo.} 4. Nf3
+Nf6 {Os mesmos quatro primeiros lances pretos da outra linha desta página, e
+isso é de propósito: contra o Londres a montagem é uma só — …d5, …c5, …Cc6,
+…Cf6 — e só depois a gente olha para o que ele fez. O cavalo em f6 defende d5
+pela segunda vez, que é o que autoriza a dama a sair mais tarde.} 5. dxc5
 e6 {Ele pegou o peão. Não corra atrás dele com …Bxc5 na hora: primeiro …e6, que
 abre a casa do bispo e prepara pegar o peão mais tarde, com tempo. É a diferença
 entre recuperar material correndo e recuperá-lo com um lance útil embutido — e o
 curso mede o resultado: quando as pretas fazem isso, o melhor que as brancas
-conseguem é igualdade.} 6. b4 a5 7. b5 Ne7 8. Nbd2
-Ng6 {Os quatro últimos lances são uma discussão só sobre o peão de c5. Ele
+conseguem é igualdade.} 6. b4
+a5 {O lance típico contra uma corrente de peões: não ataque a ponta, ataque a
+base. O peão de c5 é sustentado pelo de b4, e o de b4 é sustentado por… nada
+ainda. Batendo em b4 com o peão de a5, obrigamos a corrente inteira a se
+mexer.} 7. b5
+Ne7 {O peão de b5 expulsou o cavalo de c6, e a casa para onde ele vai não é
+escolhida a esmo: de e7 o cavalo chega a g6 no lance seguinte, e é de g6 que
+ele faz o serviço. Recuar não é perder tempo quando o recuo tem endereço.}
+8. Nbd2 Ng6 {Os quatro últimos lances são uma discussão só sobre o peão de c5. Ele
 tentou segurá-lo com 6.b4; nós minamos a corrente com …a5; ele empurrou 7.b5,
 que ataca o nosso cavalo de c6, e o cavalo foi a e7 — de onde chega a g6. O
 curso chama este …Cg6 de ataque duplo: ele bate no bispo de f4 e toma conta de
 e5 ao mesmo tempo. O bispo tem de sair, e 9.Be3 não serve por causa de …Cg4
-seguido de …e5. Sobra 9.Bg3 — e aí, finalmente, comemos em c5.} 9. Bg3 Bxc5
-10. e3 O-O {Peão de volta, rei seguro, e agora o plano, que o curso escreve numa
+seguido de …e5. Sobra 9.Bg3 — e aí, finalmente, comemos em c5.} 9. Bg3
+Bxc5 {Finalmente. Foram quatro lances de preparação para pegar de volta um peão
+que estava ali desde o quinto — e valeu a pena: o bispo recaptura já
+desenvolvido, na diagonal que aponta para f2, e nós ganhamos …e6, …a5 e o
+cavalo em g6 de brinde pela espera. Correr atrás do peão no lance 5 teria
+custado todos esses.} 10. e3 O-O {Peão de volta, rei seguro, e agora o plano, que o curso escreve numa
 linha só: …b6 e …Bb7 pondo o bispo na diagonal grande, …Bd6 realinhando o outro
 bispo, e …e5 no centro. É a mesma ideia da outra linha desta página vista de
 outro ângulo: ele gastou a abertura mexendo peões no flanco da dama, e nós
