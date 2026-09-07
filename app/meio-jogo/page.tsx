@@ -24,6 +24,19 @@ import { dicasLidas } from "@/lib/meiojogo/progresso";
  * fora de ordem custa no máximo uma releitura — bem diferente de soltar a
  * prática de um final antes de o aluno saber a técnica. O nível ordena; ele não
  * tranca.
+ *
+ * ## A marca de treino, e por que ela precisou existir
+ *
+ * Oito das trinta dicas (m9–m16) têm exercício: o aluno acha o traço no
+ * tabuleiro, com apoio se pedir. As outras 22 continuam sendo leitura e
+ * pergunta. Sem marca nenhuma, as duas espécies eram indistinguíveis nesta
+ * lista, e quem entrasse pela primeira dica encontraria a página sem treino e
+ * concluiria que ele não existe — foi o que aconteceu na primeira vez que
+ * alguém abriu o módulo depois do Bloco 4.
+ *
+ * A marca conta **exercícios**, e não diz "novo": um número é conferível na
+ * página de destino, e não envelhece sozinho no dia em que deixar de ser
+ * novidade.
  */
 
 export const metadata: Metadata = { title: "Meio-jogo — Preparatório OLESC" };
@@ -42,6 +55,11 @@ export default async function MeioJogo() {
         <p className="text-sm text-tinta-media">
           O que fazer quando a abertura acabou e o final ainda não começou. Cada dica é uma
           técnica em uma frase, um diagrama, um &quot;o que procurar&quot; e uma pergunta.
+        </p>
+        <p className="text-sm text-tinta-media">
+          As oito dicas marcadas com <strong className="font-semibold">exercícios</strong> vão
+          além da leitura: nelas você procura o traço no próprio tabuleiro, e pede ajuda se
+          precisar.
         </p>
       </header>
 
@@ -99,7 +117,17 @@ export default async function MeioJogo() {
                     </span>
 
                     <div className="flex min-w-0 flex-1 flex-col gap-1">
-                      <p className="text-sm font-medium text-tinta">{dica.titulo}</p>
+                      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                        <p className="text-sm font-medium text-tinta">{dica.titulo}</p>
+                        {/* Os três de reconhecimento mais a aplicação. Contado do
+                            conteúdo, e não escrito à mão: uma dica que ganhar
+                            reserva no Bloco 6 muda o número sozinha. */}
+                        {dica.treino ? (
+                          <span className="rotulo shrink-0 rounded-full bg-metodo-superficie/16 px-2 py-0.5 text-metodo-tinta">
+                            {dica.treino.reconhecimento.length + 1} exercícios
+                          </span>
+                        ) : null}
+                      </div>
                       <p className="text-xs text-tinta-fraca">{dica.resumo}</p>
                     </div>
                   </Link>
