@@ -1004,46 +1004,46 @@
         {
           "id": "m10-d2-b",
           "degrau": 2,
-          "fen": "2kr3r/2p2npp/1p3p2/pPqNp3/2P1P3/3PPR2/6PP/1R2Q1K1 b - - 0 18",
+          "fen": "r1bq1rk1/ppp2p2/4pbpp/8/3PQ2P/3B1N2/PPP2PP1/R3K2R b KQ - 0 12",
           "lado": "pretas",
           "tarefa": "peao-na-semiaberta",
           "resposta": [
-            "d3"
+            "d4"
           ],
-          "legenda": "Capablanca contra Janowski, São Petersburgo 1914. Jogam as pretas, com o rei preto já em c8 e as duas torres ligadas.",
+          "legenda": "Capablanca contra Chajes, Nova York 1918. Jogam as pretas, com sete peões de cada lado no tabuleiro.",
           "material": null,
+          "excecaoDeFonte": null,
           "apoio": {
-            "convite": "Agora a coluna limpa é das pretas. Ache a coluna em que as pretas não têm peão nenhum e as brancas têm — e toque no peão branco que está nela.",
+            "convite": "Agora a coluna limpa é das pretas. Acendemos os peões brancos: ache a coluna em que as pretas não têm peão nenhum e as brancas têm, e toque no peão branco parado ali.",
             "modo": "contem",
             "realce": [
-              "b5",
-              "c4",
-              "d3",
-              "e3",
-              "e4",
+              "a2",
+              "b2",
+              "c2",
+              "d4",
+              "f2",
               "g2",
-              "h2"
+              "h4"
             ],
-            "solucao": "Os sete peões brancos estão acesos. As pretas têm peão em a, b, c, e, f, g e h — falta uma coluna só, e o peão branco que está nela é o alvo. Repare que os dois peões brancos da coluna e não interessam aqui: naquela coluna as pretas também têm peão."
+            "solucao": "Os sete peões brancos estão acesos. As pretas têm peão em a, b, c, e, f, g e h — falta uma coluna só, e o peão branco que está nela é o alvo. Repare que ele é o único peão branco que já saiu da segunda fileira além do da coluna h."
           },
           "curadoria": {
-            "perceptivel": "A torre preta de d8 está apontada para o alvo, e o vão da coluna do lado do aluno é o único. O item troca a cor em relação ao anterior, para o aluno procurar a relação — a minha coluna limpa, o peão dele parado nela — e não a casa que ele decorou.",
+            "perceptivel": "As duas estruturas estão quase intactas, com sete peões de cada lado, e por isso a única coluna sem peão preto se conta numa passada. O alvo é o peão central adiantado, que é onde o olho de quem está aprendendo já para.",
             "portas": {
               "porta1": "passou",
               "profundidade": 12,
-              "salto": 12
+              "salto": 2
             },
-            "adequacao": "Vinte e quatro peças, material igual, reis rocados para lados diferentes — a posição em que este conceito de fato aparece na partida de um aluno de doze anos. Os peões brancos de e3 e e4 na mesma coluna são ruído honesto: eles convidam ao erro que a ficha prevê, e o apoio o desfaz."
+            "adequacao": "Vinte e seis peças e material igual, no lance 12 — a posição em que a coluna semiaberta acaba de nascer da troca, que é como o aluno vai encontrá-la. O item troca a cor em relação ao anterior: lá o aluno era das brancas, aqui é das pretas."
           },
           "provenance": {
-            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 11 (Capablanca–Janowski, São Petersburgo 1914), diagrama impresso na p. 223, depois do 18º lance das brancas.",
-            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 223 — Capablanca–Janowski",
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 12 (Capablanca–Chajes, Nova York 1918), diagrama impresso na p. 226, depois do 12º lance das brancas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 226 — Capablanca–Chajes",
             "editionFile": "capablanca-1921",
-            "capitulo": "Illustrative Games — Game 11, Capablanca–Janowski, São Petersburgo 1914",
-            "originalGame": "Capablanca–Janowski, São Petersburgo 1914",
-            "fenMethod": "Reconstruída pelos 35 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 Nc3 Bc5 d3 Bg4 Be3 Bxe3 fxe3 Qe7 O-O O-O-O Qe1 Nh6 Rb1 f6 b4 Nf7 a4 Bxf3 Rxf3 b6 b5 cxb5 axb5 a5 Nd5 Qc5 c4. Todo lance é legal por construção, e a troca b5 cxb5 axb5 é o que limpou a coluna do aluno. A página 223 do exemplar de 1921 (PDF 241) foi lida em texto e traz \"RUY LOPEZ 223\" com o lance 14 desta partida."
-          },
-          "excecaoDeFonte": null
+            "capitulo": "Illustrative Games — Game 12, Capablanca–Chajes, Nova York 1918",
+            "originalGame": "Capablanca–Chajes, Nova York 1918",
+            "fenMethod": "Reconstruída pelos 23 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — e4 e6 d4 d5 Nc3 Nf6 Bd3 dxe4 Nxe4 Nbd7 Nxf6+ Nxf6 Nf3 Be7 Qe2 O-O Bg5 h6 Bxf6 Bxf6 Qe4 g6 h4. Todo lance é legal por construção, e a troca dxe4 do quarto lance é o que limpou a coluna do aluno. A página 226 do exemplar de 1921 (PDF 244) foi lida em texto e traz \"226 GAME 12\" com o oitavo lance desta partida."
+          }
         },
         {
           "id": "m10-d3-a",
@@ -1256,40 +1256,41 @@
         {
           "id": "m11-d2-b",
           "degrau": 2,
-          "fen": "8/pb3pkp/2N3r1/1p2P3/1P5p/P1R5/r4PP1/2R2K2 w - - 3 29",
+          "fen": "8/pp1k2pp/2n5/5R2/2B5/3P2P1/Pr3PKP/8 b - - 8 30",
           "lado": "pretas",
           "tarefa": "torre-na-setima",
           "resposta": [
-            "a2"
+            "b2"
           ],
-          "legenda": "A mesma partida, seis lances adiante: Marshall contra Capablanca, Nova York 1918. Jogam as brancas.",
-          "material": null,
+          "legenda": "Rubinstein contra Capablanca, San Sebastián 1911. Jogam as pretas; as damas saíram e sobrou uma torre de cada lado.",
+          "material": "As brancas têm um peão a mais — cinco contra quatro.",
           "excecaoDeFonte": null,
           "apoio": {
-            "convite": "De novo de pretas. Sobraram poucos peões brancos na fileira onde eles nasceram — ache-a, e veja qual das suas duas torres está nela.",
+            "convite": "Você continua de pretas. Restaram poucos peões brancos na fileira onde eles nasceram: ache-a, e veja qual peça sua está nela.",
             "modo": "contorno",
             "realce": [
+              "a2",
               "f2",
-              "g2"
+              "h2"
             ],
-            "solucao": "Só dois peões brancos continuam na fileira onde nasceram, e são eles que a marcam. Uma torre preta está nessa fileira, encostada na borda; a outra está no meio do tabuleiro, e não conta."
+            "solucao": "Três peões brancos ainda estão na fileira onde nasceram, e são eles que a marcam. A sua torre está nessa mesma fileira, entre o primeiro e o segundo — e de lá ela olha para dois deles ao mesmo tempo."
           },
           "curadoria": {
-            "perceptivel": "É o item mais difícil dos três de propósito, e por um motivo declarado: só dois peões brancos sobraram para desenhar a fileira, e a torre preta está no canto, longe deles. Quem achou a primeira pela imagem dos peões enfileirados tem de achar esta pela conta.",
+            "perceptivel": "A torre preta está encostada no peão branco da coluna a, dentro da fileira que os três peões acesos desenham. É a imagem mais nua do conceito de toda a dica — poucas peças, nada disputando o olho —, e por isso ela vem em segundo lugar, depois de um tabuleiro mais cheio.",
             "portas": {
               "porta1": "passou",
               "profundidade": 12,
-              "salto": 46
+              "salto": 12
             },
-            "adequacao": "Dezoito peças e material igual. É a mesma partida do item anterior, seis lances depois, e as duas posições têm 47% das peças nas mesmas casas — abaixo do teto de 70%, porque no meio houve troca de torres, avanço dos peões da ala da dama e a ida do rei preto para g7. O aluno não responde a segunda pela memória da primeira."
+            "adequacao": "Quinze peças. É menos que os outros itens, e é de propósito: a torre na sétima é conceito de meio-jogo tardio, e o próprio diagrama que esta dica usa para ensinar — o XXVII do Nimzowitsch — tem treze peças. Aqui o aluno vê o traço com o tabuleiro quase vazio depois de tê-lo visto com dezenove peças."
           },
           "provenance": {
-            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 14 (Marshall–Capablanca, Nova York 1918), diagrama impresso na p. 244, depois do 28º lance das pretas.",
-            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 244 — Marshall–Capablanca",
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 2 (Rubinstein–Capablanca, San Sebastián 1911), diagrama impresso na p. 167, depois do 30º lance das brancas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 167 — Rubinstein–Capablanca",
             "editionFile": "capablanca-1921",
-            "capitulo": "Illustrative Games — Game 14, Marshall–Capablanca, Nova York 1918",
-            "originalGame": "Marshall–Capablanca, Nova York 1918",
-            "fenMethod": "Reconstruída pelos 56 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — os 44 do item anterior mais h4 gxh4 Re1 Re6 Rec1 Kg7 b4 b5 a3 Rg6 Kf1 Ra2. Todo lance é legal por construção. A página 244 do exemplar de 1921 (PDF 262) foi lida em texto e traz \"244 GAME 14\"."
+            "capitulo": "Illustrative Games — Game 2, Rubinstein–Capablanca, San Sebastián 1911",
+            "originalGame": "Rubinstein–Capablanca, San Sebastián 1911",
+            "fenMethod": "Reconstruída pelos 59 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — os 28 do item m9-d2-a mais Nxd5 Qh6 Kg2 Rcd8 Qc1 exd5 Qxc5 Qd2 Qb5 Nd4 Qd3 Qxd3 exd3 Rfe8 Bg4 Rd6 Rfe1 Rxe1 Rxe1 Rb6 Re5 Rxb2 Rxd5 Nc6 Be6+ Kf8 Rf5+ Ke8 Bf7+ Kd7 Bc4. Todo lance é legal por construção, e o Rxb2 da própria linha é o que pôs a torre na sétima. A página 167 do exemplar de 1921 (PDF 185) foi lida em texto e traz o cabeçalho \"QUEEN'S GAMBIT DECLINED 167\"; o resto da página sai como \"??\" na extração, porque é quase toda diagrama."
           }
         },
         {
@@ -2243,6 +2244,182 @@
       "titulo": "Usando a Técnica do Bloqueio — Julio Lapertosa",
       "ressalva": null,
       "url": "https://www.youtube.com/watch?v=B6QAduT74Kg"
+    },
+    "treino": {
+      "ficha": {
+        "objetivo": "Achar, sozinho, a casa imediatamente à frente do peão passado do adversário — a casa que para o peão de vez — e entender por que ocupá-la é diferente de só atacá-lo.",
+        "prerequisitos": [
+          "Saber o que é peão passado: nenhum peão adversário à frente dele, na coluna nem nas vizinhas.",
+          "Saber que peão não pula peça, e que por isso uma peça na frente dele o trava.",
+          "Ter lido a dica: o bom bloqueador é o que continua fazendo outra coisa enquanto bloqueia."
+        ],
+        "vocabulario": [
+          {
+            "termo": "peão passado",
+            "significa": "peão que não tem nenhum peão do adversário à frente dele, nem na coluna dele nem nas duas vizinhas. Ninguém o para com peão."
+          },
+          {
+            "termo": "casa de bloqueio",
+            "significa": "a casa imediatamente à frente do peão passado. A peça que senta ali o para de vez, porque peão não pula."
+          }
+        ],
+        "erroMaisProvavel": {
+          "qual": "tocar no próprio peão passado em vez da casa à frente dele — o peão é o que salta aos olhos, e a casa está vazia.",
+          "feedback": "A resposta é a casa, não o peão. O peão dele você já sabe onde está; o que a dica ensina é onde **a sua peça** vai ficar — uma casa à frente, no caminho dele."
+        },
+        "limitesDaEvidencia": "O acerto prova que o aluno acha a casa de bloqueio. Não prova que ele escolheria a peça certa para ocupá-la — que é a metade da dica que mais importa, porque uma torre presa a bloquear é só uma torre presa —, nem que ele conseguiria levar alguma peça até lá."
+      },
+      "reconhecimento": [
+        {
+          "id": "m16-d2-a",
+          "degrau": 2,
+          "fen": "2kr3r/2p2npp/1p3p2/pPqNp3/2P1P3/3PPR2/6PP/1R2Q1K1 b - - 0 18",
+          "lado": "brancas",
+          "tarefa": "casa-de-bloqueio",
+          "resposta": [
+            "a4"
+          ],
+          "legenda": "Capablanca contra Janowski, São Petersburgo 1914. Jogam as pretas, e você está do lado das brancas.",
+          "material": null,
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "Primeiro ache o peão preto que já passou: aquele sem nenhum peão branco à frente, nem na coluna dele nem nas duas do lado. Acendemos os sete peões pretos.",
+            "modo": "contorno",
+            "realce": [
+              "a5",
+              "b6",
+              "c7",
+              "e5",
+              "f6",
+              "g7",
+              "h7"
+            ],
+            "solucao": "Os sete peões pretos estão acesos. Olhe a coluna a: à frente do peão preto de lá não há peão branco nenhum, nem na coluna a nem na b — o peão branco de b5 está ao lado dele, e não na frente. Ele já passou. A casa que você procura é a que fica logo à frente dele, no caminho."
+          },
+          "curadoria": {
+            "perceptivel": "O peão passado está na borda, com a coluna inteira livre à frente, e a casa de bloqueio é a única casa vazia entre ele e o fim do tabuleiro na altura das peças. O peão branco de b5, colado do lado, é ruído honesto: ele parece parar o peão preto e não para, e desfazer essa confusão é metade do conceito.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 12
+            },
+            "adequacao": "Vinte e quatro peças, material igual, reis rocados para lados diferentes. É a posição em que este conceito de fato aparece na partida de um aluno: um peão da ala escapa enquanto a briga está no centro."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 11 (Capablanca–Janowski, São Petersburgo 1914), diagrama impresso na p. 223, depois do 18º lance das brancas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 223 — Capablanca–Janowski",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 11, Capablanca–Janowski, São Petersburgo 1914",
+            "originalGame": "Capablanca–Janowski, São Petersburgo 1914",
+            "fenMethod": "Reconstruída pelos 35 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 Nc3 Bc5 d3 Bg4 Be3 Bxe3 fxe3 Qe7 O-O O-O-O Qe1 Nh6 Rb1 f6 b4 Nf7 a4 Bxf3 Rxf3 b6 b5 cxb5 axb5 a5 Nd5 Qc5 c4. Todo lance é legal por construção, e a sequência b5 cxb5 axb5 a5 da própria linha é o que criou o peão passado. A página 223 do exemplar de 1921 (PDF 241) foi lida em texto e traz \"RUY LOPEZ 223\" com o lance 14 desta partida."
+          }
+        },
+        {
+          "id": "m16-d2-b",
+          "degrau": 2,
+          "fen": "8/1b3pkp/p1N3r1/1p2P3/1P6/P1R3Pp/r4P2/2R3K1 w - - 0 31",
+          "lado": "brancas",
+          "tarefa": "casa-de-bloqueio",
+          "resposta": [
+            "h2"
+          ],
+          "legenda": "Marshall contra Capablanca, Nova York 1918. Jogam as brancas, e o livro comenta que elas não conseguem mexer nada sem perder alguma coisa.",
+          "material": null,
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "De novo: ache primeiro o peão preto que já passou, olhando a coluna dele e as duas do lado. Acendemos os cinco peões pretos.",
+            "modo": "contorno",
+            "realce": [
+              "a6",
+              "b5",
+              "f7",
+              "h3",
+              "h7"
+            ],
+            "solucao": "Os cinco peões pretos estão acesos. O da borda direita, na terceira fileira, não tem peão branco à frente: as brancas não têm peão na coluna h, e o de g3 está ao lado dele, na mesma altura, não na frente. A casa de bloqueio é a que fica logo abaixo dele, no caminho da promoção."
+          },
+          "curadoria": {
+            "perceptivel": "O peão passado já está na antepenúltima casa, a um passo de virar dama, e a casa de bloqueio é a única coisa entre ele e a promoção — a urgência do conceito fica visível sem precisar explicá-la. O peão branco de g3, colado na diagonal, é o mesmo ruído honesto do item anterior, do outro lado do tabuleiro.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 20
+            },
+            "adequacao": "Dezoito peças, sem damas: é o estágio em que o peão passado passa a mandar na partida, e a página impressa diz isso com todas as letras — \"as brancas não podem mexer nada sem incorrer em alguma perda\". A posição é da mesma partida do item de m11, mas dezesseis meios-lances depois, com 42% das peças nas mesmas casas."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 14 (Marshall–Capablanca, Nova York 1918), diagrama impresso na p. 245, depois do 30º lance das pretas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 245 — Marshall–Capablanca",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 14, Marshall–Capablanca, Nova York 1918",
+            "originalGame": "Marshall–Capablanca, Nova York 1918",
+            "fenMethod": "Reconstruída pelos 60 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — os 56 do item m11-d2-a mais Kg1 h3 g3 a6. Todo lance é legal por construção, e o avanço h3 da própria linha é o que pôs o peão passado onde ele está. A página 245 do exemplar de 1921 (PDF 263) foi lida em texto e traz o cabeçalho \"QUEEN'S GAMBIT DECLINED 245\" e a frase \"Notice the remarkable position of the pieces. White cannot move anything without incurring some loss\"."
+          }
+        },
+        {
+          "id": "m16-d3-a",
+          "degrau": 3,
+          "fen": "3r2k1/p4pb1/1pP2n1p/4rPp1/2P5/2N5/PP3PPP/R4RK1 w - - 0 23",
+          "lado": "pretas",
+          "tarefa": "casa-de-bloqueio",
+          "resposta": [
+            "c7"
+          ],
+          "legenda": "Partida de dois jogadores comuns, sem anotação e sem diagrama. Jogam as brancas, e agora o peão que já passou é branco.",
+          "material": null,
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "Agora você é das pretas e o peão passado é branco. Acendemos os oito peões brancos: ache o que não tem peão preto à frente, nem na coluna dele nem nas duas do lado.",
+            "modo": "contorno",
+            "realce": [
+              "a2",
+              "b2",
+              "c4",
+              "c6",
+              "f2",
+              "f5",
+              "g2",
+              "h2"
+            ],
+            "solucao": "Os oito peões brancos estão acesos. O da coluna c, já na sexta fileira, não tem peão preto à frente: as pretas não têm peão nas colunas b, c nem d à frente dele — o de b6 está ao lado, na mesma altura. A casa de bloqueio é a que fica logo à frente dele, e sua torre de d8 chega lá em dois lances."
+          },
+          "curadoria": {
+            "perceptivel": "O peão está a duas casas da promoção e a coluna à frente dele está vazia, o que torna a casa de bloqueio a única coisa entre ele e a oitava fileira. O item inverte a cor em relação aos dois de livro: o passado agora é do outro lado, e quem acha a casa é o aluno de pretas.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 31
+            },
+            "adequacao": "Vinte e duas peças, sem damas, material exatamente igual — o desequilíbrio aqui é posicional e não material, e é o peão passado que o produz. Ninguém arrumou a posição: ela é o que sobrou de uma combinação numa partida sem anotação."
+          },
+          "provenance": {
+            "bibliographicSource": "Recorte CC0 da base aberta do Lichess, puzzle a2vkl (lichess.org/training/a2vkl): posição ao fim da linha tática do puzzle, quando a combinação já acabou. Os jogadores não são identificados no recorte.",
+            "citacaoCurta": "Lichess, puzzle a2vkl — posição ao fim da linha",
+            "editionFile": "lichess-open-database",
+            "capitulo": null,
+            "originalGame": "lichess.org/training/a2vkl",
+            "fenMethod": "A FEN guardada no recorte é a posição antes do erro do adversário; esta é a do fim da linha, obtida jogando os lances do puzzle na chess.js (scripts/escolher-exercicios.ts). Passou pela porta 1 — sem xeque, sem mate em 1 e sem peça de cavalo ou mais pendurada — e pela porta 2, com Stockfish 18 na profundidade 12 medindo 31 centésimos entre a melhor linha e a segunda. A resposta única foi conferida por respostaDaTarefa, o mesmo juiz que vai julgar o clique."
+          }
+        }
+      ],
+      "aplicacao": {
+        "id": "m16-d4",
+        "usa": "m16-d3-a",
+        "pergunta": "O peão branco de c6 já passou. Por que ocupar a casa **bem na frente** dele é diferente de simplesmente atacá-lo?",
+        "opcoes": [
+          {
+            "texto": "Porque peão não pula: a peça sentada na frente o para de vez, enquanto a que só o ataca precisa refazer a conta a cada lance.",
+            "certa": true,
+            "porque": "Um peão passado atacado ainda pode avançar, ser capturado e recapturado — e aí o problema mudou de lugar, uma casa mais perto da promoção. Um peão bloqueado não vai a lugar nenhum enquanto a peça estiver ali. É por isso que a dica manda **ocupar a casa**, e não só mirar o peão."
+          },
+          {
+            "texto": "Não é diferente: atacar o peão duas vezes já o impede de andar, porque ele seria capturado.",
+            "certa": false,
+            "porque": "Ele seria capturado — e recapturado. Trocar o passado por uma peça sua costuma ser exatamente o que o dono dele quer quando não consegue avançar de outro jeito. E há posições em que ele avança com xeque ou ganhando tempo, e a conta de atacantes nem chega a acontecer: quando ela falha, o peão já está na sétima."
+          }
+        ]
+      },
+      "reservas": []
     }
   },
   {
