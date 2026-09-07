@@ -24,6 +24,12 @@ const eslintConfig = defineConfig([
     // conferir replay). São `.gitignore`d, não entram no site nem no CI, e
     // lintá-los só polui o gate com aviso de variável de `catch` não usada.
     ".garimpo/**",
+    // Rascunho de sessão, pelo mesmo motivo e pela mesma regra do `.garimpo`:
+    // `.gitignore`d, fora do site e fora do CI. Entrou na lista quando o
+    // resgate da biblioteca do meio-jogo trouxe para cá o `verify.ts` do
+    // pipeline de extração dos livros — código de outra sessão, com `any`, que
+    // deixou o gate de lint vermelho sem que uma linha do site tivesse mudado.
+    ".scratch/**",
   ]),
 ]);
 

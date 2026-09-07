@@ -1,5 +1,5 @@
 {
-  "_leia": "Registro canônico das obras que podem originar posição (§12.2 e §12.4 do CURRICULO.md). O gate de conteúdo lê este arquivo: o campo provenance.editionFile de toda posição não-fixture precisa casar com o 'file' ou o 'slug' de uma entrada daqui, e obra com protected:true tem teto de 2 posições por aula (§12.7). Obra com \"didactic\": true é livro-base didático: dela sai o objetivo e o exemplo (etapas 1 e 2) de uma aula, e não só posição de prática — e o gate cobra que nenhuma obra protegida seja base de mais de uma aula por nível. A face humana deste registro — legibilidade medida, mapa de cobertura e regras editoriais — é docs/SOURCE-CORPUS.md.",
+  "_leia": "Registro canônico das obras que podem originar posição (§12.2 e §12.4 do CURRICULO.md). O gate de conteúdo lê este arquivo: o campo provenance.editionFile de toda posição não-fixture precisa casar com o 'file' ou o 'slug' de uma entrada daqui, e obra com protected:true tem teto de 2 posições por aula (§12.7). Obra com \"didactic\": true é livro-base didático: dela sai o objetivo e o exemplo (etapas 1 e 2) de uma aula, e não só posição de prática — e o gate cobra que nenhuma obra protegida seja base de mais de uma aula por nível. DOIS TETOS, E ELES CONTAM COISAS DIFERENTES. Nas aulas de finais o teto conta OBRA (PROTECTED_SOURCE_CAP = 2 em lib/lesson/schema.ts), e continua intocado. No meio-jogo ele passou a contar CAPÍTULO (CAPITULO_CAP = 3 em lib/meiojogo/dicas.ts), por decisão editorial de 2026-09-07 — nasceu 2 e subiu para 3 no mesmo dia, na execução do Bloco 3, porque no meio-jogo o capítulo é na prática uma partida ilustrada, e uma partida tem de duas a seis figuras. Quem protege o aluno de ver duas telas parecidas não é este teto e sim SEMELHANCA_MAXIMA, que mede o tabuleiro; este aqui protege a seleção do autor, e três de seis figuras não a reproduzem, e toda posição de livro tem de declarar provenance.capitulo. O porquê está escrito na licença de nimzowitsch-my-system-1930, e vale para as duas obras de meio-jogo: o teto por obra foi escrito como se fosse restrição legal, e não é. A face humana deste registro — legibilidade medida, mapa de cobertura e regras editoriais — é docs/SOURCE-CORPUS.md.",
   "sources": [
     {
       "slug": "capablanca-1921",
@@ -225,6 +225,56 @@
       "license": "obra protegida — uso sob o teto da §12.7",
       "file": "seirawan-winning-chess-endings.pdf",
       "role": "Livro-base didático. O cap. I \"Basic Mates\" ensina os mates elementares pelo método da caixa (\"Boxing the King\"), com princípios numerados e prosa de iniciante. Base didática do N0-2B-MATE; origina posição sob teto."
+    },
+    {
+      "slug": "capablanca-fundamentals-reimpressao",
+      "title": "Chess Fundamentals",
+      "author": "José Raúl Capablanca",
+      "edition": "Harcourt, Brace and Company, Nova York; G. Bell and Sons, Londres. Reimpressão sem ano de tiragem impresso; folha de rosto e verso lidos (\"COPYRIGHT, 1921, BY HARCOURT, BRACE AND COMPANY, INC.\"), e o prefácio acrescentado diz \"first published thirteen years ago\", o que o data de 1934. 270 páginas de PDF; deslocamento medido: página impressa + 18 = página do PDF.",
+      "protected": false,
+      "license": "domínio público — Capablanca morreu em 1942, e o Brasil conta vida do autor mais 70 anos",
+      "file": "capablanca-fundamentals-reimpressao-biblioteca.pdf",
+      "role": "Fonte primária do meio-jogo: 12 posições, uma por dica. Entrada separada de \"capablanca-1921\" de propósito — é outra tiragem, com um prefácio que a de 1921 não tem, e o registro grava a edição porque é dela que sai o número de página. Enquanto as duas não forem comparadas página a página, citar uma pela outra seria atribuir paginação a um exemplar que ninguém abriu."
+    },
+    {
+      "slug": "nimzowitsch-my-system-1930",
+      "title": "My System",
+      "author": "Aron Nimzowitsch",
+      "edition": "Harcourt, Brace and Company, Nova York, 1930; versão inglesa de Philip Hereford. Folha de rosto e verso lidos (\"English Version by PHILIP HEREFORD\", \"COPYRIGHT, 1930, by HARCOURT, BRACE AND COMPANY, INC.\"). 330 páginas de PDF; deslocamento medido: página impressa + 22 = página do PDF.",
+      "protected": true,
+      "license": "Domínio público no Brasil nas duas camadas, e mesmo assim marcada como protegida — de propósito. AS DATAS. Nimzowitsch morreu em 1935: o texto alemão é livre no Brasil desde 2006 (vida mais 70 anos, contados de 1º de janeiro do ano seguinte à morte, Lei 9.610 art. 41). A tradução inglesa é obra separada, com prazo próprio, e era o único prazo em aberto: o nome impresso na folha de rosto, 'Philip Hereford', é pseudônimo. CONFERIDO EM 2026-09-07, em duas fontes independentes: o registro biográfico dos Varsity Chess Matches (Britbase) e as Chess Notes de Edward Winter (chesshistory.com/winter/extra/mysystem.html) identificam ambos 'Philip Hereford' como Arthur Hereford Wykeham George (29/08/1871 – 07/03/1937), e ambos citam a mesma fonte primária: o obituário do British Chess Magazine de julho de 1937, p. 361. Pela mesma conta, a tradução é livre no Brasil desde 2008. POR QUE 'protected' CONTINUA true. Porque a partir de 2026-09-07 este campo não sustenta mais uma afirmação legal aqui — ele liga o teto editorial, e é o teto que se quer ligado. O teto por obra foi escrito como se fosse restrição da lei, e a premissa não se sustenta: uma FEN é o arranjo das peças, e o que a Lei 9.610 protege num livro de xadrez é o texto, as anotações e a seleção/organização da coletânea (art. 7º, XIII). A camada que copiamos — a posição — não é a protegida, e a que é (a tradução) não entra numa FEN. O que sobra de preocupação real é copiar a SELEÇÃO: esvaziar os diagramas do capítulo do peão isolado é reproduzir a curadoria do Nimzowitsch. É isso que o teto novo mede, e por isso ele conta capítulo. O QUE ISSO SUBSTITUI. A licença anterior dizia: 'Marcar como protegida não custa nada aqui — nenhuma dica usa mais de uma posição da mesma obra.' Passou a custar no dia em que uma dica precisou de três posições de livro, e é essa conta que a mudança de unidade resolve. Aprovado pelo Doug em 2026-09-07; a decisão é jurídico-editorial, não técnica.",
+      "file": "nimzowitsch-my-system-1930.pdf",
+      "role": "Fonte primária do meio-jogo: 11 posições, uma por dica. É de onde saem a coluna aberta, o posto, o bloqueio do peão passado, a cadeia de peões e o peão dama isolado."
+    },
+    {
+      "slug": "znosko-middle-game-1930",
+      "title": "The Middle Game in Chess",
+      "author": "Eugène Znosko-Borovsky",
+      "edition": "G. Bell and Sons, Londres, 1930. Folha de rosto e página de créditos lidas: \"First Published July, 1922 / Reprinted May, 1923 / July, 1930\" — é a reimpressão de julho de 1930 do texto de 1922, e não o livro reescrito de 1938 que leva o mesmo título. O prefácio diz \"The translation has been revised by Mr. P. W. Sergeant\": Sergeant revisou a tradução, e o tradutor original não é nomeado em lugar nenhum do volume. 248 páginas de PDF; deslocamento medido: página impressa + 16 = página do PDF.",
+      "protected": true,
+      "license": "Texto livre no Brasil; tradutor não identificado. Znosko-Borovsky morreu em 1954 e o texto dele é livre no Brasil desde 2025; Sergeant, que revisou a tradução, morreu em 1952 e a revisão dele é livre desde 2023. Quem traduziu não está escrito em lugar nenhum do volume — o prefácio diz apenas 'The translation has been revised by Mr. P. W. Sergeant' —, e sem esse nome não há prazo a contar. Diferente do My System, aqui o levantamento de 2026-09-07 não achou o nome: não é um prazo conferido e vencido, é um prazo desconhecido. Marcada como protegida, e o campo liga o teto por CAPÍTULO do meio-jogo (CAPITULO_CAP = 2), não o teto por obra. O raciocínio inteiro está na licença de nimzowitsch-my-system-1930 e vale igual aqui: a FEN é o arranjo das peças, e o que a lei protege é o texto, as anotações e a seleção da coletânea. A tradução desconhecida é camada de texto, e a nossa prosa é 100% própria.",
+      "file": "znosko-borovsky-middle-game-1930-reimpressao.pdf",
+      "role": "Fonte primária do meio-jogo: 7 posições, uma por dica. É o único livro do levantamento inteiro que trata só do meio-jogo, e de onde saem as partidas de mestre — Blackburne–Lasker, Lasker–Capablanca, Tarrasch–Duras, Schlechter–Tarrasch, Duras–Cohn."
+    },
+    {
+      "slug": "lasker-common-sense-1910",
+      "title": "Common Sense in Chess",
+      "author": "Emanuel Lasker",
+      "edition": "J. S. Ogilvie Publishing Company, Nova York, [1910] — reimpressão das doze palestras dadas em Londres em 1895",
+      "protected": false,
+      "license": "Domínio público no Brasil desde 1º de janeiro de 2012. Emanuel Lasker morreu em 11 de janeiro de 1941, e a Lei 9.610 (art. 41) conta setenta anos a partir de 1º de janeiro do ano seguinte ao da morte. Não há camada de tradução em aberto aqui, e isso é o que distingue esta obra do My System: Lasker deu as palestras em inglês, em Londres, e o livro é o texto delas — não a versão de um tradutor. Foi registrada em 2026-09-07, na execução do Bloco 3 do meio-jogo, quando o acervo alcançável do Capablanca não tinha diagrama para dois dos oito conceitos da fatia. O raciocínio de por que a FEN não depende desta discussão está na licença de nimzowitsch-my-system-1930 e na §3.1 do plano: o que a lei protege num livro de xadrez é o texto, as anotações e a seleção/organização da coletânea (art. 7º, XIII), e não o arranjo das peças.",
+      "file": "lasker-common-sense-ogilvie.pdf",
+      "role": "Fonte de posição para o meio-jogo. As doze palestras trazem partidas completas em notação descritiva desde o primeiro lance, o que permite reconstruí-las com lib/meiojogo/descritiva.ts em vez de transcrever diagrama por imagem — cada lance conferido pela chess.js. Não é livro-base didático: não tem progressão declarada para iniciante."
+    },
+    {
+      "slug": "lasker-manual-1927",
+      "title": "Lasker's Manual of Chess",
+      "author": "Emanuel Lasker",
+      "edition": "E. P. Dutton & Company, Nova York, 1927, com 306 diagramas — versão inglesa do Lehrbuch des Schachspiels (1926)",
+      "protected": false,
+      "license": "Domínio público no Brasil desde 1º de janeiro de 2012. Emanuel Lasker morreu em 11 de janeiro de 1941, e a Lei 9.610 (art. 41) conta setenta anos a partir de 1º de janeiro do ano seguinte ao da morte. Fica declarado o que **não** foi conferido: o original é alemão, de 1926, e a folha de rosto desta edição não nomeia tradutor — o mesmo tipo de prazo em aberto que o My System teve até 2026-09-07. A diferença é que aqui isso não muda nada, pela §3.1: a camada protegida de uma tradução é o texto, e a FEN de um diagrama não deve nada ao tradutor. Se alguma prosa desta obra for citada algum dia, a pergunta volta a existir e tem de ser respondida antes.",
+      "file": "lasker-manual-1927.pdf",
+      "role": "Fonte de posição para o meio-jogo, registrada junto com o Common Sense em 2026-09-07. O texto é mais de exposição que de partida anotada, e por isso ela entra como segunda opção: onde houver partida impressa desde o primeiro lance, vale o mesmo caminho de reconstrução do Common Sense."
     }
   ]
 }

@@ -140,7 +140,33 @@ const MetaDeMeioJogoSchema = z
   .strict();
 
 export const TarefaSchema = z.discriminatedUnion("tipo", [
-  z.object({ ...Base, tipo: z.literal("meiojogo"), meta: MetaDeMeioJogoSchema }).strict(),
+  z
+    .object({
+      ...Base,
+      tipo: z.literal("meiojogo"),
+      meta: MetaDeMeioJogoSchema,
+      /**
+       * As dicas que o `detalhe` nomeia — os ids, na ordem em que aparecem.
+       *
+       * **Não é a meta.** O que fecha a tarefa continua sendo "leia 6 dicas do
+       * degrau", e o aluno escolhe quais; este campo existe para o gate poder
+       * conferir a **prosa**, que é onde o erro real aconteceu. Os quatro
+       * `detalhe` do painel prometiam conceitos que não são dica do degrau que
+       * a tarefa aponta — "a coluna aberta" e "a dama sozinha" na semana 1,
+       * "melhorar a pior peça" e "trocar quando se está na frente" na 2,
+       * "posto avançado" e "bispo bom e bispo mau" na 3 (que são do degrau
+       * anterior), "ataque de minoria" e "sacrifício de qualidade" na 4 (que
+       * não são dica de degrau nenhum). O gate não pegava porque conferia só a
+       * contagem.
+       *
+       * O teste cobra três coisas: que cada id exista, que ele seja **do
+       * degrau declarado**, e que o `titulo` da dica apareça literalmente no
+       * `detalhe`. A terceira é a que morde: ela obriga a prosa a chamar a
+       * dica pelo nome que o aluno vai ver na tela, em vez de parafraseá-la.
+       */
+      dicas: z.array(z.string().regex(/^m[0-9]+$/)).min(1),
+    })
+    .strict(),
   z.object({ ...Base, tipo: z.literal("tatica"), meta: MetaSchema }).strict(),
   z.object({ ...Base, tipo: z.literal("finais"), meta: MetaDeFinaisSchema }).strict(),
   z.object({ ...Base, tipo: z.literal("marcar") }).strict(),
@@ -184,6 +210,62 @@ export function validarTarefas(dados: unknown): Tarefa[] {
     }
   }
   return lido.data;
+}
+
+/** O que a conferência do `detalhe` precisa saber de uma dica. */
+export type DicaCitavel = { readonly id: string; readonly nivel: string; readonly titulo: string };
+
+/**
+ * Os problemas do `detalhe` das tarefas de meio-jogo, em português.
+ *
+ * Mora aqui, e não dentro de `validarTarefas`, porque a conferência precisa das
+ * **dicas** — e `content/meio-jogo.json` é outro arquivo de conteúdo. Importá-lo
+ * daqui faria o esquema das tarefas depender do conteúdo do meio-jogo para
+ * conferir uma vírgula de tática. Recebendo a lista por parâmetro, quem junta
+ * as duas pontas é quem já lê as duas: o `npm test` e o gate.
+ *
+ * As três regras, e o erro real que cada uma pega:
+ *
+ * 1. **o id existe** — `detalhe` prometendo dica que ninguém escreveu;
+ * 2. **o id é do degrau declarado** — foi o que aconteceu: `s3-meiojogo` é do
+ *    degrau 1200–1400 e prometia "posto avançado" e "bispo bom e bispo mau",
+ *    que são m15 e m14, do degrau anterior;
+ * 3. **o título aparece literalmente no `detalhe`** — sem isto a lista de ids
+ *    ficaria certa e a prosa continuaria dizendo outra coisa, que é exatamente
+ *    o estado em que o painel estava.
+ */
+export function problemasDoDetalheDeMeioJogo(
+  tarefas: readonly Tarefa[],
+  dicas: readonly DicaCitavel[],
+): string[] {
+  const problemas: string[] = [];
+  for (const tarefa of tarefas) {
+    if (tarefa.tipo !== "meiojogo") continue;
+    if (tarefa.dicas.length !== tarefa.meta.ler) {
+      problemas.push(
+        `${tarefa.id}: manda ler ${tarefa.meta.ler} dicas e nomeia ${tarefa.dicas.length}`,
+      );
+    }
+    for (const id of tarefa.dicas) {
+      const dica = dicas.find((d) => d.id === id);
+      if (!dica) {
+        problemas.push(`${tarefa.id}: nomeia a dica "${id}", que não existe`);
+        continue;
+      }
+      if (dica.nivel !== tarefa.meta.nivel) {
+        problemas.push(
+          `${tarefa.id}: é do degrau ${tarefa.meta.nivel} e nomeia "${id}", ` +
+            `que é do degrau ${dica.nivel}`,
+        );
+      }
+      if (!tarefa.detalhe?.includes(dica.titulo)) {
+        problemas.push(
+          `${tarefa.id}: nomeia "${id}" na lista e não escreve "${dica.titulo}" no detalhe`,
+        );
+      }
+    }
+  }
+  return problemas;
 }
 
 /** As tarefas de uma semana, na ordem em que foram escritas. */

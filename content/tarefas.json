@@ -40,7 +40,15 @@
     "semana": 1,
     "tipo": "meiojogo",
     "titulo": "Ler 6 dicas de meio-jogo do degrau até 1000",
-    "detalhe": "Quinze minutos por dia: uma dica. Leia, olhe o diagrama, responda à pergunta e marque. São as seis primeiras — peça parada, rei seguro, o centro, a coluna aberta, a dama sozinha e os peões do roque.",
+    "detalhe": "Quinze minutos por dia: uma dica. Leia, olhe o diagrama, responda à pergunta e marque. São as seis primeiras do degrau: Coloque outra peça no jogo · Prepare a segurança do rei · Dispute o centro com suas peças · Reúna peças antes do ataque · Mexa no escudo só com motivo · Dê trabalho às duas torres.",
+    "dicas": [
+      "m1",
+      "m2",
+      "m3",
+      "m4",
+      "m5",
+      "m6"
+    ],
     "meta": {
       "nivel": "ate-1000",
       "ler": 6
@@ -137,7 +145,15 @@
     "semana": 2,
     "tipo": "meiojogo",
     "titulo": "Ler 6 dicas de meio-jogo do degrau 1000–1200",
-    "detalhe": "Melhorar a pior peça, o peão fraco, trocar quando se está na frente, a sétima fileira, o peão dobrado e o bloqueio do passado.",
+    "detalhe": "Seis das oito deste degrau, na ordem em que estão na lista: Ligue a coluna a uma entrada · Pressione o peão na semiaberta · Na sétima, confira alvo e defesa · Faça do isolado um alvo · Peão dobrado exige comparação · Compare bispo e cavalo pelo terreno. As outras duas ficam de folga para quem quiser seguir.",
+    "dicas": [
+      "m9",
+      "m10",
+      "m11",
+      "m12",
+      "m13",
+      "m14"
+    ],
     "meta": {
       "nivel": "1000-1200",
       "ler": 6
@@ -228,7 +244,17 @@
     "semana": 3,
     "tipo": "meiojogo",
     "titulo": "Ler 8 dicas de meio-jogo do degrau 1200–1400",
-    "detalhe": "Posto avançado, bispo bom e bispo mau, o lance útil, contar antes de capturar, os dois bispos, em que ala atacar, o peão retardatário e a base da cadeia.",
+    "detalhe": "As oito do degrau, e é a semana mais cheia do módulo: Abra uma rota para a pior peça · Guarde diagonais para os dois bispos · Ataque a base da cadeia · Fixe o peão que ficou para trás · Use o espaço para limitar respostas · Procure a ruptura que libera o jogo · Prepare os peões que abrem linhas · Abra o centro contra o rei exposto.",
+    "dicas": [
+      "m17",
+      "m18",
+      "m19",
+      "m20",
+      "m21",
+      "m22",
+      "m23",
+      "m24"
+    ],
     "meta": {
       "nivel": "1200-1400",
       "ler": 8
@@ -328,7 +354,15 @@
     "semana": 4,
     "tipo": "meiojogo",
     "titulo": "Ler 6 dicas de meio-jogo do degrau 1400–1600",
-    "detalhe": "As seis mais difíceis do módulo: casas fracas de uma cor, ataque de minoria, profilaxia, romper no centro, sacrifício de qualidade e a iniciativa. Leitura não é assunto novo — é a única coisa desta semana que ainda entra.",
+    "detalhe": "As seis mais difíceis do módulo: Crie trabalho em uma segunda frente · Atrase o plano que ajuda o adversário · Examine o centro antes de responder na ala · Dê atividade ao seu peão isolado · Defenda criando uma tarefa ao rival · Reavalie antes de seguir o plano. Leitura não é assunto novo — é a única coisa desta semana que ainda entra.",
+    "dicas": [
+      "m25",
+      "m26",
+      "m27",
+      "m28",
+      "m29",
+      "m30"
+    ],
     "meta": {
       "nivel": "1400-1600",
       "ler": 6

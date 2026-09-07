@@ -28,13 +28,22 @@ export function Diagrama({
   fen,
   titulo,
   orientacao,
+  realce,
 }: {
   fen: string;
   /** O que um leitor de tela lê no lugar do desenho. */
   titulo: string;
   orientacao?: Orientacao;
+  /**
+   * As casas a acender, desenhadas dentro do próprio SVG.
+   *
+   * Serve o diagrama que não muda — o impresso, e a posição extra da dica.
+   * Onde o realce **troca** por passo, quem entra é a `camadaDeRealce`: um
+   * tabuleiro inteiro por passo custaria 24,7 KB de marcação cada.
+   */
+  realce?: readonly string[];
 }) {
-  const svg = diagrama(fen, { paleta: PALETA_DA_TELA, titulo, orientacao });
+  const svg = diagrama(fen, { paleta: PALETA_DA_TELA, titulo, orientacao, realce });
 
   return (
     <div

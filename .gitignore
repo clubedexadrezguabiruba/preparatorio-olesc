@@ -64,3 +64,7 @@ next-env.d.ts
 # Rascunho de sessão: scripts de conferência, capturas de tela, geradores.
 # Nada aqui é fonte de verdade — o que vale está em content/, lib/ e docs/.
 .scratch/
+
+# Cache do hook de design (plugin impeccable). Local, derivado, sem valor
+# fora da sessão que o escreveu.
+.impeccable/

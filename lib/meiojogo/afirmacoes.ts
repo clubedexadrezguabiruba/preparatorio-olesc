@@ -221,8 +221,14 @@ function reiDe(jogo: Chess, lado: Lado): Square | null {
   return jogo.findPiece({ type: "k", color: COR[lado] })[0] ?? null;
 }
 
-/** As casas entre duas na mesma linha, exclusivas. `null` se não há linha. */
-function entre(a: string, b: string): Square[] | null {
+/**
+ * As casas entre duas na mesma linha, exclusivas. `null` se não há linha.
+ *
+ * Exportada porque `lib/meiojogo/exercicios.ts` precisa da mesma geometria para
+ * a tarefa do ataque descoberto. É geometria, e não critério — mas duas cópias
+ * de "estas casas estão alinhadas" divergem do mesmo jeito que dois juízes.
+ */
+export function casasEntre(a: string, b: string): Square[] | null {
   const dc = Math.sign(coluna(b) - coluna(a));
   const df = Math.sign(fileira(b) - fileira(a));
   const passos = Math.max(Math.abs(coluna(b) - coluna(a)), Math.abs(fileira(b) - fileira(a)));
@@ -534,7 +540,7 @@ export function conferirAfirmacao(fen: string, a: Afirmacao): string | null {
       if (atacante.color === presa.color) return `${a.por} é peça da mesma cor que ${a.casa}`;
       if (atras.color !== presa.color) return `${a.contra} não é peça da cor de ${a.casa}`;
 
-      const caminho = entre(a.por, a.contra);
+      const caminho = casasEntre(a.por, a.contra);
       if (caminho === null) return `${a.por} e ${a.contra} não estão na mesma linha`;
       if (!caminho.includes(a.casa as Square)) return `${a.casa} não está entre as duas`;
 
@@ -554,8 +560,8 @@ export function conferirAfirmacao(fen: string, a: Afirmacao): string | null {
       const torres = jogo.findPiece({ type: "r", color: COR[a.lado] });
       const ligadas =
         torres.length === 2 &&
-        entre(torres[0], torres[1]) !== null &&
-        entre(torres[0], torres[1])!.every((c) => !pecaEm(c)) &&
+        casasEntre(torres[0], torres[1]) !== null &&
+        casasEntre(torres[0], torres[1])!.every((c) => !pecaEm(c)) &&
         (fileira(torres[0]) === fileira(torres[1]) || coluna(torres[0]) === coluna(torres[1]));
       if (ligadas === a.ligadas) return null;
       return a.ligadas

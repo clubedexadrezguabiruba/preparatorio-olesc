@@ -72,7 +72,7 @@ test("o conteúdo real do meio-jogo atravessa sem perder caractere", () => {
   // que este parser não entende, é aqui que se descobre — e não na tela.
   const campos: string[] = [];
   for (const dica of DICAS) {
-    campos.push(...dica.explicacao, dica.quiz.porque);
+    campos.push(...dica.explicacao.map((passo) => passo.texto), dica.quiz.porque);
     if (dica.cuidado) campos.push(dica.cuidado);
   }
   assert.ok(campos.length >= 30);
