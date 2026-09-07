@@ -1,11 +1,13 @@
-# Meio-jogo — plano didático e de reestruturação (v2.2)
+# Meio-jogo — plano didático e de reestruturação (v2.3)
 
 > Destino: `docs/MEIO-JOGO-PLANO-DIDATICO.md`. Branch `meio-jogo-livros` ou filha.
 > **Nada em `main`.**
 >
-> **v2.2** — quarta escrita. A v1 foi revista pela Astra; a v2 respondeu; a v2.1
-> corrigiu a segunda revisão; a **v2.2 muda a fonte dos exercícios** depois da
-> observação do Doug de que posição não é obra protegida. A §1 é o histórico.
+> **v2.3** — quinta escrita, e a primeira feita **depois de executar**. A v1 foi
+> revista pela Astra; a v2 respondeu; a v2.1 corrigiu a segunda revisão; a v2.2
+> mudou a fonte dos exercícios depois da observação do Doug de que posição não é
+> obra protegida; a **v2.3 registra os Blocos 1 e 2 feitos** e corrige o que o
+> plano afirmava e a execução desmentiu. A §1 é o histórico.
 >
 > **Escopo aprovado:** 8 conceitos até o piloto; expansão para os 30 só depois
 > da análise do piloto e das correções.
@@ -34,9 +36,21 @@ sessão que o escreveu foi encerrada com `/clear`. Para retomar:
 alguém sobre gravação de tempo e acerto de menores (o site já faz isso na
 tática; nada de novo se abre).
 
-**Onde começar:** Bloco 0 da §11 — e dentro dele o **resgate dos 102 MB** da
-pasta temporária é o item urgente, porque é pasta de outra sessão. Depois,
-Bloco 1.
+**Onde começar:** **Bloco 3** da §11 — a fatia de 8 conceitos, curada. Os Blocos
+0, 1 e 2 estão feitos (commits `783a9db`, `0959930`, `de0d38b`, `ea54d85`), e o
+número medido de cada um está no fim do bloco correspondente.
+
+**O que o Bloco 2 mudou neste plano, e que você precisa saber antes de curar
+posição:**
+
+1. **Os oito conceitos da fatia (m9–m16) têm tarefa, os oito.** Era a dúvida que
+   travava o Bloco 3; está respondida.
+2. **`casa-negada` não tem estoque** — 6 posições em 444, 1,4%. É a tarefa de
+   **m3**, que não está na fatia, mas a conta vale para quando ele entrar.
+3. **A classificação dos 30 mudou em 12 entradas**, com o total intacto em 15/15.
+   Ela mora em `MAPA`, em `lib/meiojogo/exercicios.ts`, com o porquê de cada uma.
+4. **O teto agora conta capítulo**, e toda posição de livro tem de declarar
+   `provenance.capitulo` — o gate recusa livro sem ele.
 
 **Leituras de contexto, nesta ordem:** `docs/MEIO-JOGO-DIDATICA-MEDIDO.md` (o que
 a sessão anterior mediu), este arquivo, e as duas revisões da Astra em `docs/`.
@@ -61,12 +75,13 @@ serve ao mesmo tempo de exemplo ensinado e de teste. Daí saem os problemas:
   "d5" à casa d5.
 - **Meio-jogo contribui com zero minutos** para a meta de 120 min/dia: a view
   `minutos_por_dia` (`0005_revisao.sql:199`) soma só tática e finais.
-- **O texto das tarefas do painel está desatualizado** — achado ao conferir a
-  fatia do piloto: o `detalhe` de `s1-meiojogo` promete "a coluna aberta" e "a
-  dama sozinha", e o de `s2-meiojogo` promete "melhorar a pior peça" e "trocar
-  quando se está na frente". Nenhuma dessas quatro é dica do degrau que a tarefa
-  aponta. O gate não pega porque `lib/tarefas/tarefas.test.ts:80-97` confere só a
-  contagem, não a descrição.
+- ~~**O texto das tarefas do painel está desatualizado**~~ — **corrigido no
+  Bloco 1**, e era pior do que este parágrafo dizia: não eram 2 dos 4 `detalhe`,
+  eram **os 4**. `s3` prometia "posto avançado" e "bispo bom e bispo mau", que
+  são m15 e m14, do degrau anterior; `s4` prometia "ataque de minoria" e
+  "sacrifício de qualidade", que não existem. O gate não pegava porque
+  `lib/tarefas/tarefas.test.ts` conferia só a contagem; agora
+  `problemasDoDetalheDeMeioJogo` confere id, degrau e o título literal na prosa.
 
 **A condição que governa tudo:** alunos de 12 a 15 anos, 700 a 1700 no
 chess.com, e **muitos verão estes conceitos pela primeira vez**. Saber resolver
@@ -78,7 +93,7 @@ apoio** e depois **decide sozinho** — com o conceito voltando dias depois.
 
 ---
 
-## 1. Histórico das três versões
+## 1. Histórico das versões
 
 ### v1 → v2 (primeira revisão)
 
@@ -126,6 +141,24 @@ os exercícios do recorte CC0 do Lichess porque eu tratava `PROTECTED_SOURCE_CAP
 como se fosse limite legal. É política editorial do projeto, e a premissa dela
 não se sustenta aqui. Ver §3.1. A consequência é a §3.2: **livro para ensinar e
 guiar, partida real para testar transferência** — não um ou outro.
+
+### v2.2 → v2.3 (a execução dos Blocos 1 e 2) — o que o plano errou
+
+Quatro afirmações minhas não sobreviveram ao contato com o código. Ficam aqui
+porque a próxima versão deste plano vai ser escrita por quem só tem o documento.
+
+| # | O que a v2.2 dizia | O que a execução mediu |
+|---|---|---|
+| 1 | "2 dos 4 `detalhe` do painel não descrevem" | **4 de 4.** Eu só tinha conferido `s1` e `s2` |
+| 2 | "35,4% passam na porta 1" | **30,9%** numa amostra uniforme sobre os 37 temas e as três faixas. Mesma ordem de grandeza, número diferente |
+| 3 | "8 dicas de julgamento" era hipótese | O total é 15/15, como antes — mas **12 das 30 trocaram de lado**. O total estava certo por acidente |
+| 4 | o estoque do Lichess "não é o gargalo" | Verdade para 11 tarefas. **`casa-negada` sai com 6 posições em 444** e não sustenta um degrau |
+
+E dois achados que o plano não previa: **cinco das 30 posições saem do mesmo §22
+do Capablanca**, todas do Exemplo 52 — uma partida comentada só —, e o teto por
+dica não vê isso; e a identidade de **Philip Hereford ficou confirmada em duas
+fontes independentes**, o que torna a tradução do *My System* livre no Brasil
+desde 2008 sem que `protected` precise mudar (§3.1).
 
 ---
 
@@ -321,12 +354,21 @@ critérios já estão implementados e comentados em
 `lib/meiojogo/afirmacoes.ts:422-470`.
 
 **Uma tarefa por objetivo, não por traço.** m12 ("faça do isolado um alvo") e m28
-("dê atividade ao seu isolado") não podem receber o mesmo exercício. O mapa
-completo é entregável do Bloco 2, **depois** de refeita a classificação — que
-está errada: o quiz de **m7** pergunta "se o cavalo de e3 sair, qual peça passa a
-atacar a dama de c3?", que é ataque descoberto e `chess.js` confere, e mesmo
-assim eu havia classificado m7 como julgamento puro. A classificação foi feita
-pelas afirmações da legenda, não pelo que a dica ensina.
+("dê atividade ao seu isolado") não podem receber o mesmo exercício.
+
+**Feito no Bloco 2**, e o mapa mora em `MAPA`, em `lib/meiojogo/exercicios.ts`,
+com o porquê de cada uma das 30 entradas. O que separa m12 de m28 é o campo
+`alvo`: em m12 o aluno procura o isolado **dele**, em m28 o **seu** — mesma
+geometria, pergunta oposta, e um teste recusa duas dicas com o mesmo par
+`(tarefa, alvo)`. O mesmo vale para m1 e m24, que dividem
+`peca-na-casa-de-origem`: numa é a sua peça que não saiu, na outra é o rei dele
+que não rocou.
+
+A classificação antiga estava errada porque foi feita pelas **afirmações da
+legenda**, e não pelo que a dica ensina — o quiz de **m7** pergunta "se o cavalo
+de e3 sair, qual peça passa a atacar a dama de c3?", que é ataque descoberto e
+`chess.js` confere, e mesmo assim m7 constava como julgamento puro. Refeita, ela
+mudou 12 das 30 entradas.
 
 ---
 
@@ -440,10 +482,19 @@ diz hoje, em `content/meio-jogo.json`:
 > *"Ninguém o defende de graça — cada defesa custa uma peça parada."*
 
 É forte demais pelo mesmo motivo: o rei pode defendê-lo, uma peça pode defendê-lo
-sem ficar parada, e o peão pode avançar ou ser trocado. **m12 entra na lista de
-prosa a consertar no Bloco 1**, e o Bloco 2 varre as outras 29 procurando o mesmo
-tipo de generalização — heurística vendida como verdade universal é critério de
-aceite, não detalhe de redação.
+sem ficar parada, e o peão pode avançar ou ser trocado.
+
+**Feito.** m12 foi reescrita no Bloco 1, e o Bloco 2 varreu as outras 29: 244
+campos de prosa, **72 frases com marca de universalidade, 6 reescritas em 5
+dicas** — m3 ("para lá qualquer peça chega em menos lances": a torre de a1 chega
+a a8 em um lance e a d4 em dois), m5 duas vezes, m13 ("peão dobrado perde…
+defender o vizinho": ele defende em diagonal, c3 defende b4 e d4), m16 e m20
+("peão retardatário **não pode** avançar": pode, e é capturado — que é outra
+coisa).
+
+A varredura virou `npm run meiojogo:prosa`, e **não é gate**: definição e
+geometria podem ser absolutas porque são. Ela diz onde ler, e quem decide é a
+autoria.
 
 ### 7.3 Julgamento — m7
 
@@ -606,26 +657,101 @@ pelo teste padrão da biblioteca; e o texto de `nimzowitsch-my-system-1930-pages
 lido a partir de `.scratch/` (não do temp) achou a página do diagrama CXLVIII no
 índice 208 de 330 — conferido.
 
-### Bloco 1 — a leitura, para as 30 (até 10/9) · sem banco
+### Bloco 1 — a leitura, para as 30 — **feito em 2026-09-07** (`0959930`, `ea54d85`)
 `citacaoCurta` nas 30 e `<details>` no pé; explicação logo abaixo do diagrama;
 `realce` autoral no `Diagrama`; tabuleiro grudado; **a prosa de m12 corrigida**;
 os `detalhe` de `s1-meiojogo` a `s4-meiojogo` batendo com as dicas que existem;
-m11 e m22 com vídeo certo ou com a ressalva na tela.
-→ **Número:** em 360 px, medido com Playwright, o aluno lê cada passo com o
-tabuleiro à vista, sem rolar para cima, nas 30. E os 4 `detalhe` do painel
-descrevem dicas que existem no degrau que apontam — hoje, 2 dos 4 não descrevem.
+m11 e m22 com a ressalva na tela (`video.ressalva`).
 
-### Bloco 2 — o juiz, o contrato e o funil (até 13/9) · sem banco, sem tela
-`lib/meiojogo/exercicios.ts`: as tarefas, cada uma com contrato e com teste de
-caso favorável **e** adversarial. Reclassificação dos 30 conceitos pelo que a
-dica ensina. Varredura das 30 prosas atrás de generalização forte demais. As
-portas 1 e 2 do funil implementadas em `scripts/escolher-exercicios.ts`, com o
-motor pelo caminho de `scripts/motor-repertorio.ts`. **E a mudança de política da
-§3.1**: teto por capítulo para o meio-jogo, `PROTECTED_SOURCE_CAP` intocado para
-finais, e as licenças de Nimzowitsch e Znosko reescritas com o raciocínio.
-→ **Número:** o funil roda ponta a ponta e imprime quantas posições sobram por
-tarefa **depois do motor** — hoje sei só até a porta 1 (35,4%). E
-`validate:content` recusa uma terceira posição do mesmo capítulo, com teste.
+**O plano errou por metade num número, e a correção é para cima.** Ele dizia que
+2 dos 4 `detalhe` do painel prometiam dicas inexistentes. Conferidos os quatro,
+são **4 de 4**: `s3` prometia "posto avançado" e "bispo bom e bispo mau", que são
+m15 e m14 — do degrau **anterior** —, e `s4` prometia "ataque de minoria" e
+"sacrifício de qualidade", que não são dica de degrau nenhum. A checagem antiga
+só tinha olhado `s1` e `s2`.
+
+**Três decisões de desenho que saíram da medição, e não da intenção:**
+
+- **duas colunas só a partir de 1024 px.** Com `max-w-2xl` e duas colunas em
+  1100 px o tabuleiro saía com 304 px — **menor que os 320 px do celular**;
+- **o realce é camada separada, não tabuleiro por passo.** Um diagrama inteiro
+  custa 24,7 KB de marcação, e três passos seriam 74 KB no dado móvel do aluno;
+- **o estado do passo escolhido está na palavra, não na cor.** "Passo 3 aceso ·
+  d4, c5" contra "Passo 3 · acende d4, c5". O caminho até aí está no commit
+  `ea54d85`, e vale ler antes de mexer: a borda que passava no piso de 3:1 da
+  WCAG 1.4.11 pesava 2,16× uma linha de rótulo, num lugar onde nada mais passa de
+  1,35:1.
+
+→ **Número, medido:** 360×640 com Playwright, nas 30 dicas — **69 passos, e em
+todos o passo escolhido é lido com o tabuleiro inteiro dentro da janela**; nenhum
+cartão muda de altura ao ser escolhido; zero erro de console; zero rolagem
+horizontal (a FEN de 53 caracteres do `fenMethod` de m24 empurrava a página
+30 px para o lado). Citação de uma linha: **máximo 69 de 90** caracteres, contra
+os 204 de média de antes. E os 4 `detalhe`: `problemasDoDetalheDeMeioJogo` acusa
+**26 problemas na prosa que estava no ar e 0 agora**.
+
+### Bloco 2 — o juiz, o contrato e o funil — **feito em 2026-09-07** (`de0d38b`)
+`lib/meiojogo/exercicios.ts`: **13 tarefas**, cada uma com os sete campos do
+contrato e com teste de caso favorável **e** adversarial. Dois desses campos são
+FEN e resposta esperada, e o teste os roda — **o contrato é o teste**, e um que a
+implementação desmente reprova no `npm test`.
+
+A conversa UCI saiu de `motor-repertorio.ts` para `scripts/motor.ts`: dois
+drivers seriam duas opiniões sobre a mesma posição. `npm run meiojogo:funil` e
+`npm run meiojogo:prosa` deixam as duas varreduras repetíveis.
+
+**A reclassificação mudou 12 das 30, com o total intacto.** Continuam 15 dicas
+com fato conferível e 15 sem — mas ganharam tarefa m1, m3, m7, m15, m17 e m24, e
+perderam m2, m5, m6, m18, m19 e m29. Um total certo por acidente, com metade das
+entradas erradas. m7 recebeu `ataque-descoberto`, como a §7.3 previa.
+
+**A varredura da prosa:** 244 campos, 72 frases com marca de universalidade,
+**6 reescritas em 5 dicas** (m3, m5×2, m13, m16, m20) — mais m12, corrigida no
+Bloco 1. A marca não reprova: definição e geometria podem ser absolutas porque
+são.
+
+**A §3.1 entrou inteira.** `CAPITULO_CAP = 2`, `provenance.capitulo` obrigatório
+em posição de livro, `PROTECTED_SOURCE_CAP` intocado para finais, e as duas
+licenças reescritas com o raciocínio. **O achado do Bloco 0 sobre "Philip
+Hereford" foi conferido em duas fontes independentes** — o registro dos Varsity
+Chess Matches e as Chess Notes de Edward Winter —, e as duas citam a mesma
+primária: o obituário do *British Chess Magazine* de julho de 1937, p. 361. É
+Arthur Hereford Wykeham George (1871–1937), e a tradução é livre no Brasil desde
+2008. **`protected` continua `true` de propósito**, e a licença diz por quê: o
+campo deixou de sustentar uma afirmação legal aqui e passou a ligar o teto
+editorial — que é o que se quer ligado.
+
+→ **Número, medido** em 2.500 puzzles do recorte CC0, linha jogada até o fim:
+
+```
+porta 0   2500 de 2500 linhas fecham sem lance ilegal
+porta 1   60,5% xeque · 8,6% peça pendurada · 0 mate em 1  →  30,9% passam
+porta 2   Stockfish 18, profundidade 12, salto > 100 centésimos:
+          10,6% avaliação salta · 0,6% segunda linha é mate  →  88,8% passam
+```
+
+Sobrando 444 posições, quantas servem a cada tarefa com resposta única:
+
+```
+peca-com-menos-lances 331 · peao-na-semiaberta 294 · peao-isolado 208
+casa-de-bloqueio 167 · peao-retardatario 158 · posto 155
+peca-na-casa-de-origem 140 · bispo-com-peoes 128 · peao-dobrado 127
+coluna-aberta 122 · torre-na-setima 47 · casa-negada 6
+```
+
+E `validate:content` **recusa uma terceira posição do mesmo capítulo** — provado
+ponta a ponta com o conteúdo real adulterado e restaurado, além do teste
+unitário favorável e adversarial.
+
+**Dois números que o plano não previa e ficam declarados:**
+
+- **a porta 1 deixa passar 30,9%, e não os 35,4%** que a §3.3 registrava. Não é
+  contradição: a amostra de agora é uniforme sobre os 37 temas e as três faixas
+  de rating, e a anterior era outra. A ordem de grandeza se manteve;
+- **cinco das 30 posições saem do mesmo §22 do Capablanca** (m4, m20, m25, m26,
+  m30), e todas do Exemplo 52 — que é **uma** partida comentada. O teto aprovado
+  é por dica e não vê isso; o gate imprime a concentração e não reprova. Se for
+  para apertar, a decisão é sua, e é da mesma natureza da §3.1.
 
 ### Bloco 3 — a fatia de 8 conceitos, curada (até 15/9)
 24 posições novas — **16 transcritas de livro** (7 conceitos do *My System*, 1 do
@@ -734,12 +860,15 @@ duplicam; migration verificada antes do deploy.
 
 ## 14. Riscos, e o que depende de verificação
 
-1. **A porta 2 do funil ainda não tem número.** Sei que 35,4% passam na estática;
-   quanto o motor derruba depois disso é medida do Bloco 2. Se sobrar pouco para
-   algum conceito, esse conceito sai da fatia.
-2. **A reclassificação dos 30 conceitos pode mudar o mapa das tarefas.** Até o
-   Bloco 2, "8 dicas de julgamento" é hipótese, não fato — m7 já provou que a
-   classificação atual erra.
+1. ~~**A porta 2 do funil ainda não tem número.**~~ **Resolvido no Bloco 2**, e o
+   estoque não é o gargalo: o motor derruba 11,2% do que a porta 1 aprova, e
+   sobram centenas de posições por tarefa. **A exceção é `casa-negada`: 6 em
+   444.** Peão do meio ataca duas casas, e duas casas negadas são duas respostas
+   — a tarefa só tem resposta única em arranjos raros. Ela é a tarefa de **m3**,
+   que não está na fatia; quando m3 entrar, ou fica sem exercício ou ganha outra.
+2. ~~**A reclassificação dos 30 conceitos pode mudar o mapa das tarefas.**~~
+   **Feita no Bloco 2**, e mudou 12 das 30 entradas. O mapa mora em `MAPA`, em
+   `lib/meiojogo/exercicios.ts`. **Os oito da fatia têm tarefa, os oito.**
 3. **A posição final carrega desequilíbrio de material.** Para reconhecimento
    estrutural é aceitável e vai escrito; para aplicação, entra no julgamento da
    autoria item a item.
@@ -763,6 +892,23 @@ duplicam; migration verificada antes do deploy.
    com o público — revisão de adulto não substitui aluno usando.
 7. **Consentimento e uso do tempo pelo professor** são decisão sua, não desenho
    meu.
-8. **Não verificado por mim nesta sessão:** a suíte verde com 574 testes
-   (declarada por você e pelo documento anterior) e o custo real de JS do treino
-   na rota `/meio-jogo/[dica]`.
+8. ~~**Não verificado por mim nesta sessão:** a suíte verde com 574 testes.~~
+   **Rodada nos Blocos 1 e 2:** 606 testes verdes, mais `validate:content`,
+   `typecheck`, `lint` e `build`. O custo real de JS do treino continua não
+   medido — o treino ainda não existe (Bloco 4).
+
+9. **Pendências declaradas dos Blocos 1 e 2, nenhuma bloqueante:**
+   - **`Quiz.tsx` não foi reescrito** com a regra de evidência da §2.2. Não está
+     na lista de nenhum dos dois blocos, e o Bloco 2 é "sem tela". Ele é
+     candidato natural ao Bloco 4, que já mexe na tela.
+   - **"Um passo por vez" no celular não foi construído.** A §8 o declara
+     hipótese a testar no piloto, e o número do Bloco 1 é atendido pelo tabuleiro
+     grudado. Construí-lo antes do piloto seria decidir o que o piloto decide.
+   - **A barra lateral do passo escolhido tem um argumento a favor que ficou sem
+     dono.** A leitura da tela recomendou voltar a ela com 2 px e tinta escura —
+     mesmos 6,14:1 com o peso da borda clara, e "barra à esquerda" é a gramática
+     de *item atual*. Mas é o padrão que o hook de design reprova, e suprimi-lo
+     exige sua confirmação. Fica aqui para não se perder.
+   - **`npm run lint` estava vermelho antes do Bloco 1**, por um `verify.ts` que
+     o resgate do Bloco 0 trouxe para `.scratch/`. Resolvido ignorando
+     `.scratch/**`, pelo motivo do `.garimpo/**`.
