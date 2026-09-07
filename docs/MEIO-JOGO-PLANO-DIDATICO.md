@@ -36,12 +36,28 @@ sessão que o escreveu foi encerrada com `/clear`. Para retomar:
 alguém sobre gravação de tempo e acerto de menores (o site já faz isso na
 tática; nada de novo se abre).
 
-**Onde começar:** **Bloco 3** da §11 — a fatia de 8 conceitos, curada. Os Blocos
-0, 1 e 2 estão feitos (commits `783a9db`, `0959930`, `de0d38b`, `ea54d85`), e o
-número medido de cada um está no fim do bloco correspondente.
+**Onde começar:** **Bloco 4** da §11 — a tela e a gravação. Os Blocos 0 a 3 estão
+feitos, e o número medido de cada um está no fim do bloco correspondente. O
+Bloco 3 fechou em 2026-09-07 com os oito conceitos curados; o que ele mudou
+neste plano está listado no próprio bloco, e o que o Bloco 4 precisa saber está
+logo abaixo.
 
-**O que o Bloco 2 mudou neste plano, e que você precisa saber antes de curar
-posição:**
+**O que o Bloco 3 mudou, e que o Bloco 4 precisa saber antes de desenhar a tela:**
+
+1. **O treino mora dentro da dica**, em `content/meio-jogo.json`, no campo
+   `treino`: ficha, três itens de reconhecimento (degraus 2, 2 e 3), um item de
+   aplicação e as reservas — vazias até o Bloco 6.
+2. **O juiz do item é `respostaDaTarefa`**, a mesma função que a tela vai chamar
+   quando o aluno tocar numa casa. A resposta escrita no conteúdo já foi
+   conferida contra ela pelo gate; a tela não precisa de segunda opinião.
+3. **A escada de apoio tem três níveis e dois formatos.** `apoio.convite` é
+   texto; `apoio.realce` são casas para acender, e `apoio.modo` diz se elas
+   **contêm** a resposta ou a **contornam**. A tela precisa dos dois: no
+   contorno, acender a resposta seria entregá-la.
+4. **Uma guiada de m14 vem de partida real, com o motivo escrito** em
+   `excecaoDeFonte`. A tela não precisa distinguir; o relatório, sim.
+
+**O que o Bloco 2 mudou neste plano, e que valeu para o Bloco 3:**
 
 1. **Os oito conceitos da fatia (m9–m16) têm tarefa, os oito.** Era a dúvida que
    travava o Bloco 3; está respondida.
@@ -760,15 +776,95 @@ unitário favorável e adversarial.
   partida. **Nenhuma das cinco está na fatia do piloto**, então não afeta
   setembro; o momento de olhar é a expansão de 8 para 30, depois do torneio.
 
-### Bloco 3 — a fatia de 8 conceitos, curada (até 15/9)
-24 posições novas — **16 transcritas de livro** (7 conceitos do *My System*, 1 do
-Capablanca; as guiadas de obra diferente da do exemplo) e **8 de partida real**,
-pelas três portas do funil. Todas pelos seis passos. As 8 fichas. Enunciados,
-escada de apoio, feedback, e os itens de aplicação guiada com alternativas,
-justificativa e refutações escritas.
-→ **Número:** `validate:content` imprime *"8 conceitos com sequência do degrau 1
-ao 4, 24 posições novas (16 de livro, 8 de partida), 8 fichas, 0 posição sem os
-seis passos, 0 capítulo com mais de 2"*.
+### Bloco 3 — a fatia de 8 conceitos, curada — **feito em 2026-09-07**
+Os oito conceitos m9–m16 com sequência do degrau 1 ao 4: ficha, duas posições
+guiadas, uma independente e um item de aplicação cada.
+
+**O plano mandava transcrever diagrama de imagem; a execução reconstruiu.** Os
+dois livros imprimem os diagramas **dentro de partidas anotadas**, logo depois de
+um lance — então repetir os lances impressos desde a posição inicial chega na
+mesma posição, com a `chess.js` conferindo cada lance. A transcrição por imagem
+era o único passo da cadeia em que nada conferia o resultado: um peão lido em b6
+em vez de b7 dá FEN legal, plausível e errada. `lib/meiojogo/descritiva.ts` lê
+notação descritiva filtrando os lances legais, e quando o OCR come o `K` de
+`B-KKt5` ele **não escolhe o mais provável**: tenta os dois e deixa a continuação
+matar o ramo errado; se os dois ramos lerem a partida inteira, declara a
+ambiguidade. Medido: **1.171 dos 1.183 lances** descritivos das catorze partidas
+do Capablanca, 53 das 150 figuras servindo a alguma tarefa.
+
+**Quatro diagramas foram lidos por imagem, e só por não haver outro caminho:** as
+partidas do Znosko começam de um diagrama, não da posição inicial, e no OCR do
+Nimzowitsch o dígito vira letra (`B-Qz` por B-Q2). A primeira tentativa mandou a
+página inteira a dois leitores independentes e **os dois recusaram transcrever** —
+reduzida para caber no leitor, a página deixa cada casa com ~20 pixels. Estavam
+certos. `scripts/recortar-diagrama.py` passou a achar a moldura e recortar só o
+tabuleiro, que chega com ~110 pixels por casa. Regra que se manteve: **duas
+leituras independentes, e sem coincidência a posição não entra** — o par
+`nimzo-240-1` divergiu e foi descartado.
+
+Uma confirmação cruzada que vale registrar: um leitor transcreveu, sem saber, o
+diagrama CXLVIII que **m12 já publica**, e chegou à FEN idêntica.
+
+**Quatro regras nasceram do conteúdo, e não da intenção:**
+
+1. **`SEMELHANCA_MAXIMA = 0,7`.** Eu escolhi, sem ver, duas posições da mesma
+   partida do Capablanca para m9 e m10 — 77% das peças nas mesmas casas. As duas
+   passavam no teto por capítulo, que conta por dica. Peguei a olho; o gate passa
+   a pegar. O corte foi calibrado no acervo, não escolhido (a tabela está em
+   `lib/meiojogo/dicas.ts`).
+2. **O teto por capítulo passou a valer no módulo inteiro**, e não só por dica: a
+   §3.1 fala do capítulo, e três dicas tirando duas posições cada da mesma
+   partida drenavam seis diagramas sem aviso.
+3. **`apoio.modo`.** A resposta de `coluna-aberta` são as oito casas da coluna, e
+   o realce tem teto de oito — "acenda mais que a resposta" era impossível. E o
+   apoio certo para "ache a coluna sem peão" é acender **os peões**, que é o
+   oposto de conter a resposta. Os dois formatos ganharam nome: `contem` e
+   `contorno`.
+4. **`excecaoDeFonte`.** O corte da §5 — "cai uma das duas guiadas antes de cair a
+   independente" — ganhou lugar no arquivo. O gate exige o texto quando falta
+   capítulo e o proíbe quando há.
+
+**Duas decisões do Doug, em 2026-09-07:** as duas obras do Lasker entraram no
+registro (domínio público desde 2012; o *Common Sense* sem camada de tradução em
+aberto, porque as palestras foram dadas em inglês), e o **teto por capítulo subiu
+de 2 para 3** — no meio-jogo o capítulo é, na prática, uma partida ilustrada, e
+uma partida tem de duas a seis figuras.
+
+**O Lasker não resolveu o que se esperava dele, e fica declarado:** as partidas do
+*Common Sense* travam entre 8 e 16 meios-lances, porque a prosa cita lances que
+não foram jogados e eles entram na fila junto com os jogados. No Capablanca isso
+não acontece porque os lances jogados moram em células de tabela e as anotações
+em parágrafos.
+
+**Um erro de método, e a lição:** eu diagnostiquei que m16 ficaria sem posição de
+livro e quase apliquei o corte da §5 nele. Estava errado — as três figuras de
+bloqueio existiam, e o que as bloqueava era **eu**: duas estavam em partidas já
+ocupadas por m10 e m11, que tinham alternativas de sobra. A alocação de posições
+por conceito é um problema de conjunto, e eu a estava resolvendo conceito a
+conceito, na ordem em que apareciam. **O conceito com dois candidatos escolhe
+antes do conceito com quinze.**
+
+**A exceção que sobrou é uma só, e é de m14** (`m14-d2-b`): o acervo alcançável
+não tem um segundo diagrama de bispo-com-peões-na-própria-cor fora do Capablanca,
+que é a obra do próprio exemplo da dica. O Nimzowitsch deu um — lido por imagem,
+dupla leitura coincidente — e nenhum outro com dois bispos do mesmo lado. Daí
+15 posições de livro e 9 de partida, em vez das 16 e 8 previstas.
+
+Um critério de curadoria que o plano não previa e que apareceu escrevendo: **m14
+só é exercício com dois bispos do lado do aluno.** Com um bispo só a resposta é
+forçada, e o registro contaria como reconhecimento um acerto que não olhou a cor
+de peão nenhum.
+
+→ **Número, medido:** `validate:content` imprime *"8 de 8 conceitos com sequência
+do degrau 1 ao 4, 24 posições novas (15 de livro, 9 de partida), 8 fichas,
+0 posição sem os seis passos, 0 capítulo com mais de 3, 1 guiada de partida com
+exceção declarada (§5)"*, mais *"30 capítulos citados para 45 posições de livro"*.
+`npm test` **643 verdes**, typecheck e lint limpos. `npm run meiojogo:portas`
+re-mede as 24 na profundidade 12 — saltos de 0 a 48, nenhuma reprovação. O gate
+foi provado ponta a ponta com a resposta de `m12-d3-a` trocada: reprovou com
+`[RESPOSTA_DESMENTIDA]`, código 1, conteúdo restaurado. E as vinte páginas
+citadas foram conferidas uma a uma contra o PDF da biblioteca — não contra o
+texto extraído.
 
 ### Bloco 4 — a tela e a gravação (até 16/9)
 Prop nova no `ChessBoard` ligada a `events.select` do chessground

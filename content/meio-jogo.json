@@ -1913,6 +1913,178 @@
       "titulo": "Tu sabe o que é Bispo bom e Bispo mau??? | # Aprendendo Xadrez — Raffael Chess",
       "ressalva": null,
       "url": "https://www.youtube.com/watch?v=gSGhPHVdmEU"
+    },
+    "treino": {
+      "ficha": {
+        "objetivo": "Achar, sozinho, qual dos seus dois bispos anda na cor de casa em que estão a maioria dos seus peões — e dizer o que isso muda, sem transformar a observação em veredito sobre a peça.",
+        "prerequisitos": [
+          "Saber que cada bispo anda numa cor de casa só, e nunca muda de cor.",
+          "Saber olhar a cor da casa em que um peão está, e não só a coluna dele.",
+          "Ter lido a dica: isso é comparação entre as suas duas peças, não sentença sobre uma delas."
+        ],
+        "vocabulario": [
+          {
+            "termo": "peões na cor do bispo",
+            "significa": "os seus peões que estão em casas da mesma cor por onde o seu bispo anda. Cada um deles é uma casa a menos para ele passar."
+          },
+          {
+            "termo": "bispo mau",
+            "significa": "o apelido que os livros dão ao bispo com muitos peões próprios na cor dele. É comparação com o outro bispo, e não um defeito permanente da peça."
+          }
+        ],
+        "erroMaisProvavel": {
+          "qual": "escolher o bispo que parece pior — o que está atrás dos peões, ou o que não saiu de casa — em vez de contar a cor das casas dos próprios peões.",
+          "feedback": "Estar atrás de peça não é o mesmo que estar na cor dos peões. Um bispo pode estar preso hoje e livre no lance seguinte; a cor das casas dos seus peões só muda quando a estrutura muda, e é por isso que a dica manda contar cor, e não olhar quem está travado."
+        },
+        "limitesDaEvidencia": "O acerto prova que o aluno conta a cor das casas dos próprios peões e compara com a cor dos bispos. Não prova que ele saberia o que fazer com a informação — trocar o bispo, mudar a estrutura ou ignorar os dois —, e não autoriza dizer que ele entendeu \"bispo bom e bispo mau\": o clique mede a conta, não o julgamento."
+      },
+      "reconhecimento": [
+        {
+          "id": "m14-d2-a",
+          "degrau": 2,
+          "fen": "r1b2rk1/1pq1bppp/p1n1pn2/2Pp4/3P4/P1NB1N2/1P3PPP/R1BQ1RK1 b - - 0 1",
+          "lado": "brancas",
+          "tarefa": "bispo-com-peoes-na-propria-cor",
+          "resposta": [
+            "c1"
+          ],
+          "legenda": "Nimzowitsch, My System — o diagrama com que o livro pergunta se as brancas fizeram bem em avançar na ala da dama. Você está do lado das brancas, que têm dois bispos.",
+          "material": null,
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "Não olhe quem está travado. Olhe a cor das casas: acendemos os seus peões que estão em casas escuras. Conte-os, e depois veja qual dos seus dois bispos anda nessa cor.",
+            "modo": "contorno",
+            "realce": [
+              "a3",
+              "b2",
+              "c5",
+              "d4",
+              "f2",
+              "h2"
+            ],
+            "solucao": "Seis dos seus sete peões estão em casas escuras — só o de g2 está em casa clara. O bispo que anda em casas escuras é o que ficou na primeira fileira; o outro, o que já saiu, anda nas claras e tem o caminho livre. É a comparação que a dica pede, e ela não diz que o primeiro é uma peça ruim: diz que ele depende de a estrutura mudar."
+          },
+          "curadoria": {
+            "perceptivel": "A cadeia de peões brancos é escura quase inteira — a3, b2, c5, d4, f2 e h2 — e o contraste com o único peão claro, o de g2, torna a conta visível sem contar casa por casa. Os dois bispos brancos estão em casas de cores diferentes e ambos no próprio campo, o que impede a leitura fácil de \"o bispo mau é o que está mais longe\".",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 2
+            },
+            "adequacao": "Trinta peças, material igual: é o tabuleiro mais cheio de toda a fatia, e é o certo para um conceito que se lê na estrutura inteira e não num canto. A posição vem de um capítulo sobre lances libertadores, não sobre bispos — o traço está lá porque a estrutura o produziu, e não porque o autor o encenou."
+          },
+          "provenance": {
+            "bibliographicSource": "Aron Nimzowitsch, My System, Harcourt, Brace and Company, Nova York, 1930, versão inglesa de Philip Hereford; Parte II, \"Elements of position play\", p. 142 (PDF 164), diagrama CXIII — o exemplo de lance libertador incorreto.",
+            "citacaoCurta": "Nimzowitsch, My System, p. 142 — diagrama CXIII",
+            "editionFile": "nimzowitsch-my-system-1930",
+            "capitulo": "Parte II — Elements of position play, §  lances libertadores",
+            "originalGame": null,
+            "fenMethod": "Transcrita da imagem, e não reconstruída por lances: o diagrama não está dentro de uma partida impressa desde o primeiro lance, e o OCR do My System troca dígito por letra (\"B-Qz\" por B-Q2), o que fecha o caminho da reconstrução. A página foi renderizada a 400 dpi, o tabuleiro recortado por scripts/recortar-diagrama.py e ampliado para ~110 pixels por casa, e lido por dois leitores independentes que não viram a resposta um do outro: as duas leituras saíram idênticas casa por casa. Uma casa foi decidida por dedução e fica registrada: g2 tem silhueta alta, com cara de bispo, e é peão — três bispos brancos seriam ilegais, e as pretas não perderam peças que justificassem promoção. A identificação do diagrama como CXIII vem do texto da própria página, que diz \"For an example of an incorrect freeing move see Diagram CXIII\" e traz, ao lado, a legenda \"White by playing P-QKt4... Was he right in so doing?\" — e a posição admite P-QKt4, com peões em a3 e b2. Legalidade, porta 1 e resposta única conferidas por scripts/conferir-transcricao.ts."
+          }
+        },
+        {
+          "id": "m14-d2-b",
+          "degrau": 2,
+          "fen": "r3k2r/5pbp/p1p1p1p1/2PpP3/N2n1Pb1/1P1P4/P2B2PP/R4RK1 w kq - 0 18",
+          "lado": "pretas",
+          "tarefa": "bispo-com-peoes-na-propria-cor",
+          "resposta": [
+            "g4"
+          ],
+          "legenda": "Partida de dois jogadores comuns. Jogam as brancas; você está do lado das pretas, que têm dois bispos no tabuleiro.",
+          "material": "As pretas têm um cavalo a mais e um peão a menos.",
+          "excecaoDeFonte": "O acervo alcançável não tem um segundo diagrama deste conceito fora do Capablanca, que é a obra do próprio exemplo desta dica. O Nimzowitsch deu um — o do item anterior — e nenhum outro com dois bispos do mesmo lado; as partidas do Znosko começam de diagrama e não se reconstroem por lances, e as do Lasker travam antes do meio-jogo porque a prosa cita lances que não foram jogados. A §5 do plano manda, nesse caso, cortar uma das duas guiadas antes de cortar a independente, e é o que este item é: reconhecimento guiado, com escada de apoio inteira, sobre posição de partida real em vez de diagrama de livro.",
+          "apoio": {
+            "convite": "De novo pela cor, não por quem está travado. Acendemos os seus peões que estão em casas claras: conte-os, e veja qual dos seus dois bispos anda nessa cor.",
+            "modo": "contorno",
+            "realce": [
+              "a6",
+              "c6",
+              "d5",
+              "e6",
+              "g6"
+            ],
+            "solucao": "Cinco dos seus seis peões estão em casas claras — a6, c6, d5, e6 e g6 —, e só o de f7 está em casa escura. O bispo que anda nas claras é o que está fora, na ala do rei; o outro, o que está fitianchetado, anda nas escuras e tem as diagonais longas livres."
+          },
+          "curadoria": {
+            "perceptivel": "Cinco dos seis peões pretos estão na mesma cor, formando uma faixa contínua do lado da dama ao centro, e o bispo dessa cor está do outro lado do tabuleiro — o que separa a conta de cor da impressão de \"peça travada\". O bispo escuro, em fianchetto, está com a diagonal aberta e parece o melhor colocado dos dois, e é: a dica quer exatamente essa comparação.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 13
+            },
+            "adequacao": "Vinte e seis peças, meio-jogo cheio, com os reis ainda sem rocar de um lado. O desequilíbrio de material está declarado. Sendo item do degrau 2, ele mantém a escada de apoio inteira, e o que muda em relação ao anterior é só a fonte."
+          },
+          "provenance": {
+            "bibliographicSource": "Recorte CC0 da base aberta do Lichess, puzzle lOMU2 (lichess.org/training/lOMU2): posição ao fim da linha tática do puzzle, quando a combinação já acabou. Os jogadores não são identificados no recorte.",
+            "citacaoCurta": "Lichess, puzzle lOMU2 — posição ao fim da linha",
+            "editionFile": "lichess-open-database",
+            "capitulo": null,
+            "originalGame": "lichess.org/training/lOMU2",
+            "fenMethod": "A FEN guardada no recorte é a posição antes do erro do adversário; esta é a do fim da linha, obtida jogando os lances do puzzle na chess.js (scripts/escolher-exercicios.ts). Passou pela porta 1 — sem xeque, sem mate em 1 e sem peça de cavalo ou mais pendurada — e pela porta 2, com Stockfish 18 na profundidade 12 medindo 13 centésimos entre a melhor linha e a segunda. A resposta única foi conferida por respostaDaTarefa, o mesmo juiz que vai julgar o clique."
+          }
+        },
+        {
+          "id": "m14-d3-a",
+          "degrau": 3,
+          "fen": "r2qkbnr/ppp2p2/7p/4p1p1/4PpB1/2N5/PPPP2PP/R1B1QRK1 b kq - 0 10",
+          "lado": "brancas",
+          "tarefa": "bispo-com-peoes-na-propria-cor",
+          "resposta": [
+            "g4"
+          ],
+          "legenda": "Partida de dois jogadores comuns, sem anotação e sem diagrama. Jogam as pretas, e você está do lado das brancas.",
+          "material": "As brancas têm um bispo a mais e um peão a menos.",
+          "excecaoDeFonte": null,
+          "apoio": {
+            "convite": "Sem ninguém acender nada para você da outra vez: conte a cor das casas dos seus peões, e depois compare com a cor de cada um dos seus dois bispos.",
+            "modo": "contorno",
+            "realce": [
+              "a2",
+              "c2",
+              "d2",
+              "e4",
+              "g2"
+            ],
+            "solucao": "Cinco dos seus sete peões estão em casas claras — a2, c2, d2, e4 e g2 —, e só os de b2 e h2 estão nas escuras. O bispo que anda nas claras é o que já saiu para a ala do rei; o outro continua na primeira fileira, anda nas escuras, e é o que tem menos peão próprio no caminho."
+          },
+          "curadoria": {
+            "perceptivel": "O bispo da cor mais carregada é o que está fora e parece ativo — e é justamente ele que a conta acusa. É o contraexemplo do erro previsto na ficha: quem escolher pela aparência de atividade erra, e quem contar cor acerta.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 17
+            },
+            "adequacao": "Vinte e oito peças no lance 10, com o rei preto ainda no centro e os peões da ala do rei avançados: é o tipo de posição que um aluno de doze anos encontra na partida dele, e não uma estrutura arrumada. O desequilíbrio está declarado."
+          },
+          "provenance": {
+            "bibliographicSource": "Recorte CC0 da base aberta do Lichess, puzzle lEBm6 (lichess.org/training/lEBm6): posição ao fim da linha tática do puzzle, quando a combinação já acabou. Os jogadores não são identificados no recorte.",
+            "citacaoCurta": "Lichess, puzzle lEBm6 — posição ao fim da linha",
+            "editionFile": "lichess-open-database",
+            "capitulo": null,
+            "originalGame": "lichess.org/training/lEBm6",
+            "fenMethod": "A FEN guardada no recorte é a posição antes do erro do adversário; esta é a do fim da linha, obtida jogando os lances do puzzle na chess.js (scripts/escolher-exercicios.ts). Passou pela porta 1 — sem xeque, sem mate em 1 e sem peça de cavalo ou mais pendurada — e pela porta 2, com Stockfish 18 na profundidade 12 medindo 17 centésimos entre a melhor linha e a segunda. A resposta única foi conferida por respostaDaTarefa, o mesmo juiz que vai julgar o clique."
+          }
+        }
+      ],
+      "aplicacao": {
+        "id": "m14-d4",
+        "usa": "m14-d3-a",
+        "pergunta": "O bispo branco de g4 anda na cor em que estão cinco dos sete peões brancos. O que isso permite concluir?",
+        "opcoes": [
+          {
+            "texto": "Que ele tem menos casas por onde passar enquanto a estrutura for esta — e nada além disso.",
+            "certa": true,
+            "porque": "Cada peão seu na cor do seu bispo é uma casa a menos para ele. É uma afirmação sobre a estrutura de agora, e a estrutura muda: um avanço, uma troca, e a mesma peça passa a ter as diagonais que hoje não tem. Por isso a dica manda comparar os seus dois bispos, e não condenar um deles."
+          },
+          {
+            "texto": "Que trocar esse bispo é o plano certo, porque bispo mau se troca.",
+            "certa": false,
+            "porque": "\"Bispo mau se troca\" é uma regra decorada, e ela ignora o resto do tabuleiro. Aqui esse bispo está fora, ativo e atacando; trocá-lo por uma peça pior seria dar de graça o que a conta de cor não pediu. A conta diz onde a peça tem dificuldade, e não o que fazer com ela — e o que fazer depende das peças, do rei e do que o adversário ameaça."
+          }
+        ]
+      },
+      "reservas": []
     }
   },
   {

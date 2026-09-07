@@ -1626,6 +1626,11 @@ const dicas: Dica[] = [];
     // mesmas posições duas vezes.
     const deLivro = itens.filter((i) => i.provenance.capitulo !== null).length;
     const dePartida = itens.length - deLivro;
+    // O corte da §5, quando ele acontece: uma guiada que veio de partida real
+    // porque o acervo não tinha o segundo diagrama. Ele é permitido e tem de
+    // ser **contado**, senão some na diferença entre o número planejado e o
+    // medido, e ninguém pergunta por quê.
+    const comExcecao = itens.filter((i) => i.excecaoDeFonte !== null).length;
     const semOsSeisPassos = itens.filter(
       (i) =>
         i.curadoria.perceptivel.trim() === "" ||
@@ -1648,7 +1653,8 @@ const dicas: Dica[] = [];
       `  ${naFatia} de ${FATIA.length} conceitos com sequência do degrau 1 ao 4, ` +
         `${itens.length} posições novas (${deLivro} de livro, ${dePartida} de partida), ` +
         `${comTreino.length} ficha(s), ${semOsSeisPassos} posição(ões) sem os seis passos, ` +
-        `${estourados} capítulo(s) com mais de ${CAPITULO_CAP}`,
+        `${estourados} capítulo(s) com mais de ${CAPITULO_CAP}` +
+        `${comExcecao > 0 ? `, ${comExcecao} guiada(s) de partida com exceção declarada (§5)` : ""}`,
     );
     const faltam = FATIA.filter((id) => !comTreino.some((d) => d.id === id));
     if (faltam.length > 0) console.log(`  ainda sem treino na fatia: ${faltam.join(", ")}`);
