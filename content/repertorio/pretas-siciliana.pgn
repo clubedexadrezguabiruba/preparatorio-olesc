@@ -126,10 +126,28 @@ posição escrevendo que as pretas têm excelente contrajogo.} *
 [Fonte "Recomendação do professor, assinada pelo Doug em 7/9/2026 — a segunda do repertório, depois do 6.Bf4 da Caro-Kann (seção 19 de docs/REVISAO-FONTES.md). O argumento tem três pernas, e as três estão medidas. (1) A fonte natural desta posição declara que está chutando: no 5.c3, o IM Christof Sielecki ('Short & Sweet: Magnus Sicilian', variante 'S&S Magnus Sicilian - Rossolimo' do 4.O-O) escreve que o lance 'ainda não foi tentado contra o Magnus Carlsen, então não sabemos o que ele teria planejado', e que ELE decidiu recomendar 5...e5 por coerência com o resto do curso dele. (2) O motor põe a nossa linha inteira como variante principal: Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 — o 5...Cf6 dá brancas +0,32 com a continuação 6.Te1 O-O 7.d4 d5 8.e5 Ce4, que é esta linha lance por lance até o fim; o 5...e5 do curso dá +0,34 e fica em segundo. (3) A linha do curso pede que o aluno segure um peão a mais contra compensação que o próprio autor declara suficiente, por um 8...a6 que ele chama de 'menos comum' e apostando que as brancas não saberão conduzir a posição sem preparação de computador, e termina com o rei preto em f8 sem direito a roque. Não é posição para 12 a 15 anos. O 4.O-O é 22,9 por cento das respostas a 3...g6 pela tabela da seção 6 de docs/REPERTORIO.md."]
 [Result "*"]
 
-1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. Nf3 Nc6 {Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.} 3. Bb5 g6 4. O-O Bg7 5. c3 Nf6 {O c3 dele anuncia o que vem:
+1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. Nf3 Nc6 {Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.} 3. Bb5
+g6 {O mesmo fianqueto da outra linha do Rossolimo, e pelo mesmo motivo: contra
+3.Bb5 há dois caminhos, …e6 e …g6, e o campeão do mundo escolheu o fianqueto na
+esmagadora maioria das partidas. O Sielecki para de nos acompanhar dois lances
+adiante; até aqui a citação é dele.} 4. O-O
+Bg7 {O bispo na diagonal grande. Ele não trocou em c6 — guardou o bispo e rocou
+—, e o curso trata o …Bg7 como a resposta natural: seja o que for que ele
+prepare, esta peça vai para g7 de qualquer jeito. É a diferença entre um lance
+que responde e um lance que a gente jogaria de todo modo.} 5. c3 Nf6 {O c3 dele anuncia o que vem:
 d2-d4 e um centro grande de peões. Nós desenvolvemos e ficamos de olho — no
 lance em que o peão pisar em d4, respondemos …d5 na hora, antes que esse centro
-tenha tempo de crescer.} 6. Re1 O-O 7. d4 d5 8. e5
+tenha tempo de crescer.} 6. Re1
+O-O {Rei para o canto enquanto ele arruma a torre. Este é o último lance
+tranquilo da linha, e é bom gastá-lo com o rei: no próximo ele empurra d4, o
+centro abre, e a partir daí quem ainda estiver com o rei no meio joga o resto
+apavorado.} 7. d4
+d5 {AGORA, no mesmo lance. O peão pisou em d4 e nós respondemos …d5 na hora,
+antes que ele consiga somar c3, d4 e e4 num centro grande. Esperar um lance que
+fosse já seria tarde. Medido no Stockfish 18 lite-single, profundidade 20, em
+7/9/2026: esta linha inteira — 5…Cf6 6.Te1 O-O 7.d4 d5 8.e5 Ce4 — é a variante
+PRINCIPAL do motor, brancas +0,32, e fica à frente do 5…e5 que o curso
+recomenda, +0,34.} 8. e5
 Ne4 {Ele guardou o bispo e montou o centro com c3 e d4. A resposta é …d5 na
 hora, antes que esse centro fique grande. Depois de 8.e5 o cavalo pula para e4:
 casa central, defendida, e para expulsá-lo dali ele só tem f3 — que abre a casa

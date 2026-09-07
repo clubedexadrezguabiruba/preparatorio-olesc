@@ -34,7 +34,11 @@ function boa(troca: Partial<Linha> = {}): Linha {
     meus: [0, 2, 4],
     alternativas: {},
     errosNomeados: {},
-    comentarios: { "4": "d4 abre o centro antes de as pretas se organizarem." },
+    comentarios: {
+      "0": "1.e4 solta o bispo de f1 e a dama de uma vez.",
+      "2": "O cavalo ataca e5 e libera o roque.",
+      "4": "d4 abre o centro antes de as pretas se organizarem.",
+    },
     fonte: "teste",
   };
   const junto = { ...base, ...troca };
@@ -53,13 +57,25 @@ test("a linha boa passa", () => {
 
 test("linha que termina em lance do adversário é reprovada", () => {
   // A regra central: sem ela o aluno vê a posição e não aprende a resposta.
-  const torta = boa({ lances: LANCES.slice(0, 4), sans: SANS.slice(0, 4), meus: [0, 2], comentarios: { "2": "x" } });
+  const torta = boa({ lances: LANCES.slice(0, 4), sans: SANS.slice(0, 4), meus: [0, 2], comentarios: { "0": "x", "2": "y" } });
   assert.match(errosDe(torta), /termina em "Nc6", que é lance do adversário/);
 });
 
 test("último lance sem comentário é reprovado", () => {
   assert.match(errosDe(boa({ comentarios: {} })), /está sem comentário/);
   assert.match(errosDe(boa({ comentarios: { "4": "   " } })), /está sem comentário/);
+});
+
+test("lance NOSSO no meio da linha sem comentário é reprovado, com a lista", () => {
+  // A régua do repertório é o motivo de cada lance, não a sequência. Até
+  // 7/9/2026 este gate olhava só o último lance, e 80 dos 149 lances nossos
+  // estavam calados sem que nada reprovasse — a §23 de docs/REVISAO-FONTES.md.
+  const erro = errosDe(boa({ comentarios: { "2": "só o do meio", "4": "e o último" } }));
+  assert.match(erro, /1 lance\(s\) nosso\(s\) sem comentário: 1\.e4\./);
+  // Espaço em branco não conta como comentário, aqui como no último lance.
+  assert.match(errosDe(boa({ comentarios: { "0": " ", "2": "x", "4": "y" } })), /sem comentário: 1\.e4\./);
+  // E o lance DELE segue podendo ser mudo: o aluno não o joga.
+  assert.deepEqual(conferirRegras([boa()]), []);
 });
 
 test("linha mais funda que o nível é reprovada, com o número por cor", () => {
