@@ -349,8 +349,9 @@ comentários do B6, e a §9 conta o preço.
   **português de adolescente de 12 anos** — frase curta, sem jargão de adulto e
   sem falar com o aluno como se ele tivesse 8; copiar a frase do autor é que não
   pode. (Era "criança de 10 anos" até 6/9/2026, quando o público foi corrigido
-  para 12–15. Os 110 comentários que já estão escritos **não** foram revistos
-  sob a régua nova: é tarefa de conteúdo, e está no ⚠14 da §8.)
+  para 12–15. Os comentários já escritos foram varridos sob a régua nova em
+  6/9/2026: **três** tinham registro de criança e foram corrigidos; **20** quebram
+  a "frase curta", e essa parte segue aberta. A medição está na §8.1.)
   `npm run repertorio:compilar` transforma isso em `public/repertorio/*.json`, e
   `npm run repertorio:fidelidade` diz onde a fonte fala e nós estamos calados.
 
@@ -589,7 +590,7 @@ linha existente, e a medição não pediu isso em lugar nenhum. A conta está na
 | **11** | **Maroczy — recortar só a sub-árvore do `6.e4`** | Avançado | 2.4 |
 | ~~12~~ | ~~Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios~~ — **fechado no B5**, em `/aberturas/notas/` | < 4,2 % cada | 2.10 |
 | ~~13~~ | ~~**O recorte de frequência foi medido na faixa errada**~~ — **medido e escrito em 6/9/2026**. A §6.1 tem as três faixas: 14 das 23 posições mudam de conjunto, e dez delas são o teto de 4 cortando entre quase-empates. Das quatro estruturais, a **Escandinava `2…Cf6`** virou a 43ª linha e as outras três não pedem escrita. **0 ids perdidos, 1 acrescentado.** Sobra uma decisão de orçamento, não de medição: o `4…Df6` da Escocesa | 1 decisão | 6.1 |
-| **14** | **O tom dos comentários** — 110 dos 116 foram escritos para "criança de 10 anos"; o aluno mais novo tem 12. Reler sob a régua nova da §5. Os 6 da Escandinava `2…Cf6` já nasceram sob a régua nova e ficam fora. Comentário não entra no hash do id: reescrever os 110 não órfã ninguém. | todo o Base | 5 |
+| ~~14~~ | ~~**O tom dos comentários** — escritos para "criança de 10 anos"~~ — **medido em 6/9/2026, e a premissa não sobreviveu**. O cabeçalho dizia 10 anos; o texto não desceu junto. Dos 98 comentários, **3** tinham registro de criança, e estão corrigidos. Sobra uma deriva de sinal contrário: **20 quebram a "frase curta"** da §5 | 3 corrigidos, 20 em aberto | 5, 8.1 |
 
 Os itens 1 a 5 eram o caminho crítico: sozinhos, são o que os alunos mais vão
 encontrar e o que nenhuma fonte do Doug responde. Todos fecharam.
@@ -608,6 +609,44 @@ corte — a posição pede **duas** respostas, não três, e `d4` + `Bc4` já fe
 sozinhos. O ⚠ que era "escolher o que fazer contra dois lances" virou "contra
 um", e é o mesmo `4.Bc4` que o Krikor manda as brancas do clube jogarem. Continua
 esperando o Avançado, agora pela metade do tamanho.
+
+### 8.1 O ⚠14, medido — e o que ele era de verdade
+
+**Primeiro a conta, que estava na unidade errada.** O 116 conta **encaixes**: um
+comentário numa posição que três linhas atravessam é contado três vezes. A unidade
+de quem reescreve é o **texto**, e textos distintos são **98** — 116 encaixes nas
+43 linhas. Da Escandinava `2…Cf6` nasceram **5** textos sob a régua nova, e não 6:
+o sexto encaixe dela é o comentário do `1…d5`, que já existia e que ela apenas
+passa por cima. Logo o bloco eram **93 textos**, nunca 110.
+
+**Depois a medição, que era o ponto.** "Reler 93 às cegas" é caro, então os 98
+foram varridos por marcador antes de qualquer reescrita. O que se achou de
+registro infantil, no corpus inteiro:
+
+| Marcador | Achados |
+|---|---|
+| diminutivo (`-inho`, `-zinho`) | **2** — "peãozinho" e "bispinho", os dois na Escandinava |
+| fala de criança ("já já", "olha só", "viu?", "né") | **1** — "ele recupera já já", na Petroff |
+| exclamação que não é notação de xadrez | **0** |
+| segunda pessoa direta ("você") | 6, e todas apontam para linha já treinada |
+| "fácil"/"simples" | 7, e são afirmações sobre a posição, não afago |
+
+**Três.** O `⚠14` supunha um corpus escrito para criança de 10 anos porque o
+cabeçalho do rascunho mandava isso; quem escreveu não obedeceu ao cabeçalho. Os
+três foram corrigidos no lugar, sem tocar no argumento de nenhum — "peãozinho" e
+"bispinho" perderam o diminutivo, "já já" virou "logo".
+
+**A deriva de verdade é a oposta.** A §5 pede **frase curta**, e **20 dos 98** têm
+uma frase de 32 palavras ou mais — a maior tem **47**. Isso não é falar com o
+aluno como se ele tivesse 8: é prosa de adulto, o outro lado da mesma régua. É o
+que sobra em aberto do `⚠14`, e é decisão de professor, não de medição: parte das
+20 são frases longas bem construídas, com dois pontos e travessão carregando o
+peso, e cortar por cortar as pioraria.
+
+**Os dois lugares que reintroduziam o erro fecharam junto.** O
+`scripts/importar-fontes.ts` gravava "português de criança de 10 anos" no
+cabeçalho de **todo rascunho novo** — sem isso, o Avançado nasceria com a régua
+velha de volta. E a §9 afirmava a régua velha no presente, contradizendo a §5.
 
 ---
 
@@ -804,7 +843,9 @@ colado nele**.
 
 **A regra do texto, corrigida.** O B3 dizia "nenhuma prosa de curso entra
 aqui", e isso foi lido como "escreva do zero". A leitura certa é: **carregar o
-argumento, com as nossas palavras**, em português de criança de 10 anos. Nunca
+argumento, com as nossas palavras**, na régua da §5 — português de adolescente
+de 12 anos. (Este parágrafo dizia "criança de 10 anos" até 6/9/2026, quando o
+público foi corrigido para 12–15.) Nunca
 colar o texto deles no repositório — é curso pago, e a anotação do Krikor é
 telegráfica de adulto ("com boa vantagem branca"), que não ensina ninguém.
 
