@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { NIVEIS } from "../curso/trilha.ts";
 import { sourceRegistrySchema } from "../lesson/schema.ts";
 import { problemasDaPosicao } from "./afirmacoes.ts";
-import { validarDicas } from "./dicas.ts";
+import { CAPITULO_CAP, problemasDeCitacao, validarDicas } from "./dicas.ts";
 
 /**
  * O conteúdo do meio-jogo, conferido a cada `npm test`.
@@ -28,11 +28,36 @@ const DICAS = validarDicas(
   JSON.parse(readFileSync(path.join(RAIZ, "content/meio-jogo.json"), "utf8")),
 );
 
-const OBRAS = new Set(
-  sourceRegistrySchema
-    .parse(JSON.parse(readFileSync(path.join(RAIZ, "content/sources.json"), "utf8")))
-    .sources.flatMap((s) => (s.file === null ? [s.slug] : [s.slug, s.file])),
+const REGISTRO = sourceRegistrySchema.parse(
+  JSON.parse(readFileSync(path.join(RAIZ, "content/sources.json"), "utf8")),
 );
+
+const OBRAS = new Set(
+  REGISTRO.sources.flatMap((s) => (s.file === null ? [s.slug] : [s.slug, s.file])),
+);
+
+/**
+ * A busca de obra do jeito que o gate a faz — e a distinção que o teste
+ * confundia.
+ *
+ * `temArquivo` é "esta obra tem PDF na biblioteca", e não "esta obra está
+ * registrada". As duas coisas coincidiram enquanto nenhuma dica citou o recorte
+ * do Lichess, que é registrado e não tem arquivo; a primeira posição de partida
+ * real acusou a diferença, cobrando um capítulo de uma obra que não tem
+ * capítulo nenhum.
+ */
+const COM_ARQUIVO = new Map(
+  REGISTRO.sources.flatMap((s) =>
+    s.file === null
+      ? ([[s.slug, false]] as [string, boolean][])
+      : ([
+          [s.slug, true],
+          [s.file, true],
+        ] as [string, boolean][]),
+  ),
+);
+
+const obraDoRegistro = (chave: string) => ({ slug: chave, temArquivo: COM_ARQUIVO.get(chave) === true });
 
 test("o conteúdo do meio-jogo passa no esquema", () => {
   assert.ok(DICAS.length >= 30, `são ${DICAS.length} dicas, e o combinado foram 30`);
@@ -161,4 +186,118 @@ test("o título do vídeo é o do YouTube, e não a sugestão de busca", () => {
     assert.equal(titulo, titulo.trim(), `${dica.id}: sobra espaço nas pontas do título`);
     assert.ok(!/\s\s/.test(titulo), `${dica.id}: espaço duplo no título`);
   }
+});
+
+/* ------------------------------------------------------------------ *
+ * O teto por capítulo — a política da §3.1 do plano
+ * ------------------------------------------------------------------ */
+
+/** Um molde mínimo de dica, para as conferências adversariais abaixo. */
+function dicaCom(posicoes: { editionFile: string; capitulo: string | null }[]) {
+  return validarDicas([
+    {
+      id: "m99",
+      titulo: "Uma dica de teste",
+      nivel: NIVEIS[0].id,
+      resumo: "Uma frase com mais de vinte caracteres, para o esquema aceitar.",
+      explicacao: [{ texto: "Um passo com mais de vinte caracteres.", realce: [] }],
+      procure: ["Uma pergunta a fazer", "Outra pergunta a fazer"],
+      posicoes: posicoes.map((p, i) => ({
+        // Três posições distintas do mesmo capítulo — é o caso que o teto pega.
+        fen: `${"8/8/8/8/8/8/8/K6k w - - 0 ".replace("K6k", ["K6k", "K5k1", "K4k2"][i] ?? "K6k")}1`,
+        legenda: "Uma legenda com mais de dez caracteres.",
+        afirma: [{ o: "vez", lado: "brancas" }],
+        provenance: {
+          bibliographicSource: "Uma obra qualquer, p. 1, diagrama I.",
+          citacaoCurta: "Uma obra qualquer, p. 1",
+          editionFile: p.editionFile,
+          capitulo: p.capitulo,
+          originalGame: null,
+          fenMethod: "transcrição de teste",
+        },
+      })),
+      quiz: {
+        pergunta: "Uma pergunta de teste com mais de dez caracteres?",
+        opcoes: ["Uma opção", "Outra opção", "A terceira opção"],
+        certa: 0,
+        porque: "Uma explicação com mais de vinte caracteres, para o esquema aceitar.",
+      },
+    },
+  ])[0];
+}
+
+const LIVRO = (chave: string) => ({ slug: chave, temArquivo: true });
+
+test("as 30 dicas passam no teto por capítulo", () => {
+  const problemas = DICAS.flatMap((dica) =>
+    problemasDeCitacao(dica, obraDoRegistro).map(
+      (p) => `${dica.id}: ${p.codigo} — ${p.mensagem}`,
+    ),
+  );
+  assert.deepEqual(problemas, []);
+});
+
+test("a posição que passa do teto do capítulo reprova", () => {
+  // O caso que a política existe para pegar: esvaziar um capítulo é reproduzir
+  // a seleção do autor, e é a seleção que a lei protege — não a FEN.
+  //
+  // O teto subiu de 2 para 3 em 2026-09-07, e com isso ele deixou de caber nas
+  // posições de **ensino**: `posicoes` tem máximo 3 no esquema, então três do
+  // mesmo capítulo é o limite do que se pode escrever ali. Quem o faz morder
+  // hoje é o **treino**, que soma até seis posições à mesma dica — e é por esse
+  // caminho que o teste passa a exercitá-lo.
+  const base = DICAS.find((d) => d.id === "m12");
+  assert.ok(base?.treino, "m12 precisa ter treino para este teste existir");
+  const dica = JSON.parse(JSON.stringify(base)) as typeof base;
+  const capitulo = "Parte II, cap. III, §1 — The isolated queen's pawn";
+  for (const posicao of dica.posicoes) {
+    posicao.provenance.editionFile = "nimzowitsch-my-system-1930";
+    posicao.provenance.capitulo = capitulo;
+  }
+  for (const item of dica.treino!.reconhecimento) {
+    item.provenance.editionFile = "nimzowitsch-my-system-1930";
+    item.provenance.capitulo = capitulo;
+  }
+  const quantas = dica.posicoes.length + dica.treino!.reconhecimento.length;
+  assert.ok(quantas > CAPITULO_CAP, `são ${quantas} posições para um teto de ${CAPITULO_CAP}`);
+
+  const problemas = problemasDeCitacao(dica, LIVRO);
+  assert.equal(problemas.length, quantas - CAPITULO_CAP);
+  assert.equal(problemas[0].codigo, "TETO_DE_CAPITULO");
+  assert.match(
+    problemas[0].mensagem,
+    new RegExp(`${CAPITULO_CAP + 1} posições saem de .*e o teto é ${CAPITULO_CAP} por capítulo`),
+  );
+});
+
+test("três posições da mesma obra, de capítulos diferentes, passam", () => {
+  // A metade que muda de unidade: o teto antigo contava **obra** e reprovaria
+  // estas três. É exatamente o caso que a §3.1 destravou — a FEN é fato, e três
+  // capítulos diferentes não são a curadoria de nenhum deles.
+  const dica = dicaCom([
+    { editionFile: "nimzowitsch-my-system-1930", capitulo: "Parte I, cap. I — The centre" },
+    { editionFile: "nimzowitsch-my-system-1930", capitulo: "Parte I, cap. III — The seventh rank" },
+    { editionFile: "nimzowitsch-my-system-1930", capitulo: "Parte I, cap. IV — The passed pawn" },
+  ]);
+  assert.deepEqual(problemasDeCitacao(dica, LIVRO), []);
+});
+
+test("livro da biblioteca sem capítulo declarado reprova", () => {
+  // Sem esta porta o teto seria opcional na prática: a posição que não diz o
+  // capítulo não conta para capítulo nenhum, e passa sempre.
+  const dica = dicaCom([{ editionFile: "nimzowitsch-my-system-1930", capitulo: null }]);
+  const problemas = problemasDeCitacao(dica, LIVRO);
+  assert.equal(problemas.length, 1);
+  assert.equal(problemas[0].codigo, "CAPITULO_AUSENTE");
+});
+
+test("partida do Lichess não precisa de capítulo — ela não tem", () => {
+  // O recorte CC0 é fonte sem PDF na biblioteca, e cobrar capítulo dela seria
+  // pedir um dado que não existe. É por isso que a porta olha `temArquivo`, e
+  // não `protected`.
+  const dica = dicaCom([{ editionFile: "lichess-open-database", capitulo: null }]);
+  assert.deepEqual(
+    problemasDeCitacao(dica, () => ({ slug: "lichess-open-database", temArquivo: false })),
+    [],
+  );
 });

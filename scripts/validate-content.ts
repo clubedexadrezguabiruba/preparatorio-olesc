@@ -39,7 +39,15 @@ import {
 } from "./branches.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
 import { problemasDaPosicao } from "../lib/meiojogo/afirmacoes.ts";
-import { validarDicas, type Dica } from "../lib/meiojogo/dicas.ts";
+import {
+  CAPITULO_CAP,
+  problemasEntreDicas,
+  posicoesCitadas,
+  problemasDeCitacao,
+  problemasDoTreino,
+  validarDicas,
+  type Dica,
+} from "../lib/meiojogo/dicas.ts";
 import { validarNotas } from "../lib/repertorio/notas.ts";
 import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
 
@@ -1556,24 +1564,125 @@ const notas: ReturnType<typeof validarNotas> = [];
       }
     }
 
-    const porObra = new Map<string, { source: Source; quantas: number }>();
-    for (const posicao of dica.posicoes) {
-      const source = sourcesByKey.get(posicao.provenance.editionFile);
-      if (!source) continue; // já reportado como OBRA_NAO_REGISTRADA
-      const balde = porObra.get(source.slug) ?? { source, quantas: 0 };
-      balde.quantas += 1;
-      porObra.set(source.slug, balde);
+    for (const { codigo, mensagem } of problemasDeCitacao(dica, (chave) => {
+      const source = sourcesByKey.get(chave);
+      return source ? { slug: source.slug, temArquivo: source.file !== null } : undefined;
+    })) {
+      fail(codigo, onde, mensagem);
     }
-    for (const { source, quantas } of porObra.values()) {
-      if (source.protected && quantas > PROTECTED_SOURCE_CAP) {
+
+    // O treino: o juiz do clique conferindo a resposta escrita, as portas
+    // re-rodadas, e a legenda que não pode entregar o que o item pergunta.
+    for (const { codigo, mensagem } of problemasDoTreino(dica)) {
+      fail(codigo, onde, mensagem);
+    }
+
+    // A obra de cada posição de treino também precisa estar registrada — a
+    // mesma âncora que vale para as posições de ensino.
+    for (const item of [...(dica.treino?.reconhecimento ?? []), ...(dica.treino?.reservas ?? [])]) {
+      if (!sourcesByKey.has(item.provenance.editionFile)) {
         fail(
-          "TETO_DE_CITACAO",
-          onde,
-          `${quantas} posições saem de "${source.title}", obra protegida, e o teto da §12.7 é ` +
-            `${PROTECTED_SOURCE_CAP} por dica — misture fontes`,
+          "OBRA_NAO_REGISTRADA",
+          `${onde} / item ${item.id}`,
+          `provenance.editionFile "${item.provenance.editionFile}" não está em ` +
+            `content/sources.json — cite o arquivo ou o slug de uma obra registrada`,
         );
       }
     }
+  }
+
+  // O que atravessa dicas: posições parecidas demais entre si, e capítulo
+  // drenado além do teto do módulo. Nenhuma das duas é visível de dentro de
+  // uma dica só.
+  for (const { codigo, onde, mensagem } of problemasEntreDicas(dicas)) {
+    fail(codigo, onde, mensagem);
+  }
+
+  // A concentração por capítulo no **módulo inteiro** — que é o que o teto, por
+  // ser por dica, não vê. Não reprova: a regra aprovada é por dica, e mudá-la
+  // aqui seria decidir sozinho o que foi decidido em outro lugar. Mas o número
+  // fica impresso, porque cinco posições de um capítulo só são exatamente a
+  // forma de reproduzir uma seleção que o teto foi escrito para impedir.
+  if (dicas.length > 0) {
+    // Conta **todas** as posições de livro do módulo, o ensino e o treino. Foi
+    // só o ensino até o Bloco 3, e aí a conta deixou de servir: as posições de
+    // treino são dezesseis contra trinta, e é nelas que a concentração cresce.
+    const porCapitulo = new Map<string, string[]>();
+    const porObra = new Map<string, number>();
+    let deLivroNoModulo = 0;
+    for (const dica of dicas) {
+      for (const { provenance } of posicoesCitadas(dica)) {
+        if (provenance.capitulo === null) continue;
+        deLivroNoModulo += 1;
+        const chave = `${provenance.editionFile} · ${provenance.capitulo}`;
+        porCapitulo.set(chave, [...(porCapitulo.get(chave) ?? []), dica.id]);
+        porObra.set(provenance.editionFile, (porObra.get(provenance.editionFile) ?? 0) + 1);
+      }
+    }
+    const ordenado = [...porCapitulo].sort((a, b) => b[1].length - a[1].length);
+    const obras = [...porObra].sort((a, b) => b[1] - a[1]);
+    console.log(
+      `  capítulos citados: ${ordenado.length} para ${deLivroNoModulo} posições de livro` +
+        `; o mais usado é "${ordenado[0]?.[0]}" com ${ordenado[0]?.[1].length} (${ordenado[0]?.[1].join(", ")})`,
+    );
+    console.log(
+      `  obras: ${obras.map(([slug, n]) => `${slug} ${n}`).join(" · ")}`,
+    );
+  }
+
+  // O número do Bloco 3: a fatia de oito conceitos, curada.
+  //
+  // Ele é impresso e não reprova, pela mesma razão da concentração por capítulo
+  // logo acima: a fatia tem oito conceitos por decisão de escopo, e um gate que
+  // exigisse os oito reprovaria a árvore no meio do trabalho — que é justamente
+  // quando ela precisa continuar passando. O que reprova são os defeitos de cada
+  // item, que `problemasDoTreino` já cobrou acima, um a um.
+  if (dicas.length > 0) {
+    const FATIA = ["m9", "m10", "m11", "m12", "m13", "m14", "m15", "m16"];
+    const comTreino = dicas.filter((d) => d.treino !== null);
+    const itens = comTreino.flatMap((d) => [
+      ...(d.treino?.reconhecimento ?? []),
+      ...(d.treino?.reservas ?? []),
+    ]);
+    // O que separa as duas é o **capítulo**, e não a partida de origem: as
+    // posições de livro do Capablanca também saem de partidas de verdade — a
+    // diferença é que o autor as escolheu e imprimiu num capítulo, que é o que
+    // faz o traço ser encenado (§3.2). Contar por `originalGame` somaria as
+    // mesmas posições duas vezes.
+    const deLivro = itens.filter((i) => i.provenance.capitulo !== null).length;
+    const dePartida = itens.length - deLivro;
+    // O corte da §5, quando ele acontece: uma guiada que veio de partida real
+    // porque o acervo não tinha o segundo diagrama. Ele é permitido e tem de
+    // ser **contado**, senão some na diferença entre o número planejado e o
+    // medido, e ninguém pergunta por quê.
+    const comExcecao = itens.filter((i) => i.excecaoDeFonte !== null).length;
+    const semOsSeisPassos = itens.filter(
+      (i) =>
+        i.curadoria.perceptivel.trim() === "" ||
+        i.curadoria.adequacao.trim() === "" ||
+        i.provenance.fenMethod.trim() === "",
+    ).length;
+
+    const capitulos = new Map<string, number>();
+    for (const dica of dicas) {
+      for (const { provenance } of posicoesCitadas(dica)) {
+        if (provenance.capitulo === null) continue;
+        const chave = `${dica.id} · ${provenance.editionFile} · ${provenance.capitulo}`;
+        capitulos.set(chave, (capitulos.get(chave) ?? 0) + 1);
+      }
+    }
+    const estourados = [...capitulos.values()].filter((n) => n > CAPITULO_CAP).length;
+
+    const naFatia = comTreino.filter((d) => FATIA.includes(d.id)).length;
+    console.log(
+      `  ${naFatia} de ${FATIA.length} conceitos com sequência do degrau 1 ao 4, ` +
+        `${itens.length} posições novas (${deLivro} de livro, ${dePartida} de partida), ` +
+        `${comTreino.length} ficha(s), ${semOsSeisPassos} posição(ões) sem os seis passos, ` +
+        `${estourados} capítulo(s) com mais de ${CAPITULO_CAP}` +
+        `${comExcecao > 0 ? `, ${comExcecao} guiada(s) de partida com exceção declarada (§5)` : ""}`,
+    );
+    const faltam = FATIA.filter((id) => !comTreino.some((d) => d.id === id));
+    if (faltam.length > 0) console.log(`  ainda sem treino na fatia: ${faltam.join(", ")}`);
   }
 }
 

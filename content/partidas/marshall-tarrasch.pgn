@@ -1,0 +1,47 @@
+[Partida "marshall-tarrasch"]
+[Nome "Marshall x Tarrasch"]
+[Cor "pretas"]
+[Fonte "Irving Chernev — Logical Chess: Move by Move, Game 29, pp. 206–217"]
+
+{Esta partida cobre uma lacuna que ataques ao rei não cobrem: como transformar um motivo
+tático elementar em vantagem material e depois parar de procurar brilhantismo. Chernev
+usa a cravada no cavalo de c3 para mostrar que uma peça pode parecer defender e, na
+prática, não conseguir exercer essa função. Depois do ganho material, o jogo vira uma
+aula de trocas e redução de contra-jogo.}
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 {[Clube]
+Chernev destaca a pressão adicional sobre d5 com Nc3 e a lógica de Bg5: se a cravada
+incomoda o adversário, fazê-la pode ser útil. O motivo não é decorativo; ele limita a
+liberdade do cavalo.} Nbd7 5. e3 c6 6. Qc2 {[Essencial] O desenvolvimento segue uma
+ordem compreensível: peças menores, depois dama e, mais tarde, torres. Chernev também
+ressalta que princípios não são regras rígidas; a posição concreta decide.} Qa5 {[Clube]
+A dama cumpre várias funções: desfaz a cravada sobre f6, cria uma cravada em c3 e
+prepara ...Bb4. É um exemplo de lance que desenvolve atividade e ameaça ao mesmo tempo.}
+7. cxd5 Nxd5 8. Nf3 {[Avançada] Tarrasch considerou 8.Nf3 um erro de timing. O cavalo
+vai para uma boa casa, mas White não responde ao problema urgente do cavalo c3. Um 'bom
+lance geral' pode ser ruim na posição específica.} Bb4 {[Essencial] A pressão sobre c3
+aumenta. O ponto pedagógico central de Chernev: uma peça cravada pode deixar de
+funcionar como defensor; contar atacantes e defensores sem verificar mobilidade produz
+erro.} 9. Kd2 c5 10. a3 Bxc3+ {[Clube] White perde o direito de rocar. Tarrasch abre a
+coluna c e escolhe uma simplificação segura em vez de uma linha mais complicada para
+ganhar a troca.} 11. bxc3 cxd4 12. exd4 N7b6 13. Bd3 Bd7 14. Rhc1 Rc8 {[Clube] Black não
+se apressa: completa o desenvolvimento e ocupa a coluna aberta. O peão de c3, preso à
+diagonal que leva ao rei, torna-se alvo permanente.} 15. Qb3 O-O 16. Ke2 Rxc3 17. Rxc3
+Qxc3 {[Essencial] A pressão acumulada finalmente vira material. A dama em c3 também
+oferece a possibilidade de troca de damas, algo desejável para o lado que já ganhou um
+peão.} 18. Qb1 h6 19. Bd2 Qc7 20. Kf1 Nc4 21. Bc1 Ba4 22. Qa2 Rc8 23. Qe2 Nc3 24. Qe1
+Na5 {[Clube] Começa uma nova fase: os cavalos invadem e reduzem as casas da dama e das
+peças brancas. A vantagem material é acompanhada de restrição, não de passividade.} 25.
+Bxh6 Nb3 26. Bd2 Nxa1 27. Qxa1 Bb5 {[Essencial] Depois de ganhar a qualidade, Tarrasch
+troca peças. A ideia é simples para o aluno: menos peças adversárias significam menos
+chances de criar complicações contra sua vantagem.} 28. Bxb5 Nxb5 29. g3 Qc6 30. Kg2 Rd8
+31. Be3 Qe4 {[Clube] Black explora as casas claras enfraquecidas por g3 e volta a usar
+cravadas. O cavalo branco precisa ficar defendendo o peão d4, limitando sua liberdade.}
+32. Qb2 Rd5 33. a4 Nd6 34. Bf4 Nf5 35. Be3 Nxe3+ 36. fxe3 Qxe3 {[Essencial] Mais duas
+peças saem do tabuleiro e outro peão cai. É conversão por redução: cada troca diminui o
+contra-jogo.} 37. g4 f5 38. g5 Qe4 39. Qc3 f4 40. Qc8+ Kh7 41. Qc3 e5 42. h4 Rxd4
+{[Avançada] A ruptura ...e5 inicia a fase final: o centro branco é desmontado, surgem
+ameaças de torre e peões passados conectados. A vantagem muda de forma, mas continua
+aumentando.} 43. g6+ Kh6 44. Kh2 Qe2+ {[Essencial] As brancas ainda armam truques, mas a
+dama e a torre pretas controlam a posição. A resignação mostra o resultado do processo
+inteiro, não de um único golpe.}

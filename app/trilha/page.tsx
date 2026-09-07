@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Barra } from "@/components/Barra";
+import { EscolhaDaSemana } from "@/components/curso/EscolhaDaSemana";
 import { perfilAtual } from "@/lib/auth/perfil";
-import { porExtenso, sabadoDaSemana, semanaAtual } from "@/lib/curso/calendario";
+import { porExtenso, sabadoDaSemana } from "@/lib/curso/calendario";
+import { PARAMETRO_DA_SEMANA, semanaDaTela } from "@/lib/curso/semana";
 import { contarAberto, MODULO, MODULOS_EM_ORDEM, montarMapa } from "@/lib/curso/mapa";
 import {
   NIVEIS,
@@ -56,9 +58,12 @@ import { progressoPorTema } from "@/lib/tatica/progresso";
 
 export const metadata: Metadata = { title: "A trilha — Preparatório OLESC" };
 
-export default async function Trilha() {
+export default async function Trilha({ searchParams }: PageProps<"/trilha">) {
   const perfil = await perfilAtual();
-  const semana = semanaAtual();
+  // A trilha inteira é desenhada a partir da semana: ela decide qual pastilha
+  // está aberta e qual ainda "não chegou" (`lib/curso/semana.ts`).
+  const tela = semanaDaTela(perfil.papel, (await searchParams)[PARAMETRO_DA_SEMANA]);
+  const semana = tela.semana;
 
   const [tatica, finais, lidas] = await Promise.all([
     progressoPorTema(perfil.id),
@@ -104,6 +109,8 @@ export default async function Trilha() {
           </p>
         ) : null}
       </header>
+
+      {perfil.papel === "professor" ? <EscolhaDaSemana tela={tela} base="/trilha" /> : null}
 
       {NIVEIS.map((nivel, i) => {
         const modulos = mapa.get(nivel.id) ?? [];

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Barra } from "@/components/Barra";
+import { EscolhaDaSemana } from "@/components/curso/EscolhaDaSemana";
 import { perfilAtual } from "@/lib/auth/perfil";
-import { porExtenso, sabadoDaSemana, semanaAtual } from "@/lib/curso/calendario";
+import { porExtenso, sabadoDaSemana } from "@/lib/curso/calendario";
+import { PARAMETRO_DA_SEMANA, semanaDaTela } from "@/lib/curso/semana";
 import { aulasPublicadas, indiceDeAulas } from "@/lib/finais/conteudo";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import {
@@ -56,9 +58,13 @@ import {
 
 export const metadata: Metadata = { title: "Finais — Preparatório OLESC" };
 
-export default async function Finais() {
+export default async function Finais({ searchParams }: PageProps<"/finais">) {
   const perfil = await perfilAtual();
-  const semana = semanaAtual();
+  // Ver a semana 4 aqui abre as sete aulas publicadas de uma vez, e esvazia a
+  // bancada logo abaixo — que é o mesmo conteúdo, listado como "ainda não
+  // aberta". As duas listas continuam somando o mesmo curso.
+  const tela = semanaDaTela(perfil.papel, (await searchParams)[PARAMETRO_DA_SEMANA]);
+  const semana = tela.semana;
 
   const publicadas = aulasPublicadas();
   const abertas = aulasAbertas(publicadas, semana);
@@ -116,6 +122,8 @@ export default async function Finais() {
           )}
         </section>
       )}
+
+      {perfil.papel === "professor" ? <EscolhaDaSemana tela={tela} base="/finais" /> : null}
 
       {CLASSES.map((classe) => {
         // A classe inteira, aberta ou não: é o mapa do curso. A contagem ao

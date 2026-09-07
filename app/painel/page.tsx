@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { sair } from "@/app/entrar/acoes";
 import { Barra } from "@/components/Barra";
+import { EscolhaDaSemana } from "@/components/curso/EscolhaDaSemana";
 import { perfilAtual } from "@/lib/auth/perfil";
 import {
   fimDaSemana,
@@ -9,10 +10,10 @@ import {
   intervaloPorExtenso,
   porExtenso,
   sabadoDaSemana,
-  semanaAtual,
   somarDias,
 } from "@/lib/curso/calendario";
 import { minutosDeHoje, sequenciaDeDias } from "@/lib/curso/hoje";
+import { PARAMETRO_DA_SEMANA, semanaDaTela } from "@/lib/curso/semana";
 import { minutosPorDia, partidaDoDiaMarcada } from "@/lib/curso/minutos";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
 import { eventosDeAulas, progressoDeFinais } from "@/lib/finais/progresso";
@@ -60,10 +61,14 @@ const EQUIPE = { M: "Equipe masculina", F: "Equipe feminina" } as const;
  * nada por conta própria — é o que impede o painel de dizer 5 e o relatório
  * dizer 4 com o aluno na frente.
  */
-export default async function Painel() {
+export default async function Painel({ searchParams }: PageProps<"/painel">) {
   const perfil = await perfilAtual();
 
-  const semana = semanaAtual();
+  // A semana da tela, e não a do relógio: o professor ensaia a tarefa do sábado
+  // que vem antes que ele chegue, e o aluno recebe sempre a de verdade
+  // (`lib/curso/semana.ts`).
+  const tela = semanaDaTela(perfil.papel, (await searchParams)[PARAMETRO_DA_SEMANA]);
+  const semana = tela.semana;
   const sabado = sabadoDaSemana(semana);
   const tarefasDaSemana = daSemana(TAREFAS, semana);
   const hoje = hojeNoBrasil();
@@ -170,6 +175,15 @@ export default async function Painel() {
           </form>
         </div>
       </header>
+
+      {/* A barra do professor, e só para ele. Fica logo abaixo do cabeçalho
+          porque ela muda **o resto da página inteira**: a tarefa da semana, as
+          aulas de finais abertas e a contagem do que falta. Um seletor que
+          muda tudo e mora no rodapé é um seletor que o professor encontra
+          depois de já ter lido a tela errada. */}
+      {perfil.papel === "professor" ? (
+        <EscolhaDaSemana tela={tela} base="/painel" />
+      ) : null}
 
       {/* O dia, em primeiro lugar: é o que o aluno abre o site para ver. Os
           totais do curso vêm depois — eles não mudam o que fazer agora. */}

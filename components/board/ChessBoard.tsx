@@ -153,6 +153,27 @@ export type ChessBoardProps = {
    */
   montagem?: { onChange: (fenDePecas: string) => void };
   onMove?: (orig: Key, dest: Key) => void;
+  /**
+   * O toque numa casa — **inclusive casa vazia**, e é para isso que ele existe.
+   *
+   * `onMove` só fala quando um lance acontece, e no treino de meio-jogo não há
+   * lance: o aluno aponta a casa do peão isolado, a coluna sem peão, o buraco
+   * onde o cavalo fica. Metade dessas respostas é casa sem peça nenhuma.
+   *
+   * Quem dispara é o `events.select` do chessground, chamado no topo de
+   * `selectSquare` (`dist/board.js:179-180`), antes de qualquer decisão sobre
+   * seleção ou lance — por isso ele fala da casa vazia, e por isso fala mesmo
+   * quando nada é movível.
+   *
+   * **Um tabuleiro que ouve isto não pode ser `viewOnly`.** O `viewOnly` da
+   * criação nem chega a escutar o ponteiro (`events.js:12`), e o de depois
+   * ainda barra o `drag.start` que chamaria o `selectSquare` (`events.js:57`).
+   * Para um tabuleiro só de apontar, o jeito é deixar `viewOnly` desligado e
+   * não dar movimento nenhum: sem `turnColor` e sem `dests`, `isMovable` é
+   * falso, nenhuma peça arrasta e nenhuma casa fica selecionada — mas o toque
+   * continua chegando aqui.
+   */
+  onSelect?: (casa: Key) => void;
 };
 
 /**
@@ -175,6 +196,7 @@ export function ChessBoard({
   desenhavel,
   montagem,
   onMove,
+  onSelect,
 }: ChessBoardProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
@@ -193,6 +215,10 @@ export function ChessBoard({
   useEffect(() => {
     montagemRef.current = montagem;
   }, [montagem]);
+  const onSelectRef = useRef(onSelect);
+  useEffect(() => {
+    onSelectRef.current = onSelect;
+  }, [onSelect]);
   // Ligar ou desligar o desenho é decisão de **montagem**: o chessground lê
   // `drawable.enabled` na criação (e é lá que decide se engole o menu de
   // contexto do navegador). Quem quiser trocar isso em vida remonta por `key`.
@@ -236,20 +262,24 @@ export function ChessBoard({
       // `deleteOnDropOff`: arrastar a peça para fora do tabuleiro a apaga. É
       // como se tira uma peça da posição sem precisar de botão nenhum.
       draggable: { showGhost: true, deleteOnDropOff: monta },
-      // Espalhado, e **nunca** `events: undefined`: o `configure` do pacote faz
-      // `deepMerge(state, config)`, e a chave presente com valor `undefined`
-      // apaga o `state.events` inteiro. O `redrawAll` termina em
+      // Sempre um objeto, e **nunca** `events: undefined`: o `configure` do
+      // pacote faz `deepMerge(state, config)`, e a chave presente com valor
+      // `undefined` apaga o `state.events` inteiro. O `redrawAll` termina em
       // `state.events.insert?.(elements)` (chessground.js:46) e estoura —
       // derrubando **todo** tabuleiro do site, inclusive o da aula, onde não há
       // barreira de erro para segurar. Custou uma medição inteira em
       // 2026-08-24.
-      ...(monta
-        ? {
-            events: {
-              change: () => montagemRef.current?.onChange(apiRef.current?.getFen() ?? ""),
-            },
-          }
-        : {}),
+      //
+      // O `select` entra pela ref e não pela prop, e por isso pode ser
+      // registrado aqui mesmo quando ninguém escuta: um tabuleiro sem
+      // `onSelect` chama uma função que não faz nada, que é mais barato que
+      // reconfigurar o chessground a cada render do pai.
+      events: {
+        select: (casa) => onSelectRef.current?.(casa),
+        ...(monta
+          ? { change: () => montagemRef.current?.onChange(apiRef.current?.getFen() ?? "") }
+          : {}),
+      },
       drawable: {
         enabled: desenhaAqui,
         visible: true,
