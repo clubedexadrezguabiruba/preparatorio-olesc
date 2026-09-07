@@ -46,6 +46,19 @@ export const ProvenienciaSchema = z
   .object({
     /** A obra, a página e o diagrama, em prosa. */
     bibliographicSource: z.string().min(10),
+    /**
+     * A mesma citação em **uma linha**, e é ela que fica embaixo do diagrama.
+     *
+     * O teto de 90 é medido, não escolhido: os `bibliographicSource` das 30
+     * dicas têm 204 caracteres de média e 765 de proveniência inteira, o que
+     * punha ~17 linhas de letra miúda entre o tabuleiro e o primeiro parágrafo
+     * da explicação num celular de 360 px. Nenhum dos 30 cabia em 90.
+     *
+     * A proveniência inteira não sai da página: ela desce para o `<details>` do
+     * pé, onde continua aberta para o professor que abrir a dica no sábado. O
+     * que muda é **onde**, não **se**.
+     */
+    citacaoCurta: z.string().min(10).max(90),
     /** O arquivo (ou slug) da obra em `content/sources.json`. */
     editionFile: z.string().min(3),
     /** A partida original, quando a posição vem de uma. */
@@ -83,6 +96,33 @@ export const PosicaoDaDicaSchema = z
   })
   .strict();
 
+const CASA = z.string().regex(/^[a-h][1-8]$/, "casa no formato `e4`");
+
+/**
+ * Um passo da explicação, com o que ele acende no tabuleiro.
+ *
+ * ## Por que o realce é autoral, e por que ele é pequeno
+ *
+ * A prosa das 30 dicas é escrita em notação algébrica — 29 delas citam casa ou
+ * lance, 4,5 referências por dica, 136 no total — e o tabuleiro não acompanhava
+ * nada disso: nada na tela ligava "d5" à casa d5.
+ *
+ * A saída **não** é extrair as 136 com uma expressão regular. Um passo que cita
+ * seis casas para dizer que uma delas importa acenderia as seis, e o aluno de
+ * doze anos que abre a dica pela primeira vez leria um tabuleiro pintado —
+ * carga maior, não menor. Quem escreve o passo diz o que ele cita, e o teto de
+ * quatro casas é o que impede a tentação de acender tudo.
+ *
+ * Passo sem realce nenhum é estado previsto: o passo que fala do plano, e não
+ * de uma casa, não tem o que acender.
+ */
+export const PassoSchema = z
+  .object({
+    texto: z.string().min(20),
+    realce: z.array(CASA).max(4).default([]),
+  })
+  .strict();
+
 export const QuizSchema = z
   .object({
     pergunta: z.string().min(10),
@@ -104,7 +144,7 @@ export const DicaSchema = z
     nivel: z.enum(NIVEIS_VALIDOS),
     /** A técnica em uma frase — o que a dica ensina. */
     resumo: z.string().min(20),
-    explicacao: z.array(z.string().min(20)).min(1).max(3),
+    explicacao: z.array(PassoSchema).min(1).max(3),
     procure: z.array(z.string().min(10)).min(2).max(4),
     cuidado: z.string().min(10).optional(),
     posicoes: z.array(PosicaoDaDicaSchema).min(1).max(3),
@@ -131,6 +171,17 @@ export const DicaSchema = z
     video: z
       .object({
         titulo: z.string().min(5),
+        /**
+         * O que o vídeo **não** entrega, quando ele não entrega tudo.
+         *
+         * São 30 vídeos gratuitos em português para 30 dicas, e em dois casos
+         * não sobrava escolha: o do `m11` é de finais de torre e o do `m22`
+         * trata do ataque de minoria, tema que saiu da lista. A alternativa —
+         * publicar o link calado — faria a tela afirmar que o vídeo é da dica,
+         * e o aluno descobriria que não depois de dez minutos assistindo. A
+         * ressalva vai na tela, ao lado do link, não num comentário de código.
+         */
+        ressalva: z.string().min(20).nullable().default(null),
         url: z
           .string()
           .regex(

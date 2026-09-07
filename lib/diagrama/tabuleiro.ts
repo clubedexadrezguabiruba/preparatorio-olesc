@@ -120,6 +120,27 @@ export const PALETA_DA_TELA: Paleta = {
   tinta: "var(--color-coordenada)",
 };
 
+/**
+ * ## O realce, e por que ele não tem cor própria
+ *
+ * O comentário da paleta em `app/globals.css` mede o orçamento: toda marca de
+ * tabuleiro tem de ser **mais escura** que as duas casas para bater 3:1 contra
+ * as duas, e a faixa inteira em que uma marca pode viver tem 2,26:1 de ponta a
+ * ponta. Foi ela que matou o realce amarelo-claro que o chessground traz — 1,50:1,
+ * invisível para quem precisa dele.
+ *
+ * Então o realce aqui é **a tinta do próprio diagrama** (a mesma da moldura e
+ * das coordenadas), e quem carrega o sentido é a **forma**: um aro grosso por
+ * dentro da casa. Três consequências, e as três são o motivo:
+ *
+ * - nenhuma cor nova entra na paleta sem ter sido medida;
+ * - o critério de acessibilidade da §8 do plano — "o realce tem forma além de
+ *   cor" — é atendido por construção, não por acréscimo;
+ * - o mesmo desenho serve o papel, onde só há preto.
+ *
+ * O aro fica **por baixo das peças** e por dentro da casa: ele não cobre a peça
+ * que o aluno precisa identificar, e não engorda a casa vizinha.
+ */
 export type OpcoesDiagrama = {
   /** De que lado o aluno olha. O padrão é o lado de quem tem a vez na FEN. */
   readonly orientacao?: Orientacao;
@@ -129,7 +150,80 @@ export type OpcoesDiagrama = {
   readonly titulo?: string;
   /** As três cores. O padrão é o papel; a tela passa `PALETA_DA_TELA`. */
   readonly paleta?: Paleta;
+  /**
+   * As casas a acender, em `e4`. Autoral: quem escreve o passo diz o que ele
+   * cita. **Não é extraído do texto por expressão regular** — acender as 136
+   * referências das 30 dicas aumentaria a carga em vez de baixá-la.
+   */
+  readonly realce?: readonly string[];
 };
+
+/** Espessura do aro do realce, em unidades de casa (45). */
+const REALCE = 3.5;
+
+/** Margem e lado total, dado se o diagrama leva coordenadas. */
+function medidas(comCoordenadas: boolean): { margem: number; total: number } {
+  const margem = comCoordenadas ? MARGEM : BORDA;
+  return { margem, total: LADO_CASA * 8 + margem * 2 };
+}
+
+/** Coluna e linha na tela (0 = canto superior esquerdo), a partir da casa. */
+function naTela(casa: string, orientacao: Orientacao): { coluna: number; linha: number } {
+  if (!/^[a-h][1-8]$/.test(casa)) {
+    throw new Error(`"${casa}" não é casa do tabuleiro (formato \`e4\`)`);
+  }
+  const arquivo = casa.charCodeAt(0) - "a".charCodeAt(0);
+  const fileira = Number(casa[1]) - 1;
+  return orientacao === "brancas"
+    ? { coluna: arquivo, linha: 7 - fileira }
+    : { coluna: 7 - arquivo, linha: fileira };
+}
+
+/** Os aros das casas acesas, na geometria do diagrama. */
+function aros(
+  casas: readonly string[],
+  orientacao: Orientacao,
+  margem: number,
+  cor: string,
+): string[] {
+  return casas.map((casa) => {
+    const { coluna, linha } = naTela(casa, orientacao);
+    return (
+      `<rect x="${margem + coluna * LADO_CASA + REALCE / 2}"` +
+      ` y="${margem + linha * LADO_CASA + REALCE / 2}"` +
+      ` width="${LADO_CASA - REALCE}" height="${LADO_CASA - REALCE}"` +
+      ` fill="none" stroke="${cor}" stroke-width="${REALCE}" class="realce"/>`
+    );
+  });
+}
+
+/**
+ * Só a camada dos aros, num SVG com **o mesmo `viewBox`** do diagrama.
+ *
+ * Existe por uma conta de bytes. A dica tem até três passos, e cada passo
+ * acende casas diferentes; redesenhar o tabuleiro inteiro por passo custaria
+ * 24,7 KB de marcação por passo — 74 KB numa página que a criança abre no dado
+ * móvel dela. A camada custa algumas centenas de bytes, e quem troca de passo
+ * troca de camada.
+ *
+ * O `viewBox` compartilhado é o que garante o alinhamento: as duas peças de
+ * marcação passam pela mesma `medidas()` e pelo mesmo `naTela()`, então não há
+ * duas opiniões sobre onde fica d4 — que é exatamente o erro que uma sobreposição
+ * feita à mão em porcentagem de CSS produziria na primeira mudança de margem.
+ */
+export function camadaDeRealce(
+  casas: readonly string[],
+  opcoes: { orientacao: Orientacao; coordenadas?: boolean; paleta?: Paleta } = {
+    orientacao: "brancas",
+  },
+): string {
+  const { margem, total } = medidas(opcoes.coordenadas ?? true);
+  const cor = (opcoes.paleta ?? { clara: CASA_CLARA, escura: CASA_ESCURA, tinta: TINTA }).tinta;
+  return (
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}"` +
+    ` aria-hidden="true" class="camada-realce">${aros(casas, opcoes.orientacao, margem, cor).join("")}</svg>`
+  );
+}
 
 function escapar(texto: string): string {
   return texto.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -154,9 +248,8 @@ export function diagrama(fen: string, opcoes: OpcoesDiagrama = {}): string {
   const paleta = opcoes.paleta ?? { clara: CASA_CLARA, escura: CASA_ESCURA, tinta: TINTA };
   const daVezDasBrancas = orientacao === "brancas";
 
-  const margem = comCoordenadas ? MARGEM : BORDA;
+  const { margem, total } = medidas(comCoordenadas);
   const tabuleiro = LADO_CASA * 8;
-  const total = tabuleiro + margem * 2;
 
   const partes: string[] = [];
 
@@ -187,6 +280,9 @@ export function diagrama(fen: string, opcoes: OpcoesDiagrama = {}): string {
       ` width="${tabuleiro - BORDA}" height="${tabuleiro - BORDA}"` +
       ` fill="none" stroke="${paleta.tinta}" stroke-width="${BORDA}"/>`,
   );
+
+  // O realce, entre a moldura e as peças: por baixo da peça, por dentro da casa.
+  partes.push(...aros(opcoes.realce ?? [], orientacao, margem, paleta.tinta));
 
   if (comCoordenadas) {
     // 15 unidades num tabuleiro de 84 mm dão ~8,8 pt no papel, e o semibold

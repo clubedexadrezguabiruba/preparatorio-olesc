@@ -6,6 +6,7 @@ import { PECAS } from "./pecas.ts";
 import {
   BORDA,
   CASA_CLARA,
+  camadaDeRealce,
   CASA_ESCURA,
   diagrama,
   LADO_CASA,
@@ -138,4 +139,67 @@ test("o lado da casa continua igual ao lado da peça cburnett", () => {
   // vigia diverge: um upgrade do chessground que desenhasse em 40 faria a peça
   // vazar da casa, e em silêncio.
   assert.equal(LADO_CASA, LADO_PECA);
+});
+
+/* ------------------------------------------------------------------ *
+ * O realce
+ * ------------------------------------------------------------------ */
+
+test("o realce acende a casa pedida, e só ela", () => {
+  const svg = diagrama(INICIAL, { realce: ["d4"] });
+  const aros = svg.match(/class="realce"/g) ?? [];
+  assert.equal(aros.length, 1);
+  // d4 é a coluna 3, fileira 3 — vista das brancas, a quarta a partir de baixo.
+  assert.match(
+    svg,
+    new RegExp(`<rect x="${MARGEM + 3 * LADO_CASA + 1.75}" y="${MARGEM + 4 * LADO_CASA + 1.75}"`),
+  );
+});
+
+test("sem realce pedido, nenhum aro entra no desenho", () => {
+  assert.ok(!diagrama(INICIAL).includes("realce"));
+  assert.ok(!diagrama(INICIAL, { realce: [] }).includes("realce"));
+});
+
+test("o realce gira com o tabuleiro", () => {
+  // Se ele não girasse, a casa acesa seria a simétrica — e o aluno que olha das
+  // pretas leria "o peão de d4" com o aro em e5. É o tipo de erro que ninguém vê
+  // no código e todo mundo vê no celular.
+  const brancas = diagrama(INICIAL, { realce: ["a1"], orientacao: "brancas" });
+  const pretas = diagrama(INICIAL, { realce: ["a1"], orientacao: "pretas" });
+  const canto = MARGEM + LADO_CASA * 7 + 1.75;
+  assert.match(brancas, new RegExp(`<rect x="${MARGEM + 1.75}" y="${canto}"[^>]*class="realce"`));
+  assert.match(pretas, new RegExp(`<rect x="${canto}" y="${MARGEM + 1.75}"[^>]*class="realce"`));
+});
+
+test("o aro é desenhado antes das peças — ele não cobre o que o aluno tem de ver", () => {
+  const svg = diagrama(INICIAL, { realce: ["a1"] });
+  assert.ok(svg.indexOf('class="realce"') < svg.indexOf("<g transform="));
+});
+
+test("o realce usa a tinta do diagrama, e não uma cor nova", () => {
+  // O orçamento de contraste do tabuleiro está medido em `app/globals.css`:
+  // marca mais clara que a casa clara não existe. Cor nova aqui teria de ser
+  // medida contra as duas casas; a tinta da moldura já foi.
+  assert.match(diagrama(INICIAL, { realce: ["d4"] }), new RegExp(`stroke="${TINTA}"`));
+});
+
+test("casa que não existe estoura na hora, e não desenha aro em lugar nenhum", () => {
+  assert.throws(() => diagrama(INICIAL, { realce: ["j9"] }), /não é casa do tabuleiro/);
+  assert.throws(() => camadaDeRealce(["j9"], { orientacao: "brancas" }), /não é casa do tabuleiro/);
+});
+
+test("a camada de realce cai exatamente sobre a casa do diagrama", () => {
+  // O alinhamento é o ponto inteiro da camada: ela é sobreposta ao diagrama por
+  // CSS, e um `viewBox` diferente poria o aro meia casa fora sem quebrar nada
+  // que um teste de marcação pegasse.
+  const dentro = diagrama(INICIAL, { realce: ["d4"] });
+  const camada = camadaDeRealce(["d4"], { orientacao: "brancas" });
+  const aro = /<rect x="[\d.]+" y="[\d.]+" width="[\d.]+" height="[\d.]+" fill="none"[^>]*class="realce"\/>/;
+  assert.equal(dentro.match(aro)?.[0], camada.match(aro)?.[0]);
+  assert.ok(camada.includes(`viewBox="0 0 ${MARGEM * 2 + LADO_CASA * 8} ${MARGEM * 2 + LADO_CASA * 8}"`));
+});
+
+test("a camada é decorativa: quem fala com o leitor de tela é o diagrama", () => {
+  assert.match(camadaDeRealce(["d4"], { orientacao: "brancas" }), /aria-hidden="true"/);
 });
