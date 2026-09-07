@@ -40,6 +40,7 @@ import {
 import { respostasDe } from "../lib/lesson/tree.ts";
 import { problemasDaPosicao } from "../lib/meiojogo/afirmacoes.ts";
 import { validarDicas, type Dica } from "../lib/meiojogo/dicas.ts";
+import { validarNotas } from "../lib/repertorio/notas.ts";
 import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
 
 /**
@@ -1495,6 +1496,7 @@ function checkDidacticRotation() {
  * lembrar de escrever a regra.
  */
 const dicas: Dica[] = [];
+const notas: ReturnType<typeof validarNotas> = [];
 
 {
   const where = relative(meioJogoFile);
@@ -1505,6 +1507,29 @@ const dicas: Dica[] = [];
       dicas.push(...validarDicas(JSON.parse(readFileSync(meioJogoFile, "utf8"))));
     } catch (error) {
       fail("SCHEMA_DICA", where, error instanceof Error ? error.message : String(error));
+    }
+  }
+
+  /* ---------------------------------------------------------------- *
+   * As páginas de princípios do repertório
+   *
+   * Elas eram conferidas **só pelo build**: `lib/repertorio/conteudo.ts` roda o
+   * schema na importação, e quem importa é a página. Um `faca` com seis passos
+   * (o teto é cinco) passava batido aqui e derrubava `next build` lá na frente,
+   * com a mensagem escondida dentro de um "Failed to collect page data".
+   * Aconteceu em 7/9/2026, ao escrever as quatro páginas da poda da §23.
+   *
+   * Conferir aqui custa uma leitura de arquivo e devolve o erro com o nome do
+   * campo, que é o que o autor precisa ler.
+   * ---------------------------------------------------------------- */
+  const notasFile = path.join(contentDir, "repertorio", "notas.json");
+  if (!existsSync(notasFile)) {
+    fail("NOTAS_AUSENTES", relative(notasFile), "o repertório perdeu as páginas de princípios");
+  } else {
+    try {
+      notas.push(...validarNotas(JSON.parse(readFileSync(notasFile, "utf8"))));
+    } catch (error) {
+      fail("SCHEMA_NOTA", relative(notasFile), error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -1666,7 +1691,7 @@ console.log("");
 if (issues.length === 0) {
   console.log(
     `${VERDE}✔ tudo verde — ${positions.size} posições, ${lessons.length} aula(s) e ` +
-      `${dicas.length} dica(s) de meio-jogo sem nenhum problema${NORMAL}`,
+      `${dicas.length} dica(s) de meio-jogo e ${notas.length} página(s) de princípios sem nenhum problema${NORMAL}`,
   );
   process.exit(0);
 }

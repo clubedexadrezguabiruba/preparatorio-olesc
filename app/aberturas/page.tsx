@@ -204,8 +204,9 @@ export default async function Aberturas() {
         <div className="flex flex-col gap-1">
           <h2 className="text-base font-semibold text-tinta">Sem linha para decorar</h2>
           <p className="text-xs text-tinta-fraca">
-            Quatro porque são raras demais, e uma porque é a mais comum de todas e mesmo
-            assim não tem teoria. Em vez de lances, o que fazer — escrito.
+            Algumas porque são raras demais, outras porque se espalham em quatro respostas
+            e nenhuma manda. Posição espalhada não rende sequência para decorar: rende uma
+            ideia. Em vez de lances, o que fazer — escrito.
           </p>
         </div>
 

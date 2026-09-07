@@ -35,13 +35,27 @@ function partidas(nota: Nota): Chess[] {
     });
 }
 
-test("as cinco notas estão escritas, na ordem de quanto o aluno vai encontrar", () => {
-  // O bispo em c4 vem primeiro de propósito: é ~31 % das sicilianas, contra
-  // menos de 8 % das quatro raras somadas. A ordem do arquivo é a ordem da tela.
-  assert.deepEqual(
-    notas.map((n) => n.slug),
-    ["bispo-em-c4", "pirc", "nimzowitsch", "alekhine", "owen"],
-  );
+test("as nove notas estão escritas, na ordem de quanto o aluno vai encontrar", () => {
+  // A ordem do arquivo é a ordem da tela, e ela é por frequência. As cinco
+  // primeiras são posições que o aluno encontra o tempo todo e que não rendem
+  // sequência para decorar; as quatro últimas são as raras do ⚠12.
+  //
+  // Eram cinco até 7/9/2026. A poda da §23 de `docs/REVISAO-FONTES.md` trouxe
+  // quatro: a Escocesa depois de 5.Dxd4 (quatro respostas dele e nenhuma
+  // dominante), a Alapin depois de 2.c3, a Francesa depois de 3.Bd3 — onde a
+  // própria fonte oferece três lances e não escolhe nenhum — e as outras
+  // primeiras, que absorveram a abertura `pretas/outras` inteira.
+  assert.deepEqual(notas.map((n) => n.slug), [
+    "bispo-em-c4",
+    "escocesa-dama-em-d4",
+    "alapin-centro-grande",
+    "francesa-bd3",
+    "outras-primeiras",
+    "pirc",
+    "nimzowitsch",
+    "alekhine",
+    "owen",
+  ]);
 });
 
 test("os lances de cada nota são jogáveis de verdade", () => {
@@ -57,7 +71,13 @@ test("os lances de cada nota são jogáveis de verdade", () => {
           `${nota.slug}: "${lance}" não é lance legal em "${trecho}"`,
         );
       }
-      assert.ok(jogo.history().length >= 2, `${nota.slug}: "${trecho}" tem menos de dois lances`);
+      // Um lance basta, e a exigência de dois caiu em 7/9/2026. A nota
+      // `outras-primeiras` cobre 1.c4, 1.Cf3, 1.b3, 1.f4 e 1.g3: ali o PRIMEIRO
+      // lance dele já é a posição inteira, e escrever um segundo seria inventar
+      // uma resposta nossa que a página justamente não quer fixar. O que a nota
+      // não pode é ficar vazia — e quem prova que ela para no lugar certo é o
+      // teste seguinte, que confere de quem é a vez.
+      assert.ok(jogo.history().length >= 1, `${nota.slug}: "${trecho}" não tem lance nenhum`);
     }
   }
 });
@@ -75,12 +95,19 @@ test("toda nota para na vez do aluno, e a vez bate com o campo `cor`", () => {
   }
 });
 
-test("toda nota é uma posição de 1.e4 — é por onde o repertório do clube passa", () => {
-  // Das brancas porque abrimos 1.e4; das pretas porque a Siciliana é a resposta
-  // a ele. Se um dia entrar aqui uma nota de 1.d4, a página estará no lugar
-  // errado.
+test("nota das brancas começa por 1.e4; nota das pretas, pelo lance dele", () => {
+  // Até 7/9/2026 este teste exigia 1.e4 de TODAS, e a razão escrita era que o
+  // clube abre 1.e4 e que a Siciliana é a resposta a ele. A premissa caiu na
+  // poda da §23: a nota `outras-primeiras` cobre 1.c4, 1.Cf3, 1.b3, 1.f4 e
+  // 1.g3 — justamente as aberturas em que ELE não joga 1.e4.
+  //
+  // O invariante de verdade é este: quando a nota é das brancas, o primeiro
+  // lance é NOSSO e só pode ser 1.e4, porque é com ele que o clube abre. Quando
+  // é das pretas, o primeiro lance é dele e pode ser qualquer um.
   for (const nota of notas) {
-    assert.match(nota.lances, /^1\.e4\b/, `${nota.slug} não começa por 1.e4`);
+    if (nota.cor === "brancas") {
+      assert.match(nota.lances, /^1\.e4\b/, `${nota.slug} é das brancas e não abre 1.e4`);
+    }
   }
 });
 
