@@ -67,24 +67,40 @@ para a nossa torre. Este é o jeito mais simples de jogar a posição — o outr
 [Nome "Siciliana — Rossolimo 3.Bb5"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "GM Avetik Grigoryan (ChessMood) — draft 'Nightmare of Rossolimo', tronco 4.Bxc6 dxc6 5.d3 Bg7 6.h3 Cf6 7.Cc3 Cd7 8.Be3 e5."]
+[Fonte "IM Christof Sielecki — 'Short & Sweet: Magnus Sicilian' (Chess.com), variante 'S&S Magnus Sicilian - Rossolimo', a do 4.Bxc6 dxc6 5.d3 Bg7 6.h3 Dc7. Os 22 meios-lances batem um a um com o curso, que segue além até o 14...g5. Executa a decisão da seção 13 de docs/REVISAO-FONTES.md, de 7/9/2026: o Rossolimo passa a ser do Sielecki e sai do draft 'Nightmare of Rossolimo' do Grigoryan, que dava o tronco 6.h3 Cf6 7.Cc3 Cd7 8.Be3 e5 sem explicar lance nenhum. Dele são: o motivo do 4...dxc6 (o peão de c6 toma conta de d5, então o defeito habitual da estrutura Botvinnik não existe nesta versão); o 6...Dc7 e o abandono do ...Cf6 cedo, que ele descreve como mudança do próprio campeão do mundo em 2019 — jogar antes os lances úteis e só depois decidir onde o cavalo fica, o que abre o ...Cf6-h5 que o caminho antigo tornava impossível; o motivo do h3 DELE; os dois trabalhos do 9...h6; e a leitura do 11...f5. DECLARADO, com o número: o motor NÃO prefere esta troca. Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 na posição depois do 6.h3 — o nosso 6...Cf6 antigo dá brancas +0,34 e o 6...Dc7 do curso dá +0,43. A troca é de fonte, não de posição, e o Doug decidiu assim em 7/9/2026 sabendo desses nove centésimos."]
 [Result "*"]
 
 1. e4 c5 2. Nf3 Nc6 3. Bb5 g6 4. Bxc6 dxc6 {Ficamos com peão dobrado em c5 e c6,
 e isso não é problema: o de c6 toma conta de b5 e de d5, que são exatamente as
 duas casas de onde o cavalo dele gostaria de incomodar. Peão feio que faz
-trabalho não é peão fraco.} 5. d3 Bg7 6. h3 Nf6 7. Nc3 Nd7 8. Be3
-e5 {Ele trocou em c6 e nós recapturamos com o peão de d7, de propósito: assim
-ficamos com os dois bispos e com a coluna d aberta para a dama. O cavalo recuou
-a d7 para não tapar o bispo de g7, e agora o peão chega a e5 e trava o centro.
-Com o centro travado ninguém tem pressa — e quem tem os dois bispos joga para
-abrir o jogo mais tarde.} *
+trabalho não é peão fraco.} 5. d3 Bg7 6. h3
+Qc7 {A dama sai antes do cavalo, e é aí que está a ideia inteira. O caminho
+antigo — o que este arquivo jogava até 7/9/2026 — era …Cf6 e depois …Cd7: dois
+lances com o mesmo cavalo, só para abrir a diagonal do bispo de g7 antes do
+…e5. O Sielecki conta que o campeão do mundo jogou assim durante anos e mudou em
+2019. Primeiro os lances que são úteis de qualquer jeito — a dama em c7, que já
+apoia o …e5 que vem —, e só depois se decide onde o cavalo fica. Guardar a
+decisão abre casas que o caminho antigo fechava: o cavalo pode ir a f6 e de lá a
+h5, o que é impossível quando ele já teve de recuar para d7.} 7. Nc3 e5 8. Be3
+b6 9. Qd2
+h6 {Um lance pequeno com dois trabalhos, e os dois são do curso. O primeiro: tira
+o Bh6 da jogada. Assim que o nosso cavalo de g8 sair, o bispo dele iria a h6
+oferecer a troca do nosso bispo de g7 — que é a melhor peça desta estrutura, o
+dono da diagonal grande. O segundo é mais simples: o peão em h6 toma conta de
+g5.} 10. a3 Ne7 11. b4
+f5 {Cada um ataca de um lado, e o nosso é o lado do rei dele. Ele gastou os
+lances 10 e 11 em a3 e b4, mirando o nosso peão de c5; nós gastamos os mesmos
+dois em …h6 e …Ce7, e agora vem o …f5. Repare no que torna esse lance possível:
+com um cavalo em f6, o peão de f7 não teria por onde passar — f6 é a casa que
+ele precisa atravessar. Foi o …Dc7 do lance 6 que deixou o cavalo livre para ir
+a e7 em vez de f6, e é aqui que aquele lance de dama se paga. O Sielecki fecha a
+posição escrevendo que as pretas têm excelente contrajogo.} *
 
 [Abertura "siciliana"]
 [Nome "Siciliana — Rossolimo com 4.O-O"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. O 4.O-O é 22,9 por cento das respostas a 3...g6 pela tabela da seção 6 e o arquivo do Grigoryan só cobre o 4.Bxc6. O 4...Bg7 é o primeiro lance do motor, e a ponta fica em brancas +0,35."]
+[Fonte "Recomendação do professor, assinada pelo Doug em 7/9/2026 — a segunda do repertório, depois do 6.Bf4 da Caro-Kann (seção 19 de docs/REVISAO-FONTES.md). O argumento tem três pernas, e as três estão medidas. (1) A fonte natural desta posição declara que está chutando: no 5.c3, o IM Christof Sielecki ('Short & Sweet: Magnus Sicilian', variante 'S&S Magnus Sicilian - Rossolimo' do 4.O-O) escreve que o lance 'ainda não foi tentado contra o Magnus Carlsen, então não sabemos o que ele teria planejado', e que ELE decidiu recomendar 5...e5 por coerência com o resto do curso dele. (2) O motor põe a nossa linha inteira como variante principal: Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 — o 5...Cf6 dá brancas +0,32 com a continuação 6.Te1 O-O 7.d4 d5 8.e5 Ce4, que é esta linha lance por lance até o fim; o 5...e5 do curso dá +0,34 e fica em segundo. (3) A linha do curso pede que o aluno segure um peão a mais contra compensação que o próprio autor declara suficiente, por um 8...a6 que ele chama de 'menos comum' e apostando que as brancas não saberão conduzir a posição sem preparação de computador, e termina com o rei preto em f8 sem direito a roque. Não é posição para 12 a 15 anos. O 4.O-O é 22,9 por cento das respostas a 3...g6 pela tabela da seção 6 de docs/REPERTORIO.md."]
 [Result "*"]
 
 1. e4 c5 2. Nf3 Nc6 3. Bb5 g6 4. O-O Bg7 5. c3 Nf6 {O c3 dele anuncia o que vem:
@@ -129,7 +145,7 @@ decorar, e o lance mais chato do adversário já saiu do tabuleiro.} *
 [Nome "Siciliana — Alapin 2.c3"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "2.c3 e 2...Cf6: IM Andras Toth — 'Short & Sweet: 1.e4 for Club Players' (Chess.com). É repertório de BRANCAS, e é de propósito: quem explica o que o 2.c3 quer é quem o joga. O curso escreve que com 2.c3 as brancas sinalizam a vontade de tomar o centro inteiro com d2-d4, e que as duas respostas principais, 2...d5 e 2...Cf6, atacam e4 justamente para impedir esse par de peões. Do 6...Cc6 ao 8.Bb5: IM Christof Sielecki — 'Short & Sweet: Magnus Sicilian' (Chess.com), variante 'S&S Magnus Sicilian - Alapin'. Ele joga 4.Cf3 Cc6 5.d4 cxd4 6.cxd4 d6 e escreve com todas as letras que a NOSSA ordem — 4.d4 cxd4 5.cxd4 d6 6.Cf3 Cc6 — chega na mesma posição; daí em diante bate lance a lance até o 8.Bb5. Dele é também a observação de que os dois peões de c sumiram e por isso o c4 não existe para expulsar o cavalo de d5, escrita na posição depois do nosso 6...Cc6 e trazida para o comentário do 5...d6. PENDÊNCIA DECLARADA, e é o último meio-lance: o 8...dxe5 é NOSSO. O Sielecki chama o 8...dxe5 de linha principal das pretas e mesmo assim escolhe 8...Bd7, porque guarda mais chances de jogar para ganhar — critério de campeão do mundo, não de aluno de 12 a 15 anos. O draft 'Alapin' do GM Avetik Grigoryan (ChessMood) dá o 8...dxe5 sem explicar lance nenhum. Então o argumento do comentário final é nosso, e não de curso: fechá-lo na régua da seção 1 de docs/REVISAO-FONTES.md pede uma de duas coisas, o professor assinar o argumento ou um bloco futuro trocar o lance por 8...Bd7. Medido em 7/9/2026."]
+[Fonte "2.c3 e 2...Cf6: IM Andras Toth — 'Short & Sweet: 1.e4 for Club Players' (Chess.com). É repertório de BRANCAS, e é de propósito: quem explica o que o 2.c3 quer é quem o joga. O curso escreve que com 2.c3 as brancas sinalizam a vontade de tomar o centro inteiro com d2-d4, e que as duas respostas principais, 2...d5 e 2...Cf6, atacam e4 justamente para impedir esse par de peões. Do 6...Cc6 ao 11...Bxd6: IM Christof Sielecki — 'Short & Sweet: Magnus Sicilian' (Chess.com), variante 'S&S Magnus Sicilian - Alapin'. Ele joga 4.Cf3 Cc6 5.d4 cxd4 6.cxd4 d6 e escreve com todas as letras que a NOSSA ordem — 4.d4 cxd4 5.cxd4 d6 6.Cf3 Cc6 — chega na mesma posição; daí em diante bate lance a lance até o fim da nossa linha, que para dois meios-lances antes do fim da variante dele — o 12...Cb4, citado no comentário do 11...Bxd6 como o lance seguinte. Dele são: a observação de que os dois peões de c sumiram e por isso o c4 não existe para expulsar o cavalo de d5, escrita na posição depois do nosso 6...Cc6 e trazida para o comentário do 5...d6; o 8...Bd7, que ele prefere ao 8...dxe5 mesmo chamando este de linha principal das pretas, porque guarda mais chances de jogar para ganhar e foi o que o campeão do mundo jogou; e o motivo da troca de peças menores que ele escreve no 12...Cb4 — dominar as casas claras, em especial d5, a que fica na frente do peão isolado. DECLARADO: o comentário do 9...e6 é NOSSO. O curso joga o lance sem explicá-lo, e o número é do Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 — o 9...e6 é o único lance que segura a igualdade, o natural 9...exd6 põe as brancas +0,35 e o 9...a6, +0,55. TROCA DE CAUDA, decidida pelo Doug em 7/9/2026: até esta data a linha terminava em 8...dxe5, com o argumento do peão isolado escrito por nós e a pendência declarada nesta tag. O professor recusou assinar aquele argumento e mandou seguir o curso. O peão isolado de d4 não se perdeu na troca: ele continua isolado na posição final, e agora quem ensina a cobrá-lo é o Sielecki."]
 [Result "*"]
 
 1. e4 c5 2. c3 Nf6 {O 2.c3 não desenvolve nada e não ataca nada. Ele quer uma
@@ -149,28 +165,53 @@ tabuleiro. Sem peão em c2, ele não tem como jogar c4, que é o lance normal pa
 expulsar um cavalo de d5. Sobra fazer isso com peça — é o que ele tenta no
 lance 7 com Bc4 —, e aí nós recuamos …Cb6 atacando o bispo e ganhamos o tempo
 de volta.} 6. Nf3 Nc6 7. Bc4 Nb6 8. Bb5
-dxe5 {Chegou a hora de cobrar. O peão de e5, que parecia o orgulho das brancas,
-cai — e o que fica no lugar dele é o que esta linha toda perseguia. Ele
-recaptura com 9.Cxe5, e agora olhe os peões dele: a2, b2, d4, f2, g2, h2. O de
-d4 ficou sozinho, sem peão de c e sem peão de e para ajudar. Isso é um peão
-isolado, e peão isolado se trata sempre do mesmo jeito: bloqueia-se a casa da
-frente, que aqui é d5, e cobra-se o peão com as peças. Não é ataque, é
-cobrança — e é por isso que valeu a pena trocar em e5 em vez de deixar o centro
-dele de pé.} *
+Bd7 {O mérito deste bispo é não decidir nada. Ele sai de casa, defende o cavalo
+de c6 pela segunda vez e deixa a tensão no centro de pé — trocar em e5 agora
+seria nós resolvermos a estrutura no tempo dele, e assim quem tem de escolher é
+quem tem o peão em e5. O Sielecki é honesto sobre o preço: ele mesmo chama o
+8…dxe5 de linha principal das pretas, e escolhe este lance porque guarda mais
+chances de jogar para ganhar — foi o que o campeão do mundo jogou.} 9. exd6
+e6 {Não recapture. Parece óbvio pegar o peão de volta na hora, e é justamente
+aqui que a linha se decide: deixamos o peão dele em d6 por dois lances e
+preparamos comê-lo com o BISPO, que agora tem a casa e7 aberta para passar.
+Medido no Stockfish 18, profundidade 20: o …e6 é o único lance que segura a
+igualdade; o natural 9…exd6 já põe as brancas 0,35 à frente e o 9…a6, 0,55. A
+diferença é a estrutura — recapturando com peça, os nossos peões ficam limpos em
+a7, b7, e6, f7, g7 e h7, e o bispo chega de graça a uma casa boa. Ele vai tentar
+usar a diagonal que o …e6 abriu: 10.Bg5 ataca a nossa dama, e a resposta é …f6,
+que fecha a diagonal e obriga o bispo a recuar para h4.} 10. Bg5 f6 11. Bh4
+Bxd6 {O peão volta, e volta com peça: o bispo sai de f8 direto para d6, que é
+casa boa, e a nossa estrutura fica limpa. Agora olhe os peões dele: a2, b2, d4,
+f2, g2, h2. O de d4 ficou sozinho — os dois peões de c sumiram na troca do lance
+4, e o de e foi trocado no lance 9. Isso é um peão isolado, e peão isolado se
+trata sempre do mesmo jeito: bloqueia-se a casa da frente e cobra-se o peão com
+as peças. A casa da frente é d5, e o lance seguinte da variante do Sielecki é
+…Cb4, que ele explica assim: trocar peças aqui não nos incomoda, porque trocar
+ajuda a dominar as casas claras — em especial a que fica na frente do peão
+isolado. Não é ataque, é cobrança.} *
 
 [Abertura "siciliana"]
 [Nome "Siciliana — Gambito Morra 2.d4"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. O draft 'Sicilian Sidelines Homework' do Grigoryan chega a 2.d4 cxd4 3.c3 e para ali. O 3...Cf6 é o lance que o motor põe em igualdade junto com o 3...dxc3, e foi escolhido porque transpõe exatamente para a linha da Alapin acima."]
+[Fonte "IM Christof Sielecki — 'Short & Sweet: Magnus Sicilian' (Chess.com), variantes 'S&S Magnus Sicilian - Morra Gambit' e 'S&S Magnus Sicilian - Alapin'. O curso joga a NOSSA ordem inteira: 2.d4 cxd4 3.c3 Cf6 4.e5 Cd5 e, pela Alapin, 5.Cf3 Cc6 6.cxd4 d6 7.Bc4 Cb6 8.Bb5 Bd7 — daí até o fim a cauda é a mesma da linha da Alapin acima, e o texto de lá vale aqui. Dele é o argumento do 3...Cf6: o Magnus enfrentou o Morra uma vez na vida, aos 11 anos, jogou 3...Cc6 e não serve de guia; ele recomenda transpor para a Alapin por economia de estudo, porque aceitar o peão não é uma linha para decorar e sim um curso inteiro (ele manda quem quiser estudar isso para o 'Mop up the Morra' do Logozar), e para quem já carrega as linhas principais da Siciliana a solução barata contra sidelines é a que faz sentido. CORRIGIDO em 7/9/2026, dois pontos. (1) A tag dizia 'Livro + motor' e citava o draft 'Sicilian Sidelines Homework' do Grigoryan, que para no 3.c3 — estava desatualizada, porque o Magnus Sicilian está no corpus desde a importação e cobre 15 dos 16 meios-lances antigos. (2) O comentário do 3...Cf6 dizia que aceitar com 3...dxc3 faria o aluno 'jogar o resto da partida correndo atrás'. Não faz: Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026, põe o 3...dxc3 em igualdade e em PRIMEIRO lugar, empatado com o 3...Cf6. O motivo de recusar é o do Sielecki, e é de estudo, não de posição. O 9...e6 segue declarado como nosso, pelo mesmo motivo escrito na tag da Alapin."]
 [Result "*"]
 
-1. e4 c5 2. d4 cxd4 3. c3 Nf6 {Ele está oferecendo um peão. Não pegue: com
-3…dxc3 ele recupera tudo em desenvolvimento e você joga o resto da partida
-correndo atrás. O …Cf6 ataca o peão de e4 e obriga o 4.e5 — e daí em diante é a
-Alapin, que você já sabe.} 4. e5 Nd5 5. Nf3 Nc6 6. cxd4 d6 7. Bc4 Nb6 8. Bb5
-dxe5 {Este é o truque do arquivo inteiro: recusamos o peão com …Cf6 e caímos na
+1. e4 c5 2. d4 cxd4 3. c3 Nf6 {Ele está oferecendo um peão, e o motivo de não
+pegar não é o que parece. Pegar não é erro: o motor põe o 3…dxc3 em igualdade e
+em primeiro lugar, empatado com o …Cf6. O motivo é de estudo, e é do Sielecki —
+o campeão do mundo enfrentou este gambito uma vez na vida, aos onze anos, e
+aceitar o peão não é uma linha para decorar, é um curso inteiro. Contra uma
+abertura que você vai ver poucas vezes, a resposta certa é a que já está na sua
+cabeça: o …Cf6 ataca o peão de e4, obriga o 4.e5 — e daí em diante é a Alapin,
+que você já sabe.} 4. e5 Nd5 5. Nf3 Nc6 6. cxd4 d6 7. Bc4 Nb6 8. Bb5
+Bd7 {Este é o truque do arquivo inteiro: recusamos o peão com …Cf6 e caímos na
 mesma posição da linha da Alapin — confira os dois diagramas, são iguais, só os
 lances vieram em outra ordem. Quem estudou a Alapin ganhou o Gambito Morra de
-graça. Aceitar com 3…dxc3 também empata pelo motor, mas aí você joga uma
-posição nova, com ele desenvolvido e você não.} *
+graça, e daqui até o fim os dois textos são o mesmo: …e6 sem recapturar, …f6
+para expulsar o bispo e …Bxd6 pegando o peão com peça.} 9. exd6 e6 10. Bg5 f6
+11. Bh4
+Bxd6 {Mesma posição final da Alapin, e o motivo é o mesmo: o peão de d4 dele
+ficou isolado, sem peão de c e sem peão de e para ajudar. Bloqueia-se d5 e
+cobra-se o peão com as peças. Se você chegou aqui pelo Morra, leia o texto do
+11…Bxd6 da linha da Alapin — é o mesmo tabuleiro.} *

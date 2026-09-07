@@ -63,19 +63,19 @@ test("último lance sem comentário é reprovado", () => {
 });
 
 test("linha mais funda que o nível é reprovada, com o número por cor", () => {
-  // 8 lances nossos = 15 meios-lances nas brancas, 16 nas pretas.
-  assert.equal(meiosLances("base", "brancas"), 15);
-  assert.equal(meiosLances("base", "pretas"), 16);
+  // 11 lances nossos = 21 meios-lances nas brancas, 22 nas pretas.
+  assert.equal(meiosLances("base", "brancas"), 21);
+  assert.equal(meiosLances("base", "pretas"), 22);
   assert.equal(meiosLances("avancado", "brancas"), 23);
 
-  const dezesseis = Array.from({ length: 16 }, (_, i) => LANCES[i % 5]);
+  const vinteEDois = Array.from({ length: 22 }, (_, i) => LANCES[i % 5]);
   const funda = boa({
-    lances: dezesseis,
-    sans: Array.from({ length: 16 }, (_, i) => SANS[i % 5]),
-    meus: [0, 2, 4, 6, 8, 10, 12, 14],
-    comentarios: { "15": "x" },
+    lances: vinteEDois,
+    sans: Array.from({ length: 22 }, (_, i) => SANS[i % 5]),
+    meus: [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
+    comentarios: { "21": "x" },
   });
-  assert.match(errosDe(funda), /16 meios-lances; o nível base das brancas vai até 15/);
+  assert.match(errosDe(funda), /22 meios-lances; o nível base das brancas vai até 21/);
 });
 
 test("id que não bate com os lances é reprovado", () => {

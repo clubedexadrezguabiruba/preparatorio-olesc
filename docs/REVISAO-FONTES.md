@@ -1275,3 +1275,201 @@ assinar o `8…dxe5` da Alapin. O grupo "só ordem de lances" está fechado.
    `…Db6` de cara, e a `siciliana-f9fa14c5` compartilha o `8…dxe5` acima.
 2. O **Colle** (`pretas-colle-f0590dc0`), única linha sem fonte alguma.
 3. O `8…dxe5` da Alapin — assinar ou trocar.
+
+> **Os itens 1 e 3 foram executados em 7/9 — ver §21.** O Doug **recusou**
+> assinar o `8…dxe5` e mandou trocar pela cauda do curso, o que levou o Morra
+> junto. Das 6 de "cauda de verdade", 4 trocaram de lance e 2 foram assinadas
+> pelo professor. O item 2, o Colle, continua aberto.
+
+---
+
+## 21. Cauda de verdade — o bloco que troca lance, e o teto do Base sobe, 7/9/2026
+
+Fecha o grupo. É o **primeiro bloco que mata id**: até aqui todos fecharam com
+"0 ids alterados", porque dava para trocar a citação sem tocar em lance. Aqui
+trocar a cauda **é** trocar lance, e o id sai do hash dos lances
+(`lib/repertorio/linhas.ts:59`).
+
+### A janela foi re-medida antes de qualquer edição
+
+A §7.3 afirmou em 7/9 que não havia progresso de aluno real. Medido de novo no
+mesmo dia, direto no `repertorio_progresso` com a chave de serviço:
+
+| | número |
+|---|---:|
+| linhas em `repertorio_progresso` | **5** |
+| contas com progresso | **1** — `alunoteste@alunos.olesc.local`, última em 6/9 |
+| contas no Auth inteiro | **2** — `alunoteste` e `doug` |
+
+**Zero alunos reais.** Os `zz.teste.*` que a §7.3 citava já nem existem — os
+`verificar-*` apagam as próprias contas. A janela está aberta e fecha em 19/9.
+
+### As seis decisões do Doug, e uma que veio de brinde
+
+| Linha | Decisão | id |
+|---|---|---|
+| `siciliana-97331249` (Alapin) | `8…dxe5` → `8…Bd7`, cauda do Sielecki | morre → `ddf21e1b` |
+| `siciliana-f9fa14c5` (Morra) | idem, por transposição | morre → `a23cd1f7` |
+| `escocesa-fe195431` | `6.e5` → `6.Cc3`, Schmidt #2 | morre → `73290a81` |
+| `siciliana-a6563193` (Rossolimo `4.Bxc6`) | `6…Cf6` → `6…Dc7` | morre → `08323cca` |
+| `londres-1c8d69bc` | `3…Db6` → `3…Cc6`, "The Solid 3.c3" | morre → `0fdb1535` |
+| `siciliana-e6e1e081` (Rossolimo `4.O-O`) | **assinada** pelo professor | **fica** |
+| `manhattan-6ac84e24` (Armadilha) | **assinada** pelo professor | **fica** |
+
+A Alapin não era do bloco: ela entrou pela pendência declarada na §20, e a
+decisão dela arrastou o Morra junto, porque as duas terminam na mesma posição
+por transposição.
+
+### O que o professor recusou assinar, e por que importa
+
+O `8…dxe5` da Alapin tinha um argumento nosso — o peão isolado de d4 — e a
+pergunta era assinar ou trocar. **O Doug recusou** e mandou seguir o curso. A
+troca não custou a aula: a posição final do `8…Bd7` tem os peões brancos em
+`a2 b2 d4 f2 g2 h2`, lidos da FEN da `chess.js`, e o `d4` **continua isolado**.
+Mudou o autor, não o conteúdo — e agora quem escreve "dominar as casas claras,
+em especial a que fica na frente do peão isolado" é o Sielecki.
+
+### O teto do Base foi de 8 para 11 lances
+
+Não estava no plano do bloco, e apareceu no primeiro `compilar`: as cinco caudas
+novas **estouram o teto do Base**, que ia até o lance 8 (15 meios-lances nas
+brancas, 16 nas pretas). O que decidiu o número foi uma medida, não gosto:
+
+```
+Alapin, material ao fim da linha, por onde se corta:
+  corte 16 (8…Bd7)     IGUAL
+  corte 18 (9…e6)      brancas +1
+  corte 20 (10…f6)     brancas +1   <- o "lance 10"
+  corte 22 (11…Bxd6)   IGUAL
+```
+
+Cortar no lance 10 deixaria a Alapin e o Morra terminando com o aluno **um peão
+atrás**, porque a recaptura `…Bxd6` só acontece no lance 11. O 11 é o menor
+número em que as cinco caem em ponto de material igual ou de plano completo. O
+Avançado segue em 12, então os níveis continuam diferentes.
+
+Custo da mudança, medido: a constante, o comentário dela e **três asserções de
+teste** (`arvore.test.ts:154`, `linhas.test.ts:67-68` e a mensagem de erro do
+`linhas.test.ts:78`). Nada mais depende do número — o `aberturasInchadas` conta
+linhas por abertura, não profundidade.
+
+Uma linha ficou mais curta do que o Doug escolheu por causa do teto: a Escocesa
+para no `11.Df3` e não no `12.Bf4`. O comentário do `11.Df3` carrega o plano do
+`Bf4` por escrito, com a atribuição.
+
+### Três achados que não eram do roteiro
+
+**1. A tag do Morra estava desatualizada, e o Magnus Sicilian cobria a linha
+inteira.** A tag dizia "Livro + motor" e citava o draft do Grigoryan, que para
+no `3.c3`. Medido: o Sielecki joga a **nossa ordem inteira** —
+`2.d4 cxd4 3.c3 Cf6 4.e5 Cd5 5.Cf3 Cc6 6.cxd4 d6 7.Bc4 Cb6 8.Bb5` — e explica o
+`3…Cf6` por escrito. Eram 15 dos 16 meios-lances com fonte numa linha declarada
+como sem fonte nenhuma. É o mesmo tipo de achado do Anti-London na §20.
+
+**2. O Manhattan não era cauda para trocar; era a abertura.** O mapa manda
+trocar o `4…Cbd7` pelo `4…dxc4` do Sielecki. Medido no compilado: os **dois**
+ids daquele jogo PGN saem do `4…Cbd7` — o `6ac84e24` (a armadilha) e o
+`3e9e876d`, aprovado na §20 com o Kushager. Trocar mataria os dois e tiraria o
+Manhattan do repertório, que é o nome do arquivo e o tronco de três linhas.
+
+**3. Um erro de xadrez no texto do Morra, e ele contradizia o próprio arquivo.**
+O comentário do `3…Cf6` dizia que aceitar com `3…dxc3` faria o aluno *"jogar o
+resto da partida correndo atrás"* — e o comentário do `8…dxe5`, no mesmo jogo,
+dizia que aceitar *"também empata pelo motor"*. Medido no Stockfish 18
+lite-single de `public/engine/`, profundidade 20, em 7/9/2026: o `3…dxc3` é
+**igualdade e o primeiro lance do motor**, empatado com o `3…Cf6`. O motivo de
+recusar não é de posição, é de estudo, e é o que o Sielecki escreve: aceitar o
+peão não é uma linha para decorar, é um curso inteiro.
+
+### Os números do motor que sustentam as decisões
+
+Todos com o Stockfish 18 lite-single de `public/engine/`, profundidade 20,
+medidos em 7/9/2026.
+
+| Posição | Nosso lance | O da fonte | Leitura |
+|---|---|---|---|
+| Alapin, depois de `8.Bb5` | `8…dxe5` **0,00** | `8…Bd7` **0,00** | empate — a escolha é pedagógica |
+| Alapin, depois de `9.exd6` | — | `9…e6` **0,00** | `9…exd6` dá +0,35 e `9…a6` +0,55 |
+| Escocesa, depois de `5…bxc6` | `6.e5` **igual** | `6.Cc3` **igual** | e `6.Bd3`, `6.Cd2`, `6.De2` também |
+| Rossolimo, depois de `6.h3` | `6…Cf6` **+0,34** | `6…Dc7` **+0,43** | a troca **piora** 9 centésimos |
+| Rossolimo `4.O-O`, após `5.c3` | `5…Cf6` **+0,32** | `5…e5` **+0,34** | o nosso é a variante principal |
+| Londres, depois de `3.c3` | `3…Db6` **0,00** | `3…Cc6` **0,00** | empate |
+| Manhattan, fim da armadilha | `8…Bxd2+` **+3,17** | — | uma peça para as pretas |
+
+A linha do motor para o `6.e5` antigo da Escocesa é
+`6…De7 7.De2 Cd5 8.c4 Ba6 9.b3 Dh4 10.Bb2 Bb4+ 11.Rd1 Cf4` — **rei branco em d1
+no lance 11**, e ainda igual. É exatamente a complexidade de que o curso fala
+quando recusa aquele lance: *"posições altamente complexas, ideais para quem
+está no nível avançado"*.
+
+### As duas assinaturas, e o que as separa da Caro-Kann
+
+O professor virou fonte de mais duas linhas. Nos dois casos o argumento está
+escrito na tag `[Fonte]`, com data, como manda a §19.
+
+- **`siciliana-e6e1e081`** (Rossolimo `4.O-O`) — a fonte natural **declara que
+  está chutando**: o Sielecki escreve que o `5.c3` *"ainda não foi tentado
+  contra o Magnus Carlsen, então não sabemos o que ele teria planejado"*, e que
+  **ele** decidiu recomendar `5…e5` por coerência com o curso dele. Somado a
+  isso, o motor põe a nossa linha inteira como variante principal, e a dele
+  termina com o rei preto em f8 sem roque, segurando um peão a mais.
+- **`manhattan-6ac84e24`** (Armadilha do Elefante) — não há cauda para trocar
+  sem trocar de abertura, o lance que abre a armadilha é **erro dele**, e nenhum
+  curso do corpus perde peça de propósito para mostrar como se pune.
+
+Isso as separa da Caro-Kann: lá o professor assinou uma **escolha entre dois
+lances bons**; aqui ele assinou onde a fonte **não tem o que dizer**.
+
+### Quatro âncoras ficam sem prosa de propósito
+
+Duas do Rossolimo `4.O-O` e duas do Manhattan: são as linhas assinadas, e por
+definição o mapa não acha prosa de curso nelas. Ele vai continuar mostrando
+`âncoras 0/2` para as duas — como já mostra para a `brancas-caro-kann-d2337d9b`
+desde a §19. Quem quiser o número certo lê a tag `[Fonte]`, não o mapa.
+
+### Verificação
+
+- `repertorio:compilar` → **41 linhas em 12 arquivos** (40 base, 1 avançado)
+- **41 ids antes, 41 depois: 5 morreram, 5 nasceram, 36 intactos.** Com
+  **0 alunos reais no banco**, nenhum aluno fica órfão
+
+| morreu | nasceu | tamanho |
+|---|---|---:|
+| `brancas-escocesa-fe195431` | `brancas-escocesa-73290a81` | 13 → **21** |
+| `pretas-londres-1c8d69bc` | `pretas-londres-0fdb1535` | 16 → **20** |
+| `pretas-siciliana-97331249` | `pretas-siciliana-ddf21e1b` | 16 → **22** |
+| `pretas-siciliana-a6563193` | `pretas-siciliana-08323cca` | 16 → **22** |
+| `pretas-siciliana-f9fa14c5` | `pretas-siciliana-a23cd1f7` | 16 → **22** |
+
+- diff do compilado conferido campo a campo por id: dos **36 sobreviventes**,
+  **7** mudaram — e mudaram **só `fonte`**. São as 3 Escocesas e a
+  `londres-53d5b431` que dividem tag `[Fonte]` com uma linha trocada, a
+  `manhattan-3e9e876d` que divide com a assinada, e as 2 assinadas.
+  **Zero** mudança em `lances`, `sans`, `fenFinal` ou `meus`
+- `repertorio:mapear`: corpus **igual** (11 cursos / 165 variantes / 2.434
+  comentários / 2.890 posições) e o repertório sobe de **118 âncoras / 58 em
+  prosa** para **128 / 71**. O grupo "coberta inteira" vai de 6 para 10 linhas e
+  o "cauda de verdade" cai de 9 para 5
+- typecheck ✔ · lint ✔ · **585 testes, 585 passando** ✔ · `validate:content` ✔ ·
+  `compilar --check` sem diferença ✔ · `build` ✔
+
+### O grupo "cauda de verdade" acabou
+
+Das 5 que o mapa ainda lista, **3 estão fechadas por assinatura do professor**
+(`caro-kann-d2337d9b`, `manhattan-6ac84e24`, `siciliana-e6e1e081`) e as outras
+duas — `escandinava-60e836c1` e `escocesa-1778f8cb` — são linhas do **Krikor**,
+do grupo J, que já passam na régua pela fonte delas e nunca estiveram neste
+bloco.
+
+**Placar da régua: de 24 linhas aprovadas para 31, de 41.**
+
+### O que sobra, e é tudo dependente de dinheiro ou de tela
+
+1. As **9 de "a fonte não cobre o ramo"** — quem sai do roteiro é o adversário,
+   e elas dependem de comprar curso, não de escrever melhor. A lista está na §17.
+2. O **Colle** (`pretas-colle-f0590dc0`), única linha sem fonte alguma:
+   manter, trocar de abertura, ou comprar curso.
+3. O campo `nivel` **ainda não separa nada na tela**. Com o Base agora em 11
+   lances e o Avançado em 12, a diferença entre os dois níveis ficou de um lance
+   só — se o filtro for construído, vale rever se 12 ainda é o número certo para
+   o Avançado.

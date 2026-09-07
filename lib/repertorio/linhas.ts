@@ -32,10 +32,21 @@ export type Nivel = (typeof NIVEIS)[number];
  * depois da poda.
  *
  * Contando em lance nosso o número é um só, e os meios-lances saem dele por
- * cor: as brancas jogam nos meios-lances ímpares (o 8º lance branco é o 15º
- * meio-lance), as pretas nos pares (o 8º lance preto é o 16º).
+ * cor: as brancas jogam nos meios-lances ímpares (o 11º lance branco é o 21º
+ * meio-lance), as pretas nos pares (o 11º lance preto é o 22º).
+ *
+ * **O Base foi de 8 para 11 em 7/9/2026**, e o motivo é medido, não de gosto.
+ * O bloco de "cauda de verdade" (seção 21 de `docs/REVISAO-FONTES.md`) trocou
+ * cinco linhas de motor por linhas de curso, e as variantes dos cursos não
+ * param no lance 8: cortar ali deixava a Alapin e o Gambito Morra terminando
+ * com **as brancas um peão à frente**, porque a recaptura `…Bxd6` só acontece
+ * no lance 11. Uma linha que acaba com o aluno um peão atrás ensina o
+ * contrário do que devia. O 11 é o menor número em que as cinco caem num ponto
+ * de material igual ou de plano completo.
+ *
+ * O Avançado continua em 12, então os dois níveis seguem diferentes.
  */
-export const PROFUNDIDADE: Record<Nivel, number> = { base: 8, avancado: 12 };
+export const PROFUNDIDADE: Record<Nivel, number> = { base: 11, avancado: 12 };
 
 /** Quantos meios-lances uma linha daquele nível e daquela cor pode ter. */
 export function meiosLances(nivel: Nivel, cor: Cor): number {

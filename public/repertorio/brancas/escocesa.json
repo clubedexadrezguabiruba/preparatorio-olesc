@@ -58,16 +58,16 @@
       "8": "Contra 4…Bc5 há três lances de verdade: 5.Be3, 5.Cxc6 e este.\nO curso escolhe 5.Cb3 — a Variante Potter — por dois motivos que ele escreve:\ntem menos teoria decorada, então o adversário erra mais cedo, e é a que deixa\nmontar o ataque mais agressivo, coisa que quase ninguém no clube sabe segurar.\nRecuar aqui não é perder lance: quem tem de andar é o bispo dele. Ele volta a b6\nporque é de lá que segue na diagonal a7-g1, e enquanto ele arruma isso nós\narmamos Cc3, De2 e Be3 em paz.",
       "14": "O bispo de b6 é a melhor peça dele, e é por isso\nque o nosso vai a e3: para oferecer a troca justamente dessa peça. Repare que os\ntrês últimos lances trabalham juntos — a dama em e2 guarda f2, que o bispo dele\nmira, libera a casa e3 para este bispo e sai da coluna d antes do roque grande.\nSe ele trocar em e3, a dama recaptura e o roque grande vem em seguida. O curso\nchega nesta mesma posição jogando 6.De2 antes de 6.Cc3, e diz que a ordem quase\nnunca importa: a nossa, com o cavalo primeiro, é a mais popular das duas."
     },
-    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || As outras três linhas deste jogo — 4...Cf6, 4...Cxd4 5.Dxd4 d6 e 5...Cf6 — seguem GM Avetik Grigoryan (ChessMood), 'Scotch Game + Homework', que dá os lances sem explicar nenhum. As duas do 5.Dxd4 estão bloqueadas: o curso nomeia as cinco respostas populares e não argumenta nenhuma (correção 3 da seção 17 de docs/REVISAO-FONTES.md); o 4...Cf6 espera troca de cauda."
+    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || 4...Cf6: as mesmas WIM Fiona Steil-Antoni & IM Alex Astaneh, 'Short & Sweet: Scotch', variantes 'Schmidt Variation #1' e '#2'. Os 21 meios-lances batem um a um com a #2, que segue além até o 12...Tb8. TROCA DE CAUDA, decidida pelo Doug em 7/9/2026: até esta data a linha jogava 6.e5 De7 7.De2 e vinha do draft do Grigoryan. O curso escreve CONTRA aquele lance com todas as letras — depois do 5...bxc6 há uma bifurcação, e o 6.e5 dá às pretas 'igualdade confortável' pela teoria de hoje, além de levar a posições 'altamente complexas, ideais para quem está no nível avançado'. Por isso ele recomenda 6.Cc3 ou 6.Bd3, defendendo e4, e diz que os dois quase sempre transpõem um no outro. Dele são: o motivo do 5.Cxc6 e o preço dele; o 6...Bb4 como linha principal de longe; o 7.Bd3 e a conta do par de bispos contra o peão dobrado; o 10.h3, com a observação de que daqui em diante vale mais entender o plano do que decorar lance; e o 11.Df3, a casa mais ativa da dama, de onde ela pressiona os peões centrais dele e apoia o Bf4 — que é o lance seguinte da variante e o ponto do esquema, trocar o bispo de casas escuras dele porque os peões centrais dele estão em casas claras. DECLARADO: o motor não separa os dois lances. Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 na posição depois do 5...bxc6 — 6.Cc3, 6.Bd3, 6.e5, 6.Cd2 e 6.De2 dão todos igualdade. E a linha do motor para o 6.e5 antigo é 6...De7 7.De2 Cd5 8.c4 Ba6 9.b3 Dh4 10.Bb2 Bb4+ 11.Rd1 Cf4, com o rei branco em d1 no lance 11: é exatamente a complexidade de que o curso fala. || As duas linhas do 5.Dxd4 — 4...Cxd4 5.Dxd4 d6 e 5...Cf6 — seguem GM Avetik Grigoryan (ChessMood), 'Scotch Game + Homework', que dá os lances sem explicar nenhum, e estão bloqueadas: o curso nomeia as cinco respostas populares e não argumenta nenhuma (correção 3 da seção 17 de docs/REVISAO-FONTES.md)."
   },
   {
-    "id": "brancas-escocesa-fe195431",
+    "id": "brancas-escocesa-73290a81",
     "cor": "brancas",
     "abertura": "escocesa",
     "nivel": "base",
-    "nome": "Escocesa — 6.e5 Qe7 7.Qe2",
+    "nome": "Escocesa — 10.h3 c6 11.Qf3",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1b1kb1r/p1ppqppp/2p2n2/4P3/8/8/PPP1QPPP/RNB1KB1R b KQkq - 2 7",
+    "fenFinal": "r1bq1rk1/p4ppp/2p2n2/3p4/1b6/2NB1Q1P/PPP2PP1/R1B2RK1 b - - 1 11",
     "lances": [
       "e2e4",
       "e7e5",
@@ -79,9 +79,17 @@
       "g8f6",
       "d4c6",
       "b7c6",
-      "e4e5",
-      "d8e7",
-      "d1e2"
+      "b1c3",
+      "f8b4",
+      "f1d3",
+      "d7d5",
+      "e4d5",
+      "c6d5",
+      "e1g1",
+      "e8g8",
+      "h2h3",
+      "c7c6",
+      "d1f3"
     ],
     "sans": [
       "e4",
@@ -94,9 +102,17 @@
       "Nf6",
       "Nxc6",
       "bxc6",
-      "e5",
-      "Qe7",
-      "Qe2"
+      "Nc3",
+      "Bb4",
+      "Bd3",
+      "d5",
+      "exd5",
+      "cxd5",
+      "O-O",
+      "O-O",
+      "h3",
+      "c6",
+      "Qf3"
     ],
     "meus": [
       0,
@@ -105,15 +121,22 @@
       6,
       8,
       10,
-      12
+      12,
+      14,
+      16,
+      18,
+      20
     ],
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
       "6": "O cavalo recaptura e para bem no meio do\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
-      "12": "A dama entra na coluna e, atrás do peão\nde e5 e de frente para a dama dele. Enquanto esse peão ficar em pé, o bispo dele\nde f8 não sai, e nós desenvolvemos de graça."
+      "10": "Aqui é a bifurcação da variante, e o curso é\nexplícito sobre ela. O outro caminho é 6.e5, expulsando o cavalo — dá jogo\ninteressante, mas a teoria de hoje dá às pretas igualdade confortável, e a\nposição que sai dali é complicada demais para quem ainda não é jogador avançado.\nEntão defendemos o peão de e4 com o cavalo e jogamos a posição, que é o que\nsabemos fazer. Repare no que o 5.Cxc6 nos deu e no que custou: os peões dele\nficaram feios em c6 e c7, e em troca ele ganhou presença no centro e a coluna b\nsemiaberta, onde a torre dele vai parar.",
+      "12": "Desenvolve e defende\ne4 outra vez — e agora repare numa conta que vale para a partida inteira. Se ele\ntrocar em c3, nós recapturamos com o peão de b2: a nossa estrutura piora, sim,\nmas ficamos com os dois bispos. Nesta posição, aberta como está, o par de bispos\nvale mais do que o peão dobrado incomoda. É por isso que a troca é bem-vinda e\nnão precisamos gastar lance nenhum para evitá-la.",
+      "18": "Um lance pequeno com um plano atrás. Ele toma conta de g4, que é a\ncasa de onde o bispo de c8 dele viria incomodar, e prepara pôr a dama em f3 sem\nser enxotada. O curso faz aqui uma observação que vale ouro: daqui em diante a\nposição é flexível demais para decorar resposta a tudo, e o que salva é entender\no plano — a estrutura de peões quase não muda, então os mesmos planos voltam\npartida após partida.",
+      "20": "A casa mais ativa que a dama tem. De f3\nela pressiona os peões centrais dele e, sobretudo, apoia o lance seguinte do\nesquema, que é Bf4. E é esse o plano inteiro, escrito pelo curso: trocar o bispo\nde casas escuras dele. Os peões centrais dele — c6 e d5 — estão em casas claras,\nentão o bispo que anda nas escuras é justamente o que ele precisa guardar. Se\ntrocarmos, sobra o nosso bispo bom contra o bispo ruim dele, e é com essa\ndiferença que a partida se ganha devagar."
     },
-    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || As outras três linhas deste jogo — 4...Cf6, 4...Cxd4 5.Dxd4 d6 e 5...Cf6 — seguem GM Avetik Grigoryan (ChessMood), 'Scotch Game + Homework', que dá os lances sem explicar nenhum. As duas do 5.Dxd4 estão bloqueadas: o curso nomeia as cinco respostas populares e não argumenta nenhuma (correção 3 da seção 17 de docs/REVISAO-FONTES.md); o 4...Cf6 espera troca de cauda."
+    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || 4...Cf6: as mesmas WIM Fiona Steil-Antoni & IM Alex Astaneh, 'Short & Sweet: Scotch', variantes 'Schmidt Variation #1' e '#2'. Os 21 meios-lances batem um a um com a #2, que segue além até o 12...Tb8. TROCA DE CAUDA, decidida pelo Doug em 7/9/2026: até esta data a linha jogava 6.e5 De7 7.De2 e vinha do draft do Grigoryan. O curso escreve CONTRA aquele lance com todas as letras — depois do 5...bxc6 há uma bifurcação, e o 6.e5 dá às pretas 'igualdade confortável' pela teoria de hoje, além de levar a posições 'altamente complexas, ideais para quem está no nível avançado'. Por isso ele recomenda 6.Cc3 ou 6.Bd3, defendendo e4, e diz que os dois quase sempre transpõem um no outro. Dele são: o motivo do 5.Cxc6 e o preço dele; o 6...Bb4 como linha principal de longe; o 7.Bd3 e a conta do par de bispos contra o peão dobrado; o 10.h3, com a observação de que daqui em diante vale mais entender o plano do que decorar lance; e o 11.Df3, a casa mais ativa da dama, de onde ela pressiona os peões centrais dele e apoia o Bf4 — que é o lance seguinte da variante e o ponto do esquema, trocar o bispo de casas escuras dele porque os peões centrais dele estão em casas claras. DECLARADO: o motor não separa os dois lances. Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 na posição depois do 5...bxc6 — 6.Cc3, 6.Bd3, 6.e5, 6.Cd2 e 6.De2 dão todos igualdade. E a linha do motor para o 6.e5 antigo é 6...De7 7.De2 Cd5 8.c4 Ba6 9.b3 Dh4 10.Bb2 Bb4+ 11.Rd1 Cf4, com o rei branco em d1 no lance 11: é exatamente a complexidade de que o curso fala. || As duas linhas do 5.Dxd4 — 4...Cxd4 5.Dxd4 d6 e 5...Cf6 — seguem GM Avetik Grigoryan (ChessMood), 'Scotch Game + Homework', que dá os lances sem explicar nenhum, e estão bloqueadas: o curso nomeia as cinco respostas populares e não argumenta nenhuma (correção 3 da seção 17 de docs/REVISAO-FONTES.md)."
   },
   {
     "id": "brancas-escocesa-724ae4ca",
@@ -163,7 +186,7 @@
       "6": "O cavalo recaptura e para bem no meio do\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
       "10": "O peão avança e expulsa o cavalo antes que ele se instale.\nGanhamos espaço e um tempo — é por isso que esse cavalo cedo não é o melhor\nlance dele."
     },
-    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || As outras três linhas deste jogo — 4...Cf6, 4...Cxd4 5.Dxd4 d6 e 5...Cf6 — seguem GM Avetik Grigoryan (ChessMood), 'Scotch Game + Homework', que dá os lances sem explicar nenhum. As duas do 5.Dxd4 estão bloqueadas: o curso nomeia as cinco respostas populares e não argumenta nenhuma (correção 3 da seção 17 de docs/REVISAO-FONTES.md); o 4...Cf6 espera troca de cauda."
+    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || 4...Cf6: as mesmas WIM Fiona Steil-Antoni & IM Alex Astaneh, 'Short & Sweet: Scotch', variantes 'Schmidt Variation #1' e '#2'. Os 21 meios-lances batem um a um com a #2, que segue além até o 12...Tb8. TROCA DE CAUDA, decidida pelo Doug em 7/9/2026: até esta data a linha jogava 6.e5 De7 7.De2 e vinha do draft do Grigoryan. O curso escreve CONTRA aquele lance com todas as letras — depois do 5...bxc6 há uma bifurcação, e o 6.e5 dá às pretas 'igualdade confortável' pela teoria de hoje, além de levar a posições 'altamente complexas, ideais para quem está no nível avançado'. Por isso ele recomenda 6.Cc3 ou 6.Bd3, defendendo e4, e diz que os dois quase sempre transpõem um no outro. Dele são: o motivo do 5.Cxc6 e o preço dele; o 6...Bb4 como linha principal de longe; o 7.Bd3 e a conta do par de bispos contra o peão dobrado; o 10.h3, com a observação de que daqui em diante vale mais entender o plano do que decorar lance; e o 11.Df3, a casa mais ativa da dama, de onde ela pressiona os peões centrais dele e apoia o Bf4 — que é o lance seguinte da variante e o ponto do esquema, trocar o bispo de casas escuras dele porque os peões centrais dele estão em casas claras. DECLARADO: o motor não separa os dois lances. Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 na posição depois do 5...bxc6 — 6.Cc3, 6.Bd3, 6.e5, 6.Cd2 e 6.De2 dão todos igualdade. E a linha do motor para o 6.e5 antigo é 6...De7 7.De2 Cd5 8.c4 Ba6 9.b3 Dh4 10.Bb2 Bb4+ 11.Rd1 Cf4, com o rei branco em d1 no lance 11: é exatamente a complexidade de que o curso fala. || As duas linhas do 5.Dxd4 — 4...Cxd4 5.Dxd4 d6 e 5...Cf6 — seguem GM Avetik Grigoryan (ChessMood), 'Scotch Game + Homework', que dá os lances sem explicar nenhum, e estão bloqueadas: o curso nomeia as cinco respostas populares e não argumenta nenhuma (correção 3 da seção 17 de docs/REVISAO-FONTES.md)."
   },
   {
     "id": "brancas-escocesa-5250fcfd",
@@ -224,7 +247,7 @@
       "12": "O bispo vai para f4 mirando o peão de d6 e libera a casa c1\npara o roque grande.",
       "14": "Roque grande. O rei sai do centro e a\ntorre cai na coluna d, bem em frente ao peão de d6. Daqui o plano é sempre o\nmesmo: f3, g4 e os peões avançam contra o rei dele."
     },
-    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || As outras três linhas deste jogo — 4...Cf6, 4...Cxd4 5.Dxd4 d6 e 5...Cf6 — seguem GM Avetik Grigoryan (ChessMood), 'Scotch Game + Homework', que dá os lances sem explicar nenhum. As duas do 5.Dxd4 estão bloqueadas: o curso nomeia as cinco respostas populares e não argumenta nenhuma (correção 3 da seção 17 de docs/REVISAO-FONTES.md); o 4...Cf6 espera troca de cauda."
+    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || 4...Cf6: as mesmas WIM Fiona Steil-Antoni & IM Alex Astaneh, 'Short & Sweet: Scotch', variantes 'Schmidt Variation #1' e '#2'. Os 21 meios-lances batem um a um com a #2, que segue além até o 12...Tb8. TROCA DE CAUDA, decidida pelo Doug em 7/9/2026: até esta data a linha jogava 6.e5 De7 7.De2 e vinha do draft do Grigoryan. O curso escreve CONTRA aquele lance com todas as letras — depois do 5...bxc6 há uma bifurcação, e o 6.e5 dá às pretas 'igualdade confortável' pela teoria de hoje, além de levar a posições 'altamente complexas, ideais para quem está no nível avançado'. Por isso ele recomenda 6.Cc3 ou 6.Bd3, defendendo e4, e diz que os dois quase sempre transpõem um no outro. Dele são: o motivo do 5.Cxc6 e o preço dele; o 6...Bb4 como linha principal de longe; o 7.Bd3 e a conta do par de bispos contra o peão dobrado; o 10.h3, com a observação de que daqui em diante vale mais entender o plano do que decorar lance; e o 11.Df3, a casa mais ativa da dama, de onde ela pressiona os peões centrais dele e apoia o Bf4 — que é o lance seguinte da variante e o ponto do esquema, trocar o bispo de casas escuras dele porque os peões centrais dele estão em casas claras. DECLARADO: o motor não separa os dois lances. Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 na posição depois do 5...bxc6 — 6.Cc3, 6.Bd3, 6.e5, 6.Cd2 e 6.De2 dão todos igualdade. E a linha do motor para o 6.e5 antigo é 6...De7 7.De2 Cd5 8.c4 Ba6 9.b3 Dh4 10.Bb2 Bb4+ 11.Rd1 Cf4, com o rei branco em d1 no lance 11: é exatamente a complexidade de que o curso fala. || As duas linhas do 5.Dxd4 — 4...Cxd4 5.Dxd4 d6 e 5...Cf6 — seguem GM Avetik Grigoryan (ChessMood), 'Scotch Game + Homework', que dá os lances sem explicar nenhum, e estão bloqueadas: o curso nomeia as cinco respostas populares e não argumenta nenhuma (correção 3 da seção 17 de docs/REVISAO-FONTES.md)."
   },
   {
     "id": "brancas-escocesa-7b8467ff",

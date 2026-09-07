@@ -1,29 +1,33 @@
 [
   {
-    "id": "pretas-londres-1c8d69bc",
+    "id": "pretas-londres-0fdb1535",
     "cor": "pretas",
     "abertura": "londres",
     "nivel": "base",
-    "nome": "Londres 2.Bf4 — 7...Bd7 8.Ne5 Ba4",
+    "nome": "Londres 2.Bf4 — 9...Bxc5 10.e3 O-O",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "rn2kb1r/1p2pppp/1p3n2/3pN3/b1pP1B2/N1P5/PP2PPPP/R3KB1R w KQkq - 4 9",
+    "fenFinal": "r1bq1rk1/1p3ppp/4pnn1/pPbp4/8/2P1PNB1/P2N1PPP/R2QKB1R w KQ - 1 11",
     "lances": [
       "d2d4",
       "d7d5",
       "c1f4",
       "c7c5",
       "c2c3",
-      "d8b6",
+      "b8c6",
       "g1f3",
       "g8f6",
-      "d1b3",
-      "c5c4",
-      "b3b6",
-      "a7b6",
-      "b1a3",
-      "c8d7",
-      "f3e5",
-      "d7a4"
+      "d4c5",
+      "e7e6",
+      "b2b4",
+      "a7a5",
+      "b4b5",
+      "c6e7",
+      "b1d2",
+      "e7g6",
+      "f4g3",
+      "f8c5",
+      "e2e3",
+      "e8g8"
     ],
     "sans": [
       "d4",
@@ -31,17 +35,21 @@
       "Bf4",
       "c5",
       "c3",
-      "Qb6",
+      "Nc6",
       "Nf3",
       "Nf6",
-      "Qb3",
-      "c4",
-      "Qxb6",
-      "axb6",
-      "Na3",
-      "Bd7",
-      "Ne5",
-      "Ba4"
+      "dxc5",
+      "e6",
+      "b4",
+      "a5",
+      "b5",
+      "Ne7",
+      "Nbd2",
+      "Ng6",
+      "Bg3",
+      "Bxc5",
+      "e3",
+      "O-O"
     ],
     "meus": [
       1,
@@ -51,16 +59,20 @@
       9,
       11,
       13,
-      15
+      15,
+      17,
+      19
     ],
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
       "3": "Repare no que o 2.Bf4 faz e no que ele não faz. Desenvolve\numa peça, sim — mas, ao contrário do 2.c4, não disputa espaço nenhum no centro.\nÉ por isso que batemos em d4 na mesma hora com …c5, sem esperar convite. E o\nbispo, ao sair de casa, deixou b2 sem ninguém tomando conta: é em torno dessa\ncasa que giram as duas linhas deste arquivo.",
-      "9": "Ele oferece a troca de damas para se livrar da\npressão. Antes de trocar, empurramos: …c4! ganha espaço, tranca o bispo de f1\ndentro de casa, e a troca vai acontecer do mesmo jeito no lance seguinte — só\nque agora nos termos que nós escolhemos.",
-      "15": "Aqui o c3\nveio já no lance 3, então a dama vai a b6 de cara: ela ataca b2 e o cavalo dele\nnão tem mais como chegar a c3 para defender. Ele oferece a troca com 5.Db3 e\nnós avançamos …c4!, ganhando espaço e obrigando a troca mesmo assim. Depois de\n…axb6 a coluna a é da nossa torre, e o bispo em a4 vigia a casa b3 — que é por\nonde ele tentaria desfazer o nosso peão de c4."
+      "5": "Ele adiantou o c3 e a tentação é sacar a dama na hora. Não saque: o\ncurso joga …Cc6 primeiro, e por dois motivos. O primeiro é o de sempre nesta\nabertura — o cavalo toma conta de e5, e a ameaça de …Db6 fica de pé, guardada\npara quando servir. O segundo é o desenho do arquivo: o curso escreve que o 3.c3\nquase sempre acaba transpondo para as variantes com peões em e3 e c3, que é\nexatamente a outra linha desta página. Se ele jogar 5.e3 aqui, caímos nela e\nvocê já sabe o resto. Esta linha existe para o único lance que NÃO transpõe, e é\no próximo.",
+      "9": "Ele pegou o peão. Não corra atrás dele com …Bxc5 na hora: primeiro …e6, que\nabre a casa do bispo e prepara pegar o peão mais tarde, com tempo. É a diferença\nentre recuperar material correndo e recuperá-lo com um lance útil embutido — e o\ncurso mede o resultado: quando as pretas fazem isso, o melhor que as brancas\nconseguem é igualdade.",
+      "15": "Os quatro últimos lances são uma discussão só sobre o peão de c5. Ele\ntentou segurá-lo com 6.b4; nós minamos a corrente com …a5; ele empurrou 7.b5,\nque ataca o nosso cavalo de c6, e o cavalo foi a e7 — de onde chega a g6. O\ncurso chama este …Cg6 de ataque duplo: ele bate no bispo de f4 e toma conta de\ne5 ao mesmo tempo. O bispo tem de sair, e 9.Be3 não serve por causa de …Cg4\nseguido de …e5. Sobra 9.Bg3 — e aí, finalmente, comemos em c5.",
+      "19": "Peão de volta, rei seguro, e agora o plano, que o curso escreve numa\nlinha só: …b6 e …Bb7 pondo o bispo na diagonal grande, …Bd6 realinhando o outro\nbispo, e …e5 no centro. É a mesma ideia da outra linha desta página vista de\noutro ângulo: ele gastou a abertura mexendo peões no flanco da dama, e nós\nficamos com as peças apontadas para o meio do tabuleiro."
     },
-    "fonte": "3.e3: FM Viktor Neustroev — 'Short & Sweet: Anti-London System' (Chess.com, grátis), variantes '4.Nf3 with Early Qc2: 7.h3' e '4.Nf3 with Early Qc2: 7.Nbd2, 8.O-O-O'. As 18 variantes do curso respondem 2.Bf4 com 2...c5: é a fonte do sistema que este arquivo já jogava, e fecha o buraco 10 da seção 5 de docs/REVISAO-FONTES.md. Ele chega à nossa posição por 3...Cf6 4.Cf3 Cc6 e nós por 3...Cc6 4.Cf3 Cf6 — 14 dos 16 meios-lances têm fonte e, do 5.c3 em diante, bate lance a lance até o 8...O-O, que é o último dele também. Dele são: o ...Db6 ('ataca o peão de b2, e aqui as brancas têm 3 lances típicos para defendê-lo'), o motivo do h3 (fecha g4 e abre h2 para o bispo depois de ...Ch5), e o porquê do ...g6 em vez do ...Bf5. Continua nosso: a ORDEM ...Cc6 antes de ...Cf6, que o curso não joga e por isso não explica — o motivo dela é medido no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, em 7/9/2026. || 3.c3 Db6: ainda Livro + motor, mesma build, medido em 5/9/2026. O curso cobre o 3.c3 na variante 'The Solid 3.c3' e joga 3...Cc6 primeiro, não o ...Db6 de cara; trocar ou não esta ponta é decisão de xadrez do professor, e ela está no grupo 'cauda de verdade' da seção 17 de docs/REVISAO-FONTES.md."
+    "fonte": "3.e3: FM Viktor Neustroev — 'Short & Sweet: Anti-London System' (Chess.com, grátis), variantes '4.Nf3 with Early Qc2: 7.h3' e '4.Nf3 with Early Qc2: 7.Nbd2, 8.O-O-O'. As 18 variantes do curso respondem 2.Bf4 com 2...c5: é a fonte do sistema que este arquivo já jogava, e fecha o buraco 10 da seção 5 de docs/REVISAO-FONTES.md. Ele chega à nossa posição por 3...Cf6 4.Cf3 Cc6 e nós por 3...Cc6 4.Cf3 Cf6 — 14 dos 16 meios-lances têm fonte e, do 5.c3 em diante, bate lance a lance até o 8...O-O, que é o último dele também. Dele são: o ...Db6 ('ataca o peão de b2, e aqui as brancas têm 3 lances típicos para defendê-lo'), o motivo do h3 (fecha g4 e abre h2 para o bispo depois de ...Ch5), e o porquê do ...g6 em vez do ...Bf5. Continua nosso: a ORDEM ...Cc6 antes de ...Cf6, que o curso não joga e por isso não explica — o motivo dela é medido no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, em 7/9/2026. || 3.c3: o mesmo curso, variante 'The Solid 3.c3: 4.Nf3, 5.dxc5'. Os 20 meios-lances batem um a um com ela, do primeiro ao último. TROCA DE CAUDA, decidida pelo Doug em 7/9/2026: até esta data a linha jogava 3...Db6 de cara e era Livro + motor. Dele são: o motivo do 3...Cc6 (controlar e5 e deixar a ameaça de ...Db6 guardada em vez de gastá-la); a observação de que o 3.c3 quase sempre transpõe para as variantes com peões em e3 e c3, que é a OUTRA linha deste mesmo jogo — e é por causa dela que esta passou a cobrir o 5.dxc5, o único lance que não transpõe; o 5...e6, com a medida de que, recuperando o peão assim, o melhor que as brancas conseguem é igualdade; o 6.b4 como tentativa de segurar o peão e o ...a5 como o lance típico que mina a corrente; o ...Cg6 como ataque duplo, com o motivo de 9.Be3 falhar por ...Cg4 e ...e5; e o plano do 10...O-O (...b6, ...Bb7, ...Bd6 e ...e5). DECLARADO: o motor não separa os dois lances. Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 na posição depois do 3.c3 — 3...Db6, 3...Cc6, 3...Cf6, 3...e6 e 3...g6 dão todos igualdade, e a linha do motor para o 3...Db6 antigo era a nossa linha antiga inteira, até o 8...Ba4. A troca é de fonte e de desenho, não de posição."
   },
   {
     "id": "pretas-londres-53d5b431",
@@ -127,6 +139,6 @@
       "7": "Ainda não é hora da dama, e o motivo não é b2 — é d5.\nEnquanto a dama está em d8, é ela quem defende o nosso peão de d5. Se ela sair\nagora, o peão fica sem defensor nenhum, e o cavalo de b1 pula para c3 atacando\njustamente ele: 4…Db6? 5.Cc3! e o motor já dá +1,40 para as brancas. Pegar o\npeão de b2 é pior ainda — 5…Dxb2 6.Cxd5! e são quase quatro peões. Então\ndesenvolvemos, e o …Cf6 não é só esperar: o cavalo em f6 passa a defender d5, e\ncom ele lá o Cc3 deixa de ganhar peão nenhum. O Londres quase sempre acaba\njogando c3, e no lance em que ele jogar, aquela casa fecha para o cavalo — é aí\nque a dama sai.",
       "15": "Deu certo: com o\npeão dele em c3, o cavalo de b1 não chega mais àquela casa, d5 está em paz, e\nagora é b2 que fica pendurado. Ele foi obrigado a gastar um lance de dama só\npara segurar o peão — 6.Dc2 aqui; Dc1 e Db3 são os outros dois. E repare no que\nveio depois. O …g6 não é enfeite: o …Bf5, que parece o lance da vida para o\nnosso bispo, tropeça em dxc5!, que ataca a nossa dama e a tira de cima de b2 —\ne aí o bispo de f5 fica de graça para a dama dele. Então fianchetamos, e o\nbispo vai para f5 mais tarde, quando der. O h3 dele também tem motivo: fecha\ng4 e abre a casa h2, para o bispo de f4 ter para onde fugir quando o nosso\ncavalo pular para h5. Roque feito, ele escolhe entre rocar do mesmo lado ou\ntrocar as damas e rocar do lado da dama — e nós estamos prontos para os dois."
     },
-    "fonte": "3.e3: FM Viktor Neustroev — 'Short & Sweet: Anti-London System' (Chess.com, grátis), variantes '4.Nf3 with Early Qc2: 7.h3' e '4.Nf3 with Early Qc2: 7.Nbd2, 8.O-O-O'. As 18 variantes do curso respondem 2.Bf4 com 2...c5: é a fonte do sistema que este arquivo já jogava, e fecha o buraco 10 da seção 5 de docs/REVISAO-FONTES.md. Ele chega à nossa posição por 3...Cf6 4.Cf3 Cc6 e nós por 3...Cc6 4.Cf3 Cf6 — 14 dos 16 meios-lances têm fonte e, do 5.c3 em diante, bate lance a lance até o 8...O-O, que é o último dele também. Dele são: o ...Db6 ('ataca o peão de b2, e aqui as brancas têm 3 lances típicos para defendê-lo'), o motivo do h3 (fecha g4 e abre h2 para o bispo depois de ...Ch5), e o porquê do ...g6 em vez do ...Bf5. Continua nosso: a ORDEM ...Cc6 antes de ...Cf6, que o curso não joga e por isso não explica — o motivo dela é medido no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, em 7/9/2026. || 3.c3 Db6: ainda Livro + motor, mesma build, medido em 5/9/2026. O curso cobre o 3.c3 na variante 'The Solid 3.c3' e joga 3...Cc6 primeiro, não o ...Db6 de cara; trocar ou não esta ponta é decisão de xadrez do professor, e ela está no grupo 'cauda de verdade' da seção 17 de docs/REVISAO-FONTES.md."
+    "fonte": "3.e3: FM Viktor Neustroev — 'Short & Sweet: Anti-London System' (Chess.com, grátis), variantes '4.Nf3 with Early Qc2: 7.h3' e '4.Nf3 with Early Qc2: 7.Nbd2, 8.O-O-O'. As 18 variantes do curso respondem 2.Bf4 com 2...c5: é a fonte do sistema que este arquivo já jogava, e fecha o buraco 10 da seção 5 de docs/REVISAO-FONTES.md. Ele chega à nossa posição por 3...Cf6 4.Cf3 Cc6 e nós por 3...Cc6 4.Cf3 Cf6 — 14 dos 16 meios-lances têm fonte e, do 5.c3 em diante, bate lance a lance até o 8...O-O, que é o último dele também. Dele são: o ...Db6 ('ataca o peão de b2, e aqui as brancas têm 3 lances típicos para defendê-lo'), o motivo do h3 (fecha g4 e abre h2 para o bispo depois de ...Ch5), e o porquê do ...g6 em vez do ...Bf5. Continua nosso: a ORDEM ...Cc6 antes de ...Cf6, que o curso não joga e por isso não explica — o motivo dela é medido no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, em 7/9/2026. || 3.c3: o mesmo curso, variante 'The Solid 3.c3: 4.Nf3, 5.dxc5'. Os 20 meios-lances batem um a um com ela, do primeiro ao último. TROCA DE CAUDA, decidida pelo Doug em 7/9/2026: até esta data a linha jogava 3...Db6 de cara e era Livro + motor. Dele são: o motivo do 3...Cc6 (controlar e5 e deixar a ameaça de ...Db6 guardada em vez de gastá-la); a observação de que o 3.c3 quase sempre transpõe para as variantes com peões em e3 e c3, que é a OUTRA linha deste mesmo jogo — e é por causa dela que esta passou a cobrir o 5.dxc5, o único lance que não transpõe; o 5...e6, com a medida de que, recuperando o peão assim, o melhor que as brancas conseguem é igualdade; o 6.b4 como tentativa de segurar o peão e o ...a5 como o lance típico que mina a corrente; o ...Cg6 como ataque duplo, com o motivo de 9.Be3 falhar por ...Cg4 e ...e5; e o plano do 10...O-O (...b6, ...Bb7, ...Bd6 e ...e5). DECLARADO: o motor não separa os dois lances. Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 na posição depois do 3.c3 — 3...Db6, 3...Cc6, 3...Cf6, 3...e6 e 3...g6 dão todos igualdade, e a linha do motor para o 3...Db6 antigo era a nossa linha antiga inteira, até o 8...Ba4. A troca é de fonte e de desenho, não de posição."
   }
 ]
