@@ -39,7 +39,7 @@ import {
 } from "./branches.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
 import { problemasDaPosicao } from "../lib/meiojogo/afirmacoes.ts";
-import { validarDicas, type Dica } from "../lib/meiojogo/dicas.ts";
+import { problemasDeCitacao, validarDicas, type Dica } from "../lib/meiojogo/dicas.ts";
 import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
 
 /**
@@ -1531,24 +1531,33 @@ const dicas: Dica[] = [];
       }
     }
 
-    const porObra = new Map<string, { source: Source; quantas: number }>();
-    for (const posicao of dica.posicoes) {
-      const source = sourcesByKey.get(posicao.provenance.editionFile);
-      if (!source) continue; // já reportado como OBRA_NAO_REGISTRADA
-      const balde = porObra.get(source.slug) ?? { source, quantas: 0 };
-      balde.quantas += 1;
-      porObra.set(source.slug, balde);
+    for (const { codigo, mensagem } of problemasDeCitacao(dica, (chave) => {
+      const source = sourcesByKey.get(chave);
+      return source ? { slug: source.slug, temArquivo: source.file !== null } : undefined;
+    })) {
+      fail(codigo, onde, mensagem);
     }
-    for (const { source, quantas } of porObra.values()) {
-      if (source.protected && quantas > PROTECTED_SOURCE_CAP) {
-        fail(
-          "TETO_DE_CITACAO",
-          onde,
-          `${quantas} posições saem de "${source.title}", obra protegida, e o teto da §12.7 é ` +
-            `${PROTECTED_SOURCE_CAP} por dica — misture fontes`,
-        );
+  }
+
+  // A concentração por capítulo no **módulo inteiro** — que é o que o teto, por
+  // ser por dica, não vê. Não reprova: a regra aprovada é por dica, e mudá-la
+  // aqui seria decidir sozinho o que foi decidido em outro lugar. Mas o número
+  // fica impresso, porque cinco posições de um capítulo só são exatamente a
+  // forma de reproduzir uma seleção que o teto foi escrito para impedir.
+  if (dicas.length > 0) {
+    const porCapitulo = new Map<string, string[]>();
+    for (const dica of dicas) {
+      for (const posicao of dica.posicoes) {
+        if (posicao.provenance.capitulo === null) continue;
+        const chave = `${posicao.provenance.editionFile} · ${posicao.provenance.capitulo}`;
+        porCapitulo.set(chave, [...(porCapitulo.get(chave) ?? []), dica.id]);
       }
     }
+    const ordenado = [...porCapitulo].sort((a, b) => b[1].length - a[1].length);
+    console.log(
+      `  capítulos citados: ${ordenado.length} para ${dicas.reduce((n, d) => n + d.posicoes.length, 0)} posições` +
+        `; o mais usado é "${ordenado[0]?.[0]}" com ${ordenado[0]?.[1].length} (${ordenado[0]?.[1].join(", ")})`,
+    );
   }
 }
 

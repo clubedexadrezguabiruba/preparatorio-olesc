@@ -16,6 +16,8 @@
     "db:tatica": "node --conditions=react-server scripts/verificar-tatica.ts",
     "db:finais": "node --conditions=react-server scripts/verificar-finais.ts",
     "validate:content": "node scripts/validate-content.ts",
+    "meiojogo:funil": "node scripts/escolher-exercicios.ts",
+    "meiojogo:prosa": "node scripts/varrer-prosa.ts",
     "validate:mutations": "node scripts/mutation-check.ts",
     "apostila": "node --conditions=react-server apostila/build.ts",
     "apostila:ver": "node --conditions=react-server apostila/build.ts --abrir",

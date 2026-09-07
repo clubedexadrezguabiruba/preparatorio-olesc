@@ -61,6 +61,24 @@ export const ProvenienciaSchema = z
     citacaoCurta: z.string().min(10).max(90),
     /** O arquivo (ou slug) da obra em `content/sources.json`. */
     editionFile: z.string().min(3),
+    /**
+     * O capítulo ou seção de onde a posição saiu — **a unidade do teto de
+     * citação no meio-jogo**.
+     *
+     * `PROTECTED_SOURCE_CAP` contava obra: no máximo duas posições da mesma
+     * obra protegida por aula/dica. No meio-jogo o teto passa a contar
+     * **capítulo**, por decisão editorial de 2026-09-07 (§3.1 do plano). O
+     * raciocínio inteiro está em `content/sources.json`, e o resumo é: o que a
+     * Lei 9.610 protege num livro de xadrez é o texto, as anotações e a
+     * seleção/organização da coletânea (art. 7º, XIII) — não o arranjo das
+     * peças. A FEN é fato. O que **é** reprodução de curadoria é esvaziar os
+     * diagramas de um capítulo, e é isso que o teto novo mede.
+     *
+     * `null` é para fonte sem capítulo: partida do recorte CC0 do Lichess, ou
+     * posição composta pela autoria. O gate recusa `null` quando a obra citada
+     * tem PDF na biblioteca — livro sem capítulo é teto que não se cobra.
+     */
+    capitulo: z.string().min(4).nullable().default(null),
     /** A partida original, quando a posição vem de uma. */
     originalGame: z.string().min(3).nullable().default(null),
     /** Como a FEN foi obtida, e o que foi conferido. */
@@ -200,6 +218,84 @@ export type Dica = z.infer<typeof DicaSchema>;
 export type PosicaoDaDica = z.infer<typeof PosicaoDaDicaSchema>;
 
 export const DicasSchema = z.array(DicaSchema).min(1);
+
+/**
+ * Quantas posições do **mesmo capítulo** uma dica de meio-jogo pode usar.
+ *
+ * Não é o `PROTECTED_SOURCE_CAP` de `lib/lesson/schema.ts`, e a diferença é
+ * deliberada. Aquele conta **obra** e continua valendo para as aulas de finais,
+ * onde os livros são de autores vivos ou recentes (de la Villa, Silman,
+ * Seirawan). Este conta **capítulo** e vale só aqui.
+ *
+ * A troca de unidade vem de uma premissa que não se sustentava. O teto por obra
+ * foi escrito como se fosse restrição legal; é política editorial, e a coisa
+ * que ela deveria proteger não é a que ela media:
+ *
+ * - **posição é fato, não obra.** Uma FEN é o arranjo das peças. O que a
+ *   Lei 9.610 protege num livro de xadrez é o texto, as anotações e a
+ *   seleção/organização da coletânea (art. 7º, XIII);
+ * - **nestes dois livros a camada protegida não é a que se copia.** O texto de
+ *   Nimzowitsch é livre no Brasil desde 2006 e o de Znosko-Borovsky desde 2025;
+ *   o prazo em aberto era o da **tradução**, que é camada de texto. A FEN do
+ *   diagrama CXLVIII não deve nada ao tradutor;
+ * - **o que sobra de preocupação real é copiar a seleção** — esvaziar os
+ *   diagramas do capítulo do peão isolado é reproduzir a curadoria do autor. É
+ *   isso, e só isso, que este teto mede.
+ *
+ * Aprovado pelo Doug em 2026-09-07; o raciocínio inteiro está em
+ * `content/sources.json`, ao lado das licenças.
+ */
+export const CAPITULO_CAP = 2;
+
+/** O que a conferência de citação precisa saber de uma obra registrada. */
+export type ObraCitada = { readonly slug: string; readonly temArquivo: boolean };
+
+/**
+ * Os problemas de citação de uma dica: capítulo faltando e teto estourado.
+ *
+ * Recebe a busca da obra por parâmetro para não puxar `content/sources.json`
+ * para dentro do esquema — quem junta as duas pontas é o gate e o `npm test`,
+ * que já leem os dois arquivos.
+ */
+export function problemasDeCitacao(
+  dica: Dica,
+  obraDe: (editionFile: string) => ObraCitada | undefined,
+): { codigo: string; mensagem: string }[] {
+  const problemas: { codigo: string; mensagem: string }[] = [];
+  const porCapitulo = new Map<string, number>();
+
+  for (const [i, posicao] of dica.posicoes.entries()) {
+    const obra = obraDe(posicao.provenance.editionFile);
+    if (!obra) continue; // já reportado como OBRA_NAO_REGISTRADA
+
+    if (posicao.provenance.capitulo === null) {
+      // Livro sem capítulo declarado é teto que não se cobra: a posição
+      // passaria por todas as portas sem nunca contar para nenhuma.
+      if (obra.temArquivo) {
+        problemas.push({
+          codigo: "CAPITULO_AUSENTE",
+          mensagem:
+            `posição ${i + 1} sai de "${obra.slug}", que é livro da biblioteca, e não diz de ` +
+            `que capítulo — sem isso o teto por capítulo não tem o que contar`,
+        });
+      }
+      continue;
+    }
+
+    const chave = `${obra.slug} · ${posicao.provenance.capitulo}`;
+    const quantas = (porCapitulo.get(chave) ?? 0) + 1;
+    porCapitulo.set(chave, quantas);
+    if (quantas > CAPITULO_CAP) {
+      problemas.push({
+        codigo: "TETO_DE_CAPITULO",
+        mensagem:
+          `${quantas} posições saem de "${chave}" e o teto é ${CAPITULO_CAP} por capítulo — ` +
+          `esvaziar um capítulo é reproduzir a seleção do autor, que é a camada protegida`,
+      });
+    }
+  }
+  return problemas;
+}
 
 /**
  * Confere as dicas e devolve a lista, ou estoura com o caminho do erro.

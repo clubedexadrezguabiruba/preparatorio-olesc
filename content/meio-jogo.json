@@ -54,6 +54,7 @@
           "bibliographicSource": "José Raúl Capablanca, Chess Fundamentals, reimpressão com copyright de 1921; Parte I, §6 \"General strategy of the opening\", p. 26 (PDF 44), Exemplo 17, que vai das pp. 26 a 28.",
           "citacaoCurta": "Capablanca, Chess Fundamentals, p. 26 — Exemplo 17",
           "editionFile": "capablanca-fundamentals-reimpressao",
+          "capitulo": "Parte I, §6 — General strategy of the opening",
           "originalGame": null,
           "fenMethod": "A sequência impressa foi lida na página e repetida desde a posição inicial: 1.e4 e5 2.Cf3 Cc6 3.Cc3 Cf6, convertida da notação descritiva do livro (P-K4, Kt-KB3, Kt-QB3, Kt-B3). A página 44 do PDF foi extraída em texto e confere: traz o cabeçalho \"GENERAL STRATEGY\", a numeração 26 e os mesmos lances. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -125,6 +126,7 @@
           "bibliographicSource": "José Raúl Capablanca, Chess Fundamentals, reimpressão com copyright de 1921; Parte I, §6 \"General strategy of the opening\", p. 26 (PDF 44), Exemplo 17.",
           "citacaoCurta": "Capablanca, Chess Fundamentals, p. 26 — Exemplo 17",
           "editionFile": "capablanca-fundamentals-reimpressao",
+          "capitulo": "Parte I, §6 — General strategy of the opening",
           "originalGame": null,
           "fenMethod": "Mesma sequência do Exemplo 17, dois meios-lances adiante: 1.e4 e5 2.Cf3 Cc6 3.Cc3 Cf6 4.Bb5 Bb4. A página 44 do PDF traz 4.B-Kt5 e a resposta 4...B-Kt5 das pretas, com o comentário de que elas ameaçam trocar bispo por cavalo. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -153,7 +155,7 @@
     "resumo": "Controlar o centro não é ter peão lá: é ter peça mirando as casas do meio. Peão que só se defende não disputa nada.",
     "explicacao": [
       {
-        "texto": "As quatro casas do meio são o terreno alto do tabuleiro: de lá uma peça alcança os dois lados, e para lá qualquer peça chega em menos lances. Quem controla essas casas escolhe onde a partida acontece.",
+        "texto": "As quatro casas do meio são o terreno alto do tabuleiro: de lá uma peça alcança os dois lados, e um cavalo no meio tem oito saltos contra dois no canto. Quem controla essas casas costuma escolher onde a partida acontece.",
         "realce": [
           "d4",
           "e4",
@@ -204,6 +206,7 @@
           "bibliographicSource": "José Raúl Capablanca, Chess Fundamentals, reimpressão com copyright de 1921; Parte I, §7 \"Control of the centre\", p. 29 (PDF 47), Exemplo 18.",
           "citacaoCurta": "Capablanca, Chess Fundamentals, p. 29 — Exemplo 18",
           "editionFile": "capablanca-fundamentals-reimpressao",
+          "capitulo": "Parte I, §7 — Control of the centre",
           "originalGame": null,
           "fenMethod": "Sequência impressa repetida desde a posição inicial: 1.e4 e5 2.Cf3 d6. A página 47 do PDF traz o cabeçalho \"CONTROL OF THE CENTRE\", a numeração 29, o Exemplo 18 e o comentário de que d6 é lance tímido e que 3.d4 toma a ofensiva. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -281,6 +284,7 @@
           "bibliographicSource": "José Raúl Capablanca, Chess Fundamentals, reimpressão com copyright de 1921; Parte III, §22 \"The force of the threatened attack\", p. 85 (PDF 103), Exemplo 52, na posição imediatamente anterior a 12.Dh3.",
           "citacaoCurta": "Capablanca, Chess Fundamentals, p. 85 — Exemplo 52",
           "editionFile": "capablanca-fundamentals-reimpressao",
+          "capitulo": "Parte III, §22 — The force of the threatened attack",
           "originalGame": "José Raúl Capablanca–Rafael Blanco, torneio internacional de Havana, 1913 — nomes, praça e ano impressos no cabeçalho do Exemplo 52, p. 83.",
           "fenMethod": "Os 22 meios-lances impressos foram repetidos desde a posição inicial: 1.e4 e6 2.d4 d5 3.Cc3 dxe4 4.Cxe4 Cd7 5.Cf3 Cgf6 6.Cxf6+ Cxf6 7.Ce5 Bd6 8.Df3 c6 9.c3 O-O 10.Bg5 Be7 11.Bd3 Ce8. A página 103 do PDF confere: traz \"THREATENED ATTACK\", a numeração 85 e os lances 11.B-Q3 Kt-K1 12.Q-R3. A p. 101 traz o cabeçalho da partida com os dois nomes, a praça e o ano. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -306,10 +310,10 @@
     "id": "m5",
     "titulo": "Mexa no escudo só com motivo",
     "nivel": "ate-1000",
-    "resumo": "Peão que avança na frente do seu rei nunca mais volta — e as casas que ele defendia ficam sem dono para sempre.",
+    "resumo": "Peão que avança na frente do seu rei nunca mais volta — e as casas que ele defendia passam a depender de peça, ou do vizinho, se ele ainda estiver lá.",
     "explicacao": [
       {
-        "texto": "Depois do roque curto, os três peões de f2, g2 e h2 são um escudo, e cada um deles defende duas casas do lado do rei. Avançar qualquer um é abrir uma porta permanente, porque peão não anda para trás.",
+        "texto": "Depois do roque curto, os três peões de f2, g2 e h2 são um escudo, e cada um deles defende duas casas do lado do rei. Avançar um deles abre uma porta que aquele peão não fecha mais, porque peão não anda para trás — quem passa a cobrir aquelas casas é peça, ou o vizinho.",
         "realce": [
           "f2",
           "g2",
@@ -351,6 +355,7 @@
           "bibliographicSource": "José Raúl Capablanca, Chess Fundamentals, reimpressão com copyright de 1921; Parte I, §6 \"General strategy of the opening\", p. 27 (PDF 45), Exemplo 17.",
           "citacaoCurta": "Capablanca, Chess Fundamentals, p. 27 — Exemplo 17",
           "editionFile": "capablanca-fundamentals-reimpressao",
+          "capitulo": "Parte I, §6 — General strategy of the opening",
           "originalGame": null,
           "fenMethod": "Sequência do Exemplo 17 repetida desde a posição inicial até o 6º lance: 1.e4 e5 2.Cf3 Cc6 3.Cc3 Cf6 4.Bb5 Bb4 5.O-O O-O. A página 45 do PDF traz a numeração 27 e a continuação impressa 6.P-Q3 P-Q3, com o comentário de que o lance protege o peão do rei e abre a diagonal do bispo da dama. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts; o escudo foi contado nas três colunas à frente do rei que rocou."
         }
@@ -430,6 +435,7 @@
           "bibliographicSource": "José Raúl Capablanca, Chess Fundamentals, reimpressão com copyright de 1921; Parte I, §7 \"Control of the centre\", p. 30 (PDF 48), Exemplo 18, que vai das pp. 29 a 31.",
           "citacaoCurta": "Capablanca, Chess Fundamentals, p. 30 — Exemplo 18",
           "editionFile": "capablanca-fundamentals-reimpressao",
+          "capitulo": "Parte I, §7 — Control of the centre",
           "originalGame": null,
           "fenMethod": "Os 16 meios-lances impressos foram repetidos desde a posição inicial: 1.e4 e5 2.Cf3 d6 3.d4 Cd7 4.Bc4 h6 5.Cc3 Cgf6 6.Be3 Be7 7.De2 c6 8.Td1 Dc7. A página 48 do PDF traz a numeração 30 e os lances 4.B-QB4 P-KR3 5.Kt-B3 KKt-B3 6.B-K3 B-K2 7.Q-K2. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -501,6 +507,7 @@
           "bibliographicSource": "Eugène Znosko-Borovsky, The Middle Game in Chess, reimpressão de julho de 1930 do texto de 1922; Parte II, \"Superior positions — Advantage in force\", p. 117 (PDF 133), diagrama LVIII, com a continuação na p. 118.",
           "citacaoCurta": "Znosko-Borovsky, The Middle Game in Chess, p. 117 — diagrama LVIII",
           "editionFile": "znosko-middle-game-1930",
+          "capitulo": "Parte II — Superior positions: Advantage in force",
           "originalGame": "J. H. Blackburne–Emanuel Lasker — os dois nomes estão impressos na legenda do diagrama LVIII (\"Black: Dr. E. Lasker. White: J. H. Blackburne.\"); evento e ano não constam da página.",
           "fenMethod": "Transcrição do diagrama impresso, casa por casa, sem sequência de lances desde a abertura — o livro publica a posição, não a partida. Roque e en passant, que não se recuperam de um diagrama, foram fixados em \"-\", e os contadores normalizados em 0 1: não são dados históricos. A página 133 do PDF foi extraída em texto e confere o cabeçalho \"ADVANTAGE IN FORCE\", a numeração 117, o rótulo do diagrama e a frase \"Black has an extra Pawn\". O diagrama foi lido em imagem a 600 dpi, com grade calibrada, e a leitura bateu com a transcrição. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -580,6 +587,7 @@
           "bibliographicSource": "Eugène Znosko-Borovsky, The Middle Game in Chess, reimpressão de julho de 1930 do texto de 1922; Parte II, \"Superior positions — Advantage in force\", p. 117 (PDF 133), diagrama LVIII, com a continuação na p. 118.",
           "citacaoCurta": "Znosko-Borovsky, The Middle Game in Chess, p. 117 — diagrama LVIII",
           "editionFile": "znosko-middle-game-1930",
+          "capitulo": "Parte II — Superior positions: Advantage in force",
           "originalGame": "J. H. Blackburne–Emanuel Lasker — os dois nomes estão impressos na legenda do diagrama LVIII; evento e ano não constam da página.",
           "fenMethod": "Parte do diagrama LVIII — o mesmo da dica m7, transcrito casa por casa como descrito lá — e avança os dois lances que a página 118 imprime. O lance preto não saiu legível no scan, mas a página o descreve sem ambiguidade (pina os dois cavalos e retira a dama da ameaça da torre) e imprime a resposta branca, 2.K-R1, seguida de B-K3. Só um lance satisfaz as três coisas, e é ...Dd4: conferido com chess.js, ele crava o cavalo de e3 contra o rei de g1, deixa o cavalo de d2 sem lance que não perca a dama de d1, e sai da terceira fileira, onde a torre de f3 mirava. A linha 1...Dd4 2.Rh1 Be6 foi repetida inteira com chess.js e é legal. Contadores herdados da normalização do diagrama; não são dados históricos. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -644,6 +652,7 @@
           "bibliographicSource": "Aron Nimzowitsch, My System, Harcourt, Brace and Company, Nova York, 1930, versão inglesa de Philip Hereford; Parte I, cap. III \"The seventh and eighth ranks\", p. 33 (PDF 55), diagrama XXVII — sem as peças hipotéticas que o comentário acrescenta depois.",
           "citacaoCurta": "Nimzowitsch, My System, p. 33 — diagrama XXVII",
           "editionFile": "nimzowitsch-my-system-1930",
+          "capitulo": "Parte I, cap. III — The seventh and eighth ranks",
           "originalGame": null,
           "fenMethod": "Transcrição do diagrama impresso, casa por casa; é uma posição reduzida, publicada sem partida. Roque e en passant fixados em \"-\" e contadores normalizados em 0 1, porque um diagrama não os informa. A página 55 do PDF foi extraída em texto e confere o cabeçalho \"THE SEVENTH AND EIGHTH RANKS\", a numeração 33, o rótulo do diagrama e a frase \"White chooses the QBP as his objective\". O texto logo abaixo supõe um bispo branco em K1 e um cavalo preto em KKt3 para uma variante hipotética — essas peças não entram aqui. O diagrama foi lido duas vezes em imagem, por leitores independentes, a 600 dpi e com grade calibrada, e as duas leituras coincidiram, inclusive no peão preto de b6. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -717,6 +726,7 @@
           "bibliographicSource": "Aron Nimzowitsch, My System, Harcourt, Brace and Company, Nova York, 1930, versão inglesa de Philip Hereford; Parte I, cap. II, §6 \"The outpost\", p. 26 (PDF 48), diagrama XXIV, com a continuação na p. 27.",
           "citacaoCurta": "Nimzowitsch, My System, p. 26 — diagrama XXIV",
           "editionFile": "nimzowitsch-my-system-1930",
+          "capitulo": "Parte I, cap. II, §6 — The outpost",
           "originalGame": null,
           "fenMethod": "Transcrição do diagrama impresso, casa por casa, sem partida. Roque e en passant fixados em \"-\" e contadores normalizados. A página 48 do PDF traz a numeração 26 e o título do parágrafo \"§6. The outpost\", e a descrição impressa do próprio diagrama confirma a leitura: \"White has the centre and the Q file. Black has a pawn at his Q3 watching the centre, and also holds the K file\" — as brancas com a coluna d, as pretas com a coluna e e o peão de d6. A página 27 traz o lance \"1.Kt-Q5\", que o quiz usa. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -794,6 +804,7 @@
           "bibliographicSource": "Aron Nimzowitsch, My System, Harcourt, Brace and Company, Nova York, 1930, versão inglesa de Philip Hereford; Parte I, cap. III \"The seventh and eighth ranks\", p. 33 (PDF 55), diagrama XXVII, um meio-lance adiante.",
           "citacaoCurta": "Nimzowitsch, My System, p. 33 — diagrama XXVII, um meio-lance adiante",
           "editionFile": "nimzowitsch-my-system-1930",
+          "capitulo": "Parte I, cap. III — The seventh and eighth ranks",
           "originalGame": null,
           "fenMethod": "É o diagrama XXVII da dica m9 depois de um lance preto: ...Tc8. Não é o diagrama impresso literal, e sim uma posição derivada dele — mas o lance não foi escolhido por nós: a própria página 33 escreve \"After Black's R-QB1, attack and defence balance one another\", e é essa a posição que ela descreve. A transição foi feita e conferida com chess.js a partir da FEN-base de m9; os contadores são herdados dessa normalização e não têm valor histórico. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -864,6 +875,7 @@
           "bibliographicSource": "Aron Nimzowitsch, My System, Harcourt, Brace and Company, Nova York, 1930, versão inglesa de Philip Hereford; Parte II, cap. III, §1 \"The isolated queen's pawn and his descendants\", p. 187 (PDF 209), diagrama CXLVIII.",
           "citacaoCurta": "Nimzowitsch, My System, p. 187 — diagrama CXLVIII",
           "editionFile": "nimzowitsch-my-system-1930",
+          "capitulo": "Parte II, cap. III, §1 — The isolated queen's pawn and his descendants",
           "originalGame": null,
           "fenMethod": "Transcrição do diagrama impresso, casa por casa, sem partida. Roque e en passant fixados em \"-\" e contadores normalizados. A página 209 do PDF foi extraída em texto e confere: abre o capítulo \"THE ISOLATED QUEEN'S PAWN AND HIS DESCENDANTS\", traz a numeração 187 e o rótulo do diagrama, e a legenda impressa ao lado dele chama atenção para a casa de posto das brancas. O diagrama foi lido em imagem a 600 dpi, com grade calibrada, e a leitura bateu com a transcrição. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -892,7 +904,7 @@
     "resumo": "Dois peões na mesma coluna não é veredito, é uma informação. Veja o que foi recebido em troca antes de chamar de fraqueza.",
     "explicacao": [
       {
-        "texto": "Peão dobrado perde o que peão tem de melhor: andar em bloco e defender o vizinho. Isso é verdade e não muda. O que muda é o preço — quase sempre a dobra vem de uma captura, e captura costuma vir com alguma coisa junto.",
+        "texto": "Peão dobrado perde duas coisas concretas: os dois não se defendem, e não avançam lado a lado como um bloco. Isso não muda. O que muda é o preço — quase sempre a dobra vem de uma captura, e captura costuma vir com alguma coisa junto.",
         "realce": []
       },
       {
@@ -927,6 +939,7 @@
           "bibliographicSource": "Aron Nimzowitsch, My System, Harcourt, Brace and Company, Nova York, 1930, versão inglesa de Philip Hereford; Parte I, cap. I \"The centre and development\", p. 16 (PDF 38), exemplo dado em texto corrido, pp. 16–17.",
           "citacaoCurta": "Nimzowitsch, My System, pp. 16–17 — exemplo em texto corrido",
           "editionFile": "nimzowitsch-my-system-1930",
+          "capitulo": "Parte I, cap. I — The centre and development",
           "originalGame": null,
           "fenMethod": "A sequência impressa foi lida na página e repetida desde a posição inicial: 1.e4 e5 2.f4 d6 3.Cf3 Cc6 4.Bc4 Be6 5.Bxe6 fxe6 6.fxe5 dxe5, convertida da notação descritiva. A página 38 do PDF confere: traz a numeração 16 e a linha \"1.P-K4 P-K4; 2.P-KB4 P-Q3; 3.Kt-KB3 Kt-QB3; 4.B-B4 B-K3!; after 5.BxB PxB; 6.PxP PxP\", seguida do comentário de que, apesar do peão dobrado, as pretas ficam com duas colunas abertas para as torres e \"stands rather the better\". Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -993,6 +1006,7 @@
           "bibliographicSource": "José Raúl Capablanca, Chess Fundamentals, reimpressão com copyright de 1921; Parte II, §14 \"The relative value of knight and bishop\", p. 54 (PDF 72), Exemplo 33.",
           "citacaoCurta": "Capablanca, Chess Fundamentals, p. 54 — Exemplo 33",
           "editionFile": "capablanca-fundamentals-reimpressao",
+          "capitulo": "Parte II, §14 — The relative value of knight and bishop",
           "originalGame": null,
           "fenMethod": "Transcrição do diagrama impresso, casa por casa; é um exemplo reduzido, publicado sem partida. Roque e en passant fixados em \"-\" e contadores normalizados. A página 72 do PDF foi extraída em texto e confere: traz \"THE RELATIVE VALUE\", a numeração 54, o Exemplo 33, e o comentário de que esta é praticamente a única situação em que o cavalo vale mais que o bispo — posição travada, todos os peões de um lado só, e a fraqueza extra de ter os peões na mesma cor do próprio bispo. O diagrama foi lido em imagem a 600 dpi, com grade calibrada, e a leitura bateu com a transcrição. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -1073,6 +1087,7 @@
           "bibliographicSource": "Aron Nimzowitsch, My System, Harcourt, Brace and Company, Nova York, 1930, versão inglesa de Philip Hereford; Parte II, cap. III, §1 \"The isolated queen's pawn and his descendants\", p. 187 (PDF 209), diagrama CXLVIII.",
           "citacaoCurta": "Nimzowitsch, My System, p. 187 — diagrama CXLVIII",
           "editionFile": "nimzowitsch-my-system-1930",
+          "capitulo": "Parte II, cap. III, §1 — The isolated queen's pawn and his descendants",
           "originalGame": null,
           "fenMethod": "Parte do diagrama CXLVIII — o mesmo da dica m12, transcrito casa por casa como descrito lá — e avança um lance: Ce5, que é exatamente o lance de que esta dica trata. Mostrar a posição depois dele evita pedir ao aluno que imagine o tabuleiro. A transição foi feita e conferida com chess.js, e a impossibilidade de ...f6 foi medida na posição resultante, não deduzida. Contadores herdados da normalização do diagrama; não são dados históricos. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -1098,7 +1113,7 @@
     "id": "m16",
     "titulo": "Ponha uma peça diante do passado",
     "nivel": "1000-1200",
-    "resumo": "Vigiar um peão passado de longe não segura ninguém. Bloquear é ocupar a casa da frente dele, com uma peça que fique.",
+    "resumo": "Vigiar um peão passado de longe costuma só adiar o problema. Bloquear é ocupar a casa da frente dele, com uma peça que fique.",
     "explicacao": [
       {
         "texto": "Peão passado é o que não tem mais nenhum peão inimigo capaz de barrá-lo, nem na coluna dele nem nas duas ao lado. Deixado solto, ele anda — e cada casa que anda vale mais que a anterior.",
@@ -1147,6 +1162,7 @@
           "bibliographicSource": "Aron Nimzowitsch, My System, Harcourt, Brace and Company, Nova York, 1930, versão inglesa de Philip Hereford; Parte I, cap. IV \"The passed pawn\", §2 \"The blockade of passed pawns\", p. 45 (PDF 67), diagrama XL.",
           "citacaoCurta": "Nimzowitsch, My System, p. 45 — diagrama XL",
           "editionFile": "nimzowitsch-my-system-1930",
+          "capitulo": "Parte I, cap. IV, §2 — The blockade of passed pawns",
           "originalGame": null,
           "fenMethod": "Transcrição do diagrama impresso, casa por casa. **O diagrama XL não tem rei preto** — é um esqueleto didático, e o livro enumera as forças pretas como \"the Black forces, B, R, and Kt\". Como toda FEN precisa de dois reis para ser legal, um rei preto foi acrescentado em h8: fora da coluna d, fora da diagonal b7–g2 e sem contato com peça branca nenhuma, para não alterar o que a dica ensina. Isso é acréscimo nosso e está dito aqui por isso. O resto veio do papel: a página 67 do PDF traz a numeração 45, o parágrafo \"§2. The blockade of passed pawns\" e a frase \"In the position shown on Diagram XL Black has a passed pawn, which can however be blocked by Kt-Q4 or B-Q4\" — os dois bloqueadores são o cavalo de b3 e o bispo de f2. A p. 45 confirma ainda as peças pretas uma a uma: \"Kt and B guard the passed pawn; the R, however, supplies him with a certain impetus\", e diz que, se o peão avançar, o bispo de QKt2 (b7) passa a mirar o rei inimigo — o branco, em g1. O diagrama foi lido em imagem a 600 dpi, com grade calibrada, e a leitura bateu com esse texto. Roque e en passant fixados em \"-\", contadores normalizados. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -1221,6 +1237,7 @@
           "bibliographicSource": "Eugène Znosko-Borovsky, The Middle Game in Chess, reimpressão de julho de 1930 do texto de 1922; Parte II, \"Inferior positions — Inferiority in space\", p. 157 (PDF 173), diagrama LXX, com a análise nas pp. 156–158.",
           "citacaoCurta": "Znosko-Borovsky, The Middle Game in Chess, p. 157 — diagrama LXX",
           "editionFile": "znosko-middle-game-1930",
+          "capitulo": "Parte II — Inferior positions: Inferiority in space",
           "originalGame": "Siegbert Tarrasch–Oldřich Duras — os dois nomes estão impressos na legenda do diagrama LXX (\"Black: O. Duras. White: Dr. S. Tarrasch.\"); evento e ano não constam da página.",
           "fenMethod": "Transcrição do diagrama impresso, casa por casa, sem sequência desde a abertura. Roque e en passant fixados em \"-\" e contadores normalizados. A página 173 do PDF traz o cabeçalho \"INFERIORITY IN SPACE\", a numeração 157 e a frase \"The White Knight at Kt3 is also badly placed\", além da discussão do bispo travado. A transcrição foi arbitrada contra a continuação impressa da p. 158 — 1.Kt-K2 P-Kt5; 2.Kt(K2)-Q4 Kt-K4; 3.Q-K2; 4.B-K1 R-B1; 5.QR-B1 — repetida com chess.js: nesta posição a linha inteira é legal, e o 10...QxR da mesma análise só é possível com a dama preta em b6. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -1287,6 +1304,7 @@
           "bibliographicSource": "José Raúl Capablanca, Chess Fundamentals, reimpressão com copyright de 1921; Parte I, §6 \"General strategy of the opening\", p. 28 (PDF 46), Exemplo 17.",
           "citacaoCurta": "Capablanca, Chess Fundamentals, p. 28 — Exemplo 17",
           "editionFile": "capablanca-fundamentals-reimpressao",
+          "capitulo": "Parte I, §6 — General strategy of the opening",
           "originalGame": null,
           "fenMethod": "Continuação do mesmo Exemplo 17 das dicas m1, m2 e m5, repetida desde a posição inicial: 1.e4 e5 2.Cf3 Cc6 3.Cc3 Cf6 4.Bb5 Bb4 5.O-O O-O 6.d3 d6 7.Bg5 Bxc3 8.bxc3. A página 45 do PDF traz o 7.B-Kt5 e diz que as pretas ficam obrigadas a 7...BxKt; a página 46 traz a numeração 28 e o comentário de que as pretas trocaram bispo por cavalo e em compensação dobraram um peão branco — dobra que, tão cedo na partida, o autor considera antes vantagem, por trazer o peão em direção ao centro. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -1361,6 +1379,7 @@
           "bibliographicSource": "Aron Nimzowitsch, My System, Harcourt, Brace and Company, Nova York, 1930, versão inglesa de Philip Hereford; Parte I, cap. IX, §3 \"Attack on the base\", p. 121 (PDF 143), exemplo da Defesa Francesa desenvolvido em texto corrido, pp. 120–122.",
           "citacaoCurta": "Nimzowitsch, My System, p. 121 — Defesa Francesa em texto corrido",
           "editionFile": "nimzowitsch-my-system-1930",
+          "capitulo": "Parte I, cap. IX, §3 — Attack on the base",
           "originalGame": null,
           "fenMethod": "Sequência impressa repetida desde a posição inicial: 1.e4 e6 2.d4 d5 3.e5. A página 143 do PDF traz o cabeçalho \"THE PAWN-CHAIN\", a numeração 121 e o título do parágrafo \"§3. Attack on the 'base' a strategical necessity\", além da comparação entre a ruptura preta P-QB4 e a branca P-KB4-B5. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -1386,7 +1405,7 @@
     "id": "m20",
     "titulo": "Fixe o peão que ficou para trás",
     "nivel": "1200-1400",
-    "resumo": "Peão retardatário não pode avançar nem ser defendido por vizinho. Trave-o onde está e traga peças pela coluna aberta.",
+    "resumo": "Peão retardatário não recebe defesa de peão vizinho, e avançar custa o peão. Trave-o onde está e traga peças pela coluna aberta.",
     "explicacao": [
       {
         "texto": "Retardatário é o peão que ficou atrás dos vizinhos e não consegue mais alcançá-los: se avançar, é capturado. Ele fica parado numa coluna em que só ele existe — e coluna em que só ele existe é estrada para as torres do outro lado.",
@@ -1432,6 +1451,7 @@
           "bibliographicSource": "José Raúl Capablanca, Chess Fundamentals, reimpressão com copyright de 1921; Parte III, §22 \"The force of the threatened attack\", p. 85 (PDF 103), Exemplo 52, logo após 12...f5.",
           "citacaoCurta": "Capablanca, Chess Fundamentals, p. 85 — Exemplo 52, após 12...f5",
           "editionFile": "capablanca-fundamentals-reimpressao",
+          "capitulo": "Parte III, §22 — The force of the threatened attack",
           "originalGame": "José Raúl Capablanca–Rafael Blanco, torneio internacional de Havana, 1913 — nomes, praça e ano impressos no cabeçalho do Exemplo 52, p. 83.",
           "fenMethod": "É a posição de m4 dois meios-lances adiante, pela mesma partida: aos 22 meios-lances de lá somam-se 12.Dh3 f5. A página 103 do PDF confere os dois lances e traz o comentário de que as brancas já não têm ataque, mas obrigaram as pretas a criar uma fraqueza marcada — o peão do rei —, e que todo o plano branco passa a ser torná-lo insustentável. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -1516,6 +1536,7 @@
           "bibliographicSource": "Eugène Znosko-Borovsky, The Middle Game in Chess, reimpressão de julho de 1930 do texto de 1922; Parte II, \"Superior positions — Advantage in space\", p. 132 (PDF 148), diagrama LXIII, com o plano na p. 133.",
           "citacaoCurta": "Znosko-Borovsky, The Middle Game in Chess, p. 132 — diagrama LXIII",
           "editionFile": "znosko-middle-game-1930",
+          "capitulo": "Parte II — Superior positions: Advantage in space",
           "originalGame": "Emanuel Lasker–José Raúl Capablanca — os dois nomes estão impressos na legenda do diagrama LXIII (\"Black: J. R. Capablanca. White: Dr. E. Lasker.\"); evento e ano não constam da página.",
           "fenMethod": "Transcrição do diagrama impresso, casa por casa, sem sequência desde a abertura. Roque e en passant fixados em \"-\" e contadores normalizados. A página 148 do PDF traz o cabeçalho \"SUPERIOR POSITIONS\", a numeração 132 e a descrição impressa da própria posição: força e tempo iguais, a diferença é só o espaço, \"White has two centre Pawns and a Knight on the fourth rank, while Black has all his pieces on the first three ranks\" — o que confere casa por casa com a transcrição. O diagrama foi lido também em imagem a 600 dpi, com grade calibrada. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -1595,6 +1616,7 @@
           "bibliographicSource": "Aron Nimzowitsch, My System, Harcourt, Brace and Company, Nova York, 1930, versão inglesa de Philip Hereford; Parte II, cap. I, §3 \"Elements of position play\", p. 143 (PDF 165), variante dada em texto corrido nas pp. 142–143, ligada ao diagrama CXIV.",
           "citacaoCurta": "Nimzowitsch, My System, p. 143 — variante ligada ao diagrama CXIV",
           "editionFile": "nimzowitsch-my-system-1930",
+          "capitulo": "Parte II, cap. I, §3 — Elements of position play",
           "originalGame": null,
           "fenMethod": "Sequência impressa repetida desde a posição inicial: 1.e4 e5 2.Cf3 Cc6 3.Bc4 Be7 4.d4 d6 5.d5 Cb8 6.Bd3 Cf6 7.c4 O-O 8.Cc3 Ce8 9.De2. A página 165 do PDF traz o cabeçalho \"ELEMENTS OF POSITION PLAY\", a numeração 143 e a variante \"6.B-Q3 Kt-KB3; 7.P-QB4 O-O; 8.Kt-QB3 Kt-K1; 9.Q-K2\", seguida da resposta prevista 9...P-KB4 e da operação branca 10.PxP BxP; 11.BxB RxB; 12.Kt-K4. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -1674,6 +1696,7 @@
           "bibliographicSource": "Eugène Znosko-Borovsky, The Middle Game in Chess, reimpressão de julho de 1930 do texto de 1922; Parte III, cap. III, §7 \"Breaking up by pawns of the hostile pawn-position\", p. 201 (PDF 217), diagrama LXXXVII, com a continuação na p. 202.",
           "citacaoCurta": "Znosko-Borovsky, The Middle Game in Chess, p. 201 — diagrama LXXXVII",
           "editionFile": "znosko-middle-game-1930",
+          "capitulo": "Parte III, cap. III, §7 — Breaking up by pawns of the hostile pawn-position",
           "originalGame": "Carl Schlechter–Siegbert Tarrasch — os dois nomes estão impressos na legenda do diagrama LXXXVII (\"Black: Dr. S. Tarrasch. White: C. Schlechter.\"); evento e ano não constam da página.",
           "fenMethod": "Transcrição do diagrama impresso, casa por casa, sem sequência desde a abertura. Roque e en passant fixados em \"-\" e contadores normalizados. A página 217 do PDF traz o cabeçalho \"ATTACK\", a numeração 201 e o título do parágrafo, palavra por palavra: \"7. Breaking up by Pawns of the Hostile Pawn-Position (Diagram LXXXVII.)\". A mesma página tem um segundo diagrama, o LXXXVI (Tartakower–Forgacz), que não é este; a distinção foi feita pela legenda impressa de cada um. O diagrama foi lido em imagem a 600 dpi, com grade calibrada, e a leitura bateu com a transcrição. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -1746,6 +1769,7 @@
           "bibliographicSource": "Eugène Znosko-Borovsky, The Middle Game in Chess, reimpressão de julho de 1930 do texto de 1922; Parte III, cap. III, §3 \"The attack on king standing in the centre\", diagrama LXXXII (p. 195, PDF 211), na posição a que a análise chega na p. 196 (PDF 212), depois de 7.Cd1.",
           "citacaoCurta": "Znosko-Borovsky, The Middle Game in Chess, p. 195 — diagrama LXXXII",
           "editionFile": "znosko-middle-game-1930",
+          "capitulo": "Parte III, cap. III, §3 — The attack on king standing in the centre",
           "originalGame": "Aron Nimzowitsch–Julius Perlis — a legenda impressa do diagrama LXXXII traz \"Black: Dr. J. Perlis. / White: A. Niemzovitch.\"; evento e ano não constam da página.",
           "fenMethod": "Aqui a posição não vem da abertura, e sim do diagrama: partiu-se do diagrama LXXXII, transcrito casa por casa (FEN-base r1bq1rk1/ppppbppp/5n2/4p3/B3P3/2N3Q1/PPPP1PPP/R1B1K2R w - - 0 1), e sobre ele foram repetidos os 13 meios-lances impressos: 1.Dxe5 Te8 2.Df4 Bb4 3.f3 b5 4.Bxb5 c6 5.Ba4 Da5 6.Bb3 Ba6 7.Cd1. A página 212 do PDF confere o ponto de chegada, trazendo a numeração 196 e a continuação \"7.Kt-Q1 P-Q4\" — que é justamente o lance do quiz. A página 211 traz o título do parágrafo e o rótulo do diagrama. Os contadores são herdados da normalização do diagrama e não têm valor histórico. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -1823,6 +1847,7 @@
           "bibliographicSource": "José Raúl Capablanca, Chess Fundamentals, reimpressão com copyright de 1921; Parte III, §22 \"The force of the threatened attack\", p. 88 (PDF 106), Exemplo 52, na posição anterior a 28.De3.",
           "citacaoCurta": "Capablanca, Chess Fundamentals, p. 88 — Exemplo 52, antes de 28.De3",
           "editionFile": "capablanca-fundamentals-reimpressao",
+          "capitulo": "Parte III, §22 — The force of the threatened attack",
           "originalGame": "José Raúl Capablanca–Rafael Blanco, torneio internacional de Havana, 1913 — nomes, praça e ano impressos no cabeçalho do Exemplo 52, p. 83.",
           "fenMethod": "É a mesma partida das dicas m4, m20, m26 e m30, levada até o 28º lance: os 54 meios-lances impressos foram repetidos desde a posição inicial e conferidos com chess.js. A página 106 do PDF confere o ponto de chegada: traz \"FORCE OF THREATENED ATTACK\", a numeração 88, os lances 27.B-Q5 Q-Q3 e 28.Q-K3 R-K2, e o comentário de que as peças pretas estão todas amarradas e de que as brancas vão levar a dama a KR6 e depois avançar a torre para arrebentar os peões que defendem o rei. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -1900,6 +1925,7 @@
           "bibliographicSource": "José Raúl Capablanca, Chess Fundamentals, reimpressão com copyright de 1921; Parte III, §22 \"The force of the threatened attack\", p. 83 (PDF 101), Exemplo 52, na posição anterior a 7.Ce5.",
           "citacaoCurta": "Capablanca, Chess Fundamentals, p. 83 — Exemplo 52, antes de 7.Ce5",
           "editionFile": "capablanca-fundamentals-reimpressao",
+          "capitulo": "Parte III, §22 — The force of the threatened attack",
           "originalGame": "José Raúl Capablanca–Rafael Blanco, torneio internacional de Havana, 1913 — nomes, praça e ano impressos no cabeçalho do Exemplo 52, p. 83.",
           "fenMethod": "Os 12 meios-lances impressos foram repetidos desde a posição inicial: 1.e4 e6 2.d4 d5 3.Cc3 dxe4 4.Cxe4 Cd7 5.Cf3 Cgf6 6.Cxf6+ Cxf6. A página 101 do PDF traz a numeração 83 e o cabeçalho da partida com todas as letras: \"Example 52.— Played at the Havana International Masters Tournament, 1913. (French Defence.) White: J. R. Capablanca. Black: R. Blanco.\" A p. 102 traz o comentário de que o lance seguinte visa impedir o desenvolvimento do bispo da dama preto via QKt2 depois de P-QKt3. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -1976,6 +2002,7 @@
           "bibliographicSource": "Aron Nimzowitsch, My System, Harcourt, Brace and Company, Nova York, 1930, versão inglesa de Philip Hereford; Parte II, cap. I, sobre centralização, p. 155 (PDF 177); partida comentada na própria página, na posição após 17.Df2.",
           "citacaoCurta": "Nimzowitsch, My System, p. 155 — partida comentada, após 17.Df2",
           "editionFile": "nimzowitsch-my-system-1930",
+          "capitulo": "Parte II, cap. I — centralização",
           "originalGame": "Aron Nimzowitsch–Alexander Alekhine, Semmering, 1926 — a página 155 escreve \"his game with me at Semmering in 1926\" e a legenda do diagrama ao lado repete \"Nimzowitsch–Alekhine / Semmering 1926\"; o texto ainda esclarece que Alekhine tinha as pretas.",
           "fenMethod": "Os 33 meios-lances impressos foram repetidos desde a posição inicial: 1.e4 Cf6 2.Cc3 d5 3.e5 Cfd7 4.f4 e6 5.Cf3 c5 6.g3 Cc6 7.Bg2 Be7 8.O-O O-O 9.d3 Cb6 10.Ce2 d4 11.g4 f6 12.exf6 gxf6 13.Cg3 Cd5 14.De2 Bd6 15.Ch4 Cce7 16.Bd2 Dc7 17.Df2. A lista foi conferida lance a lance contra as pp. 155–156 do PDF, que a imprimem em notação descritiva do 1.P-K4 Kt-KB3 até o 17.Q-B2, seguida do comentário sobre a continuação 17...P-QB5. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -2049,6 +2076,7 @@
           "bibliographicSource": "Aron Nimzowitsch, My System, Harcourt, Brace and Company, Nova York, 1930, versão inglesa de Philip Hereford; Parte II, cap. III, §1 \"The isolated queen's pawn and his descendants\", p. 187 (PDF 209), primeira sequência dada em texto logo abaixo do diagrama CXLVIII, após 8.Bxc4.",
           "citacaoCurta": "Nimzowitsch, My System, p. 187 — sequência após 8.Bxc4",
           "editionFile": "nimzowitsch-my-system-1930",
+          "capitulo": "Parte II, cap. III, §1 — The isolated queen's pawn and his descendants",
           "originalGame": null,
           "fenMethod": "A sequência impressa foi lida na página e repetida desde a posição inicial: 1.d4 d5 2.Cf3 Cf6 3.c4 e6 4.e3 c5 5.Cc3 Cc6 6.Bd3 cxd4 7.exd4 dxc4 8.Bxc4. A página 209 do PDF traz o texto correspondente palavra por palavra: o autor pede que o estudante monte a posição normal do Gambito da Dama, \"1.P-Q4 P-Q4; 2.Kt-KB3 Kt-KB3; 3.P-QB4 P-K3; 4.P-K3 P-QB4; 5.Kt-QB3 Kt-QB3\", e então jogue \"6.B-Q3 PxQP; 7.KPxP PxP; 8.BxP and White has an 'isolani'\". Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -2134,6 +2162,7 @@
           "bibliographicSource": "Eugène Znosko-Borovsky, The Middle Game in Chess, reimpressão de julho de 1930 do texto de 1922; Parte III, cap. V, §1 \"The counter-battle in the centre\", p. 214 (PDF 230), diagrama XCVI, com a continuação na p. 215.",
           "citacaoCurta": "Znosko-Borovsky, The Middle Game in Chess, p. 214 — diagrama XCVI",
           "editionFile": "znosko-middle-game-1930",
+          "capitulo": "Parte III, cap. V, §1 — The counter-battle in the centre",
           "originalGame": "Oldřich Duras–Erich Cohn — os dois nomes estão impressos na legenda do diagrama XCVI (\"Black: E. Cohn. White: O. Duras.\"); evento e ano não constam da página.",
           "fenMethod": "Transcrição do diagrama impresso, casa por casa, sem sequência desde a abertura. Roque e en passant fixados em \"-\" e contadores normalizados. A página 230 do PDF abre o capítulo \"THE COUNTER-BATTLE\", traz a numeração 214, o rótulo do diagrama e a descrição da posição: as pretas têm um belo peão passado em Q5, ele está bloqueado, as brancas concentram cinco peças sobre o QBP que o protege, e por isso as pretas concebem o plano de avançar esse peão. A colocação da dama e do bispo brancos foi arbitrada pelo texto: a continuação impressa contém \"BxB\" capturando o bispo preto de f8, e só um bispo em a3 alcança f8 — de d2 é impossível. O diagrama foi lido em imagem a 600 dpi, com grade calibrada, e a leitura coincidiu: bispo em a3, dama em d2. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
@@ -2217,6 +2246,7 @@
           "bibliographicSource": "José Raúl Capablanca, Chess Fundamentals, reimpressão com copyright de 1921; Parte III, §22 \"The force of the threatened attack\", p. 84 (PDF 102), Exemplo 52, logo após 8.Df3.",
           "citacaoCurta": "Capablanca, Chess Fundamentals, p. 84 — Exemplo 52, após 8.Df3",
           "editionFile": "capablanca-fundamentals-reimpressao",
+          "capitulo": "Parte III, §22 — The force of the threatened attack",
           "originalGame": "José Raúl Capablanca–Rafael Blanco, torneio internacional de Havana, 1913 — nomes, praça e ano impressos no cabeçalho do Exemplo 52, p. 83.",
           "fenMethod": "Os 15 meios-lances impressos foram repetidos desde a posição inicial: 1.e4 e6 2.d4 d5 3.Cc3 dxe4 4.Cxe4 Cd7 5.Cf3 Cgf6 6.Cxf6+ Cxf6 7.Ce5 Bd6 8.Df3. A página 102 do PDF traz a numeração 84, os lances 7...B-Q3 e 8.Q-B3, o que as pretas jogaram na partida (8...P-B3) e o comentário do autor de que \"P-B4 was the right move\" — na notação descritiva do livro, o avanço do peão da dama para a quarta casa do bispo, ou seja, ...c5. Posição e afirmações conferidas por chess.js e por lib/meiojogo/afirmacoes.ts."
         }
