@@ -672,6 +672,188 @@
       "titulo": "A MELHOR FILEIRA para você colocar sua TORRE no Xadrez! — Tr. André Basso",
       "ressalva": null,
       "url": "https://www.youtube.com/watch?v=ugi2ZNc-h0s"
+    },
+    "treino": {
+      "ficha": {
+        "objetivo": "Achar, sozinho, a coluna em que nenhum dos dois lados tem peão — e depois olhar o fim dela, para dizer se a torre que entrar ali encontra alguma coisa ou volta como foi.",
+        "prerequisitos": [
+          "Saber que torre anda em linha reta, e que peão na frente dela a para.",
+          "Ler o tabuleiro por colunas, e não peça por peça.",
+          "Ter lido a dica: coluna aberta é o começo do plano, não o plano."
+        ],
+        "vocabulario": [
+          {
+            "termo": "coluna aberta",
+            "significa": "coluna sem nenhum peão, de nenhum dos dois lados. Se um dos lados tem peão nela, ela é semiaberta, que é outra coisa."
+          },
+          {
+            "termo": "casa de entrada",
+            "significa": "a casa no fim da coluna onde a sua torre consegue parar sem ser expulsa nem trocada de graça."
+          }
+        ],
+        "erroMaisProvavel": {
+          "qual": "apontar uma coluna em que só um dos lados tem peão — a semiaberta —, porque ela também parece vazia do lado de quem olha.",
+          "feedback": "Aberta é sem peão nenhum, dos dois lados. Se sobrou um peão do adversário na coluna, ela é semiaberta: continua valendo, mas o que há no caminho é um alvo, e não um vazio."
+        },
+        "limitesDaEvidencia": "O acerto prova que o aluno acha a coluna sem peões. Não prova que ele escolheria essa coluna para a torre, que ele veria a casa de entrada, nem que saberia o que fazer depois de chegar lá — que é a metade da dica que nenhum clique mede."
+      },
+      "reconhecimento": [
+        {
+          "id": "m9-d2-a",
+          "degrau": 2,
+          "fen": "2r2rk1/pp4pp/2n1pq2/2bp4/8/2N3PB/PP2PP1P/R2Q1RK1 w - - 0 15",
+          "lado": "pretas",
+          "tarefa": "coluna-aberta",
+          "resposta": [
+            "c1",
+            "c2",
+            "c3",
+            "c4",
+            "c5",
+            "c6",
+            "c7",
+            "c8"
+          ],
+          "legenda": "Rubinstein contra Capablanca, San Sebastián 1911. Jogam as brancas, e há seis peões de cada lado no tabuleiro.",
+          "material": null,
+          "apoio": {
+            "convite": "Percorra as oito colunas e conte os peões de cada uma, somando os dois lados. Uma delas dá zero.",
+            "modo": "contorno",
+            "realce": [
+              "b2",
+              "b7",
+              "d5"
+            ],
+            "solucao": "Acendemos os peões vizinhos: os de b2 e b7 de um lado, o de d5 do outro. Entre eles, na coluna do meio, não há peão nenhum — nem branco nem preto. A torre preta já está no topo dessa coluna, e o cavalo e o bispo pretos estão nela: peça na coluna não a fecha, só peão fecha."
+          },
+          "curadoria": {
+            "perceptivel": "O vão é de uma coluna, entre dois peões de um lado e um do outro, e uma torre preta já está no topo dele. A coluna tem duas peças pretas em cima, o que serve ao conceito em vez de atrapalhar: aberta quer dizer sem **peão**, e é essa a confusão que a ficha prevê.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 14
+            },
+            "adequacao": "Vinte e quatro peças e material igual, numa posição de abertura recém-terminada — que é onde a coluna aberta aparece na partida de um aluno. A tarefa não depende do lado; o `lado` gravado é o do aluno, que aqui é o das pretas."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 2 (Rubinstein–Capablanca, San Sebastián 1911), diagrama impresso na p. 165, depois do 14º lance das pretas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 165 — Rubinstein–Capablanca",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 2, Rubinstein–Capablanca, San Sebastián 1911",
+            "originalGame": "Rubinstein–Capablanca, San Sebastián 1911",
+            "fenMethod": "Reconstruída pelos 28 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — d4 d5 Nf3 c5 c4 e6 cxd5 exd5 Nc3 Nc6 g3 Be6 Bg2 Be7 O-O Rc8 dxc5 Bxc5 Ng5 Nf6 Nxe6 fxe6 Bh3 Qe7 Bg5 O-O Bxf6 Qxf6. Todo lance é legal por construção, e a troca cxd5 exd5 do quarto lance é o que abriu a coluna. A página 165 do exemplar de 1921 (PDF 183) foi lida em texto e traz o cabeçalho \"QUEEN'S GAMBIT DECLINED 165\" e o lance \"14. BxKt QxB\", que é o último desta linha."
+          }
+        },
+        {
+          "id": "m9-d2-b",
+          "degrau": 2,
+          "fen": "r2q2k1/1pp2bb1/p2p1n2/3Nr1p1/4Pp2/2PB4/PP1Q1PPB/1K1R3R w - - 2 23",
+          "lado": "brancas",
+          "tarefa": "coluna-aberta",
+          "resposta": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "h7",
+            "h8"
+          ],
+          "legenda": "Morrison contra Capablanca, Nova York 1918. Jogam as brancas, com os dois reis já rocados para lados diferentes.",
+          "material": null,
+          "apoio": {
+            "convite": "De novo, coluna por coluna, somando os peões dos dois lados. Desta vez a coluna vazia não está no meio do tabuleiro.",
+            "modo": "contorno",
+            "realce": [
+              "g2",
+              "g5"
+            ],
+            "solucao": "Acendemos o peão branco de g2 e o preto de g5. À direita deles não há peão nenhum, de nenhum dos dois lados — a última coluna está aberta de ponta a ponta, e a torre branca já está no pé dela."
+          },
+          "curadoria": {
+            "perceptivel": "A coluna vazia é a da borda, e ela ficou assim por uma troca de peões que a própria partida fez. Serve de contraste ao item anterior de propósito: a primeira coluna aberta que o aluno viu foi central, e ele precisa não guardar isso como regra.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 21
+            },
+            "adequacao": "Vinte e seis peças e material igual. É a posição mais cheia dos três itens, e vem em segundo lugar de propósito: o aluno já sabe o que procurar, e agora procura num tabuleiro com mais coisa competindo pelo olho."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 13 (Morrison–Capablanca, Nova York 1918), diagrama impresso na p. 236, depois do 22º lance das pretas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 236 — Morrison–Capablanca",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 13, Morrison–Capablanca, Nova York 1918",
+            "originalGame": "Morrison–Capablanca, Nova York 1918",
+            "fenMethod": "Reconstruída pelos 44 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — e4 e5 Nf3 Nc6 Bb5 d6 Nc3 Bd7 d4 exd4 Nxd4 g6 Nf3 Bg7 Bg5 Nf6 Qd2 h6 Bh4 O-O O-O-O Re8 Rhe1 g5 Bg3 Nh5 Nd5 a6 Bd3 Be6 c3 f5 h4 f4 hxg5 hxg5 Rh1 Bf7 Kb1 Ne5 Nxe5 Rxe5 Bh2 Nf6. A troca hxg5 hxg5 é o lance que abriu a coluna, e ela está na própria linha impressa. A página 236 do exemplar de 1921 (PDF 254) foi lida em texto e traz \"236 GAME 13\" com o comentário sobre a torre."
+          }
+        },
+        {
+          "id": "m9-d3-a",
+          "degrau": 3,
+          "fen": "3r3k/pp4bn/6p1/2p1qpPp/2B4P/2P1P1N1/PPQ2P2/5RK1 b - - 0 23",
+          "lado": "pretas",
+          "tarefa": "coluna-aberta",
+          "resposta": [
+            "d1",
+            "d2",
+            "d3",
+            "d4",
+            "d5",
+            "d6",
+            "d7",
+            "d8"
+          ],
+          "legenda": "Partida de dois jogadores comuns, sem anotação e sem diagrama: ninguém escolheu esta posição para ensinar nada. Jogam as pretas.",
+          "material": "As brancas têm um peão a mais — sete contra seis.",
+          "apoio": {
+            "convite": "São treze peões, e eles não estão espalhados por igual. Some os peões dos dois lados em cada coluna e ache a que dá zero.",
+            "modo": "contorno",
+            "realce": [
+              "c3",
+              "c5",
+              "e3"
+            ],
+            "solucao": "Acendemos os peões vizinhos: os de c3 e c5 de um lado, o de e3 do outro. Entre eles a coluna do meio não tem peão nenhum, e é a única do tabuleiro assim. A torre preta já está no topo dela."
+          },
+          "curadoria": {
+            "perceptivel": "O vão é de uma coluna só, entre dois peões de um lado e um do outro, e a torre preta parada no fim dela dá o segundo sinal. É mais difícil que os dois itens de livro de propósito: aqui há briga de peões na ala do rei disputando o olho, e ninguém arrumou a posição para a pergunta.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 15
+            },
+            "adequacao": "Vinte e três peças, meio-jogo cheio, sem xeque e sem peça pendurada. O peão a mais das brancas está declarado, para o aluno não gastar o exercício procurando o desequilíbrio."
+          },
+          "provenance": {
+            "bibliographicSource": "Recorte CC0 da base aberta do Lichess, puzzle 45LOl (lichess.org/training/45LOl): posição ao fim da linha tática do puzzle, quando a combinação já acabou. Os jogadores não são identificados no recorte.",
+            "citacaoCurta": "Lichess, puzzle 45LOl — posição ao fim da linha",
+            "editionFile": "lichess-open-database",
+            "capitulo": null,
+            "originalGame": "lichess.org/training/45LOl",
+            "fenMethod": "A FEN guardada no recorte é a posição antes do erro do adversário; esta é a do fim da linha, obtida jogando os lances do puzzle na chess.js (scripts/escolher-exercicios.ts). Passou pela porta 1 — sem xeque, sem mate em 1 e sem peça de cavalo ou mais pendurada — e pela porta 2, com Stockfish 18 na profundidade 12 medindo 15 centésimos entre a melhor linha e a segunda. A resposta única foi conferida por respostaDaTarefa, o mesmo juiz que vai julgar o clique."
+          }
+        }
+      ],
+      "aplicacao": {
+        "id": "m9-d4",
+        "usa": "m9-d3-a",
+        "pergunta": "A coluna d está aberta de ponta a ponta, e a torre preta já está nela. Entrar com ela em d1 ganha alguma coisa?",
+        "opcoes": [
+          {
+            "texto": "Não: a torre branca de f1 defende d1, e a torre preta seria trocada assim que chegasse.",
+            "certa": true,
+            "porque": "A coluna é a estrada; quem decide se ela vale é o fim dela. Em d1 a torre preta não ataca nada, e a torre branca de f1 chega em d1 pela primeira fileira — troca de torres, e a coluna aberta muda de dono. É essa a segunda metade da dica: coluna aberta sem casa de entrada útil é estrada que não leva a lugar nenhum."
+          },
+          {
+            "texto": "Sim: torre na última fileira do adversário sempre vale a troca que vier.",
+            "certa": false,
+            "porque": "\"Sempre\" é justamente o que esta dica pede para não pensar. Torre na primeira fileira do rival vale quando ela ataca alguma coisa de lá, ou quando o rei está preso e não tem casa. Aqui ela chega, não ameaça nada e é trocada — e trocar a única peça que usava a coluna aberta entrega a coluna."
+          }
+        ]
+      },
+      "reservas": []
     }
   },
   {
@@ -746,6 +928,179 @@
       "titulo": "Táticas - Remover a Defesa — Iniciativa Xadrez",
       "ressalva": null,
       "url": "https://www.youtube.com/watch?v=qqOzFayr6Mw"
+    },
+    "treino": {
+      "ficha": {
+        "objetivo": "Achar, sozinho, o peão do adversário que está parado na coluna em que ele tem peão e você não — e depois contar quem o defende, antes de decidir se dá para atacá-lo.",
+        "prerequisitos": [
+          "Saber a diferença entre coluna aberta e coluna semiaberta, que é a dica anterior.",
+          "Contar atacantes e defensores de uma casa.",
+          "Saber que peão só anda para a frente, e por isso não sai de uma coluna."
+        ],
+        "vocabulario": [
+          {
+            "termo": "coluna semiaberta",
+            "significa": "coluna em que você não tem peão e o adversário tem. Do seu lado ela está limpa; do lado dele há um alvo parado."
+          },
+          {
+            "termo": "atacar o defensor",
+            "significa": "em vez de somar peças contra o alvo que já está defendido, mirar a peça ou o peão que o defende, para que o alvo fique sozinho."
+          }
+        ],
+        "erroMaisProvavel": {
+          "qual": "tocar num peão do adversário que está numa coluna em que o aluno também tem peão — um peão que parece exposto, mas cuja coluna não é semiaberta.",
+          "feedback": "O que faz o peão ser alvo aqui não é ele estar exposto, é a **sua** coluna estar limpa: sem peão seu na frente, suas torres enxergam o peão dele de ponta a ponta. Com peão seu na mesma coluna, a estrada está fechada."
+        },
+        "limitesDaEvidencia": "O acerto prova que o aluno acha o peão parado na coluna semiaberta. Não prova que ele contaria os defensores, que escolheria atacar o defensor em vez do alvo, nem que ganharia o peão — e a dica diz, com todas as letras, que atacar não é ganhar."
+      },
+      "reconhecimento": [
+        {
+          "id": "m10-d2-a",
+          "degrau": 2,
+          "fen": "r2r2k1/pb1nqppp/1pp1p3/8/2BPP3/2Q2N2/PP3PPP/2R1R1K1 w - - 3 15",
+          "lado": "brancas",
+          "tarefa": "peao-na-semiaberta",
+          "resposta": [
+            "c6"
+          ],
+          "legenda": "Marshall contra Capablanca, Nova York 1918. Jogam as brancas; as pretas têm sete peões no tabuleiro.",
+          "material": null,
+          "apoio": {
+            "convite": "Ache primeiro a coluna em que as brancas não têm peão nenhum e as pretas têm. O peão preto que estiver nela é a resposta.",
+            "modo": "contem",
+            "realce": [
+              "a7",
+              "b6",
+              "c6",
+              "e6",
+              "f7",
+              "g7",
+              "h7"
+            ],
+            "solucao": "Os sete peões pretos estão acesos. As brancas têm peão em a, b, d, e, f, g e h — falta só uma coluna, e é nela que está o peão preto que nenhuma torre branca precisa contornar para enxergar."
+          },
+          "curadoria": {
+            "perceptivel": "A torre branca já está no pé da coluna, o que dá o segundo sinal a quem não achou pelo primeiro. E o peão alvo está encostado em outros dois peões pretos, o que impede a leitura fácil de 'o alvo é o peão que está sozinho' — que é confusão com o conceito da m12.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 0
+            },
+            "adequacao": "Vinte e seis peças e material igual, com as duas estruturas inteiras à vista. O salto de 0 centésimo entre as duas melhores linhas diz que a posição não tem lance urgente escondido competindo com a pergunta."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 14 (Marshall–Capablanca, Nova York 1918), diagrama impresso na p. 239, depois do 14º lance das pretas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 239 — Marshall–Capablanca",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 14, Marshall–Capablanca, Nova York 1918",
+            "originalGame": "Marshall–Capablanca, Nova York 1918",
+            "fenMethod": "Reconstruída pelos 28 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — d4 d5 Nf3 Nf6 c4 e6 Nc3 Nbd7 Bg5 Be7 e3 O-O Rc1 c6 Qc2 dxc4 Bxc4 Nd5 Bxe7 Qxe7 O-O Nxc3 Qxc3 b6 e4 Bb7 Rfe1 Rfd8. Todo lance é legal por construção. A página 239 do exemplar de 1921 (PDF 257) foi lida em texto e traz o cabeçalho \"QUEEN'S GAMBIT DECLINED 239\"."
+          }
+        },
+        {
+          "id": "m10-d2-b",
+          "degrau": 2,
+          "fen": "2kr3r/2p2npp/1p3p2/pPqNp3/2P1P3/3PPR2/6PP/1R2Q1K1 b - - 0 18",
+          "lado": "pretas",
+          "tarefa": "peao-na-semiaberta",
+          "resposta": [
+            "d3"
+          ],
+          "legenda": "Capablanca contra Janowski, São Petersburgo 1914. Jogam as pretas, com o rei preto já em c8 e as duas torres ligadas.",
+          "material": null,
+          "apoio": {
+            "convite": "Agora a coluna limpa é das pretas. Ache a coluna em que as pretas não têm peão nenhum e as brancas têm — e toque no peão branco que está nela.",
+            "modo": "contem",
+            "realce": [
+              "b5",
+              "c4",
+              "d3",
+              "e3",
+              "e4",
+              "g2",
+              "h2"
+            ],
+            "solucao": "Os sete peões brancos estão acesos. As pretas têm peão em a, b, c, e, f, g e h — falta uma coluna só, e o peão branco que está nela é o alvo. Repare que os dois peões brancos da coluna e não interessam aqui: naquela coluna as pretas também têm peão."
+          },
+          "curadoria": {
+            "perceptivel": "A torre preta de d8 está apontada para o alvo, e o vão da coluna do lado do aluno é o único. O item troca a cor em relação ao anterior, para o aluno procurar a relação — a minha coluna limpa, o peão dele parado nela — e não a casa que ele decorou.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 12
+            },
+            "adequacao": "Vinte e quatro peças, material igual, reis rocados para lados diferentes — a posição em que este conceito de fato aparece na partida de um aluno de doze anos. Os peões brancos de e3 e e4 na mesma coluna são ruído honesto: eles convidam ao erro que a ficha prevê, e o apoio o desfaz."
+          },
+          "provenance": {
+            "bibliographicSource": "J. R. Capablanca, Chess Fundamentals, Harcourt, Brace and Company, Nova York, 1921; Illustrative Games, Game 11 (Capablanca–Janowski, São Petersburgo 1914), diagrama impresso na p. 223, depois do 18º lance das brancas.",
+            "citacaoCurta": "Capablanca, Chess Fundamentals, p. 223 — Capablanca–Janowski",
+            "editionFile": "capablanca-1921",
+            "capitulo": "Illustrative Games — Game 11, Capablanca–Janowski, São Petersburgo 1914",
+            "originalGame": "Capablanca–Janowski, São Petersburgo 1914",
+            "fenMethod": "Reconstruída pelos 35 meios-lances impressos, convertidos de notação descritiva para SAN por lib/meiojogo/descritiva.ts e jogados na chess.js desde a posição inicial — e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 Nc3 Bc5 d3 Bg4 Be3 Bxe3 fxe3 Qe7 O-O O-O-O Qe1 Nh6 Rb1 f6 b4 Nf7 a4 Bxf3 Rxf3 b6 b5 cxb5 axb5 a5 Nd5 Qc5 c4. Todo lance é legal por construção, e a troca b5 cxb5 axb5 é o que limpou a coluna do aluno. A página 223 do exemplar de 1921 (PDF 241) foi lida em texto e traz \"RUY LOPEZ 223\" com o lance 14 desta partida."
+          }
+        },
+        {
+          "id": "m10-d3-a",
+          "degrau": 3,
+          "fen": "r2q1rk1/4pp1p/p2p2p1/1p6/4Q3/P6P/1PP1BPP1/3R1RK1 b - - 0 17",
+          "lado": "pretas",
+          "tarefa": "peao-na-semiaberta",
+          "resposta": [
+            "c2"
+          ],
+          "legenda": "Partida de dois jogadores comuns, sem anotação e sem diagrama. Jogam as pretas.",
+          "material": "As brancas têm um bispo a mais e um peão a menos — a posição saiu de uma combinação, e o material não está igual.",
+          "apoio": {
+            "convite": "As pretas têm sete peões e as brancas seis. Ache a coluna em que as pretas não têm nenhum e as brancas têm, e toque no peão branco parado ali.",
+            "modo": "contem",
+            "realce": [
+              "a3",
+              "b2",
+              "c2",
+              "f2",
+              "g2",
+              "h3"
+            ],
+            "solucao": "Os seis peões brancos estão acesos. As pretas têm peão em a, b, d, e, f, g e h; falta uma coluna só, e o peão branco parado nela é o que as torres pretas enxergariam sem nada no caminho."
+          },
+          "curadoria": {
+            "perceptivel": "A coluna limpa das pretas é única, e o peão branco nela está na segunda fileira, parado onde nasceu. Nenhuma torre preta está na coluna ainda — de propósito: aqui ninguém arrumou a posição para a pergunta, e o aluno acha o alvo sem o segundo sinal que os dois itens de livro davam.",
+            "portas": {
+              "porta1": "passou",
+              "profundidade": 12,
+              "salto": 2
+            },
+            "adequacao": "Vinte e duas peças, sem xeque e sem peça pendurada, e o salto de 2 centésimos diz que não há tática pendente disputando a atenção. O desequilíbrio de material está declarado, e ele é do lado do aluno para pior — o que impede a leitura de que o alvo aparece só quando se está ganhando."
+          },
+          "provenance": {
+            "bibliographicSource": "Recorte CC0 da base aberta do Lichess, puzzle 0UQkF (lichess.org/training/0UQkF): posição ao fim da linha tática do puzzle, quando a combinação já acabou. Os jogadores não são identificados no recorte.",
+            "citacaoCurta": "Lichess, puzzle 0UQkF — posição ao fim da linha",
+            "editionFile": "lichess-open-database",
+            "capitulo": null,
+            "originalGame": "lichess.org/training/0UQkF",
+            "fenMethod": "A FEN guardada no recorte é a posição antes do erro do adversário; esta é a do fim da linha, obtida jogando os lances do puzzle na chess.js (scripts/escolher-exercicios.ts). Passou pela porta 1 — sem xeque, sem mate em 1 e sem peça de cavalo ou mais pendurada — e pela porta 2, com Stockfish 18 na profundidade 12 medindo 2 centésimos entre a melhor linha e a segunda. A resposta única foi conferida por respostaDaTarefa, o mesmo juiz que vai julgar o clique."
+          }
+        }
+      ],
+      "aplicacao": {
+        "id": "m10-d4",
+        "usa": "m10-d3-a",
+        "pergunta": "Você achou o peão branco de c2, parado na coluna em que as pretas não têm peão. Pôr uma torre preta nessa coluna já ganha o peão?",
+        "opcoes": [
+          {
+            "texto": "Não: a dama branca de e4 olha c2 pela diagonal, então a torre encontraria um peão defendido.",
+            "certa": true,
+            "porque": "Torre não come o que está defendido — come e é trocada por peça maior. A conta é de atacantes e defensores, e aqui está um a um. O caminho da dica é somar um segundo atacante, ou atacar o defensor em vez do alvo, e não empurrar mais madeira contra o mesmo peão."
+          },
+          {
+            "texto": "Sim: peão não foge, e peão parado em coluna semiaberta é peão que cai.",
+            "certa": false,
+            "porque": "Peão não foge mesmo, e é isso que faz dele um alvo — não o que faz dele um peão perdido. Confundir \"alvo\" com \"ganho\" é exatamente o erro que esta dica existe para evitar: a coluna semiaberta dá o endereço, e a conta de quem ataca e quem defende dá a resposta."
+          }
+        ]
+      },
+      "reservas": []
     }
   },
   {
@@ -934,6 +1289,7 @@
           "material": null,
           "apoio": {
             "convite": "Olhe os peões pretos coluna por coluna. Em qual delas não há peão preto nenhum nas duas colunas do lado?",
+            "modo": "contem",
             "realce": [
               "a6",
               "b5",
@@ -975,6 +1331,7 @@
           "material": null,
           "apoio": {
             "convite": "Agora o peão sem vizinho é branco. Percorra as colunas uma a uma: em qual delas há peão branco sem nenhum peão branco nas colunas do lado?",
+            "modo": "contem",
             "realce": [
               "a4",
               "c3",
@@ -1017,6 +1374,7 @@
           "material": "As pretas têm um bispo a mais e um peão a menos — a posição saiu de uma combinação, e o material não está igual.",
           "apoio": {
             "convite": "São seis peões pretos. Percorra as colunas da esquerda para a direita e pare na que tem peão preto sem nenhum peão preto nas colunas vizinhas.",
+            "modo": "contem",
             "realce": [
               "a6",
               "b5",

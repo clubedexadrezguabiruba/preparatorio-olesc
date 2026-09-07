@@ -5,7 +5,13 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { Chess } from "chess.js";
 import { lancesDescritivos, lerPartida, normalizar } from "./descritiva.ts";
-import { problemasDoTreino, saldoDeMaterial, validarDicas, type Dica } from "./dicas.ts";
+import {
+  capitulosRepetidosNoTreino,
+  problemasDoTreino,
+  saldoDeMaterial,
+  validarDicas,
+  type Dica,
+} from "./dicas.ts";
 import { respostaDaTarefa, tarefaPorId, MAPA } from "./exercicios.ts";
 import { porta1 } from "./portas.ts";
 
@@ -299,4 +305,41 @@ test("a normalização tira anotação e conserta o sinal de captura do OCR", ()
   assert.equal(normalizar("B - B 7 ch"), "B-B7");
   assert.equal(normalizar("P - Q 4"), "P-Q4");
   assert.equal(normalizar("Resigns."), "RESIGNS");
+});
+
+/* ------------------------------------------------------------------ *
+ * O capítulo dividido entre dicas
+ * ------------------------------------------------------------------ */
+
+test("nenhum capítulo do treino é dividido entre duas dicas", () => {
+  const problemas = capitulosRepetidosNoTreino(DICAS);
+  assert.deepEqual(problemas, [], problemas.map((p) => `${p.onde}: ${p.mensagem}`).join(" | "));
+});
+
+test("adversarial: duas dicas com posição da mesma partida reprovam", () => {
+  // O defeito que eu quase publiquei nesta sessão: m9 e m10 saindo da mesma
+  // partida do Capablanca, a sete meios-lances de distância. Os dois passavam
+  // no teto por capítulo, que conta por dica e não enxerga a repetição.
+  const m9 = DICAS.find((d) => d.id === "m9");
+  const m10 = DICAS.find((d) => d.id === "m10");
+  assert.ok(m9?.treino && m10?.treino);
+  const copia = JSON.parse(JSON.stringify([m9, m10])) as Dica[];
+  copia[1].treino!.reconhecimento[0].provenance.capitulo =
+    copia[0].treino!.reconhecimento[0].provenance.capitulo;
+  copia[1].treino!.reconhecimento[0].provenance.editionFile =
+    copia[0].treino!.reconhecimento[0].provenance.editionFile;
+  const problemas = capitulosRepetidosNoTreino(copia);
+  assert.equal(problemas.length, 1, JSON.stringify(problemas));
+  assert.equal(problemas[0].codigo, "CAPITULO_DIVIDIDO_ENTRE_DICAS");
+});
+
+test("duas posições do mesmo capítulo **na mesma dica** continuam passando", () => {
+  // O teto por dica é 2, e ele continua valendo: o que a regra nova proíbe é
+  // dividir um capítulo entre dicas, não usá-lo duas vezes no mesmo conceito.
+  const m9 = DICAS.find((d) => d.id === "m9");
+  assert.ok(m9?.treino);
+  const copia = JSON.parse(JSON.stringify(m9)) as Dica;
+  copia.treino!.reconhecimento[1].provenance.capitulo =
+    copia.treino!.reconhecimento[0].provenance.capitulo;
+  assert.deepEqual(capitulosRepetidosNoTreino([copia]), []);
 });

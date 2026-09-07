@@ -209,6 +209,24 @@ export const ApoioSchema = z
      */
     convite: z.string().min(20),
     /**
+     * Qual dos dois formatos de apoio este é.
+     *
+     * Há dois jeitos honestos de estreitar o campo, e eles são opostos:
+     *
+     * - **`contem`** — acende um conjunto que **inclui** a resposta e é maior
+     *   que ela. "Toque no peão sem vizinho" com os seis peões pretos acesos: a
+     *   resposta está ali dentro, e ainda há o que decidir.
+     * - **`contorno`** — acende o que **define** a resposta por ausência, e não
+     *   a toca. "Ache a coluna sem peão nenhum" com todos os peões acesos: o vão
+     *   é a resposta, e acendê-lo seria entregá-la.
+     *
+     * Sem este campo, a conferência teria de escolher uma das duas regras e
+     * chamar a outra de defeito. `coluna-aberta` responde com as oito casas da
+     * coluna, e um realce que a contivesse e fosse maior não cabe no teto de 8 —
+     * a regra do `contem` tornaria a tarefa inexequível.
+     */
+    modo: z.enum(["contem", "contorno"]),
+    /**
      * Nível 2 — as casas que a tela acende para estreitar o campo.
      *
      * O teto é 8, e não os 4 de {@link PassoSchema}, porque o trabalho é outro:
@@ -592,6 +610,48 @@ export function saldoDeMaterial(fen: string): number {
 }
 
 /**
+ * As posições de treino que dividem capítulo entre dicas diferentes.
+ *
+ * O teto de citação é **por dica**, e por isso não vê isto: duas posições da
+ * mesma partida do Capablanca, uma em m9 e outra em m10, passam nos dois tetos
+ * e chegam ao aluno como quase o mesmo tabuleiro em duas semanas seguidas.
+ * Aconteceu nesta sessão — Fig145 e Fig147 são a mesma partida a sete
+ * meios-lances de distância —, e foi pego a olho. Passa a ser pego aqui.
+ *
+ * O risco é o pior tipo: o aluno responde o segundo item pela memória da tela
+ * do primeiro, o registro conta isso como reconhecimento, e o relatório afirma
+ * transferência onde houve lembrança. É o mesmo raciocínio do achado do Bloco 2
+ * sobre as cinco posições do §22 do Capablanca, agora com gate.
+ */
+export function capitulosRepetidosNoTreino(
+  dicas: readonly Dica[],
+): { codigo: string; onde: string; mensagem: string }[] {
+  const porCapitulo = new Map<string, { dica: string; item: string }[]>();
+  for (const dica of dicas) {
+    for (const item of [...(dica.treino?.reconhecimento ?? []), ...(dica.treino?.reservas ?? [])]) {
+      const capitulo = item.provenance.capitulo;
+      if (capitulo === null) continue;
+      const chave = `${item.provenance.editionFile} · ${capitulo}`;
+      porCapitulo.set(chave, [...(porCapitulo.get(chave) ?? []), { dica: dica.id, item: item.id }]);
+    }
+  }
+  const problemas: { codigo: string; onde: string; mensagem: string }[] = [];
+  for (const [chave, usos] of porCapitulo) {
+    const dicasDistintas = new Set(usos.map((u) => u.dica));
+    if (dicasDistintas.size < 2) continue;
+    problemas.push({
+      codigo: "CAPITULO_DIVIDIDO_ENTRE_DICAS",
+      onde: chave,
+      mensagem:
+        `os itens ${usos.map((u) => u.item).join(", ")} saem do mesmo capítulo em dicas ` +
+        `diferentes — duas posições da mesma partida chegam ao aluno como quase o mesmo ` +
+        `tabuleiro, e ele responde a segunda pela memória da primeira`,
+    });
+  }
+  return problemas;
+}
+
+/**
  * Os problemas do treino de uma dica — a conferência que o gate roda.
  *
  * Ela é longa porque cada linha corresponde a um jeito conhecido de o item
@@ -689,19 +749,35 @@ export function problemasDoTreino(dica: Dica): { codigo: string; mensagem: strin
     }
 
     const realce = new Set(item.apoio.realce);
-    const faltando = item.resposta.filter((c) => !realce.has(c));
-    if (faltando.length > 0) {
-      erro(
-        "APOIO_NAO_CONTEM_A_RESPOSTA",
-        `${onde}: o realce do apoio não acende ${faltando.join(", ")} — ele estreitaria o campo ` +
-          `para longe da resposta`,
-      );
-    } else if (item.apoio.realce.length <= item.resposta.length) {
-      erro(
-        "APOIO_E_A_RESPOSTA",
-        `${onde}: o realce do apoio tem ${item.apoio.realce.length} casa(s) para uma resposta de ` +
-          `${item.resposta.length} — o nível 2 virou o nível 3`,
-      );
+    if (item.apoio.modo === "contem") {
+      const faltando = item.resposta.filter((c) => !realce.has(c));
+      if (faltando.length > 0) {
+        erro(
+          "APOIO_NAO_CONTEM_A_RESPOSTA",
+          `${onde}: o apoio é "contem" e não acende ${faltando.join(", ")} — ele estreitaria o ` +
+            `campo para longe da resposta`,
+        );
+      } else if (item.apoio.realce.length <= item.resposta.length) {
+        erro(
+          "APOIO_E_A_RESPOSTA",
+          `${onde}: o realce do apoio tem ${item.apoio.realce.length} casa(s) para uma resposta ` +
+            `de ${item.resposta.length} — o nível 2 virou o nível 3`,
+        );
+      }
+    } else {
+      const tocadas = item.resposta.filter((c) => realce.has(c));
+      if (tocadas.length > 0) {
+        erro(
+          "CONTORNO_TOCA_A_RESPOSTA",
+          `${onde}: o apoio é "contorno" e acende ${tocadas.join(", ")}, que é resposta — ` +
+            `contorno mostra o que **define** a resposta por ausência, e não a resposta`,
+        );
+      } else if (item.apoio.realce.length < 2) {
+        erro(
+          "CONTORNO_CURTO_DEMAIS",
+          `${onde}: um contorno de uma casa só não desenha ausência nenhuma`,
+        );
+      }
     }
 
     if (Math.abs(saldoDeMaterial(item.fen)) >= 1 && item.material === null) {

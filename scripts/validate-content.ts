@@ -41,6 +41,7 @@ import { respostasDe } from "../lib/lesson/tree.ts";
 import { problemasDaPosicao } from "../lib/meiojogo/afirmacoes.ts";
 import {
   CAPITULO_CAP,
+  capitulosRepetidosNoTreino,
   posicoesCitadas,
   problemasDeCitacao,
   problemasDoTreino,
@@ -1565,24 +1566,41 @@ const dicas: Dica[] = [];
     }
   }
 
+  // O capítulo dividido entre dicas: o teto por dica não o vê, e ele produz
+  // duas telas quase iguais em semanas seguidas.
+  for (const { codigo, onde, mensagem } of capitulosRepetidosNoTreino(dicas)) {
+    fail(codigo, onde, mensagem);
+  }
+
   // A concentração por capítulo no **módulo inteiro** — que é o que o teto, por
   // ser por dica, não vê. Não reprova: a regra aprovada é por dica, e mudá-la
   // aqui seria decidir sozinho o que foi decidido em outro lugar. Mas o número
   // fica impresso, porque cinco posições de um capítulo só são exatamente a
   // forma de reproduzir uma seleção que o teto foi escrito para impedir.
   if (dicas.length > 0) {
+    // Conta **todas** as posições de livro do módulo, o ensino e o treino. Foi
+    // só o ensino até o Bloco 3, e aí a conta deixou de servir: as posições de
+    // treino são dezesseis contra trinta, e é nelas que a concentração cresce.
     const porCapitulo = new Map<string, string[]>();
+    const porObra = new Map<string, number>();
+    let deLivroNoModulo = 0;
     for (const dica of dicas) {
-      for (const posicao of dica.posicoes) {
-        if (posicao.provenance.capitulo === null) continue;
-        const chave = `${posicao.provenance.editionFile} · ${posicao.provenance.capitulo}`;
+      for (const { provenance } of posicoesCitadas(dica)) {
+        if (provenance.capitulo === null) continue;
+        deLivroNoModulo += 1;
+        const chave = `${provenance.editionFile} · ${provenance.capitulo}`;
         porCapitulo.set(chave, [...(porCapitulo.get(chave) ?? []), dica.id]);
+        porObra.set(provenance.editionFile, (porObra.get(provenance.editionFile) ?? 0) + 1);
       }
     }
     const ordenado = [...porCapitulo].sort((a, b) => b[1].length - a[1].length);
+    const obras = [...porObra].sort((a, b) => b[1] - a[1]);
     console.log(
-      `  capítulos citados: ${ordenado.length} para ${dicas.reduce((n, d) => n + d.posicoes.length, 0)} posições` +
+      `  capítulos citados: ${ordenado.length} para ${deLivroNoModulo} posições de livro` +
         `; o mais usado é "${ordenado[0]?.[0]}" com ${ordenado[0]?.[1].length} (${ordenado[0]?.[1].join(", ")})`,
+    );
+    console.log(
+      `  obras: ${obras.map(([slug, n]) => `${slug} ${n}`).join(" · ")}`,
     );
   }
 
