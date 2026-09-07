@@ -55,6 +55,34 @@ subagente consegue achar página por busca de texto (teste da §4).
 | 20 | `pandolfini-endgame-course` | Pandolfini, _Endgame Course_ | Fireside / Simon & Schuster, Nova York, 1988 | 2 | OCR em 2026-08-18 |
 | 21 | `seirawan-winning-chess-endings` | Seirawan, _Winning Chess Endings_ | a confirmar na folha de rosto | 2 | sim (240 pág., 6.959 caracteres) |
 | 22 | `posicoes-do-preparatorio` | Posições compostas pela autoria do preparatório | conteúdo do repositório, sem arquivo | sem teto (CC0) | n/a |
+| 23 | `capablanca-fundamentals-reimpressao` | Capablanca, _Chess Fundamentals_ | Harcourt, Brace, Nova York / G. Bell and Sons, Londres; reimpressão com copyright de 1921 e prefácio datável de 1934 | sem teto | sim (270 pág., 2.551 caracteres) |
+| 24 | `nimzowitsch-my-system-1930` | Nimzowitsch, _My System_ | Harcourt, Brace, Nova York, 1930; versão inglesa de Philip Hereford | 2 | sim (330 pág., 7.220 caracteres) |
+| 25 | `znosko-middle-game-1930` | Znosko-Borovsky, _The Middle Game in Chess_ | G. Bell and Sons, Londres, 1930 — reimpressão de julho de 1930 do texto de 1922 | 2 | sim (248 pág., 6.576 caracteres) |
+
+**As entradas 23 a 25 são o meio-jogo, e são as três primeiras obras do corpus
+que não são de finais.** As trinta dicas de `content/meio-jogo.json` saem delas:
+doze de Capablanca, onze de Nimzowitsch e sete de Znosko-Borovsky, uma posição
+por dica. Três notas que o registro em JSON também carrega, e que valem repetir
+aqui porque decidem uso:
+
+1. **A entrada 23 não substitui a 1.** São duas tiragens diferentes do mesmo
+   título: a de 1921 e uma reimpressão posterior que traz um prefácio novo,
+   datável de 1934 por dizer "first published thirteen years ago". Enquanto as
+   duas não forem comparadas página a página, cada uma responde pela própria
+   paginação — e é a paginação que a proveniência cita.
+2. **Nimzowitsch e Znosko-Borovsky entram como `protected: true` por precaução,
+   não por conclusão jurídica.** O texto dos dois autores já é livre no Brasil
+   (Nimzowitsch morreu em 1935, Znosko-Borovsky em 1954). O que está em aberto é
+   a **tradução**, que é obra separada com prazo próprio: a morte de Philip
+   Hereford nunca foi levantada, e o tradutor do Znosko não é nomeado em página
+   nenhuma do volume — o prefácio diz apenas que P. W. Sergeant *revisou* a
+   tradução. Marcar as duas como protegidas não custa nada hoje, porque nenhuma
+   dica usa mais de uma posição da mesma obra e o teto de 2 nunca morde; vira
+   `false` no dia em que as datas aparecerem.
+3. **Os três deslocamentos entre página impressa e página do PDF foram medidos,
+   e não estimados:** Capablanca +18, Nimzowitsch +22, Znosko-Borovsky +16. Cada
+   página citada nas trinta proveniências foi aberta e conferida por extração de
+   texto — cabeçalho, número impresso e o trecho citado.
 
 **A entrada 22 não é um livro.** `posicoes-do-preparatorio` é o registro da
 **autoria própria**, e ela existe porque a §12.2 exige que toda posição cite

@@ -225,6 +225,36 @@
       "license": "obra protegida — uso sob o teto da §12.7",
       "file": "seirawan-winning-chess-endings.pdf",
       "role": "Livro-base didático. O cap. I \"Basic Mates\" ensina os mates elementares pelo método da caixa (\"Boxing the King\"), com princípios numerados e prosa de iniciante. Base didática do N0-2B-MATE; origina posição sob teto."
+    },
+    {
+      "slug": "capablanca-fundamentals-reimpressao",
+      "title": "Chess Fundamentals",
+      "author": "José Raúl Capablanca",
+      "edition": "Harcourt, Brace and Company, Nova York; G. Bell and Sons, Londres. Reimpressão sem ano de tiragem impresso; folha de rosto e verso lidos (\"COPYRIGHT, 1921, BY HARCOURT, BRACE AND COMPANY, INC.\"), e o prefácio acrescentado diz \"first published thirteen years ago\", o que o data de 1934. 270 páginas de PDF; deslocamento medido: página impressa + 18 = página do PDF.",
+      "protected": false,
+      "license": "domínio público — Capablanca morreu em 1942, e o Brasil conta vida do autor mais 70 anos",
+      "file": "capablanca-fundamentals-reimpressao-biblioteca.pdf",
+      "role": "Fonte primária do meio-jogo: 12 posições, uma por dica. Entrada separada de \"capablanca-1921\" de propósito — é outra tiragem, com um prefácio que a de 1921 não tem, e o registro grava a edição porque é dela que sai o número de página. Enquanto as duas não forem comparadas página a página, citar uma pela outra seria atribuir paginação a um exemplar que ninguém abriu."
+    },
+    {
+      "slug": "nimzowitsch-my-system-1930",
+      "title": "My System",
+      "author": "Aron Nimzowitsch",
+      "edition": "Harcourt, Brace and Company, Nova York, 1930; versão inglesa de Philip Hereford. Folha de rosto e verso lidos (\"English Version by PHILIP HEREFORD\", \"COPYRIGHT, 1930, by HARCOURT, BRACE AND COMPANY, INC.\"). 330 páginas de PDF; deslocamento medido: página impressa + 22 = página do PDF.",
+      "protected": true,
+      "license": "classificação conservadora, à espera de uma data. O texto de Nimzowitsch é livre no Brasil desde 2006 (morte em 1935 mais 70 anos), mas a tradução é obra separada com prazo próprio e a morte de Philip Hereford não foi levantada. Marcar como protegida não custa nada aqui — nenhuma dica usa mais de uma posição da mesma obra — e vira false no dia em que a data aparecer.",
+      "file": "nimzowitsch-my-system-1930.pdf",
+      "role": "Fonte primária do meio-jogo: 11 posições, uma por dica. É de onde saem a coluna aberta, o posto, o bloqueio do peão passado, a cadeia de peões e o peão dama isolado."
+    },
+    {
+      "slug": "znosko-middle-game-1930",
+      "title": "The Middle Game in Chess",
+      "author": "Eugène Znosko-Borovsky",
+      "edition": "G. Bell and Sons, Londres, 1930. Folha de rosto e página de créditos lidas: \"First Published July, 1922 / Reprinted May, 1923 / July, 1930\" — é a reimpressão de julho de 1930 do texto de 1922, e não o livro reescrito de 1938 que leva o mesmo título. O prefácio diz \"The translation has been revised by Mr. P. W. Sergeant\": Sergeant revisou a tradução, e o tradutor original não é nomeado em lugar nenhum do volume. 248 páginas de PDF; deslocamento medido: página impressa + 16 = página do PDF.",
+      "protected": true,
+      "license": "classificação conservadora. Znosko-Borovsky morreu em 1954 e o texto dele é livre no Brasil desde 2025; Sergeant morreu em 1952 e a revisão dele, desde 2023. Quem traduziu não está escrito no livro, e é o prazo do tradutor que decide. Sem esse nome, a obra fica marcada como protegida.",
+      "file": "znosko-borovsky-middle-game-1930-reimpressao.pdf",
+      "role": "Fonte primária do meio-jogo: 7 posições, uma por dica. É o único livro do levantamento inteiro que trata só do meio-jogo, e de onde saem as partidas de mestre — Blackburne–Lasker, Lasker–Capablanca, Tarrasch–Duras, Schlechter–Tarrasch, Duras–Cohn."
     }
   ]
 }
