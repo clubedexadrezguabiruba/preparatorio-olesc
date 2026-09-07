@@ -875,3 +875,70 @@ Citar essa prosa **não resolve** `724ae4ca`, `5250fcfd` e `a46c0bd6`: ela
 sem argumento. Essas três dependem de comprar o curso completo ou de achar outra
 fonte — não de escrever melhor.
 
+---
+
+## 18. Bloco "só ordem de lances" entregue — as 5 que não custam um lance, 7/9/2026
+
+As cinco linhas da §17 cujas âncoras de comentário caem **todas** em prosa da
+fonte. A fonte chega na mesma posição por outra porta e volta a bater antes do
+fim, então não há lance a trocar: **o trabalho é escrever o argumento e dizer de
+quem ele é.**
+
+| Linha | Quebra em | A fonte nova | Onde ela volta a bater |
+|---|---|---|---|
+| `brancas-escocesa-903edd82` | `6.Cc3` | **Steil-Antoni & Astaneh, "Scotch"**, *Classical Variation #1* e *#2* | `7…d6`, e o `8.Be3` é o lance dela |
+| `pretas-siciliana-71793593` | `5.Be3` | **Plichta, "Dragão Acelerado"**, tronco `5.Cc3 Bg7 6.Be3 Cf6 7.Bc4 O-O` (#2 a #13) | `6…Bg7` |
+| `pretas-siciliana-1dc3b0cb` | `5.Bc4` | idem, mesmas variantes | `7.Cc3` |
+| `pretas-siciliana-685348cf` | `3…g6` | **Plichta**, variantes *#30* a *#32* | `5.Cxd4` |
+| `pretas-outras-2ffa3251` | `2.Cc3` | **Sielecki, "QGD"**, *The English* + **Kushager, "1.d4 d5"**, *The Manhattan #1–#3* | `3.d4` |
+
+### O que cada uma ganhou de argumento
+
+- **Escocesa** — o curso escolhe `5.Cb3` por dois motivos escritos: menos teoria
+  decorada, e é a que permite a montagem mais agressiva. E ele mesmo diz que
+  `6.De2` e `6.Cc3` dão no mesmo, sendo **a nossa a mais popular das duas** — é
+  isso que o comentário do `8.Be3` agora conta, para o aluno não estranhar.
+- **Dragão, `5.Be3`** — por que o bispo dele acaba sempre em e3: é o único lance
+  que defende o cavalo de d4 e desenvolve no mesmo tempo.
+- **Dragão, `5.Bc4`** — enquanto o bispo estiver naquela diagonal o `…d5` não
+  sai; o autor escolhe o roque no lugar do `…Da5` que jogou por anos.
+- **`2.Cc3`** — o curso recomenda `2…Cc6` **justamente** para poder responder
+  `3.Cf3` com `3…g6`. E ganhou o melhor achado do bloco: ao pôr o cavalo em c3
+  cedo, as brancas abrem mão do Maróczy sozinhas, porque o peão de c2 teria de
+  passar por c3 para chegar a c4.
+- **`1.c4`** — o `4…Cbd7` tira o xeque `Da4+` do caminho, que mataria o `…c5`
+  antes de nascer; o `5…Bb4` prega o cavalo que ataca d5; o `6…c5` é o ponto da
+  variante. Fecha a correção 2 da §17.
+
+### As tags `[Fonte]` de três jogos foram partidas com `||`
+
+Mesmo problema do bloco A: um jogo PGN carrega mais de uma linha e a tag é uma
+só. As metades sem fonte nova ficam **declaradas dentro da própria tag**:
+
+- **Escocesa, jogo 1** — as outras três (`4…Cf6`, `5…d6`, `5…Cf6`) seguem no
+  Grigoryan; as duas do `5.Dxd4` estão bloqueadas pela correção 3 da §17.
+- **Dragão, jogo do 5º lance** — o `5.Cxc6` fica em Livro + motor. O Plichta
+  cobre esse lance na variante #5, mas sai da nossa linha no `8.Cc3` **dele**.
+- **`2.Cc3`** — o ramo `3.Bc4` continua em Livro + motor: nenhum curso do corpus
+  entra nele.
+
+### Duas âncoras de tronco ficaram como estavam, de propósito
+
+O `4.Cxd4` da Escocesa e o `4…g6` do Dragão são nós **compartilhados** com
+linhas que não são deste bloco, e a prosa da fonte que cai neles é abertura de
+capítulo, não argumento de lance. Reescrevê-los seria mexer em quatro linhas
+para ganhar nada. O `2…Cc6` do `2.Cc3` também é compartilhado, e esse **foi**
+reescrito: ali a prosa do Plichta é argumento de lance de verdade.
+
+### Verificação
+
+- `repertorio:compilar` → 40 linhas em 12 arquivos, igual a antes
+- **40 ids antes, 40 depois, 0 alterados.** Nenhum aluno fica órfão
+- diff do compilado: só `fonte` (10 linhas, as 5 mais as 5 que dividem o mesmo
+  jogo PGN) e 6 comentários. **Zero** mudança em `lances`, `sans` ou `fen`
+- `repertorio:mapear` repete os números de controle: 11 cursos / 165 variantes /
+  2.434 comentários, **110 âncoras e as mesmas 53** em prosa
+- typecheck ✔ · lint ✔ · **585 testes, 585 passando** ✔ · `validate:content` ✔ ·
+  `compilar --check` sem diferença ✔ · `build` ✔
+
+**Placar da régua: de 15 linhas aprovadas para 20.**

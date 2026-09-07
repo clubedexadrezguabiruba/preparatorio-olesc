@@ -8,7 +8,7 @@
 [Nome "Escocesa"]
 [Cor "brancas"]
 [Nivel "base"]
-[Fonte "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"]
+[Fonte "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || As outras três linhas deste jogo — 4...Cf6, 4...Cxd4 5.Dxd4 d6 e 5...Cf6 — seguem GM Avetik Grigoryan (ChessMood), 'Scotch Game + Homework', que dá os lances sem explicar nenhum. As duas do 5.Dxd4 estão bloqueadas: o curso nomeia as cinco respostas populares e não argumenta nenhuma (correção 3 da seção 17 de docs/REVISAO-FONTES.md); o 4...Cf6 espera troca de cauda."]
 [Result "*"]
 
 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 {O cavalo recaptura e para bem no meio do
@@ -16,12 +16,20 @@ tabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é
 peça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A
 partir daqui ele tem três respostas de verdade, e as três estão neste arquivo.}
 4... Nxd4
-(4... Bc5 5. Nb3 {O bispo dele mira o nosso cavalo, e nós não trocamos: recuamos
-para b3. Parece um lance perdido e não é — quem tem de andar é o bispo dele, e
-em b6 ele morde bem menos, enquanto nós armamos Cc3, De2 e Be3 em paz.} 5... Bb6
-6. Nc3 Nf6 7. Qe2 d6 8. Be3 {O bispo em e3 encara o dele e
-defende f2. Se ele trocar, a dama recaptura em e3 e o roque grande vem logo em
-seguida.})
+(4... Bc5 5. Nb3 {Contra 4…Bc5 há três lances de verdade: 5.Be3, 5.Cxc6 e este.
+O curso escolhe 5.Cb3 — a Variante Potter — por dois motivos que ele escreve:
+tem menos teoria decorada, então o adversário erra mais cedo, e é a que deixa
+montar o ataque mais agressivo, coisa que quase ninguém no clube sabe segurar.
+Recuar aqui não é perder lance: quem tem de andar é o bispo dele. Ele volta a b6
+porque é de lá que segue na diagonal a7-g1, e enquanto ele arruma isso nós
+armamos Cc3, De2 e Be3 em paz.} 5... Bb6
+6. Nc3 Nf6 7. Qe2 d6 8. Be3 {O bispo de b6 é a melhor peça dele, e é por isso
+que o nosso vai a e3: para oferecer a troca justamente dessa peça. Repare que os
+três últimos lances trabalham juntos — a dama em e2 guarda f2, que o bispo dele
+mira, libera a casa e3 para este bispo e sai da coluna d antes do roque grande.
+Se ele trocar em e3, a dama recaptura e o roque grande vem em seguida. O curso
+chega nesta mesma posição jogando 6.De2 antes de 6.Cc3, e diz que a ordem quase
+nunca importa: a nossa, com o cavalo primeiro, é a mais popular das duas.})
 (4... Nf6 5. Nxc6 bxc6 6. e5 Qe7 7. Qe2 {A dama entra na coluna e, atrás do peão
 de e5 e de frente para a dama dele. Enquanto esse peão ficar em pé, o bispo dele
 de f8 não sai, e nós desenvolvemos de graça.})

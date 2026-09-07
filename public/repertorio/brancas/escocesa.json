@@ -55,10 +55,10 @@
     "errosNomeados": {},
     "comentarios": {
       "6": "O cavalo recaptura e para bem no meio do\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
-      "8": "O bispo dele mira o nosso cavalo, e nós não trocamos: recuamos\npara b3. Parece um lance perdido e não é — quem tem de andar é o bispo dele, e\nem b6 ele morde bem menos, enquanto nós armamos Cc3, De2 e Be3 em paz.",
-      "14": "O bispo em e3 encara o dele e\ndefende f2. Se ele trocar, a dama recaptura em e3 e o roque grande vem logo em\nseguida."
+      "8": "Contra 4…Bc5 há três lances de verdade: 5.Be3, 5.Cxc6 e este.\nO curso escolhe 5.Cb3 — a Variante Potter — por dois motivos que ele escreve:\ntem menos teoria decorada, então o adversário erra mais cedo, e é a que deixa\nmontar o ataque mais agressivo, coisa que quase ninguém no clube sabe segurar.\nRecuar aqui não é perder lance: quem tem de andar é o bispo dele. Ele volta a b6\nporque é de lá que segue na diagonal a7-g1, e enquanto ele arruma isso nós\narmamos Cc3, De2 e Be3 em paz.",
+      "14": "O bispo de b6 é a melhor peça dele, e é por isso\nque o nosso vai a e3: para oferecer a troca justamente dessa peça. Repare que os\ntrês últimos lances trabalham juntos — a dama em e2 guarda f2, que o bispo dele\nmira, libera a casa e3 para este bispo e sai da coluna d antes do roque grande.\nSe ele trocar em e3, a dama recaptura e o roque grande vem em seguida. O curso\nchega nesta mesma posição jogando 6.De2 antes de 6.Cc3, e diz que a ordem quase\nnunca importa: a nossa, com o cavalo primeiro, é a mais popular das duas."
     },
-    "fonte": "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"
+    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || As outras três linhas deste jogo — 4...Cf6, 4...Cxd4 5.Dxd4 d6 e 5...Cf6 — seguem GM Avetik Grigoryan (ChessMood), 'Scotch Game + Homework', que dá os lances sem explicar nenhum. As duas do 5.Dxd4 estão bloqueadas: o curso nomeia as cinco respostas populares e não argumenta nenhuma (correção 3 da seção 17 de docs/REVISAO-FONTES.md); o 4...Cf6 espera troca de cauda."
   },
   {
     "id": "brancas-escocesa-fe195431",
@@ -113,7 +113,7 @@
       "6": "O cavalo recaptura e para bem no meio do\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
       "12": "A dama entra na coluna e, atrás do peão\nde e5 e de frente para a dama dele. Enquanto esse peão ficar em pé, o bispo dele\nde f8 não sai, e nós desenvolvemos de graça."
     },
-    "fonte": "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"
+    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || As outras três linhas deste jogo — 4...Cf6, 4...Cxd4 5.Dxd4 d6 e 5...Cf6 — seguem GM Avetik Grigoryan (ChessMood), 'Scotch Game + Homework', que dá os lances sem explicar nenhum. As duas do 5.Dxd4 estão bloqueadas: o curso nomeia as cinco respostas populares e não argumenta nenhuma (correção 3 da seção 17 de docs/REVISAO-FONTES.md); o 4...Cf6 espera troca de cauda."
   },
   {
     "id": "brancas-escocesa-724ae4ca",
@@ -163,7 +163,7 @@
       "6": "O cavalo recaptura e para bem no meio do\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
       "10": "O peão avança e expulsa o cavalo antes que ele se instale.\nGanhamos espaço e um tempo — é por isso que esse cavalo cedo não é o melhor\nlance dele."
     },
-    "fonte": "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"
+    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || As outras três linhas deste jogo — 4...Cf6, 4...Cxd4 5.Dxd4 d6 e 5...Cf6 — seguem GM Avetik Grigoryan (ChessMood), 'Scotch Game + Homework', que dá os lances sem explicar nenhum. As duas do 5.Dxd4 estão bloqueadas: o curso nomeia as cinco respostas populares e não argumenta nenhuma (correção 3 da seção 17 de docs/REVISAO-FONTES.md); o 4...Cf6 espera troca de cauda."
   },
   {
     "id": "brancas-escocesa-5250fcfd",
@@ -224,7 +224,7 @@
       "12": "O bispo vai para f4 mirando o peão de d6 e libera a casa c1\npara o roque grande.",
       "14": "Roque grande. O rei sai do centro e a\ntorre cai na coluna d, bem em frente ao peão de d6. Daqui o plano é sempre o\nmesmo: f3, g4 e os peões avançam contra o rei dele."
     },
-    "fonte": "GM Avetik Grigoryan (ChessMood) — 'Scotch Game + Homework'"
+    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || As outras três linhas deste jogo — 4...Cf6, 4...Cxd4 5.Dxd4 d6 e 5...Cf6 — seguem GM Avetik Grigoryan (ChessMood), 'Scotch Game + Homework', que dá os lances sem explicar nenhum. As duas do 5.Dxd4 estão bloqueadas: o curso nomeia as cinco respostas populares e não argumenta nenhuma (correção 3 da seção 17 de docs/REVISAO-FONTES.md); o 4...Cf6 espera troca de cauda."
   },
   {
     "id": "brancas-escocesa-7b8467ff",

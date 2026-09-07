@@ -19,15 +19,21 @@
 [Nome "1.c4 e as outras primeiras"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Não vem do draft English Opening do Grigoryan, que joga outro sistema (1...c5). A linha é a transposição para o Manhattan, e a ponta fica em brancas +0,33, o mesmo número da linha principal do pretas-manhattan.pgn."]
+[Fonte "1...e6: IM Christof Sielecki — 'Short & Sweet: Sielecki's QGD' (Chess.com), variante 'The English'. O curso responde 1.c4 com ...e6 e ...d5 exatamente para perguntar às brancas se elas têm algo melhor do que d4, que transpõe para o Gambito da Dama. Do lance 3 em diante: IM Kushager Krishnater — 'Short & Sweet: 1.d4 d5' (Chess.com), variantes 'The Manhattan #1' a '#3', que explicam o 4...Cbd7 (tira o xeque Da4+ do caminho), o 5...Bb4 (prega o cavalo que ataca d5) e o 6...c5 (o ponto da variante). O único meio-lance sem fonte é o 2.Cc3 dele — o corpus chega por 2.Cf3 —, e do lance 3 em diante batem 10 dos 12. Corrige a seção 14, que dava esta linha como órfã de fonte; ver a correção 2 da seção 17 de docs/REVISAO-FONTES.md. Não vem do draft English Opening do Grigoryan, que joga outro sistema (1...c5). Conferido em 7/9/2026."]
 [Result "*"]
 
 1. c4 e6 2. Nc3 d5 3. d4 {Pronto: ele jogou d4 e a partida deixou de ser
-inglesa. Olhe o tabuleiro sem olhar o placar de lances — peões brancos em c4 e
-d4, pretos em d5 e e6. É o nosso Manhattan, exatamente, só que os lances vieram
-em outra ordem.} 3... Nf6 4. Nf3 Nbd7 5. Bg5 Bb4 6. e3 c5 {Contra 1.c4,
-1.Cf3, 1.b3, 1.f4 e 1.g3 a regra é uma só: …e6 e …d5, e espere. Quase sempre
-ele joga d4 em algum momento, e o jogo vira o nosso Manhattan — foi o que
-aconteceu aqui. Depois de 6…c5 esta é exatamente a posição da linha principal
-do arquivo do Manhattan, só que começando por 1.c4. Você não precisou aprender
-nada novo.} *
+inglesa. É o que o curso promete a quem já joga o Gambito da Dama recusado:
+responda …e6 e …d5 e pergunte ao adversário se ele tem algo melhor do que jogar
+d4 e cair no que você já treinou. Olhe o tabuleiro sem olhar o placar de lances
+— peões brancos em c4 e d4, pretos em d5 e e6. É o nosso Manhattan,
+exatamente.} 3... Nf6 4. Nf3 Nbd7 5. Bg5 Bb4 6. e3 c5 {O …c5 é o ponto da
+variante inteira: ao contrário das outras linhas do Gambito da Dama recusado,
+aqui nós não esperamos — batemos no centro dele na hora. Os dois lances
+anteriores existiram para isso. O cavalo foi para d7, e não para c6, porque com
+ele em d7 o xeque Da4+ não existe — e é esse xeque que obrigaria …Cc6 e mataria
+o …c5 antes de nascer. O bispo foi para b4 porque de lá ele prega o cavalo de
+c3, que é justamente quem ataca o nosso peão de d5. E repare no que aconteceu:
+começou em 1.c4 e terminou na posição da linha principal do arquivo do
+Manhattan. Contra 1.c4, 1.Cf3, 1.b3, 1.f4 e 1.g3 a regra é uma só — …e6, …d5,
+e espere.} *
