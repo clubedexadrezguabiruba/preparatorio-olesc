@@ -744,3 +744,134 @@ substitui não entra no placar: ela não pede que o aluno decore lance nenhum, q
 
 **Sobra do grupo F: 2 linhas** — `pretas-colle-f0590dc0` e `pretas-outras-2ffa3251`
 — e o Colle continua sendo a única abertura do repertório sem fonte alguma (§9).
+
+
+---
+
+## 17. O mapa refeito sobre 40 linhas — e três correções na §14, 7/9/2026
+
+O script que produziu o placar `J/A/C/E/F` da §14 **morreu junto com o scratchpad
+da sessão que o escreveu.** O documento guardou o placar, não a lista: sabia-se
+que havia 12 linhas no grupo C, não *quais*. A medição foi refeita do zero sobre
+as 40 linhas de hoje.
+
+**A medição virou script, para não se perder uma terceira vez:**
+`npm run repertorio:mapear` refaz este mapa inteiro, e
+`npm run repertorio:mapear <id-da-linha>` imprime a prosa da fonte lance a lance,
+que é a matéria-prima do comentário. Ele lê o `CORPUS.json` de
+`REPERTORIO_FONTES` — que fica fora do Git, porque é curso pago — e diz isso e
+sai em paz quando não acha o arquivo.
+
+> **Atenção ao comparar com as tabelas abaixo.** O script agrupa as **40**
+> linhas; as tabelas desta seção cobrem só as **25** que sobram depois de tirar
+> as 11 do Krikor (grupo J) e as 4 do bloco A. Por isso ele imprime *9* em "só
+> ordem de lances" e a tabela mostra *8*: a diferença são linhas do Krikor, que
+> não se tocam.
+
+**A medição reproduz.** Mesmo corpus (11 cursos, 165 variantes, 2.434
+comentários), mesmo casamento por posição, e o número que serve de prova bate:
+**53 âncoras de comentário caem em posição com prosa da fonte** — o mesmo 53 da
+§14. O total de âncoras caiu de 116 para 110, que são justamente as 6 das três
+linhas do Bowdler que saíram.
+
+> **Armadilha de FEN, para quem repetir a medição.** A `chess.js` 1.4 só escreve
+> a casa de *en passant* quando a captura é de fato possível; o chess.com escreve
+> sempre. Comparar as strings cruas dá **zero** posições em comum — nem o `1.e4`
+> bate. Recarregar o FEN da fonte pela `chess.js` e reemitir normaliza os dois.
+
+### O corte que reproduz não é o `C/E`
+
+O `C/E` da §14 carregava julgamento humano ("a fonte joga esta abertura, por
+outra ordem") e não se refaz sozinho. O que se mede sem opinião é melhor, porque
+diz **que trabalho cada linha dá**: onde a cobertura contígua quebra, **quem
+jogou o lance que quebrou**, e se a fonte volta a bater depois.
+
+| Grupo medido | Linhas | O que é | Mexe nos lances? |
+|---|---:|---|---|
+| **Só ordem de lances** | **8** | A fonte chega na mesma posição por outra porta e volta a bater. | **não** |
+| **Cauda de verdade** | **7** | Nós jogamos um lance que a fonte não joga, e ela não volta. | sim |
+| **A fonte não cobre o ramo** | **9** | Quem sai da fonte é **ele**, não nós. Não há cauda para trocar. | não — falta fonte |
+| **Sem fonte** | **1** | O Colle. | decisão dura |
+
+#### Só ordem de lances — 8
+
+| Linha | Quebra em | A fonte joga | Volta a bater | Âncoras com prosa |
+|---|---|---|---|---:|
+| `brancas-escocesa-903edd82` | `6.Cc3` | `6.De2` | `7…` | 3/3 |
+| `pretas-siciliana-71793593` | `5.Be3` | `5.Cc3` | `6…` | 2/2 |
+| `pretas-siciliana-1dc3b0cb` | `5.Bc4` | `5.Cc3` | `7.` | 2/2 |
+| `pretas-siciliana-685348cf` | `3…g6` | `3…e5` | `5.` | 2/2 |
+| `pretas-outras-2ffa3251` | `2.Cc3` | `2.Cf3` | `3.` | 2/2 |
+| `pretas-londres-53d5b431` | `3…Cc6` | `3…Cf6` | `4…` | 1/3 |
+| `pretas-manhattan-3e9e876d` | `4…Cbd7` | `4…dxc4` | `6.` | 1/2 |
+| `pretas-siciliana-97331249` | `5.cxd4` | `5.Cf3` | `6…` | 1/4 |
+
+As cinco de cima têm **todas** as âncoras de comentário caindo em prosa da fonte:
+é reescrever o texto e trocar a citação, sem tocar em lance nenhum e sem órfar
+ninguém.
+
+#### Cauda de verdade — 7
+
+| Linha | Quebra em | A fonte joga | Variantes da fonte |
+|---|---|---|---:|
+| `brancas-caro-kann-d2337d9b` | `6.Bf4` | `6.h3` | **6** |
+| `brancas-escocesa-fe195431` | `6.e5` | `6.Cc3` | 2 |
+| `pretas-siciliana-a6563193` | `6…Cf6` | `6…Dc7` | 1 |
+| `pretas-siciliana-e6e1e081` | `5…Cf6` | `5…e5` | 1 |
+| `pretas-siciliana-f9fa14c5` | `8…dxe5` | `8…Bd7` | 1 |
+| `pretas-londres-1c8d69bc` | `3…Db6` | `3…Cc6` | 1 |
+| `pretas-manhattan-6ac84e24` | `4…Cbd7` | `4…dxc4` | 1 |
+
+#### A fonte não cobre o ramo — 9
+
+`brancas-caro-kann-054a0df4` (`4…Cf6`), `brancas-escocesa-724ae4ca` (`5…Cf6`),
+`brancas-escocesa-5250fcfd` (`5…d6`), `brancas-escocesa-a46c0bd6` (`5…c5`),
+`brancas-francesa-746ed04d` (`3…c5`), `brancas-francesa-9d4caf37` (`3…Cc6`),
+`brancas-petroff-934fd6a6` (`7…O-O`), `pretas-siciliana-2d329919` (`8.Cc3`),
+`pretas-siciliana-2bfe81e8` (`3.Bc4`).
+
+Aqui **não há cauda para trocar**: quem saiu do roteiro da fonte foi o
+adversário. Ou a linha inteira ganha outra fonte, ou ela fica declarada como está.
+
+### Correção 1 — o `6.Bf4` do Base contradiz a decisão da §11.1
+
+A §11.1 decidiu, em 7/9: **`6.h3` entra no Base, `6.Bf4` vai para o Avançado.**
+A linha compilada `brancas-caro-kann-d2337d9b` está `nivel: base` **e joga
+`6.Bf4`**. A decisão está registrada e não foi executada.
+
+E a fonte gratuita ("Caro Kann't", chave `carokann-troca` do corpus) joga
+`4…Cc6 5.c3 Cf6 6.h3` em **seis variantes**, com prosa. É a linha mais barata do
+grupo inteiro: fecha a pendência da §11.4 *no Base* e passa na régua da §1.
+
+O `6.Bf4` do Avançado continua sem fonte — a pendência da §11.4 não morre, só
+deixa de contaminar o Base.
+
+### Correção 2 — `pretas-outras-2ffa3251` não é órfã de fonte
+
+A §14 põe essa linha no grupo F, "nenhuma fonte entra nesta abertura". Medido
+meio-lance a meio-lance: **10 dos 12 têm fonte**, e as **2 âncoras de comentário
+caem em prosa**. O único furo é o `2.Cc3` dele — a fonte chega por `2.Cf3`. Do
+lance 3 em diante bate tudo, com Kushager e Sielecki-QGD juntos, porque a linha
+transpõe para o Manhattan.
+
+**Sobra uma linha sem fonte alguma, não duas: o Colle.** Dela, do lance 2 em
+diante, o corpus inteiro de `1.d4` vira Londres (`2.Bf4`, 21 variantes) ou
+Gambito da Dama (`2.c4`, 14) — ninguém joga `2.Cf3` e `3.e3`.
+
+### Correção 3 — as três Escocesas do `4…Cxd4` estão bloqueadas, não pendentes
+
+Na posição exata depois de `5.Dxd4`, o curso escreve:
+
+> *"From here, Black has tried many things. We can't cover everything in the
+> course, so we'll tackle the five most popular continuations, which are 5…d6,
+> 5…Cf6, 5…c5, 5…Df6 and 5…b6."*
+
+O PGN do **Short & Sweet** — que é o que temos — traz **só o `5…b6`**, que é
+exatamente a linha `brancas-escocesa-7b8467ff` já entregue no bloco A. As outras
+quatro estão no curso completo.
+
+Citar essa prosa **não resolve** `724ae4ca`, `5250fcfd` e `a46c0bd6`: ela
+*nomeia* os lances e não explica nenhum deles. Pela régua da §1 isso é citação
+sem argumento. Essas três dependem de comprar o curso completo ou de achar outra
+fonte — não de escrever melhor.
+

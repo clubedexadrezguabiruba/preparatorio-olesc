@@ -25,7 +25,8 @@
     "repertorio:compilar": "node scripts/compilar-repertorio.ts",
     "repertorio:explorer": "node scripts/explorer-repertorio.ts",
     "repertorio:motor": "node scripts/motor-repertorio.ts",
-    "repertorio:fidelidade": "node scripts/medir-fidelidade.ts"
+    "repertorio:fidelidade": "node scripts/medir-fidelidade.ts",
+    "repertorio:mapear": "node scripts/mapear-fontes.ts"
   },
   "dependencies": {
     "@lichess-org/chessground": "^10.1.1",
