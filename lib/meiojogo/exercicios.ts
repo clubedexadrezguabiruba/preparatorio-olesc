@@ -52,14 +52,24 @@ import { casasEntre, conferirAfirmacao, corDaCasa } from "./afirmacoes.ts";
 export type Lado = "brancas" | "pretas";
 export type Casa = string;
 
-const COR: Record<Lado, Color> = { brancas: "w", pretas: "b" };
-const OUTRO: Record<Lado, Lado> = { brancas: "pretas", pretas: "brancas" };
-const FRENTE: Record<Lado, number> = { brancas: 1, pretas: -1 };
-const COLUNAS = ["a", "b", "c", "d", "e", "f", "g", "h"] as const;
+/**
+ * A régua de coordenadas do módulo, exportada porque `lib/meiojogo/lances.ts`
+ * precisa dela.
+ *
+ * Duplicar `coluna`/`fileira`/`casaDe` no juiz do lance seria barato de
+ * escrever e caro de manter: o dia em que um dos dois passasse a contar a
+ * fileira de cima para baixo, a legenda e o exercício divergiriam sem nenhum
+ * teste reprovando. Exportar é a mesma disciplina de `conferirAfirmacao` ser o
+ * juiz único da legenda.
+ */
+export const COR: Record<Lado, Color> = { brancas: "w", pretas: "b" };
+export const OUTRO: Record<Lado, Lado> = { brancas: "pretas", pretas: "brancas" };
+export const FRENTE: Record<Lado, number> = { brancas: 1, pretas: -1 };
+export const COLUNAS = ["a", "b", "c", "d", "e", "f", "g", "h"] as const;
 
-const coluna = (casa: string): number => casa.charCodeAt(0) - 97;
-const fileira = (casa: string): number => Number(casa[1]);
-const casaDe = (c: number, f: number): Casa => `${String.fromCharCode(97 + c)}${f}`;
+export const coluna = (casa: string): number => casa.charCodeAt(0) - 97;
+export const fileira = (casa: string): number => Number(casa[1]);
+export const casaDe = (c: number, f: number): Casa => `${String.fromCharCode(97 + c)}${f}`;
 
 /** Verdade quando a afirmação passa — o único juiz do módulo. */
 const vale = (fen: string, a: Parameters<typeof conferirAfirmacao>[1]): boolean =>

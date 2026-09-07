@@ -20,6 +20,7 @@
     "meiojogo:funil": "node scripts/escolher-exercicios.ts",
     "meiojogo:prosa": "node scripts/varrer-prosa.ts",
     "meiojogo:portas": "node scripts/medir-portas.ts",
+    "meiojogo:lances": "node scripts/medir-lances.ts",
     "meiojogo:conferir": "node scripts/conferir-transcricao.ts",
     "meiojogo:tela": "node scripts/conferir-treino.ts",
     "validate:mutations": "node scripts/mutation-check.ts",
