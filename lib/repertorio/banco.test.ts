@@ -67,11 +67,11 @@ test("cor e abertura de cada linha batem com a pasta em que ela está", () => {
   }
 });
 
-test("o Base publicado tem 42 linhas, e o primeiro lance é sempre das brancas", () => {
+test("o Base publicado tem 43 linhas, e o primeiro lance é sempre das brancas", () => {
   const todas = indice.flatMap((e) =>
     validarBanco(ler(e.arquivo.replace(/^\/repertorio\//, "")), e.abertura),
   );
-  assert.equal(todas.length, 42);
+  assert.equal(todas.length, 43);
 
   for (const linha of todas) {
     // O contrato de que a tela depende para saber quando auto-jogar: `meus`

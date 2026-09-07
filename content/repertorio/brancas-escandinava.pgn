@@ -1,6 +1,8 @@
-; Escandinava — 2 linhas do Base. Pela tabela da seção 6, depois de 2.exd5 só
-; 2...Dxd5 entra no corte, com 80,8 por cento. As duas linhas cobrem os dois
-; recuos mais comuns da dama depois de 3.Cc3.
+; Escandinava — 3 linhas do Base. Duas cobrem os recuos mais comuns da dama
+; depois de 2...Dxd5 3.Cc3; a terceira é o 2...Cf6, que a seção 6.1 mediu em 15
+; a 19 por cento e que até 6/9/2026 não tinha resposta nenhuma aqui — a tabela
+; velha, feita na faixa errada, parava no 2...Dxd5 porque ele sozinho fechava os
+; 80 por cento do corte.
 
 [Abertura "escandinava"]
 [Nome "Escandinava"]
@@ -13,7 +15,30 @@
 começar — mas repare no que ela nos entrega: daqui para a frente são lances
 naturais, um atrás do outro, e uma posição tranquila sem nada difícil para
 decorar. É por isso que ela aparece tanto nesta faixa de rating, e é por isso
-que a gente gosta de vê-la.} 2. exd5 Qxd5 3. Nc3 {O cavalo sai atacando a dama. Este é o presente
+que a gente gosta de vê-la.} 2. exd5 Qxd5
+(2... Nf6 {Ele não quer a dama no meio do tabuleiro tão cedo, e vai buscar o peão
+de volta com o cavalo. É a segunda Escandinava mais comum — quase uma em cada
+cinco — e ela tira de nós justamente o que a outra dava de graça: o tempo em
+cima da dama.}
+3. d4 {Não tente segurar o peão. O 3.c4 parece o lance óbvio, mas depois de
+3...c6 ele abre linhas e recupera tudo com juros — o motor nem põe o c4 entre os
+cinco melhores daqui. O d4 devolve o peão e fica com o centro e o
+desenvolvimento, que é o que decide a partida.
+
+E tem um bônus: se ele recapturar de dama, com 3...Dxd5, jogue 4.Cc3 e você cai
+na mesma Escandinava que já treinou — a dama vai ter de andar outra vez, e tanto
+o ...Da5 quanto o ...Dd6 já são suas linhas. Um lance, duas portas.}
+3... Nxd5 4. Nf3 {Espere o bispo dele em g4 agora: ele sai atacando e prega o
+nosso cavalo contra a dama. É o lance mais natural do mundo — e é o que a gente
+quer.}
+4... Bg4 5. h3 {O mesmo remédio da outra linha. O h3 faz a pergunta simples:
+troca ou recua? Se ele trocar em f3, recapture de dama — o bispo dele foi embora
+e o nosso jogo fica fácil. Se recuar, vem g4.}
+5... Bh5 6. g4 Bg6 7. Ne5 {Empurramos o bispo até g6 com h3 e g4, e o cavalo
+pousa no meio do tabuleiro. Repare: é o mesmo cavalo em e5 da outra linha da
+Escandinava. A caçada h3, g4, Ce5 é uma só, e serve nas duas. Daqui o plano é
+Bg2 e roque, ou h4-h5 para seguir apertando o bispo.})
+3. Nc3 {O cavalo sai atacando a dama. Este é o presente
 que a Escandinava nos dá: desenvolvemos com tempo, e ela ainda vai ter de andar
 mais uma vez.} 3... Qa5
 (3... Qd6 4. d4 Nf6 5. Nf3 {Espere o bispo dele em g4 agora: é o lance mais

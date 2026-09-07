@@ -27,7 +27,7 @@ import {
  *
  * ## O cache
  *
- * São 42 linhas em doze arquivos de poucos KB. O cache não existe pelo tamanho:
+ * São 43 linhas em doze arquivos de poucos KB. O cache não existe pelo tamanho:
  * existe porque cada lance conferido reabriria o arquivo, e o conteúdo só muda
  * quando alguém roda `npm run repertorio:compilar` e sobe um deploy novo — e um
  * deploy novo é um processo novo.

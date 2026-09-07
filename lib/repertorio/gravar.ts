@@ -30,7 +30,7 @@ const UCI = /^[a-h][1-8][a-h][1-8][qrbn]?$/;
  *
  * O parâmetro é `lances`, e não `acertou`. É a diferença entre um servidor que
  * julga e um que anota o que lhe disseram: com um booleano vindo do navegador,
- * "decorei as 42 linhas" seria uma chamada de rede a escrever — e é este número
+ * "decorei as 43 linhas" seria uma chamada de rede a escrever — e é este número
  * que vai dizer, no sábado, quem já pode jogar a abertura no torneio.
  *
  * A conferência é a mesma função que o tabuleiro do aluno usou para dizer

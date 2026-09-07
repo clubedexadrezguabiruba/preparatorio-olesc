@@ -41,8 +41,8 @@ sim **medir três e comparar**: §6.1.
   `pretas-manhattan.pgn` (3), `pretas-londres.pgn` (2), `pretas-colle.pgn` (1) e
   `pretas-outras.pgn` (1).
 - O que o **B5** escreveu: **a tela em que o aluno treina** — `/aberturas`, o
-  juiz, a tabela de progresso e a gravação. **O Base está fechado: 42 linhas**,
-  as 22 das brancas e as 20 das pretas, e agora elas são jogáveis.
+  juiz, a tabela de progresso e a gravação. **O Base está fechado: 43 linhas**,
+  as 23 das brancas e as 20 das pretas, e agora elas são jogáveis.
 
 ---
 
@@ -487,16 +487,19 @@ conclusão não depende de a conversão entre as escalas estar certa.
 
 | posição | o que muda | custa o quê |
 |---|---|---|
-| **Escandinava 2.exd5** | `2…Nf6` **entra**, com 15,4–18,7 % — de 1 resposta para 2 | uma linha **nova**. O `Qxd5` sozinho fechava 80,8 % e o corte parava nele; nas faixas novas não fecha, e o `…Nf6` — quase 1 em 5 escandinavas — fica sem resposta no Base |
+| **Escandinava 2.exd5** | `2…Nf6` **entra**, com 15,4–18,7 % — de 1 resposta para 2 | **escrita em 6/9/2026: é a 43ª linha.** O `Qxd5` sozinho fechava 80,8 % e o corte parava nele; nas faixas novas ele não fecha, e o `…Nf6` — quase 1 em 5 escandinavas — estava sem resposta no Base |
 | **Alapin pelas pretas 3.e5 Nd5** | `4.c4` **sai** — de 3 respostas para 2 | nada a escrever: **encolhe o ⚠7**, que era "`4.Bc4` e `4.c4`" |
 | Escocesa 3.d4 | `3…f6` **sai** (3,8–4,5 %) — de 4 para 3 | nada: o Base cobre algo mais raro do que se pensava |
-| Escocesa 4.Nxd4 | `4…Qf6` **entra** (5,3–5,6 %) — de 3 para 4 | uma linha nova, de frequência baixa |
+| Escocesa 4.Nxd4 | `4…Qf6` **entra** (5,3–5,6 %) — de 3 para 4 | **em aberto, e é decisão de orçamento.** Pela régua da §4 ele entra; pelo §1 a Escocesa já é a maior abertura do Base, com 9 linhas, e esta seria a 10ª por 5,5 %. Como tudo nesta seção, seria aditiva |
 
 **A assimetria que decide o risco: resposta que *entra* não órfã ninguém.** Uma
 linha nova tem lances novos, logo id novo, e os 42 ids de hoje ficam byte a byte
 onde estão. Quem órfã progresso é **mudar ou apagar** linha existente — e nenhuma
-das quatro estruturais pede isso. A Escandinava `2…Nf6` pode ser escrita a
-qualquer momento sem custar o treino de ninguém.
+das quatro estruturais pede isso.
+
+**Conferido ao escrever a Escandinava, em 6/9/2026:** comparando os 42 ids
+publicados com os 43 de agora, **0 sumiram e 1 entrou**. A previsão desta seção
+foi medida, e não suposta.
 
 ---
 
@@ -567,8 +570,9 @@ quem já treinou.
 
 **Medido em 6/9/2026, o medo não se confirmou — e a razão é uma assimetria.** As
 mudanças que a faixa certa traz são de *acrescentar* resposta, e linha nova tem
-id novo: os 42 ids de hoje ficam onde estão. O que órfã é mudar ou apagar linha
-existente, e a medição não pede isso em lugar nenhum. A conta está na §6.1.
+id novo: os 42 ids de antes ficaram onde estavam. O que órfã é mudar ou apagar
+linha existente, e a medição não pediu isso em lugar nenhum. A conta está na
+§6.1, e a escrita da Escandinava a confirmou: 0 ids perdidos, 1 acrescentado.
 
 | # | ⚠ | Frequência | §|
 |---|---|---|---|
@@ -584,7 +588,7 @@ existente, e a medição não pede isso em lugar nenhum. A conta está na §6.1.
 | ~~10~~ | ~~Manhattan `4.Bf4`~~ — **fora do Base pelo corte** (5ª resposta da posição); vai para o Avançado | 6,9 % de 3.Nc3 Nf6 | — |
 | **11** | **Maroczy — recortar só a sub-árvore do `6.e4`** | Avançado | 2.4 |
 | ~~12~~ | ~~Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios~~ — **fechado no B5**, em `/aberturas/notas/` | < 4,2 % cada | 2.10 |
-| **13** | **Medido em 6/9/2026 — a medição fechou, a escrita não.** Três faixas comparadas na §6.1: 14 das 23 posições mudam de conjunto, mas dez são o teto de 4 cortando entre quase-empates. Das quatro estruturais, a única que pede conteúdo é a **Escandinava `2…Nf6`** (15–19 % das escandinavas, hoje sem resposta no Base). É **aditivo: não órfã progresso.** | 1 linha nova | 6.1 |
+| ~~13~~ | ~~**O recorte de frequência foi medido na faixa errada**~~ — **medido e escrito em 6/9/2026**. A §6.1 tem as três faixas: 14 das 23 posições mudam de conjunto, e dez delas são o teto de 4 cortando entre quase-empates. Das quatro estruturais, a **Escandinava `2…Cf6`** virou a 43ª linha e as outras três não pedem escrita. **0 ids perdidos, 1 acrescentado.** Sobra uma decisão de orçamento, não de medição: o `4…Df6` da Escocesa | 1 decisão | 6.1 |
 | **14** | **O tom dos 110 comentários** — foram escritos para "criança de 10 anos"; o aluno mais novo tem 12. Reler sob a régua nova da §5. | todo o Base | 5 |
 
 Os itens 1 a 5 eram o caminho crítico: sozinhos, são o que os alunos mais vão
@@ -634,8 +638,11 @@ tirou a máquina de estado de dentro do componente. O texto das quatro aberturas
 raras: `notas.ts` (schema) e
 `conteudo.ts` (leitura conferida na importação).
 
-**42 linhas** compiladas para `public/repertorio/`, em 12 arquivos: as 22 das
-brancas e as 20 das pretas. **O Base está completo dos dois lados.**
+**43 linhas** compiladas para `public/repertorio/`, em 12 arquivos: as 23 das
+brancas e as 20 das pretas. **O Base está completo dos dois lados.** A 43ª é a
+Escandinava `2…Cf6`, escrita em 6/9/2026 pelo que a §6.1 mediu — e ela entrou
+sem mover nenhum dos 42 ids anteriores, que é a prova da assimetria descrita
+lá.
 
 ### A tela
 

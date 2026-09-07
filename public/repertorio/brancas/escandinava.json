@@ -1,5 +1,64 @@
 [
   {
+    "id": "brancas-escandinava-63b15bec",
+    "cor": "brancas",
+    "abertura": "escandinava",
+    "nivel": "base",
+    "nome": "Escandinava — 6.g4 Bg6 7.Ne5",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "rn1qkb1r/ppp1pppp/6b1/3nN3/3P2P1/7P/PPP2P2/RNBQKB1R b KQkq - 2 7",
+    "lances": [
+      "e2e4",
+      "d7d5",
+      "e4d5",
+      "g8f6",
+      "d2d4",
+      "f6d5",
+      "g1f3",
+      "c8g4",
+      "h2h3",
+      "g4h5",
+      "g2g4",
+      "h5g6",
+      "f3e5"
+    ],
+    "sans": [
+      "e4",
+      "d5",
+      "exd5",
+      "Nf6",
+      "d4",
+      "Nxd5",
+      "Nf3",
+      "Bg4",
+      "h3",
+      "Bh5",
+      "g4",
+      "Bg6",
+      "Ne5"
+    ],
+    "meus": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "comentarios": {
+      "1": "A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de\ncomeçar — mas repare no que ela nos entrega: daqui para a frente são lances\nnaturais, um atrás do outro, e uma posição tranquila sem nada difícil para\ndecorar. É por isso que ela aparece tanto nesta faixa de rating, e é por isso\nque a gente gosta de vê-la.",
+      "3": "Ele não quer a dama no meio do tabuleiro tão cedo, e vai buscar o peão\nde volta com o cavalo. É a segunda Escandinava mais comum — quase uma em cada\ncinco — e ela tira de nós justamente o que a outra dava de graça: o tempo em\ncima da dama.",
+      "4": "Não tente segurar o peão. O 3.c4 parece o lance óbvio, mas depois de\n3...c6 ele abre linhas e recupera tudo com juros — o motor nem põe o c4 entre os\ncinco melhores daqui. O d4 devolve o peão e fica com o centro e o\ndesenvolvimento, que é o que decide a partida.\n\nE tem um bônus: se ele recapturar de dama, com 3...Dxd5, jogue 4.Cc3 e você cai\nna mesma Escandinava que já treinou — a dama vai ter de andar outra vez, e tanto\no ...Da5 quanto o ...Dd6 já são suas linhas. Um lance, duas portas.",
+      "6": "Espere o bispo dele em g4 agora: ele sai atacando e prega o\nnosso cavalo contra a dama. É o lance mais natural do mundo — e é o que a gente\nquer.",
+      "8": "O mesmo remédio da outra linha. O h3 faz a pergunta simples:\ntroca ou recua? Se ele trocar em f3, recapture de dama — o bispo dele foi embora\ne o nosso jogo fica fácil. Se recuar, vem g4.",
+      "12": "Empurramos o bispo até g6 com h3 e g4, e o cavalo\npousa no meio do tabuleiro. Repare: é o mesmo cavalo em e5 da outra linha da\nEscandinava. A caçada h3, g4, Ce5 é uma só, e serve nas duas. Daqui o plano é\nBg2 e roque, ou h4-h5 para seguir apertando o bispo."
+    },
+    "fonte": "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'"
+  },
+  {
     "id": "brancas-escandinava-8d9a2cac",
     "cor": "brancas",
     "abertura": "escandinava",

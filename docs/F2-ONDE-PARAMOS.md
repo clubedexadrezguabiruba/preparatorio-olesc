@@ -13,8 +13,8 @@ outra turma. A turma real é:
 
 | | |
 |---|---|
-| Idade | 11 a 15 anos (o mais novo faz 12) |
-| Força | 600 a 1500 de rápidas no chess.com |
+| Idade | 12 a 15 anos |
+| Força | 700 a 1700 de rápidas no chess.com |
 | Experiência | todos com dois ou mais torneios oficiais |
 | Treino | **2 horas por dia, 6 dias por semana**, obrigatório |
 
