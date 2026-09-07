@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { Chess, type Color, type Square } from "chess.js";
 import { TAREFAS, respostaDaTarefa, type Lado } from "../lib/meiojogo/exercicios.ts";
@@ -13,6 +13,14 @@ import { Motor, prepararMotor } from "./motor.ts";
  *   node scripts/escolher-exercicios.ts --sem-motor        só a porta 1, rápido
  *   node scripts/escolher-exercicios.ts --amostra 2000     quantos puzzles ler
  *   ... --profundidade 12 --salto 100                      padrões da porta 2
+ *   ... --exportar .scratch/candidatos.json                grava o que passou
+ *
+ * O `--exportar` é o que faz o funil servir à curadoria, e não só à contagem:
+ * ele grava, para cada posição aprovada, **o id do puzzle de onde ela saiu** —
+ * que é a proveniência (`https://lichess.org/training/<id>`) — e, por tarefa e
+ * por lado, a resposta que `respostaDaTarefa` devolve. Sem o id, uma FEN
+ * aprovada é uma FEN órfã: passa nas três portas e não pode virar item, porque
+ * não há o que escrever no `provenance`.
  *
  * ## De onde vêm as posições, e por que elas precisam de funil
  *
@@ -60,6 +68,7 @@ const PROFUNDIDADE = numero("--profundidade", 12);
 /** Centésimos de peão entre a melhor linha e a segunda que denunciam tática. */
 const SALTO = numero("--salto", 100);
 const SEM_MOTOR = argv.includes("--sem-motor");
+const EXPORTAR = argv.indexOf("--exportar") >= 0 ? argv[argv.indexOf("--exportar") + 1] : null;
 /** Quantas posições vão ao motor. Ele é a parte cara: ~1 posição por segundo. */
 const TETO_DO_MOTOR = numero("--teto-motor", 400);
 
@@ -96,6 +105,19 @@ function amostrar(quantos: number): Puzzle[] {
   }
   return amostra;
 }
+
+/**
+ * Uma posição candidata: a FEN do fim da linha, e **de onde ela veio**.
+ *
+ * O par anda junto do começo ao fim do funil porque separá-los é o erro que
+ * torna o resultado inútil: uma lista de FENs aprovadas sem o id do puzzle não
+ * pode virar `provenance.originalGame`, e refazer a ligação depois significa
+ * rodar o funil de novo.
+ */
+type Candidato = { readonly id: string; readonly fen: string; readonly rating: number };
+
+/** Um candidato que passou na porta 2, com o salto que o motor mediu nele. */
+type Aprovada = Candidato & { readonly salto: number | null };
 
 /** A posição no fim da linha do puzzle, ou `null` se algum lance for ilegal. */
 function fimDaLinha(puzzle: Puzzle): string | null {
@@ -173,10 +195,31 @@ export function julgarVariantes(
 
 const LADOS: Lado[] = ["brancas", "pretas"];
 
-function contarPorTarefa(fens: readonly string[]): Map<string, number> {
+/**
+ * O que cada posição aprovada serve: tarefa, lado e a resposta única.
+ *
+ * `respostaDaTarefa` devolve vazio quando o traço não existe **ou** existe mais
+ * de uma vez, e as duas coisas dão no mesmo aqui: a posição não vira item. O
+ * que sobra é a lista do que ela **pode** ser, e é essa lista que a curadoria
+ * lê para escolher.
+ */
+type Serventia = { tarefa: string; lado: Lado; resposta: string[] };
+
+function serventias(fen: string): Serventia[] {
+  const lista: Serventia[] = [];
+  for (const tarefa of TAREFAS) {
+    for (const lado of LADOS) {
+      const resposta = respostaDaTarefa(fen, tarefa, lado);
+      if (resposta.length > 0) lista.push({ tarefa: tarefa.id, lado, resposta });
+    }
+  }
+  return lista;
+}
+
+function contarPorTarefa(candidatos: readonly { fen: string }[]): Map<string, number> {
   const conta = new Map<string, number>();
   for (const tarefa of TAREFAS) conta.set(tarefa.id, 0);
-  for (const fen of fens) {
+  for (const { fen } of candidatos) {
     for (const tarefa of TAREFAS) {
       const serve = LADOS.some((lado) => respostaDaTarefa(fen, tarefa, lado).length > 0);
       if (serve) conta.set(tarefa.id, (conta.get(tarefa.id) ?? 0) + 1);
@@ -188,19 +231,19 @@ function contarPorTarefa(fens: readonly string[]): Map<string, number> {
 const puzzles = amostrar(AMOSTRA);
 console.log(`${puzzles.length} puzzles lidos do recorte.\n`);
 
-const finais: string[] = [];
+const finais: Candidato[] = [];
 let ilegais = 0;
 for (const puzzle of puzzles) {
   const fen = fimDaLinha(puzzle);
   if (fen === null) ilegais += 1;
-  else finais.push(fen);
+  else finais.push({ id: puzzle.id, fen, rating: puzzle.rating });
 }
 
 const motivos = new Map<string, number>();
-const passaramNa1: string[] = [];
-for (const fen of finais) {
-  const motivo = porta1(fen);
-  if (motivo === null) passaramNa1.push(fen);
+const passaramNa1: Candidato[] = [];
+for (const candidato of finais) {
+  const motivo = porta1(candidato.fen);
+  if (motivo === null) passaramNa1.push(candidato);
   else motivos.set(motivo, (motivos.get(motivo) ?? 0) + 1);
 }
 
@@ -216,7 +259,7 @@ console.log(
   `  ${String(passaramNa1.length).padStart(5)} passam                    (${pct(passaramNa1.length, finais.length)})\n`,
 );
 
-let passaramNa2 = passaramNa1;
+let passaramNa2: Aprovada[] = passaramNa1.map((c) => ({ ...c, salto: null }));
 
 if (!SEM_MOTOR && passaramNa1.length > 0) {
   const aoMotor = passaramNa1.slice(0, TETO_DO_MOTOR);
@@ -224,13 +267,15 @@ if (!SEM_MOTOR && passaramNa1.length > 0) {
   await motor.abrir(2);
 
   const motivosDoMotor = new Map<string, number>();
-  const aprovadas: string[] = [];
+  const aprovadas: Aprovada[] = [];
   const comecou = Date.now();
 
-  for (const [i, fen] of aoMotor.entries()) {
-    const variantes = await motor.pensar(`fen ${fen}`, PROFUNDIDADE);
+  for (const [i, candidato] of aoMotor.entries()) {
+    const variantes = await motor.pensar(`fen ${candidato.fen}`, PROFUNDIDADE);
     const veredito = julgarVariantes(variantes);
-    if (veredito.passou) aprovadas.push(fen);
+    // O salto medido vai junto: é ele que a `curadoria.portas` de cada posição
+    // grava, e re-medi-lo depois seria uma segunda opinião sobre o mesmo dado.
+    if (veredito.passou) aprovadas.push({ ...candidato, salto: veredito.salto });
     else {
       const chave = veredito.motivo.startsWith("salta") ? "avaliação salta" : veredito.motivo;
       motivosDoMotor.set(chave, (motivosDoMotor.get(chave) ?? 0) + 1);
@@ -268,3 +313,45 @@ console.log(
   "\nResposta única, e um lado só. Uma tarefa com poucas posições aqui não sustenta um " +
     "degrau de reconhecimento — o conceito sai da fatia antes de virar ficha.",
 );
+/* ------------------------------------------------------------------ *
+ * A exportação
+ * ------------------------------------------------------------------ */
+
+if (EXPORTAR !== null) {
+  const destino = path.isAbsolute(EXPORTAR) ? EXPORTAR : path.join(RAIZ, EXPORTAR);
+  mkdirSync(path.dirname(destino), { recursive: true });
+  const linhas = passaramNa2
+    .map((c) => ({
+      puzzle: c.id,
+      origem: `https://lichess.org/training/${c.id}`,
+      ratingDoPuzzle: c.rating,
+      fen: c.fen,
+      // `null` quando o motor não rodou (`--sem-motor`): a porta 2 não foi
+      // atravessada, e escrever 0 aqui faria a curadoria acreditar que foi.
+      saltoDaPorta2: c.salto,
+      serve: serventias(c.fen),
+    }))
+    .filter((l) => l.serve.length > 0);
+  writeFileSync(
+    destino,
+    `${JSON.stringify(
+      {
+        medido: {
+          amostra: puzzles.length,
+          profundidade: SEM_MOTOR ? null : PROFUNDIDADE,
+          salto: SEM_MOTOR ? null : SALTO,
+          passaramNaPorta1: passaramNa1.length,
+          passaramNaPorta2: SEM_MOTOR ? null : passaramNa2.length,
+        },
+        posicoes: linhas,
+      },
+      null,
+      1,
+    )}\n`,
+    "utf8",
+  );
+  console.log(
+    `\n${linhas.length} posições gravadas em ${path.relative(RAIZ, destino)} ` +
+      `(as ${passaramNa2.length - linhas.length} que não servem a nenhuma tarefa ficaram de fora).`,
+  );
+}
