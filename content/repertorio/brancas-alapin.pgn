@@ -24,12 +24,23 @@
 entender: o peão de c3 não ataca nada, ele só guarda lugar para o de d2 avançar
 dois passos. Se ele comer em d4, quem recaptura é o peão de c3 — e o centro
 continua nosso.} 2... Nc6
-3. d4 cxd4 4. cxd4 {Este é o lance que dá nome à abertura toda: o peão de c3
+3. d4 {O 2.c3 só existia para permitir este lance. O segundo peão vai
+para o meio e oferece a troca — e a troca é o que a gente quer, porque quem
+recaptura em d4 é o peão de c3, não uma peça. Repare que ninguém está
+atacando nada aqui: o centro se constrói com peões, e as peças vêm depois.}
+3... cxd4 4. cxd4 {Este é o lance que dá nome à abertura toda: o peão de c3
 recaptura e ficamos com dois peões no centro, e4 e d4, contra nenhum.} 4... d6
-5. Nc3 g6 6. d5 {O peão anda mais um e o cavalo dele não tem para onde ir a não
+5. Nc3 {O peão que morava em c3 se mudou para d4, e a casa ficou livre bem na
+hora: c3 é onde o cavalo da dama sempre quer ir. De lá ele guarda o peão de
+e4 e olha para d5 — que é exatamente a casa que o nosso peão vai ocupar no
+lance seguinte. Um lance, dois serviços.} 5... g6 6. d5 {O peão anda mais um e o cavalo dele não tem para onde ir a não
 ser voltar para casa — os dois lances que ele gastou com essa peça foram para o
 lixo. E o centro virou uma parede em e4 e d5, sem nenhum peão dele por perto
-para empurrá-la.} 6... Nb8 7. Nf3
-Bg7 8. h3 {Antes de rocar, tiramos a casa g4 do bispo
+para empurrá-la.} 6... Nb8 7. Nf3 {Conte os lances dele: gastou dois com o cavalo para
+deixá-lo exatamente onde estava. A gente usa o presente para tirar a última
+peça pequena do fundo. De f3 o cavalo cobre e5, que é a casa de onde ele
+tentaria devolver o soco no centro, e o roque fica pronto para a hora que a
+gente quiser.}
+7... Bg7 8. h3 {Antes de rocar, tiramos a casa g4 do bispo
 dele. Repare no centro: peões em e4 e d5 e o cavalo dele de volta para casa — é
 isso que o 2.c3 constrói.} *

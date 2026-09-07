@@ -1,20 +1,42 @@
-; Petroff — 1 linha do Base. A fonte é o Grigoryan, por decisão de 5/9: o
-; capítulo do Krikor joga 3.d4 e ficou de fora para não dar ao aluno dois
+; Petroff — 1 linha do Base. Os lances são os do Grigoryan, por decisão de 5/9:
+; o capítulo do Krikor joga 3.d4 e ficou de fora para não dar ao aluno dois
 ; terceiros lances para a mesma posição.
+;
+; A FONTE QUE EXPLICA é outra, e foi achada em 7/9/2026 dentro do corpus que já
+; estava em casa (seção 23 do docs/REVISAO-FONTES.md). O Grigoryan dá os lances
+; e cala: 140 comentários no arquivo inteiro, 4 que explicam. O Toth joga esta
+; linha inteira, na nossa ordem, e explica lance a lance — 14 dos nossos 16
+; meios-lances. Era a última linha das 27 cuja fonte não dizia nada; não é
+; mais, e nenhum lance mudou para isso.
 
 [Abertura "petroff"]
 [Nome "Petroff"]
 [Cor "brancas"]
 [Nivel "base"]
-[Fonte "GM Avetik Grigoryan (ChessMood) — 'PGN file and Homework'"]
+[Fonte "IM Andras Toth — '1.e4 for Club Players' (Chess.com), variante 'Petroff Defense: 1.e4 e5 2.Nf3 Nf6'. O curso joga os nossos 14 primeiros meios-lances um a um, na mesma ordem, e comenta 3.Cxe5 ('o peão de e5 é bem central; se deixarem, elimine já'), 4.Cf3 ('o melhor recuo'), 5.Cc3 ('troca o cavalo de e4 e acelera a saída do bispo de c1'), 6.dxc3 ('a recaptura certa: abre a diagonal do bispo e dá coluna semiaberta') e 7.Be3 ('o objetivo do sistema é rocar grande depressa e atacar do lado para onde o rei preto for'). || O VÃO, declarado como manda o precedente do Colle na seção 22: no sétimo lance dele o curso joga 7...Cc6 e nós jogamos 7...O-O, então o 8.Dd2 final está explicado pelo curso em posição VIZINHA, a um lance preto de distância — 'as brancas cumprem sem desviar a intenção de guardar o rei na ala da dama'. O repertorio:mapear vai marcar a linha como cauda a partir do 7...O-O; a citação é dos LANCES BRANCOS, que são os mesmos. || Até 7/9/2026 esta tag dizia só 'GM Avetik Grigoryan (ChessMood) — PGN file and Homework'. Os lances continuam sendo os dele; o que mudou é que agora há uma fonte que os explica, e ela estava no corpus desde a revisão da seção 10."]
 [Result "*"]
 
 1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} e5 2. Nf3 {Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.} Nf6 3. Nxe5 {Ele copiou o nosso lance, e nós comemos primeiro.
 Não é para ganhar peão — ele recupera logo. É pela ordem: quem come primeiro
 escolhe o que acontece depois. E repare que ele não pode copiar de novo com
 3…Cxe4; precisa gastar um lance em …d6 para expulsar o nosso cavalo antes.}
-3... d6 4. Nf3 Nxe4 5. Nc3 {Oferecemos a troca dos
+3... d6
+4. Nf3 {O cavalo volta, e f3 é a casa certa das três possíveis. Em d3 ele
+trancaria o peão da dama — e o nosso plano inteiro depende justamente desse
+peão poder andar, como você vai ver no sexto lance. De f3 ele volta a olhar
+para e5 e não atrapalha ninguém.} 4... Nxe4 5. Nc3 {Oferecemos a troca dos
 cavalos. Parece que estamos ajudando ele, mas a recaptura é que é o ponto.}
-5... Nxc3 6. dxc3 Be7 7. Be3 O-O 8. Qd2 {Dobramos o peão em c3 de propósito: a
+5... Nxc3
+6. dxc3 {Aqui está o lance que dá o desenho da linha, e é para ele que os
+outros trabalhavam. Dava para recapturar com o peão de b2 e ficar com os peões
+bonitinhos; escolhemos o de d2, e dobramos os nossos peões em c3 de propósito,
+por duas coisas que valem mais do que peão bonito: a coluna d abre inteira
+para a dama e para a torre, e a diagonal do bispo de c1 abre junto.}
+6... Be7
+7. Be3 {O bispo sai pela porta que o peão acabou de abrir, e daqui em diante o
+objetivo é um só: roque grande, rápido. Depois disso o ataque vem do lado para
+onde o rei dele for — se ele rocar pequeno, empurramos os peões da ala do rei;
+se rocar grande, a briga é do outro lado. É por isso que a gente não decide
+agora.} 7... O-O 8. Qd2 {Dobramos o peão em c3 de propósito: a
 coluna d abriu inteira para a dama e para a torre. Com bispo em e3 e dama em d2
 falta só o roque grande — é o mesmo plano da Escocesa e da Philidor.} *

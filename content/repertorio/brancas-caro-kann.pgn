@@ -22,7 +22,16 @@
 [Fonte "Curso gratuito 'Caro Kann't' (Chess.com), capítulo 4...Cc6 5.c3 Cf6 6.h3, variantes 'the Passive 6...e6' #1 e #2 — a fonte joga e explica os 15 meios-lances desta linha, sem furo. A regra 'c3 contra ...Cc6, h3 contra ...Cf6' é dela; o texto aqui é reescrito com as nossas palavras. Entra no lugar do 6.Bf4 por decisão da §11.1 de docs/REVISAO-FONTES.md."]
 [Result "*"]
 
-1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} c6 2. d4 d5 3. exd5 cxd5 4. Bd3 {Depois das trocas os dois lados ficam
+1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} c6 2. d4 {Ele jogou …c6, que prepara …d5 mas ainda não briga por casa
+nenhuma. Enquanto ele prepara, a gente ocupa: o segundo peão vai para o meio
+e ficamos com e4 e d4 lado a lado. A regra vale para toda abertura — se
+deixarem, pegue o centro inteiro com os dois peões.} 2... d5
+3. exd5 {A Variante da Troca, e é ela a razão de esta linha estar no
+repertório: é a maneira mais simples que existe de jogar contra a Caro-Kann,
+com pouquíssima teoria para decorar. O que ela faz de verdade é tirar dele a
+estrutura de peões que ele veio buscar — depois de 3…cxd5 os dois lados ficam
+com os mesmos peões, e quem decide a partida passam a ser as peças.} 3... cxd5
+4. Bd3 {Depois das trocas os dois lados ficam
 com os mesmos peões, então quem faz a diferença é o bispo. Repare no que ele
 fez no primeiro lance: jogou …c6, e não …e6, justamente para deixar o bispo de
 c8 livre — é essa a diferença entre a Caro-Kann e a Francesa, e é o orgulho da
@@ -58,7 +67,16 @@ que tem é empurrar …e5 uma hora; até lá o tabuleiro é nosso.} *
 [Fonte "Recomendação do professor. O 6.Bf4 e o plano com Db3 e Cd2 são escolha do Doug, e o argumento dos comentários é dele, não de curso. Os cinco comentários desta linha foram lidos e ASSINADOS pelo professor em 7/9/2026; até essa data o texto era rascunho do assistente e a linha estava pendente na régua. A ordem de lances também aparece em GM Avetik Grigoryan (ChessMood) — 'Caro Kann', que joga a linha mas não explica por quê: o arquivo inteiro tem um comentário, e é a assinatura. Vai para o Avançado por decisão da §11.1 de docs/REVISAO-FONTES.md; no Base o aluno aprende o 6.h3, que vem com a regra escrita."]
 [Result "*"]
 
-1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} c6 2. d4 d5 3. exd5 cxd5 4. Bd3 {Depois das trocas os dois lados ficam
+1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} c6 2. d4 {Ele jogou …c6, que prepara …d5 mas ainda não briga por casa
+nenhuma. Enquanto ele prepara, a gente ocupa: o segundo peão vai para o meio
+e ficamos com e4 e d4 lado a lado. A regra vale para toda abertura — se
+deixarem, pegue o centro inteiro com os dois peões.} 2... d5
+3. exd5 {A Variante da Troca, e é ela a razão de esta linha estar no
+repertório: é a maneira mais simples que existe de jogar contra a Caro-Kann,
+com pouquíssima teoria para decorar. O que ela faz de verdade é tirar dele a
+estrutura de peões que ele veio buscar — depois de 3…cxd5 os dois lados ficam
+com os mesmos peões, e quem decide a partida passam a ser as peças.} 3... cxd5
+4. Bd3 {Depois das trocas os dois lados ficam
 com os mesmos peões, então quem faz a diferença é o bispo. Ele jogou …c6, e não
 …e6, justamente para deixar o bispo de c8 livre — é o orgulho da Caro-Kann. O
 nosso sai primeiro, para d3, e tira dele a casa que ele queria: 4…Bf5 perde

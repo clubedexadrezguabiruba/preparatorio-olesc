@@ -12,16 +12,42 @@
 próprio bispo de f8. Nós batemos no centro na hora, sem esperar: ou ele come em
 d4 e nos entrega o meio do tabuleiro, ou fica apertado por muitos lances.} 3...
 exd4
-(3... Nf6 4. dxe5 Nxe4 5. Qd5 {A dama ataca o cavalo de e4 e o peão de f7 ao
-mesmo tempo. O cavalo tem de recuar.} 5... Nc5 6. Bg5 Be7 7. exd6 Qxd6 8. Nc3
+(3... Nf6 4. dxe5 {Comemos, e a fonte já avisa da armadilha: 4…dxe5 não
+recupera nada. Vem 5.Dxd8+ Rxd8, ele perde o direito de rocar, e depois de
+6.Cxe5 o peão cai do mesmo jeito, porque não sobrou ninguém defendendo e5. O
+lance dele é 4…Cxe4 — e é exatamente esse cavalo que o 5.Dd5 está esperando.}
+4... Nxe4 5. Qd5 {A dama ataca o cavalo de e4 e o peão de f7 ao
+mesmo tempo. O cavalo tem de recuar.} 5... Nc5
+6. Bg5 {O bispo sai atacando a dama dele. A diagonal g5-d8 está vazia porque o
+cavalo saiu de f6 e nunca voltou — foi para e4 e de lá para c5. Ele vai ter de
+tapar com 6…Be7, e repare no que isso custa: o bispo entra numa casa onde já
+nasce pregado contra a própria dama, e o rei dele continua no meio do
+tabuleiro.} 6... Be7
+7. exd6 {O peão de e5 já fez o trabalho dele; agora come em d6 e abre a
+posição com o rei dele ainda no meio. A recaptura é de dama, e o motivo é a
+prega: saindo de d8, a dama solta o bispo de e7, que estava preso a ela. Só
+que em d6 ela também não descansa — o nosso cavalo entra em c3 no lance
+seguinte, de olho na casa d5.} 7... Qxd6 8. Nc3
 {O cavalo defende a nossa dama, então a troca de damas não assusta: se ele
 trocar, recapturamos com o cavalo caindo em d5, e de lá ele ataca c7 e o bispo
 de e7 ao mesmo tempo.})
-4. Nxd4 Nf6 5. Nc3 Be7 6. Bf4 {Aqui havia duas montagens possíveis, e as duas
+4. Nxd4 {O cavalo recaptura no meio do tabuleiro. Compare com a Escocesa: é a
+mesma peça na mesma casa, e não é coincidência — a diferença é que o …d6 dele
+custou a saída do bispo de f8. A Philidor é uma Escocesa em que ele está um
+passo atrás.} 4... Nf6
+5. Nc3 {O último cavalo vai para a casa dele. Repare no que ainda NÃO foi
+decidido: os dois bispos estão em casa e o rei também. É de propósito — o
+próximo lance é que escolhe o desenho da partida inteira, e a fonte oferece
+dois desenhos. Cavalos primeiro, decisão depois.} 5... Be7 6. Bf4 {Aqui havia duas montagens possíveis, e as duas
 são boas: bispo em e2 com roque pequeno, que é a tranquila, ou esta. Nós ficamos
 com esta de propósito, porque é a que põe pressão — comece a reconhecer o
 desenho: bispo em f4 mirando o peão de d6, dama em d2 atrás dele e a casa c1
 livre para a torre. É a mesma montagem da Escocesa e da Petroff — três aberturas
-diferentes, um plano só.} 6... O-O 7. Qd2 Nc6 8. O-O-O {O desenho de sempre:
+diferentes, um plano só.} 6... O-O
+7. Qd2 {Dama para d2, logo atrás do bispo, e as duas peças passam a olhar
+juntas para a diagonal que termina em h6. Com isso o corredor entre o rei e a
+torre de a1 fica vazio — b1, c1 e d1, os três — e o roque grande está pronto.
+É o terceiro lance da montagem, e a essa altura você reconhece o desenho de
+longe: Bf4, Dd2, O-O-O.} 7... Nc6 8. O-O-O {O desenho de sempre:
 bispo em f4, dama em d2, roque grande. Os dois reis foram para lados opostos, e
 quem chegar primeiro com os peões leva a partida.} *

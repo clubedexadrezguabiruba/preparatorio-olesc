@@ -20,15 +20,30 @@
 [Fonte "GM Niclas Huschenbeth — 'Short & Sweet: 1.e4' (Chess.com), variante 'French #2'. Os 15 meios-lances batem um a um com o curso, que segue além até 13.Cxc3. O arquivo do Grigoryan dá os mesmos lances mas tem zero prosa; o Huschenbeth explica o 3.Bd3 (flexibilidade e surpresa) e o 5.Bf3 (o bispo toma f3, então o cavalo vai a e2). Conferido em 7/9/2026. Até a poda de 7/9/2026 esta tag carregava também a ponta do 3...c5, que era nossa por livro + motor; aquela linha saiu do treinador e virou a página de princípios 'francesa-bd3'."]
 [Result "*"]
 
-1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} e6 2. d4 d5 3. Bd3 {Quase todo mundo joga 3.Cc3 ou 3.e5 aqui, e as duas
+1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} e6
+2. d4 {Se deixarem, pegue o centro inteiro com os dois peões. Ele jogou …e6
+para preparar …d5, e nós não esperamos a preparação ficar pronta: e4 e d4 lado
+a lado é o máximo que se pode ter no começo de uma partida.} 2... d5
+3. Bd3 {Quase todo mundo joga 3.Cc3 ou 3.e5 aqui, e as duas
 dão posições cheias de teoria. Nós fazemos o mais simples: pomos o bispo em d3,
 apontado para o rei dele, e deixamos o centro decidir sozinho. Se ele comer em
 e4, o bispo recaptura já desenvolvido; se ele bater com …c5, o jogo abre — e num
 jogo aberto quem tem o bispo bom é quem manda.} 3... dxe4
-4. Bxe4 Nf6 5. Bf3 {O cavalo dele atacou o bispo, e em vez de trocar ou voltar
+4. Bxe4 {O bispo recaptura e cai na diagonal mais longa do tabuleiro, apontado
+para b7. Isso incomoda de verdade: o bispo de c8 da Francesa já vive preso
+atrás dos próprios peões, e a saída natural dele — …b6 e depois …Bb7 — esbarra
+no nosso bispo, que está olhando justamente para b7.} 4... Nf6 5. Bf3 {O cavalo dele atacou o bispo, e em vez de trocar ou voltar
 para d3 nós recuamos para f3. Daqui o bispo atravessa o tabuleiro inteiro até
 b7, que é onde o bispo dele de c8 gostaria de morar — e não vai poder.} 5... c5
-6. Ne2 Nc6 7. Be3 cxd4 8. Nxd4 {O cavalo fica no meio do
+6. Ne2 {Casa estranha para um cavalo, e o motivo é simples: f3 está ocupada
+pelo nosso próprio bispo. Não trocamos a ordem por acaso — o bispo em f3 é a
+peça que atrapalha a vida dele, então quem se muda é o cavalo. De e2 ele
+guarda o peão de d4 e ainda pode ir para f4 ou c3 mais tarde.} 6... Nc6
+7. Be3 {Terceira peça defendendo o peão de d4, e vale contar: o peão está
+atacado duas vezes — pelo peão de c5 e pelo cavalo de c6 — e defendido três —
+pelo cavalo de e2, pela dama de d1 e agora por este bispo. Ele pode comer
+quando quiser; nós recapturamos de cavalo, que é justamente onde a gente quer
+que ele fique.} 7... cxd4 8. Nxd4 {O cavalo fica no meio do
 tabuleiro e tudo está desenvolvido. Repare no bispo de f3: ele atravessa o
 tabuleiro inteiro, e é justamente a peça que o jogador de Francesa menos gosta
 de enfrentar, porque o bispo dele de c8 continua preso.} *

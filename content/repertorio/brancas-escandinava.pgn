@@ -28,19 +28,42 @@ que a gente gosta de vê-la.} 2. exd5 {Pegue o peão. Ele vai ter de gastar um l
 3. Nc3 {O cavalo sai atacando a dama. Este é o presente
 que a Escandinava nos dá: desenvolvemos com tempo, e ela ainda vai ter de andar
 mais uma vez.} 3... Qa5
-(3... Qd6 4. d4 Nf6 5. Nf3 {Espere o bispo dele em g4 agora: é o lance mais
+(3... Qd6 {Esta é a Escandinava moderna, e o especialista dela é o holandês
+Sergei Tiviakov. A ideia é boa: em d6 a dama fica desenvolvida e não leva
+susto de peça nenhuma tão cedo.} 4. d4 {O centro inteiro é nosso de graça — e
+repare no efeito colateral do 3…Dd6: a dama tapou a saída do peão de d7, e
+sem esse peão andar o bispo de c8 não sai pela porta normal. É por isso que
+o bispo dele vai aparecer em g4 já no lance seguinte, antes da hora.} 4... Nf6 5. Nf3 {Espere o bispo dele em g4 agora: é o lance mais
 natural do mundo, ele sai atacando e ainda prega o nosso cavalo contra a dama.
 E é exatamente o que a gente quer. O bispo parece ativo em g4 e está indo para
 o lugar errado — o próximo lance começa a mostrar por quê.} 5... Bg4 6. h3 {Começa a caçada ao bispo. O h3 faz uma
 pergunta simples — troca ou recua? — e as duas respostas nos servem: se ele
 trocar, ganhamos os dois bispos; se recuar para h5, vem g4 e ele fica na
-diagonal errada.} 6... Bh5 7. g4 Bg6 8. Ne5 {Empurramos o bispo
+diagonal errada.} 6... Bh5 7. g4 {Segundo empurrão, e agora repare no que ele resolve. Com o
+bispo em h5 o nosso cavalo de f3 está pregado contra a dama de d1 e não pode
+sair do lugar. Depois de g4 o bispo é obrigado a ir para g6, a prega acaba, e
+o cavalo fica livre para pular em e5. Sim, andamos dois peões na frente do
+nosso rei; dá para pagar esse preço porque ele não tem nem dama nem torre
+olhando para essa ala.} 7... Bg6 8. Ne5 {Empurramos o bispo
 dele até g6 com h3 e g4, e agora o cavalo pousa em e5, bem no meio do tabuleiro.
 O mesmo remédio serve quando a dama recua para d8.})
-4. d4 Nf6 5. Nf3 c6 {Esse peão de c6 não ataca nada e tem endereço certo:
+4. d4 {A dama se escondeu em a5, e o centro fica nosso sem custo: dois peões
+lado a lado em e4 e d4. E guarde o detalhe que decide esta linha — o peão
+acabou de sair de d2, e é justamente d2 a casa que o nosso bispo vai ocupar
+no sétimo lance para cobrar a dama lá de a5. Cada peão que anda abre a porta
+de alguém.} 4... Nf6
+5. Nf3 {O último cavalo sai, guarda o peão de d4 e deixa o roque pronto. E
+espere o …Bg4 agora: é o lance mais natural do mundo, ele sai atacando e
+prega o cavalo contra a nossa dama. Se vier, a receita é a mesma da linha do
+3…Dd6, que está entre parênteses logo acima — h3, g4 e o cavalo pousando em
+e5.} 5... c6 {Esse peão de c6 não ataca nada e tem endereço certo:
 ele abre a casa c7 para a dama fugir quando alguém a incomodar. Ele já está se
 preparando — e o nosso plano dos próximos lances é justamente incomodá-la.}
-6. Bc4 Bf5 7. Bd2 {Ele pôs a dama em a5 para ela ficar longe de todo mundo, e até
+6. Bc4 {O bispo vai para a diagonal mais longa que ainda sobra, apontado para
+f7. Mas o emprego que importa aqui é outro: de c4 ele olha para d5. Guarde
+essa casa, porque é para lá que o nosso cavalo pula no oitavo lance — e é
+este bispo que vai estar segurando o cavalo quando ele chegar.} 6... Bf5
+7. Bd2 {Ele pôs a dama em a5 para ela ficar longe de todo mundo, e até
 agora estava dando certo. É este bispo que acaba com a história: de d2 ele
 entra na mesma diagonal da dama, e ela deixou de estar longe.} 7... e6 8. Nd5 {Agora dá para
 pular no meio do tabuleiro sem medo: se ele comer o cavalo, o bispo de d2 come a
@@ -75,7 +98,13 @@ quer.}
 4... Bg4 5. h3 {O mesmo remédio da outra linha. O h3 faz a pergunta simples:
 troca ou recua? Se ele trocar em f3, recapture de dama — o bispo dele foi embora
 e o nosso jogo fica fácil. Se recuar, vem g4.}
-5... Bh5 6. g4 Bg6 7. Ne5 {Empurramos o bispo até g6 com h3 e g4, e o cavalo
+5... Bh5 6. g4 {É o mesmo empurrão da outra Escandinava, e vale entender o
+mecanismo uma vez só: com o bispo em h5, o nosso cavalo de f3 está pregado
+contra a dama de d1 e não pode se mexer. O g4 obriga o bispo a ir para g6, a
+prega some, e o cavalo pula em e5 no lance seguinte. Os dois peões que
+andaram na frente do nosso rei são o preço — barato, porque ele não tem nem
+dama nem torre olhando para essa ala.}
+6... Bg6 7. Ne5 {Empurramos o bispo até g6 com h3 e g4, e o cavalo
 pousa no meio do tabuleiro. Repare: é o mesmo cavalo em e5 da outra linha da
 Escandinava. A caçada h3, g4, Ce5 é uma só, e serve nas duas. Daqui o plano é
 Bg2 e roque, ou h4-h5 para seguir apertando o bispo.} *

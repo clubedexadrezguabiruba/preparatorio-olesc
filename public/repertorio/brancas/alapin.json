@@ -56,8 +56,11 @@
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "2": "O lance mais estranho do repertório, e o mais simples de\nentender: o peão de c3 não ataca nada, ele só guarda lugar para o de d2 avançar\ndois passos. Se ele comer em d4, quem recaptura é o peão de c3 — e o centro\ncontinua nosso.",
+      "4": "O 2.c3 só existia para permitir este lance. O segundo peão vai\npara o meio e oferece a troca — e a troca é o que a gente quer, porque quem\nrecaptura em d4 é o peão de c3, não uma peça. Repare que ninguém está\natacando nada aqui: o centro se constrói com peões, e as peças vêm depois.",
       "6": "Este é o lance que dá nome à abertura toda: o peão de c3\nrecaptura e ficamos com dois peões no centro, e4 e d4, contra nenhum.",
+      "8": "O peão que morava em c3 se mudou para d4, e a casa ficou livre bem na\nhora: c3 é onde o cavalo da dama sempre quer ir. De lá ele guarda o peão de\ne4 e olha para d5 — que é exatamente a casa que o nosso peão vai ocupar no\nlance seguinte. Um lance, dois serviços.",
       "10": "O peão anda mais um e o cavalo dele não tem para onde ir a não\nser voltar para casa — os dois lances que ele gastou com essa peça foram para o\nlixo. E o centro virou uma parede em e4 e d5, sem nenhum peão dele por perto\npara empurrá-la.",
+      "12": "Conte os lances dele: gastou dois com o cavalo para\ndeixá-lo exatamente onde estava. A gente usa o presente para tirar a última\npeça pequena do fundo. De f3 o cavalo cobre e5, que é a casa de onde ele\ntentaria devolver o soco no centro, e o roque fica pronto para a hora que a\ngente quiser.",
       "14": "Antes de rocar, tiramos a casa g4 do bispo\ndele. Repare no centro: peões em e4 e d5 e o cavalo dele de volta para casa — é\nisso que o 2.c3 constrói."
     },
     "fonte": "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'"
