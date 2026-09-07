@@ -160,7 +160,7 @@ export default async function DicaDeMeioJogo({ params }: PageProps<"/meio-jogo/[
           revisão espaçada, dias depois. E vem **antes** da pergunta de plano,
           que continua sendo julgamento do autor e continua não sendo gravada —
           a ordem separa o que a máquina julga do que o autor julga. */}
-      {dica.treino ? <Treino treino={dica.treino} /> : null}
+      {dica.treino ? <Treino dica={dica.id} treino={dica.treino} /> : null}
 
       <Quiz
         pergunta={dica.quiz.pergunta}

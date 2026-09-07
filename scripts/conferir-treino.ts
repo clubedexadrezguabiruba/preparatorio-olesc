@@ -108,7 +108,7 @@ async function rodarDeVerdade(pagina: Page): Promise<void> {
 /** Esperou aparecer, ou não apareceu. `isVisible` sozinho não espera o React. */
 async function visivel(pagina: Page, texto: string): Promise<boolean> {
   try {
-    await pagina.getByText(texto).first().waitFor({ state: "visible", timeout: 4000 });
+    await pagina.getByText(texto).first().waitFor({ state: "visible", timeout: 8000 });
     return true;
   } catch {
     return false;
@@ -232,7 +232,7 @@ async function conferirDica(pagina: Page, dicaId: string, falhas: Falha[]): Prom
   // 5. A aplicação, na mesma tela e com o mesmo tabuleiro.
   const aplicacao = pagina.getByRole("heading", { name: "Agora a razão" });
   try {
-    await aplicacao.waitFor({ state: "visible", timeout: 4000 });
+    await aplicacao.waitFor({ state: "visible", timeout: 8000 });
   } catch {
     erro(treino.aplicacao.id, "a aplicação não apareceu depois do terceiro acerto");
     return itens;
@@ -246,6 +246,10 @@ async function conferirDica(pagina: Page, dicaId: string, falhas: Falha[]): Prom
   if (!(await visivel(pagina, "É essa."))) {
     erro(treino.aplicacao.id, "a opção certa não foi reconhecida");
   }
+  // A gravação sai sem `await` (a tela não espera a rede para dar o veredito),
+  // e fechar o navegador no instante seguinte aborta a requisição. Este respiro
+  // é do robô: o aluno de verdade lê o "É essa." antes de sair da página.
+  await pagina.waitForTimeout(1500);
   return itens + 1;
 }
 

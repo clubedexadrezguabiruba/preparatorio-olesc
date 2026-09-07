@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Key } from "@lichess-org/chessground/types";
 import { ChessBoard } from "@/components/board/ChessBoard";
@@ -16,6 +16,7 @@ import {
   contratoDoItem,
   type EstadoDoItem,
 } from "@/lib/meiojogo/tentativa";
+import { gravarTentativaDeTreino } from "../acoes";
 
 /**
  * O treino: dois exercícios guiados, um sozinho e a aplicação — os degraus 2, 3
@@ -51,7 +52,7 @@ import {
 /** O que o chessground pinta em cada casa, e o que cada cor quer dizer. */
 const PINCEL = { apoio: "blue", errada: "red", certa: "green" } as const;
 
-export function Treino({ treino }: { treino: TreinoDaDica }) {
+export function Treino({ dica, treino }: { dica: string; treino: TreinoDaDica }) {
   const [passo, setPasso] = useState(0);
   const [estados, setEstados] = useState<EstadoDoItem[]>(() => treino.reconhecimento.map(() => COMECO));
 
@@ -61,6 +62,46 @@ export function Treino({ treino }: { treino: TreinoDaDica }) {
 
   const mudar = (novo: EstadoDoItem) =>
     setEstados((atuais) => atuais.map((e, i) => (i === passo ? novo : e)));
+
+  /**
+   * O relógio do tempo gravado, e por que ele **zera a cada resposta**.
+   *
+   * A `minutos_por_dia` **soma** os `tempo_ms` das linhas. Se cada resposta
+   * gravasse o tempo desde o começo do exercício, três tentativas de vinte
+   * segundos virariam 20 + 40 + 60 = dois minutos de treino que não
+   * aconteceram. O que cada linha carrega é o intervalo desde a resposta
+   * anterior — assim a soma é o tempo de verdade.
+   *
+   * Ele nasce num efeito, e não no render: `Date.now()` no corpo do componente
+   * é chamada impura, e o React pode renderizar duas vezes sem que o aluno
+   * tenha feito nada. O efeito também é o que zera o relógio na troca de
+   * exercício, sem que quem trocou precise lembrar de zerá-lo.
+   */
+  const relogio = useRef(0);
+  useEffect(() => {
+    relogio.current = Date.now();
+  }, [passo]);
+
+  const registrar = (idDoItem: string, resposta: string, apoio: number) => {
+    const tempoMs = Date.now() - relogio.current;
+    relogio.current = Date.now();
+    // Sem `await`: a tela já deu o veredito no instante do toque, e prender a
+    // criança na rede da escola para gravar seria trocar a resposta imediata
+    // por uma barra de espera. O erro fica no `console.error` do servidor.
+    void gravarTentativaDeTreino({ dica, item: idDoItem, resposta, apoio, tempoMs }).catch(
+      () => {},
+    );
+  };
+
+  const clicar = (casa: string) => {
+    const novo = comClique(estado, item, casa);
+    // Estado idêntico é toque repetido na mesma casa, ou toque depois do
+    // acerto: `tentativa.ts` já decidiu que não conta, e o que não conta na
+    // tela não pode virar linha no banco.
+    if (novo === estado) return;
+    mudar(novo);
+    registrar(item.id, casa, estado.apoio);
+  };
 
   return (
     <section className="flex flex-col gap-4">
@@ -123,11 +164,21 @@ export function Treino({ treino }: { treino: TreinoDaDica }) {
         total={treino.reconhecimento.length}
         estado={estado}
         erroMaisProvavel={treino.ficha.erroMaisProvavel.feedback}
-        onClique={(casa) => mudar(comClique(estado, item, casa))}
+        onClique={clicar}
         onApoio={() => mudar(comApoio(estado))}
         // A aplicação entra por dentro do exercício, embaixo do feedback: é o
         // que mantém o tabuleiro do degrau 3 parado no lugar.
-        aplicacao={ultimo && estado.acertou ? <Aplicacao aplicacao={treino.aplicacao} /> : null}
+        aplicacao={
+          ultimo && estado.acertou ? (
+            <Aplicacao
+              aplicacao={treino.aplicacao}
+              // Apoio 0: o degrau 4 não tem escada, e herdar o nível do
+              // exercício de cima contaria como ajuda uma ajuda que esta
+              // pergunta não ofereceu.
+              onResponder={(letra) => registrar(treino.aplicacao.id, letra, 0)}
+            />
+          ) : null
+        }
         onProximo={ultimo ? null : () => setPasso(passo + 1)}
       />
 
@@ -379,7 +430,13 @@ function Escada({
  * assinado, como no quiz de plano; a diferença é que esta resposta **entra no
  * registro**, e a tela diz as duas coisas.
  */
-function Aplicacao({ aplicacao }: { aplicacao: ItemDeAplicacao }) {
+function Aplicacao({
+  aplicacao,
+  onResponder,
+}: {
+  aplicacao: ItemDeAplicacao;
+  onResponder: (letra: string) => void;
+}) {
   const [escolhida, setEscolhida] = useState<number | null>(null);
   const respondeu = escolhida !== null;
 
@@ -409,7 +466,13 @@ function Aplicacao({ aplicacao }: { aplicacao: ItemDeAplicacao }) {
             <li key={opcao.texto}>
               <button
                 type="button"
-                onClick={() => setEscolhida(i)}
+                onClick={() => {
+                  setEscolhida(i);
+                  // A letra que o aluno viu, e não o índice: é ela que o
+                  // professor lê no relatório quando procura padrão numa
+                  // alternativa errada escolhida por meia turma.
+                  onResponder(String.fromCharCode(97 + i));
+                }}
                 aria-pressed={escolhida === i}
                 disabled={respondeu}
                 className={`foco flex w-full items-start gap-3 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors ${estilo}`}

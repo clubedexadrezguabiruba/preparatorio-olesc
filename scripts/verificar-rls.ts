@@ -42,7 +42,11 @@
  *      "li o exemplo até o fim" não tem o que reconferir;
  *   8. as duas declarações que a F2 acrescentou — `partida_do_dia` e
  *      `dica_lida` — seguem o mesmo molde, e a view `minutos_por_dia` mostra
- *      a cada um só o que é dele.
+ *      a cada um só o que é dele;
+ *   9. no meio-jogo as duas tabelas do mesmo módulo ficam de lados opostos da
+ *      fronteira, e é de propósito: `dica_lida` é declaração e o aluno grava;
+ *      `tentativa_meiojogo` é veredito de máquina, e um `insert` dele ali seria
+ *      o aluno escrevendo o próprio relatório.
  *
  * O `with check` é a linha inteira da defesa nas tabelas em que o aluno
  * escreve — sem ele, um `insert` com o `aluno` trocado passaria, a política de
@@ -470,6 +474,60 @@ try {
     (viewPorA ?? []).reduce((soma, l) => soma + l.tempo_ms, 0) === 60_000,
     "e o total de A é o dele, não o da dupla",
   );
+
+  console.log("\n10. O treino de meio-jogo: o servidor grava, o aluno só lê a dele");
+
+  // Depois da seção 9, e não junto da 8: a linha de treino entra na
+  // `minutos_por_dia` (o terceiro ramo da view, criado na 0006), e semear
+  // uma antes mudaria o total que a 9 confere.
+
+  // A tabela do Bloco 4 entra aqui pelo molde do item 4, e não pelo do item 8:
+  // `dica_lida` é declaração do aluno e por isso ele grava; `tentativa_meiojogo`
+  // é veredito de máquina, e um `insert` do aluno seria ele escrevendo o
+  // próprio relatório. A diferença entre as duas tabelas do mesmo módulo é
+  // justamente o que esta seção existe para não deixar apagar.
+  const { error: erroTreino } = await alunoA.from("tentativa_meiojogo").insert({
+    aluno: criados[0],
+    dica: "m12",
+    item: "m12-d2-a",
+    conceito: "peao-isolado",
+    habilidade: "reconhecimento",
+    nivel_evidencia: "fato",
+    versao: "forjada0",
+    resposta: "d5",
+    acertou: true,
+    tentativa: 1,
+    apoio: 0,
+    inedita: true,
+    tempo_ms: 1,
+  });
+  afirmar(erroTreino?.code === "42501", `A não grava tentativa de treino (${erroTreino?.code})`);
+
+  for (const [i, id] of criados.entries()) {
+    const { error } = await admin.from("tentativa_meiojogo").insert({
+      aluno: id,
+      dica: "m12",
+      item: "m12-d2-a",
+      conceito: "peao-isolado",
+      habilidade: "reconhecimento",
+      nivel_evidencia: "fato",
+      versao: "semeada0",
+      resposta: i === 0 ? "d5" : "a1",
+      acertou: i === 0,
+      tentativa: 1,
+      apoio: 0,
+      inedita: true,
+      tempo_ms: 30_000,
+    });
+    if (error) throw new Error(`não semeou tentativa de treino de ${id}: ${error.message}`);
+  }
+
+  const { data: treinoPorA } = await alunoA.from("tentativa_meiojogo").select("aluno, item");
+  afirmar(
+    treinoPorA?.length === 1 && treinoPorA[0].aluno === criados[0],
+    `A vê 1 tentativa de treino, a dele (viu ${treinoPorA?.length})`,
+  );
+
 } finally {
   await limpar();
   console.log("\nContas de mentira apagadas.");

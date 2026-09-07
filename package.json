@@ -15,6 +15,7 @@
     "db:rls": "node scripts/verificar-rls.ts",
     "db:tatica": "node --conditions=react-server scripts/verificar-tatica.ts",
     "db:finais": "node --conditions=react-server scripts/verificar-finais.ts",
+    "db:meiojogo": "node --conditions=react-server scripts/verificar-meiojogo.ts",
     "validate:content": "node scripts/validate-content.ts",
     "meiojogo:funil": "node scripts/escolher-exercicios.ts",
     "meiojogo:prosa": "node scripts/varrer-prosa.ts",

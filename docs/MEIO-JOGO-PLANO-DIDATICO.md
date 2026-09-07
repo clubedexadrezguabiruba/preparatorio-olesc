@@ -36,13 +36,22 @@ sessão que o escreveu foi encerrada com `/clear`. Para retomar:
 alguém sobre gravação de tempo e acerto de menores (o site já faz isso na
 tática; nada de novo se abre).
 
-**Onde começar:** **Bloco 4** da §11 — a tela e a gravação. Os Blocos 0 a 3 estão
-feitos, e o número medido de cada um está no fim do bloco correspondente. O
-Bloco 3 fechou em 2026-09-07 com os oito conceitos curados; o que ele mudou
-neste plano está listado no próprio bloco, e o que o Bloco 4 precisa saber está
-logo abaixo.
+**Onde começar:** **Bloco 5** da §11 — o piloto. Os Blocos 0 a 4 estão feitos, e
+o número medido de cada um está no fim do bloco correspondente.
 
-**O que o Bloco 3 mudou, e que o Bloco 4 precisa saber antes de desenhar a tela:**
+**O Bloco 4 fechou em 2026-09-07, e deixou uma coisa pendente: o deploy.** A
+migration `0006` **já rodou** contra o banco (`db:migrar` "1 de 1"), porque a
+ordem é migrar antes; o código da tela e da gravação está na branch
+`meio-jogo-livros` e **não está no ar**. Enquanto não for, o aluno vê as dicas
+como antes — nada quebra, e nada de treino aparece.
+
+**O que o Bloco 4 decidiu, e que o Bloco 5 vai observar:** a aplicação aparece
+embaixo do terceiro exercício, na mesma tela; o treino vem depois da explicação
+e antes da pergunta de plano; e a escada de apoio é pedida, nunca imposta, com
+a tela escrevendo que pedir ajuda não é errar. As quatro correções de layout que
+a captura mediu estão listadas no próprio bloco.
+
+**O que o Bloco 3 deixou escrito, e que continua valendo para quem mexer na tela:**
 
 1. **O treino mora dentro da dica**, em `content/meio-jogo.json`, no campo
    `treino`: ficha, três itens de reconhecimento (degraus 2, 2 e 3), um item de
@@ -866,16 +875,75 @@ foi provado ponta a ponta com a resposta de `m12-d3-a` trocada: reprovou com
 citadas foram conferidas uma a uma contra o PDF da biblioteca — não contra o
 texto extraído.
 
-### Bloco 4 — a tela e a gravação (até 16/9)
-Prop nova no `ChessBoard` ligada a `events.select` do chessground
-(`dist/board.js:179` — dispara em casa vazia também; cuidados medidos: `events`
-nunca `undefined`, `ChessBoard.tsx:239-245`, e `viewOnly` fora da criação,
-`:204-214`). `Treino.tsx` com a escada de apoio. Migration `0006` e a gravação.
-**Migrar antes, deployar depois** (`0005_revisao.sql:24-29`).
-→ **Número:** `db:migrar` "1 de 1"; `db:rls` cobrindo a tabela nova;
-`scripts/verificar-meiojogo.ts` prova contra produção que casa errada grava
-`acertou=false`, que `apoio`, `primeira` e `inedita` chegam certos, e que a linha
-entra na `minutos_por_dia` no dia de Guabiruba.
+### Bloco 4 — a tela e a gravação — **feito em 2026-09-07**
+A prop `onSelect` do `ChessBoard`, `Treino.tsx` com a escada de apoio, a
+migration `0006` e a gravação. Migrado antes; **falta deployar**.
+
+**A decisão que o bloco pedia ao Doug, tomada em 2026-09-07:** a aplicação
+(degrau 4) aparece **embaixo do terceiro exercício, na mesma tela**, com o
+tabuleiro parado no lugar. O degrau 4 reusa a posição do 3 de propósito, e uma
+tela seguinte redesenharia o tabuleiro para mostrar a mesma posição.
+
+**Três coisas que a leitura do chessground impôs, e que o plano não previa:**
+
+1. **`viewOnly` e `select` não convivem.** O plano só sabia que `viewOnly` tem
+   de ficar fora da criação (`events.js:12`). Medido agora: o `viewOnly` de
+   **depois** também barra — ele corta o `drag.start` que chamaria o
+   `selectSquare` (`events.js:57`). O tabuleiro de apontar fica com `viewOnly`
+   desligado e movimento nenhum: sem `turnColor` e sem `dests`, `isMovable` é
+   falso, peça nenhuma arrasta, casa nenhuma seleciona — e o toque chega.
+2. **O teclado não vem de graça.** O chessground escuta só ponteiro
+   (`events.js:14-22`), e o critério de aceite da §8 pede a casa selecionável
+   por teclado. Entrou `CasasTocaveis`: 64 botões transparentes na camada de
+   `overlay`, que já é `pointer-events: none` — o mouse atravessa e chega ao
+   `select`, o teclado dispara o botão focado. Uma parada de tabulação, setas
+   entre as casas, e o rótulo dizendo casa **e peça**, porque metade das
+   respostas é casa vazia.
+3. **O juiz cabe no clique.** `exercicios.ts:26` avisa que varrer 64 casas custa
+   64 `Chess` montados. Medido nas 24 posições: **0,18 ms de média, 0,75 ms na
+   pior** (`m15-d2-a`). Então a tela chama `respostaDaTarefa` — o mesmo juiz do
+   gate e do servidor —, em vez de comparar com a `resposta` escrita.
+
+**A tela mudou quatro vezes depois de ser medida em captura**, e nenhuma das
+quatro foi ideia de antemão: o vocabulário e os pré-requisitos recolheram (eram
+15 linhas entre o título e o primeiro tabuleiro, num celular de 360 px); as abas
+pararam de quebrar em duas linhas; a aplicação perdeu o painel próprio (o texto
+da alternativa saía com 197 px, 45% da tela) e depois o filete, que encostava na
+borda do tabuleiro grudado formando régua dupla; e a legenda saiu de dentro do
+bloco grudado — com ela, o topo comia 470 dos 740 px e sobravam 270 de janela de
+leitura; agora são 385 e 352.
+
+**Duas colunas nasceram do que só existe rodando**, e ficam registradas porque a
+§9 não as previa: `versao` é a impressão digital do item (sha256 do que define a
+resposta, 8 casas) — sem ela, um enunciado corrigido no meio do piloto mistura
+duas perguntas na mesma porcentagem; e o **tempo de cada linha é o intervalo
+desde a resposta anterior**, porque a `minutos_por_dia` **soma** — três
+tentativas de 20 s gravadas desde o início do exercício virariam dois minutos de
+treino que não aconteceram.
+
+**O robô achou dois defeitos dele mesmo, e os dois valem para quem escrever o
+próximo script de navegador:** `mouse.click` usa coordenada de viewport, e
+clicar num tabuleiro abaixo da dobra não clica em nada; e o
+`scrollIntoViewIfNeeded` do Playwright rola **sem disparar `scroll`** (medido: 0
+eventos contra 2 de uma roda de verdade), então o cache de `bounds` do
+chessground fica velho e o primeiro toque de cada página some sem erro nenhum.
+Dedo, roda e teclado disparam scroll de verdade.
+
+→ **Número, medido:** `db:migrar` **"1 de 1"**; `db:rls` **verde com a seção 10**,
+a da tabela nova; `npm run db:meiojogo` **24 afirmações verdes contra
+produção** — casa errada grava `acertou=false`, a resposta 2 do mesmo item no
+mesmo dia é `tentativa=2, primeira=false`, `apoio` e `inedita` chegam certos, a
+aplicação grava `curado` guardando a letra, item inventado e casa malformada não
+viram linha, e a linha entra na `minutos_por_dia` no dia de Guabiruba com o tempo
+somando 28.000 ms. `npm run meiojogo:tela` **8 dicas, 32 itens respondidos no
+navegador a 360 px, 0 erro de console**, com o clique em casa vazia julgado, o
+realce conferido casa a casa contra o conteúdo, um item por dica respondido pelo
+teclado e o tabuleiro à vista enquanto a solução é lida. `npm test` **651
+verdes**, `validate:content`, typecheck e lint limpos. As 76 linhas que o robô
+gravou na conta `alunoteste` foram apagadas: a tabela está em zero.
+
+→ **Pendente do bloco:** o **deploy** (migrado antes, como manda a
+`0005_revisao.sql:24-29`), e a decisão de fora do código sobre aviso à escola.
 → **17 e 18/9 são folga.** Se o Bloco 4 escorregar, corta-se conceito da fatia,
 não a folga.
 
