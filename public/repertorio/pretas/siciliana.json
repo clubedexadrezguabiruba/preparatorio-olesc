@@ -56,6 +56,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "1": "A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.",
+      "3": "Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.",
+      "5": "Coma. Ele vai recapturar de peça, e não de peão — e é essa a troca que a Siciliana quer: sai o nosso peão da ala da dama, sai um peão central dele. A coluna c abre para a nossa torre, e é por ela que o nosso jogo corre o resto da partida.",
       "7": "…g6, e não …d6. É daqui que vem o\n\"Acelerado\" do nome: o bispo vai para g7 e olha o tabuleiro inteiro pela\ndiagonal grande, enquanto o peão de d7 fica guardado em casa para depois dar\ndois passos de uma vez.",
       "15": "A torre sai para e8 preparando …e6 e depois …d5 de uma vez só. É este\no motivo do nome \"Acelerado\": nós guardamos o peão de d7 em casa para jogá-lo\ndois passos num lance só, em vez de gastar …d6 e depois …d5 em dois. Enquanto\nisso o bispo de g7 já atravessa o tabuleiro pela diagonal grande."
     },
@@ -117,6 +120,9 @@
       ]
     },
     "comentarios": {
+      "1": "A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.",
+      "3": "Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.",
+      "5": "Coma. Ele vai recapturar de peça, e não de peão — e é essa a troca que a Siciliana quer: sai o nosso peão da ala da dama, sai um peão central dele. A coluna c abre para a nossa torre, e é por ela que o nosso jogo corre o resto da partida.",
       "7": "Os mesmos …g6 e …Bg7 da linha de\ncima. Este jogo reúne os quintos lances dele que não são o 5.Cc3 — e a graça é\nque quase todos dão na mesma posição, com os lances em outra ordem.",
       "9": "Repare em qual peão recaptura. Com o de b7 os nossos peões ficam\nfeios, mas o de d7 continua livre para ir a d5 ou d6; com o de d7 o motor põe as\nbrancas meio peão à frente, porque a nossa dama sai do tabuleiro e o rei não\nroca mais.",
       "13": "O cavalo vai para d5 no estilo Alekhine, e o curso avisa: não o\nponha em h5 nem o devolva a g8, que é o que a maioria faz — as duas dão às\nbrancas jogo excelente. De d5 ele fica no meio do tabuleiro, e é ELE quem tem de\ntomar cuidado agora para igualar. Daqui o plano é simples: quando ele jogar\n9.Cc3, ofereça a troca de damas com …Db6. Sem damas o peão dobrado em c6 deixa\nde ser problema, e a coluna a abre para a nossa torre."
@@ -195,6 +201,8 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "1": "A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.",
+      "3": "Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.",
       "7": "Ficamos com peão dobrado em c5 e c6,\ne isso não é problema: o de c6 toma conta de b5 e de d5, que são exatamente as\nduas casas de onde o cavalo dele gostaria de incomodar. Peão feio que faz\ntrabalho não é peão fraco.",
       "11": "A dama sai antes do cavalo, e é aí que está a ideia inteira. O caminho\nantigo — o que este arquivo jogava até 7/9/2026 — era …Cf6 e depois …Cd7: dois\nlances com o mesmo cavalo, só para abrir a diagonal do bispo de g7 antes do\n…e5. O Sielecki conta que o campeão do mundo jogou assim durante anos e mudou em\n2019. Primeiro os lances que são úteis de qualquer jeito — a dama em c7, que já\napoia o …e5 que vem —, e só depois se decide onde o cavalo fica. Guardar a\ndecisão abre casas que o caminho antigo fechava: o cavalo pode ir a f6 e de lá a\nh5, o que é impossível quando ele já teve de recuar para d7.",
       "17": "Um lance pequeno com dois trabalhos, e os dois são do curso. O primeiro: tira\no Bh6 da jogada. Assim que o nosso cavalo de g8 sair, o bispo dele iria a h6\noferecer a troca do nosso bispo de g7 — que é a melhor peça desta estrutura, o\ndono da diagonal grande. O segundo é mais simples: o peão em h6 toma conta de\ng5.",
@@ -259,6 +267,8 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "1": "A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.",
+      "3": "Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.",
       "9": "O c3 dele anuncia o que vem:\nd2-d4 e um centro grande de peões. Nós desenvolvemos e ficamos de olho — no\nlance em que o peão pisar em d4, respondemos …d5 na hora, antes que esse centro\ntenha tempo de crescer.",
       "15": "Ele guardou o bispo e montou o centro com c3 e d4. A resposta é …d5 na\nhora, antes que esse centro fique grande. Depois de 8.e5 o cavalo pula para e4:\ncasa central, defendida, e para expulsá-lo dali ele só tem f3 — que abre a casa\ndo próprio rei."
     },
@@ -311,7 +321,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "1": "A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.",
       "3": "Ele guardou o cavalo em c3 antes de abrir o centro. O curso\nresponde …Cc6 e escreve o motivo: é este lance, e não outro, que nos deixa\nresponder 3.Cf3 com 3…g6 e cair no Dragão Acelerado de sempre. Com um segundo\nlance qualquer, ele teria como nos empurrar para uma Siciliana aberta que você\nnão treinou. Os dois lances que ele tem daqui levam a posições que já estão\nneste mesmo arquivo.",
+      "9": "O bispo vai para a diagonal grande, e é ele que dá nome ao Dragão. De g7 ele atravessa o tabuleiro inteiro até a2, e mira justamente o cavalo de c3 dele — a peça que segura o centro. Guarde este bispo: ele é a melhor peça que você tem, e trocar ele por qualquer cavalo é mau negócio.",
       "11": "Ele pôs o cavalo em c3 antes de d4 e\nmesmo assim caiu no Dragão Acelerado: esta é a mesma posição da linha do 5.Cc3,\ncom os lances em outra ordem. E ele pagou caro pela ordem. O curso diz que o\nmaior teste do Acelerado é o Maróczy, quando as brancas juntam um peão em c4 ao\nde e4 e o nosso …d5 nunca mais sai — só que, para chegar a c4, o peão de c2 tem\nde passar por c3, e o cavalo dele está justamente ali. Quem joga Cc3 cedo abre\nmão do Maróczy sozinho. É o melhor tipo de linha que existe: nada de novo para\ndecorar, e o lance mais chato do adversário já saiu do tabuleiro."
     },
     "fonte": "2...Cc6 e 3.Cf3 g6: FM Kamil Plichta — 'Short & Sweet: Plichta's Accelerated Dragon' (Chess.com), variantes #30 a #32. O curso recomenda o 2...Cc6 justamente para poder responder 3.Cf3 com 3...g6, e escreve que, ao pôr o cavalo em c3 cedo, as brancas abrem mão do Maróczy. A linha transpõe para o tronco do Acelerado a partir do 5.Cxd4. Conferido em 7/9/2026. || 3.Bc4 e6: Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Pela tabela da seção 6, depois de 2.Cc3 Cc6 ele joga 3.Cf3 46,9 por cento e 3.Bc4 18,1 por cento, e são esses dois que entram. O 3...e6 é lance do motor e transpõe para a estrutura do bispo em c4, que saiu deste arquivo e virou a página de princípios de slug 'bispo-em-c4'; a ideia está no draft 'Sicilian Sidelines Homework' do Grigoryan, que a deixa sem continuação. Nenhum curso do corpus entra no 3.Bc4 — ver a seção 17 de docs/REVISAO-FONTES.md."
@@ -392,6 +404,7 @@
       ]
     },
     "comentarios": {
+      "1": "A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.",
       "3": "O 2.c3 não desenvolve nada e não ataca nada. Ele quer uma\ncoisa só: jogar d4 no lance seguinte e ficar com os dois peões lado a lado em\ne4 e d4, que é o centro com que todo mundo sonha. O …Cf6 ataca e4 antes que\nisso aconteça e obriga a escolher. Ele quase sempre responde 3.e5 — e é o que\nqueremos: o peão sai da fila e vai sozinho para a frente, onde deixa de ser\nmuralha e vira alvo. É esse peão de e5 que a linha inteira persegue.",
       "5": "Para d5, e nunca para e4. Em e4 o cavalo fica sem casa no lance seguinte:\nele joga 4.d3, e as duas fugas que parecem naturais — f6 e d6 — são justamente\nas duas casas que o peão de e5 come. Em d5 é o contrário, o cavalo para firme no\nmeio do tabuleiro.",
       "9": "Este …d6 é a conta que apresentamos ao peão de e5. Ou\nele come em d6 e abre o jogo cedo, ou fica parado esperando a hora em que somos\nnós que comemos — que é como esta linha termina. E repare numa coisa que vale\ndaqui até o fim da partida: na troca do lance 4 os dois peões de c sumiram do\ntabuleiro. Sem peão em c2, ele não tem como jogar c4, que é o lance normal para\nexpulsar um cavalo de d5. Sobra fazer isso com peça — é o que ele tenta no\nlance 7 com Bc4 —, e aí nós recuamos …Cb6 atacando o bispo e ganhamos o tempo\nde volta.",

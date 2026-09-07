@@ -20,11 +20,11 @@
 [Fonte "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'"]
 [Result "*"]
 
-1. e4 d5 {A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de
+1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} d5 {A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de
 começar — mas repare no que ela nos entrega: daqui para a frente são lances
 naturais, um atrás do outro, e uma posição tranquila sem nada difícil para
 decorar. É por isso que ela aparece tanto nesta faixa de rating, e é por isso
-que a gente gosta de vê-la.} 2. exd5 Qxd5
+que a gente gosta de vê-la.} 2. exd5 {Pegue o peão. Ele vai ter de gastar um lance para buscá-lo de volta, e é esse lance de vantagem que a linha inteira explora — enquanto ele arruma a vida, nós desenvolvemos.} Qxd5
 3. Nc3 {O cavalo sai atacando a dama. Este é o presente
 que a Escandinava nos dá: desenvolvemos com tempo, e ela ainda vai ter de andar
 mais uma vez.} 3... Qa5
@@ -53,11 +53,11 @@ dama. Ele vai ter de recuar de novo.} *
 [Fonte "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'. Passou do Base para o Avançado em 7/9/2026 pela poda da seção 23 de docs/REVISAO-FONTES.md — os lances são os mesmos de antes, o id não mudou, e a fonte também não. O que mudou foi quando o aluno a vê: depois de fechar o Base. O motivo é pedagógico e está medido: a caçada h3, g4, Ce5 que esta linha ensina é a MESMA da linha do 3...Dd6, que fica no Base — o aluno aprende o plano lá e reencontra o mesmo aqui, com a dama dele noutra casa."]
 [Result "*"]
 
-1. e4 d5 {A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de
+1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} d5 {A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de
 começar — mas repare no que ela nos entrega: daqui para a frente são lances
 naturais, um atrás do outro, e uma posição tranquila sem nada difícil para
 decorar. É por isso que ela aparece tanto nesta faixa de rating, e é por isso
-que a gente gosta de vê-la.} 2. exd5 2... Nf6 {Ele não quer a dama no meio do tabuleiro tão cedo, e vai buscar o peão
+que a gente gosta de vê-la.} 2. exd5 {Pegue o peão. Ele vai ter de gastar um lance para buscá-lo de volta, e é esse lance de vantagem que a linha inteira explora — enquanto ele arruma a vida, nós desenvolvemos.} 2... Nf6 {Ele não quer a dama no meio do tabuleiro tão cedo, e vai buscar o peão
 de volta com o cavalo. É a segunda Escandinava mais comum — quase uma em cada
 cinco — e ela tira de nós justamente o que a outra dava de graça: o tempo em
 cima da dama.}

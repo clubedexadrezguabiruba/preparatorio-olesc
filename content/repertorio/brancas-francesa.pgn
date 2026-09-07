@@ -20,7 +20,7 @@
 [Fonte "GM Niclas Huschenbeth — 'Short & Sweet: 1.e4' (Chess.com), variante 'French #2'. Os 15 meios-lances batem um a um com o curso, que segue além até 13.Cxc3. O arquivo do Grigoryan dá os mesmos lances mas tem zero prosa; o Huschenbeth explica o 3.Bd3 (flexibilidade e surpresa) e o 5.Bf3 (o bispo toma f3, então o cavalo vai a e2). Conferido em 7/9/2026. Até a poda de 7/9/2026 esta tag carregava também a ponta do 3...c5, que era nossa por livro + motor; aquela linha saiu do treinador e virou a página de princípios 'francesa-bd3'."]
 [Result "*"]
 
-1. e4 e6 2. d4 d5 3. Bd3 {Quase todo mundo joga 3.Cc3 ou 3.e5 aqui, e as duas
+1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} e6 2. d4 d5 3. Bd3 {Quase todo mundo joga 3.Cc3 ou 3.e5 aqui, e as duas
 dão posições cheias de teoria. Nós fazemos o mais simples: pomos o bispo em d3,
 apontado para o rei dele, e deixamos o centro decidir sozinho. Se ele comer em
 e4, o bispo recaptura já desenvolvido; se ele bater com …c5, o jogo abre — e num

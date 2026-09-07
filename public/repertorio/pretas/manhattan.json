@@ -56,6 +56,7 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "1": "Espelhamos: ele ocupou uma casa do meio, nós ocupamos a outra. Contra 1.d4 este é o lance mais sólido que existe — o peão de d5 segura o centro e abre a diagonal do bispo de c8. Nada de sofisticado: quem não disputa o meio joga o resto da partida apertado.",
       "7": "O cavalo parece mal posto: em c6 ele\nestaria mais no meio. O motivo de ir para d7 é um lance que ainda nem\naconteceu. Se fôssemos direto de …Bb4, ele responderia Da4+ — com xeque — e nós\nseríamos obrigados a tapar com …Cc6. Cavalo em c6 tranca o peão de c7, e sem o\n…c5 a nossa ideia inteira morre. Com o cavalo já em d7, aquele Da4 deixa de ser\nxeque, e o bispo vai para b4 em paz. Guarde a ordem: …Cbd7, depois …Bb4, depois\n…c5.",
       "15": "A dama sai e ameaça …Bxc3. Mas a ameaça não é o mais importante: o\nmais importante é que nós rocamos no lance seguinte e o rei dele continua\nparado no meio do tabuleiro, com o nosso bispo de b4 e a nossa dama de a5\napontados para lá. Ele está com um peão a mais e o rei no meio — e é o rei que\ndecide. Foi o …c5 do lance 6 que abriu tudo isso."
     },
@@ -118,6 +119,7 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "1": "Espelhamos: ele ocupou uma casa do meio, nós ocupamos a outra. Contra 1.d4 este é o lance mais sólido que existe — o peão de d5 segura o centro e abre a diagonal do bispo de c8. Nada de sofisticado: quem não disputa o meio joga o resto da partida apertado.",
       "7": "Cavalo em d7 antes de qualquer outra\ncoisa, de novo — e aqui ele faz dois trabalhos. Um é o de sempre: tira o xeque\ndo Da4, que é o que nos obrigaria a pôr o cavalo em c6 e a perder o …c5. O\noutro é este: com ele no lugar, o cavalo de f6 não está pregado de verdade,\nmesmo com o bispo dele em g5. Quem tentar provar o contrário cai na armadilha\nque vem agora.",
       "15": "A Armadilha do Elefante, e é o motivo de o cavalo ir para d7 antes de\nqualquer coisa. O cavalo de f6 parecia pregado na dama, mas não estava: 6…Cxd5\né possível porque, quando ele pegar a dama com 7.Bxd8, vem o xeque 7…Bb4+. Ele\ntem de tapar com 8.Dd2, nós trocamos, e no lance seguinte o nosso rei come o\nbispo em d8 — com uma peça a mais no bolso. E se ele não pegar a dama, também\nnão adianta: o cavalo dele já foi embora. Se ele NÃO cair na armadilha e jogar\n5.e3, não mude nada: …Bb4, …Cf3, …c5 na mesma ordem, e você cai na mesma\nposição da linha principal deste arquivo — só os lances vieram por outra\nporta."
     },

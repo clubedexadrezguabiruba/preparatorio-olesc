@@ -54,6 +54,7 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "4": "Quase todo mundo joga 3.Cc3 ou 3.e5 aqui, e as duas\ndão posições cheias de teoria. Nós fazemos o mais simples: pomos o bispo em d3,\napontado para o rei dele, e deixamos o centro decidir sozinho. Se ele comer em\ne4, o bispo recaptura já desenvolvido; se ele bater com …c5, o jogo abre — e num\njogo aberto quem tem o bispo bom é quem manda.",
       "8": "O cavalo dele atacou o bispo, e em vez de trocar ou voltar\npara d3 nós recuamos para f3. Daqui o bispo atravessa o tabuleiro inteiro até\nb7, que é onde o bispo dele de c8 gostaria de morar — e não vai poder.",
       "14": "O cavalo fica no meio do\ntabuleiro e tudo está desenvolvido. Repare no bispo de f3: ele atravessa o\ntabuleiro inteiro, e é justamente a peça que o jogador de Francesa menos gosta\nde enfrentar, porque o bispo dele de c8 continua preso."

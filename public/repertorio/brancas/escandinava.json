@@ -54,7 +54,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "1": "A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de\ncomeçar — mas repare no que ela nos entrega: daqui para a frente são lances\nnaturais, um atrás do outro, e uma posição tranquila sem nada difícil para\ndecorar. É por isso que ela aparece tanto nesta faixa de rating, e é por isso\nque a gente gosta de vê-la.",
+      "2": "Pegue o peão. Ele vai ter de gastar um lance para buscá-lo de volta, e é esse lance de vantagem que a linha inteira explora — enquanto ele arruma a vida, nós desenvolvemos.",
       "4": "O cavalo sai atacando a dama. Este é o presente\nque a Escandinava nos dá: desenvolvemos com tempo, e ela ainda vai ter de andar\nmais uma vez.",
       "8": "Espere o bispo dele em g4 agora: é o lance mais\nnatural do mundo, ele sai atacando e ainda prega o nosso cavalo contra a dama.\nE é exatamente o que a gente quer. O bispo parece ativo em g4 e está indo para\no lugar errado — o próximo lance começa a mostrar por quê.",
       "10": "Começa a caçada ao bispo. O h3 faz uma\npergunta simples — troca ou recua? — e as duas respostas nos servem: se ele\ntrocar, ganhamos os dois bispos; se recuar para h5, vem g4 e ele fica na\ndiagonal errada.",
@@ -117,7 +119,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "1": "A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de\ncomeçar — mas repare no que ela nos entrega: daqui para a frente são lances\nnaturais, um atrás do outro, e uma posição tranquila sem nada difícil para\ndecorar. É por isso que ela aparece tanto nesta faixa de rating, e é por isso\nque a gente gosta de vê-la.",
+      "2": "Pegue o peão. Ele vai ter de gastar um lance para buscá-lo de volta, e é esse lance de vantagem que a linha inteira explora — enquanto ele arruma a vida, nós desenvolvemos.",
       "4": "O cavalo sai atacando a dama. Este é o presente\nque a Escandinava nos dá: desenvolvemos com tempo, e ela ainda vai ter de andar\nmais uma vez.",
       "9": "Esse peão de c6 não ataca nada e tem endereço certo:\nele abre a casa c7 para a dama fugir quando alguém a incomodar. Ele já está se\npreparando — e o nosso plano dos próximos lances é justamente incomodá-la.",
       "12": "Ele pôs a dama em a5 para ela ficar longe de todo mundo, e até\nagora estava dando certo. É este bispo que acaba com a história: de d2 ele\nentra na mesma diagonal da dama, e ela deixou de estar longe.",
@@ -175,7 +179,9 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "1": "A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de\ncomeçar — mas repare no que ela nos entrega: daqui para a frente são lances\nnaturais, um atrás do outro, e uma posição tranquila sem nada difícil para\ndecorar. É por isso que ela aparece tanto nesta faixa de rating, e é por isso\nque a gente gosta de vê-la.",
+      "2": "Pegue o peão. Ele vai ter de gastar um lance para buscá-lo de volta, e é esse lance de vantagem que a linha inteira explora — enquanto ele arruma a vida, nós desenvolvemos.",
       "3": "Ele não quer a dama no meio do tabuleiro tão cedo, e vai buscar o peão\nde volta com o cavalo. É a segunda Escandinava mais comum — quase uma em cada\ncinco — e ela tira de nós justamente o que a outra dava de graça: o tempo em\ncima da dama.",
       "4": "Não tente segurar o peão. O 3.c4 parece o lance óbvio, mas depois de\n3...c6 ele abre linhas e recupera tudo com juros — o motor nem põe o c4 entre os\ncinco melhores daqui. O d4 devolve o peão e fica com o centro e o\ndesenvolvimento, que é o que decide a partida.\n\nE tem um bônus: se ele recapturar de dama, com 3...Dxd5, jogue 4.Cc3 e você cai\nna mesma Escandinava que já treinou — a dama vai ter de andar outra vez, e tanto\no ...Da5 quanto o ...Dd6 já são suas linhas. Um lance, duas portas.",
       "6": "Espere o bispo dele em g4 agora: ele sai atacando e prega o\nnosso cavalo contra a dama. É o lance mais natural do mundo — e é o que a gente\nquer.",

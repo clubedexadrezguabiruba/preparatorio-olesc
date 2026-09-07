@@ -54,6 +54,8 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
+      "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",
       "4": "Ele copiou o nosso lance, e nós comemos primeiro.\nNão é para ganhar peão — ele recupera logo. É pela ordem: quem come primeiro\nescolhe o que acontece depois. E repare que ele não pode copiar de novo com\n3…Cxe4; precisa gastar um lance em …d6 para expulsar o nosso cavalo antes.",
       "8": "Oferecemos a troca dos\ncavalos. Parece que estamos ajudando ele, mas a recaptura é que é o ponto.",
       "14": "Dobramos o peão em c3 de propósito: a\ncoluna d abriu inteira para a dama e para a torre. Com bispo em e3 e dama em d2\nfalta só o roque grande — é o mesmo plano da Escocesa e da Philidor."

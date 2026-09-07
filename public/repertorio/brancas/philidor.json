@@ -54,6 +54,8 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
+      "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",
       "4": "O …d6 dele defende o peão de e5, mas tranca a saída do\npróprio bispo de f8. Nós batemos no centro na hora, sem esperar: ou ele come em\nd4 e nos entrega o meio do tabuleiro, ou fica apertado por muitos lances.",
       "8": "A dama ataca o cavalo de e4 e o peão de f7 ao\nmesmo tempo. O cavalo tem de recuar.",
       "14": "O cavalo defende a nossa dama, então a troca de damas não assusta: se ele\ntrocar, recapturamos com o cavalo caindo em d5, e de lá ele ataca c7 e o bispo\nde e7 ao mesmo tempo."
@@ -115,6 +117,8 @@
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
+      "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
+      "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",
       "4": "O …d6 dele defende o peão de e5, mas tranca a saída do\npróprio bispo de f8. Nós batemos no centro na hora, sem esperar: ou ele come em\nd4 e nos entrega o meio do tabuleiro, ou fica apertado por muitos lances.",
       "10": "Aqui havia duas montagens possíveis, e as duas\nsão boas: bispo em e2 com roque pequeno, que é a tranquila, ou esta. Nós ficamos\ncom esta de propósito, porque é a que põe pressão — comece a reconhecer o\ndesenho: bispo em f4 mirando o peão de d6, dama em d2 atrás dele e a casa c1\nlivre para a torre. É a mesma montagem da Escocesa e da Petroff — três aberturas\ndiferentes, um plano só.",
       "14": "O desenho de sempre:\nbispo em f4, dama em d2, roque grande. Os dois reis foram para lados opostos, e\nquem chegar primeiro com os peões leva a partida."
