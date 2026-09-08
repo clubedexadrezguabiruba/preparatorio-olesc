@@ -1,0 +1,513 @@
+{
+  "id": "M103-PRINCIPIOS-DE-ABERTURA",
+  "title": "Princípios de abertura",
+  "orientation": "black",
+  "domainCriterion": "D1",
+  "status": "published",
+  "errors": {},
+  "fallbacks": {
+    "winningOffMethod": "Esse lance não é ruim, mas não é o que o capítulo pede. Olhe de novo o que está em jogo aqui.",
+    "losesWin": "Não é o lance do exercício. Volte ao que o capítulo pediu: quem está mais desenvolvido, quem manda no centro, e o que o adversário está querendo fazer.",
+    "methodAlternative": "Mesma ideia por outro caminho."
+  },
+  "stages": {
+    "objective": {
+      "source": "yusupov-build-up-1",
+      "technique": {
+        "name": "os três princípios da abertura",
+        "summary": "Desenvolva rápido, dispute o centro, e atrapalhe o plano do outro — nesta ordem de importância."
+      },
+      "why": "A abertura não se decora: ela se entende. Quem sabe estes três princípios monta uma posição jogável em qualquer variante que nunca viu, e sabe punir quem os ignora. É o que separa o aluno que sai da abertura com as peças prontas do que sai com dois peões a mais e nenhuma peça no jogo.",
+      "rules": [
+        {
+          "title": "Desenvolva rápido",
+          "text": "Ponha o máximo de peças em jogo no menor tempo possível, e leve o rei para a segurança com o roque. Cada lance que não desenvolve é um lance que o adversário usa para desenvolver. Ganhar um peão custando três tempos é um mau negócio na abertura — e é o negócio que quase todo mundo aceita.",
+          "frame": {
+            "scene": "morphy-desenvolvimento",
+            "step": 0
+          }
+        },
+        {
+          "title": "Dispute o centro",
+          "text": "As quatro casas do meio — e4, d4, e5, d5 — mandam no tabuleiro inteiro: a peça que passa por elas alcança os dois lados. Aponte suas peças para lá, e ocupe-as com peões quando puder sustentá-los. Quem tem o centro escolhe onde a partida acontece.",
+          "frame": {
+            "scene": "morphy-centro",
+            "step": 0
+          }
+        },
+        {
+          "title": "Atrapalhe o plano do outro",
+          "text": "Os dois primeiros princípios valem para o adversário também. Antes de seguir o seu plano, pergunte o que ele quer fazer — e, quando der, faça o lance que atende ao seu plano e estraga o dele ao mesmo tempo. Dois pela metade valem mais que um inteiro.",
+          "frame": {
+            "scene": "yusupov-contra-o-plano",
+            "step": 0
+          }
+        }
+      ],
+      "mastery": "Você domina isto quando, numa posição que nunca viu, consegue dizer em voz alta quem está mais desenvolvido, quem manda no centro, e o que o adversário está ameaçando — antes de escolher o lance."
+    },
+    "example": {
+      "scenes": [
+        {
+          "id": "morphy-desenvolvimento",
+          "title": "Meek–Morphy: o preço de caçar material",
+          "positionId": "pos-m103-diag-3-1",
+          "intro": "Mobile, 1855. As brancas atacaram cedo com o cavalo e o bispo e vão ganhar uma peça por dois peões — e vão pagar caro por isso. Repare em quantos lances as brancas gastam com as duas mesmas peças, e no que as pretas fazem enquanto isso. Jogam as pretas.",
+          "phases": [
+            {
+              "title": "Desenvolva rápido",
+              "fromStep": 1
+            }
+          ],
+          "steps": [
+            {
+              "move": "g8h6",
+              "text": "Morphy não corre para defender f7: ele desenvolve. O cavalo vai para h6 de propósito, olhando f7 e liberando a coluna do rei."
+            },
+            {
+              "move": "g5f7",
+              "text": "As brancas pegam o peão de f7 com o cavalo. Já é o terceiro lance desse cavalo na partida."
+            },
+            {
+              "move": "h6f7",
+              "text": "As pretas comem de volta. Note que o cavalo preto também já andou duas vezes — mas ele está trocando, e trocar peça ativa do adversário custa tempo dele, não nosso."
+            },
+            {
+              "move": "c4f7",
+              "text": "O bispo entra com xeque e ganha a torre depois. Quarto lance de peça branca, e nenhuma peça nova saiu de casa."
+            },
+            {
+              "move": "e8f7",
+              "text": "O rei preto toma o bispo. Ele fica no meio do tabuleiro, sem roque — o preço que Morphy aceita pagar."
+            },
+            {
+              "move": "d1h5",
+              "text": "Xeque de dama, forçando o peão a se mexer."
+            },
+            {
+              "move": "g7g6",
+              "text": "O peão bloqueia. E agora repare no que aconteceu: as brancas gastaram cinco lances com dama, bispo e cavalo, e a dama vai colher mais um."
+            },
+            {
+              "move": "h5c5",
+              "text": "As brancas pegam o bispo. Material: peça e dois peões para as brancas. Desenvolvimento: as brancas têm dama e cavalo fora, o resto em casa e o rei sem rocar; as pretas têm torre, cavalo e bispo prontos. Quem está melhor é quem tem as peças no jogo, e as próximas cenas mostram por quê."
+            }
+          ]
+        },
+        {
+          "id": "morphy-centro",
+          "title": "Meek–Morphy: o peão que abre tudo",
+          "positionId": "pos-m103-diag-3-4",
+          "intro": "Alguns lances depois. As brancas têm um peão a mais no centro, em e4, e nenhuma peça da ala da dama desenvolvida. As pretas já trouxeram as duas torres para as colunas abertas. Jogam as pretas — e o lance é sobre o centro.",
+          "phases": [
+            {
+              "title": "Dispute o centro",
+              "fromStep": 1
+            }
+          ],
+          "steps": [
+            {
+              "move": "d6d5",
+              "text": "O peão avança e bate no peão de e4. É o lance típico do princípio: não se pede licença ao centro do adversário, ataca-se ele. E note que a torre de e8 já estava esperando por esta coluna."
+            },
+            {
+              "move": "f2f3",
+              "text": "As brancas sustentam o peão de e4 com f3. Sustentar custa um lance, e é o sexto lance de peão das brancas."
+            },
+            {
+              "move": "c6a5",
+              "text": "O cavalo sai para a5 mirando a dama e a casa c4. Mais uma peça preta no jogo."
+            },
+            {
+              "move": "b3d3",
+              "text": "A dama recua para o centro. Conte as peças: as brancas continuam com o cavalo de b1, o bispo de c1 e a torre de a1 nas casas de origem."
+            }
+          ]
+        },
+        {
+          "id": "yusupov-contra-o-plano",
+          "title": "Buecker–Yusupov: cada lance atrapalha o outro",
+          "positionId": "pos-m103-diag-3-7",
+          "intro": "Bundesliga, 1993. As brancas jogaram f4, g4, h3 e b3 — quatro lances de peão, nenhuma peça desenvolvida. O plano delas é caçar o bispo preto com g4 e h3. Yusupov, com as pretas, responde ao plano em vez de seguir o dele. Jogam as pretas.",
+          "phases": [
+            {
+              "title": "Atrapalhe o plano do outro",
+              "fromStep": 1
+            }
+          ],
+          "steps": [
+            {
+              "move": "e7e5",
+              "text": "O peão avança e ataca o peão de f4. Este lance faz as três coisas ao mesmo tempo: abre o bispo de f8, disputa o centro, e obriga as brancas a cuidar de f4 em vez de continuar caçando o bispo."
+            },
+            {
+              "move": "g1f3",
+              "text": "Agora as brancas precisam desenvolver, e o cavalo sai."
+            },
+            {
+              "move": "e5e4",
+              "text": "O peão vai adiante, ganhando espaço e importunando o cavalo que acabou de sair."
+            },
+            {
+              "move": "e2e3",
+              "text": "As brancas sustentam com e3."
+            },
+            {
+              "move": "h5g6",
+              "text": "O bispo recua para g6 — a casa segura, atrás do peão de h7. Todo o plano branco de g4 e h3 foi para o lixo."
+            },
+            {
+              "move": "f3e5",
+              "text": "O cavalo vai para o centro."
+            },
+            {
+              "move": "f8d6",
+              "text": "O bispo preto entra em jogo mirando o cavalo."
+            },
+            {
+              "move": "e5g6",
+              "text": "As brancas trocam em g6."
+            },
+            {
+              "move": "h7g6",
+              "text": "As pretas comem com o peão de h7 e abrem a coluna h para a torre. Uma troca que o adversário escolheu, e que ajudou as pretas."
+            },
+            {
+              "move": "d1e2",
+              "text": "A dama branca sai."
+            },
+            {
+              "move": "g6g5",
+              "text": "O peão avança de novo: as pretas continuam atacando f4, que nunca foi resolvido."
+            },
+            {
+              "move": "e2b5",
+              "text": "Xeque de dama. As brancas ainda têm torre, bispo e cavalo em casa — e é este o retrato do capítulo inteiro."
+            }
+          ]
+        }
+      ]
+    },
+    "exercises": {
+      "intro": "Seis exercícios do próprio capítulo, na ordem do livro. Em cada um, ache o lance e jogue no tabuleiro. Errar não fecha o exercício — você tenta quantas vezes quiser, e a solução do autor aparece no fim. Mas só a primeira resposta vale ponto, que é como o Yusupov manda contar.",
+      "aprovacao": {
+        "minimo": 7,
+        "maximo": 14
+      },
+      "items": [
+        {
+          "id": "ex-3-1",
+          "positionId": "pos-m103-ex-3-1",
+          "orientation": "black",
+          "pontos": 1,
+          "node": {
+            "fen": "rnbqk1nr/ppp2ppp/3b4/8/8/2N5/PPPPP1PP/R1BQKBNR b KQkq - 0 1",
+            "hint": "As brancas jogaram quatro lances e ainda têm o rei em e1, sem nada defendendo as casas claras perto dele. Procure um xeque.",
+            "expects": [
+              {
+                "moves": [
+                  "d8h4"
+                ],
+                "feedback": "Isso. A dama entra na casa que o cavalo de g1 deveria estar defendendo — e ele não está lá, porque saiu."
+              }
+            ],
+            "winningMoves": []
+          },
+          "reveal": [
+            {
+              "move": "d8h4",
+              "text": "A dama chega em h4 com xeque. As brancas não têm como interpor uma peça: elas não desenvolveram nenhuma."
+            },
+            {
+              "move": "g2g3",
+              "text": "O peão bloqueia — é a única defesa."
+            },
+            {
+              "move": "h4g3",
+              "text": "Sacrifício de dama. Ele só funciona porque nenhuma peça branca guarda g3."
+            },
+            {
+              "move": "h2g3",
+              "text": "As brancas são obrigadas a comer."
+            },
+            {
+              "move": "d6g3",
+              "text": "E o bispo dá mate. Quatro lances de abertura mal jogados, e a partida acabou."
+            }
+          ]
+        },
+        {
+          "id": "ex-3-2",
+          "positionId": "pos-m103-ex-3-2",
+          "orientation": "white",
+          "pontos": 3,
+          "node": {
+            "fen": "r1bqk2r/pppp1ppp/1bn2n2/8/2BPP3/5N2/PP3PPP/RNBQK2R w KQkq - 0 1",
+            "hint": "As brancas estão melhor desenvolvidas e o rei preto ainda não rocou. Quando se está na frente em desenvolvimento, abre-se o jogo — e aqui é um peão do centro que faz isso.",
+            "expects": [
+              {
+                "moves": [
+                  "d4d5"
+                ],
+                "feedback": "Isso. O peão avança e expulsa o cavalo de c6, ganhando tempo e espaço no centro justamente quando as brancas estão prontas e as pretas não."
+              }
+            ],
+            "authorAlternatives": [
+              {
+                "moves": [
+                  "b1c3"
+                ],
+                "feedback": "developing move",
+                "pontos": 1
+              },
+              {
+                "moves": [
+                  "e1g1"
+                ],
+                "feedback": "developing move",
+                "pontos": 1
+              },
+              {
+                "moves": [
+                  "c1g5"
+                ],
+                "feedback": "developing move",
+                "pontos": 1
+              },
+              {
+                "moves": [
+                  "e4e5"
+                ],
+                "feedback": "Another good move is 7.e5!?, and Black still has to find the typical move 7...d5!? and then 8.exf6 dxc4 9.d5 Nb4 10.Qa4+ c6! 11.O-O. (Not 11.Qxb4? because of 11...Ba5!)",
+                "pontos": 2
+              }
+            ],
+            "winningMoves": []
+          },
+          "reveal": [
+            {
+              "move": "d4d5",
+              "text": "O peão avança e ataca o cavalo. Ganhar espaço com tempo é o melhor negócio da abertura."
+            },
+            {
+              "move": "c6e7",
+              "text": "O cavalo tem de recuar para a borda."
+            },
+            {
+              "move": "e4e5",
+              "text": "E agora o segundo peão avança, expulsando o outro cavalo. O centro branco anda e as peças pretas recuam."
+            },
+            {
+              "move": "f6e4",
+              "text": "O cavalo pula para e4, e as brancas seguem com vantagem clara de espaço e desenvolvimento."
+            }
+          ]
+        },
+        {
+          "id": "ex-3-3",
+          "positionId": "pos-m103-ex-3-3",
+          "orientation": "white",
+          "pontos": 3,
+          "node": {
+            "fen": "r2qk2r/pp1nbppp/5n2/1BpPp1B1/4P3/2N2Q2/PPP3PP/R3K2R w KQkq - 0 1",
+            "hint": "As brancas têm quase tudo pronto e o rei preto está preso no centro. Há um lance de peão que impede o roque preto para sempre.",
+            "expects": [
+              {
+                "moves": [
+                  "d5d6"
+                ],
+                "feedback": "Isso. O peão avança e o bispo de e7 tem de comê-lo — e com isso a casa do roque fica descoberta e o rei preto não sai mais do centro."
+              }
+            ],
+            "authorAlternatives": [
+              {
+                "moves": [
+                  "e1g1"
+                ],
+                "feedback": "Only 1 point for castling either short or long. Black can reply, for example, 11...a6 to free himself from the pin.",
+                "pontos": 1
+              },
+              {
+                "moves": [
+                  "e1c1"
+                ],
+                "feedback": "Only 1 point for castling either short or long. Black can reply, for example, 11...a6 to free himself from the pin.",
+                "pontos": 1
+              }
+            ],
+            "winningMoves": []
+          },
+          "reveal": [
+            {
+              "move": "d5d6",
+              "text": "O peão passa adiante. Ele não pode ser ignorado, e comê-lo custa a segurança do rei."
+            },
+            {
+              "move": "e7d6",
+              "text": "O bispo é obrigado a tomar."
+            },
+            {
+              "move": "e1c1",
+              "text": "E as brancas rocam do lado grande, pondo a torre na coluna d — de frente para o bispo e para o rei preto, que continua no meio do tabuleiro."
+            }
+          ]
+        },
+        {
+          "id": "ex-3-4",
+          "positionId": "pos-m103-ex-3-4",
+          "orientation": "white",
+          "pontos": 3,
+          "node": {
+            "fen": "r3k1nr/pppq1ppp/1b2b3/n7/3P4/B1NB1N2/P4PPP/R2Q1RK1 w kq - 0 1",
+            "hint": "As brancas já rocaram e as pretas não. Duas peças brancas apontam para as casas claras perto do rei preto. Procure a abertura de linha que os dois bispos estão esperando.",
+            "expects": [
+              {
+                "moves": [
+                  "d4d5"
+                ],
+                "feedback": "Isso. O peão avança e obriga a troca no centro — e cada troca abre mais uma linha contra o rei que ficou lá."
+              }
+            ],
+            "authorAlternatives": [
+              {
+                "moves": [
+                  "f1e1"
+                ],
+                "feedback": "If 1.Re1 (1 point), then Black can answer with 1...O-O-O.",
+                "pontos": 1
+              },
+              {
+                "moves": [
+                  "d3b5"
+                ],
+                "feedback": "Somewhat better is 1.Bb5!? (2 points) 1...c6 2.d5! cxb5 3.Ne5! with an attack.",
+                "pontos": 2
+              }
+            ],
+            "winningMoves": []
+          },
+          "reveal": [
+            {
+              "move": "d4d5",
+              "text": "O peão avança no centro, e as pretas não podem simplesmente ignorá-lo."
+            },
+            {
+              "move": "e6d5",
+              "text": "O bispo come."
+            },
+            {
+              "move": "c3d5",
+              "text": "O cavalo recaptura, entrando no centro."
+            },
+            {
+              "move": "d7d5",
+              "text": "A dama toma o cavalo — e é justamente o que as brancas querem, porque abre a coluna e."
+            },
+            {
+              "move": "f1e1",
+              "text": "Xeque de torre na coluna aberta. O rei preto está no meio do tabuleiro e as brancas já têm tudo em jogo."
+            }
+          ]
+        },
+        {
+          "id": "ex-3-5",
+          "positionId": "pos-m103-ex-3-5",
+          "orientation": "white",
+          "pontos": 2,
+          "node": {
+            "fen": "rnb1k2r/ppp2p1p/3p4/8/3PqB2/8/PPP2KP1/R2Q1B1R w kq - 0 1",
+            "hint": "A dama preta está adiantada e o rei preto ainda está em e8. As brancas têm dois bispos e as duas torres; falta escolher por onde começar, e é com xeque.",
+            "expects": [
+              {
+                "moves": [
+                  "f1b5"
+                ],
+                "feedback": "Isso. O bispo entra com xeque e o rei preto perde o direito ao roque de vez."
+              }
+            ],
+            "winningMoves": []
+          },
+          "reveal": [
+            {
+              "move": "f1b5",
+              "text": "Xeque de bispo. As pretas não têm como interpor sem perder material."
+            },
+            {
+              "move": "e8f8",
+              "text": "O rei tem de andar, e com isso o roque acabou."
+            },
+            {
+              "move": "f4h6",
+              "text": "O outro bispo entra com xeque, agora do lado escuro."
+            },
+            {
+              "move": "f8g8",
+              "text": "O rei corre."
+            },
+            {
+              "move": "h1h5",
+              "text": "A torre entra em jogo pela quinta fila, mirando a dama preta."
+            },
+            {
+              "move": "c8f5",
+              "text": "As pretas defendem a dama."
+            },
+            {
+              "move": "d1d2",
+              "text": "As brancas trazem a dama para a coordenação."
+            },
+            {
+              "move": "f5g6",
+              "text": "O bispo preto recua."
+            },
+            {
+              "move": "a1e1",
+              "text": "E a segunda torre entra na coluna aberta. Todas as peças brancas em jogo; o rei preto no canto, sem peças."
+            }
+          ]
+        },
+        {
+          "id": "ex-3-6",
+          "positionId": "pos-m103-ex-3-6",
+          "orientation": "black",
+          "pontos": 2,
+          "node": {
+            "fen": "r2qkb1r/5p1p/p1np4/1p1Npb2/8/N4Q2/PPP2PPP/R3KB1R b - - 0 1",
+            "hint": "Você está com as pretas, o rei ainda em e8 e a torre de a8 atacada. Não defenda: conte quantas peças cada lado tem em jogo e procure o lance que traz uma sua para o centro com ameaça.",
+            "expects": [
+              {
+                "moves": [
+                  "c6d4"
+                ],
+                "feedback": "Isso. O cavalo pula para o centro e ataca ao mesmo tempo — e é o lance que troca a torre de a8 por iniciativa e desenvolvimento."
+              }
+            ],
+            "winningMoves": []
+          },
+          "reveal": [
+            {
+              "move": "c6d4",
+              "text": "O cavalo salta para o centro. Ele ataca de lá, e as pretas não gastam um lance defendendo."
+            },
+            {
+              "move": "d5c7",
+              "text": "As brancas dão xeque com o cavalo e vão pegar a torre."
+            },
+            {
+              "move": "d8c7",
+              "text": "As pretas comem o cavalo com a dama, trazendo-a para a coluna aberta."
+            },
+            {
+              "move": "f3a8",
+              "text": "As brancas pegam a torre de a8."
+            },
+            {
+              "move": "e8e7",
+              "text": "E o rei anda para e7. As pretas estão com uma torre a menos e com todas as outras peças mais ativas — é a troca que o capítulo inteiro defende: material por desenvolvimento e iniciativa. O livro segue daqui com as pretas ganhando."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

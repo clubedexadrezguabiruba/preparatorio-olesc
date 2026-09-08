@@ -336,12 +336,44 @@ export function ExerciseStage({
         })}
       </nav>
 
-      <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start">
+      <div
+        className="relative flex flex-col gap-6 lg:flex-row lg:items-start"
+        /* O estado da etapa, legível de fora. Não é depuração esquecida: a
+           prova de tela (Playwright, a 360 px) precisa afirmar que o tabuleiro
+           aceita lance **antes** de tentar arrastar, senão um exercício mudo
+           passa como "o aluno não achou o lance". Os quatro valores são os
+           quatro que decidem `interactive`, e foram medidos assim quando a
+           M103 foi aberta pela primeira vez. */
+        data-exercicio={item.id}
+        data-estado={status}
+        data-interativo={interactive ? "sim" : "nao"}
+        data-vez={`${board.turn} · tabuleiro ${orientation}`}
+      >
         <div
           ref={boardColumn}
           className="relative mx-auto w-full max-w-[min(88vw,26rem)] lg:mx-0 lg:w-[26rem] lg:shrink-0"
         >
+          {/*
+            `key` por exercício, e é o único lugar do projeto que precisa disso.
+
+            O chessground trava quando `viewOnly` liga e depois desliga no mesmo
+            tabuleiro: `bindBoard` decide na criação se vai escutar o ponteiro, e
+            o `viewOnly` de depois barra o `drag.start` que chamaria o
+            `selectSquare` (o cabeçalho de `ChessBoard.tsx` já documenta as duas
+            metades). Nas etapas de final isso nunca apareceu porque lá o
+            tabuleiro trava **no fim** e o aluno não joga mais nele. Aqui ele
+            trava a cada acerto e tem de voltar a aceitar lance no exercício
+            seguinte — e não voltava.
+
+            Medido em 2026-09-08, abrindo a M103 no navegador: depois de acertar
+            o exercício 1 e trocar para o 2, **nenhuma das 64 casas selecionava**,
+            enquanto o React dizia que o tabuleiro estava ativo. Remontar por
+            exercício custa um tabuleiro novo por troca e devolve um chessground
+            criado escutando. O `FeedbackPanel` é irmão, não filho, então a regra
+            inviolável dele (nunca sair do DOM) continua respeitada.
+          */}
           <ChessBoard
+            key={item.id}
             fen={boardFen}
             orientation={orientation}
             turnColor={board.turn}

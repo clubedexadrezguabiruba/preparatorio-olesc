@@ -5,7 +5,6 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { SABADOS, SEMANAS } from "../curso/calendario.ts";
 import { CLASSES, TRILHA } from "../finais/trilha.ts";
-import { NIVEIS } from "../curso/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { daSemana, problemasDoDetalheDeMeioJogo, validarTarefas } from "./tarefas.ts";
 

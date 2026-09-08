@@ -1,0 +1,22 @@
+{
+  "id": "pos-m103-ex-3-4",
+  "fen": "r3k1nr/pppq1ppp/1b2b3/n7/3P4/B1NB1N2/P4PPP/R2Q1RK1 w kq - 0 1",
+  "expectedResult": "open",
+  "tags": [
+    "meio-jogo",
+    "exercicio",
+    "cap-3"
+  ],
+  "provenance": {
+    "externalHumanSource": "Artur Yusupov — exercício Ex. 3-4 do capítulo 3, \"Basic opening principles\"",
+    "bibliographicSource": "Yusupov, Build Up Your Chess 1: The Fundamentals, Quality Chess, 1ª edição inglesa, 2008, cap. 3, PDF p. 38",
+    "originalGame": "P.Morphy - A.Morphy, New Orleans match 1849",
+    "authorComposer": "não se aplica — posição de partida, não é estudo composto",
+    "license": "obra protegida; exemplar adquirido; uso interno do piloto; sem teto de citação no meio-jogo por decisão do Doug em 2026-09-07 — ver o _leia de content/sources.json",
+    "editionFile": "yusupov-build-up-1.pdf",
+    "fenMethod": "transcrição do diagrama impresso por leitura de imagem, com o recorte gerado por scripts/recortar-diagramas.py a 300 dpi (~95 px por casa) e as coordenadas impressas na borda do próprio diagrama usadas como referência",
+    "qaApplied": "scripts/conferir-transcricao.ts: a FEN é aceita pela chess.js, o lado a jogar bate com o glifo impresso, e a linha da solução do autor replica inteira a partir dela — um lance ilegal denunciaria uma peça no lugar errado. A soma dos pontos dos doze exercícios fecha com o máximo impresso na página de Scoring. O Stockfish mediu o lance principal e não levantou aviso.",
+    "pendingRisk": "nenhum conhecido"
+  },
+  "status": "approved"
+}

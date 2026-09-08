@@ -131,12 +131,18 @@
  {
   "id": "s2-meiojogo",
   "semana": 2,
-  "tipo": "marcar",
-  "titulo": "Fazer dois capítulos de meio-jogo",
-  "detalhe": "Dois capítulos do volume 1 nesta semana. Em cada um: leia o conceito, veja o exemplo do autor lance a lance, e depois resolve os exercícios jogando o lance no tabuleiro. Só a primeira resposta de cada exercício vale ponto — é assim que o autor manda contar —, e passar não é acertar tudo: a régua dele já conta que você erre uma parte. Enquanto as aulas estão sendo escritas, quem diz que fez é você.",
+  "tipo": "meiojogo",
+  "titulo": "Fazer a aula de meio-jogo \"Princípios de abertura\"",
+  "detalhe": "A primeira aula do módulo novo: Princípios de abertura, o capítulo 3 do volume 1 do Yusupov. Leia o conceito, veja as duas partidas lance a lance, e depois resolva os seis exercícios jogando o lance no tabuleiro. Errar não fecha o exercício — você tenta quantas vezes quiser, e a solução do autor aparece no fim —, mas só a primeira resposta vale ponto, que é como o Yusupov manda contar. A aula conta como feita quando você chega na nota de corte, e passar não é acertar tudo: a régua já conta que você erre uma parte.",
   "onde": {
-   "rotulo": "Abrir o meio-jogo",
-   "url": "/meio-jogo"
+   "rotulo": "Abrir a aula",
+   "url": "/meio-jogo/M103-PRINCIPIOS-DE-ABERTURA"
+  },
+  "aulas": [
+   "M103-PRINCIPIOS-DE-ABERTURA"
+  ],
+  "meta": {
+   "concluir": 1
   }
  },
  {

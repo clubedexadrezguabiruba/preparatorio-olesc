@@ -6,7 +6,6 @@ import { professorAtual } from "@/lib/auth/perfil";
 import { hojeNoBrasil, porExtenso, semanaAtual, somarDias } from "@/lib/curso/calendario";
 import { META_DO_DIA_MIN, MINIMO_DA_SEQUENCIA_MIN, sequenciaDeDias, serieDeDias } from "@/lib/curso/hoje";
 import { minutosPorDia, partidasDeclaradas } from "@/lib/curso/minutos";
-import { NIVEIS } from "@/lib/curso/trilha";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
 import { eventosDeAulas, progressoDeFinais } from "@/lib/finais/progresso";
 import { agendaDeRevisao, INTERVALOS_DE_FINAIS } from "@/lib/finais/revisao";

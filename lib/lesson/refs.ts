@@ -14,6 +14,11 @@ export function referencedPositionIds(lesson: Lesson): string[] {
   const s = lesson.stages;
   return [
     ...(s.example?.scenes ?? []).map((scene) => scene.positionId),
+    // Um id por exercício. Sem esta linha a aula de meio-jogo carrega sem
+    // nenhuma das posições dos exercícios, e a etapa 3 diz "esta aula ainda não
+    // tem exercícios escritos" com os seis escritos no arquivo — que foi
+    // exatamente o que aconteceu ao abrir a M103 no navegador pela primeira vez.
+    ...(s.exercises?.items ?? []).map((item) => item.positionId),
     s.guided?.positionId,
     s.solo?.positionId,
     s.practice?.positionId,
