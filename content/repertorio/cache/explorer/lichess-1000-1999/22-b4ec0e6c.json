@@ -1,0 +1,113 @@
+{
+  "white": 80,
+  "draws": 3,
+  "black": 27,
+  "moves": [
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1870,
+      "white": 39,
+      "draws": 2,
+      "black": 17,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h4",
+      "san": "h4",
+      "averageRating": 1893,
+      "white": 19,
+      "draws": 0,
+      "black": 4,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f3g5",
+      "san": "Ng5",
+      "averageRating": 1931,
+      "white": 10,
+      "draws": 1,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f3d4",
+      "san": "Nd4",
+      "averageRating": 1893,
+      "white": 3,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1g1",
+      "san": "Rdg1",
+      "averageRating": 1816,
+      "white": 2,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h3",
+      "san": "h3",
+      "averageRating": 1953,
+      "white": 3,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h1e1",
+      "san": "Rhe1",
+      "averageRating": 1732,
+      "white": 2,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e3h6",
+      "san": "Bh6",
+      "averageRating": 1649,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e3g5",
+      "san": "Bg5",
+      "averageRating": 1901,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g2g3",
+      "san": "g3",
+      "averageRating": 1939,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C42",
+    "name": "Petrov's Defense: Nimzowitsch Attack"
+  }
+}

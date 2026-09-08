@@ -1,12 +1,12 @@
 [
   {
-    "id": "brancas-caro-kann-428a7cce",
+    "id": "brancas-caro-kann-d17e5a90",
     "cor": "brancas",
     "abertura": "caro-kann",
     "nivel": "base",
-    "nome": "Caro-Kann Trocas — 7.Nf3 Bd6 8.O-O",
+    "nome": "Caro-Kann Trocas — 13.Nxe5 Nxe5 14.Nf3",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1bqk2r/pp3ppp/2nbpn2/3p4/3P4/2PB1N1P/PP3PP1/RNBQ1RK1 b kq - 3 8",
+    "fenFinal": "r1b2rk1/ppq2ppp/3b4/3pn3/8/2PB1N1P/PP2QPP1/R1B1R1K1 b - - 1 14",
     "lances": [
       "e2e4",
       "c7c6",
@@ -22,7 +22,19 @@
       "e7e6",
       "g1f3",
       "f8d6",
-      "e1g1"
+      "e1g1",
+      "e8g8",
+      "f1e1",
+      "d8c7",
+      "d1e2",
+      "f6d7",
+      "b1d2",
+      "e6e5",
+      "d4e5",
+      "d7e5",
+      "f3e5",
+      "c6e5",
+      "d2f3"
     ],
     "sans": [
       "e4",
@@ -39,7 +51,19 @@
       "e6",
       "Nf3",
       "Bd6",
-      "O-O"
+      "O-O",
+      "O-O",
+      "Re1",
+      "Qc7",
+      "Qe2",
+      "Nd7",
+      "Nbd2",
+      "e5",
+      "dxe5",
+      "Ndxe5",
+      "Nxe5",
+      "Nxe5",
+      "Nf3"
     ],
     "meus": [
       0,
@@ -49,32 +73,49 @@
       8,
       10,
       12,
-      14
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26
     ],
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
-      "2": "Ele jogou …c6, que prepara …d5 mas ainda não briga por casa\nnenhuma. Enquanto ele prepara, a gente ocupa: o segundo peão vai para o meio\ne ficamos com e4 e d4 lado a lado. A regra vale para toda abertura — se\ndeixarem, pegue o centro inteiro com os dois peões.",
-      "4": "A Variante da Troca, e é ela a razão de esta linha estar no\nrepertório: é a maneira mais simples que existe de jogar contra a Caro-Kann,\ncom pouquíssima teoria para decorar. O que ela faz de verdade é tirar dele a\nestrutura de peões que ele veio buscar — depois de 3…cxd5 os dois lados ficam\ncom os mesmos peões, e quem decide a partida passam a ser as peças.",
-      "6": "Depois das trocas os dois lados ficam\ncom os mesmos peões, então quem faz a diferença é o bispo. Repare no que ele\nfez no primeiro lance: jogou …c6, e não …e6, justamente para deixar o bispo de\nc8 livre — é essa a diferença entre a Caro-Kann e a Francesa, e é o orgulho da\nabertura dele. O nosso bispo sai primeiro, para d3, e desmancha o plano: a casa\nque ele queria era f5, e agora 4…Bf5 perde peça, porque depois de 5.Bxf5 não há\npeão em e6 nem em g6 para recapturar.",
-      "8": "O peão em c3 segura o de\nd4, que o cavalo dele acabou de atacar. E há um motivo maior para não jogar\n5.Cf3 aqui: viria 5…Bg4, pregando o cavalo, e o bispo problemático dele estaria\nresolvido. Trocar esse bispo pelo nosso cavalo nem seria ruim; o problema é sair\nda prega. Depois de h3 ele recua Bh5, e na sequência …Bg6 põe o bispo dele de\nfrente para o nosso — e quem sai do tabuleiro na troca é o de d3, que é a nossa\nmelhor peça.",
-      "10": "Com o cavalo em f6 o …Bg4 voltou a ameaçar, e é\npor isso que o h3 vem agora e não antes. A regra vale para a variante inteira e\né a coisa mais útil desta página: c3 contra …Cc6, h3 contra …Cf6. Um lance\nsegura o peão de d4, o outro fecha a casa g4. Com f5 e g4 fechadas o bispo de c8\nnão tem por onde sair, e ele vai ter de gastar alguma coisa para resolver isso:\n…e6, que é seguro e passivo, …g6, que arma o …Bf5 de novo, ou …e5, que aceita\npeão isolado.",
-      "11": "Escolheu o seguro, que é o que mais aparece no clube. O\npreço aparece depois: com o cavalo já comprometido em f6, ele perde a montagem\ncom …Cge7 e …f6, que é a maneira ativa de preparar o …e5.",
-      "12": "Agora sim o\ncavalo sai. É o mesmo lance que era ruim dois lances atrás, e a única coisa que\nmudou foi o h3 — não há mais …Bg4. Guardar essa diferença vale mais do que\nguardar os dois lances soltos.",
-      "14": "Roque, e a ala do rei está\ninteira. Daqui a montagem é sempre a mesma, e é ela que você tem de saber de\ncor: torre para e1, na coluna semiaberta — nós não temos peão em e e ele tem —,\ndama para e2, e o cavalo pulando para e5. Ele ficou sólido, mas o único plano\nque tem é empurrar …e5 uma hora; até lá o tabuleiro é nosso."
+      "2": "Ele jogou …c6, que prepara …d5 mas ainda não briga por casa\r\nnenhuma. Enquanto ele prepara, a gente ocupa: o segundo peão vai para o meio\r\ne ficamos com e4 e d4 lado a lado. A regra vale para toda abertura — se\r\ndeixarem, pegue o centro inteiro com os dois peões.",
+      "4": "A Variante da Troca, e é ela a razão de esta linha estar no\r\nrepertório: é a maneira mais simples que existe de jogar contra a Caro-Kann,\r\ncom pouquíssima teoria para decorar. O que ela faz de verdade é tirar dele a\r\nestrutura de peões que ele veio buscar — depois de 3…cxd5 os dois lados ficam\r\ncom os mesmos peões, e quem decide a partida passam a ser as peças.",
+      "6": "Depois das trocas os dois lados ficam\r\ncom os mesmos peões, então quem faz a diferença é o bispo. Repare no que ele\r\nfez no primeiro lance: jogou …c6, e não …e6, justamente para deixar o bispo de\r\nc8 livre — é essa a diferença entre a Caro-Kann e a Francesa, e é o orgulho da\r\nabertura dele. O nosso bispo sai primeiro, para d3, e desmancha o plano: a casa\r\nque ele queria era f5, e agora 4…Bf5 perde peça, porque depois de 5.Bxf5 não há\r\npeão em e6 nem em g6 para recapturar.",
+      "8": "O peão em c3 segura o de\r\nd4, que o cavalo dele acabou de atacar. E há um motivo maior para não jogar\r\n5.Cf3 aqui: viria 5…Bg4, pregando o cavalo, e o bispo problemático dele estaria\r\nresolvido. Trocar esse bispo pelo nosso cavalo nem seria ruim; o problema é sair\r\nda prega. Depois de h3 ele recua Bh5, e na sequência …Bg6 põe o bispo dele de\r\nfrente para o nosso — e quem sai do tabuleiro na troca é o de d3, que é a nossa\r\nmelhor peça.",
+      "10": "Com o cavalo em f6 o …Bg4 voltou a ameaçar, e é\r\npor isso que o h3 vem agora e não antes. A regra vale para a variante inteira e\r\né a coisa mais útil desta página: c3 contra …Cc6, h3 contra …Cf6. Um lance\r\nsegura o peão de d4, o outro fecha a casa g4. Com f5 e g4 fechadas o bispo de c8\r\nnão tem por onde sair, e ele vai ter de gastar alguma coisa para resolver isso:\r\n…e6, que é seguro e passivo, …g6, que arma o …Bf5 de novo, ou …e5, que aceita\r\npeão isolado.",
+      "11": "Escolheu o seguro, que é o que mais aparece no clube. O\r\npreço aparece depois: com o cavalo já comprometido em f6, ele perde a montagem\r\ncom …Cge7 e …f6, que é a maneira ativa de preparar o …e5.",
+      "12": "Agora sim o\r\ncavalo sai. É o mesmo lance que era ruim dois lances atrás, e a única coisa que\r\nmudou foi o h3 — não há mais …Bg4. Guardar essa diferença vale mais do que\r\nguardar os dois lances soltos.",
+      "14": "Roque, e a ala do rei está\r\ninteira. Daqui a montagem é sempre a mesma, e é ela que você tem de saber de\r\ncor: torre para e1, na coluna semiaberta — nós não temos peão em e e ele tem —,\r\ndama para e2, e o cavalo pulando para e5. Ele ficou sólido, mas o único plano\r\nque tem é empurrar …e5 uma hora; e é isso que os próximos lances mostram.",
+      "16": "Primeiro lance da montagem. A torre vai para a coluna e, que é\r\nSEMIABERTA: nós não temos peão nela e ele tem, em e6. Torre em coluna semiaberta\r\né torre com endereço — ela olha para o peão dele, e o peão não pode fugir.",
+      "18": "Segundo lance. Ele pôs a dama em c7 justamente para impedir Ce5 — de\r\nc7 a dama defende aquela casa. A nossa dama vai para e2 e volta a apoiar o pulo,\r\ne agora somos dois contra um. Repare no jeito de pensar: ele tirou o cavalo de\r\numa casa, e nós pusemos mais gente atrás dela em vez de desistir.",
+      "20": "Terceiro lance, e é o mais interessante da montagem. O cavalo da dama\r\nnão vai para c3 — o nosso próprio peão está lá — nem fica em b1: ele entra por\r\nd2 e daí pode ir a f1 e a e3, que é a rota clássica desta estrutura. Guarde o\r\ncaminho Cb1-d2-f1-e3: você vai reencontrá-lo em muitas aberturas fechadas.",
+      "22": "Ele finalmente empurrou o …e5, que era o único plano que tinha. Coma\r\nna hora. O que sai desta troca é o que decide a partida: o peão dele de d5 fica\r\nISOLADO, sem nenhum peão vizinho para defendê-lo.",
+      "24": "Troque, e troque de novo. Contra peão isolado a receita é sempre a\r\nmesma, e o curso a escreve com todas as letras: domine a casa da frente do peão\r\n— aqui, d4 — e troque o máximo de peças menores que puder. Cada troca deixa o\r\npeão mais sozinho, e no final ele cai.",
+      "26": "O cavalo volta e oferece a terceira troca seguida, mirando de novo a\r\ncasa d4. O preço é honesto e o curso o diz: ele fica com os dois bispos. Nós\r\nficamos com o alvo. Falta uma peça nossa em casa, o bispo de c1, e o comentário\r\naqui embaixo diz para onde ele vai e por que ainda não foi."
     },
-    "plano": {},
-    "fonte": "Curso gratuito 'Caro Kann't' (Chess.com), capítulo 4...Cc6 5.c3 Cf6 6.h3, variantes 'the Passive 6...e6' #1 e #2 — a fonte joga e explica os 15 meios-lances desta linha, sem furo. A regra 'c3 contra ...Cc6, h3 contra ...Cf6' é dela; o texto aqui é reescrito com as nossas palavras. Entra no lugar do 6.Bf4 por decisão da §11.1 de docs/REVISAO-FONTES.md."
+    "plano": {
+      "c1": {
+        "casa": "f4",
+        "motivo": "e o proprio curso nomeia a casa na variante irma — depois das trocas em e5 o bispo entra em f4, de onde cobra a coluna e e a diagonal que termina em b8"
+      }
+    },
+    "fonte": "Curso gratuito 'Caro Kann't' (Chess.com), capítulo 4...Cc6 5.c3 Cf6 6.h3, variantes 'the Passive 6...e6' #1 e #2 — a fonte joga e explica os 15 meios-lances desta linha, sem furo. A regra 'c3 contra ...Cc6, h3 contra ...Cf6' é dela; o texto aqui é reescrito com as nossas palavras. Entra no lugar do 6.Bf4 por decisão da §11.1 de docs/REVISAO-FONTES.md. || CAUDA DA §24 (8/9/2026), do 8...O-O ao 14.Cf3: DEGRAU 0 DO PRIMEIRO AO ULTIMO LANCE — os treze lances sao do curso, com prosa em oito deles. Dele sao: a torre em e1 na coluna semiaberta e a montagem completa da ala do rei; a De2 recolocando o Ce5 na mesa depois do ...Dc7; o ...Cd7 como unico lance que impede o Ce5; a rota Cb1-d2-f1-e3 para a peca menor da ala da dama; a leitura do ...e5 (abre a diagonal do bispo de c8 mas enfraquece d5); e a receita contra peao isolado — dominar a casa da frente, d4, e trocar o maximo de pecas menores. O [%plano] deste jogo declara c1>f4, e a CASA E DO PROPRIO CURSO: na variante irma que ele escreve no 11...e5 a sequencia termina em 15.Bf4. Dentro do teto de 14 o bispo nao sai; fora dele, sai para f4. Ponta +0,41 -> +0,40."
   },
   {
-    "id": "brancas-caro-kann-d2337d9b",
+    "id": "brancas-caro-kann-c6cf8723",
     "cor": "brancas",
     "abertura": "caro-kann",
     "nivel": "avancado",
-    "nome": "Caro-Kann Trocas — 7.Qb3 Qd7 8.Nd2",
+    "nome": "Caro-Kann Trocas — 13.Bxd7+ Kxd7 14.Qxb7+",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r3kb1r/pp1qpppp/2n2n2/3p4/3P1Bb1/1QPB4/PP1N1PPP/R3K1NR b KQkq - 6 8",
+    "fenFinal": "r6r/pQ1kbppp/4p3/3pP3/5nb1/2P5/PP1N1PPP/R3K2R b KQ - 0 14",
     "lances": [
       "e2e4",
       "c7c6",
@@ -90,7 +131,19 @@
       "c8g4",
       "d1b3",
       "d8d7",
-      "b1d2"
+      "b1d2",
+      "e7e6",
+      "g1f3",
+      "f8e7",
+      "f3e5",
+      "c6e5",
+      "d4e5",
+      "f6h5",
+      "d3b5",
+      "h5f4",
+      "b5d7",
+      "e8d7",
+      "b3b7"
     ],
     "sans": [
       "e4",
@@ -107,7 +160,19 @@
       "Bg4",
       "Qb3",
       "Qd7",
-      "Nd2"
+      "Nd2",
+      "e6",
+      "Ngf3",
+      "Be7",
+      "Ne5",
+      "Nxe5",
+      "dxe5",
+      "Nh5",
+      "Bb5",
+      "Nxf4",
+      "Bxd7+",
+      "Kxd7",
+      "Qxb7+"
     ],
     "meus": [
       0,
@@ -117,21 +182,38 @@
       8,
       10,
       12,
-      14
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26
     ],
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
-      "2": "Ele jogou …c6, que prepara …d5 mas ainda não briga por casa\nnenhuma. Enquanto ele prepara, a gente ocupa: o segundo peão vai para o meio\ne ficamos com e4 e d4 lado a lado. A regra vale para toda abertura — se\ndeixarem, pegue o centro inteiro com os dois peões.",
-      "4": "A Variante da Troca, e é ela a razão de esta linha estar no\nrepertório: é a maneira mais simples que existe de jogar contra a Caro-Kann,\ncom pouquíssima teoria para decorar. O que ela faz de verdade é tirar dele a\nestrutura de peões que ele veio buscar — depois de 3…cxd5 os dois lados ficam\ncom os mesmos peões, e quem decide a partida passam a ser as peças.",
-      "6": "Depois das trocas os dois lados ficam\ncom os mesmos peões, então quem faz a diferença é o bispo. Ele jogou …c6, e não\n…e6, justamente para deixar o bispo de c8 livre — é o orgulho da Caro-Kann. O\nnosso sai primeiro, para d3, e tira dele a casa que ele queria: 4…Bf5 perde\npeça, porque depois de 5.Bxf5 não há com o que recapturar em f5.",
-      "8": "O peão em c3 segura o de d4, que o cavalo dele acabou de atacar — e de\nquebra tira c3 do nosso próprio cavalo, o que decide por onde ele vai sair.",
-      "10": "É aqui que o Avançado se separa do Base. Lá nós fechamos a casa\ng4 com h3; aqui deixamos o …Bg4 acontecer, de propósito. O bispo tem de sair\nagora, antes de qualquer peão nosso ir para e3 — depois disso ele ficaria\ntrancado dentro da própria corrente, que é o problema que o adversário tem e nós\nnão queremos ter. De f4 ele olha para e5 e para a diagonal que termina em b8. E\na resposta ao …Bg4 não é impedir: é cobrar, com Db3.",
-      "12": "A dama em\nb3 bate em b7 e em d5 ao mesmo tempo, e é assim que se cobra o passeio do bispo\ndele: enquanto o bispo está em g4, ninguém está olhando para b7. Ele vai ter de\ngastar um lance para defender.",
-      "14": "O cavalo da dama entra por d2\nporque c3 está ocupado pelo nosso peão. De d2 ele não atrapalha ninguém, e quem\nvai para f3 é o outro cavalo, o de g1 — Cgf3 no lance seguinte. Com dama em b3 e\nbispo em d3 nós apertamos os dois lados do tabuleiro: é posição para jogar\ndevagar, sem pressa de trocar peças."
+      "2": "Ele jogou …c6, que prepara …d5 mas ainda não briga por casa\r\nnenhuma. Enquanto ele prepara, a gente ocupa: o segundo peão vai para o meio\r\ne ficamos com e4 e d4 lado a lado. A regra vale para toda abertura — se\r\ndeixarem, pegue o centro inteiro com os dois peões.",
+      "4": "A Variante da Troca, e é ela a razão de esta linha estar no\r\nrepertório: é a maneira mais simples que existe de jogar contra a Caro-Kann,\r\ncom pouquíssima teoria para decorar. O que ela faz de verdade é tirar dele a\r\nestrutura de peões que ele veio buscar — depois de 3…cxd5 os dois lados ficam\r\ncom os mesmos peões, e quem decide a partida passam a ser as peças.",
+      "6": "Depois das trocas os dois lados ficam\r\ncom os mesmos peões, então quem faz a diferença é o bispo. Ele jogou …c6, e não\r\n…e6, justamente para deixar o bispo de c8 livre — é o orgulho da Caro-Kann. O\r\nnosso sai primeiro, para d3, e tira dele a casa que ele queria: 4…Bf5 perde\r\npeça, porque depois de 5.Bxf5 não há com o que recapturar em f5.",
+      "8": "O peão em c3 segura o de d4, que o cavalo dele acabou de atacar — e de\r\nquebra tira c3 do nosso próprio cavalo, o que decide por onde ele vai sair.",
+      "10": "É aqui que o Avançado se separa do Base. Lá nós fechamos a casa\r\ng4 com h3; aqui deixamos o …Bg4 acontecer, de propósito. O bispo tem de sair\r\nagora, antes de qualquer peão nosso ir para e3 — depois disso ele ficaria\r\ntrancado dentro da própria corrente, que é o problema que o adversário tem e nós\r\nnão queremos ter. De f4 ele olha para e5 e para a diagonal que termina em b8. E\r\na resposta ao …Bg4 não é impedir: é cobrar, com Db3.",
+      "12": "A dama em\r\nb3 bate em b7 e em d5 ao mesmo tempo, e é assim que se cobra o passeio do bispo\r\ndele: enquanto o bispo está em g4, ninguém está olhando para b7. Ele vai ter de\r\ngastar um lance para defender.",
+      "14": "O cavalo da dama entra por d2\r\nporque c3 está ocupado pelo nosso peão. De d2 ele não atrapalha ninguém, e quem\r\nvai para f3 é o outro cavalo, o de g1 — Cgf3 no lance seguinte. Com dama em b3 e\r\nbispo em d3 nós apertamos os dois lados do tabuleiro.",
+      "16": "O último cavalo sai, e sai pelo caminho certo: Cgf3, e não Cdf3. As\r\nquatro peças pequenas estão fora de casa no nono lance, e o bispo dele de g4\r\nestá pregado no vazio — não há nada atrás dele para pregar.",
+      "18": "O cavalo pula para o meio do tabuleiro atacando o bispo de g4 e a dama\r\nde d7 ao mesmo tempo, porque os dois estão na mesma diagonal do cavalo. É a\r\ncobrança do 7.Db3: aquela dama em d7 entrou ali para defender b7, e agora paga\r\npor estar numa casa em que uma peça alcança.",
+      "20": "Recapture com o PEÃO de d4, não com o bispo. O peão em e5 expulsa o\r\ncavalo de f6, e é o cavalo de f6 quem defende h5 e d5. Guarde o mecanismo, que é\r\no mesmo em dezenas de posições: quando você recaptura com peão em vez de peça,\r\no peão costuma sair atacando alguém.",
+      "22": "E aqui está a conta. O cavalo dele foi para h5 comer o nosso bispo de\r\nf4, e nós nem defendemos: o bispo de d3 vai para b5 e prega o bispo de g4… não,\r\nprega nada — ele ATACA a dama de d7, que está na mesma diagonal e não tem para\r\nonde correr sem largar alguém. Quem ataca dama joga primeiro.",
+      "24": "Coma a dama com xeque. Ele comeu um bispo, nós comemos a dama, e o\r\nxeque é o que impede qualquer resposta no meio.",
+      "26": "E a dama entra atrás, com xeque de novo, comendo o peão de b7 e\r\nmirando a torre de a8. Repare no que sobrou: ele está sem dama, com o rei em d7\r\nno meio do tabuleiro e sem direito a rocar nunca mais. O nosso rei ainda está em\r\ne1, e isso é de propósito — o comentário aqui embaixo diz por quê."
     },
-    "plano": {},
-    "fonte": "Recomendação do professor. O 6.Bf4 e o plano com Db3 e Cd2 são escolha do Doug, e o argumento dos comentários é dele, não de curso. Os cinco comentários desta linha foram lidos e ASSINADOS pelo professor em 7/9/2026; até essa data o texto era rascunho do assistente e a linha estava pendente na régua. A ordem de lances também aparece em GM Avetik Grigoryan (ChessMood) — 'Caro Kann', que joga a linha mas não explica por quê: o arquivo inteiro tem um comentário, e é a assinatura. Vai para o Avançado por decisão da §11.1 de docs/REVISAO-FONTES.md; no Base o aluno aprende o 6.h3, que vem com a regra escrita."
+    "plano": {
+      "rei": {
+        "casa": "g1",
+        "motivo": "do decimo ao decimo quarto lance tudo foi forcado e ganhou material, e parar no meio para rocar teria devolvido a dama; o roque vem depois de a dama recolher a torre de a8 — na variante principal do motor ele acontece no lance 18"
+      }
+    },
+    "fonte": "Recomendação do professor. O 6.Bf4 e o plano com Db3 e Cd2 são escolha do Doug, e o argumento dos comentários é dele, não de curso. Os cinco comentários desta linha foram lidos e ASSINADOS pelo professor em 7/9/2026; até essa data o texto era rascunho do assistente e a linha estava pendente na régua. A ordem de lances também aparece em GM Avetik Grigoryan (ChessMood) — 'Caro Kann', que joga a linha mas não explica por quê: o arquivo inteiro tem um comentário, e é a assinatura. Vai para o Avançado por decisão da §11.1 de docs/REVISAO-FONTES.md; no Base o aluno aprende o 6.h3, que vem com a regra escrita. || CAUDA DA §24 (8/9/2026), do 8...e6 ao 14.Dxb7+: degrau 1 do 8...e6 ao 12.Bb5 e degrau 2 nos tres ultimos — 8.712, 7.949, 7.564, 2.612, 831, 504, 408, 223, 602, 506 e 438 jogos, nenhuma posicao abaixo de 200 ate o fim. Todos os lances nossos sao os mais jogados E os melhores do motor: 9.Cgf3 94 por cento e +0,26; 11.dxe5 84,7 por cento e +2,90 contra +0,38 do 11.Bxe5; 12.Bb5 93,7 por cento e +3,33; 13.Bxd7+ 98,6 por cento e +4,93; 14.Dxb7+ +6,84. A EXCECAO E O 10.Ce5, que e o segundo mais jogado (31,9 contra 48,8 do 10.O-O) e vale +0,72 contra +0,53 — e a escolha esta declarada: e ele que abre a sequencia forcada inteira. O [%plano] declara o roque, e o motivo esta medido: do decimo ao decimo quarto lance tudo e forcado e ganha material, e na variante principal do motor o roque acontece no lance 18. Ponta igual -> +7,24."
   }
 ]

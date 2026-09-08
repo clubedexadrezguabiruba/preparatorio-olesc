@@ -1,12 +1,12 @@
 [
   {
-    "id": "brancas-alapin-c8e4c146",
+    "id": "brancas-alapin-5eb647e6",
     "cor": "brancas",
     "abertura": "alapin",
     "nivel": "base",
-    "nome": "Alapin 2.c3 — 7.Nf3 Bg7 8.h3",
+    "nome": "Alapin 2.c3 — 11.Be3 a6 12.Qd2",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "rnbqk1nr/pp2ppbp/3p2p1/3P4/4P3/2N2N1P/PP3PP1/R1BQKB1R b KQkq - 0 8",
+    "fenFinal": "r1bq1rk1/1p1nppbp/p2p1np1/3P4/4P3/2NBBN1P/PP1Q1PP1/R4RK1 b - - 1 12",
     "lances": [
       "e2e4",
       "c7c5",
@@ -22,7 +22,15 @@
       "c6b8",
       "g1f3",
       "f8g7",
-      "h2h3"
+      "h2h3",
+      "g8f6",
+      "f1d3",
+      "e8g8",
+      "e1g1",
+      "b8d7",
+      "c1e3",
+      "a7a6",
+      "d1d2"
     ],
     "sans": [
       "e4",
@@ -39,7 +47,15 @@
       "Nb8",
       "Nf3",
       "Bg7",
-      "h3"
+      "h3",
+      "Nf6",
+      "Bd3",
+      "O-O",
+      "O-O",
+      "Nbd7",
+      "Be3",
+      "a6",
+      "Qd2"
     ],
     "meus": [
       0,
@@ -49,21 +65,29 @@
       8,
       10,
       12,
-      14
+      14,
+      16,
+      18,
+      20,
+      22
     ],
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
-      "2": "O lance mais estranho do repertório, e o mais simples de\nentender: o peão de c3 não ataca nada, ele só guarda lugar para o de d2 avançar\ndois passos. Se ele comer em d4, quem recaptura é o peão de c3 — e o centro\ncontinua nosso.",
-      "4": "O 2.c3 só existia para permitir este lance. O segundo peão vai\npara o meio e oferece a troca — e a troca é o que a gente quer, porque quem\nrecaptura em d4 é o peão de c3, não uma peça. Repare que ninguém está\natacando nada aqui: o centro se constrói com peões, e as peças vêm depois.",
-      "6": "Este é o lance que dá nome à abertura toda: o peão de c3\nrecaptura e ficamos com dois peões no centro, e4 e d4, contra nenhum.",
-      "8": "O peão que morava em c3 se mudou para d4, e a casa ficou livre bem na\nhora: c3 é onde o cavalo da dama sempre quer ir. De lá ele guarda o peão de\ne4 e olha para d5 — que é exatamente a casa que o nosso peão vai ocupar no\nlance seguinte. Um lance, dois serviços.",
-      "10": "O peão anda mais um e o cavalo dele não tem para onde ir a não\nser voltar para casa — os dois lances que ele gastou com essa peça foram para o\nlixo. E o centro virou uma parede em e4 e d5, sem nenhum peão dele por perto\npara empurrá-la.",
-      "12": "Conte os lances dele: gastou dois com o cavalo para\ndeixá-lo exatamente onde estava. A gente usa o presente para tirar a última\npeça pequena do fundo. De f3 o cavalo cobre e5, que é a casa de onde ele\ntentaria devolver o soco no centro, e o roque fica pronto para a hora que a\ngente quiser.",
-      "14": "Antes de rocar, tiramos a casa g4 do bispo\ndele. Repare no centro: peões em e4 e d5 e o cavalo dele de volta para casa — é\nisso que o 2.c3 constrói."
+      "2": "O lance mais estranho do repertório, e o mais simples de\r\nentender: o peão de c3 não ataca nada, ele só guarda lugar para o de d2 avançar\r\ndois passos. Se ele comer em d4, quem recaptura é o peão de c3 — e o centro\r\ncontinua nosso.",
+      "4": "O 2.c3 só existia para permitir este lance. O segundo peão vai\r\npara o meio e oferece a troca — e a troca é o que a gente quer, porque quem\r\nrecaptura em d4 é o peão de c3, não uma peça. Repare que ninguém está\r\natacando nada aqui: o centro se constrói com peões, e as peças vêm depois.",
+      "6": "Este é o lance que dá nome à abertura toda: o peão de c3\r\nrecaptura e ficamos com dois peões no centro, e4 e d4, contra nenhum.",
+      "8": "O peão que morava em c3 se mudou para d4, e a casa ficou livre bem na\r\nhora: c3 é onde o cavalo da dama sempre quer ir. De lá ele guarda o peão de\r\ne4 e olha para d5 — que é exatamente a casa que o nosso peão vai ocupar no\r\nlance seguinte. Um lance, dois serviços.",
+      "10": "O peão anda mais um e o cavalo dele não tem para onde ir a não\r\nser voltar para casa — os dois lances que ele gastou com essa peça foram para o\r\nlixo. E o centro virou uma parede em e4 e d5, sem nenhum peão dele por perto\r\npara empurrá-la.",
+      "12": "Conte os lances dele: gastou dois com o cavalo para\r\ndeixá-lo exatamente onde estava. A gente usa o presente para tirar a última\r\npeça pequena do fundo. De f3 o cavalo cobre e5, que é a casa de onde ele\r\ntentaria devolver o soco no centro, e o roque fica pronto para a hora que a\r\ngente quiser.",
+      "14": "Antes de rocar, tiramos a casa g4 do bispo\r\ndele. Repare no centro: peões em e4 e d5 e o cavalo dele de volta para casa — é\r\nisso que o 2.c3 constrói.",
+      "16": "O bispo sai para d3, e não para c4. De c4 ele bateria em d5, que é\r\ncasa do NOSSO peão — não há nada para atacar ali. De d3 ele guarda o peão de e4\r\ne fica na diagonal que aponta para h7, o cantinho do rei dele. Escolha a casa\r\ndo bispo pelo que ele vai fazer, não pela que parece mais bonita.",
+      "18": "Rei guardado. Conte o que cada lado tem: nós temos os dois peões\r\ncentrais em e4 e d5, todas as peças com casa e o rei no canto; ele gastou dois\r\nlances levando o cavalo de b8 a c6 e de volta a b8, e agora vai ter de achar o\r\nque fazer com uma posição sem espaço.",
+      "20": "A última peça pequena sai, e a casa é boa por dois motivos: de e3 o\r\nbispo olha para a diagonal que termina em a7 — o lado onde ele não tem peça\r\nnenhuma — e prepara o lance seguinte, que é a dama vir para d2 e as duas peças\r\napontarem juntas para h6.",
+      "22": "A dama entra atrás do bispo, e as duas passam a olhar para a mesma\r\ndiagonal, a que termina em h6. É a mesma dupla que você já viu na Escocesa, na\r\nPhilidor e na Petroff — Be3 e Dd2 — só que aqui o rei ficou no lado pequeno.\r\nConte a posição: rei no canto, as quatro peças pequenas fora de casa, dois peões\r\nno meio do tabuleiro e um plano escrito. A abertura acabou."
     },
     "plano": {},
-    "fonte": "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'"
+    "fonte": "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'. || CAUDA DA §24 (8/9/2026), do 8...Cf6 ao 12.Dd2: o curso nao alcanca nenhuma destas posicoes. Degrau 1 do 8...Cf6 ao 11.Be3 (216, 535, 274, 494 e 275 jogos) e degrau 2 nos dois ultimos. Os tres lances nossos sao os mais jogados E os melhores do motor na posicao: 9.Bd3 +1,04 contra +0,95 do 9.Be3, 11.Be3 +1,14 com 49,5 por cento, 12.Dd2 +1,08 com 33,3 por cento. O 10.O-O e o mais jogado com 72,6 por cento. A linha fecha a regua no lance 12, sem [%plano]. Ponta +1,04 -> +1,19."
   }
 ]

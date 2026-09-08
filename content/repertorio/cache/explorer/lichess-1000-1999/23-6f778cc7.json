@@ -1,0 +1,43 @@
+{
+  "white": 4,
+  "draws": 0,
+  "black": 4,
+  "moves": [
+    {
+      "uci": "e4d6",
+      "san": "Nxd6",
+      "averageRating": 1772,
+      "white": 2,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c7d6",
+      "san": "cxd6",
+      "averageRating": 1621,
+      "white": 1,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e4f2",
+      "san": "Nxf2",
+      "averageRating": 1829,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C41",
+    "name": "Philidor Defense: Nimzowitsch Variation, Rellstab Variation"
+  }
+}

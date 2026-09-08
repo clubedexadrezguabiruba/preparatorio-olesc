@@ -1,12 +1,12 @@
 [
   {
-    "id": "brancas-petroff-934fd6a6",
+    "id": "brancas-petroff-d713f48c",
     "cor": "brancas",
     "abertura": "petroff",
     "nivel": "base",
-    "nome": "Petroff — 7.Be3 O-O 8.Qd2",
+    "nome": "Petroff — 11.Kb1 a4 12.a3",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "rnbq1rk1/ppp1bppp/3p4/8/8/2P1BN2/PPPQ1PPP/R3KB1R b KQ - 4 8",
+    "fenFinal": "r2q1rk1/1pp1bppp/2npb3/8/p7/P1PBBN2/1PPQ1PPP/1K1R3R b - - 0 12",
     "lances": [
       "e2e4",
       "e7e5",
@@ -22,7 +22,15 @@
       "f8e7",
       "c1e3",
       "e8g8",
-      "d1d2"
+      "d1d2",
+      "b8c6",
+      "e1c1",
+      "c8e6",
+      "f1d3",
+      "a7a5",
+      "c1b1",
+      "a5a4",
+      "a2a3"
     ],
     "sans": [
       "e4",
@@ -39,7 +47,15 @@
       "Be7",
       "Be3",
       "O-O",
-      "Qd2"
+      "Qd2",
+      "Nc6",
+      "O-O-O",
+      "Be6",
+      "Bd3",
+      "a5",
+      "Kb1",
+      "a4",
+      "a3"
     ],
     "meus": [
       0,
@@ -49,21 +65,29 @@
       8,
       10,
       12,
-      14
+      14,
+      16,
+      18,
+      20,
+      22
     ],
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",
-      "4": "Ele copiou o nosso lance, e nós comemos primeiro.\nNão é para ganhar peão — ele recupera logo. É pela ordem: quem come primeiro\nescolhe o que acontece depois. E repare que ele não pode copiar de novo com\n3…Cxe4; precisa gastar um lance em …d6 para expulsar o nosso cavalo antes.",
-      "6": "O cavalo volta, e f3 é a casa certa das três possíveis. Em d3 ele\ntrancaria o peão da dama — e o nosso plano inteiro depende justamente desse\npeão poder andar, como você vai ver no sexto lance. De f3 ele volta a olhar\npara e5 e não atrapalha ninguém.",
-      "8": "Oferecemos a troca dos\ncavalos. Parece que estamos ajudando ele, mas a recaptura é que é o ponto.",
-      "10": "Aqui está o lance que dá o desenho da linha, e é para ele que os\noutros trabalhavam. Dava para recapturar com o peão de b2 e ficar com os peões\nbonitinhos; escolhemos o de d2, e dobramos os nossos peões em c3 de propósito,\npor duas coisas que valem mais do que peão bonito: a coluna d abre inteira\npara a dama e para a torre, e a diagonal do bispo de c1 abre junto.",
-      "12": "O bispo sai pela porta que o peão acabou de abrir, e daqui em diante o\nobjetivo é um só: roque grande, rápido. Depois disso o ataque vem do lado para\nonde o rei dele for — se ele rocar pequeno, empurramos os peões da ala do rei;\nse rocar grande, a briga é do outro lado. É por isso que a gente não decide\nagora.",
-      "14": "Dobramos o peão em c3 de propósito: a\ncoluna d abriu inteira para a dama e para a torre. Com bispo em e3 e dama em d2\nfalta só o roque grande — é o mesmo plano da Escocesa e da Philidor."
+      "4": "Ele copiou o nosso lance, e nós comemos primeiro.\r\nNão é para ganhar peão — ele recupera logo. É pela ordem: quem come primeiro\r\nescolhe o que acontece depois. E repare que ele não pode copiar de novo com\r\n3…Cxe4; precisa gastar um lance em …d6 para expulsar o nosso cavalo antes.",
+      "6": "O cavalo volta, e f3 é a casa certa das três possíveis. Em d3 ele\r\ntrancaria o peão da dama — e o nosso plano inteiro depende justamente desse\r\npeão poder andar, como você vai ver no sexto lance. De f3 ele volta a olhar\r\npara e5 e não atrapalha ninguém.",
+      "8": "Oferecemos a troca dos\r\ncavalos. Parece que estamos ajudando ele, mas a recaptura é que é o ponto.",
+      "10": "Aqui está o lance que dá o desenho da linha, e é para ele que os\r\noutros trabalhavam. Dava para recapturar com o peão de b2 e ficar com os peões\r\nbonitinhos; escolhemos o de d2, e dobramos os nossos peões em c3 de propósito,\r\npor duas coisas que valem mais do que peão bonito: a coluna d abre inteira\r\npara a dama e para a torre, e a diagonal do bispo de c1 abre junto.",
+      "12": "O bispo sai pela porta que o peão acabou de abrir, e daqui em diante o\r\nobjetivo é um só: roque grande, rápido. Depois disso o ataque vem do lado para\r\nonde o rei dele for — se ele rocar pequeno, empurramos os peões da ala do rei;\r\nse rocar grande, a briga é do outro lado. É por isso que a gente não decide\r\nagora.",
+      "14": "Dobramos o peão em c3 de propósito: a\r\ncoluna d abriu inteira para a dama e para a torre. Com bispo em e3 e dama em d2\r\nfalta só o roque grande — é o mesmo plano da Escocesa e da Philidor, e ele vem\r\nagora.",
+      "16": "Roque grande, que é o lance que a linha inteira estava preparando.\r\nOitenta e seis por cento jogam isto aqui, e não é moda: o rei sai do meio, a\r\ntorre cai na coluna d — a coluna que o peão dobrado abriu no sexto lance — e os\r\ndois reis ficam em lados opostos. A partir daqui cada um empurra os peões contra\r\no rei do outro.",
+      "18": "A última peça pequena sai, e sai para a casa que sobrou. Repare no que\r\no bispo faz de d3: guarda o peão de e4 e aponta para h7. E repare no que ele\r\nNÃO faz — não tapa a coluna d, onde a nossa torre acabou de chegar. Peça\r\ndesenvolvida é peça que não atrapalha as outras.",
+      "20": "O lance mais chato e mais útil do roque grande. O rei sai da coluna c e\r\nda diagonal a3-f8, e com isso todos os xeques que ele sonhava dar deixam de\r\nexistir. Um lance de segurança agora vale três lances de defesa depois — e ele\r\nacabou de começar a empurrar os peões desse lado.",
+      "22": "Feche a porta antes de o peão chegar. Se deixarmos ele jogar …a3, o\r\npeão de b2 tem de comer ou andar, e nos dois casos a casa do nosso rei abre.\r\nCom o peão em a3 o peão dele de a4 fica parado, sem ter para onde ir, e a nossa\r\nala volta a ser sólida. Conte a posição: rei guardado e reforçado, as quatro\r\npeças pequenas fora, torre na coluna aberta, e o ataque dele parado antes de\r\ncomeçar. A abertura acabou — e a nossa começa agora, do outro lado."
     },
     "plano": {},
-    "fonte": "IM Andras Toth — '1.e4 for Club Players' (Chess.com), variante 'Petroff Defense: 1.e4 e5 2.Nf3 Nf6'. O curso joga os nossos 14 primeiros meios-lances um a um, na mesma ordem, e comenta 3.Cxe5 ('o peão de e5 é bem central; se deixarem, elimine já'), 4.Cf3 ('o melhor recuo'), 5.Cc3 ('troca o cavalo de e4 e acelera a saída do bispo de c1'), 6.dxc3 ('a recaptura certa: abre a diagonal do bispo e dá coluna semiaberta') e 7.Be3 ('o objetivo do sistema é rocar grande depressa e atacar do lado para onde o rei preto for'). || O VÃO, declarado como manda o precedente do Colle na seção 22: no sétimo lance dele o curso joga 7...Cc6 e nós jogamos 7...O-O, então o 8.Dd2 final está explicado pelo curso em posição VIZINHA, a um lance preto de distância — 'as brancas cumprem sem desviar a intenção de guardar o rei na ala da dama'. O repertorio:mapear vai marcar a linha como cauda a partir do 7...O-O; a citação é dos LANCES BRANCOS, que são os mesmos. || Até 7/9/2026 esta tag dizia só 'GM Avetik Grigoryan (ChessMood) — PGN file and Homework'. Os lances continuam sendo os dele; o que mudou é que agora há uma fonte que os explica, e ela estava no corpus desde a revisão da seção 10."
+    "fonte": "IM Andras Toth — '1.e4 for Club Players' (Chess.com), variante 'Petroff Defense: 1.e4 e5 2.Nf3 Nf6'. O curso joga os nossos 14 primeiros meios-lances um a um, na mesma ordem, e comenta 3.Cxe5 ('o peão de e5 é bem central; se deixarem, elimine já'), 4.Cf3 ('o melhor recuo'), 5.Cc3 ('troca o cavalo de e4 e acelera a saída do bispo de c1'), 6.dxc3 ('a recaptura certa: abre a diagonal do bispo e dá coluna semiaberta') e 7.Be3 ('o objetivo do sistema é rocar grande depressa e atacar do lado para onde o rei preto for'). || O VÃO, declarado como manda o precedente do Colle na seção 22: no sétimo lance dele o curso joga 7...Cc6 e nós jogamos 7...O-O, então o 8.Dd2 final está explicado pelo curso em posição VIZINHA, a um lance preto de distância — 'as brancas cumprem sem desviar a intenção de guardar o rei na ala da dama'. O repertorio:mapear vai marcar a linha como cauda a partir do 7...O-O; a citação é dos LANCES BRANCOS, que são os mesmos. || Até 7/9/2026 esta tag dizia só 'GM Avetik Grigoryan (ChessMood) — PGN file and Homework'. Os lances continuam sendo os dele; o que mudou é que agora há uma fonte que os explica, e ela estava no corpus desde a revisão da seção 10. || CAUDA DA §24 (8/9/2026), do 8...Cc6 ao 12.a3: o curso do Toth para no 8.Dd2 e nao alcanca nenhuma destas posicoes. Degrau 1 do 8...Cc6 ao 10...a5 (2.858, 1.233, 805 e 1.086 jogos) e degrau 2 nos dois ultimos. O 9.O-O-O e 86 por cento dos jogos e cumpre exatamente o que o comentario do 7.Be3 ja prometia — o roque grande rapido. O 10.Bd3 e o 11.Rb1 sao empate tecnico no motor com os mais jogados; o 12.a3 e o mais jogado (53,1 por cento) e o melhor (+0,59). A linha fecha a regua no lance 12, sem [%plano]. Ponta +0,27 -> +0,61."
   }
 ]

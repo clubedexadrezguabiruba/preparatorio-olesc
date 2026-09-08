@@ -1,3 +1,9 @@
+; ESTICADA EM 8/9/2026 pela régua do término (seção 24 do docs/REVISAO-FONTES.md):
+; eram 8 lances nossos, sem roque e com o cavalo de b1 em casa; agora são 14, e
+; a cauda inteira até o 13.Cxc3 é do próprio Huschenbeth. O 14.O-O-O também é
+; dele, em prosa: ele escreve que o roque vem em seguida, PEQUENO ou GRANDE se
+; as pretas jogarem …Bd7 — e o 13...Bd7 é o lance que veio.
+;
 ; Francesa 3.Bd3 — 1 linha do Base, a do 3...dxe4 (22,2 por cento).
 ;
 ; A PODA de 7/9/2026 (seção 23 do docs/REVISAO-FONTES.md) tirou daqui as duas
@@ -17,7 +23,7 @@
 [Nome "Francesa 3.Bd3"]
 [Cor "brancas"]
 [Nivel "base"]
-[Fonte "GM Niclas Huschenbeth — 'Short & Sweet: 1.e4' (Chess.com), variante 'French #2'. Os 15 meios-lances batem um a um com o curso, que segue além até 13.Cxc3. O arquivo do Grigoryan dá os mesmos lances mas tem zero prosa; o Huschenbeth explica o 3.Bd3 (flexibilidade e surpresa) e o 5.Bf3 (o bispo toma f3, então o cavalo vai a e2). Conferido em 7/9/2026. Até a poda de 7/9/2026 esta tag carregava também a ponta do 3...c5, que era nossa por livro + motor; aquela linha saiu do treinador e virou a página de princípios 'francesa-bd3'."]
+[Fonte "GM Niclas Huschenbeth — 'Short & Sweet: 1.e4' (Chess.com), variante 'French #2'. Os 15 meios-lances batem um a um com o curso, que segue além até 13.Cxc3. O arquivo do Grigoryan dá os mesmos lances mas tem zero prosa; o Huschenbeth explica o 3.Bd3 (flexibilidade e surpresa) e o 5.Bf3 (o bispo toma f3, então o cavalo vai a e2). Conferido em 7/9/2026. Até a poda de 7/9/2026 esta tag carregava também a ponta do 3...c5, que era nossa por livro + motor; aquela linha saiu do treinador e virou a página de princípios 'francesa-bd3'. || CAUDA DA §24 (8/9/2026), do 8...Ce5 ao 14.O-O-O: DEGRAU 0 DO 8...Ce5 AO 13.Cxc3 — o Huschenbeth joga os dez lances, um a um, na nossa ordem. Dele e a leitura da posicao final do 13.Cxc3, escrita com todas as letras: as pecas estao bem postas e o roque vem em seguida, PEQUENO ou GRANDE se as pretas jogarem Bc8-d7. E foi isso que aconteceu: o 13...Bd7 e o lance seguinte, e o 14.O-O-O e a PRIMEIRA VARIANTE do Stockfish 18 na posicao, brancas +0,33, medido em 8/9/2026 na profundidade 20. O curso para no 13.Cxc3 e o explorer tem 1 e 2 jogos nas duas ultimas posicoes — degrau 3 —, mas o lance nao e chute: e o que a fonte manda e o que o motor confirma. A linha fecha a regua no lance 14, sem [%plano]. Ponta igual -> +0,38."]
 [Result "*"]
 
 1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} e6
@@ -46,4 +52,30 @@ quando quiser; nós recapturamos de cavalo, que é justamente onde a gente quer
 que ele fique.} 7... cxd4 8. Nxd4 {O cavalo fica no meio do
 tabuleiro e tudo está desenvolvido. Repare no bispo de f3: ele atravessa o
 tabuleiro inteiro, e é justamente a peça que o jogador de Francesa menos gosta
-de enfrentar, porque o bispo dele de c8 continua preso.} *
+de enfrentar, porque o bispo dele de c8 continua preso.} 8... Ne5
+9. Nc3 {O último cavalo sai. Ele atacou o nosso bispo de f3 com o cavalo de e5,
+e nós simplesmente não damos atenção: se ele trocar em f3, a nossa dama
+recaptura e fica numa casa ótima. Enquanto isso o cavalo de c3 guarda o peão de
+e4… que já não existe, e é isso que o torna livre para ir a b5 no lance
+seguinte.} 9... Bb4
+10. Nb5 {O cavalo pula para b5 e olha para c7 e d6 — as duas casas que o bispo
+dele acabou de deixar de defender ao sair para b4. Repare no mecanismo: cada
+peça que ele desenvolve abandona alguma casa, e a nossa próxima peça vai
+justamente para lá.} 10... Nxf3+
+11. Qxf3 {A dama recaptura e cai em f3, que é a melhor casa que ela tem: de lá
+ela olha para b7, para f6 e para a coluna f inteira. Trocar o nosso melhor bispo
+não dói quando quem entra no lugar dele é a dama, com tempo.} 11... O-O
+12. a3 {Pergunte ao bispo. Ele está em b4 pregando o cavalo de c3 contra o
+nosso rei, e o a3 obriga a decidir: ou ele volta, e perdeu dois lances, ou ele
+troca, e nós recapturamos com o outro cavalo — o de b5, que estava sem serviço
+desde o décimo lance. As duas respostas nos servem.} 12... Bxc3+
+13. Nxc3 {E recapturamos com o cavalo de b5, exatamente como o a3 previa: o
+cavalo que estava numa casa passageira volta para a casa boa, e a nossa
+estrutura de peões não sofreu nada. É o próprio curso que descreve a posição
+aqui: as peças estão bem postas, e o roque vem no lance seguinte — pequeno, ou
+GRANDE se ele jogar …Bd7.} 13... Bd7
+14. O-O-O {…e ele jogou …Bd7, então é o roque grande. Não é gosto: com o bispo
+dele em d7, a coluna b fica sem defensor perto, e o nosso rei em c1 chega junto
+da nossa própria torre em d1 apontada para o meio. Conte a posição — rei
+guardado, as quatro peças pequenas fora de casa desde o décimo terceiro lance,
+dama na casa mais ativa e as torres se falando. A abertura acabou.} *

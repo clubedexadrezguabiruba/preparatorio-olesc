@@ -5,7 +5,7 @@
     "nome": "Alapin 2.c3",
     "linhas": 1,
     "ids": [
-      "brancas-alapin-c8e4c146"
+      "brancas-alapin-5eb647e6"
     ],
     "idsAvancado": [],
     "arquivo": "/repertorio/brancas/alapin.json"
@@ -16,11 +16,11 @@
     "nome": "Caro-Kann Trocas",
     "linhas": 2,
     "ids": [
-      "brancas-caro-kann-428a7cce",
-      "brancas-caro-kann-d2337d9b"
+      "brancas-caro-kann-d17e5a90",
+      "brancas-caro-kann-c6cf8723"
     ],
     "idsAvancado": [
-      "brancas-caro-kann-d2337d9b"
+      "brancas-caro-kann-c6cf8723"
     ],
     "arquivo": "/repertorio/brancas/caro-kann.json"
   },
@@ -62,7 +62,7 @@
     "nome": "Francesa 3.Bd3",
     "linhas": 1,
     "ids": [
-      "brancas-francesa-c384ccc4"
+      "brancas-francesa-05eae3b2"
     ],
     "idsAvancado": [],
     "arquivo": "/repertorio/brancas/francesa.json"
@@ -73,7 +73,7 @@
     "nome": "Petroff",
     "linhas": 1,
     "ids": [
-      "brancas-petroff-934fd6a6"
+      "brancas-petroff-d713f48c"
     ],
     "idsAvancado": [],
     "arquivo": "/repertorio/brancas/petroff.json"
@@ -84,8 +84,8 @@
     "nome": "Philidor",
     "linhas": 2,
     "ids": [
-      "brancas-philidor-e0cf1d11",
-      "brancas-philidor-7f7f4bd2"
+      "brancas-philidor-57445804",
+      "brancas-philidor-e1d9655b"
     ],
     "idsAvancado": [],
     "arquivo": "/repertorio/brancas/philidor.json"
