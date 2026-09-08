@@ -28,9 +28,13 @@ export function Sessao({ linha, resumo }: { linha: Linha; resumo: string | null 
 
   const [modo, setModo] = useState<Modo>("assistido");
   const [rodada, setRodada] = useState(0);
-  const [placar, setPlacar] = useState<{ acertos: number; total: number; acertou: boolean } | null>(
-    null,
-  );
+  const [placar, setPlacar] = useState<{
+    acertos: number;
+    total: number;
+    acertou: boolean;
+    /** O lance certo, quando foi o erro que parou a passada. Ver `Passada.tsx`. */
+    revelado: { passo: number; uci: string; san: string } | null;
+  } | null>(null);
 
   const recomecar = useCallback((qual: Modo) => {
     setModo(qual);
@@ -59,17 +63,38 @@ export function Sessao({ linha, resumo }: { linha: Linha; resumo: string | null 
           /* o teste não grava nada. */
         }}
         aoTerminar={setPlacar}
-        aoComecarQuiz={deMemoria}
+        /*
+         * Este teste continua com **duas** etapas, e não com as três do
+         * repertório: aqui não há escada de revisão nem gravação, e a etapa do
+         * meio existe para separar "praticar" de "ser medido" — uma distinção
+         * que não faz sentido onde nada é medido. Por isso `aoAvancarEtapa`
+         * emenda direto o de memória. A trilha, pelo mesmo motivo, fica de fora.
+         */
+        aoAvancarEtapa={deMemoria}
       />
 
       {fechou ? (
         <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-4">
+          {/*
+           * Três finais desde 8/9/2026, e não dois: o erro agora **para** a
+           * passada em vez de levá-la até o fim (ver `lib/repertorio/passada.ts`).
+           * Dizer "você chegou ao fim" numa partida que parou no quarto lance
+           * seria a tela contando outra história.
+           */}
           <p className="text-sm font-semibold text-tinta">
-            {placar.acertou
-              ? "Partida inteira, de memória, sem erro."
-              : `Você chegou ao fim: ${placar.acertos} de ${placar.total} lances certos.`}
+            {placar.revelado
+              ? `Não era esse lance: a partida seguia com ${placar.revelado.san}.`
+              : placar.acertou
+                ? "Partida inteira, de memória, sem erro."
+                : `Você chegou ao fim: ${placar.acertos} de ${placar.total} lances certos.`}
           </p>
-          <Comentario texto={linha.comentarios[String(linha.lances.length - 1)]} />
+          <Comentario
+            texto={
+              placar.revelado
+                ? linha.comentarios[String(placar.revelado.passo)]
+                : linha.comentarios[String(linha.lances.length - 1)]
+            }
+          />
           <p className="text-xs text-tinta-fraca">
             Este é um teste: nada foi gravado, e esta partida não conta em lugar nenhum.
           </p>

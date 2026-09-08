@@ -741,7 +741,7 @@ npm run repertorio:fidelidade   # onde a fonte fala numa posição nossa, e o qu
 npm run repertorio:fidelidade -- --pares         # a folha: fonte e nosso, lado a lado
 npm run db:migrar               # aplica as migrations, 0005_repertorio_revisao.sql inclusive
 npm run db:rls                  # prova que o aluno não grava progresso nem adia a revisão
-npm test                        # 592 testes
+npm test                        # 725 testes
 ```
 
 Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variações),
@@ -749,7 +749,8 @@ Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variaçõ
 `motor.ts` (leitura de lances e apresentação, sem processo), e os quatro do
 treinador — `treino.ts` (o juiz, a escada e a ordem), `banco.ts`, `progresso.ts`,
 `gravar.ts`, mais `passada.ts` — o redutor puro de uma passada pela linha, que
-tirou a máquina de estado de dentro do componente. O texto das cinco aberturas
+tirou a máquina de estado de dentro do componente e onde moram as três etapas, o
+gate de gravação e a navegação por setas. O texto das cinco aberturas
 sem linha: `notas.ts` (schema) e
 `conteudo.ts` (leitura conferida na importação).
 
@@ -781,15 +782,31 @@ antes de `[abertura]` porque o slug pode repetir entre as duas.
 
 **As páginas de princípios aparecem em DOIS lugares desde 7/9/2026.** Elas
 continuam no rodapé de `/aberturas`, todas as nove — e quatro delas aparecem
-também dentro da abertura de onde saíram, logo abaixo da lista de linhas. O que
-liga uma coisa à outra é o campo `abertura` de `notas.ts`, e o motivo está na
-§23 do `docs/REVISAO-FONTES.md`: essas quatro são ramos podados de aberturas que
-o aluno TREINA, cobrem perto de um terço do que ele encontra no tabuleiro, e
-quem entra direto para treinar nunca descia até um rodapé abaixo de onze
-cartões. As outras cinco não têm abertura para onde voltar — são defesas
-inteiras que nunca viraram linha —, e por isso o campo é opcional. Slug errado
-ali falharia **calado**, com o link sumindo da tela sem erro nenhum; quem
-reprova é o `repertorio:compilar`.
+também dentro da abertura de onde saíram. O que liga uma coisa à outra é o campo
+`abertura` de `notas.ts`, e o motivo está na §23 do `docs/REVISAO-FONTES.md`:
+essas quatro são ramos podados de aberturas que o aluno TREINA, cobrem perto de
+um terço do que ele encontra no tabuleiro, e quem entra direto para treinar nunca
+descia até um rodapé abaixo de onze cartões. As outras cinco não têm abertura
+para onde voltar — são defesas inteiras que nunca viraram linha —, e por isso o
+campo é opcional. Slug errado ali falharia **calado**, com o link sumindo da tela
+sem erro nenhum; quem reprova é o `repertorio:compilar`.
+
+**Onde, exatamente, mudou em 8/9/2026: não é mais abaixo do treino.** A correção
+de 7/9 acertou o diagnóstico e errou o lugar. O palco da aula tem altura
+fechada, então tudo que vem depois dele começa na dobra e nunca é lido — medido
+nas onze aberturas, a lista de linhas que ficava ali embaixo mostrava **mediana
+de 2 itens** e, em quatro delas, **um item só: a própria linha que já estava na
+tela**. As páginas de princípios ficavam ainda mais abaixo. A mudança de 7/9
+tinha reproduzido o defeito num lugar novo.
+
+Hoje **nada fica abaixo do tabuleiro na tela de treino**. As páginas de
+princípios aparecem no cartão de "abertura em dia", que é a única tela desta rota
+sem palco de altura fechada, e continuam inteiras em `/aberturas` — o bloco
+abaixo do treino era uma terceira cópia, e era a invisível. A lista de linhas
+virou o **`SeletorDeLinha`**: um menu sobreposto atrás do "linha 2 de 5" do
+painel, com o nome, as bolinhas e o rótulo "hoje" de cada linha. É a única
+informação que só a lista tinha — pular para uma linha específica vendo o estado
+de cada uma —, e ela subiu para onde é vista.
 
 **A conta das barrinhas mudou de direção em 6/9/2026, e era um bug.** Ela varria
 o banco de progresso e adivinhava a abertura pelo **prefixo do id**
@@ -806,15 +823,45 @@ progresso, nunca o contrário. O órfão fica no banco — não há chave estran
 nem política de `delete`, e a `0004` diz que é de propósito —, mas parou de
 aparecer.
 
-**Uma sessão são duas fases, na mesma tela.** Na primeira vez em cada linha
-(`tentativas = 0`) o aluno entra na **passada assistida**: o cartão diz o lance
-por extenso, a seta do lance certo fica desenhada, e o aluno **executa**. Outro
-lance não conta — a peça volta e o cartão repete "siga a seta". Onde há
-comentário do professor a passada **trava** até o aluno continuar, inclusive nos
-comentários que caem em lance do adversário. No fim, sem prêmio sonoro e sem
-"muito bom", o botão "Começar o quiz" emenda a **segunda fase**: a mesma linha,
-de memória, sem seta e sem o nome do lance. Nada da fase assistida sobe ao
-servidor.
+**Uma sessão são TRÊS etapas, na mesma tela** — eram duas até 8/9/2026, e a do
+meio é o conserto de um buraco: o aluno pulava da passada em que a seta lhe dá o
+lance direto para a cobrança, sem nenhum lugar onde praticar **sem a seta e sem
+estar sendo medido**. É nesse lugar que se descobre se decorou.
+
+| | 1 — seta | 2 — treino | 3 — valendo |
+|---|---|---|---|
+| seta do lance | **sim** | não | não |
+| comentários | aparecem e **travam** | não | não |
+| dica | não existe (a seta já está lá) | **sim, de graça** | sim, e **custa** |
+| lance errado | recusa, tenta de novo | **recusa, tenta de novo** | decide a passada |
+| alternativa do autor | recusada | recusada | aceita, selo âmbar |
+| grava no servidor | **nunca** | **nunca** | sim |
+| setas ←/→ navegam | **sim** | não | não |
+
+Na etapa 1 o cartão diz o lance por extenso, a seta fica desenhada, e o aluno
+**executa**; onde há comentário do professor a passada trava até ele continuar,
+inclusive nos comentários que caem em lance do adversário. A etapa 2 **recusa,
+não pune** — sem isso ela seria o quiz repetido, porque as duas seriam "sem seta,
+sem comentário" e as únicas diferenças (ajuda de graça, nada gravado) são
+invisíveis para o aluno; o cartão diz "errar aqui não conta". A etapa 3 é a de
+sempre.
+
+**Só a primeira passada tem as três etapas.** Da segunda em diante
+(`tentativas > 0`) o aluno entra direto no valendo, com "Jogar com a seta" ali
+para quem esqueceu — repetição espaçada mede recall, não releitura. É por isso
+que a trilha `seta · treino · valendo`, no painel, também só aparece na primeira:
+uma trilha de três com duas etapas apagadas para sempre prometeria um caminho que
+não existe mais.
+
+**Os dois "3" da tela são coisas diferentes, e a tela precisa dizer isso.**
+"Etapa 3 de 3" é esta sessão; as bolinhas "3 de 3" são a linha **aprendida** —
+três passadas em três dias espaçados. São duas linguagens visuais separadas de
+propósito: a escada continua em círculos, no cabeçalho; as etapas são barras com
+nome, abaixo do cartão. Sem a separação, o aluno fecha uma tarde achando que
+terminou a linha.
+
+**O que as três etapas NÃO mudam:** a escada de revisão espaçada, o que sobe ao
+servidor, e as quatro revogações de 6/9/2026 abaixo. As três são **uma passada**.
 
 **Como uma linha é aprendida: a escada.** `DEGRAUS_EM_DIAS = [0, 1, 3, 7, 14,
 30]`, e o degrau é o índice. A linha entra no degrau 1 na **primeira passada
@@ -828,17 +875,162 @@ pouco, e zerar apagaria um mês por um dedo errado no celular. A data de quando
 aprendeu **nunca volta a nulo**: errar depois vira revisão, não recomeço.
 
 **O primeiro erro decide a passada na hora** — grava, e os acertos seguidos
-voltam a zero. O que mudou é que a linha **vai até o fim** mesmo assim: a peça
-volta, a linha do clube entra no lugar e o aluno vê os lances que faltavam. No
-fim, um **boletim lance a lance** — um selo por lance nosso, verde ou vermelho,
-com a acurácia ao lado. O boletim é do cliente e não é gravado: o que o servidor
-grava continua sendo o veredito do primeiro erro.
+voltam a zero. **Desde 8/9/2026 ele também a PARA**, e antes ela ia até o fim.
+Agora o painel revela o lance certo com o comentário do professor daquele lance,
+e o botão "Tentar de novo" reinicia a etapa 3 inteira. É o que o Move Trainer do
+chess.com faz (§A3 da referência), e o argumento é que assistir ao resto de uma
+linha que o aluno já não está tentando lembrar não ensina nada.
 
-**A dica é pedida, e antes do primeiro erro ela custa.** Botão "Dica" no quiz,
-um nível só: acende a casa de origem, sem seta e sem escalonar. Pedida **antes**
-de qualquer erro, ela decide a passada — os lances até ali sobem ao servidor,
-`conferirLinha` reprova a lista curta, e a passada fica gravada como treino sem
-acerto. Depois do primeiro erro é de graça, porque a passada já foi decidida.
+**A consequência a aceitar**, e ela está aceita: o **boletim lance a lance** —
+um selo por lance nosso, com a acurácia ao lado — passa a sair só em **passada
+limpa**. Com o reinício não há mais "resto da linha" para relatar. O boletim
+continua sendo do cliente e continua não sendo gravado.
+
+**A dica é pedida, e ela custa numa etapa só.** Botão "Dica" nas duas etapas sem
+seta, um nível só: acende a casa de origem, sem seta e sem escalonar. **Na etapa
+2 é de graça** — é a ajuda que faz aquela etapa valer a pena, e ali nada é
+gravado de qualquer jeito. **Na etapa 3, pedida antes de qualquer erro, ela
+decide a passada**: os lances até ali sobem ao servidor, `conferirLinha` reprova
+a lista curta, e a passada fica gravada como treino sem acerto. Depois do
+primeiro erro é de graça, porque a passada já foi decidida.
+
+**O gate de gravação é explícito desde 8/9/2026.** Antes, a etapa assistida não
+gravava por não chegar aos ramos que emitem o efeito; com três etapas isso não
+bastava. Hoje uma função só (`gravar`, em `passada.ts`) constrói **todo** efeito
+`decidir`, e ela devolve o estado intacto se o modo não for `quiz`. É a garantia
+mais importante do bloco — um vazamento aqui gravaria treino como prova e
+corromperia a escada —, e há teste dedicado a ela.
+
+### O painel de 8/9/2026: o professor, o teclado, e a digitação
+
+**O professor tem rosto, e ele está DENTRO da cena.** Um busto do Doug — cabeça,
+pescoço e o começo do tronco — de 112 px, à esquerda do comentário, com a fala
+saindo dele num balão com bico. O molde é o treinador do chess.com.
+
+A primeira versão foi recusada na tela e a recusa está registrada porque ela é a
+regra: era uma cabeça recortada dentro de um **círculo com aro e fundo próprio**,
+e lia como *uma foto colada* em vez de alguém que está ali. O disco tem outra cor
+que a do painel e o aro desenha um contorno. Portanto, e vale para quem vier
+depois: **nada de `rounded-full`, `ring-*`, `border-*` ou `bg-*` no
+`components/lesson/Professor.tsx`** — qualquer um dos quatro devolve o balãozinho.
+
+O recorte é medido, não escolhido: `(6, 41)–(1047, 1254)` do PNG original, que é
+tudo o que há de figura **sem encostar em borda lateral** — em `y=1254` a
+camiseta sangra para fora do quadro, e passar dali produziria dois cortes retos
+verticais. O corte de baixo que sobra dissolve nos últimos 12% da altura. O fundo
+branco sai por **componente conexo**, e não por limiar: a esclera dos olhos e o
+brilho dos dentes também são quase brancos, e um limiar simples furaria os olhos.
+Tudo isso mora em `scripts/professor.py`, que é o caminho de volta — este é o
+**primeiro asset de imagem versionado do projeto**, e raster em `public/` (e não
+SVG em `app/`) porque cada `fill="#..."` de uma ilustração viraria gate vermelho
+em `lib/tema/guardas.test.ts`.
+
+**O painel foi de 410 para 522 px para pagar a figura**, e o texto **não**
+encolheu para dentro dos 410: 112 do busto + 16 de vão + 394 de caixa. Meter o
+retrato dentro dos 410 deixaria o texto com 266 px e ~37 caracteres por linha,
+abaixo da faixa legível. É a mesma saída do chess.com, cujo slot tem 452 px dos
+quais 360 são de bolha. **O que isso custa, medido:** em 1366×768 o palco passa a
+592 + 40 + 522 = 1154 px e o tabuleiro não encolhe; entre 1024 e ~1200 px de
+largura, sim — num 1024 ele cai de 534 para **422 px**. A saída, se um dia
+incomodar, é subir o breakpoint das duas colunas. No celular o retrato **some**:
+lá o painel tem 328 px e 112 deles sairiam justamente do texto.
+
+**O teclado: espaço em toda etapa, ←/→ só na primeira.** A barra de espaço era
+proibida por dois motivos escritos — rola a página, e dispara o botão com foco.
+O primeiro morreu com "nada abaixo do palco"; o segundo tem conserto, e é a
+guarda do alvo: com o foco num `button`, `a`, `input`, `select` ou `textarea`,
+não interceptamos, e o nativo faz o trabalho uma vez só.
+
+As setas navegam **só na etapa 1**, e a trava vem de decisão registrada: `←`
+recua até o lance 0, `→` **não passa do meio-lance mais adiantado que o aluno
+realmente jogou**. Sem a trava, o modo "só olhar" revogado na §1 abaixo voltaria
+por outra porta. Recuado, o tabuleiro não aceita lance e o painel mostra o
+comentário daquele meio-lance. O limite é **dito** — "Você já está na frente — o
+que vem agora se joga, não se vê." —, porque tecla que não responde lê como tecla
+quebrada.
+
+**A máquina de escrever entrou como experimento, e o número está medido.** O
+comentário aparece caractere a caractere, a `MS_POR_CARACTERE = 7` (o do
+chess.com), com 340 ms de espera depois de um lance e 190 ms ao virar página.
+Qualquer toque, clique ou tecla completa o texto na hora; com
+`prefers-reduced-motion` ele aparece inteiro; o balão assume a altura final antes
+de digitar, então nada pula na tela.
+
+O risco era a aritmética não transferir: o texto do chess.com tem 89 caracteres
+de mediana, o nosso tem 276. **Medido no navegador numa etapa 1 inteira da
+Alapin: 12 comentários, 3.088 caracteres, ~21 segundos** — e isso acontece uma
+vez na vida de cada linha, porque os comentários só existem na etapa 1 e ela só
+existe na primeira passada. As três constantes moram juntas no topo de
+`components/lesson/Comentario.tsx`: mudar a velocidade, ou desligar, é editar um
+número.
+
+**O tabuleiro é AZUL, e ficou maior.** Duas decisões do Doug no mesmo dia, e as
+duas têm número.
+
+*A cor.* As casas eram marrons; passaram para a matiz do **logotipo do clube**,
+lida do arquivo e não escolhida — os tons dominantes de `Logo Xadrez.jpg` são
+`#007e97`, `#05b1bd` e `#11617a`, um azul-petróleo que em oklch cai por volta da
+matiz 220. As casas ficaram `#daeef4` e `#7ab9cd`. **A claridade das duas não
+mudou** (93,5% e 75%), e é isso que deixou a troca sair de graça: claridade é o
+que decide contraste, então trocar matiz e croma não custa marca nenhuma.
+Medido depois, a folga até subiu — o pincel do corte foi de 3,11 para 3,20 sobre
+a casa escura. O croma da escura foi a 0,07, que é o máximo em que o azul ainda
+lê como azul: a 72% de claridade três marcas reprovam.
+
+O argumento antigo — "as casas são quentes de propósito, porque um tabuleiro
+verde gastaria o significado de *método* no cenário" — **continua de pé**: o
+tabuleiro não ficou verde, ficou azul, que é a outra cor da marca e não tem
+função pedagógica.
+
+*A consequência.* A **seta e a dica não podiam continuar azuis** — azul sobre
+tabuleiro azul é a marca desaparecendo dentro do cenário, que é o mesmo defeito
+do realce amarelo-claro do pacote por outra porta. Foram para o verde escuro
+(`oklch(30% 0.11 150)`), e escuro por medição: qualquer verde acima de 50% de
+claridade reprova o piso de 3:1 na casa clara. A 30% ela também fica longe dos
+outros dois verdes do tabuleiro — `destino` a 38% e `pincel-defendida` a 44% —,
+e o que separa os três continua sendo a **forma**: linha com ponta, bolinhas
+dentro da casa, aro em volta dela.
+
+*O tamanho.* Medido no chess.com em 8/9/2026: o tabuleiro deles ocupa **95% da
+altura útil** da janela — 600 px num viewport de 633 —, com 16 px de folga acima
+e 17 abaixo. O nosso ocupava 77%, e a diferença inteira era **cabeçalho de
+página**: três linhas empilhadas (voltar, título, "você joga de brancas") mais
+80 px de respiro, somando 176 px que o tabuleiro não tinha. O cabeçalho virou
+uma linha só e o respiro caiu pela metade: 176 → 88 px.
+
+O que isso deu, medido: em 1366×768 o tabuleiro foi de **592 para 680 px**; num
+viewport real de 637 px — o que sobra numa tela de 768 depois do cromo do
+navegador e da barra de tarefas — foi de **461 para 544**. Sem rolagem em
+1366×768, 1366×637, 1024×768, 1920×1080 e 360×740. O piso continua onde estava:
+num telefone de 360×640 a página rola 30 px, que é a cessão registrada abaixo.
+
+**Cuidado para quem mexer:** `--aula-teto` e a altura do palco são a **mesma
+conta escrita duas vezes** (uma para o desktop, outra para o celular), e ela tem
+de bater com a soma real de respiro + cabeçalho + vão. Errar por 8 px devolve a
+rolagem que o palco inteiro existe para matar — foi exatamente o que aconteceu na
+primeira tentativa desta mudança.
+
+**Quatro acabamentos, todos medidos antes de mexer.**
+
+1. **O botão de som deixou de ser emoji.** 🔇 saía rosa saturado (`#F1489A`) na
+   fonte do sistema — a única cor quente e saturada da tela, num canto onde nada
+   de urgente acontece. Dois glifos SVG no traço dos quatro do cartão de comando.
+2. **O realce do último lance virou um ARO.** O Doug via as duas casas como cores
+   diferentes; medido com `getComputedStyle`, **as duas têm exatamente a mesma
+   tinta** — o que difere é que a de destino tem a peça por cima e sobra uma
+   moldura fina. O aro mora na borda da casa, onde peça nenhuma chega, e as duas
+   voltam a ter o mesmo desenho. A espessura sai de `---cg-width` para escalar
+   com o tabuleiro.
+3. **As letras a–h existiam e ninguém as via.** Tingi-las de vermelho e contar os
+   pixels achou as oito. O defeito era de posição: centradas na base da casa, elas
+   caem debaixo da peça — e a primeira fileira é a única que está sempre cheia.
+   Foram para o canto inferior direito, que é onde os números da lateral já
+   estavam, e por isso os números sempre se leram.
+4. **O botão secundário deixou de sumir.** `border-borda` sobre o papel mede
+   **1,36:1**, e o degrau mais escuro da paleta (`borda-forte`) mede 1,76 — nenhum
+   cinza desta paleta chega ao piso de 3:1 da WCAG 1.4.11. Ele passou a ser o
+   verde do método contornado (3,54:1 de traço, 11,08:1 de rótulo), que é o par
+   preenchido/contornado do botão principal.
 
 ### As quatro revogações de 6/9/2026
 

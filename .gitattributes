@@ -6,6 +6,13 @@
 # binário, corrompendo o arquivo em silêncio. A linha custa nada e o bug é chato.
 *.wav binary
 
+# O retrato do professor é o **primeiro arquivo de imagem versionado do
+# projeto** (8/9/2026) — até ele, nenhum PNG, JPG ou SVG em `public/`. Vale a
+# mesma regra do WAV acima e do WASM abaixo: o `text=auto` da primeira linha
+# decide por heurística de byte nulo, e heurística não é garantia. Um WebP
+# reescrito de CRLF para LF é um arquivo corrompido em silêncio.
+*.webp binary
+
 # O motor da etapa 5 (Stockfish compilado para WebAssembly) é binário
 # pré-compilado, e o `lib/engine/manifest.test.ts` cobra o sha256 dos dois
 # arquivos. O `.wasm` escaparia do `text=auto` por heurística de byte nulo, mas

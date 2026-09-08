@@ -20,8 +20,12 @@ import {
 } from "@/lib/repertorio/passada";
 import { playForMove, playRefusal, playSuccess } from "@/lib/sound";
 import { ABERTURA_MS } from "@/lib/tatica/tempos";
+import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
+import { Comentario, useComentarioPaginado } from "@/components/lesson/Comentario";
+import { Professor } from "@/components/lesson/Professor";
 import { Cartao } from "./Cartao";
 import { FaixaDeSans, FitaDoBoletim } from "./FitaDeLances";
+import { TrilhaDeEtapas } from "./TrilhaDeEtapas";
 import { OQueAindaFalta } from "./OQueFalta";
 
 /**
@@ -58,13 +62,58 @@ export type PassadaProps = {
   modo: Modo;
   /** Manda os lances ao servidor. Chamada **uma vez** por passada, ou nenhuma. */
   aoDecidir: (lances: string[], porQue: "erro" | "dica" | "fim") => void;
-  /** O placar da passada sobe junto: é o que o painel de fim precisa dizer. */
-  aoTerminar: (placar: { acertos: number; total: number; acertou: boolean }) => void;
-  /** A emenda: o fim da assistida chama o quiz sem trocar de rota. */
-  aoComecarQuiz: () => void;
+  /**
+   * O placar da passada sobe junto: é o que o painel de fim precisa dizer.
+   *
+   * `revelado` vem no mesmo pacote porque o fim do quiz tem **duas** formas
+   * desde 8/9/2026 — a linha inteira, ou o erro que a parou —, e o painel
+   * precisa saber qual delas mostrar sem reler o estado da passada.
+   */
+  aoTerminar: (fecho: {
+    acertos: number;
+    total: number;
+    acertou: boolean;
+    revelado: { passo: number; uci: string; san: string } | null;
+  }) => void;
+  /**
+   * A emenda entre as etapas, sem trocar de rota: assistido → treino → quiz.
+   * Quem sabe qual vem depois é o `Treino`; aqui só se sabe que acabou esta.
+   */
+  aoAvancarEtapa: () => void;
+  /** Se a trilha das três etapas aparece — só na primeira passada da linha. */
+  mostrarTrilha?: boolean;
+  /**
+   * O cabeçalho da linha (nome, "linha N de M", bolinhas, som).
+   *
+   * Vem de fora porque quem sabe a posição da linha na abertura é o `Treino`,
+   * mas o **lugar** dele é o topo do painel — do lado do tabuleiro, e não
+   * acima dele, como no cabeçalho de 48 px do chess.com.
+   */
+  cabecalho?: React.ReactNode;
+  /**
+   * O painel de resultado do quiz, quando a passada acabou.
+   *
+   * Chega montado pelo `Treino` e **substitui** o comentário, a faixa de SANs e
+   * os botões: no fim do quiz quem fala é o boletim, e repetir a faixa embaixo
+   * dele seria dizer duas vezes a mesma coisa — desta vez dentro de uma coluna
+   * de altura fechada, onde a segunda vez não caberia.
+   */
+  painelDeFim?: React.ReactNode;
+  /** Atalhos que o `Treino` acrescenta ao rodapé de botões do painel. */
+  rodapeExtra?: React.ReactNode;
 };
 
-export function Passada({ linha, modo, aoDecidir, aoTerminar, aoComecarQuiz }: PassadaProps) {
+export function Passada({
+  linha,
+  modo,
+  aoDecidir,
+  aoTerminar,
+  aoAvancarEtapa,
+  mostrarTrilha = false,
+  cabecalho,
+  painelDeFim,
+  rodapeExtra,
+}: PassadaProps) {
   const [estado, setEstado] = useState(() => inicio(linha, modo));
   /**
    * O estado autoritativo, fora do React.
@@ -84,6 +133,15 @@ export function Passada({ linha, modo, aoDecidir, aoTerminar, aoComecarQuiz }: P
    * redesenhar a posição de verdade.
    */
   const [ressincronizar, setRessincronizar] = useState(0);
+
+  /**
+   * O comentário, partido no que couber no painel.
+   *
+   * A paginação é de tela, não de conteúdo: o redutor continua entregando o
+   * comentário inteiro e continua sem saber que existe uma tela. Quem mede o
+   * espaço é o componente, e a conta refaz sozinha quando a janela muda.
+   */
+  const comentario = useComentarioPaginado(estado.comentario);
 
   const relogiosRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const agendar = useCallback((quefazer: () => void, ms: number) => {
@@ -127,9 +185,14 @@ export function Passada({ linha, modo, aoDecidir, aoTerminar, aoComecarQuiz }: P
         case "agendar":
           agendar(() => despacharRef.current(efeito.evento), efeito.ms);
           break;
-        case "terminou":
-          aoTerminar(acuracia(estadoRef.current));
+        case "terminou": {
+          const agora = estadoRef.current;
+          aoTerminar({
+            ...acuracia(agora),
+            revelado: agora.revelado ? { ...agora.revelado } : null,
+          });
           break;
+        }
       }
     },
     [agendar, aoDecidir, aoTerminar],
@@ -167,28 +230,96 @@ export function Passada({ linha, modo, aoDecidir, aoTerminar, aoComecarQuiz }: P
   }, [linha.meus]);
 
   /**
-   * A tecla →: solta a leitura de um comentário, e emenda o quiz no fim da
-   * assistida. É o mesmo gesto de todo visualizador de partida, e no computador
-   * da escola ela é mais rápida que o mouse.
+   * O gesto de "já li": **um botão só, dois trabalhos**.
    *
-   * **Não é a barra de espaço**, que é o que o chess.com usa: no navegador ela
-   * rola a página e dispara o botão que estiver com o foco, e as duas coisas
-   * acontecem *além* do que a gente pedir.
+   * Quando o comentário não coube de uma vez, "Continuar" vira a página do
+   * texto; quando acabou o texto, ele solta a passada. É a mesma tecla e o
+   * mesmo botão nos dois casos, de propósito — dois controles para o mesmo
+   * movimento dariam duas maneiras de fazer a mesma coisa numa tela cuja regra
+   * é ter um caminho só.
+   */
+  const continuarLeitura = useCallback(() => {
+    // A máquina de escrever tem prioridade sobre tudo: se o texto ainda está
+    // saindo, o primeiro gesto o completa e **não** avança. Sem isto o aluno
+    // que aperta "Continuar" cedo perde o comentário sem ter lido, e é o botão
+    // que ele mais aperta.
+    if (comentario.digitando) {
+      comentario.completar();
+      return;
+    }
+    if (!comentario.naUltima) {
+      comentario.virar();
+      return;
+    }
+    despachar({ tipo: "continuar" });
+  }, [comentario, despachar]);
+
+  /**
+   * O teclado da aula: **espaço** em toda etapa, **←/→** só na primeira.
+   *
+   * ## A barra de espaço deixou de ser proibida
+   *
+   * Ela era recusada por dois motivos escritos: **rola a página** e **dispara o
+   * botão que estiver com o foco** — as duas coisas acontecendo *além* do que
+   * se pedisse. Os dois morreram, cada um do seu jeito:
+   *
+   * - A rolagem morreu com o layout: não há mais nada abaixo do palco, e o
+   *   `preventDefault` abaixo cobre o resíduo.
+   * - O disparo duplo tem conserto, e é a guarda do alvo: se o foco está num
+   *   `button`, `a`, `input`, `select` ou `textarea`, **não interceptamos** — o
+   *   nativo faz o trabalho, e o gesto acontece uma vez só. É a mesma exceção
+   *   que a máquina de escrever usa para não brigar com o "Continuar".
+   *
+   * O que se ganha é o gesto do chess.com: uma tecla larga, que não exige mirar,
+   * para o movimento que o aluno mais repete.
+   *
+   * ## As setas, e a trava que elas respeitam
+   *
+   * Navegar é da **assistida**, e nunca das outras duas — o redutor recusa
+   * `olhou` fora dela, e a regra não é de tela: em 6/9/2026 o modo "só olhar"
+   * foi revogado porque "assistir não é treinar; o aluno via a linha andar
+   * sozinha e chegava ao quiz sem ter movido uma peça". Se → avançasse livre,
+   * ele voltaria por outra porta. Quem cuida do limite (e de dizê-lo no cartão)
+   * é o redutor; aqui só se despacha.
+   *
+   * `→` acumula três trabalhos, na ordem em que eles se excluem: soltar a
+   * leitura, emendar a etapa seguinte no fim, e — fora desses dois — andar para
+   * a frente na linha.
    */
   useEffect(() => {
     function aoTeclar(evento: KeyboardEvent) {
-      if (evento.key !== "ArrowRight") return;
-      if (estado.fase === "lendo") {
+      // Foco num controle: o navegador já sabe o que fazer, e interceptar aqui
+      // faria o gesto valer duas vezes.
+      const alvo = evento.target;
+      if (alvo instanceof Element && alvo.closest("button, a, input, select, textarea")) return;
+
+      const espaco = evento.key === " " || evento.key === "Spacebar";
+      if (espaco) {
         evento.preventDefault();
-        despachar({ tipo: "continuar" });
-      } else if (estado.fase === "resolvido" && modo === "assistido") {
+        if (estado.fase === "lendo") continuarLeitura();
+        // No fim do quiz não há "próxima etapa": o painel de fim está na tela
+        // com as escolhas dele, e uma tecla que decidisse por ele ali estaria
+        // escolhendo entre "próxima linha" e "jogar de novo" no lugar do aluno.
+        else if (estado.fase === "resolvido" && modo !== "quiz") aoAvancarEtapa();
+        return;
+      }
+
+      if (evento.key === "ArrowRight") {
         evento.preventDefault();
-        aoComecarQuiz();
+        if (estado.fase === "lendo") continuarLeitura();
+        else if (estado.fase === "resolvido" && modo !== "quiz") aoAvancarEtapa();
+        else despachar({ tipo: "olhou", para: "frente" });
+        return;
+      }
+
+      if (evento.key === "ArrowLeft") {
+        evento.preventDefault();
+        despachar({ tipo: "olhou", para: "tras" });
       }
     }
     window.addEventListener("keydown", aoTeclar);
     return () => window.removeEventListener("keydown", aoTeclar);
-  }, [aoComecarQuiz, despachar, estado.fase, modo]);
+  }, [aoAvancarEtapa, continuarLeitura, despachar, estado.fase, modo]);
 
   /* ---------------------------------------------------------------- *
    * O tabuleiro
@@ -232,7 +363,10 @@ export function Passada({ linha, modo, aoDecidir, aoTerminar, aoComecarQuiz }: P
     // segui-la é a tela contradizendo a si mesma. Medido no navegador em 6/9.
     const recusando = modo === "assistido" && estado.fase === "mostrando";
 
-    if (esperado && (estado.fase === "jogando" || recusando) && minhaVez) {
+    // Olhando para trás não há seta: ela aponta para o lance da FRENTE, e
+    // desenhá-la sobre uma posição de três lances atrás mandaria o aluno jogar
+    // uma peça que ainda nem está naquela casa.
+    if (esperado && !estado.olhando && (estado.fase === "jogando" || recusando) && minhaVez) {
       const orig = esperado.slice(0, 2) as Key;
       if (modo === "assistido") {
         lista.push({ orig, dest: esperado.slice(2, 4) as Key, brush: "blue" });
@@ -272,6 +406,7 @@ export function Passada({ linha, modo, aoDecidir, aoTerminar, aoComecarQuiz }: P
   }, [
     estado.dicaNoPasso,
     estado.fase,
+    estado.olhando,
     estado.passo,
     jogo,
     linha.lances,
@@ -284,78 +419,136 @@ export function Passada({ linha, modo, aoDecidir, aoTerminar, aoComecarQuiz }: P
 
   const fim = estado.fase === "resolvido";
   const placar = acuracia(estado);
+  /** Quantos meios-lances estão NO TABULEIRO — a frente, ou o que ele foi olhar. */
+  const naTela = estado.olhando?.meioLance ?? estado.passo;
 
   return (
-    <>
-      <div className="relative">
-        <ChessBoard
-          fen={estado.fen}
-          orientation={meuLado}
-          turnColor={toBoardColor(jogo.turn())}
-          dests={podeMover ? legalDests(jogo) : new Map()}
-          lastMove={estado.ultimoLance ? [estado.ultimoLance[0] as Key, estado.ultimoLance[1] as Key] : null}
-          check={jogo.inCheck()}
-          viewOnly={!podeMover}
-          revision={estado.revisao + ressincronizar}
-          shapes={shapes}
-          onMove={aoMover}
-        />
-        {promocao ? (
-          <PromotionPicker
-            color={meuLado}
-            onChoose={(peca: PromotionChoice) => {
-              const { orig, dest } = promocao;
-              setPromocao(null);
-              despachar({ tipo: "jogou", uci: `${orig}${dest}${peca}` });
-            }}
-            onCancel={() => {
-              setPromocao(null);
-              setRessincronizar((n) => n + 1);
-            }}
+    <AulaShell
+      tabuleiro={
+        <div className="relative">
+          <ChessBoard
+            fen={estado.fen}
+            orientation={meuLado}
+            turnColor={toBoardColor(jogo.turn())}
+            dests={podeMover ? legalDests(jogo) : new Map()}
+            lastMove={estado.ultimoLance ? [estado.ultimoLance[0] as Key, estado.ultimoLance[1] as Key] : null}
+            check={jogo.inCheck()}
+            viewOnly={!podeMover}
+            revision={estado.revisao + ressincronizar}
+            shapes={shapes}
+            onMove={aoMover}
           />
-        ) : null}
-      </div>
+          {promocao ? (
+            <PromotionPicker
+              color={meuLado}
+              onChoose={(peca: PromotionChoice) => {
+                const { orig, dest } = promocao;
+                setPromocao(null);
+                despachar({ tipo: "jogou", uci: `${orig}${dest}${peca}` });
+              }}
+              onCancel={() => {
+                setPromocao(null);
+                setRessincronizar((n) => n + 1);
+              }}
+            />
+          ) : null}
+        </div>
+      }
+      painel={
+        <>
+          {cabecalho}
 
-      {/*
-       * No fim do quiz o cartão sai e a fita entra no lugar dele: o painel de
-       * resultado do `Treino` já diz o que aconteceu, e um cartão repetindo
-       * "linha completa" logo acima seria a mesma frase duas vezes.
-       */}
-      {fim && modo === "quiz" ? (
-        <FitaDoBoletim boletim={estado.boletim} acertos={placar.acertos} />
-      ) : (
-        <Cartao conteudo={estado.cartao} />
-      )}
+          {/*
+           * No fim do quiz o cartão sai e a fita entra no lugar dele: o painel
+           * de resultado do `Treino` já diz o que aconteceu, e um cartão
+           * repetindo "linha completa" logo acima seria a mesma frase duas
+           * vezes.
+           */}
+          {fim && modo === "quiz" ? (
+            <FitaDoBoletim boletim={estado.boletim} acertos={placar.acertos} />
+          ) : (
+            <>
+              <Cartao conteudo={estado.cartao} />
+              {/*
+               * A trilha entra logo abaixo do cartão, e só na primeira passada.
+               * Ver `TrilhaDeEtapas.tsx` para os dois "3" que ela existe para
+               * não deixar o aluno confundir.
+               */}
+              {mostrarTrilha ? <TrilhaDeEtapas modo={modo} /> : null}
+            </>
+          )}
 
-      <Comentario texto={estado.comentario} />
+          {painelDeFim ?? (
+            <>
+              <Comentario paginacao={comentario} retrato={<Professor />} />
 
-      {/*
-       * O painel do plano é montado aqui só na **assistida**. No quiz quem o
-       * monta é o painel de fim do `Treino`, logo abaixo do comentário final —
-       * pôr nos dois lugares mostraria a mesma lista duas vezes na mesma tela.
-       */}
-      {fim && modo === "assistido" ? <OQueAindaFalta linha={linha} /> : null}
+              {/*
+               * O painel do plano é montado aqui só na **assistida**. No quiz
+               * quem o monta é o painel de fim do `Treino` — pôr nos dois
+               * lugares mostraria a mesma lista duas vezes na mesma tela.
+               */}
+              {fim && modo === "assistido" ? <OQueAindaFalta linha={linha} /> : null}
 
-      <FaixaDeSans linha={linha} ate={estado.passo} atual={estado.passo - 1} />
+              {/*
+               * A faixa de SANs só a partir de `lg`, e a conta é de altura.
+               * Medido num celular de 360×740: o painel tem 308 px, e o que é
+               * fixo nele — cabeçalho 48, cartão 64, botões 42, vãos 36 —
+               * come 190. A faixa levava mais 36, e sobravam **50 px** para o
+               * comentário: duas linhas. Fora dela o comentário fica com 118,
+               * que é a mediana do repertório numa página só.
+               *
+               * É o corte certo porque a faixa é a única coisa ali que o
+               * tabuleiro já mostra: a posição na tela É a lista de lances.
+               */}
+              {/*
+               * A faixa segue o que está NO TABULEIRO, e não a frente da
+               * passada: recuado, marcar o lance da frente faria a faixa
+               * apontar para um lance que não está na tela.
+               */}
+              <div className="hidden lg:block">
+                <FaixaDeSans
+                  linha={linha}
+                  ate={naTela}
+                  atual={naTela - 1}
+                />
+              </div>
 
-      <div className="flex flex-wrap items-center gap-2">
-        {estado.fase === "lendo" ? (
-          <Principal onClick={() => despachar({ tipo: "continuar" })}>Continuar →</Principal>
-        ) : null}
+              <AulaRodape>
+                {estado.fase === "lendo" ? (
+                  <Principal onClick={continuarLeitura}>Continuar →</Principal>
+                ) : null}
 
-        {modo === "assistido" && fim ? (
-          <Principal onClick={aoComecarQuiz}>Começar o quiz →</Principal>
-        ) : null}
+                {/*
+                 * O nome do botão diz o que vem, e não "próximo": o aluno tem
+                 * de saber que a etapa seguinte tira a seta antes de ela sumir.
+                 */}
+                {fim && modo === "assistido" ? (
+                  <Principal onClick={aoAvancarEtapa}>Treinar sem a seta →</Principal>
+                ) : null}
+                {fim && modo === "treino" ? (
+                  <Principal onClick={aoAvancarEtapa}>Valendo →</Principal>
+                ) : null}
 
-        {modo === "assistido" && !fim ? (
-          <Secundario onClick={aoComecarQuiz}>Pular e jogar</Secundario>
-        ) : null}
+                {!fim && modo === "assistido" ? (
+                  <Secundario onClick={aoAvancarEtapa}>Pular e jogar</Secundario>
+                ) : null}
 
-        {modo === "quiz" && podeMover ? (
-          <Secundario onClick={() => despachar({ tipo: "pediuDica" })}>Dica</Secundario>
-        ) : null}
-      </div>
-    </>
+                {/*
+                 * A dica existe nas duas etapas sem seta, e custa só numa: no
+                 * treino ela é de graça — é a ajuda que faz a etapa 2 valer a
+                 * pena —, e no quiz decide a passada. Quem cobra é o redutor.
+                 */}
+                {modo !== "assistido" && podeMover ? (
+                  <Secundario onClick={() => despachar({ tipo: "pediuDica" })}>Dica</Secundario>
+                ) : null}
+
+                {rodapeExtra}
+              </AulaRodape>
+            </>
+          )}
+        </>
+      }
+    />
   );
 }
 
@@ -363,30 +556,39 @@ export function Passada({ linha, modo, aoDecidir, aoTerminar, aoComecarQuiz }: P
  * As peças de tela que só a passada usa
  * ------------------------------------------------------------------ */
 
-/** O texto do professor. Some quando não existe: caixa vazia não é informação. */
-function Comentario({ texto }: { texto: string | null }) {
-  if (!texto) return null;
-  return <p className="rounded-lg bg-carta-alta px-3 py-2.5 text-sm text-tinta-media">{texto}</p>;
-}
-
 function Principal({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="foco rounded-lg bg-metodo-cheio px-4 py-2.5 text-sm font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque"
+      className="foco rounded-lg border border-transparent bg-metodo-cheio px-4 py-2.5 text-sm font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque"
     >
       {children}
     </button>
   );
 }
 
+/**
+ * O botão secundário: contornado em verde, e não em cinza.
+ *
+ * **Era `border-borda` sobre o papel, e sumia.** Medido em 8/9/2026: a borda
+ * neutra sobre a página dá **1,36:1** — abaixo do piso de 3:1 da WCAG 1.4.11
+ * para componente de interface, e abaixo do que o olho separa de uma sombra.
+ * "Pular e jogar" e "Dica" ficavam sendo texto solto no meio do painel, sem
+ * nada dizendo que ali havia um alvo para tocar. Escurecer a borda neutra não
+ * resolvia: `borda-forte`, o degrau mais escuro que existe, mede 1,76:1.
+ *
+ * A saída usa a paleta que já está na tela: o botão principal é o verde
+ * **cheio**, e este passa a ser o mesmo verde **contornado** — 3,54:1 de traço
+ * e 11,08:1 de rótulo sobre a página. É o par preenchido/contornado de sempre,
+ * e ele diz a hierarquia sem precisar de um cinza que não se enxerga.
+ */
 function Secundario({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="foco rounded-lg border border-borda px-3 py-2.5 text-sm font-medium text-tinta-media transition-colors hover:bg-carta-toque"
+      className="foco rounded-lg border border-metodo-superficie px-3 py-2.5 text-sm font-medium text-metodo-tinta transition-colors hover:bg-metodo-superficie/10"
     >
       {children}
     </button>

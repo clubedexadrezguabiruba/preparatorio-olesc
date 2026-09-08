@@ -102,7 +102,10 @@ const MARCAS: { onde: string; token: string; piso: number }[] = [
     piso: AA_TEXTO,
   },
   { onde: "destino de lance legal e casa selecionada", token: "destino", piso: AA_COMPONENTE },
-  { onde: "realce do último lance", token: "ultimo-lance", piso: AA_COMPONENTE },
+  // O aro na borda da casa, desde 8/9/2026 — era a casa cheia, e a peça
+  // escondia metade dele no destino. A tinta não mudou, e por isso o par não
+  // muda: aro e preenchimento são medidos do mesmo jeito contra as duas casas.
+  { onde: "aro do último lance", token: "ultimo-lance", piso: AA_COMPONENTE },
   { onde: "clarão do rei em xeque", token: "xeque", piso: AA_COMPONENTE },
   { onde: "destino de pré-lance", token: "premove", piso: AA_COMPONENTE },
 
@@ -387,7 +390,7 @@ export const PARES: Par[] = [
   // erra ou acerta — que é o pior momento para um texto ficar fraco.
   // -------------------------------------------------------------------------
   {
-    onde: "feedback do método: o lance certo (FeedbackPanel:12)",
+    onde: "feedback do método: o lance certo (FeedbackPanel:12); e o rótulo do botão secundário da aula sob o realce de toque — Passada.tsx e Treino.tsx",
     texto: "metodo-tinta",
     fundo: ["metodo-superficie/10", ...PAGINA],
     piso: AA_TEXTO,
@@ -495,6 +498,21 @@ export const PARES: Par[] = [
     piso: AA_COMPONENTE,
     divida:
       "O campo de texto é o único lugar do site em que a borda **carrega informação**: ela é o que diz onde tocar para escrever, e não há fundo próprio dizendo isso. São os 6 campos de /entrar e /professor. A conta a pagar é escurecer a borda **só do campo**, não a do cartão — 28% de tinta bate o piso, e é o valor que `borda-forte` já tem.",
+  },
+  {
+    onde: "traço do botão secundário da aula — `border-metodo-superficie` em Passada.tsx e Treino.tsx (Pular e jogar, Dica, Jogar com a seta, Próxima linha)",
+    // O traço é opaco e o botão não tem preenchimento: ele compõe direto com o
+    // que estiver atrás. Sobre o painel de fim, que é `carta`, mede 4,03:1.
+    texto: "metodo-superficie",
+    fundo: PAGINA,
+    piso: AA_COMPONENTE,
+    // Aqui a borda **carrega informação**: é a única coisa que diz "isto é um
+    // alvo para tocar", porque o botão não tem fundo próprio. É o mesmo
+    // argumento do campo de texto logo acima — e a diferença é que este par
+    // paga: 3,54:1. O traço neutro que ele substituiu media 1,36:1, e o degrau
+    // mais escuro que a paleta tem (`borda-forte`) mede 1,76:1: nenhum cinza
+    // desta paleta chega ao piso sobre o papel. O verde chega, e ainda diz
+    // que o botão é da aula.
   },
   {
     onde: "borda do cartão neutro — `border-borda-fraca` no cartão do bloco e na tabela de alunos",

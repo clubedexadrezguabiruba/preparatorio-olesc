@@ -115,11 +115,30 @@
   /* ------------------------------------------------------------------------
      O tabuleiro
 
-     **As casas são quentes de propósito, num site frio.** O verde da
-     identidade significa *método* — é o que a aula usa para dizer "isto está
-     certo". Um tabuleiro verde gastaria esse significado no cenário, e o
-     tabuleiro é o objeto morno sobre a parede fria, que é como um tabuleiro de
-     verdade se comporta em cima de uma mesa.
+     **As casas são AZUIS, na matiz da logo do clube** (8/9/2026, a pedido do
+     Doug). O azul foi lido do arquivo e convertido, não escolhido: os dois tons
+     dominantes de `Logo Xadrez.jpg` são `#007e97` e `#008099`, e os dois caem
+     em **oklch(55% 0.098 218)** — matiz 218, croma 0,098.
+
+     **A matiz é a da logo; a claridade não pode ser.** O azul do clube é
+     escuro (55%), e a casa escura tem de ficar em 75% para as doze marcas do
+     tabuleiro passarem — ver a conta abaixo. Então o que se herda é a matiz e
+     quase todo o croma (0,09 dos 0,098), e o que se perde é a profundidade: na
+     tela ele lê mais claro que o logotipo. Foi conferido e é o preço aceito;
+     escurecer a casa derruba três marcas de uma vez.
+
+     Elas eram quentes, e o argumento de então era que o verde da identidade
+     significa *método* — "isto está certo" — e que um tabuleiro verde gastaria
+     esse significado no cenário. **O argumento continua de pé, e é por isso que
+     o tabuleiro não ficou verde**: ele ficou azul, que é a outra cor da marca e
+     não tem função pedagógica nenhuma. O que mudou é que o cenário passou a
+     dizer de quem é a casa.
+
+     **Consequência que veio junto: a seta e a dica não podiam continuar azuis.**
+     Elas usavam `pincel-seta`, azul, que sobre um tabuleiro azul é a marca
+     desaparecendo dentro do cenário — o mesmo defeito do realce amarelo-claro do
+     pacote, por outra porta. Foram para o verde; ver o `pincel-seta` mais
+     abaixo, com a conta de por que ele é escuro.
 
      **Toda marca do tabuleiro é mais escura que as duas casas, e isso é
      geometria, não gosto.** Uma marca só bate 3:1 contra as duas se estiver
@@ -146,14 +165,20 @@
      O que **é** de graça é o outro lado do par: a marca precisa contrastar com
      a casa *escura*, então clarear a casa clara não custa nada ao orçamento —
      medido, e não suposto: a pior folga continua sendo os mesmos +0,11 do
-     pincel do corte, antes e depois. A casa clara subiu de 88,5% para 93% de
-     claridade e de 0,019 para 0,04 de croma, e a escura ganhou o mesmo croma
-     sem mexer na claridade. O ganho é 1,58 → 1,81:1 (+15%), com o matiz quente
-     que a revisão pediu. O resto da distância fica registrado aqui como o que
-     é: uma dívida com preço conhecido.
+     pincel do corte, antes e depois. O ganho de 1,58 para **1,81:1** (+15%) veio
+     daí, e a virada para o azul o preservou: **a claridade das duas casas não
+     mudou** (93% e 75%), só a matiz e o croma. Foi de propósito — claridade é o
+     que decide contraste, então trocar a cor sem tocar nela é a troca que não
+     custa marca nenhuma. Medido depois da virada, a pior folga até **subiu**:
+     o pincel do corte foi de 3,11 para 3,20 sobre a casa escura.
+
+     O croma da escura subiu de 0,04 para 0,07, que é o máximo em que o azul
+     ainda lê como azul sem derrubar nada: a 72% de claridade, três marcas
+     reprovam. O resto da distância até os 2,29:1 do lichess fica registrado
+     aqui como o que é: uma dívida com preço conhecido.
      ------------------------------------------------------------------------ */
-  --color-casa-clara: oklch(93% 0.04 86);
-  --color-casa-escura: oklch(75% 0.04 78);
+  --color-casa-clara: oklch(93.5% 0.03 218);
+  --color-casa-escura: oklch(75% 0.09 218);
   --color-coordenada: oklch(26% 0.015 160);
 
   --color-destino: oklch(38% 0.14 152);
@@ -195,7 +220,23 @@
      No pacote, `corte` e `pendurada` eram o **mesmo** `#882020`. */
   --color-pincel-corte: oklch(24% 0.17 305);
   --color-pincel-pendurada: oklch(22% 0.19 25);
-  --color-pincel-seta: oklch(36% 0.16 250);
+  /* **A seta e a dica: verdes desde 8/9/2026, e escuras.**
+
+     Era azul, e o tabuleiro ficou azul: a marca sumia dentro do cenário. O
+     verde é a cor do método, que é o que uma seta de "jogue aqui" está
+     dizendo.
+
+     **Por que escura e não viva.** Toda marca do tabuleiro tem de bater 3:1
+     contra as DUAS casas, e a casa clara é o lado apertado: medido, qualquer
+     verde acima de 50% de claridade reprova ali (a 50% mede 2,53:1 na casa
+     escura). Restava o lado escuro da escala, e 30% é onde ela fica longe dos
+     outros dois verdes do tabuleiro — `destino` a 38% e `pincel-defendida` a
+     44%. Mede 10,64:1 na casa clara e 5,88:1 na escura.
+
+     Os três verdes continuam próximos em matiz, e quem os separa é a FORMA,
+     como já separava `pendurada` de `defendida`: a seta é uma linha com ponta,
+     o destino são bolinhas dentro da casa, o selo é um aro em volta dela. */
+  --color-pincel-seta: oklch(30% 0.11 150);
   --color-pincel-defendida: oklch(44% 0.15 152);
 
   /* O quinto, e o único que não é da tática: o selo de **alternativa** do
@@ -272,6 +313,187 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.16em;
+}
+
+/* --------------------------------------------------------------------------
+   O palco da aula: o tabuleiro de um lado, a voz do professor do outro
+
+   O layout antigo era uma coluna só, de 576 px. Medido num notebook de
+   1366×768, na Escandinava: tabuleiro terminando em 732 px, cartão de comando
+   começando em 744, o comentário em 820 e o botão “Continuar” em 864 — **os
+   três abaixo da dobra**, com 315 px de rolagem obrigatória. E o comentário
+   TRAVA a passada: o aluno era obrigado a rolar para ler e rolar de volta para
+   jogar, a cada lance comentado. Enquanto isso sobravam 384 px de vão vazio de
+   cada lado — 768 px de tela ociosa para produzir 315 px de rolagem.
+
+   A troca é de topologia, não de espaçamento: a largura ociosa vira o painel.
+
+   **A invariante é a altura, e é ela que faz a promessa valer.** O tabuleiro
+   deixa de ser dimensionado pela largura (`w-full aspect-square`, que numa
+   tela larga cresce até empurrar todo o resto para fora) e passa a ser
+   dimensionado pelo que sobra de ALTURA. É como o chess.com faz — medido ao
+   vivo na aula “Roque” em 8/9/2026, num viewport de 1366×577: tabuleiro de
+   **544 px numa tela de 577**, e rolagem **zero em todos os treze estados da
+   aula**. Bate com o que `docs/REFERENCIA-MOVE-TRAINER.md` §A8 já registrava:
+   “dimensionado pela altura”. Com o teto de altura, “não rola” deixa de ser
+   torcida e vira aritmética.
+
+   As duas reservas abaixo são a conta do que NÃO é tabuleiro, medida na tela.
+   -------------------------------------------------------------------------- */
+
+.aula-palco {
+  /* Celular: cabeçalho da página (40, em duas linhas) + o da linha (48) +
+     cartão de comando (64) + trilha das etapas (20) + botões (44) + cinco vãos
+     (60) + respiro da página (32) = 308 px, mais 136 px de piso para o
+     comentário — seis linhas de 14 px a 328 px de largura. Os 363 comentários do repertório têm mediana
+     de 276 caracteres; o que não couber no piso **pagina**, em vez de rolar
+     (ver `Comentario`).
+
+     Eram 29rem até 8/9/2026, e a trilha das três etapas custou 2rem: medido num
+     360×740, o comentário caiu de 118 px para **86** — três linhas, e a mediana
+     do repertório passaria a sair em duas páginas. Os 32 px voltam saindo do
+     tabuleiro (276 → 244 px naquele telefone), e a escolha é a mesma que este
+     bloco já registra mais abaixo: melhor um tabuleiro menor que o texto do
+     professor servido em tiras. */
+  --aula-teto: calc(100dvh - 27.75rem);
+
+  /* O palco tem ALTURA FECHADA, e não apenas um teto para o tabuleiro.
+
+     É o que dá ao comentário um espaço medível: `flex-1` só encolhe dentro de
+     um pai que sabe onde termina. Sem esta altura, no celular a caixa do
+     comentário cresceria com o texto, a conta da paginação daria sempre
+     "cabe", e a página voltaria a rolar — que é exatamente o defeito.
+
+     6rem = respiro da página (16+16) + cabeçalho (50: no celular ele quebra em
+     duas linhas) + vão (12), com 2 px de folga. Eram 9rem, com o cabeçalho de
+     três linhas; ver o comentário da `Moldura` em
+     `app/aberturas/[cor]/[abertura]/page.tsx`. Como no desktop, errar este
+     número para baixo devolve a rolagem — medido, e não estimado.
+
+     O piso de 36rem é onde a promessa cede, e ele é conta e não gosto: o
+     tabuleiro não desce de 15rem (240), o que é fixo no painel soma 190
+     (cabeçalho 48, cartão 64, botões 42, vãos 36), o vão entre os dois é 12, e
+     o comentário precisa de 136 para valer seis linhas. Dá 578.
+
+     Sem o piso, num celular de 360×640 os 496 px disponíveis eram repartidos
+     com o tabuleiro cobrando o piso dele primeiro — e sobravam **30 px** de
+     comentário, medidos: quarenta caracteres por página. Melhor a página rolar
+     80 px num telefone baixo do que servir o texto do professor em tiras. */
+  height: max(calc(100dvh - 6rem), 36rem);
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Duas colunas só a partir de `lg`, e o motivo já foi medido uma vez em
+   `app/meio-jogo/[dica]/Passos.tsx`: quebrar em `sm` (640 px) partiria a
+   coluna em duas de ~300 px, e o tabuleiro sairia MENOR que os 328 px que ele
+   já tem no celular — a tela larga ficaria pior que o telefone. */
+@media (width >= 64rem) {
+  .aula-palco {
+    /* No desktop o tabuleiro tem TRÊS limites, e vale o menor.
+
+       1. A altura livre: respiro (80) + cabeçalho (76) + vão (20) = 11rem.
+       2. O teto absoluto de 48rem (768 px), que é o tamanho que o chess.com
+          usa numa tela de 1440 de altura (§A8). Acima disso um tabuleiro deixa
+          de ganhar legibilidade e só empurra o painel para longe do olho.
+       3. O que sobra de largura do VIEWPORT depois do painel e dos vãos.
+
+       O limite 3 é do viewport e não da moldura, e essa distinção é o conserto
+       de um erro: prendendo a conta na moldura de 62rem, o tabuleiro parava em
+       510 px numa tela de 1080 de altura e sobrava **um terço da viewport
+       vazio embaixo** — a invariante de altura anulada justamente onde ela
+       servia. A moldura agora acompanha o palco, em vez de estrangulá-lo. */
+    /* 5,5rem = respiro da página (40) + cabeçalho de uma linha (36) + vão (12).
+
+       **Este número tem de bater com a soma de verdade, medida na tela.** No
+       desktop o palco TEM a altura do tabuleiro (`height: var(--aula-teto)`
+       logo abaixo), então tudo o que não for tabuleiro é somado aqui — e errar
+       por 8 px devolve a rolagem que este bloco inteiro existe para matar. Foi
+       o que aconteceu na primeira tentativa: 5rem contra 5,5rem de conteúdo
+       real, e a página passou a rolar 8 px.
+
+       Eram **11rem**, e a diferença foi para o tabuleiro. Medido no chess.com
+       em 8/9/2026: a aula deles gasta 16 px acima do tabuleiro e 17 abaixo, e
+       o tabuleiro fica com **95% da altura útil** da janela — 600 px num
+       viewport de 633. O nosso ficava com 77%, e a diferença inteira era
+       cabeçalho de página. Numa janela real de 1366×768, onde o cromo do
+       navegador e a barra de tarefas deixam ~637 px de viewport, isto tira o
+       tabuleiro de **461 px para ~557**. O cabeçalho virou uma linha só; ver
+       o comentário da `Moldura` em `app/aberturas/[cor]/[abertura]/page.tsx`. */
+    --aula-teto: min(
+      calc(100dvh - 5.5rem),
+      48rem,
+      calc(100vw - 2.5rem - 2.5rem - 32.625rem)
+    );
+    height: var(--aula-teto);
+
+    display: grid;
+    /* 32.625rem = 522 px, e o número é uma soma: **96 do retrato + 16 de vão +
+       410 da caixa de texto**.
+
+       Os 410 continuam sendo a coluna do comentário, e é essa continuidade que
+       importa: é a largura em que o texto mede 378 px úteis, cabem ~530
+       caracteres por página, e o comentário mais longo do repertório (853
+       caracteres) ainda cabe ao lado do tabuleiro sem empurrar o botão. Meter o
+       retrato *dentro* dos 410 cortaria o texto para 266 px e ~37 caracteres
+       por linha — abaixo da faixa legível de 45 a 75 — e derrubaria a cobertura
+       de "comentário numa página só" de ~97% para ~85%.
+
+       A saída é a do próprio chess.com, medida na aula “Roque” em 8/9/2026: o
+       slot deles tem **452 px, dos quais 360 são de bolha**. O avatar não sai
+       do texto; o painel é que é maior. Aqui vale a mesma conta, com a nossa
+       caixa no lugar da bolha deles.
+
+       O que isso custa, e onde: em 1366×768 o palco passa a 592 + 40 + 522 =
+       1154 px dentro de 1326 úteis, e o tabuleiro **não encolhe** (quem manda
+       ali é o limite de altura). Em 1920 o teto de 48rem continua mandando.
+       Entre 1024 e ~1200 px de largura o terceiro limite passa a valer e o
+       tabuleiro fica menor que era — num 1024 ele cai de 534 para 422 px. É a
+       faixa em que este painel cobra, e a saída, se um dia ela incomodar, é
+       subir o `64rem` deste `@media` e deixar aquelas telas em coluna única. */
+    /* A coluna do tabuleiro é do TAMANHO do tabuleiro, e o par se centra na
+       moldura. Com `1fr` a coluna esticava até a borda e o tabuleiro ficava
+       boiando dentro dela, longe do painel que ele conversa. */
+    grid-template-columns: max(15rem, var(--aula-teto)) 32.625rem;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+
+  /* O tabuleiro encosta no topo; quem estica para preencher a linha da grade
+     é o painel, para que o rodapé de botões tenha contra o que encostar.
+     No chess.com esse botão fica cravado em y=497 em TODOS os estados da aula;
+     é isso que `margin-top: auto` no rodapé reproduz. */
+  .aula-tabuleiro {
+    align-self: start;
+  }
+
+}
+
+/* O tabuleiro nunca passa do teto de altura, e nunca passa da sua coluna.
+
+   O piso de 15rem é a saída de emergência: numa tela muito baixa (um notebook
+   de 1366×600, ou o telefone deitado) o tabuleiro para de encolher e aí sim a
+   página volta a rolar. Rolar é melhor que um tabuleiro ilegível — a promessa
+   de não rolar vale até o ponto em que cumpri-la estragaria a aula. */
+.aula-tabuleiro {
+  width: clamp(15rem, var(--aula-teto), 100%);
+  margin-inline: auto;
+}
+
+/* O painel é uma coluna em qualquer tamanho: no celular ele vem embaixo do
+   tabuleiro, no desktop ao lado. O que muda entre os dois é só a grade.
+
+   `min-height: 0` é o que permite o comentário medir o espaço que sobrou: sem
+   ele um filho `flex-1` nunca encolhe abaixo do próprio conteúdo, e a conta da
+   paginação daria sempre "cabe". */
+.aula-painel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 0;
 }
 
 html {
@@ -436,11 +658,31 @@ cg-board square.premove-dest.hover {
   background: color-mix(in oklab, var(--color-premove) 45%, transparent);
 }
 
-/* Último lance e casa selecionada: a casa inteira. Opacas de propósito — a
-   peça é desenhada por cima delas, e translucidez aqui clarearia a marca até
-   abaixo do piso. O realce amarelo-claro do pacote media 1,50:1. */
+/* O último lance é um ARO, e não a casa cheia. Foi preenchimento até 8/9/2026,
+   e a troca saiu de medição, não de gosto.
+
+   O que o Doug via: as duas casas do último lance pareciam ter cores
+   diferentes. Medido com `getComputedStyle` nas duas, na Escandinava depois de
+   1.e4, num tabuleiro de 768 px: **as duas têm exatamente o mesmo valor**
+   (`lab(31.68 6.99 52.14)`, o token abaixo). O que difere é o que está em cima
+   — a casa de ORIGEM está vazia e mostra o tom inteiro; a de DESTINO tem a peça
+   desenhada por cima e sobra uma moldura fina. Duas casas com a mesma tinta
+   lidas como duas cores, porque metade de uma delas está escondida.
+
+   O aro conserta pela raiz: ele mora na borda da casa, que é justamente onde
+   peça nenhuma chega. As duas passam a mostrar o mesmo desenho, com peça ou
+   sem. A espessura é 9% da casa e sai de `---cg-width`, que o próprio
+   chessground publica (o nome tem três traços mesmo) — 8,6 px num tabuleiro de
+   768 e 2,7 px num de 240, em vez de um valor fixo que some no grande e
+   engole o pequeno.
+
+   Opaco de propósito, como era: translucidez aqui clarearia a marca até abaixo
+   do piso de 3:1, e o realce amarelo-claro do pacote media 1,50:1.
+
+   A casa selecionada e o pré-lance continuam cheios: são estados de interação
+   ao vivo, em que a peça está na mão do aluno e não em cima da casa. */
 cg-board square.last-move {
-  background-color: var(--color-ultimo-lance);
+  box-shadow: inset 0 0 0 calc(var(---cg-width, 512px) / 8 * 0.09) var(--color-ultimo-lance);
 }
 
 cg-board square.selected {
@@ -495,7 +737,11 @@ cg-board square.check {
    ---cg-width é a largura real do tabuleiro, publicada pelo próprio chessground
    (o nome tem três traços mesmo). Dividida por 8 dá a casa. */
 .cg-wrap coords {
-  font-size: clamp(9px, calc(var(---cg-width, 512px) / 8 * 0.28), 14px);
+  /* O teto era 14px e ficou pequeno quando o tabuleiro cresceu para 680:
+     conferido na tela em 8/9/2026, as letras viravam risquinhos na borda. 16px
+     é o glifo do chess.com proporcionalmente (10-13 px numa casa de 75). O piso
+     de 9px é o do celular, onde a casa tem 37. */
+  font-size: clamp(9px, calc(var(---cg-width, 512px) / 8 * 0.28), 16px);
   font-weight: 600;
   line-height: 1;
   opacity: 1;
@@ -530,12 +776,34 @@ cg-board square.check {
   transform: none;
 }
 
-/* Letras das colunas: centradas na base de cada coluna, minúsculas. */
+/* Letras das colunas: no canto inferior DIREITO de cada casa da primeira
+   fileira, minúsculas.
+
+   Eram centradas na base da casa, e o Doug disse que não existiam. Medido em
+   8/9/2026: elas existem, as oito, e são pintadas — tingi-las de vermelho e
+   contar os pixels na captura achou os oito grupos, um por coluna. O defeito é
+   de POSIÇÃO: centradas, elas caem debaixo da peça, e a primeira fileira é a
+   única do tabuleiro que está sempre cheia. Uma letra escura na base de um
+   bispo escuro não é uma letra.
+
+   É a mesma conta que os números já faziam sem ninguém notar: eles estão no
+   canto superior esquerdo, e por isso se leem. O canto é o único lugar da casa
+   onde peça nenhuma chega. Aqui vale o canto oposto — inferior direito —, que
+   é onde o Lichess os põe e o que impede a letra de brigar com o número na
+   casa a1.
+
+   `height: 12.5%` é uma casa, e `align-items: flex-end` encosta a letra no
+   fundo dela. Sem a altura de uma casa, `flex-end` não teria contra o que
+   encostar. */
 .cg-wrap coords.files {
   left: 0;
-  bottom: 0.6%;
+  bottom: 0;
   width: 100%;
-  height: auto;
+  height: 12.5%;
+  box-sizing: border-box;
+  padding: 0 0.8% 0.4% 0;
+  align-items: flex-end;
+  text-align: right;
   text-transform: none;
 }
 
