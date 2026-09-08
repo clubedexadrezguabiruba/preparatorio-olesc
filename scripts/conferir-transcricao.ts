@@ -48,7 +48,21 @@ import { Motor, prepararMotor } from "./motor.ts";
  * que se quer é justamente a lista dos problemas, todos de uma vez.
  */
 
-type Alternativa = { lance: string; pontos?: number | null; nota?: string | null };
+type Alternativa = {
+  lance: string;
+  /**
+   * Os lances que precedem, quando o autor nomeia um lance que **não** é
+   * jogável da posição do diagrama.
+   *
+   * Medido no capítulo 3: o Yusupov nomeia como ruins, com frequência, lances
+   * do lado que não está a jogar — "7...¤xe4?" numa posição de brancas. Sem
+   * este campo eles só cabiam na prosa do comentário, onde nada os confere, e o
+   * conferidor rejeitava como ilegal quem tentasse gravá-los direito.
+   */
+  apos?: string[] | null;
+  pontos?: number | null;
+  nota?: string | null;
+};
 
 type Exercicio = {
   id: string;
@@ -56,7 +70,24 @@ type Exercicio = {
   fen: string;
   lado: "white" | "black";
   estrelas?: number | null;
+  /** Os pontos do lance principal — o que o aluno pode ganhar jogando. */
   pontos: number;
+  /**
+   * Pontos que o livro dá por algo que **nenhuma interface consegue medir**.
+   *
+   * O Ex. 3-6 do volume 1 é o caso: "(2 points)" pelo lance, e três linhas
+   * abaixo "Take 1 extra point if you took this reply into consideration". O
+   * aluno não digita o que considerou, então esse ponto não é ganhável — mas
+   * ele **conta na régua impressa**, e sem ele a soma dos doze dá 30 contra um
+   * máximo de 31 e a melhor conferência que este script tem passa a acusar um
+   * erro que não existe.
+   *
+   * Fica separado de `pontos` de propósito: a régua da aula é derivada só do
+   * que é ganhável, e misturar os dois inflaria a nota de corte com pontos que
+   * o aluno não tem como tirar.
+   */
+  pontosExtra?: number | null;
+  notaExtra?: string | null;
   partida?: string | null;
   solucao: string[];
   alternativas?: Alternativa[];
@@ -165,15 +196,35 @@ function conferirExercicio(cap: Capitulo, item: Exercicio, ordem: number): void 
     }
   }
 
-  // Alternativa e erro são lances soltos, jogados a partir da mesma posição —
-  // não continuações da solução.
+  // Alternativa e erro são lances jogados a partir da posição do exercício —
+  // ou, quando o autor nomeia um lance mais adiante na variante, a partir do
+  // que `apos` diz que veio antes.
   for (const [rotulo, lista] of [
     ["alternativa", item.alternativas ?? []],
     ["erro", item.erros ?? []],
   ] as const) {
     for (const alt of lista) {
-      const r = replicar(item.fen, [alt.lance]);
-      if (!r.ok) erro(onde, `${rotulo} "${alt.lance}" é ilegal na posição do exercício`);
+      const antes = alt.apos ?? [];
+      if (antes.length > 0) {
+        const caminho = replicar(item.fen, antes);
+        if (!caminho.ok) {
+          erro(
+            onde,
+            `o "apos" de ${rotulo} "${alt.lance}" não replica: o lance ${caminho.passo} ` +
+              `("${caminho.lance}") é ilegal`,
+          );
+          continue;
+        }
+      }
+      const r = replicar(item.fen, [...antes, alt.lance]);
+      if (!r.ok) {
+        erro(
+          onde,
+          `${rotulo} "${alt.lance}" é ilegal ${
+            antes.length > 0 ? `depois de ${antes.join(" ")}` : "na posição do exercício"
+          }`,
+        );
+      }
     }
   }
 
@@ -223,12 +274,25 @@ function conferirCapitulo(cap: Capitulo): void {
 
   // A conta do livro. É a conferência que enxerga o capítulo inteiro de uma vez:
   // se um único ponto foi lido errado em qualquer um dos doze, ela não fecha.
-  const soma = cap.exercicios.reduce((t, e) => t + (Number(e.pontos) || 0), 0);
+  // Os `pontosExtra` entram aqui e **só** aqui: eles contam na régua impressa,
+  // que é o que esta conta confere, e não contam na régua da aula, que é
+  // derivada só do que o aluno consegue ganhar jogando.
+  const ganhavel = cap.exercicios.reduce((t, e) => t + (Number(e.pontos) || 0), 0);
+  const extras = cap.exercicios.reduce((t, e) => t + (Number(e.pontosExtra) || 0), 0);
+  const soma = ganhavel + extras;
   if (soma !== cap.aprovacao.maximo) {
     erro(
       onde,
-      `a soma dos pontos dos exercícios é ${soma} e a régua impressa diz máximo ${cap.aprovacao.maximo} ` +
+      `a soma dos pontos dos exercícios é ${soma}${extras > 0 ? ` (${ganhavel} ganháveis + ${extras} extra)` : ""} ` +
+        `e a régua impressa diz máximo ${cap.aprovacao.maximo} ` +
         `(diferença de ${soma - cap.aprovacao.maximo}) — algum ponto foi lido errado, ou falta um exercício`,
+    );
+  }
+  if (extras > 0) {
+    aviso(
+      onde,
+      `${extras} ponto(s) do capítulo são "extra" do autor e não são ganháveis na tela — ` +
+        `a régua da aula sai dos ${ganhavel} ganháveis, não dos ${cap.aprovacao.maximo} impressos`,
     );
   }
 

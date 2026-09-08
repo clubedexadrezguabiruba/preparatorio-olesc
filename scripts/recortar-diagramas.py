@@ -16,9 +16,15 @@ quadrada, grande e cheia de tinta. O algoritmo é isto, e nada mais:
    só em vez de sessenta e quatro casas soltas;
 3. acha as manchas conexas com uma união-e-busca escrita aqui — nada de
    dependência nova, só a `PIL` e o `numpy` que o projeto já tem;
-4. fica com as manchas grandes e de proporção quase 1:1;
-5. ordena por linha e depois por coluna — a ordem de leitura do livro, que é a
-   ordem em que os exercícios são numerados;
+4. fica com as manchas grandes, de proporção quase 1:1 e **cheias de tinta** —
+   um tabuleiro tem metade das casas sombreadas, uma caixa de texto não;
+5. ordena **por coluna e depois por linha**, que é como o Yusupov numera: numa
+   página de seis, o de cima à esquerda é o `Ex. N-1` e o de cima à **direita**
+   é o `Ex. N-4`. Medido na camada de texto dos capítulos 6, 8 e 13, onde os
+   dois rótulos saem na mesma linha (`Ex. 6-1 … Ex. 6-4`). Ordenar por linha,
+   que é o instinto, embaralha seis exercícios de um jeito que **replica
+   perfeitamente** — as posições trocadas são todas legais —, e por isso
+   nenhuma conferência mecânica pegaria o estrago;
 6. salva cada uma na resolução cheia, com margem folgada, porque o rótulo
    (`Ex. 3-1`), as estrelas de dificuldade e o glifo de quem joga ficam **fora**
    da moldura do tabuleiro.
@@ -28,8 +34,13 @@ Uso:
     python scripts/recortar-diagramas.py <pdf> <pagina> <pasta-de-saida> [--dpi 300]
 
 Escreve `<pasta>/p<pagina>-full.png` (a página inteira, reduzida, para ler os
-rótulos) e `<pasta>/p<pagina>-d1.png` … `-dN.png` (um por diagrama, na ordem de
-leitura), e imprime uma linha por arquivo com a caixa medida.
+rótulos) e `<pasta>/p<pagina>-d1.png` … `-dN.png` (um por diagrama, na ordem do
+livro), e imprime uma linha por arquivo com a caixa e a densidade medidas.
+
+**Confira o rótulo mesmo assim.** A numeração do arquivo é uma inferência sobre
+a diagramação; o rótulo impresso (`Ex. 3-4`) é o fato. Casar os rótulos da
+página inteira com os recortes custa um minuto e é a única coisa que pega uma
+diagramação diferente da esperada.
 """
 
 from __future__ import annotations
@@ -49,6 +60,7 @@ from PIL import Image, ImageFilter
 FRACAO_MINIMA_DA_LARGURA = 0.16   # menor lado aceitável, em fração da largura da página
 FRACAO_MAXIMA_DA_LARGURA = 0.80
 PROPORCAO_TOLERADA = 0.28         # |largura/altura - 1| máximo
+DENSIDADE_MINIMA = 0.20           # fração de tinta dentro da caixa; ver `caixas_dos_diagramas`
 MARGEM = 0.13                     # folga em volta do recorte, em fração do lado
 LARGURA_DE_TRABALHO = 520         # a cópia pequena onde as manchas são achadas
 LIMIAR_DE_TINTA = 190             # abaixo disto é tinta; moldura fina é cinza médio
@@ -128,8 +140,13 @@ def manchas(binaria: np.ndarray) -> dict[int, tuple[int, int, int, int]]:
     return {r: (c[0], c[1], c[2], c[3]) for r, c in caixas.items()}
 
 
-def caixas_dos_diagramas(pagina: Image.Image) -> list[tuple[int, int, int, int]]:
-    """As caixas dos tabuleiros na resolução da página, na ordem de leitura."""
+def caixas_dos_diagramas(pagina: Image.Image) -> list[tuple[int, int, int, int, float]]:
+    """As caixas dos tabuleiros na resolução da página, na ordem do livro.
+
+    Cada caixa vem com a densidade de tinta medida, que é impressa junto ao
+    recorte: é por ela que se recalibra `DENSIDADE_MINIMA` se um volume novo
+    trouxer diagrama de sombreado mais claro.
+    """
     largura, altura = pagina.size
     escala = largura / LARGURA_DE_TRABALHO
     pequena = pagina.resize(
@@ -140,30 +157,45 @@ def caixas_dos_diagramas(pagina: Image.Image) -> list[tuple[int, int, int, int]]
     tinta = tinta.filter(ImageFilter.MaxFilter(5))
     matriz = np.array(tinta) > 127
 
+    # A densidade é medida na tinta **crua**, antes do MaxFilter: o filtro
+    # engorda tudo por igual e apagaria justamente a diferença que interessa.
+    crua = np.array(pequena.point(lambda v: 255 if v < LIMIAR_DE_TINTA else 0)) > 127
+
     lp, ap = pequena.size
     minimo = FRACAO_MINIMA_DA_LARGURA * lp
     maximo = FRACAO_MAXIMA_DA_LARGURA * lp
 
-    encontradas: list[tuple[int, int, int, int]] = []
+    encontradas: list[tuple[int, int, int, int, float]] = []
     for x0, y0, x1, y1 in manchas(matriz).values():
         w, h = x1 - x0, y1 - y0
         if not (minimo <= w <= maximo) or not (minimo <= h <= maximo):
             continue
         if abs(w / h - 1.0) > PROPORCAO_TOLERADA:
             continue
-        encontradas.append((x0, y0, x1, y1))
+        # O que separa um tabuleiro de uma caixa de texto quadrada. A caixa de
+        # `Contents` que abre todo capítulo passa nos dois testes acima — é
+        # quadrada e é grande —, e foi ela que o piloto do capítulo 3 pegou
+        # duas vezes na página 31. Um diagrama tem metade das casas sombreadas
+        # mais as peças; uma caixa tem moldura fina e linhas de texto, e fica
+        # muito abaixo do limiar.
+        densidade = float(crua[y0:y1, x0:x1].mean())
+        if densidade < DENSIDADE_MINIMA:
+            continue
+        encontradas.append((x0, y0, x1, y1, densidade))
 
     if not encontradas:
         return []
 
-    # Ordem de leitura: agrupa por faixa horizontal (os diagramas que estão na
-    # mesma "linha" da página) e, dentro dela, da esquerda para a direita.
-    altura_media = sum(y1 - y0 for _, y0, _, y1 in encontradas) / len(encontradas)
-    encontradas.sort(key=lambda c: (round(c[1] / (altura_media * 0.6)), c[0]))
+    # A ordem do livro: **coluna primeiro**. Ver o cabeçalho deste arquivo —
+    # numa página de seis o Yusupov desce a coluna da esquerda (N-1, N-2, N-3)
+    # e só então a da direita (N-4, N-5, N-6). Agrupa-se por faixa vertical (a
+    # "coluna") e, dentro dela, de cima para baixo.
+    largura_media = sum(x1 - x0 for x0, _, x1, _, _ in encontradas) / len(encontradas)
+    encontradas.sort(key=lambda c: (round(c[0] / (largura_media * 0.6)), c[1]))
 
     return [
-        (int(x0 * escala), int(y0 * escala), int(x1 * escala), int(y1 * escala))
-        for x0, y0, x1, y1 in encontradas
+        (int(x0 * escala), int(y0 * escala), int(x1 * escala), int(y1 * escala), d)
+        for x0, y0, x1, y1, d in encontradas
     ]
 
 
@@ -188,7 +220,7 @@ def main() -> int:
         print(f"{inteira}\tpagina {pagina.size[0]}x{pagina.size[1]} -> {copia.size[0]}x{copia.size[1]}")
 
         caixas = caixas_dos_diagramas(pagina)
-        for i, (x0, y0, x1, y1) in enumerate(caixas, start=1):
+        for i, (x0, y0, x1, y1, densidade) in enumerate(caixas, start=1):
             folga = int(MARGEM * max(x1 - x0, y1 - y0))
             recorte = pagina.crop((
                 max(0, x0 - folga),
@@ -198,7 +230,10 @@ def main() -> int:
             ))
             destino = os.path.join(args.saida, f"p{args.pagina}-d{i}.png")
             recorte.save(destino)
-            print(f"{destino}\tcaixa=({x0},{y0})-({x1},{y1})\t{recorte.size[0]}x{recorte.size[1]}")
+            print(
+                f"{destino}\tcaixa=({x0},{y0})-({x1},{y1})"
+                f"\t{recorte.size[0]}x{recorte.size[1]}\ttinta={densidade:.2f}"
+            )
 
         if not caixas:
             print("NENHUM DIAGRAMA ACHADO — leia a página inteira e ajuste as frações do topo",

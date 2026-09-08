@@ -1,0 +1,615 @@
+{
+  "aula": "M103-PRINCIPIOS-DE-ABERTURA",
+  "obra": "yusupov-build-up-1",
+  "volume": 1,
+  "capitulo": 3,
+  "tituloOriginal": "Basic opening principles",
+  "rotuloDoAutor": "Opening",
+  "paginas": {
+    "teoria": [
+      31,
+      37
+    ],
+    "exercicios": [
+      38,
+      39
+    ],
+    "solucoes": [
+      40,
+      43
+    ]
+  },
+  "aprovacao": {
+    "maximo": 31,
+    "excelente": 25,
+    "bom": 20,
+    "minimo": 15,
+    "pagina": 43
+  },
+  "principios": [
+    "Rapid development of all the pieces.",
+    "The struggle for the centre.",
+    "The struggle against the opponent's ideas.",
+    "Goals in the opening.",
+    "The first principle of opening play is rapid development of all the pieces.",
+    "The second principle of opening play is to struggle for the centre.",
+    "The third principle of opening play is to struggle against our opponent's ideas, in order to make his development more difficult and to prevent him from achieving control over the centre.",
+    "The best that can be achieved in the opening is: In as short a time as possible, we must bring the maximum number of pieces into play, seize control of the central squares (e4, d4, e5, d5) and, at the same time, hinder our opponent's attempts to achieve the same goals.",
+    "The absolute minimum is: We must develop the pieces rapidly and castle to get our king to safety, aim our pieces at the central squares and, at the same time, hinder our opponent from achieving either a clear lead in development or complete control of the centre.",
+    "The players, especially White, should try to dictate events right from the start of the game, also called seizing the initiative. The initiative is an advantage!"
+  ],
+  "teoria": [
+    {
+      "id": "diag-3-1",
+      "pagina": 32,
+      "recorte": "p32-d1.png",
+      "fen": "r1bqk1nr/pppp1ppp/2n5/2b3N1/2BpP3/8/PPP2PPP/RNBQK2R b KQkq - 0 1",
+      "lado": "black",
+      "partida": "A.Meek - P.Morphy, Mobile 1855",
+      "linha": [
+        "Nh6",
+        "Nxf7",
+        "Nxf7",
+        "Bxf7+",
+        "Kxf7",
+        "Qh5+",
+        "g6",
+        "Qxc5"
+      ],
+      "comentario": "Position after 5.Ng5?!. 'This is a mistake for two reasons: In the first place White moves a second time with an already developed piece, thus losing a tempo and giving Black the advantage in development. In the second place White forgets the fact that the opening is a fight for domination in the centre and through the above move relinquishes the superiority in the centre to his opponent.' - R.Reti. A better move is 5.c3 Nf6, transposing to the Giuoco Piano. Black answers 5...Nh6!: 'Black defends himself with a developing move. If instead he had made the more obvious move ...Nc6-e5, simultaneously attacking and covering, he would only be repeating White's error of moving an already developed piece again.' - R.Reti. Better than 6.Nxf7? was 6.Qh5, when 6...Qf6!? or 6...Qe7!? is good for Black."
+    },
+    {
+      "id": "diag-3-2",
+      "pagina": 32,
+      "recorte": "p32-d2.png",
+      "fen": "r1bq2nr/pppp1k1p/6p1/2Q5/3pP3/8/PPP2PPP/RNB1K2R b KQ - 0 1",
+      "lado": "black",
+      "partida": "A.Meek - P.Morphy, Mobile 1855 (analysis)",
+      "linha": [],
+      "comentario": "Marked '(analysis)' in the book. It is the position after 5...Ne5? 6.Nxf7! Nxf7 7.Bxf7+ Kxf7 8.Qh5+ g6 9.Qxc5, and not a position from the game. 'Please compare this position with the one after move 9 in the game, which is shown in diagram 3-3.' The black knight is still on g8; in the game it stands on c6."
+    },
+    {
+      "id": "diag-3-3",
+      "pagina": 33,
+      "recorte": "p33-d1.png",
+      "fen": "r1bq3r/pppp1k1p/2n3p1/2Q5/3pP3/8/PPP2PPP/RNB1K2R b KQ - 0 1",
+      "lado": "black",
+      "partida": "A.Meek - P.Morphy, Mobile 1855",
+      "linha": [
+        "d6",
+        "Qb5",
+        "Re8",
+        "Qb3+"
+      ],
+      "comentario": "Position after 9.Qxc5. 'Compared to the position in diagram 3-2, the black knight has already been developed to c6 and is much more actively posted than on g8. This difference allows Black to take the initiative.' 9...d6: with his attacks on the white queen Black gains time for the development of his own pieces. Another very good move would be 9...d5!? (I.Shumov), to open the game. 10...Re8!: Black develops his pieces very quickly and exerts pressure on the centre. On 11.Qb3+?, 'In moving about with the queen White is losing some more time. White should certainly have castled.' - R.Reti."
+    },
+    {
+      "id": "diag-3-4",
+      "pagina": 33,
+      "recorte": "p33-d2.png",
+      "fen": "r1bqr3/ppp2k1p/2np2p1/8/3pP3/1Q6/PPP2PPP/RNB1K2R b KQ - 0 1",
+      "lado": "black",
+      "partida": "A.Meek - P.Morphy, Mobile 1855",
+      "linha": [
+        "d5",
+        "f3",
+        "Na5",
+        "Qd3"
+      ],
+      "comentario": "Position after 11.Qb3+?. 11...d5: Black fights for the centre. A good alternative is 11...Be6!? 12.Qxb7 Qd7 with the initiative. On 12.f3, here White would be better getting his king into safety with 12.O-O Rxe4."
+    },
+    {
+      "id": "diag-3-5",
+      "pagina": 34,
+      "recorte": "p34-d1.png",
+      "fen": "r1bqr3/ppp2k1p/6p1/n2p4/3pP3/1Q3P2/PPP3PP/RNB1K2R w KQ - 0 1",
+      "lado": "white",
+      "partida": "A.Meek - P.Morphy, Mobile 1855",
+      "linha": [
+        "Qd3",
+        "dxe4",
+        "fxe4",
+        "Qh4+",
+        "g3",
+        "Rxe4+",
+        "Kf2",
+        "Qe7",
+        "Nd2",
+        "Re3",
+        "Qb5",
+        "c6",
+        "Qf1"
+      ],
+      "comentario": "Position after 12...Na5. White played 13.Qd3?. 'Better is 13.Qa3, which is the only possibility of putting up some resistance. Black obtains a dangerous attack, but he has to sacrifice a piece for it.' 14...Qh4+: Black tries to hinder his opponent's castling and hence his development. 15...Rxe4+: 15...Qxe4+ leads to a won endgame, but Morphy prefers to attack. 16.Kf2: after this move the king is still in danger; the only chance would be 16.Be3!!. 17...Re3!: the white queen must protect the e2-square."
+    },
+    {
+      "id": "diag-3-6",
+      "pagina": 35,
+      "recorte": "p35-d1.png",
+      "fen": "r1b5/pp2qk1p/2p3p1/n7/3p4/4r1P1/PPPN1K1P/R1B2Q1R b - - 0 1",
+      "lado": "black",
+      "partida": "A.Meek - P.Morphy, Mobile 1855",
+      "linha": [
+        "Bh3",
+        "Qd1",
+        "Rf8",
+        "Nf3",
+        "Ke8"
+      ],
+      "comentario": "Position after 19.Qf1. 19...Bh3!: 'Black ends the game with a combination. Morphy plays very energetically. Almost all the white pieces, on the other hand, are still in their starting positions.' On 20...Rf8: 'Beginners who, in the heat of the fight only play with pieces that are already engaged in battle and often forget to call on their reserves, can learn a lesson from this move.' - R.Reti. 21...Ke8 is a little joke; White can do nothing about the threat of 22...Rxf3+. 0-1"
+    },
+    {
+      "id": "diag-3-7",
+      "pagina": 35,
+      "recorte": "p35-d2.png",
+      "fen": "rn1qkbnr/ppp1pppp/8/3p3b/5PP1/1P5P/P1PPP3/RNBQKBNR b KQkq - 0 1",
+      "lado": "black",
+      "partida": "S.Buecker - A.Yusupov, Bundesliga 1993",
+      "linha": [
+        "e5",
+        "Nf3",
+        "e4",
+        "e3",
+        "Bg6",
+        "Ne5",
+        "Bd6",
+        "Nxg6",
+        "hxg6",
+        "Qe2",
+        "g5",
+        "Qb5+"
+      ],
+      "comentario": "Position after 1.f4 d5 2.b3?! Bg4 3.h3? Bh5 4.g4. On 2...Bg4: Black hinders the natural move Nf3; then Black can take on f3, and his opponent gets doubled pawns. On 3.h3?: this just leads to weaknesses on the kingside; 3.g3 or 3.Bb2 is better. 4...e5!: Black grabs the chance and seizes the centre. 5.gxh5?? is followed by 5...Qh4#. 5...e4!: White loses even more time, because he will have to move for a second time a piece which is already developed. 9...g5!: Black attacks the weaknesses on the kingside."
+    },
+    {
+      "id": "diag-3-8",
+      "pagina": 36,
+      "recorte": "p36-d1.png",
+      "fen": "rn1qk1nr/ppp2pp1/3b4/1Q1p2p1/4pPP1/1P2P2P/P1PP4/RNB1KB1R b KQkq - 0 1",
+      "lado": "black",
+      "partida": "S.Buecker - A.Yusupov, Bundesliga 1993",
+      "linha": [
+        "Nc6",
+        "Qxd5",
+        "gxf4",
+        "Bb2",
+        "fxe3",
+        "Qxe4+",
+        "Kf8",
+        "Bd3",
+        "Qh4+",
+        "Kd1",
+        "Re8",
+        "Qg2",
+        "Ne5",
+        "Be2",
+        "Nf6"
+      ],
+      "comentario": "Position after 10.Qb5+?!. 'White is already badly placed, but this attempt to win a pawn gives his opponent a decisive lead in development.' 11.Qxb7 Nge7 12.Bb5 O-O 13.Bxc6 Rb8 14.Qa6 Rb6 gives Black a great lead in development. After 13...Kf8 the black king is safe here. 14...Qh4+!: Black develops his pieces with tempo!"
+    },
+    {
+      "id": "diag-3-9",
+      "pagina": 36,
+      "recorte": "p36-d2.png",
+      "fen": "4rk1r/ppp2pp1/3b1n2/4n3/6Pq/1P2p2P/PBPPB1Q1/RN1K3R w - - 0 1",
+      "lado": "white",
+      "partida": "S.Buecker - A.Yusupov, Bundesliga 1993",
+      "linha": [
+        "Nc3",
+        "Nexg4",
+        "Rg1",
+        "Nf2+",
+        "Kc1",
+        "exd2+",
+        "Kb1",
+        "Rh7",
+        "Nd5",
+        "Nxd5",
+        "Bxg7+",
+        "Rxg7",
+        "Qxg7+",
+        "Ke7",
+        "Rf1",
+        "Kd8"
+      ],
+      "comentario": "Position after 17...Nf6. 'Black has now brought all his pieces into play, whilst the white rooks are undeveloped and the king is in the centre - even the knight still has to be developed. Furthermore, there is the threat of 18...Nxg4.' On 22.Nd5: such an unprepared attack is easily repulsed. White resigned, in view of 26.Qxf7 Nc3+ 27.Kb2 Qd4, followed by a discovered check, and mate. 0-1"
+    }
+  ],
+  "exercicios": [
+    {
+      "id": "ex-3-1",
+      "pagina": 38,
+      "recorte": "p38-d1.png",
+      "fen": "rnbqk1nr/ppp2ppp/3b4/8/8/2N5/PPPPP1PP/R1BQKBNR b KQkq - 0 1",
+      "lado": "black",
+      "estrelas": 1,
+      "pontos": 1,
+      "partida": "Sample game",
+      "solucao": [
+        "Qh4+",
+        "g3",
+        "Qxg3+",
+        "hxg3",
+        "Bxg3#"
+      ],
+      "alternativas": [],
+      "erros": [],
+      "comentario": "1.f4 e5 2.fxe5 (2.e4!?) 2...d6 (2...Qh4+? 3.g3 Qe4 4.Nf3+-) 3.exd6 (3.Nf3!?) 3...Bxd6 4.Nc3?? (4.Nf3 unclear). White has ignored the safety of his king. The punishment comes at once. 4...Qh4+! (1 point) 5.g3 Qxg3+! (or 5...Bxg3+! 6.hxg3 Qxg3#) 6.hxg3 Bxg3#"
+    },
+    {
+      "id": "ex-3-2",
+      "pagina": 38,
+      "recorte": "p38-d2.png",
+      "fen": "r1bqk2r/pppp1ppp/1bn2n2/8/2BPP3/5N2/PP3PPP/RNBQK2R w KQkq - 0 1",
+      "lado": "white",
+      "estrelas": 3,
+      "pontos": 3,
+      "partida": "M.Euwe - Jutte, Amsterdam 1927",
+      "solucao": [
+        "d5",
+        "Ne7",
+        "e5",
+        "Ne4"
+      ],
+      "alternativas": [
+        {
+          "lance": "Nc3",
+          "pontos": 1,
+          "nota": "developing move"
+        },
+        {
+          "lance": "O-O",
+          "pontos": 1,
+          "nota": "developing move"
+        },
+        {
+          "lance": "Bg5",
+          "pontos": 1,
+          "nota": "developing move"
+        },
+        {
+          "lance": "e5",
+          "pontos": 2,
+          "nota": "Another good move is 7.e5!?, and Black still has to find the typical move 7...d5!? and then 8.exf6 dxc4 9.d5 Nb4 10.Qa4+ c6! 11.O-O. (Not 11.Qxb4? because of 11...Ba5!)"
+        }
+      ],
+      "erros": [],
+      "comentario": "1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.c3 Nf6 5.d4 exd4 6.cxd4 Bb6? (6...Bb4+). White has a lot of good moves here. For the developing moves 7.Nc3, 7.O-O or 7.Bg5, you get 1 point. But it is much better to take the opportunity to extend your position in the centre with tempo. 7.d5! (3 points) 7...Ne7. Other moves are no better: a) 7...Nxe4? 8.dxc6 Bxf2+ 9.Kf1+-; b) 7...Na5? 8.Bd3 (threat b4) 8...c6 9.b4 Ng4 10.O-O Nxf2 11.Rxf2 Bxf2+ 12.Kxf2 Qb6+ 13.Kf1 Qxb4 14.Qc2+- (threats Ba3, Bd2); c) 7...Ba5+ 8.Bd2. Then 8.e5! Ne4?!: the knight will be attacked here, costing Black even more time. The correct move is 8...Ng4! 9.O-O d6."
+    },
+    {
+      "id": "ex-3-3",
+      "pagina": 38,
+      "recorte": "p38-d3.png",
+      "fen": "r2qk2r/pp1nbppp/5n2/1BpPp1B1/4P3/2N2Q2/PPP3PP/R3K2R w KQkq - 0 1",
+      "lado": "white",
+      "estrelas": 3,
+      "pontos": 3,
+      "partida": "P.Morphy - A.Meek, New York 1857",
+      "solucao": [
+        "d6",
+        "Bxd6",
+        "O-O-O"
+      ],
+      "alternativas": [
+        {
+          "lance": "O-O",
+          "pontos": 1,
+          "nota": "Only 1 point for castling either short or long. Black can reply, for example, 11...a6 to free himself from the pin."
+        },
+        {
+          "lance": "O-O-O",
+          "pontos": 1,
+          "nota": "Only 1 point for castling either short or long. Black can reply, for example, 11...a6 to free himself from the pin."
+        }
+      ],
+      "erros": [],
+      "comentario": "1.e4 e6 2.d4 c5 3.d5 e5? 4.f4 d6 5.Nf3 Bg4?! 6.fxe5 Bxf3? 7.Qxf3 dxe5 8.Bb5+ Nd7 9.Nc3 Ngf6? (9...a6) 10.Bg5 Be7? (10...Bd6). White must exploit the pins at once and attack quickly. What he has to do is open the d-file and bring his rooks into the attack. 11.d6! (3 points) 11...Bxd6 12.O-O-O+-. White is already winning, as the following variations will prove: a) 12...Be7 13.Bxf6 Bxf6 14.Rxd7+-; b) 12...Qe7 13.Bxf6 gxf6 14.Nd5 Qe6 15.Nxf6++-; c) 12...Ke7 13.Bxd7 and now 13...Kxd7 14.Nb5+- or 13...Qxd7 14.Nd5+ Kf8 15.Nxf6 gxf6 16.Qxf6+-; d) 12...a6 13.Bxd7+ Qxd7 14.Bxf6 gxf6 15.Qxf6+-. 1-0"
+    },
+    {
+      "id": "ex-3-4",
+      "pagina": 38,
+      "recorte": "p38-d4.png",
+      "fen": "r3k1nr/pppq1ppp/1b2b3/n7/3P4/B1NB1N2/P4PPP/R2Q1RK1 w kq - 0 1",
+      "lado": "white",
+      "estrelas": 3,
+      "pontos": 3,
+      "partida": "P.Morphy - A.Morphy, New Orleans match 1849",
+      "solucao": [
+        "d5",
+        "Bxd5",
+        "Nxd5",
+        "Qxd5",
+        "Re1+"
+      ],
+      "alternativas": [
+        {
+          "lance": "Re1",
+          "pontos": 1,
+          "nota": "If 1.Re1 (1 point), then Black can answer with 1...O-O-O."
+        },
+        {
+          "lance": "Bb5",
+          "pontos": 2,
+          "nota": "Somewhat better is 1.Bb5!? (2 points) 1...c6 2.d5! cxb5 3.Ne5! with an attack."
+        }
+      ],
+      "erros": [],
+      "comentario": "Here too, White has to act quickly in order to exploit the exposed position of the black king. The correct move is 1.d5! (3 points) 1...Bxd5 (1...Bg4 2.Qe1+ Ne7 3.Ne5+-; 1...O-O-O 2.Ne5 Qe8 3.dxe6 Qxe6 4.Re1+-) 2.Nxd5 Qxd5 3.Re1++-. Black resigned, on account of the following variation: 3...Kd8 (or 3...Kd7 4.Bb5++-) 4.Be4 Qxd1 5.Raxd1+ Kc8 6.Bf5+ Kb8 7.Rd8#."
+    },
+    {
+      "id": "ex-3-5",
+      "pagina": 38,
+      "recorte": "p38-d5.png",
+      "fen": "rnb1k2r/ppp2p1p/3p4/8/3PqB2/8/PPP2KP1/R2Q1B1R w kq - 0 1",
+      "lado": "white",
+      "estrelas": 2,
+      "pontos": 2,
+      "partida": "P.Morphy - G.Lyttelton, Birmingham simultaneous 1858",
+      "solucao": [
+        "Bb5+",
+        "Kf8",
+        "Bh6+",
+        "Kg8",
+        "Rh5",
+        "Bf5",
+        "Qd2",
+        "Bg6",
+        "Re1"
+      ],
+      "alternativas": [],
+      "erros": [],
+      "comentario": "1.e4 e5 2.f4 exf4 3.Nf3 g5 4.h4 g4 5.Ne5 d6 6.Nxg4 Be7 7.d4 Bxh4+ 8.Nf2 Bxf2+ 9.Kxf2 Nf6 10.Nc3 Qe7 11.Bxf4 Nxe4+ 12.Nxe4 Qxe4. Here too, White can exploit the unsafe position of the black king in the centre for a quick attack. 13.Bb5+! (2 points) 13...Kf8 (13...c6 14.Re1+- or 13...Kd8 14.Bg5++-) 14.Bh6+ Kg8 15.Rh5! Bf5 16.Qd2! Bg6 17.Re1!+- 1-0"
+    },
+    {
+      "id": "ex-3-6",
+      "pagina": 38,
+      "recorte": "p38-d6.png",
+      "fen": "r2qkb1r/5p1p/p1np4/1p1Npb2/8/N4Q2/PPP2PPP/R3KB1R b - - 0 1",
+      "lado": "black",
+      "estrelas": 3,
+      "pontos": 2,
+      "partida": "Armando - A.Yusupov, World Junior Ch, Innsbruck 1977",
+      "solucao": [
+        "Nd4",
+        "Nc7+",
+        "Qxc7",
+        "Qxa8+",
+        "Ke7",
+        "Rd1",
+        "Nxc2+",
+        "Nxc2",
+        "Bxc2",
+        "Qd5",
+        "Bxd1",
+        "Qxd1",
+        "Bh6",
+        "Qb1",
+        "Rc8"
+      ],
+      "alternativas": [],
+      "erros": [],
+      "comentario": "1...Nd4! (2 points) — this combination gives Black a strong initiative. 2.Nc7+ — 'Take 1 extra point if you took this reply into consideration' (2 + 1 = 3 points for this exercise). 2.Nf6+ Ke7 3.Nd5+ Ke6 is good for Black. 2...Qxc7 3.Qxa8+ Ke7. Black now has a lead in development, and is energetically attacking his opponent. Also possible is 3...Bc8!?. 4.Rd1?! (4.c3 b4! 5.cxb4 Qb6 with initiative) 4...Nxc2+! (less good is 4...b4?! 5.Rxd4! exd4 6.Nc4 Bg7 7.Qxa6, A.Ingram - B.Cafferty, England 1977; but Black could consider 4...Bg7!?) 5.Nxc2 Bxc2 6.Qd5 (6.Rd2 Bh6! 7.Qxb8 Qa5-+) 6...Bxd1 7.Qxd1 Bh6 8.Qb1 Rc8! (8...Qa5+ 9.b4) 9.Be2 Qa5+ 10.b4 Rc1+ 11.Bd1 Rxb1 12.bxa5 Ra1-+ 13.a4 bxa4 14.O-O d5 15.Bc2 Rxf1+ 16.Kxf1 a3 17.Bb3 d4 18.Ke2 e4 19.f3 d3+ 20.Kf2 e3+ 21.Ke1 Bg7 0-1",
+      "pontosExtra": 1,
+      "notaExtra": "Take 1 extra point if you took this reply into consideration (2.Nc7+). O ponto conta na regua impressa do capitulo e nao e ganhavel na tela: o aluno joga o lance, nao declara o que considerou."
+    },
+    {
+      "id": "ex-3-7",
+      "pagina": 39,
+      "recorte": "p39-d1.png",
+      "fen": "r5k1/1b2qpbp/3p4/1B2p3/1N6/2P2P2/1P4PP/3QK2R b K - 0 1",
+      "lado": "black",
+      "estrelas": 3,
+      "pontos": 3,
+      "partida": "J.Van der Wiel - A.Yusupov, Telechess Olympiad 1978",
+      "solucao": [
+        "d5",
+        "Be2",
+        "Qc5",
+        "Qd2",
+        "e4",
+        "fxe4",
+        "dxe4",
+        "Bd1",
+        "e3",
+        "Qd3",
+        "Qg5",
+        "Nc2",
+        "Bxg2",
+        "Rg1",
+        "Qh4+",
+        "Ke2",
+        "Qf2#"
+      ],
+      "alternativas": [
+        {
+          "lance": "e4",
+          "pontos": 1,
+          "nota": "If 1...e4 (1 point), then 2.O-O exf3 3.Bc6."
+        }
+      ],
+      "erros": [
+        {
+          "lance": "Bxf3",
+          "nota": "Of course 1...Bxf3? 2.gxf3 Qh4+ would be wrong, due to 3.Ke2 e4 4.Bc6+-."
+        }
+      ],
+      "comentario": "1...d5! (3 points). With this strong move Black prevents his opponent castling, strengthens his position in the centre and prepares an attack. 2.Be2 (2.Nxd5? loses to 2...Bxd5 3.Qxd5 Ra1+-+; if 2.O-O?, then 2...Qc5+-+) 2...Qc5 3.Qd2 e4! 4.fxe4 (after 4.f4 there follows 4...d4!) 4...dxe4 5.Bd1 e3 6.Qd3 (if 6.Qe2 Rd8 7.O-O, then 7...Rd2-+) 6...Qg5 7.Nc2 Bxg2 8.Rg1 Qh4+ 9.Ke2 Qf2#"
+    },
+    {
+      "id": "ex-3-8",
+      "pagina": 39,
+      "recorte": "p39-d2.png",
+      "fen": "r2qk2r/2nbpp1p/p2p1bp1/2pP4/P1p5/2N5/1PP1BPPP/R1BQ1RK1 w kq - 0 1",
+      "lado": "white",
+      "estrelas": 2,
+      "pontos": 2,
+      "partida": "Variation from the game M.Botvinnik - L.Schmid, Leipzig Olympiad 1960",
+      "solucao": [
+        "Bh6"
+      ],
+      "alternativas": [
+        {
+          "lance": "Bxc4",
+          "pontos": 1,
+          "nota": "Only 1 point is given for 1.Bxc4, since after 1...O-O Black brings his king to safety."
+        }
+      ],
+      "erros": [],
+      "comentario": "White should prevent his opponent from castling. The c4-pawn is not important. 1.Bh6! (2 points). White is better, since the black king is left in the middle."
+    },
+    {
+      "id": "ex-3-9",
+      "pagina": 39,
+      "recorte": "p39-d3.png",
+      "fen": "rn2kb1r/p3qppp/2p2n2/1p2p1B1/2B1P3/1QN5/PPP2PPP/R3K2R w KQkq - 0 1",
+      "lado": "white",
+      "estrelas": 3,
+      "pontos": 3,
+      "partida": "P.Morphy - 'Allies', Paris Opera 1858",
+      "solucao": [
+        "Nxb5",
+        "cxb5",
+        "Bxb5+",
+        "Nbd7",
+        "O-O-O",
+        "Rd8",
+        "Rxd7",
+        "Rxd7",
+        "Rd1",
+        "Qe6",
+        "Bxd7+",
+        "Nxd7",
+        "Qb8+",
+        "Nxb8",
+        "Rd8#"
+      ],
+      "alternativas": [
+        {
+          "lance": "Be2",
+          "pontos": 1,
+          "nota": "Only 1 point for the modest retreat 1.Be2 Qb4=."
+        }
+      ],
+      "erros": [
+        {
+          "lance": "Nd5",
+          "nota": "1.Nd5 would be wrong, due to 1...bxc4."
+        }
+      ],
+      "comentario": "1.Nxb5! (3 points). White takes the chance to mount an attack against the opposing king with a piece sacrifice. 1...cxb5 2.Bxb5+ Nbd7 (or 2...Kd8 3.O-O-O+ Kc8 4.Rd3 Qb4 5.Rc3+ Kb7 6.Qxf7+ Qe7 7.Qc4+-) 3.O-O-O Rd8 4.Rxd7! — this is how to attack! White gives his opponent no rest. 4...Rxd7 5.Rd1+- Qe6 6.Bxd7+ (also good were 6.Qxe6+ fxe6 7.Bxf6+- and 6.Bxf6+-) 6...Nxd7. Now comes a pretty finish. 7.Qb8+!! Nxb8 8.Rd8#"
+    },
+    {
+      "id": "ex-3-10",
+      "pagina": 39,
+      "recorte": "p39-d4.png",
+      "fen": "r1b1qrk1/p2n2pp/1ppbpn2/3p1p2/2PP4/3N1NP1/PPQ1PPBP/R1B2RK1 w - - 0 1",
+      "lado": "white",
+      "estrelas": 3,
+      "pontos": 3,
+      "partida": "A.Yusupov - Khatib, Tunis (1) 1979",
+      "solucao": [
+        "cxd5",
+        "Bb7",
+        "dxc6",
+        "Qc8",
+        "Ng5",
+        "Re8",
+        "Qa4",
+        "Bxc6",
+        "Bxc6",
+        "Rb8",
+        "Bf4",
+        "Qc7",
+        "Rac1",
+        "Bxf4",
+        "Nxf4",
+        "Qd6",
+        "Qb3"
+      ],
+      "alternativas": [
+        {
+          "lance": "Bf4",
+          "pontos": 1,
+          "nota": "Only 1 point for the positional move 12.Bf4, since instead White can win a pawn! Always check out the active moves first!"
+        }
+      ],
+      "erros": [],
+      "comentario": "1.d4 f5 2.Nf3 Nf6 3.g3 e6 4.Bg2 Be7 5.O-O d5 6.c4 c6 7.Nbd2 O-O 8.Ne5 Nbd7 9.Nd3 Bd6 10.Nf3 Qe8 11.Qc2 b6??. 12.cxd5! (3 points) 12...Bb7 (after 12...cxd5 there comes 13.Qc6+-) 13.dxc6 Qc8 14.Ng5 Re8 15.Qa4+- Bxc6 16.Bxc6 Rb8 17.Bf4 Qc7 18.Rac1 Bxf4 19.Nxf4 Qd6 20.Qb3 1-0"
+    },
+    {
+      "id": "ex-3-11",
+      "pagina": 39,
+      "recorte": "p39-d5.png",
+      "fen": "r1b1k2r/pp2qppp/2np1n2/2pPp3/2P5/P1PBPN2/2Q2PPP/R1B1K2R b KQkq - 0 1",
+      "lado": "black",
+      "estrelas": 2,
+      "pontos": 2,
+      "partida": "Khatib - A.Yusupov, Tunis (6) 1979",
+      "solucao": [
+        "e4",
+        "Bxe4",
+        "Qxe4",
+        "Qxe4+",
+        "Nxe4",
+        "dxc6",
+        "bxc6"
+      ],
+      "alternativas": [],
+      "erros": [
+        {
+          "lance": "Na5",
+          "nota": "10...Na5? is bad, due to 11.Qa4+."
+        },
+        {
+          "lance": "Nb8",
+          "nota": "Retreating is too passive: 10...Nb8 11.Nd2."
+        },
+        {
+          "lance": "Nd8",
+          "nota": "Retreating is too passive: 10...Nd8 11.Nd2."
+        }
+      ],
+      "comentario": "1.Nf3 Nf6 2.c4 e6 3.d4 Bb4+ 4.Nc3 c5 5.e3 Nc6 6.a3 Bxc3+ 7.bxc3 d6 8.Bd3 e5 9.Qc2 Qe7 10.d5. 10...e4! (2 points). Black fights for the initiative. 11.Bxe4?! — 11.dxc6 is necessary, continuing 11...exd3 (11...exf3!? 12.gxf3 bxc6=) 12.cxb7! Bxb7 13.Qxd3. Although White has an extra pawn, Black is well placed, since the c4-pawn is a hopeless weakness. 11...Qxe4 12.Qxe4+ Nxe4 13.dxc6 bxc6 (target c4) 14.Rg1? Ba6 15.f3 Nxc3 16.Kf2 Na4-+ ... 0-1"
+    },
+    {
+      "id": "ex-3-12",
+      "pagina": 39,
+      "recorte": "p39-d6.png",
+      "fen": "rnb2k1r/pppp1ppp/5n2/8/5N1q/2P2B2/PPP1QP1P/R1B1K2R w KQ - 0 1",
+      "lado": "white",
+      "estrelas": 3,
+      "pontos": 3,
+      "partida": "Bednarski - Sydor, Wroclaw 1972",
+      "solucao": [
+        "Qc4",
+        "g5",
+        "Qxc7",
+        "Na6",
+        "Qd6+",
+        "Kg7",
+        "Be3",
+        "Re8",
+        "O-O-O"
+      ],
+      "alternativas": [
+        {
+          "lance": "Be3",
+          "pontos": 2,
+          "nota": "One good solution is the rapid mobilization of all his forces by 11.Be3 (2 points) then 12.O-O-O."
+        }
+      ],
+      "erros": [],
+      "comentario": "1.e4 e5 2.Nc3 Nf6 3.Nf3 Bb4 4.Nxe5 Qe7 (4...O-O) 5.Nd3 Bxc3 6.dxc3 Qxe4+ 7.Be2 Qxg2? (7...O-O 8.O-O) 8.Bf3 Qh3 (8...Qg6 9.Qe2+ Kf8 [9...Kd8 10.Ne5] 10.Bf4+) 9.Nf4 Qh4? (9...Qf5) 10.Qe2+ Kf8. White has a lead in development and must attack. 11.Qc4! (3 points) — threatening Ne6+. 11...g5 (a better defence would be 11...Ng4, but White has 12.Bxg4 Qxg4 13.Qxc7 Nc6 14.Qd6+ Kg8 15.Be3) 12.Qxc7 (another very strong move is 12.Qd4! gxf4 13.Bxf4+- Qh3 14.O-O-O!) 12...Na6 13.Qd6+ Kg7 14.Be3 Re8 (or 14...gxf4 15.Rg1++-) 15.O-O-O+-. Black resigned, on account of the variation 15...gxf4 16.Rhg1+ Kh8 17.Bd4 Re6 18.Qf8#."
+    }
+  ],
+  "avisos": [
+    "Ex. 3-6: o autor da '2 points' pelo lance 1...Nd4 e mais um ponto por ter considerado a resposta 2.Nc7+. Gravado como pontos=2 e pontosExtra=1; a soma dos doze com os extras fecha com o maximo 31 da pagina 43.",
+    "Ex. 3-2: os lances que o autor nomeia como ruins (7...Nxe4?, 7...Na5?, 7...Ba5+) são respostas das pretas, e a FEN é de brancas a jogar; por isso o campo 'erros' ficou vazio e eles estão no comentário. O mesmo vale para 12...cxd5 no Ex. 3-10.",
+    "Direitos de roque: escritos como a posição realmente estava, não como '-'. Nos sete exercícios em que o autor imprime a partida desde o lance 1 (3-1, 3-2, 3-3, 3-5, 3-10, 3-11, 3-12) os direitos saíram da própria sequência, replicada na chess.js. Nos outros cinco: 3-4 'kq' (o autor dá a variante 1...O-O-O), 3-7 'K' (o autor dá 2.O-O; as brancas só têm a torre de h1), 3-8 'kq' (o autor dá 1.Bxc4 O-O), 3-9 'KQkq' (a solução joga 3.O-O-O e nada tinha mexido de rei ou torre na Ópera de Paris).",
+    "Ex. 3-6: não há como saber pelo livro se as brancas ainda tinham direito de roque — o rei está em e1 e as torres em a1/h1, mas nenhuma linha impressa roca, e as brancas jogam 4.Rd1. Gravado como '-'.",
+    "Diagrama 3-2 é marcado '(analysis)' no livro: é a posição da variante 5...Ne5? 6.Nxf7! Nxf7 7.Bxf7+ Kxf7 8.Qh5+ g6 9.Qxc5, e não uma posição da partida. O autor a imprime só para comparar com o diagrama 3-3. Por isso o campo 'linha' está vazio.",
+    "Ex. 3-1 não tem nomes de jogadores: o cabeçalho impresso é 'Sample game'.",
+    "O glifo de quem joga não é um quadradinho, como diz a receita, e sim um triângulo: vazado = brancas jogam, cheio = pretas jogam. Os doze foram lidos assim e os doze batem com o lado da FEN e com a solução.",
+    "Os campos 'recorte' seguem a numeracao nova do scripts/recortar-diagramas.py, que ordena por coluna (a ordem em que o Yusupov numera): p38-d1..d6 = Ex. 3-1..3-6, p39-d1..d6 = Ex. 3-7..3-12."
+  ]
+}
