@@ -1,24 +1,19 @@
 "use client";
 
 import type { MasteryReport } from "@/lib/lesson/mastery";
-import { LessonButton } from "./LessonButton";
 
 /**
- * O selo de domínio, ao fim da partida da etapa 5.
+ * O selo da passada, ao fim da partida da etapa 3.
  *
  * Aparece **vencendo ou não** — de propósito. Um selo que só aparece no sucesso
  * deixa o aluno que quase chegou sem saber o que faltou, e a etapa 1 prometeu
- * uma resposta. Quando falta a etapa 4, o selo leva até ela.
+ * uma resposta.
+ *
+ * Ele tinha um botão "ir para a etapa sem ajuda", para quando faltava a etapa
+ * 4. Não há mais para onde mandar: a etapa sem ajuda **é** esta, e o botão
+ * apontaria para a própria tela.
  */
-export function MasterySeal({
-  report,
-  onGoToSolo,
-}: {
-  report: MasteryReport;
-  onGoToSolo?: () => void;
-}) {
-  const faltaSolo = report.missing.some((m) => m.stage === "solo");
-
+export function MasterySeal({ report }: { report: MasteryReport }) {
   return (
     <section
       // Não é `aria-live`: o painel de feedback é a única região viva da etapa,
@@ -51,12 +46,6 @@ export function MasterySeal({
             </li>
           ))}
         </ul>
-      )}
-
-      {faltaSolo && onGoToSolo && (
-        <div>
-          <LessonButton onClick={onGoToSolo}>Ir para a etapa sem ajuda</LessonButton>
-        </div>
       )}
     </section>
   );

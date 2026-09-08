@@ -1,0 +1,23 @@
+{
+  "id": "pos-fx-krk-caixa",
+  "fen": "8/8/8/8/4k3/8/8/6RK w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "fixture",
+    "KRK",
+    "caixa",
+    "ensino"
+  ],
+  "status": "fixture",
+  "provenance": {
+    "externalHumanSource": null,
+    "bibliographicSource": null,
+    "originalGame": null,
+    "authorComposer": null,
+    "license": null,
+    "editionFile": null,
+    "fenMethod": null,
+    "qaApplied": null,
+    "pendingRisk": null
+  }
+}

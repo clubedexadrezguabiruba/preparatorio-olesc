@@ -185,17 +185,30 @@ export function TreeStage({
   const shapes: DrawShape[] = useMemo(() => {
     // Os destaques automáticos (corte e peça pendurada) saem da posição que
     // está na tela, então continuam certos mesmo durante a animação do lance.
-    // A etapa 4 não recebe nenhum: é lá que o domínio é aferido.
     const list: DrawShape[] = allowHelp ? teachingShapes(boardFen, lastMove) : [];
-    // Os destaques da autoria valem para o nó parado; enquanto o lance está
-    // sendo desenhado eles sairiam do lugar, então somem. No modo autor eles
-    // migram para o canal editável, senão sairiam desenhados duas vezes.
-    if (allowHelp && !marcacao && !overlay && status === "playing" && node) {
+    /*
+     * **Os destaques da autoria acendem SÓ com o botão de dica** (2026-09-08).
+     *
+     * Eles ficavam acesos o tempo todo, e por um bom motivo de então: a etapa
+     * 3 era a "prática com zona", em que ver a casa certa era metade da aula.
+     * O formato mudou — a etapa com ajuda passou a ser a única antes da
+     * partida —, e ajuda sempre visível numa etapa que o aluno repete todo dia
+     * vira leitura de casa acesa em vez de cálculo.
+     *
+     * A dica de texto (`node.hint`) já era sob demanda desde sempre; o que
+     * mudou é que a casa acesa passou pelo mesmo botão. As duas juntas: quem
+     * pede ajuda recebe a ajuda inteira, quem não pede vê a posição limpa.
+     *
+     * Eles valem para o nó parado; enquanto o lance está sendo desenhado
+     * sairiam do lugar, então somem. No modo autor migram para o canal
+     * editável, senão sairiam desenhados duas vezes.
+     */
+    if (allowHelp && !marcacao && !overlay && status === "playing" && node && state?.hintOpen) {
       for (const square of node.highlights ?? []) list.push({ orig: square as Key, brush: "green" });
     }
     if (message?.square) list.push({ orig: message.square as Key, brush: "red" });
     return list;
-  }, [allowHelp, boardFen, lastMove, marcacao, overlay, status, node, message]);
+  }, [allowHelp, boardFen, lastMove, marcacao, overlay, status, node, message, state?.hintOpen]);
 
   /** Os destaques que o arquivo guarda para este nó, no formato do tabuleiro. */
   const daAutoria: DrawShape[] = useMemo(
@@ -345,7 +358,10 @@ export function TreeStage({
 
   if (!state || !node) return null;
 
-  const hintAvailable = allowHelp && Boolean(node.hint);
+  // Há ajuda a pedir se existe texto **ou** casa a acender. Era só o texto: a
+  // casa acendia sozinha, então um nó com destaque e sem dica escrita não
+  // precisava de botão. Hoje precisa, senão a ajuda ficaria inalcançável.
+  const hintAvailable = allowHelp && (Boolean(node.hint) || (node.highlights ?? []).length > 0);
 
   // A raiz é `relative` **sem `z-index`**, de propósito: assim não cria
   // contexto de empilhamento novo e as camadas de hoje (canvas `z-10`, promoção
@@ -431,7 +447,10 @@ export function TreeStage({
                     {state.hintOpen ? "Esconder a dica" : "Ver a dica"}
                   </LessonButton>
                 </div>
-                {state.hintOpen && (
+                {/* O texto só aparece se houver texto: um nó pode ter apenas a
+                    casa acesa, e nesse caso o botão já entregou a ajuda toda
+                    no tabuleiro — uma caixa vazia embaixo dele seria ruído. */}
+                {state.hintOpen && node.hint && (
                   <p className="rounded-lg border border-dica-superficie/30 bg-dica-superficie/5 px-4 py-3 text-sm leading-relaxed text-dica-tinta">
                     {node.hint}
                   </p>

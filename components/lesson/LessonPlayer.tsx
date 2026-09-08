@@ -7,7 +7,6 @@ import type { PacoteDeAula } from "@/lib/finais/conteudo";
 import type { TentativaDeAula } from "@/lib/finais/gravar";
 import { masteryReport } from "@/lib/lesson/mastery";
 import {
-  reviewKey,
   STAGE_LABEL,
   STAGE_ORDER,
   useLessonStore,
@@ -16,11 +15,9 @@ import {
   type TreeKey,
 } from "@/lib/lesson/store";
 import { armAudioOnFirstGesture, isSoundOn, setSoundOn, subscribeSound } from "@/lib/sound";
-import { ExampleStage } from "./ExampleStage";
 import { MasterySeal } from "./MasterySeal";
 import { ObjectiveStage } from "./ObjectiveStage";
 import { PracticeStage } from "./PracticeStage";
-import { ReviewStage } from "./ReviewStage";
 import { TreeStage } from "./TreeStage";
 
 /**
@@ -50,8 +47,6 @@ export function LessonPlayer({
    */
   startAt?: {
     stage: StageKey;
-    scene: number;
-    step: number;
     /** Onde cada árvore parou. Sem isto, salvar desfaz o lance recém-jogado. */
     trees?: Partial<Record<TreeKey, { nodeId: string; studentMoves: number }>>;
   };
@@ -100,15 +95,9 @@ export function LessonPlayer({
   const lessonId = useLessonStore((s) => s.lessonId);
   const open = useLessonStore((s) => s.open);
   const goToStage = useLessonStore((s) => s.goToStage);
-  const setExample = useLessonStore((s) => s.setExample);
   const treeSeek = useLessonStore((s) => s.treeSeek);
   const cleared = useLessonStore((s) => s.cleared);
-  const solo = useLessonStore((s) => s.trees.solo);
-  // O mapa inteiro, e não só `practices.practice`: as partidas da etapa 6
-  // moram aqui sob `review:<posição>`, e até a F2 elas nunca subiam ao
-  // servidor — o aluno revisava e o banco não sabia.
-  const practices = useLessonStore((s) => s.practices);
-  const practice = practices.practice;
+  const practice = useLessonStore((s) => s.practices.practice);
 
   const available = STAGE_ORDER.filter((key) => lesson.stages[key] !== undefined);
 
@@ -117,9 +106,9 @@ export function LessonPlayer({
   useEffect(() => armAudioOnFirstGesture(), []);
 
   useEffect(() => {
-    // As partidas das etapas 5 e 6 são registradas aqui, junto das raízes das
-    // árvores: quem inicializa é a store, não a etapa — e assim trocar de aula
-    // zera prática e revisão pelo mesmo caminho que zera as árvores.
+    // A partida da etapa 3 é registrada aqui, junto da raiz da árvore: quem
+    // inicializa é a store, não a etapa — e assim trocar de aula zera as duas
+    // pelo mesmo caminho.
     const practices: Array<{ key: PracticeKey; positionId: string; startFen: string }> = [];
     const practice = lesson.stages.practice;
     if (practice) {
@@ -129,23 +118,12 @@ export function LessonPlayer({
         startFen: positions[practice.positionId].fen,
       });
     }
-    for (const id of lesson.stages.review?.reviewPositionIds ?? []) {
-      practices.push({ key: reviewKey(id), positionId: id, startFen: positions[id].fen });
-    }
 
     // A etapa pedida só vale se ela existe nesta aula; senão, a primeira.
     const inicial =
       startAt && available.includes(startAt.stage) ? startAt.stage : available[0] ?? "objective";
 
-    open(
-      lesson.id,
-      inicial,
-      { guided: lesson.stages.guided?.root, solo: lesson.stages.solo?.root },
-      practices,
-    );
-    // `open` zera a cena e o passo; devolvê-los aqui dentro mantém tudo numa
-    // execução só, e por isso continua certo quando o efeito roda duas vezes.
-    if (startAt && inicial === startAt.stage) setExample(startAt.scene, startAt.step);
+    open(lesson.id, inicial, { guided: lesson.stages.guided?.root }, practices);
     for (const [key, onde] of Object.entries(startAt?.trees ?? {})) {
       if (onde) treeSeek(key as TreeKey, onde.nodeId, onde.studentMoves);
     }
@@ -194,34 +172,25 @@ export function LessonPlayer({
 
     // Fracasso grava tanto quanto acerto: é a tentativa que o professor precisa
     // ver. Quem decide o veredito é o servidor; daqui sobem só os lances.
-    if (solo && solo.status !== "playing") {
-      fim("solo", solo.attempt, solo.moves, solo.startedAt);
-    }
-
-    // As partidas da etapa 6, uma por posição. Elas viram linha `revisao` — e é
-    // a data delas que a fila espaçada lê para saber quando a aula volta.
-    for (const id of lesson.stages.review?.reviewPositionIds ?? []) {
-      const partida = practices[reviewKey(id)];
-      if (partida && partida.status !== "playing") {
-        fim("revisao", partida.attempt, partida.moves, partida.startedAt, id);
-      }
-    }
-
+    //
+    // **Só a partida grava, e ela é a única etapa que afere.** A árvore que
+    // sobrou é a *com ajuda*, aquecimento por decisão do Doug: ela não entra na
+    // conta da escada, e gravá-la encheria `tentativas_aula` de linhas que
+    // nenhuma conta lê. A etapa 4, que gravava como `solo`, saiu do formato.
     if (practice && practice.status !== "playing") {
-      // Aula sem etapa 6 aberta pelo cartão de revisão: a prática **é** a
-      // revisão do dia, e é assim que ela precisa ser gravada.
-      const comoRevisao = revisao && lesson.stages.review === undefined;
+      // Aberta pelo cartão de revisão, a partida **é** a passada do dia, e é
+      // assim que ela precisa ser gravada.
       fim(
-        comoRevisao ? "revisao" : "pratica",
+        revisao ? "revisao" : "pratica",
         practice.attempt,
         practice.moves,
         practice.startedAt,
-        comoRevisao ? practice.positionId : undefined,
+        revisao ? practice.positionId : undefined,
       );
     }
-    // `practices` muda a cada lance, então este efeito roda muito — e é a
-    // trava `enviadas` que segura, não a lista de dependências.
-  }, [lesson.id, lesson.stages.review, lessonId, onStageDone, practice, practices, revisao, solo]);
+    // `practice` muda a cada lance, então este efeito roda muito — e é a trava
+    // `enviadas` que segura, não a lista de dependências.
+  }, [lesson.id, lessonId, onStageDone, practice, revisao]);
 
   // Enquanto o efeito acima não rodou, a store ainda fala da aula anterior.
   if (lessonId !== lesson.id) return null;
@@ -306,43 +275,20 @@ export function LessonPlayer({
       </header>
 
       <section className="flex flex-1 flex-col">
-        {/* O objetivo depende do exemplo: os diagramas dele são quadros das
-            cenas da etapa 2. O gate cobra a mesma dependência
-            (`lessonSchema.superRefine`), e por isso a condição aqui pede as
-            duas etapas em vez de só a primeira. */}
-        {stage === "objective" && lesson.stages.objective && lesson.stages.example && (
+        {stage === "objective" && lesson.stages.objective && (
           <ObjectiveStage
             stage={lesson.stages.objective}
-            example={lesson.stages.example}
-            positions={positions}
+            position={positions[lesson.stages.objective.positionId]}
             orientation={lesson.orientation}
             trilha={trilha}
             rodape={
               <StageFooter
                 next={nextStage("objective")}
                 onGo={goToStage}
-                label="Ver a técnica lance a lance"
+                label="Jogar com ajuda"
               />
             }
           />
-        )}
-
-        {stage === "example" && lesson.stages.example && (
-          <ExampleStage
-            stage={lesson.stages.example}
-            positions={positions}
-            orientation={lesson.orientation}
-            marcacao={marcacao}
-            trilha={trilha}
-            rodape={
-              <StageFooter next={nextStage("example")} onGo={goToStage} label="Agora é a sua vez" />
-            }
-          >
-            {/* Na aula de leitura não há etapa seguinte, e o rodapé acima não
-                desenha nada: o fim do exemplo é o fim da aula, e é aqui que ela
-                pergunta se foi lida. */}
-            {leitura}
-          </ExampleStage>
         )}
 
         {stage === "guided" && lesson.stages.guided && (
@@ -365,25 +311,6 @@ export function LessonPlayer({
           />
         )}
 
-        {stage === "solo" && lesson.stages.solo && (
-          <TreeStage
-            lesson={lesson}
-            tree={lesson.stages.solo}
-            treeKey="solo"
-            trilha={trilha}
-            position={positions[lesson.stages.solo.positionId]}
-            orientation={lesson.orientation}
-            allowHelp={false}
-            moveLimit={lesson.stages.solo.moveLimit}
-            intro="Posição nova, sem dica e sem destaque. É aqui que o domínio é aferido."
-            onFinish={() => {
-              const next = nextStage("solo");
-              if (next) goToStage(next);
-            }}
-            finishLabel="Continuar"
-          />
-        )}
-
         {stage === "practice" && lesson.stages.practice && (
           <PracticeStage
             practiceKey="practice"
@@ -392,43 +319,22 @@ export function LessonPlayer({
             orientation={lesson.orientation}
             goal={lesson.stages.practice.goal}
             engine={lesson.stages.practice.engine}
-            intro="Agora é partida de verdade: o computador defende com tudo o que sabe, e nenhum lance é corrigido no caminho. Quem decide é o resultado."
+            intro="Agora é partida de verdade, na mesma posição: o computador defende com tudo o que sabe, e nenhum lance é corrigido no caminho. Quem decide é o resultado."
             seal={
               <MasterySeal
                 report={masteryReport({
-                  // O critério é o das etapas que **esta** aula tem: das 49 da
-                  // trilha, 8 são completas (etapa 4 + etapa 5) e ~39 são curtas
-                  // (só a etapa 5). Cobrar de uma aula curta a etapa sem ajuda
-                  // seria mandar o aluno a uma aba que não existe.
-                  hasSolo: lesson.stages.solo !== undefined,
                   hasPractice: true,
-                  soloCleared: cleared.solo,
                   practiceWon: cleared.practice,
-                  soloGoal: lesson.stages.solo?.goal,
                   practiceGoal: lesson.stages.practice.goal,
                 })}
-                onGoToSolo={
-                  lesson.stages.solo ? () => goToStage("solo") : undefined
-                }
               />
             }
-            onFinish={() => {
-              const next = nextStage("practice");
-              if (next) goToStage(next);
-            }}
-            finishLabel="Ir para a revisão"
           />
         )}
 
-        {stage === "review" && lesson.stages.review && (
-          <ReviewStage
-            trilha={trilha}
-            stage={lesson.stages.review}
-            practice={lesson.stages.practice}
-            positions={positions}
-            orientation={lesson.orientation}
-          />
-        )}
+        {/* A aula de leitura não joga: o fim dela é o fim do objetivo, e é ali
+            que ela pergunta se foi lida. */}
+        {stage === "objective" && leitura}
       </section>
     </div>
   );

@@ -5,7 +5,6 @@ import {
   ETAPAS_DE_AULA,
   rejulgarPratica,
   rejulgarRevisao,
-  rejulgarSolo,
   type EtapaDeAula,
 } from "./rejulgar.ts";
 
@@ -89,9 +88,7 @@ export async function gravarTentativaDeAula(
   if (!pacote) return { erro: "aula desconhecida" };
 
   let julgamento;
-  if (etapa === "solo") {
-    julgamento = rejulgarSolo(pacote.lesson, lances);
-  } else if (etapa === "revisao") {
+  if (etapa === "revisao") {
     if (typeof posicaoId !== "string") return { erro: "revisão sem posição" };
     const posicao = pacote.positions[posicaoId];
     // Posição que a aula não referencia: nem chegou a ser carregada, então

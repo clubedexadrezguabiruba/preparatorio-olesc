@@ -1,159 +1,33 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import path from "node:path";
 import test from "node:test";
 import { Chess } from "chess.js";
 import { lessonSchema, positionSchema } from "../lesson/schema.ts";
-import { respostasDe } from "../lesson/tree.ts";
-import { rejulgarPratica, rejulgarSolo } from "./rejulgar.ts";
+import { rejulgarPratica } from "./rejulgar.ts";
 
 /**
  * O rejulgamento visto de fora: entra uma lista de lances, sai o veredito que
  * vira linha no banco — ou o erro que impede a linha de existir.
  *
- * Roda sobre a **aula de verdade** sempre que a aula de verdade alcança o caso,
- * pelo motivo que `tree.test.ts` já registrou: literal fixado à mão quebra
- * quando a posição de ensino muda, e a posição de ensino já mudou duas vezes.
- * Nem a linha vencedora nem o lance que perde estão escritos aqui — os dois são
- * caminhados a partir do arquivo.
+ * ## O que este arquivo perdeu em 2026-09-08, e é preciso dizer
  *
- * Dois casos não cabem na N0-R-MATE, e para eles há a fixture da segunda
- * metade: **defensor com mais de uma variante** (o corpus de hoje é 100% de
- * resposta única) e a **prática inteira**, que num arquivo só existiria como
- * partida jogada contra o Stockfish.
+ * Ele tinha duas metades. A primeira rodava sobre a **aula publicada**,
+ * caminhando a linha da etapa 4 a partir do arquivo, e cobria nove casos do
+ * `rejulgarSolo`: a linha inteira, a linha interrompida, o lance depois do fim,
+ * o lance ilegal, o lance que joga o objetivo fora, o lance recusado que não
+ * gasta teto, o teto estourado, a aula sem a etapa, e — na fixture de duas
+ * variantes — o defensor com mais de uma resposta.
+ *
+ * **`rejulgarSolo` não existe mais.** A etapa 4 saiu do formato: a etapa sem
+ * ajuda virou partida contra o Stockfish, e uma partida o servidor reconfere
+ * jogando os lances na chess.js, não seguindo roteiro. Os nove casos não
+ * ficaram sem cobertura — eles ficaram sem **assunto**.
+ *
+ * O que fica é a segunda metade, a da prática, que é hoje a única etapa que
+ * vira linha no banco. E fica também a fixture de duas variantes, agora como
+ * árvore da etapa *com ajuda*: ela não é mais rejulgada no servidor, mas
+ * continua provando que o schema aceita `replies` — o que a mantém honesta
+ * para o dia em que a árvore voltar a ser conferida.
  */
-
-const lesson = lessonSchema.parse(
-  JSON.parse(readFileSync(path.join(process.cwd(), "content/lessons/N0-R-MATE.json"), "utf8")),
-);
-const solo = lesson.stages.solo!;
-
-function legais(fen: string): string[] {
-  return new Chess(fen)
-    .moves({ verbose: true })
-    .map((m) => `${m.from}${m.to}${m.promotion ?? ""}`);
-}
-
-/**
- * A linha principal da etapa 4 — o primeiro lance de cada nó, seguindo a
- * primeira resposta do defensor — e, junto, o nó em que cada lance foi jogado.
- * É o caminho que o aluno percorre quando acerta tudo, e o índice dos nós é o
- * que permite plantar um lance ruim **no meio** dele.
- */
-function linhaPrincipal(): { lances: string[]; nos: string[] } {
-  const lances: string[] = [];
-  const nos: string[] = [];
-  let nodeId = solo.root;
-  for (let i = 0; i < 60; i += 1) {
-    const node = solo.nodes[nodeId];
-    assert.ok(node, `a árvore precisa ter o nó ${nodeId}`);
-    const expect = node.expects[0];
-    lances.push(expect.moves[0]);
-    nos.push(nodeId);
-    const respostas = respostasDe(expect);
-    if (respostas.length === 0) return { lances, nos };
-    nodeId = respostas[0].next;
-  }
-  throw new Error("a linha principal não terminou em 60 lances");
-}
-
-const { lances: linha, nos } = linhaPrincipal();
-
-test("a linha principal da aula de verdade chega ao fim", () => {
-  assert.ok(linha.length > 1, `a linha tem ${linha.length} lance(s)`);
-  assert.ok(linha.length <= solo.moveLimit, "a linha principal cabe no teto da própria aula");
-
-  assert.deepEqual(rejulgarSolo(lesson, linha), {
-    sucesso: true,
-    motivo: "chegou ao fim da linha dentro do teto",
-  });
-});
-
-test("a linha interrompida no meio não é sucesso — e vira linha no banco assim mesmo", () => {
-  const r = rejulgarSolo(lesson, linha.slice(0, -1));
-  assert.ok("sucesso" in r);
-  assert.equal(r.sucesso, false);
-  assert.match(r.motivo, /não chegou ao fim/);
-});
-
-test("lance depois do fim da tentativa não vira linha nenhuma", () => {
-  const r = rejulgarSolo(lesson, [...linha, linha[0]]);
-  assert.ok("erro" in r, "a lista não descreve uma tentativa que aconteceu");
-  assert.match(r.erro, /depois do fim/);
-});
-
-test("lance ilegal não vira linha nenhuma", () => {
-  // Derivado, não fixado: a origem é uma casa vazia do tabuleiro da raiz, então
-  // o lance é ilegal por construção — não depende de qual posição a aula usa.
-  const vazia = new Chess(solo.nodes[solo.root].fen)
-    .board()
-    .flat()
-    .map((casa, i) => ({ casa, square: `${"abcdefgh"[i % 8]}${8 - Math.floor(i / 8)}` }))
-    .find(({ casa }) => casa === null)!.square;
-  const ilegal = `${vazia}${vazia === "a1" ? "a2" : "a1"}`;
-  assert.ok(!legais(solo.nodes[solo.root].fen).includes(ilegal));
-
-  const r = rejulgarSolo(lesson, [ilegal]);
-  assert.ok("erro" in r);
-  assert.match(r.erro, /ilegal/);
-});
-
-test("lance que joga o objetivo fora encerra a tentativa, como na tela", () => {
-  // O primeiro nó da linha em que existe lance legal fora de `winningMoves`.
-  // Não é a raiz: em rei e torre contra rei, no começo **todo** lance ainda
-  // ganha — é adiante, quando a torre pode ser entregue ou o rei afogado, que
-  // aparece o que a tablebase reprova.
-  const alvo = nos
-    .map((id, i) => ({ i, node: solo.nodes[id] }))
-    .map(({ i, node }) => ({
-      i,
-      perdedor: legais(node.fen).find((m) => !node.winningMoves.includes(m)),
-    }))
-    .find(({ perdedor }) => perdedor !== undefined);
-  assert.ok(alvo, "a linha precisa ter algum nó com lance legal fora de winningMoves");
-
-  const r = rejulgarSolo(lesson, [...linha.slice(0, alvo.i), alvo.perdedor!]);
-  assert.ok("sucesso" in r);
-  assert.equal(r.sucesso, false);
-  assert.match(r.motivo, /jogou o objetivo fora/);
-});
-
-test("lance recusado que ainda ganha não gasta lance do teto", () => {
-  const raiz = solo.nodes[solo.root];
-  const foraDoMetodo = raiz.winningMoves.find(
-    (m) =>
-      !raiz.expects.some((e) => e.moves.includes(m)) &&
-      !(raiz.mistakes ?? []).some((mm) => mm.moves.includes(m)) &&
-      !(raiz.authorAlternatives ?? []).some((a) => a.moves.includes(m)) &&
-      !(raiz.methodAlternatives ?? []).includes(m),
-  );
-  assert.ok(foraDoMetodo, "a raiz precisa ter algum lance vencedor fora das listas");
-
-  // A linha inteira **mais** o recusado na frente. Se o recusado gastasse lance
-  // do teto, uma linha que cabia passaria a estourá-lo — que é exatamente o que
-  // a tela não faz: ali a peça volta e o contador não anda.
-  assert.deepEqual(rejulgarSolo(lesson, [foraDoMetodo, ...linha]), {
-    sucesso: true,
-    motivo: "chegou ao fim da linha dentro do teto",
-  });
-});
-
-test("o teto de lances é o do arquivo, e reprova quem não cabe nele", () => {
-  const apertada = structuredClone(lesson);
-  apertada.stages.solo!.moveLimit = 1;
-
-  const r = rejulgarSolo(apertada, [linha[0]]);
-  assert.ok("sucesso" in r);
-  assert.equal(r.sucesso, false);
-  assert.match(r.motivo, /teto de 1 lances/);
-});
-
-test("aula sem etapa sem ajuda recusa a tentativa em vez de inventá-la", () => {
-  const curta = structuredClone(lesson);
-  delete curta.stages.solo;
-  assert.deepEqual(rejulgarSolo(curta, linha), { erro: "a aula não tem etapa sem ajuda" });
-  assert.deepEqual(rejulgarSolo(lesson, []), { erro: "tentativa sem lance nenhum" });
-});
 
 /* ------------------------------------------------------------------ *
  * A fixture: defensor com duas variantes, e a prática
@@ -185,10 +59,9 @@ const aula = lessonSchema.parse({
     methodAlternative: "Mesma ideia por outro caminho.",
   },
   stages: {
-    solo: {
+    guided: {
       positionId: "pos-fx-replay",
       root: "s1",
-      moveLimit: 4,
       nodes: {
         s1: {
           fen: FEN_RAIZ,
@@ -253,6 +126,12 @@ const MATE = ["f6g6", "g8h8", "b1b8"];
 /** A torre entregue ao rei preto: sobra rei contra rei. */
 const ENTREGA_A_TORRE = ["f6f5", "g8g7", "b1g1", "g7f7", "g1g7", "f7g7"];
 
+function legais(fen: string): string[] {
+  return new Chess(fen)
+    .moves({ verbose: true })
+    .map((m) => `${m.from}${m.to}${m.promotion ?? ""}`);
+}
+
 function depoisDe(lances: string[]): Chess {
   const jogo = new Chess(FEN_RAIZ);
   for (const uci of lances) jogo.move({ from: uci.slice(0, 2), to: uci.slice(2, 4) });
@@ -270,27 +149,19 @@ test("a fixture é honesta: o mate é mate, o outro ramo não é, e a torre cai 
   assert.equal(legais(FEN_S2A).includes("g6f7"), false, "g6f7 é ilegal com o rei preto em f8");
 });
 
-test("defensor com duas variantes: a linha vale por qualquer uma delas", () => {
-  assert.deepEqual(rejulgarSolo(aula, ["f6g6", "b1b8"]), {
-    sucesso: true,
-    motivo: "chegou ao fim da linha dentro do teto",
-  });
-});
-
-test("o ramo em que o lance é ilegal não condena a tentativa que fecha no outro", () => {
-  // Sem retrocesso, o ramo `s2a` — onde `g6f7` é ilegal — derrubaria uma
-  // tentativa que terminou em mate no ramo `s2b`.
-  assert.deepEqual(rejulgarSolo(aula, ["f6g6", "g6f7", "b1b8"]), {
-    sucesso: true,
-    motivo: "chegou ao fim da linha dentro do teto",
-  });
-});
-
-test("sem ramo que feche, sobra o fracasso — e não o erro do ramo ilegal", () => {
-  const r = rejulgarSolo(aula, ["f6g6", "g6f7"]);
-  assert.ok("sucesso" in r, "fracasso do aluno vira linha; erro de arquivo não");
-  assert.equal(r.sucesso, false);
-});
+/*
+ * **Os três testes do defensor de duas variantes saíram com o `rejulgarSolo`.**
+ *
+ * Eles provavam que a linha vale por qualquer uma das duas respostas, que o
+ * ramo em que o lance é ilegal não condena a tentativa que fecha no outro, e
+ * que sem ramo que feche sobra o fracasso — e não o erro do ramo ilegal. Era a
+ * parte mais fina do rejulgamento, e a única cobertura de `replies` que o
+ * projeto tinha rodando de verdade.
+ *
+ * A fixture continua acima, e o teste de honestidade dela continua rodando: o
+ * mate é mate, o outro ramo não é, e a torre cai mesmo. É o que sobra de pé
+ * para o dia em que a árvore voltar a ser rejulgada no servidor.
+ */
 
 /* ------------------------------------------------------------------ *
  * A prática

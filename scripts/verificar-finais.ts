@@ -61,6 +61,7 @@ import { emailDoUsuario } from "../lib/auth/usuario.ts";
 import { hojeNoBrasil, somarDias } from "../lib/curso/calendario.ts";
 import { lerPacote } from "../lib/finais/conteudo.ts";
 import { gravarTentativaDeAula } from "../lib/finais/gravar.ts";
+import { posicoesDeRevisao } from "../lib/finais/rejulgar.ts";
 import {
   agendaDeRevisao,
   INTERVALOS_DE_FINAIS,
@@ -103,7 +104,26 @@ function afirmar(condicao: boolean, oQue: string): void {
 
 const SUFIXO = Date.now().toString(36).slice(-5);
 const PIN = "424242";
-const AULA = "N0-R-MATE";
+
+/*
+ * **ATENÇÃO: este script ainda não tem alvo.**
+ *
+ * A `N0-R-MATE` foi apagada em 2026-09-08, com o resto do corpus anterior, e a
+ * aula-piloto do formato novo (`N1-KPK`, de la Villa) ainda não foi escrita.
+ * Até ela existir, este script para na primeira afirmação — "o servidor acha a
+ * aula pelo id" —, e é assim que ele deve parar: um script de banco que não
+ * acha a aula não pode continuar fingindo que provou alguma coisa.
+ *
+ * O que **já** foi ajustado ao formato de três etapas: sumiram as tentativas
+ * `solo` (a etapa 4 não existe mais e o servidor recusa a etapa), e a revisão
+ * passou a ser jogada na MESMA posição da prática — a conferência que antes
+ * recusava isso agora exige isso.
+ *
+ * O que **falta**, e cabe ao passo em que a aula nascer: reapontar `AULA` e
+ * reescrever as três listas de lances abaixo, que são de posições KRK que já
+ * não estão no disco.
+ */
+const AULA = "N1-KPK";
 
 /**
  * As duas partidas da etapa 5, jogadas dos dois lados a partir da posição da
@@ -116,16 +136,6 @@ const PRATICA_QUE_MATA = [
 ];
 const PRATICA_QUE_ENTREGA_A_TORRE = ["h1h6", "e8e7", "h6g6", "e7f7", "g6g7", "f7g7"];
 
-/**
- * A primeira das duas posições de revisão da aula, e uma partida que a mata.
- *
- * A FEN é `8/8/8/1k6/8/8/8/RK6 w - - 0 1` (Rogers, XVI), e os sete lances
- * abaixo saíram de uma busca exaustiva de mate cooperativo a partir dela. O
- * defensor ajuda, como nos itens 3 e 4, e pelo mesmo motivo: o que se afirma é
- * que **o servidor lê a partida e a julga**, não que a técnica seja boa.
- */
-const REVISAO = "pos-n0-rmate-rogers-xvi";
-const REVISAO_QUE_MATA = ["a1a5", "b5b4", "a5b5", "b4a3", "b1c2", "a3a2", "b5a5"];
 
 type Conta = { id: string; usuario: string };
 
@@ -174,52 +184,36 @@ try {
   afirmar(pacote !== null, "o servidor acha a aula pelo id");
   if (!pacote) throw new Error("sem a aula não há o que provar");
 
-  const solo = pacote.lesson.stages.solo!;
-  afirmar(Boolean(solo), "a aula tem etapa sem ajuda");
   afirmar(
     Boolean(pacote.positions[pacote.lesson.stages.practice!.positionId]),
     "a posição da prática veio junto",
   );
 
-  // A linha principal, caminhada do arquivo — nunca escrita à mão aqui. Se a
-  // posição de ensino mudar, esta prova continua valendo sozinha.
+  // A linha principal da etapa COM ajuda, caminhada do arquivo — nunca escrita
+  // à mão aqui. Ela não vira linha no banco (só a partida vira), e serve a uma
+  // prova só: a de que uma etapa que o servidor não aceita é recusada.
+  const guided = pacote.lesson.stages.guided!;
   const linha: string[] = [];
-  let nodeId = solo.root;
+  let nodeId = guided.root;
   for (let i = 0; i < 60 && nodeId; i += 1) {
-    const expect = solo.nodes[nodeId].expects[0];
+    const expect = guided.nodes[nodeId].expects[0];
     linha.push(expect.moves[0]);
     const respostas = respostasDe(expect);
     if (respostas.length === 0) break;
     nodeId = respostas[0].next;
   }
-  afirmar(linha.length > 1, `a linha principal tem ${linha.length} lances`);
+  afirmar(linha.length > 1, `a linha com ajuda tem ${linha.length} lances`);
 
   /* ---------------------------------------------------------------- *
    * 2 e 3. O que a Ana joga
    * ---------------------------------------------------------------- */
   console.log("\nA Ana joga:");
 
-  const soloCerto = await gravarTentativaDeAula(ana.id, {
-    aula: AULA,
-    etapa: "solo",
-    lances: linha,
-    tempoMs: 92_000,
-  });
-  afirmar(
-    "sucesso" in soloCerto && soloCerto.sucesso,
-    `a linha inteira da etapa 4 é sucesso (${JSON.stringify(soloCerto)})`,
-  );
-
-  const soloErrado = await gravarTentativaDeAula(ana.id, {
-    aula: AULA,
-    etapa: "solo",
-    lances: linha.slice(0, -1),
-    tempoMs: 45_000,
-  });
-  afirmar(
-    "sucesso" in soloErrado && soloErrado.sucesso === false,
-    "a linha interrompida no meio vira linha, e vira como fracasso",
-  );
+  // **As duas tentativas `solo` saíram daqui.** A etapa 4 não existe no
+  // formato, `ETAPAS_DE_AULA` não a aceita mais, e o `rejulgarSolo` foi
+  // apagado: não há árvore contra a qual reproduzir. O que a etapa provava —
+  // que o servidor reproduz os lances em vez de acreditar — continua provado
+  // pela prática, logo abaixo.
 
   const praticaGanha = await gravarTentativaDeAula(ana.id, {
     aula: AULA,
@@ -252,7 +246,7 @@ try {
   // posição, e a linha não chega a existir.
   const forjado = await gravarTentativaDeAula(ana.id, {
     aula: AULA,
-    etapa: "solo",
+    etapa: "pratica",
     lances: ["h1h8"],
     tempoMs: 900,
   });
@@ -260,7 +254,7 @@ try {
 
   const aulaInventada = await gravarTentativaDeAula(ana.id, {
     aula: "N9-NAO-EXISTE",
-    etapa: "solo",
+    etapa: "pratica",
     lances: linha,
     tempoMs: 1000,
   });
@@ -269,11 +263,22 @@ try {
   const etapaInventada = await gravarTentativaDeAula(ana.id, {
     aula: AULA,
     // O tipo proíbe; o navegador, não. É por isso que a função confere.
-    etapa: "leitura" as "solo",
+    etapa: "leitura" as "pratica",
     lances: linha,
     tempoMs: 1000,
   });
   afirmar("erro" in etapaInventada, "etapa desconhecida é recusada");
+
+  // E a etapa que **existiu**: `solo` era gravável até 2026-09-08. O navegador
+  // de um aluno com a aba velha aberta ainda pode mandá-la, e ela tem de ser
+  // recusada como qualquer outra palavra que não está na lista.
+  const etapaAposentada = await gravarTentativaDeAula(ana.id, {
+    aula: AULA,
+    etapa: "solo" as "pratica",
+    lances: linha,
+    tempoMs: 1000,
+  });
+  afirmar("erro" in etapaAposentada, "a etapa aposentada `solo` é recusada como desconhecida");
 
   /* ---------------------------------------------------------------- *
    * 5 e 6. O que a Ana lê de volta
@@ -307,17 +312,22 @@ try {
    * ---------------------------------------------------------------- */
   console.log("\nA revisão da aula:");
 
-  const revisao = pacote.lesson.stages.review;
+  // **A revisão é a MESMA posição da prática, e isso inverteu.** Até
+  // 2026-09-08 a aula declarava posições de revisão próprias, e jogar a
+  // posição da prática na revisão era recusado. Hoje é o contrário: revisar é
+  // jogar de novo a posição da aula, noutro dia, e o que separa a segunda
+  // passada da primeira é o dia — não a posição.
+  const posicaoDaAula = pacote.lesson.stages.practice!.positionId;
   afirmar(
-    (revisao?.reviewPositionIds ?? []).includes(REVISAO),
-    `a aula declara ${REVISAO} como posição de revisão`,
+    posicoesDeRevisao(pacote.lesson).includes(posicaoDaAula),
+    `a revisão da aula é a posição da prática (${posicaoDaAula})`,
   );
 
   const revisaoGanha = await gravarTentativaDeAula(ana.id, {
     aula: AULA,
     etapa: "revisao",
-    posicaoId: REVISAO,
-    lances: REVISAO_QUE_MATA,
+    posicaoId: posicaoDaAula,
+    lances: PRATICA_QUE_MATA,
     tempoMs: 110_000,
   });
   afirmar(
@@ -327,32 +337,15 @@ try {
 
   console.log("\nO que a revisão recusa:");
 
-  // A posição da prática existe no pacote — `pacote.positions` a traz —, e é
-  // justamente por isso que a recusa tem de vir de outro lugar: o que
-  // `rejulgarRevisao` cobra é a lista `reviewPositionIds`, não a existência.
-  // Sem essa conferência, "revisei a aula" viraria "joguei de novo a posição
-  // que eu acabei de treinar", e a revisão espaçada mediria repetição imediata.
-  const posicaoDaPratica = pacote.lesson.stages.practice!.positionId;
-  afirmar(
-    Boolean(pacote.positions[posicaoDaPratica]),
-    "a posição da prática está no pacote (senão a recusa abaixo não provaria nada)",
-  );
-  const revisaoNaPratica = await gravarTentativaDeAula(ana.id, {
-    aula: AULA,
-    etapa: "revisao",
-    posicaoId: posicaoDaPratica,
-    lances: PRATICA_QUE_MATA,
-    tempoMs: 30_000,
-  });
-  afirmar(
-    "erro" in revisaoNaPratica,
-    `a posição da prática é recusada na revisão (${JSON.stringify(revisaoNaPratica)})`,
-  );
+  // **A recusa "a posição da prática não vale na revisão" saiu, e virou o
+  // caso de sucesso logo acima.** Ela existia porque a revisão pedia posição
+  // nova; hoje pedir posição nova é que seria o erro. As duas recusas que
+  // sobram continuam valendo, e são as que impedem "revisei" sem dizer o quê.
 
   const revisaoSemPosicao = await gravarTentativaDeAula(ana.id, {
     aula: AULA,
     etapa: "revisao",
-    lances: REVISAO_QUE_MATA,
+    lances: PRATICA_QUE_MATA,
     tempoMs: 30_000,
   });
   afirmar(
@@ -364,7 +357,7 @@ try {
     aula: AULA,
     etapa: "revisao",
     posicaoId: "pos-que-nao-existe",
-    lances: REVISAO_QUE_MATA,
+    lances: PRATICA_QUE_MATA,
     tempoMs: 30_000,
   });
   afirmar("erro" in revisaoInventada, "posição inventada é recusada");
@@ -387,7 +380,7 @@ try {
   const daRevisao = linhasComRevisao.filter((l) => l.etapa === "revisao");
   afirmar(daRevisao.length === 1, `uma linha de revisão (${daRevisao.length})`);
   afirmar(
-    daRevisao[0]?.posicao === REVISAO,
+    daRevisao[0]?.posicao === posicaoDaAula,
     `e ela guarda a posição jogada (guardou ${daRevisao[0]?.posicao})`,
   );
   // A outra metade da coluna: fora da revisão ela é nula, porque ali a posição

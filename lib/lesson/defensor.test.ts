@@ -18,9 +18,15 @@ import { judgeMove, respostasDe } from "./tree.ts";
 
 const RAIZ = fileURLToPath(new URL("../..", import.meta.url));
 
+/**
+ * A aula vem de `content/fixtures/`, e não de `content/lessons/` — ver a mesma
+ * nota em `tree.test.ts`. A `N1-FIXTURE-KRK` carrega exatamente a árvore com
+ * ajuda que estes testes sempre usaram (mesmos ids de nó, `n1` em diante); o
+ * que mudou é que ela deixou de ser conteúdo editorial que pode sair do disco.
+ */
 const aula = (id: string): Lesson =>
   lessonSchema.parse(
-    JSON.parse(readFileSync(path.join(RAIZ, "content/lessons", `${id}.json`), "utf8")),
+    JSON.parse(readFileSync(path.join(RAIZ, "content/fixtures/lessons", `${id}.json`), "utf8")),
   );
 
 const DUAS = ["e4f4", "e4d4"] as const;
@@ -107,10 +113,10 @@ function jogar(lesson: Lesson, tree: MoveTree, treeKey: string, tentativa: numbe
   return linha;
 }
 
-test("a aula publicada joga igual em qualquer tentativa", () => {
+test("a árvore escrita joga igual em qualquer tentativa", () => {
   // O contrato de E6 com o conteúdo de hoje: nada muda. A defesa variável só
   // aparece na aula que **usar** `replies`, e nenhuma usa ainda.
-  const lesson = aula("N0-R-MATE");
+  const lesson = aula("N1-FIXTURE-KRK");
   const guided = lesson.stages.guided as MoveTree;
   const primeira = jogar(lesson, guided, "guided", 1);
   const segunda = jogar(lesson, guided, "guided", 2);
@@ -123,7 +129,7 @@ test("a aula publicada joga igual em qualquer tentativa", () => {
 });
 
 test("com uma variante escrita, duas tentativas dão duas aulas diferentes", () => {
-  const lesson = structuredClone(aula("N0-R-MATE"));
+  const lesson = structuredClone(aula("N1-FIXTURE-KRK"));
   const guided = lesson.stages.guided as MoveTree;
   // A transposição de verdade: depois de 1.Rf2 o rei preto pode ir para f4 (a
   // linha escrita) ou para d4; de d4, 2.Th4+ Re5 chega ao mesmo n3.

@@ -1,8 +1,7 @@
 import { Chess } from "chess.js";
 import { readOutcome } from "../chess/status.ts";
 import { judgePractice } from "../lesson/practice.ts";
-import type { Lesson, MoveTree, Position } from "../lesson/schema.ts";
-import { judgeMove, throwsWinAway } from "../lesson/tree.ts";
+import type { Lesson, Position } from "../lesson/schema.ts";
 
 /**
  * O rejulgamento das etapas jogadas, no servidor (plano da FN1, §5).
@@ -42,17 +41,24 @@ import { judgeMove, throwsWinAway } from "../lesson/tree.ts";
  * escritos na autoria e certificados pelo gate.
  */
 
-export type EtapaDeAula = "solo" | "pratica" | "revisao";
+export type EtapaDeAula = "pratica" | "revisao";
 
 /**
- * As três etapas que viram linha. A leitura é declaração e mora em `aula_lida`.
+ * As etapas que viram linha. A leitura é declaração e mora em `aula_lida`.
  *
- * `revisao` entrou na F2, com a repetição espaçada: é a **mesma partida** da
- * etapa 5, jogada dias depois numa posição que o aluno não viu, para provar
- * que a técnica ficou. Ela não afere domínio (quem afere é `dominou()` na
- * trilha) — o que ela produz é a data que a fila de revisão lê.
+ * `revisao` entrou na F2, com a repetição espaçada: é a **mesma partida**,
+ * jogada dias depois. Ela não afere domínio — o que ela produz é a data que a
+ * fila lê.
+ *
+ * **`solo` saiu daqui em 2026-09-08, e NÃO saiu do banco.** A etapa 4 deixou de
+ * existir no formato, então uma tentativa `solo` que chegasse hoje não teria
+ * árvore contra a qual ser reproduzida — aceitar seria gravar sem reconferir,
+ * que é exatamente o que este módulo existe para não fazer. As linhas
+ * históricas continuam lá, e o `check` da `0004_finais.sql` continua
+ * aceitando-as: apagar o passado do aluno para arrumar o presente do código
+ * seria caro e mentiroso.
  */
-export const ETAPAS_DE_AULA: readonly EtapaDeAula[] = ["solo", "pratica", "revisao"];
+export const ETAPAS_DE_AULA: readonly EtapaDeAula[] = ["pratica", "revisao"];
 
 /**
  * `erro` é o que **não vira linha**: aula que não existe, lance ilegal, arquivo
@@ -69,181 +75,22 @@ export type Rejulgamento = { sucesso: boolean; motivo: string } | { erro: string
  */
 const LANCES_MAXIMOS = 400;
 
-/**
- * Quantos nós a reprodução pode visitar antes de desistir.
+/*
+ * **O julgamento por ÁRVORE saiu inteiro daqui em 2026-09-08.**
  *
- * Existe por causa do retrocesso explicado em `seguir()`: com até quatro
- * variantes de defensor por nó, uma árvore inventada poderia ramificar sozinha.
- * As árvores reais têm dezenas de nós, então este teto nunca é atingido por uma
- * aula de verdade — ele existe para que uma lista de lances vinda da rede não
- * possa custar minutos de CPU do servidor.
+ * Eram quatro peças, e todas serviam à etapa 4: `lanceLegal` (a legalidade na
+ * chess.js), o tipo `Desfecho`, `seguir()` (que reproduzia os lances do aluno
+ * contra a árvore roteirizada, com teto de visitas para uma lista vinda da
+ * rede não custar minutos de CPU) e `sobrou()` (que recusava lance depois do
+ * fim da tentativa).
+ *
+ * A etapa 4 saiu do formato: a etapa sem ajuda virou partida contra o
+ * Stockfish, e uma partida o servidor reconfere jogando os lances, não
+ * seguindo roteiro — é o que `rejulgarPratica` faz logo abaixo. As peças estão
+ * inteiras no histórico do git, se a árvore voltar.
  */
-const VISITAS_MAXIMAS = 4000;
 
-function lanceLegal(fen: string, uci: string): boolean {
-  const jogo = new Chess(fen);
-  try {
-    jogo.move({
-      from: uci.slice(0, 2),
-      to: uci.slice(2, 4),
-      promotion: uci.length > 4 ? uci.slice(4) : undefined,
-    });
-    return true;
-  } catch {
-    // A chess.js lança em lance ilegal, e é o único lugar do rejulgamento em
-    // que xadrez de verdade é calculado: legalidade. Se é *bom* continua sendo
-    // pergunta para as listas do arquivo, nunca para o motor.
-    return false;
-  }
-}
 
-/* ------------------------------------------------------------------ *
- * Etapa 4 — sem ajuda
- * ------------------------------------------------------------------ */
-
-type Desfecho =
-  | { tipo: "done" }
-  | { tipo: "falhou"; motivo: string }
-  | { tipo: "erro"; motivo: string };
-
-/**
- * Reproduz a tentativa a partir de um nó, e devolve como ela acabou.
- *
- * ## Por que retrocesso, e não a conta do defensor
- *
- * Quando um nó tem mais de uma resposta do defensor (B9/E1), quem escolhe na
- * tela é `escolherResposta(variantes, chave, tentativa)` — e o número da
- * tentativa só existe na store do navegador. Reproduzir a escolha exigiria
- * receber esse número junto e confiar nele.
- *
- * O caminho daqui é outro: **tenta todos os ramos e fica com o melhor
- * desfecho**. Não é frouxidão, porque cada variante do defensor é uma linha
- * escrita pela autoria e certificada pelo gate — chegar ao fim por qualquer uma
- * delas é a mesma competência. E o que se ganha é não ter mais um campo vindo
- * do navegador para conferir.
- *
- * A ordem de preferência é `done` > `falhou` > `erro`: um ramo em que os lances
- * não se encaixam não condena a tentativa se existe outro em que eles se
- * encaixam — ali é o ramo que está errado, não o aluno.
- */
-function seguir(
-  lesson: Lesson,
-  arvore: MoveTree,
-  moveLimit: number,
-  lances: string[],
-  nodeId: string,
-  indice: number,
-  usados: number,
-  orcamento: { restante: number },
-): Desfecho {
-  if (orcamento.restante <= 0) return { tipo: "erro", motivo: "árvore grande demais para reconferir" };
-  orcamento.restante -= 1;
-
-  if (indice >= lances.length) {
-    return { tipo: "falhou", motivo: "a tentativa parou no meio: a linha não chegou ao fim" };
-  }
-
-  const node = arvore.nodes[nodeId];
-  // Nó apontado e inexistente é arquivo torto — o gate barra isso (NO_ORFAO).
-  // Se chegou aqui, o deploy subiu sem o gate, e o aluno não paga por isso com
-  // uma linha errada no histórico.
-  if (!node) return { tipo: "erro", motivo: `a árvore não tem o nó "${nodeId}"` };
-
-  const uci = lances[indice];
-  if (!lanceLegal(node.fen, uci)) {
-    return { tipo: "erro", motivo: `lance ilegal na posição: ${uci}` };
-  }
-
-  const verdict = judgeMove(lesson, node, uci);
-
-  if (verdict.kind !== "method") {
-    // O teto de lances existe na etapa 4, então jogar o objetivo fora encerra a
-    // tentativa ali mesmo — é o `fatal` do TreeStage, na mesma ordem.
-    if (throwsWinAway(verdict)) {
-      return sobrou(lances, indice, {
-        tipo: "falhou",
-        motivo: `${uci} jogou o objetivo fora`,
-      });
-    }
-    // Recusa que não é fatal: na tela a peça volta e o painel fala. Não gasta
-    // lance do teto, e o nó não muda — o aluno joga de novo daqui.
-    return seguir(lesson, arvore, moveLimit, lances, nodeId, indice + 1, usados, orcamento);
-  }
-
-  // Terminal antes do teto, como no TreeStage: o mate no último lance permitido
-  // é mate, não estouro.
-  if (verdict.respostas.length === 0) {
-    return sobrou(lances, indice, { tipo: "done" });
-  }
-
-  const gastos = usados + 1;
-  if (gastos >= moveLimit) {
-    return sobrou(lances, indice, {
-      tipo: "falhou",
-      motivo: `o teto de ${moveLimit} lances acabou antes do fim`,
-    });
-  }
-
-  let melhor: Desfecho | null = null;
-  for (const { reply, next } of verdict.respostas) {
-    const depoisDoLance = new Chess(node.fen);
-    depoisDoLance.move({
-      from: uci.slice(0, 2),
-      to: uci.slice(2, 4),
-      promotion: uci.length > 4 ? uci.slice(4) : undefined,
-    });
-    // A resposta do defensor é escrita na autoria; ilegal ali é arquivo torto,
-    // e o ramo não serve para reproduzir nada.
-    if (!lanceLegal(depoisDoLance.fen(), reply)) {
-      melhor ??= { tipo: "erro", motivo: `a resposta ${reply} do defensor é ilegal` };
-      continue;
-    }
-    const desfecho = seguir(
-      lesson,
-      arvore,
-      moveLimit,
-      lances,
-      next,
-      indice + 1,
-      gastos,
-      orcamento,
-    );
-    if (desfecho.tipo === "done") return desfecho;
-    if (desfecho.tipo === "falhou" && melhor?.tipo !== "falhou") melhor = desfecho;
-    else melhor ??= desfecho;
-  }
-  return melhor ?? { tipo: "erro", motivo: "nó sem resposta de defensor utilizável" };
-}
-
-/** O desfecho vale só se ele foi o **último** lance da lista. */
-function sobrou(lances: string[], indice: number, desfecho: Desfecho): Desfecho {
-  if (indice + 1 < lances.length) {
-    // Lance depois do fim da tentativa: a lista não descreve uma tentativa que
-    // aconteceu. Não vira linha — nem de sucesso nem de fracasso.
-    return { tipo: "erro", motivo: "a lista tem lances depois do fim da tentativa" };
-  }
-  return desfecho;
-}
-
-/**
- * A etapa 4 do aluno, reproduzida. `lances` são os lances **dele**, na ordem,
- * inclusive os recusados: na tela a peça voltou, mas ele os jogou, e é isso que
- * o histórico guarda.
- */
-export function rejulgarSolo(lesson: Lesson, lances: string[]): Rejulgamento {
-  const solo = lesson.stages.solo;
-  if (!solo) return { erro: "a aula não tem etapa sem ajuda" };
-  if (lances.length === 0) return { erro: "tentativa sem lance nenhum" };
-  if (lances.length > LANCES_MAXIMOS) return { erro: "lances demais para uma tentativa" };
-
-  const desfecho = seguir(lesson, solo, solo.moveLimit, lances, solo.root, 0, 0, {
-    restante: VISITAS_MAXIMAS,
-  });
-
-  if (desfecho.tipo === "erro") return { erro: desfecho.motivo };
-  if (desfecho.tipo === "falhou") return { sucesso: false, motivo: desfecho.motivo };
-  return { sucesso: true, motivo: "chegou ao fim da linha dentro do teto" };
-}
 
 /* ------------------------------------------------------------------ *
  * Etapa 5 — prática contra o computador
@@ -272,15 +119,15 @@ export function rejulgarPratica(
 /**
  * As posições que a **revisão** aceita.
  *
- * São as da etapa 6, que o gate garante serem diferentes das de ensino
- * (`POSICAO_REAPROVEITADA`). Quando a aula não tem etapa 6 — a maioria das
- * curtas —, a revisão joga de novo a posição da prática: pior que uma posição
- * nova, e muito melhor que não revisar. Escrever uma posição de revisão para
- * cada aula nova é o que faz esta lista deixar de ter o segundo braço.
+ * É a posição da prática, e é **uma só** — a mesma da aula inteira.
+ *
+ * A etapa 6 dava posições novas para a revisão, e o gate cobrava que fossem
+ * diferentes das de ensino (`POSICAO_REAPROVEITADA`). Ela saiu em 2026-09-08:
+ * revisar passou a ser jogar de novo a MESMA posição, noutro dia, e o que
+ * separa a segunda passada da primeira não é a posição — é o dia. Era o braço
+ * de fallback desta função; virou o único caminho.
  */
 export function posicoesDeRevisao(lesson: Lesson): string[] {
-  const daRevisao = lesson.stages.review?.reviewPositionIds ?? [];
-  if (daRevisao.length > 0) return [...daRevisao];
   const pratica = lesson.stages.practice;
   return pratica ? [pratica.positionId] : [];
 }

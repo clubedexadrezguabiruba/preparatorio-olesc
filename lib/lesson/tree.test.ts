@@ -13,15 +13,27 @@ import { isPraise, judgeMove, respostasDe, throwsWinAway } from "./tree.ts";
  * garante que **nenhum** lance recusado saia sem mensagem.
  */
 
+/**
+ * **A aula vem de `content/fixtures/`, e não de `content/lessons/`.**
+ *
+ * Ela vinha da `N0-R-MATE`, uma aula publicada de verdade, e isso era um
+ * acoplamento que a demolição de 2026-09-08 expôs da pior maneira: o corpus
+ * saiu do disco e cinco arquivos de teste do **motor** ficaram vermelhos de uma
+ * vez, sem que nenhuma regra de motor tivesse mudado.
+ *
+ * A `N1-FIXTURE-KRK` é a árvore com ajuda daquela aula sobre uma posição
+ * sintética (`pos-fx-krk-caixa`, sem obra e sem procedência): os textos são
+ * nossos, a geometria é a do mate de torre genérico, e nada nela cita livro
+ * nenhum. O que se afirma aqui é sobre o `judgeMove`, não sobre o currículo —
+ * e agora o arquivo diz isso.
+ */
 const lesson = lessonSchema.parse(
   JSON.parse(
-    readFileSync(path.join(process.cwd(), "content/lessons/N0-R-MATE.json"), "utf8"),
+    readFileSync(path.join(process.cwd(), "content/fixtures/lessons/N1-FIXTURE-KRK.json"), "utf8"),
   ),
 );
 const guided = lesson.stages.guided!;
 const root = guided.nodes[guided.root];
-const solo = lesson.stages.solo!;
-const soloRoot = solo.nodes[solo.root];
 
 /** A FEN depois de um lance UCI — só para montar nós de teste. */
 function applyMove(fen: string, uci: string): string {
@@ -82,7 +94,8 @@ test("lance que joga a vitória fora: fallback honesto de loses-win", () => {
   // nomeado. Na etapa 3 não há nenhum — o garimpo do B5 nomeou todos os
   // perdedores dos treze nós, e é bom que seja assim: fallback genérico é o
   // que sobra, não o que se planeja. Por isso a busca varre as duas árvores.
-  const encontrado = [...Object.values(guided.nodes), ...Object.values(solo.nodes)]
+  // Varria as duas árvores; hoje há uma só — a etapa 4 saiu do formato.
+  const encontrado = Object.values(guided.nodes)
     .flatMap((node) =>
       legalMoves(node.fen)
         .filter(
@@ -101,7 +114,7 @@ test("lance que joga a vitória fora: fallback honesto de loses-win", () => {
   assert.equal(throwsWinAway(verdict), true);
 });
 
-test("etapa 4: o lance equivalente gerado é método, e a aula segue", () => {
+test("o lance equivalente gerado é método, e a aula segue", () => {
   // Nenhuma das quatro posições garimpadas no B5 rende ramo equivalente: nelas
   // cada corte é geometricamente único, e a derivação conferiu isso (`Rg1` em
   // vez de `Ra7` não separa os dois reis, então não é corte). O veredito é
@@ -111,14 +124,14 @@ test("etapa 4: o lance equivalente gerado é método, e a aula segue", () => {
   //
   // O lance do ramo e a resposta são **procurados**, não fixados: um literal
   // aqui quebra toda vez que a posição da etapa 4 muda, e já quebrou.
-  const doRoteiro = soloRoot.expects[0];
-  const inventado = soloRoot.winningMoves.find((move) => !doRoteiro.moves.includes(move));
-  assert.ok(inventado, "a raiz da etapa 4 precisa ter mais de um lance que ganha");
-  const respostaInventada = legalMoves(applyMove(soloRoot.fen, inventado))[0];
+  const doRoteiro = root.expects[0];
+  const inventado = root.winningMoves.find((move) => !doRoteiro.moves.includes(move));
+  assert.ok(inventado, "a raiz precisa ter mais de um lance que ganha");
+  const respostaInventada = legalMoves(applyMove(root.fen, inventado))[0];
   const comRamo = {
-    ...soloRoot,
+    ...root,
     expects: [
-      ...soloRoot.expects,
+      ...root.expects,
       { moves: [inventado], reply: respostaInventada, next: "g1", feedback: "ramo equivalente", generated: true as const },
     ],
   };
@@ -134,24 +147,30 @@ test("etapa 4: o lance equivalente gerado é método, e a aula segue", () => {
   assert.equal(roteiro.respostas[0].next, doRoteiro.next);
 });
 
-test("etapa 4: a linha da árvore leva ao mate sem sair dela, dentro do teto", () => {
-  let node = soloRoot;
+test("a linha da árvore leva ao fim sem sair dela", () => {
+  // Rodava sobre a etapa 4 e contra o `moveLimit` dela. A etapa saiu do
+  // formato e o teto com ela: quem limita a partida sem ajuda hoje é a regra
+  // de falta de progresso do `PracticeStage`, não um número no arquivo. O que
+  // sobra — e é o que este teste sempre mediu de verdade — é que a linha
+  // escrita chega ao fim sem apontar para nó inexistente.
+  let node = root;
   const linha: string[] = [];
-  // Segue sempre o expect gerado (ou o único que houver) até o nó terminal.
-  for (let passo = 0; passo <= solo.moveLimit + 5; passo += 1) {
+  const TETO = Object.keys(guided.nodes).length + 5;
+  for (let passo = 0; passo <= TETO; passo += 1) {
     const expect = node.expects.find((e) => e.generated) ?? node.expects[0];
     linha.push(expect.moves[0]);
     if (!expect.next) break;
-    node = solo.nodes[expect.next];
-    assert.ok(node, `o nó "${expect.next}" existe`);
+    const seguinte = guided.nodes[expect.next];
+    assert.ok(seguinte, `o nó "${expect.next}" existe`);
+    node = seguinte;
   }
-  assert.equal(linha[0], soloRoot.expects[0].moves[0]);
+  assert.equal(linha[0], root.expects[0].moves[0]);
   assert.ok(
-    new Chess(soloRoot.fen).moves({ verbose: true }).some((m) => `${m.from}${m.to}` === linha[0]),
+    new Chess(root.fen).moves({ verbose: true }).some((m) => `${m.from}${m.to}` === linha[0]),
     "o primeiro lance da linha é legal na raiz",
   );
-  assert.ok(linha.length <= solo.moveLimit, `${linha.length} lances cabem no teto de ${solo.moveLimit}`);
-  console.log(`  linha da etapa 4: ${linha.join(" ")}`);
+  assert.ok(linha.length <= TETO, `${linha.length} lances, sem ciclo`);
+  console.log(`  linha da árvore: ${linha.join(" ")}`);
 });
 
 test("etapa 3: a mesma técnica por outro caminho é elogiada, e a peça volta", () => {
@@ -252,19 +271,22 @@ test("sem o campo, o mesmo lance continua sendo a repreensão de hoje", () => {
   assert.equal(verdict.preservesWin, true);
 });
 
-test("vale também na etapa 4, onde methodAlternatives é proibido", () => {
-  const move = soloRoot.winningMoves.find(
+test("a declaração da autoria não encerra a tentativa", () => {
+  // Rodava na raiz da etapa 4, onde `methodAlternatives` era proibido e o
+  // `authorAlternatives` era o único elogio possível. A etapa saiu; o que o
+  // teste mede — que um lance declarado pela autoria é elogio e **não** joga a
+  // vitória fora — vale igual na árvore que restou.
+  const move = root.winningMoves.find(
     (m) =>
-      !soloRoot.expects.some((e) => e.moves.includes(m)) &&
-      !(soloRoot.mistakes ?? []).some((x) => x.moves.includes(m)),
+      !root.expects.some((e) => e.moves.includes(m)) &&
+      !(root.mistakes ?? []).some((x) => x.moves.includes(m)),
   );
-  assert.ok(move, "a raiz da etapa 4 precisa de um lance vencedor fora das listas");
+  assert.ok(move, "a raiz precisa de um lance vencedor fora das listas");
 
-  const node = { ...soloRoot, authorAlternatives: [{ moves: [move], feedback: "vale igual" }] };
+  const node = { ...root, authorAlternatives: [{ moves: [move], feedback: "vale igual" }] };
   const verdict = judgeMove(lesson, node, move);
   assert.equal(verdict.kind, "author-alternative");
   assert.equal(verdict.text, "vale igual");
-  // E não encerra a tentativa: `throwsWinAway` é o que a etapa 4 consulta.
   assert.equal(throwsWinAway(verdict), false);
 });
 
@@ -296,9 +318,9 @@ test("o erro nomeado continua vencendo a declaração", () => {
   assert.equal(verdict.kind, "named-error");
 });
 
-test("nenhum lance legal das duas árvores fica sem mensagem", () => {
+test("nenhum lance legal da árvore fica sem mensagem", () => {
   let julgados = 0;
-  for (const tree of [guided, solo]) {
+  for (const tree of [guided]) {
     for (const node of Object.values(tree.nodes)) {
       for (const move of legalMoves(node.fen)) {
         const verdict = judgeMove(lesson, node, move);
@@ -361,18 +383,20 @@ test("o schema aceita as três formas e recusa a mistura", () => {
   );
 });
 
-test("o corpus publicado não muda de forma: toda resposta ainda é única", () => {
-  // O contrato de E1 é este: `replies` é opcional e nenhuma aula publicada
-  // muda um byte. No dia em que a primeira variante for escrita, este número
-  // muda junto com o arquivo — e é aí que ele vira o aviso certo.
+test("a árvore não muda de forma: toda resposta ainda é única", () => {
+  // O contrato de E1 é este: `replies` é opcional e a árvore escrita não muda
+  // um byte. No dia em que a primeira variante for escrita, este número muda
+  // junto com o arquivo — e é aí que ele vira o aviso certo.
+  //
+  // O número caiu de 20 para 15 quando a fixture passou a ser a fonte: eram
+  // duas árvores da aula publicada (33 nós), hoje é uma (20). O que o teste
+  // afirma continua o mesmo; o que mudou é o tamanho do que ele varre.
   let unicas = 0;
-  for (const tree of [guided, solo]) {
-    for (const node of Object.values(tree.nodes)) {
-      for (const expect of node.expects) {
-        assert.equal(expect.replies, undefined, "nenhuma aula publicada usa replies ainda");
-        if (respostasDe(expect).length === 1) unicas += 1;
-      }
+  for (const node of Object.values(guided.nodes)) {
+    for (const expect of node.expects) {
+      assert.equal(expect.replies, undefined, "a árvore da fixture não usa replies ainda");
+      if (respostasDe(expect).length === 1) unicas += 1;
     }
   }
-  assert.ok(unicas > 20, `poucas respostas únicas no corpus: ${unicas}`);
+  assert.ok(unicas > 15, `poucas respostas únicas na árvore: ${unicas}`);
 });

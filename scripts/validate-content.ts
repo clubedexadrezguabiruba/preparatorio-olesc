@@ -26,16 +26,15 @@ import {
   type TerminalEnd,
   type TreeGoal,
 } from "../lib/lesson/schema.ts";
+// O gerador de RAMOS (`generateBranches`, `branchesDiffer`, `longestLine`,
+// `GeneratorError`) deixou de ser importado em 2026-09-08: ele servia à etapa
+// 4, que saiu do formato. O módulo continua inteiro e testado em
+// `scripts/branches.ts` — ver o bloco "O bloco da etapa 4 saiu inteiro daqui".
 import {
   alternativesDiffer,
   authorialExpects,
-  branchesDiffer,
   generateAlternatives,
-  generateBranches,
   GENERATED_ID,
-  GeneratorError,
-  longestLine,
-  type GeneratedTree,
 } from "./branches.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
 import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
@@ -909,20 +908,6 @@ async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options:
 type RawNode = { expects?: Array<Record<string, unknown>>; [key: string]: unknown };
 type RawTree = { nodes?: Record<string, RawNode> };
 
-const EMPTY_BRANCHES: GeneratedTree = { expects: new Map(), nodes: new Map() };
-
-/** A posição é KRK/KQK? Fora disso o gerador recusa em vez de gerar lixo. */
-function inScope(tree: MoveTree): boolean {
-  const root = tree.nodes[tree.root];
-  if (!root) return false;
-  try {
-    techniqueScope(root.fen);
-    return true;
-  } catch (error) {
-    if (error instanceof OutOfScopeError) return false;
-    throw error;
-  }
-}
 
 /**
  * Apaga tudo que o gerador escreveu, para a regeneração começar sempre da
@@ -953,20 +938,20 @@ function stripGeneratedFrom(tree: MoveTree, raw: RawTree | undefined) {
   }
 }
 
-function writeBranches(tree: MoveTree, raw: RawTree | undefined, generated: GeneratedTree) {
-  stripGeneratedFrom(tree, raw);
-  for (const [id, list] of generated.expects) {
-    tree.nodes[id]?.expects.push(...list);
-    const rawNode = raw?.nodes?.[id];
-    if (rawNode && Array.isArray(rawNode.expects)) {
-      rawNode.expects.push(...(structuredClone(list) as Array<Record<string, unknown>>));
-    }
-  }
-  for (const [id, node] of generated.nodes) {
-    tree.nodes[id] = node;
-    if (raw?.nodes) raw.nodes[id] = structuredClone(node) as unknown as RawNode;
+
+/** A posição é KRK/KQK? Fora disso o gerador recusa em vez de gerar lixo. */
+function inScope(tree: MoveTree): boolean {
+  const root = tree.nodes[tree.root];
+  if (!root) return false;
+  try {
+    techniqueScope(root.fen);
+    return true;
+  } catch (error) {
+    if (error instanceof OutOfScopeError) return false;
+    throw error;
   }
 }
+
 
 function writeAlternatives(
   tree: MoveTree,
@@ -989,21 +974,22 @@ async function generateFor(loaded: LoadedLesson) {
 
   // Teto da autoria: o schema deixa 8 expects por nó, mas 4 deles no máximo
   // podem ter sido escritos por gente — o resto é do gerador.
-  for (const stageName of ["guided", "solo"] as const) {
-    const tree = lesson.stages[stageName];
-    if (!tree) continue;
-    for (const [id, node] of Object.entries(tree.nodes)) {
+  // Uma árvore só desde 2026-09-08: a etapa 4 saiu do formato, e com ela os
+  // ramos gerados. O laço sobre `["guided", "solo"]` virou o bloco abaixo.
+  {
+    const tree = lesson.stages.guided;
+    for (const [id, node] of Object.entries(tree?.nodes ?? {})) {
       if (authorialExpects(node).length > 4) {
         fail(
           "EXPECTS_AUTORAIS_DEMAIS",
-          `aula ${lesson.id} / ${stageName} / ${id}`,
+          `aula ${lesson.id} / guided / ${id}`,
           `${authorialExpects(node).length} expects escritos à mão; o teto da autoria é 4`,
         );
       }
     }
   }
 
-  /* Etapa 3 — só a lista de alternativas, sem ramo. */
+  /* A etapa com ajuda — só a lista de alternativas, sem ramo. */
   const guided = lesson.stages.guided;
   if (guided) {
     const where = `aula ${lesson.id} / guided`;
@@ -1028,79 +1014,21 @@ async function generateFor(loaded: LoadedLesson) {
     }
   }
 
-  /* Etapa 4 — os ramos de verdade. */
-  const solo = lesson.stages.solo;
-  if (!solo) return;
-  const where = `aula ${lesson.id} / solo`;
-
-  // `methodAlternatives` continua proibido na etapa 4: lá o equivalente da
-  // máquina vira ramo de verdade. O `authorAlternatives` é **permitido** —
-  // ver a divergência declarada na §9.4 do plano da fase: elogiar um lance que
-  // ganha não é ajuda antes do lance, é veredito honesto depois dele.
-  for (const [id, node] of Object.entries(solo.nodes)) {
-    if (node.methodAlternatives) {
-      fail(
-        "ALTERNATIVA_NO_SOLO",
-        `${where} / ${id}`,
-        "methodAlternatives é da etapa 3; na etapa 4 o equivalente vira ramo, não elogio",
-      );
-    }
-  }
-
-  let generated = EMPTY_BRANCHES;
-  if (inScope(solo)) {
-    // Saber se haveria ramo é barato e não depende dos textos — por isso a
-    // conferência dos templates vem antes de gerar.
-    const candidates = await generateAlternatives(solo, ask2, where);
-    if (candidates.size > 0 && !lesson.generatedTemplates) {
-      fail(
-        "TEMPLATE_FALTANDO",
-        where,
-        `${candidates.size} nó(s) têm lance equivalente, mas a aula não tem generatedTemplates — ` +
-          `sem os textos o ramo gerado ficaria mudo`,
-      );
-    } else if (lesson.generatedTemplates) {
-      try {
-        generated = await generateBranches(solo, lesson.generatedTemplates, ask2, where);
-      } catch (error) {
-        if (error instanceof GeneratorError) {
-          fail(error.code, where, error.message);
-          return;
-        }
-        if (error instanceof OutOfScopeError) {
-          fail("GERADOR_FORA_DE_ESCOPO", where, error.message);
-          return;
-        }
-        throw error;
-      }
-    }
-  }
-
-  if (writeBack) {
-    writeBranches(solo, rawStages.solo, generated);
-  } else {
-    const problem = branchesDiffer(solo, generated);
-    if (problem) {
-      fail(
-        "RAMO_DESATUALIZADO",
-        where,
-        `${problem} — rode \`npm run validate:content -- --refresh-cache --write\``,
-      );
-    }
-  }
-
-  // Por caminho, não por nó: com transposição, contar nós engana.
-  const longest = longestLine(solo);
-  if (longest === "ciclo") {
-    fail("LINHA_ESTOURA_TETO", where, "há um ciclo na árvore — alguma linha nunca termina");
-  } else if (longest > solo.moveLimit) {
-    fail(
-      "LINHA_ESTOURA_TETO",
-      where,
-      `a linha mais longa pede ${longest} lances do aluno e o moveLimit é ${solo.moveLimit} — ` +
-        `a saída honesta é subir o moveLimit da aula`,
-    );
-  }
+  /*
+   * **O bloco da etapa 4 saiu inteiro daqui, e com ele o gerador de ramos.**
+   *
+   * Ele cobria: `ALTERNATIVA_NO_SOLO` (methodAlternatives era proibido lá),
+   * `TEMPLATE_FALTANDO`, a geração dos ramos derivados e o `LINHA_ESTOURA_TETO`
+   * contra o `moveLimit`. Nenhuma dessas perguntas existe mais: a etapa sem
+   * ajuda deixou de ser uma árvore roteirizada e passou a ser partida contra o
+   * Stockfish, que não tem nó, nem ramo, nem teto de lances escrito à mão — o
+   * limite dela é o de falta de progresso, e quem o aplica é o `PracticeStage`.
+   *
+   * O gerador de ramos continua em `lib/lesson/` e continua testado. Ele não é
+   * chamado por nenhuma aula hoje, e isso está declarado: é a peça mais cara
+   * que a mudança de formato deixou parada, e apagá-la seria jogar fora um mês
+   * de trabalho por uma decisão de produto que pode voltar atrás.
+   */
 }
 
 /* ------------------------------------------------------------------ *
@@ -1110,16 +1038,13 @@ async function generateFor(loaded: LoadedLesson) {
 function referencedPositionIds(lesson: Lesson): Array<{ id: string; stage: string }> {
   const refs: Array<{ id: string; stage: string }> = [];
   const s = lesson.stages;
-  // A etapa 1 não tem posição própria: ela mostra **quadros** das cenas da
-  // etapa 2 (§ do schema, `frameRefSchema`). Um quadro é a mesma posição depois
-  // de N lances — não é citação nova, e por isso não entra na conta do teto.
-  for (const [i, scene] of (s.example?.scenes ?? []).entries()) {
-    refs.push({ id: scene.positionId, stage: `example / cena ${i + 1} (${scene.id})` });
-  }
+  // As três etapas apontam o MESMO id — o `lessonSchema` recusa o arquivo em
+  // que não apontarem. A lista repete o id de propósito: quem conta o teto de
+  // citação (§12.7) quer saber quantas **etapas** citam a obra, e a
+  // deduplicação é feita lá, por id, uma vez só.
+  if (s.objective) refs.push({ id: s.objective.positionId, stage: "objective" });
   if (s.guided) refs.push({ id: s.guided.positionId, stage: "guided" });
-  if (s.solo) refs.push({ id: s.solo.positionId, stage: "solo" });
   if (s.practice) refs.push({ id: s.practice.positionId, stage: "practice" });
-  for (const id of s.review?.reviewPositionIds ?? []) refs.push({ id, stage: "review" });
   return refs;
 }
 
@@ -1175,171 +1100,38 @@ async function checkLesson(loaded: LoadedLesson) {
     }
   }
 
-  // Etapa 4 e etapa 6 pedem posições que o aluno não viu no ensino (§6, §2.3).
-  const teaching = new Set(
-    refs.filter((r) => r.stage.startsWith("example") || r.stage === "guided").map((r) => r.id),
-  );
-  for (const ref of refs.filter((r) => r.stage === "solo" || r.stage === "review")) {
-    if (teaching.has(ref.id)) {
-      fail(
-        "POSICAO_REAPROVEITADA",
-        `${where} / ${ref.stage}`,
-        `"${ref.id}" já é usada no ensino; a etapa ${ref.stage} exige posição nova`,
-      );
-    }
-  }
+  /*
+   * **`POSICAO_REAPROVEITADA` saiu, e o motivo é que ela virou o contrário.**
+   *
+   * A regra dizia: as etapas 4 e 6 pedem posições que o aluno não viu no
+   * ensino (§6, §2.3). As duas etapas saíram do formato em 2026-09-08, e o
+   * formato novo **exige** o oposto — as três etapas são a mesma posição, e é
+   * o `lessonSchema` que agora recusa quem não for. Manter a regra escrita
+   * aqui, mesmo inerte, deixaria duas frases contrárias no mesmo repositório
+   * cobrando coisas opostas da mesma aula.
+   */
 
-  // Etapa 2: cada cena precisa ser jogável do início ao fim, e cada cena de
-  // vitória precisa **terminar em mate** na tela.
-  const example = lesson.stages.example;
-  if (example) {
-    for (const scene of example.scenes) {
-      const start = positions.get(scene.positionId);
-      if (!start || fenProblem(start.fen)) continue;
-      const sceneWhere = `${where} / example / cena "${scene.id}"`;
-      /**
-       * O que a cena mostra: a vitória do aluno, o empate que ele segura, ou
-       * nada disso — uma cena que sai de posição perdida existe (mostrar o erro
-       * do outro lado), e sobre ela o gate não tem o que cobrar.
-       */
-      const objetivo: TreeGoal | null =
-        start.expectedResult === `win-${lesson.orientation}`
-          ? "win"
-          : start.expectedResult === "draw"
-            ? "draw"
-            : null;
-      const ganha = objetivo === "win";
+  /*
+   * **O bloco da etapa 2 saiu inteiro daqui.** Ele conferia, por cena: a linha
+   * jogável do início ao fim, o `showBox` sobre uma posição com caixa
+   * definida, o `ends` do último lance, e as fases dentro do comprimento. Nada
+   * disso tem sujeito: não há mais cena.
+   *
+   * Saíram com ele `QUADRO_INVALIDO` (o quadro citado pelo objetivo tinha de
+   * existir na cena) e `REGRA_SEM_FASE` (cada regra do objetivo tinha de
+   * aparecer como fase de alguma cena — "o exemplo deve mostrar todos os
+   * passos do objetivo", Doug, 2026-08-19). A segunda dói: ela guardava uma
+   * coerência de verdade entre o que a aula promete e o que ela mostra. O que
+   * a substitui é mais fraco e é o que sobrou de honesto — a regra desenha
+   * sobre a posição, e o desenho é conferido pelo schema (casa válida) e pelo
+   * olho, na tela. Fica declarado como perda, não como equivalência.
+   */
 
-      let fen = start.fen;
-      let ultimo: { fen: string; game: Chess } | null = null;
-      let quebrou = false;
-      for (const [index, step] of scene.steps.entries()) {
-        const stepWhere = `${sceneWhere} / lance ${index + 1} (${step.move})`;
-        const beforeTurn = new Chess(fen).turn();
-        const isStudentSide = beforeTurn === (lesson.orientation === "white" ? "w" : "b");
-        if (isStudentSide && objetivo) {
-          const entry = await ask(fen, stepWhere);
-          if (entry && !goalMovesOf(entry, objetivo).includes(step.move)) {
-            fail(
-              "EXEMPLO_NAO_GANHA",
-              stepWhere,
-              objetivo === "win"
-                ? "o lance mostrado como técnica joga a vitória fora"
-                : "o lance mostrado como técnica joga o empate fora",
-            );
-          }
-        }
-        const applied = applyUci(fen, step.move);
-        if (!applied) {
-          fail("EXEMPLO_ILEGAL", stepWhere, "lance ilegal — a linha da etapa 2 não é jogável");
-          quebrou = true;
-          break;
-        }
-        fen = applied.fen;
-        ultimo = applied;
-
-        // A caixa desenhada é geometria de KRK/KQK. Uma cena que a peça e
-        // passe por posição fora de escopo mostraria um retângulo em alguns
-        // lances e nada em outros, sem o aluno entender por quê — e o defeito
-        // só apareceria na tela.
-        if (scene.showBox) {
-          try {
-            techniqueScope(fen);
-          } catch (error) {
-            if (error instanceof OutOfScopeError) {
-              fail(
-                "CAIXA_FORA_DE_ESCOPO",
-                stepWhere,
-                `a cena pede showBox e esta posição não tem caixa definida: ${error.message}`,
-              );
-            } else throw error;
-          }
-        }
-      }
-
-      /**
-       * O currículo pede que o iniciante veja a técnica **acabar**. Uma cena de
-       * vitória que para dois lances antes do mate ensina o meio do caminho.
-       *
-       * A cena que não declara `ends` cai no que o gate sempre cobrou — mate,
-       * e só quando a posição é ganha pelo aluno. Declarar `ends` liga o mesmo
-       * juiz do lance terminal da árvore, e aí a cena de empate também precisa
-       * mostrar o fim: o quadro em que a posição está segura.
-       */
-      const fim = scene.ends ?? (ganha ? "mate" : null);
-      if (!quebrou && ultimo && fim === "mate" && !ultimo.game.isCheckmate()) {
-        fail(
-          "EXEMPLO_SEM_MATE",
-          sceneWhere,
-          "a cena sai de posição ganha e não termina em mate — o exemplo tem de mostrar o fim",
-        );
-      } else if (!quebrou && ultimo && fim && fim !== "mate") {
-        await checkTerminal(
-          sceneWhere,
-          objetivo ?? "win",
-          fim,
-          scene.steps[scene.steps.length - 1].move,
-          ultimo,
-          lesson.orientation,
-        );
-      }
-
-      // Fase que começa depois do último lance nunca aparece na tela.
-      for (const [i, phase] of (scene.phases ?? []).entries()) {
-        if (phase.fromStep > scene.steps.length) {
-          fail(
-            "FASE_INVALIDA",
-            sceneWhere,
-            `a fase ${i + 1} ("${phase.title}") começa no lance ${phase.fromStep} e a cena tem ` +
-              `${scene.steps.length}`,
-          );
-        }
-      }
-    }
-  }
-
-  // Etapa 1: os quadros citados têm de existir, e a obra tem de ser um dos
-  // livros-base didáticos — a decisão editorial de 2026-08-19, que tirou o
-  // objetivo e o exemplo da biblioteca inteira e os prendeu a uma rotação de
-  // cinco obras escritas para iniciante.
+  // A etapa 1: a obra tem de ser um dos livros-base didáticos — a decisão
+  // editorial de 2026-08-19, que tirou o objetivo da biblioteca inteira e o
+  // prendeu a uma rotação de cinco obras escritas para iniciante.
   const objective = lesson.stages.objective;
-  if (objective && example) {
-    const quadros = [
-      ...(objective.frame ? [{ ref: objective.frame, onde: "frame" }] : []),
-      ...objective.rules.flatMap((r, i) =>
-        r.frame ? [{ ref: r.frame, onde: `regra ${i + 1} ("${r.title}")` }] : [],
-      ),
-    ];
-    for (const { ref, onde } of quadros) {
-      const scene = example.scenes.find((s) => s.id === ref.scene);
-      // Cena inexistente já é pega pelo schema; aqui vale o alcance do passo.
-      if (scene && ref.step > scene.steps.length) {
-        fail(
-          "QUADRO_INVALIDO",
-          `${where} / objective / ${onde}`,
-          `o quadro pede o lance ${ref.step} da cena "${scene.id}", que tem ${scene.steps.length}`,
-        );
-      }
-    }
-
-    // "O exemplo deve mostrar todos os passos do objetivo" — Doug, 2026-08-19,
-    // depois de ler a aula. A etapa 1 promete uma técnica em N passos; se a
-    // etapa 2 anuncia fases com outros nomes, o aluno vê duas listas parecidas
-    // e não sabe que são a mesma. O casamento é por título, exato, porque é o
-    // título que aparece nas duas telas.
-    const fases = new Set(example.scenes.flatMap((s) => (s.phases ?? []).map((f) => f.title)));
-    for (const [i, regra] of objective.rules.entries()) {
-      if (!fases.has(regra.title)) {
-        fail(
-          "REGRA_SEM_FASE",
-          `${where} / objective / regra ${i + 1}`,
-          `"${regra.title}" não aparece como fase de nenhuma cena do exemplo — ` +
-            `o objetivo promete um passo que o exemplo não mostra ` +
-            `(fases existentes: ${[...fases].join(" · ") || "nenhuma"})`,
-        );
-      }
-    }
-
+  if (objective) {
     const base = sourcesByKey.get(objective.source);
     if (!base) {
       fail(
@@ -1351,25 +1143,20 @@ async function checkLesson(loaded: LoadedLesson) {
       fail(
         "FONTE_NAO_DIDATICA",
         `${where} / objective`,
-        `"${base.title}" não é livro-base didático — o objetivo e o exemplo saem da rotação ` +
+        `"${base.title}" não é livro-base didático — o objetivo sai da rotação ` +
           `de obras marcadas com "didactic": true`,
       );
     } else {
-      // O livro-base não é um selo decorativo: ao menos uma cena do exemplo tem
-      // de sair mesmo dele. Duas cenas de dois livros-base diferentes é o
-      // desenho previsto — daí "ao menos uma", e não "a primeira".
-      const obras = new Set(
-        example.scenes
-          .map((s) => positions.get(s.positionId)?.provenance.editionFile)
-          .map((key) => (key == null ? undefined : sourcesByKey.get(key)?.slug))
-          .filter((slug): slug is string => typeof slug === "string"),
-      );
-      if (obras.size > 0 && !obras.has(base.slug)) {
+      // O livro-base não é um selo decorativo: a posição da aula tem de sair
+      // mesmo dele. Era "ao menos uma cena", porque havia várias; com uma
+      // posição só, a conta é direta.
+      const daPosicao = positions.get(objective.positionId)?.provenance.editionFile;
+      const obra = daPosicao == null ? undefined : sourcesByKey.get(daPosicao)?.slug;
+      if (obra && obra !== base.slug) {
         fail(
           "FONTE_DIDATICA_DIVERGE",
           `${where} / objective`,
-          `o objetivo declara "${base.slug}" e nenhuma cena do exemplo sai dessa obra ` +
-            `(as cenas saem de: ${[...obras].sort().join(", ")})`,
+          `o objetivo declara "${base.slug}" e a posição da aula sai de "${obra}"`,
         );
       }
     }
@@ -1392,12 +1179,9 @@ async function checkLesson(loaded: LoadedLesson) {
     }
   }
 
+  // Uma árvore só, e ela é a *com ajuda*. A etapa 4 era a outra chamada aqui.
   if (lesson.stages.guided) {
     await checkTree(lesson, "guided", lesson.stages.guided, { allowHelp: true });
-  }
-  if (lesson.stages.solo) {
-    const solo = lesson.stages.solo;
-    await checkTree(lesson, "solo", solo, { allowHelp: false, moveLimit: solo.moveLimit });
   }
 }
 
@@ -1636,12 +1420,14 @@ if (writeBack) {
     // diff que ninguém pediu: o `--write` só encosta no que o autor abriu.
     if (useRascunhos && !loaded.rascunho) continue;
     const stages = (loaded.raw as { stages?: Record<string, unknown> }).stages ?? {};
-    for (const stageName of ["guided", "solo"] as const) {
-      const parsedStage = loaded.lesson.stages[stageName];
-      const rawStage = stages[stageName] as { nodes?: Record<string, { winningMoves?: string[] }> };
-      if (!parsedStage || !rawStage?.nodes) continue;
-      for (const [nodeId, node] of Object.entries(parsedStage.nodes)) {
-        if (rawStage.nodes[nodeId]) rawStage.nodes[nodeId].winningMoves = node.winningMoves;
+    // Uma árvore só desde 2026-09-08; era um laço sobre `["guided", "solo"]`.
+    {
+      const parsedStage = loaded.lesson.stages.guided;
+      const rawStage = stages.guided as { nodes?: Record<string, { winningMoves?: string[] }> };
+      if (parsedStage && rawStage?.nodes) {
+        for (const [nodeId, node] of Object.entries(parsedStage.nodes)) {
+          if (rawStage.nodes[nodeId]) rawStage.nodes[nodeId].winningMoves = node.winningMoves;
+        }
       }
     }
     writeFileSync(loaded.file, `${JSON.stringify(loaded.raw, null, 2)}\n`, "utf8");

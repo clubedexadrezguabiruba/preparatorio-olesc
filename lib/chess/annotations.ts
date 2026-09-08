@@ -42,6 +42,34 @@ export function teachingShapes(
 }
 
 /**
+ * Os desenhos que a **autoria** escreveu no arquivo: setas e casas acesas.
+ *
+ * Morava em `lib/lesson/example.ts` como `authoredShapes`, lendo um passo da
+ * cena. A cena saiu do formato em 2026-09-08 e o desenho ficou: hoje ele é um
+ * campo do objetivo, de cada regra dele e de cada nó da árvore. Mudou o dono,
+ * não a função — e por isso ele veio para cá, ao lado dos desenhos que a
+ * máquina deduz, em vez de morar na etapa que o usa.
+ *
+ * A distinção que os dois lados deste arquivo guardam: `teachingShapes`
+ * **deduz** da posição (o corte, a peça pendurada), esta **lê** o que o autor
+ * escreveu. Nenhuma das duas inventa.
+ */
+export function desenhoDaAutoria(desenho: {
+  arrows?: readonly (readonly [string, string])[];
+  highlights?: readonly string[];
+} | null | undefined): DrawShape[] {
+  if (!desenho) return [];
+  return [
+    ...(desenho.arrows ?? []).map(([from, to]) => ({
+      orig: from as Key,
+      dest: to as Key,
+      brush: "blue",
+    })),
+    ...(desenho.highlights ?? []).map((square) => ({ orig: square as Key, brush: "green" })),
+  ];
+}
+
+/**
  * A peça que acabou de mexer está pendurada?
  *
  * É a pergunta que o aluno da N0 mais erra: a torre chega perto do rei preto e

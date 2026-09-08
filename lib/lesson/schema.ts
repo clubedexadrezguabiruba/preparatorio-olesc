@@ -39,6 +39,7 @@ export const fenSchema = z
     "FEN malformada (esperados os 6 campos)",
   );
 
+
 /**
  * Exportado pelo mesmo motivo que o `lessonIdSchema`: no modo autor (B8.4) o id
  * vem da tela e vira nome de arquivo, e é este regex — sem barra e sem ponto —
@@ -47,10 +48,6 @@ export const fenSchema = z
 export const positionIdSchema = z
   .string()
   .regex(/^pos-[a-z0-9-]+$/, "id de posição deve ser minúsculo, no formato pos-...");
-
-const sceneIdSchema = z
-  .string()
-  .regex(/^[a-z][a-z0-9-]*$/, "id de cena deve ser minúsculo com hífens (ex.: como-termina)");
 
 const nodeIdSchema = z
   .string()
@@ -452,30 +449,34 @@ const treeBaseSchema = z.strictObject({
 });
 
 /**
- * Um quadro do exemplo: a cena, e quantos meios-lances dela já foram jogados.
- * `step: 0` é a posição de partida da cena. É a mesma contagem que a etapa 2
- * mostra ao aluno ("Lance N de M") e que a store guarda.
+ * O que se desenha por cima de um tabuleiro parado: setas e casas acesas.
  *
- * Serve para a etapa 1 mostrar **diagramas sem gastar posição**: o objetivo
- * ilustra suas regras com quadros do exemplo, e não com posições novas — o que
- * também poupa o teto de citação da §12.7.
+ * Os dois campos já existiam, palavra por palavra, dentro de cada passo da
+ * cena do exemplo. Eles subiram a peça própria em 2026-09-08, quando a etapa 1
+ * passou a ser **estática**: ela desenha sobre uma posição sua, e não sobre um
+ * quadro emprestado de uma animação que deixou de existir.
  */
-export const frameRefSchema = z.strictObject({
-  scene: sceneIdSchema,
-  step: z.number().int().min(0),
+export const desenhoSchema = z.strictObject({
+  arrows: z.array(z.tuple([squareSchema, squareSchema])).min(1).optional(),
+  highlights: z.array(squareSchema).min(1).optional(),
 });
 
 /**
  * Uma regra numerada do objetivo — a "fase" que os manuais de iniciante
  * escrevem antes de mostrar lance nenhum (Müller e Silman fazem exatamente
  * isso; ver §6.1 do SOURCE-CORPUS).
+ *
+ * **A regra desenha, não navega.** Ela tinha um `frame: {scene, step}` que
+ * apontava um quadro congelado da animação da etapa 2 — clicar na regra
+ * rebobinava o exemplo até aquele lance. Com a etapa 2 fora do formato
+ * (2026-09-08), o alvo desapareceu, e o que a regra precisa dizer cabe em
+ * setas e casas sobre a **mesma** posição: é a posição única das três etapas,
+ * e o aluno não perde o lugar ao clicar de uma regra para outra.
  */
-export const objectiveRuleSchema = z.strictObject({
+export const objectiveRuleSchema = desenhoSchema.extend({
   title: texto,
   text: texto,
-  /** Quadro que ilustra a regra. Sem ele, a regra não troca o diagrama. */
-  frame: frameRefSchema.optional(),
-  /** Desenhar a caixa do rei neste quadro. */
+  /** Desenhar a caixa do rei enquanto esta regra está escolhida. */
   box: z.boolean().optional(),
 });
 
@@ -488,9 +489,17 @@ export const objectiveRuleSchema = z.strictObject({
  * antes do caminho**. O `frame` padrão é o último quadro da primeira cena,
  * isto é, o mate: Silman ensina assim, de trás para frente.
  */
-export const objectiveStageSchema = z.strictObject({
+export const objectiveStageSchema = desenhoSchema.extend({
   /** Slug da obra-base didática (`didactic: true` no registro de obras). */
   source: z.string().regex(/^[a-z0-9-]+$/, "source deve ser o slug de uma obra"),
+  /**
+   * A posição do diagrama grande — e ela é **a mesma** das etapas 2 e 3.
+   *
+   * Era um `frame` apontando um quadro da animação; virou posição própria
+   * quando a etapa passou a ser estática. Não gasta teto de citação novo
+   * justamente por ser a mesma: uma aula, uma posição, três etapas.
+   */
+  positionId: positionIdSchema,
   technique: z.strictObject({
     /** O nome da técnica, na voz do curso ("a caixa que encolhe"). */
     name: texto,
@@ -500,56 +509,14 @@ export const objectiveStageSchema = z.strictObject({
   /** Por que esta técnica importa. O plano mestre pede, e não havia campo. */
   why: texto,
   rules: z.array(objectiveRuleSchema).min(2).max(5),
-  /** O quadro do diagrama grande. Padrão: último quadro da primeira cena. */
-  frame: frameRefSchema.optional(),
-  mastery: texto,
-});
-
-/** Etapa 2 — exemplo: lances dos dois lados roteirizados. */
-export const exampleStepSchema = z.strictObject({
-  move: uciSchema,
-  text: texto,
-  arrows: z.array(z.tuple([squareSchema, squareSchema])).min(1).optional(),
-  highlights: z.array(squareSchema).min(1).optional(),
-});
-
-/**
- * Uma fase da cena: o rótulo que aparece enquanto ela dura, e o meio-lance em
- * que começa (1-based; a primeira fase começa sempre em 1). O autoplay **para**
- * antes do primeiro lance de cada fase — é o respiro que separa "cortar" de
- * "aproximar" em vez de derramar trinta lances seguidos no aluno.
- */
-export const examplePhaseSchema = z.strictObject({
-  title: texto,
-  fromStep: z.number().int().min(1),
-});
-
-/**
- * Uma cena do exemplo. Uma aula tem de uma a quatro; o desenho que os manuais
- * de iniciante usam é **duas**: "como termina" (posição curta, mate em 3 ou 4)
- * e depois "o caminho inteiro" (a posição de meio de tabuleiro).
- */
-export const exampleSceneSchema = z.strictObject({
-  id: sceneIdSchema,
-  title: texto,
-  positionId: positionIdSchema,
-  /** O texto que abre a cena, antes do primeiro lance. */
-  intro: texto,
-  /** Desenhar a caixa do rei durante a cena inteira. */
-  showBox: z.boolean().optional(),
-  phases: z.array(examplePhaseSchema).min(1).optional(),
   /**
-   * Como a cena acaba (FN1/B2) — o mesmo vocabulário do lance terminal da
-   * árvore. Ausente numa cena que sai de posição ganha quer dizer `"mate"`, que
-   * é o que o gate sempre cobrou; numa cena de empate, ausente quer dizer que a
-   * cena não afirma nada sobre o fim, e o gate não cobra nada.
+   * Os perigos: o que costuma dar errado, em uma linha cada. O plano de
+   * 2026-09-08 pede a etapa "objetivo estático" com quatro coisas na tela — a
+   * posição, o que se quer, a técnica e **os perigos** —, e as três primeiras
+   * já tinham campo. Este é o quarto.
    */
-  ends: endsSchema.optional(),
-  steps: z.array(exampleStepSchema).min(1),
-});
-
-export const exampleStageSchema = z.strictObject({
-  scenes: z.array(exampleSceneSchema).min(1).max(4),
+  dangers: z.array(texto).max(4).optional(),
+  mastery: texto,
 });
 
 /** Etapa 3 — com ajuda: destaques, dica e retentativa ilimitada. */
@@ -562,12 +529,6 @@ export const guidedStageSchema = treeBaseSchema.extend({
    * **não tem este campo** — o schema é estrito, então pedi-la lá é erro.
    */
   showBox: z.boolean().optional(),
-});
-
-/** Etapa 4 — sem ajuda: outra posição, sem dica nem destaque, com teto. */
-export const soloStageSchema = treeBaseSchema.extend({
-  /** Teto de lances *do aluno*. O gate exige DTM ≤ teto ≤ 50. */
-  moveLimit: z.int().min(1).max(50),
 });
 
 /** Etapa 5 — prática real contra o Stockfish (F1/B4). */
@@ -614,11 +575,6 @@ export const practiceStageSchema = z.strictObject({
      */
     moveTimeMs: z.int().min(50).max(5000),
   }),
-});
-
-/** Etapa 6 — revisão v0 (§0.2): posições distintas das de ensino. */
-export const reviewStageSchema = z.strictObject({
-  reviewPositionIds: z.array(positionIdSchema).min(1),
 });
 
 
@@ -711,14 +667,30 @@ const lessonBaseSchema = z.strictObject({
    * o gate exige (`TEMPLATE_FALTANDO`) assim que algum ramo é gerado.
    */
   generatedTemplates: generatedTemplatesSchema.optional(),
-  /** Nem toda aula tem todas as etapas — cada bloco é opcional. */
+  /**
+   * **Três etapas, numa posição só** (decisão do Doug em 2026-09-08).
+   *
+   * `objective` diz o que se quer, parado, com setas e casas acesas.
+   * `guided` é a mesma posição jogada com roteiro e dica sob demanda.
+   * `practice` é a mesma posição contra a máquina, e vencer é a passada.
+   *
+   * Saíram três: `example` (a animação — o objetivo estático a absorveu),
+   * `solo` (a árvore sem ajuda — a partida contra a máquina faz o papel) e
+   * `review` (a fila de posições novas — quem revisa agora é a escada de
+   * `lib/finais/`, em dias espaçados, na MESMA posição).
+   *
+   * **A perda está declarada:** o aluno deixa de ver a técnica demonstrada em
+   * animação. Ele lê o objetivo e já joga, com dica sob demanda. É o modelo do
+   * *move trainer* do repertório, e é decisão do Doug — mas para um aluno de
+   * 600 é o degrau mais íngreme do plano.
+   *
+   * Cada bloco continua opcional: das 49 aulas da trilha, as curtas têm só a
+   * prática.
+   */
   stages: z.strictObject({
     objective: objectiveStageSchema.optional(),
-    example: exampleStageSchema.optional(),
     guided: guidedStageSchema.optional(),
-    solo: soloStageSchema.optional(),
     practice: practiceStageSchema.optional(),
-    review: reviewStageSchema.optional(),
   }),
 });
 
@@ -743,60 +715,29 @@ export const lessonSchema = lessonBaseSchema.superRefine((lesson, ctx) => {
     });
   }
 
-  const { objective, example } = lesson.stages;
-
-  // A etapa 1 ilustra as regras com quadros da etapa 2: sem exemplo, não há
-  // diagrama nenhum para mostrar.
-  if (objective && !example) {
-    ctx.addIssue({
-      code: "custom",
-      path: ["stages", "objective"],
-      message: "o objetivo aponta quadros do exemplo, então a aula precisa ter a etapa 2",
-    });
-    return;
-  }
-  if (!example) return;
-
-  const cenas = new Set<string>();
-  for (const [i, cena] of example.scenes.entries()) {
-    if (cenas.has(cena.id)) {
+  // **A trava que exigia a etapa 2 saiu com ela.** O objetivo apontava quadros
+  // da animação, então uma aula com objetivo e sem exemplo era incoerente. No
+  // formato de três etapas o objetivo tem posição própria e desenha nela, e
+  // nada mais precisa existir para ele fazer sentido.
+  //
+  // Sobra uma coerência nova, e é a que dá nome ao formato: **as três etapas
+  // jogam a MESMA posição**. Sem isto, "uma posição só" seria promessa de
+  // prosa; aqui é recusa do arquivo.
+  const { objective, guided, practice } = lesson.stages;
+  const posicoes: Array<[string, string]> = [];
+  if (objective) posicoes.push(["objective", objective.positionId]);
+  if (guided) posicoes.push(["guided", guided.positionId]);
+  if (practice) posicoes.push(["practice", practice.positionId]);
+  const primeira = posicoes[0];
+  if (primeira) {
+    for (const [etapa, id] of posicoes.slice(1)) {
+      if (id === primeira[1]) continue;
       ctx.addIssue({
         code: "custom",
-        path: ["stages", "example", "scenes", i, "id"],
-        message: `duas cenas com o id "${cena.id}"`,
-      });
-    }
-    cenas.add(cena.id);
-
-    // As fases são a espinha do respiro do autoplay: têm de começar no lance 1
-    // e andar para a frente, senão o aluno para no meio de uma ideia.
-    for (const [j, fase] of (cena.phases ?? []).entries()) {
-      const esperado = j === 0 ? fase.fromStep === 1 : fase.fromStep > (cena.phases as { fromStep: number }[])[j - 1].fromStep;
-      if (!esperado) {
-        ctx.addIssue({
-          code: "custom",
-          path: ["stages", "example", "scenes", i, "phases", j, "fromStep"],
-          message:
-            j === 0
-              ? "a primeira fase da cena tem de começar no lance 1"
-              : "as fases têm de começar em lances crescentes",
-        });
-      }
-    }
-  }
-
-  if (!objective) return;
-  const quadros: Array<{ ref: { scene: string }; path: (string | number)[] }> = [];
-  if (objective.frame) quadros.push({ ref: objective.frame, path: ["stages", "objective", "frame"] });
-  for (const [i, regra] of objective.rules.entries()) {
-    if (regra.frame) quadros.push({ ref: regra.frame, path: ["stages", "objective", "rules", i, "frame"] });
-  }
-  for (const { ref, path } of quadros) {
-    if (!cenas.has(ref.scene)) {
-      ctx.addIssue({
-        code: "custom",
-        path: [...path, "scene"],
-        message: `o quadro aponta a cena "${ref.scene}", que não existe na etapa 2`,
+        path: ["stages", etapa, "positionId"],
+        message:
+          `a etapa "${etapa}" joga "${id}" e a etapa "${primeira[0]}" joga "${primeira[1]}" — ` +
+          "as três etapas de uma aula de finais são a MESMA posição",
       });
     }
   }
@@ -818,17 +759,11 @@ export type Expect = z.infer<typeof expectSchema>;
 export type Mistake = z.infer<typeof mistakeSchema>;
 export type AuthorAlternative = z.infer<typeof authorAlternativeSchema>;
 export type TreeNode = z.infer<typeof treeNodeSchema>;
-export type FrameRef = z.infer<typeof frameRefSchema>;
+export type Desenho = z.infer<typeof desenhoSchema>;
 export type ObjectiveRule = z.infer<typeof objectiveRuleSchema>;
 export type ObjectiveStage = z.infer<typeof objectiveStageSchema>;
-export type ExampleStep = z.infer<typeof exampleStepSchema>;
-export type ExamplePhase = z.infer<typeof examplePhaseSchema>;
-export type ExampleScene = z.infer<typeof exampleSceneSchema>;
-export type ExampleStage = z.infer<typeof exampleStageSchema>;
 export type GuidedStage = z.infer<typeof guidedStageSchema>;
-export type SoloStage = z.infer<typeof soloStageSchema>;
 export type PracticeStage = z.infer<typeof practiceStageSchema>;
-export type ReviewStage = z.infer<typeof reviewStageSchema>;
 export type LessonError = z.infer<typeof lessonErrorSchema>;
 export type GeneratedTemplates = z.infer<typeof generatedTemplatesSchema>;
 export type Lesson = z.infer<typeof lessonSchema>;

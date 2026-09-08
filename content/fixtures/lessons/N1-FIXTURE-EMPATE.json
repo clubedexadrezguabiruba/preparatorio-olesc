@@ -11,29 +11,40 @@
     "methodAlternative": "Esse lance é a mesma ideia por outro caminho."
   },
   "stages": {
-    "example": {
-      "scenes": [
+    "objective": {
+      "source": "de-la-villa-100",
+      "positionId": "pos-fx-kpk-oposicao",
+      "technique": {
+        "name": "A oposição",
+        "summary": "Fique de frente para o rei inimigo, na mesma coluna, com uma casa entre os dois."
+      },
+      "why": "Sem peça nenhuma, o rei que toma a oposição segura o empate contra rei e peão.",
+      "rules": [
         {
-          "id": "segurar",
-          "title": "A oposição segura o peão",
-          "positionId": "pos-fx-kpk-oposicao",
-          "intro": "As pretas não têm peça nenhuma e mesmo assim não perdem: basta o rei ficar na frente do peão e tomar a oposição a cada lance.",
-          "ends": "draw-secured",
-          "steps": [
-            {
-              "move": "e8e7",
-              "text": "O rei preto vai ao encontro do branco: reis na mesma coluna, com uma casa entre eles. Isso é a oposição, e quem tem de mover é quem cede."
-            },
-            {
-              "move": "e5d5",
-              "text": "O rei branco desvia para o lado, tentando entrar por d6."
-            },
-            {
-              "move": "e7d7",
-              "text": "O rei preto acompanha e toma a oposição de novo. Daqui não há entrada: a posição é empate pela tablebase."
-            }
+          "title": "Vá ao encontro do rei",
+          "text": "O rei preto sobe para a mesma coluna do branco.",
+          "arrows": [
+            [
+              "e8",
+              "e7"
+            ]
+          ]
+        },
+        {
+          "title": "Retome a oposição a cada lance",
+          "text": "O branco desvia; o preto acompanha e volta a ficar de frente.",
+          "highlights": [
+            "d7",
+            "e7"
           ]
         }
+      ],
+      "dangers": [
+        "Sair da coluna do peão: o rei branco entra e promove."
+      ],
+      "mastery": "Segurar o empate contra o computador, sem ajuda.",
+      "highlights": [
+        "e8"
       ]
     },
     "guided": {
@@ -44,30 +55,50 @@
         "n1": {
           "fen": "4k3/8/8/4K3/4P3/8/8/8 b - - 0 1",
           "hint": "Um lance só empata. Vá ao encontro do rei branco, na mesma coluna.",
-          "highlights": ["e7"],
+          "highlights": [
+            "e7"
+          ],
           "expects": [
             {
-              "moves": ["e8e7"],
+              "moves": [
+                "e8e7"
+              ],
               "reply": "e5d5",
               "next": "n2",
               "feedback": "Oposição tomada. O rei branco desvia para d5 e tenta entrar pelo outro lado."
             }
           ],
-          "winningMoves": ["e8e7"]
+          "winningMoves": [
+            "e8e7"
+          ]
         },
         "n2": {
           "fen": "8/4k3/8/3K4/4P3/8/8/8 b - - 2 2",
           "hint": "De novo: acompanhe o rei branco e fique de frente para ele.",
-          "highlights": ["d7"],
+          "highlights": [
+            "d7"
+          ],
           "expects": [
             {
-              "moves": ["e7d7"],
+              "moves": [
+                "e7d7"
+              ],
               "ends": "draw-secured",
               "feedback": "Empate segurado. O rei branco não tem por onde entrar, e o peão não anda sozinho."
             }
           ],
-          "winningMoves": ["e7d7"]
+          "winningMoves": [
+            "e7d7"
+          ]
         }
+      }
+    },
+    "practice": {
+      "positionId": "pos-fx-kpk-oposicao",
+      "goal": "draw",
+      "engine": {
+        "skill": 20,
+        "moveTimeMs": 300
       }
     }
   }
