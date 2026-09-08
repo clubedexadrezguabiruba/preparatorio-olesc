@@ -274,6 +274,17 @@ export type ExerciseState = {
   /** Quando este item foi aberto, em `Date.now()`. Vira o `tempo_ms` da linha. */
   startedAt: number;
   attempt: number;
+  /**
+   * Os pontos que este item rendeu, **para a tela**. `null` enquanto o item
+   * está aberto ou quando ele não rendeu nada.
+   *
+   * Não é a nota. A nota é do servidor, que relê a aula em disco e rejulga o
+   * UCI gravado (`lib/meiojogo/progresso.ts`) — nunca acredita no cliente. Isto
+   * aqui existe para o cabeçalho da etapa poder dizer "11 de 31 pontos" sem ir
+   * ao banco a cada lance, e é por isso que ele pode divergir por um instante
+   * sem consequência nenhuma.
+   */
+  earned: number | null;
 };
 
 function freshExercise(attempt = 1): ExerciseState {
@@ -285,6 +296,7 @@ function freshExercise(attempt = 1): ExerciseState {
     revealIndex: 0,
     startedAt: Date.now(),
     attempt,
+    earned: null,
   };
 }
 
@@ -405,8 +417,14 @@ type LessonStore = {
    * no acerto é o que vale ponto.
    */
   exerciseTry: (itemId: string, uci: string) => void;
-  /** O aluno acertou: fecha o item e credita o acerto na sessão. */
-  exerciseDone: (itemId: string) => void;
+  /**
+   * O aluno acertou: fecha o item e credita o acerto na sessão.
+   *
+   * `earned` são os pontos do livro por este acerto — os do lance principal, ou
+   * os menores de uma alternativa creditada —, e `0` quando o acerto não veio
+   * de primeira, que é a regra do Yusupov. Só para a tela; ver `ExerciseState`.
+   */
+  exerciseDone: (itemId: string, earned: number) => void;
   /** O aluno desistiu e pediu a solução. Fecha o item **sem** creditar. */
   exerciseGiveUp: (itemId: string) => void;
   exerciseRestart: (itemId: string) => void;
@@ -616,7 +634,7 @@ export const useLessonStore = create<LessonStore>((set) => ({
       };
     }),
 
-  exerciseDone: (itemId) =>
+  exerciseDone: (itemId, earned) =>
     set((state) => {
       const chave = exerciseKey(itemId);
       const item = state.exercises[chave];
@@ -625,7 +643,10 @@ export const useLessonStore = create<LessonStore>((set) => ({
         cleared: state.cleared.exercises.includes(itemId)
           ? state.cleared
           : { ...state.cleared, exercises: [...state.cleared.exercises, itemId] },
-        exercises: { ...state.exercises, [chave]: { ...item, status: "done", hintOpen: false } },
+        exercises: {
+          ...state.exercises,
+          [chave]: { ...item, status: "done", hintOpen: false, earned },
+        },
       };
     }),
 

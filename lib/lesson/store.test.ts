@@ -487,7 +487,7 @@ test("acertar de primeira é tries === 1 — é disso que sai o ponto", () => {
   const store = useLessonStore.getState();
   store.openExercise("ex-3-1", 0);
   store.exerciseTry("ex-3-1", "e2e4");
-  store.exerciseDone("ex-3-1");
+  store.exerciseDone("ex-3-1", 2);
 
   const item = useLessonStore.getState().exercises[exerciseKey("ex-3-1")];
   assert.equal(item?.tries, 1);
@@ -500,7 +500,7 @@ test("item fechado não conta mais uma tentativa", () => {
   const store = useLessonStore.getState();
   store.openExercise("ex-3-1", 0);
   store.exerciseTry("ex-3-1", "e2e4");
-  store.exerciseDone("ex-3-1");
+  store.exerciseDone("ex-3-1", 2);
   // O clique atrasado que chega depois do acerto: sem a guarda ele viraria uma
   // segunda tentativa gravada, e a nota do capítulo cairia num item certo.
   store.exerciseTry("ex-3-1", "d2d4");
@@ -524,7 +524,7 @@ test("recomeçar um item zera a tentativa mas não tira o acerto da sessão", ()
   const store = useLessonStore.getState();
   store.openExercise("ex-3-1", 0);
   store.exerciseTry("ex-3-1", "e2e4");
-  store.exerciseDone("ex-3-1");
+  store.exerciseDone("ex-3-1", 2);
   store.exerciseRestart("ex-3-1");
 
   const item = useLessonStore.getState().exercises[exerciseKey("ex-3-1")];
@@ -553,7 +553,7 @@ test("trocar de aula zera os exercícios inteiros", () => {
   const store = useLessonStore.getState();
   store.openExercise("ex-3-1", 0);
   store.exerciseTry("ex-3-1", "e2e4");
-  store.exerciseDone("ex-3-1");
+  store.exerciseDone("ex-3-1", 2);
 
   store.open(lesson.id, "objective", {});
   assert.deepEqual(useLessonStore.getState().exercises, {});
