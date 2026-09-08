@@ -606,11 +606,27 @@ export const JUIZES: readonly JuizDeLance[] = [
     dicas: ["m1"],
     quemJoga: (lado) => lado,
     lances(fen, lado) {
-      // O alvo é a peça que ainda está onde nasceu; o lance é ela sair de lá.
+      // O alvo é a peça que ainda está onde nasceu; o lance é ela **sair da
+      // primeira fileira**, e não só sair da casa.
+      //
+      // As duas restrições vieram de medir os 40 candidatos que o funil achou:
+      //
+      // - **fora da primeira fileira.** Trinta e três dos quarenta resolviam
+      //   com a torre andando de a1 para b1, e o próprio "o que procurar" da
+      //   dica pergunta *quantas peças suas já saíram da primeira fileira*.
+      //   Torre que anda dentro dela não saiu — ela mudou de casa.
+      // - **o rei não conta.** Ele é peça na casa de origem como as outras, e
+      //   levá-lo para o meio do tabuleiro é o contrário do que a dica m2
+      //   acabou de ensinar. Um exercício cuja resposta é Re8-d7 no meio-jogo
+      //   ensinaria a perder a partida.
       const alvo = alvoDa("peca-na-casa-de-origem", fen, lado);
       if (alvo.length === 0) return [];
-      return legais(fen, this.quemJoga(lado))
-        .filter((m) => m.from === alvo[0])
+      const quem = this.quemJoga(lado);
+      const jogo = new Chess(fen);
+      if (jogo.get(alvo[0] as Square)?.type === "k") return [];
+      const casa1 = quem === "brancas" ? 1 : 8;
+      return legais(fen, quem)
+        .filter((m) => m.from === alvo[0] && fileira(m.to) !== casa1)
         .map(uciDe)
         .sort();
     },
@@ -633,9 +649,11 @@ export const JUIZES: readonly JuizDeLance[] = [
       exemplo: {
         // Das oito peças de origem das brancas só a torre de a1 continua onde
         // nasceu, e é ela que a dica manda mexer.
-        fen: "r3r1k1/ppp2ppp/3p2n1/8/4P3/2N5/PPP2PPP/R2R2K1 w - - 0 1",
+        // A torre de a1 é a única peça branca ainda na casa em que nasceu, e a
+        // coluna a é o caminho dela para fora da primeira fileira.
+        fen: "r3r1k1/1pp2ppp/3p2n1/8/4P3/2N5/1PP2PPP/R2R2K1 w - - 0 1",
         lado: "brancas",
-        lances: ["a1b1", "a1c1"],
+        lances: ["a1a2", "a1a3", "a1a4", "a1a5", "a1a6", "a1a7", "a1a8"],
       },
       contraexemplo: {
         fen: "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",

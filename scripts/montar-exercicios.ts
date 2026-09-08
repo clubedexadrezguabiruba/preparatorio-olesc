@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { Chess } from "chess.js";
-import { corDaCasa } from "../lib/meiojogo/afirmacoes.ts";
+import { Chess, type Square } from "chess.js";
+import { casasEntre, corDaCasa } from "../lib/meiojogo/afirmacoes.ts";
 import { SEMELHANCA_MAXIMA, semelhancaDePosicoes, validarDicas } from "../lib/meiojogo/dicas.ts";
 import { COR, OUTRO, respostaDaTarefa, tarefaPorId, type Lado } from "../lib/meiojogo/exercicios.ts";
 import { JUIZES, type LanceUci } from "../lib/meiojogo/lances.ts";
@@ -115,21 +115,31 @@ function saldo(fen: string): number {
   return total;
 }
 
-/** Os peões de um lado, em ordem — o material dos contornos. */
-function peoes(fen: string, lado: Lado): string[] {
-  const casas: string[] = [];
-  for (const fileira of new Chess(fen).board()) {
-    for (const casa of fileira) {
-      if (casa?.type === "p" && casa.color === COR[lado]) casas.push(casa.square);
-    }
-  }
-  return casas.sort();
-}
+/** As quatro casas do meio — o contorno de m3. */
+const CENTRO_DO_TABULEIRO = ["d4", "d5", "e4", "e5"] as const;
 
 type Realce = { modo: "contem" | "contorno"; realce: string[]; notaDoRealce: string };
 
+/**
+ * O realce do nível 2 do apoio, por juiz.
+ *
+ * Os dois modos têm regra fechada no gate e ela é geométrica: `contem` acende um
+ * conjunto que **inclui** toda casa de chegada e é maior que elas; `contorno`
+ * acende o que **define** a resposta por ausência e não toca em chegada nenhuma.
+ *
+ * Cada juiz precisa da sua regra, e a primeira versão deste script provou por
+ * que: os seis de m1 a m8 caíam num ramo genérico que acendia os peões do
+ * adversário, e "acendi os peões pretos" não ajuda ninguém a achar qual peça
+ * branca ainda não saiu de casa.
+ *
+ * Quando a regra escolhida tocaria uma casa de chegada — a chegada é uma
+ * captura de peão, por exemplo —, o script troca para `contem` com a vizinhança
+ * da chegada, em vez de gerar um item que o gate reprova. A troca fica
+ * registrada em `notaDoRealce`.
+ */
 function realceDe(p: Posicao): Realce {
   const destinos = [...new Set(p.lancesAceitos.map((l) => l.slice(2, 4)))];
+  const jogo = new Chess(p.fen);
   const oito = (letraOuFileira: string | number): string[] =>
     typeof letraOuFileira === "string"
       ? [1, 2, 3, 4, 5, 6, 7, 8].map((f) => `${letraOuFileira}${f}`)
@@ -137,46 +147,151 @@ function realceDe(p: Posicao): Realce {
 
   const contem = (casas: string[], nota: string): Realce => ({
     modo: "contem",
-    realce: casas,
+    realce: [...new Set(casas)].sort().slice(0, 8),
     notaDoRealce: nota,
   });
+  /** Contorno, se ele não tocar chegada nenhuma; senão a vizinhança da chegada. */
+  const contorno = (casas: string[], nota: string): Realce => {
+    // A comparação é sobre o conjunto **sem repetição**: a mesma casa pode
+    // entrar duas vezes na lista (a peça que sofre é também a que resolve), e
+    // comparar os tamanhos crus faria o script achar que ela tocou a chegada.
+    const unicas = [...new Set(casas)];
+    const limpo = unicas.filter((c) => !destinos.includes(c)).sort();
+    const tocou = unicas.length !== limpo.length;
+    if (!tocou && limpo.length >= 2) {
+      return { modo: "contorno", realce: limpo.slice(0, 8), notaDoRealce: nota };
+    }
+    return contem(vizinhanca(destinos), tocou ? "o contorno tocaria a chegada" : "contorno curto");
+  };
 
-  if (p.juiz === "coluna-aberta" || p.juiz === "peao-na-semiaberta" || p.juiz === "peao-dobrado") {
-    return contem(oito(destinos[0][0]), "a coluna inteira de destino");
-  }
-  if (p.juiz === "torre-na-setima") {
-    return contem(oito(p.lado === "brancas" ? 7 : 2), "a sétima fileira inteira");
-  }
+  const casasDe = (lado: Lado, tipos: string): string[] => {
+    const lista: string[] = [];
+    for (const fileira of jogo.board()) {
+      for (const casa of fileira) {
+        if (casa?.color === COR[lado] && tipos.includes(casa.type)) lista.push(casa.square);
+      }
+    }
+    return lista.sort();
+  };
 
-  // Os quatro de contorno: os peões que definem o alvo por ausência.
-  const deQuem: Lado =
-    p.juiz === "bispo-com-peoes-na-propria-cor" ? p.lado : OUTRO[p.quemJoga];
-  let contorno = peoes(p.fen, deQuem);
-  if (p.juiz === "bispo-com-peoes-na-propria-cor") {
-    // Só os peões que atrapalham: os da cor do bispo.
-    const bispo = respostaDaTarefa(p.fen, tarefaPorId("bispo-com-peoes-na-propria-cor")!, p.lado)[0];
-    const cor = corDaCasa(bispo);
-    contorno = contorno.filter((c) => corDaCasa(c) === cor);
+  switch (p.juiz) {
+    // Coluna e fileira: a coluna (ou a fileira) inteira de chegada contém todo
+    // destino, é maior que eles, e ainda deixa o aluno decidir peça e casa.
+    case "coluna-aberta":
+    case "peao-na-semiaberta":
+    case "peao-dobrado":
+      return contem(oito(destinos[0][0]), "a coluna inteira de destino");
+    case "torre-na-setima":
+      return contem(oito(p.lado === "brancas" ? 7 : 2), "a sétima fileira inteira");
+
+    // Casa única: os peões dele definem o alvo por ausência (o isolado que não
+    // tem vizinho, o passado que ninguém alcança, o posto que peão nenhum ataca).
+    case "peao-isolado":
+    case "casa-de-bloqueio":
+    case "posto":
+      return contorno(casasDe(OUTRO[p.quemJoga], "p"), "os peões que definem o alvo");
+
+    // O bispo: os peões **seus** que estão na cor dele são o que atrapalha.
+    case "bispo-com-peoes-na-propria-cor": {
+      const bispo = respostaDaTarefa(p.fen, tarefaPorId(p.juiz)!, p.lado)[0];
+      const cor = corDaCasa(bispo);
+      return contorno(
+        casasDe(p.lado, "p").filter((c) => corDaCasa(c) === cor),
+        "os seus peões na cor do bispo",
+      );
+    }
+
+    // m1: acende as peças que **já** saíram. A que falta é a que não acendeu —
+    // e casa ocupada por peça sua nunca é destino de lance seu.
+    case "peca-na-casa-de-origem": {
+      const casa1 = p.quemJoga === "brancas" ? "1" : "8";
+      return contorno(
+        casasDe(p.quemJoga, "nbrq").filter((c) => c[1] !== casa1),
+        "as peças que já saíram — a que falta é a que não acendeu",
+      );
+    }
+
+    // m2: o rei e as torres. São as duas peças que o roque mexe, e nenhuma das
+    // três casas é destino — o rei sai de e1 e as torres saem de a1 e h1.
+    case "roque":
+      return contorno(
+        [...casasDe(p.quemJoga, "k"), ...casasDe(p.quemJoga, "r")],
+        "o rei e as torres, que são as peças que o lance mexe",
+      );
+
+    // m3: as quatro casas do meio. O lance não precisa chegar nelas — precisa
+    // passar a mirá-las —, e é por isso que acendê-las não entrega nada.
+    case "peca-no-centro":
+      return contorno([...CENTRO_DO_TABULEIRO], "as quatro casas do meio");
+
+    // m4: as peças dele que já têm um atacante seu, **e o atacante**. O lance
+    // não vai até nenhuma das duas: ele traz a segunda peça para a mesma linha.
+    // Acender o par é o que faz o apoio dizer "olhe esta dupla" em vez de
+    // "olhe esta peça", e é o que salva o item de uma posição com um alvo só.
+    case "segunda-peca-no-alvo": {
+      const alvos = casasDe(OUTRO[p.quemJoga], "pnbrq").filter(
+        (c) => jogo.attackers(c as Square, COR[p.quemJoga]).length === 1,
+      );
+      const atacantes = alvos.flatMap((c) => jogo.attackers(c as Square, COR[p.quemJoga]));
+      return contorno([...alvos, ...atacantes], "o alvo que já tem um atacante, e o atacante");
+    }
+
+    // m6: o que está entre as duas torres. É a peça que tem de sair.
+    case "torres-ligadas": {
+      const torres = casasDe(p.quemJoga, "r");
+      const caminho = torres.length === 2 ? (casasEntre(torres[0], torres[1]) ?? []) : [];
+      return contorno(
+        [...torres, ...caminho.filter((c) => jogo.get(c) !== undefined)],
+        "as duas torres e o que está entre elas",
+      );
+    }
+
+    // m8: as **suas** peças que estão sendo atacadas — e não a dele, que é a
+    // casa de chegada. Acender o atacante seria acender a resposta; acender
+    // quem sofre é dizer onde olhar, e quem ataca aquelas casas o aluno acha.
+    case "trocar-o-atacante": {
+      const incomodadas = casasDe(p.quemJoga, "nbrq").filter(
+        (c) => jogo.attackers(c as Square, COR[OUTRO[p.quemJoga]]).length > 0,
+      );
+      // Só a peça que sofre quase nunca dá duas casas — a peça dele costuma
+      // incomodar uma só. Entram junto as **origens** dos lances que resolvem:
+      // origem não é chegada, e o aluno continua tendo de ver qual peça dele
+      // tirar do tabuleiro.
+      const origens = p.lancesAceitos.map((l) => l.slice(0, 2));
+      return contorno(
+        [...incomodadas, ...origens],
+        "a sua peça que sofre, e as suas que resolvem",
+      );
+    }
+
+    default:
+      return contem(vizinhanca(destinos), "vizinhança da chegada");
   }
-  contorno = contorno.slice(0, 8);
-  const toca = contorno.some((c) => destinos.includes(c));
-  if (!toca && contorno.length >= 2) {
-    return { modo: "contorno", realce: contorno, notaDoRealce: "os peões que definem o alvo" };
-  }
-  // O contorno tocaria um destino, ou é curto demais: o campo vira `contem`,
-  // com a casa de chegada mais a vizinhança dela.
+}
+
+/** As casas de chegada mais o que está em volta delas, até o teto de oito. */
+function vizinhanca(destinos: readonly string[]): string[] {
   const volta = new Set(destinos);
   for (const d of destinos) {
     const c = d.charCodeAt(0) - 97;
     const f = Number(d[1]);
-    for (const [dc, df] of [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [1, 1], [-1, 1], [1, -1]]) {
+    for (const [dc, df] of [
+      [-1, 0],
+      [1, 0],
+      [0, -1],
+      [0, 1],
+      [-1, -1],
+      [1, 1],
+      [-1, 1],
+      [1, -1],
+    ]) {
       const nc = c + dc;
       const nf = f + df;
       if (nc < 0 || nc > 7 || nf < 1 || nf > 8) continue;
       if (volta.size < 8) volta.add(`${String.fromCharCode(97 + nc)}${nf}`);
     }
   }
-  return contem([...volta].sort(), toca ? "o contorno tocaria a chegada" : "o contorno era curto");
+  return [...volta].sort();
 }
 
 /* ------------------------------------------------------------------ *
