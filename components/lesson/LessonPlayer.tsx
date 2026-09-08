@@ -229,87 +229,120 @@ export function LessonPlayer({
   const nextStage = (from: StageKey): StageKey | null =>
     available[available.indexOf(from) + 1] ?? null;
 
+  /**
+   * A trilha das etapas, que desce para DENTRO do painel de cada etapa.
+   *
+   * Ela era uma `<nav>` entre o cabeçalho e o palco, e ali ela custava altura
+   * de tabuleiro: `--aula-teto` é `100dvh` menos o respiro, o cabeçalho e o
+   * vão, e nada mais — qualquer coisa a mais entre eles devolve a rolagem que
+   * o palco existe para matar (ver "O palco da aula" em `app/globals.css`).
+   * No painel ela não custa nada ao tabuleiro; custa ao comentário, que é o
+   * lado que pagina em vez de rolar.
+   *
+   * É a mesma peça que o repertório chama de `TrilhaDeEtapas`, e ela ainda
+   * **não** foi promovida a `components/lesson/`: lá são três etapas fixas
+   * escritas à mão, aqui é a lista variável de `available` — a aula curta tem
+   * duas abas e a completa tem cinco. Promover agora seria juntar duas coisas
+   * que ainda não são a mesma; quando a segunda cópia nascer igual, ela sobe.
+   */
+  const trilha = (
+    <nav aria-label="Etapas da aula" className="flex flex-wrap gap-2">
+      {available.map((key, index) => {
+        const active = key === stage;
+        return (
+          <button
+            key={key}
+            type="button"
+            onClick={() => goToStage(key)}
+            aria-current={active ? "step" : undefined}
+            className={`min-h-11 rounded-md px-3 py-2 text-sm font-medium ring-1 transition foco ${
+              active
+                ? "bg-metodo-cheio text-tinta-inversa ring-metodo/30"
+                : "bg-carta text-tinta-media ring-borda hover:bg-carta-alta"
+            }`}
+          >
+            {/* O numeral recua **só** na aba inativa. Na ativa ele herda a
+                tinta do botão: a aba cheia já é a barulhenta da fila, e um
+                cinza de fundo claro sobre o verde cheio media 1,39:1 — a pior
+                reprovação que a régua achou no B6.1. */}
+            <span className={`tabular-nums ${active ? "" : "text-tinta-fraca"}`}>
+              {index + 1}.
+            </span>{" "}
+            {STAGE_LABEL[key]}
+          </button>
+        );
+      })}
+    </nav>
+  );
+
   return (
-    <div className="flex w-full flex-col gap-6">
-      <header className="flex flex-col gap-2">
+    <div className="flex w-full flex-1 flex-col gap-3">
+      {/*
+       * **O cabeçalho é uma LINHA, e isso é altura de tabuleiro.**
+       *
+       * Ele eram três linhas empilhadas — voltar, título, som — e o respiro da
+       * página era 80 px. Somados, davam altura que o tabuleiro não tinha.
+       * Medido no chess.com em 8/9/2026: a aula deles gasta 16 px acima do
+       * tabuleiro e 17 abaixo, e o tabuleiro fica com 95% da altura útil da
+       * janela. Numa linha, com o respiro em 40 e o vão em 12, a conta fecha
+       * nos 5,5rem que `--aula-teto` desconta no desktop.
+       *
+       * `flex-wrap` com `items-baseline`: no celular ela quebra em duas, e as
+       * peças continuam alinhadas pela base do texto em vez de pelo topo da
+       * caixa — que é o que faz um título de 20 px e um link de 12 parecerem a
+       * mesma linha. Os 6rem do celular já contam com essa quebra.
+       */}
+      <header className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
         {/* No laboratório este link ia para `/`, que era o índice de aulas.
             Aqui `/` é a porta do site e o índice é `/finais` — apontar para a
             raiz mandaria o aluno para fora do curso no meio da aula. */}
-        <Link
-          href="/finais"
-          className="text-xs font-medium text-tinta-fraca transition hover:text-tinta-media"
-        >
-          ← todas as aulas de finais
+        <Link href="/finais" className="foco rotulo text-tinta-fraca hover:underline">
+          ← Finais
         </Link>
-        <div className="flex items-start justify-between gap-3">
-          <h1 className="titulo">{lesson.title}</h1>
+        <h1 className="titulo">{lesson.title}</h1>
+        <div className="ml-auto self-center">
           <SoundToggle />
         </div>
       </header>
 
-      <nav aria-label="Etapas da aula" className="flex flex-wrap gap-2">
-        {available.map((key, index) => {
-          const active = key === stage;
-          return (
-            <button
-              key={key}
-              type="button"
-              onClick={() => goToStage(key)}
-              aria-current={active ? "step" : undefined}
-              className={`min-h-11 rounded-md px-3 py-2 text-sm font-medium ring-1 transition foco ${
-                active
-                  ? "bg-metodo-cheio text-tinta-inversa ring-metodo/30"
-                  : "bg-carta text-tinta-media ring-borda hover:bg-carta-alta"
-              }`}
-            >
-              {/* O numeral recua **só** na aba inativa. Na ativa ele herda a
-                  tinta do botão: a aba cheia já é a barulhenta da fila, e um
-                  cinza de fundo claro sobre o verde cheio media 1,39:1 — a pior
-                  reprovação que a régua achou no B6.1. */}
-              <span className={`tabular-nums ${active ? "" : "text-tinta-fraca"}`}>
-                {index + 1}.
-              </span>{" "}
-              {STAGE_LABEL[key]}
-            </button>
-          );
-        })}
-      </nav>
-
-      <section>
+      <section className="flex flex-1 flex-col">
         {/* O objetivo depende do exemplo: os diagramas dele são quadros das
             cenas da etapa 2. O gate cobra a mesma dependência
             (`lessonSchema.superRefine`), e por isso a condição aqui pede as
             duas etapas em vez de só a primeira. */}
         {stage === "objective" && lesson.stages.objective && lesson.stages.example && (
-          <div className="flex flex-col gap-6">
-            <ObjectiveStage
-              stage={lesson.stages.objective}
-              example={lesson.stages.example}
-              positions={positions}
-              orientation={lesson.orientation}
-            />
-            <StageFooter
-              next={nextStage("objective")}
-              onGo={goToStage}
-              label="Ver a técnica lance a lance"
-            />
-          </div>
+          <ObjectiveStage
+            stage={lesson.stages.objective}
+            example={lesson.stages.example}
+            positions={positions}
+            orientation={lesson.orientation}
+            trilha={trilha}
+            rodape={
+              <StageFooter
+                next={nextStage("objective")}
+                onGo={goToStage}
+                label="Ver a técnica lance a lance"
+              />
+            }
+          />
         )}
 
         {stage === "example" && lesson.stages.example && (
-          <div className="flex flex-col gap-6">
-            <ExampleStage
-              stage={lesson.stages.example}
-              positions={positions}
-              orientation={lesson.orientation}
-              marcacao={marcacao}
-            />
-            <StageFooter next={nextStage("example")} onGo={goToStage} label="Agora é a sua vez" />
+          <ExampleStage
+            stage={lesson.stages.example}
+            positions={positions}
+            orientation={lesson.orientation}
+            marcacao={marcacao}
+            trilha={trilha}
+            rodape={
+              <StageFooter next={nextStage("example")} onGo={goToStage} label="Agora é a sua vez" />
+            }
+          >
             {/* Na aula de leitura não há etapa seguinte, e o rodapé acima não
                 desenha nada: o fim do exemplo é o fim da aula, e é aqui que ela
                 pergunta se foi lida. */}
             {leitura}
-          </div>
+          </ExampleStage>
         )}
 
         {stage === "guided" && lesson.stages.guided && (
@@ -317,6 +350,7 @@ export function LessonPlayer({
             lesson={lesson}
             tree={lesson.stages.guided}
             treeKey="guided"
+            trilha={trilha}
             position={positions[lesson.stages.guided.positionId]}
             orientation={lesson.orientation}
             allowHelp
@@ -336,6 +370,7 @@ export function LessonPlayer({
             lesson={lesson}
             tree={lesson.stages.solo}
             treeKey="solo"
+            trilha={trilha}
             position={positions[lesson.stages.solo.positionId]}
             orientation={lesson.orientation}
             allowHelp={false}
@@ -352,6 +387,7 @@ export function LessonPlayer({
         {stage === "practice" && lesson.stages.practice && (
           <PracticeStage
             practiceKey="practice"
+            trilha={trilha}
             position={positions[lesson.stages.practice.positionId]}
             orientation={lesson.orientation}
             goal={lesson.stages.practice.goal}
@@ -386,6 +422,7 @@ export function LessonPlayer({
 
         {stage === "review" && lesson.stages.review && (
           <ReviewStage
+            trilha={trilha}
             stage={lesson.stages.review}
             practice={lesson.stages.practice}
             positions={positions}
@@ -409,7 +446,21 @@ function SoundToggle() {
       type="button"
       onClick={() => setSoundOn(!on)}
       aria-pressed={on}
-      className="min-h-11 shrink-0 rounded-md bg-carta px-3 py-2 text-lg leading-none ring-1 ring-borda transition hover:bg-carta-alta foco"
+      /*
+       * **`lg:min-h-9` é altura de tabuleiro, e o número foi medido.**
+       *
+       * O palco desconta 5,5rem do `100dvh` no desktop, e esses 88 px são
+       * respiro (40) + cabeçalho (36) + vão (12) — ver "O palco da aula" em
+       * `app/globals.css`. Este botão é a peça mais alta do cabeçalho: a
+       * `min-h-11` ele mede 44, o cabeçalho vai a 44, e a página passou a rolar
+       * **exatamente 8 px** — medido em 1366×768 antes de existir esta linha.
+       *
+       * Os 44 px continuam valendo abaixo de `lg`, que é onde há dedo: o alvo
+       * de toque de 44 px é o mínimo AAA da WCAG 2.5.5, e o orçamento do
+       * celular (6rem) já conta com um cabeçalho de 50. No desktop há ponteiro,
+       * e 36 px fica bem acima do mínimo AA de 24 (2.5.8).
+       */
+      className="min-h-11 shrink-0 rounded-md bg-carta px-3 py-2 text-lg leading-none ring-1 ring-borda transition hover:bg-carta-alta foco lg:min-h-9 lg:py-1"
     >
       <span aria-hidden>{on ? "🔊" : "🔇"}</span>
       <span className="sr-only">{on ? "Desligar o som" : "Ligar o som"}</span>

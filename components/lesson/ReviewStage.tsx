@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import type { Color } from "@lichess-org/chessground/types";
 import type { Position, PracticeStage as PracticeStageData, ReviewStage as ReviewStageData } from "@/lib/lesson/schema";
 import { reviewKey, useLessonStore } from "@/lib/lesson/store";
@@ -22,11 +22,14 @@ import { PracticeStage } from "./PracticeStage";
  * é o formato que a F3 vai precisar, para nenhuma aula ser refeita depois.
  */
 export function ReviewStage({
+  trilha,
   stage,
   practice,
   positions,
   orientation,
 }: {
+  /** A trilha das etapas, montada pelo `LessonPlayer`. */
+  trilha?: ReactNode;
   stage: ReviewStageData;
   /**
    * A configuração do motor vem da etapa 5. O schema da revisão só traz ids de
@@ -52,8 +55,15 @@ export function ReviewStage({
     );
   }
 
-  return (
-    <div className="flex flex-col gap-5">
+  /*
+   * O cabeçalho da revisão desce para o painel do `PracticeStage`, pelo mesmo
+   * slot da trilha. Ele era um bloco ACIMA do palco, e ali custava altura de
+   * tabuleiro: `--aula-teto` é `100dvh` menos o respiro, o cabeçalho da página
+   * e o vão, e nada mais (ver "O palco da aula" em `app/globals.css`).
+   */
+  const cabecalho = (
+    <>
+      {trilha}
       <div className="flex flex-col gap-3">
         <p className="text-sm leading-relaxed text-tinta-media">
           Posições novas, para provar que a técnica ficou. Mesmo computador da prática
@@ -91,7 +101,11 @@ export function ReviewStage({
           </>
         )}
       </div>
+    </>
+  );
 
+  return (
+    <>
       {/*
         Sem `key` no PracticeStage, de propósito: remontá-lo desmontaria o
         FeedbackPanel, que é a única regra inviolável do painel (ele nunca pode
@@ -101,11 +115,12 @@ export function ReviewStage({
       */}
       <PracticeStage
         practiceKey={reviewKey(selecionada)}
+        trilha={cabecalho}
         position={positions[selecionada]}
         orientation={orientation}
         goal={practice.goal}
         engine={practice.engine}
       />
-    </div>
+    </>
   );
 }

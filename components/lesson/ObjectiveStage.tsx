@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
 import type { Color } from "@lichess-org/chessground/types";
+import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
 import { BoxOverlay } from "@/components/board/BoxOverlay";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { teachingShapes } from "@/lib/chess/annotations";
@@ -33,6 +34,8 @@ export function ObjectiveStage({
   example,
   positions,
   orientation,
+  trilha,
+  rodape,
 }: {
   stage: ObjectiveStageData;
   /**
@@ -42,6 +45,10 @@ export function ObjectiveStage({
   example: ExampleStageData;
   positions: Record<string, Position>;
   orientation: Color;
+  /** A trilha das etapas, montada pelo `LessonPlayer` e servida no painel. */
+  trilha?: ReactNode;
+  /** Os botões do rodapé do painel — hoje só o "ir para a etapa seguinte". */
+  rodape?: ReactNode;
 }) {
   /** Índice da regra escolhida; `null` = nenhuma, e vale o quadro de abertura. */
   const [escolhida, setEscolhida] = useState<number | null>(null);
@@ -80,74 +87,101 @@ export function ObjectiveStage({
   };
 
   return (
-    <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-      <div
-        ref={tabuleiroRef}
-        className="mx-auto flex w-full max-w-[min(88vw,26rem)] flex-col gap-2 lg:mx-0 lg:w-[26rem] lg:shrink-0"
-      >
-        <ChessBoard
-          fen={quadro.frame.fen}
-          orientation={orientation}
-          lastMove={quadro.frame.lastMove}
-          check={quadro.frame.check}
-          shapes={shapes}
-          overlay={regra?.box ? <BoxOverlay fen={quadro.frame.fen} orientation={orientation} /> : undefined}
-          viewOnly
-        />
-        {/* A legenda é a única pista de que o diagrama mudou para quem clicou
-            numa regra e rolou a tela. Fica viva pelo mesmo motivo. */}
-        <p aria-live="polite" className="text-xs text-tinta-fraca">
-          {regra ? `Mostrando: ${regra.title}` : "O que você vai conseguir fazer no fim da aula."}
-        </p>
-      </div>
-
-      <div className="flex flex-1 flex-col gap-4">
-        <div>
-          <h2 className="text-lg font-semibold text-tinta">{stage.technique.name}</h2>
-          <p className="mt-1 text-sm leading-relaxed text-tinta-media">{stage.technique.summary}</p>
+    <AulaShell
+      tabuleiro={
+        // **Só o tabuleiro mora aqui, e isso é a aritmética do palco.** A
+        // coluna é dimensionada pela ALTURA que sobra (`.aula-tabuleiro` no
+        // CSS), então o tabuleiro já ocupa a altura inteira dela: qualquer
+        // irmão embaixo dele transborda o palco e devolve a rolagem. Medido em
+        // 1366×768: a legenda que ficava aqui somava 24 px à coluna e a página
+        // rolava exatamente isso. Ela foi para o painel, onde não custa altura
+        // de tabuleiro.
+        <div ref={tabuleiroRef}>
+          <ChessBoard
+            fen={quadro.frame.fen}
+            orientation={orientation}
+            lastMove={quadro.frame.lastMove}
+            check={quadro.frame.check}
+            shapes={shapes}
+            overlay={regra?.box ? <BoxOverlay fen={quadro.frame.fen} orientation={orientation} /> : undefined}
+            viewOnly
+          />
         </div>
+      }
+      painel={
+        <>
+          {trilha}
 
-        <p className="text-sm leading-relaxed text-tinta-media">{stage.why}</p>
+          {/* A legenda é a única pista de que o diagrama mudou para quem clicou
+              numa regra. Fica viva pelo mesmo motivo. */}
+          <p aria-live="polite" className="text-xs text-tinta-fraca">
+            {regra ? `Mostrando: ${regra.title}` : "O que você vai conseguir fazer no fim da aula."}
+          </p>
 
-        <div>
-          <h3 className="rotulo text-tinta-fraca">A técnica, em {stage.rules.length} passos</h3>
-          {/* `<ol>` e não `<ul>`: a ordem é a técnica. Cada item é um botão
-              porque clicar nele muda o tabuleiro — e `aria-pressed` porque é
-              um estado que fica ligado, não uma navegação. */}
-          <ol className="mt-2 flex flex-col gap-2">
-            {stage.rules.map((r, i) => {
-              const ativa = escolhida === i;
-              return (
-                <li key={r.title}>
-                  <button
-                    type="button"
-                    aria-pressed={ativa}
-                    onClick={() => escolher(i)}
-                    className={`flex w-full gap-3 rounded-lg px-4 py-3 text-left ring-1 transition foco ${
-                      ativa
-                        ? "bg-carta-toque text-tinta ring-borda-forte"
-                        : "bg-carta text-tinta-media ring-borda hover:bg-carta-alta"
-                    }`}
-                  >
-                    <span className="rotulo shrink-0 tabular-nums text-metodo">{i + 1}</span>
-                    <span className="flex flex-col gap-1">
-                      <span className="text-sm font-medium text-tinta">{r.title}</span>
-                      <span className="text-sm leading-relaxed">{r.text}</span>
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ol>
-        </div>
+          <div>
+            <h2 className="text-lg font-semibold text-tinta">{stage.technique.name}</h2>
+            <p className="mt-1 text-sm leading-relaxed text-tinta-media">{stage.technique.summary}</p>
+          </div>
 
-        <div className="rounded-lg border border-metodo-superficie/30 bg-metodo-superficie/5 px-4 py-3">
-          <h3 className="rotulo text-metodo">
-            O que conta como dominado
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-tinta-media">{stage.mastery}</p>
-        </div>
-      </div>
-    </div>
+          {/* **A lista rola por dentro, e é ela quem paga o palco.**
+
+              O painel tem altura fechada (ver "O palco da aula" em
+              `app/globals.css`), então alguma coisa aqui tem de ceder quando o
+              conteúdo passa: ou a PÁGINA rola — que é o defeito que o palco
+              existe para matar — ou um bloco de dentro rola. A escolha é a
+              lista, porque ela é o único bloco repetitivo: o aluno já sabe o
+              que vem depois do passo 3, e rolar dentro dela não tira de vista
+              nada que ele precise ver junto com o tabuleiro.
+
+              `min-h-0` é o que faz `overflow-y-auto` valer: sem ele um filho
+              `flex-1` nunca encolhe abaixo do próprio conteúdo, a barra nunca
+              aparece, e o transbordo vaza para a página — calado. */}
+          <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto">
+            <p className="text-sm leading-relaxed text-tinta-media">{stage.why}</p>
+
+            <div>
+              <h3 className="rotulo text-tinta-fraca">A técnica, em {stage.rules.length} passos</h3>
+              {/* `<ol>` e não `<ul>`: a ordem é a técnica. Cada item é um botão
+                  porque clicar nele muda o tabuleiro — e `aria-pressed` porque é
+                  um estado que fica ligado, não uma navegação. */}
+              <ol className="mt-2 flex flex-col gap-2">
+                {stage.rules.map((r, i) => {
+                  const ativa = escolhida === i;
+                  return (
+                    <li key={r.title}>
+                      <button
+                        type="button"
+                        aria-pressed={ativa}
+                        onClick={() => escolher(i)}
+                        className={`flex w-full gap-3 rounded-lg px-4 py-3 text-left ring-1 transition foco ${
+                          ativa
+                            ? "bg-carta-toque text-tinta ring-borda-forte"
+                            : "bg-carta text-tinta-media ring-borda hover:bg-carta-alta"
+                        }`}
+                      >
+                        <span className="rotulo shrink-0 tabular-nums text-metodo">{i + 1}</span>
+                        <span className="flex flex-col gap-1">
+                          <span className="text-sm font-medium text-tinta">{r.title}</span>
+                          <span className="text-sm leading-relaxed">{r.text}</span>
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
+
+            <div className="rounded-lg border border-metodo-superficie/30 bg-metodo-superficie/5 px-4 py-3">
+              <h3 className="rotulo text-metodo">
+                O que conta como dominado
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-tinta-media">{stage.mastery}</p>
+            </div>
+          </div>
+
+          {rodape ? <AulaRodape>{rodape}</AulaRodape> : null}
+        </>
+      }
+    />
   );
 }

@@ -54,7 +54,24 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
   const formato = aulaDaTrilha(aula)?.formato;
 
   return (
-    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8 sm:py-10">
+    /*
+     * **A moldura é o TETO do palco, não a régua dele.** `max-w-5xl` (1024 px)
+     * com `py-8 sm:py-10` era a página de antes do palco: 80 px de respiro
+     * vertical e uma largura que estrangulava a conta do tabuleiro.
+     *
+     * 85,75rem ≥ tabuleiro no máximo (48rem) + vão (2,5rem) + painel
+     * (32,625rem) + os 2,5rem de `px-5`, que somam 85,625 — arredondado para
+     * cima de propósito, porque quem decide a largura real é `--aula-teto`, no
+     * bloco "O palco da aula" de `app/globals.css`. A moldura só não pode
+     * apertar a conta.
+     *
+     * O respiro caiu para `py-4`/`lg:py-5` (32 e 40 px) porque `--aula-teto` é
+     * literalmente `100dvh` menos ele, o cabeçalho e o vão: cada pixel que sai
+     * daqui entra no tabuleiro. Os números batem com os do CSS — 5,5rem no
+     * desktop (40 + 36 + 12) e 6rem no celular (32 + 50 + 12) — e errar para
+     * baixo devolve a rolagem que o palco existe para matar.
+     */
+    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
       {/* O caminho de volta é o do próprio motor (LessonPlayer:121): dois links
           de voltar na mesma tela seriam duas respostas para a mesma pergunta. */}
       {/* O Suspense é obrigatório: `useSearchParams` numa rota estática exige

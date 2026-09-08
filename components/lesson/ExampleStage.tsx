@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color } from "@lichess-org/chessground/types";
+import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
 import { BoxOverlay } from "@/components/board/BoxOverlay";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { teachingShapes } from "@/lib/chess/annotations";
@@ -49,6 +50,9 @@ export function ExampleStage({
   positions,
   orientation,
   marcacao,
+  trilha,
+  rodape,
+  children,
 }: {
   stage: ExampleStageData;
   positions: Record<string, Position>;
@@ -59,6 +63,12 @@ export function ExampleStage({
    * botão direito. `shapes: null` quer dizer "use as do arquivo".
    */
   marcacao?: { shapes: DrawShape[] | null; onChange: (shapes: DrawShape[]) => void };
+  /** A trilha das etapas, montada pelo `LessonPlayer` e servida no painel. */
+  trilha?: ReactNode;
+  /** Os botões do rodapé do painel — hoje só o "ir para a etapa seguinte". */
+  rodape?: ReactNode;
+  /** O controle da aula de leitura: só as duas aulas de leitura o recebem. */
+  children?: ReactNode;
 }) {
   const example = useLessonStore((s) => s.example);
   const setExample = useLessonStore((s) => s.setExample);
@@ -170,8 +180,8 @@ export function ExampleStage({
           : { rotulo: "Assistir", acao: () => setPlaying(true) };
 
   return (
-    <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-      <div className="mx-auto w-full max-w-[min(88vw,26rem)] lg:mx-0 lg:w-[26rem] lg:shrink-0">
+    <AulaShell
+      tabuleiro={
         <ChessBoard
           // Sem `key` por cena as peças da cena seguinte deslizam das casas da
           // anterior: o chessground anima a diferença entre duas FENs, e entre
@@ -193,9 +203,10 @@ export function ExampleStage({
           }
           viewOnly
         />
-      </div>
-
-      <div className="flex flex-1 flex-col gap-4">
+      }
+      painel={
+        <>
+          {trilha}
         {/* Fora da região viva: um contador que muda a cada lance viraria
             tagarelice no leitor de tela, e o número já está na tela. */}
         <p className="rotulo text-tinta-fraca">
@@ -271,7 +282,15 @@ export function ExampleStage({
             ))}
           </div>
         </div>
-      </div>
-    </div>
+
+          {rodape || children ? (
+            <AulaRodape>
+              {rodape}
+              {children}
+            </AulaRodape>
+          ) : null}
+        </>
+      }
+    />
   );
 }

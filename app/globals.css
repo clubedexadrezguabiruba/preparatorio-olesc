@@ -259,6 +259,189 @@
   letter-spacing: 0.16em;
 }
 
+
+/* --------------------------------------------------------------------------
+   O palco da aula: o tabuleiro de um lado, a voz do professor do outro
+
+   O layout antigo era uma coluna só, de 576 px. Medido num notebook de
+   1366×768, na Escandinava: tabuleiro terminando em 732 px, cartão de comando
+   começando em 744, o comentário em 820 e o botão “Continuar” em 864 — **os
+   três abaixo da dobra**, com 315 px de rolagem obrigatória. E o comentário
+   TRAVA a passada: o aluno era obrigado a rolar para ler e rolar de volta para
+   jogar, a cada lance comentado. Enquanto isso sobravam 384 px de vão vazio de
+   cada lado — 768 px de tela ociosa para produzir 315 px de rolagem.
+
+   A troca é de topologia, não de espaçamento: a largura ociosa vira o painel.
+
+   **A invariante é a altura, e é ela que faz a promessa valer.** O tabuleiro
+   deixa de ser dimensionado pela largura (`w-full aspect-square`, que numa
+   tela larga cresce até empurrar todo o resto para fora) e passa a ser
+   dimensionado pelo que sobra de ALTURA. É como o chess.com faz — medido ao
+   vivo na aula “Roque” em 8/9/2026, num viewport de 1366×577: tabuleiro de
+   **544 px numa tela de 577**, e rolagem **zero em todos os treze estados da
+   aula**. Bate com o que `docs/REFERENCIA-MOVE-TRAINER.md` §A8 já registrava:
+   “dimensionado pela altura”. Com o teto de altura, “não rola” deixa de ser
+   torcida e vira aritmética.
+
+   As duas reservas abaixo são a conta do que NÃO é tabuleiro, medida na tela.
+   -------------------------------------------------------------------------- */
+
+.aula-palco {
+  /* Celular: cabeçalho da página (40, em duas linhas) + o da linha (48) +
+     cartão de comando (64) + trilha das etapas (20) + botões (44) + cinco vãos
+     (60) + respiro da página (32) = 308 px, mais 136 px de piso para o
+     comentário — seis linhas de 14 px a 328 px de largura. Os 363 comentários do repertório têm mediana
+     de 276 caracteres; o que não couber no piso **pagina**, em vez de rolar
+     (ver `Comentario`).
+
+     Eram 29rem até 8/9/2026, e a trilha das três etapas custou 2rem: medido num
+     360×740, o comentário caiu de 118 px para **86** — três linhas, e a mediana
+     do repertório passaria a sair em duas páginas. Os 32 px voltam saindo do
+     tabuleiro (276 → 244 px naquele telefone), e a escolha é a mesma que este
+     bloco já registra mais abaixo: melhor um tabuleiro menor que o texto do
+     professor servido em tiras. */
+  --aula-teto: calc(100dvh - 27.75rem);
+
+  /* O palco tem ALTURA FECHADA, e não apenas um teto para o tabuleiro.
+
+     É o que dá ao comentário um espaço medível: `flex-1` só encolhe dentro de
+     um pai que sabe onde termina. Sem esta altura, no celular a caixa do
+     comentário cresceria com o texto, a conta da paginação daria sempre
+     "cabe", e a página voltaria a rolar — que é exatamente o defeito.
+
+     6rem = respiro da página (16+16) + cabeçalho (50: no celular ele quebra em
+     duas linhas) + vão (12), com 2 px de folga. Eram 9rem, com o cabeçalho de
+     três linhas; ver o comentário da `Moldura` em
+     `app/aberturas/[cor]/[abertura]/page.tsx`. Como no desktop, errar este
+     número para baixo devolve a rolagem — medido, e não estimado.
+
+     O piso de 36rem é onde a promessa cede, e ele é conta e não gosto: o
+     tabuleiro não desce de 15rem (240), o que é fixo no painel soma 190
+     (cabeçalho 48, cartão 64, botões 42, vãos 36), o vão entre os dois é 12, e
+     o comentário precisa de 136 para valer seis linhas. Dá 578.
+
+     Sem o piso, num celular de 360×640 os 496 px disponíveis eram repartidos
+     com o tabuleiro cobrando o piso dele primeiro — e sobravam **30 px** de
+     comentário, medidos: quarenta caracteres por página. Melhor a página rolar
+     80 px num telefone baixo do que servir o texto do professor em tiras. */
+  height: max(calc(100dvh - 6rem), 36rem);
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Duas colunas só a partir de `lg`, e o motivo já foi medido uma vez em
+   `app/meio-jogo/[dica]/Passos.tsx`: quebrar em `sm` (640 px) partiria a
+   coluna em duas de ~300 px, e o tabuleiro sairia MENOR que os 328 px que ele
+   já tem no celular — a tela larga ficaria pior que o telefone. */
+@media (width >= 64rem) {
+  .aula-palco {
+    /* No desktop o tabuleiro tem TRÊS limites, e vale o menor.
+
+       1. A altura livre: respiro (80) + cabeçalho (76) + vão (20) = 11rem.
+       2. O teto absoluto de 48rem (768 px), que é o tamanho que o chess.com
+          usa numa tela de 1440 de altura (§A8). Acima disso um tabuleiro deixa
+          de ganhar legibilidade e só empurra o painel para longe do olho.
+       3. O que sobra de largura do VIEWPORT depois do painel e dos vãos.
+
+       O limite 3 é do viewport e não da moldura, e essa distinção é o conserto
+       de um erro: prendendo a conta na moldura de 62rem, o tabuleiro parava em
+       510 px numa tela de 1080 de altura e sobrava **um terço da viewport
+       vazio embaixo** — a invariante de altura anulada justamente onde ela
+       servia. A moldura agora acompanha o palco, em vez de estrangulá-lo. */
+    /* 5,5rem = respiro da página (40) + cabeçalho de uma linha (36) + vão (12).
+
+       **Este número tem de bater com a soma de verdade, medida na tela.** No
+       desktop o palco TEM a altura do tabuleiro (`height: var(--aula-teto)`
+       logo abaixo), então tudo o que não for tabuleiro é somado aqui — e errar
+       por 8 px devolve a rolagem que este bloco inteiro existe para matar. Foi
+       o que aconteceu na primeira tentativa: 5rem contra 5,5rem de conteúdo
+       real, e a página passou a rolar 8 px.
+
+       Eram **11rem**, e a diferença foi para o tabuleiro. Medido no chess.com
+       em 8/9/2026: a aula deles gasta 16 px acima do tabuleiro e 17 abaixo, e
+       o tabuleiro fica com **95% da altura útil** da janela — 600 px num
+       viewport de 633. O nosso ficava com 77%, e a diferença inteira era
+       cabeçalho de página. Numa janela real de 1366×768, onde o cromo do
+       navegador e a barra de tarefas deixam ~637 px de viewport, isto tira o
+       tabuleiro de **461 px para ~557**. O cabeçalho virou uma linha só; ver
+       o comentário da `Moldura` em `app/aberturas/[cor]/[abertura]/page.tsx`. */
+    --aula-teto: min(
+      calc(100dvh - 5.5rem),
+      48rem,
+      calc(100vw - 2.5rem - 2.5rem - 32.625rem)
+    );
+    height: var(--aula-teto);
+
+    display: grid;
+    /* 32.625rem = 522 px, e o número é uma soma: **96 do retrato + 16 de vão +
+       410 da caixa de texto**.
+
+       Os 410 continuam sendo a coluna do comentário, e é essa continuidade que
+       importa: é a largura em que o texto mede 378 px úteis, cabem ~530
+       caracteres por página, e o comentário mais longo do repertório (853
+       caracteres) ainda cabe ao lado do tabuleiro sem empurrar o botão. Meter o
+       retrato *dentro* dos 410 cortaria o texto para 266 px e ~37 caracteres
+       por linha — abaixo da faixa legível de 45 a 75 — e derrubaria a cobertura
+       de "comentário numa página só" de ~97% para ~85%.
+
+       A saída é a do próprio chess.com, medida na aula “Roque” em 8/9/2026: o
+       slot deles tem **452 px, dos quais 360 são de bolha**. O avatar não sai
+       do texto; o painel é que é maior. Aqui vale a mesma conta, com a nossa
+       caixa no lugar da bolha deles.
+
+       O que isso custa, e onde: em 1366×768 o palco passa a 592 + 40 + 522 =
+       1154 px dentro de 1326 úteis, e o tabuleiro **não encolhe** (quem manda
+       ali é o limite de altura). Em 1920 o teto de 48rem continua mandando.
+       Entre 1024 e ~1200 px de largura o terceiro limite passa a valer e o
+       tabuleiro fica menor que era — num 1024 ele cai de 534 para 422 px. É a
+       faixa em que este painel cobra, e a saída, se um dia ela incomodar, é
+       subir o `64rem` deste `@media` e deixar aquelas telas em coluna única. */
+    /* A coluna do tabuleiro é do TAMANHO do tabuleiro, e o par se centra na
+       moldura. Com `1fr` a coluna esticava até a borda e o tabuleiro ficava
+       boiando dentro dela, longe do painel que ele conversa. */
+    grid-template-columns: max(15rem, var(--aula-teto)) 32.625rem;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+
+  /* O tabuleiro encosta no topo; quem estica para preencher a linha da grade
+     é o painel, para que o rodapé de botões tenha contra o que encostar.
+     No chess.com esse botão fica cravado em y=497 em TODOS os estados da aula;
+     é isso que `margin-top: auto` no rodapé reproduz. */
+  .aula-tabuleiro {
+    align-self: start;
+  }
+
+}
+
+/* O tabuleiro nunca passa do teto de altura, e nunca passa da sua coluna.
+
+   O piso de 15rem é a saída de emergência: numa tela muito baixa (um notebook
+   de 1366×600, ou o telefone deitado) o tabuleiro para de encolher e aí sim a
+   página volta a rolar. Rolar é melhor que um tabuleiro ilegível — a promessa
+   de não rolar vale até o ponto em que cumpri-la estragaria a aula. */
+.aula-tabuleiro {
+  width: clamp(15rem, var(--aula-teto), 100%);
+  margin-inline: auto;
+}
+
+/* O painel é uma coluna em qualquer tamanho: no celular ele vem embaixo do
+   tabuleiro, no desktop ao lado. O que muda entre os dois é só a grade.
+
+   `min-height: 0` é o que permite o comentário medir o espaço que sobrou: sem
+   ele um filho `flex-1` nunca encolhe abaixo do próprio conteúdo, e a conta da
+   paginação daria sempre "cabe". */
+.aula-painel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+
 html {
   /* Evita o zoom por duplo toque atrapalhar o arraste das peças no celular. */
   touch-action: manipulation;
@@ -617,6 +800,31 @@ cg-board square.check {
   }
 }
 
+/* O professor de perto, quando o aluno clica nele. Dois quadros e nada mais: o
+   véu não pode "cair" (a página inteira escurecendo devagar lê como travamento)
+   e o retrato não pode saltar. `translateY` de 8px e não `scale`: escalar um
+   retrato de rosto passa pelo estágio borrado do resampling, e o rosto é
+   justamente o que o aluno abriu para ver. */
+@keyframes professor-chega {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes veu-chega {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Um mapa de tom → cor, uma animação só. O tom vem de `data-tom`, que é o
    mesmo `good`/`warn`/`bad` que o painel já usa. */
 .anel-pulso {
@@ -662,5 +870,16 @@ cg-board square.check {
       top 180ms ease,
       width 180ms ease,
       height 180ms ease;
+  }
+
+  /* O véu entra mais rápido que o retrato de propósito: o fundo já está
+     estabelecido quando a figura chega, então o movimento lê como "ele veio à
+     frente", e não como "a tela inteira mexeu". */
+  .veu-do-professor {
+    animation: veu-chega 140ms ease-out 1;
+  }
+
+  .professor-de-perto {
+    animation: professor-chega 220ms ease-out 1;
   }
 }

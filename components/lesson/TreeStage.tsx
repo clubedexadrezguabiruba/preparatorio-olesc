@@ -1,9 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Chess } from "chess.js";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color, Key } from "@lichess-org/chessground/types";
+import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
+import { ProfessorSeApresenta } from "@/components/lesson/ProfessorSeApresenta";
 import { BoxOverlay } from "@/components/board/BoxOverlay";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { PromotionPicker, type PromotionChoice } from "@/components/board/PromotionPicker";
@@ -58,6 +60,7 @@ export function TreeStage({
   lesson,
   tree,
   treeKey,
+  trilha,
   position,
   orientation,
   allowHelp,
@@ -71,6 +74,8 @@ export function TreeStage({
   lesson: Lesson;
   tree: MoveTree;
   treeKey: TreeKey;
+  /** A trilha das etapas, montada pelo `LessonPlayer` e servida no painel. */
+  trilha?: ReactNode;
   position: Position;
   orientation: Color;
   allowHelp: boolean;
@@ -347,106 +352,113 @@ export function TreeStage({
   // `z-20`) continuam valendo. Também não leva `overflow-hidden` — cortaria o
   // `box-shadow` do anel de pulso.
   return (
-    <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start">
-      <div
-        ref={boardColumn}
-        className="relative mx-auto w-full max-w-[min(88vw,26rem)] lg:mx-0 lg:w-[26rem] lg:shrink-0"
-      >
-        <ChessBoard
-          fen={boardFen}
-          orientation={orientation}
-          turnColor={board.turn}
-          dests={interactive ? board.dests : new Map()}
-          lastMove={lastMove}
-          check={board.check}
-          viewOnly={!interactive}
-          revision={revision}
-          shapes={shapes}
-          matedKing={board.mate ? board.turn : null}
-          overlay={showBox ? <BoxOverlay fen={boardFen} orientation={orientation} /> : undefined}
-          desenhavel={
-            marcacao
-              ? { shapes: marcacao.shapes ?? daAutoria, onChange: marcacao.onChange }
-              : undefined
-          }
-          onMove={handleMove}
-        />
-        {/* Na conclusão o anel é suprimido: confete, pulso do rei, som e painel
-            enfatizado já disparam juntos — o confete é o anel, mil vezes maior. */}
-        <PulseRing
-          tone={message && !message.done ? message.tone : null}
-          seq={message?.seq ?? 0}
-        />
-        {promotion && (
-          <PromotionPicker
-            color={board.turn}
-            onChoose={(piece) => {
-              const move = promotion;
-              setPromotion(null);
-              play(move.orig, move.dest, piece);
-            }}
-            onCancel={() => {
-              setPromotion(null);
-              setRevision((r) => r + 1);
-            }}
-          />
-        )}
-      </div>
-
-      <div className="flex flex-1 flex-col gap-4">
-        {intro && status === "playing" && (
-          <p className="text-sm leading-relaxed text-tinta-media">{intro}</p>
-        )}
-
-        {moveLimit !== undefined && (
-          <p className="rotulo text-tinta-fraca">
-            Lance {state.studentMoves} de {moveLimit}
-            {state.attempt > 1 && ` · tentativa ${state.attempt}`}
-          </p>
-        )}
-
-        <FeedbackPanel
-          message={panel}
-          placeholder={
-            allowHelp
-              ? "Faça o lance no tabuleiro. Errar aqui não custa nada — a resposta vem escrita."
-              : `Sem dica e sem destaque. Um lance que jogue ${alvo.oQue} fora encerra a tentativa.`
-          }
-        />
-
-        {hintAvailable && status === "playing" && (
-          <div className="flex flex-col gap-2">
-            <div>
-              <LessonButton onClick={() => toggleHint(treeKey)}>
-                {state.hintOpen ? "Esconder a dica" : "Ver a dica"}
-              </LessonButton>
-            </div>
-            {state.hintOpen && (
-              <p className="rounded-lg border border-dica-superficie/30 bg-dica-superficie/5 px-4 py-3 text-sm leading-relaxed text-dica-tinta">
-                {node.hint}
-              </p>
+    // A raiz é `relative` para o confete, que é `absolute inset-0` e cobre a
+    // etapa inteira — tabuleiro e painel. Ela é PAI do `.aula-palco`, e não
+    // irmão: o palco tem altura fechada, e um irmão dele somaria altura à
+    // página, devolvendo a rolagem. Um pai sem altura própria não soma nada.
+    <div className="relative">
+      <AulaShell
+        tabuleiro={
+          <div ref={boardColumn} className="relative">
+            <ChessBoard
+              fen={boardFen}
+              orientation={orientation}
+              turnColor={board.turn}
+              dests={interactive ? board.dests : new Map()}
+              lastMove={lastMove}
+              check={board.check}
+              viewOnly={!interactive}
+              revision={revision}
+              shapes={shapes}
+              matedKing={board.mate ? board.turn : null}
+              overlay={showBox ? <BoxOverlay fen={boardFen} orientation={orientation} /> : undefined}
+              desenhavel={
+                marcacao
+                  ? { shapes: marcacao.shapes ?? daAutoria, onChange: marcacao.onChange }
+                  : undefined
+              }
+              onMove={handleMove}
+            />
+            {/* Na conclusão o anel é suprimido: confete, pulso do rei, som e
+                painel enfatizado já disparam juntos — o confete é o anel, mil
+                vezes maior. */}
+            <PulseRing tone={message && !message.done ? message.tone : null} seq={message?.seq ?? 0} />
+            {promotion && (
+              <PromotionPicker
+                color={board.turn}
+                onChoose={(piece) => {
+                  const move = promotion;
+                  setPromotion(null);
+                  play(move.orig, move.dest, piece);
+                }}
+                onCancel={() => {
+                  setPromotion(null);
+                  setRevision((r) => r + 1);
+                }}
+              />
             )}
           </div>
-        )}
+        }
+        painel={
+          <>
+            {trilha}
 
-        <div className="flex flex-wrap gap-2">
-          {status === "failed" && (
-            <LessonButton variant="primary" onClick={restart}>
-              Recomeçar do zero
-            </LessonButton>
-          )}
-          {status === "done" && onFinish && (
-            <LessonButton variant="primary" onClick={onFinish}>
-              {finishLabel ?? "Continuar"}
-            </LessonButton>
-          )}
-          {/* Também na etapa concluída: é o caminho para refazer a linha — e
-              para rever a comemoração, que não se repete só por voltar aqui. */}
-          {(status === "done" || (status === "playing" && state.studentMoves > 0)) && (
-            <LessonButton onClick={restart}>Recomeçar a posição</LessonButton>
-          )}
-        </div>
-      </div>
+            {intro && status === "playing" && (
+              <p className="text-sm leading-relaxed text-tinta-media">{intro}</p>
+            )}
+
+            {moveLimit !== undefined && (
+              <p className="rotulo text-tinta-fraca">
+                Lance {state.studentMoves} de {moveLimit}
+                {state.attempt > 1 && ` · tentativa ${state.attempt}`}
+              </p>
+            )}
+
+            <FeedbackPanel
+              message={panel}
+              placeholder={
+                allowHelp
+                  ? "Faça o lance no tabuleiro. Errar aqui não custa nada — a resposta vem escrita."
+                  : `Sem dica e sem destaque. Um lance que jogue ${alvo.oQue} fora encerra a tentativa.`
+              }
+              retrato={<ProfessorSeApresenta />}
+            />
+
+            {hintAvailable && status === "playing" && (
+              <div className="flex min-h-0 flex-col gap-2 overflow-y-auto">
+                <div>
+                  <LessonButton onClick={() => toggleHint(treeKey)}>
+                    {state.hintOpen ? "Esconder a dica" : "Ver a dica"}
+                  </LessonButton>
+                </div>
+                {state.hintOpen && (
+                  <p className="rounded-lg border border-dica-superficie/30 bg-dica-superficie/5 px-4 py-3 text-sm leading-relaxed text-dica-tinta">
+                    {node.hint}
+                  </p>
+                )}
+              </div>
+            )}
+
+            <AulaRodape>
+              {status === "failed" && (
+                <LessonButton variant="primary" onClick={restart}>
+                  Recomeçar do zero
+                </LessonButton>
+              )}
+              {status === "done" && onFinish && (
+                <LessonButton variant="primary" onClick={onFinish}>
+                  {finishLabel ?? "Continuar"}
+                </LessonButton>
+              )}
+              {/* Também na etapa concluída: é o caminho para refazer a linha — e
+                  para rever a comemoração, que não se repete só por voltar aqui. */}
+              {(status === "done" || (status === "playing" && state.studentMoves > 0)) && (
+                <LessonButton onClick={restart}>Recomeçar a posição</LessonButton>
+              )}
+            </AulaRodape>
+          </>
+        }
+      />
 
       {/* Último filho da raiz, e não da coluna do tabuleiro: o confete cobre a
           etapa inteira. As partículas continuam nascendo do tabuleiro. */}
