@@ -50,6 +50,7 @@ import {
   validarDicas,
   type Dica,
 } from "../lib/meiojogo/dicas.ts";
+import { juizDaDica } from "../lib/meiojogo/lances.ts";
 import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
 
 /**
@@ -1646,15 +1647,28 @@ const dicas: Dica[] = [];
     // tema que perdeu uma posição numa edição cai de cinco para quatro sem
     // reprovar nada — o piso continua satisfeito —, e sem esta linha isso
     // passaria em silêncio até alguém abrir o arquivo.
-    const noPiso = comTreino.filter((d) => d.treino!.exercicios.length >= EXERCICIOS_PISO).length;
-    const noAlvo = comTreino.filter((d) => d.treino!.exercicios.length === EXERCICIOS_ALVO).length;
+    // **O denominador são as dicas com juiz de lance escrito**, e não as que já
+    // têm treino. Contar "8 de 8 temas com exercício" sobre as que têm exercício
+    // é uma tautologia: ela dá 100% no dia em que só uma dica estiver curada. O
+    // que interessa saber é quantas das que **podem** ter exercício já têm.
+    const comJuiz = dicas.filter((d) => juizDaDica(d.id) !== undefined);
+    const noPiso = comJuiz.filter(
+      (d) => (d.treino?.exercicios.length ?? 0) >= EXERCICIOS_PISO,
+    ).length;
+    const noAlvo = comJuiz.filter(
+      (d) => (d.treino?.exercicios.length ?? 0) === EXERCICIOS_ALVO,
+    ).length;
+    const semJuiz = dicas.filter((d) => juizDaDica(d.id) === undefined).length;
     const naFatia = comTreino.filter((d) => FATIA.includes(d.id)).length;
     console.log(
-      `  ${noPiso} de ${comTreino.length} temas com pelo menos ${EXERCICIOS_PISO} exercícios de ` +
-        `lance, ${noAlvo} deles com ${EXERCICIOS_ALVO}; ${naFatia} de ${FATIA.length} da fatia ` +
-        `do piloto, ${itens.length} posições (${deLivro} de livro, ${dePartida} de partida), ` +
-        `${semOsSeisPassos} posição(ões) sem os seis passos, ` +
-        `${estourados} capítulo(s) com mais de ${CAPITULO_CAP}`,
+      `  ${noPiso} de ${comJuiz.length} dicas com juiz têm pelo menos ${EXERCICIOS_PISO} ` +
+        `exercícios de lance, ${noAlvo} delas com ${EXERCICIOS_ALVO}; ${semJuiz} dica(s) sem juiz ` +
+        `de lance, e essas não podem ter exercício`,
+    );
+    console.log(
+      `  ${naFatia} de ${FATIA.length} da fatia do piloto, ${itens.length} posições ` +
+        `(${deLivro} de livro, ${dePartida} de partida), ${semOsSeisPassos} posição(ões) sem os ` +
+        `seis passos, ${estourados} capítulo(s) com mais de ${CAPITULO_CAP}`,
     );
     const faltam = FATIA.filter((id) => !comTreino.some((d) => d.id === id));
     if (faltam.length > 0) console.log(`  ainda sem treino na fatia: ${faltam.join(", ")}`);

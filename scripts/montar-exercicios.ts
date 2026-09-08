@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { Chess } from "chess.js";
 import { corDaCasa } from "../lib/meiojogo/afirmacoes.ts";
-import { SEMELHANCA_MAXIMA, semelhancaDePosicoes } from "../lib/meiojogo/dicas.ts";
+import { SEMELHANCA_MAXIMA, semelhancaDePosicoes, validarDicas } from "../lib/meiojogo/dicas.ts";
 import { COR, OUTRO, respostaDaTarefa, tarefaPorId, type Lado } from "../lib/meiojogo/exercicios.ts";
 import { JUIZES, type LanceUci } from "../lib/meiojogo/lances.ts";
 import { RAIZ } from "./env-local.ts";
@@ -50,6 +50,10 @@ const numero = (bandeira: string, padrao: number): number => {
   return onde >= 0 && argv[onde + 1] ? Number(argv[onde + 1]) : padrao;
 };
 const POR_JUIZ = numero("--por-juiz", 4);
+const texto = (bandeira: string): string | null => {
+  const onde = argv.indexOf(bandeira);
+  return onde >= 0 && argv[onde + 1] ? argv[onde + 1] : null;
+};
 /**
  * Quantos centésimos entre as duas melhores linhas ainda deixam a posição
  * **quieta o bastante para um exercício de estrutura**.
@@ -73,6 +77,8 @@ const SALTO_QUIETO = numero("--salto-quieto", 50);
  * procurando por que um dos lados tem um peão a mais.
  */
 const SALDO_MAXIMO = numero("--saldo-maximo", 3);
+/** Só estas dicas, quando dado — o resto do conteúdo fica como está. */
+const SO = (texto("--dicas") ?? "").split(",").filter(Boolean);
 const ondeSaida = argv.indexOf("--saida");
 const SAIDA = ondeSaida >= 0 && argv[ondeSaida + 1] ? argv[ondeSaida + 1] : ".scratch/esqueletos.json";
 
@@ -190,7 +196,21 @@ const escolhidos: Record<string, unknown[]> = {};
  */
 const gastas: string[] = [];
 
+// As posições que **já estão publicadas** entram na lista de gastas antes de
+// tudo. Sem isto, uma rodada para as dicas novas poderia escolher o mesmo
+// tabuleiro que já está numa dica antiga, e `problemasEntreDicas` reprovaria o
+// conteúdo inteiro por POSICOES_QUASE_IGUAIS depois de a prosa estar escrita.
+for (const dica of validarDicas(
+  JSON.parse(readFileSync(path.join(RAIZ, "content", "meio-jogo.json"), "utf8")),
+)) {
+  for (const item of dica.treino?.exercicios ?? []) {
+    if (SO.length > 0 && SO.includes(dica.id)) continue;
+    gastas.push(item.fen);
+  }
+}
+
 for (const juiz of JUIZES) {
+  if (SO.length > 0 && !juiz.dicas.some((d) => SO.includes(d))) continue;
   const doJuiz = dados.posicoes
     .filter((p) => p.juiz === juiz.id)
     // Mais de quatro lances do tema não é riqueza, é vagueza: o item deixa de
@@ -289,7 +309,8 @@ const destino = path.join(RAIZ, SAIDA);
 writeFileSync(destino, `${JSON.stringify(escolhidos, null, 1)}\n`, "utf8");
 
 for (const juiz of JUIZES) {
-  const lista = escolhidos[juiz.dicas[0]] as { id: string }[];
+  const lista = escolhidos[juiz.dicas[0]] as { id: string }[] | undefined;
+  if (!lista) continue;
   console.log(`${juiz.dicas[0].padEnd(4)} ${juiz.id.padEnd(32)} ${lista.length} exercício(s)`);
 }
 console.log(`\nEsqueletos em ${SAIDA}. As frases marcadas ESCREVER são a curadoria humana.`);

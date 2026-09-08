@@ -744,24 +744,29 @@ export const JUIZES: readonly JuizDeLance[] = [
       const jogo = new Chess(fen);
       // Os alvos são as peças **dele**: reunir peças é reunir sobre alguma
       // coisa, e uma casa vazia não é alvo de ataque, é casa de manobra.
+      // Só os alvos que hoje têm **exatamente um** atacante seu interessam: é
+      // deles que a segunda peça faz diferença, e filtrar aqui poupa uma
+      // varredura por lance. Medido no funil: sem este corte a porta geométrica
+      // levava horas em 80 mil puzzles.
       const alvos: Square[] = [];
       for (const fileiraDoTabuleiro of jogo.board()) {
         for (const casa of fileiraDoTabuleiro) {
-          if (casa !== null && casa.color === COR[OUTRO[quem]]) alvos.push(casa.square);
+          if (casa === null || casa.color !== COR[OUTRO[quem]]) continue;
+          if (jogo.attackers(casa.square, COR[quem]).length === 1) alvos.push(casa.square);
         }
       }
-      const contar = (posicao: string, casa: Square): number =>
-        new Chess(posicao).attackers(casa, COR[quem]).length;
+      if (alvos.length === 0) return [];
 
       const aceitos: LanceUci[] = [];
       for (const m of legais(fen, quem)) {
+        // Um `Chess` por lance, e não um por alvo: o `attackers` roda sobre o
+        // mesmo tabuleiro montado, quantas vezes for preciso.
         const depois = new Chess(fen);
         depois.move(m);
-        const fenDepois = depois.fen();
         for (const alvo of alvos) {
           // A peça capturada some do tabuleiro e não é mais alvo de ninguém.
           if (m.to === alvo) continue;
-          if (contar(fen, alvo) === 1 && contar(fenDepois, alvo) >= 2) {
+          if (depois.attackers(alvo, COR[quem]).length >= 2) {
             aceitos.push(uciDe(m));
             break;
           }
