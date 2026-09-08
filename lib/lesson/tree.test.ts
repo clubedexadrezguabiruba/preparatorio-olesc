@@ -186,38 +186,59 @@ test("etapa 3: erro nomeado da autoria vence a alternativa — o autor manda", (
  * ------------------------------------------------------------------ */
 
 /**
- * A aula da dama é o caso de verdade: `g1d1` e `g1g2` no nó `n1` estão em
- * `mistakes` (como `cheque-inutil`) **e** em `winningMoves`. São lances que
- * ganham e são tratados como erro — a queixa que abriu o B8.
+ * O caso de verdade que este bloco precisa: um nó em que o **mesmo lance** está
+ * em `mistakes` e em `winningMoves` — um lance que ganha e é tratado como erro,
+ * que é a queixa que abriu o B8.
+ *
+ * O nó e o lance são procurados na aula, e não escritos aqui. Já foram: a
+ * primeira versão fixava dois lances da raiz da aula da dama, e o bloco inteiro
+ * morreu no dia em que essa aula saiu do corpus.
  */
-const dama = lessonSchema.parse(
-  JSON.parse(readFileSync(path.join(process.cwd(), "content/lessons/N0-Q-MATE.json"), "utf8")),
+const casoDoLanceQueGanhaEErro = Object.values(guided.nodes)
+  .flatMap((node) =>
+    (node.mistakes ?? []).flatMap((mistake) =>
+      mistake.moves
+        .filter(
+          (move) =>
+            node.winningMoves.includes(move) &&
+            lesson.errors[mistake.errorId].verdict === "off-method",
+        )
+        .map((move) => ({ node, move, errorId: mistake.errorId })),
+    ),
+  )
+  .at(0);
+assert.ok(
+  casoDoLanceQueGanhaEErro,
+  "a etapa 3 precisa de ao menos um lance que ganha e é tratado como erro",
 );
-const damaGuiada = dama.stages.guided!;
-const damaN1 = damaGuiada.nodes[damaGuiada.root];
-const damaSolo = dama.stages.solo!;
-const damaS1 = damaSolo.nodes[damaSolo.root];
+const { node: erroN1, move: lanceQueGanhaEErro, errorId: erroDoLance } = casoDoLanceQueGanhaEErro;
+
+/** Um segundo lance do mesmo tipo, para o teste dos dois textos. */
+const outroLanceQueGanhaEErro = (erroN1.mistakes ?? [])
+  .flatMap((m) => m.moves)
+  .find((move) => move !== lanceQueGanhaEErro && erroN1.winningMoves.includes(move));
+assert.ok(outroLanceQueGanhaEErro, "o nó precisa de dois lances desse tipo");
 
 test("o lance declarado válido é elogiado com o texto do autor, não com o genérico", () => {
-  const move = "g1g2";
-  assert.ok(damaN1.winningMoves.includes(move), "o lance do teste precisa ganhar");
+  const move = lanceQueGanhaEErro;
+  assert.ok(erroN1.winningMoves.includes(move), "o lance do teste precisa ganhar");
 
   const meuTexto = "Também é corte, e aperta a caixa igual — guarde a ideia.";
   const node = {
-    ...damaN1,
+    ...erroN1,
     // Aceitar um lance que era erro é **mover** de uma lista para a outra.
-    mistakes: (damaN1.mistakes ?? []).map((m) => ({
+    mistakes: (erroN1.mistakes ?? []).map((m) => ({
       ...m,
       moves: m.moves.filter((x) => x !== move),
     })).filter((m) => m.moves.length > 0),
     authorAlternatives: [{ moves: [move], feedback: meuTexto }],
   };
 
-  const verdict = judgeMove(dama, node, move);
+  const verdict = judgeMove(lesson, node, move);
   assert.equal(verdict.kind, "author-alternative");
   assert.equal(verdict.text, meuTexto);
-  assert.notEqual(verdict.text, dama.fallbacks.methodAlternative);
-  assert.notEqual(verdict.text, dama.fallbacks.winningOffMethod);
+  assert.notEqual(verdict.text, lesson.fallbacks.methodAlternative);
+  assert.notEqual(verdict.text, lesson.fallbacks.winningOffMethod);
   assert.equal(throwsWinAway(verdict), false);
   assert.equal(isPraise(verdict), true);
 });
@@ -225,22 +246,22 @@ test("o lance declarado válido é elogiado com o texto do autor, não com o gen
 test("sem o campo, o mesmo lance continua sendo a repreensão de hoje", () => {
   // O contraste que dá sentido ao bloco: é este texto que o aluno lê hoje ao
   // jogar um lance que ganha.
-  const verdict = judgeMove(dama, damaN1, "g1g2");
+  const verdict = judgeMove(lesson, erroN1, lanceQueGanhaEErro);
   assert.equal(verdict.kind, "named-error");
-  assert.equal(verdict.errorId, "cheque-inutil");
+  assert.equal(verdict.errorId, erroDoLance);
   assert.equal(verdict.preservesWin, true);
 });
 
 test("vale também na etapa 4, onde methodAlternatives é proibido", () => {
-  const move = damaS1.winningMoves.find(
+  const move = soloRoot.winningMoves.find(
     (m) =>
-      !damaS1.expects.some((e) => e.moves.includes(m)) &&
-      !(damaS1.mistakes ?? []).some((x) => x.moves.includes(m)),
+      !soloRoot.expects.some((e) => e.moves.includes(m)) &&
+      !(soloRoot.mistakes ?? []).some((x) => x.moves.includes(m)),
   );
   assert.ok(move, "a raiz da etapa 4 precisa de um lance vencedor fora das listas");
 
-  const node = { ...damaS1, authorAlternatives: [{ moves: [move], feedback: "vale igual" }] };
-  const verdict = judgeMove(dama, node, move);
+  const node = { ...soloRoot, authorAlternatives: [{ moves: [move], feedback: "vale igual" }] };
+  const verdict = judgeMove(lesson, node, move);
   assert.equal(verdict.kind, "author-alternative");
   assert.equal(verdict.text, "vale igual");
   // E não encerra a tentativa: `throwsWinAway` é o que a etapa 4 consulta.
@@ -249,29 +270,29 @@ test("vale também na etapa 4, onde methodAlternatives é proibido", () => {
 
 test("mais de um lance declarado, cada um com o seu texto", () => {
   const node = {
-    ...damaN1,
+    ...erroN1,
     mistakes: [],
     authorAlternatives: [
-      { moves: ["g1g2"], feedback: "primeiro texto" },
-      { moves: ["g1d1"], feedback: "segundo texto" },
+      { moves: [lanceQueGanhaEErro], feedback: "primeiro texto" },
+      { moves: [outroLanceQueGanhaEErro], feedback: "segundo texto" },
     ],
   };
-  assert.equal((judgeMove(dama, node, "g1g2") as { text: string }).text, "primeiro texto");
-  assert.equal((judgeMove(dama, node, "g1d1") as { text: string }).text, "segundo texto");
+  assert.equal((judgeMove(lesson, node, lanceQueGanhaEErro) as { text: string }).text, "primeiro texto");
+  assert.equal((judgeMove(lesson, node, outroLanceQueGanhaEErro) as { text: string }).text, "segundo texto");
 });
 
 test("o lance do roteiro continua vencendo a declaração", () => {
-  const roteiro = damaN1.expects[0].moves[0];
-  const node = { ...damaN1, authorAlternatives: [{ moves: [roteiro], feedback: "não devia aparecer" }] };
-  const verdict = judgeMove(dama, node, roteiro);
+  const roteiro = erroN1.expects[0].moves[0];
+  const node = { ...erroN1, authorAlternatives: [{ moves: [roteiro], feedback: "não devia aparecer" }] };
+  const verdict = judgeMove(lesson, node, roteiro);
   assert.equal(verdict.kind, "method", "expects é consultado primeiro, e a aula avança");
 });
 
 test("o erro nomeado continua vencendo a declaração", () => {
   // O gate recusa esse arquivo (ALTERNATIVA_E_ERRO). Em runtime a ordem é
   // defensiva: se as duas listas se contradisserem, o erro nomeado manda.
-  const node = { ...damaN1, authorAlternatives: [{ moves: ["g1g2"], feedback: "não devia aparecer" }] };
-  const verdict = judgeMove(dama, node, "g1g2");
+  const node = { ...erroN1, authorAlternatives: [{ moves: [lanceQueGanhaEErro], feedback: "não devia aparecer" }] };
+  const verdict = judgeMove(lesson, node, lanceQueGanhaEErro);
   assert.equal(verdict.kind, "named-error");
 });
 

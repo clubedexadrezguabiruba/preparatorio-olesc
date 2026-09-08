@@ -122,7 +122,7 @@ A distribuição planejada, conferida contra a regra:
 
 | Classe | Aulas | Teto | Silman | de la Villa | Müller Kids | Pandolfini | Seirawan |
 |---|---|---|---|---|---|---|---|
-| E | 6 | 2 | **4** (regime integral) | — | 1 | 1 | — |
+| E | 6 | 2 | **6** (regime integral) | — | — | — | — |
 | D | 12 | 4 | 4 | 3 | 2 | 1 | 2 |
 | C | 16 | 5 | 5 | 5 | 2 | 2 | 2 |
 | B | 15 | 5 | 5 | 5 | 1 | 1 | 3 |
@@ -153,16 +153,30 @@ pelo menos uma**, e os capítulos foram conferidos no PDF, não lembrados (§8).
 coluna **Sob teto** lista as protegidas que podem contribuir com até 2 posições
 cada.
 
+> **2026-09-08 — o corpus antigo saiu do disco.** Decisão do Doug: as cinco aulas
+> escritas contra os livros anteriores (`N0-Q-MATE`, `N0-LADDER`, `N0-STALEMATE`,
+> `N1-KING-ACTIVITY` e `N1-KPK`) foram **apagadas** de `content/lessons/`. Elas
+> continuam nesta lista, com a fase **"a refazer"**: a trilha é o plano, e o plano
+> não mudou — o que mudou é que elas serão reescritas contra o Silman, como os
+> dois pilotos. Hoje o módulo tem **2 aulas no disco**: `N0-R-MATE` e
+> `N0-MATING-MATERIAL`. A coluna **Posição (DP)** das cinco foi zerada porque o
+> garimpo de domínio público delas não vale mais: as posições virão do Silman.
+>
+> A `lib/finais/trilha.ts` **não mudou** e nem devia: ela lista as 49 aulas
+> planejadas, e o teste que cruza a lista com o disco já pulava aula não escrita
+> (`if (!existsSync(arquivo)) continue`). Para o site, as cinco voltaram a ser
+> aulas fechadas, que é o que eram antes de existirem.
+
 ### Classe E — 6 aulas
 
 | # | F | Id | Aula | Peças | Base | Posição (DP) | Sob teto | Fase |
 |---|---|---|---|---|---|---|---|---|
-| 1 | ✔C | `N0-Q-MATE` | Mate de dama e rei: a caixa | 3 | SIL | CAP §1 · COO VII.I · STA VI.1 · FRE refs | SIL, PAN, MK | pronta |
+| 1 | C | `N0-Q-MATE` | Mate de dama e rei: a caixa | 3 | SIL | — | SIL (integral) | a refazer |
 | 2 | ✔C | `N0-R-MATE` | Mate de torre e rei: a caixa | 3 | SIL | FRE VII.I | SIL (integral) | pronta |
-| 3 | c | `N0-LADDER` | Mate da escada: duas torres, e dama e torre | 4 | PAN | FRE VII.II · WAL "Various Checkmates" No. I | PAN, SIL | B5 |
-| 4 | c | `N0-STALEMATE` | Afogamento: como não empatar a partida ganha | 3–4 | MK | FRE V.II–V · CAP §2 · CUN VI | MK, SIL | B5 |
+| 3 | c | `N0-LADDER` | Mate da escada: duas torres, e dama e torre | 4 | SIL | — | SIL (integral) | a refazer |
+| 4 | c | `N0-STALEMATE` | Afogamento: como não empatar a partida ganha | 3–4 | SIL | — | SIL (integral) | a refazer |
 | 5 | ✔L | `N0-MATING-MATERIAL` | O que dá mate e o que não dá (B, C, 2C contra rei) | 3–4 | SIL | FRE X.VI | SIL (integral) | pronta |
-| 6 | c | `N1-KING-ACTIVITY` | O rei é peça: use-o | 3–5 | SIL | FRE I.VII "Playing the King to the front" · CUN I | SIL, NUN | B5 |
+| 6 | c | `N1-KING-ACTIVITY` | O rei é peça: use-o | 3–5 | SIL | — | SIL (integral) | a refazer |
 
 ### Classe D — 12 aulas
 
@@ -171,7 +185,7 @@ cada.
 | 7 | C | `N1-SQUARE` | Regra do quadrado | 3 | DLV | FRE I.I "Calculation of distances" · CAP §12 | DLV, SIL | B5 |
 | 8 | c | `N1-DIRECT-OPPOSITION` | Oposição | 3 | SIL | FRE II.I "The Opposition illustrated" · CAP §13 · STA VI.IV | SIL, DLV | B5 |
 | 9 | c | `N1-KEY-SQUARES` | Casas-chave | 3 | DLV | FRE II.III · FRE refs "Opposition, how to secure" · CUN I | DLV, NUN | FN2 |
-| 10 | C | `N1-KPK` | Rei e peão contra rei: o rei na frente do peão | 3 | SIL | STA VI.1 (409) · ROG IV · FRE II.III · KH | SIL, MLA | B5 |
+| 10 | C | `N1-KPK` | Rei e peão contra rei: o rei na frente do peão | 3 | SIL | — | SIL (integral) | a refazer |
 | 11 | c | `N1-KPK-RANKS` | Peão na 6ª e na 7ª: quem joga decide | 3 | MK | STA VI.IV (473) · FRE II.III · KH | MK, DLV | B5 |
 | 12 | c | `N1-ROOK-PAWN` | Peão de torre: o empate do canto | 3 | MK | FRE III.II–III "Rooks' pawns' difficulties" · CUN I | MK, SIL, DLV | FN2 |
 | 13 | c | `N2-KING-MANEUVER` | Oposição além do básico: a distante | 3 | SIL | FRE II.I–II · FRE refs "how to maintain" · CAP §13 | SIL, DLV | FN2 |

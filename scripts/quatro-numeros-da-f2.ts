@@ -72,6 +72,14 @@ const PIN = "112233";
 const TEMA = "mateIn1";
 const NA_SERIE = 8;
 const ERRADOS = 3;
+// A `N0-LADDER` foi apagada de `content/lessons/` em 2026-09-08, com o resto do
+// corpus anterior ao Silman, e ainda não foi reescrita. O id continua aqui de
+// propósito: o que este script mede é o **mecanismo** da F2 — a fila de revisão,
+// os intervalos, a gravação —, e para isso o id de aula é só um rótulo que o
+// banco guarda. As posições que ele joga (`pos-n0-ladder-*`) continuam no disco,
+// e as linhas dos alunos em produção não foram tocadas. Trocar por uma aula
+// completa quebraria a prova, que assume aula **curta** ("dominada é vencer a
+// prática"). Revisar quando a escada for reescrita contra o Silman.
 const AULA = "N0-LADDER";
 const REVISAO = "pos-n0-ladder-freeborough-262";
 

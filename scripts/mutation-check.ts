@@ -99,8 +99,41 @@ function promover(dir: string, id: string, editionFile: string) {
   gravar(file, json);
 }
 
-/** A posição de ensino da aula — a que a maior parte das mutações estraga. */
-const ENSINO = "pos-n0-rmate-rogers-xvi";
+/**
+ * Os ids de posição que uma aula referencia, na ordem das etapas. Colhidos do
+ * arquivo, e nunca escritos à mão: id fixo numa mutação vira ENOENT no dia em
+ * que a aula troca de posição, e ENOENT derruba o run inteiro.
+ */
+type EtapasComPosicao = {
+  example?: { scenes: Array<{ positionId: string }> };
+  guided?: { positionId: string };
+  solo?: { positionId: string };
+  practice?: { positionId: string };
+  review?: { reviewPositionIds: string[] };
+};
+
+function idsDePosicaoDaAula(json: { stages: EtapasComPosicao }): string[] {
+  const s = json.stages;
+  const ids = [
+    ...(s.example?.scenes ?? []).map((c) => c.positionId),
+    s.guided?.positionId,
+    s.solo?.positionId,
+    s.practice?.positionId,
+    ...(s.review?.reviewPositionIds ?? []),
+  ].filter((id): id is string => typeof id === "string");
+  return [...new Set(ids)];
+}
+
+/**
+ * A posição de ensino da aula — a que a maior parte das mutações estraga.
+ *
+ * É a do Diagrama 22 do Silman: a cena 2 do exemplo e a etapa 3 inteira saem
+ * dela, então estragá-la reprova por muitos caminhos diferentes. O nome do
+ * campo já mentiu uma vez (apontava para a `rogers-xvi`, que era etapa 6 e
+ * depois deixou o corpus); se voltar a mentir, a mutação 4 avisa — ela promove
+ * esta posição a `candidate` e exige que a aula publicada a recuse.
+ */
+const ENSINO = "pos-n0-rmate-silman-d22";
 
 /* ------------------------------------------------------------------ *
  * FN1/B2 — as fixtures
@@ -387,11 +420,25 @@ const MUTACOES: Mutation[] = [
     titulo: "teto de citação furado (3 posições da mesma obra protegida numa aula)",
     codigo: "TETO_DE_CITACAO",
     aplicar: async (dir) => {
-      for (const id of [ENSINO, "pos-n0-rmate-capablanca-ex1", "pos-n0-rmate-staunton-d2"]) {
-        promover(dir, id, "silman-complete-endgame-course.pdf");
+      // Duas trocas em relação à versão anterior, e as duas por motivo de
+      // sobrevivência da mutação, não de gosto:
+      //
+      // 1. A obra deixou de ser o Silman. Ele está em **regime integral** desde
+      //    2026-09-08, e o teto de citação nem roda para ele — a mutação ficaria
+      //    verde provando o contrário do que quer provar. O Nunn serve: é
+      //    protegido, não é didático e nenhuma aula o usa.
+      // 2. Os três ids saem da própria aula, em runtime. Fixados à mão, um deles
+      //    sumir na reescrita da aula derrubava o `lerPosicao` com ENOENT — e
+      //    ENOENT no meio de uma mutação mata o run inteiro, não só ela.
+      const { json } = lerAula(dir);
+      const referenciadas = idsDePosicaoDaAula(json);
+      if (referenciadas.length < 3) {
+        throw new Error(`a aula referencia ${referenciadas.length} posições; a mutação precisa de 3`);
       }
+      const alvos = referenciadas.slice(0, 3);
+      for (const id of alvos) promover(dir, id, "nunn-understanding-chess-endgames.pdf");
       return (
-        "as posições das etapas 1–4 e 5 promovidas a \"candidate\", todas saindo do Silman — " +
+        `${alvos.join(", ")} promovidas a "candidate", todas saindo do Nunn — ` +
         "3 posições de uma obra protegida na mesma aula, contra o teto de 2 da §12.7"
       );
     },
@@ -477,11 +524,17 @@ const MUTACOES: Mutation[] = [
     codigo: "FONTE_DIDATICA_DIVERGE",
     aplicar: async (dir) => {
       const { file, json } = lerAula(dir);
+      // Era "silman-endgame-course", e virou no-op no dia em que a aula passou a
+      // ser genuinamente do Silman: o gate ficava verde e o run saía com 1.
+      // O `de-la-villa-100` é a troca certa por um motivo escrito: o
+      // SOURCE-CORPUS:543 registra que ele **não cobre mates elementares**, então
+      // ele nunca virará fonte legítima de cena numa aula de N0, e esta mutação
+      // não vai apodrecer de novo.
       const antes = json.stages.objective.source;
-      json.stages.objective.source = "silman-endgame-course";
+      json.stages.objective.source = "de-la-villa-100";
       gravar(file, json);
       return (
-        `objective.source: "${antes}" → "silman-endgame-course", obra didática registrada ` +
+        `objective.source: "${antes}" → "de-la-villa-100", obra didática registrada ` +
         "mas de onde não sai nenhuma cena do exemplo"
       );
     },
@@ -502,23 +555,87 @@ const MUTACOES: Mutation[] = [
       // O estrago realista é escolher o livro que já fornece uma cena a cada
       // aula: assim a `FONTE_DIDATICA_DIVERGE` fica satisfeita e só a regra da
       // rotação reclama — que é exatamente o que a mutação quer provar.
+      // A obra tem de ser protegida, didática e **fora do regime integral**: o
+      // Silman não serve mais, porque para ele a rotação está desligada de
+      // propósito.
       const alvo = "pandolfini-endgame-course";
-      for (const id of ["N0-R-MATE", "N0-Q-MATE"]) {
+      // As aulas são lidas do disco, e não nomeadas: a `N0-Q-MATE`, que a versão
+      // anterior citava por nome, saiu do corpus em 2026-09-08 e derrubou o run
+      // inteiro com ENOENT.
+      const publicadas = readdirSync(path.join(dir, "lessons"))
+        .filter((f) => f.endsWith(".json"))
+        .map((f) => f.replace(/\.json$/, ""))
+        .sort();
+      for (const id of publicadas) {
         const { file, json } = lerAula(dir, id);
         json.stages.objective.source = alvo;
         json.status = "published";
         json.class = "E";
         gravar(file, json);
       }
-      // A terceira: cópia byte a byte de uma das duas, com id próprio. Duas
-      // aulas ainda caberiam no piso de 2; é a terceira que estoura o teto.
-      const { json } = lerAula(dir, "N0-R-MATE");
+      // Mais uma, até passar de 3: com N aulas publicadas o teto é
+      // max(2, floor(N/3)), e é a terceira que o estoura.
+      const { json } = lerAula(dir, publicadas[0]);
       json.id = "N0-R-MATE-BIS";
       gravar(path.join(dir, "lessons", "N0-R-MATE-BIS.json"), json);
       return (
-        `3 aulas publicadas da classe E declaram "${alvo}" como livro-base — ` +
-        "acima do teto de max(2, floor(N/3))"
+        `${publicadas.length + 1} aulas publicadas da classe E declaram "${alvo}" como ` +
+        "livro-base — acima do teto de max(2, floor(N/3))"
       );
+    },
+  },
+  /* ---------------------------------------------------------------- *
+   * O regime integral (§1.1 do SOURCE-CORPUS)
+   *
+   * A exceção nasce com mutação plantada, como toda regra do gate. Sem estas
+   * três, o `integral` seria um campo que desliga duas regras e não tem nada
+   * cobrando que o desligamento continue medido.
+   * ---------------------------------------------------------------- */
+  {
+    titulo: "regime integral apagado — o teto de citação volta a morder",
+    codigo: "TETO_DE_CITACAO",
+    aplicar: async (dir) => {
+      const file = path.join(dir, "sources.json");
+      const json = JSON.parse(readFileSync(file, "utf8"));
+      const obra = json.sources.find((s: { integral?: unknown }) => s.integral);
+      if (!obra) throw new Error("nenhuma obra em regime integral para apagar");
+      delete obra.integral;
+      gravar(file, json);
+      return (
+        `o bloco integral de "${obra.slug}" apagado do sources.json — a aula que usa 5 posições ` +
+        "dele volta a estourar o teto de 2 da §12.7"
+      );
+    },
+  },
+  {
+    titulo: "prazo do regime integral vencido",
+    codigo: "REGIME_INTEGRAL_VENCIDO",
+    aplicar: async (dir) => {
+      const file = path.join(dir, "sources.json");
+      const json = JSON.parse(readFileSync(file, "utf8"));
+      const obra = json.sources.find((s: { integral?: unknown }) => s.integral);
+      if (!obra) throw new Error("nenhuma obra em regime integral para vencer");
+      obra.integral.since = "2020-01-01";
+      obra.integral.replaceBefore = "2021-01-01";
+      gravar(file, json);
+      return (
+        `o prazo de "${obra.slug}" recuado para 2021-01-01 — a exceção temporária que ninguém ` +
+        "renovou tem de reprovar sozinha"
+      );
+    },
+  },
+  {
+    titulo: "inventário da dívida adulterado à mão",
+    codigo: "DIVIDA_DESATUALIZADA",
+    aplicar: async (dir) => {
+      const file = path.join(dir, "divida-de-licenca.md");
+      const antes = readFileSync(file, "utf8");
+      // O estrago realista não é apagar o arquivo: é alguém tirar uma linha da
+      // lista de troca, e a lista continuar parecendo completa.
+      const linha = antes.split("\n").find((l) => l.startsWith("- `pos-"));
+      if (!linha) throw new Error("a dívida não lista posição nenhuma");
+      writeFileSync(file, antes.replace(`${linha}\n`, ""), "utf8");
+      return `a linha "${linha.slice(0, 48)}..." apagada à mão do content/divida-de-licenca.md`;
     },
   },
   /* ---------------------------------------------------------------- *

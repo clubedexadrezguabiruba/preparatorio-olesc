@@ -16,13 +16,10 @@ gratuito.
 - **prazo:** 2027-09-08
 - **motivo:** Decisão do Doug em 2026-09-08: todas as aulas de finais passam a seguir o Silman, texto e posições. É o único manual do acervo com progressão declarada por classe de força, que é exatamente a espinha que a trilha precisa, e o preparatório é gratuito. Quando o curso for comercializado, o conteúdo listado em content/divida-de-licenca.md será trocado por fonte pública.
 
-### Aulas com esta obra como livro-base (5)
+### Aulas com esta obra como livro-base (2)
 
 - `N0-MATING-MATERIAL` — classe E, "O que dá mate e o que não dá"
-- `N0-Q-MATE` — classe E, "Mate de dama e rei"
 - `N0-R-MATE` — classe E, "Mate de torre e rei"
-- `N1-KING-ACTIVITY` — classe E, "O rei é peça: use-o"
-- `N1-KPK` — classe D, "Rei e peão contra rei: o rei na frente do peão"
 
 ### Posições que citam esta obra (9)
 
