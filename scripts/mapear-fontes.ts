@@ -61,10 +61,11 @@
  * mudarem sem que o corpus ou o repertório tenham mudado, a medição quebrou — o
  * caso mais provável é a armadilha do en passant voltando.
  */
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { Chess } from "chess.js";
 import { carregarEnv, RAIZ } from "./env-local.ts";
+import { carregarCorpus, ondeEstaOCorpus, recadoSemCorpus, type Passagem } from "./corpus.ts";
 import { lerPgns } from "../lib/repertorio/pgn.ts";
 import { expandir } from "../lib/repertorio/arvore.ts";
 import { CORES, NIVEIS, type Cor, type Linha, type Nivel } from "../lib/repertorio/linhas.ts";
@@ -73,82 +74,21 @@ carregarEnv();
 
 const ALVO = process.argv[2];
 
-/** Uma passagem da fonte por uma posição: quem jogou o quê, e o que escreveu. */
-type Passagem = { curso: string; variante: string; san: string; com: string };
-
-type Curso = { nome: string; lances: { san: string; fen: string; com?: string }[] }[];
 
 // ------------------------------------------------------------------ o corpus
+//
+// O índice por posição mora em `scripts/corpus.ts` desde 8/9/2026: o
+// `cauda-repertorio.ts` precisa exatamente do mesmo, e duas cópias divergiriam
+// no dia em que alguém consertasse só uma. A armadilha do en passant descrita
+// no cabeçalho está lá dentro, com o comentário junto.
 
-const PASTAS = (process.env.REPERTORIO_FONTES ?? "")
-  .split(";")
-  .map((p) => p.trim())
-  .filter(Boolean);
-
-const corpusEm = PASTAS.map((p) => path.join(p, "chesscom-cursos", "CORPUS.json")).find((p) =>
-  existsSync(p),
-);
-
-if (!corpusEm) {
-  console.log(
-    "Não achei o CORPUS.json dos cursos do chess.com.\n" +
-      "Ele fica em <REPERTORIO_FONTES>/chesscom-cursos/CORPUS.json e está fora do\n" +
-      "Git de propósito: é prosa de curso pago e este repositório é público.\n" +
-      (PASTAS.length === 0
-        ? "Falta REPERTORIO_FONTES no .env.local."
-        : `Procurei em: ${PASTAS.join(", ")}`),
-  );
+const corpus = carregarCorpus();
+if (!corpus) {
+  console.log(recadoSemCorpus(ondeEstaOCorpus().procurei));
   process.exit(0);
 }
 
-const corpus: Record<string, Curso> = JSON.parse(readFileSync(corpusEm, "utf8"));
-
-const memoria = new Map<string, string>();
-
-/** As 4 primeiras partes da FEN, sempre reemitidas pela chess.js. Ver o cabeçalho. */
-function chave(fen: string): string {
-  let k = memoria.get(fen);
-  if (k === undefined) {
-    k = new Chess(fen).fen().split(" ").slice(0, 4).join(" ");
-    memoria.set(fen, k);
-  }
-  return k;
-}
-
-function anotar(mapa: Map<string, Passagem[]>, onde: string, quem: Passagem): void {
-  const lista = mapa.get(onde);
-  if (lista) lista.push(quem);
-  else mapa.set(onde, [quem]);
-}
-
-const INICIAL = chave("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-
-/** Posição alcançada pela fonte → quem passou por ali. */
-const chegam = new Map<string, Passagem[]>();
-/** Posição **antes** do lance → o que a fonte joga dali. É o que mostra a alternativa. */
-const partem = new Map<string, Passagem[]>();
-
-let variantes = 0;
-let comentariosDaFonte = 0;
-for (const [curso, lista] of Object.entries(corpus)) {
-  for (const variante of lista) {
-    variantes++;
-    let antes = INICIAL;
-    for (const lance of variante.lances) {
-      const passagem: Passagem = {
-        curso,
-        variante: variante.nome,
-        san: lance.san,
-        com: lance.com ?? "",
-      };
-      if (passagem.com) comentariosDaFonte++;
-      const depois = chave(lance.fen);
-      anotar(partem, antes, passagem);
-      anotar(chegam, depois, passagem);
-      antes = depois;
-    }
-  }
-}
+const { chegam, partem, chave, inicial: INICIAL, variantes, comentarios: comentariosDaFonte } = corpus;
 
 // ------------------------------------------------------------------ as linhas
 
@@ -223,7 +163,7 @@ function alternativas(m: Medida): string[] {
 // -------------------------------------------------------------------- saída
 
 console.log(
-  `corpus: ${Object.keys(corpus).length} cursos, ${variantes} variantes, ` +
+  `corpus: ${corpus.cursos} cursos, ${variantes} variantes, ` +
     `${comentariosDaFonte} comentários — ${chegam.size} posições distintas`,
 );
 
@@ -246,7 +186,9 @@ if (ALVO) {
     }
     console.log(`--- ${cabeca}   *** A FONTE NÃO JOGA DAQUI EM DIANTE ***`);
     const daqui = new Map<string, Passagem[]>();
-    for (const p of partem.get(i === 0 ? INICIAL : fens[i - 1]) ?? []) anotar(daqui, p.san, p);
+    for (const p of partem.get(i === 0 ? INICIAL : fens[i - 1]) ?? []) {
+      daqui.set(p.san, [...(daqui.get(p.san) ?? []), p]);
+    }
     for (const [san, ps] of daqui) {
       console.log(`    >> a fonte joga ${san} (${ps.length}×)`);
       for (const p of ps.filter((x) => x.com).slice(0, 2)) {

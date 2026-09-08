@@ -5,9 +5,11 @@ import {
   chaveDoCache,
   consultar,
   enderecoDe,
+  FAIXAS,
   RECORTES,
   recuoDe,
   resumir,
+  RITMOS_COM_BLITZ,
   TETO_DO_RECUO,
   type Cache,
 } from "./explorer.ts";
@@ -307,4 +309,14 @@ test("`semRede` é escolha de quem rodou, não falta de token", async () => {
   });
   assert.equal(lido, null);
   assert.deepEqual(ditos, [], "não é falha: não avisa");
+});
+
+test("os ritmos entram no endereço e, por ele, na chave do cache", () => {
+  // O degrau 2 da escada da §24 é "a mesma faixa, mais o blitz". Se a chave do
+  // cache não mudasse junto, ele leria a resposta guardada do degrau 1 e a
+  // tabela diria que o blitz tem exatamente os mesmos jogos que o rapid.
+  const play = ["e2e4", "c7c5"];
+  assert.match(enderecoDe(play), /speeds=rapid%2Cclassical/);
+  assert.match(enderecoDe(play, FAIXAS, RITMOS_COM_BLITZ), /speeds=blitz%2Crapid%2Cclassical/);
+  assert.notEqual(chaveDoCache(play), chaveDoCache(play, FAIXAS, RITMOS_COM_BLITZ));
 });

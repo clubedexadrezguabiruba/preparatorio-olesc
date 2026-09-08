@@ -90,7 +90,19 @@ export const RECORTE_PADRAO: Recorte = "lichess-1000-1599";
 
 export const FAIXAS: readonly number[] = RECORTES[RECORTE_PADRAO];
 
+/**
+ * Os ritmos que a medição do repertório usa.
+ *
+ * Rapid e classical: bullet e blitz têm outra distribuição de aberturas, e o
+ * clube não joga bullet. Mas o **degrau 2** da escada da §24 acrescenta o blitz
+ * de propósito — quando a posição fica rara demais em rapid+classical, o blitz
+ * é o que ainda tem jogo suficiente para o número dizer alguma coisa, e uma
+ * amostra maior de partidas ligeiramente mais rápidas é melhor que 40 jogos.
+ */
 export const RITMOS = ["rapid", "classical"] as const;
+
+/** Os mesmos, mais o blitz — o degrau 2 da escada dos lances do adversário. */
+export const RITMOS_COM_BLITZ = ["blitz", "rapid", "classical"] as const;
 
 /** Abaixo disto o percentual é ruído, e a tabela diz "poucos jogos". */
 export const JOGOS_MINIMOS = 200;
@@ -101,10 +113,11 @@ const ENDERECO = "https://explorer.lichess.ovh/lichess";
 export function enderecoDe(
   play: readonly string[],
   faixas: readonly number[] = FAIXAS,
+  ritmos: readonly string[] = RITMOS,
 ): string {
   const busca = new URLSearchParams({
     variant: "standard",
-    speeds: RITMOS.join(","),
+    speeds: ritmos.join(","),
     ratings: faixas.join(","),
     play: play.join(","),
     moves: "12",
@@ -203,6 +216,12 @@ export type Opcoes = {
   /** A faixa de rating desta consulta. Entra na chave do cache. */
   faixas?: readonly number[];
   /**
+   * Os ritmos desta consulta. Entra na chave do cache pelo mesmo caminho das
+   * faixas — o hash é do endereço inteiro, e `speeds=` está nele —, então pedir
+   * o degrau 2 nunca lê a resposta guardada do degrau 1.
+   */
+  ritmos?: readonly string[];
+  /**
    * Só o cache: nem token, nem rede, e nenhum aviso — foi escolha de quem
    * rodou, não falha. Diferente de `token: undefined`, que **é** falha e avisa.
    */
@@ -224,8 +243,9 @@ export type Opcoes = {
 export const chaveDoCache = (
   play: readonly string[],
   faixas: readonly number[] = FAIXAS,
+  ritmos: readonly string[] = RITMOS,
 ): string =>
-  `${play.length}-${chaveDe(enderecoDe(play, faixas)).toString(16).padStart(8, "0")}`;
+  `${play.length}-${chaveDe(enderecoDe(play, faixas, ritmos)).toString(16).padStart(8, "0")}`;
 
 /* ------------------------------------------------------------------ *
  * Quando o explorer manda esperar
@@ -294,12 +314,13 @@ export async function consultar(
     intervalo = 1500,
     avisar = () => {},
     faixas = FAIXAS,
+    ritmos = RITMOS,
     semRede = false,
     tentativas = 3,
     recuo: recuoBase = RECUO_PADRAO,
   } = opcoes;
 
-  const chave = chaveDoCache(play, faixas);
+  const chave = chaveDoCache(play, faixas, ritmos);
   const guardado = cache?.ler(chave);
   if (guardado !== undefined) return resumir(guardado);
 
@@ -319,7 +340,7 @@ export async function consultar(
 
     let resposta: Awaited<ReturnType<typeof fetch>>;
     try {
-      resposta = await buscar(enderecoDe(play, faixas), {
+      resposta = await buscar(enderecoDe(play, faixas, ritmos), {
         headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
       });
     } catch (erro) {
