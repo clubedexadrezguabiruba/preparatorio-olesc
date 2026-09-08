@@ -490,9 +490,14 @@ const MUTACOES: Mutation[] = [
     // FN1/B2: a regra deixou de ser "uma aula por nível" e passou a ser
     // `max(2, floor(N/3))` aulas **publicadas** por classe. Com o piso de 2, duas
     // aulas do mesmo autor são legítimas — a mutação precisa de **três**.
-    titulo: "obra protegida como livro-base de 3 das 3 aulas publicadas da classe",
+    titulo: "obra protegida como livro-base de 3 aulas publicadas da mesma classe",
     codigo: "FONTE_DIDATICA_DOMINA",
-    contem: "max(2, floor(3/3))",
+    // O teto é `max(2, floor(N/3))`, e N é o número de aulas publicadas da
+    // classe — que cresce a cada aula nova. Fixar o texto inteiro (era
+    // "max(2, floor(3/3))", escrito quando a classe E tinha 3 aulas) faz a
+    // mutação ficar verde sozinha no dia em que a quarta aula entra. Cobrar só
+    // a fórmula prova a mesma coisa sem depender do N do dia.
+    contem: "max(2, floor(",
     aplicar: async (dir) => {
       // O estrago realista é escolher o livro que já fornece uma cena a cada
       // aula: assim a `FONTE_DIDATICA_DIVERGE` fica satisfeita e só a regra da
@@ -511,8 +516,8 @@ const MUTACOES: Mutation[] = [
       json.id = "N0-R-MATE-BIS";
       gravar(path.join(dir, "lessons", "N0-R-MATE-BIS.json"), json);
       return (
-        `as 3 aulas publicadas da classe E declaram "${alvo}" como livro-base — ` +
-        "o teto de max(2, floor(3/3)) é 2"
+        `3 aulas publicadas da classe E declaram "${alvo}" como livro-base — ` +
+        "acima do teto de max(2, floor(N/3))"
       );
     },
   },
