@@ -1,0 +1,23 @@
+{
+  "white": 79,
+  "draws": 3,
+  "black": 50,
+  "moves": [
+    {
+      "uci": "e2e3",
+      "san": "Qxe3",
+      "averageRating": 1812,
+      "white": 79,
+      "draws": 3,
+      "black": 50,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C45",
+    "name": "Scotch Game: Potter Variation"
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "white": 514,
+  "draws": 32,
+  "black": 381,
+  "moves": [
+    {
+      "uci": "g2g4",
+      "san": "g4",
+      "averageRating": 1812,
+      "white": 282,
+      "draws": 15,
+      "black": 196,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1b1",
+      "san": "Kb1",
+      "averageRating": 1796,
+      "white": 91,
+      "draws": 4,
+      "black": 34,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b3d4",
+      "san": "Nd4",
+      "averageRating": 1782,
+      "white": 36,
+      "draws": 5,
+      "black": 31,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h4",
+      "san": "h4",
+      "averageRating": 1828,
+      "white": 30,
+      "draws": 2,
+      "black": 32,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e3b6",
+      "san": "Bxb6",
+      "averageRating": 1770,
+      "white": 31,
+      "draws": 2,
+      "black": 21,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b3c5",
+      "san": "Nc5",
+      "averageRating": 1825,
+      "white": 10,
+      "draws": 2,
+      "black": 13,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c3d5",
+      "san": "Nd5",
+      "averageRating": 1719,
+      "white": 5,
+      "draws": 0,
+      "black": 14,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e2d2",
+      "san": "Qd2",
+      "averageRating": 1866,
+      "white": 8,
+      "draws": 0,
+      "black": 11,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e3g5",
+      "san": "Bg5",
+      "averageRating": 1831,
+      "white": 7,
+      "draws": 2,
+      "black": 8,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e2f2",
+      "san": "Qf2",
+      "averageRating": 1883,
+      "white": 8,
+      "draws": 0,
+      "black": 4,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h3",
+      "san": "h3",
+      "averageRating": 1712,
+      "white": 2,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b3d2",
+      "san": "Nd2",
+      "averageRating": 1679,
+      "white": 1,
+      "draws": 0,
+      "black": 4,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C45",
+    "name": "Scotch Game: Potter Variation"
+  }
+}

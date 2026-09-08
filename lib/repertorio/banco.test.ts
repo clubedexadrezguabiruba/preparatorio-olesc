@@ -38,7 +38,7 @@ const indice = IndiceSchema.parse(ler("index.json"));
  * Vai a zero quando a §24 terminar; até lá, o número é o marcador do trabalho
  * que falta, e ele só pode DESCER. Um número que sobe é uma linha que encolheu.
  */
-const ABERTAS = 24;
+const ABERTAS = 19;
 
 test("o índice tem as onze aberturas, sem repetir cor e slug", () => {
   // Eram doze até 7/9/2026. A poda da §23 de `docs/REVISAO-FONTES.md` apagou
@@ -139,7 +139,7 @@ test("nenhum lance NOSSO do repertório publicado está sem comentário", () => 
   // Se este número cair, alguém encurtou uma linha; se subir, alguém a alongou.
   // Ele SOBE de propósito enquanto a §24 estica as 27 linhas até o roque e as
   // peças menores fora: era 222 no fim da §23, e o alvo é cerca de 340.
-  assert.equal(nossos, 237, "o repertório tem 237 lances nossos, em 27 linhas");
+  assert.equal(nossos, 263, "o repertório tem 263 lances nossos, em 27 linhas");
 });
 
 test("as páginas de princípios ligadas a uma abertura apontam para abertura viva", () => {

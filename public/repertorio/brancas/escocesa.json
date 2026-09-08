@@ -1,12 +1,12 @@
 [
   {
-    "id": "brancas-escocesa-903edd82",
+    "id": "brancas-escocesa-affd6133",
     "cor": "brancas",
     "abertura": "escocesa",
     "nivel": "base",
-    "nome": "Escocesa — 7.Qe2 d6 8.Be3",
+    "nome": "Escocesa — 13.Qxe3 a5 14.Bb5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1bqk2r/ppp2ppp/1bnp1n2/8/4P3/1NN1B3/PPP1QPPP/R3KB1R b KQkq - 1 8",
+    "fenFinal": "r2qr1k1/1pp2ppp/2np1n2/pB6/4P1P1/1PN1QP2/1PP4P/2KR3R b - - 1 14",
     "lances": [
       "e2e4",
       "e7e5",
@@ -22,7 +22,19 @@
       "g8f6",
       "d1e2",
       "d7d6",
-      "c1e3"
+      "c1e3",
+      "e8g8",
+      "e1c1",
+      "f8e8",
+      "f2f3",
+      "c8e6",
+      "g2g4",
+      "e6b3",
+      "a2b3",
+      "b6e3",
+      "e2e3",
+      "a7a5",
+      "f1b5"
     ],
     "sans": [
       "e4",
@@ -39,7 +51,19 @@
       "Nf6",
       "Qe2",
       "d6",
-      "Be3"
+      "Be3",
+      "O-O",
+      "O-O-O",
+      "Re8",
+      "f3",
+      "Be6",
+      "g4",
+      "Bxb3",
+      "axb3",
+      "Bxe3+",
+      "Qxe3",
+      "a5",
+      "Bb5"
     ],
     "meus": [
       0,
@@ -49,31 +73,43 @@
       8,
       10,
       12,
-      14
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26
     ],
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",
-      "4": "O lance que dá nome à Escocesa. Ele acabou de defender o peão de\ne5 com o cavalo, e nós batemos assim mesmo — não para ganhar peão, e sim para\nabrir o centro enquanto ele ainda tem quase tudo em casa. É o contrário do\nque quase todo mundo joga aqui, que é 3.Bb5 ou 3.Bc4 e uma partida longa. Se\nele não comer, o segundo jogo deste arquivo é só para isso.",
-      "6": "O cavalo recaptura e para bem no meio do\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
-      "8": "Contra 4…Bc5 há três lances de verdade: 5.Be3, 5.Cxc6 e este.\nO curso escolhe 5.Cb3 — a Variante Potter — por dois motivos que ele escreve:\ntem menos teoria decorada, então o adversário erra mais cedo, e é a que deixa\nmontar o ataque mais agressivo, coisa que quase ninguém no clube sabe segurar.\nRecuar aqui não é perder lance: quem tem de andar é o bispo dele. Ele volta a b6\nporque é de lá que segue na diagonal a7-g1, e enquanto ele arruma isso nós\narmamos Cc3, De2 e Be3 em paz.",
-      "10": "Cavalo antes de bispo: de c3 ele defende o peão de e4 e tira a\nprimeira peça de dentro da fileira de trás, porque este é um repertório de\nroque grande. O curso joga 6.De2 aqui e chega na mesma posição dois lances\ndepois; ele mesmo escreve que a ordem quase nunca importa, e que a nossa, com\no cavalo primeiro, é a mais popular das duas.",
-      "12": "A dama em e2 parece mal posta, trancando o próprio bispo de f1 — e é\no lance-chave da variante. Três empregos de uma vez: guarda o peão de f2, que\no bispo dele de b6 mira de longe; deixa a casa e3 livre para o nosso bispo; e\ntira a dama da coluna d antes que a torre chegue lá com o roque grande.",
-      "14": "O bispo de b6 é a melhor peça dele, e é por isso\nque o nosso vai a e3: para oferecer a troca justamente dessa peça. Se ele trocar em e3, a dama recaptura e o roque grande vem em seguida. Se não trocar,\ntudo bem: quem escolhe a hora somos nós."
+      "4": "O lance que dá nome à Escocesa. Ele acabou de defender o peão de\r\ne5 com o cavalo, e nós batemos assim mesmo — não para ganhar peão, e sim para\r\nabrir o centro enquanto ele ainda tem quase tudo em casa. É o contrário do\r\nque quase todo mundo joga aqui, que é 3.Bb5 ou 3.Bc4 e uma partida longa. Se\r\nele não comer, o segundo jogo deste arquivo é só para isso.",
+      "6": "O cavalo recaptura e para bem no meio do\r\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\r\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\r\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
+      "8": "Contra 4…Bc5 há três lances de verdade: 5.Be3, 5.Cxc6 e este.\r\nO curso escolhe 5.Cb3 — a Variante Potter — por dois motivos que ele escreve:\r\ntem menos teoria decorada, então o adversário erra mais cedo, e é a que deixa\r\nmontar o ataque mais agressivo, coisa que quase ninguém no clube sabe segurar.\r\nRecuar aqui não é perder lance: quem tem de andar é o bispo dele. Ele volta a b6\r\nporque é de lá que segue na diagonal a7-g1, e enquanto ele arruma isso nós\r\narmamos Cc3, De2 e Be3 em paz.",
+      "10": "Cavalo antes de bispo: de c3 ele defende o peão de e4 e tira a\r\nprimeira peça de dentro da fileira de trás, porque este é um repertório de\r\nroque grande. O curso joga 6.De2 aqui e chega na mesma posição dois lances\r\ndepois; ele mesmo escreve que a ordem quase nunca importa, e que a nossa, com\r\no cavalo primeiro, é a mais popular das duas.",
+      "12": "A dama em e2 parece mal posta, trancando o próprio bispo de f1 — e é\r\no lance-chave da variante. Três empregos de uma vez: guarda o peão de f2, que\r\no bispo dele de b6 mira de longe; deixa a casa e3 livre para o nosso bispo; e\r\ntira a dama da coluna d antes que a torre chegue lá com o roque grande.",
+      "14": "O bispo de b6 é a melhor peça dele, e é por isso\r\nque o nosso vai a e3: para oferecer a troca justamente dessa peça. Se ele trocar em e3, a dama recaptura e o roque grande vem em seguida. Se não trocar,\r\ntudo bem: quem escolhe a hora somos nós.",
+      "16": "Roque grande, e aqui está o desenho da variante inteira. Os dois reis\r\nvão para lados opostos — o dele em g8, o nosso em c1 —, e isso muda o que os\r\npeões significam: cada lado empurra os peões da sua frente contra o rei do\r\noutro, e nenhum dos dois enfraquece nada, porque o próprio rei não está lá.\r\nRepare que a dama já tinha saído da coluna d no sétimo lance; era isso que\r\ndeixava a torre cair em d1 agora.",
+      "18": "O primeiro peão da nossa ala anda, e antes de qualquer coisa ele\r\nDEFENDE: com a torre dele em e8 apontada para o peão de e4, o f3 põe um segundo\r\ndefensor ali. Só que ele é dois lances num só — de f3 o peão também segura a\r\ncasa g4, e é o g4 que vem a seguir. Nove em cada dez jogam este lance aqui.",
+      "20": "Agora sim, o peão da coluna g começa a andar. Este é o lance com que a\r\nvariante inteira sonha desde o roque grande: os peões da nossa ala do rei\r\navançam contra o rei dele, e o nosso rei está do outro lado, em segurança. E\r\nrepare no detalhe que o f3 comprou — sem ele, o g4 largaria o peão de e4 e o\r\nlance seguinte dele seria …Cxe4.",
+      "22": "Recapture com o peão de a2, e não com o de c2. Os dois recapturam; a\r\ndiferença é o que sobra. Com axb3 a coluna a abre inteira para a nossa torre e\r\no peão de c2 fica onde está, tapando a entrada em c-alguma-coisa na frente do\r\nnosso rei. Com cxb3 seria o contrário: abriríamos uma coluna na frente do nosso\r\npróprio rei. Quando os reis estão em lados opostos, escolha sempre a recaptura\r\nque abre coluna do lado DELE.",
+      "24": "A dama recaptura e cai numa casa boa de graça: de e3 ela olha para a\r\ncoluna e, para a diagonal que vai até h6 e para o peão de a7. Trocaram-se os\r\ndois pares de peças menores que estavam em contato, e o que sobrou é o que\r\ninteressa — os nossos peões de f3, g4 e h2 prontos para andar, e o rei dele\r\nsentado atrás deles.",
+      "26": "O último bispo sai, e sai pregando: de b5 ele fixa o cavalo de c6\r\ncontra a torre de e8. Repare no serviço — esse cavalo é a única peça dele que\r\ndefende alguma coisa do lado do rei, e agora ele não pode se mexer. Conte a\r\nposição, que é onde a abertura acaba: rei em c1 desde o nono lance, as quatro\r\npeças pequenas fora de casa, a coluna a aberta para a nossa torre e três peões\r\nprontos para avançar contra o rei dele. É exatamente o que o roque grande\r\nprometia lá atrás."
     },
     "plano": {},
-    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com, grátis), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || 4...Cf6: as mesmas autoras, variantes 'Schmidt Variation #1' e '#2'. TROCA DE CAUDA decidida pelo Doug em 7/9/2026 (o 6.e5 do draft do Grigoryan saiu porque o curso escreve CONTRA ele: dá às pretas igualdade confortável e leva a posições complexas demais para esta faixa). Dele são o motivo do 5.Cxc6 e o preço dele, o 6...Bb4 como principal, o 7.Bd3 e a conta do par de bispos contra o peão dobrado, e o plano do esquema — trocar o bispo de casas escuras dele, porque os peões centrais dele estão em casas claras. ENCURTADA em 7/9/2026 pela poda: parava no 11.Df3 e agora para no 9.O-O. O motivo é do próprio curso, que escreve ali que daqui em diante vale mais entender o plano do que decorar lance — então o plano (h3, Df3, Bf4) foi para o comentário do 9.O-O em vez de virar quatro meios-lances para decorar. O id mudou de 73290a81 para 3c8bdb81. || 5...d6: as mesmas autoras e o mesmo curso, variante 'The Popular 4...Nxd4?!'. ATENÇÃO AO QUE ESTA CITAÇÃO É, porque o mapa não vai confirmá-la: o curso chega nesta posição pelo 5...b6 dele, não pelo nosso 5...d6, então repertorio:mapear marca a linha como cauda. O que se cita são os LANCES BRANCOS, e eles são os mesmos três, um a um — Cc3, Bf4, O-O-O —, com a prosa do curso explicando a montagem. É o mesmo caso do Colle na seção 22: fonte gratuita que recomenda e explica, em posição vizinha, e a tag declara o vão. Até 7/9/2026 esta linha era do Grigoryan, que dá os lances sem explicar nenhum; a linha do 5...b6, que era a que tinha a citação direta, saiu na poda porque é 8,5 por cento contra os 25,4 desta — mesmos lances nossos, resposta dele três vezes mais rara."
+    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com, grátis), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || 4...Cf6: as mesmas autoras, variantes 'Schmidt Variation #1' e '#2'. TROCA DE CAUDA decidida pelo Doug em 7/9/2026 (o 6.e5 do draft do Grigoryan saiu porque o curso escreve CONTRA ele: dá às pretas igualdade confortável e leva a posições complexas demais para esta faixa). Dele são o motivo do 5.Cxc6 e o preço dele, o 6...Bb4 como principal, o 7.Bd3 e a conta do par de bispos contra o peão dobrado, e o plano do esquema — trocar o bispo de casas escuras dele, porque os peões centrais dele estão em casas claras. ENCURTADA em 7/9/2026 pela poda: parava no 11.Df3 e agora para no 9.O-O. O motivo é do próprio curso, que escreve ali que daqui em diante vale mais entender o plano do que decorar lance — então o plano (h3, Df3, Bf4) foi para o comentário do 9.O-O em vez de virar quatro meios-lances para decorar. O id mudou de 73290a81 para 3c8bdb81. || 5...d6: as mesmas autoras e o mesmo curso, variante 'The Popular 4...Nxd4?!'. ATENÇÃO AO QUE ESTA CITAÇÃO É, porque o mapa não vai confirmá-la: o curso chega nesta posição pelo 5...b6 dele, não pelo nosso 5...d6, então repertorio:mapear marca a linha como cauda. O que se cita são os LANCES BRANCOS, e eles são os mesmos três, um a um — Cc3, Bf4, O-O-O —, com a prosa do curso explicando a montagem. É o mesmo caso do Colle na seção 22: fonte gratuita que recomenda e explica, em posição vizinha, e a tag declara o vão. Até 7/9/2026 esta linha era do Grigoryan, que dá os lances sem explicar nenhum; a linha do 5...b6, que era a que tinha a citação direta, saiu na poda porque é 8,5 por cento contra os 25,4 desta — mesmos lances nossos, resposta dele três vezes mais rara.|| CAUDAS DA §24 (8/9/2026), as três deste jogo. ESCADA e números pelo repertorio:cauda, recorte lichess-1000-1999. (1) 4...Bc5, do 8...O-O ao 14.Bb5: o curso joga 8...De7 e para ali, mas o 8...De7 nem aparece entre as três respostas mais comuns e o 8...O-O e 51,8 por cento — uma linha do Base construida sobre um lance raro seria decorar o que o aluno nao vai ver, entao aqui o degrau 0 foi DESCARTADO com o motivo escrito. Degrau 1 do 8...O-O ao 11...Bxb3 (3.472, 1.300, 1.704 e 495 jogos), degrau 2 no 12.axb3 e no 12...Bxe3+, degrau 3 nos tres ultimos. O 14.Bb5 e o unico dos tres candidatos que tira a ultima peca menor de casa: vale +1,41 contra +1,70 do 14.g5, e a regua ganha dos 29 centesimos. Ponta +0,52 -> +1,60. (2) 4...Cf6, do 9...O-O ao 12.Bf4: DEGRAU 0 INTEIRO — o Short and Sweet Scotch joga e explica os cinco lances, e sao exatamente os tres que o comentario do 9.O-O ja prometia (h3, Df3, Bf4). O curso escreve ali que a posicao e flexivel demais para decorar e que vale mais entender o plano; o plano dele virou os lances. Ponta igual -> igual. (3) 5...d6, do 8...O-O ao 14.Txd8: degrau 1 do primeiro ao ultimo lance — 30.041, 23.709, 8.841, 2.711, 1.915, 712, 403, 351, 695, 375, 1.486 e 331 jogos. Nenhuma peca nossa fica sem sair a nao ser o bispo de f1, e ele nao sai dentro do teto: nas seis primeiras variantes do motor nesta posicao ele so aparece no 15o lance ou depois. Esta e a unica das cinco linhas da Escocesa com bloco [%plano], e ele declara f1>e2, que e o lance da quarta variante do motor. Ponta +0,88 -> +1,91."
   },
   {
-    "id": "brancas-escocesa-3c8bdb81",
+    "id": "brancas-escocesa-d2dc4b73",
     "cor": "brancas",
     "abertura": "escocesa",
     "nivel": "base",
-    "nome": "Escocesa — 8.exd5 cxd5 9.O-O",
+    "nome": "Escocesa — 11.Qf3 Bd6 12.Bf4",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1bqk2r/p1p2ppp/5n2/3p4/1b6/2NB4/PPP2PPP/R1BQ1RK1 b kq - 1 9",
+    "fenFinal": "r1bq1rk1/p4ppp/2pb1n2/3p4/5B2/2NB1Q1P/PPP2PP1/R4RK1 b - - 3 12",
     "lances": [
       "e2e4",
       "e7e5",
@@ -91,7 +127,13 @@
       "d7d5",
       "e4d5",
       "c6d5",
-      "e1g1"
+      "e1g1",
+      "e8g8",
+      "h2h3",
+      "c7c6",
+      "d1f3",
+      "b4d6",
+      "c1f4"
     ],
     "sans": [
       "e4",
@@ -110,7 +152,13 @@
       "d5",
       "exd5",
       "cxd5",
-      "O-O"
+      "O-O",
+      "O-O",
+      "h3",
+      "c6",
+      "Qf3",
+      "Bd6",
+      "Bf4"
     ],
     "meus": [
       0,
@@ -121,32 +169,39 @@
       10,
       12,
       14,
-      16
+      16,
+      18,
+      20,
+      22
     ],
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",
-      "4": "O lance que dá nome à Escocesa. Ele acabou de defender o peão de\ne5 com o cavalo, e nós batemos assim mesmo — não para ganhar peão, e sim para\nabrir o centro enquanto ele ainda tem quase tudo em casa. É o contrário do\nque quase todo mundo joga aqui, que é 3.Bb5 ou 3.Bc4 e uma partida longa. Se\nele não comer, o segundo jogo deste arquivo é só para isso.",
-      "6": "O cavalo recaptura e para bem no meio do\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
-      "8": "Trocamos o nosso melhor cavalo pelo dele de propósito, para\nestragar os peões: depois de 5…bxc6 ele fica com dois peões na coluna c, um\natrás do outro. E seja honesto sobre o preço, porque o curso é — em troca ele\nganha mais peão no centro e a coluna b aberta, onde a torre dele vai morar. É\numa troca de vantagens, não um golpe.",
-      "10": "Aqui é a bifurcação da variante, e o curso é\nexplícito sobre ela. O outro caminho é 6.e5, expulsando o cavalo — dá jogo\ninteressante, mas a teoria de hoje dá às pretas igualdade confortável, e a\nposição que sai dali é complicada demais para quem ainda não é jogador avançado.\nEntão defendemos o peão de e4 com o cavalo e jogamos a posição, que é o que\nsabemos fazer. Repare no que o 5.Cxc6 nos deu e no que custou: os peões dele\nficaram feios em c6 e c7, e em troca ele ganhou presença no centro e a coluna b\nsemiaberta, onde a torre dele vai parar.",
-      "12": "Desenvolve e defende\ne4 outra vez — e agora repare numa conta que vale para a partida inteira. Se ele\ntrocar em c3, nós recapturamos com o peão de b2: a nossa estrutura piora, sim,\nmas ficamos com os dois bispos. Nesta posição, aberta como está, o par de bispos\nvale mais do que o peão dobrado incomoda. É por isso que a troca é bem-vinda e\nnão precisamos gastar lance nenhum para evitá-la.",
-      "14": "Ele bateu no nosso peão de e4 com …d5, e nós comemos primeiro.\nO motivo é concreto: o nosso cavalo de c3 está pregado pelo bispo de b4 contra\no rei em e1, então não dá para contar com ele na defesa de e4. A recaptura com\n…cxd5 desfaz o peão dobrado dele, sim — mas deixa o peão central em d5, casa\nCLARA, e é dessa cor que nasce o plano do lance seguinte.",
-      "16": "Roque feito, e daqui em diante o\ncurso diz uma coisa que vale mais que os lances: a posição é flexível demais\npara decorar resposta a tudo, e quem se salva é quem entende o plano. Ele é\neste, e cabe numa frase — TROQUE O BISPO DE CASAS ESCURAS DELE. Repare por quê:\nos peões centrais dele, em c6 e d5, estão em casas CLARAS, então o bispo que\nanda nas escuras é justamente o que ele precisa guardar. Os três lances que\nfazem isso são h3 (tira a casa g4 do bispo de c8 dele e prepara a dama), Df3 (a\ncasa mais ativa dela, pressionando o centro e apoiando o lance seguinte) e Bf4,\nque oferece a troca. Se trocarmos, sobra o nosso bispo bom contra o bispo ruim\ndele — e é com essa diferença que a partida se ganha devagar."
+      "4": "O lance que dá nome à Escocesa. Ele acabou de defender o peão de\r\ne5 com o cavalo, e nós batemos assim mesmo — não para ganhar peão, e sim para\r\nabrir o centro enquanto ele ainda tem quase tudo em casa. É o contrário do\r\nque quase todo mundo joga aqui, que é 3.Bb5 ou 3.Bc4 e uma partida longa. Se\r\nele não comer, o segundo jogo deste arquivo é só para isso.",
+      "6": "O cavalo recaptura e para bem no meio do\r\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\r\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\r\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
+      "8": "Trocamos o nosso melhor cavalo pelo dele de propósito, para\r\nestragar os peões: depois de 5…bxc6 ele fica com dois peões na coluna c, um\r\natrás do outro. E seja honesto sobre o preço, porque o curso é — em troca ele\r\nganha mais peão no centro e a coluna b aberta, onde a torre dele vai morar. É\r\numa troca de vantagens, não um golpe.",
+      "10": "Aqui é a bifurcação da variante, e o curso é\r\nexplícito sobre ela. O outro caminho é 6.e5, expulsando o cavalo — dá jogo\r\ninteressante, mas a teoria de hoje dá às pretas igualdade confortável, e a\r\nposição que sai dali é complicada demais para quem ainda não é jogador avançado.\r\nEntão defendemos o peão de e4 com o cavalo e jogamos a posição, que é o que\r\nsabemos fazer. Repare no que o 5.Cxc6 nos deu e no que custou: os peões dele\r\nficaram feios em c6 e c7, e em troca ele ganhou presença no centro e a coluna b\r\nsemiaberta, onde a torre dele vai parar.",
+      "12": "Desenvolve e defende\r\ne4 outra vez — e agora repare numa conta que vale para a partida inteira. Se ele\r\ntrocar em c3, nós recapturamos com o peão de b2: a nossa estrutura piora, sim,\r\nmas ficamos com os dois bispos. Nesta posição, aberta como está, o par de bispos\r\nvale mais do que o peão dobrado incomoda. É por isso que a troca é bem-vinda e\r\nnão precisamos gastar lance nenhum para evitá-la.",
+      "14": "Ele bateu no nosso peão de e4 com …d5, e nós comemos primeiro.\r\nO motivo é concreto: o nosso cavalo de c3 está pregado pelo bispo de b4 contra\r\no rei em e1, então não dá para contar com ele na defesa de e4. A recaptura com\r\n…cxd5 desfaz o peão dobrado dele, sim — mas deixa o peão central em d5, casa\r\nCLARA, e é dessa cor que nasce o plano do lance seguinte.",
+      "16": "Roque feito, e daqui em diante o\r\ncurso diz uma coisa que vale mais que os lances: a posição é flexível demais\r\npara decorar resposta a tudo, e quem se salva é quem entende o plano. Ele é\r\neste, e cabe numa frase — TROQUE O BISPO DE CASAS ESCURAS DELE. Repare por quê:\r\nos peões centrais dele, em c6 e d5, estão em casas CLARAS, então o bispo que\r\nanda nas escuras é justamente o que ele precisa guardar. Os três lances que\r\nfazem isso vêm agora, um por vez.",
+      "18": "Primeiro lance do plano, e é um lance de prevenção: h3 tira a casa g4\r\ndo bispo de c8 dele. Sem esse peão, a dama não pode ir para f3 em paz — viria\r\n…Bg4 pregando-a contra o rei. É a mesma ideia do h3 da Caro-Kann: um peãozinho\r\nque não ataca nada, e que autoriza o lance seguinte.",
+      "20": "Segundo lance, e agora a dama vai para a casa que o h3 comprou. De f3\r\nela aperta os peões do meio dele e, principalmente, apoia o bispo que chega em\r\nf4 no lance seguinte — sem esse apoio, o bispo em f4 poderia ser enxotado.\r\nRepare que a dama saiu ANTES do bispo: quem prepara vem primeiro.",
+      "21": "Ele adivinhou o plano e pôs o bispo em f4… quer dizer, em d6, na frente do\r\nnosso. Não mude nada — o curso diz para seguir com o mesmo plano.",
+      "22": "Terceiro lance, e o plano se fecha: oferecemos a troca do bispo de\r\ncasas escuras dele. E aqui está o porquê, que é a coisa mais útil desta página:\r\nos peões do meio dele estão em c6 e d5, as duas CLARAS. Um bispo que anda em\r\ncasas escuras não pode defender peão nenhum que esteja em casa clara — então o\r\nbispo de casas escuras é o que ele precisa guardar, e é exatamente o que a\r\ngente troca. Se ele trocar, sobra o nosso bispo bom contra o bispo ruim dele, e\r\né com essa diferença que a partida se ganha devagar. Conte a posição: rei no\r\ncanto, as quatro peças pequenas fora, dama na casa mais ativa e um plano escrito\r\npara o resto da partida. A abertura acabou."
     },
     "plano": {},
-    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com, grátis), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || 4...Cf6: as mesmas autoras, variantes 'Schmidt Variation #1' e '#2'. TROCA DE CAUDA decidida pelo Doug em 7/9/2026 (o 6.e5 do draft do Grigoryan saiu porque o curso escreve CONTRA ele: dá às pretas igualdade confortável e leva a posições complexas demais para esta faixa). Dele são o motivo do 5.Cxc6 e o preço dele, o 6...Bb4 como principal, o 7.Bd3 e a conta do par de bispos contra o peão dobrado, e o plano do esquema — trocar o bispo de casas escuras dele, porque os peões centrais dele estão em casas claras. ENCURTADA em 7/9/2026 pela poda: parava no 11.Df3 e agora para no 9.O-O. O motivo é do próprio curso, que escreve ali que daqui em diante vale mais entender o plano do que decorar lance — então o plano (h3, Df3, Bf4) foi para o comentário do 9.O-O em vez de virar quatro meios-lances para decorar. O id mudou de 73290a81 para 3c8bdb81. || 5...d6: as mesmas autoras e o mesmo curso, variante 'The Popular 4...Nxd4?!'. ATENÇÃO AO QUE ESTA CITAÇÃO É, porque o mapa não vai confirmá-la: o curso chega nesta posição pelo 5...b6 dele, não pelo nosso 5...d6, então repertorio:mapear marca a linha como cauda. O que se cita são os LANCES BRANCOS, e eles são os mesmos três, um a um — Cc3, Bf4, O-O-O —, com a prosa do curso explicando a montagem. É o mesmo caso do Colle na seção 22: fonte gratuita que recomenda e explica, em posição vizinha, e a tag declara o vão. Até 7/9/2026 esta linha era do Grigoryan, que dá os lances sem explicar nenhum; a linha do 5...b6, que era a que tinha a citação direta, saiu na poda porque é 8,5 por cento contra os 25,4 desta — mesmos lances nossos, resposta dele três vezes mais rara."
+    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com, grátis), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || 4...Cf6: as mesmas autoras, variantes 'Schmidt Variation #1' e '#2'. TROCA DE CAUDA decidida pelo Doug em 7/9/2026 (o 6.e5 do draft do Grigoryan saiu porque o curso escreve CONTRA ele: dá às pretas igualdade confortável e leva a posições complexas demais para esta faixa). Dele são o motivo do 5.Cxc6 e o preço dele, o 6...Bb4 como principal, o 7.Bd3 e a conta do par de bispos contra o peão dobrado, e o plano do esquema — trocar o bispo de casas escuras dele, porque os peões centrais dele estão em casas claras. ENCURTADA em 7/9/2026 pela poda: parava no 11.Df3 e agora para no 9.O-O. O motivo é do próprio curso, que escreve ali que daqui em diante vale mais entender o plano do que decorar lance — então o plano (h3, Df3, Bf4) foi para o comentário do 9.O-O em vez de virar quatro meios-lances para decorar. O id mudou de 73290a81 para 3c8bdb81. || 5...d6: as mesmas autoras e o mesmo curso, variante 'The Popular 4...Nxd4?!'. ATENÇÃO AO QUE ESTA CITAÇÃO É, porque o mapa não vai confirmá-la: o curso chega nesta posição pelo 5...b6 dele, não pelo nosso 5...d6, então repertorio:mapear marca a linha como cauda. O que se cita são os LANCES BRANCOS, e eles são os mesmos três, um a um — Cc3, Bf4, O-O-O —, com a prosa do curso explicando a montagem. É o mesmo caso do Colle na seção 22: fonte gratuita que recomenda e explica, em posição vizinha, e a tag declara o vão. Até 7/9/2026 esta linha era do Grigoryan, que dá os lances sem explicar nenhum; a linha do 5...b6, que era a que tinha a citação direta, saiu na poda porque é 8,5 por cento contra os 25,4 desta — mesmos lances nossos, resposta dele três vezes mais rara.|| CAUDAS DA §24 (8/9/2026), as três deste jogo. ESCADA e números pelo repertorio:cauda, recorte lichess-1000-1999. (1) 4...Bc5, do 8...O-O ao 14.Bb5: o curso joga 8...De7 e para ali, mas o 8...De7 nem aparece entre as três respostas mais comuns e o 8...O-O e 51,8 por cento — uma linha do Base construida sobre um lance raro seria decorar o que o aluno nao vai ver, entao aqui o degrau 0 foi DESCARTADO com o motivo escrito. Degrau 1 do 8...O-O ao 11...Bxb3 (3.472, 1.300, 1.704 e 495 jogos), degrau 2 no 12.axb3 e no 12...Bxe3+, degrau 3 nos tres ultimos. O 14.Bb5 e o unico dos tres candidatos que tira a ultima peca menor de casa: vale +1,41 contra +1,70 do 14.g5, e a regua ganha dos 29 centesimos. Ponta +0,52 -> +1,60. (2) 4...Cf6, do 9...O-O ao 12.Bf4: DEGRAU 0 INTEIRO — o Short and Sweet Scotch joga e explica os cinco lances, e sao exatamente os tres que o comentario do 9.O-O ja prometia (h3, Df3, Bf4). O curso escreve ali que a posicao e flexivel demais para decorar e que vale mais entender o plano; o plano dele virou os lances. Ponta igual -> igual. (3) 5...d6, do 8...O-O ao 14.Txd8: degrau 1 do primeiro ao ultimo lance — 30.041, 23.709, 8.841, 2.711, 1.915, 712, 403, 351, 695, 375, 1.486 e 331 jogos. Nenhuma peca nossa fica sem sair a nao ser o bispo de f1, e ele nao sai dentro do teto: nas seis primeiras variantes do motor nesta posicao ele so aparece no 15o lance ou depois. Esta e a unica das cinco linhas da Escocesa com bloco [%plano], e ele declara f1>e2, que e o lance da quarta variante do motor. Ponta +0,88 -> +1,91."
   },
   {
-    "id": "brancas-escocesa-5250fcfd",
+    "id": "brancas-escocesa-1f2de71c",
     "cor": "brancas",
     "abertura": "escocesa",
     "nivel": "base",
-    "nome": "Escocesa — 7.Bf4 Be7 8.O-O-O",
+    "nome": "Escocesa — 13.Rxd6 Rad8 14.Rxd8",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1bqk2r/ppp1bppp/3p1n2/8/3QPB2/2N5/PPP2PPP/2KR1B1R b kq - 5 8",
+    "fenFinal": "3R1rk1/pp3ppp/4bn2/2p5/4P3/2N2P2/PPP3PP/2K2B1R b - - 0 14",
     "lances": [
       "e2e4",
       "e7e5",
@@ -162,7 +217,19 @@
       "g8f6",
       "c1f4",
       "f8e7",
-      "e1c1"
+      "e1c1",
+      "e8g8",
+      "f2f3",
+      "c7c5",
+      "d4d2",
+      "c8e6",
+      "f4d6",
+      "e7d6",
+      "d2d6",
+      "d8d6",
+      "d1d6",
+      "a8d8",
+      "d6d8"
     ],
     "sans": [
       "e4",
@@ -179,7 +246,19 @@
       "Nf6",
       "Bf4",
       "Be7",
-      "O-O-O"
+      "O-O-O",
+      "O-O",
+      "f3",
+      "c5",
+      "Qd2",
+      "Be6",
+      "Bxd6",
+      "Bxd6",
+      "Qxd6",
+      "Qxd6",
+      "Rxd6",
+      "Rad8",
+      "Rxd8"
     ],
     "meus": [
       0,
@@ -189,31 +268,48 @@
       8,
       10,
       12,
-      14
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26
     ],
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",
-      "4": "O lance que dá nome à Escocesa. Ele acabou de defender o peão de\ne5 com o cavalo, e nós batemos assim mesmo — não para ganhar peão, e sim para\nabrir o centro enquanto ele ainda tem quase tudo em casa. É o contrário do\nque quase todo mundo joga aqui, que é 3.Bb5 ou 3.Bc4 e uma partida longa. Se\nele não comer, o segundo jogo deste arquivo é só para isso.",
-      "6": "O cavalo recaptura e para bem no meio do\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
-      "8": "Ele trocou os cavalos, e isso é presente: o curso diz que é o lance\nmais jogado por quem está começando do lado das pretas, e que ele só ajuda as\nbrancas. A dama recaptura no meio do tabuleiro, de onde já mira g7, e o roque\ngrande fica um lance mais perto — porque a casa d1 acabou de esvaziar.",
-      "10": "O cavalo defende o peão de e4 e, principalmente, tira mais uma peça de\ndentro da fileira de trás. Toda a montagem que vem a seguir — Bf4 e roque\ngrande — depende de esvaziar aquele corredor, e é por isso que o cavalo sai\nantes do bispo.",
-      "12": "O bispo vai para f4 mirando o peão de d6 e libera a casa c1\npara o roque grande.",
-      "14": "Roque grande. O rei sai do centro e a\ntorre cai na coluna d, bem em frente ao peão de d6. Daqui o plano é sempre o\nmesmo: f3, g4 e os peões avançam contra o rei dele."
+      "4": "O lance que dá nome à Escocesa. Ele acabou de defender o peão de\r\ne5 com o cavalo, e nós batemos assim mesmo — não para ganhar peão, e sim para\r\nabrir o centro enquanto ele ainda tem quase tudo em casa. É o contrário do\r\nque quase todo mundo joga aqui, que é 3.Bb5 ou 3.Bc4 e uma partida longa. Se\r\nele não comer, o segundo jogo deste arquivo é só para isso.",
+      "6": "O cavalo recaptura e para bem no meio do\r\ntabuleiro. É este o desenho da Escocesa: o centro abriu cedo, o cavalo em d4 é a\r\npeça mais bem posta do tabuleiro e todas as nossas outras peças têm casa. A\r\npartir daqui ele tem três respostas de verdade, e as três estão neste arquivo.",
+      "8": "Ele trocou os cavalos, e isso é presente: o curso diz que é o lance\r\nmais jogado por quem está começando do lado das pretas, e que ele só ajuda as\r\nbrancas. A dama recaptura no meio do tabuleiro, de onde já mira g7, e o roque\r\ngrande fica um lance mais perto — porque a casa d1 acabou de esvaziar.",
+      "10": "O cavalo defende o peão de e4 e, principalmente, tira mais uma peça de\r\ndentro da fileira de trás. Toda a montagem que vem a seguir — Bf4 e roque\r\ngrande — depende de esvaziar aquele corredor, e é por isso que o cavalo sai\r\nantes do bispo.",
+      "12": "O bispo vai para f4 mirando o peão de d6 e libera a casa c1\r\npara o roque grande.",
+      "14": "Roque grande. O rei sai do centro e a\r\ntorre cai na coluna d, bem em frente ao peão de d6. Daqui o plano é sempre o\r\nmesmo: f3 primeiro, e depois cobrar o peão de d6 que a torre está encarando.",
+      "16": "Três em cada dez jogam este lance, e é o certo. Ele guarda o peão de e4\r\nde uma vez por todas — sem essa proteção, todo lance nosso teria de contar se\r\n…Cxe4 funciona — e prepara g4 para mais tarde. Um peão que não ataca nada e que\r\ndeixa todas as outras peças trabalharem em paz.",
+      "18": "O peão de c5 atacou a nossa dama, e ela tem de andar. Das três casas\r\npossíveis, d2 é a que serve ao plano: a dama fica atrás do bispo de f4, os dois\r\nolhando juntos para d6, e sai da frente da nossa própria torre de d1. Cada peça\r\nnossa nesta posição aponta para o mesmo peão.",
+      "20": "Agora a conta fecha. O peão de d6 estava atacado três vezes — bispo,\r\ndama e torre — e defendido duas, pelo bispo de e7 e pelo peão de c7… que ele\r\nmesmo tirou de lá no lance 9, quando jogou …c5. Foi esse lance que largou o\r\npeão, e é isso que a gente cobra.",
+      "22": "Recapture, e a sequência é forçada daqui: ele troca as damas, nós\r\nrecapturamos de torre, e o que sobra é um final em que temos um peão a mais e a\r\núnica torre ativa. Não tenha medo de trocar dama quando você está com peão a\r\nmais — é justamente aí que o peão começa a valer.",
+      "24": "A torre chega em d6, no meio do campo dele, e nenhuma peça preta a\r\nincomoda. Repare em como este final apareceu: começou no lance 8, quando o\r\nroque grande pôs a torre na coluna d, e terminou aqui, seis lances depois, sem\r\nnenhum lance de ataque no meio.",
+      "26": "Troque. Com peão a mais, cada par de peças que sai do tabuleiro\r\nmelhora a sua vida — o peão fica mais perto de virar dama e sobra menos gente\r\npara atrapalhar. Falta uma peça sua em casa, o bispo de f1, e ele é o próximo:\r\no comentário aqui embaixo diz para onde ele vai e por que ainda não foi."
     },
-    "plano": {},
-    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com, grátis), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || 4...Cf6: as mesmas autoras, variantes 'Schmidt Variation #1' e '#2'. TROCA DE CAUDA decidida pelo Doug em 7/9/2026 (o 6.e5 do draft do Grigoryan saiu porque o curso escreve CONTRA ele: dá às pretas igualdade confortável e leva a posições complexas demais para esta faixa). Dele são o motivo do 5.Cxc6 e o preço dele, o 6...Bb4 como principal, o 7.Bd3 e a conta do par de bispos contra o peão dobrado, e o plano do esquema — trocar o bispo de casas escuras dele, porque os peões centrais dele estão em casas claras. ENCURTADA em 7/9/2026 pela poda: parava no 11.Df3 e agora para no 9.O-O. O motivo é do próprio curso, que escreve ali que daqui em diante vale mais entender o plano do que decorar lance — então o plano (h3, Df3, Bf4) foi para o comentário do 9.O-O em vez de virar quatro meios-lances para decorar. O id mudou de 73290a81 para 3c8bdb81. || 5...d6: as mesmas autoras e o mesmo curso, variante 'The Popular 4...Nxd4?!'. ATENÇÃO AO QUE ESTA CITAÇÃO É, porque o mapa não vai confirmá-la: o curso chega nesta posição pelo 5...b6 dele, não pelo nosso 5...d6, então repertorio:mapear marca a linha como cauda. O que se cita são os LANCES BRANCOS, e eles são os mesmos três, um a um — Cc3, Bf4, O-O-O —, com a prosa do curso explicando a montagem. É o mesmo caso do Colle na seção 22: fonte gratuita que recomenda e explica, em posição vizinha, e a tag declara o vão. Até 7/9/2026 esta linha era do Grigoryan, que dá os lances sem explicar nenhum; a linha do 5...b6, que era a que tinha a citação direta, saiu na poda porque é 8,5 por cento contra os 25,4 desta — mesmos lances nossos, resposta dele três vezes mais rara."
+    "plano": {
+      "f1": {
+        "casa": "e2",
+        "motivo": "ele espera as torres saírem da coluna d, e vai para e2, de onde entra em d1 e sustenta o rei subindo pelo meio no final"
+      }
+    },
+    "fonte": "4...Bc5: WIM Fiona Steil-Antoni & IM Alex Astaneh — 'Short & Sweet: Scotch' (Chess.com, grátis), variantes 'Classical Variation #1' e '#2'. O curso joga 6.De2 antes de 6.Cc3 e escreve que a ordem quase nunca importa, sendo a nossa a mais popular das duas; a #2 volta a bater em 7...d6, e o 8.Be3 é o lance dela. Conferido em 7/9/2026. || 4...Cf6: as mesmas autoras, variantes 'Schmidt Variation #1' e '#2'. TROCA DE CAUDA decidida pelo Doug em 7/9/2026 (o 6.e5 do draft do Grigoryan saiu porque o curso escreve CONTRA ele: dá às pretas igualdade confortável e leva a posições complexas demais para esta faixa). Dele são o motivo do 5.Cxc6 e o preço dele, o 6...Bb4 como principal, o 7.Bd3 e a conta do par de bispos contra o peão dobrado, e o plano do esquema — trocar o bispo de casas escuras dele, porque os peões centrais dele estão em casas claras. ENCURTADA em 7/9/2026 pela poda: parava no 11.Df3 e agora para no 9.O-O. O motivo é do próprio curso, que escreve ali que daqui em diante vale mais entender o plano do que decorar lance — então o plano (h3, Df3, Bf4) foi para o comentário do 9.O-O em vez de virar quatro meios-lances para decorar. O id mudou de 73290a81 para 3c8bdb81. || 5...d6: as mesmas autoras e o mesmo curso, variante 'The Popular 4...Nxd4?!'. ATENÇÃO AO QUE ESTA CITAÇÃO É, porque o mapa não vai confirmá-la: o curso chega nesta posição pelo 5...b6 dele, não pelo nosso 5...d6, então repertorio:mapear marca a linha como cauda. O que se cita são os LANCES BRANCOS, e eles são os mesmos três, um a um — Cc3, Bf4, O-O-O —, com a prosa do curso explicando a montagem. É o mesmo caso do Colle na seção 22: fonte gratuita que recomenda e explica, em posição vizinha, e a tag declara o vão. Até 7/9/2026 esta linha era do Grigoryan, que dá os lances sem explicar nenhum; a linha do 5...b6, que era a que tinha a citação direta, saiu na poda porque é 8,5 por cento contra os 25,4 desta — mesmos lances nossos, resposta dele três vezes mais rara.|| CAUDAS DA §24 (8/9/2026), as três deste jogo. ESCADA e números pelo repertorio:cauda, recorte lichess-1000-1999. (1) 4...Bc5, do 8...O-O ao 14.Bb5: o curso joga 8...De7 e para ali, mas o 8...De7 nem aparece entre as três respostas mais comuns e o 8...O-O e 51,8 por cento — uma linha do Base construida sobre um lance raro seria decorar o que o aluno nao vai ver, entao aqui o degrau 0 foi DESCARTADO com o motivo escrito. Degrau 1 do 8...O-O ao 11...Bxb3 (3.472, 1.300, 1.704 e 495 jogos), degrau 2 no 12.axb3 e no 12...Bxe3+, degrau 3 nos tres ultimos. O 14.Bb5 e o unico dos tres candidatos que tira a ultima peca menor de casa: vale +1,41 contra +1,70 do 14.g5, e a regua ganha dos 29 centesimos. Ponta +0,52 -> +1,60. (2) 4...Cf6, do 9...O-O ao 12.Bf4: DEGRAU 0 INTEIRO — o Short and Sweet Scotch joga e explica os cinco lances, e sao exatamente os tres que o comentario do 9.O-O ja prometia (h3, Df3, Bf4). O curso escreve ali que a posicao e flexivel demais para decorar e que vale mais entender o plano; o plano dele virou os lances. Ponta igual -> igual. (3) 5...d6, do 8...O-O ao 14.Txd8: degrau 1 do primeiro ao ultimo lance — 30.041, 23.709, 8.841, 2.711, 1.915, 712, 403, 351, 695, 375, 1.486 e 331 jogos. Nenhuma peca nossa fica sem sair a nao ser o bispo de f1, e ele nao sai dentro do teto: nas seis primeiras variantes do motor nesta posicao ele so aparece no 15o lance ou depois. Esta e a unica das cinco linhas da Escocesa com bloco [%plano], e ele declara f1>e2, que e o lance da quarta variante do motor. Ponta +0,88 -> +1,91."
   },
   {
-    "id": "brancas-escocesa-6ca49100",
+    "id": "brancas-escocesa-8d0ad6f4",
     "cor": "brancas",
     "abertura": "escocesa",
     "nivel": "base",
-    "nome": "Escocesa — 7.O-O Be7 8.Nxc6",
+    "nome": "Escocesa — 12.b3 Bf8 13.Bb2",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r2qk2r/pppbbppp/2Np1n2/1B6/4P3/2N5/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+    "fenFinal": "1r1qrbk1/p1pb1ppp/2pp1n2/8/4PP2/1PNB3P/PBP3P1/R2Q1RK1 b - - 2 13",
     "lances": [
       "e2e4",
       "e7e5",
@@ -229,7 +325,17 @@
       "c8d7",
       "e1g1",
       "f8e7",
-      "d4c6"
+      "d4c6",
+      "b7c6",
+      "b5d3",
+      "e8g8",
+      "f2f4",
+      "a8b8",
+      "h2h3",
+      "f8e8",
+      "b2b3",
+      "e7f8",
+      "c1b2"
     ],
     "sans": [
       "e4",
@@ -246,7 +352,17 @@
       "Bd7",
       "O-O",
       "Be7",
-      "Nxc6"
+      "Nxc6",
+      "bxc6",
+      "Bd3",
+      "O-O",
+      "f4",
+      "Rb8",
+      "h3",
+      "Re8",
+      "b3",
+      "Bf8",
+      "Bb2"
     ],
     "meus": [
       0,
@@ -256,7 +372,12 @@
       8,
       10,
       12,
-      14
+      14,
+      16,
+      18,
+      20,
+      22,
+      24
     ],
     "alternativas": {
       "6": [
@@ -267,24 +388,29 @@
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",
-      "4": "O lance que abre o jogo. O normal é ele comer com\n…exd4, e é disso que trata o resto do arquivo. Este jogo reúne as três respostas\nem que ele não come — e a regra é sempre a mesma: quem não briga pelo centro,\nentrega o centro.",
-      "6": "Dá para empurrar 4.d5 e ganhar espaço, e o computador até gosta — mas\nnós não fazemos isso. Peão em d5 fecha o centro, e centro fechado ajuda quem\nestá apertado, que é ele. Deixando a tensão de pé, quem tem de decidir a hora de\ncomer é ele, e cada decisão dessas é uma chance de errar.",
-      "8": "O bispo prega o cavalo de c6 contra o rei: ele\nnão pode sair do lugar. E esse cavalo é a peça mais ocupada do tabuleiro dele —\né ele que briga com o nosso peão de d4 e é ele que ajuda o peão de d6 a segurar\ne5. Pregando o cavalo, atacamos as duas coisas sem encostar em nenhuma. Guarde o\nlance: no oitavo nós vamos trocar essa peça de propósito.",
-      "10": "O cavalo recaptura e cai no meio do tabuleiro atacando o de c6 — que\ncontinua pregado pelo nosso bispo de b5 e não tem para onde correr. Repare em\ncomo a tensão se desfez: quem teve de comer foi ele, e quem ficou com peça no\ncentro fomos nós. Era isto que o 4.Cc3 estava esperando.",
-      "12": "Rei guardado antes de abrir qualquer coisa. As peças estão empatadas —\ndois cavalos e um bispo de cada lado —, e a diferença é só esta: o nosso rei\nestá no canto e o dele ainda está no meio, com o bispo de f8 trancando a\nsaída. O próximo lance começa a cobrar essa diferença.",
-      "14": "Trocamos\nem c6 de propósito: o peão dele vira peão dobrado, o bispo de d7 perde a\nserventia e a nossa diagonal abre. Depois vem bispo para d3 e o avanço f4."
+      "4": "O lance que abre o jogo. O normal é ele comer com\r\n…exd4, e é disso que trata o resto do arquivo. Este jogo reúne as três respostas\r\nem que ele não come — e a regra é sempre a mesma: quem não briga pelo centro,\r\nentrega o centro.",
+      "6": "Dá para empurrar 4.d5 e ganhar espaço, e o computador até gosta — mas\r\nnós não fazemos isso. Peão em d5 fecha o centro, e centro fechado ajuda quem\r\nestá apertado, que é ele. Deixando a tensão de pé, quem tem de decidir a hora de\r\ncomer é ele, e cada decisão dessas é uma chance de errar.",
+      "8": "O bispo prega o cavalo de c6 contra o rei: ele\r\nnão pode sair do lugar. E esse cavalo é a peça mais ocupada do tabuleiro dele —\r\né ele que briga com o nosso peão de d4 e é ele que ajuda o peão de d6 a segurar\r\ne5. Pregando o cavalo, atacamos as duas coisas sem encostar em nenhuma. Guarde o\r\nlance: no oitavo nós vamos trocar essa peça de propósito.",
+      "10": "O cavalo recaptura e cai no meio do tabuleiro atacando o de c6 — que\r\ncontinua pregado pelo nosso bispo de b5 e não tem para onde correr. Repare em\r\ncomo a tensão se desfez: quem teve de comer foi ele, e quem ficou com peça no\r\ncentro fomos nós. Era isto que o 4.Cc3 estava esperando.",
+      "12": "Rei guardado antes de abrir qualquer coisa. As peças estão empatadas —\r\ndois cavalos e um bispo de cada lado —, e a diferença é só esta: o nosso rei\r\nestá no canto e o dele ainda está no meio, com o bispo de f8 trancando a\r\nsaída. O próximo lance começa a cobrar essa diferença.",
+      "14": "Trocamos\r\nem c6 de propósito: o peão dele vira peão dobrado, o bispo de d7 perde a\r\nserventia e a nossa diagonal abre. Depois vem bispo para d3 e o avanço f4 — e\r\nos próximos lances são exatamente isso.",
+      "16": "O bispo recua um passo e vale mais em d3 do que valia em b5. De lá ele\r\nguarda o peão de e4, e é o peão de e4 que o plano inteiro quer empurrar: f4 e\r\ndepois e5. Guarde a regra que está por trás — bispo não é bom pela casa em que\r\nestá, é bom pelo peão que ele deixa andar.",
+      "18": "O avanço que dá o desenho da partida. Os dois peões, e4 e f4, andam\r\njuntos contra a posição dele, e a ameaça de verdade é e4-e5: esse lance estraga\r\nos peões dele e, principalmente, abre linhas contra o rei que acabou de ir para\r\ng8. Sim, o f4 tira um peão da frente do NOSSO rei — dá para pagar, porque não há\r\numa peça preta olhando para esse lado.",
+      "20": "O mesmo peãozinho de sempre, e sempre pelo mesmo motivo: g4. Sem ele, o\r\nbispo de d7 dele vai a g4 e começa a incomodar o cavalo e a dama. Um lance que\r\nnão ataca nada e que compra sossego para os próximos cinco.",
+      "22": "Repare no que ele fez com a torre no lance 10: pôs em b8, apontada para\r\no nosso peão de b2. O b3 tira o peão da mira E abre a casa b2 para o bispo. Um\r\nlance, dois problemas resolvidos — e é o curso que dá o argumento: nesta\r\nestrutura o bispo vai para a diagonal grande, onde é ótimo e onde ainda tapa a\r\ntorre dele.",
+      "24": "A última peça sai de casa, e sai para a diagonal mais longa do\r\ntabuleiro, apontada para g7 — o cantinho do rei dele. Conte a posição: rei no\r\ncanto desde o sétimo lance, as quatro peças pequenas fora, os dois peões\r\nprontos para andar no centro e a torre dele em b8 encarando o nosso bispo em\r\nvez do nosso peão. A abertura acabou, e o plano do meio-jogo já está escrito:\r\ne4-e5."
     },
     "plano": {},
-    "fonte": "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'"
+    "fonte": "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'. || CAUDA DA §24 (8/9/2026), do 8...bxc6 ao 13.Bb2: DEGRAU 0 DO PRIMEIRO AO ULTIMO LANCE. WIM Fiona Steil-Antoni e IM Alex Astaneh — Short and Sweet: Scotch (Chess.com, gratis) alcancam esta posicao por transposicao e jogam os dez lances seguintes, com prosa em seis deles: o 9.Bd3 (guarda o peao de e4, e o bispo ganha vida quando vierem f4 e e5), o 10.f4 (expansao no centro, com a ideia de e5 estragar a estrutura dele e abrir linhas contra o rei), o 11.h3 (tomar conta da casa g4), o 11...Te8 (ele ativa a segunda torre) e o 12.b3 (nesta estrutura o bispo fianqueta: fica otimo na diagonal grande e ainda tapa a torre preta de b8). O explorer confirma os quatro primeiros com folga (16.962, 9.908, 13.324 e 11.886 jogos) e afina depois; onde ele afina, quem manda e o curso, que e o degrau 0. Ponta +0,52 -> +0,99."
   },
   {
-    "id": "brancas-escocesa-1778f8cb",
+    "id": "brancas-escocesa-a217869a",
     "cor": "brancas",
     "abertura": "escocesa",
     "nivel": "avancado",
-    "nome": "Escocesa — 3...Cf6 — 5.Bc4 Nc5 6.Nc3",
+    "nome": "Escocesa — 3...Cf6 — 11.exd6 Bxd6 12.Rfe1",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1bqkb1r/pppp1ppp/2n5/2n1P3/2B5/2N2N2/PPP2PPP/R1BQK2R b KQkq - 3 6",
+    "fenFinal": "r1b1qrk1/ppp2ppp/2nbn3/8/2B5/2N1BN2/PPP1QPPP/3RR1K1 b - - 1 12",
     "lances": [
       "e2e4",
       "e7e5",
@@ -296,7 +422,19 @@
       "f6e4",
       "f1c4",
       "e4c5",
-      "b1c3"
+      "b1c3",
+      "f8e7",
+      "c1e3",
+      "e8g8",
+      "e1g1",
+      "c5e6",
+      "d1e2",
+      "d7d6",
+      "a1d1",
+      "d8e8",
+      "e5d6",
+      "e7d6",
+      "f1e1"
     ],
     "sans": [
       "e4",
@@ -309,7 +447,19 @@
       "Nxe4",
       "Bc4",
       "Nc5",
-      "Nc3"
+      "Nc3",
+      "Be7",
+      "Be3",
+      "O-O",
+      "O-O",
+      "Ne6",
+      "Qe2",
+      "d6",
+      "Rad1",
+      "Qe8",
+      "exd6",
+      "Bxd6",
+      "Rfe1"
     ],
     "meus": [
       0,
@@ -317,7 +467,13 @@
       4,
       6,
       8,
-      10
+      10,
+      12,
+      14,
+      16,
+      18,
+      20,
+      22
     ],
     "alternativas": {
       "10": [
@@ -328,12 +484,18 @@
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",
-      "4": "O lance que abre o jogo, e ele não comeu. A regra é\nsempre a mesma: quem não briga pelo centro, entrega o centro. Aqui ele tenta uma\nterceira via — em vez de comer ou de segurar com peão, contra-ataca o nosso e4\ncom a peça.",
-      "6": "Comemos o peão que ele largou, e o cavalo de f6 fica sem\napoio nenhum. Ele vai buscar o peão de volta com 4…Cxe4 — é esse lance que dá\nsentido ao 3…Cf6 —, e é justamente o que a gente quer: o cavalo dele para numa\ncasa onde não há um único peão para segurá-lo, e o nosso bispo já sabe para\nonde ir.",
-      "8": "O bispo aponta para f7, e a ameaça de verdade é\nDd5: de d5 a dama bate em f7 e no cavalo de e4 ao mesmo tempo, e f7 só tem o rei\npara defender. Repare que é a mesma dama em d5 da Philidor — o golpe aparece nas\nduas aberturas, com as peças quase nos mesmos lugares.",
-      "10": "Ele pegou o peão de e4 mas\no cavalo já teve de andar duas vezes. Nós temos um peão forte em e5 e todas as\npeças saindo com tempo."
+      "4": "O lance que abre o jogo, e ele não comeu. A regra é\r\nsempre a mesma: quem não briga pelo centro, entrega o centro. Aqui ele tenta uma\r\nterceira via — em vez de comer ou de segurar com peão, contra-ataca o nosso e4\r\ncom a peça.",
+      "6": "Comemos o peão que ele largou, e o cavalo de f6 fica sem\r\napoio nenhum. Ele vai buscar o peão de volta com 4…Cxe4 — é esse lance que dá\r\nsentido ao 3…Cf6 —, e é justamente o que a gente quer: o cavalo dele para numa\r\ncasa onde não há um único peão para segurá-lo, e o nosso bispo já sabe para\r\nonde ir.",
+      "8": "O bispo aponta para f7, e a ameaça de verdade é\r\nDd5: de d5 a dama bate em f7 e no cavalo de e4 ao mesmo tempo, e f7 só tem o rei\r\npara defender. Repare que é a mesma dama em d5 da Philidor — o golpe aparece nas\r\nduas aberturas, com as peças quase nos mesmos lugares.",
+      "10": "Ele pegou o peão de e4 mas\r\no cavalo já teve de andar duas vezes. Nós temos um peão forte em e5 e todas as\r\npeças saindo com tempo.",
+      "12": "O último bispo sai, e a casa e3 é escolhida por um motivo concreto: de\r\nlá ele encara o cavalo de c5, que é a peça que já andou três vezes e ainda não\r\nachou lugar. Guarde a regra — quando o adversário tem uma peça mal posta,\r\ndesenvolva apontando para ela.",
+      "14": "Rei guardado. Repare na conta de tempos desta linha: ele gastou os\r\nlances 3, 4 e 5 com o mesmo cavalo, que saiu de g8, foi a f6, comeu em e4 e\r\nrecuou para c5. Nós usamos esses três lances para tirar bispo, cavalo e rei do\r\nlugar. É essa a vantagem que a Escocesa compra.",
+      "16": "A dama entra atrás do peão de e5, que é a peça mais avançada que temos\r\ne a que ele mais quer comer. E há um segundo emprego, que é o de sempre neste\r\nrepertório: com a dama fora de d1, a torre pode ir para lá.",
+      "18": "A torre da ala da dama vai para a coluna do meio — e é esta, e não a\r\noutra. A regra vale para a partida inteira: quando as duas torres podem ir para\r\na mesma coluna, mande a que NÃO está fazendo nada. A de f1 já olha para a coluna\r\nf, onde o nosso peão de f2 pode andar; a de a1 estava sem serviço nenhum.",
+      "20": "Devolva o peão na hora certa. Segurá-lo custaria lances de defesa, e\r\no que a gente ganha entregando-o é melhor: as colunas abrem com todas as nossas\r\npeças já colocadas e nenhuma das dele. Compare os dois lados — nós temos as duas\r\ntorres nas colunas do meio, dama em e2 e os dois bispos apontados; ele tem uma\r\ndama em e8 e um bispo que ainda não saiu.",
+      "22": "A segunda torre entra, e agora as duas estão nas colunas em que a\r\npartida vai acontecer: d e e. Este é o retrato do que a abertura entregou —\r\nrei no canto desde o oitavo lance, as quatro peças pequenas fora, as duas\r\ntorres ligadas e ocupando as duas colunas centrais, e a dama atrás delas. Não\r\nhá um único lance de arrumação sobrando: a abertura acabou."
     },
     "plano": {},
-    "fonte": "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'. Passou do Base para o Avançado em 7/9/2026 pela poda da seção 23 de docs/REVISAO-FONTES.md: os lances são os mesmos, o id não mudou, e a fonte também não. O motivo é que o golpe que ela ensina — a dama em d5 batendo em f7 e no cavalo ao mesmo tempo — o aluno JÁ TREINA na Philidor (brancas-philidor-e0cf1d11), com as peças quase nas mesmas casas, e o próprio comentário desta linha diz isso. Repetir o mesmo golpe em duas linhas do Base é cobrar duas vezes pela mesma ideia."
+    "fonte": "Curso Krikor 2025 — cap. 'Abertura Escocesa vs Respostas sem 3…exd4'. Passou do Base para o Avançado em 7/9/2026 pela poda da seção 23 de docs/REVISAO-FONTES.md: os lances são os mesmos, o id não mudou, e a fonte também não. O motivo é que o golpe que ela ensina — a dama em d5 batendo em f7 e no cavalo ao mesmo tempo — o aluno JÁ TREINA na Philidor (brancas-philidor-e0cf1d11), com as peças quase nas mesmas casas, e o próprio comentário desta linha diz isso. Repetir o mesmo golpe em duas linhas do Base é cobrar duas vezes pela mesma ideia. || CAUDA DA §24 (8/9/2026), do 6...Be7 ao 12.Tfe1: o curso para no 6.Cc3 e nao alcanca nenhuma destas posicoes. Degrau 1 em 6...Be7 (29,7 por cento, 835 jogos) e 7.Be3 (motor +1,04, o melhor dos tres, e tira a ultima peca menor de casa); degrau 2 em 7...O-O e 8.O-O (+0,66 contra +0,77 do 8.Cd5 — entre parecidos ganha o que roca); degrau 1 em 8...Ce6 e 9.De2 (+1,07, o melhor); degrau 2 em 9...d6; degrau 3 do 10.Tad1 em diante — 151, 93, 51, 25 e 24 jogos. O 10.Tad1 e o mais jogado da posicao com 61,6 por cento e o melhor do motor com +1,26. Ponta +0,90 -> +1,58."
   }
 ]
