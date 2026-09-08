@@ -87,6 +87,8 @@ const ALVO_POR_JUIZ = numero("--alvo", 40);
  * curadas no Bloco 3 têm ~20 peças —, escrita como regra.
  */
 const MINIMO_DE_PECAS = numero("--minimo-pecas", 14);
+/** Quantos lances do tema uma posição pode ter e ainda perguntar alguma coisa. */
+const TETO_DE_LANCES = numero("--teto-lances", 8);
 
 type Puzzle = { id: string; fen: string; lances: string[]; rating: number };
 
@@ -183,6 +185,10 @@ for (const puzzle of puzzles) {
       if (jogo.turn() !== COR[juiz.quemJoga(lado)]) continue;
       const lances = juiz.lances(fen, lado);
       if (lances.length === 0) continue;
+      // Mais de oito lances do tema não é exercício, é bilhete premiado: o
+      // aluno acerta mexendo quase qualquer coisa. E o motor teria de medir os
+      // oito, que é onde o tempo de parede iria embora.
+      if (lances.length > TETO_DE_LANCES) continue;
       candidatas.push({
         puzzle: puzzle.id,
         rating: puzzle.rating,

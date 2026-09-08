@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { AfirmacaoSchema } from "./afirmacoes.ts";
 import { Chess } from "chess.js";
-import { MAPA } from "./exercicios.ts";
+import { MAPA, tarefaPorId } from "./exercicios.ts";
 import { juizDaDica, uciDe } from "./lances.ts";
 import { porta1 } from "./portas.ts";
 import { NIVEIS } from "../curso/trilha.ts";
@@ -851,10 +851,14 @@ export function problemasDoTreino(dica: Dica): { codigo: string; mensagem: strin
     );
     return problemas;
   }
-  if (noMapa?.tarefa && noMapa.tarefa !== juiz.id) {
+  // A amarra vale só quando o juiz **empresta** o alvo de uma tarefa: aí ele
+  // tem de emprestar da tarefa que o MAPA deu à dica, e um juiz trocado por
+  // engano reprova aqui. Seis juízes não emprestam de tarefa nenhuma — em m1 a
+  // m8 o lance é a forma do tema —, e para eles não há o que comparar.
+  if (noMapa?.tarefa && tarefaPorId(juiz.id) && noMapa.tarefa !== juiz.id) {
     erro(
       "JUIZ_FORA_DO_MAPA",
-      `o juiz de ${dica.id} é "${juiz.id}" e o MAPA lhe dá a tarefa "${noMapa.tarefa}"`,
+      `o juiz de ${dica.id} empresta de "${juiz.id}" e o MAPA lhe dá a tarefa "${noMapa.tarefa}"`,
     );
   }
 

@@ -16,12 +16,26 @@ import { JUIZES, juizDaDica, juizPorId, lancesQueAplicam, uciDe } from "./lances
 
 const UCI = /^[a-h][1-8][a-h][1-8][nbrq]?$/;
 
-test("os juízes têm id único, e o id é o de uma tarefa", async () => {
+test("os juízes têm id único, e quem tem tarefa no MAPA usa o id dela", async () => {
   const ids = JUIZES.map((j) => j.id);
   assert.equal(new Set(ids).size, ids.length, `ids repetidos em ${ids.join(", ")}`);
   const { tarefaPorId } = await import("./exercicios.ts");
   for (const j of JUIZES) {
-    assert.ok(tarefaPorId(j.id), `o juiz ${j.id} não corresponde a nenhuma tarefa`);
+    // Seis juízes não vêm de tarefa nenhuma — em m1 a m8 o lance **é** a forma
+    // do tema, e não a consequência de um traço que já estivesse no tabuleiro.
+    // O que o teste cobra é a correspondência quando ela existe: se o MAPA dá
+    // tarefa à dica, o juiz dela tem de usar o id dessa tarefa.
+    if (!tarefaPorId(j.id)) continue;
+    // O juiz que **empresta** o alvo de uma tarefa tem de emprestar da tarefa
+    // que o MAPA deu à dica. Um juiz cujo id não é tarefa nenhuma (`roque`,
+    // `torres-ligadas`, `peca-no-centro`) não tem essa amarra, e é de
+    // propósito: em m3 o MAPA dá `casa-negada`, que o funil mediu com 1,4% de
+    // estoque, e a §1.1 do plano trocou o critério em vez de insistir nele.
+    for (const dica of j.dicas) {
+      const tarefa = MAPA.find((n) => n.dica === dica)?.tarefa ?? null;
+      if (tarefa === null) continue;
+      assert.equal(j.id, tarefa, `o juiz de ${dica} empresta de "${j.id}" e o MAPA dá "${tarefa}"`);
+    }
   }
 });
 

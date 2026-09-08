@@ -334,7 +334,9 @@ test("adversarial: duas edições do mesmo livro contam como a mesma obra", () =
 
 test("adversarial: treino numa dica sem juiz de lance reprova", () => {
   const dica = m12Sadio();
-  dica.id = "m2"; // `m2` ainda não tem juiz de lance escrito.
+  // `m5` é a regra negativa do módulo — "não mexa nos peões da frente do seu
+  // rei sem motivo" não tem lance que a aplique, e por isso ela não tem juiz.
+  dica.id = "m5";
   assert.ok(codigos(dica).includes("TREINO_SEM_JUIZ"), codigos(dica).join(","));
 });
 

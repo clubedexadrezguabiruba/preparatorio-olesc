@@ -1,5 +1,5 @@
-import { Chess, type Move } from "chess.js";
-import { corDaCasa } from "./afirmacoes.ts";
+import { Chess, type Move, type Square } from "chess.js";
+import { casasEntre, corDaCasa } from "./afirmacoes.ts";
 import {
   casaDe,
   coluna,
@@ -96,7 +96,14 @@ export type ContratoDeLance = {
 };
 
 export type JuizDeLance = {
-  /** O id da tarefa de `exercicios.ts` de onde sai o alvo. */
+  /**
+   * O id do juiz.
+   *
+   * Nos oito primeiros ele é o id da tarefa de `exercicios.ts` de onde sai o
+   * alvo. Nos seis de m1 a m8 não há tarefa por trás — o lance **é** a forma
+   * natural do tema — e o id nomeia o tema direto (`roque`, `torres-ligadas`).
+   * O gate cobra a correspondência só quando o MAPA dá tarefa à dica.
+   */
   readonly id: string;
   /**
    * As dicas que este juiz serve.
@@ -176,6 +183,72 @@ function peoesNaCor(fen: string, lado: Lado, cor: "claras" | "escuras"): number 
 
 /** Todas as peças, para os alvos em que qualquer uma serve. */
 const QUALQUER = "pnbrqk";
+
+/** As quatro casas do meio — as que a dica m3 manda mirar. */
+const CENTRO = ["d4", "d5", "e4", "e5"] as const;
+
+/** Quantas das quatro casas do meio as **peças** de um lado miram. */
+function centroMirado(fen: string, lado: Lado): number {
+  const jogo = new Chess(fen);
+  let quantas = 0;
+  for (const casa of CENTRO) {
+    const mira = jogo
+      .attackers(casa as Square, COR[lado])
+      // Peça, e não peão: a dica m3 diz que controlar o centro não é ter peão
+      // lá. O rei também fica de fora — ele controla casa do meio no final, e
+      // no meio-jogo levá-lo para lá é o contrário de m2.
+      .some((de) => "nbrq".includes(jogo.get(de as Square)?.type ?? ""));
+    if (mira) quantas += 1;
+  }
+  return quantas;
+}
+
+/**
+ * As duas torres de um lado se defendem — nada entre elas numa linha comum.
+ *
+ * Falso quando o lado não tem exatamente duas torres: com uma só não há o que
+ * ligar, e com três (promoção) a dica deixa de descrever a posição.
+ */
+function ligadas(fen: string, lado: Lado): boolean {
+  const jogo = new Chess(fen);
+  const torres: Square[] = [];
+  for (const fileiraDoTabuleiro of jogo.board()) {
+    for (const casa of fileiraDoTabuleiro) {
+      if (casa?.type === "r" && casa.color === COR[lado]) torres.push(casa.square);
+    }
+  }
+  if (torres.length !== 2) return false;
+  const caminho = casasEntre(torres[0], torres[1]);
+  if (caminho === null) return false; // não estão na mesma linha
+  return caminho.every((casa) => jogo.get(casa) === undefined);
+}
+
+/**
+ * As peças **dele** que atacam alguma peça sua de valor igual ou maior.
+ *
+ * É a leitura de máquina de "a peça dele que está te incomodando" (m8): um
+ * cavalo que ataca a sua torre incomoda; um que ataca o seu peão é troca de
+ * peão por cavalo, e ninguém chama isso de incômodo. O rei fica fora dos dois
+ * lados — ele não se troca, e ser atacado por ele é xeque, que é outra coisa.
+ */
+function quemAmeaca(fen: string, lado: Lado): Square[] {
+  const jogo = new Chess(fen);
+  const valor: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+  const ameacam = new Set<Square>();
+  for (const fileiraDoTabuleiro of jogo.board()) {
+    for (const casa of fileiraDoTabuleiro) {
+      if (casa === null || casa.color !== COR[lado] || !"nbrq".includes(casa.type)) continue;
+      for (const de of jogo.attackers(casa.square, COR[OUTRO[lado]])) {
+        const atacante = jogo.get(de as Square);
+        if (!atacante || !"nbrq".includes(atacante.type)) continue;
+        if ((valor[atacante.type] ?? 0) <= (valor[casa.type] ?? 0)) ameacam.add(de as Square);
+      }
+    }
+  }
+  return [...ameacam].sort();
+}
+
+
 
 /* ------------------------------------------------------------------ *
  * Os juízes
@@ -499,6 +572,330 @@ export const JUIZES: readonly JuizDeLance[] = [
         fen: "4k3/8/8/8/8/2p1p3/8/4K3 w - - 0 1",
         lado: "brancas",
         porque: "c3 e e3 são dois passados — duas casas de bloqueio, e nenhuma delas é a pedida",
+      },
+    },
+  },
+
+  /* ---------------------------------------------------------------- *
+   * Os seis de m1 a m8 (§1.1 do plano)
+   *
+   * Estes não vêm de tarefa de `exercicios.ts`, e é por isso que eles têm
+   * `tarefa: null`: o lance **é** a forma natural do tema, e não a consequência
+   * de um traço que já existisse no tabuleiro. Rocar, ligar as torres e tirar
+   * uma peça da casa de origem são fatos de regra, não julgamento — e a
+   * `chess.js` os nomeia sozinha.
+   *
+   * Duas das oito dicas ficam **sem exercício**, e a decisão é declarada:
+   *
+   * - **m5** é uma regra negativa. "Não mexa nos peões da frente do seu rei sem
+   *   motivo" não tem lance que a aplique — tem lances que a violam. O
+   *   exercício honesto ali seria escolher entre dois lances, e escolher entre
+   *   alternativas é o quiz que o Doug mandou tirar em 2026-09-07.
+   * - **m7** é profilaxia: a ameaça tapada do adversário depende do que ele
+   *   quer jogar, e isso é julgamento. A proposta do plano — "qual peça dele
+   *   está mirando a sua casa fraca" — é um exercício de **clique**, e a mesma
+   *   decisão o descartou.
+   *
+   * As duas continuam no ar com a explicação, sem exercício, e o gate imprime o
+   * número: dizer "6 de 8" é melhor do que o site fingir que todo tema tem
+   * prática.
+   * ---------------------------------------------------------------- */
+
+  {
+    id: "peca-na-casa-de-origem",
+    dicas: ["m1"],
+    quemJoga: (lado) => lado,
+    lances(fen, lado) {
+      // O alvo é a peça que ainda está onde nasceu; o lance é ela sair de lá.
+      const alvo = alvoDa("peca-na-casa-de-origem", fen, lado);
+      if (alvo.length === 0) return [];
+      return legais(fen, this.quemJoga(lado))
+        .filter((m) => m.from === alvo[0])
+        .map(uciDe)
+        .sort();
+    },
+    contrato: {
+      aplica:
+        "que o aluno tira do lugar a peça que ainda está na casa onde ela nasceu — que é a única " +
+        "coisa que a dica m1 manda fazer, e a que ele mais esquece de fazer.",
+      naoAutoriza:
+        "concluir que a casa de chegada é a melhor para ela. Sair é o assunto da dica; para onde " +
+        "ir é a conta seguinte, e a dica m17 é que a ensina.",
+      lanceMultiplo:
+        "qualquer casa para onde a peça parada vá conta. O tema é ela sair, e não o destino — " +
+        "recusar um destino aqui seria cobrar m17 no exercício de m1.",
+      enunciado: "Uma peça sua ainda está na casa onde começou a partida. Ponha-a para jogar.",
+      foraDoTema:
+        "Esse lance é legal, mas não é o da dica: ele mexe numa peça que já estava trabalhando.",
+      custaCaro:
+        "Desenvolver é o padrão certo, e essa peça precisava mesmo sair. O que faltou foi a casa: " +
+        "ali ela sai de casa e entra num problema.",
+      exemplo: {
+        // Das oito peças de origem das brancas só a torre de a1 continua onde
+        // nasceu, e é ela que a dica manda mexer.
+        fen: "r3r1k1/ppp2ppp/3p2n1/8/4P3/2N5/PPP2PPP/R2R2K1 w - - 0 1",
+        lado: "brancas",
+        lances: ["a1b1", "a1c1"],
+      },
+      contraexemplo: {
+        fen: "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+        lado: "brancas",
+        porque: "seis peças brancas continuam nas casas de origem — a pergunta teria seis respostas",
+      },
+    },
+  },
+
+  {
+    id: "roque",
+    dicas: ["m2"],
+    quemJoga: (lado) => lado,
+    lances(fen, lado) {
+      // O único juiz do módulo que não precisa de alvo nenhum: a `chess.js` já
+      // nomeia o roque na bandeira do lance, e roque é roque.
+      return legais(fen, this.quemJoga(lado))
+        .filter((m) => m.flags.includes("k") || m.flags.includes("q"))
+        .map(uciDe)
+        .sort();
+    },
+    contrato: {
+      aplica:
+        "que o aluno roca — que é o lance que a dica m2 ensina, e o que ela chama de duas coisas " +
+        "num lance só: o rei sai da coluna do meio e a torre entra no jogo.",
+      naoAutoriza:
+        "concluir que o lado escolhido é o certo, nem que era a hora. Rocar cedo é quase sempre " +
+        "bom e não é sempre; qual dos dois lados é a conta que a dica não faz.",
+      lanceMultiplo:
+        "os dois roques contam quando os dois são legais. Escolher entre curto e longo é " +
+        "julgamento, e este exercício não o cobra.",
+      enunciado: "O seu rei ainda está no meio. Roque.",
+      foraDoTema: "Esse lance é legal, mas não é o da dica: o seu rei continua na coluna do meio.",
+      custaCaro:
+        "Rocar é o padrão certo e esse roque o cumpre. O que ele não conferiu foi o que está " +
+        "esperando o rei do outro lado — abrigo com buraco não é abrigo.",
+      exemplo: {
+        fen: "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
+        lado: "brancas",
+        lances: ["e1g1"],
+      },
+      contraexemplo: {
+        fen: "r3k2r/pppq1ppp/2npbn2/2b1p3/2B1P3/2NPBN2/PPPQ1PPP/R4RK1 w kq - 6 9",
+        lado: "brancas",
+        porque: "as brancas já rocaram — não há roque a jogar, e a posição não serve",
+      },
+    },
+  },
+
+  {
+    id: "peca-no-centro",
+    dicas: ["m3"],
+    quemJoga: (lado) => lado,
+    lances(fen, lado) {
+      const quem = this.quemJoga(lado);
+      const antes = centroMirado(fen, quem);
+      const aceitos: LanceUci[] = [];
+      for (const m of legais(fen, quem)) {
+        // Peça, e não peão: a dica m3 diz com todas as letras que controlar o
+        // centro não é ter peão lá. O rei fica de fora porque levá-lo ao centro
+        // no meio-jogo é o contrário do que m2 acabou de ensinar.
+        if (!"nbrq".includes(m.piece)) continue;
+        const jogo = new Chess(fen);
+        jogo.move(m);
+        if (centroMirado(jogo.fen(), quem) > antes) aceitos.push(uciDe(m));
+      }
+      return aceitos.sort();
+    },
+    contrato: {
+      aplica:
+        "que o aluno põe uma peça a mirar uma das quatro casas do meio que ela não mirava antes — " +
+        "que é o que a dica m3 chama de disputar o centro com peça.",
+      naoAutoriza:
+        "concluir que ele controla o centro. Mirar é uma casa a mais na conta; quem controla é " +
+        "quem tem mais peças mirando, e essa comparação a dica não pede aqui.",
+      lanceMultiplo:
+        "todo lance de peça que aumenta a conta conta. São vários, e é assim que a dica é: ela " +
+        "descreve uma direção, e não um lance.",
+      enunciado: "Ponha uma peça sua a mirar uma casa do meio que ela ainda não alcança.",
+      foraDoTema:
+        "Esse lance é legal, mas não é o da dica: depois dele as suas peças miram as mesmas casas " +
+        "do meio de antes.",
+      custaCaro:
+        "Disputar o centro com peça é o padrão certo, e este lance o cumpre. O que ele não " +
+        "conferiu foi se a peça sobrevive na casa em que parou.",
+      exemplo: {
+        // Depois de 1.e4 e5, o cavalo de g1 é a peça que passa a mirar o centro.
+        fen: "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+        lado: "brancas",
+        lances: ["b1c3", "d1e2", "d1f3", "d1g4", "d1h5", "f1c4", "f1d3", "g1e2", "g1f3"],
+      },
+      contraexemplo: {
+        fen: "4k3/8/8/8/8/8/8/4K3 w - - 0 1",
+        lado: "brancas",
+        porque: "não há peça nenhuma no tabuleiro para mirar o centro — só os dois reis",
+      },
+    },
+  },
+
+  {
+    id: "segunda-peca-no-alvo",
+    dicas: ["m4"],
+    quemJoga: (lado) => lado,
+    lances(fen, lado) {
+      const quem = this.quemJoga(lado);
+      const jogo = new Chess(fen);
+      // Os alvos são as peças **dele**: reunir peças é reunir sobre alguma
+      // coisa, e uma casa vazia não é alvo de ataque, é casa de manobra.
+      const alvos: Square[] = [];
+      for (const fileiraDoTabuleiro of jogo.board()) {
+        for (const casa of fileiraDoTabuleiro) {
+          if (casa !== null && casa.color === COR[OUTRO[quem]]) alvos.push(casa.square);
+        }
+      }
+      const contar = (posicao: string, casa: Square): number =>
+        new Chess(posicao).attackers(casa, COR[quem]).length;
+
+      const aceitos: LanceUci[] = [];
+      for (const m of legais(fen, quem)) {
+        const depois = new Chess(fen);
+        depois.move(m);
+        const fenDepois = depois.fen();
+        for (const alvo of alvos) {
+          // A peça capturada some do tabuleiro e não é mais alvo de ninguém.
+          if (m.to === alvo) continue;
+          if (contar(fen, alvo) === 1 && contar(fenDepois, alvo) >= 2) {
+            aceitos.push(uciDe(m));
+            break;
+          }
+        }
+      }
+      return aceitos.sort();
+    },
+    contrato: {
+      aplica:
+        "que o aluno põe a **segunda** peça a atacar a mesma peça dele — que é o que a dica m4 " +
+        "chama de reunir antes de atacar.",
+      naoAutoriza:
+        "concluir que o alvo cai. Duas peças atacando é uma pergunta, e a resposta depende de " +
+        "quantas defendem — a conta de atacantes e defensores é a dica m11.",
+      lanceMultiplo:
+        "todo lance que leve a segunda peça ao mesmo alvo conta, e alvos diferentes também. O " +
+        "tema é a soma, e não o alvo escolhido.",
+      enunciado: "Uma peça sua já ataca uma peça dele. Traga a segunda para o mesmo alvo.",
+      foraDoTema:
+        "Esse lance é legal, mas não é o da dica: depois dele nenhuma peça dele passou a ter dois " +
+        "atacantes seus.",
+      custaCaro:
+        "Somar a segunda peça no alvo é o padrão certo, e este lance soma. O que ele não " +
+        "conferiu foi o preço da casa em que a segunda peça parou.",
+      exemplo: {
+        // Só a torre de d1 ataca o peão preto de d5; a dama de d2 é a segunda,
+        // e chega por d3 ou d4.
+        fen: "4k3/pp3ppp/8/3p4/8/8/PP1Q1PPP/3RK3 w - - 0 1",
+        lado: "brancas",
+        // A dama sai da frente e a torre de d1 passa a ser a segunda peça
+        // atacando o peão preto de d5 — que é o gesto que a dica descreve.
+        lances: ["d2a5", "d2g5"],
+      },
+      contraexemplo: {
+        fen: "4k3/8/8/8/8/8/8/4K3 w - - 0 1",
+        lado: "brancas",
+        porque: "não há peça dele no tabuleiro além do rei, e rei não é alvo de ataque somado",
+      },
+    },
+  },
+
+  {
+    id: "torres-ligadas",
+    dicas: ["m6"],
+    quemJoga: (lado) => lado,
+    lances(fen, lado) {
+      const quem = this.quemJoga(lado);
+      if (ligadas(fen, quem)) return []; // já estão ligadas: a posição não pergunta nada
+      const aceitos: LanceUci[] = [];
+      for (const m of legais(fen, quem)) {
+        // O roque **liga as torres** e mesmo assim não conta aqui: ele é o
+        // lance da dica m2, e um exercício de m6 cuja resposta é "roque"
+        // ensinaria o aluno a etiquetar o mesmo lance com dois nomes.
+        if (m.flags.includes("k") || m.flags.includes("q")) continue;
+        const jogo = new Chess(fen);
+        jogo.move(m);
+        if (ligadas(jogo.fen(), quem)) aceitos.push(uciDe(m));
+      }
+      return aceitos.sort();
+    },
+    contrato: {
+      aplica:
+        "que o aluno tira a última peça de entre as duas torres — depois deste lance elas se " +
+        "defendem sozinhas, que é o que a dica m6 chama de dar trabalho às duas.",
+      naoAutoriza:
+        "concluir que as torres estão ativas. Ligadas quer dizer que uma defende a outra; se elas " +
+        "têm coluna por onde entrar é a dica m9, e é outra pergunta.",
+      lanceMultiplo:
+        "qualquer lance que esvazie o caminho entre elas conta — e às vezes é a torre que se " +
+        "mexe, e não a peça do meio.",
+      enunciado: "Suas duas torres não se enxergam. Tire o que está entre elas.",
+      foraDoTema:
+        "Esse lance é legal, mas não é o da dica: depois dele ainda há peça entre as suas torres.",
+      custaCaro:
+        "Ligar as torres é o padrão certo, e este lance as liga. O que ele não conferiu foi para " +
+        "onde a peça do meio foi — ela saiu do caminho e entrou num problema.",
+      exemplo: {
+        // As torres estão em a1 e e1, e só o bispo de c1 as separa. O rei já
+        // rocou e está fora do caminho — se ele estivesse entre elas, o único
+        // lance que as ligaria seria o roque, e o roque é da dica m2.
+        fen: "6k1/8/8/8/8/8/PPP2PPP/R1B1R1K1 w - - 0 1",
+        lado: "brancas",
+        lances: ["c1d2", "c1e3", "c1f4", "c1g5", "c1h6"],
+      },
+      contraexemplo: {
+        fen: "4k3/8/8/8/8/8/PPPPPPPP/R3K2R w KQ - 0 1",
+        lado: "brancas",
+        porque:
+          "só o rei está entre as torres, e o único jeito de tirá-lo dali é rocar — que é o lance " +
+          "da dica m2, e este juiz não o aceita",
+      },
+    },
+  },
+
+  {
+    id: "trocar-o-atacante",
+    dicas: ["m8"],
+    quemJoga: (lado) => lado,
+    lances(fen, lado) {
+      const quem = this.quemJoga(lado);
+      const incomoda = quemAmeaca(fen, quem);
+      // Uma peça dele incomodando, e uma só. Duas tornam a posição inutilizável
+      // pela mesma razão de sempre: o enunciado teria duas respostas certas.
+      if (incomoda.length !== 1) return [];
+      return legais(fen, quem)
+        .filter((m) => m.to === incomoda[0])
+        .map(uciDe)
+        .sort();
+    },
+    contrato: {
+      aplica:
+        "que o aluno tira do tabuleiro a peça dele que estava incomodando — que é o que a dica m8 " +
+        "manda trocar, e não uma peça qualquer.",
+      naoAutoriza:
+        "concluir que a troca é boa em geral. A dica é condicional: trocar joga a seu favor **com " +
+        "material a mais**, e é a peça que incomoda que tem de sair.",
+      lanceMultiplo: "qualquer peça sua que capture a que incomoda aplica o tema.",
+      enunciado: "Uma peça dele está incomodando as suas. Tire-a do tabuleiro.",
+      foraDoTema:
+        "Esse lance é legal, mas não é o da dica: a peça dele que incomodava continua no jogo.",
+      custaCaro:
+        "Trocar quem incomoda é o padrão certo, e esta captura o faz. O que ela não conferiu foi " +
+        "a recaptura: a peça que tomou vale mais do que a que ela tomou.",
+      exemplo: {
+        // O cavalo preto de d4 é a única peça dele atacando peça branca de
+        // valor igual ou maior — a torre de c2. Duas peças brancas o capturam.
+        fen: "4k3/8/8/8/3n4/2P5/2R5/3QK3 w - - 0 1",
+        lado: "brancas",
+        lances: ["c3d4", "d1d4"],
+      },
+      contraexemplo: {
+        fen: "4k3/8/8/8/8/8/8/4K3 w - - 0 1",
+        lado: "brancas",
+        porque: "não há peça dele incomodando nenhuma sua — não há o que trocar",
       },
     },
   },
