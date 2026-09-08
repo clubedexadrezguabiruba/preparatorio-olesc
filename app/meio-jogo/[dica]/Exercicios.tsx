@@ -289,10 +289,16 @@ function Exercicio({
                   setOrigem(null);
                   onJogar(de, casa);
                 }}
+                // O nome da grade **começa sempre igual**, e o estado vem
+                // depois. Um rótulo que troca inteiro faz quem usa leitor de
+                // tela perder a referência do que está lendo no meio do lance —
+                // e foi o que quebrou o robô de `scripts/conferir-treino.ts`,
+                // que é o mesmo gesto de procurar a grade pelo nome.
                 descricao={
-                  origem === null
-                    ? `Tabuleiro do exercício ${ordem}. ${contrato.enunciado} Escolha a peça que vai jogar.`
-                    : `Peça de ${origem} escolhida. Escolha para onde ela vai, ou toque em ${origem} de novo para trocar de peça.`
+                  `Tabuleiro do exercício ${ordem}. ${contrato.enunciado} ` +
+                  (origem === null
+                    ? "Escolha a peça que vai jogar."
+                    : `Peça de ${origem} escolhida: escolha para onde ela vai, ou toque em ${origem} de novo para trocar de peça.`)
                 }
               />
             }

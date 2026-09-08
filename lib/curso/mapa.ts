@@ -223,9 +223,14 @@ export const MODULO: Record<
   },
   "meio-jogo": {
     nome: "Meio-jogo",
-    unidade: "dicas",
-    conta: "Dicas que você declarou ter lido. Aqui não há lance para reconferir.",
+    // **Exercícios, e não dicas.** A pastilha de cada dica conta os exercícios
+    // dela, então o total do módulo é a soma dos exercícios — dizer "40 de 40
+    // dicas" com oito dicas na tela era a soma certa com a palavra errada.
+    unidade: "exercícios",
+    conta:
+      "Exercícios em que você jogou o lance da dica. É medida: o servidor confere " +
+      "cada lance com o mesmo juiz que a tela usou.",
     href: "/meio-jogo",
-    vazio: "Nenhuma dica de meio-jogo nesta faixa.",
+    vazio: "Nenhuma dica de meio-jogo com exercício nesta faixa.",
   },
 };

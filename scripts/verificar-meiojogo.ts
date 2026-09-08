@@ -102,12 +102,12 @@ async function entrar(usuario: string): Promise<SupabaseClient> {
   return cliente;
 }
 
-/** Um lance legal que **não** aplica o tema — o erro honesto do aluno. */
-function lanceErrado(fen: string, aceitos: readonly string[]): string {
+/** Um lance legal que **não aplica o tema** — aceitos e recusados fora da conta. */
+function lanceErrado(fen: string, doTema: readonly string[]): string {
   const fora = new Chess(fen)
     .moves({ verbose: true })
     .map(uciDe)
-    .find((l) => !aceitos.includes(l));
+    .find((l) => !doTema.includes(l));
   if (!fora) throw new Error("a posição não tem lance legal fora do tema");
   return fora;
 }
@@ -122,7 +122,10 @@ try {
   if (!treino) throw new Error(`${DICA} não tem treino no conteúdo`);
   const item = treino.exercicios[0];
   const certa = lancesDoItem(item)[0];
-  const errada = lanceErrado(item.fen, lancesDoItem(item));
+  const errada = lanceErrado(item.fen, [
+    ...lancesDoItem(item),
+    ...item.lancesRecusados.map((r) => r.lance),
+  ]);
 
   const ana = await criarConta(`teste.meiojogo.a${SUFIXO}`, "Ana de Teste");
   contas.push(ana);

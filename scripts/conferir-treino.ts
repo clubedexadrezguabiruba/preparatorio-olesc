@@ -46,12 +46,21 @@ const DICAS = validarDicas(
   JSON.parse(readFileSync(path.join(RAIZ, "content/meio-jogo.json"), "utf8")),
 );
 
-/** Um lance legal que **não** aplica o tema — o erro honesto do aluno. */
+/**
+ * Um lance legal que **não aplica o tema** — o erro honesto do aluno.
+ *
+ * Ele tira da conta os aceitos **e os recusados**, e a segunda metade custou uma
+ * execução: sem ela o robô escolhia como "fora do tema" um lance que aplica o
+ * tema e o motor reprova, e depois acusava a tela de não o ter julgado. A tela
+ * estava certa — ela disse "é o lance desta dica, mas aqui ele custa caro", que
+ * é a terceira frase que este script existe para conferir logo abaixo.
+ */
 function lanceForaDoTema(item: ItemDeLance, aceitos: readonly string[]): string {
+  const doTema = new Set([...aceitos, ...item.lancesRecusados.map((r) => r.lance)]);
   const fora = new Chess(item.fen)
     .moves({ verbose: true })
     .map(uciDe)
-    .find((l) => !aceitos.includes(l));
+    .find((l) => !doTema.has(l));
   if (!fora) throw new Error(`${item.id} não tem lance legal fora do tema`);
   return fora;
 }
@@ -146,6 +155,25 @@ async function circulos(pagina: Page, esperado?: number): Promise<number> {
 }
 
 /**
+ * Quantas setas o chessground está desenhando.
+ *
+ * O realce do apoio é `{ orig }` sozinho e o chessground o desenha como
+ * `<circle>`; um **lance** é `{ orig, dest }` e ele o desenha como `<line>`.
+ * Contar círculos para conferir a marca de um lance devolve zero com a seta na
+ * tela — foi o que este script acusou como defeito antes de aprender a
+ * diferença.
+ */
+async function setas(pagina: Page): Promise<number> {
+  const alvo = pagina.locator("svg.cg-shapes line");
+  let quantas = await alvo.count();
+  for (let i = 0; i < 20 && quantas === 0; i += 1) {
+    await pagina.waitForTimeout(100);
+    quantas = await alvo.count();
+  }
+  return quantas;
+}
+
+/**
  * O tabuleiro montado — que é o sinal de que o React hidratou aqui.
  *
  * O `<cg-board>` não vem do servidor: o `ChessBoard` entrega uma `<div>` vazia
@@ -191,9 +219,7 @@ async function conferirDica(pagina: Page, dicaId: string, falhas: Falha[]): Prom
     if (!(await visivel(pagina, `${fora.slice(0, 2)}–${fora.slice(2, 4)} não é o lance desta dica`))) {
       erro(item.id, `o lance ${fora}, legal e fora do tema, não foi julgado`);
     }
-    // Duas pontas de uma seta vermelha: o chessground desenha `circle` na
-    // origem e a linha até o destino.
-    if ((await circulos(pagina)) < 1) erro(item.id, "o lance errado não foi marcado no tabuleiro");
+    if ((await setas(pagina)) < 1) erro(item.id, "o lance errado não foi marcado no tabuleiro");
 
     // 1b. O lance que **aplica** o tema e o motor reprovou, quando o item tem
     //     um. É a terceira frase da tela, e a que mais ensina: o aluno fez o

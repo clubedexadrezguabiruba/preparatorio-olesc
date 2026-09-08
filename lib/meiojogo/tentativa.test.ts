@@ -44,11 +44,17 @@ function item(indice = 0): ItemDeLance {
   return encontrado;
 }
 
-/** Um lance legal que **não** aplica o tema — o erro honesto do aluno. */
+/**
+ * Um lance legal que **não aplica o tema** — o erro honesto do aluno.
+ *
+ * Tira da conta os aceitos e os recusados: um lance recusado aplica o tema, e
+ * confundir os dois faria este arquivo provar `acertou === false` pelo motivo
+ * errado.
+ */
 function foraDoTema(dado: ItemDeLance): string {
-  const aceitos = lancesDoItem(dado);
+  const doTema = new Set([...lancesDoItem(dado), ...dado.lancesRecusados.map((r) => r.lance)]);
   const legais = new Chess(dado.fen).moves({ verbose: true }).map(uciDe);
-  const fora = legais.find((l) => !aceitos.includes(l));
+  const fora = legais.find((l) => !doTema.has(l));
   assert.ok(fora, `${dado.id} não tem lance legal fora do tema`);
   return fora;
 }
@@ -76,6 +82,7 @@ test("o lance legal fora do tema é julgado errado, e não estoura", () => {
   for (const dado of ALGUM.slice(0, 4)) {
     const depois = comLance(COMECO, dado, foraDoTema(dado));
     assert.equal(depois.acertou, false, `${dado.id}: lance fora do tema virou acerto`);
+    assert.equal(depois.vereditos.at(-1), "fora", `${dado.id}: o veredito não é "fora"`);
     assert.equal(depois.tentativa, 1);
   }
 });
@@ -101,10 +108,11 @@ test("depois do acerto o tabuleiro continua vivo e o estado não muda", () => {
 test("as tentativas contam lances diferentes, na ordem", () => {
   const dado = item();
   const aceitos = lancesDoItem(dado);
+  const doTema = new Set([...aceitos, ...dado.lancesRecusados.map((r) => r.lance)]);
   const errados = new Chess(dado.fen)
     .moves({ verbose: true })
     .map(uciDe)
-    .filter((l) => !aceitos.includes(l))
+    .filter((l) => !doTema.has(l))
     .slice(0, 3);
   assert.ok(errados.length === 3, `${dado.id} não tem três lances fora do tema`);
 
