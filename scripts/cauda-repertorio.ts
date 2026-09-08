@@ -4,7 +4,7 @@
  * Uso:
  *   node scripts/cauda-repertorio.ts                a tabela das linhas
  *   node scripts/cauda-repertorio.ts --dossies      um arquivo por linha (a rede acontece aqui)
- *   node scripts/cauda-repertorio.ts <id-da-linha>  o dossiê de uma linha, na tela
+ *   node scripts/cauda-repertorio.ts <id-ou-abertura>  o dossiê na tela (uma linha ou uma abertura inteira)
  *   node scripts/cauda-repertorio.ts --sem-rede     só o que já está no cache
  *   ... --sem-motor                                 pula a avaliação (só explorer e fonte)
  *
@@ -344,11 +344,28 @@ async function montarDossie(corpus: Corpus | null, linha: Linha): Promise<Dossie
       nota: notasDeles.get(r.uci),
     }));
 
-    // A escolha da caminhada: o degrau mais baixo que tiver lance. A fonte
-    // ganha do explorer sempre que alcança a posição — ela é a única que traz
-    // motivo escrito, e motivo escrito é o que o repertório existe para dar.
+    // A escolha da caminhada, e ela é DIFERENTE para os dois lados.
+    //
+    // O lance DELE é o mais jogado, e ponto: a caminhada tem de andar pelo que o
+    // aluno vai encontrar de verdade no sábado, não pelo que seria bom que ele
+    // jogasse. A fonte ganha do explorer quando alcança a posição, porque é a
+    // única que traz motivo escrito.
+    //
+    // O NOSSO lance é o que o motor melhor avalia ENTRE OS TRÊS MAIS JOGADOS —
+    // e isto foi conserto, não estilo. Com "o mais jogado" a caminhada da
+    // Escandinava 60e836c1 entrava em 11.Dd2, que é o lance mais comum daquela
+    // posição (28,2 %) e vale −1,41 para quem o joga; o 11.O-O, com 14,7 %, vale
+    // +0,17. Um dossiê que sugere a linha em que o aluno fica um peão e meio
+    // atrás não é material de decisão, é armadilha. A janela continua sendo o
+    // que as crianças jogam — o motor não traz candidato novo, só ordena os que
+    // o explorer já trouxe.
     const sanDaFonte = fonteAqui[0]?.san;
-    const escolhidoSan = sanDaFonte ?? candidatos[0]?.san;
+    const melhorDoMotor = meu
+      ? [...candidatos]
+          .filter((c) => c.nota && c.nota !== "mate")
+          .sort((a, b) => Number(b.nota!.replace(",", ".")) - Number(a.nota!.replace(",", ".")))[0]
+      : undefined;
+    const escolhidoSan = sanDaFonte ?? melhorDoMotor?.san ?? candidatos[0]?.san;
     let escolhido: Passo["escolhido"] = null;
     if (escolhidoSan) {
       try {
@@ -508,9 +525,18 @@ if (!DOSSIES && !ALVO) {
 
 await abrirMotor();
 
-const alvos = ALVO ? linhas.filter((l) => l.id === ALVO) : linhas;
+// O alvo aceita id **ou nome de abertura**, e o segundo existe por necessidade:
+// o id é o hash dos lances, então ele MORRE no instante em que a cauda é
+// escrita. Quem está esticando uma linha edita o PGN e quer o dossiê novo da
+// mesma linha — pelo id, teria de descobrir o id novo a cada rodada.
+const alvos = ALVO
+  ? linhas.filter((l) => l.id === ALVO || l.abertura === ALVO)
+  : linhas;
 if (alvos.length === 0) {
-  console.error(`Não achei a linha ${ALVO}. Os ids saem de npm run repertorio:cauda.`);
+  console.error(
+    `Não achei "${ALVO}". Vale o id de uma linha ou o nome de uma abertura ` +
+      `(${[...new Set(linhas.map((l) => l.abertura))].sort().join(", ")}).`,
+  );
   process.exit(1);
 }
 
