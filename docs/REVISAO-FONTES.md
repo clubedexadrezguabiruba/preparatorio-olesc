@@ -1638,7 +1638,10 @@ acionável continua sendo a de 9 da §17**, e ela não mudou.
 1. As **9 de "a fonte não cobre o ramo"** — quem sai do roteiro é o adversário.
    Dependem de comprar curso, não de escrever melhor. Lista na §17.
 2. O campo `nivel` **ainda não separa nada na tela**. Com o Base em 11 lances e o
-   Avançado em 12, os níveis seguem a um lance de distância.
+   Avançado em 12, os níveis seguem a um lance de distância. *(As duas metades
+   foram resolvidas depois: o `idsAvancado` do índice na própria §23, e a
+   distância entre os níveis na §24 — os dois passaram ao mesmo teto de 14, e o
+   Avançado deixou de se definir por profundidade.)*
 
 **Nenhuma linha do repertório está sem fonte.** O grupo "sem fonte" do mapa tem
 uma entrada, e ela é a que esta seção explica.
@@ -1918,3 +1921,327 @@ descuido.
    linhas assinadas e a Escocesa `5…d6` (citada pelo molde do Colle) aparecem em
    cauda ou sem-fonte para sempre, porque o `repertorio:mapear` casa por posição.
    **Quem quer o número certo lê a tag `[Fonte]`, não o mapa.**
+
+## 24. A régua do término — a abertura acaba com o rei guardado, 8/9/2026
+
+O pedido do Doug, e ele é curto:
+
+> *"As linhas se esticam até pelo menos o lance 12, porque um dos objetivos
+> principais da abertura é rocar e desenvolver as peças menores. O aluno tem de
+> **jogar** até lá."*
+
+A alternativa foi ouvida e recusada — escrever o roque e as peças que faltam
+apenas no comentário do último lance, sem esticar linha nenhuma. Ela custava
+zero e entregava zero: o treinador cobra **lances**, e um plano que o aluno lê e
+não joga não é treinado. O preço da opção escolhida foi dito antes e aceito:
+cerca de 130 lances nossos novos, cada um com comentário e fonte, e os 27 ids
+morrendo.
+
+### 24.1 O que a régua diz, e por que ela substitui o teto
+
+Até 7/9/2026 a profundidade era **teto**: o Base ia até o lance 8, depois 11, e
+o Avançado até 12. Nenhum desses números respondia à pergunta certa. Eles diziam
+*quanto* decorar; a pergunta é *quando a abertura acabou*.
+
+A régua nova responde isso, e ela é uma frase:
+
+> **A linha termina no primeiro lance nosso ≥ 12 em que o aluno rocou e nenhuma
+> peça menor está na casa de origem.**
+
+Peça capturada ou trocada conta como resolvida — o objetivo é "não sobrou peça
+dormindo", não "cada peça andou". Peça que saiu e voltou continua contando como
+em casa, e isso é de propósito: um cavalo de volta em b1 está dormindo igual.
+Torre e dama ficam fora da régua — a torre sai pelo roque, que já é cobrado à
+parte, e a dama de abertura não tem endereço fixo.
+
+**O teto virou 14 lances nossos, igual para os dois níveis.** O Avançado deixou
+de ser "mais fundo" na §23 — virou "os ramos que o Base deixou de lado" —, e
+profundidade diferente por nível seria dizer que a abertura acaba mais cedo para
+quem sabe menos.
+
+### 24.2 O estado inicial, medido antes de escrever qualquer coisa
+
+O compilador ganhou um placar que sai a cada rodada, mesmo quando reprova. Na
+primeira vez que ele rodou:
+
+```
+Fechamento: 0 de 27 fecham na linha; 0 fecham com [%plano]; 27 abertas (17 sem roque, 30 menores em casa).
+```
+
+**Zero de 27.** Dezessete linhas terminavam com o rei no meio do tabuleiro, e
+havia trinta peças menores paradas na casa de origem — dezessete delas o bispo
+de dama. O aluno que terminava uma linha do repertório não tinha terminado a
+abertura; tinha decorado um pedaço dela.
+
+### 24.3 As regras que substituíram os portões de decisão
+
+O plano desta seção rodou **do início ao fim sem paradas**, e isso só foi
+possível porque cada pergunta que pararia a execução virou regra escrita antes:
+
+| pergunta | regra |
+|---|---|
+| até onde vai cada linha | o primeiro lance nosso ≥ 12 que fecha a régua |
+| e se não fechar | teto rígido de 14; o que faltou vai declarado em `[%plano]` |
+| faixa do explorer | `lichess-1000-1999` (≈ chess.com 700–1700) |
+| quem escolhe o lance DELE | a escada de 4 degraus da §24.4, sempre o mais baixo |
+| quem escolhe o lance NOSSO | o curso enquanto acompanha; depois o melhor do motor entre os três mais jogados; entre parecidos, o que roca ou desenvolve |
+| ordem do trabalho | brancas antes de pretas; as mais baratas primeiro |
+
+E três condições de parada, todas de segurança:
+
+1. progresso de **aluno real** no repertório — a janela de ids teria fechado;
+2. uma ponta abaixo de **−0,50** para o aluno que não se conserte;
+3. o explorer fora do ar depois de duas tentativas com recuo.
+
+**Nenhuma das três disparou.** A primeira foi medida antes e no fim (§24.8), a
+segunda ficou em −0,26 no pior caso (§24.7) e a terceira nunca chegou perto: as
+447 consultas incluíram 20 respostas `429`, e as 20 voltaram com dado depois do
+recuo.
+
+### 24.4 A escada dos lances do adversário
+
+O lance DELE não pode ser escolhido por gosto: é o que o aluno vai encontrar no
+sábado. A escada é esta, e o degrau usado em cada meio-lance está declarado na
+tag `[Fonte]` de cada linha:
+
+| degrau | fonte | quando |
+|---|---|---|
+| 0 | o curso, com a prosa do autor | a fonte alcança a posição |
+| 1 | explorer `lichess-1000-1999`, rapid+classical, ≥ 200 jogos | a fonte acabou |
+| 2 | a mesma faixa **mais o blitz**, ≥ 200 jogos | menos de 200 no degrau 1 |
+| 3 | a linha para (se já tem ≥ 12 lances nossos), ou segue mesmo raro até o 14 | menos de 200 no degrau 2 |
+
+O degrau 0 rendeu muito mais do que o esperado. **Sete das 27 caudas são degrau
+0 em quase toda a extensão** — o curso continuava jogando e explicando muito
+além de onde a linha parava, e ninguém tinha ido ver. O caso mais bonito é a
+Escocesa `4…Cf6`: o comentário do `9.O-O` já prometia em prosa "h3, Df3 e Bf4", e
+os três lances estavam no *Short & Sweet: Scotch*, com o argumento de cada um. O
+plano virou lance, e a prosa encolheu na mesma medida.
+
+### 24.5 A ferramenta, e os quatro defeitos que ela encontrou
+
+Sem `npm run repertorio:cauda` esta seção não caberia numa sessão: cada par de
+lances exigiria uma ida à rede, com espera no meio. Com ela a rede é visitada
+**uma vez** — 447 consultas, cache versionado — e o resto é leitura e escrita.
+`--sem-rede` reproduz os 27 dossiês inteiros sem tocar na rede.
+
+O dossiê não decide nada. Ele traz, do lance atual até o teto: o estado da régua
+a cada meio-lance, o que a fonte joga dali e com que palavras, os três mais
+jogados do explorer com percentual e número de jogos, e — nos lances nossos — a
+nota do motor de cada um desses três.
+
+Escrevendo a ferramenta e lendo os dossiês apareceram **quatro defeitos reais**,
+os quatro consertados com commit próprio:
+
+1. **O explorer fala Chess960 e o Stockfish não.** O explorer devolve o roque
+   como `e1h1` (o rei sobre a própria torre); o Stockfish só aceita `e1g1`.
+   Passado assim em `searchmoves`, ele descartava o lance **em silêncio**, e a
+   nota do motor sumia justamente no lance que esta seção mais cobra. O conserto
+   é não confiar em UCI de fora: o lance é jogado na nossa `chess.js` pelo SAN, e
+   o UCI sai de lá.
+2. **A caminhada sugeria o desastre mais popular.** Com "o mais jogado", a
+   Escandinava do `3…Dd6` recebia a sugestão `11.Dd2` — 28,2 % dos jogos e
+   **−1,41** para quem o joga —, quando o `11.O-O` daquela mesma posição vale
+   +0,17. Passou a ser o melhor do motor entre os três mais jogados.
+3. **A torre de f1 ganhava bônus de "peça menor saindo de casa".** Depois do
+   roque pequeno a torre mora em f1, que é a casa de origem do bispo de casas
+   claras; depois do roque grande o rei mora em c1. O teste olhava só a casa, e
+   `Tfe1` e `Rb1` passavam por desenvolvimento. Agora o tipo da peça entra no
+   teste.
+4. **Um `429` reprovava uma medição certa.** O script saía com código 1 por
+   causa de aviso, e 20 das 447 consultas tiveram `429` — todas resolvidas pela
+   retentativa. O efeito seria mandar refazer 442 consultas corretas e ensinar
+   quem roda o comando a ignorar saída vermelha. Agora só reprova posição que
+   ficou **sem dado**.
+
+### 24.6 O bloco `[%plano]`, e as dez linhas que o usam
+
+Quando a régua não fecha dentro do teto, a saída **não** é encurtar a régua nem
+esticar a linha inventando lance: é o autor declarar, por escrito, o que ficou
+faltando e por quê. O bloco vive no comentário do último lance:
+
+```
+14. Rxd8 {… prosa normal …
+[%plano
+f1>e2: ele espera as torres saírem da coluna d, e vai para e2, de onde entra em d1 e sustenta o rei subindo pelo meio no final
+]}
+```
+
+`origem>destino: motivo` para peça; `O-O:`, `O-O-O:` ou `rei-fica:` para o rei.
+A prosa sai limpa para `comentarios` — por isso o gate do "último lance sem
+comentário" continua valendo sobre o texto do professor, e `ehPergunta` não se
+engana com um `?` que apareça num motivo. O aluno lê a lista no fim da linha e vê
+as setas roxas no tabuleiro.
+
+**São dez linhas, com treze entradas** — mais do que as seis que o plano previa,
+e o motivo é estrutural, não desleixo. Nove das treze são o bispo de dama e o rei
+que não pode mais rocar:
+
+| linha | nível | declara | por quê |
+|---|---|---|---|
+| `brancas-escandinava-fa5b2464` | base | `O-O-O` | b1, c1 e d1 já vazias; o explorer secou em 16 jogos |
+| `brancas-escocesa-1f2de71c` | base | `f1>e2` | nas seis primeiras variantes do motor o bispo só aparece no 15º lance |
+| `brancas-caro-kann-d17e5a90` | base | `c1>f4` | **a casa é do curso**: na variante irmã ele termina em 15.Bf4 |
+| `brancas-caro-kann-c6cf8723` | avançado | `O-O` | do 10º ao 14º tudo é forçado e ganha a dama; o motor roca no 18º |
+| `brancas-philidor-e1d9655b` | base | `f1>e2` | a linha é a corrida f3-g4-h4; e2 é a única casa que não atrapalha peão |
+| `pretas-manhattan-9cc86ae1` | base | `c8>a6` | **a casa é do curso**, que a nomeia no comentário do 14…Cf6 |
+| `pretas-manhattan-5eb7831d` | avançado | `rei-fica` | o rei COMEU o bispo em d8 no 9º lance — o roque acabou ali |
+| `pretas-siciliana-4639d076` | base | `c8>b7` | terceiro item da sequência do curso; o motor põe o bispo em b7 no 15º |
+| `pretas-siciliana-4c9c1e64` | base | `c8>b7` + `rei-fica` | quem empurra os peões da ala do rei somos nós; rocar seria entrar no próprio ataque |
+| `pretas-siciliana-e5b86926` | base | `rei-fica` + `c8>f5` | o rei comeu em f7 no 9º; o roque artificial …Rg7 é do curso |
+
+Em **seis das treze entradas a casa é do próprio curso**, escrita na prosa do
+autor. Nas outras, ela é a casa que a variante principal do motor ocupa, e o
+lance em que isso acontece está no motivo.
+
+O gate impede que o bloco vire porta dos fundos: motivo com menos de 25
+caracteres reprova; plano para peça que já saiu reprova; plano do rei numa linha
+que roca reprova; bispo prometido a casa da outra cor reprova; destino igual à
+origem reprova. As duas últimas pegam erro de digitação, as duas primeiras pegam
+texto velho — que é pior que plano nenhum, porque promete ao aluno uma coisa que
+o repertório acabou de fazer.
+
+### 24.7 Antes e depois
+
+```
+                        antes      depois
+linhas                     27          27
+lances nossos             222         351   (+129)
+  no Base                 164         262
+decisões distintas        165         294
+  no Base                 127         225
+fecham na régua             0          17
+fecham com [%plano]         0          10
+ABERTAS                    27           0
+  sem roque                17           0
+  peças menores em casa    30           0
+âncoras de comentário     230         363
+  com prosa da fonte      136         177
+testes                    675         712
+```
+
+**A pior ponta para quem treina era −0,44 e ficou −0,26.** As 27, medidas no
+Stockfish 18 lite-single de `public/engine/`, profundidade 20:
+
+| linha | antes | depois |
+|---|---|---|
+| alapin | +1,04 | +1,19 |
+| caro-kann (base) | +0,41 | +0,40 |
+| caro-kann (avançado) | igual | **+7,24** |
+| escandinava 3…Dd6 | +0,60 | +1,47 |
+| escandinava 3…Da5 | +0,45 | +0,43 |
+| escandinava 2…Cf6 | +0,37 | +0,25 |
+| escocesa 4…Bc5 | +0,52 | +1,60 |
+| escocesa 4…Cf6 | igual | igual |
+| escocesa 4…Cxd4 | +0,88 | +1,91 |
+| escocesa 3…d6 | +0,52 | +0,99 |
+| escocesa 3…Cf6 | +0,90 | +1,58 |
+| francesa | igual | +0,38 |
+| petroff | +0,27 | +0,61 |
+| philidor 3…Cf6 | +0,64 | +0,61 |
+| philidor 3…exd4 | +0,67 | +0,60 |
+| colle | igual | −0,26 |
+| jobava | +1,68 | +1,84 |
+| londres 3.e3 | igual | igual |
+| londres 3.c3 | +0,51 | +0,60 |
+| manhattan tronco | igual | igual |
+| manhattan elefante | +3,19 | **+3,79** |
+| siciliana dragão | −0,44 | igual |
+| siciliana 5.Cxc6 | igual | **+4,85** |
+| siciliana rossolimo | igual | igual |
+| siciliana rossolimo 4.O-O | −0,36 | igual |
+| siciliana 2.Cc3 | −0,41 | +0,39 |
+| siciliana alapin | igual | igual |
+
+(Sinal do ponto de vista de **quem treina a linha**.) Vinte e uma melhoraram ou
+empataram; as seis que caíram, caíram entre 1 e 26 centésimos, e a maior queda é
+a do Colle — que em troca passou a **jogar** o sacrifício em h7 em vez de ler
+sobre ele.
+
+### 24.8 As decisões que custaram avaliação, uma a uma
+
+A régua ganhou do motor em cinco pontos, e em cada um a conta está na tag
+`[Fonte]` da linha:
+
+1. **Philidor `3…Cf6`, 13º lance:** o `13.Be7` vale +1,70 e o `13.Bd3` vale
+   +0,65. Escrevi o Bd3 — o Be7 deixa o bispo de f1 em casa e a linha sem
+   fechar. **Um peão inteiro de avaliação**, e a ponta caiu de +0,64 para +0,61.
+2. **Jobava, 12º lance:** o curso segue por `…Ca5` e `…b5` (+2,20); escrevi
+   `…O-O` (+1,87). **33 centésimos**, e o plano do curso continua no comentário.
+3. **Rossolimo `4.O-O`, 9º lance:** o `…cxd4` é o mais jogado e vale 13
+   centésimos a mais; o `…Bf5` resolve o bispo de c8 e sem ele a linha não fecha.
+4. **Escandinava `2…Cf6`, 8º lance:** o `8.Bg2` do explorer vale +0,57 e o
+   `8.Cxg6` +0,50; a troca mantém a linha em posição medível por mais três
+   lances, e sete centésimos não decidem nada nesta faixa.
+5. **Siciliana Alapin, 12º lance:** o curso joga `…Cb4` e nós rocamos. Custo:
+   **zero** — o motor dá igualdade nos dois.
+
+E uma decisão que foi contra a fonte por frequência, não por régua: na **Escocesa
+`4…Bc5`** o curso joga `8…De7` e para ali, mas o `8…De7` não aparece entre as
+três respostas mais comuns e o `8…O-O` é 51,8 %. Construir linha do Base sobre
+lance raro é fazer o aluno decorar o que ele não vai encontrar. O degrau 0 foi
+descartado ali, com o motivo escrito na tag.
+
+**Um ponto em que o explorer acaba de verdade:** a posição depois do `11…b6` do
+Londres avançado tem **zero** jogos na faixa. É o único do repertório inteiro em
+que o degrau 3 não é raridade, é ausência. Os dois lances brancos de lá saem do
+motor, e a escolha do `12.O-O` está declarada — no lance 12, com o rei em e1, um
+humano roca e só um computador joga h4.
+
+### 24.9 Os ids, e a janela que continua aberta
+
+**Os 27 ids morreram e 27 nasceram. Zero sobreviventes** — era o esperado, porque
+o id é o hash dos lances e toda linha mudou.
+
+A licença para isso foi medida antes e depois, e o `npm run db:f2` **não serve**
+para medi-la: ele cobre tática, finais, aula e meio-jogo, não `repertorio_progresso`,
+e ainda recria a conta `alunoteste` do zero — apagando justamente o rastro que se
+queria conferir. Por isso nasceu `npm run repertorio:orfaos`, que sai com código
+1 no dia em que aparecer aluno de verdade.
+
+O que ele mede hoje: **5 registros, todos de `professorteste`** (papel professor),
+e três deles já apontavam para ids mortos na poda da §23. **Contas de aluno de
+verdade com progresso no repertório: zero.**
+
+### 24.10 A trava
+
+Enquanto as caudas estavam sendo escritas, `fechamentosAbertos` era **aviso** —
+reprovar a build em cima da própria lista de trabalho travaria a revisão que
+vinha consertá-la. No dia em que as 27 linhas passaram a fechar, a escolha se
+inverteu: `validarBanco` soma a lista aos problemas, e ele roda no compilador, no
+servidor a cada leitura e três vezes no `banco.test.ts`.
+
+O que isso impede já aconteceu uma vez: entre a §1 e a §21 o teto de 8 lances
+ficou de pé sozinho, sem ninguém decidir mantê-lo, até a §21 descobrir que a
+Alapin e o Morra terminavam com o aluno **um peão atrás**. Agora uma linha não
+encolhe em silêncio.
+
+### 24.11 A tela
+
+- **O painel "O que ainda falta"** aparece no fim da linha quando há `[%plano]`,
+  com uma entrada por linha ("Bispo de c1 → f4 — …"), e some inteiro quando não
+  há: caixa vazia não é informação, e painel que aparece sempre vira moldura.
+- **Setas roxas** no tabuleiro, pelo pincel novo `--color-pincel-plano`. Roxo
+  porque os outros cinco pincéis significam veredito, e a seta do plano não julga
+  lance nenhum — ela conta o que vem depois do fim da linha. Medido: 8,33:1 na
+  casa clara e 4,59:1 na escura, contra o piso de 3:1.
+- **A fita do boletim ganhou `flex-wrap`**: com 14 selos ela mede 436px contra os
+  328px úteis de uma tela de 360px. Já estourava com 11.
+- **Copy de `/aberturas`**: "linhas curtas" virou "linhas, cada uma até o roque e
+  as peças fora", e o Avançado deixou de ser "mais fundo" — virou "os ramos que
+  as de cima deixaram de lado", que é o que ele é desde a §23.
+
+### 24.12 Pendências que esta seção registra e não conserta
+
+1. **O compilador descarta em silêncio dois avisos do `expandir`.** Só o
+   `irmao-sem-marca` é impresso; `erro-do-adversario-sem-refutacao` e
+   `termina-em-pergunta` são calculados e jogados fora.
+2. **`gravar.ts` não confere o portão do Avançado no servidor.** Continua da §23.
+3. **O custo de aprender o Base subiu.** Eram 164 lances e 127 decisões; agora
+   são 262 e 225. É o preço declarado do pedido, e o único jeito de saber se ele
+   cabe num aluno de 1000 é medir com os alunos depois de 19/9/2026.
+4. **Dez blocos `[%plano]`, e o plano previa até seis.** Não é porta dos fundos —
+   seis das treze entradas nomeiam a casa que o próprio curso escreve —, mas é
+   número para reler quando a §25 vier.
+
+---

@@ -347,17 +347,25 @@ seguir sem mais exportação do chess.com; se um dia virarem linha, a fonte é
 
 ## 4. Os dois níveis, e a definição do corte
 
-- **Base** — todos os 12 alunos. Até o **lance 8 nosso**. Meta ~40 linhas.
-- **Avançado** — tabuleiros 1 e 2 de cada equipe. Até o **lance 12 nosso**.
-  Meta +40 linhas.
+- **Base** — todos os 12 alunos.
+- **Avançado** — tabuleiros 1 e 2 de cada equipe: os ramos que o Base deixou de
+  lado, e **não** linhas mais fundas (§23 de `REVISAO-FONTES.md`).
 
-Profundidade contada em **lance nosso**, não em meios-lances
-(`PROFUNDIDADE` em [lib/repertorio/linhas.ts](../lib/repertorio/linhas.ts)). O
-plano original trazia três números para a mesma coisa, e o de "16 meios-lances"
-é incompatível com a regra "toda linha termina num lance nosso": numa árvore das
-brancas o 16º meio-lance é **das pretas**. Contado em lance nosso o número é um
-só — 8 e 12 — e os meios-lances saem por cor: 15/23 nas brancas, 16/24 nas
-pretas.
+**A profundidade deixou de ser teto e virou régua em 8/9/2026** (§24 de
+`REVISAO-FONTES.md`). Os números desta seção eram 8 e 12, e eles diziam *quanto
+decorar*; a pergunta certa é *quando a abertura acabou*. A resposta agora é uma
+frase: a linha termina no primeiro lance nosso **≥ 12** em que o aluno rocou e
+nenhuma peça menor está na casa de origem, com **teto de 14** para os dois
+níveis. O que não fechar dentro do teto vai declarado num bloco `[%plano]`, com
+a casa e o motivo, e o aluno lê no fim da linha.
+
+Profundidade continua contada em **lance nosso**, não em meios-lances
+(`PROFUNDIDADE` e `PROFUNDIDADE_MINIMA` em
+[lib/repertorio/linhas.ts](../lib/repertorio/linhas.ts)). O plano original trazia
+três números para a mesma coisa, e o de "16 meios-lances" é incompatível com a
+regra "toda linha termina num lance nosso": numa árvore das brancas o 16º
+meio-lance é **das pretas**. Contado em lance nosso o número é um só — 14 — e os
+meios-lances saem por cor: 27 nas brancas, 28 nas pretas.
 
 ### O corte por frequência, definido
 
@@ -913,9 +921,12 @@ lance no gêmeo anotado — o resto é introdução de arquivo ou marca de
 visualizador, e some na limpeza.
 
 **Onde a fonte de fato encosta nas nossas linhas: 39 pontos.** É o que
-`npm run repertorio:fidelidade` mede, e a conta é pequena por um motivo bom: as
-nossas linhas param no lance 8 e os cursos anotam no 12, 15, 20 — a maior parte
-das 452 fala de posições que o aluno do Base nunca vê. O casamento é por **FEN**
+`npm run repertorio:fidelidade` mede, e a conta era pequena por um motivo bom: as
+nossas linhas paravam no lance 8 e os cursos anotam no 12, 15, 20 — a maior parte
+das 452 falava de posições que o aluno do Base nunca via. **Este número é de
+antes da §24**: com as linhas indo até o lance 12–14, o encontro passou a
+acontecer, e é isso que as caudas de degrau 0 daquela seção medem — as âncoras
+com prosa da fonte foram de 136 para 177. O casamento é por **FEN**
 (as 4 primeiras partes, sem contadores) e nunca por slug: os slugs do
 `fontes.json` são por capítulo de origem e não batem com os nossos —
 `peao-rei` não é `philidor`, e `alapin-brancas`, `alapin-pretas`,

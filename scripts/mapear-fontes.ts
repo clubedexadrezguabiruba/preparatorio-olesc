@@ -56,10 +56,16 @@
  * ## Os números de controle
  *
  * O cabeçalho imprime o tamanho do corpus e quantas âncoras de comentário caem
- * em posição com prosa. Em 7/9/2026, sobre as 40 linhas: **11 cursos, 165
- * variantes, 2.434 comentários** e **53 de 110 âncoras**. Se esses números
- * mudarem sem que o corpus ou o repertório tenham mudado, a medição quebrou — o
- * caso mais provável é a armadilha do en passant voltando.
+ * em posição com prosa. O lado do CORPUS não muda desde 7/9/2026 e é o número de
+ * controle de verdade: **11 cursos, 165 variantes, 2.434 comentários**. Se ele
+ * mudar sem o corpus ter mudado, a medição quebrou — o caso mais provável é a
+ * armadilha do en passant voltando.
+ *
+ * O lado do REPERTÓRIO muda quando o repertório muda, e mudou duas vezes: eram
+ * 53 de 110 âncoras sobre 40 linhas em 7/9/2026, 136 de 230 depois da poda da
+ * §23, e são **177 de 363** desde a §24 — que esticou as 27 linhas até o roque e
+ * as peças menores fora, e com isso fez as caudas encontrarem a prosa dos cursos
+ * que já estava lá, esperando, do lance 9 em diante.
  */
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
