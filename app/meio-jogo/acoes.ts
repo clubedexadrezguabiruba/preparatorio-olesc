@@ -1,39 +1,20 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { perfilAtual } from "@/lib/auth/perfil";
-import { dicaPorId } from "@/lib/meiojogo/conteudo";
 import { gravarTreino, type RespostaDoTreino } from "@/lib/meiojogo/gravar";
-import { criarClienteServidor } from "@/lib/supabase/servidor";
 
-/**
- * Marca ou desmarca a leitura de uma dica de meio-jogo.
+/*
+ * A ação `marcarDica` saiu daqui em 2026-09-07, junto com a caixa "li".
  *
- * É o molde de `marcarLeitura` (`app/finais/acoes.ts`), e pela mesma razão: em
- * meio-jogo não há lance para reconferir, então quem grava é o aluno, com a
- * RLS de `dica_lida` valendo, e o cliente é o do servidor com o cookie dele —
- * **não** o de serviço.
+ * Ela não tinha mais tela que a chamasse, e uma server action sem tela **não é
+ * código morto**: ela continua sendo um endereço que o navegador pode chamar.
+ * Deixá-la seria manter aberta uma porta que escreve em `dica_lida` sem que
+ * nada no site a use.
  *
- * A conferência de que a dica existe não é zelo: sem ela, esta ação viraria
- * "escreva qualquer texto na sua linha de `dica_lida`".
+ * A **tabela** não foi apagada, e é decisão do plano: ela guarda o que os
+ * alunos já declararam, e derrubá-la jogaria fora histórico para não ganhar
+ * nada. O que acabou foi o caminho de escrita.
  */
-export async function marcarDica(id: string, lida: boolean): Promise<void> {
-  const perfil = await perfilAtual();
-  if (!dicaPorId(id)) return;
-
-  const supabase = await criarClienteServidor();
-
-  if (lida) {
-    await supabase
-      .from("dica_lida")
-      .upsert({ aluno: perfil.id, dica: id }, { onConflict: "aluno,dica", ignoreDuplicates: true });
-  } else {
-    await supabase.from("dica_lida").delete().eq("dica", id).eq("aluno", perfil.id);
-  }
-
-  revalidatePath("/meio-jogo");
-  revalidatePath(`/meio-jogo/${id}`);
-}
 
 /**
  * Grava uma resposta do treino.

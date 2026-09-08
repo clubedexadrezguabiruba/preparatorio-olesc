@@ -16,7 +16,7 @@ import {
 } from "@/lib/curso/trilha";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
 import { progressoDeFinais } from "@/lib/finais/progresso";
-import { dicasLidas } from "@/lib/meiojogo/progresso";
+import { exerciciosResolvidos } from "@/lib/meiojogo/progresso";
 import { temaAberto } from "@/lib/tatica/conteudo";
 import { progressoPorTema } from "@/lib/tatica/progresso";
 
@@ -65,10 +65,10 @@ export default async function Trilha({ searchParams }: PageProps<"/trilha">) {
   const tela = semanaDaTela(perfil.papel, (await searchParams)[PARAMETRO_DA_SEMANA]);
   const semana = tela.semana;
 
-  const [tatica, finais, lidas] = await Promise.all([
+  const [tatica, finais, doMeioJogo] = await Promise.all([
     progressoPorTema(perfil.id),
     progressoDeFinais(perfil.id),
-    dicasLidas(perfil.id),
+    exerciciosResolvidos(perfil.id),
   ]);
 
   const mapa = montarMapa({
@@ -76,7 +76,7 @@ export default async function Trilha({ searchParams }: PageProps<"/trilha">) {
     temaAberto,
     finais,
     aulasPublicadas: aulasPublicadas(),
-    dicasLidas: lidas,
+    exerciciosResolvidos: doMeioJogo,
     semana,
   });
   const aqui = vocEstaAqui(mapa);

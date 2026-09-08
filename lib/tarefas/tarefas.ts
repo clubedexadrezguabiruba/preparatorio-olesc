@@ -37,11 +37,12 @@ import { CLASSES } from "../finais/trilha.ts";
  *   `aula_lida` pelo critério de formato da trilha. O que a torna um tipo
  *   próprio e não uma variação da de tática é a unidade do que se conta —
  *   puzzle resolvido e aula dominada não somam na mesma barra.
- * - `meiojogo` — o site **conta** quantas dicas daquele degrau o aluno declarou
- *   ter lido. É a única das medidas cuja matéria-prima é declaração, e não
- *   medição: em meio-jogo não há lance para reconferir. Ela é medida mesmo
- *   assim porque a declaração já foi dada **dica por dica**, na página de cada
- *   uma; uma caixa aqui pediria a mesma coisa uma segunda vez.
+ * - `meiojogo` — o site **mede**: quantas dicas daquele degrau o aluno resolveu,
+ *   contadas de `tentativa_meiojogo`. Uma dica conta quando ele acertou o lance
+ *   de **todos** os exercícios dela. Era declaração até 2026-09-07 (contava
+ *   `dica_lida`, a caixa "li"), e o Doug a trocou pela mesma razão que derrubou
+ *   o exercício de clicar na casa: uma barra que sobe porque a criança rolou
+ *   até o fim não mede nada.
  * - `marcar` — o aluno **declara**. "Assisti o vídeo", "joguei duas partidas".
  *   Não existe verdade no servidor para conferir isso, e fingir que existe
  *   (um botão que só o professor libera) transformaria a tarefa de casa em
@@ -121,21 +122,26 @@ const MetaDeFinaisSchema = z
  * O que fecha uma tarefa de meio-jogo.
  *
  * `nivel` e não uma lista de dicas, pelo motivo de `MetaDeFinaisSchema`: a
- * tarefa é "leia 6 dicas do degrau até-1000", e o aluno escolhe quais. Nomear
- * as seis quebraria a tarefa no dia em que uma delas mudasse de degrau.
+ * tarefa é "resolva os exercícios de 6 dicas do degrau 1000–1200", e o aluno
+ * escolhe quais. Nomear as seis quebraria a tarefa no dia em que uma delas
+ * mudasse de degrau.
  *
- * **É medida, e não marcada** — ainda que o que ela mede seja uma declaração.
- * A distinção importa: o aluno já declarou dica por dica, na página de cada
- * uma, e uma segunda caixa dizendo "li as seis" seria pedir a mesma declaração
- * duas vezes, com a segunda podendo contradizer a primeira. A tarefa conta o
- * que está em `dica_lida`, e é por isso que ela não tem caixa.
+ * **É medida, e não marcada**, e desde 2026-09-07 ela mede trabalho e não
+ * declaração: o servidor confere cada lance com o mesmo juiz que a tela usou.
+ * Uma caixa aqui pediria ao aluno que opinasse sobre um número que o servidor
+ * já sabe.
+ *
+ * O preço da mudança está declarado e é o motivo de este tipo ter ficado só na
+ * semana 2: uma dica **sem** exercício não pode fechar esta tarefa, porque não
+ * há o que resolver. As semanas 1, 3 e 4 viraram tarefa de `marcar` até as
+ * dicas dos degraus delas serem curadas.
  */
 const MetaDeMeioJogoSchema = z
   .object({
     /** O id do degrau em `lib/curso/trilha.ts` (`ate-1000`, `1000-1200`…). */
     nivel: z.string().min(3),
-    /** Quantas dicas daquele degrau fecham a tarefa. */
-    ler: z.number().int().min(1),
+    /** Quantas dicas daquele degrau, resolvidas por inteiro, fecham a tarefa. */
+    resolver: z.number().int().min(1),
   })
   .strict();
 
@@ -213,7 +219,13 @@ export function validarTarefas(dados: unknown): Tarefa[] {
 }
 
 /** O que a conferência do `detalhe` precisa saber de uma dica. */
-export type DicaCitavel = { readonly id: string; readonly nivel: string; readonly titulo: string };
+export type DicaCitavel = {
+  readonly id: string;
+  readonly nivel: string;
+  readonly titulo: string;
+  /** Quantos exercícios a dica tem. Zero é dica que não pode fechar a tarefa. */
+  readonly exercicios: number;
+};
 
 /**
  * Os problemas do `detalhe` das tarefas de meio-jogo, em português.
@@ -232,7 +244,10 @@ export type DicaCitavel = { readonly id: string; readonly nivel: string; readonl
  *    que são m15 e m14, do degrau anterior;
  * 3. **o título aparece literalmente no `detalhe`** — sem isto a lista de ids
  *    ficaria certa e a prosa continuaria dizendo outra coisa, que é exatamente
- *    o estado em que o painel estava.
+ *    o estado em que o painel estava;
+ * 4. **a dica tem exercício** — a regra que nasceu com o progresso medido: uma
+ *    dica sem exercício nunca fecharia uma tarefa que conta exercício
+ *    resolvido, e o aluno ficaria com uma caixa impossível no painel.
  */
 export function problemasDoDetalheDeMeioJogo(
   tarefas: readonly Tarefa[],
@@ -241,9 +256,10 @@ export function problemasDoDetalheDeMeioJogo(
   const problemas: string[] = [];
   for (const tarefa of tarefas) {
     if (tarefa.tipo !== "meiojogo") continue;
-    if (tarefa.dicas.length !== tarefa.meta.ler) {
+    if (tarefa.dicas.length !== tarefa.meta.resolver) {
       problemas.push(
-        `${tarefa.id}: manda ler ${tarefa.meta.ler} dicas e nomeia ${tarefa.dicas.length}`,
+        `${tarefa.id}: manda resolver ${tarefa.meta.resolver} dicas e nomeia ` +
+          `${tarefa.dicas.length}`,
       );
     }
     for (const id of tarefa.dicas) {
@@ -261,6 +277,16 @@ export function problemasDoDetalheDeMeioJogo(
       if (!tarefa.detalhe?.includes(dica.titulo)) {
         problemas.push(
           `${tarefa.id}: nomeia "${id}" na lista e não escreve "${dica.titulo}" no detalhe`,
+        );
+      }
+      // A regra nova, e a que impede a tarefa impossível: uma dica sem
+      // exercício não pode fechar uma tarefa que conta exercício resolvido.
+      // Sem ela, o aluno abriria o painel na segunda-feira do piloto com uma
+      // caixa que nada que ele fizesse marcaria.
+      if (dica.exercicios === 0) {
+        problemas.push(
+          `${tarefa.id}: nomeia "${id}", que não tem exercício — a tarefa conta exercício ` +
+            `resolvido, e essa dica nunca fecharia`,
         );
       }
     }

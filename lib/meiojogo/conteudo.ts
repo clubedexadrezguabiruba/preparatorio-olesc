@@ -32,6 +32,20 @@ export function dicasDoNivel(nivel: string): Dica[] {
   return DICAS.filter((d) => d.nivel === nivel);
 }
 
+/**
+ * As dicas na forma que o gate das tarefas lê.
+ *
+ * `lib/tarefas/tarefas.ts` não importa `content/meio-jogo.json` de propósito —
+ * o esquema das tarefas não pode depender do conteúdo do meio-jogo para
+ * conferir uma vírgula de tática. Quem junta as duas pontas passa esta lista.
+ */
+export const DICAS_CITAVEIS = DICAS.map((d) => ({
+  id: d.id,
+  nivel: d.nivel,
+  titulo: d.titulo,
+  exercicios: d.treino?.exercicios.length ?? 0,
+}));
+
 /** A posição da dica na lista geral — o número que o aluno lê no cartão. */
 export function ordemDaDica(id: string): number {
   return DICAS.findIndex((d) => d.id === id) + 1;

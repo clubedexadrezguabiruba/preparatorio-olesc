@@ -21,11 +21,13 @@ const VAZIO: ProgressoParaOMapa = {
   temaAberto: () => true,
   finais: new Map(),
   aulasPublicadas: new Set(TRILHA.map((a) => a.id)),
-  dicasLidas: new Set(),
+  exerciciosResolvidos: new Map(),
   semana: 4,
 };
 
 const TEMAS = BLOCOS.flatMap((b) => b.temas);
+/** As dicas que o mapa conta: as que têm exercício. */
+const COM_EXERCICIO = DICAS.filter((d) => d.treino !== null);
 
 function itens(mapa: ReturnType<typeof montarMapa>, modulo: string) {
   return [...mapa.values()].flatMap((ms) => ms.filter((m) => m.modulo === modulo)).flatMap((m) => m.itens);
@@ -35,7 +37,10 @@ test("o mapa carrega o curso inteiro, sem sobra e sem repetido", () => {
   const mapa = montarMapa(VAZIO);
   assert.equal(itens(mapa, "tatica").length, TEMAS.length);
   assert.equal(itens(mapa, "finais").length, TRILHA.length);
-  assert.equal(itens(mapa, "meio-jogo").length, DICAS.length);
+  // Só as dicas **com exercício**: desde 2026-09-07 o mapa conta trabalho
+  // medido, e uma dica sem exercício não tem o que contar. Ela continua no ar
+  // em `/meio-jogo`, fora da trilha.
+  assert.equal(itens(mapa, "meio-jogo").length, COM_EXERCICIO.length);
 
   for (const modulo of ["tatica", "finais", "meio-jogo"]) {
     const ids = itens(mapa, modulo).map((i) => i.id);
@@ -89,13 +94,27 @@ test("aula dominada conta 1; não dominada conta 0", () => {
   assert.equal(itens(feita, "finais").find((i) => i.id === curta.id)?.feitos, 1);
 });
 
-test("as dicas de meio-jogo estão todas abertas, e a leitura conta", () => {
-  const mapa = montarMapa({ ...VAZIO, dicasLidas: new Set([DICAS[0].id]) });
+test("as dicas de meio-jogo estão todas abertas, e o exercício resolvido conta", () => {
+  const uma = COM_EXERCICIO[0];
+  const total = uma.treino!.exercicios.length;
+  const mapa = montarMapa({ ...VAZIO, exerciciosResolvidos: new Map([[uma.id, total]]) });
   const dicas = itens(mapa, "meio-jogo");
   assert.ok(dicas.every((i) => estaAberto(i)), "nenhuma dica espera sábado");
   assert.ok(dicas.every((i) => i.sabado === null), "e nenhuma delas tem sábado para esperar");
-  assert.equal(dicas.find((i) => i.id === DICAS[0].id)?.feitos, 1);
-  assert.equal(dicas.filter((i) => i.feitos === 1).length, 1);
+  assert.equal(dicas.find((i) => i.id === uma.id)?.feitos, total);
+  assert.equal(dicas.find((i) => i.id === uma.id)?.total, total);
+  // As outras ficam em zero: a barra da trilha mede exercício resolvido, e não
+  // dica aberta.
+  assert.equal(dicas.filter((i) => i.feitos > 0).length, 1);
+});
+
+test("a dica sem exercício não entra na trilha, e é de propósito", () => {
+  const semExercicio = DICAS.filter((d) => d.treino === null);
+  assert.ok(semExercicio.length > 0, "o teste só prova algo se houver dica sem exercício");
+  const ids = new Set(itens(montarMapa(VAZIO), "meio-jogo").map((i) => i.id));
+  for (const dica of semExercicio) {
+    assert.ok(!ids.has(dica.id), `${dica.id} não tem exercício e mesmo assim está na trilha`);
+  }
 });
 
 test("`contarAberto` ignora o que ainda não abriu", () => {
@@ -172,7 +191,9 @@ test('"você está aqui" cai no primeiro nível com trabalho aberto por fazer', 
     ...VAZIO,
     temaAberto: () => false,
     aulasPublicadas: new Set(),
-    dicasLidas: new Set(DICAS.map((d) => d.id)),
+    exerciciosResolvidos: new Map(
+      DICAS.filter((d) => d.treino !== null).map((d) => [d.id, d.treino!.exercicios.length]),
+    ),
   });
   assert.equal(vocEstaAqui(nadaAberto), null);
 });

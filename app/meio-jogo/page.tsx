@@ -4,7 +4,7 @@ import { Barra } from "@/components/Barra";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { NIVEIS } from "@/lib/curso/trilha";
 import { DICAS, dicasDoNivel, ordemDaDica } from "@/lib/meiojogo/conteudo";
-import { dicasLidas } from "@/lib/meiojogo/progresso";
+import { dicasResolvidas } from "@/lib/meiojogo/progresso";
 
 /**
  * As dicas de meio-jogo, por nível de força.
@@ -41,9 +41,12 @@ import { dicasLidas } from "@/lib/meiojogo/progresso";
 
 export const metadata: Metadata = { title: "Meio-jogo — Preparatório OLESC" };
 
+/** As dicas que têm exercício — o denominador de tudo que esta tela conta. */
+const COM_EXERCICIO = DICAS.filter((d) => d.treino !== null);
+
 export default async function MeioJogo() {
   const perfil = await perfilAtual();
-  const lidas = await dicasLidas(perfil.id);
+  const resolvidas = await dicasResolvidas(perfil.id);
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-5 py-10">
@@ -57,34 +60,40 @@ export default async function MeioJogo() {
           técnica em uma frase, um diagrama, um &quot;o que procurar&quot; e uma pergunta.
         </p>
         <p className="text-sm text-tinta-media">
-          As oito dicas marcadas com <strong className="font-semibold">exercícios</strong> vão
-          além da leitura: nelas você procura o traço no próprio tabuleiro, e pede ajuda se
+          As dicas marcadas com <strong className="font-semibold">exercícios</strong> vão além
+          da leitura: nelas você joga o lance da dica no próprio tabuleiro, e pede ajuda se
           precisar.
         </p>
       </header>
 
+      {/* A barra conta **dica resolvida**, e o denominador são só as que têm
+          exercício. Ela contava "dicas lidas" até 2026-09-07, e o que a mudou
+          foi a mesma decisão que tirou a caixa do pé da página: uma barra que
+          sobe porque o aluno rolou até o fim não mede nada. */}
       <section className="flex flex-col gap-2 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
         <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-          <span className="rotulo text-tinta-fraca">Dicas lidas</span>
+          <span className="rotulo text-tinta-fraca">Dicas resolvidas</span>
           <span className="text-sm text-tinta-media tabular-nums">
-            {lidas.size} de {DICAS.length}
+            {resolvidas.size} de {COM_EXERCICIO.length}
           </span>
         </div>
         <Barra
-          feitos={lidas.size}
-          de={DICAS.length}
-          tom={lidas.size === DICAS.length ? "completo" : "metodo"}
+          feitos={resolvidas.size}
+          de={COM_EXERCICIO.length}
+          tom={resolvidas.size === COM_EXERCICIO.length ? "completo" : "metodo"}
         />
         <p className="text-xs text-tinta-fraca">
-          Esta barra conta o que você declarou ter lido — não é selo de domínio. Em meio-jogo
-          não há lance para o computador reconferir.
+          Uma dica conta quando você acerta o lance de <strong>todos</strong> os exercícios dela.
+          Pedir ajuda não tira o acerto. As outras {DICAS.length - COM_EXERCICIO.length} dicas
+          ainda não têm exercício — leia e use na partida; elas não entram nesta barra.
         </p>
       </section>
 
       {NIVEIS.map((nivel) => {
         const daqui = dicasDoNivel(nivel.id);
         if (daqui.length === 0) return null;
-        const lidasAqui = daqui.filter((d) => lidas.has(d.id)).length;
+        const comExercicio = daqui.filter((d) => d.treino !== null);
+        const resolvidasAqui = comExercicio.filter((d) => resolvidas.has(d.id)).length;
 
         return (
           <section key={nivel.id} className="flex flex-col gap-3">
@@ -92,7 +101,9 @@ export default async function MeioJogo() {
               <div className="flex flex-wrap items-baseline justify-between gap-x-3">
                 <h2 className="rotulo text-tinta-fraca">{nivel.nome} de rápidas</h2>
                 <span className="text-xs text-tinta-fraca tabular-nums">
-                  {lidasAqui} de {daqui.length} lidas
+                  {comExercicio.length === 0
+                    ? `${daqui.length} para ler`
+                    : `${resolvidasAqui} de ${comExercicio.length} resolvidas`}
                 </span>
               </div>
               <p className="text-sm text-tinta-media">{nivel.resumo}</p>
@@ -108,12 +119,12 @@ export default async function MeioJogo() {
                     <span
                       aria-hidden
                       className={`flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-bold tabular-nums ${
-                        lidas.has(dica.id)
+                        resolvidas.has(dica.id)
                           ? "border-metodo-cheio bg-metodo-cheio text-tinta-inversa"
                           : "border-borda-forte text-tinta-fraca"
                       }`}
                     >
-                      {lidas.has(dica.id) ? "✓" : ordemDaDica(dica.id)}
+                      {resolvidas.has(dica.id) ? "✓" : ordemDaDica(dica.id)}
                     </span>
 
                     <div className="flex min-w-0 flex-1 flex-col gap-1">

@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { SABADOS, SEMANAS } from "../curso/calendario.ts";
 import { CLASSES, TRILHA } from "../finais/trilha.ts";
 import { NIVEIS } from "../curso/trilha.ts";
-import { DICAS, dicasDoNivel } from "../meiojogo/conteudo.ts";
+import { DICAS_CITAVEIS, dicasDoNivel } from "../meiojogo/conteudo.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { daSemana, problemasDoDetalheDeMeioJogo, validarTarefas } from "./tarefas.ts";
 
@@ -88,11 +88,11 @@ test("as metas de meio-jogo apontam para degraus que existem, com dica escrita",
       degraus.has(tarefa.meta.nivel),
       `a tarefa "${tarefa.id}" pede o degrau "${tarefa.meta.nivel}", que não existe`,
     );
-    const escritas = dicasDoNivel(tarefa.meta.nivel).length;
+    const escritas = dicasDoNivel(tarefa.meta.nivel).filter((d) => d.treino !== null).length;
     assert.ok(
-      escritas >= tarefa.meta.ler,
-      `a tarefa "${tarefa.id}" pede ${tarefa.meta.ler} dicas e só ${escritas} ` +
-        `estão escritas no degrau ${tarefa.meta.nivel}`,
+      escritas >= tarefa.meta.resolver,
+      `a tarefa "${tarefa.id}" pede ${tarefa.meta.resolver} dicas resolvidas e só ${escritas} ` +
+        `têm exercício no degrau ${tarefa.meta.nivel}`,
     );
   }
 });
@@ -109,7 +109,7 @@ test("o detalhe do meio-jogo nomeia dicas que existem, e no degrau que ele apont
   // O teste ao lado — o da contagem — passava nos quatro, porque contagem não
   // é descrição. Este cobra as duas pontas: os ids são do degrau, e o título de
   // cada um aparece **literalmente** na prosa que o aluno lê no painel.
-  assert.deepEqual(problemasDoDetalheDeMeioJogo(validarTarefas(lerConteudo()), DICAS), []);
+  assert.deepEqual(problemasDoDetalheDeMeioJogo(validarTarefas(lerConteudo()), DICAS_CITAVEIS), []);
 });
 
 test("dica do degrau errado no detalhe reprova, mesmo com a contagem certa", () => {
@@ -123,11 +123,35 @@ test("dica do degrau errado no detalhe reprova, mesmo com a contagem certa", () 
     titulo: "Ler dicas do degrau 1000–1200",
     detalhe: "Abra uma rota para a pior peça",
     dicas: ["m17"],
-    meta: { nivel: "1000-1200", ler: 1 },
+    meta: { nivel: "1000-1200", resolver: 1 },
   };
-  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), DICAS);
-  assert.equal(problemas.length, 1);
-  assert.match(problemas[0], /é do degrau 1000-1200 e nomeia "m17", que é do degrau 1200-1400/);
+  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), DICAS_CITAVEIS);
+  assert.ok(
+    problemas.some((p) => /é do degrau 1000-1200 e nomeia "m17", que é do degrau 1200-1400/.test(p)),
+    problemas.join(" | "),
+  );
+});
+
+test("dica sem exercício numa tarefa medida reprova", () => {
+  // A regra que nasceu com o progresso medido, e o defeito que ela impede: uma
+  // tarefa que conta exercício resolvido nomeando uma dica que não tem
+  // exercício é uma caixa que nada do que o aluno fizer vai marcar.
+  const semExercicio = DICAS_CITAVEIS.find((d) => d.exercicios === 0);
+  assert.ok(semExercicio, "o teste só prova algo se houver dica sem exercício");
+  const tarefa = {
+    id: "s1-meiojogo",
+    semana: 1,
+    tipo: "meiojogo",
+    titulo: "Resolver dicas de meio-jogo",
+    detalhe: semExercicio.titulo,
+    dicas: [semExercicio.id],
+    meta: { nivel: semExercicio.nivel, resolver: 1 },
+  };
+  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), DICAS_CITAVEIS);
+  assert.ok(
+    problemas.some((p) => p.includes("que não tem exercício")),
+    problemas.join(" | "),
+  );
 });
 
 test("lista certa e prosa desatualizada reprovam — é o par que discorda", () => {
@@ -141,28 +165,51 @@ test("lista certa e prosa desatualizada reprovam — é o par que discorda", () 
     titulo: "Ler dicas do degrau até 1000",
     detalhe: "A coluna aberta e a dama sozinha.",
     dicas: ["m1"],
-    meta: { nivel: "ate-1000", ler: 1 },
+    meta: { nivel: "ate-1000", resolver: 1 },
   };
-  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), DICAS);
-  assert.equal(problemas.length, 1);
-  assert.match(problemas[0], /não escreve "Coloque outra peça no jogo" no detalhe/);
+  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), DICAS_CITAVEIS);
+  assert.ok(
+    problemas.some((p) => /não escreve "Coloque outra peça no jogo" no detalhe/.test(p)),
+    problemas.join(" | "),
+  );
 });
 
 test("toda semana do curso tem tarefa dos quatro blocos da rotina", () => {
   // A rotina de 2 h tem quatro blocos — tática, finais, meio-jogo e partida —,
   // e uma semana sem tarefa de um deles é meia hora por dia sem destino. O
   // bloco da partida é sempre `marcar`: não há API do chess.com para conferir.
+  //
+  // O **bloco** não é o `tipo`, e a diferença apareceu em 2026-09-07: as
+  // tarefas de meio-jogo das semanas 1, 3 e 4 viraram `marcar` porque as dicas
+  // dos degraus delas ainda não têm exercício. Elas continuam sendo o bloco de
+  // meio-jogo da semana; o que mudou foi como o site as fecha. Quem diz o bloco
+  // é o sufixo do id, que já era a convenção (`s1-meiojogo`).
   const tarefas = validarTarefas(lerConteudo());
   for (const semana of SEMANAS) {
     const daqui = tarefas.filter((t) => t.semana === semana);
     if (daqui.length === 0) continue; // semana ainda não escrita
-    for (const tipo of ["tatica", "finais", "meiojogo"] as const) {
+    for (const tipo of ["tatica", "finais"] as const) {
       assert.ok(
         daqui.some((t) => t.tipo === tipo),
         `a semana ${semana} não tem tarefa de ${tipo}`,
       );
     }
+    assert.ok(
+      daqui.some((t) => t.id.endsWith("-meiojogo")),
+      `a semana ${semana} não tem tarefa de meio-jogo`,
+    );
   }
+});
+
+test("a semana do piloto mede o meio-jogo, e não o deixa na declaração", () => {
+  // A semana 2 é a do piloto (19–25/9). É a única em que as dicas do degrau já
+  // têm exercício, e por isso a única que pode ser medida — deixá-la em
+  // `marcar` seria desperdiçar justamente a semana em que o professor vai
+  // olhar o relatório.
+  const semana2 = daSemana(validarTarefas(lerConteudo()), 2);
+  const doMeioJogo = semana2.find((t) => t.id.endsWith("-meiojogo"));
+  assert.ok(doMeioJogo, "a semana 2 não tem tarefa de meio-jogo");
+  assert.equal(doMeioJogo.tipo, "meiojogo", "a tarefa da semana do piloto tem de ser medida");
 });
 
 test("a semana 2 manda o aluno aos finais", () => {

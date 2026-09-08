@@ -99,9 +99,17 @@ export function somarFinais(
   return total;
 }
 
-/** Quantas das dicas lidas pertencem a este degrau. */
-export function somarMeioJogo(lidas: ReadonlySet<string>, nivel: string): number {
-  return dicasDoNivel(nivel).filter((d) => lidas.has(d.id)).length;
+/**
+ * Quantas das dicas resolvidas pertencem a este degrau.
+ *
+ * Só conta dica **com exercício**, e é a mesma regra do denominador de
+ * `/meio-jogo`: uma dica sem exercício não pode entrar num número que promete
+ * medir trabalho. O gate das tarefas cobra que nenhuma tarefa nomeie uma
+ * dessas (`problemasDoDetalheDeMeioJogo`), então na prática a filtragem aqui é
+ * a segunda tranca — e é barata.
+ */
+export function somarMeioJogo(resolvidas: ReadonlySet<string>, nivel: string): number {
+  return dicasDoNivel(nivel).filter((d) => d.treino !== null && resolvidas.has(d.id)).length;
 }
 
 export function estadoDasTarefas(
@@ -114,7 +122,7 @@ export function estadoDasTarefas(
    * tática — não tenham de inventar um conjunto.
    */
   finais: ReadonlySet<string> = new Set(),
-  /** As dicas de meio-jogo declaradas lidas. Vazio pelo mesmo motivo. */
+  /** As dicas de meio-jogo cujos exercícios o aluno resolveu. Vazio pelo mesmo motivo. */
   dicas: ReadonlySet<string> = new Set(),
 ): EstadoDaTarefa[] {
   return tarefas.map((tarefa) => {
@@ -126,8 +134,8 @@ export function estadoDasTarefas(
       const feitos = somarMeioJogo(dicas, tarefa.meta.nivel);
       return {
         tarefa,
-        feita: feitos >= tarefa.meta.ler,
-        medida: { tipo: "meiojogo", feitos, meta: tarefa.meta.ler },
+        feita: feitos >= tarefa.meta.resolver,
+        medida: { tipo: "meiojogo", feitos, meta: tarefa.meta.resolver },
       };
     }
 

@@ -19,7 +19,7 @@ import {
   AULA_ZERADA,
 } from "@/lib/finais/trilha";
 import { dicasDoNivel } from "@/lib/meiojogo/conteudo";
-import { dicasLidas } from "@/lib/meiojogo/progresso";
+import { dicasResolvidas } from "@/lib/meiojogo/progresso";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { BLOCOS } from "@/lib/tatica/blocos";
 import { linhasDeTentativas, progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
@@ -74,12 +74,12 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   const semana = semanaAtual();
   const desde = somarDias(hoje, -(DIAS - 1));
 
-  const [tatica, linhas, finais, eventos, lidas, minutos, partidas] = await Promise.all([
+  const [tatica, linhas, finais, eventos, resolvidas, minutos, partidas] = await Promise.all([
     progressoPorTema(id),
     linhasDeTentativas(id),
     progressoDeFinais(id),
     eventosDeAulas(id),
-    dicasLidas(id),
+    dicasResolvidas(id),
     minutosPorDia(id, desde),
     partidasDeclaradas(id, desde),
   ]);
@@ -395,14 +395,16 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         <div className="flex flex-col gap-0.5">
           <h2 className="rotulo text-tinta-fraca">Meio-jogo</h2>
           <p className="text-sm text-tinta-media">
-            Dicas que o aluno <strong>declarou</strong> ter lido. Não é medida — em meio-jogo
-            não há lance para o servidor reconferir.
+            Dicas em que o aluno <strong>resolveu todos os exercícios</strong>. É medida, e não
+            declaração: o servidor confere cada lance com o mesmo juiz que a tela usou. O
+            denominador conta só as dicas que já têm exercício — as outras não entram aqui
+            porque nelas não há o que medir.
           </p>
         </div>
         <div className="grid gap-2 sm:grid-cols-4">
           {NIVEIS.map((nivel) => {
-            const daqui = dicasDoNivel(nivel.id);
-            const feitas = daqui.filter((d) => lidas.has(d.id)).length;
+            const daqui = dicasDoNivel(nivel.id).filter((d) => d.treino !== null);
+            const feitas = daqui.filter((d) => resolvidas.has(d.id)).length;
             return (
               <div
                 key={nivel.id}

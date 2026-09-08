@@ -22,7 +22,7 @@ import {
  * depois?") é a mesma que o painel e o relatório do professor vão querer fazer,
  * e ela é feita de **três** progressos com donos diferentes — a view
  * `progresso_tema`, a view `progresso_aula` mais `aula_lida`, e a tabela
- * `dica_lida`. Junta-los dentro do JSX seria uma quarta opinião sobre o que é
+ * `tentativa_meiojogo`. Junta-los dentro do JSX seria uma quarta opinião sobre o que é
  * "feito", escrita onde nenhum teste alcança.
  *
  * Aqui entram os três progressos já lidos e sai o mapa. Quem fala com o banco é
@@ -63,7 +63,11 @@ export type ProgressoParaOMapa = {
   readonly finais: ReadonlyMap<string, ProgressoDaAula>;
   /** Os ids das aulas com JSON publicado, de `aulasPublicadas` — não as abertas. */
   readonly aulasPublicadas: ReadonlySet<string>;
-  readonly dicasLidas: ReadonlySet<string>;
+  /**
+   * Quantos exercícios de cada dica o aluno resolveu. Dica sem exercício não
+   * aparece no mapa: não há o que contar nela.
+   */
+  readonly exerciciosResolvidos: ReadonlyMap<string, number>;
   /** A semana do preparatório em que estamos, de `semanaAtual()`. */
   readonly semana: Semana;
 };
@@ -131,12 +135,17 @@ export function montarMapa(p: ProgressoParaOMapa): Map<string, ModuloDoNivel[]> 
   }
 
   for (const dica of DICAS) {
+    // A dica sem exercício **não entra no mapa**, e é a consequência declarada
+    // de o progresso passar a contar trabalho: sem exercício não há o que
+    // medir, e uma pastilha de "0 de 0" ensinaria o aluno a ignorar a pastilha.
+    const total = dica.treino?.exercicios.length ?? 0;
+    if (total === 0) continue;
     guardar(dica.nivel, "meio-jogo", {
       id: dica.id,
       nome: dica.titulo,
       href: `/meio-jogo/${dica.id}`,
-      total: 1,
-      feitos: p.dicasLidas.has(dica.id) ? 1 : 0,
+      total,
+      feitos: p.exerciciosResolvidos.get(dica.id) ?? 0,
       situacao: "aberto",
       sabado: null,
     });
