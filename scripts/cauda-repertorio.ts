@@ -67,9 +67,11 @@ import {
   type Posicao,
 } from "../lib/repertorio/explorer.ts";
 import {
+  estadoDe,
   fechamentoDe,
   meiosLances,
   ORIGENS,
+  pendenciasDe,
   PROFUNDIDADE_MINIMA,
   CORES,
   NIVEIS,
@@ -552,7 +554,8 @@ if (!corpus) console.log(`${recadoSemCorpus(ondeEstaOCorpus().procurei)}\n(sigo 
 if (!DOSSIES && !ALVO) {
   console.log(`${linhas.length} linhas — onde elas param hoje, e o que falta para fechar a régua\n`);
   console.log(
-    `  ${"id".padEnd(30)}${"nossos".padEnd(8)}${"roque".padEnd(8)}${"em casa".padEnd(18)}fonte`,
+    `  ${"id".padEnd(30)}${"nossos".padEnd(8)}${"roque".padEnd(8)}${"em casa".padEnd(12)}` +
+      `${"declarado".padEnd(12)}${"estado".padEnd(11)}fonte`,
   );
   let semRoque = 0;
   let emCasa = 0;
@@ -560,15 +563,28 @@ if (!DOSSIES && !ALVO) {
     const f = fechamentoDe(l);
     if (!f.rocou) semRoque += 1;
     emCasa += f.emCasa.length;
+    // O que o [%plano] declara entra numa coluna PRÓPRIA, e não some da coluna
+    // "em casa": as duas dizem coisas diferentes. "Em casa" é o tabuleiro — a
+    // peça está lá, e o aluno vai vê-la lá. "Declarado" é a promessa escrita.
+    // Sem as duas, esta tabela contradiria o placar do compilador sem explicar
+    // por quê, e quem rodasse o comando acharia que uma das duas está errada.
+    const { declaradas } = pendenciasDe(l);
     const alcanca = corpus ? (corpus.chegam.has(corpus.chave(l.fenFinal)) ? "sim" : "não") : "?";
     console.log(
       `  ${l.id.padEnd(30)}${String(l.meus.length).padEnd(8)}${(f.rocou ? "sim" : "NÃO").padEnd(8)}` +
-        `${pecas(f.emCasa).padEnd(18)}${alcanca}`,
+        `${pecas(f.emCasa).padEnd(12)}${pecas(declaradas).padEnd(12)}` +
+        `${estadoDe(l).padEnd(11)}${alcanca}`,
     );
   }
+  const placar = { fecha: 0, "com-plano": 0, aberta: 0 };
+  for (const l of linhas) placar[estadoDe(l)] += 1;
   console.log(
     `\nfaltam ${PROFUNDIDADE_MINIMA} lances nossos no mínimo. ` +
-      `Hoje: ${semRoque} linhas sem roque, ${emCasa} peças menores em casa.`,
+      `No tabuleiro: ${semRoque} linhas sem roque, ${emCasa} peças menores em casa — ` +
+      `dessas, ${linhas.filter((l) => pendenciasDe(l).declaradas.length > 0).length} linhas declaram o que falta em [%plano].`,
+  );
+  console.log(
+    `Estado: ${placar.fecha} fecham na linha, ${placar["com-plano"]} fecham com [%plano], ${placar.aberta} abertas.`,
   );
   console.log("A coluna 'fonte' diz se o curso alcança a posição final de hoje.");
   process.exit(0);
