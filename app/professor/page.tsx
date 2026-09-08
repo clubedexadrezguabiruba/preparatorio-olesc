@@ -4,7 +4,7 @@ import { professorAtual } from "@/lib/auth/perfil";
 import { semanaAtual } from "@/lib/curso/calendario";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
 import { finaisDaTurma } from "@/lib/finais/progresso";
-import { aulasAbertas, CLASSES, daClasse, dominadas } from "@/lib/finais/trilha";
+import { aprendidasDaTrilha, aulasAbertas, CLASSES, daClasse } from "@/lib/finais/trilha";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { CadastroDeAluno } from "./CadastroDeAluno";
 
@@ -96,7 +96,7 @@ export default async function Professor() {
                     <Td>{aluno.rating ?? "—"}</Td>
                     <Td>
                       <Finais
-                        feitas={dominadas(abertas, finais.get(aluno.id) ?? new Map())}
+                        feitas={aprendidasDaTrilha(abertas, finais.get(aluno.id) ?? new Map())}
                         abertas={abertas}
                       />
                     </Td>

@@ -7,8 +7,8 @@ import { hojeNoBrasil, porExtenso, semanaAtual, somarDias } from "@/lib/curso/ca
 import { META_DO_DIA_MIN, MINIMO_DA_SEQUENCIA_MIN, sequenciaDeDias, serieDeDias } from "@/lib/curso/hoje";
 import { minutosPorDia, partidasDeclaradas } from "@/lib/curso/minutos";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
-import { eventosDeAulas, progressoDeFinais } from "@/lib/finais/progresso";
-import { agendaDeRevisao, INTERVALOS_DE_FINAIS } from "@/lib/finais/revisao";
+import { DEGRAUS_EM_DIAS, diasAteRevisar } from "@/lib/finais/escada";
+import { progressoDeFinais } from "@/lib/finais/progresso";
 import {
   aulasAbertas,
   CLASSE,
@@ -71,11 +71,10 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   const semana = semanaAtual();
   const desde = somarDias(hoje, -(DIAS - 1));
 
-  const [tatica, linhas, finais, eventos, minutos, partidas] = await Promise.all([
+  const [tatica, linhas, finais, minutos, partidas] = await Promise.all([
     progressoPorTema(id),
     linhasDeTentativas(id),
     progressoDeFinais(id),
-    eventosDeAulas(id),
     minutosPorDia(id, desde),
     partidasDeclaradas(id, desde),
   ]);
@@ -87,12 +86,22 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   const devidosHoje = fila.filter((f) => f.devidoEm <= hoje);
   const pico = Math.max(META_DO_DIA_MIN, ...serie.map((d) => d.total));
 
+  /*
+   * A fila de finais, lida da escada em vez de derivada do log.
+   *
+   * `dias` é quantos faltam até a aula voltar: 0 é "vencida hoje", e `null`
+   * quer dizer que ela nem entrou na escada — nunca vencida, ou derrubada por
+   * uma partida perdida antes de estar aprendida. Estas ficam de fora da fila,
+   * e é o certo: elas não estão atrasadas, estão por começar.
+   */
+  const agoraNosFinais = new Date().toISOString();
   const revisoesDeFinais = abertas
-    .map((aula) => ({ aula, agenda: agendaDeRevisao(aula.formato, eventos.get(aula.id) ?? []) }))
-    .filter((r): r is { aula: (typeof abertas)[number]; agenda: NonNullable<ReturnType<typeof agendaDeRevisao>> } =>
-      r.agenda !== null,
-    )
-    .sort((a, b) => (a.agenda.devidoEm < b.agenda.devidoEm ? -1 : 1));
+    .map((aula) => ({
+      aula,
+      dias: diasAteRevisar(finais.get(aula.id)?.escada ?? { degrau: 0, revisarEm: null, tentativas: 0, erros: 0, aprendidaEm: null, ultimaEm: null }, agoraNosFinais),
+    }))
+    .filter((r): r is { aula: (typeof abertas)[number]; dias: number } => r.dias !== null)
+    .sort((a, b) => a.dias - b.dias);
 
   const temasComTrabalho = BLOCOS.flatMap((bloco) =>
     bloco.temas.map((tema) => ({ bloco, tema, p: tatica.get(tema.tag) ?? temaZerado() })),
@@ -285,9 +294,10 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
           <h2 className="rotulo text-tinta-fraca">Fila de revisão</h2>
           <p className="text-sm text-tinta-media">
             Tática: errou, volta em {INTERVALOS_DA_REVISAO[0]} dias; acertou no prazo, em{" "}
-            {INTERVALOS_DA_REVISAO[1]}, depois em {INTERVALOS_DA_REVISAO[2]}. Finais: dominou,
-            volta em {INTERVALOS_DE_FINAIS[0]} dias, depois {INTERVALOS_DE_FINAIS[1]} e{" "}
-            {INTERVALOS_DE_FINAIS[2]}.
+            {INTERVALOS_DA_REVISAO[1]}, depois em {INTERVALOS_DA_REVISAO[2]}. Finais: uma escada de{" "}
+            {DEGRAUS_EM_DIAS.slice(1).join(", ")} dias — a aula fica{" "}
+            <strong className="font-semibold">aprendida</strong> no terceiro degrau, e cada degrau
+            só sobe num dia em que ela já tenha vencido.
           </p>
         </div>
 
@@ -314,21 +324,20 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
             <span className="text-sm text-tinta-media tabular-nums">
               <strong
                 className={
-                  revisoesDeFinais.filter((r) => r.agenda.devidoEm <= hoje).length > 0
+                  revisoesDeFinais.filter((r) => r.dias === 0).length > 0
                     ? "text-aviso-tinta"
                     : "text-tinta"
                 }
               >
-                {revisoesDeFinais.filter((r) => r.agenda.devidoEm <= hoje).length}
+                {revisoesDeFinais.filter((r) => r.dias === 0).length}
               </strong>{" "}
               devidas hoje · {revisoesDeFinais.length} na fila
             </span>
             {revisoesDeFinais.length > 0 ? (
               <ul className="mt-0.5 flex flex-col gap-0.5">
-                {revisoesDeFinais.slice(0, 4).map(({ aula, agenda }) => (
+                {revisoesDeFinais.slice(0, 4).map(({ aula, dias }) => (
                   <li key={aula.id} className="text-xs text-tinta-fraca tabular-nums">
-                    {aula.nome} — {agenda.devidoEm}
-                    {agenda.devidoEm <= hoje ? " (vencida)" : ""}
+                    {aula.nome} — {dias === 0 ? "vencida" : `em ${dias} dia${dias === 1 ? "" : "s"}`}
                   </li>
                 ))}
               </ul>
@@ -366,14 +375,14 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
                         <span
                           title={`${aula.nome} — ${estado}`}
                           className={`inline-block max-w-full truncate rounded-full border px-2 py-0.5 text-xs ${
-                            estado === "dominada"
+                            estado === "aprendida"
                               ? "border-metodo-cheio bg-metodo-superficie/14 text-metodo-tinta-alta"
                               : estado === "praticando"
                                 ? "border-aviso bg-aviso-superficie/14 text-aviso-tinta"
                                 : "border-borda text-tinta-fraca"
                           }`}
                         >
-                          {estado === "dominada" ? "✓ " : ""}
+                          {estado === "aprendida" ? "✓ " : ""}
                           {aula.nome}
                         </span>
                       </li>

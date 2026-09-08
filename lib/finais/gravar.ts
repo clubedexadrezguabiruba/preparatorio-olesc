@@ -1,6 +1,7 @@
 import "server-only";
 import { criarClienteAdmin } from "../supabase/admin.ts";
 import { lerPacote } from "./conteudo.ts";
+import { depoisDaPassada, zerada, type ProgressoDaEscada } from "./escada.ts";
 import {
   ETAPAS_DE_AULA,
   rejulgarPratica,
@@ -31,7 +32,13 @@ export type TentativaDeAula = {
   posicaoId?: string;
 };
 
-export type ResultadoDeAula = { sucesso: boolean } | { erro: string };
+export type ResultadoDeAula =
+  | {
+      sucesso: boolean;
+      /** Onde a aula ficou na escada. Ausente quando a passada não a moveu. */
+      escada?: ProgressoDaEscada;
+    }
+  | { erro: string };
 
 /**
  * Uma hora. A tática corta em meia (`lib/tatica/gravar.ts`), e aqui o dobro:
@@ -118,5 +125,71 @@ export async function gravarTentativaDeAula(
   });
 
   if (error) return { erro: error.message };
-  return { sucesso: julgamento.sucesso };
+
+  const escada = await subirAEscada(aluno, pacote.lesson.id, julgamento.sucesso);
+  return { sucesso: julgamento.sucesso, ...(escada ? { escada } : {}) };
+}
+
+/**
+ * A passada move a escada — ler onde a aula estava, aplicar a regra, gravar.
+ *
+ * **Roda depois do `insert`, e a ordem importa.** `tentativas_aula` é o log e
+ * nunca sofre `update`; `finais_progresso` é o estado derivado dele. Se a
+ * escada falhar, a tentativa já está registrada e o professor a vê — o
+ * contrário (escada gravada sem a tentativa que a justifica) seria um degrau
+ * sem prova por trás.
+ *
+ * Por isso ela também **não** derruba a chamada: um erro aqui devolve `null` e
+ * o aluno recebe o veredito da partida, que é o que ele está esperando na tela.
+ * O degrau perdido se recupera na passada seguinte; um erro vermelho depois de
+ * um mate bem dado, não.
+ *
+ * A leitura e a escrita são duas idas ao banco, sem transação, e isso é aceito:
+ * duas partidas simultâneas do mesmo aluno na mesma aula precisariam de duas
+ * abas jogando ao mesmo tempo, e o pior caso é uma tentativa não contada — nunca
+ * um degrau a mais.
+ */
+async function subirAEscada(
+  aluno: string,
+  aula: string,
+  venceu: boolean,
+): Promise<ProgressoDaEscada | null> {
+  const admin = criarClienteAdmin();
+  const { data: atual, error: erroAoLer } = await admin
+    .from("finais_progresso")
+    .select("tentativas, erros, aprendida_em, ultima_em, degrau, revisar_em")
+    .eq("aluno", aluno)
+    .eq("aula", aula)
+    .maybeSingle();
+
+  if (erroAoLer) return null;
+
+  const anterior: ProgressoDaEscada = atual
+    ? {
+        tentativas: atual.tentativas,
+        erros: atual.erros,
+        aprendidaEm: atual.aprendida_em,
+        ultimaEm: atual.ultima_em,
+        degrau: atual.degrau,
+        revisarEm: atual.revisar_em,
+      }
+    : zerada();
+
+  const progresso = depoisDaPassada(anterior, venceu, new Date().toISOString());
+
+  const { error } = await admin.from("finais_progresso").upsert(
+    {
+      aluno,
+      aula,
+      tentativas: progresso.tentativas,
+      erros: progresso.erros,
+      aprendida_em: progresso.aprendidaEm,
+      ultima_em: progresso.ultimaEm,
+      degrau: progresso.degrau,
+      revisar_em: progresso.revisarEm,
+    },
+    { onConflict: "aluno,aula" },
+  );
+
+  return error ? null : progresso;
 }

@@ -6,6 +6,7 @@ import { aberturaNoIndice, linhasDaAbertura } from "@/lib/repertorio/banco";
 import { CORES, type Cor } from "@/lib/repertorio/linhas";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
 import {
+  DEGRAU_APRENDIDA,
   diasAteRevisar,
   proximaLinha,
   resumo,
@@ -13,7 +14,7 @@ import {
   zerado,
   type ProgressoDaLinha,
 } from "@/lib/repertorio/treino";
-import { Bolinhas } from "../../Bolinhas";
+import { Bolinhas } from "@/components/Bolinhas";
 import { Treino } from "./Treino";
 
 /** A cor veio da URL: ou é uma das duas, ou a rota não existe. */
@@ -217,7 +218,7 @@ function ListaDeLinhas({
                     {diasAteRevisar(progressoDe(l.id), agora) === 0 ? (
                       <span className="rotulo text-aviso-tinta">hoje</span>
                     ) : null}
-                    <Bolinhas progresso={progressoDe(l.id)} />
+                    <Bolinhas progresso={progressoDe(l.id)} total={DEGRAU_APRENDIDA} />
                   </span>
                 )}
               </Link>

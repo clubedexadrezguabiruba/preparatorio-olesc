@@ -3,13 +3,14 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { lessonSchema } from "../lesson/schema.ts";
+import { depoisDaPassada, zerada } from "./escada.ts";
 import {
+  aprendeu,
+  aprendidasDaTrilha,
   aulaDaTrilha,
   aulasAbertas,
   AULA_ZERADA,
   CLASSES,
-  dominadas,
-  dominou,
   estadoDaAula,
   proximaAula,
   TRILHA,
@@ -24,11 +25,23 @@ import {
  * uma aula publicada em `content/` que a trilha não conhece, ou o contrário.
  *
  * Os três critérios de domínio são testados como função pura, sem banco: é para
- * isso que `dominou` recebe o formato em vez de perguntá-lo ao Supabase.
+ * isso que `aprendeu` recebe o formato em vez de perguntá-lo ao Supabase.
  */
 
 function progresso(parcial: Partial<ProgressoDaAula>): ProgressoDaAula {
   return { ...AULA_ZERADA, ...parcial };
+}
+
+/** Uma aula subida até o degrau pedido, em dias distintos e vencidos. */
+function noDegrau(ate: number): ProgressoDaAula {
+  const dias = [
+    "2026-09-05T14:00:00.000Z",
+    "2026-09-07T14:00:00.000Z",
+    "2026-09-12T14:00:00.000Z",
+  ];
+  let escada = zerada();
+  for (let d = 0; d < ate; d++) escada = depoisDaPassada(escada, true, dias[d]);
+  return progresso({ tentativas: ate, praticaOk: true, escada });
 }
 
 /* ------------------------------------------------------------------ *
@@ -127,61 +140,77 @@ test("aula na trilha e não publicada continua fechada", () => {
 });
 
 /* ------------------------------------------------------------------ *
- * Os três critérios de domínio
+ * O que conta como aprendida
+ *
+ * **Isto mudou de significado em 2026-09-08**, e mudou no site inteiro. Era um
+ * booleano permanente — `praticaOk`, uma vitória em algum momento —, e passou a
+ * ser o degrau 3 da escada: três passadas em dias distintos e espaçados.
  * ------------------------------------------------------------------ */
 
-test("aula completa exige as duas metades", () => {
-  assert.equal(dominou("completa", progresso({ soloOk: true })), false);
-  assert.equal(dominou("completa", progresso({ praticaOk: true })), false);
-  assert.equal(dominou("completa", progresso({ soloOk: true, praticaOk: true })), true);
+test("uma vitória não aprende a aula: o degrau 1 é só o começo da escada", () => {
+  // O caso que dá nome à mudança. Antes, isto era "dominada".
+  assert.equal(aprendeu("curta", noDegrau(1)), false);
+  assert.equal(aprendeu("curta", noDegrau(2)), false);
+  assert.equal(aprendeu("curta", noDegrau(3)), true);
 });
 
-test("aula curta exige só a prática, e a etapa sem ajuda não a substitui", () => {
-  assert.equal(dominou("curta", progresso({ praticaOk: true })), true);
-  assert.equal(dominou("curta", progresso({ soloOk: true })), false);
+test("`praticaOk` sozinho não aprende nada — ele é histórico, não critério", () => {
+  // A coluna continua no banco com as linhas antigas dos alunos, e continua no
+  // tipo. O que ela deixou de fazer é decidir.
+  assert.equal(aprendeu("curta", progresso({ praticaOk: true })), false);
+  assert.equal(aprendeu("completa", progresso({ soloOk: true, praticaOk: true })), false);
 });
 
-test("aula de leitura é declaração, e tentativa jogada não a fecha", () => {
-  assert.equal(dominou("leitura", progresso({ lida: true })), true);
-  assert.equal(dominou("leitura", progresso({ soloOk: true, praticaOk: true })), false);
+test("a aula perde posto sem desaprender", () => {
+  // Perder depois de aprendida derruba dois degraus com piso no 1, e a data de
+  // `aprendidaEm` fica. A aula volta como revisão curta, não como recomeço.
+  const caiu = progresso({
+    escada: depoisDaPassada(noDegrau(3).escada, false, "2026-10-20T14:00:00.000Z"),
+  });
+  assert.equal(caiu.escada.degrau, 1);
+  assert.equal(aprendeu("curta", caiu), true);
 });
 
-test("as duas metades contam mesmo em sessões diferentes", () => {
-  // É a diferença deliberada para o selo da tela (`masteryReport`), que cobra a
-  // mesma sessão: aqui o banco lembra, e o 4G da criança não custa a etapa 4.
-  assert.equal(dominou("completa", progresso({ soloOk: true, praticaOk: true })), true);
+test("aula de leitura fica fora da escada: ela é declaração", () => {
+  assert.equal(aprendeu("leitura", progresso({ lida: true })), true);
+  // E nem o degrau 3 a fecha: não há partida numa aula de leitura, e um degrau
+  // ali seria sinal de que alguma outra coisa gravou no lugar errado.
+  assert.equal(aprendeu("leitura", noDegrau(3)), false);
 });
 
-test("o estado da aula sai do formato e das tentativas", () => {
+test("o estado da aula sai do formato, das tentativas e da escada", () => {
   assert.equal(estadoDaAula("curta", AULA_ZERADA), "nao-comecou");
   assert.equal(estadoDaAula("curta", progresso({ tentativas: 3 })), "praticando");
-  assert.equal(estadoDaAula("curta", progresso({ tentativas: 3, praticaOk: true })), "dominada");
+  assert.equal(estadoDaAula("curta", noDegrau(1)), "praticando", "um degrau ainda é praticar");
+  assert.equal(estadoDaAula("curta", noDegrau(3)), "aprendida");
   // Leitura não tem tentativa jogada: ou foi marcada, ou não começou.
   assert.equal(estadoDaAula("leitura", AULA_ZERADA), "nao-comecou");
-  assert.equal(estadoDaAula("leitura", progresso({ lida: true })), "dominada");
+  assert.equal(estadoDaAula("leitura", progresso({ lida: true })), "aprendida");
 });
 
 /* ------------------------------------------------------------------ *
  * As contas que o painel e a tarefa fazem
  * ------------------------------------------------------------------ */
 
-test("dominadas conta só entre as aulas dadas", () => {
+test("aprendidasDaTrilha conta só entre as aulas dadas", () => {
   const abertas = aulasAbertas(new Set(["N0-Q-MATE", "N0-R-MATE"]), 1);
   const mapa = new Map<string, ProgressoDaAula>([
-    ["N0-R-MATE", progresso({ soloOk: true, praticaOk: true })],
-    // Dominada num rascunho que não está aberto: não pode virar "1 de 0".
-    ["N1-KEY-SQUARES", progresso({ praticaOk: true })],
+    ["N0-R-MATE", noDegrau(3)],
+    // Aprendida num rascunho que não está aberto: não pode virar "1 de 0".
+    ["N1-KEY-SQUARES", noDegrau(3)],
   ]);
-  assert.deepEqual([...dominadas(abertas, mapa)], ["N0-R-MATE"]);
+  assert.deepEqual([...aprendidasDaTrilha(abertas, mapa)], ["N0-R-MATE"]);
 });
 
 test("a próxima aula é a primeira aberta que falta, na ordem da trilha", () => {
   const abertas = aulasAbertas(new Set(["N0-Q-MATE", "N0-R-MATE"]), 1);
-  const mapa = new Map<string, ProgressoDaAula>([
-    ["N0-Q-MATE", progresso({ soloOk: true, praticaOk: true })],
-  ]);
+  const mapa = new Map<string, ProgressoDaAula>([["N0-Q-MATE", noDegrau(3)]]);
   assert.equal(proximaAula(abertas, mapa)?.id, "N0-R-MATE");
 
-  mapa.set("N0-R-MATE", progresso({ soloOk: true, praticaOk: true }));
+  // Uma vitória não basta: a aula continua sendo a próxima até o degrau 3.
+  mapa.set("N0-R-MATE", noDegrau(1));
+  assert.equal(proximaAula(abertas, mapa)?.id, "N0-R-MATE");
+
+  mapa.set("N0-R-MATE", noDegrau(3));
   assert.equal(proximaAula(abertas, mapa), undefined);
 });

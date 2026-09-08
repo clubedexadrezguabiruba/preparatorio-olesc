@@ -1,4 +1,4 @@
-import { CLASSES, daClasse, dominou, TRILHA, type ProgressoDaAula } from "../finais/trilha.ts";
+import { aprendeu, CLASSES, daClasse, TRILHA, type ProgressoDaAula } from "../finais/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
 import { type Semana } from "./calendario.ts";
@@ -119,7 +119,7 @@ export function montarMapa(p: ProgressoParaOMapa): Map<string, ModuloDoNivel[]> 
         nome: aula.nome,
         href: `/finais/${aula.id}`,
         total: 1,
-        feitos: progresso && dominou(aula.formato, progresso) ? 1 : 0,
+        feitos: progresso && aprendeu(aula.formato, progresso) ? 1 : 0,
         situacao: situacao(aula.sabado, p.semana, p.aulasPublicadas.has(aula.id)),
         sabado: aula.sabado,
       });

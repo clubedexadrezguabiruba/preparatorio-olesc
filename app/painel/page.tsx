@@ -16,14 +16,14 @@ import { minutosDeHoje, sequenciaDeDias } from "@/lib/curso/hoje";
 import { PARAMETRO_DA_SEMANA, semanaDaTela } from "@/lib/curso/semana";
 import { minutosPorDia, partidaDoDiaMarcada } from "@/lib/curso/minutos";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
-import { eventosDeAulas, progressoDeFinais } from "@/lib/finais/progresso";
-import { revisoesDevidas } from "@/lib/finais/revisao";
+import { aulasVencidas } from "@/lib/finais/escada";
+import { progressoDeFinais } from "@/lib/finais/progresso";
 import {
   aulasAbertas,
   CLASSE,
   CLASSES,
   daClasse,
-  dominadas,
+  aprendidasDaTrilha,
   proximaAula,
 } from "@/lib/finais/trilha";
 import { lerIndice } from "@/lib/repertorio/banco";
@@ -75,7 +75,6 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
     marcadas,
     finais,
     devidosDeTatica,
-    eventos,
     minutos,
     jogouHoje,
     indice,
@@ -85,7 +84,6 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
     tarefasMarcadas(perfil.id),
     progressoDeFinais(perfil.id),
     revisaoDeHoje(perfil.id),
-    eventosDeAulas(perfil.id),
     // Trinta dias bastam para a sequência: o preparatório inteiro tem quatro
     // semanas, e ninguém precisa ver "48 dias seguidos" numa tela de celular.
     minutosPorDia(perfil.id, somarDias(hoje, -30)),
@@ -95,18 +93,30 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
   ]);
 
   // A trilha de finais: o que está aberto nesta semana, e o que dele já foi
-  // dominado. As duas contas são as mesmas de `/finais` — a tela lá e o cartão
+  // aprendido. As duas contas são as mesmas de `/finais` — a tela lá e o cartão
   // aqui não podem discordar, e é por isso que nenhuma das duas as refaz.
   const aulasDeFinais = aulasAbertas(aulasPublicadas(), semana);
-  const finaisFeitos = dominadas(aulasDeFinais, finais);
+  const finaisFeitos = aprendidasDaTrilha(aulasDeFinais, finais);
   const proximoFinal = proximaAula(aulasDeFinais, finais);
 
   const estados = estadoDasTarefas(tarefasDaSemana, marcadas, progresso, finaisFeitos);
 
-  // As aulas devidas hoje na revisão espaçada, com o nome que o cartão mostra.
-  const revisoesDeFinais = revisoesDevidas(aulasDeFinais, eventos, hoje).map((devida) => ({
-    id: devida.aula,
-    nome: aulasDeFinais.find((a) => a.id === devida.aula)?.nome ?? devida.aula,
+  /*
+   * As aulas vencidas hoje na escada, com o nome que o cartão mostra.
+   *
+   * Era `revisoesDevidas`, que relia o log inteiro de tentativas a cada
+   * renderização para derivar uma agenda. Agora a data está gravada
+   * (`finais_progresso.revisar_em`), e a fila é uma comparação de instantes
+   * sobre o que a página já leu — nenhuma consulta a mais.
+   */
+  const agoraNosFinais = new Date().toISOString();
+  const revisoesDeFinais = aulasVencidas(
+    aulasDeFinais.map((a) => a.id),
+    new Map([...finais].map(([id, p]) => [id, p.escada])),
+    agoraNosFinais,
+  ).map((id) => ({
+    id,
+    nome: aulasDeFinais.find((a) => a.id === id)?.nome ?? id,
   }));
 
   const aberturas = indice.length;

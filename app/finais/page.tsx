@@ -1,19 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Barra } from "@/components/Barra";
+import { Bolinhas } from "@/components/Bolinhas";
 import { EscolhaDaSemana } from "@/components/curso/EscolhaDaSemana";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { porExtenso, sabadoDaSemana } from "@/lib/curso/calendario";
 import { PARAMETRO_DA_SEMANA, semanaDaTela } from "@/lib/curso/semana";
 import { aulasPublicadas, indiceDeAulas } from "@/lib/finais/conteudo";
+import { DEGRAU_APRENDIDA } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import {
   AULA_ZERADA,
   aulasAbertas,
   CLASSE,
   CLASSES,
+  aprendidasDaTrilha,
   daClasse,
-  dominadas,
   estadoDaAula,
   FORMATO,
   proximaAula,
@@ -70,7 +72,7 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
   const abertas = aulasAbertas(publicadas, semana);
   const idsAbertos = new Set(abertas.map((a) => a.id));
   const progresso = await progressoDeFinais(perfil.id);
-  const feitas = dominadas(abertas, progresso);
+  const feitas = aprendidasDaTrilha(abertas, progresso);
   const proxima = proximaAula(abertas, progresso);
 
   const naTrilha = new Set(TRILHA.map((a) => a.id));
@@ -216,12 +218,12 @@ function Cartao({ aula, progresso }: { aula: AulaDaTrilha; progresso: ProgressoD
       <span
         aria-hidden
         className={`flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-bold tabular-nums ${
-          estado === "dominada"
+          estado === "aprendida"
             ? "border-metodo-cheio bg-metodo-cheio text-tinta-inversa"
             : "border-borda-forte text-tinta-fraca"
         }`}
       >
-        {estado === "dominada" ? "✓" : aula.ordem}
+        {estado === "aprendida" ? "✓" : aula.ordem}
       </span>
 
       <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -229,6 +231,13 @@ function Cartao({ aula, progresso }: { aula: AulaDaTrilha; progresso: ProgressoD
         <p className="text-xs text-tinta-fraca">
           {FORMATO[aula.formato].nome} · {FORMATO[aula.formato].etapas}
         </p>
+        {/* As bolinhas só onde há escada. A aula de leitura não tem partida
+            para vencer, e três círculos vazios ao lado dela prometeriam um
+            caminho que ela não tem — o dela é a declaração, e o `Estado` ao
+            lado já a diz. */}
+        {aula.formato !== "leitura" && (
+          <Bolinhas progresso={progresso.escada} total={DEGRAU_APRENDIDA} />
+        )}
       </div>
 
       <Estado estado={estado} />
@@ -275,8 +284,8 @@ function Fechado({ aula, publicada }: { aula: AulaDaTrilha; publicada: boolean }
  * coluna de reprovação onde não houve nem tentativa.
  */
 function Estado({ estado }: { estado: EstadoDeAula }) {
-  if (estado === "dominada") {
-    return <span className="shrink-0 text-xs font-medium text-metodo-tinta">Dominada</span>;
+  if (estado === "aprendida") {
+    return <span className="shrink-0 text-xs font-medium text-metodo-tinta">Aprendida</span>;
   }
   if (estado === "praticando") {
     return <span className="shrink-0 text-xs font-medium text-aviso-tinta">Praticando</span>;

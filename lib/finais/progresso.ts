@@ -1,6 +1,6 @@
 import "server-only";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
-import type { EventoDeAula } from "@/lib/finais/revisao";
+import type { ProgressoDaEscada } from "@/lib/finais/escada";
 import { AULA_ZERADA, type ProgressoDaAula } from "@/lib/finais/trilha";
 
 /**
@@ -10,12 +10,21 @@ import { AULA_ZERADA, type ProgressoDaAula } from "@/lib/finais/trilha";
  * e três consultas escritas em três arquivos seriam três chances de o painel
  * dizer 6 e o relatório dizer 5 com o aluno na frente.
  *
- * ## Duas tabelas, uma resposta
+ * ## Três tabelas, uma resposta
  *
- * O progresso de uma aula vem de dois lugares que o B3 separou de propósito: a
- * view `progresso_aula`, que soma o que foi **jogado** e reconferido no
- * servidor, e `aula_lida`, que guarda o que o aluno **declarou** nas aulas de
- * leitura. Juntá-las é o trabalho daqui; decidir o que a junção significa é de
+ * O progresso de uma aula vem de três lugares, e a separação é de propósito:
+ *
+ * - a view `progresso_aula`, que soma o que foi **jogado** e reconferido no
+ *   servidor — quantas tentativas, quando foi a última;
+ * - `aula_lida`, que guarda o que o aluno **declarou** nas aulas de leitura;
+ * - `finais_progresso`, que guarda **em que degrau da escada** cada aula está,
+ *   escrita pelo servidor depois de reproduzir a partida (migration 0007).
+ *
+ * A terceira entrou em 2026-09-08 e é a que responde "o aluno sabe isto?". A
+ * view não responde mais: o `bool_or` dela diz "conseguiu em alguma tentativa",
+ * que era o critério antigo de "dominada" e virou apenas um fato do histórico.
+ *
+ * Juntá-las é o trabalho daqui; decidir o que a junção significa é de
  * `lib/finais/trilha.ts`, que sabe o formato de cada aula.
  *
  * ## Quem filtra por aluno é a RLS
@@ -38,14 +47,29 @@ type LinhaDaView = {
 
 type LinhaDeLeitura = { aluno: string; aula: string };
 
+type LinhaDaEscada = {
+  aluno: string;
+  aula: string;
+  degrau: number;
+  revisar_em: string | null;
+  tentativas: number;
+  erros: number;
+  aprendida_em: string | null;
+  ultima_em: string;
+};
+
 /**
  * Uma consulta a cada tabela, e a junção em memória.
  *
- * Duas idas ao banco em vez de um `join` no SQL porque as duas metades não têm
- * o mesmo dono: a view soma tentativas e a tabela guarda declarações, e uma
- * aula de leitura nunca aparece na primeira. Um `full outer join` numa view
- * agregada resolveria isso ao custo de uma segunda view para manter — e as duas
- * consultas custam, juntas, menos que a renderização da tela que as pediu.
+ * Três idas ao banco em vez de um `join` no SQL porque as três partes não têm o
+ * mesmo dono: a view soma tentativas, `aula_lida` guarda declarações e
+ * `finais_progresso` guarda o degrau — e uma aula de leitura nunca aparece na
+ * primeira nem na terceira. Um `full outer join` numa view agregada resolveria
+ * isso ao custo de mais uma view para manter, e as três consultas custam,
+ * juntas, menos que a renderização da tela que as pediu.
+ *
+ * Elas vão **em paralelo** (`Promise.all`), então a latência é a da mais lenta,
+ * e não a soma.
  */
 async function ler(aluno?: string): Promise<Map<string, Map<string, ProgressoDaAula>>> {
   const supabase = await criarClienteServidor();
@@ -54,12 +78,16 @@ async function ler(aluno?: string): Promise<Map<string, Map<string, ProgressoDaA
     .from("progresso_aula")
     .select("aluno, aula, solo_ok, pratica_ok, tentativas, ultima");
   let daLeitura = supabase.from("aula_lida").select("aluno, aula");
+  let daEscada = supabase
+    .from("finais_progresso")
+    .select("aluno, aula, degrau, revisar_em, tentativas, erros, aprendida_em, ultima_em");
   if (aluno) {
     daView = daView.eq("aluno", aluno);
     daLeitura = daLeitura.eq("aluno", aluno);
+    daEscada = daEscada.eq("aluno", aluno);
   }
 
-  const [jogadas, lidas] = await Promise.all([daView, daLeitura]);
+  const [jogadas, lidas, naEscada] = await Promise.all([daView, daLeitura, daEscada]);
   const porAluno = new Map<string, Map<string, ProgressoDaAula>>();
 
   const doAluno = (id: string) => {
@@ -81,6 +109,19 @@ async function ler(aluno?: string): Promise<Map<string, Map<string, ProgressoDaA
   for (const linha of (lidas.data ?? []) as LinhaDeLeitura[]) {
     const aulas = doAluno(linha.aluno);
     aulas.set(linha.aula, { ...(aulas.get(linha.aula) ?? AULA_ZERADA), lida: true });
+  }
+
+  for (const linha of (naEscada.data ?? []) as LinhaDaEscada[]) {
+    const aulas = doAluno(linha.aluno);
+    const escada: ProgressoDaEscada = {
+      degrau: linha.degrau,
+      revisarEm: linha.revisar_em,
+      tentativas: linha.tentativas,
+      erros: linha.erros,
+      aprendidaEm: linha.aprendida_em,
+      ultimaEm: linha.ultima_em,
+    };
+    aulas.set(linha.aula, { ...(aulas.get(linha.aula) ?? AULA_ZERADA), escada });
   }
 
   return porAluno;
@@ -123,31 +164,15 @@ export async function finaisDaTurma(): Promise<Map<string, Map<string, Progresso
   return ler();
 }
 
-/**
- * Os eventos por aula, com data — o que a **revisão espaçada** lê.
+/*
+ * **`eventosDeAulas` saiu daqui em 2026-09-08.**
  *
- * A view não serve aqui, e não é descuido: `progresso_aula.ultima` é o máximo
- * de `criada_em` por aula, e responde "quando ele mexeu nisto pela última
- * vez". A fila precisa de outra coisa — *quando dominou* e *quantas revisões
- * já venceu* —, e isso são eventos, não um agregado.
+ * Ela lia `tentativas_aula` inteira, com data, para o antigo `revisao.ts`
+ * derivar a agenda de revisão a cada tela — porque não havia onde guardar
+ * "quando dominou" e "quantas revisões já venceu".
  *
- * Quem filtra por aluno é a RLS, como em tudo aqui; o parâmetro escolhe *qual*
- * aluno o relatório do professor está olhando.
+ * Agora há: `finais_progresso` guarda o degrau e a data, e quem os escreve é o
+ * servidor no instante da partida. A fila do dia passou a ser uma leitura
+ * (`aulasVencidas`, em `lib/finais/escada.ts`) em vez de uma varredura do log —
+ * e o log volta a ser o que ele é, o histórico que o professor lê.
  */
-export async function eventosDeAulas(aluno?: string): Promise<Map<string, EventoDeAula[]>> {
-  const supabase = await criarClienteServidor();
-  let consulta = supabase
-    .from("tentativas_aula")
-    .select("aula, etapa, sucesso, criada_em")
-    .order("criada_em");
-  if (aluno) consulta = consulta.eq("aluno", aluno);
-
-  const { data } = await consulta;
-  const porAula = new Map<string, EventoDeAula[]>();
-  for (const linha of (data ?? []) as Array<EventoDeAula & { aula: string }>) {
-    const atual = porAula.get(linha.aula) ?? [];
-    atual.push({ etapa: linha.etapa, sucesso: linha.sucesso, criada_em: linha.criada_em });
-    porAula.set(linha.aula, atual);
-  }
-  return porAula;
-}

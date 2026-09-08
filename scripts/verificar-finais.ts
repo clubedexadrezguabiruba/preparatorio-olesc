@@ -58,16 +58,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { emailDoUsuario } from "../lib/auth/usuario.ts";
-import { hojeNoBrasil, somarDias } from "../lib/curso/calendario.ts";
 import { lerPacote } from "../lib/finais/conteudo.ts";
 import { gravarTentativaDeAula } from "../lib/finais/gravar.ts";
 import { posicoesDeRevisao } from "../lib/finais/rejulgar.ts";
-import {
-  agendaDeRevisao,
-  INTERVALOS_DE_FINAIS,
-  type EventoDeAula,
-} from "../lib/finais/revisao.ts";
-import { aulaDaTrilha } from "../lib/finais/trilha.ts";
+import { DEGRAUS_EM_DIAS, diasAteRevisar, type ProgressoDaEscada } from "../lib/finais/escada.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
 
 const RAIZ = fileURLToPath(new URL("..", import.meta.url));
@@ -390,20 +384,58 @@ try {
     "e as outras quatro têm `posicao` nula",
   );
 
-  console.log(`\nA agenda: dominada hoje, volta em hoje+${INTERVALOS_DE_FINAIS[0]}:`);
+  /* ---------------------------------------------------------------- *
+   * A escada, lida do banco
+   *
+   * Substitui a antiga conferência da agenda derivada do log. O que se afirma
+   * agora é mais forte: não que uma função *calcularia* a data certa, e sim que
+   * o servidor **gravou** o degrau e a data em `finais_progresso` no instante
+   * em que a partida terminou.
+   * ---------------------------------------------------------------- */
+  console.log("");
+  console.log("A escada, depois das partidas de hoje:");
 
-  const formato = aulaDaTrilha(AULA)!.formato;
-  const agenda = agendaDeRevisao(formato, linhasComRevisao as EventoDeAula[]);
-  const hoje = hojeNoBrasil();
-  afirmar(agenda !== null, `a aula ${AULA} (${formato}) entrou na agenda`);
+  const { data: naEscada } = await comoAna
+    .from("finais_progresso")
+    .select("aula, degrau, revisar_em, tentativas, erros, aprendida_em, ultima_em");
+
+  const linhaDaEscada = (naEscada ?? []).find((l) => l.aula === AULA);
+  afirmar(Boolean(linhaDaEscada), `a aula ${AULA} tem linha na escada`);
+  if (!linhaDaEscada) throw new Error("sem a linha da escada não há o que provar");
+
+  // **Degrau 1, e não 3.** A Ana venceu hoje — uma vez, num dia só. Subir a
+  // escada exige vencer de novo num dia em que a aula já tenha vencido, e a
+  // data mínima é a meia-noite seguinte. É esta linha que prova que "três
+  // passadas" quer dizer três dias, e não três cliques.
   afirmar(
-    agenda?.devidoEm === somarDias(hoje, INTERVALOS_DE_FINAIS[0]),
-    `volta em ${somarDias(hoje, INTERVALOS_DE_FINAIS[0])} (a agenda disse ${agenda?.devidoEm})`,
+    linhaDaEscada.degrau === 1,
+    `e ela está no degrau 1 depois de vencer no mesmo dia (está no ${linhaDaEscada.degrau})`,
   );
-  // A revisão de hoje foi jogada **antes** do prazo — é o botão "ir para a
-  // revisão" no fim da prática, na mesma sessão. Continuar não é recordar, e
-  // por isso a rodada não anda.
-  afirmar(agenda?.rodada === 1, `e continua na primeira rodada (está na ${agenda?.rodada})`);
+  afirmar(
+    linhaDaEscada.aprendida_em === null,
+    "e não está aprendida: isso é o degrau 3, em três dias distintos",
+  );
+
+  const naEscadaAgora: ProgressoDaEscada = {
+    degrau: linhaDaEscada.degrau,
+    revisarEm: linhaDaEscada.revisar_em,
+    tentativas: linhaDaEscada.tentativas,
+    erros: linhaDaEscada.erros,
+    aprendidaEm: linhaDaEscada.aprendida_em,
+    ultimaEm: linhaDaEscada.ultima_em,
+  };
+  const faltam = diasAteRevisar(naEscadaAgora, new Date().toISOString());
+  afirmar(
+    faltam === DEGRAUS_EM_DIAS[1],
+    `e volta em ${DEGRAUS_EM_DIAS[1]} dia (o banco disse ${faltam})`,
+  );
+
+  // A partida perdida entrou na conta dos erros, e as contas continuam
+  // possíveis: é a mesma coerência que o `check` da migration cobra.
+  afirmar(
+    linhaDaEscada.tentativas >= linhaDaEscada.erros && linhaDaEscada.erros >= 1,
+    `tentativas ${linhaDaEscada.tentativas} e erros ${linhaDaEscada.erros}`,
+  );
 
   /* ---------------------------------------------------------------- *
    * 7. O que o Bruno **não** lê
@@ -427,10 +459,26 @@ try {
     `o Bruno lê 0 tentativas (leu ${tentativasVistasPeloBruno})`,
   );
 
+  const { data: escadaDoBruno } = await comoBruno
+    .from("finais_progresso")
+    .select("aluno, aula, degrau");
+  afirmar(
+    (escadaDoBruno ?? []).length === 0,
+    `o Bruno não enxerga a escada da Ana (viu ${(escadaDoBruno ?? []).length} linha(s))`,
+  );
+
+  const { error: erroNaEscada } = await comoBruno.from("finais_progresso").insert({
+    aluno: bruno.id,
+    aula: AULA,
+    degrau: 3,
+    revisar_em: new Date().toISOString(),
+  });
+  afirmar(erroNaEscada !== null, "o aluno logado não sobe de degrau por conta própria");
+
   const { error: erroDeEscrita } = await comoBruno.from("tentativas_aula").insert({
     aluno: bruno.id,
     aula: AULA,
-    etapa: "solo",
+    etapa: "pratica",
     sucesso: true,
     lances: ["a1a8"],
     tempo_ms: 1,

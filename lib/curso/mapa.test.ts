@@ -5,6 +5,7 @@ import { BLOCOS } from "../tatica/blocos.ts";
 import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
 import { contarAberto, montarMapa, MODULO, type ProgressoParaOMapa } from "./mapa.ts";
 import { NIVEIS, vocEstaAqui } from "./trilha.ts";
+import { depoisDaPassada, zerada } from "../finais/escada.ts";
 
 /**
  * O mapa é a única tela que soma os módulos, e por isso a única em que um erro
@@ -73,16 +74,38 @@ test("a barra da tática não passa de 100% quando a prova repete puzzle", () =>
   assert.equal(item?.feitos, PUZZLES_POR_TEMA);
 });
 
-test("aula dominada conta 1; não dominada conta 0", () => {
+test("aula aprendida conta 1; uma vitória só ainda conta 0", () => {
+  // **A segunda metade deste teste é a mudança de 2026-09-08.** `praticaOk`
+  // sozinho valia 1 — era o critério antigo, "venceu uma vez, para sempre".
+  // Hoje o mapa conta o degrau 3, e uma vitória põe a aula no degrau 1.
   const curta = TRILHA.find((a) => a.formato === "curta");
   assert.ok(curta, "a trilha precisa de pelo menos uma aula curta para este teste");
 
   const naoFeita = montarMapa(VAZIO);
   assert.equal(itens(naoFeita, "finais").find((i) => i.id === curta.id)?.feitos, 0);
 
+  const umaVitoria = montarMapa({
+    ...VAZIO,
+    finais: new Map([
+      [
+        curta.id,
+        {
+          ...AULA_ZERADA,
+          praticaOk: true,
+          escada: depoisDaPassada(zerada(), true, "2026-09-05T14:00:00.000Z"),
+        },
+      ],
+    ]),
+  });
+  assert.equal(itens(umaVitoria, "finais").find((i) => i.id === curta.id)?.feitos, 0);
+
+  let escada = zerada();
+  for (const dia of ["2026-09-05", "2026-09-07", "2026-09-12"]) {
+    escada = depoisDaPassada(escada, true, `${dia}T14:00:00.000Z`);
+  }
   const feita = montarMapa({
     ...VAZIO,
-    finais: new Map([[curta.id, { ...AULA_ZERADA, praticaOk: true }]]),
+    finais: new Map([[curta.id, { ...AULA_ZERADA, praticaOk: true, escada }]]),
   });
   assert.equal(itens(feita, "finais").find((i) => i.id === curta.id)?.feitos, 1);
 });

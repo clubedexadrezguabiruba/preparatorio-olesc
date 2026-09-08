@@ -1,13 +1,17 @@
-import { DEGRAU_APRENDIDA, type ProgressoDaLinha } from "@/lib/repertorio/treino";
-
 /**
- * Os três degraus até "aprendida", em bolinhas.
+ * Os degraus até "aprendida", em bolinhas.
  *
- * **Um desenho só, e é por isso que ele mora fora das duas telas que o usam.**
- * A lista da abertura desenha uma por linha, no servidor; o cabeçalho do treino
+ * **Um desenho só, e é por isso que ele mora fora das telas que o usam.** A
+ * lista da abertura desenha uma por linha, no servidor; o cabeçalho do treino
  * desenha a da linha atual, no navegador, com o número que o servidor acabou de
- * devolver. Duas cópias seriam duas chances de a lista dizer duas bolinhas e o
- * cabeçalho dizer três, na mesma tela.
+ * devolver; a trilha de finais desenha uma por aula. Cópias seriam chances de
+ * uma tela dizer duas bolinhas e a outra dizer três, para o mesmo progresso.
+ *
+ * Ele saiu de `app/aberturas/` em 2026-09-08, quando os finais ganharam a mesma
+ * escada. **Não** importa constante nenhuma: `total` vem de quem chama, com o
+ * `DEGRAU_APRENDIDA` do próprio módulo — as duas escadas usam hoje o mesmo três
+ * por escolha editorial, não por necessidade, e um número compartilhado aqui
+ * amarraria as duas sem que ninguém tivesse pedido.
  *
  * ## Elas contam o degrau, e não os acertos seguidos
  *
@@ -26,14 +30,22 @@ import { DEGRAU_APRENDIDA, type ProgressoDaLinha } from "@/lib/repertorio/treino
  * — "2 de 3" não é informação que caiba num círculo, e um leitor de tela que
  * lesse os dois diria tudo duas vezes. É a mesma regra da `components/Barra`.
  */
-export function Bolinhas({ progresso }: { progresso: ProgressoDaLinha }) {
-  const cheias = Math.min(progresso.degrau, DEGRAU_APRENDIDA);
+export function Bolinhas({
+  progresso,
+  total,
+}: {
+  /** Só o que se desenha: o degrau e se já esteve aprendida alguma vez. */
+  progresso: { readonly degrau: number; readonly aprendidaEm: string | null };
+  /** Quantas bolinhas, e é o degrau em que a coisa fica aprendida. */
+  total: number;
+}) {
+  const cheias = Math.min(progresso.degrau, total);
   const pronta = progresso.aprendidaEm !== null;
 
   return (
     <span className="flex items-center gap-1.5">
       <span className="flex items-center gap-1" aria-hidden>
-        {Array.from({ length: DEGRAU_APRENDIDA }, (_, i) => (
+        {Array.from({ length: total }, (_, i) => (
           <span
             key={i}
             className={`size-2 rounded-full ${i < cheias ? "bg-metodo-cheio" : "bg-carta-alta"}`}
@@ -43,7 +55,7 @@ export function Bolinhas({ progresso }: { progresso: ProgressoDaLinha }) {
       <span
         className={`text-xs tabular-nums ${pronta ? "text-metodo-tinta" : "text-tinta-fraca"}`}
       >
-        {pronta ? "aprendida" : `${cheias} de ${DEGRAU_APRENDIDA}`}
+        {pronta ? "aprendida" : `${cheias} de ${total}`}
       </span>
     </span>
   );
