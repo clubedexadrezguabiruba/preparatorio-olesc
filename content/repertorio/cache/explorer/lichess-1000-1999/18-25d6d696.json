@@ -1,0 +1,53 @@
+{
+  "white": 113,
+  "draws": 22,
+  "black": 157,
+  "moves": [
+    {
+      "uci": "c3d4",
+      "san": "cxd4",
+      "averageRating": 1858,
+      "white": 86,
+      "draws": 20,
+      "black": 118,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2e4",
+      "san": "Nxe4",
+      "averageRating": 1752,
+      "white": 16,
+      "draws": 0,
+      "black": 25,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b5c6",
+      "san": "Bxc6",
+      "averageRating": 1860,
+      "white": 11,
+      "draws": 2,
+      "black": 12,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f3d4",
+      "san": "Nxd4",
+      "averageRating": 1864,
+      "white": 0,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B31",
+    "name": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation"
+  }
+}

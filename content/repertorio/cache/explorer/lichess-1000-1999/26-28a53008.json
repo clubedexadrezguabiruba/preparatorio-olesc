@@ -1,0 +1,113 @@
+{
+  "white": 19,
+  "draws": 4,
+  "black": 319,
+  "moves": [
+    {
+      "uci": "e5e8",
+      "san": "Qxe8+",
+      "averageRating": 1806,
+      "white": 12,
+      "draws": 3,
+      "black": 237,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f2f4",
+      "san": "f4",
+      "averageRating": 1869,
+      "white": 5,
+      "draws": 0,
+      "black": 35,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1f4",
+      "san": "Bf4",
+      "averageRating": 1791,
+      "white": 2,
+      "draws": 1,
+      "black": 32,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c3b4",
+      "san": "cxb4",
+      "averageRating": 1422,
+      "white": 0,
+      "draws": 0,
+      "black": 6,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e1h1",
+      "san": "O-O",
+      "averageRating": 1889,
+      "white": 0,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e5e7",
+      "san": "Qe7+",
+      "averageRating": 1520,
+      "white": 0,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e5e3",
+      "san": "Qe3",
+      "averageRating": 1904,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1e3",
+      "san": "Be3",
+      "averageRating": 1844,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e5e4",
+      "san": "Qe4",
+      "averageRating": 1979,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b3d5",
+      "san": "Bxd5+",
+      "averageRating": 1849,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B34",
+    "name": "Sicilian Defense: Accelerated Dragon, Exchange Variation"
+  }
+}

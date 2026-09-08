@@ -1,0 +1,93 @@
+{
+  "white": 64,
+  "draws": 13,
+  "black": 634,
+  "moves": [
+    {
+      "uci": "f8b4",
+      "san": "Bb4+",
+      "averageRating": 1846,
+      "white": 51,
+      "draws": 12,
+      "black": 605,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8d6",
+      "san": "Bd6",
+      "averageRating": 1916,
+      "white": 7,
+      "draws": 1,
+      "black": 13,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8g7",
+      "san": "Bg7",
+      "averageRating": 1838,
+      "white": 2,
+      "draws": 0,
+      "black": 11,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8h6",
+      "san": "Bh6",
+      "averageRating": 1917,
+      "white": 1,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8c5",
+      "san": "Bc5",
+      "averageRating": 1672,
+      "white": 1,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8e7",
+      "san": "Qe7",
+      "averageRating": 1617,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8e7",
+      "san": "Be7",
+      "averageRating": 1983,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8a6",
+      "san": "Ba6",
+      "averageRating": 1933,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B34",
+    "name": "Sicilian Defense: Accelerated Dragon, Exchange Variation"
+  }
+}

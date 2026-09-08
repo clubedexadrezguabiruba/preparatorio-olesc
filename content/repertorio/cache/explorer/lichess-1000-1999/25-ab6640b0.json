@@ -1,0 +1,33 @@
+{
+  "white": 0,
+  "draws": 0,
+  "black": 2,
+  "moves": [
+    {
+      "uci": "c8d7",
+      "san": "Bd7",
+      "averageRating": 1936,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a5",
+      "san": "a5",
+      "averageRating": 1545,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C00",
+    "name": "French Defense: Schlechter Variation"
+  }
+}

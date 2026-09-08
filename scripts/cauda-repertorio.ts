@@ -156,19 +156,22 @@ const cacheEm = (pasta: string): Cache => {
 const cache = cacheEm(PASTA_CACHE);
 const avisos: string[] = [];
 let consultas = 0;
+let semDados = 0;
 
 async function explorer(
   play: readonly string[],
   ritmos: readonly string[],
 ): Promise<Posicao | null> {
   consultas += 1;
-  return consultar(play, {
+  const lido = await consultar(play, {
     cache,
     faixas: FAIXAS,
     ritmos,
     semRede: SEM_REDE,
     avisar: (m) => avisos.push(`${play.join(",") || "(início)"}: ${m}`),
   });
+  if (lido === null && !SEM_REDE) semDados += 1;
+  return lido;
 }
 
 /* ------------------------------------------------------------------ *
@@ -535,7 +538,18 @@ if (DOSSIES) {
   );
 }
 if (avisos.length > 0) {
-  console.log(`\n${avisos.length} aviso(s) do explorer:`);
-  for (const a of [...new Set(avisos)].slice(0, 20)) console.log(`  ${a}`);
+  console.log(`
+${avisos.length} aviso(s) do explorer — 429 é adiamento, não furo:`);
+  for (const a of [...new Set(avisos)].slice(0, 10)) console.log(`  ${a}`);
+}
+
+// Só reprova quando alguma posição ficou SEM DADO. Um 429 que a retentativa
+// resolveu não é furo: a medição saiu inteira, só demorou. Reprovar por causa
+// dele mandaria refazer 442 consultas que já estão certas — e, pior, ensinaria
+// quem roda o script a ignorar a saída vermelha, que é como um furo de verdade
+// passa despercebido depois.
+if (semDados > 0) {
+  console.error(`
+${semDados} posição(ões) ficaram sem dado do explorer. A medição está furada.`);
   process.exit(1);
 }

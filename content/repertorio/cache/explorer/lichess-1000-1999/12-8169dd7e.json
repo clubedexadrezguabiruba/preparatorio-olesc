@@ -1,0 +1,136 @@
+{
+  "white": 192692,
+  "draws": 22640,
+  "black": 209472,
+  "moves": [
+    {
+      "uci": "f2f3",
+      "san": "f3",
+      "averageRating": 1824,
+      "white": 56853,
+      "draws": 6452,
+      "black": 58463,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1c4",
+      "san": "Bc4",
+      "averageRating": 1775,
+      "white": 42300,
+      "draws": 4956,
+      "black": 43690,
+      "game": null,
+      "opening": {
+        "eco": "B35",
+        "name": "Sicilian Defense: Accelerated Dragon, Modern Bc4 Variation"
+      }
+    },
+    {
+      "uci": "f1e2",
+      "san": "Be2",
+      "averageRating": 1812,
+      "white": 24726,
+      "draws": 3620,
+      "black": 24558,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1d2",
+      "san": "Qd2",
+      "averageRating": 1759,
+      "white": 22050,
+      "draws": 2098,
+      "black": 24126,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4c6",
+      "san": "Nxc6",
+      "averageRating": 1741,
+      "white": 15383,
+      "draws": 1775,
+      "black": 17147,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1b5",
+      "san": "Bb5",
+      "averageRating": 1710,
+      "white": 10696,
+      "draws": 1360,
+      "black": 13336,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1d3",
+      "san": "Bd3",
+      "averageRating": 1705,
+      "white": 6436,
+      "draws": 860,
+      "black": 9549,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h3",
+      "san": "h3",
+      "averageRating": 1775,
+      "white": 3604,
+      "draws": 435,
+      "black": 4418,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f2f4",
+      "san": "f4",
+      "averageRating": 1758,
+      "white": 3517,
+      "draws": 317,
+      "black": 4204,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e4e5",
+      "san": "e5",
+      "averageRating": 1637,
+      "white": 1229,
+      "draws": 121,
+      "black": 2119,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1774,
+      "white": 918,
+      "draws": 126,
+      "black": 1310,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g2g3",
+      "san": "g3",
+      "averageRating": 1722,
+      "white": 837,
+      "draws": 124,
+      "black": 1055,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B34",
+    "name": "Sicilian Defense: Accelerated Dragon, Modern Variation"
+  }
+}

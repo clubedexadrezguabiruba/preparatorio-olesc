@@ -1,0 +1,133 @@
+{
+  "white": 974,
+  "draws": 95,
+  "black": 1240,
+  "moves": [
+    {
+      "uci": "c4b3",
+      "san": "Bb3",
+      "averageRating": 1800,
+      "white": 650,
+      "draws": 63,
+      "black": 826,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c4d3",
+      "san": "Bd3",
+      "averageRating": 1764,
+      "white": 119,
+      "draws": 15,
+      "black": 199,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e1h1",
+      "san": "O-O",
+      "averageRating": 1830,
+      "white": 126,
+      "draws": 10,
+      "black": 117,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c4e2",
+      "san": "Be2",
+      "averageRating": 1802,
+      "white": 30,
+      "draws": 4,
+      "black": 41,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1g5",
+      "san": "Bg5",
+      "averageRating": 1748,
+      "white": 20,
+      "draws": 2,
+      "black": 26,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b1c3",
+      "san": "Nc3",
+      "averageRating": 1811,
+      "white": 26,
+      "draws": 0,
+      "black": 21,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1f4",
+      "san": "Bf4",
+      "averageRating": 1863,
+      "white": 1,
+      "draws": 1,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1d2",
+      "san": "Bd2",
+      "averageRating": 1656,
+      "white": 0,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b2b3",
+      "san": "b3",
+      "averageRating": 1676,
+      "white": 0,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4f4",
+      "san": "Qf4",
+      "averageRating": 1106,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4d1",
+      "san": "Qd1",
+      "averageRating": 1961,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g2g4",
+      "san": "g4",
+      "averageRating": 1599,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B34",
+    "name": "Sicilian Defense: Accelerated Dragon, Exchange Variation"
+  }
+}

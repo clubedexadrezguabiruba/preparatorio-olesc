@@ -1,0 +1,73 @@
+{
+  "white": 26,
+  "draws": 6,
+  "black": 19,
+  "moves": [
+    {
+      "uci": "e5f3",
+      "san": "Nxf3+",
+      "averageRating": 1818,
+      "white": 8,
+      "draws": 0,
+      "black": 4,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8d7",
+      "san": "Bd7",
+      "averageRating": 1866,
+      "white": 2,
+      "draws": 2,
+      "black": 6,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e8h8",
+      "san": "O-O",
+      "averageRating": 2037,
+      "white": 4,
+      "draws": 1,
+      "black": 4,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8d1",
+      "san": "Qxd1+",
+      "averageRating": 1944,
+      "white": 6,
+      "draws": 1,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b4c3",
+      "san": "Bxc3+",
+      "averageRating": 1879,
+      "white": 5,
+      "draws": 1,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8a5",
+      "san": "Qa5",
+      "averageRating": 1905,
+      "white": 1,
+      "draws": 1,
+      "black": 3,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C00",
+    "name": "French Defense: Schlechter Variation"
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "white": 2348,
+  "draws": 182,
+  "black": 1400,
+  "moves": [
+    {
+      "uci": "d7g4",
+      "san": "Bg4",
+      "averageRating": 1813,
+      "white": 753,
+      "draws": 50,
+      "black": 369,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h7h6",
+      "san": "h6",
+      "averageRating": 1841,
+      "white": 435,
+      "draws": 39,
+      "black": 256,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d6d5",
+      "san": "d5",
+      "averageRating": 1811,
+      "white": 274,
+      "draws": 25,
+      "black": 223,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a8b8",
+      "san": "Rb8",
+      "averageRating": 1864,
+      "white": 236,
+      "draws": 13,
+      "black": 158,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8e8",
+      "san": "Re8",
+      "averageRating": 1827,
+      "white": 171,
+      "draws": 19,
+      "black": 119,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c6c5",
+      "san": "c5",
+      "averageRating": 1815,
+      "white": 142,
+      "draws": 12,
+      "black": 91,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6e8",
+      "san": "Ne8",
+      "averageRating": 1832,
+      "white": 70,
+      "draws": 6,
+      "black": 42,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6g4",
+      "san": "Ng4",
+      "averageRating": 1769,
+      "white": 65,
+      "draws": 6,
+      "black": 38,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8b8",
+      "san": "Qb8",
+      "averageRating": 1819,
+      "white": 46,
+      "draws": 2,
+      "black": 24,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a5",
+      "san": "a5",
+      "averageRating": 1859,
+      "white": 29,
+      "draws": 2,
+      "black": 24,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8c8",
+      "san": "Qc8",
+      "averageRating": 1825,
+      "white": 33,
+      "draws": 3,
+      "black": 15,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d7e6",
+      "san": "Be6",
+      "averageRating": 1831,
+      "white": 25,
+      "draws": 1,
+      "black": 14,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C44",
+    "name": "Scotch Game"
+  }
+}

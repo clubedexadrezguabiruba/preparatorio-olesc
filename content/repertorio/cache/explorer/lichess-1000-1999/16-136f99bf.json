@@ -1,0 +1,133 @@
+{
+  "white": 132,
+  "draws": 19,
+  "black": 213,
+  "moves": [
+    {
+      "uci": "f1e2",
+      "san": "Be2",
+      "averageRating": 1748,
+      "white": 61,
+      "draws": 12,
+      "black": 84,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g2g4",
+      "san": "g4",
+      "averageRating": 1763,
+      "white": 14,
+      "draws": 1,
+      "black": 25,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1d3",
+      "san": "Bd3",
+      "averageRating": 1743,
+      "white": 10,
+      "draws": 0,
+      "black": 30,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f3e5",
+      "san": "Ne5",
+      "averageRating": 1728,
+      "white": 10,
+      "draws": 3,
+      "black": 14,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4c5",
+      "san": "dxc5",
+      "averageRating": 1835,
+      "white": 11,
+      "draws": 0,
+      "black": 12,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2b3",
+      "san": "Nb3",
+      "averageRating": 1685,
+      "white": 5,
+      "draws": 0,
+      "black": 8,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c2b3",
+      "san": "Qb3",
+      "averageRating": 1745,
+      "white": 2,
+      "draws": 0,
+      "black": 9,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1801,
+      "white": 2,
+      "draws": 1,
+      "black": 7,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a1b1",
+      "san": "Rb1",
+      "averageRating": 1590,
+      "white": 2,
+      "draws": 0,
+      "black": 6,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a4",
+      "san": "a4",
+      "averageRating": 1652,
+      "white": 4,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b2b3",
+      "san": "b3",
+      "averageRating": 1752,
+      "white": 2,
+      "draws": 1,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h3h4",
+      "san": "h4",
+      "averageRating": 1717,
+      "white": 3,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "D00",
+    "name": "Queen's Pawn Game: Accelerated London System, Steinitz Countergambit"
+  }
+}

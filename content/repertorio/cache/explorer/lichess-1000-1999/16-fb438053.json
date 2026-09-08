@@ -1,0 +1,113 @@
+{
+  "white": 5087,
+  "draws": 552,
+  "black": 4269,
+  "moves": [
+    {
+      "uci": "b5d3",
+      "san": "Bd3",
+      "averageRating": 1781,
+      "white": 2324,
+      "draws": 233,
+      "black": 1558,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b5c4",
+      "san": "Bc4",
+      "averageRating": 1745,
+      "white": 1645,
+      "draws": 194,
+      "black": 1541,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b5a4",
+      "san": "Ba4",
+      "averageRating": 1715,
+      "white": 549,
+      "draws": 67,
+      "black": 609,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b5e2",
+      "san": "Be2",
+      "averageRating": 1730,
+      "white": 406,
+      "draws": 33,
+      "black": 225,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b5a6",
+      "san": "Ba6",
+      "averageRating": 1617,
+      "white": 110,
+      "draws": 18,
+      "black": 151,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b5c6",
+      "san": "Bxc6",
+      "averageRating": 1655,
+      "white": 51,
+      "draws": 7,
+      "black": 175,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e4e5",
+      "san": "e5",
+      "averageRating": 1625,
+      "white": 2,
+      "draws": 0,
+      "black": 6,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1e1",
+      "san": "Re1",
+      "averageRating": 1125,
+      "white": 0,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g2g4",
+      "san": "g4",
+      "averageRating": 1888,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1f4",
+      "san": "Bf4",
+      "averageRating": 1357,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C44",
+    "name": "Scotch Game"
+  }
+}

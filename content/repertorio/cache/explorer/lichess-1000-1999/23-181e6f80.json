@@ -1,0 +1,23 @@
+{
+  "white": 1,
+  "draws": 0,
+  "black": 0,
+  "moves": [
+    {
+      "uci": "d8b6",
+      "san": "Qb6",
+      "averageRating": 1090,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "D00",
+    "name": "Queen's Pawn Game: Accelerated London System, Steinitz Countergambit"
+  }
+}

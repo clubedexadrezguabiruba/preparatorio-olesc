@@ -1,0 +1,33 @@
+{
+  "white": 2339,
+  "draws": 624,
+  "black": 9168,
+  "moves": [
+    {
+      "uci": "e1d2",
+      "san": "Kxd2",
+      "averageRating": 1751,
+      "white": 2337,
+      "draws": 624,
+      "black": 9152,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e1d1",
+      "san": "Kd1",
+      "averageRating": 1684,
+      "white": 2,
+      "draws": 0,
+      "black": 16,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "D51",
+    "name": "Queen's Gambit Declined: Modern Variation, Knight Defense"
+  }
+}
