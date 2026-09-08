@@ -1160,6 +1160,11 @@ async function checkLesson(loaded: LoadedLesson) {
     bySource.set(source.slug, bucket);
   }
   for (const { source, ids } of bySource.values()) {
+    // Regime integral (§1.1 do SOURCE-CORPUS): a obra foi declarada base
+    // integral do módulo, com data e prazo no `sources.json`. O teto sai para
+    // ela — e só para ela. Ela continua protegida, e continua no inventário
+    // de `content/divida-de-licenca.md`.
+    if (source.integral) continue;
     if (source.protected && ids.size > PROTECTED_SOURCE_CAP) {
       fail(
         "TETO_DE_CITACAO",
@@ -1448,11 +1453,17 @@ function checkDidacticRotation() {
     if (!source) continue;
     const obra = sourcesByKey.get(source);
     if (!obra?.protected) continue;
+    // A obra em regime integral **continua contada aqui**, de propósito: é
+    // desta lista que sai o inventário de `content/divida-de-licenca.md`. O
+    // que ela não sofre é a reprovação, pulada lá embaixo.
     daClasse.porObra.set(obra.slug, [...(daClasse.porObra.get(obra.slug) ?? []), lesson.id]);
   }
   for (const [classe, { total, porObra }] of porClasse) {
     const teto = tetoDeRotacao(total);
     for (const [slug, aulas] of porObra) {
+      // Regime integral (§1.1 do SOURCE-CORPUS): quem decidiu que o módulo
+      // inteiro segue este livro decidiu junto que a rotação não se aplica.
+      if (sourcesByKey.get(slug)?.integral) continue;
       if (aulas.length > teto) {
         fail(
           "FONTE_DIDATICA_DOMINA",
@@ -1463,6 +1474,141 @@ function checkDidacticRotation() {
       }
     }
   }
+}
+
+/* ------------------------------------------------------------------ *
+ * Regime integral — a exceção que se mede sozinha
+ * ------------------------------------------------------------------ */
+
+/** As obras em regime integral, na ordem do slug. */
+function obrasIntegrais(): Source[] {
+  return [...new Set(sourcesByKey.values())]
+    .filter((source) => source.integral)
+    .sort((a, b) => a.slug.localeCompare(b.slug));
+}
+
+/** O arquivo do inventário. Mora em `content/` — ver o comentário do relatório. */
+const dividaFile = path.join(contentDir, "divida-de-licenca.md");
+
+/**
+ * Hoje, em YYYY-MM-DD. Sai do relógio de propósito: é o único jeito de o prazo
+ * do regime integral vencer sem ninguém precisar lembrar dele.
+ */
+const hoje = new Date().toISOString().slice(0, 10);
+
+/**
+ * O prazo do regime integral, cobrado. Sem isto o `replaceBefore` seria
+ * decoração: exceção temporária cuja validade nenhum programa mede é exceção
+ * permanente com nota de rodapé.
+ */
+function checkIntegralRegime() {
+  for (const source of obrasIntegrais()) {
+    const { since, replaceBefore } = source.integral!;
+    if (hoje > replaceBefore) {
+      fail(
+        "REGIME_INTEGRAL_VENCIDO",
+        `obra ${source.slug}`,
+        `o regime integral começou em ${since} e valia até ${replaceBefore}; hoje é ${hoje} — ` +
+          "renove o prazo por escrito no content/sources.json, ou desfaça o regime e " +
+          "troque o conteúdo listado em content/divida-de-licenca.md",
+      );
+    }
+  }
+}
+
+/**
+ * O inventário da dívida de licença — a lista de troca para o dia em que o
+ * curso for comercializado.
+ *
+ * **Gerado, nunca escrito à mão**, pelo mesmo motivo que os `winningMoves`:
+ * lista mantida a mão envelhece calada, e uma lista de troca errada é pior que
+ * lista nenhuma. Sem `--write`, divergência é `DIVIDA_DESATUALIZADA` — crescer
+ * a dívida vira um diff que alguém aprova.
+ *
+ * Mora em `content/`, e não em `docs/`, porque o `mutation-check` roda o gate
+ * sobre uma **cópia** de `content/` via `--content`: fora de `contentDir` a
+ * cópia intacta divergiria do arquivo do repositório e o controle mataria a
+ * suíte inteira.
+ */
+function relatorioDeDivida(): string {
+  const linhas: string[] = [
+    "# Dívida de licença — obras em regime integral",
+    "",
+    "<!-- Gerado por `npm run validate:content -- --write`. Não editar à mão: sem",
+    "     a flag, qualquer divergência é reprovada como DIVIDA_DESATUALIZADA. -->",
+    "",
+    "O **regime integral** (§1.1 do `docs/SOURCE-CORPUS.md`) desliga o teto de citação",
+    "e o teto de rotação de livro-base para uma obra protegida — a obra continua",
+    "protegida, e é por isso que esta lista existe. É a lista de troca: tudo que sai",
+    "dessas obras e precisa virar fonte pública no dia em que o curso deixar de ser",
+    "gratuito.",
+    "",
+  ];
+
+  const obras = obrasIntegrais();
+  if (obras.length === 0) {
+    linhas.push("Nenhuma obra em regime integral hoje.");
+    return linhas.join("\n") + "\n";
+  }
+
+  for (const source of obras) {
+    const integral = source.integral!;
+    linhas.push(
+      `## ${source.title} — ${source.author}`,
+      "",
+      `- **slug:** \`${source.slug}\``,
+      `- **desde:** ${integral.since}`,
+      `- **prazo:** ${integral.replaceBefore}`,
+      `- **motivo:** ${integral.reason}`,
+      "",
+    );
+
+    const aulas = lessons
+      .filter(
+        ({ lesson }) =>
+          lesson.status === "published" &&
+          lesson.stages.objective?.source !== undefined &&
+          sourcesByKey.get(lesson.stages.objective.source)?.slug === source.slug,
+      )
+      .map(({ lesson }) => `- \`${lesson.id}\` — classe ${lesson.class ?? "?"}, "${lesson.title}"`)
+      .sort();
+    linhas.push(`### Aulas com esta obra como livro-base (${aulas.length})`, "");
+    linhas.push(...(aulas.length > 0 ? aulas : ["_Nenhuma._"]), "");
+
+    const posicoes = [...positions.values()]
+      .filter((position) => {
+        if (position.status === "fixture") return false;
+        const key = position.provenance.editionFile;
+        return key !== null && sourcesByKey.get(key)?.slug === source.slug;
+      })
+      .map(
+        (position) =>
+          `- \`${position.id}\` — ${position.provenance.bibliographicSource ?? "sem referência"}`,
+      )
+      .sort();
+    linhas.push(`### Posições que citam esta obra (${posicoes.length})`, "");
+    linhas.push(...(posicoes.length > 0 ? posicoes : ["_Nenhuma._"]), "");
+  }
+
+  return linhas.join("\n") + "\n";
+}
+
+function checkDivida() {
+  const esperado = relatorioDeDivida();
+  if (writeBack) {
+    writeFileSync(dividaFile, esperado, "utf8");
+    return;
+  }
+  const atual = existsSync(dividaFile) ? readFileSync(dividaFile, "utf8") : null;
+  if (atual === esperado) return;
+  fail(
+    "DIVIDA_DESATUALIZADA",
+    relative(dividaFile),
+    atual === null
+      ? "o inventário do regime integral não existe — rode `npm run validate:content -- --write`"
+      : "o inventário do regime integral não bate com o conteúdo — rode " +
+        "`npm run validate:content -- --write` e leia o diff antes de commitar",
+  );
 }
 
 /* ------------------------------------------------------------------ *
@@ -1481,6 +1627,8 @@ for (const loaded of lessons) {
   await checkLesson(loaded);
 }
 checkDidacticRotation();
+checkIntegralRegime();
+checkDivida();
 
 if (writeBack) {
   for (const loaded of lessons) {
@@ -1552,6 +1700,17 @@ console.log(
   `  tablebase: ${tablebase.usedFiles().size} posições consultadas ` +
     `(${tablebase.hits} do cache, ${tablebase.fetched} pela rede)`,
 );
+// A exceção aparece em **toda** rodada verde, e não só quando alguém procura:
+// exceção que só se vê procurando é exceção esquecida.
+{
+  const integrais = obrasIntegrais();
+  if (integrais.length > 0) {
+    console.log(
+      `  regime integral: ${integrais.length} obra(s) — ` +
+        integrais.map((s) => `${s.slug} (até ${s.integral!.replaceBefore})`).join(", "),
+    );
+  }
+}
 if (useRascunhos) {
   console.log(
     `  rascunhos: ${rascunhosDeAula.length} aula(s) e ${rascunhosDePosicao.length} posição(ões) ` +

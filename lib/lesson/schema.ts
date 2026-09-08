@@ -124,6 +124,36 @@ export const positionSchema = z.strictObject({
  * Camada 0 — registro de obras
  * ------------------------------------------------------------------ */
 
+/** Data em YYYY-MM-DD — o formato que o repositório escreve por toda parte. */
+const dataSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "data no formato YYYY-MM-DD");
+
+/**
+ * **Regime integral** — a obra deixa de ter teto de citação (§1.1 do
+ * SOURCE-CORPUS).
+ *
+ * Existe porque uma decisão editorial pode ser "esta aula inteira segue este
+ * livro": o teto de 2 posições por aula e o teto de rotação de livro-base
+ * dizem o contrário, e dizem certo — para o corpus normal. O `integral` é a
+ * exceção **nomeada, datada e com prazo**, e não `protected: false`: a obra
+ * continua protegida (é fato, e a `license` diz), e é justamente por continuar
+ * protegida que o gate sabe o que listar em `content/divida-de-licenca.md` no
+ * dia da troca.
+ *
+ * O `replaceBefore` não é enfeite: o gate reprova `REGIME_INTEGRAL_VENCIDO`
+ * quando a data passa. Exceção temporária cuja validade nenhum programa mede é
+ * exceção permanente com nota de rodapé.
+ */
+export const integralSchema = z.strictObject({
+  /** Quando a decisão foi tomada. */
+  since: dataSchema,
+  /** Por que — em prosa, para quem ler o `sources.json` daqui a um ano. */
+  reason: texto,
+  /** Prazo: depois desta data o gate reprova até alguém renovar ou desfazer. */
+  replaceBefore: dataSchema,
+});
+
 /**
  * `content/sources.json` — a lista das obras que podem originar posição
  * (§12.2 e §12.4 do currículo). O gate usa este registro para duas coisas:
@@ -138,7 +168,7 @@ export const positionSchema = z.strictObject({
  * `file: null` é para fonte sem PDF na biblioteca (o Lichess Open Database,
  * por exemplo); nesse caso a posição cita o `slug`.
  */
-export const sourceSchema = z.strictObject({
+const sourceBaseSchema = z.strictObject({
   /** Identificador estável, minúsculo — é o que a proveniência pode citar. */
   slug: z.string().regex(/^[a-z0-9-]+$/, "slug deve ser minúsculo com hífens"),
   title: texto,
@@ -160,6 +190,44 @@ export const sourceSchema = z.strictObject({
   /** Nome do PDF em `biblioteca/`, ou `null` para fonte sem arquivo local. */
   file: texto.nullable(),
   role: texto,
+  /**
+   * Regime integral: sem teto de citação nem de rotação para esta obra
+   * (§1.1 do SOURCE-CORPUS). Ausente = regime normal, que é o caso de todas
+   * as outras obras do registro.
+   */
+  integral: integralSchema.optional(),
+});
+
+export const sourceSchema = sourceBaseSchema.superRefine((source, ctx) => {
+  if (!source.integral) return;
+  // Obra em domínio público não tem teto para desligar: declarar `integral`
+  // ali é ruído que o inventário da dívida repetiria para sempre.
+  if (!source.protected) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["integral"],
+      message:
+        "regime integral só faz sentido em obra protegida — sem teto de citação não há o que desligar",
+    });
+  }
+  // O regime desliga as **duas** regras, e uma delas (FONTE_DIDATICA_DOMINA)
+  // só existe para livro-base. Obra que não é didática nunca seria contada
+  // ali, e o `integral` estaria prometendo mais do que a obra pode usar.
+  if (!source.didactic) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["integral"],
+      message:
+        "regime integral é para livro-base: marque `didactic: true` ou tire o `integral`",
+    });
+  }
+  if (source.integral.replaceBefore <= source.integral.since) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["integral", "replaceBefore"],
+      message: `o prazo (${source.integral.replaceBefore}) precisa ser posterior ao início (${source.integral.since})`,
+    });
+  }
 });
 
 export const sourceRegistrySchema = z.strictObject({
@@ -769,4 +837,5 @@ export type Lesson = z.infer<typeof lessonSchema>;
 export type MoveTree = z.infer<typeof treeBaseSchema>;
 
 export type Source = z.infer<typeof sourceSchema>;
+export type Integral = z.infer<typeof integralSchema>;
 export type SourceRegistry = z.infer<typeof sourceRegistrySchema>;

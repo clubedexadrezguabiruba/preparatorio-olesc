@@ -24,6 +24,53 @@ O que nenhuma obra autoriza, em qualquer volume: copiar texto, comentário,
 tradução, seleção completa de exercícios ou estrutura editorial. Todo texto do
 curso é escrito do zero, em PT-BR.
 
+### 1.1 A exceção: o regime integral
+
+Há um caso em que o teto de 2 é a régua errada: quando a decisão editorial é
+**"este módulo inteiro segue este livro"**. Foi o que o Doug decidiu em
+2026-09-08 para o módulo de finais, que passa a seguir o *Silman's Complete
+Endgame Course* — texto e posições. O motivo é de conteúdo, não de custo: é o
+único manual do acervo com progressão declarada **por classe de força**, que é
+exatamente a espinha que a trilha precisa. O preparatório é gratuito; quando for
+comercializado, o conteúdo do Silman será trocado por fonte pública.
+
+O mecanismo é um campo em `content/sources.json`:
+
+```json
+"integral": {
+  "since": "2026-09-08",
+  "reason": "...",
+  "replaceBefore": "2027-09-08"
+}
+```
+
+Ele desliga, **para aquela obra e só para ela**, as duas regras de teto:
+`TETO_DE_CITACAO` (§12.7 — 2 posições por aula) e `FONTE_DIDATICA_DOMINA`
+(§3.4 — rotação de livro-base por classe).
+
+**Por que não `protected: false`.** Porque seria mentira em três lugares. A obra
+continua protegida — é fato, e a `license` do registro diz —, o teto continuaria
+existindo para as outras, e — o que mais importa — o gate perderia **como saber
+o que listar no dia da troca**. O `integral` desliga o mesmo tanto e devolve o
+inventário: `content/divida-de-licenca.md`, gerado pelo gate a cada
+`--write`, lista toda aula que usa a obra como livro-base e toda posição que a
+cita. Fora de `--write`, divergência é `DIVIDA_DESATUALIZADA` — crescer a dívida
+vira um diff que alguém aprova.
+
+**O prazo é cobrado.** Passado o `replaceBefore`, o gate reprova
+`REGIME_INTEGRAL_VENCIDO` e diz as duas saídas: renovar por escrito, ou desfazer
+e trocar o conteúdo listado. Exceção temporária cuja validade nenhum programa
+mede é exceção permanente com nota de rodapé. E toda rodada verde imprime a
+linha `regime integral: N obra(s)` no sumário: exceção que só aparece quando
+alguém procura é exceção esquecida.
+
+**O que cai junto, e nenhuma máquina confere.** A §5.1 abaixo proíbe diagramas
+em sequência da mesma obra numa aula — "sequência é a seleção do autor sendo
+copiada em miniatura". Numa obra em regime integral essa regra cai na prática:
+a aula de mate de rei e torre usa os Diagramas 19→26 do Silman, que são
+exatamente uma sequência. Não há gate para isso; fica escrito aqui para não
+virar descoberta.
+
 ---
 
 ## 2. As obras registradas
@@ -645,6 +692,11 @@ checklist de QA da §17 do currículo:
    gate cobra. A tabela de diagramas consumidos da §3.2.3 **continua sendo
    mantida**: ela deixou de ser proibição entre aulas e segue sendo memória —
    é o que permite ver se uma obra está começando a dominar o nível.
+
+   **Obra em regime integral não é alcançada por esta regra** (§1.1): quem
+   decidiu que o módulo inteiro segue um livro decidiu junto que a sequência do
+   autor é a espinha da aula. Máquina nenhuma confere isso — nem antes, nem
+   agora; o que muda é que agora está escrito.
 2. **Misturar por nível, não só por aula.** O teto é por aula; nada impede que
    uma obra protegida apareça em todas as aulas de um nível. Não deve: nenhuma
    obra protegida deve dominar as posições de um nível inteiro.

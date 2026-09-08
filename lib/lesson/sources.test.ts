@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
-import { PROTECTED_SOURCE_CAP, sourceRegistrySchema } from "./schema.ts";
+import { PROTECTED_SOURCE_CAP, sourceSchema, sourceRegistrySchema } from "./schema.ts";
 
 /**
  * O registro de obras (§12.2 e §12.7 do currículo).
@@ -75,5 +75,75 @@ test("toda obra do registro aparece no SOURCE-CORPUS.md", () => {
       doc.includes(`\`${source.slug}\``),
       `a obra "${source.slug}" está no sources.json e não no docs/SOURCE-CORPUS.md`,
     );
+  }
+});
+
+/* ------------------------------------------------------------------ *
+ * Regime integral (§1.1 do SOURCE-CORPUS)
+ * ------------------------------------------------------------------ */
+
+/** Uma obra mínima e válida, para variar um campo de cada vez. */
+function obra(patch: Record<string, unknown> = {}) {
+  return {
+    slug: "obra-de-teste",
+    title: "Obra de teste",
+    author: "Autoria de teste",
+    edition: null,
+    protected: true,
+    didactic: true,
+    license: "citação de posição isolada",
+    file: "obra-de-teste.pdf",
+    role: "livro-base de teste",
+    ...patch,
+  };
+}
+
+const integralValido = {
+  since: "2026-09-08",
+  reason: "todas as aulas de finais seguem este manual enquanto o curso for gratuito",
+  replaceBefore: "2027-09-08",
+};
+
+test("o regime integral só existe em obra protegida e didática", () => {
+  // As duas regras que o `integral` desliga são exatamente essas duas
+  // qualidades: o teto de citação vale para obra protegida, e a rotação de
+  // livro-base vale para obra didática. Declarar `integral` em obra que não é
+  // as duas coisas promete um desligamento que não existe — e a obra entraria
+  // no inventário da dívida sem nada a dever.
+  assert.ok(sourceSchema.safeParse(obra({ integral: integralValido })).success);
+
+  const semProtecao = sourceSchema.safeParse(
+    obra({ protected: false, integral: integralValido }),
+  );
+  assert.equal(semProtecao.success, false);
+
+  const semDidatica = sourceSchema.safeParse(
+    obra({ didactic: false, integral: integralValido }),
+  );
+  assert.equal(semDidatica.success, false);
+});
+
+test("o prazo do regime integral é posterior ao início", () => {
+  // O gate reprova `REGIME_INTEGRAL_VENCIDO` quando `replaceBefore` passa. Um
+  // prazo anterior ao início nasceria vencido: o regime seria escrito e
+  // reprovado no mesmo commit, e a leitura óbvia — "o gate está quebrado" —
+  // seria a errada. Erro de digitação morre no schema.
+  const invertido = sourceSchema.safeParse(
+    obra({ integral: { ...integralValido, replaceBefore: "2026-01-01" } }),
+  );
+  assert.equal(invertido.success, false);
+
+  const mesmoDia = sourceSchema.safeParse(
+    obra({ integral: { ...integralValido, replaceBefore: integralValido.since } }),
+  );
+  assert.equal(mesmoDia.success, false);
+});
+
+test("as datas do regime integral são YYYY-MM-DD", () => {
+  // O gate compara as datas como **texto**, e a comparação só ordena certo
+  // nesse formato. "8/9/2026" passaria por qualquer prazo para sempre.
+  for (const data of ["08/09/2026", "2026-9-8", "2026-09-08T00:00:00Z", "amanhã"]) {
+    const parsed = sourceSchema.safeParse(obra({ integral: { ...integralValido, since: data } }));
+    assert.equal(parsed.success, false, `"${data}" deveria ser recusada`);
   }
 });
