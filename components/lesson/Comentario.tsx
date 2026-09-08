@@ -442,10 +442,16 @@ export function Comentario({
            * reservado ficaria pendurado fora dele. 44 px está dentro do balão
            * em qualquer comentário que exista.
            *
-           * E cai onde deve: a figura tem 130 px de altura, então 44 é 34% dela
-           * — a altura do nariz. É a mesma proporção do chess.com, onde o bico
-           * nasce a ~30% da altura do treinador. Aos 20 px da primeira versão
-           * ele nascia na altura do cabelo, e lia como enfeite em vez de fala.
+           * **E os 44 px são teto, não gosto — por isso ficam onde estão
+           * mesmo depois de o retrato crescer.** Desde que o recorte passou a
+           * mostrar o terno a figura tem 197 px de altura (112 de largura,
+           * razão 0,57), e 44 é 22% dela: o bico nasce na altura dos olhos, e
+           * não mais na do nariz. Descê-lo para os ~30% do chess.com pediria 60
+           * px, e aí ele ficaria FORA do balão no comentário mais curto do
+           * repertório — 80 caracteres, duas linhas, ~62 px. Entre nascer nos
+           * olhos e nascer no vazio, nasce nos olhos. Aos 20 px da primeira
+           * versão ele nascia na altura do cabelo, e lia como enfeite em vez de
+           * fala.
            */}
           {retrato && pagina ? (
             <span

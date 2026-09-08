@@ -19,22 +19,39 @@ import Image from "next/image";
  * Portanto, e isto é contrato: **nada de `rounded-full`, `ring-*`, `border-*`
  * ou `bg-*` neste componente.** Qualquer um dos quatro devolve o balãozinho.
  *
- * ## O recorte, e por que ele para no alargamento do paletó
+ * ## O recorte, e por que o terno tem de caber nele
  *
  * A arte de 9/9/2026 (`Untitled design.png`) é uma ilustração vetorial já
- * pensada como busto — terno, gravata com peças de xadrez, broche do clube —,
- * diferente da foto de corpo inteiro da primeira versão. O busto é
- * `(31, 124)–(1014, 1150)` do original, 983×1026 — escolhido entre três
- * candidatos numa folha de contato, e não a olho: o paletó se abre num
- * alargamento que vira quase uma capa mais abaixo na arte, e incluí-lo faria a
- * miniatura de 112 px virar uma mancha cinza sem forma.
+ * pensada como busto — terno cinza, camisa, gravata e o broche teal do clube na
+ * lapela —, diferente da foto de corpo inteiro da primeira versão.
  *
- * **Duas voltas atrás, no mesmo dia.** Descer o corte para caber o broche da
- * lapela deixou o avatar largo demais, e descer até a arte inteira (o fecho
- * decorativo em ponta) deixou muito vazio ao redor da figura. As duas foram
- * revertidas para este recorte, que é o que ficou. O corte reto que sobra é o
- * de baixo, e ele dissolve: os últimos 12% da altura têm rampa de alfa (ver
- * `scripts/professor.py`, que gera o arquivo e registra os três candidatos).
+ * **A primeira tentativa continha o terno e não o mostrava.** O corte parava em
+ * y=1150 e a rampa de alfa dos últimos 12% começava em y≈1027, que é exatamente
+ * onde o paletó começa: medido no arquivo que ela gerava, o alfa máximo era 0,85
+ * em y≈1052 e 0,36 em y≈1106. A 112 px o avatar lia como uma cabeça flutuando
+ * sobre um véu claro.
+ *
+ * O corte de agora é `(140, 112)–(900, 1450)`, 760×1338 — retrato de razão
+ * 0,57, e não o quase-quadrado de antes. A 112 px de largura ele dá **197 px de
+ * altura**.
+ *
+ * **A largura é 760 e não os 983 da figura inteira**, e essa diferença é a peça
+ * que faz a coisa funcionar: com a largura cheia o paletó incha até 957 px em
+ * y=1150 e volta a estreitar dentro do quadro, e a 112 px isso vira uma mancha
+ * triangular tipo capa. Estreitando, o ombro **sai pelas laterais** e o corpo lê
+ * como "continua fora do quadro" — que é o mesmo motivo de o alfa encostar no
+ * painel sem borda. De quebra, quadro estreito é figura ampliada: a cabeça sai
+ * com 88 px contra os 73 de um recorte largo.
+ *
+ * **E não há rampa de alfa no pé — isso é uma correção, não um esquecimento.**
+ * A versão anterior parava em y=1385 e dissolvia os últimos 22% da altura para o
+ * corte não virar linha reta. Sobre o papel claro, baixar o alfa de uma
+ * superfície escura **clareia** a superfície: numa faixa larga de tecido aquilo
+ * não leu como dissolver, leu como véu branco por cima do terno, e foi assim que
+ * o Doug descreveu na tela. O corte de agora desce até y=1450, **abaixo da ponta
+ * em que a figura acaba sozinha** (y≈1446) — não há corte no desenho, então não
+ * há linha para disfarçar. Medido no arquivo: o alfa é 1,000 até a penúltima
+ * linha de exibição e a figura afunila de 97 px para 6 px por conta própria.
  *
  * ## Uma imagem só, sem estado
  *
@@ -59,10 +76,10 @@ import Image from "next/image";
 export function Professor({ largura = 112 }: { largura?: number }) {
   return (
     <Image
-      src="/professor-v1.webp"
+      src="/professor-v3.webp"
       alt="O professor Douglas"
       width={360}
-      height={376}
+      height={634}
       sizes="180px"
       className="block h-auto shrink-0"
       style={{ width: largura }}

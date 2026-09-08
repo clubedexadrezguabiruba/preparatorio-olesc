@@ -25,41 +25,77 @@ O molde é o treinador do chess.com, visto na aula "Espetos": ele aparece
 moldura, sem disco de fundo e sem aro. O que faz o desenho pertencer à cena é
 justamente não ter borda nenhuma: o alfa encosta direto no painel.
 
-## A troca de arte em 9/9/2026, e o recorte escolhido entre três
+## A troca de arte em 9/9/2026, e o recorte que finalmente mostra o terno
 
 A segunda arte (`Untitled design.png`, 1020×1611) é uma ilustração vetorial já
-pensada como avatar de busto — terno cinza, gravata com peças de xadrez, e um
-broche do clube na lapela —, e não uma foto de corpo inteiro como a primeira. O
-fundo branco sai do mesmo jeito (componente conexo, ver abaixo).
+pensada como avatar de busto — terno cinza, camisa, gravata e um broche teal do
+clube na lapela —, e não uma foto de corpo inteiro como a primeira. O fundo
+branco sai do mesmo jeito (componente conexo, ver abaixo).
 
-**A figura não encosta em borda lateral nenhuma**, diferente da primeira arte:
-o paletó se abre num alargamento largo — quase uma capa — que chega a 959 px de
-largura por volta de y=1140, e depois **afunila até uma ponta** perto do
-rodapé (y≈1446), um fecho decorativo sem conteúdo anatômico. Recortar até esse
-ponto reproduziria o defeito que a troca de arte veio resolver: numa miniatura
-de 112 px o alargamento vira uma mancha cinza triangular sem sentido.
+**A figura não encosta em borda lateral nenhuma**, diferente da primeira arte.
+Medida linha a linha: a cabeça começa em y=124, o pescoço afunila em y≈924
+(373 px de largura), o paletó abre e chega ao **pico de 957 px em y=1150**,
+depois estreita de volta até uma ponta em y≈1446 — um fecho decorativo sem
+conteúdo anatômico. O broche do clube fica em `x 706..765, y 1236..1327`.
 
-Três recortes foram testados numa folha de contato, cada um redimensionado para
-os 112 px de exibição, e julgados por uma segunda leitura:
+### O defeito que este recorte veio corrigir
 
-- **Rente ao pescoço** (até y≈1010, onde a largura afunila antes do paletó
-  abrir): o rosto sai ótimo, mas o corte no cabelo e a quase ausência de
-  paletó leem como "recorte de emergência".
-- **A figura inteira** (até y≈1446, com a capa e a ponta): reintroduz a mancha
-  triangular acima.
-- **O ombro largo, antes do pico do alargamento** (até y=1150): cabeça,
-  pescoço e ombros com folga nos dois lados, sem cortar o cabelo e sem entrar
-  no trecho em que o paletó vira capa. **Este é o escolhido**, e continua
-  sendo depois de duas voltas atrás: uma tentativa de descer o corte para
-  caber o broche da lapela (9/9/2026) deixou o avatar largo demais, e o Doug
-  pediu para voltar a este.
+O corte anterior era `(31, 124, 1014, 1150)` com rampa de alfa de 0,12. Ele
+continha o começo do paletó, mas **a rampa começava exatamente onde o terno
+começava**: medido no WebP que ele gerava, o alfa máximo era 0,85 em y≈1052 e
+0,36 em y≈1106. O terno estava lá e não aparecia. Na miniatura de 112 px o
+resultado era uma cabeça flutuando sobre um véu claro.
 
-O corte final é `(31, 124)–(1014, 1150)`, 983×1026 — quase quadrado (razão
-1,04), com margem de 12 px em volta do que a figura ocupa naquele intervalo, e
-não escolhido a olho. O que sobra embaixo é uma linha reta na altura do
-alargamento do paletó, e ela **não fica reta**: os últimos 12% da altura
-recebem uma rampa de alfa, e o busto dissolve no painel em vez de terminar com
-um corte.
+### Por que a largura é 760, e por que o pé desce até o fim da figura
+
+Ir mais fundo com a largura cheia (`31..1014`) é a armadilha: com papel sobrando
+dos dois lados na altura do ombro, a silhueta **incha e volta a estreitar dentro
+do quadro**, e a 112 px isso vira uma mancha triangular tipo capa.
+
+O que resolve é **estreitar o quadro** até o paletó sair pelas laterais. Em
+`x 140..900` o pico de y=1150 (que vai de x=44 a x=1000) é cortado com folga nos
+dois lados, e o cinza atravessa a moldura em vez de fechar dentro dela — o corpo
+lê como "continua fora do quadro", que é o que o treinador do chess.com faz. É o
+mesmo motivo de o alfa encostar no painel: o que integra a figura à cena é ela
+não ter contorno próprio. De quebra, quadro estreito é figura ampliada: a cabeça
+sai com 88 px de largura contra os 73 que um recorte de 920 daria.
+
+**E o pé desce até y=1450, que é abaixo da ponta em que a figura acaba
+sozinha (y≈1446).** Um recorte que para antes disso precisa de rampa de alfa
+para o corte não virar linha, e uma rampa larga o bastante para funcionar
+**clareia o terno** — ver `DISSOLVE`, e a razão inteira está lá. Descendo até o
+fim não há corte no desenho e não há nada a disfarçar.
+
+O corte final é `(140, 112, 900, 1450)`, 760×1338 — retrato, razão 0,57, que a
+112 px de largura dá **197 px de altura**. Nele o paletó tem cinza cheio até
+embaixo, a lapela em V e o colarinho branco dão estrutura, e o broche teal lê
+como ponto de cor.
+
+## O pin do clube, e o que ele não entrega
+
+O broche na lapela é, medido: um cavalo em mosaico de quadradinhos teal (~81 px
+de largura na arte, uns 10 ladrilhos de 7 a 9 px) e, abaixo dele, uma tarja com
+o wordmark **"Clube de Xadrez"** em serifa versalete.
+
+**O wordmark não é legível, e não há recorte que resolva.** A altura de
+caixa-alta dele é ~8,6 px na arte-mãe e o traço fino da serifa fica **abaixo de
+1,5 px** — abaixo de 1,5 px o traço não sobrevive à rasterização: vira cinza, e
+não linha. A arte é raster, não vetor, então ampliar não recupera o que não foi
+escrito. Os patamares, medidos:
+
+| Largura do pin na tela | O que o aluno vê |
+| --- | --- |
+| ~28 px (é o do painel, a 112 px) | "uma peça de xadrez azul" |
+| ~45–60 px | reconhece que é um **cavalo** |
+| ~95 px (a arte em 1:1, o teto) | o mosaico, e uma tarja escura texturizada |
+| ~130–150 px | só aqui ele **leria** "Clube de Xadrez" — e não existe |
+
+Por isso `professor-inteiro-v1.webp` sai em resolução **nativa** (983×1346) e
+sem reamostragem: é literalmente tudo o que a arte tem. Conferido na tela, num
+navegador de 1440×900 o pin fica com **31 px** — o cavalo se reconhece, a
+plaquinha lê como borrão claro. Para o texto ser lido seria preciso outra coisa
+— uma exportação da arte em resolução maior, ou o logotipo do clube entrando
+como elemento próprio (ele existe em 4149×4160, fora do repositório).
 
 ## O fundo, e a armadilha do limiar
 
@@ -83,12 +119,21 @@ auréola clara no dia em que o tema escuro voltar.
 
 ## O arquivo
 
-`public/professor-v1.webp`, 360 px de largura — o dobro da maior exibição
+`public/professor-v3.webp`, 360 px de largura — o dobro da maior exibição
 (~180 px, no painel de fim). Ao lado do comentário ele aparece com ~112 px, que
 é a escala em que o treinador do chess.com aparece na aula deles.
 
-O nome carrega a versão (`-v1`) porque é a doutrina de cache do
-`next.config.ts`: trocar os bytes exige trocar o nome.
+O nome carrega a versão porque é a doutrina de cache do `next.config.ts`
+(`immutable`, um ano): **trocar os bytes exige trocar o nome.**
+
+**E o número pulou o 2 porque a doutrina foi violada e cobrou na hora.** Durante
+esta troca de arte o `-v2` foi gerado três vezes com recortes diferentes e o
+mesmo nome; o navegador continuou servindo os primeiros bytes, e o retrato com o
+véu que já tinha sido corrigido continuava na tela — inclusive medido: o `<img>`
+anunciava a razão nova (360×634) e o layout usava a antiga (360×498), porque
+`h-auto` segue o bitmap carregado, não o atributo. O `-v2` está queimado nos
+caches que o viram. Regra prática para a próxima arte: **um número novo por
+tentativa que chega ao navegador**, não um por arte.
 """
 
 import sys
@@ -107,16 +152,45 @@ SAIDA = RAIZ / "public"
 LIMIAR = 248
 # A faixa junto ao fundo que ganha alfa proporcional, em pixels.
 SUAVIZACAO = 2
-# O busto: o recorte escolhido entre três candidatos na folha de contato — ver
-# "A troca de arte em 9/9/2026" acima. Cada um destes quatro números foi medido
-# na arte.
-BUSTO = (31, 124, 1014, 1150)
-# Quanto da altura do busto dissolve no pé, para o corte reto do ombro não
-# terminar em linha seca. Medido na primeira arte (8/9/2026): 0,06 dava só 6 px
-# de rampa a 96 px de exibição e o corte continuava lendo como linha; 0,12 é o
-# que passa a dissolver de verdade sem comer o ombro.
-DISSOLVE = 0.12
+# O busto: o recorte escolhido na folha de contato — ver "A troca de arte em
+# 9/9/2026" acima. Cada um destes quatro números foi medido na arte, e a largura
+# estreita (760, contra os 959 que a figura chega a ocupar) é o que corta o
+# paletó nas laterais em vez de deixá-lo fechar dentro do quadro.
+BUSTO = (140, 112, 900, 1450)
+# Quanto da altura do busto dissolve no pé. **Zero, e isso é uma correção.**
+#
+# A rampa existia para o corte de baixo não terminar em linha reta, e na arte
+# antiga — em que o corte caía no meio de uma faixa larga de paletó — ela era o
+# certo. Neste recorte ela virou o defeito: sobre o papel claro, baixar o alfa
+# do cinza do terno **clareia** o cinza, e o Doug leu na tela exatamente isso,
+# "uma camada branca por cima do terno, como se estivesse fadeaway". Não era
+# ilusão nem banda de Mach: é o que a rampa faz, e neste corte ela come o terno
+# inteiro em vez de só a borda.
+#
+# O que a substitui não é uma rampa melhor — é um corte que não precisa de
+# rampa. `BUSTO` desce até y=1450, que é **abaixo da ponta em que a figura
+# termina sozinha** (y≈1446): não há corte no desenho, então não há linha para
+# disfarçar. A constante fica, com valor 0, porque é o parâmetro que documenta a
+# decisão; `dissolver_o_pe` devolve a imagem intacta quando ela é zero.
+DISSOLVE = 0.0
 LARGURA = 360
+# O retrato de perto, que o aluno abre clicando no professor. Sai na resolução
+# NATIVA, sem reamostrar nada — ver "O pin do clube, e o que ele não entrega".
+#
+# **E o recorte é OUTRO: a figura inteira, sem cortar ombro nenhum.** O do
+# painel é estreito de propósito, para o paletó sair pelas laterais e não virar
+# mancha de capa a 112 px. Solto dentro de um cartão de diálogo, esse mesmo
+# corte lê como defeito: a figura encosta na borda e o ombro parece decepado.
+#
+# Trocar de recorte **não custa nada ao pin**, e isso é aritmética, não gosto: o
+# pin na tela vale `59 × altura_exibida / altura_do_recorte`, e a largura não
+# entra na conta. 1338 px de recorte estreito dão 31,0 px de pin a 702 px de
+# altura; 1346 px de figura inteira dão 30,8. A diferença é meio pixel.
+#
+# A caixa é a da figura (`x 43..1002`, `y 124..1446`, medida) com 12 px de
+# margem em volta — inclusive em cima, diferente do recorte do painel, onde a
+# cabeça encosta no topo.
+INTEIRO = (31, 112, 1014, 1458)
 
 
 def sem_fundo(imagem: Image.Image) -> Image.Image:
@@ -158,13 +232,32 @@ def sem_fundo(imagem: Image.Image) -> Image.Image:
 
 
 def dissolver_o_pe(imagem: Image.Image, fracao: float) -> Image.Image:
-    """Uma rampa de alfa no pé, para o corte dos ombros não terminar em linha reta."""
+    """Uma rampa de alfa no pé, para um corte de ombro não terminar em linha reta.
+
+    **Hoje `DISSOLVE` é 0 e esta função é passagem** — o recorte atual desce
+    abaixo da ponta em que a figura acaba sozinha, então não há corte a
+    disfarçar. Ela fica porque o parâmetro é o que documenta a escolha, e porque
+    uma arte futura que corte no meio do tronco vai precisar dela de novo.
+
+    Quando ligada, a rampa é `smoothstep` e não uma reta: uma reta tem
+    inclinação zero acima e −1/n dentro, e o degrau de inclinação no pixel em
+    que ela começa é lido como borda. `1 − (3t² − 2t³)` entra e sai com
+    inclinação zero.
+
+    O aviso, para quem for religá-la: **sobre papel claro, baixar o alfa de uma
+    superfície escura clareia a superfície.** Numa faixa larga de tecido isso não
+    lê como dissolver, lê como véu branco por cima. Rampa serve para desmanchar
+    uma *borda*, não um *terço da figura*.
+    """
+    if fracao <= 0:
+        return imagem
     dados = np.asarray(imagem).astype(np.float64).copy()
     altura = dados.shape[0]
     quantas = max(1, int(round(altura * fracao)))
-    # `linspace` de 1 a 0 ao longo das últimas linhas, aplicado sobre o alfa que
-    # já existe — o contorno do desenho continua mandando onde há figura.
-    rampa = np.linspace(1.0, 0.0, quantas)[:, None]
+    t = np.linspace(0.0, 1.0, quantas)
+    rampa = (1.0 - (3 * t**2 - 2 * t**3))[:, None]
+    # Aplicada sobre o alfa que já existe — o contorno do desenho continua
+    # mandando onde há figura.
     dados[altura - quantas :, :, 3] *= rampa
     return Image.fromarray(dados.astype(np.uint8), "RGBA")
 
@@ -184,13 +277,21 @@ def main() -> None:
     print(f"  busto: {busto.size[0]}×{busto.size[1]} a partir de ({BUSTO[0]}, {BUSTO[1]})")
     busto = dissolver_o_pe(busto, DISSOLVE)
 
+    # O de perto é a figura inteira, em resolução nativa, e sai do `cheio` — não
+    # do busto: ele tem outro recorte e não leva a rampa do pé.
+    perto = cheio.crop(INTEIRO)
+    caminho_perto = SAIDA / "professor-inteiro-v1.webp"
+    perto.save(caminho_perto, "WEBP", quality=94, method=6, exact=False)
+    kb = caminho_perto.stat().st_size / 1024
+    print(f"  professor-inteiro-v1.webp: {perto.size[0]}×{perto.size[1]}, {kb:.1f} KB")
+
     altura = round(LARGURA * busto.size[1] / busto.size[0])
     busto = busto.resize((LARGURA, altura), Image.LANCZOS)
 
-    caminho = SAIDA / "professor-v1.webp"
+    caminho = SAIDA / "professor-v3.webp"
     busto.save(caminho, "WEBP", quality=92, method=6, exact=False)
     kb = caminho.stat().st_size / 1024
-    print(f"  professor-v1.webp: {busto.size[0]}×{busto.size[1]}, {kb:.1f} KB")
+    print(f"  professor-v3.webp: {busto.size[0]}×{busto.size[1]}, {kb:.1f} KB")
 
 
 if __name__ == "__main__":

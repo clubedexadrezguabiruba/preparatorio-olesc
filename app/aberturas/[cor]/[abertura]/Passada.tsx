@@ -22,7 +22,7 @@ import { playForMove, playRefusal, playSuccess } from "@/lib/sound";
 import { ABERTURA_MS } from "@/lib/tatica/tempos";
 import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
 import { Comentario, useComentarioPaginado } from "@/components/lesson/Comentario";
-import { Professor } from "@/components/lesson/Professor";
+import { ProfessorSeApresenta } from "@/components/lesson/ProfessorSeApresenta";
 import { Cartao } from "./Cartao";
 import { FaixaDeSans, FitaDoBoletim } from "./FitaDeLances";
 import { TrilhaDeEtapas } from "./TrilhaDeEtapas";
@@ -480,7 +480,7 @@ export function Passada({
 
           {painelDeFim ?? (
             <>
-              <Comentario paginacao={comentario} retrato={<Professor />} />
+              <Comentario paginacao={comentario} retrato={<ProfessorSeApresenta />} />
 
               {/*
                * O painel do plano é montado aqui só na **assistida**. No quiz

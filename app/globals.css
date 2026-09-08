@@ -900,6 +900,31 @@ cg-board square.check {
   }
 }
 
+/* O professor de perto, quando o aluno clica nele. Dois quadros e nada mais: o
+   véu não pode "cair" (a página inteira escurecendo devagar lê como travamento)
+   e o retrato não pode saltar. `translateY` de 8px e não `scale`: escalar um
+   retrato de rosto passa pelo estágio borrado do resampling, e o rosto é
+   justamente o que o aluno abriu para ver. */
+@keyframes professor-chega {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes veu-chega {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Um mapa de tom → cor, uma animação só. O tom vem de `data-tom`, que é o
    mesmo `good`/`warn`/`bad` que o painel já usa. */
 .anel-pulso {
@@ -945,5 +970,16 @@ cg-board square.check {
       top 180ms ease,
       width 180ms ease,
       height 180ms ease;
+  }
+
+  /* O véu entra mais rápido que o retrato de propósito: o fundo já está
+     estabelecido quando a figura chega, então o movimento lê como "ele veio à
+     frente", e não como "a tela inteira mexeu". */
+  .veu-do-professor {
+    animation: veu-chega 140ms ease-out 1;
+  }
+
+  .professor-de-perto {
+    animation: professor-chega 220ms ease-out 1;
   }
 }
