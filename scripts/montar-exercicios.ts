@@ -50,6 +50,29 @@ const numero = (bandeira: string, padrao: number): number => {
   return onde >= 0 && argv[onde + 1] ? Number(argv[onde + 1]) : padrao;
 };
 const POR_JUIZ = numero("--por-juiz", 4);
+/**
+ * Quantos centésimos entre as duas melhores linhas ainda deixam a posição
+ * **quieta o bastante para um exercício de estrutura**.
+ *
+ * Não é o teto do funil, que é 100 e vale para publicar. É o teto da escolha:
+ * a 90 centésimos há uma tática no tabuleiro, e quem foi mandado olhar a coluna
+ * aberta tropeça nela antes de achá-la.
+ */
+const SALTO_QUIETO = numero("--salto-quieto", 50);
+/**
+ * Quantos peões de diferença o material ainda pode ter.
+ *
+ * A porta 2 do funil **não** reprova desequilíbrio, e está certa: a posição
+ * final de um puzzle nasce com ele, e para reconhecer estrutura não importa
+ * quem está ganhando. Para **aplicar** o tema importa: "pressione o peão na
+ * coluna semiaberta" com oito pontos a menos no tabuleiro é um exercício em que
+ * a resposta certa não muda nada, e o aluno de doze anos vê isso.
+ *
+ * O teto é uma peça menor. A frase do campo `material` continua obrigatória —
+ * declarar o desequilíbrio pequeno é o que impede o aluno de gastar o exercício
+ * procurando por que um dos lados tem um peão a mais.
+ */
+const SALDO_MAXIMO = numero("--saldo-maximo", 3);
 const ondeSaida = argv.indexOf("--saida");
 const SAIDA = ondeSaida >= 0 && argv[ondeSaida + 1] ? argv[ondeSaida + 1] : ".scratch/esqueletos.json";
 
@@ -173,14 +196,26 @@ for (const juiz of JUIZES) {
     // Mais de quatro lances do tema não é riqueza, é vagueza: o item deixa de
     // perguntar "qual é o lance da dica" e passa a perguntar "mexa qualquer
     // peça pesada".
-    .filter((p) => p.lancesAceitos.length <= 4);
+    .filter((p) => p.lancesAceitos.length <= 4)
+    // O teto do funil é 100, e é o que o conteúdo **pode** publicar. O que faz
+    // um exercício de estrutura é a posição estar quieta, e 90 centésimos entre
+    // as duas melhores linhas é uma tática esperando ser achada — o aluno
+    // mandado a olhar a coluna tropeça nela.
+    .filter((p) => p.saltoDaPorta2 <= SALTO_QUIETO)
+    // Mais de dois lances do tema que o motor reprova é uma posição em que o
+    // tema quase sempre perde. Ela ensina a exceção antes da regra.
+    .filter((p) => p.lancesRecusados.length <= 2)
+    .filter((p) => Math.abs(saldo(p.fen)) <= SALDO_MAXIMO);
   // O lance do tema tem de ser **quase o melhor**, e não só tolerável. O teto
   // de 100 centésimos é o que o conteúdo pode publicar; o que faz um bom
   // exercício é o tema e o motor concordarem, e por isso a ordem é pelo pior
   // custo da posição, do menor para o maior. Em empate, menos lances primeiro.
   const pior = (p: Posicao) => Math.max(...p.custos);
   const ordenados = [...doJuiz].sort(
-    (a, b) => pior(a) - pior(b) || a.lancesAceitos.length - b.lancesAceitos.length,
+    (a, b) =>
+      pior(a) - pior(b) ||
+      a.saltoDaPorta2 - b.saltoDaPorta2 ||
+      a.lancesAceitos.length - b.lancesAceitos.length,
   );
 
   const pegos: Posicao[] = [];

@@ -44,6 +44,8 @@ type Alvo = {
   readonly fen: string;
   readonly lado: Lado;
   readonly juiz: JuizDeLance;
+  /** O que o conteúdo **gravou**: lance aceito → custo, e lance recusado → custo. */
+  readonly gravado: Map<LanceUci, number>;
 };
 
 const dicas = validarDicas(
@@ -61,7 +63,10 @@ for (const dica of dicas) {
     continue;
   }
   for (const item of itens) {
-    alvos.push({ dica: dica.id, item: item.id, fen: item.fen, lado: item.lado, juiz });
+    const gravado = new Map<LanceUci, number>();
+    item.lancesAceitos.forEach((l, i) => gravado.set(l, item.curadoria.portas.custos[i]));
+    for (const r of item.lancesRecusados) gravado.set(r.lance, r.custo);
+    alvos.push({ dica: dica.id, item: item.id, fen: item.fen, lado: item.lado, juiz, gravado });
   }
 }
 
@@ -131,7 +136,13 @@ if (SEM_MOTOR) process.exit(0);
 console.log(`\n=== Motor: cada lance do tema é são? (profundidade ${PROFUNDIDADE}) ===\n`);
 
 const motor = new Motor(prepararMotor());
-await motor.abrir(1);
+// **MultiPV 2, e não 1.** É o mesmo número que `scripts/escolher-lances.ts`
+// usa, e igualá-lo não é zelo: com MultiPV 2 o Stockfish poda menos e a
+// avaliação da linha principal na profundidade 12 sai diferente da que ele daria
+// com MultiPV 1. Medido: 31 dos 40 itens divergiam do número gravado só por
+// causa disso. Dois arreios diferentes sobre a mesma posição produzem dois
+// números, e o gate não teria como saber qual deles é o defeito.
+await motor.abrir(2);
 
 /** A avaliação da posição em centésimos, do ponto de vista de quem joga. */
 async function avaliar(posicao: string): Promise<number | null> {
@@ -143,7 +154,9 @@ async function avaliar(posicao: string): Promise<number | null> {
 type Julgado = { lance: LanceUci; custo: number | null; sao: boolean };
 
 let posicoesSas = 0;
-const relatorio: { item: string; julgados: Julgado[]; nota: string }[] = [];
+let divergencias = 0;
+/** Quanto o número medido agora pode andar do gravado sem ser defeito. */
+const RUIDO = 20;
 
 for (const g of comLance) {
   const melhor = await avaliar(`fen ${g.alvo.fen}`);
@@ -166,11 +179,33 @@ for (const g of comLance) {
   }
   const sos = julgados.filter((j) => j.sao);
   if (sos.length > 0) posicoesSas += 1;
+
+  // A conferência que este script existe para fazer no conteúdo publicado: o
+  // número gravado em `curadoria.portas.custos` é o que o motor mede hoje?
+  // Um item cuja FEN foi editada à mão depois da curadoria reprova aqui, e é o
+  // mesmo caminho pelo qual `medir-portas.ts` pega FEN mexida.
+  const notas: string[] = [];
+  for (const j of julgados) {
+    const gravado = g.alvo.gravado.get(j.lance);
+    if (gravado === undefined) {
+      notas.push(`${j.lance} NÃO ESTÁ NO CONTEÚDO`);
+      divergencias += 1;
+    } else if (j.custo !== null && Math.abs(j.custo - gravado) > RUIDO) {
+      notas.push(`${j.lance} GRAVADO ${gravado}, MEDIDO ${j.custo}`);
+      divergencias += 1;
+    }
+  }
+  for (const lance of g.alvo.gravado.keys()) {
+    if (!julgados.some((j) => j.lance === lance)) {
+      notas.push(`${lance} está no conteúdo e o juiz não o devolve`);
+      divergencias += 1;
+    }
+  }
+
   const linha = julgados
     .map((j) => `${j.lance}=${j.custo === null ? "mate" : j.custo}${j.sao ? "" : " RUIM"}`)
     .join(" ");
-  relatorio.push({ item: g.alvo.item, julgados, nota });
-  console.log(`${g.alvo.item.padEnd(10)} ${nota || linha}`);
+  console.log(`${g.alvo.item.padEnd(10)} ${nota || linha}${notas.length > 0 ? `  — ${notas.join("; ")}` : ""}`);
 }
 
 motor.fechar();
@@ -188,4 +223,8 @@ console.log(
   `Aceito é custo <= ${SALTO_PADRAO} centésimos do melhor lance, medido na ` +
     `profundidade ${PROFUNDIDADE}.`,
 );
-void relatorio;
+console.log(
+  `${divergencias} divergência(s) entre o número gravado no conteúdo e o medido agora ` +
+    `(tolerância de ${RUIDO} centésimos).`,
+);
+process.exit(divergencias > 0 ? 1 : 0);
