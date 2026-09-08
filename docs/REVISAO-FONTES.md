@@ -2231,7 +2231,43 @@ encolhe em silêncio.
   as peças fora", e o Avançado deixou de ser "mais fundo" — virou "os ramos que
   as de cima deixaram de lado", que é o que ele é desde a §23.
 
-### 24.12 Pendências que esta seção registra e não conserta
+### 24.12 A conferência no navegador, medida
+
+Playwright, 360×740, logado como `alunoteste`, com `npm run dev` de pé. Os cinco
+pontos que o plano pedia, com o número de cada um:
+
+1. **`/aberturas`** — a copy nova está lá ("20 linhas, cada uma até o roque e as
+   peças fora"; "Mais 7 linhas: os ramos que as de cima deixaram de lado"). O
+   progresso está zerado (**0 de 20 aprendidas**), que é o esperado com 27 ids
+   novos, e o denominador do portão do Avançado está certo (**Faltam 20 linhas
+   do Base**). Varrido o texto inteiro atrás de contador com numerador maior que
+   o denominador — o sintoma do id fantasma que a §23 consertou: **zero**.
+2. **Uma linha de 14 lances no quiz** (Escocesa `4…Bc5`) — a fita do boletim
+   quebra em **duas fileiras**, mede 328px de largura e 48px de altura, e a
+   página inteira fecha em `scrollWidth` **360** com **zero** elementos passando
+   de 361px. O comentário final aparece inteiro.
+3. **Uma linha com `[%plano]`** (Escocesa `4…Cxd4`) — o painel "O que ainda
+   falta" aparece com o texto certo ("Bispo de f1 → e2 — ele espera as torres
+   saírem da coluna d…") e o tabuleiro desenha a seta com o marcador
+   `arrowhead-plano`, na cor do token `--color-pincel-plano`.
+4. **Errando de propósito** o 11º lance daquela linha (g3 no lugar de Bxd6) — a
+   fita sai `✓✓✓✓✓✓✓✓✓✓✗✓✓✓`: o **✗ na posição 11**, exatamente onde o erro foi,
+   e o placar diz "13 de 14 lances certos".
+5. **Uma linha que fecha inteira** (Siciliana Alapin, 12 lances) — 12 selos
+   verdes, **nenhum painel extra** e **nenhuma seta de plano**: só o comentário
+   final.
+
+**E a conferência achou um defeito que não era da §24.** A `/aberturas` tinha
+`scrollWidth` de **758px** numa tela de 360: a sequência de lances de cada página
+de princípios vai num `span` com `shrink-0`, e a da `escocesa-dama-em-d4` tem 105
+caracteres. O markup é idêntico no `2a3ea2b` — nasceu na poda da §23 e nunca foi
+medido em 360px. Consertado aqui, porque uma tela com rolagem lateral não passa
+numa conferência de celular: no celular a sequência desce para baixo do nome e
+pode quebrar; a partir de `sm` ela volta para a direita. Depois: `scrollWidth`
+360 e zero elementos estourando, em `/aberturas`, na página da nota mais longa e
+nas telas de treino das duas cores.
+
+### 24.13 Pendências que esta seção registra e não conserta
 
 1. **O compilador descarta em silêncio dois avisos do `expandir`.** Só o
    `irmao-sem-marca` é impresso; `erro-do-adversario-sem-refutacao` e
