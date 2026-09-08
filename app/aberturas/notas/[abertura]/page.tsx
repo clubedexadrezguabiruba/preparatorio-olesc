@@ -114,10 +114,10 @@ export default async function NotaDaAbertura({
             <li key={n.slug}>
               <Link
                 href={`/aberturas/notas/${n.slug}`}
-                className="foco flex items-baseline justify-between gap-3 rounded-lg border border-borda-fraca bg-carta px-3 py-2.5 transition-colors hover:bg-carta-toque"
+                className="foco flex flex-col gap-1 rounded-lg border border-borda-fraca bg-carta px-3 py-2.5 transition-colors hover:bg-carta-toque sm:flex-row sm:items-baseline sm:justify-between sm:gap-3"
               >
                 <span className="text-sm text-tinta">{n.nome}</span>
-                <span className="shrink-0 text-xs text-tinta-fraca tabular-nums">
+                <span className="text-xs text-tinta-fraca tabular-nums">
                   {lancesEmPortugues(n.lances)}
                 </span>
               </Link>
