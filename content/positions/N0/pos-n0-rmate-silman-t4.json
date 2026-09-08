@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-rmate-silman-t4",
+  "fen": "1k6/7R/2K5/8/8/8/8/8 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KRK",
+    "pratica"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Jeremy Silman — Diagrama 35, o Teste 4 da Parte Um. O enunciado impresso é \"How do you finish Black off?\", e a solução dele é o lance de espera 1.Rg7, que passa a vez e obriga o rei preto a se pôr na frente do rei branco",
+    "bibliographicSource": "Silman, Silman's Complete Endgame Course: From Beginner to Master, Siles Press, Los Angeles, 2007, p. impressa 26 (PDF p. 40, offset 14), Parte Um \"Endgames for Beginners (Unrated-999)\", seção \"Tests and Solutions\", Teste 4 (solução na p. impressa 29), Diagrama 35",
+    "originalGame": "não se aplica — exercício de manual, não vem de partida",
+    "authorComposer": "não se aplica — posição de teste didático, não é estudo composto",
+    "license": "obra protegida por direito autoral, em regime integral desde 2026-09-08 (§1.1 do docs/SOURCE-CORPUS.md): o teto de citação da §12.7 está desligado para esta obra, e em troca toda posição que sai dela fica inventariada em content/divida-de-licenca.md — é a lista de troca por fonte pública para quando o curso deixar de ser gratuito. O texto da aula é original em português; nada da prosa do autor é reproduzido.",
+    "editionFile": "silman-complete-endgame-course.pdf",
+    "fenMethod": "transcrição do diagrama por leitura de imagem medida, cega ao texto da página: o PDF é digitalizado (Image2PDF, sem camada de texto), a página foi renderizada a 400 e a 600 dpi, a moldura do tabuleiro foi localizada pelas linhas escuras contínuas nos dois eixos (run >= 80% do lado), a grade dividida em 8x8 a partir dela, e a tinta de cada casa medida na janela central de 76% depois de uma abertura morfológica 5x5 — que mata o ponto isolado da trama de meio-tom da casa escura e deixa de pé o traço da peça. A fase do xadrezado foi conferida pela média de cinza do anel de borda de cada casa (a1 escura), o que prova que a grade não está deslocada de uma casa. A orientação não é suposta: o diagrama impresso traz os rótulos a–h embaixo e 8–1 à esquerda. Medida: peça pesada em b8 (36,6% de traço — rei preto), torre em h7 (16,3%) e rei branco em c6 (12,8%). A vez é das brancas, como diz a legenda impressa \"White to move\".",
+    "qaApplied": "garimpo de 2026-09-08, para o piloto 2 da reformulação Silman. Falsificação pela solução impressa inteira, na chess.js: 1.Rg7 Ka8 2.Kb6 Kb8 3.Rg8 é mate (5 meios-lances, mate conferido), e a variante 1...Kc8 2.Rg8 também é mate. As duas recusas que o autor imprime também se confirmam: 1.Kb6 deixa o rei preto escapar por 1...Kc8, e 1.Rb7+ Ka8 2.Kb6?? é afogamento conferido — que é exatamente o erro `afogamento` da aula, agora com fonte. Tablebase: win-white.",
+    "pendingRisk": "nenhum conhecido"
+  }
+}

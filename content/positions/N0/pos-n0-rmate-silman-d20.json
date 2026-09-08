@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-rmate-silman-d20",
+  "fen": "3k4/R7/8/4K3/8/8/8/8 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KRK",
+    "ensino"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Jeremy Silman — Diagrama 20, legenda impressa \"White's King to the rescue\". É a posição com que ele começa a seção \"King and Rook vs. Lone King\" pelo fim: o Diagrama 19 mostra o mate já pronto, e este mostra como se chegou até ele",
+    "bibliographicSource": "Silman, Silman's Complete Endgame Course: From Beginner to Master, Siles Press, Los Angeles, 2007, p. impressa 15 (PDF p. 29, offset 14), Parte Um \"Endgames for Beginners (Unrated-999)\", seção \"King and Rook vs. Lone King\", Diagrama 20",
+    "originalGame": "não se aplica — posição de ensino de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar didático, não é estudo composto",
+    "license": "obra protegida por direito autoral, em regime integral desde 2026-09-08 (§1.1 do docs/SOURCE-CORPUS.md): o teto de citação da §12.7 está desligado para esta obra, e em troca toda posição que sai dela fica inventariada em content/divida-de-licenca.md — é a lista de troca por fonte pública para quando o curso deixar de ser gratuito. O texto da aula é original em português; nada da prosa do autor é reproduzido.",
+    "editionFile": "silman-complete-endgame-course.pdf",
+    "fenMethod": "transcrição do diagrama por leitura de imagem medida, cega ao texto da página: o PDF é digitalizado (Image2PDF, sem camada de texto), a página foi renderizada a 400 e a 600 dpi, a moldura do tabuleiro foi localizada pelas linhas escuras contínuas nos dois eixos (run >= 80% do lado), a grade dividida em 8x8 a partir dela, e a tinta de cada casa medida na janela central de 76% depois de uma abertura morfológica 5x5 — que mata o ponto isolado da trama de meio-tom da casa escura e deixa de pé o traço da peça. A fase do xadrezado foi conferida pela média de cinza do anel de borda de cada casa (a1 escura), o que prova que a grade não está deslocada de uma casa. A orientação não é suposta: o diagrama impresso traz os rótulos a–h embaixo e 8–1 à esquerda. Medida: peça pesada em d8 (22,4% de traço — rei preto), traço em a7 (5,5% — torre branca) e em e5 (3,1% — rei branco, o desenho de contorno mais fino dos três). A vez é das brancas: a linha impressa começa em 1.Kd6.",
+    "qaApplied": "garimpo de 2026-09-08, para o piloto 2 da reformulação Silman. A leitura de imagem é falsificada pelas QUATRO linhas que o autor imprime sobre esta mesma posição, todas rodadas na chess.js: (1) a principal, 1.Kd6 Ke8 2.Rb7 Kf8 3.Ke6 Kg8 4.Kf6 Kh8 5.Kg6 Kg8 6.Rb8 mate — 11 meios-lances sem um lance ilegal, terminando em mate conferido; (2) a variante 1...Kc8 2.Rh7 Kb8 3.Kc6 Ka8 4.Kb6 Kb8 5.Rh8 mate, 9 meios-lances, também mate; (3) a abordagem direta que ele apresenta como circular, 2.Ke6 Kd8 3.Kd6 Ke8, que de fato devolve a posição de dois lances antes; (4) o erratum registrado no risco pendente. Uma leitura girada ou com as peças trocadas não roda nenhuma delas. Tablebase: win-white.",
+    "pendingRisk": "ERRATUM DO LIVRO, registrado para quem for conferir a página: na p. impressa 15 o autor escreve que o mate teria vindo na hora depois de \"2...Kd6 3.Rb8 mate\". O lance 2...Kd6 é impossível — d6 está ocupada pelo próprio rei branco desde 1.Kd6, e é casa vizinha dele. O lance que ele descreve é 2...Kd8, e aí 3.Rb8 é mate mesmo (conferido na chess.js). A aula usa o lance correto; o texto impresso fica registrado aqui para a divergência não parecer erro nosso."
+  }
+}

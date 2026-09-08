@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-rmate-silman-t3",
+  "fen": "8/8/8/3k4/7R/5K2/8/8 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KRK",
+    "fading"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Jeremy Silman — Diagrama 34, o Teste 3 da Parte Um. O enunciado impresso é \"Trap the enemy King in the smallest possible Box\", e a solução dele, na p. impressa 28, é 1.Re4!, que prende o rei preto numa Caixa de a4 a e4 a e8",
+    "bibliographicSource": "Silman, Silman's Complete Endgame Course: From Beginner to Master, Siles Press, Los Angeles, 2007, p. impressa 26 (PDF p. 40, offset 14), Parte Um \"Endgames for Beginners (Unrated-999)\", seção \"Tests and Solutions\", Teste 3 (solução na p. impressa 28), Diagrama 34",
+    "originalGame": "não se aplica — exercício de manual, não vem de partida",
+    "authorComposer": "não se aplica — posição de teste didático, não é estudo composto",
+    "license": "obra protegida por direito autoral, em regime integral desde 2026-09-08 (§1.1 do docs/SOURCE-CORPUS.md): o teto de citação da §12.7 está desligado para esta obra, e em troca toda posição que sai dela fica inventariada em content/divida-de-licenca.md — é a lista de troca por fonte pública para quando o curso deixar de ser gratuito. O texto da aula é original em português; nada da prosa do autor é reproduzido.",
+    "editionFile": "silman-complete-endgame-course.pdf",
+    "fenMethod": "transcrição do diagrama por leitura de imagem medida, cega ao texto da página: o PDF é digitalizado (Image2PDF, sem camada de texto), a página foi renderizada a 400 e a 600 dpi, a moldura do tabuleiro foi localizada pelas linhas escuras contínuas nos dois eixos (run >= 80% do lado), a grade dividida em 8x8 a partir dela, e a tinta de cada casa medida na janela central de 76% depois de uma abertura morfológica 5x5 — que mata o ponto isolado da trama de meio-tom da casa escura e deixa de pé o traço da peça. A fase do xadrezado foi conferida pela média de cinza do anel de borda de cada casa (a1 escura), o que prova que a grade não está deslocada de uma casa. A orientação não é suposta: o diagrama impresso traz os rótulos a–h embaixo e 8–1 à esquerda. Medida: peça pesada em d5 (37,0% de traço — rei preto), torre em h4 (16,4%) e rei branco em f3 (17,9%), identificados pelo desenho do topo do glifo: ameias na torre, cruz no rei. A medição foi repetida em dois renders independentes, a 600 e a 400 dpi, com a moldura re-derivada em cada um, e deu as mesmas três casas nas duas.",
+    "qaApplied": "garimpo de 2026-09-08, para o piloto 2 da reformulação Silman. A solução impressa 1.Re4! roda legal e a torre fica protegida — o rei preto de d5 ataca e4 e não pode capturar, porque o rei branco de f3 defende a casa (conferido na chess.js: depois de 1.Re4 os lances pretos são Kc5, Kc6 e Kd6, e Kxe4 não está entre eles). A Caixa que sai daí é a que o autor descreve, de a4 a e4 a e8. Tablebase: win-white. CORREÇÃO DE LEITURA DECLARADA: o plano desta reformulação trazia o rei branco em e3. A medição de pixel, refeita em duas resoluções, dá f3 — e com f3 tudo o que o livro afirma continua verdadeiro. O e3 não foi adotado por não ter sido medido.",
+    "pendingRisk": "e3 e f3 são casas vizinhas e o glifo do rei branco é o mais fino dos três; quem for conferir a olho pode ler e3. O método está descrito acima e é reproduzível — se alguém medir e der e3, é este arquivo que está errado, não o método."
+  }
+}

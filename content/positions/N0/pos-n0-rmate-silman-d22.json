@@ -1,0 +1,21 @@
+{
+  "id": "pos-n0-rmate-silman-d22",
+  "fen": "8/8/8/8/4k3/8/8/6RK w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KRK",
+    "ensino"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Jeremy Silman — Diagrama 22, legenda impressa \"Black's King can't be mated in the middle\". É a posição de partida da técnica que ele chama de \"the Box\": o rei preto no centro, e o caminho inteiro dali até o mate na borda",
+    "bibliographicSource": "Silman, Silman's Complete Endgame Course: From Beginner to Master, Siles Press, Los Angeles, 2007, p. impressa 16 (PDF p. 30, offset 14), Parte Um \"Endgames for Beginners (Unrated-999)\", seção \"King and Rook vs. Lone King\", Diagrama 22 (a Caixa encolhendo nos Diagramas 23, 24, 25 e 26)",
+    "originalGame": "não se aplica — posição de ensino de manual, não vem de partida",
+    "authorComposer": "não se aplica — mate elementar didático, não é estudo composto",
+    "license": "obra protegida por direito autoral, em regime integral desde 2026-09-08 (§1.1 do docs/SOURCE-CORPUS.md): o teto de citação da §12.7 está desligado para esta obra, e em troca toda posição que sai dela fica inventariada em content/divida-de-licenca.md — é a lista de troca por fonte pública para quando o curso deixar de ser gratuito. O texto da aula é original em português; nada da prosa do autor é reproduzido.",
+    "editionFile": "silman-complete-endgame-course.pdf",
+    "fenMethod": "transcrição do diagrama por leitura de imagem medida, cega ao texto da página: o PDF é digitalizado (Image2PDF, sem camada de texto), a página foi renderizada a 400 e a 600 dpi, a moldura do tabuleiro foi localizada pelas linhas escuras contínuas nos dois eixos (run >= 80% do lado), a grade dividida em 8x8 a partir dela, e a tinta de cada casa medida na janela central de 76% depois de uma abertura morfológica 5x5 — que mata o ponto isolado da trama de meio-tom da casa escura e deixa de pé o traço da peça. A fase do xadrezado foi conferida pela média de cinza do anel de borda de cada casa (a1 escura), o que prova que a grade não está deslocada de uma casa. A orientação não é suposta: o diagrama impresso traz os rótulos a–h embaixo e 8–1 à esquerda. Medida: peça pesada em e4 (28,1% de traço — rei preto), traço em g1 (4,6%) e h1 (2,6%). Qual das duas é a torre não foi decidido pela silhueta e sim pela linha impressa: o primeiro lance do autor é 1.Rg3, que só é legal com a torre em g1, e o terceiro é 2.Kg2, que só é legal com o rei em h1. A vez é das brancas.",
+    "qaApplied": "garimpo de 2026-09-08, para o piloto 2 da reformulação Silman. Falsificação pela linha principal INTEIRA que o autor imprime, do Diagrama 22 até o mate: 1.Rg3 Kf4 2.Kg2 Ke4 3.Rf3 Kd4 4.Kf2 Ke4 5.Ke2 Kd4 6.Re3 Kc4 7.Rd3 Kb4 8.Ke3 Kc4 9.Ke4 Kc5 10.Rd4 Kb5 11.Kd5 Kb6 12.Rb4+ Kc7 13.Rb2 Kd7 14.Rb7+ Kd8 15.Kd6 Ke8 16.Ra7 Kf8 17.Ke6 Kg8 18.Kf6 Kh8 19.Kg6 Kg8 20.Ra8 mate — 39 meios-lances rodados na chess.js sem um único lance ilegal, terminando em mate conferido no 20º lance, exatamente como anunciado. Rodaram também as sub-variantes impressas, todas legais e todas fechando onde o autor diz: 4.Re3?? Kxe3 (a torre cai mesmo), 5...Ke5 6.Kd3 Kd5 7.Rf5+ Ke6 8.Ke4 Kd6 9.Re5, 12...Ka6 13.Kc6 Ka7 14.Rb1 Ka8 15.Kc7 Ka7 16.Ra1 mate, e 15...Kc8 16.Rb6 Kd8 17.Rb8 mate. Cinco linhas independentes sobre a mesma FEN. Tablebase: win-white. ATENÇÃO ao conferir o Diagrama 22 no livro: o rei preto está em **e4**; lido em d4, o 1...Kf4 do próprio autor seria ilegal — foi assim que a medição e a linha impressa se conferiram uma à outra.",
+    "pendingRisk": "nenhum conhecido"
+  }
+}
