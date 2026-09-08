@@ -89,6 +89,15 @@ test("toda posição afirma alguma coisa conferível", () => {
   }
 });
 
+/**
+ * O quiz saiu da **tela** do aluno em 2026-09-07, e continua no arquivo.
+ *
+ * Apagar trinta perguntas escritas para tirar um bloco de uma página seria
+ * jogar fora prosa curada por nada: o campo não custa nada parado, e o dia em
+ * que alguém quiser a pergunta de volta — no caderno impresso, no relatório do
+ * professor — ela está ali. O que não pode é o esquema deixar de conferi-la e
+ * ela apodrecer sem ninguém ver.
+ */
 test("toda dica tem quiz, com a resposta certa dentro das opções", () => {
   for (const dica of DICAS) {
     assert.ok(dica.quiz, `${dica.id} está sem quiz`);
@@ -254,11 +263,11 @@ test("a posição que passa do teto do capítulo reprova", () => {
     posicao.provenance.editionFile = "nimzowitsch-my-system-1930";
     posicao.provenance.capitulo = capitulo;
   }
-  for (const item of dica.treino!.reconhecimento) {
+  for (const item of dica.treino!.exercicios) {
     item.provenance.editionFile = "nimzowitsch-my-system-1930";
     item.provenance.capitulo = capitulo;
   }
-  const quantas = dica.posicoes.length + dica.treino!.reconhecimento.length;
+  const quantas = dica.posicoes.length + dica.treino!.exercicios.length;
   assert.ok(quantas > CAPITULO_CAP, `são ${quantas} posições para um teto de ${CAPITULO_CAP}`);
 
   const problemas = problemasDeCitacao(dica, LIVRO);

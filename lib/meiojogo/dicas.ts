@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { AfirmacaoSchema } from "./afirmacoes.ts";
-import { MAPA, respostaDaTarefa, tarefaPorId } from "./exercicios.ts";
+import { Chess } from "chess.js";
+import { MAPA } from "./exercicios.ts";
+import { juizDaDica, uciDe } from "./lances.ts";
 import { porta1 } from "./portas.ts";
 import { NIVEIS } from "../curso/trilha.ts";
 
@@ -253,10 +255,10 @@ export const SALTO_DA_PORTA_2 = 100;
  */
 export const CuradoriaSchema = z
   .object({
-    /** Passo 3 — por que o traço é perceptível **nesta** posição, para este aluno. */
+    /** Passo 3 — por que o tema é aplicável **nesta** posição, para este aluno. */
     perceptivel: z.string().min(30),
     /**
-     * Passo 4 — as portas 1 e 2 do funil, medidas nesta posição.
+     * Passo 4 — as portas do funil, medidas nesta posição.
      *
      * Só o resultado aprovado é representável, e é de propósito: uma posição
      * que reprova numa porta não vira item, então não há o que escrever. O
@@ -268,6 +270,23 @@ export const CuradoriaSchema = z
         porta1: z.literal("passou"),
         profundidade: z.number().int().min(10),
         salto: z.number().int().min(0).max(SALTO_DA_PORTA_2),
+        /**
+         * O que **cada lance aceito** custa, em centésimos, na ordem de
+         * `lancesAceitos` — a regra dura do plano, gravada.
+         *
+         * Um número por lance, e não um por posição: a torre que ocupa a coluna
+         * aberta pela casa segura e a que a ocupa pendurando são dois lances do
+         * mesmo tema na mesma posição, e só um deles pode entrar na lista. Sem
+         * a coluna, o gate teria de acreditar que quem escreveu mediu os dois.
+         *
+         * Negativo é normal e não é defeito: o motor pode avaliar a posição
+         * depois do lance um pouco melhor do que avaliou a linha principal
+         * antes dele, na mesma profundidade. É ruído de busca, e o teto que
+         * importa é o de cima.
+         */
+        custos: z
+          .array(z.number().int().min(-SALTO_DA_PORTA_2).max(SALTO_DA_PORTA_2))
+          .min(1),
       })
       .strict(),
     /** Passo 6 — por que ela serve a um aluno de 12 a 15 anos vendo isto pela primeira vez. */
@@ -275,11 +294,39 @@ export const CuradoriaSchema = z
   })
   .strict();
 
-export const ItemDeReconhecimentoSchema = z
+const LANCE = z
+  .string()
+  .regex(/^[a-h][1-8][a-h][1-8][nbrq]?$/, "o lance é UCI: `f1d1`, e `e7e8q` quando promove");
+
+/** O piso e o alvo de exercícios por dica (§6 do plano). */
+export const EXERCICIOS_PISO = 2;
+export const EXERCICIOS_ALVO = 5;
+
+/**
+ * Um exercício: a posição, e os lances que aplicam o tema nela.
+ *
+ * ## Por que o id não tem degrau
+ *
+ * `m12-d2-a` dizia, no próprio id, que aquele item era "guiado". Com dois a
+ * cinco exercícios a escada de apoio fica disponível em **todos**, e quem
+ * separa quem resolveu sozinho de quem pediu ajuda é a coluna `apoio` do
+ * registro, que já existe e já grava o nível. Um degrau declarado no id era uma
+ * promessa sobre o aluno; a coluna é o que ele fez.
+ *
+ * ## As três camadas do juiz, e o que cada item tem de carregar
+ *
+ * | camada | quem decide os lances | o que o item escreve |
+ * |---|---|---|
+ * | geométrica | `lancesQueAplicam`, das `grupos()` que já existem | nada além da FEN — o gate confere que o escrito é o calculado |
+ * | autoral | quem escreveu o item | `porqueAceitos`, obrigatório |
+ * | motor | Stockfish, na curadoria | `curadoria.portas.custos`, um por lance |
+ *
+ * A camada do motor vale para as três: **todo** lance aceito tem de ser são.
+ */
+export const ItemDeLanceSchema = z
   .object({
-    /** `m12-d2-a`. O degrau está no id porque é o que o professor lê no relatório. */
-    id: z.string().regex(/^m[0-9]+-d[23]-[a-z]$/, "o id é `m12-d2-a`: dica, degrau e letra"),
-    degrau: z.union([z.literal(2), z.literal(3)]),
+    /** `m9-a`. Dica e letra, e nada mais — ver acima por que o degrau saiu. */
+    id: z.string().regex(/^m[0-9]+-[a-e]$/, "o id é `m9-a`: a dica, um hífen e uma letra"),
     fen: z
       .string()
       .regex(
@@ -287,85 +334,78 @@ export const ItemDeReconhecimentoSchema = z
         "a FEN precisa dos seis campos (posição, vez, roques, en passant, meios-lances, lance)",
       ),
     /**
-     * O argumento `lado` de `respostaDaTarefa` — e não "o lado do aluno".
+     * O argumento `lado` do juiz — e não "o lado do aluno".
      *
-     * As treze tarefas não têm a mesma perspectiva, e fingir que têm produziria
-     * itens invertidos. `peao-isolado` devolve os peões **de** `lado`;
-     * `peao-na-semiaberta` devolve os peões do adversário **de** `lado`. Quem
-     * diz se isso é o traço do aluno ou o do rival é o `alvo` do `MAPA`, e é lá
-     * que essa leitura mora.
+     * As tarefas não têm a mesma perspectiva, e fingir que têm produziria itens
+     * invertidos. `peao-isolado` recebe o dono do peão; `peao-na-semiaberta`
+     * recebe quem **não** tem peão na coluna. Quem joga o lance sai do
+     * `quemJoga` do juiz, e a vez da FEN tem de ser a dele — o gate cobra.
      */
     lado: z.enum(["brancas", "pretas"]),
-    /** A tarefa de `lib/meiojogo/exercicios.ts`. O gate confere que é a do `MAPA`. */
+    /** A tarefa de `lib/meiojogo/exercicios.ts`, que é também o id do juiz de lance. */
     tarefa: z.string().min(3),
-    /** As casas aceitas. O gate as compara com o que o juiz devolve. */
-    resposta: z.array(CASA).min(1),
     /**
-     * A legenda do item — que é a legenda que **não** pode afirmar o traço.
+     * Os lances aceitos, em UCI.
+     *
+     * Todos os que aplicam o tema e são sãos, e não o que o autor tinha em
+     * mente: recusar Tad1 e aceitar Tfd1 porque ele pensou numa só ensina o
+     * aluno a adivinhar o site.
+     */
+    lancesAceitos: z.array(LANCE).min(1),
+    /**
+     * Por que estes lances, quando quem os escolheu foi uma pessoa — ou `null`
+     * quando o juiz geométrico os calcula sozinho.
+     *
+     * O gate cobra os dois lados: obrigatório quando o juiz não confirma a
+     * lista, proibido quando confirma. Uma justificativa escrita ao lado de uma
+     * lista que a máquina deriva é uma justificativa que ninguém vai reler
+     * quando a máquina mudar de ideia.
+     */
+    porqueAceitos: z.string().min(30).nullable().default(null),
+    /**
+     * Os lances que **aplicam o tema e o motor reprovou**, com o custo de cada.
+     *
+     * A lista existe para uma frase só, e é a frase que separa este exercício
+     * de um exercício que mente. O aluno que leva a torre para a coluna aberta
+     * pendurando-a fez exatamente o que a dica manda — e perde a partida. Sem
+     * esta lista a tela lhe diria "esse não é o lance desta dica", que é falso;
+     * com ela, diz "é o lance da dica, mas aqui ele custa caro", que é a aula.
+     *
+     * O gate cobra que `lancesAceitos` mais estes cubram **todo** lance que o
+     * juiz geométrico devolve: nenhum lance do tema pode sumir em silêncio.
+     */
+    lancesRecusados: z
+      .array(
+        z
+          .object({
+            lance: LANCE,
+            /** Fora do teto dos aceitos, e é por isso que ele foi recusado. */
+            custo: z.number().int(),
+          })
+          .strict(),
+      )
+      .default([]),
+    /**
+     * A legenda do item — que é a legenda que **não** pode entregar o lance.
      *
      * Aqui a regra se inverte em relação a `PosicaoDaDicaSchema`: lá a legenda
      * afirma o que `afirma` mede, porque a posição ensina; aqui ela descreve o
      * contexto sem entregar a resposta, porque a posição pergunta. O gate
-     * recusa uma legenda que cite qualquer casa da resposta.
+     * recusa uma legenda que cite a casa de destino de qualquer lance aceito.
      */
     legenda: z.string().min(10),
     /**
      * A frase sobre o material, quando ele está desigual — ou `null`.
      *
      * A posição de partida real nasce com desequilíbrio: é o que a combinação
-     * produziu. Para reconhecimento estrutural isso é aceitável, e a §3.3 do
-     * plano exige que fique **escrito**, para o aluno não passar o exercício
+     * produziu. Para o exercício estrutural isso é aceitável, e a §3.3 do plano
+     * exige que fique **escrito**, para o aluno não passar o exercício
      * procurando por que um dos lados está com uma torre a mais.
      */
     material: z.string().min(10).nullable().default(null),
-    /**
-     * Por que este item do degrau 2 vem de partida real, e não de livro — ou
-     * `null`, que é o caso normal.
-     *
-     * A §3.2 manda a guiada sair de livro, porque o diagrama que o autor
-     * escolheu tem o traço **encenado**, e encenado é o certo enquanto há
-     * apoio. Só que o estoque de livro não é infinito nem uniforme: um
-     * conceito pode não ter dois diagramas no acervo, e a §5 já previu o corte
-     * — "cai uma das duas posições guiadas antes de cair a independente".
-     *
-     * Este campo é esse corte, **declarado**. O gate exige que ele exista
-     * quando um item do degrau 2 não tem capítulo, e proíbe que exista quando
-     * tem: a exceção fica no arquivo, contada no número do bloco, em vez de
-     * virar uma regra que silenciosamente deixou de valer.
-     */
-    excecaoDeFonte: z.string().min(40).nullable().default(null),
     apoio: ApoioSchema,
     curadoria: CuradoriaSchema,
     provenance: ProvenienciaSchema,
-  })
-  .strict();
-
-/**
- * O item do degrau 4 — a aplicação guiada, na posição do degrau 3.
- *
- * Duas opções, e não três: o quiz de plano tem três porque compara planos;
- * este compara **razões**, e a terceira razão plausível costuma ser a segunda
- * com outra roupa. Cada opção carrega o próprio `porque` — a justificativa na
- * certa, a refutação na errada —, porque gabarito sem refutação escrita é
- * gabarito que ninguém revisou.
- */
-export const ItemDeAplicacaoSchema = z
-  .object({
-    id: z.string().regex(/^m[0-9]+-d4$/, "o id é `m12-d4`"),
-    /** O id do item do degrau 3 cuja posição este reusa. */
-    usa: z.string().regex(/^m[0-9]+-d3-[a-z]$/, "o id do item do degrau 3"),
-    pergunta: z.string().min(20),
-    opcoes: z
-      .array(
-        z
-          .object({
-            texto: z.string().min(5),
-            certa: z.boolean(),
-            porque: z.string().min(30),
-          })
-          .strict(),
-      )
-      .length(2),
   })
   .strict();
 
@@ -401,17 +441,27 @@ export const FichaSchema = z
   })
   .strict();
 
+/**
+ * A sequência de exercícios de uma dica.
+ *
+ * **Dois é o piso, cinco é o alvo, e quem decide entre os dois é o estoque.**
+ * Um tema com quinze candidatas aprovadas fica com cinco; um tema em que o
+ * acervo só dá duas fica com duas, e o gate não deixa publicar com uma. O teto
+ * de cinco não é orçamento: é a sessão de treino de um aluno de doze anos, que
+ * não faz oito posições seguidas do mesmo assunto sem parar de olhar o
+ * tabuleiro.
+ *
+ * O que saiu, e por quê: `aplicacao` (a pergunta de duas alternativas do degrau
+ * 4) e `reservas`. A pergunta saiu por decisão do Doug em 2026-09-07 — o que
+ * fica na tela é a apresentação e o exercício de jogar, e mais nada. As
+ * reservas saíram porque deixaram de ser um lugar separado: as posições que
+ * sobram do funil acima de cinco **são** o estoque de revisão do Bloco 6, e
+ * ficam onde o funil as deixou.
+ */
 export const TreinoSchema = z
   .object({
     ficha: FichaSchema,
-    /** Dois do degrau 2 e um do degrau 3, nesta ordem. O gate confere. */
-    reconhecimento: z.array(ItemDeReconhecimentoSchema).length(3),
-    aplicacao: ItemDeAplicacaoSchema,
-    /**
-     * As três posições de revisão. Vazio hoje, e é o estado certo: elas entram
-     * no Bloco 6, antes de a revisão espaçada ser ligada.
-     */
-    reservas: z.array(ItemDeReconhecimentoSchema).max(3).default([]),
+    exercicios: z.array(ItemDeLanceSchema).min(EXERCICIOS_PISO).max(EXERCICIOS_ALVO),
   })
   .strict();
 
@@ -487,8 +537,7 @@ export const DicaSchema = z
 
 export type Dica = z.infer<typeof DicaSchema>;
 export type Treino = z.infer<typeof TreinoSchema>;
-export type ItemDeReconhecimento = z.infer<typeof ItemDeReconhecimentoSchema>;
-export type ItemDeAplicacao = z.infer<typeof ItemDeAplicacaoSchema>;
+export type ItemDeLance = z.infer<typeof ItemDeLanceSchema>;
 export type Ficha = z.infer<typeof FichaSchema>;
 export type PosicaoDaDica = z.infer<typeof PosicaoDaDicaSchema>;
 export type Proveniencia = z.infer<typeof ProvenienciaSchema>;
@@ -617,11 +666,11 @@ export function mesmaObra(a: string, b: string): boolean {
   return MESMA_OBRA.some((grupo) => grupo.includes(a) && grupo.includes(b));
 }
 
-/** Todas as posições de uma dica: o ensino, o treino e as reservas. */
+/** Todas as posições de uma dica: a de ensino e as dos exercícios. */
 export function posicoesCitadas(dica: Dica): { provenance: Proveniencia; onde: string }[] {
   const lista = dica.posicoes.map((p, i) => ({ provenance: p.provenance, onde: `posição ${i + 1}` }));
   if (dica.treino === null) return lista;
-  for (const item of [...dica.treino.reconhecimento, ...dica.treino.reservas]) {
+  for (const item of dica.treino.exercicios) {
     lista.push({ provenance: item.provenance, onde: `item ${item.id}` });
   }
   return lista;
@@ -717,7 +766,7 @@ export function problemasEntreDicas(
 ): { codigo: string; onde: string; mensagem: string }[] {
   const itens: { dica: string; id: string; fen: string; capitulo: string | null }[] = [];
   for (const dica of dicas) {
-    for (const item of [...(dica.treino?.reconhecimento ?? []), ...(dica.treino?.reservas ?? [])]) {
+    for (const item of dica.treino?.exercicios ?? []) {
       itens.push({
         dica: dica.id,
         id: item.id,
@@ -773,14 +822,16 @@ export function problemasEntreDicas(
  * Ela é longa porque cada linha corresponde a um jeito conhecido de o item
  * chegar torto na tela do aluno, e nenhum deles é visível relendo o JSON:
  *
- * - a resposta escrita não é a que o juiz devolve → o aluno acerta e é recusado;
- * - a legenda cita a casa da resposta → o exercício se responde sem olhar;
- * - o realce do apoio não contém a resposta → o apoio leva para o lado errado;
- * - o realce do apoio **é** a resposta → o nível 2 virou o nível 3;
- * - a posição guiada sai da mesma obra do exemplo → é a curadoria do autor
- *   sendo copiada, que é a única camada protegida (§3.1);
- * - a posição do degrau 3 sai de livro → traço encenado provando reconhecimento
- *   independente, que é justamente o que ela existe para não fazer.
+ * - a lista escrita diverge da que o juiz calcula → o aluno joga o lance certo
+ *   e é recusado, ou joga um lance qualquer e é aprovado;
+ * - a vez da FEN é do lado errado → o exercício pede um lance que ninguém pode
+ *   jogar;
+ * - falta o número do motor de algum lance aceito → o site pode estar ensinando
+ *   o contrário da dica;
+ * - a legenda cita a casa de destino → o exercício se responde sem olhar;
+ * - o realce do apoio não contém o destino, ou **é** o destino → o apoio leva
+ *   para o lado errado, ou o nível 2 virou o nível 3;
+ * - a solução não nomeia lance nenhum → o nível 3 deixou de ser solução.
  */
 export function problemasDoTreino(dica: Dica): { codigo: string; mensagem: string }[] {
   const problemas: { codigo: string; mensagem: string }[] = [];
@@ -791,28 +842,25 @@ export function problemasDoTreino(dica: Dica): { codigo: string; mensagem: strin
   if (treino === null) return problemas;
 
   const noMapa = MAPA.find((n) => n.dica === dica.id);
-  if (!noMapa?.tarefa) {
+  const juiz = juizDaDica(dica.id);
+  if (!juiz) {
     erro(
-      "TREINO_SEM_TAREFA",
-      `${dica.id} tem treino mas o MAPA não lhe dá tarefa — sem juiz de máquina não há ` +
-        `item de reconhecimento a escrever`,
+      "TREINO_SEM_JUIZ",
+      `${dica.id} tem treino mas não há juiz de lance escrito para ela em ` +
+        `lib/meiojogo/lances.ts — sem juiz não há exercício de jogar a escrever`,
     );
     return problemas;
   }
-
-  const graus = treino.reconhecimento.map((i) => i.degrau);
-  if (graus.join(",") !== "2,2,3") {
+  if (noMapa?.tarefa && noMapa.tarefa !== juiz.id) {
     erro(
-      "DEGRAUS_FORA_DE_ORDEM",
-      `os degraus do reconhecimento são ${graus.join(", ")} e têm de ser 2, 2 e 3 — duas ` +
-        `guiadas e uma independente, nessa ordem`,
+      "JUIZ_FORA_DO_MAPA",
+      `o juiz de ${dica.id} é "${juiz.id}" e o MAPA lhe dá a tarefa "${noMapa.tarefa}"`,
     );
   }
 
-  const obraDoExemplo = dica.posicoes[0]?.provenance.editionFile;
   const ids = new Set<string>();
 
-  for (const item of [...treino.reconhecimento, ...treino.reservas]) {
+  for (const item of treino.exercicios) {
     const onde = `item ${item.id}`;
 
     if (!item.id.startsWith(`${dica.id}-`)) {
@@ -821,32 +869,84 @@ export function problemasDoTreino(dica: Dica): { codigo: string; mensagem: strin
     if (ids.has(item.id)) erro("ID_REPETIDO", `${onde} aparece duas vezes`);
     ids.add(item.id);
 
-    if (item.tarefa !== noMapa.tarefa) {
+    if (item.tarefa !== juiz.id) {
       erro(
-        "TAREFA_FORA_DO_MAPA",
-        `${onde} usa a tarefa "${item.tarefa}" e o MAPA dá "${noMapa.tarefa}" a ${dica.id}`,
+        "TAREFA_FORA_DO_JUIZ",
+        `${onde} usa a tarefa "${item.tarefa}" e o juiz de ${dica.id} é "${juiz.id}"`,
       );
-      continue;
-    }
-    const tarefa = tarefaPorId(item.tarefa);
-    if (!tarefa) {
-      erro("TAREFA_INEXISTENTE", `${onde} aponta a tarefa "${item.tarefa}", que não existe`);
       continue;
     }
 
-    // O juiz. É esta linha que o item inteiro existe para satisfazer.
-    const doJuiz = respostaDaTarefa(item.fen, tarefa, item.lado);
-    const escrita = [...item.resposta].sort();
-    if (doJuiz.length === 0) {
+    // A vez. Sem isto o item pediria um lance que ninguém pode jogar, e a tela
+    // ficaria esperando um toque que o tabuleiro não aceita.
+    const jogo = new Chess(item.fen);
+    const quemJoga = juiz.quemJoga(item.lado);
+    if (jogo.turn() !== (quemJoga === "brancas" ? "w" : "b")) {
       erro(
-        "POSICAO_SEM_RESPOSTA_UNICA",
-        `${onde}: respostaDaTarefa devolve vazio para ${item.tarefa}/${item.lado} — o traço ` +
-          `não existe nesta posição, ou existe mais de uma vez`,
+        "VEZ_DO_LADO_ERRADO",
+        `${onde}: quem aplica o tema é ${quemJoga}, e a FEN está com a vez do outro lado`,
       );
-    } else if (doJuiz.join(",") !== escrita.join(",")) {
+      continue;
+    }
+
+    const legais = new Set(jogo.moves({ verbose: true }).map(uciDe));
+    for (const lance of item.lancesAceitos) {
+      if (!legais.has(lance)) {
+        erro("LANCE_ILEGAL", `${onde}: o lance aceito "${lance}" não é legal nesta posição`);
+      }
+    }
+
+    // O juiz. É esta linha que o item inteiro existe para satisfazer.
+    const doJuiz = juiz.lances(item.fen, item.lado);
+    const recusados = item.lancesRecusados.map((r) => r.lance);
+    const escritos = [...item.lancesAceitos, ...recusados].sort();
+    for (const { lance, custo } of item.lancesRecusados) {
+      if (Math.abs(custo) <= SALTO_DA_PORTA_2) {
+        erro(
+          "RECUSADO_QUE_PASSA",
+          `${onde}: o lance "${lance}" está na lista de recusados custando ${custo} centésimos, ` +
+            `que cabe no teto de ${SALTO_DA_PORTA_2} — se ele é são, ele é aceito`,
+        );
+      }
+      if (item.lancesAceitos.includes(lance)) {
+        erro(
+          "RECUSADO_E_ACEITO",
+          `${onde}: o lance "${lance}" está nas duas listas ao mesmo tempo`,
+        );
+      }
+    }
+    if (doJuiz.length > 0) {
+      if (item.porqueAceitos !== null) {
+        erro(
+          "PORQUE_SOBRANDO",
+          `${onde}: o juiz calcula a lista sozinho, e mesmo assim o item escreve um ` +
+            `"porqueAceitos" — justificativa ao lado de lista derivada é justificativa que ` +
+            `ninguém relê quando a máquina muda de ideia`,
+        );
+      }
+      if (doJuiz.join(",") !== escritos.join(",")) {
+        erro(
+          "LANCES_DESMENTIDOS",
+          `${onde}: os lances escritos (aceitos + recusados) são ${escritos.join(", ")} e o juiz ` +
+            `devolve ${doJuiz.join(", ")} — um lance do tema que some da lista vira "esse não é o ` +
+            `lance desta dica" na tela, e é mentira`,
+        );
+      }
+    } else if (item.porqueAceitos === null) {
       erro(
-        "RESPOSTA_DESMENTIDA",
-        `${onde}: a resposta escrita é ${escrita.join(", ")} e o juiz devolve ${doJuiz.join(", ")}`,
+        "CAMADA_AUTORAL_MUDA",
+        `${onde}: o juiz geométrico não devolve lance nenhum aqui, então quem escolheu foi ` +
+          `uma pessoa — e "porqueAceitos" tem de dizer o porquê`,
+      );
+    }
+
+    // O motor, gravado: um número por lance aceito, e nenhum acima do teto.
+    const custos = item.curadoria.portas.custos;
+    if (custos.length !== item.lancesAceitos.length) {
+      erro(
+        "MOTOR_SEM_NUMERO",
+        `${onde}: são ${item.lancesAceitos.length} lance(s) aceito(s) e ${custos.length} ` +
+          `número(s) do motor — todo lance aceito tem de ter sido medido`,
       );
     }
 
@@ -855,37 +955,42 @@ export function problemasDoTreino(dica: Dica): { codigo: string; mensagem: strin
       erro("PORTA_1", `${onde} reprova na porta 1 por ${reprovacao} — a posição não está quieta`);
     }
 
-    for (const casa of item.resposta) {
+    // O que a legenda não pode entregar é a casa de **chegada**. A de origem
+    // pode: dizer "a torre de a1" não diz para onde ela vai, e às vezes é o
+    // contexto que a posição precisa.
+    const destinos = [...new Set(item.lancesAceitos.map((l) => l.slice(2, 4)))];
+    for (const casa of destinos) {
       if (new RegExp(`\\b${casa}\\b`).test(item.legenda)) {
         erro(
           "LEGENDA_ENTREGA",
-          `${onde}: a legenda cita "${casa}", que é a resposta — o item se responde sem olhar`,
+          `${onde}: a legenda cita "${casa}", que é destino de lance aceito — o item se ` +
+            `responde sem olhar`,
         );
       }
     }
 
     const realce = new Set(item.apoio.realce);
     if (item.apoio.modo === "contem") {
-      const faltando = item.resposta.filter((c) => !realce.has(c));
+      const faltando = destinos.filter((c) => !realce.has(c));
       if (faltando.length > 0) {
         erro(
-          "APOIO_NAO_CONTEM_A_RESPOSTA",
+          "APOIO_NAO_CONTEM_O_DESTINO",
           `${onde}: o apoio é "contem" e não acende ${faltando.join(", ")} — ele estreitaria o ` +
-            `campo para longe da resposta`,
+            `campo para longe do lance`,
         );
-      } else if (item.apoio.realce.length <= item.resposta.length) {
+      } else if (item.apoio.realce.length <= destinos.length) {
         erro(
           "APOIO_E_A_RESPOSTA",
-          `${onde}: o realce do apoio tem ${item.apoio.realce.length} casa(s) para uma resposta ` +
-            `de ${item.resposta.length} — o nível 2 virou o nível 3`,
+          `${onde}: o realce do apoio tem ${item.apoio.realce.length} casa(s) para ` +
+            `${destinos.length} destino(s) — o nível 2 virou o nível 3`,
         );
       }
     } else {
-      const tocadas = item.resposta.filter((c) => realce.has(c));
+      const tocadas = destinos.filter((c) => realce.has(c));
       if (tocadas.length > 0) {
         erro(
           "CONTORNO_TOCA_A_RESPOSTA",
-          `${onde}: o apoio é "contorno" e acende ${tocadas.join(", ")}, que é resposta — ` +
+          `${onde}: o apoio é "contorno" e acende ${tocadas.join(", ")}, que é destino — ` +
             `contorno mostra o que **define** a resposta por ausência, e não a resposta`,
         );
       } else if (item.apoio.realce.length < 2) {
@@ -896,6 +1001,22 @@ export function problemasDoTreino(dica: Dica): { codigo: string; mensagem: strin
       }
     }
 
+    // O nível 3 da escada nomeia o **lance**, e não a casa: é a frase que o
+    // aluno lê depois de desistir de achar sozinho, e "a coluna d" não diz o
+    // que ele tem de arrastar no tabuleiro.
+    const nomeiaLance = item.lancesAceitos.some(
+      (l) =>
+        new RegExp(`\\b${l.slice(2, 4)}\\b`).test(item.apoio.solucao) &&
+        new RegExp(`\\b${l.slice(0, 2)}\\b`).test(item.apoio.solucao),
+    );
+    if (!nomeiaLance) {
+      erro(
+        "SOLUCAO_SEM_LANCE",
+        `${onde}: a solução do apoio não nomeia origem e destino de nenhum lance aceito — ` +
+          `ela é o nível 3 da escada, e o nível 3 entrega o lance`,
+      );
+    }
+
     if (Math.abs(saldoDeMaterial(item.fen)) >= 1 && item.material === null) {
       erro(
         "MATERIAL_CALADO",
@@ -904,57 +1025,20 @@ export function problemasDoTreino(dica: Dica): { codigo: string; mensagem: strin
       );
     }
 
-    const p = item.provenance;
-    if (item.degrau === 2) {
-      if (p.capitulo === null && item.excecaoDeFonte === null) {
-        erro(
-          "GUIADA_SEM_CAPITULO",
-          `${onde} é do degrau 2 e não sai de livro — o corte da §5 é permitido, mas tem de ` +
-            `estar escrito em "excecaoDeFonte", com o motivo`,
-        );
-      }
-      if (p.capitulo !== null && item.excecaoDeFonte !== null) {
-        erro(
-          "EXCECAO_SEM_EXCECAO",
-          `${onde} sai de livro e mesmo assim declara uma exceção de fonte — a exceção existe ` +
-            `para o caso em que o livro faltou`,
-        );
-      }
-      if (obraDoExemplo !== undefined && mesmaObra(p.editionFile, obraDoExemplo)) {
-        erro(
-          "GUIADA_DA_MESMA_OBRA",
-          `${onde} sai de "${p.editionFile}", a mesma obra do exemplo — a §3.2 pede obra ` +
-            `diferente, e esvaziar um autor é copiar a seleção dele`,
-        );
-      }
-    } else if (item.excecaoDeFonte !== null) {
+    // A §3.2, que sobreviveu ao fim dos degraus: o exercício não sai da obra do
+    // exemplo. Os degraus acabaram, mas o motivo não — o exemplo já bebeu
+    // daquele autor, e tirar dele também a prática é reproduzir a seleção dele,
+    // que é a única camada protegida (§3.1). Hoje a regra quase não morde,
+    // porque o funil traz partida CC0; ela existe para o dia em que alguém
+    // curar uma posição de livro à mão.
+    const obraDoExemplo = dica.posicoes[0]?.provenance.editionFile;
+    if (obraDoExemplo !== undefined && mesmaObra(item.provenance.editionFile, obraDoExemplo)) {
       erro(
-        "EXCECAO_NO_DEGRAU_3",
-        `${onde} é do degrau 3, onde partida real é a regra — não há exceção a declarar`,
-      );
-    } else if (p.originalGame === null) {
-      erro(
-        "INDEPENDENTE_SEM_PARTIDA",
-        `${onde} é do degrau 3 e não aponta partida — traço encenado não prova reconhecimento ` +
-          `independente`,
+        "EXERCICIO_DA_MESMA_OBRA",
+        `${onde} sai de "${item.provenance.editionFile}", a mesma obra do exemplo — a §3.2 pede ` +
+          `obra diferente, e esvaziar um autor é copiar a seleção dele`,
       );
     }
-  }
-
-  const independente = treino.reconhecimento[2];
-  if (independente !== undefined && treino.aplicacao.usa !== independente.id) {
-    erro(
-      "APLICACAO_EM_OUTRA_POSICAO",
-      `a aplicação usa "${treino.aplicacao.usa}" e o item do degrau 3 é "${independente.id}" — ` +
-        `o degrau 4 reusa a posição do 3 de propósito (§5)`,
-    );
-  }
-  if (treino.aplicacao.id !== `${dica.id}-d4`) {
-    erro("ID_DA_APLICACAO", `a aplicação de ${dica.id} tem id "${treino.aplicacao.id}"`);
-  }
-  const certas = treino.aplicacao.opcoes.filter((o) => o.certa).length;
-  if (certas !== 1) {
-    erro("GABARITO_AMBIGUO", `a aplicação de ${dica.id} tem ${certas} opções marcadas como certas`);
   }
 
   return problemas;

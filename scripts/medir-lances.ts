@@ -54,7 +54,7 @@ const alvos: Alvo[] = [];
 const semJuiz: string[] = [];
 for (const dica of dicas) {
   const juiz = juizDaDica(dica.id);
-  const itens = [...(dica.treino?.reconhecimento ?? []), ...(dica.treino?.reservas ?? [])];
+  const itens = dica.treino?.exercicios ?? [];
   if (itens.length === 0) continue;
   if (!juiz) {
     semJuiz.push(`${dica.id} (${itens.length} posições, e nenhum juiz de lance escrito)`);

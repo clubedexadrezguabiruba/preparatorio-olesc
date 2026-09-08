@@ -3,24 +3,24 @@ import { createHash } from "node:crypto";
 import { hojeNoBrasil } from "../curso/calendario.ts";
 import { criarClienteAdmin } from "../supabase/admin.ts";
 import { dicaPorId } from "./conteudo.ts";
-import type { ItemDeAplicacao, ItemDeReconhecimento } from "./dicas.ts";
-import { casasAceitas } from "./tentativa.ts";
+import type { ItemDeLance } from "./dicas.ts";
+import { lancesDoItem } from "./tentativa.ts";
 
 /**
  * A gravação de uma resposta do treino de meio-jogo.
  *
- * ## O navegador manda a casa, nunca o acerto
+ * ## O navegador manda o lance, nunca o acerto
  *
  * É a regra de `lib/tatica/gravar.ts:30-40`, e aqui ela pesa mais: o conteúdo
  * do treino é servido ao navegador — tem de ser, para a tela responder no
- * instante do toque —, então a `resposta` de cada item viaja junto. Com um
- * `acertou` vindo de fora, "acertei os 24" seria uma chamada de rede a
+ * instante do toque —, então os lances aceitos de cada item viajam junto. Com
+ * um `acertou` vindo de fora, "acertei os 24" seria uma chamada de rede a
  * escrever, e o relatório que o professor lê antes de escalar o time viraria
  * ficção.
  *
- * O juiz é o mesmo dos outros dois lugares: `casasAceitas` chama
- * `respostaDaTarefa`, que é o que o gate de conteúdo usou para conferir a
- * resposta escrita no arquivo. Um juiz, três lugares.
+ * O juiz é o mesmo dos outros dois lugares: `lancesDoItem` chama
+ * `lancesQueAplicam`, que é o que o gate de conteúdo usou para conferir os
+ * lances escritos no arquivo. Um juiz, três lugares.
  *
  * ## O que o servidor deriva, e por quê cada um
  *
@@ -35,9 +35,9 @@ import { casasAceitas } from "./tentativa.ts";
 /** O que o navegador manda: o que foi **respondido**, e o que só ele sabe. */
 export type RespostaDoTreino = {
   dica: string;
-  /** O id do item no conteúdo (`m12-d2-a`, `m12-d4`). */
+  /** O id do item no conteúdo (`m9-a`). */
   item: string;
-  /** A casa tocada (`d5`) ou a letra da alternativa (`a`). */
+  /** O lance jogado, em UCI (`f1d1`, e `e7e8q` quando promove). */
   resposta: string;
   /** 0 nenhum · 1 convite · 2 realce · 3 solução vista. */
   apoio: number;
@@ -49,22 +49,29 @@ export type Resultado = { acertou: boolean } | { erro: string };
 /** Meia hora, como na tática: acima disso é aba esquecida aberta. */
 const TEMPO_MAXIMO_MS = 30 * 60 * 1000;
 
-const CASA = /^[a-h][1-8]$/;
+const LANCE = /^[a-h][1-8][a-h][1-8][nbrq]?$/;
 
 /**
  * A impressão digital do item — as oito primeiras casas do sha256 sobre o que
  * define a resposta.
  *
  * Só entra o que, mudando, torna as respostas incomparáveis: a posição, o lado,
- * a tarefa e as casas aceitas; na aplicação, a pergunta e as opções com o
- * gabarito. Corrigir uma vírgula da legenda **não** invalida o histórico, e é
- * por isso que a legenda fica de fora.
+ * a tarefa e **os lances aceitos**. Corrigir uma vírgula da legenda **não**
+ * invalida o histórico, e é por isso que a legenda fica de fora.
+ *
+ * Os lances entraram no lugar das casas quando o exercício deixou de ser
+ * clique: um item que ganhou um segundo lance aceito passou a perguntar outra
+ * coisa, e comparar as respostas de antes com as de depois somaria dois
+ * exercícios diferentes na mesma porcentagem.
  */
-function versaoDoItem(item: ItemDeReconhecimento | ItemDeAplicacao): string {
-  const material =
-    "usa" in item
-      ? ["a", item.usa, item.pergunta, ...item.opcoes.map((o) => `${o.certa ? 1 : 0}:${o.texto}`)]
-      : ["r", item.fen, item.lado, item.tarefa, [...item.resposta].sort().join(",")];
+function versaoDoItem(item: ItemDeLance): string {
+  const material = [
+    "l",
+    item.fen,
+    item.lado,
+    item.tarefa,
+    [...item.lancesAceitos].sort().join(","),
+  ];
   return createHash("sha256").update(material.join(" ")).digest("hex").slice(0, 8);
 }
 
@@ -80,41 +87,21 @@ export async function gravarTreino(aluno: string, dado: RespostaDoTreino): Promi
   // seria "escreva qualquer texto na tabela de tentativas".
   if (!treino) return { erro: "dica sem treino" };
 
-  const reconhecimento = treino.reconhecimento.find((i) => i.id === itemId);
-  const aplicacao = treino.aplicacao.id === itemId ? treino.aplicacao : null;
-  if (!reconhecimento && !aplicacao) return { erro: "item desconhecido" };
+  const item = treino.exercicios.find((i) => i.id === itemId);
+  if (!item) return { erro: "item desconhecido" };
 
-  let acertou: boolean;
-  let conceito: string;
-  let habilidade: "reconhecimento" | "aplicacao";
-  let nivel: "fato" | "curado";
-  let versao: string;
+  if (!LANCE.test(resposta)) return { erro: "resposta malformada" };
 
-  if (reconhecimento) {
-    if (!CASA.test(resposta)) return { erro: "resposta malformada" };
-    acertou = casasAceitas(reconhecimento).includes(resposta);
-    conceito = reconhecimento.tarefa;
-    habilidade = "reconhecimento";
-    nivel = "fato";
-    versao = versaoDoItem(reconhecimento);
-  } else if (aplicacao) {
-    // A letra que o aluno viu na tela, e não um índice: é ela que o professor
-    // lê no relatório, e é por ela que se procura padrão numa alternativa
-    // errada escolhida por metade da turma.
-    const escolhida = resposta.charCodeAt(0) - 97;
-    const opcao = aplicacao.opcoes[escolhida];
-    if (resposta.length !== 1 || !opcao) return { erro: "resposta malformada" };
-    acertou = opcao.certa;
-    // O conceito é o do item do degrau 3, cuja posição a aplicação reusa: a
-    // fila de revisão agrupa por traço, e o degrau 4 treina o mesmo traço com
-    // uma pergunta mais funda.
-    conceito = treino.reconhecimento[2].tarefa;
-    habilidade = "aplicacao";
-    nivel = "curado";
-    versao = versaoDoItem(aplicacao);
-  } else {
-    return { erro: "item desconhecido" };
-  }
+  // `habilidade` continua com os dois valores do `check` da migration 0006, e o
+  // exercício de lance grava `aplicacao`: jogar o lance do tema é aplicar o
+  // conceito, e chamá-lo de reconhecimento seria escrever no relatório do
+  // professor o que o Bloco 4 mediu e o Doug recusou — que clicar na casa prova
+  // que o aluno usa a coluna aberta.
+  const acertou = lancesDoItem(item).includes(resposta);
+  const conceito = item.tarefa;
+  const habilidade: "reconhecimento" | "aplicacao" = "aplicacao";
+  const nivel: "fato" | "curado" = "fato";
+  const versao = versaoDoItem(item);
 
   const supabase = criarClienteAdmin();
 

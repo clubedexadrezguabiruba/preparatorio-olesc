@@ -1,10 +1,11 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { Chess, type Square } from "chess.js";
+import { Chess } from "chess.js";
 import { chromium, type Page } from "playwright";
-import { validarDicas, type ItemDeReconhecimento } from "../lib/meiojogo/dicas.ts";
-import { casasAceitas } from "../lib/meiojogo/tentativa.ts";
+import { validarDicas, type ItemDeLance } from "../lib/meiojogo/dicas.ts";
+import { uciDe } from "../lib/meiojogo/lances.ts";
+import { lancesDoItem } from "../lib/meiojogo/tentativa.ts";
 
 /**
  * O treino de meio-jogo, dirigido no navegador de verdade.
@@ -45,16 +46,14 @@ const DICAS = validarDicas(
   JSON.parse(readFileSync(path.join(RAIZ, "content/meio-jogo.json"), "utf8")),
 );
 
-/** Uma casa vazia que não é resposta — o clique que só o `select` entrega. */
-function casaVaziaFora(item: ItemDeReconhecimento): string {
-  const jogo = new Chess(item.fen);
-  for (const coluna of "abcdefgh") {
-    for (let fileira = 1; fileira <= 8; fileira += 1) {
-      const casa = `${coluna}${fileira}`;
-      if (!jogo.get(casa as Square) && !item.resposta.includes(casa)) return casa;
-    }
-  }
-  throw new Error(`${item.id} não tem casa vazia fora da resposta`);
+/** Um lance legal que **não** aplica o tema — o erro honesto do aluno. */
+function lanceForaDoTema(item: ItemDeLance, aceitos: readonly string[]): string {
+  const fora = new Chess(item.fen)
+    .moves({ verbose: true })
+    .map(uciDe)
+    .find((l) => !aceitos.includes(l));
+  if (!fora) throw new Error(`${item.id} não tem lance legal fora do tema`);
+  return fora;
 }
 
 /**
@@ -83,6 +82,19 @@ async function tocar(pagina: Page, casa: string): Promise<void> {
   const caixa = await botao.boundingBox();
   if (!caixa) throw new Error(`a casa ${casa} não está na tela`);
   await pagina.mouse.click(caixa.x + caixa.width / 2, caixa.y + caixa.height / 2);
+}
+
+/**
+ * Um lance jogado com o mouse: seleciona a origem, solta no destino.
+ *
+ * Dois cliques, e não arrasto, porque é o gesto que o dedo de uma criança faz
+ * num celular — e porque o arrasto do Playwright teria de acertar a física do
+ * `draggable` do chessground para provar a mesma coisa.
+ */
+async function jogar(pagina: Page, uci: string): Promise<void> {
+  await tocar(pagina, uci.slice(0, 2));
+  await pagina.waitForTimeout(80);
+  await tocar(pagina, uci.slice(2, 4));
 }
 
 /**
@@ -162,21 +174,41 @@ async function conferirDica(pagina: Page, dicaId: string, falhas: Falha[]): Prom
 
   const erro = (onde: string, o_que: string) => falhas.push({ onde, o_que });
   await pagina.goto(`${BASE}/meio-jogo/${dicaId}`);
-  await pagina.getByRole("heading", { name: "Treino" }).waitFor({ timeout: 20_000 });
+  await pagina.getByRole("heading", { name: "Agora jogue" }).waitFor({ timeout: 20_000 });
   await tabuleiroPronto(pagina);
 
+  const total = treino.exercicios.length;
   let itens = 0;
-  for (const [i, item] of treino.reconhecimento.entries()) {
-    const aceitas = casasAceitas(item);
-    await pagina.getByText(`Exercício ${i + 1} de 3`).waitFor();
+  for (const [i, item] of treino.exercicios.entries()) {
+    const aceitos = lancesDoItem(item);
+    const certo = aceitos[0];
+    await pagina.getByText(`Exercício ${i + 1} de ${total}`).waitFor();
 
-    // 1. O clique em casa vazia. É o gesto que o `movable.after` não entregaria.
-    const vazia = casaVaziaFora(item);
-    await tocar(pagina, vazia);
-    if (!(await visivel(pagina, `${vazia} não é.`))) {
-      erro(item.id, `o clique em ${vazia} (casa vazia) não foi julgado`);
+    // 1. O lance legal fora do tema. É o erro honesto do aluno, e a tela tem de
+    //    dizer que ele não é o **da dica** — sem dizer que ele é ruim.
+    const fora = lanceForaDoTema(item, aceitos);
+    await jogar(pagina, fora);
+    if (!(await visivel(pagina, `${fora.slice(0, 2)}–${fora.slice(2, 4)} não é o lance desta dica`))) {
+      erro(item.id, `o lance ${fora}, legal e fora do tema, não foi julgado`);
     }
-    if ((await circulos(pagina, 1)) < 1) erro(item.id, "a casa errada não foi acesa no tabuleiro");
+    // Duas pontas de uma seta vermelha: o chessground desenha `circle` na
+    // origem e a linha até o destino.
+    if ((await circulos(pagina)) < 1) erro(item.id, "o lance errado não foi marcado no tabuleiro");
+
+    // 1b. O lance que **aplica** o tema e o motor reprovou, quando o item tem
+    //     um. É a terceira frase da tela, e a que mais ensina: o aluno fez o
+    //     que a dica manda e perdeu.
+    const caro = item.lancesRecusados[0];
+    if (caro) {
+      await jogar(pagina, caro.lance);
+      const dito = `${caro.lance.slice(0, 2)}–${caro.lance.slice(2, 4)} é o lance desta dica`;
+      if (!(await visivel(pagina, dito))) {
+        erro(item.id, `o lance ${caro.lance}, do tema e caro, foi tratado como fora do tema`);
+      }
+      if (!(await visivel(pagina, `${caro.custo} centésimos`))) {
+        erro(item.id, "a tela não disse quanto o lance caro custa");
+      }
+    }
 
     // 2. A escada, degrau a degrau, com o realce chegando ao tabuleiro.
     await pagina.getByRole("button", { name: "Pedir uma ajuda" }).click();
@@ -193,11 +225,11 @@ async function conferirDica(pagina: Page, dicaId: string, falhas: Falha[]): Prom
       );
     }
     const frase =
-      item.apoio.modo === "contem" ? "A resposta está entre elas." : "Nenhuma delas é a resposta";
+      item.apoio.modo === "contem" ? "O lance chega a uma delas." : "Nenhuma delas é a chegada";
     if (!(await visivel(pagina, frase))) {
       erro(item.id, `o apoio "${item.apoio.modo}" não escreveu como ler o realce`);
     }
-    await pagina.getByRole("button", { name: "Ver a resposta explicada" }).click();
+    await pagina.getByRole("button", { name: "Ver o lance explicado" }).click();
     if (!(await visivel(pagina, item.apoio.solucao.slice(0, 40)))) {
       erro(item.id, "a solução do nível 3 não apareceu");
     }
@@ -209,48 +241,50 @@ async function conferirDica(pagina: Page, dicaId: string, falhas: Falha[]): Prom
       erro(item.id, "o tabuleiro saiu da tela enquanto a solução era lida");
     }
 
-    // 4. A resposta. O segundo exercício responde pelo **teclado**, que é o
-    //    caminho que nenhum outro passo deste script exercita.
+    // 4. O lance do tema. O segundo exercício é jogado pelo **teclado**, que é o
+    //    caminho que nenhum outro passo deste script exercita — e que aqui pede
+    //    duas casas, e não uma.
     if (i === 1) {
-      const casa = casaDoTabuleiro(pagina, aceitas[0]);
-      await casa.focus();
+      await casaDoTabuleiro(pagina, certo.slice(0, 2)).focus();
+      await pagina.keyboard.press("Enter");
+      if (!(await visivel(pagina, `Peça de ${certo.slice(0, 2)} escolhida`))) {
+        erro(item.id, "o teclado escolheu a origem e a tela não disse que ela estava escolhida");
+      }
+      await casaDoTabuleiro(pagina, certo.slice(2, 4)).focus();
       await pagina.keyboard.press("Enter");
     } else {
-      await tocar(pagina, aceitas[0]);
+      await jogar(pagina, certo);
     }
-    if (!(await visivel(pagina, `Isso: ${aceitas.join(", ")}.`))) {
-      erro(item.id, `a resposta ${aceitas[0]} não foi aceita`);
+    if (!(await visivel(pagina, `Isso: ${certo.slice(0, 2)} para ${certo.slice(2, 4)}.`))) {
+      erro(item.id, `o lance ${certo} não foi aceito`);
+    }
+    // Os outros lances do tema são ditos, e não escondidos.
+    if (aceitos.length > 1 && !(await visivel(pagina, "Também serv"))) {
+      erro(item.id, "a tela não disse que os outros lances do tema também serviam");
     }
     itens += 1;
 
-    if (i < treino.reconhecimento.length - 1) {
+    if (i < total - 1) {
       await pagina.getByRole("button", { name: "Próximo exercício" }).click();
       await tabuleiroPronto(pagina);
     }
   }
 
-  // 5. A aplicação, na mesma tela e com o mesmo tabuleiro.
-  const aplicacao = pagina.getByRole("heading", { name: "Agora a razão" });
-  try {
-    await aplicacao.waitFor({ state: "visible", timeout: 8000 });
-  } catch {
-    erro(treino.aplicacao.id, "a aplicação não apareceu depois do terceiro acerto");
-    return itens;
+  // 5. O que **não** pode estar na tela: o quiz de três alternativas e a caixa
+  //    "li" saíram por decisão do Doug em 2026-09-07, e uma tela que os traz de
+  //    volta é uma tela que voltou a medir declaração em vez de trabalho.
+  if (await pagina.getByRole("heading", { name: "Pergunta" }).isVisible().catch(() => false)) {
+    erro(dicaId, "o quiz de três alternativas voltou para a tela");
   }
-  const boardsNaTela = await pagina.locator("cg-board").count();
-  if (boardsNaTela !== 1) {
-    erro(treino.aplicacao.id, `a aplicação apareceu com ${boardsNaTela} tabuleiros na tela`);
+  if (await pagina.getByText("Já li esta dica").isVisible().catch(() => false)) {
+    erro(dicaId, 'a caixa "li" voltou para a tela');
   }
-  const certa = treino.aplicacao.opcoes.findIndex((o) => o.certa);
-  await pagina.getByRole("button", { name: treino.aplicacao.opcoes[certa].texto }).click();
-  if (!(await visivel(pagina, "É essa."))) {
-    erro(treino.aplicacao.id, "a opção certa não foi reconhecida");
-  }
+
   // A gravação sai sem `await` (a tela não espera a rede para dar o veredito),
   // e fechar o navegador no instante seguinte aborta a requisição. Este respiro
-  // é do robô: o aluno de verdade lê o "É essa." antes de sair da página.
+  // é do robô: o aluno de verdade lê o "Isso:" antes de sair da página.
   await pagina.waitForTimeout(1500);
-  return itens + 1;
+  return itens;
 }
 
 async function principal(): Promise<void> {

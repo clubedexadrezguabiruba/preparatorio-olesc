@@ -119,12 +119,13 @@ export default async function MeioJogo() {
                     <div className="flex min-w-0 flex-1 flex-col gap-1">
                       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                         <p className="text-sm font-medium text-tinta">{dica.titulo}</p>
-                        {/* Os três de reconhecimento mais a aplicação. Contado do
-                            conteúdo, e não escrito à mão: uma dica que ganhar
-                            reserva no Bloco 6 muda o número sozinha. */}
+                        {/* Contado do conteúdo, e não escrito à mão: uma dica
+                            que subir de dois para cinco exercícios muda o
+                            número sozinha. */}
                         {dica.treino ? (
                           <span className="rotulo shrink-0 rounded-full bg-metodo-superficie/16 px-2 py-0.5 text-metodo-tinta">
-                            {dica.treino.reconhecimento.length + 1} exercícios
+                            {dica.treino.exercicios.length}{" "}
+                            {dica.treino.exercicios.length === 1 ? "exercício" : "exercícios"}
                           </span>
                         ) : null}
                       </div>

@@ -73,7 +73,7 @@ if (!alguma) console.log("  nenhuma tarefa com resposta única — a posição n
 const dicas = validarDicas(
   JSON.parse(readFileSync(path.join(RAIZ, "content", "meio-jogo.json"), "utf8")),
 );
-const publicadas = dicas.flatMap((d) => (d.treino?.reconhecimento ?? []).map((i) => i));
+const publicadas = dicas.flatMap((d) => (d.treino?.exercicios ?? []).map((i) => i));
 let pior = { quanto: 0, id: "—" };
 for (const item of publicadas) {
   const quanto = semelhancaDePosicoes(fen, item.fen);

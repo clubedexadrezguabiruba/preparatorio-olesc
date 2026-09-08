@@ -76,6 +76,15 @@ export type ContratoDeLance = {
   readonly enunciado: string;
   /** A linha do erro: por que aquele lance não é o do tema. */
   readonly foraDoTema: string;
+  /**
+   * A linha do lance que **aplica** o tema e o motor reprovou.
+   *
+   * Ela é a mais difícil de escrever das três, e é a que mais ensina: o aluno
+   * fez o que a dica manda e perdeu. A frase não pode desdizer a dica ("então
+   * não ocupe a coluna") nem elogiar o erro — ela diz que o padrão está certo e
+   * que a conta da casa é a metade seguinte.
+   */
+  readonly custaCaro: string;
   /** Uma posição em que o tema tem lance, com os lances que o aplicam. */
   readonly exemplo: {
     readonly fen: string;
@@ -195,6 +204,8 @@ export const JUIZES: readonly JuizDeLance[] = [
       enunciado: "Há uma coluna sem peão nenhum. Leve uma torre ou a dama para ela.",
       foraDoTema:
         "Esse lance é legal, mas não é o da dica: ele não põe peça pesada na coluna aberta.",
+      custaCaro:
+        "Ocupar a coluna é o padrão certo, e este lance a ocupa. O que ele não conferiu foi o preço da casa: quem chega tem de aguentar ficar lá.",
       exemplo: {
         // A mesma posição do exemplo de `coluna-aberta`: a f é a única aberta,
         // e a torre de h1 é quem chega nela.
@@ -231,6 +242,8 @@ export const JUIZES: readonly JuizDeLance[] = [
         "Nesta coluna você não tem peão e ele tem. Leve uma torre ou a dama para essa coluna.",
       foraDoTema:
         "Esse lance é legal, mas não é o da dica: ele não põe peça pesada na coluna semiaberta.",
+      custaCaro:
+        "A ideia está certa — a peça pesada foi para a coluna do peão dele. O que faltou foi olhar quem defende a casa em que ela parou.",
       exemplo: {
         // d é a única semiaberta para as brancas, e o peão dele em d6 é o alvo.
         // As duas torres chegam a d1 — e as duas contam.
@@ -267,6 +280,8 @@ export const JUIZES: readonly JuizDeLance[] = [
       lanceMultiplo: "qualquer torre que chegue à sétima aplica o tema.",
       enunciado: "Leve uma torre para a fileira dos peões dele — a sétima.",
       foraDoTema: "Esse lance é legal, mas não é o da dica: nenhuma torre sua chegou à sétima.",
+      custaCaro:
+        "A sétima é o lugar certo para a torre, e ela chegou lá. Só que chegar não basta: nesta casa ela é capturada ou expulsa, e a invasão acaba antes de render.",
       exemplo: {
         fen: "2r3k1/p1p3pp/1p6/8/8/8/PPP3PP/2KR4 w - - 0 1",
         lado: "brancas",
@@ -306,6 +321,8 @@ export const JUIZES: readonly JuizDeLance[] = [
       enunciado: "O peão dele não tem vizinho. Ocupe a casa bem na frente dele.",
       foraDoTema:
         "Esse lance é legal, mas não é o da dica: ele não põe peça nenhuma na frente do isolado.",
+      custaCaro:
+        "Bloquear o isolado é o plano certo, e esta peça bloqueia. O problema é quem paga a conta: a casa da frente também precisa ser sustentável para a peça que senta nela.",
       exemplo: {
         // O isolado é o d4 das brancas; quem joga é quem o bloqueia, e quatro
         // peças pretas chegam a d5.
@@ -342,6 +359,8 @@ export const JUIZES: readonly JuizDeLance[] = [
       enunciado: "Ele tem dois peões na mesma coluna. Leve uma torre ou a dama para essa coluna.",
       foraDoTema:
         "Esse lance é legal, mas não é o da dica: ele não põe peça pesada na coluna dobrada.",
+      custaCaro:
+        "A coluna dos dois peões é o endereço certo, e este lance vai até lá. O que ele não olhou foi o que acontece com a peça depois de chegar.",
       exemplo: {
         // A dobra preta é na e (e5 e e6); quem joga são as brancas, e a dama de
         // d1 é quem chega à coluna.
@@ -396,6 +415,8 @@ export const JUIZES: readonly JuizDeLance[] = [
       foraDoTema:
         "Esse lance é legal, mas não é o da dica: depois dele o seu bispo continua com os mesmos " +
         "peões na frente.",
+      custaCaro:
+        "Tirar o peão da cor do bispo é a ideia da dica, e este lance tira. Só que peão não volta: o buraco que ele deixou atrás custa mais do que o bispo ganhou.",
       exemplo: {
         // O bispo de c1 anda em casas escuras, e b2, d4, f2 e h2 estão nelas.
         // Cada avanço para casa clara conta — e Bxg5 é a outra metade da dica.
@@ -432,6 +453,8 @@ export const JUIZES: readonly JuizDeLance[] = [
       enunciado:
         "Há uma casa que nenhum peão dele alcança e um peão seu defende. Leve um cavalo até ela.",
       foraDoTema: "Esse lance é legal, mas não é o da dica: nenhum cavalo seu ocupou o posto.",
+      custaCaro:
+        "O posto é a casa certa para o cavalo, e este lance o leva até lá. O que faltou foi a ordem: chegar agora custa material, e o posto continua lá no lance seguinte.",
       exemplo: {
         fen: "4k3/pp3ppp/8/2P2N2/1P6/8/5PPP/4K3 w - - 0 1",
         lado: "brancas",
@@ -465,6 +488,8 @@ export const JUIZES: readonly JuizDeLance[] = [
       enunciado: "O peão dele já passou. Ponha uma peça bem na frente dele.",
       foraDoTema:
         "Esse lance é legal, mas não é o da dica: o peão passado dele continua com a frente livre.",
+      custaCaro:
+        "Parar o peão passado é o plano certo, e esta peça o para. O preço é que ela fica presa ali — ou é capturada antes de bloquear coisa nenhuma.",
       exemplo: {
         fen: "3r3k/1b6/5n2/3p4/8/1N6/5B2/6K1 w - - 0 1",
         lado: "brancas",

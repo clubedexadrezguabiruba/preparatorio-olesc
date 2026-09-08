@@ -6,23 +6,28 @@ import { fileURLToPath } from "node:url";
 import { Chess } from "chess.js";
 import { lancesDescritivos, lerPartida, normalizar } from "./descritiva.ts";
 import {
+  EXERCICIOS_ALVO,
+  EXERCICIOS_PISO,
   problemasEntreDicas,
+  SALTO_DA_PORTA_2,
   semelhancaDePosicoes,
   problemasDoTreino,
   saldoDeMaterial,
   validarDicas,
   type Dica,
 } from "./dicas.ts";
-import { respostaDaTarefa, tarefaPorId, MAPA } from "./exercicios.ts";
+import { MAPA } from "./exercicios.ts";
+import { juizDaDica, uciDe } from "./lances.ts";
+import { lancesDoItem } from "./tentativa.ts";
 import { porta1 } from "./portas.ts";
 
 /**
  * O treino do meio-jogo: o conteúdo curado, e o gate que o recusa quando torto.
  *
  * A disciplina é a de `exercicios.test.ts`: **caso favorável e caso
- * adversarial**. O favorável roda sobre o conteúdo de verdade — toda posição de
- * treino publicada tem de devolver, no juiz, exatamente a resposta escrita nela.
- * O adversarial constrói de propósito cada defeito que a revisão previu e cobra
+ * adversarial**. O favorável roda sobre o conteúdo de verdade — todo exercício
+ * publicado tem de devolver, no juiz, exatamente os lances escritos nele. O
+ * adversarial constrói de propósito cada defeito que a revisão previu e cobra
  * que `problemasDoTreino` o nomeie.
  *
  * O adversarial é o que importa. Um gate que só foi visto passar é um gate que
@@ -53,63 +58,136 @@ test("o conteúdo publicado não tem nenhum problema de treino", () => {
   }
 });
 
-test("a resposta escrita em cada item é a que o juiz do clique devolve", () => {
+test("os lances escritos em cada item são os que o juiz devolve", () => {
   // A mesma conferência que o gate faz, rodada aqui porque este é o teste que
-  // roda em toda quinta: se `respostaDaTarefa` mudar de critério, o conteúdo
+  // roda em toda quinta: se `lancesQueAplicam` mudar de critério, o conteúdo
   // publicado reprova no `npm test` antes de reprovar na tela do aluno.
   let itens = 0;
   for (const dica of COM_TREINO) {
-    for (const item of dica.treino?.reconhecimento ?? []) {
-      const tarefa = tarefaPorId(item.tarefa);
-      assert.ok(tarefa, `${item.id}: tarefa "${item.tarefa}" não existe`);
-      assert.deepEqual(
-        respostaDaTarefa(item.fen, tarefa, item.lado),
-        [...item.resposta].sort(),
-        `${item.id}: a resposta escrita não é a do juiz`,
-      );
+    const juiz = juizDaDica(dica.id);
+    assert.ok(juiz, `${dica.id}: não há juiz de lance escrito`);
+    for (const item of dica.treino?.exercicios ?? []) {
+      const doJuiz = juiz.lances(item.fen, item.lado);
+      if (doJuiz.length > 0) {
+        // Aceitos **mais** recusados: o juiz devolve todo lance que aplica o
+        // tema, e os que o motor reprovou não somem — eles ganham a terceira
+        // frase da tela em vez de virarem "esse não é o lance desta dica".
+        assert.deepEqual(
+          doJuiz,
+          [...item.lancesAceitos, ...item.lancesRecusados.map((r) => r.lance)].sort(),
+          `${item.id}: os lances escritos não são os do juiz`,
+        );
+        assert.deepEqual(
+          lancesDoItem(item),
+          [...item.lancesAceitos].sort(),
+          `${item.id}: o juiz de tela aceita um lance que o motor reprovou`,
+        );
+      } else {
+        assert.ok(
+          item.porqueAceitos !== null,
+          `${item.id}: camada autoral sem "porqueAceitos"`,
+        );
+      }
       itens += 1;
     }
   }
-  console.log(`  meio-jogo: ${itens} item(ns) de reconhecimento conferidos pelo juiz`);
+  console.log(`  meio-jogo: ${itens} exercício(s) de lance conferidos pelo juiz`);
 });
 
-test("toda posição de treino está quieta — a porta 1 re-rodada", () => {
+test("todo lance aceito é legal, e é da vez de quem aplica o tema", () => {
   for (const dica of COM_TREINO) {
-    for (const item of dica.treino?.reconhecimento ?? []) {
-      assert.equal(porta1(item.fen), null, `${item.id} reprova na porta 1`);
-      assert.equal(item.curadoria.portas.porta1, "passou");
+    const juiz = juizDaDica(dica.id)!;
+    for (const item of dica.treino?.exercicios ?? []) {
+      const jogo = new Chess(item.fen);
+      assert.equal(
+        jogo.turn(),
+        juiz.quemJoga(item.lado) === "brancas" ? "w" : "b",
+        `${item.id}: a vez não é de quem aplica o tema`,
+      );
+      const legais = new Set(jogo.moves({ verbose: true }).map(uciDe));
+      for (const lance of item.lancesAceitos) {
+        assert.ok(legais.has(lance), `${item.id}: o lance "${lance}" não é legal`);
+      }
     }
   }
 });
 
-test("a tarefa de cada item é a que o MAPA dá à dica", () => {
+test("todo lance aceito tem número do motor, e nenhum passa do teto", () => {
+  // A regra dura do plano, conferida no conteúdo: um lance que aplica o tema e
+  // perde a partida ensina o contrário da dica.
   for (const dica of COM_TREINO) {
-    const noMapa = MAPA.find((n) => n.dica === dica.id);
-    for (const item of dica.treino?.reconhecimento ?? []) {
-      assert.equal(item.tarefa, noMapa?.tarefa, `${item.id} usa tarefa fora do mapa`);
-    }
-  }
-});
-
-test("nenhuma legenda de item entrega a casa da resposta", () => {
-  for (const dica of COM_TREINO) {
-    for (const item of dica.treino?.reconhecimento ?? []) {
-      for (const casa of item.resposta) {
+    for (const item of dica.treino?.exercicios ?? []) {
+      const custos = item.curadoria.portas.custos;
+      assert.equal(
+        custos.length,
+        item.lancesAceitos.length,
+        `${item.id}: ${item.lancesAceitos.length} lance(s) e ${custos.length} número(s)`,
+      );
+      for (const custo of custos) {
         assert.ok(
-          !new RegExp(`\\b${casa}\\b`).test(item.legenda),
-          `${item.id}: a legenda cita "${casa}"`,
+          Math.abs(custo) <= SALTO_DA_PORTA_2,
+          `${item.id}: um lance custa ${custo} centésimos, e o teto é ${SALTO_DA_PORTA_2}`,
         );
       }
     }
   }
 });
 
-test("nenhuma FEN de treino repete uma FEN de ensino", () => {
+test("toda posição de exercício está quieta — a porta 1 re-rodada", () => {
+  for (const dica of COM_TREINO) {
+    for (const item of dica.treino?.exercicios ?? []) {
+      assert.equal(porta1(item.fen), null, `${item.id} reprova na porta 1`);
+      assert.equal(item.curadoria.portas.porta1, "passou");
+    }
+  }
+});
+
+test("a tarefa de cada item é a do juiz da dica, e o juiz é o do MAPA", () => {
+  for (const dica of COM_TREINO) {
+    const noMapa = MAPA.find((n) => n.dica === dica.id);
+    const juiz = juizDaDica(dica.id)!;
+    assert.equal(juiz.id, noMapa?.tarefa, `${dica.id}: o juiz não é a tarefa do MAPA`);
+    for (const item of dica.treino?.exercicios ?? []) {
+      assert.equal(item.tarefa, juiz.id, `${item.id} usa tarefa fora do juiz`);
+    }
+  }
+});
+
+test("nenhuma legenda de item entrega a casa de chegada", () => {
+  for (const dica of COM_TREINO) {
+    for (const item of dica.treino?.exercicios ?? []) {
+      for (const lance of item.lancesAceitos) {
+        const destino = lance.slice(2, 4);
+        assert.ok(
+          !new RegExp(`\\b${destino}\\b`).test(item.legenda),
+          `${item.id}: a legenda cita "${destino}"`,
+        );
+      }
+    }
+  }
+});
+
+test("cada dica com treino tem de dois a cinco exercícios", () => {
+  for (const dica of COM_TREINO) {
+    const quantos = dica.treino!.exercicios.length;
+    assert.ok(
+      quantos >= EXERCICIOS_PISO && quantos <= EXERCICIOS_ALVO,
+      `${dica.id} tem ${quantos} exercício(s)`,
+    );
+  }
+  const cinco = COM_TREINO.filter((d) => d.treino!.exercicios.length === EXERCICIOS_ALVO).length;
+  console.log(
+    `  meio-jogo: ${COM_TREINO.length} tema(s) com pelo menos ${EXERCICIOS_PISO} exercícios, ` +
+      `${cinco} deles com ${EXERCICIOS_ALVO}`,
+  );
+});
+
+test("nenhuma FEN de exercício repete uma FEN de ensino", () => {
   // Repetir a posição do exemplo como exercício seria testar memória da tela
-  // anterior, e o registro contaria isso como reconhecimento.
+  // anterior, e o registro contaria isso como aprendizado.
   const doEnsino = new Set(DICAS.flatMap((d) => d.posicoes.map((p) => p.fen)));
   for (const dica of COM_TREINO) {
-    for (const item of dica.treino?.reconhecimento ?? []) {
+    for (const item of dica.treino?.exercicios ?? []) {
       assert.ok(!doEnsino.has(item.fen), `${item.id} usa a FEN de uma posição de ensino`);
     }
   }
@@ -129,45 +207,119 @@ function m12Sadio(): Dica {
 /** Os códigos que `problemasDoTreino` devolve para uma dica. */
 const codigos = (dica: Dica): string[] => problemasDoTreino(dica).map((p) => p.codigo);
 
-test("adversarial: a resposta que o juiz desmente reprova", () => {
+test("adversarial: o lance que o juiz desmente reprova", () => {
+  // O defeito que a tela mostraria como "joguei o lance certo e o site recusou".
   const dica = m12Sadio();
-  dica.treino!.reconhecimento[0].resposta = ["e5"];
-  assert.ok(codigos(dica).includes("RESPOSTA_DESMENTIDA"), codigos(dica).join(","));
+  const item = dica.treino!.exercicios[0];
+  item.lancesAceitos = [...item.lancesAceitos, "e2e4"];
+  assert.ok(codigos(dica).includes("LANCES_DESMENTIDOS"), codigos(dica).join(","));
 });
 
-test("adversarial: a posição com duas respostas certas reprova", () => {
-  // O defeito que a tela mostraria como "acertei e o site disse que errei".
+test("adversarial: a FEN com a vez do lado errado reprova", () => {
   const dica = m12Sadio();
-  dica.treino!.reconhecimento[0].fen = "4k3/8/8/8/8/8/P1P5/4K3 w - - 0 1";
-  dica.treino!.reconhecimento[0].lado = "brancas";
-  dica.treino!.reconhecimento[0].resposta = ["a2"];
-  assert.ok(codigos(dica).includes("POSICAO_SEM_RESPOSTA_UNICA"), codigos(dica).join(","));
+  const item = dica.treino!.exercicios[0];
+  item.fen = item.fen.replace(/ (w|b) /, item.fen.includes(" w ") ? " b " : " w ");
+  assert.ok(codigos(dica).includes("VEZ_DO_LADO_ERRADO"), codigos(dica).join(","));
 });
 
-test("adversarial: a legenda que cita a casa da resposta reprova", () => {
+test("adversarial: o lance aceito que não é legal reprova", () => {
   const dica = m12Sadio();
-  dica.treino!.reconhecimento[0].legenda = "As brancas jogam; repare no peão preto de d5.";
+  dica.treino!.exercicios[0].lancesAceitos = ["a1a8"];
+  assert.ok(codigos(dica).includes("LANCE_ILEGAL"), codigos(dica).join(","));
+});
+
+test("adversarial: lance aceito sem número do motor reprova", () => {
+  // A regra dura sem prova é a regra dura desligada: sem o custo medido, o
+  // conteúdo pode estar ensinando o contrário da dica e ninguém saberia.
+  const dica = m12Sadio();
+  dica.treino!.exercicios[0].curadoria.portas.custos = [];
+  assert.ok(codigos(dica).includes("MOTOR_SEM_NUMERO"), codigos(dica).join(","));
+});
+
+test("adversarial: a camada autoral calada reprova", () => {
+  // Uma posição em que o juiz geométrico não acha lance nenhum só pode virar
+  // item se alguém escrever por que aqueles lances valem.
+  const dica = m12Sadio();
+  const item = dica.treino!.exercicios[0];
+  // Uma posição sem peão isolado nenhum: o juiz devolve vazio.
+  item.fen = "4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3 b - - 0 1";
+  item.lado = "brancas";
+  item.lancesAceitos = ["e7e5"];
+  item.porqueAceitos = null;
+  assert.ok(codigos(dica).includes("CAMADA_AUTORAL_MUDA"), codigos(dica).join(","));
+});
+
+test("adversarial: justificativa ao lado de lista derivada reprova", () => {
+  const dica = m12Sadio();
+  dica.treino!.exercicios[0].porqueAceitos =
+    "Uma justificativa longa o bastante para o esquema aceitar, e sem motivo nenhum para existir.";
+  assert.ok(codigos(dica).includes("PORQUE_SOBRANDO"), codigos(dica).join(","));
+});
+
+test("adversarial: a legenda que cita a casa de chegada reprova", () => {
+  const dica = m12Sadio();
+  const item = dica.treino!.exercicios[0];
+  item.legenda = `As pretas jogam; a casa ${item.lancesAceitos[0].slice(2, 4)} está livre.`;
   assert.ok(codigos(dica).includes("LEGENDA_ENTREGA"), codigos(dica).join(","));
 });
 
-test("adversarial: o apoio que não acende a resposta reprova", () => {
+test("adversarial: o apoio que não acende a chegada reprova", () => {
   const dica = m12Sadio();
-  dica.treino!.reconhecimento[0].apoio.realce = ["a6", "b5", "f7", "g7"];
-  assert.ok(codigos(dica).includes("APOIO_NAO_CONTEM_A_RESPOSTA"), codigos(dica).join(","));
+  const item = dica.treino!.exercicios[0];
+  item.apoio.modo = "contem";
+  item.apoio.realce = ["a1", "b1", "c1"];
+  assert.ok(codigos(dica).includes("APOIO_NAO_CONTEM_O_DESTINO"), codigos(dica).join(","));
 });
 
-test("adversarial: o apoio que **é** a resposta reprova", () => {
-  // O nível 2 vira o nível 3: acender só a casa certa não estreita o campo,
-  // entrega o exercício — e o registro contaria como "resolvido com apoio 2".
+test("adversarial: o apoio que **é** a chegada reprova", () => {
+  // O nível 2 vira o nível 3: acender só a casa de chegada não estreita o
+  // campo, entrega o exercício — e o registro contaria como "resolvido com
+  // apoio 2".
   const dica = m12Sadio();
-  dica.treino!.reconhecimento[0].apoio.realce = ["d5"];
+  const item = dica.treino!.exercicios[0];
+  item.apoio.modo = "contem";
+  item.apoio.realce = [...new Set(item.lancesAceitos.map((l) => l.slice(2, 4)))];
   assert.ok(codigos(dica).includes("APOIO_E_A_RESPOSTA"), codigos(dica).join(","));
 });
 
-test("adversarial: a posição guiada da mesma obra do exemplo reprova", () => {
+test("adversarial: o contorno que toca a chegada reprova", () => {
   const dica = m12Sadio();
-  dica.treino!.reconhecimento[0].provenance.editionFile = dica.posicoes[0].provenance.editionFile;
-  assert.ok(codigos(dica).includes("GUIADA_DA_MESMA_OBRA"), codigos(dica).join(","));
+  const item = dica.treino!.exercicios[0];
+  item.apoio.modo = "contorno";
+  item.apoio.realce = ["a1", item.lancesAceitos[0].slice(2, 4)];
+  assert.ok(codigos(dica).includes("CONTORNO_TOCA_A_RESPOSTA"), codigos(dica).join(","));
+});
+
+test("adversarial: a solução que não nomeia o lance reprova", () => {
+  // O nível 3 da escada é a frase que o aluno lê depois de desistir: "a coluna
+  // do meio" não diz o que ele tem de arrastar.
+  const dica = m12Sadio();
+  dica.treino!.exercicios[0].apoio.solucao =
+    "A ideia é ocupar a casa da frente do peão que não tem vizinho nenhum.";
+  assert.ok(codigos(dica).includes("SOLUCAO_SEM_LANCE"), codigos(dica).join(","));
+});
+
+test("adversarial: a posição em xeque reprova na porta 1", () => {
+  const dica = m12Sadio();
+  // Rei preto em e8 com a dama branca colada em e7: a porta 1 recusa antes de
+  // qualquer outra conferência, porque numa posição em xeque o lance urgente é
+  // o xeque, e não o tema que a pergunta manda aplicar.
+  dica.treino!.exercicios[0].fen = "4k3/4Q3/8/8/8/3p4/8/4K3 b - - 0 1";
+  assert.ok(codigos(dica).includes("PORTA_1"), codigos(dica).join(","));
+});
+
+test("adversarial: material desigual sem a frase que o declara reprova", () => {
+  const dica = m12Sadio();
+  const comSaldo = dica.treino!.exercicios.find((i) => saldoDeMaterial(i.fen) !== 0);
+  assert.ok(comSaldo, "m12 precisa de um exercício com material desigual para este teste");
+  comSaldo.material = null;
+  assert.ok(codigos(dica).includes("MATERIAL_CALADO"), codigos(dica).join(","));
+});
+
+test("adversarial: o exercício da mesma obra do exemplo reprova", () => {
+  const dica = m12Sadio();
+  dica.treino!.exercicios[0].provenance.editionFile = dica.posicoes[0].provenance.editionFile;
+  assert.ok(codigos(dica).includes("EXERCICIO_DA_MESMA_OBRA"), codigos(dica).join(","));
 });
 
 test("adversarial: duas edições do mesmo livro contam como a mesma obra", () => {
@@ -176,55 +328,20 @@ test("adversarial: duas edições do mesmo livro contam como a mesma obra", () =
   // próprio motivo dela.
   const dica = m12Sadio();
   dica.posicoes[0].provenance.editionFile = "capablanca-fundamentals-reimpressao";
-  assert.ok(codigos(dica).includes("GUIADA_DA_MESMA_OBRA"), codigos(dica).join(","));
+  dica.treino!.exercicios[0].provenance.editionFile = "capablanca-1921";
+  assert.ok(codigos(dica).includes("EXERCICIO_DA_MESMA_OBRA"), codigos(dica).join(","));
 });
 
-test("adversarial: o item do degrau 3 sem partida reprova", () => {
+test("adversarial: treino numa dica sem juiz de lance reprova", () => {
   const dica = m12Sadio();
-  dica.treino!.reconhecimento[2].provenance.originalGame = null;
-  assert.ok(codigos(dica).includes("INDEPENDENTE_SEM_PARTIDA"), codigos(dica).join(","));
+  dica.id = "m2"; // `m2` ainda não tem juiz de lance escrito.
+  assert.ok(codigos(dica).includes("TREINO_SEM_JUIZ"), codigos(dica).join(","));
 });
 
-test("adversarial: a posição em xeque reprova na porta 1", () => {
+test("adversarial: item com tarefa que não é a do juiz reprova", () => {
   const dica = m12Sadio();
-  // Rei preto em e8 com a dama branca colada em e7: a porta 1 recusa antes de
-  // qualquer outra conferência, porque numa posição em xeque o lance urgente é
-  // o xeque, e não a estrutura que a pergunta manda procurar.
-  dica.treino!.reconhecimento[2].fen = "4k3/4Q3/8/8/8/8/P1P5/4K3 b - - 0 1";
-  assert.ok(codigos(dica).includes("PORTA_1"), codigos(dica).join(","));
-});
-
-test("adversarial: material desigual sem a frase que o declara reprova", () => {
-  const dica = m12Sadio();
-  dica.treino!.reconhecimento[2].material = null;
-  assert.ok(codigos(dica).includes("MATERIAL_CALADO"), codigos(dica).join(","));
-});
-
-test("adversarial: os degraus fora da ordem 2-2-3 reprovam", () => {
-  const dica = m12Sadio();
-  dica.treino!.reconhecimento[0].degrau = 3;
-  assert.ok(codigos(dica).includes("DEGRAUS_FORA_DE_ORDEM"), codigos(dica).join(","));
-});
-
-test("adversarial: a aplicação em outra posição reprova", () => {
-  const dica = m12Sadio();
-  dica.treino!.aplicacao.usa = "m12-d3-z";
-  assert.ok(codigos(dica).includes("APLICACAO_EM_OUTRA_POSICAO"), codigos(dica).join(","));
-});
-
-test("adversarial: o gabarito com duas certas, ou nenhuma, reprova", () => {
-  const dica = m12Sadio();
-  dica.treino!.aplicacao.opcoes[1].certa = true;
-  assert.ok(codigos(dica).includes("GABARITO_AMBIGUO"), codigos(dica).join(","));
-  dica.treino!.aplicacao.opcoes[0].certa = false;
-  dica.treino!.aplicacao.opcoes[1].certa = false;
-  assert.ok(codigos(dica).includes("GABARITO_AMBIGUO"), codigos(dica).join(","));
-});
-
-test("adversarial: treino numa dica sem tarefa no mapa reprova", () => {
-  const dica = m12Sadio();
-  dica.id = "m2"; // `m2` é julgamento puro: o MAPA não lhe dá tarefa.
-  assert.ok(codigos(dica).includes("TREINO_SEM_TAREFA"), codigos(dica).join(","));
+  dica.treino!.exercicios[0].tarefa = "posto";
+  assert.ok(codigos(dica).includes("TAREFA_FORA_DO_JUIZ"), codigos(dica).join(","));
 });
 
 /* ------------------------------------------------------------------ *
@@ -337,7 +454,7 @@ test("adversarial: duas posições quase iguais reprovam", () => {
   const m10 = DICAS.find((d) => d.id === "m10");
   assert.ok(m9?.treino && m10?.treino);
   const copia = JSON.parse(JSON.stringify([m9, m10])) as Dica[];
-  copia[1].treino!.reconhecimento[0].fen = copia[0].treino!.reconhecimento[0].fen;
+  copia[1].treino!.exercicios[0].fen = copia[0].treino!.exercicios[0].fen;
   const problemas = problemasEntreDicas(copia);
   assert.ok(
     problemas.some((p) => p.codigo === "POSICOES_QUASE_IGUAIS"),
@@ -350,8 +467,8 @@ test("adversarial: posições de treino além do teto do capítulo reprovam", ()
   // mesma partida esvaziam o capítulo sem estourar nenhum teto por dica.
   const dicas = ["m9", "m10", "m11", "m12"].map((id) => {
     const d = JSON.parse(JSON.stringify(DICAS.find((x) => x.id === id))) as Dica;
-    d.treino!.reconhecimento[0].provenance.editionFile = "capablanca-1921";
-    d.treino!.reconhecimento[0].provenance.capitulo = "Illustrative Games — Game 7";
+    d.treino!.exercicios[0].provenance.editionFile = "capablanca-1921";
+    d.treino!.exercicios[0].provenance.capitulo = "Illustrative Games — Game 7";
     return d;
   });
   const problemas = problemasEntreDicas(dicas);
@@ -368,53 +485,9 @@ test("duas posições do mesmo capítulo, em dicas diferentes, passam se forem d
   const m12 = DICAS.find((d) => d.id === "m12");
   const copia = JSON.parse(JSON.stringify([m9, m12])) as Dica[];
   const cap = "Illustrative Games — Game 7";
-  copia[0].treino!.reconhecimento[0].provenance.capitulo = cap;
-  copia[1].treino!.reconhecimento[0].provenance.capitulo = cap;
-  copia[0].treino!.reconhecimento[0].provenance.editionFile = "capablanca-1921";
-  copia[1].treino!.reconhecimento[0].provenance.editionFile = "capablanca-1921";
+  copia[0].treino!.exercicios[0].provenance.capitulo = cap;
+  copia[1].treino!.exercicios[0].provenance.capitulo = cap;
+  copia[0].treino!.exercicios[0].provenance.editionFile = "capablanca-1921";
+  copia[1].treino!.exercicios[0].provenance.editionFile = "capablanca-1921";
   assert.deepEqual(problemasEntreDicas(copia), []);
-});
-
-/* ------------------------------------------------------------------ *
- * O corte da §5, declarado
- * ------------------------------------------------------------------ */
-
-test("adversarial: guiada de partida real sem exceção escrita reprova", () => {
-  const dica = m12Sadio();
-  const item = dica.treino!.reconhecimento[0];
-  item.provenance.capitulo = null;
-  item.provenance.originalGame = "lichess.org/training/xxxxx";
-  item.provenance.editionFile = "lichess-open-database";
-  assert.ok(codigos(dica).includes("GUIADA_SEM_CAPITULO"), codigos(dica).join(","));
-});
-
-test("a guiada de partida real passa quando a exceção está escrita", () => {
-  // O corte que a §5 prevê — "cai uma das duas posições guiadas antes de cair a
-  // independente" — existe para o conceito cujo acervo não tem dois diagramas.
-  // Ele é permitido; o que não é permitido é ele acontecer calado.
-  const dica = m12Sadio();
-  const item = dica.treino!.reconhecimento[0];
-  item.provenance.capitulo = null;
-  item.provenance.originalGame = "lichess.org/training/xxxxx";
-  item.provenance.editionFile = "lichess-open-database";
-  item.excecaoDeFonte =
-    "O acervo não tem um segundo diagrama deste conceito em obra diferente da do exemplo, e a §5 manda cortar a guiada antes da independente.";
-  assert.deepEqual(codigos(dica), []);
-});
-
-test("adversarial: exceção declarada numa posição que veio de livro reprova", () => {
-  const dica = m12Sadio();
-  dica.treino!.reconhecimento[0].excecaoDeFonte =
-    "Uma justificativa longa o bastante para o esquema aceitar, e sem motivo nenhum para existir.";
-  assert.ok(codigos(dica).includes("EXCECAO_SEM_EXCECAO"), codigos(dica).join(","));
-});
-
-test("adversarial: exceção declarada no degrau 3 reprova", () => {
-  // No degrau 3 partida real é a regra, e não a exceção — declarar uma ali é
-  // sinal de que quem escreveu não entendeu qual dos dois degraus estava
-  // preenchendo.
-  const dica = m12Sadio();
-  dica.treino!.reconhecimento[2].excecaoDeFonte =
-    "Uma justificativa longa o bastante para o esquema aceitar, no degrau errado.";
-  assert.ok(codigos(dica).includes("EXCECAO_NO_DEGRAU_3"), codigos(dica).join(","));
 });

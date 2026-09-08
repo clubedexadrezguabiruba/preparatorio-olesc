@@ -7,22 +7,18 @@ import { perfilAtual } from "@/lib/auth/perfil";
 import { NIVEIS } from "@/lib/curso/trilha";
 import { camadaDeRealce, ladoDaVez, PALETA_DA_TELA } from "@/lib/diagrama/tabuleiro";
 import { DICAS, dicaPorId, ordemDaDica } from "@/lib/meiojogo/conteudo";
-import { dicasLidas } from "@/lib/meiojogo/progresso";
-import { Li } from "../Li";
+import { Exercicios } from "./Exercicios";
 import { Passos } from "./Passos";
-import { Treino } from "./Treino";
-import { Quiz } from "../Quiz";
 
 /**
  * Uma dica de meio-jogo.
  *
- * ## Dinâmica, ao contrário da aula de finais
+ * ## Dinâmica só pela tranca
  *
- * `/finais/[aula]` é estática e paga uma ida de rede só nas duas aulas que
- * precisam do estado do aluno. Aqui é o contrário, e o motivo é a proporção:
- * **todas** as trinta dicas terminam na caixa "li", então uma consulta na
- * renderização é uma consulta por página aberta — a mesma que a estática pagaria
- * do navegador, um instante depois e com a tela piscando no meio.
+ * Ela era dinâmica porque lia `dica_lida` na renderização. A caixa "li" saiu em
+ * 2026-09-07 e o progresso passou a sair de `tentativa_meiojogo`, então não há
+ * mais estado do aluno nesta página — o que a mantém dinâmica é a chamada de
+ * `perfilAtual`, que é a tranca da rota num projeto sem middleware.
  *
  * ## O que a tela separa, e por quê
  *
@@ -37,14 +33,19 @@ import { Quiz } from "../Quiz";
  * É a mesma disciplina do selo de domínio das aulas de finais, aplicada ao
  * módulo que não tem tablebase para se apoiar.
  *
- * ## A ordem da página, e a proveniência que desceu
+ * ## A ordem da página, e o que saiu dela
  *
  * ```
  * 1 cabeçalho · 2 diagrama grudado + legenda + citação de uma linha
  * 3 explicação passo a passo, cada passo acendendo o que ele cita
- * 4 "o que procurar" + cuidado · 5 pergunta · 6 vídeo · 7 caixa "li"
- * 8 <details> da proveniência · nav
+ * 4 vocabulário · 5 cuidado · 6 exercícios de jogar o lance
+ * 7 vídeo · 8 <details> da proveniência · nav
  * ```
+ *
+ * Saíram, por decisão do Doug em 2026-09-07: o quiz de três alternativas, a
+ * pergunta de duas alternativas do degrau 4, a caixa "li" e o bloco "o que
+ * procurar" (cujo conteúdo dobra dentro da explicação). O que fica é a
+ * apresentação do tema e a prática dele — e mais nada.
  *
  * A proveniência ficava aberta embaixo da legenda, e a justificativa de então
  * continua válida — "o aluno de doze anos não vai lê-la; o professor que abrir
@@ -57,9 +58,8 @@ import { Quiz } from "../Quiz";
  */
 
 export function generateStaticParams() {
-  // A rota é dinâmica na renderização (lê `dica_lida`), mas os ids são
-  // conhecidos na build: declará-los fecha a porta para um `/meio-jogo/m99`
-  // renderizado sob demanda.
+  // Os ids são conhecidos na build, e declará-los fecha a porta para um
+  // `/meio-jogo/m99` renderizado sob demanda.
   return DICAS.map((d) => ({ dica: d.id }));
 }
 
@@ -78,8 +78,13 @@ export default async function DicaDeMeioJogo({ params }: PageProps<"/meio-jogo/[
   const dica = dicaPorId(id);
   if (!dica) notFound();
 
-  const perfil = await perfilAtual();
-  const lidas = await dicasLidas(perfil.id);
+  // A tranca da rota, e o único motivo de esta página continuar dinâmica.
+  //
+  // Ela não lê mais nada do aluno — a caixa "li" saiu, e o progresso passou a
+  // sair de `tentativa_meiojogo`. O que sobrou de `perfilAtual` é o redirecionamento
+  // de quem não entrou: sem middleware no projeto, esta chamada **é** a tranca, e
+  // tirá-la publicaria as trinta dicas para qualquer um com o endereço.
+  await perfilAtual();
 
   // A primeira posição é a que a explicação comenta: é ela que gruda no topo.
   const exemplo = dica.posicoes[0];
@@ -116,10 +121,31 @@ export default async function DicaDeMeioJogo({ params }: PageProps<"/meio-jogo/[
         <Diagrama fen={exemplo.fen} titulo={`Diagrama da dica ${ordem}: ${dica.titulo}`} />
       </Passos>
 
-      {/* As posições além do exemplo. Hoje as 30 dicas têm uma só, e o esquema
-          aceita até três: as duas extras são o reconhecimento guiado do Bloco 3,
-          que ainda não foi curado. Elas não entram no tabuleiro grudado — o que
-          gruda é a posição que a explicação comenta. */}
+      {/* O vocabulário do conceito, dentro da explicação — que é onde ele
+          serve. Ele morava na ficha do treino, ao lado dos pré-requisitos e
+          dos limites da evidência; a ficha visível saiu da tela do aluno por
+          decisão do Doug em 2026-09-07, e dos quatro campos dela este é o
+          único que o aluno usa enquanto lê. Os `limitesDaEvidencia` continuam
+          no arquivo e vão para o relatório do professor, que é de quem eles
+          são. */}
+      {dica.treino ? (
+        <details className="rounded-lg bg-carta px-3 py-2.5">
+          <summary className="foco cursor-pointer text-sm text-tinta-media">
+            As palavras desta dica
+          </summary>
+          <dl className="flex flex-col gap-1.5 pt-2.5">
+            {dica.treino.ficha.vocabulario.map((verbete) => (
+              <div key={verbete.termo} className="text-sm">
+                <dt className="inline font-semibold text-tinta">{verbete.termo}: </dt>
+                <dd className="inline text-tinta-media">{verbete.significa}</dd>
+              </div>
+            ))}
+          </dl>
+        </details>
+      ) : null}
+
+      {/* As posições além do exemplo. Elas não entram no tabuleiro grudado — o
+          que gruda é a posição que a explicação comenta. */}
       {dica.posicoes.slice(1).map((posicao) => (
         <figure key={posicao.fen} className="flex flex-col gap-2">
           <Diagrama fen={posicao.fen} titulo={`Outra posição da dica ${ordem}`} />
@@ -130,20 +156,6 @@ export default async function DicaDeMeioJogo({ params }: PageProps<"/meio-jogo/[
         </figure>
       ))}
 
-      <section className="flex flex-col gap-2 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
-        <h2 className="rotulo text-tinta-fraca">O que procurar no tabuleiro</h2>
-        <ul className="flex flex-col gap-1.5">
-          {dica.procure.map((item) => (
-            <li key={item} className="flex gap-2 text-sm text-tinta-media">
-              <span aria-hidden className="text-tinta-muda">
-                —
-              </span>
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
       {dica.cuidado ? (
         <p className="rounded-lg bg-aviso-superficie/14 px-3 py-2.5 text-sm text-aviso-tinta">
           <span className="font-semibold">Cuidado: </span>
@@ -151,23 +163,21 @@ export default async function DicaDeMeioJogo({ params }: PageProps<"/meio-jogo/[
         </p>
       ) : null}
 
-      {/* O treino das oito dicas curadas (m9–m16). Nas outras 22 `treino` é
-          `null`, e o estado correto delas hoje é não ter exercício nenhum: a
-          expansão para os 30 é pós-torneio.
+      {/* Os exercícios de jogar o lance, quando o conceito já foi curado. Nas
+          outras dicas `treino` é `null`, e o estado correto delas é não ter
+          exercício nenhum: elas continuam no ar com a explicação, e a lista de
+          `/meio-jogo` já marca quais têm prática.
 
           Ele vem **depois** da explicação, e não antes: testar antes de ensinar
           funciona para quem tem o que ativar, e quem testa antes aqui é a
-          revisão espaçada, dias depois. E vem **antes** da pergunta de plano,
-          que continua sendo julgamento do autor e continua não sendo gravada —
-          a ordem separa o que a máquina julga do que o autor julga. */}
-      {dica.treino ? <Treino dica={dica.id} treino={dica.treino} /> : null}
-
-      <Quiz
-        pergunta={dica.quiz.pergunta}
-        opcoes={dica.quiz.opcoes}
-        certa={dica.quiz.certa}
-        porque={dica.quiz.porque}
-      />
+          revisão espaçada, dias depois. */}
+      {dica.treino ? <Exercicios dica={dica.id} treino={dica.treino} /> : (
+        <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-3 text-sm text-tinta-media">
+          Esta dica ainda não tem exercício. Ela está aqui para ser lida e
+          usada na partida — a prática entra quando as posições dela estiverem
+          curadas.
+        </p>
+      )}
 
       {dica.video ? (
         <section className="flex flex-col gap-1 rounded-xl border border-dashed border-borda bg-carta px-4 py-3">
@@ -216,8 +226,6 @@ export default async function DicaDeMeioJogo({ params }: PageProps<"/meio-jogo/[
           )}
         </section>
       ) : null}
-
-      <Li dica={dica.id} inicial={lidas.has(dica.id)} />
 
       {/* A proveniência inteira, fechada. `tinta-fraca` e não `tinta-muda`:
           `tinta-muda` é a única tinta da paleta isenta do piso de 4,5:1, e a

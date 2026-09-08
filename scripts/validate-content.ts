@@ -41,6 +41,8 @@ import { respostasDe } from "../lib/lesson/tree.ts";
 import { problemasDaPosicao } from "../lib/meiojogo/afirmacoes.ts";
 import {
   CAPITULO_CAP,
+  EXERCICIOS_ALVO,
+  EXERCICIOS_PISO,
   problemasEntreDicas,
   posicoesCitadas,
   problemasDeCitacao,
@@ -1554,7 +1556,7 @@ const dicas: Dica[] = [];
 
     // A obra de cada posição de treino também precisa estar registrada — a
     // mesma âncora que vale para as posições de ensino.
-    for (const item of [...(dica.treino?.reconhecimento ?? []), ...(dica.treino?.reservas ?? [])]) {
+    for (const item of dica.treino?.exercicios ?? []) {
       if (!sourcesByKey.has(item.provenance.editionFile)) {
         fail(
           "OBRA_NAO_REGISTRADA",
@@ -1615,10 +1617,7 @@ const dicas: Dica[] = [];
   if (dicas.length > 0) {
     const FATIA = ["m9", "m10", "m11", "m12", "m13", "m14", "m15", "m16"];
     const comTreino = dicas.filter((d) => d.treino !== null);
-    const itens = comTreino.flatMap((d) => [
-      ...(d.treino?.reconhecimento ?? []),
-      ...(d.treino?.reservas ?? []),
-    ]);
+    const itens = comTreino.flatMap((d) => d.treino?.exercicios ?? []);
     // O que separa as duas é o **capítulo**, e não a partida de origem: as
     // posições de livro do Capablanca também saem de partidas de verdade — a
     // diferença é que o autor as escolheu e imprimiu num capítulo, que é o que
@@ -1626,11 +1625,6 @@ const dicas: Dica[] = [];
     // mesmas posições duas vezes.
     const deLivro = itens.filter((i) => i.provenance.capitulo !== null).length;
     const dePartida = itens.length - deLivro;
-    // O corte da §5, quando ele acontece: uma guiada que veio de partida real
-    // porque o acervo não tinha o segundo diagrama. Ele é permitido e tem de
-    // ser **contado**, senão some na diferença entre o número planejado e o
-    // medido, e ninguém pergunta por quê.
-    const comExcecao = itens.filter((i) => i.excecaoDeFonte !== null).length;
     const semOsSeisPassos = itens.filter(
       (i) =>
         i.curadoria.perceptivel.trim() === "" ||
@@ -1648,13 +1642,19 @@ const dicas: Dica[] = [];
     }
     const estourados = [...capitulos.values()].filter((n) => n > CAPITULO_CAP).length;
 
+    // **Quantos temas chegaram a cinco.** O número é impresso de propósito: um
+    // tema que perdeu uma posição numa edição cai de cinco para quatro sem
+    // reprovar nada — o piso continua satisfeito —, e sem esta linha isso
+    // passaria em silêncio até alguém abrir o arquivo.
+    const noPiso = comTreino.filter((d) => d.treino!.exercicios.length >= EXERCICIOS_PISO).length;
+    const noAlvo = comTreino.filter((d) => d.treino!.exercicios.length === EXERCICIOS_ALVO).length;
     const naFatia = comTreino.filter((d) => FATIA.includes(d.id)).length;
     console.log(
-      `  ${naFatia} de ${FATIA.length} conceitos com sequência do degrau 1 ao 4, ` +
-        `${itens.length} posições novas (${deLivro} de livro, ${dePartida} de partida), ` +
-        `${comTreino.length} ficha(s), ${semOsSeisPassos} posição(ões) sem os seis passos, ` +
-        `${estourados} capítulo(s) com mais de ${CAPITULO_CAP}` +
-        `${comExcecao > 0 ? `, ${comExcecao} guiada(s) de partida com exceção declarada (§5)` : ""}`,
+      `  ${noPiso} de ${comTreino.length} temas com pelo menos ${EXERCICIOS_PISO} exercícios de ` +
+        `lance, ${noAlvo} deles com ${EXERCICIOS_ALVO}; ${naFatia} de ${FATIA.length} da fatia ` +
+        `do piloto, ${itens.length} posições (${deLivro} de livro, ${dePartida} de partida), ` +
+        `${semOsSeisPassos} posição(ões) sem os seis passos, ` +
+        `${estourados} capítulo(s) com mais de ${CAPITULO_CAP}`,
     );
     const faltam = FATIA.filter((id) => !comTreino.some((d) => d.id === id));
     if (faltam.length > 0) console.log(`  ainda sem treino na fatia: ${faltam.join(", ")}`);

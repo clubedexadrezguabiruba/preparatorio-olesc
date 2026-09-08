@@ -3,12 +3,23 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { Chess, type Square } from "chess.js";
-import { validarDicas, type ItemDeReconhecimento } from "./dicas.ts";
-import { APOIO_MAXIMO, COMECO, casasAceitas, comApoio, comClique } from "./tentativa.ts";
+import { Chess } from "chess.js";
+import { validarDicas, type ItemDeLance } from "./dicas.ts";
+import { uciDe } from "./lances.ts";
+import {
+  APOIO_MAXIMO,
+  COMECO,
+  comApoio,
+  comLance,
+  contratoDoItem,
+  custoDoRecusado,
+  julgar,
+  lancesDoItem,
+  uciDoToque,
+} from "./tentativa.ts";
 
 /**
- * O caminho do clique, do toque na casa ao que vai virar linha no banco.
+ * O caminho do lance, do arrasto da peça ao que vai virar linha no banco.
  *
  * Os itens são os publicados, e não fixtures: o que a tela vai receber é isto,
  * e um teste sobre uma posição inventada provaria a máquina de estado sem
@@ -20,84 +31,90 @@ const DICAS = validarDicas(
   JSON.parse(readFileSync(path.join(RAIZ, "content/meio-jogo.json"), "utf8")),
 );
 
-const ITENS = new Map<string, ItemDeReconhecimento>(
-  DICAS.flatMap((d) => (d.treino?.reconhecimento ?? []).map((i) => [i.id, i] as const)),
+const ITENS = new Map<string, ItemDeLance>(
+  DICAS.flatMap((d) => (d.treino?.exercicios ?? []).map((i) => [i.id, i] as const)),
 );
 
-const item = (id: string): ItemDeReconhecimento => {
-  const encontrado = ITENS.get(id);
-  assert.ok(encontrado, `o item ${id} sumiu do conteúdo`);
-  return encontrado;
-};
+/** O primeiro item publicado — o teste anda com o conteúdo, e não com um id fixo. */
+const ALGUM = [...ITENS.values()];
 
-/** Uma casa vazia que não é resposta — o clique que o `events.select` produz. */
-function casaVaziaFora(dado: ItemDeReconhecimento): string {
-  const jogo = new Chess(dado.fen);
-  for (const coluna of "abcdefgh") {
-    for (let fileira = 1; fileira <= 8; fileira += 1) {
-      const casa = `${coluna}${fileira}`;
-      if (!jogo.get(casa as Square) && !dado.resposta.includes(casa)) return casa;
-    }
-  }
-  throw new Error(`${dado.id} não tem casa vazia fora da resposta`);
+function item(indice = 0): ItemDeLance {
+  const encontrado = ALGUM[indice];
+  assert.ok(encontrado, `não há ${indice + 1} exercício(s) publicado(s)`);
+  return encontrado;
 }
 
-test("qualquer casa do grupo é acerto — a resposta de oito casas da coluna aberta", () => {
-  const coluna = item("m9-d2-a");
-  assert.equal(coluna.resposta.length, 8, "m9-d2-a deixou de ser a resposta de coluna inteira");
-  for (const casa of coluna.resposta) {
-    const depois = comClique(COMECO, coluna, casa);
-    assert.ok(depois.acertou, `${casa} devia ser aceita`);
+/** Um lance legal que **não** aplica o tema — o erro honesto do aluno. */
+function foraDoTema(dado: ItemDeLance): string {
+  const aceitos = lancesDoItem(dado);
+  const legais = new Chess(dado.fen).moves({ verbose: true }).map(uciDe);
+  const fora = legais.find((l) => !aceitos.includes(l));
+  assert.ok(fora, `${dado.id} não tem lance legal fora do tema`);
+  return fora;
+}
+
+test("todo item publicado tem pelo menos um lance aceito", () => {
+  assert.ok(ALGUM.length > 0, "nenhum exercício publicado — o teste não prova nada");
+  for (const dado of ALGUM) {
+    assert.ok(lancesDoItem(dado).length > 0, `${dado.id} não tem lance aceito`);
+  }
+});
+
+test("qualquer lance da lista é acerto — dois caminhos, uma resposta", () => {
+  // O caso que o Bloco 3 ensinou sobre casas e agora vale para lances: as duas
+  // torres chegam à coluna, e recusar uma delas ensinaria a adivinhar o autor.
+  for (const dado of ALGUM) {
+    for (const lance of lancesDoItem(dado)) {
+      const depois = comLance(COMECO, dado, lance);
+      assert.ok(depois.acertou, `${dado.id}: ${lance} devia ser aceito`);
+      assert.equal(depois.tentativa, 1);
+    }
+  }
+});
+
+test("o lance legal fora do tema é julgado errado, e não estoura", () => {
+  for (const dado of ALGUM.slice(0, 4)) {
+    const depois = comLance(COMECO, dado, foraDoTema(dado));
+    assert.equal(depois.acertou, false, `${dado.id}: lance fora do tema virou acerto`);
     assert.equal(depois.tentativa, 1);
   }
 });
 
-test("o clique em casa vazia é julgado errado, e não estoura", () => {
-  // É o caso que o `events.select` do chessground cria e o `movable.after` não
-  // criaria: ele dispara em casa sem peça nenhuma (`dist/board.js:179`). Antes
-  // de existir tela, o juiz tem de responder "errou" a isso.
-  for (const id of ["m12-d2-a", "m15-d3-a", "m16-d2-b"]) {
-    const dado = item(id);
-    const depois = comClique(COMECO, dado, casaVaziaFora(dado));
-    assert.equal(depois.acertou, false, `${id}: casa vazia virou acerto`);
-    assert.equal(depois.tentativa, 1);
-  }
-});
-
-test("o segundo toque na mesma casa não conta tentativa nova", () => {
-  const dado = item("m12-d2-a");
-  const errada = casaVaziaFora(dado);
-  const uma = comClique(COMECO, dado, errada);
-  const outra = comClique(uma, dado, errada);
-  assert.equal(outra, uma, "o toque repetido criou estado novo");
+test("o mesmo lance de novo não conta tentativa nova", () => {
+  const dado = item();
+  const errado = foraDoTema(dado);
+  const uma = comLance(COMECO, dado, errado);
+  const outra = comLance(uma, dado, errado);
+  assert.equal(outra, uma, "o lance repetido criou estado novo");
   assert.equal(outra.tentativa, 1);
 });
 
-test("depois do acerto o tabuleiro continua clicável e o estado não muda", () => {
-  const dado = item("m12-d2-a");
-  const certo = comClique(COMECO, dado, dado.resposta[0]);
+test("depois do acerto o tabuleiro continua vivo e o estado não muda", () => {
+  const dado = item();
+  const certo = comLance(COMECO, dado, lancesDoItem(dado)[0]);
   assert.ok(certo.acertou);
-  const depois = comClique(certo, dado, casaVaziaFora(dado));
-  assert.equal(depois, certo, "um passeio pelas casas virou tentativa errada");
+  const depois = comLance(certo, dado, foraDoTema(dado));
+  assert.equal(depois, certo, "um lance depois do acerto virou tentativa errada");
   assert.equal(depois.tentativa, 1);
 });
 
-test("as tentativas contam respostas diferentes, na ordem", () => {
-  const dado = item("m10-d2-a");
-  const jogo = new Chess(dado.fen);
-  const erradas = "abcdefgh"
-    .split("")
-    .flatMap((c) => [1, 2, 3, 4, 5, 6, 7, 8].map((f) => `${c}${f}`))
-    .filter((casa) => !jogo.get(casa as Square) && !dado.resposta.includes(casa))
+test("as tentativas contam lances diferentes, na ordem", () => {
+  const dado = item();
+  const aceitos = lancesDoItem(dado);
+  const errados = new Chess(dado.fen)
+    .moves({ verbose: true })
+    .map(uciDe)
+    .filter((l) => !aceitos.includes(l))
     .slice(0, 3);
+  assert.ok(errados.length === 3, `${dado.id} não tem três lances fora do tema`);
 
   let estado = COMECO;
-  for (const casa of erradas) estado = comClique(estado, dado, casa);
+  for (const lance of errados) estado = comLance(estado, dado, lance);
   assert.equal(estado.tentativa, 3);
-  assert.deepEqual(estado.tocadas, erradas);
+  assert.deepEqual(estado.jogados, errados);
   assert.equal(estado.acertou, false);
 
-  estado = comClique(estado, dado, dado.resposta[0]);
+  estado = comLance(estado, dado, aceitos[0]);
   assert.equal(estado.tentativa, 4);
   assert.ok(estado.acertou);
 });
@@ -115,17 +132,69 @@ test("a escada de apoio sobe um degrau por vez e para no topo", () => {
 });
 
 test("o apoio não interfere no julgamento — pedir ajuda não é errar", () => {
-  const dado = item("m15-d2-a");
+  const dado = item();
   const comAjuda = comApoio(comApoio(COMECO));
-  const depois = comClique(comAjuda, dado, dado.resposta[0]);
+  const depois = comLance(comAjuda, dado, lancesDoItem(dado)[0]);
   assert.ok(depois.acertou);
-  assert.equal(depois.apoio, 2, "o nível de apoio se perdeu no clique");
+  assert.equal(depois.apoio, 2, "o nível de apoio se perdeu no lance");
   assert.equal(depois.tentativa, 1);
 });
 
-test("tarefa que não existe estoura em vez de virar item sem resposta", () => {
-  assert.throws(
-    () => casasAceitas({ ...item("m12-d2-a"), tarefa: "peao-inventado" }),
-    /peao-inventado/,
-  );
+/**
+ * O tabuleiro entrega origem e destino; o UCI aceito pode ter a promoção no
+ * fim. Sem a casação por prefixo, o aluno que promovesse jogaria o lance certo
+ * e o site diria que não é.
+ */
+test("o toque vira o lance aceito inteiro, com a promoção quando há", () => {
+  assert.equal(uciDoToque("e7", "e8", ["e7e8q"]), "e7e8q");
+  assert.equal(uciDoToque("f1", "d1", ["a1d1", "f1d1"]), "f1d1");
+  // Lance fora da lista sai como o par que o tabuleiro deu: é o que vai para o
+  // registro, e é ele que o professor lê quando procura o erro da turma.
+  assert.equal(uciDoToque("e2", "e4", ["f1d1"]), "e2e4");
+});
+
+/**
+ * O terceiro veredito, e o que ele existe para impedir.
+ *
+ * Um lance que aplica o tema e o motor reprovou **não** pode ser julgado como
+ * "fora do tema": o aluno fez o que a dica manda. A tela precisa da terceira
+ * frase, e quem lhe dá o direito de dizê-la é este julgamento.
+ */
+test("o lance que aplica o tema e o motor reprovou é `caro`, e não `fora`", () => {
+  const comRecusado = ALGUM.filter((i) => i.lancesRecusados.length > 0);
+  for (const dado of comRecusado) {
+    for (const { lance, custo } of dado.lancesRecusados) {
+      assert.equal(julgar(dado, lance), "caro", `${dado.id}: ${lance} devia ser caro`);
+      assert.equal(custoDoRecusado(dado, lance), custo);
+      const depois = comLance(COMECO, dado, lance);
+      assert.equal(depois.acertou, false, `${dado.id}: lance caro não pode virar acerto`);
+      assert.equal(depois.vereditos.at(-1), "caro");
+      // E ele **conta** como tentativa: o aluno respondeu, e o professor tem de
+      // ver que ele respondeu com o padrão certo na casa errada.
+      assert.equal(depois.tentativa, 1);
+    }
+  }
+  console.log(`  meio-jogo: ${comRecusado.length} exercício(s) com lance do tema que o motor recusa`);
+});
+
+test("os três vereditos cobrem todo lance legal, e não se sobrepõem", () => {
+  for (const dado of ALGUM.slice(0, 6)) {
+    const aceitos = lancesDoItem(dado);
+    const recusados = dado.lancesRecusados.map((r) => r.lance);
+    for (const lance of new Chess(dado.fen).moves({ verbose: true }).map(uciDe)) {
+      const v = julgar(dado, lance);
+      if (aceitos.includes(lance)) assert.equal(v, "certo", `${dado.id}/${lance}`);
+      else if (recusados.includes(lance)) assert.equal(v, "caro", `${dado.id}/${lance}`);
+      else assert.equal(v, "fora", `${dado.id}/${lance}`);
+    }
+    assert.equal(
+      aceitos.filter((l) => recusados.includes(l)).length,
+      0,
+      `${dado.id}: um lance está nas duas listas`,
+    );
+  }
+});
+
+test("juiz que não existe estoura em vez de virar item sem lance", () => {
+  assert.throws(() => contratoDoItem({ ...item(), tarefa: "tema-inventado" }), /tema-inventado/);
 });

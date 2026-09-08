@@ -44,7 +44,9 @@ import { emailDoUsuario } from "../lib/auth/usuario.ts";
 import { hojeNoBrasil } from "../lib/curso/calendario.ts";
 import { dicaPorId } from "../lib/meiojogo/conteudo.ts";
 import { gravarTreino } from "../lib/meiojogo/gravar.ts";
-import { casasAceitas } from "../lib/meiojogo/tentativa.ts";
+import { lancesDoItem } from "../lib/meiojogo/tentativa.ts";
+import { uciDe } from "../lib/meiojogo/lances.ts";
+import { Chess } from "chess.js";
 
 const RAIZ = fileURLToPath(new URL("..", import.meta.url));
 
@@ -100,24 +102,14 @@ async function entrar(usuario: string): Promise<SupabaseClient> {
   return cliente;
 }
 
-/** Uma casa vazia que não é resposta — o clique que só o `select` entrega. */
-function casaErrada(fen: string, resposta: readonly string[]): string {
-  const linhas = fen.split(" ")[0].split("/");
-  for (let i = 0; i < 8; i += 1) {
-    let coluna = 0;
-    for (const c of linhas[i]) {
-      if (/\d/.test(c)) {
-        for (let n = 0; n < Number(c); n += 1) {
-          const casa = `${"abcdefgh"[coluna + n]}${8 - i}`;
-          if (!resposta.includes(casa)) return casa;
-        }
-        coluna += Number(c);
-      } else {
-        coluna += 1;
-      }
-    }
-  }
-  throw new Error("a posição não tem casa vazia fora da resposta");
+/** Um lance legal que **não** aplica o tema — o erro honesto do aluno. */
+function lanceErrado(fen: string, aceitos: readonly string[]): string {
+  const fora = new Chess(fen)
+    .moves({ verbose: true })
+    .map(uciDe)
+    .find((l) => !aceitos.includes(l));
+  if (!fora) throw new Error("a posição não tem lance legal fora do tema");
+  return fora;
 }
 
 const contas: Conta[] = [];
@@ -128,9 +120,9 @@ try {
   const dica = dicaPorId(DICA);
   const treino = dica?.treino;
   if (!treino) throw new Error(`${DICA} não tem treino no conteúdo`);
-  const item = treino.reconhecimento[0];
-  const certa = casasAceitas(item)[0];
-  const errada = casaErrada(item.fen, item.resposta);
+  const item = treino.exercicios[0];
+  const certa = lancesDoItem(item)[0];
+  const errada = lanceErrado(item.fen, lancesDoItem(item));
 
   const ana = await criarConta(`teste.meiojogo.a${SUFIXO}`, "Ana de Teste");
   contas.push(ana);
@@ -186,13 +178,13 @@ try {
   );
   afirmar(
     primeiraLinha?.conceito === item.tarefa &&
-      primeiraLinha?.habilidade === "reconhecimento" &&
+      primeiraLinha?.habilidade === "aplicacao" &&
       primeiraLinha?.nivel_evidencia === "fato",
-    `o reconhecimento grava conceito=${item.tarefa}, habilidade=reconhecimento, evidência=fato`,
+    `o exercício de lance grava conceito=${item.tarefa}, habilidade=aplicacao, evidência=fato`,
   );
   afirmar(
     primeiraLinha?.resposta === errada && segundaLinha?.resposta === certa,
-    "a casa tocada fica gravada — e não um booleano",
+    "o lance jogado fica gravado — e não um booleano",
   );
   afirmar(
     typeof primeiraLinha?.versao === "string" &&
@@ -202,40 +194,37 @@ try {
   );
 
   /* ---------------------------------------------------------------- *
-   * 3. A aplicação
+   * 3. O segundo exercício da mesma dica
    * ---------------------------------------------------------------- */
-  console.log("\nA aplicação (degrau 4):");
+  console.log("\nO segundo exercício:");
 
-  const letraCerta = String.fromCharCode(97 + treino.aplicacao.opcoes.findIndex((o) => o.certa));
-  const aplicacao = await gravarTreino(ana.id, {
+  const segundo = treino.exercicios[1];
+  const certaDoSegundo = lancesDoItem(segundo)[0];
+  const doSegundo = await gravarTreino(ana.id, {
     dica: DICA,
-    item: treino.aplicacao.id,
-    resposta: letraCerta,
+    item: segundo.id,
+    resposta: certaDoSegundo,
     apoio: 0,
     tempoMs: 12000,
   });
   afirmar(
-    "acertou" in aplicacao && aplicacao.acertou === true,
-    `a opção "${letraCerta}" é a certa e grava acertou=true`,
+    "acertou" in doSegundo && doSegundo.acertou === true,
+    `o lance "${certaDoSegundo}" aplica o tema e grava acertou=true`,
   );
 
-  const { data: doDegrau4 } = await admin
+  const { data: doItemDois } = await admin
     .from("tentativa_meiojogo")
     .select("*")
     .eq("aluno", ana.id)
-    .eq("item", treino.aplicacao.id)
+    .eq("item", segundo.id)
     .single();
   afirmar(
-    doDegrau4?.habilidade === "aplicacao" && doDegrau4?.nivel_evidencia === "curado",
-    "a aplicação grava habilidade=aplicacao e evidência=curado",
+    doItemDois?.habilidade === "aplicacao" && doItemDois?.conceito === segundo.tarefa,
+    "o segundo exercício grava habilidade=aplicacao e o mesmo conceito da dica",
   );
-  afirmar(doDegrau4?.resposta === letraCerta, "a letra escolhida fica gravada");
+  afirmar(doItemDois?.resposta === certaDoSegundo, "o lance jogado fica gravado");
   afirmar(
-    doDegrau4?.conceito === treino.reconhecimento[2].tarefa,
-    "a aplicação herda o conceito do item do degrau 3, para a fila de revisão",
-  );
-  afirmar(
-    doDegrau4?.versao !== primeiraLinha?.versao,
+    doItemDois?.versao !== primeiraLinha?.versao,
     "item diferente, versão diferente — as duas não se comparam",
   );
 
@@ -256,11 +245,11 @@ try {
   const malformada = await gravarTreino(ana.id, {
     dica: DICA,
     item: item.id,
-    resposta: "z9",
+    resposta: "z9z9",
     apoio: 0,
     tempoMs: 10,
   });
-  afirmar("erro" in malformada, "casa fora do tabuleiro não vira linha");
+  afirmar("erro" in malformada, "lance malformado não vira linha");
 
   const semTreino = await gravarTreino(ana.id, {
     dica: "m1",

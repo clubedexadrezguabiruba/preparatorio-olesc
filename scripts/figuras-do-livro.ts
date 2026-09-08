@@ -185,7 +185,7 @@ console.log(`${achados.length} figura(s) servem a alguma tarefa${SO_TAREFA ? ` (
 
 const publicadas = validarDicas(
   JSON.parse(readFileSync(path.join(RAIZ, "content", "meio-jogo.json"), "utf8")),
-).flatMap((d) => (d.treino?.reconhecimento ?? []).map((i) => ({ id: i.id, fen: i.fen })));
+).flatMap((d) => (d.treino?.exercicios ?? []).map((i) => ({ id: i.id, fen: i.fen })));
 
 if (SO_TAREFA) {
   for (const a of achados) {

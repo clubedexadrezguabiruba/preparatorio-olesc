@@ -43,7 +43,7 @@ if (soltas.length > 0) {
     JSON.parse(readFileSync(path.join(RAIZ, "content", "meio-jogo.json"), "utf8")),
   );
   for (const dica of dicas) {
-    for (const item of [...(dica.treino?.reconhecimento ?? []), ...(dica.treino?.reservas ?? [])]) {
+    for (const item of dica.treino?.exercicios ?? []) {
       alvos.push({
         nome: item.id,
         fen: item.fen,

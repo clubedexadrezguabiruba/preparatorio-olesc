@@ -50,6 +50,7 @@ test("nenhum campo do contrato fica em branco", () => {
       lanceMultiplo: c.lanceMultiplo,
       enunciado: c.enunciado,
       foraDoTema: c.foraDoTema,
+      custaCaro: c.custaCaro,
       porqueDoContraexemplo: c.contraexemplo.porque,
     })) {
       assert.ok(texto.trim().length >= 20, `${j.id}.${campo} tem menos de 20 caracteres`);
