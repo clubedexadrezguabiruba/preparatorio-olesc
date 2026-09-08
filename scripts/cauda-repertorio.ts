@@ -269,12 +269,22 @@ function daFonte(corpus: Corpus, fen: string): Passo["daFonte"] {
     .sort((a, b) => b.cursos.length - a.cursos.length);
 }
 
-/** O lance sai da casa de origem de uma peça menor? É "desenvolver", na régua da §24. */
+/**
+ * O lance tira uma peça MENOR da casa de origem dela? É "desenvolver", na régua
+ * da §24.
+ *
+ * O tipo da peça entra no teste, e não é detalhe: depois do roque pequeno a
+ * torre mora em **f1**, que é a casa de origem do bispo de casas claras.
+ * Testando só a casa, `Tfe1` ganhava o bônus de desenvolvimento — e foi
+ * exatamente assim que a caminhada da Escandinava 97d22512 escolheu 11.Te1
+ * (7 jogos) em vez de 11.c4 (25 jogos, seis centésimos de motor de diferença).
+ */
 function desenvolve(jogo: Chess, cor: Cor, san: string): boolean {
   try {
     const feito = jogo.move(san);
     jogo.undo();
-    return Object.keys(ORIGENS[cor]).includes(feito.from);
+    const menor = feito.piece === "n" || feito.piece === "b";
+    return menor && Object.keys(ORIGENS[cor]).includes(feito.from);
   } catch {
     return false;
   }
