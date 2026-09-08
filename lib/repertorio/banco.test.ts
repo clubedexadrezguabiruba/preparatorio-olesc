@@ -33,10 +33,15 @@ function ler(relativo: string): unknown {
 const indice = IndiceSchema.parse(ler("index.json"));
 
 /**
- * Quantas linhas publicadas ainda não fecham a régua do término.
+ * Quantas linhas publicadas ainda não fecham a régua do término: **zero**, desde
+ * que a §24 terminou em 8/9/2026.
  *
- * Vai a zero quando a §24 terminar; até lá, o número é o marcador do trabalho
- * que falta, e ele só pode DESCER. Um número que sobe é uma linha que encolheu.
+ * Este teste ficou redundante no mesmo dia, e continua aqui de propósito. Desde
+ * a Fase 4 quem reprova linha aberta é `validarBanco`, que roda no compilador,
+ * no servidor a cada leitura e três vezes neste arquivo — então uma linha aberta
+ * já estoura antes de chegar aqui. O que este teste guarda é o NÚMERO: se um dia
+ * alguém afrouxar `fechamentosAbertos` para destravar uma build, o banco volta a
+ * passar em silêncio e é esta linha que grita.
  */
 const ABERTAS = 0;
 

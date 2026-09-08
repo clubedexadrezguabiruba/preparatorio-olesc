@@ -494,13 +494,14 @@ export function estadoDe(linha: Linha): Estado {
 /**
  * As linhas que ainda não fecham a régua do término.
  *
- * **Aviso, não erro — até a Fase 4 da §24.** É a mesma escolha de
- * `aberturasInchadas`, e pelo mesmo motivo: enquanto o conteúdo está sendo
- * escrito, uma linha por esticar é a lista de trabalho, e uma build vermelha em
- * cima dela atrapalharia a própria revisão que vem consertá-la. Terminado o
- * conteúdo, `validarBanco` passa a somar esta lista aos problemas, e aí voltar
- * atrás vira build quebrada — que é o que impede a régua de se afrouxar de novo
- * daqui a seis meses.
+ * **Era aviso até 8/9/2026; hoje é ERRO.** Enquanto o conteúdo da §24 estava
+ * sendo escrito, uma linha por esticar era a lista de trabalho, e uma build
+ * vermelha em cima dela atrapalharia a própria revisão que vinha consertá-la —
+ * a mesma escolha que `aberturasInchadas` faz até hoje. No dia em que as 27
+ * linhas passaram a fechar, `validarBanco` passou a somar esta lista aos
+ * problemas. Agora encurtar uma linha quebra a build, e é isso que impede a
+ * régua de se afrouxar sozinha — que foi o que aconteceu com o teto de 8 lances
+ * entre a §1 e a §21, sem ninguém decidir nada.
  */
 export function fechamentosAbertos(linhas: readonly Linha[]): string[] {
   const abertas: string[] = [];
@@ -561,9 +562,19 @@ export function validarBanco(dados: unknown, onde = "o banco de linhas"): Linha[
     throw new Error(`${onde} não passou na conferência:\n${problemas.join("\n")}`);
   }
 
-  const problemas = conferirRegras(lido.data);
+  const problemas = conferirRegras(lido.data).map((p) => `${p.linha}: ${p.erro}`);
+
+  // A régua do término entrou aqui na Fase 4 da §24, no dia em que as 27 linhas
+  // passaram a fechá-la. Enquanto o conteúdo estava sendo escrito ela era aviso,
+  // porque uma build vermelha em cima da lista de trabalho travaria a própria
+  // revisão que vinha consertá-la. Terminado o trabalho, a escolha se inverte:
+  // agora quem encurtar uma linha quebra a build, e é isso que impede a régua de
+  // se afrouxar sozinha daqui a seis meses — que foi exatamente o que aconteceu
+  // com o teto de 8 lances entre a §1 e a §21, sem ninguém decidir nada.
+  problemas.push(...fechamentosAbertos(lido.data));
+
   if (problemas.length > 0) {
-    const lista = problemas.map((p) => `  ${p.linha}: ${p.erro}`).join("\n");
+    const lista = problemas.map((p) => `  ${p}`).join("\n");
     throw new Error(`${onde} não passou na conferência:\n${lista}`);
   }
   return lido.data;

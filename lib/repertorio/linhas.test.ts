@@ -56,8 +56,12 @@ function boa(troca: Partial<Linha> = {}): Linha {
 const errosDe = (linha: Linha): string => conferirRegras([linha]).map((p) => p.erro).join(" | ");
 
 test("a linha boa passa", () => {
+  // `boa()` passa em `conferirRegras`, que é onde moram as regras de forma. Ela
+  // NÃO passa em `validarBanco` desde 8/9/2026: com três lances nossos ela é
+  // curta demais para a régua do término, e quem cobra isso é `fechamentosAbertos`
+  // — ver o teste "a régua do término reprova em validarBanco" no fim do arquivo.
   assert.deepEqual(conferirRegras([boa()]), []);
-  assert.equal(validarBanco([boa()]).length, 1);
+  assert.equal(validarBanco([longa()]).length, 1);
 });
 
 test("linha que termina em lance do adversário é reprovada", () => {
@@ -301,4 +305,37 @@ test("destino igual à origem, e chave que não é casa de peça menor, reprovam
     plano: { d1: { casa: "e2", motivo: "a dama vai para e2, atrás do peão que ainda não andou" } },
   });
   assert.match(errosDe(inventada), /"d1" não é casa de peça menor das brancas/);
+});
+
+/* ------------------------------------------------------------------ *
+ * A trava da Fase 4 — 8/9/2026
+ *
+ * Enquanto a §24 escrevia as caudas, `fechamentosAbertos` era AVISO: reprovar a
+ * build em cima da lista de trabalho travaria a própria revisão que vinha
+ * consertá-la. No dia em que as 27 linhas passaram a fechar, a escolha se
+ * inverteu — e é este par de testes que a mantém invertida.
+ * ------------------------------------------------------------------ */
+
+test("a régua do término reprova em validarBanco, e não só em aviso", () => {
+  // Uma linha de 3 lances nossos passava em `validarBanco` até 8/9/2026. Hoje o
+  // banco inteiro é recusado, com o número na mensagem.
+  assert.throws(() => validarBanco([boa()]), /3 lances nossos; o mínimo é 12/);
+
+  // E a mesma coisa quando a linha é longa mas deixa peça em casa sem declarar.
+  const semBispo = longa({
+    fenFinal: "r1bqk2r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 12",
+  });
+  assert.throws(() => validarBanco([semBispo]), /a peça de c1 não saiu/);
+});
+
+test("a linha que fecha, e a que fecha por [%plano], passam as duas", () => {
+  // As duas formas de terminar que a §24 autoriza. Se uma delas parasse de
+  // passar, metade do repertório publicado deixaria de carregar no servidor.
+  assert.equal(validarBanco([longa()]).length, 1);
+
+  const comPlano = longa({
+    fenFinal: "r1bqk2r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 12",
+    plano: { c1: { casa: "g5", motivo: "sai depois do h3, para não levar o …h6 com tempo" } },
+  });
+  assert.equal(validarBanco([comPlano]).length, 1);
 });

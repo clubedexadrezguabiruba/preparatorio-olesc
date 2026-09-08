@@ -31,7 +31,6 @@ import { notas } from "../lib/repertorio/conteudo.ts";
 import { lerPgns } from "../lib/repertorio/pgn.ts";
 import {
   aberturasInchadas,
-  fechamentosAbertos,
   placarDeFechamento,
   CORES,
   NIVEIS,
@@ -136,10 +135,11 @@ if (problemas.length === 0) {
 }
 
 avisos.push(...aberturasInchadas(todas).map((a) => `acima da meta do Base — ${a}`));
-// A régua do término (§24) entra como aviso até a Fase 4 fechá-la em erro. É
-// a lista de trabalho enquanto as caudas estão sendo escritas: cada linha que
-// sai daqui é uma linha que passou a terminar com o rei rocado e as peças fora.
-avisos.push(...fechamentosAbertos(todas).map((a) => `ainda não fecha — ${a}`));
+// A régua do término NÃO entra mais aqui. Ela era aviso enquanto as caudas da
+// §24 estavam sendo escritas; desde 8/9/2026 `validarBanco` a soma aos
+// problemas, e repetir a lista como aviso imprimiria cada linha aberta duas
+// vezes — uma como erro e outra como recado, com o leitor tendo de descobrir
+// sozinho que são a mesma coisa.
 
 /* ------------------------------------------------------------------ *
  * O campo `abertura` das páginas de princípios aponta para abertura viva
