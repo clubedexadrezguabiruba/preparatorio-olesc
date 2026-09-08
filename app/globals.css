@@ -354,8 +354,22 @@
      do repertório passaria a sair em duas páginas. Os 32 px voltam saindo do
      tabuleiro (276 → 244 px naquele telefone), e a escolha é a mesma que este
      bloco já registra mais abaixo: melhor um tabuleiro menor que o texto do
-     professor servido em tiras. */
-  --aula-teto: calc(100dvh - 27.75rem);
+     professor servido em tiras.
+
+     **As três medidas do palco são variáveis desde 9/9/2026**, e a razão é a
+     tática: ela tem o mesmo desenho e um painel mais magro, porque lá o
+     professor não explica — ele lembra a ordem de busca em uma linha, e a
+     aula do tema só aparece se o aluno pedir a dica. Ver
+     `.aula-palco-magro`, no fim deste bloco. Os valores abaixo continuam
+     sendo os da aula de abertura, medidos; quem os muda declara por quê. */
+  --aula-reserva: 27.75rem;
+  --aula-teto: calc(100dvh - var(--aula-reserva));
+
+  /* A largura do painel no desktop. Ela só vale dentro do `@media` lá embaixo,
+     mas é declarada aqui para que um modificador possa trocá-la sem repetir a
+     media query. A soma que dá este número está no comentário do
+     `grid-template-columns`. */
+  --aula-painel: 32.625rem;
 
   /* O palco tem ALTURA FECHADA, e não apenas um teto para o tabuleiro.
 
@@ -379,7 +393,8 @@
      com o tabuleiro cobrando o piso dele primeiro — e sobravam **30 px** de
      comentário, medidos: quarenta caracteres por página. Melhor a página rolar
      80 px num telefone baixo do que servir o texto do professor em tiras. */
-  height: max(calc(100dvh - 6rem), 36rem);
+  --aula-piso: 36rem;
+  height: max(calc(100dvh - 6rem), var(--aula-piso));
 
   display: flex;
   flex-direction: column;
@@ -425,7 +440,7 @@
     --aula-teto: min(
       calc(100dvh - 5.5rem),
       48rem,
-      calc(100vw - 2.5rem - 2.5rem - 32.625rem)
+      calc(100vw - 2.5rem - 2.5rem - var(--aula-painel))
     );
     height: var(--aula-teto);
 
@@ -456,7 +471,7 @@
     /* A coluna do tabuleiro é do TAMANHO do tabuleiro, e o par se centra na
        moldura. Com `1fr` a coluna esticava até a borda e o tabuleiro ficava
        boiando dentro dela, longe do painel que ele conversa. */
-    grid-template-columns: max(15rem, var(--aula-teto)) 32.625rem;
+    grid-template-columns: max(15rem, var(--aula-teto)) var(--aula-painel);
     justify-content: center;
     gap: 2.5rem;
   }
@@ -494,6 +509,59 @@
   flex-direction: column;
   gap: 0.75rem;
   min-height: 0;
+}
+
+/* --------------------------------------------------------------------------
+   O palco magro: o mesmo desenho, com o painel do tamanho de quem fala pouco
+
+   A tática usa este. **A diferença não é de gosto, é de tarefa.** Na aula de
+   abertura o professor explica um lance a cada lance — 363 comentários, mediana
+   de 276 caracteres —, e o painel de 522 px existe para caber essa prosa ao
+   lado do tabuleiro. Na tática o aluno não vem ler: ele vem procurar. O que o
+   professor diz em repouso é **uma linha** (a ordem de busca: xeques, capturas,
+   ameaças), e a aula do tema só aparece se ele pedir a dica.
+
+   Painel de 522 para servir uma linha é vão desenhado como conteúdo. Os três
+   números abaixo são a mesma conta das aberturas, refeita para esse painel.
+   -------------------------------------------------------------------------- */
+.aula-palco-magro {
+  /* 24,5rem = 392 px = respiro da página (32) + cabeçalho (40) + vão (12) +
+     painel (304), com 4 px de folga. Os 304 do painel, medidos num 360×740:
+     cabeçalho do painel (44, que é o alvo de toque do botão de som) + cartão de
+     comando (64) + rodapé (44) + três vãos (36) + **116 de balão**.
+
+     A trilha das etapas não entra na soma: ela é `hidden lg:block` na tática
+     (ver `Serie.tsx`), e foi ela que pagou o balão. Com ela, o balão dava 74 px
+     e a frase de repouso PAGINAVA — o aluno tinha de clicar "Ler mais" para ler
+     a ordem de busca, que é justamente o texto que precisa estar sempre à
+     vista.
+
+     Eram 27,75rem, e os 52 px vão para o tabuleiro. Medido: num 360×740 ele sai
+     de 296 para **328 px**, e 328 é o teto absoluto ali — a partir daqui quem
+     manda é a largura da coluna (360 menos os 32 do `px-4`), não mais esta
+     conta. Num telefone assim `--aula-teto` dá 348 e sobra; a reserva volta a
+     mandar em tela baixa e larga, que é o telefone deitado. */
+  --aula-reserva: 24.5rem;
+
+  /* 35rem = 560 px: tabuleiro no piso (240) + vão (12) + painel (304, a soma
+     acima). Um rem a menos que o das aberturas porque o balão aqui pede 116 e
+     não 136 — e um piso mais baixo é menos rolagem no telefone curto, que é o
+     único lugar onde este número aparece. */
+  --aula-piso: 35rem;
+
+  /* 26rem = 416 px = **80 do retrato + 16 de vão + 320 da caixa de texto**.
+     Contra 112 + 16 + 410 do repertório.
+
+     Os 320 dão ~44 caracteres por linha, um a menos que o piso de 45 da faixa
+     legível — e aqui isso passa, onde no repertório não passaria. A diferença é
+     o comprimento do texto: uma linha de repouso e três frases de dica não
+     cansam em 44 caracteres; oitocentos e cinquenta caracteres de comentário
+     cansariam. A faixa de 45 a 75 é feita para prosa corrida.
+
+     O retrato cai de 112 para 80 pela mesma razão: aos 112 ele era a **emissora
+     de um bloco grande de texto**, e proporcional a ele. Ao lado de uma linha,
+     112 px de figura falam mais alto que a fala. */
+  --aula-painel: 26rem;
 }
 
 html {

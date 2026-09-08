@@ -13,6 +13,7 @@ import {
   setSoundOn,
   subscribeSound,
 } from "@/lib/sound";
+import { BotaoPrincipal, BotaoSecundario } from "@/components/lesson/BotoesDaAula";
 import { Bolinhas } from "../../Bolinhas";
 import { registrarTreino } from "../../acoes";
 import { Passada } from "./Passada";
@@ -375,26 +376,26 @@ export function Treino({
                  * contou. Os dois fazem a mesma coisa — reiniciam o valendo do
                  * lance 1 —, e é o nome que tem de dizer o que aconteceu.
                  */}
-                <Principal onClick={dNovo} esperando={gravando}>
+                <BotaoPrincipal onClick={dNovo} esperando={gravando}>
                   {placar?.revelado ? "Tentar de novo" : "Jogar de novo"}
-                </Principal>
-                <Secundario onClick={proxima} esperando={gravando}>
+                </BotaoPrincipal>
+                <BotaoSecundario onClick={proxima} esperando={gravando}>
                   Próxima linha
-                </Secundario>
+                </BotaoSecundario>
               </>
             ) : (
               <>
-                <Principal onClick={proxima} esperando={gravando}>
+                <BotaoPrincipal onClick={proxima} esperando={gravando}>
                   Próxima linha
-                </Principal>
-                <Secundario onClick={dNovo} esperando={gravando}>
+                </BotaoPrincipal>
+                <BotaoSecundario onClick={dNovo} esperando={gravando}>
                   Jogar de novo
-                </Secundario>
+                </BotaoSecundario>
               </>
             )}
-            <Secundario onClick={comASeta} esperando={false}>
+            <BotaoSecundario onClick={comASeta} esperando={false}>
               Jogar com a seta
-            </Secundario>
+            </BotaoSecundario>
           </div>
             </div>
           ) : null
@@ -464,48 +465,6 @@ function Falha({ erro }: { erro: string }) {
   );
 }
 
-function Principal({
-  onClick,
-  esperando,
-  children,
-}: {
-  onClick: () => void;
-  esperando: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={esperando}
-      className="foco rounded-lg bg-metodo-cheio px-4 py-2.5 text-sm font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque disabled:opacity-50"
-    >
-      {children}
-    </button>
-  );
-}
-
-function Secundario({
-  onClick,
-  esperando,
-  children,
-}: {
-  onClick: () => void;
-  esperando: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={esperando}
-      className="foco rounded-lg border border-metodo-superficie px-4 py-2.5 text-sm font-medium text-metodo-tinta transition-colors hover:bg-metodo-superficie/10 disabled:opacity-50"
-    >
-      {children}
-    </button>
-  );
-}
-
 /**
  * Liga e desliga o som. A preferência mora no `localStorage`, fora do React —
  * por isso `useSyncExternalStore`: no servidor o som é "ligado", e a leitura
@@ -523,7 +482,7 @@ function Secundario({
  * operacional, e o alinhamento com o texto ao lado muda junto.
  *
  * Os dois glifos abaixo são o mesmo traço dos quatro do cartão de comando
- * (`Cartao.tsx`): 24 px, `stroke-width: 2`, `fill: none`, `currentColor`.
+ * (`components/lesson/CartaoDeComando.tsx`): 24 px, `stroke-width: 2`, `fill: none`, `currentColor`.
  * `currentColor` é o que os faz respeitar o tom da linha em que estão.
  */
 function BotaoDeSom() {

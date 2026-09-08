@@ -24,9 +24,26 @@ import type { ReactNode } from "react";
  * quatro `*Stage.tsx` com uma divergência já plantada (`lg:w-[26rem]` em três
  * deles, `lg:w-104` no `PracticeStage`).
  */
-export function AulaShell({ tabuleiro, painel }: { tabuleiro: ReactNode; painel: ReactNode }) {
+export function AulaShell({
+  tabuleiro,
+  painel,
+  magro = false,
+}: {
+  tabuleiro: ReactNode;
+  painel: ReactNode;
+  /**
+   * O painel magro: 416 px em vez de 522, e mais tabuleiro no celular.
+   *
+   * É para a tela em que o professor **não explica** — na tática ele diz uma
+   * linha em repouso e só abre a aula do tema se o aluno pedir a dica. Um
+   * painel dimensionado para prosa, servindo uma linha, é vão desenhado como
+   * conteúdo. A conta dos três números está em `.aula-palco-magro`, no bloco
+   * "O palco da aula" de `app/globals.css`.
+   */
+  magro?: boolean;
+}) {
   return (
-    <div className="aula-palco">
+    <div className={magro ? "aula-palco aula-palco-magro" : "aula-palco"}>
       <div className="aula-tabuleiro">{tabuleiro}</div>
       <div className="aula-painel">{painel}</div>
     </div>

@@ -1,5 +1,3 @@
-import type { Cartao as Conteudo, Tom } from "@/lib/repertorio/passada";
-
 /**
  * O cartão de comando: duas linhas, sempre no mesmo lugar, sempre dizendo o
  * que fazer.
@@ -30,39 +28,57 @@ import type { Cartao as Conteudo, Tom } from "@/lib/repertorio/passada";
  * cartão de altura fixa com prosa dentro deixa de ser um cartão. Quando há
  * comentário, o cartão diz "leia e continue" e o texto vai no bloco próprio,
  * logo abaixo.
+ *
+ * ## Por que ele mora em `components/lesson/`
+ *
+ * Nasceu em `app/aberturas/` e subiu quando a **tática** adotou o palco. Ele
+ * não sabe nada de repertório: recebe as três coisas que desenha e pronto. É
+ * por isso que as props são declaradas aqui, e não importadas de
+ * `lib/repertorio/passada` — o tipo `Cartao` de lá as satisfaz
+ * estruturalmente, e a tática monta as suas em `lib/tatica/fala.ts` sem passar
+ * pelo repertório.
  */
 
-const BORDA: Record<Tom, string> = {
+export type TomDoCartao = "calma" | "bom" | "aviso" | "ruim";
+
+const BORDA: Record<TomDoCartao, string> = {
   calma: "border-tinta-muda",
   bom: "border-metodo-superficie",
   aviso: "border-aviso-superficie",
   ruim: "border-erro-superficie",
 };
 
-const ICONE: Record<Tom, string> = {
+const ICONE: Record<TomDoCartao, string> = {
   calma: "text-tinta-muda",
   bom: "text-metodo-superficie",
   aviso: "text-aviso-superficie",
   ruim: "text-erro-superficie",
 };
 
-export function Cartao({ conteudo }: { conteudo: Conteudo }) {
+export function CartaoDeComando({
+  comando,
+  estado,
+  tom,
+}: {
+  comando: string;
+  /** Onde a passada está. Opcional: na tática nem toda fase tem o que dizer. */
+  estado?: string;
+  tom: TomDoCartao;
+}) {
   return (
     <div
       // O `aria-live` herdado do balão de recado que este cartão substituiu:
       // sem ele, o leitor de tela do aluno não é avisado de que a instrução
       // mudou — e a instrução muda a cada lance.
       aria-live="polite"
-      className={`flex min-h-16 items-center gap-3 rounded-lg border-2 bg-tinta px-3.5 py-2.5 text-tinta-inversa ${BORDA[conteudo.tom]}`}
+      className={`flex min-h-16 items-center gap-3 rounded-lg border-2 bg-tinta px-3.5 py-2.5 text-tinta-inversa ${BORDA[tom]}`}
     >
-      <span className={`shrink-0 ${ICONE[conteudo.tom]}`} aria-hidden>
-        <Icone tom={conteudo.tom} />
+      <span className={`shrink-0 ${ICONE[tom]}`} aria-hidden>
+        <Icone tom={tom} />
       </span>
       <span className="flex min-w-0 flex-col gap-0.5">
-        <span className="text-sm font-semibold leading-snug">{conteudo.comando}</span>
-        {conteudo.estado ? (
-          <span className="text-xs leading-snug opacity-90">{conteudo.estado}</span>
-        ) : null}
+        <span className="text-sm font-semibold leading-snug">{comando}</span>
+        {estado ? <span className="text-xs leading-snug opacity-90">{estado}</span> : null}
       </span>
     </div>
   );
@@ -75,7 +91,7 @@ export function Cartao({ conteudo }: { conteudo: Conteudo }) {
  * tamanho vira um borrão. `stroke-width` 2 é o mesmo peso da borda do cartão —
  * os dois canais do tom têm de parecer o mesmo canal.
  */
-function Icone({ tom }: { tom: Tom }) {
+function Icone({ tom }: { tom: TomDoCartao }) {
   const comum = {
     width: 24,
     height: 24,

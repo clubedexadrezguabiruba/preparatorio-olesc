@@ -375,9 +375,21 @@ function emFrases(texto: string): string[] {
 export function Comentario({
   paginacao,
   retrato,
+  compacto = false,
 }: {
   paginacao: Paginacao;
   retrato?: ReactNode;
+  /**
+   * O teto da linha cai de 22rem para 14rem.
+   *
+   * O teto não é o tamanho do balão — o balão abraça o texto —, é onde o
+   * **rodapé** começa. Com 22rem e uma fala de uma linha, sobram uns 290 px de
+   * nada entre o fim do texto e os botões, e o painel lê como formulário meio
+   * preenchido. 22rem é o certo para a prosa do repertório, que chega a 850
+   * caracteres; 14rem é o certo para quem fala uma linha em repouso e três
+   * frases quando pedem a dica. Ver `.aula-palco-magro` em `app/globals.css`.
+   */
+  compacto?: boolean;
 }) {
   const { espacoRef, caixaRef, pagina, visivel, indice, total } = paginacao;
   return (
@@ -410,7 +422,7 @@ export function Comentario({
      * **Abaixo de `lg` o retrato e o bico somem.** Lá o painel tem 328 px e 96
      * deles seriam um quarto da tela do telefone, tirados justamente do texto.
      */
-    <div className="flex min-h-0 flex-1 gap-4 lg:max-h-88">
+    <div className={`flex min-h-0 flex-1 gap-4 ${compacto ? "lg:max-h-56" : "lg:max-h-88"}`}>
       {retrato ? <div className="hidden shrink-0 lg:block">{retrato}</div> : null}
       <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-1.5">
         {/*

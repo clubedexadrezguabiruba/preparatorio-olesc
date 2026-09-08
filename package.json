@@ -34,7 +34,8 @@
     "repertorio:fidelidade": "node scripts/medir-fidelidade.ts",
     "repertorio:mapear": "node scripts/mapear-fontes.ts",
     "repertorio:cauda": "node scripts/cauda-repertorio.ts",
-    "repertorio:orfaos": "node scripts/orfaos-repertorio.ts"
+    "repertorio:orfaos": "node scripts/orfaos-repertorio.ts",
+    "tatica:tela": "node scripts/conferir-tatica.ts"
   },
   "dependencies": {
     "@lichess-org/chessground": "^10.1.1",
