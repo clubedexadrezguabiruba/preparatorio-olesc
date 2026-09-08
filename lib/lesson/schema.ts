@@ -111,10 +111,27 @@ export const provenanceSchema = z.strictObject({
  */
 export const positionStatusSchema = z.enum(["fixture", "candidate", "approved"]);
 
+/**
+ * O que a posição afirma sobre o resultado com jogo perfeito.
+ *
+ * Os três primeiros valores são de final: a tablebase sabe a resposta, e o gate
+ * a cobra. `open` é o quarto, e nasceu com o meio-jogo em 2026-09-08: a posição
+ * de um exercício do Yusupov é uma posição de partida de mestre, com trinta
+ * peças no tabuleiro, e ninguém — nem a tablebase, nem o autor — afirma se ela
+ * é ganha ou empatada. Afirmar seria mentir, e o gate cobraria a mentira.
+ *
+ * `open` quer dizer exatamente isto: **esta posição não afirma resultado**. As
+ * regras que dependem do resultado (a consulta à tablebase, `RESULTADO_ERRADO`,
+ * `OBJETIVO_INCOERENTE`, `TETO_IMPOSSIVEL`, `WINNING_MOVES_DESATUALIZADO`)
+ * pulam a posição em vez de reprová-la. O que julga o lance do aluno num
+ * exercício não é o resultado: é o gabarito impresso do livro.
+ */
+export const expectedResultSchema = z.enum(["win-white", "win-black", "draw", "open"]);
+
 export const positionSchema = z.strictObject({
   id: positionIdSchema,
   fen: fenSchema,
-  expectedResult: z.enum(["win-white", "win-black", "draw"]),
+  expectedResult: expectedResultSchema,
   tags: z.array(texto).min(1),
   status: positionStatusSchema,
   provenance: provenanceSchema,
@@ -156,6 +173,16 @@ export const sourceSchema = z.strictObject({
    * gate a cobra em `FONTE_DIDATICA_DOMINA`.
    */
   didactic: z.boolean().optional(),
+  /**
+   * Série a que a obra pertence, quando ela é um volume de uma. Existe por
+   * causa do meio-jogo: as seis obras do módulo são os seis volumes da série
+   * do Yusupov, e o gate cobra que toda aula M cite uma obra da mesma série,
+   * com o volume batendo com o primeiro dígito do id da aula (M1xx = volume 1).
+   * Obra solta — todo o acervo de finais — não declara nada.
+   */
+  serie: texto.optional(),
+  /** O número do volume dentro da `serie`. Só faz sentido com ela. */
+  volume: z.number().int().positive().optional(),
   license: texto,
   /** Nome do PDF em `biblioteca/`, ou `null` para fonte sem arquivo local. */
   file: texto.nullable(),
@@ -325,6 +352,18 @@ export const authorAlternativeSchema = z.strictObject({
   moves: z.array(uciSchema).min(1),
   /** O que o aluno lê. Elogio, não recusa — a peça volta, mas sem repreensão. */
   feedback: texto,
+  /**
+   * Crédito parcial, em pontos do livro. Só a etapa de exercícios o usa.
+   *
+   * O Yusupov não pontua por acerto e erro: ele imprime "(2 points)" no lance
+   * principal e "(1 point)" num segundo lance que também resolve, e a nota do
+   * capítulo é a soma. Sem este campo, o crédito parcial do livro se perderia e
+   * a régua de aprovação dele deixaria de fechar.
+   *
+   * Ausente quer dizer alternativa **sem** pontos: boa, elogiada, e sem crédito
+   * — que é como as alternativas de finais sempre funcionaram.
+   */
+  pontos: z.number().int().positive().optional(),
 });
 
 export const treeNodeSchema = z.strictObject({
@@ -480,8 +519,20 @@ export const exampleSceneSchema = z.strictObject({
   steps: z.array(exampleStepSchema).min(1),
 });
 
+/**
+ * O teto de cenas subiu de 4 para 12 em 2026-09-08, com o meio-jogo.
+ *
+ * Quatro era o teto certo enquanto o exemplo era o de um final: dois diagramas
+ * bastam para ensinar a caixa do rei, e um quinto seria repetição. A teoria de
+ * um capítulo do Yusupov tem de seis a dez diagramas numerados, e ela entra
+ * inteira — cortá-la seria reescrever a aula do autor, que é justamente o que a
+ * decisão de 2026-09-07 recusou fazer.
+ *
+ * O teto continua existindo porque cena não é lista: cada uma tem posição,
+ * roteiro e fases, e doze já é mais do que qualquer capítulo medido tem.
+ */
 export const exampleStageSchema = z.strictObject({
-  scenes: z.array(exampleSceneSchema).min(1).max(4),
+  scenes: z.array(exampleSceneSchema).min(1).max(12),
 });
 
 /** Etapa 3 — com ajuda: destaques, dica e retentativa ilimitada. */
@@ -553,6 +604,104 @@ export const reviewStageSchema = z.strictObject({
   reviewPositionIds: z.array(positionIdSchema).min(1),
 });
 
+/* ------------------------------------------------------------------ *
+ * Etapa de exercícios — o meio-jogo (2026-09-08)
+ * ------------------------------------------------------------------ */
+
+/**
+ * O id de um exercício, e ele carrega a numeração impressa: `ex-14-3` é o
+ * terceiro exercício do capítulo 14. Não é enfeite — é por ele que se volta ao
+ * livro para conferir uma transcrição, e é ele que vai para a coluna `item` de
+ * `tentativa_meiojogo`.
+ */
+export const exerciseIdSchema = z
+  .string()
+  .regex(/^ex-[0-9]{1,2}-[0-9]{1,2}$/, "id de exercício fora do padrão (ex.: ex-14-3)");
+
+/**
+ * Um exercício: uma posição, um lance a achar, e os pontos que o livro dá.
+ *
+ * O nó é um `treeNodeSchema` de **um nível só**, e essa escolha é o que faz a
+ * etapa caber no motor sem código novo de julgamento: `judgeMove`
+ * (`lib/lesson/tree.ts`) já sabe ler `expects` (o lance do livro),
+ * `authorAlternatives` (os lances que o livro credita, com os pontos dele) e
+ * `mistakes` (os lances que o livro nomeia como ruins). Lance fora de todas as
+ * listas cai no veredito `loses-win`, cujo texto vem de `fallbacks.losesWin` —
+ * e numa aula de meio-jogo esse texto é escrito com vocabulário de meio-jogo,
+ * não de final.
+ *
+ * `winningMoves` fica **vazio** de propósito: ele é a lista da tablebase, e a
+ * posição de um exercício é `expectedResult: "open"` — não há tablebase, e não
+ * há o que listar. O esquema já aceita a lista vazia.
+ */
+export const exerciseItemSchema = z.strictObject({
+  id: exerciseIdSchema,
+  positionId: positionIdSchema,
+  /**
+   * De que lado o tabuleiro é visto. Varia **por exercício**, e não por aula:
+   * numa mesma página o Yusupov põe seis diagramas, uns com as brancas jogando
+   * e outros com as pretas. Ausente quer dizer o lado a jogar da FEN, que é o
+   * caso normal; o campo existe para o exercício em que o autor imprime o
+   * diagrama do outro lado.
+   */
+  orientation: z.enum(["white", "black"]).optional(),
+  /** Os pontos do livro pelo lance principal. Nunca inventados. */
+  pontos: z.number().int().positive(),
+  node: treeNodeSchema,
+  /**
+   * A solução do livro, para tocar **depois** que o aluno acerta ou desiste.
+   * Mesmo formato do roteiro do exemplo, e por isso a mesma máquina de quadros
+   * (`buildFrames`) a anima: o aluno vê o resto da linha, com o comentário do
+   * autor traduzido, em vez de só um "certo".
+   */
+  reveal: z.array(exampleStepSchema).min(1),
+});
+
+/**
+ * A régua de aprovação do capítulo, e ela é do **livro**, não nossa.
+ *
+ * O Yusupov fecha cada capítulo com "Maximum number of points is 31 / 25 points
+ * and above: Excellent / 20: Good / 15: Pass mark". `minimo` é a nota de corte,
+ * e é ela que decide se a aula está concluída. Aprovar com menos da metade dos
+ * pontos parece frouxo até se ver o que o autor está medindo: um aluno da faixa
+ * **deve** errar parte dos exercícios, e a régua já prevê isso.
+ *
+ * Os dois números são medidos, e o gate confere que `maximo` é a soma dos
+ * pontos dos itens — se não fechar, algum ponto foi transcrito errado.
+ */
+export const aprovacaoSchema = z.strictObject({
+  minimo: z.number().int().positive(),
+  maximo: z.number().int().positive(),
+});
+
+/**
+ * Etapa de exercícios — a etapa que o meio-jogo trouxe.
+ *
+ * O que ela é, e por que não é a etapa 5 nem a 4: nas etapas de final o aluno
+ * conduz uma técnica até o fim, lance a lance, contra a tablebase. Aqui ele
+ * responde **uma pergunta por posição** — "qual é o lance?" —, o livro diz se
+ * acertou, e passa-se ao próximo. São doze perguntas de um capítulo, não uma
+ * partida.
+ *
+ * Fica entre `solo` e `practice` na ordem das etapas porque é ali que ela cai
+ * na aula de meio-jogo: depois de ver o conceito (objetivo) e o exemplo do
+ * autor, antes de qualquer prática livre.
+ */
+export const exercisesStageSchema = z.strictObject({
+  intro: texto.optional(),
+  aprovacao: aprovacaoSchema,
+  /**
+   * Um capítulo da série tem doze exercícios impressos, e o teto é doze. O
+   * piso é um porque uma aula em escrita publica o que já transcreveu.
+   *
+   * Quantos chegam ao aluno é outra decisão, e ela é editorial: desde
+   * 2026-09-08 são os **seis primeiros**, na ordem do autor, porque doze é
+   * lista de casa de adulto e o aluno tem de 11 a 15 anos. O esquema não a
+   * cobra — quem escolhe o que entra no arquivo é quem escreve a aula.
+   */
+  items: z.array(exerciseItemSchema).min(1).max(12),
+});
+
 export const lessonErrorSchema = z.strictObject({
   /**
    * `off-method` — o lance ganha, mas não é o método da aula.
@@ -596,7 +745,43 @@ export const generatedTemplatesSchema = z.strictObject({
  */
 export const lessonIdSchema = z
   .string()
-  .regex(/^N[0-9]+-[A-Z0-9-]+$/, "id de aula fora do padrão (ex.: N0-R-MATE)");
+  .regex(
+    /^(N[0-9]+|M[1-9][0-9]{2})-[A-Z0-9-]+$/,
+    "id de aula fora do padrão (ex.: N0-R-MATE, M103-PRINCIPIOS-DE-ABERTURA)",
+  );
+
+/**
+ * De que módulo é a aula — e é o **prefixo do id** que decide, não um campo.
+ *
+ * `N` é finais, e o número é o nível do currículo (`N0`…`N5`). `M` é meio-jogo,
+ * e os três dígitos são volume e capítulo do livro de origem: `M103` é o
+ * capítulo 3 do volume 1 da série do Yusupov, `M214` o capítulo 14 do volume 2.
+ * Ordenar por id é, nos dois módulos, ordenar pela progressão do autor.
+ *
+ * Ser derivado do id, e não declarado, é de propósito: um campo `modulo` seria
+ * uma segunda opinião sobre o mesmo fato, e um dia as duas divergiriam. O gate,
+ * as rotas e as listas ramificam por esta função.
+ */
+export function moduloDaAula(id: string): "finais" | "meio-jogo" {
+  return id.startsWith("M") ? "meio-jogo" : "finais";
+}
+
+/**
+ * O volume da série de onde a aula de meio-jogo saiu — o primeiro dígito do id.
+ * `null` em aula de finais, que não sai de série nenhuma.
+ */
+export function volumeDaAula(id: string): number | null {
+  const casou = /^M([1-9])[0-9]{2}-/.exec(id);
+  return casou ? Number(casou[1]) : null;
+}
+
+/**
+ * O capítulo do livro — os dois últimos dígitos. `null` em aula de finais.
+ */
+export function capituloDaAula(id: string): number | null {
+  const casou = /^M[1-9]([0-9]{2})-/.exec(id);
+  return casou ? Number(casou[1]) : null;
+}
 
 /**
  * A classe de força a que a aula pertence (`docs/TRILHA-FINAIS.md` §1). São as
@@ -645,6 +830,7 @@ const lessonBaseSchema = z.strictObject({
     example: exampleStageSchema.optional(),
     guided: guidedStageSchema.optional(),
     solo: soloStageSchema.optional(),
+    exercises: exercisesStageSchema.optional(),
     practice: practiceStageSchema.optional(),
     review: reviewStageSchema.optional(),
   }),
@@ -661,7 +847,17 @@ const lessonBaseSchema = z.strictObject({
 export const lessonSchema = lessonBaseSchema.superRefine((lesson, ctx) => {
   // A rotação de livros-base (§4 da trilha) é contada por classe, sobre as
   // aulas publicadas. Publicar sem declarar a classe é sair da conta.
-  if (lesson.status === "published" && lesson.class === undefined) {
+  //
+  // Só em **finais**: a classe existe para contar a rotação de livros-base por
+  // classe de força, e no meio-jogo não há rotação a contar — a aula inteira
+  // sai de um capítulo de um volume só, e a graduação é a do próprio autor, já
+  // escrita no id (M1xx antes de M2xx). Cobrar a classe ali seria pedir um dado
+  // que não decide nada.
+  if (
+    moduloDaAula(lesson.id) === "finais" &&
+    lesson.status === "published" &&
+    lesson.class === undefined
+  ) {
     ctx.addIssue({
       code: "custom",
       path: ["class"],
@@ -757,6 +953,9 @@ export type GuidedStage = z.infer<typeof guidedStageSchema>;
 export type SoloStage = z.infer<typeof soloStageSchema>;
 export type PracticeStage = z.infer<typeof practiceStageSchema>;
 export type ReviewStage = z.infer<typeof reviewStageSchema>;
+export type ExercisesStage = z.infer<typeof exercisesStageSchema>;
+export type ExerciseItem = z.infer<typeof exerciseItemSchema>;
+export type Aprovacao = z.infer<typeof aprovacaoSchema>;
 export type LessonError = z.infer<typeof lessonErrorSchema>;
 export type GeneratedTemplates = z.infer<typeof generatedTemplatesSchema>;
 export type Lesson = z.infer<typeof lessonSchema>;
