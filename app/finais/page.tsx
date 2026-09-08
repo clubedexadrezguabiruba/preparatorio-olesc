@@ -168,7 +168,7 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
         <Link href="/trilha" className="font-medium underline">
           Veja a trilha do curso inteiro
         </Link>{" "}
-        — tática, finais e meio-jogo, por nível.
+        — tática e finais, por nível.
       </p>
 
       {bancada.length > 0 ? (

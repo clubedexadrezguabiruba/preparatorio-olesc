@@ -37,12 +37,6 @@ import { CLASSES } from "../finais/trilha.ts";
  *   `aula_lida` pelo critério de formato da trilha. O que a torna um tipo
  *   próprio e não uma variação da de tática é a unidade do que se conta —
  *   puzzle resolvido e aula dominada não somam na mesma barra.
- * - `meiojogo` — o site **mede**: quantas dicas daquele degrau o aluno resolveu,
- *   contadas de `tentativa_meiojogo`. Uma dica conta quando ele acertou o lance
- *   de **todos** os exercícios dela. Era declaração até 2026-09-07 (contava
- *   `dica_lida`, a caixa "li"), e o Doug a trocou pela mesma razão que derrubou
- *   o exercício de clicar na casa: uma barra que sobe porque a criança rolou
- *   até o fim não mede nada.
  * - `marcar` — o aluno **declara**. "Assisti o vídeo", "joguei duas partidas".
  *   Não existe verdade no servidor para conferir isso, e fingir que existe
  *   (um botão que só o professor libera) transformaria a tarefa de casa em
@@ -118,65 +112,7 @@ const MetaDeFinaisSchema = z
   })
   .strict();
 
-/**
- * O que fecha uma tarefa de meio-jogo.
- *
- * `nivel` e não uma lista de dicas, pelo motivo de `MetaDeFinaisSchema`: a
- * tarefa é "resolva os exercícios de 6 dicas do degrau 1000–1200", e o aluno
- * escolhe quais. Nomear as seis quebraria a tarefa no dia em que uma delas
- * mudasse de degrau.
- *
- * **É medida, e não marcada**, e desde 2026-09-07 ela mede trabalho e não
- * declaração: o servidor confere cada lance com o mesmo juiz que a tela usou.
- * Uma caixa aqui pediria ao aluno que opinasse sobre um número que o servidor
- * já sabe.
- *
- * O preço da mudança está declarado e é o motivo de este tipo ter ficado só na
- * semana 2: uma dica **sem** exercício não pode fechar esta tarefa, porque não
- * há o que resolver. As semanas 1, 3 e 4 viraram tarefa de `marcar` até as
- * dicas dos degraus delas serem curadas.
- */
-const MetaDeMeioJogoSchema = z
-  .object({
-    /**
-     * Quantas das aulas nomeadas o aluno precisa **concluir** para fechar a
-     * tarefa. Concluir é chegar à nota de corte do próprio livro, e não acertar
-     * tudo (`lib/meiojogo/progresso.ts`).
-     *
-     * O campo `nivel` saiu em 2026-09-08. Ele existia porque a tarefa dizia
-     * "leia 6 dicas do degrau 1200–1400" e o aluno escolhia quais; agora a
-     * tarefa **nomeia as aulas**, e um degrau declarado ao lado seria um
-     * segundo jeito de dizer a mesma coisa, livre para divergir.
-     */
-    concluir: z.number().int().min(1),
-  })
-  .strict();
-
 export const TarefaSchema = z.discriminatedUnion("tipo", [
-  z
-    .object({
-      ...Base,
-      tipo: z.literal("meiojogo"),
-      meta: MetaDeMeioJogoSchema,
-      /**
-       * As aulas que a tarefa manda fazer — os ids, na ordem em que aparecem
-       * no `detalhe`.
-       *
-       * Agora **é** a meta: a tarefa nomeia as aulas e `meta.concluir` diz
-       * quantas delas fecham. Era diferente até 2026-09-08, quando a tarefa
-       * dizia "leia 6 dicas do degrau" e o aluno escolhia quais — e a prosa
-       * podia prometer conceitos que não eram daquele degrau, que foi o erro
-       * real que este campo nasceu para pegar.
-       *
-       * O teste cobra três coisas: que cada id exista, que a aula tenha
-       * exercício escrito (sem ele nada se conclui, e a caixa do painel seria
-       * impossível), e que o `titulo` da aula apareça **literalmente** no
-       * `detalhe`. A terceira é a que morde: ela obriga a prosa a chamar a aula
-       * pelo nome que o aluno vai ver na tela, em vez de parafraseá-la.
-       */
-      aulas: z.array(z.string().regex(/^M[1-9][0-9]{2}-[A-Z0-9-]+$/)).min(1),
-    })
-    .strict(),
   z.object({ ...Base, tipo: z.literal("tatica"), meta: MetaSchema }).strict(),
   z.object({ ...Base, tipo: z.literal("finais"), meta: MetaDeFinaisSchema }).strict(),
   z.object({ ...Base, tipo: z.literal("marcar") }).strict(),
@@ -185,7 +121,6 @@ export const TarefaSchema = z.discriminatedUnion("tipo", [
 export type Tarefa = z.infer<typeof TarefaSchema>;
 export type MetaDeTatica = z.infer<typeof MetaSchema>;
 export type MetaDeFinais = z.infer<typeof MetaDeFinaisSchema>;
-export type MetaDeMeioJogo = z.infer<typeof MetaDeMeioJogoSchema>;
 
 export const TarefasSchema = z.array(TarefaSchema).min(1);
 
@@ -222,74 +157,6 @@ export function validarTarefas(dados: unknown): Tarefa[] {
   return lido.data;
 }
 
-/** O que a conferência do `detalhe` precisa saber de uma aula de meio-jogo. */
-export type AulaCitavel = {
-  readonly id: string;
-  readonly titulo: string;
-  /** Quantos exercícios a aula tem. Zero é aula que não pode fechar a tarefa. */
-  readonly exercicios: number;
-};
-
-/**
- * Os problemas do `detalhe` das tarefas de meio-jogo, em português.
- *
- * Mora aqui, e não dentro de `validarTarefas`, porque a conferência precisa das
- * **dicas** — e `content/meio-jogo.json` é outro arquivo de conteúdo. Importá-lo
- * daqui faria o esquema das tarefas depender do conteúdo do meio-jogo para
- * conferir uma vírgula de tática. Recebendo a lista por parâmetro, quem junta
- * as duas pontas é quem já lê as duas: o `npm test` e o gate.
- *
- * As três regras, e o erro real que cada uma pega:
- *
- * 1. **o id existe** — `detalhe` prometendo dica que ninguém escreveu;
- * 2. **o id é do degrau declarado** — foi o que aconteceu: `s3-meiojogo` é do
- *    degrau 1200–1400 e prometia "posto avançado" e "bispo bom e bispo mau",
- *    que são m15 e m14, do degrau anterior;
- * 3. **o título aparece literalmente no `detalhe`** — sem isto a lista de ids
- *    ficaria certa e a prosa continuaria dizendo outra coisa, que é exatamente
- *    o estado em que o painel estava;
- * 4. **a dica tem exercício** — a regra que nasceu com o progresso medido: uma
- *    dica sem exercício nunca fecharia uma tarefa que conta exercício
- *    resolvido, e o aluno ficaria com uma caixa impossível no painel.
- */
-export function problemasDoDetalheDeMeioJogo(
-  tarefas: readonly Tarefa[],
-  aulas: readonly AulaCitavel[],
-): string[] {
-  const problemas: string[] = [];
-  for (const tarefa of tarefas) {
-    if (tarefa.tipo !== "meiojogo") continue;
-    if (tarefa.aulas.length !== tarefa.meta.concluir) {
-      problemas.push(
-        `${tarefa.id}: manda concluir ${tarefa.meta.concluir} aula(s) e nomeia ` +
-          `${tarefa.aulas.length}`,
-      );
-    }
-    for (const id of tarefa.aulas) {
-      const aula = aulas.find((a) => a.id === id);
-      if (!aula) {
-        problemas.push(`${tarefa.id}: nomeia a aula "${id}", que não existe`);
-        continue;
-      }
-      if (!tarefa.detalhe?.includes(aula.titulo)) {
-        problemas.push(
-          `${tarefa.id}: nomeia "${id}" na lista e não escreve "${aula.titulo}" no detalhe`,
-        );
-      }
-      // A regra que impede a tarefa impossível: uma aula sem exercício escrito
-      // não pode fechar uma tarefa que conta aula concluída. Sem ela, o aluno
-      // abriria o painel na segunda-feira do piloto com uma caixa que nada que
-      // ele fizesse marcaria.
-      if (aula.exercicios === 0) {
-        problemas.push(
-          `${tarefa.id}: nomeia "${id}", que não tem exercício escrito — a tarefa conta aula ` +
-            `concluída, e essa aula nunca fecharia`,
-        );
-      }
-    }
-  }
-  return problemas;
-}
 
 /** As tarefas de uma semana, na ordem em que foram escritas. */
 export function daSemana(tarefas: readonly Tarefa[], semana: number): Tarefa[] {

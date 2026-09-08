@@ -6,7 +6,6 @@ import Link from "next/link";
 import type { PacoteDeAula } from "@/lib/finais/conteudo";
 import type { TentativaDeAula } from "@/lib/finais/gravar";
 import { masteryReport } from "@/lib/lesson/mastery";
-import { moduloDaAula } from "@/lib/lesson/schema";
 import {
   reviewKey,
   STAGE_LABEL,
@@ -18,7 +17,6 @@ import {
 } from "@/lib/lesson/store";
 import { armAudioOnFirstGesture, isSoundOn, setSoundOn, subscribeSound } from "@/lib/sound";
 import { ExampleStage } from "./ExampleStage";
-import { ExerciseStage } from "./ExerciseStage";
 import { MasterySeal } from "./MasterySeal";
 import { ObjectiveStage } from "./ObjectiveStage";
 import { PracticeStage } from "./PracticeStage";
@@ -36,7 +34,6 @@ export function LessonPlayer({
   marcacao,
   revisao = false,
   onStageDone,
-  onExercise,
   leitura,
 }: {
   bundle: PacoteDeAula;
@@ -88,28 +85,6 @@ export function LessonPlayer({
    */
   onStageDone?: (tentativa: TentativaDeAula) => void | Promise<unknown>;
   /**
-   * O que fazer quando o aluno tenta um lance num exercício — a server action
-   * de `app/meio-jogo/acoes.ts`.
-   *
-   * Prop separada do `onStageDone`, e não uma variante dele, porque as duas
-   * escrevem em **tabelas diferentes**: a de finais em `tentativas_aula`, esta
-   * em `tentativa_meiojogo`. Juntá-las obrigaria o motor a saber qual banco é
-   * qual, que é justamente o que a divisão "o motor diz onde e quando, o site
-   * diz o quê" existe para evitar.
-   *
-   * Sobe a cada tentativa, certa ou errada, e o que sobe é **o lance**: quem
-   * decide se acertou é o servidor, relendo a aula em disco.
-   */
-  onExercise?: (tentativa: {
-    aula: string;
-    item: string;
-    lance: string;
-    apoio: boolean;
-    tentativa: number;
-    tries: number;
-    tempo_ms: number;
-  }) => void | Promise<unknown>;
-  /**
    * O que a aula de **leitura** oferece no fim do exemplo: o controle de "eu li
    * até o fim".
    *
@@ -136,7 +111,6 @@ export function LessonPlayer({
   const practice = practices.practice;
 
   const available = STAGE_ORDER.filter((key) => lesson.stages[key] !== undefined);
-  const ehMeioJogo = moduloDaAula(lesson.id) === "meio-jogo";
 
   // Navegador nenhum toca áudio antes de um gesto. O primeiro toque na página
   // destrava o som — inclusive o clique que abre a etapa 2, que roda sozinha.
@@ -259,15 +233,13 @@ export function LessonPlayer({
     <div className="flex w-full flex-col gap-6">
       <header className="flex flex-col gap-2">
         {/* No laboratório este link ia para `/`, que era o índice de aulas.
-            Aqui `/` é a porta do site e o índice é o do módulo — apontar para a
-            raiz mandaria o aluno para fora do curso no meio da aula. Qual
-            módulo vem do prefixo do id, e não de uma prop: um segundo lugar
-            dizendo a mesma coisa um dia diria outra. */}
+            Aqui `/` é a porta do site e o índice é `/finais` — apontar para a
+            raiz mandaria o aluno para fora do curso no meio da aula. */}
         <Link
-          href={ehMeioJogo ? "/meio-jogo" : "/finais"}
+          href="/finais"
           className="text-xs font-medium text-tinta-fraca transition hover:text-tinta-media"
         >
-          ← todas as aulas de {ehMeioJogo ? "meio-jogo" : "finais"}
+          ← todas as aulas de finais
         </Link>
         <div className="flex items-start justify-between gap-3">
           <h1 className="titulo">{lesson.title}</h1>
@@ -374,19 +346,6 @@ export function LessonPlayer({
               if (next) goToStage(next);
             }}
             finishLabel="Continuar"
-          />
-        )}
-
-        {stage === "exercises" && lesson.stages.exercises && (
-          <ExerciseStage
-            lesson={lesson}
-            stage={lesson.stages.exercises}
-            positions={positions}
-            onAttempt={
-              onExercise
-                ? (dados) => void onExercise({ aula: lesson.id, ...dados })
-                : undefined
-            }
           />
         )}
 

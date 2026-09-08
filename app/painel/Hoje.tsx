@@ -11,8 +11,10 @@ import { marcarPartidaDoDia } from "./acoes";
  *
  * **A ordem é a decisão.** O Doug fixou que a partida vem por último, depois do
  * treino: treina-se primeiro, joga-se para aplicar. Então o cartão lista 1)
- * tática, 2) finais, 3) meio-jogo, 4) partida — e a caixa da partida é o
- * último elemento, embaixo dos minutos, não o primeiro.
+ * tática, 2) finais, 3) partida — e a caixa da partida é o último elemento,
+ * embaixo dos minutos, não o primeiro.
+ *
+ * O passo de meio-jogo saiu em 2026-09-08, com o módulo inteiro.
  *
  * ## Por que os minutos aparecem
  *
@@ -33,7 +35,6 @@ export function Hoje({
   sequencia,
   revisaoDeTatica,
   revisaoDeFinais,
-  meioJogo,
   partidaFeita,
 }: {
   minutos: MinutosDeHoje;
@@ -42,16 +43,6 @@ export function Hoje({
   revisaoDeTatica: number;
   /** As aulas devidas hoje: nome e para onde ir. A primeira é a que o cartão mostra. */
   revisaoDeFinais: { id: string; nome: string }[];
-  /**
-   * A próxima aula de meio-jogo aberta e ainda não concluída, ou `null` quando
-   * o aluno fechou todas as escritas.
-   *
-   * Até 2026-09-07 este passo dizia "Uma dica e o vídeo dela" — texto de um
-   * módulo que tinha vídeo e dica, e que não existe mais. Apontar a aula pelo
-   * nome é o mesmo que o passo de finais faz: o cartão "Hoje" existe para tirar
-   * do aluno a decisão de por onde começar.
-   */
-  meioJogo: { id: string; nome: string } | null;
   partidaFeita: boolean;
 }) {
   const [jogou, aplicar] = useOptimistic(partidaFeita, (_atual, novo: boolean) => novo);
@@ -118,17 +109,9 @@ export function Hoje({
           )}
         </Passo>
 
-        <Passo numero={3} titulo="Meio-jogo">
-          {meioJogo ? (
-            <Ir href={`/meio-jogo/${meioJogo.id}`}>{meioJogo.nome}</Ir>
-          ) : (
-            <Ir href="/meio-jogo">Rever um capítulo já aprovado</Ir>
-          )}
-        </Passo>
-
         {/* Por último, e é a decisão do Doug: treina-se primeiro, joga-se
             depois, para aplicar o que acabou de treinar. */}
-        <Passo numero={4} titulo="Partida">
+        <Passo numero={3} titulo="Partida">
           <label className="-m-2 flex cursor-pointer items-start gap-2 p-2">
             <input
               type="checkbox"

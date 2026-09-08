@@ -1,5 +1,5 @@
 {
-  "_leia": "Registro canônico das obras que podem originar posição (§12.2 e §12.4 do CURRICULO.md). O gate de conteúdo lê este arquivo: o campo provenance.editionFile de toda posição não-fixture precisa casar com o 'file' ou o 'slug' de uma entrada daqui. Obra com \"didactic\": true é livro-base didático: dela sai o objetivo e o exemplo (etapas 1 e 2) de uma aula, e não só posição de prática. O TETO DE CITAÇÃO VALE SÓ PARA FINAIS, DESDE 2026-09-07. Nas aulas de finais obra com protected:true contribui no máximo 2 posições por aula (PROTECTED_SOURCE_CAP = 2 em lib/lesson/schema.ts), e o gate também cobra a rotação de livro-base por classe; isso continua intocado. NO MEIO-JOGO NÃO HÁ TETO NENHUM — nem por obra, nem por capítulo. Decisão do Doug em 2026-09-07, na reformulação do módulo: o meio-jogo passou a ser aula do mesmo motor de finais, e o conteúdo de cada aula é um capítulo de um livro — a teoria dele vira o exemplo, os exercícios dele viram os exercícios, na ordem dele e com o gabarito dele. Um teto de duas ou três posições é incompatível com isso por construção, e a recomendação anterior (regime de edição didática só para obra em domínio público) foi recusada. O que substitui o teto é uma regra de honestidade, não de quantidade: o uso é INTERNO, no piloto de 19 a 25/9/2026, com exemplares adquiridos e atribuição da obra em toda tela do módulo. A CONSEQUÊNCIA ESTÁ ESCRITA AQUI PARA NÃO SER ESQUECIDA: o meio-jogo, do jeito que está, NÃO PODE SER COMERCIALIZADO. Antes de vender, as posições da série do Yusupov têm de ser trocadas por outra obra pelo mesmo pipeline; o motor é agnóstico de livro, então a troca é só de conteúdo (content/positions/M/, content/lessons/M*.json e as entradas daqui), mas quanto mais volumes entrarem, maior a conta. O candidato em domínio público levantado em 2026-09-07 é o znosko-middle-game-1930 (59 diagramas de meio-jogo, e nenhum exercício: lá o exercício vira 'adivinhe o lance'). O raciocínio jurídico de fundo — que uma FEN é o arranjo das peças, e o que a Lei 9.610 protege num livro de xadrez é o texto, as anotações e a seleção/organização da coletânea (art. 7º, XIII) — está escrito por extenso na licença de nimzowitsch-my-system-1930 e continua valendo; o que mudou é que no meio-jogo a seleção do autor é copiada de propósito e é isso que fecha a porta da venda. A face humana deste registro — legibilidade medida, mapa de cobertura e regras editoriais — é docs/SOURCE-CORPUS.md; o mapa das páginas dos capítulos transcritos é docs/MEIO-JOGO-YUSUPOV-MAPA.md.",
+  "_leia": "Registro canônico das obras que podem originar posição (§12.2 e §12.4 do CURRICULO.md). O gate de conteúdo lê este arquivo: o campo provenance.editionFile de toda posição não-fixture precisa casar com o 'file' ou o 'slug' de uma entrada daqui, e obra com protected:true tem teto de 2 posições por aula (§12.7, PROTECTED_SOURCE_CAP em lib/lesson/schema.ts). Obra com \"didactic\": true é livro-base didático: dela sai o objetivo e o exemplo (etapas 1 e 2) de uma aula, e não só posição de prática — e o gate cobra que nenhuma obra protegida seja base de mais de uma aula por nível. HISTÓRICO, PARA QUEM ENCONTRAR AS OBRAS DE MEIO-JOGO NO GIT. Entre 2026-08 e 2026-09-08 este arquivo teve duas gerações de obras de meio-jogo: primeiro Capablanca, Nimzowitsch, Znosko-Borovsky e Lasker, para as trinta dicas; depois, por um dia, os seis volumes da série do Yusupov, para o módulo reescrito como aula do motor de finais. O Doug testou a primeira aula pronta em 2026-09-08 e reprovou o módulo inteiro: complexo demais para a idade e a força dos alunos dele. O meio-jogo saiu do site, e as obras saíram daqui junto. O teto de citação voltou a ser um só, por obra, e vale para tudo que resta. As obras de finais e as de domínio público continuam registradas e em uso. A face humana deste registro — legibilidade medida, mapa de cobertura e regras editoriais — é docs/SOURCE-CORPUS.md.",
   "sources": [
     {
       "slug": "capablanca-1921",
@@ -275,84 +275,6 @@
       "license": "Domínio público no Brasil desde 1º de janeiro de 2012. Emanuel Lasker morreu em 11 de janeiro de 1941, e a Lei 9.610 (art. 41) conta setenta anos a partir de 1º de janeiro do ano seguinte ao da morte. Fica declarado o que **não** foi conferido: o original é alemão, de 1926, e a folha de rosto desta edição não nomeia tradutor — o mesmo tipo de prazo em aberto que o My System teve até 2026-09-07. A diferença é que aqui isso não muda nada, pela §3.1: a camada protegida de uma tradução é o texto, e a FEN de um diagrama não deve nada ao tradutor. Se alguma prosa desta obra for citada algum dia, a pergunta volta a existir e tem de ser respondida antes.",
       "file": "lasker-manual-1927.pdf",
       "role": "Fonte de posição para o meio-jogo, registrada junto com o Common Sense em 2026-09-07. O texto é mais de exposição que de partida anotada, e por isso ela entra como segunda opção: onde houver partida impressa desde o primeiro lance, vale o mesmo caminho de reconstrução do Common Sense."
-    },
-    {
-      "slug": "yusupov-build-up-1",
-      "title": "Build Up Your Chess 1 — The Fundamentals",
-      "author": "Artur Yusupov",
-      "edition": "Quality Chess UK LLP, 1ª edição inglesa, 2008; tradução de Ian Adams do original alemão Tigersprung auf DWZ 1500. Copyright 2007, 2008 Artur Yusupov. ISBN 978-1-906552-01-5. Folha de rosto e verso lidos em 2026-09-07. 266 páginas de PDF; deslocamento medido: página impressa + 1 = página do PDF.",
-      "protected": true,
-      "didactic": true,
-      "serie": "yusupov",
-      "volume": 1,
-      "license": "Obra protegida — Quality Chess, direito autoral vigente. Exemplar adquirido pelo Doug em 2026-09-07. Uso interno do piloto de 19 a 25/9/2026, com atribuição da obra em toda tela do módulo de meio-jogo. NÃO HÁ TETO DE CITAÇÃO AQUI: por decisão do Doug em 2026-09-07, a aula de meio-jogo sai de um capítulo — a teoria vira o exemplo, os exercícios viram os exercícios, com o gabarito e a régua de aprovação do próprio autor. Isso é cópia deliberada da seleção do autor, que é justamente a camada que a Lei 9.610 protege (art. 7º, XIII), e por isso o módulo não pode ser comercializado com esta obra dentro. Substituir antes de comercializar — o porquê inteiro está no _leia deste arquivo.",
-      "file": "yusupov-build-up-1.pdf",
-      "role": "Nível laranja (DWZ 1500). Volume 1 da série, e o primeiro do módulo de meio-jogo: as aulas M103, M106, M108, M113, M114 e M120 saem dos capítulos 3, 6, 8, 13, 14 e 20 deste livro. Formato igual nos seis volumes, e é ele que faz a aula M: capítulo = teoria com diagramas numerados (Diagram N-k), duas páginas de 'Exercises' com doze diagramas (Ex. N-1 a N-12), glifo de quem joga e coordenadas impressas, e a seção de soluções com pontos por lance e a régua de aprovação do capítulo (máximo, excelente, bom, nota de corte). O autor rotula cada capítulo na seção de soluções (Tactics, Strategy, Positional play, Endgame, Calculation, Opening); entram no módulo só os de Strategy e Positional play, mais ataque ao rei. O PDF está em biblioteca/, com o nome igual ao slug, como todas as obras do corpus; o exemplar original comprado continua na pasta 'Yusupov- Buid your chess _BOOKS' do Desktop."
-    },
-    {
-      "slug": "yusupov-boost-1",
-      "title": "Boost Your Chess 1 — The Fundamentals",
-      "author": "Artur Yusupov",
-      "edition": null,
-      "protected": true,
-      "didactic": true,
-      "serie": "yusupov",
-      "volume": 2,
-      "license": "Obra protegida — Quality Chess, direito autoral vigente. Exemplar adquirido pelo Doug em 2026-09-07. Uso interno do piloto de 19 a 25/9/2026, com atribuição da obra em toda tela do módulo de meio-jogo. NÃO HÁ TETO DE CITAÇÃO AQUI: por decisão do Doug em 2026-09-07, a aula de meio-jogo sai de um capítulo — a teoria vira o exemplo, os exercícios viram os exercícios, com o gabarito e a régua de aprovação do próprio autor. Isso é cópia deliberada da seleção do autor, que é justamente a camada que a Lei 9.610 protege (art. 7º, XIII), e por isso o módulo não pode ser comercializado com esta obra dentro. Substituir antes de comercializar — o porquê inteiro está no _leia deste arquivo.",
-      "file": "yusupov-boost-1.pdf",
-      "role": "Nível laranja. Volume 2 da série: oito capítulos de meio-jogo (2, 4, 5, 7, 11, 14, 18, 22). ATENÇÃO: este PDF não tem camada de texto — são 116 MB de imagem —, e por isso a transcrição dele passa por OCR (pdftoppm + Tesseract) ou por leitura de imagem. A folha de rosto ainda não foi lida, e é por isso que 'edition' está null. O PDF está em biblioteca/, com o nome igual ao slug, como todas as obras do corpus; o exemplar original comprado continua na pasta 'Yusupov- Buid your chess _BOOKS' do Desktop."
-    },
-    {
-      "slug": "yusupov-evolution-1",
-      "title": "Chess Evolution 1 — The Fundamentals",
-      "author": "Artur Yusupov",
-      "edition": "Quality Chess UK Ltd, 1ª edição inglesa, 2011; traduzido do original alemão Tigersprung auf DWZ 1500 III. Copyright 2011 Artur Yusupov. ISBN 978-1-906552-45-9 (brochura), 978-1-906552-64-0 (capa dura). Folha de rosto e verso lidos em 2026-09-07. 264 páginas de PDF.",
-      "protected": true,
-      "didactic": true,
-      "serie": "yusupov",
-      "volume": 3,
-      "license": "Obra protegida — Quality Chess, direito autoral vigente. Exemplar adquirido pelo Doug em 2026-09-07. Uso interno do piloto de 19 a 25/9/2026, com atribuição da obra em toda tela do módulo de meio-jogo. NÃO HÁ TETO DE CITAÇÃO AQUI: por decisão do Doug em 2026-09-07, a aula de meio-jogo sai de um capítulo — a teoria vira o exemplo, os exercícios viram os exercícios, com o gabarito e a régua de aprovação do próprio autor. Isso é cópia deliberada da seleção do autor, que é justamente a camada que a Lei 9.610 protege (art. 7º, XIII), e por isso o módulo não pode ser comercializado com esta obra dentro. Substituir antes de comercializar — o porquê inteiro está no _leia deste arquivo.",
-      "file": "yusupov-evolution-1.pdf",
-      "role": "Nível laranja. Volume 3 da série: quatro capítulos de estratégia (5, 11, 14, 22) e seis de técnica de ataque por par de peças (6, 8, 10, 13, 15, 17). O PDF está em biblioteca/, com o nome igual ao slug, como todas as obras do corpus; o exemplar original comprado continua na pasta 'Yusupov- Buid your chess _BOOKS' do Desktop."
-    },
-    {
-      "slug": "yusupov-build-up-2",
-      "title": "Build Up Your Chess 2 — Beyond the Basics",
-      "author": "Artur Yusupov",
-      "edition": null,
-      "protected": true,
-      "didactic": true,
-      "serie": "yusupov",
-      "volume": 4,
-      "license": "Obra protegida — Quality Chess, direito autoral vigente. Exemplar adquirido pelo Doug em 2026-09-07. Uso interno do piloto de 19 a 25/9/2026, com atribuição da obra em toda tela do módulo de meio-jogo. NÃO HÁ TETO DE CITAÇÃO AQUI: por decisão do Doug em 2026-09-07, a aula de meio-jogo sai de um capítulo — a teoria vira o exemplo, os exercícios viram os exercícios, com o gabarito e a régua de aprovação do próprio autor. Isso é cópia deliberada da seleção do autor, que é justamente a camada que a Lei 9.610 protege (art. 7º, XIII), e por isso o módulo não pode ser comercializado com esta obra dentro. Substituir antes de comercializar — o porquê inteiro está no _leia deste arquivo.",
-      "file": "yusupov-build-up-2.pdf",
-      "role": "Nível azul (DWZ 1800). Volume 4 da série, e o primeiro do nível azul: seis capítulos de conceito (6, 8, 13, 14, 18, 23) e dois de abertura e ataque (4, 16). ATENÇÃO: este PDF não tem camada de texto — 36 MB de imagem —, e a transcrição passa por OCR. Folha de rosto ainda não lida. O PDF está em biblioteca/, com o nome igual ao slug, como todas as obras do corpus; o exemplar original comprado continua na pasta 'Yusupov- Buid your chess _BOOKS' do Desktop."
-    },
-    {
-      "slug": "yusupov-boost-2",
-      "title": "Boost Your Chess 2 — Beyond the Basics",
-      "author": "Artur Yusupov",
-      "edition": "Quality Chess UK Ltd, 1ª edição inglesa, 2010; traduzido do original alemão Tigersprung auf DWZ 1800 II. Copyright 2010 Artur Yusupov. ISBN 978-1-906552-43-5. Folha de rosto e verso lidos em 2026-09-07. 285 páginas de PDF.",
-      "protected": true,
-      "didactic": true,
-      "serie": "yusupov",
-      "volume": 5,
-      "license": "Obra protegida — Quality Chess, direito autoral vigente. Exemplar adquirido pelo Doug em 2026-09-07. Uso interno do piloto de 19 a 25/9/2026, com atribuição da obra em toda tela do módulo de meio-jogo. NÃO HÁ TETO DE CITAÇÃO AQUI: por decisão do Doug em 2026-09-07, a aula de meio-jogo sai de um capítulo — a teoria vira o exemplo, os exercícios viram os exercícios, com o gabarito e a régua de aprovação do próprio autor. Isso é cópia deliberada da seleção do autor, que é justamente a camada que a Lei 9.610 protege (art. 7º, XIII), e por isso o módulo não pode ser comercializado com esta obra dentro. Substituir antes de comercializar — o porquê inteiro está no _leia deste arquivo.",
-      "file": "yusupov-boost-2.pdf",
-      "role": "Nível azul. Volume 5 da série: sete capítulos de meio-jogo (1, 2, 6, 9, 14, 17, 21). O PDF está em biblioteca/, com o nome igual ao slug, como todas as obras do corpus; o exemplar original comprado continua na pasta 'Yusupov- Buid your chess _BOOKS' do Desktop."
-    },
-    {
-      "slug": "yusupov-evolution-2",
-      "title": "Chess Evolution 2 — Beyond the Basics",
-      "author": "Artur Yusupov",
-      "edition": "Quality Chess UK Ltd, 1ª edição inglesa, 2012; traduzido do original alemão Tigersprung auf DWZ 1800 III. Copyright 2012 Artur Yusupov. ISBN 978-1-906552-46-6 (brochura), 978-1-906552-65-7 (capa dura). Folha de rosto e verso lidos em 2026-09-07. 305 páginas de PDF.",
-      "protected": true,
-      "didactic": true,
-      "serie": "yusupov",
-      "volume": 6,
-      "license": "Obra protegida — Quality Chess, direito autoral vigente. Exemplar adquirido pelo Doug em 2026-09-07. Uso interno do piloto de 19 a 25/9/2026, com atribuição da obra em toda tela do módulo de meio-jogo. NÃO HÁ TETO DE CITAÇÃO AQUI: por decisão do Doug em 2026-09-07, a aula de meio-jogo sai de um capítulo — a teoria vira o exemplo, os exercícios viram os exercícios, com o gabarito e a régua de aprovação do próprio autor. Isso é cópia deliberada da seleção do autor, que é justamente a camada que a Lei 9.610 protege (art. 7º, XIII), e por isso o módulo não pode ser comercializado com esta obra dentro. Substituir antes de comercializar — o porquê inteiro está no _leia deste arquivo.",
-      "file": "yusupov-evolution-2.pdf",
-      "role": "Nível azul. Volume 6 da série, o que mais dá capítulos: catorze (2, 3, 5, 6, 7, 9, 10, 14, 15, 17, 20, 21, 22, 24). O PDF está em biblioteca/, com o nome igual ao slug, como todas as obras do corpus; o exemplar original comprado continua na pasta 'Yusupov- Buid your chess _BOOKS' do Desktop."
     }
   ]
 }

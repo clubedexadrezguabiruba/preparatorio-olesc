@@ -38,7 +38,6 @@ import {
   type GeneratedTree,
 } from "./branches.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
-import { moduloDaAula } from "../lib/lesson/schema.ts";
 import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
 
 /**
@@ -408,17 +407,6 @@ async function checkPosition(position: Position) {
       );
     }
   }
-
-  // A posição que **não afirma resultado** para aqui. É a posição de meio-jogo:
-  // trinta peças no tabuleiro, e nem a tablebase nem o autor dizem se ela é
-  // ganha ou empatada. Tudo o que vem abaixo — a consulta, `RESULTADO_ERRADO`,
-  // e as regras que comparam o que o arquivo afirma com o que a tablebase sabe
-  // — depende de haver uma verdade a comparar, e aqui não há.
-  //
-  // O que continua valendo para ela é o que veio acima: a FEN é legal, a
-  // proveniência tem os nove campos, e a obra está registrada. É o que dá para
-  // cobrar de uma posição cuja autoridade é um livro, e não uma tabela.
-  if (position.expectedResult === "open") return;
 
   const entry = await ask(position.fen, where);
   if (!entry) return;
@@ -1128,14 +1116,6 @@ function referencedPositionIds(lesson: Lesson): Array<{ id: string; stage: strin
   for (const [i, scene] of (s.example?.scenes ?? []).entries()) {
     refs.push({ id: scene.positionId, stage: `example / cena ${i + 1} (${scene.id})` });
   }
-  // Os exercícios citam uma posição cada. Sem esta linha o gate conferiria a
-  // aula sem nunca olhar as posições dos exercícios: elas existiriam no disco
-  // sem estar ligadas a nada, e uma que faltasse só apareceria com o aluno na
-  // tela. Foi o que aconteceu ao abrir a M103 pela primeira vez — a etapa 3
-  // disse "esta aula ainda não tem exercícios escritos" com seis no arquivo.
-  for (const item of s.exercises?.items ?? []) {
-    refs.push({ id: item.positionId, stage: `exercises / ${item.id}` });
-  }
   if (s.guided) refs.push({ id: s.guided.positionId, stage: "guided" });
   if (s.solo) refs.push({ id: s.solo.positionId, stage: "solo" });
   if (s.practice) refs.push({ id: s.practice.positionId, stage: "practice" });
@@ -1168,16 +1148,6 @@ async function checkLesson(loaded: LoadedLesson) {
   // para a mesma aula. O que a lei protege é a *coleção* do autor, não a
   // posição isolada — e é copiando sequência de uma obra só que se copia a
   // coleção. Domínio público e CC0 não têm teto.
-  //
-  // **Só em finais, desde 2026-09-07.** No meio-jogo a aula *é* um capítulo de
-  // um livro, e usa a seleção inteira dele de propósito: um teto de duas
-  // posições é incompatível com isso por construção — não há como respeitá-lo e
-  // fazer o que a decisão do Doug manda. O que substitui o teto ali não é uma
-  // quantidade e sim uma consequência declarada, escrita no `_leia` de
-  // `content/sources.json`: o uso é interno, com exemplares comprados e
-  // atribuição em toda tela, e **o módulo não pode ser comercializado**. O
-  // silêncio deste bloco para aulas M é a outra metade daquela decisão, e não
-  // um esquecimento.
   const bySource = new Map<string, { source: Source; ids: Set<string> }>();
   for (const id of new Set(refs.map((r) => r.id))) {
     const position = positions.get(id);
@@ -1190,7 +1160,7 @@ async function checkLesson(loaded: LoadedLesson) {
     bySource.set(source.slug, bucket);
   }
   for (const { source, ids } of bySource.values()) {
-    if (moduloDaAula(lesson.id) === "finais" && source.protected && ids.size > PROTECTED_SOURCE_CAP) {
+    if (source.protected && ids.size > PROTECTED_SOURCE_CAP) {
       fail(
         "TETO_DE_CITACAO",
         where,
@@ -1578,18 +1548,6 @@ console.log(
     `obras: ${new Set(sourcesByKey.values()).size} ` +
     `(${[...new Set(sourcesByKey.values())].filter((s) => s.protected).length} com teto)`,
 );
-// O meio-jogo deixou de ser um formato próprio em 2026-09-08: uma aula dele é
-// uma aula do mesmo motor, com uma etapa a mais. Por isso a contagem sai das
-// aulas já carregadas, e não de um arquivo de conteúdo separado.
-const aulasDeMeioJogo = lessons.filter((l) => moduloDaAula(l.lesson.id) === "meio-jogo");
-const exerciciosEscritos = aulasDeMeioJogo.reduce(
-  (soma, l) => soma + (l.lesson.stages.exercises?.items.length ?? 0),
-  0,
-);
-console.log(
-  `  meio-jogo: ${aulasDeMeioJogo.length} aula(s), ${exerciciosEscritos} exercício(s), ` +
-    `${aulasDeMeioJogo.reduce((soma, l) => soma + (l.lesson.stages.exercises?.aprovacao.maximo ?? 0), 0)} ponto(s) de régua`,
-);
 console.log(
   `  tablebase: ${tablebase.usedFiles().size} posições consultadas ` +
     `(${tablebase.hits} do cache, ${tablebase.fetched} pela rede)`,
@@ -1616,7 +1574,7 @@ console.log("");
 if (issues.length === 0) {
   console.log(
     `${VERDE}✔ tudo verde — ${positions.size} posições, ${lessons.length} aula(s) e ` +
-      `${aulasDeMeioJogo.length} aula(s) de meio-jogo sem nenhum problema${NORMAL}`,
+      `sem nenhum problema${NORMAL}`,
   );
   process.exit(0);
 }

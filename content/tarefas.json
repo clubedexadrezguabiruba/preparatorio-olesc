@@ -36,17 +36,6 @@
   }
  },
  {
-  "id": "s1-meiojogo",
-  "semana": 1,
-  "tipo": "marcar",
-  "titulo": "Fazer o capítulo de meio-jogo da semana",
-  "detalhe": "O módulo de meio-jogo foi refeito: cada aula agora é um capítulo inteiro de livro, com o conceito, o exemplo do autor lance a lance, e os exercícios dele — que você resolve jogando no tabuleiro, e não lendo a resposta. Abra o módulo, comece pelo primeiro capítulo do volume 1 e vá até a nota de corte que o próprio autor imprimiu. Enquanto as aulas estão sendo escritas, quem diz que fez é você: entre, trabalhe o que estiver aberto e marque aqui.",
-  "onde": {
-   "rotulo": "Abrir o meio-jogo",
-   "url": "/meio-jogo"
-  }
- },
- {
   "id": "s1-partidas",
   "semana": 1,
   "tipo": "marcar",
@@ -129,23 +118,6 @@
   }
  },
  {
-  "id": "s2-meiojogo",
-  "semana": 2,
-  "tipo": "meiojogo",
-  "titulo": "Fazer a aula de meio-jogo \"Princípios de abertura\"",
-  "detalhe": "A primeira aula do módulo novo: Princípios de abertura, o capítulo 3 do volume 1 do Yusupov. Leia o conceito, veja as duas partidas lance a lance, e depois resolva os seis exercícios jogando o lance no tabuleiro. Errar não fecha o exercício — você tenta quantas vezes quiser, e a solução do autor aparece no fim —, mas só a primeira resposta vale ponto, que é como o Yusupov manda contar. A aula conta como feita quando você chega na nota de corte, e passar não é acertar tudo: a régua já conta que você erre uma parte.",
-  "onde": {
-   "rotulo": "Abrir a aula",
-   "url": "/meio-jogo/M103-PRINCIPIOS-DE-ABERTURA"
-  },
-  "aulas": [
-   "M103-PRINCIPIOS-DE-ABERTURA"
-  ],
-  "meta": {
-   "concluir": 1
-  }
- },
- {
   "id": "s2-partidas",
   "semana": 2,
   "tipo": "marcar",
@@ -219,17 +191,6 @@
   "onde": {
    "rotulo": "Abrir o curso de finais",
    "url": "/finais"
-  }
- },
- {
-  "id": "s3-meiojogo",
-  "semana": 3,
-  "tipo": "marcar",
-  "titulo": "Fazer dois capítulos de meio-jogo",
-  "detalhe": "Mais dois capítulos do volume 1. A esta altura o formato já é conhecido: conceito, exemplo do autor, e os exercícios dele no tabuleiro. Se um capítulo não fechar na nota de corte, refaça os exercícios que você errou — o botão de refazer está em cada um. Enquanto as aulas estão sendo escritas, quem diz que fez é você.",
-  "onde": {
-   "rotulo": "Abrir o meio-jogo",
-   "url": "/meio-jogo"
   }
  },
  {
@@ -315,17 +276,6 @@
   "onde": {
    "rotulo": "Abrir o curso de finais",
    "url": "/finais"
-  }
- },
- {
-  "id": "s4-meiojogo",
-  "semana": 4,
-  "tipo": "marcar",
-  "titulo": "Fechar o volume 1 do meio-jogo",
-  "detalhe": "O último capítulo do volume 1. Antes de marcar, volte ao módulo e confira quais capítulos ainda não chegaram à nota de corte — a lista mostra os pontos de cada um. Enquanto as aulas estão sendo escritas, quem diz que fez é você.",
-  "onde": {
-   "rotulo": "Abrir o meio-jogo",
-   "url": "/meio-jogo"
   }
  },
  {

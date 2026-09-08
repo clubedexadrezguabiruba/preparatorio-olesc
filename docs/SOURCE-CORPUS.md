@@ -60,12 +60,6 @@ subagente consegue achar página por busca de texto (teste da §4).
 | 25 | `znosko-middle-game-1930` | Znosko-Borovsky, _The Middle Game in Chess_ | G. Bell and Sons, Londres, 1930 — reimpressão de julho de 1930 do texto de 1922 | 2 | sim (248 pág., 6.576 caracteres) |
 | 26 | `lasker-common-sense-1910` | Lasker, _Common Sense in Chess_ | J. S. Ogilvie, Nova York, [1910] — reimpressão das doze palestras de Londres, 1895 | sem teto | sim (148 pág., 4.926 caracteres) |
 | 27 | `lasker-manual-1927` | Lasker, _Lasker's Manual of Chess_ | E. P. Dutton, Nova York, 1927, com 306 diagramas — versão inglesa do _Lehrbuch des Schachspiels_ (1926) | sem teto | sim (424 pág., 5.953 caracteres) |
-| 28 | `yusupov-build-up-1` | Yusupov, _Build Up Your Chess 1: The Fundamentals_ | Quality Chess, 1ª ed. inglesa 2008, trad. Ian Adams do _Tigersprung auf DWZ 1500_ | **sem teto (meio-jogo)** | sim (266 pág.) |
-| 29 | `yusupov-boost-1` | Yusupov, _Boost Your Chess 1: The Fundamentals_ | a confirmar na folha de rosto | **sem teto (meio-jogo)** | **não** — 116 MB só de imagem, precisa de OCR |
-| 30 | `yusupov-evolution-1` | Yusupov, _Chess Evolution 1: The Fundamentals_ | Quality Chess, 1ª ed. inglesa 2011, do _Tigersprung auf DWZ 1500 III_ | **sem teto (meio-jogo)** | sim (264 pág.) |
-| 31 | `yusupov-build-up-2` | Yusupov, _Build Up Your Chess 2: Beyond the Basics_ | a confirmar na folha de rosto | **sem teto (meio-jogo)** | **não** — 36 MB só de imagem, precisa de OCR |
-| 32 | `yusupov-boost-2` | Yusupov, _Boost Your Chess 2: Beyond the Basics_ | Quality Chess, 1ª ed. inglesa 2010, do _Tigersprung auf DWZ 1800 II_ | **sem teto (meio-jogo)** | sim (285 pág.) |
-| 33 | `yusupov-evolution-2` | Yusupov, _Chess Evolution 2: Beyond the Basics_ | Quality Chess, 1ª ed. inglesa 2012, do _Tigersprung auf DWZ 1800 III_ | **sem teto (meio-jogo)** | sim (305 pág.) |
 
 **As entradas 23 a 25 são o meio-jogo, e são as três primeiras obras do corpus
 que não são de finais.** As trinta dicas de `content/meio-jogo.json` saem delas:
@@ -151,58 +145,25 @@ a canônica. A 1ª edição de Mott fica registrada porque a proveniência grava
 edição: uma posição transcrita do arquivo de Mott **não pode** citar a de 1889.
 Duas edições, dois slugs, nenhuma confusão possível.
 
-### 2.3 Os seis volumes do Yusupov — e por que eles não têm teto
+### 2.3 As obras de meio-jogo, e por que elas não estão mais aqui
 
-As entradas **28 a 33** entraram em 2026-09-07 e são de outra natureza que todas
-as anteriores. Elas não dão *posições* para uma aula: elas **são** as aulas. O
-módulo de meio-jogo foi reescrito naquele dia, e o desenho novo é este — uma
-aula de meio-jogo é um capítulo de um livro, e sai dele inteira: a teoria vira o
-exemplo, os exercícios impressos viram os exercícios, na ordem do autor, com o
-gabarito e a régua de aprovação dele.
+Este arquivo teve, entre agosto e 8 de setembro de 2026, duas gerações de obras
+de meio-jogo. A primeira — Capablanca, Nimzowitsch, Znosko-Borovsky e os dois
+Lasker — sustentava as trinta dicas do módulo original. A segunda foram os
+**seis volumes da série do Yusupov**, que entraram em 7/9 para o módulo
+reescrito como aula do mesmo motor de finais, e saíram no dia seguinte.
 
-**O teto de citação não existe aqui, e a razão é aritmética antes de ser
-jurídica.** Um teto de duas ou três posições por aula é incompatível com "o
-capítulo inteiro" por construção: não há como respeitá-lo e fazer o que a
-decisão manda. O Doug tirou o teto do meio-jogo em 2026-09-07, sabendo o que
-isso troca; a recomendação alternativa (um regime de edição didática que só
-valeria para obra em domínio público) foi apresentada e recusada.
+O que aconteceu: o Doug abriu a primeira aula pronta, `M103`, e reprovou o
+módulo inteiro. O motivo não foi técnico — a aula funcionava de ponta a ponta —,
+foi de público: complexo demais para a idade e a força dos alunos dele. O
+meio-jogo saiu do site, e as obras saíram deste registro junto.
 
-**O que substitui o teto não é uma quantidade, é uma consequência declarada:**
+Fica escrito porque quem for garimpar o git vai encontrar seis entradas de
+Quality Chess e uma §2.3 inteira defendendo a ausência de teto de citação. Nada
+daquilo está em uso, e a decisão que a criou foi revertida por outra, do mesmo
+autor, um dia depois. **O teto de citação voltou a ser um só, por obra, e vale
+para tudo que resta.**
 
-- o uso é **interno**, no piloto de 19 a 25 de setembro de 2026;
-- os exemplares foram **adquiridos**, os seis;
-- a obra é **atribuída em toda tela** do módulo;
-- e o módulo, do jeito que está, **não pode ser comercializado**.
-
-A última linha é a que importa e é a que se esquece. Nas obras de finais o campo
-`protected` liga um teto que torna o uso defensável; aqui ele não liga nada — é
-só um rótulo dizendo "esta obra está sob direito autoral vigente". A camada que
-a Lei 9.610 protege num livro de xadrez é o texto, as anotações e a
-**seleção/organização da coletânea** (art. 7º, XIII); a FEN, que é o arranjo das
-peças, não é essa camada — o raciocínio inteiro está na licença de
-`nimzowitsch-my-system-1930` e vale igual aqui. A diferença é que no meio-jogo a
-seleção do autor é copiada **de propósito**, e é exatamente ela que a lei
-protege. Por isso a porta da venda está fechada, e por isso está escrito aqui.
-
-Antes de vender, as posições têm de ser trocadas por outra obra, pelo mesmo
-pipeline de transcrição. O motor não sabe qual livro é: trocar é refazer
-`content/positions/M/`, `content/lessons/M*.json` e estas seis entradas. Quanto
-mais volumes entrarem, maior essa conta — com os seis dentro, são 53 capítulos.
-O candidato em domínio público levantado no mesmo dia é o
-`znosko-middle-game-1930`, o único livro só de meio-jogo do corpus: 59 diagramas
-e **nenhum exercício**, o que muda o formato (lá o exercício vira "adivinhe o
-lance", sem pontos e sem régua).
-
-**Os seis estão em `biblioteca/`**, com o nome igual ao slug — `yusupov-build-up-1.pdf` e os cinco irmãos —, como toda obra do corpus. Os exemplares comprados continuam também na pasta de origem no Desktop do Doug; o que a proveniência cita é sempre o nome em `biblioteca/`.
-
-**Dois dos seis não têm camada de texto** (entradas 29 e 31): são digitalizações
-de imagem, e neles o passo 1 do pipeline é `pdftoppm` + Tesseract em vez de
-`pdftotext`. O Tesseract foi instalado em 2026-09-07 por isso. É a razão de eles
-serem os **últimos** na ordem de execução dentro de cada nível: quando chegar a
-parte cara, o pipeline já terá rodado quatro vezes.
-
-O mapa das páginas capítulo a capítulo está em `docs/MEIO-JOGO-YUSUPOV-MAPA.md`,
-e a receita de transcrição em `docs/MEIO-JOGO-TRANSCRICAO.md`.
 
 ---
 

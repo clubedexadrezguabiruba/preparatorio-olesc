@@ -10,10 +10,11 @@ import { RAIZ } from "./env-local.ts";
 /**
  * O Stockfish 18 offline, falando UCI — a parte que precisa de processo.
  *
- * Saiu de `scripts/motor-repertorio.ts` quando o meio-jogo passou a precisar do
- * mesmo motor: `scripts/escolher-exercicios.ts` roda a porta 2 do funil, e um
- * segundo driver seria uma segunda opinião sobre a mesma posição, com as três
- * armadilhas abaixo para redescobrir do zero.
+ * Saiu de `scripts/motor-repertorio.ts` quando um segundo script passou a
+ * precisar do mesmo motor: um segundo driver seria uma segunda opinião sobre a
+ * mesma posição, com as três armadilhas abaixo para redescobrir do zero. O tal
+ * segundo script era do meio-jogo e saiu com o módulo em 2026-09-08; a extração
+ * fica, porque o que ela evita não depende de quem chama.
  *
  * O motor é o **mesmo** de `public/engine/` que a etapa 5 da aula serve ao
  * aluno, lido de `lib/engine/build.ts` para não haver dois lugares dizendo qual

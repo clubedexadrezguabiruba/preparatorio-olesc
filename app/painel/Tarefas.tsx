@@ -19,10 +19,9 @@ import { alternarTarefa } from "./acoes";
  * junto — uma barra que diz "lidas" e conta lances é pior do que uma barra sem
  * palavra nenhuma.
  */
-const UNIDADE: Record<"tatica" | "finais" | "meiojogo", string> = {
+const UNIDADE: Record<"tatica" | "finais", string> = {
   tatica: "puzzles",
   finais: "aulas dominadas",
-  meiojogo: "dicas resolvidas",
 };
 
 /**

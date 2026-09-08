@@ -33,29 +33,14 @@ export type MedidaDeFinais = {
 };
 
 /**
- * A medida da tarefa de meio-jogo: quantas das aulas nomeadas o aluno concluiu.
- *
- * Sem acerto, como a de finais, e agora pelo mesmo motivo que lá: a aula
- * concluída **já é** o acerto — ela quer dizer "chegou à nota de corte do
- * livro", e não existe "concluiu 2 aulas com 64% de acerto". Era diferente até
- * 2026-09-07, quando aqui não havia acerto nenhum a medir porque a unidade era
- * uma declaração de leitura.
- */
-export type MedidaDeMeioJogo = {
-  readonly tipo: "meiojogo";
-  readonly feitos: number;
-  readonly meta: number;
-};
-
-/**
  * As três medidas carregam a etiqueta do seu tipo porque a tela desenha a mesma
  * barra para todas e escreve palavras diferentes embaixo — "puzzles", "aulas
  * dominadas", "capítulos aprovados". Sem a etiqueta, a tela teria de reabrir a tarefa
  * para descobrir o que a barra está medindo. E as três contam coisas de peso
  * diferente: puzzle resolvido é medido, aula dominada é certificada pela
- * tablebase, capítulo de meio-jogo é aprovado pela régua do próprio autor.
+ * tablebase.
  */
-export type Medida = MedidaDeTatica | MedidaDeFinais | MedidaDeMeioJogo;
+export type Medida = MedidaDeTatica | MedidaDeFinais;
 
 export type EstadoDaTarefa = {
   readonly tarefa: Tarefa;
@@ -102,21 +87,6 @@ export function somarFinais(
   return total;
 }
 
-/**
- * Quantas das aulas que a tarefa nomeia o aluno já concluiu.
- *
- * A tarefa nomeia as aulas desde 2026-09-08, então aqui não há mais o que
- * filtrar por degrau: é a interseção entre o que a tarefa pediu e o que o aluno
- * fechou. O gate cobra que nenhuma tarefa nomeie aula sem exercício
- * (`problemasDoDetalheDeMeioJogo`), que é o que tornaria a caixa impossível.
- */
-export function somarMeioJogo(
-  concluidas: ReadonlySet<string>,
-  aulas: readonly string[],
-): number {
-  return aulas.filter((id) => concluidas.has(id)).length;
-}
-
 export function estadoDasTarefas(
   tarefas: readonly Tarefa[],
   marcadas: ReadonlySet<string>,
@@ -127,21 +97,10 @@ export function estadoDasTarefas(
    * tática — não tenham de inventar um conjunto.
    */
   finais: ReadonlySet<string> = new Set(),
-  /** As aulas de meio-jogo que o aluno concluiu pela régua do livro. Vazio pelo mesmo motivo. */
-  meioJogo: ReadonlySet<string> = new Set(),
 ): EstadoDaTarefa[] {
   return tarefas.map((tarefa) => {
     if (tarefa.tipo === "marcar") {
       return { tarefa, feita: marcadas.has(tarefa.id), medida: null };
-    }
-
-    if (tarefa.tipo === "meiojogo") {
-      const feitos = somarMeioJogo(meioJogo, tarefa.aulas);
-      return {
-        tarefa,
-        feita: feitos >= tarefa.meta.concluir,
-        medida: { tipo: "meiojogo", feitos, meta: tarefa.meta.concluir },
-      };
     }
 
     if (tarefa.tipo === "finais") {

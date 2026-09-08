@@ -156,7 +156,7 @@ export type ChessBoardProps = {
   /**
    * O toque numa casa — **inclusive casa vazia**, e é para isso que ele existe.
    *
-   * `onMove` só fala quando um lance acontece, e no treino de meio-jogo não há
+   * `onMove` só fala quando um lance acontece, e num treino de apontar não há
    * lance: o aluno aponta a casa do peão isolado, a coluna sem peão, o buraco
    * onde o cavalo fica. Metade dessas respostas é casa sem peça nenhuma.
    *
