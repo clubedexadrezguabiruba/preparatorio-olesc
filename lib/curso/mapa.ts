@@ -1,4 +1,3 @@
-import { DICAS } from "../meiojogo/conteudo.ts";
 import { CLASSES, daClasse, dominou, TRILHA, type ProgressoDaAula } from "../finais/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
@@ -55,6 +54,16 @@ import {
  * de um final antes de o aluno saber a técnica.
  */
 
+/** O que o mapa precisa saber de uma aula de meio-jogo. */
+export type AulaNoMapa = {
+  readonly id: string;
+  readonly titulo: string;
+  readonly nivel: string;
+  readonly status: "draft" | "published";
+  /** A régua do livro, ou `null` na aula que ainda não tem exercício escrito. */
+  readonly aprovacao: { readonly minimo: number; readonly maximo: number } | null;
+};
+
 export type ProgressoParaOMapa = {
   /** Tentativas por tema, da view `progresso_tema`. */
   readonly tatica: ReadonlyMap<string, number>;
@@ -64,10 +73,21 @@ export type ProgressoParaOMapa = {
   /** Os ids das aulas com JSON publicado, de `aulasPublicadas` — não as abertas. */
   readonly aulasPublicadas: ReadonlySet<string>;
   /**
-   * Quantos exercícios de cada dica o aluno resolveu. Dica sem exercício não
-   * aparece no mapa: não há o que contar nela.
+   * Quantos pontos o aluno tem em cada aula de meio-jogo, pela régua do livro
+   * (`lib/meiojogo/progresso.ts`). Aula sem exercício escrito não aparece no
+   * mapa: não há o que contar nela.
    */
-  readonly exerciciosResolvidos: ReadonlyMap<string, number>;
+  readonly pontosDeMeioJogo: ReadonlyMap<string, number>;
+  /**
+   * As aulas de meio-jogo, de `indiceDeMeioJogo()`.
+   *
+   * **Entra por parâmetro, e não por import**, pela mesma razão que
+   * `aulasPublicadas`: quem as lê é `lib/meiojogo/conteudo.ts`, que abre o
+   * disco e por isso é `server-only`. Importá-lo aqui tornaria este arquivo
+   * — que é função pura de propósito, para ser testado sem Supabase e sem
+   * `--conditions=react-server` — impossível de rodar no `node --test`.
+   */
+  readonly meioJogo: readonly AulaNoMapa[];
   /** A semana do preparatório em que estamos, de `semanaAtual()`. */
   readonly semana: Semana;
 };
@@ -134,19 +154,25 @@ export function montarMapa(p: ProgressoParaOMapa): Map<string, ModuloDoNivel[]> 
     }
   }
 
-  for (const dica of DICAS) {
-    // A dica sem exercício **não entra no mapa**, e é a consequência declarada
-    // de o progresso passar a contar trabalho: sem exercício não há o que
+  for (const aula of p.meioJogo) {
+    // A aula sem exercício escrito **não entra no mapa**, e é a consequência
+    // declarada de o progresso contar trabalho: sem exercício não há o que
     // medir, e uma pastilha de "0 de 0" ensinaria o aluno a ignorar a pastilha.
-    const total = dica.treino?.exercicios.length ?? 0;
-    if (total === 0) continue;
-    guardar(dica.nivel, "meio-jogo", {
-      id: dica.id,
-      nome: dica.titulo,
-      href: `/meio-jogo/${dica.id}`,
-      total,
-      feitos: p.exerciciosResolvidos.get(dica.id) ?? 0,
-      situacao: "aberto",
+    if (aula.aprovacao === null) continue;
+    guardar(aula.nivel, "meio-jogo", {
+      id: aula.id,
+      nome: aula.titulo,
+      href: `/meio-jogo/${aula.id}`,
+      // A barra do meio-jogo conta **pontos do livro**, e não exercícios
+      // feitos: a régua do capítulo é em pontos, e um exercício de 3 pontos não
+      // vale o mesmo que um de 1. Quem chega ao `minimo` concluiu a aula; a
+      // barra continua até o máximo porque acertar tudo é uma coisa a mais, e
+      // esconder isso seria mentir sobre onde o aluno está.
+      total: aula.aprovacao.maximo,
+      feitos: Math.min(p.pontosDeMeioJogo.get(aula.id) ?? 0, aula.aprovacao.maximo),
+      // Sem sábado: o meio-jogo não espera calendário, então o que decide é só
+      // a aula existir escrita. É a mesma regra de antes, sobre outro conteúdo.
+      situacao: aula.status === "published" ? "aberto" : "em-escrita",
       sabado: null,
     });
   }
@@ -223,14 +249,14 @@ export const MODULO: Record<
   },
   "meio-jogo": {
     nome: "Meio-jogo",
-    // **Exercícios, e não dicas.** A pastilha de cada dica conta os exercícios
-    // dela, então o total do módulo é a soma dos exercícios — dizer "40 de 40
-    // dicas" com oito dicas na tela era a soma certa com a palavra errada.
-    unidade: "exercícios",
+    // **Pontos, e não aulas.** A pastilha de cada aula conta os pontos do
+    // capítulo, então o total do módulo é a soma dos pontos — dizer "6 de 6
+    // aulas" esconderia que o aluno passou raspando em quatro delas.
+    unidade: "pontos",
     conta:
-      "Exercícios em que você jogou o lance da dica. É medida: o servidor confere " +
+      "Pontos dos exercícios do capítulo, pela régua do próprio livro. É medida: o servidor confere " +
       "cada lance com o mesmo juiz que a tela usou.",
     href: "/meio-jogo",
-    vazio: "Nenhuma dica de meio-jogo com exercício nesta faixa.",
+    vazio: "Nenhuma aula de meio-jogo escrita nesta faixa.",
   },
 };

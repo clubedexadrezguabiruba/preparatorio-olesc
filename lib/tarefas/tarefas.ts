@@ -138,10 +138,17 @@ const MetaDeFinaisSchema = z
  */
 const MetaDeMeioJogoSchema = z
   .object({
-    /** O id do degrau em `lib/curso/trilha.ts` (`ate-1000`, `1000-1200`…). */
-    nivel: z.string().min(3),
-    /** Quantas dicas daquele degrau, resolvidas por inteiro, fecham a tarefa. */
-    resolver: z.number().int().min(1),
+    /**
+     * Quantas das aulas nomeadas o aluno precisa **concluir** para fechar a
+     * tarefa. Concluir é chegar à nota de corte do próprio livro, e não acertar
+     * tudo (`lib/meiojogo/progresso.ts`).
+     *
+     * O campo `nivel` saiu em 2026-09-08. Ele existia porque a tarefa dizia
+     * "leia 6 dicas do degrau 1200–1400" e o aluno escolhia quais; agora a
+     * tarefa **nomeia as aulas**, e um degrau declarado ao lado seria um
+     * segundo jeito de dizer a mesma coisa, livre para divergir.
+     */
+    concluir: z.number().int().min(1),
   })
   .strict();
 
@@ -152,25 +159,22 @@ export const TarefaSchema = z.discriminatedUnion("tipo", [
       tipo: z.literal("meiojogo"),
       meta: MetaDeMeioJogoSchema,
       /**
-       * As dicas que o `detalhe` nomeia — os ids, na ordem em que aparecem.
+       * As aulas que a tarefa manda fazer — os ids, na ordem em que aparecem
+       * no `detalhe`.
        *
-       * **Não é a meta.** O que fecha a tarefa continua sendo "leia 6 dicas do
-       * degrau", e o aluno escolhe quais; este campo existe para o gate poder
-       * conferir a **prosa**, que é onde o erro real aconteceu. Os quatro
-       * `detalhe` do painel prometiam conceitos que não são dica do degrau que
-       * a tarefa aponta — "a coluna aberta" e "a dama sozinha" na semana 1,
-       * "melhorar a pior peça" e "trocar quando se está na frente" na 2,
-       * "posto avançado" e "bispo bom e bispo mau" na 3 (que são do degrau
-       * anterior), "ataque de minoria" e "sacrifício de qualidade" na 4 (que
-       * não são dica de degrau nenhum). O gate não pegava porque conferia só a
-       * contagem.
+       * Agora **é** a meta: a tarefa nomeia as aulas e `meta.concluir` diz
+       * quantas delas fecham. Era diferente até 2026-09-08, quando a tarefa
+       * dizia "leia 6 dicas do degrau" e o aluno escolhia quais — e a prosa
+       * podia prometer conceitos que não eram daquele degrau, que foi o erro
+       * real que este campo nasceu para pegar.
        *
-       * O teste cobra três coisas: que cada id exista, que ele seja **do
-       * degrau declarado**, e que o `titulo` da dica apareça literalmente no
-       * `detalhe`. A terceira é a que morde: ela obriga a prosa a chamar a
-       * dica pelo nome que o aluno vai ver na tela, em vez de parafraseá-la.
+       * O teste cobra três coisas: que cada id exista, que a aula tenha
+       * exercício escrito (sem ele nada se conclui, e a caixa do painel seria
+       * impossível), e que o `titulo` da aula apareça **literalmente** no
+       * `detalhe`. A terceira é a que morde: ela obriga a prosa a chamar a aula
+       * pelo nome que o aluno vai ver na tela, em vez de parafraseá-la.
        */
-      dicas: z.array(z.string().regex(/^m[0-9]+$/)).min(1),
+      aulas: z.array(z.string().regex(/^M[1-9][0-9]{2}-[A-Z0-9-]+$/)).min(1),
     })
     .strict(),
   z.object({ ...Base, tipo: z.literal("tatica"), meta: MetaSchema }).strict(),
@@ -218,12 +222,11 @@ export function validarTarefas(dados: unknown): Tarefa[] {
   return lido.data;
 }
 
-/** O que a conferência do `detalhe` precisa saber de uma dica. */
-export type DicaCitavel = {
+/** O que a conferência do `detalhe` precisa saber de uma aula de meio-jogo. */
+export type AulaCitavel = {
   readonly id: string;
-  readonly nivel: string;
   readonly titulo: string;
-  /** Quantos exercícios a dica tem. Zero é dica que não pode fechar a tarefa. */
+  /** Quantos exercícios a aula tem. Zero é aula que não pode fechar a tarefa. */
   readonly exercicios: number;
 };
 
@@ -251,42 +254,36 @@ export type DicaCitavel = {
  */
 export function problemasDoDetalheDeMeioJogo(
   tarefas: readonly Tarefa[],
-  dicas: readonly DicaCitavel[],
+  aulas: readonly AulaCitavel[],
 ): string[] {
   const problemas: string[] = [];
   for (const tarefa of tarefas) {
     if (tarefa.tipo !== "meiojogo") continue;
-    if (tarefa.dicas.length !== tarefa.meta.resolver) {
+    if (tarefa.aulas.length !== tarefa.meta.concluir) {
       problemas.push(
-        `${tarefa.id}: manda resolver ${tarefa.meta.resolver} dicas e nomeia ` +
-          `${tarefa.dicas.length}`,
+        `${tarefa.id}: manda concluir ${tarefa.meta.concluir} aula(s) e nomeia ` +
+          `${tarefa.aulas.length}`,
       );
     }
-    for (const id of tarefa.dicas) {
-      const dica = dicas.find((d) => d.id === id);
-      if (!dica) {
-        problemas.push(`${tarefa.id}: nomeia a dica "${id}", que não existe`);
+    for (const id of tarefa.aulas) {
+      const aula = aulas.find((a) => a.id === id);
+      if (!aula) {
+        problemas.push(`${tarefa.id}: nomeia a aula "${id}", que não existe`);
         continue;
       }
-      if (dica.nivel !== tarefa.meta.nivel) {
+      if (!tarefa.detalhe?.includes(aula.titulo)) {
         problemas.push(
-          `${tarefa.id}: é do degrau ${tarefa.meta.nivel} e nomeia "${id}", ` +
-            `que é do degrau ${dica.nivel}`,
+          `${tarefa.id}: nomeia "${id}" na lista e não escreve "${aula.titulo}" no detalhe`,
         );
       }
-      if (!tarefa.detalhe?.includes(dica.titulo)) {
+      // A regra que impede a tarefa impossível: uma aula sem exercício escrito
+      // não pode fechar uma tarefa que conta aula concluída. Sem ela, o aluno
+      // abriria o painel na segunda-feira do piloto com uma caixa que nada que
+      // ele fizesse marcaria.
+      if (aula.exercicios === 0) {
         problemas.push(
-          `${tarefa.id}: nomeia "${id}" na lista e não escreve "${dica.titulo}" no detalhe`,
-        );
-      }
-      // A regra nova, e a que impede a tarefa impossível: uma dica sem
-      // exercício não pode fechar uma tarefa que conta exercício resolvido.
-      // Sem ela, o aluno abriria o painel na segunda-feira do piloto com uma
-      // caixa que nada que ele fizesse marcaria.
-      if (dica.exercicios === 0) {
-        problemas.push(
-          `${tarefa.id}: nomeia "${id}", que não tem exercício — a tarefa conta exercício ` +
-            `resolvido, e essa dica nunca fecharia`,
+          `${tarefa.id}: nomeia "${id}", que não tem exercício escrito — a tarefa conta aula ` +
+            `concluída, e essa aula nunca fecharia`,
         );
       }
     }

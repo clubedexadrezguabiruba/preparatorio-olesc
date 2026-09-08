@@ -3,15 +3,70 @@ import test from "node:test";
 import { AULA_ZERADA, TRILHA } from "../finais/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
-import { DICAS } from "../meiojogo/conteudo.ts";
-import { contarAberto, montarMapa, MODULO, type ProgressoParaOMapa } from "./mapa.ts";
+import {
+  contarAberto,
+  montarMapa,
+  MODULO,
+  type AulaNoMapa,
+  type ProgressoParaOMapa,
+} from "./mapa.ts";
 import { estaAberto, NIVEIS, vocEstaAqui } from "./trilha.ts";
 
 /**
  * O mapa é a única tela que soma os três módulos, e por isso a única em que um
- * erro de contagem passa despercebido: 31 temas, 49 aulas e 30 dicas somam 110
- * cartões, e ninguém confere 110 cartões a olho.
+ * erro de contagem passa despercebido: são mais de cem cartões, e ninguém
+ * confere cem cartões a olho.
+ *
+ * Os testes de meio-jogo mudaram em 2026-09-08, com a reformulação do módulo, e
+ * a forma deles também: eles não citam mais um conteúdo específico. O módulo
+ * está sendo reescrito capítulo a capítulo, e um teste que dependesse de "a
+ * dica m9 tem 5 exercícios" quebraria a cada aula publicada, ensinando quem o
+ * lesse a atualizar o número em vez de olhar o que ele afirma. O que se cobra
+ * aqui são **propriedades**: nenhuma aula de meio-jogo espera sábado, aula sem
+ * exercício escrito fica fora da trilha, e a barra conta pontos do livro.
  */
+
+const TEMAS = BLOCOS.flatMap((b) => b.temas);
+
+/**
+ * As aulas de meio-jogo do teste, escritas à mão.
+ *
+ * Não saem de `indiceDeMeioJogo()` de propósito, e por dois motivos que se
+ * somam. O primeiro é técnico: aquele arquivo abre o disco e é `server-only`,
+ * e o `npm test` roda sem `--conditions=react-server`. O segundo é o que
+ * importa — o módulo está sendo reescrito capítulo a capítulo, e um teste
+ * atado ao conteúdo de hoje quebraria a cada aula publicada, ensinando quem o
+ * lesse a atualizar o número em vez de olhar o que ele afirma.
+ *
+ * A terceira entrada é a aula em escrita: é ela que prova que aula sem
+ * exercício fica fora da trilha.
+ */
+const MEIO_JOGO: readonly AulaNoMapa[] = [
+  {
+    id: "M103-PRINCIPIOS-DE-ABERTURA",
+    titulo: "Princípios de abertura",
+    nivel: NIVEIS[0].id,
+    status: "published",
+    aprovacao: { minimo: 7, maximo: 15 },
+  },
+  {
+    id: "M106-O-VALOR-DAS-PECAS",
+    titulo: "O valor das peças",
+    nivel: NIVEIS[0].id,
+    status: "published",
+    aprovacao: { minimo: 5, maximo: 10 },
+  },
+  {
+    id: "M120-PONTOS-FRACOS",
+    titulo: "Pontos fracos",
+    nivel: NIVEIS[0].id,
+    status: "draft",
+    aprovacao: null,
+  },
+];
+
+/** As aulas que o mapa conta: as que já têm exercício escrito. */
+const COM_EXERCICIO = MEIO_JOGO.filter((a) => a.aprovacao !== null);
 
 // A semana 4 é a última do preparatório: com ela, nenhum item fica "por-abrir"
 // por data, e o que sobra fechado é só o que não tem texto. É a base certa para
@@ -21,13 +76,10 @@ const VAZIO: ProgressoParaOMapa = {
   temaAberto: () => true,
   finais: new Map(),
   aulasPublicadas: new Set(TRILHA.map((a) => a.id)),
-  exerciciosResolvidos: new Map(),
+  pontosDeMeioJogo: new Map(),
+  meioJogo: MEIO_JOGO,
   semana: 4,
 };
-
-const TEMAS = BLOCOS.flatMap((b) => b.temas);
-/** As dicas que o mapa conta: as que têm exercício. */
-const COM_EXERCICIO = DICAS.filter((d) => d.treino !== null);
 
 function itens(mapa: ReturnType<typeof montarMapa>, modulo: string) {
   return [...mapa.values()].flatMap((ms) => ms.filter((m) => m.modulo === modulo)).flatMap((m) => m.itens);
@@ -37,9 +89,9 @@ test("o mapa carrega o curso inteiro, sem sobra e sem repetido", () => {
   const mapa = montarMapa(VAZIO);
   assert.equal(itens(mapa, "tatica").length, TEMAS.length);
   assert.equal(itens(mapa, "finais").length, TRILHA.length);
-  // Só as dicas **com exercício**: desde 2026-09-07 o mapa conta trabalho
-  // medido, e uma dica sem exercício não tem o que contar. Ela continua no ar
-  // em `/meio-jogo`, fora da trilha.
+  // Só as aulas **com exercício escrito**: desde 2026-09-07 o mapa conta
+  // trabalho medido, e uma aula sem exercício não tem o que contar. Ela
+  // continua aparecendo em `/meio-jogo` como "em escrita", fora da trilha.
   assert.equal(itens(mapa, "meio-jogo").length, COM_EXERCICIO.length);
 
   for (const modulo of ["tatica", "finais", "meio-jogo"]) {
@@ -94,26 +146,43 @@ test("aula dominada conta 1; não dominada conta 0", () => {
   assert.equal(itens(feita, "finais").find((i) => i.id === curta.id)?.feitos, 1);
 });
 
-test("as dicas de meio-jogo estão todas abertas, e o exercício resolvido conta", () => {
+test("as aulas de meio-jogo não esperam sábado, e a barra delas conta pontos", () => {
   const uma = COM_EXERCICIO[0];
-  const total = uma.treino!.exercicios.length;
-  const mapa = montarMapa({ ...VAZIO, exerciciosResolvidos: new Map([[uma.id, total]]) });
-  const dicas = itens(mapa, "meio-jogo");
-  assert.ok(dicas.every((i) => estaAberto(i)), "nenhuma dica espera sábado");
-  assert.ok(dicas.every((i) => i.sabado === null), "e nenhuma delas tem sábado para esperar");
-  assert.equal(dicas.find((i) => i.id === uma.id)?.feitos, total);
-  assert.equal(dicas.find((i) => i.id === uma.id)?.total, total);
-  // As outras ficam em zero: a barra da trilha mede exercício resolvido, e não
-  // dica aberta.
-  assert.equal(dicas.filter((i) => i.feitos > 0).length, 1);
+  if (!uma) return; // módulo ainda em reescrita: nada a afirmar sobre zero aulas
+
+  const maximo = uma.aprovacao!.maximo;
+  const mapa = montarMapa({ ...VAZIO, pontosDeMeioJogo: new Map([[uma.id, maximo]]) });
+  const aulas = itens(mapa, "meio-jogo");
+
+  assert.ok(aulas.every((i) => estaAberto(i)), "nenhuma aula de meio-jogo espera sábado");
+  assert.ok(aulas.every((i) => i.sabado === null), "e nenhuma delas tem sábado para esperar");
+  // O total é o **máximo de pontos do capítulo**, e não o número de exercícios:
+  // um exercício de 3 pontos não vale o mesmo que um de 1, e contar exercícios
+  // apagaria a graduação que o autor escreveu.
+  assert.equal(aulas.find((i) => i.id === uma.id)?.total, maximo);
+  assert.equal(aulas.find((i) => i.id === uma.id)?.feitos, maximo);
+  assert.equal(aulas.filter((i) => i.feitos > 0).length, 1);
 });
 
-test("a dica sem exercício não entra na trilha, e é de propósito", () => {
-  const semExercicio = DICAS.filter((d) => d.treino === null);
-  assert.ok(semExercicio.length > 0, "o teste só prova algo se houver dica sem exercício");
+test("os pontos do mapa nunca passam do máximo do capítulo", () => {
+  const uma = COM_EXERCICIO[0];
+  if (!uma) return;
+  // Uma linha antiga do módulo anterior, ou um gabarito corrigido para valer
+  // menos, podem somar acima do teto. A barra em 130% seria a documentação
+  // chegando tarde demais — é a mesma decisão que a tática tomou.
+  const mapa = montarMapa({
+    ...VAZIO,
+    pontosDeMeioJogo: new Map([[uma.id, uma.aprovacao!.maximo + 50]]),
+  });
+  assert.equal(itens(mapa, "meio-jogo").find((i) => i.id === uma.id)?.feitos, uma.aprovacao!.maximo);
+});
+
+test("a aula sem exercício escrito não entra na trilha, e é de propósito", () => {
+  const semExercicio = MEIO_JOGO.filter((a) => a.aprovacao === null);
+  assert.ok(semExercicio.length > 0, "o teste só prova algo se houver aula em escrita");
   const ids = new Set(itens(montarMapa(VAZIO), "meio-jogo").map((i) => i.id));
-  for (const dica of semExercicio) {
-    assert.ok(!ids.has(dica.id), `${dica.id} não tem exercício e mesmo assim está na trilha`);
+  for (const aula of semExercicio) {
+    assert.ok(!ids.has(aula.id), `${aula.id} não tem exercício e mesmo assim está na trilha`);
   }
 });
 
@@ -191,17 +260,16 @@ test('"você está aqui" cai no primeiro nível com trabalho aberto por fazer', 
     ...VAZIO,
     temaAberto: () => false,
     aulasPublicadas: new Set(),
-    exerciciosResolvidos: new Map(
-      DICAS.filter((d) => d.treino !== null).map((d) => [d.id, d.treino!.exercicios.length]),
-    ),
+    pontosDeMeioJogo: new Map(COM_EXERCICIO.map((a) => [a.id, a.aprovacao!.maximo])),
   });
   assert.equal(vocEstaAqui(nadaAberto), null);
 });
 
 test("todo módulo tem rótulo e diz o que a barra dele conta", () => {
   // A tela põe as três barras lado a lado, e elas contam coisas diferentes —
-  // puzzle medido, aula certificada e leitura declarada. Uma barra sem essa
-  // frase ao lado vira um percentual que o professor não sabe defender.
+  // puzzle medido, aula certificada pela tablebase, e capítulo aprovado pela
+  // régua do próprio autor. Uma barra sem essa frase ao lado vira um percentual
+  // que o professor não sabe defender.
   for (const chave of ["tatica", "finais", "meio-jogo"] as const) {
     assert.ok(MODULO[chave].nome.length > 2);
     assert.ok(MODULO[chave].conta.length > 20);

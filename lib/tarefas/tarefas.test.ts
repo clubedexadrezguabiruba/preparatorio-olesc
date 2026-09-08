@@ -1,12 +1,11 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { SABADOS, SEMANAS } from "../curso/calendario.ts";
 import { CLASSES, TRILHA } from "../finais/trilha.ts";
 import { NIVEIS } from "../curso/trilha.ts";
-import { DICAS_CITAVEIS, dicasDoNivel } from "../meiojogo/conteudo.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { daSemana, problemasDoDetalheDeMeioJogo, validarTarefas } from "./tarefas.ts";
 
@@ -77,102 +76,7 @@ test("as metas de finais apontam para classes que a trilha tem, com aula a abrir
   }
 });
 
-test("as metas de meio-jogo apontam para degraus que existem, com dica escrita", () => {
-  // O gêmeo do teste acima, e pelo mesmo erro real: pedir "8 dicas do degrau
-  // 1400-1600" quando só 6 estão escritas deixaria a barra parada em 6 de 8 e
-  // o aluno concluiria que marcar não funciona.
-  const degraus = new Set(NIVEIS.map((n) => n.id));
-  for (const tarefa of validarTarefas(lerConteudo())) {
-    if (tarefa.tipo !== "meiojogo") continue;
-    assert.ok(
-      degraus.has(tarefa.meta.nivel),
-      `a tarefa "${tarefa.id}" pede o degrau "${tarefa.meta.nivel}", que não existe`,
-    );
-    const escritas = dicasDoNivel(tarefa.meta.nivel).filter((d) => d.treino !== null).length;
-    assert.ok(
-      escritas >= tarefa.meta.resolver,
-      `a tarefa "${tarefa.id}" pede ${tarefa.meta.resolver} dicas resolvidas e só ${escritas} ` +
-        `têm exercício no degrau ${tarefa.meta.nivel}`,
-    );
-  }
-});
 
-test("o detalhe do meio-jogo nomeia dicas que existem, e no degrau que ele aponta", () => {
-  // O erro real, e ele estava no ar: o `detalhe` de `s1-meiojogo` prometia
-  // "a coluna aberta" e "a dama sozinha", que não são dica do degrau `ate-1000`;
-  // o de `s2` prometia "melhorar a pior peça" (que é m17, do degrau seguinte) e
-  // "trocar quando se está na frente", que não é dica de degrau nenhum; o de
-  // `s3` prometia "posto avançado" e "bispo bom e bispo mau", que são m15 e m14,
-  // do degrau anterior; e o de `s4`, "ataque de minoria" e "sacrifício de
-  // qualidade", que não existem. Quatro de quatro.
-  //
-  // O teste ao lado — o da contagem — passava nos quatro, porque contagem não
-  // é descrição. Este cobra as duas pontas: os ids são do degrau, e o título de
-  // cada um aparece **literalmente** na prosa que o aluno lê no painel.
-  assert.deepEqual(problemasDoDetalheDeMeioJogo(validarTarefas(lerConteudo()), DICAS_CITAVEIS), []);
-});
-
-test("dica do degrau errado no detalhe reprova, mesmo com a contagem certa", () => {
-  // O caso adversarial: seis dicas nomeadas para uma tarefa que pede seis, com
-  // uma delas de outro degrau. É a forma exata do erro que estava no ar — e o
-  // teste da contagem, ao lado, continua passando neste conteúdo.
-  const tarefa = {
-    id: "s2-meiojogo",
-    semana: 2,
-    tipo: "meiojogo",
-    titulo: "Ler dicas do degrau 1000–1200",
-    detalhe: "Abra uma rota para a pior peça",
-    dicas: ["m17"],
-    meta: { nivel: "1000-1200", resolver: 1 },
-  };
-  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), DICAS_CITAVEIS);
-  assert.ok(
-    problemas.some((p) => /é do degrau 1000-1200 e nomeia "m17", que é do degrau 1200-1400/.test(p)),
-    problemas.join(" | "),
-  );
-});
-
-test("dica sem exercício numa tarefa medida reprova", () => {
-  // A regra que nasceu com o progresso medido, e o defeito que ela impede: uma
-  // tarefa que conta exercício resolvido nomeando uma dica que não tem
-  // exercício é uma caixa que nada do que o aluno fizer vai marcar.
-  const semExercicio = DICAS_CITAVEIS.find((d) => d.exercicios === 0);
-  assert.ok(semExercicio, "o teste só prova algo se houver dica sem exercício");
-  const tarefa = {
-    id: "s1-meiojogo",
-    semana: 1,
-    tipo: "meiojogo",
-    titulo: "Resolver dicas de meio-jogo",
-    detalhe: semExercicio.titulo,
-    dicas: [semExercicio.id],
-    meta: { nivel: semExercicio.nivel, resolver: 1 },
-  };
-  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), DICAS_CITAVEIS);
-  assert.ok(
-    problemas.some((p) => p.includes("que não tem exercício")),
-    problemas.join(" | "),
-  );
-});
-
-test("lista certa e prosa desatualizada reprovam — é o par que discorda", () => {
-  // A outra metade: os ids passam a estar certos e ninguém reescreve o texto.
-  // Sem esta regra, o painel voltaria a prometer uma coisa e a trilha a levar
-  // a outra, com o gate verde.
-  const tarefa = {
-    id: "s1-meiojogo",
-    semana: 1,
-    tipo: "meiojogo",
-    titulo: "Ler dicas do degrau até 1000",
-    detalhe: "A coluna aberta e a dama sozinha.",
-    dicas: ["m1"],
-    meta: { nivel: "ate-1000", resolver: 1 },
-  };
-  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), DICAS_CITAVEIS);
-  assert.ok(
-    problemas.some((p) => /não escreve "Coloque outra peça no jogo" no detalhe/.test(p)),
-    problemas.join(" | "),
-  );
-});
 
 test("toda semana do curso tem tarefa dos quatro blocos da rotina", () => {
   // A rotina de 2 h tem quatro blocos — tática, finais, meio-jogo e partida —,
@@ -201,15 +105,58 @@ test("toda semana do curso tem tarefa dos quatro blocos da rotina", () => {
   }
 });
 
-test("a semana do piloto mede o meio-jogo, e não o deixa na declaração", () => {
-  // A semana 2 é a do piloto (19–25/9). É a única em que as dicas do degrau já
-  // têm exercício, e por isso a única que pode ser medida — deixá-la em
-  // `marcar` seria desperdiçar justamente a semana em que o professor vai
-  // olhar o relatório.
+/**
+ * As aulas de meio-jogo que já têm exercício escrito, lidas do disco.
+ *
+ * Lê `content/lessons/` com `fs`, como este arquivo já lê `content/tarefas.json`
+ * — e não por `lib/meiojogo/conteudo.ts`, que é `server-only` e não roda no
+ * `node --test`. O que se quer aqui é uma pergunta só: existe alguma aula
+ * pronta? — e ela não precisa do schema para ser respondida.
+ */
+function aulasDeMeioJogoComExercicio(): string[] {
+  const pasta = path.join(RAIZ, "content/lessons");
+  return readdirSync(pasta)
+    .filter((f) => f.startsWith("M") && f.endsWith(".json"))
+    .filter((f) => {
+      const aula = JSON.parse(readFileSync(path.join(pasta, f), "utf8")) as {
+        status?: string;
+        stages?: { exercises?: { items?: unknown[] } };
+      };
+      return aula.status === "published" && (aula.stages?.exercises?.items?.length ?? 0) > 0;
+    })
+    .map((f) => f.replace(/\.json$/, ""));
+}
+
+test("a semana do piloto mede o meio-jogo assim que houver aula escrita", () => {
+  // A semana 2 é a do piloto (19–25/9), e é a semana em que o professor vai
+  // olhar o relatório: deixá-la em `marcar` é desperdiçá-la.
+  //
+  // A cobrança é **condicionada ao conteúdo**, e é de propósito. Em 2026-09-08 o
+  // módulo foi reescrito do zero e ficou sem nenhuma aula: cobrar a tarefa
+  // medida naquele dia só deixaria a árvore vermelha sem que houvesse o que
+  // apontar, e a saída fácil — apagar o teste — perderia a regra. Assim ele
+  // dorme enquanto não há conteúdo e **volta a morder no minuto em que a
+  // primeira aula for publicada**, que é exatamente quando a conversão passa a
+  // ser possível. A dívida fica com gatilho em vez de ficar num documento.
   const semana2 = daSemana(validarTarefas(lerConteudo()), 2);
   const doMeioJogo = semana2.find((t) => t.id.endsWith("-meiojogo"));
   assert.ok(doMeioJogo, "a semana 2 não tem tarefa de meio-jogo");
-  assert.equal(doMeioJogo.tipo, "meiojogo", "a tarefa da semana do piloto tem de ser medida");
+
+  const escritas = aulasDeMeioJogoComExercicio();
+  if (escritas.length === 0) {
+    assert.equal(
+      doMeioJogo.tipo,
+      "marcar",
+      "sem aula escrita, a tarefa do piloto só pode ser de marcar",
+    );
+    return;
+  }
+  assert.equal(
+    doMeioJogo.tipo,
+    "meiojogo",
+    `já existem aulas de meio-jogo escritas (${escritas.join(", ")}) — ` +
+      "a tarefa da semana do piloto tem de ser medida",
+  );
 });
 
 test("a semana 2 manda o aluno aos finais", () => {
@@ -276,4 +223,105 @@ test("os links que ainda estão em branco ficam listados", () => {
     console.log(`  link pendente: ${tarefa.id} — ${tarefa.onde?.rotulo}`);
   }
   assert.ok(true);
+});
+
+/**
+ * As aulas de meio-jogo que uma tarefa pode citar, escritas à mão.
+ *
+ * Não saem de `indiceDeMeioJogo()`: aquele arquivo abre o disco e é
+ * `server-only`, e o `npm test` roda sem `--conditions=react-server`. O que se
+ * cobra aqui é a **regra** — id que existe, título literal na prosa, aula com
+ * exercício —, e a regra não depende de qual capítulo já foi escrito.
+ */
+const AULAS_CITAVEIS = [
+  { id: "M103-PRINCIPIOS-DE-ABERTURA", titulo: "Princípios de abertura", exercicios: 6 },
+  { id: "M106-O-VALOR-DAS-PECAS", titulo: "O valor das peças", exercicios: 6 },
+];
+
+test("o detalhe do meio-jogo nomeia aulas que existem, e escreve o título delas", () => {
+  // O erro real, e ele estava no ar antes de 2026-09-07: os quatro `detalhe` do
+  // painel prometiam conceitos que não eram do conteúdo que a tarefa apontava.
+  // O teste de contagem, sozinho, passava nos quatro — porque contagem não é
+  // descrição. Este cobra as duas pontas: os ids existem, e o título de cada um
+  // aparece **literalmente** na prosa que o aluno lê no painel.
+  assert.deepEqual(problemasDoDetalheDeMeioJogo(validarTarefas(lerConteudo()), AULAS_CITAVEIS), []);
+});
+
+test("aula que não existe no detalhe reprova, mesmo com a contagem certa", () => {
+  const tarefa = {
+    id: "s2-meiojogo",
+    semana: 2,
+    tipo: "meiojogo",
+    titulo: "Fazer uma aula de meio-jogo",
+    detalhe: "Uma aula que ninguém escreveu",
+    aulas: ["M199-NAO-EXISTE"],
+    meta: { concluir: 1 },
+  };
+  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), AULAS_CITAVEIS);
+  assert.ok(
+    problemas.some((p) => /nomeia a aula "M199-NAO-EXISTE", que não existe/.test(p)),
+    problemas.join(" | "),
+  );
+});
+
+test("a contagem e a lista têm de concordar", () => {
+  // Uma tarefa que manda concluir duas aulas e nomeia uma: a barra do painel
+  // pararia em 1 de 2 para sempre, e o aluno concluiria que marcar não funciona.
+  const tarefa = {
+    id: "s2-meiojogo",
+    semana: 2,
+    tipo: "meiojogo",
+    titulo: "Fazer duas aulas de meio-jogo",
+    detalhe: "Só uma está escrita aqui",
+    aulas: ["M103-PRINCIPIOS-DE-ABERTURA"],
+    meta: { concluir: 2 },
+  };
+  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), AULAS_CITAVEIS);
+  assert.ok(
+    problemas.some((p) => /manda concluir 2 aula\(s\) e nomeia 1/.test(p)),
+    problemas.join(" | "),
+  );
+});
+
+test("aula sem exercício escrito numa tarefa medida reprova", () => {
+  // A regra que impede a caixa impossível: uma tarefa que conta aula concluída
+  // nomeando uma aula que ainda não tem exercício é uma caixa que nada do que o
+  // aluno fizer vai marcar. O caso é montado à mão porque o módulo está sendo
+  // reescrito e pode não haver, hoje, uma aula nesse estado.
+  const semExercicio = { id: "M101-EM-ESCRITA", titulo: "Uma aula em escrita", exercicios: 0 };
+  const tarefa = {
+    id: "s1-meiojogo",
+    semana: 1,
+    tipo: "meiojogo",
+    titulo: "Fazer uma aula de meio-jogo",
+    detalhe: semExercicio.titulo,
+    aulas: [semExercicio.id],
+    meta: { concluir: 1 },
+  };
+  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), [semExercicio]);
+  assert.ok(
+    problemas.some((p) => p.includes("que não tem exercício escrito")),
+    problemas.join(" | "),
+  );
+});
+
+test("lista certa e prosa desatualizada reprovam — é o par que discorda", () => {
+  // A outra metade: os ids passam a estar certos e ninguém reescreve o texto.
+  // Sem esta regra, o painel voltaria a prometer uma coisa e a trilha a levar a
+  // outra, com o gate verde.
+  const aula = { id: "M103-PRINCIPIOS-DE-ABERTURA", titulo: "Princípios de abertura", exercicios: 6 };
+  const tarefa = {
+    id: "s1-meiojogo",
+    semana: 1,
+    tipo: "meiojogo",
+    titulo: "Fazer uma aula de meio-jogo",
+    detalhe: "A coluna aberta e a dama sozinha.",
+    aulas: [aula.id],
+    meta: { concluir: 1 },
+  };
+  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), [aula]);
+  assert.ok(
+    problemas.some((p) => /não escreve "Princípios de abertura" no detalhe/.test(p)),
+    problemas.join(" | "),
+  );
 });

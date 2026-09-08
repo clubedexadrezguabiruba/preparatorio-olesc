@@ -30,7 +30,8 @@ import { lerIndice } from "@/lib/repertorio/banco";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
 import { aprendidasDaAbertura, aRevisarNaAbertura } from "@/lib/repertorio/treino";
 import { TAREFAS } from "@/lib/tarefas/conteudo";
-import { dicasResolvidas } from "@/lib/meiojogo/progresso";
+import { indiceDeMeioJogo } from "@/lib/meiojogo/conteudo";
+import { aulasConcluidas } from "@/lib/meiojogo/progresso";
 import { estadoDasTarefas } from "@/lib/tarefas/estado";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
 import { daSemana } from "@/lib/tarefas/tarefas";
@@ -88,7 +89,7 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
     progressoDeFinais(perfil.id),
     revisaoDeHoje(perfil.id),
     eventosDeAulas(perfil.id),
-    dicasResolvidas(perfil.id),
+    aulasConcluidas(perfil.id),
     // Trinta dias bastam para a sequência: o preparatório inteiro tem quatro
     // semanas, e ninguém precisa ver "48 dias seguidos" numa tela de celular.
     minutosPorDia(perfil.id, somarDias(hoje, -30)),
@@ -105,6 +106,14 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
   const proximoFinal = proximaAula(aulasDeFinais, finais);
 
   const estados = estadoDasTarefas(tarefasDaSemana, marcadas, progresso, finaisFeitos, resolvidas);
+
+  // A próxima aula de meio-jogo por fazer: a primeira escrita, na ordem da
+  // série, que o aluno ainda não aprovou. `null` quando ele fechou todas — e aí
+  // o cartão convida a rever, em vez de apontar para uma aula que não existe.
+  const proximoMeioJogo =
+    indiceDeMeioJogo()
+      .filter((a) => a.status === "published" && a.aprovacao !== null && !resolvidas.has(a.id))
+      .map((a) => ({ id: a.id, nome: a.titulo }))[0] ?? null;
 
   // As aulas devidas hoje na revisão espaçada, com o nome que o cartão mostra.
   const revisoesDeFinais = revisoesDevidas(aulasDeFinais, eventos, hoje).map((devida) => ({
@@ -179,6 +188,7 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
         sequencia={sequenciaDeDias(minutos, hoje)}
         revisaoDeTatica={devidosDeTatica.length}
         revisaoDeFinais={revisoesDeFinais}
+        meioJogo={proximoMeioJogo}
         partidaFeita={jogouHoje}
       />
 

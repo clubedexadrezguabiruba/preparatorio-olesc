@@ -1,0 +1,660 @@
+{
+  "aula": "M106-O-VALOR-DAS-PECAS",
+  "obra": "yusupov-build-up-1",
+  "volume": 1,
+  "capitulo": 6,
+  "tituloOriginal": "The value of the pieces",
+  "rotuloDoAutor": "Positional play",
+  "paginas": {
+    "teoria": [
+      65,
+      69
+    ],
+    "exercicios": [
+      70,
+      71
+    ],
+    "solucoes": [
+      72,
+      74
+    ]
+  },
+  "aprovacao": {
+    "maximo": 19,
+    "excelente": 16,
+    "bom": 13,
+    "minimo": 9,
+    "pagina": 74
+  },
+  "principios": [
+    "You must understand clearly the value of the pieces.",
+    "1 knight = 1 bishop = 3 pawns; 1 rook = 4.5 pawns; 1 queen = 3 minor pieces = 2 rooks = 9 pawns.",
+    "A rook is stronger than a minor piece + a pawn.",
+    "A rook + pawn are weaker than two minor pieces.",
+    "A queen is stronger than rook + minor piece.",
+    "A queen is weaker than a rook + two minor pieces.",
+    "However, the value of the pieces is not an absolute and constant number.",
+    "G.Lisitsin's five factors which influence the relative strength of the pieces: 1) The central position of a piece; 2) A safe, well protected position; 3) The activity of the piece; 4) Coordination with other pieces; 5) The mobility of the piece.",
+    "The queen is generally not as strong as two rooks or three pieces. But if the king of the player with the rooks is exposed to a lot of checks, the queen is stronger, and minor pieces must be well protected. (S.Tarrasch)",
+    "A rook, minor piece and passed pawn on the 6th rank are superior to the queen. The queen is stronger if there is play on both wings; if play is on a single wing, rook and minor piece are often no worse than the queen.",
+    "In the middlegame, three pawns are normally weaker than a bishop or a knight. Only connected central passed pawns or far advanced pawns are better than the piece. In the endgame the value of pawns increases, and three pawns are normally no worse than a minor piece.",
+    "In the middlegame, two minor pieces are often stronger than a rook and two pawns. In the endgame, a rook and even a single passed pawn are sometimes better than the two pieces."
+  ],
+  "teoria": [
+    {
+      "id": "diag-6-1",
+      "pagina": 65,
+      "recorte": "p65-d1.png",
+      "fen": "6b1/5p2/2B2K2/7k/8/6P1/8/8 w - - 0 1",
+      "lado": "white",
+      "partida": "B.Horwitz, 1880 (study)",
+      "linha": [
+        "Bf3+",
+        "Kh6",
+        "g4",
+        "Kh7",
+        "g5",
+        "Kh8",
+        "Be4",
+        "Bh7",
+        "Bxh7",
+        "Kxh7",
+        "Kxf7",
+        "Kh8",
+        "Kg6",
+        "Kg8",
+        "Kh6",
+        "Kh8",
+        "g6"
+      ],
+      "comentario": "White wins because the black pieces are very badly placed. 1.Bf3+ Kh6 2.g4 Kh7 (2...Bh7 3.g5#) 3.g5 Kh8 4.Be4 (zugzwang) 4...Bh7 5.Bxh7 Kxh7 6.Kxf7 Kh8 7.Kg6 Kg8 8.Kh6 Kh8 9.g6+- 1-0. Example of factor 1 (the central position of a piece) and factor 5 (mobility): the black bishop on g8 has no useful move."
+    },
+    {
+      "id": "diag-6-2",
+      "pagina": 66,
+      "recorte": "p66-d1.png",
+      "fen": "n1r1n1k1/1pr1q1pp/p3p3/P1NpNp2/3P1P2/1QR2P2/1P3P1P/2R2K2 w - - 0 1",
+      "lado": "white",
+      "partida": "M.Taimanov - G.Lisitsin, USSR Ch semifinal, Leningrad 1949",
+      "linha": [
+        "Nxb7",
+        "Rxb7",
+        "Qxb7",
+        "Qxb7",
+        "Rxc8",
+        "Kf8",
+        "Rb8",
+        "Qe7",
+        "Rxa8",
+        "g6",
+        "Rcc8",
+        "Kg7",
+        "Rxe8",
+        "Qc7",
+        "Rec8",
+        "Qb7",
+        "Rab8",
+        "Qa7",
+        "Rh8",
+        "Qe7",
+        "Rbg8+",
+        "Kh6",
+        "Rxg6+",
+        "Kh5",
+        "Rg3",
+        "Kh4",
+        "Nf3+",
+        "Kh5",
+        "Rhg8"
+      ],
+      "comentario": "White uses the active placing of his pieces for a startling combination. 1.Nxb7!! Rxb7 2.Qxb7! Qxb7 3.Rxc8 Kf8 4.Rb8! and after this move Black can no longer defend both knights. 4...Qe7 (4...Qxb8 loses to 5.Nd7+, while 4...Qa7 is refuted by 5.Rxe8+! Kxe8 6.Rc8+ Ke7 7.Nc6+) 5.Rxa8 g6 6.Rcc8 Kg7 7.Rxe8+-, with a decisive material advantage: two rooks and a knight against the queen. 1-0"
+    },
+    {
+      "id": "diag-6-3",
+      "pagina": 66,
+      "recorte": "p66-d2.png",
+      "fen": "8/pp6/2p2q2/6k1/3bQ2p/3B4/PP4PP/7K w - - 0 1",
+      "lado": "white",
+      "partida": "Mantefel - Presnjakov, Penza 1950",
+      "linha": [
+        "g3",
+        "hxg3",
+        "hxg3"
+      ],
+      "comentario": "1.g3! hxg3 2.hxg3 and Black resigned: he cannot at the same time meet the mate threat and protect his bishop. For example: a) 2...Kh6 3.Qh7+ Kg5 4.Qh4#; b) 2...Kh5 3.Qh7+ Kg4 (3...Qh6 4.Qf5+ Qg5 5.Qh3++-) 4.Be2+ Kg5 (4...Kxg3 5.Qh2#) 5.Qh5#; c) 2...Qh6+ 3.Kg2 c5 4.Qf5#. 1-0"
+    },
+    {
+      "id": "diag-6-4",
+      "pagina": 66,
+      "recorte": "p66-d3.png",
+      "fen": "4r1k1/4bpp1/1r2qn1p/p4N2/1pp1PQ2/1P3N1P/P4PP1/R3R1K1 w - - 0 1",
+      "lado": "white",
+      "partida": "R.Nezhmetdinov - Y.Estrin, USSR Ch semifinal, Baku 1951",
+      "linha": [
+        "Nxg7",
+        "Kxg7",
+        "Nd4",
+        "Qc8",
+        "Nf5+",
+        "Kg8",
+        "Qg3+",
+        "Ng4",
+        "Qxg4+"
+      ],
+      "comentario": "White wins by an elegant combination, which is only possible because of the mobility of the knight on f3. 1.Nxg7! Kxg7 2.Nd4! Qc8 3.Nf5+ Kg8 4.Qg3 Ng4 5.Qxg4+ and Black resigned: after 5...Bg5 or 5...Rg6 there is the decisive 6.N(x)e7!+. 1-0"
+    },
+    {
+      "id": "diag-6-5",
+      "pagina": 67,
+      "recorte": "p67-d1.png",
+      "fen": "8/4r1k1/6r1/5Q1K/4p3/4P3/8/8 b - - 0 1",
+      "lado": "black",
+      "partida": "Cousigne - A.Yusupov, France 2002",
+      "linha": [
+        "Ree6",
+        "Qd5",
+        "Rh6+",
+        "Kg4",
+        "Reg6+",
+        "Kf4",
+        "Rh4+",
+        "Kf5",
+        "Rh5+",
+        "Kf4",
+        "Rxd5"
+      ],
+      "comentario": "Illustrates remark 1 (two rooks against the queen). Normally such endings should be drawn by perpetual check or repetition, but here the white pieces are unfavourably placed and White loses the queen. 1...Ree6! threatens 2...Rh6+, 3...Reg6+ and then 4...Rf6. 2.Qd5 Rh6+ 3.Kg4 Reg6+ 4.Kf4 Rh4+ 5.Kf5 Rh5+-+ 6.Kf4 Rxd5. 0-1"
+    },
+    {
+      "id": "diag-6-6",
+      "pagina": 67,
+      "recorte": "p67-d2.png",
+      "fen": "8/5pp1/4n1k1/5r1p/8/3Q4/5P1K/8 b - - 0 1",
+      "lado": "black",
+      "partida": "J.Nunn - A.Yusupov, Linares 1988",
+      "linha": [
+        "Ng5",
+        "Kg3",
+        "Nf3",
+        "Qe4",
+        "Ne5",
+        "Qc2",
+        "Ng4",
+        "f3",
+        "Ne5",
+        "f4",
+        "Ng4",
+        "Qd3",
+        "Nh6",
+        "Qd6+",
+        "Kh7",
+        "Qd3",
+        "g6",
+        "Qd7",
+        "Ng4",
+        "Qa7",
+        "Kg7",
+        "Qd4+",
+        "Nf6",
+        "Qb2",
+        "Kh7",
+        "Qb7",
+        "Nd5",
+        "Qa7",
+        "Nxf4",
+        "Qd7",
+        "Ne6",
+        "Qb7",
+        "Rf4",
+        "Qb5",
+        "h4+",
+        "Kh3",
+        "g5",
+        "Qb7",
+        "Nf8",
+        "Qd5",
+        "Kh6",
+        "Qd6+",
+        "Ng6",
+        "Qd2",
+        "g4+",
+        "Kg2",
+        "Kh5",
+        "Qd5+",
+        "f5",
+        "Qd7",
+        "h3+",
+        "Kg1",
+        "g3",
+        "Qh7+",
+        "Kg5",
+        "Qxh3",
+        "Nh4"
+      ],
+      "comentario": "Illustrates remark 2 (rook and minor piece against the queen with play on one wing). 1...Ng5! Black wants to redeploy the knight (via f3 and e5 to g4) and attack the f2-pawn; the two black pieces hunt down the f-pawn and win it, after which Black advances his pawns. 7...Nh6 intends to unpin by ...Kh7 and then ...g6. 9.Qd3 (or 9.Qe7 g6 10.Qf8 Ng4 11.Kf3 Ne5+! with the idea Nd7-c5-e6-+). 11...Kg7 intends ...Nf6-d5. 20.Qb7?! (more resistance was 20.Qd3+ Kg7 21.Qc3+ Nd4!?-+). 20...Nf8! sends the knight to g6, to shelter the black king from the queen checks. 21.Qd5 (or 21.Qe7 g4+ 22.Kg2 Ng6-+). 29...Nh4! and White resigned, in view of 30.Qxg3+ (or 30.Kh1 g2+ 31.Kh2 Rf3-+) 30...Rg4-+. 0-1"
+    },
+    {
+      "id": "diag-6-7",
+      "pagina": 68,
+      "recorte": "p68-d1.png",
+      "fen": "2bbr3/6kp/1p1q1pp1/r1p5/2BpPN2/3N4/2Q3PP/4RRK1 w - - 0 1",
+      "lado": "white",
+      "partida": "M.Petursson - J.Nunn, Reykjavik 1990",
+      "linha": [
+        "Qf2",
+        "Ra7",
+        "e5",
+        "fxe5",
+        "Nxe5",
+        "Rae7",
+        "Nf7",
+        "Rxf7",
+        "Rxe8"
+      ],
+      "comentario": "Illustrates remark 3 (three pawns against a minor piece). The correct plan is an attack on the kingside. 1.Qf2! Ra7 (1...b5 is too late because of 2.e5! fxe5 3.Nxe5! bxc4 - no better is 3...Rxe5 4.Rxe5 Qxe5 5.Ne6+! Bxe6 6.Qf8# - 4.Nh5+! gxh5 5.Qf7++-) 2.e5! White has an extra piece and attacks. 2...fxe5 3.Nxe5 Rae7 (3...Rxe5 is bad on account of 4.Rxe5 Qxe5 5.Ne6+! Kh6 [5...Bxe6 6.Qf8#] 6.Qf8+ Kh5 7.Be2+ Qxe2 8.Nf4++-; if 3...g5, then 4.Nf7! Rxf7 5.Nh5+! Kh6 6.Qxf7 Rxe1 7.Rxe1 gxh5 [7...Kxh5 8.Qxh7+ Kh6 9.Be2+ Kg5 10.Qh4+ +-] 8.Bd3 Be3+ 9.Rxe3 dxe3 10.Qxh7+ Kg5 11.Qg7+ Kh4 [11...Kf4 12.Qg3#] 12.g3+ Kh3 13.Bf1#) 4.Nf7!+- Rxf7 5.Rxe8. 1-0"
+    },
+    {
+      "id": "diag-6-8",
+      "pagina": 69,
+      "recorte": "p69-d1.png",
+      "fen": "4rrk1/ppp2pq1/7p/2P3p1/8/P4PPB/2QB2KP/4R3 w - - 0 1",
+      "lado": "white",
+      "partida": "V.Babula - M.Kaminski, Lazne Bohdanec 1996",
+      "linha": [
+        "Bc3",
+        "f6",
+        "Be6+",
+        "Kh8",
+        "Qf5",
+        "c6",
+        "Rd1",
+        "Re7",
+        "Rd6",
+        "h5",
+        "Bc4"
+      ],
+      "comentario": "Illustrates remark 4 (two minor pieces against a rook and two pawns). 1.Bc3 The black castled position is too open and White organizes a rapid attack. 1...f6 (other moves are no better: a) 1...Rxe1 2.Bxg7 Kxg7 - or if first 2...Rfe8 then 3.Kf2!+- - 3.Qc3++-; b) 1...Qg6 2.Bf5 Qc6 3.Bh7#) 2.Be6+ Kh8 3.Qf5 c6 4.Rd1 Re7 5.Rd6! h5 6.Bc4+-. Black cannot defend the f6-pawn. 1-0"
+    }
+  ],
+  "exercicios": [
+    {
+      "id": "ex-6-1",
+      "pagina": 70,
+      "recorte": "p70-d1.png",
+      "fen": "8/4bkp1/8/2r2p2/Kp4p1/1P1Q4/8/8 w - - 0 1",
+      "lado": "white",
+      "estrelas": 2,
+      "pontos": 2,
+      "partida": "Variation from the game S.Kindermann - A.Yusupov, Bundesliga 1996",
+      "solucao": [
+        "Qxf5+",
+        "Rxf5"
+      ],
+      "alternativas": [],
+      "erros": [],
+      "comentario": "Black has a material advantage and White must fight for a draw. 1.Qxf5+!! Rxf5= stalemate. (2 points)"
+    },
+    {
+      "id": "ex-6-2",
+      "pagina": 70,
+      "recorte": "p70-d2.png",
+      "fen": "2r5/p3qrk1/4pp1p/np1p2p1/2pP2NP/1PP2NP1/P4P2/R1BQ2K1 w - - 0 1",
+      "lado": "white",
+      "estrelas": 2,
+      "pontos": 2,
+      "partida": "L.Portisch - O.Panno, Madrid 1973",
+      "solucao": [
+        "Nxh6",
+        "Kxh6",
+        "Nxg5",
+        "Kg7",
+        "Nxf7",
+        "Qxf7",
+        "b4",
+        "Nb7",
+        "Bf4",
+        "a5",
+        "bxa5",
+        "Ra8",
+        "a4",
+        "bxa4",
+        "Rxa4",
+        "Rxa5",
+        "Rb4",
+        "Ra8",
+        "Rb6",
+        "Nd8",
+        "Qb1",
+        "Ra7",
+        "Kg2",
+        "Rb7",
+        "Rxb7",
+        "Nxb7",
+        "Qb6",
+        "Qd7",
+        "Qc7"
+      ],
+      "alternativas": [
+        {
+          "lance": "b4",
+          "pontos": null,
+          "nota": "An equally good way to play is 1.b4 Nc6 2.Nxh6!+-. The author gives it no separate score."
+        }
+      ],
+      "erros": [],
+      "comentario": "1.Nxh6! Kxh6 2.Nxg5 (2 points) 2...Kg7 (2...Rff8 3.Nxe6++- or 2...fxg5 3.Bxg5++-) 3.Nxf7. White has won a rook and two pawns for two knights. 3...Qxf7 4.b4 Nb7 5.Bf4+- a5 6.bxa5 Ra8 7.a4 bxa4 8.Rxa4 Rxa5 9.Rb4 Ra8 10.Rb6 Nd8 11.Qb1 Ra7 12.Kg2 Rb7 13.Rxb7 Nxb7 14.Qb6 Qd7 15.Qc7!+-. The exchange of queens leaves the knight marooned on b7. 1-0"
+    },
+    {
+      "id": "ex-6-3",
+      "pagina": 70,
+      "recorte": "p70-d3.png",
+      "fen": "7k/p1p2R1p/bpn1ppRQ/8/3P4/q1P1PP2/P1PK3P/R7 b - - 0 1",
+      "lado": "black",
+      "estrelas": 2,
+      "pontos": 2,
+      "partida": "J.Hodgson - A.Yermolinsky, Hastings 1996",
+      "solucao": [
+        "Ne5",
+        "dxe5",
+        "Rd7+",
+        "Ke1",
+        "Qxc3+",
+        "Kf2",
+        "Rd2+",
+        "Kg3",
+        "Qxe5+",
+        "Qf4",
+        "Qxf4+",
+        "exf4",
+        "hxg6"
+      ],
+      "alternativas": [
+        {
+          "lance": "Na5",
+          "pontos": 1,
+          "nota": "The text move is more precise than 1...Na5 (1 point), since White has fewer options."
+        },
+        {
+          "lance": "Ne7",
+          "pontos": null,
+          "nota": "1...Ne7 2.Rg2 Nd5 3.Rag1 is not convincing. The author gives it no score."
+        }
+      ],
+      "erros": [
+        {
+          "lance": "Rag1",
+          "apos": [
+            "Ne5"
+          ],
+          "nota": "2.Rag1 loses to 2...Nxf3+ 3.Kd1 Nxg1-+."
+        },
+        {
+          "lance": "Rxf6",
+          "apos": [
+            "Ne5"
+          ],
+          "nota": "If 2.Rxf6 then 2...Nxf3+ 3.Kd1 Qxc3-+."
+        }
+      ],
+      "comentario": "1...Ne5! (2 points). After 1...Ne5! White resigned. On 2.dxe5 there follows 2...Rd7+ 3.Ke1 Qxc3+ 4.Kf2 Rd2+ 5.Kg3 Qxe5+ 6.Qf4 Qxf4+ 7.exf4 hxg6-+. 0-1"
+    },
+    {
+      "id": "ex-6-4",
+      "pagina": 70,
+      "recorte": "p70-d4.png",
+      "fen": "r2q1r2/p4pkp/1p2p1p1/2p3N1/2BP4/2N1P3/PP4PP/3R1RK1 w - - 0 1",
+      "lado": "white",
+      "estrelas": 1,
+      "pontos": 1,
+      "partida": "H.Kmoch - Prinz, Amsterdam 1940",
+      "solucao": [
+        "Rxf7+"
+      ],
+      "alternativas": [],
+      "erros": [],
+      "comentario": "1.Rxf7+! (1 point). Black resigned; he loses in all variations: a) 1...Rxf7 2.Nxe6++-; b) 1...Kg8 2.Nxe6+-; c) 1...Kh6 2.Rxh7+ Kxg5 3.h4+ and now c1) 3...Kf6 4.Rf1#; c2) 3...Kg4 4.Be2+ Rf3 (or 4...Kg3 5.Ne4#) 5.Bxf3+ Kf5 6.Rf7+ Qf6 7.g4#; c3) 3...Kf5 4.Rf1+ Kg4 5.Be2+ Rf3 6.Bxf3+ Kf5 (6...Kg3 7.Ne4#) 7.Be2#. 1-0"
+    },
+    {
+      "id": "ex-6-5",
+      "pagina": 70,
+      "recorte": "p70-d5.png",
+      "fen": "8/8/8/1Q6/5pkp/4pR2/8/6K1 w - - 0 1",
+      "lado": "white",
+      "estrelas": 1,
+      "pontos": 1,
+      "partida": "J.Kling, 1851 (study)",
+      "solucao": [
+        "Qe2",
+        "h3",
+        "Kh2"
+      ],
+      "alternativas": [],
+      "erros": [],
+      "comentario": "1.Qe2! (1 point) 1...h3 (1...Kg3 2.Qg2#) 2.Kh2 (zugzwang) +-."
+    },
+    {
+      "id": "ex-6-6",
+      "pagina": 70,
+      "recorte": "p70-d6.png",
+      "fen": "8/8/5Nb1/3p4/3k4/3P4/2PK4/8 w - - 0 1",
+      "lado": "white",
+      "estrelas": 2,
+      "pontos": 2,
+      "partida": "E.Pogosiants, 1964 (study)",
+      "solucao": [
+        "Nd7",
+        "Bxd3",
+        "c3+",
+        "Kc4",
+        "Ne5+"
+      ],
+      "alternativas": [],
+      "erros": [],
+      "comentario": "1.Nd7! (1 point). The threat is mate (2.c3#). 1...Bxd3! (1...Be8 2.c3#) 2.c3+! (1 point). White cannot take the bishop, but he can win the piece in another way. 2...Kc4 (or 2...Ke4 3.Nc5++-) 3.Ne5++-."
+    },
+    {
+      "id": "ex-6-7",
+      "pagina": 71,
+      "recorte": "p71-d1.png",
+      "fen": "7r/P1pq4/2p5/1k5p/5p2/3P1P2/Q5PK/8 w - - 0 1",
+      "lado": "white",
+      "estrelas": 2,
+      "pontos": 2,
+      "partida": "L.Kubbel, 1935 (study)",
+      "solucao": [
+        "Qb2+",
+        "Ka6",
+        "Qb8",
+        "Rxb8",
+        "axb8=N+"
+      ],
+      "alternativas": [],
+      "erros": [],
+      "comentario": "1.Qb2+ (1 point) 1...Ka6! 2.Qb8! (1 point). This is stronger than 2.Qxh8?! Kxa7 3.Qxh5 Qxd3 4.Qa5+ Kb7 5.Qb4+ Ka6 6.Qxf4 c5=. 2...Rxb8 3.axb8=N+! and White wins the queen. 1-0"
+    },
+    {
+      "id": "ex-6-8",
+      "pagina": 71,
+      "recorte": "p71-d2.png",
+      "fen": "8/8/8/8/7p/1b3N1P/8/Qqk3K1 w - - 0 1",
+      "lado": "white",
+      "estrelas": 2,
+      "pontos": 2,
+      "partida": "F.Bondarenko, 1940 (study)",
+      "solucao": [
+        "Nd2",
+        "Qxa1",
+        "Nxb3+",
+        "Kb1",
+        "Nxa1",
+        "Kxa1",
+        "Kg2",
+        "Kb2",
+        "Kf3",
+        "Kc3",
+        "Kg4",
+        "Kd4",
+        "Kxh4",
+        "Ke5",
+        "Kg5",
+        "Ke6",
+        "Kg6",
+        "Ke7",
+        "Kg7",
+        "Ke6",
+        "h4",
+        "Kf5",
+        "h5",
+        "Kg5",
+        "h6"
+      ],
+      "alternativas": [
+        {
+          "lance": "Qxb1+",
+          "pontos": null,
+          "nota": "Only a draw can be obtained after 1.Qxb1+ Kxb1 2.Nd2+ Kc2 3.Nxb3 Kxb3, since Black quickly brings his king to f7: 4.Kf2 Kc4 5.Kf3 Kd5 6.Kg4 Ke6 7.Kxh4 Kf7= (see Chapter 4). The move 1.Nd2! wins some valuable tempi compared to this variation."
+        },
+        {
+          "lance": "Qc3+",
+          "pontos": null,
+          "nota": "If 1.Qc3+ Qc2 2.Qe3+, then 2...Kb2 with a slight edge for Black."
+        }
+      ],
+      "erros": [],
+      "comentario": "1.Nd2! (2 points) 1...Qxa1 2.Nxb3+ Kb1 3.Nxa1 Kxa1 4.Kg2+- (another good move is 4.Kf2+-) 4...Kb2 5.Kf3 Kc3 6.Kg4 Kd4 7.Kxh4 Ke5 8.Kg5 Ke6 9.Kg6! Ke7 10.Kg7! Ke6 11.h4 Kf5 12.h5 Kg5 13.h6. 1-0"
+    },
+    {
+      "id": "ex-6-9",
+      "pagina": 71,
+      "recorte": "p71-d3.png",
+      "fen": "k2r4/1p5q/p1n5/4p3/2Q5/P3P1P1/1P3PP1/2R1K3 b - - 0 1",
+      "lado": "black",
+      "estrelas": 1,
+      "pontos": 1,
+      "partida": "B.Gulko - V.Kupreichik, Kislovodsk 1982",
+      "solucao": [
+        "e4",
+        "Ke2",
+        "Qh5+",
+        "Ke1",
+        "Ne5",
+        "Qc7",
+        "Nd3+"
+      ],
+      "alternativas": [],
+      "erros": [
+        {
+          "lance": "Qh1+",
+          "nota": "1...Qh1+ 2.Qf1 would not be so strong."
+        }
+      ],
+      "comentario": "1...e4!-+ (1 point). Black brings his knight into the attack via the e5-square. 2.Ke2 (if 2.Qc5, then 2...Ne5! 3.Qxe5 Qh1+-+) 2...Qh5+ 3.Ke1 Ne5 4.Qc7 Nd3+. 0-1"
+    },
+    {
+      "id": "ex-6-10",
+      "pagina": 71,
+      "recorte": "p71-d4.png",
+      "fen": "6k1/2p3pp/p7/1p1q4/3N4/1P2K3/PB1N2PP/8 b - - 0 1",
+      "lado": "black",
+      "estrelas": 2,
+      "pontos": 2,
+      "partida": "L.Ljubojevic - A.Yusupov, Tilburg 1987",
+      "solucao": [
+        "Qe5+",
+        "Kd3",
+        "c5",
+        "N2f3",
+        "Qd6"
+      ],
+      "alternativas": [],
+      "erros": [],
+      "comentario": "1...Qe5+!-+ (2 points). Black intends 2...c5 to exploit the pin on the d4-knight and win a piece. White resigned in view of 2.Kd3 c5 3.N2f3 Qd6-+ pinning the knight. 0-1"
+    },
+    {
+      "id": "ex-6-11",
+      "pagina": 71,
+      "recorte": "p71-d5.png",
+      "fen": "8/2K1nk2/7P/5P2/8/8/8/8 w - - 0 1",
+      "lado": "white",
+      "estrelas": 1,
+      "pontos": 1,
+      "partida": "Variation from the game P.Svidler - V.Anand, Dos Hermanas 1999",
+      "solucao": [
+        "h7",
+        "Kg7",
+        "f6+"
+      ],
+      "alternativas": [],
+      "erros": [],
+      "comentario": "1.h7 Kg7 (or 1...Nd5+ 2.Kd6 Kg7 3.Kxd5 Kxh7 4.Ke6+-) 2.f6+!+- (1 point)."
+    },
+    {
+      "id": "ex-6-12",
+      "pagina": 71,
+      "recorte": "p71-d6.png",
+      "fen": "8/p2p2k1/3P2pp/2PN1p2/r4P1P/2K5/6P1/8 w - - 0 1",
+      "lado": "white",
+      "estrelas": 1,
+      "pontos": 1,
+      "partida": "A.Yusupov - D.Shapiro, World Open, Philadelphia 2002",
+      "solucao": [
+        "c6",
+        "dxc6",
+        "d7",
+        "cxd5",
+        "d8=Q",
+        "Rc4+",
+        "Kd3",
+        "Re4",
+        "h5",
+        "gxh5",
+        "Qxd5",
+        "Kg6",
+        "Qg8+",
+        "Kf6",
+        "g3",
+        "a5",
+        "Qh7"
+      ],
+      "alternativas": [],
+      "erros": [
+        {
+          "lance": "Ra6",
+          "apos": [
+            "c6"
+          ],
+          "nota": "1...Ra6 loses after 2.Nb4 Ra5 3.cxd7+-."
+        },
+        {
+          "lance": "Rxf4",
+          "apos": [
+            "c6",
+            "dxc6",
+            "d7",
+            "cxd5",
+            "d8=Q",
+            "Rc4+",
+            "Kd3"
+          ],
+          "nota": "If 4...Rxf4, then 5.Qc7++-."
+        }
+      ],
+      "comentario": "The far advanced pawns decide the game. 1.c6! (1 point) 1...dxc6 2.d7+- cxd5 3.d8=Q Rc4+ 4.Kd3 Re4 5.h5!? (this is even better than 5.Qxd5 h5 6.Qb7+ Kh6 7.Qxa7+-; Black cannot construct a fortress) 5...gxh5 6.Qxd5. Now the f5-pawn is weak. 6...Kg6 7.Qg8+ Kf6 8.g3 a5 (or 8...h4 9.gxh4 Rxf4 10.Qf8+ Ke6 11.Qxh6++-) 9.Qh7!+-. Both of Black's h-pawns drop. 1-0"
+    }
+  ],
+  "avisos": [
+    "A régua da página 74 (máximo 19, excelente 16, bom 13, corte 9) foi lida na imagem e bate com o texto extraído. A soma dos doze exercícios fecha em 19 sem nenhum pontosExtra: 2+2+2+1+1+2+2+2+1+2+1+1.",
+    "Ex. 6-6 e Ex. 6-7 têm os pontos partidos em dois lances pelo autor: 6-6 dá '(1 point)' por 1.Nd7 e mais '(1 point)' por 2.c3+; 6-7 dá '(1 point)' por 1.Qb2+ e mais '(1 point)' por 2.Qb8. Os dois lances são jogáveis na tela, então os dois pontos entraram em 'pontos' (2 em cada) e não em 'pontosExtra' — nenhum ponto deste capítulo é do tipo 'take 1 extra point if you considered'.",
+    "Os nomes dos jogadores não sobreviveram ao pdftotext (a fonte dos cabeçalhos come letras) e foram lidos das imagens das páginas 72-74 a 200 dpi, um a um. Seis dos doze exercícios são estudos compostos, sem par de jogadores: 6-5 (J.Kling 1851), 6-6 (E.Pogosiants 1964), 6-7 (L.Kubbel 1935) e 6-8 (F.Bondarenko 1940); 6-1 e 6-11 são marcados 'Variation from the game'.",
+    "Direitos de roque: '-' em todos os vinte diagramas, e isto foi verificado peça a peça, não assumido. Em nenhum deles rei e torre estão ambos nas casas de origem — nos exercícios os reis estão em a4, g7, d2, g7, g1, d2, h2, c1, a8, g8, f7 e c3, e nos diagramas de teoria em f6, f1/g8, h1/g5, g1/g8, h5/g7, h2/g6, g1/g7 e g2/g8. Nenhuma linha impressa roca.",
+    "En passant '-' em todos: nenhuma solução do capítulo joga uma tomada en passant.",
+    "O recortador achou 1 diagrama na p65, 3 na p66, 2 na p67, 1 na p68, 1 na p69 (os oito da teoria, Diagram 6-1 a 6-8) e 6 em cada página de exercício (p70 e p71). Os rótulos impressos foram conferidos na página inteira: p70-d1..d6 = Ex. 6-1..6-6 (coluna da esquerda 6-1/6-2/6-3, da direita 6-4/6-5/6-6) e p71-d1..d6 = Ex. 6-7..6-12. A ordem por coluna do script bate com a numeração do autor.",
+    "Os triângulos de quem joga: vazado nos Ex. 6-1, 6-2, 6-4, 6-5, 6-6, 6-7, 6-8, 6-11 e 6-12; cheio nos Ex. 6-3, 6-9 e 6-10. Os doze batem com o lado da FEN e com a solução impressa.",
+    "Diagram 6-3 (Mantefel - Presnjakov): o texto do livro traz 'After:' antes de 1.g3! hxg3 2.hxg3, mas o triângulo do diagrama é vazado (brancas jogam), então a posição impressa é a de ANTES de 1.g3 e a linha foi gravada assim. Depois de 2.hxg3 as pretas abandonaram; as três variantes de mate a), b) e c) ficaram no comentário.",
+    "Diagram 6-1: o rótulo impresso é só 'B.Horwitz / 1880' — é um estudo composto, não uma partida. O mesmo vale para os quatro estudos entre os exercícios.",
+    "Ex. 6-2: o autor diz que 1.b4 é 'equally good' mas não lhe dá pontos separados; gravado em 'alternativas' com pontos null. O mesmo critério em Ex. 6-3 (1...Ne7) e Ex. 6-8 (1.Qxb1+ e 1.Qc3+), que o autor nomeia sem pontuar.",
+    "Ex. 6-4: a solução impressa é o lance único 1.Rxf7+! — Black resigned. As três defesas a), b) e c) são respostas das pretas e ficaram no comentário, porque 'solucao' é a linha do livro e ela termina no primeiro lance.",
+    "Ex. 6-6: o autor escreve que as brancas não podem tomar o bispo 'due to stalemate'. Na posição lida do diagrama 2.Kxd3 é simplesmente ilegal (o rei preto de d4 defende d3); a frase do autor ficou no comentário como está, sem tentativa de reconciliar.",
+    "Diagram 6-4: o livro imprime '4.Qg3' sem o sinal de xeque, mas na posição o lance é xeque pela coluna g (o peão de g7 já foi capturado) e as pretas respondem 4...Ng4 justamente para tapar. Gravado como 'Qg3+'."
+  ]
+}

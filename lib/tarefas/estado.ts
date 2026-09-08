@@ -1,5 +1,4 @@
 import { aulaDaTrilha, type Classe } from "../finais/trilha.ts";
-import { dicasDoNivel } from "../meiojogo/conteudo.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import type { ProgressoDoTema } from "../tatica/progresso.ts";
 import type { Tarefa } from "./tarefas.ts";
@@ -34,9 +33,13 @@ export type MedidaDeFinais = {
 };
 
 /**
- * A medida da tarefa de meio-jogo: quantas dicas daquele degrau o aluno já
- * declarou ter lido. Sem acerto, como a de finais — e por um motivo mais duro:
- * aqui não existe acerto nenhum a medir.
+ * A medida da tarefa de meio-jogo: quantas das aulas nomeadas o aluno concluiu.
+ *
+ * Sem acerto, como a de finais, e agora pelo mesmo motivo que lá: a aula
+ * concluída **já é** o acerto — ela quer dizer "chegou à nota de corte do
+ * livro", e não existe "concluiu 2 aulas com 64% de acerto". Era diferente até
+ * 2026-09-07, quando aqui não havia acerto nenhum a medir porque a unidade era
+ * uma declaração de leitura.
  */
 export type MedidaDeMeioJogo = {
   readonly tipo: "meiojogo";
@@ -47,10 +50,10 @@ export type MedidaDeMeioJogo = {
 /**
  * As três medidas carregam a etiqueta do seu tipo porque a tela desenha a mesma
  * barra para todas e escreve palavras diferentes embaixo — "puzzles", "aulas
- * dominadas", "dicas lidas". Sem a etiqueta, a tela teria de reabrir a tarefa
+ * dominadas", "capítulos aprovados". Sem a etiqueta, a tela teria de reabrir a tarefa
  * para descobrir o que a barra está medindo. E as três contam coisas de peso
  * diferente: puzzle resolvido é medido, aula dominada é certificada pela
- * tablebase, dica lida é declaração.
+ * tablebase, capítulo de meio-jogo é aprovado pela régua do próprio autor.
  */
 export type Medida = MedidaDeTatica | MedidaDeFinais | MedidaDeMeioJogo;
 
@@ -100,16 +103,18 @@ export function somarFinais(
 }
 
 /**
- * Quantas das dicas resolvidas pertencem a este degrau.
+ * Quantas das aulas que a tarefa nomeia o aluno já concluiu.
  *
- * Só conta dica **com exercício**, e é a mesma regra do denominador de
- * `/meio-jogo`: uma dica sem exercício não pode entrar num número que promete
- * medir trabalho. O gate das tarefas cobra que nenhuma tarefa nomeie uma
- * dessas (`problemasDoDetalheDeMeioJogo`), então na prática a filtragem aqui é
- * a segunda tranca — e é barata.
+ * A tarefa nomeia as aulas desde 2026-09-08, então aqui não há mais o que
+ * filtrar por degrau: é a interseção entre o que a tarefa pediu e o que o aluno
+ * fechou. O gate cobra que nenhuma tarefa nomeie aula sem exercício
+ * (`problemasDoDetalheDeMeioJogo`), que é o que tornaria a caixa impossível.
  */
-export function somarMeioJogo(resolvidas: ReadonlySet<string>, nivel: string): number {
-  return dicasDoNivel(nivel).filter((d) => d.treino !== null && resolvidas.has(d.id)).length;
+export function somarMeioJogo(
+  concluidas: ReadonlySet<string>,
+  aulas: readonly string[],
+): number {
+  return aulas.filter((id) => concluidas.has(id)).length;
 }
 
 export function estadoDasTarefas(
@@ -122,8 +127,8 @@ export function estadoDasTarefas(
    * tática — não tenham de inventar um conjunto.
    */
   finais: ReadonlySet<string> = new Set(),
-  /** As dicas de meio-jogo cujos exercícios o aluno resolveu. Vazio pelo mesmo motivo. */
-  dicas: ReadonlySet<string> = new Set(),
+  /** As aulas de meio-jogo que o aluno concluiu pela régua do livro. Vazio pelo mesmo motivo. */
+  meioJogo: ReadonlySet<string> = new Set(),
 ): EstadoDaTarefa[] {
   return tarefas.map((tarefa) => {
     if (tarefa.tipo === "marcar") {
@@ -131,11 +136,11 @@ export function estadoDasTarefas(
     }
 
     if (tarefa.tipo === "meiojogo") {
-      const feitos = somarMeioJogo(dicas, tarefa.meta.nivel);
+      const feitos = somarMeioJogo(meioJogo, tarefa.aulas);
       return {
         tarefa,
-        feita: feitos >= tarefa.meta.resolver,
-        medida: { tipo: "meiojogo", feitos, meta: tarefa.meta.resolver },
+        feita: feitos >= tarefa.meta.concluir,
+        medida: { tipo: "meiojogo", feitos, meta: tarefa.meta.concluir },
       };
     }
 

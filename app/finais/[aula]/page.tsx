@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { idsDeAula, lerPacote } from "@/lib/finais/conteudo";
 import { aulaDaTrilha } from "@/lib/finais/trilha";
+import { moduloDaAula } from "@/lib/lesson/schema";
 import { AulaNoNavegador } from "./AulaNoNavegador";
 import { Leitura } from "./Leitura";
 
@@ -30,7 +31,12 @@ import { Leitura } from "./Leitura";
  */
 
 export function generateStaticParams() {
-  return idsDeAula().map((aula) => ({ aula }));
+  // Só as de finais. Desde 2026-09-08 `content/lessons/` guarda os dois
+  // módulos, e sem este filtro `/finais/M103-…` seria uma rota de verdade,
+  // servindo uma aula de meio-jogo com o cabeçalho errado.
+  return idsDeAula()
+    .filter((aula) => moduloDaAula(aula) === "finais")
+    .map((aula) => ({ aula }));
 }
 
 export const dynamicParams = false;
@@ -46,7 +52,7 @@ export async function generateMetadata({ params }: PageProps<"/finais/[aula]">):
 export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]">) {
   const { aula } = await params;
   const pacote = lerPacote(aula);
-  if (!pacote) notFound();
+  if (!pacote || moduloDaAula(aula) !== "finais") notFound();
 
   // Quem sabe o formato é a trilha, não o arquivo da aula: uma curta rebaixada
   // para leitura muda de linha lá, e o arquivo continua o mesmo. Aula fora da

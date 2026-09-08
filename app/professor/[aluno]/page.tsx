@@ -18,8 +18,8 @@ import {
   estadoDaAula,
   AULA_ZERADA,
 } from "@/lib/finais/trilha";
-import { dicasDoNivel } from "@/lib/meiojogo/conteudo";
-import { dicasResolvidas } from "@/lib/meiojogo/progresso";
+import { indiceDeMeioJogo } from "@/lib/meiojogo/conteudo";
+import { pontosPorAula } from "@/lib/meiojogo/progresso";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { BLOCOS } from "@/lib/tatica/blocos";
 import { linhasDeTentativas, progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
@@ -74,12 +74,12 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   const semana = semanaAtual();
   const desde = somarDias(hoje, -(DIAS - 1));
 
-  const [tatica, linhas, finais, eventos, resolvidas, minutos, partidas] = await Promise.all([
+  const [tatica, linhas, finais, eventos, pontosDeMeioJogo, minutos, partidas] = await Promise.all([
     progressoPorTema(id),
     linhasDeTentativas(id),
     progressoDeFinais(id),
     eventosDeAulas(id),
-    dicasResolvidas(id),
+    pontosPorAula(id),
     minutosPorDia(id, desde),
     partidasDeclaradas(id, desde),
   ]);
@@ -395,29 +395,37 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         <div className="flex flex-col gap-0.5">
           <h2 className="rotulo text-tinta-fraca">Meio-jogo</h2>
           <p className="text-sm text-tinta-media">
-            Dicas em que o aluno <strong>resolveu todos os exercícios</strong>. É medida, e não
-            declaração: o servidor confere cada lance com o mesmo juiz que a tela usou. O
-            denominador conta só as dicas que já têm exercício — as outras não entram aqui
-            porque nelas não há o que medir.
+            Cada capítulo do livro, com os pontos que o aluno tirou e a{" "}
+            <strong>nota de corte do próprio autor</strong>. É medida, e não declaração: o
+            servidor relê a aula em disco e rejulga cada lance gravado, e só a{" "}
+            <strong>primeira</strong> resposta de cada exercício vale ponto — que é como o
+            Yusupov manda contar. Passar não é acertar tudo; a régua já conta com o aluno da
+            faixa errando uma parte.
           </p>
         </div>
-        <div className="grid gap-2 sm:grid-cols-4">
-          {NIVEIS.map((nivel) => {
-            const daqui = dicasDoNivel(nivel.id).filter((d) => d.treino !== null);
-            const feitas = daqui.filter((d) => resolvidas.has(d.id)).length;
-            return (
-              <div
-                key={nivel.id}
-                className="flex flex-col gap-1 rounded-xl border border-borda-fraca bg-carta px-3 py-2.5"
-              >
-                <span className="text-xs text-tinta-fraca">{nivel.nome}</span>
-                <span className="text-sm text-tinta tabular-nums">
-                  {feitas} de {daqui.length}
-                </span>
-                <Barra feitos={feitas} de={daqui.length} tom={feitas === daqui.length ? "completo" : "metodo"} />
-              </div>
-            );
-          })}
+        <div className="grid gap-2 sm:grid-cols-3">
+          {indiceDeMeioJogo()
+            .filter((aula) => aula.status === "published" && aula.aprovacao !== null)
+            .map((aula) => {
+              const regua = aula.aprovacao!;
+              const pontos = Math.min(pontosDeMeioJogo.get(aula.id) ?? 0, regua.maximo);
+              const aprovado = pontos >= regua.minimo;
+              return (
+                <div
+                  key={aula.id}
+                  className="flex flex-col gap-1 rounded-xl border border-borda-fraca bg-carta px-3 py-2.5"
+                >
+                  <span className="text-xs text-tinta-fraca">
+                    Vol. {aula.volume} · cap. {aula.capitulo}
+                  </span>
+                  <span className="text-sm text-tinta">{aula.titulo}</span>
+                  <span className="text-sm text-tinta tabular-nums">
+                    {pontos} de {regua.maximo} pts · corte {regua.minimo}
+                  </span>
+                  <Barra feitos={pontos} de={regua.maximo} tom={aprovado ? "completo" : "metodo"} />
+                </div>
+              );
+            })}
         </div>
       </section>
     </main>

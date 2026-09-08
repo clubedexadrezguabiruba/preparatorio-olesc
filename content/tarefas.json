@@ -39,8 +39,8 @@
   "id": "s1-meiojogo",
   "semana": 1,
   "tipo": "marcar",
-  "titulo": "Ler 6 dicas de meio-jogo do degrau até 1000",
-  "detalhe": "Quinze minutos por dia: uma dica. Leia a explicação passo a passo, acompanhe o realce no tabuleiro e guarde o que a dica manda procurar. São as seis primeiras do degrau: Coloque outra peça no jogo · Prepare a segurança do rei · Dispute o centro com suas peças · Reúna peças antes do ataque · Mexa no escudo só com motivo · Dê trabalho às duas torres. Estas ainda não têm exercício de jogar o lance, então quem diz que fez é você: leia, use na partida e marque aqui.",
+  "titulo": "Fazer o capítulo de meio-jogo da semana",
+  "detalhe": "O módulo de meio-jogo foi refeito: cada aula agora é um capítulo inteiro de livro, com o conceito, o exemplo do autor lance a lance, e os exercícios dele — que você resolve jogando no tabuleiro, e não lendo a resposta. Abra o módulo, comece pelo primeiro capítulo do volume 1 e vá até a nota de corte que o próprio autor imprimiu. Enquanto as aulas estão sendo escritas, quem diz que fez é você: entre, trabalhe o que estiver aberto e marque aqui.",
   "onde": {
    "rotulo": "Abrir o meio-jogo",
    "url": "/meio-jogo"
@@ -131,21 +131,9 @@
  {
   "id": "s2-meiojogo",
   "semana": 2,
-  "tipo": "meiojogo",
-  "titulo": "Resolver os exercícios de 6 dicas de meio-jogo do degrau 1000–1200",
-  "detalhe": "Em cada dica você lê a explicação e depois **joga o lance** que ela ensina, no tabuleiro. São cinco exercícios por dica, e a dica só conta quando você acerta os cinco — pedir ajuda não tira o acerto. Seis das oito deste degrau, na ordem da lista: Ligue a coluna a uma entrada · Pressione o peão na semiaberta · Na sétima, confira alvo e defesa · Faça do isolado um alvo · Peão dobrado exige comparação · Compare bispo e cavalo pelo terreno. As outras duas ficam de folga para quem quiser seguir.",
-  "dicas": [
-   "m9",
-   "m10",
-   "m11",
-   "m12",
-   "m13",
-   "m14"
-  ],
-  "meta": {
-   "nivel": "1000-1200",
-   "resolver": 6
-  },
+  "tipo": "marcar",
+  "titulo": "Fazer dois capítulos de meio-jogo",
+  "detalhe": "Dois capítulos do volume 1 nesta semana. Em cada um: leia o conceito, veja o exemplo do autor lance a lance, e depois resolve os exercícios jogando o lance no tabuleiro. Só a primeira resposta de cada exercício vale ponto — é assim que o autor manda contar —, e passar não é acertar tudo: a régua dele já conta que você erre uma parte. Enquanto as aulas estão sendo escritas, quem diz que fez é você.",
   "onde": {
    "rotulo": "Abrir o meio-jogo",
    "url": "/meio-jogo"
@@ -231,8 +219,8 @@
   "id": "s3-meiojogo",
   "semana": 3,
   "tipo": "marcar",
-  "titulo": "Ler 8 dicas de meio-jogo do degrau 1200–1400",
-  "detalhe": "As oito do degrau, e é a semana mais cheia do módulo: Abra uma rota para a pior peça · Guarde diagonais para os dois bispos · Ataque a base da cadeia · Fixe o peão que ficou para trás · Use o espaço para limitar respostas · Procure a ruptura que libera o jogo · Prepare os peões que abrem linhas · Abra o centro contra o rei exposto. Estas ainda não têm exercício de jogar o lance, então quem diz que fez é você: leia, use na partida e marque aqui.",
+  "titulo": "Fazer dois capítulos de meio-jogo",
+  "detalhe": "Mais dois capítulos do volume 1. A esta altura o formato já é conhecido: conceito, exemplo do autor, e os exercícios dele no tabuleiro. Se um capítulo não fechar na nota de corte, refaça os exercícios que você errou — o botão de refazer está em cada um. Enquanto as aulas estão sendo escritas, quem diz que fez é você.",
   "onde": {
    "rotulo": "Abrir o meio-jogo",
    "url": "/meio-jogo"
@@ -327,8 +315,8 @@
   "id": "s4-meiojogo",
   "semana": 4,
   "tipo": "marcar",
-  "titulo": "Ler 6 dicas de meio-jogo do degrau 1400–1600",
-  "detalhe": "As seis mais difíceis do módulo: Crie trabalho em uma segunda frente · Atrase o plano que ajuda o adversário · Examine o centro antes de responder na ala · Dê atividade ao seu peão isolado · Defenda criando uma tarefa ao rival · Reavalie antes de seguir o plano. Estas ainda não têm exercício de jogar o lance, então quem diz que fez é você: leia, use na partida e marque aqui.",
+  "titulo": "Fechar o volume 1 do meio-jogo",
+  "detalhe": "O último capítulo do volume 1. Antes de marcar, volte ao módulo e confira quais capítulos ainda não chegaram à nota de corte — a lista mostra os pontos de cada um. Enquanto as aulas estão sendo escritas, quem diz que fez é você.",
   "onde": {
    "rotulo": "Abrir o meio-jogo",
    "url": "/meio-jogo"

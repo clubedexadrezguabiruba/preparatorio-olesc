@@ -38,19 +38,7 @@ import {
   type GeneratedTree,
 } from "./branches.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
-import { problemasDaPosicao } from "../lib/meiojogo/afirmacoes.ts";
-import {
-  CAPITULO_CAP,
-  EXERCICIOS_ALVO,
-  EXERCICIOS_PISO,
-  problemasEntreDicas,
-  posicoesCitadas,
-  problemasDeCitacao,
-  problemasDoTreino,
-  validarDicas,
-  type Dica,
-} from "../lib/meiojogo/dicas.ts";
-import { juizDaDica } from "../lib/meiojogo/lances.ts";
+import { moduloDaAula } from "../lib/lesson/schema.ts";
 import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
 
 /**
@@ -162,7 +150,6 @@ const positionsDir = path.join(contentDir, "positions");
 const lessonsDir = path.join(contentDir, "lessons");
 const cacheDir = path.join(contentDir, "tablebase-cache");
 const sourcesFile = path.join(contentDir, "sources.json");
-const meioJogoFile = path.join(contentDir, "meio-jogo.json");
 /**
  * A pasta do modo autor. É **irmã** de `lessons/` e `positions/`, e não filha:
  * dentro delas a varredura recursiva de `lib/lesson/content.ts` levaria
@@ -1480,202 +1467,6 @@ function checkDidacticRotation() {
 }
 
 /* ------------------------------------------------------------------ *
- * O meio-jogo (F2)
- * ------------------------------------------------------------------ */
-
-/**
- * As dicas de meio-jogo passam pelo mesmo gate das aulas de finais — no que
- * cabe.
- *
- * **O que não cabe:** a tablebase. Uma posição de 24 peças não é julgável por
- * ela, e é justamente essa ausência que faz a dica precisar de um juiz próprio.
- * Quem julga a verdade da legenda é `lib/meiojogo/afirmacoes.ts`, e ele é
- * chamado daqui **e** de `lib/meiojogo/dicas.test.ts` — a mesma função, para
- * não haver duas opiniões sobre o que é uma legenda verdadeira.
- *
- * **O que cabe, e é o que este bloco cobra:**
- *
- * - `FEN_ILEGAL` e `AFIRMACAO_FALSA`, pelo verificador;
- * - `OBRA_NAO_REGISTRADA`, a mesma âncora da §12.2 que vale para as posições;
- * - `TETO_DE_CITACAO`, o teto de {@link PROTECTED_SOURCE_CAP} posições por obra
- *   protegida — aqui por **dica**, que é a unidade equivalente à aula.
- *
- * O teto não morde hoje, porque as 30 posições são compostas pela autoria e a
- * obra `posicoes-do-preparatorio` não é protegida. Ele existe para o dia em que
- * uma posição vier do Znosko-Borovsky ou do Lasker — e nesse dia ninguém vai
- * lembrar de escrever a regra.
- */
-const dicas: Dica[] = [];
-
-{
-  const where = relative(meioJogoFile);
-  if (!existsSync(meioJogoFile)) {
-    fail("MEIO_JOGO_AUSENTE", where, "o módulo de meio-jogo perdeu o arquivo de conteúdo");
-  } else {
-    try {
-      dicas.push(...validarDicas(JSON.parse(readFileSync(meioJogoFile, "utf8"))));
-    } catch (error) {
-      fail("SCHEMA_DICA", where, error instanceof Error ? error.message : String(error));
-    }
-  }
-
-  for (const dica of dicas) {
-    const onde = `dica ${dica.id}`;
-
-    for (const [i, posicao] of dica.posicoes.entries()) {
-      const naDica = `${onde} / posição ${i + 1}`;
-      for (const problema of problemasDaPosicao(posicao)) {
-        // A FEN ilegal já vem rotulada pelo verificador, e ela é a causa: as
-        // afirmações nem chegam a ser medidas numa posição impossível.
-        const codigo = problema.startsWith("FEN ilegal") ? "FEN_ILEGAL" : "AFIRMACAO_FALSA";
-        fail(codigo, naDica, problema);
-      }
-
-      const chave = posicao.provenance.editionFile;
-      if (!sourcesByKey.has(chave)) {
-        fail(
-          "OBRA_NAO_REGISTRADA",
-          naDica,
-          `provenance.editionFile "${chave}" não está em content/sources.json — ` +
-            `cite o arquivo ou o slug de uma obra registrada`,
-        );
-      }
-    }
-
-    for (const { codigo, mensagem } of problemasDeCitacao(dica, (chave) => {
-      const source = sourcesByKey.get(chave);
-      return source ? { slug: source.slug, temArquivo: source.file !== null } : undefined;
-    })) {
-      fail(codigo, onde, mensagem);
-    }
-
-    // O treino: o juiz do clique conferindo a resposta escrita, as portas
-    // re-rodadas, e a legenda que não pode entregar o que o item pergunta.
-    for (const { codigo, mensagem } of problemasDoTreino(dica)) {
-      fail(codigo, onde, mensagem);
-    }
-
-    // A obra de cada posição de treino também precisa estar registrada — a
-    // mesma âncora que vale para as posições de ensino.
-    for (const item of dica.treino?.exercicios ?? []) {
-      if (!sourcesByKey.has(item.provenance.editionFile)) {
-        fail(
-          "OBRA_NAO_REGISTRADA",
-          `${onde} / item ${item.id}`,
-          `provenance.editionFile "${item.provenance.editionFile}" não está em ` +
-            `content/sources.json — cite o arquivo ou o slug de uma obra registrada`,
-        );
-      }
-    }
-  }
-
-  // O que atravessa dicas: posições parecidas demais entre si, e capítulo
-  // drenado além do teto do módulo. Nenhuma das duas é visível de dentro de
-  // uma dica só.
-  for (const { codigo, onde, mensagem } of problemasEntreDicas(dicas)) {
-    fail(codigo, onde, mensagem);
-  }
-
-  // A concentração por capítulo no **módulo inteiro** — que é o que o teto, por
-  // ser por dica, não vê. Não reprova: a regra aprovada é por dica, e mudá-la
-  // aqui seria decidir sozinho o que foi decidido em outro lugar. Mas o número
-  // fica impresso, porque cinco posições de um capítulo só são exatamente a
-  // forma de reproduzir uma seleção que o teto foi escrito para impedir.
-  if (dicas.length > 0) {
-    // Conta **todas** as posições de livro do módulo, o ensino e o treino. Foi
-    // só o ensino até o Bloco 3, e aí a conta deixou de servir: as posições de
-    // treino são dezesseis contra trinta, e é nelas que a concentração cresce.
-    const porCapitulo = new Map<string, string[]>();
-    const porObra = new Map<string, number>();
-    let deLivroNoModulo = 0;
-    for (const dica of dicas) {
-      for (const { provenance } of posicoesCitadas(dica)) {
-        if (provenance.capitulo === null) continue;
-        deLivroNoModulo += 1;
-        const chave = `${provenance.editionFile} · ${provenance.capitulo}`;
-        porCapitulo.set(chave, [...(porCapitulo.get(chave) ?? []), dica.id]);
-        porObra.set(provenance.editionFile, (porObra.get(provenance.editionFile) ?? 0) + 1);
-      }
-    }
-    const ordenado = [...porCapitulo].sort((a, b) => b[1].length - a[1].length);
-    const obras = [...porObra].sort((a, b) => b[1] - a[1]);
-    console.log(
-      `  capítulos citados: ${ordenado.length} para ${deLivroNoModulo} posições de livro` +
-        `; o mais usado é "${ordenado[0]?.[0]}" com ${ordenado[0]?.[1].length} (${ordenado[0]?.[1].join(", ")})`,
-    );
-    console.log(
-      `  obras: ${obras.map(([slug, n]) => `${slug} ${n}`).join(" · ")}`,
-    );
-  }
-
-  // O número do Bloco 3: a fatia de oito conceitos, curada.
-  //
-  // Ele é impresso e não reprova, pela mesma razão da concentração por capítulo
-  // logo acima: a fatia tem oito conceitos por decisão de escopo, e um gate que
-  // exigisse os oito reprovaria a árvore no meio do trabalho — que é justamente
-  // quando ela precisa continuar passando. O que reprova são os defeitos de cada
-  // item, que `problemasDoTreino` já cobrou acima, um a um.
-  if (dicas.length > 0) {
-    const FATIA = ["m9", "m10", "m11", "m12", "m13", "m14", "m15", "m16"];
-    const comTreino = dicas.filter((d) => d.treino !== null);
-    const itens = comTreino.flatMap((d) => d.treino?.exercicios ?? []);
-    // O que separa as duas é o **capítulo**, e não a partida de origem: as
-    // posições de livro do Capablanca também saem de partidas de verdade — a
-    // diferença é que o autor as escolheu e imprimiu num capítulo, que é o que
-    // faz o traço ser encenado (§3.2). Contar por `originalGame` somaria as
-    // mesmas posições duas vezes.
-    const deLivro = itens.filter((i) => i.provenance.capitulo !== null).length;
-    const dePartida = itens.length - deLivro;
-    const semOsSeisPassos = itens.filter(
-      (i) =>
-        i.curadoria.perceptivel.trim() === "" ||
-        i.curadoria.adequacao.trim() === "" ||
-        i.provenance.fenMethod.trim() === "",
-    ).length;
-
-    const capitulos = new Map<string, number>();
-    for (const dica of dicas) {
-      for (const { provenance } of posicoesCitadas(dica)) {
-        if (provenance.capitulo === null) continue;
-        const chave = `${dica.id} · ${provenance.editionFile} · ${provenance.capitulo}`;
-        capitulos.set(chave, (capitulos.get(chave) ?? 0) + 1);
-      }
-    }
-    const estourados = [...capitulos.values()].filter((n) => n > CAPITULO_CAP).length;
-
-    // **Quantos temas chegaram a cinco.** O número é impresso de propósito: um
-    // tema que perdeu uma posição numa edição cai de cinco para quatro sem
-    // reprovar nada — o piso continua satisfeito —, e sem esta linha isso
-    // passaria em silêncio até alguém abrir o arquivo.
-    // **O denominador são as dicas com juiz de lance escrito**, e não as que já
-    // têm treino. Contar "8 de 8 temas com exercício" sobre as que têm exercício
-    // é uma tautologia: ela dá 100% no dia em que só uma dica estiver curada. O
-    // que interessa saber é quantas das que **podem** ter exercício já têm.
-    const comJuiz = dicas.filter((d) => juizDaDica(d.id) !== undefined);
-    const noPiso = comJuiz.filter(
-      (d) => (d.treino?.exercicios.length ?? 0) >= EXERCICIOS_PISO,
-    ).length;
-    const noAlvo = comJuiz.filter(
-      (d) => (d.treino?.exercicios.length ?? 0) === EXERCICIOS_ALVO,
-    ).length;
-    const semJuiz = dicas.filter((d) => juizDaDica(d.id) === undefined).length;
-    const naFatia = comTreino.filter((d) => FATIA.includes(d.id)).length;
-    console.log(
-      `  ${noPiso} de ${comJuiz.length} dicas com juiz têm pelo menos ${EXERCICIOS_PISO} ` +
-        `exercícios de lance, ${noAlvo} delas com ${EXERCICIOS_ALVO}; ${semJuiz} dica(s) sem juiz ` +
-        `de lance, e essas não podem ter exercício`,
-    );
-    console.log(
-      `  ${naFatia} de ${FATIA.length} da fatia do piloto, ${itens.length} posições ` +
-        `(${deLivro} de livro, ${dePartida} de partida), ${semOsSeisPassos} posição(ões) sem os ` +
-        `seis passos, ${estourados} capítulo(s) com mais de ${CAPITULO_CAP}`,
-    );
-    const faltam = FATIA.filter((id) => !comTreino.some((d) => d.id === id));
-    if (faltam.length > 0) console.log(`  ainda sem treino na fatia: ${faltam.join(", ")}`);
-  }
-}
-
-/* ------------------------------------------------------------------ *
  * Execução
  * ------------------------------------------------------------------ */
 
@@ -1758,10 +1549,17 @@ console.log(
     `obras: ${new Set(sourcesByKey.values()).size} ` +
     `(${[...new Set(sourcesByKey.values())].filter((s) => s.protected).length} com teto)`,
 );
+// O meio-jogo deixou de ser um formato próprio em 2026-09-08: uma aula dele é
+// uma aula do mesmo motor, com uma etapa a mais. Por isso a contagem sai das
+// aulas já carregadas, e não de um arquivo de conteúdo separado.
+const aulasDeMeioJogo = lessons.filter((l) => moduloDaAula(l.lesson.id) === "meio-jogo");
+const exerciciosEscritos = aulasDeMeioJogo.reduce(
+  (soma, l) => soma + (l.lesson.stages.exercises?.items.length ?? 0),
+  0,
+);
 console.log(
-  `  meio-jogo: ${dicas.length} dica(s), ` +
-    `${dicas.reduce((soma, d) => soma + d.posicoes.length, 0)} posição(ões), ` +
-    `${dicas.reduce((soma, d) => soma + d.posicoes.reduce((n, p) => n + p.afirma.length, 0), 0)} afirmação(ões) medida(s)`,
+  `  meio-jogo: ${aulasDeMeioJogo.length} aula(s), ${exerciciosEscritos} exercício(s), ` +
+    `${aulasDeMeioJogo.reduce((soma, l) => soma + (l.lesson.stages.exercises?.aprovacao.maximo ?? 0), 0)} ponto(s) de régua`,
 );
 console.log(
   `  tablebase: ${tablebase.usedFiles().size} posições consultadas ` +
@@ -1789,7 +1587,7 @@ console.log("");
 if (issues.length === 0) {
   console.log(
     `${VERDE}✔ tudo verde — ${positions.size} posições, ${lessons.length} aula(s) e ` +
-      `${dicas.length} dica(s) de meio-jogo sem nenhum problema${NORMAL}`,
+      `${aulasDeMeioJogo.length} aula(s) de meio-jogo sem nenhum problema${NORMAL}`,
   );
   process.exit(0);
 }

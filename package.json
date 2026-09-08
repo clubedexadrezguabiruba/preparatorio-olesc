@@ -15,16 +15,7 @@
     "db:rls": "node scripts/verificar-rls.ts",
     "db:tatica": "node --conditions=react-server scripts/verificar-tatica.ts",
     "db:finais": "node --conditions=react-server scripts/verificar-finais.ts",
-    "db:meiojogo": "node --conditions=react-server scripts/verificar-meiojogo.ts",
     "validate:content": "node scripts/validate-content.ts",
-    "meiojogo:funil": "node scripts/escolher-exercicios.ts",
-    "meiojogo:prosa": "node scripts/varrer-prosa.ts",
-    "meiojogo:portas": "node scripts/medir-portas.ts",
-    "meiojogo:lances": "node scripts/medir-lances.ts",
-    "meiojogo:funil-lances": "node scripts/escolher-lances.ts",
-    "meiojogo:montar": "node scripts/montar-exercicios.ts",
-    "meiojogo:conferir": "node scripts/conferir-transcricao.ts",
-    "meiojogo:tela": "node scripts/conferir-treino.ts",
     "validate:mutations": "node scripts/mutation-check.ts",
     "apostila": "node --conditions=react-server apostila/build.ts",
     "apostila:ver": "node --conditions=react-server apostila/build.ts --abrir",
@@ -34,7 +25,8 @@
     "repertorio:compilar": "node scripts/compilar-repertorio.ts",
     "repertorio:explorer": "node scripts/explorer-repertorio.ts",
     "repertorio:motor": "node scripts/motor-repertorio.ts",
-    "repertorio:fidelidade": "node scripts/medir-fidelidade.ts"
+    "repertorio:fidelidade": "node scripts/medir-fidelidade.ts",
+    "meiojogo:conferir": "node scripts/conferir-transcricao.ts"
   },
   "dependencies": {
     "@lichess-org/chessground": "^10.1.1",

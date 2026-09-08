@@ -1,7 +1,7 @@
 "use server";
 
 import { perfilAtual } from "@/lib/auth/perfil";
-import { gravarTreino, type RespostaDoTreino } from "@/lib/meiojogo/gravar";
+import { gravarExercicio, type RespostaDoExercicio } from "@/lib/meiojogo/gravar";
 
 /*
  * A ação `marcarDica` saiu daqui em 2026-09-07, junto com a caixa "li".
@@ -14,10 +14,14 @@ import { gravarTreino, type RespostaDoTreino } from "@/lib/meiojogo/gravar";
  * A **tabela** não foi apagada, e é decisão do plano: ela guarda o que os
  * alunos já declararam, e derrubá-la jogaria fora histórico para não ganhar
  * nada. O que acabou foi o caminho de escrita.
+ *
+ * `gravarTentativaDeTreino` saiu em 2026-09-08, na reformulação do módulo, pelo
+ * mesmo raciocínio: o treino que ela gravava deixou de existir, e uma porta de
+ * escrita para conteúdo apagado é pior que nenhuma.
  */
 
 /**
- * Grava uma resposta do treino.
+ * Grava a tentativa de um exercício.
  *
  * A casca é fina de propósito: quem julga e quem escreve é
  * `lib/meiojogo/gravar.ts`, que roda fora de uma requisição do Next e por isso
@@ -26,13 +30,15 @@ import { gravarTreino, type RespostaDoTreino } from "@/lib/meiojogo/gravar";
  * corpo da chamada, porque a chave de serviço que grava ignora toda a RLS e não
  * tem como perguntar quem pediu.
  *
- * Sem `revalidatePath`: a página da dica não mostra número nenhum de tentativa,
- * e revalidá-la a cada clique jogaria fora o estado do treino em curso.
+ * Sem `revalidatePath`: a página da aula não mostra número nenhum vindo do
+ * banco, e revalidá-la a cada lance jogaria fora o estado da etapa em curso.
  */
-export async function gravarTentativaDeTreino(dado: RespostaDoTreino): Promise<void> {
+export async function registrarExercicio(dado: RespostaDoExercicio): Promise<void> {
   const perfil = await perfilAtual();
-  const resultado = await gravarTreino(perfil.id, dado);
+  const resultado = await gravarExercicio(perfil.id, dado);
   // O erro fica no servidor: a tela do aluno já mostrou o veredito no instante
-  // do toque, e uma linha que não gravou é problema do professor, não dele.
-  if ("erro" in resultado) console.error(`meio-jogo: ${dado.item} não gravou — ${resultado.erro}`);
+  // do lance, e uma linha que não gravou é problema do professor, não dele.
+  if ("erro" in resultado) {
+    console.error(`meio-jogo: ${dado.aula}/${dado.item} não gravou — ${resultado.erro}`);
+  }
 }

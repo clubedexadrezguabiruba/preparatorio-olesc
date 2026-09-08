@@ -33,6 +33,7 @@ export function Hoje({
   sequencia,
   revisaoDeTatica,
   revisaoDeFinais,
+  meioJogo,
   partidaFeita,
 }: {
   minutos: MinutosDeHoje;
@@ -41,6 +42,16 @@ export function Hoje({
   revisaoDeTatica: number;
   /** As aulas devidas hoje: nome e para onde ir. A primeira é a que o cartão mostra. */
   revisaoDeFinais: { id: string; nome: string }[];
+  /**
+   * A próxima aula de meio-jogo aberta e ainda não concluída, ou `null` quando
+   * o aluno fechou todas as escritas.
+   *
+   * Até 2026-09-07 este passo dizia "Uma dica e o vídeo dela" — texto de um
+   * módulo que tinha vídeo e dica, e que não existe mais. Apontar a aula pelo
+   * nome é o mesmo que o passo de finais faz: o cartão "Hoje" existe para tirar
+   * do aluno a decisão de por onde começar.
+   */
+  meioJogo: { id: string; nome: string } | null;
   partidaFeita: boolean;
 }) {
   const [jogou, aplicar] = useOptimistic(partidaFeita, (_atual, novo: boolean) => novo);
@@ -108,7 +119,11 @@ export function Hoje({
         </Passo>
 
         <Passo numero={3} titulo="Meio-jogo">
-          <Ir href="/meio-jogo">Uma dica e o vídeo dela</Ir>
+          {meioJogo ? (
+            <Ir href={`/meio-jogo/${meioJogo.id}`}>{meioJogo.nome}</Ir>
+          ) : (
+            <Ir href="/meio-jogo">Rever um capítulo já aprovado</Ir>
+          )}
         </Passo>
 
         {/* Por último, e é a decisão do Doug: treina-se primeiro, joga-se
