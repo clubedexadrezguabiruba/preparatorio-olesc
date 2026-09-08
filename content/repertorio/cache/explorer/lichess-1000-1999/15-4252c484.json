@@ -1,0 +1,133 @@
+{
+  "white": 5065,
+  "draws": 541,
+  "black": 3105,
+  "moves": [
+    {
+      "uci": "e7e6",
+      "san": "e6",
+      "averageRating": 1833,
+      "white": 4548,
+      "draws": 499,
+      "black": 2828,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a6",
+      "san": "a6",
+      "averageRating": 1841,
+      "white": 230,
+      "draws": 21,
+      "black": 137,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6h5",
+      "san": "Nh5",
+      "averageRating": 1825,
+      "white": 61,
+      "draws": 7,
+      "black": 42,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d7e6",
+      "san": "Qe6+",
+      "averageRating": 1680,
+      "white": 67,
+      "draws": 3,
+      "black": 27,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g7g6",
+      "san": "g6",
+      "averageRating": 1784,
+      "white": 35,
+      "draws": 5,
+      "black": 14,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c6a5",
+      "san": "Na5",
+      "averageRating": 1682,
+      "white": 24,
+      "draws": 2,
+      "black": 13,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a8c8",
+      "san": "Rc8",
+      "averageRating": 1826,
+      "white": 19,
+      "draws": 0,
+      "black": 10,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e8a8",
+      "san": "O-O-O",
+      "averageRating": 1708,
+      "white": 16,
+      "draws": 0,
+      "black": 6,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g4f5",
+      "san": "Bf5",
+      "averageRating": 1694,
+      "white": 12,
+      "draws": 3,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g4h5",
+      "san": "Bh5",
+      "averageRating": 1799,
+      "white": 10,
+      "draws": 0,
+      "black": 7,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e7e5",
+      "san": "e5",
+      "averageRating": 1590,
+      "white": 10,
+      "draws": 1,
+      "black": 5,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h7h6",
+      "san": "h6",
+      "averageRating": 1822,
+      "white": 13,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B13",
+    "name": "Caro-Kann Defense: Exchange Variation, Rubinstein Variation"
+  }
+}

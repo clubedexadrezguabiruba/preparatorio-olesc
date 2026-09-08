@@ -1,0 +1,133 @@
+{
+  "white": 194,
+  "draws": 7,
+  "black": 119,
+  "moves": [
+    {
+      "uci": "e5g6",
+      "san": "Nxg6",
+      "averageRating": 1670,
+      "white": 47,
+      "draws": 1,
+      "black": 59,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1b5",
+      "san": "Bb5",
+      "averageRating": 1750,
+      "white": 75,
+      "draws": 5,
+      "black": 25,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c3b5",
+      "san": "Nb5",
+      "averageRating": 1731,
+      "white": 24,
+      "draws": 0,
+      "black": 7,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e5c6",
+      "san": "Nxc6",
+      "averageRating": 1704,
+      "white": 22,
+      "draws": 1,
+      "black": 4,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1f4",
+      "san": "Bf4",
+      "averageRating": 1755,
+      "white": 16,
+      "draws": 0,
+      "black": 10,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e5c4",
+      "san": "Nc4",
+      "averageRating": 1853,
+      "white": 0,
+      "draws": 0,
+      "black": 7,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f2f4",
+      "san": "f4",
+      "averageRating": 1876,
+      "white": 4,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1e3",
+      "san": "Be3",
+      "averageRating": 1610,
+      "white": 2,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1g2",
+      "san": "Bg2",
+      "averageRating": 1793,
+      "white": 1,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1f3",
+      "san": "Qf3",
+      "averageRating": 1416,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1c4",
+      "san": "Bc4",
+      "averageRating": 1519,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1e2",
+      "san": "Qe2",
+      "averageRating": 2017,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B01",
+    "name": "Scandinavian Defense: Gubinsky-Melts Defense"
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "white": 1506,
+  "draws": 160,
+  "black": 1295,
+  "moves": [
+    {
+      "uci": "d2g5",
+      "san": "Bg5",
+      "averageRating": 1696,
+      "white": 525,
+      "draws": 48,
+      "black": 515,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e1h1",
+      "san": "O-O",
+      "averageRating": 1666,
+      "white": 412,
+      "draws": 48,
+      "black": 372,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2c3",
+      "san": "Bc3",
+      "averageRating": 1679,
+      "white": 142,
+      "draws": 15,
+      "black": 113,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c2c3",
+      "san": "c3",
+      "averageRating": 1756,
+      "white": 128,
+      "draws": 20,
+      "black": 113,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1e2",
+      "san": "Qe2",
+      "averageRating": 1723,
+      "white": 173,
+      "draws": 13,
+      "black": 65,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f3e5",
+      "san": "Ne5",
+      "averageRating": 1692,
+      "white": 72,
+      "draws": 7,
+      "black": 75,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c4b3",
+      "san": "Bb3",
+      "averageRating": 1790,
+      "white": 11,
+      "draws": 3,
+      "black": 8,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h4",
+      "san": "h4",
+      "averageRating": 1714,
+      "white": 14,
+      "draws": 0,
+      "black": 7,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h3",
+      "san": "h3",
+      "averageRating": 1786,
+      "white": 9,
+      "draws": 4,
+      "black": 8,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2e3",
+      "san": "Be3",
+      "averageRating": 1652,
+      "white": 10,
+      "draws": 1,
+      "black": 6,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2f4",
+      "san": "Bf4",
+      "averageRating": 1659,
+      "white": 5,
+      "draws": 1,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a4",
+      "san": "a4",
+      "averageRating": 1641,
+      "white": 1,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B01",
+    "name": "Scandinavian Defense: Main Line, Mieses Variation"
+  }
+}
