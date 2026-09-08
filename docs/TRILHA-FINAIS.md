@@ -122,13 +122,17 @@ A distribuição planejada, conferida contra a regra:
 
 | Classe | Aulas | Teto | Silman | de la Villa | Müller Kids | Pandolfini | Seirawan |
 |---|---|---|---|---|---|---|---|
-| E | 6 | 2 | 2 | — | 2 | 1 | 1 |
+| E | 6 | 2 | **4** (regime integral) | — | 1 | 1 | — |
 | D | 12 | 4 | 4 | 3 | 2 | 1 | 2 |
 | C | 16 | 5 | 5 | 5 | 2 | 2 | 2 |
 | B | 15 | 5 | 5 | 5 | 1 | 1 | 3 |
 
-Nenhuma célula estoura o teto, e as fatias intermediárias (FN1 com 4 aulas de D;
-FN2 com 4 de C; FN3 com 2 de B) cabem no piso de 2.
+As fatias intermediárias (FN1 com 4 aulas de D; FN2 com 4 de C; FN3 com 2 de B)
+cabem no piso de 2. A **classe E é a exceção declarada**: desde 2026-09-08 o
+Silman está em **regime integral** (§1.1 do `SOURCE-CORPUS`), e nela o teto de
+rotação não se aplica — a obra passou a ser livro-base de 4 das 6. As outras três
+classes continuam sob a régua normal, e serão redesenhadas contra o índice do
+Silman depois que o Doug aprovar os dois pilotos.
 
 ---
 
@@ -154,10 +158,10 @@ cada.
 | # | F | Id | Aula | Peças | Base | Posição (DP) | Sob teto | Fase |
 |---|---|---|---|---|---|---|---|---|
 | 1 | ✔C | `N0-Q-MATE` | Mate de dama e rei: a caixa | 3 | SIL | CAP §1 · COO VII.I · STA VI.1 · FRE refs | SIL, PAN, MK | pronta |
-| 2 | ✔C | `N0-R-MATE` | Mate de torre e rei: a caixa | 3 | MK | CAP §1 · STA VI.1 · FRE VII.I · ROG II | MK, PAN, SIL | pronta |
+| 2 | ✔C | `N0-R-MATE` | Mate de torre e rei: a caixa | 3 | SIL | FRE VII.I | SIL (integral) | pronta |
 | 3 | c | `N0-LADDER` | Mate da escada: duas torres, e dama e torre | 4 | PAN | FRE VII.II · WAL "Various Checkmates" No. I | PAN, SIL | B5 |
 | 4 | c | `N0-STALEMATE` | Afogamento: como não empatar a partida ganha | 3–4 | MK | FRE V.II–V · CAP §2 · CUN VI | MK, SIL | B5 |
-| 5 | L | `N0-MATING-MATERIAL` | O que dá mate e o que não dá (B, C, 2C contra rei) | 3–4 | SEI | STA VI.1 (405–408) · FRE X.VI/VIII · CAP §15 | SEI, SIL, DLV | B5 |
+| 5 | ✔L | `N0-MATING-MATERIAL` | O que dá mate e o que não dá (B, C, 2C contra rei) | 3–4 | SIL | FRE X.VI | SIL (integral) | pronta |
 | 6 | c | `N1-KING-ACTIVITY` | O rei é peça: use-o | 3–5 | SIL | FRE I.VII "Playing the King to the front" · CUN I | SIL, NUN | B5 |
 
 ### Classe D — 12 aulas

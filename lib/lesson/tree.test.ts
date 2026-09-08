@@ -23,6 +23,13 @@ const root = guided.nodes[guided.root];
 const solo = lesson.stages.solo!;
 const soloRoot = solo.nodes[solo.root];
 
+/** A FEN depois de um lance UCI — só para montar nós de teste. */
+function applyMove(fen: string, uci: string): string {
+  const game = new Chess(fen);
+  game.move({ from: uci.slice(0, 2), to: uci.slice(2, 4) });
+  return game.fen();
+}
+
 function legalMoves(fen: string): string[] {
   return new Chess(fen)
     .moves({ verbose: true })
@@ -101,37 +108,44 @@ test("etapa 4: o lance equivalente gerado é método, e a aula segue", () => {
   // testado num nó montado à mão — é o que o gerador escreveria se houvesse —
   // pelo mesmo caminho que os testes da etapa 3 já usavam.
   // Não é elogio e volta: é um expect de verdade, com resposta e nó seguinte.
+  //
+  // O lance do ramo e a resposta são **procurados**, não fixados: um literal
+  // aqui quebra toda vez que a posição da etapa 4 muda, e já quebrou.
+  const doRoteiro = soloRoot.expects[0];
+  const inventado = soloRoot.winningMoves.find((move) => !doRoteiro.moves.includes(move));
+  assert.ok(inventado, "a raiz da etapa 4 precisa ter mais de um lance que ganha");
+  const respostaInventada = legalMoves(applyMove(soloRoot.fen, inventado))[0];
   const comRamo = {
     ...soloRoot,
     expects: [
       ...soloRoot.expects,
-      { moves: ["a1g1"], reply: "h8g8", next: "g1", feedback: "ramo equivalente", generated: true as const },
+      { moves: [inventado], reply: respostaInventada, next: "g1", feedback: "ramo equivalente", generated: true as const },
     ],
   };
-  const verdict = judgeMove(lesson, comRamo, "a1g1");
+  const verdict = judgeMove(lesson, comRamo, inventado);
   assert.equal(verdict.kind, "method");
-  assert.equal(verdict.respostas[0].reply, "h8g8");
+  assert.equal(verdict.respostas[0].reply, respostaInventada);
   assert.match(verdict.respostas[0].next, /^g\d+$/);
   assert.equal(throwsWinAway(verdict), false);
 
   // E o lance do roteiro continua sendo o do roteiro.
-  const roteiro = judgeMove(lesson, comRamo, "a1a7");
+  const roteiro = judgeMove(lesson, comRamo, doRoteiro.moves[0]);
   assert.equal(roteiro.kind, "method");
-  assert.equal(roteiro.respostas[0].next, "s2");
+  assert.equal(roteiro.respostas[0].next, doRoteiro.next);
 });
 
 test("etapa 4: a linha da árvore leva ao mate sem sair dela, dentro do teto", () => {
   let node = soloRoot;
   const linha: string[] = [];
   // Segue sempre o expect gerado (ou o único que houver) até o nó terminal.
-  for (let passo = 0; passo < 20; passo += 1) {
+  for (let passo = 0; passo <= solo.moveLimit + 5; passo += 1) {
     const expect = node.expects.find((e) => e.generated) ?? node.expects[0];
     linha.push(expect.moves[0]);
     if (!expect.next) break;
     node = solo.nodes[expect.next];
     assert.ok(node, `o nó "${expect.next}" existe`);
   }
-  assert.equal(linha[0], "a1a7");
+  assert.equal(linha[0], soloRoot.expects[0].moves[0]);
   assert.ok(
     new Chess(soloRoot.fen).moves({ verbose: true }).some((m) => `${m.from}${m.to}` === linha[0]),
     "o primeiro lance da linha é legal na raiz",

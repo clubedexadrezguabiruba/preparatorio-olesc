@@ -150,8 +150,13 @@
       "protected": true,
       "license": "obra protegida — uso sob o teto da §12.7",
       "file": "silman-complete-endgame-course.pdf",
-      "role": "Livro-base didático. A Parte 1 nomeia as duas técnicas (\"the Staircase\" e \"the Box\") e ensina de trás para frente, mostrando o mate antes do caminho. Base didática do N0-Q-MATE; origina posição sob teto.",
-      "didactic": true
+      "role": "Livro-base didático e, desde 2026-09-08, **obra em regime integral** do módulo de finais (§1.1 do SOURCE-CORPUS): texto e posições das aulas seguem este manual, sem teto de citação nem de rotação. É o único manual do acervo com progressão declarada por classe de força, e ele ensina de trás para frente — mostra o mate antes do caminho —, que é o desenho da etapa 1 do nosso schema. A Parte Um nomeia as duas técnicas (\"the Staircase\" e \"the Box\").",
+      "didactic": true,
+      "integral": {
+        "since": "2026-09-08",
+        "reason": "Decisão do Doug em 2026-09-08: todas as aulas de finais passam a seguir o Silman, texto e posições. É o único manual do acervo com progressão declarada por classe de força, que é exatamente a espinha que a trilha precisa, e o preparatório é gratuito. Quando o curso for comercializado, o conteúdo listado em content/divida-de-licenca.md será trocado por fonte pública.",
+        "replaceBefore": "2027-09-08"
+      }
     },
     {
       "slug": "rabinovich-russian",

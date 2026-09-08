@@ -115,7 +115,11 @@ test("a aula publicada joga igual em qualquer tentativa", () => {
   const primeira = jogar(lesson, guided, "guided", 1);
   const segunda = jogar(lesson, guided, "guided", 2);
   assert.deepEqual(primeira, segunda);
-  assert.equal(primeira.length, 31, "16 lances do aluno e 15 respostas");
+  // O comprimento é derivado da própria árvore, e não fixado: a etapa 3 tem N
+  // nós em linha reta, o que dá N lances do aluno e N-1 respostas. Fixar o
+  // número aqui só fazia o teste quebrar toda vez que a aula trocava de linha.
+  const nosEmLinha = Object.keys(guided.nodes).length;
+  assert.equal(primeira.length, 2 * nosEmLinha - 1, `${nosEmLinha} lances do aluno e ${nosEmLinha - 1} respostas`);
 });
 
 test("com uma variante escrita, duas tentativas dão duas aulas diferentes", () => {

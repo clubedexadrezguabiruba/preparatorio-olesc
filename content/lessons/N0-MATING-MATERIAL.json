@@ -13,42 +13,50 @@
   },
   "stages": {
     "objective": {
-      "source": "seirawan-winning-chess-endings",
+      "source": "silman-endgame-course",
       "technique": {
-        "name": "O material que dá mate",
-        "summary": "Peça a mais nem sempre é vitória. Rei e bispo contra rei é empate; rei e cavalo contra rei é empate; e mesmo dois cavalos contra rei sozinho não dão mate à força. Dois bispos dão."
+        "name": "O que dá mate contra o rei sozinho — e o que não dá",
+        "summary": "Cinco materiais dão mate contra o rei sozinho e quatro não dão. Saber a lista ganha partidas de um lado e salva partidas do outro."
       },
-      "why": "Esta é a aula que evita a derrota mais boba do xadrez — a que nem é derrota: é meio ponto entregue. O aluno troca tudo achando que \"peça a mais ganha\", fica com rei e cavalo contra rei sozinho e descobre que ali não existe mate nenhum. Vale para os dois lados: quem está perdendo às vezes salva a partida trocando na direção certa, e quem está ganhando precisa saber o que não pode deixar sobrar no tabuleiro. Aqui não há o que deduzir, há o que saber: bispo sozinho, não dá mate; cavalo sozinho, não dá; dois cavalos, não dão à força; dois bispos, dão; bispo e cavalo, dá — mas é o mate mais difícil que existe, e ele fica fora desta trilha de propósito.",
+      "why": "Esta aula vale para os dois lados do tabuleiro, e é por isso que ela vem antes de qualquer técnica. Do lado de quem está ganhando: quando o adversário fica só com o rei, é obrigatório saber que material dá mate, senão você troca peças na direção errada e entrega meio ponto que já era seu. Do lado de quem está perdendo: dá para salvar muita posição ruim deixando o adversário com material que não mata — e essa é uma jogada de quem sabe a lista.\n\nA lista tem nove itens. Dão mate: dama; duas torres; torre; dois bispos; bispo e cavalo. Não dão: peão (a não ser que ele consiga promover); bispo sozinho; cavalo sozinho; dois cavalos.\n\nOs três primeiros você já sabe dar — dama e torre foram as aulas anteriores, e duas torres é mais fácil que uma. Dois bispos dá mate e é o que a primeira cena mostra, mas a técnica inteira fica para muito mais adiante. Bispo e cavalo dá mate e **não é ensinado nesta trilha, de propósito**: é o mate mais difícil que existe, pode nunca acontecer na sua vida inteira de jogador, e o tempo de estudo que ele custa rende muito mais em outra coisa. Bispo sozinho e cavalo sozinho são fatos tristes e simples: não há mate ali nem se o adversário quiser ajudar.\n\nSobra o item que mais surpreende, e é onde esta aula para: dois cavalos. Duas peças a mais, e não ganha.",
       "rules": [
         {
-          "title": "Com dois bispos, o rei vai junto",
-          "text": "Nos mates de peça pesada o rei do lado forte ajuda. Com dois bispos ele não ajuda: ele trabalha. Sem o rei branco de perto, os dois bispos não tiram casa nenhuma do rei adversário.",
+          "title": "Cinco materiais dão mate",
+          "text": "Dama, duas torres, torre, dois bispos, bispo e cavalo. Com qualquer um destes cinco existe mate forçado contra o rei sozinho — o adversário não precisa colaborar em nada.",
           "frame": {
             "scene": "dois-bispos",
             "step": 1
           }
         },
         {
-          "title": "Um bispo fecha a saída",
-          "text": "Os dois bispos andam em cores diferentes, e por isso cada um cuida de metade das casas. O primeiro se planta numa diagonal que fecha a saída do rei preto e não sai mais de lá.",
+          "title": "Quatro materiais não dão mate",
+          "text": "Peão (enquanto não promove), bispo sozinho, cavalo sozinho e dois cavalos. Com estes quatro não há mate forçado. Peça a mais no tabuleiro e meio ponto na tabela.",
           "frame": {
-            "scene": "dois-bispos",
-            "step": 3
+            "scene": "dois-cavalos-o-erro",
+            "step": 1
           }
         },
         {
-          "title": "O outro dá o xeque, e o primeiro dá o mate",
-          "text": "O segundo bispo se reposiciona sem pressa e entra dando xeque, empurrando o rei para o canto. O mate é sempre no canto — dois bispos não matam na borda, como a torre faz: eles precisam das duas paredes.",
+          "title": "Dois cavalos: duas peças a mais, e não ganha",
+          "text": "Dois cavalos é o caso mais cruel da lista: o quadro de mate existe e é fácil de montar, mas não há como forçar o adversário a entrar nele. O mate só aparece se ele mesmo se colocar lá.",
+          "frame": {
+            "scene": "dois-cavalos-o-erro",
+            "step": 2
+          }
+        },
+        {
+          "title": "O mate só sai se o rei fraco entrar no canto",
+          "text": "Contra dois cavalos, o único mate possível é com o rei fraco numa casa de canto — a1, a8, h1 ou h8. Fora do canto não existe rede que feche. Vale também para os dois bispos, que matam no canto e em lugar nenhum mais.",
           "frame": {
             "scene": "dois-bispos",
             "step": 9
           }
         },
         {
-          "title": "Dois cavalos não dão mate à força",
-          "text": "Com dois cavalos o quadro de mate existe, e é fácil de montar. O que não existe é o lance do meio: quando a rede fecha, o rei adversário fica sem lance nenhum e a partida acaba empatada por afogamento. Dois cavalos a mais, e meio ponto.",
+          "title": "Defendendo, fuja dos quatro cantos",
+          "text": "Do outro lado: se você é quem está com o rei sozinho contra dois cavalos, mantenha o rei longe dos quatro cantos e a partida é empate. Não há o que o adversário faça. É a defesa mais barata do xadrez.",
           "frame": {
-            "scene": "dois-cavalos",
+            "scene": "dois-cavalos-a-defesa",
             "step": 1
           }
         }
@@ -57,7 +65,7 @@
         "scene": "dois-bispos",
         "step": 9
       },
-      "mastery": "Esta aula é de leitura: não há tabuleiro para jogar. Dominada quando você ler o objetivo, ver as duas cenas até o fim e marcar a caixa no fim do exemplo."
+      "mastery": "Esta aula é de leitura: não há tabuleiro para jogar. Dominada quando você souber dizer de cor quais cinco materiais dão mate e quais quatro não dão, e quando, com o rei sozinho contra dois cavalos, a sua mão for para longe do canto sem você pensar."
     },
     "example": {
       "scenes": [
@@ -68,15 +76,15 @@
           "intro": "Dois bispos dão mate, e o mate é no canto. O rei preto já está em h8 e são cinco lances. Repare em quem trabalha: os dois bispos e o rei branco, os três juntos, o tempo inteiro. Em cada um dos quatro lances que ele tem, o rei preto vai ter uma casa só.",
           "phases": [
             {
-              "title": "Com dois bispos, o rei vai junto",
+              "title": "Cinco materiais dão mate",
               "fromStep": 1
             },
             {
-              "title": "Um bispo fecha a saída",
+              "title": "Um bispo fecha a saída, o outro dá o xeque",
               "fromStep": 3
             },
             {
-              "title": "O outro dá o xeque, e o primeiro dá o mate",
+              "title": "O mate só sai se o rei fraco entrar no canto",
               "fromStep": 7
             }
           ],
@@ -170,31 +178,81 @@
           ]
         },
         {
-          "id": "dois-cavalos",
-          "title": "O que não dá mate: dois cavalos",
-          "positionId": "pos-n0-2n-seirawan-d20-e2",
-          "intro": "Agora o contrário, e é o fato que mais surpreende quem aprende: dois cavalos a mais não ganham. O rei preto já está no canto e o quadro de mate existe mesmo — bastaria o cavalo de e2 chegar a c2, passando por d4. Veja o que acontece no caminho.",
+          "id": "dois-cavalos-o-erro",
+          "title": "O que não dá mate: dois cavalos, quando o rei preto ajuda",
+          "positionId": "pos-n0-2n-silman-d38",
+          "intro": "Agora o caso que mais surpreende. As brancas têm dois cavalos a mais e empurraram o rei preto para a borda — está tudo do jeito que se pede. O rei preto está em xeque pelo cavalo de f6 e tem exatamente dois lances: h8 e f8. Um deles perde a partida na hora. Veja o que acontece com o errado.",
+          "ends": "mate",
           "phases": [
             {
-              "title": "Dois cavalos não dão mate à força",
+              "title": "Quatro materiais não dão mate",
+              "fromStep": 1
+            },
+            {
+              "title": "Dois cavalos: duas peças a mais, e não ganha",
+              "fromStep": 2
+            }
+          ],
+          "steps": [
+            {
+              "move": "g8h8",
+              "text": "O rei preto vai para o canto. É a casa envenenada: h8 é um dos quatro cantos, e é só de lá que os dois cavalos conseguem dar mate.",
+              "arrows": [
+                [
+                  "g8",
+                  "h8"
+                ]
+              ],
+              "highlights": [
+                "h8"
+              ]
+            },
+            {
+              "move": "e5f7",
+              "text": "Xeque-mate. O cavalo de e5 pula para f7, o de f6 já cobria g8, e o rei branco de g6 tira g7 e h7. Repare de onde veio o mate: não de um lance brilhante das brancas, e sim do rei preto ter entrado no canto sozinho.",
+              "arrows": [
+                [
+                  "e5",
+                  "f7"
+                ]
+              ],
+              "highlights": [
+                "f7",
+                "g8",
+                "g7",
+                "h7"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dois-cavalos-a-defesa",
+          "title": "O que não dá mate: dois cavalos, quando o rei preto não ajuda",
+          "positionId": "pos-n0-2n-silman-d38",
+          "intro": "A mesma posição, e agora o outro lance. Os dois cavalos continuam lá, o rei branco também, e nada disso importa: basta o rei preto recusar o canto.",
+          "ends": "draw-secured",
+          "phases": [
+            {
+              "title": "Defendendo, fuja dos quatro cantos",
               "fromStep": 1
             }
           ],
           "steps": [
             {
-              "move": "e2d4",
-              "text": "O cavalo vai a d4 para completar a rede — e a partida acaba aqui, empatada por afogamento. O rei preto não está em xeque e não tem lance nenhum: a2 e b2 são do rei branco, b1 é do cavalo de d2. Para o mate sair no lance seguinte seria preciso que o rei preto tivesse alguma coisa para jogar agora, e ele não tem. É por isso que dois cavalos não dão mate à força: o mate depende de o adversário colaborar.",
+              "move": "g8f8",
+              "text": "f8, e acabou. Daqui em diante as brancas podem jogar o que quiserem: não existe mais mate forçado, e a partida é empate. Esta não é uma afirmação da aula — é a tablebase que devolve empate para esta posição, e o gate do curso confere isso a cada rodada.",
               "arrows": [
                 [
-                  "e2",
-                  "d4"
+                  "g8",
+                  "f8"
                 ]
               ],
               "highlights": [
+                "f8",
                 "a1",
-                "a2",
-                "b1",
-                "b2"
+                "a8",
+                "h1",
+                "h8"
               ]
             }
           ]
