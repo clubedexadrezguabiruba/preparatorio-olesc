@@ -21,7 +21,7 @@ import { alternarTarefa } from "./acoes";
  */
 const UNIDADE: Record<"tatica" | "finais", string> = {
   tatica: "puzzles",
-  finais: "aulas dominadas",
+  finais: "aulas aprendidas",
 };
 
 /**

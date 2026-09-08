@@ -93,21 +93,33 @@ export const CLASSE: Record<Classe, { nome: string; faixa: string; resumo: strin
  */
 export type Formato = "completa" | "curta" | "leitura";
 
+/**
+ * Os três formatos, na palavra que o aluno lê.
+ *
+ * **Os textos mudaram inteiros em 2026-09-08**, e não por gosto: a aula deixou
+ * de ter seis etapas em posições diferentes e passou a ter **três numa posição
+ * só**, e "dominada" deixou de ser uma vitória para sempre e virou o degrau 3
+ * da escada (`lib/finais/escada.ts`). A trilha dizia "as seis etapas" para uma
+ * aula que tem três, e "dominada ao vencer a prática" para um critério que
+ * hoje pede três dias — as duas frases mentiam na tela do aluno.
+ */
 export const FORMATO: Record<Formato, { nome: string; etapas: string; criterio: string }> = {
   completa: {
     nome: "Aula completa",
-    etapas: "as seis etapas",
-    criterio: "Dominada ao completar a etapa sem ajuda e vencer a prática.",
+    etapas: "objetivo, com ajuda e sem ajuda",
+    criterio:
+      "Aprendida com três vitórias sem ajuda, em três dias diferentes e espaçados.",
   },
   curta: {
     nome: "Aula curta",
-    etapas: "objetivo, exemplo e prática",
-    criterio: "Dominada ao vencer (ou segurar) a prática contra o computador.",
+    etapas: "objetivo e sem ajuda",
+    criterio:
+      "Aprendida com três vitórias (ou empates seguros) sem ajuda, em três dias diferentes.",
   },
   leitura: {
     nome: "Aula de leitura",
-    etapas: "objetivo e exemplo",
-    criterio: "Dominada quando você marcar que leu e viu o exemplo até o fim.",
+    etapas: "só o objetivo",
+    criterio: "Aprendida quando você marcar que leu — esta aula não tem partida.",
   },
 };
 

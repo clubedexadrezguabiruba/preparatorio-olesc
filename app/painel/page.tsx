@@ -340,7 +340,7 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
           <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
             <div className="flex flex-col gap-1.5">
               <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-                <span className="text-sm font-medium text-tinta">Aulas dominadas</span>
+                <span className="text-sm font-medium text-tinta">Aulas aprendidas</span>
                 <span className="text-sm text-tinta-media tabular-nums">
                   {finaisFeitos.size} de {aulasDeFinais.length}
                 </span>

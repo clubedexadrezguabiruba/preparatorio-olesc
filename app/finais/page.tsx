@@ -103,7 +103,7 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
       ) : (
         <section className="flex flex-col gap-2 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
           <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-            <span className="rotulo text-tinta-fraca">Aulas dominadas</span>
+            <span className="rotulo text-tinta-fraca">Aulas aprendidas</span>
             <span className="text-sm text-tinta-media tabular-nums">
               {feitas.size} de {abertas.length} abertas
             </span>
@@ -132,7 +132,7 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
         // lado continua sobre as abertas, que é o que dá para fazer hoje.
         const aulas = daClasse(TRILHA, classe);
         const abertasAqui = aulas.filter((a) => idsAbertos.has(a.id));
-        const dominadasAqui = abertasAqui.filter((a) => feitas.has(a.id)).length;
+        const aprendidasAqui = abertasAqui.filter((a) => feitas.has(a.id)).length;
 
         return (
           <section key={classe} className="flex flex-col gap-3">
@@ -142,7 +142,7 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
                   {CLASSE[classe].nome} · {CLASSE[classe].faixa}
                 </h2>
                 <span className="text-xs text-tinta-fraca tabular-nums">
-                  {dominadasAqui} de {abertasAqui.length} dominadas
+                  {aprendidasAqui} de {abertasAqui.length} aprendidas
                   {abertasAqui.length < aulas.length ? ` · ${aulas.length} no total` : ""}
                 </span>
               </div>

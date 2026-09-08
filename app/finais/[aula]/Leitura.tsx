@@ -75,7 +75,7 @@ export function Leitura({ aula }: { aula: string }) {
         </p>
         <p className="text-xs text-tinta-fraca">
           Esta aula não tem tabuleiro para jogar — ela é de leitura. Marcar aqui é o que a
-          conta como dominada na trilha.
+          conta como aprendida na trilha.
         </p>
       </div>
     </div>

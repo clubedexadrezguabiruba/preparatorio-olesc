@@ -179,7 +179,7 @@ export function ObjectiveStage({
 
             <div className="rounded-lg border border-metodo-superficie/30 bg-metodo-superficie/5 px-4 py-3">
               <h3 className="rotulo text-metodo">
-                O que conta como dominado
+                O que conta como aprendida
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-tinta-media">{stage.mastery}</p>
             </div>

@@ -342,7 +342,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
                 ))}
               </ul>
             ) : (
-              <span className="text-xs text-tinta-fraca">Nenhuma aula dominada ainda.</span>
+              <span className="text-xs text-tinta-fraca">Nenhuma aula aprendida ainda.</span>
             )}
           </div>
         </div>

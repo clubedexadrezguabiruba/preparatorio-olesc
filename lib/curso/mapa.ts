@@ -193,7 +193,7 @@ export const MODULO: Record<
   finais: {
     nome: "Finais",
     unidade: "aulas",
-    conta: "Aulas dominadas — o critério de cada formato, certificado pela tablebase.",
+    conta: "Aulas aprendidas — três passadas em dias distintos, cada uma certificada pela tablebase.",
     href: "/finais",
     vazio: "Nenhuma aula de finais nesta faixa.",
   },
