@@ -153,19 +153,31 @@ pelo menos uma**, e os capítulos foram conferidos no PDF, não lembrados (§8).
 coluna **Sob teto** lista as protegidas que podem contribuir com até 2 posições
 cada.
 
-> **2026-09-08 — o corpus antigo saiu do disco.** Decisão do Doug: as cinco aulas
-> escritas contra os livros anteriores (`N0-Q-MATE`, `N0-LADDER`, `N0-STALEMATE`,
-> `N1-KING-ACTIVITY` e `N1-KPK`) foram **apagadas** de `content/lessons/`. Elas
-> continuam nesta lista, com a fase **"a refazer"**: a trilha é o plano, e o plano
-> não mudou — o que mudou é que elas serão reescritas contra o Silman, como os
-> dois pilotos. Hoje o módulo tem **2 aulas no disco**: `N0-R-MATE` e
-> `N0-MATING-MATERIAL`. A coluna **Posição (DP)** das cinco foi zerada porque o
-> garimpo de domínio público delas não vale mais: as posições virão do Silman.
+> **2026-09-08 — o corpus antigo saiu do disco, e o livro-base mudou.**
+>
+> Duas coisas aconteceram no mesmo dia, e a segunda é a que manda. Primeiro, as
+> cinco aulas escritas contra os livros anteriores foram apagadas de
+> `content/lessons/`. Depois o Doug **trocou o livro-base do módulo do Silman
+> para o de la Villa** e **redesenhou o formato**: a aula deixou de ser seis
+> etapas em posições diferentes e passou a ser **três etapas numa posição só**
+> — objetivo estático, com ajuda, sem ajuda —, com "aprendida" contada pela
+> escada de três passadas em dias distintos.
+>
+> Hoje o módulo tem **1 aula no disco**: a `N1-KPK`, piloto do formato novo e
+> do livro novo. As outras estão na fase **"a refazer"** — a trilha é o plano, e
+> o plano não mudou; o que mudou é contra que livro e em que formato elas serão
+> escritas. A coluna **Posição (DP)** delas foi zerada porque o garimpo de
+> domínio público não vale mais para elas.
+>
+> As duas aulas do Silman (`N0-R-MATE` e `N0-MATING-MATERIAL`) saíram junto,
+> com as 17 posições de obra protegida. O **regime integral do Silman continua
+> declarado** em `content/divida-de-licenca.md`, com inventário zerado: a
+> Classe E está em aberto, e se ela voltar a sair daquele livro o regime já
+> está de pé.
 >
 > A `lib/finais/trilha.ts` **não mudou** e nem devia: ela lista as 49 aulas
 > planejadas, e o teste que cruza a lista com o disco já pulava aula não escrita
-> (`if (!existsSync(arquivo)) continue`). Para o site, as cinco voltaram a ser
-> aulas fechadas, que é o que eram antes de existirem.
+> (`if (!existsSync(arquivo)) continue`).
 
 ### Classe E — 6 aulas
 
@@ -185,7 +197,7 @@ cada.
 | 7 | C | `N1-SQUARE` | Regra do quadrado | 3 | DLV | FRE I.I "Calculation of distances" · CAP §12 | DLV, SIL | B5 |
 | 8 | c | `N1-DIRECT-OPPOSITION` | Oposição | 3 | SIL | FRE II.I "The Opposition illustrated" · CAP §13 · STA VI.IV | SIL, DLV | B5 |
 | 9 | c | `N1-KEY-SQUARES` | Casas-chave | 3 | DLV | FRE II.III · FRE refs "Opposition, how to secure" · CUN I | DLV, NUN | FN2 |
-| 10 | C | `N1-KPK` | Rei e peão contra rei: o rei na frente do peão | 3 | SIL | — | SIL (integral) | a refazer |
+| 10 | ✔C | `N1-KPK` | Rei e peão contra rei: o rei na frente do peão | 3 | DLV | — | DLV (1 de 2) | pronta |
 | 11 | c | `N1-KPK-RANKS` | Peão na 6ª e na 7ª: quem joga decide | 3 | MK | STA VI.IV (473) · FRE II.III · KH | MK, DLV | B5 |
 | 12 | c | `N1-ROOK-PAWN` | Peão de torre: o empate do canto | 3 | MK | FRE III.II–III "Rooks' pawns' difficulties" · CUN I | MK, SIL, DLV | FN2 |
 | 13 | c | `N2-KING-MANEUVER` | Oposição além do básico: a distante | 3 | SIL | FRE II.I–II · FRE refs "how to maintain" · CAP §13 | SIL, DLV | FN2 |

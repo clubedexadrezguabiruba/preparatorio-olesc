@@ -12,7 +12,7 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { Chess } from "chess.js";
-import { goalMovesOf, Tablebase, winningMovesOf } from "./tablebase.ts";
+import { goalMovesOf, Tablebase } from "./tablebase.ts";
 
 /**
  * O gate testado contra si mesmo (plano da F1, §3.4).
@@ -55,12 +55,23 @@ type Mutation = {
   aplicar: (dir: string) => Promise<string>;
 };
 
-function lerAula(dir: string, id = "N0-R-MATE") {
+function lerAula(dir: string, id = "N1-KPK") {
   const file = path.join(dir, "lessons", `${id}.json`);
   return { file, json: JSON.parse(readFileSync(file, "utf8")) };
 }
+/**
+ * A pasta sai do **id**, e não é fixada: `pos-n1-...` mora em `N1`. Estava
+ * cravada em `N0` desde que a única aula era de classe E, e essa constante
+ * escondida derrubou o run inteiro com ENOENT no dia em que o piloto virou uma
+ * aula de classe D — que é o mesmo defeito que o `posicaoDeEnsino` conserta do
+ * outro lado.
+ */
+function pastaDaPosicao(id: string): string {
+  return id.slice(4, 6).toUpperCase();
+}
+
 function lerPosicao(dir: string, id: string) {
-  const file = path.join(dir, "positions", "N0", `${id}.json`);
+  const file = path.join(dir, "positions", pastaDaPosicao(id), `${id}.json`);
   return { file, json: JSON.parse(readFileSync(file, "utf8")) };
 }
 function gravar(file: string, json: unknown) {
@@ -105,35 +116,38 @@ function promover(dir: string, id: string, editionFile: string) {
  * que a aula troca de posição, e ENOENT derruba o run inteiro.
  */
 type EtapasComPosicao = {
-  example?: { scenes: Array<{ positionId: string }> };
+  objective?: { positionId: string };
   guided?: { positionId: string };
-  solo?: { positionId: string };
   practice?: { positionId: string };
-  review?: { reviewPositionIds: string[] };
 };
 
 function idsDePosicaoDaAula(json: { stages: EtapasComPosicao }): string[] {
   const s = json.stages;
-  const ids = [
-    ...(s.example?.scenes ?? []).map((c) => c.positionId),
-    s.guided?.positionId,
-    s.solo?.positionId,
-    s.practice?.positionId,
-    ...(s.review?.reviewPositionIds ?? []),
-  ].filter((id): id is string => typeof id === "string");
+  const ids = [s.objective?.positionId, s.guided?.positionId, s.practice?.positionId].filter(
+    (id): id is string => typeof id === "string",
+  );
   return [...new Set(ids)];
 }
 
 /**
  * A posição de ensino da aula — a que a maior parte das mutações estraga.
  *
- * É a do Diagrama 22 do Silman: a cena 2 do exemplo e a etapa 3 inteira saem
- * dela, então estragá-la reprova por muitos caminhos diferentes. O nome do
- * campo já mentiu uma vez (apontava para a `rogers-xvi`, que era etapa 6 e
- * depois deixou o corpus); se voltar a mentir, a mutação 4 avisa — ela promove
- * esta posição a `candidate` e exige que a aula publicada a recuse.
+ * **Ela é COLHIDA da aula, e não escrita aqui.** O campo já mentiu duas vezes:
+ * apontava para a `rogers-xvi`, que era etapa 6 e deixou o corpus, e depois
+ * para a `silman-d22`, que a demolição de 2026-09-08 apagou. Nas duas vezes o
+ * sintoma foi o mesmo — ENOENT no meio de uma mutação, que mata o run inteiro
+ * em vez de reprovar uma linha.
+ *
+ * No formato de três etapas ela é trivial de colher: as três jogam a MESMA
+ * posição, e o `lessonSchema` recusa o arquivo em que não jogarem. Estragá-la
+ * reprova por muitos caminhos diferentes, que é o que estas mutações querem.
  */
-const ENSINO = "pos-n0-rmate-silman-d22";
+function posicaoDeEnsino(dir: string): string {
+  const { json } = lerAula(dir);
+  const ids = idsDePosicaoDaAula(json);
+  if (ids.length === 0) throw new Error("a aula não referencia posição nenhuma");
+  return ids[0];
+}
 
 /* ------------------------------------------------------------------ *
  * FN1/B2 — as fixtures
@@ -180,6 +194,8 @@ type ExpectDaAula = {
   reply?: string;
   next?: string;
   replies?: Variante[];
+  /** O que o nó terminal promete. Ver `endsSchema` em `lib/lesson/schema.ts`. */
+  ends?: string;
   generated?: boolean;
 };
 
@@ -246,7 +262,7 @@ const MUTACOES: Mutation[] = [
     titulo: "FEN ilegal (reis adjacentes) na posição de ensino",
     codigo: "FEN_ILEGAL",
     aplicar: async (dir) => {
-      const { file, json } = lerPosicao(dir, ENSINO);
+      const { file, json } = lerPosicao(dir, posicaoDeEnsino(dir));
       json.fen = "8/8/8/1k6/1K6/8/8/R7 w - - 0 1";
       gravar(file, json);
       return "fen → 8/8/8/1k6/1K6/8/8/R7 (rei branco em b4, colado no preto em b5)";
@@ -256,7 +272,7 @@ const MUTACOES: Mutation[] = [
     titulo: "resultado esperado errado",
     codigo: "RESULTADO_ERRADO",
     aplicar: async (dir) => {
-      const { file, json } = lerPosicao(dir, ENSINO);
+      const { file, json } = lerPosicao(dir, posicaoDeEnsino(dir));
       json.expectedResult = "draw";
       gravar(file, json);
       return 'expectedResult → "draw" numa posição que a tablebase dá como ganha';
@@ -267,7 +283,7 @@ const MUTACOES: Mutation[] = [
     codigo: "SCHEMA_POSICAO",
     contem: "fenMethod",
     aplicar: async (dir) => {
-      const { file, json } = lerPosicao(dir, ENSINO);
+      const { file, json } = lerPosicao(dir, posicaoDeEnsino(dir));
       delete json.provenance.fenMethod;
       gravar(file, json);
       return "provenance.fenMethod apagado (sobram 8 dos 9 campos)";
@@ -281,7 +297,8 @@ const MUTACOES: Mutation[] = [
       // as 4 posições ainda eram fixtures. Com o garimpo feito, todas são
       // "approved" e a mutação precisa PLANTAR o estrago em vez de herdá-lo —
       // que aliás sempre foi o desenho certo dela.
-      const posicao = lerPosicao(dir, ENSINO);
+      const ensino = posicaoDeEnsino(dir);
+      const posicao = lerPosicao(dir, ensino);
       posicao.json.status = "candidate";
       gravar(posicao.file, posicao.json);
       const { file, json } = lerAula(dir);
@@ -290,7 +307,7 @@ const MUTACOES: Mutation[] = [
       // mutação morreria em SCHEMA_AULA e a regra sob teste nunca rodaria.
       json.class = "E";
       gravar(file, json);
-      return `status da aula → "published" (classe E) com ${ENSINO} rebaixada a "candidate"`;
+      return `status da aula → "published" (classe E) com ${ensino} rebaixada a "candidate"`;
     },
   },
   {
@@ -319,6 +336,16 @@ const MUTACOES: Mutation[] = [
     },
   },
   {
+    // O estrago mudou de forma com o piloto do de la Villa. Ele antes só
+    // trocava o lance final por um que ganha sem dar mate, porque o terminal
+    // da aula de então **declarava** `ends: "mate"`. O terminal do piloto
+    // declara `ends: "promotion"` — é uma aula de peão, e ela acaba na dama
+    // nova, não no mate. Trocar só o lance deixaria a regra sob teste sem
+    // sujeito, e a mutação ficaria verde por não ter o que provar.
+    //
+    // Agora ela planta a declaração **e** o lance: `ends: "mate"` num lance que
+    // não dá mate. É a promessa quebrada que a regra existe para pegar, e ela
+    // sobrevive a qualquer aula que venha depois.
     titulo: "nó terminal sem mate",
     codigo: "TERMINAL_SEM_MATE",
     aplicar: async (dir) => {
@@ -326,19 +353,36 @@ const MUTACOES: Mutation[] = [
       const [id, node] = acharTerminal(json.stages.guided);
       const naoDaMate = node.winningMoves.find((uci: string) => {
         const game = new Chess(node.fen);
-        game.move({ from: uci.slice(0, 2), to: uci.slice(2, 4) });
+        game.move({
+          from: uci.slice(0, 2),
+          to: uci.slice(2, 4),
+          promotion: uci.length > 4 ? uci.slice(4) : undefined,
+        });
         return !game.isCheckmate();
       });
-      node.expects[0].moves = [naoDaMate as string];
+      if (!naoDaMate) throw new Error("o terminal não tem lance vencedor que deixe de dar mate");
+      node.expects[0].moves = [naoDaMate];
+      node.expects[0].ends = "mate";
       gravar(file, json);
-      return `${id}: o lance final vira ${naoDaMate}, que ganha mas não dá mate`;
+      return `${id}: o lance final vira ${naoDaMate} e o nó passa a declarar ends "mate" — mas não há mate`;
     },
   },
   {
+    // **Roda sobre a fixture, e não sobre a aula publicada.** O piloto do de la
+    // Villa é rei e peão contra rei com o rei muito à frente: ali o defensor
+    // não tem escolha nenhuma que encurte o mate em mais de 2 lances — todas
+    // as fugas do rei preto valem quase o mesmo. Sem espalhamento não há
+    // defesa frouxa a plantar, e a regra ficaria sem sujeito.
+    //
+    // A `N1-FIXTURE-KRK` é o mate de torre, onde o defensor **tem** escolhas
+    // que custam muitos lances de diferença. É a mesma razão pela qual as
+    // outras mutações da B2 moram em fixture: a regra é do gate, não do
+    // currículo, e não pode depender de qual aula está escrita hoje.
     titulo: "defensor frouxo (resposta que encurta o mate)",
     codigo: "DEFENSOR_FROUXO",
+    fixtures: true,
     aplicar: async (dir) => {
-      const { file, json } = lerAula(dir);
+      const { file, json } = lerFixture(dir, "N1-FIXTURE-KRK");
       const tablebase = new Tablebase(path.join(dir, "tablebase-cache"), true);
       for (const nodeId of Object.keys(json.stages.guided.nodes)) {
         const node = json.stages.guided.nodes[nodeId];
@@ -365,51 +409,10 @@ const MUTACOES: Mutation[] = [
     },
   },
   {
-    titulo: "teto de lances impossível na etapa 4",
-    codigo: "TETO_IMPOSSIVEL",
-    aplicar: async (dir) => {
-      const { file, json } = lerAula(dir);
-      json.stages.solo.moveLimit = 2;
-      gravar(file, json);
-      return "moveLimit da etapa 4 → 2, numa posição cujo mate mais curto tem 9 lances";
-    },
-  },
-  {
-    titulo: "ramo gerado adulterado (expect derivado que a derivação não produz)",
-    codigo: "RAMO_DESATUALIZADO",
-    aplicar: async (dir) => {
-      const { file, json } = lerAula(dir);
-      // Antes do B5 esta mutação APAGAVA um expect gerado da etapa 4. As
-      // posições garimpadas não têm nenhum: nelas cada corte é geometricamente
-      // único, então o gerador de ramos equivalentes legitimamente não produz
-      // nada (`Rg1` em vez de `Ra7`, por exemplo, não separa os dois reis e
-      // por isso não é corte). O estrago agora entra pelo outro lado — um
-      // expect marcado como gerado que a derivação NÃO produz — e continua
-      // cobrando exatamente a mesma regra: o que é derivado não se escreve à
-      // mão. Quando alguma posição futura voltar a render ramo equivalente,
-      // vale acrescentar de novo a versão que apaga.
-      const [id, node] = Object.entries(json.stages.solo.nodes)[0] as [
-        string,
-        { fen: string; winningMoves: string[]; expects: Array<Record<string, unknown>> },
-      ];
-      const game = new Chess(node.fen);
-      const outro = game
-        .moves({ verbose: true })
-        .map((m) => `${m.from}${m.to}`)
-        .find((uci) => node.winningMoves.includes(uci) && !node.expects.some((e) => (e.moves as string[]).includes(uci)));
-      node.expects.push({ moves: [outro], feedback: "ramo forjado à mão", generated: true });
-      gravar(file, json);
-      return (
-        `${id}: acrescentado à mão um expect com generated:true para ${outro}, ` +
-        "que o gerador não deriva — como faria quem editasse o JSON sem rodar o gerador"
-      );
-    },
-  },
-  {
     titulo: "posição citando obra que não está no registro",
     codigo: "OBRA_NAO_REGISTRADA",
     aplicar: async (dir) => {
-      promover(dir, ENSINO, "dvoretsky-endgame-manual.pdf");
+      promover(dir, posicaoDeEnsino(dir), "dvoretsky-endgame-manual.pdf");
       return (
         'pos-...-fx-a promovida a "candidate" com os 9 campos preenchidos, mas ' +
         'editionFile → "dvoretsky-endgame-manual.pdf", obra ausente de content/sources.json'
@@ -417,125 +420,31 @@ const MUTACOES: Mutation[] = [
     },
   },
   {
-    titulo: "teto de citação furado (3 posições da mesma obra protegida numa aula)",
-    codigo: "TETO_DE_CITACAO",
-    aplicar: async (dir) => {
-      // Duas trocas em relação à versão anterior, e as duas por motivo de
-      // sobrevivência da mutação, não de gosto:
-      //
-      // 1. A obra deixou de ser o Silman. Ele está em **regime integral** desde
-      //    2026-09-08, e o teto de citação nem roda para ele — a mutação ficaria
-      //    verde provando o contrário do que quer provar. O Nunn serve: é
-      //    protegido, não é didático e nenhuma aula o usa.
-      // 2. Os três ids saem da própria aula, em runtime. Fixados à mão, um deles
-      //    sumir na reescrita da aula derrubava o `lerPosicao` com ENOENT — e
-      //    ENOENT no meio de uma mutação mata o run inteiro, não só ela.
-      const { json } = lerAula(dir);
-      const referenciadas = idsDePosicaoDaAula(json);
-      if (referenciadas.length < 3) {
-        throw new Error(`a aula referencia ${referenciadas.length} posições; a mutação precisa de 3`);
-      }
-      const alvos = referenciadas.slice(0, 3);
-      for (const id of alvos) promover(dir, id, "nunn-understanding-chess-endgames.pdf");
-      return (
-        `${alvos.join(", ")} promovidas a "candidate", todas saindo do Nunn — ` +
-        "3 posições de uma obra protegida na mesma aula, contra o teto de 2 da §12.7"
-      );
-    },
-  },
-  {
-    titulo: "lance do exemplo que joga a vitória fora",
-    codigo: "EXEMPLO_NAO_GANHA",
-    aplicar: async (dir) => {
-      const { file, json } = lerAula(dir);
-      const tablebase = new Tablebase(path.join(dir, "tablebase-cache"), true);
-      // Procurado, não fixado à mão: o primeiro lance das brancas que tenha uma
-      // alternativa que **não** ganha. No fim de um KRK não existe: com o rei
-      // preto no canto e a torre longe, todo lance legal continua ganhando —
-      // e foi tentando o último lance primeiro que isso apareceu.
-      //
-      // Trocado o lance, o resto da linha vira ilegal, então a cena é cortada
-      // ali. Isso faz sair junto um EXEMPLO_SEM_MATE, que é a consequência
-      // honesta do mesmo estrago: um lance que joga a vitória fora não termina
-      // em mate. A mutação continua vermelha pelo código que ela cobra.
-      const cena = [...json.stages.example.scenes].sort(
-        (a: { steps: unknown[] }, b: { steps: unknown[] }) => b.steps.length - a.steps.length,
-      )[0];
-      const game = new Chess(lerPosicao(dir, cena.positionId).json.fen);
-      for (const [i, step] of (cena.steps as Array<{ move: string }>).entries()) {
-        if (game.turn() === "w") {
-          const ganhadores = new Set(winningMovesOf(await tablebase.lookup(game.fen())));
-          const joga = game
-            .moves({ verbose: true })
-            .map((m) => `${m.from}${m.to}`)
-            .find((uci) => !ganhadores.has(uci));
-          if (joga) {
-            const antes = step.move;
-            cena.steps = cena.steps.slice(0, i + 1);
-            cena.steps[i].move = joga;
-            cena.phases = (cena.phases ?? []).filter(
-              (f: { fromStep: number }) => f.fromStep <= cena.steps.length,
-            );
-            gravar(file, json);
-            return (
-              `cena "${cena.id}": o lance ${i + 1} (${antes}) vira ${joga}, que não ganha, ` +
-              "e a linha é cortada ali — o EXEMPLO_SEM_MATE que sai junto é consequência do mesmo estrago"
-            );
-          }
-        }
-        game.move({ from: step.move.slice(0, 2), to: step.move.slice(2, 4) });
-      }
-      throw new Error("nenhum lance das brancas na cena tem alternativa perdedora");
-    },
-  },
-  {
-    titulo: "cena de vitória que para antes do mate",
-    codigo: "EXEMPLO_SEM_MATE",
-    aplicar: async (dir) => {
-      const { file, json } = lerAula(dir);
-      // A cena mais curta é a do "como termina" — cortar o último lance dela é
-      // exatamente o defeito que a etapa 2 tinha antes desta reforma: mostrar o
-      // caminho e não mostrar o fim.
-      const cena = [...json.stages.example.scenes].sort(
-        (a: { steps: unknown[] }, b: { steps: unknown[] }) => a.steps.length - b.steps.length,
-      )[0];
-      const cortado = cena.steps.pop();
-      gravar(file, json);
-      return `cena "${cena.id}": o lance de mate (${cortado.move}) some, e a linha para um lance antes`;
-    },
-  },
-  {
-    titulo: "passo do objetivo que o exemplo não mostra",
-    codigo: "REGRA_SEM_FASE",
-    aplicar: async (dir) => {
-      const { file, json } = lerAula(dir);
-      // Renomear a fase, e não apagá-la, é o estrago realista: alguém melhora
-      // o texto de um lado e esquece o outro, e as duas listas passam a
-      // parecer duas técnicas diferentes.
-      const cena = json.stages.example.scenes.find((s: { phases?: unknown[] }) => s.phases);
-      const antes = cena.phases[0].title;
-      cena.phases[0].title = `${antes} (rev. 2)`;
-      gravar(file, json);
-      return `a fase 1 da cena "${cena.id}" vira "${antes} (rev. 2)" e deixa de casar com a regra do objetivo`;
-    },
-  },
-  {
     titulo: "livro-base declarado que não é o de nenhuma cena",
     codigo: "FONTE_DIDATICA_DIVERGE",
     aplicar: async (dir) => {
       const { file, json } = lerAula(dir);
-      // Era "silman-endgame-course", e virou no-op no dia em que a aula passou a
-      // ser genuinamente do Silman: o gate ficava verde e o run saía com 1.
-      // O `de-la-villa-100` é a troca certa por um motivo escrito: o
-      // SOURCE-CORPUS:543 registra que ele **não cobre mates elementares**, então
-      // ele nunca virará fonte legítima de cena numa aula de N0, e esta mutação
-      // não vai apodrecer de novo.
+      // **A obra errada é COLHIDA, e não escrita aqui — e essa é a terceira
+      // versão desta linha.** Ela já foi "silman-endgame-course" e apodreceu no
+      // dia em que a aula passou a ser genuinamente do Silman; virou
+      // "de-la-villa-100" e apodreceu de novo em 2026-09-08, quando o piloto
+      // passou a ser do de la Villa. Nas duas vezes o sintoma foi o mesmo: a
+      // mutação vira no-op e passa batido, verde, sem provar nada.
+      //
+      // Agora ela pergunta ao registro qual é a outra: qualquer obra didática
+      // que não seja a que a aula declara. Não há mais nome de obra escrito
+      // nesta mutação, e por isso ela não tem como apodrecer numa terceira.
+      const registro = JSON.parse(readFileSync(path.join(dir, "sources.json"), "utf8"));
       const antes = json.stages.objective.source;
-      json.stages.objective.source = "de-la-villa-100";
+      const outra = registro.sources.find(
+        (o: { didactic?: boolean; slug: string }) => o.didactic && o.slug !== antes,
+      );
+      if (!outra) throw new Error("o registro não tem uma segunda obra didática");
+      json.stages.objective.source = outra.slug;
       gravar(file, json);
       return (
-        `objective.source: "${antes}" → "de-la-villa-100", obra didática registrada ` +
-        "mas de onde não sai nenhuma cena do exemplo"
+        `objective.source: "${antes}" → "${outra.slug}", obra didática registrada ` +
+        "mas de onde não sai a posição da aula"
       );
     },
   },
@@ -552,13 +461,17 @@ const MUTACOES: Mutation[] = [
     // a fórmula prova a mesma coisa sem depender do N do dia.
     contem: "max(2, floor(",
     aplicar: async (dir) => {
-      // O estrago realista é escolher o livro que já fornece uma cena a cada
-      // aula: assim a `FONTE_DIDATICA_DIVERGE` fica satisfeita e só a regra da
-      // rotação reclama — que é exatamente o que a mutação quer provar.
-      // A obra tem de ser protegida, didática e **fora do regime integral**: o
-      // Silman não serve mais, porque para ele a rotação está desligada de
-      // propósito.
-      const alvo = "pandolfini-endgame-course";
+      // O estrago realista é escolher o livro que **já** fornece a posição de
+      // cada aula: assim a `FONTE_DIDATICA_DIVERGE` fica satisfeita e só a
+      // regra da rotação reclama — que é exatamente o que a mutação quer
+      // provar. Colhido da aula, e não escrito: era "pandolfini-endgame-course"
+      // e passou a divergir da posição no dia em que o piloto virou de la
+      // Villa, o que fazia o gate reprovar pelo código errado.
+      //
+      // A obra tem de ser protegida, didática e **fora do regime integral** — e
+      // a do piloto é as três. O Silman não serviria: para ele a rotação está
+      // desligada de propósito.
+      const alvo = lerAula(dir).json.stages.objective.source as string;
       // As aulas são lidas do disco, e não nomeadas: a `N0-Q-MATE`, que a versão
       // anterior citava por nome, saiu do corpus em 2026-09-08 e derrubou o run
       // inteiro com ENOENT.
@@ -573,13 +486,20 @@ const MUTACOES: Mutation[] = [
         json.class = "E";
         gravar(file, json);
       }
-      // Mais uma, até passar de 3: com N aulas publicadas o teto é
-      // max(2, floor(N/3)), e é a terceira que o estoura.
-      const { json } = lerAula(dir, publicadas[0]);
-      json.id = "N0-R-MATE-BIS";
-      gravar(path.join(dir, "lessons", "N0-R-MATE-BIS.json"), json);
+      // Cópias até passar do teto. Com N aulas publicadas ele é
+      // max(2, floor(N/3)), então **três** é o menor N que o estoura: 2 aulas
+      // dão max(2, 0) = 2, que não é maior que 2. Eram duas quando o corpus
+      // tinha três aulas no disco; com uma só, o laço acima produz uma, e as
+      // cópias precisam ser duas.
+      const copias = Math.max(0, 3 - publicadas.length);
+      for (let k = 0; k < copias; k += 1) {
+        const { json } = lerAula(dir, publicadas[0]);
+        const id = `${publicadas[0]}-COPIA${k + 1}`;
+        json.id = id;
+        gravar(path.join(dir, "lessons", `${id}.json`), json);
+      }
       return (
-        `${publicadas.length + 1} aulas publicadas da classe E declaram "${alvo}" como ` +
+        `${publicadas.length + copias} aulas publicadas da classe E declaram "${alvo}" como ` +
         "livro-base — acima do teto de max(2, floor(N/3))"
       );
     },
@@ -591,22 +511,6 @@ const MUTACOES: Mutation[] = [
    * três, o `integral` seria um campo que desliga duas regras e não tem nada
    * cobrando que o desligamento continue medido.
    * ---------------------------------------------------------------- */
-  {
-    titulo: "regime integral apagado — o teto de citação volta a morder",
-    codigo: "TETO_DE_CITACAO",
-    aplicar: async (dir) => {
-      const file = path.join(dir, "sources.json");
-      const json = JSON.parse(readFileSync(file, "utf8"));
-      const obra = json.sources.find((s: { integral?: unknown }) => s.integral);
-      if (!obra) throw new Error("nenhuma obra em regime integral para apagar");
-      delete obra.integral;
-      gravar(file, json);
-      return (
-        `o bloco integral de "${obra.slug}" apagado do sources.json — a aula que usa 5 posições ` +
-        "dele volta a estourar o teto de 2 da §12.7"
-      );
-    },
-  },
   {
     titulo: "prazo do regime integral vencido",
     codigo: "REGIME_INTEGRAL_VENCIDO",
@@ -622,20 +526,6 @@ const MUTACOES: Mutation[] = [
         `o prazo de "${obra.slug}" recuado para 2021-01-01 — a exceção temporária que ninguém ` +
         "renovou tem de reprovar sozinha"
       );
-    },
-  },
-  {
-    titulo: "inventário da dívida adulterado à mão",
-    codigo: "DIVIDA_DESATUALIZADA",
-    aplicar: async (dir) => {
-      const file = path.join(dir, "divida-de-licenca.md");
-      const antes = readFileSync(file, "utf8");
-      // O estrago realista não é apagar o arquivo: é alguém tirar uma linha da
-      // lista de troca, e a lista continuar parecendo completa.
-      const linha = antes.split("\n").find((l) => l.startsWith("- `pos-"));
-      if (!linha) throw new Error("a dívida não lista posição nenhuma");
-      writeFileSync(file, antes.replace(`${linha}\n`, ""), "utf8");
-      return `a linha "${linha.slice(0, 48)}..." apagada à mão do content/divida-de-licenca.md`;
     },
   },
   /* ---------------------------------------------------------------- *
@@ -709,7 +599,13 @@ const MUTACOES: Mutation[] = [
       const { file, json } = lerAula(dir);
       const [id, node] = Object.entries(json.stages.guided.nodes)[0] as [string, NoDaAula];
       const roteiro = node.expects[0].moves[0];
-      node.mistakes = [...(node.mistakes ?? []), { moves: [roteiro], errorId: "rei-distante" }];
+      // O id do erro é COLHIDO da aula. Estava escrito como "rei-distante", que
+      // era um erro da aula de mate de torre; com o piloto do de la Villa esse
+      // id deixou de existir e o gate passou a reprovar por ERRO_DESCONHECIDO —
+      // um vermelho verdadeiro pelo motivo errado, que é o mesmo que verde.
+      const [erroId] = Object.keys(json.errors);
+      if (!erroId) throw new Error("a aula não declara erro nomeado nenhum");
+      node.mistakes = [...(node.mistakes ?? []), { moves: [roteiro], errorId: erroId }];
       gravar(file, json);
       return `${id}: ${roteiro} é o lance do roteiro e entra também em mistakes`;
     },
@@ -727,28 +623,13 @@ const MUTACOES: Mutation[] = [
     contem: "texto não pode ser vazio",
     flags: ["--rascunhos"],
     aplicar: async (dir) => {
-      const { json } = lerAula(dir, "N0-R-MATE");
+      const { json } = lerAula(dir);
       json.stages.objective.rules[0].text = "";
-      gravarRascunhoDeAula(dir, "N0-R-MATE", json);
+      gravarRascunhoDeAula(dir, "N1-KPK", json);
       return (
-        "rascunhos/lessons/N0-R-MATE.json com o texto da regra 1 vazio — " +
+        "rascunhos/lessons/N1-KPK.json com o texto da regra 1 vazio — " +
         "o arquivo publicado continua intacto"
       );
-    },
-  },
-  {
-    // O acoplamento que o painel resolve num gesto, provado pelo lado de fora:
-    // renomear a regra do objetivo sem renomear a fase da cena deixa o
-    // objetivo prometendo um passo que o exemplo não mostra.
-    titulo: "rascunho com a regra renomeada e a fase não",
-    codigo: "REGRA_SEM_FASE",
-    flags: ["--rascunhos"],
-    aplicar: async (dir) => {
-      const { json } = lerAula(dir, "N0-R-MATE");
-      const antes = json.stages.objective.rules[0].title;
-      json.stages.objective.rules[0].title = `${antes} (só na regra)`;
-      gravarRascunhoDeAula(dir, "N0-R-MATE", json);
-      return `no rascunho a regra 1 vira "${antes} (só na regra)"; a fase da cena continua "${antes}"`;
     },
   },
   {
@@ -759,10 +640,10 @@ const MUTACOES: Mutation[] = [
     codigo: "RASCUNHO_ORFAO",
     flags: ["--rascunhos"],
     aplicar: async (dir) => {
-      const { json } = lerAula(dir, "N0-R-MATE");
+      const { json } = lerAula(dir);
       mkdirSync(path.join(dir, "rascunhos"), { recursive: true });
-      gravar(path.join(dir, "rascunhos", "N0-R-MATE.json"), json);
-      return "rascunhos/N0-R-MATE.json, um degrau acima de rascunhos/lessons/";
+      gravar(path.join(dir, "rascunhos", "N1-KPK.json"), json);
+      return "rascunhos/N1-KPK.json, um degrau acima de rascunhos/lessons/";
     },
   },
   {
@@ -774,8 +655,8 @@ const MUTACOES: Mutation[] = [
     contem: "juiz enfraquecido",
     flags: ["--rascunhos", "--aplicar", "--write"],
     aplicar: async (dir) => {
-      const { json } = lerAula(dir, "N0-R-MATE");
-      gravarRascunhoDeAula(dir, "N0-R-MATE", json);
+      const { json } = lerAula(dir);
+      gravarRascunhoDeAula(dir, "N1-KPK", json);
       return "o gate é chamado com --aplicar e --write juntos, sobre um rascunho intacto";
     },
   },
@@ -788,9 +669,9 @@ const MUTACOES: Mutation[] = [
     contem: "--rascunho",
     flags: ["--rascunho"],
     aplicar: async (dir) => {
-      const { json } = lerAula(dir, "N0-R-MATE");
+      const { json } = lerAula(dir);
       json.title = "título que nunca deveria ser aprovado por engano";
-      gravarRascunhoDeAula(dir, "N0-R-MATE", json);
+      gravarRascunhoDeAula(dir, "N1-KPK", json);
       return "o gate é chamado com --rascunho (sem o s) sobre um rascunho que mudou o título";
     },
   },
@@ -803,13 +684,14 @@ const MUTACOES: Mutation[] = [
     contem: "reis adjacentes",
     flags: ["--rascunhos"],
     aplicar: async (dir) => {
-      const { json } = lerPosicao(dir, ENSINO);
+      const ensino = posicaoDeEnsino(dir);
+      const { json } = lerPosicao(dir, ensino);
       json.fen = "8/8/8/1k6/1K6/8/8/R7 w - - 0 1";
-      const pasta = path.join(dir, "rascunhos", "positions", "N0");
+      const pasta = path.join(dir, "rascunhos", "positions", pastaDaPosicao(ensino));
       mkdirSync(pasta, { recursive: true });
-      gravar(path.join(pasta, `${ENSINO}.json`), json);
+      gravar(path.join(pasta, `${ensino}.json`), json);
       return (
-        `rascunhos/positions/N0/${ENSINO}.json com os reis em b4 e b5 — ` +
+        `rascunhos/positions/N1/${ensino}.json com os reis em b4 e b5 — ` +
         "o arquivo publicado continua legal"
       );
     },
@@ -818,15 +700,23 @@ const MUTACOES: Mutation[] = [
     // B8.4: trocar a posição de uma etapa de árvore **não** apaga a árvore.
     // Ela fica órfã, e é o gate que recusa — que é exatamente o que o painel
     // avisa antes de deixar trocar.
-    titulo: "posição da etapa 4 trocada com a árvore velha de pé",
+    //
+    // Ela trocava a posição da etapa 4 pela da etapa 3, que eram diferentes.
+    // No formato de três etapas as três são a MESMA, então trocar por outra
+    // qualquer é o estrago: a árvore continua escrita para a posição de antes,
+    // e o primeiro nó dela deixa de bater com a FEN da posição nova.
+    titulo: "posição da árvore trocada com a árvore velha de pé",
     codigo: "FEN_DO_NO",
     aplicar: async (dir) => {
-      const { file, json } = lerAula(dir, "N0-R-MATE");
-      const antes = json.stages.solo.positionId;
-      const outra = json.stages.guided.positionId;
-      json.stages.solo.positionId = outra;
+      const { file, json } = lerAula(dir);
+      const antes = json.stages.guided.positionId;
+      // Uma posição de outra classe, que existe no disco e não é a da aula.
+      const outra = "pos-n1-square-dlv-1-1";
+      json.stages.guided.positionId = outra;
+      json.stages.objective.positionId = outra;
+      json.stages.practice.positionId = outra;
       gravar(file, json);
-      return `stages.solo.positionId: "${antes}" → "${outra}", e a árvore de ${antes} fica de pé`;
+      return `as três etapas apontam "${outra}" e a árvore continua escrita para "${antes}"`;
     },
   },
 
@@ -910,16 +800,16 @@ const MUTACOES: Mutation[] = [
     fixtures: true,
     aplicar: async (dir) => {
       const { file, json } = lerFixture(dir, "N1-FIXTURE-PROMOCAO");
-      json.stages.solo.goal = "draw";
+      json.stages.guided.goal = "draw";
       // A mentira é plantada **inteira**: trocar o objetivo troca a lista de
       // lances que o preservam, e deixar a lista velha faria a mutação ficar
       // vermelha por WINNING_MOVES_DESATUALIZADO — um vermelho verdadeiro pelo
       // motivo errado, que não provaria nada sobre a regra sob teste.
       const tablebase = new Tablebase(path.join(dir, "tablebase-cache"), true);
-      const node = json.stages.solo.nodes.p1;
+      const node = json.stages.guided.nodes.p1;
       node.winningMoves = goalMovesOf(await tablebase.lookup(node.fen), "draw");
       gravar(file, json);
-      return 'stages.solo.goal → "draw" numa posição que a tablebase dá como ganha para as brancas';
+      return 'stages.guided.goal → "draw" numa posição que a tablebase dá como ganha para as brancas';
     },
   },
   {
@@ -939,7 +829,7 @@ const MUTACOES: Mutation[] = [
     fixtures: true,
     aplicar: async (dir) => {
       const { file, json } = lerFixture(dir, "N1-FIXTURE-PROMOCAO");
-      const expect = json.stages.solo.nodes.p1.expects[0];
+      const expect = json.stages.guided.nodes.p1.expects[0];
       const antes = expect.moves[0];
       // "e6d7" ganha e está em winningMoves: o único defeito é não promover.
       expect.moves = ["e6d7"];
@@ -953,7 +843,7 @@ const MUTACOES: Mutation[] = [
     fixtures: true,
     aplicar: async (dir) => {
       const { file, json } = lerFixture(dir, "N1-FIXTURE-PROMOCAO");
-      json.stages.solo.nodes.p1.expects[0].ends = "draw-secured";
+      json.stages.guided.nodes.p1.expects[0].ends = "draw-secured";
       gravar(file, json);
       return 'ends do terminal → "draw-secured" depois de e7e8q, que deixa posição ganha, não empatada';
     },
@@ -975,7 +865,7 @@ const MUTACOES: Mutation[] = [
     fixtures: true,
     aplicar: async (dir) => {
       const { file, json } = lerFixture(dir, "N1-FIXTURE-PROMOCAO");
-      json.stages.solo.nodes.p1.expects[0].ends = "tablebase-win";
+      json.stages.guided.nodes.p1.expects[0].ends = "tablebase-win";
       gravar(file, json);
       return (
         'ends → "tablebase-win" numa posição de 7 peças: a posição é ganha mesmo, ' +

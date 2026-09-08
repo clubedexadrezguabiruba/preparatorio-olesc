@@ -1,0 +1,23 @@
+{
+  "id": "pos-n1-kpk-dlv-1-3",
+  "fen": "8/4k3/2K5/8/8/8/1P6/8 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KPK",
+    "rei-na-frente-do-peao",
+    "bloqueio",
+    "ensino"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Jesús de la Villa — Posição 1.3, no bloco intitulado \"Blocking the way and supporting the pawn with the king\". É a posição em que o rei forte já está NA FRENTE do peão e o defensor já alcançou o quadrado: o peão só promove com a ajuda do rei, e a ajuda é bloquear o caminho do rei inimigo.",
+    "bibliographicSource": "de la Villa, 100 Endgames You Must Know, New In Chess, Alkmaar, 2008, p. impressa 29 (PDF p. 29, offset 0), capítulo 1 \"Basic endings\", Posição 1.3, com a linha impressa 1.Kc7! Ke6 2.b4 Kd5 3.b5 1-0",
+    "originalGame": "não se aplica — posição de ensino de manual, não vem de partida",
+    "authorComposer": "não se aplica — final elementar didático, não é estudo composto",
+    "license": "obra protegida por direito autoral. Uma posição desta obra nesta aula, contra o teto de 2 por aula da §12.7 — e as TRÊS etapas jogam esta mesma posição, então o teto conta 1. O texto da aula é original em português; nada da prosa do autor é reproduzido.",
+    "editionFile": "de-la-villa-100-endgames.pdf",
+    "fenMethod": "**Não veio de medição de pixel.** Veio do PGN do estudo público do Lichess https://lichess.org/study/SPBNV2KC (capítulo 2, https://lichess.org/study/SPBNV2KC/nSyOvvkl), que declara a FEN no cabeçalho — `8/4k3/2K5/8/8/8/1P6/8 w - - 0 1`, rei branco em c6, peão em b2, rei preto em e7. O PDF do de la Villa também é digitalizado, e ler o diagrama por medição custaria o mesmo que custou no Silman; a saída foi cruzar três fontes independentes em vez de medir uma. A fidelidade do estudo foi conferida no capítulo anterior: o capítulo 1 dele traz `6k1/8/8/8/8/8/P7/7K w`, que bate casa por casa com a `pos-n1-square-dlv-1-1`, garimpada dias antes por medição de imagem — duas rotas diferentes chegando à mesma FEN.",
+    "qaApplied": "esteira de 2026-09-08, para o piloto do de la Villa, e ela é o cruzamento de três fontes que não se falam: (1) a FEN saiu do PGN do estudo do Lichess; (2) a linha IMPRESSA pelo autor na p. 29 foi lida por OCR (tesseract, 300 dpi, --psm 4) e rodou sobre ela — 1.Kc7 Ke6 2.b4 Kd5 3.b5, cinco meios-lances, todos legais na chess.js, e a tablebase deu vitória branca em cada um dos cinco; (3) a linha do próprio estudo, dois meios-lances mais longa (…3…Kc5 4.b6), rodou igual, e o que o livro imprime é PREFIXO exato do que o estudo joga, lance a lance. Tablebase na raiz: win, DTM 27. Todos os 8 lances legais da raiz mantêm a vitória — é posição de rei muito à frente do peão, e não há como estragá-la no primeiro lance. O texto da página confirma a geometria de forma independente do diagrama: o autor escreve que 1.Kc7 impede \"...Kc8 seguido de ...Kb8\" e assegura o caminho do peão \"a b8\", e fala da zona segura \"b6-b7-b8\" — tudo coerente com peão na coluna b e rei branco vindo de c6.",
+    "pendingRisk": "o diagrama impresso não foi lido por medição de pixel, então a coincidência com a FEN do estudo é provada por concordância de três fontes, e não por leitura direta da imagem. O risco residual é o estudo e o livro terem a mesma posição errada — improvável, porque as casas citadas na prosa do autor (c8, b8, b6-b7-b8) só fazem sentido nesta geometria."
+  }
+}
