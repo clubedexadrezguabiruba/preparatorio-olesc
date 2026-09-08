@@ -1,0 +1,23 @@
+{
+  "white": 6,
+  "draws": 0,
+  "black": 2,
+  "moves": [
+    {
+      "uci": "b7c6",
+      "san": "bxc6",
+      "averageRating": 1710,
+      "white": 6,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B01",
+    "name": "Scandinavian Defense: Modern Variation, Gipslis Variation"
+  }
+}

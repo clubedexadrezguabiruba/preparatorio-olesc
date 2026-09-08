@@ -313,7 +313,20 @@ async function montarDossie(corpus: Corpus | null, linha: Linha): Promise<Dossie
     }
     if (degrau !== 0 && (!posicao || posicao.jogos < JOGOS_MINIMOS)) degrau = 3;
 
-    const tres = (posicao?.respostas ?? []).slice(0, 3);
+    // O UCI vem da nossa `chess.js`, e NÃO do explorer — medido em 8/9/2026: o
+    // explorer devolve o roque no estilo Chess960 (`e1h1`, `e8a8`, o rei sobre a
+    // torre), e o Stockfish só aceita `e1g1`/`e8c8`. Passando o `uci` dele em
+    // `searchmoves`, o motor descarta o lance em silêncio e a nota do roque some
+    // do dossiê — justamente o lance que a régua da §24 mais cobra.
+    const tres = (posicao?.respostas ?? []).slice(0, 3).flatMap((r) => {
+      try {
+        const feito = jogo.move(r.san);
+        jogo.undo();
+        return [{ ...r, uci: `${feito.from}${feito.to}${feito.promotion ?? ""}` }];
+      } catch {
+        return [];
+      }
+    });
     const notasDeles = meu
       ? await notas(
           play,
