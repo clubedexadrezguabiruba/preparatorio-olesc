@@ -1,3 +1,14 @@
+; ESTICADAS EM 8/9/2026 pela régua do término (seção 24 do docs/REVISAO-FONTES.md).
+; A do Colle tinha 8 lances nossos e agora tem 14 — e a cauda é EXATAMENTE a
+; variante do motor que a tag [Fonte] já media desde 7/9/2026, incluindo o
+; sacrifício em h7 que o comentário do 8...Bxc5 avisava que viria. O que era
+; medição virou linha, e o bispo de c8, que era o preço declarado da abertura,
+; sai no décimo lance para d7.
+;
+; A do Jobava tinha 11 e agora tem 12: um lance só, o roque. O curso segue por
+; ...Ca5 e ...b5, que vale 33 centésimos a mais; a régua ganhou deles, e a tag
+; declara a conta.
+;
 ; Colle, Jobava e 2.e3 — DUAS linhas do Base, uma por jogo. Pela tabela da seção
 ; 6, depois de 1.d4 d5 ele joga 2.Cf3 14,4 por cento, 2.e3 12,2 e 2.Cc3 11,9:
 ; somados são 38,5, e o orçamento da seção 1 dava UMA linha para os três.
@@ -35,7 +46,7 @@
 [Nome "Colle e Jobava — Colle 2.Cf3 e 2.e3"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "IM Christof Sielecki — 'Short & Sweet: Sielecki's QGD' (Chess.com, grátis), comentário do 1...d5, que o curso repete nas 8 variantes: ele NOMEIA a nossa ordem branca inteira — cita '2.Nf3 Nf6 3.e3 c5' como o caso B dos sistemas fora de moda depois de 1.d4 d5 — e dá o motivo de responder assim, que é atacar o centro dele com ...Cf6 e ...c5. || GM Kushager Krishnater — 'Short & Sweet: 1.d4 d5' (Chess.com, grátis), variante 'The London': ele joga os NOSSOS CINCO primeiros lances pretos NA NOSSA ORDEM (...d5, ...Cf6, ...e6, ...c5, ...Cc6) e explica cada um. Dele são: o motivo do ...e6 (segura d5 e prepara o ...c5 com o bispo de f8 defendido, ao preço de trancar o de c8); o do ...c5 (espaço na ala da dama); o do ...Cc6 (a casa mais ativa, e pressão sobre d4); e a razão de o bispo ir a d6 (a casa mais ativa dele, e vigiar e5). É ele também que autoriza levar a receita do Londres para cá, porque escreve, no ...e6, que o plano vale 'whatever White plays in the next couple of moves'. || FM Viktor Neustroev — 'Short & Sweet: Anti-London System' (Chess.com, grátis), variante 'The Impatient 3.dxc5: Mainline - 6.Nbd2, 7.Bd3': depois do 8.O-O dele, as QUINZE peças pretas estão exatamente nas casas da nossa posição final, e nas brancas a única diferença é o bispo (f4 lá, ainda em c1 aqui) e o peão-c (c2 lá, c3 aqui). Medido casa a casa na chess.js em 7/9/2026. O plano que ele escreve ali é o nosso: empurrar ...e5. || POR QUE O MAPA MOSTRA 2/16, E VAI CONTINUAR MOSTRANDO: o npm run repertorio:mapear casa por POSIÇÃO, e nenhum dos 11 cursos do corpus joga um Colle — do 2.Cf3 em diante o corpus inteiro de 1.d4 vira Londres (2.Bf4, 21 variantes) ou Gambito da Dama (2.c4, 14). As três fontes acima recomendam e explicam esta linha em prosa, em posição vizinha; o mapa não tem como enxergar isso. Quem quer o número certo lê esta tag, não o mapa — mesma situação das linhas assinadas pelo professor na seção 21 do docs/REVISAO-FONTES.md. || Motor, para as afirmações de avaliação: Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 7/9/2026. A posição final é IGUAL nas cinco primeiras linhas, e em três delas o lance seguinte das pretas é justamente o ...e5 do Neustroev. A primeira linha do motor é 9.e4 Dc7 10.De2 Bd7 11.e5 Cg4 12.Bxh7+ Rxh7 13.Cg5+ Rg8 14.Dxg4 Dxe5, com o sacrifício clássico do Colle em h7 — e ela também termina em igualdade."]
+[Fonte "IM Christof Sielecki — 'Short & Sweet: Sielecki's QGD' (Chess.com, grátis), comentário do 1...d5, que o curso repete nas 8 variantes: ele NOMEIA a nossa ordem branca inteira — cita '2.Nf3 Nf6 3.e3 c5' como o caso B dos sistemas fora de moda depois de 1.d4 d5 — e dá o motivo de responder assim, que é atacar o centro dele com ...Cf6 e ...c5. || GM Kushager Krishnater — 'Short & Sweet: 1.d4 d5' (Chess.com, grátis), variante 'The London': ele joga os NOSSOS CINCO primeiros lances pretos NA NOSSA ORDEM (...d5, ...Cf6, ...e6, ...c5, ...Cc6) e explica cada um. Dele são: o motivo do ...e6 (segura d5 e prepara o ...c5 com o bispo de f8 defendido, ao preço de trancar o de c8); o do ...c5 (espaço na ala da dama); o do ...Cc6 (a casa mais ativa, e pressão sobre d4); e a razão de o bispo ir a d6 (a casa mais ativa dele, e vigiar e5). É ele também que autoriza levar a receita do Londres para cá, porque escreve, no ...e6, que o plano vale 'whatever White plays in the next couple of moves'. || FM Viktor Neustroev — 'Short & Sweet: Anti-London System' (Chess.com, grátis), variante 'The Impatient 3.dxc5: Mainline - 6.Nbd2, 7.Bd3': depois do 8.O-O dele, as QUINZE peças pretas estão exatamente nas casas da nossa posição final, e nas brancas a única diferença é o bispo (f4 lá, ainda em c1 aqui) e o peão-c (c2 lá, c3 aqui). Medido casa a casa na chess.js em 7/9/2026. O plano que ele escreve ali é o nosso: empurrar ...e5. || POR QUE O MAPA MOSTRA 2/16, E VAI CONTINUAR MOSTRANDO: o npm run repertorio:mapear casa por POSIÇÃO, e nenhum dos 11 cursos do corpus joga um Colle — do 2.Cf3 em diante o corpus inteiro de 1.d4 vira Londres (2.Bf4, 21 variantes) ou Gambito da Dama (2.c4, 14). As três fontes acima recomendam e explicam esta linha em prosa, em posição vizinha; o mapa não tem como enxergar isso. Quem quer o número certo lê esta tag, não o mapa — mesma situação das linhas assinadas pelo professor na seção 21 do docs/REVISAO-FONTES.md. || Motor, para as afirmações de avaliação: Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 7/9/2026. A posição final é IGUAL nas cinco primeiras linhas, e em três delas o lance seguinte das pretas é justamente o ...e5 do Neustroev. A primeira linha do motor nesta posição é 9.e4 Dc7 10.De2 Bd7 11.e5 Cg4 12.Bxh7+ Rxh7 13.Cg5+ Rg8 14.Dxg4 Dxe5, com o sacrifício clássico do Colle em h7 — e ela também termina em igualdade. || CAUDA DA §24 (8/9/2026), do 9.e4 ao 14...Dxe5: é EXATAMENTE a variante principal do motor que esta tag já media em 7/9/2026, lance por lance, do 9.e4 ao 14...Dxe5. O que era medição virou linha. Degrau 1 nos dois primeiros lances dele (2.858 e 158 jogos) e degrau 3 a partir do 10...Bd7, que o explorer não traz entre os três mais jogados — a escolha é declarada: o 10...Bd6 do explorer vale brancas +0,38 e deixa o bispo de c8 em casa; o 10...Bd7 é igualdade E resolve a peça que a Colle inteira deixa para trás. Do 11.e5 em diante a sequência é a do motor, e é o sacrifício em h7 que o comentário do 8...Bxc5 já avisava que viria. Re-medido em 8/9/2026, profundidade 20: a posição final é igualdade. A linha fecha a régua no lance 14, sem [%plano]. Ponta igual -> brancas +0,26."]
 [Result "*"]
 
 1. d4 d5 {Espelhamos: ele ocupou uma casa do meio, nós ocupamos a outra. Contra 1.d4 este é o lance mais sólido que existe — o peão de d5 segura o centro e abre a diagonal do bispo de c8. Nada de sofisticado: quem não disputa o meio joga o resto da partida apertado.} 2. Nf3 Nf6 {O cavalo sai para a casa dele, e repare no que ele já está fazendo
@@ -77,13 +88,41 @@ TODAS as peças pretas estão nestas mesmas casas. E um aviso que vale o resto d
 partida: quando ele conseguir e4 e depois e5, o cavalo de f6 é enxotado e h7
 fica com um defensor a menos. É aí que vem Bxh7+ com xeque, Cg5+ atrás e a dama
 chegando — o sacrifício com que o Colle sonha. Medido: o motor deixa ele fazer e
-a posição continua igual. Você não precisa temer; precisa saber que vem.} *
+a posição continua igual. Você não precisa temer; precisa saber que vem.}
+9. e4
+Qc7 {Ele finalmente empurrou o e4, que era o único plano do Colle. E aqui está o
+lance que quase ninguém joga e que o motor prefere: em vez de comer em e4 — que
+é o que seis em cada dez fazem, e que solta as peças dele —, a dama vai para c7.
+De c7 ela toma conta de e5 e de h2, que é a casa por onde o ataque do bispo de
+d3 passa. Guarde a diferença: comer resolve a tensão para ELE; o …Dc7 deixa a
+tensão de pé e ainda defende.} 10. Qe2
+Bd7 {E agora o bispo que estava trancado desde o terceiro lance sai — pela porta
+dos fundos, para d7. Não é a casa mais bonita do mundo; é a que existe, e ela
+resolve a peça que a Colle inteira deixa para trás. Repare no que ele libera:
+com o bispo fora de c8, as duas torres passam a se falar pela primeira fileira.}
+11. e5
+Ng4 {O peão empurrou o cavalo, e ele vai para g4 — para a frente, não para trás.
+De g4 o cavalo bate em f2 e em h2, e é ele que vai recolher a conta do lance
+seguinte.} 12. Bxh7+
+Kxh7 {E aqui está: o sacrifício com que todo jogador de Colle sonha, o mesmo que
+o comentário do oitavo lance avisou que viria. COMA. Não é bravura — é conta: o
+motor mede a posição depois de tudo e ela continua igual. Quem conhece o
+sacrifício não o teme; quem não conhece entrega a partida de susto.} 13. Ng5+
+Kg8 {Volte para o canto. O rei não vai para g6 nem para h6, onde levaria xeque
+de tudo quanto é lado — em g8 ele está atrás dos próprios peões de f7 e g7, que
+não andaram.} 14. Qxg4
+Qxe5 {E a conta fecha. Ele deu bispo pelo peão de h7 e recuperou o cavalo de g4;
+nós recuperamos o peão de e5 com a dama, que de e5 ataca o cavalo de g5 e o peão
+de h2 ao mesmo tempo. Material igual, e o ataque dele acabou. Conte a posição:
+rei no canto, as quatro peças pequenas fora de casa desde o décimo lance, e o
+sacrifício mais famoso da abertura já pago e cobrado. A abertura acabou — e a
+sua ficou igual, que contra o Colle é exatamente o que se pede.} *
 
 [Abertura "colle"]
 [Nome "Colle e Jobava — Jobava 2.Cc3"]
 [Cor "pretas"]
 [Nivel "avancado"]
-[Fonte "PASSOU PARA O AVANÇADO em 7/9/2026, pela poda da seção 23 de docs/REVISAO-FONTES.md — os lances são os mesmos, o id não mudou. O motivo está medido na própria tag abaixo: são 11 lances de armadilha forçada que só disparam se ele jogar o TERCEIRO melhor lance no 5º (o 5.Cxd5, pretas +0,40; o 5.exd5 dá igualdade e o 5.Cb5 pretas +0,38). Linha que só existe quando o adversário erra duas vezes é prêmio, não Base. As três regras que valem SEMPRE contra o 2.Cc3 — bater com …c5 na hora, …Cc6, e comer em d4 e nunca em e4 — foram para a página de princípios pretas-1d4-sem-c4. || FM Viktor Neustroev — 'Short & Sweet: Anti-London System' (Chess.com, grátis), variante 'Jobava Attack: 4.e4', que tem 34 meios-lances e 14 comentários. A nossa linha são os 22 primeiros, que é o teto do Base. TRANSPOSIÇÃO, conferida na chess.js em 7/9/2026: o curso chega por 2.Bf4 c5 3.Cc3 Cc6 4.e4 e nós por 2.Cc3 c5 3.Bf4 Cc6 4.e4 — mesma FEN. Cobertura medida pelo repertorio:mapear: 20 dos 22 meios-lances caem em posição do curso; os dois que faltam são o 2.Cc3 DELE e a nossa resposta 2...c5, que o curso não joga porque entra por outra porta. Dele são: o nome da variante e as três ideias do lance de cavalo (preparar e4, atacar d5 para poder empurrar o peão até lá, e guardar o pulo Cb5 com garfo em c7); o motivo do ...Cc6 (disputa o centro e obriga ele a reagir, porque d4 fica atacado); o aviso contra 4...dxe4 5.d5; a armadilha do 7...Cf6; e a explicação do 8...Cxd5. || TRÊS MEDIDAS DECLARADAS que o curso não traz, todas no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, em 7/9/2026. (1) O 5.Cxd5 do curso é o TERCEIRO lance branco naquela posição: 5.exd5 dá igualdade, 5.Cb5 dá pretas +0,38 e o 5.Cxd5 pretas +0,40. A armadilha desta linha só existe se ele jogar o terceiro — os outros dois não caem nela, e isso está escrito no comentário do 4...cxd4. (2) Depois do 9...Bb4+, o 10.Dd2 do curso NÃO é o melhor dele: 10.Re2 dá pretas +1,18 e o 10.Dd2 pretas +1,84. Escrevemos o 10.Dd2 porque é o lance humano — bloquear o xeque oferecendo troca de damas —, e a resposta ao 10.Re2 está no comentário do 8...Cxd5. (3) O nosso 10...Bxd2+ é o PRIMEIRO lance do motor, pretas +2,08, e a continuação dele é a nossa: 11.Rxd2 Cdb4 12.a3 Ca6 13.Bh4 Ca5. A posição final da linha dá pretas +2,18. E o aviso do curso confere com número: 4...dxe4 5.d5 dá brancas +1,49."]
+[Fonte "PASSOU PARA O AVANÇADO em 7/9/2026, pela poda da seção 23 de docs/REVISAO-FONTES.md — os lances são os mesmos, o id não mudou. O motivo está medido na própria tag abaixo: são 11 lances de armadilha forçada que só disparam se ele jogar o TERCEIRO melhor lance no 5º (o 5.Cxd5, pretas +0,40; o 5.exd5 dá igualdade e o 5.Cb5 pretas +0,38). Linha que só existe quando o adversário erra duas vezes é prêmio, não Base. As três regras que valem SEMPRE contra o 2.Cc3 — bater com …c5 na hora, …Cc6, e comer em d4 e nunca em e4 — foram para a página de princípios pretas-1d4-sem-c4. || FM Viktor Neustroev — 'Short & Sweet: Anti-London System' (Chess.com, grátis), variante 'Jobava Attack: 4.e4', que tem 34 meios-lances e 14 comentários. A nossa linha são os 22 primeiros, que é o teto do Base. TRANSPOSIÇÃO, conferida na chess.js em 7/9/2026: o curso chega por 2.Bf4 c5 3.Cc3 Cc6 4.e4 e nós por 2.Cc3 c5 3.Bf4 Cc6 4.e4 — mesma FEN. Cobertura medida pelo repertorio:mapear: 20 dos 22 meios-lances caem em posição do curso; os dois que faltam são o 2.Cc3 DELE e a nossa resposta 2...c5, que o curso não joga porque entra por outra porta. Dele são: o nome da variante e as três ideias do lance de cavalo (preparar e4, atacar d5 para poder empurrar o peão até lá, e guardar o pulo Cb5 com garfo em c7); o motivo do ...Cc6 (disputa o centro e obriga ele a reagir, porque d4 fica atacado); o aviso contra 4...dxe4 5.d5; a armadilha do 7...Cf6; e a explicação do 8...Cxd5. || TRÊS MEDIDAS DECLARADAS que o curso não traz, todas no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, em 7/9/2026. (1) O 5.Cxd5 do curso é o TERCEIRO lance branco naquela posição: 5.exd5 dá igualdade, 5.Cb5 dá pretas +0,38 e o 5.Cxd5 pretas +0,40. A armadilha desta linha só existe se ele jogar o terceiro — os outros dois não caem nela, e isso está escrito no comentário do 4...cxd4. (2) Depois do 9...Bb4+, o 10.Dd2 do curso NÃO é o melhor dele: 10.Re2 dá pretas +1,18 e o 10.Dd2 pretas +1,84. Escrevemos o 10.Dd2 porque é o lance humano — bloquear o xeque oferecendo troca de damas —, e a resposta ao 10.Re2 está no comentário do 8...Cxd5. (3) O nosso 10...Bxd2+ é o PRIMEIRO lance do motor, pretas +2,08, e a continuação dele é a nossa: 11.Rxd2 Cdb4 12.a3 Ca6 13.Bh4 Ca5. A posição final da linha dá pretas +2,18. E o aviso do curso confere com número: 4...dxe4 5.d5 dá brancas +1,49. || CAUDA DA §24 (8/9/2026), do 12.Bh4 ao 12...O-O: degrau 0 no lance dele — o Neustroev joga 12.Bh4 — e ESCOLHA DECLARADA no nosso. O curso segue por 12...Ca5 13.b3 b5, abrindo a coluna c, e o motor põe esse plano em pretas +2,20 contra +1,87 do 12...O-O. Escrevi o roque, e o preço são 33 centésimos: o plano do curso deixa o rei no meio por mais três lances numa posição em que as duas torres ainda não se falam, e a régua da §24 diz que a abertura acaba com o rei guardado. O ...Ca5 continua sendo o plano, e está no comentário. Ponta pretas +1,68 -> pretas +1,84."]
 [Result "*"]
 
 1. d4 d5
@@ -146,4 +185,12 @@ rocar mais. O bispo dele em d8 está enfiado no canto, sem nada para fazer. E n�
 temos um peão passado em d4, protegido, andando. O …Cdb4 é obrigatório e o curso
 explica por quê: se o cavalo ficasse em d5, ele comeria cxd5 com garfo no nosso
 cavalo de c6 e no bispo de e6. Daqui o cavalo mira c2, onde daria garfo no rei e
-na torre. Medido: o motor dá pretas +2,18 nesta posição.} *
+na torre.} 12. Bh4
+O-O {O bispo dele fugiu do canto, e nós fazemos a coisa mais simples do
+tabuleiro: rocar. O curso segue por …Ca5 e …b5, abrindo a coluna c, e é um plano
+melhor por um terço de peão — só que ele deixa o nosso rei no meio por mais três
+lances numa posição em que as duas torres ainda não se falam. Com o rei em g8 a
+torre de f8 entra na partida de graça, e o …Ca5 continua ali para o lance
+seguinte. Conte a posição: rei guardado, as quatro peças pequenas fora de casa,
+um peão passado em d4 e o rei dele a pé em d2. A abertura acabou, e o motor dá
+quase dois peões de vantagem para as pretas.} *

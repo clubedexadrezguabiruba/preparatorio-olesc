@@ -96,11 +96,11 @@
     "nome": "Colle e Jobava",
     "linhas": 2,
     "ids": [
-      "pretas-colle-f0590dc0",
-      "pretas-colle-0e2f8d38"
+      "pretas-colle-0df04498",
+      "pretas-colle-64467a1a"
     ],
     "idsAvancado": [
-      "pretas-colle-0e2f8d38"
+      "pretas-colle-64467a1a"
     ],
     "arquivo": "/repertorio/pretas/colle.json"
   },
@@ -110,11 +110,11 @@
     "nome": "Londres 2.Bf4",
     "linhas": 2,
     "ids": [
-      "pretas-londres-53d5b431",
-      "pretas-londres-0fdb1535"
+      "pretas-londres-edc96624",
+      "pretas-londres-620e9574"
     ],
     "idsAvancado": [
-      "pretas-londres-0fdb1535"
+      "pretas-londres-620e9574"
     ],
     "arquivo": "/repertorio/pretas/londres.json"
   },
@@ -124,11 +124,11 @@
     "nome": "Manhattan",
     "linhas": 2,
     "ids": [
-      "pretas-manhattan-7945d4d3",
-      "pretas-manhattan-6ac84e24"
+      "pretas-manhattan-9cc86ae1",
+      "pretas-manhattan-5eb7831d"
     ],
     "idsAvancado": [
-      "pretas-manhattan-6ac84e24"
+      "pretas-manhattan-5eb7831d"
     ],
     "arquivo": "/repertorio/pretas/manhattan.json"
   },
@@ -138,15 +138,15 @@
     "nome": "Siciliana",
     "linhas": 6,
     "ids": [
-      "pretas-siciliana-345142b0",
-      "pretas-siciliana-75cca098",
-      "pretas-siciliana-08323cca",
-      "pretas-siciliana-e6e1e081",
-      "pretas-siciliana-685348cf",
-      "pretas-siciliana-ddf21e1b"
+      "pretas-siciliana-4639d076",
+      "pretas-siciliana-e5b86926",
+      "pretas-siciliana-4c9c1e64",
+      "pretas-siciliana-f6e74697",
+      "pretas-siciliana-2dda9a0d",
+      "pretas-siciliana-63c825a8"
     ],
     "idsAvancado": [
-      "pretas-siciliana-e6e1e081"
+      "pretas-siciliana-f6e74697"
     ],
     "arquivo": "/repertorio/pretas/siciliana.json"
   }
