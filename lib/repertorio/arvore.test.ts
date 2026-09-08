@@ -149,21 +149,21 @@ test("`[#]` sozinho não é pergunta, e `[%csl …]` não engana o detector", ()
 
 test("a profundidade é contada em lance nosso, e por isso muda com a cor", () => {
   // O erro do plano: um número par de meios-lances numa árvore das brancas
-  // termina num lance das pretas. Contado em lance nosso, o 11º lance branco é
-  // o 21º meio-lance e o 11º preto é o 22º — o mesmo "lance 11" para os dois.
-  assert.equal(PROFUNDIDADE.base, 11);
-  const onze =
+  // termina num lance das pretas. Contado em lance nosso, o 14º lance branco é
+  // o 27º meio-lance e o 14º preto é o 28º — o mesmo "lance 14" para os dois.
+  assert.equal(PROFUNDIDADE.base, 14);
+  const catorze =
     "1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Bc5 5. Nb3 Bb6 6. Nc3 Nf6 7. Qe2 d6 8. Be3 O-O " +
-    "9. O-O-O Re8 10. f3 a6 11. g4";
-  const brancas = expandirTexto(onze);
-  assert.equal(brancas.linhas[0].lances.length, 21);
+    "9. O-O-O Re8 10. f3 a6 11. g4 Be6 12. g5 Nd7 13. h4 Nc5 14. h5";
+  const brancas = expandirTexto(catorze);
+  assert.equal(brancas.linhas[0].lances.length, 27);
   assert.equal(brancas.avisos.filter((a) => a.tipo === "acima-da-profundidade").length, 0);
 
-  const pretas = expandirTexto(`${onze} Be6`, PRETAS);
-  assert.equal(pretas.linhas[0].lances.length, 22);
+  const pretas = expandirTexto(`${catorze} Nxb3+`, PRETAS);
+  assert.equal(pretas.linhas[0].lances.length, 28);
   assert.equal(pretas.avisos.filter((a) => a.tipo === "acima-da-profundidade").length, 0);
 
-  const longa = expandirTexto(`${onze} Be6 12. h4`);
+  const longa = expandirTexto(`${catorze} Nxb3+ 15. axb3`);
   assert.equal(longa.avisos.filter((a) => a.tipo === "acima-da-profundidade").length, 1);
 });
 
@@ -175,4 +175,48 @@ test("os rótulos de um ramo não vazam para o ramo irmão", () => {
   const philidor = linhas.find((l) => l.sans.includes("d6"));
   assert.deepEqual(principal?.alternativas, { "2": ["f1c4"] });
   assert.deepEqual(philidor?.alternativas, { "2": ["f1c4"], "4": ["f1c4"] });
+});
+
+/* ------------------------------------------------------------------ *
+ * O bloco `[%plano]` atravessando a árvore — §24
+ * ------------------------------------------------------------------ */
+
+test("o [%plano] da ponta vira campo da linha, e some da prosa", () => {
+  const { linhas, problemas } = expandirTexto(
+    "1. e4 e5 2. Nf3 {O cavalo ataca e5.\n[%plano\nc1>g5: sai depois do h3, para não levar o …h6 com tempo\n]}",
+  );
+  assert.deepEqual(problemas, []);
+  assert.deepEqual(linhas[0].plano, {
+    c1: { casa: "g5", motivo: "sai depois do h3, para não levar o …h6 com tempo" },
+  });
+  // A prosa chega limpa: é ela que o aluno lê, e é sobre ela que o gate do
+  // "último lance sem comentário" continua valendo.
+  assert.equal(linhas[0].comentarios["2"], "O cavalo ataca e5.");
+});
+
+test("bloco em lance que não é a ponta é problema, não aviso", () => {
+  const { problemas } = expandirTexto(
+    "1. e4 {abrimos\n[%plano\nc1>g5: sai depois do h3, para não levar o …h6 com tempo\n]} e5 2. Nf3 {ataca e5}",
+  );
+  assert.equal(problemas.length, 1);
+  assert.match(problemas[0], /não está no último lance da linha/);
+});
+
+test("um `?` dentro do motivo do plano não vira pergunta de homework", () => {
+  // `ehPergunta` roda sobre a prosa JÁ sem o bloco. Sem essa ordem, um motivo
+  // com interrogação faria a linha inteira ser contada como "a fonte parou numa
+  // pergunta" — e o relatório da importação mentiria.
+  const { avisos } = expandirTexto(
+    "1. e4 e5 2. Nf3 {O cavalo ataca e5.\n[%plano\nc1>g5: e o bispo, sai quando? Depois do h3, nunca antes\n]}",
+  );
+  assert.equal(avisos.filter((a) => a.tipo === "termina-em-pergunta").length, 0);
+});
+
+test("sintaxe torta no bloco vira problema com o lance nomeado", () => {
+  const { problemas } = expandirTexto("1. e4 e5 2. Nf3 {ataca e5\n[%plano\nc1>g5 sem os dois pontos\n]}");
+  // Dois: a linha que ninguém soube ler, e o bloco que sobrou vazio por causa
+  // dela. Os dois nomeiam o lance, que é como a pessoa acha onde mexer.
+  assert.equal(problemas.length, 2);
+  for (const p of problemas) assert.match(p, /em "Nf3"/);
+  assert.match(problemas[0], /antes de qualquer entrada/);
 });

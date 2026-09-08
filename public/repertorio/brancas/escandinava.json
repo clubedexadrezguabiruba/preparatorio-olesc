@@ -65,6 +65,7 @@
       "12": "Segundo empurrão, e agora repare no que ele resolve. Com o\nbispo em h5 o nosso cavalo de f3 está pregado contra a dama de d1 e não pode\nsair do lugar. Depois de g4 o bispo é obrigado a ir para g6, a prega acaba, e\no cavalo fica livre para pular em e5. Sim, andamos dois peões na frente do\nnosso rei; dá para pagar esse preço porque ele não tem nem dama nem torre\nolhando para essa ala.",
       "14": "Empurramos o bispo\ndele até g6 com h3 e g4, e agora o cavalo pousa em e5, bem no meio do tabuleiro.\nO mesmo remédio serve quando a dama recua para d8."
     },
+    "plano": {},
     "fonte": "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'"
   },
   {
@@ -133,6 +134,7 @@
       "12": "Ele pôs a dama em a5 para ela ficar longe de todo mundo, e até\nagora estava dando certo. É este bispo que acaba com a história: de d2 ele\nentra na mesma diagonal da dama, e ela deixou de estar longe.",
       "14": "Agora dá para\npular no meio do tabuleiro sem medo: se ele comer o cavalo, o bispo de d2 come a\ndama. Ele vai ter de recuar de novo."
     },
+    "plano": {},
     "fonte": "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'"
   },
   {
@@ -195,6 +197,7 @@
       "10": "É o mesmo empurrão da outra Escandinava, e vale entender o\nmecanismo uma vez só: com o bispo em h5, o nosso cavalo de f3 está pregado\ncontra a dama de d1 e não pode se mexer. O g4 obriga o bispo a ir para g6, a\nprega some, e o cavalo pula em e5 no lance seguinte. Os dois peões que\nandaram na frente do nosso rei são o preço — barato, porque ele não tem nem\ndama nem torre olhando para essa ala.",
       "12": "Empurramos o bispo até g6 com h3 e g4, e o cavalo\npousa no meio do tabuleiro. Repare: é o mesmo cavalo em e5 da outra linha da\nEscandinava. A caçada h3, g4, Ce5 é uma só, e serve nas duas. Daqui o plano é\nBg2 e roque, ou h4-h5 para seguir apertando o bispo."
     },
+    "plano": {},
     "fonte": "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'. Passou do Base para o Avançado em 7/9/2026 pela poda da seção 23 de docs/REVISAO-FONTES.md — os lances são os mesmos de antes, o id não mudou, e a fonte também não. O que mudou foi quando o aluno a vê: depois de fechar o Base. O motivo é pedagógico e está medido: a caçada h3, g4, Ce5 que esta linha ensina é a MESMA da linha do 3...Dd6, que fica no Base — o aluno aprende o plano lá e reencontra o mesmo aqui, com a dama dele noutra casa."
   }
 ]

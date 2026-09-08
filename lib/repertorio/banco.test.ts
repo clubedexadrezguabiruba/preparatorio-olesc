@@ -3,8 +3,9 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { Chess } from "chess.js";
 import { notas as NOTAS_FN } from "./conteudo.ts";
-import { IndiceSchema, meiosLances, validarBanco, type Linha } from "./linhas.ts";
+import { estadoDe, IndiceSchema, meiosLances, validarBanco, type Linha } from "./linhas.ts";
 
 /**
  * O que está publicado em `public/repertorio/` confere?
@@ -30,6 +31,14 @@ function ler(relativo: string): unknown {
 }
 
 const indice = IndiceSchema.parse(ler("index.json"));
+
+/**
+ * Quantas linhas publicadas ainda não fecham a régua do término.
+ *
+ * Vai a zero quando a §24 terminar; até lá, o número é o marcador do trabalho
+ * que falta, e ele só pode DESCER. Um número que sobe é uma linha que encolheu.
+ */
+const ABERTAS = 27;
 
 test("o índice tem as onze aberturas, sem repetir cor e slug", () => {
   // Eram doze até 7/9/2026. A poda da §23 de `docs/REVISAO-FONTES.md` apagou
@@ -149,4 +158,44 @@ test("as páginas de princípios ligadas a uma abertura apontam para abertura vi
   // Quatro das nove: as outras cinco (Pirc, Nimzowitsch, Alekhine, Owen e as
   // outras primeiras) não são ramo de abertura nenhuma do treinador.
   assert.equal(ligadas.length, 4);
+});
+
+test("cada linha publicada se remonta no tabuleiro, e a FEN final bate", () => {
+  // A `fenFinal` deixou de ser enfeite em 8/9/2026: a régua do término (§24 de
+  // `docs/REVISAO-FONTES.md`) lê nela quais peças menores ficaram na casa de
+  // origem. Se ela estiver errada — um JSON editado à mão, um compilador com
+  // bug de `undo` —, o placar de fechamento mente e a linha passa por fechada
+  // sem estar. Aqui os lances são jogados de novo, um a um, e a posição que
+  // sai é comparada com a que está gravada.
+  //
+  // De quebra isto cobre a legalidade de todo lance publicado: um UCI
+  // impossível estoura na `chess.js` com o lance nomeado.
+  for (const entrada of indice) {
+    const relativo = entrada.arquivo.replace(/^\/repertorio\//, "");
+    for (const linha of validarBanco(ler(relativo), relativo)) {
+      const jogo = new Chess(linha.fenInicial);
+      for (const [i, uci] of linha.lances.entries()) {
+        const feito = jogo.move({
+          from: uci.slice(0, 2),
+          to: uci.slice(2, 4),
+          promotion: uci.slice(4) || undefined,
+        });
+        assert.equal(feito.san, linha.sans[i], `${linha.id}: o SAN do meio-lance ${i} não bate`);
+      }
+      assert.equal(jogo.fen(), linha.fenFinal, `${linha.id}: a FEN final não bate com os lances`);
+    }
+  }
+});
+
+test("o que a régua do término mede no publicado — o número da §24", () => {
+  // O placar que o compilador imprime, conferido aqui sobre o que o servidor
+  // vai abrir. Trocar estes números sem passar pela §24 é afrouxar a régua sem
+  // ninguém ver.
+  const todas = indice.flatMap((e) =>
+    validarBanco(ler(e.arquivo.replace(/^\/repertorio\//, "")), e.abertura),
+  );
+  const conta = { fecha: 0, "com-plano": 0, aberta: 0 };
+  for (const linha of todas) conta[estadoDe(linha)] += 1;
+  assert.equal(conta.fecha + conta["com-plano"] + conta.aberta, todas.length);
+  assert.equal(conta.aberta, ABERTAS, "linhas que ainda não fecham a régua do término");
 });

@@ -144,6 +144,9 @@ function montar(pgn: PartidaPgn, slug: string, arquivo: string): Partida {
       alternativas: {},
       errosNomeados: {},
       comentarios,
+      // As partidas comentadas não são repertório: elas não têm régua de
+      // término, e por isso nunca declaram plano.
+      plano: {},
       fonte: tag("Fonte") || arquivo,
     },
   };

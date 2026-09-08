@@ -63,6 +63,7 @@
       "12": "Terceira peça defendendo o peão de d4, e vale contar: o peão está\natacado duas vezes — pelo peão de c5 e pelo cavalo de c6 — e defendido três —\npelo cavalo de e2, pela dama de d1 e agora por este bispo. Ele pode comer\nquando quiser; nós recapturamos de cavalo, que é justamente onde a gente quer\nque ele fique.",
       "14": "O cavalo fica no meio do\ntabuleiro e tudo está desenvolvido. Repare no bispo de f3: ele atravessa o\ntabuleiro inteiro, e é justamente a peça que o jogador de Francesa menos gosta\nde enfrentar, porque o bispo dele de c8 continua preso."
     },
+    "plano": {},
     "fonte": "GM Niclas Huschenbeth — 'Short & Sweet: 1.e4' (Chess.com), variante 'French #2'. Os 15 meios-lances batem um a um com o curso, que segue além até 13.Cxc3. O arquivo do Grigoryan dá os mesmos lances mas tem zero prosa; o Huschenbeth explica o 3.Bd3 (flexibilidade e surpresa) e o 5.Bf3 (o bispo toma f3, então o cavalo vai a e2). Conferido em 7/9/2026. Até a poda de 7/9/2026 esta tag carregava também a ponta do 3...c5, que era nossa por livro + motor; aquela linha saiu do treinador e virou a página de princípios 'francesa-bd3'."
   }
 ]

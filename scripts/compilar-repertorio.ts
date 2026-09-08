@@ -31,6 +31,8 @@ import { notas } from "../lib/repertorio/conteudo.ts";
 import { lerPgns } from "../lib/repertorio/pgn.ts";
 import {
   aberturasInchadas,
+  fechamentosAbertos,
+  placarDeFechamento,
   CORES,
   NIVEIS,
   validarBanco,
@@ -134,6 +136,10 @@ if (problemas.length === 0) {
 }
 
 avisos.push(...aberturasInchadas(todas).map((a) => `acima da meta do Base — ${a}`));
+// A régua do término (§24) entra como aviso até a Fase 4 fechá-la em erro. É
+// a lista de trabalho enquanto as caudas estão sendo escritas: cada linha que
+// sai daqui é uma linha que passou a terminar com o rei rocado e as peças fora.
+avisos.push(...fechamentosAbertos(todas).map((a) => `ainda não fecha — ${a}`));
 
 /* ------------------------------------------------------------------ *
  * O campo `abertura` das páginas de princípios aponta para abertura viva
@@ -160,6 +166,13 @@ for (const nota of notas()) {
 }
 
 for (const aviso of avisos) console.log(`  aviso: ${aviso}`);
+
+// O placar sai SEMPRE, inclusive quando a compilação reprova. É o número que
+// mede o avanço da §24, e ele é mais útil justamente nas rodadas em que alguma
+// coisa quebrou — sem ele, um erro de sintaxe num PGN esconderia o progresso
+// das outras dez aberturas.
+console.log(`
+${placarDeFechamento(todas)}`);
 
 if (problemas.length > 0) {
   console.error(`\n${problemas.length} problema(s):\n`);

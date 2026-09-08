@@ -55,6 +55,7 @@ function linha(troca: Partial<Linha> = {}): Linha {
     meus: [0, 2, 4, 6],
     alternativas: {},
     errosNomeados: {},
+    plano: {},
     comentarios: { "6": "c3 prepara d4 e monta o centro." },
     fonte: "teste",
   };

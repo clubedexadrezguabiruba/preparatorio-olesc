@@ -64,6 +64,7 @@
       "12": "Agora sim o\ncavalo sai. É o mesmo lance que era ruim dois lances atrás, e a única coisa que\nmudou foi o h3 — não há mais …Bg4. Guardar essa diferença vale mais do que\nguardar os dois lances soltos.",
       "14": "Roque, e a ala do rei está\ninteira. Daqui a montagem é sempre a mesma, e é ela que você tem de saber de\ncor: torre para e1, na coluna semiaberta — nós não temos peão em e e ele tem —,\ndama para e2, e o cavalo pulando para e5. Ele ficou sólido, mas o único plano\nque tem é empurrar …e5 uma hora; até lá o tabuleiro é nosso."
     },
+    "plano": {},
     "fonte": "Curso gratuito 'Caro Kann't' (Chess.com), capítulo 4...Cc6 5.c3 Cf6 6.h3, variantes 'the Passive 6...e6' #1 e #2 — a fonte joga e explica os 15 meios-lances desta linha, sem furo. A regra 'c3 contra ...Cc6, h3 contra ...Cf6' é dela; o texto aqui é reescrito com as nossas palavras. Entra no lugar do 6.Bf4 por decisão da §11.1 de docs/REVISAO-FONTES.md."
   },
   {
@@ -130,6 +131,7 @@
       "12": "A dama em\nb3 bate em b7 e em d5 ao mesmo tempo, e é assim que se cobra o passeio do bispo\ndele: enquanto o bispo está em g4, ninguém está olhando para b7. Ele vai ter de\ngastar um lance para defender.",
       "14": "O cavalo da dama entra por d2\nporque c3 está ocupado pelo nosso peão. De d2 ele não atrapalha ninguém, e quem\nvai para f3 é o outro cavalo, o de g1 — Cgf3 no lance seguinte. Com dama em b3 e\nbispo em d3 nós apertamos os dois lados do tabuleiro: é posição para jogar\ndevagar, sem pressa de trocar peças."
     },
+    "plano": {},
     "fonte": "Recomendação do professor. O 6.Bf4 e o plano com Db3 e Cd2 são escolha do Doug, e o argumento dos comentários é dele, não de curso. Os cinco comentários desta linha foram lidos e ASSINADOS pelo professor em 7/9/2026; até essa data o texto era rascunho do assistente e a linha estava pendente na régua. A ordem de lances também aparece em GM Avetik Grigoryan (ChessMood) — 'Caro Kann', que joga a linha mas não explica por quê: o arquivo inteiro tem um comentário, e é a assinatura. Vai para o Avançado por decisão da §11.1 de docs/REVISAO-FONTES.md; no Base o aluno aprende o 6.h3, que vem com a regra escrita."
   }
 ]

@@ -1,6 +1,7 @@
 import { Chess } from "chess.js";
 import type { LancePgn, PartidaPgn } from "./pgn.ts";
 import { idDaLinha, meiosLances, type Cor, type Linha, type Nivel } from "./linhas.ts";
+import { separarPlano, type Plano } from "./esquema.ts";
 
 /**
  * De árvore de PGN para linhas de treino.
@@ -120,7 +121,14 @@ function nomearLinha(base: string, sans: readonly string[], quantos = 3): string
   return `${base} — ${partes.join(" ")}`;
 }
 
-type Passo = { uci: string; san: string; comentario: string | null; nags: string[] };
+type Passo = {
+  uci: string;
+  san: string;
+  /** A prosa, JÁ sem o bloco `[%plano]` — ver `esquema.ts`. */
+  comentario: string | null;
+  plano: Plano;
+  nags: string[];
+};
 
 /**
  * Expande a árvore de um PGN nas linhas que o treinador vai cobrar.
@@ -175,6 +183,14 @@ export function expandir(partida: PartidaPgn, cabecalho: Cabecalho): Expansao {
     for (const [i, passo] of caminho.entries()) {
       if (ehMeu(i, cabecalho.cor)) meus.push(i);
       if (passo.comentario) comentarios[String(i)] = passo.comentario;
+      // O `[%plano]` diz o que a LINHA não fechou, e a linha só termina na
+      // ponta. Escrito no meio, ele descreveria uma posição que a linha ainda
+      // vai deixar para trás — e o aluno leria uma promessa que o próprio
+      // repertório já cumpriu dois lances depois.
+      if (i !== ultimo && Object.keys(passo.plano).length > 0) {
+        const erro = `o [%plano] em "${passo.san}" não está no último lance da linha`;
+        if (!problemas.includes(erro)) problemas.push(erro);
+      }
     }
 
     const comoTexto = (m: Map<number, string[]>): Record<string, string[]> =>
@@ -222,6 +238,7 @@ export function expandir(partida: PartidaPgn, cabecalho: Cabecalho): Expansao {
       alternativas: comoTexto(alternativas),
       errosNomeados: comoTexto(errosNomeados),
       comentarios,
+      plano: caminho[ultimo].plano,
       fonte: cabecalho.fonte,
     });
   }
@@ -283,7 +300,9 @@ export function expandir(partida: PartidaPgn, cabecalho: Cabecalho): Expansao {
         problemas.push(`"${no.san}" não é lance legal ${ondeEstou()}`);
         break;
       }
-      caminho.push({ uci: feito.uci, san: feito.san, comentario: no.comentario, nags: no.nags });
+      const { prosa, plano, erros } = separarPlano(no.comentario, cabecalho.cor);
+      for (const erro of erros) problemas.push(`em "${feito.san}" ${ondeEstou()}: ${erro}`);
+      caminho.push({ uci: feito.uci, san: feito.san, comentario: prosa, plano, nags: no.nags });
       jogados += 1;
     }
 
