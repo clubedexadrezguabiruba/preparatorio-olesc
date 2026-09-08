@@ -1,0 +1,113 @@
+{
+  "white": 33,
+  "draws": 3,
+  "black": 24,
+  "moves": [
+    {
+      "uci": "c2c4",
+      "san": "c4",
+      "averageRating": 1862,
+      "white": 24,
+      "draws": 1,
+      "black": 11,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e1h1",
+      "san": "O-O",
+      "averageRating": 1797,
+      "white": 3,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1d2",
+      "san": "Bd2",
+      "averageRating": 1728,
+      "white": 2,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1e3",
+      "san": "Be3",
+      "averageRating": 1759,
+      "white": 0,
+      "draws": 1,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1e2",
+      "san": "Qe2",
+      "averageRating": 1666,
+      "white": 0,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g2d5",
+      "san": "Bxd5",
+      "averageRating": 1712,
+      "white": 0,
+      "draws": 1,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1f3",
+      "san": "Qf3",
+      "averageRating": 1816,
+      "white": 2,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b1d2",
+      "san": "Nd2",
+      "averageRating": 1847,
+      "white": 1,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b1c3",
+      "san": "Nc3",
+      "averageRating": 1232,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b1a3",
+      "san": "Na3",
+      "averageRating": 1758,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B01",
+    "name": "Scandinavian Defense: Modern Variation, Gipslis Variation"
+  }
+}

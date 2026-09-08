@@ -1,0 +1,93 @@
+{
+  "white": 24,
+  "draws": 3,
+  "black": 22,
+  "moves": [
+    {
+      "uci": "c5e6",
+      "san": "Ne6",
+      "averageRating": 1771,
+      "white": 15,
+      "draws": 2,
+      "black": 12,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d7d6",
+      "san": "d6",
+      "averageRating": 1843,
+      "white": 3,
+      "draws": 1,
+      "black": 5,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h7h6",
+      "san": "h6",
+      "averageRating": 1956,
+      "white": 2,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b7b6",
+      "san": "b6",
+      "averageRating": 1808,
+      "white": 2,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8e8",
+      "san": "Re8",
+      "averageRating": 1816,
+      "white": 1,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c6a5",
+      "san": "Na5",
+      "averageRating": 1308,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c5e4",
+      "san": "Ne4",
+      "averageRating": 1547,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a6",
+      "san": "a6",
+      "averageRating": 1934,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C44",
+    "name": "Scotch Game"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "white": 4,
+  "draws": 0,
+  "black": 0,
+  "moves": [
+    {
+      "uci": "f8e8",
+      "san": "Re8",
+      "averageRating": 1685,
+      "white": 3,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6e5",
+      "san": "Bxe5",
+      "averageRating": 1411,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C44",
+    "name": "Scotch Game: Lolli Variation"
+  }
+}

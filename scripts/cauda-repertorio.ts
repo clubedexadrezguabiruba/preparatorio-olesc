@@ -69,6 +69,7 @@ import {
 import {
   fechamentoDe,
   meiosLances,
+  ORIGENS,
   PROFUNDIDADE_MINIMA,
   CORES,
   NIVEIS,
@@ -268,6 +269,43 @@ function daFonte(corpus: Corpus, fen: string): Passo["daFonte"] {
     .sort((a, b) => b.cursos.length - a.cursos.length);
 }
 
+/** O lance sai da casa de origem de uma peça menor? É "desenvolver", na régua da §24. */
+function desenvolve(jogo: Chess, cor: Cor, san: string): boolean {
+  try {
+    const feito = jogo.move(san);
+    jogo.undo();
+    return Object.keys(ORIGENS[cor]).includes(feito.from);
+  } catch {
+    return false;
+  }
+}
+
+const emNumero = (nota: string | undefined): number | null =>
+  nota && nota !== "mate" ? Number(nota.replace(",", ".")) : null;
+
+/**
+ * Qual dos três mais jogados a caminhada joga por NÓS.
+ *
+ * Primeiro o motor: o melhor entre os três. Depois a régua do término, para
+ * desempatar os que estão perto — dentro de 15 centésimos, que é menos do que
+ * a diferença que qualquer criança percebe no tabuleiro. Ali ganha o roque,
+ * depois o desenvolvimento de peça menor, e por último o mais jogado.
+ *
+ * Sem nota nenhuma (o `--sem-motor`), sobra o mais jogado.
+ */
+function escolherNosso(jogo: Chess, cor: Cor, candidatos: readonly Candidato[]): string | undefined {
+  const comNota = candidatos.filter((c) => emNumero(c.nota) !== null);
+  if (comNota.length === 0) return candidatos[0]?.san;
+
+  const melhor = Math.max(...comNota.map((c) => emNumero(c.nota)!));
+  const parecidos = comNota.filter((c) => melhor - emNumero(c.nota)! <= 0.15);
+
+  const peso = (c: Candidato): number =>
+    (c.san.startsWith("O-O") ? 2 : desenvolve(jogo, cor, c.san) ? 1 : 0);
+
+  return [...parecidos].sort((a, b) => peso(b) - peso(a) || b.jogos - a.jogos)[0]?.san;
+}
+
 async function montarDossie(corpus: Corpus | null, linha: Linha): Promise<Dossie> {
   const jogo = new Chess(linha.fenInicial);
   for (const uci of linha.lances) {
@@ -359,13 +397,16 @@ async function montarDossie(corpus: Corpus | null, linha: Linha): Promise<Dossie
     // atrás não é material de decisão, é armadilha. A janela continua sendo o
     // que as crianças jogam — o motor não traz candidato novo, só ordena os que
     // o explorer já trouxe.
+    //
+    // E entre candidatos PARECIDOS — dentro de 15 centésimos do melhor — ganha o
+    // que roca, depois o que tira uma peça menor de casa, e só então o mais
+    // jogado. Isto é a régua da §24 escrita na ferramenta, e sem ela o dossiê
+    // sugeria 11.De2 (+0,55, 10,7 % dos jogos) em vez do 11.O-O (+0,39, 60,5 %)
+    // numa linha cuja única pendência era o roque: dezesseis centésimos de
+    // motor contra o lance que fecha a abertura e que cinco em cada seis
+    // crianças jogam.
     const sanDaFonte = fonteAqui[0]?.san;
-    const melhorDoMotor = meu
-      ? [...candidatos]
-          .filter((c) => c.nota && c.nota !== "mate")
-          .sort((a, b) => Number(b.nota!.replace(",", ".")) - Number(a.nota!.replace(",", ".")))[0]
-      : undefined;
-    const escolhidoSan = sanDaFonte ?? melhorDoMotor?.san ?? candidatos[0]?.san;
+    const escolhidoSan = sanDaFonte ?? (meu ? escolherNosso(jogo, linha.cor, candidatos) : candidatos[0]?.san);
     let escolhido: Passo["escolhido"] = null;
     if (escolhidoSan) {
       try {

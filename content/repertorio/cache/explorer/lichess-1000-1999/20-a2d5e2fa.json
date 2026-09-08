@@ -1,0 +1,83 @@
+{
+  "white": 28,
+  "draws": 1,
+  "black": 7,
+  "moves": [
+    {
+      "uci": "d1e2",
+      "san": "Qe2",
+      "averageRating": 1671,
+      "white": 20,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1e3",
+      "san": "Be3",
+      "averageRating": 1817,
+      "white": 5,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1f4",
+      "san": "Bf4",
+      "averageRating": 1742,
+      "white": 1,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e5g6",
+      "san": "Nxg6",
+      "averageRating": 1667,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h3h4",
+      "san": "h4",
+      "averageRating": 1726,
+      "white": 0,
+      "draws": 1,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f2f4",
+      "san": "f4",
+      "averageRating": 1804,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1f3",
+      "san": "Qf3",
+      "averageRating": 1811,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B01",
+    "name": "Scandinavian Defense: Gubinsky-Melts Defense"
+  }
+}
