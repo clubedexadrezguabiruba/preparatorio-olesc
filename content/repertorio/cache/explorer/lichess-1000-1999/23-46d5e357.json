@@ -1,0 +1,23 @@
+{
+  "white": 3,
+  "draws": 0,
+  "black": 1,
+  "moves": [
+    {
+      "uci": "g6f5",
+      "san": "gxf5",
+      "averageRating": 2013,
+      "white": 3,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B31",
+    "name": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation"
+  }
+}

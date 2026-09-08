@@ -1,0 +1,33 @@
+{
+  "white": 5,
+  "draws": 0,
+  "black": 3,
+  "moves": [
+    {
+      "uci": "e6d5",
+      "san": "exd5",
+      "averageRating": 1840,
+      "white": 4,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e5d3",
+      "san": "Nxd3",
+      "averageRating": 1826,
+      "white": 1,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "D05",
+    "name": "Queen's Pawn Game: Colle System, Traditional Colle"
+  }
+}

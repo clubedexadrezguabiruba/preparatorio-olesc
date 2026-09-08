@@ -1,0 +1,73 @@
+{
+  "white": 3,
+  "draws": 1,
+  "black": 12,
+  "moves": [
+    {
+      "uci": "f3h4",
+      "san": "Nh4",
+      "averageRating": 1731,
+      "white": 2,
+      "draws": 1,
+      "black": 6,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b5c6",
+      "san": "Bxc6",
+      "averageRating": 1955,
+      "white": 0,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2b3",
+      "san": "Nb3",
+      "averageRating": 1915,
+      "white": 1,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2e4",
+      "san": "Nxe4",
+      "averageRating": 1762,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h3",
+      "san": "h3",
+      "averageRating": 1867,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b5d3",
+      "san": "Bd3",
+      "averageRating": 1923,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B31",
+    "name": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation"
+  }
+}

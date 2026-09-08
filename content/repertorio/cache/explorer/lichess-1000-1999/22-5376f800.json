@@ -1,0 +1,113 @@
+{
+  "white": 150,
+  "draws": 12,
+  "black": 121,
+  "moves": [
+    {
+      "uci": "g2g4",
+      "san": "g4",
+      "averageRating": 1894,
+      "white": 121,
+      "draws": 9,
+      "black": 96,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c3d5",
+      "san": "Nd5",
+      "averageRating": 1854,
+      "white": 8,
+      "draws": 1,
+      "black": 6,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h4",
+      "san": "h4",
+      "averageRating": 1919,
+      "white": 9,
+      "draws": 0,
+      "black": 4,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e4e5",
+      "san": "e5",
+      "averageRating": 1828,
+      "white": 4,
+      "draws": 1,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1809,
+      "white": 2,
+      "draws": 1,
+      "black": 4,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1e2",
+      "san": "Be2",
+      "averageRating": 1834,
+      "white": 1,
+      "draws": 0,
+      "black": 4,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4d2",
+      "san": "Qd2",
+      "averageRating": 1923,
+      "white": 2,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4e3",
+      "san": "Qe3",
+      "averageRating": 1467,
+      "white": 0,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1d3",
+      "san": "Bd3",
+      "averageRating": 2032,
+      "white": 1,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c3e2",
+      "san": "Ne2",
+      "averageRating": 1895,
+      "white": 2,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C41",
+    "name": "Philidor Defense: Exchange Variation"
+  }
+}
