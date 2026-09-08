@@ -73,7 +73,8 @@ export default async function Aberturas() {
         </Link>
         <h1 className="titulo text-tinta">Repertório do clube</h1>
         <p className="text-sm text-tinta-media">
-          {total} linhas curtas. Uma linha é aprendida quando você a acerta{" "}
+          {total} linhas, cada uma até o roque e as peças fora. Uma linha é aprendida quando
+          você a acerta{" "}
           <strong className="font-semibold text-tinta">em três dias diferentes</strong> — e
           depois ela volta de vez em quando, para você não esquecer.
         </p>
@@ -167,9 +168,9 @@ export default async function Aberturas() {
           <div className="flex flex-col gap-1">
             <h2 className="text-base font-semibold text-tinta">Avançado — ainda trancado</h2>
             <p className="text-xs text-tinta-fraca">
-              Mais {noAvancado === 1 ? "1 linha" : `${noAvancado} linhas`}, mais fundas, para
-              quem já sabe o resto. Elas abrem sozinhas quando <strong>todas</strong> as{" "}
-              {total} linhas de cima estiverem aprendidas.
+              Mais {noAvancado === 1 ? "1 linha" : `${noAvancado} linhas`}: os ramos que as de
+              cima deixaram de lado, para quem já sabe o resto. Elas abrem sozinhas quando{" "}
+              <strong>todas</strong> as {total} linhas de cima estiverem aprendidas.
             </p>
           </div>
 

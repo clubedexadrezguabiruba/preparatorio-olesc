@@ -167,3 +167,56 @@ export function casaEscura(casa: string): boolean {
 
 /** Só para a mensagem de erro: `c1` é casa de tabuleiro? */
 export const ehCasa = (texto: string): boolean => CASA.test(texto);
+
+/* ------------------------------------------------------------------ *
+ * Do plano para a tela
+ * ------------------------------------------------------------------ */
+
+/** O nome que o aluno lê. A casa entra no nome porque há dois de cada. */
+const NOME_DA_PECA: Record<string, string> = {
+  b1: "Cavalo de b1",
+  g1: "Cavalo de g1",
+  c1: "Bispo de c1",
+  f1: "Bispo de f1",
+  b8: "Cavalo de b8",
+  g8: "Cavalo de g8",
+  c8: "Bispo de c8",
+  f8: "Bispo de f8",
+};
+
+export type ItemDoPlano = {
+  chave: string;
+  /** "Bispo de c1 → b2", "Roque curto — o rei vai para g1". */
+  titulo: string;
+  motivo: string;
+  /** O destino, para a seta. `null` quando o plano é o rei ficar onde está. */
+  casa: string | null;
+};
+
+/**
+ * O plano em ordem de leitura, com o título já escrito.
+ *
+ * O rei vem primeiro porque o roque é a manchete: das duas coisas que a régua
+ * cobra, é a que muda a segurança do aluno na partida seguinte. Depois as peças,
+ * em ordem de casa, que é ordem estável — e ordem estável importa numa lista
+ * que o aluno vai reler várias vezes até a linha virar dele.
+ */
+export function lerPlano(plano: Plano): ItemDoPlano[] {
+  const chaves = Object.keys(plano).sort((a, b) =>
+    a === "rei" ? -1 : b === "rei" ? 1 : a.localeCompare(b),
+  );
+  return chaves.map((chave) => {
+    const { casa, motivo } = plano[chave];
+    if (chave === "rei") {
+      const titulo =
+        casa === null
+          ? "O rei fica onde está"
+          : casa[0] === "g"
+            ? `Roque curto — o rei vai para ${casa}`
+            : `Roque longo — o rei vai para ${casa}`;
+      return { chave, titulo, motivo, casa };
+    }
+    const nome = NOME_DA_PECA[chave] ?? `a peça de ${chave}`;
+    return { chave, titulo: casa ? `${nome} → ${casa}` : nome, motivo, casa };
+  });
+}

@@ -7,6 +7,7 @@ import type { Color, Key } from "@lichess-org/chessground/types";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { PromotionPicker, type PromotionChoice } from "@/components/board/PromotionPicker";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
+import { lerPlano } from "@/lib/repertorio/esquema";
 import type { Linha } from "@/lib/repertorio/linhas";
 import {
   acuracia,
@@ -21,6 +22,7 @@ import { playForMove, playRefusal, playSuccess } from "@/lib/sound";
 import { ABERTURA_MS } from "@/lib/tatica/tempos";
 import { Cartao } from "./Cartao";
 import { FaixaDeSans, FitaDoBoletim } from "./FitaDeLances";
+import { OQueAindaFalta } from "./OQueFalta";
 
 /**
  * A casca da passada: relógios, tabuleiro e teclado.
@@ -242,8 +244,43 @@ export function Passada({ linha, modo, aoDecidir, aoTerminar, aoComecarQuiz }: P
     }
 
     if (marca) lista.push({ orig: marca.casa as Key, brush: PINCEL[marca.qual] });
+
+    // A quarta camada, e a única que aparece DEPOIS do fim: as setas do
+    // `[%plano]`. Elas convivem com o resto sem disputa porque, no `resolvido`,
+    // não há seta de assistida nem dica de pé — o selo do último lance ainda
+    // pode estar na tela por menos de um segundo, e é bom que esteja: o aluno vê
+    // o veredito do lance e, ao lado, para onde a peça que ficou ainda vai.
+    //
+    // A origem do rei é procurada no tabuleiro, e não fixada em e1: numa linha
+    // em que ele já andou (as duas com a dama trocada cedo), e1 desenharia a
+    // seta a partir de uma casa vazia.
+    if (estado.fase === "resolvido") {
+      for (const item of lerPlano(linha.plano)) {
+        const orig =
+          item.chave === "rei"
+            ? jogo.findPiece({ type: "k", color: meuLado === "white" ? "w" : "b" })[0]
+            : (item.chave as Square);
+        if (!orig) continue;
+        lista.push(
+          item.casa
+            ? { orig: orig as Key, dest: item.casa as Key, brush: "plano" }
+            : { orig: orig as Key, brush: "plano" },
+        );
+      }
+    }
     return lista;
-  }, [estado.dicaNoPasso, estado.fase, estado.passo, linha.lances, marca, minhaVez, modo]);
+  }, [
+    estado.dicaNoPasso,
+    estado.fase,
+    estado.passo,
+    jogo,
+    linha.lances,
+    linha.plano,
+    marca,
+    meuLado,
+    minhaVez,
+    modo,
+  ]);
 
   const fim = estado.fase === "resolvido";
   const placar = acuracia(estado);
@@ -291,6 +328,13 @@ export function Passada({ linha, modo, aoDecidir, aoTerminar, aoComecarQuiz }: P
       )}
 
       <Comentario texto={estado.comentario} />
+
+      {/*
+       * O painel do plano é montado aqui só na **assistida**. No quiz quem o
+       * monta é o painel de fim do `Treino`, logo abaixo do comentário final —
+       * pôr nos dois lugares mostraria a mesma lista duas vezes na mesma tela.
+       */}
+      {fim && modo === "assistido" ? <OQueAindaFalta linha={linha} /> : null}
 
       <FaixaDeSans linha={linha} ate={estado.passo} atual={estado.passo - 1} />
 

@@ -44,6 +44,12 @@ const PINCEIS = [
   // `defendida`: os três selos do repertório são o mesmo aro, e o que os separa
   // é a cor — quem precisa da espessura é o par vermelho/verde da tática.
   { nome: "yellow", token: "--color-pincel-alternativa", opacity: 1, lineWidth: 9 },
+  // O sexto entra por um nome que o chessground não conhece — a interface
+  // `DrawBrushes` tem os quatro fixos e assinatura de índice para o resto, e é
+  // por ela que um pincel próprio é legítimo em vez de sequestrar um dos
+  // outros. Traço mais fino que os selos: a seta do plano fala do que vem
+  // DEPOIS do fim da linha, e não pode competir com o veredito do lance.
+  { nome: "plano", token: "--color-pincel-plano", opacity: 1, lineWidth: 8 },
 ] as const;
 
 function pinceis(host: HTMLElement): Partial<DrawBrushes> {

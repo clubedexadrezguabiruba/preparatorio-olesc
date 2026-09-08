@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { casaEscura, separarPlano } from "./esquema.ts";
+import { casaEscura, lerPlano, separarPlano } from "./esquema.ts";
 
 /**
  * O leitor do bloco `[%plano]`.
@@ -112,4 +112,21 @@ test("a cor das casas: a1 é escura, c1 é escura, f1 é clara", () => {
   assert.equal(casaEscura("f1"), false);
   assert.equal(casaEscura("c8"), false);
   assert.equal(casaEscura("f8"), true);
+});
+
+test("lerPlano põe o rei na frente e escreve o título que o aluno lê", () => {
+  const itens = lerPlano({
+    f1: { casa: "d3", motivo: "o bispo espera o …c5 dele para não perder tempo" },
+    rei: { casa: "g1", motivo: "o roque vem assim que o bispo de f1 sair do caminho" },
+    c1: { casa: "g5", motivo: "sai depois do h3, para não levar o …h6 com tempo" },
+  });
+  assert.deepEqual(itens.map((i) => i.chave), ["rei", "c1", "f1"]);
+  assert.equal(itens[0].titulo, "Roque curto — o rei vai para g1");
+  assert.equal(itens[1].titulo, "Bispo de c1 → g5");
+  assert.equal(itens[2].titulo, "Bispo de f1 → d3");
+});
+
+test("o roque longo e o rei que fica têm título próprio", () => {
+  assert.equal(lerPlano({ rei: { casa: "c8", motivo: "x".repeat(30) } })[0].titulo, "Roque longo — o rei vai para c8");
+  assert.equal(lerPlano({ rei: { casa: null, motivo: "x".repeat(30) } })[0].titulo, "O rei fica onde está");
 });

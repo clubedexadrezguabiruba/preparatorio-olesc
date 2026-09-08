@@ -121,6 +121,7 @@ const MARCAS: { onde: string; token: string; piso: number }[] = [
   { onde: "pincel da peça defendida", token: "pincel-defendida", piso: AA_COMPONENTE },
   { onde: "pincel da seta do exemplo", token: "pincel-seta", piso: AA_COMPONENTE },
   { onde: "selo de alternativa do repertório", token: "pincel-alternativa", piso: AA_COMPONENTE },
+  { onde: "seta do plano — o que a linha não fechou", token: "pincel-plano", piso: AA_COMPONENTE },
 ];
 
 const NAS_DUAS_CASAS: Par[] = MARCAS.flatMap(({ onde, token, piso }) => [

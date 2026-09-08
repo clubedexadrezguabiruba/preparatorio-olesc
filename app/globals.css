@@ -208,6 +208,21 @@
      outra — ou vermelho como "errado", que é pior ainda. É o mesmo aro de
      `pendurada` e `defendida`, na claridade do meio, entre as duas. */
   --color-pincel-alternativa: oklch(45% 0.135 75);
+
+  /* O sexto: o **plano** do repertório — a seta que aparece no fim de uma linha
+     que não fechou dentro do teto, apontando para onde a peça que ficou em casa
+     ainda vai (§24 de `docs/REVISAO-FONTES.md`).
+
+     Roxo porque os outros cinco estão tomados e porque a família importa: as
+     setas do plano não são veredito nenhum. Verde diria "certo", vermelho
+     "errado", âmbar "também vale" e azul é a seta que MANDA jogar — e esta não
+     manda nada, ela conta o que vem depois do fim da linha. Um pincel que já
+     significasse outra coisa faria o aluno ler ordem onde há promessa.
+
+     É mais claro que o `pincel-corte`, que é o outro roxo do site: aquele pinta
+     uma parede opaca de seis casas no Laboratório de Finais, este desenha duas
+     ou três setas finas no repertório, e os dois nunca aparecem na mesma tela. */
+  --color-pincel-plano: oklch(40% 0.19 310);
 }
 
 /* --------------------------------------------------------------------------

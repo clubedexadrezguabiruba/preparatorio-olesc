@@ -16,6 +16,7 @@ import {
 import { Bolinhas } from "../../Bolinhas";
 import { registrarTreino } from "../../acoes";
 import { Passada } from "./Passada";
+import { OQueAindaFalta } from "./OQueFalta";
 
 /**
  * O treinador de uma linha do repertório: conduzir as duas fases e gravar.
@@ -246,6 +247,9 @@ export function Treino({
           )}
 
           <Comentario texto={linha.comentarios[String(linha.lances.length - 1)]} />
+
+          {/* Só aparece quando a linha não fechou a régua — ver `OQueFalta.tsx`. */}
+          <OQueAindaFalta linha={linha} />
 
           <ProximaPratica progresso={resultado?.progresso ?? null} agora={agora} />
 
