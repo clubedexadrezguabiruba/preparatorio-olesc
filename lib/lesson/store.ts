@@ -12,14 +12,33 @@ import { create } from "zustand";
  * de um lance. Essa é efêmera e vive no componente da etapa.
  */
 
-export type StageKey = "objective" | "example" | "guided" | "solo" | "practice" | "review";
+export type StageKey =
+  | "objective"
+  | "example"
+  | "guided"
+  | "solo"
+  | "exercises"
+  | "practice"
+  | "review";
 export type TreeKey = "guided" | "solo";
 
+/**
+ * A ordem das etapas, e ela é a mesma nos dois módulos — o que muda é **quais**
+ * a aula tem. Uma aula de finais tem objetivo, exemplo, com ajuda, sem ajuda,
+ * prática e revisão; uma de meio-jogo tem objetivo, exemplo e exercícios, e
+ * mais nada. `available`, no `LessonPlayer`, filtra pela presença do bloco no
+ * arquivo, e por isso nenhuma das duas precisa saber da outra.
+ *
+ * `exercises` entra entre `solo` e `practice`: é onde ela cai numa aula de
+ * meio-jogo (depois de ver o conceito e o exemplo do autor) e onde cairia se um
+ * dia uma aula de finais quisesse as duas.
+ */
 export const STAGE_ORDER: StageKey[] = [
   "objective",
   "example",
   "guided",
   "solo",
+  "exercises",
   "practice",
   "review",
 ];
@@ -29,6 +48,7 @@ export const STAGE_LABEL: Record<StageKey, string> = {
   example: "Exemplo",
   guided: "Com ajuda",
   solo: "Sem ajuda",
+  exercises: "Exercícios",
   practice: "Prática real",
   review: "Revisão",
 };
@@ -223,13 +243,80 @@ export function restingPracticeMessage(practice: PracticeState | undefined): Pan
 }
 
 /**
+ * O estado de **um** exercício do livro.
+ *
+ * Bem menor que `TreeState` e `PracticeState`, e é o desenho certo: aqui o
+ * aluno não conduz uma técnica nem joga uma partida — ele responde uma pergunta
+ * de um lance. Não há lista de lances a guardar, nem relógio de 50 lances, nem
+ * repetição. O que existe é: já acertou? quantas vezes tentou? a dica está
+ * aberta? e até onde a solução do livro já foi tocada.
+ *
+ * `tries` é contado porque ele é a diferença entre acertar de primeira e
+ * acertar na quarta, e é essa diferença que a coluna `primeira` de
+ * `tentativa_meiojogo` guarda — a nota do capítulo sai **só** da primeira
+ * tentativa de cada item, que é como o Yusupov manda contar.
+ */
+export type ExerciseState = {
+  /** `idle` é "ainda respondendo": só sai daqui por acerto ou por desistência. */
+  status: "idle" | "done" | "failed";
+  /** Quantos lances o aluno já tentou neste item, nesta tentativa. */
+  tries: number;
+  hintOpen: boolean;
+  /** O último lance tentado, em UCI. Serve ao realce e a repor o tabuleiro. */
+  lastMove: string | null;
+  /**
+   * Até que passo da solução do livro o aluno já viu. `0` = não começou, e a
+   * solução só aparece depois de acertar ou desistir — antes disso ela seria a
+   * resposta impressa embaixo da pergunta, que é justamente o defeito dos
+   * livros de exposição que este módulo não quis copiar.
+   */
+  revealIndex: number;
+  /** Quando este item foi aberto, em `Date.now()`. Vira o `tempo_ms` da linha. */
+  startedAt: number;
+  attempt: number;
+};
+
+function freshExercise(attempt = 1): ExerciseState {
+  return {
+    status: "idle",
+    tries: 0,
+    hintOpen: false,
+    lastMove: null,
+    revealIndex: 0,
+    startedAt: Date.now(),
+    attempt,
+  };
+}
+
+/** A chave de um item no mapa de exercícios. Uma função para não haver duas. */
+export function exerciseKey(itemId: string): string {
+  return `ex:${itemId}`;
+}
+
+/**
  * O que o aluno já venceu nesta sessão, para o selo de domínio (§6 do plano).
  *
  * **Grudento de propósito:** recomeçar a etapa 4 depois de tê-la vencido não
  * tira o selo. Quem zera é `open()`, ou seja, trocar de aula — que é
  * exatamente o "na mesma sessão" que a definição de D1 pede.
  */
-export type Cleared = { solo: boolean; practice: boolean };
+export type Cleared = {
+  solo: boolean;
+  practice: boolean;
+  /**
+   * Os ids dos exercícios já acertados nesta sessão, em ordem de acerto.
+   *
+   * Grudento pela mesma razão que os outros dois: refazer um exercício que já
+   * saiu certo não tira o acerto. Lista e não conjunto porque o estado do
+   * zustand atravessa a fronteira do React, e um `Set` mutado no lugar não
+   * dispara render — a lista nova, sim.
+   *
+   * **Não é a nota.** A nota do capítulo é do servidor, somada sobre a primeira
+   * tentativa de cada item (`lib/meiojogo/progresso.ts`); isto aqui é só o que
+   * a tela precisa para marcar o item como feito sem ir ao banco.
+   */
+  exercises: string[];
+};
 
 type LessonStore = {
   lessonId: string | null;
@@ -246,6 +333,16 @@ type LessonStore = {
   trees: Partial<Record<TreeKey, TreeState>>;
   /** Indexado por `PracticeKey`; `Record<string, …>` porque chave de template é índice de string. */
   practices: Record<string, PracticeState | undefined>;
+  /** Indexado por `exerciseKey(item.id)`. Vazio em aula de finais. */
+  exercises: Record<string, ExerciseState | undefined>;
+  /**
+   * Qual dos exercícios está aberto — o índice na lista da etapa.
+   *
+   * Mora aqui, e não no componente, pelo mesmo motivo que `example`: sair para
+   * outra etapa e voltar tem de devolver o aluno ao exercício em que ele
+   * estava, e não ao primeiro.
+   */
+  exercise: { item: number };
   cleared: Cleared;
   message: PanelMessage | null;
 
@@ -296,6 +393,26 @@ type LessonStore = {
   practiceMove: (key: PracticeKey, uci: string) => void;
   practiceFinish: (key: PracticeKey, end: PracticeEnd) => void;
   practiceRestart: (key: PracticeKey) => void;
+
+  /** Abre um exercício da lista. Cria o estado dele se for a primeira vez. */
+  openExercise: (itemId: string, index: number) => void;
+  /**
+   * Um lance tentado num exercício, **antes** de se saber se está certo.
+   *
+   * Igual ao `treeTry`: o que se guarda aqui é o que a mão do aluno fez, e é
+   * isso que o servidor reconfere contra a aula em disco. Chamada em toda
+   * tentativa, certa ou errada — é ela que faz `tries` andar, e `tries === 1`
+   * no acerto é o que vale ponto.
+   */
+  exerciseTry: (itemId: string, uci: string) => void;
+  /** O aluno acertou: fecha o item e credita o acerto na sessão. */
+  exerciseDone: (itemId: string) => void;
+  /** O aluno desistiu e pediu a solução. Fecha o item **sem** creditar. */
+  exerciseGiveUp: (itemId: string) => void;
+  exerciseRestart: (itemId: string) => void;
+  exerciseHint: (itemId: string) => void;
+  /** Anda um passo na solução do livro, depois que o item já fechou. */
+  exerciseReveal: (itemId: string, index: number) => void;
 };
 
 export const useLessonStore = create<LessonStore>((set) => ({
@@ -304,7 +421,9 @@ export const useLessonStore = create<LessonStore>((set) => ({
   example: { scene: 0, step: 0 },
   trees: {},
   practices: {},
-  cleared: { solo: false, practice: false },
+  exercises: {},
+  exercise: { item: 0 },
+  cleared: { solo: false, practice: false, exercises: [] },
   message: null,
 
   open: (lessonId, stage, roots, practices = []) =>
@@ -312,8 +431,10 @@ export const useLessonStore = create<LessonStore>((set) => ({
       lessonId,
       stage,
       example: { scene: 0, step: 0 },
+      exercise: { item: 0 },
+      exercises: {},
       message: null,
-      cleared: { solo: false, practice: false },
+      cleared: { solo: false, practice: false, exercises: [] },
       trees: {
         ...(roots.guided ? { guided: freshTree(roots.guided) } : {}),
         ...(roots.solo ? { solo: freshTree(roots.solo) } : {}),
@@ -463,5 +584,90 @@ export const useLessonStore = create<LessonStore>((set) => ({
           [key]: freshPractice(practice.positionId, practice.startFen, practice.attempt + 1),
         },
       };
+    }),
+
+  openExercise: (itemId, index) =>
+    set((state) => {
+      const chave = exerciseKey(itemId);
+      return {
+        exercise: { item: index },
+        message: null,
+        // Só cria na primeira abertura: voltar a um item já respondido tem de
+        // devolvê-lo como estava, com o acerto e a solução já vista.
+        exercises: state.exercises[chave]
+          ? state.exercises
+          : { ...state.exercises, [chave]: freshExercise() },
+      };
+    }),
+
+  exerciseTry: (itemId, uci) =>
+    set((state) => {
+      const chave = exerciseKey(itemId);
+      const item = state.exercises[chave];
+      // Item fechado não recebe lance: o clique atrasado que chegasse depois do
+      // acerto viraria uma segunda tentativa gravada, e `primeira` mediria
+      // errado justamente no item que o aluno acertou.
+      if (!item || item.status !== "idle") return state;
+      return {
+        exercises: {
+          ...state.exercises,
+          [chave]: { ...item, tries: item.tries + 1, lastMove: uci, hintOpen: false },
+        },
+      };
+    }),
+
+  exerciseDone: (itemId) =>
+    set((state) => {
+      const chave = exerciseKey(itemId);
+      const item = state.exercises[chave];
+      if (!item) return state;
+      return {
+        cleared: state.cleared.exercises.includes(itemId)
+          ? state.cleared
+          : { ...state.cleared, exercises: [...state.cleared.exercises, itemId] },
+        exercises: { ...state.exercises, [chave]: { ...item, status: "done", hintOpen: false } },
+      };
+    }),
+
+  exerciseGiveUp: (itemId) =>
+    set((state) => {
+      const chave = exerciseKey(itemId);
+      const item = state.exercises[chave];
+      if (!item) return state;
+      // `failed`, e não `done`: a solução aparece igual nos dois casos, mas o
+      // que a sessão credita é só o acerto. Desistir e ler a resposta é uma
+      // coisa boa de se poder fazer, e não é a mesma coisa que acertar.
+      return {
+        exercises: { ...state.exercises, [chave]: { ...item, status: "failed", hintOpen: false } },
+      };
+    }),
+
+  exerciseRestart: (itemId) =>
+    set((state) => {
+      const chave = exerciseKey(itemId);
+      const item = state.exercises[chave];
+      if (!item) return state;
+      return {
+        message: null,
+        exercises: { ...state.exercises, [chave]: freshExercise(item.attempt + 1) },
+      };
+    }),
+
+  exerciseHint: (itemId) =>
+    set((state) => {
+      const chave = exerciseKey(itemId);
+      const item = state.exercises[chave];
+      if (!item) return state;
+      return {
+        exercises: { ...state.exercises, [chave]: { ...item, hintOpen: !item.hintOpen } },
+      };
+    }),
+
+  exerciseReveal: (itemId, index) =>
+    set((state) => {
+      const chave = exerciseKey(itemId);
+      const item = state.exercises[chave];
+      if (!item) return state;
+      return { exercises: { ...state.exercises, [chave]: { ...item, revealIndex: index } } };
     }),
 }));

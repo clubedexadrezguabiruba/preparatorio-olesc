@@ -5,6 +5,7 @@ import test from "node:test";
 import { Chess } from "chess.js";
 import { lessonSchema, type MoveTree } from "./schema.ts";
 import {
+  exerciseKey,
   restingMessage,
   restingPracticeMessage,
   reviewKey,
@@ -346,7 +347,11 @@ test("abrir a aula zera o selo — é o que define a mesma sessão", () => {
   playScriptedLine("solo", lesson.stages.solo!);
   assert.equal(useLessonStore.getState().cleared.solo, true);
   openWithPractice();
-  assert.deepEqual(useLessonStore.getState().cleared, { solo: false, practice: false });
+  assert.deepEqual(useLessonStore.getState().cleared, {
+    solo: false,
+    practice: false,
+    exercises: [],
+  });
 });
 
 /* ------------------------------------------------------------------ *
@@ -445,4 +450,113 @@ test("pedir uma etapa que a aula não tem cai na primeira disponível", () => {
   const store = useLessonStore.getState();
   store.open(lesson.id, "objective", { guided: guided.root });
   assert.equal(useLessonStore.getState().stage, "objective");
+});
+
+/* ------------------------------------------------------------------ *
+ * A etapa de exercícios (meio-jogo, 2026-09-08)
+ * ------------------------------------------------------------------ */
+
+/**
+ * O que se cobra aqui é o mesmo que se cobra das árvores: o que a store tem de
+ * carregar sozinha para o aluno poder sair da etapa e voltar. A diferença é o
+ * que está em jogo — na árvore o que se perde é o lance atual; aqui é a
+ * **nota do capítulo**, porque quem decide se um item vale ponto é o contador
+ * de tentativas, e ele só existe se estiver guardado.
+ */
+
+function abrirParaExercicios(): void {
+  useLessonStore.getState().open(lesson.id, "objective", {});
+}
+
+test("abrir um exercício cria o estado dele, e reabrir não o zera", () => {
+  abrirParaExercicios();
+  const store = useLessonStore.getState();
+  store.openExercise("ex-3-1", 0);
+  store.exerciseTry("ex-3-1", "e2e4");
+  store.openExercise("ex-3-2", 1);
+  store.openExercise("ex-3-1", 0);
+
+  const item = useLessonStore.getState().exercises[exerciseKey("ex-3-1")];
+  assert.equal(item?.tries, 1, "voltar ao item não pode apagar a tentativa que ele já gastou");
+  assert.equal(item?.lastMove, "e2e4");
+  assert.equal(useLessonStore.getState().exercise.item, 0, "voltar tem de reabrir o item certo");
+});
+
+test("acertar de primeira é tries === 1 — é disso que sai o ponto", () => {
+  abrirParaExercicios();
+  const store = useLessonStore.getState();
+  store.openExercise("ex-3-1", 0);
+  store.exerciseTry("ex-3-1", "e2e4");
+  store.exerciseDone("ex-3-1");
+
+  const item = useLessonStore.getState().exercises[exerciseKey("ex-3-1")];
+  assert.equal(item?.tries, 1);
+  assert.equal(item?.status, "done");
+  assert.deepEqual(useLessonStore.getState().cleared.exercises, ["ex-3-1"]);
+});
+
+test("item fechado não conta mais uma tentativa", () => {
+  abrirParaExercicios();
+  const store = useLessonStore.getState();
+  store.openExercise("ex-3-1", 0);
+  store.exerciseTry("ex-3-1", "e2e4");
+  store.exerciseDone("ex-3-1");
+  // O clique atrasado que chega depois do acerto: sem a guarda ele viraria uma
+  // segunda tentativa gravada, e a nota do capítulo cairia num item certo.
+  store.exerciseTry("ex-3-1", "d2d4");
+
+  assert.equal(useLessonStore.getState().exercises[exerciseKey("ex-3-1")]?.tries, 1);
+});
+
+test("desistir fecha o item sem creditar o acerto", () => {
+  abrirParaExercicios();
+  const store = useLessonStore.getState();
+  store.openExercise("ex-3-4", 3);
+  store.exerciseTry("ex-3-4", "a2a3");
+  store.exerciseGiveUp("ex-3-4");
+
+  assert.equal(useLessonStore.getState().exercises[exerciseKey("ex-3-4")]?.status, "failed");
+  assert.deepEqual(useLessonStore.getState().cleared.exercises, [], "ler a resposta não é acertar");
+});
+
+test("recomeçar um item zera a tentativa mas não tira o acerto da sessão", () => {
+  abrirParaExercicios();
+  const store = useLessonStore.getState();
+  store.openExercise("ex-3-1", 0);
+  store.exerciseTry("ex-3-1", "e2e4");
+  store.exerciseDone("ex-3-1");
+  store.exerciseRestart("ex-3-1");
+
+  const item = useLessonStore.getState().exercises[exerciseKey("ex-3-1")];
+  assert.equal(item?.tries, 0);
+  assert.equal(item?.status, "idle");
+  assert.equal(item?.attempt, 2, "a tentativa nova tem de ser numerada — é o dedupe da gravação");
+  assert.deepEqual(
+    useLessonStore.getState().cleared.exercises,
+    ["ex-3-1"],
+    "o selo da sessão é grudento, como o da etapa 4",
+  );
+});
+
+test("a dica fecha sozinha quando o aluno joga", () => {
+  abrirParaExercicios();
+  const store = useLessonStore.getState();
+  store.openExercise("ex-3-1", 0);
+  store.exerciseHint("ex-3-1");
+  assert.equal(useLessonStore.getState().exercises[exerciseKey("ex-3-1")]?.hintOpen, true);
+  store.exerciseTry("ex-3-1", "e2e4");
+  assert.equal(useLessonStore.getState().exercises[exerciseKey("ex-3-1")]?.hintOpen, false);
+});
+
+test("trocar de aula zera os exercícios inteiros", () => {
+  abrirParaExercicios();
+  const store = useLessonStore.getState();
+  store.openExercise("ex-3-1", 0);
+  store.exerciseTry("ex-3-1", "e2e4");
+  store.exerciseDone("ex-3-1");
+
+  store.open(lesson.id, "objective", {});
+  assert.deepEqual(useLessonStore.getState().exercises, {});
+  assert.deepEqual(useLessonStore.getState().cleared.exercises, []);
+  assert.equal(useLessonStore.getState().exercise.item, 0);
 });
