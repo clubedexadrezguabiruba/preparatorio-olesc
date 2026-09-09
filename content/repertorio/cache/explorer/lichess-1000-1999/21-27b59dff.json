@@ -1,0 +1,113 @@
+{
+  "white": 269,
+  "draws": 31,
+  "black": 217,
+  "moves": [
+    {
+      "uci": "e8h8",
+      "san": "O-O",
+      "averageRating": 1614,
+      "white": 154,
+      "draws": 22,
+      "black": 123,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b8d7",
+      "san": "Nd7",
+      "averageRating": 1618,
+      "white": 61,
+      "draws": 4,
+      "black": 50,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f5g4",
+      "san": "Bg4",
+      "averageRating": 1624,
+      "white": 24,
+      "draws": 5,
+      "black": 20,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h7h6",
+      "san": "h6",
+      "averageRating": 1698,
+      "white": 12,
+      "draws": 0,
+      "black": 9,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6g6",
+      "san": "Qg6",
+      "averageRating": 1533,
+      "white": 9,
+      "draws": 0,
+      "black": 10,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6d8",
+      "san": "Qd8",
+      "averageRating": 1789,
+      "white": 2,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b7b5",
+      "san": "b5",
+      "averageRating": 1467,
+      "white": 3,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h7h5",
+      "san": "h5",
+      "averageRating": 1589,
+      "white": 2,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6e7",
+      "san": "Qe7",
+      "averageRating": 1484,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6h6",
+      "san": "Qh6",
+      "averageRating": 1471,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B01",
+    "name": "Scandinavian Defense: Main Line, Mieses Variation"
+  }
+}

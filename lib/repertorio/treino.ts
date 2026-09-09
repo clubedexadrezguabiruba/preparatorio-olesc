@@ -1,5 +1,5 @@
 import { hojeNoBrasil } from "../curso/calendario.ts";
-import type { Cor, Linha } from "./linhas.ts";
+import type { EntradaDoIndice, Linha } from "./linhas.ts";
 
 /**
  * O juiz do repertório e a ordem em que as linhas voltam.
@@ -433,31 +433,91 @@ export function resumo(
 
 /**
  * O mesmo resumo para quem **não carregou as linhas**: a lista de aberturas
- * sabe quantas linhas cada uma tem pelo `index.json`, e não precisa abrir os
+ * sabe pelo `index.json` quais linhas cada abertura tem, e não precisa abrir os
  * doze arquivos para desenhar doze barrinhas.
  *
- * O filtro é o prefixo do id (`brancas-petroff-`), que é como `idDaLinha` o
- * monta. Cor e abertura entram as duas porque o slug pode repetir entre as
- * cores — há uma "francesa" de brancas e poderia haver uma de pretas.
+ * **A varredura vai do conteúdo para o progresso, e não ao contrário.** Até
+ * 6/9/2026 estas duas funções percorriam o banco de progresso e adivinhavam a
+ * abertura pelo prefixo do id (`brancas-petroff-`). O id é o hash dos lances:
+ * uma linha reescrita deixa um registro que nenhuma linha reclama, e o prefixo
+ * o adotava. A tela mostrava "3 de 2", a abertura virava "em dia" sem o aluno
+ * ter visto a linha nova, e o painel prometia uma revisão sem onde ser feita —
+ * enquanto a página da abertura, que sempre contou pelas linhas, discordava das
+ * outras duas. Agora as três contam do mesmo jeito, que é o de `resumo` aqui em
+ * cima.
  */
-export function aprendidasDaAbertura(progresso: Progresso, cor: Cor, abertura: string): number {
-  const prefixo = `${cor}-${abertura}-`;
-  let conta = 0;
-  for (const [id, p] of progresso) if (id.startsWith(prefixo) && aprendida(p)) conta++;
-  return conta;
+export function aprendidasDaAbertura(
+  progresso: Progresso,
+  abertura: EntradaDoIndice,
+  avancadoLiberado: boolean,
+): number {
+  return idsLiberados(abertura, avancadoLiberado).filter((id) =>
+    aprendida(progressoDe(progresso, id)),
+  ).length;
 }
 
-/** Quantas linhas desta abertura vencem hoje. Mesmo filtro, outra pergunta. */
+/** Quantas linhas desta abertura vencem hoje. Mesma varredura, outra pergunta. */
 export function aRevisarNaAbertura(
   progresso: Progresso,
-  cor: Cor,
-  abertura: string,
+  abertura: EntradaDoIndice,
   agora: string,
+  avancadoLiberado: boolean,
 ): number {
-  const prefixo = `${cor}-${abertura}-`;
-  let conta = 0;
-  for (const [id, p] of progresso) if (id.startsWith(prefixo) && vencida(p, agora)) conta++;
-  return conta;
+  return idsLiberados(abertura, avancadoLiberado).filter((id) =>
+    vencida(progressoDe(progresso, id), agora),
+  ).length;
+}
+
+/* ------------------------------------------------------------------ *
+ * O portão do Avançado
+ * ------------------------------------------------------------------ */
+
+/**
+ * Os ids que o aluno pode ver nesta abertura agora.
+ *
+ * O `avancadoLiberado` não tem padrão de propósito. Um padrão `false` deixaria
+ * o painel contar só o Base para sempre sem ninguém notar; um padrão `true`
+ * mostraria as trancadas. Quem chama tem de dizer, e só há uma fonte para a
+ * resposta: `baseCompleto`.
+ */
+export function idsLiberados(
+  abertura: EntradaDoIndice,
+  avancadoLiberado: boolean,
+): readonly string[] {
+  if (avancadoLiberado) return abertura.ids;
+  return abertura.ids.filter((id) => !abertura.idsAvancado.includes(id));
+}
+
+/**
+ * Quantas linhas do **Base** ainda não estão aprendidas, no repertório inteiro.
+ *
+ * É o número que a tela mostra no bloco trancado, e é o que o professor pediu
+ * em 7/9/2026: *"só desbloqueia quando o aluno terminou todas as linhas com
+ * acerto"*. "Com acerto" é o `aprendida` que já existe — degrau
+ * `DEGRAU_APRENDIDA`, três passadas limpas em três dias diferentes —, e não uma
+ * régua nova: o aluno já vê essa palavra na lista de aberturas, e duas
+ * definições de "sei esta linha" na mesma tela seria pior que o portão.
+ *
+ * **O preço, medido em 7/9/2026:** um Base de N linhas custa 3N passadas limpas
+ * e no mínimo 5 dias corridos, porque os degraus 1, 2 e 3 exigem intervalos de
+ * 0, 1 e 3 dias. A ~4 linhas por sessão (a estimativa de `proximaLinha` aqui em
+ * cima), 20 linhas dão ~15 sessões. O tamanho do Base **é** o preço de entrada
+ * do Avançado, e quem mexer num tem de olhar o outro.
+ */
+export function faltamNoBase(progresso: Progresso, indice: readonly EntradaDoIndice[]): number {
+  return indice
+    .flatMap((e) => idsLiberados(e, false))
+    .filter((id) => !aprendida(progressoDe(progresso, id))).length;
+}
+
+/** O portão: o Avançado abre quando não falta nenhuma linha do Base. */
+export function baseCompleto(progresso: Progresso, indice: readonly EntradaDoIndice[]): boolean {
+  return faltamNoBase(progresso, indice) === 0;
+}
+
+/** Quantas linhas de Avançado existem — o que o aluno ganha ao destravar. */
+export function quantasNoAvancado(indice: readonly EntradaDoIndice[]): number {
+  return indice.reduce((soma, e) => soma + e.idsAvancado.length, 0);
 }
 
 /* ------------------------------------------------------------------ *

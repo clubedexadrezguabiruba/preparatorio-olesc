@@ -68,3 +68,10 @@ next-env.d.ts
 # Cache do hook de design (plugin impeccable). Local, derivado, sem valor
 # fora da sessão que o escreveu.
 .impeccable/
+
+# Os dossiês da cauda (`npm run repertorio:cauda -- --dossies`): o que a fonte
+# joga a partir de cada ponta, COM a prosa do autor, mais o que o explorer e o
+# motor dizem. Fora do Git pelo mesmo motivo de `rascunhos-anotados/` — a prosa
+# é de curso pago e este repositório é público. É derivado: volta inteiro do
+# cache do explorer, que ESSE sim é versionado.
+/content/repertorio/caudas/

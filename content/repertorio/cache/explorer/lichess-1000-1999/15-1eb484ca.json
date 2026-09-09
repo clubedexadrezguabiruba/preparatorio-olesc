@@ -1,0 +1,133 @@
+{
+  "white": 17931,
+  "draws": 1433,
+  "black": 10677,
+  "moves": [
+    {
+      "uci": "e8h8",
+      "san": "O-O",
+      "averageRating": 1673,
+      "white": 13007,
+      "draws": 1077,
+      "black": 8174,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8e6",
+      "san": "Be6",
+      "averageRating": 1730,
+      "white": 1865,
+      "draws": 155,
+      "black": 993,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c7c5",
+      "san": "c5",
+      "averageRating": 1615,
+      "white": 1363,
+      "draws": 81,
+      "black": 664,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8g4",
+      "san": "Bg4",
+      "averageRating": 1555,
+      "white": 405,
+      "draws": 29,
+      "black": 173,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8d7",
+      "san": "Bd7",
+      "averageRating": 1695,
+      "white": 327,
+      "draws": 21,
+      "black": 159,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a6",
+      "san": "a6",
+      "averageRating": 1731,
+      "white": 276,
+      "draws": 23,
+      "black": 173,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h7h6",
+      "san": "h6",
+      "averageRating": 1647,
+      "white": 277,
+      "draws": 23,
+      "black": 153,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6h5",
+      "san": "Nh5",
+      "averageRating": 1684,
+      "white": 76,
+      "draws": 4,
+      "black": 43,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a5",
+      "san": "a5",
+      "averageRating": 1707,
+      "white": 77,
+      "draws": 6,
+      "black": 39,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b7b6",
+      "san": "b6",
+      "averageRating": 1667,
+      "white": 81,
+      "draws": 6,
+      "black": 31,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6g4",
+      "san": "Ng4",
+      "averageRating": 1539,
+      "white": 59,
+      "draws": 1,
+      "black": 32,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c7c6",
+      "san": "c6",
+      "averageRating": 1666,
+      "white": 52,
+      "draws": 3,
+      "black": 19,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C44",
+    "name": "Scotch Game: Lolli Variation"
+  }
+}

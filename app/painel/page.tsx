@@ -28,7 +28,12 @@ import {
 } from "@/lib/finais/trilha";
 import { lerIndice } from "@/lib/repertorio/banco";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
-import { aprendidasDaAbertura, aRevisarNaAbertura } from "@/lib/repertorio/treino";
+import {
+  aprendidasDaAbertura,
+  aRevisarNaAbertura,
+  baseCompleto,
+  idsLiberados,
+} from "@/lib/repertorio/treino";
 import { TAREFAS } from "@/lib/tarefas/conteudo";
 import { estadoDasTarefas } from "@/lib/tarefas/estado";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
@@ -120,14 +125,22 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
   }));
 
   const aberturas = indice.length;
-  const linhasDoRepertorio = indice.reduce((soma, e) => soma + e.linhas, 0);
+  // O painel conta o mesmo que `/aberturas`: enquanto o portão do Avançado está
+  // fechado, as linhas trancadas não entram no total nem na conta de aprendidas.
+  // Duas telas com denominadores diferentes para o mesmo repertório seria o bug
+  // de 6/9/2026 de novo, por outra porta.
+  const avancadoLiberado = baseCompleto(repertorio, indice);
+  const linhasDoRepertorio = indice.reduce(
+    (soma, e) => soma + idsLiberados(e, avancadoLiberado).length,
+    0,
+  );
   const linhasAprendidas = indice.reduce(
-    (soma, e) => soma + aprendidasDaAbertura(repertorio, e.cor, e.abertura),
+    (soma, e) => soma + aprendidasDaAbertura(repertorio, e, avancadoLiberado),
     0,
   );
   const agoraNoRepertorio = new Date().toISOString();
   const linhasARevisar = indice.reduce(
-    (soma, e) => soma + aRevisarNaAbertura(repertorio, e.cor, e.abertura, agoraNoRepertorio),
+    (soma, e) => soma + aRevisarNaAbertura(repertorio, e, agoraNoRepertorio, avancadoLiberado),
     0,
   );
 

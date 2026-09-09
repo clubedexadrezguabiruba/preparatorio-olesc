@@ -1,0 +1,33 @@
+{
+  "white": 0,
+  "draws": 1,
+  "black": 1,
+  "moves": [
+    {
+      "uci": "d8c7",
+      "san": "Qc7",
+      "averageRating": 1975,
+      "white": 0,
+      "draws": 1,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c6b4",
+      "san": "Nb4",
+      "averageRating": 2011,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B22",
+    "name": "Sicilian Defense: Alapin Variation, Smith-Morra Declined"
+  }
+}

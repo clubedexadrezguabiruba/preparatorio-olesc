@@ -37,6 +37,7 @@ import {
   GENERATED_ID,
 } from "./branches.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
+import { validarNotas } from "../lib/repertorio/notas.ts";
 import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
 
 /**
@@ -1427,6 +1428,36 @@ checkDidacticRotation();
 checkIntegralRegime();
 checkDivida();
 
+/* ------------------------------------------------------------------ *
+ * As páginas de princípios do repertório
+ *
+ * Elas eram conferidas **só pelo build**: `lib/repertorio/conteudo.ts` roda o
+ * schema na importação, e quem importa é a página. Um `faca` com seis passos
+ * (o teto é cinco) passava batido aqui e derrubava `next build` lá na frente,
+ * com a mensagem escondida dentro de um "Failed to collect page data".
+ * Aconteceu em 7/9/2026, ao escrever as quatro páginas da poda da §23.
+ *
+ * Conferir aqui custa uma leitura de arquivo e devolve o erro com o nome do
+ * campo, que é o que o autor precisa ler.
+ *
+ * Chegou da `main` em 8/9/2026, no merge que trouxe o repertório para esta
+ * árvore. Lá este bloco morava dentro do bloco do meio-jogo, que aqui não
+ * existe mais — a conferência é a mesma, e ficou de pé sozinha.
+ * ------------------------------------------------------------------ */
+const notas: ReturnType<typeof validarNotas> = [];
+{
+  const notasFile = path.join(contentDir, "repertorio", "notas.json");
+  if (!existsSync(notasFile)) {
+    fail("NOTAS_AUSENTES", relative(notasFile), "o repertório perdeu as páginas de princípios");
+  } else {
+    try {
+      notas.push(...validarNotas(JSON.parse(readFileSync(notasFile, "utf8"))));
+    } catch (error) {
+      fail("SCHEMA_NOTA", relative(notasFile), error instanceof Error ? error.message : String(error));
+    }
+  }
+}
+
 if (writeBack) {
   for (const loaded of lessons) {
     // Em modo autor, regenerar derivado não pode sujar aula publicada com um
@@ -1532,7 +1563,7 @@ console.log("");
 if (issues.length === 0) {
   console.log(
     `${VERDE}✔ tudo verde — ${positions.size} posições, ${lessons.length} aula(s) e ` +
-      `sem nenhum problema${NORMAL}`,
+      `${notas.length} página(s) de princípios sem nenhum problema${NORMAL}`,
   );
   process.exit(0);
 }

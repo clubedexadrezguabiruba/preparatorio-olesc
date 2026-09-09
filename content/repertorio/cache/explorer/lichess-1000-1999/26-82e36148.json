@@ -1,0 +1,33 @@
+{
+  "white": 14,
+  "draws": 0,
+  "black": 0,
+  "moves": [
+    {
+      "uci": "c6d4",
+      "san": "Nxd4",
+      "averageRating": 1738,
+      "white": 13,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1e3",
+      "san": "Be3",
+      "averageRating": 1567,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B01",
+    "name": "Scandinavian Defense: Gubinsky-Melts Defense"
+  }
+}

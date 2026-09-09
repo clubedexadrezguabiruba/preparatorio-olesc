@@ -1,0 +1,73 @@
+{
+  "white": 18,
+  "draws": 1,
+  "black": 16,
+  "moves": [
+    {
+      "uci": "d7c5",
+      "san": "Nc5",
+      "averageRating": 1764,
+      "white": 13,
+      "draws": 1,
+      "black": 10,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a6",
+      "san": "a6",
+      "averageRating": 1680,
+      "white": 1,
+      "draws": 0,
+      "black": 4,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d7e5",
+      "san": "Ne5",
+      "averageRating": 1715,
+      "white": 2,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a5",
+      "san": "a5",
+      "averageRating": 1928,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8e8",
+      "san": "Re8",
+      "averageRating": 1495,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b7b6",
+      "san": "b6",
+      "averageRating": 1167,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B22",
+    "name": "Sicilian Defense: Alapin Variation"
+  }
+}

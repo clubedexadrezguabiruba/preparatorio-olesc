@@ -1,0 +1,103 @@
+{
+  "white": 56,
+  "draws": 3,
+  "black": 63,
+  "moves": [
+    {
+      "uci": "b8c6",
+      "san": "Nc6",
+      "averageRating": 1770,
+      "white": 25,
+      "draws": 1,
+      "black": 28,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c7c6",
+      "san": "c6",
+      "averageRating": 1848,
+      "white": 11,
+      "draws": 2,
+      "black": 19,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8d6",
+      "san": "Bd6",
+      "averageRating": 1854,
+      "white": 7,
+      "draws": 0,
+      "black": 7,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8e7",
+      "san": "Be7",
+      "averageRating": 1867,
+      "white": 5,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8b4",
+      "san": "Bb4+",
+      "averageRating": 1614,
+      "white": 4,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c7c5",
+      "san": "c5",
+      "averageRating": 1928,
+      "white": 2,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b8d7",
+      "san": "Nd7",
+      "averageRating": 1826,
+      "white": 1,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8d6",
+      "san": "Qd6",
+      "averageRating": 1566,
+      "white": 1,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8f6",
+      "san": "Qf6",
+      "averageRating": 1974,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B01",
+    "name": "Scandinavian Defense: Modern Variation, Gipslis Variation"
+  }
+}

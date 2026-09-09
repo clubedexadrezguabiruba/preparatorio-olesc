@@ -1,0 +1,23 @@
+{
+  "white": 0,
+  "draws": 0,
+  "black": 1,
+  "moves": [
+    {
+      "uci": "a5c4",
+      "san": "Nc4",
+      "averageRating": 1780,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B35",
+    "name": "Sicilian Defense: Accelerated Dragon, Modern Bc4 Variation"
+  }
+}

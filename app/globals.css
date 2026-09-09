@@ -115,11 +115,30 @@
   /* ------------------------------------------------------------------------
      O tabuleiro
 
-     **As casas são quentes de propósito, num site frio.** O verde da
-     identidade significa *método* — é o que a aula usa para dizer "isto está
-     certo". Um tabuleiro verde gastaria esse significado no cenário, e o
-     tabuleiro é o objeto morno sobre a parede fria, que é como um tabuleiro de
-     verdade se comporta em cima de uma mesa.
+     **As casas são AZUIS, na matiz da logo do clube** (8/9/2026, a pedido do
+     Doug). O azul foi lido do arquivo e convertido, não escolhido: os dois tons
+     dominantes de `Logo Xadrez.jpg` são `#007e97` e `#008099`, e os dois caem
+     em **oklch(55% 0.098 218)** — matiz 218, croma 0,098.
+
+     **A matiz é a da logo; a claridade não pode ser.** O azul do clube é
+     escuro (55%), e a casa escura tem de ficar em 75% para as doze marcas do
+     tabuleiro passarem — ver a conta abaixo. Então o que se herda é a matiz e
+     quase todo o croma (0,09 dos 0,098), e o que se perde é a profundidade: na
+     tela ele lê mais claro que o logotipo. Foi conferido e é o preço aceito;
+     escurecer a casa derruba três marcas de uma vez.
+
+     Elas eram quentes, e o argumento de então era que o verde da identidade
+     significa *método* — "isto está certo" — e que um tabuleiro verde gastaria
+     esse significado no cenário. **O argumento continua de pé, e é por isso que
+     o tabuleiro não ficou verde**: ele ficou azul, que é a outra cor da marca e
+     não tem função pedagógica nenhuma. O que mudou é que o cenário passou a
+     dizer de quem é a casa.
+
+     **Consequência que veio junto: a seta e a dica não podiam continuar azuis.**
+     Elas usavam `pincel-seta`, azul, que sobre um tabuleiro azul é a marca
+     desaparecendo dentro do cenário — o mesmo defeito do realce amarelo-claro do
+     pacote, por outra porta. Foram para o verde; ver o `pincel-seta` mais
+     abaixo, com a conta de por que ele é escuro.
 
      **Toda marca do tabuleiro é mais escura que as duas casas, e isso é
      geometria, não gosto.** Uma marca só bate 3:1 contra as duas se estiver
@@ -146,14 +165,20 @@
      O que **é** de graça é o outro lado do par: a marca precisa contrastar com
      a casa *escura*, então clarear a casa clara não custa nada ao orçamento —
      medido, e não suposto: a pior folga continua sendo os mesmos +0,11 do
-     pincel do corte, antes e depois. A casa clara subiu de 88,5% para 93% de
-     claridade e de 0,019 para 0,04 de croma, e a escura ganhou o mesmo croma
-     sem mexer na claridade. O ganho é 1,58 → 1,81:1 (+15%), com o matiz quente
-     que a revisão pediu. O resto da distância fica registrado aqui como o que
-     é: uma dívida com preço conhecido.
+     pincel do corte, antes e depois. O ganho de 1,58 para **1,81:1** (+15%) veio
+     daí, e a virada para o azul o preservou: **a claridade das duas casas não
+     mudou** (93% e 75%), só a matiz e o croma. Foi de propósito — claridade é o
+     que decide contraste, então trocar a cor sem tocar nela é a troca que não
+     custa marca nenhuma. Medido depois da virada, a pior folga até **subiu**:
+     o pincel do corte foi de 3,11 para 3,20 sobre a casa escura.
+
+     O croma da escura subiu de 0,04 para 0,07, que é o máximo em que o azul
+     ainda lê como azul sem derrubar nada: a 72% de claridade, três marcas
+     reprovam. O resto da distância até os 2,29:1 do lichess fica registrado
+     aqui como o que é: uma dívida com preço conhecido.
      ------------------------------------------------------------------------ */
-  --color-casa-clara: oklch(93% 0.04 86);
-  --color-casa-escura: oklch(75% 0.04 78);
+  --color-casa-clara: oklch(93.5% 0.03 218);
+  --color-casa-escura: oklch(75% 0.09 218);
   --color-coordenada: oklch(26% 0.015 160);
 
   --color-destino: oklch(38% 0.14 152);
@@ -195,7 +220,23 @@
      No pacote, `corte` e `pendurada` eram o **mesmo** `#882020`. */
   --color-pincel-corte: oklch(24% 0.17 305);
   --color-pincel-pendurada: oklch(22% 0.19 25);
-  --color-pincel-seta: oklch(36% 0.16 250);
+  /* **A seta e a dica: verdes desde 8/9/2026, e escuras.**
+
+     Era azul, e o tabuleiro ficou azul: a marca sumia dentro do cenário. O
+     verde é a cor do método, que é o que uma seta de "jogue aqui" está
+     dizendo.
+
+     **Por que escura e não viva.** Toda marca do tabuleiro tem de bater 3:1
+     contra as DUAS casas, e a casa clara é o lado apertado: medido, qualquer
+     verde acima de 50% de claridade reprova ali (a 50% mede 2,53:1 na casa
+     escura). Restava o lado escuro da escala, e 30% é onde ela fica longe dos
+     outros dois verdes do tabuleiro — `destino` a 38% e `pincel-defendida` a
+     44%. Mede 10,64:1 na casa clara e 5,88:1 na escura.
+
+     Os três verdes continuam próximos em matiz, e quem os separa é a FORMA,
+     como já separava `pendurada` de `defendida`: a seta é uma linha com ponta,
+     o destino são bolinhas dentro da casa, o selo é um aro em volta dela. */
+  --color-pincel-seta: oklch(30% 0.11 150);
   --color-pincel-defendida: oklch(44% 0.15 152);
 
   /* O quinto, e o único que não é da tática: o selo de **alternativa** do
@@ -208,6 +249,21 @@
      outra — ou vermelho como "errado", que é pior ainda. É o mesmo aro de
      `pendurada` e `defendida`, na claridade do meio, entre as duas. */
   --color-pincel-alternativa: oklch(45% 0.135 75);
+
+  /* O sexto: o **plano** do repertório — a seta que aparece no fim de uma linha
+     que não fechou dentro do teto, apontando para onde a peça que ficou em casa
+     ainda vai (§24 de `docs/REVISAO-FONTES.md`).
+
+     Roxo porque os outros cinco estão tomados e porque a família importa: as
+     setas do plano não são veredito nenhum. Verde diria "certo", vermelho
+     "errado", âmbar "também vale" e azul é a seta que MANDA jogar — e esta não
+     manda nada, ela conta o que vem depois do fim da linha. Um pincel que já
+     significasse outra coisa faria o aluno ler ordem onde há promessa.
+
+     É mais claro que o `pincel-corte`, que é o outro roxo do site: aquele pinta
+     uma parede opaca de seis casas no Laboratório de Finais, este desenha duas
+     ou três setas finas no repertório, e os dois nunca aparecem na mesma tela. */
+  --color-pincel-plano: oklch(40% 0.19 310);
 }
 
 /* --------------------------------------------------------------------------
@@ -258,7 +314,6 @@
   text-transform: uppercase;
   letter-spacing: 0.16em;
 }
-
 
 /* --------------------------------------------------------------------------
    O palco da aula: o tabuleiro de um lado, a voz do professor do outro
@@ -441,7 +496,6 @@
   min-height: 0;
 }
 
-
 html {
   /* Evita o zoom por duplo toque atrapalhar o arraste das peças no celular. */
   touch-action: manipulation;
@@ -604,11 +658,31 @@ cg-board square.premove-dest.hover {
   background: color-mix(in oklab, var(--color-premove) 45%, transparent);
 }
 
-/* Último lance e casa selecionada: a casa inteira. Opacas de propósito — a
-   peça é desenhada por cima delas, e translucidez aqui clarearia a marca até
-   abaixo do piso. O realce amarelo-claro do pacote media 1,50:1. */
+/* O último lance é um ARO, e não a casa cheia. Foi preenchimento até 8/9/2026,
+   e a troca saiu de medição, não de gosto.
+
+   O que o Doug via: as duas casas do último lance pareciam ter cores
+   diferentes. Medido com `getComputedStyle` nas duas, na Escandinava depois de
+   1.e4, num tabuleiro de 768 px: **as duas têm exatamente o mesmo valor**
+   (`lab(31.68 6.99 52.14)`, o token abaixo). O que difere é o que está em cima
+   — a casa de ORIGEM está vazia e mostra o tom inteiro; a de DESTINO tem a peça
+   desenhada por cima e sobra uma moldura fina. Duas casas com a mesma tinta
+   lidas como duas cores, porque metade de uma delas está escondida.
+
+   O aro conserta pela raiz: ele mora na borda da casa, que é justamente onde
+   peça nenhuma chega. As duas passam a mostrar o mesmo desenho, com peça ou
+   sem. A espessura é 9% da casa e sai de `---cg-width`, que o próprio
+   chessground publica (o nome tem três traços mesmo) — 8,6 px num tabuleiro de
+   768 e 2,7 px num de 240, em vez de um valor fixo que some no grande e
+   engole o pequeno.
+
+   Opaco de propósito, como era: translucidez aqui clarearia a marca até abaixo
+   do piso de 3:1, e o realce amarelo-claro do pacote media 1,50:1.
+
+   A casa selecionada e o pré-lance continuam cheios: são estados de interação
+   ao vivo, em que a peça está na mão do aluno e não em cima da casa. */
 cg-board square.last-move {
-  background-color: var(--color-ultimo-lance);
+  box-shadow: inset 0 0 0 calc(var(---cg-width, 512px) / 8 * 0.09) var(--color-ultimo-lance);
 }
 
 cg-board square.selected {
@@ -663,7 +737,11 @@ cg-board square.check {
    ---cg-width é a largura real do tabuleiro, publicada pelo próprio chessground
    (o nome tem três traços mesmo). Dividida por 8 dá a casa. */
 .cg-wrap coords {
-  font-size: clamp(9px, calc(var(---cg-width, 512px) / 8 * 0.28), 14px);
+  /* O teto era 14px e ficou pequeno quando o tabuleiro cresceu para 680:
+     conferido na tela em 8/9/2026, as letras viravam risquinhos na borda. 16px
+     é o glifo do chess.com proporcionalmente (10-13 px numa casa de 75). O piso
+     de 9px é o do celular, onde a casa tem 37. */
+  font-size: clamp(9px, calc(var(---cg-width, 512px) / 8 * 0.28), 16px);
   font-weight: 600;
   line-height: 1;
   opacity: 1;
@@ -698,12 +776,34 @@ cg-board square.check {
   transform: none;
 }
 
-/* Letras das colunas: centradas na base de cada coluna, minúsculas. */
+/* Letras das colunas: no canto inferior DIREITO de cada casa da primeira
+   fileira, minúsculas.
+
+   Eram centradas na base da casa, e o Doug disse que não existiam. Medido em
+   8/9/2026: elas existem, as oito, e são pintadas — tingi-las de vermelho e
+   contar os pixels na captura achou os oito grupos, um por coluna. O defeito é
+   de POSIÇÃO: centradas, elas caem debaixo da peça, e a primeira fileira é a
+   única do tabuleiro que está sempre cheia. Uma letra escura na base de um
+   bispo escuro não é uma letra.
+
+   É a mesma conta que os números já faziam sem ninguém notar: eles estão no
+   canto superior esquerdo, e por isso se leem. O canto é o único lugar da casa
+   onde peça nenhuma chega. Aqui vale o canto oposto — inferior direito —, que
+   é onde o Lichess os põe e o que impede a letra de brigar com o número na
+   casa a1.
+
+   `height: 12.5%` é uma casa, e `align-items: flex-end` encosta a letra no
+   fundo dela. Sem a altura de uma casa, `flex-end` não teria contra o que
+   encostar. */
 .cg-wrap coords.files {
   left: 0;
-  bottom: 0.6%;
+  bottom: 0;
   width: 100%;
-  height: auto;
+  height: 12.5%;
+  box-sizing: border-box;
+  padding: 0 0.8% 0.4% 0;
+  align-items: flex-end;
+  text-align: right;
   text-transform: none;
 }
 

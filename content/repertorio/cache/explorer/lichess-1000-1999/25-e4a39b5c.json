@@ -1,0 +1,43 @@
+{
+  "white": 1,
+  "draws": 0,
+  "black": 2,
+  "moves": [
+    {
+      "uci": "d7c5",
+      "san": "Nxc5",
+      "averageRating": 1931,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c3b4",
+      "san": "Bb4",
+      "averageRating": 2046,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b7b5",
+      "san": "b5",
+      "averageRating": 1876,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "D38",
+    "name": "Queen's Gambit Declined: Westphalian Variation"
+  }
+}

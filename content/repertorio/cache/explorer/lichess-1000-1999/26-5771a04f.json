@@ -1,0 +1,73 @@
+{
+  "white": 423,
+  "draws": 2,
+  "black": 13,
+  "moves": [
+    {
+      "uci": "b3b7",
+      "san": "Qxb7+",
+      "averageRating": 1871,
+      "white": 212,
+      "draws": 1,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b3a4",
+      "san": "Qa4+",
+      "averageRating": 1868,
+      "white": 202,
+      "draws": 1,
+      "black": 8,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e1h1",
+      "san": "O-O",
+      "averageRating": 1816,
+      "white": 7,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b3b5",
+      "san": "Qb5+",
+      "averageRating": 1621,
+      "white": 0,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f2f3",
+      "san": "f3",
+      "averageRating": 1862,
+      "white": 2,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2f3",
+      "san": "Nf3",
+      "averageRating": 1845,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B13",
+    "name": "Caro-Kann Defense: Exchange Variation, Rubinstein Variation"
+  }
+}

@@ -1,31 +1,68 @@
-; Alapin 2.c3 — 3 linhas do Base. As três respostas mais jogadas na faixa
-; 1000-1400 são 2...Cc6, 2...d6 e 2...e6, e são essas que entram. Os capítulos
-; do Krikor sobre 2...Cf6 e 2...d5 ficam para o Avançado: pela tabela da seção 6
-; eles são 6,1 por cento e 6,6 por cento, abaixo do corte do Base.
+; ESTICADA EM 8/9/2026 pela régua do término (seção 24 do docs/REVISAO-FONTES.md):
+; a linha tinha 8 lances nossos, não rocava e deixava os dois bispos em casa.
+; Agora tem 12, roca no décimo e termina com as quatro peças menores fora. A
+; cauda está declarada lance a lance na tag [Fonte], com o degrau da escada.
+;
+; Alapin 2.c3 — 1 linha do Base. Eram três até 7/9/2026: o 2...Cc6 (37,6 por
+; cento), o 2...d6 (21,3) e o 2...e6 (12,2).
+;
+; A PODA de 7/9/2026 (seção 23 do docs/REVISAO-FONTES.md) deixou só o 2...Cc6, e
+; o motivo é o mesmo do bispo em c4 na seção 2.6 do docs/REPERTORIO.md: depois
+; de 2.c3 as quatro respostas mais comuns somam 78,1 por cento — a posição se
+; espalha, e posição espalhada não rende sequência para decorar, rende uma
+; ideia. As respostas dele viraram a página de princípios 'alapin-centro-grande'
+; em content/repertorio/notas.json, que cobre 2...d6 e 2...e6 (que tinham linha)
+; e mais 2...Cf6 e 2...d5 (que nunca tiveram).
+;
+; O que sobra aqui é a linha que ENSINA a ideia, jogada contra a resposta mais
+; comum: o peão de c3 recaptura em d4 e o centro fica com dois peões contra
+; nenhum. Quem entendeu isso responde as outras quatro sozinho.
 
 [Abertura "alapin"]
 [Nome "Alapin 2.c3"]
 [Cor "brancas"]
 [Nivel "base"]
-[Fonte "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'"]
+[Fonte "Curso Krikor 2025 — cap. 'Defesa Siciliana - Alapin vs Alternativas no lance 2'. || CAUDA DA §24 (8/9/2026), do 8...Cf6 ao 12.Dd2: o curso nao alcanca nenhuma destas posicoes. Degrau 1 do 8...Cf6 ao 11.Be3 (216, 535, 274, 494 e 275 jogos) e degrau 2 nos dois ultimos. Os tres lances nossos sao os mais jogados E os melhores do motor na posicao: 9.Bd3 +1,04 contra +0,95 do 9.Be3, 11.Be3 +1,14 com 49,5 por cento, 12.Dd2 +1,08 com 33,3 por cento. O 10.O-O e o mais jogado com 72,6 por cento. A linha fecha a regua no lance 12, sem [%plano]. Ponta +1,04 -> +1,19."]
 [Result "*"]
 
-1. e4 c5 2. c3 {O lance mais estranho do repertório, e o mais simples de
+1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} c5 2. c3 {O lance mais estranho do repertório, e o mais simples de
 entender: o peão de c3 não ataca nada, ele só guarda lugar para o de d2 avançar
 dois passos. Se ele comer em d4, quem recaptura é o peão de c3 — e o centro
 continua nosso.} 2... Nc6
-(2... d6 3. d4 Nf6 4. Bd3 {Ele não brigou pelo centro, então os dois peões do
-meio ficam nossos e o bispo sai para d3 apoiando e4. Se ele trocar em d4, o peão
-de c3 recaptura e o centro fica ainda maior.})
-(2... e6 3. d4 d5 4. e5 {O peão avança e trava o centro. O bispo dele de c8 fica
-preso atrás dos próprios peões, e nós ganhamos espaço para jogar do lado do
-rei.})
-3. d4 cxd4 4. cxd4 {Este é o lance que dá nome à abertura toda: o peão de c3
+3. d4 {O 2.c3 só existia para permitir este lance. O segundo peão vai
+para o meio e oferece a troca — e a troca é o que a gente quer, porque quem
+recaptura em d4 é o peão de c3, não uma peça. Repare que ninguém está
+atacando nada aqui: o centro se constrói com peões, e as peças vêm depois.}
+3... cxd4 4. cxd4 {Este é o lance que dá nome à abertura toda: o peão de c3
 recaptura e ficamos com dois peões no centro, e4 e d4, contra nenhum.} 4... d6
-5. Nc3 g6 6. d5 {O peão anda mais um e o cavalo dele não tem para onde ir a não
+5. Nc3 {O peão que morava em c3 se mudou para d4, e a casa ficou livre bem na
+hora: c3 é onde o cavalo da dama sempre quer ir. De lá ele guarda o peão de
+e4 e olha para d5 — que é exatamente a casa que o nosso peão vai ocupar no
+lance seguinte. Um lance, dois serviços.} 5... g6 6. d5 {O peão anda mais um e o cavalo dele não tem para onde ir a não
 ser voltar para casa — os dois lances que ele gastou com essa peça foram para o
 lixo. E o centro virou uma parede em e4 e d5, sem nenhum peão dele por perto
-para empurrá-la.} 6... Nb8 7. Nf3
-Bg7 8. h3 {Antes de rocar, tiramos a casa g4 do bispo
+para empurrá-la.} 6... Nb8 7. Nf3 {Conte os lances dele: gastou dois com o cavalo para
+deixá-lo exatamente onde estava. A gente usa o presente para tirar a última
+peça pequena do fundo. De f3 o cavalo cobre e5, que é a casa de onde ele
+tentaria devolver o soco no centro, e o roque fica pronto para a hora que a
+gente quiser.}
+7... Bg7 8. h3 {Antes de rocar, tiramos a casa g4 do bispo
 dele. Repare no centro: peões em e4 e d5 e o cavalo dele de volta para casa — é
-isso que o 2.c3 constrói.} *
+isso que o 2.c3 constrói.} 8... Nf6
+9. Bd3 {O bispo sai para d3, e não para c4. De c4 ele bateria em d5, que é
+casa do NOSSO peão — não há nada para atacar ali. De d3 ele guarda o peão de e4
+e fica na diagonal que aponta para h7, o cantinho do rei dele. Escolha a casa
+do bispo pelo que ele vai fazer, não pela que parece mais bonita.} 9... O-O
+10. O-O {Rei guardado. Conte o que cada lado tem: nós temos os dois peões
+centrais em e4 e d5, todas as peças com casa e o rei no canto; ele gastou dois
+lances levando o cavalo de b8 a c6 e de volta a b8, e agora vai ter de achar o
+que fazer com uma posição sem espaço.} 10... Nbd7
+11. Be3 {A última peça pequena sai, e a casa é boa por dois motivos: de e3 o
+bispo olha para a diagonal que termina em a7 — o lado onde ele não tem peça
+nenhuma — e prepara o lance seguinte, que é a dama vir para d2 e as duas peças
+apontarem juntas para h6.} 11... a6
+12. Qd2 {A dama entra atrás do bispo, e as duas passam a olhar para a mesma
+diagonal, a que termina em h6. É a mesma dupla que você já viu na Escocesa, na
+Philidor e na Petroff — Be3 e Dd2 — só que aqui o rei ficou no lado pequeno.
+Conte a posição: rei no canto, as quatro peças pequenas fora de casa, dois peões
+no meio do tabuleiro e um plano escrito. A abertura acabou.} *

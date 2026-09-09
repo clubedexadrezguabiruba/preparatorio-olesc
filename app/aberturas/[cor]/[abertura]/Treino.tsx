@@ -21,6 +21,8 @@ import {
 import { Bolinhas } from "@/components/Bolinhas";
 import { registrarTreino } from "../../acoes";
 import { Passada } from "./Passada";
+import { OQueAindaFalta } from "./OQueFalta";
+import { SeletorDeLinha, type LinhaDoMenu } from "./SeletorDeLinha";
 
 /**
  * O treinador de uma linha do repertório: conduzir as duas fases e gravar.
@@ -74,6 +76,12 @@ export type TreinoProps = {
   progresso: ProgressoDaLinha;
   modoInicial: Modo;
   posicao: { indice: number; total: number };
+  /**
+   * As linhas da abertura, para o menu de troca — id, nome e progresso, e nada
+   * mais. Ver o `catalogo` em `page.tsx`: aqui é cliente, e a `Linha` inteira
+   * seria o repertório da abertura despejado no HTML.
+   */
+  linhas: readonly LinhaDoMenu[];
   /** O instante que a página calculou uma vez, para a conta dos dias. */
   agora: string;
 };
@@ -85,6 +93,7 @@ export function Treino({
   progresso,
   modoInicial,
   posicao,
+  linhas,
   agora,
 }: TreinoProps) {
   const router = useRouter();
@@ -118,7 +127,11 @@ export function Treino({
    * não faz.
    */
   const [porQue, setPorQue] = useState<"erro" | "dica" | "fim">("fim");
-  const [placar, setPlacar] = useState<{ acertou: boolean } | null>(null);
+  const [placar, setPlacar] = useState<{
+    acertou: boolean;
+    /** Preenchido quando foi o erro que parou a passada. Ver `Passada.tsx`. */
+    revelado: { passo: number; uci: string; san: string } | null;
+  } | null>(null);
 
   /**
    * A passada terminou (ou a dica a decidiu): manda os lances e guarda o que
@@ -159,16 +172,42 @@ export function Treino({
     if (virouAprendida) playComplete();
   }, [virouAprendida]);
 
-  /** Recomeça a linha, de memória. É a emenda do fim da assistida e o "de novo". */
-  const dNovo = useCallback(() => {
+  /**
+   * Zera tudo o que é de uma passada e entra na etapa pedida.
+   *
+   * A `rodada` sobe junto porque é ela que remonta a `Passada` por `key`, e
+   * remontar é a maneira do React de zerar estado: posição, fase e boletim têm
+   * de voltar ao começo, e não há caminho mais barato nem mais seguro.
+   */
+  const entrarEm = useCallback((proximo: Modo) => {
     setTerminou(false);
     setResultado(null);
     setFalhaAoGravar(null);
-    setModo("quiz");
+    setModo(proximo);
     setPorQue("fim");
     setPlacar(null);
     setRodada((r) => r + 1);
   }, []);
+
+  /** Recomeça a linha valendo. É o "Jogar de novo" e o "Tentar de novo". */
+  const dNovo = useCallback(() => entrarEm("quiz"), [entrarEm]);
+
+  /**
+   * A emenda das três etapas: **seta → treino → valendo**.
+   *
+   * A do meio é a que faltava até 8/9/2026, e o buraco que ela fecha é este: o
+   * aluno saía da passada com a seta lhe dando o lance e caía direto na
+   * cobrança. Não havia onde praticar **sem a seta e sem estar sendo medido** —
+   * e é nesse lugar que se descobre se decorou.
+   *
+   * As três são **uma passada**. A escada de revisão espaçada não muda: a linha
+   * só fica aprendida com três passadas em três dias espaçados, e só a terceira
+   * etapa grava. Da segunda passada em diante (`tentativas > 0`) o aluno entra
+   * direto no valendo — repetição espaçada mede recall, não releitura.
+   */
+  const avancarEtapa = useCallback(() => {
+    entrarEm(modo === "assistido" ? "treino" : "quiz");
+  }, [entrarEm, modo]);
 
   /**
    * A volta à passada assistida, sob demanda.
@@ -178,15 +217,7 @@ export function Treino({
    * para quem a dica de uma casa não basta. Ela não grava nada, então não há o
    * que burlar aqui.
    */
-  const comASeta = useCallback(() => {
-    setTerminou(false);
-    setResultado(null);
-    setFalhaAoGravar(null);
-    setModo("assistido");
-    setPorQue("fim");
-    setPlacar(null);
-    setRodada((r) => r + 1);
-  }, []);
+  const comASeta = useCallback(() => entrarEm("assistido"), [entrarEm]);
 
   /**
    * A próxima linha vem do servidor, e não daqui: `proximaLinha` sabe a ordem —
@@ -199,15 +230,32 @@ export function Treino({
     router.refresh();
   }, [abertura, cor, router]);
 
-  return (
-    <div className="flex flex-col gap-3">
+  /**
+   * O topo do painel. Sobe para dentro da coluna da direita porque é lá que
+   * fica a voz do treinador — o nome da linha responde "onde eu estou?", e a
+   * pergunta nasce ao lado do tabuleiro, não acima dele.
+   */
+  const cabecalho = (
+    <>
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-1">
           <p className="truncate text-sm font-medium text-tinta">{linha.nome}</p>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-tinta-fraca tabular-nums">
-              linha {posicao.indice} de {posicao.total}
-            </span>
+            {/*
+             * O "linha 2 de 5" deixou de ser rótulo e virou o gatilho do menu
+             * de troca. É a única informação que a lista de baixo tinha e as
+             * outras telas não davam — pular para uma linha específica vendo o
+             * estado de cada uma —, e ela subiu para cá quando a lista saiu de
+             * baixo do tabuleiro. Ver `SeletorDeLinha.tsx`.
+             */}
+            <SeletorDeLinha
+              cor={cor}
+              abertura={abertura}
+              linhas={linhas}
+              atual={linha.id}
+              posicao={posicao}
+              agora={agora}
+            />
             <span className="text-tinta-muda" aria-hidden>
               ·
             </span>
@@ -216,7 +264,37 @@ export function Treino({
         </div>
         <BotaoDeSom />
       </div>
+      {falhaAoGravar ? <Falha erro={falhaAoGravar} /> : null}
+    </>
+  );
 
+  /**
+   * Os dois atalhos do quiz em andamento, no pé do painel.
+   *
+   * Ficam junto dos outros botões e não numa barra própria: no painel de
+   * altura fechada, cada faixa extra é altura que sai do comentário.
+   */
+  const rodapeExtra =
+    !terminou && modo !== "assistido" ? (
+      <>
+        <button
+          type="button"
+          onClick={comASeta}
+          className="foco rounded-lg border border-metodo-superficie px-3 py-2 text-xs font-medium text-metodo-tinta hover:bg-metodo-superficie/10"
+        >
+          Jogar com a seta
+        </button>
+        <Link
+          href="/aberturas"
+          className="foco ml-auto text-xs font-medium text-metodo-tinta hover:underline"
+        >
+          Escolher outra abertura →
+        </Link>
+      </>
+    ) : null;
+
+  return (
+    <>
       <Passada
         key={`${modo}:${linha.id}:${rodada}`}
         linha={linha}
@@ -226,20 +304,43 @@ export function Treino({
           setPlacar(fechou);
           setTerminou(true);
         }}
-        aoComecarQuiz={dNovo}
-      />
-
-      {falhaAoGravar ? <Falha erro={falhaAoGravar} /> : null}
-
-      {/*
-       * O painel de fim é só do quiz. A assistida termina no cartão "Pronto. /
-       * Agora de memória." e no botão que emenda a fase seguinte — pôr aqui um
-       * painel de resultado seria dar nota a uma passada que não é medida.
-       */}
-      {terminou && modo === "quiz" ? (
-        <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-4">
+        aoAvancarEtapa={avancarEtapa}
+        /*
+         * A trilha só na primeira passada da linha. Da segunda em diante o
+         * aluno entra direto no valendo, e uma trilha de três com duas etapas
+         * apagadas para sempre prometeria um caminho que não existe mais.
+         */
+        mostrarTrilha={modoInicial === "assistido"}
+        cabecalho={cabecalho}
+        rodapeExtra={rodapeExtra}
+        painelDeFim={
+          /*
+           * O painel de fim é só do quiz. A assistida termina no cartão
+           * "Pronto. / Agora de memória." e no botão que emenda a fase
+           * seguinte — pôr aqui um painel de resultado seria dar nota a uma
+           * passada que não é medida.
+           */
+          terminou && modo === "quiz" ? (
+            <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto rounded-xl border border-borda-fraca bg-carta px-4 py-4">
           {virouAprendida ? (
             <p className="titulo text-metodo-tinta-alta">Linha aprendida!</p>
+          ) : placar?.revelado ? (
+            /*
+             * O erro **para** a passada desde 8/9/2026, e antes ela ia até o
+             * fim. A troca é do Move Trainer do chess.com (§A3 de
+             * `docs/REFERENCIA-MOVE-TRAINER.md`): revelar o lance certo e
+             * recomeçar ensina mais que assistir ao resto de uma linha que o
+             * aluno já não está mais tentando lembrar.
+             *
+             * O que **não** mudou é o que se grava: o erro sobe ao servidor uma
+             * vez, com `porQue: "erro"`, derruba o degrau e zera os acertos
+             * seguidos. É o que faz o registro querer dizer alguma coisa.
+             */
+            <p className="text-sm font-semibold text-tinta">
+              Não era esse lance. A linha joga{" "}
+              <span className="text-metodo-tinta-alta">{placar.revelado.san}</span> — e os
+              acertos seguidos voltaram a zero.
+            </p>
           ) : resultado && !resultado.acertou ? (
             <p className="text-sm font-semibold text-tinta">
               {porQue === "dica" && placar?.acertou
@@ -250,15 +351,37 @@ export function Treino({
             <p className="text-sm font-semibold text-tinta">Linha inteira, sem erro.</p>
           )}
 
-          <Comentario texto={linha.comentarios[String(linha.lances.length - 1)]} />
+          {/*
+           * O texto do professor: o do lance em que o aluno errou, quando houve
+           * erro, e o do último lance da linha quando ela fechou. É o comentário
+           * que responde à pergunta que ele acabou de fazer — "por que não era
+           * esse?" tem resposta no lance certo, não no fim da linha.
+           */}
+          <Comentario
+            texto={
+              placar?.revelado
+                ? linha.comentarios[String(placar.revelado.passo)]
+                : linha.comentarios[String(linha.lances.length - 1)]
+            }
+          />
+
+          {/* Só aparece quando a linha não fechou a régua — ver `OQueFalta.tsx`. */}
+          <OQueAindaFalta linha={linha} />
 
           <ProximaPratica progresso={resultado?.progresso ?? null} agora={agora} />
 
           <div className="flex flex-wrap gap-2">
             {resultado?.acertou === false ? (
               <>
+                {/*
+                 * "Tentar de novo" quando o erro parou a passada, e "Jogar de
+                 * novo" quando ela foi até o fim: o primeiro é a resposta a uma
+                 * linha que ficou incompleta, o segundo a uma que fechou e não
+                 * contou. Os dois fazem a mesma coisa — reiniciam o valendo do
+                 * lance 1 —, e é o nome que tem de dizer o que aconteceu.
+                 */}
                 <Principal onClick={dNovo} esperando={gravando}>
-                  Jogar de novo
+                  {placar?.revelado ? "Tentar de novo" : "Jogar de novo"}
                 </Principal>
                 <Secundario onClick={proxima} esperando={gravando}>
                   Próxima linha
@@ -278,25 +401,11 @@ export function Treino({
               Jogar com a seta
             </Secundario>
           </div>
-        </div>
-      ) : !terminou && modo === "quiz" ? (
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <button
-            type="button"
-            onClick={comASeta}
-            className="foco rounded-lg border border-borda px-3 py-2 text-xs font-medium text-tinta-media hover:bg-carta-toque"
-          >
-            Jogar com a seta
-          </button>
-          <Link
-            href="/aberturas"
-            className="foco text-xs font-medium text-metodo-tinta hover:underline"
-          >
-            Escolher outra abertura →
-          </Link>
-        </div>
-      ) : null}
-    </div>
+            </div>
+          ) : null
+        }
+      />
+    </>
   );
 }
 
@@ -395,7 +504,7 @@ function Secundario({
       type="button"
       onClick={onClick}
       disabled={esperando}
-      className="foco rounded-lg border border-borda px-4 py-2.5 text-sm font-medium text-tinta-media transition-colors hover:bg-carta-toque disabled:opacity-50"
+      className="foco rounded-lg border border-metodo-superficie px-4 py-2.5 text-sm font-medium text-metodo-tinta transition-colors hover:bg-metodo-superficie/10 disabled:opacity-50"
     >
       {children}
     </button>
@@ -406,6 +515,21 @@ function Secundario({
  * Liga e desliga o som. A preferência mora no `localStorage`, fora do React —
  * por isso `useSyncExternalStore`: no servidor o som é "ligado", e a leitura
  * real do armazenamento entra na hidratação sem acusar divergência.
+ *
+ * ## Por que os emojis saíram
+ *
+ * Eram 🔊 e 🔇. Medido nas capturas de 8/9/2026, o 🔇 sai **rosa saturado**
+ * (`#F1489A`) na fonte de emoji do sistema: a única cor quente e saturada da
+ * tela inteira, num canto onde não há nada de urgente acontecendo. O olho lê
+ * como erro e vai até lá — e a paleta do site, que existe para reservar cor
+ * forte ao veredito de um lance, é atropelada por um glifo que não é nosso.
+ *
+ * Emoji é, além disso, arte de terceiro: o desenho muda por sistema
+ * operacional, e o alinhamento com o texto ao lado muda junto.
+ *
+ * Os dois glifos abaixo são o mesmo traço dos quatro do cartão de comando
+ * (`Cartao.tsx`): 24 px, `stroke-width: 2`, `fill: none`, `currentColor`.
+ * `currentColor` é o que os faz respeitar o tom da linha em que estão.
  */
 function BotaoDeSom() {
   const ligado = useSyncExternalStore(subscribeSound, isSoundOn, () => true);
@@ -414,10 +538,43 @@ function BotaoDeSom() {
       type="button"
       onClick={() => setSoundOn(!ligado)}
       aria-pressed={ligado}
-      className="foco min-h-11 shrink-0 rounded-lg px-2 text-lg leading-none transition-colors hover:bg-carta-toque"
+      className="foco flex min-h-11 w-11 shrink-0 items-center justify-center rounded-lg text-tinta-fraca transition-colors hover:bg-carta-toque hover:text-tinta"
     >
-      <span aria-hidden>{ligado ? "🔊" : "🔇"}</span>
+      <IconeDeSom ligado={ligado} />
       <span className="sr-only">{ligado ? "Desligar o som" : "Ligar o som"}</span>
     </button>
+  );
+}
+
+/**
+ * O alto-falante, com as ondas ou com o corte.
+ *
+ * O corpo é o mesmo nos dois estados — só o que sai dele muda. É o que faz o
+ * botão não "piscar de forma" quando o aluno o aperta: a silhueta fica, e a
+ * diferença é exatamente a informação (som saindo, som cortado).
+ */
+function IconeDeSom({ ligado }: { ligado: boolean }) {
+  return (
+    <svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M11 5 6.5 9H3v6h3.5L11 19V5Z" />
+      {ligado ? (
+        <>
+          <path d="M15.5 9.2a4 4 0 0 1 0 5.6" />
+          <path d="M18.5 6.4a8 8 0 0 1 0 11.2" />
+        </>
+      ) : (
+        <path d="M16 9.5 21 14.5M21 9.5 16 14.5" />
+      )}
+    </svg>
   );
 }

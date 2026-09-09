@@ -1,0 +1,133 @@
+{
+  "white": 95,
+  "draws": 19,
+  "black": 577,
+  "moves": [
+    {
+      "uci": "c4b3",
+      "san": "Bb3",
+      "averageRating": 1802,
+      "white": 70,
+      "draws": 12,
+      "black": 381,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c4d5",
+      "san": "Bxd5",
+      "averageRating": 1718,
+      "white": 7,
+      "draws": 1,
+      "black": 92,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b2b3",
+      "san": "b3",
+      "averageRating": 1750,
+      "white": 10,
+      "draws": 5,
+      "black": 65,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a1c1",
+      "san": "Rc1",
+      "averageRating": 1685,
+      "white": 3,
+      "draws": 0,
+      "black": 12,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g1f3",
+      "san": "Nf3",
+      "averageRating": 1642,
+      "white": 0,
+      "draws": 0,
+      "black": 8,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c4d3",
+      "san": "Bd3",
+      "averageRating": 1723,
+      "white": 1,
+      "draws": 1,
+      "black": 5,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a4",
+      "san": "a4",
+      "averageRating": 1625,
+      "white": 0,
+      "draws": 0,
+      "black": 6,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c4b5",
+      "san": "Bb5",
+      "averageRating": 1633,
+      "white": 2,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2d3",
+      "san": "Kd3",
+      "averageRating": 1615,
+      "white": 0,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a1e1",
+      "san": "Re1",
+      "averageRating": 1358,
+      "white": 0,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g1e2",
+      "san": "Ne2",
+      "averageRating": 1971,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c4f1",
+      "san": "Bf1",
+      "averageRating": 1963,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "D51",
+    "name": "Queen's Gambit Declined: Modern Variation, Knight Defense"
+  }
+}

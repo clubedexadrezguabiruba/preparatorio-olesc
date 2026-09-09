@@ -1,0 +1,133 @@
+{
+  "white": 1696861,
+  "draws": 144665,
+  "black": 1603364,
+  "moves": [
+    {
+      "uci": "b8c6",
+      "san": "Nc6",
+      "averageRating": 1551,
+      "white": 623451,
+      "draws": 49742,
+      "black": 562518,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d7d6",
+      "san": "d6",
+      "averageRating": 1547,
+      "white": 348574,
+      "draws": 31145,
+      "black": 314983,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e7e6",
+      "san": "e6",
+      "averageRating": 1576,
+      "white": 215735,
+      "draws": 18325,
+      "black": 206572,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d7d5",
+      "san": "d5",
+      "averageRating": 1618,
+      "white": 130937,
+      "draws": 13438,
+      "black": 155864,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e7e5",
+      "san": "e5",
+      "averageRating": 1555,
+      "white": 123034,
+      "draws": 10575,
+      "black": 111020,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g8f6",
+      "san": "Nf6",
+      "averageRating": 1565,
+      "white": 103628,
+      "draws": 9627,
+      "black": 118060,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g7g6",
+      "san": "g6",
+      "averageRating": 1563,
+      "white": 71583,
+      "draws": 6028,
+      "black": 70279,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a6",
+      "san": "a6",
+      "averageRating": 1556,
+      "white": 47793,
+      "draws": 3577,
+      "black": 41909,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b7b6",
+      "san": "b6",
+      "averageRating": 1481,
+      "white": 12633,
+      "draws": 908,
+      "black": 9839,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8a5",
+      "san": "Qa5",
+      "averageRating": 1503,
+      "white": 3415,
+      "draws": 220,
+      "black": 2687,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b7b5",
+      "san": "b5",
+      "averageRating": 1336,
+      "white": 2936,
+      "draws": 197,
+      "black": 1528,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8c7",
+      "san": "Qc7",
+      "averageRating": 1477,
+      "white": 2221,
+      "draws": 162,
+      "black": 1684,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B22",
+    "name": "Sicilian Defense: Alapin Variation"
+  }
+}

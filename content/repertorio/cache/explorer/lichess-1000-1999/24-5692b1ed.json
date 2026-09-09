@@ -1,0 +1,133 @@
+{
+  "white": 20,
+  "draws": 3,
+  "black": 30,
+  "moves": [
+    {
+      "uci": "e3d4",
+      "san": "Bd4",
+      "averageRating": 1857,
+      "white": 9,
+      "draws": 2,
+      "black": 12,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e3c5",
+      "san": "Bc5",
+      "averageRating": 1862,
+      "white": 4,
+      "draws": 1,
+      "black": 7,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1d2",
+      "san": "Qd2",
+      "averageRating": 1755,
+      "white": 1,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c3e4",
+      "san": "Ne4",
+      "averageRating": 1373,
+      "white": 1,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c3a4",
+      "san": "Na4",
+      "averageRating": 1860,
+      "white": 1,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e2f3",
+      "san": "Bf3",
+      "averageRating": 1893,
+      "white": 2,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e3d2",
+      "san": "Bd2",
+      "averageRating": 1881,
+      "white": 0,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c3d5",
+      "san": "Nxd5",
+      "averageRating": 1784,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g1h1",
+      "san": "Kh1",
+      "averageRating": 1835,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e2g4",
+      "san": "Bg4",
+      "averageRating": 1883,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e3f2",
+      "san": "Bf2",
+      "averageRating": 1605,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a1b1",
+      "san": "Rb1",
+      "averageRating": 1609,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B34",
+    "name": "Sicilian Defense: Accelerated Dragon, Modern Variation"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "white": 6,
+  "draws": 0,
+  "black": 1,
+  "moves": [
+    {
+      "uci": "e6e5",
+      "san": "e5",
+      "averageRating": 1791,
+      "white": 5,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f7f5",
+      "san": "f5",
+      "averageRating": 1562,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a6",
+      "san": "a6",
+      "averageRating": 1912,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B13",
+    "name": "Caro-Kann Defense: Exchange Variation"
+  }
+}

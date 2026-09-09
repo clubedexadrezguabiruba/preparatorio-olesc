@@ -1,0 +1,133 @@
+{
+  "white": 261,
+  "draws": 17,
+  "black": 85,
+  "moves": [
+    {
+      "uci": "c8e6",
+      "san": "Be6",
+      "averageRating": 1748,
+      "white": 69,
+      "draws": 7,
+      "black": 24,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e8h8",
+      "san": "O-O",
+      "averageRating": 1748,
+      "white": 66,
+      "draws": 4,
+      "black": 26,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d6d5",
+      "san": "Qxd5",
+      "averageRating": 1530,
+      "white": 47,
+      "draws": 0,
+      "black": 6,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e7g5",
+      "san": "Bxg5",
+      "averageRating": 1643,
+      "white": 29,
+      "draws": 2,
+      "black": 11,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c7c6",
+      "san": "c6",
+      "averageRating": 1759,
+      "white": 22,
+      "draws": 3,
+      "black": 7,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d6e6",
+      "san": "Qe6+",
+      "averageRating": 1497,
+      "white": 10,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b8c6",
+      "san": "Nc6",
+      "averageRating": 1852,
+      "white": 8,
+      "draws": 1,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f7f6",
+      "san": "f6",
+      "averageRating": 1479,
+      "white": 3,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8g4",
+      "san": "Bg4",
+      "averageRating": 1353,
+      "white": 3,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c5e6",
+      "san": "Ne6",
+      "averageRating": 1679,
+      "white": 1,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h7h6",
+      "san": "h6",
+      "averageRating": 1564,
+      "white": 1,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e7f6",
+      "san": "Bf6",
+      "averageRating": 1201,
+      "white": 2,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C41",
+    "name": "Philidor Defense: Nimzowitsch Variation, Rellstab Variation"
+  }
+}

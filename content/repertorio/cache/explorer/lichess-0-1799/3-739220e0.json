@@ -1,0 +1,163 @@
+{
+  "white": 122663135,
+  "draws": 10235673,
+  "black": 104169977,
+  "moves": [
+    {
+      "uci": "b8c6",
+      "san": "Nc6",
+      "averageRating": 1413,
+      "white": 75705347,
+      "draws": 6482047,
+      "black": 66900142,
+      "game": null,
+      "opening": {
+        "eco": "C44",
+        "name": "King's Knight Opening: Normal Variation"
+      }
+    },
+    {
+      "uci": "d7d6",
+      "san": "d6",
+      "averageRating": 1436,
+      "white": 17495833,
+      "draws": 1532619,
+      "black": 14598614,
+      "game": null,
+      "opening": {
+        "eco": "C41",
+        "name": "Philidor Defense"
+      }
+    },
+    {
+      "uci": "g8f6",
+      "san": "Nf6",
+      "averageRating": 1345,
+      "white": 14180131,
+      "draws": 1135109,
+      "black": 11550975,
+      "game": null,
+      "opening": {
+        "eco": "C42",
+        "name": "Petrov's Defense"
+      }
+    },
+    {
+      "uci": "f8c5",
+      "san": "Bc5",
+      "averageRating": 1291,
+      "white": 3838758,
+      "draws": 266004,
+      "black": 2985073,
+      "game": null,
+      "opening": {
+        "eco": "C40",
+        "name": "King's Pawn Game: Busch-Gass Gambit"
+      }
+    },
+    {
+      "uci": "d8f6",
+      "san": "Qf6",
+      "averageRating": 1371,
+      "white": 3149945,
+      "draws": 236526,
+      "black": 2622883,
+      "game": null,
+      "opening": {
+        "eco": "C40",
+        "name": "King's Pawn Game: McConnell Defense"
+      }
+    },
+    {
+      "uci": "f7f6",
+      "san": "f6",
+      "averageRating": 1227,
+      "white": 2500419,
+      "draws": 180084,
+      "black": 1502169,
+      "game": null,
+      "opening": {
+        "eco": "C40",
+        "name": "King's Pawn Game: Damiano Defense"
+      }
+    },
+    {
+      "uci": "d7d5",
+      "san": "d5",
+      "averageRating": 1361,
+      "white": 2029406,
+      "draws": 150996,
+      "black": 1669005,
+      "game": null,
+      "opening": {
+        "eco": "C40",
+        "name": "Elephant Gambit"
+      }
+    },
+    {
+      "uci": "f8d6",
+      "san": "Bd6",
+      "averageRating": 1296,
+      "white": 966292,
+      "draws": 65946,
+      "black": 653363,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f7f5",
+      "san": "f5",
+      "averageRating": 1406,
+      "white": 540681,
+      "draws": 34740,
+      "black": 443684,
+      "game": null,
+      "opening": {
+        "eco": "C40",
+        "name": "Latvian Gambit"
+      }
+    },
+    {
+      "uci": "d8e7",
+      "san": "Qe7",
+      "averageRating": 1271,
+      "white": 440515,
+      "draws": 32758,
+      "black": 306909,
+      "game": null,
+      "opening": {
+        "eco": "C40",
+        "name": "Gunderam Defense"
+      }
+    },
+    {
+      "uci": "c7c6",
+      "san": "c6",
+      "averageRating": 1320,
+      "white": 319906,
+      "draws": 21856,
+      "black": 212889,
+      "game": null,
+      "opening": {
+        "eco": "C40",
+        "name": "King's Pawn Game: Gunderam Gambit"
+      }
+    },
+    {
+      "uci": "f8b4",
+      "san": "Bb4",
+      "averageRating": 1066,
+      "white": 349787,
+      "draws": 24448,
+      "black": 138477,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C40",
+    "name": "King's Knight Opening"
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "white": 63,
+  "draws": 8,
+  "black": 50,
+  "moves": [
+    {
+      "uci": "e8h8",
+      "san": "O-O",
+      "averageRating": 1626,
+      "white": 40,
+      "draws": 7,
+      "black": 33,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b8d7",
+      "san": "Nd7",
+      "averageRating": 1693,
+      "white": 10,
+      "draws": 1,
+      "black": 7,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f5g4",
+      "san": "Bg4",
+      "averageRating": 1724,
+      "white": 5,
+      "draws": 0,
+      "black": 4,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h7h6",
+      "san": "h6",
+      "averageRating": 1614,
+      "white": 4,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6g6",
+      "san": "Qg6",
+      "averageRating": 1497,
+      "white": 3,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6d8",
+      "san": "Qd8",
+      "averageRating": 1886,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b7b5",
+      "san": "b5",
+      "averageRating": 1644,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B01",
+    "name": "Scandinavian Defense: Main Line, Mieses Variation"
+  }
+}

@@ -1,35 +1,206 @@
-; Escandinava — 2 linhas do Base. Pela tabela da seção 6, depois de 2.exd5 só
-; 2...Dxd5 entra no corte, com 80,8 por cento. As duas linhas cobrem os dois
-; recuos mais comuns da dama depois de 3.Cc3.
+; Escandinava — 2 linhas do Base e 1 do Avançado. As duas do Base cobrem os
+; recuos mais comuns da dama depois de 2...Dxd5 3.Cc3, que é 80,8 por cento da
+; posição.
+;
+; ESTICADA EM 8/9/2026 pela régua do término (seção 24 do docs/REVISAO-FONTES.md):
+; toda linha vai até o aluno ter rocado e tirado as quatro peças menores de
+; casa, com piso no lance 12 e teto no 14. As três linhas tinham 8, 8 e 7 lances
+; nossos e nenhuma rocava; agora têm 12, 12 e 14. Os três ids morreram e três
+; nasceram — o id é o hash dos lances. As caudas estão declaradas lance a lance
+; nas tags [Fonte], com o degrau da escada e o número de jogos de cada posição.
+;
+; A linha do 3...Dd6 é a única das três que termina com um bloco [%plano]: ela
+; chega ao lance 12 com tudo desenvolvido e só o roque faltando, e ali o
+; explorer já secou em 16 jogos. Em vez de inventar dois lances que ninguém
+; joga, ela declara o roque grande e para.
+;
+; O 2...Cf6 SAIU DO BASE em 7/9/2026 (seção 23 do docs/REVISAO-FONTES.md) e é o
+; segundo jogo deste arquivo, agora com [Nivel "avancado"]. Ele não foi cortado
+; nem encurtado — os treze meios-lances são os mesmos, então o id não mudou; só
+; passou a ficar trancado até o aluno fechar o Base inteiro.
+;
+; O motivo não é a frequência dele (15 a 19 por cento pela seção 6.1, e por isso
+; ele entrou em 6/9): é que o Base tem de caber num aluno de ~1000, e o plano
+; desta linha — a caçada h3, g4, Ce5 ao bispo — o aluno já treina na linha do
+; 3...Dd6. Quem sabe uma sabe a outra. Fica no comentário do 1...d5, que as duas
+; dividem: se ele recapturar de cavalo, não segure o peão, jogue 3.d4.
 
 [Abertura "escandinava"]
 [Nome "Escandinava"]
 [Cor "brancas"]
 [Nivel "base"]
-[Fonte "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'"]
+[Fonte "Curso Krikor 2025 — cap. 'Defesa Escandinava vs 2.exd5'. || CAUDA DA §24 (8/9/2026), do 8...Dd8 ao 12.Bg5: o curso nao alcanca nenhuma destas posicoes, entao ela sai da escada de degraus da §24, medida pelo repertorio:cauda no recorte lichess-1000-1999. DEGRAU 1 (rapid+classical, mais de 200 jogos) nos lances 8...Dd8 (96,9 por cento, 4.108 jogos), 9.Cxf6+ (75 por cento, motor +0,35 contra +0,11 do 9.Ce3), 9...Dxf6 (76 por cento), 10.O-O (28,1 por cento, motor +0,39 — o 10.Bg5 e mais jogado com 36,7 e vale +0,33; entre lances parecidos ganha o que roca, que e a regra da §24), 10...Bd6 (37,7 por cento) e 11.Te1 (24,3 por cento, motor +0,42). DEGRAU 2 (mais o blitz) em 11...O-O (57,8 por cento) e 12.Bg5 (34,3 por cento, motor +0,33). A linha fecha a regua no lance 12 e nao precisou de [%plano]. Ponta antes da cauda: brancas +0,45; depois: brancas +0,43. || CAUDA DA §24 do ramo 3...Dd6, do 8...Cc6 ao 12.De2: mesma escada, mesma medicao. Degrau 1 em 8...Cc6 (39,6 por cento, 320 jogos) e 9.Bb5 (32,8 por cento, motor +1,18 contra +0,25 do 9.Cxg6, que e o mais jogado). Degrau 2 em 9...O-O-O (44,4 por cento), 10.Bxc6 (52,3 por cento, motor +2,09) e 10...bxc6 (98,3 por cento). Degrau 3 do 11.Be3 em diante — 178, 78 e 54 jogos: 11.Be3 e o mais jogado (42,1 por cento) e desenvolve a ultima peca menor; 11...Cd5 e 66,7 por cento; e o 12.De2 vale +1,51 contra +0,47 do 12.O-O. AQUI A LINHA PARA, pela regra do degrau 3 da §24: ela ja tem 12 lances nossos e o explorer secou em 16 jogos. O roque que falta esta declarado no bloco [%plano] do ultimo lance, e ele e legal na posicao — b1, c1 e d1 estao vazias. Ponta antes da cauda: brancas +0,60; depois: brancas +1,51."]
 [Result "*"]
 
-1. e4 d5 {A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de
+1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} d5 {A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de
 começar — mas repare no que ela nos entrega: daqui para a frente são lances
 naturais, um atrás do outro, e uma posição tranquila sem nada difícil para
 decorar. É por isso que ela aparece tanto nesta faixa de rating, e é por isso
-que a gente gosta de vê-la.} 2. exd5 Qxd5 3. Nc3 {O cavalo sai atacando a dama. Este é o presente
+que a gente gosta de vê-la.} 2. exd5 {Pegue o peão. Ele vai ter de gastar um lance para buscá-lo de volta, e é esse lance de vantagem que a linha inteira explora — enquanto ele arruma a vida, nós desenvolvemos.} Qxd5
+3. Nc3 {O cavalo sai atacando a dama. Este é o presente
 que a Escandinava nos dá: desenvolvemos com tempo, e ela ainda vai ter de andar
 mais uma vez.} 3... Qa5
-(3... Qd6 4. d4 Nf6 5. Nf3 {Espere o bispo dele em g4 agora: é o lance mais
+(3... Qd6 {Esta é a Escandinava moderna, e o especialista dela é o holandês
+Sergei Tiviakov. A ideia é boa: em d6 a dama fica desenvolvida e não leva
+susto de peça nenhuma tão cedo.} 4. d4 {O centro inteiro é nosso de graça — e
+repare no efeito colateral do 3…Dd6: a dama tapou a saída do peão de d7, e
+sem esse peão andar o bispo de c8 não sai pela porta normal. É por isso que
+o bispo dele vai aparecer em g4 já no lance seguinte, antes da hora.} 4... Nf6 5. Nf3 {Espere o bispo dele em g4 agora: é o lance mais
 natural do mundo, ele sai atacando e ainda prega o nosso cavalo contra a dama.
 E é exatamente o que a gente quer. O bispo parece ativo em g4 e está indo para
 o lugar errado — o próximo lance começa a mostrar por quê.} 5... Bg4 6. h3 {Começa a caçada ao bispo. O h3 faz uma
 pergunta simples — troca ou recua? — e as duas respostas nos servem: se ele
 trocar, ganhamos os dois bispos; se recuar para h5, vem g4 e ele fica na
-diagonal errada.} 6... Bh5 7. g4 Bg6 8. Ne5 {Empurramos o bispo
+diagonal errada.} 6... Bh5 7. g4 {Segundo empurrão, e agora repare no que ele resolve. Com o
+bispo em h5 o nosso cavalo de f3 está pregado contra a dama de d1 e não pode
+sair do lugar. Depois de g4 o bispo é obrigado a ir para g6, a prega acaba, e
+o cavalo fica livre para pular em e5. Sim, andamos dois peões na frente do
+nosso rei; dá para pagar esse preço porque ele não tem nem dama nem torre
+olhando para essa ala.} 7... Bg6 8. Ne5 {Empurramos o bispo
 dele até g6 com h3 e g4, e agora o cavalo pousa em e5, bem no meio do tabuleiro.
-O mesmo remédio serve quando a dama recua para d8.})
-4. d4 Nf6 5. Nf3 c6 {Esse peãozinho de c6 não ataca nada e tem endereço certo:
+O mesmo remédio serve quando a dama recua para d8.} 8... Nc6
+9. Bb5 {O último bispo sai, e sai pregando: com o rei dele em e8, o cavalo de
+c6 não pode se mexer. Repare por que ele é uma peça importante — é o cavalo de
+c6 que ataca o nosso de e5 e é ele que ajuda a segurar d4. Pregado, deixa de
+fazer as duas coisas.} 9... O-O-O
+10. Bxc6 {Trocamos, e o motivo é o peão que recaptura. Ele acabou de pôr o rei
+em c8, e a única recaptura razoável é …bxc6 — os peões da frente do rei dele
+ficam dobrados e a coluna b abre bem para lá. Nós ainda não rocamos, então
+temos a partida inteira para escolher de que lado fica o nosso.} 10... bxc6
+11. Be3 {A última peça pequena sai de casa, e a casa é escolhida: de e3 o bispo
+guarda o peão de d4, e é o peão de d4 que segura o nosso cavalo em e5. Cada
+peça que sai neste repertório sai defendendo alguém — desenvolver não é
+espalhar peça pelo tabuleiro, é ligar uma na outra.} 11... Nd5
+{O cavalo pula para o meio atacando o nosso bispo e o nosso cavalo de c3 ao
+mesmo tempo. Dois em cada três jogam isto.}
+12. Qe2 {Não corra atrás do ataque duplo dele: o cavalo de c3 está defendido
+pelo peão de b2, e o bispo de e3 pelo peão de f2 — nada está pendurado, e um
+ataque duplo em cima de duas peças defendidas não é ataque nenhum. A dama é que
+tem trabalho a fazer. De e2 ela guarda o cavalo de e5, que é a peça que segura a
+posição inteira, sai da coluna d, onde a torre dele está apontada para ela, e
+desocupa d1 para a nossa própria torre. Repare no endereço da dama: ela mira a6,
+bem no cantinho do rei dele.
+
+E olhe a fileira de trás: b1, c1 e d1 estão as três vazias. O roque grande está
+pronto, e é o lance que vem — a linha para aqui porque daqui em diante quase
+ninguém jogou, e é melhor você saber o plano do que decorar lances que ninguém
+faz.
+[%plano
+O-O-O: b1, c1 e d1 já estão vazias, entao o roque grande sai no lance seguinte e a torre cai na coluna d, bem em frente ao rei dele
+]} *)
+4. d4 {A dama se escondeu em a5, e o centro fica nosso sem custo: dois peões
+lado a lado em e4 e d4. E guarde o detalhe que decide esta linha — o peão
+acabou de sair de d2, e é justamente d2 a casa que o nosso bispo vai ocupar
+no sétimo lance para cobrar a dama lá de a5. Cada peão que anda abre a porta
+de alguém.} 4... Nf6
+5. Nf3 {O último cavalo sai, guarda o peão de d4 e deixa o roque pronto. E
+espere o …Bg4 agora: é o lance mais natural do mundo, ele sai atacando e
+prega o cavalo contra a nossa dama. Se vier, a receita é a mesma da linha do
+3…Dd6, que está entre parênteses logo acima — h3, g4 e o cavalo pousando em
+e5.} 5... c6 {Esse peão de c6 não ataca nada e tem endereço certo:
 ele abre a casa c7 para a dama fugir quando alguém a incomodar. Ele já está se
 preparando — e o nosso plano dos próximos lances é justamente incomodá-la.}
-6. Bc4 Bf5 7. Bd2 {Ele pôs a dama em a5 para ela ficar longe de todo mundo, e até
-agora estava dando certo. É este bispinho que acaba com a história: de d2 ele
+6. Bc4 {O bispo vai para a diagonal mais longa que ainda sobra, apontado para
+f7. Mas o emprego que importa aqui é outro: de c4 ele olha para d5. Guarde
+essa casa, porque é para lá que o nosso cavalo pula no oitavo lance — e é
+este bispo que vai estar segurando o cavalo quando ele chegar.} 6... Bf5
+7. Bd2 {Ele pôs a dama em a5 para ela ficar longe de todo mundo, e até
+agora estava dando certo. É este bispo que acaba com a história: de d2 ele
 entra na mesma diagonal da dama, e ela deixou de estar longe.} 7... e6 8. Nd5 {Agora dá para
 pular no meio do tabuleiro sem medo: se ele comer o cavalo, o bispo de d2 come a
-dama. Ele vai ter de recuar de novo.} *
+dama. Ele vai ter de recuar de novo.} 8... Qd8 {E recua. Noventa e sete por
+cento voltam a dama para casa aqui — é o quarto lance que ela dá desde o
+segundo, e nenhum deles construiu nada.}
+9. Nxf6+ {Troque. Parece que estamos ajudando ele a desenvolver, e o que
+acontece é o contrário: quem recaptura é a DAMA, e ela vai parar em f6, onde o
+nosso bispo de d2 vai incomodá-la mais uma vez. Repare na conta dos tempos: ele
+já andou com a dama quatro vezes e vai andar de novo, e nós ainda nem rocamos —
+é essa dívida que a Escandinava paga a partida inteira.} 9... Qxf6
+10. O-O {Rei guardado. Não há mais nada a arrumar do lado do rei: os dois
+cavalos saíram, os dois bispos saíram, e este era o último lance de arrumação
+que faltava. Aprenda a reconhecer o momento — quando as peças pequenas estão
+fora e o rei ainda está no meio, o roque não é uma opção entre outras, é O
+lance.} 10... Bd6
+11. Re1 {A torre sai do canto e vai para a coluna do meio, atrás do peão de e.
+É o lance que quase ninguém lembra de fazer e que decide partidas: torre não se
+desenvolve andando, ela se desenvolve quando a coluna abre — e quem já está lá
+quando ela abre ganha a coluna de graça. Repare que a coluna e está com um peão
+só, o dele em e6; do nosso lado ela está vazia.} 11... O-O
+12. Bg5 {O bispo que estava dormindo em d2 sai com tempo, atacando a dama pela
+segunda vez na mesma partida. E agora conte a posição inteira, porque é aqui
+que a abertura acaba: o nosso rei está no canto, as quatro peças pequenas
+saíram de casa, a torre está na coluna do meio e a dama dele ainda está
+procurando um lugar. Isto é ter terminado a abertura — daqui em diante é
+meio-jogo, e você começa ele com tudo pronto.} *
+
+[Abertura "escandinava"]
+[Nome "Escandinava — 2...Cf6"]
+[Cor "brancas"]
+[Nivel "avancado"]
+[Fonte "CAUDA DA §24 (8/9/2026), do 7...e6 ao 14.Cc3: o curso não alcança nenhuma destas posições. Degrau 1 em 7...e6 (40,5 por cento, 580 jogos) e 8.Cxg6 (35,9 por cento, motor +0,50) — o 8.Bg2 do explorer vale +0,57 mas leva a posições com menos de 70 jogos já no lance 10, e a troca em g6 mantém a linha em dado medível por mais três lances. Degrau 2 em 8...hxg6, 9.Bg2, 9...Cc6 (37,4 por cento) e 10.O-O (motor +0,48 contra +0,40 do 10.c4; ganha o que roca). Degrau 3 do 10...Bd6 em diante — 67, 44, 24, 16, 13, 9 e 4 jogos —, seguido porque a linha ainda não tinha 12 lances nossos e cada lance dela é forçado ou quase: 11.c4 empurra o cavalo, 12.Bxf4 é a única recaptura que desenvolve, 12...Bxf4 é 100 por cento, 13.d5 vale +0,29 contra -1,46 do segundo, e 14.Cc3 fecha a régua. Ponta antes da cauda: brancas +0,37; depois: brancas +0,25. || Passou do Base para o Avançado em 7/9/2026 pela poda da seção 23 de docs/REVISAO-FONTES.md — os lances são os mesmos de antes, o id não mudou, e a fonte também não. O que mudou foi quando o aluno a vê: depois de fechar o Base. O motivo é pedagógico e está medido: a caçada h3, g4, Ce5 que esta linha ensina é a MESMA da linha do 3...Dd6, que fica no Base — o aluno aprende o plano lá e reencontra o mesmo aqui, com a dama dele noutra casa."]
+[Result "*"]
+
+1. e4 {Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.} d5 {A Escandinava. Não é uma defesa ruim, e é bom saber disso antes de
+começar — mas repare no que ela nos entrega: daqui para a frente são lances
+naturais, um atrás do outro, e uma posição tranquila sem nada difícil para
+decorar. É por isso que ela aparece tanto nesta faixa de rating, e é por isso
+que a gente gosta de vê-la.} 2. exd5 {Pegue o peão. Ele vai ter de gastar um lance para buscá-lo de volta, e é esse lance de vantagem que a linha inteira explora — enquanto ele arruma a vida, nós desenvolvemos.} 2... Nf6 {Ele não quer a dama no meio do tabuleiro tão cedo, e vai buscar o peão
+de volta com o cavalo. É a segunda Escandinava mais comum — quase uma em cada
+cinco — e ela tira de nós justamente o que a outra dava de graça: o tempo em
+cima da dama.}
+3. d4 {Não tente segurar o peão. O 3.c4 parece o lance óbvio, mas depois de
+3...c6 ele abre linhas e recupera tudo com juros — o motor nem põe o c4 entre os
+cinco melhores daqui. O d4 devolve o peão e fica com o centro e o
+desenvolvimento, que é o que decide a partida.
+
+E tem um bônus: se ele recapturar de dama, com 3...Dxd5, jogue 4.Cc3 e você cai
+na mesma Escandinava que já treinou — a dama vai ter de andar outra vez, e tanto
+o ...Da5 quanto o ...Dd6 já são suas linhas. Um lance, duas portas.}
+3... Nxd5 4. Nf3 {Espere o bispo dele em g4 agora: ele sai atacando e prega o
+nosso cavalo contra a dama. É o lance mais natural do mundo — e é o que a gente
+quer.}
+4... Bg4 5. h3 {O mesmo remédio da outra linha. O h3 faz a pergunta simples:
+troca ou recua? Se ele trocar em f3, recapture de dama — o bispo dele foi embora
+e o nosso jogo fica fácil. Se recuar, vem g4.}
+5... Bh5 6. g4 {É o mesmo empurrão da outra Escandinava, e vale entender o
+mecanismo uma vez só: com o bispo em h5, o nosso cavalo de f3 está pregado
+contra a dama de d1 e não pode se mexer. O g4 obriga o bispo a ir para g6, a
+prega some, e o cavalo pula em e5 no lance seguinte. Os dois peões que
+andaram na frente do nosso rei são o preço — barato, porque ele não tem nem
+dama nem torre olhando para essa ala.}
+6... Bg6 7. Ne5 {Empurramos o bispo até g6 com h3 e g4, e o cavalo
+pousa no meio do tabuleiro. Repare: é o mesmo cavalo em e5 da outra linha da
+Escandinava. A caçada h3, g4, Ce5 é uma só, e serve nas duas. Daqui o plano é
+Bg2 e roque, e é isso que os próximos lances fazem, um a um.} 7... e6
+8. Nxg6 {Termine o serviço. Foram três lances — h3, g4, Ce5 — para caçar este
+bispo, e agora ele sai do tabuleiro. Quem recaptura é o peão de h7, e é isso
+que a gente quer: os peões da frente do rei dele ficam com um buraco em h, e é
+por essa coluna que a nossa torre vai olhar mais tarde. Não tenha pena de
+trocar um cavalo bem posto por um bispo quando a troca estraga a casa do rei
+dele.} 8... hxg6
+9. Bg2 {O bispo vai para a casa que o g4 abriu, e olha a diagonal mais longa do
+tabuleiro. Guarde o desenho: quando você empurra os peões da frente do próprio
+rei, o bispo tem de ir para essa fila — senão os peões ficam sozinhos e o
+buraco que eles deixaram vira problema, em vez de virar espaço.} 9... Nc6
+10. O-O {Rei no canto, atrás do bispo que acabou de chegar. Esta é a ordem que
+o 7.Ce5 prometia lá atrás: caçar o bispo, trocá-lo, pôr o nosso na diagonal e
+rocar. Quatro lances com um plano só.} 10... Bd6
+11. c4 {O peão empurra o cavalo de d5, e é um empurrão que a gente pode dar de
+graça: o cavalo dele está no meio do tabuleiro há seis lances sem nada por
+perto para segurá-lo. Repare no que o c4 ainda faz — abre a casa c3 para o
+nosso último cavalo, que é a peça que ainda não saiu.} 11... Nf4
+{Em vez de recuar, o cavalo salta para f4 atacando o nosso bispo de g2. Dois em
+cada três jogam isto.}
+12. Bxf4 {Coma com o BISPO DE c1, e não com o de g2. É a diferença entre um
+lance que resolve a ameaça e um lance que resolve a ameaça e desenvolve: o
+bispo que estava dormindo na fileira de trás sai de casa comendo uma peça, e o
+de g2, que é o dono da diagonal grande, fica onde está.} 12... Bxf4
+13. d5 {O peão avança com tempo — ataca o cavalo de c6 — e faz o serviço maior:
+tira a casa e5 e a casa d5 do jogo dele e abre a diagonal do bispo de g2 até b7.
+Este é o pagamento do 9.Bg2: um bispo na diagonal grande só vale quando a
+diagonal abre, e quem a abre é um peão.} 13... Ne5
+14. Nc3 {O último cavalo sai, e com ele a abertura acaba. Faça o balanço, que é
+o que esta linha ensina: rei no canto desde o décimo lance, os quatro cavalos e
+bispos fora de casa, peão em d5 tomando espaço, o bispo grande na diagonal
+grande — e ele com os peões de g6 e g7 dobrados por causa da caçada que começou
+lá no quinto lance. Cada lance desta linha tinha endereço.} *

@@ -1,0 +1,145 @@
+{
+  "white": 1467894,
+  "draws": 146475,
+  "black": 1261338,
+  "moves": [
+    {
+      "uci": "b1c3",
+      "san": "Nc3",
+      "averageRating": 1649,
+      "white": 804445,
+      "draws": 80480,
+      "black": 674328,
+      "game": null,
+      "opening": {
+        "eco": "A34",
+        "name": "English Opening: Symmetrical Variation, Normal Variation"
+      }
+    },
+    {
+      "uci": "g2g3",
+      "san": "g3",
+      "averageRating": 1668,
+      "white": 225044,
+      "draws": 21849,
+      "black": 177447,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g1f3",
+      "san": "Nf3",
+      "averageRating": 1671,
+      "white": 132262,
+      "draws": 12518,
+      "black": 101096,
+      "game": null,
+      "opening": {
+        "eco": "A30",
+        "name": "English Opening: Symmetrical Variation"
+      }
+    },
+    {
+      "uci": "e2e3",
+      "san": "e3",
+      "averageRating": 1628,
+      "white": 100567,
+      "draws": 9217,
+      "black": 91655,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e2e4",
+      "san": "e4",
+      "averageRating": 1530,
+      "white": 70612,
+      "draws": 7456,
+      "black": 70289,
+      "game": null,
+      "opening": {
+        "eco": "B20",
+        "name": "Sicilian Defense: Staunton-Cochrane Variation"
+      }
+    },
+    {
+      "uci": "d2d4",
+      "san": "d4",
+      "averageRating": 1477,
+      "white": 44829,
+      "draws": 4578,
+      "black": 48480,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2d3",
+      "san": "d3",
+      "averageRating": 1535,
+      "white": 38410,
+      "draws": 4420,
+      "black": 39435,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b2b3",
+      "san": "b3",
+      "averageRating": 1597,
+      "white": 20125,
+      "draws": 2201,
+      "black": 20300,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1591,
+      "white": 11930,
+      "draws": 1056,
+      "black": 11747,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f2f4",
+      "san": "f4",
+      "averageRating": 1492,
+      "white": 3841,
+      "draws": 497,
+      "black": 4683,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1a4",
+      "san": "Qa4",
+      "averageRating": 1321,
+      "white": 2730,
+      "draws": 473,
+      "black": 4728,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b2b4",
+      "san": "b4",
+      "averageRating": 1527,
+      "white": 2689,
+      "draws": 350,
+      "black": 3360,
+      "game": null,
+      "opening": {
+        "eco": "A30",
+        "name": "English Opening: Wing Gambit"
+      }
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "A30",
+    "name": "English Opening: Symmetrical Variation"
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "white": 137,
+  "draws": 16,
+  "black": 120,
+  "moves": [
+    {
+      "uci": "c2c4",
+      "san": "c4",
+      "averageRating": 1805,
+      "white": 83,
+      "draws": 8,
+      "black": 64,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1e2",
+      "san": "Qe2",
+      "averageRating": 1698,
+      "white": 8,
+      "draws": 2,
+      "black": 11,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1d2",
+      "san": "Bd2",
+      "averageRating": 1560,
+      "white": 9,
+      "draws": 1,
+      "black": 11,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g2d5",
+      "san": "Bxd5",
+      "averageRating": 1767,
+      "white": 10,
+      "draws": 4,
+      "black": 5,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e1h1",
+      "san": "O-O",
+      "averageRating": 1734,
+      "white": 9,
+      "draws": 0,
+      "black": 7,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1e3",
+      "san": "Be3",
+      "averageRating": 1717,
+      "white": 3,
+      "draws": 1,
+      "black": 5,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b1c3",
+      "san": "Nc3",
+      "averageRating": 1738,
+      "white": 2,
+      "draws": 0,
+      "black": 7,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b1d2",
+      "san": "Nd2",
+      "averageRating": 1673,
+      "white": 3,
+      "draws": 0,
+      "black": 4,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1f3",
+      "san": "Qf3",
+      "averageRating": 1840,
+      "white": 3,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c2c3",
+      "san": "c3",
+      "averageRating": 1870,
+      "white": 3,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1924,
+      "white": 2,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b2b3",
+      "san": "b3",
+      "averageRating": 1577,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B01",
+    "name": "Scandinavian Defense: Modern Variation, Gipslis Variation"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "white": 5,
+  "draws": 1,
+  "black": 0,
+  "moves": [
+    {
+      "uci": "g2g4",
+      "san": "g4",
+      "averageRating": 1774,
+      "white": 3,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1b5",
+      "san": "Bb5",
+      "averageRating": 2084,
+      "white": 2,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1c4",
+      "san": "Bc4",
+      "averageRating": 1710,
+      "white": 0,
+      "draws": 1,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C45",
+    "name": "Scotch Game: Potter Variation"
+  }
+}

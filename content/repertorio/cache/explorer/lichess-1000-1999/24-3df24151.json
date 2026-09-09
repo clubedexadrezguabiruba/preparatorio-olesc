@@ -1,0 +1,63 @@
+{
+  "white": 120,
+  "draws": 6,
+  "black": 73,
+  "moves": [
+    {
+      "uci": "d4d2",
+      "san": "Qd2",
+      "averageRating": 1866,
+      "white": 87,
+      "draws": 4,
+      "black": 57,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4e3",
+      "san": "Qe3",
+      "averageRating": 1839,
+      "white": 29,
+      "draws": 2,
+      "black": 11,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4f2",
+      "san": "Qf2",
+      "averageRating": 1769,
+      "white": 3,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4g1",
+      "san": "Qg1",
+      "averageRating": 1841,
+      "white": 1,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4d3",
+      "san": "Qd3",
+      "averageRating": 1833,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C41",
+    "name": "Philidor Defense: Exchange Variation"
+  }
+}

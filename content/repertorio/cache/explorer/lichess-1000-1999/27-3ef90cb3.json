@@ -1,0 +1,12 @@
+{
+  "white": 0,
+  "draws": 0,
+  "black": 0,
+  "moves": [],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "D38",
+    "name": "Queen's Gambit Declined: Westphalian Variation"
+  }
+}

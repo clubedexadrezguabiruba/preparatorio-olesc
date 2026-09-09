@@ -1,0 +1,23 @@
+{
+  "white": 11,
+  "draws": 3,
+  "black": 11,
+  "moves": [
+    {
+      "uci": "c7d6",
+      "san": "cxd6",
+      "averageRating": 1836,
+      "white": 11,
+      "draws": 3,
+      "black": 11,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C44",
+    "name": "Scotch Game"
+  }
+}

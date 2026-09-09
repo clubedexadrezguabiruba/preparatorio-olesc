@@ -1,0 +1,23 @@
+{
+  "white": 5,
+  "draws": 0,
+  "black": 0,
+  "moves": [
+    {
+      "uci": "d4e5",
+      "san": "dxe5",
+      "averageRating": 1869,
+      "white": 5,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B13",
+    "name": "Caro-Kann Defense: Exchange Variation"
+  }
+}

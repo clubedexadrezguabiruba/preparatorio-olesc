@@ -1,3 +1,14 @@
+; ESTICADAS EM 8/9/2026 pela régua do término (seção 24 do docs/REVISAO-FONTES.md).
+; As duas tinham 8 lances nossos; agora têm 14 e 13, e as duas caudas são degrau
+; 0 ou degrau 1 do primeiro ao último lance — nenhuma posição da Armadilha do
+; Elefante fica abaixo de 200 jogos.
+;
+; As duas terminam com um bloco [%plano], e nos dois casos por motivo estrutural,
+; não por falta de lance. Na do tronco o bispo de c8 sai para a6, e a casa é do
+; próprio Kushager, que a nomeia no comentário do 14...Cf6. Na do Elefante o rei
+; COMEU o bispo em d8 no nono lance: o roque acabou ali, e a peça inteira que a
+; armadilha ganha é o troco.
+;
 ; Manhattan — o nosso 1.d4 d5 2.c4 e6. Três linhas do Base, e todas as três
 ; terminam na mesma montagem: …Cbd7, …Bb4 pregando o cavalo de c3, e …c5
 ; batendo no centro. É de propósito: uma ideia só para todas as ordens de
@@ -22,43 +33,127 @@
 [Nome "Manhattan — tronco"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "Short & Sweet: 1.d4 d5 do IM Kushager Krishnater (Chessable) — capítulo The Manhattan, tronco 4.Cf3 Cbd7 5.Bg5 Bb4 6.e3 c5 7.cxd5 exd5 8.dxc5 Da5."]
+[Fonte "IM Kushager Krishnater — 'Short & Sweet: 1.d4 d5', capítulo 'The Manhattan #1'. Tronco 4.Cf3 Cbd7 5.Bg5 Bb4 6.e3 c5 7.cxd5 exd5 8.dxc5 Da5, que bate com o nosso por transposição na ordem Cc3/Cf3. ATENÇÃO: o PGN exportado do curso tem ZERO comentários, mas a versão no chess.com tem 263 — inclusive a explicação do …Cbd7 (o Da4+ deixaria de ser xeque) e do …Da5 (roque no lance seguinte, rei dele parado no meio). Medido em 7/9/2026. || CAUDA DA §24 (8/9/2026), do 9.Tc1 ao 14...Cf6: DEGRAU 0 DO PRIMEIRO AO ÚLTIMO LANCE — o Kushager joga os doze, com prosa em nove. Dele são: o motivo do 9.Tc1 (defender o cavalo de c3) e do 9...Ce4 (renovar a ameaça, com a posição branca já perigosa por causa do rei no centro); a observação de que o 10.Dxd5 é praticamente o único lance; o motivo de recapturar em c3 com o CAVALO e não com o bispo (guardar o ...Bxc3+ com xeque para o lance seguinte); o 12.Rd1 como único lance e a razão de d1 em vez de e2 (manter a diagonal f1-a6 aberta); o 13...b5 como novidade fortíssima, com a pressa explicada (com Bc4 ele prepara Re2, e com o rei em e2 a posição dele fica muito mais segura); e o 14...Cf6, com a frase que dá o [%plano] desta linha — o ...b5 abriu a casa a6 PARA O BISPO DE c8. O bloco declara c8>a6, e a casa é do curso. Ponta igual -> igual."]
 [Result "*"]
 
-1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 Nbd7 {O cavalo parece mal posto: em c6 ele
+1. d4 d5 {Espelhamos: ele ocupou uma casa do meio, nós ocupamos a outra. Contra 1.d4 este é o lance mais sólido que existe — o peão de d5 segura o centro e abre a diagonal do bispo de c8. Nada de sofisticado: quem não disputa o meio joga o resto da partida apertado.} 2. c4
+e6 {O …e6 reforça o nosso peão de d5 e abre a saída do bispo de f8. E ele tem um
+preço que o Kushager faz questão de dizer em voz alta: o bispo de c8 fica preso
+atrás do peão. Esse é O problema de toda Recusada, e há três saídas — forçar ele
+a comer em d5, para o nosso peão de e recapturar e a diagonal abrir; jogar
+…dxc4, …b6 e …Bb7; ou simplesmente cuidar das outras peças e bater no centro.
+Nesta página nós usamos as duas primeiras.} 3. Nc3
+Nf6 {Ele desenvolveu para o centro, nós desenvolvemos para o centro. O cavalo em
+f6 defende o peão de d5 pela segunda vez — é o mínimo que se pede a um lance de
+abertura: sair de casa e ajudar quem já está no tabuleiro.} 4. Nf3 Nbd7 {O cavalo parece mal posto: em c6 ele
 estaria mais no meio. O motivo de ir para d7 é um lance que ainda nem
 aconteceu. Se fôssemos direto de …Bb4, ele responderia Da4+ — com xeque — e nós
 seríamos obrigados a tapar com …Cc6. Cavalo em c6 tranca o peão de c7, e sem o
 …c5 a nossa ideia inteira morre. Com o cavalo já em d7, aquele Da4 deixa de ser
 xeque, e o bispo vai para b4 em paz. Guarde a ordem: …Cbd7, depois …Bb4, depois
-…c5.} 5. Bg5 Bb4 6. e3 c5 7. cxd5 exd5 8.
-dxc5 Qa5 {A dama sai e ameaça …Bxc3. Mas a ameaça não é o mais importante: o
+…c5.} 5. Bg5
+Bb4 {Espelho do bispo dele: se o de g5 está na casa mais ativa, o nosso em b4
+também está. De lá ele prega o cavalo de c3 — e esse cavalo é justamente quem
+mais aperta o nosso peão de d5. Pregando, defendemos d5 sem encostar nele.}
+6. e3
+c5 {O ponto da variante inteira, e é o que separa esta Recusada das outras: em
+vez de ficar sólido esperando, minamos o centro dele na hora. O …c5 bate em d4,
+e como o nosso bispo de b4 já segura o cavalo de c3, ele não tem como reforçar
+o centro do jeito normal.} 7. cxd5
+exd5 {Único lance que recupera o material — e repare que é o peão de e que
+recaptura, exatamente a saída que o …e6 do lance 2 prometia: a diagonal do bispo
+de c8 abre agora. O curso avisa o que ele está comprando com isso: um peão
+isolado nosso em d5, em troca de peças mais ativas. É um negócio, não um erro.}
+8. dxc5 Qa5 {A dama sai e ameaça …Bxc3. Mas a ameaça não é o mais importante: o
 mais importante é que nós rocamos no lance seguinte e o rei dele continua
 parado no meio do tabuleiro, com o nosso bispo de b4 e a nossa dama de a5
 apontados para lá. Ele está com um peão a mais e o rei no meio — e é o rei que
-decide. Foi o …c5 do lance 6 que abriu tudo isso.} *
+decide. Foi o …c5 do lance 6 que abriu tudo isso.} 9. Rc1
+Ne4 {A torre em c1 defendeu o cavalo de c3, e nós renovamos a ameaça com o
+cavalo: agora são DUAS peças em cima de c3, o bispo e o cavalo, e a torre
+defende uma vez só. O curso resume a posição numa frase — com o rei no centro,
+a posição das brancas já parece perigosa.} 10. Qxd5
+Nxc3 {Ele comeu o segundo peão, e o curso diz que era praticamente o único
+lance. Coma o cavalo com o CAVALO, e não com o bispo: assim o …Bxc3+, com xeque,
+continua guardado para o lance seguinte. Um lance que come e mantém a ameaça
+vale por dois.} 11. bxc3
+Bxc3+ {E agora sim, com xeque. Ele não tem como tapar de graça, e o rei vai ter
+de andar.} 12. Kd1
+O-O {O rei dele foi para d1 — o curso diz que é o único lance, e que d1 é melhor
+que e2 porque mantém a diagonal f1-a6 aberta para o bispo. E nós rocamos: o
+desenvolvimento fica pronto, a torre de f8 entra na partida, e a diferença entre
+os dois reis passa a ser o assunto do resto do jogo.} 13. Bc4
+b5 {O curso chama este lance de novidade fortíssima e explica a pressa: com Bc4
+ele prepara Re2, e com o rei em e2 a posição dele fica muito mais segura. Então
+não dá para esperar. O …b5 empurra o bispo agora, antes de o rei escapar.}
+14. Bb3
+Nf6 {Agora dá. O curso explica a diferença que o …b5 comprou: com o peão em b5,
+a casa a6 ficou aberta para o bispo de c8. É a última peça a colocar, e o
+comentário aqui embaixo diz o endereço dela.
+[%plano
+c8>a6: a casa foi comprada pelo ...b5 do decimo terceiro lance, e e o proprio curso que a nomeia — de a6 o bispo cobra a diagonal em que o rei dele ficou, sem poder rocar, la em d1
+]} *
 
 [Abertura "manhattan"]
 [Nome "Manhattan — 4.Bg5"]
 [Cor "pretas"]
-[Nivel "base"]
-[Fonte "Livro + motor — a Armadilha do Elefante é posição de livro, conferida no Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026: depois de 6.Cxd5 Cxd5 as pretas ficam +3,43, uma peça. O ramo do 5.e3 é o mesmo tronco do Kushager numa ordem diferente, e a ponta fica em brancas +0,33."]
+[Nivel "avancado"]
+[Fonte "PODA DE 7/9/2026 (seção 23 de docs/REVISAO-FONTES.md): este jogo tinha DUAS linhas e agora tem uma. A do 5.e3 saiu — ela terminava na MESMA posição da linha principal deste arquivo, conferido casa a casa na chess.js, e treinar a mesma posição por duas portas cobra duas vezes pela mesma ideia; a observação da ordem foi para o comentário final. A que ficou é a Armadilha do Elefante, e ela passou para o AVANÇADO: é uma punição a um erro dele, não uma linha que o aluno vá encontrar toda semana. || O que era a fonte do 5.e3, guardado porque explica o ...Cbd7 que a linha que ficou também joga: IM Kushager Krishnater — 'Short & Sweet: Kushager's 1.d4 d5' (Chess.com), variantes 'The Manhattan #1' a '#3'. O tronco dele é 3.Cf3 Cf6 4.Cc3 Cbd7 5.Bg5 Bb4 6.e3 c5 e o nosso é 3.Cc3 Cf6 4.Bg5 Cbd7 5.e3 Bb4 6.Cf3 c5: no 6º lance a posição é a MESMA, só a ordem mudou. Dele são o argumento do ...Cbd7 (com o cavalo em d7 o Da4 deixa de ser xeque, e sem o xeque o cavalo não é empurrado para c6, onde trancaria o ...c5) e o do ...c5 ('o ponto da variante: ao contrário das outras linhas da Recusada, aqui vamos minar o centro na hora'). O 4.Bg5 dele é explicado por IM Christof Sielecki — 'Short & Sweet: Sielecki's Queen's Gambit Declined', que conta por que as brancas jogam esse bispo e por que ele saiu de moda no topo. ATENÇÃO, para não citar a mais do que a fonte diz: contra todo bispo cedo o Sielecki recomenda 4...dxc4, e não o nosso 4...Cbd7 — dele vem a explicação do lance DELE, não do nosso. Medido em 7/9/2026. || 5.cxd5 (Armadilha do Elefante): recomendação do professor, assinada pelo Doug em 7/9/2026 — a terceira do repertório, depois do 6.Bf4 da Caro-Kann (seção 19 de docs/REVISAO-FONTES.md) e do 5...Cf6 do Rossolimo com 4.O-O. O argumento tem três pernas, e as três estão medidas. (1) Não há cauda para trocar aqui sem trocar de abertura. O 4...Cbd7 É o Manhattan, e os DOIS ids deste jogo saem dele: trocá-lo pelo 4...dxc4 que o Sielecki recomenda contra bispo cedo mataria junto a linha do 5.e3, aprovada com o Kushager, e tiraria o Manhattan do repertório — que é o nome deste arquivo e o tronco de três linhas. (2) O lance que abre a armadilha é ERRO DELE, não escolha de repertório. Medido em 7/9/2026 com repertorio:mapear: do 4...Cbd7 em diante nenhum dos onze cursos do corpus acompanha, e a razão é simples — curso nenhum perde peça de propósito para mostrar como se pune. Isto é posição de livro, com nome próprio, e o resultado é conferível por qualquer um. (3) Conferido no Stockfish 18 lite-single de public/engine/, profundidade 20: depois de 6.Cxd5 Cxd5 as pretas ficam +3,43 (medido em 5/9/2026) e, no fim da linha, depois de 8...Bxd2+ 9.Rxd2 Rxd8, +3,17 (re-medido em 7/9/2026) — uma peça limpa nos dois pontos. E a armadilha é a justificativa da ordem de lances do arquivo inteiro: o ...Cbd7 vem antes de qualquer coisa porque com ele o cavalo de f6 não fica pregado de verdade. || CAUDA DA §24 (8/9/2026), do 9.Rxd2 ao 13...Be6: DEGRAU 1 DO PRIMEIRO AO ÚLTIMO LANCE — 12.131, 12.074, 11.243, 4.397, 1.634, 1.231, 1.053, 690 e 463 jogos, nenhuma posição abaixo de 200. Todos os lances nossos são os mais jogados E os melhores do motor: 9...Rxd8 99,9 por cento; 10...C5f6 50,7 por cento e +3,10; 11...Cd5 75,1 por cento e +3,40; 12...C7b6 65,9 por cento e +3,70; 13...Be6 72,5 por cento e +3,88. O [%plano] declara rei-fica, e não é escolha: o rei COMEU o bispo em d8 no nono lance, então o direito ao roque acabou ali — é o preço da armadilha, e a peça inteira que ela ganha é o troco. Ponta pretas +3,19 -> pretas +3,79."]
 [Result "*"]
 
-1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Nbd7 {Cavalo em d7 antes de qualquer outra
+1. d4 d5 {Espelhamos: ele ocupou uma casa do meio, nós ocupamos a outra. Contra 1.d4 este é o lance mais sólido que existe — o peão de d5 segura o centro e abre a diagonal do bispo de c8. Nada de sofisticado: quem não disputa o meio joga o resto da partida apertado.} 2. c4
+e6 {O …e6 reforça o nosso peão de d5 e abre a saída do bispo de f8. E ele tem um
+preço que o Kushager faz questão de dizer em voz alta: o bispo de c8 fica preso
+atrás do peão. Esse é O problema de toda Recusada, e há três saídas — forçar ele
+a comer em d5, para o nosso peão de e recapturar e a diagonal abrir; jogar
+…dxc4, …b6 e …Bb7; ou simplesmente cuidar das outras peças e bater no centro.
+Nesta página nós usamos as duas primeiras.} 3. Nc3
+Nf6 {Ele desenvolveu para o centro, nós desenvolvemos para o centro. O cavalo em
+f6 defende o peão de d5 pela segunda vez — é o mínimo que se pede a um lance de
+abertura: sair de casa e ajudar quem já está no tabuleiro.} 4. Bg5 Nbd7 {Cavalo em d7 antes de qualquer outra
 coisa, de novo — e aqui ele faz dois trabalhos. Um é o de sempre: tira o xeque
 do Da4, que é o que nos obrigaria a pôr o cavalo em c6 e a perder o …c5. O
 outro é este: com ele no lugar, o cavalo de f6 não está pregado de verdade,
 mesmo com o bispo dele em g5. Quem tentar provar o contrário cai na armadilha
-da variante ao lado.} 5. e3
-(5. cxd5 exd5 6. Nxd5 $2 Nxd5 7. Bxd8 Bb4+ 8. Qd2 Bxd2+ {A Armadilha do
-Elefante, é o motivo de o cavalo ir para d7 antes de qualquer coisa. O cavalo
-de f6 parecia pregado na dama, mas não estava: 6…Cxd5 é possível porque, quando
-ele pegar a dama com 7.Bxd8, vem o xeque 7…Bb4+. Ele tem de tapar com 8.Dd2,
-nós trocamos, e no lance seguinte o nosso rei come o bispo em d8 — com uma peça
-a mais no bolso. E se ele não pegar a dama, também não adianta: o cavalo dele já
-foi embora.})
-5... Bb4 6. Nf3 c5 {Ele adiantou o bispo para g5 antes do cavalo de f3, e a
-nossa resposta não muda em nada: …Cbd7, …Bb4 pregando o cavalo, …c5 batendo no
-centro. Compare com a linha principal deste arquivo: a posição é exatamente a
-mesma. É sempre a mesma montagem, em qualquer ordem que ele jogue.} *
+que vem agora.} 5. cxd5
+exd5 {Recapture com o peão de e, sempre. É a primeira das três saídas que o
+Kushager lista para o bispo de c8 da Recusada: forçar a troca em d5 e abrir a
+diagonal com a recaptura. Só que aqui a posição tem uma segunda camada, e ele
+está prestes a cair nela.} 6. Nxd5 $2
+Nxd5 {Coma. Parece impossível — o cavalo de f6 está "pregado" no bispo de g5
+contra a nossa dama —, e é justamente por isso que a armadilha funciona: quem
+conta só até aqui perde peça. Continue contando com o lance seguinte.}
+7. Bxd8
+Bb4+ {O xeque que cobra a conta. Ele pegou a nossa dama e agora tem um xeque
+para resolver com o bispo dele enfiado lá em d8, longe de tudo. Tapar é a única
+coisa que dá — e o que tapa é a dama.} 8. Qd2 Bxd2+ {A Armadilha do Elefante, e é o motivo de o cavalo ir para d7 antes de
+qualquer coisa. O cavalo de f6 parecia pregado na dama, mas não estava: 6…Cxd5
+é possível porque, quando ele pegar a dama com 7.Bxd8, vem o xeque 7…Bb4+. Ele
+tem de tapar com 8.Dd2, nós trocamos, e no lance seguinte o nosso rei come o
+bispo em d8 — com uma peça a mais no bolso. E se ele não pegar a dama, também
+não adianta: o cavalo dele já foi embora. Se ele NÃO cair na armadilha e jogar
+5.e3, não mude nada: …Bb4, …Cf3, …c5 na mesma ordem, e você cai na mesma
+posição da linha principal deste arquivo.} 9. Kxd2
+Kxd8 {O rei come o bispo, e é aqui que a peça entra no bolso. Repare no preço
+que a armadilha cobrou de nós: o rei andou, e com isso o direito ao roque acabou
+para sempre. Não é problema — as damas saíram do tabuleiro, e sem damas um rei
+no meio não é alvo.} 10. e4
+N5f6 {O peão dele avança atacando o nosso cavalo de d5, e o cavalo volta a f6 —
+metade dos jogadores faz isso, e o motor concorda. De f6 ele guarda as casas
+claras do lado do rei e não atrapalha o outro cavalo, que ainda está em d7.}
+11. e5
+Nd5 {E de volta a d5, agora sem poder ser expulso por peão nenhum: os peões de c
+e de e dele já passaram. Cavalo no meio do tabuleiro sem peão que o incomode é a
+melhor peça que existe.} 12. Bc4
+N7b6 {Ele ataca o cavalo de d5 com o bispo, e nós defendemos DESENVOLVENDO: o
+cavalo de d7 vai para b6, guarda o companheiro e ataca o bispo de c4 de volta.
+Repare no cuidado com a notação — são dois cavalos que podem ir a b6, e é o de
+d7 que vai.} 13. Bb3
+Be6 {O último bispo sai, e sai para a casa em que ele vale mais: de e6 ele
+guarda o cavalo de d5 pela segunda vez e encara o bispo de b3, que é a peça mais
+ativa que ele tem. Conte a posição — as quatro peças pequenas fora de casa, uma
+peça inteira a mais desde o nono lance, e as damas fora do tabuleiro. O rei em
+d8 é o único item que não fecha, e o comentário aqui embaixo diz por quê.
+[%plano
+rei-fica: o rei comeu o bispo em d8 no nono lance, entao o roque acabou ali — e nao faz falta: sem damas o rei anda para c7 e as duas torres se ligam pela primeira fileira, que e o mesmo servico
+]} *

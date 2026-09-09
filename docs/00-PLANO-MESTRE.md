@@ -11,7 +11,7 @@ time).
 
 ### Decisões tomadas com o Doug (2026-09-03)
 
-- **Alunos:** intermediários, ~1000–1400 de força. **Duas equipes** (masculina e
+- **Alunos:** intermediários, **~700–1700** de rápidas no chess.com. **Duas equipes** (masculina e
   feminina), até 12 alunos. Idades OLESC: nascidos 2011–2018 (8 a 15 anos).
 - **Entregável:** plano de treino + apostila (PDF) + site próprio **com login**
   (aluno vê o próprio progresso; professor vê relatório de todos).
@@ -44,8 +44,8 @@ descreveu a turma **real**, e ela não é a mesma:
 
 | | Imaginado em 03/09 | Real, medido em 06/09 |
 |---|---|---|
-| Força | 1000–1400 | **600 a 1500** de rápidas no chess.com |
-| Idade | 8 a 15 | **11 a 15** (o mais novo faz 12) |
+| Força | 1000–1400 | **700 a 1700** de rápidas no chess.com |
+| Idade | 8 a 15 | **12 a 15** |
 | Experiência | primeiro ou segundo torneio | **todos com dois ou mais torneios oficiais** |
 | Treino em casa | "um pouco por dia" | **2 horas por dia, 6 dias por semana, obrigatório** |
 

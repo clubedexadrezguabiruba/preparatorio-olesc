@@ -80,7 +80,12 @@ export function FitaDoBoletim({
 }) {
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-      <ul className="flex items-center gap-3" aria-hidden>
+      {/*
+       * `flex-wrap` porque a linha cresceu: com o teto de 14 lances da §24 a
+       * fita mede 436px (14 selos de 20px e 13 vãos de 12px) contra os 328px
+       * úteis de uma tela de 360px. Já estourava com 11.
+       */}
+      <ul className="flex flex-wrap items-center gap-x-3 gap-y-2" aria-hidden>
         {boletim.map((selo, i) => (
           <li
             key={i}

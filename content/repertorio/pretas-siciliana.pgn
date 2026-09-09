@@ -1,179 +1,379 @@
-; Siciliana pelas pretas. Este arquivo abre com o ramo do bispo em c4 — o
-; buraco 1 da seção 8 do docs/REPERTORIO.md, ~31 por cento das sicilianas é o
-; ponto mais vazio de todas as fontes. O resto do orçamento das pretas contra
-; 1.e4 c5 entra aqui como jogos novos, um por sistema.
+; ESTICADAS EM 8/9/2026 pela régua do término (seção 24 do docs/REVISAO-FONTES.md).
+; As seis linhas tinham 8, 7, 11, 8, 6 e 11 lances nossos; agora têm 12, 14, 14,
+; 12, 13 e 12. Quatro fecham inteiras; duas terminam com [%plano].
 ;
-; A regra que organiza as três linhas é uma só: o bispo em c4 mira f7 e tem de
-; ser obrigado a sair. Contra 3.Cf3 quem o expulsa é o peão d5; contra 3.d3,
-; que segura essa casa, são os peões a6 e b5 mais o cavalo em a5.
+; Cinco das seis caudas são DEGRAU 0 em quase toda a extensão — o Plichta e o
+; Sielecki continuam jogando e explicando muito além de onde as linhas paravam.
+; A variante do 5.Cxc6 que a §17 dava por perdida é justamente uma delas: o
+; Plichta cobre os dez lances da cauda, com prosa em todos.
 ;
-; O 2...Cc6 e o 3...e6 estão no arquivo do Grigoryan, mas lá a linha morre no
-; lance 3 das brancas, sem nenhuma resposta nossa. Tudo a partir daí é livro +
-; motor, e a tag Fonte diz isso.
+; Duas ESCOLHAS DECLARADAS, as duas contra o curso e as duas pela régua: no
+; Dragão do 2.Cc3 e na Alapin o roque entra no lugar do lance de reagrupamento
+; que o curso joga. Na Alapin custa zero centésimos; no Jobava do outro arquivo,
+; 33. As tags [Fonte] dão a conta de cada uma.
 ;
-; O corte é o da seção 4, aplicado à tabela da seção 6: depois de 2.Bc4 Cc6 as
-; brancas jogam Cf3 36,4 por cento, Df3 14,7, d3 11,1 e Dh5 11,0. Cabem três, e
-; entram as três mais frequentes. O Dh5 fica de fora por um décimo de ponto
-; percentual, e a resposta a ele é a mesma do Df3 — está escrita no comentário.
-
-[Abertura "siciliana"]
-[Nome "Siciliana — bispo em c4"]
-[Cor "pretas"]
-[Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 22, MultiPV 5, medido em 5/9/2026. Buraco 1 da seção 8 de docs/REPERTORIO.md: o arquivo do Grigoryan tem 2...Cc6 e 3...e6 mas nenhuma resposta ao lance 3 das brancas. O 3...e6 é o primeiro lance do motor contra 3.Cf3 e contra 3.d3, e o segundo contra 3.Df3, a 4 centésimos do primeiro."]
-[Result "*"]
-
-1. e4 c5 2. Bc4 Nc6 3. Nf3
-(3. Qf3 e6 4. Ne2 Ne5 {O cavalo pula no meio e ataca duas peças de uma vez: a
-dama em f3 e o bispo em c4. Ele salva a dama, mas o bispo que mirava f7 vai ser
-trocado de qualquer jeito. Contra 3.Dh5 a ideia é a mesma, só que aí o cavalo
-vai para f6 primeiro.} 5. Qc3 Nxc4 6. Qxc4 Nf6 {A dama saiu cedo e pagou o
-preço: perdeu o bispo bom e ainda teve de andar duas vezes. Nós trocamos a peça
-que nos incomodava e agora desenvolvemos em paz.})
-(3. d3 e6 4. Nc3 a6 {Com o peão em d3 o lance d5 não sai de graça, então
-trocamos de ferramenta: a6 e b5 empurram o bispo pelo lado.} 5. Nf3 b5 6. Bb3
-Bb7 7. O-O Na5 {O cavalo vai para a beirada de propósito. Ele caça o bispo de
-b3, que é a peça que mais atrapalha, e sem esse bispo o ataque das brancas em f7
-acaba.})
-3... e6 4. O-O d5 {O lance da regra: o peão bate no bispo de c4. Ele tem de
-sair, e no caminho nós abrimos o centro.} 5. exd5 exd5 6. Bb5 Nf6 7. d4 Be7 8.
-Nc3 O-O {Roque, e olhe o tabuleiro: o bispo que mirava f7 foi parar em b5, o
-centro está aberto e todas as nossas peças saíram. Foi isso que o d5 comprou.} *
+; Siciliana pelas pretas. Um jogo por sistema: Dragão Acelerado, Rossolimo,
+; 2.Cc3, Alapin e o Morra declinado.
+;
+; O que NÃO está aqui é decisão, e é a maior deste arquivo: o ramo do bispo em
+; c4 — 2.Bc4 e 2.Cf3 Cc6 3.Bc4, ~31 por cento das sicilianas — saiu do treinador
+; e virou página de princípios, em content/repertorio/notas.json, slug
+; "bispo-em-c4". Ele era o mais frequente do repertório inteiro e mesmo assim
+; não rende linha: depois de 2.Bc4 Cc6 as quatro respostas mais comuns das
+; brancas somam 73,2 por cento, o número mais espalhado da tabela da seção 6, e
+; nenhum dos onze cursos do corpus entra na posição — os autores escrevem para
+; 1200+, e nessa faixa o lance quase não aparece. Decorar oito meios-lances de
+; uma posição que se dispersa em quatro não ensina nada; a ideia ensina, e cabe
+; numa frase: ...e6 fecha a diagonal c4-f7 e prepara o ...d5 que expulsa o
+; bispo. Seção 16 do docs/REVISAO-FONTES.md.
 
 [Abertura "siciliana"]
 [Nome "Siciliana — Dragão Acelerado"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "GM Avetik Grigoryan (ChessMood) — draft 'Sicilian Defence - Accelerated Dragon', tronco 5.Cc3 Bg7 6.Be3 Cf6 7.Bc4 O-O 8.Bb3 Te8."]
+[Fonte "FM Kamil Plichta — 'Short & Sweet: Plichta's Accelerated Dragon' (Chess.com), variantes #12 (9.h3) e #13 (9.f3 d5!). Os 16 meios-lances batem um a um com as duas. O draft do Grigoryan dá os mesmos lances mas tem zero prosa; o Plichta explica o 8...Te8 e nomeia o erro 8...Ca5?? 9.e5. Medido em 7/9/2026. || CAUDA DA §24 (8/9/2026), do 9.O-O ao 12...b5: DEGRAU 0 DO 9.O-O AO 11...a6 — o Plichta joga e comenta os seis lances. Dele são: a leitura do 9.O-O (com o bispo em b3 a intenção dele era rocar GRANDE e atacar; rocar curto é uma pequena vitória nossa); o 9...d6 como o lance mais flexível, ameaçando ...Cg4; o 10...Ca5 batendo no bispo de b3; e a sequência ...a6, ...b5, ...Bb7, ...Dc7, com a regra de quando aplicá-la (se ele joga devagar, siga; se ele ataca, largue tudo e responda). O 12.Tad1 e o 12...b5 são degrau 3 (23 e 10 jogos); o 12...b5 é a PRIMEIRA variante do motor na posição, igualdade. O [%plano] declara c8>b7, que é o terceiro item da sequência do próprio curso — e na variante principal do motor o bispo chega a b7 no lance 15. Ponta brancas +0,44 -> igual."]
 [Result "*"]
 
-1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 {…g6, e não …d6. É daqui que vem o
+1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. Nf3 Nc6 {Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.} 3. d4 cxd4 {Coma. Ele vai recapturar de peça, e não de peão — e é essa a troca que a Siciliana quer: sai o nosso peão da ala da dama, sai um peão central dele. A coluna c abre para a nossa torre, e é por ela que o nosso jogo corre o resto da partida.} 4. Nxd4 g6 {…g6, e não …d6. É daqui que vem o
 "Acelerado" do nome: o bispo vai para g7 e olha o tabuleiro inteiro pela
 diagonal grande, enquanto o peão de d7 fica guardado em casa para depois dar
-dois passos de uma vez.} 5. Nc3 Bg7 6. Be3 Nf6 7. Bc4 O-O 8.
-Bb3 Re8 {A torre sai para e8 preparando …e6 e depois …d5 de uma vez só. É este
+dois passos de uma vez.} 5. Nc3
+Bg7 {O bispo vai para a diagonal grande, e é ele que dá nome ao Dragão. De g7 ele
+atravessa o tabuleiro inteiro até a2, e mira justamente o cavalo de c3 dele — a
+peça que segura o centro. Guarde este bispo: ele é a melhor peça que você tem,
+e trocá-lo por qualquer cavalo é mau negócio.} 6. Be3
+Nf6 {Repare no que a gente NÃO joga: …d6. É disto que vem o "Acelerado" — o peão
+de d7 fica em casa o máximo possível, para depois dar os dois passos de uma vez.
+O curso é direto: desenvolvemos o cavalo, rocamos em seguida e jogamos …d5
+assim que ele deixar. E, segundo o autor, ele deixa.} 7. Bc4
+O-O {Rei seguro ANTES de bater no centro, e aqui a ordem não é conselho geral, é
+concreto: 7…d5 já, sem rocar, esbarra em 8.Bb5! e de repente todas as peças
+brancas fazem sentido. Rocando primeiro, mantemos tudo flexível e decidimos o
+plano depois de ver o oitavo lance dele.} 8. Bb3 Re8 {A torre sai para e8 preparando …e6 e depois …d5 de uma vez só. É este
 o motivo do nome "Acelerado": nós guardamos o peão de d7 em casa para jogá-lo
-dois passos num lance só, em vez de gastar …d6 e depois …d5 em dois. Enquanto
-isso o bispo de g7 já atravessa o tabuleiro pela diagonal grande.} *
+dois passos num lance só, em vez de gastar …d6 e depois …d5 em dois.} 9. O-O
+d6 {Ele rocou pequeno, e o curso manda tratar isso como uma pequena vitória: com
+o bispo em b3, apontado para f7, a intenção dele era rocar GRANDE e atacar. Rocou
+curto, não vai haver ataque. Então o peão anda um passo só — é o lance mais
+flexível — e nós ameaçamos …Cg4.} 10. h3
+Na5 {Ele tapou a casa g4, e o cavalo muda de alvo na hora: de a5 ele bate no
+bispo de b3, que é a peça mais perigosa que ele tem. O plano que vem atrás está
+escrito no curso — …a6 e depois …b5, tomando conta do lado da dama.} 11. Qd2
+a6 {O plano em ação. O …a6 prepara o …b5, e o …b5 prepara o …Bb7: as três coisas
+são um lance só, dividido em três. E o curso dá a regra que vale para a linha
+inteira — se ele jogar devagar, siga com o contrajogo do lado da dama; se ele
+começar um ataque, largue tudo e responda ao ataque.} 12. Rad1
+b5 {O segundo dos três lances, e ele é o melhor da posição segundo o motor. O
+peão em b5 tira do bispo de b3 a casa c4 e prepara a última peça a sair — o
+bispo de c8, que vai para b7 e passa a olhar a diagonal grande inteira. Conte a
+posição: rei no canto desde o sétimo lance, três peças pequenas fora e os peões
+da ala da dama andando. Falta uma peça, e o comentário aqui embaixo diz onde ela
+mora.
+[%plano
+c8>b7: o proprio curso escreve a sequencia — ...a6, ...b5, ...Bb7 e ...Dc7 — e na variante principal do motor nesta posicao o bispo chega a b7 no lance 15, depois de ...Dc7 e ...e6 abrirem espaco
+]} *
 
 [Abertura "siciliana"]
 [Nome "Siciliana — Dragão Acelerado, o 5º lance dele"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 3 da seção 8 de docs/REPERTORIO.md: 5.Cxc6 é 36 por cento das respostas a 4...g6, mais que o 5.Cc3, e o arquivo do Grigoryan não o cobre. As três linhas são a escolha do motor: 5...bxc6 empata e 5...dxc6 fica meio peão atrás; contra 5.Be3 e 5.Bc4 o desenvolvimento normal custa cerca de um terço de peão contra o 6...Da5+ do motor, e a troca foi feita de propósito para repetir os lances da linha principal."]
+[Fonte "5.Be3 e 5.Bc4: FM Kamil Plichta — 'Short & Sweet: Plichta's Accelerated Dragon' (Chess.com), tronco 5.Cc3 Bg7 6.Be3 Cf6 7.Bc4 O-O das variantes #2 a #13. As duas transpõem para ele: a do 5.Be3 volta a bater em 6...Bg7 e a do 5.Bc4 em 7.Cc3, e é ali que o curso explica o Be3 (o único lance que defende o cavalo de d4 e desenvolve no mesmo tempo) e o roque (preferido ao 7...Da5 que o autor jogou por anos). O motor prefere 6...Da5+ nas duas, cerca de um terço de peão melhor; repetir os lances do curso foi escolha de propósito, para não acrescentar ideia nova. Conferido em 7/9/2026. || 5.Cxc6: Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Buraco 3 da seção 8 de docs/REPERTORIO.md: 5.Cxc6 é 36 por cento das respostas a 4...g6, mais que o 5.Cc3. O 5...bxc6 empata e o 5...dxc6 fica meio peão atrás. O Plichta cobre o 5.Cxc6 na variante #5, mas sai da nossa linha no 8.Cc3 dele; ver a seção 17 de docs/REVISAO-FONTES.md. || CAUDA DA §24 (8/9/2026), do 8.e6 ao 14...Dxe8+: DEGRAU 0 DO 8.e6 AO 12...Bb4+ — o Plichta joga e comenta os dez lances, e a variante dele que a §17 dava por perdida É ESTA. Dele são: a lista das regras que as brancas quebram para chegar aqui (mesmo cavalo três vezes, mesmo peão três vezes, dama cedo, sem desenvolver); a escolha de TAPAR com 8...Cf6 em vez de comer com o peão; o rei em f7 sendo relativamente seguro, com o roque artificial ...Rg7 vindo depois; o 10...d5 obrigando-o a escolher entre trocar damas e jogar com o rei no centro; e o 12...Bb4+ com o aviso de que o ...Te8 vem a seguir com consequências fatais. Do 13.c3 em diante é degrau 2 (660, 375 e 342 jogos) e os lances são forçados: o 13...Te8 é 99,7 por cento e vale +4,01, e o 14...Dxe8+ é 99,6 por cento e vale +4,38. O [%plano] tem DUAS entradas, e as duas vêm do curso: rei-fica porque o rei comeu em f7 e o roque artificial é ...Rg7, e c8>f5 para o bispo que ainda não saiu. Ponta igual -> pretas +4,85."]
 [Result "*"]
 
-1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 {Os mesmos …g6 e …Bg7 da linha de
+1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. Nf3 Nc6 {Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.} 3. d4 cxd4 {Coma. Ele vai recapturar de peça, e não de peão — e é essa a troca que a Siciliana quer: sai o nosso peão da ala da dama, sai um peão central dele. A coluna c abre para a nossa torre, e é por ela que o nosso jogo corre o resto da partida.} 4. Nxd4 g6 {Os mesmos …g6 e …Bg7 da linha de
 cima. Este jogo reúne os quintos lances dele que não são o 5.Cc3 — e a graça é
 que quase todos dão na mesma posição, com os lances em outra ordem.} 5. Nxc6
-(5. Be3 Nf6 6. Nc3 Bg7 {O bispo dele saiu antes do cavalo, e nada muda para
-nós: Cf6 e Bg7, e esta é exatamente a mesma posição da linha do 5.Cc3. Contra o
-Dragão Acelerado a ordem dos lances das brancas quase nunca importa — o nosso
-plano é sempre o mesmo: g6, Bg7, Cf6, roque.})
-(5. Bc4 Bg7 6. Be3 Nf6 7. Nc3 O-O {De novo o bispo em c4 mirando f7, e de novo
-a resposta é só desenvolver. Depois do roque esta é a mesma posição da linha
-principal, numa ordem diferente. O motor tem aqui um lance mais preciso, o
-xeque 6…Da5+, que iguala na hora; ele custa um terço de peão a menos, mas custa
-também uma ideia nova para decorar — e nós preferimos repetir os lances que
-você já treinou nas outras linhas.})
 5... bxc6 (5... dxc6 $6) {Repare em qual peão recaptura. Com o de b7 os nossos peões ficam
 feios, mas o de d7 continua livre para ir a d5 ou d6; com o de d7 o motor põe as
 brancas meio peão à frente, porque a nossa dama sai do tabuleiro e o rei não
-roca mais.} 6. Qd4 Nf6 7. e5 Nd5 8. Nc3 Qb6 {Ele trocou o cavalo para estragar
-os nossos peões e centralizou a dama. Nós oferecemos a troca: sem damas, o peão
-dobrado em c6 deixa de ser um problema, e depois de 9.Dxb6 axb6 a coluna a abre
-para a nossa torre. Este é o jeito mais simples de jogar a posição — o outro,
-8…Bg7, exige dar um peão para ter iniciativa.} *
+roca mais.} 6. Qd4
+Nf6 {Cerca de um em cada cinco entra em pânico aqui e joga 6…f6, que enfraquece
+o rei de graça. Não precisa: desenvolva. Sim, o cavalo vai ser expulso na hora
+com 7.e5 — mas ele vai para uma casa melhor do que a de agora, e enquanto isso
+a dama dele em d4 é que vai ter de se explicar.} 7. e5 Nd5 {O cavalo vai para d5 no estilo Alekhine, e o curso avisa: não o
+ponha em h5 nem o devolva a g8, que é o que a maioria faz — as duas dão às
+brancas jogo excelente. De d5 ele fica no meio do tabuleiro, e é ELE quem tem de
+tomar cuidado agora para igualar.} 8. e6
+Nf6 {Ele empurra o peão até e6 para atrapalhar tudo, e o curso escolhe TAPAR a
+diagonal com o cavalo em vez de comer com o peão de f7. O motivo é de gosto
+declarado — depois de 8…f6 a posição vira uma bagunça, e depois de 8…Cf6 vira
+uma bagunça em que nós é que mandamos no ritmo.} 9. exf7+
+Kxf7 {O rei come em f7, e é seguro ali: repare em quantas regras ele já quebrou
+para chegar aqui — mexeu no mesmo cavalo três vezes, no mesmo peão três vezes,
+tirou a dama cedo e não desenvolveu ninguém. O nosso rei anda um passo e depois
+vai para g7, atrás do bispo; é o que o curso chama de roque artificial.}
+10. Bc4+
+d5 {Tape o xeque ganhando o centro. O peão em d5 fecha a diagonal do bispo e
+constrói a parede de peões que o rei em f7 precisa. E repare no que a jogada faz
+com ele: ou ele aceita a troca de damas, ou joga com o rei no meio do tabuleiro
+— e nenhuma das duas era o que ele queria.} 11. Bb3
+e5 {O segundo peão da parede, e ele vem com uma oferta: o peão de e5 está
+atacado pela dama de d4. Se ele comer, cai na conta que vem nos próximos três
+lances. É o preço de a dama dele estar no meio do tabuleiro desde o sexto
+lance.} 12. Qxe5
+Bb4+ {E aqui está a cobrança. O bispo sai com xeque, e o xeque é o que dá tempo
+para o lance seguinte — …Te8, pregando a dama contra o rei dele. O curso escreve
+isso com todas as letras: o …Te8 vem a seguir, com consequências fatais.}
+13. c3
+Re8 {A torre entra na coluna e e prega a dama contra o rei em e1. Ela não tem
+para onde ir que não custe: qualquer casa em que ela pare continua na coluna, e
+a única saída é comer a torre — o que devolve dama por torre.} 14. Qxe8+
+Qxe8+ {Recapture com a dama, e conte o material: ele deu a dama por uma torre.
+O motor dá quatro peões e meio de vantagem para as pretas. O rei em f7 não vai
+rocar nunca mais, e o bispo de c8 ainda está em casa — o comentário aqui embaixo
+diz o que fazer com os dois.
+[%plano
+rei-fica: o rei comeu em f7 no nono lance e perdeu o direito ao roque ali; o endereco dele e g7, atras do bispo, e o proprio curso chama isso de roque artificial
+c8>f5: com a dama fora do tabuleiro e a coluna e aberta, o bispo sai para f5 assim que o rei chegar a g7 e a torre de a8 tiver casa
+]} *
 
 [Abertura "siciliana"]
 [Nome "Siciliana — Rossolimo 3.Bb5"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "GM Avetik Grigoryan (ChessMood) — draft 'Nightmare of Rossolimo', tronco 4.Bxc6 dxc6 5.d3 Bg7 6.h3 Cf6 7.Cc3 Cd7 8.Be3 e5."]
+[Fonte "IM Christof Sielecki — 'Short & Sweet: Magnus Sicilian' (Chess.com), variante 'S&S Magnus Sicilian - Rossolimo', a do 4.Bxc6 dxc6 5.d3 Bg7 6.h3 Dc7. Os 22 meios-lances batem um a um com o curso, que segue além até o 14...g5. Executa a decisão da seção 13 de docs/REVISAO-FONTES.md, de 7/9/2026: o Rossolimo passa a ser do Sielecki e sai do draft 'Nightmare of Rossolimo' do Grigoryan, que dava o tronco 6.h3 Cf6 7.Cc3 Cd7 8.Be3 e5 sem explicar lance nenhum. Dele são: o motivo do 4...dxc6 (o peão de c6 toma conta de d5, então o defeito habitual da estrutura Botvinnik não existe nesta versão); o 6...Dc7 e o abandono do ...Cf6 cedo, que ele descreve como mudança do próprio campeão do mundo em 2019 — jogar antes os lances úteis e só depois decidir onde o cavalo fica, o que abre o ...Cf6-h5 que o caminho antigo tornava impossível; o motivo do h3 DELE; os dois trabalhos do 9...h6; e a leitura do 11...f5. DECLARADO, com o número: o motor NÃO prefere esta troca. Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 na posição depois do 6.h3 — o nosso 6...Cf6 antigo dá brancas +0,34 e o 6...Dc7 do curso dá +0,43. A troca é de fonte, não de posição, e o Doug decidiu assim em 7/9/2026 sabendo desses nove centésimos. || CAUDA DA §24 (8/9/2026), do 12.Dc1 ao 14...g5: DEGRAU 0 DO PRIMEIRO AO ÚLTIMO LANCE — o Sielecki joga os seis e comenta dois. Dele são: o motivo do 12.Dc1 (a dama antecipa a abertura da ala da dama e mira b2 ou a3, e precisava sair de qualquer jeito porque o ...f4 vinha); e a leitura da posição final — as pretas têm boas chances do lado do rei e é ELE quem precisa provar alguma coisa do outro lado, porque o rei dele é o alvo. O [%plano] tem DUAS entradas. c8>b7: a casa já está aberta desde o ...b6 do oitavo lance. rei-fica: quem está empurrando os peões da ala do rei somos nós, então rocar para g8 seria pôr o rei no meio do nosso próprio ataque — o endereço dele é f7 ou d8. Ponta igual -> igual."]
 [Result "*"]
 
-1. e4 c5 2. Nf3 Nc6 3. Bb5 g6 4. Bxc6 dxc6 {Ficamos com peão dobrado em c5 e c6,
+1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. Nf3 Nc6 {Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.} 3. Bb5
+g6 {Contra o Rossolimo há dois caminhos, …e6 e …g6, e o campeão do mundo jogou
+os dois — mas na esmagadora maioria das partidas ele fianchetou. É o que fazemos
+aqui, e o motivo aparece nos próximos lances: o bispo vai para g7 e nós montamos
+a estrutura Botvinnik, com peões em c5 e e5, que é a favorita dele.}
+4. Bxc6 dxc6 {Ficamos com peão dobrado em c5 e c6,
 e isso não é problema: o de c6 toma conta de b5 e de d5, que são exatamente as
 duas casas de onde o cavalo dele gostaria de incomodar. Peão feio que faz
-trabalho não é peão fraco.} 5. d3 Bg7 6. h3 Nf6 7. Nc3 Nd7 8. Be3
-e5 {Ele trocou em c6 e nós recapturamos com o peão de d7, de propósito: assim
-ficamos com os dois bispos e com a coluna d aberta para a dama. O cavalo recuou
-a d7 para não tapar o bispo de g7, e agora o peão chega a e5 e trava o centro.
-Com o centro travado ninguém tem pressa — e quem tem os dois bispos joga para
-abrir o jogo mais tarde.} *
+trabalho não é peão fraco.} 5. d3
+Bg7 {A melhor peça da posição vai para a melhor casa que ela tem. E repare no
+que o …dxc6 do lance anterior fez por ela: com o peão em c6 tomando conta de
+d5, o cavalo dele não tem casa de onde incomodar essa diagonal.} 6. h3
+Qc7 {A dama sai antes do cavalo, e é aí que está a ideia inteira. O caminho
+antigo — o que este arquivo jogava até 7/9/2026 — era …Cf6 e depois …Cd7: dois
+lances com o mesmo cavalo, só para abrir a diagonal do bispo de g7 antes do
+…e5. O Sielecki conta que o campeão do mundo jogou assim durante anos e mudou em
+2019. Primeiro os lances que são úteis de qualquer jeito — a dama em c7, que já
+apoia o …e5 que vem —, e só depois se decide onde o cavalo fica. Guardar a
+decisão abre casas que o caminho antigo fechava: o cavalo pode ir a f6 e de lá a
+h5, o que é impossível quando ele já teve de recuar para d7.} 7. Nc3
+e5 {Agora sim. O …Dc7 esperava ele se comprometer, e o 7.Cc3 é o compromisso:
+com o cavalo em c3 ele não vai mais montar o plano de Cb1-d2-c4, e avisa que não
+tem pressa de rocar pequeno. Então fechamos a estrutura Botvinnik — peões em c5
+e e5, o centro travado — e o nosso jogo passa a ser o …f5, mais adiante.}
+8. Be3
+b6 {Lance pequeno e obrigatório: o bispo que ele acabou de pôr em e3 está
+olhando para o nosso peão de c5, e ninguém defendia aquele peão. Agora defende.
+De brinde, o …b6 abre a casa b7 para o bispo de c8, que é a peça que ainda não
+tem endereço.} 9. Qd2
+h6 {Um lance pequeno com dois trabalhos, e os dois são do curso. O primeiro: tira
+o Bh6 da jogada. Assim que o nosso cavalo de g8 sair, o bispo dele iria a h6
+oferecer a troca do nosso bispo de g7 — que é a melhor peça desta estrutura, o
+dono da diagonal grande. O segundo é mais simples: o peão em h6 toma conta de
+g5.} 10. a3
+Ne7 {Só agora o cavalo escolhe onde morar, e escolhe e7 em vez de f6 — que é o
+ponto de toda a linha. De e7 ele vai a g6, apoia o …f5 e, principalmente, NÃO
+tapa a casa f6, por onde o peão de f7 tem de passar. Ele gastou os lances 10 e
+11 preparando o avanço b4 no flanco da dama; nós gastamos os nossos preparando o
+avanço na ala do rei. Cada um no seu lado, e o nosso lado é o do rei dele.}
+11. b4
+f5 {Cada um ataca de um lado, e o nosso é o lado do rei dele. Ele gastou os
+lances 10 e 11 em a3 e b4, mirando o nosso peão de c5; nós gastamos os mesmos
+dois em …h6 e …Ce7, e agora vem o …f5. Repare no que torna esse lance possível:
+com um cavalo em f6, o peão de f7 não teria por onde passar — f6 é a casa que
+ele precisa atravessar. Foi o …Dc7 do lance 6 que deixou o cavalo livre para ir
+a e7 em vez de f6, e é aqui que aquele lance de dama se paga.} 12. Qc1
+f4 {Ele tirou a dama de d2 porque o …f4 vinha de qualquer jeito, e agora ele
+vem. O peão trava o bispo de e3 fora do jogo e fecha o centro de vez: com peões
+em e5, f4, c5 e h6, não há mais nada para acontecer do lado da dama sem que a
+gente deixe. A partir daqui a partida é uma corrida de peões, e a nossa já
+começou.} 13. Bd2
+cxb4 {Abra a coluna c ANTES de empurrar mais peões do lado do rei. É a mesma
+ideia do repertório inteiro vista pelo outro lado: quando os dois vão atacar em
+lados opostos, cada troca no lado dele é uma linha aberta para as nossas peças e
+um lance a menos para ele.} 14. axb4
+g5 {E o ataque começa de verdade. O curso fecha a variante aqui dizendo que as
+pretas têm boas chances do lado do rei e que ele é quem tem de provar alguma
+coisa do outro lado — porque o rei DELE é o alvo. Duas peças nossas ainda não
+estão no lugar, e o comentário aqui embaixo diz onde elas ficam.
+[%plano
+c8>b7: o ...b6 do oitavo lance ja abriu a casa, e o bispo vai para b7 assim que a coluna c aberta deixar de pedir a torre de a8 naquele canto
+rei-fica: quem esta empurrando os peoes da ala do rei somos nos, entao rocar para g8 seria por o rei bem no meio do nosso proprio ataque; o endereco dele e f7 ou d8, atras dos peoes que nao andaram
+]} *
 
 [Abertura "siciliana"]
 [Nome "Siciliana — Rossolimo com 4.O-O"]
 [Cor "pretas"]
-[Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. O 4.O-O é 22,9 por cento das respostas a 3...g6 pela tabela da seção 6 e o arquivo do Grigoryan só cobre o 4.Bxc6. O 4...Bg7 é o primeiro lance do motor, e a ponta fica em brancas +0,35."]
+[Nivel "avancado"]
+[Fonte "Recomendação do professor, assinada pelo Doug em 7/9/2026 — a segunda do repertório, depois do 6.Bf4 da Caro-Kann (seção 19 de docs/REVISAO-FONTES.md). O argumento tem três pernas, e as três estão medidas. (1) A fonte natural desta posição declara que está chutando: no 5.c3, o IM Christof Sielecki ('Short & Sweet: Magnus Sicilian', variante 'S&S Magnus Sicilian - Rossolimo' do 4.O-O) escreve que o lance 'ainda não foi tentado contra o Magnus Carlsen, então não sabemos o que ele teria planejado', e que ELE decidiu recomendar 5...e5 por coerência com o resto do curso dele. (2) O motor põe a nossa linha inteira como variante principal: Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 — o 5...Cf6 dá brancas +0,32 com a continuação 6.Te1 O-O 7.d4 d5 8.e5 Ce4, que é esta linha lance por lance até o fim; o 5...e5 do curso dá +0,34 e fica em segundo. (3) A linha do curso pede que o aluno segure um peão a mais contra compensação que o próprio autor declara suficiente, por um 8...a6 que ele chama de 'menos comum' e apostando que as brancas não saberão conduzir a posição sem preparação de computador, e termina com o rei preto em f8 sem direito a roque. Não é posição para 12 a 15 anos. O 4.O-O é 22,9 por cento das respostas a 3...g6 pela tabela da seção 6 de docs/REPERTORIO.md. || CAUDA DA §24 (8/9/2026), do 9.Cbd2 ao 12...gxf5: o curso já não acompanha desde o quinto lance, então a cauda inteira sai da escada. Degrau 1 no 9.Cbd2 (276 jogos), degrau 2 no 9...Bf5 e degrau 3 do 10.Cxe4 em diante — 33, 15, 8, 6 e 4 jogos. ESCOLHA DECLARADA no 9...Bf5: o 9...cxd4 é o mais jogado (42,6 por cento) e vale 13 centésimos a mais para nós; o 9...Bf5 resolve o bispo de c8, que é a peça que a Siciliana sempre deixa para trás, e sem ele a linha não fecha a régua. Treze centésimos não decidem partida nesta faixa. Fecha no lance 12, sem [%plano]. Ponta brancas +0,36 -> igual."]
 [Result "*"]
 
-1. e4 c5 2. Nf3 Nc6 3. Bb5 g6 4. O-O Bg7 5. c3 Nf6 {O c3 dele anuncia o que vem:
+1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. Nf3 Nc6 {Cavalo para c6, desenvolvendo e batendo em d4 — a casa que o peão de c5 já vigia. São duas peças mirando a mesma casa, e é assim que se impede o adversário de montar o centro grande dele.} 3. Bb5
+g6 {O mesmo fianqueto da outra linha do Rossolimo, e pelo mesmo motivo: contra
+3.Bb5 há dois caminhos, …e6 e …g6, e o campeão do mundo escolheu o fianqueto na
+esmagadora maioria das partidas. O Sielecki para de nos acompanhar dois lances
+adiante; até aqui a citação é dele.} 4. O-O
+Bg7 {O bispo na diagonal grande. Ele não trocou em c6 — guardou o bispo e rocou
+—, e o curso trata o …Bg7 como a resposta natural: seja o que for que ele
+prepare, esta peça vai para g7 de qualquer jeito. É a diferença entre um lance
+que responde e um lance que a gente jogaria de todo modo.} 5. c3 Nf6 {O c3 dele anuncia o que vem:
 d2-d4 e um centro grande de peões. Nós desenvolvemos e ficamos de olho — no
 lance em que o peão pisar em d4, respondemos …d5 na hora, antes que esse centro
-tenha tempo de crescer.} 6. Re1 O-O 7. d4 d5 8. e5
+tenha tempo de crescer.} 6. Re1
+O-O {Rei para o canto enquanto ele arruma a torre. Este é o último lance
+tranquilo da linha, e é bom gastá-lo com o rei: no próximo ele empurra d4, o
+centro abre, e a partir daí quem ainda estiver com o rei no meio joga o resto
+apavorado.} 7. d4
+d5 {AGORA, no mesmo lance. O peão pisou em d4 e nós respondemos …d5 na hora,
+antes que ele consiga somar c3, d4 e e4 num centro grande. Esperar um lance que
+fosse já seria tarde. Medido no Stockfish 18 lite-single, profundidade 20, em
+7/9/2026: esta linha inteira — 5…Cf6 6.Te1 O-O 7.d4 d5 8.e5 Ce4 — é a variante
+PRINCIPAL do motor, brancas +0,32, e fica à frente do 5…e5 que o curso
+recomenda, +0,34.} 8. e5
 Ne4 {Ele guardou o bispo e montou o centro com c3 e d4. A resposta é …d5 na
 hora, antes que esse centro fique grande. Depois de 8.e5 o cavalo pula para e4:
 casa central, defendida, e para expulsá-lo dali ele só tem f3 — que abre a casa
-do próprio rei.} *
+do próprio rei.} 9. Nbd2
+Bf5 {O bispo que ainda não tinha saído sai agora, e a casa é a melhor que ele
+vai ter na partida inteira: de f5 ele guarda o cavalo de e4 pela segunda vez.
+Há lances mais frequentes aqui — …cxd4 e …Cxd2 —, e o motor os põe treze
+centésimos à frente. A gente escolhe este porque ele resolve a peça que a
+Siciliana sempre deixa para trás, e treze centésimos não decidem partida
+nenhuma nesta faixa.} 10. Nxe4
+dxe4 {Recapture com o PEÃO, não com o bispo. Com o peão em e4 o cavalo de f3
+dele perde a melhor casa que tinha e o nosso bispo de f5 continua vivo; com o
+bispo, ficaríamos com um peão a menos no centro e o motor já dá quase um peão
+de vantagem para as brancas.} 11. Nh4
+cxd4 {Ele foi caçar o nosso bispo com o cavalo, e nós usamos o tempo para
+resolver o centro. Não corra atrás do bispo: ele vale o que valia, e o peão de
+d4 dele é que era o dono da posição.} 12. Nxf5
+gxf5 {Recapture com o peão de g, e não tenha medo do buraco: os peões e4 e f5
+formam uma dupla que toma conta de d3, e3, g4 e f3 — quatro casas centrais, e
+nenhum cavalo dele consegue pousar em nenhuma. Conte a posição: rei no canto
+desde o sexto lance, as quatro peças pequenas resolvidas, um peão passado em d4
+e o centro nosso. A abertura acabou.} *
 
 [Abertura "siciliana"]
 [Nome "Siciliana — 2.Cc3"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Pela tabela da seção 6, depois de 2.Cc3 Cc6 ele joga 3.Cf3 46,9 por cento e 3.Bc4 18,1 por cento, e são esses dois que entram. O 3...g6 contra 3.Cf3 e o 3...e6 contra 3.Bc4 são lances do motor e transpõem, um para o Dragão Acelerado e o outro para a estrutura do bispo em c4 que abre este arquivo; a ideia do ...e6 está no draft 'Sicilian Sidelines Homework' do Grigoryan, que a deixa sem continuação."]
+[Fonte "2...Cc6 e 3.Cf3 g6: FM Kamil Plichta — 'Short & Sweet: Plichta's Accelerated Dragon' (Chess.com), variantes #30 a #32. O curso recomenda o 2...Cc6 justamente para poder responder 3.Cf3 com 3...g6, e escreve que, ao pôr o cavalo em c3 cedo, as brancas abrem mão do Maróczy. A linha transpõe para o tronco do Acelerado a partir do 5.Cxd4. Conferido em 7/9/2026. || 3.Bc4 e6: Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. Pela tabela da seção 6, depois de 2.Cc3 Cc6 ele joga 3.Cf3 46,9 por cento e 3.Bc4 18,1 por cento, e são esses dois que entram. O 3...e6 é lance do motor e transpõe para a estrutura do bispo em c4, que saiu deste arquivo e virou a página de princípios de slug 'bispo-em-c4'; a ideia está no draft 'Sicilian Sidelines Homework' do Grigoryan, que a deixa sem continuação. Nenhum curso do corpus entra no 3.Bc4 — ver a seção 17 de docs/REVISAO-FONTES.md. || CAUDA DA §24 (8/9/2026), do 7.Be2 ao 13...Bf5: DEGRAU 0 DO 7.Be2 AO 12...Bxf6 — o Plichta joga e comenta os doze lances, e são muitos comentários. Dele são: a regra de rocar PRIMEIRO e só então bater com ...d5; o ...d5 como o lance para o qual o Acelerado existe; o motivo de recapturar em c6 com o peão de b7 (a estrutura melhora e a coluna b abre); o ...Ce8 em vez do natural ...Cd7, com a linha concreta que refuta o segundo (11.f4 f6 12.Cxd5!); o ...f6 como o único contrajogo; e a escolha entre as TRÊS recapturas em f6, com o argumento de cada uma — ...exf6 obriga ao ...f5 depois e deixa e5 fraca para sempre, ...Cxf6 põe o cavalo na casa por onde o bispo quer passar, e o ...Bxf6 devolve o bispo à diagonal grande. O 13.Bd4 e o 13...Bf5 são degrau 3 (53 e 24 jogos), e o ...Bf5 é nomeado no plano do próprio curso (...Cd6, ...Bf5 e depois ...e5). Fecha a régua no lance 13, sem [%plano]. Ponta brancas +0,41 -> pretas +0,39."]
 [Result "*"]
 
-1. e4 c5 2. Nc3 Nc6 {Ele guardou o cavalo em c3 antes de abrir o centro. Nós
-respondemos …Cc6 e esperamos, sem inventar nada: os dois lances que ele tem
-daqui levam a posições que você já treinou neste mesmo arquivo.} 3. Nf3
-(3. Bc4 e6 4. Nf3 Nf6 5. d4 d5 {O …d5 só é possível porque o peão de e6 está lá
-embaixo para segurá-lo. É por isso que a ordem é …e6 primeiro e …d5 depois, e
-nunca ao contrário.} 6. exd5 exd5 7. Bb5 Be7 8. O-O O-O {O bispo em
-c4 de novo, é a mesma receita das três primeiras linhas deste arquivo: …e6 e
-depois …d5, o peão bate no bispo e ele vai parar em b5. Compare com a linha do
-2.Bc4: os lances são quase iguais. Uma ideia só resolve as duas.})
-3... g6 4. d4 cxd4 5. Nxd4 Bg7 6. Be3 Nf6 {Ele pôs o cavalo em c3 antes de d4 e
+1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. Nc3 Nc6 {Ele guardou o cavalo em c3 antes de abrir o centro. O curso
+responde …Cc6 e escreve o motivo: é este lance, e não outro, que nos deixa
+responder 3.Cf3 com 3…g6 e cair no Dragão Acelerado de sempre. Com um segundo
+lance qualquer, ele teria como nos empurrar para uma Siciliana aberta que você
+não treinou. Os dois lances que ele tem daqui levam a posições que já estão
+neste mesmo arquivo.} 3. Nf3
+g6 {O lance que o …Cc6 comprou. Ele voltou à ideia de abrir o centro com d4, e
+nós fianchetamos na hora: seja qual for a ordem, o que sai daqui é o Dragão
+Acelerado que você já treina na primeira linha desta página.} 4. d4
+cxd4 {Coma, como sempre. É a troca que a Siciliana quer — sai um peão nosso da
+ala da dama, sai um peão central dele, e a coluna c abre para a nossa torre. E
+guarde: nesta estrutura a gente pega em d4 com o PEÃO sempre que puder; comer
+com peça ali é entregar o centro de volta.} 5. Nxd4
+Bg7 {O bispo vai para a diagonal grande, e é ele que dá nome ao Dragão. De g7 ele atravessa o tabuleiro inteiro até a2, e mira justamente o cavalo de c3 dele — a peça que segura o centro. Guarde este bispo: ele é a melhor peça que você tem, e trocar ele por qualquer cavalo é mau negócio.} 6. Be3 Nf6 {Ele pôs o cavalo em c3 antes de d4 e
 mesmo assim caiu no Dragão Acelerado: esta é a mesma posição da linha do 5.Cc3,
-com os lances em outra ordem. É o melhor tipo de linha que existe para decorar —
-não tem nada de novo dentro dela.} *
+com os lances em outra ordem. E ele pagou caro pela ordem. O curso diz que o
+maior teste do Acelerado é o Maróczy, quando as brancas juntam um peão em c4 ao
+de e4 e o nosso …d5 nunca mais sai — só que, para chegar a c4, o peão de c2 tem
+de passar por c3, e o cavalo dele está justamente ali. Quem joga Cc3 cedo abre
+mão do Maróczy sozinho.} 7. Be2
+O-O {Rei primeiro, sempre. O curso é explícito: rocamos e SÓ ENTÃO batemos com
+o …d5. Na ordem contrária o …d5 leva um susto, e o susto custa a partida.}
+8. O-O
+d5 {Boom. É para este lance que o Dragão Acelerado existe: o peão dá os dois
+passos de uma vez, o que só é possível porque ele nunca gastou o …d6. O curso
+diz que aqui as pretas já igualaram e libertaram a posição, e ele tem razão —
+com o peão em d5 nós ameaçamos …dxe4 e …Cxe4, e ele é obrigado a responder.}
+9. Nxc6
+bxc6 {Recapture com o peão de b7. A nossa estrutura MELHOROU: o peão de c6
+segura d5, que é o nosso peão avançado, e a coluna b abre para a torre de a8. E
+já ameaçamos comer em e4.} 10. e5
+Ne8 {Para e8, e o curso avisa por quê: o natural é …Cd7, e aí vem 11.f4 f6
+12.Cxd5! e o peão de d5 cai com xeque no fim da conta. Em e8 o cavalo não fica
+bonito, mas fica seguro — e é ele que vai defender a casa f6 no lance seguinte.}
+11. f4
+f6 {O único contra-ataque que existe aqui, e o próprio curso diz que joga por
+falta de coisa melhor. O peão de e5 dele é a cabeça de tudo: enquanto ele
+estiver ali, o nosso bispo de g7 não enxerga nada. Então nós o atacamos.}
+12. exf6
+Bxf6 {Das três recapturas possíveis, esta. O curso explica as outras duas:
+…exf6 obriga a jogar …f5 depois para soltar o bispo, e o par de peões d5 e f5
+deixa a casa e5 fraca para sempre; …Cxf6 põe o cavalo justamente na casa por
+onde o bispo quer passar. Com …Bxf6 o bispo volta à diagonal grande e o cavalo
+de e8 continua livre para ir a g7 ou d6.} 13. Bd4
+Bf5 {O último bispo sai, e sai para a casa que o próprio curso nomeia no plano:
+…Cd6, …Bf5 e depois …e5. Conte a posição — rei no canto desde o sétimo lance,
+as quatro peças pequenas fora de casa, o peão em d5 firme no meio e os dois
+bispos apontados para o lado dele. A abertura acabou.} *
 
 [Abertura "siciliana"]
 [Nome "Siciliana — Alapin 2.c3"]
 [Cor "pretas"]
 [Nivel "base"]
-[Fonte "GM Avetik Grigoryan (ChessMood) — draft 'Alapin', tronco 2...Cf6 3.e5 Cd5 4.d4 cxd4 5.cxd4 d6 6.Cf3 Cc6 7.Bc4 Cb6 8.Bb5 dxe5."]
+[Fonte "2.c3 e 2...Cf6: IM Andras Toth — 'Short & Sweet: 1.e4 for Club Players' (Chess.com). É repertório de BRANCAS, e é de propósito: quem explica o que o 2.c3 quer é quem o joga. O curso escreve que com 2.c3 as brancas sinalizam a vontade de tomar o centro inteiro com d2-d4, e que as duas respostas principais, 2...d5 e 2...Cf6, atacam e4 justamente para impedir esse par de peões. Do 6...Cc6 ao 11...Bxd6: IM Christof Sielecki — 'Short & Sweet: Magnus Sicilian' (Chess.com), variante 'S&S Magnus Sicilian - Alapin'. Ele joga 4.Cf3 Cc6 5.d4 cxd4 6.cxd4 d6 e escreve com todas as letras que a NOSSA ordem — 4.d4 cxd4 5.cxd4 d6 6.Cf3 Cc6 — chega na mesma posição; daí em diante bate lance a lance até o fim da nossa linha, que para dois meios-lances antes do fim da variante dele — o 12...Cb4, citado no comentário do 11...Bxd6 como o lance seguinte. Dele são: a observação de que os dois peões de c sumiram e por isso o c4 não existe para expulsar o cavalo de d5, escrita na posição depois do nosso 6...Cc6 e trazida para o comentário do 5...d6; o 8...Bd7, que ele prefere ao 8...dxe5 mesmo chamando este de linha principal das pretas, porque guarda mais chances de jogar para ganhar e foi o que o campeão do mundo jogou; e o motivo da troca de peças menores que ele escreve no 12...Cb4 — dominar as casas claras, em especial d5, a que fica na frente do peão isolado. DECLARADO: o comentário do 9...e6 é NOSSO. O curso joga o lance sem explicá-lo, e o número é do Stockfish 18 lite-single de public/engine/, profundidade 20, medido em 7/9/2026 — o 9...e6 é o único lance que segura a igualdade, o natural 9...exd6 põe as brancas +0,35 e o 9...a6, +0,55. TROCA DE CAUDA, decidida pelo Doug em 7/9/2026: até esta data a linha terminava em 8...dxe5, com o argumento do peão isolado escrito por nós e a pendência declarada nesta tag. O professor recusou assinar aquele argumento e mandou seguir o curso. O peão isolado de d4 não se perdeu na troca: ele continua isolado na posição final, e agora quem ensina a cobrá-lo é o Sielecki. || CAUDA DA §24 (8/9/2026), do 12.Cc3 ao 12...O-O: degrau 0 no lance dele e ESCOLHA DECLARADA no nosso. O curso joga 12...Cb4 — o reagrupamento que domina as casas claras, em especial d5, a que fica na frente do peão isolado — e o motor dá IGUALDADE tanto para o ...Cb4 quanto para o ...O-O; as duas são variante principal dele nesta posição. Escrevi o roque porque a régua da §24 diz que a abertura acaba com o rei guardado, e o ...Cb4 continua sendo o plano, agora com a torre de f8 já ligada. Custo: zero centésimos. Fecha no lance 12, sem [%plano]. Ponta igual -> igual."]
 [Result "*"]
 
-1. e4 c5 2. c3 Nf6 {O cavalo ataca o peão de e4 antes que o de c3 vire peão de
-d4. Ele quase sempre responde 3.e5 — e é o que queremos: o peão avança sozinho,
-sem nenhum peão vizinho para protegê-lo, e vira o alvo da linha inteira.} 3. e5
+1. e4 c5 {A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.} 2. c3 Nf6 {O 2.c3 não desenvolve nada e não ataca nada. Ele quer uma
+coisa só: jogar d4 no lance seguinte e ficar com os dois peões lado a lado em
+e4 e d4, que é o centro com que todo mundo sonha. O …Cf6 ataca e4 antes que
+isso aconteça e obriga a escolher. Ele quase sempre responde 3.e5 — e é o que
+queremos: o peão sai da fila e vai sozinho para a frente, onde deixa de ser
+muralha e vira alvo. É esse peão de e5 que a linha inteira persegue.} 3. e5
 Nd5 {Para d5, e nunca para e4. Em e4 o cavalo fica sem casa no lance seguinte:
 ele joga 4.d3, e as duas fugas que parecem naturais — f6 e d6 — são justamente
 as duas casas que o peão de e5 come. Em d5 é o contrário, o cavalo para firme no
-meio do tabuleiro.} (3... Ne4 $4) 4. d4 cxd4 5. cxd4 d6 {Este …d6 é a conta que apresentamos ao peão de e5. Ou
+meio do tabuleiro.} (3... Ne4 $4)
+4. d4
+cxd4 {Coma na hora. Este é o lance mais importante da linha e o motivo não se vê
+agora, se vê daqui a dez lances: quando ele recapturar com 5.cxd4, os DOIS peões
+da coluna c terão sumido do tabuleiro. Sem peão em c2 ele nunca vai poder jogar
+c4, que é o lance normal para expulsar um cavalo de d5 — e o nosso cavalo mora
+lá. O Sielecki chega nesta mesma posição pela ordem 4.Cf3 Cc6 5.d4 cxd4 6.cxd4 e
+escreve que a nossa ordem dá no mesmo.} 5. cxd4 d6 {Este …d6 é a conta que apresentamos ao peão de e5. Ou
 ele come em d6 e abre o jogo cedo, ou fica parado esperando a hora em que somos
-nós que comemos — que é como esta linha termina.} 6. Nf3 Nc6 7. Bc4 Nb6 8. Bb5
-dxe5 {O cavalo em d5 é o coração da linha: ele para no meio do tabuleiro e o
-peão de e5, que parecia o orgulho das brancas, é justamente o que cai primeiro.
-Quando o bispo dele chegou em c4 nós o empurramos com …Cb6, e agora …dxe5
-desfaz o centro dele. Ele recaptura, mas o jogo abre com as nossas peças
-prontas.} *
-
-[Abertura "siciliana"]
-[Nome "Siciliana — Gambito Morra 2.d4"]
-[Cor "pretas"]
-[Nivel "base"]
-[Fonte "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 5, medido em 5/9/2026. O draft 'Sicilian Sidelines Homework' do Grigoryan chega a 2.d4 cxd4 3.c3 e para ali. O 3...Cf6 é o lance que o motor põe em igualdade junto com o 3...dxc3, e foi escolhido porque transpõe exatamente para a linha da Alapin acima."]
-[Result "*"]
-
-1. e4 c5 2. d4 cxd4 3. c3 Nf6 {Ele está oferecendo um peão. Não pegue: com
-3…dxc3 ele recupera tudo em desenvolvimento e você joga o resto da partida
-correndo atrás. O …Cf6 ataca o peão de e4 e obriga o 4.e5 — e daí em diante é a
-Alapin, que você já sabe.} 4. e5 Nd5 5. Nf3 Nc6 6. cxd4 d6 7. Bc4 Nb6 8. Bb5
-dxe5 {Este é o truque do arquivo inteiro: recusamos o peão com …Cf6 e caímos na
-mesma posição da linha da Alapin — confira os dois diagramas, são iguais, só os
-lances vieram em outra ordem. Quem estudou a Alapin ganhou o Gambito Morra de
-graça. Aceitar com 3…dxc3 também empata pelo motor, mas aí você joga uma
-posição nova, com ele desenvolvido e você não.} *
+nós que comemos — que é como esta linha termina. E repare numa coisa que vale
+daqui até o fim da partida: na troca do lance 4 os dois peões de c sumiram do
+tabuleiro. Sem peão em c2, ele não tem como jogar c4, que é o lance normal para
+expulsar um cavalo de d5. Sobra fazer isso com peça — é o que ele tenta no
+lance 7 com Bc4 —, e aí nós recuamos …Cb6 atacando o bispo e ganhamos o tempo
+de volta.} 6. Nf3
+Nc6 {Cavalo para a casa dele, batendo em d4 — que é o peão que vai ficar isolado
+no fim desta linha, e é bom começar a cobrá-lo cedo. Daqui ele quase sempre
+combina d4 com Bc4, ocupando o centro e saindo com a ala do rei.} 7. Bc4
+Nb6 {Ele não tem peão para expulsar o nosso cavalo, então tentou com peça. O
+cavalo recua UM passo e, no mesmo lance, ataca o bispo que veio expulsá-lo:
+recuo com juros. Ele gastou um lance, nós gastamos um lance, e o bispo dele vai
+ter de andar de novo.} 8. Bb5 Bd7 {O mérito deste bispo é não decidir nada. Ele sai de casa, defende o cavalo
+de c6 pela segunda vez e deixa a tensão no centro de pé — trocar em e5 agora
+seria nós resolvermos a estrutura no tempo dele, e assim quem tem de escolher é
+quem tem o peão em e5. O Sielecki é honesto sobre o preço: ele mesmo chama o
+8…dxe5 de linha principal das pretas, e escolhe este lance porque guarda mais
+chances de jogar para ganhar — foi o que o campeão do mundo jogou.} 9. exd6
+e6 {Não recapture. Parece óbvio pegar o peão de volta na hora, e é justamente
+aqui que a linha se decide: deixamos o peão dele em d6 por dois lances e
+preparamos comê-lo com o BISPO, que agora tem a casa e7 aberta para passar.
+Medido no Stockfish 18, profundidade 20: o …e6 é o único lance que segura a
+igualdade; o natural 9…exd6 já põe as brancas 0,35 à frente e o 9…a6, 0,55. A
+diferença é a estrutura — recapturando com peça, os nossos peões ficam limpos em
+a7, b7, e6, f7, g7 e h7, e o bispo chega de graça a uma casa boa. Ele vai tentar
+usar a diagonal que o …e6 abriu: 10.Bg5 ataca a nossa dama, e a resposta é …f6,
+que fecha a diagonal e obriga o bispo a recuar para h4.} 10. Bg5
+f6 {O …e6 abriu a diagonal d8-h4 e ele foi buscá-la na hora, atacando a nossa
+dama. O …f6 fecha a porta e obriga o bispo a recuar para h4, onde ele fica longe
+de tudo. Sim, o peão de f6 tira a casa f6 do nosso cavalo — mas o cavalo de d5
+não quer sair de d5 mesmo, e o de b8 nunca vai passar por ali.} 11. Bh4
+Bxd6 {O peão volta, e volta com peça: o bispo sai de f8 direto para d6, que é
+casa boa, e a nossa estrutura fica limpa. Agora olhe os peões dele: a2, b2, d4,
+f2, g2, h2. O de d4 ficou sozinho — os dois peões de c sumiram na troca do lance
+4, e o de e foi trocado no lance 9. Isso é um peão isolado, e peão isolado se
+trata sempre do mesmo jeito: bloqueia-se a casa da frente e cobra-se o peão com
+as peças. A casa da frente é d5, e é dela que trata o plano do curso: …Cb4, que
+ele explica assim — trocar peças aqui não nos incomoda, porque trocar ajuda a
+dominar as casas claras, em especial a que fica na frente do peão isolado. Não é
+ataque, é cobrança.} 12. Nc3
+O-O {Antes da cobrança, o rei. O curso joga …Cb4 aqui e nós rocamos primeiro: o
+motor dá igualdade nos dois, e uma partida se perde muito mais por rei no meio
+do que por um lance de reagrupamento adiado. O …Cb4 continua sendo o plano, e
+ele fica melhor com a torre já ligada em f8. Conte a posição: rei no canto, as
+quatro peças pequenas fora de casa desde o décimo primeiro lance, e um peão
+isolado dele em d4 para cobrar o resto da partida. A abertura acabou.} *

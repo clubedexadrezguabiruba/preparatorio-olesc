@@ -1,62 +1,12 @@
 [
   {
-    "id": "brancas-francesa-746ed04d",
+    "id": "brancas-francesa-05eae3b2",
     "cor": "brancas",
     "abertura": "francesa",
     "nivel": "base",
-    "nome": "Francesa 3.Bd3 — 4.exd5 exd5 5.c3",
+    "nome": "Francesa 3.Bd3 — 13.Nxc3 Bd7 14.O-O-O",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "rnbqkbnr/pp3ppp/8/2pp4/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq - 0 5",
-    "lances": [
-      "e2e4",
-      "e7e6",
-      "d2d4",
-      "d7d5",
-      "f1d3",
-      "c7c5",
-      "e4d5",
-      "e6d5",
-      "c2c3"
-    ],
-    "sans": [
-      "e4",
-      "e6",
-      "d4",
-      "d5",
-      "Bd3",
-      "c5",
-      "exd5",
-      "exd5",
-      "c3"
-    ],
-    "meus": [
-      0,
-      2,
-      4,
-      6,
-      8
-    ],
-    "alternativas": {
-      "8": [
-        "d4c5",
-        "g1f3"
-      ]
-    },
-    "errosNomeados": {},
-    "comentarios": {
-      "4": "Quase todo mundo joga 3.Cc3 ou 3.e5 aqui, e as duas\ndão posições cheias de teoria. Nós fazemos o mais simples: pomos o bispo em d3,\napontado para o rei dele, e deixamos o centro decidir sozinho. Se ele comer em\ne4, o bispo recaptura já desenvolvido; se ele bater com …c5, o jogo abre — e num\njogo aberto quem tem o bispo bom é quem manda.",
-      "8": "Ele abriu o jogo cedo.\nNós seguramos o peão de d4 com o de c3 e ficamos com um centro sólido e o bispo\njá apontado para o lado do rei dele. Os outros dois lances da fonte também\nservem — este é o mais fácil de jogar depois."
-    },
-    "fonte": "GM Avetik Grigoryan (ChessMood) — 'French with 3.Bd3'. No lance 5 contra 3...c5 a escolha entre os três lances marcados pela fonte é nossa, por livro + motor: Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026 põe os três a menos de um décimo de peão um do outro, então a escolha é pedagógica, não de avaliação."
-  },
-  {
-    "id": "brancas-francesa-c384ccc4",
-    "cor": "brancas",
-    "abertura": "francesa",
-    "nivel": "base",
-    "nome": "Francesa 3.Bd3 — 7.Be3 cxd4 8.Nxd4",
-    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1bqkb1r/pp3ppp/2n1pn2/8/3N4/4BB2/PPP2PPP/RN1QK2R b KQkq - 0 8",
+    "fenFinal": "r2q1rk1/pp1b1ppp/4pn2/8/8/P1N1BQ2/1PP2PPP/2KR3R b - - 2 14",
     "lances": [
       "e2e4",
       "e7e6",
@@ -72,7 +22,19 @@
       "b8c6",
       "c1e3",
       "c5d4",
-      "e2d4"
+      "e2d4",
+      "c6e5",
+      "b1c3",
+      "f8b4",
+      "d4b5",
+      "e5f3",
+      "d1f3",
+      "e8g8",
+      "a2a3",
+      "b4c3",
+      "b5c3",
+      "c8d7",
+      "e1c1"
     ],
     "sans": [
       "e4",
@@ -89,7 +51,19 @@
       "Nc6",
       "Be3",
       "cxd4",
-      "Nxd4"
+      "Nxd4",
+      "Ne5",
+      "Nc3",
+      "Bb4",
+      "Nb5",
+      "Nxf3+",
+      "Qxf3",
+      "O-O",
+      "a3",
+      "Bxc3+",
+      "Nxc3",
+      "Bd7",
+      "O-O-O"
     ],
     "meus": [
       0,
@@ -99,65 +73,33 @@
       8,
       10,
       12,
-      14
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26
     ],
     "alternativas": {},
     "errosNomeados": {},
     "comentarios": {
-      "4": "Quase todo mundo joga 3.Cc3 ou 3.e5 aqui, e as duas\ndão posições cheias de teoria. Nós fazemos o mais simples: pomos o bispo em d3,\napontado para o rei dele, e deixamos o centro decidir sozinho. Se ele comer em\ne4, o bispo recaptura já desenvolvido; se ele bater com …c5, o jogo abre — e num\njogo aberto quem tem o bispo bom é quem manda.",
-      "8": "O cavalo dele atacou o bispo, e em vez de trocar ou voltar\npara d3 nós recuamos para f3. Daqui o bispo atravessa o tabuleiro inteiro até\nb7, que é onde o bispo dele de c8 gostaria de morar — e não vai poder.",
-      "14": "O cavalo fica no meio do\ntabuleiro e tudo está desenvolvido. Repare no bispo de f3: ele atravessa o\ntabuleiro inteiro, e é justamente a peça que o jogador de Francesa menos gosta\nde enfrentar, porque o bispo dele de c8 continua preso."
+      "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
+      "2": "Se deixarem, pegue o centro inteiro com os dois peões. Ele jogou …e6\r\npara preparar …d5, e nós não esperamos a preparação ficar pronta: e4 e d4 lado\r\na lado é o máximo que se pode ter no começo de uma partida.",
+      "4": "Quase todo mundo joga 3.Cc3 ou 3.e5 aqui, e as duas\r\ndão posições cheias de teoria. Nós fazemos o mais simples: pomos o bispo em d3,\r\napontado para o rei dele, e deixamos o centro decidir sozinho. Se ele comer em\r\ne4, o bispo recaptura já desenvolvido; se ele bater com …c5, o jogo abre — e num\r\njogo aberto quem tem o bispo bom é quem manda.",
+      "6": "O bispo recaptura e cai na diagonal mais longa do tabuleiro, apontado\r\npara b7. Isso incomoda de verdade: o bispo de c8 da Francesa já vive preso\r\natrás dos próprios peões, e a saída natural dele — …b6 e depois …Bb7 — esbarra\r\nno nosso bispo, que está olhando justamente para b7.",
+      "8": "O cavalo dele atacou o bispo, e em vez de trocar ou voltar\r\npara d3 nós recuamos para f3. Daqui o bispo atravessa o tabuleiro inteiro até\r\nb7, que é onde o bispo dele de c8 gostaria de morar — e não vai poder.",
+      "10": "Casa estranha para um cavalo, e o motivo é simples: f3 está ocupada\r\npelo nosso próprio bispo. Não trocamos a ordem por acaso — o bispo em f3 é a\r\npeça que atrapalha a vida dele, então quem se muda é o cavalo. De e2 ele\r\nguarda o peão de d4 e ainda pode ir para f4 ou c3 mais tarde.",
+      "12": "Terceira peça defendendo o peão de d4, e vale contar: o peão está\r\natacado duas vezes — pelo peão de c5 e pelo cavalo de c6 — e defendido três —\r\npelo cavalo de e2, pela dama de d1 e agora por este bispo. Ele pode comer\r\nquando quiser; nós recapturamos de cavalo, que é justamente onde a gente quer\r\nque ele fique.",
+      "14": "O cavalo fica no meio do\r\ntabuleiro e tudo está desenvolvido. Repare no bispo de f3: ele atravessa o\r\ntabuleiro inteiro, e é justamente a peça que o jogador de Francesa menos gosta\r\nde enfrentar, porque o bispo dele de c8 continua preso.",
+      "16": "O último cavalo sai. Ele atacou o nosso bispo de f3 com o cavalo de e5,\r\ne nós simplesmente não damos atenção: se ele trocar em f3, a nossa dama\r\nrecaptura e fica numa casa ótima. Enquanto isso o cavalo de c3 guarda o peão de\r\ne4… que já não existe, e é isso que o torna livre para ir a b5 no lance\r\nseguinte.",
+      "18": "O cavalo pula para b5 e olha para c7 e d6 — as duas casas que o bispo\r\ndele acabou de deixar de defender ao sair para b4. Repare no mecanismo: cada\r\npeça que ele desenvolve abandona alguma casa, e a nossa próxima peça vai\r\njustamente para lá.",
+      "20": "A dama recaptura e cai em f3, que é a melhor casa que ela tem: de lá\r\nela olha para b7, para f6 e para a coluna f inteira. Trocar o nosso melhor bispo\r\nnão dói quando quem entra no lugar dele é a dama, com tempo.",
+      "22": "Pergunte ao bispo. Ele está em b4 pregando o cavalo de c3 contra o\r\nnosso rei, e o a3 obriga a decidir: ou ele volta, e perdeu dois lances, ou ele\r\ntroca, e nós recapturamos com o outro cavalo — o de b5, que estava sem serviço\r\ndesde o décimo lance. As duas respostas nos servem.",
+      "24": "E recapturamos com o cavalo de b5, exatamente como o a3 previa: o\r\ncavalo que estava numa casa passageira volta para a casa boa, e a nossa\r\nestrutura de peões não sofreu nada. É o próprio curso que descreve a posição\r\naqui: as peças estão bem postas, e o roque vem no lance seguinte — pequeno, ou\r\nGRANDE se ele jogar …Bd7.",
+      "26": "…e ele jogou …Bd7, então é o roque grande. Não é gosto: com o bispo\r\ndele em d7, a coluna b fica sem defensor perto, e o nosso rei em c1 chega junto\r\nda nossa própria torre em d1 apontada para o meio. Conte a posição — rei\r\nguardado, as quatro peças pequenas fora de casa desde o décimo terceiro lance,\r\ndama na casa mais ativa e as torres se falando. A abertura acabou."
     },
-    "fonte": "GM Avetik Grigoryan (ChessMood) — 'French with 3.Bd3'. No lance 5 contra 3...c5 a escolha entre os três lances marcados pela fonte é nossa, por livro + motor: Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026 põe os três a menos de um décimo de peão um do outro, então a escolha é pedagógica, não de avaliação."
-  },
-  {
-    "id": "brancas-francesa-9d4caf37",
-    "cor": "brancas",
-    "abertura": "francesa",
-    "nivel": "base",
-    "nome": "Francesa 3.Bd3 — 5.Bxe4 Nf6 6.Bg5",
-    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-    "fenFinal": "r1bqkb1r/ppp2ppp/2n1pn2/6B1/3PB3/5N2/PPP2PPP/RN1QK2R b KQkq - 2 6",
-    "lances": [
-      "e2e4",
-      "e7e6",
-      "d2d4",
-      "d7d5",
-      "f1d3",
-      "b8c6",
-      "g1f3",
-      "d5e4",
-      "d3e4",
-      "g8f6",
-      "c1g5"
-    ],
-    "sans": [
-      "e4",
-      "e6",
-      "d4",
-      "d5",
-      "Bd3",
-      "Nc6",
-      "Nf3",
-      "dxe4",
-      "Bxe4",
-      "Nf6",
-      "Bg5"
-    ],
-    "meus": [
-      0,
-      2,
-      4,
-      6,
-      8,
-      10
-    ],
-    "alternativas": {},
-    "errosNomeados": {},
-    "comentarios": {
-      "4": "O mesmo lance de sempre contra a Francesa: bispo em\nd3, apontado para o rei dele, e o centro fica de pé. Ele tentou uma ordem\ndiferente com …Cc6, e a nossa resposta não muda — desenvolver e esperar.",
-      "10": "O bispo prega o\ncavalo na dama: se ele comer o nosso bispo de e4, nós comemos a dama dele em d8.\nEle vai ter de gastar um lance desfazendo a pregação, e nós desenvolvemos de\ngraça enquanto isso."
-    },
-    "fonte": "Livro + motor — Stockfish 18 lite-single de public/engine/, profundidade 20, MultiPV 3, medido em 5/9/2026. Buraco 9 da seção 8 de docs/REPERTORIO.md: o arquivo do Grigoryan não cobre 3...Cc6. O 4.Cf3 é o primeiro lance do motor e o 6.Bg5 também, com folga sobre o segundo."
+    "plano": {},
+    "fonte": "GM Niclas Huschenbeth — 'Short & Sweet: 1.e4' (Chess.com), variante 'French #2'. Os 15 meios-lances batem um a um com o curso, que segue além até 13.Cxc3. O arquivo do Grigoryan dá os mesmos lances mas tem zero prosa; o Huschenbeth explica o 3.Bd3 (flexibilidade e surpresa) e o 5.Bf3 (o bispo toma f3, então o cavalo vai a e2). Conferido em 7/9/2026. Até a poda de 7/9/2026 esta tag carregava também a ponta do 3...c5, que era nossa por livro + motor; aquela linha saiu do treinador e virou a página de princípios 'francesa-bd3'. || CAUDA DA §24 (8/9/2026), do 8...Ce5 ao 14.O-O-O: DEGRAU 0 DO 8...Ce5 AO 13.Cxc3 — o Huschenbeth joga os dez lances, um a um, na nossa ordem. Dele e a leitura da posicao final do 13.Cxc3, escrita com todas as letras: as pecas estao bem postas e o roque vem em seguida, PEQUENO ou GRANDE se as pretas jogarem Bc8-d7. E foi isso que aconteceu: o 13...Bd7 e o lance seguinte, e o 14.O-O-O e a PRIMEIRA VARIANTE do Stockfish 18 na posicao, brancas +0,33, medido em 8/9/2026 na profundidade 20. O curso para no 13.Cxc3 e o explorer tem 1 e 2 jogos nas duas ultimas posicoes — degrau 3 —, mas o lance nao e chute: e o que a fonte manda e o que o motor confirma. A linha fecha a regua no lance 14, sem [%plano]. Ponta igual -> +0,38."
   }
 ]

@@ -26,7 +26,9 @@
     "repertorio:explorer": "node scripts/explorer-repertorio.ts",
     "repertorio:motor": "node scripts/motor-repertorio.ts",
     "repertorio:fidelidade": "node scripts/medir-fidelidade.ts",
-    "meiojogo:conferir": "node scripts/conferir-transcricao.ts"
+    "repertorio:mapear": "node scripts/mapear-fontes.ts",
+    "repertorio:cauda": "node scripts/cauda-repertorio.ts",
+    "repertorio:orfaos": "node scripts/orfaos-repertorio.ts"
   },
   "dependencies": {
     "@lichess-org/chessground": "^10.1.1",

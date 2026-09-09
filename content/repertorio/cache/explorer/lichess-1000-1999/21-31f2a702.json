@@ -1,0 +1,83 @@
+{
+  "white": 378,
+  "draws": 2,
+  "black": 28,
+  "moves": [
+    {
+      "uci": "f6h5",
+      "san": "Nh5",
+      "averageRating": 1814,
+      "white": 217,
+      "draws": 1,
+      "black": 5,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e8h8",
+      "san": "O-O",
+      "averageRating": 1869,
+      "white": 58,
+      "draws": 1,
+      "black": 16,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6e4",
+      "san": "Ne4",
+      "averageRating": 1794,
+      "white": 36,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6g8",
+      "san": "Ng8",
+      "averageRating": 1820,
+      "white": 38,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a6",
+      "san": "a6",
+      "averageRating": 1841,
+      "white": 14,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d7c7",
+      "san": "Qc7",
+      "averageRating": 1883,
+      "white": 14,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d7c8",
+      "san": "Qc8",
+      "averageRating": 1949,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B13",
+    "name": "Caro-Kann Defense: Exchange Variation, Rubinstein Variation"
+  }
+}

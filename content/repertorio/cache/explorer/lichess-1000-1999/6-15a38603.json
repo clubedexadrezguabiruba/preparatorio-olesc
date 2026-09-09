@@ -1,0 +1,133 @@
+{
+  "white": 194366,
+  "draws": 19575,
+  "black": 199256,
+  "moves": [
+    {
+      "uci": "b5c6",
+      "san": "Bxc6",
+      "averageRating": 1672,
+      "white": 82777,
+      "draws": 8725,
+      "black": 86190,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e1h1",
+      "san": "O-O",
+      "averageRating": 1707,
+      "white": 53665,
+      "draws": 5015,
+      "black": 48410,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c2c3",
+      "san": "c3",
+      "averageRating": 1730,
+      "white": 17606,
+      "draws": 1860,
+      "black": 17288,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b1c3",
+      "san": "Nc3",
+      "averageRating": 1625,
+      "white": 15168,
+      "draws": 1408,
+      "black": 16767,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2d4",
+      "san": "d4",
+      "averageRating": 1673,
+      "white": 13677,
+      "draws": 1434,
+      "black": 16477,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2d3",
+      "san": "d3",
+      "averageRating": 1624,
+      "white": 6641,
+      "draws": 652,
+      "black": 7647,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b2b3",
+      "san": "b3",
+      "averageRating": 1570,
+      "white": 1114,
+      "draws": 95,
+      "black": 1575,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c2c4",
+      "san": "c4",
+      "averageRating": 1683,
+      "white": 1155,
+      "draws": 138,
+      "black": 1482,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1643,
+      "white": 636,
+      "draws": 50,
+      "black": 730,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h3",
+      "san": "h3",
+      "averageRating": 1643,
+      "white": 532,
+      "draws": 55,
+      "black": 536,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e4e5",
+      "san": "e5",
+      "averageRating": 1595,
+      "white": 469,
+      "draws": 38,
+      "black": 600,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f3g5",
+      "san": "Ng5",
+      "averageRating": 1425,
+      "white": 185,
+      "draws": 18,
+      "black": 301,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B31",
+    "name": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation"
+  }
+}

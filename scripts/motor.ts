@@ -118,7 +118,24 @@ export class Motor {
    * `bestmove` antes de chegar lá, e exigir a profundidade exata devolveria uma
    * lista vazia justamente nas posições que mais importa recusar.
    */
-  async pensar(posicao: string, profundidade: number): Promise<Variante[]> {
+  async pensar(
+    posicao: string,
+    profundidade: number,
+    /**
+     * Restringe a busca a estes lances (UCI), na ordem em que vierem.
+     *
+     * É o `searchmoves` do UCI, e ele existe aqui para uma pergunta que o
+     * MultiPV sozinho não responde: "quanto vale **este** lance?". O MultiPV
+     * devolve os melhores da posição; o dossiê da cauda (§24) precisa da nota
+     * dos **mais jogados**, que muitas vezes não são os melhores — é justamente
+     * a diferença entre os dois que decide se o lance do clube entra ou não.
+     *
+     * A ordem da resposta continua sendo a do motor (melhor primeiro), não a
+     * desta lista: quem casa lance com nota é quem chamou, pelo primeiro token
+     * da `pv`.
+     */
+    lances?: readonly string[],
+  ): Promise<Variante[]> {
     const achadas = new Map<number, { profundidade: number; variante: Variante }>();
 
     const coletar = (linha: string): void => {
@@ -140,7 +157,9 @@ export class Motor {
     this.ouvintes.push(coletar);
     this.manda("ucinewgame");
     this.manda(`position ${posicao}`);
-    this.manda(`go depth ${profundidade}`);
+    this.manda(
+      `go depth ${profundidade}${lances && lances.length > 0 ? ` searchmoves ${lances.join(" ")}` : ""}`,
+    );
     await this.ate((linha) => linha.startsWith("bestmove"));
     this.ouvintes = this.ouvintes.filter((o) => o !== coletar);
 

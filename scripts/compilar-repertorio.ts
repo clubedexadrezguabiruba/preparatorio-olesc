@@ -27,9 +27,11 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync
 import path from "node:path";
 import { RAIZ } from "./env-local.ts";
 import { expandir } from "../lib/repertorio/arvore.ts";
+import { notas } from "../lib/repertorio/conteudo.ts";
 import { lerPgns } from "../lib/repertorio/pgn.ts";
 import {
   aberturasInchadas,
+  placarDeFechamento,
   CORES,
   NIVEIS,
   validarBanco,
@@ -133,8 +135,44 @@ if (problemas.length === 0) {
 }
 
 avisos.push(...aberturasInchadas(todas).map((a) => `acima da meta do Base — ${a}`));
+// A régua do término NÃO entra mais aqui. Ela era aviso enquanto as caudas da
+// §24 estavam sendo escritas; desde 8/9/2026 `validarBanco` a soma aos
+// problemas, e repetir a lista como aviso imprimiria cada linha aberta duas
+// vezes — uma como erro e outra como recado, com o leitor tendo de descobrir
+// sozinho que são a mesma coisa.
+
+/* ------------------------------------------------------------------ *
+ * O campo `abertura` das páginas de princípios aponta para abertura viva
+ *
+ * Uma nota com `abertura: "escocesa"` faz a página da Escocesa mostrar o link
+ * para ela. Se o slug estiver errado — ou se a abertura sair do repertório num
+ * corte futuro —, o link simplesmente **não aparece**: a página não quebra,
+ * ninguém vê erro nenhum, e a nota volta a ser invisível fora do rodapé de
+ * `/aberturas`. Foi exatamente esse silêncio que a §23 de 7/9/2026 veio
+ * consertar, então ele não pode voltar por descuido de slug.
+ *
+ * É aqui e não no `validate:content` porque o par `cor`+`abertura` só existe
+ * depois de compilar: é este script que decide quais aberturas há. E é ANTES do
+ * `--check` para o gate valer também quando nada é escrito.
+ * ------------------------------------------------------------------ */
+const aberturasVivas = new Set(todas.map((l) => `${l.cor}/${l.abertura}`));
+for (const nota of notas()) {
+  if (nota.abertura && !aberturasVivas.has(`${nota.cor}/${nota.abertura}`)) {
+    problemas.push(
+      `a página de princípios "${nota.slug}" aponta para ${nota.cor}/${nota.abertura}, ` +
+        "que não é abertura do repertório. O link para ela sumiria calado da tela da abertura.",
+    );
+  }
+}
 
 for (const aviso of avisos) console.log(`  aviso: ${aviso}`);
+
+// O placar sai SEMPRE, inclusive quando a compilação reprova. É o número que
+// mede o avanço da §24, e ele é mais útil justamente nas rodadas em que alguma
+// coisa quebrou — sem ele, um erro de sintaxe num PGN esconderia o progresso
+// das outras dez aberturas.
+console.log(`
+${placarDeFechamento(todas)}`);
 
 if (problemas.length > 0) {
   console.error(`\n${problemas.length} problema(s):\n`);
@@ -171,6 +209,11 @@ for (const [chave, linhas] of [...grupos].sort()) {
     abertura: linhas[0].abertura,
     nome: linhas[0].nome.split(" — ")[0],
     linhas: linhas.length,
+    ids: linhas.map((l) => l.id) as [string, ...string[]],
+    // O `nivel` de cada linha só chega à tela por aqui: o índice é o único
+    // arquivo que `/aberturas` abre, e sem esta lista marcar uma linha como
+    // `avancado` não a esconde de ninguém. Ver o schema em `lib/repertorio/linhas.ts`.
+    idsAvancado: linhas.filter((l) => l.nivel === "avancado").map((l) => l.id),
     arquivo: `/repertorio/${chave}.json`,
   });
 }

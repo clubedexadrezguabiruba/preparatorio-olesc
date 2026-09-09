@@ -1,0 +1,142 @@
+{
+  "white": 18127734,
+  "draws": 1556203,
+  "black": 14816999,
+  "moves": [
+    {
+      "uci": "d8d5",
+      "san": "Qxd5",
+      "averageRating": 1513,
+      "white": 13761810,
+      "draws": 1168280,
+      "black": 10668656,
+      "game": null,
+      "opening": {
+        "eco": "B01",
+        "name": "Scandinavian Defense: Mieses-Kotroc Variation"
+      }
+    },
+    {
+      "uci": "g8f6",
+      "san": "Nf6",
+      "averageRating": 1659,
+      "white": 3029200,
+      "draws": 296146,
+      "black": 3135823,
+      "game": null,
+      "opening": {
+        "eco": "B01",
+        "name": "Scandinavian Defense: Modern Variation"
+      }
+    },
+    {
+      "uci": "c7c6",
+      "san": "c6",
+      "averageRating": 1588,
+      "white": 590174,
+      "draws": 43334,
+      "black": 527681,
+      "game": null,
+      "opening": {
+        "eco": "B01",
+        "name": "Scandinavian Defense: Blackburne-Kloosterboer Gambit"
+      }
+    },
+    {
+      "uci": "e7e6",
+      "san": "e6",
+      "averageRating": 1564,
+      "white": 369511,
+      "draws": 25849,
+      "black": 303138,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e7e5",
+      "san": "e5",
+      "averageRating": 1437,
+      "white": 121456,
+      "draws": 7368,
+      "black": 65426,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8f5",
+      "san": "Bf5",
+      "averageRating": 1502,
+      "white": 73362,
+      "draws": 4889,
+      "black": 49037,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8d6",
+      "san": "Qd6",
+      "averageRating": 1382,
+      "white": 48591,
+      "draws": 2848,
+      "black": 21386,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c7c5",
+      "san": "c5",
+      "averageRating": 1408,
+      "white": 30675,
+      "draws": 1801,
+      "black": 12067,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8d7",
+      "san": "Qd7",
+      "averageRating": 1411,
+      "white": 14844,
+      "draws": 857,
+      "black": 6233,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b8c6",
+      "san": "Nc6",
+      "averageRating": 1366,
+      "white": 14417,
+      "draws": 599,
+      "black": 1965,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g7g6",
+      "san": "g6",
+      "averageRating": 1558,
+      "white": 8195,
+      "draws": 648,
+      "black": 6140,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f7f5",
+      "san": "f5",
+      "averageRating": 1417,
+      "white": 8487,
+      "draws": 456,
+      "black": 3301,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B01",
+    "name": "Scandinavian Defense"
+  }
+}

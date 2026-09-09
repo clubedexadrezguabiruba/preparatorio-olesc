@@ -1,0 +1,133 @@
+{
+  "white": 125,
+  "draws": 10,
+  "black": 48,
+  "moves": [
+    {
+      "uci": "a5a4",
+      "san": "a4",
+      "averageRating": 1823,
+      "white": 77,
+      "draws": 3,
+      "black": 27,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c6e5",
+      "san": "Ne5",
+      "averageRating": 1831,
+      "white": 15,
+      "draws": 3,
+      "black": 5,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a8b8",
+      "san": "Rb8",
+      "averageRating": 1837,
+      "white": 6,
+      "draws": 2,
+      "black": 5,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8d7",
+      "san": "Qd7",
+      "averageRating": 1762,
+      "white": 6,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e7f6",
+      "san": "Bf6",
+      "averageRating": 1871,
+      "white": 6,
+      "draws": 1,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c6a7",
+      "san": "Na7",
+      "averageRating": 1757,
+      "white": 1,
+      "draws": 1,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8b8",
+      "san": "Qb8",
+      "averageRating": 1852,
+      "white": 4,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e6g4",
+      "san": "Bg4",
+      "averageRating": 1821,
+      "white": 3,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d6d5",
+      "san": "d5",
+      "averageRating": 1850,
+      "white": 3,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g7g6",
+      "san": "g6",
+      "averageRating": 1840,
+      "white": 2,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e6a2",
+      "san": "Bxa2+",
+      "averageRating": 1628,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f7f5",
+      "san": "f5",
+      "averageRating": 1964,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C42",
+    "name": "Petrov's Defense: Nimzowitsch Attack"
+  }
+}

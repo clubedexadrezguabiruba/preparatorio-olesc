@@ -14,6 +14,24 @@ antes. Alargar para 700–1700 muda as frequências, e por isso o ⚠13 da §8 e
 A idade também muda o tom dos comentários: a §5 dizia "português de criança de
 10 anos", e o aluno mais novo tem 12.
 
+**E "medir em 700–1700" não é coisa que se possa pedir.** Duas descobertas de
+6/9/2026, na hora de fazer:
+
+1. **O explorer não tem balde abaixo de 1000.** Os valores que ele aceita são
+   `0, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500`, cada um indo até o
+   próximo. O piso é um balde só, de **0 a 999**. Não existe "700".
+2. **O número do explorer é o do Lichess; o do clube é o do chess.com.** Não são
+   a mesma escala: o Lichess começa todo mundo em 1500, então, para a mesma
+   força, o número dele é maior — e a diferença é maior justamente embaixo. Um
+   aluno de 700 no chess.com não é um jogador de 700 no Lichess; é algo perto de
+   1000 a 1200.
+
+Somadas, elas viram o ⚠13 do avesso: traduzir "700–1700" para dentro do
+`ratings` daria `0,1000,1200,1400,1600`, que enche a medição de gente **abaixo**
+do aluno mais fraco do clube e ainda corta o topo da turma — faixa mais errada
+que a que estava lá. Por isso a resposta não foi trocar a faixa por teoria, e
+sim **medir três e comparar**: §6.1.
+
 - O que existe hoje: a ferramenta (`lib/repertorio/`, `scripts/`) e **20
   rascunhos** importados dos cursos em `content/repertorio/rascunhos/`.
 - O que o **B3** escreveu: as **22 linhas do Base das brancas**, em sete arquivos
@@ -23,8 +41,19 @@ A idade também muda o tom dos comentários: a §5 dizia "português de criança
   `pretas-manhattan.pgn` (3), `pretas-londres.pgn` (2), `pretas-colle.pgn` (1) e
   `pretas-outras.pgn` (1).
 - O que o **B5** escreveu: **a tela em que o aluno treina** — `/aberturas`, o
-  juiz, a tabela de progresso e a gravação. **O Base está fechado: 42 linhas**,
-  as 22 das brancas e as 20 das pretas, e agora elas são jogáveis.
+  juiz, a tabela de progresso e a gravação. **O Base fechou em 43 linhas**, as 23
+  das brancas e as 20 das pretas, e agora elas são jogáveis.
+- O que a **revisão de fontes** (7/9/2026) fez: a régua nova do
+  `docs/REVISAO-FONTES.md` — *toda linha tem de vir de fonte que explique o
+  motivo* — tirou as **3 do bispo em c4** do treinador e as transformou em
+  página de princípios. Depois disso a poda da §23 continuou o serviço, e o
+  número de hoje é outro: **27 linhas** (20 do Base, 7 do Avançado) em **11
+  aberturas**, e **nove páginas** em `/aberturas/notas/`. As 15 linhas que
+  saíram não foram jogadas fora — as que eram ideia viraram página, e as que
+  eram para depois viraram Avançado.
+- **O número que fecha o repertório, medido em 7/9/2026:** nenhum dos **222
+  lances que o aluno joga** está sem comentário. Era 80 antes desta sessão, e
+  quem impede a volta é o `conferirRegras` de `lib/repertorio/linhas.ts`.
 
 ---
 
@@ -41,21 +70,22 @@ motor**, marcado ⚠ e com a proveniência dizendo isso. Nada é inventado.
 | 1…e5 2…d6 Philidor | 13,7 % de 1…e5 | 3.d4, Bf4 + Qd2 + O-O-O | Krikor (Peão Rei) | **2** |
 | 1…e5 2…Nf6 Petroff | 11 % de 1…e5 | 3.Nxe5 d6 4.Nf3 Nxe4 5.Nc3 | Grigoryan | **1** |
 | 1…c5 | 10,1 % | **Alapin** 2.c3 | Krikor (3 capítulos) | **3** |
-| 1…d5 Escandinava | 8,6 % | 2.exd5 Qxd5 3.Nc3 | Grigoryan + Krikor | **2** |
+| 1…d5 Escandinava | 8,6 % | 2.exd5 Qxd5 3.Nc3 | Grigoryan + Krikor | **3** |
 | 1…e6 Francesa | 6,8 % | **3.Bd3** | Grigoryan + livro/motor | **3** |
 | 1…c6 Caro-Kann | 4,7 % | Trocas 3.exd5 cxd5 4.Bd3 | Grigoryan | **2** |
 | 1…d6/g6 Pirc | 4,2 % | — | — | **princípios** |
 | 1…Nc6, 1…Nf6, 1…b6 | < 2 % cada | — | — | **princípios** |
 
-**Soma do Base das brancas: 22 linhas.** Escritas no B3, em
-`content/repertorio/brancas-*.pgn`.
+**Soma do Base das brancas: 23 linhas.** 22 escritas no B3 em
+`content/repertorio/brancas-*.pgn`, mais a Escandinava `2…Cf6` que a §6.1
+acrescentou em 6/9/2026.
 
 ### Pretas
 
 | Contra | % | Sistema | Fonte | Base |
 |---|---|---|---|---|
-| 1.e4 (68,2 % da raiz) | | **1…c5** | | **13** |
-| · 2.Bc4 e 2.Nf3 Nc6 3.Bc4 | ~31 % das sicilianas | …Nc6, …e6, e expulsar o bispo | livro + motor | **3** ✔ |
+| 1.e4 (68,2 % da raiz) | | **1…c5** | | **10** |
+| · 2.Bc4 e 2.Nf3 Nc6 3.Bc4 | ~31 % das sicilianas | …e6, e o …d5 que expulsa o bispo | — | **princípios** |
 | · 2.Nf3 Nc6 3.d4 Aberta | ~12 % | **Dragão Acelerado** 4…g6 | Grigoryan + livro/motor | **4** ✔ |
 | · 3.Bb5 Rossolimo | ~5 % | 3…g6 4.Bxc6 dxc6 | Grigoryan + livro/motor | **2** ✔ |
 | · 2.Nc3 Grand Prix / Fechada | 8,3 % | 3.Nf3 →…g6 (transpõe); 3.Bc4 →…e6 | livro + motor | **2** ✔ |
@@ -67,8 +97,12 @@ motor**, marcado ⚠ e com a proveniência dizendo isso. Nada é inventado.
 | · 2.Nf3/2.e3/2.Nc3 Colle, Jobava | 38,5 % somados | …e6, …c5, …Bd6 | livro + motor | **1** ✔ |
 | 1.c4, 1.Nf3, 1.b3, 1.f4, 1.g3 | ~8 % da raiz | 1…e6 e …d5, transpõe p/ Manhattan | livro + motor | **1** ✔ |
 
-**Soma do Base das pretas: 20 linhas, todas escritas no B4.**
-Total geral: **42**, contra a meta de ~40. **O Base está fechado.**
+**Soma do Base das pretas: 17 linhas.** As 20 do B4 menos as 3 do bispo em c4,
+que em 7/9/2026 saíram do treinador e viraram página de princípios (§2.6 aqui,
+§16 do `docs/REVISAO-FONTES.md`).
+
+Total geral hoje: **40** — 23 das brancas e 17 das pretas, contra a meta de ~40.
+**O Base está fechado.**
 
 Duas correções que o B4 mediu e esta tabela já traz:
 
@@ -161,7 +195,8 @@ arquivo: `4. e5 {Where the Knight goes?} (4. d3 {How to fight for the center?})
 E a posição é espalhada: depois de `2.Bc4 Nc6`, as quatro respostas mais comuns
 cobrem só **73,2 %** — o menor número da tabela inteira.
 
-**Decisão:** **3 linhas**, a maior fatia das pretas, ⚠ **livro + motor**.
+**Decisão do B4, revista em 7/9/2026:** eram **3 linhas** ⚠ livro + motor. Hoje
+são **0 linhas e uma página de princípios** — a virada está no fim desta seção.
 
 **Escrito no B4, e como.** O `2…Nc6` fica: é o lance do arquivo do Grigoryan e é
 a posição que a §6 mediu — trocá-lo por `2…e6` invalidaria aquela linha da tabela
@@ -179,6 +214,34 @@ O que muda de linha para linha não é o lance, é **quem expulsa o bispo**: con
 `3.Nf3` é o peão `…d5`; contra `3.d3`, que segura d5, são `…a6`, `…b5` e o cavalo
 a a5. Medido nas pontas: pretas **+0,67** contra `3.Qf3`, **+0,24** contra `3.d3`,
 e igualdade contra `3.Nf3`.
+
+#### O que a régua nova fez com estas três — 7/9/2026
+
+A régua da §1 do `docs/REVISAO-FONTES.md` reprovou as três: o lance é do motor, e
+motor não dá motivo. Procurar fonte não resolveu — **nenhum dos onze cursos do
+corpus entra na posição**, porque os autores escrevem para 1200+ e nessa faixa o
+`2.Bc4` quase não aparece. Não é falta de procurar: é estrutural.
+
+E aí a própria medição desta seção vira o argumento. **73,2 % é o número mais
+espalhado da tabela inteira** — quatro respostas comuns, nenhuma dominante. Uma
+posição que se dispersa em quatro não rende sequência para decorar: rende uma
+ideia. E a ideia cabe numa frase, com um motivo tático que a criança consegue
+ver: **o mate em f7 só existe porque o bispo de c4 defende a dama que pousa
+lá**; tire o bispo da diagonal com `…e6` e `4.Dxf7+ Rxf7` é uma dama de graça.
+`…e6` é também o lance que prepara o `…d5` que expulsa o bispo — defesa e plano
+no mesmo lance.
+
+**Decisão, executada em 7/9/2026:** as 3 linhas saíram do treinador e a posição
+virou página de princípios, `/aberturas/notas/bispo-em-c4`. É o mesmo formato do
+⚠12, por um motivo oposto: aquelas são raras demais para decorar, esta é
+espalhada demais. Medido no motor em 7/9/2026, com a mesma build da §8: depois de
+`3.Dh5 e6` as quatro melhores das brancas deixam as pretas **+1,03 a +1,19** (o
+`4.Dxc5` não entra no corte), e contra `3.d3` a primeira escolha do motor é
+exatamente `…e6`, `…a6`, `…b5`, `…Ca5`, em igualdade. As armadilhas estão
+escritas na página: `3.Dh5 Cf6??` é mate em f7, e `3.Dh5 d6?` leva `4.Bxf7+`,
+brancas **+2,95**.
+
+O detalhe da §16 do `docs/REVISAO-FONTES.md`.
 
 ### 2.7 A Francesa 3.Bd3 são três estruturas, não uma
 
@@ -213,10 +276,19 @@ já marcava esse ⚠; o `00-ESTADO.md` o apagou ao consolidar.
 O Short & Sweet do Kushager tem **uma** linha de Londres, **zero** de Colle e de
 Jobava, e **duas** de Catalã — que é 10,5 % de 16,5 % de 29,4 %, ou seja ~0,5 %.
 
-**Decisão:** Londres ganha 2 linhas; Colle/Jobava/2.e3 ganham 1 (⚠ livro +
-motor); a Catalã vai para o Avançado. Contra a Londres, `2…c5` é a resposta
-prevista, e o explorer mostra que ela leva a `3.e3` 40,9 % / `3.c3` 23,5 % —
-duas linhas cobrem 64 %.
+**Decisão:** Londres ganha 2 linhas; Colle/Jobava/2.e3 ganham 1; a Catalã vai
+para o Avançado. Contra a Londres, `2…c5` é a resposta prevista, e o explorer
+mostra que ela leva a `3.e3` 40,9 % / `3.c3` 23,5 % — duas linhas cobrem 64 %.
+
+**Revisto em 7/9/2026 (§22 do `docs/REVISAO-FONTES.md`): Colle/Jobava/2.e3
+passaram de 1 para 2 linhas, e as duas saíram do ⚠ livro + motor.** O Colle
+cobre `2.Cf3` e `2.e3` num jogo só, porque as duas ordens transpõem na mesma
+posição final — 26,6 %. O `2.Cc3` **não** transpõe (com o cavalo dele em c3, o
+peão dele não cabe mais em c3) e por isso ganhou jogo próprio: o Jobava, que
+transpõe exato para o capítulo `Jobava Attack: 4.e4` do Anti-London gratuito.
+A frase acima sobre o Kushager continua verdadeira e deixou de ser o problema:
+ele não tem capítulo de Colle, mas a variante `The London` dele joga os cinco
+primeiros lances pretos do nosso Colle, na nossa ordem, e explica cada um.
 
 **Correção do B4: a dama em b6 tem hora.** O documento previa "`2…c5`, `…Nc6`,
 `…Qb6`" como uma receita só. Medido no motor:
@@ -232,7 +304,7 @@ indo a c3.** Enquanto essa casa estiver livre, a dama em b6 não incomoda; assim
 que o peão dele ocupa c3, ela incomoda de graça. É por isso que contra `3.c3` a
 dama sai no lance 3, e contra `3.e3` ela espera até o lance 5.
 
-### 2.10 Três defesas não entram em nível nenhum
+### 2.10 Quatro defesas não entram em nível nenhum
 
 Pirc (1…d6 2,6 % + 1…g6 1,6 % = 4,2 %), Nimzowitsch (1…Nc6 1,6 %), Alekhine
 (1…Nf6 1,3 %), Owen (1…b6 < 1 %). Pelo corte da §4 nenhuma chega ao Base, e o
@@ -242,9 +314,15 @@ Grigoryan (16 linhas) prontos para eles.
 Detalhe do Pirc: o arquivo começa em `1…d6`. O `1…g6` sem `…Nf6` **não transpõe**
 para ele, então nem essa cobertura é inteira.
 
-**Decisão:** **princípios em `content/repertorio/notas/`**, uma página de texto,
-sem exercício no treinador. Libera ~16 linhas do orçamento — que é exatamente o
-que a Escocesa e o Bowdler precisam.
+**Decisão:** **princípios em `content/repertorio/notas.json`**, uma página de
+texto, sem exercício no treinador. Libera ~16 linhas do orçamento — que é
+exatamente o que a Escocesa e o Bowdler precisam.
+
+**E em 7/9/2026 o próprio Bowdler veio para cá** (§2.6), pelo motivo oposto: não
+por ser raro — é o mais frequente do repertório —, mas por não haver teoria que
+renda linha. São cinco notas, e cada uma diz o seu próprio motivo: o campo
+`porque` existe porque um rodapé fixo do tipo "estas são as raras" mentiria
+justamente para a que o aluno mais encontra.
 
 ---
 
@@ -269,17 +347,25 @@ seguir sem mais exportação do chess.com; se um dia virarem linha, a fonte é
 
 ## 4. Os dois níveis, e a definição do corte
 
-- **Base** — todos os 12 alunos. Até o **lance 8 nosso**. Meta ~40 linhas.
-- **Avançado** — tabuleiros 1 e 2 de cada equipe. Até o **lance 12 nosso**.
-  Meta +40 linhas.
+- **Base** — todos os 12 alunos.
+- **Avançado** — tabuleiros 1 e 2 de cada equipe: os ramos que o Base deixou de
+  lado, e **não** linhas mais fundas (§23 de `REVISAO-FONTES.md`).
 
-Profundidade contada em **lance nosso**, não em meios-lances
-(`PROFUNDIDADE` em [lib/repertorio/linhas.ts](../lib/repertorio/linhas.ts)). O
-plano original trazia três números para a mesma coisa, e o de "16 meios-lances"
-é incompatível com a regra "toda linha termina num lance nosso": numa árvore das
-brancas o 16º meio-lance é **das pretas**. Contado em lance nosso o número é um
-só — 8 e 12 — e os meios-lances saem por cor: 15/23 nas brancas, 16/24 nas
-pretas.
+**A profundidade deixou de ser teto e virou régua em 8/9/2026** (§24 de
+`REVISAO-FONTES.md`). Os números desta seção eram 8 e 12, e eles diziam *quanto
+decorar*; a pergunta certa é *quando a abertura acabou*. A resposta agora é uma
+frase: a linha termina no primeiro lance nosso **≥ 12** em que o aluno rocou e
+nenhuma peça menor está na casa de origem, com **teto de 14** para os dois
+níveis. O que não fechar dentro do teto vai declarado num bloco `[%plano]`, com
+a casa e o motivo, e o aluno lê no fim da linha.
+
+Profundidade continua contada em **lance nosso**, não em meios-lances
+(`PROFUNDIDADE` e `PROFUNDIDADE_MINIMA` em
+[lib/repertorio/linhas.ts](../lib/repertorio/linhas.ts)). O plano original trazia
+três números para a mesma coisa, e o de "16 meios-lances" é incompatível com a
+regra "toda linha termina num lance nosso": numa árvore das brancas o 16º
+meio-lance é **das pretas**. Contado em lance nosso o número é um só — 14 — e os
+meios-lances saem por cor: 27 nas brancas, 28 nas pretas.
 
 ### O corte por frequência, definido
 
@@ -331,8 +417,9 @@ comentários do B6, e a §9 conta o preço.
   **português de adolescente de 12 anos** — frase curta, sem jargão de adulto e
   sem falar com o aluno como se ele tivesse 8; copiar a frase do autor é que não
   pode. (Era "criança de 10 anos" até 6/9/2026, quando o público foi corrigido
-  para 12–15. Os 110 comentários que já estão escritos **não** foram revistos
-  sob a régua nova: é tarefa de conteúdo, e está no ⚠14 da §8.)
+  para 12–15. Os comentários já escritos foram varridos sob a régua nova em
+  6/9/2026: **três** tinham registro de criança e foram corrigidos; **20** quebram
+  a "frase curta", e essa parte segue aberta. A medição está na §8.1.)
   `npm run repertorio:compilar` transforma isso em `public/repertorio/*.json`, e
   `npm run repertorio:fidelidade` diz onde a fonte fala e nós estamos calados.
 
@@ -359,7 +446,12 @@ Nf3)`. Pela regra antiga, `4.Nf3` viraria resposta aceita.
 
 ---
 
-## 6. O que a faixa 1000–1400 joga de verdade
+## 6. O que a faixa medida joga de verdade
+
+O título desta seção dizia "a faixa 1000–1400", e estava errado duas vezes: os
+baldes pedidos cobrem **1000 a 1599**, e o número é o do **Lichess**, não o do
+chess.com. A tabela continua aqui como está porque é o registro do que de fato
+construiu o repertório. O que a faixa certa diria está na §6.1, medido.
 
 <!-- Gerado por `npm run repertorio:explorer` em 2026-09-05.
      Explorer do Lichess, rapid + classical, faixas 1000/1200/1400 — que são os
@@ -397,6 +489,94 @@ Nf3)`. Pela regra antiga, `4.Nf3` viraria resposta aceita.
 Para refazer: `npm run repertorio:explorer`. Para acrescentar posição, edite
 `content/repertorio/posicoes-chave.json` — o script recusa posição em que quem
 joga é o aluno, e joga os lances no tabuleiro antes de consultar.
+
+**Confira o código de saída antes de copiar a tabela.** Até 6/9/2026 um `429`
+do Lichess — o "devagar" dele quando a rodada é grande — virava "sem dados" na
+linha da posição, com saída 0: dentro da tabela, indistinguível de uma posição
+que o explorer não conhece, e o corte sairia por limite de requisição em vez de
+por frequência. Agora a consulta recua o que o servidor pedir e insiste, e o
+script sai com 1 se ainda assim ficou buraco. O cache do que deu certo fica
+gravado, então rodar de novo retoma de onde parou.
+
+## 6.1 As três faixas, lado a lado — a medição do ⚠13
+
+Feita em 6/9/2026. Três recortes, definidos em `RECORTES`
+([lib/repertorio/explorer.ts](../lib/repertorio/explorer.ts)), cada um com seu
+cache versionado numa subpasta própria:
+
+| nome | baldes | o que é |
+|---|---|---|
+| `lichess-1000-1599` | 1000/1200/1400 | o que a §6 mediu, e de onde saiu o repertório |
+| `lichess-1000-1999` | 1000/1200/1400/1600/1800 | ≈ chess.com 700–1700, o público do clube |
+| `lichess-0-1799` | 0/1000/1200/1400/1600 | a leitura literal do ⚠13 |
+
+**A pergunta não é se 60,3 % virou 58,1 %.** É se muda o *conjunto de lances que
+entra*: percentual que anda não custa linha nenhuma, e resposta que entra ou sai
+custa — e, como o id de uma linha é o hash dos lances, custa junto o progresso de
+quem já treinou. Por isso o veredito compara conjuntos, e os percentuais ficam de
+apoio.
+
+`=` mesmo conjunto e mesma ordem · `~` mesmo conjunto, outra ordem · `≠` o
+conjunto muda. O `⚠` marca cobertura abaixo dos 80 % da §4.
+
+| posição (o adversário escolhe) | ? | `1000-1599` | `1000-1999` | `0-1799` |
+|---|---|---|---|---|
+| raiz — o que as brancas abrem | = | e4 d4 · 89% | e4 d4 · 89% | e4 d4 · 88.8% |
+| 1.e4 — a resposta das pretas | ~ | e5 c5 d5 e6 · 85.8% | e5 c5 e6 d5 · 84.6% | e5 c5 d5 e6 · 85.1% |
+| 1.e4 e5 2.Nf3 | = | Nc6 d6 Nf6 · 88% | Nc6 d6 Nf6 · 89.7% | Nc6 d6 Nf6 · 88.4% |
+| Escocesa 3.d4 | ≠ | exd4 d6 Nf6 **f6** · 83.3% | exd4 d6 Nf6 · 83.2% | exd4 d6 Nf6 · 80.5% |
+| Escocesa 4.Nxd4 | ≠ | Nxd4 Bc5 Nf6 · 81% | Nxd4 Bc5 Nf6 **Qf6** · 84% | Nxd4 Bc5 Nf6 **Qf6** · 84.7% |
+| Escocesa 4…Nxd4 5.Qxd4 | ≠ | Nf6 d6 c5 b6 · 81.1% | d6 Nf6 c5 **Qf6** · 79.5% ⚠ | d6 Nf6 c5 b6 · 79.9% ⚠ |
+| Caro Trocas 4.Bd3 | = | Nc6 Nf6 · 88.4% | Nc6 Nf6 · 90.7% | Nc6 Nf6 · 89.4% |
+| Francesa 3.Bd3 | ≠ | c5 dxe4 Nc6 Nf6 · 87.8% | c5 dxe4 Nf6 · 82.3% | c5 dxe4 Nf6 Nc6 · 88.9% |
+| **Escandinava 2.exd5** | ≠ | Qxd5 · 80.8% | Qxd5 **Nf6** · 92.9% | Qxd5 **Nf6** · 92.7% |
+| Alapin 2.c3 | ≠ | Nc6 d6 e6 e5 · 78.1% ⚠ | Nc6 d6 e6 **d5** · 76.9% ⚠ | Nc6 d6 e6 **d5** · 77.6% ⚠ |
+| 1.e4 c5 | = | Nf3 Bc4 d4 Nc3 · 79.6% ⚠ | Nf3 Bc4 d4 Nc3 · 80.4% | Nf3 Bc4 d4 Nc3 · 80% |
+| 1.e4 c5 2.Nf3 Nc6 | ≠ | d4 Bc4 Nc3 Bb5 · 84.6% | d4 Bc4 Bb5 **c3** · 83.9% | d4 Bc4 Bb5 Nc3 · 84.1% |
+| Dragão Acelerado 4…g6 | ≠ | Nxc6 Nc3 Be3 Bc4 · 83.1% | Nc3 Nxc6 Be3 **c4** · 82.6% | Nc3 Nxc6 Be3 Bc4 · 83% |
+| Bowdler 2.Bc4 Nc6 | ≠ | Nf3 Qf3 d3 Qh5 · 73.2% ⚠ | Nf3 d3 **c3** Qf3 · 68.7% ⚠ | Nf3 Qf3 d3 **c3** · 70.2% ⚠ |
+| **Alapin pelas pretas 3.e5 Nd5** | ≠ | d4 Bc4 c4 · 89.3% | d4 Bc4 · 81% | d4 Bc4 · 80.3% |
+| Rossolimo 3.Bb5 g6 | ≠ | Bxc6 O-O Nc3 d4 · 84.9% | Bxc6 O-O **c3** Nc3 · 85.9% | Bxc6 O-O Nc3 d4 · 84.8% |
+| Grand Prix 2.Nc3 Nc6 | ~ | Nf3 Bc4 Bb5 f4 · 83.4% | Nf3 Bc4 f4 Bb5 · 81.2% | Nf3 Bc4 Bb5 f4 · 82.5% |
+| 1.d4 d5 | = | c4 Bf4 Nf3 e3 · 77.8% ⚠ | c4 Bf4 Nf3 e3 · 81% | c4 Bf4 Nf3 e3 · 78.6% ⚠ |
+| Manhattan 2.c4 e6 | = | Nc3 Nf3 cxd5 e3 · 85.6% | Nc3 Nf3 cxd5 e3 · 87.7% | Nc3 Nf3 cxd5 e3 · 86.3% |
+| Manhattan 3.Nc3 Nf6 | ~ | Bg5 Nf3 e3 cxd5 · 80.2% | Bg5 Nf3 cxd5 e3 · 83.7% | Bg5 Nf3 cxd5 e3 · 82% |
+| Londres 2.Bf4 c5 | ≠ | e3 c3 dxc5 Nf3 · 92.7% | e3 c3 Nf3 · 82% | e3 c3 dxc5 · 80.2% |
+| Inglesa 1.c4 c5 | ≠ | Nc3 g3 Nf3 e4 · 78.2% ⚠ | Nc3 g3 Nf3 **e3** · 84.6% | Nc3 g3 Nf3 **e3** · 80.7% |
+| 1.Nf3 d5 | ≠ | d4 g3 e4 Nc3 · 75.5% ⚠ | d4 g3 **c4** e4 · 78.6% ⚠ | d4 g3 e4 **c4** · 75.5% ⚠ |
+
+**23 posições · 14 mudam de conjunto · 3 trocam de ordem.**
+
+Refazer: `npm run repertorio:explorer -- --comparar` — 0 consultas, porque o
+cache dos três está versionado.
+
+### O que os 14 querem dizer
+
+Catorze parece muito, e não é: **dez deles são o teto de 4 cortando entre dois
+lances quase empatados na quarta vaga.** No Bowdler entra `c3` com 10,7 % e sai
+`Qh5` com 8,6 %; no Rossolimo entra `c3` 8,9 % e sai `d4` 7,6 %; na Inglesa entra
+`e3` 7 % e sai `e4` 5,2 %. Nenhum é erro de repertório: é a régua tendo de cortar
+em algum lugar, e o lugar andando meio ponto.
+
+**Quatro são estruturais — o número de respostas muda, e as duas faixas novas
+concordam entre si.** Que elas concordem é o resultado mais forte daqui: a
+conclusão não depende de a conversão entre as escalas estar certa.
+
+| posição | o que muda | custa o quê |
+|---|---|---|
+| **Escandinava 2.exd5** | `2…Nf6` **entra**, com 15,4–18,7 % — de 1 resposta para 2 | **escrita em 6/9/2026: é a 43ª linha.** O `Qxd5` sozinho fechava 80,8 % e o corte parava nele; nas faixas novas ele não fecha, e o `…Nf6` — quase 1 em 5 escandinavas — estava sem resposta no Base |
+| **Alapin pelas pretas 3.e5 Nd5** | `4.c4` **sai** — de 3 respostas para 2 | nada a escrever: **encolhe o ⚠7**, que era "`4.Bc4` e `4.c4`" |
+| Escocesa 3.d4 | `3…f6` **sai** (3,8–4,5 %) — de 4 para 3 | nada: o Base cobre algo mais raro do que se pensava |
+| Escocesa 4.Nxd4 | `4…Qf6` **entra** (5,3–5,6 %) — de 3 para 4 | **em aberto, e é decisão de orçamento.** Pela régua da §4 ele entra; pelo §1 a Escocesa já é a maior abertura do Base, com 9 linhas, e esta seria a 10ª por 5,5 %. Como tudo nesta seção, seria aditiva |
+
+**A assimetria que decide o risco: resposta que *entra* não órfã ninguém.** Uma
+linha nova tem lances novos, logo id novo, e os 42 ids de hoje ficam byte a byte
+onde estão. Quem órfã progresso é **mudar ou apagar** linha existente — e nenhuma
+das quatro estruturais pede isso.
+
+**Conferido ao escrever a Escandinava, em 6/9/2026:** comparando os 42 ids
+publicados com os 43 de agora, **0 sumiram e 1 entrou**. A previsão desta seção
+foi medida, e não suposta.
 
 ---
 
@@ -460,38 +640,89 @@ Manhattan `4.Bf4`; e no B5 o 12, que virou página de princípios em vez de
 linha. Sobram **dois** dos doze, e nenhum deles é linha do Base.
 
 Em 6/9/2026 entraram **dois novos**, e eles não são buraco de fonte: são
-consequência da correção do público no alto deste documento. O 13 é o que
-custa mais — ele pode mudar *quais* linhas existem, e o id de uma linha é o
-hash dos lances, então mexer nelas órfã o progresso de quem já treinou. Por
-isso ele é a tarefa logo depois do treinador, e não depois do Avançado.
+consequência da correção do público no alto deste documento. O 13 foi feito
+primeiro, e não depois do Avançado, exatamente porque podia mudar *quais* linhas
+existem: o id de uma linha é o hash dos lances, e mexer nelas órfã o progresso de
+quem já treinou.
+
+**Medido em 6/9/2026, o medo não se confirmou — e a razão é uma assimetria.** As
+mudanças que a faixa certa traz são de *acrescentar* resposta, e linha nova tem
+id novo: os 42 ids de antes ficaram onde estavam. O que órfã é mudar ou apagar
+linha existente, e a medição não pediu isso em lugar nenhum. A conta está na
+§6.1, e a escrita da Escandinava a confirmou: 0 ids perdidos, 1 acrescentado.
 
 | # | ⚠ | Frequência | §|
 |---|---|---|---|
-| ~~1~~ | ~~Bowdler `2.Bc4` e `3.Bc4` — resposta e plano~~ — **fechado no B4**, é `…e6` | ~31 % das sicilianas | 2.6 |
+| ~~1~~ | ~~Bowdler `2.Bc4` e `3.Bc4` — resposta e plano~~ — **fechado no B4** como 3 linhas de motor; **reaberto e fechado de outro jeito em 7/9/2026**: a régua nova as reprovou, nenhum dos 11 cursos entra na posição, e ela virou **página de princípios** | ~31 % das sicilianas | 2.6 |
 | ~~2~~ | ~~Escocesa `4…Nxd4 5.Qxd4 c5` e `…b6`~~ — **fechado no B3** | 25 % de 52 % | 2.1 |
 | ~~3~~ | ~~Dragão `5.Nxc6`~~ — **fechado no B4**, é `…bxc6` e `8…Qb6`, igualdade | 36 % de 4…g6 | 2.5 |
 | ~~4~~ | ~~Francesa `3…c5` — escolher **um** dos três `!?`~~ — **fechado no B3**, é o `5.c3` | 38 % de 3.Bd3 | 2.7 |
 | ~~5~~ | ~~Caro `4…Nf6`~~ — **fechado no B3**, é o `5.c3` | 31 % de 4.Bd3 | 2.8 |
 | ~~6~~ | ~~Londres `2.Bf4` — confirmar `2…c5, …Nc6, …Qb6`~~ — **fechado no B4, com correção**: a dama só depois do c3 dele | 22 % de 1.d4 d5 | 2.9 |
-| **7** | **Alapin pelas pretas `4.Bc4` e `4.c4` — continua aberto** | 27 % de 3…Nd5 | 2.3 |
-| ~~8~~ | ~~Colle, Jobava, `2.e3`~~ — **fechado no B4**, é `…e6, …c5, …Bd6`, igualdade | 24 % de 1.d4 d5 | 2.9 |
+| **7** | **Alapin pelas pretas `4.Bc4` — continua aberto.** O `4.c4` saiu junto na §6.1: nas duas faixas novas ele não entra mais no corte, e o ⚠ encolheu para um lance só | 17,5 % de 3…Nd5 | 2.3, 6.1 |
+| ~~8~~ | ~~Colle, Jobava, `2.e3`~~ — **fechado no B4**, é `…e6, …c5, …Bd6`, igualdade. **A fonte fechou depois, em 7/9/2026 (§22 do `docs/REVISAO-FONTES.md`)**: virou 2 linhas, com 3 cursos gratuitos | 24 % de 1.d4 d5 | 2.9 |
 | ~~9~~ | ~~Francesa `3…Nc6`~~ — **fechado no B3**, é o `4.Nf3` | 14 % de 3.Bd3 | 2.7 |
 | ~~10~~ | ~~Manhattan `4.Bf4`~~ — **fora do Base pelo corte** (5ª resposta da posição); vai para o Avançado | 6,9 % de 3.Nc3 Nf6 | — |
 | **11** | **Maroczy — recortar só a sub-árvore do `6.e4`** | Avançado | 2.4 |
-| ~~12~~ | ~~Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios~~ — **fechado no B5**, em `/aberturas/notas/` | < 4,2 % cada | 2.10 |
-| **13** | **O recorte de frequência foi medido na faixa errada** — a §6 e o corte dos 80 % da §4 saíram do explorer em **1000–1400**; o público é **700–1700**. Refazer o explorer na faixa nova e comparar linha a linha. | todo o Base | 4, 6 |
-| **14** | **O tom dos 110 comentários** — foram escritos para "criança de 10 anos"; o aluno mais novo tem 12. Reler sob a régua nova da §5. | todo o Base | 5 |
+| ~~12~~ | ~~Pirc, Nimzowitsch, Alekhine, Owen — texto de princípios~~ — **fechado no B5**, em `/aberturas/notas/`. Em 7/9/2026 o bispo em c4 entrou no mesmo formato, e são **cinco** | < 4,2 % cada | 2.10 |
+| ~~13~~ | ~~**O recorte de frequência foi medido na faixa errada**~~ — **medido e escrito em 6/9/2026**. A §6.1 tem as três faixas: 14 das 23 posições mudam de conjunto, e dez delas são o teto de 4 cortando entre quase-empates. Das quatro estruturais, a **Escandinava `2…Cf6`** virou a 43ª linha e as outras três não pedem escrita. **0 ids perdidos, 1 acrescentado.** Sobra uma decisão de orçamento, não de medição: o `4…Df6` da Escocesa | 1 decisão | 6.1 |
+| ~~14~~ | ~~**O tom dos comentários** — escritos para "criança de 10 anos"~~ — **medido em 6/9/2026, e a premissa não sobreviveu**. O cabeçalho dizia 10 anos; o texto não desceu junto. Dos 98 comentários, **3** tinham registro de criança, e estão corrigidos. Sobra uma deriva de sinal contrário: **20 quebram a "frase curta"** da §5 | 3 corrigidos, 20 em aberto | 5, 8.1 |
 
 Os itens 1 a 5 eram o caminho crítico: sozinhos, são o que os alunos mais vão
 encontrar e o que nenhuma fonte do Doug responde. Todos fecharam.
 
 **Sobre o 7, que é o único ⚠ do Base ainda em aberto.** O orçamento da §1 dá
 **uma** linha à Alapin pelas pretas, e ela foi para o `4.d4` (61,8 %). Quem
-fecha a porta aqui é o orçamento, não a régua: pela §4 a posição pediria três
-respostas (`d4` 61,8 + `Bc4` 17,5 + `c4` 10 = 89,3 %). O preço, medido: `4.Bc4`
-e `4.c4` juntos são 27 % de uma abertura que é 3,9 % das Sicilianas, que são
-10,1 % de 1.e4, que é 68,2 % da raiz — **menos de um jogo em mil**. É o menor
-número de toda esta tabela, e por isso ele espera o Avançado. O item 11 já era, por decisão, fora do Base.
+fechava a porta aqui era o orçamento, não a régua: na faixa antiga a posição
+pediria três respostas (`d4` 61,8 + `Bc4` 17,5 + `c4` 10 = 89,3 %). O preço,
+medido: `4.Bc4` e `4.c4` juntos são 27 % de uma abertura que é 3,9 % das
+Sicilianas, que são 10,1 % de 1.e4, que é 68,2 % da raiz — **menos de um jogo em
+mil**. É o menor número de toda esta tabela, e por isso ele espera o Avançado. O
+item 11 já era, por decisão, fora do Base.
+
+**A §6.1 encolheu o 7 sem custar nada.** Nas duas faixas novas o `4.c4` sai do
+corte — a posição pede **duas** respostas, não três, e `d4` + `Bc4` já fecham 80 %
+sozinhos. O ⚠ que era "escolher o que fazer contra dois lances" virou "contra
+um", e é o mesmo `4.Bc4` que o Krikor manda as brancas do clube jogarem. Continua
+esperando o Avançado, agora pela metade do tamanho.
+
+### 8.1 O ⚠14, medido — e o que ele era de verdade
+
+**Primeiro a conta, que estava na unidade errada.** O 116 conta **encaixes**: um
+comentário numa posição que três linhas atravessam é contado três vezes. A unidade
+de quem reescreve é o **texto**, e textos distintos são **98** — 116 encaixes nas
+43 linhas. Da Escandinava `2…Cf6` nasceram **5** textos sob a régua nova, e não 6:
+o sexto encaixe dela é o comentário do `1…d5`, que já existia e que ela apenas
+passa por cima. Logo o bloco eram **93 textos**, nunca 110.
+
+**Depois a medição, que era o ponto.** "Reler 93 às cegas" é caro, então os 98
+foram varridos por marcador antes de qualquer reescrita. O que se achou de
+registro infantil, no corpus inteiro:
+
+| Marcador | Achados |
+|---|---|
+| diminutivo (`-inho`, `-zinho`) | **2** — "peãozinho" e "bispinho", os dois na Escandinava |
+| fala de criança ("já já", "olha só", "viu?", "né") | **1** — "ele recupera já já", na Petroff |
+| exclamação que não é notação de xadrez | **0** |
+| segunda pessoa direta ("você") | 6, e todas apontam para linha já treinada |
+| "fácil"/"simples" | 7, e são afirmações sobre a posição, não afago |
+
+**Três.** O `⚠14` supunha um corpus escrito para criança de 10 anos porque o
+cabeçalho do rascunho mandava isso; quem escreveu não obedeceu ao cabeçalho. Os
+três foram corrigidos no lugar, sem tocar no argumento de nenhum — "peãozinho" e
+"bispinho" perderam o diminutivo, "já já" virou "logo".
+
+**A deriva de verdade é a oposta.** A §5 pede **frase curta**, e **20 dos 98** têm
+uma frase de 32 palavras ou mais — a maior tem **47**. Isso não é falar com o
+aluno como se ele tivesse 8: é prosa de adulto, o outro lado da mesma régua. É o
+que sobra em aberto do `⚠14`, e é decisão de professor, não de medição: parte das
+20 são frases longas bem construídas, com dois pontos e travessão carregando o
+peso, e cortar por cortar as pioraria.
+
+**Os dois lugares que reintroduziam o erro fecharam junto.** O
+`scripts/importar-fontes.ts` gravava "português de criança de 10 anos" no
+cabeçalho de **todo rascunho novo** — sem isso, o Avançado nasceria com a régua
+velha de volta. E a §9 afirmava a régua velha no presente, contradizendo a §5.
 
 ---
 
@@ -500,6 +731,8 @@ número de toda esta tabela, e por isso ele espera o Avançado. O item 11 já er
 ```
 npm run repertorio:importar     # fontes -> rascunhos + relatório da §7
 npm run repertorio:explorer     # a tabela da §6 (cache versionado)
+npm run repertorio:explorer -- --recorte=lichess-1000-1999   # noutra faixa
+npm run repertorio:explorer -- --comparar    # as três faixas, lado a lado (§6.1)
 npm run repertorio:compilar     # PGN revisados -> public/repertorio/*.json
 npm run repertorio:compilar -- --check   # só confere; sai com erro se algo falha
 npm run repertorio:motor -- "1.e4 c5 2.Bc4 Cc6"   # as 5 melhores da posição
@@ -508,7 +741,7 @@ npm run repertorio:fidelidade   # onde a fonte fala numa posição nossa, e o qu
 npm run repertorio:fidelidade -- --pares         # a folha: fonte e nosso, lado a lado
 npm run db:migrar               # aplica as migrations, 0005_repertorio_revisao.sql inclusive
 npm run db:rls                  # prova que o aluno não grava progresso nem adia a revisão
-npm test                        # 292 testes, 145 deles do repertório
+npm test                        # 725 testes
 ```
 
 Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variações),
@@ -516,28 +749,119 @@ Código em [lib/repertorio/](../lib/repertorio/): `pgn.ts` (leitor com variaçõ
 `motor.ts` (leitura de lances e apresentação, sem processo), e os quatro do
 treinador — `treino.ts` (o juiz, a escada e a ordem), `banco.ts`, `progresso.ts`,
 `gravar.ts`, mais `passada.ts` — o redutor puro de uma passada pela linha, que
-tirou a máquina de estado de dentro do componente. O texto das quatro aberturas
-raras: `notas.ts` (schema) e
+tirou a máquina de estado de dentro do componente e onde moram as três etapas, o
+gate de gravação e a navegação por setas. O texto das cinco aberturas
+sem linha: `notas.ts` (schema) e
 `conteudo.ts` (leitura conferida na importação).
 
-**42 linhas** compiladas para `public/repertorio/`, em 12 arquivos: as 22 das
-brancas e as 20 das pretas. **O Base está completo dos dois lados.**
+**27 linhas** compiladas para `public/repertorio/`, em 11 arquivos: as 15 das
+brancas e as 12 das pretas — **20 do Base e 7 do Avançado**. **O Base está
+completo dos dois lados**, e nenhum dos **222 lances que o aluno joga** está sem
+comentário.
+
+O caminho até esses números, porque ele explica por que os textos mais antigos
+deste documento falam em 42 e 43. O Base fechou em **43** linhas em 6/9/2026. A
+régua nova tirou as **3 do bispo em c4** (§2.6), que viraram página de
+princípios, e a §22 acrescentou o Jobava: **42**. Em 7/9/2026 a **poda da §23**
+cortou 15 — onze viraram as quatro páginas novas de princípios e quatro foram
+para o Avançado, junto com três que já estavam no treinador. Sobraram **27**, e
+o Avançado deixou de ser um nome numa tag: são 7 linhas, trancadas até o aluno
+fechar o Base inteiro.
+
+**Nenhum corte moveu um id que ficou.** O id é o hash dos lances: linha
+encurtada ganha id novo, linha só reclassificada mantém o dela. As 15 da poda
+levaram os seus embora; as 27 que ficaram têm os mesmos ids de antes. Cabia
+fazer isso agora porque ainda não há progresso de aluno de verdade gravado — a
+janela está medida na §23 do `docs/REVISAO-FONTES.md`.
 
 ### A tela
 
-`/aberturas` lista as 12 aberturas em dois grupos, com a conta de linhas
+`/aberturas` lista as 11 aberturas em dois grupos, com a conta de linhas
 aprendidas; `/aberturas/[cor]/[abertura]` é onde se treina. A rota tem `[cor]`
 antes de `[abertura]` porque o slug pode repetir entre as duas.
 
-**Uma sessão são duas fases, na mesma tela.** Na primeira vez em cada linha
-(`tentativas = 0`) o aluno entra na **passada assistida**: o cartão diz o lance
-por extenso, a seta do lance certo fica desenhada, e o aluno **executa**. Outro
-lance não conta — a peça volta e o cartão repete "siga a seta". Onde há
-comentário do professor a passada **trava** até o aluno continuar, inclusive nos
-comentários que caem em lance do adversário. No fim, sem prêmio sonoro e sem
-"muito bom", o botão "Começar o quiz" emenda a **segunda fase**: a mesma linha,
-de memória, sem seta e sem o nome do lance. Nada da fase assistida sobe ao
-servidor.
+**As páginas de princípios aparecem em DOIS lugares desde 7/9/2026.** Elas
+continuam no rodapé de `/aberturas`, todas as nove — e quatro delas aparecem
+também dentro da abertura de onde saíram. O que liga uma coisa à outra é o campo
+`abertura` de `notas.ts`, e o motivo está na §23 do `docs/REVISAO-FONTES.md`:
+essas quatro são ramos podados de aberturas que o aluno TREINA, cobrem perto de
+um terço do que ele encontra no tabuleiro, e quem entra direto para treinar nunca
+descia até um rodapé abaixo de onze cartões. As outras cinco não têm abertura
+para onde voltar — são defesas inteiras que nunca viraram linha —, e por isso o
+campo é opcional. Slug errado ali falharia **calado**, com o link sumindo da tela
+sem erro nenhum; quem reprova é o `repertorio:compilar`.
+
+**Onde, exatamente, mudou em 8/9/2026: não é mais abaixo do treino.** A correção
+de 7/9 acertou o diagnóstico e errou o lugar. O palco da aula tem altura
+fechada, então tudo que vem depois dele começa na dobra e nunca é lido — medido
+nas onze aberturas, a lista de linhas que ficava ali embaixo mostrava **mediana
+de 2 itens** e, em quatro delas, **um item só: a própria linha que já estava na
+tela**. As páginas de princípios ficavam ainda mais abaixo. A mudança de 7/9
+tinha reproduzido o defeito num lugar novo.
+
+Hoje **nada fica abaixo do tabuleiro na tela de treino**. As páginas de
+princípios aparecem no cartão de "abertura em dia", que é a única tela desta rota
+sem palco de altura fechada, e continuam inteiras em `/aberturas` — o bloco
+abaixo do treino era uma terceira cópia, e era a invisível. A lista de linhas
+virou o **`SeletorDeLinha`**: um menu sobreposto atrás do "linha 2 de 5" do
+painel, com o nome, as bolinhas e o rótulo "hoje" de cada linha. É a única
+informação que só a lista tinha — pular para uma linha específica vendo o estado
+de cada uma —, e ela subiu para onde é vista.
+
+**A conta das barrinhas mudou de direção em 6/9/2026, e era um bug.** Ela varria
+o banco de progresso e adivinhava a abertura pelo **prefixo do id**
+(`brancas-escocesa-`). Como o id é o hash dos lances, uma linha reescrita deixa
+para trás um registro que nenhuma linha reclama — e o prefixo o adotava. O
+resultado, se algum dia uma linha mudasse: `/aberturas` mostrando **"3 de 2"**, a
+abertura virando **"em dia"** sem o aluno ter visto a linha nova, e o painel
+prometendo **"a revisar hoje"** para sempre, sem onde ser feita — enquanto a
+página da abertura, que sempre contou pelas linhas de verdade, discordava das
+outras duas. É o modo de falha que `progresso.ts` existe para impedir, entrando
+por outra porta. Agora o `index.json` carrega os **ids** de cada abertura, e as
+três telas contam do mesmo jeito: percorrendo o conteúdo e perguntando o
+progresso, nunca o contrário. O órfão fica no banco — não há chave estrangeira
+nem política de `delete`, e a `0004` diz que é de propósito —, mas parou de
+aparecer.
+
+**Uma sessão são TRÊS etapas, na mesma tela** — eram duas até 8/9/2026, e a do
+meio é o conserto de um buraco: o aluno pulava da passada em que a seta lhe dá o
+lance direto para a cobrança, sem nenhum lugar onde praticar **sem a seta e sem
+estar sendo medido**. É nesse lugar que se descobre se decorou.
+
+| | 1 — seta | 2 — treino | 3 — valendo |
+|---|---|---|---|
+| seta do lance | **sim** | não | não |
+| comentários | aparecem e **travam** | não | não |
+| dica | não existe (a seta já está lá) | **sim, de graça** | sim, e **custa** |
+| lance errado | recusa, tenta de novo | **recusa, tenta de novo** | decide a passada |
+| alternativa do autor | recusada | recusada | aceita, selo âmbar |
+| grava no servidor | **nunca** | **nunca** | sim |
+| setas ←/→ navegam | **sim** | não | não |
+
+Na etapa 1 o cartão diz o lance por extenso, a seta fica desenhada, e o aluno
+**executa**; onde há comentário do professor a passada trava até ele continuar,
+inclusive nos comentários que caem em lance do adversário. A etapa 2 **recusa,
+não pune** — sem isso ela seria o quiz repetido, porque as duas seriam "sem seta,
+sem comentário" e as únicas diferenças (ajuda de graça, nada gravado) são
+invisíveis para o aluno; o cartão diz "errar aqui não conta". A etapa 3 é a de
+sempre.
+
+**Só a primeira passada tem as três etapas.** Da segunda em diante
+(`tentativas > 0`) o aluno entra direto no valendo, com "Jogar com a seta" ali
+para quem esqueceu — repetição espaçada mede recall, não releitura. É por isso
+que a trilha `seta · treino · valendo`, no painel, também só aparece na primeira:
+uma trilha de três com duas etapas apagadas para sempre prometeria um caminho que
+não existe mais.
+
+**Os dois "3" da tela são coisas diferentes, e a tela precisa dizer isso.**
+"Etapa 3 de 3" é esta sessão; as bolinhas "3 de 3" são a linha **aprendida** —
+três passadas em três dias espaçados. São duas linguagens visuais separadas de
+propósito: a escada continua em círculos, no cabeçalho; as etapas são barras com
+nome, abaixo do cartão. Sem a separação, o aluno fecha uma tarde achando que
+terminou a linha.
+
+**O que as três etapas NÃO mudam:** a escada de revisão espaçada, o que sobe ao
+servidor, e as quatro revogações de 6/9/2026 abaixo. As três são **uma passada**.
 
 **Como uma linha é aprendida: a escada.** `DEGRAUS_EM_DIAS = [0, 1, 3, 7, 14,
 30]`, e o degrau é o índice. A linha entra no degrau 1 na **primeira passada
@@ -551,17 +875,162 @@ pouco, e zerar apagaria um mês por um dedo errado no celular. A data de quando
 aprendeu **nunca volta a nulo**: errar depois vira revisão, não recomeço.
 
 **O primeiro erro decide a passada na hora** — grava, e os acertos seguidos
-voltam a zero. O que mudou é que a linha **vai até o fim** mesmo assim: a peça
-volta, a linha do clube entra no lugar e o aluno vê os lances que faltavam. No
-fim, um **boletim lance a lance** — um selo por lance nosso, verde ou vermelho,
-com a acurácia ao lado. O boletim é do cliente e não é gravado: o que o servidor
-grava continua sendo o veredito do primeiro erro.
+voltam a zero. **Desde 8/9/2026 ele também a PARA**, e antes ela ia até o fim.
+Agora o painel revela o lance certo com o comentário do professor daquele lance,
+e o botão "Tentar de novo" reinicia a etapa 3 inteira. É o que o Move Trainer do
+chess.com faz (§A3 da referência), e o argumento é que assistir ao resto de uma
+linha que o aluno já não está tentando lembrar não ensina nada.
 
-**A dica é pedida, e antes do primeiro erro ela custa.** Botão "Dica" no quiz,
-um nível só: acende a casa de origem, sem seta e sem escalonar. Pedida **antes**
-de qualquer erro, ela decide a passada — os lances até ali sobem ao servidor,
-`conferirLinha` reprova a lista curta, e a passada fica gravada como treino sem
-acerto. Depois do primeiro erro é de graça, porque a passada já foi decidida.
+**A consequência a aceitar**, e ela está aceita: o **boletim lance a lance** —
+um selo por lance nosso, com a acurácia ao lado — passa a sair só em **passada
+limpa**. Com o reinício não há mais "resto da linha" para relatar. O boletim
+continua sendo do cliente e continua não sendo gravado.
+
+**A dica é pedida, e ela custa numa etapa só.** Botão "Dica" nas duas etapas sem
+seta, um nível só: acende a casa de origem, sem seta e sem escalonar. **Na etapa
+2 é de graça** — é a ajuda que faz aquela etapa valer a pena, e ali nada é
+gravado de qualquer jeito. **Na etapa 3, pedida antes de qualquer erro, ela
+decide a passada**: os lances até ali sobem ao servidor, `conferirLinha` reprova
+a lista curta, e a passada fica gravada como treino sem acerto. Depois do
+primeiro erro é de graça, porque a passada já foi decidida.
+
+**O gate de gravação é explícito desde 8/9/2026.** Antes, a etapa assistida não
+gravava por não chegar aos ramos que emitem o efeito; com três etapas isso não
+bastava. Hoje uma função só (`gravar`, em `passada.ts`) constrói **todo** efeito
+`decidir`, e ela devolve o estado intacto se o modo não for `quiz`. É a garantia
+mais importante do bloco — um vazamento aqui gravaria treino como prova e
+corromperia a escada —, e há teste dedicado a ela.
+
+### O painel de 8/9/2026: o professor, o teclado, e a digitação
+
+**O professor tem rosto, e ele está DENTRO da cena.** Um busto do Doug — cabeça,
+pescoço e o começo do tronco — de 112 px, à esquerda do comentário, com a fala
+saindo dele num balão com bico. O molde é o treinador do chess.com.
+
+A primeira versão foi recusada na tela e a recusa está registrada porque ela é a
+regra: era uma cabeça recortada dentro de um **círculo com aro e fundo próprio**,
+e lia como *uma foto colada* em vez de alguém que está ali. O disco tem outra cor
+que a do painel e o aro desenha um contorno. Portanto, e vale para quem vier
+depois: **nada de `rounded-full`, `ring-*`, `border-*` ou `bg-*` no
+`components/lesson/Professor.tsx`** — qualquer um dos quatro devolve o balãozinho.
+
+O recorte é medido, não escolhido: `(6, 41)–(1047, 1254)` do PNG original, que é
+tudo o que há de figura **sem encostar em borda lateral** — em `y=1254` a
+camiseta sangra para fora do quadro, e passar dali produziria dois cortes retos
+verticais. O corte de baixo que sobra dissolve nos últimos 12% da altura. O fundo
+branco sai por **componente conexo**, e não por limiar: a esclera dos olhos e o
+brilho dos dentes também são quase brancos, e um limiar simples furaria os olhos.
+Tudo isso mora em `scripts/professor.py`, que é o caminho de volta — este é o
+**primeiro asset de imagem versionado do projeto**, e raster em `public/` (e não
+SVG em `app/`) porque cada `fill="#..."` de uma ilustração viraria gate vermelho
+em `lib/tema/guardas.test.ts`.
+
+**O painel foi de 410 para 522 px para pagar a figura**, e o texto **não**
+encolheu para dentro dos 410: 112 do busto + 16 de vão + 394 de caixa. Meter o
+retrato dentro dos 410 deixaria o texto com 266 px e ~37 caracteres por linha,
+abaixo da faixa legível. É a mesma saída do chess.com, cujo slot tem 452 px dos
+quais 360 são de bolha. **O que isso custa, medido:** em 1366×768 o palco passa a
+592 + 40 + 522 = 1154 px e o tabuleiro não encolhe; entre 1024 e ~1200 px de
+largura, sim — num 1024 ele cai de 534 para **422 px**. A saída, se um dia
+incomodar, é subir o breakpoint das duas colunas. No celular o retrato **some**:
+lá o painel tem 328 px e 112 deles sairiam justamente do texto.
+
+**O teclado: espaço em toda etapa, ←/→ só na primeira.** A barra de espaço era
+proibida por dois motivos escritos — rola a página, e dispara o botão com foco.
+O primeiro morreu com "nada abaixo do palco"; o segundo tem conserto, e é a
+guarda do alvo: com o foco num `button`, `a`, `input`, `select` ou `textarea`,
+não interceptamos, e o nativo faz o trabalho uma vez só.
+
+As setas navegam **só na etapa 1**, e a trava vem de decisão registrada: `←`
+recua até o lance 0, `→` **não passa do meio-lance mais adiantado que o aluno
+realmente jogou**. Sem a trava, o modo "só olhar" revogado na §1 abaixo voltaria
+por outra porta. Recuado, o tabuleiro não aceita lance e o painel mostra o
+comentário daquele meio-lance. O limite é **dito** — "Você já está na frente — o
+que vem agora se joga, não se vê." —, porque tecla que não responde lê como tecla
+quebrada.
+
+**A máquina de escrever entrou como experimento, e o número está medido.** O
+comentário aparece caractere a caractere, a `MS_POR_CARACTERE = 7` (o do
+chess.com), com 340 ms de espera depois de um lance e 190 ms ao virar página.
+Qualquer toque, clique ou tecla completa o texto na hora; com
+`prefers-reduced-motion` ele aparece inteiro; o balão assume a altura final antes
+de digitar, então nada pula na tela.
+
+O risco era a aritmética não transferir: o texto do chess.com tem 89 caracteres
+de mediana, o nosso tem 276. **Medido no navegador numa etapa 1 inteira da
+Alapin: 12 comentários, 3.088 caracteres, ~21 segundos** — e isso acontece uma
+vez na vida de cada linha, porque os comentários só existem na etapa 1 e ela só
+existe na primeira passada. As três constantes moram juntas no topo de
+`components/lesson/Comentario.tsx`: mudar a velocidade, ou desligar, é editar um
+número.
+
+**O tabuleiro é AZUL, e ficou maior.** Duas decisões do Doug no mesmo dia, e as
+duas têm número.
+
+*A cor.* As casas eram marrons; passaram para a matiz do **logotipo do clube**,
+lida do arquivo e não escolhida — os tons dominantes de `Logo Xadrez.jpg` são
+`#007e97`, `#05b1bd` e `#11617a`, um azul-petróleo que em oklch cai por volta da
+matiz 220. As casas ficaram `#daeef4` e `#7ab9cd`. **A claridade das duas não
+mudou** (93,5% e 75%), e é isso que deixou a troca sair de graça: claridade é o
+que decide contraste, então trocar matiz e croma não custa marca nenhuma.
+Medido depois, a folga até subiu — o pincel do corte foi de 3,11 para 3,20 sobre
+a casa escura. O croma da escura foi a 0,07, que é o máximo em que o azul ainda
+lê como azul: a 72% de claridade três marcas reprovam.
+
+O argumento antigo — "as casas são quentes de propósito, porque um tabuleiro
+verde gastaria o significado de *método* no cenário" — **continua de pé**: o
+tabuleiro não ficou verde, ficou azul, que é a outra cor da marca e não tem
+função pedagógica.
+
+*A consequência.* A **seta e a dica não podiam continuar azuis** — azul sobre
+tabuleiro azul é a marca desaparecendo dentro do cenário, que é o mesmo defeito
+do realce amarelo-claro do pacote por outra porta. Foram para o verde escuro
+(`oklch(30% 0.11 150)`), e escuro por medição: qualquer verde acima de 50% de
+claridade reprova o piso de 3:1 na casa clara. A 30% ela também fica longe dos
+outros dois verdes do tabuleiro — `destino` a 38% e `pincel-defendida` a 44% —,
+e o que separa os três continua sendo a **forma**: linha com ponta, bolinhas
+dentro da casa, aro em volta dela.
+
+*O tamanho.* Medido no chess.com em 8/9/2026: o tabuleiro deles ocupa **95% da
+altura útil** da janela — 600 px num viewport de 633 —, com 16 px de folga acima
+e 17 abaixo. O nosso ocupava 77%, e a diferença inteira era **cabeçalho de
+página**: três linhas empilhadas (voltar, título, "você joga de brancas") mais
+80 px de respiro, somando 176 px que o tabuleiro não tinha. O cabeçalho virou
+uma linha só e o respiro caiu pela metade: 176 → 88 px.
+
+O que isso deu, medido: em 1366×768 o tabuleiro foi de **592 para 680 px**; num
+viewport real de 637 px — o que sobra numa tela de 768 depois do cromo do
+navegador e da barra de tarefas — foi de **461 para 544**. Sem rolagem em
+1366×768, 1366×637, 1024×768, 1920×1080 e 360×740. O piso continua onde estava:
+num telefone de 360×640 a página rola 30 px, que é a cessão registrada abaixo.
+
+**Cuidado para quem mexer:** `--aula-teto` e a altura do palco são a **mesma
+conta escrita duas vezes** (uma para o desktop, outra para o celular), e ela tem
+de bater com a soma real de respiro + cabeçalho + vão. Errar por 8 px devolve a
+rolagem que o palco inteiro existe para matar — foi exatamente o que aconteceu na
+primeira tentativa desta mudança.
+
+**Quatro acabamentos, todos medidos antes de mexer.**
+
+1. **O botão de som deixou de ser emoji.** 🔇 saía rosa saturado (`#F1489A`) na
+   fonte do sistema — a única cor quente e saturada da tela, num canto onde nada
+   de urgente acontece. Dois glifos SVG no traço dos quatro do cartão de comando.
+2. **O realce do último lance virou um ARO.** O Doug via as duas casas como cores
+   diferentes; medido com `getComputedStyle`, **as duas têm exatamente a mesma
+   tinta** — o que difere é que a de destino tem a peça por cima e sobra uma
+   moldura fina. O aro mora na borda da casa, onde peça nenhuma chega, e as duas
+   voltam a ter o mesmo desenho. A espessura sai de `---cg-width` para escalar
+   com o tabuleiro.
+3. **As letras a–h existiam e ninguém as via.** Tingi-las de vermelho e contar os
+   pixels achou as oito. O defeito era de posição: centradas na base da casa, elas
+   caem debaixo da peça — e a primeira fileira é a única que está sempre cheia.
+   Foram para o canto inferior direito, que é onde os números da lateral já
+   estavam, e por isso os números sempre se leram.
+4. **O botão secundário deixou de sumir.** `border-borda` sobre o papel mede
+   **1,36:1**, e o degrau mais escuro da paleta (`borda-forte`) mede 1,76 — nenhum
+   cinza desta paleta chega ao piso de 3:1 da WCAG 1.4.11. Ele passou a ser o
+   verde do método contornado (3,54:1 de traço, 11,08:1 de rótulo), que é o par
+   preenchido/contornado do botão principal.
 
 ### As quatro revogações de 6/9/2026
 
@@ -644,9 +1113,12 @@ lance no gêmeo anotado — o resto é introdução de arquivo ou marca de
 visualizador, e some na limpeza.
 
 **Onde a fonte de fato encosta nas nossas linhas: 39 pontos.** É o que
-`npm run repertorio:fidelidade` mede, e a conta é pequena por um motivo bom: as
-nossas linhas param no lance 8 e os cursos anotam no 12, 15, 20 — a maior parte
-das 452 fala de posições que o aluno do Base nunca vê. O casamento é por **FEN**
+`npm run repertorio:fidelidade` mede, e a conta era pequena por um motivo bom: as
+nossas linhas paravam no lance 8 e os cursos anotam no 12, 15, 20 — a maior parte
+das 452 falava de posições que o aluno do Base nunca via. **Este número é de
+antes da §24**: com as linhas indo até o lance 12–14, o encontro passou a
+acontecer, e é isso que as caudas de degrau 0 daquela seção medem — as âncoras
+com prosa da fonte foram de 136 para 177. O casamento é por **FEN**
 (as 4 primeiras partes, sem contadores) e nunca por slug: os slugs do
 `fontes.json` são por capítulo de origem e não batem com os nossos —
 `peao-rei` não é `philidor`, e `alapin-brancas`, `alapin-pretas`,
@@ -668,7 +1140,9 @@ colado nele**.
 
 **A regra do texto, corrigida.** O B3 dizia "nenhuma prosa de curso entra
 aqui", e isso foi lido como "escreva do zero". A leitura certa é: **carregar o
-argumento, com as nossas palavras**, em português de criança de 10 anos. Nunca
+argumento, com as nossas palavras**, na régua da §5 — português de adolescente
+de 12 anos. (Este parágrafo dizia "criança de 10 anos" até 6/9/2026, quando o
+público foi corrigido para 12–15.) Nunca
 colar o texto deles no repositório — é curso pago, e a anotação do Krikor é
 telegráfica de adulto ("com boa vantagem branca"), que não ensina ninguém.
 

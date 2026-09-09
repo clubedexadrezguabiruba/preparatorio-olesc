@@ -1,0 +1,93 @@
+{
+  "white": 1820,
+  "draws": 106,
+  "black": 785,
+  "moves": [
+    {
+      "uci": "d4d2",
+      "san": "Qd2",
+      "averageRating": 1731,
+      "white": 1090,
+      "draws": 66,
+      "black": 426,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4e3",
+      "san": "Qe3",
+      "averageRating": 1608,
+      "white": 339,
+      "draws": 15,
+      "black": 143,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4d3",
+      "san": "Qd3",
+      "averageRating": 1653,
+      "white": 272,
+      "draws": 21,
+      "black": 138,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4f2",
+      "san": "Qf2",
+      "averageRating": 1616,
+      "white": 95,
+      "draws": 3,
+      "black": 52,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4c4",
+      "san": "Qc4",
+      "averageRating": 1449,
+      "white": 15,
+      "draws": 1,
+      "black": 14,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4a4",
+      "san": "Qa4",
+      "averageRating": 1452,
+      "white": 5,
+      "draws": 0,
+      "black": 6,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4g1",
+      "san": "Qg1",
+      "averageRating": 1529,
+      "white": 4,
+      "draws": 0,
+      "black": 5,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g2g4",
+      "san": "g4",
+      "averageRating": 1953,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C44",
+    "name": "Scotch Game: Lolli Variation"
+  }
+}

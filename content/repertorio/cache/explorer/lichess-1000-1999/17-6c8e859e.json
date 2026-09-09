@@ -1,0 +1,113 @@
+{
+  "white": 260,
+  "draws": 48,
+  "black": 378,
+  "moves": [
+    {
+      "uci": "c5d4",
+      "san": "cxd4",
+      "averageRating": 1881,
+      "white": 113,
+      "draws": 22,
+      "black": 157,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e4d2",
+      "san": "Nxd2",
+      "averageRating": 1877,
+      "white": 79,
+      "draws": 20,
+      "black": 134,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8f5",
+      "san": "Bf5",
+      "averageRating": 1836,
+      "white": 47,
+      "draws": 3,
+      "black": 53,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8b6",
+      "san": "Qb6",
+      "averageRating": 1944,
+      "white": 11,
+      "draws": 1,
+      "black": 17,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8g4",
+      "san": "Bg4",
+      "averageRating": 1790,
+      "white": 8,
+      "draws": 2,
+      "black": 11,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f7f5",
+      "san": "f5",
+      "averageRating": 1914,
+      "white": 2,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8c7",
+      "san": "Qc7",
+      "averageRating": 1806,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a6",
+      "san": "a6",
+      "averageRating": 1609,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f7f6",
+      "san": "f6",
+      "averageRating": 2019,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8d7",
+      "san": "Bd7",
+      "averageRating": 1919,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B31",
+    "name": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation"
+  }
+}

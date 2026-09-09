@@ -1,0 +1,133 @@
+{
+  "white": 2300943,
+  "draws": 196910,
+  "black": 2706885,
+  "moves": [
+    {
+      "uci": "g1f3",
+      "san": "Nf3",
+      "averageRating": 1571,
+      "white": 849879,
+      "draws": 71080,
+      "black": 952028,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2d3",
+      "san": "d3",
+      "averageRating": 1593,
+      "white": 281909,
+      "draws": 25139,
+      "black": 316971,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c2c3",
+      "san": "c3",
+      "averageRating": 1595,
+      "white": 249035,
+      "draws": 22069,
+      "black": 287039,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1f3",
+      "san": "Qf3",
+      "averageRating": 1428,
+      "white": 208792,
+      "draws": 17838,
+      "black": 292810,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b1c3",
+      "san": "Nc3",
+      "averageRating": 1615,
+      "white": 237752,
+      "draws": 21138,
+      "black": 260289,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1h5",
+      "san": "Qh5",
+      "averageRating": 1488,
+      "white": 180182,
+      "draws": 14560,
+      "black": 254879,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1715,
+      "white": 145361,
+      "draws": 13080,
+      "black": 148951,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c4f7",
+      "san": "Bxf7+",
+      "averageRating": 1594,
+      "white": 45932,
+      "draws": 3522,
+      "black": 72644,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f2f4",
+      "san": "f4",
+      "averageRating": 1691,
+      "white": 34084,
+      "draws": 2380,
+      "black": 37159,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a4",
+      "san": "a4",
+      "averageRating": 1720,
+      "white": 13790,
+      "draws": 1338,
+      "black": 14343,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g1e2",
+      "san": "Ne2",
+      "averageRating": 1680,
+      "white": 11201,
+      "draws": 985,
+      "black": 12159,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d2d4",
+      "san": "d4",
+      "averageRating": 1521,
+      "white": 8541,
+      "draws": 637,
+      "black": 10953,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B20",
+    "name": "Sicilian Defense: Bowdler Attack"
+  }
+}

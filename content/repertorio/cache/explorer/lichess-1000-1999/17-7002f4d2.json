@@ -1,0 +1,133 @@
+{
+  "white": 9699,
+  "draws": 1894,
+  "black": 9742,
+  "moves": [
+    {
+      "uci": "e8h8",
+      "san": "O-O",
+      "averageRating": 1774,
+      "white": 7997,
+      "draws": 1636,
+      "black": 8552,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b4c3",
+      "san": "Bxc3",
+      "averageRating": 1723,
+      "white": 745,
+      "draws": 129,
+      "black": 435,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c7c6",
+      "san": "c6",
+      "averageRating": 1766,
+      "white": 280,
+      "draws": 58,
+      "black": 318,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d5d4",
+      "san": "d4",
+      "averageRating": 1509,
+      "white": 243,
+      "draws": 27,
+      "black": 132,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8e6",
+      "san": "Be6",
+      "averageRating": 1768,
+      "white": 125,
+      "draws": 15,
+      "black": 86,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h7h6",
+      "san": "h6",
+      "averageRating": 1784,
+      "white": 99,
+      "draws": 10,
+      "black": 71,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8g4",
+      "san": "Bg4",
+      "averageRating": 1533,
+      "white": 77,
+      "draws": 7,
+      "black": 49,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8b7",
+      "san": "Bb7",
+      "averageRating": 1579,
+      "white": 42,
+      "draws": 0,
+      "black": 25,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6g4",
+      "san": "Ng4",
+      "averageRating": 1437,
+      "white": 16,
+      "draws": 0,
+      "black": 15,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b4c5",
+      "san": "Bc5",
+      "averageRating": 1528,
+      "white": 11,
+      "draws": 3,
+      "black": 12,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b4d6",
+      "san": "Bd6",
+      "averageRating": 1596,
+      "white": 13,
+      "draws": 0,
+      "black": 13,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c7c5",
+      "san": "c5",
+      "averageRating": 1602,
+      "white": 15,
+      "draws": 3,
+      "black": 5,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C45",
+    "name": "Scotch Game: Schmidt Variation"
+  }
+}

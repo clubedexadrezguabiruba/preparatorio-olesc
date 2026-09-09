@@ -1,0 +1,133 @@
+{
+  "white": 316583,
+  "draws": 36456,
+  "black": 254135,
+  "moves": [
+    {
+      "uci": "b8c6",
+      "san": "Nc6",
+      "averageRating": 1749,
+      "white": 168884,
+      "draws": 19864,
+      "black": 140408,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g8f6",
+      "san": "Nf6",
+      "averageRating": 1767,
+      "white": 115540,
+      "draws": 13627,
+      "black": 92667,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e7e6",
+      "san": "e6",
+      "averageRating": 1693,
+      "white": 11825,
+      "draws": 1050,
+      "black": 7764,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a6",
+      "san": "a6",
+      "averageRating": 1758,
+      "white": 7509,
+      "draws": 795,
+      "black": 5459,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g7g6",
+      "san": "g6",
+      "averageRating": 1729,
+      "white": 4803,
+      "draws": 537,
+      "black": 3640,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h7h6",
+      "san": "h6",
+      "averageRating": 1770,
+      "white": 1932,
+      "draws": 198,
+      "black": 1242,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8f5",
+      "san": "Bf5",
+      "averageRating": 1651,
+      "white": 1361,
+      "draws": 51,
+      "black": 268,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8d7",
+      "san": "Bd7",
+      "averageRating": 1620,
+      "white": 683,
+      "draws": 55,
+      "black": 408,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8c7",
+      "san": "Qc7",
+      "averageRating": 1785,
+      "white": 513,
+      "draws": 60,
+      "black": 437,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b8d7",
+      "san": "Nd7",
+      "averageRating": 1681,
+      "white": 489,
+      "draws": 36,
+      "black": 304,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8b6",
+      "san": "Qb6",
+      "averageRating": 1692,
+      "white": 453,
+      "draws": 24,
+      "black": 318,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c8g4",
+      "san": "Bg4",
+      "averageRating": 1686,
+      "white": 532,
+      "draws": 19,
+      "black": 137,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B13",
+    "name": "Caro-Kann Defense: Exchange Variation"
+  }
+}

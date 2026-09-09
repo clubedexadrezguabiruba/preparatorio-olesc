@@ -1,0 +1,133 @@
+{
+  "white": 316,
+  "draws": 18,
+  "black": 251,
+  "moves": [
+    {
+      "uci": "h2h4",
+      "san": "h4",
+      "averageRating": 1865,
+      "white": 205,
+      "draws": 10,
+      "black": 134,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1b1",
+      "san": "Kb1",
+      "averageRating": 1904,
+      "white": 53,
+      "draws": 5,
+      "black": 51,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g4g5",
+      "san": "g5",
+      "averageRating": 1844,
+      "white": 38,
+      "draws": 2,
+      "black": 40,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c3d5",
+      "san": "Nd5",
+      "averageRating": 1904,
+      "white": 5,
+      "draws": 1,
+      "black": 10,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1768,
+      "white": 6,
+      "draws": 0,
+      "black": 5,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1e2",
+      "san": "Be2",
+      "averageRating": 1845,
+      "white": 1,
+      "draws": 0,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4d2",
+      "san": "Qd2",
+      "averageRating": 2003,
+      "white": 2,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4e3",
+      "san": "Qe3",
+      "averageRating": 1915,
+      "white": 1,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b2b3",
+      "san": "b3",
+      "averageRating": 1780,
+      "white": 1,
+      "draws": 0,
+      "black": 2,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e4e5",
+      "san": "e5",
+      "averageRating": 1658,
+      "white": 2,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1d3",
+      "san": "Bd3",
+      "averageRating": 2009,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d4f2",
+      "san": "Qf2",
+      "averageRating": 1898,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C41",
+    "name": "Philidor Defense: Exchange Variation"
+  }
+}

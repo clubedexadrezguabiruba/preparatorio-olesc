@@ -1,0 +1,139 @@
+{
+  "white": 6523773,
+  "draws": 628823,
+  "black": 5503064,
+  "moves": [
+    {
+      "uci": "b1c3",
+      "san": "Nc3",
+      "averageRating": 1674,
+      "white": 3353759,
+      "draws": 321761,
+      "black": 2723582,
+      "game": null,
+      "opening": {
+        "eco": "D31",
+        "name": "Queen's Gambit Declined: Queen's Knight Variation"
+      }
+    },
+    {
+      "uci": "g1f3",
+      "san": "Nf3",
+      "averageRating": 1649,
+      "white": 1121065,
+      "draws": 106491,
+      "black": 901157,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c4d5",
+      "san": "cxd5",
+      "averageRating": 1587,
+      "white": 653340,
+      "draws": 64583,
+      "black": 600025,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e2e3",
+      "san": "e3",
+      "averageRating": 1593,
+      "white": 624817,
+      "draws": 64687,
+      "black": 558379,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a2a3",
+      "san": "a3",
+      "averageRating": 1659,
+      "white": 296627,
+      "draws": 27088,
+      "black": 265279,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c4c5",
+      "san": "c5",
+      "averageRating": 1542,
+      "white": 194180,
+      "draws": 17475,
+      "black": 191902,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c1f4",
+      "san": "Bf4",
+      "averageRating": 1597,
+      "white": 142299,
+      "draws": 13078,
+      "black": 127707,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g2g3",
+      "san": "g3",
+      "averageRating": 1690,
+      "white": 77211,
+      "draws": 7710,
+      "black": 60452,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e2e4",
+      "san": "e4",
+      "averageRating": 1504,
+      "white": 21804,
+      "draws": 1971,
+      "black": 24063,
+      "game": null,
+      "opening": {
+        "eco": "C00",
+        "name": "French Defense: Diemer-Duhm Gambit"
+      }
+    },
+    {
+      "uci": "b2b3",
+      "san": "b3",
+      "averageRating": 1420,
+      "white": 9970,
+      "draws": 1093,
+      "black": 13146,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1a4",
+      "san": "Qa4+",
+      "averageRating": 1347,
+      "white": 5963,
+      "draws": 626,
+      "black": 9566,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f2f3",
+      "san": "f3",
+      "averageRating": 1518,
+      "white": 4258,
+      "draws": 364,
+      "black": 4909,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "D30",
+    "name": "Queen's Gambit Declined"
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "white": 44,
+  "draws": 8,
+  "black": 18,
+  "moves": [
+    {
+      "uci": "c8d7",
+      "san": "Bd7",
+      "averageRating": 1799,
+      "white": 22,
+      "draws": 4,
+      "black": 5,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8d1",
+      "san": "Rxd1+",
+      "averageRating": 1756,
+      "white": 10,
+      "draws": 0,
+      "black": 7,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f7f6",
+      "san": "f6",
+      "averageRating": 1751,
+      "white": 2,
+      "draws": 2,
+      "black": 3,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c5b6",
+      "san": "Bb6",
+      "averageRating": 1877,
+      "white": 4,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8e8",
+      "san": "Re8",
+      "averageRating": 1971,
+      "white": 1,
+      "draws": 1,
+      "black": 1,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g8f8",
+      "san": "Kf8",
+      "averageRating": 1892,
+      "white": 1,
+      "draws": 1,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e6e5",
+      "san": "e5",
+      "averageRating": 1545,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "a7a6",
+      "san": "a6",
+      "averageRating": 1886,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d8d7",
+      "san": "Rd7",
+      "averageRating": 1784,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b7b6",
+      "san": "b6",
+      "averageRating": 1839,
+      "white": 1,
+      "draws": 0,
+      "black": 0,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c5e7",
+      "san": "Be7",
+      "averageRating": 1850,
+      "white": 0,
+      "draws": 0,
+      "black": 1,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "D05",
+    "name": "Queen's Pawn Game: Colle System, Traditional Colle"
+  }
+}

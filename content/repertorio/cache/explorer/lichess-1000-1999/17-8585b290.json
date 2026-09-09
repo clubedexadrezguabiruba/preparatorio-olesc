@@ -1,0 +1,33 @@
+{
+  "white": 546,
+  "draws": 50,
+  "black": 386,
+  "moves": [
+    {
+      "uci": "d8e7",
+      "san": "Qxe7",
+      "averageRating": 1855,
+      "white": 436,
+      "draws": 42,
+      "black": 322,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c6e7",
+      "san": "Nxe7",
+      "averageRating": 1844,
+      "white": 110,
+      "draws": 8,
+      "black": 64,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C44",
+    "name": "Scotch Game"
+  }
+}

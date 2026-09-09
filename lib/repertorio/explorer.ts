@@ -5,7 +5,7 @@ import { chaveDe } from "../tatica/chave.ts";
  *
  * É o número que decide o repertório, e por isso ele subiu de bloco. As fontes
  * são draft de GM: troncos até o lance 15–17, o ramo principal escolhido pela
- * verdade teórica. Numa sala de 1000–1400 a verdade é outra — na Escocesa, por
+ * verdade teórica. Numa sala de clube a verdade é outra — na Escocesa, por
  * exemplo, o `4…Bc5` do tronco do Grigoryan aparece em 16 % dos jogos e o
  * `4…Nxd4?!`, que ele mostra numa sub-variante marcada `$2`, aparece em 52 %.
  * Escrever as linhas antes de medir seria podar 336 ramos para 40 no chute e
@@ -16,10 +16,17 @@ import { chaveDe } from "../tatica/chave.ts";
  * - **explorer** — o banco de partidas online do Lichess, com um endereço que
  *   responde "nesta posição, o que cada faixa de rating joga, e em quantos
  *   jogos".
- * - **faixa** (`ratings`) — o explorer agrupa de 200 em 200 pelo piso: pedir
- *   `1000,1200,1400` traz jogadores de **1000 a 1599**, não de 1000 a 1400.
- *   Está escrito aqui porque a diferença some fácil e mudaria a leitura da
- *   tabela.
+ * - **faixa** (`ratings`) — o explorer agrupa em **baldes fixos**, nomeados
+ *   pelo piso: `0, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500`, cada um
+ *   indo até o próximo. Duas consequências que somem fácil e mudam a leitura
+ *   da tabela inteira. A primeira: pedir `1000,1200,1400` traz jogadores de
+ *   **1000 a 1599**, não de 1000 a 1400. A segunda: **não existe balde abaixo
+ *   de 1000** — o piso é um só, de 0 a 999, e não há como pedir "700".
+ * - **a escala** — o número é o do **Lichess**, que não é o do chess.com. Lá
+ *   todo mundo começa em 1500, então, para a mesma força, o número do Lichess
+ *   é maior. Ler um recorte daqui como se fosse a força do clube foi o erro
+ *   que gerou o ⚠13 do `docs/REPERTORIO.md`; por isso os nomes abaixo dizem
+ *   `lichess-` na cara.
  * - **cache** — a resposta guardada em arquivo. O explorer é gentil mas tem
  *   limite; e uma medição que muda sozinha entre duas rodadas não serve para
  *   justificar corte de conteúdo.
@@ -29,6 +36,11 @@ import { chaveDe } from "../tatica/chave.ts";
  * Sem token, com 401, com a rede fora, com o formato mudado: a consulta devolve
  * `null` e quem chamou escreve "sem dados". Compilar e validar o repertório não
  * dependem disto — medir é uma coisa, e provar que os lances são legais é outra.
+ *
+ * **Mas "sem dados" tem de significar "o explorer não sabe", e não "o explorer
+ * pediu para eu esperar".** Um 429 não é resposta: é adiamento, e virar `null`
+ * ali faz a tabela mentir para quem corta conteúdo por causa dela. Por isso a
+ * consulta recua e insiste nos códigos que pedem tempo — ver `recuoDe`.
  */
 
 export type RespostaDoExplorer = {
@@ -45,8 +57,52 @@ export type Posicao = {
   respostas: RespostaDoExplorer[];
 };
 
-export const FAIXAS = [1000, 1200, 1400] as const;
+/**
+ * As faixas candidatas, nomeadas.
+ *
+ * O ⚠13 pede comparar o recorte medido com o do público de verdade. Elas vivem
+ * aqui juntas, e não numa constante trocada na mão, porque a comparação só vale
+ * se as três puderem ser medidas **na mesma rodada** — e porque o cache em
+ * disco é separado por este nome.
+ */
+export const RECORTES = {
+  /** O que a §6 mediu até 6/9/2026, e o que está commitado no cache. */
+  "lichess-1000-1599": [1000, 1200, 1400],
+  /** ≈ chess.com 700–1700 — o público do clube, convertido entre as escalas. */
+  "lichess-1000-1999": [1000, 1200, 1400, 1600, 1800],
+  /** A leitura literal do ⚠13, que arrasta o balde do piso inteiro junto. */
+  "lichess-0-1799": [0, 1000, 1200, 1400, 1600],
+} as const;
+
+export type Recorte = keyof typeof RECORTES;
+
+export const RECORTES_NOMES = Object.keys(RECORTES) as Recorte[];
+
+/**
+ * O recorte que vale quando ninguém pede outro.
+ *
+ * Enquanto ele apontar para o que já está medido, a tabela da §6 continua
+ * reproduzível sem tocar na rede — e é essa reprodutibilidade que dá direito de
+ * comparar. Movê-lo **muda a §6**: é decisão de documento, não de código, e a
+ * medição vem antes.
+ */
+export const RECORTE_PADRAO: Recorte = "lichess-1000-1599";
+
+export const FAIXAS: readonly number[] = RECORTES[RECORTE_PADRAO];
+
+/**
+ * Os ritmos que a medição do repertório usa.
+ *
+ * Rapid e classical: bullet e blitz têm outra distribuição de aberturas, e o
+ * clube não joga bullet. Mas o **degrau 2** da escada da §24 acrescenta o blitz
+ * de propósito — quando a posição fica rara demais em rapid+classical, o blitz
+ * é o que ainda tem jogo suficiente para o número dizer alguma coisa, e uma
+ * amostra maior de partidas ligeiramente mais rápidas é melhor que 40 jogos.
+ */
 export const RITMOS = ["rapid", "classical"] as const;
+
+/** Os mesmos, mais o blitz — o degrau 2 da escada dos lances do adversário. */
+export const RITMOS_COM_BLITZ = ["blitz", "rapid", "classical"] as const;
 
 /** Abaixo disto o percentual é ruído, e a tabela diz "poucos jogos". */
 export const JOGOS_MINIMOS = 200;
@@ -54,11 +110,15 @@ export const JOGOS_MINIMOS = 200;
 const ENDERECO = "https://explorer.lichess.ovh/lichess";
 
 /** O endereço completo de uma consulta. É também a chave do cache. */
-export function enderecoDe(play: readonly string[]): string {
+export function enderecoDe(
+  play: readonly string[],
+  faixas: readonly number[] = FAIXAS,
+  ritmos: readonly string[] = RITMOS,
+): string {
   const busca = new URLSearchParams({
     variant: "standard",
-    speeds: RITMOS.join(","),
-    ratings: FAIXAS.join(","),
+    speeds: ritmos.join(","),
+    ratings: faixas.join(","),
     play: play.join(","),
     moves: "12",
     topGames: "0",
@@ -153,11 +213,80 @@ export type Opcoes = {
   intervalo?: number;
   /** Para onde vão os avisos. */
   avisar?: (mensagem: string) => void;
+  /** A faixa de rating desta consulta. Entra na chave do cache. */
+  faixas?: readonly number[];
+  /**
+   * Os ritmos desta consulta. Entra na chave do cache pelo mesmo caminho das
+   * faixas — o hash é do endereço inteiro, e `speeds=` está nele —, então pedir
+   * o degrau 2 nunca lê a resposta guardada do degrau 1.
+   */
+  ritmos?: readonly string[];
+  /**
+   * Só o cache: nem token, nem rede, e nenhum aviso — foi escolha de quem
+   * rodou, não falha. Diferente de `token: undefined`, que **é** falha e avisa.
+   */
+  semRede?: boolean;
+  /** Quantas idas à rede no máximo, contando a primeira. */
+  tentativas?: number;
+  /** O recuo depois de um 429 que não diz quanto esperar. Zero no teste. */
+  recuo?: number;
 };
 
-/** Um nome de arquivo estável para a consulta. */
-export const chaveDoCache = (play: readonly string[]): string =>
-  `${play.length}-${chaveDe(enderecoDe(play)).toString(16).padStart(8, "0")}`;
+/**
+ * Um nome de arquivo estável para a consulta.
+ *
+ * O hash é do **endereço inteiro**, que carrega `ratings=` — então dois
+ * recortes nunca colidem, e nenhum lê o cache do outro. O hash não conhece o
+ * caminho em disco: mover os arquivos para uma subpasta por recorte não muda
+ * chave nenhuma.
+ */
+export const chaveDoCache = (
+  play: readonly string[],
+  faixas: readonly number[] = FAIXAS,
+  ritmos: readonly string[] = RITMOS,
+): string =>
+  `${play.length}-${chaveDe(enderecoDe(play, faixas, ritmos)).toString(16).padStart(8, "0")}`;
+
+/* ------------------------------------------------------------------ *
+ * Quando o explorer manda esperar
+ * ------------------------------------------------------------------ */
+
+/**
+ * Os códigos em que insistir faz sentido.
+ *
+ * `429` é o explorer dizendo "devagar" — a documentação do Lichess pede um
+ * minuto inteiro de pausa antes de voltar. `5xx` é o servidor tropeçando, que
+ * por definição é passageiro. Todo o resto (401 com token ruim, 404) é
+ * resposta definitiva: repetir daria a mesma coisa, mais devagar.
+ */
+const pedeTempo = (status: number): boolean => status === 429 || status >= 500;
+
+/** Nenhum recuo passa disto, nem que o servidor peça. */
+export const TETO_DO_RECUO = 120_000;
+
+/** O recuo padrão de um 429 — o minuto que a documentação do Lichess pede. */
+export const RECUO_PADRAO = 60_000;
+
+/**
+ * Quanto esperar antes de tentar de novo.
+ *
+ * O `Retry-After` do servidor ganha de qualquer palpite nosso, quando vem em
+ * segundos; ele também aceita uma **data** HTTP, e aí `Number` dá `NaN` e a
+ * conta cai no padrão em vez de virar espera de tempo indefinido.
+ */
+export function recuoDe(
+  resposta: { status: number; headers: { get(nome: string): string | null } },
+  tentativa: number,
+  base: number,
+): number {
+  const pedido = Number(resposta.headers.get("retry-after"));
+  if (Number.isFinite(pedido) && pedido > 0) return Math.min(pedido * 1000, TETO_DO_RECUO);
+  // O 429 custa o minuto cheio; o tropeço de servidor não merece tanto.
+  return resposta.status === 429 ? base : Math.min(base, 2_000 * tentativa);
+}
+
+const dormir = (ms: number): Promise<void> =>
+  ms <= 0 ? Promise.resolve() : new Promise((pronto) => setTimeout(pronto, ms));
 
 let ultimaIda = 0;
 
@@ -167,6 +296,12 @@ let ultimaIda = 0;
  * Cache primeiro, rede depois — e a espera do intervalo só acontece quando a
  * rede é mesmo necessária. Uma segunda rodada do script não faz requisição
  * nenhuma, que é o que torna a tabela reproduzível.
+ *
+ * **Um 429 não é resposta, é adiamento.** Antes, ele virava `null` e a posição
+ * saía "sem dados" — indistinguível, na tabela, de uma posição que o explorer
+ * realmente não conhece. Quem lesse a tabela cortaria conteúdo por causa de um
+ * limite de requisições. Agora a consulta espera o que o servidor pedir e
+ * insiste; só desiste depois de `tentativas` idas, e aí o aviso diz o código.
  */
 export async function consultar(
   play: readonly string[],
@@ -178,36 +313,66 @@ export async function consultar(
     buscar = fetch,
     intervalo = 1500,
     avisar = () => {},
+    faixas = FAIXAS,
+    ritmos = RITMOS,
+    semRede = false,
+    tentativas = 3,
+    recuo: recuoBase = RECUO_PADRAO,
   } = opcoes;
 
-  const chave = chaveDoCache(play);
+  const chave = chaveDoCache(play, faixas, ritmos);
   const guardado = cache?.ler(chave);
   if (guardado !== undefined) return resumir(guardado);
+
+  if (semRede) return null;
 
   if (!token) {
     avisar("sem LICHESS_TOKEN no .env.local — a cobertura sai como “sem dados”");
     return null;
   }
 
-  const espera = ultimaIda + intervalo - Date.now();
-  if (espera > 0) await new Promise((pronto) => setTimeout(pronto, espera));
-  ultimaIda = Date.now();
+  const onde = play.join(",") || "(início)";
 
-  try {
-    const resposta = await buscar(enderecoDe(play), {
-      headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
-    });
-    if (!resposta.ok) {
-      avisar(`o explorer respondeu ${resposta.status} em ${play.join(",") || "(início)"}`);
+  for (let tentativa = 1; ; tentativa += 1) {
+    const espera = ultimaIda + intervalo - Date.now();
+    if (espera > 0) await dormir(espera);
+    ultimaIda = Date.now();
+
+    let resposta: Awaited<ReturnType<typeof fetch>>;
+    try {
+      resposta = await buscar(enderecoDe(play, faixas, ritmos), {
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+      });
+    } catch (erro) {
+      avisar(`o explorer não respondeu (${String(erro)})`);
       return null;
     }
-    const bruto: unknown = await resposta.json();
-    const lido = resumir(bruto);
-    if (lido) cache?.gravar(chave, bruto);
-    else avisar(`resposta do explorer em formato inesperado em ${play.join(",") || "(início)"}`);
-    return lido;
-  } catch (erro) {
-    avisar(`o explorer não respondeu (${String(erro)})`);
-    return null;
+
+    if (resposta.ok) {
+      let bruto: unknown;
+      try {
+        bruto = await resposta.json();
+      } catch (erro) {
+        avisar(`o explorer não respondeu (${String(erro)})`);
+        return null;
+      }
+      const lido = resumir(bruto);
+      if (lido) cache?.gravar(chave, bruto);
+      else avisar(`resposta do explorer em formato inesperado em ${onde}`);
+      return lido;
+    }
+
+    if (!pedeTempo(resposta.status) || tentativa >= tentativas) {
+      const insistiu = tentativa > 1 ? ` (desisti depois de ${tentativa} tentativas)` : "";
+      avisar(`o explorer respondeu ${resposta.status} em ${onde}${insistiu}`);
+      return null;
+    }
+
+    const quanto = recuoDe(resposta, tentativa, recuoBase);
+    avisar(
+      `o explorer respondeu ${resposta.status} — esperando ${Math.round(quanto / 1000)} s ` +
+        `e tentando de novo (${tentativa} de ${tentativas - 1})`,
+    );
+    await dormir(quanto);
   }
 }

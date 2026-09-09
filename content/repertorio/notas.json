@@ -1,16 +1,125 @@
 [
   {
+    "slug": "bispo-em-c4",
+    "nome": "Siciliana — o bispo em c4",
+    "cor": "pretas",
+    "abertura": "siciliana",
+    "lances": "1.e4 c5 2.Bc4 (ou 1.e4 c5 2.Nf3 Nc6 3.Bc4) (ou 1.e4 c5 2.Nc3 Nc6 3.Bc4)",
+    "frequencia": "~31% das sicilianas — uma em cada três. É a posição mais comum de todo o repertório, e a única que nenhum curso ensina: os autores escrevem para quem já passou dos 1200, e nessa faixa esse bispo quase não sai.",
+    "porque": "Não há sequência para decorar. Depois de 2.Bc4 Cc6, as quatro respostas mais comuns das brancas somam só 73% — o mais espalhado do repertório inteiro. Contra o que é espalhado, quem salva é uma ideia.",
+    "explicacao": [
+      "O bispo mira f7, que é a casa mais fraca da sua posição enquanto o rei está no meio. É o lance favorito de quem acabou de aprender o mate do pastor, e quase sempre a dama vem logo atrás — 3.Df3 ou 3.Dh5 — com uma ameaça só: dama em f7, com o bispo guardando as costas dela.",
+      "Repare em como esse mate funciona, porque é daí que sai a resposta. A dama em f7 não dá mate por ser dama: dá porque o bispo de c4 defende a casa em que ela pousou. Tire o bispo dessa diagonal e a dama que chegar lá vira dama de graça — 4.Dxf7+ Rxf7, e você ficou com uma dama a mais.",
+      "E o lance que tira o bispo da diagonal é o …e6 — que é o lance que a sua Siciliana ia jogar de qualquer jeito para preparar o …d5. A defesa e o plano são o mesmo lance. É por isso que esta abertura não precisa de teoria nova: ela já está dentro do que você treina."
+    ],
+    "faca": [
+      "Jogue …e6 cedo. Ele fecha a diagonal c4–f7 e prepara o …d5: um lance com dois empregos. Vale igual pelas três portas — 2.Bc4, 2.Cf3 Cc6 3.Bc4 e 2.Cc3 Cc6 3.Bc4.",
+      "Depois …d5. O peão bate no bispo, ele tem de andar de novo, e o centro abre com as suas peças prontas e a dama dele passeando.",
+      "Se a dama sair (3.Df3, 3.Dh5), não recue nada. Com o …e6 jogado, cada peça sua que ataca a dama é um lance de graça — depois de 3.Dh5 e6 o motor já põe as pretas mais de um peão à frente.",
+      "Se ele jogar 3.d3, segurando a casa d5, troque de ferramenta: …a6, …b5 e o cavalo a a5 caçam o bispo pelo lado.",
+      "Com o bispo expulso, é a Siciliana de sempre: cavalos para fora, o seu bispo, roque."
+    ],
+    "cuidado": "A ordem é …e6 antes de qualquer outra coisa. Contra 3.Dh5, o natural …Cf6 leva mate em f7 no lance seguinte, e o …d6 leva 4.Bxf7+ — o rei nunca mais roca, e o motor põe as brancas quase três peões à frente. O perigo aqui não é o mate: é jogar o lance bonito antes do lance necessário."
+  },
+  {
+    "slug": "escocesa-dama-em-d4",
+    "nome": "Escocesa — a dama em d4",
+    "cor": "brancas",
+    "abertura": "escocesa",
+    "lances": "1.e4 e5 2.Nf3 Nc6 3.d4 exd4 4.Nxd4 Nxd4 5.Qxd4 Nf6 (ou 1.e4 e5 2.Nf3 Nc6 3.d4 exd4 4.Nxd4 Nxd4 5.Qxd4 c5)",
+    "frequencia": "O 4…Cxd4 é 52% das respostas ao nosso 4.Cxd4 — de longe a mais comum. Daqui ele tem quatro lances de verdade (…Cf6 30,8%, …d6 25,4%, …c5 16,4%, …b6 8,5%) e nenhum domina.",
+    "porque": "Quatro respostas e nenhuma dominante: 81% espalhados em quatro. Decorar quatro sequências para uma posição só é o dobro do trabalho pelo mesmo aprendizado — e as quatro se respondem com DUAS regras e uma montagem. A linha do …d6 continua no treinador, e é lá que você aprende a montagem; esta página diz o que muda nas outras três.",
+    "explicacao": [
+      "A dama no meio do tabuleiro costuma ser perigosa, e aqui não é: não há peça dele pronta para expulsá-la de graça. Ele vai ter de empurrá-la com peão — e cada peão que anda é um lance que ele não usou para desenvolver. É por isso que este 4…Cxd4 é bom para nós: ele troca peças e nos entrega o centro e o tempo.",
+      "A montagem é sempre a mesma, e você já a treina na linha do …d6: Cc3 defendendo e4, Bf4 mirando d6 e abrindo a casa c1, e roque grande, com a torre caindo na coluna d bem em frente ao peão dele. Depois vêm f3 e g4, e os peões andam contra o rei dele.",
+      "As duas regras que cobrem o resto: se ele atacar a dama com peão, ela vai para e3 — fica na coluna e, ainda ativa, e de olho no peão que a atacou. Se ele puser o cavalo em f6 antes de estar pronto, e5 o expulsa, e o cavalo tem de voltar para g8. Medido no Stockfish 18, profundidade 20: depois de 5…Cf6 6.e5 as brancas ficam +1,52, e depois de 5…c5 6.De3, +1,37."
+    ],
+    "faca": [
+      "Contra 5…d6 e 5…b6, a montagem inteira: Cc3, Bf4, O-O-O. É a linha que você treina no site.",
+      "Contra 5…Cf6, empurre 6.e5. O cavalo não tem casa boa e volta para g8 — você ganhou espaço e um tempo.",
+      "Contra 5…c5, recue a dama para e3. Ela sai do ataque, continua na coluna e e fica de olho no peão de c5 que acabou de andar.",
+      "Contra 5…Df6 e 5…De7, que são mais raros, troque as damas sem medo: no final você tem o centro e o desenvolvimento, e ele tem peões andados à toa.",
+      "Depois de qualquer um deles, volte para a montagem: Cc3, Bf4, roque grande, f3 e g4."
+    ],
+    "cuidado": "Não empurre e5 sem que o cavalo esteja em f6. Fora dessa hora, o peão de e5 fica sem apoio e vira alvo — o lance só é forte porque ataca alguém."
+  },
+  {
+    "slug": "alapin-centro-grande",
+    "nome": "Alapin — o centro grande",
+    "cor": "brancas",
+    "abertura": "alapin",
+    "lances": "1.e4 c5 2.c3 d6 (ou 1.e4 c5 2.c3 e6) (ou 1.e4 c5 2.c3 Nf6) (ou 1.e4 c5 2.c3 d5)",
+    "frequencia": "O 2.c3 é a nossa resposta a toda Siciliana. As quatro respostas mais comuns dele somam só 78%, e a quinta e a sexta ainda aparecem em um jogo a cada quinze.",
+    "porque": "É a posição mais espalhada do lado das brancas: seis respostas com peso parecido, e o mesmo plano nosso serve para todas. Uma linha por resposta seriam seis sequências para decorar quando o que decide é uma frase só — o peão de c3 existe para o de d2 andar dois passos. A resposta mais comum (2…Cc6) continua no treinador; aqui está o resto.",
+    "explicacao": [
+      "O 2.c3 é o lance mais estranho do repertório e o mais simples de entender: ele não ataca nada. Ele guarda lugar. O que queremos é jogar d4 no lance seguinte e, se ele comer, recapturar COM O PEÃO DE C3 — e aí ficamos com dois peões no centro, e4 e d4, contra nenhum.",
+      "Sabendo disso, quase toda resposta dele se responde sozinha: se o lance dele não impede o d4, jogue d4. Se ele comer, cxd4. Se ele não comer, o centro é seu de graça e você desenvolve por cima dele.",
+      "As duas respostas que pedem um segundo pensamento são as que atacam o e4 direto: o 2…Cf6 e o 2…d5. Nas duas, o peão de e4 anda ou troca em vez de ficar sendo atacado — e4-e5 expulsa o cavalo, exd5 troca e devolve a dama dele ao meio do tabuleiro, onde o nosso d4 ganha tempo em cima dela."
+    ],
+    "faca": [
+      "Jogue 3.d4 sempre que ele não impedir. Se ele comer, recapture com o peão de c3: dois peões no centro contra nenhum.",
+      "Contra 2…d6, jogue 3.d4 e ponha o bispo em d3 apoiando o e4. Ele não brigou pelo centro, então o centro é seu.",
+      "Contra 2…e6, jogue 3.d4 e, depois de 3…d5, empurre 4.e5. O centro trava com o bispo de c8 dele preso atrás dos próprios peões.",
+      "Contra 2…Cf6, jogue 3.e5 e depois d4: o cavalo tem de andar de novo, e você ganha espaço com tempo.",
+      "Contra 2…d5, troque com 3.exd5 e depois 4.d4: a dama dele volta ao meio do tabuleiro, e o seu peão de d4 a incomoda enquanto você desenvolve."
+    ],
+    "cuidado": "Não defenda o peão de e4 parado quando ele for atacado. Nesta abertura o e4 sempre tem para onde ir — andar ou trocar — e cada lance gasto defendendo é um lance que o d4 não deu."
+  },
+  {
+    "slug": "francesa-bd3",
+    "nome": "Francesa — o bispo em d3",
+    "cor": "brancas",
+    "abertura": "francesa",
+    "lances": "1.e4 e6 2.d4 d5 3.Bd3 c5 (ou 1.e4 e6 2.d4 d5 3.Bd3 Nc6) (ou 1.e4 e6 2.d4 d5 3.Bd3 Nf6)",
+    "frequencia": "Depois de 3.Bd3 ele tem quatro respostas parecidas: 3…c5 com 38%, 3…dxe4 com 22%, 3…Cc6 com 14% e 3…Cf6 com 13%. Juntas são quase 90%.",
+    "porque": "A própria fonte não escolhe. No lance seguinte ao 3…c5 ela oferece TRÊS lances marcados como interessantes e não recomenda nenhum — e fonte que não escolhe está dizendo que ali é ideia, não lance. A linha do 3…dxe4, que é a única em que ela escolhe e explica, continua no treinador.",
+    "explicacao": [
+      "Quase todo mundo joga 3.Cc3 ou 3.e5 contra a Francesa, e as duas dão posições cheias de teoria decorada. Nós fazemos o mais simples: pomos o bispo em d3, apontado para o rei dele, e deixamos o centro decidir sozinho. O bispo em d3 é a peça da abertura inteira — e o bispo dele, o de c8, é a peça que o jogador de Francesa passa o jogo tentando libertar.",
+      "Daí sai a regra única: JOGO ABERTO É NOSSO. Se ele comer em e4, o bispo recaptura já desenvolvido. Se ele bater com …c5, abra você mesmo com exd5 e segure o d4 com c3 — num tabuleiro aberto, quem tem o bispo bom manda, e o bispo bom é o nosso. E se ele fechar com …Cf6, empurre e5 e vire uma Francesa de Avanço, com o bispo dele ainda preso."
+    ],
+    "faca": [
+      "Contra 3…c5, abra: 4.exd5 exd5 e depois 5.c3 segurando o d4. Peças para fora e o bispo de d3 apontado para o rei dele.",
+      "Contra 3…Cc6, desenvolva com 4.Cf3 e espere. Quando ele comer em e4, recapture de bispo e ponha o outro bispo em g5, pregando o cavalo na dama.",
+      "Contra 3…Cf6, empurre 4.e5. O cavalo tem de andar e o bispo de c8 dele continua preso atrás dos peões.",
+      "Em qualquer uma delas, o bispo de d3 nunca troca à toa: ele é a peça que faz o ataque existir."
+    ],
+    "cuidado": "Não segure o centro parado quando ele bater com …c5. Trocar em d5 e segurar o d4 com c3 abre o jogo do jeito que serve a você; deixar a tensão parada dá a ele o tempo de que precisa para soltar o bispo de c8."
+  },
+  {
+    "slug": "outras-primeiras",
+    "nome": "1.c4 e as outras primeiras",
+    "cor": "pretas",
+    "lances": "1.c4 (ou 1.Nf3) (ou 1.b3) (ou 1.f4) (ou 1.g3) (ou 1.d4 d5 2.Nc3)",
+    "frequencia": "Fora 1.e4 (68%) e 1.d4 (21%), sobram cerca de 8% espalhados em cinco primeiros lances, nenhum passando de 2,3%. O 2.Cc3 depois de 1.d4 d5 é outros 12%.",
+    "porque": "Cinco primeiros lances raros, e a mesma resposta serve para todos. Uma linha por lance seriam cinco sequências para decorar quando o que decide é uma montagem só, que você já treina no Colle e no Manhattan. A linha que existia aqui terminava na MESMA posição do 6º lance do Manhattan — conferido casa a casa — e por isso foi apagada: o aluno chega lá treinando o Manhattan.",
+    "explicacao": [
+      "A montagem é sempre a mesma, e é a que você já joga contra o Colle: …d5, …Cf6, …e6, …c5 e …Cc6. Ela não é resposta ao que ele faz — é plano seu. Repare que o …e6 vem antes do …c5 de propósito: ele segura o peão de d5 e abre a saída do bispo de f8, para que a recaptura em c5 venha com tempo.",
+      "Contra 1.c4 e 1.Cf3, ponha …e6 e …d5 e espere. Quase todos esses jogadores acabam jogando d4 uma hora — e no lance em que ele jogar, você já está no Manhattan, que é a sua abertura contra 1.d4 d5 2.c4, e você conhece o resto.",
+      "A exceção que tem nome é o 2.Cc3 depois de 1.d4 d5 — o Jobava. Ali a ordem muda: bata com …c5 na hora, ponha o cavalo em c6, e quando o centro abrir COMA EM D4, nunca em e4. Pegar o peão de e4 parece de graça e não é: depois de …dxe4 vem d5, e o cavalo de c6 fica sem casa — o motor põe as brancas mais de um peão e meio à frente."
+    ],
+    "faca": [
+      "Jogue …d5 e …Cf6 primeiro. São lances bons contra tudo, e não entregam informação nenhuma.",
+      "Depois …e6, que segura o d5 e solta o bispo de f8, e só então …c5 batendo no centro.",
+      "Contra 1.c4 e 1.Cf3, espere o d4 dele: quando vier, você está no Manhattan e segue a linha que treinou.",
+      "Contra 1.b3, 1.f4 e 1.g3, ocupe o centro com …d5 e …e5 quando der: quem não briga pelo centro no primeiro lance, entrega o centro.",
+      "Contra o Jobava (1.d4 d5 2.Cc3), …c5 na hora e …Cc6 — e coma em d4, nunca em e4."
+    ],
+    "cuidado": "Não jogue …c5 antes do …e6 nestas montagens. Sem o peão em e6, quando ele trocar em c5 o bispo de f8 não tem como recapturar de graça, e você perde o tempo que a montagem inteira existe para ganhar."
+  },
+  {
     "slug": "pirc",
     "nome": "Defesa Pirc",
+    "cor": "brancas",
     "lances": "1.e4 d6 (ou 1.e4 g6)",
-    "frequencia": "4,2% — a mais comum destas quatro. Espere encontrá-la umas duas vezes por torneio.",
+    "frequencia": "4,2% — a mais comum destas quatro raras. Espere encontrá-la umas duas vezes por torneio.",
+    "porque": "Fica perto do corte, mas do lado de fora. Decorar oito lances de algo que demora tanto a cair na sua mão é o pior negócio de memória que existe: quando a partida chega, a linha já evaporou.",
     "explicacao": [
       "Ele não disputa o centro: joga d6 ou g6, põe o bispo em g7 apontando para a diagonal longa, e deixa você montar os dois peões no meio. A ideia dele é atacar esse centro depois, com c5 ou e5, quando as peças estiverem prontas.",
       "Isso quer dizer que os primeiros lances são fáceis para você — e é justamente aí que mora a armadilha. O jogador que ganha centro de graça costuma achar que já ganhou, empurra os peões, e o bispo de g7 come a diagonal que ficou aberta."
     ],
     "faca": [
       "Monte o centro grande: e4 e d4, os dois peões lado a lado.",
-      "Desenvolva antes de avançar: Nc3, Nf3, Be2 (ou Bc4) e o roque pequeno.",
+      "Desenvolva antes de avançar: Cc3, Cf3, Be2 (ou Bc4) e o roque pequeno.",
       "Só depois de rocado pense em e5 ou f4 — nunca antes.",
       "Vigie a diagonal do bispo dele. Um peão em e5 sem apoio vira alvo."
     ],
@@ -19,15 +128,17 @@
   {
     "slug": "nimzowitsch",
     "nome": "Defesa Nimzowitsch",
+    "cor": "brancas",
     "lances": "1.e4 Nc6",
     "frequencia": "1,6% — talvez uma vez por torneio, e quase sempre de alguém que decorou a surpresa.",
+    "porque": "Rara demais para ocupar vaga no treinador — e aqui a vantagem nem vem de linha: vem de um lance natural que você já sabe jogar sem estudar nada.",
     "explicacao": [
       "O cavalo em c6 tranca o próprio peão de c, que é o peão com que quase toda defesa contra 1.e4 disputa o centro. Ele abriu mão da ferramenta principal dele no primeiro lance.",
       "Quem joga isto conta com a surpresa: espera que você pare para pensar e escolha um lance tímido. O lance certo é o mais natural do tabuleiro, e é bom por um motivo que se explica em uma linha."
     ],
     "faca": [
       "Jogue 2.d4. Você fica com dois peões no centro e ele com nenhum.",
-      "Se ele responder 2…d5, troque em d5 e desenvolva com Nc3 ganhando tempo na dama.",
+      "Se ele responder 2…d5, troque em d5 e desenvolva com Cc3 ganhando tempo na dama.",
       "Se ele responder 2…e5, jogue 3.d5 e o cavalo dele tem de voltar.",
       "Depois é o de sempre: cavalos para fora, bispo, roque."
     ],
@@ -36,33 +147,37 @@
   {
     "slug": "alekhine",
     "nome": "Defesa Alekhine",
+    "cor": "brancas",
     "lances": "1.e4 Nf6",
     "frequencia": "1,3% — a mais rara das que você vai ver de verdade.",
+    "porque": "Rara, e o que decide não é a sequência: é saber a hora de parar de empurrar peão. Isso cabe numa frase, e uma frase você leva para a partida — oito lances decorados, não.",
     "explicacao": [
       "Ele ataca o seu peão de e4 com o cavalo, sabendo que você vai empurrá-lo. E é isso que ele quer: cada peão que avança para caçar o cavalo é um peão que sai da defesa dos outros. A defesa inteira é uma provocação.",
       "Contra ele o erro não é avançar — é continuar avançando. Um peão a mais no centro é vantagem; quatro peões avançados com as peças em casa é uma vantagem que desmorona no lance 12."
     ],
     "faca": [
       "Avance uma vez: 2.e5, e o cavalo vai para d5.",
-      "Agora pare de empurrar. Jogue 3.d4 e desenvolva: Nf3, Be2, roque.",
+      "Agora pare de empurrar. Jogue 3.d4 e desenvolva: Cf3, Be2, roque.",
       "Deixe o cavalo dele em d5 em paz — ele não ameaça nada sozinho.",
       "Só volte a avançar quando as peças estiverem fora e o rei rocado."
     ],
-    "cuidado": "Depois de 2.e5 Nd5, o lance 3.c4 parece forte e é o começo de uma linha longa que ele conhece e você não. Prefira 3.d4."
+    "cuidado": "Depois de 2.e5 Cd5, o lance 3.c4 parece forte e é o começo de uma linha longa que ele conhece e você não. Prefira 3.d4."
   },
   {
     "slug": "owen",
     "nome": "Defesa Owen",
+    "cor": "brancas",
     "lances": "1.e4 b6",
     "frequencia": "menos de 1% — pode ser que você nunca a veja. Está aqui para você não travar se vier.",
+    "porque": "Pode ser que você nunca a encontre. Esta página existe para você não travar diante dela, não para você decorá-la.",
     "explicacao": [
       "Ele vai pôr o bispo em b7, mirando a diagonal longa e o seu peão de e4. É o mesmo bispo do fianchetto da Pirc, só que sem o peão de g e sem o roque perto.",
       "A diferença é que aqui ele demorou dois lances para desenvolver uma peça só, e não tocou no centro. Você tem tempo de sobra para montar tudo antes de o bispo dele virar problema."
     ],
     "faca": [
       "Jogue 2.d4 e monte o centro grande.",
-      "Defenda o peão de e4 antes que o bispo chegue: Bd3 ou Nc3.",
-      "Desenvolva pelo caminho normal — Nf3, roque pequeno.",
+      "Defenda o peão de e4 antes que o bispo chegue: Bd3 ou Cc3.",
+      "Desenvolva pelo caminho normal — Cf3, roque pequeno.",
       "Com o centro montado e o rei seguro, o bispo dele em b7 fica olhando para uma parede."
     ],
     "cuidado": "Não deixe e4 pendurado achando que sobra tempo. O bispo em b7 ataca de longe, e um peão perdido no lance 4 vira uma partida difícil."
