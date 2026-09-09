@@ -58,21 +58,22 @@ inteiro até a promoção com o mouse**, e imprime uma linha por quesito: `ok` o
 
 **Nenhuma imagem entra na conversa.** Uma captura custa ~4.800 tokens e é relida
 a cada turno até o fim da sessão. Se o Doug pedir para ver, gere **uma folha de
-contato só** — as três telas lado a lado, num arquivo em disco — e mande um
+contato só** — as quatro telas lado a lado, num arquivo em disco — e mande um
 subagente lê-la e devolver a descrição medida em texto. Nunca N imagens soltas,
 e nunca reabra uma imagem já descrita.
 
 ---
 
-## 4. Os cinco quesitos, e o que cada um mede
+## 4. Os seis quesitos, e o que cada um mede
 
 | Quesito | O que é medido, e por quem |
 |---|---|
 | **Voz e texto** | `node --test lib/lesson/voz.test.ts` — teto de caracteres por fala, teto de palavras por frase e a lista de palavras de bastidor, sobre `content/lessons/*.json` **e** sobre `lib/lesson/falas.ts`. O que a máquina **não** mede está na §7 do documento: "uma ideia por fala", elogio vazio, exclamação, repreensão. Esses você lê. |
-| **Flechas e casas** | `medir.mjs`: toda casa citada numa fala está desenhada naquele passo; todo desenho é citado; a etapa 2 tem seta em **todos** os nós; nenhuma seta liga a origem ao destino do lance certo; a etapa 3 tem **zero** desenho. |
-| **Tempo** | `medir.mjs`: a duração da aula assistida contra a faixa da régua; e o comentário **nunca pagina** — se paginou, a fala passou do teto. `Pausar` segura por 10 s. |
-| **Experiência** | `medir.mjs`: rolagem zero nas três telas e nas duas resoluções (página **e** blocos internos); botões acima do alvo mínimo, que muda com o que aponta. |
-| **Coerência da aula** | O treino jogado até o fim com o mouse; e a linha do roteiro é a linha da árvore (`lib/lesson/roteiro.test.ts`). As três etapas jogarem a MESMA posição já é recusa de arquivo (`lessonSchema`), então não se confere de novo aqui. |
+| **Flechas e casas** | `medir.mjs`: toda casa citada numa fala está desenhada naquele passo; todo desenho é citado; **todo nó do treino aponta o alvo — com seta ou com casa acesa**; nenhuma seta liga a origem ao destino do lance certo; a **prática real** tem **zero** desenho. O desenho do treino não se edita na árvore: ele mora em `objective.roteiro[…].treino`. |
+| **Tempo** | `medir.mjs`: o comentário **nunca pagina** — se paginou, a fala passou do teto —, e `Pausar` segura por 10 s. **A duração da aula assistida é observação (`·`), não veredito**, desde 9/9/2026: a faixa de 40 a 70 s saiu da régua a pedido do Doug (§3.1b da voz). O número continua impresso, e recusar uma aula de dois minutos é do olho. |
+| **Experiência** | `medir.mjs`: rolagem zero nas **quatro** telas e nas duas resoluções (página **e** blocos internos); botões acima do alvo mínimo, que muda com o que aponta; e a apresentação anda com `→` e volta com `←`. |
+| **Coerência da aula** | O treino jogado até o fim com o mouse; e a linha do roteiro é a linha da árvore (`lib/lesson/roteiro.test.ts`). As etapas, da aula em diante, jogarem a MESMA posição já é recusa de arquivo (`lessonSchema`), então não se confere de novo aqui. |
+| **O treino é derivado, e o gate o reproduz sem diff** | `npm run validate:content` **sem** `--write`. A etapa 3 é saída de `lib/lesson/derivar-treino.ts`: se o que está no arquivo não é o que o roteiro produz, sai `TREINO_DESATUALIZADO`. Se você editou a árvore à mão, o próximo `--write` apaga o que você escreveu — o conserto mora em `objective.roteiro[…].treino`. Para provar o contrato: apague `stages.guided`, rode `--refresh-cache --write`, e leia o `git diff`; ele tem de voltar campo por campo. |
 
 ---
 
@@ -114,9 +115,17 @@ que a régua está frouxa — e aí o que sobe é a régua, não o elogio.
 
 ## 7. Dívida conhecida, para não a redescobrir a cada aula
 
-Em **390×844 a página rola 76 px, nas três telas**, e isso é defeito do
+Em **390×844 a página rola 76 px, nas quatro telas**, e isso é defeito do
 orçamento de altura do cabeçalho, não da aula: `app/globals.css` reserva 50 px
 para ele e um título real gasta 128. Está medido na §7.5 de
-`docs/VOZ-DO-CURSO.md`. Enquanto ele não for consertado, `medir.mjs` vai
-reprovar três linhas de "experiência" no celular em **toda** aula. Não gaste a
-revisão nisso: cite a dívida e siga.
+`docs/VOZ-DO-CURSO.md`, e foi **isolado em 9/9/2026**: com a linha de abas em
+96 px e com ela em 44 px, a rolagem é a mesma. Enquanto ele não for consertado,
+`medir.mjs` vai reprovar **quatro** linhas de "experiência" no celular em toda
+aula. Não gaste a revisão nisso: cite a dívida e siga.
+
+**A segunda dívida é dos rótulos, e é decisão do Doug.** "Apresentação · Aula ·
+Treino · Prática real" **não cabe em uma linha em 390 px**: a trilha de abas vai
+de 44 para 96 px, e os 52 px que ela rouba do painel fazem o comentário da aula
+assistida **paginar** — o que a régua reprova. Medido em 9/9/2026, com rótulos
+curtos como controle. Os rótulos ficaram como o Doug os escolheu; encurtá-los é
+decisão dele, não de quem revisa.

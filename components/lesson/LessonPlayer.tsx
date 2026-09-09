@@ -5,6 +5,7 @@ import type { DrawShape } from "@lichess-org/chessground/draw";
 import Link from "next/link";
 import type { PacoteDeAula } from "@/lib/finais/conteudo";
 import type { TentativaDeAula } from "@/lib/finais/gravar";
+import { IntroStage } from "@/components/lesson/IntroStage";
 import { AVANCO, PARTIDA } from "@/lib/lesson/falas";
 import { masteryReport } from "@/lib/lesson/mastery";
 import {
@@ -276,6 +277,27 @@ export function LessonPlayer({
       </header>
 
       <section className="flex flex-1 flex-col">
+        {stage === "intro" && lesson.stages.intro && (
+          <IntroStage
+            stage={lesson.stages.intro}
+            // O diagrama do passo que não declara FEN própria é a posição da
+            // aula. Ela vem da etapa que a tem — a apresentação não aponta
+            // posição nenhuma, e é por isso que a trava da MESMA posição não a
+            // alcança (ver `lessonSchema`).
+            position={
+              positions[
+                (lesson.stages.objective ?? lesson.stages.guided ?? lesson.stages.practice)!
+                  .positionId
+              ]
+            }
+            orientation={lesson.orientation}
+            trilha={trilha}
+            rodape={
+              <StageFooter next={nextStage("intro")} onGo={goToStage} label={AVANCO.paraAula} />
+            }
+          />
+        )}
+
         {stage === "objective" && lesson.stages.objective && (
           <ObjectiveStage
             stage={lesson.stages.objective}

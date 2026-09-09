@@ -59,42 +59,70 @@ competência, não duas competências.
 
 ---
 
-## 2. Os três formatos
+## 2. Um formato só, quatro etapas
 
-> **2026-09-08 — a aula deixou de ter seis etapas.** O formato antigo era objetivo,
-> exemplo, guiada, sem-ajuda, prática e revisão, **em posições diferentes**. Hoje
-> são **três etapas numa posição só**, e as telas se chamam **"Aula · Treino ·
-> Valendo"** (`docs/VOZ-DO-CURSO.md`). Esta seção foi reescrita para não continuar
-> descrevendo um motor que não existe.
+> **9/9/2026 — os três formatos saíram.** Esta seção descrevia `C`/`c`/`L`, e a
+> tabela deles governava 49 linhas de `lib/finais/trilha.ts`. O motivo dos
+> formatos está logo abaixo, e ele deixou de valer.
 
-A etapa cara de escrever é a árvore: cada nó precisa de erro nomeado, resposta do
-defensor e lances gerados pela tablebase. Quarenta e nove aulas completas não
-cabem no prazo. Então:
+**O que havia aqui, e por que caiu.** A etapa cara de escrever era a árvore do
+treino: cada nó pedia FEN própria, resposta do defensor, ponteiro para o nó
+seguinte, erro nomeado e a lista de lances da tablebase. Escrever isso à mão
+custava 6 a 8 horas por aula, e o texto desta seção dizia: *"quarenta e nove
+aulas completas não cabem no prazo"*. Daí os três formatos — e daí 39 das 49
+aulas nascerem sem treino nenhum, com o aluno passando da aula assistida direto
+para a partida contra a máquina.
 
-| Formato | Marca | Etapas | Aprendida quando | Custo |
-|---|---|---|---|---|
-| **Completa** | `C` | objetivo, com ajuda e sem ajuda | três vitórias sem ajuda, em três dias diferentes e espaçados | 6–8 h |
-| **Curta** | `c` | objetivo e sem ajuda | três vitórias (ou empates seguros) sem ajuda, em três dias diferentes | ~2 h |
-| **Leitura** | `L` | só o objetivo | quando o aluno marcar que leu — não tem partida | ~1 h |
+**A árvore deixou de ser escrita.** Ela é **derivada** do roteiro da aula
+(`lib/lesson/derivar-treino.ts`). O projeto já exigia, em teste, que a linha da
+aula e a linha do treino fossem a mesma; sendo a mesma, escrevê-la duas vezes era
+transcrever à mão o que a máquina sabe derivar. O que sobra para o autor é o que
+nenhuma máquina sabe — a flecha do alvo, a dica, o texto do acerto, os erros com
+nome — e isso mora em `objective.roteiro[…].treino`, dentro do passo. A prova de
+que a derivação está certa é o `git diff` vazio da `N1-KPK`: apague
+`stages.guided`, rode `--write`, e ele volta campo por campo.
 
-Os textos desta tabela são os de `FORMATO` em `lib/finais/trilha.ts:106-124`, e é
-de lá que o aluno os lê no cartão. **"Aprendida" é o degrau 3 da escada de revisão**
-(`lib/finais/escada.ts`), não uma vitória permanente: o aluno de 11 anos que deu o
-mate de torre na terça não sabe dá-lo no sábado.
+### As quatro etapas
+
+| # | Etapa | Aba | O que o aluno faz |
+|---|---|---|---|
+| 1 | **Apresentação** | Apresentação | Lê o que está em jogo — se ganha, se empata, qual é a técnica — e **avança ele mesmo**, com a seta. É a única etapa que pode trocar de diagrama entre um passo e outro, em FEN livre. |
+| 2 | **Aula** | Aula | Assiste: o tabuleiro toca sozinho e o professor comenta, um passo por vez. |
+| 3 | **Treino** | Treino | Joga a mesma linha, com flecha ou casa acesa sempre na tela. Reproduz e lembra o que assistiu. **Derivada da etapa 2.** |
+| 4 | **Prática real** | Prática real | Joga a posição contra o Stockfish, nua. É o que conta para a escada. |
+
+**"Aprendida" é o degrau 3 da escada de revisão** (`lib/finais/escada.ts`), não
+uma vitória permanente: o aluno de 11 anos que deu o mate de torre na terça não
+sabe dá-lo no sábado. A aula **sem prática** fica fora da escada — o que a fecha
+é a declaração do aluno de que leu.
+
+### A ausência de etapa é exceção declarada, e não formato
+
+A aula publicada tem as quatro etapas, **ou diz por escrito qual falta e por
+quê**, no campo `etapasAusentes` do próprio arquivo. A diferença entre isso e um
+formato não é de rigor: um formato é uma gaveta em que a aula cai, e uma frase é
+alguém afirmando alguma coisa sobre aquela aula. Quem cobra são duas travas — a
+`superRefine` de `lib/lesson/schema.ts`, que roda também na build, e o caso
+*"toda aula publicada tem as quatro etapas, ou diz por escrito qual falta"* de
+`lib/finais/trilha.test.ts`, que lê `content/lessons/` de verdade.
 
 No motor isso custa quase nada: o `LessonPlayer` renderiza cada etapa só se ela
-existir na aula. O aluno vê o formato escrito no cartão da trilha ("aula curta"),
-para não procurar uma etapa que não existe.
+existir na aula.
 
 **A explicação mora dentro da aula**, e é isso que substitui o professor quando a
 criança estuda sozinha no celular na quarta à noite. **Como ela é escrita é régua,
 não gosto:** `docs/VOZ-DO-CURSO.md` fixa o professor Douglas falando com **um**
-aluno, fala ≤ 200 caracteres, frase ≤ 20 palavras, aula assistida de 40 a 70 s, as
-vinte palavras proibidas, e — desde 2026-09-09 — os **cinco movimentos de quem
-ensina** (§2.1), **como uma palavra técnica entra** (§4.1, mostra → nomeia → usa) e
-o **português de manual de adulto** que sai (§4.2). Os números daquele documento são
-lidos por `lib/lesson/voz.test.ts` e pela skill `/revisar-aula`; nenhum dos dois tem
-cópia própria, e por isso a régua não se repete aqui.
+aluno, fala ≤ 200 caracteres, frase ≤ 20 palavras, as vinte palavras proibidas,
+e — desde 9/9/2026 — os **cinco movimentos de quem ensina** (§2.1), **como uma
+palavra técnica entra** (§4.1, mostra → nomeia → usa) e o **português de manual de
+adulto** que sai (§4.2). Os números daquele documento são lidos por
+`lib/lesson/voz.test.ts` e pela skill `/revisar-aula`; nenhum dos dois tem cópia
+própria, e por isso a régua não se repete aqui.
+
+**A faixa de 40 a 70 s da aula assistida saiu da régua em 9/9/2026**, a pedido do
+Doug: a aula dura o que precisar. A duração continua impressa pela
+`/revisar-aula`, como observação. A perda está declarada na §3.1b daquele
+documento.
 
 ---
 
@@ -110,9 +138,12 @@ Consequências, ditas com todas as letras:
   aula 38 só entra se houver versão de 3 contra 2 no acervo;
 - finais de torre com muitos peões ficam fora — a "sétima fila" entra só na versão
   T+P vs T+P (6 peças);
-- **aula completa fica em ≤ 5 peças**, mais apertado que o resto: as árvores
-  precisam de DTM para medir o teto de lances, e a API só dá DTM até 5 peças. Aula
-  curta e leitura podem ir até 7.
+- **a aula cujo treino acaba em mate fica em ≤ 5 peças**, mais apertado que o
+  resto: a régua do teto de lances precisa de DTM, e a API só dá DTM até 5 peças.
+  A aula cujo treino acaba em promoção, em empate segurado ou em posição de
+  tablebase ganha vai até 7 — e a que declarar a ausência do treino também.
+  (Era "aula completa fica em ≤ 5 peças"; os formatos saíram em 9/9/2026, e a
+  pergunta que sobrou é sobre como a linha **acaba**, que é o que a régua mede.)
 
 A coluna `Peças` da lista abaixo é o total no tabuleiro na família canônica da
 aula, contando os dois reis.
@@ -155,8 +186,9 @@ o livro que a fundamenta no campo `objective.source`.
 
 O que **mudou depois**, em 2026-09-08, e não é detalhe: o teto de **2 posições por
 obra protegida por aula** (§12.7.1 do currículo) e a proibição de diagramas
-consecutivos **não seguram mais este módulo**. O teto é por aula, e no formato de
-três etapas uma aula é uma posição só — ele ficou sem sujeito (§1.2 do
+consecutivos **não seguram mais este módulo**. O teto é por aula, e da aula em
+diante uma aula é uma posição só (a apresentação desenha em FEN livre e não cita
+posição nenhuma) — ele ficou sem sujeito (§1.2 do
 `SOURCE-CORPUS`). E o livro-base do módulo, o de la Villa, está em **regime
 integral** desde 2026-09-08 por decisão do Doug — *"sem teto nenhum, quero usar o
 livro inteiro"* —, o que desliga para ele tanto o teto de citação quanto a
@@ -186,8 +218,6 @@ cobrado e inventário em `content/divida-de-licenca.md`.
 ---
 
 ## 5. A lista — 49 aulas
-
-**Legenda de formato:** `C` completa · `c` curta · `L` leitura.
 
 **Legenda de obras.** Domínio público: `CAP` Capablanca 1921 · `KH` Kling &
 Horwitz 1889 · `FRE` Freeborough 1891 · `WAL` Walker 1832 · `STA` Staunton 1848 ·
@@ -235,8 +265,9 @@ porque "tem posição" não quer dizer "pode virar aula":
 > **A distinção não é preciosismo: é o gate.** `scripts/validate-content.ts:1163-1175`
 > exige que a posição de uma aula saia **do mesmo livro** declarado como
 > livro-base, e que esse livro seja um dos cinco `didactic: true`
-> (`FONTE_DIDATICA_DIVERGE` + `FONTE_NAO_DIDATICA`). Como os **três** formatos têm
-> a etapa do objetivo, isso vale para toda aula, sem exceção.
+> (`FONTE_DIDATICA_DIVERGE` + `FONTE_NAO_DIDATICA`). Como toda aula tem a
+> etapa da aula assistida, isso vale para toda aula — e a exceção, se houver, é a
+> que declarar a ausência dela em `etapasAusentes` (§2).
 >
 > Medido em 2026-09-09: das 16 posições aprovadas, **14 são de domínio público** —
 > Freeborough, Capablanca, Staunton, Cook, Rogers — e nenhuma delas pode ser a
@@ -257,9 +288,13 @@ porque "tem posição" não quer dizer "pode virar aula":
 > — objetivo estático, com ajuda, sem ajuda —, com "aprendida" contada pela
 > escada de três passadas em dias distintos.
 >
-> Hoje o módulo tem **1 aula no disco**: a `N1-KPK`, piloto do formato novo e
-> do livro novo. A trilha é o plano, e o plano não mudou; o que mudou é contra
-> que livro e em que formato as outras 48 serão escritas.
+> Naquele dia o módulo ficou com **1 aula no disco**: a `N1-KPK`, piloto do
+> formato de três etapas e do livro novo. A trilha é o plano, e o plano não mudou;
+> o que mudou é contra que livro as outras seriam escritas.
+>
+> **Hoje são 3, e as etapas são quatro** — a apresentação entrou na frente em
+> 9/9/2026, e o treino passou a ser derivado da aula (§2). As três são `N1-KPK`,
+> `N0-LADDER` e `N0-MATING-MATERIAL`.
 >
 > As duas aulas do Silman (`N0-R-MATE` e `N0-MATING-MATERIAL`) saíram junto,
 > com as 17 posições de obra protegida. O **regime integral do Silman continua
@@ -284,14 +319,14 @@ porque "tem posição" não quer dizer "pode virar aula":
 
 ### Nível 1 — 6 aulas · FIDE até 800
 
-| # | F | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
-|---|---|---|---|---|---|---|---|
-| 1 | C | `N0-MATING-MATERIAL` | O que dá mate e o que não dá | 4 | SIL | **furo** — o estudo pula a seção, e a posição veio do Doug (§14.1) | — |
-| 2 | c | `N0-LADDER` | Mate da escada: duas torres, e dama e torre | 4 | SIL | `yk` 3–4 *The Staircase* · 7 (duas torres) | posição DP |
-| 3 | C | `N0-Q-MATE` | Mate de dama e rei: **a técnica do L** | 3 | SIL | `yk` 8 *Queen vs lone King* · 5–7 (mates de excesso) | posição DP |
-| 4 | C | `N0-R-MATE` | Mate de torre e rei: a caixa | 3 | SIL | `yk` 9–11 *King and Rook vs. Lone King* | posição DP |
-| 5 | c | `N0-STALEMATE` | Afogamento: como não empatar a partida ganha | 3–4 | SIL | `yk` 13 *Carful Stalemate!* | posição DP |
-| 6 | c | `N1-KING-ACTIVITY` | O rei é peça: use-o | 3–5 | SIL | `yk` 16 *Understanding the King* | posição DP |
+| # | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
+|---|---|---|---|---|---|---|
+| 1 | `N0-MATING-MATERIAL` | O que dá mate e o que não dá | 4 | SIL | **furo** — o estudo pula a seção, e a posição veio do Doug (§14.1) | — |
+| 2 | `N0-LADDER` | Mate da escada: duas torres, e dama e torre | 4 | SIL | `yk` 3–4 *The Staircase* · 7 (duas torres) | posição DP |
+| 3 | `N0-Q-MATE` | Mate de dama e rei: **a técnica do L** | 3 | SIL | `yk` 8 *Queen vs lone King* · 5–7 (mates de excesso) | posição DP |
+| 4 | `N0-R-MATE` | Mate de torre e rei: a caixa | 3 | SIL | `yk` 9–11 *King and Rook vs. Lone King* | posição DP |
+| 5 | `N0-STALEMATE` | Afogamento: como não empatar a partida ganha | 3–4 | SIL | `yk` 13 *Carful Stalemate!* | posição DP |
+| 6 | `N1-KING-ACTIVITY` | O rei é peça: use-o | 3–5 | SIL | `yk` 16 *Understanding the King* | posição DP |
 
 > **2026-09-09 — a ordem deste nível mudou, por decisão do Doug.** Era
 > dama · torre · escada · afogamento · o que dá mate · o rei é peça. A ordem
@@ -308,66 +343,66 @@ porque "tem posição" não quer dizer "pode virar aula":
 
 ### Nível 2 — 6 aulas · FIDE 800–1000
 
-| # | F | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
-|---|---|---|---|---|---|---|---|
-| 7 | C | `N1-SQUARE` | Regra do quadrado | 3 | DLV | ⚠ `TW` 20 *The square of the pawn* — **não está no estudo dos iniciantes** | posição |
-| 8 | c | `N1-DIRECT-OPPOSITION` | Oposição | 3 | SIL | `yk` 17, 19 *Opposition (basics)* — o 18 é diagrama (§12) | — |
-| 9 | c | `N1-KEY-SQUARES` | Casas-chave | 3 | DLV | `yk` 33 *Two Squares in Front Always Does it* · `TW` 3–5 | — |
-| 10 | C | `N1-KPK` | Rei e peão contra rei: o rei na frente do peão | 3 | DLV | `yk` 30–32 *King and Pawn Endgames* · `TW` 2, 6–8 | **aula** |
-| 11 | c | `N1-KPK-RANKS` | Peão na 6ª e na 7ª: quem joga decide | 3 | MK | `TW` 6 (peão na 6ª), 7–8 (mesma FEN, os dois lados a jogar) · `yk` 31–32 | — |
-| 12 | c | `N1-ROOK-PAWN` | Peão de torre: o empate do canto | 3 | MK | `yk` 20–21 *Rook-Pawns* · `TW` 16–18 *Stalemating the Stronger Side* | — |
+| # | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
+|---|---|---|---|---|---|---|
+| 7 | `N1-SQUARE` | Regra do quadrado | 3 | DLV | ⚠ `TW` 20 *The square of the pawn* — **não está no estudo dos iniciantes** | posição |
+| 8 | `N1-DIRECT-OPPOSITION` | Oposição | 3 | SIL | `yk` 17, 19 *Opposition (basics)* — o 18 é diagrama (§12) | — |
+| 9 | `N1-KEY-SQUARES` | Casas-chave | 3 | DLV | `yk` 33 *Two Squares in Front Always Does it* · `TW` 3–5 | — |
+| 10 | `N1-KPK` | Rei e peão contra rei: o rei na frente do peão | 3 | DLV | `yk` 30–32 *King and Pawn Endgames* · `TW` 2, 6–8 | **aula** |
+| 11 | `N1-KPK-RANKS` | Peão na 6ª e na 7ª: quem joga decide | 3 | MK | `TW` 6 (peão na 6ª), 7–8 (mesma FEN, os dois lados a jogar) · `yk` 31–32 | — |
+| 12 | `N1-ROOK-PAWN` | Peão de torre: o empate do canto | 3 | MK | `yk` 20–21 *Rook-Pawns* · `TW` 16–18 *Stalemating the Stronger Side* | — |
 
 ### Nível 3 — 6 aulas · FIDE 1000–1200
 
-| # | F | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
-|---|---|---|---|---|---|---|---|
-| 13 | c | `N2-KING-MANEUVER` | Oposição além do básico: a distante | 3 | SIL | `yk` 27 *Distant Opposition* — os 28 e 29 são diagrama (§12) | — |
-| 14 | c | `N4-B-VS-PAWNS` | Bispo contra peão | 4 | SEI | `yk` 38–39 *Bishop vs. Lone (rook) Pawn* | — |
-| 15 | c | `N4-N-VS-PAWNS` | Cavalo contra peão, inclusive o de torre na 7ª | 4 | DLV | `yk` 40–46 *Knight vs. Lone (Rook-)Pawn* — sete capítulos, um tópico | — |
-| 16 | C | `N3-R-VS-PAWN` | Torre contra peão: contar, cortar, aproximar | 4 | SIL | `yk` 47–49 *Rook vs. Lone Pawn* | — |
-| 17 | c | `N1-KING-VS-PAWNS` | Rei contra dois peões passados | 4 | PAN | `yk` 34 *Fox in the Chicken Coop* — 7 peças, no limite do envelope | — |
-| 18 | c | `N1-PAWNS-BLOCKADE` | Um peão segura dois: o bloqueio | 5 | SEI | `yk` 36 *The Deep Freeze* — o 35 é diagrama (§12) | — |
+| # | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
+|---|---|---|---|---|---|---|
+| 13 | `N2-KING-MANEUVER` | Oposição além do básico: a distante | 3 | SIL | `yk` 27 *Distant Opposition* — os 28 e 29 são diagrama (§12) | — |
+| 14 | `N4-B-VS-PAWNS` | Bispo contra peão | 4 | SEI | `yk` 38–39 *Bishop vs. Lone (rook) Pawn* | — |
+| 15 | `N4-N-VS-PAWNS` | Cavalo contra peão, inclusive o de torre na 7ª | 4 | DLV | `yk` 40–46 *Knight vs. Lone (Rook-)Pawn* — sete capítulos, um tópico | — |
+| 16 | `N3-R-VS-PAWN` | Torre contra peão: contar, cortar, aproximar | 4 | SIL | `yk` 47–49 *Rook vs. Lone Pawn* | — |
+| 17 | `N1-KING-VS-PAWNS` | Rei contra dois peões passados | 4 | PAN | `yk` 34 *Fox in the Chicken Coop* — 7 peças, no limite do envelope | — |
+| 18 | `N1-PAWNS-BLOCKADE` | Um peão segura dois: o bloqueio | 5 | SEI | `yk` 36 *The Deep Freeze* — o 35 é diagrama (§12) | — |
 
 ### Nível 4 — 16 aulas · FIDE 1200–1400
 
-| # | F | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
-|---|---|---|---|---|---|---|---|
-| 19 | C | `N3-LUCENA` | Lucena: a ponte | 5 | SIL | `TW` 33 *The Lucena Position* | — |
-| 20 | C | `N3-PHILIDOR` | Filidor: a defesa da terceira fila | 5 | DLV | `TW` 34 *The Philidor Position (Defense)* | — |
-| 21 | C | `N3-ROOK-BEHIND` | Torre atrás do peão passado | 5 | SIL | **furo** — `uu` 15–18 são a torre **na frente** do peão (§12) | — |
-| 22 | c | `N3-SIDE-CHECKS` | Lado curto, lado longo | 5 | DLV | ⚠ `uu` 22–27 *Rook and Pawn (on 5th/4th) vs. Rook* — o tema, sem o nome | — |
-| 23 | c | `N3-CUT-FILE` | Cortar o rei pela coluna | 5 | DLV | `TW` 38 *Trap The Enemy King Away From the Action* — o 39 tem 9 peças | — |
-| 24 | c | `N3-DEFENSIVE-EXCEPTIONS` | Defesa passiva: quando ela segura | 5 | SIL | `TW` 35–37 *The Philidor Position (Passive Rook)* | — |
-| 25 | c | `N3-R-VS-2P` | Torre contra dois peões | 5 | DLV | **furo** — acima da Classe A (§12) | — |
-| 26 | c | `N2-OUTSIDE-PASSER` | Peão passado distante | 6 | SIL | `TW` 21 *The Outside Passed Pawns* — o 22 tem 8 peças | — |
-| 27 | c | `N2-PROTECTED-PASSER` | Peão passado protegido | 6 | DLV | **furo** — os estudos só trazem o passado **distante** (§12) | — |
-| 28 | c | `N1-K2P-VS-K` | Rei e dois peões contra rei: ligados e dobrados | 4–5 | MK | `TW` 14–15 (dobrados) · `p9` 1–8 *Two Healthy Pawns* (ligados e separados) | — |
-| 29 | c | `N2-PAWN-RACES` | Corrida de peões: quem promove primeiro | 4–6 | PAN | ⚠ `uu` 2–7 *King and pawns: Strange Races* | — |
-| 30 | c | `N4-Q-VS-PAWN` | Dama contra peão na 7ª: quando ganha, e as exceções | 4 | SIL | `TW` 40–44 *Queen vs. King and Pawn on 6th/7th* | — |
-| 31 | c | `N4-WRONG-BISHOP` | Bispo errado com peão de torre | 4 | MK | `TW` 23–26 *Bishop and Wrong Colored Rook-Pawn* | — |
-| 32 | c | `N4-OPPOSITE-BISHOPS` | Bispos de cores opostas: a fortaleza com um peão a menos | 5 | SEI | `TW` 29 *Bishops of Opposite Colors* — os 30 e 31 têm 9 peças | — |
-| 33 | c | `N4-N-AND-ROOK-PAWN` | Cavalo e peão de torre na 6ª/7ª contra rei | 4 | PAN | `TW` 27–28 *Lone King vs. Knight and Rook-Pawn on the 6th* | — |
-| 34 | c | `N4-Q-VS-ROOK` | Dama contra torre: o básico | 4 | SEI | **furo** — o Silman diz por escrito que não cobre (§12) | — |
+| # | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
+|---|---|---|---|---|---|---|
+| 19 | `N3-LUCENA` | Lucena: a ponte | 5 | SIL | `TW` 33 *The Lucena Position* | — |
+| 20 | `N3-PHILIDOR` | Filidor: a defesa da terceira fila | 5 | DLV | `TW` 34 *The Philidor Position (Defense)* | — |
+| 21 | `N3-ROOK-BEHIND` | Torre atrás do peão passado | 5 | SIL | **furo** — `uu` 15–18 são a torre **na frente** do peão (§12) | — |
+| 22 | `N3-SIDE-CHECKS` | Lado curto, lado longo | 5 | DLV | ⚠ `uu` 22–27 *Rook and Pawn (on 5th/4th) vs. Rook* — o tema, sem o nome | — |
+| 23 | `N3-CUT-FILE` | Cortar o rei pela coluna | 5 | DLV | `TW` 38 *Trap The Enemy King Away From the Action* — o 39 tem 9 peças | — |
+| 24 | `N3-DEFENSIVE-EXCEPTIONS` | Defesa passiva: quando ela segura | 5 | SIL | `TW` 35–37 *The Philidor Position (Passive Rook)* | — |
+| 25 | `N3-R-VS-2P` | Torre contra dois peões | 5 | DLV | **furo** — acima da Classe A (§12) | — |
+| 26 | `N2-OUTSIDE-PASSER` | Peão passado distante | 6 | SIL | `TW` 21 *The Outside Passed Pawns* — o 22 tem 8 peças | — |
+| 27 | `N2-PROTECTED-PASSER` | Peão passado protegido | 6 | DLV | **furo** — os estudos só trazem o passado **distante** (§12) | — |
+| 28 | `N1-K2P-VS-K` | Rei e dois peões contra rei: ligados e dobrados | 4–5 | MK | `TW` 14–15 (dobrados) · `p9` 1–8 *Two Healthy Pawns* (ligados e separados) | — |
+| 29 | `N2-PAWN-RACES` | Corrida de peões: quem promove primeiro | 4–6 | PAN | ⚠ `uu` 2–7 *King and pawns: Strange Races* | — |
+| 30 | `N4-Q-VS-PAWN` | Dama contra peão na 7ª: quando ganha, e as exceções | 4 | SIL | `TW` 40–44 *Queen vs. King and Pawn on 6th/7th* | — |
+| 31 | `N4-WRONG-BISHOP` | Bispo errado com peão de torre | 4 | MK | `TW` 23–26 *Bishop and Wrong Colored Rook-Pawn* | — |
+| 32 | `N4-OPPOSITE-BISHOPS` | Bispos de cores opostas: a fortaleza com um peão a menos | 5 | SEI | `TW` 29 *Bishops of Opposite Colors* — os 30 e 31 têm 9 peças | — |
+| 33 | `N4-N-AND-ROOK-PAWN` | Cavalo e peão de torre na 6ª/7ª contra rei | 4 | PAN | `TW` 27–28 *Lone King vs. Knight and Rook-Pawn on the 6th* | — |
+| 34 | `N4-Q-VS-ROOK` | Dama contra torre: o básico | 4 | SEI | **furo** — o Silman diz por escrito que não cobre (§12) | — |
 
 ### Nível 5 — 15 aulas · FIDE 1400+
 
-| # | F | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
-|---|---|---|---|---|---|---|---|
-| 35 | c | `N2-TRIANGULATION` | Triangulação | 4–6 | SIL | **sem capítulo usável** — `p9` 11–12 têm 10 peças (§12) | — |
-| 36 | c | `N2-OUTFLANKING` | Flanquear o rei | 3 | SIL | **sem capítulo usável** — `p9` 13 é diagrama (§12) | — |
-| 37 | c | `N2-RESERVE-TEMPI` | Tempos de reserva | 6 | DLV | ⚠ `uu` 8–12 *King and Pawn vs. King and Pawn* | — |
-| 38 | c | `N2-BREAKTHROUGH` | Ruptura de peões | 7 | DLV | `p9` 9 *Tactical Bombs (2p vs. 2p)*, 6 peças — o 10 (4p vs. 3p) tem 9 | — |
-| 39 | c | `N2-RETI` | Manobra de Réti: o rei que faz duas coisas | 4 | SEI | ⚠ `uu` 6 — FEN `7K/8/k1P5/7p/8/8/8/8`, o autor nomeia Réti 1921 · 7 é o Adamson 1922 | — |
-| 40 | c | `N3-R-2P-VS-R` | Torre e dois peões ligados contra torre | 6 | SIL | `p9` 14 *Rook and Two Connected Pawns vs. Rook* | — |
-| 41 | c | `N3-SEVENTH-RANK` | A sétima fila | 6 | SIL | **sem capítulo usável** — `p9` 15–16 têm 15 e 10 peças (§12) | — |
-| 42 | c | `N5-VANCURA` | Defesa de Vancura | 5 | DLV | ⚠ `uu` 19–21 *The Vancura Position* — o 21 ensina quando ela **não** serve | — |
-| 43 | c | `N3-R-VS-RN-PAWNS` | Torre contra peão de torre e de bispo: as exceções | 4 | DLV | ⚠ `uu` 13–14 *"Lucena" with a Rook-Pawn* · 21, 27 (peão de cavalo) | — |
-| 44 | c | `N0-2B-MATE` | Dois bispos contra rei | 4 | SEI | `p9` 18 *Two Bishops vs. Lone King* | posição DP |
-| 45 | c | `N4-OPPOSITE-BISHOPS-2P` | Bispos de cores opostas com dois peões: quando ganha | 6 | DLV | `p9` 19, 21–23 *Two Pawns* · `uu` 28–31 | — |
-| 46 | c | `N4-SAME-BISHOPS` | Bispo e peão contra bispo da mesma cor | 5 | SIL | ⚠ `uu` 32–37 *Fortresses in Bishop-up Endgames* | — |
-| 47 | c | `N4-BISHOP-VS-KNIGHT` | Bispo contra cavalo com um peão | 5 | SEI | **furo** — acima da Classe A (§12) | — |
-| 48 | c | `N2-DOUBLED-ISOLATED` | Peões dobrados e isolados no final de peões | 5–6 | MK | `TW` 14–15 *Two Doubled Pawns vs. Lone King* — **só a metade dobrada** (§12) | — |
-| 49 | L | `N2-ZUGZWANG` | Zugzwang: a obrigação de mover | 4 | PAN | `TW` 9–10 *Trébuchet* | — |
+| # | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
+|---|---|---|---|---|---|---|
+| 35 | `N2-TRIANGULATION` | Triangulação | 4–6 | SIL | **sem capítulo usável** — `p9` 11–12 têm 10 peças (§12) | — |
+| 36 | `N2-OUTFLANKING` | Flanquear o rei | 3 | SIL | **sem capítulo usável** — `p9` 13 é diagrama (§12) | — |
+| 37 | `N2-RESERVE-TEMPI` | Tempos de reserva | 6 | DLV | ⚠ `uu` 8–12 *King and Pawn vs. King and Pawn* | — |
+| 38 | `N2-BREAKTHROUGH` | Ruptura de peões | 7 | DLV | `p9` 9 *Tactical Bombs (2p vs. 2p)*, 6 peças — o 10 (4p vs. 3p) tem 9 | — |
+| 39 | `N2-RETI` | Manobra de Réti: o rei que faz duas coisas | 4 | SEI | ⚠ `uu` 6 — FEN `7K/8/k1P5/7p/8/8/8/8`, o autor nomeia Réti 1921 · 7 é o Adamson 1922 | — |
+| 40 | `N3-R-2P-VS-R` | Torre e dois peões ligados contra torre | 6 | SIL | `p9` 14 *Rook and Two Connected Pawns vs. Rook* | — |
+| 41 | `N3-SEVENTH-RANK` | A sétima fila | 6 | SIL | **sem capítulo usável** — `p9` 15–16 têm 15 e 10 peças (§12) | — |
+| 42 | `N5-VANCURA` | Defesa de Vancura | 5 | DLV | ⚠ `uu` 19–21 *The Vancura Position* — o 21 ensina quando ela **não** serve | — |
+| 43 | `N3-R-VS-RN-PAWNS` | Torre contra peão de torre e de bispo: as exceções | 4 | DLV | ⚠ `uu` 13–14 *"Lucena" with a Rook-Pawn* · 21, 27 (peão de cavalo) | — |
+| 44 | `N0-2B-MATE` | Dois bispos contra rei | 4 | SEI | `p9` 18 *Two Bishops vs. Lone King* | posição DP |
+| 45 | `N4-OPPOSITE-BISHOPS-2P` | Bispos de cores opostas com dois peões: quando ganha | 6 | DLV | `p9` 19, 21–23 *Two Pawns* · `uu` 28–31 | — |
+| 46 | `N4-SAME-BISHOPS` | Bispo e peão contra bispo da mesma cor | 5 | SIL | ⚠ `uu` 32–37 *Fortresses in Bishop-up Endgames* | — |
+| 47 | `N4-BISHOP-VS-KNIGHT` | Bispo contra cavalo com um peão | 5 | SEI | **furo** — acima da Classe A (§12) | — |
+| 48 | `N2-DOUBLED-ISOLATED` | Peões dobrados e isolados no final de peões | 5–6 | MK | `TW` 14–15 *Two Doubled Pawns vs. Lone King* — **só a metade dobrada** (§12) | — |
+| 49 | `N2-ZUGZWANG` | Zugzwang: a obrigação de mover | 4 | PAN | `TW` 9–10 *Trébuchet* | — |
 
 **A conta, medida e não estimada:** das 49, **40 têm pelo menos um capítulo
 usável**; 6 são furo e 3 têm capítulo do tema sem nenhuma FEN aproveitável. **Nos
@@ -378,33 +413,43 @@ resolvida por fora do estudo (§14.1).
 
 ## 6. O que isto custa, e a alavanca se apertar
 
+> **9/9/2026 — a conta foi refeita, e ela caiu.** A tabela antiga somava por
+> formato: 8 completas a 6–8 h, 39 curtas a ~2 h, 1 leitura a ~1 h, **~135 h**. Os
+> formatos saíram (§2), e o que os fazia caros saiu junto: a árvore do treino
+> deixou de ser escrita e passou a ser derivada do roteiro.
+
 | | Quantidade | Horas por aula | Horas |
 |---|---|---|---|
-| Completas novas | 8 | 6–8 | ~56 |
-| Curtas | 39 | ~2 | ~78 |
-| Leituras | 1 | ~1 | ~1 |
-| **Total** | **48 novas** | | **~135 h** |
+| Aulas novas, quatro etapas | 46 | ~2–3 | ~115 |
+| **Total** | **46 novas** | | **~115 h** |
 
-São 48 e não 47 porque a `N0-MATING-MATERIAL` também foi apagada em 8/9; a única
-aula em disco é a `N1-KPK`.
+São 46 e não 48: as três aulas em disco são a `N1-KPK`, a `N0-LADDER` e a
+`N0-MATING-MATERIAL`, as três com as quatro etapas.
 
-**A conta mudou em 9/9:** a `N0-MATING-MATERIAL` saiu de leitura para completa
-(§14.1), e a lista passou de 8/39/2 para **9 completas, 39 curtas, 1 leitura** —
-das quais 8 completas ainda por escrever. A completa dela, porém, é a mais barata
-da lista: a árvore da etapa 2 começa numa posição com **dois lances legais**.
+**O que mudou na aritmética, e o que continua estimativa.** As 6–8 h da aula
+completa eram, quase inteiras, a árvore do treino: FEN por nó, resposta do
+defensor, ponteiro para o nó seguinte, lista da tablebase. Isso virou saída de
+`--write`. O que o autor escreve para a etapa 3 é um bloco `treino` por lance
+dele — dica, flecha do alvo, e os erros que tiverem nome.
 
-O ritmo vem medido do laboratório: 5,9 → 8,6 posições garimpadas por hora
-(`SOURCE-CORPUS.md §7`), e **esse número não vale mais para o garimpo** — com a
-FEN vindo pronta do cabeçalho do estudo, a parte cara passou a ser escrever o
-texto, não achar a posição. **O número que vale é o dos níveis 1 e 2**: doze aulas
-escritas no formato novo, medidas; até elas existirem, as ~2 h por aula curta são
-estimativa herdada de outro processo.
+**A medida do bloco 4, feita na `N0-LADDER` em 9/9/2026:** cinco nós de treino
+nasceram de **cinco blocos `treino`**, e o gate ficou verde na primeira rodada.
+Contra as 6–8 h que a mesma etapa custava à mão.
+
+Entra no lugar um custo que os formatos não tinham: a **apresentação**, de 2 a 6
+passos, com diagrama próprio quando o assunto pede. É barata — é texto e FEN, sem
+tablebase —, e as ~2–3 h por aula já a contam.
+
+**As ~2–3 h continuam sendo estimativa**, e o número que vale é o dos níveis 1 e
+2: doze aulas escritas no formato de quatro etapas, medidas. Três existem.
 
 Alavancas, em ordem, se o ritmo não sustentar:
 
-1. rebaixar aulas curtas do nível 5 para **leitura** (economiza ~1 h cada);
-2. reduzir completas de 8 para 6 — as aulas 16 (torre contra peão) e 21 (torre
-   atrás do peão) viram curtas (economiza ~12 h);
+1. **declarar a ausência da apresentação** nas aulas em que ela repetiria a aula
+   assistida (economiza pouco, mas é a única que não tira nada de jogável);
+2. **declarar a ausência do treino** nas aulas do nível 5 — o aluno vai da aula
+   direto para a partida, que era o formato `curta` inteiro. Cada uma dessas
+   declarações é uma frase no arquivo, e não uma gaveta;
 3. **fechar em 34 aulas** (níveis 1 a 4). O nível 5 inteiro fica para depois do
    torneio, e o site não sente: a trilha ganha aulas por acréscimo, nunca por
    reforma. É esta a alavanca que a §12 manda considerar primeiro — das nove aulas
@@ -567,14 +612,14 @@ Silman, que já está registrado e em regime integral (§13). A única mudança 
 
 | Risco | Aula | O que fazer |
 |---|---|---|
-| **Ritmo de autoria** | todas | É o risco dominante do plano inteiro, e continua sendo: 48 aulas a escrever, 1 escrita. Medido de verdade quando os níveis 1 e 2 fecharem, com doze aulas no formato novo; os níveis 4 e 5 não começam sem esse número na mesa. |
+| **Ritmo de autoria** | todas | É o risco dominante do plano inteiro, e continua sendo: **46 aulas a escrever, 3 escritas**. Ele baixou em 9/9/2026, quando o treino deixou de ser escrito à mão (§2 e §6), e ainda não foi remedido: o número que vale é o dos níveis 1 e 2 fechados, com doze aulas de quatro etapas; os níveis 4 e 5 não começam sem esse número na mesa. |
 | **Nove aulas sem posição usável** | §12 | Seis furos e três com capítulo fora do envelope. Oito das nove estão nos níveis 4 e 5, que já são pós-OLESC. A decisão é a alavanca 3 da §6. |
 | **A página impressa não é conferida** em nenhuma aula vinda de estudo | todas as novas | §13. É perda de proveniência, não de verdade xadrezística — a tablebase continua julgando o resultado sozinha. |
 | **FEN de terceiro, não do PDF** | todas as novas | O gate pega **resultado errado**, não posição certa do tema errado nem tema trocado. Toda posição vinda de estudo vai ao tabuleiro com o Doug antes de publicar. É a única verificação que máquina nenhuma faz aqui, e ela não mudou de natureza — mudou de origem. |
 | **Sete capítulos são diagrama didático**, não posição de partida | 8, 13, 18, 36 | O autor desenha com peão na 1ª fila ou dois reis brancos. A `finais:extrair` os marca `tipo: "diagrama"` e eles ficam fora da coluna da §5. Onde o tema depende deles, a posição é montada do zero — ver §12. |
 | **Ruptura de peões não cabe em 7 peças** na versão clássica (3×3 = 8) | 38 | **Resolvido, e não como estava previsto:** o `p9` 9 (*Tactical Bombs*, 2p vs. 2p) tem 6 peças e cabe. Conferir no tabuleiro se o tema dele é mesmo ruptura antes de fechar. |
 | **Freeborough carrega 46 das 49 aulas** no domínio público | as 16 posições já feitas | Continua valendo só para elas, que é onde o domínio público continua sendo a fonte. Para as novas, a concentração editorial mudou de nome: **quatro estudos do mesmo transcritor, sobre um livro só**. |
-| **Aula completa exige DTM (≤ 5 peças)** | 7, 10, 16, 19, 20, 21 | Todas as seis já estão em 3–5 peças. Conferido, e os capítulos do estudo confirmam: nenhum passa de 5. |
+| **Treino que acaba em mate exige DTM (≤ 5 peças)** | 7, 10, 16, 19, 20, 21 | Todas as seis já estão em 3–5 peças. Conferido, e os capítulos do estudo confirmam: nenhum passa de 5. Era "aula completa"; os formatos saíram em 9/9/2026, e o que a régua mede é como a linha **acaba**. |
 
 ---
 
@@ -590,9 +635,14 @@ Silman, que já está registrado e em regime integral (§13). A única mudança 
    aulas prontas e invalidaria posições e cache. O preço é a colisão de
    vocabulário: `N4-B-VS-PAWNS` é aula do **nível 3**, e o `N4` do id é a
    competência do currículo, não o nível da escada.
-4. **A terceira leitura virou curta.** O plano previa 3 leituras; a lista tinha 2,
-   porque nenhuma outra aula era genuinamente "não se joga". **Em 9/9 sobrou uma
-   só** (`N2-ZUGZWANG`): a `N0-MATING-MATERIAL` passou a ser jogada (§14.1).
+4. **A aula "de leitura" deixou de ser um formato e virou uma frase.** O plano
+   previa 3 leituras; a lista tinha 2, e em 9/9 de manhã sobrou uma só
+   (`N2-ZUGZWANG`), porque a `N0-MATING-MATERIAL` passou a ser jogada (§14.1). Na
+   tarde do mesmo dia os três formatos saíram inteiros (§2): a aula que não tem
+   partida agora **declara isso no próprio arquivo**, em `etapasAusentes.practice`,
+   com o motivo por escrito. Quem lê a ausência é `aprendeu`
+   (`lib/finais/trilha.ts`), e a pergunta que ela faz é uma só — a aula tem
+   prática? Sem prática, o que fecha a aula é a declaração do aluno de que leu.
 5. **A ordem dentro do nível 2 coloca o quadrado antes da oposição.** O de la Villa
    põe o quadrado como F1 e a oposição como F2–3, e o quadrado não tem pré-requisito
    nenhum — é a única ferramenta do nível que uma criança usa no mesmo dia em que
@@ -724,7 +774,7 @@ Duas coisas menores, para não serem descobertas depois:
 **Nada agora.** Oito das nove sem posição usável estão nos níveis 4 e 5, que a §1
 já declara pós-OLESC. Quando chegarem, as saídas estarão na mesa e são as mesmas
 para todas: escrevê-las pelo **de la Villa**, que também está em regime integral;
-garimpá-las no **domínio público** da §8; **rebaixá-las a leitura**; ou **cortá-las**,
+garimpá-las no **domínio público** da §8; **declarar que elas não têm prática** (`etapasAusentes`); ou **cortá-las**,
 que é a alavanca 3 da §6 e já estava prevista.
 
 A única que precisa de decisão para a meta da OLESC é a **ordem 1**, e ela já está
@@ -808,12 +858,20 @@ As réguas desta seção existem há tempo, espalhadas por quatro arquivos:
 obrigam na hora de escrever.** É o que esta seção faz. Nenhum número mora aqui —
 todos são lidos de onde vivem, e o ponteiro está ao lado de cada um.
 
-### 14.1 A aula é assistida: o objetivo é mostrado, não lido
+### 14.1 A aula é assistida — e antes dela, alguém diz o que está em jogo
 
-Decisão do Doug em 9/9, e é a que governa as 48: *"não pode mais ter texto para
+Decisão do Doug em 9/9, e é a que governa as 46: *"não pode mais ter texto para
 rolar, e o objetivo é mostrado, com o aluno assistindo a aula."*
 
-A etapa 1 **anda sozinha** (`components/lesson/ObjectiveStage.tsx:88`): ninguém
+**Antes dela vem a apresentação**, que é a etapa 1 desde 9/9/2026. Ela diz o que
+está em jogo — se ganha, se empata, qual é a técnica — em diagrama e fala curta, e
+é a **única etapa que o aluno faz andar**: não há relógio, há seta (`←` e `→`, ou
+os botões). São de 2 a 6 passos: um só é cartão de título, e sete cliques antes de
+a primeira peça andar é um manual com botão de "próximo". Ela pode trocar de
+diagrama entre um passo e outro, em **FEN livre** — é o que permite dizer "estas
+peças dão mate" num tabuleiro e "estas não dão" no seguinte.
+
+A etapa 2 **anda sozinha** (`components/lesson/ObjectiveStage.tsx:88`): ninguém
 clica para começar, e o relógio é o **texto**, não um cronômetro. Um passo é um
 quadro; passo **sem** `lance` repete a posição e apaga o realce do lance anterior
 (`lib/lesson/roteiro.ts:57-68`), que é como se aponta antes de mover. Os controles
@@ -827,17 +885,21 @@ anda sozinha o tabuleiro fica parado esperando um toque que o aluno não sabe qu
 deve dar. O teto de caracteres por fala da `VOZ-DO-CURSO §3` não é editorial — é
 o que cabe na caixa. Quem escreve mira o **celular**, que é onde a caixa é menor.
 
-### 14.2 O orçamento do roteiro é de caracteres, e ele tem piso
+### 14.2 O relógio da aula assistida continua; o julgamento dele saiu
 
-A conta está em `lib/lesson/roteiro.ts:124-146` e é curta: cada caractere custa a
-digitação mais a pausa de leitura, com um piso por passo. Somados, a faixa de
-duração que a `/revisar-aula` cobra vira **um orçamento de caracteres para o
-roteiro inteiro** — a `N1-KPK` gasta 787 deles em 13 passos.
+A conta está em `lib/lesson/roteiro.ts` e é curta: cada caractere custa a
+digitação mais a pausa de leitura, com um piso por passo. Ela decide **quanto
+tempo cada fala fica na tela** antes de a próxima entrar, e isso não mudou.
 
-**A armadilha é contra-intuitiva: fala curta demais reprova.** Não pelo teto, pelo
-**piso**: treze falas telegráficas não somam a duração mínima, porque o piso de
-tempo por passo não compensa. Escrever telegráfico não é escrever curto — é
-escrever legenda, e o piso existe para recusar legenda.
+**O que saiu em 9/9/2026 foi a faixa de 40 a 70 segundos**, a pedido do Doug: a
+aula dura o que precisar. A `/revisar-aula` continua imprimindo a duração, agora
+com `·`, como observação — a `N1-KPK` sai em **43,1 s** em 13 passos.
+
+**A perda está declarada, e é dupla.** O piso protegia contra a fala telegráfica
+— treze falas de legenda não somavam a duração mínima, e a régua as recusava. O
+teto protegia contra a aula longa demais para uma criança de 12 anos diante de um
+tabuleiro que ela ainda não pode tocar. As duas passam a ser de quem lê. O teto de
+**caracteres por fala** (§3.1 da voz) continua, e continua sendo máquina.
 
 ### 14.3 Casa citada é casa desenhada — e vice-versa
 
@@ -846,9 +908,17 @@ desenho naquele passo. É a §5.3 da voz virada máquina, e ela casa com o segun
 dos cinco movimentos (§2.1 de lá): *diga a casa, não a ideia*.
 
 Mais três regras de desenho que a revisão cobra: os desenhos **trocam** a cada
-passo e não se acumulam; a etapa 2 tem seta em **todos** os nós, e **nenhuma seta
-pode ligar a origem ao destino do lance certo** — seria meio lance entregue; e a
-etapa 3 tem **zero** desenho, porque ali o juiz é o resultado.
+passo e não se acumulam; **todo nó do treino aponta o alvo — com seta ou com casa
+acesa**, e **nenhuma seta pode ligar a origem ao destino do lance certo**, que
+seria meio lance entregue; e a **prática real** tem **zero** desenho, porque ali o
+juiz é o resultado.
+
+**O desenho do treino não se escreve no treino.** A etapa 3 é derivada, e o que
+ela desenha vem de `objective.roteiro[…].treino.arrows` e `.highlights` — o bloco
+que mora no passo da aula. E ele **não herda** o desenho do próprio passo: o do
+passo acompanha o lance *acontecendo*, o do nó aponta o alvo *antes* de o aluno
+mexer. Na `N1-KPK` a seta do primeiro nó é `e7→c8`, que é a ideia do passo que só
+aponta, e não a do passo seguinte, que carrega `c6c7`.
 
 ### 14.4 O aviso não vem antes do erro — e isso decide o formato
 
@@ -857,12 +927,17 @@ a criança decora e não usa; o mesmo texto, dito **na hora em que ela erra**, v
 comportamento. Por isso os perigos vivem em `errors`, disparados pelo nó da
 árvore.
 
-**A consequência é de formato, e vale para metade da lista.** Aula cujo conteúdo
-*é* um perigo — "não vá para o canto", "não empurre o peão de torre", "não troque
-para o bispo errado" — precisa da **etapa 2**, que é onde o erro é nomeado no
-instante em que acontece. Uma aula curta só tem o roteiro para dizer isso, e aí
-ela diz antes, que é o que a régua recusa. **Aula de perigo tende a ser completa**,
-e a `N0-MATING-MATERIAL` é o primeiro caso.
+**A consequência era de formato, e deixou de ser.** Aula cujo conteúdo *é* um
+perigo — "não vá para o canto", "não empurre o peão de torre", "não troque para o
+bispo errado" — precisa do **treino**, que é onde o erro é nomeado no instante em
+que acontece. No formato antigo isso obrigava a aula a ser `completa`, e 39 das 49
+não podiam pagar por isso. Hoje o treino é derivado, e **toda aula com aula tem
+treino**: a regra deixou de ser um custo e virou o padrão.
+
+O que ela ainda decide é onde o perigo **não** vai: nunca numa fala da aula
+assistida dita antes do lance. Ele vai em `errors`, disparado pelo nó — e o nó o
+recebe de `objective.roteiro[…].treino.erros`. A `N0-MATING-MATERIAL` é o caso
+que deu nome à regra, e o §14.5 conta o resto.
 
 ### 14.5 A `N0-MATING-MATERIAL`, e por que ela é a exceção do módulo
 
@@ -876,11 +951,29 @@ profundidade 65, e a Syzygy quando virar arquivo. O preto está **em xeque** e t
 binária em que o canto perde na hora, e é por isso que a árvore da etapa 2 é a
 mais barata da lista — o primeiro nó tem dois lances.
 
-**A inversão que esta aula faz, registrada para ninguém "consertá-la":** nas
-outras aulas o roteiro mostra o método e a árvore o cobra. Aqui **o roteiro joga
-a armadilha** — `Kh8`, `Nf7#` — e a árvore cobra evitá-la. As duas linhas divergem
-de propósito: é o que "mostra antes de nomear" significa quando o que se ensina é
-um erro.
+**A inversão que esta aula fazia, e por que ela caiu em 9/9/2026.** O roteiro
+dela **jogava a armadilha** — `Kh8`, `Nf7#` — enquanto a árvore cobrava evitá-la.
+As duas linhas divergiam de propósito, e isto estava escrito aqui como decisão a
+não "consertar".
+
+Ela caiu porque o contrato mudou: a etapa 3 é **derivada** da etapa 2
+(`lib/lesson/derivar-treino.ts`), e duas linhas divergentes deixaram de poder
+coexistir — a derivação produziria um treino que pede ao aluno o lance que perde.
+O projeto, aliás, já exigia em teste que as duas fossem a mesma linha; esta aula
+era a exceção que ninguém tinha medido.
+
+**Para onde foi a armadilha.** Para a **apresentação**, que é onde ela sempre
+coube melhor: um diagrama com a posição depois de `Kh8 Nf7#`, em FEN livre,
+dizendo *"só existe um jeito de dois cavalos darem mate: o rei entrar sozinho num
+canto. Assim."*. Ninguém joga naquele diagrama, e é exatamente o ponto — o aluno
+vê o mate sem tê-lo jogado, e depois a aula assistida joga `Kf8`, que é a linha
+que ele vai reproduzir no treino.
+
+**O que a aula ganhou de quebra.** A apresentação leva também as três falas que
+estavam espremidas no fim do roteiro antigo — *"uma dama sozinha dá mate, uma
+torre dá, dois bispos também"* e *"um bispo sozinho não dá, um cavalo sozinho
+não dá"* —, agora em dois diagramas com as peças na mesa, em vez de lidas depois
+do mate sobre um tabuleiro que não as mostrava.
 
 **A honestidade que a aula exige:** dois cavalos **não forçam** mate — a tablebase
 diz empate em toda posição, inclusive nesta. O mate existe só quando o defensor
@@ -912,14 +1005,21 @@ campo é reescrever o corpus; o comentário do schema é que precisa dizer isto.
 
 ### 14.6 Toda aula fecha na `/revisar-aula`, sem exceção
 
-`/revisar-aula <ID>` roda os quatro gates, sobe o site, entra como `alunoteste` e
-mede nas duas resoluções. **É ela que mede o que o `npm test` não mede** — e isso
-não é redundância, é o único caminho: `lib/lesson/roteiro.test.ts` está preso à
-`N1-KPK`, então a duração das 48 aulas novas **não roda** no `node --test`.
+`/revisar-aula <ID>` roda os gates, sobe o site, entra como `alunoteste` e mede
+**as quatro telas** nas duas resoluções. **É ela que mede o que o `npm test` não
+mede** — e isso não é redundância, é o único caminho: `lib/lesson/roteiro.test.ts`
+está preso à `N1-KPK`, então nada das 46 aulas novas **roda** no `node --test`.
 
-Três coisas dela que valem antes de escrever: a **dívida conhecida** dos 76 px de
-rolagem no celular, que é do cabeçalho e vai reprovar três linhas em toda aula —
-citar e seguir; **nenhuma imagem entra na conversa**, e se for preciso ver, é uma
-folha de contato lida por um subagente; e a instrução que fecha a skill —
-***"se a aula passar limpa, desconfie e diga isso"***, porque quem escreve e quem
-revisa são o mesmo agente.
+Um quesito novo desde 9/9/2026: **o treino é derivado, e o gate o reproduz sem
+diff**. É o `npm run validate:content` sem `--write` que responde — se a etapa 3
+do arquivo não é a que o roteiro produz, sai `TREINO_DESATUALIZADO`. Editar a
+árvore à mão é trabalho que o próximo `--write` apaga.
+
+Quatro coisas dela que valem antes de escrever: a **dívida conhecida** dos 76 px
+de rolagem no celular, que é do cabeçalho e vai reprovar **quatro** linhas em toda
+aula — citar e seguir; a **duração da aula assistida saiu como veredito** e é
+observação (`·`), então uma aula de dois minutos passa e é do olho recusá-la;
+**nenhuma imagem entra na conversa**, e se for preciso ver, é uma folha de contato
+lida por um subagente; e a instrução que fecha a skill — ***"se a aula passar
+limpa, desconfie e diga isso"***, porque quem escreve e quem revisa são o mesmo
+agente.

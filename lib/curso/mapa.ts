@@ -60,6 +60,12 @@ export type ProgressoParaOMapa = {
   readonly finais: ReadonlyMap<string, ProgressoDaAula>;
   /** Os ids das aulas com JSON publicado, de `aulasPublicadas` — não as abertas. */
   readonly aulasPublicadas: ReadonlySet<string>;
+  /**
+   * Os ids das aulas que têm a etapa 4, de `aulasComPratica`. É o que decide o
+   * que "aprendida" quer dizer nelas — substituiu a coluna `formato` da trilha,
+   * apagada em 9/9/2026 com os três formatos.
+   */
+  readonly aulasComPratica: ReadonlySet<string>;
   /** A semana do preparatório em que estamos, de `semanaAtual()`. */
   readonly semana: Semana;
 };
@@ -119,7 +125,7 @@ export function montarMapa(p: ProgressoParaOMapa): Map<string, ModuloDoNivel[]> 
         nome: aula.nome,
         href: `/finais/${aula.id}`,
         total: 1,
-        feitos: progresso && aprendeu(aula.formato, progresso) ? 1 : 0,
+        feitos: progresso && aprendeu(p.aulasComPratica.has(aula.id), progresso) ? 1 : 0,
         situacao: situacao(aula.sabado, p.semana, p.aulasPublicadas.has(aula.id)),
         sabado: aula.sabado,
       });

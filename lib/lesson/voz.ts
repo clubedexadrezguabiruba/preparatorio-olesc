@@ -29,8 +29,6 @@ export type Regua = {
   fraseMaxPalavras: number;
   /** Palavras de bastidor que não chegam ao aluno. Comparadas sem acento. */
   proibidas: string[];
-  /** A faixa de duração da aula assistida, em segundos: `[piso, teto]`. */
-  roteiroSegundos: [number, number];
   /** Alvo mínimo onde há dedo, em px. O mínimo AAA da WCAG 2.5.5. */
   alvoDeToquePx: number;
   /** Alvo mínimo onde há ponteiro, em px. O mínimo AA da WCAG 2.5.8. */
@@ -175,6 +173,16 @@ export function falasDaAula(lesson: Lesson): Fala[] {
   if (lesson.generatedTemplates) {
     for (const [chave, texto] of Object.entries(lesson.generatedTemplates)) {
       falas.push({ onde: `${id} / generatedTemplates.${chave}`, texto, tipo: "fala" });
+    }
+  }
+
+  // A apresentação é a primeira coisa que o aluno lê na aula, e ficaria fora da
+  // régua se não fosse colhida aqui — a lista é explícita de propósito (ver o
+  // cabeçalho desta função), e campo novo no schema entra nela à mão.
+  const intro = lesson.stages.intro;
+  if (intro) {
+    for (const [i, passo] of intro.passos.entries()) {
+      falas.push({ onde: `${id} / intro.passos[${i}].fala`, texto: passo.fala, tipo: "fala" });
     }
   }
 

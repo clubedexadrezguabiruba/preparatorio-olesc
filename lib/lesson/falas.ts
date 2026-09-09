@@ -35,22 +35,42 @@ import type { Fala } from "./voz.ts";
  */
 
 /* ------------------------------------------------------------------ *
- * As três etapas, e o caminho entre elas
+ * As quatro etapas, e o caminho entre elas
  * ------------------------------------------------------------------ */
 
+/**
+ * Os rótulos das abas. **São os do Doug, escolhidos em 9/9/2026**, e a
+ * apresentação entrou na frente da aula.
+ *
+ * "Prática real" substituiu "Valendo" na quarta: com quatro abas na mesma
+ * linha, "Valendo" ao lado de "Treino" ficou ambíguo — as duas são jogadas, e o
+ * que muda é que uma tem ajuda e a outra é a partida de verdade.
+ */
 export const TRILHA = {
+  intro: "Apresentação",
   objective: "Aula",
   guided: "Treino",
-  practice: "Valendo",
+  practice: "Prática real",
 } as const;
 
 export const AVANCO = {
+  /** Do fim da apresentação para a aula assistida. */
+  paraAula: "Ver a técnica",
   /** Do fim da aula assistida para o treino. */
   paraTreino: "Agora é a sua vez",
   /** Do fim do treino para a partida que vale. */
   paraValendo: "Jogar valendo",
   /** Quando não há próxima etapa nomeada. */
   padrao: "Continuar",
+} as const;
+
+/**
+ * Os dois controles da apresentação. Ela é a única etapa que o **aluno** faz
+ * andar: não há relógio, há seta.
+ */
+export const APRESENTACAO = {
+  voltar: "Voltar",
+  continuar: "Continuar",
 } as const;
 
 /* ------------------------------------------------------------------ *
@@ -179,6 +199,11 @@ export const TODAS_AS_FALAS: Fala[] = [
   ...Object.entries(AVANCO).map(([k, texto]) => ({ onde: `AVANCO.${k}`, texto, tipo: "rotulo" as const })),
   ...Object.entries(AULA_ASSISTIDA).map(([k, texto]) => ({
     onde: `AULA_ASSISTIDA.${k}`,
+    texto,
+    tipo: "rotulo" as const,
+  })),
+  ...Object.entries(APRESENTACAO).map(([k, texto]) => ({
+    onde: `APRESENTACAO.${k}`,
     texto,
     tipo: "rotulo" as const,
   })),

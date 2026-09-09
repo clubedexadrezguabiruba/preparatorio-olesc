@@ -111,7 +111,6 @@ nenhum:** quem precisa deles os lê daqui.
 {
   "falaMaxCaracteres": 200,
   "fraseMaxPalavras": 20,
-  "roteiroSegundos": [40, 70],
   "alvoDeToquePx": 44,
   "alvoDePonteiroPx": 24,
   "proibidas": [
@@ -161,15 +160,27 @@ deve dar.
 **A mediana do repertório é 276 caracteres**, e por isso este número vai brigar
 com o que já está escrito. Ver a §7.
 
-### 3.1b A aula assistida dura de 40 a 70 segundos
+### 3.1b A aula assistida dura o que precisar
 
-O piso é o que separa uma aula de uma legenda: abaixo de 40 s o roteiro não
-mostrou a técnica, mostrou o fim dela. O teto é atenção de criança de 12 anos
-diante de um tabuleiro que ela ainda não pode tocar — passou de 70 s, ela toca.
+**A faixa de 40 a 70 segundos saiu da régua em 9/9/2026, a pedido do Doug.** Ela
+era um veredito: a aula que durasse menos ou mais era reprovada pela
+`/revisar-aula` e pelo `lib/lesson/roteiro.test.ts`. Nenhum dos dois a cobra
+mais, e `roteiroSegundos` saiu do bloco de números acima.
 
-A conta é de `lib/lesson/roteiro.ts`: digitação (7 ms/caractere) mais a pausa de
-leitura de cada passo, que é 45 ms/caractere com piso de 1 s, mais o `espera`
-que o autor pedir. A `N1-KPK` sai em **47 s**.
+**A conta continua, e continua impressa.** Ela é de `lib/lesson/roteiro.ts` —
+digitação (7 ms/caractere) mais a pausa de leitura de cada passo, que é
+45 ms/caractere com piso de 1 s, mais o `espera` que o autor pedir — e ela é o
+relógio da **tela**: é ela que decide quanto tempo cada fala fica lá antes de a
+próxima entrar. Isso não mudou e não pode mudar. O que saiu foi o julgamento
+sobre o total. A `/revisar-aula` imprime a duração com `·`, como observação.
+
+**O que se perdeu, escrito para não ser descoberto depois.** O piso protegia
+contra a fala telegráfica — o roteiro que mostra o fim da técnica em vez da
+técnica. O teto protegia contra a aula longa demais para a atenção de uma
+criança de 12 anos diante de um tabuleiro que ela ainda não pode tocar. As duas
+proteções passam a ser de quem lê.
+
+### 3.1c Os alvos de toque
 
 E os alvos: **44 px onde há dedo** (o mínimo AAA da WCAG 2.5.5) e **24 px onde
 há ponteiro** (o mínimo AA da 2.5.8). Os dois já valem no motor de aula — o
@@ -212,14 +223,23 @@ vez. É jargão de **professor e de desenvolvedor** que vazou para a tela.
 | "o teto de N lances acabou" | "acabaram os N lances" |
 | "Etapa concluída." | "Pronto." |
 | "critério de domínio", "passada", "degrau" | não aparecem ao aluno |
-| "Objetivo / Com ajuda / Sem ajuda" | **"Aula / Treino / Valendo"** |
+| "Objetivo / Com ajuda / Sem ajuda" | **"Apresentação / Aula / Treino / Prática real"** |
 | "A técnica, em 3 passos" | (some — vira a fala do professor) |
 | "Mostrando: …" | (some) |
 
-**"Aula · treino · valendo" não é invenção.** É a mesma família que o módulo de
-aberturas já usa nas três abas dele — "seta · treino · valendo",
-`TrilhaDeEtapas.tsx`. O site passa a ter um vocabulário só, e o aluno que sai do
-repertório e entra nos finais reconhece onde está.
+**"Aula · treino" não é invenção.** É a mesma família que o módulo de aberturas
+já usa nas três abas dele — "seta · treino · valendo", `TrilhaDeEtapas.tsx`. O
+site tem um vocabulário só, e o aluno que sai do repertório e entra nos finais
+reconhece onde está.
+
+**Os quatro rótulos são do Doug, de 9/9/2026, e o preço deles está medido.** Eram
+três — "Aula · Treino · Valendo" —, e a apresentação entrou na frente. Em 390 px a
+linha de abas **quebra em duas** e passa de 44 para **96 px de altura**; esses
+52 px vêm do painel, e o comentário da aula assistida passa a **paginar**, que é
+justamente o que o desenho dela proíbe. Medido no bloco 6 de 9/9/2026, com os
+mesmos rótulos encurtados para isolar a causa: com "Início · Aula · Treino ·
+Valendo" a linha volta a 44 px e o comentário não pagina. Os rótulos ficaram como
+o Doug os escolheu; a decisão de encurtá-los é dele, e não de quem mediu.
 
 ### 4.1 Como uma palavra de xadrez entra: mostra, nomeia, usa
 
@@ -329,28 +349,40 @@ andar sozinha e chegava ao quiz sem ter movido uma peça"*. Está certo, e
 continua valendo lá.
 
 **O que muda aqui:** naquele desenho, assistir era o **único** contato antes da
-prova. Numa aula de finais é a primeira de três telas, e as duas seguintes são
-jogadas com a mão — a do meio com flecha e fala, a última nua, contra a máquina.
+prova. Numa aula de finais é a segunda de **quatro** telas — a primeira é a
+apresentação, que nem tabuleiro jogável tem —, e as duas seguintes são jogadas
+com a mão: o treino com flecha e fala, a prática real nua, contra a máquina.
 A demonstração não substitui o treino: ela é o que faltava **antes** dele, para
 o aluno de 600 pontos que a `HANDOFF` §3 mediu.
 
-### 6.2 "A dica é pedida, não concedida" — revogado na Etapa 2
+### 6.2 "A dica é pedida, não concedida" — revogado no Treino
 
 É a §A4 do `docs/REFERENCIA-MOVE-TRAINER.md`, medida no chess.com, e foi ela
-que em **8/9/2026** mandou as casas acesas da Etapa 2 para trás de um botão.
+que em **8/9/2026** mandou as casas acesas do treino para trás de um botão.
 
 **O que muda aqui:** o chess.com dá a dica sob demanda a um **adulto que
-escolheu treinar**. A nossa Etapa 2 é aquecimento declarado — não grava, não
+escolheu treinar**. O nosso treino é aquecimento declarado — não grava, não
 conta na escada —, e aquecimento em que a criança trava não aquece nada. Então
-a flecha é obrigatória e está sempre na tela, e a dica em texto deixa de ser
+a ajuda é obrigatória e está sempre na tela, e a dica em texto deixa de ser
 botão e vira a fala do professor.
 
-E a flecha **aponta o alvo, nunca o lance**: a casa que importa, a intenção do
-rei preto. Casa de destino do lance certo é meio lance entregue, e isso é outra
-coisa — é responder pelo aluno.
+**Flecha *ou* casa acesa** (desde 9/9/2026): as duas apontam o alvo, e o nó que
+só precisa dizer "olhe esta casa" não deve inventar uma origem para a seta sair
+de algum lugar. Uma das duas basta, e é o que a `superRefine` de
+`lib/lesson/schema.ts` cobra da aula publicada.
 
-Quem afere continua sendo a Etapa 3, e ela continua nua: sem seta, sem casa
-acesa, sem dica.
+E ela **aponta o alvo, nunca o lance**: a casa que importa, a intenção do rei
+preto. Casa de destino do lance certo é meio lance entregue, e isso é outra coisa
+— é responder pelo aluno.
+
+**Onde isso se escreve mudou, e é a parte que se esquece.** O treino é derivado
+da aula (`lib/lesson/derivar-treino.ts`), então a flecha dele **não** se escreve
+na árvore: ela mora em `objective.roteiro[…].treino.arrows` — ou `.highlights` —,
+dentro do passo. E ela não é o desenho daquele passo: o do passo acompanha o
+lance *acontecendo*, o do nó aponta o alvo *antes* de o aluno mexer.
+
+Quem afere continua sendo a **prática real**, e ela continua nua: sem seta, sem
+casa acesa, sem dica.
 
 ---
 
@@ -378,21 +410,24 @@ acesa, sem dica.
    os mede lendo a tela; o `voz.test.ts`, não. Uma lista de palavras não
    distingue "Dama!" de "Muito bem!", e a segunda é a que importa.
 5. **A regra "nunca rolagem" (§5.1) não vale hoje no celular, e o número está
-   medido.** Em 390×844 a página da aula rola **76 px**, nas três telas. A conta:
+   medido.** Em 390×844 a página da aula rola **76 px**, nas quatro telas. A conta:
    cabeçalho 128 + palco 748 + vão 12 + respiro 32 = 920, contra 844 de tela.
    O palco está certo — quem estoura é o **cabeçalho**, que o
    `app/globals.css` orçou em 50 px ("no celular ele quebra em duas linhas") e
    que mede 128 com um título real: link de voltar (16) + título em três linhas
    (64) + botão de som numa linha própria (44).
 
-   É defeito **anterior** a este trabalho, e a aritmética prova: nenhum dos
-   quatro números vem da etapa 1 nova, e ele se repete igual na etapa 3, que
-   este trabalho não tocou no layout. Consertá-lo é retirar o orçamento fixo do
+   É defeito **anterior** a este trabalho, e há duas provas. A aritmética:
+   nenhum dos quatro números vem de etapa nenhuma, e ele se repete igual na
+   prática real, cujo layout não foi tocado. E a medição de 9/9/2026, que o
+   isolou: com a linha de abas em 96 px (quatro rótulos longos) e com ela em
+   44 px (rótulos curtos), a rolagem é a **mesma, 76 px** — se viesse das abas,
+   os dois números seriam diferentes. Consertá-lo é retirar o orçamento fixo do
    cabeçalho — ou torná-lo elástico, o que pede `min-height: 0` em três níveis e
    `height` no `body` da raiz — e isso é medir de novo o palco inteiro, no
    celular e no desktop. Ficou de fora aqui de propósito: fazê-lo de olho, no
    meio de outra tarefa, é como um sistema medido se quebra. Em 1366×768 a
-   rolagem é **0 px** nas três telas.
+   rolagem é **0 px** nas quatro telas.
 
 6. **O teto de 200 caracteres foi escolhido, não medido.** Ele é o corte que faz
    caber uma fala por tela sem paginar, deduzido da caixa de comentário — não
@@ -411,3 +446,26 @@ acesa, sem dica.
    que o teste varre — e nenhuma aparecia. **Não** foram conferidas contra as
    telas de aberturas, tática e painel, que a dívida 1 já declara fora da
    varredura. Quando a dívida 1 for paga, é bem provável que a §4.2 morda lá.
+
+9. **A proveniência dos diagramas da apresentação não tem defesa mecânica**
+   (9/9/2026). A etapa 1 desenha em **FEN livre**, escrita no próprio arquivo da
+   aula: ela não vira `content/positions/`, não tem os 9 campos de proveniência e
+   não passa pela tablebase. É deliberado — o passo que diz "estas peças dão
+   mate" precisa mostrar peças que não estão na posição da aula, às vezes mais de
+   sete delas, e ninguém joga ali.
+
+   **A regra que fecha o buraco é escrita, e é esta: se um diagrama de
+   apresentação vier de um LIVRO, ele deixa de ser ilustração e vira posição** —
+   arquivo em `content/positions/`, com os 9 campos, como qualquer outra. Um
+   diagrama montado do zero para ilustrar material continua sendo ilustração.
+
+   O que a máquina cobra é só o que ela sabe: `INTRO_FEN_ILEGAL` (o mesmo
+   `fenProblem` do `checkPosition` — reis colados, xeque impossível) e
+   `INTRO_FEN_REDUNDANTE` (repetir a FEN da aula, que se diz omitindo o campo).
+   Nenhum dos dois olha de onde o diagrama veio. Quem olha é o Doug.
+
+10. **A faixa de 40 a 70 s da aula assistida saiu da régua** (9/9/2026, §3.1b).
+    Com ela saíram duas proteções: o **piso**, contra a fala telegráfica, e o
+    **teto**, contra a aula longa demais para a atenção de uma criança de 12
+    anos. A duração continua impressa pela `/revisar-aula`, com `·`. As duas
+    proteções passam a ser de quem lê.

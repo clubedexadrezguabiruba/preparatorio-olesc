@@ -36,6 +36,7 @@ import {
   generateAlternatives,
   GENERATED_ID,
 } from "./branches.ts";
+import { derivarTreino, esqueletoDoTreino } from "../lib/lesson/derivar-treino.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
 import { validarNotas } from "../lib/repertorio/notas.ts";
 import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
@@ -312,7 +313,33 @@ for (const { file, destino, rascunho } of [
     fail("JSON_INVALIDO", where, error instanceof Error ? error.message : String(error));
     continue;
   }
-  const parsed = lessonSchema.safeParse(raw);
+  let parsed = lessonSchema.safeParse(raw);
+  /*
+   * **A saída não é entrada.**
+   *
+   * `stages.guided` é gerado (ver `guidedStageSchema`), e um gerado torto
+   * trancava a porta por onde ele se conserta: o arquivo não passava no schema,
+   * a aula sumia da carga, e a derivação — a única coisa capaz de reescrever a
+   * árvore — nunca chegava a rodar. O autor ficava com um vermelho que manda
+   * consertar `roteiro[…].treino` e um `--write` que não consertava nada.
+   *
+   * O contrato de `guidedStageSchema` diz que a árvore volta byte por byte se
+   * for apagada. Isto **é** apagá-la, e só em `--write`, só quando há roteiro de
+   * onde derivar, e só depois de a árvore já ter sido recusada: nenhuma árvore
+   * válida é jogada fora por este bloco.
+   */
+  if (!parsed.success && writeBack) {
+    const stages = (raw as { stages?: Record<string, unknown> }).stages;
+    if (stages?.objective && stages.guided) {
+      const semArvore = { ...(raw as object), stages: { ...stages } } as Record<string, unknown>;
+      delete (semArvore.stages as Record<string, unknown>).guided;
+      const outraVez = lessonSchema.safeParse(semArvore);
+      if (outraVez.success) {
+        delete stages.guided;
+        parsed = outraVez;
+      }
+    }
+  }
   if (!parsed.success) {
     reportZod(where, "SCHEMA_AULA", parsed.error);
     continue;
@@ -1033,6 +1060,95 @@ async function generateFor(loaded: LoadedLesson) {
 }
 
 /* ------------------------------------------------------------------ *
+ * A etapa 3, derivada da etapa 2
+ *
+ * O mesmo contrato do `winningMoves` e das alternativas, um andar acima: com
+ * `--write` a árvore é regravada a partir do roteiro; sem `--write` ela é
+ * derivada de novo e comparada com o que está no arquivo.
+ *
+ * **Quem é julgado em cada modo, e por quê.** Sem `--write`, quem passa pelas
+ * ~50 regras é a árvore **do arquivo** — é ela que a build lê e que chega ao
+ * aluno, e julgar a derivada seria aprovar uma árvore que ninguém vai jogar.
+ * Com `--write`, quem passa é a derivada, porque é ela que vai virar arquivo
+ * naquela mesma rodada.
+ *
+ * **Aula com `guided` e sem `objective` não é derivada.** Sem roteiro não há de
+ * onde derivar, e inventar um erro para esse caso seria cobrar do autor um
+ * campo que o formato não pede. Não existe aula assim no corpus de hoje; no dia
+ * em que existir, ela é a exceção declarada de que fala a §5 da trilha.
+ * ------------------------------------------------------------------ */
+
+/** A tablebase sem acusar: quem acusa cache faltando é o `checkTree`, uma vez. */
+async function perguntarQuieto(fen: string): Promise<TbEntry | null> {
+  if (pieceCount(fen) > 7) return null;
+  try {
+    return await tablebase.lookup(fen);
+  } catch {
+    return null;
+  }
+}
+
+async function derivarEtapa3(loaded: LoadedLesson) {
+  const { lesson } = loaded;
+  const objective = lesson.stages.objective;
+  if (!objective) return;
+  const posicao = positions.get(objective.positionId);
+  if (!posicao || fenProblem(posicao.fen)) return;
+
+  const where = `aula ${lesson.id} / treino`;
+
+  // Primeira passada, a seco: ela não precisa da tablebase para saber a linha,
+  // e é ela que diz QUAIS posições perguntar.
+  const seco = derivarTreino(lesson, posicao, () => null);
+  for (const problema of seco.problemas) {
+    const onde = problema.passo === null ? where : `${where} / roteiro[${problema.passo}]`;
+    fail(problema.code, onde, problema.message);
+  }
+  if (!seco.tree) return;
+
+  const lances = new Map<string, string[]>();
+  for (const node of Object.values(seco.tree.nodes)) {
+    const entry = await perguntarQuieto(node.fen);
+    if (entry) lances.set(node.fen, goalMovesOf(entry, seco.tree.goal));
+  }
+  const { tree } = derivarTreino(lesson, posicao, (fen) => lances.get(fen) ?? null);
+  if (!tree) return;
+
+  if (!writeBack) {
+    const doArquivo = lesson.stages.guided;
+    const igual =
+      doArquivo !== undefined &&
+      JSON.stringify(esqueletoDoTreino(doArquivo)) === JSON.stringify(esqueletoDoTreino(tree));
+    if (!igual) {
+      fail(
+        "TREINO_DESATUALIZADO",
+        where,
+        (doArquivo === undefined
+          ? "o roteiro da aula produz uma etapa 3 e o arquivo não tem nenhuma"
+          : "a etapa 3 do arquivo não é a que o roteiro da aula produz") +
+          " — rode `npm run validate:content -- --refresh-cache --write` e leia o diff",
+      );
+    }
+    return;
+  }
+
+  lesson.stages.guided = tree;
+  const rawStages = ((loaded.raw as { stages?: Record<string, unknown> }).stages ??= {});
+  // A ordem é reconstruída, e não remendada: a N0-LADDER não tem `guided` hoje,
+  // e escrever a chave nova no fim deixaria a etapa 3 depois da prática para
+  // sempre — num arquivo que se lê de cima para baixo como a aula acontece.
+  const reordenado: Record<string, unknown> = {};
+  for (const chave of ["intro", "objective", "guided", "practice"]) {
+    if (chave === "guided") {
+      reordenado.guided = JSON.parse(JSON.stringify(tree));
+      continue;
+    }
+    if (chave in rawStages) reordenado[chave] = rawStages[chave];
+  }
+  (loaded.raw as { stages: unknown }).stages = reordenado;
+}
+
+/* ------------------------------------------------------------------ *
  * Conferência por aula
  * ------------------------------------------------------------------ */
 
@@ -1141,7 +1257,49 @@ async function checkLesson(loaded: LoadedLesson) {
    * olho, na tela. Fica declarado como perda, não como equivalência.
    */
 
-  // A etapa 1: a obra tem de ser um dos livros-base didáticos — a decisão
+  /* ---------------------------------------------------------------- *
+   * A apresentação — a única FEN do curso sem arquivo de posição
+   *
+   * O diagrama de apresentação é **ilustração**: ninguém joga nele, ele pode ter
+   * mais de sete peças de propósito, e por isso não vira `content/positions/` e
+   * **não se consulta a tablebase sobre ele**. Perguntar seria pedir a uma
+   * máquina que julgasse um desenho.
+   *
+   * O que sobra de mecânico é o que `fenProblem` já sabe — o mesmo juiz do
+   * `checkPosition`, e por isso a mesma função e não uma cópia: rei colado, rei
+   * faltando, xeque impossível. Um diagrama assim não é ilustração ousada, é
+   * erro de digitação, e ele chegaria à tela do aluno.
+   *
+   * **O que nenhuma máquina mede fica escrito**: um diagrama de apresentação
+   * que venha de um LIVRO deixa de ser ilustração e vira posição, com os 9
+   * campos de proveniência. A regra está na §7 de `docs/VOZ-DO-CURSO.md` e na
+   * §1.2 de `docs/SOURCE-CORPUS.md`, e quem a cobra é o olho.
+   * ---------------------------------------------------------------- */
+  const intro = lesson.stages.intro;
+  if (intro) {
+    const daAula = positions.get(
+      lesson.stages.objective?.positionId ?? lesson.stages.practice?.positionId ?? "",
+    );
+    for (const [i, passo] of intro.passos.entries()) {
+      if (passo.fen === undefined) continue;
+      const onde = `${where} / intro / passos[${i}]`;
+      const problema = fenProblem(passo.fen);
+      if (problema) {
+        fail("INTRO_FEN_ILEGAL", onde, `o diagrama da apresentação não é uma posição possível: ${problema}`);
+        continue;
+      }
+      if (daAula && samePosition(passo.fen, daAula.fen)) {
+        fail(
+          "INTRO_FEN_REDUNDANTE",
+          onde,
+          `o diagrama repete a posição da aula ("${daAula.id}") — isso se diz omitindo o ` +
+            "campo `fen`, e escrevê-lo cria uma segunda cópia da mesma FEN para divergir depois",
+        );
+      }
+    }
+  }
+
+  // A etapa 2: a obra tem de ser um dos livros-base didáticos — a decisão
   // editorial de 2026-08-19, que tirou o objetivo da biblioteca inteira e o
   // prendeu a uma rotação de cinco obras escritas para iniciante.
   const objective = lesson.stages.objective;
@@ -1413,7 +1571,13 @@ function checkDivida() {
  * Execução
  * ------------------------------------------------------------------ */
 
-// A geração vem primeiro: o que ela produz passa pelas mesmas conferências que
+// A derivação vem antes de tudo: a etapa 3 nasce aqui, e a partir daí é árvore
+// comum — os ramos equivalentes, os winningMoves e as ~50 regras caem sobre ela
+// exatamente como caem sobre uma árvore escrita à mão.
+for (const loaded of lessons) {
+  await derivarEtapa3(loaded);
+}
+// A geração vem depois: o que ela produz passa pelas mesmas conferências que
 // o resto da árvore — nó gerado é nó comum.
 for (const loaded of lessons) {
   await generateFor(loaded);

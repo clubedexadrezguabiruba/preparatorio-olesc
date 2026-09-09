@@ -27,7 +27,14 @@
         },
         {
           "lance": "e8e7",
-          "fala": "O rei preto vai ao encontro do outro, na mesma coluna."
+          "fala": "O rei preto vai ao encontro do outro, na mesma coluna.",
+          "treino": {
+            "dica": "Um lance só empata. Vá ao encontro do rei branco, na mesma coluna.",
+            "highlights": [
+              "e7"
+            ],
+            "feedback": "Oposição tomada. O rei branco desvia para d5 e tenta entrar pelo outro lado."
+          }
         },
         {
           "lance": "e5d5",
@@ -35,7 +42,14 @@
         },
         {
           "lance": "e7d7",
-          "fala": "O preto acompanha e volta a ficar de frente. O peão não passa."
+          "fala": "O preto acompanha e volta a ficar de frente. O peão não passa.",
+          "treino": {
+            "dica": "De novo: acompanhe o rei branco e fique de frente para ele.",
+            "highlights": [
+              "d7"
+            ],
+            "feedback": "Empate segurado. O rei branco não tem por onde entrar, e o peão não anda sozinho."
+          }
         }
       ]
     },

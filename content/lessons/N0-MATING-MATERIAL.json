@@ -17,6 +17,47 @@
     "methodAlternative": "Esse lance é a mesma ideia por outro caminho."
   },
   "stages": {
+    "intro": {
+      "passos": [
+        {
+          "fala": "Dois cavalos e o rei contra o seu rei sozinho. Esta partida não se perde — e você vai ver por quê.",
+          "highlights": [
+            "f6",
+            "e5",
+            "g8"
+          ]
+        },
+        {
+          "fala": "Estas peças dão mate junto com o rei: a dama, a torre, e dois bispos.",
+          "fen": "4k3/8/8/8/8/8/8/R1B1KB1Q w - - 0 1",
+          "highlights": [
+            "h1",
+            "a1",
+            "c1",
+            "f1"
+          ]
+        },
+        {
+          "fala": "Estas não dão: um bispo sozinho, um cavalo sozinho — e dois cavalos também não.",
+          "fen": "4k3/8/8/8/8/8/8/1NB1K1N1 w - - 0 1",
+          "highlights": [
+            "c1",
+            "b1",
+            "g1"
+          ]
+        },
+        {
+          "fala": "Só existe um jeito de dois cavalos darem mate: o rei entrar sozinho num canto. Assim.",
+          "fen": "7k/5N2/5NK1/8/8/8/8/8 b - - 0 1",
+          "highlights": [
+            "h8"
+          ]
+        },
+        {
+          "fala": "E ninguém consegue te obrigar a entrar. A regra é uma só: fique longe dos quatro cantos."
+        }
+      ]
+    },
     "objective": {
       "source": "silman-endgame-course",
       "positionId": "pos-n0-mating-material-silman-38",
@@ -46,57 +87,51 @@
           ]
         },
         {
-          "lance": "g8h8",
-          "fala": "O rei preto vai para h8, que é o canto. Veja o que acontece com ele lá.",
+          "fala": "h8 é o canto. Se o seu rei for para lá, o cavalo de e5 pula para f7 e é mate.",
           "highlights": [
-            "h8"
-          ],
-          "espera": 600
-        },
-        {
-          "fala": "Agora repare no outro cavalo, o de e5. Ele tem um pulo até f7.",
-          "highlights": [
+            "h8",
             "e5",
             "f7"
-          ]
-        },
-        {
-          "lance": "e5f7",
-          "fala": "O cavalo pula para f7. Xeque — e o seu rei não tem para onde ir.",
-          "highlights": [
-            "f7"
           ],
-          "espera": 900
+          "espera": 700
         },
         {
-          "fala": "As casas g8 e h7 estão tomadas pelo cavalo de f6. E g7, pelo rei branco.",
-          "highlights": [
-            "g8",
-            "h7",
-            "g7",
-            "f6"
-          ]
-        },
-        {
-          "fala": "Isso é mate. Dois cavalos dão mate — mas só em quem entra no canto sozinho."
-        },
-        {
-          "fala": "Ninguém consegue te obrigar a entrar. Contra uma defesa certa, dois cavalos não ganham."
-        },
-        {
-          "fala": "Uma dama sozinha dá mate. Uma torre sozinha dá. Dois bispos também dão."
-        },
-        {
-          "fala": "Um bispo sozinho não dá mate. Um cavalo sozinho também não. E dois cavalos, você acabou de ver."
-        },
-        {
-          "fala": "O seu rei estava seguro em f8. Fique longe dos quatro cantos e a partida empata.",
+          "lance": "g8f8",
+          "fala": "Então o rei vai para f8, longe do canto. Aqui não existe mate nenhum.",
           "highlights": [
             "f8"
           ],
+          "espera": 600,
+          "treino": {
+            "dica": "Duas casas para escolher. Pense em qual delas o seu rei fica com menos saída.",
+            "arrows": [
+              [
+                "f6",
+                "g8"
+              ]
+            ],
+            "feedback": "Isso. Longe do canto, os dois cavalos não têm como fechar o seu rei — e a partida é empate.",
+            "erros": [
+              {
+                "moves": [
+                  "g8h8"
+                ],
+                "errorId": "canto"
+              }
+            ]
+          }
+        },
+        {
+          "fala": "Os dois cavalos não têm como fechar o seu rei fora do canto. Eles nem chegam perto."
+        },
+        {
+          "fala": "E ninguém consegue te obrigar a entrar lá. Contra uma defesa certa, a partida empata.",
           "espera": 700
         }
-      ]
+      ],
+      "treino": {
+        "intro": "A mesma posição, agora jogada. Você é as pretas, e o cavalo de f6 está te dando xeque."
+      }
     },
     "guided": {
       "positionId": "pos-n0-mating-material-silman-38",
@@ -132,7 +167,8 @@
           ],
           "winningMoves": [
             "g8f8"
-          ]
+          ],
+          "generated": true
         }
       }
     },

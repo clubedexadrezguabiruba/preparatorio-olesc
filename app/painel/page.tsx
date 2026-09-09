@@ -15,7 +15,7 @@ import {
 import { minutosDeHoje, sequenciaDeDias } from "@/lib/curso/hoje";
 import { PARAMETRO_DA_SEMANA, semanaDaTela } from "@/lib/curso/semana";
 import { minutosPorDia, partidaDoDiaMarcada } from "@/lib/curso/minutos";
-import { aulasPublicadas } from "@/lib/finais/conteudo";
+import { aulasComPratica, aulasPublicadas } from "@/lib/finais/conteudo";
 import { aulasVencidas } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import {
@@ -101,8 +101,9 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
   // aprendido. As duas contas são as mesmas de `/finais` — a tela lá e o cartão
   // aqui não podem discordar, e é por isso que nenhuma das duas as refaz.
   const aulasDeFinais = aulasAbertas(aulasPublicadas(), semana);
-  const finaisFeitos = aprendidasDaTrilha(aulasDeFinais, finais);
-  const proximoFinal = proximaAula(aulasDeFinais, finais);
+  const comPratica = aulasComPratica();
+  const finaisFeitos = aprendidasDaTrilha(aulasDeFinais, finais, comPratica);
+  const proximoFinal = proximaAula(aulasDeFinais, finais, comPratica);
 
   const estados = estadoDasTarefas(tarefasDaSemana, marcadas, progresso, finaisFeitos);
 

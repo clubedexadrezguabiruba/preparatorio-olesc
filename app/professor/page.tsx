@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { professorAtual } from "@/lib/auth/perfil";
 import { semanaAtual } from "@/lib/curso/calendario";
-import { aulasPublicadas } from "@/lib/finais/conteudo";
+import { aulasComPratica, aulasPublicadas } from "@/lib/finais/conteudo";
 import { finaisDaTurma } from "@/lib/finais/progresso";
 import { aprendidasDaTrilha, aulasAbertas, CLASSES, daClasse } from "@/lib/finais/trilha";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
@@ -37,6 +37,7 @@ export default async function Professor() {
    * número em voz alta com o aluno na frente.
    */
   const abertas = aulasAbertas(aulasPublicadas(), semanaAtual());
+  const comPratica = aulasComPratica();
   const finais = await finaisDaTurma();
 
   return (
@@ -96,7 +97,7 @@ export default async function Professor() {
                     <Td>{aluno.rating ?? "—"}</Td>
                     <Td>
                       <Finais
-                        feitas={aprendidasDaTrilha(abertas, finais.get(aluno.id) ?? new Map())}
+                        feitas={aprendidasDaTrilha(abertas, finais.get(aluno.id) ?? new Map(), comPratica)}
                         abertas={abertas}
                       />
                     </Td>

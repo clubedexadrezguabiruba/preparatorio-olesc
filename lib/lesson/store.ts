@@ -15,19 +15,23 @@ import { TRILHA } from "./falas.ts";
  */
 
 /**
- * **Três etapas, numa posição só** (2026-09-08). Eram seis: saíram `example`
- * (a animação, absorvida pelo objetivo estático), `solo` (a árvore sem ajuda,
- * cujo papel a partida contra a máquina faz) e `review` (a fila de posições
- * novas, substituída pela escada em dias espaçados). Ver `lessonSchema`.
+ * **Quatro etapas, numa posição só** (2026-09-09). Eram seis, viraram três em
+ * 2026-09-08 — saíram `example` (a animação, absorvida pela aula assistida),
+ * `solo` (a árvore sem ajuda, cujo papel a partida contra a máquina faz) e
+ * `review` (a fila de posições novas, substituída pela escada em dias
+ * espaçados) —, e agora ganharam uma na frente: `intro`, a apresentação, em que
+ * o professor diz o que está em jogo e **quem avança é o aluno**.
+ *
+ * Ver `lessonSchema`.
  */
-export type StageKey = "objective" | "guided" | "practice";
-/** Só uma árvore roteirizada sobrou, e ela é a etapa do meio. */
+export type StageKey = "intro" | "objective" | "guided" | "practice";
+/** Só uma árvore roteirizada sobrou, e ela é a terceira. */
 export type TreeKey = "guided";
 
-export const STAGE_ORDER: StageKey[] = ["objective", "guided", "practice"];
+export const STAGE_ORDER: StageKey[] = ["intro", "objective", "guided", "practice"];
 
 /**
- * Os três rótulos, e eles moram em `lib/lesson/falas.ts` como toda fala de
+ * Os quatro rótulos, e eles moram em `lib/lesson/falas.ts` como toda fala de
  * tela. Eram "Objetivo / Com ajuda / Sem ajuda": três nomes que descreviam o
  * desenho do sistema em vez do que o aluno faz em cada um. Ver a §4 de
  * `docs/VOZ-DO-CURSO.md`.

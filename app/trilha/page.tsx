@@ -14,7 +14,7 @@ import {
   type ModuloDoNivel,
   type Situacao,
 } from "@/lib/curso/trilha";
-import { aulasPublicadas } from "@/lib/finais/conteudo";
+import { aulasComPratica, aulasPublicadas } from "@/lib/finais/conteudo";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import { temaAberto } from "@/lib/tatica/conteudo";
 import { progressoPorTema } from "@/lib/tatica/progresso";
@@ -74,6 +74,7 @@ export default async function Trilha({ searchParams }: PageProps<"/trilha">) {
     temaAberto,
     finais,
     aulasPublicadas: aulasPublicadas(),
+    aulasComPratica: aulasComPratica(),
     semana,
   });
   const aqui = vocEstaAqui(mapa);

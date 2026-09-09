@@ -125,6 +125,8 @@ export function indiceDeAulas(): Array<{
   id: string;
   titulo: string;
   etapas: number;
+  /** Tem a etapa 4? É a pergunta que decide o que "aprendida" quer dizer. */
+  temPratica: boolean;
   status: Lesson["status"];
 }> {
   return idsDeAula()
@@ -133,6 +135,7 @@ export function indiceDeAulas(): Array<{
       id: aula.id,
       titulo: aula.title,
       etapas: Object.keys(aula.stages).length,
+      temPratica: aula.stages.practice !== undefined,
       status: aula.status,
     }));
 }
@@ -147,4 +150,16 @@ export function indiceDeAulas(): Array<{
  */
 export function aulasPublicadas(): Set<string> {
   return new Set(indiceDeAulas().filter((a) => a.status === "published").map((a) => a.id));
+}
+
+/**
+ * Os ids das aulas que têm a etapa 4 — a partida contra a máquina.
+ *
+ * É o que substituiu a coluna `formato` da trilha, apagada em 9/9/2026 junto
+ * com os três formatos. A pergunta que o `aprendeu` faz é uma só — a aula tem
+ * prática? —, e a resposta mora no arquivo da aula, e não numa tabela ao lado
+ * que pode divergir dele.
+ */
+export function aulasComPratica(): Set<string> {
+  return new Set(indiceDeAulas().filter((a) => a.temPratica).map((a) => a.id));
 }

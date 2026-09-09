@@ -902,6 +902,114 @@ const MUTACOES: Mutation[] = [
       );
     },
   },
+
+  /* ---------------------------------------------------------------- *
+   * A etapa 3 derivada da etapa 2 (2026-09-09)
+   *
+   * As quatro primeiras cobrem o buraco que `schema.ts` prometia e que não
+   * existia: **o roteiro nunca teve juiz contra a posição de verdade**. A trava
+   * do schema encadeia os lances a partir da raiz da árvore, então uma aula sem
+   * árvore — a N0-LADDER era uma — tinha o roteiro inteiro sem ninguém olhando.
+   * Por isso três delas apagam `stages.guided` antes de plantar o estrago: é
+   * assim que se põe o gate sozinho na frente do roteiro.
+   * ---------------------------------------------------------------- */
+  {
+    titulo: "lance ilegal no roteiro da aula, sem árvore que o denuncie",
+    codigo: "ROTEIRO_ILEGAL",
+    aplicar: async (dir) => {
+      const { file, json } = lerAula(dir);
+      delete json.stages.guided;
+      // A ausência de etapa é declarada por escrito desde 9/9/2026: sem isto a
+      // aula bateria na trava das quatro etapas e a regra sob teste — que é
+      // sobre o ROTEIRO — nunca chegaria a rodar.
+      json.etapasAusentes = { guided: "mutação de teste: a árvore foi apagada de propósito" };
+      json.stages.objective.roteiro[2].lance = "h1h8";
+      gravar(file, json);
+      return 'stages.guided apagado (e declarado ausente) e roteiro[2].lance → "h1h8"';
+    },
+  },
+  {
+    titulo: "roteiro que começa pelo lance do adversário",
+    codigo: "ROTEIRO_COMECA_ERRADO",
+    aplicar: async (dir) => {
+      const { file, json } = lerAula(dir);
+      json.orientation = "black";
+      gravar(file, json);
+      return 'orientation → "black": o primeiro lance do roteiro passa a ser do defensor';
+    },
+  },
+  {
+    titulo: "roteiro que termina com o lance do adversário",
+    codigo: "ROTEIRO_NAO_FECHA",
+    aplicar: async (dir) => {
+      const { file, json } = lerAula(dir);
+      const fora = json.stages.objective.roteiro.pop();
+      gravar(file, json);
+      return `último passo do roteiro removido ("${fora.lance}") — a linha passa a acabar no preto`;
+    },
+  },
+  {
+    titulo: "bloco de treino num passo que não vira nó do aluno",
+    codigo: "TREINO_SEM_NO",
+    aplicar: async (dir) => {
+      const { file, json } = lerAula(dir);
+      json.stages.objective.roteiro[0].treino = { dica: "ninguém leria esta dica" };
+      gravar(file, json);
+      return "roteiro[0] (passo sem lance) ganhou um bloco treino que nunca seria lido";
+    },
+  },
+  {
+    titulo: "etapa 3 do arquivo divergindo do roteiro que a produz",
+    codigo: "TREINO_DESATUALIZADO",
+    aplicar: async (dir) => {
+      const { file, json } = lerAula(dir);
+      const raiz = json.stages.guided.root;
+      json.stages.guided.nodes[raiz].hint = "uma dica que o roteiro não pediu";
+      gravar(file, json);
+      return `guided.nodes.${raiz}.hint editado à mão — a árvore é SAÍDA, e o roteiro não mudou`;
+    },
+  },
+
+  /* ---------------------------------------------------------------- *
+   * A apresentação — a única FEN do curso sem arquivo de posição
+   *
+   * Ela não passa pela tablebase de propósito (é ilustração, e pode ter mais de
+   * sete peças). O que sobra de mecânico são estas duas, e é por isso que elas
+   * ganham mutação: uma regra sem mutação plantada é uma regra que se pode
+   * apagar sem ninguém notar.
+   * ---------------------------------------------------------------- */
+  {
+    titulo: "aula publicada sem uma das quatro etapas, e sem dizer por quê",
+    codigo: "SCHEMA_AULA",
+    contem: 'não tem a etapa "intro"',
+    aplicar: async (dir) => {
+      const { file, json } = lerAula(dir);
+      delete json.stages.intro;
+      gravar(file, json);
+      return "stages.intro apagado sem entrar em etapasAusentes — um formato só, e a ausência se escreve";
+    },
+  },
+  {
+    titulo: "diagrama de apresentação com os dois reis colados",
+    codigo: "INTRO_FEN_ILEGAL",
+    aplicar: async (dir) => {
+      const { file, json } = lerAula(dir);
+      json.stages.intro.passos[0].fen = "8/8/8/1k6/1K6/8/8/8 w - - 0 1";
+      gravar(file, json);
+      return "intro.passos[0].fen → reis em b4 e b5, colados — não é posição, é erro de digitação";
+    },
+  },
+  {
+    titulo: "diagrama de apresentação repetindo a posição da aula",
+    codigo: "INTRO_FEN_REDUNDANTE",
+    aplicar: async (dir) => {
+      const { file, json } = lerAula(dir);
+      const { json: posicao } = lerPosicao(dir, posicaoDeEnsino(dir));
+      json.stages.intro.passos[0].fen = posicao.fen;
+      gravar(file, json);
+      return "intro.passos[0].fen → a FEN da própria posição da aula, que se diz omitindo o campo";
+    },
+  },
 ];
 
 function rodarValidador(dir: string, flags: string[] = []) {

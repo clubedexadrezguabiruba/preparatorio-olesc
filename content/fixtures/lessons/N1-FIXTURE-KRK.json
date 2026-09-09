@@ -29,35 +29,6 @@
     "methodAlternative": "Esse lance é a mesma técnica por outro caminho: ele corta tão bem quanto o da aula. Aqui a linha escrita continua pelo lance do roteiro — mas guarde essa ideia, porque na etapa sem ajuda ela vale."
   },
   "stages": {
-    "objective": {
-      "source": "silman-endgame-course",
-      "positionId": "pos-fx-krk-caixa",
-      "technique": {
-        "name": "A caixa",
-        "summary": "A torre desenha uma parede que o rei adversário não atravessa. Encolha a caixa com a torre, ande com o rei, encolha a caixa com a torre, ande com o rei — até o mate."
-      },
-      "roteiro": [
-        {
-          "fala": "A torre sozinha não dá mate. Os dois, torre e rei, trabalham juntos.",
-          "highlights": [
-            "h1",
-            "g1"
-          ]
-        },
-        {
-          "lance": "g1g3",
-          "fala": "A torre desenha uma parede. O rei preto não passa dela."
-        },
-        {
-          "lance": "e4f4",
-          "fala": "O rei preto anda de lado, e a parede continua onde estava."
-        },
-        {
-          "lance": "h1g2",
-          "fala": "Agora o seu rei sobe. É ele quem tira as casas de fuga."
-        }
-      ]
-    },
     "guided": {
       "positionId": "pos-fx-krk-caixa",
       "showBox": true,

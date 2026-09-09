@@ -409,8 +409,11 @@ export const treeNodeSchema = z.strictObject({
    */
   hint: texto.optional(),
   /**
-   * **A flecha do nó, e ela é obrigatória na aula publicada** (a `superRefine`
-   * do `lessonSchema` a cobra).
+   * **A flecha do nó. A aula publicada precisa dela ou de uma casa acesa** (a
+   * `superRefine` do `lessonSchema` cobra as duas juntas, uma basta).
+   *
+   * **Nem ela nem o `highlights` se escrevem aqui**: o nó é derivado do
+   * roteiro, e o desenho dele mora em `objective.roteiro[…].treino`.
    *
    * Ela aponta o **alvo**, nunca o lance: a casa que importa, a intenção do rei
    * inimigo, a casa de promoção que o peão persegue. Seta que liga a origem ao
@@ -511,6 +514,93 @@ export const desenhoSchema = z.strictObject({
  * campos **novos** ficam em português, que é a língua de quem escreve as outras
  * 48 aulas.
  */
+/**
+ * Um passo da **apresentação** — a etapa 1.
+ *
+ * A apresentação é o professor dizendo o que está em jogo antes de qualquer
+ * peça se mexer: se ganha ou se empata, e qual é a técnica. Um diagrama e uma
+ * fala curta, sem rolagem, e **quem avança é o aluno** — a etapa não tem
+ * relógio, tem seta.
+ *
+ * **A FEN é livre, e não vira posição de `content/positions/`.** É a única
+ * exceção da casa, e ela é deliberada: o passo que diz "estas peças dão mate"
+ * precisa mostrar peças que não estão na posição da aula, às vezes mais de
+ * sete delas, e ninguém joga ali. O preço é que essas FEN **não têm
+ * proveniência** e nenhuma máquina a cobra.
+ *
+ * A regra que fecha o buraco é escrita, e está na §7 de `docs/VOZ-DO-CURSO.md`:
+ * se um diagrama de apresentação vier **de um livro**, ele deixa de ser
+ * ilustração e vira posição — arquivo próprio, com os 9 campos de proveniência.
+ * O que existe para cobrá-la é o olho.
+ */
+export const introPassoSchema = desenhoSchema.extend({
+  /** O que o professor diz neste passo. */
+  fala: texto,
+  /**
+   * O diagrama deste passo. **Ausente = a posição da aula**, que é o caso
+   * comum: a apresentação normalmente fala da posição que o aluno vai jogar.
+   */
+  fen: fenSchema.optional(),
+});
+
+/**
+ * Etapa 1 — **a apresentação**: o professor diz o objetivo, e o aluno avança.
+ *
+ * O piso é 2 porque um passo só é cartão de título, não apresentação — quem não
+ * tem o que dizer omite `stages.intro` inteiro, e isso é uma escolha, não um
+ * arquivo pela metade.
+ *
+ * O teto é 6 porque cada passo é um clique que o aluno dá **antes** de ver
+ * qualquer peça se mexer. Sete cliques até a primeira peça andar é um manual
+ * com botão de "próximo", que é exatamente o que a etapa 2 deixou de ser.
+ */
+export const introStageSchema = z.strictObject({
+  passos: z.array(introPassoSchema).min(2).max(6),
+});
+
+/**
+ * **O que o autor escreve para a etapa 3, dentro do passo da etapa 2.**
+ *
+ * A etapa 3 deixou de ser escrita e passou a ser **derivada** do roteiro
+ * (`lib/lesson/derivar-treino.ts`). O projeto já exigia, em teste, que a linha
+ * da aula e a linha do treino fossem a MESMA — "o que a etapa 1 mostra e o que
+ * a etapa 2 pede têm de ser a MESMA linha", `roteiro.test.ts`. Sendo a mesma,
+ * escrevê-la duas vezes era copiar à mão o que a máquina sabe derivar, e era o
+ * que fazia a etapa custar 6 a 8 horas por aula.
+ *
+ * O que a máquina **não** sabe é o que este bloco carrega: para onde apontar a
+ * flecha antes do lance, o que dizer enquanto o aluno pensa, quais erros têm
+ * nome. Ele é lido **só quando aquele passo vira nó do aluno** — passo do
+ * defensor, ou passo sem lance, não tem nó, e escrever `treino` ali é erro
+ * (`TREINO_SEM_NO`).
+ *
+ * **O desenho daqui não é o desenho do passo, e isso é a decisão inteira.** O
+ * `arrows`/`highlights` do passo acompanha o lance *acontecendo*, na aula
+ * assistida; o daqui aponta o **alvo** *antes* de o aluno mexer. Na N1-KPK a
+ * seta do nó `n1` é `e7→c8` — a ideia do passo que só aponta —, e não a do
+ * passo seguinte, que carrega `c6c7`. Herdar um do outro entregaria o lance.
+ */
+export const passoTreinoSchema = desenhoSchema.extend({
+  /**
+   * O que o professor diz enquanto o aluno pensa (vira `hint` do nó).
+   *
+   * **Não é a fala do passo.** A fala entrega o lance — "o rei branco vai a
+   * c7" —, e no treino isso é responder pelo aluno.
+   */
+  dica: texto.optional(),
+  /**
+   * O que o aluno lê ao acertar (vira o `feedback` do expect).
+   *
+   * Ausente, o gerador costura a fala deste passo com a do passo do defensor —
+   * que é literalmente o que a N1-KPK fez à mão, um passo de cada vez.
+   */
+  feedback: texto.optional(),
+  /** Os erros nomeados deste nó (vira `mistakes`). */
+  erros: z.array(mistakeSchema).min(1).optional(),
+  /** Os lances que a autoria declara válidos (vira `authorAlternatives`). */
+  alternativas: z.array(authorAlternativeSchema).min(1).optional(),
+});
+
 export const roteiroPassoSchema = desenhoSchema.extend({
   /** O que o professor diz neste passo. Uma ideia, uma fala (VOZ-DO-CURSO §3.3). */
   fala: texto,
@@ -528,6 +618,14 @@ export const roteiroPassoSchema = desenhoSchema.extend({
    * ajuste fino que o autor pede quando a posição precisa ser olhada.
    */
   espera: z.int().min(0).max(4000).optional(),
+  /**
+   * O que a etapa 3 precisa e a máquina não deriva — flecha do alvo, dica,
+   * texto do acerto, erros nomeados. Ver `passoTreinoSchema`.
+   *
+   * Só faz sentido no passo cujo `lance` é do lado do aluno: é ele que vira nó.
+   * O gate recusa o bloco em qualquer outro passo (`TREINO_SEM_NO`).
+   */
+  treino: passoTreinoSchema.optional(),
 });
 
 /**
@@ -586,14 +684,56 @@ export const objectiveStageSchema = z.strictObject({
    * define uma fala (`docs/VOZ-DO-CURSO.md` §3.3). A KPK do piloto gasta 13
    * passos assim — 11 meios-lances e dois passos de abertura, que só apontam.
    *
-   * O teto de 14 é o do relógio: a `/revisar-aula` mede a duração da etapa
-   * contra a faixa de 40 a 70 segundos, e catorze falas longas já a estouram. O
-   * piso de 3 é o que separa roteiro de legenda.
+   * **Os dois números deixaram de ser régua.** O teto de 14 era o do relógio —
+   * a faixa de 40 a 70 segundos que a `/revisar-aula` cobrava —, e essa faixa
+   * saiu da régua a pedido do Doug em 2026-09-09: a aula dura o que precisar. O
+   * 24 que ficou no lugar não mede nada; é freio contra arquivo descontrolado,
+   * e o piso de 2 é o mínimo para haver um lance e uma fala sobre ele.
+   *
+   * A conta de `lib/lesson/roteiro.ts` continua valendo e continua sendo
+   * impressa: ela é o relógio da TELA — quanto tempo cada fala fica lá. O que
+   * saiu foi o julgamento sobre o total.
    */
-  roteiro: z.array(roteiroPassoSchema).min(3).max(14),
+  roteiro: z.array(roteiroPassoSchema).min(2).max(24),
+  /**
+   * O que é da etapa 3 **inteira**, e não de um passo dela.
+   *
+   * A etapa é derivada do roteiro, então ela não tem arquivo próprio onde
+   * escrever a fala de abertura nem pedir a caixa. Estes dois campos são a
+   * porta — e são só estes dois: tudo o mais que a etapa 3 tem sai do roteiro
+   * ou do bloco `treino` de um passo.
+   */
+  treino: z
+    .strictObject({
+      /** A fala de abertura da etapa 3 (vira `guided.intro`). */
+      intro: texto.optional(),
+      /** Desenhar a caixa do rei enquanto o aluno joga (vira `guided.showBox`). */
+      showBox: z.boolean().optional(),
+    })
+    .optional(),
 });
 
-/** Etapa 3 — com ajuda: destaques, dica e retentativa ilimitada. */
+/**
+ * Etapa 3 — com ajuda: destaques, dica e retentativa ilimitada.
+ *
+ * ## **Esta etapa é SAÍDA, não entrada.**
+ *
+ * O contrato, em uma frase: apague `stages.guided` do arquivo, rode
+ * `npm run validate:content -- --refresh-cache --write`, e ele volta byte por
+ * byte. Quem a escreve é `lib/lesson/derivar-treino.ts`, a partir do roteiro da
+ * etapa 2 e dos blocos `treino` dos passos dela.
+ *
+ * Nunca há merge entre campo de autor e campo de gerador dentro do mesmo
+ * objeto — a armadilha que `stripGeneratedFrom` já documenta em
+ * `scripts/validate-content.ts`: o campo do autor apagado em silêncio, e o
+ * autor descobrindo pelo aluno. Aqui a divisão é por **arquivo inteiro**: tudo
+ * dentro de `guided` é derivado, e o que o autor tem a dizer sobre a etapa 3
+ * ele diz em `objective.roteiro[i].treino` e em `objective.treino`.
+ *
+ * Os campos continuam declarados aqui porque o schema também roda na build
+ * (`lib/finais/conteudo.ts`) e no navegador: o que chega ao aluno é o arquivo
+ * gravado, e ele é conferido como qualquer outro.
+ */
 export const guidedStageSchema = treeBaseSchema.extend({
   intro: texto.optional(),
   /**
@@ -742,7 +882,13 @@ const lessonBaseSchema = z.strictObject({
    */
   generatedTemplates: generatedTemplatesSchema.optional(),
   /**
-   * **Três etapas, numa posição só** (decisão do Doug em 2026-09-08).
+   * **Quatro etapas, numa posição só** (decisão do Doug em 2026-09-09).
+   *
+   * `intro` é a apresentação: o professor diz o que está em jogo — se ganha, se
+   * empata, qual é a técnica —, num diagrama e uma fala curta por vez, e **quem
+   * avança é o aluno**. É a única etapa que pode trocar de posição entre um
+   * passo e outro, em FEN livre, porque o que ela mostra é ilustração e
+   * ninguém joga nela.
    *
    * `objective` é a aula: o roteiro toca sozinho sobre a posição, um comentário
    * por vez, e o aluno assiste.
@@ -762,10 +908,47 @@ const lessonBaseSchema = z.strictObject({
    * assistir no lugar de jogar: as etapas 2 e 3 continuam sendo jogadas com a
    * mão (ver `docs/VOZ-DO-CURSO.md` §6.1).
    *
-   * Cada bloco continua opcional: das 49 aulas da trilha, as curtas têm só a
-   * prática.
+   * **A etapa 3 deixou de ser escrita e passou a ser derivada da etapa 2**
+   * (ver `guidedStageSchema`). É essa mudança que torna as quatro etapas
+   * possíveis nas 49 aulas: a etapa cara de escrever era a árvore, e ela agora
+   * sai do roteiro mais os blocos `treino` dos passos dele.
+   *
+   * Cada bloco continua opcional, e a ausência de um é **exceção declarada por
+   * escrito no arquivo da aula** — não um formato à parte. Os formatos
+   * `completa`/`curta`/`leitura` da trilha saíram em 2026-09-09: um formato só.
    */
+  /**
+   * **Por que esta aula não tem uma das quatro etapas.**
+   *
+   * Substitui os formatos `completa`/`curta`/`leitura` da trilha, que saíram em
+   * 9/9/2026. Eles eram três desenhos de aula concorrendo, e o segundo — 39 das
+   * 49 — existia por um motivo que deixou de valer: *"a etapa cara de escrever
+   * é a árvore… quarenta e nove aulas completas não cabem no prazo"*. A árvore
+   * deixou de ser escrita (ver `guidedStageSchema`), e com ela o motivo.
+   *
+   * O que fica no lugar é **um formato só, e a exceção por escrito**: a aula
+   * publicada tem as quatro etapas, ou diz aqui, com o nome da etapa e uma
+   * frase, qual falta e por quê. A diferença não é de rigor, é de quem
+   * responde: um formato é uma gaveta em que a aula cai; uma frase é alguém
+   * afirmando alguma coisa sobre aquela aula.
+   *
+   * A chave é o nome da etapa; o valor é o motivo, lido por gente.
+   *
+   * **Objeto de quatro campos opcionais, e não `z.record` com chave de enum**:
+   * no Zod 4 o record de enum é *exaustivo* — declarar uma ausência obrigaria a
+   * declarar as quatro, e a aula a que só falta a apresentação teria de mentir
+   * sobre as outras três.
+   */
+  etapasAusentes: z
+    .strictObject({
+      intro: texto.optional(),
+      objective: texto.optional(),
+      guided: texto.optional(),
+      practice: texto.optional(),
+    })
+    .optional(),
   stages: z.strictObject({
+    intro: introStageSchema.optional(),
     objective: objectiveStageSchema.optional(),
     guided: guidedStageSchema.optional(),
     practice: practiceStageSchema.optional(),
@@ -798,9 +981,17 @@ export const lessonSchema = lessonBaseSchema.superRefine((lesson, ctx) => {
   // formato de três etapas o objetivo tem posição própria e desenha nela, e
   // nada mais precisa existir para ele fazer sentido.
   //
-  // Sobra uma coerência nova, e é a que dá nome ao formato: **as três etapas
-  // jogam a MESMA posição**. Sem isto, "uma posição só" seria promessa de
-  // prosa; aqui é recusa do arquivo.
+  // Sobra uma coerência nova, e é a que dá nome ao formato: **da aula em diante,
+  // todas as etapas jogam a MESMA posição**. Sem isto, "uma posição só" seria
+  // promessa de prosa; aqui é recusa do arquivo.
+  //
+  // **A apresentação é a exceção, e ela nem chega neste laço.** Ela não tem
+  // `positionId`: os diagramas dela são FEN livre, escrita no próprio arquivo
+  // da aula. É de propósito — o passo que diz "estas peças dão mate" precisa
+  // mostrar peças que não estão na posição da aula, e às vezes mais de sete
+  // delas. O preço é que a proveniência daqueles diagramas não tem defesa
+  // mecânica; a regra escrita está na §7 de `docs/VOZ-DO-CURSO.md`, e quem a
+  // cobra é o olho.
   const { objective, guided, practice } = lesson.stages;
   const posicoes: Array<[string, string]> = [];
   if (objective) posicoes.push(["objective", objective.positionId]);
@@ -815,8 +1006,73 @@ export const lessonSchema = lessonBaseSchema.superRefine((lesson, ctx) => {
         path: ["stages", etapa, "positionId"],
         message:
           `a etapa "${etapa}" joga "${id}" e a etapa "${primeira[0]}" joga "${primeira[1]}" — ` +
-          "as três etapas de uma aula de finais são a MESMA posição",
+          "da aula em diante, as etapas de uma aula de finais são a MESMA posição " +
+          "(a apresentação é a exceção: ela desenha em FEN livre)",
       });
+    }
+  }
+
+  /*
+   * **A aula publicada tem as quatro etapas, ou declara qual falta.**
+   *
+   * É o que substituiu os três formatos da trilha (ver `etapasAusentes`). A
+   * trava é sobre a aula **publicada** porque rascunho é aula em construção: a
+   * etapa que ainda não foi escrita não é uma etapa que falta, é uma etapa que
+   * está sendo escrita.
+   *
+   * A segunda metade da trava é a que impede a declaração de virar formalidade:
+   * declarar ausente uma etapa **que existe** é uma frase que o arquivo
+   * desmente, e ninguém a leria de novo para conferir.
+   */
+  {
+    const ETAPAS = ["intro", "objective", "guided", "practice"] as const;
+    const ausentes = lesson.etapasAusentes ?? {};
+    for (const etapa of ETAPAS) {
+      const existe = lesson.stages[etapa] !== undefined;
+      const declarada = ausentes[etapa] !== undefined;
+      // Declarar ausente o que está no arquivo é uma frase que o arquivo
+      // desmente, e vale para as quatro — inclusive para a derivada.
+      if (existe && declarada) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["etapasAusentes", etapa],
+          message:
+            `a aula declara que não tem a etapa "${etapa}" e ela está em stages — ` +
+            "apague a declaração ou apague a etapa, nunca as duas",
+        });
+      }
+      /*
+       * **`guided` é SAÍDA, e por isso não se cobra dele o mesmo.**
+       *
+       * Onde há `objective` há roteiro, e onde há roteiro a etapa 3 é derivada
+       * dele (`lib/lesson/derivar-treino.ts`): um arquivo sem `guided` ali não
+       * é uma aula a que falta o treino, é um arquivo que ainda não passou pelo
+       * `--write`. Cobrá-lo aqui trancava a porta pela qual ele se conserta — a
+       * aula era recusada no schema, sumia da carga do gate, e a derivação, que
+       * é a única coisa capaz de escrevê-la, nunca chegava a rodar. Era o
+       * contrato de `guidedStageSchema` — *apague, rode `--write`, e ele volta
+       * byte por byte* — virando mentira.
+       *
+       * Quem cobra a etapa 3 ausente é o gate, e com o código certo:
+       * `TREINO_DESATUALIZADO`, "o roteiro da aula produz uma etapa 3 e o
+       * arquivo não tem nenhuma". Aula publicada **sem** `objective` continua
+       * tendo de declarar a ausência do treino, porque aí não há de onde
+       * derivá-lo.
+       */
+      if (
+        lesson.status === "published" &&
+        !existe &&
+        !declarada &&
+        !(etapa === "guided" && lesson.stages.objective !== undefined)
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["stages", etapa],
+          message:
+            `a aula publicada não tem a etapa "${etapa}" e não diz por quê — ` +
+            "um formato só, quatro etapas, e a ausência se escreve em `etapasAusentes`",
+        });
+      }
     }
   }
 
@@ -836,13 +1092,15 @@ export const lessonSchema = lessonBaseSchema.superRefine((lesson, ctx) => {
    */
   if (lesson.status === "published" && guided) {
     for (const [nodeId, node] of Object.entries(guided.nodes)) {
-      if (node.arrows && node.arrows.length > 0) continue;
+      if (node.arrows?.length || node.highlights?.length) continue;
       ctx.addIssue({
         code: "custom",
         path: ["stages", "guided", "nodes", nodeId, "arrows"],
         message:
-          `o nó "${nodeId}" da etapa 2 não tem flecha — ela é obrigatória na aula ` +
-          "publicada, e aponta o ALVO do lance, nunca o lance",
+          `o nó "${nodeId}" do treino não tem flecha nem casa acesa — a aula publicada ` +
+          "precisa de uma das duas, e ela aponta o ALVO do lance, nunca o lance. " +
+          `Conserta-se em \`stages.objective.roteiro[…].treino.arrows\` (ou \`.highlights\`) — ` +
+          "o nó é derivado do roteiro, e não se edita aqui",
       });
     }
   }
@@ -856,12 +1114,19 @@ export const lessonSchema = lessonBaseSchema.superRefine((lesson, ctx) => {
    * tela do aluno. Roteiro que não fecha é arquivo recusado, não bug em
    * produção.
    *
-   * **De onde vem a posição de partida.** O schema não lê `content/positions/`
-   * — ele recebe uma aula, não o repositório —, então o ponto de partida é a
-   * FEN do nó raiz da etapa 2, que a trava logo acima já garantiu ser a MESMA
-   * posição. Aula com etapa 1 e sem etapa 2 não é encadeada aqui; quem a
-   * encadeia, a partir do arquivo de posição de verdade, é o gate
-   * (`ROTEIRO_ILEGAL` em `scripts/validate-content.ts`).
+   * **De onde vem a posição de partida, e o que esta trava passou a valer.** O
+   * schema não lê `content/positions/` — ele recebe uma aula, não o
+   * repositório —, então o ponto de partida é a FEN do nó raiz do treino.
+   *
+   * Com o treino **derivado** do roteiro, essa FEN saiu do próprio roteiro: a
+   * trava deixou de ser conferência de duas fontes e virou **conferência de
+   * coerência interna do arquivo** — o roteiro fecha a partir da raiz que ele
+   * mesmo produziu. Ela continua valendo a pena por dois motivos: ela roda na
+   * build e no navegador, onde o gate não roda, e ela pega o arquivo editado à
+   * mão depois de gravado. Quem confere de verdade, contra a posição de
+   * verdade, passou a ser o gate — `ROTEIRO_ILEGAL` em
+   * `scripts/validate-content.ts`, o buraco que este comentário prometia e que
+   * até 2026-09-09 não existia.
    *
    * A chess.js entra neste arquivo só para isto, e só aplica o que está escrito.
    * Quem julga se um lance é BOM continua sendo a tablebase, na autoria.
@@ -916,6 +1181,9 @@ export type Mistake = z.infer<typeof mistakeSchema>;
 export type AuthorAlternative = z.infer<typeof authorAlternativeSchema>;
 export type TreeNode = z.infer<typeof treeNodeSchema>;
 export type Desenho = z.infer<typeof desenhoSchema>;
+export type IntroPasso = z.infer<typeof introPassoSchema>;
+export type IntroStage = z.infer<typeof introStageSchema>;
+export type PassoTreino = z.infer<typeof passoTreinoSchema>;
 export type RoteiroPasso = z.infer<typeof roteiroPassoSchema>;
 export type ObjectiveStage = z.infer<typeof objectiveStageSchema>;
 export type GuidedStage = z.infer<typeof guidedStageSchema>;

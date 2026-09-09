@@ -1,0 +1,23 @@
+{
+  "id": "pos-n0-ladder-silman-yk7",
+  "fen": "8/8/8/8/8/4k3/6R1/6RK w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "KRRK",
+    "escada",
+    "mate-de-duas-torres",
+    "ensino"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Jeremy Silman, na seção em que ensina o mate de rei e duas torres contra rei solitário — a técnica que ele nomeia 'the Staircase' na Parte Um do livro",
+    "bibliographicSource": "Silman, Silman's Complete Endgame Course, Siles Press, Los Angeles, 2007, Parte Um 'Endgames for Beginners (Unrated-999)', seção 'King and Two Rooks vs. Lone King' — página impressa não conferida. A seção é o capítulo 7 do estudo que retranscreve o livro, e o nome acima é o do capítulo, não o da página impressa.",
+    "originalGame": "não se aplica — posição de ensino de manual, não vem de partida",
+    "authorComposer": "não se aplica — é o quadro que ilustra uma técnica de mate (duas torres fecham uma fileira de cada vez), e não uma composição autoral",
+    "license": "obra protegida por direito autoral, em regime integral desde 2026-09-08 (§1.1 do SOURCE-CORPUS): o módulo de finais segue este livro, e por isso o teto de citação da §12.7 e a rotação da §4 não se aplicam a ele. O texto da aula é original em português; nada da prosa do autor é reproduzido, e os PGN do estudo — que carregam a prosa transcrita por OCR — ficam fora do repositório (§13 da TRILHA-FINAIS).",
+    "editionFile": "silman-complete-endgame-course.pdf",
+    "fenMethod": "Não é transcrição de diagrama impresso: a FEN veio do cabeçalho [FEN] do PGN do capítulo 7 do estudo público https://lichess.org/study/yk2b24vS ('King and Two Rooks vs. Lone King', capítulo https://lichess.org/study/yk2b24vS/323XMJc9), que retranscreve este livro. O PGN foi baixado por `npm run finais:extrair` e o par (número, nome, FEN) está versionado em content/finais/capitulos.json. É o atalho da §13 da TRILHA-FINAIS, com o custo declarado ali: das três pernas de cruzamento que a N1-KPK usa, a linha impressa lida no PDF não foi usada — sobram a FEN do estudo e a tablebase.",
+    "qaApplied": "garimpo de 2026-09-09. A Syzygy julga o expectedResult no `npm run validate:content -- --refresh-cache`: a posição é ganha para as brancas, com DTM 9 meios-lances (mate em 5). A linha da aula assistida foi conferida lance a lance contra a mesma tablebase, com o preto jogando sempre a defesa mais dura: 1.Tg4 Rd2 2.T1g3 Rc1 3.Tg2 Rb1 4.Te2 Ra1 5.Tg1#. Os cinco lances brancos são todos lances de DTM ótimo — nenhum deles depende de o preto colaborar.",
+    "pendingRisk": "transcrição de terceiro; página do livro não conferida. O resultado é julgado pela tablebase, a atribuição ao livro não. Some-se a isto que o nome do capítulo vem truncado em 80 caracteres pela fonte (§13 da TRILHA-FINAIS): quem identifica o capítulo é o par (estudo, número), e a url está no capitulos.json."
+  }
+}

@@ -3,8 +3,12 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { lessonSchema, type Expect, type RoteiroPasso, type TreeNode } from "./schema.ts";
-import { duracaoDoRoteiro, montarQuadros, pausaDoPasso } from "./roteiro.ts";
-import { lerRegua } from "./voz.ts";
+import {
+  duracaoDoRoteiro,
+  montarQuadros,
+  MS_POR_CARACTERE_DIGITADO,
+  pausaDoPasso,
+} from "./roteiro.ts";
 
 /**
  * A aritmética da etapa 1. Metade dos casos usa um roteiro sintético — é o
@@ -58,16 +62,34 @@ test("a pausa tem piso, e o `espera` do autor soma por cima", () => {
   assert.equal(pausaDoPasso(longo), 4500);
 });
 
-test("a etapa 1 da N1-KPK dura o que a régua manda", () => {
-  const objective = lesson.stages.objective;
-  assert.ok(objective, "a aula piloto precisa ter a etapa 1");
-  // A faixa vem de `docs/VOZ-DO-CURSO.md` §3.1b, como todo número desta casa.
-  const [piso, teto] = lerRegua().roteiroSegundos;
-  const segundos = duracaoDoRoteiro(objective.roteiro) / 1000;
-  assert.ok(
-    segundos >= piso && segundos <= teto,
-    `a etapa 1 dura ${segundos.toFixed(1)} s, fora da faixa de ${piso} a ${teto} s`,
+/*
+ * **O teste da faixa de 40 a 70 segundos saiu em 2026-09-09**, com a faixa.
+ *
+ * Ele lia `lerRegua().roteiroSegundos` e reprovava a aula que durasse menos ou
+ * mais. A decisão do Doug é que a aula dura o que precisar; a `/revisar-aula`
+ * continua imprimindo a duração, agora como observação e não como veredito.
+ *
+ * O que saiu junto e fica declarado como perda: o **piso** protegia contra fala
+ * telegráfica, e o **teto**, contra a aula longa demais. Nenhuma máquina cobra
+ * as duas coisas agora.
+ *
+ * `duracaoDoRoteiro` e `pausaDoPasso` não mudaram e continuam testados aqui —
+ * eles governam o ritmo da aula na tela, e isso continua.
+ */
+
+test("a duração do roteiro é a digitação mais a pausa de leitura de cada passo", () => {
+  // A conta continua sendo cobrada; o que saiu foi a faixa em que ela tinha de
+  // cair. Sem este caso, tirar o veredito teria deixado a função sem teste
+  // nenhum — e ela é o relógio da tela.
+  const um = passo({ fala: "Dama." });
+  assert.equal(duracaoDoRoteiro([um]), 5 * MS_POR_CARACTERE_DIGITADO + 1000);
+  assert.equal(
+    duracaoDoRoteiro([um, um]),
+    2 * (5 * MS_POR_CARACTERE_DIGITADO + 1000),
+    "dois passos iguais levam o dobro de um",
   );
+  const comEspera = passo({ fala: "Dama.", espera: 900 });
+  assert.equal(duracaoDoRoteiro([comEspera]) - duracaoDoRoteiro([um]), 900);
 });
 
 test("o roteiro da N1-KPK fecha no tabuleiro e termina com a dama em b8", () => {

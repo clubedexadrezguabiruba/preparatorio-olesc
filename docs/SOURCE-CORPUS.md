@@ -21,8 +21,8 @@ não o fato isolado. Obra protegida tem **teto de 2 posições por aula**, cobra
 pelo gate; domínio público e CC0 não têm teto.
 
 Duas coisas tiram esse teto do caminho, e as duas estão logo abaixo: o **regime
-integral** (§1.1) o desliga por obra, por decisão escrita; e o **formato de três
-etapas** (§1.2) o deixou **sem sujeito** no módulo de finais.
+integral** (§1.1) o desliga por obra, por decisão escrita; e o **formato de uma
+posição só** (§1.2) o deixou **sem sujeito** no módulo de finais.
 
 O que nenhuma obra autoriza, em qualquer volume: copiar texto, comentário,
 tradução, seleção completa de exercícios ou estrutura editorial. Todo texto do
@@ -91,18 +91,47 @@ descoberta.
 
 ### 1.2 O teto por aula ficou sem sujeito no módulo de finais
 
-Escrito em 2026-09-08, junto com o formato de três etapas, para que ninguém leia
-o teto de 2 como uma trava que o módulo de finais ainda tem. Ele não tem.
+Escrito em 2026-09-08, junto com o formato de uma posição só, para que ninguém
+leia o teto de 2 como uma trava que o módulo de finais ainda tem. Ele não tem.
 
 O teto da §12.7 é **por aula**. No formato novo, uma aula é **uma posição só**: o
-`lessonSchema` recusa o arquivo cujas três etapas não apontem o mesmo id, e o
-gate desduplica por id antes de contar. Toda aula conta 1, e 1 nunca passa de 2 —
+`lessonSchema` recusa o arquivo cujas etapas, da aula em diante, não apontem o
+mesmo id, e o gate desduplica por id antes de contar. Toda aula conta 1, e 1 nunca passa de 2 —
 **o teto não tem como morder neste formato**. Uma obra protegida pode fornecer
 quarenta aulas de uma posição cada e o gate fica verde.
 
 O código do teto continua em `scripts/validate-content.ts` e continua correto: ele
 volta a ter sujeito no dia em que algum formato usar mais de uma posição na mesma
 aula. O que **não** existe é a proteção que ele parecia dar ao módulo de finais.
+
+### 1.2b A apresentação desenha em FEN livre, e isso é dívida de olho humano
+
+Desde **9/9/2026** a aula de finais tem uma etapa 1 — a **apresentação** —, e ela é
+a única do curso que desenha em **FEN escrita no próprio arquivo da aula**, sem
+virar `content/positions/` e sem os 9 campos de proveniência.
+
+É deliberado. O passo que diz *"estas peças dão mate"* precisa mostrar peças que
+não estão na posição da aula, às vezes mais de sete delas, e **ninguém joga ali**:
+o tabuleiro é `viewOnly`, e a tablebase nem é consultada. Um diagrama montado do
+zero para ilustrar material não é uma posição de xadrez citada de lugar nenhum —
+é uma figura.
+
+**A regra que fecha o buraco é escrita, e é esta:**
+
+> Se um diagrama de apresentação vier **de um livro**, ele deixa de ser ilustração
+> e vira posição: arquivo em `content/positions/`, com os 9 campos de
+> proveniência, como qualquer outra.
+
+O que a máquina cobra é só o que ela sabe — `INTRO_FEN_ILEGAL` (o mesmo
+`fenProblem` do `checkPosition`) e `INTRO_FEN_REDUNDANTE` (repetir a FEN da aula,
+que se diz omitindo o campo). **Nenhum dos dois olha de onde o diagrama veio.**
+Quem olha é o Doug, e é por isso que isto está escrito aqui e na §7 de
+`docs/VOZ-DO-CURSO.md` em vez de estar só num comentário de código.
+
+As três FEN de apresentação que existem hoje são das duas aulas do nível 1 e todas
+foram **montadas do zero** para ilustrar material: as peças que dão mate, as que
+não dão, e a posição de mate de dois cavalos no canto. Nenhuma saiu de diagrama de
+livro.
 
 A régua alternativa — um teto **por obra no módulo inteiro**, `N` posições da
 mesma obra somadas em todas as aulas publicadas — foi proposta ao Doug em
@@ -120,7 +149,7 @@ estiverem de pé; se alguma cair, o módulo fica sem régua nenhuma.
 ## 2. As obras registradas
 
 `Teto` = quantas posições a obra pode dar para uma mesma aula — e leia a §1.2
-antes de confiar nesta coluna: no formato de três etapas ela não morde. `Legível` = o
+antes de confiar nesta coluna: com uma posição por aula ela não morde. `Legível` = o
 subagente consegue achar página por busca de texto (teste da §4).
 
 | # | Slug | Obra | Edição | Teto | Legível |

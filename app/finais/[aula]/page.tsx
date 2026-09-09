@@ -48,10 +48,19 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
   const pacote = lerPacote(aula);
   if (!pacote) notFound();
 
-  // Quem sabe o formato é a trilha, não o arquivo da aula: uma curta rebaixada
-  // para leitura muda de linha lá, e o arquivo continua o mesmo. Aula fora da
-  // trilha — um rascunho que o Doug abre para revisar — não recebe o controle.
-  const formato = aulaDaTrilha(aula)?.formato;
+  /*
+   * **Quem sabe se a aula é de leitura é o ARQUIVO dela, e não mais a trilha.**
+   *
+   * Era `aulaDaTrilha(aula)?.formato === "leitura"`. Os três formatos saíram em
+   * 9/9/2026 (ver `lib/finais/trilha.ts`), e a pergunta que eles respondiam
+   * ficou sendo uma só: a aula tem a etapa 4? Sem prática não há partida para
+   * vencer, e o que fecha a aula é a declaração do aluno de que leu.
+   *
+   * Aula fora da trilha — um rascunho que o Doug abre para revisar — continua
+   * sem o controle: o botão grava progresso, e rascunho não grava.
+   */
+  const naTrilha = aulaDaTrilha(aula) !== undefined;
+  const deLeitura = naTrilha && pacote.lesson.stages.practice === undefined;
 
   return (
     /*
@@ -80,7 +89,7 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
       <Suspense fallback={null}>
         <AulaNoNavegador
           pacote={pacote}
-          leitura={formato === "leitura" ? <Leitura aula={aula} /> : undefined}
+          leitura={deLeitura ? <Leitura aula={aula} /> : undefined}
         />
       </Suspense>
     </main>

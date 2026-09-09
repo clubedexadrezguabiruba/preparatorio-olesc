@@ -23,6 +23,9 @@ const VAZIO: ProgressoParaOMapa = {
   temaAberto: () => true,
   finais: new Map(),
   aulasPublicadas: new Set(TRILHA.map((a) => a.id)),
+  // Os três formatos saíram em 9/9/2026: o que decide o critério de uma aula é
+  // ela ter prática, e no mapa toda aula da trilha tem.
+  aulasComPratica: new Set(TRILHA.map((a) => a.id)),
   semana: 4,
 };
 
@@ -78,8 +81,8 @@ test("aula aprendida conta 1; uma vitória só ainda conta 0", () => {
   // **A segunda metade deste teste é a mudança de 2026-09-08.** `praticaOk`
   // sozinho valia 1 — era o critério antigo, "venceu uma vez, para sempre".
   // Hoje o mapa conta o degrau 3, e uma vitória põe a aula no degrau 1.
-  const curta = TRILHA.find((a) => a.formato === "curta");
-  assert.ok(curta, "a trilha precisa de pelo menos uma aula curta para este teste");
+  const curta = TRILHA[1];
+  assert.ok(curta, "a trilha precisa de pelo menos duas aulas para este teste");
 
   const naoFeita = montarMapa(VAZIO);
   assert.equal(itens(naoFeita, "finais").find((i) => i.id === curta.id)?.feitos, 0);

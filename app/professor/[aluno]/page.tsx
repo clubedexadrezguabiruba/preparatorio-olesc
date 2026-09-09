@@ -6,7 +6,7 @@ import { professorAtual } from "@/lib/auth/perfil";
 import { hojeNoBrasil, porExtenso, semanaAtual, somarDias } from "@/lib/curso/calendario";
 import { META_DO_DIA_MIN, MINIMO_DA_SEQUENCIA_MIN, sequenciaDeDias, serieDeDias } from "@/lib/curso/hoje";
 import { minutosPorDia, partidasDeclaradas } from "@/lib/curso/minutos";
-import { aulasPublicadas } from "@/lib/finais/conteudo";
+import { aulasComPratica, aulasPublicadas } from "@/lib/finais/conteudo";
 import { DEGRAUS_EM_DIAS, diasAteRevisar } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import {
@@ -80,6 +80,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   ]);
 
   const abertas = aulasAbertas(aulasPublicadas(), semana);
+  const comPratica = aulasComPratica();
   const serie = serieDeDias(minutos, hoje, DIAS);
   const sequencia = sequenciaDeDias(minutos, hoje);
   const fila = filaCompleta(linhas);
@@ -369,7 +370,10 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
                 </h3>
                 <ul className="flex flex-wrap gap-1.5">
                   {daqui.map((aula) => {
-                    const estado = estadoDaAula(aula.formato, finais.get(aula.id) ?? AULA_ZERADA);
+                    const estado = estadoDaAula(
+                      comPratica.has(aula.id),
+                      finais.get(aula.id) ?? AULA_ZERADA,
+                    );
                     return (
                       <li key={aula.id}>
                         <span
