@@ -144,6 +144,19 @@ export const BLOCOS: readonly Bloco[] = [
   },
   {
     id: 8,
+    /*
+     * "Conversão" é da lista de jargão vigiada — a mesma que derrubou "Motivos
+     * fundamentais" do bloco 4. **Fica, por decisão do Doug em 2026-09-08**, e
+     * está escrito aqui para ninguém propor a troca uma terceira vez.
+     *
+     * A varredura de jargão acusa esta linha e mais nada no bloco de tática.
+     * Isso é esperado: a regra de "nenhum termo sem tradução na mesma frase"
+     * foi escrita para os textos, onde há espaço para explicar ao lado. Um
+     * nome de bloco não tem esse espaço, e os candidatos que evitavam a
+     * palavra — "Segurar e virar dama", "Defesa e peões", "Defender e
+     * terminar" — ou prometiam o que o bloco não cumpre (en passant não vira
+     * dama), ou descreviam as peças em vez do que se aprende.
+     */
     nome: "Defesa e conversão",
     faixa: [1000, 2100],
     sabado: 3,
