@@ -133,7 +133,7 @@ test("toda aula publicada em content/ está na trilha, e a trilha não inventa a
 });
 
 test("aulaDaTrilha acha pelo id e nega o que não é do curso", () => {
-  assert.equal(aulaDaTrilha("N0-R-MATE")?.ordem, 2);
+  assert.equal(aulaDaTrilha("N0-R-MATE")?.ordem, 4);
   assert.equal(aulaDaTrilha("N9-INVENTADA"), undefined);
 });
 
