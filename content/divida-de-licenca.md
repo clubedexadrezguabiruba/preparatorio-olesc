@@ -32,11 +32,11 @@ gratuito.
 - **prazo:** 2027-09-08
 - **motivo:** Decisão do Doug em 2026-09-08: todas as aulas de finais passam a seguir o Silman, texto e posições. É o único manual do acervo com progressão declarada por classe de força, que é exatamente a espinha que a trilha precisa, e o preparatório é gratuito. Quando o curso for comercializado, o conteúdo listado em content/divida-de-licenca.md será trocado por fonte pública.
 
-### Aulas com esta obra como livro-base (0)
+### Aulas com esta obra como livro-base (1)
 
-_Nenhuma._
+- `N0-MATING-MATERIAL` — classe E, "O que dá mate e o que não dá"
 
-### Posições que citam esta obra (0)
+### Posições que citam esta obra (1)
 
-_Nenhuma._
+- `pos-n0-mating-material-silman-38` — Silman, Silman's Complete Endgame Course, Siles Press, Los Angeles, 2007, p. impressa 34 (PDF p. 48, offset 14), Parte Dois 'Endgames for Class E (1000-1199)', seção 'What Can (or Cannot) Mate vs. Lone King' (impressas 33-34), Diagram 38 — o único diagrama da seção
 

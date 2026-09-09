@@ -3,13 +3,22 @@ import { aprendida, zerada, type ProgressoDaEscada } from "./escada.ts";
 
 /**
  * A trilha de finais: **a fonte única** de quais aulas o curso tem, em que
- * classe, em que ordem, em que formato e a partir de que sábado.
+ * nível, em que ordem e em que formato.
  *
  * É o análogo de `lib/tatica/blocos.ts`, e existe pelo mesmo motivo: o painel,
  * a lista de `/finais`, a tarefa da semana e o relatório do professor fazem a
- * mesma pergunta — "quantas aulas o aluno dominou na classe E?" —, e quatro
+ * mesma pergunta — "quantas aulas o aluno aprendeu no nível 2?" —, e quatro
  * respostas escritas em quatro arquivos são quatro chances de o painel dizer 6
  * e o relatório dizer 5 com o aluno na frente.
+ *
+ * ## Dois eixos ao mesmo tempo, e por quanto tempo
+ *
+ * Desde 2026-09-09 cada aula tem **`nivel` e `classe`**. O vigente é o `nivel`,
+ * cortado pela `ordem` (§1 do documento); a `classe` e o `sabado` ficam até a
+ * Etapa 2 do plano dos níveis, que roda no branch do repertório e apaga os dois
+ * de uma vez, com as telas junto. Enquanto isso, quem lê este arquivo deve
+ * preferir `nivel` — a `classe` sobrevive porque `lib/curso/mapa.ts`,
+ * `app/finais/page.tsx` e o gate de rotação de livros ainda a leem.
  *
  * ## O que está aqui e o que está em `docs/TRILHA-FINAIS.md`
  *
@@ -87,6 +96,57 @@ export const CLASSE: Record<Classe, { nome: string; faixa: string; resumo: strin
   },
 };
 
+/* ------------------------------------------------------------------ *
+ * Os cinco níveis — o eixo novo, ao lado da classe
+ * ------------------------------------------------------------------ */
+
+/**
+ * Os cinco níveis da escada (§1 do documento), do mais fraco para o mais forte.
+ *
+ * **Entram ao lado da `classe`, não no lugar dela, e é de propósito.** Apagar
+ * `classe` e `sabado` é a Etapa 2 do plano dos níveis, que roda no branch do
+ * repertório; fazê-lo aqui quebraria `lib/curso/trilha.test.ts`,
+ * `lib/curso/mapa.ts` e `app/finais/page.tsx` por um ganho que este trabalho não
+ * precisa. Enquanto isso, este arquivo carrega dois eixos, e o documento já
+ * declara qual dos dois é o vigente.
+ */
+export const NIVEIS = [1, 2, 3, 4, 5] as const;
+
+export type Nivel = (typeof NIVEIS)[number];
+
+/**
+ * O cabeçalho de cada nível na tela. **A faixa é FIDE, não chess.com**, e isso é
+ * decisão do plano dos níveis: FIDE ≈ chess.com rápidas − 300/400, e rotular por
+ * FIDE impede que o aluno de 1700 rapid conclua que pode pular os níveis baixos.
+ */
+export const NIVEL: Record<Nivel, { nome: string; fide: string; resumo: string }> = {
+  1: {
+    nome: "Nível 1",
+    fide: "até 800",
+    resumo: "Mates básicos, afogamento, o que dá mate e o rei como peça.",
+  },
+  2: {
+    nome: "Nível 2",
+    fide: "800 a 1000",
+    resumo: "Rei e peão: quadrado, oposição, casas-chave, KPK, peão de torre.",
+  },
+  3: {
+    nome: "Nível 3",
+    fide: "1000 a 1200",
+    resumo: "Oposição distante; bispo, cavalo e torre contra peão; o bloqueio.",
+  },
+  4: {
+    nome: "Nível 4",
+    fide: "1200 a 1400",
+    resumo: "Torres: Lucena, Filidor, cortar o rei. Passados, bispo errado, dama contra peão.",
+  },
+  5: {
+    nome: "Nível 5",
+    fide: "1400 ou mais",
+    resumo: "Triangulação, Réti, Vancura, sétima fila, bispos de cores opostas.",
+  },
+};
+
 /**
  * Os três formatos (§2 do documento). O que muda é quais etapas a aula tem — e,
  * por consequência, o que "dominada" quer dizer nela.
@@ -124,88 +184,122 @@ export const FORMATO: Record<Formato, { nome: string; etapas: string; criterio: 
 };
 
 export type AulaDaTrilha = {
-  /** O id do arquivo em `content/lessons/`, que é o do currículo do laboratório. */
+  /**
+   * O id do arquivo em `content/lessons/`, que é o do currículo do laboratório.
+   *
+   * **O prefixo `N0-`…`N5-` não é o nível.** É a competência do currículo do
+   * Laboratório de Finais, e a colisão de vocabulário é herança, não descuido:
+   * `N4-B-VS-PAWNS` é aula do **nível 3**. Renomear invalidaria as posições
+   * aprovadas e o cache da tablebase (§11.3 do documento).
+   */
   readonly id: string;
+  /** Sai na Etapa 2 do plano dos níveis. Ainda é o que o gate de rotação agrupa. */
   readonly classe: Classe;
-  /** A posição na lista das 49. Ordena a classe e não se repete. */
+  /** O nível da escada, cortado pela `ordem` (§1 do documento). */
+  readonly nivel: Nivel;
+  /** A posição na lista das 49. É ordem de pré-requisito, e não se repete. */
   readonly ordem: number;
   readonly formato: Formato;
-  /** A semana do preparatório a partir da qual a aula aparece. */
+  /** A semana do preparatório a partir da qual a aula aparece. Sai na Etapa 2. */
   readonly sabado: Semana;
   /** Uma linha: é o que o aluno lê no cartão antes de abrir. */
   readonly nome: string;
 };
 
 /**
+ * O corte da §1 do documento: qual nível a `ordem` cai.
+ *
+ * Existe como função, e não só como a coluna escrita na lista, porque é ela que
+ * o teste usa para conferir as 49 linhas uma a uma. Uma lista escrita à mão erra
+ * uma célula; a função não erra a mesma célula duas vezes.
+ */
+export function nivelDaOrdem(ordem: number): Nivel {
+  if (ordem <= 6) return 1;
+  if (ordem <= 12) return 2;
+  if (ordem <= 18) return 3;
+  if (ordem <= 34) return 4;
+  return 5;
+}
+
+/**
  * As 49 aulas, na ordem da §5 do documento.
  *
- * ## Uma decisão tomada aqui, e não lá: as duas aulas prontas abrem na semana 1
+ * O `nivel` é **derivado da `ordem`** pela regra da §1 (1–6 · 7–12 · 13–18 ·
+ * 19–34 · 35–49) e escrito linha a linha aqui, não calculado na leitura: assim
+ * ele é dado, como todo o resto desta lista, e o teste o confere contra
+ * `nivelDaOrdem` em vez de contra si mesmo.
  *
- * A tabela "Quando cada aula abre" do documento põe as aulas 1–8, 10 e 11 na
- * semana 2, porque é a semana em que a **FN1/B5** entrega as oito novas. As
- * duas primeiras, porém, já existem, já passaram pelo gate e já jogam — e a
- * coluna "Fase" delas diz "pronta", não "B5". Deixá-las trancadas até 19 de
- * setembro seria o site escondendo o que ele tem: quem entrar no domingo
- * seguinte ao Sábado 1 encontraria um curso de finais com zero aulas abertas.
- * Então `sabado: 1` nas duas, e `sabado: 2` no resto do lote da B5.
+ * O `sabado` continua escrito e **não vale mais nada de novo**: ele é do
+ * calendário de sábados que o plano dos níveis aposentou, e a tabela "Quando
+ * cada aula abre" já saiu do documento. Sai daqui na Etapa 2 daquele plano,
+ * junto com `classe`. Enquanto ele estiver aqui, `aulasAbertas` continua
+ * cobrando a semana — mudar isso agora é a reforma, não este trabalho.
  */
 export const TRILHA: readonly AulaDaTrilha[] = [
-  // ---------------------------------------------------------------- Classe E
-  { ordem: 1, id: "N0-Q-MATE", classe: "E", formato: "completa", sabado: 1, nome: "Mate de dama e rei: a caixa" },
-  { ordem: 2, id: "N0-R-MATE", classe: "E", formato: "completa", sabado: 1, nome: "Mate de torre e rei: a caixa" },
-  { ordem: 3, id: "N0-LADDER", classe: "E", formato: "curta", sabado: 2, nome: "Mate da escada: duas torres, e dama e torre" },
-  { ordem: 4, id: "N0-STALEMATE", classe: "E", formato: "curta", sabado: 2, nome: "Afogamento: como não empatar a partida ganha" },
-  { ordem: 5, id: "N0-MATING-MATERIAL", classe: "E", formato: "leitura", sabado: 2, nome: "O que dá mate e o que não dá" },
-  { ordem: 6, id: "N1-KING-ACTIVITY", classe: "E", formato: "curta", sabado: 2, nome: "O rei é peça: use-o" },
+  // ---------------------------------------------------------------- Nível 1  ·  FIDE até 800
+  //
+  // A ordem mudou em 2026-09-09, por decisão do Doug (§5 e §11.11 do documento):
+  // antes de aprender a dar mate, saber com que material dá. Depois a dificuldade
+  // sobe — escada (duas torres, mecânico), dama (tranca sozinha), torre (precisa
+  // do rei) —, e o afogamento vem logo depois dos dois mates, que é onde ele
+  // acontece. O `sabado` das seis é 1: elas são a meta da OLESC, e o calendário
+  // de sábados já foi aposentado.
+  { ordem: 1, id: "N0-MATING-MATERIAL", nivel: 1, classe: "E", formato: "completa", sabado: 1, nome: "O que dá mate e o que não dá" },
+  { ordem: 2, id: "N0-LADDER", nivel: 1, classe: "E", formato: "curta", sabado: 1, nome: "Mate da escada: duas torres, e dama e torre" },
+  { ordem: 3, id: "N0-Q-MATE", nivel: 1, classe: "E", formato: "completa", sabado: 1, nome: "Mate de dama e rei: a técnica do L" },
+  { ordem: 4, id: "N0-R-MATE", nivel: 1, classe: "E", formato: "completa", sabado: 1, nome: "Mate de torre e rei: a caixa" },
+  { ordem: 5, id: "N0-STALEMATE", nivel: 1, classe: "E", formato: "curta", sabado: 1, nome: "Afogamento: como não empatar a partida ganha" },
+  { ordem: 6, id: "N1-KING-ACTIVITY", nivel: 1, classe: "E", formato: "curta", sabado: 1, nome: "O rei é peça: use-o" },
 
-  // ---------------------------------------------------------------- Classe D
-  { ordem: 7, id: "N1-SQUARE", classe: "D", formato: "completa", sabado: 2, nome: "Regra do quadrado" },
-  { ordem: 8, id: "N1-DIRECT-OPPOSITION", classe: "D", formato: "curta", sabado: 2, nome: "Oposição" },
-  { ordem: 9, id: "N1-KEY-SQUARES", classe: "D", formato: "curta", sabado: 3, nome: "Casas-chave" },
-  { ordem: 10, id: "N1-KPK", classe: "D", formato: "completa", sabado: 2, nome: "Rei e peão contra rei: o rei na frente do peão" },
-  { ordem: 11, id: "N1-KPK-RANKS", classe: "D", formato: "curta", sabado: 2, nome: "Peão na 6ª e na 7ª: quem joga decide" },
-  { ordem: 12, id: "N1-ROOK-PAWN", classe: "D", formato: "curta", sabado: 3, nome: "Peão de torre: o empate do canto" },
-  { ordem: 13, id: "N2-KING-MANEUVER", classe: "D", formato: "curta", sabado: 3, nome: "Oposição além do básico: a distante" },
-  { ordem: 14, id: "N4-B-VS-PAWNS", classe: "D", formato: "curta", sabado: 3, nome: "Bispo contra peão" },
-  { ordem: 15, id: "N4-N-VS-PAWNS", classe: "D", formato: "curta", sabado: 3, nome: "Cavalo contra peão" },
-  { ordem: 16, id: "N3-R-VS-PAWN", classe: "D", formato: "completa", sabado: 3, nome: "Torre contra peão: contar, cortar, aproximar" },
-  { ordem: 17, id: "N1-KING-VS-PAWNS", classe: "D", formato: "curta", sabado: 3, nome: "Rei contra dois peões passados" },
-  { ordem: 18, id: "N1-PAWNS-BLOCKADE", classe: "D", formato: "curta", sabado: 3, nome: "Um peão segura dois: o bloqueio" },
+  // ---------------------------------------------------------------- Nível 2  ·  FIDE 800–1000
+  { ordem: 7, id: "N1-SQUARE", nivel: 2, classe: "D", formato: "completa", sabado: 2, nome: "Regra do quadrado" },
+  { ordem: 8, id: "N1-DIRECT-OPPOSITION", nivel: 2, classe: "D", formato: "curta", sabado: 2, nome: "Oposição" },
+  { ordem: 9, id: "N1-KEY-SQUARES", nivel: 2, classe: "D", formato: "curta", sabado: 3, nome: "Casas-chave" },
+  { ordem: 10, id: "N1-KPK", nivel: 2, classe: "D", formato: "completa", sabado: 2, nome: "Rei e peão contra rei: o rei na frente do peão" },
+  { ordem: 11, id: "N1-KPK-RANKS", nivel: 2, classe: "D", formato: "curta", sabado: 2, nome: "Peão na 6ª e na 7ª: quem joga decide" },
+  { ordem: 12, id: "N1-ROOK-PAWN", nivel: 2, classe: "D", formato: "curta", sabado: 3, nome: "Peão de torre: o empate do canto" },
+  // ---------------------------------------------------------------- Nível 3  ·  FIDE 1000–1200
+  { ordem: 13, id: "N2-KING-MANEUVER", nivel: 3, classe: "D", formato: "curta", sabado: 3, nome: "Oposição além do básico: a distante" },
+  { ordem: 14, id: "N4-B-VS-PAWNS", nivel: 3, classe: "D", formato: "curta", sabado: 3, nome: "Bispo contra peão" },
+  { ordem: 15, id: "N4-N-VS-PAWNS", nivel: 3, classe: "D", formato: "curta", sabado: 3, nome: "Cavalo contra peão" },
+  { ordem: 16, id: "N3-R-VS-PAWN", nivel: 3, classe: "D", formato: "completa", sabado: 3, nome: "Torre contra peão: contar, cortar, aproximar" },
+  { ordem: 17, id: "N1-KING-VS-PAWNS", nivel: 3, classe: "D", formato: "curta", sabado: 3, nome: "Rei contra dois peões passados" },
+  { ordem: 18, id: "N1-PAWNS-BLOCKADE", nivel: 3, classe: "D", formato: "curta", sabado: 3, nome: "Um peão segura dois: o bloqueio" },
 
-  // ---------------------------------------------------------------- Classe C
-  { ordem: 19, id: "N3-LUCENA", classe: "C", formato: "completa", sabado: 3, nome: "Lucena: a ponte" },
-  { ordem: 20, id: "N3-PHILIDOR", classe: "C", formato: "completa", sabado: 3, nome: "Filidor: a defesa da terceira fila" },
-  { ordem: 21, id: "N3-ROOK-BEHIND", classe: "C", formato: "completa", sabado: 3, nome: "Torre atrás do peão passado" },
-  { ordem: 22, id: "N3-SIDE-CHECKS", classe: "C", formato: "curta", sabado: 3, nome: "Lado curto, lado longo" },
-  { ordem: 23, id: "N3-CUT-FILE", classe: "C", formato: "curta", sabado: 4, nome: "Cortar o rei pela coluna" },
-  { ordem: 24, id: "N3-DEFENSIVE-EXCEPTIONS", classe: "C", formato: "curta", sabado: 4, nome: "Defesa passiva: quando ela segura" },
-  { ordem: 25, id: "N3-R-VS-2P", classe: "C", formato: "curta", sabado: 4, nome: "Torre contra dois peões" },
-  { ordem: 26, id: "N2-OUTSIDE-PASSER", classe: "C", formato: "curta", sabado: 4, nome: "Peão passado distante" },
-  { ordem: 27, id: "N2-PROTECTED-PASSER", classe: "C", formato: "curta", sabado: 4, nome: "Peão passado protegido" },
-  { ordem: 28, id: "N1-K2P-VS-K", classe: "C", formato: "curta", sabado: 4, nome: "Rei e dois peões contra rei: ligados e dobrados" },
-  { ordem: 29, id: "N2-PAWN-RACES", classe: "C", formato: "curta", sabado: 4, nome: "Corrida de peões: quem promove primeiro" },
-  { ordem: 30, id: "N4-Q-VS-PAWN", classe: "C", formato: "curta", sabado: 4, nome: "Dama contra peão na 7ª, e as exceções" },
-  { ordem: 31, id: "N4-WRONG-BISHOP", classe: "C", formato: "curta", sabado: 4, nome: "Bispo errado com peão de torre" },
-  { ordem: 32, id: "N4-OPPOSITE-BISHOPS", classe: "C", formato: "curta", sabado: 4, nome: "Bispos de cores opostas: a fortaleza" },
-  { ordem: 33, id: "N4-N-AND-ROOK-PAWN", classe: "C", formato: "curta", sabado: 4, nome: "Cavalo e peão de torre contra rei" },
-  { ordem: 34, id: "N4-Q-VS-ROOK", classe: "C", formato: "curta", sabado: 4, nome: "Dama contra torre: o básico" },
+  // ---------------------------------------------------------------- Nível 4  ·  FIDE 1200–1400
+  { ordem: 19, id: "N3-LUCENA", nivel: 4, classe: "C", formato: "completa", sabado: 3, nome: "Lucena: a ponte" },
+  { ordem: 20, id: "N3-PHILIDOR", nivel: 4, classe: "C", formato: "completa", sabado: 3, nome: "Filidor: a defesa da terceira fila" },
+  { ordem: 21, id: "N3-ROOK-BEHIND", nivel: 4, classe: "C", formato: "completa", sabado: 3, nome: "Torre atrás do peão passado" },
+  { ordem: 22, id: "N3-SIDE-CHECKS", nivel: 4, classe: "C", formato: "curta", sabado: 3, nome: "Lado curto, lado longo" },
+  { ordem: 23, id: "N3-CUT-FILE", nivel: 4, classe: "C", formato: "curta", sabado: 4, nome: "Cortar o rei pela coluna" },
+  { ordem: 24, id: "N3-DEFENSIVE-EXCEPTIONS", nivel: 4, classe: "C", formato: "curta", sabado: 4, nome: "Defesa passiva: quando ela segura" },
+  { ordem: 25, id: "N3-R-VS-2P", nivel: 4, classe: "C", formato: "curta", sabado: 4, nome: "Torre contra dois peões" },
+  { ordem: 26, id: "N2-OUTSIDE-PASSER", nivel: 4, classe: "C", formato: "curta", sabado: 4, nome: "Peão passado distante" },
+  { ordem: 27, id: "N2-PROTECTED-PASSER", nivel: 4, classe: "C", formato: "curta", sabado: 4, nome: "Peão passado protegido" },
+  { ordem: 28, id: "N1-K2P-VS-K", nivel: 4, classe: "C", formato: "curta", sabado: 4, nome: "Rei e dois peões contra rei: ligados e dobrados" },
+  { ordem: 29, id: "N2-PAWN-RACES", nivel: 4, classe: "C", formato: "curta", sabado: 4, nome: "Corrida de peões: quem promove primeiro" },
+  { ordem: 30, id: "N4-Q-VS-PAWN", nivel: 4, classe: "C", formato: "curta", sabado: 4, nome: "Dama contra peão na 7ª, e as exceções" },
+  { ordem: 31, id: "N4-WRONG-BISHOP", nivel: 4, classe: "C", formato: "curta", sabado: 4, nome: "Bispo errado com peão de torre" },
+  { ordem: 32, id: "N4-OPPOSITE-BISHOPS", nivel: 4, classe: "C", formato: "curta", sabado: 4, nome: "Bispos de cores opostas: a fortaleza" },
+  { ordem: 33, id: "N4-N-AND-ROOK-PAWN", nivel: 4, classe: "C", formato: "curta", sabado: 4, nome: "Cavalo e peão de torre contra rei" },
+  { ordem: 34, id: "N4-Q-VS-ROOK", nivel: 4, classe: "C", formato: "curta", sabado: 4, nome: "Dama contra torre: o básico" },
 
-  // ---------------------------------------------------------------- Classe B
-  { ordem: 35, id: "N2-TRIANGULATION", classe: "B", formato: "curta", sabado: 4, nome: "Triangulação" },
-  { ordem: 36, id: "N2-OUTFLANKING", classe: "B", formato: "curta", sabado: 4, nome: "Flanquear o rei" },
-  { ordem: 37, id: "N2-RESERVE-TEMPI", classe: "B", formato: "curta", sabado: 4, nome: "Tempos de reserva" },
-  { ordem: 38, id: "N2-BREAKTHROUGH", classe: "B", formato: "curta", sabado: 4, nome: "Ruptura de peões" },
-  { ordem: 39, id: "N2-RETI", classe: "B", formato: "curta", sabado: 4, nome: "Manobra de Réti: o rei que faz duas coisas" },
-  { ordem: 40, id: "N3-R-2P-VS-R", classe: "B", formato: "curta", sabado: 4, nome: "Torre e dois peões ligados contra torre" },
-  { ordem: 41, id: "N3-SEVENTH-RANK", classe: "B", formato: "curta", sabado: 4, nome: "A sétima fila" },
-  { ordem: 42, id: "N5-VANCURA", classe: "B", formato: "curta", sabado: 4, nome: "Defesa de Vancura" },
-  { ordem: 43, id: "N3-R-VS-RN-PAWNS", classe: "B", formato: "curta", sabado: 4, nome: "Torre contra peão de torre e de bispo: as exceções" },
-  { ordem: 44, id: "N0-2B-MATE", classe: "B", formato: "curta", sabado: 4, nome: "Dois bispos contra rei" },
-  { ordem: 45, id: "N4-OPPOSITE-BISHOPS-2P", classe: "B", formato: "curta", sabado: 4, nome: "Bispos de cores opostas com dois peões" },
-  { ordem: 46, id: "N4-SAME-BISHOPS", classe: "B", formato: "curta", sabado: 4, nome: "Bispo e peão contra bispo da mesma cor" },
-  { ordem: 47, id: "N4-BISHOP-VS-KNIGHT", classe: "B", formato: "curta", sabado: 4, nome: "Bispo contra cavalo com um peão" },
-  { ordem: 48, id: "N2-DOUBLED-ISOLATED", classe: "B", formato: "curta", sabado: 4, nome: "Peões dobrados e isolados no final de peões" },
-  { ordem: 49, id: "N2-ZUGZWANG", classe: "B", formato: "leitura", sabado: 4, nome: "Zugzwang: a obrigação de mover" },
+  // ---------------------------------------------------------------- Nível 5  ·  FIDE 1400+
+  { ordem: 35, id: "N2-TRIANGULATION", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "Triangulação" },
+  { ordem: 36, id: "N2-OUTFLANKING", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "Flanquear o rei" },
+  { ordem: 37, id: "N2-RESERVE-TEMPI", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "Tempos de reserva" },
+  { ordem: 38, id: "N2-BREAKTHROUGH", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "Ruptura de peões" },
+  { ordem: 39, id: "N2-RETI", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "Manobra de Réti: o rei que faz duas coisas" },
+  { ordem: 40, id: "N3-R-2P-VS-R", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "Torre e dois peões ligados contra torre" },
+  { ordem: 41, id: "N3-SEVENTH-RANK", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "A sétima fila" },
+  { ordem: 42, id: "N5-VANCURA", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "Defesa de Vancura" },
+  { ordem: 43, id: "N3-R-VS-RN-PAWNS", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "Torre contra peão de torre e de bispo: as exceções" },
+  { ordem: 44, id: "N0-2B-MATE", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "Dois bispos contra rei" },
+  { ordem: 45, id: "N4-OPPOSITE-BISHOPS-2P", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "Bispos de cores opostas com dois peões" },
+  { ordem: 46, id: "N4-SAME-BISHOPS", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "Bispo e peão contra bispo da mesma cor" },
+  { ordem: 47, id: "N4-BISHOP-VS-KNIGHT", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "Bispo contra cavalo com um peão" },
+  { ordem: 48, id: "N2-DOUBLED-ISOLATED", nivel: 5, classe: "B", formato: "curta", sabado: 4, nome: "Peões dobrados e isolados no final de peões" },
+  { ordem: 49, id: "N2-ZUGZWANG", nivel: 5, classe: "B", formato: "leitura", sabado: 4, nome: "Zugzwang: a obrigação de mover" },
 ];
 
 const POR_ID = new Map(TRILHA.map((aula) => [aula.id, aula]));
@@ -215,9 +309,14 @@ export function aulaDaTrilha(id: string): AulaDaTrilha | undefined {
   return POR_ID.get(id);
 }
 
-/** As aulas de uma classe, na ordem da lista. */
+/** As aulas de uma classe, na ordem da lista. Some na Etapa 2 do plano dos níveis. */
 export function daClasse(aulas: readonly AulaDaTrilha[], classe: Classe): AulaDaTrilha[] {
   return aulas.filter((aula) => aula.classe === classe);
+}
+
+/** As aulas de um nível, na ordem da lista. É a `daClasse` do eixo novo. */
+export function doNivel(aulas: readonly AulaDaTrilha[], nivel: Nivel): AulaDaTrilha[] {
+  return aulas.filter((aula) => aula.nivel === nivel);
 }
 
 /**
