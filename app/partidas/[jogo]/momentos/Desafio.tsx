@@ -136,7 +136,7 @@ export function Desafio({
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="rounded-xl border border-borda-fraca bg-carta px-4 py-3 text-sm text-tinta">
+      <p className="cartao px-4 py-3 text-sm text-tinta">
         {momento.pergunta}
       </p>
 
@@ -170,7 +170,7 @@ export function Desafio({
       </div>
 
       {resolvido ? (
-        <div className="flex flex-col gap-2 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+        <div className="flex flex-col gap-2 cartao px-4 py-3">
           <p className="text-sm font-semibold text-tinta">
             {sanEmPortugues(momento.san)} — {momento.titulo}
           </p>
@@ -188,7 +188,7 @@ export function Desafio({
           {momento.fonte ? <p className="text-xs text-tinta-muda">{momento.fonte}</p> : null}
         </div>
       ) : erros > 0 ? (
-        <div className="flex flex-col gap-2 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+        <div className="flex flex-col gap-2 cartao px-4 py-3">
           <p className="text-sm font-semibold text-tinta">
             {ultimoErro ? `${sanEmPortugues(ultimoErro)} não é o lance.` : "Não é o lance."}
           </p>

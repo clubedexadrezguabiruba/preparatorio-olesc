@@ -4,9 +4,8 @@ import { z } from "zod";
  * O texto de cada tema: a explicação que o aluno lê antes de resolver.
  *
  * **Conteúdo é dado, não código.** Ele mora em `content/temas.json` porque
- * quem o escreve é o professor, e porque a apostila vai imprimir exatamente
- * estas frases — se elas estivessem espalhadas em JSX, o caderno e o site
- * diriam coisas parecidas mas não iguais.
+ * quem o escreve é o professor, e ele escreve prosa — espalhadas em JSX, as
+ * mesmas frases viram duas versões parecidas mas não iguais.
  *
  * ## Por que o esquema mora aqui e a leitura do arquivo mora fora
  *
@@ -20,8 +19,8 @@ import { z } from "zod";
  * O plano previa `content/temas/<tema>.md`. Markdown exigiria um renderizador
  * — mais uma dependência, e uma superfície de HTML vindo de arquivo. Como o
  * texto é sempre a mesma forma (parágrafos, uma lista de "procure", uma linha
- * de "cuidado"), um JSON com campos nomeados diz a mesma coisa, valida sozinho
- * e imprime igual na apostila.
+ * de "cuidado"), um JSON com campos nomeados diz a mesma coisa e valida
+ * sozinho.
  */
 
 export const TemaEscritoSchema = z
@@ -32,17 +31,12 @@ export const TemaEscritoSchema = z
     explicacao: z.array(z.string().min(20)).min(1).max(3),
     /** O que olhar no tabuleiro. Vira lista com marcador. */
     procure: z.array(z.string().min(10)).min(2).max(4),
-    /** O erro que o aluno comete neste tema. Opcional. */
-    cuidado: z.string().min(10).optional(),
     /**
-     * O id de um puzzle do próprio banco para servir de diagrama-exemplo.
-     *
-     * Nulo é o normal: sem ele, o exemplo é o primeiro puzzle da faixa mais
-     * fácil do tema — sempre válido, e escolhido pelo mesmo critério para
-     * todos. O campo existe para o professor **fixar** um exemplo melhor
-     * quando encontrar um, sem mexer em código.
+     * O erro que ESTE tema produz, e o que fazer no lugar. Opcional no
+     * esquema, presente nos 36 — a página o cola ao fim do segundo degrau da
+     * dica (`app/tatica/[tema]/Serie.tsx`).
      */
-    exemplo: z.string().min(1).nullable().default(null),
+    cuidado: z.string().min(10).optional(),
   })
   .strict();
 

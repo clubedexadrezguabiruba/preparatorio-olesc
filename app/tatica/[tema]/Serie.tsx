@@ -1,6 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Chess, type Square } from "chess.js";
@@ -8,6 +16,12 @@ import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color, Key } from "@lichess-org/chessground/types";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { PromotionPicker, type PromotionChoice } from "@/components/board/PromotionPicker";
+import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
+import { BotaoPrincipal, BotaoSecundario } from "@/components/lesson/BotoesDaAula";
+import { CartaoDeComando } from "@/components/lesson/CartaoDeComando";
+import { Comentario, useComentarioPaginado } from "@/components/lesson/Comentario";
+import { ProfessorSeApresenta } from "@/components/lesson/ProfessorSeApresenta";
+import { TrilhaDeEtapas, type EtapaDaTrilha } from "@/components/lesson/TrilhaDeEtapas";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { applyUci, type Applied } from "@/lib/chess/fen";
 import {
@@ -15,7 +29,6 @@ import {
   isSoundOn,
   playComplete,
   playForMove,
-  playMate,
   playRefusal,
   playSuccess,
   setSoundOn,
@@ -23,8 +36,16 @@ import {
 } from "@/lib/sound";
 import { temaPorTag } from "@/lib/tatica/blocos";
 import { lanceCerto } from "@/lib/tatica/conferir";
+import {
+  aulaDoTema,
+  cartaoDaFase,
+  dicaDoTema,
+  falaDaFase,
+  REPOUSO_DA_TATICA,
+  type Fase,
+} from "@/lib/tatica/fala";
 import type { PuzzleServido } from "@/lib/tatica/puzzles";
-import { NOME_DO_MODO, type Modo } from "@/lib/tatica/serie";
+import { NOME_DO_MODO, type Etapa, type Modo } from "@/lib/tatica/serie";
 import {
   ABERTURA_MS,
   FIM_COM_MATE_MS,
@@ -55,6 +76,30 @@ import { registrarTentativa } from "../acoes";
  * "certo" na tela (`lib/tatica/conferir.ts`). Um juiz só, dois lugares: o
  * tabuleiro não tem como dizer verde e o relatório contar vermelho.
  *
+ * ## O palco, e o que ele trocou
+ *
+ * Até 8/9/2026 esta tela era uma coluna de 576 px que rolava: tabuleiro
+ * dimensionado pela **largura** (travado em ~536 px por mais larga que fosse a
+ * janela), e todo o feedback do professor espremido numa tira de 44 px sob ele.
+ * Agora ela usa o mesmo `AulaShell` da aula de abertura — tabuleiro dimensionado
+ * pela **altura** que sobra, e o painel ao lado com o cartão de comando, a
+ * trilha das etapas e a voz do professor. A geometria inteira mora no bloco "O
+ * palco da aula" de `app/globals.css`, e não aqui.
+ *
+ * **O avanço continua automático.** O palco veio de uma tela em que o aluno
+ * clica "Continuar" a cada lance; aqui não há botão de próximo puzzle, e o
+ * ritmo da série é o mesmo de antes. Os botões do rodapé só mexem no **texto**:
+ * viram a página do professor e abrem os dois degraus da dica.
+ *
+ * ## O painel é MAGRO, e a tática é a razão de ele existir
+ *
+ * 416 px contra os 522 da aula de abertura, retrato de 80 contra 112. Lá o
+ * professor comenta um lance a cada lance e o painel existe para caber a prosa;
+ * aqui o aluno não vem ler, vem procurar. O que ele ouve de graça é **uma
+ * linha** — a ordem de busca: xeques, capturas, ameaças —, e a aula do tema
+ * fica atrás do botão de dica, em dois degraus. Ver `.aula-palco-magro` em
+ * `app/globals.css` para os três números e a conta de cada um.
+ *
  * ## O som
  *
  * Os seis efeitos vêm do laboratório de finais, sintetizados em WebAudio — não
@@ -83,19 +128,30 @@ import { registrarTentativa } from "../acoes";
  * `setState` em cascata a cada troca de puzzle, que é justamente o que a regra
  * `set-state-in-effect` do projeto proíbe — e proíbe por um bom motivo: um
  * render a mais por lance, no celular do aluno.
+ *
+ * É também por isso que o `AulaShell` é montado **dentro** do `NoTabuleiro`, e
+ * não aqui: metade do painel (o cartão, a fala do professor) é estado de um
+ * puzzle só. O que é da rodada — o cabeçalho, a trilha, os botões — desce
+ * pronto, por prop.
  */
 
-type Fase =
-  /** O adversário ainda vai errar: o tabuleiro está parado, mostrando a posição. */
-  | "abrindo"
-  /** A vez do aluno. */
-  | "jogando"
-  /** O aluno acertou e o adversário está respondendo. */
-  | "respondendo"
-  /** Lance errado: a peça volta e o recado aparece. */
-  | "errado"
-  /** A linha acabou. */
-  | "resolvido";
+/**
+ * As três etapas de um tema: `aquecimento · série · prova`.
+ *
+ * São as mesmas de `lib/tatica/serie.ts`, e o `diz` de cada uma é o que o
+ * leitor de tela ouve — por isso ele explica a etapa em vez de repetir o nome
+ * dela. Os dois modos largos não entram — a revisão do dia e a prova de nível
+ * não são etapa de tema nenhum, e uma trilha de três com as três apagadas
+ * prometeria um caminho que ali não existe.
+ */
+const ETAPAS_DA_SERIE = [
+  { nome: "aquecimento", diz: "os mais fáceis, para o olho pegar o padrão" },
+  { nome: "série", diz: "o tema em dificuldade crescente" },
+  { nome: "prova", diz: "o tema misturado com os que você já viu" },
+] as const satisfies readonly EtapaDaTrilha[];
+
+/** Em que barra da trilha cada etapa acende. */
+const BARRA_DA_ETAPA: Record<Etapa, number> = { aquecimento: 0, serie: 1, prova: 2 };
 
 export type SerieProps = {
   /**
@@ -114,6 +170,15 @@ export type SerieProps = {
   explicacao: string[];
   procure: string[];
   cuidado: string | null;
+  /**
+   * O que fica no lugar dos botões, na tela do placar.
+   *
+   * Existe para a **prova de nível**: lá o fim da rodada não é "continuar" —
+   * é o servidor corrigir as 12 linhas e conceder (ou não) o degrau. Um
+   * `ReactNode` em vez de um `boolean` porque quem sabe o que fazer no fim é
+   * quem montou a rodada, e não esta série, que serve três telas diferentes.
+   */
+  noFim?: ReactNode;
 };
 
 export function Serie({
@@ -128,6 +193,7 @@ export function Serie({
   explicacao,
   procure,
   cuidado,
+  noFim,
 }: SerieProps) {
   const router = useRouter();
 
@@ -139,6 +205,36 @@ export function Serie({
   const [placar, setPlacar] = useState({ certos: 0, total: 0 });
   const [falhaAoGravar, setFalhaAoGravar] = useState<string | null>(null);
   const [fim, setFim] = useState(false);
+
+  /**
+   * Os dois degraus da ajuda pedida, e o `cuidado` no fim do segundo.
+   *
+   * `null` na revisão do dia, que mistura temas: lá não há um "o que procurar"
+   * possível, e o botão de dica não aparece.
+   */
+  const degraus = useMemo(
+    () => [dicaDoTema(procure), aulaDoTema(cuidado ? [...explicacao, `Cuidado: ${cuidado}`] : explicacao)],
+    [cuidado, explicacao, procure],
+  );
+
+  /**
+   * Em que degrau da dica o aluno está: 0 nenhum, 1 o "procure", 2 a aula.
+   *
+   * **Começa sempre em zero, inclusive na primeira vez no tema.** Antes a aula
+   * abria sozinha na primeira entrada, herdando a gavetinha `<details>` que
+   * existia antes do palco. Ela deixou de abrir porque esta tela não é de
+   * leitura: o aluno vem procurar táticas, e o que ele precisa ver de graça é a
+   * ordem de busca — que é o texto de repouso, e cabe numa linha.
+   *
+   * A escada é a mesma que o tabuleiro já faz com as setas: dois erros acendem
+   * a casa, três desenham o lance. Ajuda existe, custa um pedido, e vem em
+   * pedaços.
+   *
+   * Mora aqui, e não no `NoTabuleiro`, porque `key={puzzle.id}` zeraria o
+   * estado a cada puzzle — e aí não haveria como decidir se a dica sobrevive à
+   * troca. Quem decide é o `avancar`, logo abaixo: ela **não** sobrevive.
+   */
+  const [degrau, setDegrau] = useState(0);
 
   const puzzle = puzzles[indice];
 
@@ -183,6 +279,14 @@ export function Serie({
   }, [fim]);
 
   const avancar = useCallback(() => {
+    /*
+     * A dica não atravessa o puzzle. Ela foi pedida para **aquela** posição, e
+     * mantê-la aberta na seguinte tiraria da tela a ordem de busca — que é o
+     * que o aluno tem de estar olhando quando uma posição nova aparece.
+     * Pedir de novo é um clique; ler o tema quando não se quer ler é a rodada
+     * inteira.
+     */
+    setDegrau(0);
     setIndice((i) => {
       if (i + 1 >= puzzles.length) {
         setFim(true);
@@ -194,7 +298,7 @@ export function Serie({
 
   if (fim || !puzzle) {
     return (
-      <div className="flex flex-col gap-4 rounded-xl border border-borda-fraca bg-carta px-5 py-6">
+      <div className="flex flex-col gap-4 cartao px-5 py-6">
         <p className="rotulo text-metodo-tinta">{NOME_DO_MODO[etapa]} — fim</p>
         <p className="titulo text-tinta tabular-nums">
           {placar.certos} de {placar.total} de primeira
@@ -205,7 +309,9 @@ export function Serie({
             : placar.certos === placar.total
               ? etapa === "revisao"
                 ? "Nenhum erro. Os certos voltam daqui a uma semana, para provar que ficaram."
-                : "Nenhum erro. Pode seguir."
+                : etapa === "prova-de-nivel"
+                  ? "Nenhum erro. Conferindo o resultado…"
+                  : "Nenhum erro. Pode seguir."
               : /*
                  * Cada modo diz para onde o erro vai — e diz a verdade. Ate a
                  * F2 a frase da serie prometia "voltam na prova" enquanto o
@@ -217,93 +323,89 @@ export function Serie({
                 ? "Os que você errou voltam em 2 dias; os certos, em uma semana."
                 : etapa === "prova"
                   ? "Os que você errou voltam na revisão do dia, daqui a 2 dias."
-                  : "Os que você errou voltam misturados na prova deste tema."}
+                  : etapa === "prova-de-nivel"
+                    ? "Os que você errou entraram na fila de revisão. Conferindo o resultado…"
+                    : "Os que você errou voltam misturados na prova deste tema."}
         </p>
         {falhaAoGravar ? <Falha erro={falhaAoGravar} /> : null}
-        <div className="flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={() => router.refresh()}
-            className="foco rounded-lg bg-metodo-cheio px-4 py-2.5 text-sm font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque"
-          >
-            Continuar
-          </button>
-          <Link
-            href={etapa === "revisao" ? "/painel" : "/tatica"}
-            className="foco rounded-lg border border-borda px-4 py-2.5 text-sm font-medium text-tinta-media hover:bg-carta-toque"
-          >
-            {etapa === "revisao" ? "Voltar ao painel" : "Escolher outro tema"}
-          </Link>
-        </div>
+        {noFim ?? (
+          <div className="flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => router.refresh()}
+              className="foco rounded-lg bg-metodo-cheio px-4 py-2.5 text-sm font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque"
+            >
+              Continuar
+            </button>
+            <Link
+              href={etapa === "revisao" ? "/painel" : "/tatica"}
+              className="foco rounded-lg border border-borda px-4 py-2.5 text-sm font-medium text-tinta-media hover:bg-carta-toque"
+            >
+              {etapa === "revisao" ? "Voltar ao painel" : "Escolher outro tema"}
+            </Link>
+          </div>
+        )}
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center justify-between gap-3">
-        <p className="rotulo text-metodo-tinta">{NOME_DO_MODO[etapa]}</p>
-        <div className="flex items-center gap-2">
-          <p className="text-xs text-tinta-fraca tabular-nums">
-            {Math.min(jaFeitosNaEtapa + indice + 1, metaDaEtapa)} de {metaDaEtapa}
-            {feitosNoTema !== null && totalNoTema !== null
-              ? ` · tema ${feitosNoTema + indice + 1}/${totalNoTema}`
-              : ""}
-          </p>
-          <BotaoDeSom />
-        </div>
-      </div>
-
-      <NoTabuleiro
-        key={puzzle.id}
-        puzzle={puzzle}
-        aoDecidir={decidir}
-        aoTerminar={avancar}
-        falhaAoGravar={falhaAoGravar}
-        /*
-         * Na prova e na revisao o tema e revelado **depois** de resolver: o
-         * aluno reconhece o padrao sem o nome (que e o que acontece na
-         * partida), e o nome chega para fixar o que ele acabou de ver. Na
-         * serie ele ja esta dentro do tema, e dize-lo de novo e ruido.
-         */
-        nomeDoPadrao={etapa === "prova" || etapa === "revisao" ? nomeDoPadrao(puzzle) : null}
-      />
-
-      {explicacao.length > 0 ? (
-        /*
-         * Aberto no primeiro aquecimento: quem chega ao tema pela primeira vez
-         * le o que procurar **antes** do primeiro puzzle, e nao escondido num
-         * bloco fechado embaixo do tabuleiro. Depois disso, dobrado — ele ja
-         * leu, e o tabuleiro e o que importa.
-         */
-        <details
-          open={etapa === "aquecimento" && jaFeitosNaEtapa === 0}
-          className="rounded-xl border border-borda-fraca bg-carta px-4 py-3"
-        >
-          <summary className="foco cursor-pointer text-sm font-medium text-tinta">
-            {nomeDoTema}: o que procurar
-          </summary>
-        <div className="mt-3 flex flex-col gap-3 text-sm text-tinta-media">
-          {explicacao.map((paragrafo) => (
-            <p key={paragrafo.slice(0, 24)}>{paragrafo}</p>
-          ))}
-          <ul className="flex flex-col gap-1.5 pl-4">
-            {procure.map((linha) => (
-              <li key={linha.slice(0, 24)} className="list-disc text-tinta">
-                {linha}
-              </li>
-            ))}
-          </ul>
-          {cuidado ? (
-            <p className="rounded-lg bg-aviso-superficie/15 px-3 py-2 text-aviso-tinta">
-              <span className="font-semibold">Cuidado: </span>
-              {cuidado}
+    <NoTabuleiro
+      key={puzzle.id}
+      puzzle={puzzle}
+      aoDecidir={decidir}
+      aoTerminar={avancar}
+      falhaAoGravar={falhaAoGravar}
+      /*
+       * Na prova e na revisao o tema e revelado **depois** de resolver: o
+       * aluno reconhece o padrao sem o nome (que e o que acontece na
+       * partida), e o nome chega para fixar o que ele acabou de ver. Na
+       * serie ele ja esta dentro do tema, e dize-lo de novo e ruido.
+       */
+      nomeDoPadrao={etapa === "serie" || etapa === "aquecimento" ? null : nomeDoPadrao(puzzle)}
+      degraus={degraus}
+      degrau={degrau}
+      aoPedirDica={() => setDegrau((d) => d + 1)}
+      rotuloDaDica={`Dica: o que procurar em ${nomeDoTema}`}
+      cabecalho={
+        <div className="flex items-center justify-between gap-3">
+          <p className="rotulo text-metodo-tinta">{NOME_DO_MODO[etapa]}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs text-tinta-fraca tabular-nums">
+              {Math.min(jaFeitosNaEtapa + indice + 1, metaDaEtapa)} de {metaDaEtapa}
+              {feitosNoTema !== null && totalNoTema !== null
+                ? ` · tema ${feitosNoTema + indice + 1}/${totalNoTema}`
+                : ""}
             </p>
-          ) : null}
+            <BotaoDeSom />
           </div>
-        </details>
-      ) : null}
-    </div>
+        </div>
+      }
+      trilha={
+        etapa === "revisao" || etapa === "prova-de-nivel" ? null : (
+
+          /*
+           * A trilha só a partir de `lg`, e a conta é de altura.
+           *
+           * Medido num 360×740 com o palco magro: o painel tem 304 px, e a
+           * trilha come 38 deles (26 dela mais o vão de 12). Com ela, o balão
+           * do professor ficava com **74 px** — e a frase de repouso, que tem
+           * de estar sempre à vista, **paginava**: o aluno teria de clicar
+           * "Ler mais" para ler a ordem de busca. Sem ela, o balão fica com
+           * 116, e a frase cabe inteira.
+           *
+           * É o corte certo porque a trilha é a única coisa ali que a tela já
+           * diz de outro jeito: o cabeçalho do painel traz "SÉRIE" e
+           * "10 de 24 · tema 15/39" — o nome da etapa e a posição nela, que é
+           * exatamente o que as três barras desenham. É a mesma regra que tira
+           * a `FaixaDeSans` do celular na aula de abertura.
+           */
+          <div className="hidden lg:block">
+            <TrilhaDeEtapas etapas={ETAPAS_DA_SERIE} atual={BARRA_DA_ETAPA[etapa as Etapa]} />
+          </div>
+        )
+      }
+    />
   );
 }
 
@@ -356,6 +458,12 @@ function NoTabuleiro({
   aoTerminar,
   falhaAoGravar,
   nomeDoPadrao,
+  degraus,
+  degrau,
+  aoPedirDica,
+  rotuloDaDica,
+  cabecalho,
+  trilha,
 }: {
   puzzle: PuzzleServido;
   aoDecidir: (p: PuzzleServido, lances: string[], tempoMs: number) => void;
@@ -363,6 +471,18 @@ function NoTabuleiro({
   falhaAoGravar: string | null;
   /** O tema a revelar depois de resolver, ou `null` para nao revelar. */
   nomeDoPadrao: string | null;
+  /**
+   * Os dois degraus da ajuda pedida, em ordem: o "procure" do tema e a aula.
+   * Cada um pode ser `null` — na revisão do dia os dois são.
+   */
+  degraus: readonly (string | null)[];
+  /** Quantos degraus o aluno já pediu: 0, 1 ou 2. */
+  degrau: number;
+  aoPedirDica: () => void;
+  /** O rótulo do botão de dica para o leitor de tela. */
+  rotuloDaDica: string;
+  cabecalho: ReactNode;
+  trilha: ReactNode;
 }) {
   const [fen, setFen] = useState(puzzle.fen);
   const [passo, setPasso] = useState(1);
@@ -446,9 +566,13 @@ function NoTabuleiro({
       if (matou || passo + 1 >= puzzle.lances.length) {
         // Prêmio **no lugar** do som do lance, não junto: o fim do puzzle não
         // pode soar igual a um lance qualquer. É a mesma regra do laboratório.
+        //
+        // O mate toca o som de conclusão de aula (`playComplete`), não o de
+        // xeque-mate: o Doug pediu que o fim da série soasse como o fim de
+        // uma aula de finais, não como o efeito `mate` do catálogo.
         if (matou) {
           setReiMatado(toBoardColor(depois.game.turn()));
-          playMate();
+          playComplete();
         } else {
           playSuccess();
         }
@@ -521,111 +645,138 @@ function NoTabuleiro({
       : [{ orig, brush: "blue" }];
   }, [erros, fase, passo, puzzle.lances]);
 
+  const situacao = { fase, erros, meuLado, rating: puzzle.rating, nomeDoPadrao } as const;
+
+  /**
+   * O que o professor diz agora, e a ordem tem um porquê em cada degrau.
+   *
+   * **A dica pedida ganha da reação.** É o contrário do que parece natural, e é
+   * de propósito: se o aluno pediu a dica e depois errou, trocar a dica pelo
+   * recado de erro tiraria da tela justamente o texto que ele acabou de pedir —
+   * e ele teria de pedir de novo para reler. Quem dá o recado do erro é o
+   * **cartão**, que está logo acima e é o canal do veredito. Balão e cartão são
+   * duas vozes; é isto que a divisão serve para permitir.
+   *
+   * Sem dica pedida, a reação ganha do repouso: nos 850 ms depois de um erro,
+   * "por que este não serve" vale mais que a ordem de busca.
+   *
+   * E no fim o repouso, que **nunca é nulo** — o balão ao lado do retrato não
+   * fica vazio em nenhum estado da tela, nem na revisão do dia.
+   */
+  const dicaAberta = degrau > 0 ? (degraus[degrau - 1] ?? null) : null;
+  const reacao = falaDaFase(situacao);
+  const comentario = useComentarioPaginado(dicaAberta ?? reacao ?? REPOUSO_DA_TATICA);
+
+  /**
+   * Vira a página do professor, ou completa a digitação.
+   *
+   * A ordem importa e é a mesma da aula de abertura: um toque no meio da
+   * digitação **completa** em vez de avançar, senão o aluno perde metade do
+   * texto num clique que ele deu para ler mais depressa.
+   */
+  const lerMais = useCallback(() => {
+    if (comentario.digitando) {
+      comentario.completar();
+      return;
+    }
+    if (!comentario.naUltima) comentario.virar();
+  }, [comentario]);
+
   return (
-    <>
-      <div className="relative">
-        <ChessBoard
-          fen={fen}
-          orientation={meuLado}
-          turnColor={toBoardColor(jogo.turn())}
-          dests={podeMover ? legalDests(jogo) : new Map()}
-          lastMove={ultimoLance}
-          check={jogo.inCheck()}
-          viewOnly={!podeMover}
-          revision={revisao}
-          shapes={dicas}
-          matedKing={reiMatado}
-          onMove={aoMover}
-        />
-        {promocao ? (
-          <PromotionPicker
-            color={meuLado}
-            onChoose={(peca: PromotionChoice) => {
-              const { orig, dest } = promocao;
-              setPromocao(null);
-              jogar(`${orig}${dest}${peca}`);
-            }}
-            onCancel={() => {
-              setPromocao(null);
-              setRevisao((r) => r + 1);
-            }}
+    <AulaShell
+      magro
+      tabuleiro={
+        <div className="relative">
+          <ChessBoard
+            fen={fen}
+            orientation={meuLado}
+            turnColor={toBoardColor(jogo.turn())}
+            dests={podeMover ? legalDests(jogo) : new Map()}
+            lastMove={ultimoLance}
+            check={jogo.inCheck()}
+            viewOnly={!podeMover}
+            revision={revisao}
+            shapes={dicas}
+            matedKing={reiMatado}
+            onMove={aoMover}
           />
-        ) : null}
-      </div>
+          {promocao ? (
+            <PromotionPicker
+              color={meuLado}
+              onChoose={(peca: PromotionChoice) => {
+                const { orig, dest } = promocao;
+                setPromocao(null);
+                jogar(`${orig}${dest}${peca}`);
+              }}
+              onCancel={() => {
+                setPromocao(null);
+                setRevisao((r) => r + 1);
+              }}
+            />
+          ) : null}
+        </div>
+      }
+      painel={
+        <>
+          {cabecalho}
 
-      {falhaAoGravar ? (
-        <Falha erro={falhaAoGravar} />
-      ) : (
-        <Recado
-          fase={fase}
-          erros={erros}
-          meuLado={meuLado}
-          rating={puzzle.rating}
-          nomeDoPadrao={nomeDoPadrao}
-        />
-      )}
-    </>
-  );
-}
+          {/*
+           * A falha de gravação toma o lugar do cartão, e não um lugar a mais:
+           * ela é `role="alert"`, é a coisa mais importante da tela naquele
+           * momento, e o painel tem altura fechada — empilhá-la sobre o cartão
+           * roubaria 64 px do professor para dizer duas coisas ao mesmo tempo.
+           */}
+          {falhaAoGravar ? <Falha erro={falhaAoGravar} /> : <CartaoDeComando {...cartaoDaFase(situacao)} />}
 
-/* ------------------------------------------------------------------ *
- * O recado sob o tabuleiro
- *
- * Altura mínima fixa: sem ela a página pula meia linha a cada lance, e no
- * celular o tabuleiro sai do lugar debaixo do dedo.
- * ------------------------------------------------------------------ */
+          {trilha}
 
-function Recado({
-  fase,
-  erros,
-  meuLado,
-  rating,
-  nomeDoPadrao,
-}: {
-  fase: Fase;
-  erros: number;
-  meuLado: Color;
-  rating: number;
-  nomeDoPadrao: string | null;
-}) {
-  if (fase === "abrindo") {
-    return <Linha tom="calma">Olhe a posição. O adversário vai jogar.</Linha>;
-  }
-  if (fase === "errado") {
-    return (
-      <Linha tom="ruim">
-        {erros >= 3
-          ? "A seta mostra o lance. Jogue-o para ver por quê."
-          : erros >= 2
-            ? "A casa acesa é a peça que resolve."
-            : "Não é esse. Olhe de novo — este puzzle já contou como erro."}
-      </Linha>
-    );
-  }
-  if (fase === "resolvido") {
-    return <Linha tom="bom">Certo.{nomeDoPadrao ? ` Era: ${nomeDoPadrao}.` : ""}</Linha>;
-  }
-  if (fase === "respondendo") return <Linha tom="calma">Certo. Veja a resposta dele.</Linha>;
+          {/*
+           * O retrato de 80 px, e não os 112 da aula de abertura. Lá ele é a
+           * emissora de um bloco grande de prosa e é proporcional a ele; aqui,
+           * ao lado de uma linha, 112 px de figura falariam mais alto que a
+           * fala. Ver `.aula-palco-magro` em `app/globals.css`.
+           */}
+          <Comentario
+            paginacao={comentario}
+            retrato={<ProfessorSeApresenta largura={80} />}
+            compacto
+          />
 
-  return (
-    <Linha tom="calma">
-      Você joga de {meuLado === "white" ? "brancas" : "pretas"}.{" "}
-      <span className="text-tinta-fraca tabular-nums">({rating})</span>
-    </Linha>
-  );
-}
+          <AulaRodape>
+            {/*
+             * "Ler mais", e não "Continuar": aqui o botão vira a página do
+             * texto, e nunca o puzzle. O avanço da série é automático, e um
+             * botão que parecesse avançá-la faria o aluno clicar esperando o
+             * próximo exercício.
+             */}
+            {!comentario.naUltima ? (
+              <BotaoPrincipal onClick={lerMais}>Ler mais →</BotaoPrincipal>
+            ) : null}
 
-function Linha({ tom, children }: { tom: "calma" | "bom" | "ruim"; children: React.ReactNode }) {
-  const cor =
-    tom === "bom"
-      ? "bg-metodo-superficie/15 text-metodo-tinta-alta"
-      : tom === "ruim"
-        ? "bg-erro-superficie/12 text-erro-texto"
-        : "bg-carta text-tinta-media";
-  return (
-    <p aria-live="polite" className={`min-h-11 rounded-lg px-3 py-2.5 text-sm ${cor}`}>
-      {children}
-    </p>
+            {/*
+             * A dica em dois degraus, e o rótulo diz qual vem.
+             *
+             * "Dica" abre o que procurar **neste tema**; "Por que funciona"
+             * abre a aula. Nomear o segundo em vez de repetir "mais uma dica" é
+             * o que deixa o aluno decidir se quer aquilo — ele já teve a ajuda
+             * prática, e o segundo degrau é estudo, não socorro.
+             *
+             * O botão some no último degrau em vez de ficar desabilitado: um
+             * alvo apagado no rodapé de um painel de altura fechada é ruído que
+             * ocupa a linha mais disputada da coluna.
+             */}
+            {degrau < degraus.length && degraus[degrau] ? (
+              <BotaoSecundario
+                onClick={aoPedirDica}
+                rotulo={degrau === 0 ? rotuloDaDica : undefined}
+              >
+                {degrau === 0 ? "Dica" : "Por que funciona"}
+              </BotaoSecundario>
+            ) : null}
+          </AulaRodape>
+        </>
+      }
+    />
   );
 }
 

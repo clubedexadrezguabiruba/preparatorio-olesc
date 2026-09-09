@@ -3,13 +3,10 @@ import test from "node:test";
 import {
   COMECO_DO_TORNEIO,
   diasEntre,
-  fimDaSemana,
   hojeNoBrasil,
   intervaloPorExtenso,
   porExtenso,
   SABADOS,
-  sabadoDaSemana,
-  semanaAtual,
   somarDias,
 } from "./calendario.ts";
 
@@ -23,36 +20,13 @@ test("os quatro sábados são mesmo sábados", () => {
   }
 });
 
-test("as semanas não têm buraco nem sobreposição", () => {
-  // O fim de uma semana é a véspera do começo da seguinte. Um dia de folga
-  // entre elas seria um dia em que o aluno abre o painel e não tem tarefa.
-  for (const sabado of SABADOS) {
-    const seguinte = SABADOS.find((s) => s.semana === sabado.semana + 1);
-    const proximoComeco = seguinte?.data ?? COMECO_DO_TORNEIO;
-    const fim = new Date(`${fimDaSemana(sabado.semana)}T12:00:00Z`);
-    fim.setUTCDate(fim.getUTCDate() + 1);
-    assert.equal(fim.toISOString().slice(0, 10), proximoComeco);
-  }
-});
-
-test("a semana atual anda com os sábados", () => {
-  assert.equal(semanaAtual("2026-09-03"), 1, "antes do primeiro sábado, a semana é a 1");
-  assert.equal(semanaAtual("2026-09-11"), 1, "véspera do Sábado 1");
-  assert.equal(semanaAtual("2026-09-12"), 1, "o próprio Sábado 1");
-  assert.equal(semanaAtual("2026-09-18"), 1, "sexta da semana 1");
-  assert.equal(semanaAtual("2026-09-19"), 2);
-  assert.equal(semanaAtual("2026-09-26"), 3);
-  assert.equal(semanaAtual("2026-10-03"), 4);
-  assert.equal(semanaAtual("2026-10-15"), 4, "durante o torneio ainda é a semana 4");
-});
-
 test("o fuso é o de Guabiruba, e não o do servidor da Vercel", () => {
   // Sexta, 18/9, 21h em São Paulo — que é sábado 19/9, 00h em UTC. O servidor
-  // roda em UTC: sem o fuso explícito, a semana viraria com um dia de
-  // antecedência e as tarefas da semana 1 sumiriam antes de a semana acabar.
+  // roda em UTC: sem o fuso explícito, o "hoje" viraria com um dia de
+  // antecedência, e a revisão espaçada — que conta em dias de Guabiruba —
+  // devolveria os puzzles de amanhã na noite de hoje.
   const sextaANoite = new Date("2026-09-19T00:30:00Z");
   assert.equal(hojeNoBrasil(sextaANoite), "2026-09-18");
-  assert.equal(semanaAtual(hojeNoBrasil(sextaANoite)), 1);
 });
 
 test("somar dias atravessa o mês e volta a véspera", () => {
@@ -81,9 +55,18 @@ test("as datas por extenso", () => {
   );
 });
 
-test("todo sábado tem título e é achável pela semana", () => {
+test("os quatro encontros são numerados 1 a 4, sem repetir, e todos têm título", () => {
+  // `sabadoDaSemana` saiu com o calendário de tranca em 2026-09-09. O que
+  // restou de verdade sobre esta lista é que ela é achável pelo número — é
+  // assim que `content/agenda.json` a aponta, pelo rótulo `"sabado-2"`.
+  assert.deepEqual(SABADOS.map((s) => s.semana), [1, 2, 3, 4]);
   for (const sabado of SABADOS) {
-    assert.equal(sabadoDaSemana(sabado.semana).data, sabado.data);
-    assert.ok(sabado.titulo.length > 5);
+    assert.ok(sabado.titulo.length > 5, `o encontro ${sabado.semana} não tem título`);
   }
+});
+
+test("o torneio vem depois do último encontro", () => {
+  // A agenda tira a véspera de `COMECO_DO_TORNEIO`. Se o torneio caísse antes
+  // do Sábado 4, a véspera apareceria no meio do curso e ninguém veria por quê.
+  assert.ok(COMECO_DO_TORNEIO > SABADOS[SABADOS.length - 1].data);
 });

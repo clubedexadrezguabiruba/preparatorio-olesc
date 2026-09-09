@@ -63,7 +63,7 @@ npm run db:finais    # a mesma corrente nas aulas de finais, com o rejulgamento
 
 Cada tema tem três etapas: **aquecimento** (5 puzzles fáceis), **série** (24 em
 rating crescente) e **prova** (10 misturados com temas já vistos). O currículo
-— oito blocos, 31 temas — está em [`lib/tatica/blocos.ts`](lib/tatica/blocos.ts),
+— oito blocos, 36 temas, todos com texto — está em [`lib/tatica/blocos.ts`](lib/tatica/blocos.ts),
 que é a única fonte da taxonomia; o texto que o aluno lê está em
 [`content/temas.json`](content/temas.json), e **ter texto escrito é o que abre o
 tema**.
@@ -84,60 +84,18 @@ node scripts/aluno-de-teste.ts contar   # o que ficou gravado, com os tempos
 node scripts/aluno-de-teste.ts apagar
 ```
 
-## A apostila
-
-Um caderno por sábado, em PDF. O caderno é um **arquivo de texto que o professor
-edita sozinho** — `apostila/caderno-1.md` —, e o guia de edição, escrito para
-quem não programa, está em [`apostila/COMO-EDITAR.md`](apostila/COMO-EDITAR.md).
-
-```bash
-npm run apostila:ver 1          # gera o PDF e abre na tela
-npm run apostila 1              # só gera, em public/apostila/caderno-1.pdf
-npm run apostila:conferir 1     # recorta os PNGs de conferência em .conferencia/
-```
-
-O texto dos temas sai de `content/temas.json`, os problemas do mesmo banco de
-puzzles que o site serve, e as tarefas de `content/tarefas.json` — as três coisas
-que o aluno também vê na tela. O que o caderno escreve por conta própria é só o
-que é do papel: as regras da OLESC, a anotação, as três perguntas.
-
-**O gabarito é calculado, não digitado.** As respostas saem da linha de solução
-do próprio puzzle, traduzidas para a notação portuguesa (R, D, T, B, C) por
-[`lib/apostila/notacao.ts`](lib/apostila/notacao.ts) — e a tradução tem uma
-armadilha coberta por teste: o `R` inglês é torre e o `R` português é rei, então
-a troca é simultânea, nunca em duas passadas.
-
-Diagrama é FEN → SVG no servidor ([`lib/diagrama/`](lib/diagrama/)), com as peças
-**cburnett extraídas do chessground** — as mesmas da tela, byte a byte, com um
-teste que reprova se um upgrade mudar o desenho.
-
-O PDF fica versionado em `public/apostila/` porque o painel do aluno leva a ele
-por link, e a Vercel não tem Chromium para regerá-lo na build. O HTML
-intermediário fica em `apostila/saida/`, fora do versionamento.
-
-Duas builds do mesmo `.md` dão PDFs que **diferem em 4 bytes** — o carimbo de
-data que o Chromium embute. Então `git status` acusa o PDF como alterado depois
-de todo `npm run apostila`, mesmo sem nada ter mudado no caderno. Antes de
-versionar a diferença, vale conferir se o conteúdo mudou de verdade; se forem só
-os 4 bytes, `git checkout public/apostila/caderno-1.pdf` descarta o ruído.
-
-**Legibilidade impressa é medida, não estimada.** `npm test` mede peça contra
-casa em P&B pela mesma régua de contraste do site
-([`lib/diagrama/tabuleiro.test.ts`](lib/diagrama/tabuleiro.test.ts)) — mas
-contraste não responde *tamanho*, e por isso `apostila:conferir` recorta em
-coordenada medida para um subagente descrever. O que essa conferência já mudou
-está em comentário no `apostila/impressao.css`, com o número que justificou cada
-mudança.
-
 ## Os puzzles
 
-Os 166.623 puzzles de `public/puzzles/` são um recorte do banco público do
+Os 175.987 puzzles de `public/puzzles/` são um recorte do banco público do
 Lichess (CC0), gerado por `npm run puzzles:filtrar` a partir do CSV bruto em
 `dados/` — que tem 570 MB e **não** é versionado.
 
 O recorte é por tema do currículo (`lib/tatica/blocos.ts`) e por faixa de
-rating. Dentro de cada tema, os puzzles saem **em rating crescente**, e as
-faixas vêm na ordem: a série que o aluno resolve sobe de dificuldade sozinha.
+rating: de **700 a 2100**, em faixas de 200 pontos, com teto de **1.000 puzzles
+por arquivo**. Dentro de cada tema, os puzzles saem **em rating crescente**, e
+as faixas vêm na ordem: a série que o aluno resolve sobe de dificuldade
+sozinha. O teto de 2100 é o mesmo para os oito blocos — o que muda entre eles é
+o piso.
 
 Refazer o recorte:
 

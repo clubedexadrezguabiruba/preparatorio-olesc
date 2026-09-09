@@ -269,19 +269,31 @@ exemplo e sequência de exercícios, progresso por tema. Aqui igual, com puzzles
 banco Lichess filtrados por **tema** (coluna `Themes`) e **faixa de rating**. Tags
 conferidas em `lichess.org/training/themes` (2026-09-03).
 
+A tabela abaixo é cópia; **quem manda é `lib/tatica/blocos.ts`**. Ela já esteve
+errada em duas frentes ao mesmo tempo — listava quatro temas que o currículo não
+tem (`operaMate`, `morphysMate`, `discoveredCheck`, `equality`) e as faixas
+estreitas de antes.
+
+O **teto é 2100 em todos os oito blocos**: o que muda de bloco para bloco é só o
+piso, porque a série de cada tema é servida em rating crescente e ninguém
+encontra o puzzle de 2000 antes de passar pelos de baixo.
+
 | Bloco | Temas (tag do Lichess) | Faixa |
 |---|---|---|
-| 1. Mates curtos | `mateIn1`, `mateIn2`, `hangingPiece` (peça de graça — erro nº 1 em 1000–1400) | 600–1300 |
-| 2. Padrões de mate I | `backRankMate`, `smotheredMate`, `arabianMate`, `anastasiaMate`, `hookMate` | 800–1400 |
-| 3. Padrões de mate II | `bodenMate`, `operaMate`, `morphysMate`, `doubleBishopMate`, `dovetailMate`, `mateIn3` | 1000–1600 |
-| 4. Motivos fundamentais | `fork`, `pin`, `skewer`, `discoveredAttack`, `discoveredCheck`, `doubleCheck` | 800–1400 |
-| 5. Remover a defesa | `capturingDefender`, `deflection`, `attraction`, `trappedPiece`, `xRayAttack` | 1000–1500 |
-| 6. Ataque ao rei | `exposedKing`, `attackingF2F7`, `kingsideAttack`, `sacrifice` | 1000–1600 |
-| 7. Lances finos | `intermezzo`, `quietMove`, `clearance`, `interference`, `zugzwang` | 1100–1700 |
-| 8. Defesa e conversão | `defensiveMove`, `equality`, `advancedPawn`, `promotion`, `underPromotion`, `enPassant` | 1000–1600 |
+| 1. Mates curtos e peça de graça | `mateIn1`, `mateIn2`, `hangingPiece` (peça de graça — erro nº 1 em 1000–1400) | 700–2100 |
+| 2. Padrões de mate I | `backRankMate`, `smotheredMate`, `arabianMate`, `anastasiaMate`, `hookMate` | 800–2100 |
+| 3. Padrões de mate II | `bodenMate`, `doubleBishopMate`, `dovetailMate`, `mateIn3` | 1000–2100 |
+| 4. Táticas fundamentais | `fork`, `pin`, `skewer`, `discoveredAttack`, `doubleCheck` | 800–2100 |
+| 5. Remover a defesa | `capturingDefender`, `deflection`, `attraction`, `trappedPiece`, `xRayAttack` | 1000–2100 |
+| 6. Ataque ao rei | `exposedKing`, `attackingF2F7`, `kingsideAttack`, `sacrifice` | 1000–2100 |
+| 7. Lances finos | `intermezzo`, `quietMove`, `clearance`, `interference`, `zugzwang` | 1100–2100 |
+| 8. Defesa e conversão | `defensiveMove`, `advancedPawn`, `promotion`, `underPromotion`, `enPassant` | 1000–2100 |
 
-**Cada tema tem:** (1) explicação curta redigida + 1 diagrama-exemplo do próprio
-banco; (2) **aquecimento** 5 puzzles fáceis (`short`/`oneMove`); (3) **série** 20–30
+**Cada tema tem:** (1) explicação curta redigida — dois parágrafos, três
+perguntas de "procure" e uma linha de "cuidado", em `content/temas.json`. O
+campo `exemplo`, que fixaria um diagrama do próprio banco, **foi apagado em
+2026-09-08**: ele era validado e não era lido em lugar nenhum, e com a apostila
+fora de cena não havia onde ele aparecer; (2) **aquecimento** 5 puzzles fáceis (`short`/`oneMove`); (3) **série** 20–30
 em rating crescente; (4) **prova** 10 puzzles do tema **misturados** com temas já
 vistos (reconhecer sem saber o nome, como na partida); (5) progresso (acertos,
 tentativas, tempo) salvo no servidor.

@@ -62,24 +62,38 @@ export default async function Revisao() {
   const puzzles = carregados.filter((p): p is PuzzleServido => p !== null);
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-5 px-4 py-6 sm:px-5 sm:py-10">
-      <header className="flex flex-col gap-1">
-        <Link href="/painel" className="foco rotulo w-fit text-metodo-tinta hover:underline">
+    /*
+     * A moldura e o cabeçalho de uma linha são os do palco — ver a `Moldura` de
+     * `app/tatica/[tema]/page.tsx`. Aqui o corte doeu mais: a escada inteira da
+     * repetição espaçada ("volta em 2, depois 7, depois 14, depois sai") ficava
+     * no cabeçalho, em duas linhas, e era lida uma vez e ignorada nos outros
+     * trinta dias. Ela desceu para o cartão de "nada para revisar", que é onde
+     * o aluno tem tempo de ler e onde não custa altura de tabuleiro.
+     */
+    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
+      <header className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+        <Link href="/painel" className="foco rotulo text-metodo-tinta hover:underline">
           ← Painel
         </Link>
         <h1 className="titulo text-tinta">Revisão do dia</h1>
-        <p className="text-xs text-tinta-fraca">
-          Os puzzles que você errou, de volta {INTERVALOS_DA_REVISAO[0]} dias depois. Acertou:
-          volta em {INTERVALOS_DA_REVISAO[1]}, depois em {INTERVALOS_DA_REVISAO[2]}, depois sai.
-        </p>
+        {/*
+         * A fila de hoje entra no cabeçalho, e não abaixo da série: o palco tem
+         * altura fechada, e qualquer coisa depois dele volta a rolar a página.
+         */}
+        {devidos.length > puzzles.length ? (
+          <p className="text-xs text-tinta-fraca tabular-nums">
+            +{devidos.length - puzzles.length} na fila de hoje
+          </p>
+        ) : null}
       </header>
 
       {puzzles.length === 0 ? (
-        <div className="flex flex-col gap-3 rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center">
+        <div className="flex flex-col gap-3 cartao-vazio px-4 py-6 text-center">
           <p className="text-sm font-medium text-tinta">Nada para revisar hoje.</p>
           <p className="text-sm text-tinta-media">
-            Os erros de hoje voltam em {INTERVALOS_DA_REVISAO[0]} dias. Enquanto isso, siga na
-            série do seu tema.
+            Os erros de hoje voltam em {INTERVALOS_DA_REVISAO[0]} dias. Acertou na revisão:
+            volta em {INTERVALOS_DA_REVISAO[1]}, depois em {INTERVALOS_DA_REVISAO[2]}, depois
+            sai. Enquanto isso, siga na série do seu tema.
           </p>
           <Link href="/tatica" className="foco text-sm font-medium text-metodo-tinta underline">
             Ir para a tática
@@ -101,13 +115,6 @@ export default async function Revisao() {
           cuidado={null}
         />
       )}
-
-      {devidos.length > puzzles.length ? (
-        <p className="text-xs text-tinta-fraca tabular-nums">
-          {devidos.length - puzzles.length} ainda na fila de hoje — aparecem quando esta rodada
-          acabar.
-        </p>
-      ) : null}
     </main>
   );
 }

@@ -17,9 +17,9 @@
  */
 export const MARCA = {
   /** `--color-papel`. O fundo da página, e a cor da barra do navegador. */
-  papel: "#ebf0ec",
+  papel: "#040906",
   /** `--color-metodo-cheio`. O verde do botão primário, e o fundo do ícone. */
-  verde: "#15552e",
+  verde: "#56bd78",
   /** `--color-tinta`. */
-  tinta: "#1e2621",
+  tinta: "#edf1ee",
 } as const;

@@ -270,7 +270,7 @@ try {
     .insert({ aluno: criados[0], tarefa: "s1-coordenadas" });
   afirmar(!erroMarcarA, `A marca a tarefa dele (${erroMarcarA?.message ?? "sem erro"})`);
 
-  await alunoB.from("tarefa_conclusao").insert({ aluno: criados[1], tarefa: "s1-caderno" });
+  await alunoB.from("tarefa_conclusao").insert({ aluno: criados[1], tarefa: "s1-anotacao" });
 
   // A linha que a política `with check` recusa. Sem ela, A escreveria no
   // painel de B — e B nunca saberia de onde veio.
@@ -288,7 +288,7 @@ try {
 
   // `delete` que não alcança nada não é erro no Postgres: some, calado. Por
   // isso a prova é contar do outro lado, e não olhar o `error`.
-  await alunoA.from("tarefa_conclusao").delete().eq("tarefa", "s1-caderno");
+  await alunoA.from("tarefa_conclusao").delete().eq("tarefa", "s1-anotacao");
   const { count: sobrouDeB } = await admin
     .from("tarefa_conclusao")
     .select("*", { count: "exact", head: true })
@@ -532,6 +532,48 @@ try {
     treinoPorA?.length === 1 && treinoPorA[0].aluno === criados[0],
     `A vê 1 tentativa de treino, a dele (viu ${treinoPorA?.length})`,
   );
+
+  console.log("\n11. O nível conquistado: só o servidor concede, e cada um lê o seu");
+
+  // A porta que **não** pode existir. Se ela abrir, o navegador do aluno se
+  // promove sozinho até o nível 5 — e a progressão sequencial, que é o eixo
+  // inteiro do curso desde 2026-09-09, vira decoração.
+  const { error: erroAutoPromocao } = await alunoA
+    .from("nivel_conquistado")
+    .insert({ aluno: criados[0], nivel: 5 });
+  afirmar(
+    Boolean(erroAutoPromocao),
+    `A não se promove sozinho (${erroAutoPromocao?.code ?? "PASSOU! O ALUNO SE PROMOVE."})`,
+  );
+
+  // Nem no nome de outro, nem no nível 1: não é o número que é recusado, é a
+  // escrita inteira.
+  const { error: erroPromocaoDeB } = await alunoA
+    .from("nivel_conquistado")
+    .insert({ aluno: criados[1], nivel: 1 });
+  afirmar(Boolean(erroPromocaoDeB), `A não promove B (${erroPromocaoDeB?.code ?? "PASSOU!"})`);
+
+  // Quem concede é o servidor, com chave de serviço — o caminho da ação que
+  // encerra a prova de nível.
+  for (const [i, id] of criados.entries()) {
+    const { error } = await admin
+      .from("nivel_conquistado")
+      .insert({ aluno: id, nivel: i + 1 });
+    if (error) throw new Error(`o servidor não concedeu nível a ${id}: ${error.message}`);
+  }
+
+  const { data: niveisPorA } = await alunoA.from("nivel_conquistado").select("aluno, nivel");
+  afirmar(niveisPorA?.length === 1, `A vê 1 nível (viu ${niveisPorA?.length})`);
+  afirmar(niveisPorA?.[0]?.aluno === criados[0], "e o nível que A vê é o de A");
+
+  // Descer é impossível: `delete` que não alcança nada some calado, então a
+  // prova é contar do outro lado. É a monotonia que a forma da tabela promete.
+  await alunoA.from("nivel_conquistado").delete().eq("aluno", criados[0]);
+  const { count: nivelDeASobrou } = await admin
+    .from("nivel_conquistado")
+    .select("*", { count: "exact", head: true })
+    .eq("aluno", criados[0]);
+  afirmar(nivelDeASobrou === 1, `A não apaga o próprio nível (sobrou ${nivelDeASobrou})`);
 
 } finally {
   await limpar();

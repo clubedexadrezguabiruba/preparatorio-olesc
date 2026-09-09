@@ -18,17 +18,27 @@
  * omitido é par esquecido; par isento é decisão registrada, com o motivo do
  * lado. Hoje são três, todas de coisa que não carrega informação.
  *
- * **Dívida está escrita, e hoje está vazia.** O tema que o site tinha no B6.1
- * reprovava AA em oito combinações, de 4,23:1 a 1,39:1. Sete foram pagas pela
- * paleta clara; a oitava, e pior delas, foi paga antes, por conserto de
- * componente — era tinta encostada num fundo que mudou de claridade embaixo
- * dela, e nenhuma paleta salvaria isso.
+ * **Dívida está escrita, e hoje há uma.** É a borda do campo de texto, e ela
+ * atravessou os dois temas: reprovava no claro e continua reprovando no escuro,
+ * em 1,83:1. O comentário que ficou aqui até 2026-09-09 dizia que a lista
+ * estava vazia, e estava errado desde que a linha foi escrita — o tipo de
+ * desencontro que faz o próximo leitor confiar no arquivo em vez de na medida.
+ * O número e a conta a pagar estão na própria linha, lá embaixo.
  *
- * O campo `divida` continua existindo e continua sendo exigente: um par que o
- * declare **tem** de reprovar, senão o teste fica vermelho. Ele é o caminho
- * honesto para registrar um defeito conhecido em vez de escondê-lo — e o
- * caminho de volta, porque consertar a cor sem apagar a linha também reprova.
- * Que ele esteja vazio é a entrega do B6, não uma propriedade permanente.
+ * O campo `divida` é exigente nos dois sentidos: um par que o declare **tem**
+ * de reprovar, senão o teste fica vermelho. Ele é o caminho honesto para
+ * registrar um defeito conhecido em vez de escondê-lo — e o caminho de volta,
+ * porque consertar a cor sem apagar a linha daqui também reprova.
+ *
+ * ## O que esta lista **não** cobre
+ *
+ * Ela é escrita à mão. "76 de 76 passando" quer dizer *"as 76 combinações que
+ * alguém lembrou de declarar passaram"*, e não *"a interface está legal"*. O
+ * que escapa por construção é o que nasce em tempo de execução: `hover`,
+ * `:focus-visible`, `disabled`, `placeholder`, o preenchimento automático do
+ * Chrome, a barra de rolagem, a seleção de texto e os controles nativos do
+ * celular. Esses foram varridos à mão na virada para o escuro, e o que apareceu
+ * com combinação nova entrou aqui — é isso, ou passa sem ninguém medir.
  */
 
 /** Piso da WCAG 2.2 para corpo de texto (1.4.3, AA). */
@@ -231,7 +241,7 @@ export const PARES: Par[] = [
     fundo: CARTA,
     piso: AA_TEXTO,
     isencao:
-      "3,06:1, e nenhuma informação passa por ele: cada `placeholder` do site repete o que o rótulo acima do campo já diz por extenso, em `tinta-fraca`. O texto de exemplo some no instante em que o aluno digita — e some sem levar nada junto. Os travessões são `aria-hidden`, são marcador de item de lista, e o texto que eles antecedem está em `tinta-media` ao lado. **A isenção encolheu na F2**: a revisão das capturas pegou a proveniência do diagrama de meio-jogo e a pastilha fechada da `/trilha` nesta tinta a 2,69:1 e 3,06:1, e a varredura que se seguiu achou mais vinte e duas — \"abre no Sábado 3\", \"Não começou\", \"(meta 70%)\", o número do bloco, a contagem do professor. Todas subiram para `tinta-fraca`. O que sobra em `tinta-muda` hoje é o que a isenção sempre disse que era: `placeholder` e travessão.",
+      "3,06:1, e nenhuma informação passa por ele: cada `placeholder` do site repete o que o rótulo acima do campo já diz por extenso, em `tinta-fraca`. O texto de exemplo some no instante em que o aluno digita — e some sem levar nada junto. Os travessões são `aria-hidden`, são marcador de item de lista, e o texto que eles antecedem está em `tinta-media` ao lado. **A isenção encolheu na F2**: a revisão das capturas pegou a proveniência do diagrama de meio-jogo e a pastilha fechada da `/trilha` nesta tinta a 2,69:1 e 3,06:1, e a varredura que se seguiu achou mais vinte e duas — a pastilha do nível adiante, \"Não começou\", \"(meta 70%)\", o número do bloco, a contagem do professor. Todas subiram para `tinta-fraca`. O que sobra em `tinta-muda` hoje é o que a isenção sempre disse que era: `placeholder` e travessão.",
   },
 
   // -------------------------------------------------------------------------
@@ -303,7 +313,8 @@ export const PARES: Par[] = [
     // O motor usa tinta cheia nos controles neutros, e não `tinta-media`: são
     // botões que o aluno aperta dezenas de vezes numa aula (Avançar, Voltar,
     // Repetir a cena), e o rótulo deles é a instrução, não um apoio.
-    onde: "botão neutro em repouso — LessonButton:23",
+    onde:
+      "botão neutro em repouso (LessonButton:23) e o campo preenchido pelo Chrome, cujo `box-shadow` interno em globals.css cobre o amarelo do navegador com esta mesma superfície",
     texto: "tinta",
     fundo: CARTA_ALTA,
     piso: AA_TEXTO,
@@ -497,7 +508,7 @@ export const PARES: Par[] = [
     fundo: PAGINA,
     piso: AA_COMPONENTE,
     divida:
-      "O campo de texto é o único lugar do site em que a borda **carrega informação**: ela é o que diz onde tocar para escrever, e não há fundo próprio dizendo isso. São os 6 campos de /entrar e /professor. A conta a pagar é escurecer a borda **só do campo**, não a do cartão — 28% de tinta bate o piso, e é o valor que `borda-forte` já tem.",
+      "O campo de texto é o único lugar do site em que a borda **carrega informação**: ela é o que diz onde tocar para escrever, e não há fundo próprio dizendo isso. São os 6 campos de /entrar e /professor. Mede 1,83:1 no tema escuro (media 2,03:1 no claro): a dívida atravessou a virada, e não foi de graça nem no escuro — levar `borda` sozinha ao piso exigiria ~40% de tinta em TODA borda do site, e o cartão viraria arame. A conta a pagar continua sendo a mesma: trocar a classe **só do campo** para `border-borda-forte`, em entrar/Formulario.tsx e professor/CadastroDeAluno.tsx. É mudança de componente, e por isso ficou fora do commit que só troca cor.",
   },
   {
     onde: "traço do botão secundário da aula — `border-metodo-superficie` em Passada.tsx e Treino.tsx (Pular e jogar, Dica, Jogar com a seta, Próxima linha)",
@@ -537,6 +548,36 @@ export const PARES: Par[] = [
     piso: AA_COMPONENTE,
     isencao:
       "é o escurecedor de fundo de um modal, não uma marca: o contraste que importa ali é o do conteúdo do modal contra o véu já composto, e esse par entra quando o modal existir.",
+  },
+
+  // -------------------------------------------------------------------------
+  // O que o navegador pinta sozinho
+  //
+  // Estes três nasceram da varredura de estados da virada para o escuro
+  // (2026-09-09). Nenhum deles existia na tabela porque nenhum deles nasce de
+  // uma classe nossa — e era exatamente por isso que precisavam entrar: a
+  // interface pode estar 100% verde aqui e ilegível no campo preenchido
+  // automaticamente pelo Chrome. (O autofill em si não ganhou linha própria: a
+  // combinação dele já existia como botão neutro em repouso, e a lista é por
+  // combinação — o sítio foi somado ao `onde` de lá.)
+  // -------------------------------------------------------------------------
+  {
+    onde: "anel da caixa de seleção vazia — `input[type=checkbox]` em globals.css, e o sítio é a caixa da partida do dia (Hoje.tsx)",
+    texto: "borda-forte",
+    fundo: CARTA,
+    piso: AA_COMPONENTE,
+  },
+  {
+    onde: "texto selecionado com o dedo ou o mouse (`::selection`) — sobre a página",
+    texto: "tinta",
+    fundo: ["metodo-superficie/40", ...PAGINA],
+    piso: AA_TEXTO,
+  },
+  {
+    onde: "texto selecionado dentro de um cartão — a mesma marcação, um degrau de superfície acima",
+    texto: "tinta",
+    fundo: ["metodo-superficie/40", ...CARTA],
+    piso: AA_TEXTO,
   },
 
   // -------------------------------------------------------------------------

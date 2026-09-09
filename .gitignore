@@ -47,12 +47,6 @@ next-env.d.ts
 # apagando a exceção da linha de cima.
 .vercel
 
-# O HTML intermediário do caderno e os recortes de conferência. O que fica
-# versionado é o PDF em public/apostila/ — ele é o material entregue, e a
-# Vercel não tem Chromium para regerá-lo na build.
-/apostila/saida/
-/.conferencia/
-
 # Os rascunhos COM a prosa do Krikor e do Grigoryan. O gêmeo sem prosa, em
 # content/repertorio/rascunhos/, é o versionado; este existe para quem escreve
 # o comentário ter o argumento do autor na mão, e não pode entrar no Git —

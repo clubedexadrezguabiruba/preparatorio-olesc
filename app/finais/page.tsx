@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Barra } from "@/components/Barra";
+import { Cabecalho } from "@/components/Cabecalho";
+import { Moldura } from "@/components/Moldura";
 import { Bolinhas } from "@/components/Bolinhas";
-import { EscolhaDaSemana } from "@/components/curso/EscolhaDaSemana";
 import { perfilAtual } from "@/lib/auth/perfil";
-import { porExtenso, sabadoDaSemana } from "@/lib/curso/calendario";
-import { PARAMETRO_DA_SEMANA, semanaDaTela } from "@/lib/curso/semana";
+import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import { aulasComPratica, aulasPublicadas, indiceDeAulas } from "@/lib/finais/conteudo";
 import { DEGRAU_APRENDIDA } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
@@ -25,13 +25,13 @@ import {
 } from "@/lib/finais/trilha";
 
 /**
- * A trilha de finais na tela: quatro classes, e em cada uma as aulas que já
- * abriram, com o estado do aluno em cada uma.
+ * A trilha de finais na tela: quatro classes, e em cada uma as 49 aulas, com o
+ * estado do aluno em cada uma.
  *
  * ## O que a tela **não** decide
  *
- * Nada. Quais aulas existem, em que classe, em que formato e a partir de que
- * sábado é `lib/finais/trilha.ts`; o que passou pelo gate é o `status` do
+ * Nada. Quais aulas existem, em que classe, em que formato e em que nível é
+ * `lib/finais/trilha.ts`; o que passou pelo gate é o `status` do
  * arquivo; o que o aluno fez é `lib/finais/progresso.ts`; e o que "dominada"
  * quer dizer em cada formato é `dominou()`. Esta página junta as quatro coisas
  * e as desenha — é o mesmo desenho de `/tatica`, e é o que impede a trilha de
@@ -43,11 +43,18 @@ import {
  * 39 cartões cinzas ensinam a criança a medir o que falta. A turma real
  * respondeu o contrário: o aluno quer **saber o que vem depois**, e um curso
  * que esconde o próprio tamanho não deixa ninguém planejar o mês. Então as 49
- * aparecem, numeradas, por classe de força, e cada uma diz em que estado está
- * — inclusive "abre no Sábado 3" e "em escrita".
+ * aparecem, numeradas, por classe de força, e cada uma diz em que estado está.
  *
- * O que **não** mudou: a barra de progresso conta sobre as **abertas**. Medir o
- * aluno contra 49 aulas em 12 de setembro seria dizer-lhe que ele está em 4%.
+ * O que **não** mudou: a barra de progresso conta sobre as **publicadas**.
+ * Medir o aluno contra 49 aulas quando existe uma seria dizer-lhe que ele está
+ * em 2%.
+ *
+ * ## O sábado saiu daqui em 2026-09-09
+ *
+ * A aula fechada tinha dois motivos — "abre no Sábado 3" e "em escrita" — e o
+ * primeiro nunca chegou a valer: `/finais/[aula]` não checava semana nenhuma, e
+ * o cadeado só existia nesta lista. Com a data fora do portão sobrou um motivo
+ * só, e ele é o que sempre foi verdade: a aula não existe em disco.
  *
  * ## A bancada do professor
  *
@@ -59,19 +66,17 @@ import {
 
 export const metadata: Metadata = { title: "Finais — Preparatório OLESC" };
 
-export default async function Finais({ searchParams }: PageProps<"/finais">) {
+export default async function Finais() {
   const perfil = await perfilAtual();
-  // Ver a semana 4 aqui abre as sete aulas publicadas de uma vez, e esvazia a
-  // bancada logo abaixo — que é o mesmo conteúdo, listado como "ainda não
-  // aberta". As duas listas continuam somando o mesmo curso.
-  const tela = semanaDaTela(perfil.papel, (await searchParams)[PARAMETRO_DA_SEMANA]);
-  const semana = tela.semana;
 
   const publicadas = aulasPublicadas();
   const comPratica = aulasComPratica();
-  const abertas = aulasAbertas(publicadas, semana);
+  const abertas = aulasAbertas(publicadas);
   const idsAbertos = new Set(abertas.map((a) => a.id));
-  const progresso = await progressoDeFinais(perfil.id);
+  const [progresso, cabecalho] = await Promise.all([
+    progressoDeFinais(perfil.id),
+    dadosDoCabecalho(perfil.id),
+  ]);
   const feitas = aprendidasDaTrilha(abertas, progresso, comPratica);
   const proxima = proximaAula(abertas, progresso, comPratica);
 
@@ -82,11 +87,10 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
       : [];
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-5 py-10">
+    <>
+      <Cabecalho atual="finais" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} />
+      <Moldura largura="painel" barraInferior>
       <header className="flex flex-col gap-2">
-        <Link href="/painel" className="foco rotulo w-fit text-metodo-tinta hover:underline">
-          ← Painel
-        </Link>
         <h1 className="titulo text-tinta">Curso de finais</h1>
         {/*
           * **Esta frase era falsa, e voltou a ser verdadeira.**
@@ -103,18 +107,19 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
         </p>
       </header>
 
-      {/* Sem aula aberta, o aviso substitui a barra — mas a lista das 49
+      {/* Sem aula publicada, o aviso substitui a barra — mas a lista das 49
           continua embaixo. É justamente quando o aluno mais quer ver o que vem. */}
       {abertas.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
-          As primeiras aulas de finais abrem no Sábado {semana}, {porExtenso(sabadoDaSemana(semana).data)}.
+        <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
+          Nenhuma aula de finais foi publicada ainda. A lista abaixo é o curso inteiro, e
+          ela vai enchendo.
         </p>
       ) : (
-        <section className="flex flex-col gap-2 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+        <section className="flex flex-col gap-2 cartao px-4 py-3">
           <div className="flex flex-wrap items-baseline justify-between gap-x-3">
             <span className="rotulo text-tinta-fraca">Aulas aprendidas</span>
             <span className="text-sm text-tinta-media tabular-nums">
-              {feitas.size} de {abertas.length} abertas
+              {feitas.size} de {abertas.length} publicadas
             </span>
           </div>
           <Barra
@@ -128,13 +133,11 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
             </p>
           ) : (
             <p className="text-xs text-metodo-tinta">
-              Você dominou tudo o que está aberto. O próximo lote vem no sábado.
+              Você aprendeu tudo o que já foi publicado. O curso continua sendo escrito.
             </p>
           )}
         </section>
       )}
-
-      {perfil.papel === "professor" ? <EscolhaDaSemana tela={tela} base="/finais" /> : null}
 
       {CLASSES.map((classe) => {
         // A classe inteira, aberta ou não: é o mapa do curso. A contagem ao
@@ -191,8 +194,8 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
           <div className="flex flex-col gap-0.5">
             <h2 className="rotulo text-tinta-fraca">Bancada do professor</h2>
             <p className="text-sm text-tinta-media">
-              Aulas que o aluno ainda não enxerga: rascunho, ou publicada com o sábado por
-              chegar. Abrem normalmente por este link, e o que você jogar nelas grava.
+              Aulas que o aluno ainda não enxerga: rascunho, ou publicada fora da trilha
+              das 49. Abrem normalmente por este link, e o que você jogar nelas grava.
             </p>
           </div>
           <ul className="flex flex-col gap-2">
@@ -200,13 +203,13 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
               <li key={aula.id}>
                 <Link
                   href={`/finais/${aula.id}`}
-                  className="foco flex items-center gap-3 rounded-xl border border-dashed border-borda bg-carta px-4 py-3 transition-colors hover:bg-carta-toque"
+                  className="foco flex items-center gap-3 cartao-vazio px-4 py-3 transition-colors hover:bg-carta-toque"
                 >
                   <div className="flex min-w-0 flex-1 flex-col gap-1">
                     <p className="truncate text-sm font-medium text-tinta">{aula.titulo}</p>
                     <p className="text-xs text-tinta-fraca tabular-nums">
                       {aula.etapas} {aula.etapas === 1 ? "etapa" : "etapas"}
-                      {aula.status === "draft" ? " · rascunho" : " · publicada, sábado por chegar"}
+                      {aula.status === "draft" ? " · rascunho" : " · publicada"}
                       {naTrilha.has(aula.id) ? "" : " · fora da trilha"}
                     </p>
                   </div>
@@ -216,7 +219,8 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
           </ul>
         </section>
       ) : null}
-    </main>
+      </Moldura>
+    </>
   );
 }
 
@@ -235,7 +239,7 @@ function Cartao({
   return (
     <Link
       href={`/finais/${aula.id}`}
-      className="foco flex items-center gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-3 transition-colors hover:bg-carta-toque"
+      className="foco flex items-center gap-3 cartao-alvo px-4 py-3"
     >
       <span
         aria-hidden
@@ -271,16 +275,16 @@ function Cartao({
 }
 
 /**
- * A aula que ainda não abriu: sem link, e dizendo **por quê**.
+ * A aula que ainda não existe: sem link, e dizendo **por quê**.
  *
- * As duas razões são diferentes para o aluno. "Abre no Sábado 3" é uma data
- * que ele pode esperar; "em escrita" é uma aula que ainda não existe. Um
- * cadeado mudo para as duas faria ele perguntar ao professor o que já estaria
- * escrito na tela.
+ * Eram duas razões — o sábado por chegar e o texto por escrever —, e a primeira
+ * saiu com o calendário em 2026-09-09. Sobrou "em escrita", que é a única que
+ * de fato fecha a porta: não há o que abrir num arquivo que não existe. O
+ * `nível N` ao lado é informação, e não tranca — a trava é mole.
  */
 function Fechado({ aula, publicada }: { aula: AulaDaTrilha; publicada: boolean }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-dashed border-borda bg-carta/50 px-4 py-3">
+    <div className="flex items-center gap-3 cartao-vazio px-4 py-3">
       <span
         aria-hidden
         className="flex size-6 shrink-0 items-center justify-center rounded-full border border-borda text-xs font-bold text-tinta-fraca tabular-nums"
@@ -291,9 +295,7 @@ function Fechado({ aula, publicada }: { aula: AulaDaTrilha; publicada: boolean }
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <p className="truncate text-sm font-medium text-tinta-fraca">{aula.nome}</p>
         <p className="text-xs text-tinta-fraca">
-          {publicada
-            ? `Abre no Sábado ${aula.sabado}, ${porExtenso(sabadoDaSemana(aula.sabado).data)}`
-            : "Em escrita"}
+          {publicada ? `Nível ${aula.nivel}` : "Em escrita"}
         </p>
       </div>
     </div>

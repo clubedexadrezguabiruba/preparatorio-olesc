@@ -1,16 +1,14 @@
-import { aprendeu, CLASSES, daClasse, TRILHA, type ProgressoDaAula } from "../finais/trilha.ts";
+import { aprendeu, TRILHA, type ProgressoDaAula } from "../finais/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
-import { type Semana } from "./calendario.ts";
 import {
-  estaAberto,
+  aulasDoNivel,
   NIVEIS,
-  nivelDaClasse,
-  nivelDoBloco,
-  type ItemDoNivel,
-  type ModuloDoNivel,
+  situacaoDoItem,
+  temasDoNivel,
+  type Nivel,
   type Situacao,
-} from "./trilha.ts";
+} from "./nivel.ts";
 
 /**
  * O curso inteiro montado por nível — a matéria-prima da página `/trilha`.
@@ -28,6 +26,16 @@ import {
  * a página; quem decide o que os números significam é este arquivo, e o
  * `mapa.test.ts` cobra.
  *
+ * ## A divisão com `nivel.ts`, que é nova
+ *
+ * Até 2026-09-09 havia um `lib/curso/trilha.ts` que misturava duas coisas: a
+ * **regra** (quais são os níveis, o que abre um item) e o **modelo de tela**
+ * (`ItemDoNivel`, `ModuloDoNivel`, as barras). Elas se separaram limpo — a
+ * regra foi para `nivel.ts`, o modelo de tela ficou aqui — e o arquivo do meio
+ * morreu junto com o defeito que morava nele: `nivelDoBloco` derivava o degrau
+ * do **piso de rating do puzzle**, e como os oito blocos começam entre 700 e
+ * 1100, os 36 temas caíam todos no nível 1.
+ *
  * ## A unidade de cada módulo é diferente, e isso é o assunto
  *
  * | módulo | um item é | `total` |
@@ -42,14 +50,14 @@ import {
  *
  * ## O que "aberto" quer dizer em cada um
  *
- * Tática e finais abrem por sábado, e o item fechado diz **qual** dos dois
- * motivos o fecha — a data que ainda não chegou, ou o texto que ainda não
- * existe. É a regra de {@link Situacao}, e ela mora aqui porque é a mesma nos
- * dois módulos: quem sabe a semana de hoje é a página, quem sabe o que aquilo
- * significa é este arquivo.
+ * O item fechado diz **qual** dos dois motivos o fecha — o nível que o aluno
+ * ainda não alcançou, ou o texto que ainda não existe. É a regra de
+ * {@link situacaoDoItem}, e ela mora em `nivel.ts` porque é a mesma nos dois
+ * módulos: quem sabe o nível do aluno é a página, quem sabe o que aquilo
+ * significa é a regra.
  *
- * O módulo de meio-jogo saiu do site em 2026-09-08, e este arquivo voltou a
- * falar de dois.
+ * "Adiante" **continua clicável** — a trava é mole, e `podeAbrir` é quem
+ * responde isso.
  */
 
 export type ProgressoParaOMapa = {
@@ -58,7 +66,7 @@ export type ProgressoParaOMapa = {
   /** Um tema **tem texto escrito**? Vem de `temaAberto`, que olha o `content/`. */
   readonly temaAberto: (tag: string) => boolean;
   readonly finais: ReadonlyMap<string, ProgressoDaAula>;
-  /** Os ids das aulas com JSON publicado, de `aulasPublicadas` — não as abertas. */
+  /** Os ids das aulas com JSON publicado, de `aulasPublicadas`. */
   readonly aulasPublicadas: ReadonlySet<string>;
   /**
    * Os ids das aulas que têm a etapa 4, de `aulasComPratica`. É o que decide o
@@ -66,26 +74,43 @@ export type ProgressoParaOMapa = {
    * apagada em 9/9/2026 com os três formatos.
    */
   readonly aulasComPratica: ReadonlySet<string>;
-  /** A semana do preparatório em que estamos, de `semanaAtual()`. */
-  readonly semana: Semana;
+  /** O degrau em que o aluno está, de `nivelDoAluno()`. */
+  readonly nivelDoAluno: Nivel;
 };
 
-/**
- * A data primeiro, o texto depois. Ver {@link Situacao} para o porquê da ordem.
- *
- * `escrito` é o único dos dois que muda de módulo para módulo: em tática é ter
- * linha em `content/temas.json`, em finais é ter JSON publicado em
- * `content/lessons/`.
- */
-function situacao(sabado: Semana, semana: Semana, escrito: boolean): Situacao {
-  if (sabado > semana) return "por-abrir";
-  return escrito ? "aberto" : "em-escrita";
+export type ItemDoNivel = {
+  readonly id: string;
+  /** O que o aluno lê: "Mate em 1", "Rei e peão contra rei". */
+  readonly nome: string;
+  readonly href: string;
+  /** Quantas unidades tem (puzzles, aulas), para a linha de progresso. */
+  readonly total: number;
+  readonly feitos: number;
+  readonly situacao: Situacao;
+  /**
+   * O degrau em que o item mora.
+   *
+   * Não aceita `null`, ao contrário do `sabado` que ele substituiu: todo item
+   * do curso tem nível, porque o nível é declarado no currículo e não derivado
+   * de um calendário que alguns módulos não tinham.
+   */
+  readonly nivel: Nivel;
+};
+
+/** Clicável hoje. Existe para que nenhuma tela compare a string à mão. */
+export function estaAberto(item: ItemDoNivel): boolean {
+  return item.situacao === "aberto";
 }
 
-export function montarMapa(p: ProgressoParaOMapa): Map<string, ModuloDoNivel[]> {
-  const porNivel = new Map<string, ModuloDoNivel[]>();
+export type ModuloDoNivel = {
+  readonly modulo: "tatica" | "finais";
+  readonly itens: readonly ItemDoNivel[];
+};
 
-  const guardar = (nivel: string, modulo: ModuloDoNivel["modulo"], item: ItemDoNivel) => {
+export function montarMapa(p: ProgressoParaOMapa): Map<Nivel, ModuloDoNivel[]> {
+  const porNivel = new Map<Nivel, ModuloDoNivel[]>();
+
+  const guardar = (nivel: Nivel, modulo: ModuloDoNivel["modulo"], item: ItemDoNivel) => {
     const modulos = porNivel.get(nivel) ?? [];
     const existente = modulos.find((m) => m.modulo === modulo);
     if (existente) {
@@ -97,41 +122,40 @@ export function montarMapa(p: ProgressoParaOMapa): Map<string, ModuloDoNivel[]> 
   };
 
   for (const bloco of BLOCOS) {
-    const nivel = nivelDoBloco(bloco.faixa);
     for (const tema of bloco.temas) {
       // `Math.min` porque a prova serve puzzles repetidos e a revisão grava no
-      // mesmo tema: o contador passa de 24 sem o aluno ter feito nada a mais.
+      // mesmo tema: o contador passa de 39 sem o aluno ter feito nada a mais.
       // Documentar em vez de filtrar é a decisão da F2 — mas uma barra em 130%
       // seria a documentação chegando tarde demais.
       const feitos = Math.min(p.tatica.get(tema.tag) ?? 0, PUZZLES_POR_TEMA);
-      guardar(nivel, "tatica", {
+      guardar(bloco.nivel, "tatica", {
         id: tema.tag,
         nome: tema.nome,
         href: `/tatica/${tema.tag}`,
         total: PUZZLES_POR_TEMA,
         feitos,
-        situacao: situacao(bloco.sabado, p.semana, p.temaAberto(tema.tag)),
-        sabado: bloco.sabado,
+        situacao: situacaoDoItem(bloco.nivel, p.nivelDoAluno, p.temaAberto(tema.tag)),
+        nivel: bloco.nivel,
       });
     }
   }
 
-  for (const classe of CLASSES) {
-    const nivel = nivelDaClasse(classe);
-    for (const aula of daClasse(TRILHA, classe)) {
-      const progresso = p.finais.get(aula.id);
-      guardar(nivel, "finais", {
-        id: aula.id,
-        nome: aula.nome,
-        href: `/finais/${aula.id}`,
-        total: 1,
-        feitos: progresso && aprendeu(p.aulasComPratica.has(aula.id), progresso) ? 1 : 0,
-        situacao: situacao(aula.sabado, p.semana, p.aulasPublicadas.has(aula.id)),
-        sabado: aula.sabado,
-      });
-    }
+  // O corte é o `nivel` da aula, e não mais a `classe`: quatro classes não
+  // cabem em cinco níveis. Quem diz o que "aprendida" significa é
+  // `aulasComPratica` — a coluna `formato`, que respondia isso antes, foi
+  // apagada em 9/9/2026 junto com os três formatos.
+  for (const aula of TRILHA) {
+    const progresso = p.finais.get(aula.id);
+    guardar(aula.nivel, "finais", {
+      id: aula.id,
+      nome: aula.nome,
+      href: `/finais/${aula.id}`,
+      total: 1,
+      feitos: progresso && aprendeu(p.aulasComPratica.has(aula.id), progresso) ? 1 : 0,
+      situacao: situacaoDoItem(aula.nivel, p.nivelDoAluno, p.aulasPublicadas.has(aula.id)),
+      nivel: aula.nivel,
+    });
   }
-
 
   // A ordem dos módulos dentro do nível é a da rotina de treino do aluno —
   // tática e depois finais —, a mesma do cartão "Hoje". Sair da ordem de
@@ -139,12 +163,15 @@ export function montarMapa(p: ProgressoParaOMapa): Map<string, ModuloDoNivel[]> 
   // primeiro e o de baixo mostrasse tática primeiro.
   const ORDEM: ModuloDoNivel["modulo"][] = ["tatica", "finais"];
   for (const [nivel, modulos] of porNivel) {
-    porNivel.set(nivel, [...modulos].sort((a, b) => ORDEM.indexOf(a.modulo) - ORDEM.indexOf(b.modulo)));
+    porNivel.set(
+      nivel,
+      [...modulos].sort((a, b) => ORDEM.indexOf(a.modulo) - ORDEM.indexOf(b.modulo)),
+    );
   }
-  // E todo nível aparece no mapa, mesmo vazio: a tela desenha os quatro degraus
+  // E todo nível aparece no mapa, mesmo vazio: a tela desenha os cinco degraus
   // da escada, e um buraco no meio dela leria como erro.
   for (const nivel of NIVEIS) {
-    if (!porNivel.has(nivel.id)) porNivel.set(nivel.id, []);
+    if (!porNivel.has(nivel)) porNivel.set(nivel, []);
   }
 
   return porNivel;
@@ -154,8 +181,8 @@ export function montarMapa(p: ProgressoParaOMapa): Map<string, ModuloDoNivel[]> 
 export function contarAberto(modulo: ModuloDoNivel): {
   feitos: number;
   total: number;
-  /** Fechados porque o sábado deles ainda não chegou. */
-  porAbrir: number;
+  /** Fechados porque o degrau deles ainda não chegou. Clicáveis mesmo assim. */
+  adiante: number;
   /** Fechados porque o texto ainda não existe. */
   emEscrita: number;
 } {
@@ -163,17 +190,22 @@ export function contarAberto(modulo: ModuloDoNivel): {
   return {
     feitos: abertos.reduce((s, i) => s + i.feitos, 0),
     total: abertos.reduce((s, i) => s + i.total, 0),
-    porAbrir: modulo.itens.filter((i) => i.situacao === "por-abrir").length,
+    adiante: modulo.itens.filter((i) => i.situacao === "adiante").length,
     emEscrita: modulo.itens.filter((i) => i.situacao === "em-escrita").length,
   };
 }
 
+/** Quantas aulas de finais e temas de tática cada nível tem, no total. */
+export function tamanhoDoNivel(n: Nivel): { tatica: number; finais: number } {
+  return { tatica: temasDoNivel(n).length, finais: aulasDoNivel(n).length };
+}
+
 /**
- * Os três módulos na ordem da rotina de treino do aluno.
+ * Os módulos na ordem da rotina de treino do aluno.
  *
- * A tela desenha as **três** colunas em todo degrau, mesmo nos degraus em que
- * um dos módulos não tem item nenhum — senão a coluna do meio de um degrau fica
- * embaixo da coluna da direita do degrau de cima, e a escada deixa de ser
+ * A tela desenha as **duas** colunas em todo degrau, mesmo nos degraus em que
+ * um dos módulos não tem item nenhum — senão a coluna da esquerda de um degrau
+ * fica embaixo da coluna da direita do degrau de cima, e a escada deixa de ser
  * legível de relance. O que preenche a coluna vazia é o `vazio` de cada módulo,
  * que diz **por que** ela está vazia.
  */
@@ -188,19 +220,20 @@ export const MODULO: Record<
     nome: "Tática",
     unidade: "puzzles",
     conta: "Puzzles resolvidos, conferidos pelo servidor lance a lance.",
+    // Este campo já foi a confissão de um defeito: enquanto o degrau era
+    // derivado do piso de rating, todos os oito blocos caíam no nível 1 e os
+    // outros três degraus escreviam aqui uma explicação para uma coluna vazia
+    // que não devia estar vazia. Com o nível declarado no currículo, os cinco
+    // degraus têm tática — e a frase volta a ser o que um `vazio` deve ser:
+    // uma linha para um caso que hoje não acontece.
     href: "/tatica",
-    // Os oito blocos começam entre 600 e 1100 de rating de puzzle do Lichess,
-    // que `PUZZLE_ACIMA_DO_RAPIDO` converte para 300 a 800 de rápidas: todos
-    // cabem no primeiro degrau, e é o que `nivelDoBloco` diz. Não é defeito da
-    // conta — é o desenho do curso, e a tela escreve isso em vez de deixar um
-    // buraco branco onde o cabeçalho prometeu três colunas.
-    vazio: "Os oito blocos são de base: todos começam abaixo de 1000 de rápidas, e por isso moram no degrau 1.",
+    vazio: "Nenhum tema de tática neste degrau.",
   },
   finais: {
     nome: "Finais",
     unidade: "aulas",
     conta: "Aulas aprendidas — três passadas em dias distintos, cada uma certificada pela tablebase.",
     href: "/finais",
-    vazio: "Nenhuma aula de finais nesta faixa.",
+    vazio: "Nenhuma aula de finais neste degrau.",
   },
 };

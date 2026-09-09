@@ -50,7 +50,7 @@ export function Sessao({ linha, resumo }: { linha: Linha; resumo: string | null 
   return (
     <div className="flex flex-col gap-3">
       {resumo && rodada === 0 ? (
-        <p className="rounded-xl border border-borda-fraca bg-carta px-4 py-3 text-sm text-tinta-media">
+        <p className="cartao px-4 py-3 text-sm text-tinta-media">
           {semQuebras(resumo)}
         </p>
       ) : null}
@@ -74,7 +74,7 @@ export function Sessao({ linha, resumo }: { linha: Linha; resumo: string | null 
       />
 
       {fechou ? (
-        <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-4">
+        <div className="flex flex-col gap-3 cartao px-4 py-4">
           {/*
            * Três finais desde 8/9/2026, e não dois: o erro agora **para** a
            * passada em vez de levá-la até o fim (ver `lib/repertorio/passada.ts`).

@@ -21,12 +21,45 @@ import {
 import { playForMove, playRefusal, playSuccess } from "@/lib/sound";
 import { ABERTURA_MS } from "@/lib/tatica/tempos";
 import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
+import { BotaoPrincipal, BotaoSecundario } from "@/components/lesson/BotoesDaAula";
+import { CartaoDeComando } from "@/components/lesson/CartaoDeComando";
 import { Comentario, useComentarioPaginado } from "@/components/lesson/Comentario";
 import { ProfessorSeApresenta } from "@/components/lesson/ProfessorSeApresenta";
-import { Cartao } from "./Cartao";
+import { TrilhaDeEtapas, type EtapaDaTrilha } from "@/components/lesson/TrilhaDeEtapas";
 import { FaixaDeSans, FitaDoBoletim } from "./FitaDeLances";
-import { TrilhaDeEtapas } from "./TrilhaDeEtapas";
 import { OQueAindaFalta } from "./OQueFalta";
+
+/**
+ * As três etapas de uma passada: `seta · treino · valendo`.
+ *
+ * ## Por que a trilha existe, e é uma questão de não mentir
+ *
+ * Com as três etapas passaram a existir **dois números 3 na mesma tela, com
+ * significados diferentes**: "etapa 3 de 3", que é esta sessão, e as bolinhas
+ * "3 de 3", que é a linha **aprendida** — três passadas em três dias espaçados
+ * (`DEGRAUS_EM_DIAS` em `lib/repertorio/treino.ts`). Sem separar os dois, o
+ * aluno chega ao fim de uma tarde achando que terminou a linha, e volta no dia
+ * seguinte para encontrá-la de novo na fila.
+ *
+ * A separação é de **linguagem visual**: a escada continua nas `Bolinhas` —
+ * círculos, no cabeçalho, ao lado de "próxima prática" —, e as etapas são as
+ * barras do `TrilhaDeEtapas`, logo abaixo do cartão de comando. Círculo é
+ * progresso de memória; barra é onde estou agora.
+ *
+ * ## Ela só aparece na primeira passada
+ *
+ * Da segunda em diante o aluno entra direto no "valendo" (`page.tsx` escolhe o
+ * modo inicial por `tentativas === 0`), e uma trilha de três com duas etapas
+ * apagadas para sempre prometeria um caminho que não existe mais.
+ */
+const ETAPAS_DA_PASSADA = [
+  { nome: "seta", diz: "com a seta" },
+  { nome: "treino", diz: "sem a seta, sem valer" },
+  { nome: "valendo", diz: "valendo" },
+] as const satisfies readonly EtapaDaTrilha[];
+
+/** Em que barra da trilha o modo corrente acende. */
+const BARRA_DO_MODO: Record<Modo, number> = { assistido: 0, treino: 1, quiz: 2 };
 
 /**
  * A casca da passada: relógios, tabuleiro e teclado.
@@ -468,13 +501,15 @@ export function Passada({
             <FitaDoBoletim boletim={estado.boletim} acertos={placar.acertos} />
           ) : (
             <>
-              <Cartao conteudo={estado.cartao} />
+              <CartaoDeComando {...estado.cartao} />
               {/*
                * A trilha entra logo abaixo do cartão, e só na primeira passada.
-               * Ver `TrilhaDeEtapas.tsx` para os dois "3" que ela existe para
-               * não deixar o aluno confundir.
+               * Ver `ETAPAS_DA_PASSADA`, acima, para os dois "3" que ela existe
+               * para não deixar o aluno confundir.
                */}
-              {mostrarTrilha ? <TrilhaDeEtapas modo={modo} /> : null}
+              {mostrarTrilha ? (
+                <TrilhaDeEtapas etapas={ETAPAS_DA_PASSADA} atual={BARRA_DO_MODO[modo]} />
+              ) : null}
             </>
           )}
 
@@ -515,7 +550,7 @@ export function Passada({
 
               <AulaRodape>
                 {estado.fase === "lendo" ? (
-                  <Principal onClick={continuarLeitura}>Continuar →</Principal>
+                  <BotaoPrincipal onClick={continuarLeitura}>Continuar →</BotaoPrincipal>
                 ) : null}
 
                 {/*
@@ -523,14 +558,14 @@ export function Passada({
                  * de saber que a etapa seguinte tira a seta antes de ela sumir.
                  */}
                 {fim && modo === "assistido" ? (
-                  <Principal onClick={aoAvancarEtapa}>Treinar sem a seta →</Principal>
+                  <BotaoPrincipal onClick={aoAvancarEtapa}>Treinar sem a seta →</BotaoPrincipal>
                 ) : null}
                 {fim && modo === "treino" ? (
-                  <Principal onClick={aoAvancarEtapa}>Valendo →</Principal>
+                  <BotaoPrincipal onClick={aoAvancarEtapa}>Valendo →</BotaoPrincipal>
                 ) : null}
 
                 {!fim && modo === "assistido" ? (
-                  <Secundario onClick={aoAvancarEtapa}>Pular e jogar</Secundario>
+                  <BotaoSecundario onClick={aoAvancarEtapa}>Pular e jogar</BotaoSecundario>
                 ) : null}
 
                 {/*
@@ -539,7 +574,7 @@ export function Passada({
                  * pena —, e no quiz decide a passada. Quem cobra é o redutor.
                  */}
                 {modo !== "assistido" && podeMover ? (
-                  <Secundario onClick={() => despachar({ tipo: "pediuDica" })}>Dica</Secundario>
+                  <BotaoSecundario onClick={() => despachar({ tipo: "pediuDica" })}>Dica</BotaoSecundario>
                 ) : null}
 
                 {rodapeExtra}
@@ -552,45 +587,3 @@ export function Passada({
   );
 }
 
-/* ------------------------------------------------------------------ *
- * As peças de tela que só a passada usa
- * ------------------------------------------------------------------ */
-
-function Principal({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="foco rounded-lg border border-transparent bg-metodo-cheio px-4 py-2.5 text-sm font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque"
-    >
-      {children}
-    </button>
-  );
-}
-
-/**
- * O botão secundário: contornado em verde, e não em cinza.
- *
- * **Era `border-borda` sobre o papel, e sumia.** Medido em 8/9/2026: a borda
- * neutra sobre a página dá **1,36:1** — abaixo do piso de 3:1 da WCAG 1.4.11
- * para componente de interface, e abaixo do que o olho separa de uma sombra.
- * "Pular e jogar" e "Dica" ficavam sendo texto solto no meio do painel, sem
- * nada dizendo que ali havia um alvo para tocar. Escurecer a borda neutra não
- * resolvia: `borda-forte`, o degrau mais escuro que existe, mede 1,76:1.
- *
- * A saída usa a paleta que já está na tela: o botão principal é o verde
- * **cheio**, e este passa a ser o mesmo verde **contornado** — 3,54:1 de traço
- * e 11,08:1 de rótulo sobre a página. É o par preenchido/contornado de sempre,
- * e ele diz a hierarquia sem precisar de um cinza que não se enxerga.
- */
-function Secundario({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="foco rounded-lg border border-metodo-superficie px-3 py-2.5 text-sm font-medium text-metodo-tinta transition-colors hover:bg-metodo-superficie/10"
-    >
-      {children}
-    </button>
-  );
-}

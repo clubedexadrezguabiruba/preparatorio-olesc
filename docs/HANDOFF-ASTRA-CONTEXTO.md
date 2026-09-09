@@ -158,7 +158,7 @@ Três módulos de conteúdo, mais a apostila. Estado real, contado no código ho
 
 | Módulo | Estado | Fonte do conteúdo |
 |---|---|---|
-| **Tática** | 8 blocos e **36 temas** na taxonomia; **8 temas com texto escrito** (e ter texto escrito é o que abre o tema para o aluno). 166.623 puzzles. | Banco público do Lichess, **CC0** |
+| **Tática** | 8 blocos e **36 temas** na taxonomia; **os 36 com texto escrito** desde 2026-09-08, e um teste reprova se algum fechar de novo (ter texto escrito é o que abre o tema para o aluno). 175.987 puzzles. | Banco público do Lichess, **CC0** |
 | **Finais** | **49 aulas planejadas, 7 construídas.** Cada aula é interativa e tem juiz de máquina. | **22 obras registradas** — Capablanca 1921, Freeborough 1891, Staunton 1848, Müller, Silman, Pandolfini, De la Villa e outras |
 | **Meio-jogo** | **30 dicas, todas escritas.** É o único módulo completo. | **Nenhuma obra.** As 30 posições são compostas pela própria autoria do projeto |
 

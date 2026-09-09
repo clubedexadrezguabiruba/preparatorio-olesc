@@ -160,7 +160,7 @@ export default async function Abertura({
   if (!escolhida && todasAprendidas(linhas, progresso, agora)) {
     return (
       <Moldura nome={entrada.nome} cor={cor}>
-        <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-6 text-center">
+        <div className="flex flex-col gap-3 cartao px-4 py-6 text-center">
           <p className="titulo text-tinta">Abertura em dia</p>
           <p className="text-sm text-tinta-media tabular-nums">
             {contas.total} {contas.total === 1 ? "linha" : "linhas"}, todas aprendidas e
@@ -190,7 +190,7 @@ export default async function Abertura({
     const trancada = todasAsLinhas.length > 0 && !avancadoLiberado;
     return (
       <Moldura nome={entrada.nome} cor={cor}>
-        <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
+        <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
           {trancada
             ? "Esta abertura é do Avançado. Ela abre quando você tiver aprendido todas as linhas do Base."
             : "Esta abertura ainda não tem linhas publicadas."}
@@ -257,7 +257,7 @@ function ListaDeLinhas({
           <li key={l.id}>
             <Link
               href={`/aberturas/${cor}/${abertura}?linha=${l.id}`}
-              className="foco flex items-center justify-between gap-3 rounded-lg border border-borda-fraca bg-carta px-3 py-2.5 transition-colors hover:bg-carta-toque"
+              className="foco flex items-center justify-between gap-3 cartao-alvo px-3 py-2.5"
             >
               <span className="min-w-0 flex-1 truncate text-sm text-tinta">{l.nome}</span>
               <span className="flex shrink-0 items-center gap-2">
@@ -312,7 +312,7 @@ function Podadas({ notas }: { notas: readonly Nota[] }) {
           <li key={nota.slug}>
             <Link
               href={`/aberturas/notas/${nota.slug}`}
-              className="foco flex flex-col gap-1 rounded-lg border border-dashed border-borda-fraca bg-carta px-3 py-2.5 transition-colors hover:bg-carta-toque"
+              className="foco flex flex-col gap-1 cartao-vazio px-3 py-2.5 transition-colors hover:bg-carta-toque"
             >
               <span className="flex items-baseline justify-between gap-3">
                 <span className="min-w-0 flex-1 truncate text-sm text-tinta">{nota.nome}</span>

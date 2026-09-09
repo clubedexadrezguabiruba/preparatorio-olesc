@@ -1,3 +1,5 @@
+import type { Nivel } from "../curso/nivel.ts";
+
 /**
  * O currículo de tática, em oito blocos.
  *
@@ -12,10 +14,21 @@
  * que achou por tag e reprova a tag que veio vazia — é o que transforma o
  * silêncio em vermelho.
  *
- * A faixa de rating é do **bloco**, não da tag: ela diz em que altura aquele
- * assunto é ensinável para um aluno de 1000–1400. `mateIn1` existe até 2000 de
- * rating no banco do Lichess; num bloco de mates curtos, um mate em 1 de 1900
- * é ruído.
+ * A faixa de rating é do **bloco**. O piso é dele — mate em 1 começa mais
+ * embaixo que lance quieto —, mas **o teto é 2100 em todos os oito**, decisão
+ * do Doug.
+ *
+ * Houve aqui o argumento contrário, e ele está registrado para não voltar:
+ * dizia que `mateIn1` existe até 2000 no banco do Lichess e que, num bloco de
+ * mates curtos, um mate em 1 de 1900 seria ruído. A decisão o inverte, e por
+ * um motivo que o argumento não via: **a série de cada tema é servida em
+ * rating crescente**. Ninguém encontra o puzzle de 1900 antes de passar pelos
+ * de 900; quem chega ao topo da série é exatamente quem aguenta o topo. Cortar
+ * em 1300 não protege o aluno fraco — ele nunca chegaria lá —, só tira o teto
+ * do aluno forte, que é quem termina o tema e fica sem nada para fazer.
+ *
+ * O piso do bloco 1 é 700 e não 600 pelo mesmo tipo de razão, do outro lado: a
+ * turma joga de 700 a 1700 de rápidas, e abaixo de 700 o puzzle é ruído.
  */
 
 export type Tema = {
@@ -32,14 +45,24 @@ export type Bloco = {
   readonly nome: string;
   readonly faixa: readonly [number, number];
   /**
-   * Em que sábado o bloco abre — 1, 2 ou 3, do cronograma do preparatório.
+   * Em que degrau da escada o bloco mora — 1 a 5, de `lib/curso/nivel.ts`.
    *
-   * Mora aqui porque é o mesmo dado em três lugares: o cartão trancado diz
-   * "abre no Sábado 2", o painel diz o que é para fazer esta semana, e a
-   * apostila imprime o caderno daquele sábado. Uma tabela separada de
-   * bloco → sábado seria a quarta opinião sobre a mesma coisa.
+   * **Declarado, e não derivado do rating.** O `sabado` que morava aqui era
+   * calendário, e a escada anterior tentava adivinhar o nível pelo piso da
+   * `faixa` — os oito blocos começam entre 700 e 1100, então os 36 temas caíam
+   * todos no nível 1. O currículo tem uma ordem pedagógica que nenhuma fórmula
+   * sobre rating de puzzle reconstrói; ela cabe neste campo.
+   *
+   * **A inversão B4 → nível 2, na frente de B2.** Os dois blocos têm o mesmo
+   * piso (800), então a ordem antiga (`B2` no Sábado 1, `B4` no 2) vinha do
+   * livro-texto, não da dificuldade. Numa partida entre alunos de 1000, garfo e
+   * peça pendurada decidem dez vezes mais partidas que o mate do corredor — e o
+   * resumo de `hangingPiece` aqui embaixo já chama a peça pendurada de *"o erro
+   * nº 1 em 1000–1400"*. Garfo, cravada, espeto e descoberto são o vocabulário
+   * de que os outros blocos são feitos: `capturingDefender` e `deflection` (B5)
+   * são operações **sobre** uma cravada.
    */
-  readonly sabado: 1 | 2 | 3;
+  readonly nivel: Nivel;
   readonly temas: readonly Tema[];
 };
 
@@ -47,8 +70,8 @@ export const BLOCOS: readonly Bloco[] = [
   {
     id: 1,
     nome: "Mates curtos e peça de graça",
-    faixa: [600, 1300],
-    sabado: 1,
+    faixa: [700, 2100],
+    nivel: 1,
     temas: [
       { tag: "mateIn1", nome: "Mate em 1", resumo: "Um lance e acabou. O olho treina aqui." },
       { tag: "mateIn2", nome: "Mate em 2", resumo: "O lance que obriga, e depois o mate." },
@@ -58,33 +81,33 @@ export const BLOCOS: readonly Bloco[] = [
   {
     id: 2,
     nome: "Padrões de mate I",
-    faixa: [800, 1400],
-    sabado: 1,
+    faixa: [800, 2100],
+    nivel: 3,
     temas: [
       { tag: "backRankMate", nome: "Mate do corredor", resumo: "O rei preso atrás dos próprios peões." },
       { tag: "smotheredMate", nome: "Mate sufocado", resumo: "O cavalo mata o rei cercado pelas próprias peças." },
-      { tag: "arabianMate", nome: "Mate árabe", resumo: "Torre e cavalo no canto." },
-      { tag: "anastasiaMate", nome: "Mate de Anastasia", resumo: "Cavalo e torre pela coluna aberta." },
+      { tag: "arabianMate", nome: "Mate árabe", resumo: "Torre e cavalo prendem o rei no canto." },
+      { tag: "anastasiaMate", nome: "Mate de Anastasia", resumo: "O cavalo tapa as fugas e a torre entra pela coluna." },
       { tag: "hookMate", nome: "Mate do gancho", resumo: "Torre, cavalo e peão fechando a saída." },
     ],
   },
   {
     id: 3,
     nome: "Padrões de mate II",
-    faixa: [1000, 1600],
-    sabado: 2,
+    faixa: [1000, 2100],
+    nivel: 4,
     temas: [
       { tag: "bodenMate", nome: "Mate de Boden", resumo: "Os dois bispos em diagonais que se cruzam." },
-      { tag: "doubleBishopMate", nome: "Mate dos dois bispos", resumo: "Bispos paralelos sobre o rei no canto." },
+      { tag: "doubleBishopMate", nome: "Mate dos dois bispos", resumo: "Dois bispos em diagonais vizinhas, e o rei no canto." },
       { tag: "dovetailMate", nome: "Mate da cauda de andorinha", resumo: "A dama ao lado do rei, com as fugas tapadas." },
       { tag: "mateIn3", nome: "Mate em 3", resumo: "Três lances forçados: onde o cálculo começa a doer." },
     ],
   },
   {
     id: 4,
-    nome: "Motivos fundamentais",
-    faixa: [800, 1400],
-    sabado: 2,
+    nome: "Táticas fundamentais",
+    faixa: [800, 2100],
+    nivel: 2,
     temas: [
       { tag: "fork", nome: "Garfo", resumo: "Uma peça ataca duas ao mesmo tempo." },
       { tag: "pin", nome: "Cravada", resumo: "A peça que não pode sair porque atrás dela há coisa melhor." },
@@ -96,8 +119,8 @@ export const BLOCOS: readonly Bloco[] = [
   {
     id: 5,
     nome: "Remover a defesa",
-    faixa: [1000, 1500],
-    sabado: 2,
+    faixa: [1000, 2100],
+    nivel: 4,
     temas: [
       { tag: "capturingDefender", nome: "Capturar o defensor", resumo: "Tire quem segura, e o resto cai." },
       { tag: "deflection", nome: "Desvio", resumo: "Obrigue a peça a sair do posto que ela guarda." },
@@ -109,33 +132,46 @@ export const BLOCOS: readonly Bloco[] = [
   {
     id: 6,
     nome: "Ataque ao rei",
-    faixa: [1000, 1600],
-    sabado: 3,
+    faixa: [1000, 2100],
+    nivel: 5,
     temas: [
       { tag: "exposedKing", nome: "Rei exposto", resumo: "Rei sem casas e sem defensores: procure o xeque." },
       { tag: "attackingF2F7", nome: "Ataque em f2/f7", resumo: "A casa mais fraca do começo de partida." },
       { tag: "kingsideAttack", nome: "Ataque na ala do rei", resumo: "Onde ele roca, é para lá que as peças vão." },
-      { tag: "sacrifice", nome: "Sacrifício", resumo: "Dar material porque o que vem depois vale mais." },
+      { tag: "sacrifice", nome: "Sacrifício", resumo: "Dar uma peça porque o que vem depois vale mais." },
     ],
   },
   {
     id: 7,
     nome: "Lances finos",
-    faixa: [1100, 1700],
-    sabado: 3,
+    faixa: [1100, 2100],
+    nivel: 5,
     temas: [
       { tag: "intermezzo", nome: "Lance intermediário", resumo: "Antes de recapturar, um xeque que muda tudo." },
       { tag: "quietMove", nome: "Lance quieto", resumo: "Sem xeque e sem captura — e a ameaça é imparável." },
       { tag: "clearance", nome: "Liberação", resumo: "Tirar a própria peça da frente." },
-      { tag: "interference", nome: "Interferência", resumo: "Pôr algo no meio da linha que defende." },
+      { tag: "interference", nome: "Interferência", resumo: "Pôr uma peça no meio do caminho de quem defende." },
       { tag: "zugzwang", nome: "Zugzwang", resumo: "Jogar é obrigatório, e todo lance piora." },
     ],
   },
   {
     id: 8,
+    /*
+     * "Conversão" é da lista de jargão vigiada — a mesma que derrubou "Motivos
+     * fundamentais" do bloco 4. **Fica, por decisão do Doug em 2026-09-08**, e
+     * está escrito aqui para ninguém propor a troca uma terceira vez.
+     *
+     * A varredura de jargão acusa esta linha e mais nada no bloco de tática.
+     * Isso é esperado: a regra de "nenhum termo sem tradução na mesma frase"
+     * foi escrita para os textos, onde há espaço para explicar ao lado. Um
+     * nome de bloco não tem esse espaço, e os candidatos que evitavam a
+     * palavra — "Segurar e virar dama", "Defesa e peões", "Defender e
+     * terminar" — ou prometiam o que o bloco não cumpre (en passant não vira
+     * dama), ou descreviam as peças em vez do que se aprende.
+     */
     nome: "Defesa e conversão",
-    faixa: [1000, 1600],
-    sabado: 3,
+    faixa: [1000, 2100],
+    nivel: 5,
     temas: [
       { tag: "defensiveMove", nome: "Lance defensivo", resumo: "O único lance que segura — treinar não desistir." },
       { tag: "advancedPawn", nome: "Peão avançado", resumo: "O peão que vai virar dama e decide a partida." },

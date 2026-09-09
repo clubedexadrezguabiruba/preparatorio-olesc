@@ -49,9 +49,9 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
   if (!escrito || !bloco) {
     return (
       <Moldura tema={tema.nome} bloco={bloco?.nome ?? ""}>
-        <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
-          Este tema abre no Sábado {bloco?.sabado ?? "—"}. Até lá, siga pelos temas que já
-          estão abertos.
+        <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
+          Este tema é do currículo, mas o texto dele ainda não foi escrito. Siga pelos
+          temas que já estão abertos.
         </p>
       </Moldura>
     );
@@ -64,7 +64,7 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
   if (!etapa) {
     return (
       <Moldura tema={tema.nome} bloco={bloco.nome}>
-        <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-6 text-center">
+        <div className="flex flex-col gap-3 cartao px-4 py-6 text-center">
           <p className="titulo text-tinta">Tema concluído</p>
           <p className="text-sm text-tinta-media tabular-nums">
             {progresso.tentativas} puzzles ·{" "}
@@ -139,9 +139,28 @@ function Moldura({
   children: React.ReactNode;
 }) {
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-5 px-4 py-6 sm:px-5 sm:py-10">
-      <header className="flex flex-col gap-1">
-        <Link href="/tatica" className="foco rotulo w-fit text-metodo-tinta hover:underline">
+    /*
+     * A moldura é a mesma da aula de abertura, e pelo mesmo motivo: ela é o
+     * TETO do palco, não a régua dele. 85,75rem ≥ tabuleiro no máximo (48rem)
+     * + vão (2,5rem) + painel (32,625rem) + os 2,5rem de `px-5`, que somam
+     * 85,625. Quem decide a largura real é `--aula-teto`, no CSS — a moldura
+     * só não pode estrangular a conta.
+     *
+     * `max-w-xl` continua valendo abaixo de `lg`, onde o palco é uma coluna só.
+     */
+    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
+      {/*
+       * **O cabeçalho é uma LINHA, e isso é altura de tabuleiro.**
+       *
+       * Ele era três linhas empilhadas — voltar, título, bloco — com `gap-5`
+       * abaixo. No palco, `--aula-teto` é literalmente `100dvh` menos o que
+       * está fora do tabuleiro, então cada pixel que sai daqui entra nele. É a
+       * mesma conta e o mesmo desenho da `Moldura` de
+       * `app/aberturas/[cor]/[abertura]/page.tsx`, que registra os números
+       * medidos.
+       */}
+      <header className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+        <Link href="/tatica" className="foco rotulo text-metodo-tinta hover:underline">
           ← Tática
         </Link>
         <h1 className="titulo text-tinta">{tema}</h1>

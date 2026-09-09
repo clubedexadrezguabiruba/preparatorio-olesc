@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { hojeNoBrasil } from "@/lib/curso/calendario";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
-import { TAREFAS } from "@/lib/tarefas/conteudo";
+import { AGENDA, TAREFAS } from "@/lib/tarefas/conteudo";
 
 /**
  * Marca ou desmarca uma tarefa de casa.
@@ -16,15 +16,23 @@ import { TAREFAS } from "@/lib/tarefas/conteudo";
  *
  * **A conferência de que a tarefa existe e é do tipo `marcar` não é zelo.** Sem
  * ela, esta ação viraria "escreva qualquer texto na sua linha de
- * `tarefa_conclusao`": o aluno marcaria `s1-tatica`, que não tem caixa porque é
+ * `tarefa_conclusao`": o aluno marcaria `n1-tatica`, que não tem caixa porque é
  * medida dos puzzles, e apareceria feita no relatório do professor sem um
  * puzzle resolvido.
+ *
+ * **Dois arquivos, uma coluna.** Desde 2026-09-09 a lista de casa tem duas
+ * metades — a rotina do nível (`content/tarefas.json`) e a agenda datada
+ * (`content/agenda.json`) — e as duas marcam na mesma `tarefa_conclusao`. Por
+ * isso a conferência olha as duas listas, e por isso os ids da agenda têm
+ * prefixo `agenda-`: sem ele, uma colisão faria marcar um item da agenda marcar
+ * uma tarefa de nível, e ninguém depuraria isso olhando as telas.
  */
 export async function alternarTarefa(id: string, marcar: boolean): Promise<void> {
   const perfil = await perfilAtual();
 
-  const tarefa = TAREFAS.find((t) => t.id === id);
-  if (!tarefa || tarefa.tipo !== "marcar") return;
+  const daRotina = TAREFAS.find((t) => t.id === id);
+  const daAgenda = AGENDA.find((i) => i.id === id);
+  if (!daAgenda && (!daRotina || daRotina.tipo !== "marcar")) return;
 
   const supabase = await criarClienteServidor();
 

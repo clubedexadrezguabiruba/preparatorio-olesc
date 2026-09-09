@@ -25,7 +25,7 @@ const UNIDADE: Record<"tatica" | "finais", string> = {
 };
 
 /**
- * A lista de tarefas da semana.
+ * A lista de tarefas do degrau.
  *
  * **A caixa tem de responder na hora.** O aluno marca a tarefa no celular, no
  * 4G, e a ida ao servidor demora o que demorar; sem `useOptimistic` ele
@@ -71,7 +71,7 @@ export function Tarefas({ estados }: { estados: EstadoDaTarefa[] }) {
           {feitas} de {estados.length} feitas
         </span>
         {feitas === estados.length ? (
-          <span className="text-sm font-medium text-metodo-tinta">Semana fechada 🎉</span>
+          <span className="text-sm font-medium text-metodo-tinta">Rotina em dia 🎉</span>
         ) : null}
       </div>
       <Barra feitos={feitas} de={estados.length} tom={feitas === estados.length ? "completo" : "metodo"} />
@@ -184,7 +184,7 @@ function Selo({ feita }: { feita: boolean }) {
 /**
  * O destino da tarefa — ou o aviso de que ele ainda não existe.
  *
- * `url` nula não é falha: o clube da OLESC no chess.com e o caderno em PDF são
+ * `url` nula não é falha: o clube da OLESC no chess.com e o caderno do torneio são
  * combinados com o aluno no sábado e ainda estão sendo feitos. Dizer isso é
  * melhor que um link morto, e melhor que esconder a linha — o aluno lê que a
  * tarefa existe e que o caminho vem.

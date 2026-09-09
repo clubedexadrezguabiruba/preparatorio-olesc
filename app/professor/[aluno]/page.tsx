@@ -3,8 +3,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Barra } from "@/components/Barra";
 import { professorAtual } from "@/lib/auth/perfil";
-import { hojeNoBrasil, porExtenso, semanaAtual, somarDias } from "@/lib/curso/calendario";
-import { META_DO_DIA_MIN, MINIMO_DA_SEQUENCIA_MIN, sequenciaDeDias, serieDeDias } from "@/lib/curso/hoje";
+import { hojeNoBrasil, porExtenso, somarDias } from "@/lib/curso/calendario";
+import { nivelDoAluno } from "@/lib/curso/nivel";
+import { nivelConquistado } from "@/lib/curso/progresso";
+import {
+  META_DO_DIA_MIN,
+  MINIMO_DA_SEQUENCIA_MIN,
+  MINUTOS_DA_PARTIDA,
+  sequenciaDeDias,
+  serieDeDias,
+} from "@/lib/curso/hoje";
 import { minutosPorDia, partidasDeclaradas } from "@/lib/curso/minutos";
 import { aulasComPratica, aulasPublicadas } from "@/lib/finais/conteudo";
 import { DEGRAUS_EM_DIAS, diasAteRevisar } from "@/lib/finais/escada";
@@ -68,20 +76,24 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   if (!aluno || aluno.papel !== "aluno") notFound();
 
   const hoje = hojeNoBrasil();
-  const semana = semanaAtual();
   const desde = somarDias(hoje, -(DIAS - 1));
 
-  const [tatica, linhas, finais, minutos, partidas] = await Promise.all([
+  const [tatica, linhas, finais, minutos, partidas, conquistado] = await Promise.all([
     progressoPorTema(id),
     linhasDeTentativas(id),
     progressoDeFinais(id),
     minutosPorDia(id, desde),
     partidasDeclaradas(id, desde),
+    nivelConquistado(id),
   ]);
 
-  const abertas = aulasAbertas(aulasPublicadas(), semana);
+  const nivel = nivelDoAluno(conquistado);
+  const abertas = aulasAbertas(aulasPublicadas());
   const comPratica = aulasComPratica();
-  const serie = serieDeDias(minutos, hoje, DIAS);
+  // As partidas entram na série: sem elas o gráfico do professor e a barra do
+  // aluno somariam totais diferentes para o mesmo dia — e o professor diria o
+  // número em voz alta com o aluno na frente, olhando outro número.
+  const serie = serieDeDias(minutos, hoje, DIAS, partidas);
   const sequencia = sequenciaDeDias(minutos, hoje);
   const fila = filaCompleta(linhas);
   const devidosHoje = fila.filter((f) => f.devidoEm <= hoje);
@@ -122,7 +134,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
           {aluno.rating ? ` · rating ${aluno.rating}` : ""}
         </p>
         <p className="text-xs text-tinta-fraca">
-          Semana {semana} do preparatório · dados de {porExtenso(desde)} a {porExtenso(hoje)}.
+          Nível {nivel} de 5 · dados de {porExtenso(desde)} a {porExtenso(hoje)}.
         </p>
       </header>
 
@@ -131,12 +143,14 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         <div className="flex flex-col gap-0.5">
           <h2 className="rotulo text-tinta-fraca">A rotina — {DIAS} dias</h2>
           <p className="text-sm text-tinta-media">
-            Minutos por dia, somados de cada puzzle e de cada etapa de aula. A meta é{" "}
-            {META_DO_DIA_MIN} min; {MINIMO_DA_SEQUENCIA_MIN} é o mínimo que mantém a sequência.
+            Minutos por dia, somados de cada puzzle e de cada etapa de aula, mais os{" "}
+            {MINUTOS_DA_PARTIDA} da partida quando ela foi declarada. A meta é {META_DO_DIA_MIN}{" "}
+            min; {MINIMO_DA_SEQUENCIA_MIN} é o mínimo que mantém a sequência — e esse mínimo{" "}
+            <strong className="font-semibold">só conta tempo medido</strong>, sem a partida.
           </p>
         </div>
 
-        <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-4">
+        <div className="flex flex-col gap-3 cartao px-4 py-4">
           <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1 text-sm tabular-nums">
             <span className="text-tinta">
               <span className="font-semibold">{sequencia}</span>{" "}
@@ -171,7 +185,8 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
             {serie.map((dia) => (
               <div key={dia.dia} className="flex h-full flex-1 flex-col justify-end gap-0.5">
                 <div
-                  title={`${dia.dia}: ${dia.total} min (tática ${dia.tatica}, finais ${dia.finais})`}
+                  title={`${dia.dia}: ${dia.total} min (tática ${dia.tatica}, finais ${dia.finais}` +
+                    `${dia.partida ? `, partida ${dia.partida} declarados` : ""})`}
                   className={`w-full rounded-t-sm ${
                     dia.bateuMeta
                       ? "bg-metodo-cheio"
@@ -191,8 +206,9 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
           </div>
 
           <p className="text-xs text-tinta-fraca">
-            Verde cheio: bateu os {META_DO_DIA_MIN} min. Verde claro: passou dos{" "}
-            {MINIMO_DA_SEQUENCIA_MIN}. Âmbar: treinou menos que isso. Cinza: não treinou.
+            Verde cheio: bateu os {META_DO_DIA_MIN} min do dia, partida incluída. Verde claro:{" "}
+            passou dos {MINIMO_DA_SEQUENCIA_MIN} medidos. Âmbar: treinou menos que isso. Cinza:{" "}
+            não treinou.
           </p>
         </div>
       </section>
@@ -209,11 +225,11 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         </div>
 
         {temasComTrabalho.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
+          <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
             Nenhum puzzle resolvido ainda.
           </p>
         ) : (
-          <div className="overflow-x-auto rounded-xl border border-borda-fraca bg-carta">
+          <div className="cartao overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-borda-fraca text-left text-tinta-fraca">
@@ -303,7 +319,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
-          <div className="flex flex-col gap-1 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+          <div className="flex flex-col gap-1 cartao px-4 py-3">
             <span className="text-sm font-medium text-tinta">Puzzles</span>
             <span className="text-sm text-tinta-media tabular-nums">
               <strong className={devidosHoje.length > 0 ? "text-aviso-tinta" : "text-tinta"}>
@@ -320,7 +336,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
             )}
           </div>
 
-          <div className="flex flex-col gap-1 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+          <div className="flex flex-col gap-1 cartao px-4 py-3">
             <span className="text-sm font-medium text-tinta">Aulas de finais</span>
             <span className="text-sm text-tinta-media tabular-nums">
               <strong
@@ -354,8 +370,8 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         <div className="flex flex-col gap-0.5">
           <h2 className="rotulo text-tinta-fraca">Finais, aula a aula</h2>
           <p className="text-sm text-tinta-media">
-            Só as {abertas.length} aulas abertas na semana {semana}. O critério de domínio é o
-            do formato de cada uma — o mesmo que a trilha do aluno usa.
+            Só as {abertas.length} aulas publicadas. O critério de domínio é o do formato de
+            cada uma — o mesmo que a trilha do aluno usa.
           </p>
         </div>
 

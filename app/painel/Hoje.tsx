@@ -1,28 +1,35 @@
 "use client";
 
-import Link from "next/link";
 import { useOptimistic, useTransition } from "react";
 import { Barra } from "@/components/Barra";
-import { META_DO_DIA_MIN, type MinutosDeHoje } from "@/lib/curso/hoje";
+import { META_DO_DIA_MIN, MINIMO_DA_SEQUENCIA_MIN, type MinutosDeHoje } from "@/lib/curso/hoje";
 import { marcarPartidaDoDia } from "./acoes";
 
 /**
- * O cartão do dia: a rotina de 2 horas, na ordem em que ela acontece.
+ * O cartão do dia: **quanto do dia já foi** — e não o que fazer.
  *
- * **A ordem é a decisão.** O Doug fixou que a partida vem por último, depois do
- * treino: treina-se primeiro, joga-se para aplicar. Então o cartão lista 1)
- * tática, 2) finais, 3) partida — e a caixa da partida é o último elemento,
- * embaixo dos minutos, não o primeiro.
+ * ## Ele deixou de competir, e essa é a mudança inteira
  *
- * O passo de meio-jogo saiu em 2026-09-08, com o módulo inteiro.
+ * Até 2026-09-09 este cartão listava a rotina em três passos numerados, cada um
+ * com o seu link: 1 Tática, 2 Finais, 3 Partida. Era a segunda e a terceira
+ * resposta do painel para *"o que eu faço agora?"* — e ele discordava do
+ * "Próximo passo" logo abaixo em três situações diferentes. Com 5 puzzles
+ * vencidos, o painel apontava para dois lugares ao mesmo tempo.
  *
- * ## Por que os minutos aparecem
+ * Quem responde "agora" passou a ser `Agora.tsx`, servido por `proximaAcao()`.
+ * Este cartão ficou com o que só ele sabe: **o tempo**. É contexto de rotina,
+ * não instrução — e por isso ele vem depois, e é baixo.
  *
- * Porque a obrigação é de tempo, e obrigação que ninguém mede é intenção. O
- * banco já guardava `tempo_ms` em cada tentativa desde a primeira migration;
- * o que faltava era a soma do dia na frente do aluno. A sequência de dias
- * premia constância — e é por isso que ela usa 60 minutos como mínimo, e não
- * os 120 da meta: um dia curto não pode apagar duas semanas.
+ * ## A barra tem dois pedaços
+ *
+ * A meta de {@link META_DO_DIA_MIN} inclui os 30 minutos da partida, que
+ * acontece no chess.com e o site **não mede** (`MINUTOS_DA_PARTIDA`). Então a barra pinta
+ * o medido cheio e a partida hachurada: uma barra que pintasse os dois iguais
+ * estaria afirmando ter cronometrado uma caixa de seleção.
+ *
+ * A sequência 🔥 saiu daqui para o cabeçalho, onde ela aparece em toda tela. O
+ * que ficou é a linha que diz **o que ela cobra**: {@link
+ * MINIMO_DA_SEQUENCIA_MIN} minutos de treino no site, sem a partida.
  *
  * ## O toque otimista
  *
@@ -33,16 +40,10 @@ import { marcarPartidaDoDia } from "./acoes";
 export function Hoje({
   minutos,
   sequencia,
-  revisaoDeTatica,
-  revisaoDeFinais,
   partidaFeita,
 }: {
   minutos: MinutosDeHoje;
   sequencia: number;
-  /** Quantos puzzles estão devidos hoje. */
-  revisaoDeTatica: number;
-  /** As aulas devidas hoje: nome e para onde ir. A primeira é a que o cartão mostra. */
-  revisaoDeFinais: { id: string; nome: string }[];
   partidaFeita: boolean;
 }) {
   const [jogou, aplicar] = useOptimistic(partidaFeita, (_atual, novo: boolean) => novo);
@@ -55,110 +56,56 @@ export function Hoje({
     });
   }
 
-  const primeiraAula = revisaoDeFinais[0];
+  const bateu = minutos.total >= META_DO_DIA_MIN;
 
   return (
-    <section className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-4">
+    <section aria-labelledby="hoje" className="cartao flex flex-col gap-3 px-4 py-4">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <h2 className="rotulo text-tinta-fraca">Hoje</h2>
-        <span className="text-sm text-tinta-media tabular-nums">
+        <h2 id="hoje" className="rotulo text-tinta-fraca">
+          Hoje
+        </h2>
+        <span
+          className={`text-sm tabular-nums ${bateu ? "font-semibold text-metodo-tinta" : "text-tinta-media"}`}
+        >
           {minutos.total} de {META_DO_DIA_MIN} min
         </span>
       </div>
 
+      {/* O medido cheio, a partida hachurada. A hachura é a honestidade da
+          barra: os 30 da partida são declaração, não cronômetro. */}
       <Barra
-        feitos={minutos.total}
+        feitos={minutos.medido}
+        declarado={minutos.partida}
         de={META_DO_DIA_MIN}
-        tom={minutos.total >= META_DO_DIA_MIN ? "completo" : "metodo"}
+        tom={bateu ? "completo" : "metodo"}
       />
 
       <p className="text-xs text-tinta-fraca tabular-nums">
         Tática {minutos.tatica} min · Finais {minutos.finais} min
-        {sequencia > 0 ? (
-          <>
-            {" · "}
-            <span className="text-metodo-tinta">
-              {sequencia} {sequencia === 1 ? "dia seguido" : "dias seguidos"}
-            </span>
-          </>
-        ) : null}
+        {minutos.partida > 0 ? ` · Partida ${minutos.partida} min declarados` : ""}
+        {sequencia > 0
+          ? ` · a sequência pede ${MINIMO_DA_SEQUENCIA_MIN} min de treino no site`
+          : ""}
       </p>
 
-      <ol className="flex flex-col gap-2 border-t border-borda-fraca pt-3">
-        <Passo numero={1} titulo="Tática">
-          {revisaoDeTatica > 0 ? (
-            <Ir href="/tatica/revisao">
-              Revisão do dia: {revisaoDeTatica}{" "}
-              {revisaoDeTatica === 1 ? "puzzle" : "puzzles"}
-            </Ir>
-          ) : (
-            <span className="text-xs text-tinta-fraca">
-              Nada a revisar hoje. Siga na série do seu tema.
-            </span>
-          )}
-        </Passo>
-
-        <Passo numero={2} titulo="Finais">
-          {primeiraAula ? (
-            <Ir href={`/finais/${primeiraAula.id}?revisao=1`}>
-              Revisar: {primeiraAula.nome}
-              {revisaoDeFinais.length > 1 ? ` (+${revisaoDeFinais.length - 1})` : ""}
-            </Ir>
-          ) : (
-            <Ir href="/finais">Uma aula nova da trilha</Ir>
-          )}
-        </Passo>
-
-        {/* Por último, e é a decisão do Doug: treina-se primeiro, joga-se
-            depois, para aplicar o que acabou de treinar. */}
-        <Passo numero={3} titulo="Partida">
-          <label className="-m-2 flex cursor-pointer items-start gap-2 p-2">
-            <input
-              type="checkbox"
-              className="foco mt-0.5 size-5 shrink-0 accent-metodo-cheio"
-              checked={jogou}
-              onChange={(e) => alternar(e.target.checked)}
-              aria-label="Joguei a partida de hoje"
-            />
-            <span className={`text-xs ${jogou ? "text-tinta-fraca line-through" : "text-tinta-media"}`}>
-              Joguei uma partida de 15+10, anotada, e procurei o lance que a decidiu.
-            </span>
-          </label>
-        </Passo>
-      </ol>
+      {/* A partida é o último bloco do dia, e é a decisão do Doug: treina-se
+          primeiro, joga-se para aplicar. Ela nunca entra na fila do "Agora" —
+          mandar o aluno embora do site não pode ser a resposta a "o que faço
+          agora" —, então este é o único lugar dela no painel. */}
+      <label className="-mx-2 flex cursor-pointer items-start gap-3 border-t border-borda-fraca px-2 pt-3">
+        <input
+          type="checkbox"
+          className="foco mt-0.5 size-5 shrink-0"
+          checked={jogou}
+          onChange={(e) => alternar(e.target.checked)}
+          aria-label="Joguei a partida de hoje"
+        />
+        <span
+          className={`text-xs ${jogou ? "text-tinta-fraca line-through" : "text-tinta-media"}`}
+        >
+          Joguei uma partida de 15+10, anotada, e procurei o lance que a decidiu.
+        </span>
+      </label>
     </section>
-  );
-}
-
-function Passo({
-  numero,
-  titulo,
-  children,
-}: {
-  numero: number;
-  titulo: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <li className="flex items-baseline gap-3">
-      <span
-        aria-hidden
-        className="w-4 shrink-0 text-right text-xs font-semibold text-tinta-fraca tabular-nums"
-      >
-        {numero}
-      </span>
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span className="text-sm font-medium text-tinta">{titulo}</span>
-        {children}
-      </div>
-    </li>
-  );
-}
-
-function Ir({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <Link href={href} className="foco w-fit text-xs font-medium text-metodo-tinta hover:underline">
-      {children} →
-    </Link>
   );
 }

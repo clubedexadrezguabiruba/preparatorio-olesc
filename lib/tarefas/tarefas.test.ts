@@ -3,10 +3,11 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { SABADOS, SEMANAS } from "../curso/calendario.ts";
+import { NIVEIS } from "../curso/nivel.ts";
 import { CLASSES, TRILHA } from "../finais/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
-import { daSemana, validarTarefas } from "./tarefas.ts";
+import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
+import { doNivel, niveisEscritos, validarTarefas } from "./tarefas.ts";
 
 const RAIZ = fileURLToPath(new URL("../..", import.meta.url));
 
@@ -18,145 +19,159 @@ test("o conteúdo das tarefas passa no esquema", () => {
   assert.doesNotThrow(() => validarTarefas(lerConteudo()));
 });
 
-test("a semana 1 tem tarefa escrita", () => {
-  // É a entrega da F1. Uma `content/tarefas.json` sem a semana 1 é o aluno
-  // abrindo o painel no domingo e achando que não tem nada para fazer.
-  const semana1 = daSemana(validarTarefas(lerConteudo()), 1);
-  assert.ok(semana1.length >= 4, `só ${semana1.length} tarefa(s) na semana 1`);
-  assert.ok(
-    semana1.some((t) => t.tipo === "tatica"),
-    "a semana 1 tem de ter a tarefa de tática — é a que o site mede sozinho",
-  );
+test("todo nível da escada tem tarefa escrita", () => {
+  // Era "a semana 1 tem tarefa escrita" até 2026-09-09, e a diferença importa:
+  // uma semana sem tarefa era um dia sem destino, mas um **nível** sem tarefa é
+  // um aluno que chegou lá e encontrou a lista vazia — e ele pode chegar lá
+  // hoje, adiantando, porque a trava é mole.
+  assert.deepEqual(niveisEscritos(validarTarefas(lerConteudo())), [...NIVEIS]);
 });
 
-test("toda tarefa aponta para semana que existe no calendário", () => {
-  const semanas = new Set(SABADOS.map((s) => s.semana));
-  for (const tarefa of validarTarefas(lerConteudo())) {
-    assert.ok(semanas.has(tarefa.semana), `a tarefa "${tarefa.id}" está numa semana sem sábado`);
+test("todo nível tem a tarefa de tática, que é a que o site mede sozinho", () => {
+  // A rotina tem dois blocos escritos aqui: a tática, que o servidor conta, e a
+  // partida, que só o aluno declara. Um nível sem a de tática é tempo de estudo
+  // por dia sem destino.
+  //
+  // **Não há tarefa de finais**, e é decisão: o cartão do nível já cobra finais
+  // com o clamp pelo publicado, e um `dominar` escrito em JSON não sabe
+  // encolher para o que existe em disco. Ver o cabeçalho de `tarefas.ts`.
+  const tarefas = validarTarefas(lerConteudo());
+  for (const nivel of NIVEIS) {
+    const daqui = doNivel(tarefas, nivel);
+    assert.ok(
+      daqui.some((t) => t.tipo === "tatica"),
+      `o nível ${nivel} não tem tarefa de tática`,
+    );
+    assert.ok(
+      daqui.some((t) => t.tipo === "marcar"),
+      `o nível ${nivel} não tem tarefa de marcar`,
+    );
   }
 });
 
-test("as metas de tática apontam para blocos do currículo, já abertos", () => {
+test("as metas de tática apontam para blocos do currículo, e do nível certo", () => {
   // O erro real é digitar `[1, 9]`: um bloco que não existe não soma puzzle
   // nenhum, e a barra da tarefa ficaria parada no zero para sempre, sem
   // nenhuma mensagem de erro em lugar nenhum.
-  const ids = new Set(BLOCOS.map((b) => b.id));
+  //
+  // O segundo `assert` substituiu a conferência de sábado: mandar o aluno do
+  // nível 2 resolver um bloco do nível 5 seria a lista de casa discordando da
+  // escada — e é o tipo de erro que ninguém vê, porque as duas telas parecem
+  // certas isoladamente.
+  const porId = new Map(BLOCOS.map((b) => [b.id, b]));
   for (const tarefa of validarTarefas(lerConteudo())) {
     if (tarefa.tipo !== "tatica") continue;
-    for (const bloco of tarefa.meta.blocos) {
-      assert.ok(ids.has(bloco), `a tarefa "${tarefa.id}" cita o bloco ${bloco}, que não existe`);
-      const sabado = BLOCOS.find((b) => b.id === bloco)?.sabado ?? 99;
-      assert.ok(
-        sabado <= tarefa.semana,
-        `a tarefa "${tarefa.id}" (semana ${tarefa.semana}) manda resolver o bloco ${bloco}, ` +
-          `que só abre no Sábado ${sabado}`,
+    for (const id of tarefa.meta.blocos) {
+      const bloco = porId.get(id);
+      assert.ok(bloco, `a tarefa "${tarefa.id}" cita o bloco ${id}, que não existe`);
+      assert.equal(
+        bloco.nivel,
+        tarefa.nivel,
+        `a tarefa "${tarefa.id}" (nível ${tarefa.nivel}) manda resolver o bloco ${id}, ` +
+          `que é do nível ${bloco.nivel}`,
       );
     }
   }
 });
 
-test("as metas de finais apontam para classes que a trilha tem, com aula a abrir", () => {
-  // O erro real é pedir "6 da classe C" numa semana em que nenhuma aula da C
-  // abriu: a barra ficaria parada no zero e o aluno concluiria que o site não
-  // conta o que ele faz.
+test("a meta de puzzles de cada nível é o tamanho real dos blocos dele", () => {
+  // Uma meta maior que o conteúdo é uma barra que nunca enche; uma meta menor
+  // é a tarefa dizendo "acabou" com o nível ainda aberto. As duas fazem o aluno
+  // desconfiar do número, e o número é a única coisa que a tarefa tem.
+  for (const tarefa of validarTarefas(lerConteudo())) {
+    if (tarefa.tipo !== "tatica") continue;
+    const temas = BLOCOS.filter((b) => tarefa.meta.blocos.includes(b.id)).reduce(
+      (soma, b) => soma + b.temas.length,
+      0,
+    );
+    assert.equal(
+      tarefa.meta.puzzles,
+      temas * PUZZLES_POR_TEMA,
+      `a tarefa "${tarefa.id}" pede ${tarefa.meta.puzzles} puzzles e os blocos têm ${temas * PUZZLES_POR_TEMA}`,
+    );
+  }
+});
+
+test("as metas de finais, se voltarem, apontam para classes que a trilha tem", () => {
+  // Nenhuma tarefa é de finais hoje. O teste fica porque o **tipo** fica: no
+  // dia em que a escada de finais deixar de ser oca e alguém escrever uma, o
+  // erro de digitar uma classe inexistente reprova aqui.
   for (const tarefa of validarTarefas(lerConteudo())) {
     if (tarefa.tipo !== "finais") continue;
     for (const classe of tarefa.meta.classes) {
       assert.ok(CLASSES.includes(classe), `a tarefa "${tarefa.id}" pede a classe ${classe}`);
     }
     const disponiveis = TRILHA.filter(
-      (aula) => tarefa.meta.classes.includes(aula.classe) && aula.sabado <= tarefa.semana,
+      (aula) => tarefa.meta.classes.includes(aula.classe) && aula.nivel <= tarefa.nivel,
     ).length;
     assert.ok(
       disponiveis >= tarefa.meta.dominar,
       `a tarefa "${tarefa.id}" pede ${tarefa.meta.dominar} aulas e só ${disponiveis} ` +
-        `estão na trilha até a semana ${tarefa.semana}`,
+        `estão na trilha até o nível ${tarefa.nivel}`,
     );
   }
-});
-
-
-
-test("toda semana do curso tem tarefa dos blocos da rotina", () => {
-  // A rotina tem três blocos — tática, finais e partida —, e uma semana sem
-  // tarefa de um deles é tempo de estudo por dia sem destino. O bloco da
-  // partida é sempre `marcar`: não há API do chess.com para conferir.
-  //
-  // Eram quatro blocos até 2026-09-08, com o meio-jogo. Ele saiu do site, e as
-  // quatro tarefas dele saíram de `content/tarefas.json` junto.
-  const tarefas = validarTarefas(lerConteudo());
-  for (const semana of SEMANAS) {
-    const daqui = tarefas.filter((t) => t.semana === semana);
-    if (daqui.length === 0) continue; // semana ainda não escrita
-    for (const tipo of ["tatica", "finais"] as const) {
-      assert.ok(
-        daqui.some((t) => t.tipo === tipo),
-        `a semana ${semana} não tem tarefa de ${tipo}`,
-      );
-    }
-  }
-});
-
-
-test("a semana 2 manda o aluno aos finais", () => {
-  // É a entrega da FN1/B4: o curso de finais só vira tarefa de casa quando
-  // alguma tarefa o nomeia. Sem isto, a trilha existe e ninguém é mandado nela.
-  const semana2 = daSemana(validarTarefas(lerConteudo()), 2);
-  assert.ok(
-    semana2.some((t) => t.tipo === "finais"),
-    "a semana 2 tem de ter a tarefa de finais",
-  );
 });
 
 test("tarefa de finais sem classe nenhuma reprova", () => {
   assert.throws(
     () =>
       validarTarefas([
-        { id: "s2-finais", semana: 2, tipo: "finais", titulo: "Finais", meta: { classes: [], dominar: 6 } },
+        {
+          id: "n2-finais",
+          nivel: 2,
+          tipo: "finais",
+          titulo: "Finais",
+          meta: { classes: [], dominar: 6 },
+        },
       ]),
     /conferência/,
   );
 });
 
 test("id repetido reprova", () => {
-  const uma = {
-    id: "s1-x",
-    semana: 1,
-    tipo: "marcar",
-    titulo: "Uma tarefa qualquer",
-  };
+  const uma = { id: "n1-x", nivel: 1, tipo: "marcar", titulo: "Uma tarefa qualquer" };
   assert.throws(() => validarTarefas([uma, { ...uma }]), /aparece duas vezes/);
 });
 
-test("o prefixo do id tem de bater com a semana", () => {
-  // `s1-` numa tarefa da semana 2 é o tipo de erro que ninguém vê: a tarefa
-  // apareceria na semana certa, mas o id mentiria para quem for depurar a
+test("o prefixo do id tem de bater com o nível", () => {
+  // `n1-` numa tarefa do nível 2 é o tipo de erro que ninguém vê: a tarefa
+  // apareceria no nível certo, mas o id mentiria para quem for depurar a
   // marcação no banco daqui a três semanas.
   assert.throws(
-    () => validarTarefas([{ id: "s1-fora", semana: 2, tipo: "marcar", titulo: "Fora do lugar" }]),
-    /O prefixo do id e a semana têm de bater/,
+    () => validarTarefas([{ id: "n1-fora", nivel: 2, tipo: "marcar", titulo: "Fora do lugar" }]),
+    /O prefixo do id e o nível têm de bater/,
+  );
+});
+
+test("o prefixo de semana não é mais aceito", () => {
+  // A renomeação de `s<semana>-` para `n<nível>-` foi segura porque
+  // `tarefa_conclusao` estava vazia. Este teste é o que impede alguém de
+  // reintroduzir o prefixo antigo sem notar que ele já não quer dizer nada.
+  assert.throws(
+    () => validarTarefas([{ id: "s1-antiga", nivel: 1, tipo: "marcar", titulo: "Do tempo antigo" }]),
+    /content\/tarefas\.json/,
   );
 });
 
 test("conteúdo quebrado estoura com o caminho do problema", () => {
   assert.throws(
-    () => validarTarefas([{ id: "s1-curto", semana: 1, tipo: "marcar", titulo: "curto" }]),
+    () => validarTarefas([{ id: "n1-curto", nivel: 1, tipo: "marcar", titulo: "curto" }]),
     /content\/tarefas\.json/,
   );
 });
 
 test("tarefa de tática sem meta reprova", () => {
   assert.throws(
-    () => validarTarefas([{ id: "s1-t", semana: 1, tipo: "tatica", titulo: "Sem meta nenhuma" }]),
+    () => validarTarefas([{ id: "n1-t", nivel: 1, tipo: "tatica", titulo: "Sem meta nenhuma" }]),
     /content\/tarefas\.json/,
   );
 });
 
 test("os links que ainda estão em branco ficam listados", () => {
   // Este teste não reprova nada: `url` nula é estado previsto (o clube da OLESC
-  // no chess.com e o caderno em PDF ainda não existem). Ele **imprime** o que está
-  // pendente, para a lista aparecer no `npm test` de toda quinta-feira em vez
-  // de ser lembrada na manhã do sábado.
+  // no chess.com ainda não existe). Ele **imprime** o que está pendente, para a
+  // lista aparecer no `npm test` de toda quinta-feira em vez de ser lembrada na
+  // manhã do sábado.
   const emBranco = validarTarefas(lerConteudo()).filter((t) => t.onde && !t.onde.url);
   for (const tarefa of emBranco) {
     console.log(`  link pendente: ${tarefa.id} — ${tarefa.onde?.rotulo}`);

@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel 2>/dev/null)/.claude/exame-de-sangue.sh\" 2>/dev/null || true",
+            "timeout": 25,
+            "statusMessage": "Conferindo o git com o servidor..."
+          }
+        ]
+      }
+    ]
+  }
+}

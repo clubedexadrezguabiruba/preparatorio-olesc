@@ -52,6 +52,19 @@ const PINCEIS = [
   { nome: "plano", token: "--color-pincel-plano", opacity: 1, lineWidth: 8 },
 ] as const;
 
+/**
+ * Os pincéis lidos da folha, **uma vez, na montagem**.
+ *
+ * Isso seria dívida se o site tivesse botão de tema: trocar de tema com o
+ * tabuleiro montado deixaria as setas com as cores do tema anterior até a
+ * próxima navegação. Não tem — o site é só escuro, por decisão registrada em
+ * 2026-09-09 —, então a leitura única deixa de ser dívida e passa a ser a
+ * escolha barata: nenhum observador, nenhum `useEffect` de tema, nenhuma
+ * releitura por render.
+ *
+ * Se um botão de tema voltar, o conserto é aqui e é conhecido: reexecutar isto
+ * quando o atributo de tema do `<html>` mudar.
+ */
 function pinceis(host: HTMLElement): Partial<DrawBrushes> {
   const estilo = getComputedStyle(host);
   const tabela: Record<string, DrawBrush> = {};

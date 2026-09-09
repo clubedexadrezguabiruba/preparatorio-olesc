@@ -283,7 +283,7 @@ const msDasTabelas =
 
 console.log("");
 console.log(
-  `  NÚMERO 4 — o cartão mostra ${doCartao.total} min (${doCartao.tatica} de tática + ` +
+  `  NÚMERO 4 — o cartão mede ${doCartao.medido} min (${doCartao.tatica} de tática + ` +
     `${doCartao.finais} de finais); a view soma ${msDaView} ms ` +
     `(${(msDaView / 60000).toFixed(2)} min) em ${itensDaView} itens.`,
 );
@@ -293,8 +293,11 @@ medir(
   `e conta os mesmos itens (${itensDaView})`,
 );
 medir(
-  doCartao.total === Math.round(msDaView / 60000),
-  `o cartão arredonda uma vez só (${doCartao.total} min)`,
+  // `medido`, e não `total`: o total inclui os 30 declarados da partida, que
+  // não têm linha na view — compará-lo com a view seria comparar coisas
+  // diferentes e chamar isso de defeito.
+  doCartao.medido === Math.round(msDaView / 60000),
+  `o cartão arredonda uma vez só (${doCartao.medido} min)`,
 );
 medir(
   (naView ?? []).every((l) => l.dia === hoje),

@@ -2,8 +2,8 @@
   {
     "tag": "mateIn1",
     "explicacao": [
-      "Mate em 1 é o exercício mais simples do xadrez e o mais mal treinado. A posição já está ganha: falta enxergar qual das suas peças encosta no rei sem poder ser capturada, e com todas as casas de fuga fechadas.",
-      "Treinar isto não é decorar mates — é acostumar o olho a olhar primeiro para o rei do adversário. Em torneio, quem tem esse hábito ganha partidas que o relógio já ia decidir."
+      "Mate em 1 é o exercício mais simples do xadrez, e o mais mal treinado. A posição já está ganha. Falta achar a peça sua que encosta no rei dele sem poder ser capturada, com todas as casas de fuga fechadas.",
+      "Treinar isto não é decorar mates. É acostumar o olho a olhar primeiro para o rei do adversário. Em torneio, quem tem esse hábito ganha partidas que o relógio já ia decidir."
     ],
     "procure": [
       "Quais casas o rei dele tem para fugir? Conte, uma por uma.",
@@ -15,13 +15,13 @@
   {
     "tag": "mateIn2",
     "explicacao": [
-      "O mate em 2 tem uma forma quase sempre igual: o primeiro lance **obriga** — é xeque, ou é uma ameaça que ele não pode ignorar —, e o segundo mata. É por isso que se procura o lance forçado primeiro, e não o lance bonito.",
-      "Quando o primeiro lance dá ao adversário duas respostas diferentes, você tem de ver o mate depois das duas. Se depois de uma delas não há mate, o lance está errado, por mais forte que pareça."
+      "O mate em 2 tem quase sempre a mesma forma. O primeiro lance obriga: é xeque, ou é uma ameaça que ele não pode ignorar. O segundo mata. Por isso você procura o lance forçado primeiro, e não o bonito.",
+      "Se o primeiro lance deixa duas respostas para ele, você tem de ver o mate depois das duas. Uma resposta sem mate já derruba o lance, por mais forte que ele pareça. É esse cuidado que separa quem dá mate de quem dá xeque e perde."
     ],
     "procure": [
-      "Comece pelos xeques. Liste todos, mesmo os que parecem absurdos.",
-      "Depois, os lances que ameaçam mate no lance seguinte.",
-      "Sacrifício que tira o defensor do rei costuma ser o primeiro lance."
+      "Quais são todos os xeques? Liste até os que parecem absurdos.",
+      "Que lance ameaça mate no lance seguinte, sem dar xeque?",
+      "Quem defende o rei dele — dá para tirar essa peça?"
     ],
     "cuidado": "Não pare quando achar um xeque forte: confira a resposta dele antes de mover a peça."
   },
@@ -29,74 +29,442 @@
     "tag": "hangingPiece",
     "explicacao": [
       "Peça de graça é a peça que ninguém defende, e é o erro número um em partidas entre 1000 e 1400. Metade das partidas do seu torneio vai ser decidida por isto: alguém deixou uma peça e o outro pegou — ou não viu.",
-      "Este tema treina os dois lados da mesma coisa. Olhar as peças **dele** que estão sem defesa, e olhar as **suas** antes de mover. É a primeira das três perguntas que a gente usa antes de cada lance."
+      "Este tema treina os dois lados da mesma coisa. Olhar as peças dele que estão sem defesa, e olhar as suas antes de mover. É a primeira das três perguntas que você faz antes de cada lance."
     ],
     "procure": [
       "Depois do lance dele: alguma peça ficou sem defensor?",
       "Alguma peça dele está atacada mais vezes do que defendida?",
-      "Antes de mover: a peça que eu vou tirar dali estava defendendo alguém?"
+      "Antes de mover: a peça que eu vou tirar dali defendia alguém?"
     ],
     "cuidado": "Capturar de graça só vale se a peça que captura não for capturada de volta por algo maior. Conte antes."
   },
   {
     "tag": "backRankMate",
     "explicacao": [
-      "O rei rocado fica atrás dos próprios três peões. Enquanto nenhum deles avança, a única entrada para o rei é pela primeira fileira — e é exatamente por ali que a torre ou a dama chegam.",
-      "É o mate mais comum de todo o xadrez de clube, e ele quase nunca aparece de repente: aparece quando as peças da defesa saem para atacar e ninguém volta a olhar para casa."
+      "O rei rocado fica atrás dos próprios três peões. Enquanto nenhum deles avança, a única entrada para o rei é pela primeira fileira. E é exatamente por ali que a torre ou a dama chegam.",
+      "É o mate mais comum de todo o xadrez de clube. Ele quase nunca aparece de repente: aparece quando as peças da defesa saem para atacar e ninguém volta a olhar para casa."
     ],
     "procure": [
-      "O rei dele tem 'janela' — algum peão da frente já avançou?",
-      "Quem defende a primeira fileira dele? Uma torre só? Dá para desviá-la ou capturá-la?",
-      "Antes de trocar torres, veja de que lado o corredor fica desprotegido."
+      "O rei dele tem janela — algum peão da frente já avançou?",
+      "Quem defende a primeira fileira dele? Dá para tirar essa peça?",
+      "Antes de trocar torres: de que lado o corredor fica aberto?"
     ],
-    "cuidado": "O corredor é uma ameaça sua e um perigo seu. Fazer a janela do próprio rei em algum momento da partida custa um lance e evita a derrota."
+    "cuidado": "O corredor é uma ameaça sua e um perigo seu. Abrir a janela do próprio rei custa um lance e evita a derrota."
   },
   {
     "tag": "smotheredMate",
     "explicacao": [
-      "O mate sufocado é o cavalo dando mate num rei cercado pelas **próprias** peças. Elas não podem sair a tempo, e nenhuma consegue capturar o cavalo — porque cavalo não se bloqueia.",
-      "A forma clássica começa com um xeque de dama que empurra o rei para o canto, um sacrifício de dama que obriga a torre a ocupar a última casa livre, e o cavalo fechando. Vale a pena conhecer a sequência inteira: ela aparece pronta em partidas rápidas."
+      "O mate sufocado é o cavalo dando mate num rei cercado pelas próprias peças. Elas não podem sair a tempo, e nenhuma consegue capturar o cavalo — porque cavalo não se bloqueia.",
+      "A forma clássica tem três lances. Um xeque de dama que empurra o rei para o canto. Um sacrifício de dama que obriga a torre a ocupar a última casa livre. E o cavalo fechando. Vale decorar a sequência inteira: ela aparece pronta em partidas rápidas."
     ],
     "procure": [
-      "O rei dele está no canto com as próprias peças em volta?",
+      "O rei dele está no canto, cercado pelas próprias peças?",
       "Você tem um cavalo que chega a uma casa de xeque perto dele?",
-      "Falta tapar uma casa? Um sacrifício de dama costuma ser o que a tapa."
-    ]
+      "Falta tapar uma casa? Um sacrifício de dama costuma tapá-la."
+    ],
+    "cuidado": "Se o rei alcança o cavalo e ninguém o defende, ele come e acabou. Confira todas as fugas antes de sacrificar a dama."
   },
   {
     "tag": "arabianMate",
     "explicacao": [
-      "Torre e cavalo, juntos, contra o rei no canto. O cavalo cobre as casas de fuga e defende a torre; a torre dá o xeque colada ao rei. Nenhum dos dois faria isso sozinho — este é o padrão de dupla mais antigo que se conhece, daí o nome.",
-      "Reconhecer o desenho vale mais que calcular: quando você vê cavalo e torre perto do rei encurralado, já sabe o que procurar antes de começar a contar variantes."
+      "Torre e cavalo, juntos, contra o rei no canto. O cavalo cobre as casas de fuga e defende a torre. A torre dá o xeque colada ao rei. Nenhum dos dois faria isso sozinho — é a dupla mais antiga do xadrez, e daí vem o nome.",
+      "Reconhecer o desenho vale mais do que calcular. Quando você vê cavalo e torre perto do rei encurralado, já sabe o que procurar — e num torneio isso é meio minuto de relógio que você não gasta."
     ],
     "procure": [
-      "Rei no canto, com pouca ou nenhuma casa de fuga.",
-      "Um cavalo a duas casas do rei, defendendo a casa onde a torre vai entrar.",
-      "A torre com caminho livre até a casa colada no rei."
-    ]
+      "O rei dele está no canto, com pouca ou nenhuma fuga?",
+      "Seu cavalo defende a casa onde a torre vai entrar?",
+      "A torre tem caminho livre até a casa colada no rei?"
+    ],
+    "cuidado": "O árabe só funciona com o rei no canto. Um passo para fora e o cavalo já não cobre as fugas — aí procure outro mate."
   },
   {
     "tag": "anastasiaMate",
     "explicacao": [
-      "O cavalo pousa perto do rei e tira dele as casas de fuga do lado de dentro; a torre entra pela coluna aberta ao lado e dá o xeque. O rei fica preso entre o próprio peão e a borda do tabuleiro.",
+      "O cavalo pousa perto do rei e tira dele as fugas do lado de dentro. A torre entra pela coluna aberta ao lado e dá o xeque. O rei fica preso entre o próprio peão e a borda do tabuleiro.",
       "Aparece muito depois de um ataque na ala do rei em que uma coluna abriu. Quando você tem cavalo em e7 (ou e2, do outro lado) e uma torre livre, vale sempre olhar."
     ],
     "procure": [
       "O cavalo pode ir para a casa que tira as fugas do rei?",
       "Existe coluna aberta encostando no rei — a coluna h, quase sempre?",
-      "A torre chega lá em um lance, ou precisa de um sacrifício para abrir o caminho?"
-    ]
+      "A torre chega lá em um lance, ou precisa abrir o caminho antes?"
+    ],
+    "cuidado": "Sem a coluna aberta não há Anastasia: a torre precisa chegar. Se ela ainda está trancada, o lance é abrir a coluna."
   },
   {
     "tag": "hookMate",
     "explicacao": [
-      "O mate do gancho junta três peças: a torre dá o xeque, o cavalo defende a torre e tapa uma fuga, e um peão seu tapa a outra. O nome vem do desenho — as peças formam um gancho em volta do rei.",
-      "É um mate de ataque, aquele que aparece quando você empurrou os peões na ala do rei dele. Vale conhecer porque ele mostra o motivo de o peão avançado valer o risco."
+      "O mate do gancho junta três peças. A torre dá o xeque, o cavalo defende a torre e tapa uma fuga, e um peão seu tapa a outra. O nome vem do desenho: as peças formam um gancho em volta do rei.",
+      "É um mate de ataque: aparece quando você empurrou os peões na ala do rei dele. Vale conhecer porque ele mostra por que o peão avançado compensa o risco de abrir o próprio rei."
     ],
     "procure": [
       "Você tem um peão avançado perto do rei dele?",
-      "Um cavalo consegue apoiar a torre de dentro do ataque?",
+      "Um cavalo consegue apoiar a torre por dentro do ataque?",
       "Quais casas o rei ainda tem — e quem as cobre?"
-    ]
+    ],
+    "cuidado": "O gancho depende do seu peão. Se ele cai ou avança demais, a fuga abre e o mate some — trate esse peão como peça."
+  },
+  {
+    "tag": "bodenMate",
+    "explicacao": [
+      "Dois bispos, cada um numa diagonal, e as duas diagonais se cruzam em cima do rei. Um bispo dá o xeque, o outro tapa a única casa por onde ele sairia. As peças dele fazem o resto do trabalho, sem querer.",
+      "Aparece quase sempre contra quem rocou para o lado da dama, com o peão e a torre ainda parados ali. Se você tem os dois bispos e ele rocou desse lado, vale olhar isto antes de qualquer outro plano."
+    ],
+    "procure": [
+      "Seus dois bispos apontam para casas coladas no rei dele?",
+      "As peças em volta do rei estão presas, sem poder sair?",
+      "Falta abrir uma das diagonais? O que dá para dar ali?"
+    ],
+    "cuidado": "Boden precisa dos dois bispos vivos. Trocar um deles por um cavalo, mesmo numa troca boa, apaga o mate do tabuleiro."
+  },
+  {
+    "tag": "doubleBishopMate",
+    "explicacao": [
+      "Os dois bispos em diagonais vizinhas, apontando para o mesmo canto. Um dá o xeque, o outro cobre a casa de fuga. O rei não tem para onde correr porque as duas diagonais chegam juntas ao mesmo pedaço do tabuleiro.",
+      "É o mate do ataque que já foi longe: o peão da frente do rei dele saiu, e os bispos ficaram olhando direto para lá. Numa partida ele vem depois de um sacrifício — e quem não conhece o desenho não faz o sacrifício."
+    ],
+    "procure": [
+      "Os dois bispos apontam para o mesmo canto do tabuleiro?",
+      "Que peça dele ainda tapa uma das duas diagonais?",
+      "Dá para tirar o peão da frente do rei dando alguma peça?"
+    ],
+    "cuidado": "Bispo sozinho não dá mate: falta sempre tirar alguém do caminho. Se a diagonal está tapada, o lance é destapá-la."
+  },
+  {
+    "tag": "dovetailMate",
+    "explicacao": [
+      "A dama encosta no rei, na diagonal, e alguma peça sua a defende. As duas casas que sobrariam para ele fugir estão tapadas pelas próprias peças dele, uma de cada lado. É esse desenho de ponta dupla que dá o nome.",
+      "Aparece no fim da partida, quando ele já perdeu peças e as que sobraram estão amontoadas perto do rei. É por isso que amontoar peça perto do próprio rei é perigoso mesmo quando não há ataque nenhum à vista."
+    ],
+    "procure": [
+      "O rei dele está cercado pelas próprias peças, na diagonal?",
+      "Sua dama chega a uma casa colada nele, e defendida?",
+      "Sobrou alguma fuga? Quem está tapando cada uma delas?"
+    ],
+    "cuidado": "A dama colada ao rei tem de estar defendida, ou ele simplesmente come. Antes de encostar, veja quem apoia a dama."
+  },
+  {
+    "tag": "mateIn3",
+    "explicacao": [
+      "Três lances forçados até o mate. É a mesma busca do mate em 2, com um degrau a mais: o primeiro obriga, o segundo obriga, e o terceiro fecha. O que muda é que você segura a posição inteira na cabeça até o fim.",
+      "É aqui que o cálculo começa a doer, e é aqui que ele começa a servir. Quem enxerga três lances à frente num puzzle enxerga dois numa partida de torneio, com o relógio andando e o adversário do outro lado da mesa."
+    ],
+    "procure": [
+      "Quais lances ele é obrigado a fazer depois do seu xeque?",
+      "Depois do segundo lance, o rei ainda tem alguma fuga?",
+      "Você conferiu a resposta mais chata dele, e não só a natural?"
+    ],
+    "cuidado": "Três lances não são três xeques. Um dos degraus costuma ser um lance quieto, que só ameaça — e é o que ninguém acha."
+  },
+  {
+    "tag": "fork",
+    "explicacao": [
+      "Garfo é uma peça sua atacando duas peças dele ao mesmo tempo. Ele só consegue salvar uma; a outra você leva no lance seguinte. O cavalo é o campeão disso, porque ele pula — nenhuma peça consegue se meter na frente dele.",
+      "É o jeito mais comum de ganhar peça numa partida de torneio, e ele aparece sozinho quando as peças dele ficam paradas perto uma da outra. Quem procura garfo em toda posição ganha peça sem precisar de plano nenhum."
+    ],
+    "procure": [
+      "Tem duas peças dele valiosas perto uma da outra?",
+      "Alguma casa sua alcança as duas de uma vez?",
+      "Se você der xeque, o rei sai — e o que fica sozinho atrás dele?"
+    ],
+    "cuidado": "Garfo em casa defendida não é garfo: ele captura a sua peça e acabou. Antes de pousar, veja quem está olhando aquela casa."
+  },
+  {
+    "tag": "pin",
+    "explicacao": [
+      "Cravada é quando a peça dele não pode sair do lugar, porque atrás dela está o rei ou uma peça maior. Ela fica ali parada, sem poder defender ninguém. É a única peça do tabuleiro que você ataca de novo sem medo.",
+      "Contra o rei ela nem pode sair, porque seria lance ilegal. Contra peça grande ela pode, mas sair custa caro. Num torneio, quem crava e depois empilha ataque em cima da peça cravada ganha peça sem calcular nada."
+    ],
+    "procure": [
+      "Alguma peça dele está bem na frente do rei dele?",
+      "O que existe atrás da peça que você quer atacar?",
+      "A peça cravada está defendida quantas vezes? E atacada?"
+    ],
+    "cuidado": "Cravar contra uma peça, e não contra o rei, não prende de verdade: ele pode sair e aceitar a perda se ganhar mais do outro lado."
+  },
+  {
+    "tag": "skewer",
+    "explicacao": [
+      "A peça grande dele está na frente e a pequena atrás, as duas na mesma reta. Você ataca a grande. Ela é obrigada a sair, e aí você come a de trás. É a cravada de cabeça para baixo: a valiosa vem primeiro.",
+      "Vale muito no fim da partida, quando sobram torres e damas e o tabuleiro está vazio — reta livre é o que não falta ali. Um espeto dado com xeque costuma decidir a partida, porque o rei é obrigado a se mexer."
+    ],
+    "procure": [
+      "Duas peças dele estão na mesma reta, com a maior na frente?",
+      "Você tem torre, bispo ou dama que alcance essa reta?",
+      "Se ele fugir com a da frente, o que fica sozinho atrás?"
+    ],
+    "cuidado": "Se a peça de trás estiver defendida, o espeto não ganha nada: você come e ele recaptura. Confira quem defende antes."
+  },
+  {
+    "tag": "discoveredAttack",
+    "explicacao": [
+      "Duas peças suas na mesma reta, uma na frente da outra. Você mexe a da frente e quem passa a atacar é a de trás, que estava tapada. Um lance só, e nascem dois ataques: o da peça que saiu e o da que ficou.",
+      "O que faz isso doer é que a peça da frente pode ir para qualquer lugar, até para uma casa onde ela seria capturada de graça — porque a ameaça de trás é maior. Em partida, é o lance que parece erro e ganha."
+    ],
+    "procure": [
+      "Alguma peça sua está tapando a mira de outra peça sua?",
+      "Se ela sair do caminho, o que a de trás passa a atacar?",
+      "Para onde a peça da frente sai fazendo a maior ameaça?"
+    ],
+    "cuidado": "Sair com a peça da frente só vale se a ameaça de trás valer mais do que você entrega. Compare as duas antes de mover."
+  },
+  {
+    "tag": "doubleCheck",
+    "explicacao": [
+      "Duas peças suas dão xeque no mesmo lance. Isso só acontece num descoberto: a que sai dá xeque, e a que estava atrás dela também dá. O rei não consegue capturar as duas nem tapar as duas — só resta andar.",
+      "É o lance mais forte do xadrez, e o único em que não importa quanta peça você deu para chegar lá. Se o rei não tem casa para onde ir, é mate — e é assim que quase todo sacrifício grande termina."
+    ],
+    "procure": [
+      "Você tem duas peças que dão xeque no mesmo lance?",
+      "Quantas casas o rei dele tem depois desse xeque?",
+      "Se ele só pode andar, você alcança onde ele vai parar?"
+    ],
+    "cuidado": "No xeque duplo o rei anda, e nada mais: capturar e tapar são ilegais. Não perca lance procurando o que ele não pode fazer."
+  },
+  {
+    "tag": "capturingDefender",
+    "explicacao": [
+      "Uma peça dele está segurando outra. Você come quem segura. A que sobrou fica sem ninguém por perto e cai no lance seguinte. São duas capturas, e a conta fecha a seu favor porque a segunda vem de graça.",
+      "Dito assim parece óbvio, e é justamente o que mais escapa na partida: você olha a peça, vê que está defendida e segue adiante — sem perguntar quem é o defensor, nem se ele aguenta ser atacado."
+    ],
+    "procure": [
+      "Qual peça dele está segurando a peça que você quer?",
+      "Dá para capturar ou expulsar esse defensor primeiro?",
+      "Depois da troca, quem sobra defendendo aquela casa?"
+    ],
+    "cuidado": "Nem todo defensor é único: se duas peças defendem, comer uma só não resolve. Conte os defensores antes de começar."
+  },
+  {
+    "tag": "deflection",
+    "explicacao": [
+      "Uma peça dele está guardando alguma coisa importante. Você a ataca com uma ameaça ainda maior, e ela é obrigada a sair. O posto que ela guardava fica vazio — e é exatamente ali que você entra.",
+      "É o contrário de capturar o defensor: você não come a peça, você a chama para outro canto do tabuleiro. Quase sempre com xeque, porque xeque é a única coisa que ele não tem como ignorar e responder depois."
+    ],
+    "procure": [
+      "O que aquela peça dele está guardando neste momento?",
+      "Você tem um xeque ou ameaça que a obrigue a sair dali?",
+      "Depois que ela sair do posto, o que fica sem defesa?"
+    ],
+    "cuidado": "Desvio só funciona se o que você ameaça valer mais que o posto que ela guarda. Senão ela fica, e você perdeu um lance."
+  },
+  {
+    "tag": "attraction",
+    "explicacao": [
+      "O contrário do desvio: em vez de tirar a peça de onde ela está, você a puxa para uma casa ruim. Quase sempre dando alguma coisa, porque ninguém vai para casa ruim de graça. Chegando lá, ela vira alvo.",
+      "O alvo mais comum é o rei: você dá uma peça para puxá-lo até a casa onde um garfo o pega. Quem só conta quanto vale cada peça nunca acha esse lance, porque ele começa com você entregando peça de propósito."
+    ],
+    "procure": [
+      "Se o rei dele estivesse uma casa adiante, haveria xeque?",
+      "Que peça você pode dar para obrigá-lo a ir até lá?",
+      "Depois que ele chegar nessa casa, o que você tem?"
+    ],
+    "cuidado": "Puxar a peça só vale com o lance seguinte já pronto na cabeça. Sacrificar para ver o que aparece é dar peça, e nada mais."
+  },
+  {
+    "tag": "trappedPiece",
+    "explicacao": [
+      "Uma peça dele foi longe demais e agora não tem casa para onde ir. As saídas estão cobertas por você ou tapadas pelas próprias peças dele. Você nem precisa capturá-la agora: basta fechar a última porta.",
+      "Acontece muito com o bispo que come um peão no canto e fica trancado lá, e com a dama que saiu cedo caçando peão. Quando ele avança uma peça sozinha na partida, a pergunta é sempre: por onde ela volta?"
+    ],
+    "procure": [
+      "Alguma peça dele está longe, sem apoio das outras?",
+      "Conte as casas para onde ela pode ir. São quantas?",
+      "Você consegue cobrir a última casa que sobrou para ela?"
+    ],
+    "cuidado": "Peça presa não é peça ganha: se você demorar, ela se solta. Feche a saída no lance em que enxergar, não no seguinte."
+  },
+  {
+    "tag": "xRayAttack",
+    "explicacao": [
+      "Sua torre ou seu bispo mira uma peça dele, mas tem outra peça no meio do caminho. O ataque vale mesmo assim: se a do meio sair ou for capturada, o que está atrás já estava sendo atacado desde antes.",
+      "É o raciocínio que salva conta de troca. Antes de trocar na casa disputada, olhe o que está atrás de cada peça: muitas vezes a terceira da fila é sua, e a troca que parecia empatada ganha uma peça."
+    ],
+    "procure": [
+      "O que está atrás da peça que você está atacando?",
+      "Se a peça do meio sumir, quem fica na mira de quem?",
+      "Você tem duas peças empilhadas na mesma reta?"
+    ],
+    "cuidado": "Raio X é ataque através, não captura livre: a peça do meio continua lá. Confira a ordem das capturas antes de começar."
+  },
+  {
+    "tag": "exposedKing",
+    "explicacao": [
+      "Rei exposto é o rei que perdeu os peões da frente, ou que nem rocou e ficou parado no meio do tabuleiro. Ele não está em xeque ainda. Está pior: está alcançável, e qualquer peça sua que chegue perto já incomoda.",
+      "Contra rei assim você não procura o melhor lance de sempre — procura xeque, e xeque, e xeque. Numa partida de torneio, rei no meio vale mais do que uma peça a menos, e é por isso que se dá peça para abrir o rei dele."
+    ],
+    "procure": [
+      "O rei dele ainda tem peões na frente, ou saíram todos?",
+      "Quantas peças suas alcançam a região onde ele está?",
+      "Qual xeque traz mais uma peça sua para perto dele?"
+    ],
+    "cuidado": "Rei exposto sem peça sua por perto não é ataque nenhum. Antes de abrir a posição, conte quantas peças você leva para lá."
+  },
+  {
+    "tag": "attackingF2F7",
+    "explicacao": [
+      "No começo da partida, o f7 dele (e o seu f2, do outro lado) é a única casa perto do rei que só o próprio rei defende. Todas as outras têm torre, cavalo ou peão olhando. Por isso é para lá que o bispo e o cavalo apontam.",
+      "Vale para os dois lados: você mira o f7 dele e cuida do seu f2. É por isso que o cavalo em g5 junto com o bispo em c4 é a armadilha mais velha que existe — e ela continua pegando gente no torneio de sábado."
+    ],
+    "procure": [
+      "Quantas peças suas já estão apontando para o f7 dele?",
+      "Quem defende o f7 além do rei? Alguém, ou ninguém?",
+      "Se você der uma peça em f7, o rei é obrigado a sair?"
+    ],
+    "cuidado": "Bater em f7 cedo demais entrega peça e ainda puxa o rei dele para uma casa segura. Veja se o ataque continua depois."
+  },
+  {
+    "tag": "kingsideAttack",
+    "explicacao": [
+      "Ele rocou para o lado do rei, e é para lá que as suas peças vão. É o plano mais simples do xadrez de ataque: juntar torre, bispo, cavalo e dama na mesma metade do tabuleiro e empurrar os peões atrás delas.",
+      "O que decide não é a beleza do lance, é a contagem: quantas peças suas atacam contra quantas peças dele defendem. Quando esse número vira a seu favor, o sacrifício que abre a posição passa a funcionar sozinho."
+    ],
+    "procure": [
+      "Quantas peças suas já estão do lado do rei dele?",
+      "Quantas peças dele estão defendendo aquele lado?",
+      "Qual peça sua está mais longe da festa? Traga essa."
+    ],
+    "cuidado": "Atacar com duas peças contra três defensores não dá em nada, e ainda desarruma o seu lado. Conte antes de empurrar peão."
+  },
+  {
+    "tag": "sacrifice",
+    "explicacao": [
+      "Sacrifício é dar peça de propósito, porque o que vem depois vale mais do que ela. Não é chute nem coragem: é uma conta que termina em mate, em peça de volta com juros, ou no rei dele sem casa nenhuma.",
+      "Todo sacrifício que funciona tem uma coisa em comum: os lances seguintes são obrigados. Se depois de dar a peça ele ainda tem três respostas boas, aquilo não era sacrifício — era uma peça a menos."
+    ],
+    "procure": [
+      "Depois que eu der a peça, os lances dele são obrigados?",
+      "Quantas peças minhas chegam ao rei dele em dois lances?",
+      "Se não der mate, eu recupero a peça — e de que jeito?"
+    ],
+    "cuidado": "Sacrifício sem sequência forçada é só peça a menos. Se você não consegue dizer o lance seguinte, ainda não é a hora."
+  },
+  {
+    "tag": "intermezzo",
+    "explicacao": [
+      "Ele capturou uma peça sua e você já ia recapturar. Espere. Antes de recapturar existe um xeque, ou uma ameaça maior, que ele é obrigado a responder. Você joga esse lance primeiro, e só depois recaptura.",
+      "É o lance que mais dói levar, porque parece que a sequência já estava resolvida. Na partida a regra é simples: toda vez que a recaptura parecer automática, pare um segundo e procure um xeque antes dela."
+    ],
+    "procure": [
+      "Antes de recapturar: existe algum xeque agora?",
+      "A recaptura pode esperar um lance sem perder nada?",
+      "Que ameaça sua ele não teria como responder?"
+    ],
+    "cuidado": "O lance do meio tem de ser mais forte que a recaptura, e ela precisa continuar valendo depois. Confira as duas coisas."
+  },
+  {
+    "tag": "quietMove",
+    "explicacao": [
+      "Um lance que não dá xeque, não captura nada e não ameaça peça nenhuma. Mesmo assim ele ganha, porque fecha a última saída dele. Depois desse lance, tudo o que o adversário jogar perde, e não havia como impedir.",
+      "É o lance mais difícil de achar num puzzle, porque o olho treinado procura primeiro xeque e captura. Quando nenhum dos dois funciona e a posição parece ganha, o que está faltando é quase sempre um lance quieto."
+    ],
+    "procure": [
+      "Você já tentou todos os xeques e todas as capturas?",
+      "Que ameaça você criaria sem encostar em peça dele?",
+      "Qual é a última casa de fuga dele, e quem a cobre?"
+    ],
+    "cuidado": "Lance quieto entrega um lance livre a ele. Antes de jogar, veja o que ele faz com esse lance — se há defesa, não era ele."
+  },
+  {
+    "tag": "clearance",
+    "explicacao": [
+      "Às vezes a peça que atrapalha é sua. Ela está bem no caminho de uma torre, um bispo ou uma dama que resolveria tudo sozinha. Você tira essa peça dali, muitas vezes entregando ela de graça, só para abrir a estrada.",
+      "É o lance que parece erro grosseiro para quem olha de fora: você dá uma peça sem ninguém pedir. A diferença é que a peça que estava atrás dela chega no lance seguinte — e chega decidindo a partida."
+    ],
+    "procure": [
+      "Alguma peça sua está tapando a mira de outra peça sua?",
+      "Se aquela casa ficasse vazia, o que aconteceria?",
+      "Vale entregar a peça da frente para abrir o caminho?"
+    ],
+    "cuidado": "Abrir o caminho só compensa se a peça de trás chegar no lance seguinte. Um lance de atraso e ele já tapou de novo."
+  },
+  {
+    "tag": "interference",
+    "explicacao": [
+      "Duas peças dele conversam por uma reta: uma defende a outra, ou guarda uma casa importante. Você põe alguma coisa no meio dessa reta. A conversa acaba na hora, e o que estava defendido fica sozinho.",
+      "O bonito é que a peça que você põe no meio quase sempre pode ser capturada. Não importa: quem captura ocupa aquela casa e tapa o caminho do mesmo jeito, e a defesa dele continua cortada."
+    ],
+    "procure": [
+      "Que peça dele defende a peça que você quer comer?",
+      "Existe uma casa no meio do caminho entre as duas?",
+      "Você alcança essa casa, mesmo entregando a peça ali?"
+    ],
+    "cuidado": "Interferência precisa de uma reta: torre, bispo ou dama defendendo de longe. Contra cavalo defendendo, não há meio."
+  },
+  {
+    "tag": "zugzwang",
+    "explicacao": [
+      "Zugzwang é quando ele está bem parado, e o problema dele é ter de jogar. Qualquer peça que mova piora a posição. Não é você que ataca: é a obrigação de fazer um lance que entrega a partida na mão dele.",
+      "Aparece quase sempre no fim, com poucas peças no tabuleiro. É a razão de os finais de rei e peão se ganharem esperando, e não correndo: quem for obrigado a andar primeiro é quem perde a partida."
+    ],
+    "procure": [
+      "Quantos lances ele tem? Conte todos, um por um.",
+      "Se todos pioram, dá para passar a vez de volta a ele?",
+      "Existe um lance de espera seu que não estraga nada?"
+    ],
+    "cuidado": "Zugzwang exige que você tenha lance de espera e ele não. Se você também for obrigado a piorar, o zugzwang é seu."
+  },
+  {
+    "tag": "defensiveMove",
+    "explicacao": [
+      "Nem todo puzzle é ataque. Aqui você está pior, ele está ameaçando, e existe um lance só que segura a posição — todos os outros perdem. Achar esse lance é a mesma busca de sempre, feita do lado de baixo.",
+      "É o tema que mais muda resultado de torneio, porque quase ninguém treina. A posição fica feia, o aluno desiste por dentro e joga qualquer coisa. Quem procura o lance que segura empata partida perdida."
+    ],
+    "procure": [
+      "Qual é exatamente a ameaça dele? Diga em voz alta.",
+      "Dá para capturar quem ameaça, tapar o caminho, ou fugir?",
+      "Existe um xeque seu que resolva antes de tudo isso?"
+    ],
+    "cuidado": "Defender por instinto costuma piorar: o primeiro lance que acalma nem sempre segura. Nomeie a ameaça antes de reagir."
+  },
+  {
+    "tag": "advancedPawn",
+    "explicacao": [
+      "Um peão seu chegou perto da oitava fileira. Daquela distância ele já não é bem um peão: é uma dama que ainda não nasceu, e ele obriga uma peça grande dele a ficar parada ali só olhando.",
+      "Numa partida de torneio é isso que decide o fim. Enquanto a torre dele vigia o seu peão, ela não faz mais nada no tabuleiro — e você joga o resto da partida com uma peça a mais de verdade."
+    ],
+    "procure": [
+      "Qual peão seu está mais perto de virar dama?",
+      "Quem está segurando esse peão — uma peça só, ou duas?",
+      "Dá para tirar do caminho quem tapa a casa da frente?"
+    ],
+    "cuidado": "Peão avançado sem apoio cai. Antes de empurrar, veja quem vai atrás dele — o rei ou a torre — para escoltar até o fim."
+  },
+  {
+    "tag": "promotion",
+    "explicacao": [
+      "Chegar na oitava fileira e trocar o peão por outra peça. Quase sempre dama, que é a mais forte. A parte que se erra não é chegar lá: é o lance de antes, o que tira do caminho quem está tapando a casa.",
+      "Na partida a promoção quase nunca acontece em paz: ele tem uma peça vigiando aquela casa, e você precisa dar alguma coisa para tirá-la de lá. Esse sacrifício é o tema de verdade, e é o que os puzzles cobram."
+    ],
+    "procure": [
+      "Quem está vigiando a casa em que o seu peão vira dama?",
+      "Você tem um xeque que obrigue esse vigia a sair?",
+      "Depois de promover, a dama nova fica atacada por alguém?"
+    ],
+    "cuidado": "Promover com xeque vale muito mais do que promover em paz: sem xeque, ele ganha um lance para capturar a dama nova."
+  },
+  {
+    "tag": "underPromotion",
+    "explicacao": [
+      "Às vezes a dama não serve. Você promove a cavalo, porque um cavalo dá xeque de uma casa onde dama nenhuma daria. Ou promove a torre, porque a dama deixaria ele sem lance nenhum e o jogo acabaria empatado.",
+      "É raro e é bonito, mas o valor de treinar isto é outro: ele quebra o automático. Quem promove sem olhar perde partida ganha por afogamento, e isso acontece em torneio de escola em toda rodada."
+    ],
+    "procure": [
+      "A dama nova daria xeque, ou só ocuparia a casa?",
+      "Se ele ficar sem lance legal nenhum, dá afogamento?",
+      "Um cavalo naquela casa daria xeque, ou um garfo?"
+    ],
+    "cuidado": "Antes de promover a dama, conte os lances que sobram para ele. Zero lances e rei sem xeque é empate, não vitória."
+  },
+  {
+    "tag": "enPassant",
+    "explicacao": [
+      "Se o peão dele anda duas casas e para bem do lado de um peão seu, você pode capturá-lo como se ele tivesse andado uma só. Vale nesse lance seguinte e em nenhum outro: se você jogar outra coisa, o direito some.",
+      "É a regra que mais se esquece na hora, e a que mais gera briga de árbitro em torneio de escola. Nos puzzles ela aparece porque é o único lance que resolve — e ninguém procura aquilo que acha que não existe."
+    ],
+    "procure": [
+      "O peão dele acabou de andar duas casas agora?",
+      "Ele parou ao lado de um peão seu, na quinta fileira?",
+      "Essa captura abre alguma coluna ou reta a seu favor?"
+    ],
+    "cuidado": "O en passant vale só no lance imediatamente seguinte. Jogou outra coisa, perdeu o direito naquele peão para sempre."
   }
 ]

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { professorAtual } from "@/lib/auth/perfil";
-import { semanaAtual } from "@/lib/curso/calendario";
+import { nivelDoAluno } from "@/lib/curso/nivel";
+import { niveisDaTurma } from "@/lib/curso/progresso";
 import { aulasComPratica, aulasPublicadas } from "@/lib/finais/conteudo";
 import { finaisDaTurma } from "@/lib/finais/progresso";
 import { aprendidasDaTrilha, aulasAbertas, CLASSES, daClasse } from "@/lib/finais/trilha";
@@ -36,9 +37,9 @@ export default async function Professor() {
    * abertas), e é justamente por ser a mesma que o professor pode dizer o
    * número em voz alta com o aluno na frente.
    */
-  const abertas = aulasAbertas(aulasPublicadas(), semanaAtual());
+  const abertas = aulasAbertas(aulasPublicadas());
   const comPratica = aulasComPratica();
-  const finais = await finaisDaTurma();
+  const [finais, niveis] = await Promise.all([finaisDaTurma(), niveisDaTurma()]);
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-5 py-10">
@@ -65,7 +66,7 @@ export default async function Professor() {
           {alunos?.length ?? 0} {alunos?.length === 1 ? "aluno" : "alunos"}
         </h2>
         {alunos?.length ? (
-          <div className="overflow-x-auto rounded-xl border border-borda-fraca bg-carta">
+          <div className="cartao overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-borda-fraca text-left text-tinta-fraca">
@@ -74,6 +75,7 @@ export default async function Professor() {
                   <Th>Equipe</Th>
                   <Th>Tab.</Th>
                   <Th>Rating</Th>
+                  <Th>Nível</Th>
                   <Th>Finais</Th>
                 </tr>
               </thead>
@@ -94,7 +96,15 @@ export default async function Professor() {
                     <Td mono>{aluno.usuario}</Td>
                     <Td>{aluno.equipe ? EQUIPE[aluno.equipe as "M" | "F"] : "—"}</Td>
                     <Td>{aluno.tabuleiro ?? "—"}</Td>
-                    <Td>{aluno.rating ?? "—"}</Td>
+                    {/* O degrau vem antes dos finais porque é a resposta de
+                        uma palavra: é ele que diz o que o aluno está fazendo
+                        hoje, e os finais são uma das três trilhas dele. */}
+                    <Td>
+                      <span className="tabular-nums">
+                        {nivelDoAluno(niveis.get(aluno.id) ?? 0)}
+                        <span className="text-tinta-fraca"> de 5</span>
+                      </span>
+                    </Td>
                     <Td>
                       <Finais
                         feitas={aprendidasDaTrilha(abertas, finais.get(aluno.id) ?? new Map(), comPratica)}
@@ -107,7 +117,7 @@ export default async function Professor() {
             </table>
           </div>
         ) : (
-          <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
+          <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
             Nenhum aluno ainda. Crie a primeira conta acima.
           </p>
         )}

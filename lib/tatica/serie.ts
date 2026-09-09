@@ -47,22 +47,35 @@ export const NOME_DA_ETAPA: Record<Etapa, string> = {
 };
 
 /**
- * Os modos que viram linha no banco: as três etapas do tema, mais a **revisão
- * do dia**, que não pertence a tema nenhum.
+ * Os modos que viram linha no banco: as três etapas do tema, mais os dois que
+ * não pertencem a tema nenhum — a **revisão do dia** e a **prova de nível**.
  *
  * `Modo` é mais largo que `Etapa` de propósito, e `ETAPAS`/`METAS`/`etapaAtual`
  * continuam falando só de `Etapa`: são elas que definem o caminho de um tema
- * (aquecimento → série → prova) e o total `PUZZLES_POR_TEMA`. A revisão
- * repete puzzles já vistos, em dias diferentes, e não pode mover a barra de
- * tema nenhum — `progressoPorTema` já descarta modos fora de `ETAPAS`.
+ * (aquecimento → série → prova) e o total `PUZZLES_POR_TEMA`. Os dois modos
+ * largos repetem puzzles já vistos e não podem mover a barra de tema nenhum —
+ * `progressoPorTema` já descarta modos fora de `ETAPAS`, e é por isso que
+ * acrescentar um modo aqui não polui progresso nenhum.
+ *
+ * ## `prova-de-nivel` não é "mais uma prova"
+ *
+ * A prova do **tema** diz ao aluno qual é o tema. A prova de **nível** não —
+ * ela sorteia dos temas do nível e de todos os anteriores, misturados. É a
+ * única medida do site que não avisa o que procurar, e é a única habilidade
+ * que o curso não treina em lugar nenhum: na partida ninguém diz "aqui tem um
+ * garfo". Ver `lib/tatica/prova.ts`.
+ *
+ * A fila de revisão a absorve sem mudança nenhuma: ela reage a `acertou`, e
+ * não ao modo.
  */
-export type Modo = Etapa | "revisao";
+export type Modo = Etapa | "revisao" | "prova-de-nivel";
 
-export const MODOS_GRAVAVEIS: readonly Modo[] = [...ETAPAS, "revisao"];
+export const MODOS_GRAVAVEIS: readonly Modo[] = [...ETAPAS, "revisao", "prova-de-nivel"];
 
 export const NOME_DO_MODO: Record<Modo, string> = {
   ...NOME_DA_ETAPA,
   revisao: "Revisão do dia",
+  "prova-de-nivel": "Prova de nível",
 };
 
 /** Quantos puzzles a revisão do dia serve de uma vez. */
