@@ -233,7 +233,7 @@ export const CATALOG: Effect[] = [
     name: "mate",
     title: "Xeque-mate",
     when:
-      "O mate que fecha o puzzle. Toca junto com o pulso do rei matado, e no lugar do som de lance — o fim não pode soar como um lance qualquer.",
+      "Hoje não toca em lugar nenhum: a tática usa `playComplete()` no mate, para soar como o fim de uma aula de finais em vez do efeito abaixo. A síntese fica no catálogo — foi medida e aprovada — para o dia em que um som de mate for cobrado de novo.",
     // Toca com a linha encerrada: o teto não é a resposta do adversário, e sim
     // o `FIM_COM_MATE_MS` de `lib/tatica/tempos.ts`, que é 1500 ms.
     maxDurationMs: 600,

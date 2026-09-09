@@ -29,7 +29,6 @@ import {
   isSoundOn,
   playComplete,
   playForMove,
-  playMate,
   playRefusal,
   playSuccess,
   setSoundOn,
@@ -567,9 +566,13 @@ function NoTabuleiro({
       if (matou || passo + 1 >= puzzle.lances.length) {
         // Prêmio **no lugar** do som do lance, não junto: o fim do puzzle não
         // pode soar igual a um lance qualquer. É a mesma regra do laboratório.
+        //
+        // O mate toca o som de conclusão de aula (`playComplete`), não o de
+        // xeque-mate: o Doug pediu que o fim da série soasse como o fim de
+        // uma aula de finais, não como o efeito `mate` do catálogo.
         if (matou) {
           setReiMatado(toBoardColor(depois.game.turn()));
-          playMate();
+          playComplete();
         } else {
           playSuccess();
         }
