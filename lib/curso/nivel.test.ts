@@ -12,11 +12,13 @@ import {
   nivelDoAluno,
   nivelDoTema,
   podeAbrir,
+  PROVA_DE_NIVEL,
   prontoParaProva,
   proximoPasso,
   REVISAO_ANTES_DO_AVANCO,
   situacaoDoItem,
   temaFechado,
+  temasDaProva,
   temasDoNivel,
   type Nivel,
   type ProgressoParaONivel,
@@ -307,4 +309,41 @@ test("quem já passou na prova do nível não é mandado fazê-la de novo", () =
 test("o aluno que fechou tudo e conquistou o 5 não recebe alvo nenhum", () => {
   const p = { ...comTaticaAte(5), linhasAprendidas: 20, baseCompleto: true };
   assert.deepEqual(proximoPasso(5, p, 0, 5), { tipo: "nivel-fechado" });
+});
+
+/* ------------------------------------------------------------------ *
+ * A prova de nível
+ * ------------------------------------------------------------------ */
+
+test("a prova sorteia do nível e de todos os anteriores, sem repetir tema", () => {
+  // Os anteriores entram porque o degrau 3 não pode deixar o aluno esquecer o
+  // mate em 1 do degrau 1. E sortear só do degrau de cima entregaria metade da
+  // resposta antes de ele olhar o tabuleiro — a prova é a única medida do site
+  // que não diz o tema.
+  assert.deepEqual(temasDaProva(1), [...temasDoNivel(1)]);
+
+  const doTres = temasDaProva(3);
+  assert.equal(doTres.length, 3 + 5 + 5);
+  assert.equal(new Set(doTres).size, doTres.length, "algum tema entrou duas vezes");
+  for (const tag of temasDoNivel(1)) assert.ok(doTres.includes(tag), `${tag} ficou de fora`);
+
+  assert.equal(temasDaProva(5).length, 36, "a prova do nível 5 alcança o currículo inteiro");
+});
+
+test("a prova de um nível contém a do nível abaixo, inteira", () => {
+  // A propriedade que garante que a escada não abre buraco: subir de degrau
+  // nunca tira um tema do sorteio.
+  for (const n of NIVEIS) {
+    if (n === 1) continue;
+    const abaixo = new Set(temasDaProva((n - 1) as Nivel));
+    for (const tag of abaixo) {
+      assert.ok(temasDaProva(n).includes(tag), `o nível ${n} perdeu ${tag}`);
+    }
+  }
+});
+
+test("passar é 9 de 12, e o número está num lugar só", () => {
+  assert.equal(PROVA_DE_NIVEL.puzzles, 12);
+  assert.equal(PROVA_DE_NIVEL.paraPassar, 9);
+  assert.ok(PROVA_DE_NIVEL.paraPassar <= PROVA_DE_NIVEL.puzzles);
 });

@@ -141,8 +141,9 @@ import { registrarTentativa } from "../acoes";
  *
  * São as mesmas de `lib/tatica/serie.ts`, e o `diz` de cada uma é o que o
  * leitor de tela ouve — por isso ele explica a etapa em vez de repetir o nome
- * dela. A revisão do dia não entra: ela não é etapa de tema nenhum, e uma
- * trilha de três com as três apagadas prometeria um caminho que ali não existe.
+ * dela. Os dois modos largos não entram — a revisão do dia e a prova de nível
+ * não são etapa de tema nenhum, e uma trilha de três com as três apagadas
+ * prometeria um caminho que ali não existe.
  */
 const ETAPAS_DA_SERIE = [
   { nome: "aquecimento", diz: "os mais fáceis, para o olho pegar o padrão" },
@@ -170,6 +171,15 @@ export type SerieProps = {
   explicacao: string[];
   procure: string[];
   cuidado: string | null;
+  /**
+   * O que fica no lugar dos botões, na tela do placar.
+   *
+   * Existe para a **prova de nível**: lá o fim da rodada não é "continuar" —
+   * é o servidor corrigir as 12 linhas e conceder (ou não) o degrau. Um
+   * `ReactNode` em vez de um `boolean` porque quem sabe o que fazer no fim é
+   * quem montou a rodada, e não esta série, que serve três telas diferentes.
+   */
+  noFim?: ReactNode;
 };
 
 export function Serie({
@@ -184,6 +194,7 @@ export function Serie({
   explicacao,
   procure,
   cuidado,
+  noFim,
 }: SerieProps) {
   const router = useRouter();
 
@@ -299,7 +310,9 @@ export function Serie({
             : placar.certos === placar.total
               ? etapa === "revisao"
                 ? "Nenhum erro. Os certos voltam daqui a uma semana, para provar que ficaram."
-                : "Nenhum erro. Pode seguir."
+                : etapa === "prova-de-nivel"
+                  ? "Nenhum erro. Conferindo o resultado…"
+                  : "Nenhum erro. Pode seguir."
               : /*
                  * Cada modo diz para onde o erro vai — e diz a verdade. Ate a
                  * F2 a frase da serie prometia "voltam na prova" enquanto o
@@ -311,24 +324,28 @@ export function Serie({
                 ? "Os que você errou voltam em 2 dias; os certos, em uma semana."
                 : etapa === "prova"
                   ? "Os que você errou voltam na revisão do dia, daqui a 2 dias."
-                  : "Os que você errou voltam misturados na prova deste tema."}
+                  : etapa === "prova-de-nivel"
+                    ? "Os que você errou entraram na fila de revisão. Conferindo o resultado…"
+                    : "Os que você errou voltam misturados na prova deste tema."}
         </p>
         {falhaAoGravar ? <Falha erro={falhaAoGravar} /> : null}
-        <div className="flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={() => router.refresh()}
-            className="foco rounded-lg bg-metodo-cheio px-4 py-2.5 text-sm font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque"
-          >
-            Continuar
-          </button>
-          <Link
-            href={etapa === "revisao" ? "/painel" : "/tatica"}
-            className="foco rounded-lg border border-borda px-4 py-2.5 text-sm font-medium text-tinta-media hover:bg-carta-toque"
-          >
-            {etapa === "revisao" ? "Voltar ao painel" : "Escolher outro tema"}
-          </Link>
-        </div>
+        {noFim ?? (
+          <div className="flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => router.refresh()}
+              className="foco rounded-lg bg-metodo-cheio px-4 py-2.5 text-sm font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque"
+            >
+              Continuar
+            </button>
+            <Link
+              href={etapa === "revisao" ? "/painel" : "/tatica"}
+              className="foco rounded-lg border border-borda px-4 py-2.5 text-sm font-medium text-tinta-media hover:bg-carta-toque"
+            >
+              {etapa === "revisao" ? "Voltar ao painel" : "Escolher outro tema"}
+            </Link>
+          </div>
+        )}
       </div>
     );
   }
@@ -346,7 +363,7 @@ export function Serie({
        * partida), e o nome chega para fixar o que ele acabou de ver. Na
        * serie ele ja esta dentro do tema, e dize-lo de novo e ruido.
        */
-      nomeDoPadrao={etapa === "prova" || etapa === "revisao" ? nomeDoPadrao(puzzle) : null}
+      nomeDoPadrao={etapa === "serie" || etapa === "aquecimento" ? null : nomeDoPadrao(puzzle)}
       degraus={degraus}
       degrau={degrau}
       aoPedirDica={() => setDegrau((d) => d + 1)}
@@ -366,7 +383,8 @@ export function Serie({
         </div>
       }
       trilha={
-        etapa === "revisao" ? null : (
+        etapa === "revisao" || etapa === "prova-de-nivel" ? null : (
+
           /*
            * A trilha só a partir de `lg`, e a conta é de altura.
            *
@@ -384,7 +402,7 @@ export function Serie({
            * a `FaixaDeSans` do celular na aula de abertura.
            */
           <div className="hidden lg:block">
-            <TrilhaDeEtapas etapas={ETAPAS_DA_SERIE} atual={BARRA_DA_ETAPA[etapa]} />
+            <TrilhaDeEtapas etapas={ETAPAS_DA_SERIE} atual={BARRA_DA_ETAPA[etapa as Etapa]} />
           </div>
         )
       }

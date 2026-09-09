@@ -26,7 +26,9 @@
     "repertorio:mapear": "node scripts/mapear-fontes.ts",
     "repertorio:cauda": "node scripts/cauda-repertorio.ts",
     "repertorio:orfaos": "node scripts/orfaos-repertorio.ts",
-    "tatica:tela": "node scripts/conferir-tatica.ts"
+    "tatica:tela": "node scripts/conferir-tatica.ts",
+    "niveis:tela": "node scripts/conferir-niveis.ts",
+    "niveis:ciclo": "node scripts/conferir-ciclo-do-nivel.ts"
   },
   "dependencies": {
     "@lichess-org/chessground": "^10.1.1",

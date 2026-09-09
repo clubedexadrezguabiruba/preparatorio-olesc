@@ -25,7 +25,7 @@ const UNIDADE: Record<"tatica" | "finais", string> = {
 };
 
 /**
- * A lista de tarefas da semana.
+ * A lista de tarefas do degrau.
  *
  * **A caixa tem de responder na hora.** O aluno marca a tarefa no celular, no
  * 4G, e a ida ao servidor demora o que demorar; sem `useOptimistic` ele
@@ -71,7 +71,7 @@ export function Tarefas({ estados }: { estados: EstadoDaTarefa[] }) {
           {feitas} de {estados.length} feitas
         </span>
         {feitas === estados.length ? (
-          <span className="text-sm font-medium text-metodo-tinta">Semana fechada 🎉</span>
+          <span className="text-sm font-medium text-metodo-tinta">Rotina em dia 🎉</span>
         ) : null}
       </div>
       <Barra feitos={feitas} de={estados.length} tom={feitas === estados.length ? "completo" : "metodo"} />

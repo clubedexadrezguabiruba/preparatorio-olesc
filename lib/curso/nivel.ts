@@ -162,6 +162,24 @@ export function aulasDoNivel(n: Nivel) {
   return TRILHA.filter((a) => a.nivel === n);
 }
 
+/**
+ * Os temas de onde a prova de nível sorteia: os do nível **e os de todos os
+ * anteriores**.
+ *
+ * Os anteriores entram porque o degrau 3 não pode deixar o aluno esquecer o
+ * mate em 1 do degrau 1 — é a mesma razão pela qual a fila de revisão mistura
+ * todos os níveis já percorridos. E porque a prova é a única medida do site que
+ * **não diz o tema**: sortear só do degrau de cima entregaria metade da
+ * resposta antes de o aluno olhar o tabuleiro.
+ *
+ * Mora aqui, e não em `lib/tatica/prova.ts`, porque é uma regra sobre a escada
+ * e não sobre o banco de puzzles — e porque `prova.ts` é `server-only`, o que
+ * a deixaria fora do `npm test`.
+ */
+export function temasDaProva(nivel: Nivel): string[] {
+  return NIVEIS.filter((n) => n <= nivel).flatMap((n) => [...temasDoNivel(n)]);
+}
+
 /** Em que nível mora um tema de tática. `undefined` se a tag não é do currículo. */
 export function nivelDoTema(tag: string): Nivel | undefined {
   return BLOCOS.find((b) => b.temas.some((t) => t.tag === tag))?.nivel;
