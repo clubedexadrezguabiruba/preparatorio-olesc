@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import type { Cor } from "@/lib/repertorio/linhas";
-import { diasAteRevisar, type ProgressoDaLinha } from "@/lib/repertorio/treino";
-import { Bolinhas } from "../../Bolinhas";
+import { DEGRAU_APRENDIDA, diasAteRevisar, type ProgressoDaLinha } from "@/lib/repertorio/treino";
+import { Bolinhas } from "@/components/Bolinhas";
 
 /**
  * Trocar de linha sem sair do palco.
@@ -178,7 +178,7 @@ export function SeletorDeLinha({
                     {diasAteRevisar(l.progresso, agora) === 0 ? (
                       <span className="rotulo text-aviso-tinta">hoje</span>
                     ) : null}
-                    <Bolinhas progresso={l.progresso} />
+                    <Bolinhas progresso={l.progresso} total={DEGRAU_APRENDIDA} />
                   </span>
                 )}
               </Link>
