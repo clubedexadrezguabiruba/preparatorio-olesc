@@ -1,22 +1,19 @@
 import Link from "next/link";
 import { Barra } from "@/components/Barra";
-import {
-  META_DA_OLESC,
-  NIVEL,
-  PROVA_DE_NIVEL,
-  type FechamentoDoNivel,
-  type Nivel,
-  type ProximoPasso,
-} from "@/lib/curso/nivel";
+import { PROVA_DE_NIVEL, type FechamentoDoNivel, type Nivel } from "@/lib/curso/nivel";
 
 /**
- * A faixa do nível: onde o aluno está, o que falta, e o que fazer agora.
+ * Os três módulos do degrau: tática, finais e repertório.
  *
- * ## Por que ela é a primeira coisa do painel depois do "Hoje"
+ * ## O que este arquivo era, e o que ele deixou de fazer
  *
- * Porque é a pergunta que o aluno abre o site para responder, e até 2026-09-09
- * o site respondia outra: *"Semana 2 · 19 a 25 de setembro"*. A semana dizia
- * que dia é hoje — coisa que o celular dele já diz — e não dizia onde ele está.
+ * Era a `FaixaDoNivel`: um cartão alto que dizia o nível, a faixa FIDE, o
+ * resumo, três barras, a prova **e** o próximo passo. Ele fazia bem uma coisa e
+ * mal três. Em 2026-09-09 o painel virou treinador e as peças se separaram:
+ *
+ * - *"o que eu faço agora?"* virou `Agora.tsx`, servido por `proximaAcao()`;
+ * - *"onde eu estou?"* virou `Escada.tsx`, a escada dos cinco degraus;
+ * - *"quanto falta em cada frente?"* ficou aqui, e é só isto.
  *
  * ## Três barras, e elas contam coisas diferentes
  *
@@ -28,128 +25,142 @@ import {
  * ## O clamp dos finais aparece na tela, e é isso que o torna honesto
  *
  * O requisito de finais é `min(declarado, publicado)`. Escondê-lo faria o nível
- * 1 fechar com finais em branco e ninguém entenderia por quê; escrevê-lo — *"1
+ * 1 fechar com finais em branco e ninguém entenderia por quê; escrevê-lo — *"2
  * de 4 aulas publicadas"* — diz ao aluno que o degrau fecha com o que existe
  * hoje, e que o curso de finais ainda está sendo escrito. Um requisito que
  * encolhe em silêncio é pior que um requisito alto.
  *
- * ## O acerto é aviso, e nunca cadeado
+ * ## Os dois números soltos vieram parar aqui
  *
- * Nenhuma barra aqui cobra piso de acerto, e isso é decisão escrita em
- * `lib/curso/nivel.ts`: quem pune acerto baixo é a fila de revisão, que já
- * existe e já derruba. Duas réguas de "eu sei isto" na mesma tela seriam uma a
- * mais.
+ * "Puzzles resolvidos" e "Acerto" ocupavam a posição nobre do painel, logo
+ * abaixo do cartão do dia, em dois quadrados sem contexto nenhum. Eles não
+ * mudam o que fazer agora — mas dentro do cartão de tática eles significam
+ * alguma coisa: são o histórico da frente que a barra está medindo.
+ *
+ * **O acerto é aviso, e nunca cadeado.** Nenhuma barra aqui cobra piso de
+ * acerto, e isso é decisão escrita em `lib/curso/nivel.ts`: quem pune acerto
+ * baixo é a fila de revisão, que já existe e já derruba.
  */
-export function FaixaDoNivel({
-  nivel,
+export function Modulos({
   fechamento,
-  passo,
-  conquistado,
+  puzzles,
+  acerto,
+  linhasARevisar,
 }: {
-  nivel: Nivel;
   fechamento: FechamentoDoNivel;
-  passo: ProximoPasso;
-  conquistado: 0 | Nivel;
+  /** Puzzles tentados no curso inteiro. */
+  puzzles: number;
+  /** Percentual de acerto, ou `null` quando ainda não há tentativa nenhuma. */
+  acerto: number | null;
+  linhasARevisar: number;
 }) {
-  const [piso, teto] = NIVEL[nivel].fide;
-  const faixa = teto === null ? `${piso}+` : piso === 0 ? `até ${teto}` : `${piso} a ${teto}`;
-  const daOlesc = META_DA_OLESC.includes(nivel);
-
   return (
-    <section className="cartao flex flex-col gap-4 border-metodo-cheio px-4 py-4 sm:px-5">
-      <div className="flex flex-col gap-1">
-        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h2 className="titulo text-tinta">
-            Nível {nivel} <span className="font-normal text-tinta-fraca">de 5</span>
-          </h2>
-          <span className="text-sm text-tinta-media tabular-nums">FIDE {faixa}</span>
-          {daOlesc ? (
-            <span className="rounded-full border border-metodo-cheio px-2 py-0.5 text-xs font-medium text-metodo-tinta">
-              Meta da OLESC
-            </span>
-          ) : (
-            <span className="rounded-full border border-borda px-2 py-0.5 text-xs text-tinta-fraca">
-              Depois da OLESC
-            </span>
-          )}
-        </div>
-        <p className="text-sm text-tinta-media">{NIVEL[nivel].resumo}</p>
-      </div>
+    <section aria-labelledby="modulos" className="flex flex-col gap-3">
+      <h2 id="modulos" className="rotulo text-tinta-fraca">
+        O degrau, em três frentes
+      </h2>
 
-      <ul className="flex flex-col gap-3">
-        <Trilha
+      {/* Grade no desktop, empilhados no celular: três cartões numa coluna de
+          360 px viram três telas de rolagem, e três numa de 1366 px viram uma
+          coluna estreita com dois terços de vazio ao lado. */}
+      <ul className="grid gap-3 sm:grid-cols-3">
+        <Modulo
           nome="Tática"
+          href="/tatica"
           feitos={fechamento.tatica.feitos}
           de={fechamento.tatica.total}
-          conta={`${fechamento.tatica.feitos} de ${fechamento.tatica.total} temas fechados`}
-          nota="Um tema fecha com as três etapas: aquecimento, série e prova."
-          href="/tatica"
+          conta={`${fechamento.tatica.feitos} de ${fechamento.tatica.total} ${
+            fechamento.tatica.total === 1 ? "tema" : "temas"
+          }`}
+          nota={
+            puzzles > 0
+              ? `${puzzles} ${puzzles === 1 ? "puzzle resolvido" : "puzzles resolvidos"} · ${acerto}% de acerto`
+              : "Um tema fecha com as três etapas: aquecimento, série e prova."
+          }
         />
-        <Trilha
+        <Modulo
           nome="Finais"
+          href="/finais"
           feitos={fechamento.finais.feitos}
           de={fechamento.finais.exigidas}
           conta={
             fechamento.finais.exigidas === 0
-              ? "nenhuma aula deste nível está publicada"
-              : `${fechamento.finais.feitos} de ${fechamento.finais.exigidas} aulas aprendidas`
+              ? "nenhuma ainda"
+              : `${fechamento.finais.feitos} de ${fechamento.finais.exigidas} ${
+                  fechamento.finais.exigidas === 1 ? "aula" : "aulas"
+                }`
           }
           nota={
             fechamento.finais.publicadas < fechamento.finais.declaradas
               ? `${fechamento.finais.publicadas} de ${fechamento.finais.declaradas} aulas publicadas — o nível fecha com o que existe hoje.`
               : "Cada aula é certificada pela tablebase, em três dias diferentes."
           }
-          href="/finais"
         />
-        <Trilha
+        <Modulo
           nome="Repertório"
+          href="/aberturas"
           feitos={Math.min(fechamento.repertorio.feitas, fechamento.repertorio.exigidas)}
           de={fechamento.repertorio.exigidas}
-          conta={`${fechamento.repertorio.feitas} de ${fechamento.repertorio.exigidas} linhas aprendidas`}
-          nota="Quaisquer linhas, contadas no total — quem adiantou repertório atravessa de graça."
-          href="/aberturas"
+          conta={`${fechamento.repertorio.feitas} de ${fechamento.repertorio.exigidas} ${
+            fechamento.repertorio.exigidas === 1 ? "linha" : "linhas"
+          }`}
+          nota={
+            linhasARevisar > 0
+              ? `${linhasARevisar} ${linhasARevisar === 1 ? "linha vence" : "linhas vencem"} hoje na revisão.`
+              : "Quaisquer linhas — quem adiantou repertório atravessa de graça."
+          }
+          alerta={linhasARevisar > 0}
         />
       </ul>
-
-      <Prova nivel={nivel} fechado={fechamento.fechado} conquistado={conquistado} />
-
-      <ProximoPassoCartao passo={passo} />
     </section>
   );
 }
 
-function Trilha({
+function Modulo({
   nome,
+  href,
   feitos,
   de,
   conta,
   nota,
-  href,
+  alerta = false,
 }: {
   nome: string;
+  href: string;
   feitos: number;
   de: number;
   conta: string;
   nota: string;
-  href: string;
+  alerta?: boolean;
 }) {
-  // Denominador zero é estado previsto — é o clamp dos finais com o disco
-  // vazio. A barra cheia é a verdade: não falta nada que exista.
-  const completo = feitos >= de;
+  // Denominador zero é estado previsto — é o clamp dos finais quando nenhuma
+  // aula do nível foi publicada ainda. Ele **não** conta como completo: uma barra
+  // verde cheia em "Finais" com zero aula aprendida seria a tela comemorando o
+  // vazio. Quem explica o zero é a nota, que diz quantas das declaradas existem.
+  const completo = de > 0 && feitos >= de;
 
   return (
-    <li className="flex flex-col gap-1">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-        <Link
-          href={href}
-          className="foco text-sm font-semibold text-metodo-tinta hover:underline"
+    <li>
+      {/* A ordem é título → barra → nota, e a nota leva `mt-auto`.
+
+          Na primeira versão a contagem dividia a linha do título, e a dos finais
+          ("nada publicado neste nível") quebrava em duas: a barra daquele cartão
+          descia 18 px e a fileira das três entortava no meio. Com o título
+          sozinho na primeira linha, as três barras caem no mesmo `y` por
+          construção — e o `mt-auto` da nota faz os três cartões terminarem
+          juntos por mais linhas que ela ocupe. */}
+      <Link href={href} className="cartao-alvo foco flex h-full flex-col gap-2 px-4 py-3.5">
+        <span className="flex items-baseline justify-between gap-x-2">
+          <span className="text-sm font-semibold text-tinta">{nome}</span>
+          <span className="shrink-0 text-xs text-tinta-fraca tabular-nums">{conta}</span>
+        </span>
+        <Barra feitos={feitos} de={de} tom={completo ? "completo" : "metodo"} />
+        <span
+          className={`mt-auto text-xs ${alerta ? "font-semibold text-aviso-tinta" : "text-tinta-fraca"}`}
         >
-          {nome}
-        </Link>
-        <span className="text-xs text-tinta-fraca tabular-nums">{conta}</span>
-      </div>
-      <Barra feitos={feitos} de={de} tom={completo ? "completo" : "metodo"} />
-      <p className="text-xs text-tinta-fraca">{nota}</p>
+          {nota}
+        </span>
+      </Link>
     </li>
   );
 }
@@ -162,8 +173,16 @@ function Trilha({
  * o tema** — as outras quatro medidas de "eu sei isto" (a prova do tema, a
  * tablebase, os degraus do repertório, a fila de revisão) todas dizem qual é o
  * motivo. Na partida ninguém avisa "aqui tem um garfo".
+ *
+ * ## Ela não repete o botão do "Agora"
+ *
+ * Quando a prova é a ação do dia, quem a oferece é o cartão AGORA, com o botão
+ * grande. Aqui ela aparece **fechada** ("abre quando as três barras encherem")
+ * ou **passada** ("o selo é seu") — os dois estados que o AGORA nunca mostra,
+ * porque nenhum deles é uma ação. Dois botões para a mesma prova na mesma tela
+ * seriam a divergência de 9/9 renascendo por outra porta.
  */
-function Prova({
+export function Prova({
   nivel,
   fechado,
   conquistado,
@@ -180,91 +199,12 @@ function Prova({
     );
   }
 
-  if (!fechado) {
-    return (
-      <p className="rounded-lg border border-dashed border-borda px-3 py-2 text-sm text-tinta-fraca">
-        A prova do nível {nivel} abre quando as três barras encherem. São{" "}
-        {PROVA_DE_NIVEL.puzzles} puzzles misturados, sem dizer o tema.
-      </p>
-    );
-  }
+  if (fechado) return null;
 
   return (
-    <Link
-      href={`/nivel/${nivel}/prova`}
-      className="foco flex flex-col gap-0.5 rounded-lg bg-metodo-cheio px-3 py-2.5 text-tinta-inversa transition-opacity hover:opacity-90"
-    >
-      <span className="text-sm font-semibold">Fazer a prova do nível {nivel} →</span>
-      <span className="text-xs opacity-90">
-        {PROVA_DE_NIVEL.puzzles} puzzles misturados, sem dizer o tema. Passa com{" "}
-        {PROVA_DE_NIVEL.paraPassar}.
-      </span>
-    </Link>
+    <p className="cartao-vazio px-4 py-3 text-sm text-tinta-fraca">
+      A prova do nível {nivel} abre quando as três barras encherem. São{" "}
+      {PROVA_DE_NIVEL.puzzles} puzzles misturados, sem dizer o tema.
+    </p>
   );
-}
-
-/**
- * Um alvo só, e a prioridade decidida em `proximoPasso`.
- *
- * "Faça isto agora" com três opções é "escolha o que fazer agora", que é a
- * pergunta que o aluno veio evitar. A fila de revisão vencida passa na frente
- * de conteúdo novo — é o site apontando para a casa antes de deixar mudar de
- * bairro.
- */
-function ProximoPassoCartao({ passo }: { passo: ProximoPasso }) {
-  const alvo = destinoDoPasso(passo);
-
-  return (
-    <div className="flex flex-col gap-1 border-t border-borda-fraca pt-3">
-      <span className="rotulo text-tinta-fraca">Próximo passo</span>
-      {alvo.href ? (
-        <Link
-          href={alvo.href}
-          className="foco w-fit text-base font-semibold text-metodo-tinta hover:underline"
-        >
-          {alvo.diz} →
-        </Link>
-      ) : (
-        <p className="text-base font-semibold text-tinta">{alvo.diz}</p>
-      )}
-      {alvo.porque ? <p className="text-xs text-tinta-fraca">{alvo.porque}</p> : null}
-    </div>
-  );
-}
-
-function destinoDoPasso(passo: ProximoPasso): {
-  diz: string;
-  href: string | null;
-  porque: string | null;
-} {
-  switch (passo.tipo) {
-    case "revisao":
-      return {
-        diz: `Revisar ${passo.vencidos} puzzles vencidos`,
-        href: "/tatica/revisao",
-        porque: "A fila passou de dois dias. Ela vem antes de conteúdo novo.",
-      };
-    case "tema":
-      return { diz: passo.nome, href: passo.href, porque: "O próximo tema do seu nível." };
-    case "aula":
-      return { diz: passo.nome, href: passo.href, porque: "A próxima aula de finais do seu nível." };
-    case "linha":
-      return {
-        diz: `Aprender mais ${passo.faltam} ${passo.faltam === 1 ? "linha" : "linhas"} do repertório`,
-        href: "/aberturas",
-        porque: "Quaisquer linhas. Elas treinam em paralelo, na mesma sessão.",
-      };
-    case "prova-de-nivel":
-      return {
-        diz: `A prova do nível ${passo.nivel}`,
-        href: `/nivel/${passo.nivel}/prova`,
-        porque: "As três trilhas fecharam. Falta o selo.",
-      };
-    case "nivel-fechado":
-      return {
-        diz: "Você percorreu a escada inteira",
-        href: null,
-        porque: "Daqui em diante o treino é a fila de revisão e as partidas do clube.",
-      };
-  }
 }

@@ -38,7 +38,12 @@ export function Barra({
   // O declarado não empurra o medido para fora: os dois juntos param em 100%.
   const parteDeclarada = de > 0 ? Math.min(1 - parte, declarado / de) : 0;
   return (
-    <div className="flex h-1 w-full overflow-hidden rounded-full bg-carta-alta" aria-hidden>
+    // **O trilho é `carta-toque`, e não `carta-alta`.** No tema escuro a
+    // distância entre `carta` e `carta-alta` é 1,24:1, e uma barra a 0% ficava
+    // indistinguível de um fio divisório dentro do cartão — medido na folha do
+    // painel novo: "o aluno não tem nenhum progresso legível". Uma barra vazia
+    // precisa ler como barra vazia, senão ela só existe para quem já avançou.
+    <div className="flex h-1.5 w-full overflow-hidden rounded-full bg-carta-toque" aria-hidden>
       <div
         className={`h-full rounded-full transition-[width] ${
           tom === "completo" ? "bg-metodo-cheio" : "bg-metodo-superficie"

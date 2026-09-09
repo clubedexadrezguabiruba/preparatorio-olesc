@@ -78,3 +78,44 @@ tirado dele. Quando você voltar, o `main` recebe tudo de uma vez.
 ```
 git merge repertorio     # avanço direto, sem conflito: o repertorio já tem tudo
 ```
+
+---
+
+## Bloco 4 — o painel vira o treinador
+
+### 4. A escada tem uma porta, e não cinco
+
+**O que o plano pedia.** Cada degrau da escada dos cinco níveis seria clicável,
+levando à `/trilha` — a leitura literal da trava mole (`TRANCA_DURA = false`).
+
+**O que eu fiz.** Os degraus são visuais, e há **um** link no rodapé do cartão:
+*"A escada inteira, degrau a degrau →"*.
+
+**Por quê.** Cinco links que fazem a mesma promessa são quatro decisões a mais
+numa tela cuja meta declarada é ter **uma**. A trava continua mole onde ela
+significa alguma coisa: `/tatica` mostra os 36 temas e abre qualquer um,
+`/finais` mostra as 49 aulas. O que a escada faz é dizer onde o aluno está — e
+para isso ela não precisa ser um menu.
+
+**Como desfazer.** Trocar o `<span>` de cada degrau por um `<Link>` em
+`app/painel/Escada.tsx`. São seis linhas.
+
+### 5. A lista de tarefas do degrau saiu do painel e ainda não tem casa
+
+**O que aconteceu.** A seção "O seu nível" (`app/painel/Tarefas.tsx`, alimentada
+por `content/tarefas.json`) era uma das oito do painel velho. O plano não a
+listou entre as seis que ficam, e ela saiu.
+
+**O que isso deixou.** `Tarefas.tsx`, `lib/tarefas/tarefas.ts` e
+`lib/tarefas/estado.ts` continuam no disco, testados e válidos, **sem nenhuma
+tela que os renderize**. `content/tarefas.json` continua sendo validado pelo
+`validate:content`. A `Agenda`, que é irmã deles, continua no painel.
+
+**O que eu recomendo, e não fiz sozinho.** A rotina de cada degrau é conteúdo
+que você escreveu e que ainda vale — ela só não é o que o aluno precisa ver na
+primeira tela. A casa natural dela é a `/trilha`, que virou a página do detalhe.
+Isso é trabalho do Bloco 6 e uma decisão de produto sua; enquanto ela não for
+tomada, o código fica de pé e não atrapalha ninguém.
+
+**Como desfazer.** Devolver `<Tarefas estados={...} />` ao `app/painel/page.tsx`
+são cinco linhas — o commit do Bloco 4 tem as que saíram.

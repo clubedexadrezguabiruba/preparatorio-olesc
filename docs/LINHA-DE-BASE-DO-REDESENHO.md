@@ -48,6 +48,34 @@ Os oito títulos, na ordem em que o aluno os encontra:
 Um `/painel` de 1,5 a 2 telas é aceitável. O problema nunca foi rolar; foi rolar
 **antes** de achar informação útil.
 
-## Depois
+## Depois — `/painel`, fim do Bloco 4, commit do treinador
 
-_(preenchido no fim do Bloco 4 e de novo no fim do Bloco 6)_
+Mesma máquina, mesma receita, mesma conta de ensaio zerada.
+
+| O que | Antes | Depois | |
+|---|---|---|---|
+| Altura de rolagem a 360 px | 5.661 px | **1.502 px** | −73% |
+| Isso em telas de 740 px | 7,65 | **2,03** | |
+| Links na página inteira | 50 | **20** | −60% |
+| Links dentro do `<main>` | 50 | **7** | −86% |
+| Destinos distintos | 43 | **8** | |
+| `<section>` no `<main>` | 8 | **4** | |
+
+Os 13 links que sobraram fora do `<main>` são o **cabeçalho**, que não existia
+antes: 7 destinos no topo (desktop) e 6 na barra de baixo (celular). Eles são
+navegação, e a comparação honesta do conteúdo do painel é a linha do `<main>`.
+
+### As três metas, na ordem em que foram cobradas
+
+1. **O "AGORA" inteiro visível sem rolar, com o botão dentro da dobra** — o
+   botão termina em **y = 332** de uma dobra de 740. ✅
+2. **O nível visível sem procurar** — a escada dos cinco degraus termina em
+   **y = 625**, inteira acima da dobra, e o número também está no cabeçalho. ✅
+3. **Alguma barra de progresso visível** — a barra do dia está na dobra. ✅
+4. **Links do painel abaixo de 15** — 7 no `<main>`. ✅
+
+Nenhum estouro horizontal a 360 px.
+
+## Depois — o resto do site
+
+_(preenchido no fim do Bloco 6)_
