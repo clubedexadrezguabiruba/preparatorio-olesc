@@ -1,4 +1,5 @@
 import type { GameOutcome } from "../chess/status.ts";
+import { CONSELHO_DO_EMPATE, VEREDITO } from "./falas.ts";
 
 /**
  * O juiz da etapa 5 (plano da F1, §5).
@@ -36,19 +37,11 @@ export type PracticeVerdict =
  * criaria duas verdades.
  */
 function conselhoDoEmpate(reason: string): string {
-  if (reason.startsWith("Rei afogado")) {
-    return "O rei adversário ficou sem lance legal sem estar em xeque. Encolha a caixa deixando sempre uma casa de fuga, até a hora do mate.";
-  }
-  if (reason.startsWith("Material insuficiente")) {
-    return "Sem a peça não há mate: a partida acabou no momento em que ela caiu.";
-  }
-  if (reason.startsWith("50 lances")) {
-    return "A regra dos 50 lances fecha a partida quando não há progresso. A caixa precisa encolher a cada lance — cada lance de espera é um lance a menos.";
-  }
-  if (reason.startsWith("A posição repetiu")) {
-    return "A posição voltou três vezes ao mesmo lugar: os lances estavam se anulando. Cada lance precisa tirar uma casa do rei adversário.";
-  }
-  return "O objetivo era vencer.";
+  if (reason.startsWith("Rei afogado")) return CONSELHO_DO_EMPATE.afogamento;
+  if (reason.startsWith("Material insuficiente")) return CONSELHO_DO_EMPATE.materialInsuficiente;
+  if (reason.startsWith("50 lances")) return CONSELHO_DO_EMPATE.cinquentaLances;
+  if (reason.startsWith("A posição repetiu")) return CONSELHO_DO_EMPATE.repeticao;
+  return CONSELHO_DO_EMPATE.outro;
 }
 
 /**
@@ -67,10 +60,7 @@ export function judgePractice(
   if (vitoriaDoAluno) {
     return {
       kind: "passed",
-      text:
-        goal === "win"
-          ? `${outcome.reason} Você venceu o computador — a técnica saiu inteira contra resistência de verdade.`
-          : `${outcome.reason} Mais do que o pedido: bastava empatar, e você venceu.`,
+      text: `${outcome.reason} ${VEREDITO.venceu(goal)}`,
     };
   }
 
@@ -78,7 +68,7 @@ export function judgePractice(
     if (goal === "draw") {
       return {
         kind: "passed",
-        text: `${outcome.reason} O empate era o objetivo — segurou a posição.`,
+        text: `${outcome.reason} ${VEREDITO.empatouQuandoBastava}`,
       };
     }
     return { kind: "failed", tone: "warn", text: `${outcome.reason} ${conselhoDoEmpate(outcome.reason)}` };
@@ -88,6 +78,6 @@ export function judgePractice(
   return {
     kind: "failed",
     tone: "bad",
-    text: `${outcome.reason} O computador venceu. Recomece — o método precisa sair inteiro, do começo ao mate.`,
+    text: `${outcome.reason} ${VEREDITO.perdeu}`,
   };
 }

@@ -13,6 +13,7 @@ import { applyUci } from "@/lib/chess/fen";
 import { refusalReason } from "@/lib/chess/refusal";
 import { fiftyMoveProgress, readOutcome } from "@/lib/chess/status";
 import { engineTotalBytes, formatBytes } from "@/lib/engine/build";
+import { AVANCO, PARTIDA, TREINO } from "@/lib/lesson/falas";
 import { useEngine } from "@/lib/engine/useEngine";
 import { judgePractice, type PracticeGoal } from "@/lib/lesson/practice";
 import type { Position } from "@/lib/lesson/schema";
@@ -271,7 +272,7 @@ export function PracticeStage({
           // de onde vier.
           if (!applyUci(boardFen, uci)) {
             setSearchError({
-              text: "O computador devolveu um lance impossível nesta posição.",
+              text: PARTIDA.lanceImpossivel,
               key: practiceKey,
             });
             return;
@@ -383,16 +384,14 @@ export function PracticeStage({
 
             <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rotulo text-tinta-fraca">
               {/* O empate por falta de progresso deixa de cair do céu no lance 100. */}
-              <span>
-                Sem progresso: {progress.used} de {progress.limit}
-              </span>
-              {attempt > 1 && <span>· tentativa {attempt}</span>}
-              {thinking && <span className="text-metodo/80">· pensando…</span>}
+              <span>{PARTIDA.semProgresso(progress.used, progress.limit)}</span>
+              {attempt > 1 && <span>· {TREINO.vez(attempt)}</span>}
+              {thinking && <span className="text-metodo/80">· {PARTIDA.pensando}</span>}
             </p>
 
             <FeedbackPanel
               message={panel}
-              placeholder="Partida de verdade: o computador defende com tudo o que sabe. Quem decide é o resultado, não o lance."
+              placeholder={PARTIDA.esperando}
               retrato={<ProfessorSeApresenta />}
             />
 
@@ -403,7 +402,7 @@ export function PracticeStage({
             <div className="flex min-h-0 flex-col gap-4 overflow-y-auto">
               {engineStatus === "loading" && (
                 <p className="rounded-lg border border-dica-superficie/30 bg-dica-superficie/5 px-4 py-3 text-sm leading-relaxed text-dica-tinta">
-                  Carregando o computador — {formatBytes(engineTotalBytes())}, só na primeira vez.
+                  {PARTIDA.carregando(formatBytes(engineTotalBytes()))}
                 </p>
               )}
 
@@ -411,8 +410,7 @@ export function PracticeStage({
                 <div className="flex flex-col gap-3 rounded-lg border border-aviso-superficie/30 bg-aviso-superficie/5 px-4 py-3">
                   {/* Âmbar, não rubro: não foi o aluno que errou. */}
                   <p className="text-sm leading-relaxed text-aviso-tinta">
-                    {searchError ?? "Não consegui carregar o computador."} Confira a conexão e tente
-                    de novo. As etapas com ajuda e sem ajuda continuam disponíveis.
+                    {searchError ?? PARTIDA.naoCarregou} {PARTIDA.tenteDeNovoDepois}
                   </p>
                   <div>
                     <LessonButton
@@ -422,7 +420,7 @@ export function PracticeStage({
                         retry();
                       }}
                     >
-                      Tentar de novo
+                      {PARTIDA.tentarDeNovo}
                     </LessonButton>
                   </div>
                 </div>
@@ -434,17 +432,18 @@ export function PracticeStage({
             <AulaRodape>
               {verdict.kind === "passed" && onFinish && (
                 <LessonButton variant="primary" onClick={onFinish}>
-                  {finishLabel ?? "Continuar"}
+                  {finishLabel ?? AVANCO.padrao}
                 </LessonButton>
               )}
-              {verdict.kind === "failed" && (
-                <LessonButton variant="primary" onClick={restart}>
-                  Recomeçar a partida
+              {/* Um botão só, como no treino: os dois "Recomeçar a partida"
+                  chamavam a mesma função e diferiam só na cor. */}
+              {(verdict.kind !== "playing" || (moves?.length ?? 0) > 0) && (
+                <LessonButton
+                  variant={verdict.kind === "failed" ? "primary" : "default"}
+                  onClick={restart}
+                >
+                  {PARTIDA.recomecar}
                 </LessonButton>
-              )}
-              {(verdict.kind === "passed" ||
-                (verdict.kind === "playing" && (moves?.length ?? 0) > 0)) && (
-                <LessonButton onClick={restart}>Recomeçar a partida</LessonButton>
               )}
             </AulaRodape>
           </>

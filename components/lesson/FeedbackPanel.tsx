@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { TREINO } from "@/lib/lesson/falas";
 import type { MessageTone, PanelMessage } from "@/lib/lesson/store";
 
 /**
@@ -69,7 +70,9 @@ export function FeedbackPanel({
         <span key={message.seq}>
           {done && (
             <strong className="mr-2 inline-block rounded bg-metodo/20 px-2 py-0.5 text-xs font-bold uppercase tracking-[0.14em] text-metodo-selo">
-              Etapa concluída.
+              {/* Era "Etapa concluída." — duas palavras de bastidor num selo de
+                  duas palavras. O aluno não precisa saber que existe uma etapa. */}
+              {TREINO.pronto}
             </strong>
           )}
           {message.text}
