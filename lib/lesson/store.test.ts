@@ -7,7 +7,6 @@ import { lessonSchema, type MoveTree } from "./schema.ts";
 import {
   restingMessage,
   restingPracticeMessage,
-  reviewKey,
   useLessonStore,
   type TreeKey,
   type TreeState,
@@ -21,8 +20,15 @@ import { judgeMove, throwsWinAway } from "./tree.ts";
  * guardado aqui não existe mais quando o aluno volta.
  */
 
+/**
+ * A aula vem de `content/fixtures/`, e não de `content/lessons/` — ver a mesma
+ * nota em `tree.test.ts`. Um teste de **store** não pode ficar vermelho porque
+ * uma decisão editorial tirou uma aula do disco.
+ */
 const lesson = lessonSchema.parse(
-  JSON.parse(readFileSync(path.join(process.cwd(), "content/lessons/N0-R-MATE.json"), "utf8")),
+  JSON.parse(
+    readFileSync(path.join(process.cwd(), "content/fixtures/lessons/N1-FIXTURE-KRK.json"), "utf8"),
+  ),
 );
 const guided = lesson.stages.guided!;
 
@@ -102,7 +108,7 @@ test("etapa concluída continua concluída depois de sair e voltar", () => {
 
   // O aluno vai para outra etapa e volta — é isso que desmonta o `TreeStage` e
   // apaga a mensagem do painel.
-  useLessonStore.getState().goToStage("solo");
+  useLessonStore.getState().goToStage("practice");
   useLessonStore.getState().goToStage("guided");
 
   const state = useLessonStore.getState().trees.guided!;
@@ -124,23 +130,26 @@ test("etapa concluída continua concluída depois de sair e voltar", () => {
 });
 
 test("tentativa encerrada continua explicada depois de sair e voltar", () => {
-  const solo = lesson.stages.solo!;
+  // Rodava na etapa 4, que saiu do formato. A árvore que sobrou é a *com
+  // ajuda*, e o mecanismo medido é o mesmo: `treeFail` guarda o motivo, e sair
+  // da etapa e voltar tem de devolvê-lo ao painel.
+  //
   // Na raiz não há o que errar de fatal: com a torre longe do rei preto, todo
   // lance legal ainda ganha. O lance que joga a vitória fora aparece um nó
   // adiante, quando a torre já pode ser capturada.
-  const { node, losing } = advanceToLosingChance("solo", solo);
+  const { node, losing } = advanceToLosingChance("guided", guided);
   const verdict = judgeMove(lesson, node, losing);
   assert.ok(verdict.kind !== "method", "um lance fora de `winningMoves` não pode ser o método");
   assert.ok(throwsWinAway(verdict), "o lance escolhido precisa mesmo jogar a vitória fora");
 
   const text = `${verdict.text} Sem a vitória não há o que treinar: a tentativa acabou.`;
-  useLessonStore.getState().treeFail("solo", { tone: "bad", text });
+  useLessonStore.getState().treeFail("guided", { tone: "bad", text });
   useLessonStore.getState().say("bad", text, losing.slice(2, 4));
 
+  useLessonStore.getState().goToStage("practice");
   useLessonStore.getState().goToStage("guided");
-  useLessonStore.getState().goToStage("solo");
 
-  const state = useLessonStore.getState().trees.solo!;
+  const state = useLessonStore.getState().trees.guided!;
   assert.equal(state.status, "failed");
   assert.equal(useLessonStore.getState().message, null, "sair da etapa apaga a mensagem");
 
@@ -149,25 +158,22 @@ test("tentativa encerrada continua explicada depois de sair e voltar", () => {
   assert.equal(resting?.tone, "bad");
   assert.notEqual(resting?.done, true, "tentativa encerrada não é conclusão: sem selo");
   assert.equal(
-    fenOnReentry(state, solo),
+    fenOnReentry(state, guided),
     node.fen,
     "o lance foi recusado, então a posição continua a do nó",
   );
 });
 
-test("teto de lances estourado: o texto do limite também sobrevive", () => {
-  const solo = lesson.stages.solo!;
-  useLessonStore.getState().open(lesson.id, "solo", { solo: solo.root });
-
-  const text = `O teto de ${solo.moveLimit} lances acabou e o mate não saiu. Recomece: o método precisa caber no limite.`;
-  useLessonStore.getState().treeFail("solo", { tone: "warn", text });
-  useLessonStore.getState().goToStage("guided");
-  useLessonStore.getState().goToStage("solo");
-
-  const resting = restingMessage(useLessonStore.getState().trees.solo);
-  assert.equal(resting?.text, text);
-  assert.equal(resting?.tone, "warn", "o teto avisa, não repreende: o tom é o âmbar");
-});
+/*
+ * **O teste do teto de lances saiu.** Ele montava a mensagem "o teto de N
+ * lances acabou" e provava que o âmbar dela sobrevivia a sair da etapa e
+ * voltar. O `moveLimit` era campo da etapa 4, que não existe mais: quem limita
+ * a partida sem ajuda hoje é a regra de falta de progresso, e ela é do
+ * `PracticeStage` — coberta pelos testes de prática logo abaixo.
+ *
+ * O que o teste media além disso — que `treeFail` com tom `warn` sobrevive — é
+ * o mesmo mecanismo do teste acima, com outro tom.
+ */
 
 test("sem desfecho não há mensagem de descanso", () => {
   useLessonStore.getState().open(lesson.id, "guided", { guided: guided.root });
@@ -176,10 +182,10 @@ test("sem desfecho não há mensagem de descanso", () => {
 });
 
 test("recomeçar apaga a conclusão e devolve a etapa à raiz", () => {
-  playScriptedLine("solo", lesson.stages.solo!);
-  useLessonStore.getState().treeRestart("solo");
+  playScriptedLine("guided", guided);
+  useLessonStore.getState().treeRestart("guided");
 
-  const state = useLessonStore.getState().trees.solo!;
+  const state = useLessonStore.getState().trees.guided!;
   assert.equal(state.status, "playing");
   assert.equal(state.end, null, "a conclusão da tentativa anterior não pode sobreviver");
   assert.equal(state.failure, null);
@@ -187,25 +193,23 @@ test("recomeçar apaga a conclusão e devolve a etapa à raiz", () => {
   assert.equal(state.nodeId, state.rootId);
   assert.equal(state.studentMoves, 0);
   assert.equal(state.attempt, 2);
-  assert.equal(fenOnReentry(state, lesson.stages.solo!), lesson.stages.solo!.nodes[state.rootId].fen);
+  assert.equal(fenOnReentry(state, guided), guided.nodes[state.rootId].fen);
 });
 
 test("o lance que dá mate conta como lance do aluno", () => {
-  const solo = lesson.stages.solo!;
-  playScriptedLine("solo", solo);
+  playScriptedLine("guided", guided);
 
   let expected = 0;
-  let nodeId = solo.root;
+  let nodeId = guided.root;
   for (;;) {
     expected += 1;
-    const expect = solo.nodes[nodeId].expects.find((e) => !e.generated)!;
+    const expect = guided.nodes[nodeId].expects.find((e) => !e.generated)!;
     if (expect.next === undefined) break;
     nodeId = expect.next;
   }
 
-  const state = useLessonStore.getState().trees.solo!;
+  const state = useLessonStore.getState().trees.guided!;
   assert.equal(state.studentMoves, expected);
-  assert.ok(state.studentMoves <= solo.moveLimit, "o roteiro do autor cabe no teto da etapa");
 });
 
 /* ------------------------------------------------------------------ *
@@ -219,7 +223,7 @@ const PRACTICE_FEN = "8/8/8/8/8/2k5/8/2K4R w - - 0 1";
 function openWithPractice() {
   useLessonStore
     .getState()
-    .open(lesson.id, "practice", { solo: lesson.stages.solo!.root }, [
+    .open(lesson.id, "practice", { guided: guided.root }, [
       { key: "practice", positionId: practice.positionId, startFen: PRACTICE_FEN },
     ]);
 }
@@ -245,7 +249,7 @@ test("a partida sobrevive a sair da etapa e voltar, reproduzindo a mesma posiç�
 
   const antes = replay(useLessonStore.getState().practices.practice!).fen();
 
-  useLessonStore.getState().goToStage("solo");
+  useLessonStore.getState().goToStage("guided");
   useLessonStore.getState().goToStage("practice");
 
   const depois = replay(useLessonStore.getState().practices.practice!).fen();
@@ -274,7 +278,7 @@ test("o desfecho volta ao painel depois de sair e voltar", () => {
     passed: false,
   });
 
-  useLessonStore.getState().goToStage("solo");
+  useLessonStore.getState().goToStage("guided");
   useLessonStore.getState().goToStage("practice");
 
   const painel = restingPracticeMessage(useLessonStore.getState().practices.practice);
@@ -311,42 +315,45 @@ test("lance depois do fim da partida é recusado pela store", () => {
   assert.deepEqual(useLessonStore.getState().practices.practice!.moves, []);
 });
 
-test("a etapa 4 vencida liga o selo, e recomeçá-la não o desliga", () => {
-  // O critério de domínio é "na mesma sessão" (§6 do plano): quem zera é trocar
-  // de aula. Recomeçar a etapa 4 por curiosidade não pode tirar o que foi feito.
-  playScriptedLine("solo", lesson.stages.solo!);
-  assert.equal(useLessonStore.getState().cleared.solo, true);
-
-  useLessonStore.getState().treeRestart("solo");
-  assert.equal(useLessonStore.getState().cleared.solo, true, "o selo não é revogável");
+test("a árvore vencida NÃO liga selo nenhum — quem afere é a partida", () => {
+  // **Isto é o contrário do que valia até 2026-09-08.** A etapa 4 vencida
+  // ligava metade do critério de domínio, e o teste de então provava que
+  // recomeçá-la não revogava o selo. A etapa saiu; a árvore que sobrou é a
+  // *com ajuda*, que por decisão do Doug é aquecimento e não entra na conta.
+  //
+  // O teste continua aqui, com o sinal trocado, porque a afirmação nova é tão
+  // fácil de quebrar quanto a antiga: bastaria alguém devolver um `cleared` ao
+  // `treeAdvance` para a aula passar a ser dada por feita sem partida nenhuma.
+  playScriptedLine("guided", guided);
+  assert.deepEqual(
+    useLessonStore.getState().cleared,
+    { practice: false },
+    "terminar a árvore com ajuda não pode carimbar passada",
+  );
 });
 
-test("só a etapa 5 vencida liga o selo da prática — revisão não conta", () => {
-  useLessonStore.getState().open(lesson.id, "practice", {}, [
-    { key: "practice", positionId: practice.positionId, startFen: PRACTICE_FEN },
-    { key: reviewKey("pos-n0-rmate-fx-d"), positionId: "pos-n0-rmate-fx-d", startFen: PRACTICE_FEN },
-  ]);
-
-  useLessonStore.getState().practiceFinish(reviewKey("pos-n0-rmate-fx-d"), {
-    result: "win-white",
-    text: "venceu a revisão",
-    passed: true,
-  });
-  assert.equal(useLessonStore.getState().cleared.practice, false, "revisão não afere domínio");
+test("vencer a partida é o que liga o selo", () => {
+  openWithPractice();
+  assert.equal(useLessonStore.getState().cleared.practice, false);
 
   useLessonStore.getState().practiceFinish("practice", {
     result: "win-white",
-    text: "venceu a prática",
+    text: "venceu a partida",
     passed: true,
   });
   assert.equal(useLessonStore.getState().cleared.practice, true);
 });
 
 test("abrir a aula zera o selo — é o que define a mesma sessão", () => {
-  playScriptedLine("solo", lesson.stages.solo!);
-  assert.equal(useLessonStore.getState().cleared.solo, true);
   openWithPractice();
-  assert.deepEqual(useLessonStore.getState().cleared, { solo: false, practice: false });
+  useLessonStore.getState().practiceFinish("practice", {
+    result: "win-white",
+    text: "venceu",
+    passed: true,
+  });
+  assert.equal(useLessonStore.getState().cleared.practice, true);
+  openWithPractice();
+  assert.deepEqual(useLessonStore.getState().cleared, { practice: false });
 });
 
 /* ------------------------------------------------------------------ *
@@ -359,31 +366,26 @@ test("abrir a aula zera o selo — é o que define a mesma sessão", () => {
  * executando duas vezes.
  */
 type StartAt = {
-  stage: "objective" | "example" | "guided";
-  scene: number;
-  step: number;
+  stage: "objective" | "guided" | "practice";
   trees?: Partial<Record<TreeKey, { nodeId: string; studentMoves: number }>>;
 };
 
 function montar(startAt?: StartAt) {
   const store = useLessonStore.getState();
-  const disponiveis = ["objective", "example", "guided", "solo"] as const;
+  const disponiveis = ["objective", "guided", "practice"] as const;
   const inicial =
     startAt && (disponiveis as readonly string[]).includes(startAt.stage)
       ? startAt.stage
       : disponiveis[0];
   store.open(lesson.id, inicial, { guided: guided.root });
-  if (startAt && inicial === startAt.stage) store.setExample(startAt.scene, startAt.step);
   for (const [key, onde] of Object.entries(startAt?.trees ?? {})) {
     if (onde) store.treeSeek(key as TreeKey, onde.nodeId, onde.studentMoves);
   }
 }
 
-test("montar o motor num lugar escolhido abre exatamente ali", () => {
-  montar({ stage: "example", scene: 1, step: 6 });
-  const estado = useLessonStore.getState();
-  assert.equal(estado.stage, "example");
-  assert.deepEqual(estado.example, { scene: 1, step: 6 });
+test("montar o motor numa etapa escolhida abre exatamente ali", () => {
+  montar({ stage: "practice" });
+  assert.equal(useLessonStore.getState().stage, "practice");
 });
 
 test("montar duas vezes — o que o modo estrito faz — não perde o lugar", () => {
@@ -394,23 +396,31 @@ test("montar duas vezes — o que o modo estrito faz — não perde o lugar", ()
   //
   // A correção é de ordem, não de estado: a etapa entra *na* carga. Por isso a
   // prova é executar a montagem duas vezes seguidas.
-  montar({ stage: "example", scene: 1, step: 6 });
-  montar({ stage: "example", scene: 1, step: 6 });
-  const estado = useLessonStore.getState();
-  assert.equal(estado.stage, "example", "a segunda carga não pode devolver o motor à etapa 1");
-  assert.deepEqual(estado.example, { scene: 1, step: 6 });
+  //
+  // Os três testes deste bloco mediam a cena e o passo do exemplo, que saíram
+  // do formato junto com a etapa 2. O que eles provavam de verdade — que a
+  // ORDEM da carga preserva o lugar — passou a ser medido na etapa e no nó da
+  // árvore, que é o que sobrou de "lugar" numa aula de três etapas.
+  montar({ stage: "practice" });
+  montar({ stage: "practice" });
+  assert.equal(
+    useLessonStore.getState().stage,
+    "practice",
+    "a segunda carga não pode devolver o motor à etapa 1",
+  );
 });
 
 test("a restauração feita depois da carga é o que se perdia", () => {
   // O desenho antigo, escrito aqui para o teste acima não ser uma afirmação
-  // solta: guardar, carregar, devolver — e a carga acontecer de novo.
+  // solta: carregar, mudar de etapa, e a carga acontecer de novo.
   montar();
-  useLessonStore.getState().goToStage("example");
-  useLessonStore.getState().setExample(1, 6);
+  useLessonStore.getState().goToStage("practice");
   montar(); // o segundo `open()` do modo estrito
-  const estado = useLessonStore.getState();
-  assert.equal(estado.stage, "objective", "é exatamente esta perda que o startAt evita");
-  assert.deepEqual(estado.example, { scene: 0, step: 0 });
+  assert.equal(
+    useLessonStore.getState().stage,
+    "objective",
+    "é exatamente esta perda que o startAt evita",
+  );
 });
 
 test("o nó da árvore também sobrevive à remontagem", () => {
@@ -424,8 +434,6 @@ test("o nó da árvore também sobrevive à remontagem", () => {
 
   const alvo: StartAt = {
     stage: "guided",
-    scene: 0,
-    step: 0,
     trees: { guided: { nodeId: segundo, studentMoves: 1 } },
   };
   montar(alvo);
@@ -441,7 +449,7 @@ test("o nó da árvore também sobrevive à remontagem", () => {
 });
 
 test("pedir uma etapa que a aula não tem cai na primeira disponível", () => {
-  montar({ stage: "example", scene: 0, step: 0 });
+  montar({ stage: "practice" });
   const store = useLessonStore.getState();
   store.open(lesson.id, "objective", { guided: guided.root });
   assert.equal(useLessonStore.getState().stage, "objective");

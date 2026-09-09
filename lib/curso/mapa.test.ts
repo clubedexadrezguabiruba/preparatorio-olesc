@@ -3,14 +3,17 @@ import test from "node:test";
 import { AULA_ZERADA, TRILHA } from "../finais/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
-import { DICAS } from "../meiojogo/conteudo.ts";
 import { contarAberto, montarMapa, MODULO, type ProgressoParaOMapa } from "./mapa.ts";
-import { estaAberto, NIVEIS, vocEstaAqui } from "./trilha.ts";
+import { NIVEIS, vocEstaAqui } from "./trilha.ts";
+import { depoisDaPassada, zerada } from "../finais/escada.ts";
 
 /**
- * O mapa é a única tela que soma os três módulos, e por isso a única em que um
- * erro de contagem passa despercebido: 36 temas, 49 aulas e 30 dicas somam 115
- * cartões, e ninguém confere 115 cartões a olho.
+ * O mapa é a única tela que soma os módulos, e por isso a única em que um erro
+ * de contagem passa despercebido: 36 temas de tática e 49 aulas de finais dão
+ * 85 cartões, e ninguém confere 85 cartões a olho.
+ *
+ * Os testes de meio-jogo saíram em 2026-09-08, com o módulo — e com eles as 30
+ * dicas que faziam a soma passar de cem.
  */
 
 // A semana 4 é a última do preparatório: com ela, nenhum item fica "por-abrir"
@@ -21,7 +24,6 @@ const VAZIO: ProgressoParaOMapa = {
   temaAberto: () => true,
   finais: new Map(),
   aulasPublicadas: new Set(TRILHA.map((a) => a.id)),
-  dicasLidas: new Set(),
   semana: 4,
 };
 
@@ -35,9 +37,7 @@ test("o mapa carrega o curso inteiro, sem sobra e sem repetido", () => {
   const mapa = montarMapa(VAZIO);
   assert.equal(itens(mapa, "tatica").length, TEMAS.length);
   assert.equal(itens(mapa, "finais").length, TRILHA.length);
-  assert.equal(itens(mapa, "meio-jogo").length, DICAS.length);
-
-  for (const modulo of ["tatica", "finais", "meio-jogo"]) {
+  for (const modulo of ["tatica", "finais"]) {
     const ids = itens(mapa, modulo).map((i) => i.id);
     assert.equal(new Set(ids).size, ids.length, `${modulo}: item repetido no mapa`);
   }
@@ -51,13 +51,13 @@ test("os quatro níveis existem, mesmo os que ficarem vazios", () => {
   }
 });
 
-test("os módulos vêm na ordem da rotina: tática, finais, meio-jogo", () => {
+test("os módulos vêm na ordem da rotina: tática e depois finais", () => {
   const mapa = montarMapa(VAZIO);
   for (const modulos of mapa.values()) {
     const nomes = modulos.map((m) => m.modulo);
     assert.deepEqual(nomes, [...nomes].sort(
       (a, b) =>
-        ["tatica", "finais", "meio-jogo"].indexOf(a) - ["tatica", "finais", "meio-jogo"].indexOf(b),
+        ["tatica", "finais"].indexOf(a) - ["tatica", "finais"].indexOf(b),
     ));
   }
 });
@@ -75,27 +75,40 @@ test("a barra da tática não passa de 100% quando a prova repete puzzle", () =>
   assert.equal(item?.feitos, PUZZLES_POR_TEMA);
 });
 
-test("aula dominada conta 1; não dominada conta 0", () => {
+test("aula aprendida conta 1; uma vitória só ainda conta 0", () => {
+  // **A segunda metade deste teste é a mudança de 2026-09-08.** `praticaOk`
+  // sozinho valia 1 — era o critério antigo, "venceu uma vez, para sempre".
+  // Hoje o mapa conta o degrau 3, e uma vitória põe a aula no degrau 1.
   const curta = TRILHA.find((a) => a.formato === "curta");
   assert.ok(curta, "a trilha precisa de pelo menos uma aula curta para este teste");
 
   const naoFeita = montarMapa(VAZIO);
   assert.equal(itens(naoFeita, "finais").find((i) => i.id === curta.id)?.feitos, 0);
 
+  const umaVitoria = montarMapa({
+    ...VAZIO,
+    finais: new Map([
+      [
+        curta.id,
+        {
+          ...AULA_ZERADA,
+          praticaOk: true,
+          escada: depoisDaPassada(zerada(), true, "2026-09-05T14:00:00.000Z"),
+        },
+      ],
+    ]),
+  });
+  assert.equal(itens(umaVitoria, "finais").find((i) => i.id === curta.id)?.feitos, 0);
+
+  let escada = zerada();
+  for (const dia of ["2026-09-05", "2026-09-07", "2026-09-12"]) {
+    escada = depoisDaPassada(escada, true, `${dia}T14:00:00.000Z`);
+  }
   const feita = montarMapa({
     ...VAZIO,
-    finais: new Map([[curta.id, { ...AULA_ZERADA, praticaOk: true }]]),
+    finais: new Map([[curta.id, { ...AULA_ZERADA, praticaOk: true, escada }]]),
   });
   assert.equal(itens(feita, "finais").find((i) => i.id === curta.id)?.feitos, 1);
-});
-
-test("as dicas de meio-jogo estão todas abertas, e a leitura conta", () => {
-  const mapa = montarMapa({ ...VAZIO, dicasLidas: new Set([DICAS[0].id]) });
-  const dicas = itens(mapa, "meio-jogo");
-  assert.ok(dicas.every((i) => estaAberto(i)), "nenhuma dica espera sábado");
-  assert.ok(dicas.every((i) => i.sabado === null), "e nenhuma delas tem sábado para esperar");
-  assert.equal(dicas.find((i) => i.id === DICAS[0].id)?.feitos, 1);
-  assert.equal(dicas.filter((i) => i.feitos === 1).length, 1);
 });
 
 test("`contarAberto` ignora o que ainda não abriu", () => {
@@ -172,16 +185,15 @@ test('"você está aqui" cai no primeiro nível com trabalho aberto por fazer', 
     ...VAZIO,
     temaAberto: () => false,
     aulasPublicadas: new Set(),
-    dicasLidas: new Set(DICAS.map((d) => d.id)),
   });
   assert.equal(vocEstaAqui(nadaAberto), null);
 });
 
 test("todo módulo tem rótulo e diz o que a barra dele conta", () => {
-  // A tela põe as três barras lado a lado, e elas contam coisas diferentes —
-  // puzzle medido, aula certificada e leitura declarada. Uma barra sem essa
-  // frase ao lado vira um percentual que o professor não sabe defender.
-  for (const chave of ["tatica", "finais", "meio-jogo"] as const) {
+  // A tela põe as duas barras lado a lado, e elas contam coisas diferentes —
+  // puzzle medido e aula certificada pela tablebase. Uma barra sem essa frase
+  // ao lado vira um percentual que o professor não sabe defender.
+  for (const chave of ["tatica", "finais"] as const) {
     assert.ok(MODULO[chave].nome.length > 2);
     assert.ok(MODULO[chave].conta.length > 20);
     assert.ok(MODULO[chave].href.startsWith("/"));

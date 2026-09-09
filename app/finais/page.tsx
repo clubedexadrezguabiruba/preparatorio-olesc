@@ -1,19 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Barra } from "@/components/Barra";
+import { Bolinhas } from "@/components/Bolinhas";
 import { EscolhaDaSemana } from "@/components/curso/EscolhaDaSemana";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { porExtenso, sabadoDaSemana } from "@/lib/curso/calendario";
 import { PARAMETRO_DA_SEMANA, semanaDaTela } from "@/lib/curso/semana";
 import { aulasPublicadas, indiceDeAulas } from "@/lib/finais/conteudo";
+import { DEGRAU_APRENDIDA } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import {
   AULA_ZERADA,
   aulasAbertas,
   CLASSE,
   CLASSES,
+  aprendidasDaTrilha,
   daClasse,
-  dominadas,
   estadoDaAula,
   FORMATO,
   proximaAula,
@@ -70,7 +72,7 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
   const abertas = aulasAbertas(publicadas, semana);
   const idsAbertos = new Set(abertas.map((a) => a.id));
   const progresso = await progressoDeFinais(perfil.id);
-  const feitas = dominadas(abertas, progresso);
+  const feitas = aprendidasDaTrilha(abertas, progresso);
   const proxima = proximaAula(abertas, progresso);
 
   const naTrilha = new Set(TRILHA.map((a) => a.id));
@@ -101,7 +103,7 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
       ) : (
         <section className="flex flex-col gap-2 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
           <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-            <span className="rotulo text-tinta-fraca">Aulas dominadas</span>
+            <span className="rotulo text-tinta-fraca">Aulas aprendidas</span>
             <span className="text-sm text-tinta-media tabular-nums">
               {feitas.size} de {abertas.length} abertas
             </span>
@@ -130,7 +132,7 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
         // lado continua sobre as abertas, que é o que dá para fazer hoje.
         const aulas = daClasse(TRILHA, classe);
         const abertasAqui = aulas.filter((a) => idsAbertos.has(a.id));
-        const dominadasAqui = abertasAqui.filter((a) => feitas.has(a.id)).length;
+        const aprendidasAqui = abertasAqui.filter((a) => feitas.has(a.id)).length;
 
         return (
           <section key={classe} className="flex flex-col gap-3">
@@ -140,7 +142,7 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
                   {CLASSE[classe].nome} · {CLASSE[classe].faixa}
                 </h2>
                 <span className="text-xs text-tinta-fraca tabular-nums">
-                  {dominadasAqui} de {abertasAqui.length} dominadas
+                  {aprendidasAqui} de {abertasAqui.length} aprendidas
                   {abertasAqui.length < aulas.length ? ` · ${aulas.length} no total` : ""}
                 </span>
               </div>
@@ -168,7 +170,7 @@ export default async function Finais({ searchParams }: PageProps<"/finais">) {
         <Link href="/trilha" className="font-medium underline">
           Veja a trilha do curso inteiro
         </Link>{" "}
-        — tática, finais e meio-jogo, por nível.
+        — tática e finais, por nível.
       </p>
 
       {bancada.length > 0 ? (
@@ -216,12 +218,12 @@ function Cartao({ aula, progresso }: { aula: AulaDaTrilha; progresso: ProgressoD
       <span
         aria-hidden
         className={`flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-bold tabular-nums ${
-          estado === "dominada"
+          estado === "aprendida"
             ? "border-metodo-cheio bg-metodo-cheio text-tinta-inversa"
             : "border-borda-forte text-tinta-fraca"
         }`}
       >
-        {estado === "dominada" ? "✓" : aula.ordem}
+        {estado === "aprendida" ? "✓" : aula.ordem}
       </span>
 
       <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -229,6 +231,13 @@ function Cartao({ aula, progresso }: { aula: AulaDaTrilha; progresso: ProgressoD
         <p className="text-xs text-tinta-fraca">
           {FORMATO[aula.formato].nome} · {FORMATO[aula.formato].etapas}
         </p>
+        {/* As bolinhas só onde há escada. A aula de leitura não tem partida
+            para vencer, e três círculos vazios ao lado dela prometeriam um
+            caminho que ela não tem — o dela é a declaração, e o `Estado` ao
+            lado já a diz. */}
+        {aula.formato !== "leitura" && (
+          <Bolinhas progresso={progresso.escada} total={DEGRAU_APRENDIDA} />
+        )}
       </div>
 
       <Estado estado={estado} />
@@ -275,8 +284,8 @@ function Fechado({ aula, publicada }: { aula: AulaDaTrilha; publicada: boolean }
  * coluna de reprovação onde não houve nem tentativa.
  */
 function Estado({ estado }: { estado: EstadoDeAula }) {
-  if (estado === "dominada") {
-    return <span className="shrink-0 text-xs font-medium text-metodo-tinta">Dominada</span>;
+  if (estado === "aprendida") {
+    return <span className="shrink-0 text-xs font-medium text-metodo-tinta">Aprendida</span>;
   }
   if (estado === "praticando") {
     return <span className="shrink-0 text-xs font-medium text-aviso-tinta">Praticando</span>;

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import type { MessageTone, PanelMessage } from "@/lib/lesson/store";
 
 /**
@@ -32,12 +33,28 @@ const TONE: Record<MessageTone | "conclusao", string> = {
 export function FeedbackPanel({
   message,
   placeholder,
+  retrato,
 }: {
   message: PanelMessage | null;
   placeholder?: string;
+  /**
+   * O professor, à esquerda da fala. É a mesma linha que o `Comentario` do
+   * repertório monta, e pela mesma razão: **a ordem é a informação** — o texto
+   * vem depois do desenho, e assim a instrução lê como alguém falando em vez de
+   * como aviso de sistema.
+   *
+   * **Abaixo de `lg` ele some.** No celular o painel tem 328 px, e 112 deles
+   * seriam um terço da tela tirados justamente do texto.
+   *
+   * O retrato fica FORA do `aria-live`, e isso não é detalhe: a região viva
+   * anuncia tudo que muda dentro dela, e um desenho que não fala não pode
+   * entrar na fala. A regra inviolável do painel — nunca desmontar — continua
+   * valendo para o `<div>` de dentro, que é o que tem o `aria-live`.
+   */
+  retrato?: ReactNode;
 }) {
   const done = message?.done ?? false;
-  return (
+  const fala = (
     <div
       aria-live="polite"
       role="status"
@@ -60,6 +77,14 @@ export function FeedbackPanel({
       ) : (
         <span className="text-tinta-fraca">{placeholder ?? ""}</span>
       )}
+    </div>
+  );
+
+  if (!retrato) return fala;
+  return (
+    <div className="flex gap-4">
+      <div className="hidden shrink-0 lg:block">{retrato}</div>
+      <div className="min-w-0 flex-1">{fala}</div>
     </div>
   );
 }

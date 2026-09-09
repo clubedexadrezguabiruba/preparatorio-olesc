@@ -25,9 +25,9 @@
  * ## O que **não** está aqui
  *
  * A conversa UCI, a cópia executável e as três armadilhas de rodar essa build
- * no node moram em `scripts/motor.ts` — foram para lá quando a porta 2 do funil
- * do meio-jogo (`scripts/escolher-exercicios.ts`) passou a precisar do mesmo
- * motor. Dois drivers seriam duas opiniões sobre a mesma posição.
+ * no node moram em `scripts/motor.ts` — foram para lá quando um segundo script
+ * passou a precisar do mesmo motor. Dois drivers seriam duas opiniões sobre a
+ * mesma posição.
  *
  * A leitura dos lances (`paraUci`, o portão da armadilha do lance ilegal) e a
  * apresentação (`paraBrancas`, `quemEstaMelhor`, `pvEmSan`) moram em

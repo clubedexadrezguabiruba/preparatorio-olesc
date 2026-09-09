@@ -1,4 +1,5 @@
 import { semanaAtual, type Semana } from "../curso/calendario.ts";
+import { aprendida, zerada, type ProgressoDaEscada } from "./escada.ts";
 
 /**
  * A trilha de finais: **a fonte única** de quais aulas o curso tem, em que
@@ -92,21 +93,33 @@ export const CLASSE: Record<Classe, { nome: string; faixa: string; resumo: strin
  */
 export type Formato = "completa" | "curta" | "leitura";
 
+/**
+ * Os três formatos, na palavra que o aluno lê.
+ *
+ * **Os textos mudaram inteiros em 2026-09-08**, e não por gosto: a aula deixou
+ * de ter seis etapas em posições diferentes e passou a ter **três numa posição
+ * só**, e "dominada" deixou de ser uma vitória para sempre e virou o degrau 3
+ * da escada (`lib/finais/escada.ts`). A trilha dizia "as seis etapas" para uma
+ * aula que tem três, e "dominada ao vencer a prática" para um critério que
+ * hoje pede três dias — as duas frases mentiam na tela do aluno.
+ */
 export const FORMATO: Record<Formato, { nome: string; etapas: string; criterio: string }> = {
   completa: {
     nome: "Aula completa",
-    etapas: "as seis etapas",
-    criterio: "Dominada ao completar a etapa sem ajuda e vencer a prática.",
+    etapas: "objetivo, com ajuda e sem ajuda",
+    criterio:
+      "Aprendida com três vitórias sem ajuda, em três dias diferentes e espaçados.",
   },
   curta: {
     nome: "Aula curta",
-    etapas: "objetivo, exemplo e prática",
-    criterio: "Dominada ao vencer (ou segurar) a prática contra o computador.",
+    etapas: "objetivo e sem ajuda",
+    criterio:
+      "Aprendida com três vitórias (ou empates seguros) sem ajuda, em três dias diferentes.",
   },
   leitura: {
     nome: "Aula de leitura",
-    etapas: "objetivo e exemplo",
-    criterio: "Dominada quando você marcar que leu e viu o exemplo até o fim.",
+    etapas: "só o objetivo",
+    criterio: "Aprendida quando você marcar que leu — esta aula não tem partida.",
   },
 };
 
@@ -231,12 +244,29 @@ export function aulasAbertas(
  * `lib/finais/progresso.ts` monta da view `progresso_aula` e de `aula_lida`.
  */
 export type ProgressoDaAula = {
+  /**
+   * A etapa 4, que saiu do formato em 2026-09-08.
+   *
+   * O campo fica porque a coluna fica: `progresso_aula.solo_ok` guarda as
+   * linhas históricas dos alunos, e apagar o passado deles para arrumar o
+   * presente do código seria caro e mentiroso. **Nenhuma aula nova o liga**, e
+   * nada mais o lê para decidir coisa nenhuma.
+   */
   readonly soloOk: boolean;
+  /** Alguma partida vencida, em algum dia. **Não é "aprendida"** — ver `escada`. */
   readonly praticaOk: boolean;
   readonly tentativas: number;
   readonly lida: boolean;
   /** Quando foi a última tentativa nesta aula (ISO), ou `null`. */
   readonly ultima: string | null;
+  /**
+   * Onde a aula está na escada de revisão (`lib/finais/escada.ts`).
+   *
+   * **É esta a resposta para "o aluno sabe isto?"**, e ela substituiu um
+   * booleano permanente em 2026-09-08. Vem de `finais_progresso`, uma linha por
+   * (aluno, aula), escrita pelo servidor depois de reproduzir a partida.
+   */
+  readonly escada: ProgressoDaEscada;
 };
 
 export const AULA_ZERADA: ProgressoDaAula = {
@@ -245,69 +275,74 @@ export const AULA_ZERADA: ProgressoDaAula = {
   tentativas: 0,
   lida: false,
   ultima: null,
+  escada: zerada(),
 };
 
-export type EstadoDeAula = "nao-comecou" | "praticando" | "dominada";
+export type EstadoDeAula = "nao-comecou" | "praticando" | "aprendida";
 
 export const NOME_DO_ESTADO: Record<EstadoDeAula, string> = {
   "nao-comecou": "Não começou",
   praticando: "Praticando",
-  dominada: "Dominada",
+  aprendida: "Aprendida",
 };
 
 /**
- * Dominou esta aula? A pergunta depende do formato, e é aqui que ela mora.
+ * Aprendeu esta aula? A pergunta depende do formato, e é aqui que ela mora.
  *
- * Note que o critério do banco é **mais frouxo que o selo da tela** de
- * propósito: o `masteryReport` exige as duas metades *na mesma sessão*, porque
- * é assim que a definição D1 afere competência num momento. Aqui as duas metades
- * contam em qualquer momento — criança no 4G perde sessão no meio da prática, e
- * cobrar a mesma sessão faria o aluno refazer a etapa 4 por causa da operadora.
+ * ## O que mudou em 2026-09-08, e mudou no site inteiro
+ *
+ * Ela chamava-se `dominou` e era um **booleano permanente**: `praticaOk`, isto
+ * é, uma vitória em algum momento. O banco reforçava com `bool_or` e o
+ * comentário *"final não se desaprende"*. É bonito e é falso — o aluno de 11
+ * anos que deu o mate de torre na terça não sabe dá-lo no sábado.
+ *
+ * Passa a ser o **degrau 3 da escada**: três passadas em dias distintos e
+ * espaçados (`lib/finais/escada.ts`). E, como lá, uma aula pode **perder
+ * posto** sem desaprender: quem chegou ao degrau 3 uma vez continua aprendido,
+ * e o que cai é o degrau — por isso a leitura é de `aprendidaEm`, e não de
+ * `degrau >= 3`.
+ *
+ * A aula de leitura continua fora da escada: não há partida para vencer, e o
+ * que ela tem é a declaração do aluno, gravada em `aula_lida`.
  */
-export function dominou(formato: Formato, p: ProgressoDaAula): boolean {
-  switch (formato) {
-    case "completa":
-      return p.soloOk && p.praticaOk;
-    case "curta":
-      return p.praticaOk;
-    case "leitura":
-      return p.lida;
-  }
+export function aprendeu(formato: Formato, p: ProgressoDaAula): boolean {
+  if (formato === "leitura") return p.lida;
+  return aprendida(p.escada);
 }
 
 export function estadoDaAula(formato: Formato, p: ProgressoDaAula): EstadoDeAula {
-  if (dominou(formato, p)) return "dominada";
+  if (aprendeu(formato, p)) return "aprendida";
   return p.tentativas > 0 ? "praticando" : "nao-comecou";
 }
 
 /**
- * Os ids que o aluno dominou, entre as aulas dadas.
+ * Os ids que o aluno aprendeu, entre as aulas dadas.
  *
  * Recebe a lista de aulas em vez de varrer a `TRILHA` inteira porque quem
  * pergunta já sabe o recorte: o painel conta sobre as **abertas**, e uma aula
- * que o professor dominou revisando um rascunho não pode virar "1 de 0".
+ * que o professor aprendeu revisando um rascunho não pode virar "1 de 0".
  */
-export function dominadas(
+export function aprendidasDaTrilha(
   aulas: readonly AulaDaTrilha[],
   progresso: ReadonlyMap<string, ProgressoDaAula>,
 ): Set<string> {
   const feitas = new Set<string>();
   for (const aula of aulas) {
-    if (dominou(aula.formato, progresso.get(aula.id) ?? AULA_ZERADA)) feitas.add(aula.id);
+    if (aprendeu(aula.formato, progresso.get(aula.id) ?? AULA_ZERADA)) feitas.add(aula.id);
   }
   return feitas;
 }
 
 /**
- * A próxima aula a estudar: a primeira aberta que ainda não foi dominada.
+ * A próxima aula a estudar: a primeira aberta que ainda não foi aprendida.
  *
  * Na ordem da trilha, que é ordem de pré-requisito — não na ordem em que o
- * aluno abriu as abas. `undefined` quer dizer que ele dominou tudo o que está
+ * aluno abriu as abas. `undefined` quer dizer que ele aprendeu tudo o que está
  * aberto, e o painel diz isso em vez de sugerir coisa nenhuma.
  */
 export function proximaAula(
   abertas: readonly AulaDaTrilha[],
   progresso: ReadonlyMap<string, ProgressoDaAula>,
 ): AulaDaTrilha | undefined {
-  return abertas.find((aula) => !dominou(aula.formato, progresso.get(aula.id) ?? AULA_ZERADA));
+  return abertas.find((aula) => !aprendeu(aula.formato, progresso.get(aula.id) ?? AULA_ZERADA));
 }

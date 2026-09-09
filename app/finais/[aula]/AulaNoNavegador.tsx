@@ -23,9 +23,14 @@ import { registrarEtapa } from "../acoes";
  *
  * ## O que o parâmetro muda
  *
- * Só onde a aula abre — na etapa 6 quando ela existe, na prática quando não —
- * e o `revisao` que o motor usa para gravar a linha certa nas aulas sem etapa
- * 6. O aluno pode navegar para qualquer etapa depois, como sempre.
+ * Só onde a aula abre — direto na etapa sem ajuda —, e o `revisao` que o motor
+ * usa para gravar a linha certa. O aluno pode navegar para qualquer etapa
+ * depois, como sempre.
+ *
+ * A escolha era entre a etapa 6 e a prática, e deixou de ser: a etapa 6 saiu
+ * do formato em 2026-09-08, e quem revisa agora é a escada — mesma aula, mesma
+ * posição, noutro dia. Quem volta para revisar já sabe a técnica; o que ele
+ * vem fazer é a passada, e ela é a partida.
  */
 export function AulaNoNavegador({
   pacote,
@@ -36,16 +41,12 @@ export function AulaNoNavegador({
 }) {
   const revisao = useSearchParams().get("revisao") === "1";
 
-  const etapa: StageKey | undefined = revisao
-    ? pacote.lesson.stages.review
-      ? "review"
-      : "practice"
-    : undefined;
+  const etapa: StageKey | undefined = revisao ? "practice" : undefined;
 
   return (
     <LessonPlayer
       bundle={pacote}
-      startAt={etapa ? { stage: etapa, scene: 0, step: 0 } : undefined}
+      startAt={etapa ? { stage: etapa } : undefined}
       revisao={revisao}
       onStageDone={registrarEtapa}
       leitura={leitura}

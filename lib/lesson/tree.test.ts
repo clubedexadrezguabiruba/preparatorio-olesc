@@ -13,15 +13,34 @@ import { isPraise, judgeMove, respostasDe, throwsWinAway } from "./tree.ts";
  * garante que **nenhum** lance recusado saia sem mensagem.
  */
 
+/**
+ * **A aula vem de `content/fixtures/`, e não de `content/lessons/`.**
+ *
+ * Ela vinha da `N0-R-MATE`, uma aula publicada de verdade, e isso era um
+ * acoplamento que a demolição de 2026-09-08 expôs da pior maneira: o corpus
+ * saiu do disco e cinco arquivos de teste do **motor** ficaram vermelhos de uma
+ * vez, sem que nenhuma regra de motor tivesse mudado.
+ *
+ * A `N1-FIXTURE-KRK` é a árvore com ajuda daquela aula sobre uma posição
+ * sintética (`pos-fx-krk-caixa`, sem obra e sem procedência): os textos são
+ * nossos, a geometria é a do mate de torre genérico, e nada nela cita livro
+ * nenhum. O que se afirma aqui é sobre o `judgeMove`, não sobre o currículo —
+ * e agora o arquivo diz isso.
+ */
 const lesson = lessonSchema.parse(
   JSON.parse(
-    readFileSync(path.join(process.cwd(), "content/lessons/N0-R-MATE.json"), "utf8"),
+    readFileSync(path.join(process.cwd(), "content/fixtures/lessons/N1-FIXTURE-KRK.json"), "utf8"),
   ),
 );
 const guided = lesson.stages.guided!;
 const root = guided.nodes[guided.root];
-const solo = lesson.stages.solo!;
-const soloRoot = solo.nodes[solo.root];
+
+/** A FEN depois de um lance UCI — só para montar nós de teste. */
+function applyMove(fen: string, uci: string): string {
+  const game = new Chess(fen);
+  game.move({ from: uci.slice(0, 2), to: uci.slice(2, 4) });
+  return game.fen();
+}
 
 function legalMoves(fen: string): string[] {
   return new Chess(fen)
@@ -75,7 +94,8 @@ test("lance que joga a vitória fora: fallback honesto de loses-win", () => {
   // nomeado. Na etapa 3 não há nenhum — o garimpo do B5 nomeou todos os
   // perdedores dos treze nós, e é bom que seja assim: fallback genérico é o
   // que sobra, não o que se planeja. Por isso a busca varre as duas árvores.
-  const encontrado = [...Object.values(guided.nodes), ...Object.values(solo.nodes)]
+  // Varria as duas árvores; hoje há uma só — a etapa 4 saiu do formato.
+  const encontrado = Object.values(guided.nodes)
     .flatMap((node) =>
       legalMoves(node.fen)
         .filter(
@@ -94,50 +114,63 @@ test("lance que joga a vitória fora: fallback honesto de loses-win", () => {
   assert.equal(throwsWinAway(verdict), true);
 });
 
-test("etapa 4: o lance equivalente gerado é método, e a aula segue", () => {
+test("o lance equivalente gerado é método, e a aula segue", () => {
   // Nenhuma das quatro posições garimpadas no B5 rende ramo equivalente: nelas
   // cada corte é geometricamente único, e a derivação conferiu isso (`Rg1` em
   // vez de `Ra7` não separa os dois reis, então não é corte). O veredito é
   // testado num nó montado à mão — é o que o gerador escreveria se houvesse —
   // pelo mesmo caminho que os testes da etapa 3 já usavam.
   // Não é elogio e volta: é um expect de verdade, com resposta e nó seguinte.
+  //
+  // O lance do ramo e a resposta são **procurados**, não fixados: um literal
+  // aqui quebra toda vez que a posição da etapa 4 muda, e já quebrou.
+  const doRoteiro = root.expects[0];
+  const inventado = root.winningMoves.find((move) => !doRoteiro.moves.includes(move));
+  assert.ok(inventado, "a raiz precisa ter mais de um lance que ganha");
+  const respostaInventada = legalMoves(applyMove(root.fen, inventado))[0];
   const comRamo = {
-    ...soloRoot,
+    ...root,
     expects: [
-      ...soloRoot.expects,
-      { moves: ["a1g1"], reply: "h8g8", next: "g1", feedback: "ramo equivalente", generated: true as const },
+      ...root.expects,
+      { moves: [inventado], reply: respostaInventada, next: "g1", feedback: "ramo equivalente", generated: true as const },
     ],
   };
-  const verdict = judgeMove(lesson, comRamo, "a1g1");
+  const verdict = judgeMove(lesson, comRamo, inventado);
   assert.equal(verdict.kind, "method");
-  assert.equal(verdict.respostas[0].reply, "h8g8");
+  assert.equal(verdict.respostas[0].reply, respostaInventada);
   assert.match(verdict.respostas[0].next, /^g\d+$/);
   assert.equal(throwsWinAway(verdict), false);
 
   // E o lance do roteiro continua sendo o do roteiro.
-  const roteiro = judgeMove(lesson, comRamo, "a1a7");
+  const roteiro = judgeMove(lesson, comRamo, doRoteiro.moves[0]);
   assert.equal(roteiro.kind, "method");
-  assert.equal(roteiro.respostas[0].next, "s2");
+  assert.equal(roteiro.respostas[0].next, doRoteiro.next);
 });
 
-test("etapa 4: a linha da árvore leva ao mate sem sair dela, dentro do teto", () => {
-  let node = soloRoot;
+test("a linha da árvore leva ao fim sem sair dela", () => {
+  // Rodava sobre a etapa 4 e contra o `moveLimit` dela. A etapa saiu do
+  // formato e o teto com ela: quem limita a partida sem ajuda hoje é a regra
+  // de falta de progresso do `PracticeStage`, não um número no arquivo. O que
+  // sobra — e é o que este teste sempre mediu de verdade — é que a linha
+  // escrita chega ao fim sem apontar para nó inexistente.
+  let node = root;
   const linha: string[] = [];
-  // Segue sempre o expect gerado (ou o único que houver) até o nó terminal.
-  for (let passo = 0; passo < 20; passo += 1) {
+  const TETO = Object.keys(guided.nodes).length + 5;
+  for (let passo = 0; passo <= TETO; passo += 1) {
     const expect = node.expects.find((e) => e.generated) ?? node.expects[0];
     linha.push(expect.moves[0]);
     if (!expect.next) break;
-    node = solo.nodes[expect.next];
-    assert.ok(node, `o nó "${expect.next}" existe`);
+    const seguinte = guided.nodes[expect.next];
+    assert.ok(seguinte, `o nó "${expect.next}" existe`);
+    node = seguinte;
   }
-  assert.equal(linha[0], "a1a7");
+  assert.equal(linha[0], root.expects[0].moves[0]);
   assert.ok(
-    new Chess(soloRoot.fen).moves({ verbose: true }).some((m) => `${m.from}${m.to}` === linha[0]),
+    new Chess(root.fen).moves({ verbose: true }).some((m) => `${m.from}${m.to}` === linha[0]),
     "o primeiro lance da linha é legal na raiz",
   );
-  assert.ok(linha.length <= solo.moveLimit, `${linha.length} lances cabem no teto de ${solo.moveLimit}`);
-  console.log(`  linha da etapa 4: ${linha.join(" ")}`);
+  assert.ok(linha.length <= TETO, `${linha.length} lances, sem ciclo`);
+  console.log(`  linha da árvore: ${linha.join(" ")}`);
 });
 
 test("etapa 3: a mesma técnica por outro caminho é elogiada, e a peça volta", () => {
@@ -172,38 +205,59 @@ test("etapa 3: erro nomeado da autoria vence a alternativa — o autor manda", (
  * ------------------------------------------------------------------ */
 
 /**
- * A aula da dama é o caso de verdade: `g1d1` e `g1g2` no nó `n1` estão em
- * `mistakes` (como `cheque-inutil`) **e** em `winningMoves`. São lances que
- * ganham e são tratados como erro — a queixa que abriu o B8.
+ * O caso de verdade que este bloco precisa: um nó em que o **mesmo lance** está
+ * em `mistakes` e em `winningMoves` — um lance que ganha e é tratado como erro,
+ * que é a queixa que abriu o B8.
+ *
+ * O nó e o lance são procurados na aula, e não escritos aqui. Já foram: a
+ * primeira versão fixava dois lances da raiz da aula da dama, e o bloco inteiro
+ * morreu no dia em que essa aula saiu do corpus.
  */
-const dama = lessonSchema.parse(
-  JSON.parse(readFileSync(path.join(process.cwd(), "content/lessons/N0-Q-MATE.json"), "utf8")),
+const casoDoLanceQueGanhaEErro = Object.values(guided.nodes)
+  .flatMap((node) =>
+    (node.mistakes ?? []).flatMap((mistake) =>
+      mistake.moves
+        .filter(
+          (move) =>
+            node.winningMoves.includes(move) &&
+            lesson.errors[mistake.errorId].verdict === "off-method",
+        )
+        .map((move) => ({ node, move, errorId: mistake.errorId })),
+    ),
+  )
+  .at(0);
+assert.ok(
+  casoDoLanceQueGanhaEErro,
+  "a etapa 3 precisa de ao menos um lance que ganha e é tratado como erro",
 );
-const damaGuiada = dama.stages.guided!;
-const damaN1 = damaGuiada.nodes[damaGuiada.root];
-const damaSolo = dama.stages.solo!;
-const damaS1 = damaSolo.nodes[damaSolo.root];
+const { node: erroN1, move: lanceQueGanhaEErro, errorId: erroDoLance } = casoDoLanceQueGanhaEErro;
+
+/** Um segundo lance do mesmo tipo, para o teste dos dois textos. */
+const outroLanceQueGanhaEErro = (erroN1.mistakes ?? [])
+  .flatMap((m) => m.moves)
+  .find((move) => move !== lanceQueGanhaEErro && erroN1.winningMoves.includes(move));
+assert.ok(outroLanceQueGanhaEErro, "o nó precisa de dois lances desse tipo");
 
 test("o lance declarado válido é elogiado com o texto do autor, não com o genérico", () => {
-  const move = "g1g2";
-  assert.ok(damaN1.winningMoves.includes(move), "o lance do teste precisa ganhar");
+  const move = lanceQueGanhaEErro;
+  assert.ok(erroN1.winningMoves.includes(move), "o lance do teste precisa ganhar");
 
   const meuTexto = "Também é corte, e aperta a caixa igual — guarde a ideia.";
   const node = {
-    ...damaN1,
+    ...erroN1,
     // Aceitar um lance que era erro é **mover** de uma lista para a outra.
-    mistakes: (damaN1.mistakes ?? []).map((m) => ({
+    mistakes: (erroN1.mistakes ?? []).map((m) => ({
       ...m,
       moves: m.moves.filter((x) => x !== move),
     })).filter((m) => m.moves.length > 0),
     authorAlternatives: [{ moves: [move], feedback: meuTexto }],
   };
 
-  const verdict = judgeMove(dama, node, move);
+  const verdict = judgeMove(lesson, node, move);
   assert.equal(verdict.kind, "author-alternative");
   assert.equal(verdict.text, meuTexto);
-  assert.notEqual(verdict.text, dama.fallbacks.methodAlternative);
-  assert.notEqual(verdict.text, dama.fallbacks.winningOffMethod);
+  assert.notEqual(verdict.text, lesson.fallbacks.methodAlternative);
+  assert.notEqual(verdict.text, lesson.fallbacks.winningOffMethod);
   assert.equal(throwsWinAway(verdict), false);
   assert.equal(isPraise(verdict), true);
 });
@@ -211,59 +265,62 @@ test("o lance declarado válido é elogiado com o texto do autor, não com o gen
 test("sem o campo, o mesmo lance continua sendo a repreensão de hoje", () => {
   // O contraste que dá sentido ao bloco: é este texto que o aluno lê hoje ao
   // jogar um lance que ganha.
-  const verdict = judgeMove(dama, damaN1, "g1g2");
+  const verdict = judgeMove(lesson, erroN1, lanceQueGanhaEErro);
   assert.equal(verdict.kind, "named-error");
-  assert.equal(verdict.errorId, "cheque-inutil");
+  assert.equal(verdict.errorId, erroDoLance);
   assert.equal(verdict.preservesWin, true);
 });
 
-test("vale também na etapa 4, onde methodAlternatives é proibido", () => {
-  const move = damaS1.winningMoves.find(
+test("a declaração da autoria não encerra a tentativa", () => {
+  // Rodava na raiz da etapa 4, onde `methodAlternatives` era proibido e o
+  // `authorAlternatives` era o único elogio possível. A etapa saiu; o que o
+  // teste mede — que um lance declarado pela autoria é elogio e **não** joga a
+  // vitória fora — vale igual na árvore que restou.
+  const move = root.winningMoves.find(
     (m) =>
-      !damaS1.expects.some((e) => e.moves.includes(m)) &&
-      !(damaS1.mistakes ?? []).some((x) => x.moves.includes(m)),
+      !root.expects.some((e) => e.moves.includes(m)) &&
+      !(root.mistakes ?? []).some((x) => x.moves.includes(m)),
   );
-  assert.ok(move, "a raiz da etapa 4 precisa de um lance vencedor fora das listas");
+  assert.ok(move, "a raiz precisa de um lance vencedor fora das listas");
 
-  const node = { ...damaS1, authorAlternatives: [{ moves: [move], feedback: "vale igual" }] };
-  const verdict = judgeMove(dama, node, move);
+  const node = { ...root, authorAlternatives: [{ moves: [move], feedback: "vale igual" }] };
+  const verdict = judgeMove(lesson, node, move);
   assert.equal(verdict.kind, "author-alternative");
   assert.equal(verdict.text, "vale igual");
-  // E não encerra a tentativa: `throwsWinAway` é o que a etapa 4 consulta.
   assert.equal(throwsWinAway(verdict), false);
 });
 
 test("mais de um lance declarado, cada um com o seu texto", () => {
   const node = {
-    ...damaN1,
+    ...erroN1,
     mistakes: [],
     authorAlternatives: [
-      { moves: ["g1g2"], feedback: "primeiro texto" },
-      { moves: ["g1d1"], feedback: "segundo texto" },
+      { moves: [lanceQueGanhaEErro], feedback: "primeiro texto" },
+      { moves: [outroLanceQueGanhaEErro], feedback: "segundo texto" },
     ],
   };
-  assert.equal((judgeMove(dama, node, "g1g2") as { text: string }).text, "primeiro texto");
-  assert.equal((judgeMove(dama, node, "g1d1") as { text: string }).text, "segundo texto");
+  assert.equal((judgeMove(lesson, node, lanceQueGanhaEErro) as { text: string }).text, "primeiro texto");
+  assert.equal((judgeMove(lesson, node, outroLanceQueGanhaEErro) as { text: string }).text, "segundo texto");
 });
 
 test("o lance do roteiro continua vencendo a declaração", () => {
-  const roteiro = damaN1.expects[0].moves[0];
-  const node = { ...damaN1, authorAlternatives: [{ moves: [roteiro], feedback: "não devia aparecer" }] };
-  const verdict = judgeMove(dama, node, roteiro);
+  const roteiro = erroN1.expects[0].moves[0];
+  const node = { ...erroN1, authorAlternatives: [{ moves: [roteiro], feedback: "não devia aparecer" }] };
+  const verdict = judgeMove(lesson, node, roteiro);
   assert.equal(verdict.kind, "method", "expects é consultado primeiro, e a aula avança");
 });
 
 test("o erro nomeado continua vencendo a declaração", () => {
   // O gate recusa esse arquivo (ALTERNATIVA_E_ERRO). Em runtime a ordem é
   // defensiva: se as duas listas se contradisserem, o erro nomeado manda.
-  const node = { ...damaN1, authorAlternatives: [{ moves: ["g1g2"], feedback: "não devia aparecer" }] };
-  const verdict = judgeMove(dama, node, "g1g2");
+  const node = { ...erroN1, authorAlternatives: [{ moves: [lanceQueGanhaEErro], feedback: "não devia aparecer" }] };
+  const verdict = judgeMove(lesson, node, lanceQueGanhaEErro);
   assert.equal(verdict.kind, "named-error");
 });
 
-test("nenhum lance legal das duas árvores fica sem mensagem", () => {
+test("nenhum lance legal da árvore fica sem mensagem", () => {
   let julgados = 0;
-  for (const tree of [guided, solo]) {
+  for (const tree of [guided]) {
     for (const node of Object.values(tree.nodes)) {
       for (const move of legalMoves(node.fen)) {
         const verdict = judgeMove(lesson, node, move);
@@ -326,18 +383,20 @@ test("o schema aceita as três formas e recusa a mistura", () => {
   );
 });
 
-test("o corpus publicado não muda de forma: toda resposta ainda é única", () => {
-  // O contrato de E1 é este: `replies` é opcional e nenhuma aula publicada
-  // muda um byte. No dia em que a primeira variante for escrita, este número
-  // muda junto com o arquivo — e é aí que ele vira o aviso certo.
+test("a árvore não muda de forma: toda resposta ainda é única", () => {
+  // O contrato de E1 é este: `replies` é opcional e a árvore escrita não muda
+  // um byte. No dia em que a primeira variante for escrita, este número muda
+  // junto com o arquivo — e é aí que ele vira o aviso certo.
+  //
+  // O número caiu de 20 para 15 quando a fixture passou a ser a fonte: eram
+  // duas árvores da aula publicada (33 nós), hoje é uma (20). O que o teste
+  // afirma continua o mesmo; o que mudou é o tamanho do que ele varre.
   let unicas = 0;
-  for (const tree of [guided, solo]) {
-    for (const node of Object.values(tree.nodes)) {
-      for (const expect of node.expects) {
-        assert.equal(expect.replies, undefined, "nenhuma aula publicada usa replies ainda");
-        if (respostasDe(expect).length === 1) unicas += 1;
-      }
+  for (const node of Object.values(guided.nodes)) {
+    for (const expect of node.expects) {
+      assert.equal(expect.replies, undefined, "a árvore da fixture não usa replies ainda");
+      if (respostasDe(expect).length === 1) unicas += 1;
     }
   }
-  assert.ok(unicas > 20, `poucas respostas únicas no corpus: ${unicas}`);
+  assert.ok(unicas > 15, `poucas respostas únicas na árvore: ${unicas}`);
 });

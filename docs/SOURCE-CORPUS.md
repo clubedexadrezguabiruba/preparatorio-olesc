@@ -20,15 +20,107 @@ se pode tirar da mesma obra, porque o que a lei protege é a *coleção* do auto
 não o fato isolado. Obra protegida tem **teto de 2 posições por aula**, cobrado
 pelo gate; domínio público e CC0 não têm teto.
 
+Duas coisas tiram esse teto do caminho, e as duas estão logo abaixo: o **regime
+integral** (§1.1) o desliga por obra, por decisão escrita; e o **formato de três
+etapas** (§1.2) o deixou **sem sujeito** no módulo de finais.
+
 O que nenhuma obra autoriza, em qualquer volume: copiar texto, comentário,
 tradução, seleção completa de exercícios ou estrutura editorial. Todo texto do
 curso é escrito do zero, em PT-BR.
+
+### 1.1 A exceção: o regime integral
+
+Há um caso em que o teto de 2 é a régua errada: quando a decisão editorial é
+**"este módulo inteiro segue este livro"**. Foi o que o Doug decidiu em
+2026-09-08 para o módulo de finais. A decisão teve duas metades no mesmo dia, e
+as duas estão declaradas no registro:
+
+- de manhã, o *Silman's Complete Endgame Course*, quando a trilha inteira ia
+  sair dele — é o único manual do acervo com progressão declarada **por classe
+  de força**;
+- no fim do dia, o ***100 Endgames You Must Know*, de Jesús de la Villa**, que é
+  hoje o livro-base do módulo: *"sem teto nenhum, quero usar o livro inteiro,
+  sem teto, para finais"* (Doug, 2026-09-08).
+
+O Silman **continua declarado, com inventário zerado, de propósito**: a Classe E
+está em aberto e o de la Villa não ensina mate elementar — o próprio autor
+escreve que assume o leitor sabendo os mates básicos. Se a Classe E voltar a sair
+do Silman, o regime já está de pé e não precisa ser decidido de novo.
+
+O motivo é de conteúdo, não de custo. O preparatório é gratuito e não será
+comercializado por ora; quando for, o conteúdo listado no inventário será
+trocado por fonte pública.
+
+O mecanismo é um campo em `content/sources.json`:
+
+```json
+"integral": {
+  "since": "2026-09-08",
+  "reason": "...",
+  "replaceBefore": "2027-09-08"
+}
+```
+
+Ele desliga, **para aquela obra e só para ela**, as duas regras de teto:
+`TETO_DE_CITACAO` (§12.7 — 2 posições por aula) e `FONTE_DIDATICA_DOMINA`
+(§3.4 — rotação de livro-base por classe).
+
+**Por que não `protected: false`.** Porque seria mentira em três lugares. A obra
+continua protegida — é fato, e a `license` do registro diz —, o teto continuaria
+existindo para as outras, e — o que mais importa — o gate perderia **como saber
+o que listar no dia da troca**. O `integral` desliga o mesmo tanto e devolve o
+inventário: `content/divida-de-licenca.md`, gerado pelo gate a cada
+`--write`, lista toda aula que usa a obra como livro-base e toda posição que a
+cita. Fora de `--write`, divergência é `DIVIDA_DESATUALIZADA` — crescer a dívida
+vira um diff que alguém aprova.
+
+**O prazo é cobrado.** Passado o `replaceBefore`, o gate reprova
+`REGIME_INTEGRAL_VENCIDO` e diz as duas saídas: renovar por escrito, ou desfazer
+e trocar o conteúdo listado. Exceção temporária cuja validade nenhum programa
+mede é exceção permanente com nota de rodapé. E toda rodada verde imprime a
+linha `regime integral: N obra(s)` no sumário: exceção que só aparece quando
+alguém procura é exceção esquecida.
+
+**O que cai junto, e nenhuma máquina confere.** A §5.1 abaixo proíbe diagramas
+em sequência da mesma obra numa aula — "sequência é a seleção do autor sendo
+copiada em miniatura". Numa obra em regime integral essa regra cai na prática:
+a trilha de finais anda pela numeração do de la Villa, e as duas posições já
+transcritas são a Position 1.1 e a Position 1.3 do capítulo 1 — sequência, pela
+definição da §5.1. Não há gate para isso; fica escrito aqui para não virar
+descoberta.
+
+### 1.2 O teto por aula ficou sem sujeito no módulo de finais
+
+Escrito em 2026-09-08, junto com o formato de três etapas, para que ninguém leia
+o teto de 2 como uma trava que o módulo de finais ainda tem. Ele não tem.
+
+O teto da §12.7 é **por aula**. No formato novo, uma aula é **uma posição só**: o
+`lessonSchema` recusa o arquivo cujas três etapas não apontem o mesmo id, e o
+gate desduplica por id antes de contar. Toda aula conta 1, e 1 nunca passa de 2 —
+**o teto não tem como morder neste formato**. Uma obra protegida pode fornecer
+quarenta aulas de uma posição cada e o gate fica verde.
+
+O código do teto continua em `scripts/validate-content.ts` e continua correto: ele
+volta a ter sujeito no dia em que algum formato usar mais de uma posição na mesma
+aula. O que **não** existe é a proteção que ele parecia dar ao módulo de finais.
+
+A régua alternativa — um teto **por obra no módulo inteiro**, `N` posições da
+mesma obra somadas em todas as aulas publicadas — foi proposta ao Doug em
+2026-09-08 e **recusada**: *"sem teto nenhum"*. A decisão está registrada aqui
+porque a próxima pessoa que notar o buraco vai propor exatamente isso de novo.
+
+O que protege o módulo, então, não é número: é a declaração da §1.1 — escrita,
+datada, com prazo que o gate cobra (`REGIME_INTEGRAL_VENCIDO`) e com um
+inventário em `content/divida-de-licenca.md` que cresce como diff que alguém
+aprova. Trocar um teto por uma declaração só é honesto enquanto essas três peças
+estiverem de pé; se alguma cair, o módulo fica sem régua nenhuma.
 
 ---
 
 ## 2. As obras registradas
 
-`Teto` = quantas posições a obra pode dar para uma mesma aula. `Legível` = o
+`Teto` = quantas posições a obra pode dar para uma mesma aula — e leia a §1.2
+antes de confiar nesta coluna: no formato de três etapas ela não morde. `Legível` = o
 subagente consegue achar página por busca de texto (teste da §4).
 
 | # | Slug | Obra | Edição | Teto | Legível |
@@ -43,10 +135,10 @@ subagente consegue achar página por busca de texto (teste da §4).
 | 8 | `rogers-1907` | Rogers, _How to Play Chess_ | Thomas Y. Crowell, Nova York, 1907 | sem teto | sim (176 pág.) |
 | 9 | `cunnington-1903` | Cunnington (org.), _Selected Chess Endings_ | George Routledge & Sons, Londres / E. P. Dutton, Nova York, 1903 | sem teto | sim (104 pág.) |
 | 10 | `lichess-open-database` | Lichess Open Database | exports públicos, sem arquivo local | sem teto (CC0) | n/a |
-| 11 | `de-la-villa-100` | De la Villa, _100 Endgames You Must Know_ | a confirmar na folha de rosto | 2 | OCR em 2026-08-18 |
+| 11 | `de-la-villa-100` | De la Villa, _100 Endgames You Must Know_ | a confirmar na folha de rosto | sem teto (regime integral, §1.1) | OCR em 2026-08-18 |
 | 12 | `de-la-villa-workbook` | De la Villa, _The 100 Endgames You Must Know Workbook_ | a confirmar | 2 | sim (286 pág.) |
 | 13 | `de-la-villa-amostra` | De la Villa, _100 Basic Endgames_ (excerto) | excerto promocional, 31 pág. | 2 | sim |
-| 14 | `silman-endgame-course` | Silman, _Complete Endgame Course_ | Siles Press, Los Angeles, 2007 | 2 | OCR em 2026-08-18 |
+| 14 | `silman-endgame-course` | Silman, _Complete Endgame Course_ | Siles Press, Los Angeles, 2007 | sem teto (regime integral, §1.1) | OCR em 2026-08-18 |
 | 15 | `rabinovich-russian` | Rabinovich, _The Russian Endgame Handbook_ | a confirmar | 2 | sim (525 pág.) |
 | 16 | `averbakh-essential` | Averbakh, _Chess Endings: Essential Knowledge_ | a confirmar | 2 | OCR em 2026-08-18 |
 | 17 | `nunn-understanding` | Nunn, _Understanding Chess Endgames_ | a confirmar | 2 | sim (234 pág.) |
@@ -144,6 +236,26 @@ de rosto em 2026-08-18 (`REVISED BY W. WAYTE`, `G. BELL AND SONS`, `1889`), e é
 a canônica. A 1ª edição de Mott fica registrada porque a proveniência grava
 edição: uma posição transcrita do arquivo de Mott **não pode** citar a de 1889.
 Duas edições, dois slugs, nenhuma confusão possível.
+
+### 2.3 As obras de meio-jogo, e por que elas não estão mais aqui
+
+Este arquivo teve, entre agosto e 8 de setembro de 2026, duas gerações de obras
+de meio-jogo. A primeira — Capablanca, Nimzowitsch, Znosko-Borovsky e os dois
+Lasker — sustentava as trinta dicas do módulo original. A segunda foram os
+**seis volumes da série do Yusupov**, que entraram em 7/9 para o módulo
+reescrito como aula do mesmo motor de finais, e saíram no dia seguinte.
+
+O que aconteceu: o Doug abriu a primeira aula pronta, `M103`, e reprovou o
+módulo inteiro. O motivo não foi técnico — a aula funcionava de ponta a ponta —,
+foi de público: complexo demais para a idade e a força dos alunos dele. O
+meio-jogo saiu do site, e as obras saíram deste registro junto.
+
+Fica escrito porque quem for garimpar o git vai encontrar seis entradas de
+Quality Chess e uma §2.3 inteira defendendo a ausência de teto de citação. Nada
+daquilo está em uso, e a decisão que a criou foi revertida por outra, do mesmo
+autor, um dia depois. **O teto de citação voltou a ser um só, por obra, e vale
+para tudo que resta.**
+
 
 ---
 
@@ -625,6 +737,11 @@ checklist de QA da §17 do currículo:
    gate cobra. A tabela de diagramas consumidos da §3.2.3 **continua sendo
    mantida**: ela deixou de ser proibição entre aulas e segue sendo memória —
    é o que permite ver se uma obra está começando a dominar o nível.
+
+   **Obra em regime integral não é alcançada por esta regra** (§1.1): quem
+   decidiu que o módulo inteiro segue um livro decidiu junto que a sequência do
+   autor é a espinha da aula. Máquina nenhuma confere isso — nem antes, nem
+   agora; o que muda é que agora está escrito.
 2. **Misturar por nível, não só por aula.** O teto é por aula; nada impede que
    uma obra protegida apareça em todas as aulas de um nível. Não deve: nenhuma
    obra protegida deve dominar as posições de um nível inteiro.

@@ -6,11 +6,10 @@ import { type Semana } from "./calendario.ts";
  * O mapa do curso inteiro por **nível de força** — o que o aluno pergunta
  * quando quer saber o que vem depois.
  *
- * Cada módulo (tática, finais, meio-jogo) tem a própria escada, e elas não
+ * Cada módulo (tática, finais) tem a própria escada, e elas não
  * conversavam: o bloco de tática fala em rating de puzzle do Lichess, a classe
- * de finais fala em USCF convertida para chess.com, e o meio-jogo não falava em
- * nada. Este arquivo é o único lugar que as põe lado a lado, e diz em qual
- * degrau o aluno está.
+ * de finais fala em USCF convertida para chess.com. Este arquivo é o único
+ * lugar que as põe lado a lado, e diz em qual degrau o aluno está.
  *
  * ## A conversão, dita com todas as letras
  *
@@ -112,8 +111,11 @@ export type ItemDoNivel = {
   readonly feitos: number;
   readonly situacao: Situacao;
   /**
-   * O sábado em que o item abre. É `null` só no meio-jogo, que não espera
-   * sábado nenhum — as trinta dicas estão abertas desde o primeiro dia.
+   * O sábado em que o item abre. O tipo aceita `null` desde o meio-jogo, que
+   * não esperava sábado nenhum; ele saiu do site em 2026-09-08 e hoje os dois
+   * módulos restantes sempre têm sábado. O `null` fica porque é o tipo honesto
+   * para "item que não espera calendário", e apertá-lo agora só trocaria um
+   * campo por uma suposição.
    */
   readonly sabado: Semana | null;
 };
@@ -124,7 +126,7 @@ export function estaAberto(item: ItemDoNivel): boolean {
 }
 
 export type ModuloDoNivel = {
-  readonly modulo: "tatica" | "finais" | "meio-jogo";
+  readonly modulo: "tatica" | "finais";
   readonly itens: readonly ItemDoNivel[];
 };
 

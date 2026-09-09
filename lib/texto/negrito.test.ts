@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import test from "node:test";
-import { DICAS } from "../meiojogo/conteudo.ts";
 import { emPedacos, semMarcacao } from "./negrito.ts";
 
 const junto = (entrada: string) =>
@@ -67,18 +68,35 @@ test("`semMarcacao` devolve a frase legível, sem asterisco", () => {
   assert.equal(semMarcacao("2*3"), "2*3");
 });
 
-test("o conteúdo real do meio-jogo atravessa sem perder caractere", () => {
-  // O teste que amarra a regra ao arquivo: se uma dica nova usar uma marcação
-  // que este parser não entende, é aqui que se descobre — e não na tela.
-  const campos: string[] = [];
-  for (const dica of DICAS) {
-    campos.push(...dica.explicacao.map((passo) => passo.texto), dica.quiz.porque);
-    if (dica.cuidado) campos.push(dica.cuidado);
-  }
-  assert.ok(campos.length >= 30);
+test("o conteúdo real dos temas de tática atravessa sem perder caractere", () => {
+  /*
+   * O teste que amarra a regra ao arquivo. Ele lia as 30 dicas do meio-jogo
+   * até 2026-09-08, quando o módulo saiu do site e levou `conteudo.ts` junto.
+   *
+   * Passou a ler `content/temas.json`, que é o consumidor que restou: os dois
+   * degraus da dica em `lib/tatica/fala.ts` chamam `semMarcacao` sobre esses
+   * campos. Se um tema novo usar uma marcação que este parser não entende, é
+   * aqui que se descobre — e não no balão do professor.
+   *
+   * Diferença de uma asserção: o conteúdo do meio-jogo **tinha** negrito, e o
+   * teste antigo cobrava isso. Os 36 temas de tática foram escritos sem
+   * marcação nenhuma de propósito (a apostila saiu de cena, e o balão pagina
+   * texto puro), então aqui a promessa é a outra metade: nada é alterado no
+   * caminho, e nada com asterisco chega à tela.
+   */
+  const bruto = readFileSync(path.join(process.cwd(), "content", "temas.json"), "utf8");
+  const temas = JSON.parse(bruto) as {
+    explicacao: string[];
+    procure: string[];
+    cuidado?: string;
+  }[];
 
-  const comNegrito = campos.filter((c) => c.includes("**"));
-  assert.ok(comNegrito.length > 0, "o conteúdo perdeu o negrito — reveja este teste");
+  const campos: string[] = [];
+  for (const tema of temas) {
+    campos.push(...tema.explicacao, ...tema.procure);
+    if (tema.cuidado) campos.push(tema.cuidado);
+  }
+  assert.ok(campos.length >= 36 * 6, `só ${campos.length} campos — o conteúdo encolheu?`);
 
   for (const campo of campos) {
     assert.equal(junto(campo), campo, `um campo foi alterado: ${campo.slice(0, 60)}…`);

@@ -11,8 +11,10 @@ import { marcarPartidaDoDia } from "./acoes";
  *
  * **A ordem é a decisão.** O Doug fixou que a partida vem por último, depois do
  * treino: treina-se primeiro, joga-se para aplicar. Então o cartão lista 1)
- * tática, 2) finais, 3) meio-jogo, 4) partida — e a caixa da partida é o
- * último elemento, embaixo dos minutos, não o primeiro.
+ * tática, 2) finais, 3) partida — e a caixa da partida é o último elemento,
+ * embaixo dos minutos, não o primeiro.
+ *
+ * O passo de meio-jogo saiu em 2026-09-08, com o módulo inteiro.
  *
  * ## Por que os minutos aparecem
  *
@@ -107,13 +109,9 @@ export function Hoje({
           )}
         </Passo>
 
-        <Passo numero={3} titulo="Meio-jogo">
-          <Ir href="/meio-jogo">Uma dica e o vídeo dela</Ir>
-        </Passo>
-
         {/* Por último, e é a decisão do Doug: treina-se primeiro, joga-se
             depois, para aplicar o que acabou de treinar. */}
-        <Passo numero={4} titulo="Partida">
+        <Passo numero={3} titulo="Partida">
           <label className="-m-2 flex cursor-pointer items-start gap-2 p-2">
             <input
               type="checkbox"

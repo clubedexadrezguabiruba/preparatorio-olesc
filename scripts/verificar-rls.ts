@@ -475,7 +475,12 @@ try {
     "e o total de A é o dele, não o da dupla",
   );
 
-  console.log("\n10. O treino de meio-jogo: o servidor grava, o aluno só lê a dele");
+  // O módulo de meio-jogo saiu do site em 2026-09-08, e as duas tabelas dele
+  // ficaram: elas guardam o que os alunos já responderam, e derrubá-las jogaria
+  // fora histórico para não ganhar nada. Enquanto existirem, a fronteira de RLS
+  // delas continua sendo provada aqui — tabela sem tela é justamente a que
+  // ninguém lembra de conferir.
+  console.log("\n10. As tabelas do meio-jogo (módulo removido): o servidor grava, o aluno só lê a dele");
 
   // Depois da seção 9, e não junto da 8: a linha de treino entra na
   // `minutos_por_dia` (o terceiro ramo da view, criado na 0006), e semear

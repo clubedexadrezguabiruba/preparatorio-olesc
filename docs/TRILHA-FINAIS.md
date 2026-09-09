@@ -113,22 +113,41 @@ Duas coisas nessa fórmula não são enfeite:
   seria reprovada por ter as duas do mesmo autor, e a regra viraria um obstáculo à
   publicação incremental em vez de uma regra editorial.
 
-O que **não** muda: o teto de **2 posições por obra protegida por aula** (§12.7.1
-do currículo), a proibição de diagramas consecutivos da mesma obra, e o texto 100%
-escrito do zero em PT-BR. E cada aula continua declarando o livro que a fundamenta
-no campo `objective.source`.
+O que **não** muda: o texto 100% escrito do zero em PT-BR, e cada aula declarando
+o livro que a fundamenta no campo `objective.source`.
 
-A distribuição planejada, conferida contra a regra:
+O que **mudou depois**, em 2026-09-08, e não é detalhe: o teto de **2 posições por
+obra protegida por aula** (§12.7.1 do currículo) e a proibição de diagramas
+consecutivos **não seguram mais este módulo**. O teto é por aula, e no formato de
+três etapas uma aula é uma posição só — ele ficou sem sujeito (§1.2 do
+`SOURCE-CORPUS`). E o livro-base do módulo, o de la Villa, está em **regime
+integral** desde 2026-09-08 por decisão do Doug — *"sem teto nenhum, quero usar o
+livro inteiro"* —, o que desliga para ele tanto o teto de citação quanto a
+rotação desta §4. O que segura o módulo é a declaração do regime, com prazo
+cobrado e inventário em `content/divida-de-licenca.md`.
+
+A distribuição planejada, conferida contra a regra — **e vencida em 2026-09-08**.
+A tabela abaixo foi desenhada quando cinco livros iam se revezar e o Silman ia dar
+a espinha. Desde então o livro-base do módulo passou a ser o de la Villa, em
+regime integral: a rotação não se aplica a ele, e a tabela vira desejo, não
+régua. Fica no arquivo porque é o único desenho de distribuição que já existiu, e
+é dele que a redistribuição vai partir; **não a leia como plano vigente**.
 
 | Classe | Aulas | Teto | Silman | de la Villa | Müller Kids | Pandolfini | Seirawan |
 |---|---|---|---|---|---|---|---|
-| E | 6 | 2 | 2 | — | 2 | 1 | 1 |
+| E | 6 | 2 | **6** (regime integral) | — | — | — | — |
 | D | 12 | 4 | 4 | 3 | 2 | 1 | 2 |
 | C | 16 | 5 | 5 | 5 | 2 | 2 | 2 |
 | B | 15 | 5 | 5 | 5 | 1 | 1 | 3 |
 
-Nenhuma célula estoura o teto, e as fatias intermediárias (FN1 com 4 aulas de D;
-FN2 com 4 de C; FN3 com 2 de B) cabem no piso de 2.
+As fatias intermediárias (FN1 com 4 aulas de D; FN2 com 4 de C; FN3 com 2 de B)
+cabem no piso de 2. Duas obras estão hoje em **regime integral** (§1.1 do
+`SOURCE-CORPUS`) e por isso fora da régua da rotação: o **de la Villa**, que é o
+livro-base do módulo, e o **Silman**, que segue declarado com inventário zerado
+porque a **Classe E continua em aberto** — o de la Villa não ensina mate
+elementar. As obras que não estão em regime integral continuam sob a régua
+normal. O redesenho das classes D, C e B sai do índice do de la Villa, não mais
+do Silman, e ainda não foi feito.
 
 ---
 
@@ -149,16 +168,42 @@ pelo menos uma**, e os capítulos foram conferidos no PDF, não lembrados (§8).
 coluna **Sob teto** lista as protegidas que podem contribuir com até 2 posições
 cada.
 
+> **2026-09-08 — o corpus antigo saiu do disco, e o livro-base mudou.**
+>
+> Duas coisas aconteceram no mesmo dia, e a segunda é a que manda. Primeiro, as
+> cinco aulas escritas contra os livros anteriores foram apagadas de
+> `content/lessons/`. Depois o Doug **trocou o livro-base do módulo do Silman
+> para o de la Villa** e **redesenhou o formato**: a aula deixou de ser seis
+> etapas em posições diferentes e passou a ser **três etapas numa posição só**
+> — objetivo estático, com ajuda, sem ajuda —, com "aprendida" contada pela
+> escada de três passadas em dias distintos.
+>
+> Hoje o módulo tem **1 aula no disco**: a `N1-KPK`, piloto do formato novo e
+> do livro novo. As outras estão na fase **"a refazer"** — a trilha é o plano, e
+> o plano não mudou; o que mudou é contra que livro e em que formato elas serão
+> escritas. A coluna **Posição (DP)** delas foi zerada porque o garimpo de
+> domínio público não vale mais para elas.
+>
+> As duas aulas do Silman (`N0-R-MATE` e `N0-MATING-MATERIAL`) saíram junto,
+> com as 17 posições de obra protegida. O **regime integral do Silman continua
+> declarado** em `content/divida-de-licenca.md`, com inventário zerado: a
+> Classe E está em aberto, e se ela voltar a sair daquele livro o regime já
+> está de pé.
+>
+> A `lib/finais/trilha.ts` **não mudou** e nem devia: ela lista as 49 aulas
+> planejadas, e o teste que cruza a lista com o disco já pulava aula não escrita
+> (`if (!existsSync(arquivo)) continue`).
+
 ### Classe E — 6 aulas
 
 | # | F | Id | Aula | Peças | Base | Posição (DP) | Sob teto | Fase |
 |---|---|---|---|---|---|---|---|---|
-| 1 | ✔C | `N0-Q-MATE` | Mate de dama e rei: a caixa | 3 | SIL | CAP §1 · COO VII.I · STA VI.1 · FRE refs | SIL, PAN, MK | pronta |
-| 2 | ✔C | `N0-R-MATE` | Mate de torre e rei: a caixa | 3 | MK | CAP §1 · STA VI.1 · FRE VII.I · ROG II | MK, PAN, SIL | pronta |
-| 3 | c | `N0-LADDER` | Mate da escada: duas torres, e dama e torre | 4 | PAN | FRE VII.II · WAL "Various Checkmates" No. I | PAN, SIL | B5 |
-| 4 | c | `N0-STALEMATE` | Afogamento: como não empatar a partida ganha | 3–4 | MK | FRE V.II–V · CAP §2 · CUN VI | MK, SIL | B5 |
-| 5 | L | `N0-MATING-MATERIAL` | O que dá mate e o que não dá (B, C, 2C contra rei) | 3–4 | SEI | STA VI.1 (405–408) · FRE X.VI/VIII · CAP §15 | SEI, SIL, DLV | B5 |
-| 6 | c | `N1-KING-ACTIVITY` | O rei é peça: use-o | 3–5 | SIL | FRE I.VII "Playing the King to the front" · CUN I | SIL, NUN | B5 |
+| 1 | C | `N0-Q-MATE` | Mate de dama e rei: a caixa | 3 | SIL | — | SIL (integral) | a refazer |
+| 2 | ✔C | `N0-R-MATE` | Mate de torre e rei: a caixa | 3 | SIL | FRE VII.I | SIL (integral) | pronta |
+| 3 | c | `N0-LADDER` | Mate da escada: duas torres, e dama e torre | 4 | SIL | — | SIL (integral) | a refazer |
+| 4 | c | `N0-STALEMATE` | Afogamento: como não empatar a partida ganha | 3–4 | SIL | — | SIL (integral) | a refazer |
+| 5 | ✔L | `N0-MATING-MATERIAL` | O que dá mate e o que não dá (B, C, 2C contra rei) | 3–4 | SIL | FRE X.VI | SIL (integral) | pronta |
+| 6 | c | `N1-KING-ACTIVITY` | O rei é peça: use-o | 3–5 | SIL | — | SIL (integral) | a refazer |
 
 ### Classe D — 12 aulas
 
@@ -167,7 +212,7 @@ cada.
 | 7 | C | `N1-SQUARE` | Regra do quadrado | 3 | DLV | FRE I.I "Calculation of distances" · CAP §12 | DLV, SIL | B5 |
 | 8 | c | `N1-DIRECT-OPPOSITION` | Oposição | 3 | SIL | FRE II.I "The Opposition illustrated" · CAP §13 · STA VI.IV | SIL, DLV | B5 |
 | 9 | c | `N1-KEY-SQUARES` | Casas-chave | 3 | DLV | FRE II.III · FRE refs "Opposition, how to secure" · CUN I | DLV, NUN | FN2 |
-| 10 | C | `N1-KPK` | Rei e peão contra rei: o rei na frente do peão | 3 | SIL | STA VI.1 (409) · ROG IV · FRE II.III · KH | SIL, MLA | B5 |
+| 10 | ✔C | `N1-KPK` | Rei e peão contra rei: o rei na frente do peão | 3 | DLV | — | DLV (1 de 2) | pronta |
 | 11 | c | `N1-KPK-RANKS` | Peão na 6ª e na 7ª: quem joga decide | 3 | MK | STA VI.IV (473) · FRE II.III · KH | MK, DLV | B5 |
 | 12 | c | `N1-ROOK-PAWN` | Peão de torre: o empate do canto | 3 | MK | FRE III.II–III "Rooks' pawns' difficulties" · CUN I | MK, SIL, DLV | FN2 |
 | 13 | c | `N2-KING-MANEUVER` | Oposição além do básico: a distante | 3 | SIL | FRE II.I–II · FRE refs "how to maintain" · CAP §13 | SIL, DLV | FN2 |

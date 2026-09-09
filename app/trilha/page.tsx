@@ -16,7 +16,6 @@ import {
 } from "@/lib/curso/trilha";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
 import { progressoDeFinais } from "@/lib/finais/progresso";
-import { dicasLidas } from "@/lib/meiojogo/progresso";
 import { temaAberto } from "@/lib/tatica/conteudo";
 import { progressoPorTema } from "@/lib/tatica/progresso";
 
@@ -27,7 +26,7 @@ import { progressoPorTema } from "@/lib/tatica/progresso";
  *
  * "O que vem depois?" — e ela existe porque, até a F2, a resposta estava
  * repartida em três telas que não conversavam: `/tatica` fala em rating de
- * puzzle do Lichess, `/finais` fala em classe USCF, e o meio-jogo não falava em
+ * puzzle do Lichess e `/finais` fala em classe USCF, e nenhuma das duas fala em
  * nada. Um aluno de doze anos não converte escalas de cabeça.
  *
  * ## Uma escada só, e a conversão dita com todas as letras
@@ -65,10 +64,9 @@ export default async function Trilha({ searchParams }: PageProps<"/trilha">) {
   const tela = semanaDaTela(perfil.papel, (await searchParams)[PARAMETRO_DA_SEMANA]);
   const semana = tela.semana;
 
-  const [tatica, finais, lidas] = await Promise.all([
+  const [tatica, finais] = await Promise.all([
     progressoPorTema(perfil.id),
     progressoDeFinais(perfil.id),
-    dicasLidas(perfil.id),
   ]);
 
   const mapa = montarMapa({
@@ -76,7 +74,6 @@ export default async function Trilha({ searchParams }: PageProps<"/trilha">) {
     temaAberto,
     finais,
     aulasPublicadas: aulasPublicadas(),
-    dicasLidas: lidas,
     semana,
   });
   const aqui = vocEstaAqui(mapa);
@@ -98,9 +95,9 @@ export default async function Trilha({ searchParams }: PageProps<"/trilha">) {
         </Link>
         <h1 className="titulo text-tinta">A trilha do curso</h1>
         <p className="text-sm text-tinta-media">
-          Tudo o que o preparatório tem, em quatro degraus de força: tática, finais e
-          meio-jogo lado a lado. Você não precisa esperar o degrau certo — o que está aberto
-          está clicável em qualquer um.
+          Tudo o que o preparatório tem, em quatro degraus de força: tática e finais lado
+          a lado. Você não precisa esperar o degrau certo — o que está aberto está clicável
+          em qualquer um.
         </p>
         <Legenda situacoes={situacoes} />
         {aqui === null ? (
@@ -139,14 +136,13 @@ export default async function Trilha({ searchParams }: PageProps<"/trilha">) {
               <p className="text-sm text-tinta-media">{nivel.resumo}</p>
             </div>
 
-            {/* `items-start` porque a coluna do meio-jogo tem trinta pastilhas e
-                a de finais tem seis: sem isto as três esticam até a altura da
-                mais alta e sobra um terço de cartão em branco. `min-w-0` em
-                cada cartão porque item de grade nasce com `min-width: auto`, e
-                uma pastilha longa empurrava o cartão para fora da coluna — que
-                é o defeito nº 1 da revisão das capturas: na coluna do meio o
-                rótulo ficava escondido atrás do cartão vizinho. */}
-            <div className="grid items-start gap-3 sm:grid-cols-3">
+            {/* `items-start` porque a coluna de tática tem muito mais pastilhas
+                que a de finais: sem isto as duas esticam até a altura da mais
+                alta e sobra meio cartão em branco. `min-w-0` em cada cartão
+                porque item de grade nasce com `min-width: auto`, e uma pastilha
+                longa empurrava o cartão para fora da coluna — que era o defeito
+                nº 1 da revisão das capturas. */}
+            <div className="grid items-start gap-3 sm:grid-cols-2">
               {MODULOS_EM_ORDEM.map((nome) => (
                 <Coluna
                   key={nome}

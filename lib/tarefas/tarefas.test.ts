@@ -5,10 +5,8 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { SABADOS, SEMANAS } from "../curso/calendario.ts";
 import { CLASSES, TRILHA } from "../finais/trilha.ts";
-import { NIVEIS } from "../curso/trilha.ts";
-import { DICAS, dicasDoNivel } from "../meiojogo/conteudo.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
-import { daSemana, problemasDoDetalheDeMeioJogo, validarTarefas } from "./tarefas.ts";
+import { daSemana, validarTarefas } from "./tarefas.ts";
 
 const RAIZ = fileURLToPath(new URL("../..", import.meta.url));
 
@@ -77,86 +75,20 @@ test("as metas de finais apontam para classes que a trilha tem, com aula a abrir
   }
 });
 
-test("as metas de meio-jogo apontam para degraus que existem, com dica escrita", () => {
-  // O gêmeo do teste acima, e pelo mesmo erro real: pedir "8 dicas do degrau
-  // 1400-1600" quando só 6 estão escritas deixaria a barra parada em 6 de 8 e
-  // o aluno concluiria que marcar não funciona.
-  const degraus = new Set(NIVEIS.map((n) => n.id));
-  for (const tarefa of validarTarefas(lerConteudo())) {
-    if (tarefa.tipo !== "meiojogo") continue;
-    assert.ok(
-      degraus.has(tarefa.meta.nivel),
-      `a tarefa "${tarefa.id}" pede o degrau "${tarefa.meta.nivel}", que não existe`,
-    );
-    const escritas = dicasDoNivel(tarefa.meta.nivel).length;
-    assert.ok(
-      escritas >= tarefa.meta.ler,
-      `a tarefa "${tarefa.id}" pede ${tarefa.meta.ler} dicas e só ${escritas} ` +
-        `estão escritas no degrau ${tarefa.meta.nivel}`,
-    );
-  }
-});
 
-test("o detalhe do meio-jogo nomeia dicas que existem, e no degrau que ele aponta", () => {
-  // O erro real, e ele estava no ar: o `detalhe` de `s1-meiojogo` prometia
-  // "a coluna aberta" e "a dama sozinha", que não são dica do degrau `ate-1000`;
-  // o de `s2` prometia "melhorar a pior peça" (que é m17, do degrau seguinte) e
-  // "trocar quando se está na frente", que não é dica de degrau nenhum; o de
-  // `s3` prometia "posto avançado" e "bispo bom e bispo mau", que são m15 e m14,
-  // do degrau anterior; e o de `s4`, "ataque de minoria" e "sacrifício de
-  // qualidade", que não existem. Quatro de quatro.
+
+test("toda semana do curso tem tarefa dos blocos da rotina", () => {
+  // A rotina tem três blocos — tática, finais e partida —, e uma semana sem
+  // tarefa de um deles é tempo de estudo por dia sem destino. O bloco da
+  // partida é sempre `marcar`: não há API do chess.com para conferir.
   //
-  // O teste ao lado — o da contagem — passava nos quatro, porque contagem não
-  // é descrição. Este cobra as duas pontas: os ids são do degrau, e o título de
-  // cada um aparece **literalmente** na prosa que o aluno lê no painel.
-  assert.deepEqual(problemasDoDetalheDeMeioJogo(validarTarefas(lerConteudo()), DICAS), []);
-});
-
-test("dica do degrau errado no detalhe reprova, mesmo com a contagem certa", () => {
-  // O caso adversarial: seis dicas nomeadas para uma tarefa que pede seis, com
-  // uma delas de outro degrau. É a forma exata do erro que estava no ar — e o
-  // teste da contagem, ao lado, continua passando neste conteúdo.
-  const tarefa = {
-    id: "s2-meiojogo",
-    semana: 2,
-    tipo: "meiojogo",
-    titulo: "Ler dicas do degrau 1000–1200",
-    detalhe: "Abra uma rota para a pior peça",
-    dicas: ["m17"],
-    meta: { nivel: "1000-1200", ler: 1 },
-  };
-  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), DICAS);
-  assert.equal(problemas.length, 1);
-  assert.match(problemas[0], /é do degrau 1000-1200 e nomeia "m17", que é do degrau 1200-1400/);
-});
-
-test("lista certa e prosa desatualizada reprovam — é o par que discorda", () => {
-  // A outra metade: os ids passam a estar certos e ninguém reescreve o texto.
-  // Sem esta regra, o painel voltaria a prometer uma coisa e a trilha a levar
-  // a outra, com o gate verde.
-  const tarefa = {
-    id: "s1-meiojogo",
-    semana: 1,
-    tipo: "meiojogo",
-    titulo: "Ler dicas do degrau até 1000",
-    detalhe: "A coluna aberta e a dama sozinha.",
-    dicas: ["m1"],
-    meta: { nivel: "ate-1000", ler: 1 },
-  };
-  const problemas = problemasDoDetalheDeMeioJogo(validarTarefas([tarefa]), DICAS);
-  assert.equal(problemas.length, 1);
-  assert.match(problemas[0], /não escreve "Coloque outra peça no jogo" no detalhe/);
-});
-
-test("toda semana do curso tem tarefa dos quatro blocos da rotina", () => {
-  // A rotina de 2 h tem quatro blocos — tática, finais, meio-jogo e partida —,
-  // e uma semana sem tarefa de um deles é meia hora por dia sem destino. O
-  // bloco da partida é sempre `marcar`: não há API do chess.com para conferir.
+  // Eram quatro blocos até 2026-09-08, com o meio-jogo. Ele saiu do site, e as
+  // quatro tarefas dele saíram de `content/tarefas.json` junto.
   const tarefas = validarTarefas(lerConteudo());
   for (const semana of SEMANAS) {
     const daqui = tarefas.filter((t) => t.semana === semana);
     if (daqui.length === 0) continue; // semana ainda não escrita
-    for (const tipo of ["tatica", "finais", "meiojogo"] as const) {
+    for (const tipo of ["tatica", "finais"] as const) {
       assert.ok(
         daqui.some((t) => t.tipo === tipo),
         `a semana ${semana} não tem tarefa de ${tipo}`,
@@ -164,6 +96,7 @@ test("toda semana do curso tem tarefa dos quatro blocos da rotina", () => {
     }
   }
 });
+
 
 test("a semana 2 manda o aluno aos finais", () => {
   // É a entrega da FN1/B4: o curso de finais só vira tarefa de casa quando

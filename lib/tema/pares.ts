@@ -226,7 +226,7 @@ export const PARES: Par[] = [
     piso: AA_TEXTO,
   },
   {
-    onde: "texto de exemplo dentro do campo vazio (`placeholder:`) — entrar/Formulario.tsx, professor/CadastroDeAluno.tsx; e os travessões `aria-hidden` de MasterySeal:47, /trilha e /meio-jogo/[dica]",
+    onde: "texto de exemplo dentro do campo vazio (`placeholder:`) — entrar/Formulario.tsx, professor/CadastroDeAluno.tsx; e os travessões `aria-hidden` de MasterySeal:47 e /trilha",
     texto: "tinta-muda",
     fundo: CARTA,
     piso: AA_TEXTO,

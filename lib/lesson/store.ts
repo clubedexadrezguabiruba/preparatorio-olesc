@@ -12,25 +12,22 @@ import { create } from "zustand";
  * de um lance. Essa é efêmera e vive no componente da etapa.
  */
 
-export type StageKey = "objective" | "example" | "guided" | "solo" | "practice" | "review";
-export type TreeKey = "guided" | "solo";
+/**
+ * **Três etapas, numa posição só** (2026-09-08). Eram seis: saíram `example`
+ * (a animação, absorvida pelo objetivo estático), `solo` (a árvore sem ajuda,
+ * cujo papel a partida contra a máquina faz) e `review` (a fila de posições
+ * novas, substituída pela escada em dias espaçados). Ver `lessonSchema`.
+ */
+export type StageKey = "objective" | "guided" | "practice";
+/** Só uma árvore roteirizada sobrou, e ela é a etapa do meio. */
+export type TreeKey = "guided";
 
-export const STAGE_ORDER: StageKey[] = [
-  "objective",
-  "example",
-  "guided",
-  "solo",
-  "practice",
-  "review",
-];
+export const STAGE_ORDER: StageKey[] = ["objective", "guided", "practice"];
 
 export const STAGE_LABEL: Record<StageKey, string> = {
   objective: "Objetivo",
-  example: "Exemplo",
   guided: "Com ajuda",
-  solo: "Sem ajuda",
-  practice: "Prática real",
-  review: "Revisão",
+  practice: "Sem ajuda",
 };
 
 export type MessageTone = "good" | "bad" | "warn" | "neutral";
@@ -158,15 +155,16 @@ export function restingMessage(tree: TreeState | undefined): PanelMessage | null
  * ------------------------------------------------------------------ */
 
 /**
- * Qual partida. A etapa 5 tem uma; a etapa 6 tem uma por posição de revisão.
- * As duas jogam exatamente a mesma partida contra o mesmo motor, então
- * compartilham estado e ações — o que muda é a chave.
+ * Qual partida. Hoje há uma só — a etapa 3 —, e o tipo continua sendo um tipo
+ * em vez de virar a constante `"practice"` porque a store é indexada por ele e
+ * a forma "uma tabela de partidas" é a que serve à escada: no dia em que uma
+ * aula quiser mais de uma partida, entra chave nova sem mexer no estado.
+ *
+ * Era `"practice" | `review:${string}``, com uma partida por posição de
+ * revisão. A etapa 6 saiu em 2026-09-08: quem revisa agora é a escada de
+ * `lib/finais/`, na MESMA posição, em dias espaçados.
  */
-export type PracticeKey = "practice" | `review:${string}`;
-
-export function reviewKey(positionId: string): PracticeKey {
-  return `review:${positionId}`;
-}
+export type PracticeKey = "practice";
 
 export type PracticeEnd = {
   result: "win-white" | "win-black" | "draw";
@@ -229,20 +227,11 @@ export function restingPracticeMessage(practice: PracticeState | undefined): Pan
  * tira o selo. Quem zera é `open()`, ou seja, trocar de aula — que é
  * exatamente o "na mesma sessão" que a definição de D1 pede.
  */
-export type Cleared = { solo: boolean; practice: boolean };
+export type Cleared = { practice: boolean };
 
 type LessonStore = {
   lessonId: string | null;
   stage: StageKey;
-  /**
-   * Onde a etapa 2 está: em que cena, e quantos lances dela já rodaram
-   * (0 = posição de partida da cena).
-   *
-   * Virou par em 2026-08-19, quando o exemplo passou a ter cenas — "como
-   * termina" e depois "o caminho inteiro". Com um número só, sair da etapa e
-   * voltar devolvia o aluno ao lance certo da cena errada.
-   */
-  example: { scene: number; step: number };
   trees: Partial<Record<TreeKey, TreeState>>;
   /** Indexado por `PracticeKey`; `Record<string, …>` porque chave de template é índice de string. */
   practices: Record<string, PracticeState | undefined>;
@@ -256,7 +245,6 @@ type LessonStore = {
     practices?: Array<{ key: PracticeKey; positionId: string; startFen: string }>,
   ) => void;
   goToStage: (stage: StageKey) => void;
-  setExample: (scene: number, step: number) => void;
   say: (tone: MessageTone, text: string, square?: string) => void;
   /**
    * A mensagem de fim de etapa. Ação nomeada em vez de um quarto parâmetro
@@ -296,27 +284,25 @@ type LessonStore = {
   practiceMove: (key: PracticeKey, uci: string) => void;
   practiceFinish: (key: PracticeKey, end: PracticeEnd) => void;
   practiceRestart: (key: PracticeKey) => void;
+
 };
 
 export const useLessonStore = create<LessonStore>((set) => ({
   lessonId: null,
   stage: "objective",
-  example: { scene: 0, step: 0 },
   trees: {},
   practices: {},
-  cleared: { solo: false, practice: false },
+  cleared: { practice: false },
   message: null,
 
   open: (lessonId, stage, roots, practices = []) =>
     set({
       lessonId,
       stage,
-      example: { scene: 0, step: 0 },
       message: null,
-      cleared: { solo: false, practice: false },
+      cleared: { practice: false },
       trees: {
         ...(roots.guided ? { guided: freshTree(roots.guided) } : {}),
-        ...(roots.solo ? { solo: freshTree(roots.solo) } : {}),
       },
       practices: Object.fromEntries(
         practices.map((p) => [p.key, freshPractice(p.positionId, p.startFen)]),
@@ -324,7 +310,6 @@ export const useLessonStore = create<LessonStore>((set) => ({
     }),
 
   goToStage: (stage) => set({ stage, message: null }),
-  setExample: (scene, step) => set({ example: { scene, step } }),
 
   say: (tone, text, square) =>
     set((state) => ({
@@ -356,13 +341,12 @@ export const useLessonStore = create<LessonStore>((set) => ({
       if (!tree) return state;
       const finished = nextNodeId === null;
       return {
-        // Chegar ao mate na etapa 4 é metade do critério de domínio (§6 do
-        // plano). Nada mais precisa ser contado: um lance que joga a vitória
-        // fora já encerra a tentativa por `treeFail`, o teto de lances também,
-        // a etapa 4 roda sem dica nenhuma, e o gate de conteúdo prova que todo
-        // nó terminal é mate de verdade — o que descarta afogamento. Portanto
-        // `status: "done"` na etapa 4 **é** o critério, e basta lê-lo.
-        cleared: key === "solo" && finished ? { ...state.cleared, solo: true } : state.cleared,
+        // **A árvore não afere domínio nenhum, e isso mudou em 2026-09-08.**
+        // Era a etapa 4 (`solo`) que fechava metade do critério ao chegar no
+        // mate. Ela saiu do formato, e a árvore que sobrou é a etapa *com*
+        // ajuda: terminá-la prova que o aluno soube seguir o roteiro com a
+        // dica à mão, e isso é aquecimento, não passada. Quem afere é a etapa
+        // 3, contra a máquina — ver `Cleared`.
         trees: {
           ...state.trees,
           [key]: {
@@ -464,4 +448,5 @@ export const useLessonStore = create<LessonStore>((set) => ({
         },
       };
     }),
+
 }));

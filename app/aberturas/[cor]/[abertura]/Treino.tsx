@@ -5,7 +5,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Cor, Linha } from "@/lib/repertorio/linhas";
 import type { Modo } from "@/lib/repertorio/passada";
-import { diasAteRevisar, semQuebras, type ProgressoDaLinha } from "@/lib/repertorio/treino";
+import {
+  DEGRAU_APRENDIDA,
+  diasAteRevisar,
+  semQuebras,
+  type ProgressoDaLinha,
+} from "@/lib/repertorio/treino";
 import {
   armAudioOnFirstGesture,
   isSoundOn,
@@ -14,7 +19,7 @@ import {
   subscribeSound,
 } from "@/lib/sound";
 import { BotaoPrincipal, BotaoSecundario } from "@/components/lesson/BotoesDaAula";
-import { Bolinhas } from "../../Bolinhas";
+import { Bolinhas } from "@/components/Bolinhas";
 import { registrarTreino } from "../../acoes";
 import { Passada } from "./Passada";
 import { OQueAindaFalta } from "./OQueFalta";
@@ -255,7 +260,7 @@ export function Treino({
             <span className="text-tinta-muda" aria-hidden>
               ·
             </span>
-            <Bolinhas progresso={atual} />
+            <Bolinhas progresso={atual} total={DEGRAU_APRENDIDA} />
           </div>
         </div>
         <BotaoDeSom />

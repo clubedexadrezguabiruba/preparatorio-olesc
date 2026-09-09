@@ -1,5 +1,4 @@
-import { DICAS } from "../meiojogo/conteudo.ts";
-import { CLASSES, daClasse, dominou, TRILHA, type ProgressoDaAula } from "../finais/trilha.ts";
+import { aprendeu, CLASSES, daClasse, TRILHA, type ProgressoDaAula } from "../finais/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
 import { type Semana } from "./calendario.ts";
@@ -20,12 +19,12 @@ import {
  *
  * Porque a pergunta que a `/trilha` responde ("onde eu estou, e o que vem
  * depois?") é a mesma que o painel e o relatório do professor vão querer fazer,
- * e ela é feita de **três** progressos com donos diferentes — a view
- * `progresso_tema`, a view `progresso_aula` mais `aula_lida`, e a tabela
- * `dica_lida`. Junta-los dentro do JSX seria uma quarta opinião sobre o que é
- * "feito", escrita onde nenhum teste alcança.
+ * e ela é feita de **dois** progressos com donos diferentes — a view
+ * `progresso_tema`, e a view `progresso_aula` mais `aula_lida`. Juntá-los
+ * dentro do JSX seria uma terceira opinião sobre o que é "feito", escrita onde
+ * nenhum teste alcança.
  *
- * Aqui entram os três progressos já lidos e sai o mapa. Quem fala com o banco é
+ * Aqui entram os dois progressos já lidos e sai o mapa. Quem fala com o banco é
  * a página; quem decide o que os números significam é este arquivo, e o
  * `mapa.test.ts` cobra.
  *
@@ -35,12 +34,11 @@ import {
  * |---|---|---|
  * | tática | um tema | os {@link PUZZLES_POR_TEMA} puzzles dele |
  * | finais | uma aula | 1 — ela é dominada ou não |
- * | meio-jogo | uma dica | 1 — ela é lida ou não |
  *
  * Não há como uniformizar isso sem mentir: um tema tem progresso parcial
- * medido, uma aula tem um critério de domínio que a tablebase certifica, e uma
- * dica tem uma declaração do aluno. A tela mostra as três lado a lado **e**
- * escreve o que cada barra conta — é a mesma disciplina do selo de domínio.
+ * medido, e uma aula tem um critério de domínio que a tablebase certifica. A
+ * tela mostra as duas lado a lado **e** escreve o que cada barra conta — é a
+ * mesma disciplina do selo de domínio.
  *
  * ## O que "aberto" quer dizer em cada um
  *
@@ -50,9 +48,8 @@ import {
  * dois módulos: quem sabe a semana de hoje é a página, quem sabe o que aquilo
  * significa é este arquivo.
  *
- * As dicas de meio-jogo estão **todas** abertas desde o primeiro dia: leitura
- * fora de ordem custa no máximo uma releitura, ao contrário de soltar a prática
- * de um final antes de o aluno saber a técnica.
+ * O módulo de meio-jogo saiu do site em 2026-09-08, e este arquivo voltou a
+ * falar de dois.
  */
 
 export type ProgressoParaOMapa = {
@@ -63,7 +60,6 @@ export type ProgressoParaOMapa = {
   readonly finais: ReadonlyMap<string, ProgressoDaAula>;
   /** Os ids das aulas com JSON publicado, de `aulasPublicadas` — não as abertas. */
   readonly aulasPublicadas: ReadonlySet<string>;
-  readonly dicasLidas: ReadonlySet<string>;
   /** A semana do preparatório em que estamos, de `semanaAtual()`. */
   readonly semana: Semana;
 };
@@ -123,30 +119,19 @@ export function montarMapa(p: ProgressoParaOMapa): Map<string, ModuloDoNivel[]> 
         nome: aula.nome,
         href: `/finais/${aula.id}`,
         total: 1,
-        feitos: progresso && dominou(aula.formato, progresso) ? 1 : 0,
+        feitos: progresso && aprendeu(aula.formato, progresso) ? 1 : 0,
         situacao: situacao(aula.sabado, p.semana, p.aulasPublicadas.has(aula.id)),
         sabado: aula.sabado,
       });
     }
   }
 
-  for (const dica of DICAS) {
-    guardar(dica.nivel, "meio-jogo", {
-      id: dica.id,
-      nome: dica.titulo,
-      href: `/meio-jogo/${dica.id}`,
-      total: 1,
-      feitos: p.dicasLidas.has(dica.id) ? 1 : 0,
-      situacao: "aberto",
-      sabado: null,
-    });
-  }
 
   // A ordem dos módulos dentro do nível é a da rotina de treino do aluno —
-  // tática, finais, meio-jogo —, a mesma do cartão "Hoje". Sair da ordem de
+  // tática e depois finais —, a mesma do cartão "Hoje". Sair da ordem de
   // inserção evitaria que um nível sem tema de tática mostrasse finais
   // primeiro e o de baixo mostrasse tática primeiro.
-  const ORDEM: ModuloDoNivel["modulo"][] = ["tatica", "finais", "meio-jogo"];
+  const ORDEM: ModuloDoNivel["modulo"][] = ["tatica", "finais"];
   for (const [nivel, modulos] of porNivel) {
     porNivel.set(nivel, [...modulos].sort((a, b) => ORDEM.indexOf(a.modulo) - ORDEM.indexOf(b.modulo)));
   }
@@ -186,7 +171,7 @@ export function contarAberto(modulo: ModuloDoNivel): {
  * legível de relance. O que preenche a coluna vazia é o `vazio` de cada módulo,
  * que diz **por que** ela está vazia.
  */
-export const MODULOS_EM_ORDEM = ["tatica", "finais", "meio-jogo"] as const;
+export const MODULOS_EM_ORDEM = ["tatica", "finais"] as const;
 
 /** O nome do módulo na tela, e o que a barra dele conta. */
 export const MODULO: Record<
@@ -209,15 +194,8 @@ export const MODULO: Record<
   finais: {
     nome: "Finais",
     unidade: "aulas",
-    conta: "Aulas dominadas — o critério de cada formato, certificado pela tablebase.",
+    conta: "Aulas aprendidas — três passadas em dias distintos, cada uma certificada pela tablebase.",
     href: "/finais",
     vazio: "Nenhuma aula de finais nesta faixa.",
-  },
-  "meio-jogo": {
-    nome: "Meio-jogo",
-    unidade: "dicas",
-    conta: "Dicas que você declarou ter lido. Aqui não há lance para reconferir.",
-    href: "/meio-jogo",
-    vazio: "Nenhuma dica de meio-jogo nesta faixa.",
   },
 };

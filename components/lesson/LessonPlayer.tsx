@@ -7,7 +7,6 @@ import type { PacoteDeAula } from "@/lib/finais/conteudo";
 import type { TentativaDeAula } from "@/lib/finais/gravar";
 import { masteryReport } from "@/lib/lesson/mastery";
 import {
-  reviewKey,
   STAGE_LABEL,
   STAGE_ORDER,
   useLessonStore,
@@ -16,11 +15,9 @@ import {
   type TreeKey,
 } from "@/lib/lesson/store";
 import { armAudioOnFirstGesture, isSoundOn, setSoundOn, subscribeSound } from "@/lib/sound";
-import { ExampleStage } from "./ExampleStage";
 import { MasterySeal } from "./MasterySeal";
 import { ObjectiveStage } from "./ObjectiveStage";
 import { PracticeStage } from "./PracticeStage";
-import { ReviewStage } from "./ReviewStage";
 import { TreeStage } from "./TreeStage";
 
 /**
@@ -50,8 +47,6 @@ export function LessonPlayer({
    */
   startAt?: {
     stage: StageKey;
-    scene: number;
-    step: number;
     /** Onde cada árvore parou. Sem isto, salvar desfaz o lance recém-jogado. */
     trees?: Partial<Record<TreeKey, { nodeId: string; studentMoves: number }>>;
   };
@@ -100,15 +95,9 @@ export function LessonPlayer({
   const lessonId = useLessonStore((s) => s.lessonId);
   const open = useLessonStore((s) => s.open);
   const goToStage = useLessonStore((s) => s.goToStage);
-  const setExample = useLessonStore((s) => s.setExample);
   const treeSeek = useLessonStore((s) => s.treeSeek);
   const cleared = useLessonStore((s) => s.cleared);
-  const solo = useLessonStore((s) => s.trees.solo);
-  // O mapa inteiro, e não só `practices.practice`: as partidas da etapa 6
-  // moram aqui sob `review:<posição>`, e até a F2 elas nunca subiam ao
-  // servidor — o aluno revisava e o banco não sabia.
-  const practices = useLessonStore((s) => s.practices);
-  const practice = practices.practice;
+  const practice = useLessonStore((s) => s.practices.practice);
 
   const available = STAGE_ORDER.filter((key) => lesson.stages[key] !== undefined);
 
@@ -117,9 +106,9 @@ export function LessonPlayer({
   useEffect(() => armAudioOnFirstGesture(), []);
 
   useEffect(() => {
-    // As partidas das etapas 5 e 6 são registradas aqui, junto das raízes das
-    // árvores: quem inicializa é a store, não a etapa — e assim trocar de aula
-    // zera prática e revisão pelo mesmo caminho que zera as árvores.
+    // A partida da etapa 3 é registrada aqui, junto da raiz da árvore: quem
+    // inicializa é a store, não a etapa — e assim trocar de aula zera as duas
+    // pelo mesmo caminho.
     const practices: Array<{ key: PracticeKey; positionId: string; startFen: string }> = [];
     const practice = lesson.stages.practice;
     if (practice) {
@@ -129,23 +118,12 @@ export function LessonPlayer({
         startFen: positions[practice.positionId].fen,
       });
     }
-    for (const id of lesson.stages.review?.reviewPositionIds ?? []) {
-      practices.push({ key: reviewKey(id), positionId: id, startFen: positions[id].fen });
-    }
 
     // A etapa pedida só vale se ela existe nesta aula; senão, a primeira.
     const inicial =
       startAt && available.includes(startAt.stage) ? startAt.stage : available[0] ?? "objective";
 
-    open(
-      lesson.id,
-      inicial,
-      { guided: lesson.stages.guided?.root, solo: lesson.stages.solo?.root },
-      practices,
-    );
-    // `open` zera a cena e o passo; devolvê-los aqui dentro mantém tudo numa
-    // execução só, e por isso continua certo quando o efeito roda duas vezes.
-    if (startAt && inicial === startAt.stage) setExample(startAt.scene, startAt.step);
+    open(lesson.id, inicial, { guided: lesson.stages.guided?.root }, practices);
     for (const [key, onde] of Object.entries(startAt?.trees ?? {})) {
       if (onde) treeSeek(key as TreeKey, onde.nodeId, onde.studentMoves);
     }
@@ -194,34 +172,25 @@ export function LessonPlayer({
 
     // Fracasso grava tanto quanto acerto: é a tentativa que o professor precisa
     // ver. Quem decide o veredito é o servidor; daqui sobem só os lances.
-    if (solo && solo.status !== "playing") {
-      fim("solo", solo.attempt, solo.moves, solo.startedAt);
-    }
-
-    // As partidas da etapa 6, uma por posição. Elas viram linha `revisao` — e é
-    // a data delas que a fila espaçada lê para saber quando a aula volta.
-    for (const id of lesson.stages.review?.reviewPositionIds ?? []) {
-      const partida = practices[reviewKey(id)];
-      if (partida && partida.status !== "playing") {
-        fim("revisao", partida.attempt, partida.moves, partida.startedAt, id);
-      }
-    }
-
+    //
+    // **Só a partida grava, e ela é a única etapa que afere.** A árvore que
+    // sobrou é a *com ajuda*, aquecimento por decisão do Doug: ela não entra na
+    // conta da escada, e gravá-la encheria `tentativas_aula` de linhas que
+    // nenhuma conta lê. A etapa 4, que gravava como `solo`, saiu do formato.
     if (practice && practice.status !== "playing") {
-      // Aula sem etapa 6 aberta pelo cartão de revisão: a prática **é** a
-      // revisão do dia, e é assim que ela precisa ser gravada.
-      const comoRevisao = revisao && lesson.stages.review === undefined;
+      // Aberta pelo cartão de revisão, a partida **é** a passada do dia, e é
+      // assim que ela precisa ser gravada.
       fim(
-        comoRevisao ? "revisao" : "pratica",
+        revisao ? "revisao" : "pratica",
         practice.attempt,
         practice.moves,
         practice.startedAt,
-        comoRevisao ? practice.positionId : undefined,
+        revisao ? practice.positionId : undefined,
       );
     }
-    // `practices` muda a cada lance, então este efeito roda muito — e é a
-    // trava `enviadas` que segura, não a lista de dependências.
-  }, [lesson.id, lesson.stages.review, lessonId, onStageDone, practice, practices, revisao, solo]);
+    // `practice` muda a cada lance, então este efeito roda muito — e é a trava
+    // `enviadas` que segura, não a lista de dependências.
+  }, [lesson.id, lessonId, onStageDone, practice, revisao]);
 
   // Enquanto o efeito acima não rodou, a store ainda fala da aula anterior.
   if (lessonId !== lesson.id) return null;
@@ -229,87 +198,97 @@ export function LessonPlayer({
   const nextStage = (from: StageKey): StageKey | null =>
     available[available.indexOf(from) + 1] ?? null;
 
+  /**
+   * A trilha das etapas, que desce para DENTRO do painel de cada etapa.
+   *
+   * Ela era uma `<nav>` entre o cabeçalho e o palco, e ali ela custava altura
+   * de tabuleiro: `--aula-teto` é `100dvh` menos o respiro, o cabeçalho e o
+   * vão, e nada mais — qualquer coisa a mais entre eles devolve a rolagem que
+   * o palco existe para matar (ver "O palco da aula" em `app/globals.css`).
+   * No painel ela não custa nada ao tabuleiro; custa ao comentário, que é o
+   * lado que pagina em vez de rolar.
+   *
+   * É a mesma peça que o repertório chama de `TrilhaDeEtapas`, e ela ainda
+   * **não** foi promovida a `components/lesson/`: lá são três etapas fixas
+   * escritas à mão, aqui é a lista variável de `available` — a aula curta tem
+   * duas abas e a completa tem cinco. Promover agora seria juntar duas coisas
+   * que ainda não são a mesma; quando a segunda cópia nascer igual, ela sobe.
+   */
+  const trilha = (
+    <nav aria-label="Etapas da aula" className="flex flex-wrap gap-2">
+      {available.map((key, index) => {
+        const active = key === stage;
+        return (
+          <button
+            key={key}
+            type="button"
+            onClick={() => goToStage(key)}
+            aria-current={active ? "step" : undefined}
+            className={`min-h-11 rounded-md px-3 py-2 text-sm font-medium ring-1 transition foco ${
+              active
+                ? "bg-metodo-cheio text-tinta-inversa ring-metodo/30"
+                : "bg-carta text-tinta-media ring-borda hover:bg-carta-alta"
+            }`}
+          >
+            {/* O numeral recua **só** na aba inativa. Na ativa ele herda a
+                tinta do botão: a aba cheia já é a barulhenta da fila, e um
+                cinza de fundo claro sobre o verde cheio media 1,39:1 — a pior
+                reprovação que a régua achou no B6.1. */}
+            <span className={`tabular-nums ${active ? "" : "text-tinta-fraca"}`}>
+              {index + 1}.
+            </span>{" "}
+            {STAGE_LABEL[key]}
+          </button>
+        );
+      })}
+    </nav>
+  );
+
   return (
-    <div className="flex w-full flex-col gap-6">
-      <header className="flex flex-col gap-2">
+    <div className="flex w-full flex-1 flex-col gap-3">
+      {/*
+       * **O cabeçalho é uma LINHA, e isso é altura de tabuleiro.**
+       *
+       * Ele eram três linhas empilhadas — voltar, título, som — e o respiro da
+       * página era 80 px. Somados, davam altura que o tabuleiro não tinha.
+       * Medido no chess.com em 8/9/2026: a aula deles gasta 16 px acima do
+       * tabuleiro e 17 abaixo, e o tabuleiro fica com 95% da altura útil da
+       * janela. Numa linha, com o respiro em 40 e o vão em 12, a conta fecha
+       * nos 5,5rem que `--aula-teto` desconta no desktop.
+       *
+       * `flex-wrap` com `items-baseline`: no celular ela quebra em duas, e as
+       * peças continuam alinhadas pela base do texto em vez de pelo topo da
+       * caixa — que é o que faz um título de 20 px e um link de 12 parecerem a
+       * mesma linha. Os 6rem do celular já contam com essa quebra.
+       */}
+      <header className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
         {/* No laboratório este link ia para `/`, que era o índice de aulas.
             Aqui `/` é a porta do site e o índice é `/finais` — apontar para a
             raiz mandaria o aluno para fora do curso no meio da aula. */}
-        <Link
-          href="/finais"
-          className="text-xs font-medium text-tinta-fraca transition hover:text-tinta-media"
-        >
-          ← todas as aulas de finais
+        <Link href="/finais" className="foco rotulo text-tinta-fraca hover:underline">
+          ← Finais
         </Link>
-        <div className="flex items-start justify-between gap-3">
-          <h1 className="titulo">{lesson.title}</h1>
+        <h1 className="titulo">{lesson.title}</h1>
+        <div className="ml-auto self-center">
           <SoundToggle />
         </div>
       </header>
 
-      <nav aria-label="Etapas da aula" className="flex flex-wrap gap-2">
-        {available.map((key, index) => {
-          const active = key === stage;
-          return (
-            <button
-              key={key}
-              type="button"
-              onClick={() => goToStage(key)}
-              aria-current={active ? "step" : undefined}
-              className={`min-h-11 rounded-md px-3 py-2 text-sm font-medium ring-1 transition foco ${
-                active
-                  ? "bg-metodo-cheio text-tinta-inversa ring-metodo/30"
-                  : "bg-carta text-tinta-media ring-borda hover:bg-carta-alta"
-              }`}
-            >
-              {/* O numeral recua **só** na aba inativa. Na ativa ele herda a
-                  tinta do botão: a aba cheia já é a barulhenta da fila, e um
-                  cinza de fundo claro sobre o verde cheio media 1,39:1 — a pior
-                  reprovação que a régua achou no B6.1. */}
-              <span className={`tabular-nums ${active ? "" : "text-tinta-fraca"}`}>
-                {index + 1}.
-              </span>{" "}
-              {STAGE_LABEL[key]}
-            </button>
-          );
-        })}
-      </nav>
-
-      <section>
-        {/* O objetivo depende do exemplo: os diagramas dele são quadros das
-            cenas da etapa 2. O gate cobra a mesma dependência
-            (`lessonSchema.superRefine`), e por isso a condição aqui pede as
-            duas etapas em vez de só a primeira. */}
-        {stage === "objective" && lesson.stages.objective && lesson.stages.example && (
-          <div className="flex flex-col gap-6">
-            <ObjectiveStage
-              stage={lesson.stages.objective}
-              example={lesson.stages.example}
-              positions={positions}
-              orientation={lesson.orientation}
-            />
-            <StageFooter
-              next={nextStage("objective")}
-              onGo={goToStage}
-              label="Ver a técnica lance a lance"
-            />
-          </div>
-        )}
-
-        {stage === "example" && lesson.stages.example && (
-          <div className="flex flex-col gap-6">
-            <ExampleStage
-              stage={lesson.stages.example}
-              positions={positions}
-              orientation={lesson.orientation}
-              marcacao={marcacao}
-            />
-            <StageFooter next={nextStage("example")} onGo={goToStage} label="Agora é a sua vez" />
-            {/* Na aula de leitura não há etapa seguinte, e o rodapé acima não
-                desenha nada: o fim do exemplo é o fim da aula, e é aqui que ela
-                pergunta se foi lida. */}
-            {leitura}
-          </div>
+      <section className="flex flex-1 flex-col">
+        {stage === "objective" && lesson.stages.objective && (
+          <ObjectiveStage
+            stage={lesson.stages.objective}
+            position={positions[lesson.stages.objective.positionId]}
+            orientation={lesson.orientation}
+            trilha={trilha}
+            rodape={
+              <StageFooter
+                next={nextStage("objective")}
+                onGo={goToStage}
+                label="Jogar com ajuda"
+              />
+            }
+          />
         )}
 
         {stage === "guided" && lesson.stages.guided && (
@@ -317,6 +296,7 @@ export function LessonPlayer({
             lesson={lesson}
             tree={lesson.stages.guided}
             treeKey="guided"
+            trilha={trilha}
             position={positions[lesson.stages.guided.positionId]}
             orientation={lesson.orientation}
             allowHelp
@@ -331,67 +311,30 @@ export function LessonPlayer({
           />
         )}
 
-        {stage === "solo" && lesson.stages.solo && (
-          <TreeStage
-            lesson={lesson}
-            tree={lesson.stages.solo}
-            treeKey="solo"
-            position={positions[lesson.stages.solo.positionId]}
-            orientation={lesson.orientation}
-            allowHelp={false}
-            moveLimit={lesson.stages.solo.moveLimit}
-            intro="Posição nova, sem dica e sem destaque. É aqui que o domínio é aferido."
-            onFinish={() => {
-              const next = nextStage("solo");
-              if (next) goToStage(next);
-            }}
-            finishLabel="Continuar"
-          />
-        )}
-
         {stage === "practice" && lesson.stages.practice && (
           <PracticeStage
             practiceKey="practice"
+            trilha={trilha}
             position={positions[lesson.stages.practice.positionId]}
             orientation={lesson.orientation}
             goal={lesson.stages.practice.goal}
             engine={lesson.stages.practice.engine}
-            intro="Agora é partida de verdade: o computador defende com tudo o que sabe, e nenhum lance é corrigido no caminho. Quem decide é o resultado."
+            intro="Agora é partida de verdade, na mesma posição: o computador defende com tudo o que sabe, e nenhum lance é corrigido no caminho. Quem decide é o resultado."
             seal={
               <MasterySeal
                 report={masteryReport({
-                  // O critério é o das etapas que **esta** aula tem: das 49 da
-                  // trilha, 8 são completas (etapa 4 + etapa 5) e ~39 são curtas
-                  // (só a etapa 5). Cobrar de uma aula curta a etapa sem ajuda
-                  // seria mandar o aluno a uma aba que não existe.
-                  hasSolo: lesson.stages.solo !== undefined,
                   hasPractice: true,
-                  soloCleared: cleared.solo,
                   practiceWon: cleared.practice,
-                  soloGoal: lesson.stages.solo?.goal,
                   practiceGoal: lesson.stages.practice.goal,
                 })}
-                onGoToSolo={
-                  lesson.stages.solo ? () => goToStage("solo") : undefined
-                }
               />
             }
-            onFinish={() => {
-              const next = nextStage("practice");
-              if (next) goToStage(next);
-            }}
-            finishLabel="Ir para a revisão"
           />
         )}
 
-        {stage === "review" && lesson.stages.review && (
-          <ReviewStage
-            stage={lesson.stages.review}
-            practice={lesson.stages.practice}
-            positions={positions}
-            orientation={lesson.orientation}
-          />
-        )}
+        {/* A aula de leitura não joga: o fim dela é o fim do objetivo, e é ali
+            que ela pergunta se foi lida. */}
+        {stage === "objective" && leitura}
       </section>
     </div>
   );
@@ -409,7 +352,21 @@ function SoundToggle() {
       type="button"
       onClick={() => setSoundOn(!on)}
       aria-pressed={on}
-      className="min-h-11 shrink-0 rounded-md bg-carta px-3 py-2 text-lg leading-none ring-1 ring-borda transition hover:bg-carta-alta foco"
+      /*
+       * **`lg:min-h-9` é altura de tabuleiro, e o número foi medido.**
+       *
+       * O palco desconta 5,5rem do `100dvh` no desktop, e esses 88 px são
+       * respiro (40) + cabeçalho (36) + vão (12) — ver "O palco da aula" em
+       * `app/globals.css`. Este botão é a peça mais alta do cabeçalho: a
+       * `min-h-11` ele mede 44, o cabeçalho vai a 44, e a página passou a rolar
+       * **exatamente 8 px** — medido em 1366×768 antes de existir esta linha.
+       *
+       * Os 44 px continuam valendo abaixo de `lg`, que é onde há dedo: o alvo
+       * de toque de 44 px é o mínimo AAA da WCAG 2.5.5, e o orçamento do
+       * celular (6rem) já conta com um cabeçalho de 50. No desktop há ponteiro,
+       * e 36 px fica bem acima do mínimo AA de 24 (2.5.8).
+       */
+      className="min-h-11 shrink-0 rounded-md bg-carta px-3 py-2 text-lg leading-none ring-1 ring-borda transition hover:bg-carta-alta foco lg:min-h-9 lg:py-1"
     >
       <span aria-hidden>{on ? "🔊" : "🔇"}</span>
       <span className="sr-only">{on ? "Desligar o som" : "Ligar o som"}</span>

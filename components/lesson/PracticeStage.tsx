@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import { Chess } from "chess.js";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color, Key } from "@lichess-org/chessground/types";
+import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
+import { ProfessorSeApresenta } from "@/components/lesson/ProfessorSeApresenta";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { PromotionPicker, type PromotionChoice } from "@/components/board/PromotionPicker";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
@@ -47,6 +49,7 @@ import { PulseRing } from "./PulseRing";
  */
 export function PracticeStage({
   practiceKey,
+  trilha,
   position,
   orientation,
   goal,
@@ -57,6 +60,8 @@ export function PracticeStage({
   finishLabel,
 }: {
   practiceKey: PracticeKey;
+  /** A trilha das etapas, montada pelo `LessonPlayer` e servida no painel. */
+  trilha?: ReactNode;
   position: Position;
   /** O lado do aluno. */
   orientation: Color;
@@ -332,106 +337,119 @@ export function PracticeStage({
   const mate = game.isCheckmate();
 
   return (
-    <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start">
-      <div
-        ref={boardColumn}
-        className="relative mx-auto w-full max-w-[min(88vw,26rem)] lg:mx-0 lg:w-104 lg:shrink-0"
-        aria-busy={thinking}
-      >
-        <ChessBoard
-          fen={boardFen}
-          orientation={orientation}
-          turnColor={turn}
-          dests={interactive ? dests : new Map()}
-          lastMove={lastMove}
-          check={game.isCheck()}
-          viewOnly={!interactive}
-          revision={revision}
-          shapes={shapes}
-          matedKing={mate ? turn : null}
-          onMove={handleMove}
-        />
-        <PulseRing tone={message && !message.done ? message.tone : null} seq={message?.seq ?? 0} />
-        {promotion && (
-          <PromotionPicker
-            color={turn}
-            onChoose={(piece) => {
-              const move = promotion;
-              setPromotion(null);
-              play(move.orig, move.dest, piece);
-            }}
-            onCancel={() => {
-              setPromotion(null);
-              setRevision((r) => r + 1);
-            }}
-          />
-        )}
-      </div>
-
-      <div className="flex flex-1 flex-col gap-4">
-        {intro && verdict.kind === "playing" && (
-          <p className="text-sm leading-relaxed text-tinta-media">{intro}</p>
-        )}
-
-        <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rotulo text-tinta-fraca">
-          {/* O empate por falta de progresso deixa de cair do céu no lance 100. */}
-          <span>
-            Sem progresso: {progress.used} de {progress.limit}
-          </span>
-          {attempt > 1 && <span>· tentativa {attempt}</span>}
-          {thinking && <span className="text-metodo/80">· pensando…</span>}
-        </p>
-
-        <FeedbackPanel
-          message={panel}
-          placeholder="Partida de verdade: o computador defende com tudo o que sabe. Quem decide é o resultado, não o lance."
-        />
-
-        {engineStatus === "loading" && (
-          <p className="rounded-lg border border-dica-superficie/30 bg-dica-superficie/5 px-4 py-3 text-sm leading-relaxed text-dica-tinta">
-            Carregando o computador — {formatBytes(engineTotalBytes())}, só na primeira vez.
-          </p>
-        )}
-
-        {(engineStatus === "failed" || searchError) && (
-          <div className="flex flex-col gap-3 rounded-lg border border-aviso-superficie/30 bg-aviso-superficie/5 px-4 py-3">
-            {/* Âmbar, não rubro: não foi o aluno que errou. */}
-            <p className="text-sm leading-relaxed text-aviso-tinta">
-              {searchError ?? "Não consegui carregar o computador."} Confira a conexão e tente de
-              novo. As etapas com ajuda e sem ajuda continuam disponíveis.
-            </p>
-            <div>
-              <LessonButton
-                variant="primary"
-                onClick={() => {
-                  setSearchError(null);
-                  retry();
+    // `relative` no PAI do palco, e não nele: o palco tem altura fechada, e um
+    // irmão dele somaria altura à página. Ver o mesmo comentário no `TreeStage`.
+    <div className="relative">
+      <AulaShell
+        tabuleiro={
+          <div ref={boardColumn} className="relative" aria-busy={thinking}>
+            <ChessBoard
+              fen={boardFen}
+              orientation={orientation}
+              turnColor={turn}
+              dests={interactive ? dests : new Map()}
+              lastMove={lastMove}
+              check={game.isCheck()}
+              viewOnly={!interactive}
+              revision={revision}
+              shapes={shapes}
+              matedKing={mate ? turn : null}
+              onMove={handleMove}
+            />
+            <PulseRing tone={message && !message.done ? message.tone : null} seq={message?.seq ?? 0} />
+            {promotion && (
+              <PromotionPicker
+                color={turn}
+                onChoose={(piece) => {
+                  const move = promotion;
+                  setPromotion(null);
+                  play(move.orig, move.dest, piece);
                 }}
-              >
-                Tentar de novo
-              </LessonButton>
-            </div>
+                onCancel={() => {
+                  setPromotion(null);
+                  setRevision((r) => r + 1);
+                }}
+              />
+            )}
           </div>
-        )}
+        }
+        painel={
+          <>
+            {trilha}
 
-        {verdict.kind !== "playing" && seal}
+            {intro && verdict.kind === "playing" && (
+              <p className="text-sm leading-relaxed text-tinta-media">{intro}</p>
+            )}
 
-        <div className="flex flex-wrap gap-2">
-          {verdict.kind === "passed" && onFinish && (
-            <LessonButton variant="primary" onClick={onFinish}>
-              {finishLabel ?? "Continuar"}
-            </LessonButton>
-          )}
-          {verdict.kind === "failed" && (
-            <LessonButton variant="primary" onClick={restart}>
-              Recomeçar a partida
-            </LessonButton>
-          )}
-          {(verdict.kind === "passed" || (verdict.kind === "playing" && (moves?.length ?? 0) > 0)) && (
-            <LessonButton onClick={restart}>Recomeçar a partida</LessonButton>
-          )}
-        </div>
-      </div>
+            <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rotulo text-tinta-fraca">
+              {/* O empate por falta de progresso deixa de cair do céu no lance 100. */}
+              <span>
+                Sem progresso: {progress.used} de {progress.limit}
+              </span>
+              {attempt > 1 && <span>· tentativa {attempt}</span>}
+              {thinking && <span className="text-metodo/80">· pensando…</span>}
+            </p>
+
+            <FeedbackPanel
+              message={panel}
+              placeholder="Partida de verdade: o computador defende com tudo o que sabe. Quem decide é o resultado, não o lance."
+              retrato={<ProfessorSeApresenta />}
+            />
+
+            {/* O que vem daqui para baixo é o que pode passar da altura do
+                painel — o aviso do motor e o selo de domínio, que só aparecem
+                em alguns estados. Rola por dentro para a página não rolar; ver
+                a mesma escolha no `ObjectiveStage`. */}
+            <div className="flex min-h-0 flex-col gap-4 overflow-y-auto">
+              {engineStatus === "loading" && (
+                <p className="rounded-lg border border-dica-superficie/30 bg-dica-superficie/5 px-4 py-3 text-sm leading-relaxed text-dica-tinta">
+                  Carregando o computador — {formatBytes(engineTotalBytes())}, só na primeira vez.
+                </p>
+              )}
+
+              {(engineStatus === "failed" || searchError) && (
+                <div className="flex flex-col gap-3 rounded-lg border border-aviso-superficie/30 bg-aviso-superficie/5 px-4 py-3">
+                  {/* Âmbar, não rubro: não foi o aluno que errou. */}
+                  <p className="text-sm leading-relaxed text-aviso-tinta">
+                    {searchError ?? "Não consegui carregar o computador."} Confira a conexão e tente
+                    de novo. As etapas com ajuda e sem ajuda continuam disponíveis.
+                  </p>
+                  <div>
+                    <LessonButton
+                      variant="primary"
+                      onClick={() => {
+                        setSearchError(null);
+                        retry();
+                      }}
+                    >
+                      Tentar de novo
+                    </LessonButton>
+                  </div>
+                </div>
+              )}
+
+              {verdict.kind !== "playing" && seal}
+            </div>
+
+            <AulaRodape>
+              {verdict.kind === "passed" && onFinish && (
+                <LessonButton variant="primary" onClick={onFinish}>
+                  {finishLabel ?? "Continuar"}
+                </LessonButton>
+              )}
+              {verdict.kind === "failed" && (
+                <LessonButton variant="primary" onClick={restart}>
+                  Recomeçar a partida
+                </LessonButton>
+              )}
+              {(verdict.kind === "passed" ||
+                (verdict.kind === "playing" && (moves?.length ?? 0) > 0)) && (
+                <LessonButton onClick={restart}>Recomeçar a partida</LessonButton>
+              )}
+            </AulaRodape>
+          </>
+        }
+      />
 
       <Confetti seq={celebration} originRef={boardColumn} />
     </div>

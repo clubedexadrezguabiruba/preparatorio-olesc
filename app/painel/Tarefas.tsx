@@ -11,13 +11,17 @@ import { alternarTarefa } from "./acoes";
  *
  * As três palavras existem porque as três barras têm o mesmo desenho e pesos
  * diferentes: puzzle resolvido o servidor mediu, aula dominada a tablebase
- * certificou, e dica lida foi o aluno que declarou. A tela não pode chamar as
- * três de "feitas".
+ * certificou, e dica resolvida é o aluno tendo acertado o lance de **todos** os
+ * exercícios dela. A tela não pode chamar as três de "feitas".
+ *
+ * "dicas lidas" era a palavra até 2026-09-07, e ela dizia a verdade: aquela
+ * barra contava declaração. Agora conta trabalho medido, e a palavra mudou
+ * junto — uma barra que diz "lidas" e conta lances é pior do que uma barra sem
+ * palavra nenhuma.
  */
-const UNIDADE: Record<"tatica" | "finais" | "meiojogo", string> = {
+const UNIDADE: Record<"tatica" | "finais", string> = {
   tatica: "puzzles",
-  finais: "aulas dominadas",
-  meiojogo: "dicas lidas",
+  finais: "aulas aprendidas",
 };
 
 /**

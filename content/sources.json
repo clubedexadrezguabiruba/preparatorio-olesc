@@ -1,5 +1,5 @@
 {
-  "_leia": "Registro canônico das obras que podem originar posição (§12.2 e §12.4 do CURRICULO.md). O gate de conteúdo lê este arquivo: o campo provenance.editionFile de toda posição não-fixture precisa casar com o 'file' ou o 'slug' de uma entrada daqui, e obra com protected:true tem teto de 2 posições por aula (§12.7). Obra com \"didactic\": true é livro-base didático: dela sai o objetivo e o exemplo (etapas 1 e 2) de uma aula, e não só posição de prática — e o gate cobra que nenhuma obra protegida seja base de mais de uma aula por nível. DOIS TETOS, E ELES CONTAM COISAS DIFERENTES. Nas aulas de finais o teto conta OBRA (PROTECTED_SOURCE_CAP = 2 em lib/lesson/schema.ts), e continua intocado. No meio-jogo ele passou a contar CAPÍTULO (CAPITULO_CAP = 3 em lib/meiojogo/dicas.ts), por decisão editorial de 2026-09-07 — nasceu 2 e subiu para 3 no mesmo dia, na execução do Bloco 3, porque no meio-jogo o capítulo é na prática uma partida ilustrada, e uma partida tem de duas a seis figuras. Quem protege o aluno de ver duas telas parecidas não é este teto e sim SEMELHANCA_MAXIMA, que mede o tabuleiro; este aqui protege a seleção do autor, e três de seis figuras não a reproduzem, e toda posição de livro tem de declarar provenance.capitulo. O porquê está escrito na licença de nimzowitsch-my-system-1930, e vale para as duas obras de meio-jogo: o teto por obra foi escrito como se fosse restrição legal, e não é. A face humana deste registro — legibilidade medida, mapa de cobertura e regras editoriais — é docs/SOURCE-CORPUS.md.",
+  "_leia": "Registro canônico das obras que podem originar posição (§12.2 e §12.4 do CURRICULO.md). O gate de conteúdo lê este arquivo: o campo provenance.editionFile de toda posição não-fixture precisa casar com o 'file' ou o 'slug' de uma entrada daqui, e obra com protected:true tem teto de 2 posições por aula (§12.7, PROTECTED_SOURCE_CAP em lib/lesson/schema.ts). Obra com \"didactic\": true é livro-base didático: dela sai o objetivo e o exemplo (etapas 1 e 2) de uma aula, e não só posição de prática — e o gate cobra que nenhuma obra protegida seja base de mais de uma aula por nível. HISTÓRICO, PARA QUEM ENCONTRAR AS OBRAS DE MEIO-JOGO NO GIT. Entre 2026-08 e 2026-09-08 este arquivo teve duas gerações de obras de meio-jogo: primeiro Capablanca, Nimzowitsch, Znosko-Borovsky e Lasker, para as trinta dicas; depois, por um dia, os seis volumes da série do Yusupov, para o módulo reescrito como aula do motor de finais. O Doug testou a primeira aula pronta em 2026-09-08 e reprovou o módulo inteiro: complexo demais para a idade e a força dos alunos dele. O meio-jogo saiu do site, e as obras saíram daqui junto. O teto de citação voltou a ser um só, por obra, e vale para tudo que resta. As obras de finais e as de domínio público continuam registradas e em uso. A face humana deste registro — legibilidade medida, mapa de cobertura e regras editoriais — é docs/SOURCE-CORPUS.md.",
   "sources": [
     {
       "slug": "capablanca-1921",
@@ -117,10 +117,15 @@
       "author": "Jesús de la Villa",
       "edition": null,
       "protected": true,
-      "license": "obra protegida — uso sob o teto da §12.7",
+      "license": "obra protegida — em regime integral desde 2026-09-08 (§1.1 do SOURCE-CORPUS): sem teto de citação e sem teto de rotação. Continua protegida, e o inventário da troca está em content/divida-de-licenca.md.",
       "file": "de-la-villa-100-endgames.pdf",
-      "role": "Livro-base didático de N1 em diante — o próprio autor declara que não cobre os mates elementares (\"I assume the reader knows the basic mates\"). Progressão graduada; origina posição sob teto.",
-      "didactic": true
+      "role": "Livro-base didático e, desde 2026-09-08, **obra em regime integral** do módulo de finais: texto e posições das aulas seguem este manual, sem teto. O próprio autor declara que não cobre os mates elementares (\"I assume the reader knows the basic mates\"), e é por isso que a Classe E fica de fora dele. Progressão graduada, 100 finais numerados.",
+      "didactic": true,
+      "integral": {
+        "since": "2026-09-08",
+        "reason": "Decisão do Doug em 2026-09-08: o módulo de finais passa a seguir este livro inteiro, sem teto de citação nem de rotação. O formato novo gasta uma posição por aula nas três etapas, e uma trilha de dúzias de aulas não cabe num teto por aula — o que a protege deixa de ser o teto e passa a ser esta declaração, com prazo e inventário. O preparatório é gratuito e não será comercializado por ora; quando for, o conteúdo listado em content/divida-de-licenca.md será trocado por fonte pública.",
+        "replaceBefore": "2027-09-08"
+      }
     },
     {
       "slug": "de-la-villa-workbook",
@@ -150,8 +155,13 @@
       "protected": true,
       "license": "obra protegida — uso sob o teto da §12.7",
       "file": "silman-complete-endgame-course.pdf",
-      "role": "Livro-base didático. A Parte 1 nomeia as duas técnicas (\"the Staircase\" e \"the Box\") e ensina de trás para frente, mostrando o mate antes do caminho. Base didática do N0-Q-MATE; origina posição sob teto.",
-      "didactic": true
+      "role": "Livro-base didático e, desde 2026-09-08, **obra em regime integral** do módulo de finais (§1.1 do SOURCE-CORPUS): texto e posições das aulas seguem este manual, sem teto de citação nem de rotação. É o único manual do acervo com progressão declarada por classe de força, e ele ensina de trás para frente — mostra o mate antes do caminho —, que é o desenho da etapa 1 do nosso schema. A Parte Um nomeia as duas técnicas (\"the Staircase\" e \"the Box\").",
+      "didactic": true,
+      "integral": {
+        "since": "2026-09-08",
+        "reason": "Decisão do Doug em 2026-09-08: todas as aulas de finais passam a seguir o Silman, texto e posições. É o único manual do acervo com progressão declarada por classe de força, que é exatamente a espinha que a trilha precisa, e o preparatório é gratuito. Quando o curso for comercializado, o conteúdo listado em content/divida-de-licenca.md será trocado por fonte pública.",
+        "replaceBefore": "2027-09-08"
+      }
     },
     {
       "slug": "rabinovich-russian",

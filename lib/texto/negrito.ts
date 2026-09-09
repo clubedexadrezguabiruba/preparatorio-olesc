@@ -1,3 +1,21 @@
+/*
+ * ## Por que este arquivo sobreviveu à limpeza de 2026-09-08
+ *
+ * O commit `e183cb2` do `main` apagou o módulo antigo e levou este arquivo
+ * junto — 17.036 linhas fora —, e estava certo pelo que via: no `main` não
+ * havia mais consumidor.
+ *
+ * Havia num lugar que o `main` não enxergava: `lib/tatica/fala.ts`, que nasceu
+ * na branch `repertorio` e chama `semMarcacao` nos dois degraus da dica. Se
+ * `content/temas.json` ganhar um `**negrito**` um dia, é esta função que
+ * impede o asterisco de aparecer desenhado no balão do professor.
+ *
+ * `emPedacos` está hoje **sem consumidor** — a apostila deixou de chamá-lo.
+ * Ele fica porque apagar metade de um arquivo com teste é limpeza, e limpeza
+ * não se faz dentro de um merge. Se a apostila sair de cena, some com ele e
+ * mova `semMarcacao` para junto de quem a usa.
+ */
+
 /**
  * O único pedaço de markdown que o conteúdo do site usa: `**assim**`.
  *
