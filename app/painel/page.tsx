@@ -6,17 +6,28 @@ import { Moldura } from "@/components/Moldura";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { proximaAcao } from "@/lib/curso/acao";
 import { hojeNoBrasil, somarDias } from "@/lib/curso/calendario";
-import { minutosDeHoje, sequenciaDeDias } from "@/lib/curso/hoje";
-import { fechamentoDoNivel, nivelDoAluno } from "@/lib/curso/nivel";
+import {
+  diasComOMinimo,
+  maiorSequenciaDeDias,
+  minutosDeHoje,
+  sequenciaDeDias,
+} from "@/lib/curso/hoje";
+import { fechamentoDoNivel, nivelDoAluno, temaFechado } from "@/lib/curso/nivel";
+import { selos } from "@/lib/curso/selos";
 import { minutosPorDia, partidasDeclaradas } from "@/lib/curso/minutos";
 import { nivelConquistado } from "@/lib/curso/progresso";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
 import { aulasVencidas } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
-import { aulasAbertas } from "@/lib/finais/trilha";
+import { aprendidasDaTrilha, aulasAbertas } from "@/lib/finais/trilha";
 import { lerIndice } from "@/lib/repertorio/banco";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
-import { aprendidasDaAbertura, aRevisarNaAbertura, baseCompleto } from "@/lib/repertorio/treino";
+import {
+  aprendidasDaAbertura,
+  aRevisarNaAbertura,
+  baseCompleto,
+  idsLiberados,
+} from "@/lib/repertorio/treino";
 import {
   emOrdemDeData,
   quandoPorExtenso,
@@ -25,12 +36,14 @@ import {
 } from "@/lib/tarefas/agenda";
 import { AGENDA } from "@/lib/tarefas/conteudo";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
+import { BLOCOS } from "@/lib/tatica/blocos";
 import { progressoPorTema, revisaoDeHoje } from "@/lib/tatica/progresso";
 import { Agenda } from "./Agenda";
 import { Agora } from "./Agora";
 import { Escada } from "./Escada";
 import { Hoje } from "./Hoje";
 import { Modulos, Prova } from "./Nivel";
+import { Selos } from "./Selos";
 
 export const metadata: Metadata = { title: "Painel — Preparatório OLESC" };
 
@@ -59,7 +72,8 @@ const EQUIPE = { M: "Equipe masculina", F: "Equipe feminina" } as const;
  * 3. **Hoje** — quanto do dia já foi. Contexto, não instrução.
  * 4. **Os três módulos** — quanto falta em cada frente.
  * 5. **A prova**, quando ela está fechada ou já passada.
- * 6. **A agenda**, no fim: são 4 itens presos a data, e a data deixou de ser o
+ * 6. **Os selos** — o que ele já conquistou, e dois que estão perto.
+ * 7. **A agenda**, fechada: são 4 itens presos a data, e a data deixou de ser o
  *    eixo do site em 9/9.
  *
  * ## Saíram, e por quê
@@ -100,9 +114,13 @@ export default async function Painel() {
     tarefasMarcadas(perfil.id),
     progressoDeFinais(perfil.id),
     revisaoDeHoje(perfil.id),
-    // Trinta dias bastam para a sequência: o preparatório inteiro tem quatro
-    // semanas, e ninguém precisa ver "48 dias seguidos" numa tela de celular.
-    minutosPorDia(perfil.id, somarDias(hoje, -30)),
+    // **O histórico inteiro, e não os 30 dias.** A janela de 30 dias era certa
+    // para o cartão Hoje e **errada para um selo**, que é permanente: "Uma hora"
+    // ganho no dia 1 sumiria no dia 32, e "30 dias seguidos" seria
+    // inconquistável dentro de uma janela de 30. O `desde` de `minutosPorDia` já
+    // era opcional; basta não passá-lo. O recorte dos 30 dias passa a ser feito
+    // em memória, logo abaixo, e não custa consulta nenhuma.
+    minutosPorDia(perfil.id),
     // `partidasDeclaradas` no lugar de `partidaDoDiaMarcada`: **a mesma uma
     // consulta**, com mais dias. Ela devolve o conjunto de dias declarados, e
     // com isso a barra do dia e o gráfico do professor passam a somar a mesma
@@ -177,8 +195,55 @@ export default async function Painel() {
     vencidasDeFinais: revisoesDeFinais,
   });
 
-  const minutosDoDia = minutosDeHoje(minutos, hoje, partidas.has(hoje));
-  const sequencia = sequenciaDeDias(minutos, hoje);
+  /*
+   * O recorte dos 30 dias, agora em memória.
+   *
+   * O cartão Hoje e a sequência corrente olham a janela curta — ninguém precisa
+   * ver "48 dias seguidos" numa tela de celular, e o preparatório inteiro tem
+   * quatro semanas. Os selos olham o histórico inteiro, porque um selo não
+   * expira. As duas leituras saem da **mesma** consulta.
+   */
+  const inicioDaJanela = somarDias(hoje, -30);
+  const minutosRecentes = minutos.filter((l) => l.dia >= inicioDaJanela);
+
+  const minutosDoDia = minutosDeHoje(minutosRecentes, hoje, partidas.has(hoje));
+  const sequencia = sequenciaDeDias(minutosRecentes, hoje);
+
+  /*
+   * Os selos, do histórico inteiro e sem uma consulta a mais.
+   *
+   * Os números de tática e de finais são do **curso inteiro**, e não do degrau:
+   * um selo de "13 temas" que zerasse ao subir de nível não seria um selo.
+   */
+  const temasFechados = BLOCOS.flatMap((b) => b.temas).filter((t) =>
+    temaFechado(progresso.get(t.tag)?.feitos),
+  ).length;
+
+  const aBase = (cor: "brancas" | "pretas") => {
+    const daCor = indice.filter((e) => e.cor === cor);
+    const total = daCor.reduce((n, e) => n + idsLiberados(e, false).length, 0);
+    const feitas = daCor.reduce((n, e) => n + aprendidasDaAbertura(repertorio, e, false), 0);
+    return total > 0 && feitas >= total;
+  };
+  const linhasTodas = indice.reduce((n, e) => n + e.ids.length, 0);
+  const aprendidasTodas = indice.reduce(
+    (n, e) => n + aprendidasDaAbertura(repertorio, e, true),
+    0,
+  );
+
+  const listaDeSelos = selos({
+    temasFechados,
+    aulasAprendidas: aprendidasDaTrilha(aulasDeFinais, finais).size,
+    repertorio: {
+      brancasCompletas: aBase("brancas"),
+      pretasCompletas: aBase("pretas"),
+      baseCompleto: avancadoLiberado,
+      avancadoCompleto: linhasTodas > 0 && aprendidasTodas >= linhasTodas,
+    },
+    conquistado,
+    diasComUmaHora: diasComOMinimo(minutos),
+    maiorSequencia: maiorSequenciaDeDias(minutos),
+  });
   const grupos = agrupar(emOrdemDeData(AGENDA));
   const itensDaAgenda = grupos.reduce((n, g) => n + g.itens.length, 0);
 
@@ -228,6 +293,8 @@ export default async function Painel() {
         />
 
         <Prova nivel={nivel} fechado={fechamento.fechado} conquistado={conquistado} />
+
+        <Selos lista={listaDeSelos} />
 
         {/* A agenda no fim, e **fechada**.
 

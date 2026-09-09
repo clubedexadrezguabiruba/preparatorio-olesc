@@ -160,6 +160,61 @@ export function sequenciaDeDias(
   return dias;
 }
 
+/**
+ * A **maior** sequência já atingida, em qualquer ponto do histórico.
+ *
+ * `sequenciaDeDias` responde *"quantos dias seguidos ele está fazendo agora?"* —
+ * um número que sobe e **zera**. Isso serve à tela, e não serve a um selo: um
+ * selo é permanente por definição, e um selo que some quando o aluno falta um
+ * dia é o site tirando dele uma coisa que ele fez.
+ *
+ * Daí as duas funções. Esta varre o histórico inteiro e devolve o recorde.
+ *
+ * **Hoje não é tratado com indulgência aqui**, ao contrário da outra: um dia que
+ * ainda não bateu o mínimo simplesmente não entra. A indulgência da outra existe
+ * para não punir quem acordou; um recorde não precisa dela, porque ele já conta
+ * o passado.
+ */
+export function maiorSequenciaDeDias(
+  linhas: readonly MinutosDoDia[],
+  minimo: number = MINIMO_DA_SEQUENCIA_MIN,
+): number {
+  const porDia = new Map<string, number>();
+  for (const linha of linhas) {
+    porDia.set(linha.dia, (porDia.get(linha.dia) ?? 0) + linha.tempo_ms);
+  }
+
+  const bons = [...porDia.entries()]
+    .filter(([, ms]) => emMinutos(ms) >= minimo)
+    .map(([dia]) => dia)
+    .sort();
+
+  let maior = 0;
+  let corrente = 0;
+  let anterior: string | null = null;
+  for (const dia of bons) {
+    corrente = anterior !== null && somarDias(anterior, 1) === dia ? corrente + 1 : 1;
+    if (corrente > maior) maior = corrente;
+    anterior = dia;
+  }
+  return maior;
+}
+
+/**
+ * Em quantos dias distintos o aluno já treinou pelo menos `minimo` minutos
+ * **medidos**. É o dado do selo "Uma hora", que acende no primeiro deles.
+ */
+export function diasComOMinimo(
+  linhas: readonly MinutosDoDia[],
+  minimo: number = MINIMO_DA_SEQUENCIA_MIN,
+): number {
+  const porDia = new Map<string, number>();
+  for (const linha of linhas) {
+    porDia.set(linha.dia, (porDia.get(linha.dia) ?? 0) + linha.tempo_ms);
+  }
+  return [...porDia.values()].filter((ms) => emMinutos(ms) >= minimo).length;
+}
+
 /** Um dia da série, já em minutos e por bloco. */
 export type DiaDeTreino = {
   readonly dia: string;
