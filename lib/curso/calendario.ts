@@ -4,9 +4,8 @@
  * **Uma data escrita num lugar só.** Antes disto, `12 de setembro` aparecia
  * como texto solto em `app/tatica/page.tsx`, para dizer quando um bloco
  * trancado abre. O painel precisa da mesma data para dizer em que semana o
- * aluno está, e a apostila vai precisar dela para imprimir o cabeçalho do
- * caderno. Três cópias da mesma data é uma remarcação de sábado que conserta
- * duas telas e esquece a terceira.
+ * aluno está. Duas cópias da mesma data é uma remarcação de sábado que
+ * conserta uma tela e esquece a outra.
  *
  * ## Por que a comparação é de texto e não de `Date`
  *

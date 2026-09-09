@@ -270,7 +270,7 @@ try {
     .insert({ aluno: criados[0], tarefa: "s1-coordenadas" });
   afirmar(!erroMarcarA, `A marca a tarefa dele (${erroMarcarA?.message ?? "sem erro"})`);
 
-  await alunoB.from("tarefa_conclusao").insert({ aluno: criados[1], tarefa: "s1-caderno" });
+  await alunoB.from("tarefa_conclusao").insert({ aluno: criados[1], tarefa: "s1-anotacao" });
 
   // A linha que a política `with check` recusa. Sem ela, A escreveria no
   // painel de B — e B nunca saberia de onde veio.
@@ -288,7 +288,7 @@ try {
 
   // `delete` que não alcança nada não é erro no Postgres: some, calado. Por
   // isso a prova é contar do outro lado, e não olhar o `error`.
-  await alunoA.from("tarefa_conclusao").delete().eq("tarefa", "s1-caderno");
+  await alunoA.from("tarefa_conclusao").delete().eq("tarefa", "s1-anotacao");
   const { count: sobrouDeB } = await admin
     .from("tarefa_conclusao")
     .select("*", { count: "exact", head: true })

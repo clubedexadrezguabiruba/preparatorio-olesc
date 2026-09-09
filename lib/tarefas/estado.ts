@@ -93,8 +93,8 @@ export function estadoDasTarefas(
   progresso: ReadonlyMap<string, ProgressoDoTema>,
   /**
    * As aulas de finais que o aluno dominou, entre as abertas. Vazio por padrão
-   * para que as telas que não têm finais nenhum — a apostila, um teste de
-   * tática — não tenham de inventar um conjunto.
+   * para que as telas que não têm finais nenhum — um teste de tática, por
+   * exemplo — não tenham de inventar um conjunto.
    */
   finais: ReadonlySet<string> = new Set(),
 ): EstadoDaTarefa[] {

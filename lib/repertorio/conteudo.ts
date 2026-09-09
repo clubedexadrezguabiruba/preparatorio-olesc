@@ -9,7 +9,7 @@ import { validarNotas, type Nota } from "./notas.ts";
  * faltando. É a mesma forma de `lib/tatica/conteudo.ts`.
  *
  * Este arquivo **não** é `server-only`: as notas são texto público, sem nada de
- * aluno dentro, e um dia a apostila vai querer imprimi-las.
+ * aluno dentro.
  */
 const NOTAS: Nota[] = validarNotas(notasJson);
 const POR_SLUG = new Map(NOTAS.map((nota) => [nota.slug, nota]));

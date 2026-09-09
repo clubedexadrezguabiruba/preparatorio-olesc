@@ -45,10 +45,10 @@ export type Bloco = {
   /**
    * Em que sábado o bloco abre — 1, 2 ou 3, do cronograma do preparatório.
    *
-   * Mora aqui porque é o mesmo dado em três lugares: o cartão trancado diz
-   * "abre no Sábado 2", o painel diz o que é para fazer esta semana, e a
-   * apostila imprime o caderno daquele sábado. Uma tabela separada de
-   * bloco → sábado seria a quarta opinião sobre a mesma coisa.
+   * Mora aqui porque é o mesmo dado em dois lugares: o cartão trancado diz
+   * "abre no Sábado 2" e o painel diz o que é para fazer esta semana. Uma
+   * tabela separada de bloco → sábado seria a terceira opinião sobre a mesma
+   * coisa.
    */
   readonly sabado: 1 | 2 | 3;
   readonly temas: readonly Tema[];

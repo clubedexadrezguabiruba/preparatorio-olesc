@@ -33,7 +33,7 @@ import { semMarcacao } from "../texto/negrito.ts";
  *
  * ## O `**negrito**` do conteúdo
  *
- * `content/temas.json` é escrito com a marcação que a apostila usa. O balão do
+ * `content/temas.json` pode trazer `**assim**` no conteúdo. O balão do
  * professor pagina **texto puro** (ele mede a frase com `getComputedStyle` e
  * digita caractere a caractere), então um `**obriga**` sairia com os asteriscos
  * na tela. Por isso tudo o que vem do conteúdo passa por `semMarcacao`.

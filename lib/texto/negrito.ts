@@ -10,10 +10,9 @@
  * `content/temas.json` ganhar um `**negrito**` um dia, é esta função que
  * impede o asterisco de aparecer desenhado no balão do professor.
  *
- * `emPedacos` está hoje **sem consumidor** — a apostila deixou de chamá-lo.
- * Ele fica porque apagar metade de um arquivo com teste é limpeza, e limpeza
- * não se faz dentro de um merge. Se a apostila sair de cena, some com ele e
- * mova `semMarcacao` para junto de quem a usa.
+ * `emPedacos` era exportado para a apostila desenhar o negrito no papel.
+ * A apostila saiu de cena em 2026-09-09 e ele deixou de ser API: hoje é o
+ * miolo privado de `semMarcacao`, que é a única coisa que o site pede daqui.
  */
 
 /**
@@ -33,9 +32,9 @@
  * Porque markdown inteiro num campo de conteúdo abre a porta para link, imagem
  * e HTML embutido dentro de um JSON que o gate lê mas não sanitiza — e o
  * componente que desenha isto teria de virar `dangerouslySetInnerHTML`. Aqui
- * não há HTML em canto nenhum: entra uma string, sai uma lista de pedaços, e o
- * React escapa cada pedaço como texto. A gramática é uma regra só, e o que ela
- * não reconhece fica como está.
+ * não há HTML em canto nenhum: entra uma string, sai uma string, e o React
+ * escapa o resultado como texto. A gramática é uma regra só, e o que ela não
+ * reconhece fica como está.
  *
  * ## O que não é negrito
  *
@@ -45,44 +44,16 @@
  * um caractere dentro.
  */
 
-export type Pedaco = {
-  readonly texto: string;
-  readonly forte: boolean;
-};
-
 /** `**` … `**`, sem cruzar outro `**` e sem aceitar miolo vazio. */
 const NEGRITO = /\*\*([^*]+(?:\*(?!\*)[^*]*)*)\*\*/g;
 
 /**
- * A frase repartida em pedaços normais e pedaços em negrito.
+ * A mesma frase sem marcação nenhuma — para o balão, `title` e `aria-label`.
  *
- * Devolve sempre pelo menos um pedaço — a string inteira, se não houver
- * marcação —, e a concatenação dos `texto` com os `**` de volta reconstrói a
- * entrada. É essa propriedade que o teste cobra: nada se perde no caminho.
+ * A promessa é a que o teste cobra: **só o par completo some**. Tudo o que a
+ * regra acima não reconhece atravessa caractere a caractere, do asterisco
+ * solto ao `****`.
  */
-export function emPedacos(entrada: string): Pedaco[] {
-  const pedacos: Pedaco[] = [];
-  let cursor = 0;
-
-  for (const achado of entrada.matchAll(NEGRITO)) {
-    const inicio = achado.index;
-    if (inicio > cursor) {
-      pedacos.push({ texto: entrada.slice(cursor, inicio), forte: false });
-    }
-    pedacos.push({ texto: achado[1], forte: true });
-    cursor = inicio + achado[0].length;
-  }
-
-  if (cursor < entrada.length || pedacos.length === 0) {
-    pedacos.push({ texto: entrada.slice(cursor), forte: false });
-  }
-
-  return pedacos;
-}
-
-/** A mesma frase sem marcação nenhuma — para `title`, `aria-label` e teste. */
 export function semMarcacao(entrada: string): string {
-  return emPedacos(entrada)
-    .map((p) => p.texto)
-    .join("");
+  return entrada.replace(NEGRITO, "$1");
 }

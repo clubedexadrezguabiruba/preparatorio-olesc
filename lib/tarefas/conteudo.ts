@@ -8,8 +8,7 @@ import { validarTarefas, type Tarefa } from "./tarefas.ts";
  * build falhar, em vez de o aluno abrir o painel no domingo e achar que a
  * semana não tem tarefa.
  *
- * Só a semana 1 está escrita. As outras entram com o caderno do sábado delas —
- * e o painel sabe dizer que a semana ainda não foi lançada, o que é a verdade,
+ * O painel sabe dizer que uma lista ainda não foi lançada, o que é a verdade,
  * e não um erro.
  */
 export const TAREFAS: readonly Tarefa[] = validarTarefas(tarefasJson);

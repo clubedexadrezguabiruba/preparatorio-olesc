@@ -6,21 +6,17 @@ import { CLASSES } from "../finais/trilha.ts";
  * As tarefas de casa: o que o aluno tem de fazer entre um sábado e o outro.
  *
  * **Conteúdo é dado, não código** — a mesma regra de `content/temas.json`.
- * Quem escreve a tarefa é o professor, e o caderno da apostila vai imprimir
- * exatamente estas frases. Em JSX elas virariam duas versões parecidas da
- * mesma lista.
+ * Quem escreve a tarefa é o professor, e ele escreve prosa, não JSX. Em
+ * componente elas virariam duas versões parecidas da mesma lista.
  *
  * ## Por que não existe tabela `tarefas` no banco
  *
  * O plano previa `tarefas` (semana, descrição, tipo, meta) como tabela, com
  * `/professor` lançando tarefa pela tela. Ela ficou de fora, e é decisão:
  *
- * - A tarefa da semana é **conteúdo do curso**, decidido junto com o caderno
- *   daquele sábado. Ela nasce no repositório, não numa caixa de texto às onze
- *   da noite de sexta.
- * - A apostila imprime a mesma lista. Em tabela, o PDF teria de consultar o
- *   banco para saber o que mandar para casa — e o caderno impresso na quinta
- *   discordaria da tela no domingo, sem ninguém perceber.
+ * - A tarefa é **conteúdo do curso**, decidida junto com o resto do módulo.
+ *   Ela nasce no repositório, não numa caixa de texto às onze da noite de
+ *   sexta.
  * - Uma tela de CRUD a menos é um dia a mais para a B1.4, que é o poste longo
  *   da F1.
  *
@@ -63,9 +59,9 @@ const Base = {
   /**
    * Para onde a tarefa manda o aluno.
    *
-   * `url` nula é um estado **previsto**: o clube do chess.com e o caderno
-   * em PDF ainda não existem quando a tarefa é escrita. A tarefa aparece com o
-   * destino em branco e um aviso, em vez de um link que leva a lugar nenhum —
+   * `url` nula é um estado **previsto**: o clube do chess.com ainda não
+   * existe quando a tarefa é escrita. A tarefa aparece com o destino em
+   * branco e um aviso, em vez de um link que leva a lugar nenhum —
    * e o teste de conteúdo lista o que está em branco, para não passar batido
    * até a manhã do sábado.
    */

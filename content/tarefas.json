@@ -69,17 +69,6 @@
   }
  },
  {
-  "id": "s1-caderno",
-  "semana": 1,
-  "tipo": "marcar",
-  "titulo": "Ler o caderno 1",
-  "detalhe": "A rotina de duas horas, as três perguntas antes de mover, e as regras de torneio para consultar.",
-  "onde": {
-   "rotulo": "Caderno 1 em PDF",
-   "url": "/apostila/caderno-1.pdf"
-  }
- },
- {
   "id": "s2-tatica",
   "semana": 2,
   "tipo": "tatica",
@@ -143,17 +132,6 @@
   "titulo": "Vídeos de abertura: Rafael Leitão (2) e Evandro Barbosa (1)",
   "detalhe": "Os dois do repertório do clube, mais o \"Aberturas em 15 min\". Assista uma vez inteira, e depois de novo com o tabuleiro na mão.",
   "onde": null
- },
- {
-  "id": "s2-caderno",
-  "semana": 2,
-  "tipo": "marcar",
-  "titulo": "Ler o caderno 2",
-  "detalhe": "O repertório do clube e as armadilhas de abertura que aparecem nesta faixa.",
-  "onde": {
-   "rotulo": "Caderno 2 em PDF",
-   "url": null
-  }
  },
  {
   "id": "s3-tatica",
@@ -224,17 +202,6 @@
   "onde": null
  },
  {
-  "id": "s3-caderno",
-  "semana": 3,
-  "tipo": "marcar",
-  "titulo": "Ler o caderno 3 e uma partida do Chernev",
-  "detalhe": "A partida comentada lance a lance é o modelo do que você vai fazer sozinho na análise do Sábado 3.",
-  "onde": {
-   "rotulo": "Caderno 3 em PDF",
-   "url": null
-  }
- },
- {
   "id": "s4-revisao",
   "semana": 4,
   "tipo": "tatica",
@@ -295,20 +262,6 @@
   "tipo": "marcar",
   "titulo": "Véspera (10/10): 1 hora leve, e a mochila pronta",
   "detalhe": "Dez puzzles fáceis, uma olhada no repertório, e para. Mochila: caneta, planilha, água, lanche. Dormir cedo é parte do treino.",
-  "onde": {
-   "rotulo": "Caderno do torneio",
-   "url": null
-  }
- },
- {
-  "id": "s4-caderno",
-  "semana": 4,
-  "tipo": "marcar",
-  "titulo": "Ler o caderno do torneio",
-  "detalhe": "Rotina do dia, checklists, desempates e o que fazer entre rodadas. Leia antes de 11/10, não no ônibus.",
-  "onde": {
-   "rotulo": "Caderno 4 em PDF",
-   "url": null
-  }
+  "onde": null
  }
 ]

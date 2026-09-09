@@ -2,70 +2,44 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
-import { emPedacos, semMarcacao } from "./negrito.ts";
+import { semMarcacao } from "./negrito.ts";
 
-const junto = (entrada: string) =>
-  emPedacos(entrada)
-    .map((p) => (p.forte ? `**${p.texto}**` : p.texto))
-    .join("");
-
-test("uma frase sem marcação sai inteira, num pedaço só", () => {
-  const p = emPedacos("Conte as peças antes de trocar.");
-  assert.deepEqual(p, [{ texto: "Conte as peças antes de trocar.", forte: false }]);
+test("uma frase sem marcação sai inteira", () => {
+  assert.equal(semMarcacao("Conte as peças antes de trocar."), "Conte as peças antes de trocar.");
 });
 
-test("o par completo vira negrito, e o resto fica ao redor", () => {
-  assert.deepEqual(emPedacos("é o peão **dele**, não o seu"), [
-    { texto: "é o peão ", forte: false },
-    { texto: "dele", forte: true },
-    { texto: ", não o seu", forte: false },
-  ]);
+test("o par completo perde os asteriscos, e o resto fica ao redor", () => {
+  assert.equal(semMarcacao("é o peão **dele**, não o seu"), "é o peão dele, não o seu");
 });
 
 test("dois negritos na mesma frase não se fundem num só", () => {
   // O erro clássico da expressão gulosa: `**a** e **b**` viraria um negrito só,
-  // com "a** e **b" dentro.
-  assert.deepEqual(emPedacos("**dele**, não o **seu**"), [
-    { texto: "dele", forte: true },
-    { texto: ", não o ", forte: false },
-    { texto: "seu", forte: true },
-  ]);
+  // com "a** e **b" dentro — e o miolo com asteriscos chegaria à tela.
+  assert.equal(semMarcacao("**dele**, não o **seu**"), "dele, não o seu");
+  assert.ok(!semMarcacao("**a** e **b**").includes("*"));
 });
 
-test("negrito no começo e no fim não deixa pedaço vazio", () => {
-  assert.deepEqual(emPedacos("**tudo**"), [{ texto: "tudo", forte: true }]);
-  assert.ok(emPedacos("**a** b").every((p) => p.texto.length > 0));
+test("negrito no começo e no fim não deixa buraco", () => {
+  assert.equal(semMarcacao("**tudo**"), "tudo");
+  assert.equal(semMarcacao("**a** b"), "a b");
 });
 
 test("o que não é par completo passa como texto literal", () => {
   // Uma conta escrita numa dica não pode perder metade dos sinais.
-  for (const cru of ["2*3", "abre ** e não fecha", "****", "* item", "a ** b ** "]) {
-    assert.equal(junto(cru), cru, `"${cru}" foi alterado`);
-    if (cru === "****") assert.deepEqual(emPedacos(cru), [{ texto: "****", forte: false }]);
+  for (const cru of ["2*3", "abre ** e não fecha", "****", "* item", "2*3**4"]) {
+    assert.equal(semMarcacao(cru), cru, `"${cru}" foi alterado`);
   }
 });
 
-test("string vazia devolve um pedaço vazio, e não uma lista vazia", () => {
-  // Quem chama mapeia a lista direto no JSX; uma lista vazia sumiria com o
-  // parágrafo em vez de desenhá-lo em branco.
-  assert.deepEqual(emPedacos(""), [{ texto: "", forte: false }]);
+test("um par completo é par completo mesmo com espaço no miolo", () => {
+  // `a ** b ** ` casa a regra — o miolo é " b " — e some, como sempre somiu.
+  // Está aqui escrito porque o par com espaço é o caso que se lê como "isso
+  // não devia ser negrito" e não é: a gramática só cobra miolo não-vazio.
+  assert.equal(semMarcacao("a ** b ** "), "a  b  ");
 });
 
-test("nada se perde: remontar os pedaços devolve a entrada", () => {
-  const amostras = [
-    "sem marca nenhuma",
-    "**tudo em negrito**",
-    "meio **negrito** meio não",
-    "**a**, **b** e **c**",
-    "asterisco solto * no meio",
-    "",
-  ];
-  for (const a of amostras) assert.equal(junto(a), a);
-});
-
-test("`semMarcacao` devolve a frase legível, sem asterisco", () => {
-  assert.equal(semMarcacao("o peão **dele**"), "o peão dele");
-  assert.equal(semMarcacao("2*3"), "2*3");
+test("string vazia continua string vazia", () => {
+  assert.equal(semMarcacao(""), "");
 });
 
 test("o conteúdo real dos temas de tática atravessa sem perder caractere", () => {
@@ -78,11 +52,9 @@ test("o conteúdo real dos temas de tática atravessa sem perder caractere", () 
    * campos. Se um tema novo usar uma marcação que este parser não entende, é
    * aqui que se descobre — e não no balão do professor.
    *
-   * Diferença de uma asserção: o conteúdo do meio-jogo **tinha** negrito, e o
-   * teste antigo cobrava isso. Os 36 temas de tática foram escritos sem
-   * marcação nenhuma de propósito (a apostila saiu de cena, e o balão pagina
-   * texto puro), então aqui a promessa é a outra metade: nada é alterado no
-   * caminho, e nada com asterisco chega à tela.
+   * Os 36 temas de tática foram escritos sem marcação nenhuma de propósito (o
+   * balão pagina texto puro), então a promessa aqui tem duas metades: nada é
+   * alterado no caminho, e nada com asterisco chega à tela.
    */
   const bruto = readFileSync(path.join(process.cwd(), "content", "temas.json"), "utf8");
   const temas = JSON.parse(bruto) as {
@@ -99,7 +71,7 @@ test("o conteúdo real dos temas de tática atravessa sem perder caractere", () 
   assert.ok(campos.length >= 36 * 6, `só ${campos.length} campos — o conteúdo encolheu?`);
 
   for (const campo of campos) {
-    assert.equal(junto(campo), campo, `um campo foi alterado: ${campo.slice(0, 60)}…`);
+    assert.equal(semMarcacao(campo), campo, `um campo foi alterado: ${campo.slice(0, 60)}…`);
     assert.ok(
       !semMarcacao(campo).includes("**"),
       `sobrou asterisco na tela: ${campo.slice(0, 60)}…`,

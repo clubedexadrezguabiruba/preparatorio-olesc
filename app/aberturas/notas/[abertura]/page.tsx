@@ -32,9 +32,9 @@ export async function generateMetadata({
  * fixo dizendo "estas são as raras" seria falso justamente para a que o aluno
  * mais encontra. Cada nota traz o seu motivo no campo `porque`.
  *
- * Um diagrama também custaria uma superfície nova: o `lib/diagrama` que a
- * apostila usa é paleta **de papel**, por decisão escrita lá; trazê-lo para a
- * tela traria as cores erradas. Os lances no alto dizem que posição é essa, que
+ * Um diagrama também custaria uma superfície nova — um desenhista de FEN que
+ * o site não tem desde que a apostila saiu de cena. Os lances no alto dizem
+ * que posição é essa, que
  * é o que um livro de princípios faz — e saem em português (`Cf3`, e não `Nf3`)
  * por `lancesEmPortugues`, porque o JSON os guarda em inglês para a `chess.js`
  * do teste poder conferir que são lances legais.

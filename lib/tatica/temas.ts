@@ -4,9 +4,8 @@ import { z } from "zod";
  * O texto de cada tema: a explicação que o aluno lê antes de resolver.
  *
  * **Conteúdo é dado, não código.** Ele mora em `content/temas.json` porque
- * quem o escreve é o professor, e porque a apostila vai imprimir exatamente
- * estas frases — se elas estivessem espalhadas em JSX, o caderno e o site
- * diriam coisas parecidas mas não iguais.
+ * quem o escreve é o professor, e ele escreve prosa — espalhadas em JSX, as
+ * mesmas frases viram duas versões parecidas mas não iguais.
  *
  * ## Por que o esquema mora aqui e a leitura do arquivo mora fora
  *
@@ -20,8 +19,8 @@ import { z } from "zod";
  * O plano previa `content/temas/<tema>.md`. Markdown exigiria um renderizador
  * — mais uma dependência, e uma superfície de HTML vindo de arquivo. Como o
  * texto é sempre a mesma forma (parágrafos, uma lista de "procure", uma linha
- * de "cuidado"), um JSON com campos nomeados diz a mesma coisa, valida sozinho
- * e imprime igual na apostila.
+ * de "cuidado"), um JSON com campos nomeados diz a mesma coisa e valida
+ * sozinho.
  */
 
 export const TemaEscritoSchema = z
