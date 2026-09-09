@@ -33,6 +33,14 @@ diz** (§4). Faltava, sobretudo, um número: a §8.1 do repertório mediu **20 d
 comentários com uma frase de 32 palavras ou mais**, a maior com 47 — sob uma
 régua que já pedia "frase curta" desde sempre. Régua sem número não pega.
 
+**Em 2026-09-09 entrou o que faltava depois disso: como ele ensina.** A régua era
+quase toda negativa, e proibição sozinha produz texto correto e sem aula dentro.
+Entraram os **cinco movimentos** de quem está ensinando (§2.1), a regra de **como
+uma palavra técnica entra** — mostra, nomeia, usa (§4.1) — e o **português de
+manual de adulto** (§4.2), que passava pela régua antiga porque não era jargão
+nosso nem jargão de xadrez, e sim o registro dos livros escritos para gente
+grande.
+
 ---
 
 ## 2. Quem é o professor
@@ -62,6 +70,36 @@ O molde é o treinador do chess.com, medido em `docs/REFERENCIA-MOVE-TRAINER.md`
 — e o que se copiou dele foi a **forma** (uma fala por vez, ao lado de um
 retrato, num balão com bico), nunca as palavras.
 
+### 2.1 O que ele faz — os cinco movimentos de quem está ensinando
+
+A lista acima é toda negativa, e uma régua só de proibições produz texto correto
+e morto. Estes são os movimentos positivos, e eles são o que separa **um
+professor dando aula** de uma legenda descrevendo lances.
+
+1. **Mostra antes de nomear.** A peça anda, o aluno vê o que aconteceu, e só
+   então a coisa ganha nome. Nomear primeiro é pedir que ele decore um rótulo
+   vazio e depois procure onde ele encaixa. Ver a §4.1, que é a regra inteira.
+
+2. **Diz a casa, não a ideia.** *"O rei vai a c7"* ensina; *"o rei melhora a sua
+   posição"* não ensina nada, porque não diz o que fazer com as mãos. Toda fala
+   que descreve um lance nomeia **a casa**, e a casa está desenhada no tabuleiro
+   naquele instante (§5.3).
+
+3. **Fecha o ciclo: diz o que o lance conseguiu.** Não basta dizer para onde ir.
+   Depois que a peça chega, o professor diz o que mudou — *"agora o rei preto não
+   tem como chegar em b8"*. É este movimento, e não o elogio, que dá ao aluno a
+   sensação de estar avançando (§2, "ele não dá parabéns").
+
+4. **Repete a ideia com as mesmas palavras.** Se o rei "escolta" o peão na
+   primeira fala, ele escolta em todas — não "acompanha", não "protege", não
+   "dá cobertura". Sinônimo é enfeite de adulto: para quem está aprendendo, três
+   palavras são três coisas. **A aula escolhe uma palavra por ideia e fica com
+   ela**, inclusive entre aulas diferentes que ensinam a mesma coisa.
+
+5. **Uma palavra difícil por fala, no máximo.** Uma fala com "oposição" e
+   "zugzwang" juntas não ensina duas palavras: não ensina nenhuma. Se a segunda é
+   mesmo necessária, ela é outra fala — o que também é a §3.3 dita de outro jeito.
+
 ---
 
 ## 3. Os números
@@ -87,10 +125,25 @@ nenhum:** quem precisa deles os lê daqui.
     "critério",
     "domínio",
     "mostrando",
-    "objetivo"
+    "objetivo",
+    "conversão",
+    "posicional",
+    "avaliação",
+    "compensação",
+    "iniciativa",
+    "elementar",
+    "teoria",
+    "profilaxia",
+    "estrutura"
   ]
 }
 ```
+
+A lista tem **duas metades e um propósito só**. As onze primeiras são jargão de
+bastidor — palavra nossa que vazou para a tela (§4). As nove últimas são o
+**português de manual de xadrez para adulto** (§4.2). A máquina não distingue as
+duas, e não precisa: as vinte têm em comum serem palavras que um professor não
+diria a uma criança de doze anos com o tabuleiro na frente.
 
 ### 3.1 Fala ≤ 200 caracteres
 
@@ -167,6 +220,72 @@ vez. É jargão de **professor e de desenvolvedor** que vazou para a tela.
 aberturas já usa nas três abas dele — "seta · treino · valendo",
 `TrilhaDeEtapas.tsx`. O site passa a ter um vocabulário só, e o aluno que sai do
 repertório e entra nos finais reconhece onde está.
+
+### 4.1 Como uma palavra de xadrez entra: mostra, nomeia, usa
+
+A §4 diz que a palavra de xadrez **entra** e que "o curso a explica na primeira
+vez". Isso era verdade e não era regra — não dizia *como*. É a lacuna que mais
+produz texto de manual, porque o caminho fácil é o inverso do caminho que ensina.
+
+**Quais palavras ganham este tratamento:** só as que **nomeiam o que a aula
+ensina** — oposição, casa-chave, zugzwang, afogamento, a ponte, a fortaleza, o
+quadrado. Elas são o conteúdo, e o aluno precisa sair sabendo o nome, porque é
+assim que ele vai reencontrar a ideia num livro, num vídeo ou na boca do
+adversário. **Todo o resto que puder ser dito em português comum, é dito em
+português comum** — e não vira palavra nova.
+
+**Os três momentos, nesta ordem, e nunca ao contrário:**
+
+1. **Mostra.** A coisa acontece no tabuleiro e o professor descreve **o que se
+   vê**, com as casas, sem nome nenhum.
+2. **Nomeia.** Uma fala curta, própria, só para dar o nome ao que acabou de
+   acontecer.
+3. **Usa.** Dali em diante o nome é usado sem explicação, como quem já combinou.
+
+Na oposição, que é a aula 8:
+
+> ✗ **Errado — nomeia primeiro.**
+> *"Agora você vai usar a oposição: é quando os reis ficam frente a frente com
+> uma casa entre eles, e quem tem a vez de jogar precisa ceder."*
+>
+> ✓ **Certo — mostra, depois nomeia.**
+> *"Rei em e4, rei em e6 — frente a frente, uma casa no meio."*
+> *"Agora é a vez das pretas. E o rei preto vai ter que sair da frente."*
+> *"Isso tem nome: oposição."*
+
+Repare no que a versão certa não faz: ela não define. Ela deixa a definição
+acontecer no tabuleiro e depois pendura o nome nela. O aluno de doze anos que lê
+a primeira versão decora sete palavras; o que vê a segunda entende uma ideia.
+
+**E explica uma vez só.** Da segunda aula em diante, "oposição" é usada como
+qualquer outra palavra da língua. Reexplicar é dizer ao aluno que você não
+acredita que ele aprendeu.
+
+### 4.2 O português de manual de adulto
+
+Estas não são jargão de bastidor nem jargão de xadrez: são o **registro** dos
+livros de finais escritos para adultos. Passam pela régua da §4 e não deviam —
+uma criança que lê "converter a vantagem" entende que ali tem uma coisa de
+gente grande e para de ler.
+
+| Está na tela | Vira |
+|---|---|
+| "converter a vantagem", "a conversão" | "transformar isso em vitória", "ganhar a partida" |
+| "avaliar a posição", "a avaliação" | "olhar quem está melhor" |
+| "compensação" | (some — diga o que o lado *tem*: "um peão a menos, mas o rei ativo") |
+| "posicionalmente melhor" | "melhor colocado", "no lugar certo" |
+| "a iniciativa" | "quem manda no jogo" |
+| "mate elementar", "é elementar" | (some — e ver a §2: ele não avisa que algo é fácil) |
+| "na teoria", "a teoria diz" | (some — o tabuleiro é que diz) |
+| "profilaxia" | "impedir antes", "tirar a ideia dele" |
+| "a estrutura de peões" | "os peões", "os peões de vocês dois" |
+| "simplificar" | "trocar peças" |
+| "neutralizar" | "parar", "segurar" |
+
+**As duas últimas linhas a máquina não pega**, e é honesto dizer por quê: a lista
+proibida casa **palavra inteira com plural** (`lib/lesson/voz.ts:112`), então ela
+pega "simplificação" e deixa passar "simplificando". Verbo escapa por conjugação.
+Quem cobra essas duas é quem revisa — como a §3.3 e como o elogio vazio.
 
 **O que a lista proibida não é:** ela não impede a palavra de existir no código,
 no comentário de um arquivo, num documento ou numa mensagem de erro do gate. Ela
@@ -248,6 +367,13 @@ acesa, sem dica.
 3. **"Uma ideia por fala" (§3.3) não tem máquina.** Nenhum teste a cobra, e ela
    é a régua que mais decide a qualidade de uma fala. Quem a cobra é quem
    revisa.
+
+   **Os cinco movimentos da §2.1 e a sequência da §4.1 também não têm máquina**,
+   e pela mesma razão: nenhuma delas é conta sobre texto. "Mostrou antes de
+   nomear?" e "repetiu a ideia com as mesmas palavras?" são leitura, não regex.
+   Entram na `/revisar-aula` como quesito de **coerência**, que já existe e já é
+   julgado por quem lê.
+
 4. **Elogio vazio, exclamação e repreensão não estão no teste.** A `/revisar-aula`
    os mede lendo a tela; o `voz.test.ts`, não. Uma lista de palavras não
    distingue "Dama!" de "Muito bem!", e a segunda é a que importa.
@@ -272,3 +398,16 @@ acesa, sem dica.
    caber uma fala por tela sem paginar, deduzido da caixa de comentário — não
    saiu de uma medição de quantos caracteres uma criança de 12 anos lê sem
    cansar. Se alguém medir isso, o número muda.
+
+7. **A lista proibida não pega verbo conjugado.** `usaProibida` casa palavra
+   inteira com plural (`lib/lesson/voz.ts:112`), então "simplificação" reprova e
+   "simplificando" passa. Foi escolha, não descuido: um casador por radical
+   reprovaria "objeto" por causa de "objetivo", e falso positivo em régua de voz
+   treina quem escreve a ignorá-la. As duas linhas de verbo da §4.2 ficam com o
+   revisor, e estão declaradas lá.
+
+8. **A §4.2 não foi medida contra o corpus antigo.** As nove palavras novas foram
+   conferidas contra `content/lessons/` e `lib/lesson/falas.ts` — os dois lugares
+   que o teste varre — e nenhuma aparecia. **Não** foram conferidas contra as
+   telas de aberturas, tática e painel, que a dívida 1 já declara fora da
+   varredura. Quando a dívida 1 for paga, é bem provável que a §4.2 morda lá.
