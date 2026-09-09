@@ -1,3 +1,5 @@
+import type { Nivel } from "../curso/nivel.ts";
+
 /**
  * O currículo de tática, em oito blocos.
  *
@@ -43,14 +45,24 @@ export type Bloco = {
   readonly nome: string;
   readonly faixa: readonly [number, number];
   /**
-   * Em que sábado o bloco abre — 1, 2 ou 3, do cronograma do preparatório.
+   * Em que degrau da escada o bloco mora — 1 a 5, de `lib/curso/nivel.ts`.
    *
-   * Mora aqui porque é o mesmo dado em dois lugares: o cartão trancado diz
-   * "abre no Sábado 2" e o painel diz o que é para fazer esta semana. Uma
-   * tabela separada de bloco → sábado seria a terceira opinião sobre a mesma
-   * coisa.
+   * **Declarado, e não derivado do rating.** O `sabado` que morava aqui era
+   * calendário, e a escada anterior tentava adivinhar o nível pelo piso da
+   * `faixa` — os oito blocos começam entre 700 e 1100, então os 36 temas caíam
+   * todos no nível 1. O currículo tem uma ordem pedagógica que nenhuma fórmula
+   * sobre rating de puzzle reconstrói; ela cabe neste campo.
+   *
+   * **A inversão B4 → nível 2, na frente de B2.** Os dois blocos têm o mesmo
+   * piso (800), então a ordem antiga (`B2` no Sábado 1, `B4` no 2) vinha do
+   * livro-texto, não da dificuldade. Numa partida entre alunos de 1000, garfo e
+   * peça pendurada decidem dez vezes mais partidas que o mate do corredor — e o
+   * resumo de `hangingPiece` aqui embaixo já chama a peça pendurada de *"o erro
+   * nº 1 em 1000–1400"*. Garfo, cravada, espeto e descoberto são o vocabulário
+   * de que os outros blocos são feitos: `capturingDefender` e `deflection` (B5)
+   * são operações **sobre** uma cravada.
    */
-  readonly sabado: 1 | 2 | 3;
+  readonly nivel: Nivel;
   readonly temas: readonly Tema[];
 };
 
@@ -59,7 +71,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 1,
     nome: "Mates curtos e peça de graça",
     faixa: [700, 2100],
-    sabado: 1,
+    nivel: 1,
     temas: [
       { tag: "mateIn1", nome: "Mate em 1", resumo: "Um lance e acabou. O olho treina aqui." },
       { tag: "mateIn2", nome: "Mate em 2", resumo: "O lance que obriga, e depois o mate." },
@@ -70,7 +82,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 2,
     nome: "Padrões de mate I",
     faixa: [800, 2100],
-    sabado: 1,
+    nivel: 3,
     temas: [
       { tag: "backRankMate", nome: "Mate do corredor", resumo: "O rei preso atrás dos próprios peões." },
       { tag: "smotheredMate", nome: "Mate sufocado", resumo: "O cavalo mata o rei cercado pelas próprias peças." },
@@ -83,7 +95,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 3,
     nome: "Padrões de mate II",
     faixa: [1000, 2100],
-    sabado: 2,
+    nivel: 4,
     temas: [
       { tag: "bodenMate", nome: "Mate de Boden", resumo: "Os dois bispos em diagonais que se cruzam." },
       { tag: "doubleBishopMate", nome: "Mate dos dois bispos", resumo: "Dois bispos em diagonais vizinhas, e o rei no canto." },
@@ -95,7 +107,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 4,
     nome: "Táticas fundamentais",
     faixa: [800, 2100],
-    sabado: 2,
+    nivel: 2,
     temas: [
       { tag: "fork", nome: "Garfo", resumo: "Uma peça ataca duas ao mesmo tempo." },
       { tag: "pin", nome: "Cravada", resumo: "A peça que não pode sair porque atrás dela há coisa melhor." },
@@ -108,7 +120,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 5,
     nome: "Remover a defesa",
     faixa: [1000, 2100],
-    sabado: 2,
+    nivel: 4,
     temas: [
       { tag: "capturingDefender", nome: "Capturar o defensor", resumo: "Tire quem segura, e o resto cai." },
       { tag: "deflection", nome: "Desvio", resumo: "Obrigue a peça a sair do posto que ela guarda." },
@@ -121,7 +133,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 6,
     nome: "Ataque ao rei",
     faixa: [1000, 2100],
-    sabado: 3,
+    nivel: 5,
     temas: [
       { tag: "exposedKing", nome: "Rei exposto", resumo: "Rei sem casas e sem defensores: procure o xeque." },
       { tag: "attackingF2F7", nome: "Ataque em f2/f7", resumo: "A casa mais fraca do começo de partida." },
@@ -133,7 +145,7 @@ export const BLOCOS: readonly Bloco[] = [
     id: 7,
     nome: "Lances finos",
     faixa: [1100, 2100],
-    sabado: 3,
+    nivel: 5,
     temas: [
       { tag: "intermezzo", nome: "Lance intermediário", resumo: "Antes de recapturar, um xeque que muda tudo." },
       { tag: "quietMove", nome: "Lance quieto", resumo: "Sem xeque e sem captura — e a ameaça é imparável." },
@@ -159,7 +171,7 @@ export const BLOCOS: readonly Bloco[] = [
      */
     nome: "Defesa e conversão",
     faixa: [1000, 2100],
-    sabado: 3,
+    nivel: 5,
     temas: [
       { tag: "defensiveMove", nome: "Lance defensivo", resumo: "O único lance que segura — treinar não desistir." },
       { tag: "advancedPawn", nome: "Peão avançado", resumo: "O peão que vai virar dama e decide a partida." },

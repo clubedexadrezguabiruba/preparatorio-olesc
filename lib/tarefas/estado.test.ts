@@ -27,8 +27,8 @@ function tema(tentativas: number, certos: number): ProgressoDoTema {
 }
 
 const TAREFA_TATICA: Tarefa = {
-  id: "s1-tatica",
-  semana: 1,
+  id: "n1-tatica",
+  nivel: 1,
   tipo: "tatica",
   titulo: "60 puzzles dos blocos 1 e 2",
   meta: { blocos: [1, 2], puzzles: 60, acerto: 70 },
@@ -42,8 +42,8 @@ function deTatica(estado: EstadoDaTarefa): MedidaDeTatica {
 }
 
 const TAREFA_FINAIS: Tarefa = {
-  id: "s2-finais",
-  semana: 2,
+  id: "n2-finais",
+  nivel: 2,
   tipo: "finais",
   titulo: "Dominar 6 finais das classes E e D",
   meta: { classes: ["E", "D"], dominar: 6 },
@@ -51,8 +51,8 @@ const TAREFA_FINAIS: Tarefa = {
 };
 
 const TAREFA_MARCAR: Tarefa = {
-  id: "s1-video",
-  semana: 1,
+  id: "n1-video",
+  nivel: 1,
   tipo: "marcar",
   titulo: "Assistir ao vídeo da anotação",
   onde: null,
@@ -155,7 +155,7 @@ test("aula de outra classe não fecha a tarefa de finais", () => {
 test("marcar a tarefa de finais não a fecha", () => {
   // Mesmo motivo da de tática: quem conta é o servidor, e a marcação não tem
   // voto numa tarefa medida.
-  const [estado] = estadoDasTarefas([TAREFA_FINAIS], new Set(["s2-finais"]), new Map());
+  const [estado] = estadoDasTarefas([TAREFA_FINAIS], new Set(["n2-finais"]), new Map());
   assert.equal(estado.feita, false);
 });
 
@@ -166,7 +166,7 @@ test("a tarefa de marcar depende só da marcação", () => {
   assert.equal(semMarca.feita, false, "resolver puzzle não assiste vídeo por ninguém");
   assert.equal(semMarca.medida, null);
 
-  const [comMarca] = estadoDasTarefas([TAREFA_MARCAR], new Set(["s1-video"]), new Map());
+  const [comMarca] = estadoDasTarefas([TAREFA_MARCAR], new Set(["n1-video"]), new Map());
   assert.equal(comMarca.feita, true);
 });
 
@@ -174,7 +174,7 @@ test("marcar a tarefa de tática não a fecha", () => {
   // A ação do servidor recusa marcar tarefa de tática, mas se uma linha velha
   // sobrar no banco (um id que mudou de tipo, por exemplo), a contagem aqui
   // continua sendo a dos puzzles. A marcação não tem voto nesta tarefa.
-  const [estado] = estadoDasTarefas([TAREFA_TATICA], new Set(["s1-tatica"]), new Map());
+  const [estado] = estadoDasTarefas([TAREFA_TATICA], new Set(["n1-tatica"]), new Map());
   assert.equal(estado.feita, false);
 });
 
@@ -182,7 +182,7 @@ test("quantas feitas conta as duas espécies juntas", () => {
   const progresso = new Map([["mateIn1", tema(60, 42)]]);
   const estados = estadoDasTarefas(
     [TAREFA_TATICA, TAREFA_MARCAR],
-    new Set(["s1-video"]),
+    new Set(["n1-video"]),
     progresso,
   );
   assert.equal(quantasFeitas(estados), 2);

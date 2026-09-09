@@ -2,18 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { sair } from "@/app/entrar/acoes";
 import { Barra } from "@/components/Barra";
-import { EscolhaDaSemana } from "@/components/curso/EscolhaDaSemana";
 import { perfilAtual } from "@/lib/auth/perfil";
-import {
-  fimDaSemana,
-  hojeNoBrasil,
-  intervaloPorExtenso,
-  porExtenso,
-  sabadoDaSemana,
-  somarDias,
-} from "@/lib/curso/calendario";
+import { hojeNoBrasil, somarDias } from "@/lib/curso/calendario";
 import { minutosDeHoje, sequenciaDeDias } from "@/lib/curso/hoje";
-import { PARAMETRO_DA_SEMANA, semanaDaTela } from "@/lib/curso/semana";
+import { fechamentoDoNivel, nivelDoAluno, proximoPasso } from "@/lib/curso/nivel";
+import { nivelConquistado } from "@/lib/curso/progresso";
 import { minutosPorDia, partidaDoDiaMarcada } from "@/lib/curso/minutos";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
 import { aulasVencidas } from "@/lib/finais/escada";
@@ -34,15 +27,23 @@ import {
   baseCompleto,
   idsLiberados,
 } from "@/lib/repertorio/treino";
-import { TAREFAS } from "@/lib/tarefas/conteudo";
+import {
+  emOrdemDeData,
+  quandoPorExtenso,
+  type ItemDaAgenda,
+  type Quando,
+} from "@/lib/tarefas/agenda";
+import { AGENDA, TAREFAS } from "@/lib/tarefas/conteudo";
 import { estadoDasTarefas } from "@/lib/tarefas/estado";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
-import { daSemana } from "@/lib/tarefas/tarefas";
+import { doNivel } from "@/lib/tarefas/tarefas";
 import { BLOCOS } from "@/lib/tatica/blocos";
 import { temaAberto } from "@/lib/tatica/conteudo";
 import { progressoPorTema, PUZZLES_POR_TEMA, revisaoDeHoje, temaZerado } from "@/lib/tatica/progresso";
 import { etapaAtual, METAS, NOME_DA_ETAPA } from "@/lib/tatica/serie";
+import { Agenda } from "./Agenda";
 import { Hoje } from "./Hoje";
+import { FaixaDoNivel } from "./Nivel";
 import { Tarefas } from "./Tarefas";
 
 export const metadata: Metadata = { title: "Painel — Preparatório OLESC" };
@@ -50,8 +51,12 @@ export const metadata: Metadata = { title: "Painel — Preparatório OLESC" };
 const EQUIPE = { M: "Equipe masculina", F: "Equipe feminina" } as const;
 
 /**
- * O painel do aluno: a semana em que ele está, o que falta fazer nela, e onde
- * ele parou em cada tema.
+ * O painel do aluno: **o nível em que ele está**, o que falta para fechá-lo, e
+ * uma única coisa para fazer agora.
+ *
+ * Era a semana até 2026-09-09, e a semana respondia a pergunta errada: ela
+ * dizia que dia é hoje, que o celular já diz, e não dizia onde o aluno está.
+ * O eixo é o degrau; a data ficou como agenda dos encontros presenciais.
  *
  * **As três consultas do painel são as mesmas de outras telas, e de propósito.**
  * O progresso vem de `progressoPorTema`, que a lista de tática e (na B1.3) o
@@ -60,16 +65,8 @@ const EQUIPE = { M: "Equipe masculina", F: "Equipe feminina" } as const;
  * nada por conta própria — é o que impede o painel de dizer 5 e o relatório
  * dizer 4 com o aluno na frente.
  */
-export default async function Painel({ searchParams }: PageProps<"/painel">) {
+export default async function Painel() {
   const perfil = await perfilAtual();
-
-  // A semana da tela, e não a do relógio: o professor ensaia a tarefa do sábado
-  // que vem antes que ele chegue, e o aluno recebe sempre a de verdade
-  // (`lib/curso/semana.ts`).
-  const tela = semanaDaTela(perfil.papel, (await searchParams)[PARAMETRO_DA_SEMANA]);
-  const semana = tela.semana;
-  const sabado = sabadoDaSemana(semana);
-  const tarefasDaSemana = daSemana(TAREFAS, semana);
   const hoje = hojeNoBrasil();
 
   // As duas últimas são do repertório, e entram na **mesma** rajada: elas
@@ -84,6 +81,7 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
     jogouHoje,
     indice,
     repertorio,
+    conquistado,
   ] = await Promise.all([
     progressoPorTema(perfil.id),
     tarefasMarcadas(perfil.id),
@@ -95,16 +93,21 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
     partidaDoDiaMarcada(perfil.id, hoje),
     lerIndice(),
     progressoDoRepertorio(),
+    nivelConquistado(perfil.id),
   ]);
 
-  // A trilha de finais: o que está aberto nesta semana, e o que dele já foi
-  // aprendido. As duas contas são as mesmas de `/finais` — a tela lá e o cartão
-  // aqui não podem discordar, e é por isso que nenhuma das duas as refaz.
-  const aulasDeFinais = aulasAbertas(aulasPublicadas(), semana);
+  // A trilha de finais: o que está publicado, e o que dele já foi aprendido. As
+  // duas contas são as mesmas de `/finais` — a tela lá e o cartão aqui não
+  // podem discordar, e é por isso que nenhuma das duas as refaz.
+  const publicadas = aulasPublicadas();
+  const aulasDeFinais = aulasAbertas(publicadas);
   const finaisFeitos = aprendidasDaTrilha(aulasDeFinais, finais);
   const proximoFinal = proximaAula(aulasDeFinais, finais);
 
-  const estados = estadoDasTarefas(tarefasDaSemana, marcadas, progresso, finaisFeitos);
+  const nivel = nivelDoAluno(conquistado);
+  const estados = estadoDasTarefas(doNivel(TAREFAS, nivel), marcadas, progresso, finaisFeitos);
+
+  const grupos = agrupar(emOrdemDeData(AGENDA));
 
   /*
    * As aulas vencidas hoje na escada, com o nome que o cartão mostra.
@@ -152,6 +155,23 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
   const feitos = [...progresso.values()].reduce((s, p) => s + p.tentativas, 0);
   const certos = [...progresso.values()].reduce((s, p) => s + p.certos, 0);
 
+  /*
+   * O fechamento do degrau, montado das mesmas leituras que a página já fez.
+   *
+   * Nenhuma consulta a mais: `fechamentoDoNivel` e `proximoPasso` são funções
+   * puras de `lib/curso/nivel.ts`, testadas, e o que elas recebem aqui é o que
+   * já está na memória. Foi por isso que a regra nasceu sem falar com o banco.
+   */
+  const paraONivel = {
+    temas: new Map([...progresso].map(([tema, p]) => [tema, p.feitos])),
+    finais,
+    publicadas,
+    linhasAprendidas,
+    baseCompleto: avancadoLiberado,
+  };
+  const fechamento = fechamentoDoNivel(nivel, paraONivel);
+  const passo = proximoPasso(nivel, paraONivel, devidosDeTatica.length, conquistado);
+
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-5 py-10">
       <header className="flex flex-wrap items-baseline justify-between gap-3">
@@ -183,15 +203,6 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
         </div>
       </header>
 
-      {/* A barra do professor, e só para ele. Fica logo abaixo do cabeçalho
-          porque ela muda **o resto da página inteira**: a tarefa da semana, as
-          aulas de finais abertas e a contagem do que falta. Um seletor que
-          muda tudo e mora no rodapé é um seletor que o professor encontra
-          depois de já ter lido a tela errada. */}
-      {perfil.papel === "professor" ? (
-        <EscolhaDaSemana tela={tela} base="/painel" />
-      ) : null}
-
       {/* O dia, em primeiro lugar: é o que o aluno abre o site para ver. Os
           totais do curso vêm depois — eles não mudam o que fazer agora. */}
       <Hoje
@@ -211,26 +222,48 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
       </section>
 
       {/* ----------------------------------------------------------------- *
-       * A semana
+       * O seu nível — a faixa, as três barras, a prova e o próximo passo
+       * ----------------------------------------------------------------- */}
+      <FaixaDoNivel
+        nivel={nivel}
+        fechamento={fechamento}
+        passo={passo}
+        conquistado={conquistado}
+      />
+
+      {/* ----------------------------------------------------------------- *
+       * A rotina do degrau
+       *
+       * O que o site **não** mede sozinho, mais a tarefa de tática — que fica
+       * porque é onde mora o aviso de acerto, e o nível recusa de propósito
+       * cobrar piso de acerto como cadeado.
        * ----------------------------------------------------------------- */}
       <section className="flex flex-col gap-3">
-        <div className="flex flex-col gap-0.5">
-          <h2 className="rotulo text-tinta-fraca">
-            Semana {semana} · {intervaloPorExtenso(sabado.data, fimDaSemana(semana))}
-          </h2>
-          <p className="text-sm text-tinta-media">
-            Sábado {semana}, {porExtenso(sabado.data)}: {sabado.titulo}.
-          </p>
-        </div>
-
+        <h2 className="rotulo text-tinta-fraca">O seu nível</h2>
         {estados.length > 0 ? (
           <Tarefas estados={estados} />
         ) : (
           <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
-            As tarefas desta semana saem no Sábado {semana}. Até lá, siga na tática.
+            A rotina deste degrau ainda não foi escrita. Siga na tática.
           </p>
         )}
       </section>
+
+      {/* ----------------------------------------------------------------- *
+       * A agenda — o que tem data marcada
+       * ----------------------------------------------------------------- */}
+      {grupos.length > 0 ? (
+        <section className="flex flex-col gap-3">
+          <div className="flex flex-col gap-0.5">
+            <h2 className="rotulo text-tinta-fraca">A agenda</h2>
+            <p className="text-sm text-tinta-media">
+              Os encontros presenciais e o que só acontece num dia. A data não tranca nada
+              do curso — ela só marca quando estas coisas são.
+            </p>
+          </div>
+          <Agenda grupos={grupos} marcadas={[...marcadas]} />
+        </section>
+      ) : null}
 
       {/* ----------------------------------------------------------------- *
        * O progresso por tema
@@ -284,7 +317,7 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
 
         <p className="rounded-lg bg-dica-superficie/12 px-3 py-2 text-sm text-dica-tinta">
           Dentro de cada tema os puzzles vêm em ordem de dificuldade: começam fáceis e vão
-          subindo. Os blocos seguintes abrem nos próximos sábados.
+          subindo. Os blocos dos degraus seguintes já estão abertos — você pode adiantar.
         </p>
       </section>
 
@@ -392,7 +425,8 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
               </Link>
             ) : (
               <p className="text-sm text-metodo-tinta">
-                Você dominou tudo o que está aberto. O próximo lote vem no sábado.
+                Você aprendeu tudo o que já foi publicado. O curso de finais continua sendo
+                escrito.
               </p>
             )}
           </div>
@@ -400,6 +434,26 @@ export default async function Painel({ searchParams }: PageProps<"/painel">) {
       ) : null}
     </main>
   );
+}
+
+/**
+ * A agenda agrupada por dia, com o rótulo já pronto.
+ *
+ * Feito aqui, e não no componente: quem sabe converter `"sabado-2"` em "19 de
+ * setembro" é `SABADOS`, que é do servidor — e uma função não atravessa a
+ * fronteira para o cliente. O agrupamento vem de graça junto, porque a lista já
+ * chega em ordem de data.
+ */
+function agrupar(
+  itens: readonly ItemDaAgenda[],
+): { rotulo: string; itens: ItemDaAgenda[] }[] {
+  const grupos: { quando: Quando; rotulo: string; itens: ItemDaAgenda[] }[] = [];
+  for (const item of itens) {
+    const ultimo = grupos[grupos.length - 1];
+    if (ultimo && ultimo.quando === item.quando) ultimo.itens.push(item);
+    else grupos.push({ quando: item.quando, rotulo: quandoPorExtenso(item.quando), itens: [item] });
+  }
+  return grupos.map(({ rotulo, itens: doDia }) => ({ rotulo, itens: doDia }));
 }
 
 function Numero({ rotulo, valor }: { rotulo: string; valor: number | string }) {

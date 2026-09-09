@@ -3,7 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Barra } from "@/components/Barra";
 import { professorAtual } from "@/lib/auth/perfil";
-import { hojeNoBrasil, porExtenso, semanaAtual, somarDias } from "@/lib/curso/calendario";
+import { hojeNoBrasil, porExtenso, somarDias } from "@/lib/curso/calendario";
+import { nivelDoAluno } from "@/lib/curso/nivel";
+import { nivelConquistado } from "@/lib/curso/progresso";
 import { META_DO_DIA_MIN, MINIMO_DA_SEQUENCIA_MIN, sequenciaDeDias, serieDeDias } from "@/lib/curso/hoje";
 import { minutosPorDia, partidasDeclaradas } from "@/lib/curso/minutos";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
@@ -68,18 +70,19 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   if (!aluno || aluno.papel !== "aluno") notFound();
 
   const hoje = hojeNoBrasil();
-  const semana = semanaAtual();
   const desde = somarDias(hoje, -(DIAS - 1));
 
-  const [tatica, linhas, finais, minutos, partidas] = await Promise.all([
+  const [tatica, linhas, finais, minutos, partidas, conquistado] = await Promise.all([
     progressoPorTema(id),
     linhasDeTentativas(id),
     progressoDeFinais(id),
     minutosPorDia(id, desde),
     partidasDeclaradas(id, desde),
+    nivelConquistado(id),
   ]);
 
-  const abertas = aulasAbertas(aulasPublicadas(), semana);
+  const nivel = nivelDoAluno(conquistado);
+  const abertas = aulasAbertas(aulasPublicadas());
   const serie = serieDeDias(minutos, hoje, DIAS);
   const sequencia = sequenciaDeDias(minutos, hoje);
   const fila = filaCompleta(linhas);
@@ -121,7 +124,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
           {aluno.rating ? ` · rating ${aluno.rating}` : ""}
         </p>
         <p className="text-xs text-tinta-fraca">
-          Semana {semana} do preparatório · dados de {porExtenso(desde)} a {porExtenso(hoje)}.
+          Nível {nivel} de 5 · dados de {porExtenso(desde)} a {porExtenso(hoje)}.
         </p>
       </header>
 
@@ -353,8 +356,8 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         <div className="flex flex-col gap-0.5">
           <h2 className="rotulo text-tinta-fraca">Finais, aula a aula</h2>
           <p className="text-sm text-tinta-media">
-            Só as {abertas.length} aulas abertas na semana {semana}. O critério de domínio é o
-            do formato de cada uma — o mesmo que a trilha do aluno usa.
+            Só as {abertas.length} aulas publicadas. O critério de domínio é o do formato de
+            cada uma — o mesmo que a trilha do aluno usa.
           </p>
         </div>
 

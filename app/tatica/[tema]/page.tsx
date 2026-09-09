@@ -50,8 +50,8 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
     return (
       <Moldura tema={tema.nome} bloco={bloco?.nome ?? ""}>
         <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
-          Este tema abre no Sábado {bloco?.sabado ?? "—"}. Até lá, siga pelos temas que já
-          estão abertos.
+          Este tema é do currículo, mas o texto dele ainda não foi escrito. Siga pelos
+          temas que já estão abertos.
         </p>
       </Moldura>
     );

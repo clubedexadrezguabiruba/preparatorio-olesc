@@ -1,88 +1,89 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Barra } from "@/components/Barra";
-import { EscolhaDaSemana } from "@/components/curso/EscolhaDaSemana";
 import { perfilAtual } from "@/lib/auth/perfil";
-import { porExtenso, sabadoDaSemana } from "@/lib/curso/calendario";
-import { PARAMETRO_DA_SEMANA, semanaDaTela } from "@/lib/curso/semana";
-import { contarAberto, MODULO, MODULOS_EM_ORDEM, montarMapa } from "@/lib/curso/mapa";
 import {
-  NIVEIS,
-  PUZZLE_ACIMA_DO_RAPIDO,
-  vocEstaAqui,
+  contarAberto,
+  MODULO,
+  MODULOS_EM_ORDEM,
+  montarMapa,
   type ItemDoNivel,
   type ModuloDoNivel,
+} from "@/lib/curso/mapa";
+import {
+  META_DA_OLESC,
+  NIVEIS,
+  NIVEL,
+  nivelDoAluno,
+  type Nivel,
   type Situacao,
-} from "@/lib/curso/trilha";
+} from "@/lib/curso/nivel";
+import { nivelConquistado } from "@/lib/curso/progresso";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import { temaAberto } from "@/lib/tatica/conteudo";
 import { progressoPorTema } from "@/lib/tatica/progresso";
 
 /**
- * O mapa do curso inteiro, por nível de força.
+ * O mapa do curso inteiro, por nível.
  *
  * ## A pergunta que esta página responde
  *
  * "O que vem depois?" — e ela existe porque, até a F2, a resposta estava
- * repartida em três telas que não conversavam: `/tatica` fala em rating de
- * puzzle do Lichess e `/finais` fala em classe USCF, e nenhuma das duas fala em
- * nada. Um aluno de doze anos não converte escalas de cabeça.
+ * repartida em três telas que não conversavam: `/tatica` falava em rating de
+ * puzzle do Lichess e `/finais` falava em classe USCF, e nenhuma das duas falava
+ * em nada. Um aluno de doze anos não converte escalas de cabeça.
  *
- * ## Uma escada só, e a conversão dita com todas as letras
+ * ## Os degraus passaram a ser cinco, e o rótulo passou a ser FIDE
  *
- * Os quatro degraus são faixas de **rápidas do chess.com**, que é o número que
- * o aluno conhece. As outras duas escalas entram convertidas, e a conversão
- * está escrita no rodapé desta página — não escondida em `lib/curso/trilha.ts`.
- * São aproximações declaradas, e **ninguém é barrado por elas**: todo item
- * aberto continua clicável em qualquer degrau.
+ * Eram quatro faixas de rápidas do chess.com, **derivadas** do piso de rating
+ * dos puzzles — e a derivação estava quebrada: os oito blocos começam entre 700
+ * e 1100, então os 36 temas caíam todos no degrau 1 e três degraus mostravam
+ * uma coluna vazia com uma explicação. Hoje o degrau é declarado no currículo
+ * (`Bloco.nivel`, `AulaDaTrilha.nivel`) e a escada tem cinco.
  *
- * ## Três barras que contam coisas diferentes
+ * O rótulo é **FIDE**, e não chess.com, de propósito: um aluno de 1700 rapid
+ * que lesse "1400+" no degrau 5 concluiria que pode pular os quatro de baixo.
+ * FIDE ≈ rápidas − 300/400 é conversão honesta, e o efeito acontece sozinho.
  *
- * Puzzle resolvido é medido; aula dominada é certificada pela tablebase; dica
- * lida é declaração do aluno. Pôr as três lado a lado sem dizer isso seria
- * fabricar um percentual único que o professor não saberia defender com o aluno
- * na frente — então cada barra carrega a frase que diz o que ela conta
- * (`MODULO` em `lib/curso/mapa.ts`).
+ * ## Duas barras que contam coisas diferentes
+ *
+ * Puzzle resolvido é medido; aula aprendida é certificada pela tablebase. Pôr
+ * as duas lado a lado sem dizer isso seria fabricar um percentual único que o
+ * professor não saberia defender com o aluno na frente — então cada barra
+ * carrega a frase que diz o que ela conta (`MODULO` em `lib/curso/mapa.ts`).
  *
  * ## As três aparências de uma pastilha, e a legenda que as nomeia
  *
- * A pastilha fechada é tracejada, que é a mesma linguagem de `/finais` e
- * `/tatica` — e por isso o tracejado precisava parar de dizer duas coisas ao
- * mesmo tempo. Ele **não** significa "trancado por rating": significa que o
- * item ainda não chegou, e a pastilha diz qual dos dois motivos o segura (o
- * sábado, ou o texto por escrever). A legenda no cabeçalho nomeia as três
- * aparências, e o rodapé não fala mais em tranca sem dizer de que espécie.
+ * A pastilha tracejada **não** significa "trancado". Ela diz qual dos dois
+ * motivos segura o item: o degrau que o aluno ainda não alcançou (e que ele
+ * pode adiantar, porque a trava é mole) ou o texto por escrever (que não
+ * existe, e aí não há o que abrir). A legenda no cabeçalho só nomeia as
+ * aparências que a página **está** usando.
  */
 
 export const metadata: Metadata = { title: "A trilha — Preparatório OLESC" };
 
-export default async function Trilha({ searchParams }: PageProps<"/trilha">) {
+export default async function Trilha() {
   const perfil = await perfilAtual();
-  // A trilha inteira é desenhada a partir da semana: ela decide qual pastilha
-  // está aberta e qual ainda "não chegou" (`lib/curso/semana.ts`).
-  const tela = semanaDaTela(perfil.papel, (await searchParams)[PARAMETRO_DA_SEMANA]);
-  const semana = tela.semana;
 
-  const [tatica, finais] = await Promise.all([
+  const [tatica, finais, conquistado] = await Promise.all([
     progressoPorTema(perfil.id),
     progressoDeFinais(perfil.id),
+    nivelConquistado(perfil.id),
   ]);
+  const aqui = nivelDoAluno(conquistado);
 
   const mapa = montarMapa({
     tatica: new Map([...tatica].map(([tema, p]) => [tema, p.tentativas])),
     temaAberto,
     finais,
     aulasPublicadas: aulasPublicadas(),
-    semana,
+    nivelDoAluno: aqui,
   });
-  const aqui = vocEstaAqui(mapa);
-  // A legenda só nomeia o que a página de fato desenha. Hoje nenhuma pastilha
-  // está "em escrita" — as duas aulas do Sábado 1 já têm JSON, e o que falta
-  // escrever só abre em sábados que ainda não chegaram —, e uma legenda com
-  // uma entrada sem referente ensina o aluno a procurar um desenho que não
-  // existe. Ela volta sozinha no dia em que um sábado chegar sem o texto
-  // pronto, que é justamente o dia em que ela precisa estar lá.
+
+  // A legenda só nomeia o que a página de fato desenha. Uma legenda com uma
+  // entrada sem referente ensina o aluno a procurar um desenho que não existe.
   const situacoes = new Set<Situacao>(
     [...mapa.values()].flat().flatMap((m) => m.itens.map((i) => i.situacao)),
   );
@@ -95,27 +96,21 @@ export default async function Trilha({ searchParams }: PageProps<"/trilha">) {
         </Link>
         <h1 className="titulo text-tinta">A trilha do curso</h1>
         <p className="text-sm text-tinta-media">
-          Tudo o que o preparatório tem, em quatro degraus de força: tática e finais lado
-          a lado. Você não precisa esperar o degrau certo — o que está aberto está clicável
-          em qualquer um.
+          Tudo o que o preparatório tem, em cinco degraus: tática e finais lado a lado.
+          Você não precisa esperar o degrau certo — <strong>tudo o que está escrito
+          continua clicável</strong>, em qualquer um.
         </p>
         <Legenda situacoes={situacoes} />
-        {aqui === null ? (
-          <p className="rounded-lg bg-metodo-superficie/12 px-3 py-2 text-sm text-metodo-tinta-alta">
-            Você fez tudo o que está aberto. O próximo lote abre no sábado.
-          </p>
-        ) : null}
       </header>
 
-      {perfil.papel === "professor" ? <EscolhaDaSemana tela={tela} base="/trilha" /> : null}
-
-      {NIVEIS.map((nivel, i) => {
-        const modulos = mapa.get(nivel.id) ?? [];
-        const voceEstaAqui = aqui === nivel.id;
+      {NIVEIS.map((nivel) => {
+        const modulos = mapa.get(nivel) ?? [];
+        const voceEstaAqui = aqui === nivel;
+        const daOlesc = META_DA_OLESC.includes(nivel);
 
         return (
           <section
-            key={nivel.id}
+            key={nivel}
             aria-current={voceEstaAqui ? "step" : undefined}
             className={`flex flex-col gap-4 rounded-2xl border px-4 py-4 sm:px-5 ${
               voceEstaAqui ? "border-metodo-cheio bg-carta" : "border-borda-fraca bg-carta/60"
@@ -124,16 +119,22 @@ export default async function Trilha({ searchParams }: PageProps<"/trilha">) {
             <div className="flex flex-col gap-1">
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                 <h2 className="text-base font-semibold text-tinta">
-                  <span className="text-tinta-fraca tabular-nums">{i + 1}.</span> {nivel.nome}
-                  <span className="font-normal text-tinta-fraca"> de rápidas</span>
+                  <span className="text-tinta-fraca tabular-nums">Nível {nivel}.</span>{" "}
+                  <span className="font-normal text-tinta-fraca">FIDE </span>
+                  {faixaFide(nivel)}
                 </h2>
                 {voceEstaAqui ? (
                   <span className="rounded-full bg-metodo-cheio px-2 py-0.5 text-xs font-semibold text-tinta-inversa">
                     Você está aqui
                   </span>
                 ) : null}
+                {daOlesc ? (
+                  <span className="rounded-full border border-metodo-cheio px-2 py-0.5 text-xs font-medium text-metodo-tinta">
+                    Meta da OLESC
+                  </span>
+                ) : null}
               </div>
-              <p className="text-sm text-tinta-media">{nivel.resumo}</p>
+              <p className="text-sm text-tinta-media">{NIVEL[nivel].resumo}</p>
             </div>
 
             {/* `items-start` porque a coluna de tática tem muito mais pastilhas
@@ -155,38 +156,44 @@ export default async function Trilha({ searchParams }: PageProps<"/trilha">) {
       })}
 
       <section className="flex flex-col gap-2 rounded-xl border border-dashed border-borda bg-carta px-4 py-3">
-        <h2 className="rotulo text-tinta-fraca">Como as escalas foram casadas</h2>
+        <h2 className="rotulo text-tinta-fraca">Sobre os números da escada</h2>
         <p className="text-sm text-tinta-media">
-          Os quatro degraus são faixas de <strong>rápidas do chess.com</strong>. As outras
-          duas escalas do curso entram convertidas, e as duas conversões são aproximações,
-          não fatos:
+          As faixas são de <strong>rating FIDE</strong> — o do torneio, e não o do site
+          onde você joga. A conversão é aproximada e vale a pena saber de cor:
         </p>
         <ul className="flex flex-col gap-1 text-sm text-tinta-media">
           <li>
             <span aria-hidden className="text-tinta-muda">
               —{" "}
             </span>
-            <strong>classe USCF → chess.com:</strong> o chess.com roda de 150 a 250 pontos
-            acima do USCF nesta faixa.
+            <strong>FIDE ≈ rápidas do chess.com − 300 a 400.</strong> Quem tem 1200 de
+            rápidas está por volta de 800 FIDE, que é o degrau 2.
           </li>
           <li>
             <span aria-hidden className="text-tinta-muda">
               —{" "}
             </span>
-            <strong>puzzle do Lichess → rápidas do chess.com:</strong> puzzle é outra
-            habilidade e outra escala; aqui vale{" "}
-            <span className="tabular-nums">puzzle ≈ rápidas + {PUZZLE_ACIMA_DO_RAPIDO}</span>.
+            <strong>A meta da OLESC são os degraus 1 a 3.</strong> São 13 temas e 507
+            puzzles, que cabem no tempo até o torneio. Os degraus 4 e 5 são o treino do
+            clube <em>depois</em> dele — ninguém está atrasado por não os ter feito.
           </li>
         </ul>
         <p className="text-xs text-tinta-fraca">
-          Elas ordenam esta tela, e nada mais: <strong>nenhum item é trancado por rating</strong>
-          , e o degrau em que você está não impede de clicar no de cima. O que segura uma
-          pastilha tracejada é o calendário ou o texto ainda por escrever — nunca o seu
-          número.
+          Elas ordenam esta tela, e nada mais: <strong>nenhum item é trancado por
+          rating</strong>, e o degrau em que você está não impede de clicar no de cima. O
+          que segura uma pastilha tracejada é o degrau — que você alcança fazendo — ou o
+          texto ainda por escrever.
         </p>
       </section>
     </main>
   );
+}
+
+/** "800 a 1000", "1400+" — o rótulo do degrau, sem o `null` do teto na tela. */
+function faixaFide(nivel: Nivel): string {
+  const [piso, teto] = NIVEL[nivel].fide;
+  if (teto === null) return `${piso}+`;
+  return piso === 0 ? `até ${teto}` : `${piso} a ${teto}`;
 }
 
 /**
@@ -194,10 +201,10 @@ export default async function Trilha({ searchParams }: PageProps<"/trilha">) {
  *
  * Recebe o módulo mesmo vazio, e é de propósito — ver `MODULOS_EM_ORDEM`. Uma
  * coluna sem item nenhum escreve **por que** está vazia; um espaço em branco
- * onde o cabeçalho prometeu três colunas lê como erro de carregamento.
+ * onde o cabeçalho prometeu duas colunas lê como erro de carregamento.
  */
 function Coluna({ modulo }: { modulo: ModuloDoNivel }) {
-  const { feitos, total, porAbrir, emEscrita } = contarAberto(modulo);
+  const { feitos, total, adiante, emEscrita } = contarAberto(modulo);
   const rotulo = MODULO[modulo.modulo];
 
   if (modulo.itens.length === 0) {
@@ -220,7 +227,7 @@ function Coluna({ modulo }: { modulo: ModuloDoNivel }) {
         </Link>
         <span className="text-xs text-tinta-fraca tabular-nums">
           {total > 0 ? `${feitos} de ${total} ${rotulo.unidade}` : "nada aberto ainda"}
-          {porAbrir > 0 ? ` · ${porAbrir} por abrir` : ""}
+          {adiante > 0 ? ` · ${adiante} adiante` : ""}
           {emEscrita > 0 ? ` · ${emEscrita} em escrita` : ""}
         </span>
       </div>
@@ -248,7 +255,7 @@ function Coluna({ modulo }: { modulo: ModuloDoNivel }) {
 function Legenda({ situacoes }: { situacoes: ReadonlySet<Situacao> }) {
   const exemplos: { situacao: Situacao; amostra: string; diz: string; tracejada: boolean }[] = [
     { situacao: "aberto", amostra: "aberto", diz: "clique e comece", tracejada: false },
-    { situacao: "por-abrir", amostra: "Sáb 3", diz: "abre naquele sábado", tracejada: true },
+    { situacao: "adiante", amostra: "Nível 4", diz: "adiante — clicável mesmo assim", tracejada: true },
     { situacao: "em-escrita", amostra: "em escrita", diz: "ainda não existe", tracejada: true },
   ];
 
@@ -276,32 +283,45 @@ function Legenda({ situacoes }: { situacoes: ReadonlySet<Situacao> }) {
 /**
  * Um item do curso, do tamanho de uma pastilha.
  *
- * Cento e dez pastilhas cabem nesta página, e é de propósito: a promessa da F2
- * é que o aluno **veja o que vem depois**, e um resumo em número não mostra que
- * a aula 34 se chama "Filidor".
+ * Oitenta e cinco pastilhas cabem nesta página, e é de propósito: a promessa da
+ * F2 é que o aluno **veja o que vem depois**, e um resumo em número não mostra
+ * que a aula 34 se chama "Filidor".
  *
- * O sufixo (`Sáb 3`, `em escrita`) é irredutível — `shrink-0` — e é o nome que
- * encolhe. O contrário deixaria a pastilha dizer só o motivo, que é a metade
- * inútil das duas: o aluno já sabe que está fechada pelo tracejado.
+ * ## O item "adiante" é um link, e o "em escrita" não é
+ *
+ * A diferença é a que a trava mole faz: o degrau é uma recomendação, e o texto
+ * que não existe é um fato. O tracejado é o mesmo nos dois porque o que ele diz
+ * é "isto não é o seu trabalho de hoje" — mas só um deles abre.
+ *
+ * O sufixo (`Nível 4`, `em escrita`) é irredutível — `shrink-0` — e é o nome
+ * que encolhe. O contrário deixaria a pastilha dizer só o motivo, que é a
+ * metade inútil das duas: o aluno já sabe que está fechada pelo tracejado.
  */
 function Pastilha({ item }: { item: ItemDoNivel }) {
   const completo = item.feitos >= item.total;
 
-  if (item.situacao !== "aberto") {
-    const motivo = item.situacao === "por-abrir" ? `Sáb ${item.sabado}` : "em escrita";
-    const porque =
-      item.situacao === "por-abrir" && item.sabado !== null
-        ? `abre no Sábado ${item.sabado}, ${porExtenso(sabadoDaSemana(item.sabado).data)}`
-        : "ainda não foi escrita";
-
+  if (item.situacao === "em-escrita") {
     return (
       <span
         className="inline-flex max-w-full items-baseline gap-1 rounded-full border border-dashed border-borda px-2 py-0.5 text-xs text-tinta-fraca"
-        title={`${item.nome} — ${porque}`}
+        title={`${item.nome} — ainda não foi escrita`}
       >
         <span className="truncate">{item.nome}</span>
-        <span className="shrink-0 text-tinta-fraca tabular-nums">· {motivo}</span>
+        <span className="shrink-0 text-tinta-fraca">· em escrita</span>
       </span>
+    );
+  }
+
+  if (item.situacao === "adiante") {
+    return (
+      <Link
+        href={item.href}
+        title={`${item.nome} — nível ${item.nivel}, adiante do seu. Pode adiantar.`}
+        className="foco inline-flex max-w-full items-baseline gap-1 rounded-full border border-dashed border-borda px-2 py-0.5 text-xs text-tinta-fraca transition-colors hover:bg-carta-toque"
+      >
+        <span className="truncate">{item.nome}</span>
+        <span className="shrink-0 text-tinta-fraca tabular-nums">· Nível {item.nivel}</span>
+      </Link>
     );
   }
 

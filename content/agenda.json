@@ -1,0 +1,36 @@
+[
+ {
+  "id": "agenda-sabado-2-torneio-do-clube",
+  "quando": "sabado-2",
+  "titulo": "Torneio 15+10 do clube, na quinta",
+  "detalhe": "Ritmo de rodada, contra quem você vai encontrar na OLESC. Anote as partidas.",
+  "onde": {
+   "rotulo": "Entrar no clube da OLESC",
+   "url": "https://www.chess.com/club/olesc-2026-equipe-guabiruba/join"
+  }
+ },
+ {
+  "id": "agenda-sabado-3-partida-longa",
+  "quando": "sabado-3",
+  "titulo": "Uma partida de 60+30, anotada, no fim de semana",
+  "detalhe": "É o único ritmo em que dá tempo de calcular de verdade. Reserve as duas horas antes de começar.",
+  "onde": null
+ },
+ {
+  "id": "agenda-sabado-3-blitz",
+  "quando": "sabado-3",
+  "titulo": "Torneio 3+2 do clube",
+  "detalhe": "Blitz não treina cálculo — treina reconhecer padrão sem tempo de pensar. É o que a prova de nível cobra.",
+  "onde": {
+   "rotulo": "Entrar no clube da OLESC",
+   "url": "https://www.chess.com/club/olesc-2026-equipe-guabiruba/join"
+  }
+ },
+ {
+  "id": "agenda-vespera",
+  "quando": "vespera-do-torneio",
+  "titulo": "Véspera: uma hora leve, e a mochila pronta",
+  "detalhe": "Dez puzzles fáceis, uma olhada no repertório, e para. Mochila: caneta, planilha, água, lanche. Dormir cedo é parte do treino.",
+  "onde": null
+ }
+]

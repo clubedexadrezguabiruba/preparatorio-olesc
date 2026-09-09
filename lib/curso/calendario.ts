@@ -1,11 +1,25 @@
 /**
- * O calendário do preparatório: quatro sábados e as quatro semanas entre eles.
+ * O calendário do preparatório: os quatro encontros presenciais, e a aritmética
+ * de dias de que a revisão espaçada vive.
  *
  * **Uma data escrita num lugar só.** Antes disto, `12 de setembro` aparecia
- * como texto solto em `app/tatica/page.tsx`, para dizer quando um bloco
- * trancado abre. O painel precisa da mesma data para dizer em que semana o
- * aluno está. Duas cópias da mesma data é uma remarcação de sábado que
- * conserta uma tela e esquece a outra.
+ * como texto solto em `app/tatica/page.tsx`. Duas cópias da mesma data é uma
+ * remarcação de sábado que conserta uma tela e esquece a outra.
+ *
+ * ## Este arquivo perdeu o poder de tranca em 2026-09-09
+ *
+ * Ele governava o curso: `semanaAtual()` lia o relógio e decidia o que o painel
+ * listava e o que a `/trilha` mostrava como "ainda não chegou". O eixo passou a
+ * ser o **nível** (`lib/curso/nivel.ts`), e a data virou o que ela sempre devia
+ * ter sido: **agenda**. `SABADOS` e `COMECO_DO_TORNEIO` continuam aqui porque
+ * os encontros presenciais continuam existindo, e `content/agenda.json` os
+ * aponta pelo rótulo (`lib/tarefas/agenda.ts`) — remarcar um sábado continua
+ * sendo mudar uma linha aqui.
+ *
+ * Saíram `Semana`, `SEMANAS`, `semanaAtual`, `sabadoDaSemana` e `fimDaSemana`:
+ * eram as cinco que respondiam "em que semana o aluno está", que é a pergunta
+ * que o site deixou de fazer. `Sabado.semana` ficou — ali ele é o **número do
+ * encontro**, e é assim que a agenda o nomeia.
  *
  * ## Por que a comparação é de texto e não de `Date`
  *
@@ -21,12 +35,9 @@
  * biblioteca e sem hora nenhuma no meio.
  */
 
-export type Semana = 1 | 2 | 3 | 4;
-
-export const SEMANAS: readonly Semana[] = [1, 2, 3, 4];
-
 export type Sabado = {
-  readonly semana: Semana;
+  /** O número do encontro: "Sábado 2". Não é mais uma semana de calendário. */
+  readonly semana: 1 | 2 | 3 | 4;
   /** O dia do encontro, `AAAA-MM-DD`. Todos são sábados — há teste disso. */
   readonly data: string;
   /** O tema do dia, como no plano mestre. */
@@ -40,7 +51,7 @@ export const SABADOS: readonly Sabado[] = [
   { semana: 4, data: "2026-10-03", titulo: "Simulado de torneio" },
 ];
 
-/** O primeiro dia do xadrez na OLESC. A semana 4 termina na véspera. */
+/** O primeiro dia do xadrez na OLESC. A agenda tira a véspera daqui. */
 export const COMECO_DO_TORNEIO = "2026-10-11";
 
 const FUSO = "America/Sao_Paulo";
@@ -51,34 +62,6 @@ export function hojeNoBrasil(agora: Date = new Date()): string {
   // alternativa seria montar a string de `formatToParts`, três linhas para o
   // mesmo resultado.
   return new Intl.DateTimeFormat("en-CA", { timeZone: FUSO }).format(agora);
-}
-
-/**
- * Em que semana o preparatório está.
- *
- * Antes do primeiro sábado a resposta é **1**, e não "nenhuma": quem entra no
- * site em 10 de setembro é o Doug ensaiando a semana 1, e uma tela vazia
- * esconderia justamente o que ele foi conferir. Depois do último sábado a
- * resposta é 4, que é a semana de manutenção e vai até o torneio.
- */
-export function semanaAtual(dia: string = hojeNoBrasil()): Semana {
-  let semana: Semana = 1;
-  for (const sabado of SABADOS) {
-    if (dia >= sabado.data) semana = sabado.semana;
-  }
-  return semana;
-}
-
-export function sabadoDaSemana(semana: Semana): Sabado {
-  // O `!` é seguro por construção: `SEMANAS` e `SABADOS` são a mesma lista de
-  // quatro, e o tipo `Semana` não deixa passar um quinto número.
-  return SABADOS.find((s) => s.semana === semana)!;
-}
-
-/** O último dia da semana: a véspera do sábado seguinte, ou do torneio. */
-export function fimDaSemana(semana: Semana): string {
-  const seguinte = SABADOS.find((s) => s.semana === semana + 1);
-  return somarDias(seguinte?.data ?? COMECO_DO_TORNEIO, -1);
 }
 
 /**

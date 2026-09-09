@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Barra } from "@/components/Barra";
 import { perfilAtual } from "@/lib/auth/perfil";
+import { LINHAS_POR_NIVEL, nivelDoAluno } from "@/lib/curso/nivel";
+import { nivelConquistado } from "@/lib/curso/progresso";
 import { lerIndice } from "@/lib/repertorio/banco";
 import { notas } from "@/lib/repertorio/conteudo";
 import { CORES, type Cor } from "@/lib/repertorio/linhas";
@@ -45,8 +47,13 @@ const RESUMO: Record<Cor, string> = {
  * barrinhas não é motivo para abrir doze JSON.
  */
 export default async function Aberturas() {
-  await perfilAtual();
-  const [indice, progresso] = await Promise.all([lerIndice(), progressoDoRepertorio()]);
+  const perfil = await perfilAtual();
+  const [indice, progresso, conquistado] = await Promise.all([
+    lerIndice(),
+    progressoDoRepertorio(),
+    nivelConquistado(perfil.id),
+  ]);
+  const nivel = nivelDoAluno(conquistado);
 
   const agora = new Date().toISOString();
   // O portão: enquanto o Base não fecha, as linhas do Avançado não entram em
@@ -64,6 +71,20 @@ export default async function Aberturas() {
   const total = indice.reduce((soma, e) => soma + idsLiberados(e, destravado).length, 0);
   const faltam = faltamNoBase(progresso, indice);
   const noAvancado = quantasNoAvancado(indice);
+
+  /*
+   * O alvo do degrau — a única coisa que os níveis mudaram nesta tela.
+   *
+   * O repertório entra no portão do nível: 4 linhas por degrau, **em
+   * acumulado**, quaisquer que sejam. Escrever o alvo aqui, ao lado da
+   * contagem que o aluno já lê, é o que impede a pergunta "quantas eu preciso?"
+   * de ter duas respostas em duas telas.
+   *
+   * O nível 5 é o único que não usa o número: ele cobra o Base inteiro, que é
+   * o mesmo `baseCompleto` que já destrava o Avançado aqui em cima. Fechar o
+   * degrau 5 e abrir o Avançado são o mesmo evento.
+   */
+  const alvoDoNivel = nivel === 5 ? null : LINHAS_POR_NIVEL * nivel;
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-5 py-10">
@@ -88,6 +109,13 @@ export default async function Aberturas() {
               </strong>
             </>
           ) : null}
+        </p>
+        <p className="text-sm text-tinta-media tabular-nums">
+          {alvoDoNivel === null
+            ? `O nível 5 pede o Base inteiro — as ${total} linhas.`
+            : `O nível ${nivel} pede ${alvoDoNivel}${
+                aprendidas >= alvoDoNivel ? " — feito." : `; faltam ${alvoDoNivel - aprendidas}.`
+              }`}
         </p>
       </header>
 
