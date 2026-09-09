@@ -1,0 +1,23 @@
+{
+  "id": "pos-n0-mating-material-silman-38",
+  "fen": "6k1/8/5NK1/4N3/8/8/8/8 b - - 0 1",
+  "expectedResult": "draw",
+  "tags": [
+    "KNNK",
+    "material-de-mate",
+    "canto",
+    "ensino"
+  ],
+  "status": "approved",
+  "provenance": {
+    "externalHumanSource": "Jeremy Silman, que a publica como Diagram 38 sob a legenda impressa 'One move draws, one loses'",
+    "bibliographicSource": "Silman, Silman's Complete Endgame Course, Siles Press, Los Angeles, 2007, p. impressa 34 (PDF p. 48, offset 14), Parte Dois 'Endgames for Class E (1000-1199)', seção 'What Can (or Cannot) Mate vs. Lone King' (impressas 33-34), Diagram 38 — o único diagrama da seção",
+    "originalGame": "não se aplica — posição de ensino de manual, não vem de partida",
+    "authorComposer": "não se aplica — é o quadro que ilustra uma regra de final (dois cavalos não forçam mate contra rei solitário), e não uma composição autoral",
+    "license": "obra protegida por direito autoral, em regime integral desde 2026-09-08 (§1.1 do SOURCE-CORPUS): o módulo de finais segue este livro, e por isso o teto de citação da §12.7 e a rotação da §4 não se aplicam a ele. O texto da aula é original em português; nada da prosa do autor é reproduzido. A legenda do diagrama é citada acima como fato bibliográfico — o rótulo que identifica a figura —, não como conteúdo trazido para a tela do aluno.",
+    "editionFile": "silman-complete-endgame-course.pdf",
+    "fenMethod": "Transcrição do diagrama impresso, sustentada por duas leituras de imagem independentes que convergiram e por uma falsificação por geometria. (1) Leitura A, feita junto com o levantamento da seção no sumário. (2) Leitura B, feita às cegas por outro leitor, que recebeu apenas 'leia as casas do Diagram 38 na página 48 do PDF' — sem a posição esperada, sem a lista de candidatas e sem o texto da seção. As duas devolveram a mesma posição: rei preto em g8; rei branco em g6, cavalos brancos em f6 e e5. Duas coisas tornam esta leitura mais barata que as do Freeborough: o diagrama IMPRIME COORDENADAS nas bordas (8 a 1 na esquerda, a a h embaixo), então a orientação foi lida e não deduzida, o que dispensa o argumento de paridade do canto; e o sombreado das casas confere com o tabuleiro real — g8 e g6 em casa clara, f6 e e5 em casa escura —, que é um teste independente das coordenadas. (3) Falsificação por geometria (`.scratch/falsificar-38.mjs`): varredura de todas as posições de rei e dois cavalos contra rei preto em g8 com um cavalo em f6, filtradas pelas marcas que a página IMPRIME e que não dependem de ler casa nenhuma — exatamente dois lances legais (a legenda diz que um empata e um perde), o lance a h8 perdendo para mate em 1 por cavalo indo a f7, e o lance a f8 não perdendo. Sobraram OITO candidatas, e a posição lida é uma delas. A geometria portanto não escolhe sozinha: ela reduz o campo e confirma que a leitura é compatível com tudo o que está impresso. Quem escolhe é a convergência das duas leituras.",
+    "qaApplied": "garimpo de 2026-09-09, na reordenação do nível 1. A chess.js confere a posição sem usar a legenda: as pretas estão em xeque do cavalo de f6 e têm exatamente dois lances legais, Kf8 e Kh8; Kh8 perde para Nf7#, que é o único mate em 1 do tabuleiro, e Kf8 não perde. Isso reproduz 'One move draws, one loses' por cálculo, e não por leitura. Terceira via, independente das duas anteriores: o Stockfish 18 a profundidade 65 avalia a posição em 0.00 e separa as duas linhas — 1...Kf8 em 0.00 e 1...Kh8 em M1. O expectedResult é julgado pela Syzygy no npm run validate:content.",
+    "pendingRisk": "a leitura veio de imagem, não de camada de dados: o tabuleiro do PDF é figura e o OCR não devolve as casas. O que sustenta a transcrição são duas leituras independentes que convergiram, as coordenadas impressas nas bordas e o sombreado das casas — e não uma medição de pixel por perfil de peça, como nas posições do Freeborough. A falsificação por geometria deixou oito posições compatíveis com tudo o que a página imprime, e a escolha entre elas é da leitura, não do cálculo. Vale registrar que as oito ensinam a mesma coisa: em todas, um lance empata e o outro perde para Nf7#."
+  }
+}

@@ -158,11 +158,11 @@ export type AulaDaTrilha = {
  */
 export const TRILHA: readonly AulaDaTrilha[] = [
   // ---------------------------------------------------------------- Classe E
-  { ordem: 1, id: "N0-Q-MATE", classe: "E", formato: "completa", nivel: 1, nome: "Mate de dama e rei: a caixa" },
-  { ordem: 2, id: "N0-R-MATE", classe: "E", formato: "completa", nivel: 1, nome: "Mate de torre e rei: a caixa" },
-  { ordem: 3, id: "N0-LADDER", classe: "E", formato: "curta", nivel: 1, nome: "Mate da escada: duas torres, e dama e torre" },
-  { ordem: 4, id: "N0-STALEMATE", classe: "E", formato: "curta", nivel: 1, nome: "Afogamento: como não empatar a partida ganha" },
-  { ordem: 5, id: "N0-MATING-MATERIAL", classe: "E", formato: "leitura", nivel: 1, nome: "O que dá mate e o que não dá" },
+  { ordem: 1, id: "N0-MATING-MATERIAL", classe: "E", formato: "completa", nivel: 1, nome: "O que dá mate e o que não dá" },
+  { ordem: 2, id: "N0-LADDER", classe: "E", formato: "curta", nivel: 1, nome: "Mate da escada: duas torres, e dama e torre" },
+  { ordem: 3, id: "N0-Q-MATE", classe: "E", formato: "completa", nivel: 1, nome: "Mate de dama e rei: a técnica do L" },
+  { ordem: 4, id: "N0-R-MATE", classe: "E", formato: "completa", nivel: 1, nome: "Mate de torre e rei: a caixa" },
+  { ordem: 5, id: "N0-STALEMATE", classe: "E", formato: "curta", nivel: 1, nome: "Afogamento: como não empatar a partida ganha" },
   { ordem: 6, id: "N1-KING-ACTIVITY", classe: "E", formato: "curta", nivel: 1, nome: "O rei é peça: use-o" },
 
   // ---------------------------------------------------------------- Classe D

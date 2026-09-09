@@ -9,9 +9,10 @@ import { ProfessorSeApresenta } from "@/components/lesson/ProfessorSeApresenta";
 import { BoxOverlay } from "@/components/board/BoxOverlay";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { PromotionPicker, type PromotionChoice } from "@/components/board/PromotionPicker";
-import { teachingShapes } from "@/lib/chess/annotations";
+import { desenhoDaAutoria, teachingShapes } from "@/lib/chess/annotations";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { chaveDoDefensor, escolherResposta } from "@/lib/lesson/defensor";
+import { AVANCO, TREINO } from "@/lib/lesson/falas";
 import type { Lesson, MoveTree, Position } from "@/lib/lesson/schema";
 import { isPraise, judgeMove, throwsWinAway, toUci } from "@/lib/lesson/tree";
 import { restingMessage, useLessonStore, type PanelMessage, type TreeKey } from "@/lib/lesson/store";
@@ -21,31 +22,6 @@ import { Confetti } from "./Confetti";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { LessonButton } from "./LessonButton";
 import { PulseRing } from "./PulseRing";
-
-/**
- * As palavras que mudam com o objetivo da árvore (FN1/B2).
- *
- * Metade dos 49 finais da trilha se ganha e a outra metade se segura. Os textos
- * fixos desta tela — "sem a vitória não há o que treinar", "o mate não saiu" —
- * foram escritos quando só existiam os dois mates da N0, e ditos a quem só
- * precisava empatar viram a aula cobrando o que ela mesma não pediu.
- *
- * Só o vocabulário muda. A mecânica é a mesma: quem decide se o lance preserva
- * o objetivo continua sendo a lista `winningMoves` do arquivo, gerada pela
- * tablebase na autoria.
- */
-const ALVOS = {
-  win: {
-    /** "Sem ___ não há o que treinar." */
-    oQue: "a vitória",
-    /** "O teto de N lances acabou e ___." */
-    oFim: "o mate não saiu",
-  },
-  draw: {
-    oQue: "o empate",
-    oFim: "o empate não veio",
-  },
-} as const;
 
 /**
  * Etapas 3 e 4 — a árvore de lances (plano da F1, §3). A mesma mecânica serve
@@ -97,9 +73,6 @@ export function TreeStage({
   onFinish?: () => void;
   finishLabel?: string;
 }) {
-  /** Ganhar ou segurar: vem da árvore, escrito no arquivo da aula. */
-  const alvo = ALVOS[tree.goal];
-
   const state = useLessonStore((s) => s.trees[treeKey]);
   const message = useLessonStore((s) => s.message);
   const say = useLessonStore((s) => s.say);
@@ -109,7 +82,6 @@ export function TreeStage({
   const treeAdvance = useLessonStore((s) => s.treeAdvance);
   const treeFail = useLessonStore((s) => s.treeFail);
   const treeRestart = useLessonStore((s) => s.treeRestart);
-  const toggleHint = useLessonStore((s) => s.toggleHint);
 
   /**
    * A posição desenhada enquanto o lance acontece; `null` = a do nó atual.
@@ -187,34 +159,38 @@ export function TreeStage({
     // está na tela, então continuam certos mesmo durante a animação do lance.
     const list: DrawShape[] = allowHelp ? teachingShapes(boardFen, lastMove) : [];
     /*
-     * **Os destaques da autoria acendem SÓ com o botão de dica** (2026-09-08).
+     * **O desenho da autoria fica na tela SEMPRE, e não atrás de um botão.**
      *
-     * Eles ficavam acesos o tempo todo, e por um bom motivo de então: a etapa
-     * 3 era a "prática com zona", em que ver a casa certa era metade da aula.
-     * O formato mudou — a etapa com ajuda passou a ser a única antes da
-     * partida —, e ajuda sempre visível numa etapa que o aluno repete todo dia
-     * vira leitura de casa acesa em vez de cálculo.
+     * Ele já esteve dos dois jeitos. Até 2026-09-08 as casas acesas ficavam
+     * ligadas o tempo todo; naquele dia foram para trás de "Ver a dica", pela
+     * §A4 do `REFERENCIA-MOVE-TRAINER.md` — "a dica é pedida, não concedida",
+     * medida no chess.com.
      *
-     * A dica de texto (`node.hint`) já era sob demanda desde sempre; o que
-     * mudou é que a casa acesa passou pelo mesmo botão. As duas juntas: quem
-     * pede ajuda recebe a ajuda inteira, quem não pede vê a posição limpa.
+     * O que aquela medição não carregava é para **quem** o chess.com dá a dica
+     * sob demanda: um adulto que escolheu treinar. Esta etapa é aquecimento
+     * declarado — não grava, não conta na escada —, o aluno tem 11 anos e 600
+     * pontos, e aquecimento em que a criança trava não aquece nada. Quem afere
+     * é a etapa 3, e ela continua nua. O precedente revogado está reescrito na
+     * §6.2 de `docs/VOZ-DO-CURSO.md`, porque precedente revogado em silêncio
+     * volta sozinho.
      *
-     * Eles valem para o nó parado; enquanto o lance está sendo desenhado
-     * sairiam do lugar, então somem. No modo autor migram para o canal
-     * editável, senão sairiam desenhados duas vezes.
+     * **A flecha aponta o alvo, nunca o lance** — a casa que importa, a
+     * intenção do rei inimigo. Ligar a origem ao destino do lance certo seria
+     * responder pelo aluno; quem cobra a flecha em todo nó é a `lessonSchema`.
+     *
+     * Ele vale para o nó parado; enquanto o lance está sendo desenhado sairia
+     * do lugar, então some. No modo autor migra para o canal editável, senão
+     * sairia desenhado duas vezes.
      */
-    if (allowHelp && !marcacao && !overlay && status === "playing" && node && state?.hintOpen) {
-      for (const square of node.highlights ?? []) list.push({ orig: square as Key, brush: "green" });
+    if (allowHelp && !marcacao && !overlay && status === "playing" && node) {
+      list.push(...desenhoDaAutoria(node));
     }
     if (message?.square) list.push({ orig: message.square as Key, brush: "red" });
     return list;
-  }, [allowHelp, boardFen, lastMove, marcacao, overlay, status, node, message, state?.hintOpen]);
+  }, [allowHelp, boardFen, lastMove, marcacao, overlay, status, node, message]);
 
-  /** Os destaques que o arquivo guarda para este nó, no formato do tabuleiro. */
-  const daAutoria: DrawShape[] = useMemo(
-    () => (node?.highlights ?? []).map((square) => ({ orig: square as Key, brush: "green" })),
-    [node],
-  );
+  /** O desenho que o arquivo guarda para este nó, no formato do tabuleiro. */
+  const daAutoria: DrawShape[] = useMemo(() => desenhoDaAutoria(node), [node]);
 
   const play = useCallback(
     (orig: Key, dest: Key, promoted?: PromotionChoice) => {
@@ -245,7 +221,7 @@ export function TreeStage({
         playRefusal();
         const fatal = moveLimit !== undefined && throwsWinAway(verdict);
         if (fatal) {
-          const text = `${verdict.text} Sem ${alvo.oQue} não há o que treinar: a tentativa acabou.`;
+          const text = `${verdict.text} ${TREINO.perdeuOAlvo(tree.goal)}`;
           treeFail(treeKey, { tone: "bad", text });
           say("bad", text, dest);
         } else {
@@ -306,14 +282,13 @@ export function TreeStage({
         treeAdvance(treeKey, next);
         setBusy(false);
         if (outOfMoves) {
-          const text = `O teto de ${moveLimit} lances acabou e ${alvo.oFim}. Recomece: o método precisa caber no limite.`;
+          const text = TREINO.acabaramOsLances(moveLimit, tree.goal);
           treeFail(treeKey, { tone: "warn", text });
           say("warn", text);
         }
       }, REPLY_DELAY_MS);
     },
     [
-      alvo,
       attempt,
       busy,
       celebrate,
@@ -327,6 +302,7 @@ export function TreeStage({
       treeFail,
       treeKey,
       treeTry,
+      tree.goal,
     ],
   );
 
@@ -344,7 +320,7 @@ export function TreeStage({
         // Era a única recusa muda do arquivo. Com o anel de pulso ficaria cor
         // sem som, o que soa como bug.
         playRefusal();
-        say("bad", "Esse lance não é legal nesta posição.", dest);
+        say("bad", TREINO.ilegal, dest);
         return;
       }
       if (candidates.some((move) => move.promotion)) {
@@ -357,11 +333,6 @@ export function TreeStage({
   );
 
   if (!state || !node) return null;
-
-  // Há ajuda a pedir se existe texto **ou** casa a acender. Era só o texto: a
-  // casa acendia sozinha, então um nó com destaque e sem dica escrita não
-  // precisava de botão. Hoje precisa, senão a ajuda ficaria inalcançável.
-  const hintAvailable = allowHelp && (Boolean(node.hint) || (node.highlights ?? []).length > 0);
 
   // A raiz é `relative` **sem `z-index`**, de propósito: assim não cria
   // contexto de empilhamento novo e as camadas de hoje (canvas `z-10`, promoção
@@ -425,54 +396,60 @@ export function TreeStage({
 
             {moveLimit !== undefined && (
               <p className="rotulo text-tinta-fraca">
-                Lance {state.studentMoves} de {moveLimit}
-                {state.attempt > 1 && ` · tentativa ${state.attempt}`}
+                {TREINO.lance(state.studentMoves, moveLimit)}
+                {state.attempt > 1 && ` · ${TREINO.vez(state.attempt)}`}
               </p>
             )}
 
+            {/*
+             * **A dica do nó é o que o professor diz enquanto o aluno pensa.**
+             *
+             * Ela era uma caixa atrás de "Ver a dica", e o botão saiu com o
+             * bloco inteiro — e com ele o único `overflow-y-auto` desta tela.
+             * Como `placeholder` ela chega pelo mesmo lugar por onde chega o
+             * feedback do lance, ao lado do retrato: uma voz só, e não um aviso
+             * de sistema numa caixa de outra cor.
+             *
+             * O `placeholder` só aparece enquanto não há mensagem viva, que é
+             * exatamente o momento em que a dica serve: antes do lance.
+             */}
             <FeedbackPanel
               message={panel}
               placeholder={
                 allowHelp
-                  ? "Faça o lance no tabuleiro. Errar aqui não custa nada — a resposta vem escrita."
-                  : `Sem dica e sem destaque. Um lance que jogue ${alvo.oQue} fora encerra a tentativa.`
+                  ? node.hint ?? TREINO.esperando
+                  : TREINO.semAjuda(tree.goal)
               }
               retrato={<ProfessorSeApresenta />}
             />
 
-            {hintAvailable && status === "playing" && (
-              <div className="flex min-h-0 flex-col gap-2 overflow-y-auto">
-                <div>
-                  <LessonButton onClick={() => toggleHint(treeKey)}>
-                    {state.hintOpen ? "Esconder a dica" : "Ver a dica"}
-                  </LessonButton>
-                </div>
-                {/* O texto só aparece se houver texto: um nó pode ter apenas a
-                    casa acesa, e nesse caso o botão já entregou a ajuda toda
-                    no tabuleiro — uma caixa vazia embaixo dele seria ruído. */}
-                {state.hintOpen && node.hint && (
-                  <p className="rounded-lg border border-dica-superficie/30 bg-dica-superficie/5 px-4 py-3 text-sm leading-relaxed text-dica-tinta">
-                    {node.hint}
-                  </p>
-                )}
-              </div>
-            )}
-
             <AulaRodape>
-              {status === "failed" && (
-                <LessonButton variant="primary" onClick={restart}>
-                  Recomeçar do zero
-                </LessonButton>
-              )}
               {status === "done" && onFinish && (
                 <LessonButton variant="primary" onClick={onFinish}>
-                  {finishLabel ?? "Continuar"}
+                  {finishLabel ?? AVANCO.padrao}
                 </LessonButton>
               )}
-              {/* Também na etapa concluída: é o caminho para refazer a linha — e
-                  para rever a comemoração, que não se repete só por voltar aqui. */}
-              {(status === "done" || (status === "playing" && state.studentMoves > 0)) && (
-                <LessonButton onClick={restart}>Recomeçar a posição</LessonButton>
+              {/*
+               * **Um botão só, e ele é o mesmo em todos os estados.**
+               *
+               * Eram dois — "Recomeçar do zero", que aparecia no fracasso, e
+               * "Recomeçar a posição", que aparecia no resto. Os dois chamavam
+               * `restart` e faziam exatamente a mesma coisa; a diferença de
+               * nome era só o estado da tela, que o aluno já está vendo. Dois
+               * botões para um movimento são duas maneiras de fazer a mesma
+               * coisa numa tela cuja regra é ter um caminho só
+               * (`docs/VOZ-DO-CURSO.md` §5.5).
+               *
+               * Ele fica em `primary` no fracasso porque ali é a única saída, e
+               * neutro no resto, onde a saída é o avanço.
+               */}
+              {(status !== "playing" || state.studentMoves > 0) && (
+                <LessonButton
+                  variant={status === "failed" ? "primary" : "default"}
+                  onClick={restart}
+                >
+                  {TREINO.recomecar}
+                </LessonButton>
               )}
             </AulaRodape>
           </>

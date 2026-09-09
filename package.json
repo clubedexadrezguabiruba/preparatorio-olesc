@@ -18,6 +18,7 @@
     "validate:content": "node scripts/validate-content.ts",
     "validate:mutations": "node scripts/mutation-check.ts",
     "db:f2": "node --conditions=react-server scripts/quatro-numeros-da-f2.ts",
+    "finais:extrair": "node scripts/extrair-estudo.ts",
     "repertorio:importar": "node scripts/importar-fontes.ts",
     "repertorio:compilar": "node scripts/compilar-repertorio.ts",
     "repertorio:explorer": "node scripts/explorer-repertorio.ts",

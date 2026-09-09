@@ -18,33 +18,25 @@
         "name": "A oposição",
         "summary": "Fique de frente para o rei inimigo, na mesma coluna, com uma casa entre os dois."
       },
-      "why": "Sem peça nenhuma, o rei que toma a oposição segura o empate contra rei e peão.",
-      "rules": [
+      "roteiro": [
         {
-          "title": "Vá ao encontro do rei",
-          "text": "O rei preto sobe para a mesma coluna do branco.",
-          "arrows": [
-            [
-              "e8",
-              "e7"
-            ]
+          "fala": "Você joga de pretas, e o que se quer aqui é o empate.",
+          "highlights": [
+            "e8"
           ]
         },
         {
-          "title": "Retome a oposição a cada lance",
-          "text": "O branco desvia; o preto acompanha e volta a ficar de frente.",
-          "highlights": [
-            "d7",
-            "e7"
-          ]
+          "lance": "e8e7",
+          "fala": "O rei preto vai ao encontro do outro, na mesma coluna."
+        },
+        {
+          "lance": "e5d5",
+          "fala": "O branco desvia para d5, tentando passar por um lado."
+        },
+        {
+          "lance": "e7d7",
+          "fala": "O preto acompanha e volta a ficar de frente. O peão não passa."
         }
-      ],
-      "dangers": [
-        "Sair da coluna do peão: o rei branco entra e promove."
-      ],
-      "mastery": "Segurar o empate contra o computador, sem ajuda.",
-      "highlights": [
-        "e8"
       ]
     },
     "guided": {

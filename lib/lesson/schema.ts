@@ -1,3 +1,4 @@
+import { Chess } from "chess.js";
 import { z } from "zod";
 
 /**
@@ -401,7 +402,27 @@ export const authorAlternativeSchema = z.strictObject({
 
 export const treeNodeSchema = z.strictObject({
   fen: fenSchema,
+  /**
+   * A fala do professor neste nó. Era uma caixa escondida atrás de um botão
+   * "Ver a dica"; virou o que o `FeedbackPanel` diz enquanto o aluno pensa,
+   * ao lado do retrato. Ver `TreeStage` e `docs/VOZ-DO-CURSO.md` §6.2.
+   */
   hint: texto.optional(),
+  /**
+   * **A flecha do nó, e ela é obrigatória na aula publicada** (a `superRefine`
+   * do `lessonSchema` a cobra).
+   *
+   * Ela aponta o **alvo**, nunca o lance: a casa que importa, a intenção do rei
+   * inimigo, a casa de promoção que o peão persegue. Seta que liga a origem ao
+   * destino do lance certo é meio lance entregue, e isso é responder pelo
+   * aluno em vez de ensiná-lo a olhar.
+   *
+   * É julgamento editorial por nó, e não sai da tablebase: nenhuma máquina diz
+   * o que "o alvo" é. Toda flecha deste módulo passa pela conferência do Doug
+   * no tabuleiro, como a §10 da `TRILHA-FINAIS.md` já manda para toda posição
+   * vinda de diagrama.
+   */
+  arrows: z.array(z.tuple([squareSchema, squareSchema])).min(1).optional(),
   highlights: z.array(squareSchema).min(1).optional(),
   /**
    * O teto de 8 é o do arquivo inteiro, autorais + gerados. O teto da autoria
@@ -469,61 +490,107 @@ export const desenhoSchema = z.strictObject({
 });
 
 /**
- * Uma regra numerada do objetivo — a "fase" que os manuais de iniciante
- * escrevem antes de mostrar lance nenhum (Müller e Silman fazem exatamente
- * isso; ver §6.1 do SOURCE-CORPUS).
+ * Um passo do roteiro da etapa 1: **uma fala, e o que acontece enquanto ela é
+ * dita**.
  *
- * **A regra desenha, não navega.** Ela tinha um `frame: {scene, step}` que
- * apontava um quadro congelado da animação da etapa 2 — clicar na regra
- * rebobinava o exemplo até aquele lance. Com a etapa 2 fora do formato
- * (2026-09-08), o alvo desapareceu, e o que a regra precisa dizer cabe em
- * setas e casas sobre a **mesma** posição: é a posição única das três etapas,
- * e o aluno não perde o lugar ao clicar de uma regra para outra.
+ * Ele substitui a `objectiveRuleSchema` — a "regra numerada" que os manuais de
+ * iniciante escrevem antes de mostrar lance nenhum. A regra desenhava sobre uma
+ * posição parada e o aluno clicava de uma para outra; nove blocos de texto
+ * chegavam à tela de uma vez e a lista rolava por dentro. Para um aluno de 11
+ * anos e 600 pontos aquilo era um manual, não uma aula (ver `ObjectiveStage`).
+ *
+ * O passo é a mesma informação servida em fatias: a fala é obrigatória, o lance
+ * é opcional, e as duas coisas acontecem juntas — o professor diz o que vai
+ * fazer no instante em que a peça se move.
+ *
+ * **Os campos de desenho continuam sendo `arrows` e `highlights`**, e isto é uma
+ * divergência declarada em relação ao plano, que os chamava de `setas` e
+ * `acende`. O motivo é que `desenhoSchema` já existe com esses nomes, já é lido
+ * por `desenhoDaAutoria` e já é o vocabulário de desenho do nó da árvore: dois
+ * nomes para a mesma seta seriam duas opiniões sobre o que é uma seta. Os
+ * campos **novos** ficam em português, que é a língua de quem escreve as outras
+ * 48 aulas.
  */
-export const objectiveRuleSchema = desenhoSchema.extend({
-  title: texto,
-  text: texto,
-  /** Desenhar a caixa do rei enquanto esta regra está escolhida. */
-  box: z.boolean().optional(),
+export const roteiroPassoSchema = desenhoSchema.extend({
+  /** O que o professor diz neste passo. Uma ideia, uma fala (VOZ-DO-CURSO §3.3). */
+  fala: texto,
+  /**
+   * O lance que a peça faz enquanto a fala é dita, em UCI. Opcional: o passo
+   * que só aponta — "o rei preto quer entrar aqui" — não move nada.
+   *
+   * A `lessonSchema.superRefine` encadeia todos eles a partir da posição da
+   * aula e recusa o arquivo em que um não for legal.
+   */
+  lance: uciSchema.optional(),
+  /**
+   * Pausa extra depois da fala, em ms, para o passo que precisa de mais tempo
+   * na tela. O relógio normal já é proporcional ao tamanho da fala; isto é o
+   * ajuste fino que o autor pede quando a posição precisa ser olhada.
+   */
+  espera: z.int().min(0).max(4000).optional(),
 });
 
 /**
- * Etapa 1 — objetivo: o andaime da aula.
+ * Etapa 1 — **a aula assistida**: as peças se movem, as flechas aparecem, e um
+ * comentário por vez muda junto com a posição.
  *
- * Deixou de ser "diagrama parado + dois textos" em 2026-08-19: o aluno-alvo é
- * iniciante absoluto, e os manuais que funcionam para ele têm sempre a mesma
- * forma — **técnica com nome, motivo, regras numeradas, e o fim mostrado
- * antes do caminho**. O `frame` padrão é o último quadro da primeira cena,
- * isto é, o mate: Silman ensina assim, de trás para frente.
+ * ## O que ela era, e por que mudou
+ *
+ * Ela era um documento: nome da técnica, resumo, um "por quê", três regras
+ * numeradas com título e parágrafo, três perigos e o "o que conta como
+ * aprendida" — nove blocos de texto na mesma tela, ~400 palavras simultâneas, e
+ * uma lista que rolava por dentro para caber. O tabuleiro ficava parado o tempo
+ * todo.
+ *
+ * Isto **reverte por escrito** a decisão de 2026-09-08 que tirou a animação do
+ * formato. A perda estava declarada ali mesmo — "o aluno deixa de ver a técnica
+ * demonstrada em animação... para um aluno de 600 é o degrau mais íngreme do
+ * plano" —, e é essa perda que o roteiro devolve. A demonstração volta, não como
+ * etapa separada, mas **dentro da etapa 1**.
+ *
+ * ## Os quatro campos que saíram, e para onde cada um foi
+ *
+ * - `why` e as `rules` **viraram falas do roteiro**, ditas no momento em que a
+ *   peça se move, que é quando fazem sentido;
+ * - os `dangers` já existem em `errors` e chegam ao aluno **na hora em que ele
+ *   comete o erro**, na etapa 2. Aviso lido antes de jogar não vira
+ *   comportamento (VOZ-DO-CURSO §5.4);
+ * - o `mastery` era texto de sistema, não de aula. Quem o diz é o `MasterySeal`
+ *   da etapa 3, onde ele importa.
+ *
+ * O que sobra é o que a etapa precisa: de onde a posição veio, qual é ela, o
+ * nome da técnica, e o roteiro.
  */
-export const objectiveStageSchema = desenhoSchema.extend({
+export const objectiveStageSchema = z.strictObject({
   /** Slug da obra-base didática (`didactic: true` no registro de obras). */
   source: z.string().regex(/^[a-z0-9-]+$/, "source deve ser o slug de uma obra"),
   /**
-   * A posição do diagrama grande — e ela é **a mesma** das etapas 2 e 3.
+   * A posição de onde o roteiro parte — e ela é **a mesma** das etapas 2 e 3.
    *
-   * Era um `frame` apontando um quadro da animação; virou posição própria
-   * quando a etapa passou a ser estática. Não gasta teto de citação novo
-   * justamente por ser a mesma: uma aula, uma posição, três etapas.
+   * Não gasta teto de citação novo justamente por ser a mesma: uma aula, uma
+   * posição, três etapas. O roteiro anda a partir dela e volta a ela quando o
+   * aluno pede "ver de novo".
    */
   positionId: positionIdSchema,
   technique: z.strictObject({
-    /** O nome da técnica, na voz do curso ("a caixa que encolhe"). */
+    /** O nome da técnica, na voz do curso ("o rei escolta, o peão anda atrás"). */
     name: texto,
     /** Uma linha que resume a ideia — o "slogan" do manual. */
     summary: texto,
   }),
-  /** Por que esta técnica importa. O plano mestre pede, e não havia campo. */
-  why: texto,
-  rules: z.array(objectiveRuleSchema).min(2).max(5),
   /**
-   * Os perigos: o que costuma dar errado, em uma linha cada. O plano de
-   * 2026-09-08 pede a etapa "objetivo estático" com quatro coisas na tela — a
-   * posição, o que se quer, a técnica e **os perigos** —, e as três primeiras
-   * já tinham campo. Este é o quarto.
+   * A aula, passo a passo — **um passo, um lance, uma fala**.
+   *
+   * O meio-lance do defensor tem passo próprio em vez de vir de carona no do
+   * atacante: "o preto corre atrás e chega tarde" é uma ideia, e ideia é o que
+   * define uma fala (`docs/VOZ-DO-CURSO.md` §3.3). A KPK do piloto gasta 13
+   * passos assim — 11 meios-lances e dois passos de abertura, que só apontam.
+   *
+   * O teto de 14 é o do relógio: a `/revisar-aula` mede a duração da etapa
+   * contra a faixa de 40 a 70 segundos, e catorze falas longas já a estouram. O
+   * piso de 3 é o que separa roteiro de legenda.
    */
-  dangers: z.array(texto).max(4).optional(),
-  mastery: texto,
+  roteiro: z.array(roteiroPassoSchema).min(3).max(14),
 });
 
 /** Etapa 3 — com ajuda: destaques, dica e retentativa ilimitada. */
@@ -677,19 +744,23 @@ const lessonBaseSchema = z.strictObject({
   /**
    * **Três etapas, numa posição só** (decisão do Doug em 2026-09-08).
    *
-   * `objective` diz o que se quer, parado, com setas e casas acesas.
-   * `guided` é a mesma posição jogada com roteiro e dica sob demanda.
-   * `practice` é a mesma posição contra a máquina, e vencer é a passada.
+   * `objective` é a aula: o roteiro toca sozinho sobre a posição, um comentário
+   * por vez, e o aluno assiste.
+   * `guided` é a mesma posição jogada, com flecha sempre na tela e a dica dita
+   * pelo professor.
+   * `practice` é a mesma posição contra a máquina, nua, e vencer é o que conta.
    *
-   * Saíram três: `example` (a animação — o objetivo estático a absorveu),
+   * Saíram três: `example` (a animação, que virou o roteiro da etapa 1),
    * `solo` (a árvore sem ajuda — a partida contra a máquina faz o papel) e
    * `review` (a fila de posições novas — quem revisa agora é a escada de
    * `lib/finais/`, em dias espaçados, na MESMA posição).
    *
-   * **A perda está declarada:** o aluno deixa de ver a técnica demonstrada em
-   * animação. Ele lê o objetivo e já joga, com dica sob demanda. É o modelo do
-   * *move trainer* do repertório, e é decisão do Doug — mas para um aluno de
-   * 600 é o degrau mais íngreme do plano.
+   * **A perda declarada em 2026-09-08 foi revertida em 2026-09-08.** Ela dizia:
+   * "o aluno deixa de ver a técnica demonstrada em animação... para um aluno de
+   * 600 é o degrau mais íngreme do plano". O degrau era real, e a demonstração
+   * voltou — dentro da etapa 1, e não como etapa própria. O que **não** voltou é
+   * assistir no lugar de jogar: as etapas 2 e 3 continuam sendo jogadas com a
+   * mão (ver `docs/VOZ-DO-CURSO.md` §6.1).
    *
    * Cada bloco continua opcional: das 49 aulas da trilha, as curtas têm só a
    * prática.
@@ -748,6 +819,84 @@ export const lessonSchema = lessonBaseSchema.superRefine((lesson, ctx) => {
       });
     }
   }
+
+  /*
+   * **A flecha da etapa 2 é obrigatória na aula publicada.**
+   *
+   * O aquecimento em que a criança trava não aquece nada. Até 2026-09-08 a
+   * ajuda desta etapa vivia atrás de um botão "Ver a dica" — era a §A4 do
+   * `REFERENCIA-MOVE-TRAINER.md`, "a dica é pedida, não concedida", medida no
+   * chess.com. O que o chess.com faz é dar a dica sob demanda a um **adulto que
+   * escolheu treinar**; a nossa etapa 2 é aquecimento declarado, e quem afere é
+   * a etapa 3, que continua nua. O precedente revogado está reescrito na §6.2
+   * de `docs/VOZ-DO-CURSO.md`.
+   *
+   * Só na aula **publicada**: o rascunho é aula em construção, e exigir a
+   * flecha antes de a linha existir mandaria o autor desenhar sobre nada.
+   */
+  if (lesson.status === "published" && guided) {
+    for (const [nodeId, node] of Object.entries(guided.nodes)) {
+      if (node.arrows && node.arrows.length > 0) continue;
+      ctx.addIssue({
+        code: "custom",
+        path: ["stages", "guided", "nodes", nodeId, "arrows"],
+        message:
+          `o nó "${nodeId}" da etapa 2 não tem flecha — ela é obrigatória na aula ` +
+          "publicada, e aponta o ALVO do lance, nunca o lance",
+      });
+    }
+  }
+
+  /*
+   * **A trava que dá sentido ao roteiro: ele tem de fechar no tabuleiro.**
+   *
+   * A etapa 1 deixou de ser texto sobre um diagrama parado e virou uma linha
+   * que TOCA — as peças andam de verdade. Um `lance` que não é legal na posição
+   * em que chega não é erro de redação: é a demonstração travando no meio, na
+   * tela do aluno. Roteiro que não fecha é arquivo recusado, não bug em
+   * produção.
+   *
+   * **De onde vem a posição de partida.** O schema não lê `content/positions/`
+   * — ele recebe uma aula, não o repositório —, então o ponto de partida é a
+   * FEN do nó raiz da etapa 2, que a trava logo acima já garantiu ser a MESMA
+   * posição. Aula com etapa 1 e sem etapa 2 não é encadeada aqui; quem a
+   * encadeia, a partir do arquivo de posição de verdade, é o gate
+   * (`ROTEIRO_ILEGAL` em `scripts/validate-content.ts`).
+   *
+   * A chess.js entra neste arquivo só para isto, e só aplica o que está escrito.
+   * Quem julga se um lance é BOM continua sendo a tablebase, na autoria.
+   */
+  const roteiro = objective?.roteiro;
+  const partida = guided ? guided.nodes[guided.root]?.fen : undefined;
+  if (roteiro && partida) {
+    const game = new Chess();
+    try {
+      game.load(partida);
+    } catch {
+      // FEN da raiz malformada já é reprovada pelo `fenSchema` do nó; não vale
+      // acusar duas vezes a mesma coisa em nome de campos diferentes.
+      return;
+    }
+    for (const [i, passo] of roteiro.entries()) {
+      if (!passo.lance) continue;
+      try {
+        game.move({
+          from: passo.lance.slice(0, 2),
+          to: passo.lance.slice(2, 4),
+          promotion: passo.lance.length > 4 ? passo.lance.slice(4) : undefined,
+        });
+      } catch {
+        ctx.addIssue({
+          code: "custom",
+          path: ["stages", "objective", "roteiro", i, "lance"],
+          message:
+            `"${passo.lance}" não é legal em "${game.fen()}" — o roteiro da etapa 1 ` +
+            "é encadeado a partir da posição da aula, e ele parou aqui",
+        });
+        return;
+      }
+    }
+  }
 });
 
 /* ------------------------------------------------------------------ *
@@ -767,7 +916,7 @@ export type Mistake = z.infer<typeof mistakeSchema>;
 export type AuthorAlternative = z.infer<typeof authorAlternativeSchema>;
 export type TreeNode = z.infer<typeof treeNodeSchema>;
 export type Desenho = z.infer<typeof desenhoSchema>;
-export type ObjectiveRule = z.infer<typeof objectiveRuleSchema>;
+export type RoteiroPasso = z.infer<typeof roteiroPassoSchema>;
 export type ObjectiveStage = z.infer<typeof objectiveStageSchema>;
 export type GuidedStage = z.infer<typeof guidedStageSchema>;
 export type PracticeStage = z.infer<typeof practiceStageSchema>;

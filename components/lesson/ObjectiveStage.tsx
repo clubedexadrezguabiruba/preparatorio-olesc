@@ -1,42 +1,72 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Color } from "@lichess-org/chessground/types";
 import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
-import { BoxOverlay } from "@/components/board/BoxOverlay";
 import { ChessBoard } from "@/components/board/ChessBoard";
+import { Comentario, useComentarioPaginado } from "@/components/lesson/Comentario";
+import { LessonButton } from "@/components/lesson/LessonButton";
+import { ProfessorSeApresenta } from "@/components/lesson/ProfessorSeApresenta";
 import { desenhoDaAutoria, teachingShapes } from "@/lib/chess/annotations";
+import { montarQuadros, pausaDoPasso } from "@/lib/lesson/roteiro";
 import type { ObjectiveStage as ObjectiveStageData, Position } from "@/lib/lesson/schema";
+import { playForMove } from "@/lib/sound";
 
 /**
- * Etapa 1 — o objetivo, **estático**: a posição, o que se quer, a técnica e os
- * perigos, tudo numa tela que não anda.
+ * Etapa 1 — **a aula assistida**: o tabuleiro toca sozinho e o professor
+ * comenta, um passo por vez.
  *
  * ## O que ela era, e por que mudou
  *
- * Ela mostrava *quadros* da animação da etapa 2 — a posição depois de N lances
- * —, e cada regra apontava o seu: clicar numa regra rebobinava o exemplo até o
- * momento em que ela acontecia. Aquilo tinha resolvido um defeito real (um
- * iniciante lia "corte o rei" ao lado de um diagrama onde nada estava
- * cortado), e o mecanismo era bom.
+ * Ela era um documento. Nove blocos de texto empilhados na mesma tela — nome da
+ * técnica, resumo, um "por quê", três regras numeradas com título e parágrafo,
+ * três perigos e o "o que conta como aprendida" —, ~400 palavras simultâneas, e
+ * uma lista com `overflow-y-auto` que rolava por dentro para caber. Era a única
+ * rolagem que sobrava no motor de aula. O tabuleiro ficava parado o tempo todo,
+ * e um aluno de 11 anos e 600 pontos abria isso e lia um manual.
  *
- * A etapa 2 saiu do formato em 2026-09-08, e com ela o alvo dos quadros. O que
- * ficou no lugar resolve o mesmo defeito por outro caminho, mais barato: a
- * regra **desenha** sobre a posição — setas e casas acesas, escritas no
- * arquivo — em vez de navegar até um momento dela. O diagrama não muda de
- * posição ao clicar; muda de marcação. Para o aluno, é a diferença entre
- * perder o lugar e não perder.
+ * Antes disso ela já tinha sido outra coisa: em 2026-09-08 ela mostrava
+ * *quadros* de uma animação (a etapa `example`), e cada regra rebobinava o
+ * exemplo até o lance dela. A animação saiu do formato naquele dia, e a perda
+ * ficou escrita no próprio arquivo: *"o aluno deixa de ver a técnica
+ * demonstrada em animação... para um aluno de 600 é o degrau mais íngreme do
+ * plano"*.
  *
- * **A posição é a mesma das outras duas etapas**, e o `lessonSchema` recusa o
- * arquivo em que não for. É o que dá sentido a "três etapas, uma posição só":
- * o aluno lê o objetivo olhando exatamente o tabuleiro que vai jogar.
+ * **Este componente é a reversão daquela decisão**, e ela é deliberada: a
+ * demonstração volta, não como etapa separada, mas como a etapa 1 inteira. O
+ * precedente que dizia o contrário — "assistir não é treinar", do módulo de
+ * aberturas — está reescrito na §6.1 de `docs/VOZ-DO-CURSO.md`, e o que o
+ * separa deste caso é que lá assistir era o **único** contato antes da prova.
+ * Aqui as etapas 2 e 3 continuam sendo jogadas com a mão.
  *
- * ## O que se perdeu, dito por extenso
+ * ## Como o relógio anda
  *
- * O aluno não vê mais a técnica demonstrada lance a lance. Ele lê o objetivo e
- * já joga, com dica sob demanda na etapa seguinte. É o modelo do *move
- * trainer* que o repertório adotou, e é decisão do Doug — mas para um aluno de
- * 600 é o degrau mais íngreme do plano, e fica registrado aqui.
+ * **Quem manda no avanço é o texto, não um cronômetro.** A fala termina de ser
+ * digitada (o `Comentario` revela a 7 ms/caractere), o aluno tem a pausa de
+ * leitura de `pausaDoPasso` — proporcional ao tamanho da fala —, e só então a
+ * próxima posição entra. Um intervalo fixo daria pressa na fala longa e vazio
+ * na curta.
+ *
+ * `setTimeout` encadeado e cancelado no `cleanup`, nunca `setInterval`: é o
+ * mesmo desenho que o `TreeStage` usa para a resposta do defensor. Um
+ * `setInterval` continuaria batendo depois de o aluno pausar, sair da etapa ou
+ * fechar a aula.
+ *
+ * **Se a fala paginar, o relógio vira a página em vez de pular o passo.** A
+ * régua de 200 caracteres (`docs/VOZ-DO-CURSO.md` §3.1) existe justamente para
+ * isso nunca acontecer — uma fala paginada numa aula que anda sozinha para o
+ * tabuleiro esperando um toque que o aluno não sabe que deve dar. Mas se
+ * acontecer, o aluno lê o texto inteiro em vez de perder metade dele.
+ *
+ * `prefers-reduced-motion` não precisa de tratamento aqui: o `Comentario` já
+ * mostra o texto inteiro de uma vez, `digitando` nasce falso, e o player segue
+ * tocando com a pausa de leitura cheia.
+ *
+ * ## Dois controles, e só dois
+ *
+ * "Pausar"/"Continuar" e "Ver de novo". Nada de passo a passo, nada de barra
+ * arrastável: são controles de vídeo, e isto não é um vídeo — é uma aula de 47
+ * segundos que o aluno vai ver uma vez e depois jogar.
  */
 export function ObjectiveStage({
   stage,
@@ -46,7 +76,7 @@ export function ObjectiveStage({
   rodape,
 }: {
   stage: ObjectiveStageData;
-  /** A posição da aula — a MESMA das três etapas. */
+  /** A posição da aula — a MESMA das três etapas, e de onde o roteiro parte. */
   position: Position;
   orientation: Color;
   /** A trilha das etapas, montada pelo `LessonPlayer` e servida no painel. */
@@ -54,46 +84,100 @@ export function ObjectiveStage({
   /** Os botões do rodapé do painel — hoje só o "ir para a etapa seguinte". */
   rodape?: ReactNode;
 }) {
-  /** Índice da regra escolhida; `null` = nenhuma, e vale o desenho da etapa. */
-  const [escolhida, setEscolhida] = useState<number | null>(null);
-
-  const regra = escolhida === null ? null : stage.rules[escolhida];
+  const [passo, setPasso] = useState(0);
+  const [tocando, setTocando] = useState(true);
 
   /**
-   * O que se desenha por cima da posição, em duas camadas.
-   *
-   * A de baixo é deduzida (`teachingShapes`): o corte que a peça maior faz, a
-   * peça pendurada. A de cima é a da autoria — e ela é a da **regra escolhida**
-   * quando há uma, ou a da etapa quando não há. Não somam: escolher uma regra
-   * troca o desenho, não empilha em cima do anterior, senão a terceira regra
-   * chegaria num tabuleiro com nove setas.
-   *
-   * Sem `lastMove`: a posição é de partida, e ninguém acabou de jogar nada.
+   * Os quadros do roteiro, um por passo. A conta é pura e mora em
+   * `lib/lesson/roteiro.ts`, com teste — aqui só se escolhe qual quadro está na
+   * tela.
    */
-  const shapes = useMemo(
-    () => [...teachingShapes(position.fen, null), ...desenhoDaAutoria(regra ?? stage)],
-    [position.fen, regra, stage],
+  const quadros = useMemo(
+    () => montarQuadros(position.fen, stage.roteiro),
+    [position.fen, stage.roteiro],
   );
 
-  /** Clicar de novo na mesma regra a desliga, e o tabuleiro volta ao desenho da etapa. */
-  const escolher = (indice: number) =>
-    setEscolhida((atual) => (atual === indice ? null : indice));
+  const atual = stage.roteiro[passo];
+  const quadro = quadros[passo];
+  const ultimo = passo >= stage.roteiro.length - 1;
+
+  const comentario = useComentarioPaginado(atual.fala);
+  const { digitando, naUltima } = comentario;
+  const terminou = ultimo && naUltima && !digitando;
+
+  /**
+   * A paginação numa referência.
+   *
+   * O relógio precisa dela **na hora em que dispara**, e não na hora em que foi
+   * agendado: entre uma coisa e outra a medição do `ResizeObserver` pode ter
+   * chegado e partido a fala em duas. A referência é sincronizada por efeito, e
+   * não escrita durante o render, porque escrever ref no render quebra o modo
+   * concorrente (`react-hooks/refs`) — é a mesma regra que o `ChessBoard` segue
+   * com os callbacks dele.
+   */
+  const comentarioRef = useRef(comentario);
+  useEffect(() => {
+    comentarioRef.current = comentario;
+  });
+
+  /** O relógio: a fala acaba, o aluno lê, e o próximo passo entra. */
+  useEffect(() => {
+    if (!tocando || digitando) return;
+    if (ultimo && naUltima) return;
+    const espera = pausaDoPasso(atual);
+    const relogio = setTimeout(() => {
+      // Página antes de passo: uma fala partida é lida inteira, e só então o
+      // tabuleiro anda.
+      if (!comentarioRef.current.naUltima) comentarioRef.current.virar();
+      else setPasso((p) => Math.min(p + 1, stage.roteiro.length - 1));
+    }, espera);
+    return () => clearTimeout(relogio);
+  }, [tocando, digitando, naUltima, ultimo, atual, stage.roteiro.length]);
+
+  /**
+   * O som do lance, por passo.
+   *
+   * Roda no passo, e não dentro do relógio, para o "Ver de novo" soar igual à
+   * primeira vez. O passo que não move peça (`lastMove` nulo) é mudo — não há
+   * lance para soar.
+   */
+  useEffect(() => {
+    const q = quadros[passo];
+    if (!q?.lastMove) return;
+    playForMove({ capture: q.capture, check: q.check });
+  }, [passo, quadros]);
+
+  /**
+   * O que se desenha por cima, em duas camadas: a de baixo é deduzida da
+   * posição (`teachingShapes` — o corte, a peça pendurada), a de cima é a que a
+   * autoria escreveu no passo.
+   *
+   * Elas trocam a cada passo em vez de somar: três passos empilhados chegariam
+   * ao aluno como um tabuleiro de nove setas.
+   */
+  const shapes = useMemo(
+    () => [...teachingShapes(quadro.fen, quadro.lastMove), ...desenhoDaAutoria(atual)],
+    [quadro, atual],
+  );
+
+  const rever = () => {
+    setPasso(0);
+    setTocando(true);
+  };
 
   return (
     <AulaShell
       tabuleiro={
-        // **Só o tabuleiro mora aqui, e isso é a aritmética do palco.** A
-        // coluna é dimensionada pela ALTURA que sobra (`.aula-tabuleiro` no
-        // CSS), então o tabuleiro já ocupa a altura inteira dela: qualquer
-        // irmão embaixo dele transborda o palco e devolve a rolagem. Medido em
-        // 1366×768: a legenda que ficava aqui somava 24 px à coluna e a página
-        // rolava exatamente isso. Ela foi para o painel, onde não custa altura
-        // de tabuleiro.
+        // **Só o tabuleiro mora aqui, e isso é a aritmética do palco.** A coluna
+        // é dimensionada pela ALTURA que sobra (`.aula-tabuleiro` no CSS), então
+        // qualquer irmão embaixo dele transborda o palco e devolve a rolagem.
         <ChessBoard
-          fen={position.fen}
+          fen={quadro.fen}
           orientation={orientation}
+          lastMove={quadro.lastMove}
+          check={quadro.check}
           shapes={shapes}
-          overlay={regra?.box ? <BoxOverlay fen={position.fen} orientation={orientation} /> : undefined}
+          matedKing={quadro.matedColor}
           viewOnly
         />
       }
@@ -101,91 +185,28 @@ export function ObjectiveStage({
         <>
           {trilha}
 
-          {/* A legenda é a única pista, para quem clicou numa regra, de que o
-              DESENHO mudou — a posição não muda mais. Fica viva pelo mesmo
-              motivo: quem não vê a tela precisa ouvir a troca. */}
-          <p aria-live="polite" className="text-xs text-tinta-fraca">
-            {regra ? `Mostrando: ${regra.title}` : "O que você vai conseguir fazer no fim da aula."}
-          </p>
-
           <div>
             <h2 className="text-lg font-semibold text-tinta">{stage.technique.name}</h2>
-            <p className="mt-1 text-sm leading-relaxed text-tinta-media">{stage.technique.summary}</p>
+            <p className="mt-1 text-sm leading-relaxed text-tinta-media">
+              {stage.technique.summary}
+            </p>
           </div>
 
-          {/* **A lista rola por dentro, e é ela quem paga o palco.**
+          <Comentario paginacao={comentario} retrato={<ProfessorSeApresenta />} />
 
-              O painel tem altura fechada (ver "O palco da aula" em
-              `app/globals.css`), então alguma coisa aqui tem de ceder quando o
-              conteúdo passa: ou a PÁGINA rola — que é o defeito que o palco
-              existe para matar — ou um bloco de dentro rola. A escolha é a
-              lista, porque ela é o único bloco repetitivo: o aluno já sabe o
-              que vem depois do passo 3, e rolar dentro dela não tira de vista
-              nada que ele precise ver junto com o tabuleiro.
-
-              `min-h-0` é o que faz `overflow-y-auto` valer: sem ele um filho
-              `flex-1` nunca encolhe abaixo do próprio conteúdo, a barra nunca
-              aparece, e o transbordo vaza para a página — calado. */}
-          <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto">
-            <p className="text-sm leading-relaxed text-tinta-media">{stage.why}</p>
-
-            <div>
-              <h3 className="rotulo text-tinta-fraca">A técnica, em {stage.rules.length} passos</h3>
-              {/* `<ol>` e não `<ul>`: a ordem é a técnica. Cada item é um botão
-                  porque clicar nele muda o tabuleiro — e `aria-pressed` porque é
-                  um estado que fica ligado, não uma navegação. */}
-              <ol className="mt-2 flex flex-col gap-2">
-                {stage.rules.map((r, i) => {
-                  const ativa = escolhida === i;
-                  return (
-                    <li key={r.title}>
-                      <button
-                        type="button"
-                        aria-pressed={ativa}
-                        onClick={() => escolher(i)}
-                        className={`flex w-full gap-3 rounded-lg px-4 py-3 text-left ring-1 transition foco ${
-                          ativa
-                            ? "bg-carta-toque text-tinta ring-borda-forte"
-                            : "bg-carta text-tinta-media ring-borda hover:bg-carta-alta"
-                        }`}
-                      >
-                        <span className="rotulo shrink-0 tabular-nums text-metodo">{i + 1}</span>
-                        <span className="flex flex-col gap-1">
-                          <span className="text-sm font-medium text-tinta">{r.title}</span>
-                          <span className="text-sm leading-relaxed">{r.text}</span>
-                        </span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
-
-            {/* Os perigos. Âmbar e não rubro: é aviso do que costuma dar
-                errado, não repreensão de erro que o aluno tenha cometido — ele
-                ainda não jogou lance nenhum quando lê isto. */}
-            {stage.dangers && stage.dangers.length > 0 && (
-              <div className="rounded-lg border border-aviso-superficie/30 bg-aviso-superficie/5 px-4 py-3">
-                <h3 className="rotulo text-aviso-tinta">Onde se erra</h3>
-                <ul className="mt-2 flex list-disc flex-col gap-1 pl-4">
-                  {stage.dangers.map((d) => (
-                    <li key={d} className="text-sm leading-relaxed text-tinta-media">
-                      {d}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          <AulaRodape>
+            {/* O botão de pausa some quando a aula acaba: pausar o que já parou
+                não é controle, é botão morto. */}
+            {!terminou && (
+              <LessonButton onClick={() => setTocando((t) => !t)}>
+                {tocando ? "Pausar" : "Continuar"}
+              </LessonButton>
             )}
-
-            <div className="rounded-lg border border-metodo-superficie/30 bg-metodo-superficie/5 px-4 py-3">
-              <h3 className="rotulo text-metodo">
-                O que conta como aprendida
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-tinta-media">{stage.mastery}</p>
-            </div>
-          </div>
-
-          {rodape ? <AulaRodape>{rodape}</AulaRodape> : null}
+            <LessonButton variant={terminou ? "primary" : "default"} onClick={rever}>
+              Ver de novo
+            </LessonButton>
+            {rodape}
+          </AulaRodape>
         </>
       }
     />

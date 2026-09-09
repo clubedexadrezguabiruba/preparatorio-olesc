@@ -162,8 +162,13 @@ por dia — pedir sessenta a quem treina duas horas é ensinar que a tarefa acab
 terça.
 
 *E por que só 2 finais na semana 1, com meia hora por dia reservada a eles:* porque
-é o que a trilha abre. As 49 aulas entram por sábado — 2, 8, 12 e 27 —, e na primeira
-semana existem duas. O teste de `content/tarefas.json` reprova a tarefa que pedir
+é o que cabe na meia hora. **O motivo mudou em 2026-09-09, e o número não.** Antes
+era disponibilidade: a trilha abria duas aulas na semana 1 e a tarefa não podia
+pedir mais do que abriu. Com a reordenação do nível 1, as **seis** aulas do nível
+passaram a abrir na semana 1 — elas são a meta da OLESC, e o calendário de sábados
+que as escalonava foi aposentado pelo plano dos níveis. A entrada por sábado passa
+a ser **6, 4, 12 e 27**. Pedir 2 continua certo, mas agora por escolha de ritmo, e
+não por falta de aula. O teste de `content/tarefas.json` reprova a tarefa que pedir
 mais do que abriu, e foi ele que pegou este erro quando a meta foi escrita como 6.
 Na semana 1 o bloco de finais é curto de propósito: as duas aulas, a revisão delas
 três dias depois, e o tempo que sobrar vai para a tática — que é o assunto do Sábado

@@ -621,6 +621,25 @@ const MUTACOES: Mutation[] = [
     },
   },
 
+  {
+    // A etapa 1 deixou de ser texto sobre um diagrama parado: ela TOCA. Um
+    // lance ilegal no meio do roteiro não é erro de redação — é a demonstração
+    // travando na tela do aluno, e o gate tem de pegá-lo antes.
+    titulo: "roteiro da etapa 1 com lance ilegal no meio",
+    codigo: "SCHEMA_AULA",
+    contem: "não é legal em",
+    aplicar: async (dir) => {
+      const { file, json } = lerAula(dir);
+      const roteiro = json.stages.objective.roteiro as Array<{ lance?: string }>;
+      const passo = roteiro.findIndex((p) => p.lance);
+      const antes = roteiro[passo].lance;
+      // Um lance de peão que salta três casas: legal em UCI, ilegal no xadrez.
+      roteiro[passo].lance = `${antes!.slice(0, 2)}${antes!.slice(0, 1)}8`;
+      gravar(file, json);
+      return `roteiro[${passo}].lance: "${antes}" → "${roteiro[passo].lance}", que a chess.js recusa`;
+    },
+  },
+
   /* ---------------------------------------------------------------- *
    * Modo autor (B8) — o canal dos rascunhos, testado contra si mesmo
    * ---------------------------------------------------------------- */
@@ -634,10 +653,10 @@ const MUTACOES: Mutation[] = [
     flags: ["--rascunhos"],
     aplicar: async (dir) => {
       const { json } = lerAula(dir);
-      json.stages.objective.rules[0].text = "";
+      json.stages.objective.roteiro[0].fala = "";
       gravarRascunhoDeAula(dir, "N1-KPK", json);
       return (
-        "rascunhos/lessons/N1-KPK.json com o texto da regra 1 vazio — " +
+        "rascunhos/lessons/N1-KPK.json com a fala do passo 1 vazia — " +
         "o arquivo publicado continua intacto"
       );
     },

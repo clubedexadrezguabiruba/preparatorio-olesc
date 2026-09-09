@@ -74,11 +74,31 @@ test("as classes vêm em blocos, de E para B, com o tamanho do documento", () =>
   }
 });
 
-test("os formatos batem com a conta de horas da §6: 8 completas, 39 curtas, 2 leituras", () => {
+test("os formatos batem com a conta de horas da §6: 9 completas, 39 curtas, 1 leitura", () => {
+  // Mudou em 2026-09-09: a `N0-MATING-MATERIAL` saiu de leitura para completa,
+  // porque o que ela ensina é um perigo — e perigo dito no roteiro é aviso lido
+  // antes da hora (§14.4 do documento). Quem o nomeia na hora é a etapa 2.
   const conta = (f: Formato) => TRILHA.filter((a) => a.formato === f).length;
-  assert.equal(conta("completa"), 8);
+  assert.equal(conta("completa"), 9);
   assert.equal(conta("curta"), 39);
-  assert.equal(conta("leitura"), 2);
+  assert.equal(conta("leitura"), 1);
+});
+
+test("a ordem do nível 1 é a do documento, aula por aula", () => {
+  // Cravada por id porque a ordem aqui é decisão editorial, não consequência de
+  // regra nenhuma: ela veio do Doug em 2026-09-09 e o documento a explica na §5.
+  // Sem este teste, uma edição de lista a desfaz em silêncio.
+  assert.deepEqual(
+    TRILHA.filter((a) => a.nivel === 1).map((a) => a.id),
+    [
+      "N0-MATING-MATERIAL",
+      "N0-LADDER",
+      "N0-Q-MATE",
+      "N0-R-MATE",
+      "N0-STALEMATE",
+      "N1-KING-ACTIVITY",
+    ],
+  );
 });
 
 test("o nível de uma aula nunca é menor que o de uma aula anterior", () => {

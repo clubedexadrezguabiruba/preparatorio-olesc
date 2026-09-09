@@ -87,9 +87,18 @@ export default async function Finais() {
           ← Painel
         </Link>
         <h1 className="titulo text-tinta">Curso de finais</h1>
+        {/*
+          * **Esta frase era falsa, e voltou a ser verdadeira.**
+          *
+          * Ela promete "um exemplo animado" desde sempre. Em 8/9/2026 a animação
+          * saiu do formato das aulas e ninguém mexeu aqui: por um dia o índice
+          * prometeu ao aluno uma coisa que nenhuma aula fazia. A etapa 1 voltou a
+          * animar (ver `ObjectiveStage`), e a promessa voltou a se cumprir — o
+          * que ela precisava era de redação nova, não de remoção.
+          */}
         <p className="text-sm text-tinta-media">
-          Cada aula explica a técnica, mostra um exemplo animado e devolve o tabuleiro para
-          você jogar. As aulas vêm em classes de força: comece pela E e suba.
+          Cada aula mostra a técnica jogada no tabuleiro e depois devolve as peças para
+          você. As aulas vêm em classes de força: comece pela E e suba.
         </p>
       </header>
 
