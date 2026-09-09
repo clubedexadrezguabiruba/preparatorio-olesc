@@ -34,18 +34,36 @@
    par com um teste que faz o grep e conta: `lib/tema/guardas.test.ts` exige
    zero ocorrências em `app/` e `components/`.
 
-   **Estes valores chegaram aqui sem nenhum componente ser reescrito.** Eles
-   nasceram como uma das três direções candidatas do B6.3, foram escolhidos na
-   tela e promovidos trocando só valor — que era a promessa da taxonomia, e
-   agora é fato verificado. O tema escuro que o site teve até aqui cabe no
-   mesmo lugar: são trinta linhas de valores dentro de
-   `@media (prefers-color-scheme: dark)`, e zero componentes tocados.
+   **O site é escuro desde 2026-09-09, e a troca custou zero componente.** A
+   promessa da taxonomia era que trocar de tema fosse trocar de **valor**, nunca
+   de nome de token — e a conta ficou provada duas vezes: o tema escuro original
+   virou claro no B6.3 sem tocar em componente nenhum, e agora o claro voltou a
+   ser escuro do mesmo jeito. Trinta linhas neste bloco. Nenhum `.tsx` aberto.
 
-   **A página é cinza-esverdeada e o cartão é quase branco**, e não o contrário
-   do que a maioria dos temas claros faz. O motivo é medido: o site inteiro se
-   apoia na diferença entre os dois — sete arquivos usam o cartão neutro —, e
-   com a página em branco puro essa diferença cai para 1,04, contra os 1,13 que
-   o tema escuro tinha. Aqui ela é 1,14: o cartão levanta.
+   **Não há tema claro guardado, e isso é decisão.** O Doug pediu **só escuro**:
+   sem botão, sem seguir o sistema. Um claro escondido num `@media` seria um
+   tema fantasma que ninguém vê e que a bateria de contraste mediria para
+   sempre. Ele está recuperável no git, que é onde tema aposentado mora.
+
+   **A página é bem escura e o cartão é um degrau acima dela** — a mesma
+   direção do tema claro, que tinha a página cinza-esverdeada e o cartão quase
+   branco. O site inteiro se apoia nessa diferença (sete arquivos usam o cartão
+   neutro), e invertê-la teria custado sete telas.
+
+   **A distância entre os dois é 1,25:1, e ela foi medida duas vezes.** A
+   primeira paleta escura deste bloco os pôs a **1,08:1**, e na folha de contato
+   a 360 px a `/tatica` e a `/finais` viraram uma coluna escura única cortada por
+   fios: a hierarquia existia no número e não na tela. O conserto foi abrir a
+   escada — a página desceu de 17,5% para 13% de claridade e o cartão subiu de
+   21,5% para 24,5% —, e de quebra a razão ficou **maior que a do tema claro**
+   (1,14). No escuro a mesma razão rende menos ao olho, porque a curva de
+   luminância é íngreme perto do preto; por isso ela precisa ser mais alta ali.
+
+   **O tabuleiro não escureceu.** As duas casas continuam em 93,5% e 75% de
+   claridade, e as doze marcas continuam calibradas contra esses dois números:
+   baixar a casa escura derrubaria quatro marcas de uma vez. Não é concessão —
+   chess.com e lichess fazem igual. No escuro, o tabuleiro é o objeto iluminado
+   da tela, e é nele que o olho pousa.
 
    **`foco` e `metodo` continuam com o mesmo valor de propósito**, assim como
    `metodo-cheio-toque` e `metodo-superficie`. Continua sendo uma linha separar
@@ -56,30 +74,30 @@
   --color-*: initial;
 
   /* Superfícies — o papel e o que se empilha sobre ele. */
-  --color-papel: oklch(95% 0.008 150);
-  --color-carta: oklch(99.5% 0.003 150);
-  --color-carta-alta: oklch(91.2% 0.011 150);
-  --color-carta-toque: oklch(86.5% 0.014 150);
-  --color-veu: color-mix(in oklab, oklch(26% 0.015 160) 62%, transparent);
+  --color-papel: oklch(13% 0.012 160);
+  --color-carta: oklch(24.5% 0.017 160);
+  --color-carta-alta: oklch(31% 0.018 160);
+  --color-carta-toque: oklch(36% 0.02 160);
+  --color-veu: color-mix(in oklab, oklch(8% 0.012 160) 74%, transparent);
 
   /* Tinta — três degraus, a dez pontos de claridade um do outro. Eram cinco,
      e dois pares deles ficavam a quatro e cinco pontos: distinção que existia
      no nome e não na tela. `tinta-muda` fica de fora da escada — é a única
      que não carrega informação, e por isso é a única isenta do piso. */
-  --color-tinta: oklch(26% 0.015 160);
-  --color-tinta-media: oklch(36% 0.0135 160);
-  --color-tinta-fraca: oklch(46% 0.012 160);
-  --color-tinta-muda: oklch(66% 0.01 160);
-  --color-tinta-inversa: oklch(99% 0.004 150);
+  --color-tinta: oklch(95.5% 0.006 150);
+  --color-tinta-media: oklch(85% 0.008 150);
+  --color-tinta-fraca: oklch(74% 0.009 150);
+  --color-tinta-muda: oklch(56% 0.011 150);
+  --color-tinta-inversa: oklch(15% 0.014 160);
 
   /* Estrutura — o alfa vai assado no token: `border-borda`, sem modificador. */
-  --color-borda: color-mix(in oklab, oklch(26% 0.015 160) 16%, transparent);
-  --color-borda-fraca: color-mix(in oklab, oklch(26% 0.015 160) 9%, transparent);
-  --color-borda-forte: color-mix(in oklab, oklch(26% 0.015 160) 28%, transparent);
-  --color-foco: oklch(46% 0.115 152);
+  --color-borda: color-mix(in oklab, oklch(95.5% 0.006 150) 22%, transparent);
+  --color-borda-fraca: color-mix(in oklab, oklch(95.5% 0.006 150) 14%, transparent);
+  --color-borda-forte: color-mix(in oklab, oklch(95.5% 0.006 150) 37%, transparent);
+  --color-foco: oklch(72% 0.14 152);
 
   /* Método — o verde. Seis faces porque a tinta sobre painel tingido não é
-     derivável por alfa: no escuro ela é clara, no claro terá de ser escura. A
+     derivável por alfa: no escuro ela é clara, no claro era escura. A
      superfície, essa sim, é o mesmo tom com alfa (`bg-metodo-superficie/10`).
 
      `metodo-selo` é a sexta, e chegou com o motor de aula: é a tinta do selo
@@ -88,29 +106,37 @@
      `metodo-tinta` — que basta sobre uma camada só — cai abaixo do piso ali.
      Não é preciosismo de paleta: é o único lugar do site com três verdes um
      sobre o outro, e a régua de `lib/tema/pares.ts` mede a pilha inteira. */
-  --color-metodo: oklch(39.5% 0.093 152);
-  --color-metodo-superficie: oklch(58% 0.105 152);
-  --color-metodo-tinta: oklch(31% 0.07 152);
-  --color-metodo-tinta-alta: oklch(26% 0.058 152);
-  --color-metodo-selo: oklch(29% 0.066 152);
-  --color-metodo-cheio: oklch(40% 0.092 152);
-  --color-metodo-cheio-toque: oklch(34% 0.082 152);
+  --color-metodo: oklch(73% 0.13 152);
+  --color-metodo-superficie: oklch(60% 0.115 152);
+  --color-metodo-tinta: oklch(80% 0.13 152);
+  --color-metodo-tinta-alta: oklch(88% 0.11 152);
+  --color-metodo-selo: oklch(90% 0.09 152);
+  --color-metodo-cheio: oklch(72% 0.14 152);
+  --color-metodo-cheio-toque: oklch(66% 0.135 152);
 
-  /* Aviso — o âmbar. Ganha, mas não é a aula. */
-  --color-aviso: oklch(60% 0.125 72);
-  --color-aviso-superficie: oklch(70% 0.135 72);
-  --color-aviso-tinta: oklch(35% 0.08 62);
+  /* Aviso — o âmbar. Ganha, mas não é a aula.
+
+     `aviso-superficie` é a única das três superfícies semânticas que **desceu**
+     ao virar escuro (de 70% para 58%), e o motivo é um só sítio: o cartão de
+     comando do treino de repertório é `bg-tinta`, que no escuro é quase branco.
+     A borda de 2 px em âmbar claro sobre ele media 2,23:1. A 58% mede 3,88:1
+     sobre o cartão branco e 8,6:1 sobre a página — e as três superfícies
+     passam a viver juntas, entre 58% e 60%, que é o que o âmbar nunca conseguiu
+     no tema claro. */
+  --color-aviso: oklch(76% 0.14 72);
+  --color-aviso-superficie: oklch(58% 0.135 68);
+  --color-aviso-tinta: oklch(85% 0.115 78);
 
   /* Erro — o rosa. `erro-texto` é a quarta face: erro escrito direto sobre a
      página, sem painel embaixo. */
-  --color-erro: oklch(50% 0.165 25);
-  --color-erro-superficie: oklch(57% 0.185 25);
-  --color-erro-tinta: oklch(35% 0.125 25);
-  --color-erro-texto: oklch(43% 0.155 25);
+  --color-erro: oklch(63% 0.19 25);
+  --color-erro-superficie: oklch(60% 0.19 25);
+  --color-erro-tinta: oklch(80% 0.13 25);
+  --color-erro-texto: oklch(74% 0.155 25);
 
   /* Dica — o azul. Só duas faces: não existe matiz de dica solta na página. */
-  --color-dica-superficie: oklch(54% 0.12 235);
-  --color-dica-tinta: oklch(34% 0.095 235);
+  --color-dica-superficie: oklch(62% 0.13 235);
+  --color-dica-tinta: oklch(82% 0.105 235);
 
   /* ------------------------------------------------------------------------
      O tabuleiro
@@ -592,6 +618,100 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+   O que o NAVEGADOR pinta, e a tabela de contraste não alcança
+
+   `lib/tema/pares.ts` é uma lista escrita à mão de combinações nossas. Nada do
+   que o navegador desenha por conta própria entra nela — e no escuro é
+   justamente aí que a tela quebra sem ninguém ser avisado. Os três abaixo
+   apareceram na varredura de estados de 2026-09-09.
+   -------------------------------------------------------------------------- */
+
+/* **O preenchimento automático do Chrome.** Ele pinta o fundo do campo com um
+   amarelo-claro próprio e ignora `background-color` — o campo fica claro no meio
+   de uma página escura, com a nossa tinta clara por cima, ilegível. A única porta
+   é esta: uma sombra interna gorda que cobre a área inteira, e a tinta empurrada
+   por `-webkit-text-fill-color`, que é quem vence o `color` ali dentro.
+
+   `transition: background-color` com atraso absurdo é o truque conhecido para o
+   caso em que a sombra não basta; aqui ela basta, e o atraso fica de fora. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  box-shadow: 0 0 0 40rem var(--color-carta-alta) inset;
+  -webkit-text-fill-color: var(--color-tinta);
+  caret-color: var(--color-tinta);
+}
+
+/* **A seleção de texto.** O padrão do navegador é um azul de sistema que não é
+   de nenhuma paleta nossa, e sobre a página escura ele engole a tinta. Aqui ela
+   passa a ser o verde do método, com a tinta clara por cima. */
+::selection {
+  background: color-mix(in oklab, var(--color-metodo-superficie) 40%, transparent);
+  color: var(--color-tinta);
+}
+
+/* **A caixa de seleção.** `accent-color` deixa o navegador desenhar a marca de
+   confirmado; ele escolhe sozinho entre branco e preto para o tique, pela
+   claridade do que recebe. Fica declarado no `:root` para valer também nos
+   controles que ninguém lembrou de vestir. */
+:root {
+  accent-color: var(--color-metodo-cheio);
+  /* A barra de rolagem. `color-scheme: dark` já a escurece, mas escurece para o
+     cinza neutro do sistema — e ele era, na folha de contato, uma das duas
+     únicas coisas sem tinta verde numa tela inteira verde-escura. */
+  scrollbar-color: var(--color-carta-toque) transparent;
+}
+
+/* A caixa **vazia** é outro problema, e o `accent-color` não o resolve: ele só
+   pinta o estado marcado. Vazia, o Chrome desenha um quadrado cinza de sistema
+   que mede 1,55:1 contra o cartão — abaixo dos 3:1 que a WCAG 1.4.11 pede de um
+   controle, e a caixa da partida do dia é exatamente um controle que carrega
+   informação.
+
+   A primeira tentativa foi pôr um anel por fora e deixar o resto ao navegador.
+   Chegou aos 3,13:1 e produziu **dois anéis concêntricos** — o nosso e a borda
+   nativa — em três cinzas neutros, o único buraco acromático de uma tela
+   inteiramente esverdeada. Então a caixa passa a ser desenhada aqui, do zero.
+
+   **O tique entra por `mask-image`, e não por `background-image`.** Um SVG em
+   `background-image` carregaria a cor dentro do `data:` — um literal fora da
+   paleta, invisível para `guardas.test.ts`, condenado a ficar para trás na
+   próxima virada de tema. Como máscara, o SVG é só **forma**: quem dá a cor é
+   o `background-color`, que é token. */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid var(--color-borda-forte);
+  border-radius: 0.3rem;
+  background-color: var(--color-carta-alta);
+  transition:
+    background-color 120ms,
+    border-color 120ms;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--color-metodo-cheio);
+  border-color: var(--color-metodo-cheio);
+}
+
+/* O tique. Um `::before` não serve — `input` é elemento substituído e não gera
+   filho —, então ele vem por máscara sobre o próprio fundo do controle. */
+input[type="checkbox"]:checked::after {
+  content: "";
+  display: block;
+  block-size: 100%;
+  background-color: var(--color-tinta-inversa);
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.2 8.4l3.1 3.2 6.5-7" fill="none" stroke="black" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+}
+
+input[type="checkbox"]:disabled {
+  border-color: var(--color-borda);
+  background-color: var(--color-carta);
+}
+
+/* --------------------------------------------------------------------------
    O tabuleiro
 
    O `chessground.brown.css` **não é importado**. Ele foi largado em vez de
@@ -609,6 +729,29 @@ body {
 
 .cg-wrap {
   box-sizing: content-box;
+}
+
+/* **O rebordo do tabuleiro.** Ele não existia no tema claro e passou a ser
+   necessário no escuro, por uma razão medida: o tabuleiro ficou claro de
+   propósito (as duas casas em 93,5% e 75%, para as doze marcas continuarem
+   passando), e sobre a página escura isso é um salto de **15,8:1 num pixel**.
+   Sem transição nenhuma ele não lê como objeto iluminado da tela — lê como
+   recorte colado, um buraco na página.
+
+   São duas camadas finas, e cada uma faz uma coisa: o `outline` é a linha que
+   fecha a forma, e a sombra difusa dá ao tabuleiro a altura que o salto de
+   claridade sozinho não dá. `outline`, e não `border`, porque o `box-sizing:
+   content-box` acima existe para que a largura do tabuleiro seja a largura do
+   tabuleiro: uma borda entraria na conta das casas e traria de volta a sobra
+   de meio pixel que os dois blocos seguintes existem para matar.
+
+   A sombra usa `--color-veu`, que é o escurecedor da paleta — o mesmo token do
+   fundo de modal. Não é economia de linha: é que a sombra e o véu fazem a mesma
+   coisa (afastar o que está embaixo), e dois pretos ligeiramente diferentes para
+   isso seria a repetição de receita que este arquivo recusa em outros lugares. */
+.cg-wrap {
+  outline: 1px solid var(--color-borda-forte);
+  box-shadow: 0 6px 20px var(--color-veu);
 }
 
 /* O chessground arredonda o tabuleiro para um múltiplo de 8 pixels (para as

@@ -39,10 +39,11 @@ export const viewport: Viewport = {
   // lib/tema/marca.ts, que é o único lugar onde a cor existe fora do CSS e
   // que lib/tema/guardas.test.ts confere contra os tokens.
   themeColor: MARCA.papel,
-  // Sem isto o Android escurece por conta própria os controles nativos — barra
-  // de rolagem, campo de número do laboratório do motor — dentro de uma página
-  // clara. Faltava desde a F0, e só agora tem resposta certa para dar.
-  colorScheme: "light",
+  // Sem isto o Android pinta por conta própria os controles nativos — barra de
+  // rolagem, campo de número do laboratório do motor, o preenchimento automático
+  // do Chrome — em claro, dentro de uma página escura. É uma palavra, e sem ela
+  // o tema escuro fica certo em tudo menos no que o sistema desenha.
+  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
