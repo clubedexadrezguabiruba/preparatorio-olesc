@@ -267,9 +267,9 @@
 }
 
 /* --------------------------------------------------------------------------
-   Três utilitárias próprias
+   As utilitárias próprias
 
-   Três utilitárias, vinte e um sítios que repetiam a mesma sequência literal.
+   Nasceram três, para vinte e um sítios que repetiam a mesma sequência literal.
    Repetição de receita não é reuso — é vinte e um lugares para esquecer de
    mudar.
    -------------------------------------------------------------------------- */
@@ -304,6 +304,24 @@
     font-size: var(--text-3xl);
     line-height: var(--text-3xl--line-height);
   }
+}
+
+/* A hachura do que foi **declarado** e não medido.
+
+   Nasceu com a barra do dia em 2026-09-09: a meta de 90 min inclui os 30 da
+   partida, e a partida acontece no chess.com — o site não a cronometra, ele
+   acredita na caixa que o aluno marcou. Pintar esse pedaço com a mesma cor
+   cheia do tempo medido seria a barra afirmando ter medido o que ela não mediu.
+
+   Listras a 135°, na cor de superfície do método: o olho lê “mesma família,
+   outra natureza” sem precisar de legenda. A textura é fina de propósito — numa
+   barra de 4 px de altura, listra grossa vira serrilha. */
+@utility hachura {
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--color-metodo-superficie) 0 2px,
+    transparent 2px 5px
+  );
 }
 
 /* O rótulo em caixa-alta que abre cada bloco da aula. */

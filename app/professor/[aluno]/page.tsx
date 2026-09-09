@@ -6,7 +6,13 @@ import { professorAtual } from "@/lib/auth/perfil";
 import { hojeNoBrasil, porExtenso, somarDias } from "@/lib/curso/calendario";
 import { nivelDoAluno } from "@/lib/curso/nivel";
 import { nivelConquistado } from "@/lib/curso/progresso";
-import { META_DO_DIA_MIN, MINIMO_DA_SEQUENCIA_MIN, sequenciaDeDias, serieDeDias } from "@/lib/curso/hoje";
+import {
+  META_DO_DIA_MIN,
+  MINIMO_DA_SEQUENCIA_MIN,
+  MINUTOS_DA_PARTIDA,
+  sequenciaDeDias,
+  serieDeDias,
+} from "@/lib/curso/hoje";
 import { minutosPorDia, partidasDeclaradas } from "@/lib/curso/minutos";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
 import { DEGRAUS_EM_DIAS, diasAteRevisar } from "@/lib/finais/escada";
@@ -83,7 +89,10 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
 
   const nivel = nivelDoAluno(conquistado);
   const abertas = aulasAbertas(aulasPublicadas());
-  const serie = serieDeDias(minutos, hoje, DIAS);
+  // As partidas entram na série: sem elas o gráfico do professor e a barra do
+  // aluno somariam totais diferentes para o mesmo dia — e o professor diria o
+  // número em voz alta com o aluno na frente, olhando outro número.
+  const serie = serieDeDias(minutos, hoje, DIAS, partidas);
   const sequencia = sequenciaDeDias(minutos, hoje);
   const fila = filaCompleta(linhas);
   const devidosHoje = fila.filter((f) => f.devidoEm <= hoje);
@@ -133,8 +142,10 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         <div className="flex flex-col gap-0.5">
           <h2 className="rotulo text-tinta-fraca">A rotina — {DIAS} dias</h2>
           <p className="text-sm text-tinta-media">
-            Minutos por dia, somados de cada puzzle e de cada etapa de aula. A meta é{" "}
-            {META_DO_DIA_MIN} min; {MINIMO_DA_SEQUENCIA_MIN} é o mínimo que mantém a sequência.
+            Minutos por dia, somados de cada puzzle e de cada etapa de aula, mais os{" "}
+            {MINUTOS_DA_PARTIDA} da partida quando ela foi declarada. A meta é {META_DO_DIA_MIN}{" "}
+            min; {MINIMO_DA_SEQUENCIA_MIN} é o mínimo que mantém a sequência — e esse mínimo{" "}
+            <strong className="font-semibold">só conta tempo medido</strong>, sem a partida.
           </p>
         </div>
 
@@ -173,7 +184,8 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
             {serie.map((dia) => (
               <div key={dia.dia} className="flex h-full flex-1 flex-col justify-end gap-0.5">
                 <div
-                  title={`${dia.dia}: ${dia.total} min (tática ${dia.tatica}, finais ${dia.finais})`}
+                  title={`${dia.dia}: ${dia.total} min (tática ${dia.tatica}, finais ${dia.finais}` +
+                    `${dia.partida ? `, partida ${dia.partida} declarados` : ""})`}
                   className={`w-full rounded-t-sm ${
                     dia.bateuMeta
                       ? "bg-metodo-cheio"
@@ -193,8 +205,9 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
           </div>
 
           <p className="text-xs text-tinta-fraca">
-            Verde cheio: bateu os {META_DO_DIA_MIN} min. Verde claro: passou dos{" "}
-            {MINIMO_DA_SEQUENCIA_MIN}. Âmbar: treinou menos que isso. Cinza: não treinou.
+            Verde cheio: bateu os {META_DO_DIA_MIN} min do dia, partida incluída. Verde claro:{" "}
+            passou dos {MINIMO_DA_SEQUENCIA_MIN} medidos. Âmbar: treinou menos que isso. Cinza:{" "}
+            não treinou.
           </p>
         </div>
       </section>

@@ -7,7 +7,7 @@ import { hojeNoBrasil, somarDias } from "@/lib/curso/calendario";
 import { minutosDeHoje, sequenciaDeDias } from "@/lib/curso/hoje";
 import { fechamentoDoNivel, nivelDoAluno, proximoPasso } from "@/lib/curso/nivel";
 import { nivelConquistado } from "@/lib/curso/progresso";
-import { minutosPorDia, partidaDoDiaMarcada } from "@/lib/curso/minutos";
+import { minutosPorDia, partidasDeclaradas } from "@/lib/curso/minutos";
 import { aulasPublicadas } from "@/lib/finais/conteudo";
 import { aulasVencidas } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
@@ -78,7 +78,7 @@ export default async function Painel() {
     finais,
     devidosDeTatica,
     minutos,
-    jogouHoje,
+    partidas,
     indice,
     repertorio,
     conquistado,
@@ -90,7 +90,11 @@ export default async function Painel() {
     // Trinta dias bastam para a sequência: o preparatório inteiro tem quatro
     // semanas, e ninguém precisa ver "48 dias seguidos" numa tela de celular.
     minutosPorDia(perfil.id, somarDias(hoje, -30)),
-    partidaDoDiaMarcada(perfil.id, hoje),
+    // `partidasDeclaradas` no lugar de `partidaDoDiaMarcada`: **a mesma uma
+    // consulta**, com mais dias. Ela devolve o conjunto de dias declarados, e
+    // com isso a barra do dia e o gráfico do professor passam a somar a mesma
+    // coisa — que era a terceira divergência de 9/9.
+    partidasDeclaradas(perfil.id, somarDias(hoje, -30)),
     lerIndice(),
     progressoDoRepertorio(),
     nivelConquistado(perfil.id),
@@ -206,11 +210,11 @@ export default async function Painel() {
       {/* O dia, em primeiro lugar: é o que o aluno abre o site para ver. Os
           totais do curso vêm depois — eles não mudam o que fazer agora. */}
       <Hoje
-        minutos={minutosDeHoje(minutos, hoje)}
+        minutos={minutosDeHoje(minutos, hoje, partidas.has(hoje))}
         sequencia={sequenciaDeDias(minutos, hoje)}
         revisaoDeTatica={devidosDeTatica.length}
         revisaoDeFinais={revisoesDeFinais}
-        partidaFeita={jogouHoje}
+        partidaFeita={partidas.has(hoje)}
       />
 
       <section className="flex gap-3">

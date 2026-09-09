@@ -3,11 +3,15 @@
 import Link from "next/link";
 import { useOptimistic, useTransition } from "react";
 import { Barra } from "@/components/Barra";
-import { META_DO_DIA_MIN, type MinutosDeHoje } from "@/lib/curso/hoje";
+import {
+  META_DO_DIA_MIN,
+  MINIMO_DA_SEQUENCIA_MIN,
+  type MinutosDeHoje,
+} from "@/lib/curso/hoje";
 import { marcarPartidaDoDia } from "./acoes";
 
 /**
- * O cartão do dia: a rotina de 2 horas, na ordem em que ela acontece.
+ * O cartão do dia: a rotina, na ordem em que ela acontece.
  *
  * **A ordem é a decisão.** O Doug fixou que a partida vem por último, depois do
  * treino: treina-se primeiro, joga-se para aplicar. Então o cartão lista 1)
@@ -22,7 +26,14 @@ import { marcarPartidaDoDia } from "./acoes";
  * banco já guardava `tempo_ms` em cada tentativa desde a primeira migration;
  * o que faltava era a soma do dia na frente do aluno. A sequência de dias
  * premia constância — e é por isso que ela usa 60 minutos como mínimo, e não
- * os 120 da meta: um dia curto não pode apagar duas semanas.
+ * os 90 da meta: um dia curto não pode apagar duas semanas.
+ *
+ * ## A barra tem dois pedaços desde 2026-09-09
+ *
+ * A meta de 90 inclui os 30 da partida, que o site **não mede** — ela acontece
+ * no chess.com. Então a barra pinta o medido cheio e a partida hachurada, e a
+ * linha da sequência diz em texto o que ela cobra: 60 min de treino **no site**.
+ * Sem isso, a barra prometeria ter cronometrado uma caixa de seleção.
  *
  * ## O toque otimista
  *
@@ -66,23 +77,28 @@ export function Hoje({
         </span>
       </div>
 
+      {/* O medido cheio, a partida hachurada. A hachura é a honestidade da
+          barra: os 30 da partida são declaração, não cronômetro. */}
       <Barra
-        feitos={minutos.total}
+        feitos={minutos.medido}
+        declarado={minutos.partida}
         de={META_DO_DIA_MIN}
         tom={minutos.total >= META_DO_DIA_MIN ? "completo" : "metodo"}
       />
 
       <p className="text-xs text-tinta-fraca tabular-nums">
         Tática {minutos.tatica} min · Finais {minutos.finais} min
-        {sequencia > 0 ? (
-          <>
-            {" · "}
-            <span className="text-metodo-tinta">
-              {sequencia} {sequencia === 1 ? "dia seguido" : "dias seguidos"}
-            </span>
-          </>
-        ) : null}
+        {minutos.partida > 0 ? ` · Partida ${minutos.partida} min` : ""}
       </p>
+
+      {sequencia > 0 ? (
+        <p className="text-xs text-metodo-tinta tabular-nums">
+          {sequencia} {sequencia === 1 ? "dia seguido" : "dias seguidos"}{" "}
+          <span className="text-tinta-fraca">
+            com {MINIMO_DA_SEQUENCIA_MIN} min de treino no site
+          </span>
+        </p>
+      ) : null}
 
       <ol className="flex flex-col gap-2 border-t border-borda-fraca pt-3">
         <Passo numero={1} titulo="Tática">
