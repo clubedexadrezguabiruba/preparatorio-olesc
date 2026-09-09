@@ -1,113 +1,167 @@
 {
   "fonte": "lichess.org/training - banco público de puzzles, CC0",
-  "geradoEm": "2026-09-03",
+  "geradoEm": "2026-09-09",
   "filtros": {
     "rating": [
-      600,
-      1800
+      700,
+      2100
     ],
     "popularidadeMinima": 50,
     "jogadasMinimas": 100,
     "desvioMaximo": 100,
-    "tetoPorArquivo": 2000
+    "tetoPorArquivo": 1000
   },
-  "totalNoSite": 166623,
+  "totalNoSite": 175987,
   "temas": [
     {
       "tag": "mateIn1",
       "bloco": 1,
       "faixas": [
         {
-          "de": 600,
-          "ate": 800,
-          "arquivo": "mateIn1/600-800.json",
-          "total": 2000
+          "de": 700,
+          "ate": 900,
+          "arquivo": "mateIn1/700-900.json",
+          "total": 1000
         },
         {
-          "de": 800,
-          "ate": 1000,
-          "arquivo": "mateIn1/800-1000.json",
-          "total": 2000
+          "de": 900,
+          "ate": 1100,
+          "arquivo": "mateIn1/900-1100.json",
+          "total": 1000
         },
         {
-          "de": 1000,
-          "ate": 1200,
-          "arquivo": "mateIn1/1000-1200.json",
-          "total": 2000
-        },
-        {
-          "de": 1200,
+          "de": 1100,
           "ate": 1300,
-          "arquivo": "mateIn1/1200-1300.json",
-          "total": 2000
+          "arquivo": "mateIn1/1100-1300.json",
+          "total": 1000
+        },
+        {
+          "de": 1300,
+          "ate": 1500,
+          "arquivo": "mateIn1/1300-1500.json",
+          "total": 1000
+        },
+        {
+          "de": 1500,
+          "ate": 1700,
+          "arquivo": "mateIn1/1500-1700.json",
+          "total": 1000
+        },
+        {
+          "de": 1700,
+          "ate": 1900,
+          "arquivo": "mateIn1/1700-1900.json",
+          "total": 1000
+        },
+        {
+          "de": 1900,
+          "ate": 2100,
+          "arquivo": "mateIn1/1900-2100.json",
+          "total": 472
         }
       ],
-      "total": 8000,
-      "noBanco": 91759
+      "total": 6472,
+      "noBanco": 103047
     },
     {
       "tag": "mateIn2",
       "bloco": 1,
       "faixas": [
         {
-          "de": 600,
-          "ate": 800,
-          "arquivo": "mateIn2/600-800.json",
-          "total": 2000
+          "de": 700,
+          "ate": 900,
+          "arquivo": "mateIn2/700-900.json",
+          "total": 1000
         },
         {
-          "de": 800,
-          "ate": 1000,
-          "arquivo": "mateIn2/800-1000.json",
-          "total": 2000
+          "de": 900,
+          "ate": 1100,
+          "arquivo": "mateIn2/900-1100.json",
+          "total": 1000
         },
         {
-          "de": 1000,
-          "ate": 1200,
-          "arquivo": "mateIn2/1000-1200.json",
-          "total": 2000
-        },
-        {
-          "de": 1200,
+          "de": 1100,
           "ate": 1300,
-          "arquivo": "mateIn2/1200-1300.json",
-          "total": 2000
+          "arquivo": "mateIn2/1100-1300.json",
+          "total": 1000
+        },
+        {
+          "de": 1300,
+          "ate": 1500,
+          "arquivo": "mateIn2/1300-1500.json",
+          "total": 1000
+        },
+        {
+          "de": 1500,
+          "ate": 1700,
+          "arquivo": "mateIn2/1500-1700.json",
+          "total": 1000
+        },
+        {
+          "de": 1700,
+          "ate": 1900,
+          "arquivo": "mateIn2/1700-1900.json",
+          "total": 1000
+        },
+        {
+          "de": 1900,
+          "ate": 2100,
+          "arquivo": "mateIn2/1900-2100.json",
+          "total": 1000
         }
       ],
-      "total": 8000,
-      "noBanco": 144989
+      "total": 7000,
+      "noBanco": 203685
     },
     {
       "tag": "hangingPiece",
       "bloco": 1,
       "faixas": [
         {
-          "de": 600,
-          "ate": 800,
-          "arquivo": "hangingPiece/600-800.json",
-          "total": 2000
+          "de": 700,
+          "ate": 900,
+          "arquivo": "hangingPiece/700-900.json",
+          "total": 1000
         },
         {
-          "de": 800,
-          "ate": 1000,
-          "arquivo": "hangingPiece/800-1000.json",
-          "total": 2000
+          "de": 900,
+          "ate": 1100,
+          "arquivo": "hangingPiece/900-1100.json",
+          "total": 1000
         },
         {
-          "de": 1000,
-          "ate": 1200,
-          "arquivo": "hangingPiece/1000-1200.json",
-          "total": 2000
-        },
-        {
-          "de": 1200,
+          "de": 1100,
           "ate": 1300,
-          "arquivo": "hangingPiece/1200-1300.json",
-          "total": 2000
+          "arquivo": "hangingPiece/1100-1300.json",
+          "total": 1000
+        },
+        {
+          "de": 1300,
+          "ate": 1500,
+          "arquivo": "hangingPiece/1300-1500.json",
+          "total": 1000
+        },
+        {
+          "de": 1500,
+          "ate": 1700,
+          "arquivo": "hangingPiece/1500-1700.json",
+          "total": 1000
+        },
+        {
+          "de": 1700,
+          "ate": 1900,
+          "arquivo": "hangingPiece/1700-1900.json",
+          "total": 1000
+        },
+        {
+          "de": 1900,
+          "ate": 2100,
+          "arquivo": "hangingPiece/1900-2100.json",
+          "total": 1000
         }
       ],
-      "total": 8000,
-      "noBanco": 31656
+      "total": 7000,
+      "noBanco": 63171
     },
     {
       "tag": "backRankMate",
@@ -117,23 +171,47 @@
           "de": 800,
           "ate": 1000,
           "arquivo": "backRankMate/800-1000.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1000,
           "ate": 1200,
           "arquivo": "backRankMate/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "backRankMate/1200-1400.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "backRankMate/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "backRankMate/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "backRankMate/1800-2000.json",
+          "total": 677
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "backRankMate/2000-2100.json",
+          "total": 168
         }
       ],
-      "total": 6000,
-      "noBanco": 28802
+      "total": 5845,
+      "noBanco": 34690
     },
     {
       "tag": "smotheredMate",
@@ -143,7 +221,7 @@
           "de": 800,
           "ate": 1000,
           "arquivo": "smotheredMate/800-1000.json",
-          "total": 1517
+          "total": 1000
         },
         {
           "de": 1000,
@@ -155,11 +233,35 @@
           "de": 1200,
           "ate": 1400,
           "arquivo": "smotheredMate/1200-1400.json",
-          "total": 1588
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "smotheredMate/1400-1600.json",
+          "total": 618
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "smotheredMate/1600-1800.json",
+          "total": 196
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "smotheredMate/1800-2000.json",
+          "total": 36
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "smotheredMate/2000-2100.json",
+          "total": 6
         }
       ],
-      "total": 3862,
-      "noBanco": 3862
+      "total": 3613,
+      "noBanco": 4718
     },
     {
       "tag": "arabianMate",
@@ -182,10 +284,34 @@
           "ate": 1400,
           "arquivo": "arabianMate/1200-1400.json",
           "total": 430
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "arabianMate/1400-1600.json",
+          "total": 294
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "arabianMate/1600-1800.json",
+          "total": 206
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "arabianMate/1800-2000.json",
+          "total": 99
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "arabianMate/2000-2100.json",
+          "total": 33
         }
       ],
-      "total": 1645,
-      "noBanco": 1645
+      "total": 2277,
+      "noBanco": 2277
     },
     {
       "tag": "anastasiaMate",
@@ -208,10 +334,34 @@
           "ate": 1400,
           "arquivo": "anastasiaMate/1200-1400.json",
           "total": 366
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "anastasiaMate/1400-1600.json",
+          "total": 945
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "anastasiaMate/1600-1800.json",
+          "total": 114
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "anastasiaMate/1800-2000.json",
+          "total": 51
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "anastasiaMate/2000-2100.json",
+          "total": 7
         }
       ],
-      "total": 1329,
-      "noBanco": 1329
+      "total": 2446,
+      "noBanco": 2446
     },
     {
       "tag": "hookMate",
@@ -234,10 +384,34 @@
           "ate": 1400,
           "arquivo": "hookMate/1200-1400.json",
           "total": 599
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "hookMate/1400-1600.json",
+          "total": 532
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "hookMate/1600-1800.json",
+          "total": 355
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "hookMate/1800-2000.json",
+          "total": 176
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "hookMate/2000-2100.json",
+          "total": 58
         }
       ],
-      "total": 1674,
-      "noBanco": 1674
+      "total": 2795,
+      "noBanco": 2795
     },
     {
       "tag": "bodenMate",
@@ -260,10 +434,28 @@
           "ate": 1600,
           "arquivo": "bodenMate/1400-1600.json",
           "total": 37
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "bodenMate/1600-1800.json",
+          "total": 39
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "bodenMate/1800-2000.json",
+          "total": 23
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "bodenMate/2000-2100.json",
+          "total": 3
         }
       ],
-      "total": 166,
-      "noBanco": 166
+      "total": 231,
+      "noBanco": 231
     },
     {
       "tag": "doubleBishopMate",
@@ -286,10 +478,28 @@
           "ate": 1600,
           "arquivo": "doubleBishopMate/1400-1600.json",
           "total": 29
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "doubleBishopMate/1600-1800.json",
+          "total": 13
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "doubleBishopMate/1800-2000.json",
+          "total": 12
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "doubleBishopMate/2000-2100.json",
+          "total": 3
         }
       ],
-      "total": 51,
-      "noBanco": 51
+      "total": 79,
+      "noBanco": 79
     },
     {
       "tag": "dovetailMate",
@@ -312,10 +522,28 @@
           "ate": 1600,
           "arquivo": "dovetailMate/1400-1600.json",
           "total": 206
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "dovetailMate/1600-1800.json",
+          "total": 104
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "dovetailMate/1800-2000.json",
+          "total": 84
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "dovetailMate/2000-2100.json",
+          "total": 32
         }
       ],
-      "total": 665,
-      "noBanco": 665
+      "total": 885,
+      "noBanco": 885
     },
     {
       "tag": "mateIn3",
@@ -325,23 +553,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "mateIn3/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "mateIn3/1200-1400.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "mateIn3/1400-1600.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "mateIn3/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "mateIn3/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "mateIn3/2000-2100.json",
+          "total": 1000
         }
       ],
       "total": 6000,
-      "noBanco": 35751
+      "noBanco": 53469
     },
     {
       "tag": "fork",
@@ -351,23 +597,47 @@
           "de": 800,
           "ate": 1000,
           "arquivo": "fork/800-1000.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1000,
           "ate": 1200,
           "arquivo": "fork/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "fork/1200-1400.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "fork/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "fork/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "fork/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "fork/2000-2100.json",
+          "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 153105
+      "total": 7000,
+      "noBanco": 256511
     },
     {
       "tag": "pin",
@@ -377,23 +647,47 @@
           "de": 800,
           "ate": 1000,
           "arquivo": "pin/800-1000.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1000,
           "ate": 1200,
           "arquivo": "pin/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "pin/1200-1400.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "pin/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "pin/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "pin/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "pin/2000-2100.json",
+          "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 39807
+      "total": 7000,
+      "noBanco": 101067
     },
     {
       "tag": "skewer",
@@ -403,23 +697,47 @@
           "de": 800,
           "ate": 1000,
           "arquivo": "skewer/800-1000.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1000,
           "ate": 1200,
           "arquivo": "skewer/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "skewer/1200-1400.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "skewer/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "skewer/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "skewer/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "skewer/2000-2100.json",
+          "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 21680
+      "total": 7000,
+      "noBanco": 36886
     },
     {
       "tag": "discoveredAttack",
@@ -429,23 +747,47 @@
           "de": 800,
           "ate": 1000,
           "arquivo": "discoveredAttack/800-1000.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1000,
           "ate": 1200,
           "arquivo": "discoveredAttack/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "discoveredAttack/1200-1400.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "discoveredAttack/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "discoveredAttack/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "discoveredAttack/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "discoveredAttack/2000-2100.json",
+          "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 54021
+      "total": 7000,
+      "noBanco": 102959
     },
     {
       "tag": "doubleCheck",
@@ -461,17 +803,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "doubleCheck/1000-1200.json",
-          "total": 1069
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "doubleCheck/1200-1400.json",
-          "total": 1588
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "doubleCheck/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "doubleCheck/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "doubleCheck/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "doubleCheck/2000-2100.json",
+          "total": 725
         }
       ],
-      "total": 3127,
-      "noBanco": 3127
+      "total": 6195,
+      "noBanco": 8411
     },
     {
       "tag": "capturingDefender",
@@ -481,23 +847,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "capturingDefender/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "capturingDefender/1200-1400.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1400,
-          "ate": 1500,
-          "arquivo": "capturingDefender/1400-1500.json",
-          "total": 2000
+          "ate": 1600,
+          "arquivo": "capturingDefender/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "capturingDefender/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "capturingDefender/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "capturingDefender/2000-2100.json",
+          "total": 996
         }
       ],
-      "total": 6000,
-      "noBanco": 8672
+      "total": 5996,
+      "noBanco": 17884
     },
     {
       "tag": "deflection",
@@ -507,23 +891,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "deflection/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "deflection/1200-1400.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1400,
-          "ate": 1500,
-          "arquivo": "deflection/1400-1500.json",
-          "total": 2000
+          "ate": 1600,
+          "arquivo": "deflection/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "deflection/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "deflection/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "deflection/2000-2100.json",
+          "total": 1000
         }
       ],
       "total": 6000,
-      "noBanco": 36068
+      "noBanco": 66950
     },
     {
       "tag": "attraction",
@@ -533,23 +935,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "attraction/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "attraction/1200-1400.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1400,
-          "ate": 1500,
-          "arquivo": "attraction/1400-1500.json",
-          "total": 2000
+          "ate": 1600,
+          "arquivo": "attraction/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "attraction/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "attraction/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "attraction/2000-2100.json",
+          "total": 1000
         }
       ],
       "total": 6000,
-      "noBanco": 24183
+      "noBanco": 62666
     },
     {
       "tag": "trappedPiece",
@@ -559,23 +979,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "trappedPiece/1000-1200.json",
-          "total": 1635
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "trappedPiece/1200-1400.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1400,
-          "ate": 1500,
-          "arquivo": "trappedPiece/1400-1500.json",
-          "total": 2000
+          "ate": 1600,
+          "arquivo": "trappedPiece/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "trappedPiece/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "trappedPiece/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "trappedPiece/2000-2100.json",
+          "total": 1000
         }
       ],
-      "total": 5635,
-      "noBanco": 9518
+      "total": 6000,
+      "noBanco": 26834
     },
     {
       "tag": "xRayAttack",
@@ -585,23 +1023,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "xRayAttack/1000-1200.json",
-          "total": 1119
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "xRayAttack/1200-1400.json",
-          "total": 1431
+          "total": 1000
         },
         {
           "de": 1400,
-          "ate": 1500,
-          "arquivo": "xRayAttack/1400-1500.json",
-          "total": 964
+          "ate": 1600,
+          "arquivo": "xRayAttack/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "xRayAttack/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "xRayAttack/1800-2000.json",
+          "total": 641
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "xRayAttack/2000-2100.json",
+          "total": 260
         }
       ],
-      "total": 3514,
-      "noBanco": 3514
+      "total": 4901,
+      "noBanco": 6261
     },
     {
       "tag": "exposedKing",
@@ -611,23 +1067,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "exposedKing/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "exposedKing/1200-1400.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "exposedKing/1400-1600.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "exposedKing/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "exposedKing/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "exposedKing/2000-2100.json",
+          "total": 1000
         }
       ],
       "total": 6000,
-      "noBanco": 15614
+      "noBanco": 33705
     },
     {
       "tag": "attackingF2F7",
@@ -637,23 +1111,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "attackingF2F7/1000-1200.json",
-          "total": 1850
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "attackingF2F7/1200-1400.json",
-          "total": 1900
+          "total": 1000
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "attackingF2F7/1400-1600.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "attackingF2F7/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "attackingF2F7/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "attackingF2F7/2000-2100.json",
+          "total": 444
         }
       ],
-      "total": 5750,
-      "noBanco": 5752
+      "total": 5444,
+      "noBanco": 8654
     },
     {
       "tag": "kingsideAttack",
@@ -663,23 +1155,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "kingsideAttack/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "kingsideAttack/1200-1400.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "kingsideAttack/1400-1600.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "kingsideAttack/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "kingsideAttack/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "kingsideAttack/2000-2100.json",
+          "total": 1000
         }
       ],
       "total": 6000,
-      "noBanco": 69200
+      "noBanco": 103782
     },
     {
       "tag": "sacrifice",
@@ -689,23 +1199,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "sacrifice/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "sacrifice/1200-1400.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "sacrifice/1400-1600.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "sacrifice/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "sacrifice/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "sacrifice/2000-2100.json",
+          "total": 1000
         }
       ],
       "total": 6000,
-      "noBanco": 52848
+      "noBanco": 105300
     },
     {
       "tag": "intermezzo",
@@ -715,23 +1243,35 @@
           "de": 1100,
           "ate": 1300,
           "arquivo": "intermezzo/1100-1300.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1300,
           "ate": 1500,
           "arquivo": "intermezzo/1300-1500.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1500,
           "ate": 1700,
           "arquivo": "intermezzo/1500-1700.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1700,
+          "ate": 1900,
+          "arquivo": "intermezzo/1700-1900.json",
+          "total": 1000
+        },
+        {
+          "de": 1900,
+          "ate": 2100,
+          "arquivo": "intermezzo/1900-2100.json",
+          "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 14730
+      "total": 5000,
+      "noBanco": 22627
     },
     {
       "tag": "quietMove",
@@ -741,23 +1281,35 @@
           "de": 1100,
           "ate": 1300,
           "arquivo": "quietMove/1100-1300.json",
-          "total": 1651
+          "total": 1000
         },
         {
           "de": 1300,
           "ate": 1500,
           "arquivo": "quietMove/1300-1500.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1500,
           "ate": 1700,
           "arquivo": "quietMove/1500-1700.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1700,
+          "ate": 1900,
+          "arquivo": "quietMove/1700-1900.json",
+          "total": 1000
+        },
+        {
+          "de": 1900,
+          "ate": 2100,
+          "arquivo": "quietMove/1900-2100.json",
+          "total": 1000
         }
       ],
-      "total": 5651,
-      "noBanco": 10362
+      "total": 5000,
+      "noBanco": 26587
     },
     {
       "tag": "clearance",
@@ -767,23 +1319,35 @@
           "de": 1100,
           "ate": 1300,
           "arquivo": "clearance/1100-1300.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1300,
           "ate": 1500,
           "arquivo": "clearance/1300-1500.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1500,
           "ate": 1700,
           "arquivo": "clearance/1500-1700.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1700,
+          "ate": 1900,
+          "arquivo": "clearance/1700-1900.json",
+          "total": 1000
+        },
+        {
+          "de": 1900,
+          "ate": 2100,
+          "arquivo": "clearance/1900-2100.json",
+          "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 9306
+      "total": 5000,
+      "noBanco": 17826
     },
     {
       "tag": "interference",
@@ -799,17 +1363,29 @@
           "de": 1300,
           "ate": 1500,
           "arquivo": "interference/1300-1500.json",
-          "total": 1380
+          "total": 1000
         },
         {
           "de": 1500,
           "ate": 1700,
           "arquivo": "interference/1500-1700.json",
-          "total": 1458
+          "total": 1000
+        },
+        {
+          "de": 1700,
+          "ate": 1900,
+          "arquivo": "interference/1700-1900.json",
+          "total": 1000
+        },
+        {
+          "de": 1900,
+          "ate": 2100,
+          "arquivo": "interference/1900-2100.json",
+          "total": 1000
         }
       ],
-      "total": 3797,
-      "noBanco": 3797
+      "total": 4959,
+      "noBanco": 6027
     },
     {
       "tag": "zugzwang",
@@ -819,23 +1395,35 @@
           "de": 1100,
           "ate": 1300,
           "arquivo": "zugzwang/1100-1300.json",
-          "total": 1083
+          "total": 1000
         },
         {
           "de": 1300,
           "ate": 1500,
           "arquivo": "zugzwang/1300-1500.json",
-          "total": 1125
+          "total": 1000
         },
         {
           "de": 1500,
           "ate": 1700,
           "arquivo": "zugzwang/1500-1700.json",
-          "total": 1196
+          "total": 1000
+        },
+        {
+          "de": 1700,
+          "ate": 1900,
+          "arquivo": "zugzwang/1700-1900.json",
+          "total": 1000
+        },
+        {
+          "de": 1900,
+          "ate": 2100,
+          "arquivo": "zugzwang/1900-2100.json",
+          "total": 1000
         }
       ],
-      "total": 3404,
-      "noBanco": 3404
+      "total": 5000,
+      "noBanco": 7082
     },
     {
       "tag": "defensiveMove",
@@ -845,23 +1433,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "defensiveMove/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "defensiveMove/1200-1400.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "defensiveMove/1400-1600.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "defensiveMove/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "defensiveMove/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "defensiveMove/2000-2100.json",
+          "total": 1000
         }
       ],
       "total": 6000,
-      "noBanco": 20717
+      "noBanco": 53681
     },
     {
       "tag": "advancedPawn",
@@ -871,23 +1477,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "advancedPawn/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "advancedPawn/1200-1400.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "advancedPawn/1400-1600.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "advancedPawn/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "advancedPawn/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "advancedPawn/2000-2100.json",
+          "total": 1000
         }
       ],
       "total": 6000,
-      "noBanco": 41971
+      "noBanco": 74486
     },
     {
       "tag": "promotion",
@@ -897,23 +1521,41 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "promotion/1000-1200.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "promotion/1200-1400.json",
-          "total": 2000
+          "total": 1000
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "promotion/1400-1600.json",
-          "total": 2000
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "promotion/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "promotion/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "promotion/2000-2100.json",
+          "total": 1000
         }
       ],
       "total": 6000,
-      "noBanco": 17223
+      "noBanco": 27657
     },
     {
       "tag": "underPromotion",
@@ -936,10 +1578,28 @@
           "ate": 1600,
           "arquivo": "underPromotion/1400-1600.json",
           "total": 19
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "underPromotion/1600-1800.json",
+          "total": 18
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "underPromotion/1800-2000.json",
+          "total": 58
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "underPromotion/2000-2100.json",
+          "total": 48
         }
       ],
-      "total": 86,
-      "noBanco": 86
+      "total": 210,
+      "noBanco": 210
     },
     {
       "tag": "enPassant",
@@ -962,10 +1622,28 @@
           "ate": 1600,
           "arquivo": "enPassant/1400-1600.json",
           "total": 209
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "enPassant/1600-1800.json",
+          "total": 443
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "enPassant/1800-2000.json",
+          "total": 609
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "enPassant/2000-2100.json",
+          "total": 320
         }
       ],
-      "total": 267,
-      "noBanco": 267
+      "total": 1639,
+      "noBanco": 1639
     }
   ]
 }

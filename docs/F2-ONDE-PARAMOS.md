@@ -208,8 +208,10 @@ vizinho mais próximo, e vale assistir antes do sábado.
    para 35%, onde ele encosta em `destino` (38%) e os dois verdes do vocabulário
    pedagógico deixam de ser distinguíveis. Está escrito no `globals.css`.
 2. **O vazio no degrau 1 da `/trilha` em desktop.** Com os cartões parando na
-   altura do próprio conteúdo, a coluna de tática (31 temas) fica ~785 px CSS
-   mais alta que as outras duas, e sobra branco à direita. É o defeito antigo
+   altura do próprio conteúdo, a coluna de tática fica bem mais alta que as
+   outras duas, e sobra branco à direita. Os ~785 px CSS de sobra foram
+   medidos com 31 temas; hoje são 36, e nenhum deles vem mais tracejado — a
+   coluna cresceu, e a mancha branca com ela. É o defeito antigo
    **resolvido pela metade**: não há mais cartão vazio esticado, mas há mancha
    branca. Sair dela é distribuir a tática em subcolunas ou pôr um "ver mais" —
    nenhum dos dois é de graça, e nenhum dos dois é ilegibilidade.

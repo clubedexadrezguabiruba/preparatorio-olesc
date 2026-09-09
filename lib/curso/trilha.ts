@@ -22,8 +22,10 @@ import { type Semana } from "./calendario.ts";
  *   está escrita em `CLASSE[c].faixa`.
  * - **rating de puzzle do Lichess → chess.com de rápidas**: puzzle é outra
  *   habilidade e outra escala; a aproximação usada aqui é **puzzle ≈ rápidas +
- *   300** nesta faixa, que é o que casa os blocos 1–2 (600–1400 de puzzle) com
- *   um aluno de 600–1100 de rápidas.
+ *   300** nesta faixa, que é o que casa o **piso** dos blocos 1–2 (700 e 800
+ *   de puzzle) com um aluno de 400 a 500 de rápidas. É o piso que conta: todo
+ *   bloco vai até 2100 de puzzle, mas a série sobe em rating crescente e
+ *   ninguém encontra o topo antes de subir até ele.
  *
  * As duas são **aproximações declaradas**, não fatos. Elas servem para ordenar
  * a tela, e é por isso que a página escreve "aproximado" ao lado. Ninguém é
@@ -102,7 +104,7 @@ export type Situacao = "aberto" | "por-abrir" | "em-escrita";
 
 export type ItemDoNivel = {
   readonly id: string;
-  /** O que o aluno lê: "4. Motivos fundamentais", "10. Rei e peão contra rei". */
+  /** O que o aluno lê: "4. Táticas fundamentais", "10. Rei e peão contra rei". */
   readonly nome: string;
   readonly href: string;
   /** Quantas unidades tem (puzzles, etapas), para a linha de progresso. */

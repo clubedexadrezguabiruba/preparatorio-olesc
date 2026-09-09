@@ -111,7 +111,7 @@ export function cartaoDaFase({
        */
       estado:
         erros >= 3
-          ? "A seta mostra o lance. Jogue-o para ver por quê."
+          ? "A seta mostra o lance. Jogue para ver por quê."
           : erros >= 2
             ? "A casa acesa é a peça que resolve."
             : "Olhe de novo — este puzzle já contou como erro.",
@@ -215,7 +215,7 @@ export function aulaDoTema(explicacao: readonly string[]): string | null {
 export function falaDaFase({ fase, erros, nomeDoPadrao }: Situacao): string | null {
   if (fase === "errado") {
     if (erros >= 3) {
-      return "A seta é o lance. Jogue-o e veja o que ele faz — é isso que você vai reconhecer.";
+      return "A seta é o lance. Jogue e veja o que acontece — é esse desenho que você vai reconhecer na partida.";
     }
     if (erros >= 2) {
       return "A casa acesa é a peça que resolve. Veja tudo o que ela alcança daí.";
@@ -226,7 +226,7 @@ export function falaDaFase({ fase, erros, nomeDoPadrao }: Situacao): string | nu
   if (fase === "resolvido") {
     return nomeDoPadrao
       ? `Era ${nomeDoPadrao}. Guarde o desenho das peças, não o nome.`
-      : "Certo. Você viu o motivo antes de mover — é esse hábito que a série treina.";
+      : "Certo. Você viu o desenho antes de mover — é esse hábito que a série treina.";
   }
 
   return null;

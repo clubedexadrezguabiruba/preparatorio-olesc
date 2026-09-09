@@ -23,11 +23,11 @@
  * ## Por que a amostra é por hash, e não pelas primeiras N linhas
  *
  * Alguns temas (`fork`, `mateIn2`) têm centenas de milhares de puzzles na
- * faixa; o teto por arquivo é 2.000. Pegar "os primeiros 2.000" amostraria o
+ * faixa; o teto por arquivo é 1.000. Pegar "os primeiros 1.000" amostraria o
  * começo do arquivo, que vem ordenado por id — e o id do Lichess carrega a
  * época em que o puzzle foi gerado. A amostra ficaria presa aos antigos.
  *
- * Então cada puzzle ganha uma chave `hash(id)` e o balde guarda **as 2.000
+ * Então cada puzzle ganha uma chave `hash(id)` e o balde guarda **as 1.000
  * menores chaves**. É uniforme, é determinístico (rodar de novo dá o mesmo
  * recorte) e não depende da ordem de leitura.
  */
@@ -57,17 +57,27 @@ const RAIZ = fileURLToPath(new URL("..", import.meta.url));
  * `DESVIO`: rating com desvio alto é rating que ainda não assentou. Numa série
  * "em rating crescente", ele é o degrau que não está onde diz estar.
  *
- * `RATING`: 600–1800 é a faixa em que um aluno de 1000–1400 aprende. Abaixo é
- * ruído; acima é frustração.
+ * `RATING`: 700–2100, decisão do Doug. A turma joga de 700 a 1700 de rápidas
+ * no chess.com, e o piso sobe de 600 para 700 porque abaixo disso o puzzle é
+ * ruído. O teto vai a 2100 — o mesmo número aqui e em todos os oito blocos de
+ * `lib/tatica/blocos.ts` — porque a série de cada tema sobe sozinha em rating:
+ * quem chega ao topo dela é quem aguenta o topo. Não há teto didático.
  */
 const POPULARIDADE_MINIMA = 50;
 const JOGADAS_MINIMAS = 100;
 const DESVIO_MAXIMO = 100;
-const RATING_MINIMO = 600;
-const RATING_MAXIMO = 1800;
+const RATING_MINIMO = 700;
+const RATING_MAXIMO = 2100;
 
-/** Teto por arquivo. ~2.000 puzzles dão ~300 KB de JSON: um toque no 4G. */
-const TETO_PADRAO = 2000;
+/**
+ * Teto por arquivo, decisão do Doug: 1.000, e não os 2.000 de antes.
+ *
+ * Com o corte em 2100 cada tema ganha faixas novas em cima, e 2.000 por faixa
+ * dobrariam o peso do repositório sem servir a ninguém: um aluno consome ~39
+ * puzzles num tema inteiro, então 1.000 numa faixa só já são 25× isso.
+ * ~1.000 puzzles dão ~150 KB de JSON: um toque no 4G.
+ */
+const TETO_PADRAO = 1000;
 
 /** Largura de cada faixa de rating dentro do bloco. */
 const LARGURA_DA_FAIXA = 200;
@@ -138,8 +148,12 @@ for (const bloco of BLOCOS) {
 const argv = process.argv.slice(2);
 const iLimite = argv.indexOf("--limite");
 const teto = iLimite >= 0 ? Number(argv[iLimite + 1]) : TETO_PADRAO;
+// A guarda `iLimite >= 0` não é enfeite: sem `--limite`, `iLimite` é -1 e
+// `iLimite + 1` é 0 — o índice do primeiro argumento. Sem ela,
+// `node scripts/filtrar-puzzles.ts outro.csv`, que é a forma documentada no
+// cabeçalho deste arquivo, descartava o caminho em silêncio.
 const csv =
-  argv.find((a, i) => !a.startsWith("--") && i !== iLimite + 1) ??
+  argv.find((a, i) => !a.startsWith("--") && !(iLimite >= 0 && i === iLimite + 1)) ??
   path.join(RAIZ, "dados/lichess_db_puzzle.csv");
 
 /** Aparar o balde custa um sort; só compensa quando ele passa do dobro. */

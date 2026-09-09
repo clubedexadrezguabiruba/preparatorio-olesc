@@ -103,7 +103,7 @@ de aceitar duas respostas.
 ## 4. Fonte confiável para exercícios: já está no repositório
 
 O recorte CC0 do banco público do Lichess já vive em
-`public/puzzles/<tema>/<faixa>.json` — **111 arquivos, 166.623 posições**. Ele
+`public/puzzles/<tema>/<faixa>.json` — **224 arquivos, 175.987 posições**. Ele
 foi baixado para a tática, mas as posições servem para qualquer coisa.
 
 Varri uma **amostra uniforme de 25.215 posições únicas** com

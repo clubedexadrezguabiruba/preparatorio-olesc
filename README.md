@@ -63,7 +63,7 @@ npm run db:finais    # a mesma corrente nas aulas de finais, com o rejulgamento
 
 Cada tema tem três etapas: **aquecimento** (5 puzzles fáceis), **série** (24 em
 rating crescente) e **prova** (10 misturados com temas já vistos). O currículo
-— oito blocos, 31 temas — está em [`lib/tatica/blocos.ts`](lib/tatica/blocos.ts),
+— oito blocos, 36 temas, todos com texto — está em [`lib/tatica/blocos.ts`](lib/tatica/blocos.ts),
 que é a única fonte da taxonomia; o texto que o aluno lê está em
 [`content/temas.json`](content/temas.json), e **ter texto escrito é o que abre o
 tema**.
@@ -131,13 +131,16 @@ mudança.
 
 ## Os puzzles
 
-Os 166.623 puzzles de `public/puzzles/` são um recorte do banco público do
+Os 175.987 puzzles de `public/puzzles/` são um recorte do banco público do
 Lichess (CC0), gerado por `npm run puzzles:filtrar` a partir do CSV bruto em
 `dados/` — que tem 570 MB e **não** é versionado.
 
 O recorte é por tema do currículo (`lib/tatica/blocos.ts`) e por faixa de
-rating. Dentro de cada tema, os puzzles saem **em rating crescente**, e as
-faixas vêm na ordem: a série que o aluno resolve sobe de dificuldade sozinha.
+rating: de **700 a 2100**, em faixas de 200 pontos, com teto de **1.000 puzzles
+por arquivo**. Dentro de cada tema, os puzzles saem **em rating crescente**, e
+as faixas vêm na ordem: a série que o aluno resolve sobe de dificuldade
+sozinha. O teto de 2100 é o mesmo para os oito blocos — o que muda entre eles é
+o piso.
 
 Refazer o recorte:
 

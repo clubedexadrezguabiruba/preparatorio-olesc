@@ -198,9 +198,10 @@ export const MODULO: Record<
     unidade: "puzzles",
     conta: "Puzzles resolvidos, conferidos pelo servidor lance a lance.",
     href: "/tatica",
-    // Os oito blocos começam entre 600 e 1100 de rating de puzzle do Lichess,
-    // que `PUZZLE_ACIMA_DO_RAPIDO` converte para 300 a 800 de rápidas: todos
-    // cabem no primeiro degrau, e é o que `nivelDoBloco` diz. Não é defeito da
+    // Os oito blocos começam entre 700 e 1100 de rating de puzzle do Lichess,
+    // que `PUZZLE_ACIMA_DO_RAPIDO` converte para 400 a 800 de rápidas: todos
+    // cabem no primeiro degrau, e é o que `nivelDoBloco` diz. O degrau é dado
+    // pelo **piso** do bloco; o teto de todos é 2100, e não move ninguém daqui. Não é defeito da
     // conta — é o desenho do curso, e a tela escreve isso em vez de deixar um
     // buraco branco onde o cabeçalho prometeu três colunas.
     vazio: "Os oito blocos são de base: todos começam abaixo de 1000 de rápidas, e por isso moram no degrau 1.",

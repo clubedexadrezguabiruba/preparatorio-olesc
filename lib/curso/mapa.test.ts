@@ -9,8 +9,8 @@ import { estaAberto, NIVEIS, vocEstaAqui } from "./trilha.ts";
 
 /**
  * O mapa é a única tela que soma os três módulos, e por isso a única em que um
- * erro de contagem passa despercebido: 31 temas, 49 aulas e 30 dicas somam 110
- * cartões, e ninguém confere 110 cartões a olho.
+ * erro de contagem passa despercebido: 36 temas, 49 aulas e 30 dicas somam 115
+ * cartões, e ninguém confere 115 cartões a olho.
  */
 
 // A semana 4 é a última do preparatório: com ela, nenhum item fica "por-abrir"

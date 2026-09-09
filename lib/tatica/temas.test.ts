@@ -28,15 +28,27 @@ test("todo tema escrito existe no currículo", () => {
   }
 });
 
-test("os blocos do Sábado 1 estão inteiros", () => {
-  // Blocos 1 e 2 são o que o Sábado 1 usa. Faltar um tema aqui é o sábado com
-  // um cartão que não abre.
+test("todo tema do currículo tem texto", () => {
+  /*
+   * Esta é a afirmação forte, e ela só passou a ser possível quando os 36
+   * temas foram escritos. Antes o teste cobrava só os blocos do Sábado 1,
+   * porque era o que existia; o resto aparecia na tela como cartão tracejado
+   * "Abre no Sábado N".
+   *
+   * Ter texto escrito **é** o que abre o tema (`lib/tatica/conteudo.ts`).
+   * Então apagar a explicação de um tema não é mexer em prosa: é fechar o
+   * tema para o aluno, em silêncio. É esse silêncio que este teste quebra.
+   */
   const escritas = new Set(validarTemas(lerConteudo()).map((t) => t.tag));
-  for (const bloco of BLOCOS.filter((b) => b.sabado === 1)) {
+  for (const bloco of BLOCOS) {
     for (const tema of bloco.temas) {
-      assert.ok(escritas.has(tema.tag), `falta o texto de "${tema.tag}" (bloco ${bloco.id})`);
+      assert.ok(
+        escritas.has(tema.tag),
+        `falta o texto de "${tema.tag}" (bloco ${bloco.id} — ${bloco.nome})`,
+      );
     }
   }
+  assert.equal(escritas.size, TEMAS.length, "o currículo e o conteúdo não têm o mesmo tamanho");
 });
 
 test("conteúdo quebrado estoura com o caminho do problema", () => {

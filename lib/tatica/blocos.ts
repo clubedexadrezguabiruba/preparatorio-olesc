@@ -12,10 +12,21 @@
  * que achou por tag e reprova a tag que veio vazia — é o que transforma o
  * silêncio em vermelho.
  *
- * A faixa de rating é do **bloco**, não da tag: ela diz em que altura aquele
- * assunto é ensinável para um aluno de 1000–1400. `mateIn1` existe até 2000 de
- * rating no banco do Lichess; num bloco de mates curtos, um mate em 1 de 1900
- * é ruído.
+ * A faixa de rating é do **bloco**. O piso é dele — mate em 1 começa mais
+ * embaixo que lance quieto —, mas **o teto é 2100 em todos os oito**, decisão
+ * do Doug.
+ *
+ * Houve aqui o argumento contrário, e ele está registrado para não voltar:
+ * dizia que `mateIn1` existe até 2000 no banco do Lichess e que, num bloco de
+ * mates curtos, um mate em 1 de 1900 seria ruído. A decisão o inverte, e por
+ * um motivo que o argumento não via: **a série de cada tema é servida em
+ * rating crescente**. Ninguém encontra o puzzle de 1900 antes de passar pelos
+ * de 900; quem chega ao topo da série é exatamente quem aguenta o topo. Cortar
+ * em 1300 não protege o aluno fraco — ele nunca chegaria lá —, só tira o teto
+ * do aluno forte, que é quem termina o tema e fica sem nada para fazer.
+ *
+ * O piso do bloco 1 é 700 e não 600 pelo mesmo tipo de razão, do outro lado: a
+ * turma joga de 700 a 1700 de rápidas, e abaixo de 700 o puzzle é ruído.
  */
 
 export type Tema = {
@@ -47,7 +58,7 @@ export const BLOCOS: readonly Bloco[] = [
   {
     id: 1,
     nome: "Mates curtos e peça de graça",
-    faixa: [600, 1300],
+    faixa: [700, 2100],
     sabado: 1,
     temas: [
       { tag: "mateIn1", nome: "Mate em 1", resumo: "Um lance e acabou. O olho treina aqui." },
@@ -58,32 +69,32 @@ export const BLOCOS: readonly Bloco[] = [
   {
     id: 2,
     nome: "Padrões de mate I",
-    faixa: [800, 1400],
+    faixa: [800, 2100],
     sabado: 1,
     temas: [
       { tag: "backRankMate", nome: "Mate do corredor", resumo: "O rei preso atrás dos próprios peões." },
       { tag: "smotheredMate", nome: "Mate sufocado", resumo: "O cavalo mata o rei cercado pelas próprias peças." },
-      { tag: "arabianMate", nome: "Mate árabe", resumo: "Torre e cavalo no canto." },
-      { tag: "anastasiaMate", nome: "Mate de Anastasia", resumo: "Cavalo e torre pela coluna aberta." },
+      { tag: "arabianMate", nome: "Mate árabe", resumo: "Torre e cavalo prendem o rei no canto." },
+      { tag: "anastasiaMate", nome: "Mate de Anastasia", resumo: "O cavalo tapa as fugas e a torre entra pela coluna." },
       { tag: "hookMate", nome: "Mate do gancho", resumo: "Torre, cavalo e peão fechando a saída." },
     ],
   },
   {
     id: 3,
     nome: "Padrões de mate II",
-    faixa: [1000, 1600],
+    faixa: [1000, 2100],
     sabado: 2,
     temas: [
       { tag: "bodenMate", nome: "Mate de Boden", resumo: "Os dois bispos em diagonais que se cruzam." },
-      { tag: "doubleBishopMate", nome: "Mate dos dois bispos", resumo: "Bispos paralelos sobre o rei no canto." },
+      { tag: "doubleBishopMate", nome: "Mate dos dois bispos", resumo: "Dois bispos em diagonais vizinhas, e o rei no canto." },
       { tag: "dovetailMate", nome: "Mate da cauda de andorinha", resumo: "A dama ao lado do rei, com as fugas tapadas." },
       { tag: "mateIn3", nome: "Mate em 3", resumo: "Três lances forçados: onde o cálculo começa a doer." },
     ],
   },
   {
     id: 4,
-    nome: "Motivos fundamentais",
-    faixa: [800, 1400],
+    nome: "Táticas fundamentais",
+    faixa: [800, 2100],
     sabado: 2,
     temas: [
       { tag: "fork", nome: "Garfo", resumo: "Uma peça ataca duas ao mesmo tempo." },
@@ -96,7 +107,7 @@ export const BLOCOS: readonly Bloco[] = [
   {
     id: 5,
     nome: "Remover a defesa",
-    faixa: [1000, 1500],
+    faixa: [1000, 2100],
     sabado: 2,
     temas: [
       { tag: "capturingDefender", nome: "Capturar o defensor", resumo: "Tire quem segura, e o resto cai." },
@@ -109,32 +120,32 @@ export const BLOCOS: readonly Bloco[] = [
   {
     id: 6,
     nome: "Ataque ao rei",
-    faixa: [1000, 1600],
+    faixa: [1000, 2100],
     sabado: 3,
     temas: [
       { tag: "exposedKing", nome: "Rei exposto", resumo: "Rei sem casas e sem defensores: procure o xeque." },
       { tag: "attackingF2F7", nome: "Ataque em f2/f7", resumo: "A casa mais fraca do começo de partida." },
       { tag: "kingsideAttack", nome: "Ataque na ala do rei", resumo: "Onde ele roca, é para lá que as peças vão." },
-      { tag: "sacrifice", nome: "Sacrifício", resumo: "Dar material porque o que vem depois vale mais." },
+      { tag: "sacrifice", nome: "Sacrifício", resumo: "Dar uma peça porque o que vem depois vale mais." },
     ],
   },
   {
     id: 7,
     nome: "Lances finos",
-    faixa: [1100, 1700],
+    faixa: [1100, 2100],
     sabado: 3,
     temas: [
       { tag: "intermezzo", nome: "Lance intermediário", resumo: "Antes de recapturar, um xeque que muda tudo." },
       { tag: "quietMove", nome: "Lance quieto", resumo: "Sem xeque e sem captura — e a ameaça é imparável." },
       { tag: "clearance", nome: "Liberação", resumo: "Tirar a própria peça da frente." },
-      { tag: "interference", nome: "Interferência", resumo: "Pôr algo no meio da linha que defende." },
+      { tag: "interference", nome: "Interferência", resumo: "Pôr uma peça no meio do caminho de quem defende." },
       { tag: "zugzwang", nome: "Zugzwang", resumo: "Jogar é obrigatório, e todo lance piora." },
     ],
   },
   {
     id: 8,
     nome: "Defesa e conversão",
-    faixa: [1000, 1600],
+    faixa: [1000, 2100],
     sabado: 3,
     temas: [
       { tag: "defensiveMove", nome: "Lance defensivo", resumo: "O único lance que segura — treinar não desistir." },

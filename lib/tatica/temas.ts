@@ -32,17 +32,12 @@ export const TemaEscritoSchema = z
     explicacao: z.array(z.string().min(20)).min(1).max(3),
     /** O que olhar no tabuleiro. Vira lista com marcador. */
     procure: z.array(z.string().min(10)).min(2).max(4),
-    /** O erro que o aluno comete neste tema. Opcional. */
-    cuidado: z.string().min(10).optional(),
     /**
-     * O id de um puzzle do próprio banco para servir de diagrama-exemplo.
-     *
-     * Nulo é o normal: sem ele, o exemplo é o primeiro puzzle da faixa mais
-     * fácil do tema — sempre válido, e escolhido pelo mesmo critério para
-     * todos. O campo existe para o professor **fixar** um exemplo melhor
-     * quando encontrar um, sem mexer em código.
+     * O erro que ESTE tema produz, e o que fazer no lugar. Opcional no
+     * esquema, presente nos 36 — a página o cola ao fim do segundo degrau da
+     * dica (`app/tatica/[tema]/Serie.tsx`).
      */
-    exemplo: z.string().min(1).nullable().default(null),
+    cuidado: z.string().min(10).optional(),
   })
   .strict();
 
