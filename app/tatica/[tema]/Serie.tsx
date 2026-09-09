@@ -299,7 +299,7 @@ export function Serie({
 
   if (fim || !puzzle) {
     return (
-      <div className="flex flex-col gap-4 rounded-xl border border-borda-fraca bg-carta px-5 py-6">
+      <div className="flex flex-col gap-4 cartao px-5 py-6">
         <p className="rotulo text-metodo-tinta">{NOME_DO_MODO[etapa]} — fim</p>
         <p className="titulo text-tinta tabular-nums">
           {placar.certos} de {placar.total} de primeira

@@ -65,7 +65,7 @@ export default async function Professor() {
           {alunos?.length ?? 0} {alunos?.length === 1 ? "aluno" : "alunos"}
         </h2>
         {alunos?.length ? (
-          <div className="overflow-x-auto rounded-xl border border-borda-fraca bg-carta">
+          <div className="cartao overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-borda-fraca text-left text-tinta-fraca">
@@ -116,7 +116,7 @@ export default async function Professor() {
             </table>
           </div>
         ) : (
-          <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
+          <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
             Nenhum aluno ainda. Crie a primeira conta acima.
           </p>
         )}

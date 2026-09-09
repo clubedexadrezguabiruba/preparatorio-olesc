@@ -73,7 +73,7 @@ export default async function NotaDaAbertura({
        * da nota, não da tela: o motivo do bispo em c4 (não há teoria) é o
        * oposto do das quatro raras (aparecem pouco).
        * ---------------------------------------------------------------- */}
-      <section className="flex flex-col gap-1.5 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+      <section className="flex flex-col gap-1.5 cartao px-4 py-3">
         <h2 className="rotulo text-tinta-fraca">Por que não há linha para decorar</h2>
         <p className="text-sm text-tinta-media">{texto.porque}</p>
       </section>
@@ -93,7 +93,7 @@ export default async function NotaDaAbertura({
           {texto.faca.map((passo, i) => (
             <li
               key={passo.slice(0, 24)}
-              className="flex gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-3"
+              className="flex gap-3 cartao px-4 py-3"
             >
               <span className="text-sm font-semibold text-metodo-tinta tabular-nums">{i + 1}.</span>
               <span className="text-sm text-tinta">{passo}</span>
@@ -114,7 +114,7 @@ export default async function NotaDaAbertura({
             <li key={n.slug}>
               <Link
                 href={`/aberturas/notas/${n.slug}`}
-                className="foco flex flex-col gap-1 rounded-lg border border-borda-fraca bg-carta px-3 py-2.5 transition-colors hover:bg-carta-toque sm:flex-row sm:items-baseline sm:justify-between sm:gap-3"
+                className="foco flex flex-col gap-1 cartao-alvo px-3 py-2.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-3"
               >
                 <span className="text-sm text-tinta">{n.nome}</span>
                 <span className="text-xs text-tinta-fraca tabular-nums">

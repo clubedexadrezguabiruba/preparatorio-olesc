@@ -155,7 +155,7 @@ export default async function Trilha() {
         );
       })}
 
-      <section className="flex flex-col gap-2 rounded-xl border border-dashed border-borda bg-carta px-4 py-3">
+      <section className="flex flex-col gap-2 cartao-vazio px-4 py-3">
         <h2 className="rotulo text-tinta-fraca">Sobre os números da escada</h2>
         <p className="text-sm text-tinta-media">
           As faixas são de <strong>rating FIDE</strong> — o do torneio, e não o do site
@@ -209,7 +209,7 @@ function Coluna({ modulo }: { modulo: ModuloDoNivel }) {
 
   if (modulo.itens.length === 0) {
     return (
-      <div className="flex min-w-0 flex-col gap-2 rounded-xl border border-dashed border-borda-fraca bg-carta/40 px-3 py-3">
+      <div className="flex min-w-0 flex-col gap-2 cartao-vazio px-3 py-3">
         <span className="text-sm font-semibold text-tinta-fraca">{rotulo.nome}</span>
         <p className="text-xs text-tinta-fraca">{rotulo.vazio}</p>
       </div>
@@ -217,7 +217,7 @@ function Coluna({ modulo }: { modulo: ModuloDoNivel }) {
   }
 
   return (
-    <div className="flex min-w-0 flex-col gap-2 rounded-xl border border-borda-fraca bg-carta px-3 py-3">
+    <div className="flex min-w-0 flex-col gap-2 cartao px-3 py-3">
       <div className="flex flex-col gap-1">
         <Link
           href={rotulo.href}

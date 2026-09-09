@@ -247,7 +247,7 @@ export default async function Painel() {
         {estados.length > 0 ? (
           <Tarefas estados={estados} />
         ) : (
-          <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
+          <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
             A rotina deste degrau ainda não foi escrita. Siga na tática.
           </p>
         )}
@@ -296,7 +296,7 @@ export default async function Painel() {
                   <li key={tema.tag}>
                     <Link
                       href={`/tatica/${tema.tag}`}
-                      className="foco flex items-center gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-3 transition-colors hover:bg-carta-toque"
+                      className="foco flex items-center gap-3 cartao-alvo px-4 py-3"
                     >
                       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                         <p className="truncate text-sm font-medium text-tinta">{tema.nome}</p>
@@ -350,7 +350,7 @@ export default async function Painel() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+        <div className="flex items-center gap-3 cartao px-4 py-3">
           <div className="flex min-w-0 flex-1 flex-col gap-1.5">
             <p className="text-sm font-medium text-tinta">
               {aberturas} aberturas, de brancas e de pretas
@@ -387,7 +387,7 @@ export default async function Painel() {
             </Link>
           </div>
 
-          <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+          <div className="flex flex-col gap-3 cartao px-4 py-3">
             <div className="flex flex-col gap-1.5">
               <div className="flex flex-wrap items-baseline justify-between gap-x-3">
                 <span className="text-sm font-medium text-tinta">Aulas aprendidas</span>
@@ -462,7 +462,7 @@ function agrupar(
 
 function Numero({ rotulo, valor }: { rotulo: string; valor: number | string }) {
   return (
-    <div className="flex flex-1 flex-col gap-0.5 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+    <div className="flex flex-1 flex-col gap-0.5 cartao px-4 py-3">
       <span className="text-2xl font-semibold text-tinta tabular-nums">{valor}</span>
       <span className="text-xs text-tinta-fraca">{rotulo}</span>
     </div>

@@ -88,7 +88,7 @@ export default async function Revisao() {
       </header>
 
       {puzzles.length === 0 ? (
-        <div className="flex flex-col gap-3 rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center">
+        <div className="flex flex-col gap-3 cartao-vazio px-4 py-6 text-center">
           <p className="text-sm font-medium text-tinta">Nada para revisar hoje.</p>
           <p className="text-sm text-tinta-media">
             Os erros de hoje voltam em {INTERVALOS_DA_REVISAO[0]} dias. Acertou na revisão:

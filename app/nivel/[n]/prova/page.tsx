@@ -57,7 +57,7 @@ export default async function ProvaDeNivel({ params }: PageProps<"/nivel/[n]/pro
     const fecho = fechamentoDoNivel(nivel, progresso);
     return (
       <Moldura nivel={nivel}>
-        <div className="flex flex-col gap-3 rounded-xl border border-dashed border-borda bg-carta px-5 py-6">
+        <div className="flex flex-col gap-3 cartao-vazio px-5 py-6">
           <p className="text-sm font-medium text-tinta">
             A prova do nível {nivel} ainda não abriu.
           </p>
@@ -168,7 +168,7 @@ function Resultado({
   const nomes = resultado.erros.map((tag) => temaPorTag(tag)?.nome ?? tag);
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-borda-fraca bg-carta px-5 py-6">
+    <div className="flex flex-col gap-4 cartao px-5 py-6">
       <p className="rotulo text-metodo-tinta">
         Prova do nível {nivel} — {passou ? "passou" : "não passou"}
       </p>

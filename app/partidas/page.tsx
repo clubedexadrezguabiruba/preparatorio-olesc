@@ -29,7 +29,7 @@ export default async function Partidas() {
       </header>
 
       {partidas.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
+        <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
           Nenhum PGN em <code>content/partidas/</code>.
         </p>
       ) : (
@@ -39,7 +39,7 @@ export default async function Partidas() {
             return (
               <li
                 key={p.slug}
-                className="flex flex-col gap-2 rounded-xl border border-borda-fraca bg-carta px-3 py-3"
+                className="flex flex-col gap-2 cartao px-3 py-3"
               >
                 <div className="flex flex-col gap-0.5">
                   <span className="text-sm font-medium text-tinta">{p.nome}</span>

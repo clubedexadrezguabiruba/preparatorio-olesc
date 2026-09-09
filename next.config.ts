@@ -68,6 +68,18 @@ const nextConfig: NextConfig = {
     "/painel": ["./content/**", "./public/repertorio/**"],
   },
   /**
+   * **O selo de desenvolvimento do Next sai da tela.**
+   *
+   * Ele mora fixo no canto inferior esquerdo, e desde 2026-09-09 esse canto é o
+   * primeiro alvo da barra de navegação do celular: o disco de ~40 px cobria
+   * metade da palavra "Painel" e o alvo inteiro. Isso torna o botão inclicável
+   * em desenvolvimento e, pior, envenena **toda captura de tela** — e captura
+   * de tela a 360 px é a régua com que este site é conferido.
+   *
+   * Não custa nada: o selo não existe em produção.
+   */
+  devIndicators: false,
+  /**
    * O motor da etapa 5 são 7,3 MB servidos de `public/engine/`. O padrão do
    * Next para `public/` é `max-age=0, must-revalidate`: correto para conteúdo
    * que muda, caro para um binário que nunca muda — cada aluno que reabre a

@@ -332,6 +332,58 @@
   }
 }
 
+/* --------------------------------------------------------------------------
+   O cartão, em três receitas nomeadas
+
+   Antes de 2026-09-09 havia **onze** receitas distintas de cartão, em quatro
+   raios (`md`, `lg`, `xl`, `2xl`), copiadas à mão em 54 sítios. Ninguém decidiu
+   isso: a segunda tela copiou a primeira, e a décima copiou a nona.
+
+   A escolha de fazer isto por `@utility`, e **não** por um componente `<Cartao>`,
+   é do próprio repositório: um componente injetaria `<div>` onde o HTML quer
+   `<li>`, `<section>` ou `<Link>` — enfraquecendo a semântica para eliminar
+   repetição de classe. A utilitária resolve a **superfície** e deixa o elemento
+   em paz. Componente React fica para onde há estrutura ou comportamento.
+
+   Um raio só, e é o `xl`: era o mais usado (53 dos 54) e é o que a mão de uma
+   criança espera num alvo de toque grande. Os outros três foram acidente.
+   -------------------------------------------------------------------------- */
+
+/* A superfície neutra: o que a maior parte do site chama de cartão. */
+@utility cartao {
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-borda-fraca);
+  background-color: var(--color-carta);
+}
+
+/* O cartão que é um alvo: leva a algum lugar quando tocado. A borda é um degrau
+   mais forte que a do cartão parado, e isso é a diferença inteira — um alvo
+   precisa parecer alvo antes de ser tocado, não só depois. */
+@utility cartao-alvo {
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-borda);
+  background-color: var(--color-carta);
+  transition: background-color 120ms;
+
+  &:hover {
+    background-color: var(--color-carta-toque);
+  }
+}
+
+/* O cartão do que ainda não existe — aula por escrever, tema de nível adiante.
+
+   **Ele é opaco, e no tema claro não era.** A receita antiga era `bg-carta/50`,
+   e ela funcionava por acidente: sobre uma página clara, metade de um cartão
+   quase branco ainda é quase branco. Sobre a página escura a mesma conta dá
+   1,09:1 — a caixa desaparece e sobra o texto solto, medido na folha de contato
+   da virada. O que diz "ainda não" passa a ser o **tracejado**, que é forma e
+   não claridade, e por isso sobrevive a qualquer tema. */
+@utility cartao-vazio {
+  border-radius: var(--radius-xl);
+  border: 1px dashed var(--color-borda);
+  background-color: var(--color-carta);
+}
+
 /* A hachura do que foi **declarado** e não medido.
 
    Nasceu com a barra do dia em 2026-09-09: a meta de 90 min inclui os 30 da

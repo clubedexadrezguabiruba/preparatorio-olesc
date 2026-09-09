@@ -322,7 +322,7 @@ export function Treino({
            * passada que não é medida.
            */
           terminou && modo === "quiz" ? (
-            <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto rounded-xl border border-borda-fraca bg-carta px-4 py-4">
+            <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto cartao px-4 py-4">
           {virouAprendida ? (
             <p className="titulo text-metodo-tinta-alta">Linha aprendida!</p>
           ) : placar?.revelado ? (

@@ -49,7 +49,7 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
   if (!escrito || !bloco) {
     return (
       <Moldura tema={tema.nome} bloco={bloco?.nome ?? ""}>
-        <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
+        <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
           Este tema é do currículo, mas o texto dele ainda não foi escrito. Siga pelos
           temas que já estão abertos.
         </p>
@@ -64,7 +64,7 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
   if (!etapa) {
     return (
       <Moldura tema={tema.nome} bloco={bloco.nome}>
-        <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-6 text-center">
+        <div className="flex flex-col gap-3 cartao px-4 py-6 text-center">
           <p className="titulo text-tinta">Tema concluído</p>
           <p className="text-sm text-tinta-media tabular-nums">
             {progresso.tentativas} puzzles ·{" "}

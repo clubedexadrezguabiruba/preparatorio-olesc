@@ -8,7 +8,7 @@ export function CadastroDeAluno() {
 
   return (
     <div className="flex flex-col gap-4">
-      <form action={agir} className="flex flex-col gap-4 rounded-xl border border-borda bg-carta p-4">
+      <form action={agir} className="flex flex-col gap-4 cartao p-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <Campo rotulo="Nome do aluno" nome="nome" placeholder="João Pedro Silva" obrigatorio />
           <Campo

@@ -144,7 +144,7 @@ export default async function Aberturas() {
                   <li key={`${cor}/${abertura.abertura}`}>
                     <Link
                       href={`/aberturas/${cor}/${abertura.abertura}`}
-                      className="foco flex items-center gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-3 transition-colors hover:bg-carta-toque"
+                      className="foco flex items-center gap-3 cartao-alvo px-4 py-3"
                     >
                       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                         <p className="truncate text-sm font-medium text-tinta">{abertura.nome}</p>
@@ -202,7 +202,7 @@ export default async function Aberturas() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 rounded-xl border border-dashed border-borda-fraca bg-carta px-4 py-3">
+          <div className="flex items-center gap-3 cartao-vazio px-4 py-3">
             <div className="flex min-w-0 flex-1 flex-col gap-1.5">
               <p className="truncate text-sm font-medium text-tinta-fraca">
                 {faltam === 1 ? "Falta 1 linha do Base" : `Faltam ${faltam} linhas do Base`}
@@ -244,7 +244,7 @@ export default async function Aberturas() {
             <li key={nota.slug}>
               <Link
                 href={`/aberturas/notas/${nota.slug}`}
-                className="foco flex flex-col gap-1 rounded-lg border border-borda-fraca bg-carta px-3 py-2.5 transition-colors hover:bg-carta-toque sm:flex-row sm:items-baseline sm:justify-between sm:gap-3"
+                className="foco flex flex-col gap-1 cartao-alvo px-3 py-2.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-3"
               >
                 <span className="flex flex-col gap-0.5">
                   <span className="text-sm text-tinta">{nota.nome}</span>

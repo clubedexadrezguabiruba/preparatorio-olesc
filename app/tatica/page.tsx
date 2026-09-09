@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Barra } from "@/components/Barra";
+import { Cabecalho } from "@/components/Cabecalho";
+import { Moldura } from "@/components/Moldura";
 import { perfilAtual } from "@/lib/auth/perfil";
+import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import { NIVEL, nivelDoAluno, situacaoDoItem } from "@/lib/curso/nivel";
 import { nivelConquistado } from "@/lib/curso/progresso";
 import { BLOCOS } from "@/lib/tatica/blocos";
@@ -24,9 +27,10 @@ export const metadata: Metadata = { title: "Tática — Preparatório OLESC" };
  */
 export default async function Tatica() {
   const perfil = await perfilAtual();
-  const [progresso, conquistado] = await Promise.all([
+  const [progresso, conquistado, cabecalho] = await Promise.all([
     progressoPorTema(),
     nivelConquistado(perfil.id),
+    dadosDoCabecalho(perfil.id),
   ]);
   const nivel = nivelDoAluno(conquistado);
 
@@ -34,11 +38,10 @@ export default async function Tatica() {
   const certos = [...progresso.values()].reduce((s, p) => s + p.certos, 0);
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-5 py-10">
+    <>
+      <Cabecalho atual="tatica" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} />
+      <Moldura largura="painel" barraInferior>
       <header className="flex flex-col gap-2">
-        <Link href="/painel" className="foco rotulo w-fit text-metodo-tinta hover:underline">
-          ← Painel
-        </Link>
         <h1 className="titulo text-tinta">Curso de tática</h1>
         <p className="text-sm text-tinta-media">
           Cada tema tem aquecimento, série e prova — {PUZZLES_POR_TEMA} puzzles ao todo. A
@@ -74,7 +77,7 @@ export default async function Tatica() {
                 return (
                   <li
                     key={tema.tag}
-                    className="flex items-center gap-3 rounded-xl border border-dashed border-borda bg-carta/50 px-4 py-3"
+                    className="flex items-center gap-3 cartao-vazio px-4 py-3"
                   >
                     <div className="flex-1">
                       <p className="text-sm font-medium text-tinta-fraca">{tema.nome}</p>
@@ -90,10 +93,8 @@ export default async function Tatica() {
                 <li key={tema.tag}>
                   <Link
                     href={`/tatica/${tema.tag}`}
-                    className={`foco flex items-center gap-3 rounded-xl border px-4 py-3 transition-colors hover:bg-carta-toque ${
-                      adiante
-                        ? "border-dashed border-borda bg-carta/50"
-                        : "border-borda-fraca bg-carta"
+                    className={`foco flex items-center gap-3 px-4 py-3 transition-colors hover:bg-carta-toque ${
+                      adiante ? "cartao-vazio" : "cartao"
                     }`}
                   >
                     <div className="flex flex-1 flex-col gap-1">
@@ -135,7 +136,8 @@ export default async function Tatica() {
         rating. As faixas FIDE são aproximadas — <strong>nada aqui é trancado por
         elas</strong>, e um tema de nível acima continua clicável.
       </p>
-    </main>
+      </Moldura>
+    </>
   );
 }
 

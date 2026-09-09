@@ -77,7 +77,7 @@ export function Momentos({
 
   if (acabou) {
     return (
-      <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-4">
+      <div className="flex flex-col gap-3 cartao px-4 py-4">
         <p className="titulo text-tinta">
           {limpos} de {feitos.length} de primeira
         </p>

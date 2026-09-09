@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Barra } from "@/components/Barra";
+import { Cabecalho } from "@/components/Cabecalho";
+import { Moldura } from "@/components/Moldura";
 import { Bolinhas } from "@/components/Bolinhas";
 import { perfilAtual } from "@/lib/auth/perfil";
+import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import { aulasPublicadas, indiceDeAulas } from "@/lib/finais/conteudo";
 import { DEGRAU_APRENDIDA } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
@@ -70,7 +73,10 @@ export default async function Finais() {
   const publicadas = aulasPublicadas();
   const abertas = aulasAbertas(publicadas);
   const idsAbertos = new Set(abertas.map((a) => a.id));
-  const progresso = await progressoDeFinais(perfil.id);
+  const [progresso, cabecalho] = await Promise.all([
+    progressoDeFinais(perfil.id),
+    dadosDoCabecalho(perfil.id),
+  ]);
   const feitas = aprendidasDaTrilha(abertas, progresso);
   const proxima = proximaAula(abertas, progresso);
 
@@ -81,11 +87,10 @@ export default async function Finais() {
       : [];
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-5 py-10">
+    <>
+      <Cabecalho atual="finais" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} />
+      <Moldura largura="painel" barraInferior>
       <header className="flex flex-col gap-2">
-        <Link href="/painel" className="foco rotulo w-fit text-metodo-tinta hover:underline">
-          ← Painel
-        </Link>
         <h1 className="titulo text-tinta">Curso de finais</h1>
         {/*
           * **Esta frase era falsa, e voltou a ser verdadeira.**
@@ -105,12 +110,12 @@ export default async function Finais() {
       {/* Sem aula publicada, o aviso substitui a barra — mas a lista das 49
           continua embaixo. É justamente quando o aluno mais quer ver o que vem. */}
       {abertas.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
+        <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
           Nenhuma aula de finais foi publicada ainda. A lista abaixo é o curso inteiro, e
           ela vai enchendo.
         </p>
       ) : (
-        <section className="flex flex-col gap-2 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+        <section className="flex flex-col gap-2 cartao px-4 py-3">
           <div className="flex flex-wrap items-baseline justify-between gap-x-3">
             <span className="rotulo text-tinta-fraca">Aulas aprendidas</span>
             <span className="text-sm text-tinta-media tabular-nums">
@@ -194,7 +199,7 @@ export default async function Finais() {
               <li key={aula.id}>
                 <Link
                   href={`/finais/${aula.id}`}
-                  className="foco flex items-center gap-3 rounded-xl border border-dashed border-borda bg-carta px-4 py-3 transition-colors hover:bg-carta-toque"
+                  className="foco flex items-center gap-3 cartao-vazio px-4 py-3 transition-colors hover:bg-carta-toque"
                 >
                   <div className="flex min-w-0 flex-1 flex-col gap-1">
                     <p className="truncate text-sm font-medium text-tinta">{aula.titulo}</p>
@@ -210,7 +215,8 @@ export default async function Finais() {
           </ul>
         </section>
       ) : null}
-    </main>
+      </Moldura>
+    </>
   );
 }
 
@@ -220,7 +226,7 @@ function Cartao({ aula, progresso }: { aula: AulaDaTrilha; progresso: ProgressoD
   return (
     <Link
       href={`/finais/${aula.id}`}
-      className="foco flex items-center gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-3 transition-colors hover:bg-carta-toque"
+      className="foco flex items-center gap-3 cartao-alvo px-4 py-3"
     >
       <span
         aria-hidden
@@ -262,7 +268,7 @@ function Cartao({ aula, progresso }: { aula: AulaDaTrilha; progresso: ProgressoD
  */
 function Fechado({ aula, publicada }: { aula: AulaDaTrilha; publicada: boolean }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-dashed border-borda bg-carta/50 px-4 py-3">
+    <div className="flex items-center gap-3 cartao-vazio px-4 py-3">
       <span
         aria-hidden
         className="flex size-6 shrink-0 items-center justify-center rounded-full border border-borda text-xs font-bold text-tinta-fraca tabular-nums"

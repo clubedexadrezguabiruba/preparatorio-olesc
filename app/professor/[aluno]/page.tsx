@@ -149,7 +149,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
           </p>
         </div>
 
-        <div className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-4">
+        <div className="flex flex-col gap-3 cartao px-4 py-4">
           <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1 text-sm tabular-nums">
             <span className="text-tinta">
               <span className="font-semibold">{sequencia}</span>{" "}
@@ -224,11 +224,11 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         </div>
 
         {temasComTrabalho.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
+          <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
             Nenhum puzzle resolvido ainda.
           </p>
         ) : (
-          <div className="overflow-x-auto rounded-xl border border-borda-fraca bg-carta">
+          <div className="cartao overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-borda-fraca text-left text-tinta-fraca">
@@ -318,7 +318,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
-          <div className="flex flex-col gap-1 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+          <div className="flex flex-col gap-1 cartao px-4 py-3">
             <span className="text-sm font-medium text-tinta">Puzzles</span>
             <span className="text-sm text-tinta-media tabular-nums">
               <strong className={devidosHoje.length > 0 ? "text-aviso-tinta" : "text-tinta"}>
@@ -335,7 +335,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
             )}
           </div>
 
-          <div className="flex flex-col gap-1 rounded-xl border border-borda-fraca bg-carta px-4 py-3">
+          <div className="flex flex-col gap-1 cartao px-4 py-3">
             <span className="text-sm font-medium text-tinta">Aulas de finais</span>
             <span className="text-sm text-tinta-media tabular-nums">
               <strong

@@ -69,7 +69,7 @@ export function Hoje({
   const primeiraAula = revisaoDeFinais[0];
 
   return (
-    <section className="flex flex-col gap-3 rounded-xl border border-borda-fraca bg-carta px-4 py-4">
+    <section className="flex flex-col gap-3 cartao px-4 py-4">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
         <h2 className="rotulo text-tinta-fraca">Hoje</h2>
         <span className="text-sm text-tinta-media tabular-nums">

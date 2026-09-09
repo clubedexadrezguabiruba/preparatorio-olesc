@@ -56,7 +56,7 @@ export function FaixaDoNivel({
   const daOlesc = META_DA_OLESC.includes(nivel);
 
   return (
-    <section className="flex flex-col gap-4 rounded-2xl border border-metodo-cheio bg-carta px-4 py-4 sm:px-5">
+    <section className="cartao flex flex-col gap-4 border-metodo-cheio px-4 py-4 sm:px-5">
       <div className="flex flex-col gap-1">
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <h2 className="titulo text-tinta">

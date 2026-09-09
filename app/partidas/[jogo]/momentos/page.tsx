@@ -55,7 +55,7 @@ export default async function MomentosDaPartida({
       </header>
 
       {momentos.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-borda bg-carta px-4 py-6 text-center text-sm text-tinta-fraca">
+        <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
           Esta partida não tem momentos na ficha.
         </p>
       ) : (
