@@ -1,26 +1,46 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Cabecalho } from "@/components/Cabecalho";
+import { Moldura } from "@/components/Moldura";
+import { perfilAtual } from "@/lib/auth/perfil";
+import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import { listarPartidas } from "@/lib/partidas/carregar";
 import { quantosMomentos } from "@/lib/partidas/momentos";
 
 export const metadata: Metadata = { title: "Partidas instrutivas — Preparatório OLESC" };
 
 /**
- * **TESTE.** A lista das partidas instrutivas de `content/partidas/`.
+ * A lista das partidas instrutivas de `content/partidas/`.
  *
- * Não está ligada a nenhum menu: chega-se aqui digitando `/partidas`. Enquanto
- * for teste é o certo — um aluno que tropeçasse nisto acharia que é matéria do
- * curso, e ainda não é.
+ * **Ela deixou de ser órfã em 2026-09-09.** Até ali não havia um único link para
+ * cá em todo o site — três partidas e 28 momentos de decisão funcionando, e a
+ * página só alcançável digitando a URL. O argumento de então (*"enquanto for
+ * teste é o certo, um aluno que tropeçasse nisto acharia que é matéria do
+ * curso"*) protegia o aluno de conteúdo inacabado, e cobrava o preço de que
+ * ninguém nunca o visse. Ela entra no "Mais" do cabeçalho, que é onde mora o que
+ * é do curso mas não é da rotina do dia — e o aviso de que nada aqui é gravado
+ * continua na tela, dito ao aluno em vez de escondido dele.
  *
  * **O caminho principal são os momentos de decisão**, e a partida inteira é o
  * link secundário. É a ordem que os números pedem: a Marshall–Tarrasch tem 44
  * lances das pretas e 10 momentos, e cobrar os 44 de memória não é exercício.
  */
 export default async function Partidas() {
-  const partidas = await listarPartidas();
+  const perfil = await perfilAtual();
+  const [partidas, cabecalho] = await Promise.all([
+    listarPartidas(),
+    dadosDoCabecalho(perfil.id),
+  ]);
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-5 px-4 py-6 sm:px-5 sm:py-10">
+    <>
+      <Cabecalho
+        atual="partidas"
+        nivel={cabecalho.nivel}
+        sequencia={cabecalho.sequencia}
+        largura="leitura"
+      />
+      <Moldura largura="leitura" barraInferior className="gap-5">
       <header className="flex flex-col gap-1">
         <h1 className="titulo text-tinta">Partidas instrutivas</h1>
         <p className="text-xs text-tinta-fraca">
@@ -64,6 +84,7 @@ export default async function Partidas() {
           })}
         </ul>
       )}
-    </main>
+      </Moldura>
+    </>
   );
 }

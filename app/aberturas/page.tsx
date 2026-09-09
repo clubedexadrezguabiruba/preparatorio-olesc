@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Barra } from "@/components/Barra";
+import { Cabecalho } from "@/components/Cabecalho";
+import { Moldura } from "@/components/Moldura";
 import { perfilAtual } from "@/lib/auth/perfil";
+import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import { LINHAS_POR_NIVEL, nivelDoAluno } from "@/lib/curso/nivel";
 import { nivelConquistado } from "@/lib/curso/progresso";
 import { lerIndice } from "@/lib/repertorio/banco";
@@ -48,10 +51,11 @@ const RESUMO: Record<Cor, string> = {
  */
 export default async function Aberturas() {
   const perfil = await perfilAtual();
-  const [indice, progresso, conquistado] = await Promise.all([
+  const [indice, progresso, conquistado, cabecalho] = await Promise.all([
     lerIndice(),
     progressoDoRepertorio(),
     nivelConquistado(perfil.id),
+    dadosDoCabecalho(perfil.id),
   ]);
   const nivel = nivelDoAluno(conquistado);
 
@@ -87,11 +91,10 @@ export default async function Aberturas() {
   const alvoDoNivel = nivel === 5 ? null : LINHAS_POR_NIVEL * nivel;
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-5 py-10">
+    <>
+      <Cabecalho atual="aberturas" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} />
+      <Moldura largura="painel" barraInferior>
       <header className="flex flex-col gap-2">
-        <Link href="/painel" className="foco rotulo w-fit text-metodo-tinta hover:underline">
-          ← Painel
-        </Link>
         <h1 className="titulo text-tinta">Repertório do clube</h1>
         <p className="text-sm text-tinta-media">
           {total} linhas, cada uma até o roque e as peças fora. Uma linha é aprendida quando
@@ -264,6 +267,7 @@ export default async function Aberturas() {
         primeira vez, o site joga a linha com você e desenha a seta; depois cobra de
         memória, e o botão &ldquo;Dica&rdquo; acende a peça quando você travar.
       </p>
-    </main>
+      </Moldura>
+    </>
   );
 }

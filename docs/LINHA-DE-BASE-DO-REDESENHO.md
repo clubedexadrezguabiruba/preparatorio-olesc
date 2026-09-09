@@ -76,6 +76,38 @@ navegação, e a comparação honesta do conteúdo do painel é a linha do `<mai
 
 Nenhum estouro horizontal a 360 px.
 
-## Depois — o resto do site
+## Depois — o site inteiro, fim do Bloco 6
 
-_(preenchido no fim do Bloco 6)_
+Mesma receita, mesma conta de ensaio. O `/painel` cresceu 166 px em relação à
+medida do Bloco 4 porque os selos entraram depois — são os 2,25 abaixo.
+
+| Tela | Altura a 360 px | Telas | Links | Topo | Barra de baixo |
+|---|---|---|---|---|---|
+| `/painel` | 1.668 px | 2,25 | 20 | ✓ | ✓ |
+| `/tatica` | 4.649 px | 6,28 | 49 | ✓ | ✓ |
+| `/finais` | 4.707 px | 6,36 | 16 | ✓ | ✓ |
+| `/aberturas` | 2.653 px | 3,59 | 33 | ✓ | ✓ |
+| `/trilha` | 5.569 px | 7,53 | 103 | ✓ | ✓ |
+| `/partidas` | 795 px | 1,07 | 19 | ✓ | ✓ |
+| `/finais/N1-KPK` (o palco) | 816 px | 1,10 | 1 | — | — |
+
+**Nenhuma tela estoura na horizontal a 360 px.**
+
+### O que estes números dizem, e o que eles não dizem
+
+As telas de **lista** continuam longas, e isso é o certo: a `/tatica` mostra 36
+temas, a `/trilha` mostra 49 aulas mais 36 temas em cinco degraus. Elas são
+catálogo por natureza, e catálogo rola. O que mudou é que **o aluno não começa
+mais nelas**: o `/painel` decide por ele, e as listas passaram a ser o lugar
+aonde se vai quando se quer escolher — não o lugar onde se cai.
+
+O **palco da aula** é a única tela sem cabeçalho e sem barra, de propósito: a
+altura dele é medida contra a janela, e cada pixel de casca sairia do tabuleiro.
+Ele passa dos 740 px por 76 — era 836 px antes desta rodada, e a invariante de
+"não rolar" já cedia ali; não é regressão do redesenho.
+
+### Zero páginas órfãs
+
+Contado sobre o código: toda rota de aluno tem pelo menos um link apontando para
+ela. A `/partidas`, que tinha **zero** e só era alcançável digitando a URL, tem
+seis. A `/trilha`, que tinha um enterrado dentro de `/finais`, tem dois.

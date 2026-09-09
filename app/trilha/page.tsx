@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Barra } from "@/components/Barra";
+import { Cabecalho } from "@/components/Cabecalho";
+import { Moldura } from "@/components/Moldura";
 import { perfilAtual } from "@/lib/auth/perfil";
+import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import {
   contarAberto,
   MODULO,
@@ -67,10 +70,11 @@ export const metadata: Metadata = { title: "A trilha — Preparatório OLESC" };
 export default async function Trilha() {
   const perfil = await perfilAtual();
 
-  const [tatica, finais, conquistado] = await Promise.all([
+  const [tatica, finais, conquistado, cabecalho] = await Promise.all([
     progressoPorTema(perfil.id),
     progressoDeFinais(perfil.id),
     nivelConquistado(perfil.id),
+    dadosDoCabecalho(perfil.id),
   ]);
   const aqui = nivelDoAluno(conquistado);
 
@@ -89,11 +93,15 @@ export default async function Trilha() {
   );
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-5 py-10">
+    <>
+      <Cabecalho
+        atual="trilha"
+        nivel={cabecalho.nivel}
+        sequencia={cabecalho.sequencia}
+        largura="larga"
+      />
+      <Moldura largura="larga" barraInferior>
       <header className="flex flex-col gap-2">
-        <Link href="/painel" className="foco rotulo w-fit text-metodo-tinta hover:underline">
-          ← Painel
-        </Link>
         <h1 className="titulo text-tinta">A trilha do curso</h1>
         <p className="text-sm text-tinta-media">
           Tudo o que o preparatório tem, em cinco degraus: tática e finais lado a lado.
@@ -185,7 +193,8 @@ export default async function Trilha() {
           texto ainda por escrever.
         </p>
       </section>
-    </main>
+      </Moldura>
+    </>
   );
 }
 
