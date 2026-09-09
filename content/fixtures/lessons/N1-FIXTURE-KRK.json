@@ -36,32 +36,27 @@
         "name": "A caixa",
         "summary": "A torre desenha uma parede que o rei adversário não atravessa. Encolha a caixa com a torre, ande com o rei, encolha a caixa com a torre, ande com o rei — até o mate."
       },
-      "why": "Rei e torre contra rei sozinho é o final mais difícil dos que se aprende no começo, e ao mesmo tempo o que mais aparece quando as peças acabam. Sem a técnica dá empate — por afogamento ou pela regra dos 50 lances.\n\nDuas coisas decidem tudo aqui. A primeira: **a torre sozinha não dá mate**. Você precisa das duas peças trabalhando juntas, e o rei branco não é figurante — é ele quem tira as casas de fuga e quem defende a torre. A segunda: **o rei preto não pode ser matado no meio do tabuleiro**. Empurrá-lo até uma borda, qualquer uma, não é uma opção elegante: é obrigatório.\n\nO método existe para isso, e é lento de propósito. Há maneiras mais rápidas de dar este mate; esta é a que se aprende em uma tarde e não se erra mais. Você troca velocidade por um processo seguro — e não há pressa nenhuma: siga o processo e a partida se ganha sozinha.\n\nA aula começa pelo fim: primeiro o quadro do mate pronto, depois o caminho inteiro até ele.",
-      "rules": [
+      "roteiro": [
         {
-          "title": "Use o seu rei",
-          "text": "A torre não dá mate sozinha. O rei branco entra na conta desde o começo — ele tira casas do rei adversário e defende a torre, e sem ele não existe mate."
+          "fala": "A torre sozinha não dá mate. Os dois, torre e rei, trabalham juntos.",
+          "highlights": [
+            "h1",
+            "g1"
+          ]
         },
         {
-          "title": "Prenda o rei numa caixa",
-          "text": "A torre se planta numa coluna ou fileira que o rei preto não pode cruzar. O que sobra do outro lado da parede é a caixa dele. Aqui 1.Tg3 fecha a coluna g e a 3ª fileira de uma vez.",
-          "box": true
+          "lance": "g1g3",
+          "fala": "A torre desenha uma parede. O rei preto não passa dela."
         },
         {
-          "title": "Encolha, e ande com o rei",
-          "text": "Encolha a caixa com a torre, ande com o rei, encolha, ande. Sempre que o rei preto cede uma linha, a torre toma — e o rei branco vem junto, porque é ele quem vai defender a casa onde a torre acabou de pousar.",
-          "box": true
+          "lance": "e4f4",
+          "fala": "O rei preto anda de lado, e a parede continua onde estava."
         },
         {
-          "title": "O lance de espera",
-          "text": "Quando os dois reis se encaram, quem tem a vez perde terreno. Aí a torre joga um lance que não muda nada e devolve a vez: 13.Tb2. A casa exata não importa — b5, b3 ou b1 fazem o mesmo. O que importa é passar a vez."
-        },
-        {
-          "title": "Mate na borda, torre longe",
-          "text": "O mate sai com o rei preto na borda, o rei branco de frente para ele e a torre entrando de longe. Longe é o ponto: torre perto do rei inimigo é torre que pode ser capturada."
+          "lance": "h1g2",
+          "fala": "Agora o seu rei sobe. É ele quem tira as casas de fuga."
         }
-      ],
-      "mastery": "Dominado = dar o mate numa posição que você nunca viu, sem dica, sem nenhum lance que jogue a vitória fora e dentro do limite de lances — e depois vencer o computador na prática."
+      ]
     },
     "guided": {
       "positionId": "pos-fx-krk-caixa",

@@ -69,6 +69,14 @@ next-env.d.ts
 # fora da sessão que o escreveu.
 .impeccable/
 
+# Os PGN dos estudos do Lichess que retranscrevem o Silman (`npm run
+# finais:extrair`). Fora do Git pelo mesmo motivo de `rascunhos-anotados/`: eles
+# carregam o prefácio e os comentários do autor transcritos por OCR — a
+# expressão dele —, e este repositório é público. É derivado: volta inteiro da
+# API pública do Lichess. O que fica versionado é content/finais/capitulos.json,
+# com número, nome, FEN e lances — fato com proveniência.
+/content/finais/estudos/
+
 # Os dossiês da cauda (`npm run repertorio:cauda -- --dossies`): o que a fonte
 # joga a partir de cada ponta, COM a prosa do autor, mais o que o explorer e o
 # motor dizem. Fora do Git pelo mesmo motivo de `rascunhos-anotados/` — a prosa

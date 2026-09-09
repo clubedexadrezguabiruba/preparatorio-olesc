@@ -5,6 +5,7 @@ import type { DrawShape } from "@lichess-org/chessground/draw";
 import Link from "next/link";
 import type { PacoteDeAula } from "@/lib/finais/conteudo";
 import type { TentativaDeAula } from "@/lib/finais/gravar";
+import { AVANCO, PARTIDA } from "@/lib/lesson/falas";
 import { masteryReport } from "@/lib/lesson/mastery";
 import {
   STAGE_LABEL,
@@ -282,11 +283,7 @@ export function LessonPlayer({
             orientation={lesson.orientation}
             trilha={trilha}
             rodape={
-              <StageFooter
-                next={nextStage("objective")}
-                onGo={goToStage}
-                label="Jogar com ajuda"
-              />
+              <StageFooter next={nextStage("objective")} onGo={goToStage} label={AVANCO.paraTreino} />
             }
           />
         )}
@@ -307,7 +304,7 @@ export function LessonPlayer({
               const next = nextStage("guided");
               if (next) goToStage(next);
             }}
-            finishLabel="Ir para a etapa sem ajuda"
+            finishLabel={AVANCO.paraValendo}
           />
         )}
 
@@ -319,7 +316,7 @@ export function LessonPlayer({
             orientation={lesson.orientation}
             goal={lesson.stages.practice.goal}
             engine={lesson.stages.practice.engine}
-            intro="Agora é partida de verdade, na mesma posição: o computador defende com tudo o que sabe, e nenhum lance é corrigido no caminho. Quem decide é o resultado."
+            intro={PARTIDA.abertura}
             seal={
               <MasterySeal
                 report={masteryReport({
@@ -384,8 +381,11 @@ function StageFooter({
   label: string;
 }) {
   if (!next) return null;
+  // `ml-auto`: o avanço encosta na borda direita do rodapé, e os controles da
+  // própria etapa ficam à esquerda dele. Sem isto o botão de avançar sentaria
+  // colado nos de "Pausar" e "Ver de novo", que fazem outra coisa.
   return (
-    <div className="flex justify-end">
+    <div className="ml-auto">
       <button
         type="button"
         onClick={() => onGo(next)}

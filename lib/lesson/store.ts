@@ -2,6 +2,8 @@
 
 import { create } from "zustand";
 
+import { TRILHA } from "./falas.ts";
+
 /**
  * O estado da aula (plano da F1, §4). Uma store só, porque só existe uma aula
  * aberta por vez: a rota `app/aula/[id]` a inicializa em `open()` e todo o
@@ -24,11 +26,13 @@ export type TreeKey = "guided";
 
 export const STAGE_ORDER: StageKey[] = ["objective", "guided", "practice"];
 
-export const STAGE_LABEL: Record<StageKey, string> = {
-  objective: "Objetivo",
-  guided: "Com ajuda",
-  practice: "Sem ajuda",
-};
+/**
+ * Os três rótulos, e eles moram em `lib/lesson/falas.ts` como toda fala de
+ * tela. Eram "Objetivo / Com ajuda / Sem ajuda": três nomes que descreviam o
+ * desenho do sistema em vez do que o aluno faz em cada um. Ver a §4 de
+ * `docs/VOZ-DO-CURSO.md`.
+ */
+export const STAGE_LABEL: Record<StageKey, string> = TRILHA;
 
 export type MessageTone = "good" | "bad" | "warn" | "neutral";
 
@@ -112,7 +116,6 @@ export type TreeState = {
   /** Quantas vezes a etapa 4 recomeçou do zero. */
   attempt: number;
   status: TreeStatus;
-  hintOpen: boolean;
   /** Preenchido só quando `status` é `done`. */
   end: TreeEnd | null;
   /** Preenchido só quando `status` é `failed`. */
@@ -128,7 +131,6 @@ function freshTree(rootId: string, attempt = 1): TreeState {
     startedAt: Date.now(),
     attempt,
     status: "playing",
-    hintOpen: false,
     end: null,
     failure: null,
   };
@@ -278,7 +280,6 @@ type LessonStore = {
    * lance que o autor acabou de jogar seria desfeito.
    */
   treeSeek: (key: TreeKey, nodeId: string, studentMoves: number) => void;
-  toggleHint: (key: TreeKey) => void;
 
   /** Um lance aceito na partida — do aluno ou do motor, os dois entram aqui. */
   practiceMove: (key: PracticeKey, uci: string) => void;
@@ -354,7 +355,6 @@ export const useLessonStore = create<LessonStore>((set) => ({
             nodeId: nextNodeId ?? tree.nodeId,
             studentMoves: tree.studentMoves + 1,
             status: finished ? "done" : tree.status,
-            hintOpen: false,
             // Só o lance terminal fecha a etapa; num avanço comum um `end`
             // solto seria ruído, então nem é lido.
             end: finished ? (end ?? null) : tree.end,
@@ -399,13 +399,6 @@ export const useLessonStore = create<LessonStore>((set) => ({
         message: null,
         trees: { ...state.trees, [key]: freshTree(tree.rootId, tree.attempt + 1) },
       };
-    }),
-
-  toggleHint: (key) =>
-    set((state) => {
-      const tree = state.trees[key];
-      if (!tree) return state;
-      return { trees: { ...state.trees, [key]: { ...tree, hintOpen: !tree.hintOpen } } };
     }),
 
   practiceMove: (key, uci) =>

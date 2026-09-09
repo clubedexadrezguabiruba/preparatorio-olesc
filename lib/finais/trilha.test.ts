@@ -11,18 +11,28 @@ import {
   aulasAbertas,
   AULA_ZERADA,
   CLASSES,
+  doNivel,
   estadoDaAula,
+  NIVEIS,
+  NIVEL,
+  nivelDaOrdem,
   proximaAula,
   TRILHA,
   type AulaDaTrilha,
   type Formato,
+  type Nivel,
   type ProgressoDaAula,
 } from "./trilha.ts";
 
 /**
  * A trilha é dado, e o que se cobra dela é o que uma lista escrita à mão erra:
- * id repetido, ordem furada, classe fora de ordem, e — a que dói de verdade —
+ * id repetido, ordem furada, nível fora de ordem, e — a que dói de verdade —
  * uma aula publicada em `content/` que a trilha não conhece, ou o contrário.
+ *
+ * Desde 2026-09-09 a lista carrega **dois eixos**, `nivel` e `classe`, e os dois
+ * são testados. O `nivel` é o vigente; a `classe` continua sendo cobrada porque
+ * o gate de rotação de livros ainda a lê, e ela só some na Etapa 2 do plano dos
+ * níveis. Os dois blocos de teste morrem juntos, quando ela morrer.
  *
  * Os três critérios de domínio são testados como função pura, sem banco: é para
  * isso que `aprendeu` recebe o formato em vez de perguntá-lo ao Supabase.
@@ -74,11 +84,77 @@ test("as classes vêm em blocos, de E para B, com o tamanho do documento", () =>
   }
 });
 
-test("os formatos batem com a conta de horas da §6: 8 completas, 39 curtas, 2 leituras", () => {
+test("o nível de cada aula é o corte por ordem da §1, e toda aula tem um", () => {
+  // É este o teste que impede a lista de derivar do documento em silêncio: o
+  // `nivel` é escrito linha a linha (é dado, como o resto), e aqui ele é
+  // conferido contra a regra, não contra si mesmo.
+  for (const aula of TRILHA) {
+    assert.ok(NIVEIS.includes(aula.nivel), `${aula.id} tem nível ${aula.nivel}`);
+    assert.equal(
+      aula.nivel,
+      nivelDaOrdem(aula.ordem),
+      `${aula.id} (ordem ${aula.ordem}) está no nível ${aula.nivel}`,
+    );
+  }
+});
+
+test("os cinco níveis vêm em blocos e com o tamanho da §1: 6, 6, 6, 16, 15", () => {
+  const esperado: Record<Nivel, number> = { 1: 6, 2: 6, 3: 6, 4: 16, 5: 15 };
+  for (const nivel of NIVEIS) {
+    assert.equal(doNivel(TRILHA, nivel).length, esperado[nivel], `nível ${nivel}`);
+  }
+  // Soma 49: sem isto, dois erros que se cancelam passariam.
+  assert.equal(
+    NIVEIS.reduce((t, n) => t + esperado[n], 0),
+    TRILHA.length,
+  );
+  // Em blocos: o nível nunca "volta" na lista, porque a ordem é pré-requisito.
+  for (let i = 1; i < TRILHA.length; i += 1) {
+    assert.ok(TRILHA[i].nivel >= TRILHA[i - 1].nivel, `a aula ${TRILHA[i].id} sai da ordem`);
+  }
+});
+
+test("os níveis 1 a 3 são as 18 aulas da meta da OLESC", () => {
+  // O número que a §1 promete. Ele decide o que precisa estar escrito antes do
+  // torneio, e por isso não pode mudar por acidente numa edição de lista.
+  const ate3 = TRILHA.filter((a) => a.nivel <= 3);
+  assert.equal(ate3.length, 18);
+  assert.deepEqual(
+    ate3.map((a) => a.ordem),
+    Array.from({ length: 18 }, (_, i) => i + 1),
+  );
+});
+
+test("todo nível tem cabeçalho em NIVEL, e nenhum sobra", () => {
+  assert.deepEqual(Object.keys(NIVEL).map(Number), [...NIVEIS]);
+});
+
+test("os formatos batem com a conta de horas da §6: 9 completas, 39 curtas, 1 leitura", () => {
+  // Mudou em 2026-09-09: a `N0-MATING-MATERIAL` saiu de leitura para completa,
+  // porque o que ela ensina é um perigo — e perigo dito no roteiro é aviso lido
+  // antes da hora (§14.4 do documento). Quem o nomeia na hora é a etapa 2.
   const conta = (f: Formato) => TRILHA.filter((a) => a.formato === f).length;
-  assert.equal(conta("completa"), 8);
+  assert.equal(conta("completa"), 9);
   assert.equal(conta("curta"), 39);
-  assert.equal(conta("leitura"), 2);
+  assert.equal(conta("leitura"), 1);
+});
+
+test("a ordem do nível 1 é a do documento, aula por aula", () => {
+  // Cravada por id porque a ordem aqui é decisão editorial, não consequência de
+  // regra nenhuma: ela veio do Doug em 2026-09-09 e o documento a explica na §5.
+  // Sem este teste, uma edição de lista a desfaz em silêncio — que é o que os
+  // outros testes de nível existem para impedir.
+  assert.deepEqual(
+    doNivel(TRILHA, 1).map((a) => a.id),
+    [
+      "N0-MATING-MATERIAL",
+      "N0-LADDER",
+      "N0-Q-MATE",
+      "N0-R-MATE",
+      "N0-STALEMATE",
+      "N1-KING-ACTIVITY",
+    ],
+  );
 });
 
 test("o sábado de uma aula nunca é anterior ao de uma aula anterior da mesma classe", () => {
@@ -110,7 +186,7 @@ test("toda aula publicada em content/ está na trilha, e a trilha não inventa a
 });
 
 test("aulaDaTrilha acha pelo id e nega o que não é do curso", () => {
-  assert.equal(aulaDaTrilha("N0-R-MATE")?.ordem, 2);
+  assert.equal(aulaDaTrilha("N0-R-MATE")?.ordem, 4);
   assert.equal(aulaDaTrilha("N9-INVENTADA"), undefined);
 });
 

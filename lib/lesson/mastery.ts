@@ -1,3 +1,4 @@
+import { SELO } from "./falas.ts";
 import type { TreeGoal } from "./schema";
 
 /**
@@ -52,16 +53,6 @@ export type MasteryInput = {
   practiceGoal?: TreeGoal;
 };
 
-const FALTA_PRACTICE: Record<TreeGoal, string> = {
-  win: "Vencer o computador aqui, sem ajuda. Saber a técnica e executá-la contra quem resiste são duas coisas.",
-  draw: "Segurar o empate contra o computador aqui, sem ajuda. Saber a técnica e executá-la contra quem resiste são duas coisas.",
-};
-
-const SAIU: Record<TreeGoal, string> = {
-  win: "Passada do dia feita. Você venceu o computador sem ajuda — volte noutro dia para a aula subir de degrau.",
-  draw: "Passada do dia feita. Você segurou o empate sem ajuda — volte noutro dia para a aula subir de degrau.",
-};
-
 export function masteryReport({
   hasPractice,
   practiceWon,
@@ -74,18 +65,18 @@ export function masteryReport({
   if (!hasPractice) {
     return {
       mastered: false,
-      headline: "Esta aula não afere passada por etapa jogada — ela é de leitura.",
+      headline: SELO.semPartida,
       missing: [],
     };
   }
 
   if (practiceWon) {
-    return { mastered: true, headline: SAIU[practiceGoal], missing: [] };
+    return { mastered: true, headline: SELO.feito(practiceGoal), missing: [] };
   }
 
   return {
     mastered: false,
-    headline: "A passada de hoje ainda não saiu.",
-    missing: [{ stage: "practice", text: FALTA_PRACTICE[practiceGoal] }],
+    headline: SELO.aindaNao,
+    missing: [{ stage: "practice", text: SELO.falta(practiceGoal) }],
   };
 }
