@@ -113,12 +113,25 @@ Duas coisas nessa fórmula não são enfeite:
   seria reprovada por ter as duas do mesmo autor, e a regra viraria um obstáculo à
   publicação incremental em vez de uma regra editorial.
 
-O que **não** muda: o teto de **2 posições por obra protegida por aula** (§12.7.1
-do currículo), a proibição de diagramas consecutivos da mesma obra, e o texto 100%
-escrito do zero em PT-BR. E cada aula continua declarando o livro que a fundamenta
-no campo `objective.source`.
+O que **não** muda: o texto 100% escrito do zero em PT-BR, e cada aula declarando
+o livro que a fundamenta no campo `objective.source`.
 
-A distribuição planejada, conferida contra a regra:
+O que **mudou depois**, em 2026-09-08, e não é detalhe: o teto de **2 posições por
+obra protegida por aula** (§12.7.1 do currículo) e a proibição de diagramas
+consecutivos **não seguram mais este módulo**. O teto é por aula, e no formato de
+três etapas uma aula é uma posição só — ele ficou sem sujeito (§1.2 do
+`SOURCE-CORPUS`). E o livro-base do módulo, o de la Villa, está em **regime
+integral** desde 2026-09-08 por decisão do Doug — *"sem teto nenhum, quero usar o
+livro inteiro"* —, o que desliga para ele tanto o teto de citação quanto a
+rotação desta §4. O que segura o módulo é a declaração do regime, com prazo
+cobrado e inventário em `content/divida-de-licenca.md`.
+
+A distribuição planejada, conferida contra a regra — **e vencida em 2026-09-08**.
+A tabela abaixo foi desenhada quando cinco livros iam se revezar e o Silman ia dar
+a espinha. Desde então o livro-base do módulo passou a ser o de la Villa, em
+regime integral: a rotação não se aplica a ele, e a tabela vira desejo, não
+régua. Fica no arquivo porque é o único desenho de distribuição que já existiu, e
+é dele que a redistribuição vai partir; **não a leia como plano vigente**.
 
 | Classe | Aulas | Teto | Silman | de la Villa | Müller Kids | Pandolfini | Seirawan |
 |---|---|---|---|---|---|---|---|
@@ -128,11 +141,13 @@ A distribuição planejada, conferida contra a regra:
 | B | 15 | 5 | 5 | 5 | 1 | 1 | 3 |
 
 As fatias intermediárias (FN1 com 4 aulas de D; FN2 com 4 de C; FN3 com 2 de B)
-cabem no piso de 2. A **classe E é a exceção declarada**: desde 2026-09-08 o
-Silman está em **regime integral** (§1.1 do `SOURCE-CORPUS`), e nela o teto de
-rotação não se aplica — a obra passou a ser livro-base de 4 das 6. As outras três
-classes continuam sob a régua normal, e serão redesenhadas contra o índice do
-Silman depois que o Doug aprovar os dois pilotos.
+cabem no piso de 2. Duas obras estão hoje em **regime integral** (§1.1 do
+`SOURCE-CORPUS`) e por isso fora da régua da rotação: o **de la Villa**, que é o
+livro-base do módulo, e o **Silman**, que segue declarado com inventário zerado
+porque a **Classe E continua em aberto** — o de la Villa não ensina mate
+elementar. As obras que não estão em regime integral continuam sob a régua
+normal. O redesenho das classes D, C e B sai do índice do de la Villa, não mais
+do Silman, e ainda não foi feito.
 
 ---
 

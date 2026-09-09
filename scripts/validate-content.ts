@@ -1073,6 +1073,19 @@ async function checkLesson(loaded: LoadedLesson) {
   // para a mesma aula. O que a lei protege é a *coleção* do autor, não a
   // posição isolada — e é copiando sequência de uma obra só que se copia a
   // coleção. Domínio público e CC0 não têm teto.
+  //
+  // **ESTA REGRA ESTÁ DORMENTE DESDE 2026-09-08, e é de propósito.** O teto é
+  // por aula, e no formato de três etapas uma aula é uma posição só — o
+  // `lessonSchema` recusa quem não apontar o mesmo id nas três, e o `Set`
+  // abaixo desduplica. `ids.size` é sempre 1, e 1 nunca passa de 2: o `fail`
+  // não tem como disparar, e é por isso que não há mutação plantada para o
+  // código `TETO_DE_CITACAO` — não há o que plantar. O bloco fica porque volta
+  // a ter sujeito no dia em que algum formato usar mais de uma posição na
+  // mesma aula; enquanto isso, **ele não é o que protege o módulo de finais**.
+  // O que protege é o regime integral (§1.1 e §1.2 do docs/SOURCE-CORPUS.md):
+  // declaração escrita, prazo cobrado em REGIME_INTEGRAL_VENCIDO e inventário
+  // em content/divida-de-licenca.md. O teto por obra no módulo, que devolveria
+  // a mordida, foi proposto ao Doug em 2026-09-08 e recusado: "sem teto nenhum".
   const bySource = new Map<string, { source: Source; ids: Set<string> }>();
   for (const id of new Set(refs.map((r) => r.id))) {
     const position = positions.get(id);

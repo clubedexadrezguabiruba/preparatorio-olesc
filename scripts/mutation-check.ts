@@ -461,45 +461,55 @@ const MUTACOES: Mutation[] = [
     // a fórmula prova a mesma coisa sem depender do N do dia.
     contem: "max(2, floor(",
     aplicar: async (dir) => {
-      // O estrago realista é escolher o livro que **já** fornece a posição de
-      // cada aula: assim a `FONTE_DIDATICA_DIVERGE` fica satisfeita e só a
-      // regra da rotação reclama — que é exatamente o que a mutação quer
-      // provar. Colhido da aula, e não escrito: era "pandolfini-endgame-course"
-      // e passou a divergir da posição no dia em que o piloto virou de la
-      // Villa, o que fazia o gate reprovar pelo código errado.
-      //
-      // A obra tem de ser protegida, didática e **fora do regime integral** — e
-      // a do piloto é as três. O Silman não serviria: para ele a rotação está
-      // desligada de propósito.
-      const alvo = lerAula(dir).json.stages.objective.source as string;
-      // As aulas são lidas do disco, e não nomeadas: a `N0-Q-MATE`, que a versão
-      // anterior citava por nome, saiu do corpus em 2026-09-08 e derrubou o run
-      // inteiro com ENOENT.
-      const publicadas = readdirSync(path.join(dir, "lessons"))
-        .filter((f) => f.endsWith(".json"))
-        .map((f) => f.replace(/\.json$/, ""))
-        .sort();
-      for (const id of publicadas) {
-        const { file, json } = lerAula(dir, id);
-        json.stages.objective.source = alvo;
+      // A obra tem de ser protegida, didática e **fora do regime integral**:
+      // para quem está em regime integral a rotação é desligada de propósito, e
+      // o `fail` nunca sai. Ela é colhida do registro, e não escrita — o livro
+      // do piloto já mudou duas vezes, e em 2026-09-08 ele **entrou** em regime
+      // integral (o de la Villa passou a ser o livro do módulo inteiro, por
+      // decisão do Doug). Foi exatamente isso que deixou esta mutação sem alvo:
+      // ela ficou verde sozinha, e o run a pegou.
+      const registro = JSON.parse(readFileSync(path.join(dir, "sources.json"), "utf8")) as {
+        sources: Array<{ slug: string; file: string | null; protected?: boolean; didactic?: boolean; integral?: unknown }>;
+      };
+      const alvo = registro.sources.find((o) => o.protected && o.didactic && !o.integral);
+      if (!alvo) throw new Error("o registro não tem obra protegida, didática e fora do regime integral");
+
+      // A posição da aula sai de uma obra em regime integral, e ela consta do
+      // inventário de `content/divida-de-licenca.md`. Trocar a proveniência
+      // dela faria a mutação disparar `DIVIDA_DESATUALIZADA` junto, e uma
+      // mutação que acende dois códigos deixa de provar qual dos dois pegou o
+      // estrago. Em vez disso: uma **cópia** da posição, com id novo e a
+      // proveniência do alvo. Mesma FEN e mesmo resultado, então nenhuma outra
+      // regra reclama; e como o alvo não está em regime integral, o inventário
+      // não muda um byte.
+      const original = lerAula(dir);
+      const idPosicao = original.json.stages.objective.positionId as string;
+      const posicao = lerPosicao(dir, idPosicao).json;
+      const idCopia = `${idPosicao}-rotacao`;
+      posicao.id = idCopia;
+      posicao.provenance.editionFile = alvo.file ?? alvo.slug;
+      gravar(path.join(dir, "positions", pastaDaPosicao(idCopia), `${idCopia}.json`), posicao);
+
+      // Três aulas publicadas da mesma classe, todas com o alvo como livro-base.
+      // Três é o menor N que estoura: com duas o teto é max(2, 0) = 2, e 2 não é
+      // maior que 2. A aula original fica **intacta** — ela é classe D, o
+      // livro dela é o do regime integral, e mexer nela é o que sujaria o
+      // inventário.
+      const aulas: string[] = [];
+      for (let k = 0; k < 3; k += 1) {
+        const { json } = lerAula(dir);
+        json.id = `${json.id}-ROTACAO${k + 1}`;
         json.status = "published";
         json.class = "E";
-        gravar(file, json);
-      }
-      // Cópias até passar do teto. Com N aulas publicadas ele é
-      // max(2, floor(N/3)), então **três** é o menor N que o estoura: 2 aulas
-      // dão max(2, 0) = 2, que não é maior que 2. Eram duas quando o corpus
-      // tinha três aulas no disco; com uma só, o laço acima produz uma, e as
-      // cópias precisam ser duas.
-      const copias = Math.max(0, 3 - publicadas.length);
-      for (let k = 0; k < copias; k += 1) {
-        const { json } = lerAula(dir, publicadas[0]);
-        const id = `${publicadas[0]}-COPIA${k + 1}`;
-        json.id = id;
-        gravar(path.join(dir, "lessons", `${id}.json`), json);
+        json.stages.objective.source = alvo.slug;
+        for (const etapa of ["objective", "guided", "practice"] as const) {
+          if (json.stages[etapa]) json.stages[etapa].positionId = idCopia;
+        }
+        gravar(path.join(dir, "lessons", `${json.id}.json`), json);
+        aulas.push(json.id as string);
       }
       return (
-        `${publicadas.length + copias} aulas publicadas da classe E declaram "${alvo}" como ` +
+        `${aulas.length} aulas publicadas da classe E declaram "${alvo.slug}" como ` +
         "livro-base — acima do teto de max(2, floor(N/3))"
       );
     },

@@ -20,6 +20,10 @@ se pode tirar da mesma obra, porque o que a lei protege é a *coleção* do auto
 não o fato isolado. Obra protegida tem **teto de 2 posições por aula**, cobrado
 pelo gate; domínio público e CC0 não têm teto.
 
+Duas coisas tiram esse teto do caminho, e as duas estão logo abaixo: o **regime
+integral** (§1.1) o desliga por obra, por decisão escrita; e o **formato de três
+etapas** (§1.2) o deixou **sem sujeito** no módulo de finais.
+
 O que nenhuma obra autoriza, em qualquer volume: copiar texto, comentário,
 tradução, seleção completa de exercícios ou estrutura editorial. Todo texto do
 curso é escrito do zero, em PT-BR.
@@ -28,11 +32,24 @@ curso é escrito do zero, em PT-BR.
 
 Há um caso em que o teto de 2 é a régua errada: quando a decisão editorial é
 **"este módulo inteiro segue este livro"**. Foi o que o Doug decidiu em
-2026-09-08 para o módulo de finais, que passa a seguir o *Silman's Complete
-Endgame Course* — texto e posições. O motivo é de conteúdo, não de custo: é o
-único manual do acervo com progressão declarada **por classe de força**, que é
-exatamente a espinha que a trilha precisa. O preparatório é gratuito; quando for
-comercializado, o conteúdo do Silman será trocado por fonte pública.
+2026-09-08 para o módulo de finais. A decisão teve duas metades no mesmo dia, e
+as duas estão declaradas no registro:
+
+- de manhã, o *Silman's Complete Endgame Course*, quando a trilha inteira ia
+  sair dele — é o único manual do acervo com progressão declarada **por classe
+  de força**;
+- no fim do dia, o ***100 Endgames You Must Know*, de Jesús de la Villa**, que é
+  hoje o livro-base do módulo: *"sem teto nenhum, quero usar o livro inteiro,
+  sem teto, para finais"* (Doug, 2026-09-08).
+
+O Silman **continua declarado, com inventário zerado, de propósito**: a Classe E
+está em aberto e o de la Villa não ensina mate elementar — o próprio autor
+escreve que assume o leitor sabendo os mates básicos. Se a Classe E voltar a sair
+do Silman, o regime já está de pé e não precisa ser decidido de novo.
+
+O motivo é de conteúdo, não de custo. O preparatório é gratuito e não será
+comercializado por ora; quando for, o conteúdo listado no inventário será
+trocado por fonte pública.
 
 O mecanismo é um campo em `content/sources.json`:
 
@@ -67,15 +84,43 @@ alguém procura é exceção esquecida.
 **O que cai junto, e nenhuma máquina confere.** A §5.1 abaixo proíbe diagramas
 em sequência da mesma obra numa aula — "sequência é a seleção do autor sendo
 copiada em miniatura". Numa obra em regime integral essa regra cai na prática:
-a aula de mate de rei e torre usa os Diagramas 19→26 do Silman, que são
-exatamente uma sequência. Não há gate para isso; fica escrito aqui para não
-virar descoberta.
+a trilha de finais anda pela numeração do de la Villa, e as duas posições já
+transcritas são a Position 1.1 e a Position 1.3 do capítulo 1 — sequência, pela
+definição da §5.1. Não há gate para isso; fica escrito aqui para não virar
+descoberta.
+
+### 1.2 O teto por aula ficou sem sujeito no módulo de finais
+
+Escrito em 2026-09-08, junto com o formato de três etapas, para que ninguém leia
+o teto de 2 como uma trava que o módulo de finais ainda tem. Ele não tem.
+
+O teto da §12.7 é **por aula**. No formato novo, uma aula é **uma posição só**: o
+`lessonSchema` recusa o arquivo cujas três etapas não apontem o mesmo id, e o
+gate desduplica por id antes de contar. Toda aula conta 1, e 1 nunca passa de 2 —
+**o teto não tem como morder neste formato**. Uma obra protegida pode fornecer
+quarenta aulas de uma posição cada e o gate fica verde.
+
+O código do teto continua em `scripts/validate-content.ts` e continua correto: ele
+volta a ter sujeito no dia em que algum formato usar mais de uma posição na mesma
+aula. O que **não** existe é a proteção que ele parecia dar ao módulo de finais.
+
+A régua alternativa — um teto **por obra no módulo inteiro**, `N` posições da
+mesma obra somadas em todas as aulas publicadas — foi proposta ao Doug em
+2026-09-08 e **recusada**: *"sem teto nenhum"*. A decisão está registrada aqui
+porque a próxima pessoa que notar o buraco vai propor exatamente isso de novo.
+
+O que protege o módulo, então, não é número: é a declaração da §1.1 — escrita,
+datada, com prazo que o gate cobra (`REGIME_INTEGRAL_VENCIDO`) e com um
+inventário em `content/divida-de-licenca.md` que cresce como diff que alguém
+aprova. Trocar um teto por uma declaração só é honesto enquanto essas três peças
+estiverem de pé; se alguma cair, o módulo fica sem régua nenhuma.
 
 ---
 
 ## 2. As obras registradas
 
-`Teto` = quantas posições a obra pode dar para uma mesma aula. `Legível` = o
+`Teto` = quantas posições a obra pode dar para uma mesma aula — e leia a §1.2
+antes de confiar nesta coluna: no formato de três etapas ela não morde. `Legível` = o
 subagente consegue achar página por busca de texto (teste da §4).
 
 | # | Slug | Obra | Edição | Teto | Legível |
@@ -90,10 +135,10 @@ subagente consegue achar página por busca de texto (teste da §4).
 | 8 | `rogers-1907` | Rogers, _How to Play Chess_ | Thomas Y. Crowell, Nova York, 1907 | sem teto | sim (176 pág.) |
 | 9 | `cunnington-1903` | Cunnington (org.), _Selected Chess Endings_ | George Routledge & Sons, Londres / E. P. Dutton, Nova York, 1903 | sem teto | sim (104 pág.) |
 | 10 | `lichess-open-database` | Lichess Open Database | exports públicos, sem arquivo local | sem teto (CC0) | n/a |
-| 11 | `de-la-villa-100` | De la Villa, _100 Endgames You Must Know_ | a confirmar na folha de rosto | 2 | OCR em 2026-08-18 |
+| 11 | `de-la-villa-100` | De la Villa, _100 Endgames You Must Know_ | a confirmar na folha de rosto | sem teto (regime integral, §1.1) | OCR em 2026-08-18 |
 | 12 | `de-la-villa-workbook` | De la Villa, _The 100 Endgames You Must Know Workbook_ | a confirmar | 2 | sim (286 pág.) |
 | 13 | `de-la-villa-amostra` | De la Villa, _100 Basic Endgames_ (excerto) | excerto promocional, 31 pág. | 2 | sim |
-| 14 | `silman-endgame-course` | Silman, _Complete Endgame Course_ | Siles Press, Los Angeles, 2007 | 2 | OCR em 2026-08-18 |
+| 14 | `silman-endgame-course` | Silman, _Complete Endgame Course_ | Siles Press, Los Angeles, 2007 | sem teto (regime integral, §1.1) | OCR em 2026-08-18 |
 | 15 | `rabinovich-russian` | Rabinovich, _The Russian Endgame Handbook_ | a confirmar | 2 | sim (525 pág.) |
 | 16 | `averbakh-essential` | Averbakh, _Chess Endings: Essential Knowledge_ | a confirmar | 2 | OCR em 2026-08-18 |
 | 17 | `nunn-understanding` | Nunn, _Understanding Chess Endgames_ | a confirmar | 2 | sim (234 pág.) |

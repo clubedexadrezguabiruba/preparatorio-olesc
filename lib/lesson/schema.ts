@@ -232,7 +232,14 @@ export const sourceRegistrySchema = z.strictObject({
   sources: z.array(sourceSchema).min(1),
 });
 
-/** Quantas posições de uma mesma obra protegida uma aula pode usar (§12.7). */
+/**
+ * Quantas posições de uma mesma obra protegida uma aula pode usar (§12.7).
+ *
+ * Dormente desde 2026-09-08: uma aula do formato de três etapas usa **uma**
+ * posição, então o teto nunca é atingido. O comentário longo, com o que passou
+ * a proteger o módulo no lugar dele, está no bloco que o consome em
+ * `scripts/validate-content.ts` e na §1.2 de `docs/SOURCE-CORPUS.md`.
+ */
 export const PROTECTED_SOURCE_CAP = 2;
 
 /* ------------------------------------------------------------------ *
