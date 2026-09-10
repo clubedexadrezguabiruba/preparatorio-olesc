@@ -1,6 +1,6 @@
 # Modo editor — onde paramos
 
-**Data:** 2026-09-10. **Branch:** `modo-editor`. **Bloco 1 entregue; Bloco 2 pela metade.**
+**Data:** 2026-09-10. **Branch:** `modo-editor`. **Bloco 1 entregue; Bloco 2 pela metade, sem dívidas.**
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -175,9 +175,18 @@ aula nenhuma** (`onde` diz `posição pos-…`), mas a exceção mora no arquivo
 aula. A posição é devolvida à dona pela busca de qual aula a referencia. Sem
 isso, a exceção existia e não perdoava nada, em silêncio.
 
-**Falta:** a mutação plantada para `EXCECAO_CADUCA` e para o rebaixamento, em
-`scripts/mutation-check.ts`. A casa cobra mutação para cada código novo, e esta
-é a única dívida declarada do bloco.
+As duas mutações foram plantadas (commit `ea9b177`), e escrevê-las destapou um
+defeito na própria suíte: `linhasDoCodigo` casava `[CODIGO]` em qualquer linha e
+só *removia* o `✖`, sem exigi-lo. Como os avisos novos usam o mesmo formato
+(`▲ [CODIGO] onde`), um aviso passou a servir de prova de que a regra pegou o
+estrago — e isso valia para a **suíte inteira**, não só para as duas novas.
+Corrigido: o `✖` agora é exigido.
+
+**A lição, para quem acrescentar aviso novo ao gate:** uma mutação que continua
+vermelha com a regra desligada não guarda nada. A única maneira de saber é
+desligar a regra de propósito e conferir que a suíte cai. Aqui: com a
+conferência de hash sabotada, 41 de 41 continuavam vermelhas antes da correção;
+depois dela, a suíte cai para 40 de 41, como tem de cair.
 
 ### Dois pedidos novos do Doug, já no plano (2026-09-10)
 
