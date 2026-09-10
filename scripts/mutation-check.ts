@@ -13,7 +13,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { Chess } from "chess.js";
 import { hashDoAlvo } from "../lib/lesson/excecoes.ts";
-import type { Lesson } from "../lib/lesson/schema.ts";
+import { MARCA_DE_MOLDE, type Lesson } from "../lib/lesson/schema.ts";
 import { goalMovesOf, Tablebase } from "./tablebase.ts";
 
 /**
@@ -340,6 +340,27 @@ const MUTACOES: Mutation[] = [
       ];
       gravar(fa, aula);
       return `exceção de METODO_NAO_GANHA, com hash certo, sobre um erro de RESULTADO_ERRADO`;
+    },
+  },
+  /**
+   * A marca do texto gerado sobrevivendo até a publicação.
+   *
+   * O "+" do editor cria o diagrama com `MARCA_DE_MOLDE` na fala, porque fala
+   * vazia não é aula válida. Quem impede a marca de chegar à criança é o
+   * `TEXTO_DE_MOLDE`, e esta mutação é a única prova de que ele impede: se
+   * alguém trocar a marca em `schema.ts` sem trocar a busca no gate, ou mover
+   * a regra para um ramo que não roda, ela fica **verde** — e verde aqui é a
+   * suíte gritando.
+   */
+  {
+    titulo: "fala com a marca do molde numa aula publicada",
+    codigo: "TEXTO_DE_MOLDE",
+    aplicar: async (dir) => {
+      const { file, json } = lerAula(dir);
+      const roteiro = json.stages.objective.roteiro as Array<{ fala: string }>;
+      roteiro[2].fala = MARCA_DE_MOLDE;
+      gravar(file, json);
+      return `roteiro[2].fala → ${MARCA_DE_MOLDE} numa aula de status "published"`;
     },
   },
   {

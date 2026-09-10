@@ -60,6 +60,25 @@ const errorIdSchema = z
 
 const texto = z.string().min(1, "texto não pode ser vazio");
 
+/**
+ * **A marca que todo texto escrito pela máquina carrega até alguém reescrevê-lo.**
+ *
+ * O schema exige que uma fala não seja vazia, então o diagrama que o professor
+ * acabou de acrescentar pelo "+" tem de nascer com alguma coisa dentro. Nascer
+ * com uma frase de aparência normal seria pior que nascer vazio: ela passaria
+ * despercebida numa releitura, e a aula chegaria ao aluno com um passo que
+ * ninguém escreveu.
+ *
+ * A marca resolve os dois lados. Na tela ela grita — não é uma fala, é um
+ * lembrete. E no gate ela é procurável: `TEXTO_DE_MOLDE` recusa a aula
+ * **publicada** que ainda a carregue. Rascunho pode tê-la à vontade; é
+ * exatamente o estado de uma aula em construção.
+ *
+ * Os chevrons são de propósito: nenhuma fala do curso os usa, então achar a
+ * marca é procurar uma substring, sem heurística e sem falso positivo.
+ */
+export const MARCA_DE_MOLDE = "«escreva aqui»";
+
 /* ------------------------------------------------------------------ *
  * Camada 1 — posição
  * ------------------------------------------------------------------ */
@@ -554,8 +573,11 @@ export const introPassoSchema = desenhoSchema.extend({
  * qualquer peça se mexer. Sete cliques até a primeira peça andar é um manual
  * com botão de "próximo", que é exatamente o que a etapa 2 deixou de ser.
  */
+/** O teto de passos da apresentação — o "+" do editor precisa saber onde parar. */
+export const MAX_PASSOS_INTRO = 6;
+
 export const introStageSchema = z.strictObject({
-  passos: z.array(introPassoSchema).min(2).max(6),
+  passos: z.array(introPassoSchema).min(2).max(MAX_PASSOS_INTRO),
 });
 
 /**
@@ -628,6 +650,9 @@ export const roteiroPassoSchema = desenhoSchema.extend({
   treino: passoTreinoSchema.optional(),
 });
 
+/** O teto de passos da aula assistida — o "+" do editor precisa saber onde parar. */
+export const MAX_PASSOS_ROTEIRO = 24;
+
 /**
  * Etapa 1 — **a aula assistida**: as peças se movem, as flechas aparecem, e um
  * comentário por vez muda junto com a posição.
@@ -694,7 +719,7 @@ export const objectiveStageSchema = z.strictObject({
    * impressa: ela é o relógio da TELA — quanto tempo cada fala fica lá. O que
    * saiu foi o julgamento sobre o total.
    */
-  roteiro: z.array(roteiroPassoSchema).min(2).max(24),
+  roteiro: z.array(roteiroPassoSchema).min(2).max(MAX_PASSOS_ROTEIRO),
   /**
    * O que é da etapa 3 **inteira**, e não de um passo dela.
    *

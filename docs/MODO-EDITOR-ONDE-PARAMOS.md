@@ -211,17 +211,71 @@ implementado**:
    bloco é a que protege o que já existe: para as 3 aulas de hoje, `--write`
    não pode mudar um byte.
 
+### Pronto — o "+" que acrescenta diagrama
+
+**A descoberta que decidiu a forma:** um diagrama novo é um **passo sem
+`lance`**. O `derivarTreino` pula passo sem lance antes de qualquer conta
+(`lib/lesson/derivar-treino.ts:167`), o `montarQuadros` idem
+(`lib/lesson/roteiro.ts:58`), e a corrente de legalidade do `superRefine`
+também. Então **acrescentar diagrama em qualquer ponto do roteiro não muda um
+byte da etapa 3** — e há teste que compara as duas árvores derivadas para
+provar. O passo novo com lance quebraria a corrente do ponto de inserção em
+diante: o professor pediria um diagrama e receberia a aula recusada. O lance
+entra depois, pelo arrastar, e é aí que ele passa a ter consequência.
+
+- `comPassoNovo` e `cabeMaisUmPasso` em `lib/editor/edicoes.ts`. Acrescentar um
+  diagrama muda **3 linhas** do arquivo, e o teste afirma as duas metades: tudo
+  antes do ponto de inserção é byte a byte igual, e tudo depois também, só
+  deslocado.
+- Os tetos saíram do schema para constantes exportadas (`MAX_PASSOS_INTRO` = 6,
+  `MAX_PASSOS_ROTEIRO` = 24) e o `+` os usa. Um `+` com teto próprio produziria
+  um rascunho que o próprio editor recusaria a salvar, e a mensagem que o
+  professor leria seria a do Zod.
+- Na tela: **o "+" mora no vão entre dois selos**, inclusive no de cima e no de
+  baixo — o gesto pedido é "acrescentar um diagrama *aqui*", e "aqui" é um
+  lugar. Quase invisível até o ponteiro passar, mas no DOM e recebendo foco
+  (um "+" que só existe no `:hover` não existe para quem anda de Tab). No teto
+  o vão some e uma frase no pé da coluna explica.
+- **A conferência anterior é jogada fora ao acrescentar.** Ela marca diagramas
+  por índice (`roteiro[3]` = quarto selo), e um passo no meio empurra os de
+  baixo: manter as marcas acenderia a borda vermelha no diagrama errado, que é
+  pior que não acender nenhuma.
+
+### Pronto — `TEXTO_DE_MOLDE`, trazido do Bloco 3
+
+O `+` obrigou. Fala vazia não é aula válida (`texto` é `min(1)`), então o passo
+novo nasce com `MARCA_DE_MOLDE` (`«escreva aqui»`, exportada de
+`lib/lesson/schema.ts`) — e sem portão nada impediria o professor de
+acrescentar um diagrama, se distrair e publicar uma aula com um passo que
+ninguém escreveu.
+
+A regra vive no `checkLesson` e só na aula **publicada**: carregar a marca é o
+estado normal de um rascunho em construção. Ela varre `falasDaAula`, que já
+colhe todo texto que o aluno lê e já escreve o índice do passo
+(`objective.roteiro[3].fala`) — então o `diagramaDoOnde` acende a borda vermelha
+**no selo do diagrama** de graça, sem tocar no gate.
+
+Mutação plantada, e **conferida como o doc manda**: com a regra desligada de
+propósito, a suíte cai de 42 para 41. Ela guarda de verdade.
+
 ### Não começado
 
 - A **barrinha do tabuleiro** (flecha, casa, limpar, virar) e o chip
   "desenho deste diagrama / alvo do treino", para quem não usa botão direito.
 - O **lance por arrastar** no diagrama.
-- O **"+"** entre diagramas, arrastar para reordenar, lixeira com desfazer, e
-  `espera` como controle de pausa. *É o pedido literal do Doug: "um ícone de
-  mais pra adicionar um novo diagrama".*
+- **Arrastar para reordenar**, lixeira com desfazer, e `espera` como controle
+  de pausa. (O "+" saiu; estes três continuam.)
 - `criarMotor()` extraído de `stockfish.ts` e a **barra de avaliação** com
   worker próprio.
 - **Bloco 2C** — as respostas do defensor pela fonte (ver acima).
+
+### Pendente de verificação (não é código faltando)
+
+Ninguém **viu o "+" na tela**. Ele está coberto por teste na cirurgia do JSON e
+pela mutação no gate, e os sete portões estão verdes — mas a rodada de navegador
+não foi feita: clicar no vão, ver o diagrama nascer, escrever a fala, conferir e
+ver o `TEXTO_DE_MOLDE` sumir. É a medida de uso do bloco ("pessoa leiga
+acrescenta um diagrama com uma flecha, sem instrução"), e ela é do Doug.
 
 ## O próximo passo
 

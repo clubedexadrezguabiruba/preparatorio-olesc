@@ -6,7 +6,15 @@ import { LessonPlayer } from "@/components/lesson/LessonPlayer";
 import { Lapis } from "@/components/editor/Lapis";
 import { ListaDeDiagramas, type Diagrama } from "@/components/editor/ListaDeDiagramas";
 import { conferirAula, publicarAula, recarregarAula, salvarAula } from "@/app/editor/acoes";
-import { comCarimbo, comDesenho, comFala, comTecnica, passoCru } from "@/lib/editor/edicoes";
+import {
+  cabeMaisUmPasso,
+  comCarimbo,
+  comDesenho,
+  comFala,
+  comPassoNovo,
+  comTecnica,
+  passoCru,
+} from "@/lib/editor/edicoes";
 import { filaDeGravacao, type Fila } from "@/lib/editor/fila";
 import type { Conferencia } from "@/lib/editor/gate";
 import { autoriaDoDesenho, desenhoDaAutoria } from "@/lib/chess/annotations";
@@ -226,6 +234,38 @@ export function Editor({
     [cru, alvo.etapa, alvo.passo, editar],
   );
 
+  /** Cabe mais um diagrama nesta etapa? O teto é o do schema. */
+  const cabeMais = useMemo(() => cabeMaisUmPasso(cru, alvo.etapa), [cru, alvo.etapa]);
+
+  /**
+   * O "+": um diagrama novo entra **antes** do índice pedido, e o tabuleiro vai
+   * para ele.
+   *
+   * Três coisas acontecem juntas, e a terceira é a que não é óbvia:
+   *
+   * 1. o JSON ganha o passo (`comPassoNovo`, que o faz sem lance — ver lá o
+   *    porquê: assim a etapa 3 não muda um byte);
+   * 2. o palco vai para o diagrama novo, porque o gesto do professor é
+   *    "acrescentar **para escrever agora**", e deixá-lo onde estava o
+   *    obrigaria a caçar na coluna o passo que ele acabou de criar;
+   * 3. **a conferência anterior é jogada fora.** Ela marcava diagramas por
+   *    índice — `roteiro[3]` era o quarto selo —, e um passo inserido no meio
+   *    empurra todos os de baixo. Manter as marcas acenderia a borda vermelha
+   *    no diagrama errado, que é pior que não acender nenhuma: o professor
+   *    consertaria uma fala que não tinha problema.
+   */
+  const acrescentarDiagrama = useCallback(
+    (indice: number) => {
+      if (!cabeMaisUmPasso(cru, alvo.etapa)) return;
+      editar(comPassoNovo(cru, alvo.etapa, indice));
+      setAlvo({ etapa: alvo.etapa, passo: indice });
+      setGeracao((g) => g + 1);
+      setConferencia(null);
+      setPublicavel({ pode: false, motivo: "a aula ganhou um diagrama depois da conferência" });
+    },
+    [cru, alvo.etapa, editar],
+  );
+
   // -------------------------------------------------- conferir e publicar
 
   async function conferir() {
@@ -371,11 +411,20 @@ export function Editor({
             diagramas={diagramas}
             atual={alvo.passo}
             orientation={ultimaValida.orientation}
+            cabeMais={cabeMais}
+            aoAcrescentar={acrescentarDiagrama}
             aoEscolher={(i) => {
               setAlvo((a) => ({ ...a, passo: i }));
               setGeracao((g) => g + 1);
             }}
           />
+          {!cabeMais && (
+            <p className="mt-2 text-xs text-tinta-fraca">
+              {alvo.etapa === "intro"
+                ? "A apresentação chegou aos 6 diagramas — é o teto, porque cada um é um clique antes de qualquer peça se mexer."
+                : "A aula assistida chegou aos 24 diagramas — é o teto do formato."}
+            </p>
+          )}
         </aside>
 
         <main className="min-w-0 flex-1">

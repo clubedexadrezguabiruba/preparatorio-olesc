@@ -18,6 +18,12 @@
  * do editor, e garantia central se cobra por teste.
  */
 
+import {
+  MARCA_DE_MOLDE,
+  MAX_PASSOS_INTRO,
+  MAX_PASSOS_ROTEIRO,
+} from "../lesson/schema.ts";
+
 /**
  * O carimbo do professor: **data, sem hora**.
  *
@@ -121,6 +127,75 @@ export function comDesenho(
   });
 
   return { ...cru, stages: { ...stages, [etapa]: { ...etapaCrua, [chaveDaLista]: nova } } };
+}
+
+/**
+ * Acrescenta um diagrama vazio na posição pedida — o "+" da coluna.
+ *
+ * ## Por que o passo novo nasce **sem lance**
+ *
+ * Um passo de roteiro pode ter `lance`, e o encadeamento inteiro da aula
+ * depende dele: o `superRefine` do schema aplica os lances um atrás do outro a
+ * partir da posição da aula, e recusa o arquivo em que um não for legal. Um
+ * passo novo com lance no meio da linha quebraria a corrente do ponto de
+ * inserção em diante — o professor pediria um diagrama e receberia a aula
+ * inteira recusada.
+ *
+ * O passo **sem** lance não é um passo pela metade: é a forma que o formato já
+ * usa para "o passo que só aponta" (`roteiroPassoSchema.lance` é opcional, e a
+ * N1-KPK abre com dois deles). Ele é ignorado pela corrente de legalidade, pelo
+ * `montarQuadros` e pelo `derivarTreino` — que o pula antes de qualquer conta
+ * (`lib/lesson/derivar-treino.ts`). O efeito prático é o que interessa:
+ * **acrescentar um diagrama em qualquer ponto do roteiro não muda um byte da
+ * etapa 3.** O lance vem depois, pelo arrastar do Bloco 2, e é aí que ele passa
+ * a ter consequência.
+ *
+ * ## Por que a fala nasce marcada
+ *
+ * `texto` é `min(1)`: fala vazia não é aula válida, e rascunho inválido não vai
+ * ao disco. Então o passo tem de nascer com alguma coisa — e o que ele carrega
+ * é `MARCA_DE_MOLDE`, que a tela mostra como lembrete e o gate procura
+ * (`TEXTO_DE_MOLDE`) antes de deixar a aula ser publicada.
+ *
+ * `indice` é a posição em que o passo entra: 0 põe antes do primeiro, e o
+ * tamanho da lista põe no fim. Fora da faixa, o passo entra na ponta mais
+ * próxima em vez de a tela explodir.
+ */
+export function comPassoNovo(
+  cru: Record<string, unknown>,
+  etapa: "intro" | "objective",
+  indice: number,
+): Record<string, unknown> {
+  const stages = cru.stages as Record<string, unknown>;
+  const etapaCrua = stages[etapa] as Record<string, unknown>;
+  const chaveDaLista = etapa === "intro" ? "passos" : "roteiro";
+  const lista = etapaCrua[chaveDaLista] as Array<Record<string, unknown>>;
+
+  const onde = Math.max(0, Math.min(indice, lista.length));
+  const nova = [...lista.slice(0, onde), { fala: MARCA_DE_MOLDE }, ...lista.slice(onde)];
+
+  return { ...cru, stages: { ...stages, [etapa]: { ...etapaCrua, [chaveDaLista]: nova } } };
+}
+
+/**
+ * Ainda cabe um diagrama nesta etapa?
+ *
+ * Os dois tetos são do schema (`MAX_PASSOS_INTRO`, `MAX_PASSOS_ROTEIRO`), e são
+ * importados de lá em vez de repetidos aqui: um "+" que aceitasse o sétimo
+ * passo da apresentação produziria um rascunho que o próprio editor recusaria a
+ * salvar, e a mensagem que o professor leria seria a do Zod.
+ */
+export function cabeMaisUmPasso(
+  cru: Record<string, unknown>,
+  etapa: "intro" | "objective",
+): boolean {
+  const stages = cru.stages as Record<string, unknown> | undefined;
+  const etapaCrua = stages?.[etapa] as Record<string, unknown> | undefined;
+  const lista = (etapa === "intro" ? etapaCrua?.passos : etapaCrua?.roteiro) as
+    | unknown[]
+    | undefined;
+  if (!lista) return false;
+  return lista.length < (etapa === "intro" ? MAX_PASSOS_INTRO : MAX_PASSOS_ROTEIRO);
 }
 
 export function comTecnica(

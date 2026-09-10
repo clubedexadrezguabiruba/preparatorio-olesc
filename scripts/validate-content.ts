@@ -16,6 +16,7 @@ import { applyUci, fenProblem, pieceCount, samePosition } from "../lib/chess/fen
 import { OutOfScopeError, techniqueScope } from "../lib/chess/technique.ts";
 import {
   lessonSchema,
+  MARCA_DE_MOLDE,
   positionSchema,
   PROTECTED_SOURCE_CAP,
   PROVENANCE_FIELDS,
@@ -46,6 +47,7 @@ import {
   type Excecao,
 } from "../lib/lesson/excecoes.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
+import { falasDaAula } from "../lib/lesson/voz.ts";
 import { validarNotas } from "../lib/repertorio/notas.ts";
 import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
 
@@ -1311,6 +1313,37 @@ function referencedPositionIds(lesson: Lesson): Array<{ id: string; stage: strin
 async function checkLesson(loaded: LoadedLesson) {
   const { lesson } = loaded;
   const where = `aula ${lesson.id}`;
+
+  /*
+   * **Texto que a máquina escreveu não chega ao aluno.**
+   *
+   * O "+" do editor cria um diagrama, e um diagrama precisa de uma fala: o
+   * schema recusa fala vazia, e rascunho recusado não vai ao disco. Então o
+   * passo novo nasce com `MARCA_DE_MOLDE` dentro, e é esta regra que impede a
+   * marca de sobreviver até a publicação — sem ela, o professor acrescenta um
+   * diagrama, se distrai, publica, e a aula chega à criança com um passo que
+   * ninguém escreveu. O molde do Bloco 3 vai gerar aula inteira assim; a regra
+   * já está no lugar quando ele chegar.
+   *
+   * Só na aula **publicada**, e é o ponto: carregar a marca é exatamente o
+   * estado normal de um rascunho em construção. Quem cobra é a publicação.
+   *
+   * O `onde` vem de `falasDaAula`, que já colhe todo texto que o aluno lê e já
+   * escreve o índice do passo (`objective.roteiro[3].fala`). É de graça que o
+   * editor acende a borda vermelha **no selo do diagrama** que acabou de
+   * nascer, em vez de dizer "há uma marca em algum lugar da aula".
+   */
+  if (lesson.status === "published") {
+    for (const fala of falasDaAula(lesson)) {
+      if (!fala.texto.includes(MARCA_DE_MOLDE)) continue;
+      fail(
+        "TEXTO_DE_MOLDE",
+        `aula ${fala.onde}`,
+        `este texto ainda tem a marca ${MARCA_DE_MOLDE} — foi a máquina que o escreveu, ` +
+          "e a aula publicada só carrega o que o professor escreveu",
+      );
+    }
+  }
 
   const refs = referencedPositionIds(lesson);
   for (const ref of refs) {

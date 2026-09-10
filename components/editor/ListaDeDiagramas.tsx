@@ -17,8 +17,20 @@ export type Diagrama = {
  * olhando para a posição do passo 7, em vez de contar os cliques a partir do
  * começo.
  *
- * **Neste bloco a lista é só leitura.** Arrastar para reordenar, o "+" entre
- * dois selos e a lixeira com desfazer são do Bloco 2; entrariam aqui como
+ * ## O "+" mora no vão, e não numa barra
+ *
+ * O gesto que o Doug pediu é "acrescentar um diagrama **aqui**", e "aqui" é um
+ * lugar entre dois selos. Um botão único no alto da coluna não teria esse
+ * "aqui": ele acrescentaria sempre no fim, e mover o passo até o meio seria um
+ * segundo gesto — o de arrastar, que ainda não existe. Então cada vão da coluna
+ * é um alvo, inclusive o de cima e o de baixo.
+ *
+ * Eles ficam quase invisíveis até o ponteiro passar por cima, senão treze
+ * sinais de mais competiriam com os treze diagramas pela atenção de quem só
+ * quer escolher um. Mas ficam no DOM e recebem foco: um "+" que só existe no
+ * `:hover` é um botão que não existe para quem anda de Tab.
+ *
+ * Arrastar para reordenar e a lixeira com desfazer entram aqui depois, como
  * gestos sobre a mesma lista.
  *
  * ## O erro aparece no diagrama, não numa lista de códigos
@@ -33,20 +45,32 @@ export function ListaDeDiagramas({
   atual,
   orientation,
   aoEscolher,
+  aoAcrescentar,
+  cabeMais,
 }: {
   diagramas: Diagrama[];
   atual: number;
   orientation: "white" | "black";
   aoEscolher: (indice: number) => void;
+  /** Acrescenta um diagrama **antes** do índice pedido. */
+  aoAcrescentar: (indice: number) => void;
+  /** Falso quando a etapa chegou ao teto do schema — o vão vira frase. */
+  cabeMais: boolean;
 }) {
   return (
-    <nav aria-label="Diagramas desta etapa" className="flex flex-col gap-1.5">
+    <nav aria-label="Diagramas desta etapa" className="flex flex-col">
+      <Vao
+        indice={0}
+        total={diagramas.length}
+        cabeMais={cabeMais}
+        aoAcrescentar={aoAcrescentar}
+      />
       {diagramas.map((d, i) => {
         const selecionado = i === atual;
         const temProblema = d.problemas.length > 0;
         return (
+          <div key={i}>
           <button
-            key={i}
             type="button"
             onClick={() => aoEscolher(i)}
             aria-current={selecionado ? "true" : undefined}
@@ -77,8 +101,65 @@ export function ListaDeDiagramas({
               />
             )}
           </button>
+          <Vao
+            indice={i + 1}
+            total={diagramas.length}
+            cabeMais={cabeMais}
+            aoAcrescentar={aoAcrescentar}
+          />
+          </div>
         );
       })}
     </nav>
+  );
+}
+
+/**
+ * O vão entre dois selos: seis pixels de nada que viram um "+" ao serem
+ * apontados.
+ *
+ * ## O rótulo diz o lugar, não o gesto
+ *
+ * "Acrescentar diagrama" sozinho seria a mesma frase nos catorze vãos, e quem
+ * ouve a tela ouviria catorze botões idênticos. O rótulo nomeia a posição —
+ * "acrescentar diagrama antes do 3", "acrescentar diagrama no fim" —, que é a
+ * única coisa que distingue um vão do outro.
+ *
+ * ## Cheio, ele some
+ *
+ * No teto do schema o vão não vira um "+" desabilitado: um botão apagado que
+ * não diz por quê é pior que botão nenhum. Ele deixa de existir, e quem explica
+ * é a frase no pé da coluna, que o `Editor` desenha uma vez só.
+ */
+function Vao({
+  indice,
+  total,
+  cabeMais,
+  aoAcrescentar,
+}: {
+  indice: number;
+  total: number;
+  cabeMais: boolean;
+  aoAcrescentar: (indice: number) => void;
+}) {
+  if (!cabeMais) return <span className="block h-1.5" />;
+  const onde =
+    indice === 0
+      ? "no começo"
+      : indice >= total
+        ? "no fim"
+        : `entre o ${indice} e o ${indice + 1}`;
+  return (
+    <button
+      type="button"
+      onClick={() => aoAcrescentar(indice)}
+      title={`acrescentar diagrama ${onde}`}
+      aria-label={`acrescentar diagrama ${onde}`}
+      className="foco group flex h-3 w-full items-center justify-center opacity-0 transition-opacity hover:opacity-100 focus-visible:opacity-100"
+    >
+      <span className="h-px flex-1 bg-borda-fraca" />
+      <span className="rotulo px-1.5 leading-none text-tinta-fraca">+</span>
+      <span className="h-px flex-1 bg-borda-fraca" />
+    </button>
   );
 }
