@@ -274,8 +274,8 @@ propósito, a suíte cai de 42 para 41. Ela guarda de verdade.
 - A **barrinha do tabuleiro** (flecha, casa, limpar, virar) e o chip
   "desenho deste diagrama / alvo do treino", para quem não usa botão direito.
 - O **lance por arrastar** no diagrama.
-- **Arrastar para reordenar**, lixeira com desfazer, e `espera` como controle
-  de pausa. (O "+" saiu; estes três continuam.)
+- **Arrastar para reordenar** e `espera` como controle de pausa. (O "+" saiu, e
+  a lixeira com desfazer também — ver a seção dela, mais abaixo.)
 - `criarMotor()` extraído de `stockfish.ts` e a **barra de avaliação** com
   worker próprio.
 - **Bloco 2C** — as respostas do defensor pela fonte (ver acima).
@@ -525,6 +525,117 @@ DEPOIS  ✔ 11 de 11
 
 ---
 
+## A lixeira com desfazer, entregue em 10/9/2026
+
+O gesto contrário do "+", que era o buraco mais visível do editor: um diagrama
+posto por engano só saía editando o JSON à mão. Entrou **antes** do reordenar e
+da barrinha de propósito — ele decide, no gesto mais simples, a pergunta que o
+reordenar faria duas vezes, e sem ele toda rodada de navegador dos gestos
+seguintes deixa entulho no rascunho que só o `git checkout` tira.
+
+### A regra que decide tudo: a corrente de lances
+
+Apagar **inverte** a descoberta que deu forma ao "+". Lá, o passo novo nasce sem
+`lance` e por isso não muda um byte da etapa 3. Aqui:
+
+- passo **sem** `lance` sai sempre — é ignorado pela corrente, pelo
+  `montarQuadros` e pelo `derivarTreino`;
+- passo **com** `lance` no meio **quebra a corrente** do ponto de corte em
+  diante: o `superRefine` aplica os lances um atrás do outro e recusa o arquivo;
+- passo com `lance` que é o **último com lance** sai: o que sobra é um prefixo
+  da mesma corrente, e prefixo de corrente legal é corrente legal.
+
+**Por que a tela pergunta antes, em vez de apagar e ver no que dá:** o rascunho
+inválido não chega ao disco — `gravarRascunhoDeAula` julga antes de escrever
+(`lib/editor/rascunhos.ts:208`). Uma lixeira que apagasse sem perguntar deixaria
+o editor num estado de erro que o professor não pediu.
+
+A decisão foi tomada com o Doug: a lixeira **não some** quando não pode. É o
+contrário da regra do vão do "+", e não se contradiz — lá a recusa é global e
+explicada por uma frase no pé da coluna; aqui ela é **deste** diagrama e muda de
+selo para selo, e um selo sem lixeira ao lado de um selo com lixeira faz o
+professor concluir a regra errada. Ela usa `aria-disabled` e não `disabled`: o
+desabilitado de verdade sai do Tab e não dispara `title`, escondendo a
+explicação de quem mais precisa dela.
+
+### O que foi escrito
+
+- `MIN_PASSOS_INTRO` e `MIN_PASSOS_ROTEIRO` (ambos 2) saíram do `.min(2)` do
+  schema e viraram constantes exportadas — o espelho exato da lição dos tetos.
+- `podeApagarPasso` e `comPassoRemovido` em `lib/editor/edicoes.ts`. O veredicto
+  é um tipo com **motivo** (`piso` ou `corrente`), porque as duas recusas têm
+  frases diferentes na tela.
+- A lixeira e a linha de desfazer em `ListaDeDiagramas.tsx`; `apagarDiagrama`,
+  `desfazerApagar` e o estado do desfazer em `Editor.tsx`.
+
+**`aplicar` foi extraída de `editar`** — é o mesmo caminho sem o `comCarimbo`, e
+existe só para o desfazer: desfazer quer dizer "isto não aconteceu", e um
+carimbo posto pelo gesto desfeito deixaria três linhas de `git diff` dizendo que
+o professor adaptou uma aula que ele não adaptou.
+
+**O desfazer morre por identidade de objeto**, e isso não é economia — é
+correção. Um "desfazer" clicado depois de o professor ter escrito outra coisa
+devolveria o arquivo de antes e levaria a escrita junto, em silêncio. Toda
+edição cria um objeto novo, então `cru === desfazer.depois` responde "nada
+aconteceu desde então" sem contador, sem relógio e sem limpar estado em cada uma
+das dez funções que editam.
+
+**A linha de desfazer não tem cronômetro**, contra o "por alguns segundos" do
+plano. Ela não flutua: ocupa o buraco que o diagrama deixou, numa coluna que
+rola por dentro e que acabou de ficar 64 px mais curta. Um cronômetro ali não
+protegeria a tela de nada — só marcaria o tempo que o professor tem para
+perceber o próprio erro, no único gesto do editor sem outro caminho de volta.
+**Isto é uma linha de código**, se um dia a decisão for outra.
+
+### Medido na tela, 1366×768
+
+Rodada em `/editor/finais/N1-KPK`, etapa 2, com os 13 selos.
+
+| O quê | Medido |
+|---|---|
+| Lixeiras habilitadas | **3** — os selos 1 e 2 (sem lance) e o 13 (último com lance) |
+| Lixeiras recusando | **10** — os selos 3 a 12, cada um dizendo quantos lances vêm depois |
+| Ordem no DOM | 40 botões: vão, selo, lixeira, vão, selo, lixeira… todos `tabIndex 0` |
+| Opacidade em repouso | **0** — invisível até o ponteiro chegar, como o "+" |
+| Geometria | lixeira de 22×22 no canto de baixo do selo (x 195→217); o `pr-7` mantém a fala fora dela |
+| Rolagem | **zero** nas duas direções — a conta do palco não foi tocada |
+
+**O ciclo inteiro, no disco:**
+
+- apagar o diagrama 2 → o `diff` do rascunho deu **14 linhas removidas** (o
+  bloco do passo, inteiro) **+ 3 do carimbo**, 547 → 536. `content/lessons/`
+  intocado;
+- **desfazer → o arquivo voltou byte a byte**, 547 linhas, sem carimbo novo;
+- apagar e depois clicar no "+" → **a linha de desfazer some**, como tem de
+  somer;
+- na apresentação: 3 diagramas, as 3 lixeiras habilitadas; apagado um, as 2
+  restantes passam a recusar com *"a apresentação precisa de pelo menos 2
+  diagramas"*.
+
+### Um defeito achado rodando, e consertado
+
+O selo 12 dizia *"os **1 lances** seguintes"*. O plural estava escrito à mão na
+interpolação, e o penúltimo diagrama com lance é um caso comum, não uma ponta.
+Passou a dizer *"o lance seguinte é jogado a partir dele"*.
+
+### O que esta rodada NÃO cobre
+
+- **O Tab não pôde ser exercido.** O painel do navegador embutido não recebe
+  tecla nesta sessão (a tecla não moveu o foco nem com o painel à frente). A
+  ordem de foco foi medida pelo DOM — 40 botões na ordem certa, todos
+  `tabIndex 0` —, e não pressionando Tab, como na rodada do "+".
+- **A medida de uso continua sendo do Doug:** uma pessoa leiga apaga um diagrama
+  por engano e volta atrás sem instrução.
+- A lixeira **não julga se a aula ainda faz sentido** sem aquele diagrama — só
+  se o arquivo continua gravável. Quem julga o resto é o professor, olhando, e
+  depois o gate.
+
+Portões, todos verdes: `typecheck`, `lint`, **757 testes** (8 novos),
+`validate:content`, `validate:mutations` (**42 de 42** vermelhas), `build`,
+`repertorio:compilar --check`.
+
+---
+
 ## O próximo passo
 
 **A dívida do palco está paga** (seção acima, com os números das duas direções).
@@ -536,9 +647,10 @@ gestos, e agora eles têm com que ser julgados:
 1. A **barrinha do tabuleiro** (flecha, casa, limpar, virar) e o chip
    "desenho deste diagrama / alvo do treino".
 2. O **lance por arrastar** no diagrama.
-3. **Arrastar para reordenar**, lixeira com desfazer, e `espera` como controle
-   de pausa. (O "+" já saiu; o gesto contrário dele — apagar um diagrama — mora
-   aqui, e continua sendo o buraco mais visível do editor.)
+3. **Arrastar para reordenar** e `espera` como controle de pausa. (O "+" e a
+   lixeira já saíram. O reordenar herda a regra da corrente pronta: mover um
+   passo é tirá-lo de um lugar **e** pô-lo em outro, então `podeApagarPasso` já
+   responde a metade da pergunta.)
 4. `criarMotor()` extraído de `stockfish.ts` e a **barra de avaliação** com
    worker próprio.
 

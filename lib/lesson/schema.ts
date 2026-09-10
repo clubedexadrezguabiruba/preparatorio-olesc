@@ -592,8 +592,22 @@ export const introPassoSchema = desenhoSchema.extend({
 /** O teto de passos da apresentação — o "+" do editor precisa saber onde parar. */
 export const MAX_PASSOS_INTRO = 12;
 
+/**
+ * O piso de passos da apresentação — a **lixeira** do editor precisa saber onde
+ * parar, pelo mesmo motivo que o "+" precisa do teto.
+ *
+ * O número já era 2 e continua sendo; o que mudou é ele ter nome. Uma lixeira
+ * com piso próprio deixaria o professor apagar o penúltimo diagrama e ler a
+ * mensagem do Zod no lugar da aula — o mesmo defeito que o teto escrito à mão
+ * tinha antes de virar constante, na outra ponta da lista.
+ *
+ * Dois é o menor número que ainda é uma apresentação: com um diagrama só não há
+ * o que apresentar, há um diagrama.
+ */
+export const MIN_PASSOS_INTRO = 2;
+
 export const introStageSchema = z.strictObject({
-  passos: z.array(introPassoSchema).min(2).max(MAX_PASSOS_INTRO),
+  passos: z.array(introPassoSchema).min(MIN_PASSOS_INTRO).max(MAX_PASSOS_INTRO),
 });
 
 /**
@@ -670,6 +684,16 @@ export const roteiroPassoSchema = desenhoSchema.extend({
 export const MAX_PASSOS_ROTEIRO = 40;
 
 /**
+ * O piso de passos da aula assistida — o par do teto, e pelo mesmo motivo:
+ * a lixeira do editor pergunta a ele antes de deixar apagar.
+ *
+ * Ver MIN_PASSOS_INTRO. Aqui vale ainda mais literalmente: um roteiro de um
+ * passo não é uma demonstração, é uma posição parada — e a etapa 1 deixou de
+ * ser exatamente isso.
+ */
+export const MIN_PASSOS_ROTEIRO = 2;
+
+/**
  * Etapa 1 — **a aula assistida**: as peças se movem, as flechas aparecem, e um
  * comentário por vez muda junto com a posição.
  *
@@ -742,7 +766,7 @@ export const objectiveStageSchema = z.strictObject({
    * impressa: ela é o relógio da TELA — quanto tempo cada fala fica lá. O que
    * saiu foi o julgamento sobre o total.
    */
-  roteiro: z.array(roteiroPassoSchema).min(2).max(MAX_PASSOS_ROTEIRO),
+  roteiro: z.array(roteiroPassoSchema).min(MIN_PASSOS_ROTEIRO).max(MAX_PASSOS_ROTEIRO),
   /**
    * O que é da etapa 3 **inteira**, e não de um passo dela.
    *

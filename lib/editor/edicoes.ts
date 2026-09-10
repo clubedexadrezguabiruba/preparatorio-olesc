@@ -22,6 +22,8 @@ import {
   MARCA_DE_MOLDE,
   MAX_PASSOS_INTRO,
   MAX_PASSOS_ROTEIRO,
+  MIN_PASSOS_INTRO,
+  MIN_PASSOS_ROTEIRO,
 } from "../lesson/schema.ts";
 
 /**
@@ -202,6 +204,121 @@ export function cabeMaisUmPasso(
     | undefined;
   if (!lista) return false;
   return lista.length < (etapa === "intro" ? MAX_PASSOS_INTRO : MAX_PASSOS_ROTEIRO);
+}
+
+/**
+ * A lista crua de passos de uma etapa: `passos` na apresentação, `roteiro` na
+ * aula assistida. `undefined` quando a etapa não existe no arquivo.
+ */
+function listaCrua(
+  cru: Record<string, unknown>,
+  etapa: "intro" | "objective",
+): Array<Record<string, unknown>> | undefined {
+  const stages = cru.stages as Record<string, unknown> | undefined;
+  const etapaCrua = stages?.[etapa] as Record<string, unknown> | undefined;
+  return (etapa === "intro" ? etapaCrua?.passos : etapaCrua?.roteiro) as
+    | Array<Record<string, unknown>>
+    | undefined;
+}
+
+/**
+ * O veredicto da lixeira: pode apagar este diagrama, ou não pode e por quê.
+ *
+ * As duas recusas têm frases diferentes na tela, e por isso são casos
+ * diferentes aqui — um "não pode" sem motivo é o botão apagado que o vão do
+ * "+" recusou a ser.
+ */
+export type Apagavel =
+  | { pode: true }
+  | { pode: false; porque: "piso"; piso: number }
+  | { pode: false; porque: "corrente"; seguintes: number };
+
+/**
+ * Este diagrama pode sair?
+ *
+ * ## Por que a pergunta existe, em vez de a lixeira apagar e ver no que dá
+ *
+ * O rascunho inválido **não chega ao disco**: `gravarRascunhoDeAula` julga
+ * antes de escrever e devolve "esta versão da aula ainda não é válida"
+ * (`lib/editor/rascunhos.ts`). Então uma lixeira que apagasse sem perguntar
+ * deixaria o editor num estado de erro que o professor não pediu e do qual só
+ * o desfazer o tira — pelo tempo em que o desfazer existir. A tela pergunta
+ * antes porque a resposta é barata e a alternativa é cara.
+ *
+ * ## As duas recusas
+ *
+ * **O piso.** As duas listas são `.min(2)` no schema. Apagar o penúltimo
+ * diagrama produz um arquivo que o Zod recusa — e a mensagem que o professor
+ * leria seria a do Zod, não a da tela. É o espelho exato de `cabeMaisUmPasso`.
+ *
+ * **A corrente.** Um passo do roteiro pode ter `lance`, e a aula inteira é
+ * encadeada: o `superRefine` aplica os lances um atrás do outro a partir da
+ * posição da aula e recusa o arquivo em que um não for legal. Tirar um lance do
+ * **meio** muda a posição — e, com ela, de quem é a vez — para todos os lances
+ * de baixo: o professor pediria para tirar um diagrama e receberia a aula
+ * recusada, sem entender o que um gesto tem a ver com o outro.
+ *
+ * Tirar o **último** passo que tem lance é seguro: o que sobra é um prefixo da
+ * mesma corrente, e prefixo de corrente legal é corrente legal. Tirar um passo
+ * **sem** lance é sempre seguro — ele é ignorado pela corrente, pelo
+ * `montarQuadros` e pelo `derivarTreino`, que é a mesma descoberta que deu
+ * forma ao "+" (ver `comPassoNovo`), lida ao contrário.
+ *
+ * Na apresentação não há corrente nenhuma: ninguém joga ali, cada passo é uma
+ * ilustração. Só o piso morde.
+ *
+ * ## O que este veredicto NÃO promete
+ *
+ * Que o gate vai ficar verde. Ele julga o que o Zod julga — o arquivo ser
+ * gravável —, e não se a aula continua fazendo sentido depois de perder um
+ * diagrama. Quem julga isso é o professor, olhando, e depois o gate em
+ * "Conferir". A última palavra continua sendo dele.
+ */
+export function podeApagarPasso(
+  cru: Record<string, unknown>,
+  etapa: "intro" | "objective",
+  indice: number,
+): Apagavel {
+  const piso = etapa === "intro" ? MIN_PASSOS_INTRO : MIN_PASSOS_ROTEIRO;
+  const lista = listaCrua(cru, etapa);
+  if (!lista || lista.length <= piso) return { pode: false, porque: "piso", piso };
+  // Índice fora da faixa não acontece pela tela — a lixeira nasce de um selo,
+  // e o selo nasce da lista. Tratado como "não pode" em vez de estourar.
+  if (indice < 0 || indice >= lista.length) return { pode: false, porque: "piso", piso };
+
+  if (etapa === "intro") return { pode: true };
+  if (typeof lista[indice].lance !== "string") return { pode: true };
+
+  const seguintes = lista.slice(indice + 1).filter((p) => typeof p.lance === "string").length;
+  return seguintes === 0 ? { pode: true } : { pode: false, porque: "corrente", seguintes };
+}
+
+/**
+ * Tira um diagrama da etapa — a lixeira da coluna, o gesto contrário do "+".
+ *
+ * A cirurgia é o espelho de `comPassoNovo`, e a promessa também: o `git diff`
+ * mostra **um bloco removido** e nada mais. Tudo antes do passo continua byte a
+ * byte, tudo depois continua byte a byte e só sobe de lugar.
+ *
+ * Não julga nada — quem julga é `podeApagarPasso`, na tela, antes de chamar.
+ * Índice fora da faixa devolve o arquivo intacto: "apagar o que não existe" não
+ * tem ponta mais próxima que faça sentido, ao contrário do "+", que insere na
+ * ponta.
+ */
+export function comPassoRemovido(
+  cru: Record<string, unknown>,
+  etapa: "intro" | "objective",
+  indice: number,
+): Record<string, unknown> {
+  const stages = cru.stages as Record<string, unknown>;
+  const etapaCrua = stages[etapa] as Record<string, unknown>;
+  const chaveDaLista = etapa === "intro" ? "passos" : "roteiro";
+  const lista = etapaCrua[chaveDaLista] as Array<Record<string, unknown>>;
+
+  if (indice < 0 || indice >= lista.length) return cru;
+  const nova = [...lista.slice(0, indice), ...lista.slice(indice + 1)];
+
+  return { ...cru, stages: { ...stages, [etapa]: { ...etapaCrua, [chaveDaLista]: nova } } };
 }
 
 /**

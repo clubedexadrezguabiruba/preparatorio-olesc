@@ -4,7 +4,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import { LessonPlayer } from "@/components/lesson/LessonPlayer";
 import { Lapis } from "@/components/editor/Lapis";
-import { ListaDeDiagramas, type Diagrama } from "@/components/editor/ListaDeDiagramas";
+import {
+  ListaDeDiagramas,
+  type Desfazer,
+  type Diagrama,
+} from "@/components/editor/ListaDeDiagramas";
 import { PosicaoDoDiagrama } from "@/components/editor/PosicaoDoDiagrama";
 import { conferirAula, publicarAula, recarregarAula, salvarAula } from "@/app/editor/acoes";
 import {
@@ -14,8 +18,10 @@ import {
   comFala,
   comFenDoDiagrama,
   comPassoNovo,
+  comPassoRemovido,
   comTecnica,
   passoCru,
+  podeApagarPasso,
 } from "@/lib/editor/edicoes";
 import { filaDeGravacao, type Fila } from "@/lib/editor/fila";
 import type { Conferencia } from "@/lib/editor/gate";
@@ -116,6 +122,28 @@ export function Editor({
    */
   const [previa, setPrevia] = useState(false);
 
+  /**
+   * O diagrama que acabou de ser apagado, e o arquivo de antes dele sair.
+   *
+   * **`depois` é a chave de validade, e é por identidade de objeto.** O direito
+   * de desfazer só vale enquanto nada mais aconteceu: um "desfazer" clicado
+   * depois de o professor ter escrito outra fala devolveria o arquivo de antes
+   * e levaria a fala junto, em silêncio — que é um estrago pior que o diagrama
+   * apagado. Toda edição cria um objeto novo (o espalhamento de `edicoes.ts`),
+   * então `cru === desfazer.depois` responde "nada aconteceu desde então" sem
+   * precisar de contador, de relógio, nem de limpar este estado em cada uma das
+   * dez funções que editam.
+   */
+  const [desfazer, setDesfazer] = useState<
+    | {
+        etapa: "intro" | "objective";
+        indice: number;
+        antes: Record<string, unknown>;
+        depois: Record<string, unknown>;
+      }
+    | null
+  >(null);
+
   const hash = useRef(hashInicial);
   const relogioDoDebounce = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -193,16 +221,25 @@ export function Editor({
     return filaRef.current;
   }, [aula]);
 
-  /** Muda o JSON na tela e agenda a gravação. É por aqui que passa toda edição. */
-  const editar = useCallback(
+  /**
+   * Põe um JSON na tela e agenda a gravação. O caminho comum é `editar`, logo
+   * abaixo; este é o mesmo caminho **sem o carimbo**, e existe só para o
+   * desfazer.
+   */
+  const aplicar = useCallback(
     (proximo: Record<string, unknown>) => {
-      const carimbado = comCarimbo(proximo);
-      adotar(carimbado);
+      adotar(proximo);
       setEstado("pendente");
       if (relogioDoDebounce.current) clearTimeout(relogioDoDebounce.current);
-      relogioDoDebounce.current = setTimeout(() => obterFila().enfileirar(carimbado), 500);
+      relogioDoDebounce.current = setTimeout(() => obterFila().enfileirar(proximo), 500);
     },
     [adotar, obterFila],
+  );
+
+  /** Muda o JSON na tela e agenda a gravação. É por aqui que passa toda edição. */
+  const editar = useCallback(
+    (proximo: Record<string, unknown>) => aplicar(comCarimbo(proximo)),
+    [aplicar],
   );
 
   const forcarSalvamento = useCallback(() => {
@@ -314,6 +351,82 @@ export function Editor({
     },
     [cru, alvo.etapa, editar],
   );
+
+  /** O veredicto da lixeira de cada selo. A tela não decide nada; ela pergunta. */
+  const apagavel = useCallback(
+    (indice: number) => podeApagarPasso(cru, alvo.etapa, indice),
+    [cru, alvo.etapa],
+  );
+
+  /**
+   * A lixeira: o gesto contrário do "+", que faltava desde que ele existe.
+   *
+   * O que acontece junto, e por quê:
+   *
+   * 1. o JSON perde o passo (`comPassoRemovido`), depois de `podeApagarPasso`
+   *    ter dito que pode — a tela nunca produz um rascunho que o disco vá
+   *    recusar;
+   * 2. o palco vai para o diagrama **anterior**, e não para o que tomou o
+   *    índice: o que estava ali deixou de existir, e o de cima é o contexto em
+   *    que o professor estava trabalhando. Quem estava olhando um diagrama mais
+   *    abaixo não sai do lugar — só desce um número;
+   * 3. a conferência anterior é jogada fora, **pelo mesmo motivo do "+"**: ela
+   *    marca diagramas por índice, e tirar um passo puxa todos os de baixo para
+   *    cima. Manter as marcas acenderia o sinal no diagrama errado;
+   * 4. o desfazer nasce, guardando o arquivo de antes.
+   */
+  const apagarDiagrama = useCallback(
+    (indice: number) => {
+      if (!podeApagarPasso(cru, alvo.etapa, indice).pode) return;
+      const antes = cru;
+      const depois = comCarimbo(comPassoRemovido(cru, alvo.etapa, indice));
+      aplicar(depois);
+      setDesfazer({ etapa: alvo.etapa, indice, antes, depois });
+      setAlvo((a) => ({
+        etapa: a.etapa,
+        passo:
+          a.passo > indice ? a.passo - 1 : a.passo === indice ? Math.max(0, indice - 1) : a.passo,
+      }));
+      setGeracao((g) => g + 1);
+      setConferencia(null);
+      setPublicavel({ pode: false, motivo: "a aula perdeu um diagrama depois da conferência" });
+    },
+    [cru, alvo.etapa, aplicar],
+  );
+
+  /**
+   * Trazer o diagrama de volta — e trazê-lo **sem carimbo novo**.
+   *
+   * `aplicar` e não `editar`: desfazer quer dizer "isto não aconteceu", e um
+   * carimbo posto pelo gesto desfeito deixaria três linhas de `git diff`
+   * dizendo que o professor adaptou a aula num dia em que ele apagou um
+   * diagrama por engano e o trouxe de volta. O arquivo restaurado é o de antes,
+   * byte a byte.
+   *
+   * **A conferência não volta junto**, e é de propósito: ela é sobre o arquivo
+   * que estava no disco naquele momento, e o arquivo foi ao disco duas vezes
+   * desde então. Conferir de novo custa um segundo; uma conferência que mente
+   * custa uma publicação errada.
+   */
+  const desfazerApagar = useCallback(() => {
+    if (!desfazer) return;
+    aplicar(desfazer.antes);
+    setAlvo({ etapa: desfazer.etapa, passo: desfazer.indice });
+    setGeracao((g) => g + 1);
+    setDesfazer(null);
+  }, [desfazer, aplicar]);
+
+  /**
+   * O desfazer que a coluna mostra — ou nada.
+   *
+   * Ele morre de três causas, e as três estão nesta linha: outra edição (o JSON
+   * na tela deixa de ser o que este desfazer conhece), a troca de etapa (o
+   * buraco é da outra coluna), e o próprio desfazer.
+   */
+  const desfazerVisivel: Desfazer | null =
+    desfazer && desfazer.depois === cru && desfazer.etapa === alvo.etapa
+      ? { indice: desfazer.indice, numero: desfazer.indice + 1 }
+      : null;
 
   // -------------------------------------------------- conferir e publicar
 
@@ -576,9 +689,14 @@ export function Editor({
           <ListaDeDiagramas
             diagramas={diagramas}
             atual={alvo.passo}
+            etapa={alvo.etapa}
             orientation={ultimaValida.orientation}
             cabeMais={cabeMais}
             aoAcrescentar={acrescentarDiagrama}
+            apagavel={apagavel}
+            aoApagar={apagarDiagrama}
+            desfazer={desfazerVisivel}
+            aoDesfazer={desfazerApagar}
             aoEscolher={(i) => {
               setAlvo((a) => ({ ...a, passo: i }));
               setGeracao((g) => g + 1);

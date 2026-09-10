@@ -9,14 +9,18 @@ import {
   comFala,
   comFenDoDiagrama,
   comPassoNovo,
+  comPassoRemovido,
   comTecnica,
   passoCru,
+  podeApagarPasso,
 } from "./edicoes.ts";
 import { serializar } from "./rascunhos.ts";
 import {
   MARCA_DE_MOLDE,
   MAX_PASSOS_INTRO,
   MAX_PASSOS_ROTEIRO,
+  MIN_PASSOS_INTRO,
+  MIN_PASSOS_ROTEIRO,
   lessonSchema,
 } from "../lesson/schema.ts";
 import { derivarTreino } from "../lesson/derivar-treino.ts";
@@ -240,6 +244,113 @@ test("o teto do schema é o teto do `+`", () => {
     MAX_PASSOS_ROTEIRO,
   );
   assert.equal(lessonSchema.safeParse(comPassoNovo(obj, "objective", 0)).success, false);
+});
+
+/* ------------------------------------------------------------------ *
+ * A lixeira — o gesto contrário do "+"
+ * ------------------------------------------------------------------ */
+
+/** Quantos passos tem a etapa, no cru. */
+function quantos(cru: Record<string, unknown>, etapa: "intro" | "objective"): number {
+  const stages = cru.stages as Record<string, Record<string, unknown[]>>;
+  return (etapa === "intro" ? stages.intro.passos : stages.objective.roteiro).length;
+}
+
+test("acrescentar e apagar devolve o arquivo byte a byte", () => {
+  // O teste que diz se a lixeira é mesmo o gesto CONTRÁRIO do "+", e não outro
+  // gesto que também mexe na lista. Se um dia esta igualdade cair, o professor
+  // que clicar sem querer e desfazer vai deixar rastro no `git diff` — e o
+  // rastro de um gesto desfeito é a pior linha que um diff pode ter.
+  const ida = comPassoNovo(cru(), "objective", 4);
+  const volta = comPassoRemovido(ida, "objective", 4);
+  assert.equal(serializar(volta), AULA);
+});
+
+test("apagar um diagrama tira o bloco dele, e não encosta no resto", () => {
+  const depois = comPassoRemovido(cru(), "objective", 1);
+  const a = AULA.split("\n");
+  const b = serializar(depois).split("\n");
+  const removidas = a.length - b.length;
+  assert.ok(removidas > 0, "o arquivo encolheu");
+
+  // As duas metades, como no "+": tudo antes do corte é byte a byte o arquivo
+  // de antes, e tudo depois também, só subindo de lugar.
+  const divergencia = iguaisAte(depois);
+  assert.deepEqual(b.slice(0, divergencia), a.slice(0, divergencia));
+  assert.deepEqual(b.slice(divergencia), a.slice(divergencia + removidas));
+  assert.equal(quantos(depois, "objective"), quantos(cru(), "objective") - 1);
+});
+
+test("apagar diagrama sem lance NÃO muda a etapa 3", () => {
+  // O espelho da promessa do "+": o passo sem lance é ignorado pela derivação,
+  // então tirá-lo não pode mexer no treino. Se mexesse, o `--write` reescreveria
+  // a aula inteira atrás de um diagrama que o professor só quis apagar.
+  const original = lessonSchema.parse(cru());
+  const semDiagrama = lessonSchema.parse(comPassoRemovido(cru(), "objective", 1));
+  const posicao = {
+    fen: original.stages.guided!.nodes[original.stages.guided!.root].fen,
+    expectedResult: "win",
+  } as const;
+  const a = derivarTreino(original, posicao, () => null);
+  const b = derivarTreino(semDiagrama, posicao, () => null);
+  assert.deepEqual(b.problemas, []);
+  assert.deepEqual(JSON.stringify(b.tree), JSON.stringify(a.tree));
+});
+
+test("o passo com lance no MEIO é recusado — e a recusa guarda alguma coisa", () => {
+  // A prova em duas metades. Primeiro a tela diz não...
+  const veredicto = podeApagarPasso(cru(), "objective", 5);
+  assert.equal(veredicto.pode, false);
+  assert.equal(veredicto.pode === false && veredicto.porque, "corrente");
+  assert.equal(veredicto.pode === false && veredicto.porque === "corrente" && veredicto.seguintes, 7);
+
+  // ...e depois: forçando a remoção, o Zod cai de verdade. Sem esta segunda
+  // metade, a recusa poderia estar protegendo de nada — e ninguém saberia.
+  assert.equal(lessonSchema.safeParse(comPassoRemovido(cru(), "objective", 5)).success, false);
+});
+
+test("o ÚLTIMO passo com lance sai, e a aula continua válida", () => {
+  // Prefixo de corrente legal é corrente legal: não há lance embaixo para
+  // quebrar. É a única exceção, e ela é o que torna a lixeira útil no fim.
+  assert.deepEqual(podeApagarPasso(cru(), "objective", 12), { pode: true });
+  assert.equal(lessonSchema.safeParse(comPassoRemovido(cru(), "objective", 12)).success, true);
+});
+
+test("o passo SEM lance sai de qualquer lugar", () => {
+  assert.deepEqual(podeApagarPasso(cru(), "objective", 0), { pode: true });
+  assert.deepEqual(podeApagarPasso(cru(), "objective", 1), { pode: true });
+  assert.equal(lessonSchema.safeParse(comPassoRemovido(cru(), "objective", 1)).success, true);
+});
+
+test("na apresentação não há corrente: só o piso morde", () => {
+  // Ninguém joga na apresentação — cada passo é ilustração. A única recusa
+  // possível ali é a do piso.
+  const antes = cru();
+  assert.deepEqual(podeApagarPasso(antes, "intro", 0), { pode: true });
+  const comDois = comPassoRemovido(antes, "intro", 0);
+  assert.equal(quantos(comDois, "intro"), MIN_PASSOS_INTRO);
+  assert.equal(lessonSchema.safeParse(comDois).success, true);
+
+  // No piso, a lixeira some de todos os selos — e o Zod concorda.
+  assert.deepEqual(podeApagarPasso(comDois, "intro", 0), {
+    pode: false,
+    porque: "piso",
+    piso: MIN_PASSOS_INTRO,
+  });
+  assert.equal(lessonSchema.safeParse(comPassoRemovido(comDois, "intro", 0)).success, false);
+});
+
+test("o piso do schema é o piso da lixeira, na aula assistida", () => {
+  // A conta é a mesma nos dois lados, como no teto do "+": `podeApagarPasso`
+  // diz não exatamente quando o Zod passaria a recusar. Apagar sempre o último
+  // é o caminho que a corrente deixa livre — o último com lance nunca quebra
+  // nada embaixo dele.
+  let obj = cru();
+  while (podeApagarPasso(obj, "objective", quantos(obj, "objective") - 1).pode) {
+    obj = comPassoRemovido(obj, "objective", quantos(obj, "objective") - 1);
+  }
+  assert.equal(quantos(obj, "objective"), MIN_PASSOS_ROTEIRO);
+  assert.equal(lessonSchema.safeParse(comPassoRemovido(obj, "objective", 1)).success, false);
 });
 
 /* ------------------------------------------------------------------ *
