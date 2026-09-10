@@ -70,7 +70,11 @@ const EM_PORTUGUES: Array<[RegExp, string]> = [
   [/missing black king/i, "falta o rei preto"],
   [/too many white kings/i, "há mais de um rei branco"],
   [/too many black kings/i, "há mais de um rei preto"],
-  [/must contain 6 space[- ]delimited fields/i, "a FEN precisa dos 6 campos"],
+  // `six` por extenso, e não só o algarismo: é assim que a chess.js escreve
+  // ("must contain six space-delimited fields"). Com o padrão só de algarismo a
+  // mensagem passava crua, em inglês — e é a mais frequente do editor, porque é
+  // a que aparece quando se cola no campo qualquer coisa que não seja uma FEN.
+  [/must contain (6|six) space[- ]delimited fields/i, "a FEN precisa dos 6 campos"],
   [/piece data does not contain 8 '\/'-delimited rows/i, "a FEN não tem as 8 fileiras"],
   [/invalid piece/i, "há um caractere que não é peça"],
   [/consecutive numbers/i, "há dois números seguidos numa fileira"],

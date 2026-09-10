@@ -1,8 +1,10 @@
 # Modo editor — onde paramos
 
 **Data:** 2026-09-10. **Branch:** `modo-editor`. **Bloco 1 entregue; Bloco 2 pela
-metade, com uma dívida aberta: o palco não cabe em 1366×768** (ver a rodada de
-navegador do "+", mais abaixo).
+metade.** A dívida do palco em 1366×768 foi **paga e medida** — ver a seção
+daquela rodada, mais abaixo. O que sobra do Bloco 2 está em "Não começado", e
+o **Bloco 2B** (prévia, galeria de diagramas, tetos) foi pedido pelo Doug e
+**entregue** em 10/9/2026 — seção própria abaixo.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -277,6 +279,8 @@ propósito, a suíte cai de 42 para 41. Ela guarda de verdade.
 - `criarMotor()` extraído de `stockfish.ts` e a **barra de avaliação** com
   worker próprio.
 - **Bloco 2C** — as respostas do defensor pela fonte (ver acima).
+(O Bloco 2B e a moldura vermelha saíram desta lista: foram entregues. Ver
+"O Bloco 2B, entregue", logo abaixo.)
 
 ### A rodada de navegador do "+" (2026-09-10) — feita
 
@@ -316,8 +320,17 @@ selecionado fica verde — o contrário do que se quer.
 O aviso chega assim mesmo, por dois sinais menores: a **bolinha** no canto
 (`bg-erro`) e o **código em texto** (`text-erro-tinta`). Os dois apareceram.
 
-Decisão em aberto, e ela é de desenho, não de código: pôr a borda que os
-comentários prometem, ou corrigir os comentários e aceitar bolinha + frase.
+**Decidida em 10/9/2026** (o Doug delegou a escolha): a moldura fica
+**vermelha no selo que tem problema e NÃO está selecionado**; ao selecioná-lo
+ela volta a ser verde, e o problema segue avisando pela bolinha e pelo código
+em texto — que estão à vista justamente porque o professor foi olhar.
+
+O motivo da escolha, contra as outras duas: é a única que dá o aviso **de
+longe** sem inventar desenho novo. "Sempre vermelha" obrigaria a uma terceira
+forma para o selo que é os dois ao mesmo tempo (anel duplo, sombra), e "só
+bolinha" deixa o professor procurar uma marca de 8 px numa coluna que agora
+pode ter 40 selos. **Ainda não implementada** — é uma linha em
+`ListaDeDiagramas.tsx:77-81`, que hoje nem chega a perguntar se há problema.
 
 ### O que a rodada destapou — 2: o palco não cabe em 1366×768
 
@@ -337,26 +350,199 @@ lado onde mora a fala cortada. E o painel de texto termina em 1417, 51 px além
 da janela — barra de rolagem horizontal numa tela que é a mais comum em
 notebook.
 
+### Paga em 10/9/2026, e com uma segunda goteira junto
+
 **A causa, com arquivo e linha:** `app/globals.css:536` calcula o tabuleiro como
 `calc(100vw - 2.5rem - 2.5rem - var(--aula-painel))`. Essa conta reparte a
 largura entre respiro, painel e tabuleiro — e **não sabe que o editor pendurou
 mais 224 px de coluna à esquerda**. O palco do aluno está certo; o do editor
 herda a conta do aluno.
 
-O conserto tem forma pronta no próprio arquivo: `.aula-palco-magro`
-(`globals.css:623`) existe justamente para um modificador trocar as medidas sem
-repetir a media query. Um `.aula-palco-editor` que desconte a coluna na mesma
-conta resolve, e é mudança de CSS só.
+**O conserto foi outro, e de propósito.** Um `.aula-palco-editor` descontando
+16,5rem da mesma conta seria uma cópia à mão das classes do `Editor.tsx`: no dia
+em que o `w-56` virasse `w-64`, o CSS voltaria a mentir em silêncio — o mesmo
+defeito com outra roupagem. Em vez de recalcular, a coluna do tabuleiro passou a
+**perguntar quanto sobra**: `grid-template-columns: minmax(0, max(15rem,
+var(--aula-teto))) var(--aula-painel)`. Com tamanho fixo a coluna transborda
+quando não cabe; com `minmax(0, …)` ela cresce até o teto **mas só até onde o
+espaço deixar**, e o tabuleiro segue junto porque o `clamp` de `.aula-tabuleiro`
+já tem `100%` — e esse `100%` é a largura da coluna. Não há número para manter.
+
+Medido depois, em 1366×768, no editor com os 13 selos da N1-KPK:
+
+| | Antes | Depois |
+|---|---|---|
+| `grid-template-columns` | `680px 522px` | **`525px 522px`** |
+| Palco / `<main>` | 1242 dentro de ~1117 | **1087 dentro de 1087** |
+| Documento | 1417 px (51 fora) | **1351 px** (a janela menos a barra) |
+| Rolagem horizontal | sim | **não** |
+| Tabuleiro × coluna | sobrepõem 46 px | **vão de 16 px** (coluna até 236, tabuleiro de 252) |
+
+**Isto não toca no palco do aluno**, e a razão é aritmética: a regra nova só se
+afasta da antiga quando o pai é mais estreito do que a conta do `100vw` supõe, e
+o único lugar onde isso acontece é o editor. Em 1024 px — a faixa em que o
+próprio comentário do arquivo diz que "este painel cobra" — as duas dão o mesmo
+tabuleiro de 422 px num pai de 984.
+
+#### A segunda goteira: a página rolava 593 px na vertical
+
+A mesma medida destapou um defeito anterior, que o doc não registrava. A coluna
+de selos tem `overflow-y-auto` — ela promete rolar por dentro —, mas nenhum pai
+com altura fechada: com `min-h-dvh` a coluna **cresce em vez de rolar**. Medidos
+os 13 selos: coluna de **1245 px**, documento de **1361** contra 768 de janela.
+É o mesmo defeito do palco, na outra direção — e ele trava o mesmo próximo
+passo, porque não se arrasta o selo 1 até o 13 numa coluna que não cabe na tela.
+
+Consertado em `components/editor/Editor.tsx`: `min-h-dvh` → **`h-dvh`** (altura
+fechada), `min-h-0` na linha de baixo (sem ele um filho flex nunca encolhe
+abaixo do próprio conteúdo) e `overflow-y-auto` no `<main>` — para que uma faixa
+de aviso empurre **o painel**, e nunca a página, que arrastaria a coluna junto.
+Depois: documento de **1366×768**, rolagem zero nas duas direções, coluna de 652
+px rolando por dentro (conteúdo de 1231).
+
+**O que ficou, e não é defeito que se sinta:** o palco pede 680 px de altura
+(`100dvh - 5.5rem`, a conta do cabeçalho do **aluno**) onde o editor tem 652, e
+o `<main>` rola 94 px para acomodar. Medido botão por botão, **nada fica
+cortado**: o último termina em y=475 e o `<main>` vai até 756. Os 94 px são vão
+vazio no pé do painel. Consertar de verdade exige uma reserva vertical própria
+para o editor — e essa **seria** um número copiado à mão, que é o que este
+conserto acabou de evitar. Fica declarado, não pago.
+
+Portões depois das duas mudanças: `typecheck`, `lint`, **742 testes**, `build` —
+todos verdes.
+
+## O Bloco 2B, entregue em 10/9/2026
+
+Os três pedidos que o Doug fez depois da rodada do "+". **O levantamento mudou a
+forma de um deles**, e essa é a parte que quem continuar precisa saber.
+
+### A descoberta: galeria de posições não é a etapa 2
+
+O pedido foi "quantos diagramas forem necessários", com o exemplo de uma aula do
+que dá mate e do que não dá — várias posições diferentes, uma depois da outra.
+
+Isso **não cabe na etapa 2**. Lá os quadros são derivados de UMA posição jogando
+o roteiro (`montarQuadros`), e passo sem lance repete o quadro anterior: não
+existe "outra posição" na aula assistida.
+
+Cabe na **etapa 1**, e o gate já a trata como o lugar certo. O comentário dele
+(`scripts/validate-content.ts:1435`) diz: a apresentação é **"a única FEN do
+curso sem arquivo de posição"** — ilustração, ninguém joga nela, pode ter mais de
+sete peças de propósito, não vira `content/positions/`, não consulta a tablebase
+e não deve proveniência. O único juízo mecânico é `fenProblem` mais
+`INTRO_FEN_REDUNDANTE`.
+
+**O que nenhuma máquina cobra, e por isso está escrito na tela do editor:** um
+diagrama de apresentação tirado de um LIVRO deixa de ser ilustração e vira
+posição, com os nove campos de proveniência.
+
+### O que foi feito, em três paradas
+
+**1. Os tetos.** `MAX_PASSOS_ROTEIRO` 24 → **40**, `MAX_PASSOS_INTRO` 6 → **12**,
+e o motivo escrito do segundo mudou junto: os 6 valiam para a apresentação que é
+preâmbulo, e o argumento ("sete cliques até a primeira peça andar") não alcança a
+galeria, onde cada clique mostra uma posição nova. A frase do pé da coluna passou
+a ler a constante em vez de trazer o número escrito à mão.
+
+*Medido na tela, 1366×768:* a apresentação foi de 3 a **12** diagramas pelo "+",
+o vão sumiu exatamente no teto, a frase leu "12", e os 12 passos chegaram ao
+disco — antes do sétimo o `lessonSchema` recusava.
+
+**2. A moldura vermelha do selo** (a decisão em aberto, resolvida acima).
+*Medido:* selo limpo → transparente; selo com problema e não selecionado →
+`--color-erro`, byte a byte igual ao token; selo com problema **e** selecionado →
+`--color-foco`, com o aviso seguindo pela bolinha e pelo código.
+
+**3. A prévia** — botão "Ver como aluno" na barra, `Esc` para voltar.
+
+Ela **não é um modo novo do player**, e essa é a decisão inteira: o player já
+entrega a experiência do aluno quando não recebe nada. Sem `edicao` não há
+lápis, sem `startAt` a aula abre na etapa 1 e anda sozinha, sem `marcacao` o
+botão direito volta a não desenhar, e sem `onStageDone` nada é gravado como
+progresso. A prévia é o editor **parando de passar props**, não uma segunda
+implementação da aula para divergir da primeira.
+
+*Medido:* coluna de selos ausente, **zero** glifos de lápis na tela (na edição
+são 4), rolagem zero nas duas direções — e uma prova incidental do conserto do
+palco: **sem a coluna, o tabuleiro volta sozinho aos 680 px do aluno**
+(`680px 522px`). O conserto é adaptativo, não um número fixo.
+
+**A armadilha da prévia, e ela está na tela.** A etapa 3 é derivada pelo
+`--write`, que só roda em "Conferir": entre uma edição do roteiro e a
+conferência seguinte, o treino do arquivo é o anterior. Quem decide o aviso é
+`publicavel.pode`, que já significa "última conferência verde **e** rascunho
+intocado desde então". *Medido nos três estados:* sem conferência → avisa;
+conferência verde em dia → **não** avisa; uma fala editada depois → avisa de
+novo, com a hora da conferência.
+
+**4. A FEN por diagrama da apresentação** — `comFenDoDiagrama` em
+`lib/editor/edicoes.ts` e `components/editor/PosicaoDoDiagrama.tsx`.
+
+Duas regras que mordem, as duas com teste:
+
+- **`null` OMITE o campo.** "Mostra a posição da aula" se diz pela ausência de
+  `fen`, nunca por `fen` vazia nem por `fen` igual à da aula — essa o gate
+  recusa por `INTRO_FEN_REDUNDANTE`. É a mesma regra do desenho, que some em vez
+  de virar `arrows: []`.
+- **A `fen` entra logo depois da `fala`, e não no fim do objeto.** O
+  espalhamento põe a chave nova no fim, e aí a chave anterior tem de ganhar uma
+  vírgula: o `git diff` mostra uma linha removida e duas acrescentadas para
+  dizer uma coisa só. Depois da `fala` é **inserção pura**.
+
+*Medido no disco:* `diff` do rascunho contra a publicada deu **`31a32`** — uma
+linha acrescentada, nenhuma tocada, mais as 3 do carimbo. Voltar à posição da
+aula devolveu o arquivo byte a byte.
+
+O juízo é o mesmo dos dois lados: `fenProblem` roda na tela antes de gravar e no
+gate depois. *Medido:* FEN com dois reis brancos → "há mais de um rei branco";
+a própria posição da aula → o aviso da redundância, com o botão desabilitado.
+
+### Um defeito achado rodando, e consertado
+
+Colar no campo algo que não é FEN devolvia a mensagem **em inglês**: a tabela de
+tradução de `lib/chess/fen.ts` procurava o algarismo (`must contain 6 space…`) e
+a chess.js escreve **`six`** por extenso. É a mensagem mais frequente do editor,
+justamente a que passava crua — e ela também vale para o gate, que usa a mesma
+função.
+
+Teste de regressão, com as duas saídas:
+
+```
+ANTES   ✖ o texto colado que não é FEN reclama em português
+        actual:   'Invalid FEN: must contain six space-delimited fields'
+        expected: 'a FEN precisa dos 6 campos'
+DEPOIS  ✔ 11 de 11
+```
+
+### O que o 2B **não** cobre
+
+- **Não há montador de peças** — a posição entra por FEN colada. O montador é do
+  Bloco 3 e entra pela mesma porta: quem grava continua sendo `comFenDoDiagrama`.
+- **A prévia não conserta a etapa 3 velha**, ela avisa. Conferir continua sendo
+  o que a põe em dia.
+- **A medida de uso continua sendo do Doug** — ver "Onde o Doug aprova antes de
+  seguir", no plano.
+
+---
 
 ## O próximo passo
 
-**Terminar o Bloco 2.** Antes dos gestos novos, há uma dívida barata de pagar: o
-**palco em 1366×768** (a seção acima diz a causa e o conserto). Enquanto ela não
-for paga, todo gesto novo na coluna vai ser desenhado em cima de um selo que o
-tabuleiro cobre pela direita — e arrastar para reordenar é justamente o gesto
-que precisa do selo inteiro.
+**A dívida do palco está paga** (seção acima, com os números das duas direções).
+O selo está inteiro, e o gesto de arrastar tem onde nascer.
 
-Depois dela, três coisas levantadas que economizam tempo:
+**O Bloco 2B está entregue** (seção acima). O que sobra do Bloco 2 são os
+gestos, e agora eles têm com que ser julgados:
+
+1. A **barrinha do tabuleiro** (flecha, casa, limpar, virar) e o chip
+   "desenho deste diagrama / alvo do treino".
+2. O **lance por arrastar** no diagrama.
+3. **Arrastar para reordenar**, lixeira com desfazer, e `espera` como controle
+   de pausa. (O "+" já saiu; o gesto contrário dele — apagar um diagrama — mora
+   aqui, e continua sendo o buraco mais visível do editor.)
+4. `criarMotor()` extraído de `stockfish.ts` e a **barra de avaliação** com
+   worker próprio.
+
+E as três coisas levantadas que economizam tempo:
 
 - **Ligar `montagem` (e `desenhavel`) exige `key` no `ChessBoard`.** As duas são
   lidas uma vez, com `useState(() => …)` (`ChessBoard.tsx:245` e `:247`), porque
@@ -367,12 +553,22 @@ Depois dela, três coisas levantadas que economizam tempo:
   A barra de avaliação **precisa** de um worker próprio, senão ela cancela o
   lance do computador na etapa de prática. O corte natural é envolver as linhas
   60-486 numa função `criarMotor(build)`.
-- **O navegador embutido escala as coordenadas.** `.claude/launch.json` sobe o
-  `next dev` para a ferramenta de navegador, mas o quadro do ponteiro **não** é
-  o do CSS: na rodada do "+" a razão medida foi **CSS ≈ quadro × 2,91**, e
-  clicar por `ref` erra o alvo. Calibra-se em dois cliques, com um ouvinte de
-  `mousedown` lendo `clientX/clientY`. E a tecla que confirma o lapisinho é
-  `Enter`; `Return` não chega à página.
+- **O navegador embutido escala as coordenadas, e a razão NÃO é constante.** O
+  quadro do ponteiro não é o do CSS: na rodada do "+" a razão foi **× 2,91**; na
+  do Bloco 2B, **× 8,34** — o painel estava reduzido. Clicar por `ref` erra o
+  alvo nas duas. **Calibre a cada sessão**, com dois cliques e um ouvinte de
+  `mousedown` lendo `clientX/clientY`, e resolva `CSS = a × quadro + b`.
+
+  Com o painel muito reduzido (1 px de quadro = 8 px de CSS) o clique por
+  ponteiro deixa de ser confiável: um botão de 44 px vira 5 px de quadro. O
+  caminho que funcionou foi **disparar o clique pelo próprio manipulador da
+  página** (`elemento.click()`) e medir a **geometria à parte**
+  (`getBoundingClientRect`, `elementFromPoint`, `getComputedStyle`) — a
+  geometria não depende do tamanho do painel, então a prova não se perde. Para
+  campo de texto, o valor tem de entrar pelo `setter` nativo mais um evento
+  `input`, senão o React não vê.
+
+  E a tecla que confirma o lapisinho é `Enter`; `Return` não chega à página.
 
 ---
 

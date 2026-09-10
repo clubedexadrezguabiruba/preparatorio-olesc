@@ -95,3 +95,10 @@ test("applyUci recusa lance ilegal em vez de estourar", () => {
   assert.equal(applyUci("8/8/8/3k4/8/8/8/6QK w - - 0 1", "g1a8"), null);
   assert.ok(applyUci("8/8/8/3k4/8/8/8/6QK w - - 0 1", "g1g4"));
 });
+
+test("o texto colado que não é FEN reclama em português", () => {
+  // A chess.js escreve "six" por extenso, e o padrão que só via o algarismo
+  // deixava passar em inglês a mensagem mais frequente do editor: a de quem
+  // colou no campo alguma coisa que não é uma FEN.
+  assert.equal(fenProblem("lixo qualquer"), "a FEN precisa dos 6 campos");
+});

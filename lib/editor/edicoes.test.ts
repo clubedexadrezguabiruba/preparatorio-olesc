@@ -7,6 +7,7 @@ import {
   comCarimbo,
   comDesenho,
   comFala,
+  comFenDoDiagrama,
   comPassoNovo,
   comTecnica,
   passoCru,
@@ -239,4 +240,79 @@ test("o teto do schema é o teto do `+`", () => {
     MAX_PASSOS_ROTEIRO,
   );
   assert.equal(lessonSchema.safeParse(comPassoNovo(obj, "objective", 0)).success, false);
+});
+
+/* ------------------------------------------------------------------ *
+ * A FEN do diagrama da apresentação — a galeria de posições
+ * ------------------------------------------------------------------ */
+
+/** Mate de rei e dama, e nada a ver com a posição da N1-KPK. */
+const OUTRA_POSICAO = "6k1/6Q1/6K1/8/8/8/8/8 b - - 0 1";
+
+test("dar posição própria a um diagrama da apresentação acrescenta UMA linha", () => {
+  const depois = comFenDoDiagrama(cru(), 1, OUTRA_POSICAO);
+  const a = AULA.split("\n");
+  const b = serializar(depois).split("\n");
+
+  // Uma linha só: a chave `fen`, que não existia neste passo.
+  assert.equal(b.length - a.length, 1);
+  assert.equal(lessonSchema.safeParse(depois).success, true);
+
+  // E o arquivo diverge num ponto só: tudo antes é byte a byte igual, tudo
+  // depois também, deslocado de uma linha. `linhasMudadas` não serve aqui —
+  // ele compara por POSIÇÃO, e uma linha inserida desloca as 500 seguintes.
+  const divergencia = iguaisAte(depois);
+  assert.ok(divergencia > 0 && divergencia < a.length, "há um ponto de divergência, e é um só");
+  assert.deepEqual(b.slice(0, divergencia), a.slice(0, divergencia));
+  assert.deepEqual(b.slice(divergencia + 1), a.slice(divergencia));
+});
+
+test("tirar a posição própria devolve o arquivo ao que era, byte a byte", () => {
+  const comFen = comFenDoDiagrama(cru(), 1, OUTRA_POSICAO);
+  const semFen = comFenDoDiagrama(comFen, 1, null);
+  assert.equal(serializar(semFen), AULA);
+});
+
+test("`null` OMITE o campo em vez de deixá-lo vazio", () => {
+  const comFen = comFenDoDiagrama(cru(), 1, OUTRA_POSICAO);
+  const semFen = comFenDoDiagrama(comFen, 1, null);
+  const passo = (semFen.stages as { intro: { passos: Array<Record<string, unknown>> } })
+    .intro.passos[1];
+  // A diferença que morde: `fen: undefined` sobreviveria a este `in` e morreria
+  // no `JSON.stringify`, e `fen: ""` chegaria ao gate como FEN ilegal.
+  assert.equal("fen" in passo, false);
+});
+
+test("trocar por uma posição igual devolve o MESMO objeto", () => {
+  // Sem isto, reabrir a mesma posição marcaria a aula como alterada e mataria
+  // o direito de publicar sem que nada tivesse mudado.
+  const comFen = comFenDoDiagrama(cru(), 1, OUTRA_POSICAO);
+  assert.equal(comFenDoDiagrama(comFen, 1, OUTRA_POSICAO), comFen);
+  const semNada = cru();
+  assert.equal(comFenDoDiagrama(semNada, 1, null), semNada);
+});
+
+test("a galeria inteira: 12 diagramas de posições diferentes é aula válida", () => {
+  // A medida do Bloco 2B. Uma apresentação que é galeria — cada clique mostra
+  // uma posição nova — passa no schema com o teto novo, e cada diagrama leva a
+  // sua própria FEN.
+  let g = cru();
+  while (cabeMaisUmPasso(g, "intro")) g = comPassoNovo(g, "intro", 0);
+  const passos = (g.stages as { intro: { passos: unknown[] } }).intro.passos.length;
+  assert.equal(passos, MAX_PASSOS_INTRO);
+  // O rei branco anda pela primeira fileira: posições legais e distintas.
+  const reiNaFileira = (f: number) =>
+    `7k/8/8/8/8/8/8/${f > 0 ? f : ""}K${7 - f > 0 ? 7 - f : ""} w - - 0 1`;
+  for (let i = 0; i < passos; i += 1) {
+    g = comFenDoDiagrama(g, i, reiNaFileira(i % 8));
+    g = comFala(g, "intro", i, `Diagrama ${i + 1} da galeria.`);
+  }
+  const juizo = lessonSchema.safeParse(g);
+  assert.equal(juizo.success, true, JSON.stringify(juizo.error?.issues?.[0]));
+});
+
+test("o diagrama fora da faixa não estraga o arquivo", () => {
+  const antes = cru();
+  assert.equal(serializar(comFenDoDiagrama(antes, 99, OUTRA_POSICAO)), AULA);
+  assert.equal(serializar(comFenDoDiagrama(antes, -1, OUTRA_POSICAO)), AULA);
 });

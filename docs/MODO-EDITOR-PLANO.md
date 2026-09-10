@@ -132,6 +132,24 @@ Primeiro os contratos, depois a tela: `lib/editor/local.ts` (`EDITOR_LOCAL`, +te
 `marcacao` em `IntroStage`/`ObjectiveStage`; `autoriaDoDesenho`; barrinha do tabuleiro (flecha, casa, limpar, virar) + chip "diagrama / alvo do treino"; lance por arrastar no diagrama (chess.js valida a corrente); o **"+"** entre diagramas, arrastar para reordenar, lixeira com desfazer, `espera` como um controle de "pausa" no diagrama; `criarMotor()` extraído de `stockfish.ts` + `BarraDeAvaliacao` com worker próprio (perspectiva das brancas); `excecoes` por alvo com hash no schema + gate rebaixando a aviso só o erro que casa, `EXCECAO_CADUCA` quando o hash diverge + mutações (exceção que casa passa; exceção com hash velho não protege).
 *Medida:* apagar as 15 flechas e 11 lances da N1-KPK e refazê-los pelo editor → `git diff` vazio. Tempo cronometrado de refazer a aula inteira. **Uso:** pessoa leiga acrescenta um diagrama com uma flecha, sem instrução.
 
+**Bloco 2B — a apresentação como galeria, a prévia, e os tetos (pedidos do Doug em 10/9/2026).**
+
+Três pedidos que chegaram depois da rodada do "+", e que o levantamento mudou de forma.
+
+**1. "Quantos diagramas forem necessários."** O exemplo dele é uma aula do que dá mate e do que não dá: várias posições diferentes, uma depois da outra. Levantado, isso **não é a etapa 2** — lá os quadros são derivados de UMA posição jogando o roteiro (`montarQuadros`), e passo sem lance repete a posição anterior; não existe "outra posição" na etapa 2. É a **etapa 1**, e o gate já a trata como o lugar certo: "a apresentação é a única FEN do curso sem arquivo de posição" (`scripts/validate-content.ts:1435`) — ilustração, ninguém joga nela, pode ter mais de sete peças de propósito, não vira `content/positions/`, **não consulta a tablebase** e não deve proveniência. O único juízo mecânico é `fenProblem` (rei colado, rei faltando, xeque impossível) mais `INTRO_FEN_REDUNDANTE`.
+
+Então o que falta é pequeno, e mora **aqui** e não no Bloco 3: o "+" da apresentação tem de deixar **escolher a FEN do diagrama novo** — colar uma FEN é o caminho barato; o montador e o PGN chegam nos Blocos 3 e 4 e entram pela mesma porta. Sem isso o diagrama novo nasce repetindo a posição da aula, que é exatamente o que `INTRO_FEN_REDUNDANTE` recusa.
+
+Continua valendo o que o comentário do gate já escreve e nenhuma máquina cobra: **diagrama de apresentação tirado de um LIVRO deixa de ser ilustração e vira posição**, com os nove campos de proveniência. Quem cobra é o olho.
+
+**2. Os tetos.** `MAX_PASSOS_ROTEIRO` sobe de 24 para 40: o próprio schema declara que esse número "não mede nada; é freio contra arquivo descontrolado". `MAX_PASSOS_INTRO` sobe de 6 para 12, **e o motivo escrito muda junto** — os 6 valiam para a apresentação que é preâmbulo ("sete cliques até a primeira peça andar é um manual com botão de próximo"), e esse argumento **não alcança a galeria**: ali cada clique mostra uma posição nova, que é o conteúdo da aula e não a antessala dele. Quem subir de novo declara por quê.
+
+**3. A prévia.** Não existe hoje. É a mesma `LessonPlayer` do editor **sem** o objeto `edicao`, sem `pausado`, sem a coluna de selos, começando na etapa 1: um botão "Ver como aluno" na barra, que volta com `Esc`. Ela vem **antes** dos gestos (arrastar, reordenar, lixeira), e não depois — é com ela que se julga cada gesto novo, e construí-la primeiro torna todos os outros itens mais baratos de conferir.
+
+**A armadilha da prévia, e ela tem de estar na tela:** a etapa 3 é derivada pelo `--write`, que só roda em "Conferir". Antes de conferir, a prévia mostra a etapa 3 da **última conferência**, não a do que acabou de ser escrito. A prévia diz isso em uma linha, com a hora da conferência, e só quando o rascunho mudou depois dela.
+
+*Medida:* uma apresentação de 8 diagramas de posições diferentes passa o gate como rascunho; a prévia percorre as quatro etapas sem nenhum lápis à vista e sem a coluna de selos; e a linha de aviso da etapa 3 aparece quando — e só quando — o rascunho mudou depois da última conferência.
+
 **Bloco 2C — as respostas do defensor (`replies`), pela fonte.**
 Hoje o roteiro é uma linha só: um lance do aluno, uma resposta do defensor, e a derivação costura os dois. Quando o defensor tem **mais de uma** resposta razoável, o autor precisa de `replies[2..4]` na etapa 3 — e hoje isso é edição do JSON à mão, porque a etapa 3 é saída.
 
@@ -163,6 +181,19 @@ Montador (ícone de peças na barrinha; paleta de peças ao lado do tabuleiro co
 Não se atualiza o Next junto com isto: o editor nasce na 16.3.0 instalada, lendo `node_modules/next/dist/docs/`; atualizar o framework é outra tarefa.
 
 Riscos declarados: `spawn` do Node a partir de Server Action no Windows (medir no Bloco 1); mudar lance de linha que a turma já treina zera o progresso (o editor mostra o número; OLESC em outubro); cada extra publicada encarece o nível para quem não fechou (regra existente, dita na tela).
+
+## Onde o Doug aprova antes de seguir
+
+O editor é a ferramenta que vai escrever as outras 46 aulas. Ele não fecha um bloco só porque os portões estão verdes: **trabalho verde e trabalho aprovado não são a mesma coisa.** Estes são os pontos de parada em que quem usa a ferramenta olha e decide — e em cada um a resposta pode ser "muda".
+
+| Quando | O que o Doug faz | O que ele decide |
+|---|---|---|
+| **Agora**, com o Bloco 2 pela metade | Abre `/editor/finais/N1-KPK`, muda uma fala, acrescenta um diagrama, confere, publica. | Se o ciclo inteiro já é usável **antes** de ganhar mais gestos. |
+| **Fim do 2B** — prévia e galeria | Monta uma apresentação de várias posições e vê a aula como o aluno vê. | Se a prévia responde "como ficou" sem ele precisar publicar. |
+| **Fim do Bloco 2** — os gestos | Apaga as 15 flechas e os 11 lances da N1-KPK e refaz tudo pelo editor, cronometrado. | Se refazer pela tela é mais rápido que editar o JSON à mão. |
+| **Fim do Bloco 3** — aula do zero | Escreve uma aula inteira a partir do molde, do zero ao verde, cronometrado. | Se as outras 46 aulas nascem aqui, ou não. |
+
+Em cada um a medida é **tempo e hesitações**, não só "funcionou". A medida de uso do Bloco 1 — uma pessoa que nunca viu a tela muda uma fala sem instrução — continua pendente e é a mesma coisa, com outra pessoa no lugar dele.
 
 ## Verificação
 

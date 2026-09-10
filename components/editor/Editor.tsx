@@ -5,12 +5,14 @@ import type { DrawShape } from "@lichess-org/chessground/draw";
 import { LessonPlayer } from "@/components/lesson/LessonPlayer";
 import { Lapis } from "@/components/editor/Lapis";
 import { ListaDeDiagramas, type Diagrama } from "@/components/editor/ListaDeDiagramas";
+import { PosicaoDoDiagrama } from "@/components/editor/PosicaoDoDiagrama";
 import { conferirAula, publicarAula, recarregarAula, salvarAula } from "@/app/editor/acoes";
 import {
   cabeMaisUmPasso,
   comCarimbo,
   comDesenho,
   comFala,
+  comFenDoDiagrama,
   comPassoNovo,
   comTecnica,
   passoCru,
@@ -19,7 +21,13 @@ import { filaDeGravacao, type Fila } from "@/lib/editor/fila";
 import type { Conferencia } from "@/lib/editor/gate";
 import { autoriaDoDesenho, desenhoDaAutoria } from "@/lib/chess/annotations";
 import { montarQuadros } from "@/lib/lesson/roteiro";
-import { lessonSchema, type Lesson, type Position } from "@/lib/lesson/schema";
+import {
+  MAX_PASSOS_INTRO,
+  MAX_PASSOS_ROTEIRO,
+  lessonSchema,
+  type Lesson,
+  type Position,
+} from "@/lib/lesson/schema";
 
 /**
  * A casca do modo editor: a aula como o aluno a vê, com a edição em cima dela.
@@ -95,6 +103,18 @@ export function Editor({
   });
   /** Sobe a cada mudança estrutural (conferência, recarga) para remontar o player. */
   const [geracao, setGeracao] = useState(0);
+
+  /**
+   * A prévia: **ver a aula como o aluno a vê**, sem nada do editor por cima.
+   *
+   * Ela não é um modo novo do player, e essa é a decisão inteira: o player já
+   * entrega a experiência do aluno quando não recebe nada — sem `edicao` não há
+   * lápis, sem `startAt` a aula abre na etapa 1 e anda sozinha, sem `marcacao`
+   * o botão direito volta a não desenhar, e sem `onStageDone` nada é gravado
+   * como progresso. A prévia é o editor **parando de passar props**, não uma
+   * segunda implementação da aula para divergir da primeira.
+   */
+  const [previa, setPrevia] = useState(false);
 
   const hash = useRef(hashInicial);
   const relogioDoDebounce = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -190,16 +210,28 @@ export function Editor({
     obterFila().enfileirar(cru);
   }, [cru, obterFila]);
 
+  /** Volta da prévia para a edição, remontando o player no diagrama de origem. */
+  const sairDaPrevia = useCallback(() => {
+    setPrevia(false);
+    setGeracao((g) => g + 1);
+  }, []);
+
   useEffect(() => {
     function aoTeclar(e: KeyboardEvent) {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
         e.preventDefault();
         forcarSalvamento();
       }
+      // `Escape` só sai da prévia. Na edição ele é do lapisinho, que cancela a
+      // frase em curso — roubá-lo aqui apagaria o cancelamento de quem digita.
+      if (e.key === "Escape" && previa) {
+        e.preventDefault();
+        sairDaPrevia();
+      }
     }
     window.addEventListener("keydown", aoTeclar);
     return () => window.removeEventListener("keydown", aoTeclar);
-  }, [forcarSalvamento]);
+  }, [forcarSalvamento, previa, sairDaPrevia]);
 
   // ------------------------------------------------------- as edições
 
@@ -211,6 +243,23 @@ export function Editor({
   );
 
   const trocarTitulo = useCallback((texto: string) => editar({ ...cru, title: texto }), [cru, editar]);
+
+  /**
+   * Troca a posição de um diagrama da apresentação — a "galeria".
+   *
+   * Não julga a FEN: quem julgou foi a tela (`PosicaoDoDiagrama` roda o mesmo
+   * `fenProblem` do gate antes de chamar), e quem julga de novo é o gate. Aqui
+   * é só a cirurgia no JSON.
+   */
+  const trocarFenDoDiagrama = useCallback(
+    (fen: string | null) => {
+      editar(comFenDoDiagrama(cru, alvo.passo, fen));
+      // O tabuleiro tem de mostrar a posição nova: `startAt` só é lido na
+      // montagem, e sem remontar o professor colaria uma FEN e não veria nada.
+      setGeracao((g) => g + 1);
+    },
+    [cru, alvo.passo, editar],
+  );
 
   const trocarTecnica = useCallback(
     (campo: "name" | "summary", texto: string) => editar(comTecnica(cru, campo, texto)),
@@ -360,8 +409,112 @@ export function Editor({
     (e) => ultimaValida.stages[e] !== undefined,
   );
 
+  /**
+   * A posição da aula — a que um diagrama da apresentação mostra quando não tem
+   * `fen` própria. É a mesma conta do `useMemo` dos diagramas, e a ordem
+   * (`objective`, depois `guided`, depois `practice`) é a do gate.
+   */
+  const fenDaAula =
+    positions[
+      (ultimaValida.stages.objective ??
+        ultimaValida.stages.guided ??
+        ultimaValida.stages.practice)!.positionId
+    ].fen;
+
+  /**
+   * A FEN própria do diagrama selecionado: `null` quando ele mostra a da aula,
+   * `undefined` quando não há diagrama (etapa sem passos, ou índice fora).
+   *
+   * Ela sai do **cru**, e não de `ultimaValida`: é o cru que vai ao disco, e
+   * ler do objeto do Zod aqui abriria a porta para a tela mostrar uma posição e
+   * o arquivo guardar outra.
+   */
+  const fenDoDiagrama: string | null | undefined = (() => {
+    if (alvo.etapa !== "intro") return undefined;
+    const passo = passoCru(cru, "intro", alvo.passo);
+    if (!passo) return undefined;
+    return typeof passo.fen === "string" ? passo.fen : null;
+  })();
+
+  if (previa) {
+    /**
+     * **A armadilha da prévia, e por isso ela está na tela e não num
+     * comentário:** a etapa 3 não é escrita pela edição — ela é *derivada* do
+     * roteiro pelo `--write`, que só roda em "Conferir". Entre uma edição do
+     * roteiro e a conferência seguinte, o treino que o arquivo carrega é o
+     * anterior, e a prévia o mostraria como se fosse o de agora. Quem confere
+     * é `publicavel.pode`: ele já significa "a última conferência ficou verde
+     * **e** o rascunho não mudou desde então", que é exatamente a condição em
+     * que o treino do arquivo está em dia.
+     */
+    const treinoEmDia = publicavel.pode;
+    const horaDaConferencia = conferencia
+      ? new Date(conferencia.em).toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : null;
+
+    return (
+      <div className="flex h-dvh flex-col gap-3 p-3">
+        <header className="flex flex-wrap items-center gap-3 rounded-lg border border-borda-fraca bg-carta px-3 py-2">
+          <span className="rotulo text-tinta-fraca">Prévia de {aula}</span>
+          <span className="text-sm text-tinta-media">
+            A aula como o aluno a vê. Nada do que você fizer aqui é salvo, e nada conta como
+            progresso.
+          </span>
+          <button
+            type="button"
+            onClick={sairDaPrevia}
+            className="foco ml-auto rounded-md border border-borda px-3 py-1.5 text-sm"
+          >
+            Voltar a editar (Esc)
+          </button>
+        </header>
+
+        {!treinoEmDia && (
+          <p
+            role="status"
+            className="rounded-lg border border-aviso bg-aviso-superficie px-3 py-2 text-sm text-aviso-tinta"
+          >
+            O treino da etapa 3 é escrito pela conferência, não pela edição.{" "}
+            {horaDaConferencia
+              ? `A última foi às ${horaDaConferencia}, e o rascunho mudou depois dela — `
+              : "Esta aula ainda não foi conferida — "}
+            o treino que aparece abaixo pode ser o de antes. Confira para vê-lo em dia.
+          </p>
+        )}
+
+        <main className="min-w-0 flex-1 overflow-y-auto">
+          {/* Sem `startAt`, sem `edicao`, sem `marcacao`, sem `aoAndar`: é o
+              aluno. A `key` remonta a aula do começo a cada entrada na prévia,
+              senão a segunda visita abriria onde a primeira parou. */}
+          <LessonPlayer
+            key={`previa-${aula}-${geracao}`}
+            bundle={{ lesson: ultimaValida, positions }}
+          />
+        </main>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex min-h-dvh flex-col gap-3 p-3">
+    /*
+     * **A altura da página é FECHADA (`h-dvh`), e não um piso (`min-h-dvh`).**
+     *
+     * A coluna de selos tem `overflow-y-auto` — ela promete rolar por dentro.
+     * Essa promessa só vale dentro de um pai que saiba onde termina: com um
+     * piso, a coluna cresce em vez de rolar. Medido em 1366×768 em 10/9/2026,
+     * com os 13 selos da N1-KPK: a coluna media **1245 px** e a página inteira
+     * **1361**, contra 768 de janela — 593 px de rolagem, com o tabuleiro e os
+     * botões empurrados junto. É o mesmo defeito que o palco tinha na largura
+     * (ver `.aula-palco` em `app/globals.css`), na outra direção.
+     *
+     * `min-h-0` na linha abaixo é a outra metade: sem ele, um filho flex nunca
+     * encolhe abaixo do próprio conteúdo, e a altura fechada aqui em cima não
+     * chegaria à coluna.
+     */
+    <div className="flex h-dvh flex-col gap-3 p-3">
       <BarraDoEditor
         aula={aula}
         estado={estado}
@@ -372,6 +525,7 @@ export function Editor({
         publicando={publicando}
         publicavel={publicavel}
         temConferenciaVerde={conferencia?.verde ?? false}
+        aoVerPrevia={() => setPrevia(true)}
         aoConferir={conferir}
         aoPublicar={publicar}
         aoRecarregar={recarregar}
@@ -388,7 +542,19 @@ export function Editor({
         <ProblemasSemDiagrama problemas={problemas.filter((p) => !p.diagrama)} />
       )}
 
-      <div className="flex flex-1 gap-4">
+      {/* Só na apresentação, e a razão está no cabeçalho de `PosicaoDoDiagrama`:
+          na aula assistida não existe "a posição deste diagrama". */}
+      {alvo.etapa === "intro" && fenDoDiagrama !== undefined && (
+        <PosicaoDoDiagrama
+          key={alvo.passo}
+          numero={alvo.passo + 1}
+          fen={fenDoDiagrama}
+          fenDaAula={fenDaAula}
+          aoTrocar={trocarFenDoDiagrama}
+        />
+      )}
+
+      <div className="flex min-h-0 flex-1 gap-4">
         <aside className="w-56 shrink-0 overflow-y-auto">
           <div className="mb-2 flex gap-1">
             {etapasDisponiveis.map((e) => (
@@ -420,14 +586,21 @@ export function Editor({
           />
           {!cabeMais && (
             <p className="mt-2 text-xs text-tinta-fraca">
+              {/* O número sai da constante, e nunca do texto: um teto escrito à
+                  mão vira mentira no dia em que o schema mudar — e ele mudou em
+                  10/9/2026, 6→12 na apresentação e 24→40 na aula assistida. */}
               {alvo.etapa === "intro"
-                ? "A apresentação chegou aos 6 diagramas — é o teto, porque cada um é um clique antes de qualquer peça se mexer."
-                : "A aula assistida chegou aos 24 diagramas — é o teto do formato."}
+                ? `A apresentação chegou aos ${MAX_PASSOS_INTRO} diagramas — é o teto do formato.`
+                : `A aula assistida chegou aos ${MAX_PASSOS_ROTEIRO} diagramas — é o teto do formato.`}
             </p>
           )}
         </aside>
 
-        <main className="min-w-0 flex-1">
+        {/* `overflow-y-auto`: o palco tem altura própria (`--aula-teto`, no
+            CSS) e não encolhe. Quando uma faixa de aviso aparece aqui em cima e
+            sobra menos altura do que ele pede, quem rola é este painel — nunca
+            a página, que voltaria a arrastar a coluna de selos junto. */}
+        <main className="min-w-0 flex-1 overflow-y-auto">
           <LessonPlayer
             // Remonta quando o diagrama-alvo muda ou quando o arquivo é
             // reescrito por fora (conferência, recarga). Digitar **não**
@@ -490,6 +663,7 @@ function BarraDoEditor({
   publicando,
   publicavel,
   temConferenciaVerde,
+  aoVerPrevia,
   aoConferir,
   aoPublicar,
   aoRecarregar,
@@ -505,6 +679,7 @@ function BarraDoEditor({
   publicavel: { pode: boolean; motivo: string | null };
   temConferenciaVerde: boolean;
   aoConferir: () => void;
+  aoVerPrevia: () => void;
   aoPublicar: () => void;
   aoRecarregar: () => void;
   aoForcar: () => void;
@@ -535,6 +710,17 @@ function BarraDoEditor({
       {estado === "limpo" && recado && <span className="text-sm text-aviso-tinta">{recado}</span>}
 
       <div className="ml-auto flex gap-2">
+        {/* "Ver como aluno" vem ANTES de Conferir, e a ordem é o ciclo: escrevo,
+            olho, confiro, publico. Ela não desabilita nunca — a prévia lê a
+            última versão válida na tela, que existe mesmo enquanto o JSON está
+            quebrado no meio de uma frase. */}
+        <button
+          type="button"
+          onClick={aoVerPrevia}
+          className="foco rounded-md border border-borda px-3 py-1.5 text-sm"
+        >
+          Ver como aluno
+        </button>
         <button
           type="button"
           onClick={aoConferir}

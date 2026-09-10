@@ -35,10 +35,23 @@ export type Diagrama = {
  *
  * ## O erro aparece no diagrama, não numa lista de códigos
  *
- * Quando a conferência acusa alguma coisa, o selo do passo ganha borda
- * vermelha e o código vira frase ao lado. Uma lista de erros embaixo da tela
- * obrigaria o professor a traduzir `roteiro[3]` para "o terceiro diagrama" com
- * o dedo — e `TREINO_SEM_NO` não quer dizer nada para quem não escreveu o gate.
+ * Quando a conferência acusa alguma coisa, o selo do passo ganha três marcas: o
+ * código vira frase ao lado, uma bolinha vermelha aparece no canto, e a moldura
+ * fica vermelha. Uma lista de erros embaixo da tela obrigaria o professor a
+ * traduzir `roteiro[3]` para "o terceiro diagrama" com o dedo — e
+ * `TREINO_SEM_NO` não quer dizer nada para quem não escreveu o gate.
+ *
+ * **A moldura vermelha só vale no selo que NÃO está selecionado**, e isso foi
+ * decidido depois de a rodada de navegador de 10/9/2026 descobrir que ela nunca
+ * existiu: este comentário a prometia, e o `className` punha
+ * `border-transparent` no selo acusado, igual ao selo limpo do lado. Uma
+ * moldura tem uma cor só, e ela já tinha dono — dizer qual selo está
+ * selecionado. Ao selecionar o selo com problema, a moldura volta ao verde e o
+ * aviso segue pela bolinha e pelo código, que estão à vista justamente porque o
+ * professor foi olhar. As outras duas saídas foram recusadas: "sempre vermelha"
+ * pede uma terceira forma para o selo que é os dois ao mesmo tempo (anel duplo,
+ * sombra), e "só bolinha" manda procurar uma marca de 8 px numa coluna que
+ * agora pode ter 40 selos.
  */
 export function ListaDeDiagramas({
   diagramas,
@@ -77,7 +90,9 @@ export function ListaDeDiagramas({
             className={`foco flex items-start gap-2.5 rounded-lg border p-1.5 text-left transition-colors ${
               selecionado
                 ? "border-foco bg-carta-alta"
-                : "border-transparent hover:border-borda-fraca hover:bg-carta-alta"
+                : temProblema
+                  ? "border-erro hover:bg-carta-alta"
+                  : "border-transparent hover:border-borda-fraca hover:bg-carta-alta"
             }`}
           >
             <Miniatura fen={d.fen} orientation={orientation} tamanho={64} />

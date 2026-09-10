@@ -566,8 +566,37 @@
        subir o `64rem` deste `@media` e deixar aquelas telas em coluna única. */
     /* A coluna do tabuleiro é do TAMANHO do tabuleiro, e o par se centra na
        moldura. Com `1fr` a coluna esticava até a borda e o tabuleiro ficava
-       boiando dentro dela, longe do painel que ele conversa. */
-    grid-template-columns: max(15rem, var(--aula-teto)) var(--aula-painel);
+       boiando dentro dela, longe do painel que ele conversa.
+
+       **O `minmax(0, …)` é o que impede o palco de transbordar o pai**, e ele
+       entrou consertando o modo editor. O terceiro limite de `--aula-teto`, ali
+       em cima, mede o que sobra do **viewport** — e isso só é verdade enquanto
+       o palco É a página. O editor pendura uma coluna de selos ao lado
+       (`aside w-56` + `gap-4` dentro de um `p-3`, em `components/editor/Editor.tsx`),
+       e a conta não sabe disso. Medido em 1366×768 em 10/9/2026: o palco
+       montava 1242 px (tabuleiro 680 + vão 40 + painel 522) dentro dos ~1117 px
+       que sobravam para o `<main>`, e o `justify-content: center` logo abaixo
+       repartia os 125 px de excesso **nos dois lados** — 62 px de tabuleiro por
+       cima dos selos à esquerda, e o painel terminando em 1417, 51 px fora da
+       janela. Um palco largo demais, centrado: um número, dois sintomas.
+
+       Com tamanho fixo, a coluna transborda quando não cabe. Com
+       `minmax(0, …)` ela cresce até o teto **mas só até onde o espaço deixar**,
+       e o tabuleiro segue junto de graça: o `clamp` de `.aula-tabuleiro` já tem
+       `100%`, e esse `100%` é a largura desta coluna.
+
+       **Isto não muda um pixel do palco do aluno**, e a razão é aritmética: a
+       regra nova só se afasta da antiga quando o pai é mais estreito do que a
+       conta do `100vw` supõe, e o único lugar onde isso acontece é o editor. Em
+       1024 px — a faixa em que o comentário acima diz que “este painel cobra”
+       — as duas dão o mesmo tabuleiro de 422 px num pai de 984.
+
+       A alternativa era um `.aula-palco-editor` descontando 16,5rem (14 da
+       coluna + 1 do vão + 1,5 do respiro) da mesma conta. Recusada: seria uma
+       cópia à mão das classes do `Editor.tsx`, e no dia em que o `w-56` virasse
+       `w-64` o CSS voltaria a mentir em silêncio — o mesmo defeito com outra
+       roupagem. Perguntar quanto sobra não tem número para manter. */
+    grid-template-columns: minmax(0, max(15rem, var(--aula-teto))) var(--aula-painel);
     justify-content: center;
     gap: 2.5rem;
   }

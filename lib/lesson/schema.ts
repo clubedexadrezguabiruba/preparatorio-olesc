@@ -569,12 +569,28 @@ export const introPassoSchema = desenhoSchema.extend({
  * tem o que dizer omite `stages.intro` inteiro, e isso é uma escolha, não um
  * arquivo pela metade.
  *
- * O teto é 6 porque cada passo é um clique que o aluno dá **antes** de ver
- * qualquer peça se mexer. Sete cliques até a primeira peça andar é um manual
- * com botão de "próximo", que é exatamente o que a etapa 2 deixou de ser.
+ * **O teto era 6, e subiu para 12 em 2026-09-10.** O argumento dos 6 continua
+ * bom para o caso em que ele nasceu: quando a apresentação é **preâmbulo** — os
+ * passos falam da mesma posição que o aluno vai jogar, `fen` ausente —, cada
+ * passo é um clique que o aluno dá **antes** de ver qualquer peça se mexer, e
+ * sete cliques até a primeira peça andar são um manual com botão de "próximo",
+ * que é exatamente o que a etapa 2 deixou de ser.
+ *
+ * O que esse argumento **não** alcança é a apresentação como **galeria**:
+ * passos com `fen` própria, cada um mostrando uma posição diferente ("aqui dá
+ * mate, aqui não dá"). Ali o clique não é espera — é o conteúdo, porque a
+ * posição muda a cada um. O Doug pediu esse formato em 2026-09-10, e ele é
+ * legítimo justamente porque a apresentação é a única FEN do curso sem arquivo
+ * de posição: ilustração, sem proveniência e sem tablebase (ver o bloco "A
+ * apresentação" em `scripts/validate-content.ts`, e o Bloco 2B de
+ * `docs/MODO-EDITOR-PLANO.md`).
+ *
+ * Os 12 continuam sendo **freio, não régua**. Quem subir de novo declara por
+ * quê — e, se precisar subir muito, a pergunta deixa de ser o teto e passa a
+ * ser se aquilo ainda é uma aula ou já são duas.
  */
 /** O teto de passos da apresentação — o "+" do editor precisa saber onde parar. */
-export const MAX_PASSOS_INTRO = 6;
+export const MAX_PASSOS_INTRO = 12;
 
 export const introStageSchema = z.strictObject({
   passos: z.array(introPassoSchema).min(2).max(MAX_PASSOS_INTRO),
@@ -651,7 +667,7 @@ export const roteiroPassoSchema = desenhoSchema.extend({
 });
 
 /** O teto de passos da aula assistida — o "+" do editor precisa saber onde parar. */
-export const MAX_PASSOS_ROTEIRO = 24;
+export const MAX_PASSOS_ROTEIRO = 40;
 
 /**
  * Etapa 1 — **a aula assistida**: as peças se movem, as flechas aparecem, e um
@@ -712,8 +728,15 @@ export const objectiveStageSchema = z.strictObject({
    * **Os dois números deixaram de ser régua.** O teto de 14 era o do relógio —
    * a faixa de 40 a 70 segundos que a `/revisar-aula` cobrava —, e essa faixa
    * saiu da régua a pedido do Doug em 2026-09-09: a aula dura o que precisar. O
-   * 24 que ficou no lugar não mede nada; é freio contra arquivo descontrolado,
-   * e o piso de 2 é o mínimo para haver um lance e uma fala sobre ele.
+   * número que ficou no lugar não mede nada; é freio contra arquivo
+   * descontrolado, e o piso de 2 é o mínimo para haver um lance e uma fala
+   * sobre ele.
+   *
+   * Ele era 24 e virou **40** em 2026-09-10, quando o Doug pediu "quantos
+   * diagramas forem necessários". Subir um freio que não mede nada custa uma
+   * conferência só: que ninguém o esteja lendo como régua. Ninguém estava — os
+   * dois únicos leitores são o `superRefine` daqui e o `cabeMaisUmPasso` do
+   * editor, e o teto de tempo saiu da régua da voz em 2026-09-09.
    *
    * A conta de `lib/lesson/roteiro.ts` continua valendo e continua sendo
    * impressa: ela é o relógio da TELA — quanto tempo cada fala fica lá. O que

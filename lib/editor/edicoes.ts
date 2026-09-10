@@ -77,13 +77,19 @@ export function passoCru(
   cru: Record<string, unknown>,
   etapa: "intro" | "objective",
   passo: number,
-): { arrows?: [string, string][]; highlights?: string[] } | null {
+): { arrows?: [string, string][]; highlights?: string[]; fen?: string } | null {
   const stages = cru.stages as Record<string, unknown> | undefined;
   const etapaCrua = stages?.[etapa] as Record<string, unknown> | undefined;
   const lista = (etapa === "intro" ? etapaCrua?.passos : etapaCrua?.roteiro) as
     | Array<Record<string, unknown>>
     | undefined;
-  return (lista?.[passo] as { arrows?: [string, string][]; highlights?: string[] }) ?? null;
+  return (
+    (lista?.[passo] as {
+      arrows?: [string, string][];
+      highlights?: string[];
+      fen?: string;
+    }) ?? null
+  );
 }
 
 /**
@@ -196,6 +202,96 @@ export function cabeMaisUmPasso(
     | undefined;
   if (!lista) return false;
   return lista.length < (etapa === "intro" ? MAX_PASSOS_INTRO : MAX_PASSOS_ROTEIRO);
+}
+
+/**
+ * O passo com a `fen` **logo depois da `fala`**, e não no fim do objeto.
+ *
+ * Parece capricho e é a diferença entre um `git diff` de 1 linha e um de 3. O
+ * espalhamento (`{...passo, fen}`) põe a chave nova no FIM, e no JSON a chave
+ * anterior tem de ganhar uma vírgula — o `git diff` mostra uma linha removida e
+ * duas acrescentadas para dizer uma coisa só. Entrando logo depois da `fala`,
+ * que num passo com desenho nunca é a última, é **inserção pura**: uma linha a
+ * mais e nenhuma tocada.
+ *
+ * Num passo que só tem `fala` os 3 são inevitáveis — não há chave depois dela
+ * para carregar a vírgula. Nunca é pior, e quase sempre é melhor.
+ *
+ * A ordem também lê bem: o que o professor diz, sobre que posição, com que
+ * marcas em cima dela.
+ */
+function comFenDepoisDaFala(
+  passo: Record<string, unknown>,
+  fen: string,
+): Record<string, unknown> {
+  const saida: Record<string, unknown> = {};
+  for (const [chave, valor] of Object.entries(passo)) {
+    saida[chave] = valor;
+    if (chave === "fala") saida.fen = fen;
+  }
+  if (!("fen" in saida)) saida.fen = fen;
+  return saida;
+}
+
+/**
+ * Troca a posição que um diagrama da **apresentação** mostra.
+ *
+ * ## Por que só a apresentação, e por que isso não é uma limitação
+ *
+ * Na etapa 2 não existe "a posição deste diagrama": os quadros são derivados de
+ * UMA posição jogando o roteiro (`montarQuadros`), e um passo sem lance repete
+ * o quadro anterior. Trocar a posição de um diagrama do meio da aula seria
+ * trocar a aula inteira dali para a frente.
+ *
+ * A apresentação é o contrário, e o gate já diz por quê: ela é **a única FEN do
+ * curso sem arquivo de posição** — ilustração, ninguém joga nela, pode ter mais
+ * de sete peças de propósito, não vira `content/positions/` e não se consulta a
+ * tablebase sobre ela (ver o bloco "A apresentação" em
+ * `scripts/validate-content.ts`). É por isso que a galeria de posições que o
+ * professor quer — "aqui dá mate, aqui não dá" — mora aqui e sai barata.
+ *
+ * ## `null` OMITE o campo, e isso é a regra que morde
+ *
+ * "Mostra a posição da aula" se diz pela **ausência** de `fen`
+ * (`introPassoSchema`), nunca por `fen` vazia nem por `fen` igual à da aula —
+ * essa última o gate recusa por `INTRO_FEN_REDUNDANTE`, e a mensagem que o
+ * professor leria seria sobre "uma segunda cópia da mesma FEN para divergir
+ * depois". É a mesma regra do desenho, que some em vez de virar `arrows: []`.
+ *
+ * Não julga a FEN: quem julga é `fenProblem`, na tela antes de salvar e no gate
+ * depois. Aqui só se troca o campo, e trocar por igual devolve o mesmo objeto —
+ * sem isso, reabrir a mesma posição marcaria a aula como alterada e mataria o
+ * direito de publicar sem que nada tivesse mudado.
+ */
+export function comFenDoDiagrama(
+  cru: Record<string, unknown>,
+  passo: number,
+  fen: string | null,
+): Record<string, unknown> {
+  const stages = cru.stages as Record<string, unknown>;
+  const intro = stages.intro as Record<string, unknown> | undefined;
+  if (!intro) return cru;
+  const lista = intro.passos as Array<Record<string, unknown>> | undefined;
+  if (!lista || passo < 0 || passo >= lista.length) return cru;
+
+  const antigo = lista[passo];
+  let novo: Record<string, unknown>;
+  if (fen === null) {
+    if (!("fen" in antigo)) return cru;
+    novo = { ...antigo };
+    delete novo.fen;
+  } else if (antigo.fen === fen) {
+    return cru;
+  } else if ("fen" in antigo) {
+    // Já existe: o espalhamento preserva a POSIÇÃO da chave, e trocar a
+    // posição de um diagrama passa a mudar uma linha só.
+    novo = { ...antigo, fen };
+  } else {
+    novo = comFenDepoisDaFala(antigo, fen);
+  }
+
+  const nova = [...lista.slice(0, passo), novo, ...lista.slice(passo + 1)];
+  return { ...cru, stages: { ...stages, intro: { ...intro, passos: nova } } };
 }
 
 export function comTecnica(
