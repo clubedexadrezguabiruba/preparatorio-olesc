@@ -961,6 +961,34 @@ const lessonBaseSchema = z.strictObject({
    * `nota` é livre e opcional — o Doug escreve nela quando quer lembrar por
    * que mexeu.
    */
+  /**
+   * As divergências que o professor assumiu **por escrito, e por ponto**.
+   *
+   * Cada uma rebaixa a aviso um erro do gate, e só ele: o par (`codigo`,
+   * `alvo`) diz qual, e o `hash` diz sobre o quê. Se a posição ou o passo
+   * mudarem, o hash não casa mais, a exceção caduca e o erro volta a bloquear —
+   * o professor decidiu sobre o que viu, não sobre o que alguém mudar depois.
+   * A regra inteira, com o que entra no hash, está em `lib/lesson/excecoes.ts`.
+   *
+   * `motivo` tem piso de 25 caracteres porque "ok" e "eu sei" não são motivo.
+   * Quem lê o arquivo daqui a um ano precisa entender a decisão sem perguntar.
+   */
+  excecoes: z
+    .array(
+      z.strictObject({
+        /** O código do gate. Só os de `CODIGOS_COM_EXCECAO` são aceitos. */
+        codigo: z.string().min(1),
+        /** `pos-…` ou `roteiro[i]`. */
+        alvo: z.string().min(1),
+        /** O que estava no alvo quando a decisão foi tomada. */
+        hash: z.string().min(8),
+        motivo: z.string().min(25),
+        /** Data ISO da decisão. */
+        em: z.string(),
+      }),
+    )
+    .min(1)
+    .optional(),
   professor: z
     .strictObject({
       /** Data ISO da última adaptação pela tela. */

@@ -38,6 +38,13 @@ import {
   GENERATED_ID,
 } from "./branches.ts";
 import { derivarTreino, esqueletoDoTreino } from "../lib/lesson/derivar-treino.ts";
+import {
+  aceitaExcecao,
+  alvoDoOnde,
+  hashDoAlvo,
+  julgarComExcecoes,
+  type Excecao,
+} from "../lib/lesson/excecoes.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
 import { validarNotas } from "../lib/repertorio/notas.ts";
 import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
@@ -58,12 +65,99 @@ import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebas
 
 const VERDE = "\u001b[32m";
 const VERMELHO = "\u001b[31m";
+/** O amarelo dos avisos: o que o professor le, e que nao recusa o conteudo. */
+const AMARELO = "\u001b[33m";
 const NORMAL = "\u001b[0m";
 
 type Issue = { code: string; where: string; message: string };
 
 const issues: Issue[] = [];
+
+/**
+ * O que não recusa o conteúdo, mas o professor tem de ler.
+ *
+ * Hoje só recebe as exceções: o erro que ele assumiu por escrito (que vira
+ * aviso com o motivo dele) e a exceção que caducou (que **não** perdoa nada —
+ * o erro correspondente continua em `issues`).
+ */
+const avisos: Issue[] = [];
+
+/**
+ * As exceções de cada aula, por id. Preenchido depois da carga.
+ *
+ * É `let` com Map vazio, e não `const` construído lá embaixo, porque `fail()`
+ * é chamado **durante** a carga das aulas (JSON quebrado, schema recusado) e
+ * uma referência a algo ainda não inicializado explodiria ali — num caminho de
+ * erro, que é o pior lugar para uma segunda falha.
+ */
+let excecoesPorAula = new Map<string, readonly Excecao[]>();
+
+/**
+ * A última palavra do professor, aplicada no único lugar por onde todo erro
+ * passa.
+ *
+ * Só três códigos podem ser perdoados (`CODIGOS_COM_EXCECAO`), e todos são
+ * divergência com a tablebase — o juiz externo. Lance ilegal e FEN impossível
+ * não são opinião, e continuam recusando a aula.
+ */
 function fail(code: string, where: string, message: string) {
+  if (aceitaExcecao(code)) {
+    const alvo = alvoDoOnde(where);
+    /**
+     * De quem é a exceção que pode perdoar isto?
+     *
+     * O `where` de um erro de aula traz o id dela. O de um erro de **posição**
+     * não traz — ele diz `posição pos-…`, e nada mais. Como a exceção mora no
+     * arquivo da aula, a posição precisa ser devolvida à dona: a aula que a
+     * referencia. Se duas aulas usarem a mesma posição, cada uma responde pela
+     * sua, e basta uma tê-la perdoado.
+     */
+    const nomeada = /N[0-9]+-[A-Z0-9-]+/.exec(where)?.[0];
+    const candidatas = nomeada
+      ? lessons.filter((l) => l.lesson.id === nomeada)
+      : alvo?.startsWith("pos-")
+          // A local, que devolve {id, stage} — não a de `lib/lesson/refs.ts`.
+          ? lessons.filter((l) => referencedPositionIds(l.lesson).some((r) => r.id === alvo))
+        : [];
+
+    const carregada = candidatas.find(
+      (l) =>
+        julgarComExcecoes(
+          excecoesPorAula.get(l.lesson.id),
+          code,
+          where,
+          alvo ? hashDoAlvo(l.lesson, (id) => positions.get(id)?.fen ?? null, alvo) : null,
+        ).tipo !== "erro",
+    );
+
+    if (carregada) {
+      const veredito = julgarComExcecoes(
+        excecoesPorAula.get(carregada.lesson.id),
+        code,
+        where,
+        alvo ? hashDoAlvo(carregada.lesson, (id) => positions.get(id)?.fen ?? null, alvo) : null,
+      );
+      if (veredito.tipo === "aviso") {
+        const aceito = { code, where, message: `${message}
+    exceção do professor: ${veredito.motivo}` };
+        avisos.push(aceito);
+        emitir({ tipo: "aviso", code, onde: where, message: aceito.message });
+        return;
+      }
+      if (veredito.tipo === "caduca") {
+        // O erro segue adiante. Isto só explica **por que** a exceção não valeu.
+        const caduca = {
+          code: "EXCECAO_CADUCA",
+          where,
+          message:
+            `a exceção escrita em ${veredito.excecao.em} descrevia outra coisa — ` +
+            "a posição ou o passo mudaram desde então, e a decisão precisa ser tomada de novo",
+        };
+        avisos.push(caduca);
+        emitir({ tipo: "aviso", code: caduca.code, onde: where, message: caduca.message });
+      }
+    }
+  }
   issues.push({ code, where, message });
   emitir({ tipo: "problema", code, onde: where, message });
 }
@@ -1623,6 +1717,12 @@ function checkDivida() {
 // A derivação vem antes de tudo: a etapa 3 nasce aqui, e a partir daí é árvore
 // comum — os ramos equivalentes, os winningMoves e as ~50 regras caem sobre ela
 // exatamente como caem sobre uma árvore escrita à mão.
+// As exceções entram em cena **antes** de qualquer conferência, porque é o
+// `fail()` que as consulta e ele começa a ser chamado na primeira delas.
+excecoesPorAula = new Map(
+  lessons.filter((l) => l.lesson.excecoes).map((l) => [l.lesson.id, l.lesson.excecoes!]),
+);
+
 progresso(`derivando a etapa 3 de ${lessons.length} aula(s)`);
 for (const loaded of lessons) {
   await derivarEtapa3(loaded);
@@ -1793,7 +1893,19 @@ emitir({
     : null,
   promovidos,
   problemas: issues.length,
+  avisos: avisos.length,
 });
+
+// Os avisos saem **antes** do veredito, em amarelo, e não mudam o código de
+// saída. Uma exceção que ninguém relê é uma exceção esquecida: ela aparece em
+// toda rodada, verde ou vermelha.
+if (avisos.length > 0) {
+  for (const aviso of avisos) {
+    console.log(`${AMARELO}▲ [${aviso.code}] ${aviso.where}${NORMAL}`);
+    console.log(`    ${aviso.message}`);
+  }
+  console.log("");
+}
 
 if (issues.length === 0) {
   emitir({ tipo: "fim", exit: 0 });
