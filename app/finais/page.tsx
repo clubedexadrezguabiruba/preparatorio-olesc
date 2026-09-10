@@ -5,6 +5,7 @@ import { Cabecalho } from "@/components/Cabecalho";
 import { Moldura } from "@/components/Moldura";
 import { Bolinhas } from "@/components/Bolinhas";
 import { perfilAtual } from "@/lib/auth/perfil";
+import { editorLigado } from "@/lib/editor/local";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import { aulasComPratica, aulasPublicadas, indiceDeAulas } from "@/lib/finais/conteudo";
 import { DEGRAU_APRENDIDA } from "@/lib/finais/escada";
@@ -81,6 +82,9 @@ export default async function Finais() {
   const proxima = proximaAula(abertas, progresso, comPratica);
 
   const naTrilha = new Set(TRILHA.map((a) => a.id));
+  // O editor não existe em produção, e o link para ele também não. A conta é a
+  // mesma que a página do editor faz para decidir se abre ou responde 404.
+  const comEditor = perfil.papel === "professor" && editorLigado();
   const bancada =
     perfil.papel === "professor"
       ? indiceDeAulas().filter((a) => !abertas.some((aberta) => aberta.id === a.id))
@@ -189,6 +193,15 @@ export default async function Finais() {
         — tática e finais, por nível.
       </p>
 
+      {comEditor ? (
+        <p className="text-sm text-tinta-media">
+          <Link href="/editor" className="foco underline">
+            Editar as aulas
+          </Link>{" "}
+          — só na sua máquina, em <code>npm run dev</code>.
+        </p>
+      ) : null}
+
       {bancada.length > 0 ? (
         <section className="flex flex-col gap-3">
           <div className="flex flex-col gap-0.5">
@@ -214,6 +227,16 @@ export default async function Finais() {
                     </p>
                   </div>
                 </Link>
+                {/* Irmão do link da aula, e não filho: link dentro de link é
+                    HTML inválido, e o leitor de tela anuncia um alvo só. */}
+                {comEditor ? (
+                  <Link
+                    href={`/editor/finais/${aula.id}`}
+                    className="foco rotulo mt-1 inline-block px-4 text-tinta-fraca underline"
+                  >
+                    Editar
+                  </Link>
+                ) : null}
               </li>
             ))}
           </ul>

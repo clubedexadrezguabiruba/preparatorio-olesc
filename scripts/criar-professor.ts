@@ -80,10 +80,20 @@ const { error } = await admin.auth.admin.createUser({
 
 if (error) {
   console.error(`O Supabase recusou: ${error.message}`);
-  process.exit(1);
+  if (error.message.includes("already been registered")) {
+    console.error(`\nA conta "${usuario}" já existe. Para lhe dar um PIN novo:`);
+    console.error(`  node scripts/trocar-pin.ts ${usuario} <6 dígitos>`);
+  }
+  // **`process.exitCode`, e não `process.exit`.** O cliente do Supabase ainda
+  // tem uma conexão aberta quando se chega aqui, e matar o processo no meio
+  // disso faz o libuv imprimir uma "Assertion failed" do próprio C no Windows —
+  // ao lado de uma mensagem em português que já estava certa, o que faz uma
+  // recusa esperada parecer defeito do programa. Assim o Node fecha o que abriu
+  // e sai sozinho com o código 1.
+  process.exitCode = 1;
+} else {
+  console.log("\nConta de professor criada.\n");
+  console.log(`  Usuário: ${usuario}`);
+  console.log(`  PIN:     ${pin}\n`);
+  console.log("Anote o PIN: daqui para a frente ele é um hash no servidor.");
 }
-
-console.log("\nConta de professor criada.\n");
-console.log(`  Usuário: ${usuario}`);
-console.log(`  PIN:     ${pin}\n`);
-console.log("Anote o PIN: daqui para a frente ele é um hash no servidor.");

@@ -34,6 +34,8 @@ export function LessonPlayer({
   revisao = false,
   onStageDone,
   leitura,
+  aoAndar,
+  edicao,
 }: {
   bundle: PacoteDeAula;
   /**
@@ -51,6 +53,36 @@ export function LessonPlayer({
     stage: StageKey;
     /** Onde cada árvore parou. Sem isto, salvar desfaz o lance recém-jogado. */
     trees?: Partial<Record<TreeKey, { nodeId: string; studentMoves: number }>>;
+    /**
+     * Em qual diagrama das etapas 1 e 2 abrir, e se a etapa 2 abre parada.
+     *
+     * As duas etapas de assistir guardam o passo em estado próprio, e não no
+     * `useLessonStore` — então `treeSeek` não as alcança e a devolução tem de
+     * descer como prop até elas. O editor sempre abre a etapa 2 **parada**: uma
+     * aula que anda sozinha embaixo de quem está escrevendo foge da frase.
+     */
+    passo?: number;
+    pausado?: boolean;
+  };
+  /** O editor acompanha o passo para acender a miniatura certa. O aluno não passa. */
+  aoAndar?: (passo: number) => void;
+  /**
+   * **A edição no lugar.** Só o modo editor passa; sem isto, nada muda.
+   *
+   * Cada função troca um pedaço de texto pelo mesmo texto com um lápis em cima.
+   * É render-prop, e não um `modoEditor: boolean`, por uma razão de desenho: o
+   * player não deve saber o que é um lápis, o que é um rascunho ou o que é
+   * salvar. Ele continua sabendo apenas montar a aula; quem sabe editar é o
+   * editor, e ele entrega o pedaço já montado.
+   *
+   * A fala fica **exatamente onde o aluno a lê** — no balão do painel, com a
+   * mesma tipografia. É essa a régua de uso: o professor edita a aula olhando
+   * para a aula, não para um formulário com nomes de campo.
+   */
+  edicao?: {
+    titulo?: (valor: string) => ReactNode;
+    fala?: (etapa: "intro" | "objective", passo: number, valor: string) => ReactNode;
+    tecnica?: (campo: "name" | "summary", valor: string) => ReactNode;
   };
   /**
    * Só o modo autor (B8.3): liga o desenho com o botão direito nas etapas 2 e
@@ -270,7 +302,7 @@ export function LessonPlayer({
         <Link href="/finais" className="foco rotulo text-tinta-fraca hover:underline">
           ← Finais
         </Link>
-        <h1 className="titulo">{lesson.title}</h1>
+        <h1 className="titulo">{edicao?.titulo ? edicao.titulo(lesson.title) : lesson.title}</h1>
         <div className="ml-auto self-center">
           <SoundToggle />
         </div>
@@ -292,6 +324,11 @@ export function LessonPlayer({
             }
             orientation={lesson.orientation}
             trilha={trilha}
+            passoInicial={startAt?.stage === "intro" ? (startAt.passo ?? 0) : 0}
+            edicaoDaFala={
+              edicao?.fala ? (passo, valor) => edicao.fala!("intro", passo, valor) : undefined
+            }
+            aoAndar={aoAndar}
             rodape={
               <StageFooter next={nextStage("intro")} onGo={goToStage} label={AVANCO.paraAula} />
             }
@@ -304,6 +341,13 @@ export function LessonPlayer({
             position={positions[lesson.stages.objective.positionId]}
             orientation={lesson.orientation}
             trilha={trilha}
+            passoInicial={startAt?.stage === "objective" ? (startAt.passo ?? 0) : 0}
+            pausadoInicial={startAt?.stage === "objective" ? (startAt.pausado ?? false) : false}
+            aoAndar={aoAndar}
+            edicaoDaFala={
+              edicao?.fala ? (passo, valor) => edicao.fala!("objective", passo, valor) : undefined
+            }
+            edicaoDaTecnica={edicao?.tecnica}
             rodape={
               <StageFooter next={nextStage("objective")} onGo={goToStage} label={AVANCO.paraTreino} />
             }

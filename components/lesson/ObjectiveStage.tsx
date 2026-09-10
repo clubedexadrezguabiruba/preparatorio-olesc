@@ -74,6 +74,11 @@ export function ObjectiveStage({
   orientation,
   trilha,
   rodape,
+  passoInicial = 0,
+  pausadoInicial = false,
+  aoAndar,
+  edicaoDaFala,
+  edicaoDaTecnica,
 }: {
   stage: ObjectiveStageData;
   /** A posição da aula — a MESMA das três etapas, e de onde o roteiro parte. */
@@ -83,9 +88,32 @@ export function ObjectiveStage({
   trilha?: ReactNode;
   /** Os botões do rodapé do painel — hoje só o "ir para a etapa seguinte". */
   rodape?: ReactNode;
+  /**
+   * Em qual passo abrir, e se abre parado. Só o modo editor passa os dois.
+   *
+   * O editor remonta o player a cada salvamento (por `key`), e o professor está
+   * escrevendo a fala de *um* diagrama: sem isto, o tabuleiro voltaria ao passo
+   * 1 e recomeçaria a tocar a cada letra digitada. E `pausadoInicial` é o
+   * padrão do editor porque uma aula que anda sozinha embaixo de quem está
+   * escrevendo é uma aula que foge da frase.
+   */
+  passoInicial?: number;
+  pausadoInicial?: boolean;
+  /** O editor acompanha para acender a miniatura certa na lista de diagramas. */
+  aoAndar?: (passo: number) => void;
+  /** Modo editor: a fala com um lápis, no mesmo lugar em que o aluno a lê. */
+  edicaoDaFala?: (passo: number, valor: string) => ReactNode;
+  /** Modo editor: o nome e o resumo da técnica, com lápis. */
+  edicaoDaTecnica?: (campo: "name" | "summary", valor: string) => ReactNode;
 }) {
-  const [passo, setPasso] = useState(0);
-  const [tocando, setTocando] = useState(true);
+  const [passo, setPasso] = useState(() =>
+    Math.min(Math.max(passoInicial, 0), stage.roteiro.length - 1),
+  );
+  const [tocando, setTocando] = useState(!pausadoInicial);
+
+  useEffect(() => {
+    aoAndar?.(passo);
+  }, [passo, aoAndar]);
 
   /**
    * Os quadros do roteiro, um por passo. A conta é pura e mora em
@@ -186,13 +214,23 @@ export function ObjectiveStage({
           {trilha}
 
           <div>
-            <h2 className="text-lg font-semibold text-tinta">{stage.technique.name}</h2>
-            <p className="mt-1 text-sm leading-relaxed text-tinta-media">
-              {stage.technique.summary}
-            </p>
+            <h2 className="text-lg font-semibold text-tinta">
+              {edicaoDaTecnica ? edicaoDaTecnica("name", stage.technique.name) : stage.technique.name}
+            </h2>
+            <div className="mt-1 text-sm leading-relaxed text-tinta-media">
+              {edicaoDaTecnica ? (
+                edicaoDaTecnica("summary", stage.technique.summary)
+              ) : (
+                <p>{stage.technique.summary}</p>
+              )}
+            </div>
           </div>
 
-          <Comentario paginacao={comentario} retrato={<ProfessorSeApresenta />} />
+          {edicaoDaFala ? (
+            edicaoDaFala(passo, atual.fala)
+          ) : (
+            <Comentario paginacao={comentario} retrato={<ProfessorSeApresenta />} />
+          )}
 
           <AulaRodape>
             {/* O botão de pausa some quando a aula acaba: pausar o que já parou

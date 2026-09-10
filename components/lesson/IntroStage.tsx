@@ -53,6 +53,9 @@ export function IntroStage({
   orientation,
   trilha,
   rodape,
+  passoInicial = 0,
+  edicaoDaFala,
+  aoAndar,
 }: {
   stage: IntroStageData;
   /** A posição da aula — o diagrama do passo que não declara FEN própria. */
@@ -62,13 +65,33 @@ export function IntroStage({
   trilha?: ReactNode;
   /** Os botões do rodapé do painel — hoje só o "ir para a etapa seguinte". */
   rodape?: ReactNode;
+  /**
+   * Em qual passo abrir. Só o modo editor passa.
+   *
+   * O editor remonta o player a cada salvamento (por `key`), e sem isto o
+   * tabuleiro voltaria ao primeiro diagrama a cada letra digitada — o professor
+   * escreveria a fala do passo 7 olhando para a posição do passo 1. Entra na
+   * carga do estado, e não como um "pule para lá" depois de montar, pelo mesmo
+   * motivo que `startAt` do `LessonPlayer`: o segundo passo apagaria o primeiro.
+   */
+  passoInicial?: number;
+  /** Modo editor: a fala com um lápis, no mesmo lugar em que o aluno a lê. */
+  edicaoDaFala?: (passo: number, valor: string) => ReactNode;
+  /** Modo editor: qual diagrama está na tela, para a lista acender o certo. */
+  aoAndar?: (passo: number) => void;
 }) {
-  const [passo, setPasso] = useState(0);
+  const [passo, setPasso] = useState(() =>
+    Math.min(Math.max(passoInicial, 0), stage.passos.length - 1),
+  );
   const atual = stage.passos[passo];
   const primeiro = passo === 0;
   const ultimo = passo >= stage.passos.length - 1;
 
   const comentario = useComentarioPaginado(atual.fala);
+
+  useEffect(() => {
+    aoAndar?.(passo);
+  }, [passo, aoAndar]);
 
   const shapes = useMemo(() => desenhoDaAutoria(atual), [atual]);
 
@@ -113,7 +136,11 @@ export function IntroStage({
         <>
           {trilha}
 
-          <Comentario paginacao={comentario} retrato={<ProfessorSeApresenta />} />
+          {edicaoDaFala ? (
+            edicaoDaFala(passo, atual.fala)
+          ) : (
+            <Comentario paginacao={comentario} retrato={<ProfessorSeApresenta />} />
+          )}
 
           <AulaRodape>
             <LessonButton onClick={() => andar(-1)} disabled={primeiro}>

@@ -77,3 +77,10 @@ next-env.d.ts
 # é de curso pago e este repositório é público. É derivado: volta inteiro do
 # cache do explorer, que ESSE sim é versionado.
 /content/repertorio/caudas/
+
+# O estado do modo editor: recuperação de sessão, log das conferências, lock,
+# e rascunhos de PGN. Nada aqui é fonte de verdade — o conteúdo que o editor
+# produz vai para `content/rascunhos/` (versionado, é o que o gate julga) e de
+# lá para `content/`. Fica FORA de `content/` de propósito: dentro dele, o gate
+# acusaria `RASCUNHO_ORFAO` em cada arquivo destes.
+.editor/

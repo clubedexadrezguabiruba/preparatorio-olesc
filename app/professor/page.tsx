@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { professorAtual } from "@/lib/auth/perfil";
+import { editorLigado } from "@/lib/editor/local";
 import { nivelDoAluno } from "@/lib/curso/nivel";
 import { niveisDaTurma } from "@/lib/curso/progresso";
 import { aulasComPratica, aulasPublicadas } from "@/lib/finais/conteudo";
@@ -55,6 +56,20 @@ export default async function Professor() {
           Voltar ao painel
         </Link>
       </header>
+
+      {/* Só na máquina do Doug, em `npm run dev`. Na Vercel esta linha não
+          existe — e a rota que ela aponta responde 404. */}
+      {editorLigado() ? (
+        <section className="flex flex-col gap-1">
+          <h2 className="rotulo text-tinta-fraca">Modo editor</h2>
+          <p className="text-sm text-tinta-media">
+            <Link href="/editor" className="foco underline">
+              Editar as aulas de finais
+            </Link>{" "}
+            — escreve nos arquivos deste computador.
+          </p>
+        </section>
+      ) : null}
 
       <section className="flex flex-col gap-3">
         <h2 className="rotulo text-tinta-fraca">Criar conta</h2>

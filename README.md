@@ -18,6 +18,37 @@ node scripts/criar-professor.ts doug "Douglas Vieira"
 npm run dev
 ```
 
+## Modo editor
+
+Editar as aulas de finais pela tela, no acesso de professor. Ele existe **só na
+sua máquina**, e é preciso pedir por ele:
+
+```bash
+echo EDITOR_LOCAL=1 >> .env.local
+npm run dev            # e entrar como professor
+```
+
+Daí `/editor` lista as aulas, e o link "Editar" aparece em `/finais` e em
+`/professor`. Sem a variável — ou numa build de produção, ou na Vercel — a rota
+responde **404**, inclusive para o professor logado. São três condições porque o
+editor escreve arquivos deste repositório: `NODE_ENV=development`, ausência de
+`VERCEL`, e a chave. O login de professor continua sendo a tranca de verdade;
+a variável só decide se a porta existe (`lib/editor/local.ts`).
+
+O ciclo na tela é **eu edito → o sistema salva → eu confiro → eu publico**:
+
+- **Salvar é automático** (`Ctrl+S` força). Escreve em
+  `content/rascunhos/lessons/<ID>.json`, nunca em `content/lessons/`.
+- **Conferir** roda o gate duas vezes: `--rascunhos --refresh-cache --write`
+  (que gera a etapa 3 e os derivados) e depois `--rascunhos` limpo. Verde é as
+  duas verdes — a primeira julga com o juiz enfraquecido, e sozinha não vale.
+- **Publicar no curso** roda `--rascunhos --aplicar`, que julga de novo e promove
+  por cópia de bytes. Não faz commit: quem envia é você.
+
+O estado do editor (recuperação de sessão, log das conferências, lock) mora em
+`.editor/`, que é `.gitignore`d. Os rascunhos ficam em `content/rascunhos/`, que
+**é** versionado — é o que o gate julga.
+
 ## Publicar
 
 O repositório mora em **`clubedexadrezguabiruba/preparatorio-olesc`**, e o

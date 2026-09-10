@@ -947,6 +947,27 @@ const lessonBaseSchema = z.strictObject({
       practice: texto.optional(),
     })
     .optional(),
+  /**
+   * O carimbo do modo editor: esta aula foi adaptada pelo professor na tela.
+   *
+   * **Só o professor vê isto**, e ele o vê na bancada, nunca dentro da aula. A
+   * voz da casa (`docs/VOZ-DO-CURSO.md`) é a de um professor que não fala do
+   * sistema: um aviso de "aula adaptada" no palco seria o curso comentando a
+   * si mesmo na frente da criança de 11 anos. O aluno abre a aula editada
+   * exatamente como abre qualquer outra.
+   *
+   * Mora no arquivo, e não num banco, porque é do conteúdo: quem lê o JSON
+   * daqui a um ano precisa saber que aquela fala saiu da tela e não do livro.
+   * `nota` é livre e opcional — o Doug escreve nela quando quer lembrar por
+   * que mexeu.
+   */
+  professor: z
+    .strictObject({
+      /** Data ISO da última adaptação pela tela. */
+      adaptouEm: z.string(),
+      nota: texto.optional(),
+    })
+    .optional(),
   stages: z.strictObject({
     intro: introStageSchema.optional(),
     objective: objectiveStageSchema.optional(),

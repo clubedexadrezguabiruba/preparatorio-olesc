@@ -92,11 +92,15 @@ export function lerAula(id: string): Lesson | null {
   return lessonSchema.parse(lerJson(arquivo));
 }
 
-/** A aula e suas posições, ou `null` se o id não existe. */
-export function lerPacote(id: string): PacoteDeAula | null {
-  const lesson = lerAula(id);
-  if (!lesson) return null;
-
+/**
+ * O pacote de uma aula **que já está na mão** — o motor precisa dela com as
+ * posições dentro.
+ *
+ * Existe separada de `lerPacote` por causa do modo editor: lá a aula não vem de
+ * `content/lessons/`, vem do rascunho que o professor está escrevendo, e ainda
+ * assim precisa das mesmas posições para o player montar.
+ */
+export function pacoteDaAula(lesson: Lesson): PacoteDeAula {
   const todas = lerPosicoes();
   const positions: Record<string, Position> = {};
   for (const idDaPosicao of referencedPositionIds(lesson)) {
@@ -108,6 +112,13 @@ export function lerPacote(id: string): PacoteDeAula | null {
     positions[idDaPosicao] = posicao;
   }
   return { lesson, positions };
+}
+
+/** A aula e suas posições, ou `null` se o id não existe. */
+export function lerPacote(id: string): PacoteDeAula | null {
+  const lesson = lerAula(id);
+  if (!lesson) return null;
+  return pacoteDaAula(lesson);
 }
 
 /**

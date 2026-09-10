@@ -7,6 +7,7 @@ import {
   rmdirSync,
   rmSync,
   writeFileSync,
+  writeSync,
 } from "node:fs";
 import path from "node:path";
 import { Chess } from "chess.js";
@@ -64,6 +65,42 @@ type Issue = { code: string; where: string; message: string };
 const issues: Issue[] = [];
 function fail(code: string, where: string, message: string) {
   issues.push({ code, where, message });
+  emitir({ tipo: "problema", code, onde: where, message });
+}
+
+/* ------------------------------------------------------------------ *
+ * A saída em JSONL, para o editor
+ * ------------------------------------------------------------------ */
+
+/**
+ * `--jsonl`: uma linha de JSON por evento, no stdout, **junto** com a saída
+ * humana de sempre.
+ *
+ * O editor precisa saber *qual* problema aconteceu *onde*, para acender a
+ * borda vermelha no diagrama certo em vez de despejar texto de terminal na
+ * tela do professor. Ler o texto humano de volta seria um analisador frágil
+ * sobre um formato que ninguém prometeu manter.
+ *
+ * **É aditivo de propósito, e essa é a decisão importante aqui.** O formato
+ * humano de duas linhas (`✖ [CODIGO] onde` + a mensagem) é contrato:
+ * `scripts/mutation-check.ts` junta stdout e stderr e procura exatamente por
+ * ele (linhas 1021-1036 de lá). Suprimir a saída humana sob `--jsonl` faria a
+ * suíte de mutações depender de qual flag alguém passou. Então nada some, e o
+ * leitor do outro lado (`lib/editor/saida-do-gate.ts`) ignora toda linha que
+ * não seja um objeto JSON com `tipo`.
+ *
+ * A escrita é `writeSync` no descritor 1, e não `console.log`, porque logo
+ * depois dos últimos eventos vem `process.exit` — e num cano (que é como o
+ * editor lê) o `console.log` do Node é assíncrono e pode ser cortado no meio.
+ */
+function emitir(evento: Record<string, unknown>): void {
+  if (!jsonl) return;
+  writeSync(1, `${JSON.stringify(evento)}\n`);
+}
+
+/** Um passo do trabalho, em português, para a tela dizer o que está esperando. */
+function progresso(texto: string): void {
+  emitir({ tipo: "progresso", texto });
 }
 
 /* ------------------------------------------------------------------ *
@@ -80,8 +117,18 @@ function option(name: string, fallback: string): string {
 }
 
 /** Tudo que o gate aceita. Qualquer outra coisa é erro duro, nunca silêncio. */
-const FLAGS = ["refresh-cache", "write", "prune-cache", "rascunhos", "aplicar"] as const;
+const FLAGS = ["refresh-cache", "write", "prune-cache", "rascunhos", "aplicar", "jsonl"] as const;
 const OPCOES = ["content"] as const;
+
+/**
+ * Lida **antes** da validação de argumentos, e não junto das outras.
+ *
+ * `morrer()` sai do processo já na leitura dos argumentos — flag desconhecida,
+ * opção sem valor. Se `jsonl` só existisse depois desse laço, o editor que
+ * chamasse o gate com um argumento errado receberia o silêncio de um cano
+ * vazio em vez de um evento dizendo o que houve.
+ */
+const jsonl = flag("jsonl");
 
 /**
  * Erro de argumento — sai com **exit 2** (o 1 é "conteúdo recusado") e no mesmo
@@ -90,6 +137,8 @@ const OPCOES = ["content"] as const;
  * estas travas ganham mutação plantada como todas as outras regras.
  */
 function morrer(codigo: string, mensagem: string): never {
+  emitir({ tipo: "problema", code: codigo, onde: "argumentos", message: mensagem });
+  emitir({ tipo: "fim", exit: 2 });
   console.error("");
   console.error(`${VERMELHO}✖ [${codigo}] argumentos${NORMAL}`);
   console.error(`    ${mensagem}`);
@@ -1574,17 +1623,21 @@ function checkDivida() {
 // A derivação vem antes de tudo: a etapa 3 nasce aqui, e a partir daí é árvore
 // comum — os ramos equivalentes, os winningMoves e as ~50 regras caem sobre ela
 // exatamente como caem sobre uma árvore escrita à mão.
+progresso(`derivando a etapa 3 de ${lessons.length} aula(s)`);
 for (const loaded of lessons) {
   await derivarEtapa3(loaded);
 }
 // A geração vem depois: o que ela produz passa pelas mesmas conferências que
 // o resto da árvore — nó gerado é nó comum.
+progresso("gerando alternativas de método");
 for (const loaded of lessons) {
   await generateFor(loaded);
 }
+progresso(`conferindo ${positions.size} posição(ões) contra a tablebase`);
 for (const position of positions.values()) {
   await checkPosition(position);
 }
+progresso(`conferindo ${lessons.length} aula(s)`);
 for (const loaded of lessons) {
   await checkLesson(loaded);
 }
@@ -1724,13 +1777,34 @@ if (orphanCache.length > 0) {
 }
 console.log("");
 
+// O resumo em dados, para a tela poder dizer "12 posições, 3 pela rede" sem
+// analisar a frase que o terminal imprime.
+emitir({
+  tipo: "resumo",
+  posicoes: positions.size,
+  aulas: lessons.length,
+  tablebase: {
+    consultadas: tablebase.usedFiles().size,
+    doCache: tablebase.hits,
+    pelaRede: tablebase.fetched,
+  },
+  rascunhos: useRascunhos
+    ? { aulas: rascunhosDeAula.length, posicoes: rascunhosDePosicao.length }
+    : null,
+  promovidos,
+  problemas: issues.length,
+});
+
 if (issues.length === 0) {
+  emitir({ tipo: "fim", exit: 0 });
   console.log(
     `${VERDE}✔ tudo verde — ${positions.size} posições, ${lessons.length} aula(s) e ` +
       `${notas.length} página(s) de princípios sem nenhum problema${NORMAL}`,
   );
   process.exit(0);
 }
+
+emitir({ tipo: "fim", exit: 1 });
 
 for (const issue of issues) {
   console.log(`${VERMELHO}✖ [${issue.code}] ${issue.where}${NORMAL}`);
