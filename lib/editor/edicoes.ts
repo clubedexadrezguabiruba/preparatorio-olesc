@@ -322,6 +322,147 @@ export function comPassoRemovido(
 }
 
 /**
+ * O veredicto do arrastar: para que vãos este diagrama pode ir.
+ *
+ * `vaos` são posições **entre** selos, não índices de selo: 0 é "antes do
+ * primeiro", 1 é "entre o primeiro e o segundo", e o tamanho da lista é "no
+ * fim" — a mesma numeração que o "+" já usa. Os dois vãos que ladeiam o próprio
+ * diagrama (`indice` e `indice + 1`) entram na lista de propósito: soltar ali é
+ * desistir do gesto, e um alvo que se apaga debaixo do ponteiro no meio do
+ * arrasto faz o professor achar que soltou errado.
+ */
+export type Movivel =
+  | { pode: true; vaos: number[] }
+  | { pode: false; porque: "corrente" };
+
+/**
+ * Para onde este diagrama pode ser arrastado?
+ *
+ * ## A regra, numa frase
+ *
+ * **A ordem dos `lance` não pode mudar.** Nada mais.
+ *
+ * A aula assistida é uma partida: os passos que têm `lance` são jogados um
+ * atrás do outro a partir da posição da aula, e o `superRefine` recusa o
+ * arquivo em que um deles não for legal. Embaralhar a ordem deles é embaralhar
+ * os lances de uma partida — o que sai quase nunca é partida.
+ *
+ * Os passos **sem** `lance` não estão nessa fila. O `derivarTreino` os pula
+ * antes de qualquer conta (`derivar-treino.ts`), o `montarQuadros` repete neles
+ * o quadro anterior, e a corrente do `superRefine` não os enxerga. É a mesma
+ * descoberta que deu forma ao "+" (ver `comPassoNovo`), lida de um terceiro
+ * jeito: se um passo é invisível para a corrente, ele pode estar em qualquer
+ * lugar dela.
+ *
+ * Daí as duas respostas:
+ *
+ * - **passo sem `lance`: todos os vãos.** Ele passeia pela etapa inteira sem
+ *   mexer num byte da etapa 3.
+ * - **passo com `lance`: só os vãos entre o lance de cima e o lance de baixo.**
+ *   Ou seja, ele atravessa quantos passos "só apontam" houver à sua volta, e
+ *   para no primeiro que move peça. Quando não há nenhum dos dois lados — que é
+ *   o caso de onze dos treze diagramas da N1-KPK —, os únicos vãos são os dois
+ *   dele, e a resposta é `pode: false`.
+ *
+ * Na apresentação não há corrente nenhuma: ninguém joga ali, cada passo é uma
+ * ilustração. Todos os vãos, sempre.
+ *
+ * ## Por que isto NÃO é `podeApagarPasso` de novo
+ *
+ * As duas nascem da mesma descoberta e respondem a perguntas diferentes, e a
+ * diferença muda a resposta num caso comum. Apagar **encurta** a corrente:
+ * tirar o último passo com lance é seguro, porque prefixo de corrente legal é
+ * corrente legal. Mover **reordena** a corrente: o mesmo último passo com
+ * lance, arrastado para o topo, embaralha tudo. Reaproveitar aquele veredicto
+ * aqui deixaria a tela dizer "pode" e o disco recusar o arquivo — o professor
+ * arrastaria um selo e receberia a aula inválida, sem ligar uma coisa à outra.
+ *
+ * O piso e o teto também somem, e por um motivo simples: mover não muda o
+ * tamanho da lista.
+ *
+ * ## O que este veredicto NÃO promete
+ *
+ * Que a aula continua fazendo sentido com os diagramas noutra ordem. Ele julga
+ * o que o Zod julga — o arquivo ser gravável. Quem julga o resto é o professor,
+ * olhando, e depois o gate em "Conferir".
+ */
+export function podeMoverPasso(
+  cru: Record<string, unknown>,
+  etapa: "intro" | "objective",
+  indice: number,
+): Movivel {
+  const lista = listaCrua(cru, etapa);
+  if (!lista || indice < 0 || indice >= lista.length) return { pode: false, porque: "corrente" };
+
+  const todos = lista.map((_, i) => i).concat(lista.length);
+  if (etapa === "intro" || typeof lista[indice].lance !== "string") {
+    return { pode: true, vaos: todos };
+  }
+
+  // O lance mais próximo acima e o mais próximo abaixo. Fora deles a ordem dos
+  // lances mudaria; entre eles não há lance nenhum para trocar de vez com este.
+  let antes = -1;
+  for (let i = indice - 1; i >= 0; i -= 1) {
+    if (typeof lista[i].lance === "string") {
+      antes = i;
+      break;
+    }
+  }
+  let depois = lista.length;
+  for (let i = indice + 1; i < lista.length; i += 1) {
+    if (typeof lista[i].lance === "string") {
+      depois = i;
+      break;
+    }
+  }
+
+  const vaos: number[] = [];
+  for (let v = antes + 1; v <= depois; v += 1) vaos.push(v);
+  // Sobraram só os dois vãos do próprio diagrama: ele está entre dois lances e
+  // não tem para onde ir.
+  return vaos.length <= 2 ? { pode: false, porque: "corrente" } : { pode: true, vaos };
+}
+
+/**
+ * Muda um diagrama de lugar — o gesto de arrastar da coluna.
+ *
+ * `vao` é a posição **entre** selos em que ele é solto, contada na lista de
+ * antes do gesto: 0 põe antes do primeiro, o tamanho da lista põe no fim. Soltar
+ * num dos dois vãos do próprio diagrama devolve o arquivo intacto, que é o que
+ * "desisti do arrasto" significa.
+ *
+ * A promessa do `git diff` é a das outras duas: o bloco inteiro do passo aparece
+ * num lugar e desaparece do outro, e nenhuma linha de nenhum outro passo é
+ * tocada. Os objetos dos passos que ficam parados são os **mesmos objetos**, e
+ * não cópias, então a serialização os reimprime byte a byte.
+ *
+ * Não julga nada — quem julga é `podeMoverPasso`, na tela, antes de chamar.
+ */
+export function comPassoMovido(
+  cru: Record<string, unknown>,
+  etapa: "intro" | "objective",
+  de: number,
+  vao: number,
+): Record<string, unknown> {
+  const stages = cru.stages as Record<string, unknown>;
+  const etapaCrua = stages[etapa] as Record<string, unknown>;
+  const chaveDaLista = etapa === "intro" ? "passos" : "roteiro";
+  const lista = etapaCrua[chaveDaLista] as Array<Record<string, unknown>>;
+
+  if (de < 0 || de >= lista.length) return cru;
+  const alvo = Math.max(0, Math.min(vao, lista.length));
+  if (alvo === de || alvo === de + 1) return cru;
+
+  const sem = [...lista.slice(0, de), ...lista.slice(de + 1)];
+  // O vão foi contado na lista de ANTES; tirado o passo, tudo o que estava
+  // abaixo dele subiu um lugar.
+  const onde = alvo > de ? alvo - 1 : alvo;
+  const nova = [...sem.slice(0, onde), lista[de], ...sem.slice(onde)];
+
+  return { ...cru, stages: { ...stages, [etapa]: { ...etapaCrua, [chaveDaLista]: nova } } };
+}
+
+/**
  * O passo com a `fen` **logo depois da `fala`**, e não no fim do objeto.
  *
  * Parece capricho e é a diferença entre um `git diff` de 1 linha e um de 3. O

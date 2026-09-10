@@ -8,11 +8,13 @@ import {
   comDesenho,
   comFala,
   comFenDoDiagrama,
+  comPassoMovido,
   comPassoNovo,
   comPassoRemovido,
   comTecnica,
   passoCru,
   podeApagarPasso,
+  podeMoverPasso,
 } from "./edicoes.ts";
 import { serializar } from "./rascunhos.ts";
 import {
@@ -426,4 +428,125 @@ test("o diagrama fora da faixa não estraga o arquivo", () => {
   const antes = cru();
   assert.equal(serializar(comFenDoDiagrama(antes, 99, OUTRA_POSICAO)), AULA);
   assert.equal(serializar(comFenDoDiagrama(antes, -1, OUTRA_POSICAO)), AULA);
+});
+
+/* ------------------------------------------------------------------ *
+ * O arrastar — mudar um diagrama de lugar
+ * ------------------------------------------------------------------ */
+
+/** A posição da aula, para derivar a etapa 3 e comparar as duas árvores. */
+function posicaoDaAula(aula: ReturnType<typeof lessonSchema.parse>) {
+  return {
+    fen: aula.stages.guided!.nodes[aula.stages.guided!.root].fen,
+    expectedResult: "win",
+  } as const;
+}
+
+/** A etapa 3 derivada deste JSON cru, em texto, para comparar com outra. */
+function treinoDe(obj: Record<string, unknown>): string {
+  const aula = lessonSchema.parse(obj);
+  const { tree, problemas } = derivarTreino(aula, posicaoDaAula(aula), () => null);
+  assert.deepEqual(problemas, []);
+  return JSON.stringify(tree);
+}
+
+test("arrastar move o bloco do diagrama e não reescreve nenhum outro", () => {
+  // A promessa do `git diff` do gesto: o arquivo não encolhe nem cresce, e as
+  // linhas são as MESMAS linhas noutra ordem. Se alguma fosse reimpressa — uma
+  // vírgula que muda de lugar, uma chave reordenada pelo Zod —, este multiconjunto
+  // deixaria de bater, e o diff pararia de dizer o que o professor mudou.
+  const depois = comPassoMovido(cru(), "objective", 1, 6);
+  assert.equal(lessonSchema.safeParse(depois).success, true);
+
+  const a = AULA.split("\n");
+  const b = serializar(depois).split("\n");
+  assert.equal(b.length, a.length, "o arquivo não muda de tamanho");
+  assert.deepEqual([...b].sort(), [...a].sort(), "são as mesmas linhas, noutra ordem");
+  assert.ok(iguaisAte(depois) > 0, "o começo do arquivo continua intocado");
+});
+
+test("arrastar um diagrama sem lance NÃO muda a etapa 3", () => {
+  // A promessa central, e o terceiro uso da mesma descoberta: o passo sem lance
+  // é invisível para a corrente, então ele pode estar em qualquer lugar dela.
+  // Se um dia deixar de ser, o `--write` reescreveria a aula inteira atrás de um
+  // diagrama que o professor só quis mudar de lugar.
+  const original = cru();
+  assert.equal(treinoDe(comPassoMovido(original, "objective", 1, 9)), treinoDe(original));
+  assert.equal(treinoDe(comPassoMovido(original, "objective", 0, 13)), treinoDe(original));
+});
+
+test("levar e trazer de volta devolve o arquivo byte a byte", () => {
+  // O arrasto desfeito não pode deixar rastro: é o mesmo que a lixeira promete
+  // com o "Desfazer", e aqui sem estado nenhum guardado.
+  const ida = comPassoMovido(cru(), "objective", 1, 9);
+  const volta = comPassoMovido(ida, "objective", 8, 1);
+  assert.equal(serializar(volta), AULA);
+});
+
+test("soltar no próprio lugar não é uma edição", () => {
+  // Os dois vãos que ladeiam o diagrama significam "desisti do arrasto". Se
+  // isto gravasse, todo arrasto interrompido carimbaria a aula.
+  assert.equal(serializar(comPassoMovido(cru(), "objective", 4, 4)), AULA);
+  assert.equal(serializar(comPassoMovido(cru(), "objective", 4, 5)), AULA);
+});
+
+test("o diagrama sem lance vai para qualquer vão", () => {
+  const veredicto = podeMoverPasso(cru(), "objective", 1);
+  assert.equal(veredicto.pode, true);
+  assert.ok(veredicto.pode);
+  assert.equal(veredicto.vaos.length, quantos(cru(), "objective") + 1);
+});
+
+test("na apresentação não há corrente, e todo diagrama se move", () => {
+  for (let i = 0; i < quantos(cru(), "intro"); i += 1) {
+    const veredicto = podeMoverPasso(cru(), "intro", i);
+    assert.ok(veredicto.pode, `o diagrama ${i + 1} da apresentação devia se mover`);
+    assert.equal(veredicto.vaos.length, quantos(cru(), "intro") + 1);
+  }
+});
+
+test("o diagrama com lance entre dois lances não sai do lugar", () => {
+  // Onze dos treze diagramas da N1-KPK são assim: a aula é uma partida quase
+  // inteira, um lance atrás do outro, e não há folga entre eles.
+  assert.deepEqual(podeMoverPasso(cru(), "objective", 5), { pode: false, porque: "corrente" });
+});
+
+test("o ÚLTIMO diagrama com lance também não sai — e é aqui que a lixeira erraria", () => {
+  // O caso que impediu de reaproveitar `podeApagarPasso`. Apagar o último passo
+  // com lance é seguro (o que sobra é um prefixo da mesma corrente); ARRASTÁ-LO
+  // para o topo embaralha a partida. As duas perguntas têm respostas contrárias
+  // no mesmo diagrama, e a prova é o arquivo que sai.
+  assert.deepEqual(podeApagarPasso(cru(), "objective", 12), { pode: true });
+  assert.deepEqual(podeMoverPasso(cru(), "objective", 12), { pode: false, porque: "corrente" });
+  assert.equal(lessonSchema.safeParse(comPassoMovido(cru(), "objective", 12, 0)).success, false);
+});
+
+test("o diagrama com lance atravessa os que só apontam", () => {
+  // Um diagrama novo nasce sem lance (ver `comPassoNovo`), e abre folga para o
+  // vizinho de baixo, que antes estava preso entre dois lances.
+  const comFolga = comPassoNovo(cru(), "objective", 5);
+  assert.deepEqual(podeMoverPasso(cru(), "objective", 5), { pode: false, porque: "corrente" });
+
+  // O passo que era o 5 agora é o 6, e ganhou o vão 5 — o lugar que o diagrama
+  // novo ocupa.
+  const veredicto = podeMoverPasso(comFolga, "objective", 6);
+  assert.ok(veredicto.pode);
+  assert.deepEqual(veredicto.vaos, [5, 6, 7]);
+
+  // E a troca dos dois é gravável, porque a ordem dos lances não mudou.
+  const trocados = comPassoMovido(comFolga, "objective", 6, 5);
+  assert.equal(lessonSchema.safeParse(trocados).success, true);
+  assert.equal(treinoDe(trocados), treinoDe(comFolga));
+});
+
+test("o arrasto fora da faixa não estraga o arquivo", () => {
+  assert.equal(serializar(comPassoMovido(cru(), "objective", 99, 0)), AULA);
+  assert.equal(serializar(comPassoMovido(cru(), "objective", -1, 0)), AULA);
+  assert.deepEqual(podeMoverPasso(cru(), "objective", 99), { pode: false, porque: "corrente" });
+
+  // Vão fora da faixa vai para a ponta mais próxima, como a inserção do "+".
+  const noFim = comPassoMovido(cru(), "objective", 1, 999);
+  const roteiro = (noFim.stages as { objective: { roteiro: Array<Record<string, unknown>> } })
+    .objective.roteiro;
+  assert.deepEqual(roteiro[roteiro.length - 1], passoCru(cru(), "objective", 1));
 });

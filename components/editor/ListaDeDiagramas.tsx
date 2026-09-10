@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
+import type { DragEvent } from "react";
 import { Miniatura } from "@/components/editor/Miniatura";
-import type { Apagavel } from "@/lib/editor/edicoes";
+import type { Apagavel, Movivel } from "@/lib/editor/edicoes";
 
 export type Diagrama = {
   fen: string;
@@ -48,6 +50,45 @@ export type Desfazer = { indice: number; numero: number };
  * professor conclui a regra errada. Então a lixeira fica, apagada, e diz o
  * motivo ao ser apontada ou focada.
  *
+ * ## O arrastar: o gesto de mudar um slide de lugar
+ *
+ * O terceiro gesto da coluna, e o Doug o escolheu contra a alternativa das
+ * setinhas para cima e para baixo, com a frase que decidiu: *como mudar um
+ * slide de lugar quando estamos criando*. A escolha melhorou o desenho, e por
+ * um motivo que as setinhas não alcançavam: **o arrasto mostra a regra enquanto
+ * ela vale**.
+ *
+ * Nem todo diagrama pode mudar de lugar. Os passos com `lance` são uma partida,
+ * jogada um atrás do outro; embaralhá-los é embaralhar os lances, e a aula sai
+ * inválida (ver `podeMoverPasso`). Em vez de escrever isso numa frase que o
+ * professor leria uma vez e esqueceria, **os vãos onde este diagrama pode cair
+ * se acendem enquanto ele está no ar**, e os outros não aceitam o solte. A
+ * regra não é lida: é vista, e só no momento em que interessa.
+ *
+ * ### O punho existe para dizer que o selo se arrasta
+ *
+ * Um selo arrastável e um selo parado são pixel a pixel iguais, e "tente
+ * arrastar e veja" não é interface. O punho é o sinal — e ele segue a regra da
+ * lixeira, não a do vão: **nunca some**. Onde o diagrama não pode sair do
+ * lugar, ele fica apagado e diz o motivo ao ser apontado, porque a recusa é
+ * deste diagrama e muda de selo para selo.
+ *
+ * ### O alvo do solte é o selo inteiro, não o vão
+ *
+ * O vão tem 12 px de altura. Mirar 12 px com um selo pendurado no ponteiro é o
+ * tipo de precisão que faz o professor achar que o gesto não funciona. Então
+ * quem recebe o solte é o **selo**: metade de cima quer dizer "acima dele",
+ * metade de baixo quer dizer "abaixo dele". O vão só desenha a linha, e nunca
+ * muda de altura no meio do arrasto — uma coluna que reflui debaixo do ponteiro
+ * move o alvo que a pessoa está mirando.
+ *
+ * ### O que este gesto não tem, e é sabido
+ *
+ * **Caminho pelo teclado.** O "+" e a lixeira têm; este não. Foi decidido com o
+ * Doug em 10/9/2026: ele preferiu o arrasto, e um segundo par de botões em cada
+ * selo pagaria a acessibilidade com a clareza do que a coluna faz. Fica
+ * declarado como dívida, e é meia hora de trabalho no dia em que incomodar.
+ *
  * ## O erro aparece no diagrama, não numa lista de códigos
  *
  * Quando a conferência acusa alguma coisa, o selo do passo ganha três marcas: o
@@ -78,6 +119,8 @@ export function ListaDeDiagramas({
   cabeMais,
   apagavel,
   aoApagar,
+  movivel,
+  aoMover,
   desfazer,
   aoDesfazer,
 }: {
@@ -93,27 +136,108 @@ export function ListaDeDiagramas({
   /** O veredicto da lixeira deste diagrama. Ver `podeApagarPasso`. */
   apagavel: (indice: number) => Apagavel;
   aoApagar: (indice: number) => void;
+  /** O veredicto do arrastar deste diagrama. Ver `podeMoverPasso`. */
+  movivel: (indice: number) => Movivel;
+  /** Solta o diagrama `de` no vão `vao`, contado na lista de antes do gesto. */
+  aoMover: (de: number, vao: number) => void;
   /** O diagrama recém-apagado, ou `null`. A linha nasce no buraco que ele deixou. */
   desfazer: Desfazer | null;
   aoDesfazer: () => void;
 }) {
+  /** O diagrama que está no ar, ou `null`. */
+  const [arrastando, setArrastando] = useState<number | null>(null);
+  /** O vão que receberia o solte agora, ou `null`. */
+  const [vaoAlvo, setVaoAlvo] = useState<number | null>(null);
+
+  /*
+   * Os vãos legais deste arrasto, calculados uma vez por render. Fora do
+   * arrasto é `null`, e a coluna inteira volta a ser a de sempre — o "+" nos
+   * vãos, nenhuma linha acesa.
+   */
+  const veredicto = arrastando === null ? null : movivel(arrastando);
+  const vaosLegais = veredicto?.pode ? veredicto.vaos : null;
+
+  /** Metade de cima do selo quer dizer "acima dele"; metade de baixo, "abaixo". */
+  function vaoDoPonteiro(e: DragEvent<HTMLElement>, indice: number): number {
+    const caixa = e.currentTarget.getBoundingClientRect();
+    return e.clientY < caixa.top + caixa.height / 2 ? indice : indice + 1;
+  }
+
+  function largar() {
+    setArrastando(null);
+    setVaoAlvo(null);
+  }
+
+  function aoPassarPorCima(e: DragEvent<HTMLElement>, indice: number) {
+    if (!vaosLegais) return;
+    const vao = vaoDoPonteiro(e, indice);
+    if (!vaosLegais.includes(vao)) {
+      setVaoAlvo(null);
+      return;
+    }
+    /*
+     * Sem este `preventDefault` o navegador recusa o solte — é assim que a API
+     * de arrastar diz "aqui pode". Nos vãos ilegais ele NÃO é chamado, e o
+     * ponteiro passa a mostrar o sinal de proibido sozinho, sem uma linha de
+     * código nossa.
+     */
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setVaoAlvo(vao);
+  }
+
+  function aoSoltar(e: DragEvent<HTMLElement>, indice: number) {
+    e.preventDefault();
+    const de = arrastando;
+    const vao = vaoDoPonteiro(e, indice);
+    const podia = vaosLegais?.includes(vao) ?? false;
+    largar();
+    if (de !== null && podia) aoMover(de, vao);
+  }
+
   const linhaDeDesfazer = desfazer ? (
     <LinhaDeDesfazer numero={desfazer.numero} aoDesfazer={aoDesfazer} />
   ) : null;
 
   return (
-    <nav aria-label="Diagramas desta etapa" className="flex flex-col">
+    <nav
+      aria-label="Diagramas desta etapa"
+      className="flex flex-col"
+      onDragLeave={(e) => {
+        // Só quando o ponteiro sai da coluna inteira, e não a cada selo que ele
+        // atravessa por dentro.
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setVaoAlvo(null);
+      }}
+    >
       <Vao
         indice={0}
         total={diagramas.length}
         cabeMais={cabeMais}
         aoAcrescentar={aoAcrescentar}
+        arrastando={arrastando !== null}
+        legal={vaosLegais?.includes(0) ?? false}
+        alvo={vaoAlvo === 0}
       />
       {diagramas.map((d, i) => {
         const selecionado = i === atual;
         const temProblema = d.problemas.length > 0;
+        const podeMover = movivel(i).pode;
         return (
-          <div key={i}>
+          <div
+            key={i}
+            draggable={podeMover}
+            onDragStart={(e) => {
+              setArrastando(i);
+              e.dataTransfer.effectAllowed = "move";
+              // O Firefox só começa o arrasto se houver dado; o valor não é
+              // lido por ninguém — quem sabe o que está no ar é o estado.
+              e.dataTransfer.setData("text/plain", String(i));
+            }}
+            onDragEnd={largar}
+            onDragOver={(e) => aoPassarPorCima(e, i)}
+            onDrop={(e) => aoSoltar(e, i)}
+            className={arrastando === i ? "opacity-40" : undefined}
+          >
             {/* A linha do desfazer nasce ENTRE o vão e o selo — que é
                 exatamente o buraco deixado pelo diagrama que saiu. */}
             {desfazer?.indice === i && linhaDeDesfazer}
@@ -151,6 +275,7 @@ export function ListaDeDiagramas({
                   />
                 )}
               </button>
+              <Punho numero={i + 1} etapa={etapa} veredicto={movivel(i)} />
               <Lixeira
                 numero={i + 1}
                 etapa={etapa}
@@ -163,6 +288,9 @@ export function ListaDeDiagramas({
               total={diagramas.length}
               cabeMais={cabeMais}
               aoAcrescentar={aoAcrescentar}
+              arrastando={arrastando !== null}
+              legal={vaosLegais?.includes(i + 1) ?? false}
+              alvo={vaoAlvo === i + 1}
             />
           </div>
         );
@@ -171,6 +299,77 @@ export function ListaDeDiagramas({
           selo seguinte para carregar a linha. */}
       {desfazer !== null && desfazer.indice >= diagramas.length && linhaDeDesfazer}
     </nav>
+  );
+}
+
+/**
+ * O punho: o sinal de que este selo se arrasta — ou de que não se arrasta.
+ *
+ * Ele é a única coisa na coluna que diz que os selos mudam de lugar. Sem ele o
+ * gesto existiria e ninguém saberia, e "tente arrastar e veja no que dá" não é
+ * uma interface: é uma adivinhação.
+ *
+ * **Não é ele que se arrasta — é o selo inteiro**, como um slide. O punho é
+ * placa, não maçaneta; arrastar só a partir de um alvo de 12 px seria trocar a
+ * precisão do vão pela precisão do punho, que é justamente o defeito que este
+ * gesto evitou. Isso continua verdade sem tirar o ponteiro dele: o arrasto
+ * começa no `draggable` do selo, e um filho não precisa ser transparente ao
+ * ponteiro para o pai ser arrastado a partir dele.
+ *
+ * ## O `pointer-events-none` que emudeceu o punho
+ *
+ * A primeira versão era `pointer-events-none`, e o Doug achou na primeira
+ * rodada de teste: o bloqueio funcionava e **a frase nunca aparecia**. É a
+ * mesma armadilha que a lixeira já tinha documentado por outro caminho — lá é o
+ * `disabled` de verdade que não dispara `title`; aqui era o ponteiro
+ * atravessando o elemento como se ele não existisse. Um elemento que o ponteiro
+ * nunca toca não tem `:hover`, e sem `:hover` não há dica nenhuma.
+ *
+ * O alvo tem o **mesmo tamanho da lixeira** (20 px de caixa em volta de 12 de
+ * desenho) pelo mesmo motivo: 12 px é grande o bastante para ver e pequeno
+ * demais para acertar.
+ *
+ * Segue a regra da lixeira e não a do vão: **nunca some**. Onde o diagrama está
+ * preso entre dois lances ele fica apagado e diz o motivo ao ser apontado —
+ * porque a recusa é deste diagrama e muda de selo para selo, e um selo sem
+ * punho ao lado de um selo com punho faz o professor concluir a regra errada.
+ */
+function Punho({
+  numero,
+  etapa,
+  veredicto,
+}: {
+  numero: number;
+  etapa: "intro" | "objective";
+  veredicto: Movivel;
+}) {
+  const onde = etapa === "intro" ? "a apresentação" : "a aula assistida";
+  const frase = veredicto.pode
+    ? `arrastar o diagrama ${numero} para outro lugar`
+    : "não dá para mudar de lugar: este diagrama move uma peça, e os vizinhos " +
+      `também — ${onde} é uma partida, e trocar a ordem dos lances embaralharia a aula`;
+
+  return (
+    <span
+      title={frase}
+      aria-label={frase}
+      role="img"
+      /* Meio da altura, na calha que o `pr-7` do selo já reserva: o alto é da
+         bolinha do problema e o pé é da lixeira, e as três não se pisam. */
+      className={`absolute right-1 top-1/2 flex -translate-y-1/2 rounded-md p-1 opacity-0 transition-opacity group-hover:opacity-100 ${
+        veredicto.pode ? "cursor-grab text-tinta-fraca" : "cursor-default text-tinta-muda"
+      }`}
+    >
+      {/* Seis pontos, o desenho universal de "isto se arrasta". */}
+      <svg width={12} height={12} viewBox="0 0 12 12" fill="currentColor" aria-hidden>
+        <circle cx="4" cy="2.5" r="1" />
+        <circle cx="8" cy="2.5" r="1" />
+        <circle cx="4" cy="6" r="1" />
+        <circle cx="8" cy="6" r="1" />
+        <circle cx="4" cy="9.5" r="1" />
+        <circle cx="8" cy="9.5" r="1" />
+      </svg>
+    </span>
   );
 }
 
@@ -304,19 +503,51 @@ function LinhaDeDesfazer({ numero, aoDesfazer }: { numero: number; aoDesfazer: (
  * é a frase no pé da coluna, que o `Editor` desenha uma vez só. (A lixeira faz
  * o contrário e não se contradiz — ver o cabeçalho deste arquivo: lá a recusa é
  * de um diagrama, e não da etapa inteira.)
+ *
+ * ## Durante o arrasto ele troca de papel, e não de altura
+ *
+ * O "+" sai — no meio de um arrasto o vão quer dizer "solte aqui", não
+ * "acrescente aqui", e dois significados no mesmo lugar não é economia: é
+ * ambiguidade. Entra a linha: fraca nos vãos que aceitam este diagrama, sólida
+ * no que receberia o solte agora, nenhuma nos que a corrente de lances proíbe.
+ *
+ * **A altura não muda em nenhum dos casos**, e essa é a parte que se sente sem
+ * se ver: uma coluna que cresce e encolhe enquanto o professor arrasta move o
+ * alvo que ele está mirando, e o gesto vira perseguição. Mesmo no teto, onde o
+ * vão é um espaçador sem botão, a linha aparece dentro dos mesmos pixels.
  */
 function Vao({
   indice,
   total,
   cabeMais,
   aoAcrescentar,
+  arrastando,
+  legal,
+  alvo,
 }: {
   indice: number;
   total: number;
   cabeMais: boolean;
   aoAcrescentar: (indice: number) => void;
+  arrastando: boolean;
+  legal: boolean;
+  alvo: boolean;
 }) {
-  if (!cabeMais) return <span className="block h-1.5" />;
+  const altura = cabeMais ? "h-3" : "h-1.5";
+
+  if (arrastando) {
+    return (
+      <span className={`flex ${altura} items-center`} aria-hidden>
+        <span
+          className={`h-0.5 w-full rounded-full transition-colors ${
+            alvo ? "bg-foco" : legal ? "bg-foco/30" : "bg-transparent"
+          }`}
+        />
+      </span>
+    );
+  }
+
+  if (!cabeMais) return <span className={`block ${altura}`} />;
   const onde =
     indice === 0
       ? "no começo"
@@ -329,7 +560,7 @@ function Vao({
       onClick={() => aoAcrescentar(indice)}
       title={`acrescentar diagrama ${onde}`}
       aria-label={`acrescentar diagrama ${onde}`}
-      className="foco group flex h-3 w-full items-center justify-center opacity-0 transition-opacity hover:opacity-100 focus-visible:opacity-100"
+      className={`foco group flex ${altura} w-full items-center justify-center opacity-0 transition-opacity hover:opacity-100 focus-visible:opacity-100`}
     >
       <span className="h-px flex-1 bg-borda-fraca" />
       <span className="rotulo px-1.5 leading-none text-tinta-fraca">+</span>

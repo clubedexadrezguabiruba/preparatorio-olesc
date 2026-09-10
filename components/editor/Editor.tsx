@@ -17,11 +17,13 @@ import {
   comDesenho,
   comFala,
   comFenDoDiagrama,
+  comPassoMovido,
   comPassoNovo,
   comPassoRemovido,
   comTecnica,
   passoCru,
   podeApagarPasso,
+  podeMoverPasso,
 } from "@/lib/editor/edicoes";
 import { filaDeGravacao, type Fila } from "@/lib/editor/fila";
 import type { Conferencia } from "@/lib/editor/gate";
@@ -416,6 +418,54 @@ export function Editor({
     setDesfazer(null);
   }, [desfazer, aplicar]);
 
+  /** O veredicto do arrastar de cada selo. A tela não decide nada; ela pergunta. */
+  const movivel = useCallback(
+    (indice: number) => podeMoverPasso(cru, alvo.etapa, indice),
+    [cru, alvo.etapa],
+  );
+
+  /**
+   * O arrastar: mudar um diagrama de lugar, como se muda um slide.
+   *
+   * O que acontece junto, e por quê:
+   *
+   * 1. o JSON troca o passo de posição (`comPassoMovido`), depois de
+   *    `podeMoverPasso` ter dito que pode — a tela nunca produz um rascunho que
+   *    o disco vá recusar;
+   * 2. **o arrasto desistido não é uma edição.** Soltar num dos dois vãos que
+   *    ladeiam o próprio diagrama devolve o MESMO objeto, e a comparação por
+   *    identidade corta o caminho aqui: sem isto, todo arrasto interrompido
+   *    carimbaria a aula com `professor.adaptouEm` e mandaria uma gravação ao
+   *    disco para dizer que nada mudou;
+   * 3. o palco **segue o diagrama**, e não o número. Se o professor estava
+   *    olhando o que ele arrastou, o tabuleiro vai junto; se estava olhando
+   *    outro, continua no mesmo diagrama — que pode ter trocado de número, e é
+   *    por isso que o índice é recalculado em vez de mantido;
+   * 4. a conferência anterior é jogada fora, **pelo mesmo motivo do "+" e da
+   *    lixeira**: ela marca diagramas por índice, e uma ordem nova troca os
+   *    números de todo mundo entre a origem e o destino. Manter as marcas
+   *    acenderia o sinal no diagrama errado.
+   *
+   * O desfazer da lixeira morre sozinho, sem uma linha aqui: `comPassoMovido`
+   * devolve um objeto novo, e o direito de desfazer vale por identidade.
+   */
+  const moverDiagrama = useCallback(
+    (de: number, vao: number) => {
+      const depois = comPassoMovido(cru, alvo.etapa, de, vao);
+      if (depois === cru) return;
+      editar(depois);
+      const paraOnde = vao > de ? vao - 1 : vao;
+      setAlvo((a) => ({ etapa: a.etapa, passo: indiceDepoisDoArrasto(a.passo, de, paraOnde) }));
+      setGeracao((g) => g + 1);
+      setConferencia(null);
+      setPublicavel({
+        pode: false,
+        motivo: "a aula mudou a ordem dos diagramas depois da conferência",
+      });
+    },
+    [cru, alvo.etapa, editar],
+  );
+
   /**
    * O desfazer que a coluna mostra — ou nada.
    *
@@ -695,6 +745,8 @@ export function Editor({
             aoAcrescentar={acrescentarDiagrama}
             apagavel={apagavel}
             aoApagar={apagarDiagrama}
+            movivel={movivel}
+            aoMover={moverDiagrama}
             desfazer={desfazerVisivel}
             aoDesfazer={desfazerApagar}
             aoEscolher={(i) => {
@@ -770,6 +822,24 @@ export function Editor({
 }
 
 // --------------------------------------------------------------- a barra
+
+/**
+ * Que número tem, depois do arrasto, o diagrama que era o número `passo`?
+ *
+ * O palco guarda um índice, e um arrasto renumera todo mundo entre a origem e o
+ * destino. Sem esta conta o professor arrastaria o diagrama 9 para o alto e o
+ * tabuleiro mudaria sozinho para outra posição — não porque ele pediu, mas
+ * porque o número que o palco guardava passou a apontar para outro diagrama.
+ *
+ * `de` é de onde o diagrama saiu e `para` é o índice em que ele entrou na lista
+ * já sem ele — que é o que `comPassoMovido` faz por dentro, e por isso a conta
+ * aqui é a mesma em duas etapas: tira e põe.
+ */
+function indiceDepoisDoArrasto(passo: number, de: number, para: number): number {
+  if (passo === de) return para;
+  const semEle = passo > de ? passo - 1 : passo;
+  return semEle >= para ? semEle + 1 : semEle;
+}
 
 function BarraDoEditor({
   aula,
