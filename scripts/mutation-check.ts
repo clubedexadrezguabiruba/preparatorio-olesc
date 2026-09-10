@@ -12,6 +12,8 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { Chess } from "chess.js";
+import { hashDoAlvo } from "../lib/lesson/excecoes.ts";
+import type { Lesson } from "../lib/lesson/schema.ts";
 import { goalMovesOf, Tablebase } from "./tablebase.ts";
 
 /**
@@ -276,6 +278,68 @@ const MUTACOES: Mutation[] = [
       json.expectedResult = "draw";
       gravar(file, json);
       return 'expectedResult → "draw" numa posição que a tablebase dá como ganha';
+    },
+  },
+  /**
+   * As duas mutações da exceção do professor (decisão 10 do plano do editor).
+   *
+   * Elas são de um tipo diferente das outras: não plantam um erro para ver se o
+   * gate o pega — plantam um **perdão indevido** para ver se o gate o recusa. O
+   * erro de base é o mesmo dos dois lados (`RESULTADO_ERRADO`, com a posição
+   * mentindo sobre o resultado); o que muda é a exceção que o acompanha.
+   *
+   * Se alguém afrouxar a regra — parar de conferir o hash, ou passar a casar
+   * exceção só pelo alvo —, estas duas ficam **verdes**, e verde aqui é a
+   * suíte gritando. É o único jeito de uma regra que *perdoa* ter mutação.
+   */
+  {
+    titulo: "exceção com hash velho perdoando o erro que ela descrevia",
+    codigo: "RESULTADO_ERRADO",
+    aplicar: async (dir) => {
+      const id = posicaoDeEnsino(dir);
+      const { file: fp, json: posicao } = lerPosicao(dir, id);
+      posicao.expectedResult = "draw";
+      gravar(fp, posicao);
+
+      const { file: fa, json: aula } = lerAula(dir);
+      aula.excecoes = [
+        {
+          codigo: "RESULTADO_ERRADO",
+          alvo: id,
+          // O hash descreve uma posição que não é mais esta.
+          hash: "00000000000000000000000000000000",
+          motivo: "Divergência que eu assumi quando a posição era outra, e ninguém reviu.",
+          em: "2026-09-10",
+        },
+      ];
+      gravar(fa, aula);
+      return `exceção de ${id} com hash velho — o erro tem de voltar a bloquear`;
+    },
+  },
+  {
+    titulo: "exceção de outro código perdoando este erro",
+    codigo: "RESULTADO_ERRADO",
+    aplicar: async (dir) => {
+      const id = posicaoDeEnsino(dir);
+      const { file: fp, json: posicao } = lerPosicao(dir, id);
+      posicao.expectedResult = "draw";
+      gravar(fp, posicao);
+
+      const { file: fa, json: aula } = lerAula(dir);
+      // Hash **certo**: a exceção descreve exatamente esta posição. O que não
+      // bate é o código — ela perdoa `METODO_NAO_GANHA`, e o erro é outro.
+      const hash = hashDoAlvo(aula as Lesson, () => posicao.fen as string, id);
+      aula.excecoes = [
+        {
+          codigo: "METODO_NAO_GANHA",
+          alvo: id,
+          hash,
+          motivo: "Assumo que a linha do método não ganha, e é só isso que assumo aqui.",
+          em: "2026-09-10",
+        },
+      ];
+      gravar(fa, aula);
+      return `exceção de METODO_NAO_GANHA, com hash certo, sobre um erro de RESULTADO_ERRADO`;
     },
   },
   {
@@ -1024,12 +1088,28 @@ function rodarValidador(dir: string, flags: string[] = []) {
 /** Tira as cores da saída do validador, para poder procurar texto nela. */
 const limpar = (texto: string) => texto.replace(/\u001b\[\d+m/g, "");
 
+/**
+ * As linhas de **erro** com este código. Aviso não conta.
+ *
+ * O `✖` é exigido, e não apenas removido. Desde que o gate ganhou avisos
+ * (`▲ [CODIGO] onde`, para a exceção do professor), as duas coisas passaram a
+ * ter o mesmo formato — e uma busca por `[CODIGO]` solto aceitava um aviso como
+ * prova de que a regra pegou o estrago. O efeito era uma mutação vermelha
+ * **pelo motivo errado**: ela ficava vermelha mesmo com a regra desligada, que
+ * é exatamente o verde que esta suíte existe para produzir.
+ *
+ * Medido: com a conferência de hash de `julgarComExcecoes` sabotada, a mutação
+ * "exceção com hash velho" continuava passando. Com o `✖` exigido, ela fica
+ * verde e a suíte grita.
+ */
 function linhasDoCodigo(saida: string, codigo: string): string[] {
   const linhas = saida.split(/\r?\n/);
   const encontradas: string[] = [];
   for (const [i, linha] of linhas.entries()) {
-    if (!limpar(linha).includes(`[${codigo}]`)) continue;
-    const cabeca = limpar(linha).replace(/^\s*✖\s*/, "").trim();
+    const limpa = limpar(linha);
+    if (!limpa.includes(`[${codigo}]`)) continue;
+    if (!limpa.trimStart().startsWith("✖")) continue;
+    const cabeca = limpa.replace(/^\s*✖\s*/, "").trim();
     encontradas.push(`${cabeca}\n      ${limpar(linhas[i + 1] ?? "").trim()}`);
   }
   return encontradas;
