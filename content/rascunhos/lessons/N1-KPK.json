@@ -1,0 +1,547 @@
+{
+  "id": "N1-KPK",
+  "title": "Rei e peão contra rei: o rei na frente do peão",
+  "class": "D",
+  "orientation": "white",
+  "domainCriterion": "D1",
+  "status": "published",
+  "errors": {
+    "rei-na-frente-do-peao": {
+      "verdict": "loses-win",
+      "text": "O seu rei entrou na coluna do peão e tapou o caminho dele. Os dois se atrapalham, e o rei preto chega na frente. O rei escolta pelo lado."
+    },
+    "larga-o-peao": {
+      "verdict": "loses-win",
+      "text": "O rei largou o peão. Ele saiu da casa que segurava o rei preto fora, e o preto entra na frente. Dali não sai mais, e o final empata."
+    },
+    "peca-errada": {
+      "verdict": "loses-win",
+      "text": "Cavalo ou bispo joga a vitória fora: nenhum dos dois dá mate em rei sozinho. Aqui a peça é a dama."
+    }
+  },
+  "fallbacks": {
+    "winningOffMethod": "Esse lance ainda ganha, mas não é o caminho da aula. Aqui o rei escolta e o peão anda atrás dele.",
+    "losesWin": "Esse lance joga a vitória fora. Depois dele o rei preto se planta na frente do peão, e dá empate.",
+    "methodAlternative": "Esse lance é a mesma ideia por outro caminho."
+  },
+  "stages": {
+    "intro": {
+      "passos": [
+        {
+          "fala": "Rei e peão contra rei. Esta posição ganha: o peão precisa chegar a b8 e virar dama.",
+          "arrows": [
+            [
+              "b2",
+              "b8"
+            ]
+          ],
+          "highlights": [
+            "b8"
+          ]
+        },
+        {
+          "fala": "Quem decide isso é o rei branco. Ele já está na frente do peão, e é ele quem barra o rei preto.",
+          "highlights": [
+            "c6"
+          ]
+        },
+        {
+          "fala": "Se o rei preto chegar antes a c8 ou b8, ele se planta ali e o final empata.",
+          "arrows": [
+            [
+              "e7",
+              "c8"
+            ]
+          ],
+          "highlights": [
+            "c8",
+            "b8"
+          ]
+        }
+      ]
+    },
+    "objective": {
+      "source": "de-la-villa-100",
+      "positionId": "pos-n1-kpk-dlv-1-3",
+      "technique": {
+        "name": "O rei escolta, o peão anda atrás",
+        "summary": "O rei branco já está à frente do peão. O trabalho dele é barrar o caminho do rei preto — e só depois o peão anda."
+      },
+      "roteiro": [
+        {
+          "fala": "Você joga de brancas, e esta posição ganha. O peão da coluna b precisa chegar a b8.",
+          "arrows": [
+            [
+              "b2",
+              "b8"
+            ]
+          ],
+          "highlights": [
+            "b8"
+          ]
+        },
+        {
+          "fala": "O rei preto quer chegar na frente dele, em c8 ou b8. Se ele conseguir, o final empata.",
+          "arrows": [
+            [
+              "e7",
+              "c8"
+            ]
+          ],
+          "highlights": [
+            "c8",
+            "b8"
+          ],
+          "espera": 600
+        },
+        {
+          "lance": "c6c7",
+          "fala": "O rei branco vai a c7. De lá ele toma c8 e b8 do preto.",
+          "highlights": [
+            "c8",
+            "b8"
+          ],
+          "treino": {
+            "dica": "Antes de mexer o peão: para que casa o rei preto quer ir? Tire-a dele.",
+            "arrows": [
+              [
+                "e7",
+                "c8"
+              ]
+            ],
+            "highlights": [
+              "b8"
+            ],
+            "feedback": "Isso. De c7 o rei branco tira c8 e b8 do preto. Agora o preto vai por cima, atrás do peão."
+          }
+        },
+        {
+          "lance": "e7e6",
+          "fala": "O preto tenta por cima. Ele quer alcançar o peão no meio do caminho.",
+          "highlights": [
+            "b2"
+          ]
+        },
+        {
+          "lance": "b2b4",
+          "fala": "Só agora o peão anda — e anda duas casas, porque ainda não tinha saído.",
+          "treino": {
+            "dica": "O caminho está barrado. Agora o peão pode andar — e pode andar duas casas.",
+            "arrows": [
+              [
+                "b2",
+                "b8"
+              ]
+            ],
+            "feedback": "O peão sai, e sai duas casas. O rei preto corre atrás, mas chega tarde: quem manda aqui é o rei branco em c7.",
+            "erros": [
+              {
+                "moves": [
+                  "c7b7",
+                  "c7b8"
+                ],
+                "errorId": "rei-na-frente-do-peao"
+              },
+              {
+                "moves": [
+                  "c7c8",
+                  "c7d8"
+                ],
+                "errorId": "larga-o-peao"
+              }
+            ]
+          }
+        },
+        {
+          "lance": "e6d5",
+          "fala": "O rei preto corre atrás. Ele chega tarde, e daqui a pouco você vê por quê."
+        },
+        {
+          "lance": "b4b5",
+          "fala": "O peão vai a b5. O rei preto ainda não alcança essa casa.",
+          "treino": {
+            "dica": "O rei preto se aproxima. O peão continua andando: quem o protege é a casa em que o seu rei está.",
+            "arrows": [
+              [
+                "b4",
+                "b8"
+              ]
+            ],
+            "feedback": "Mais uma. O rei preto encosta em c5, mas não adianta: ele nunca vai conseguir chegar à frente do peão.",
+            "erros": [
+              {
+                "moves": [
+                  "c7b7",
+                  "c7b8"
+                ],
+                "errorId": "rei-na-frente-do-peao"
+              },
+              {
+                "moves": [
+                  "c7c8",
+                  "c7d8",
+                  "c7d7"
+                ],
+                "errorId": "larga-o-peao"
+              }
+            ]
+          }
+        },
+        {
+          "lance": "d5c5",
+          "fala": "Agora ele alcança: de c5 o rei preto ataca o peão em b5.",
+          "highlights": [
+            "b5"
+          ]
+        },
+        {
+          "lance": "b5b6",
+          "fala": "E o peão passa para b6, onde o seu rei em c7 o defende.",
+          "arrows": [
+            [
+              "c7",
+              "b6"
+            ]
+          ],
+          "espera": 700,
+          "treino": {
+            "dica": "Um lance só ganha aqui. O peão passa pelo rei preto sem poder ser pego.",
+            "arrows": [
+              [
+                "c5",
+                "b5"
+              ]
+            ],
+            "highlights": [
+              "b5"
+            ],
+            "feedback": "Só este lance ganhava. O peão em b6 está defendido pelo rei em c7, e o rei preto ficou para trás.",
+            "erros": [
+              {
+                "moves": [
+                  "c7b7",
+                  "c7b8"
+                ],
+                "errorId": "rei-na-frente-do-peao"
+              },
+              {
+                "moves": [
+                  "c7c8",
+                  "c7d8",
+                  "c7d7"
+                ],
+                "errorId": "larga-o-peao"
+              }
+            ]
+          }
+        },
+        {
+          "lance": "c5c4",
+          "fala": "Não dá para pegar o peão. O preto desiste e desce."
+        },
+        {
+          "lance": "b6b7",
+          "fala": "b7. Falta um passo até b8, e o caminho está livre.",
+          "highlights": [
+            "b8"
+          ],
+          "treino": {
+            "dica": "O rei preto desistiu de pegar o peão. Empurre.",
+            "arrows": [
+              [
+                "b6",
+                "b8"
+              ]
+            ],
+            "feedback": "O peão chega à sétima. Falta um lance."
+          }
+        },
+        {
+          "lance": "c4d5",
+          "fala": "O rei preto está longe demais para atrapalhar."
+        },
+        {
+          "lance": "b7b8q",
+          "fala": "Dama. O rei escoltou, o peão chegou.",
+          "espera": 900,
+          "treino": {
+            "dica": "Promova — e escolha a peça que dá mate sozinha com o rei.",
+            "arrows": [
+              [
+                "c7",
+                "b8"
+              ]
+            ],
+            "highlights": [
+              "b8"
+            ],
+            "feedback": "Dama nova no tabuleiro, e o rei preto está longe. O final desta aula acabou aqui, ganho. O mate de dama é outra aula.",
+            "erros": [
+              {
+                "moves": [
+                  "b7b8n",
+                  "b7b8b"
+                ],
+                "errorId": "peca-errada"
+              }
+            ]
+          }
+        }
+      ],
+      "treino": {
+        "intro": "A mesma posição, agora jogada. Você é as brancas, e a flecha mostra o que importa."
+      }
+    },
+    "guided": {
+      "positionId": "pos-n1-kpk-dlv-1-3",
+      "goal": "win",
+      "root": "n1",
+      "intro": "A mesma posição, agora jogada. Você é as brancas, e a flecha mostra o que importa.",
+      "nodes": {
+        "n1": {
+          "fen": "8/4k3/2K5/8/8/8/1P6/8 w - - 0 1",
+          "hint": "Antes de mexer o peão: para que casa o rei preto quer ir? Tire-a dele.",
+          "arrows": [
+            [
+              "e7",
+              "c8"
+            ]
+          ],
+          "highlights": [
+            "b8"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "c6c7"
+              ],
+              "reply": "e7e6",
+              "next": "n2",
+              "feedback": "Isso. De c7 o rei branco tira c8 e b8 do preto. Agora o preto vai por cima, atrás do peão."
+            }
+          ],
+          "winningMoves": [
+            "b2b3",
+            "b2b4",
+            "c6b5",
+            "c6b6",
+            "c6b7",
+            "c6c5",
+            "c6c7",
+            "c6d5"
+          ],
+          "generated": true
+        },
+        "n2": {
+          "fen": "8/2K5/4k3/8/8/8/1P6/8 w - - 2 2",
+          "hint": "O caminho está barrado. Agora o peão pode andar — e pode andar duas casas.",
+          "arrows": [
+            [
+              "b2",
+              "b8"
+            ]
+          ],
+          "expects": [
+            {
+              "moves": [
+                "b2b4"
+              ],
+              "reply": "e6d5",
+              "next": "n3",
+              "feedback": "O peão sai, e sai duas casas. O rei preto corre atrás, mas chega tarde: quem manda aqui é o rei branco em c7."
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "c7b7",
+                "c7b8"
+              ],
+              "errorId": "rei-na-frente-do-peao"
+            },
+            {
+              "moves": [
+                "c7c8",
+                "c7d8"
+              ],
+              "errorId": "larga-o-peao"
+            }
+          ],
+          "winningMoves": [
+            "b2b3",
+            "b2b4",
+            "c7b6",
+            "c7c6"
+          ],
+          "generated": true
+        },
+        "n3": {
+          "fen": "8/2K5/8/3k4/1P6/8/8/8 w - - 1 3",
+          "hint": "O rei preto se aproxima. O peão continua andando: quem o protege é a casa em que o seu rei está.",
+          "arrows": [
+            [
+              "b4",
+              "b8"
+            ]
+          ],
+          "expects": [
+            {
+              "moves": [
+                "b4b5"
+              ],
+              "reply": "d5c5",
+              "next": "n4",
+              "feedback": "Mais uma. O rei preto encosta em c5, mas não adianta: ele nunca vai conseguir chegar à frente do peão."
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "c7b7",
+                "c7b8"
+              ],
+              "errorId": "rei-na-frente-do-peao"
+            },
+            {
+              "moves": [
+                "c7c8",
+                "c7d8",
+                "c7d7"
+              ],
+              "errorId": "larga-o-peao"
+            }
+          ],
+          "winningMoves": [
+            "b4b5",
+            "c7b6"
+          ],
+          "generated": true
+        },
+        "n4": {
+          "fen": "8/2K5/8/1Pk5/8/8/8/8 w - - 1 4",
+          "hint": "Um lance só ganha aqui. O peão passa pelo rei preto sem poder ser pego.",
+          "arrows": [
+            [
+              "c5",
+              "b5"
+            ]
+          ],
+          "highlights": [
+            "b5"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "b5b6"
+              ],
+              "reply": "c5c4",
+              "next": "n5",
+              "feedback": "Só este lance ganhava. O peão em b6 está defendido pelo rei em c7, e o rei preto ficou para trás."
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "c7b7",
+                "c7b8"
+              ],
+              "errorId": "rei-na-frente-do-peao"
+            },
+            {
+              "moves": [
+                "c7c8",
+                "c7d8",
+                "c7d7"
+              ],
+              "errorId": "larga-o-peao"
+            }
+          ],
+          "winningMoves": [
+            "b5b6"
+          ],
+          "generated": true
+        },
+        "n5": {
+          "fen": "8/2K5/1P6/8/2k5/8/8/8 w - - 1 5",
+          "hint": "O rei preto desistiu de pegar o peão. Empurre.",
+          "arrows": [
+            [
+              "b6",
+              "b8"
+            ]
+          ],
+          "expects": [
+            {
+              "moves": [
+                "b6b7"
+              ],
+              "reply": "c4d5",
+              "next": "n6",
+              "feedback": "O peão chega à sétima. Falta um lance."
+            }
+          ],
+          "winningMoves": [
+            "b6b7",
+            "c7b7",
+            "c7b8",
+            "c7c6",
+            "c7c8",
+            "c7d6",
+            "c7d7",
+            "c7d8"
+          ],
+          "generated": true
+        },
+        "n6": {
+          "fen": "8/1PK5/8/3k4/8/8/8/8 w - - 1 6",
+          "hint": "Promova — e escolha a peça que dá mate sozinha com o rei.",
+          "arrows": [
+            [
+              "c7",
+              "b8"
+            ]
+          ],
+          "highlights": [
+            "b8"
+          ],
+          "expects": [
+            {
+              "moves": [
+                "b7b8q"
+              ],
+              "ends": "promotion",
+              "feedback": "Dama nova no tabuleiro, e o rei preto está longe. O final desta aula acabou aqui, ganho. O mate de dama é outra aula."
+            }
+          ],
+          "mistakes": [
+            {
+              "moves": [
+                "b7b8n",
+                "b7b8b"
+              ],
+              "errorId": "peca-errada"
+            }
+          ],
+          "winningMoves": [
+            "b7b8q",
+            "b7b8r",
+            "c7b6",
+            "c7b8",
+            "c7c8",
+            "c7d7",
+            "c7d8"
+          ],
+          "generated": true
+        }
+      }
+    },
+    "practice": {
+      "positionId": "pos-n1-kpk-dlv-1-3",
+      "goal": "win",
+      "engine": {
+        "skill": 20,
+        "moveTimeMs": 300
+      }
+    }
+  }
+}
