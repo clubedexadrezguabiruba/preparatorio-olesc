@@ -95,3 +95,56 @@ function movedPieceSafety(
     brush: game.isAttacked(destination, piece.color) ? DEFENDED_BRUSH : HANGING_BRUSH,
   };
 }
+
+/**
+ * O caminho de volta: o que o professor desenhou no tabuleiro, virando arquivo.
+ *
+ * É o inverso exato de `desenhoDaAutoria`, e existe para o modo editor: o
+ * chessground devolve a **lista inteira** de formas depois de cada traço (não um
+ * delta, não uma seta só), e o que vai para o JSON tem de ser `arrows` e
+ * `highlights` do `desenhoSchema`.
+ *
+ * ## Duas regras do schema que esta função obedece
+ *
+ * 1. **Lista vazia é inválida.** `desenhoSchema` declara `.min(1).optional()`
+ *    (`lib/lesson/schema.ts:490`): a ausência de desenho se escreve **omitindo
+ *    o campo**, nunca com `[]`. Apagar o último traço tem de devolver `{}`, e
+ *    não `{ arrows: [] }` — senão o gate recusa a aula que o professor acabou
+ *    de limpar.
+ * 2. **O objeto é estrito.** Nada além de `arrows` e `highlights` sai daqui.
+ *
+ * ## O que se perde, de propósito
+ *
+ * O chessground guarda um pincel por forma (`green`, `red`, `blue`, `yellow`,
+ * `paleRed` e o nosso `plano`), e o Lichess troca a cor com `Shift`/`Alt`. O
+ * arquivo não tem onde guardar cor: uma seta é uma seta, uma casa acesa é uma
+ * casa acesa, e é `desenhoDaAutoria` quem decide como elas aparecem (azul e
+ * verde). Então a cor com que o professor desenhou **não volta** — e é por isso
+ * que a ida e a volta são iguais só a partir do arquivo, que é o teste que
+ * importa.
+ *
+ * As formas que o chessground cria e não cabem em nenhum dos dois campos
+ * (uma peça fantasma arrastada, um pedaço de texto) são descartadas em silêncio:
+ * elas não são desenho de autoria, são estado da interação.
+ */
+export function autoriaDoDesenho(shapes: readonly DrawShape[]): {
+  arrows?: [string, string][];
+  highlights?: string[];
+} {
+  const arrows: [string, string][] = [];
+  const highlights: string[] = [];
+
+  for (const shape of shapes) {
+    if (typeof shape.orig !== "string") continue;
+    if (shape.dest) {
+      arrows.push([shape.orig, shape.dest]);
+    } else {
+      highlights.push(shape.orig);
+    }
+  }
+
+  const desenho: { arrows?: [string, string][]; highlights?: string[] } = {};
+  if (arrows.length > 0) desenho.arrows = arrows;
+  if (highlights.length > 0) desenho.highlights = highlights;
+  return desenho;
+}

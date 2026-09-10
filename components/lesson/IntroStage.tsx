@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color } from "@lichess-org/chessground/types";
 import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
 import { ChessBoard } from "@/components/board/ChessBoard";
@@ -56,6 +57,7 @@ export function IntroStage({
   passoInicial = 0,
   edicaoDaFala,
   aoAndar,
+  marcacao,
 }: {
   stage: IntroStageData;
   /** A posição da aula — o diagrama do passo que não declara FEN própria. */
@@ -79,6 +81,19 @@ export function IntroStage({
   edicaoDaFala?: (passo: number, valor: string) => ReactNode;
   /** Modo editor: qual diagrama está na tela, para a lista acender o certo. */
   aoAndar?: (passo: number) => void;
+  /**
+   * Modo editor: o desenho com o botão direito, no diagrama que está na tela.
+   *
+   * Quando presente, o desenho da autoria sai da camada automática e entra na
+   * camada **do usuário** do chessground — que é a única em que o botão direito
+   * mexe. As duas existem ao mesmo tempo no tabuleiro; desenhar na automática
+   * daria um traço que o professor vê e não consegue apagar.
+   *
+   * O `ChessBoard` decide se aceita desenho **na criação** (`ChessBoard.tsx:245`),
+   * então ligar isto em vida exige remontar por `key` — o editor já remonta a
+   * cada troca de diagrama.
+   */
+  marcacao?: { shapes: DrawShape[]; onChange: (shapes: DrawShape[]) => void };
 }) {
   const [passo, setPasso] = useState(() =>
     Math.min(Math.max(passoInicial, 0), stage.passos.length - 1),
@@ -93,7 +108,9 @@ export function IntroStage({
     aoAndar?.(passo);
   }, [passo, aoAndar]);
 
-  const shapes = useMemo(() => desenhoDaAutoria(atual), [atual]);
+  // Com o editor ligado, o desenho da autoria vive na camada do usuário (por
+  // `marcacao`), e repeti-lo aqui o desenharia duas vezes.
+  const shapes = useMemo(() => (marcacao ? [] : desenhoDaAutoria(atual)), [atual, marcacao]);
 
   const andar = useCallback(
     (para: 1 | -1) =>
@@ -129,6 +146,7 @@ export function IntroStage({
           fen={atual.fen ?? position.fen}
           orientation={orientation}
           shapes={shapes}
+          desenhavel={marcacao}
           viewOnly
         />
       }

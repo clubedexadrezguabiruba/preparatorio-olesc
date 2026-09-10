@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { teachingShapes } from "./annotations.ts";
+import { autoriaDoDesenho, desenhoDaAutoria, teachingShapes } from "./annotations.ts";
+import type { DrawShape } from "@lichess-org/chessground/draw";
+import type { Key } from "@lichess-org/chessground/types";
+import { desenhoSchema } from "../lesson/schema.ts";
 
 /**
  * Os destaques automáticos, medidos nas posições da aula N0-R-MATE.
@@ -46,4 +49,63 @@ test("peça que ninguém ataca não ganha círculo nenhum", () => {
   const shapes = teachingShapes("8/8/8/4k3/7R/8/4K3/8 b - - 1 1", ["h1", "h4"]);
   assert.deepEqual(squaresOf(shapes, "red"), []);
   assert.deepEqual(squaresOf(shapes, "green"), []);
+});
+
+/**
+ * A ida e a volta do desenho do professor.
+ *
+ * O modo editor recebe do chessground a lista inteira de formas depois de cada
+ * traço e precisa gravá-la como `arrows`/`highlights`. O que estes testes
+ * protegem é a regra que o gate cobra e que ninguém vê ao desenhar: **lista
+ * vazia é inválida no schema** — apagar o último traço tem de sumir com o
+ * campo, não deixá-lo como `[]`.
+ */
+
+test("ida e volta: o arquivo sobrevive a virar tabuleiro e voltar", () => {
+  for (const original of [
+    { arrows: [["e7", "c8"]] as [string, string][] },
+    { highlights: ["c8", "b8"] },
+    { arrows: [["b2", "b4"]] as [string, string][], highlights: ["b8"] },
+    { arrows: [["a1", "a8"], ["h1", "h8"]] as [string, string][], highlights: ["d4", "e5", "f6"] },
+  ]) {
+    const volta = autoriaDoDesenho(desenhoDaAutoria(original));
+    assert.deepEqual(volta, original);
+    // E o que volta continua sendo aceito pelo schema, que é quem decide.
+    assert.equal(desenhoSchema.safeParse(volta).success, true);
+  }
+});
+
+test("apagar o último traço some com o campo — nunca deixa lista vazia", () => {
+  const vazio = autoriaDoDesenho([]);
+  assert.deepEqual(vazio, {});
+  assert.equal("arrows" in vazio, false, "`arrows: []` faria o gate recusar a aula limpa");
+  assert.equal("highlights" in vazio, false);
+  assert.equal(desenhoSchema.safeParse(vazio).success, true);
+
+  // Sobrando só a seta, o campo das casas some, e vice-versa.
+  assert.deepEqual(autoriaDoDesenho([{ orig: "e2", dest: "e4", brush: "green" }]), {
+    arrows: [["e2", "e4"]],
+  });
+  assert.deepEqual(autoriaDoDesenho([{ orig: "e4", brush: "red" }]), { highlights: ["e4"] });
+});
+
+test("a cor com que se desenhou não vai para o arquivo", () => {
+  // O Lichess troca o pincel com Shift/Alt, e o schema não tem onde guardar
+  // isso. Quem decide como o desenho aparece é `desenhoDaAutoria`.
+  const emVermelho = autoriaDoDesenho([{ orig: "a1", dest: "a8", brush: "red" }]);
+  const emAmarelo = autoriaDoDesenho([{ orig: "a1", dest: "a8", brush: "yellow" }]);
+  assert.deepEqual(emVermelho, emAmarelo);
+});
+
+test("forma que não é seta nem casa é descartada, e não quebra o arquivo", () => {
+  const shapes: DrawShape[] = [
+    { orig: "e2", dest: "e4", brush: "blue" },
+    // O que o chessground cria durante a interação e não é desenho de autoria.
+    { orig: undefined as unknown as Key, brush: "green" },
+    { orig: "d4", brush: "green" },
+  ];
+  assert.deepEqual(autoriaDoDesenho(shapes), {
+    arrows: [["e2", "e4"]],
+    highlights: ["d4"],
+  });
 });

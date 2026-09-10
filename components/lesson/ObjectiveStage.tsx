@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color } from "@lichess-org/chessground/types";
 import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
 import { ChessBoard } from "@/components/board/ChessBoard";
@@ -79,6 +80,7 @@ export function ObjectiveStage({
   aoAndar,
   edicaoDaFala,
   edicaoDaTecnica,
+  marcacao,
 }: {
   stage: ObjectiveStageData;
   /** A posição da aula — a MESMA das três etapas, e de onde o roteiro parte. */
@@ -105,6 +107,19 @@ export function ObjectiveStage({
   edicaoDaFala?: (passo: number, valor: string) => ReactNode;
   /** Modo editor: o nome e o resumo da técnica, com lápis. */
   edicaoDaTecnica?: (campo: "name" | "summary", valor: string) => ReactNode;
+  /**
+   * Modo editor: o desenho com o botão direito, no diagrama que está na tela.
+   *
+   * Quando presente, o desenho da autoria sai da camada automática e entra na
+   * camada **do usuário** do chessground — que é a única em que o botão direito
+   * mexe. As duas existem ao mesmo tempo no tabuleiro; desenhar na automática
+   * daria um traço que o professor vê e não consegue apagar.
+   *
+   * O `ChessBoard` decide se aceita desenho **na criação** (`ChessBoard.tsx:245`),
+   * então ligar isto em vida exige remontar por `key` — o editor já remonta a
+   * cada troca de diagrama.
+   */
+  marcacao?: { shapes: DrawShape[]; onChange: (shapes: DrawShape[]) => void };
 }) {
   const [passo, setPasso] = useState(() =>
     Math.min(Math.max(passoInicial, 0), stage.roteiro.length - 1),
@@ -184,8 +199,15 @@ export function ObjectiveStage({
    * ao aluno como um tabuleiro de nove setas.
    */
   const shapes = useMemo(
-    () => [...teachingShapes(quadro.fen, quadro.lastMove), ...desenhoDaAutoria(atual)],
-    [quadro, atual],
+    () => [
+      ...teachingShapes(quadro.fen, quadro.lastMove),
+      // Com o editor ligado, o desenho da autoria vive na camada do usuário
+      // (por `marcacao`) — repeti-lo aqui o desenharia duas vezes. Os
+      // destaques deduzidos ficam: o professor precisa ver o mesmo tabuleiro
+      // que o aluno vai ver, e eles não são dele para apagar.
+      ...(marcacao ? [] : desenhoDaAutoria(atual)),
+    ],
+    [quadro, atual, marcacao],
   );
 
   const rever = () => {
@@ -206,6 +228,7 @@ export function ObjectiveStage({
           check={quadro.check}
           shapes={shapes}
           matedKing={quadro.matedColor}
+          desenhavel={marcacao}
           viewOnly
         />
       }

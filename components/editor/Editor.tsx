@@ -1,12 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { DrawShape } from "@lichess-org/chessground/draw";
 import { LessonPlayer } from "@/components/lesson/LessonPlayer";
 import { Lapis } from "@/components/editor/Lapis";
 import { ListaDeDiagramas, type Diagrama } from "@/components/editor/ListaDeDiagramas";
 import { conferirAula, publicarAula, recarregarAula, salvarAula } from "@/app/editor/acoes";
+import { comCarimbo, comDesenho, comFala, comTecnica, passoCru } from "@/lib/editor/edicoes";
 import { filaDeGravacao, type Fila } from "@/lib/editor/fila";
 import type { Conferencia } from "@/lib/editor/gate";
+import { autoriaDoDesenho, desenhoDaAutoria } from "@/lib/chess/annotations";
 import { montarQuadros } from "@/lib/lesson/roteiro";
 import { lessonSchema, type Lesson, type Position } from "@/lib/lesson/schema";
 
@@ -206,6 +209,23 @@ export function Editor({
     [cru, editar],
   );
 
+  /**
+   * O desenho do diagrama que está na tela, nos dois sentidos.
+   *
+   * O chessground devolve a **lista inteira** de formas depois de cada traço,
+   * não um delta — então gravar é sempre reescrever o desenho daquele passo.
+   * `autoriaDoDesenho` cuida da regra que o gate cobra e que ninguém vê ao
+   * desenhar: apagar o último traço some com o campo, em vez de deixar `[]`.
+   */
+  const marcacao = useMemo(
+    () => ({
+      shapes: desenhoDaAutoria(passoCru(cru, alvo.etapa, alvo.passo)),
+      onChange: (shapes: DrawShape[]) =>
+        editar(comDesenho(cru, alvo.etapa, alvo.passo, autoriaDoDesenho(shapes))),
+    }),
+    [cru, alvo.etapa, alvo.passo, editar],
+  );
+
   // -------------------------------------------------- conferir e publicar
 
   async function conferir() {
@@ -367,6 +387,7 @@ export function Editor({
             key={`${aula}-${alvo.etapa}-${alvo.passo}-${geracao}`}
             bundle={{ lesson: ultimaValida, positions }}
             startAt={{ stage: alvo.etapa, passo: alvo.passo, pausado: true }}
+            marcacao={marcacao}
             aoAndar={(passo) => setAlvo((a) => (a.passo === passo ? a : { ...a, passo }))}
             edicao={{
               titulo: (valor) => (
@@ -527,62 +548,4 @@ function avisoDaVoz(quantas: number): string {
   return quantas === 1
     ? "1 texto fora da régua da voz do curso"
     : `${quantas} textos fora da régua da voz do curso`;
-}
-
-/**
- * O carimbo do professor: **data, sem hora**.
- *
- * Com hora, cada salvamento mudaria os bytes do rascunho e o `git diff` de uma
- * aula tocada e destocada no mesmo dia mostraria uma linha de ruído. Com data,
- * um dia de trabalho é um carimbo só.
- *
- * O aluno não vê nada disto: o campo existe para o professor saber, meses
- * depois, que aquela fala saiu da tela e não do livro. A voz da casa é a de um
- * professor que não fala do sistema.
- */
-function comCarimbo(cru: Record<string, unknown>): Record<string, unknown> {
-  const hoje = new Date().toISOString().slice(0, 10);
-  const atual = cru.professor as { adaptouEm?: string } | undefined;
-  if (atual?.adaptouEm === hoje) return cru;
-  return { ...cru, professor: { ...atual, adaptouEm: hoje } };
-}
-
-/**
- * Troca a fala de um passo, preservando a ordem das chaves.
- *
- * A propagação por espalhamento (`{...obj, campo: novo}`) mantém a posição de
- * uma chave que já existe — e é isso que faz o `git diff` da aula mostrar uma
- * linha em vez do arquivo inteiro.
- */
-function comFala(
-  cru: Record<string, unknown>,
-  etapa: "intro" | "objective",
-  passo: number,
-  texto: string,
-): Record<string, unknown> {
-  const stages = cru.stages as Record<string, unknown>;
-  if (etapa === "intro") {
-    const intro = stages.intro as { passos: Array<Record<string, unknown>> };
-    const passos = intro.passos.map((p, i) => (i === passo ? { ...p, fala: texto } : p));
-    return { ...cru, stages: { ...stages, intro: { ...intro, passos } } };
-  }
-  const objective = stages.objective as { roteiro: Array<Record<string, unknown>> };
-  const roteiro = objective.roteiro.map((p, i) => (i === passo ? { ...p, fala: texto } : p));
-  return { ...cru, stages: { ...stages, objective: { ...objective, roteiro } } };
-}
-
-function comTecnica(
-  cru: Record<string, unknown>,
-  campo: "name" | "summary",
-  texto: string,
-): Record<string, unknown> {
-  const stages = cru.stages as Record<string, unknown>;
-  const objective = stages.objective as { technique: Record<string, unknown> };
-  return {
-    ...cru,
-    stages: {
-      ...stages,
-      objective: { ...objective, technique: { ...objective.technique, [campo]: texto } },
-    },
-  };
 }

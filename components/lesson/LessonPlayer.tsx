@@ -85,8 +85,14 @@ export function LessonPlayer({
     tecnica?: (campo: "name" | "summary", valor: string) => ReactNode;
   };
   /**
-   * Só o modo autor (B8.3): liga o desenho com o botão direito nas etapas 2 e
-   * 3 e diz o que desenhar. O aluno nunca recebe isto, e sem isto nada muda.
+   * Só o modo editor: liga o desenho com o botão direito e diz o que desenhar.
+   * O aluno nunca recebe isto, e sem isto nada muda.
+   *
+   * **É um canal só, para o diagrama que está na tela.** O editor remonta o
+   * player a cada troca de diagrama, então `shapes` é sempre o desenho daquele
+   * passo e `onChange` grava naquele passo. Um mapa de desenhos por índice
+   * obrigaria o player a saber qual índice está mostrando — que é justamente o
+   * que ele não precisa saber.
    */
   marcacao?: { shapes: DrawShape[] | null; onChange: (shapes: DrawShape[]) => void };
   /**
@@ -325,6 +331,7 @@ export function LessonPlayer({
             orientation={lesson.orientation}
             trilha={trilha}
             passoInicial={startAt?.stage === "intro" ? (startAt.passo ?? 0) : 0}
+            marcacao={marcacao ? { shapes: marcacao.shapes ?? [], onChange: marcacao.onChange } : undefined}
             edicaoDaFala={
               edicao?.fala ? (passo, valor) => edicao.fala!("intro", passo, valor) : undefined
             }
@@ -348,6 +355,7 @@ export function LessonPlayer({
               edicao?.fala ? (passo, valor) => edicao.fala!("objective", passo, valor) : undefined
             }
             edicaoDaTecnica={edicao?.tecnica}
+            marcacao={marcacao ? { shapes: marcacao.shapes ?? [], onChange: marcacao.onChange } : undefined}
             rodape={
               <StageFooter next={nextStage("objective")} onGo={goToStage} label={AVANCO.paraTreino} />
             }
