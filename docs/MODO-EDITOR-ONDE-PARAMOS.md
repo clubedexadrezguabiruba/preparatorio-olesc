@@ -1,6 +1,8 @@
 # Modo editor — onde paramos
 
-**Data:** 2026-09-10. **Branch:** `modo-editor`. **Bloco 1 entregue; Bloco 2 pela metade, sem dívidas.**
+**Data:** 2026-09-10. **Branch:** `modo-editor`. **Bloco 1 entregue; Bloco 2 pela
+metade, com uma dívida aberta: o palco não cabe em 1366×768** (ver a rodada de
+navegador do "+", mais abaixo).
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -25,6 +27,10 @@ npm run dev            # e entrar como professor (usuário `doug`)
 responde **404**, inclusive para o professor logado.
 
 Trocar o PIN de qualquer conta: `node scripts/trocar-pin.ts <usuario> [pin]`.
+
+`.claude/launch.json` existe só para a ferramenta de navegador do agente subir
+esse mesmo `npm run dev` sozinha, em vez de deixar um terminal solto aberto.
+Ele não muda nada de quem roda o servidor à mão.
 
 ---
 
@@ -131,11 +137,12 @@ entrada. O menu "+ Nova aula" continua sendo do Bloco 3.
 Nada disto é código faltando; é verificação que não foi feita.
 
 1. **A rodada de navegador.** Faltava o login de professor quando o bloco
-   fechou. Falta confirmar na tela: `/editor/finais/N1-KPK` = 404 em
-   `next build && next start`; = 404 em `next dev` sem `EDITOR_LOCAL`; e a
-   **largura do palco com a lista de diagramas a 1366×768**. O mecanismo dos
-   404 está coberto por `lib/editor/local.test.ts` e por leitura de
-   `exigirEditor()`, mas ninguém viu na tela.
+   fechou. A **largura do palco a 1366×768** foi medida em 2026-09-10, junto
+   com a rodada do "+", e **falhou** — está na seção daquela rodada, com os
+   números e a causa. Continuam de fora: `/editor/finais/N1-KPK` = 404 em
+   `next build && next start` e = 404 em `next dev` sem `EDITOR_LOCAL`. O
+   mecanismo dos 404 está coberto por `lib/editor/local.test.ts` e por leitura
+   de `exigirEditor()`, mas ninguém viu na tela.
 2. **A medida de uso** — uma pessoa que nunca viu a tela muda uma fala sem
    instrução. Tempo **e** hesitações. É do Doug, não de um agente.
 3. **A miniatura usa glifos Unicode**, não as peças do cburnett. Alcançar as
@@ -252,8 +259,10 @@ ninguém escreveu.
 A regra vive no `checkLesson` e só na aula **publicada**: carregar a marca é o
 estado normal de um rascunho em construção. Ela varre `falasDaAula`, que já
 colhe todo texto que o aluno lê e já escreve o índice do passo
-(`objective.roteiro[3].fala`) — então o `diagramaDoOnde` acende a borda vermelha
-**no selo do diagrama** de graça, sem tocar no gate.
+(`objective.roteiro[3].fala`) — então o `diagramaDoOnde` acende o sinal de erro
+**no selo do diagrama** de graça, sem tocar no gate. (Sinal, e não borda: a
+rodada de navegador mostrou que a borda vermelha nunca existiu no código. Ver
+logo abaixo.)
 
 Mutação plantada, e **conferida como o doc manda**: com a regra desligada de
 propósito, a suíte cai de 42 para 41. Ela guarda de verdade.
@@ -269,17 +278,85 @@ propósito, a suíte cai de 42 para 41. Ela guarda de verdade.
   worker próprio.
 - **Bloco 2C** — as respostas do defensor pela fonte (ver acima).
 
-### Pendente de verificação (não é código faltando)
+### A rodada de navegador do "+" (2026-09-10) — feita
 
-Ninguém **viu o "+" na tela**. Ele está coberto por teste na cirurgia do JSON e
-pela mutação no gate, e os sete portões estão verdes — mas a rodada de navegador
-não foi feita: clicar no vão, ver o diagrama nascer, escrever a fala, conferir e
-ver o `TEXTO_DE_MOLDE` sumir. É a medida de uso do bloco ("pessoa leiga
-acrescenta um diagrama com uma flecha, sem instrução"), e ela é do Doug.
+Ligado o `EDITOR_LOCAL=1`, `next dev`, logado como professor, em
+`/editor/finais/N1-KPK`, etapa 2. **O "+" faz o que promete.**
+
+- **O vão aparece e recebe foco.** Com o ponteiro em cima, a opacidade vai de
+  `0` a `1` em 150 ms. Com o foco no selo 3, **um Tab** leva ao botão
+  "acrescentar diagrama entre o 3 e o 4", com `:focus-visible` e opacidade 1 —
+  a promessa do teclado se cumpre na tela, e não só no DOM.
+- **O clique acrescenta.** 13 selos viraram 14, o novo é o 4, já selecionado,
+  com `«escreva aqui»`, e a barra disse "salvo agora".
+- **O diff é o prometido:** 6 linhas somadas, 0 removidas — as 3 do passo novo e
+  as 3 do carimbo `professor.adaptouEm`. As outras 547 linhas, byte a byte. E
+  `content/lessons/N1-KPK.json` intocado.
+- **O portão pega antes da fala.** Conferir com a marca ainda no lugar acusou
+  `TEXTO_DE_MOLDE` **num selo só** — o 4. Os treze antigos, limpos. Escrita a
+  fala e conferido de novo: "conferência verde — pode publicar", em ~1,0 s.
+
+Não foi publicado, e o rascunho foi devolvido ao estado inicial.
+
+**O que a rodada ainda não cobre:** a medida de uso do bloco ("pessoa leiga
+acrescenta um diagrama com uma flecha, sem instrução") continua sendo do Doug —
+o que foi medido aqui é o mecanismo, não a hesitação de quem nunca viu a tela.
+E o "+" **não tem gesto contrário**: um diagrama acrescentado por engano só sai
+editando o JSON por fora, até a lixeira com desfazer existir.
+
+### O que a rodada destapou — 1: a borda vermelha nunca existiu
+
+Este doc e o comentário de `ListaDeDiagramas.tsx` dizem, os dois, que o selo com
+problema "ganha borda vermelha". **O `className` nunca põe borda nenhuma.**
+Medido no selo acusado, sem estar selecionado: `border-transparent`, igual ao
+selo limpo do lado. A borda do selo é usada só para dizer qual está
+**selecionado** (verde, `border-foco`), e um selo com problema que está
+selecionado fica verde — o contrário do que se quer.
+
+O aviso chega assim mesmo, por dois sinais menores: a **bolinha** no canto
+(`bg-erro`) e o **código em texto** (`text-erro-tinta`). Os dois apareceram.
+
+Decisão em aberto, e ela é de desenho, não de código: pôr a borda que os
+comentários prometem, ou corrigir os comentários e aceitar bolinha + frase.
+
+### O que a rodada destapou — 2: o palco não cabe em 1366×768
+
+**A dívida aberta do Bloco 2.** Medido no editor, com a coluna de 13 selos:
+
+| Janela | Documento | Sobra para fora | Tabuleiro cobre a coluna? |
+|---|---|---|---|
+| 1280 | 1373 px | 93 px | sim |
+| **1366** | **1417 px** | **51 px** | **sim, 46 px** |
+| 1440 | 1498 px | 58 px | sim |
+| 1600 | 1585 px | não | não |
+
+Em 1366 o tabuleiro ocupa x 175→855 e a coluna x 12→221: **sobrepõem-se em
+46 px**, e o tabuleiro fica por cima (`document.elementFromPoint(200, 300)`
+devolve `cg-board`). Isso come cerca de um quinto de cada selo, justamente do
+lado onde mora a fala cortada. E o painel de texto termina em 1417, 51 px além
+da janela — barra de rolagem horizontal numa tela que é a mais comum em
+notebook.
+
+**A causa, com arquivo e linha:** `app/globals.css:536` calcula o tabuleiro como
+`calc(100vw - 2.5rem - 2.5rem - var(--aula-painel))`. Essa conta reparte a
+largura entre respiro, painel e tabuleiro — e **não sabe que o editor pendurou
+mais 224 px de coluna à esquerda**. O palco do aluno está certo; o do editor
+herda a conta do aluno.
+
+O conserto tem forma pronta no próprio arquivo: `.aula-palco-magro`
+(`globals.css:623`) existe justamente para um modificador trocar as medidas sem
+repetir a media query. Um `.aula-palco-editor` que desconte a coluna na mesma
+conta resolve, e é mudança de CSS só.
 
 ## O próximo passo
 
-**Terminar o Bloco 2.** Duas coisas levantadas que economizam tempo lá:
+**Terminar o Bloco 2.** Antes dos gestos novos, há uma dívida barata de pagar: o
+**palco em 1366×768** (a seção acima diz a causa e o conserto). Enquanto ela não
+for paga, todo gesto novo na coluna vai ser desenhado em cima de um selo que o
+tabuleiro cobre pela direita — e arrastar para reordenar é justamente o gesto
+que precisa do selo inteiro.
+
+Depois dela, três coisas levantadas que economizam tempo:
 
 - **Ligar `montagem` (e `desenhavel`) exige `key` no `ChessBoard`.** As duas são
   lidas uma vez, com `useState(() => …)` (`ChessBoard.tsx:245` e `:247`), porque
@@ -290,6 +367,12 @@ acrescenta um diagrama com uma flecha, sem instrução"), e ela é do Doug.
   A barra de avaliação **precisa** de um worker próprio, senão ela cancela o
   lance do computador na etapa de prática. O corte natural é envolver as linhas
   60-486 numa função `criarMotor(build)`.
+- **O navegador embutido escala as coordenadas.** `.claude/launch.json` sobe o
+  `next dev` para a ferramenta de navegador, mas o quadro do ponteiro **não** é
+  o do CSS: na rodada do "+" a razão medida foi **CSS ≈ quadro × 2,91**, e
+  clicar por `ref` erra o alvo. Calibra-se em dois cliques, com um ouvinte de
+  `mousedown` lendo `clientX/clientY`. E a tecla que confirma o lapisinho é
+  `Enter`; `Return` não chega à página.
 
 ---
 
