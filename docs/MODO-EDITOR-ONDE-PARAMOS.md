@@ -1,6 +1,6 @@
 # Modo editor — onde paramos
 
-**Data:** 2026-09-10. **Branch:** `modo-editor`. **Bloco 1 de 6 entregue.**
+**Data:** 2026-09-10. **Branch:** `modo-editor`. **Bloco 1 entregue; Bloco 2 pela metade.**
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -144,17 +144,57 @@ Nada disto é código faltando; é verificação que não foi feita.
 
 ---
 
+## O Bloco 2, até onde foi
+
+Dois dos sete itens do bloco estão prontos e commitados. Os outros cinco não
+foram começados.
+
+### Pronto — o desenho (commit `add94e7`)
+
+- `autoriaDoDesenho` em `lib/chess/annotations.ts`: o inverso de
+  `desenhoDaAutoria`. **A regra que morde:** `desenhoSchema` é
+  `.min(1).optional()`, então apagar o último traço tem de **omitir o campo**,
+  nunca deixar `arrows: []` — senão o gate recusa a aula que o professor acabou
+  de limpar. Tem teste de ida e volta.
+- O botão direito desenha nas etapas 1 e 2 (`marcacao` → `desenhavel`). Com o
+  editor ligado, o desenho da autoria **muda de camada**: sai da automática e
+  entra na do usuário, que é a única em que o botão direito mexe. Os destaques
+  deduzidos (corte, peça pendurada) ficam onde estavam.
+- `lib/editor/edicoes.ts` — a cirurgia no JSON saiu do componente e ganhou
+  teste contra a N1-KPK de verdade. É ela que guarda a promessa do editor
+  inteiro, e a pergunta do teste é sempre "quantas linhas mudaram?".
+
+### Pronto — a exceção do professor (commit `e856b08`)
+
+`lib/lesson/excecoes.ts` + o campo `excecoes` no schema + a regra dentro do
+`fail()` do gate + a cor amarela dos avisos. Verificado contra o gate de
+verdade, não só por teste.
+
+Um furo achado só rodando, e que vale lembrar: **o erro de posição não nomeia
+aula nenhuma** (`onde` diz `posição pos-…`), mas a exceção mora no arquivo da
+aula. A posição é devolvida à dona pela busca de qual aula a referencia. Sem
+isso, a exceção existia e não perdoava nada, em silêncio.
+
+**Falta:** a mutação plantada para `EXCECAO_CADUCA` e para o rebaixamento, em
+`scripts/mutation-check.ts`. A casa cobra mutação para cada código novo, e esta
+é a única dívida declarada do bloco.
+
+### Não começado
+
+- A **barrinha do tabuleiro** (flecha, casa, limpar, virar) e o chip
+  "desenho deste diagrama / alvo do treino", para quem não usa botão direito.
+- O **lance por arrastar** no diagrama.
+- O **"+"** entre diagramas, arrastar para reordenar, lixeira com desfazer, e
+  `espera` como controle de pausa. *É o pedido literal do Doug: "um ícone de
+  mais pra adicionar um novo diagrama".*
+- `criarMotor()` extraído de `stockfish.ts` e a **barra de avaliação** com
+  worker próprio.
+
 ## O próximo passo
 
-**Bloco 2 — flechas, casas, lances, diagramas e a barra de avaliação.** O plano
-o descreve na seção "Blocos entregáveis". Três coisas levantadas nesta rodada
-que economizam tempo lá:
+**Terminar o Bloco 2.** Duas coisas levantadas que economizam tempo lá:
 
-- **`autoriaDoDesenho` não existe.** `lib/chess/annotations.ts:57` tem só o
-  caminho de ida (`desenhoDaAutoria`). O alvo da volta é `desenhoSchema`
-  (`lib/lesson/schema.ts:490`), que é `.min(1).optional()`: **lista vazia é
-  inválida** — a ausência se escreve omitindo o campo, nunca com `[]`.
-- **Ligar `desenhavel` ou `montagem` exige `key` no `ChessBoard`.** As duas são
+- **Ligar `montagem` (e `desenhavel`) exige `key` no `ChessBoard`.** As duas são
   lidas uma vez, com `useState(() => …)` (`ChessBoard.tsx:245` e `:247`), porque
   o chessground decide na criação. Um botão "modo desenho" que só troca a prop
   não vai funcionar.
