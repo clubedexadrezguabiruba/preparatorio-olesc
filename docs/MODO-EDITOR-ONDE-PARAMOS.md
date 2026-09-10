@@ -1,7 +1,8 @@
 # Modo editor — onde paramos
 
 **Data:** 2026-09-10. **Branch:** `modo-editor`. **Bloco 1 entregue; Bloco 2 pela
-metade.** A dívida do palco em 1366×768 foi **paga e medida** — ver a seção
+metade e SUSPENSO** — ver "A conversa que mudou o rumo", mais abaixo, e a
+[proposta do editor v2](EDITOR-V2-PROPOSTA.md), que ainda **não foi aprovada**. A dívida do palco em 1366×768 foi **paga e medida** — ver a seção
 daquela rodada, mais abaixo. O que sobra do Bloco 2 está em "Não começado", e
 o **Bloco 2B** (prévia, galeria de diagramas, tetos) foi pedido pelo Doug e
 **entregue** em 10/9/2026 — seção própria abaixo.
@@ -636,23 +637,207 @@ Portões, todos verdes: `typecheck`, `lint`, **757 testes** (8 novos),
 
 ---
 
+## O arrastar para reordenar, entregue em 10/9/2026
+
+O terceiro gesto da coluna, e o último dela: o "+", a lixeira e agora o arrastar. Com
+ele a coluna está completa, e o que sobra do Bloco 2 é tudo tabuleiro.
+
+**O Doug escolheu o arrastar contra a alternativa das setinhas ↑/↓**, com a frase que
+decidiu: *"como mudar um slide de lugar quando estamos criando"*. A escolha melhorou o
+desenho por um motivo que as setinhas não alcançavam — **o arrasto mostra a regra
+enquanto ela vale**, em vez de a explicar depois.
+
+### A regra, e por que ela NÃO é `podeApagarPasso` de novo
+
+> **A ordem dos `lance` não pode mudar.** Nada mais.
+
+O passo sem `lance` é invisível para a corrente (`derivarTreino` o pula antes de
+qualquer conta, `derivar-treino.ts:167`; a costura do feedback usa a fala do passo do
+**defensor**, que sempre tem lance, `:235`). Logo ele passeia pela etapa inteira sem
+mexer num byte da etapa 3 — é a mesma descoberta que deu forma ao "+", lida de um
+terceiro jeito. O passo **com** lance só atravessa passos que "só apontam", e para no
+primeiro que move peça.
+
+**A dica do Doug era reaproveitar `podeApagarPasso`, e ela dá resposta errada num caso
+comum.** Apagar **encurta** a corrente: tirar o último passo com lance é seguro, porque
+prefixo de corrente legal é corrente legal. Mover **reordena**: o mesmo último passo,
+arrastado para o topo, embaralha a partida. Há teste que põe as duas perguntas no
+**mesmo** diagrama — o 13 da N1-KPK — e recebe respostas contrárias, e que depois move
+de verdade para provar que o arquivo sai inválido. O piso e o teto também somem:
+mover não muda o tamanho da lista.
+
+### Escrito
+
+- `podeMoverPasso` → `Movivel` e `comPassoMovido` em `lib/editor/edicoes.ts`. O
+  veredicto devolve **a lista de vãos legais**, e não um sim/não — é ela que a tela
+  acende durante o arrasto.
+- Os dois vãos que ladeiam o próprio diagrama entram na lista **de propósito**: soltar
+  ali é desistir, e um alvo que se apaga debaixo do ponteiro faz o professor achar que
+  soltou errado. `comPassoMovido` devolve **o mesmo objeto** nesse caso, e é assim que
+  o arrasto desistido não carimba a aula nem manda gravação ao disco.
+- Na tela (`ListaDeDiagramas.tsx`): arrasto HTML nativo, **sem biblioteca nova** — a
+  rolagem automática ao arrastar o selo 13 até o topo vem de graça no nativo e seria
+  escrita à mão num arrasto por ponteiro. O **alvo do solte é o selo inteiro** (metade
+  de cima = acima, metade de baixo = abaixo), porque o vão tem 12 px e mirar 12 px com
+  um selo pendurado no ponteiro faz o gesto parecer quebrado. O vão vira linha e
+  **nunca muda de altura**: uma coluna que reflui move o alvo que a pessoa está mirando.
+- O **punho** (seis pontos) é o único sinal de que os selos se arrastam. Ele segue a
+  regra da lixeira e não a do vão: **nunca some**, e onde não pode diz o motivo.
+- `indiceDepoisDoArrasto` em `Editor.tsx`: o palco segue **o diagrama**, não o número.
+
+### Medido na tela, 1366×768
+
+| O quê | Medido |
+|---|---|
+| Diagramas que se movem | **3 de 13** na N1-KPK, 6 de 13 na N0-LADDER, **7 de 7** na N0-MATING-MATERIAL |
+| Arrastar o selo 1 (só aponta) | 14 vãos acesos de 14 |
+| Arrastar o selo 3 (move peça) | **4 acesos, 10 apagados** — os vãos 0 a 3 |
+| Soltar em vão proibido | recusado; o navegador nem aceita o solte |
+| Paradas de Tab na coluna | **40** — as mesmas da rodada da lixeira; o punho não acrescenta nenhuma |
+| Punho | 20×20 px, centrado na altura, 3 px de folga da lixeira |
+| Rolagem / palco | zero nas duas direções; `525px 522px`, os números da conta refeita |
+
+**O ciclo no disco**, arrastando o selo 3 para o topo: 24 linhas somadas, 21 removidas
+— o bloco de 21 linhas do diagrama **mudou de lugar** —, e as 3 de sobra são o carimbo.
+Comparadas linha a linha, fora do carimbo **não há uma única linha diferente**.
+`content/lessons/` intocado; o rascunho devolvido byte a byte.
+
+### Dois defeitos achados rodando
+
+1. **O punho estava mudo.** Ele nascera com `pointer-events-none` para não roubar o
+   arrasto do selo — e um elemento que o ponteiro nunca toca **nunca dispara `title`**.
+   É a mesma armadilha que a lixeira já documentava por outro caminho (`disabled` de
+   verdade também não dispara). Era desnecessário: o arrasto começa no `draggable` do
+   selo, e um filho não precisa ser transparente ao ponteiro para o pai ser arrastado a
+   partir dele. **Quem achou foi o Doug testando**, não a rodada de navegador.
+2. **As transições de CSS ficam congeladas no navegador do agente** — o painel não
+   pinta e a animação trava no meio. A linha do alvo parecia não acender; forçando cada
+   transição a terminar (`getAnimations().forEach(a => a.finish())`) ela sai
+   `lab(69.3189 -43.1329 25.7322)`, byte a byte igual ao token `--color-foco`. É a
+   segunda vez que este ambiente mente sobre a tela (a primeira foi a borda vermelha).
+
+### O que esta rodada NÃO cobre
+
+- **Não há caminho pelo teclado.** O "+" e a lixeira têm; este não. Decidido com o Doug:
+  ele preferiu o arrasto, e um segundo par de botões em cada selo pagaria a
+  acessibilidade com a clareza da coluna. **Dívida declarada**, ~meia hora de trabalho.
+- **O `espera` como controle de pausa não foi feito.** Era a quarta parada do bloco e
+  ficou de fora quando a conversa virou para a arquitetura. A armadilha, para quem
+  pegar: **zero tem de OMITIR o campo**, nunca gravar `espera: 0` — é a regra do desenho
+  (`arrows: []`) e a da FEN (`null` omite), pela terceira vez.
+- O arrasto com o mouse de verdade foi provado **pelo Doug**, não por mim: o navegador
+  embutido não dá o ponteiro com precisão. O que eu provei foi a ação, o resultado no
+  disco e a geometria.
+
+Portões, todos verdes: `typecheck`, `lint`, **767 testes** (10 novos), `build`,
+`validate:content`, `validate:mutations` (**42 de 42** vermelhas),
+`repertorio:compilar --check`.
+
+---
+
+## A conversa que mudou o rumo (10/9/2026) — leia antes de continuar o Bloco 2
+
+Depois do arrastar, o Doug abriu uma mudança de arquitetura e **o Bloco 2 está
+suspenso no meio**. A proposta está em
+[`EDITOR-V2-PROPOSTA.md`](EDITOR-V2-PROPOSTA.md), ao lado deste arquivo, e ela **não
+foi aprovada** — ele vai revisá-la com outra ferramenta antes de decidir.
+
+**O defeito que abriu a conversa:** cada passo do roteiro é um selo, e `fala` é
+obrigatória. Uma partida de 60 lances viraria 60 selos e exigiria 60 comentários
+escritos à mão. Ele quer o modelo do Lichess: os lances correm num painel e o
+comentário aparece só onde importa.
+
+**O que ele já decidiu**, e que vale como requisito mesmo que a proposta mude de forma:
+
+1. Um slide novo é **ou** uma posição parada **ou** o começo de uma partida.
+2. A etapa 2 corre sozinha e **pára só onde há texto**, com *ver de novo*, *pausar* e
+   **mudar a velocidade** (a velocidade existiu no `ExampleStage.tsx`, apagado em
+   `aeb5ca1`, e é recuperável).
+3. **A etapa 3 deixa de ser saída da máquina.** Ela nasce espelhando a aula e passa a
+   ser dele no primeiro toque; quando as duas divergirem, a tela **avisa**, e um botão
+   "refazer a partir da aula" que só ele aperta desfaz. Isto contraria a decisão 5 do
+   plano vigente e a promessa escrita em `schema.ts:788-808`.
+4. **Vários treinos por aula, nos dois níveis** — um capítulo pode ter o seu, e a aula
+   pode ter treinos gerais no fim. Isto quebra o array fixo de quatro etapas
+   (`store.ts:31`).
+5. **Variações desde já**, e **só os seis símbolos de qualidade do lance** (`!`, `?`,
+   `!!`, `??`, `!?`, `?!`) — não os 24 do Lichess.
+6. **A aula tem de saber comparar dois lances.** Foi o pedido mais concreto dele: numa
+   posição de rei e peão, mostrar a linha certa até o empate e **depois** a errada até
+   a derrota, na mesma aula.
+
+**A descoberta que decidiu a forma da proposta:** o Doug já mantém o mesmo conteúdo num
+estudo do Lichess (*"P1 — Fundamentos: rei e peão contra rei"*, 12 capítulos), e o
+comentário que abre o capítulo P1.04 é, escrito por ele:
+
+> *"Compare com P1.03: as peças estão nos mesmos lugares, mas agora as pretas jogam
+> primeiro."*
+
+**Ele escreveu com palavras o que a ferramenta não sabia fazer.** O Lichess só tem
+capítulos soltos; a comparação, que é o conteúdo da aula, teve de virar prosa apontando
+para outra tela. É o buraco que a proposta fecha.
+
+### O que foi medido no Lichess, para não ter de medir de novo
+
+- **Lista de lances:** os lances correm **em linha** e compactos; **um comentário quebra
+  a lista em bloco** (`<interrupt>`), e as variações aninham recursivamente. É esse
+  desenho que faz 60 lances caberem sem virar 60 telas.
+- **Botão direito num lance:** *Transformar em linha principal · Comente sobre este
+  lance · Anotar com símbolos · Copiar PGN da variante · Excluir a partir daqui*.
+- **Capítulo novo:** cinco portas num diálogo — *Vazio · Editor · URL · FEN · PGN*
+  (colar até 64 jogos, ou subir arquivo) — mais Nome, Variante, Orientação e Modo.
+- **Modo do capítulo:** *Análise normal · Pratique com o computador · Ocultar próximos
+  movimentos · **Lição interativa*** (`gamebook` por dentro). No modo lição o autor
+  escreve um comentário por lance e uma **dica sob demanda**. Tem *Preview*.
+- **Editar capítulo:** Nome, Orientação, Modo, comentário afixado, e as ações *Remover
+  anotações · Limpar variantes · Excluir capítulo*. **Não dá para trocar a posição
+  inicial** — reclamação recorrente no fórum deles.
+- **Comentário** guarda autor e lance. **Símbolos:** 24, em três famílias. **Etiquetas
+  PGN** editáveis. Botão **REC** liga/desliga a gravação.
+
+### As reclamações públicas do editor do Lichess — cinco já resolvidas aqui
+
+| Reclamação | Como este projeto já responde |
+|---|---|
+| **"A lição interativa só aceita UM lance certo"**; sidelines viram *"Retry"* | `expects[].moves[]` (até 4), `authorAlternatives` com feedback próprio, `methodAlternatives`, e `mistakes` — erros **nomeados** |
+| Não dá para trocar a posição inicial de um capítulo | Já planejado (Bloco 3), arrastando a proveniência junto |
+| Teto de 64 capítulos e teto de lances | Os tetos são nossos, com motivo escrito |
+| O aluno burla a restrição abrindo o explorador pelo atalho | O nosso aluno não tem explorador |
+| Não dá para saber se o aluno aprendeu | Escada de repetição espaçada (`lib/finais/escada.ts`) |
+
+Fontes: [issue de coaches](https://github.com/lichess-org/lila/issues/6524),
+[lances certos alternativos](https://lichess.org/forum/lichess-feedback/interactive-studies-accepting-multiple-correct-moves),
+[teto de capítulos](https://lichess.org/forum/lichess-feedback/chapter-limit-in-studies).
+
+---
+
 ## O próximo passo
 
 **A dívida do palco está paga** (seção acima, com os números das duas direções).
 O selo está inteiro, e o gesto de arrastar tem onde nascer.
 
-**O Bloco 2B está entregue** (seção acima). O que sobra do Bloco 2 são os
-gestos, e agora eles têm com que ser julgados:
+**O Bloco 2B e o arrastar estão entregues** (seções acima). **Mas o Bloco 2 está
+suspenso**: em 10/9/2026 o Doug abriu uma mudança de arquitetura que muda o que um
+selo é, e continuar os gestos antes de decidi-la é construir em cima de coisa que
+pode mudar. Ver "A conversa que mudou o rumo", acima, e
+[`EDITOR-V2-PROPOSTA.md`](EDITOR-V2-PROPOSTA.md) — **não aprovada**.
+
+O que sobra do Bloco 2, para quando a decisão sair:
 
 1. A **barrinha do tabuleiro** (flecha, casa, limpar, virar) e o chip
-   "desenho deste diagrama / alvo do treino".
-2. O **lance por arrastar** no diagrama.
-3. **Arrastar para reordenar** e `espera` como controle de pausa. (O "+" e a
-   lixeira já saíram. O reordenar herda a regra da corrente pronta: mover um
-   passo é tirá-lo de um lugar **e** pô-lo em outro, então `podeApagarPasso` já
-   responde a metade da pergunta.)
+   "desenho deste diagrama / alvo do treino". **Come altura** do palco — a conta
+   dele foi refeita e medida; conversar antes de escrever.
+2. O **lance por arrastar** no diagrama. Depende do remonte por `key` para ligar
+   `montagem`/`desenhavel`, o mesmo mecanismo da barrinha.
+3. O **`espera`** como controle de pausa — a única parada do arrastar que não foi
+   feita. Regra que morde: **zero OMITE o campo**, nunca `espera: 0`.
 4. `criarMotor()` extraído de `stockfish.ts` e a **barra de avaliação** com
-   worker próprio.
+   worker próprio. **Come largura** ao lado do tabuleiro; é a última de propósito,
+   porque é a única que pode ser cortada sem deixar um gesto pela metade.
+
+Os itens 1 e 2 são os que a proposta do editor v2 mais atinge: se um selo passar a
+ser um capítulo com painel de lances, o "lance por arrastar" muda de dono. O item 4
+não é atingido por nada, e é o mais seguro de fazer enquanto a decisão não sai.
 
 E as três coisas levantadas que economizam tempo:
 
