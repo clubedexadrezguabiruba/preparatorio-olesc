@@ -179,6 +179,29 @@ isso, a exceção existia e não perdoava nada, em silêncio.
 `scripts/mutation-check.ts`. A casa cobra mutação para cada código novo, e esta
 é a única dívida declarada do bloco.
 
+### Dois pedidos novos do Doug, já no plano (2026-09-10)
+
+Ele pediu **controle total de edição** e tirou dois itens do "o que fica fora".
+Os dois estão escritos no plano, no bloco certo, e **nenhum dos dois foi
+implementado**:
+
+1. **Editar a FEN de uma posição publicada, no lugar** (Bloco 3). O plano os
+   excluía porque "a proveniência viraria mentira", e a objeção era boa: a
+   proveniência diz *diagrama 1.3, página 47 do De la Villa*, e trocada a FEN
+   essa frase descreve outro diagrama. A resposta não é proibir — é **arrastar
+   a proveniência junto**: o status cai para `candidate`, `fenMethod` e
+   `qaApplied` são reabertos, e o gate novo `FEN_SEM_PROVENIENCIA` pega a
+   posição `approved` cuja FEN não bate mais com o que foi aprovado (a mesma
+   mecânica de caducidade das exceções). A tela mostra antes e depois lado a
+   lado e diz quantos alunos já treinaram aquela posição.
+2. **Editar as respostas do defensor (`replies`)** — virou o **Bloco 2C**. A
+   etapa 3 continua sendo saída: abrir o lápis nela seria escrever num arquivo
+   que o `--write` regrava, e a edição sumiria em silêncio na conferência
+   seguinte. O caminho é declarar as respostas na **fonte** (um campo novo no
+   passo do roteiro) e deixar `derivarTreino` produzir `replies`. A medida do
+   bloco é a que protege o que já existe: para as 3 aulas de hoje, `--write`
+   não pode mudar um byte.
+
 ### Não começado
 
 - A **barrinha do tabuleiro** (flecha, casa, limpar, virar) e o chip
@@ -189,6 +212,7 @@ isso, a exceção existia e não perdoava nada, em silêncio.
   mais pra adicionar um novo diagrama".*
 - `criarMotor()` extraído de `stockfish.ts` e a **barra de avaliação** com
   worker próprio.
+- **Bloco 2C** — as respostas do defensor pela fonte (ver acima).
 
 ## O próximo passo
 
