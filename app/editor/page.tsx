@@ -39,10 +39,10 @@ export default async function IndiceDoEditor() {
         {aulas.map((aula) => {
           const naTrilha = aulaDaTrilha(aula.id);
           return (
-            <li key={aula.id}>
+            <li key={aula.id} className="cartao-vazio flex items-stretch gap-1 p-1">
               <Link
                 href={`/editor/finais/${aula.id}`}
-                className="foco cartao-vazio flex items-center gap-3 px-4 py-3 transition-colors hover:bg-carta-toque"
+                className="foco flex min-w-0 flex-1 items-center gap-3 rounded-md px-3 py-2 transition-colors hover:bg-carta-toque"
               >
                 <span className="flex min-w-0 flex-1 flex-col gap-1">
                   <span className="truncate text-sm font-medium text-tinta">{aula.titulo}</span>
@@ -55,6 +55,12 @@ export default async function IndiceDoEditor() {
                 <span aria-hidden className="text-tinta-fraca">
                   ✎
                 </span>
+              </Link>
+              <Link
+                href={`/editor/v2/finais/${aula.id}`}
+                className="foco flex shrink-0 items-center rounded-md border border-metodo-superficie px-3 py-2 text-xs font-medium text-metodo-tinta transition-colors hover:bg-metodo-superficie/10"
+              >
+                Abrir v2
               </Link>
             </li>
           );

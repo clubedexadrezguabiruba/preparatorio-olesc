@@ -1,11 +1,13 @@
 # Modo editor — onde paramos
 
-**Data:** 2026-09-10. **Branch:** `modo-editor`. **Bloco 1 entregue; Bloco 2 pela
-metade e SUSPENSO** — ver "A conversa que mudou o rumo", mais abaixo, e a
-[proposta do editor v2](EDITOR-V2-PROPOSTA.md), que ainda **não foi aprovada**. A dívida do palco em 1366×768 foi **paga e medida** — ver a seção
-daquela rodada, mais abaixo. O que sobra do Bloco 2 está em "Não começado", e
-o **Bloco 2B** (prévia, galeria de diagramas, tetos) foi pedido pelo Doug e
-**entregue** em 10/9/2026 — seção própria abaixo.
+> **Atualização de 10/09/2026:** o Doug aprovou o
+> [`EDITOR-V2-PLANO-FINAL.md`](EDITOR-V2-PLANO-FINAL.md). Ele substitui a proposta v2 e
+> passa a reger a continuação. As seções históricas abaixo continuam registrando o que
+> existia antes dessa aprovação.
+
+**Data:** 2026-09-10. **Branch:** `modo-editor`. O estado vigente é o piloto v2
+descrito abaixo. A menção histórica a “Bloco 2 suspenso” nas seções antigas
+explica a interrupção que levou à nova arquitetura; não rege mais o trabalho.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -15,6 +17,43 @@ para cá justamente porque morava fora do repositório e ia se perder na troca.
 > **Leia o plano antes de escrever código.** Ele traz as dez decisões, a régua
 > de uso ("leigo edita sem instrução"), o que fica fora e por quê, e a divisão
 > em seis blocos. Este arquivo só diz o que já foi feito e o que mudou de rota.
+
+---
+
+## Atualização vigente — fundação e piloto do Editor v2
+
+Entregue em 10/09/2026, após a aprovação do plano final:
+
+- contrato Zod do documento v2, diagnóstico estrutural de IDs, raízes, ciclos,
+  órfãos, dois pais, percursos e referências;
+- adaptador **somente leitura** do formato atual para v2. A N1-KPK vira uma
+  análise, um capítulo explícito, 13 narrações e 11 lances sem alterar o JSON v1;
+- reconstrução de FEN e SAN por nó; comandos transacionais para capítulo,
+  comentário, NAG, novo lance, variante principal e exclusão de ramo;
+- Undo/Redo, recuperação em IndexedDB, autosave separado em `.editor/v2/`,
+  escrita atômica, `baseHash`, conflito e exclusão mútua no servidor;
+- rota paralela `/editor/v2/finais/[aula]` e botão **Abrir v2** na bancada. O
+  editor antigo e o conteúdo publicado continuam intactos;
+- piloto visual com capítulos, tabuleiro, painel, narração, comentários e os
+  seis símbolos. Jogar continuação existente navega; lance divergente cria
+  variante;
+- após teste do Doug, o painel deixou de recuar a linha principal a cada lance:
+  agora é **vertical**, numerado e no mesmo eixo. Só variantes reais recebem
+  recuo curto, limitado a dois níveis visuais — uma partida de 60 lances não
+  vira uma escada.
+
+Evidência executada: 772 testes do repositório verdes; 6 testes focados v2
+verdes; tipos, lint e build Next verdes após o ajuste visual;
+conteúdo verde com 38 consultas de tablebase vindas do cache; repertório
+`--check` verde. No navegador real foram conferidos login de professor, abertura
+da N1-KPK, seleção por painel e tabuleiro, comentário, NAG, autosave, dois Undo,
+Redo e restauração do estado original.
+
+**Primeiro ponto a retomar:** criar uma variante real pelo tabuleiro e conferir
+seu recuo/promoção no painel vertical. Depois, continuar os blocos B–J do plano
+final; este commit é fundação/piloto, não declara o plano inteiro concluído.
+Recuperação sob reload/conflito e o modelo completo de prática/treino são os
+próximos riscos estruturais.
 
 ---
 

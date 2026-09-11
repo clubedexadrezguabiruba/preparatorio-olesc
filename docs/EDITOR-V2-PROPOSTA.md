@@ -1,9 +1,10 @@
 # Editor v2 — a partida como painel de lances, e o treino que passa a ser seu
 
-> ## ⚠️ PROPOSTA — NÃO APROVADA
+> ## SUPERADA PELO PLANO FINAL APROVADO
 >
-> **Data:** 2026-09-10. **Nada disto foi implementado, e nada foi decidido em
-> definitivo.** Este documento é uma proposta de arquitetura escrita a partir de uma
+> **Data:** 2026-09-10. Este documento é histórico. O plano vigente e aprovado é
+> [`EDITOR-V2-PLANO-FINAL.md`](EDITOR-V2-PLANO-FINAL.md). Não implemente esta proposta
+> quando ela divergir do plano final. Ela foi uma proposta de arquitetura escrita a partir de uma
 > conversa com o Doug, de três varreduras do código, e de uma sessão medindo o editor
 > de estudos do Lichess por dentro. O Doug vai revisá-la com outra ferramenta antes de
 > aprovar.
