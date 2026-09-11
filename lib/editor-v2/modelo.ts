@@ -16,9 +16,45 @@ export const referenciaNoSchema = z.strictObject({
   nodeId: idV2Schema,
 });
 
+/**
+ * As quatro cores de desenho, com os nomes que o Lichess usa: verde, vermelho,
+ * amarelo e azul.
+ *
+ * **Por que quatro, e por que estas.** É a paleta que o professor já conhece de
+ * anotar no Lichess, e é a que sai do PGN — `[%cal Ge2e4]` é verde, `R` vermelho,
+ * `Y` amarelo, `B` azul. Guardar o nome da cor (e não o código da fonte) é o que
+ * deixa o arquivo legível num diff e independente de quem exportou.
+ */
+export const corDesenhoV2Schema = z.enum(["verde", "vermelho", "amarelo", "azul"]);
+
+/**
+ * Setas e casas acesas de um nó — agora com cor.
+ *
+ * ## Por que cada entrada aceita duas formas
+ *
+ * A forma curta (`["e2","e4"]`, `"d5"`) é a que as três aulas v1 já usam, e ela
+ * continua valendo **exatamente** como valia: sem cor declarada, a tela desenha com
+ * os pincéis de sempre e nada no conteúdo publicado muda de aparência. A forma
+ * longa (`{ de, para, cor }`) é a que a importação escreve, porque um PGN do Lichess
+ * sempre diz a cor.
+ *
+ * Não há `transform` no meio: o que entra é o que sai. Um schema que normalizasse
+ * faria o validador devolver um documento diferente do que recebeu, e o editor
+ * gravaria de volta um arquivo reescrito que o professor não pediu.
+ */
+export const setaV2Schema = z.union([
+  z.tuple([z.string(), z.string()]),
+  z.strictObject({ de: z.string(), para: z.string(), cor: corDesenhoV2Schema }),
+]);
+
+export const casaAcesaV2Schema = z.union([
+  z.string(),
+  z.strictObject({ casa: z.string(), cor: corDesenhoV2Schema }),
+]);
+
 export const desenhoV2Schema = z.strictObject({
-  arrows: z.array(z.tuple([z.string(), z.string()])).optional(),
-  highlights: z.array(z.string()).optional(),
+  arrows: z.array(setaV2Schema).optional(),
+  highlights: z.array(casaAcesaV2Schema).optional(),
 });
 
 export const metadadosAulaV2Schema = z.strictObject({
@@ -76,13 +112,14 @@ export const noV2Schema = z.strictObject({
    * As diretivas que vieram dentro do `{comentário}` do PGN, **cruas e opacas**:
    * `[%cal Ge2e4]`, `[%csl Rd5]`, `[%clk 0:05:00]`, `[%anno …]`.
    *
-   * ## Por que guardar o texto cru se `desenhos` já tem a seta
+   * ## Por que guardar o texto cru se `desenhos` já tem a seta e a cor
    *
-   * Porque `desenhos` guarda o que a tela sabe **desenhar**, e a tela deste projeto
-   * desenha numa cor só: o `G` de verde e o `R` de vermelho do Lichess não têm onde
-   * morar ali. Jogar a cor fora seria uma perda silenciosa; guardar o texto cru é o
-   * que o plano (§11) chama de "diretiva desconhecida preservável continua opaca".
-   * Assim a seta aparece na tela **e** a cor volta inteira num round-trip futuro.
+   * Porque nem toda diretiva é desenho. `[%cal]` e `[%csl]` viram seta e casa acesa
+   * com a cor do professor, e essas a tela desenha. Mas `[%clk 0:05:00]`, `[%anno …]`
+   * e o que o próximo exportador inventar não têm — nem devem ter — significado aqui.
+   * Guardá-las cruas é o que o plano (§11) chama de "diretiva desconhecida preservável
+   * continua opaca": elas voltam inteiras num round-trip sem que ninguém precise
+   * decidir o que elas querem dizer.
    *
    * Nada aqui é executado nem interpretado. É texto guardado, não comando.
    */
@@ -255,6 +292,9 @@ export const aulaV2Schema = z.strictObject({
   origem: z.strictObject({ formato: z.literal("lesson-v1"), hash: z.string().min(1) }).optional(),
 });
 
+export type CorDesenhoV2 = z.infer<typeof corDesenhoV2Schema>;
+export type SetaV2 = z.infer<typeof setaV2Schema>;
+export type CasaAcesaV2 = z.infer<typeof casaAcesaV2Schema>;
 export type ReferenciaNoV2 = z.infer<typeof referenciaNoSchema>;
 export type MetadadosAulaV2 = z.infer<typeof metadadosAulaV2Schema>;
 export type NoV2 = z.infer<typeof noV2Schema>;

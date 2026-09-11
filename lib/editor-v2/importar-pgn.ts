@@ -34,20 +34,20 @@
  *
  * Perda é o que entra incompleto: um lance impossível (o ramo para ali, os irmãos
  * seguem — a mesma poda por ramo do portão de legalidade), um token que a varredura
- * não soube ler, a cor de uma seta que a tela não sabe desenhar. Recusar o jogo inteiro
+ * não soube ler, uma letra de cor fora das quatro conhecidas. Recusar o jogo inteiro
  * por causa de uma variante torta jogaria fora as vinte que estão certas.
  */
 import { Chess } from "chess.js";
 import { lerPgns, type LancePgn, type PartidaPgn } from "../repertorio/pgn.ts";
 import { LIMITES_V2, medidasDaAulaV2, problemasDeLimiteV2 } from "./limites.ts";
-import type { AnaliseV2, AulaV2, CapituloV2, NoV2 } from "./modelo.ts";
+import type { AnaliseV2, AulaV2, CapituloV2, CorDesenhoV2, CasaAcesaV2, NoV2, SetaV2 } from "./modelo.ts";
 
 /* ------------------------------------------------------------------ *
  * O vocabulário do relatório
  * ------------------------------------------------------------------ */
 
 export type PerdaImportacao = {
-  codigo: "LANCE_IMPOSSIVEL" | "TOKEN_NAO_RECONHECIDO" | "COR_DO_DESENHO" | "NAG_DESCONHECIDO";
+  codigo: "LANCE_IMPOSSIVEL" | "TOKEN_NAO_RECONHECIDO" | "COR_DESCONHECIDA" | "NAG_DESCONHECIDO";
   /** Já em português de professor: é isto que aparece na tela. */
   mensagem: string;
 };
@@ -99,36 +99,55 @@ const NAGS_POR_SIMBOLO: Record<string, number> = { "!": 1, "?": 2, "!!": 3, "??"
 /** `[%cal Ge2e4,Rd1d5]` e `[%csl Rd5]` — o que o Lichess escreve dentro do comentário. */
 const DIRETIVA = /\[%[^\]]*\]/g;
 
-type Desenhos = { arrows?: [string, string][]; highlights?: string[] };
+type Desenhos = { arrows?: SetaV2[]; highlights?: CasaAcesaV2[] };
 
 /**
- * Separa um comentário do PGN em prosa, desenhos e diretivas cruas.
+ * A letra de cor do PGN vira o nome da cor no documento.
  *
- * A cor é lida e **anunciada como perda**, não descartada em silêncio: a seta entra em
- * `desenhos` (que é o que a tela sabe desenhar, numa cor só) e o texto original inteiro
- * fica em `diretivas`, de onde a cor volta se um dia houver para onde.
+ * `G`, `R`, `Y` e `B` são as quatro do Lichess, e são as quatro que o v2 guarda. A
+ * tradução acontece aqui, na porta, e não na tela: o arquivo do professor fala
+ * português e não depende de quem exportou o PGN.
+ */
+const COR_POR_LETRA: Record<string, CorDesenhoV2> = { G: "verde", R: "vermelho", Y: "amarelo", B: "azul" };
+
+/**
+ * Separa um comentário do PGN em prosa, desenhos **com cor** e diretivas cruas.
+ *
+ * A cor atravessa inteira: `[%cal Ge2e4]` entra como uma seta verde de e2 a e4, e é
+ * assim que ela chega ao tabuleiro. O texto original continua guardado em `diretivas`
+ * porque nem toda diretiva é desenho — `[%clk]`, `[%anno]` e o que mais o exportador
+ * inventar ficam lá, opacos e nunca interpretados (§11).
  */
 function separarComentario(bruto: string): { prosa: string; desenhos: Desenhos | undefined; diretivas: string[]; cores: string[] } {
   const diretivas = bruto.match(DIRETIVA) ?? [];
   const prosa = bruto.replace(DIRETIVA, " ").replace(/\s+/g, " ").trim();
-  const arrows: [string, string][] = [];
-  const highlights: string[] = [];
+  const arrows: SetaV2[] = [];
+  const highlights: CasaAcesaV2[] = [];
+  /** As letras de cor que este importador **não** conhece — viram perda anunciada. */
   const cores: string[] = [];
 
   for (const diretiva of diretivas) {
     const cal = /^\[%cal\s+(.*)\]$/.exec(diretiva);
     const csl = /^\[%csl\s+(.*)\]$/.exec(diretiva);
     for (const item of (cal?.[1] ?? "").split(",")) {
-      const achado = /^\s*([GRYB])([a-h][1-8])([a-h][1-8])\s*$/.exec(item);
+      const achado = /^\s*([A-Za-z])([a-h][1-8])([a-h][1-8])\s*$/.exec(item);
       if (!achado) continue;
-      arrows.push([achado[2], achado[3]]);
-      if (achado[1] !== "G") cores.push(achado[1]);
+      const cor = COR_POR_LETRA[achado[1].toUpperCase()];
+      if (!cor) {
+        cores.push(achado[1]);
+        continue;
+      }
+      arrows.push({ de: achado[2], para: achado[3], cor });
     }
     for (const item of (csl?.[1] ?? "").split(",")) {
-      const achado = /^\s*([GRYB])([a-h][1-8])\s*$/.exec(item);
+      const achado = /^\s*([A-Za-z])([a-h][1-8])\s*$/.exec(item);
       if (!achado) continue;
-      highlights.push(achado[2]);
-      if (achado[1] !== "G") cores.push(achado[1]);
+      const cor = COR_POR_LETRA[achado[1].toUpperCase()];
+      if (!cor) {
+        cores.push(achado[1]);
+        continue;
+      }
+      highlights.push({ casa: achado[2], cor });
     }
   }
 
@@ -209,7 +228,7 @@ function converter(
       }
       if (desenhos) no.desenhos = desenhos;
       if (diretivas.length > 0) no.diretivas = diretivas;
-      if (cores.length > 0) perdas.push({ codigo: "COR_DO_DESENHO", mensagem: `a cor de ${cores.length} desenho(s) não é desenhada pelo editor; o texto original foi guardado inteiro` });
+      if (cores.length > 0) perdas.push({ codigo: "COR_DESCONHECIDA", mensagem: `o arquivo usa a cor "${cores.join(", ")}", que não é uma das quatro do editor; esse desenho não entrou, e o texto original foi guardado inteiro` });
     }
 
     const nags = lance.nags.map((simbolo) => NAGS_POR_SIMBOLO[simbolo] ?? (/^\$\d+$/.test(simbolo) ? Number(simbolo.slice(1)) : 0)).filter((n) => n >= 1 && n <= 255);

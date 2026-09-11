@@ -124,14 +124,41 @@ test("o que o leitor não reconheceu vira perda anunciada, não silêncio", () =
   assert.equal(jogo.analise!.origemPgn?.naoReconhecidos.length, 1);
 });
 
-test("as setas entram, a cor é anunciada como perda, e o texto original fica guardado", () => {
-  const jogo = lerImportacaoPgn('1. e4 { ideia central [%cal Ge2e4,Rd1h5] [%csl Yd5] } *').jogos[0];
+test("a cor da seta e da casa acesa atravessa inteira, com o nome em português", () => {
+  const jogo = lerImportacaoPgn('1. e4 { ideia central [%cal Ge2e4,Rd1h5,Bb1c3] [%csl Yd5] } *').jogos[0];
   const no = jogo.analise!.nos[jogo.capitulo!.caminho[0]];
   assert.equal(no.comentario, "ideia central");
-  assert.deepEqual(no.desenhos, { arrows: [["e2", "e4"], ["d1", "h5"]], highlights: ["d5"] });
-  // A cor não cabe em `desenhos`, então ela é dita em voz alta **e** preservada crua.
-  assert.deepEqual(no.diretivas, ["[%cal Ge2e4,Rd1h5]", "[%csl Yd5]"]);
-  assert.equal(jogo.perdas.filter((p) => p.codigo === "COR_DO_DESENHO").length, 1);
+  assert.deepEqual(no.desenhos, {
+    arrows: [
+      { de: "e2", para: "e4", cor: "verde" },
+      { de: "d1", para: "h5", cor: "vermelho" },
+      { de: "b1", para: "c3", cor: "azul" },
+    ],
+    highlights: [{ casa: "d5", cor: "amarelo" }],
+  });
+  // O texto cru continua guardado: nem toda diretiva é desenho, e `[%clk]` e companhia
+  // precisam voltar inteiras num round-trip sem ninguém decidir o que querem dizer.
+  assert.deepEqual(no.diretivas, ["[%cal Ge2e4,Rd1h5,Bb1c3]", "[%csl Yd5]"]);
+  assert.deepEqual(jogo.perdas, [], "as quatro cores do Lichess não são perda nenhuma");
+});
+
+test("letra de cor fora das quatro é recusada e anunciada, não adivinhada", () => {
+  const jogo = lerImportacaoPgn("1. e4 { [%cal Ze2e4] } *").jogos[0];
+  assert.equal(jogo.analise!.nos[jogo.capitulo!.caminho[0]].desenhos, undefined);
+  assert.equal(jogo.perdas.length, 1);
+  assert.equal(jogo.perdas[0].codigo, "COR_DESCONHECIDA");
+  assert.match(jogo.perdas[0].mensagem, /"Z"/);
+  // E ela continua guardada crua, então nada se perde de verdade.
+  assert.deepEqual(jogo.analise!.nos[jogo.capitulo!.caminho[0]].diretivas, ["[%cal Ze2e4]"]);
+});
+
+test("diretiva que não é desenho fica guardada sem virar desenho nem perda", () => {
+  const jogo = lerImportacaoPgn("1. e4 { pensou muito [%clk 0:04:32] } *").jogos[0];
+  const no = jogo.analise!.nos[jogo.capitulo!.caminho[0]];
+  assert.equal(no.comentario, "pensou muito");
+  assert.equal(no.desenhos, undefined);
+  assert.deepEqual(no.diretivas, ["[%clk 0:04:32]"]);
+  assert.deepEqual(jogo.perdas, []);
 });
 
 test("os seis símbolos viram NAG numérico, e o NAG numérico atravessa inteiro", () => {

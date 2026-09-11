@@ -70,6 +70,64 @@ export function desenhoDaAutoria(desenho: {
 }
 
 /**
+ * O pincel de cada cor de desenho do Editor v2.
+ *
+ * ## Três cores caem em pincéis que já existem, medidos
+ *
+ * Verde, vermelho e amarelo já moram na folha de estilo com contraste conferido
+ * contra as duas casas do tabuleiro (`globals.css`). Inventar quatro cores novas
+ * seria refazer esse trabalho para chegar, na melhor das hipóteses, nas mesmas.
+ *
+ * ## O azul é o caso difícil, e ele vira roxo
+ *
+ * **Este projeto não tem azul de propósito.** A seta era azul até 8/9/2026 e foi
+ * trocada porque *o tabuleiro é azul*: a marca sumia dentro do cenário, e está
+ * medido na folha que qualquer azul reprova o piso de 3:1 contra a casa clara.
+ *
+ * Então o azul do Lichess é desenhado com o roxo do plano — a cor mais próxima que
+ * o site tem, distinta das outras três e já medida (10,64:1 e 5,88:1 são os números
+ * do vizinho dela na folha). **No arquivo ele continua sendo `"azul"`**: a cor do
+ * professor é preservada inteira, e no dia em que o tabuleiro deixar de ser azul
+ * basta trocar esta linha. O que não se pode é gravar "roxo" num arquivo onde o
+ * professor escreveu azul.
+ */
+export const PINCEL_POR_COR: Record<string, string> = {
+  verde: "green",
+  vermelho: "red",
+  amarelo: "yellow",
+  azul: "plano",
+};
+
+type SetaV2 = readonly [string, string] | { de: string; para: string; cor: string };
+type CasaV2 = string | { casa: string; cor: string };
+
+/**
+ * Os desenhos de um nó do Editor v2, com as cores que o professor escolheu.
+ *
+ * Sem cor declarada — que é o caso das três aulas v1 — cai nos pincéis de sempre,
+ * `desenhoDaAutoria`. Isso não é gentileza com o legado: é a promessa de que ligar a
+ * cor no editor não repinta sozinho o conteúdo que já está publicado.
+ */
+export function desenhoDaAutoriaV2(desenho: {
+  arrows?: readonly SetaV2[];
+  highlights?: readonly CasaV2[];
+} | null | undefined): DrawShape[] {
+  if (!desenho) return [];
+  return [
+    ...(desenho.arrows ?? []).map((seta) =>
+      Array.isArray(seta)
+        ? { orig: seta[0] as Key, dest: seta[1] as Key, brush: "blue" }
+        : { orig: (seta as { de: string }).de as Key, dest: (seta as { para: string }).para as Key, brush: PINCEL_POR_COR[(seta as { cor: string }).cor] ?? "blue" },
+    ),
+    ...(desenho.highlights ?? []).map((casa) =>
+      typeof casa === "string"
+        ? { orig: casa as Key, brush: "green" }
+        : { orig: casa.casa as Key, brush: PINCEL_POR_COR[casa.cor] ?? "green" },
+    ),
+  ];
+}
+
+/**
  * A peça que acabou de mexer está pendurada?
  *
  * É a pergunta que o aluno da N0 mais erra: a torre chega perto do rei preto e

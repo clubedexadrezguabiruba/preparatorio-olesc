@@ -602,6 +602,89 @@ impressão digital (`92879926…`). Nenhum arquivo temporário ficou.
 
 ---
 
+## Continuação — a cor do desenho, como no Lichess
+
+A rodada anterior guardava a seta e **jogava a cor fora**, anunciando-a como perda. O
+Doug recusou, e com razão: anotar em verde, vermelho e amarelo é metade do que uma seta
+diz. Agora a cor atravessa inteira — do PGN ao arquivo, e do arquivo ao tabuleiro.
+
+### O documento
+
+`corDesenhoV2Schema` tem as quatro cores do Lichess pelo nome: **verde, vermelho,
+amarelo, azul**. `[%cal Ge2e4]` vira `{ de: "e2", para: "e4", cor: "verde" }`. Guardar o
+nome, e não a letra do exportador, é o que deixa o arquivo legível num diff e
+independente de quem exportou.
+
+**Cada entrada aceita duas formas, e isso é a promessa que protege o que já existe.** A
+forma curta (`["e2","e4"]`) é a das três aulas v1, e sem cor declarada a tela desenha com
+os pincéis de sempre — ligar a cor **não repinta sozinho** o conteúdo publicado. Há teste
+fixando que as duas formas dão exatamente o mesmo resultado que davam antes.
+
+Não há `transform` no schema: o que entra é o que sai. Um schema que normalizasse faria o
+editor gravar de volta um arquivo reescrito que o professor não pediu.
+
+### O azul é o caso difícil, e a decisão está declarada
+
+**Este projeto não tem azul de propósito.** A seta era azul até 8/9/2026 e foi trocada
+porque *o tabuleiro é azul*: a marca sumia dentro do cenário, e está medido na folha que
+qualquer azul acima de 50% de claridade reprova o piso de 3:1 contra a casa clara.
+
+Então o azul do Lichess é **desenhado** com o roxo do plano. **No arquivo ele continua
+sendo `"azul"`** — a escolha do professor é preservada inteira, e no dia em que o
+tabuleiro deixar de ser azul basta trocar uma linha. O que não se pode é gravar "roxo"
+onde o professor escreveu azul.
+
+Contraste das quatro contra as duas casas, calculado em 11/09/2026:
+
+| Cor | Pincel | Casa clara | Casa escura |
+|---|---|---|---|
+| verde | `pincel-defendida` | 5,83:1 | **3,23:1** |
+| vermelho | `pincel-pendurada` | 12,60:1 | 6,99:1 |
+| amarelo | `pincel-alternativa` | 6,31:1 | 3,50:1 |
+| azul → roxo | `pincel-plano` | 8,53:1 | 4,73:1 |
+
+As quatro passam o piso de 3:1 nas duas casas; o verde na casa escura é o mais apertado.
+
+**Limitação declarada, não escondida:** verde e amarelo separam-se por apenas **1,08:1**
+de luminância — em escala de cinza são quase a mesma cor. Quem os separa é a matiz (152
+contra 75), que é a mesma solução que a folha já usa para os três verdes do tabuleiro. O
+Lichess tem exatamente o mesmo problema. Se incomodar, o conserto é afastar a claridade
+de um dos dois, e isso é decisão do Doug.
+
+### A tela passou a desenhar
+
+O tabuleiro do editor v2 **não desenhava nada** — o canal de desenho nunca tinha sido
+ligado ali. Agora as setas e casas acesas do lance selecionado aparecem, pelo canal dos
+desenhos automáticos (`shapes`). O canal de quem desenha com o mouse continua desligado:
+**mostrar** o desenho que veio do arquivo é esta rodada; **desenhar** com o botão direito
+é gesto que entra com o painel de edição.
+
+### A guarda contra o defeito mudo
+
+Um nome de pincel errado não dá erro: o chessground desenha com o padrão dele, ou nada. A
+seta some e parece que o professor não desenhou. `ChessBoard` passou a conferir, na
+montagem, que todo pincel que a paleta do autor pede existe na tabela — e grita no
+console se não existir. É a mesma regra que já valia para o token ausente.
+
+### Evidência desta continuação
+
+**847 testes** do repositório verdes (eram 841), sendo **6 novos** — 3 das cores no
+tabuleiro e 3 do importador. Tipos, lint, build, conteúdo, repertório `--check` e
+**42/42 mutações** verdes.
+
+**No navegador**, em 1366×768, sem login (a rodada do editor v2 pede credencial do Doug):
+a aula pública N0-LADDER abriu, o tabuleiro desenhou o corte e o selo como antes, e o
+console ficou **sem uma única mensagem** — o que é a prova de que a guarda nova não
+disparou, ou seja, os quatro pincéis existem. Medidos no navegador, os quatro tokens
+resolvem para cores reais, nenhum ausente.
+
+**O que falta ver na tela, e é teste do Doug:** uma seta verde e uma vermelha importadas
+de um PGN, desenhadas no editor v2. Nenhum dos quatro PGNs da pasta de downloads traz
+`[%cal]`, então esse caminho está provado por teste e por medida de cor, não por
+fotografia.
+
+---
+
 ## Como ligar o editor
 
 ```bash

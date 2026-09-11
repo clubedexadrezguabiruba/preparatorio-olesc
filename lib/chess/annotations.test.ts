@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { autoriaDoDesenho, desenhoDaAutoria, teachingShapes } from "./annotations.ts";
+import { autoriaDoDesenho, desenhoDaAutoria, desenhoDaAutoriaV2, PINCEL_POR_COR, teachingShapes } from "./annotations.ts";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Key } from "@lichess-org/chessground/types";
 import { desenhoSchema } from "../lesson/schema.ts";
@@ -108,4 +108,56 @@ test("forma que não é seta nem casa é descartada, e não quebra o arquivo", (
     arrows: [["e2", "e4"]],
     highlights: ["d4"],
   });
+});
+
+/* ------------------------------------------------------------------ *
+ * As cores do desenho do Editor v2
+ * ------------------------------------------------------------------ */
+
+test("cada cor cai no seu pincel, e o azul vira o roxo do site", () => {
+  // O azul é o caso difícil e está documentado em `desenhoDaAutoriaV2`: este projeto
+  // tirou o azul da paleta de propósito, porque o tabuleiro é azul e a seta sumia.
+  // No arquivo a cor continua sendo "azul"; o que muda é só com o que ela é pintada.
+  assert.deepEqual(
+    desenhoDaAutoriaV2({
+      arrows: [
+        { de: "e2", para: "e4", cor: "verde" },
+        { de: "d1", para: "h5", cor: "vermelho" },
+        { de: "b1", para: "c3", cor: "azul" },
+      ],
+      highlights: [{ casa: "d5", cor: "amarelo" }],
+    }),
+    [
+      { orig: "e2", dest: "e4", brush: "green" },
+      { orig: "d1", dest: "h5", brush: "red" },
+      { orig: "b1", dest: "c3", brush: "plano" },
+      { orig: "d5", brush: "yellow" },
+    ],
+  );
+});
+
+test("desenho sem cor declarada continua exatamente como era", () => {
+  // Esta é a promessa que impede a cor nova de repintar sozinha o conteúdo publicado:
+  // as três aulas v1 escrevem a forma curta, e ela cai nos pincéis de sempre.
+  assert.deepEqual(
+    desenhoDaAutoriaV2({ arrows: [["e2", "e4"]], highlights: ["d5"] }),
+    desenhoDaAutoria({ arrows: [["e2", "e4"]], highlights: ["d5"] }),
+  );
+});
+
+test("as duas formas convivem no mesmo nó", () => {
+  assert.deepEqual(
+    desenhoDaAutoriaV2({ arrows: [["e2", "e4"], { de: "d1", para: "h5", cor: "vermelho" }] }),
+    [
+      { orig: "e2", dest: "e4", brush: "blue" },
+      { orig: "d1", dest: "h5", brush: "red" },
+    ],
+  );
+});
+
+test("a paleta do autor só nomeia pincéis que a folha de estilo define", () => {
+  // `ChessBoard` monta a tabela de pincéis a partir de `PINCEIS`, e um nome que não
+  // estiver lá desenha com o padrão do pacote — ou some — **sem erro nenhum**. Este
+  // teste fixa os quatro nomes; `ChessBoard` reclama no console se a tabela mudar.
+  assert.deepEqual(PINCEL_POR_COR, { verde: "green", vermelho: "red", amarelo: "yellow", azul: "plano" });
 });

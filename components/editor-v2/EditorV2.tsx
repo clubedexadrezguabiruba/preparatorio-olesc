@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Key } from "@lichess-org/chessground/types";
 import { salvarDocumentoV2 } from "@/app/editor/v2/acoes";
 import { ChessBoard } from "@/components/board/ChessBoard";
+import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
 import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
 import { PainelDeProblemas } from "@/components/editor-v2/PainelDeProblemas";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
@@ -194,6 +195,15 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
 
   const jogo = useMemo(() => new Chess(derivado?.quadro.fen), [derivado?.quadro.fen]);
   const selecionado = analise.nos[nodeIdAtual];
+  /**
+   * As setas e casas acesas do lance selecionado, nas cores que o professor escolheu.
+   *
+   * Entram pelo canal `shapes` — o dos desenhos **automáticos** do chessground —, e
+   * não pelo `desenhavel`, que é o canal de quem está desenhando com o mouse. É a
+   * separação certa por enquanto: hoje o editor v2 **mostra** o desenho que veio do
+   * arquivo; desenhar com o botão direito é o gesto que entra com o painel de edição.
+   */
+  const desenhos = desenhoDaAutoriaV2(selecionado?.desenhos);
   const narracoes = capitulo?.narracoes.filter((n) => n.nodeId === selecionado?.id) ?? [];
 
   /** Leva a tela até o lugar do problema. É o que o botão da lista faz. */
@@ -330,7 +340,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         <section className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
           {derivado ? (
             <>
-              <ChessBoard fen={derivado.quadro.fen} orientation={capitulo.orientacao} turnColor={toBoardColor(jogo.turn())} dests={legalDests(jogo)} lastMove={derivado.quadro.ultimoLance as [Key, Key] | null} check={jogo.inCheck()} onMove={mover} revision={historico.passados.length + historico.futuros.length} />
+              <ChessBoard fen={derivado.quadro.fen} orientation={capitulo.orientacao} turnColor={toBoardColor(jogo.turn())} dests={legalDests(jogo)} lastMove={derivado.quadro.ultimoLance as [Key, Key] | null} check={jogo.inCheck()} onMove={mover} shapes={desenhos} revision={historico.passados.length + historico.futuros.length} />
               <p className="text-center text-xs text-tinta-fraca">Arraste uma peça para acrescentar um lance a partir da posição selecionada. Promoção usa dama por padrão.</p>
             </>
           ) : (

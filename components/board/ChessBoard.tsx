@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { PINCEL_POR_COR } from "@/lib/chess/annotations";
 import { Chessground } from "@lichess-org/chessground";
 import type { Api } from "@lichess-org/chessground/api";
 import type { DrawBrush, DrawBrushes, DrawShape } from "@lichess-org/chessground/draw";
@@ -77,6 +78,13 @@ function pinceis(host: HTMLElement): Partial<DrawBrushes> {
       continue;
     }
     tabela[nome] = { key: nome, color: cor, opacity, lineWidth };
+  }
+  // A mesma regra do token ausente, um degrau acima: se a paleta de cores do autor
+  // apontar para um pincel que esta tabela não tem, o chessground **não reclama** —
+  // ele desenha com o padrão dele, ou nada. Uma seta que some sem erro é o pior tipo
+  // de defeito, porque parece que o professor não desenhou.
+  for (const pincel of Object.values(PINCEL_POR_COR)) {
+    if (!tabela[pincel]) console.error(`ChessBoard: a paleta do autor pede o pincel "${pincel}", que não existe nesta tabela`);
   }
   return tabela;
 }
