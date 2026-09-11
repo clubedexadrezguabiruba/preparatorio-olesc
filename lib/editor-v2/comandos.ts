@@ -2,7 +2,8 @@ import { Chess } from "chess.js";
 import type { Position } from "../lesson/schema.ts";
 import { quadroDoNo } from "./arvore.ts";
 import { aplicarImportacaoPgn, type RelatorioImportacao } from "./importar-pgn.ts";
-import type { AulaV2, NoV2 } from "./modelo.ts";
+import { mesmosDesenhos, noComDesenhos } from "./desenhos.ts";
+import type { AulaV2, DesenhoV2, NoV2 } from "./modelo.ts";
 
 export type ComandoV2 =
   | { tipo: "RENOMEAR_CAPITULO"; capituloId: string; titulo: string }
@@ -20,7 +21,17 @@ export type ComandoV2 =
   | { tipo: "ALTERNAR_NAG"; analiseId: string; nodeId: string; nag: number }
   | { tipo: "ADICIONAR_LANCE"; analiseId: string; nodeId: string; uci: string; novoNodeId: string }
   | { tipo: "PROMOVER_VARIANTE"; analiseId: string; parentId: string; nodeId: string }
-  | { tipo: "EXCLUIR_RAMO"; analiseId: string; parentId: string; nodeId: string };
+  | { tipo: "EXCLUIR_RAMO"; analiseId: string; parentId: string; nodeId: string }
+  /**
+   * O desenho desta posição, inteiro, como está no tabuleiro agora.
+   *
+   * **Por que a lista inteira e não "acrescente esta seta".** Porque é isso que o
+   * tabuleiro sabe dizer: o chessground devolve o conjunto de formas depois de cada
+   * gesto — inclusive quando o gesto foi apagar. Um comando de acrescentar exigiria
+   * adivinhar, por diferença, o que o professor fez; a lista inteira não adivinha
+   * nada. E como cada uma entra no histórico, um Ctrl+Z devolve o desenho anterior.
+   */
+  | { tipo: "DEFINIR_DESENHOS"; analiseId: string; nodeId: string; desenhos: DesenhoV2 | undefined };
 
 export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Record<string, Position>): AulaV2 {
   if (comando.tipo === "RENOMEAR_CAPITULO") {
@@ -65,6 +76,14 @@ export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Rec
     const existente = no.filhos.find((filho) => analise.nos[filho]?.uci === comando.uci);
     if (existente) return aula;
     proxima = { ...analise, nos: { ...analise.nos, [no.id]: { ...no, filhos: [...no.filhos, comando.novoNodeId] }, [comando.novoNodeId]: { id: comando.novoNodeId, uci: comando.uci, filhos: [] } } };
+  }
+  if (comando.tipo === "DEFINIR_DESENHOS") {
+    // Gesto sem efeito não entra no histórico (§6 do plano). O tabuleiro avisa da
+    // mudança mais vezes do que ela acontece — um clique com o botão esquerdo numa
+    // casa vazia já devolve a lista —, e sem esta porta o Desfazer encheria de
+    // passos que não desfazem nada.
+    if (mesmosDesenhos(no.desenhos, comando.desenhos)) return aula;
+    proxima = { ...analise, nos: { ...analise.nos, [no.id]: noComDesenhos(no, comando.desenhos) } };
   }
   if (comando.tipo === "PROMOVER_VARIANTE") {
     if (!no.filhos.includes(comando.nodeId)) throw new Error("a variante não pertence a esta posição");

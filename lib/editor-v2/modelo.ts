@@ -295,6 +295,7 @@ export const aulaV2Schema = z.strictObject({
 export type CorDesenhoV2 = z.infer<typeof corDesenhoV2Schema>;
 export type SetaV2 = z.infer<typeof setaV2Schema>;
 export type CasaAcesaV2 = z.infer<typeof casaAcesaV2Schema>;
+export type DesenhoV2 = z.infer<typeof desenhoV2Schema>;
 export type ReferenciaNoV2 = z.infer<typeof referenciaNoSchema>;
 export type MetadadosAulaV2 = z.infer<typeof metadadosAulaV2Schema>;
 export type NoV2 = z.infer<typeof noV2Schema>;

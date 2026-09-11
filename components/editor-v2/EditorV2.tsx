@@ -2,6 +2,7 @@
 
 import { Chess, type Square } from "chess.js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Key } from "@lichess-org/chessground/types";
 import { salvarDocumentoV2 } from "@/app/editor/v2/acoes";
 import { ChessBoard } from "@/components/board/ChessBoard";
@@ -11,6 +12,7 @@ import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
 import { PainelDeProblemas } from "@/components/editor-v2/PainelDeProblemas";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { analiseDaAula, mapaDaAnalise } from "@/lib/editor-v2/arvore";
+import { desenhoDeFormas } from "@/lib/editor-v2/desenhos";
 import { acaoDeTeclado, ehCampoDeTexto, navegar } from "@/lib/editor-v2/navegacao";
 import { problemasVisiveisV2, resumoDosProblemasV2, type DestinoV2 } from "@/lib/editor-v2/diagnostico-visual";
 import {
@@ -234,12 +236,37 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   /**
    * As setas e casas acesas do lance selecionado, nas cores que o professor escolheu.
    *
-   * Entram pelo canal `shapes` — o dos desenhos **automáticos** do chessground —, e
-   * não pelo `desenhavel`, que é o canal de quem está desenhando com o mouse. É a
-   * separação certa por enquanto: hoje o editor v2 **mostra** o desenho que veio do
-   * arquivo; desenhar com o botão direito é o gesto que entra com o painel de edição.
+   * Entram pelo canal `desenhavel` — o de quem desenha com o mouse —, e não mais pelo
+   * `shapes`, que é o dos desenhos automáticos do motor. Agora é o mesmo canal nos dois
+   * sentidos: o que o arquivo guarda aparece ali, e o que o professor desenha ali volta
+   * para o arquivo. Fossem dois canais, um traço apagado com o botão direito
+   * continuaria na tela pelo outro.
    */
-  const desenhos = desenhoDaAutoriaV2(selecionado?.desenhos);
+  /*
+   * Memorizado de propósito: a lista é reconstruída a cada render, e o `ChessBoard`
+   * reescreve as formas do tabuleiro sempre que a **identidade** dela muda. Sem o
+   * `useMemo`, cada tecla digitada no comentário mandaria o tabuleiro redesenhar o
+   * desenho inteiro — e redesenho no meio de um traço é traço perdido.
+   */
+  const desenhos = useMemo(() => desenhoDaAutoriaV2(selecionado.desenhos), [selecionado.desenhos]);
+
+  /**
+   * O professor acabou de desenhar (ou apagar) alguma coisa nesta posição.
+   *
+   * O tabuleiro devolve o conjunto inteiro de formas depois de cada gesto; a tradução
+   * para as quatro cores do arquivo está em `desenhos.ts`, e o comando cuida de não
+   * gravar gesto sem efeito. `useCallback` porque a função desce até o chessground.
+   */
+  const aoDesenhar = useCallback((formas: DrawShape[]) => {
+    aplicar({
+      tipo: "DEFINIR_DESENHOS",
+      analiseId: analise.id,
+      nodeId: nodeIdAtual,
+      desenhos: desenhoDeFormas(formas),
+    });
+  }, [analise.id, aplicar, nodeIdAtual]);
+
+  const desenhavel = useMemo(() => ({ shapes: desenhos, onChange: aoDesenhar }), [desenhos, aoDesenhar]);
   const narracoes = capitulo?.narracoes.filter((n) => n.nodeId === selecionado?.id) ?? [];
 
   /**
@@ -405,8 +432,20 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         <section className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
           {derivado ? (
             <>
-              <ChessBoard fen={derivado.quadro.fen} orientation={capitulo.orientacao} turnColor={toBoardColor(jogo.turn())} dests={legalDests(jogo)} lastMove={derivado.quadro.ultimoLance as [Key, Key] | null} check={jogo.inCheck()} onMove={mover} shapes={desenhos} revision={historico.passados.length + historico.futuros.length} />
+              <ChessBoard fen={derivado.quadro.fen} orientation={capitulo.orientacao} turnColor={toBoardColor(jogo.turn())} dests={legalDests(jogo)} lastMove={derivado.quadro.ultimoLance as [Key, Key] | null} check={jogo.inCheck()} onMove={mover} desenhavel={desenhavel} revision={historico.passados.length + historico.futuros.length} />
               <p className="text-center text-xs text-tinta-fraca">Arraste uma peça para acrescentar um lance a partir da posição selecionada. Promoção usa dama por padrão.</p>
+              {/* A ajuda fica escrita na tela pelo mesmo motivo dos atalhos de
+                  navegação (§16, "ferramentas de desenho descobríveis sem botão
+                  direito"): quem não souber do botão direito nunca desenha. As
+                  teclas são as do chessground, e portanto as mesmas do Lichess. */}
+              <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-tinta-fraca">
+                <span>Botão direito arrasta seta e acende casa:</span>
+                <span className="inline-flex items-center gap-1"><i aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: "var(--color-pincel-defendida)" }} />sozinho</span>
+                <span className="inline-flex items-center gap-1"><i aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: "var(--color-pincel-pendurada)" }} />Shift</span>
+                <span className="inline-flex items-center gap-1"><i aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: "var(--color-pincel-plano)" }} />Alt</span>
+                <span className="inline-flex items-center gap-1"><i aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: "var(--color-pincel-alternativa)" }} />Shift+Alt</span>
+                <button type="button" disabled={!desenhos.length} onClick={() => aplicar({ tipo: "DEFINIR_DESENHOS", analiseId: analise.id, nodeId: nodeIdAtual, desenhos: undefined })} className="foco rounded border border-borda px-2 py-1 text-tinta disabled:opacity-40">Apagar desenhos desta posição</button>
+              </div>
             </>
           ) : (
             /* Sem tabuleiro possível, e dizendo por quê. A lista de problemas acima

@@ -28,19 +28,22 @@ cada linha aponta a seção que conta a história inteira.
 - **Navegação por teclado (§16)** — ← → ↑ ↓, Home e End andam na árvore; o foco segue a
   seta; campo de texto engole o atalho. **Falta a conferência humana da tecla real.**
   Ver “o teclado anda na árvore”.
+- **Desenhar com o botão direito** — seta e casa acesa nascem com o mouse, nas quatro
+  cores do Lichess, e cada desenho entra no Desfazer. **Falta a conferência humana do
+  gesto real.** Ver “desenhar com o botão direito”.
 
 **Aberto, na ordem:**
 
-1. **Desenhar com o botão direito** no editor v2 — hoje a tela mostra o desenho que
-   veio do arquivo, mas não deixa criar um.
-2. **Reordenar capítulos** — os importados vão para o fim do fluxo, na ordem do arquivo.
+1. **Reordenar capítulos** — os importados vão para o fim do fluxo, na ordem do arquivo.
+2. **Paleta clicável de desenho** — hoje a cor se escolhe segurando Shift/Alt.
 3. **Importar por URL do Lichess** (§11) e **exportar PGN** continuam fora.
 
 **Dívida conhecida e não paga:** a lista de lances mostra ~10 lances por vez em
 1366×768; se incomodar, o espaço sai do bloco de edição abaixo dela.
 
 **Isto não declara o editor pronto.** Do Bloco B saíram a leitura da árvore e a
-navegação; a autoria de verdade — desenhar, reordenar capítulos, exportar — continua
+navegação, e agora o desenho; a autoria de verdade — reordenar capítulos, exportar —
+continua
 aberta, e os blocos seguintes do plano ainda não foram fechados.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
@@ -873,6 +876,90 @@ mesma impressão digital (`92879926…`).
 **Desenhar com o botão direito** no editor v2: hoje o canal `shapes` do tabuleiro só
 mostra o desenho que veio do arquivo; criar seta e casa acesa com o mouse exige o canal
 `desenhavel` e um comando novo no histórico, para caber no Desfazer.
+
+---
+
+## Continuação — desenhar com o botão direito (11/9/2026)
+
+### O que o professor ganha
+
+O tabuleiro do editor v2 deixou de ser só vitrine do desenho que veio do arquivo: agora
+o desenho **nasce ali**, com o mouse, nas quatro cores do Lichess.
+
+| Gesto | Cor |
+|---|---|
+| botão direito arrastando | seta verde; clicando sem arrastar, casa acesa verde |
+| Shift + botão direito | vermelho |
+| Alt + botão direito | azul (desenhado com o roxo do plano — ver "a cor do desenho") |
+| Shift + Alt + botão direito | amarelo |
+
+Repetir o mesmo gesto na mesma casa apaga o traço; repetir com outra cor troca a cor.
+Cada mudança **entra no histórico**: um Ctrl+Z devolve o desenho anterior, inclusive
+quando o gesto foi apagar. E há um botão **"Apagar desenhos desta posição"** embaixo do
+tabuleiro, com a legenda das quatro cores ao lado — ferramenta de desenho descobrível
+sem botão direito é exigência do §16, e atalho que ninguém descobre não existe.
+
+O desenho pertence **à posição selecionada**, como no arquivo: trocar de lance troca o
+desenho, e voltar ao lance traz o dele de volta.
+
+### Três decisões, e o porquê de cada uma
+
+**O comando guarda a lista inteira, não "acrescente esta seta".** É o que o tabuleiro
+sabe dizer: o chessground devolve o conjunto de formas depois de cada gesto, inclusive
+quando o gesto foi apagar. Um comando de acrescentar teria de adivinhar, por diferença,
+o que o professor fez.
+
+**Pincel desconhecido é descartado, não adivinhado.** Se um dia chegar uma forma com
+pincel fora das quatro cores, ela não vira cor inventada no arquivo do professor.
+
+**A cópia crua do desenho sai junto.** Um nó importado guarda `[%cal …]`/`[%csl …]` como
+texto opaco, para o round-trip do PGN (§11). Isso é o mesmo desenho guardado duas vezes:
+se o professor apagasse uma seta e o texto cru ficasse, a exportação ressuscitaria a
+seta apagada. Ao reescrever o desenho de um nó, só essas duas diretivas saem —
+`[%clk]`, `[%anno]` e o que o próximo exportador inventar continuam intactos e opacos.
+
+Uma porta a menos no Desfazer: gesto sem efeito não vira passo. O tabuleiro avisa da
+mudança mais vezes do que ela acontece — um clique com o botão esquerdo numa casa vazia
+já devolve a lista —, e sem essa porta o histórico encheria de passos que não desfazem
+nada.
+
+### Evidência desta continuação
+
+A tradução entre a forma do tabuleiro e o desenho do arquivo mora num arquivo puro e é
+provada em Node, sem tela: **10 testes novos** — as quatro cores de ida e volta, o
+pincel desconhecido, o desenho vazio que não vira campo no arquivo, a diretiva crua que
+sai e o relógio que fica, o comando que não cria passo quando nada muda. **867 testes**
+verdes (eram 857); tipos, lint, build, conteúdo, repertório `--check` e **42/42
+mutações** verdes.
+
+No navegador embutido, em 1366×768, com a N0-LADDER: quatro desenhos gravados no arquivo
+(seta vermelha a1–a8, seta azul h1–h4, casa verde e5, casa amarela d4) aparecem no
+tabuleiro pelo canal novo, cada um na sua cor; "Apagar desenhos desta posição" apagou os
+quatro e "Desfazer" trouxe os quatro de volta. Nenhum erro no console.
+
+**Isto prova o caminho do dado, não o gesto** (§19): o tabuleiro não aceita botão direito
+por evento simulado. **A conferência do gesto real continua sendo teste humano do
+Doug** — abrir o editor v2, desenhar com o botão direito nas quatro cores, trocar de
+lance e voltar.
+
+Artefatos temporários removidos. O rascunho real `.editor/v2/N1-KPK.json` continua com a
+mesma impressão digital (`92879926…`).
+
+### O que esta rodada NÃO cobre
+
+- **O gesto real**, pelo motivo acima.
+- **Paleta clicável** (escolher a cor num botão, em vez de segurar Shift/Alt): a legenda
+  mostra as quatro cores, mas ainda não se desenha clicando nelas.
+- A legenda e o botão ficam **abaixo do tabuleiro**, e em 1366×768 exigem uma rolagem
+  curta da coluna do meio — a mesma dívida de altura já registrada para a lista de
+  lances.
+- **Reordenar capítulos**, **URL do Lichess** e **exportar PGN** seguem abertos, na
+  mesma ordem.
+
+### O próximo ponto exato
+
+**Reordenar capítulos**: os importados vão para o fim do fluxo, na ordem do arquivo, e
+não há como mover um de lugar.
 
 ---
 
