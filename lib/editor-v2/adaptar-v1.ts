@@ -1,6 +1,6 @@
-import { createHash } from "node:crypto";
 import { Chess } from "chess.js";
 import type { Lesson, Position } from "../lesson/schema.ts";
+import { hashDoConteudo as hash } from "./hash.ts";
 import { validarAulaV2, type AulaV2, type NoV2 } from "./modelo.ts";
 
 const id = (parte: string) => parte.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -189,8 +189,4 @@ export function adaptarLessonV1(lesson: Lesson, positions: Record<string, Positi
   const valida = validarAulaV2(aula);
   if (!valida.ok) throw new Error(`adaptação v1 inválida: ${valida.problemas.join("; ")}`);
   return aula;
-}
-
-function hash(valor: unknown): string {
-  return createHash("sha256").update(JSON.stringify(valor)).digest("hex");
 }

@@ -402,6 +402,92 @@ function problemasDeLegalidade(
 }
 
 /**
+ * A revisão registrada ainda descreve a posição que está no arquivo? E a
+ * certificação está dizendo a verdade?
+ *
+ * ## O buraco que isto fecha
+ *
+ * Até aqui o validador conferia se a proveniência **existe** — nunca se ela **bate**.
+ * Uma aula podia registrar "posição aprovada, conteúdo tal" e a posição ter mudado
+ * depois: a frase continuava no arquivo, agora descrevendo outra coisa. É a falha que
+ * o plano final nomeia em §12 ("troca de FEN de posição aprovada reabre a revisão") e
+ * em §9 ("sem evidência adequada, não emitir selo de resultado certificado").
+ *
+ * ## As três regras, e por que as severidades são diferentes
+ *
+ * **`PROVENIENCIA_CADUCA` e `PROVENIENCIA_DIVERGE` são AVISOS.** As duas descrevem
+ * uma divergência com o mundo de fora — alguém mexeu no arquivo da posição depois de
+ * a revisão ter sido registrada. Travar o salvamento por causa disso prenderia o
+ * professor num rascunho que ele não consegue nem guardar, por um estrago que não foi
+ * ele que fez. O plano (§7) é explícito: o rascunho aceita pendência editorial
+ * identificada; quem exige tudo em ordem é a publicação. **Quando a publicação v2
+ * existir, estas duas passam a impedir** — está escrito aqui para não se perder.
+ *
+ * **`CERTIFICACAO_SEM_APROVACAO` é ERRO.** Ela não descreve o mundo de fora: descreve
+ * o documento contradizendo a si mesmo. Um treino que diz "conferido" sobre uma
+ * posição que a própria aula não registra como aprovada é uma afirmação falsa escrita
+ * pelo autor, e o autor pode desfazê-la na hora. O adaptador nunca a produz — ele
+ * carimba `herdada-v1` justamente para não inventar confirmação que ninguém fez.
+ *
+ * ## Por que o hash entra por fora
+ *
+ * `hashDaPosicao` é injetado em vez de importado porque este módulo roda **também no
+ * navegador**, onde `node:crypto` não existe. Quem tem o hash (o servidor, o gate)
+ * passa e recebe a conferência de conteúdo; a tela chama sem, e continua recebendo
+ * as conferências que não dependem de hash. Nada some em silêncio: o que não pode ser
+ * conferido simplesmente não é afirmado.
+ */
+function problemasDeProveniencia(
+  aula: AulaV2,
+  positions: Record<string, Position>,
+  hashDaPosicao?: (posicao: Position) => string,
+): ProblemaBrutoV2[] {
+  const problemas: ProblemaBrutoV2[] = [];
+  const registro = new Map(aula.proveniencia.map((item) => [item.positionId, item]));
+
+  for (const item of aula.proveniencia) {
+    const posicao = positions[item.positionId];
+    // Posição ausente já é acusada por POSICAO_INEXISTENTE, no portão de legalidade.
+    if (!posicao) continue;
+
+    if (item.estado !== posicao.status) {
+      problemas.push({
+        codigo: "PROVENIENCIA_DIVERGE",
+        severidade: "aviso",
+        mensagem: `esta aula registra a posição "${item.positionId}" como "${item.estado}", e o arquivo dela hoje diz "${posicao.status}"`,
+        campo: "proveniencia.estado",
+      });
+    }
+
+    if (hashDaPosicao && hashDaPosicao(posicao) !== item.conteudoHash) {
+      problemas.push({
+        codigo: "PROVENIENCIA_CADUCA",
+        severidade: "aviso",
+        mensagem: `a posição "${item.positionId}" mudou depois de a revisão ser registrada — o que foi conferido não é mais o que está no arquivo`,
+        campo: "proveniencia.conteudoHash",
+      });
+    }
+  }
+
+  for (const treino of aula.treinos) {
+    const certificacao = treino.certificacao;
+    if (certificacao?.estado !== "confirmada") continue;
+    const daPosicao = registro.get(certificacao.positionId);
+    if (daPosicao?.estado === "approved") continue;
+    problemas.push({
+      codigo: "CERTIFICACAO_SEM_APROVACAO",
+      mensagem:
+        `este treino afirma que a posição "${certificacao.positionId}" foi conferida, ` +
+        `mas a aula ${daPosicao ? `a registra como "${daPosicao.estado}"` : "não registra a revisão dela"}`,
+      treinoId: treino.id,
+      campo: "certificacao.estado",
+    });
+  }
+
+  return problemas;
+}
+
+/**
  * Valida referências e a forma de árvore que o schema isolado não consegue enxergar.
  *
  * ## Por que `positions` é opcional
@@ -416,7 +502,11 @@ function problemasDeLegalidade(
  * Sem isso, a legalidade ficaria onde estava: numa exceção dentro de `arvore.ts`,
  * que derruba o painel inteiro em vez de dizer qual lance está errado.
  */
-export function problemasDaAulaV2(aula: AulaV2, positions?: Record<string, Position>): ProblemaV2[] {
+export function problemasDaAulaV2(
+  aula: AulaV2,
+  positions?: Record<string, Position>,
+  hashDaPosicao?: (posicao: Position) => string,
+): ProblemaV2[] {
   const problemas: ProblemaBrutoV2[] = [];
   if (!aula.metadados) problemas.push(aula.origem?.formato === "lesson-v1"
     ? { codigo: "METADADOS_LEGADOS", severidade: "aviso", mensagem: "o rascunho foi criado antes dos metadados v2; eles serão completados ao abrir a aula", campo: "metadados" }
@@ -545,6 +635,7 @@ export function problemasDaAulaV2(aula: AulaV2, positions?: Record<string, Posit
   }
 
   if (positions) problemas.push(...problemasDeLegalidade(aula, positions, analises, analisesSaudaveis));
+  if (positions) problemas.push(...problemasDeProveniencia(aula, positions, hashDaPosicao));
 
   for (const capitulo of aula.capitulos) {
     const analise = analises.get(capitulo.analiseId);
@@ -617,7 +708,11 @@ export type ResultadoValidacaoAulaV2 =
  * o documento tem forma de aula v2 (recuperação local, rascunho colado) continua
  * chamando sem, e recebe o mesmo veredicto de antes.
  */
-export function validarAulaV2(valor: unknown, positions?: Record<string, Position>): ResultadoValidacaoAulaV2 {
+export function validarAulaV2(
+  valor: unknown,
+  positions?: Record<string, Position>,
+  hashDaPosicao?: (posicao: Position) => string,
+): ResultadoValidacaoAulaV2 {
   const forma = aulaV2Schema.safeParse(valor);
   if (!forma.success) {
     const aulaId = typeof valor === "object" && valor !== null && "id" in valor && typeof valor.id === "string" ? valor.id : "aula-desconhecida";
@@ -629,7 +724,7 @@ export function validarAulaV2(valor: unknown, positions?: Record<string, Positio
     }));
     return { ok: false, problemas: diagnosticos.map(formatarProblemaV2), diagnosticos };
   }
-  const diagnosticos = problemasDaAulaV2(forma.data, positions);
+  const diagnosticos = problemasDaAulaV2(forma.data, positions, hashDaPosicao);
   const erros = diagnosticos.filter((problema) => problema.severidade === "erro");
   const avisos = diagnosticos.filter((problema) => problema.severidade === "aviso");
   if (erros.length) return { ok: false, problemas: erros.map(formatarProblemaV2), diagnosticos };

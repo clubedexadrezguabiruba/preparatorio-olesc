@@ -19,7 +19,7 @@ import {
   type ComandoV2,
   type Historico,
 } from "@/lib/editor-v2/comandos";
-import { problemasDaAulaV2, validarAulaV2, type AulaV2 } from "@/lib/editor-v2/modelo";
+import { problemasDaAulaV2, validarAulaV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
 import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/editor-v2/recuperacao";
 import type { Position } from "@/lib/lesson/schema";
 
@@ -29,11 +29,17 @@ function novoId(): string {
   return `n-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
+export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, problemasDaOrigem = [] }: {
   aulaId: string;
   documentoInicial: AulaV2;
   hashInicial: string;
   positions: Record<string, Position>;
+  /**
+   * As conferências que só o servidor pode fazer — proveniência e certificação, que
+   * comparam hashes. Elas não mudam enquanto o professor escreve: descrevem o arquivo
+   * da posição, não o texto dele. Chegam prontas e se juntam às que a tela recalcula.
+   */
+  problemasDaOrigem?: ProblemaV2[];
 }) {
   const [historico, setHistorico] = useState<Historico<AulaV2>>(() => iniciarHistorico(documentoInicial));
   const [capituloId, setCapituloId] = useState(() => documentoInicial.capitulos[0]?.id ?? "");
@@ -144,8 +150,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
    * ao salvar chegaria depois de ele já ter esquecido o que fez.
    */
   const problemas = useMemo(
-    () => problemasDaAulaV2(historico.presente, positions),
-    [historico.presente, positions],
+    () => [...problemasDaAulaV2(historico.presente, positions), ...problemasDaOrigem],
+    [historico.presente, positions, problemasDaOrigem],
   );
   const visiveis = useMemo(() => problemasVisiveisV2(historico.presente, problemas), [historico.presente, problemas]);
   const resumo = useMemo(() => resumoDosProblemasV2(problemas), [problemas]);

@@ -262,8 +262,7 @@ medida em Node quando o que se quer é o custo do algoritmo.
 
 - **A lista de lances não rola por dentro.** **Paga na continuação seguinte; ver
   abaixo.**
-- **Proveniência e certificação** continuam abertos: o validador confere se o registro
-  existe, não se ele bate com o conteúdo.
+- **Proveniência e certificação:** **fechados na continuação seguinte; ver abaixo.**
 
 ## Continuação — a lista de lances passa a rolar por dentro
 
@@ -306,6 +305,83 @@ v2**; tipos, lint, build Next, conteúdo (38 consultas de tablebase, todas do ca
 repertório `--check` e **42/42 mutações** verdes. Artefatos temporários da N0-LADDER
 removidos. O rascunho real `.editor/v2/N1-KPK.json` continua com 20 nós e a mesma
 impressão digital (`92879926…`).
+
+---
+
+## Continuação — proveniência e certificação: o Bloco 0/A fechado
+
+O validador conferia se a revisão **existe**; nunca se ela **bate**. Uma aula podia
+registrar "posição aprovada, conteúdo tal" e a posição ter mudado depois: a frase
+continuava no arquivo, agora descrevendo outra coisa. É o buraco que o plano final
+nomeia em §12 e §9.
+
+### As três regras, e por que as severidades são diferentes
+
+| Código | Severidade | O que pega |
+|---|---|---|
+| `PROVENIENCIA_CADUCA` | **aviso** | o `conteudoHash` registrado não é mais o da posição no arquivo |
+| `PROVENIENCIA_DIVERGE` | **aviso** | a aula diz `approved` e o arquivo da posição diz `candidate` |
+| `CERTIFICACAO_SEM_APROVACAO` | **erro** | um treino diz "conferido" sobre posição que a aula não registra como aprovada |
+
+**Os dois primeiros são avisos de propósito.** Descrevem o mundo de fora mudando —
+alguém mexeu no arquivo da posição depois de a revisão ter sido registrada. Travar o
+salvamento prenderia o professor num rascunho que ele não consegue nem guardar, por um
+estrago que não foi ele que fez; o plano (§7) diz que o rascunho aceita pendência
+identificada e que quem exige tudo em ordem é a publicação. **Quando a publicação v2
+existir, estas duas passam a impedir** — está escrito no código, junto da regra.
+
+**O terceiro é erro** porque não descreve o mundo de fora: é o documento contradizendo
+a si mesmo, e quem escreveu desfaz na hora. O adaptador nunca o produz — ele carimba
+`herdada-v1` justamente para não inventar confirmação que ninguém fez, e há teste
+fixando isso.
+
+### Onde cada conferência roda, e por quê
+
+O hash vem do `node:crypto`, que **não existe no navegador**. Então:
+
+- `hashDoConteudo` saiu para `lib/editor-v2/hash.ts` e é **a mesma função** que o
+  adaptador usa para registrar e o validador usa para conferir. Duas cópias divergiriam
+  no dia em que alguém mexesse numa delas, e o sintoma seria "toda posição está caduca"
+  — alarme falso que ensina a ignorar o alarme. Há teste fixando a igualdade.
+- `problemasDaAulaV2(aula, positions?, hashDaPosicao?)` recebe o hash **injetado**.
+  Sem ele, as conferências de conteúdo simplesmente não são afirmadas — nem viram aviso
+  falso, nem silêncio enganoso.
+- A página (servidor) confere a proveniência na abertura e manda o resultado pronto
+  para a tela em `problemasDaOrigem`. Não é gambiarra: a proveniência responde "o
+  arquivo da posição mudou", e isso não muda enquanto o professor escreve. O que muda a
+  cada tecla — forma, referências, legalidade — continua sendo recalculado na tela.
+
+### Evidência
+
+**813 testes** do repositório verdes, **46 focados no v2** (7 novos nesta rodada);
+tipos, lint, build Next, conteúdo (38 consultas de tablebase, todas do cache),
+repertório `--check` e **42/42 mutações** verdes. As 3 aulas reais passam no portão
+novo sem acusar nada. Na tela, a N1-KPK real abriu com tabuleiro, 19 lances e
+**nenhum problema** — o portão não produz alarme falso no conteúdo que existe.
+
+### O Bloco 0/A está fechado
+
+Os quatro portões que faltavam foram fechados nesta sequência: **legalidade dos
+lances**, **diagnóstico localizado na interface**, **regressão de conteúdo** (as aulas
+v1 continuam íntegras e jogáveis) e **proveniência/certificação**. A diferença entre
+aviso e erro bloqueante passou a ser decidida por regra escrita, não por acidente.
+
+**Isto não declara o editor pronto.** O Bloco B inteiro continua aberto.
+
+### O próximo ponto exato: Bloco B
+
+1. **Importação e leitura de PGN** (plano §11): reaproveitar `lib/repertorio/pgn.ts`,
+   auditar tokens não reconhecidos, relatório de perdas antes de aplicar, lote
+   transacional. O writer não é pré-requisito do importador.
+2. **Navegação por teclado** (§16): setas para andar na árvore, atalhos só fora de
+   campo de texto, foco visível. **Não pode ser verificada pelo agente** — a tecla não
+   chega à página do navegador embutido; é teste humano do Doug.
+3. **Corpus e limites** (§17): a partida de 60 lances já é fixture e está medida; falta
+   a linha de 500 meios-lances e a árvore de 1.000 nós, com os limites de bytes, nós e
+   profundidade declarados antes de liberar a importação.
+
+**Dívida conhecida, medida e não paga:** a lista de lances mostra ~10 lances por vez em
+1366×768; se incomodar, o espaço sai do bloco de edição abaixo dela.
 
 ---
 

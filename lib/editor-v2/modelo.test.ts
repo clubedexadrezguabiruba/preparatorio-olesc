@@ -6,6 +6,7 @@ import { Chess } from "chess.js";
 import { lessonSchema, positionSchema, type Position } from "../lesson/schema.ts";
 import { adaptarLessonV1 } from "./adaptar-v1.ts";
 import { mapaDaAnalise, quadroDoNo } from "./arvore.ts";
+import { hashDaPosicao } from "./hash.ts";
 import { aplicarNoHistorico, desfazer, executarComando, iniciarHistorico, refazer } from "./comandos.ts";
 import { completarAulaV2Legada, problemasDaAulaV2, validarAulaV2, type AulaV2 } from "./modelo.ts";
 import { entradasVerticais } from "./painel.ts";
@@ -554,4 +555,94 @@ test("o mapa devolve o mesmo que o cálculo nó a nó", () => {
   for (const id of Object.keys(analise.nos)) {
     assert.deepEqual(mapa.quadros[id], quadroDoNo(aula, analise.id, id, positions), id);
   }
+});
+
+/* ------------------------------------------------------------------ *
+ * Proveniência e certificação — o registro ainda descreve o arquivo?
+ * ------------------------------------------------------------------ */
+
+test("a posição alterada depois da revisão vira aviso, e não trava o rascunho", () => {
+  /*
+   * Aviso e não erro: quem mexeu no arquivo da posição não foi o professor que está
+   * escrevendo a aula, e travar o salvamento o prenderia num rascunho que ele não
+   * consegue nem guardar. Quem exige tudo em ordem é a publicação (plano §7).
+   */
+  const aula = adaptarLessonV1(lesson, positions);
+  const mudada: Record<string, Position> = {
+    ...positions,
+    [position.id]: { ...position, notes: "o arquivo da posição mudou depois" } as Position,
+  };
+  const problema = problemasDaAulaV2(aula, mudada, hashDaPosicao).find((p) => p.codigo === "PROVENIENCIA_CADUCA");
+  assert.ok(problema, "mudar a posição tem de acusar a revisão caduca");
+  assert.equal(problema.severidade, "aviso");
+  assert.match(problema.mensagem, new RegExp(position.id));
+  assert.equal(problema.localizacao.campo, "proveniencia.conteudoHash");
+  // E sem mexer em nada, silêncio: um alarme que toca sempre não é alarme.
+  assert.equal(problemasDaAulaV2(aula, positions, hashDaPosicao).length, 0);
+});
+
+test("sem a função de hash, a conferência de conteúdo não é afirmada", () => {
+  // A tela roda no navegador, onde não há `node:crypto`. O que não pode ser
+  // conferido não vira aviso falso nem silêncio enganoso: simplesmente não é dito.
+  const aula = adaptarLessonV1(lesson, positions);
+  const mudada: Record<string, Position> = {
+    ...positions,
+    [position.id]: { ...position, notes: "mudou" } as Position,
+  };
+  assert.equal(problemasDaAulaV2(aula, mudada).some((p) => p.codigo === "PROVENIENCIA_CADUCA"), false);
+});
+
+test("aula que diz «aprovada» sobre posição que não está aprovada é acusada", () => {
+  const aula = adaptarLessonV1(lesson, positions);
+  const rebaixada: Record<string, Position> = {
+    ...positions,
+    [position.id]: { ...position, status: "candidate" } as Position,
+  };
+  const problema = problemasDaAulaV2(aula, rebaixada, hashDaPosicao).find((p) => p.codigo === "PROVENIENCIA_DIVERGE");
+  assert.ok(problema);
+  assert.equal(problema.severidade, "aviso");
+  assert.match(problema.mensagem, /candidate/);
+});
+
+test("treino não pode dizer «conferido» sobre posição que a aula não aprovou", () => {
+  /*
+   * Erro, e não aviso: isto não é o mundo de fora mudando, é o documento
+   * contradizendo a si mesmo — e quem escreveu pode desfazer na hora.
+   */
+  const aula = structuredClone(adaptarLessonV1(lesson, positions));
+  aula.proveniencia = aula.proveniencia.map((p) => ({ ...p, estado: "candidate" as const }));
+  aula.treinos[0].certificacao = { ...aula.treinos[0].certificacao!, estado: "confirmada" };
+  const problema = problemasDaAulaV2(aula, positions, hashDaPosicao).find((p) => p.codigo === "CERTIFICACAO_SEM_APROVACAO");
+  assert.ok(problema);
+  assert.equal(problema.severidade, "erro");
+  assert.equal(problema.localizacao.treinoId, aula.treinos[0].id);
+  assert.equal(validarAulaV2(aula, positions, hashDaPosicao).ok, false);
+});
+
+test("o adaptador nunca inventa confirmação: o que vem do v1 é herdado", () => {
+  // A regra que impede o selo falso de nascer sozinho na migração.
+  const aula = adaptarLessonV1(lesson, positions);
+  assert.equal(aula.treinos[0].certificacao?.estado, "herdada-v1");
+  assert.ok(!problemasDaAulaV2(aula, positions, hashDaPosicao).some((p) => p.codigo === "CERTIFICACAO_SEM_APROVACAO"));
+});
+
+test("as três aulas reais passam no portão de proveniência", () => {
+  // A regressão do conteúdo que já existe: nenhuma aula publicada pode passar a
+  // acusar revisão caduca por causa de uma mudança no v2.
+  const todasAsPosicoes = Object.fromEntries(arquivosJson("content/positions").map((arquivo) => {
+    const posicao = positionSchema.parse(JSON.parse(readFileSync(arquivo, "utf8")));
+    return [posicao.id, posicao];
+  }));
+  for (const arquivo of arquivosJson("content/lessons")) {
+    const aulaV1 = lessonSchema.parse(JSON.parse(readFileSync(arquivo, "utf8")));
+    const aulaV2 = adaptarLessonV1(aulaV1, todasAsPosicoes);
+    assert.deepEqual(validarAulaV2(aulaV2, todasAsPosicoes, hashDaPosicao), { ok: true, aula: aulaV2 }, aulaV1.id);
+  }
+});
+
+test("o hash da revisão e o do adaptador são a MESMA função", () => {
+  // Duas cópias divergem no dia em que alguém mexe numa delas, e o sintoma seria
+  // "toda posição está caduca" — um alarme falso que ensina a ignorar o alarme.
+  const aula = adaptarLessonV1(lesson, positions);
+  assert.equal(aula.proveniencia[0].conteudoHash, hashDaPosicao(positions[aula.proveniencia[0].positionId]));
 });
