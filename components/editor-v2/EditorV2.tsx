@@ -43,16 +43,27 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
   const [recuperavel, setRecuperavel] = useState<{ aula: AulaV2; baseHash: string; em: string } | null>(null);
   const [conflitoAtual, setConflitoAtual] = useState<{ textoAtual: string | null; hashAtual: string | null } | null>(null);
   const [falhaRecuperacao, setFalhaRecuperacao] = useState(false);
+  const [sessaoId, setSessaoId] = useState<string | null>(null);
   const hash = useRef(hashInicial);
   const ultimoEnfileirado = useRef(documentoInicial);
   const fila = useRef(Promise.resolve());
   const maisRecente = useRef(documentoInicial);
 
   useEffect(() => {
-    void lerRecuperacao(aulaId).then((r) => {
+    const chave = `editor-v2-sessao:${aulaId}`;
+    let id = sessionStorage.getItem(chave);
+    if (!id) { id = crypto.randomUUID(); sessionStorage.setItem(chave, id); }
+    let ativo = true;
+    queueMicrotask(() => { if (ativo) setSessaoId(id); });
+    return () => { ativo = false; };
+  }, [aulaId]);
+
+  useEffect(() => {
+    if (!sessaoId) return;
+    void lerRecuperacao(aulaId, sessaoId).then((r) => {
       if (r && JSON.stringify(r.aula) !== JSON.stringify(documentoInicial)) setRecuperavel(r);
     }).catch(() => undefined);
-  }, [aulaId, documentoInicial]);
+  }, [aulaId, documentoInicial, sessaoId]);
 
   const aplicar = useCallback((comando: ComandoV2) => {
     setHistorico((atual) => {
@@ -74,7 +85,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
     const aula = historico.presente;
     maisRecente.current = aula;
     const baseHash = hash.current;
-    void guardarRecuperacao(aulaId, aula, baseHash)
+    if (!sessaoId) return;
+    void guardarRecuperacao(aulaId, sessaoId, aula, baseHash)
       .then(() => setFalhaRecuperacao(false))
       .catch(() => setFalhaRecuperacao(true));
     const relogio = setTimeout(() => {
@@ -87,7 +99,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
             setEstado("salvo");
             setRecado(null);
             setConflitoAtual(null);
-            await apagarRecuperacao(aulaId).catch(() => undefined);
+            await apagarRecuperacao(aulaId, sessaoId).catch(() => undefined);
           }
         } else if ("conflito" in resposta && resposta.conflito) {
           setEstado("conflito");
@@ -103,7 +115,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
       });
     }, 600);
     return () => clearTimeout(relogio);
-  }, [aulaId, historico.presente]);
+  }, [aulaId, historico.presente, sessaoId]);
 
   useEffect(() => {
     const teclado = (evento: KeyboardEvent) => {
@@ -157,14 +169,21 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
     URL.revokeObjectURL(url);
   };
 
-  const adotarVersaoDoDisco = () => {
+  const adotarVersaoDoDisco = async () => {
     if (!conflitoAtual?.textoAtual || !conflitoAtual.hashAtual) return;
     let cru: unknown;
     try { cru = JSON.parse(conflitoAtual.textoAtual); } catch { setRecado("A versão do disco não contém JSON válido."); return; }
     const validada = validarAulaV2(cru);
     if (!validada.ok) { setRecado("A versão do disco não é um documento v2 válido."); return; }
     const copiaLocal = { aula: historico.presente, baseHash: hash.current, em: new Date().toISOString() };
-    void guardarRecuperacao(aulaId, copiaLocal.aula, copiaLocal.baseHash).catch(() => setFalhaRecuperacao(true));
+    if (!sessaoId) { setRecado("A sessão local ainda não está pronta. Tente novamente."); return; }
+    try {
+      await guardarRecuperacao(aulaId, sessaoId, copiaLocal.aula, copiaLocal.baseHash);
+    } catch {
+      setFalhaRecuperacao(true);
+      setRecado("A versão do disco não foi aberta porque o navegador não confirmou a preservação da sua edição.");
+      return;
+    }
     setRecuperavel(copiaLocal);
     hash.current = conflitoAtual.hashAtual;
     maisRecente.current = validada.aula;
@@ -198,7 +217,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
         <section className="rounded-lg border border-aviso-superficie bg-aviso-superficie/10 p-3 text-sm text-aviso-tinta">
           Há uma versão local não concluída de {new Date(recuperavel.em).toLocaleString("pt-BR")}.
           <button type="button" className="foco ml-2 underline" onClick={() => { setHistorico(iniciarHistorico(recuperavel.aula)); hash.current = recuperavel.baseHash; setRecuperavel(null); }}>Recuperar</button>
-          <button type="button" className="foco ml-3 underline" onClick={() => { void apagarRecuperacao(aulaId); setRecuperavel(null); }}>Descartar</button>
+          <button type="button" className="foco ml-3 underline" onClick={() => { if (sessaoId) void apagarRecuperacao(aulaId, sessaoId); setRecuperavel(null); }}>Descartar</button>
         </section>
       ) : null}
       {conflitoAtual ? (

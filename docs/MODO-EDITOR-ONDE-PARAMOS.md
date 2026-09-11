@@ -63,10 +63,18 @@ IndexedDB. Falha do IndexedDB ganhou aviso verdadeiro e exportação manual; o
 autosave no disco continua sendo tentado. Tipos, lint e 8 testes v2 ficaram
 verdes após essa mudança.
 
-**Primeiro ponto a retomar:** ensaiar duas abas e reload no navegador, incluindo
-download/restauração, e completar o modelo de prática/treino. Depois, continuar
-os blocos B–J do plano final; estes commits são fundação/piloto, não declaram o
-plano inteiro concluído.
+Ensaio seguinte concluído com a N0-LADDER: duas abas partiram do mesmo hash; A
+gravou, B recebeu conflito sem sobrescrever; B abriu a versão do disco somente
+depois do ACK do IndexedDB; sua cópia sobreviveu ao reload; A restaurou o arquivo
+original sem apagar a recuperação de B; e “Descartar” apagou somente a cópia de
+B. A chave do IndexedDB passou de `aula` para `aula + sessão da aba`. O teste
+também revelou e corrigiu uma promessa prematura: a interface não diz mais que
+preservou antes da confirmação do armazenamento local. A N0-LADDER terminou sem
+o comentário temporário.
+
+**Primeiro ponto a retomar:** testar o download da cópia e completar o modelo de
+prática/treino. Depois, continuar os blocos B–J do plano final; estes commits são
+fundação/piloto, não declaram o plano inteiro concluído.
 
 ---
 
