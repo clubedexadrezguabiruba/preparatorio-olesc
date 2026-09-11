@@ -1,33 +1,9 @@
 "use client";
 
-import type { AnaliseV2, NoV2 } from "@/lib/editor-v2/modelo";
+import type { AnaliseV2 } from "@/lib/editor-v2/modelo";
+import { entradasVerticais } from "@/lib/editor-v2/painel";
 
 const NAG: Record<number, string> = { 1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!" };
-type Entrada = { nodeId: string; parentId: string; nivel: number; principal: boolean };
-
-/** A linha principal fica no mesmo eixo; só uma variante real ganha recuo. */
-function achatar(analise: AnaliseV2): Entrada[] {
-  const saida: Entrada[] = [];
-  const linha = (primeiro: string, paiInicial: string, nivel: number, principalInicial: boolean) => {
-    let id: string | undefined = primeiro;
-    let pai = paiInicial;
-    let principal = principalInicial;
-    while (id) {
-      const no: NoV2 | undefined = analise.nos[id];
-      if (!no) return;
-      saida.push({ nodeId: id, parentId: pai, nivel, principal });
-      no.filhos.slice(1).forEach((variante) => linha(variante, no.id, nivel + 1, false));
-      pai = no.id;
-      id = no.filhos[0];
-      principal = true;
-    }
-  };
-  const raiz = analise.nos[analise.raizId];
-  if (raiz.filhos[0]) linha(raiz.filhos[0], raiz.id, 0, true);
-  raiz.filhos.slice(1).forEach((variante) => linha(variante, raiz.id, 1, false));
-  return saida;
-}
-
 export function PainelDeLances({ analise, sans, rotulos, selecionado, onSelecionar, onPromover }: {
   analise: AnaliseV2;
   sans: Record<string, string>;
@@ -37,7 +13,7 @@ export function PainelDeLances({ analise, sans, rotulos, selecionado, onSelecion
   onPromover: (parentId: string, nodeId: string) => void;
 }) {
   const raiz = analise.nos[analise.raizId];
-  const entradas = achatar(analise);
+  const entradas = entradasVerticais(analise);
   return (
     <div className="flex min-h-0 flex-col gap-2">
       <button type="button" aria-current={selecionado === raiz.id ? "true" : undefined} onClick={() => onSelecionar(raiz.id)} className={`foco w-fit rounded-md px-2 py-1 text-xs ${selecionado === raiz.id ? "bg-metodo-superficie text-metodo-tinta-alta" : "text-tinta-fraca hover:bg-carta-toque"}`}>Posição inicial</button>

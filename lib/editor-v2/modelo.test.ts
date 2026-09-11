@@ -6,6 +6,7 @@ import { adaptarLessonV1 } from "./adaptar-v1.ts";
 import { quadroDoNo } from "./arvore.ts";
 import { aplicarNoHistorico, desfazer, executarComando, iniciarHistorico, refazer } from "./comandos.ts";
 import { problemasDaAulaV2, validarAulaV2 } from "./modelo.ts";
+import { entradasVerticais } from "./painel.ts";
 
 const lesson = lessonSchema.parse(JSON.parse(readFileSync("content/lessons/N1-KPK.json", "utf8")));
 const position = positionSchema.parse(JSON.parse(readFileSync("content/positions/N1/pos-n1-kpk-dlv-1-3.json", "utf8")));
@@ -66,4 +67,24 @@ test("lance divergente vira variante, e promover não troca a identidade", () =>
   const promovida = executarComando(comVariante, { tipo: "PROMOVER_VARIANTE", analiseId: capitulo.analiseId, parentId: raiz, nodeId: "node-variante-teste" }, positions);
   assert.equal(promovida.analises[0].nos[raiz].filhos[0], "node-variante-teste");
   assert.ok(promovida.analises[0].nos["node-variante-teste"]);
+});
+
+test("painel mantém toda linha principal vertical e recua só a variante", () => {
+  const aula = adaptarLessonV1(lesson, positions);
+  const analise = aula.analises[0];
+  const raiz = analise.raizId;
+  const comVariante = executarComando(aula, { tipo: "ADICIONAR_LANCE", analiseId: analise.id, nodeId: raiz, uci: "c6b6", novoNodeId: "node-variante-teste" }, positions);
+  const prolongada = executarComando(comVariante, { tipo: "ADICIONAR_LANCE", analiseId: analise.id, nodeId: "node-variante-teste", uci: "e7d7", novoNodeId: "node-variante-resposta" }, positions);
+  const entradas = entradasVerticais(prolongada.analises[0]);
+  assert.ok(entradas.filter((e) => e.nivel === 0).length >= 11);
+  assert.deepEqual(entradas.filter((e) => e.nodeId.startsWith("node-variante")).map((e) => e.nivel), [1, 1]);
+});
+
+test("o contrato detecta ciclo entre posições iniciais de análises", () => {
+  const aula = structuredClone(adaptarLessonV1(lesson, positions));
+  aula.analises.push(
+    { id: "analise-b", inicio: { tipo: "referencia", origem: { analiseId: "analise-c", nodeId: "raiz-c" } }, raizId: "raiz-b", nos: { "raiz-b": { id: "raiz-b", filhos: [] } } },
+    { id: "analise-c", inicio: { tipo: "referencia", origem: { analiseId: "analise-b", nodeId: "raiz-b" } }, raizId: "raiz-c", nos: { "raiz-c": { id: "raiz-c", filhos: [] } } },
+  );
+  assert.ok(problemasDaAulaV2(aula).some((p) => p.codigo === "CICLO_ENTRE_ANALISES"));
 });

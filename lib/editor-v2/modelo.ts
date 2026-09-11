@@ -109,6 +109,22 @@ export function problemasDaAulaV2(aula: AulaV2): ProblemaV2[] {
   aula.fluxo.forEach((e) => registrar(e.id, "etapa"));
 
   const analises = new Map(aula.analises.map((a) => [a.id, a]));
+  const visitandoAnalises = new Set<string>();
+  const analisesVisitadas = new Set<string>();
+  const visitarDependencia = (id: string) => {
+    if (visitandoAnalises.has(id)) {
+      problemas.push({ codigo: "CICLO_ENTRE_ANALISES", mensagem: "as posições iniciais das análises formam um ciclo", analiseId: id });
+      return;
+    }
+    if (analisesVisitadas.has(id)) return;
+    const analise = analises.get(id);
+    if (!analise) return;
+    visitandoAnalises.add(id);
+    if (analise.inicio.tipo === "referencia") visitarDependencia(analise.inicio.origem.analiseId);
+    visitandoAnalises.delete(id);
+    analisesVisitadas.add(id);
+  };
+  aula.analises.forEach((analise) => visitarDependencia(analise.id));
   for (const analise of aula.analises) {
     for (const [chave, no] of Object.entries(analise.nos)) {
       if (chave !== no.id) {

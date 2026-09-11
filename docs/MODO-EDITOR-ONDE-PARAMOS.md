@@ -49,11 +49,17 @@ conteúdo verde com 38 consultas de tablebase vindas do cache; repertório
 da N1-KPK, seleção por painel e tabuleiro, comentário, NAG, autosave, dois Undo,
 Redo e restauração do estado original.
 
-**Primeiro ponto a retomar:** criar uma variante real pelo tabuleiro e conferir
-seu recuo/promoção no painel vertical. Depois, continuar os blocos B–J do plano
-final; este commit é fundação/piloto, não declara o plano inteiro concluído.
-Recuperação sob reload/conflito e o modelo completo de prática/treino são os
-próximos riscos estruturais.
+Continuação da mesma rodada: a variante real foi preservada e medida no
+navegador. A linha principal inteira ficou em `x=29`; os oito lances da variante
+ficaram em `x=41`, sempre no mesmo eixo — 12 px de recuo, sem escada. O
+comportamento passou para função pura e teste automatizado. O validador também
+passou a detectar ciclos entre posições iniciais de análises. Tipos, lint e os
+8 testes focados v2 ficaram verdes.
+
+**Primeiro ponto a retomar:** recuperação sob reload/conflito na interface e o
+modelo completo de prática/treino são os próximos riscos estruturais. Depois,
+continuar os blocos B–J do plano final; estes commits são fundação/piloto, não
+declaram o plano inteiro concluído.
 
 ---
 
