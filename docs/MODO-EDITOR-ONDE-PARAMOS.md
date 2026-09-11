@@ -56,10 +56,17 @@ comportamento passou para função pura e teste automatizado. O validador també
 passou a detectar ciclos entre posições iniciais de análises. Tipos, lint e os
 8 testes focados v2 ficaram verdes.
 
-**Primeiro ponto a retomar:** recuperação sob reload/conflito na interface e o
-modelo completo de prática/treino são os próximos riscos estruturais. Depois,
-continuar os blocos B–J do plano final; estes commits são fundação/piloto, não
-declaram o plano inteiro concluído.
+Continuação seguinte: o conflito agora aparece como estado próprio, nunca
+sobrescreve silenciosamente e oferece **Baixar minha cópia** ou **Abrir versão
+do disco**. Ao abrir a versão do disco, a edição local continua preservada no
+IndexedDB. Falha do IndexedDB ganhou aviso verdadeiro e exportação manual; o
+autosave no disco continua sendo tentado. Tipos, lint e 8 testes v2 ficaram
+verdes após essa mudança.
+
+**Primeiro ponto a retomar:** ensaiar duas abas e reload no navegador, incluindo
+download/restauração, e completar o modelo de prática/treino. Depois, continuar
+os blocos B–J do plano final; estes commits são fundação/piloto, não declaram o
+plano inteiro concluído.
 
 ---
 

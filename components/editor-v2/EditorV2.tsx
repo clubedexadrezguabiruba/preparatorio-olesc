@@ -17,7 +17,7 @@ import {
   type ComandoV2,
   type Historico,
 } from "@/lib/editor-v2/comandos";
-import type { AulaV2 } from "@/lib/editor-v2/modelo";
+import { validarAulaV2, type AulaV2 } from "@/lib/editor-v2/modelo";
 import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/editor-v2/recuperacao";
 import type { Position } from "@/lib/lesson/schema";
 
@@ -41,6 +41,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
   const [estado, setEstado] = useState<Estado>("salvo");
   const [recado, setRecado] = useState<string | null>(null);
   const [recuperavel, setRecuperavel] = useState<{ aula: AulaV2; baseHash: string; em: string } | null>(null);
+  const [conflitoAtual, setConflitoAtual] = useState<{ textoAtual: string | null; hashAtual: string | null } | null>(null);
+  const [falhaRecuperacao, setFalhaRecuperacao] = useState(false);
   const hash = useRef(hashInicial);
   const ultimoEnfileirado = useRef(documentoInicial);
   const fila = useRef(Promise.resolve());
@@ -72,7 +74,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
     const aula = historico.presente;
     maisRecente.current = aula;
     const baseHash = hash.current;
-    void guardarRecuperacao(aulaId, aula, baseHash).catch(() => undefined);
+    void guardarRecuperacao(aulaId, aula, baseHash)
+      .then(() => setFalhaRecuperacao(false))
+      .catch(() => setFalhaRecuperacao(true));
     const relogio = setTimeout(() => {
       fila.current = fila.current.then(async () => {
         setEstado("salvando");
@@ -82,11 +86,13 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
           if (maisRecente.current === aula) {
             setEstado("salvo");
             setRecado(null);
+            setConflitoAtual(null);
             await apagarRecuperacao(aulaId).catch(() => undefined);
           }
         } else if ("conflito" in resposta && resposta.conflito) {
           setEstado("conflito");
-          setRecado("O arquivo mudou em outra aba. Suas mudanças continuam guardadas neste navegador.");
+          setConflitoAtual(resposta.conflito);
+          setRecado(null);
         } else {
           setEstado("erro");
           setRecado(resposta.erro);
@@ -141,6 +147,34 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
     setNodeId(id);
   };
 
+  const baixarCopia = () => {
+    const blob = new Blob([JSON.stringify(historico.presente, null, 2) + "\n"], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${aulaId}-editor-v2-recuperacao.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const adotarVersaoDoDisco = () => {
+    if (!conflitoAtual?.textoAtual || !conflitoAtual.hashAtual) return;
+    let cru: unknown;
+    try { cru = JSON.parse(conflitoAtual.textoAtual); } catch { setRecado("A versão do disco não contém JSON válido."); return; }
+    const validada = validarAulaV2(cru);
+    if (!validada.ok) { setRecado("A versão do disco não é um documento v2 válido."); return; }
+    const copiaLocal = { aula: historico.presente, baseHash: hash.current, em: new Date().toISOString() };
+    void guardarRecuperacao(aulaId, copiaLocal.aula, copiaLocal.baseHash).catch(() => setFalhaRecuperacao(true));
+    setRecuperavel(copiaLocal);
+    hash.current = conflitoAtual.hashAtual;
+    maisRecente.current = validada.aula;
+    ultimoEnfileirado.current = validada.aula;
+    setHistorico(iniciarHistorico(validada.aula));
+    setConflitoAtual(null);
+    setRecado(null);
+    setEstado("salvo");
+  };
+
   if (!capitulo) return <main className="p-4 text-erro-texto">Esta aula ainda não tem capítulo editável.</main>;
 
   return (
@@ -165,6 +199,21 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
           Há uma versão local não concluída de {new Date(recuperavel.em).toLocaleString("pt-BR")}.
           <button type="button" className="foco ml-2 underline" onClick={() => { setHistorico(iniciarHistorico(recuperavel.aula)); hash.current = recuperavel.baseHash; setRecuperavel(null); }}>Recuperar</button>
           <button type="button" className="foco ml-3 underline" onClick={() => { void apagarRecuperacao(aulaId); setRecuperavel(null); }}>Descartar</button>
+        </section>
+      ) : null}
+      {conflitoAtual ? (
+        <section className="rounded-lg border border-erro bg-erro-superficie/10 p-3 text-sm text-erro-texto">
+          <p>Outra aba gravou esta aula. Sua versão não foi sobrescrita.</p>
+          <div className="mt-2 flex flex-wrap gap-3">
+            <button type="button" className="foco underline" onClick={baixarCopia}>Baixar minha cópia</button>
+            <button type="button" className="foco underline disabled:opacity-40" disabled={!conflitoAtual.textoAtual || !conflitoAtual.hashAtual} onClick={adotarVersaoDoDisco}>Abrir versão do disco</button>
+          </div>
+        </section>
+      ) : null}
+      {falhaRecuperacao ? (
+        <section className="rounded-lg border border-aviso-superficie bg-aviso-superficie/10 p-3 text-sm text-aviso-tinta">
+          O navegador não conseguiu guardar a cópia de recuperação. O autosave no disco ainda será tentado.
+          <button type="button" className="foco ml-2 underline" onClick={baixarCopia}>Baixar cópia agora</button>
         </section>
       ) : null}
       {recado ? <p role="alert" className="rounded-lg border border-erro bg-erro-superficie/10 p-3 text-sm text-erro-texto">{recado}</p> : null}
