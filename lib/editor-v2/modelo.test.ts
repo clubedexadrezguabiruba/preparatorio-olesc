@@ -206,6 +206,40 @@ test("editar comentário e NAG é transacional e desfaz/refaz", () => {
   assert.deepEqual(h.presente.analises[0].nos[nodeId].nags, [1]);
 });
 
+test("reordenar capítulo move sua etapa no fluxo, preserva IDs e cabe num Desfazer", () => {
+  const aula = adaptarLessonV1(lesson, positions);
+  const capituloOriginal = aula.capitulos[0];
+  const etapaOriginal = aula.fluxo.find((etapa) => etapa.entidadeId === capituloOriginal.id)!;
+  aula.capitulos.push(
+    { ...capituloOriginal, id: "capitulo-dois", titulo: "Segundo capítulo" },
+    { ...capituloOriginal, id: "capitulo-tres", titulo: "Terceiro capítulo" },
+  );
+  aula.fluxo.push(
+    { id: "etapa-dois", tipo: "capitulo", entidadeId: "capitulo-dois" },
+    { id: "etapa-tres", tipo: "capitulo", entidadeId: "capitulo-tres" },
+  );
+
+  const historico = iniciarHistorico(aula);
+  const movida = executarComando(aula, { tipo: "MOVER_CAPITULO", capituloId: "capitulo-tres", vao: 0 }, positions);
+  const depois = aplicarNoHistorico(historico, movida);
+
+  assert.deepEqual(
+    movida.fluxo.filter((etapa) => etapa.tipo === "capitulo").map((etapa) => etapa.entidadeId),
+    ["capitulo-tres", capituloOriginal.id, "capitulo-dois"],
+  );
+  assert.equal(movida.fluxo.find((etapa) => etapa.entidadeId === capituloOriginal.id), etapaOriginal);
+  assert.deepEqual(movida.capitulos, aula.capitulos, "o cadastro não vira uma segunda fonte de ordem");
+  assert.equal(desfazer(depois).presente, aula);
+});
+
+test("soltar capítulo ao lado dele não cria edição", () => {
+  const aula = adaptarLessonV1(lesson, positions);
+  assert.equal(
+    executarComando(aula, { tipo: "MOVER_CAPITULO", capituloId: aula.capitulos[0].id, vao: 1 }, positions),
+    aula,
+  );
+});
+
 test("lance divergente vira variante, e promover não troca a identidade", () => {
   const aula = adaptarLessonV1(lesson, positions);
   const capitulo = aula.capitulos[0];

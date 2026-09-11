@@ -8,6 +8,14 @@ import type { AulaV2, DesenhoV2, NoV2 } from "./modelo.ts";
 export type ComandoV2 =
   | { tipo: "RENOMEAR_CAPITULO"; capituloId: string; titulo: string }
   /**
+   * Move a etapa de um capítulo para um dos vãos entre os capítulos visíveis.
+   *
+   * `fluxo` continua sendo a única fonte da ordem pedagógica: não reordenamos o
+   * cadastro de capítulos e não guardamos uma segunda lista. A etapa inteira muda
+   * de lugar, com o mesmo ID, inclusive quando atravessa treino ou prática.
+   */
+  | { tipo: "MOVER_CAPITULO"; capituloId: string; vao: number }
+  /**
    * Importar capítulos de um PGN já lido.
    *
    * **Por que a importação é um comando, e não uma escrita direta na aula.** Porque
@@ -36,6 +44,29 @@ export type ComandoV2 =
 export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Record<string, Position>): AulaV2 {
   if (comando.tipo === "RENOMEAR_CAPITULO") {
     return { ...aula, capitulos: aula.capitulos.map((c) => c.id === comando.capituloId ? { ...c, titulo: comando.titulo.trim() || c.titulo } : c) };
+  }
+  if (comando.tipo === "MOVER_CAPITULO") {
+    const etapas = aula.fluxo.filter((etapa) => etapa.tipo === "capitulo");
+    const de = etapas.findIndex((etapa) => etapa.entidadeId === comando.capituloId);
+    if (de < 0) throw new Error("esse capítulo não está no fluxo da aula");
+    if (!Number.isInteger(comando.vao) || comando.vao < 0 || comando.vao > etapas.length) {
+      throw new Error("o destino do capítulo não existe");
+    }
+
+    // Os dois vãos que ladeiam a própria etapa significam desistir do gesto.
+    // Devolver o mesmo objeto impede que um arrasto sem efeito entre no histórico.
+    if (comando.vao === de || comando.vao === de + 1) return aula;
+
+    const movida = etapas[de];
+    const semEla = aula.fluxo.filter((etapa) => etapa.id !== movida.id);
+    const restantes = etapas.filter((etapa) => etapa.id !== movida.id);
+    const para = comando.vao > de ? comando.vao - 1 : comando.vao;
+    const referencia = restantes[para];
+    const indice = referencia
+      ? semEla.findIndex((etapa) => etapa.id === referencia.id)
+      : semEla.findIndex((etapa) => etapa.id === restantes.at(-1)?.id) + 1;
+    semEla.splice(indice, 0, movida);
+    return { ...aula, fluxo: semEla };
   }
   if (comando.tipo === "IMPORTAR_JOGOS") {
     // A recusa do importador é uma frase pronta, em português de professor, e ela

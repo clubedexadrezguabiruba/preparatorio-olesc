@@ -31,20 +31,21 @@ cada linha aponta a seção que conta a história inteira.
 - **Desenhar com o botão direito** — seta e casa acesa nascem com o mouse, nas quatro
   cores do Lichess, e cada desenho entra no Desfazer. **Falta a conferência humana do
   gesto real.** Ver “desenhar com o botão direito”.
+- **Reordenar capítulos** — a coluna segue a ordem única do fluxo; arrastar muda o
+  capítulo como um slide, o menu oferece a mesma ação pelo teclado e um Desfazer
+  devolve a ordem anterior. Ver “reordenar capítulos no fluxo”.
 
 **Aberto, na ordem:**
 
-1. **Reordenar capítulos** — os importados vão para o fim do fluxo, na ordem do arquivo.
-2. **Paleta clicável de desenho** — hoje a cor se escolhe segurando Shift/Alt.
-3. **Importar por URL do Lichess** (§11) e **exportar PGN** continuam fora.
+1. **Paleta clicável de desenho** — hoje a cor se escolhe segurando Shift/Alt.
+2. **Importar por URL do Lichess** (§11) e **exportar PGN** continuam fora.
 
 **Dívida conhecida e não paga:** a lista de lances mostra ~10 lances por vez em
 1366×768; se incomodar, o espaço sai do bloco de edição abaixo dela.
 
-**Isto não declara o editor pronto.** Do Bloco B saíram a leitura da árvore e a
-navegação, e agora o desenho; a autoria de verdade — reordenar capítulos, exportar —
-continua
-aberta, e os blocos seguintes do plano ainda não foram fechados.
+**Isto não declara o editor pronto.** Do Bloco B saíram a leitura da árvore, a
+navegação, o desenho e a ordem dos capítulos; exportar e os blocos seguintes do plano
+continuam abertos.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -953,13 +954,50 @@ mesma impressão digital (`92879926…`).
 - A legenda e o botão ficam **abaixo do tabuleiro**, e em 1366×768 exigem uma rolagem
   curta da coluna do meio — a mesma dívida de altura já registrada para a lista de
   lances.
-- **Reordenar capítulos**, **URL do Lichess** e **exportar PGN** seguem abertos, na
-  mesma ordem.
+- **URL do Lichess** e **exportar PGN** seguem abertos.
 
 ### O próximo ponto exato
 
-**Reordenar capítulos**: os importados vão para o fim do fluxo, na ordem do arquivo, e
-não há como mover um de lugar.
+**Paleta clicável de desenho**: escolher a cor num controle visível, sem exigir que o
+professor conheça Shift/Alt.
+
+---
+
+## Reordenar capítulos no fluxo, entregue em 11/9/2026
+
+A coluna de capítulos agora mostra a ordem que está em `fluxo`, a única ordem
+pedagógica do documento. O cadastro de capítulos não é reordenado nem ganha campo de
+posição: ele continua sendo cadastro, e a etapa inteira — com o mesmo ID — é que muda
+de lugar no fluxo.
+
+Há dois caminhos para o mesmo gesto:
+
+- arrastar o capítulo como um slide; a metade de cima ou de baixo de cada cartão é o
+  alvo, e uma linha marca onde ele cairá sem fazer a coluna mudar de altura;
+- abrir `•••` e escolher **Mover para cima** ou **Mover para baixo**. O menu recebe
+  foco e funciona pelo teclado, como exige o §5 do plano.
+
+Cada movimento é um comando transacional. Desfazer e Ctrl+Z devolvem a etapa ao lugar
+anterior; soltar no vão que já ladeia o capítulo devolve o mesmo objeto e não polui o
+histórico. A seleção acompanha a identidade do capítulo, não o número que ele passou a
+ocupar. Ao reabrir a aula, o primeiro capítulo também é escolhido pela ordem do fluxo,
+e não pela ordem acidental do cadastro.
+
+Dois testes novos cobrem a etapa real se movendo sem trocar IDs nem reordenar o
+cadastro, o Desfazer e o gesto sem efeito. Os sete portões passaram: tipos, lint,
+**869 testes**, build, conteúdo, **42/42 mutações** e repertório `--check`.
+
+No navegador autenticado, em 1366×768, a N0-LADDER recebeu dois capítulos temporários.
+O menu abriu por teclado e moveu o último para cima; Desfazer e Refazer restauraram as
+duas ordens; o arrasto real levou o capítulo selecionado ao início; o autosave gravou;
+e, depois de recarregar, a lista manteve a ordem do fluxo e abriu no primeiro capítulo
+dessa ordem. O console ficou sem erros. Os arquivos temporários da N0-LADDER foram
+removidos no fim.
+
+### O próximo ponto exato
+
+**Paleta clicável de desenho**: transformar a legenda das quatro cores em escolha de
+pincel que funcione sem Shift/Alt, preservando o gesto atual do Lichess.
 
 ---
 

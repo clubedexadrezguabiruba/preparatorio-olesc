@@ -10,6 +10,7 @@ import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
 import { PainelDeImportacao } from "@/components/editor-v2/PainelDeImportacao";
 import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
 import { PainelDeProblemas } from "@/components/editor-v2/PainelDeProblemas";
+import { ListaDeCapitulos } from "@/components/editor-v2/ListaDeCapitulos";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { analiseDaAula, mapaDaAnalise } from "@/lib/editor-v2/arvore";
 import { desenhoDeFormas } from "@/lib/editor-v2/desenhos";
@@ -35,6 +36,16 @@ function novoId(): string {
   return `n-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+/** A lista que a tela mostra nasce do fluxo; `capitulos` é só o cadastro. */
+function capitulosNaOrdemDaAula(aula: AulaV2): AulaV2["capitulos"] {
+  const porId = new Map(aula.capitulos.map((item) => [item.id, item]));
+  return aula.fluxo.flatMap((etapa) => {
+    if (etapa.tipo !== "capitulo") return [];
+    const item = porId.get(etapa.entidadeId);
+    return item ? [item] : [];
+  });
+}
+
 export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, problemasDaOrigem = [] }: {
   aulaId: string;
   documentoInicial: AulaV2;
@@ -48,8 +59,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   problemasDaOrigem?: ProblemaV2[];
 }) {
   const [historico, setHistorico] = useState<Historico<AulaV2>>(() => iniciarHistorico(documentoInicial));
-  const [capituloId, setCapituloId] = useState(() => documentoInicial.capitulos[0]?.id ?? "");
-  const capitulo = historico.presente.capitulos.find((item) => item.id === capituloId) ?? historico.presente.capitulos[0];
+  const [capituloId, setCapituloId] = useState(() => capitulosNaOrdemDaAula(documentoInicial)[0]?.id ?? "");
+  const capitulosOrdenados = useMemo(() => capitulosNaOrdemDaAula(historico.presente), [historico.presente]);
+  const capitulo = capitulosOrdenados.find((item) => item.id === capituloId) ?? capitulosOrdenados[0];
   const analise = capitulo ? analiseDaAula(historico.presente, capitulo.analiseId) : historico.presente.analises[0];
   const [nodeId, setNodeId] = useState(() => capitulo?.inicioNodeId ?? analise.raizId);
   const [estado, setEstado] = useState<Estado>("salvo");
@@ -420,9 +432,13 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
       <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[14rem_minmax(20rem,38rem)_minmax(18rem,1fr)]">
         <aside className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
           <h2 className="text-sm font-semibold text-tinta">Capítulos</h2>
-          {historico.presente.capitulos.map((item) => (
-            <button key={item.id} type="button" onClick={() => { setCapituloId(item.id); setNodeId(item.inicioNodeId); }} className={`foco rounded-md px-2 py-2 text-left text-sm ${item.id === capitulo.id ? "bg-metodo-superficie text-metodo-tinta-alta" : "text-tinta hover:bg-carta-toque"}`}>{item.titulo}</button>
-          ))}
+          <p className="text-xs text-tinta-fraca">Arraste como um slide ou abra ••• para mover pelo teclado.</p>
+          <ListaDeCapitulos
+            capitulos={capitulosOrdenados}
+            atualId={capitulo.id}
+            aoEscolher={(item) => { setCapituloId(item.id); setNodeId(item.inicioNodeId); }}
+            aoMover={(id, vao) => aplicar({ tipo: "MOVER_CAPITULO", capituloId: id, vao })}
+          />
           <label className="mt-2 flex flex-col gap-1 text-xs text-tinta-fraca">
             Nome do capítulo
             <input key={capitulo.id + capitulo.titulo} defaultValue={capitulo.titulo} onBlur={(e) => aplicar({ tipo: "RENOMEAR_CAPITULO", capituloId: capitulo.id, titulo: e.currentTarget.value })} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm text-tinta" />
