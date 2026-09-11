@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import { lessonSchema, positionSchema, type Position } from "../lesson/schema.ts";
 import { adaptarLessonV1 } from "./adaptar-v1.ts";
-import { descreverProblemaV2, problemasVisiveisV2, resumoDosProblemasV2 } from "./diagnostico-visual.ts";
+import { descreverProblemaV2, emOnde, problemasVisiveisV2, resumoDosProblemasV2 } from "./diagnostico-visual.ts";
 import { problemasDaAulaV2, type ProblemaV2 } from "./modelo.ts";
 
 const lesson = lessonSchema.parse(JSON.parse(readFileSync("content/lessons/N1-KPK.json", "utf8")));
@@ -143,4 +143,13 @@ test("o resumo diz o que trava e o que só avisa, em uma linha", () => {
 test("a aula real do piloto não produz problema nenhum para mostrar", () => {
   const aula = aulaDoPiloto();
   assert.deepEqual(problemasVisiveisV2(aula, problemasDaAulaV2(aula, positions)), []);
+});
+
+test("a preposição contrai como em português, e não fica «em o»", () => {
+  assert.equal(emOnde("o 2º lance do capítulo «X»"), "no 2º lance do capítulo «X»");
+  assert.equal(emOnde("a 3ª etapa do roteiro da aula"), "na 3ª etapa do roteiro da aula");
+  assert.equal(emOnde("um lance de variante, no capítulo «X»"), "num lance de variante, no capítulo «X»");
+  assert.equal(emOnde("uma prática que não existe mais"), "numa prática que não existe mais");
+  // Sem artigo na frente, a preposição fica solta mesmo — é o certo.
+  assert.equal(emOnde("toda a aula"), "em toda a aula");
 });

@@ -52,6 +52,27 @@ function entreAspas(texto: string): string {
 }
 
 /**
+ * "em" + o lugar, com a preposição contraída como se escreve em português.
+ *
+ * O lugar é escrito com artigo porque assim ele se lê sozinho ("o 2º lance do
+ * capítulo…"). Só que a tela o apresenta depois de "em", e "em o 2º lance" não é
+ * português — é "no 2º lance". A contração é pequena e mecânica, e mora aqui em vez
+ * de no componente porque é regra de língua, não de layout, e porque assim tem teste.
+ */
+export function emOnde(onde: string): string {
+  const contracoes: [RegExp, string][] = [
+    [/^o /, "no "],
+    [/^a /, "na "],
+    [/^um /, "num "],
+    [/^uma /, "numa "],
+  ];
+  for (const [padrao, troca] of contracoes) {
+    if (padrao.test(onde)) return onde.replace(padrao, troca);
+  }
+  return `em ${onde}`;
+}
+
+/**
  * Em que passo do percurso este nó está — contando a partir de 1 no primeiro lance.
  *
  * `0` quer dizer "é a posição de partida do capítulo", e `null`, "não está neste

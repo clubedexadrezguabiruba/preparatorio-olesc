@@ -1,6 +1,6 @@
 "use client";
 
-import type { DestinoV2, ProblemaVisivelV2 } from "@/lib/editor-v2/diagnostico-visual";
+import { emOnde, type DestinoV2, type ProblemaVisivelV2 } from "@/lib/editor-v2/diagnostico-visual";
 
 /**
  * A lista de problemas da aula, no vocabulário do professor.
@@ -53,7 +53,7 @@ export function PainelDeProblemas({
               {item.problema.severidade === "erro" ? "impede" : "aviso"}
             </span>
             <span className="text-tinta">{item.problema.mensagem}</span>
-            <span className="text-tinta-fraca">— em {item.onde}</span>
+            <span className="text-tinta-fraca">— {emOnde(item.onde)}</span>
             {item.destino ? (
               <button
                 type="button"
