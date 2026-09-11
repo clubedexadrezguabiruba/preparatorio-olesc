@@ -11,8 +11,39 @@ const id = (parte: string) => parte.toLowerCase().replace(/[^a-z0-9]+/g, "-").re
  */
 export function adaptarLessonV1(lesson: Lesson, positions: Record<string, Position>): AulaV2 {
   const objective = lesson.stages.objective;
+  const etapasAusentes = lesson.etapasAusentes ? {
+    ...(lesson.etapasAusentes.intro ? { introducao: lesson.etapasAusentes.intro } : {}),
+    ...(lesson.etapasAusentes.objective ? { capitulos: lesson.etapasAusentes.objective } : {}),
+    ...(lesson.etapasAusentes.guided ? { treinos: lesson.etapasAusentes.guided } : {}),
+    ...(lesson.etapasAusentes.practice ? { praticas: lesson.etapasAusentes.practice } : {}),
+  } : undefined;
+  const metadados: NonNullable<AulaV2["metadados"]> = {
+    orientacaoPadrao: lesson.orientation,
+    criterioDominio: lesson.domainCriterion,
+    ...(lesson.class ? { classe: lesson.class } : {}),
+    estadoEditorial: "rascunho",
+    estadoDaOrigem: lesson.status === "published" ? "publicado" : "rascunho",
+    ...(objective?.source ? { fonteDidatica: objective.source } : {}),
+    ...(etapasAusentes && Object.keys(etapasAusentes).length ? { etapasAusentes } : {}),
+    ...(lesson.professor ? { professor: lesson.professor } : {}),
+  };
+  const catalogo: NonNullable<AulaV2["catalogo"]> = {
+    erros: Object.entries(lesson.errors).map(([erroId, erro]) => ({ id: erroId, julgamento: erro.verdict === "off-method" ? "fora-do-metodo" : "perde-resultado", texto: erro.text })),
+    mensagensPadrao: {
+      vitoriaForaDoMetodo: lesson.fallbacks.winningOffMethod,
+      perdeResultado: lesson.fallbacks.losesWin,
+      alternativaDoMetodo: lesson.fallbacks.methodAlternative,
+    },
+    ...(lesson.generatedTemplates ? { mensagensGeradas: lesson.generatedTemplates } : {}),
+  };
+  const positionIds = [...new Set([objective?.positionId, lesson.stages.guided?.positionId, lesson.stages.practice?.positionId].filter((positionId): positionId is string => Boolean(positionId)))];
+  const proveniencia: AulaV2["proveniencia"] = positionIds.map((positionId) => {
+    const posicao = positions[positionId];
+    if (!posicao) throw new Error(`posição ${positionId} não foi carregada`);
+    return { positionId, conteudoHash: hash(posicao), estado: posicao.status };
+  });
   if (!objective) {
-    return { schemaVersion: 2, id: lesson.id, titulo: lesson.title, analises: [], capitulos: [], treinos: [], praticas: [], fluxo: [], origem: { formato: "lesson-v1", hash: hash(lesson) } };
+    return { schemaVersion: 2, id: lesson.id, titulo: lesson.title, metadados, proveniencia, excecoes: lesson.excecoes ?? [], catalogo, analises: [], introducoes: [], capitulos: [], treinos: [], praticas: [], fluxo: [], origem: { formato: "lesson-v1", hash: hash(lesson) } };
   }
   const position = positions[objective.positionId];
   if (!position) throw new Error(`posição ${objective.positionId} não foi carregada`);
@@ -52,6 +83,19 @@ export function adaptarLessonV1(lesson: Lesson, positions: Record<string, Positi
     objetivo: lesson.stages.practice.goal,
     engine: lesson.stages.practice.engine,
   } satisfies AulaV2["praticas"][number] : null;
+
+  const introducao = lesson.stages.intro ? {
+    id: id(`introducao-${lesson.id}`),
+    titulo: "Apresentação",
+    quadros: lesson.stages.intro.passos.map((passo, indice) => ({
+      id: id(`quadro-${lesson.id}-introducao-${indice + 1}`),
+      texto: passo.fala,
+      posicao: passo.fen
+        ? { tipo: "fen" as const, fen: passo.fen }
+        : { tipo: "referencia" as const, origem: { analiseId, nodeId: raizId } },
+      ...(passo.arrows || passo.highlights ? { desenhos: { arrows: passo.arrows, highlights: passo.highlights } } : {}),
+    })),
+  } satisfies AulaV2["introducoes"][number] : null;
 
   const guided = lesson.stages.guided;
   const treinoId = id(`treino-${lesson.id}-guiado`);
@@ -117,6 +161,7 @@ export function adaptarLessonV1(lesson: Lesson, positions: Record<string, Positi
     origem: { analiseId, nodeIds: [...new Set([raizId, ...[...fenParaNo.values()]])], hash: hash(guided), derivadorVersao: 1 },
     obrigatorio: true,
     revisaoAvaliacao: "confirmada" as const,
+    certificacao: { tipo: "tablebase" as const, estado: "herdada-v1" as const, positionId: guided.positionId, alvoHash: hash(guided) },
     ...(guided.intro ? { introducao: guided.intro } : {}),
   } satisfies AulaV2["treinos"][number] : null;
 
@@ -124,11 +169,17 @@ export function adaptarLessonV1(lesson: Lesson, positions: Record<string, Positi
     schemaVersion: 2,
     id: lesson.id,
     titulo: lesson.title,
+    metadados,
+    proveniencia,
+    excecoes: lesson.excecoes ?? [],
+    catalogo,
     analises: [{ id: analiseId, inicio: { tipo: "posicao", positionId: objective.positionId }, raizId, nos }],
+    introducoes: introducao ? [introducao] : [],
     capitulos: [{ id: capituloId, titulo: objective.technique.name, analiseId, inicioNodeId: raizId, caminho, orientacao: lesson.orientation, narracoes }],
     treinos: treino ? [treino] : [],
     praticas: pratica ? [pratica] : [],
     fluxo: [
+      ...(introducao ? [{ id: id(`etapa-${lesson.id}-introducao`), tipo: "introducao" as const, entidadeId: introducao.id }] : []),
       { id: id(`etapa-${lesson.id}-objetivo`), tipo: "capitulo", entidadeId: capituloId },
       ...(treino ? [{ id: id(`etapa-${lesson.id}-treino`), tipo: "treino" as const, entidadeId: treino.id }] : []),
       ...(pratica ? [{ id: id(`etapa-${lesson.id}-pratica`), tipo: "pratica" as const, entidadeId: pratica.id }] : []),

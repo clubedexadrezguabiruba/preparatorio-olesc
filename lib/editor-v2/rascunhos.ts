@@ -2,7 +2,7 @@ import path from "node:path";
 import { closeSync, existsSync, mkdirSync, openSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { caminhoDeAula, conflito, escreverAtomico, hashDoTexto, lerConteudo, serializar } from "../editor/rascunhos.ts";
 import { editorLigado } from "../editor/local.ts";
-import { validarAulaV2, type AulaV2 } from "./modelo.ts";
+import { completarAulaV2Legada, validarAulaV2, type AulaV2 } from "./modelo.ts";
 
 const PASTA_V2 = path.join(".editor", "v2");
 
@@ -54,7 +54,7 @@ export function lerDocumentoV2(id: string, raiz = process.cwd()): DocumentoV2 | 
 
 export function documentoInicialV2(id: string, adaptado: AulaV2, raiz = process.cwd()): DocumentoV2 {
   const existente = lerDocumentoV2(id, raiz);
-  if (existente) return existente;
+  if (existente) return { ...existente, aula: completarAulaV2Legada(existente.aula, adaptado) };
   const texto = serializar(adaptado);
   return { aula: adaptado, texto, hash: hashDoTexto(texto) };
 }

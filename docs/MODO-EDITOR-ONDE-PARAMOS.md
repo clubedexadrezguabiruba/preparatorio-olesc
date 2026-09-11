@@ -92,11 +92,33 @@ Evidência desta continuação: 779 testes do repositório e 12 testes focados v
 verdes; tipos, lint, build, conteúdo (38 consultas de tablebase, todas do cache),
 42/42 mutações vermelhas e repertório `--check` verdes.
 
-**Primeiro ponto a retomar:** testar o download da cópia no conflito e então
-continuar o Bloco 0/A pelas lacunas conceituais ainda abertas (metadados,
-proveniência, certificação e diagnóstico com localização completa). Depois,
-seguir os blocos B–J do plano final; estes commits são fundação/piloto, não
-declaram o plano inteiro concluído.
+Continuação final desta rodada: o download da cópia em conflito foi testado no
+navegador. O JSON baixado continha exatamente a edição da aba B, validou no
+schema e não sobrescreveu a versão da aba A. Os arquivos temporários da
+N0-LADDER e o download de ensaio foram removidos depois da conferência.
+
+O Bloco 0/A avançou no contrato conceitual: o documento v2 agora representa
+metadados didáticos, introduções, proveniência por hash, exceções editoriais,
+catálogo de erros e mensagens, e certificação separada da autoria. O diagnóstico
+passou a ter código, gravidade e localização precisa. O fluxo enumera também as
+introduções e recusa entidades ausentes ou repetidas. Rascunhos antigos continuam
+legíveis e são enriquecidos em memória somente quando sua origem ainda possui o
+hash esperado; isso preservou o rascunho local real da N1-KPK, inclusive sua
+variante de 20 nós, sem regravá-lo à força no disco.
+
+Evidência deste checkpoint: 785 testes do repositório e 18 testes focados v2
+verdes; tipos, lint completo, build Next, validação de conteúdo (38 consultas de
+tablebase, todas do cache) e repertório `--check` verdes. A validação de mutações
+foi **interrompida de propósito a pedido do Doug**, quando 37 das 42 mutações já
+tinham sido corretamente rejeitadas. Portanto, ela não falhou, mas também não
+foi concluída para estas alterações.
+
+**Primeiro ponto exato a retomar:** executar `npm run validate:mutations` até o
+fim e exigir 42/42 mutações vermelhas. Depois, concluir os portões v2 ainda
+abertos para legalidade/proveniência/certificação e ligar o diagnóstico
+localizado à ação visual de ir ao problema. Só então avançar ao Bloco B
+(importação/leitura de PGN, teclado e corpus de partidas longas). Este commit é
+um checkpoint seguro; não declara o Bloco 0/A nem o plano inteiro concluídos.
 
 ---
 

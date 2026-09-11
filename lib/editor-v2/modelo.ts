@@ -1,7 +1,11 @@
 import { z } from "zod";
-import { uciSchema } from "../lesson/schema.ts";
+import { fenSchema, generatedTemplatesSchema, lessonClassSchema, lessonIdSchema, uciSchema } from "../lesson/schema.ts";
 
 export const idV2Schema = z.string().regex(/^[a-z][a-z0-9-]*$/, "id interno inválido");
+export const aulaIdV2Schema = z.union([
+  lessonIdSchema,
+  z.string().regex(/^EX-[A-Z0-9-]+$/, "id de aula extra fora do padrão (ex.: EX-OPOSICAO)"),
+]);
 export const referenciaNoSchema = z.strictObject({
   analiseId: idV2Schema,
   nodeId: idV2Schema,
@@ -10,6 +14,50 @@ export const referenciaNoSchema = z.strictObject({
 export const desenhoV2Schema = z.strictObject({
   arrows: z.array(z.tuple([z.string(), z.string()])).optional(),
   highlights: z.array(z.string()).optional(),
+});
+
+export const metadadosAulaV2Schema = z.strictObject({
+  orientacaoPadrao: z.enum(["white", "black"]),
+  criterioDominio: z.enum(["D1", "D2", "D3", "D4"]),
+  classe: lessonClassSchema.optional(),
+  estadoEditorial: z.enum(["rascunho", "publicado"]),
+  estadoDaOrigem: z.enum(["rascunho", "publicado"]).optional(),
+  fonteDidatica: z.string().min(1).optional(),
+  etapasAusentes: z.strictObject({
+    introducao: z.string().min(1).optional(),
+    capitulos: z.string().min(1).optional(),
+    treinos: z.string().min(1).optional(),
+    praticas: z.string().min(1).optional(),
+  }).optional(),
+  professor: z.strictObject({ adaptouEm: z.string().min(1), nota: z.string().min(1).optional() }).optional(),
+});
+
+export const referenciaProvenienciaV2Schema = z.strictObject({
+  positionId: z.string().min(1),
+  conteudoHash: z.string().min(8),
+  estado: z.enum(["fixture", "candidate", "approved"]),
+});
+
+export const excecaoEditorialV2Schema = z.strictObject({
+  codigo: z.string().min(1),
+  alvo: z.string().min(1),
+  hash: z.string().min(8),
+  motivo: z.string().min(25),
+  em: z.string().min(1),
+});
+
+export const catalogoEditorialV2Schema = z.strictObject({
+  erros: z.array(z.strictObject({
+    id: idV2Schema,
+    julgamento: z.enum(["fora-do-metodo", "perde-resultado"]),
+    texto: z.string().min(1),
+  })),
+  mensagensPadrao: z.strictObject({
+    vitoriaForaDoMetodo: z.string().min(1),
+    perdeResultado: z.string().min(1),
+    alternativaDoMetodo: z.string().min(1),
+  }),
+  mensagensGeradas: generatedTemplatesSchema.optional(),
 });
 
 export const noV2Schema = z.strictObject({
@@ -29,6 +77,22 @@ export const analiseV2Schema = z.strictObject({
   ]),
   raizId: idV2Schema,
   nos: z.record(idV2Schema, noV2Schema),
+});
+
+export const quadroIntroducaoV2Schema = z.strictObject({
+  id: idV2Schema,
+  texto: z.string().min(1),
+  posicao: z.discriminatedUnion("tipo", [
+    z.strictObject({ tipo: z.literal("referencia"), origem: referenciaNoSchema }),
+    z.strictObject({ tipo: z.literal("fen"), fen: fenSchema }),
+  ]),
+  desenhos: desenhoV2Schema.optional(),
+});
+
+export const introducaoV2Schema = z.strictObject({
+  id: idV2Schema,
+  titulo: z.string().min(1),
+  quadros: z.array(quadroIntroducaoV2Schema).min(1),
 });
 
 export const narracaoV2Schema = z.strictObject({
@@ -100,8 +164,15 @@ export const treinoV2Schema = z.strictObject({
   origem: origemTreinoV2Schema.optional(),
   obrigatorio: z.boolean().default(true),
   revisaoAvaliacao: z.enum(["pendente", "confirmada"]).default("pendente"),
+  certificacao: z.strictObject({
+    tipo: z.literal("tablebase"),
+    estado: z.enum(["pendente", "herdada-v1", "confirmada", "indisponivel"]),
+    positionId: z.string().min(1),
+    alvoHash: z.string().min(8),
+  }).optional(),
   explicacaoConclusao: z.string().min(1).optional(),
 }).superRefine((treino, ctx) => {
+  if (treino.perfil === "final-certificado" && !treino.certificacao) ctx.addIssue({ code: "custom", path: ["certificacao"], message: "final certificado precisa declarar o estado da certificação" });
   if (treino.propriedade === "derivado" && !treino.origem) ctx.addIssue({ code: "custom", path: ["origem"], message: "treino derivado precisa declarar sua receita de origem" });
   if (treino.propriedade === "independente" && treino.origem) ctx.addIssue({ code: "custom", path: ["origem"], message: "treino independente não mantém origem operacional" });
   if (treino.termino.tipo === "limite" && !treino.termino.maxPlies) ctx.addIssue({ code: "custom", path: ["termino", "maxPlies"], message: "término por limite precisa de maxPlies" });
@@ -118,15 +189,20 @@ export const praticaV2Schema = z.strictObject({
 
 export const etapaV2Schema = z.strictObject({
   id: idV2Schema,
-  tipo: z.enum(["capitulo", "treino", "pratica"]),
+  tipo: z.enum(["introducao", "capitulo", "treino", "pratica"]),
   entidadeId: idV2Schema,
 });
 
 export const aulaV2Schema = z.strictObject({
   schemaVersion: z.literal(2),
-  id: z.string().min(1),
+  id: aulaIdV2Schema,
   titulo: z.string().min(1),
+  metadados: metadadosAulaV2Schema.optional(),
+  proveniencia: z.array(referenciaProvenienciaV2Schema).default([]),
+  excecoes: z.array(excecaoEditorialV2Schema).default([]),
+  catalogo: catalogoEditorialV2Schema.optional(),
   analises: z.array(analiseV2Schema),
+  introducoes: z.array(introducaoV2Schema).default([]),
   capitulos: z.array(capituloV2Schema),
   treinos: z.array(treinoV2Schema),
   praticas: z.array(praticaV2Schema).default([]),
@@ -135,8 +211,11 @@ export const aulaV2Schema = z.strictObject({
 });
 
 export type ReferenciaNoV2 = z.infer<typeof referenciaNoSchema>;
+export type MetadadosAulaV2 = z.infer<typeof metadadosAulaV2Schema>;
 export type NoV2 = z.infer<typeof noV2Schema>;
 export type AnaliseV2 = z.infer<typeof analiseV2Schema>;
+export type QuadroIntroducaoV2 = z.infer<typeof quadroIntroducaoV2Schema>;
+export type IntroducaoV2 = z.infer<typeof introducaoV2Schema>;
 export type NarracaoV2 = z.infer<typeof narracaoV2Schema>;
 export type CapituloV2 = z.infer<typeof capituloV2Schema>;
 export type RespostaTreinoV2 = z.infer<typeof respostaTreinoV2Schema>;
@@ -145,35 +224,104 @@ export type TreinoV2 = z.infer<typeof treinoV2Schema>;
 export type PraticaV2 = z.infer<typeof praticaV2Schema>;
 export type AulaV2 = z.infer<typeof aulaV2Schema>;
 
+export type LocalizacaoProblemaV2 = {
+  aulaId: string;
+  analiseId?: string;
+  introducaoId?: string;
+  quadroId?: string;
+  capituloId?: string;
+  narracaoId?: string;
+  nodeId?: string;
+  treinoId?: string;
+  questaoId?: string;
+  respostaId?: string;
+  praticaId?: string;
+  etapaId?: string;
+  campo?: string;
+};
+
 export type ProblemaV2 = {
   codigo: string;
+  severidade: "erro" | "aviso";
+  mensagem: string;
+  localizacao: LocalizacaoProblemaV2;
+};
+
+type ProblemaBrutoV2 = {
+  codigo: string;
+  severidade?: ProblemaV2["severidade"];
   mensagem: string;
   analiseId?: string;
+  introducaoId?: string;
+  quadroId?: string;
   capituloId?: string;
+  narracaoId?: string;
   nodeId?: string;
+  treinoId?: string;
+  questaoId?: string;
+  respostaId?: string;
+  praticaId?: string;
+  etapaId?: string;
+  campo?: string;
 };
 
 /** Valida referências e a forma de árvore que o schema isolado não consegue enxergar. */
 export function problemasDaAulaV2(aula: AulaV2): ProblemaV2[] {
-  const problemas: ProblemaV2[] = [];
+  const problemas: ProblemaBrutoV2[] = [];
+  if (!aula.metadados) problemas.push(aula.origem?.formato === "lesson-v1"
+    ? { codigo: "METADADOS_LEGADOS", severidade: "aviso", mensagem: "o rascunho foi criado antes dos metadados v2; eles serão completados ao abrir a aula", campo: "metadados" }
+    : { codigo: "METADADOS_AUSENTES", mensagem: "uma aula v2 nova precisa declarar seus metadados", campo: "metadados" });
   const ids = new Set<string>();
-  const registrar = (id: string, tipo: string) => {
-    if (ids.has(id)) problemas.push({ codigo: "ID_DUPLICADO", mensagem: `${tipo} repete o id ${id}` });
+  const registrar = (id: string, tipo: string, localizacao: Omit<ProblemaBrutoV2, "codigo" | "severidade" | "mensagem"> = {}) => {
+    if (ids.has(id)) problemas.push({ codigo: "ID_DUPLICADO", mensagem: `${tipo} repete o id ${id}`, ...localizacao, campo: "id" });
     ids.add(id);
   };
-  aula.analises.forEach((a) => registrar(a.id, "análise"));
-  aula.capitulos.forEach((c) => registrar(c.id, "capítulo"));
+  aula.analises.forEach((a) => registrar(a.id, "análise", { analiseId: a.id }));
+  aula.introducoes.forEach((introducao) => {
+    registrar(introducao.id, "introdução", { introducaoId: introducao.id });
+    introducao.quadros.forEach((quadro) => registrar(quadro.id, "quadro da introdução", { introducaoId: introducao.id, quadroId: quadro.id }));
+  });
+  aula.capitulos.forEach((c) => {
+    registrar(c.id, "capítulo", { capituloId: c.id });
+    c.narracoes.forEach((n) => registrar(n.id, "narração", { capituloId: c.id, narracaoId: n.id }));
+  });
   aula.treinos.forEach((t) => {
-    registrar(t.id, "treino");
+    registrar(t.id, "treino", { treinoId: t.id });
     t.questoes.forEach((q) => {
-      registrar(q.id, "questão de treino");
-      q.respostas.forEach((r) => registrar(r.id, "resposta de treino"));
+      registrar(q.id, "questão de treino", { treinoId: t.id, questaoId: q.id });
+      q.respostas.forEach((r) => registrar(r.id, "resposta de treino", { treinoId: t.id, questaoId: q.id, respostaId: r.id }));
     });
   });
-  aula.praticas.forEach((p) => registrar(p.id, "prática"));
-  aula.fluxo.forEach((e) => registrar(e.id, "etapa"));
+  aula.praticas.forEach((p) => registrar(p.id, "prática", { praticaId: p.id }));
+  aula.fluxo.forEach((e) => registrar(e.id, "etapa", { etapaId: e.id }));
 
   const analises = new Map(aula.analises.map((a) => [a.id, a]));
+  const errosCatalogados = new Set(aula.catalogo?.erros.map((erro) => erro.id) ?? []);
+  const proveniencia = new Map<string, AulaV2["proveniencia"][number]>();
+  for (const referencia of aula.proveniencia) {
+    if (proveniencia.has(referencia.positionId)) problemas.push({ codigo: "PROVENIENCIA_DUPLICADA", mensagem: `a posição ${referencia.positionId} aparece duas vezes no manifesto de proveniência`, campo: "proveniencia" });
+    proveniencia.set(referencia.positionId, referencia);
+  }
+
+  if (aula.metadados) {
+    for (const analise of aula.analises) {
+      if (analise.inicio.tipo === "posicao" && !proveniencia.has(analise.inicio.positionId)) problemas.push({ codigo: "POSICAO_SEM_PROVENIENCIA", mensagem: `a análise usa ${analise.inicio.positionId} sem registrar sua revisão`, analiseId: analise.id, campo: "inicio.positionId" });
+    }
+    for (const pratica of aula.praticas) {
+      if (!proveniencia.has(pratica.positionId)) problemas.push({ codigo: "PRATICA_SEM_PROVENIENCIA", mensagem: `a prática usa ${pratica.positionId} sem registrar sua revisão`, praticaId: pratica.id, campo: "positionId" });
+    }
+    for (const treino of aula.treinos) {
+      if (treino.certificacao && !proveniencia.has(treino.certificacao.positionId)) problemas.push({ codigo: "CERTIFICACAO_SEM_PROVENIENCIA", mensagem: `a certificação usa ${treino.certificacao.positionId} sem registrar sua revisão`, treinoId: treino.id, campo: "certificacao.positionId" });
+    }
+  }
+
+  for (const introducao of aula.introducoes) {
+    for (const quadro of introducao.quadros) {
+      if (quadro.posicao.tipo !== "referencia") continue;
+      const analise = analises.get(quadro.posicao.origem.analiseId);
+      if (!analise?.nos[quadro.posicao.origem.nodeId]) problemas.push({ codigo: "QUADRO_SEM_POSICAO", mensagem: "o quadro da introdução aponta para posição inexistente", introducaoId: introducao.id, quadroId: quadro.id, analiseId: quadro.posicao.origem.analiseId, nodeId: quadro.posicao.origem.nodeId });
+    }
+  }
   const visitandoAnalises = new Set<string>();
   const analisesVisitadas = new Set<string>();
   const visitarDependencia = (id: string) => {
@@ -195,7 +343,7 @@ export function problemasDaAulaV2(aula: AulaV2): ProblemaV2[] {
       if (chave !== no.id) {
         problemas.push({ codigo: "NO_CHAVE_DIVERGE", mensagem: `${chave} contém ${no.id}`, analiseId: analise.id, nodeId: no.id });
       }
-      registrar(no.id, "nó");
+      registrar(no.id, "nó", { analiseId: analise.id, nodeId: no.id });
     }
     const raiz = analise.nos[analise.raizId];
     if (!raiz) {
@@ -250,42 +398,102 @@ export function problemasDaAulaV2(aula: AulaV2): ProblemaV2[] {
       atual = proximo;
     }
     for (const narracao of capitulo.narracoes) {
-      if (!analise.nos[narracao.nodeId]) problemas.push({ codigo: "NARRACAO_SEM_NO", mensagem: "a narração aponta para posição inexistente", capituloId: capitulo.id, nodeId: narracao.nodeId });
+      if (!analise.nos[narracao.nodeId]) problemas.push({ codigo: "NARRACAO_SEM_NO", mensagem: "a narração aponta para posição inexistente", capituloId: capitulo.id, narracaoId: narracao.id, nodeId: narracao.nodeId, campo: "nodeId" });
     }
   }
 
   for (const treino of aula.treinos) {
     const analise = analises.get(treino.inicio.analiseId);
-    if (!analise?.nos[treino.inicio.nodeId]) problemas.push({ codigo: "TREINO_SEM_INICIO", mensagem: "o treino aponta para posição inicial inexistente", nodeId: treino.inicio.nodeId });
+    if (!analise?.nos[treino.inicio.nodeId]) problemas.push({ codigo: "TREINO_SEM_INICIO", mensagem: "o treino aponta para posição inicial inexistente", treinoId: treino.id, analiseId: treino.inicio.analiseId, nodeId: treino.inicio.nodeId, campo: "inicio" });
     const questoes = new Set(treino.questoes.map((questao) => questao.id));
     for (const questao of treino.questoes) {
       const analiseDaQuestao = analises.get(questao.posicao.analiseId);
-      if (!analiseDaQuestao?.nos[questao.posicao.nodeId]) problemas.push({ codigo: "QUESTAO_SEM_POSICAO", mensagem: "a questão do treino aponta para posição inexistente", nodeId: questao.posicao.nodeId });
+      if (!analiseDaQuestao?.nos[questao.posicao.nodeId]) problemas.push({ codigo: "QUESTAO_SEM_POSICAO", mensagem: "a questão do treino aponta para posição inexistente", treinoId: treino.id, questaoId: questao.id, analiseId: questao.posicao.analiseId, nodeId: questao.posicao.nodeId, campo: "posicao" });
       for (const resposta of questao.respostas) {
+        if (resposta.erroId && !errosCatalogados.has(resposta.erroId)) problemas.push({ codigo: "ERRO_NAO_CATALOGADO", mensagem: `a resposta usa o erro ${resposta.erroId}, que não existe no catálogo`, treinoId: treino.id, questaoId: questao.id, respostaId: resposta.id, campo: "erroId" });
         if (resposta.efeito.tipo !== "avanca") continue;
-        for (const defesa of resposta.efeito.defesas) if (!questoes.has(defesa.proximaQuestaoId)) problemas.push({ codigo: "DEFESA_SEM_QUESTAO", mensagem: "a resposta do defensor aponta para questão inexistente" });
+        for (const defesa of resposta.efeito.defesas) if (!questoes.has(defesa.proximaQuestaoId)) problemas.push({ codigo: "DEFESA_SEM_QUESTAO", mensagem: "a resposta do defensor aponta para questão inexistente", treinoId: treino.id, questaoId: questao.id, respostaId: resposta.id, campo: "efeito.defesas.proximaQuestaoId" });
       }
     }
     if (treino.origem && !(treino.propriedade === "personalizado" && treino.fonte === "removida")) {
       const origem = analises.get(treino.origem.analiseId);
-      for (const nodeId of treino.origem.nodeIds) if (!origem?.nos[nodeId]) problemas.push({ codigo: "FONTE_TREINO_AUSENTE", mensagem: "a receita do treino aponta para nó inexistente", nodeId });
+      for (const nodeId of treino.origem.nodeIds) if (!origem?.nos[nodeId]) problemas.push({ codigo: "FONTE_TREINO_AUSENTE", mensagem: "a receita do treino aponta para nó inexistente", treinoId: treino.id, analiseId: treino.origem.analiseId, nodeId, campo: "origem.nodeIds" });
     }
   }
 
+  const introducoes = new Set(aula.introducoes.map((i) => i.id));
   const capitulos = new Set(aula.capitulos.map((c) => c.id));
   const treinos = new Set(aula.treinos.map((t) => t.id));
   const praticas = new Set(aula.praticas.map((p) => p.id));
+  const aparicoesNoFluxo = new Map<string, number>();
   for (const etapa of aula.fluxo) {
-    if (etapa.tipo === "capitulo" && !capitulos.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_CAPITULO", mensagem: "o fluxo aponta para capítulo inexistente" });
-    if (etapa.tipo === "treino" && !treinos.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_TREINO", mensagem: "o fluxo aponta para treino inexistente" });
-    if (etapa.tipo === "pratica" && !praticas.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_PRATICA", mensagem: "o fluxo aponta para prática inexistente" });
+    aparicoesNoFluxo.set(etapa.entidadeId, (aparicoesNoFluxo.get(etapa.entidadeId) ?? 0) + 1);
+    if ((aparicoesNoFluxo.get(etapa.entidadeId) ?? 0) > 1) problemas.push({ codigo: "FLUXO_REPETE_ENTIDADE", mensagem: `o fluxo repete a entidade ${etapa.entidadeId}`, etapaId: etapa.id, campo: "entidadeId" });
+    if (etapa.tipo === "introducao" && !introducoes.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_INTRODUCAO", mensagem: "o fluxo aponta para introdução inexistente", etapaId: etapa.id, campo: "entidadeId" });
+    if (etapa.tipo === "capitulo" && !capitulos.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_CAPITULO", mensagem: "o fluxo aponta para capítulo inexistente", etapaId: etapa.id, campo: "entidadeId" });
+    if (etapa.tipo === "treino" && !treinos.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_TREINO", mensagem: "o fluxo aponta para treino inexistente", etapaId: etapa.id, campo: "entidadeId" });
+    if (etapa.tipo === "pratica" && !praticas.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_PRATICA", mensagem: "o fluxo aponta para prática inexistente", etapaId: etapa.id, campo: "entidadeId" });
   }
-  return problemas;
+  for (const introducao of aula.introducoes) if (!aparicoesNoFluxo.has(introducao.id)) problemas.push({ codigo: "INTRODUCAO_FORA_DO_FLUXO", mensagem: "a introdução não tem lugar no fluxo da aula", introducaoId: introducao.id });
+  for (const capitulo of aula.capitulos) if (!aparicoesNoFluxo.has(capitulo.id)) problemas.push({ codigo: "CAPITULO_FORA_DO_FLUXO", mensagem: "o capítulo não tem lugar no fluxo da aula", capituloId: capitulo.id });
+  for (const treino of aula.treinos) if (!aparicoesNoFluxo.has(treino.id)) problemas.push({ codigo: "TREINO_FORA_DO_FLUXO", mensagem: "o treino não tem lugar no fluxo da aula", treinoId: treino.id });
+  for (const pratica of aula.praticas) if (!aparicoesNoFluxo.has(pratica.id)) problemas.push({ codigo: "PRATICA_FORA_DO_FLUXO", mensagem: "a prática não tem lugar no fluxo da aula", praticaId: pratica.id });
+  return problemas.map(({ codigo, severidade = "erro", mensagem, ...localizacao }) => ({
+    codigo,
+    severidade,
+    mensagem,
+    localizacao: { aulaId: aula.id, ...localizacao },
+  }));
 }
 
-export function validarAulaV2(valor: unknown): { ok: true; aula: AulaV2 } | { ok: false; problemas: string[] } {
+export type ResultadoValidacaoAulaV2 =
+  | { ok: true; aula: AulaV2; avisos?: ProblemaV2[] }
+  | { ok: false; problemas: string[]; diagnosticos: ProblemaV2[] };
+
+export function validarAulaV2(valor: unknown): ResultadoValidacaoAulaV2 {
   const forma = aulaV2Schema.safeParse(valor);
-  if (!forma.success) return { ok: false, problemas: forma.error.issues.map((i) => `${i.path.join(".") || "(raiz)"}: ${i.message}`) };
-  const problemas = problemasDaAulaV2(forma.data);
-  return problemas.length === 0 ? { ok: true, aula: forma.data } : { ok: false, problemas: problemas.map((p) => `[${p.codigo}] ${p.mensagem}`) };
+  if (!forma.success) {
+    const aulaId = typeof valor === "object" && valor !== null && "id" in valor && typeof valor.id === "string" ? valor.id : "aula-desconhecida";
+    const diagnosticos = forma.error.issues.map((issue): ProblemaV2 => ({
+      codigo: "SCHEMA_V2",
+      severidade: "erro",
+      mensagem: issue.message,
+      localizacao: { aulaId, campo: issue.path.join(".") || "(raiz)" },
+    }));
+    return { ok: false, problemas: diagnosticos.map(formatarProblemaV2), diagnosticos };
+  }
+  const diagnosticos = problemasDaAulaV2(forma.data);
+  const erros = diagnosticos.filter((problema) => problema.severidade === "erro");
+  const avisos = diagnosticos.filter((problema) => problema.severidade === "aviso");
+  if (erros.length) return { ok: false, problemas: erros.map(formatarProblemaV2), diagnosticos };
+  return { ok: true, aula: forma.data, ...(avisos.length ? { avisos } : {}) };
+}
+
+export function formatarProblemaV2(problema: ProblemaV2): string {
+  const campo = problema.localizacao.campo ? ` em ${problema.localizacao.campo}` : "";
+  return `[${problema.codigo}]${campo} ${problema.mensagem}`;
+}
+
+/**
+ * Completa somente documentos do piloto anterior, sem tocar na árvore nem nos
+ * textos já editados. O hash da origem impede misturar metadados de outra
+ * revisão da aula v1.
+ */
+export function completarAulaV2Legada(aula: AulaV2, referencia: AulaV2): AulaV2 {
+  if (aula.metadados || aula.origem?.hash !== referencia.origem?.hash) return aula;
+  const treinos = aula.treinos.length ? aula.treinos : referencia.treinos;
+  const praticas = aula.praticas.length ? aula.praticas : referencia.praticas;
+  const introducoes = aula.introducoes.length ? aula.introducoes : referencia.introducoes;
+  const idsDoFluxo = new Set(referencia.fluxo.map((etapa) => etapa.id));
+  return {
+    ...aula,
+    metadados: referencia.metadados,
+    proveniencia: referencia.proveniencia,
+    excecoes: aula.excecoes.length ? aula.excecoes : referencia.excecoes,
+    catalogo: aula.catalogo ?? referencia.catalogo,
+    introducoes,
+    treinos,
+    praticas,
+    fluxo: [...referencia.fluxo, ...aula.fluxo.filter((etapa) => !idsDoFluxo.has(etapa.id))],
+  };
 }

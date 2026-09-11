@@ -8,7 +8,7 @@ import type { AulaV2 } from "./modelo.ts";
 
 const ligada = { NODE_ENV: "development", EDITOR_LOCAL: "1", VERCEL: "" } as NodeJS.ProcessEnv;
 const aula: AulaV2 = {
-  schemaVersion: 2, id: "N1-KPK", titulo: "Piloto", treinos: [], praticas: [],
+  schemaVersion: 2, id: "N1-KPK", titulo: "Piloto", metadados: { orientacaoPadrao: "white", criterioDominio: "D1", estadoEditorial: "rascunho" }, proveniencia: [{ positionId: "pos-a", conteudoHash: "hash-pos-a", estado: "fixture" }], excecoes: [], introducoes: [], treinos: [], praticas: [],
   analises: [{ id: "analise-a", inicio: { tipo: "posicao", positionId: "pos-a" }, raizId: "raiz-a", nos: { "raiz-a": { id: "raiz-a", filhos: [] } } }],
   capitulos: [{ id: "capitulo-a", titulo: "Capítulo", analiseId: "analise-a", inicioNodeId: "raiz-a", caminho: [], orientacao: "white", narracoes: [] }],
   fluxo: [{ id: "etapa-a", tipo: "capitulo", entidadeId: "capitulo-a" }],

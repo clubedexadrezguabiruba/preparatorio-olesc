@@ -1,21 +1,37 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
+import path from "node:path";
 import test from "node:test";
 import { lessonSchema, positionSchema, type Position } from "../lesson/schema.ts";
 import { adaptarLessonV1 } from "./adaptar-v1.ts";
 import { quadroDoNo } from "./arvore.ts";
 import { aplicarNoHistorico, desfazer, executarComando, iniciarHistorico, refazer } from "./comandos.ts";
-import { problemasDaAulaV2, validarAulaV2, type AulaV2 } from "./modelo.ts";
+import { completarAulaV2Legada, problemasDaAulaV2, validarAulaV2, type AulaV2 } from "./modelo.ts";
 import { entradasVerticais } from "./painel.ts";
 
 const lesson = lessonSchema.parse(JSON.parse(readFileSync("content/lessons/N1-KPK.json", "utf8")));
 const position = positionSchema.parse(JSON.parse(readFileSync("content/positions/N1/pos-n1-kpk-dlv-1-3.json", "utf8")));
 const positions: Record<string, Position> = { [position.id]: position };
 
+function arquivosJson(pasta: string): string[] {
+  return readdirSync(pasta, { withFileTypes: true }).flatMap((entrada) => {
+    const caminho = path.join(pasta, entrada.name);
+    return entrada.isDirectory() ? arquivosJson(caminho) : caminho.endsWith(".json") ? [caminho] : [];
+  });
+}
+
 test("a N1-KPK vira um capítulo explícito sem tocar no arquivo v1", () => {
   const antes = readFileSync("content/lessons/N1-KPK.json", "utf8");
   const aula = adaptarLessonV1(lesson, positions);
   assert.equal(aula.schemaVersion, 2);
+  assert.deepEqual(aula.metadados, { orientacaoPadrao: "white", criterioDominio: "D1", classe: "D", estadoEditorial: "rascunho", estadoDaOrigem: "publicado", fonteDidatica: "de-la-villa-100" });
+  assert.equal(aula.proveniencia.length, 1);
+  assert.equal(aula.proveniencia[0].positionId, "pos-n1-kpk-dlv-1-3");
+  assert.equal(aula.proveniencia[0].conteudoHash.length, 64);
+  assert.equal(aula.catalogo?.erros.length, 3);
+  assert.equal(aula.introducoes.length, 1);
+  assert.equal(aula.introducoes[0].quadros.length, lesson.stages.intro?.passos.length);
+  assert.deepEqual(aula.introducoes[0].quadros[0].posicao, { tipo: "referencia", origem: { analiseId: aula.analises[0].id, nodeId: aula.analises[0].raizId } });
   assert.equal(aula.capitulos.length, 1);
   assert.equal(aula.capitulos[0].narracoes.length, 13);
   assert.equal(aula.capitulos[0].caminho.length, 11);
@@ -29,9 +45,32 @@ test("a N1-KPK vira um capítulo explícito sem tocar no arquivo v1", () => {
   assert.equal(aula.treinos[0].questoes[0].posicao.nodeId, aula.analises[0].raizId);
   assert.equal(aula.treinos[0].questoes.at(-1)!.respostas[0].efeito.tipo, "encerra");
   assert.deepEqual(aula.treinos[0].questoes.at(-1)!.respostas[0].efeito, { tipo: "encerra", condicao: "promotion" });
-  assert.deepEqual(aula.fluxo.map((etapa) => etapa.tipo), ["capitulo", "treino", "pratica"]);
+  assert.equal(aula.treinos[0].certificacao?.estado, "herdada-v1");
+  assert.deepEqual(aula.fluxo.map((etapa) => etapa.tipo), ["introducao", "capitulo", "treino", "pratica"]);
   assert.deepEqual(validarAulaV2(aula), { ok: true, aula });
   assert.equal(readFileSync("content/lessons/N1-KPK.json", "utf8"), antes);
+});
+
+test("todas as aulas v1 preservam etapas e bytes ao serem adaptadas", () => {
+  const todasAsPosicoes = Object.fromEntries(arquivosJson("content/positions").map((arquivo) => {
+    const posicao = positionSchema.parse(JSON.parse(readFileSync(arquivo, "utf8")));
+    return [posicao.id, posicao];
+  }));
+  for (const arquivo of arquivosJson("content/lessons")) {
+    const antes = readFileSync(arquivo, "utf8");
+    const aulaV1 = lessonSchema.parse(JSON.parse(antes));
+    const aulaV2 = adaptarLessonV1(aulaV1, todasAsPosicoes);
+    assert.equal(aulaV2.introducoes.length, aulaV1.stages.intro ? 1 : 0, aulaV1.id);
+    aulaV1.stages.intro?.passos.forEach((passo, indice) => {
+      const posicao = aulaV2.introducoes[0].quadros[indice].posicao;
+      if (passo.fen) assert.deepEqual(posicao, { tipo: "fen", fen: passo.fen }, `${aulaV1.id} / intro ${indice + 1}`);
+      else assert.equal(posicao.tipo, "referencia", `${aulaV1.id} / intro ${indice + 1}`);
+    });
+    assert.equal(aulaV2.treinos.length, aulaV1.stages.guided ? 1 : 0, aulaV1.id);
+    assert.equal(aulaV2.praticas.length, aulaV1.stages.practice ? 1 : 0, aulaV1.id);
+    assert.deepEqual(validarAulaV2(aulaV2), { ok: true, aula: aulaV2 }, aulaV1.id);
+    assert.equal(readFileSync(arquivo, "utf8"), antes, aulaV1.id);
+  }
 });
 
 test("cada nó do piloto reconstrói a posição e o último promove em b8", () => {
@@ -45,11 +84,95 @@ test("cada nó do piloto reconstrói a posição e o último promove em b8", () 
 
 test("rascunho v2 anterior ao campo de práticas continua legível", () => {
   const antigo: Record<string, unknown> = structuredClone(adaptarLessonV1(lesson, positions));
+  delete antigo.metadados;
+  delete antigo.proveniencia;
+  delete antigo.excecoes;
+  delete antigo.catalogo;
+  delete antigo.introducoes;
   delete antigo.praticas;
-  antigo.fluxo = (antigo.fluxo as AulaV2["fluxo"]).filter((etapa) => etapa.tipo !== "pratica");
+  antigo.treinos = [];
+  antigo.fluxo = (antigo.fluxo as AulaV2["fluxo"]).filter((etapa) => etapa.tipo === "capitulo");
   const resultado = validarAulaV2(antigo);
   assert.equal(resultado.ok, true);
-  if (resultado.ok) assert.deepEqual(resultado.aula.praticas, []);
+  if (resultado.ok) {
+    assert.deepEqual(resultado.aula.praticas, []);
+    assert.equal(resultado.avisos?.[0].codigo, "METADADOS_LEGADOS");
+  }
+});
+
+test("a compatibilidade de metadados vale para legado, não para aula v2 nova", () => {
+  const nova = structuredClone(adaptarLessonV1(lesson, positions)) as AulaV2;
+  delete nova.metadados;
+  delete nova.origem;
+  const resultado = validarAulaV2(nova);
+  assert.equal(resultado.ok, false);
+  if (!resultado.ok) assert.ok(resultado.diagnosticos.some((problema) => problema.codigo === "METADADOS_AUSENTES" && problema.severidade === "erro"));
+});
+
+test("completar piloto legado preserva a variante e acrescenta só o contrato ausente", () => {
+  const referencia = adaptarLessonV1(lesson, positions);
+  const raiz = referencia.analises[0].raizId;
+  const comVariante = executarComando(referencia, { tipo: "ADICIONAR_LANCE", analiseId: referencia.analises[0].id, nodeId: raiz, uci: "c6b6", novoNodeId: "node-variante-preservada" }, positions);
+  const cru = structuredClone(comVariante) as Record<string, unknown>;
+  delete cru.metadados;
+  delete cru.proveniencia;
+  delete cru.excecoes;
+  delete cru.catalogo;
+  delete cru.introducoes;
+  cru.treinos = [];
+  cru.praticas = [];
+  cru.fluxo = (cru.fluxo as AulaV2["fluxo"]).filter((etapa) => etapa.tipo === "capitulo");
+  const legado = validarAulaV2(cru);
+  assert.equal(legado.ok, true);
+  if (!legado.ok) return;
+  const completado = completarAulaV2Legada(legado.aula, referencia);
+  assert.ok(completado.analises[0].nos["node-variante-preservada"]);
+  assert.equal(completado.introducoes.length, 1);
+  assert.equal(completado.treinos.length, 1);
+  assert.equal(completado.praticas.length, 1);
+  assert.deepEqual(completado.fluxo.map((etapa) => etapa.tipo), ["introducao", "capitulo", "treino", "pratica"]);
+});
+
+test("diagnóstico estruturado informa severidade e localização exata", () => {
+  const aula = adaptarLessonV1(lesson, positions);
+  aula.introducoes[0].quadros[0].posicao = { tipo: "referencia", origem: { analiseId: aula.analises[0].id, nodeId: "node-ausente" } };
+  const problema = problemasDaAulaV2(aula).find((item) => item.codigo === "QUADRO_SEM_POSICAO");
+  assert.deepEqual(problema, {
+    codigo: "QUADRO_SEM_POSICAO",
+    severidade: "erro",
+    mensagem: "o quadro da introdução aponta para posição inexistente",
+    localizacao: {
+      aulaId: "N1-KPK",
+      introducaoId: "introducao-n1-kpk",
+      quadroId: "quadro-n1-kpk-introducao-1",
+      analiseId: "analise-n1-kpk-objetivo",
+      nodeId: "node-ausente",
+    },
+  });
+  const schema = validarAulaV2({ ...aula, titulo: "" });
+  assert.equal(schema.ok, false);
+  if (!schema.ok) {
+    assert.equal(schema.diagnosticos[0].codigo, "SCHEMA_V2");
+    assert.equal(schema.diagnosticos[0].localizacao.campo, "titulo");
+  }
+});
+
+test("manifesto e catálogo impedem dependências editoriais silenciosas", () => {
+  const aula = adaptarLessonV1(lesson, positions);
+  aula.proveniencia = [];
+  aula.treinos[0].questoes[0].respostas.push({
+    id: "resposta-com-erro-ausente",
+    moves: ["c6b6"],
+    julgamento: "erro",
+    feedback: "Erro ainda não catalogado.",
+    erroId: "erro-ausente",
+    efeito: { tipo: "repete" },
+  });
+  const problemas = problemasDaAulaV2(aula);
+  assert.ok(problemas.some((problema) => problema.codigo === "POSICAO_SEM_PROVENIENCIA" && problema.localizacao.analiseId === aula.analises[0].id));
+  assert.ok(problemas.some((problema) => problema.codigo === "PRATICA_SEM_PROVENIENCIA" && problema.localizacao.praticaId === aula.praticas[0].id));
+  assert.ok(problemas.some((problema) => problema.codigo === "CERTIFICACAO_SEM_PROVENIENCIA" && problema.localizacao.treinoId === aula.treinos[0].id));
+  assert.ok(problemas.some((problema) => problema.codigo === "ERRO_NAO_CATALOGADO" && problema.localizacao.respostaId === "resposta-com-erro-ausente"));
 });
 
 test("o contrato acusa filho ausente e ciclo", () => {
@@ -87,6 +210,38 @@ test("lance divergente vira variante, e promover não troca a identidade", () =>
   const promovida = executarComando(comVariante, { tipo: "PROMOVER_VARIANTE", analiseId: capitulo.analiseId, parentId: raiz, nodeId: "node-variante-teste" }, positions);
   assert.equal(promovida.analises[0].nos[raiz].filhos[0], "node-variante-teste");
   assert.ok(promovida.analises[0].nos["node-variante-teste"]);
+});
+
+test("posição parada, variante compartilhada e cópia independente não se confundem", () => {
+  const aula = adaptarLessonV1(lesson, positions);
+  const analise = aula.analises[0];
+  const raiz = analise.raizId;
+  const comVariante = executarComando(aula, { tipo: "ADICIONAR_LANCE", analiseId: analise.id, nodeId: raiz, uci: "c6b6", novoNodeId: "node-variante-compartilhada" }, positions);
+  comVariante.capitulos.push(
+    { id: "capitulo-posicao-parada", titulo: "Observe antes de jogar", analiseId: analise.id, inicioNodeId: raiz, caminho: [], orientacao: "white", narracoes: [] },
+    { id: "capitulo-variante-compartilhada", titulo: "Compare a alternativa", analiseId: analise.id, inicioNodeId: raiz, caminho: ["node-variante-compartilhada"], orientacao: "white", narracoes: [] },
+  );
+  comVariante.fluxo.push(
+    { id: "etapa-posicao-parada", tipo: "capitulo", entidadeId: "capitulo-posicao-parada" },
+    { id: "etapa-variante-compartilhada", tipo: "capitulo", entidadeId: "capitulo-variante-compartilhada" },
+  );
+  comVariante.analises.push({
+    id: "analise-copia-independente",
+    inicio: { tipo: "posicao", positionId: position.id },
+    raizId: "raiz-copia-independente",
+    nos: {
+      "raiz-copia-independente": { id: "raiz-copia-independente", filhos: ["node-copia-independente"] },
+      "node-copia-independente": { id: "node-copia-independente", uci: "c6c7", filhos: [] },
+    },
+  });
+  comVariante.capitulos.push({ id: "capitulo-copia-independente", titulo: "Cópia sem dependência", analiseId: "analise-copia-independente", inicioNodeId: "raiz-copia-independente", caminho: ["node-copia-independente"], orientacao: "white", narracoes: [] });
+  comVariante.fluxo.push({ id: "etapa-copia-independente", tipo: "capitulo", entidadeId: "capitulo-copia-independente" });
+  const promovida = executarComando(comVariante, { tipo: "PROMOVER_VARIANTE", analiseId: analise.id, parentId: raiz, nodeId: "node-variante-compartilhada" }, positions);
+  assert.deepEqual(promovida.capitulos.find((capitulo) => capitulo.id === "capitulo-variante-compartilhada")?.caminho, ["node-variante-compartilhada"]);
+  assert.equal(promovida.analises.find((item) => item.id === "analise-copia-independente")?.inicio.tipo, "posicao");
+  assert.equal(promovida.capitulos.find((capitulo) => capitulo.id === "capitulo-posicao-parada")?.caminho.length, 0);
+  assert.equal(validarAulaV2(promovida).ok, true);
+  assert.equal(validarAulaV2({ ...promovida, id: "EX-OPOSICAO" }).ok, true);
 });
 
 test("painel mantém toda linha principal vertical e recua só a variante", () => {
@@ -165,6 +320,7 @@ test("contrato recusa treino derivado sem receita e limite sem número de lances
   });
   assert.equal(invalida.ok, false);
   if (!invalida.ok) {
+    assert.ok(invalida.problemas.some((problema) => problema.includes("estado da certificação")));
     assert.ok(invalida.problemas.some((problema) => problema.includes("receita de origem")));
     assert.ok(invalida.problemas.some((problema) => problema.includes("maxPlies")));
   }
@@ -191,5 +347,6 @@ test("validação semântica acusa início de treino e prática ausentes", () =>
   aula.fluxo.push({ id: "etapa-pratica-ausente", tipo: "pratica", entidadeId: "pratica-ausente" });
   const codigos = problemasDaAulaV2(aula).map((problema) => problema.codigo);
   assert.ok(codigos.includes("TREINO_SEM_INICIO"));
+  assert.ok(codigos.includes("TREINO_FORA_DO_FLUXO"));
   assert.ok(codigos.includes("FLUXO_SEM_PRATICA"));
 });
