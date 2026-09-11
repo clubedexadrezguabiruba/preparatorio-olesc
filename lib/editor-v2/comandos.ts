@@ -1,10 +1,21 @@
 import { Chess } from "chess.js";
 import type { Position } from "../lesson/schema.ts";
 import { quadroDoNo } from "./arvore.ts";
+import { aplicarImportacaoPgn, type RelatorioImportacao } from "./importar-pgn.ts";
 import type { AulaV2, NoV2 } from "./modelo.ts";
 
 export type ComandoV2 =
   | { tipo: "RENOMEAR_CAPITULO"; capituloId: string; titulo: string }
+  /**
+   * Importar capítulos de um PGN já lido.
+   *
+   * **Por que a importação é um comando, e não uma escrita direta na aula.** Porque
+   * ela precisa caber num Desfazer. Doze capítulos entrando de uma vez é a edição
+   * mais cara que o editor faz, e é exatamente a que o professor mais vai querer
+   * desfazer quando vir que escolheu o arquivo errado. Passando por aqui, ela entra
+   * no histórico como qualquer outro gesto: um Ctrl+Z e a aula volta ao que era.
+   */
+  | { tipo: "IMPORTAR_JOGOS"; relatorio: RelatorioImportacao; escolhidos: number[] }
   | { tipo: "EDITAR_COMENTARIO"; analiseId: string; nodeId: string; comentario: string }
   | { tipo: "ALTERNAR_NAG"; analiseId: string; nodeId: string; nag: number }
   | { tipo: "ADICIONAR_LANCE"; analiseId: string; nodeId: string; uci: string; novoNodeId: string }
@@ -14,6 +25,14 @@ export type ComandoV2 =
 export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Record<string, Position>): AulaV2 {
   if (comando.tipo === "RENOMEAR_CAPITULO") {
     return { ...aula, capitulos: aula.capitulos.map((c) => c.id === comando.capituloId ? { ...c, titulo: comando.titulo.trim() || c.titulo } : c) };
+  }
+  if (comando.tipo === "IMPORTAR_JOGOS") {
+    // A recusa do importador é uma frase pronta, em português de professor, e ela
+    // vira a mensagem que a tela mostra. Reescrevê-la aqui perderia o motivo exato —
+    // "a aula já tem uma parte chamada X" não é a mesma coisa que "não deu certo".
+    const resultado = aplicarImportacaoPgn(aula, comando.relatorio, comando.escolhidos);
+    if (!resultado.ok) throw new Error(resultado.mensagem);
+    return resultado.aula;
   }
   const indice = aula.analises.findIndex((a) => a.id === comando.analiseId);
   if (indice < 0) throw new Error("análise inexistente");

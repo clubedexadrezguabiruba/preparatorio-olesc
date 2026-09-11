@@ -685,6 +685,88 @@ fotografia.
 
 ---
 
+## Continuação — a tela de importar, exercitada no navegador
+
+O importador existia como biblioteca desde a rodada anterior; o professor não tinha onde
+usá-lo. Agora há um botão **Importar PGN** no cabeçalho do editor v2 e uma janela que
+segue a ordem da decisão: escolher o arquivo, **ver o que ele tem**, marcar o que entra,
+e só então aplicar. O botão de aplicar não existe antes do relatório, porque antes do
+relatório não há decisão — só aposta.
+
+### Três decisões da tela
+
+- **Recusa trava a caixa; perda não.** Um capítulo recusado aparece riscado, com o motivo
+  em vermelho e a caixa desmarcada **e desabilitada**: o que não pode entrar não pode ser
+  escolhido por engano. Perda aparece em âmbar, uma linha cada, e não impede nada — quem
+  aplica sem ler pelo menos leu.
+- **O número do rodapé responde antes.** "Com o que está marcado, a aula fica com 17 de
+  4.000 lances" é a pergunta que o professor faria depois de aplicar. Passando do teto, o
+  botão trava e diz por quê, em vez de deixar aplicar e devolver um erro que ele não sabe
+  desfazer.
+- **A leitura espera 300 ms.** Ler 20 partidas custa 145 ms, medido; sem a espera, um
+  texto colado e depois ajustado à mão relê o arquivo a cada tecla e a caixa trava.
+
+### Importar é um comando, e cabe num Desfazer
+
+`IMPORTAR_JOGOS` entrou em `comandos.ts`. Doze capítulos de uma vez é a edição mais cara
+que o editor faz, e é exatamente a que o professor mais vai querer desfazer quando vir
+que escolheu o arquivo errado. A recusa do importador vira a mensagem da tela sem ser
+reescrita: *"o jogo 2 não pode ser importado: … Nada foi aplicado"* diz o que fazer;
+"não deu certo" não diria.
+
+Foco (§16): ao abrir, vai para a caixa de texto; `Esc` fecha; o `Tab` não escapa da
+janela; ao fechar, o foco volta para o botão que abriu.
+
+### A rodada de navegador — e desta vez com fotografia da cor
+
+Feita em **1366×768**, na **N0-LADDER** (cópia temporária), nunca na N1-KPK real. Num
+arquivo de três jogos — um capítulo real do estudo P1 do Doug, um Chess960 e um com
+defeito de propósito:
+
+| O que a tela mostrou | Confere? |
+|---|---|
+| "3 jogo(s) no arquivo · **2 podem entrar**" | sim |
+| P1.07 — 6 lances, 3 variantes, 6 comentários | sim, contado no PGN |
+| Chess960 riscado, *"não entra — este jogo é de Chess960…"* | sim |
+| duas perdas do jogo torto: o `¿¿` e o `Qh8` impossível | sim |
+| "a aula fica com **17** de 4000 lances" (9 + 6 + 2) | sim |
+| aplicar: dois capítulos novos, tela pulou para o primeiro | sim |
+| aviso de proveniência da FEN importada, com *Ir para o problema* | sim |
+| **Desfazer** devolveu a aula a um capítulo e ao estado "✓ salvo" | sim |
+
+**A cor, medida no tabuleiro de verdade.** Selecionando o lance que trazia
+`[%cal Gh2h1,Rf3f2]`, o desenho saiu com **duas linhas**, uma em
+`lab(36,89% -47,5 29,2)` e outra em `lab(7,36% 61,5 18,4)` — exatamente os tokens do
+verde e do vermelho. No lance com `[%csl Yh1]`, um círculo em `lab(35,89% 20,9 75,8)`, o
+amarelo. É a fotografia que faltava na rodada da cor.
+
+Console sem uma mensagem em toda a sessão. Artefatos temporários removidos
+(`.editor/v2/N0-LADDER.json` e o rascunho v1 que a abertura recria). O rascunho real
+`.editor/v2/N1-KPK.json` continua com a mesma impressão digital (`92879926…`).
+
+### Evidência desta continuação
+
+**849 testes** verdes (eram 847), sendo 2 novos do comando de importação; tipos, lint,
+build, conteúdo, repertório `--check` e **42/42 mutações** verdes.
+
+### O que esta rodada NÃO cobre
+
+- **Importar por URL do Lichess** (§11) continua fora: arquivo exportado primeiro.
+- **Desenhar com o botão direito** no editor v2 ainda não existe — a tela **mostra** o
+  desenho que veio do arquivo, não deixa criar um.
+- **Escolher onde o capítulo entra.** Os importados vão para o fim do fluxo, na ordem do
+  arquivo. Reordenar capítulos é gesto que ainda não existe no editor v2.
+- **Renomear na hora de importar.** O título vem do `ChapterName`; mudar depois, pelo
+  campo "Nome do capítulo", funciona.
+
+### O próximo ponto exato
+
+**Navegação por teclado** (§16): setas para andar na árvore, atalhos só fora de campo de
+texto, foco visível. A tecla não chega à página do navegador embutido, então a
+conferência final é teste humano do Doug.
+
+---
+
 ## Como ligar o editor
 
 ```bash

@@ -15,6 +15,7 @@ import { Chess } from "chess.js";
 import { lessonSchema, positionSchema, type Position } from "../lesson/schema.ts";
 import { adaptarLessonV1 } from "./adaptar-v1.ts";
 import { mapaDaAnalise } from "./arvore.ts";
+import { aplicarNoHistorico, desfazer, executarComando, iniciarHistorico } from "./comandos.ts";
 import { aplicarImportacaoPgn, lerImportacaoPgn, medirImportacao } from "./importar-pgn.ts";
 import { LIMITES_V2 } from "./limites.ts";
 import { problemasDaAulaV2, validarAulaV2, type AnaliseV2, type AulaV2 } from "./modelo.ts";
@@ -253,4 +254,26 @@ test("partida que começa do começo não pede revisão de proveniência", () =>
   const resultado = aplicarImportacaoPgn(aulaVazia(), lerImportacaoPgn("1. e4 e5 2. Nf3 *"), [1]);
   assert.ok(resultado.ok);
   assert.deepEqual(problemasDaAulaV2(resultado.aula), []);
+});
+
+test("importar é um comando, e portanto cabe num Desfazer", () => {
+  // A edição mais cara que o editor faz é a que o professor mais vai querer desfazer
+  // quando vir que escolheu o arquivo errado. Por isso ela passa pelo histórico.
+  const relatorio = lerImportacaoPgn(CAPITULO_LICHESS);
+  const antes = aulaVazia();
+  const historico = iniciarHistorico(antes);
+  const depois = aplicarNoHistorico(historico, executarComando(antes, { tipo: "IMPORTAR_JOGOS", relatorio, escolhidos: [1] }, {}));
+  assert.equal(depois.presente.capitulos.length, 1);
+  assert.equal(desfazer(depois).presente.capitulos.length, 0);
+  assert.equal(desfazer(depois).presente, antes, "desfazer devolve o documento idêntico, e não uma cópia parecida");
+});
+
+test("o comando estoura com a frase do importador, não com uma genérica", () => {
+  // A tela mostra o que vem da exceção. "não deu certo" não diz ao professor o que
+  // fazer; "o jogo 2 não pode ser importado: … Nada foi aplicado" diz.
+  const relatorio = lerImportacaoPgn(`${CAPITULO_LICHESS}\n\n[Variant "Chess960"]\n[Event "outro"]\n\n1. e4 e5 *`);
+  assert.throws(
+    () => executarComando(aulaVazia(), { tipo: "IMPORTAR_JOGOS", relatorio, escolhidos: [1, 2] }, {}),
+    /Nada foi aplicado/,
+  );
 });

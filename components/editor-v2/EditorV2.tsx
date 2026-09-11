@@ -6,6 +6,7 @@ import type { Key } from "@lichess-org/chessground/types";
 import { salvarDocumentoV2 } from "@/app/editor/v2/acoes";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
+import { PainelDeImportacao } from "@/components/editor-v2/PainelDeImportacao";
 import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
 import { PainelDeProblemas } from "@/components/editor-v2/PainelDeProblemas";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
@@ -20,6 +21,7 @@ import {
   type ComandoV2,
   type Historico,
 } from "@/lib/editor-v2/comandos";
+import type { RelatorioImportacao } from "@/lib/editor-v2/importar-pgn";
 import { problemasDaAulaV2, validarAulaV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
 import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/editor-v2/recuperacao";
 import type { Position } from "@/lib/lesson/schema";
@@ -52,6 +54,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const [recuperavel, setRecuperavel] = useState<{ aula: AulaV2; baseHash: string; em: string } | null>(null);
   const [conflitoAtual, setConflitoAtual] = useState<{ textoAtual: string | null; hashAtual: string | null } | null>(null);
   const [falhaRecuperacao, setFalhaRecuperacao] = useState(false);
+  const [importando, setImportando] = useState(false);
+  const botaoImportar = useRef<HTMLButtonElement>(null);
   const [sessaoId, setSessaoId] = useState<string | null>(null);
   const hash = useRef(hashInicial);
   const ultimoEnfileirado = useRef(documentoInicial);
@@ -206,6 +210,33 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const desenhos = desenhoDaAutoriaV2(selecionado?.desenhos);
   const narracoes = capitulo?.narracoes.filter((n) => n.nodeId === selecionado?.id) ?? [];
 
+  /**
+   * Fecha a janela de importação e devolve o foco ao botão que a abriu (§16).
+   *
+   * Sem isto, quem navega por teclado volta ao começo da página toda vez que fecha —
+   * e precisa atravessar o cabeçalho inteiro para chegar de novo onde estava.
+   */
+  const fecharImportacao = useCallback(() => {
+    setImportando(false);
+    botaoImportar.current?.focus();
+  }, []);
+
+  /**
+   * Aplica a importação e leva a tela ao primeiro capítulo que entrou.
+   *
+   * Importar e continuar olhando para o capítulo antigo faria o professor duvidar de
+   * que alguma coisa aconteceu. O primeiro capítulo novo é a resposta visível.
+   */
+  const importar = useCallback((relatorio: RelatorioImportacao, escolhidos: number[]) => {
+    const primeiro = relatorio.jogos.find((jogo) => escolhidos.includes(jogo.numero) && jogo.capitulo);
+    aplicar({ tipo: "IMPORTAR_JOGOS", relatorio, escolhidos });
+    if (primeiro?.capitulo) {
+      setCapituloId(primeiro.capitulo.id);
+      setNodeId(primeiro.capitulo.inicioNodeId);
+    }
+    fecharImportacao();
+  }, [aplicar, fecharImportacao]);
+
   /** Leva a tela até o lugar do problema. É o que o botão da lista faz. */
   const irAoProblema = useCallback((destino: DestinoV2) => {
     if (destino.capituloId) setCapituloId(destino.capituloId);
@@ -292,6 +323,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
           <p className="text-sm text-tinta-fraca">Formato novo separado. A aula publicada e o editor atual não são alterados.</p>
         </div>
         <div className="flex items-center gap-2">
+          <button type="button" ref={botaoImportar} onClick={() => setImportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Importar PGN</button>
           <button type="button" disabled={!historico.passados.length} onClick={() => setHistorico(desfazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Desfazer</button>
           <button type="button" disabled={!historico.futuros.length} onClick={() => setHistorico(refazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Refazer</button>
           <span className={`text-xs ${estado === "erro" || estado === "conflito" ? "text-erro-texto" : "text-tinta-fraca"}`}>
@@ -324,6 +356,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
       ) : null}
       {recado ? <p role="alert" className="rounded-lg border border-erro bg-erro-superficie/10 p-3 text-sm text-erro-texto">{recado}</p> : null}
       <PainelDeProblemas visiveis={visiveis} resumo={resumo} aoIr={irAoProblema} />
+      {importando ? <PainelDeImportacao aula={historico.presente} aoAplicar={importar} aoFechar={fecharImportacao} /> : null}
 
       <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[14rem_minmax(20rem,38rem)_minmax(18rem,1fr)]">
         <aside className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
