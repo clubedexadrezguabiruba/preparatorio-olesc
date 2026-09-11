@@ -48,19 +48,72 @@ export const capituloV2Schema = z.strictObject({
   narracoes: z.array(narracaoV2Schema),
 });
 
+const origemTreinoV2Schema = z.strictObject({
+  analiseId: idV2Schema,
+  nodeIds: z.array(idV2Schema).min(1),
+  hash: z.string().min(1),
+  derivadorVersao: z.number().int().positive(),
+});
+
+export const respostaTreinoV2Schema = z.strictObject({
+  id: idV2Schema,
+  moves: z.array(uciSchema).min(1),
+  julgamento: z.enum(["correta", "erro"]),
+  feedback: z.string().min(1),
+  erroId: idV2Schema.optional(),
+  efeito: z.discriminatedUnion("tipo", [
+    z.strictObject({
+      tipo: z.literal("avanca"),
+      defesas: z.array(z.strictObject({ move: uciSchema, proximaQuestaoId: idV2Schema })).min(1),
+    }),
+    z.strictObject({ tipo: z.literal("repete") }),
+    z.strictObject({ tipo: z.literal("encerra"), condicao: z.enum(["mate", "promotion", "draw-secured", "tablebase-win"]) }),
+  ]),
+});
+
+export const questaoTreinoV2Schema = z.strictObject({
+  id: idV2Schema,
+  posicao: referenciaNoSchema,
+  dica: z.string().min(1).optional(),
+  desenhos: desenhoV2Schema.optional(),
+  respostas: z.array(respostaTreinoV2Schema).min(1),
+});
+
 export const treinoV2Schema = z.strictObject({
   id: idV2Schema,
   titulo: z.string().min(1),
+  introducao: z.string().min(1).optional(),
+  perfil: z.enum(["final-certificado", "linha-autoral"]),
+  inicio: referenciaNoSchema,
+  ladoAluno: z.enum(["white", "black"]),
+  objetivo: z.string().min(1),
+  questoes: z.array(questaoTreinoV2Schema).min(1),
+  defensor: z.strictObject({
+    politica: z.enum(["deterministica", "autoral"]),
+  }),
+  termino: z.strictObject({
+    tipo: z.enum(["objetivo", "mate", "limite"]),
+    maxPlies: z.number().int().positive().optional(),
+  }),
   propriedade: z.enum(["derivado", "personalizado", "independente"]),
   fonte: z.enum(["atual", "alterada", "removida"]),
-  origem: z
-    .strictObject({
-      analiseId: idV2Schema,
-      nodeIds: z.array(idV2Schema),
-      hash: z.string().min(1),
-      derivadorVersao: z.number().int().positive(),
-    })
-    .optional(),
+  origem: origemTreinoV2Schema.optional(),
+  obrigatorio: z.boolean().default(true),
+  revisaoAvaliacao: z.enum(["pendente", "confirmada"]).default("pendente"),
+  explicacaoConclusao: z.string().min(1).optional(),
+}).superRefine((treino, ctx) => {
+  if (treino.propriedade === "derivado" && !treino.origem) ctx.addIssue({ code: "custom", path: ["origem"], message: "treino derivado precisa declarar sua receita de origem" });
+  if (treino.propriedade === "independente" && treino.origem) ctx.addIssue({ code: "custom", path: ["origem"], message: "treino independente não mantém origem operacional" });
+  if (treino.termino.tipo === "limite" && !treino.termino.maxPlies) ctx.addIssue({ code: "custom", path: ["termino", "maxPlies"], message: "término por limite precisa de maxPlies" });
+});
+
+export const praticaV2Schema = z.strictObject({
+  id: idV2Schema,
+  titulo: z.string().min(1),
+  positionId: z.string().min(1),
+  ladoAluno: z.enum(["white", "black"]),
+  objetivo: z.enum(["win", "draw"]),
+  engine: z.strictObject({ skill: z.number().int().min(0).max(20), moveTimeMs: z.number().int().min(50).max(5000) }),
 });
 
 export const etapaV2Schema = z.strictObject({
@@ -76,6 +129,7 @@ export const aulaV2Schema = z.strictObject({
   analises: z.array(analiseV2Schema),
   capitulos: z.array(capituloV2Schema),
   treinos: z.array(treinoV2Schema),
+  praticas: z.array(praticaV2Schema).default([]),
   fluxo: z.array(etapaV2Schema),
   origem: z.strictObject({ formato: z.literal("lesson-v1"), hash: z.string().min(1) }).optional(),
 });
@@ -85,6 +139,10 @@ export type NoV2 = z.infer<typeof noV2Schema>;
 export type AnaliseV2 = z.infer<typeof analiseV2Schema>;
 export type NarracaoV2 = z.infer<typeof narracaoV2Schema>;
 export type CapituloV2 = z.infer<typeof capituloV2Schema>;
+export type RespostaTreinoV2 = z.infer<typeof respostaTreinoV2Schema>;
+export type QuestaoTreinoV2 = z.infer<typeof questaoTreinoV2Schema>;
+export type TreinoV2 = z.infer<typeof treinoV2Schema>;
+export type PraticaV2 = z.infer<typeof praticaV2Schema>;
 export type AulaV2 = z.infer<typeof aulaV2Schema>;
 
 export type ProblemaV2 = {
@@ -105,7 +163,14 @@ export function problemasDaAulaV2(aula: AulaV2): ProblemaV2[] {
   };
   aula.analises.forEach((a) => registrar(a.id, "análise"));
   aula.capitulos.forEach((c) => registrar(c.id, "capítulo"));
-  aula.treinos.forEach((t) => registrar(t.id, "treino"));
+  aula.treinos.forEach((t) => {
+    registrar(t.id, "treino");
+    t.questoes.forEach((q) => {
+      registrar(q.id, "questão de treino");
+      q.respostas.forEach((r) => registrar(r.id, "resposta de treino"));
+    });
+  });
+  aula.praticas.forEach((p) => registrar(p.id, "prática"));
   aula.fluxo.forEach((e) => registrar(e.id, "etapa"));
 
   const analises = new Map(aula.analises.map((a) => [a.id, a]));
@@ -189,11 +254,31 @@ export function problemasDaAulaV2(aula: AulaV2): ProblemaV2[] {
     }
   }
 
+  for (const treino of aula.treinos) {
+    const analise = analises.get(treino.inicio.analiseId);
+    if (!analise?.nos[treino.inicio.nodeId]) problemas.push({ codigo: "TREINO_SEM_INICIO", mensagem: "o treino aponta para posição inicial inexistente", nodeId: treino.inicio.nodeId });
+    const questoes = new Set(treino.questoes.map((questao) => questao.id));
+    for (const questao of treino.questoes) {
+      const analiseDaQuestao = analises.get(questao.posicao.analiseId);
+      if (!analiseDaQuestao?.nos[questao.posicao.nodeId]) problemas.push({ codigo: "QUESTAO_SEM_POSICAO", mensagem: "a questão do treino aponta para posição inexistente", nodeId: questao.posicao.nodeId });
+      for (const resposta of questao.respostas) {
+        if (resposta.efeito.tipo !== "avanca") continue;
+        for (const defesa of resposta.efeito.defesas) if (!questoes.has(defesa.proximaQuestaoId)) problemas.push({ codigo: "DEFESA_SEM_QUESTAO", mensagem: "a resposta do defensor aponta para questão inexistente" });
+      }
+    }
+    if (treino.origem && !(treino.propriedade === "personalizado" && treino.fonte === "removida")) {
+      const origem = analises.get(treino.origem.analiseId);
+      for (const nodeId of treino.origem.nodeIds) if (!origem?.nos[nodeId]) problemas.push({ codigo: "FONTE_TREINO_AUSENTE", mensagem: "a receita do treino aponta para nó inexistente", nodeId });
+    }
+  }
+
   const capitulos = new Set(aula.capitulos.map((c) => c.id));
   const treinos = new Set(aula.treinos.map((t) => t.id));
+  const praticas = new Set(aula.praticas.map((p) => p.id));
   for (const etapa of aula.fluxo) {
     if (etapa.tipo === "capitulo" && !capitulos.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_CAPITULO", mensagem: "o fluxo aponta para capítulo inexistente" });
     if (etapa.tipo === "treino" && !treinos.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_TREINO", mensagem: "o fluxo aponta para treino inexistente" });
+    if (etapa.tipo === "pratica" && !praticas.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_PRATICA", mensagem: "o fluxo aponta para prática inexistente" });
   }
   return problemas;
 }

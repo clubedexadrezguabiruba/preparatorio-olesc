@@ -72,9 +72,31 @@ também revelou e corrigiu uma promessa prematura: a interface não diz mais que
 preservou antes da confirmação do armazenamento local. A N0-LADDER terminou sem
 o comentário temporário.
 
-**Primeiro ponto a retomar:** testar o download da cópia e completar o modelo de
-prática/treino. Depois, continuar os blocos B–J do plano final; estes commits são
-fundação/piloto, não declaram o plano inteiro concluído.
+Continuação do contrato: `PraticaV2` agora conserva posição, lado, objetivo e
+configuração do Stockfish; `TreinoV2` ganhou perfil (final certificado ou linha
+autoral), propriedade e estado da fonte independentes, receita versionada,
+questões por posição, respostas com feedback, erros nomeados, defesa e próxima
+questão, término por ramo, dicas, obrigatoriedade e revisão da avaliação. O
+adaptador v1 preserva a ordem `capítulo → treino → prática`. Na N1-KPK, os seis
+nós do treino guiado viram seis questões: `c6c7` conserva `e7e6 → n2` e o fim
+conserva `b7b8q → promotion`. Os três arquivos de aula atuais foram adaptados
+em memória sem erro e sem alteração de bytes.
+
+O campo `praticas` tem compatibilidade de leitura com os rascunhos v2 anteriores.
+O rascunho real da N1-KPK, já com a variante criada pelo Doug, continuou válido
+com 20 nós e reapareceu igual depois de duas recargas no navegador. As duas abas
+temporárias da N0-LADDER usadas no ensaio de conflito foram fechadas, e o
+rascunho v1 que elas recriavam — byte a byte igual ao publicado — foi removido.
+
+Evidência desta continuação: 779 testes do repositório e 12 testes focados v2
+verdes; tipos, lint, build, conteúdo (38 consultas de tablebase, todas do cache),
+42/42 mutações vermelhas e repertório `--check` verdes.
+
+**Primeiro ponto a retomar:** testar o download da cópia no conflito e então
+continuar o Bloco 0/A pelas lacunas conceituais ainda abertas (metadados,
+proveniência, certificação e diagnóstico com localização completa). Depois,
+seguir os blocos B–J do plano final; estes commits são fundação/piloto, não
+declaram o plano inteiro concluído.
 
 ---
 

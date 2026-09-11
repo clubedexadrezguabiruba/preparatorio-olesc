@@ -5,7 +5,7 @@ import { lessonSchema, positionSchema, type Position } from "../lesson/schema.ts
 import { adaptarLessonV1 } from "./adaptar-v1.ts";
 import { quadroDoNo } from "./arvore.ts";
 import { aplicarNoHistorico, desfazer, executarComando, iniciarHistorico, refazer } from "./comandos.ts";
-import { problemasDaAulaV2, validarAulaV2 } from "./modelo.ts";
+import { problemasDaAulaV2, validarAulaV2, type AulaV2 } from "./modelo.ts";
 import { entradasVerticais } from "./painel.ts";
 
 const lesson = lessonSchema.parse(JSON.parse(readFileSync("content/lessons/N1-KPK.json", "utf8")));
@@ -19,6 +19,17 @@ test("a N1-KPK vira um capítulo explícito sem tocar no arquivo v1", () => {
   assert.equal(aula.capitulos.length, 1);
   assert.equal(aula.capitulos[0].narracoes.length, 13);
   assert.equal(aula.capitulos[0].caminho.length, 11);
+  assert.equal(aula.praticas.length, 1);
+  assert.deepEqual(aula.praticas[0].engine, { skill: 20, moveTimeMs: 300 });
+  assert.equal(aula.treinos.length, 1);
+  assert.equal(aula.treinos[0].questoes.length, 6);
+  const primeiraResposta = aula.treinos[0].questoes[0].respostas[0];
+  assert.deepEqual(primeiraResposta.moves, ["c6c7"]);
+  assert.deepEqual(primeiraResposta.efeito, { tipo: "avanca", defesas: [{ move: "e7e6", proximaQuestaoId: "questao-n1-kpk-n2" }] });
+  assert.equal(aula.treinos[0].questoes[0].posicao.nodeId, aula.analises[0].raizId);
+  assert.equal(aula.treinos[0].questoes.at(-1)!.respostas[0].efeito.tipo, "encerra");
+  assert.deepEqual(aula.treinos[0].questoes.at(-1)!.respostas[0].efeito, { tipo: "encerra", condicao: "promotion" });
+  assert.deepEqual(aula.fluxo.map((etapa) => etapa.tipo), ["capitulo", "treino", "pratica"]);
   assert.deepEqual(validarAulaV2(aula), { ok: true, aula });
   assert.equal(readFileSync("content/lessons/N1-KPK.json", "utf8"), antes);
 });
@@ -30,6 +41,15 @@ test("cada nó do piloto reconstrói a posição e o último promove em b8", () 
   const quadro = quadroDoNo(aula, capitulo.analiseId, fim, positions);
   assert.equal(quadro.san, "b8=Q");
   assert.match(quadro.fen, /1Q6/);
+});
+
+test("rascunho v2 anterior ao campo de práticas continua legível", () => {
+  const antigo: Record<string, unknown> = structuredClone(adaptarLessonV1(lesson, positions));
+  delete antigo.praticas;
+  antigo.fluxo = (antigo.fluxo as AulaV2["fluxo"]).filter((etapa) => etapa.tipo !== "pratica");
+  const resultado = validarAulaV2(antigo);
+  assert.equal(resultado.ok, true);
+  if (resultado.ok) assert.deepEqual(resultado.aula.praticas, []);
 });
 
 test("o contrato acusa filho ausente e ciclo", () => {
@@ -87,4 +107,89 @@ test("o contrato detecta ciclo entre posições iniciais de análises", () => {
     { id: "analise-c", inicio: { tipo: "referencia", origem: { analiseId: "analise-b", nodeId: "raiz-b" } }, raizId: "raiz-c", nos: { "raiz-c": { id: "raiz-c", filhos: [] } } },
   );
   assert.ok(problemasDaAulaV2(aula).some((p) => p.codigo === "CICLO_ENTRE_ANALISES"));
+});
+
+test("treino personalizado aceita respostas autorais e conserva a origem editorial", () => {
+  const aula = adaptarLessonV1(lesson, positions);
+  const analise = aula.analises[0];
+  const primeiroLance = analise.nos[analise.raizId].filhos[0];
+  aula.treinos.push({
+    id: "treino-personalizado-teste",
+    titulo: "Converter sem soltar a oposição",
+    perfil: "linha-autoral",
+    inicio: { analiseId: analise.id, nodeId: analise.raizId },
+    ladoAluno: "white",
+    objetivo: "Promover o peão sem permitir a captura.",
+    questoes: [{
+      id: "questao-personalizada-teste",
+      posicao: { analiseId: analise.id, nodeId: analise.raizId },
+      dica: "Mantenha a oposição.",
+      respostas: [
+        { id: "resposta-correta-teste", moves: [analise.nos[primeiroLance].uci!], julgamento: "correta", feedback: "Mantém o rei à frente do peão.", efeito: { tipo: "encerra", condicao: "tablebase-win" } },
+        { id: "resposta-erro-teste", moves: ["c6b6"], julgamento: "erro", feedback: "Esse desvio abandona a linha ensinada.", efeito: { tipo: "repete" } },
+      ],
+    }],
+    defensor: { politica: "autoral" },
+    termino: { tipo: "limite", maxPlies: 8 },
+    propriedade: "personalizado",
+    fonte: "atual",
+    origem: { analiseId: analise.id, nodeIds: [analise.raizId, primeiroLance], hash: "hash-teste", derivadorVersao: 1 },
+    obrigatorio: true,
+    revisaoAvaliacao: "pendente",
+    explicacaoConclusao: "A promoção ficou garantida.",
+  });
+  aula.fluxo.push({ id: "etapa-treino-personalizado-teste", tipo: "treino", entidadeId: "treino-personalizado-teste" });
+  assert.deepEqual(validarAulaV2(aula), { ok: true, aula });
+});
+
+test("contrato recusa treino derivado sem receita e limite sem número de lances", () => {
+  const aula = adaptarLessonV1(lesson, positions);
+  const analise = aula.analises[0];
+  const invalida = validarAulaV2({
+    ...aula,
+    treinos: [{
+      id: "treino-invalido-teste",
+      titulo: "Treino incompleto",
+      perfil: "final-certificado",
+      inicio: { analiseId: analise.id, nodeId: analise.raizId },
+      ladoAluno: "white",
+      objetivo: "Converter.",
+      questoes: [{ id: "questao-invalida-teste", posicao: { analiseId: analise.id, nodeId: analise.raizId }, respostas: [{ id: "resposta-invalida-teste", moves: ["c6b6"], julgamento: "correta", feedback: "Teste.", efeito: { tipo: "encerra", condicao: "tablebase-win" } }] }],
+      defensor: { politica: "deterministica" },
+      termino: { tipo: "limite" },
+      propriedade: "derivado",
+      fonte: "atual",
+      obrigatorio: true,
+      revisaoAvaliacao: "pendente",
+    }],
+  });
+  assert.equal(invalida.ok, false);
+  if (!invalida.ok) {
+    assert.ok(invalida.problemas.some((problema) => problema.includes("receita de origem")));
+    assert.ok(invalida.problemas.some((problema) => problema.includes("maxPlies")));
+  }
+});
+
+test("validação semântica acusa início de treino e prática ausentes", () => {
+  const aula = adaptarLessonV1(lesson, positions);
+  const analise = aula.analises[0];
+  aula.treinos.push({
+    id: "treino-referencia-quebrada",
+    titulo: "Referência quebrada",
+    perfil: "linha-autoral",
+    inicio: { analiseId: analise.id, nodeId: "node-ausente" },
+    ladoAluno: "white",
+    objetivo: "Testar referências.",
+    questoes: [{ id: "questao-referencia-quebrada", posicao: { analiseId: analise.id, nodeId: "node-ausente" }, respostas: [{ id: "resposta-referencia-quebrada", moves: ["c6b6"], julgamento: "correta", feedback: "Teste.", efeito: { tipo: "encerra", condicao: "tablebase-win" } }] }],
+    defensor: { politica: "autoral" },
+    termino: { tipo: "objetivo" },
+    propriedade: "independente",
+    fonte: "atual",
+    obrigatorio: true,
+    revisaoAvaliacao: "pendente",
+  });
+  aula.fluxo.push({ id: "etapa-pratica-ausente", tipo: "pratica", entidadeId: "pratica-ausente" });
+  const codigos = problemasDaAulaV2(aula).map((problema) => problema.codigo);
+  assert.ok(codigos.includes("TREINO_SEM_INICIO"));
+  assert.ok(codigos.includes("FLUXO_SEM_PRATICA"));
 });
