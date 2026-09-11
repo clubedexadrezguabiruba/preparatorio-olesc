@@ -5,9 +5,42 @@
 > passa a reger a continuação. As seções históricas abaixo continuam registrando o que
 > existia antes dessa aprovação.
 
-**Data:** 2026-09-10. **Branch:** `modo-editor`. O estado vigente é o piloto v2
-descrito abaixo. A menção histórica a “Bloco 2 suspenso” nas seções antigas
-explica a interrupção que levou à nova arquitetura; não rege mais o trabalho.
+**Data:** 2026-09-11. **Branch:** `modo-editor`, sincronizada com o `origin`. A menção
+histórica a “Bloco 2 suspenso” nas seções antigas explica a interrupção que levou à
+nova arquitetura; não rege mais o trabalho.
+
+## Estado de hoje, em vinte linhas
+
+Este arquivo é longo e cronológico. Se você só precisa saber onde estamos, é aqui — e
+cada linha aponta a seção que conta a história inteira.
+
+**Fechado:**
+
+- **Bloco 0/A inteiro** — legalidade dos lances, diagnóstico localizado na tela,
+  regressão de conteúdo e proveniência/certificação. Ver “o Bloco 0/A fechado”.
+- **Corpus e tetos (§17)** — linha de 500 meios-lances, árvore de 1.000 nós, e seis
+  tetos com o número medido atrás de cada um. Ver “Bloco B começa pelo freio”.
+- **Importar PGN (§11)** — auditoria do que a varredura não lê, relatório de perdas
+  antes de aplicar, lote transacional, recusa explícita de variante não padrão. Ver
+  “o importador de PGN” e “a tela de importar”.
+- **Cor do desenho** — as quatro cores do Lichess atravessam do PGN ao tabuleiro. Ver
+  “a cor do desenho, como no Lichess”.
+
+**Aberto, na ordem:**
+
+1. **Navegação por teclado (§16)** — setas na árvore, atalhos só fora de campo de
+   texto, foco visível. **A conferência final é humana:** a tecla não chega à página do
+   navegador embutido.
+2. **Desenhar com o botão direito** no editor v2 — hoje a tela mostra o desenho que
+   veio do arquivo, mas não deixa criar um.
+3. **Reordenar capítulos** — os importados vão para o fim do fluxo, na ordem do arquivo.
+4. **Importar por URL do Lichess** (§11) e **exportar PGN** continuam fora.
+
+**Dívida conhecida e não paga:** a lista de lances mostra ~10 lances por vez em
+1366×768; se incomodar, o espaço sai do bloco de edição abaixo dela.
+
+**Isto não declara o editor pronto.** O Bloco B tem três itens e o primeiro deles ainda
+está aberto.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
