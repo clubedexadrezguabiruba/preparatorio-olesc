@@ -385,6 +385,111 @@ aviso e erro bloqueante passou a ser decidida por regra escrita, não por aciden
 
 ---
 
+## Continuação — Bloco B começa pelo freio: o corpus grande e os tetos
+
+**Por que o corpus veio antes do importador.** O plano final (§17) manda declarar os
+limites de bytes, nós e profundidade **antes** de liberar a importação. Na ordem
+contrária o importador nasceria sem teto: um PGN de torneio inteiro entraria, a tela
+tentaria montar a árvore e o professor receberia uma página branca — sem aviso e sem
+nada para consertar. Então o Bloco B começa pelo freio de mão.
+
+### As duas fixtures que faltavam, e por que elas são geradas
+
+`lib/editor-v2/corpus.ts` (novo) constrói a linha de **500 meios-lances** e a árvore de
+**1.000 nós** com comentários e variantes. Elas são **reconstruídas** a cada execução, a
+partir de uma semente fixa, em vez de guardadas em JSON: 500 lances gravados seriam
+dezenas de milhares de bytes de conteúdo que ninguém consegue revisar num diff, e que
+viram lixo silencioso no dia em que o esquema mudar. Semente fixa, e não `Math.random`:
+teste que falha só às terças é pior que teste nenhum.
+
+Duas regras fazem a linha chegar aos 500 sem virar absurdo: captura é desempatada por
+último (senão o sorteio come as peças e a partida morre afogada por volta do lance 40),
+e lance que dá mate ou afogamento é recusado, porque são os únicos que zeram os lances
+legais. Repetição e regra dos 50 **não** são recusadas — o plano diz que a linha longa é
+fixture de navegação, "não necessariamente partida competitiva concluída pelas regras de
+empate".
+
+### Os tetos, e o número medido atrás de cada um
+
+`lib/editor-v2/limites.ts` (novo). Medido em 11/09/2026, Node 24 no Windows, **mediana de
+20 execuções em processo limpo**:
+
+| O quê | Lances | Prof. | Bytes | Percorrer a árvore | Validar |
+|---|---|---|---|---|---|
+| N1-KPK (real) | 11 | 11 | 13 KB | 1 ms | 1 ms |
+| linha de 500 | 500 | 500 | 33 KB | 69 ms | 180 ms |
+| árvore de 1.000 | 1.000 | 317 | 94 KB | 289 ms | 278 ms |
+| linha **no teto** | 1.000 | 1.000 | 66 KB | 328 ms | 335 ms |
+| árvore **no teto** | 2.000 | 625 | 191 KB | 611 ms | 571 ms |
+
+Daí saem os tetos: **2.000 lances por análise** (no teto, abrir custa ~1,2 s, ainda
+abaixo do alvo de 2 s do plano e já sem folga para dobrar de novo), **4.000 por aula**,
+**1.000 meios-lances de profundidade** (o dobro da partida mais longa já jogada em
+torneio; medida, a recursão não chega perto de estourar a pilha), **2 MB** por arquivo,
+**4.000 comentários** e **4.000 desenhos**.
+
+Acima do teto o professor lê os **dois** números, nunca "aula grande demais":
+*"esta análise tem 2.100 lances e o limite é 2.000"*. Saber que precisa cortar cem, e não
+dois, é a diferença entre consertar e desistir.
+
+### Três decisões que mordem
+
+- **Teto é erro, e erro não tranca o salvamento.** No v2 `severidade: "erro"` significa
+  *impede a publicação* — o painel escreve "impede" e o rascunho continua gravando. É o
+  que o plano (§7) manda: o rascunho aceita pendência identificada. Um teto que travasse
+  o salvamento prenderia o professor dentro de um arquivo grande demais para ele
+  conseguir encolher.
+- **Os tetos rodam sem o pacote de posições.** Legalidade e proveniência precisam das
+  posições; tamanho, não. Quem recupera um rascunho local, sem pacote nenhum, ainda
+  precisa saber que o arquivo não cabe — e há teste fixando isso.
+- **A medida da profundidade não é recursiva.** O que ela mede é justamente árvore funda;
+  medi-la com recursão seria o medidor estourando antes do medido.
+
+### A primeira medição estava errada, e o erro é do método
+
+A primeira rodada relatou **176 ms** para a árvore de 1.000 nós. A execução seguinte, com
+mais fixtures vivas na memória do mesmo processo, relatou **468 ms** para exatamente a
+mesma conta. A diferença era pressão de memória do próprio medidor.
+
+`scripts/medir-corpus-v2.ts` (novo) passou a rodar **um processo por caso**, com cinco
+execuções de aquecimento descartadas, e a relatar **mediana e p95** em vez de média. Os
+números repetem: duas execuções seguidas da árvore de 2.000 deram 613 e 612 ms. É o
+mesmo tipo de armadilha do `requestAnimationFrame` de 10/09 — o cronômetro medindo o
+cronômetro.
+
+### Evidência desta continuação
+
+**822 testes** do repositório verdes (eram 813), sendo **9 novos** em
+`lib/editor-v2/limites.test.ts`; tipos, lint, build Next, conteúdo (38 consultas de
+tablebase, todas do cache), repertório `--check` e **42/42 mutações** verdes, rodados
+depois desta mudança e não herdados. O rascunho real `.editor/v2/N1-KPK.json` continua
+intocado, com a mesma impressão digital (`92879926…`). Nenhum arquivo temporário ficou.
+
+**Não houve rodada de navegador, e não devia haver:** esta mudança é de biblioteca e de
+script; nada na tela muda enquanto nenhuma aula encostar num teto, e nenhuma encosta.
+
+### O que esta rodada NÃO cobre
+
+- **Orçamento de expansão de treino** (§17) continua aberto: ele é teto do derivador, e
+  o derivador ainda não existe. Está escrito no código, junto dos outros tetos.
+- **O aviso de aproximação** — "você está em 1.900 dos 2.000" — não existe. A decisão foi
+  não inventar barulho de interface antes de o importador ter onde mostrá-lo: quem vai
+  dizer isso é o relatório de perdas da importação, com o número na mão antes de aplicar.
+
+### O próximo ponto exato
+
+**Importação e leitura de PGN** (plano §11), agora com o freio pronto:
+`medidasDaAulaV2` já devolve os seis números que o relatório de perdas precisa mostrar
+antes de aplicar. O buraco medido no leitor atual (`lib/repertorio/pgn.ts`) é a auditoria
+que o plano exige: a varredura **descarta em silêncio** tudo que a expressão regular não
+reconhece — não há token de "não entendi isto", e portanto não há como listar as perdas.
+É por aí que o importador começa.
+
+Depois dele, **navegação por teclado** (§16), que é teste humano do Doug — a tecla não
+chega à página do navegador embutido.
+
+---
+
 ## Como ligar o editor
 
 ```bash

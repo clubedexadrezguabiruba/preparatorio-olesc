@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Chess } from "chess.js";
+import { problemasDeLimiteV2 } from "./limites.ts";
 import { fenSchema, generatedTemplatesSchema, lessonClassSchema, lessonIdSchema, uciSchema, type Position } from "../lesson/schema.ts";
 
 export const idV2Schema = z.string().regex(/^[a-z][a-z0-9-]*$/, "id interno inválido");
@@ -636,6 +637,11 @@ export function problemasDaAulaV2(
 
   if (positions) problemas.push(...problemasDeLegalidade(aula, positions, analises, analisesSaudaveis));
   if (positions) problemas.push(...problemasDeProveniencia(aula, positions, hashDaPosicao));
+  // Os tetos de tamanho (§17) não dependem do pacote de posições: são do documento.
+  // Por isso rodam sempre, inclusive na recuperação local e num rascunho recém-colado
+  // — que é justamente quando um arquivo grande demais precisa ser recusado antes de
+  // ser aberto na tela.
+  problemas.push(...problemasDeLimiteV2(aula));
 
   for (const capitulo of aula.capitulos) {
     const analise = analises.get(capitulo.analiseId);
