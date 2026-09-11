@@ -11,6 +11,7 @@ import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
 import { PainelDeProblemas } from "@/components/editor-v2/PainelDeProblemas";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { analiseDaAula, mapaDaAnalise } from "@/lib/editor-v2/arvore";
+import { acaoDeTeclado, ehCampoDeTexto, navegar } from "@/lib/editor-v2/navegacao";
 import { problemasVisiveisV2, resumoDosProblemasV2, type DestinoV2 } from "@/lib/editor-v2/diagnostico-visual";
 import {
   aplicarNoHistorico,
@@ -55,6 +56,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const [conflitoAtual, setConflitoAtual] = useState<{ textoAtual: string | null; hashAtual: string | null } | null>(null);
   const [falhaRecuperacao, setFalhaRecuperacao] = useState(false);
   const [importando, setImportando] = useState(false);
+  /** Cresce a cada navegação por teclado; é o sinal para o foco seguir a seta (§16). */
+  const [pedidoDeFoco, setPedidoDeFoco] = useState(0);
   const botaoImportar = useRef<HTMLButtonElement>(null);
   const [sessaoId, setSessaoId] = useState<string | null>(null);
   const hash = useRef(hashInicial);
@@ -142,6 +145,35 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         evento.preventDefault();
         setHistorico(refazer);
       }
+    };
+    window.addEventListener("keydown", teclado);
+    return () => window.removeEventListener("keydown", teclado);
+  }, []);
+
+  /*
+   * ## O teclado anda na árvore (§16)
+   *
+   * O atendedor é registrado **uma vez**, e não a cada lance selecionado: reinstalar o
+   * ouvinte a cada tecla é o caminho curto para perder uma. Por isso a árvore e o
+   * estado da janela de importação chegam por uma caixinha (`useRef`) que o React
+   * atualiza depois de cada desenho, e o nó atual vem da própria `setNodeId`.
+   *
+   * `preventDefault` é obrigatório: sem ele a seta rola a página junto, e o professor
+   * vê o tabuleiro subir enquanto tenta só avançar um lance.
+   */
+  const estadoDoTeclado = useRef({ analise, importando });
+  useEffect(() => { estadoDoTeclado.current = { analise, importando }; });
+
+  useEffect(() => {
+    const teclado = (evento: KeyboardEvent) => {
+      const { analise: arvore, importando: janelaAberta } = estadoDoTeclado.current;
+      if (janelaAberta) return;
+      if (ehCampoDeTexto(evento.target as HTMLElement | null)) return;
+      const acao = acaoDeTeclado(evento);
+      if (!acao) return;
+      evento.preventDefault();
+      setNodeId((atual) => navegar(arvore, atual, acao));
+      setPedidoDeFoco((pedido) => pedido + 1);
     };
     window.addEventListener("keydown", teclado);
     return () => window.removeEventListener("keydown", teclado);
@@ -390,6 +422,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         <section className="cartao-vazio flex min-h-[32rem] flex-col gap-4 p-3 lg:min-h-0">
           <div className="flex min-h-0 flex-1 flex-col gap-2">
             <h2 className="text-sm font-semibold text-tinta">Lances e variantes</h2>
+            {/* A ajuda fica escrita na tela porque atalho que ninguém descobre não
+                existe (§16, "descobrível sem botão direito"). */}
+            <p className="text-xs text-tinta-fraca">← → andam na linha · ↑ ↓ andam na lista, variantes incluídas · Home e End vão ao começo e ao fim</p>
             {/* Sem as posições reconstruídas não há SAN nem numeração; o painel cai
                 para o UCI cru, que é feio mas legível, em vez de sumir junto com o
                 tabuleiro. O professor continua conseguindo clicar no lance errado. */}
@@ -398,6 +433,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
               sans={derivado?.sans ?? Object.fromEntries(Object.values(analise.nos).filter((no) => no.uci).map((no) => [no.id, no.uci!]))}
               rotulos={derivado?.rotulos ?? {}}
               selecionado={selecionado.id}
+              focar={pedidoDeFoco}
               onSelecionar={setNodeId}
               onPromover={(parentId, id) => aplicar({ tipo: "PROMOVER_VARIANTE", analiseId: analise.id, parentId, nodeId: id })}
             />

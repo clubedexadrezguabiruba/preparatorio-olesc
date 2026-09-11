@@ -1,22 +1,46 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import type { AnaliseV2 } from "@/lib/editor-v2/modelo";
 import { entradasVerticais } from "@/lib/editor-v2/painel";
 
 const NAG: Record<number, string> = { 1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!" };
-export function PainelDeLances({ analise, sans, rotulos, selecionado, onSelecionar, onPromover }: {
+export function PainelDeLances({ analise, sans, rotulos, selecionado, focar = 0, onSelecionar, onPromover }: {
   analise: AnaliseV2;
   sans: Record<string, string>;
   rotulos: Record<string, string>;
   selecionado: string;
+  /**
+   * Um contador que só cresce quando a seleção veio **do teclado** (§16).
+   *
+   * Serve para o foco seguir a seta sem seguir o mouse: se o foco pulasse a cada
+   * mudança de seleção, clicar num problema da lista acima arrancaria o foco de lá.
+   * Zero é o valor de partida e não mexe em nada — abrir a página não rouba o foco.
+   */
+  focar?: number;
   onSelecionar: (nodeId: string) => void;
   onPromover: (parentId: string, nodeId: string) => void;
 }) {
   const raiz = analise.nos[analise.raizId];
   const entradas = entradasVerticais(analise);
+  const botoes = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  /**
+   * Foco visível e rolagem até o lance escolhido.
+   *
+   * `block: "nearest"` rola o mínimo necessário: a lista não dá um pulo a cada seta
+   * quando o lance já estava à vista.
+   */
+  useEffect(() => {
+    if (!focar) return;
+    const alvo = botoes.current[selecionado];
+    alvo?.focus();
+    alvo?.scrollIntoView({ block: "nearest" });
+  }, [focar, selecionado]);
+
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-2">
-      <button type="button" aria-current={selecionado === raiz.id ? "true" : undefined} onClick={() => onSelecionar(raiz.id)} className={`foco w-fit rounded-md px-2 py-1 text-xs ${selecionado === raiz.id ? "bg-metodo-superficie text-metodo-tinta-alta" : "text-tinta-fraca hover:bg-carta-toque"}`}>Posição inicial</button>
+      <button type="button" ref={(el) => { botoes.current[raiz.id] = el; }} aria-current={selecionado === raiz.id ? "true" : undefined} onClick={() => onSelecionar(raiz.id)} className={`foco w-fit rounded-md px-2 py-1 text-xs ${selecionado === raiz.id ? "bg-metodo-superficie text-metodo-tinta-alta" : "text-tinta-fraca hover:bg-carta-toque"}`}>Posição inicial</button>
       {entradas.length ? (
         <ol className="flex min-h-0 flex-col gap-0.5 overflow-auto pr-1" aria-label="Lances da análise">
           {entradas.map(({ nodeId, parentId, nivel, principal }) => {
@@ -24,7 +48,7 @@ export function PainelDeLances({ analise, sans, rotulos, selecionado, onSelecion
             return (
               <li key={nodeId} className={`grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-1 rounded-md ${nivel ? "border-l border-borda bg-papel" : ""}`} style={{ marginLeft: `${Math.min(nivel, 2) * 0.75}rem` }}>
                 <span className="px-1 text-right text-xs tabular-nums text-tinta-fraca">{rotulos[nodeId]}</span>
-                <button type="button" aria-current={selecionado === nodeId ? "true" : undefined} onClick={() => onSelecionar(nodeId)} className={`foco min-w-0 rounded-md px-2 py-1.5 text-left text-sm transition-colors ${selecionado === nodeId ? "bg-metodo-superficie text-metodo-tinta-alta" : "text-tinta hover:bg-carta-toque"}`}>
+                <button type="button" ref={(el) => { botoes.current[nodeId] = el; }} aria-current={selecionado === nodeId ? "true" : undefined} onClick={() => onSelecionar(nodeId)} className={`foco min-w-0 rounded-md px-2 py-1.5 text-left text-sm transition-colors ${selecionado === nodeId ? "bg-metodo-superficie text-metodo-tinta-alta" : "text-tinta hover:bg-carta-toque"}`}>
                   <span className="font-medium">{sans[nodeId] ?? no.uci ?? "?"}</span>
                   {no.nags?.map((nag) => <span key={nag} className="ml-0.5 text-aviso-tinta">{NAG[nag] ?? `$${nag}`}</span>)}
                   {no.comentario ? <span className="ml-2 text-xs text-tinta-fraca">{no.comentario}</span> : null}

@@ -25,22 +25,23 @@ cada linha aponta a seção que conta a história inteira.
   “o importador de PGN” e “a tela de importar”.
 - **Cor do desenho** — as quatro cores do Lichess atravessam do PGN ao tabuleiro. Ver
   “a cor do desenho, como no Lichess”.
+- **Navegação por teclado (§16)** — ← → ↑ ↓, Home e End andam na árvore; o foco segue a
+  seta; campo de texto engole o atalho. **Falta a conferência humana da tecla real.**
+  Ver “o teclado anda na árvore”.
 
 **Aberto, na ordem:**
 
-1. **Navegação por teclado (§16)** — setas na árvore, atalhos só fora de campo de
-   texto, foco visível. **A conferência final é humana:** a tecla não chega à página do
-   navegador embutido.
-2. **Desenhar com o botão direito** no editor v2 — hoje a tela mostra o desenho que
+1. **Desenhar com o botão direito** no editor v2 — hoje a tela mostra o desenho que
    veio do arquivo, mas não deixa criar um.
-3. **Reordenar capítulos** — os importados vão para o fim do fluxo, na ordem do arquivo.
-4. **Importar por URL do Lichess** (§11) e **exportar PGN** continuam fora.
+2. **Reordenar capítulos** — os importados vão para o fim do fluxo, na ordem do arquivo.
+3. **Importar por URL do Lichess** (§11) e **exportar PGN** continuam fora.
 
 **Dívida conhecida e não paga:** a lista de lances mostra ~10 lances por vez em
 1366×768; se incomodar, o espaço sai do bloco de edição abaixo dela.
 
-**Isto não declara o editor pronto.** O Bloco B tem três itens e o primeiro deles ainda
-está aberto.
+**Isto não declara o editor pronto.** Do Bloco B saíram a leitura da árvore e a
+navegação; a autoria de verdade — desenhar, reordenar capítulos, exportar — continua
+aberta, e os blocos seguintes do plano ainda não foram fechados.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -797,6 +798,81 @@ build, conteúdo, repertório `--check` e **42/42 mutações** verdes.
 **Navegação por teclado** (§16): setas para andar na árvore, atalhos só fora de campo de
 texto, foco visível. A tecla não chega à página do navegador embutido, então a
 conferência final é teste humano do Doug.
+
+---
+
+## Continuação — o teclado anda na árvore (11/9/2026)
+
+### O que o professor ganha
+
+Com o cursor fora de um campo de texto:
+
+| Tecla | O que faz |
+|---|---|
+| ← | volta um lance, para o pai; na posição inicial, para |
+| → | avança um lance, pelo primeiro filho — a linha principal |
+| ↑ ↓ | andam **na lista desenhada**, entrada por entrada, variantes incluídas |
+| Home | volta à posição inicial |
+| End | desce até o fim da linha atual, seguindo o primeiro filho |
+
+O lance selecionado pelo teclado **recebe o foco** e rola para dentro da vista
+(`block: "nearest"`, o mínimo necessário — a lista não dá um pulo quando o lance já
+estava à vista). A linha de ajuda fica escrita acima da lista: atalho que ninguém
+descobre não existe.
+
+### Três decisões, e o porquê de cada uma
+
+**↑ ↓ seguem a tela, não a árvore.** Poderiam pular entre irmãos, mas aí haveria uma
+ordem secreta que o olho não vê. Andando na ordem desenhada, o cursor anda como o olho
+anda — e a variante aparece no caminho, em vez de precisar ser caçada.
+
+**Qualquer modificador devolve a tecla.** Ctrl, Alt, Meta ou Shift junto com a seta faz
+o atalho deixar de ser nosso. É o espaço do navegador e do Desfazer/Refazer (Ctrl+Z), e
+roubá-lo quebraria os dois.
+
+**Campo de texto engole o atalho (§16).** Escrever dentro do comentário do lance e ver o
+lance mudar por baixo do texto seria perder o que se estava escrevendo sem entender por
+quê. `INPUT`, `TEXTAREA`, `SELECT`, `contenteditable` e `role="textbox"` bloqueiam. A
+janela de importação aberta também bloqueia: lá as setas são da janela.
+
+Detalhe de implementação que evita um defeito silencioso: o atendedor de teclado é
+registrado **uma vez**. A árvore chega por uma caixinha (`useRef`) atualizada depois de
+cada desenho, e o nó atual vem da própria `setNodeId`. Reinstalar o ouvinte a cada lance
+selecionado é o caminho curto para perder uma tecla no meio da troca.
+
+### Evidência desta continuação
+
+A conta — dado o documento, o nó e a ação, qual nó fica selecionado — mora num arquivo
+puro e é provada em Node, sem tela: **8 testes novos**, incluindo o ciclo no documento
+que não pode travar o End e o nó que deixou de existir. **857 testes** verdes (eram
+849); tipos, lint, build, conteúdo, repertório `--check` e **42/42 mutações** verdes.
+
+No navegador embutido, em 1366×768, com a N0-LADDER: a linha de ajuda aparece; a
+sequência → → → ← ↓ End Home levou a seleção a Rg4, Kd2, R1g3, Kd2, R1g3, Rg1# e
+“Posição inicial”, e o `activeElement` acompanhou a seleção em cada passo; a mesma seta
+disparada de dentro do `textarea` não mexeu na seleção.
+
+**Isto prova o manipulador, não o teclado** (§19). Evento disparado por script não é
+tecla: a página do navegador embutido nunca tem foco. **A conferência da tecla real
+continua sendo teste humano do Doug** — abrir o editor v2, clicar num lance e usar as
+setas.
+
+Artefatos temporários removidos. O rascunho real `.editor/v2/N1-KPK.json` continua com a
+mesma impressão digital (`92879926…`).
+
+### O que esta rodada NÃO cobre
+
+- **A tecla real**, pelo motivo acima.
+- **Atalhos de edição** (apagar lance, promover variante por tecla) continuam fora:
+  §16 pede navegação, e edição por tecla sem confirmação é perda de trabalho.
+- **Desenhar com o botão direito**, **reordenar capítulos**, **URL do Lichess** e
+  **exportar PGN** seguem abertos, na mesma ordem.
+
+### O próximo ponto exato
+
+**Desenhar com o botão direito** no editor v2: hoje o canal `shapes` do tabuleiro só
+mostra o desenho que veio do arquivo; criar seta e casa acesa com o mouse exige o canal
+`desenhavel` e um comando novo no histórico, para caber no Desfazer.
 
 ---
 
