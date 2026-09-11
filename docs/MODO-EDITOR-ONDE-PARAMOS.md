@@ -5,6 +5,12 @@
 > passa a reger a continuação. As seções históricas abaixo continuam registrando o que
 > existia antes dessa aprovação.
 
+> **Especificação funcional de 11/09/2026:**
+> [`EDITOR-V2-ESPECIFICACAO-FUNCIONAL.md`](EDITOR-V2-ESPECIFICACAO-FUNCIONAL.md)
+> reúne todas as funções, interações e critérios de aceite do produto. Outro agente deve
+> ler plano + especificação antes deste diário; este arquivo diz o estado, não redefine
+> o produto.
+
 **Data:** 2026-09-11. **Branch:** `modo-editor`, sincronizada com o `origin`. A menção
 histórica a “Bloco 2 suspenso” nas seções antigas explica a interrupção que levou à
 nova arquitetura; não rege mais o trabalho.
@@ -1791,6 +1797,22 @@ para outra tela. É o buraco que a proposta fecha.
 Fontes: [issue de coaches](https://github.com/lichess-org/lila/issues/6524),
 [lances certos alternativos](https://lichess.org/forum/lichess-feedback/interactive-studies-accepting-multiple-correct-moves),
 [teto de capítulos](https://lichess.org/forum/lichess-feedback/chapter-limit-in-studies).
+
+---
+
+## Especificação funcional consolidada — 11/9/2026
+
+Doug pediu que o conhecimento funcional não dependesse da memória dos agentes que
+planejaram o editor. Foi criado
+[`EDITOR-V2-ESPECIFICACAO-FUNCIONAL.md`](EDITOR-V2-ESPECIFICACAO-FUNCIONAL.md),
+com o comportamento esperado por tela, ações, confirmações, estados, segurança,
+critérios de aceite, ordem de entrega e checklist mestre do produto completo.
+
+O plano final continua sendo a autoridade de arquitetura, dados e segurança; a nova
+especificação é a autoridade de comportamento funcional. `AGENTS.md` e `CLAUDE.md`
+agora obrigam agentes Codex/Claude a ler plano, especificação e este diário antes de
+trabalhar no v2. A criação do documento não marca funcionalidades como entregues e não
+altera código de produto.
 
 ---
 

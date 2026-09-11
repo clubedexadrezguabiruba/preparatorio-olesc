@@ -4,6 +4,12 @@ Data: 10/09/2026. **APROVADO pelo Doug em 10/09/2026.** Revisão confrontada com
 
 Este documento consolida o Plano Mestre fornecido pelo Doug, a revisão do ChatGPT e os contratos do projeto. **É o plano vigente do Editor v2.** Sua aprovação autoriza a implementação por blocos; publicação no curso continua sendo uma decisão separada do professor. Os documentos anteriores permanecem como histórico. Decisões novas tomadas nesta revisão estão identificadas na seção 22.
 
+O comportamento completo de telas, ações, confirmações e critérios de aceite foi
+consolidado depois, a pedido do Doug, em
+[`EDITOR-V2-ESPECIFICACAO-FUNCIONAL.md`](EDITOR-V2-ESPECIFICACAO-FUNCIONAL.md).
+Este plano continua mandando na arquitetura, nos dados e na segurança; a especificação
+manda no comportamento funcional. Ambos são leitura obrigatória para implementar o v2.
+
 ## 1. Resultado esperado e escopo
 
 O professor deve conseguir transformar uma posição ou partida em explicação, demonstração, comparação e treino pela tela. A medida de qualidade é conseguir fazer isso com clareza, recuperação de erros e conteúdo verificável.
