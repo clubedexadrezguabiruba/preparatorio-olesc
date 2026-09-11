@@ -37,6 +37,8 @@ export function fenInicialDaAnalise(aula: AulaV2, analise: AnaliseV2, positions:
     if (!position) throw new Error(`posição inexistente: ${analise.inicio.positionId}`);
     return position.fen;
   }
+  // FEN crua: é assim que um PGN importado começa, sem arquivo de posição por trás.
+  if (analise.inicio.tipo === "fen") return analise.inicio.fen;
   pilha.add(analise.id);
   const origem = analiseDaAula(aula, analise.inicio.origem.analiseId);
   const fen = quadroDoNo(aula, origem.id, analise.inicio.origem.nodeId, positions, pilha).fen;

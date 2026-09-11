@@ -66,6 +66,19 @@ export type PartidaPgn = {
   lances: LancePgn[];
   /** `1-0`, `0-1`, `1/2-1/2` ou `*`. `null` se o PGN não traz. */
   resultado: string | null;
+  /**
+   * **Tudo o que a varredura não soube ler**, na ordem em que apareceu.
+   *
+   * Existe porque a primeira versão descartava em silêncio: o que a expressão
+   * regular não casava simplesmente sumia, e não havia como saber que sumiu. O
+   * plano final do Editor v2 (§11) exige o contrário — "auditar tokens não
+   * reconhecidos… não descartar tokens silenciosamente" —, porque o importador
+   * precisa mostrar as perdas ao professor **antes** de aplicar.
+   *
+   * É diagnóstico, não conteúdo: ninguém interpreta o que está aqui. Um leitor
+   * que executasse o que não entendeu seria pior do que um que ignora.
+   */
+  naoReconhecidos: string[];
 };
 
 /* ------------------------------------------------------------------ *
@@ -80,7 +93,8 @@ type Token =
   | { t: "nag"; texto: string }
   | { t: "numero" }
   | { t: "resultado"; texto: string }
-  | { t: "san"; texto: string };
+  | { t: "san"; texto: string }
+  | { t: "desconhecido"; texto: string };
 
 /**
  * A varredura, em uma passada.
@@ -122,9 +136,24 @@ function separarNags(bruto: string): { san: string; nags: string[] } {
   return { san: casou[1], nags: [casou[2]] };
 }
 
+/**
+ * A varredura, agora com auditoria.
+ *
+ * O que a `VARREDURA` não casa fica **entre** duas casadas. Então o não reconhecido
+ * não precisa de uma alternativa própria na expressão regular — que seria uma
+ * alternativa "qualquer coisa" competindo com as outras e roubando o que elas
+ * deveriam pegar: ele é o buraco entre um casamento e o seguinte.
+ *
+ * Espaço em branco não conta, claro. O que conta é `1.e4 e5 ¿ Nf3` — o `¿` vira um
+ * `desconhecido`, e o professor lê "não entendi isto" em vez de nunca ficar sabendo.
+ */
 function varrer(texto: string): Token[] {
   const tokens: Token[] = [];
+  let fimDoAnterior = 0;
   for (const m of texto.matchAll(VARREDURA)) {
+    const buraco = texto.slice(fimDoAnterior, m.index).trim();
+    fimDoAnterior = m.index + m[0].length;
+    if (buraco !== "") tokens.push({ t: "desconhecido", texto: buraco });
     const [
       ,
       chave,
@@ -155,6 +184,10 @@ function varrer(texto: string): Token[] {
     else if (san !== undefined) tokens.push({ t: "san", texto: san });
     else if (soltos !== undefined) tokens.push({ t: "nag", texto: soltos });
   }
+  // O rabo do arquivo, depois do último casamento: é onde mora a chave que ninguém
+  // fechou e o lixo que o exportador deixou no fim.
+  const sobra = texto.slice(fimDoAnterior).trim();
+  if (sobra !== "") tokens.push({ t: "desconhecido", texto: sobra });
   return tokens;
 }
 
@@ -162,12 +195,13 @@ function varrer(texto: string): Token[] {
  * Leitura
  * ------------------------------------------------------------------ */
 
-const vazia = (): PartidaPgn => ({ tags: {}, intro: null, lances: [], resultado: null });
+const vazia = (): PartidaPgn => ({ tags: {}, intro: null, lances: [], resultado: null, naoReconhecidos: [] });
 
 /** Monta a árvore de uma partida a partir dos tokens dela. */
 function montar(tokens: Token[]): PartidaPgn {
   const tags: Record<string, string> = {};
   const raiz: LancePgn[] = [];
+  const naoReconhecidos: string[] = [];
   let intro: string | null = null;
   let resultado: string | null = null;
 
@@ -240,10 +274,15 @@ function montar(tokens: Token[]): PartidaPgn {
 
       case "numero":
         break;
+
+      case "desconhecido":
+        // Guardado, nunca interpretado: quem lê o relatório é o professor.
+        naoReconhecidos.push(token.texto);
+        break;
     }
   }
 
-  return { tags, intro, lances: raiz, resultado };
+  return { tags, intro, lances: raiz, resultado, naoReconhecidos };
 }
 
 /**

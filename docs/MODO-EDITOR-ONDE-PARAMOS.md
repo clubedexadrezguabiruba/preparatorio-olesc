@@ -490,6 +490,118 @@ chega à página do navegador embutido.
 
 ---
 
+## Continuação — o importador de PGN, medido no estudo real do Doug
+
+### Primeiro o buraco que o plano manda tapar: a varredura descartava em silêncio
+
+`lib/repertorio/pgn.ts` lia o PGN com uma expressão regular de alternativas. O que ela
+não casava **sumia**: nenhum token, nenhum aviso, nenhum jeito de saber que sumiu. O
+plano (§11) proíbe exatamente isso — "auditar tokens não reconhecidos… não descartar
+tokens silenciosamente" —, porque o importador precisa mostrar as perdas antes de aplicar.
+
+A correção não é uma alternativa nova na expressão regular. Uma alternativa "qualquer
+coisa" competiria com as outras e roubaria o que elas deviam pegar. O não reconhecido é o
+**buraco entre um casamento e o seguinte**, mais o rabo depois do último. Cada jogo passou
+a carregar seu `naoReconhecidos`.
+
+Medido nos 15 arquivos PGN que existem entre o repertório do projeto e a pasta de
+downloads do Doug — 56 jogos: **zero achados**. A auditoria não é barulhenta. E num PGN
+quebrado de propósito ela acha: `1. e4 ¿¿ e5` devolve `¿¿`, e `1. e4 {sem fechar` devolve
+o `{s` órfão — junto com a prosa virando SAN de mentira, que é o outro sintoma da mesma
+chave aberta.
+
+### O importador: ler nunca aplica
+
+`lib/editor-v2/importar-pgn.ts` (novo) tem duas metades, e a separação é o ponto:
+
+- `lerImportacaoPgn` **não toca em aula nenhuma**. Lê o arquivo, monta o que entraria e
+  devolve, jogo por jogo, o título, os lances, as variantes, os comentários, o que é
+  recusado e o que se perde.
+- `aplicarImportacaoPgn` é a única que muda o documento, e só com a lista escolhida.
+
+**O lote é transação de verdade:** a aula nova é montada inteira numa cópia, conferida na
+cópia, e só então devolvida. Se qualquer jogo escolhido for recusado, ou se o conjunto
+estourar os tetos de §17, **nada** entra e o motivo volta nomeado, com "Nada foi
+aplicado" escrito na frase. Meia importação deixa a aula num estado que o professor não
+pediu e não sabe descrever.
+
+**Recusa é na porta** (variante que não é xadrez padrão, jogo sem lance, FEN inicial
+impossível). **Perda não recusa**: lance impossível, token não reconhecido, cor de seta.
+Jogar fora vinte variantes certas por causa de uma torta seria o oposto do que se quer.
+
+### Duas mudanças de contrato que a importação exigiu
+
+1. **Uma análise pode começar numa FEN crua** (`inicio: { tipo: "fen" }`). Era isso ou
+   fabricar um arquivo de posição na importação — e §12 é categórico: "FEN importada não é
+   posição automaticamente aprovada". Fabricar daria ao material de fora a mesma aparência
+   do material revisado, e o professor perderia o único sinal que separa os dois. Agora a
+   diferença é estrutural, e o validador diz `FEN_IMPORTADA_SEM_REVISAO` (aviso; vira
+   impeditivo quando a publicação v2 existir).
+
+   **Com uma exceção:** partida que começa do começo não gera aviso. A posição inicial do
+   xadrez não é material de ninguém e não tem o que revisar; vinte avisos que não pedem
+   trabalho ensinariam a ignorar os que pedem.
+
+2. **O nó guarda as diretivas cruas** (`diretivas`). `desenhos` guarda o que a tela sabe
+   desenhar, e a tela deste projeto desenha **numa cor só** — o `G` de verde e o `R` de
+   vermelho do Lichess não têm onde morar ali. Então a seta aparece na tela, a cor é
+   **anunciada como perda**, e o texto original (`[%cal Ge2e4]`) fica guardado inteiro e
+   opaco, de onde a cor volta num round-trip futuro. Nada ali é interpretado.
+
+   O cabeçalho do PGN também ficou: `origemPgn` guarda tags, resultado e o que não foi
+   reconhecido. Sem ele o professor não teria como voltar à origem do que edita.
+
+### O teste com o arquivo de verdade, e os dois defeitos que ele achou
+
+Rodado nos quatro PGNs da pasta de downloads — **42 jogos, 1.524 lances**:
+
+| Arquivo | Jogos | Lances | Comentários | Perdas |
+|---|---|---|---|---|
+| Estudo P1 do Lichess (12 capítulos) | 12 | 170 | 88 | 0 |
+| P1.07 sozinho | 1 | 6 | 6 | 0 |
+| Caro-Kann comentado | 9 | 259 | 259 | 0 |
+| 20 partidas canônicas | 20 | 1.089 | 0 | 0 |
+
+Todos validam no esquema, todas as árvores são percorridas com tabuleiro sem erro, e a
+única queixa do validador é a que o plano manda existir.
+
+Conferência independente, contada no texto do arquivo e não perguntada ao código: o
+capítulo P1.07 tem linha principal de 2 lances, três variantes (`1.Kg1`, `1.Kh3`,
+`1...Kg4 2.Kg2`) e 6 comentários. O importador devolveu **6 lances, 3 variantes, 6
+comentários**. Bate.
+
+**Os dois defeitos que só o arquivo real (e o teste) mostraram:**
+
+1. **153 identificadores repetidos.** Os ids de nó são únicos na **aula inteira**, não
+   dentro da análise — e 12 capítulos numerados `no-1`, `no-2`… colidiram todos. Lendo o
+   código de um capítulo só, isso é invisível. Agora o id do lance carrega o apelido do
+   capítulo.
+2. **Um lance impossível matava as variantes que eram alternativas a ele.** O `( … )` do
+   PGN quer dizer "em vez deste lance": as variantes saem da **mesma** posição que ele.
+   Podar o ramo é cortar o que vem *depois* do lance impossível, não o que estava *ao
+   lado*. Um teste escrito para essa regra ficou vermelho e apontou o lugar.
+
+### Evidência desta continuação
+
+**841 testes** do repositório verdes (eram 822), sendo **19 novos** — 4 da auditoria do
+leitor de PGN e 15 do importador; tipos, lint, build Next, conteúdo (38 consultas de
+tablebase, todas do cache), repertório `--check` e **42/42 mutações** verdes, rodados
+depois desta mudança. O rascunho real `.editor/v2/N1-KPK.json` continua com a mesma
+impressão digital (`92879926…`). Nenhum arquivo temporário ficou.
+
+### O que esta rodada NÃO cobre
+
+- **Não há tela.** O importador é biblioteca: o professor ainda não tem onde soltar um
+  arquivo, ver o relatório, escolher os capítulos e clicar em aplicar. **É o próximo
+  passo exato.**
+- **Importação por URL do Lichess** (§11) não entra ainda — arquivo exportado primeiro.
+- **Exportar** continua fora: o plano diz que o escritor não é pré-requisito do
+  importador, e o round-trip só é prometido quando houver escritor para provar.
+- **A cor do desenho não chega à tela.** Está preservada no arquivo e anunciada como
+  perda; fazer a tela desenhar em cores é decisão de interface, não de importação.
+
+---
+
 ## Como ligar o editor
 
 ```bash

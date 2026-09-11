@@ -359,3 +359,46 @@ test("`recortarJogos` com um jogo só devolve o arquivo inteiro", () => {
 1. e4 c6 *`;
   assert.deepEqual(recortarJogos(um, 1), { pedacos: [um], confere: true });
 });
+
+/* ------------------------------------------------------------------ *
+ * A auditoria — o que a varredura não soube ler
+ * ------------------------------------------------------------------ */
+
+test("o que a varredura não entende é guardado, não descartado", () => {
+  // O buraco entre dois casamentos é o que ninguém reconheceu. Sem isto, o `¿¿`
+  // sumia e não havia como saber que tinha sumido — que é justamente o que o plano
+  // do Editor v2 (§11) proíbe no importador.
+  assert.deepEqual(lerPgn("1. e4 ¿¿ e5").naoReconhecidos, ["¿¿"]);
+  assert.deepEqual(lerPgn("1. e4 → e5").naoReconhecidos, ["→"]);
+  // E o lance continua sendo lido: auditar não é recusar.
+  assert.deepEqual(lerPgn("1. e4 ¿¿ e5").lances.map((l) => l.san), ["e4", "e5"]);
+});
+
+test("PGN bem formado não produz um único achado — a auditoria não é barulhenta", () => {
+  assert.deepEqual(lerPgn(REFERENCIA).naoReconhecidos, []);
+  assert.deepEqual(lerPgn("1.e4 e5 2.Nf3 {prosa} (2.Bc4 Nf6!?) 1-0").naoReconhecidos, []);
+});
+
+test("chave que ninguém fechou aparece na auditoria, e o estrago aparece nos lances", () => {
+  // Duas coisas de uma vez, e as duas importam para o relatório de perdas: o `{s`
+  // órfão é achado pela auditoria, **e** a prosa que devia estar dentro da chave
+  // vira SAN de mentira ("em", "fechar"). Quem recusa esses lances é a legalidade,
+  // no importador; quem avisa que havia texto perdido é esta lista.
+  const partida = lerPgn("1. e4 {sem fechar");
+  assert.deepEqual(partida.naoReconhecidos, ["{s"]);
+  assert.deepEqual(partida.lances.map((l) => l.san), ["e4", "em", "fechar"]);
+});
+
+test("a auditoria é por jogo, e não do arquivo inteiro", () => {
+  const dois = `[Event "um"]
+
+1. e4 ¿ e5 *
+
+[Event "dois"]
+
+1. d4 d5 *`;
+  const jogos = lerPgns(dois);
+  assert.equal(jogos.length, 2);
+  assert.deepEqual(jogos[0].naoReconhecidos, ["¿"]);
+  assert.deepEqual(jogos[1].naoReconhecidos, []);
+});

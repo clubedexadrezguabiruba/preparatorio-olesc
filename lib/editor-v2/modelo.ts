@@ -3,6 +3,9 @@ import { Chess } from "chess.js";
 import { problemasDeLimiteV2 } from "./limites.ts";
 import { fenSchema, generatedTemplatesSchema, lessonClassSchema, lessonIdSchema, uciSchema, type Position } from "../lesson/schema.ts";
 
+/** A posição inicial do xadrez padrão, como a `chess.js` a escreve. */
+export const FEN_INICIAL_PADRAO = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
 export const idV2Schema = z.string().regex(/^[a-z][a-z0-9-]*$/, "id interno inválido");
 export const aulaIdV2Schema = z.union([
   lessonIdSchema,
@@ -69,6 +72,21 @@ export const noV2Schema = z.strictObject({
   comentario: z.string().optional(),
   nags: z.array(z.number().int().min(1).max(255)).optional(),
   desenhos: desenhoV2Schema.optional(),
+  /**
+   * As diretivas que vieram dentro do `{comentário}` do PGN, **cruas e opacas**:
+   * `[%cal Ge2e4]`, `[%csl Rd5]`, `[%clk 0:05:00]`, `[%anno …]`.
+   *
+   * ## Por que guardar o texto cru se `desenhos` já tem a seta
+   *
+   * Porque `desenhos` guarda o que a tela sabe **desenhar**, e a tela deste projeto
+   * desenha numa cor só: o `G` de verde e o `R` de vermelho do Lichess não têm onde
+   * morar ali. Jogar a cor fora seria uma perda silenciosa; guardar o texto cru é o
+   * que o plano (§11) chama de "diretiva desconhecida preservável continua opaca".
+   * Assim a seta aparece na tela **e** a cor volta inteira num round-trip futuro.
+   *
+   * Nada aqui é executado nem interpretado. É texto guardado, não comando.
+   */
+  diretivas: z.array(z.string()).optional(),
 });
 
 export const analiseV2Schema = z.strictObject({
@@ -76,7 +94,32 @@ export const analiseV2Schema = z.strictObject({
   inicio: z.discriminatedUnion("tipo", [
     z.strictObject({ tipo: z.literal("posicao"), positionId: z.string().min(1) }),
     z.strictObject({ tipo: z.literal("referencia"), origem: referenciaNoSchema }),
+    /**
+     * Uma FEN crua, sem arquivo de posição por trás — é como um PGN importado chega.
+     *
+     * **Por que um terceiro tipo, e não inventar um `positionId`.** O plano final (§12)
+     * é categórico: "FEN importada não é posição automaticamente aprovada". Fabricar um
+     * arquivo de posição na importação faria exatamente isso — daria ao material de
+     * fora a mesma aparência do material revisado, e o professor perderia o único sinal
+     * que distingue os dois. Aqui a diferença é estrutural: enquanto a análise começa em
+     * `fen`, ela **não pode** ser certificada, e o validador diz isso em voz alta.
+     */
+    z.strictObject({ tipo: z.literal("fen"), fen: fenSchema }),
   ]),
+  /**
+   * O cabeçalho do PGN de onde a análise veio, guardado inteiro e **nunca
+   * interpretado** — §11: "diretivas desconhecidas preserváveis continuam opacas; não
+   * executá-las nem interpretá-las como comandos".
+   *
+   * Sem isto, importar perderia `[White]`, `[Event]`, `[ChapterURL]` e o resultado: o
+   * professor não teria como voltar à origem do que está editando.
+   */
+  origemPgn: z.strictObject({
+    tags: z.record(z.string(), z.string()),
+    resultado: z.string().optional(),
+    /** O que a varredura do PGN não soube ler. Diagnóstico, não conteúdo. */
+    naoReconhecidos: z.array(z.string()).default([]),
+  }).optional(),
   raizId: idV2Schema,
   nos: z.record(idV2Schema, noV2Schema),
 });
@@ -320,6 +363,7 @@ function problemasDeLegalidade(
       }
       return position.fen;
     }
+    if (analise.inicio.tipo === "fen") return analise.inicio.fen;
     // Começar de um nó de outra análise: aquela precisa ser percorrida primeiro.
     return caminhar(analise.inicio.origem.analiseId)?.get(analise.inicio.origem.nodeId) ?? null;
   }
@@ -547,6 +591,16 @@ export function problemasDaAulaV2(
   if (aula.metadados) {
     for (const analise of aula.analises) {
       if (analise.inicio.tipo === "posicao" && !proveniencia.has(analise.inicio.positionId)) problemas.push({ codigo: "POSICAO_SEM_PROVENIENCIA", mensagem: `a análise usa ${analise.inicio.positionId} sem registrar sua revisão`, analiseId: analise.id, campo: "inicio.positionId" });
+      // §12: "FEN importada não é posição automaticamente aprovada". É **aviso**, e não
+      // erro, porque descreve um trabalho que ainda não foi feito e que o professor
+      // pode fazer depois — o plano (§7) diz que o rascunho aceita pendência
+      // identificada. **Quando a publicação v2 existir, esta passa a impedir**: aula
+      // publicada com posição não revisada é exatamente o que o currículo proíbe.
+      // A posição inicial do xadrez é a exceção, e não é firula: ela não é material de
+      // ninguém, não afirma nada e não tem o que revisar. Importar vinte partidas
+      // completas produziria vinte avisos que não pedem trabalho nenhum — e alarme que
+      // não pede trabalho ensina o professor a ignorar os que pedem.
+      if (analise.inicio.tipo === "fen" && analise.inicio.fen !== FEN_INICIAL_PADRAO) problemas.push({ codigo: "FEN_IMPORTADA_SEM_REVISAO", severidade: "aviso", mensagem: "esta análise começa numa posição importada, que ainda não passou por revisão de proveniência", analiseId: analise.id, campo: "inicio.fen" });
     }
     for (const pratica of aula.praticas) {
       if (!proveniencia.has(pratica.positionId)) problemas.push({ codigo: "PRATICA_SEM_PROVENIENCIA", mensagem: `a prática usa ${pratica.positionId} sem registrar sua revisão`, praticaId: pratica.id, campo: "positionId" });
