@@ -167,8 +167,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
    *
    * Antes eram três percursos independentes — posição do nó, SAN de todos, numeração
    * de todos — e cada um rejogava a partida desde a raiz por nó. Numa partida de 60
-   * lances isso levava 1,1 s por clique, medido. `mapaDaAnalise` faz os três numa
-   * descida só, com um tabuleiro e `undo`.
+   * lances (121 nós) isso media **758 ms** por recálculo, contra **24 ms** agora —
+   * medido em Node, sem o relógio do navegador no meio. `mapaDaAnalise` faz os três
+   * numa descida só, com um tabuleiro e `undo`.
    *
    * As dependências também mudaram: o mapa **não depende do nó selecionado**, então
    * trocar de lance na lista não recalcula a árvore — só lê `quadros[nodeIdAtual]`.
@@ -247,7 +248,27 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
   if (!capitulo) return <main className="p-4 text-erro-texto">Esta aula ainda não tem capítulo editável.</main>;
 
   return (
-    <main className="mx-auto flex w-full max-w-7xl flex-col gap-4 p-4">
+    /*
+     * ## A altura é FECHADA (`h-dvh`), e não um piso
+     *
+     * Medido em 10/09/2026 com uma partida de 60 lances: a lista de lances tem
+     * `overflow-auto` — ela **promete** rolar por dentro —, mas sem nenhum pai de
+     * altura fechada ela cresce em vez de rolar. Eram **4.420 px** de lista numa
+     * página de 5.452 px, e quem rolava era a página inteira: o professor perdia o
+     * tabuleiro de vista justamente enquanto procurava um lance lá embaixo.
+     *
+     * É o mesmo defeito que o editor v1 já tinha corrigido, e o conserto é o mesmo:
+     * altura fechada aqui, `min-h-0` na linha de baixo (sem ele um filho flex nunca
+     * encolhe abaixo do próprio conteúdo) e `overflow-y-auto` em cada coluna. Assim
+     * as três colunas rolam por dentro e o tabuleiro fica onde está.
+     *
+     * **Só a partir de `lg`.** Em tela estreita o layout de três colunas não se
+     * aplica, tudo empilha, e uma altura fechada espremeria a lista de lances até
+     * zero — medido. Abaixo disso a página volta a rolar como antes. O plano (§16)
+     * diz que o alvo da autoria é o desktop; isto não promete paridade no celular,
+     * só evita quebrar o que já funcionava.
+     */
+    <main className="mx-auto flex w-full max-w-7xl flex-col gap-4 p-4 lg:h-dvh">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs font-medium uppercase tracking-wide text-metodo-tinta">Editor v2 · piloto</p>
@@ -288,8 +309,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
       {recado ? <p role="alert" className="rounded-lg border border-erro bg-erro-superficie/10 p-3 text-sm text-erro-texto">{recado}</p> : null}
       <PainelDeProblemas visiveis={visiveis} resumo={resumo} aoIr={irAoProblema} />
 
-      <div className="grid gap-4 lg:grid-cols-[14rem_minmax(20rem,38rem)_minmax(18rem,1fr)]">
-        <aside className="cartao-vazio flex flex-col gap-3 p-3">
+      <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[14rem_minmax(20rem,38rem)_minmax(18rem,1fr)]">
+        <aside className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
           <h2 className="text-sm font-semibold text-tinta">Capítulos</h2>
           {historico.presente.capitulos.map((item) => (
             <button key={item.id} type="button" onClick={() => { setCapituloId(item.id); setNodeId(item.inicioNodeId); }} className={`foco rounded-md px-2 py-2 text-left text-sm ${item.id === capitulo.id ? "bg-metodo-superficie text-metodo-tinta-alta" : "text-tinta hover:bg-carta-toque"}`}>{item.titulo}</button>
@@ -300,7 +321,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
           </label>
         </aside>
 
-        <section className="cartao-vazio flex flex-col gap-3 p-3">
+        <section className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
           {derivado ? (
             <>
               <ChessBoard fen={derivado.quadro.fen} orientation={capitulo.orientacao} turnColor={toBoardColor(jogo.turn())} dests={legalDests(jogo)} lastMove={derivado.quadro.ultimoLance as [Key, Key] | null} check={jogo.inCheck()} onMove={mover} revision={historico.passados.length + historico.futuros.length} />
@@ -317,7 +338,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
           )}
         </section>
 
-        <section className="cartao-vazio flex min-h-[32rem] flex-col gap-4 p-3">
+        <section className="cartao-vazio flex min-h-[32rem] flex-col gap-4 p-3 lg:min-h-0">
           <div className="flex min-h-0 flex-1 flex-col gap-2">
             <h2 className="text-sm font-semibold text-tinta">Lances e variantes</h2>
             {/* Sem as posições reconstruídas não há SAN nem numeração; o painel cai

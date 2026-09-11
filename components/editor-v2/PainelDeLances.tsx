@@ -15,7 +15,7 @@ export function PainelDeLances({ analise, sans, rotulos, selecionado, onSelecion
   const raiz = analise.nos[analise.raizId];
   const entradas = entradasVerticais(analise);
   return (
-    <div className="flex min-h-0 flex-col gap-2">
+    <div className="flex min-h-0 flex-1 flex-col gap-2">
       <button type="button" aria-current={selecionado === raiz.id ? "true" : undefined} onClick={() => onSelecionar(raiz.id)} className={`foco w-fit rounded-md px-2 py-1 text-xs ${selecionado === raiz.id ? "bg-metodo-superficie text-metodo-tinta-alta" : "text-tinta-fraca hover:bg-carta-toque"}`}>Posição inicial</button>
       {entradas.length ? (
         <ol className="flex min-h-0 flex-col gap-0.5 overflow-auto pr-1" aria-label="Lances da análise">

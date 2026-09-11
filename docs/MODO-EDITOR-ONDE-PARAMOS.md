@@ -260,12 +260,46 @@ medida em Node quando o que se quer é o custo do algoritmo.
 
 ### O que a rodada NÃO cobre, e é o próximo ponto
 
-- **A lista de lances não rola por dentro.** Com 123 lances ela fica com **4.420 px**
-  de altura e empurra a página para **5.452 px**: quem rola é a página, e o tabuleiro
-  sai da tela enquanto o professor procura um lance. Medido, não suposto. É ergonomia
-  do Bloco B e **não foi consertado**.
+- **A lista de lances não rola por dentro.** **Paga na continuação seguinte; ver
+  abaixo.**
 - **Proveniência e certificação** continuam abertos: o validador confere se o registro
   existe, não se ele bate com o conteúdo.
+
+## Continuação — a lista de lances passa a rolar por dentro
+
+Com 60 lances, a lista tinha **4.420 px** e empurrava a página para **5.452 px**:
+quem rolava era a página, e o tabuleiro saía da tela justamente enquanto o professor
+procurava um lance lá embaixo.
+
+O conserto é o mesmo que o editor v1 já tinha aprendido: **altura fechada** no `main`,
+`min-h-0` na linha de baixo (sem ele um filho flex nunca encolhe abaixo do próprio
+conteúdo) e rolagem própria em cada coluna.
+
+**Duas correções que só apareceram medindo:**
+
+1. Pôr `overflow-y-auto` também na coluna dos lances **desabou a lista para 0 px** —
+   quem rola ali é a `<ol>`, e a coluna precisa apenas ceder altura. A `PainelDeLances`
+   também passou a reclamar a altura que sobra (`flex-1`), senão encolhia a zero.
+2. **A altura fechada vale só a partir de `lg`.** Em tela estreita as três colunas
+   empilham, e altura fechada espremia a lista a zero — medido em 375 px. Abaixo de
+   `lg` a página volta a rolar como antes. O plano (§16) diz que o alvo da autoria é o
+   desktop; isto não promete paridade no celular, só evita quebrar o que funcionava.
+
+Medido em **1366×768**, com a partida de 60 lances e 123 lances na lista:
+
+| O quê | Antes | Depois |
+|---|---|---|
+| Lista de lances | cresce até 4.420 px | **rola por dentro**, 369 px visíveis (~10 lances) |
+| Página na vertical | 5.452 px, rolando | **768 px, sem rolagem** |
+| Tabuleiro ao rolar a lista | saía da tela | **fica parado e inteiro na tela** (560 px) |
+| Rolagem horizontal | não | **não** |
+| Recuo das variantes | 13 px, duas posições | **13 px, duas posições** |
+
+Conferido em 375×812 que a tela estreita não regrediu: a lista não desaba e a página
+rola como antes.
+
+**Fica declarado:** 369 px mostram cerca de 10 lances por vez. É utilizável e não foi
+ajustado; se incomodar, o espaço sai do bloco de edição embaixo da lista.
 
 Evidência desta continuação: **806 testes** do repositório verdes, **39 focados no
 v2**; tipos, lint, build Next, conteúdo (38 consultas de tablebase, todas do cache),

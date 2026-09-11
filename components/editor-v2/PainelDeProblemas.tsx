@@ -41,7 +41,10 @@ export function PainelDeProblemas({
       className={`rounded-lg border p-3 ${impede ? "border-erro bg-erro-superficie/10" : "border-aviso-superficie bg-aviso-superficie/10"}`}
     >
       <p className={`text-sm font-medium ${impede ? "text-erro-texto" : "text-aviso-tinta"}`}>{resumo}</p>
-      <ul className="mt-2 flex flex-col gap-2">
+      {/* Teto com rolagem própria: a página tem altura fechada, e uma lista de
+          quarenta problemas espremeria o tabuleiro até ele sumir. O resumo acima
+          continua visível, então o professor sabe quantos são mesmo sem rolar. */}
+      <ul className="mt-2 flex max-h-40 flex-col gap-2 overflow-y-auto">
         {visiveis.map((item, indice) => (
           <li
             key={`${item.problema.codigo}-${indice}`}
