@@ -5,7 +5,7 @@ import { PINCEL_POR_COR } from "@/lib/chess/annotations";
 import { Chessground } from "@lichess-org/chessground";
 import type { Api } from "@lichess-org/chessground/api";
 import type { DrawBrush, DrawBrushes, DrawShape } from "@lichess-org/chessground/draw";
-import type { Color, Dests, Key } from "@lichess-org/chessground/types";
+import type { Color, Dests, Key, MouchEvent, Piece } from "@lichess-org/chessground/types";
 
 /**
  * Os quatro pincéis pedagógicos, lidos dos tokens de `app/globals.css`.
@@ -184,7 +184,28 @@ export type ChessBoardProps = {
    * completa os outros cinco é o montador, porque de quem é a vez é decisão
    * dele, não do tabuleiro.
    */
-  montagem?: { onChange: (fenDePecas: string) => void };
+  montagem?: {
+    onChange: (fenDePecas: string) => void;
+    /**
+     * Entrega ao montador o punho para **arrastar uma peça nova** da paleta para
+     * o tabuleiro, e `null` quando o tabuleiro é destruído.
+     *
+     * ## Por que a paleta precisa disto, e não de um segundo tabuleiro
+     *
+     * Arrastar da paleta não é um lance nem um movimento de peça existente: a
+     * peça ainda não está no tabuleiro quando o gesto começa. Quem sabe fazer
+     * isso é o próprio chessground (`api.dragNewPiece`), que põe a peça numa
+     * casa de espera fora do tabuleiro e conduz o arrasto até a casa de destino.
+     * Sem este atalho, uma paleta teria de inventar o arrasto por fora — com
+     * HTML5 drag-and-drop, coordenadas próprias e um fantasma que não é o mesmo
+     * do tabuleiro. Duas mecânicas de arrasto na mesma tela é o caminho curto
+     * para duas maneiras diferentes de errar.
+     *
+     * A força fica ligada: na montagem, soltar sobre uma casa ocupada **troca** a
+     * peça, que é o que o professor espera de um editor de posição.
+     */
+    aoLigar?: (controles: ControlesDeMontagem | null) => void;
+  };
   onMove?: (orig: Key, dest: Key) => void;
   /**
    * O toque numa casa — **inclusive casa vazia**, e é para isso que ele existe.
@@ -207,6 +228,19 @@ export type ChessBoardProps = {
    * continua chegando aqui.
    */
   onSelect?: (casa: Key) => void;
+};
+
+/** O que a paleta do montador pode pedir ao tabuleiro. */
+export type ControlesDeMontagem = {
+  arrastarNovaPeca: (peca: Piece, evento: MouchEvent) => void;
+  /**
+   * Põe (ou apaga, com `null`) uma peça numa casa, sem arrastar.
+   *
+   * É o **equivalente sem arrasto** que §25 exige: quem não puder ou não quiser
+   * arrastar escolhe a peça na paleta e clica na casa. Sem isto, montar uma
+   * posição seria a única operação do editor que só existe no mouse.
+   */
+  porPeca: (peca: Piece | null, casa: Key) => void;
 };
 
 /**
@@ -328,8 +362,26 @@ export function ChessBoard({
       },
     });
     apiRef.current = api;
+    // O punho da paleta só existe depois que o chessground existe — e some com
+    // ele. Passar `null` na limpeza evita que o montador segure um tabuleiro
+    // destruído e arraste uma peça para lugar nenhum.
+    montagemRef.current?.aoLigar?.({
+      arrastarNovaPeca: (peca, evento) => api.dragNewPiece(peca, evento, true),
+      porPeca: (peca, casa) => {
+        // `newPiece` avisa o `events.change` sozinho; `setPieces` **não** avisa
+        // (board.js:17 não chama `callUserFunction`). Por isso só o apagar
+        // precisa contar ao montador que a posição mudou — e sem este aviso a
+        // peça sumiria da tela e continuaria na FEN.
+        if (peca) api.newPiece(peca, casa);
+        else {
+          api.setPieces(new Map([[casa, undefined]]));
+          montagemRef.current?.onChange(api.getFen());
+        }
+      },
+    });
 
     return () => {
+      montagemRef.current?.aoLigar?.(null);
       api.destroy();
       apiRef.current = null;
     };

@@ -40,11 +40,19 @@ cada linha aponta a seção que conta a história inteira.
 - **Reordenar capítulos** — a coluna segue a ordem única do fluxo; arrastar muda o
   capítulo como um slide, o menu oferece a mesma ação pelo teclado e um Desfazer
   devolve a ordem anterior. Ver “reordenar capítulos no fluxo”.
+- **Adicionar capítulo** — o botão junto à lista abre um diálogo com posição
+  inicial, montador de peças e FEN colada; o capítulo entra depois do atual, num
+  Desfazer só, e o Refazer devolve os mesmos ids. **Falta a conferência humana do
+  arrasto da paleta.** Ver “adicionar capítulo e montar a posição”.
 
 **Aberto, na ordem:**
 
-1. **Paleta clicável de desenho** — hoje a cor se escolhe segurando Shift/Alt.
-2. **Importar por URL do Lichess** (§11) e **exportar PGN** continuam fora.
+1. **Trocar a posição inicial de um capítulo** (§9) — o montador já existe; falta o
+   cálculo de impacto sobre os lances que já estão lá.
+2. **Ações contextuais de §8.3** — mostrar esta variante na aula, começar desta
+   posição e duplicar como independente.
+3. **Paleta clicável de desenho** — hoje a cor se escolhe segurando Shift/Alt.
+4. **Importar por URL do Lichess** (§11) e **exportar PGN** continuam fora.
 
 **Dívida conhecida e não paga:** a lista de lances mostra ~10 lances por vez em
 1366×768; se incomodar, o espaço sai do bloco de edição abaixo dela.
@@ -1004,6 +1012,165 @@ removidos no fim.
 
 **Paleta clicável de desenho**: transformar a legenda das quatro cores em escolha de
 pincel que funcione sem Shift/Alt, preservando o gesto atual do Lichess.
+
+---
+
+## Adicionar capítulo e montar a posição, entregue em 11/9/2026
+
+Até aqui um capítulo só nascia de importação de PGN. Agora nasce da tela: o botão
+**Adicionar capítulo**, junto à coluna da esquerda, abre um diálogo com três das cinco
+portas de §8.3 — **posição inicial**, **montar posição** e **colar FEN**. A quarta
+(PGN) continua na janela de importar, e a janela diz isso em voz alta em vez de fingir
+que tem cinco abas. A quinta (URL do Lichess) continua não existindo.
+
+### O montador não é um segundo tabuleiro
+
+O `ChessBoard` já sabia montar desde o B8.4 — `movable.free`, `deleteOnDropOff` e
+`events.change` estão documentados na prop `montagem` dele. O que faltava era a
+**paleta**, e paleta não é tabuleiro: a peça começa **fora** dele. Quem sabe fazer esse
+gesto é o próprio chessground (`api.dragNewPiece`), e a prop `montagem` ganhou um
+`aoLigar` que entrega esse punho ao montador — mais um `porPeca`, que é o equivalente
+**sem arrasto** exigido por §25: clique na peça, clique na casa.
+
+As peças da paleta são as **mesmas** do tabuleiro. O sprite mora no `cburnett.css` do
+pacote, preso ao seletor `.cg-wrap piece.<peça>.<cor>`; por isso o contêiner da paleta
+também é `.cg-wrap`, e um bloco novo em `globals.css` desfaz as três coisas que ele
+herda e que ali não fazem sentido (rebordo, sombra e o posicionamento a 12,5%). Um
+segundo jogo de imagens daria duas damas ligeiramente diferentes na mesma tela — e a de
+arrastar não seria a que cai no tabuleiro.
+
+### Duas regras que a chess.js não cobre, e que um montador comete o tempo todo
+
+Medido em 11/9/2026: `validateFen("4k3/8/8/8/8/8/8/4K3 w KQkq - 0 1")` devolve
+`{ok:true}` — quatro direitos de roque sem uma torre no tabuleiro. E
+`validateFen("4k3/8/8/8/8/8/8/4K3 w - e6 0 1")` também — casa de en passant sem peão
+nenhum que pudesse ter passado por ela. As duas são exatamente o que sai de um montador
+em que o professor não mexeu nas opções avançadas.
+
+`problemaDosCamposDaFen` passou a cobrir as duas, e `problemaDaPosicaoMontada` soma esse
+juízo ao `fenProblem` de sempre. **Fora** do `fenProblem`, de propósito: ele responde
+"dá para jogar aqui?" e é o juiz do gate sobre conteúdo publicado; endurecê-lo mudaria o
+veredicto sobre material já aprovado sem ninguém ter pedido. As caixinhas de roque que a
+posição não permite se desmarcam sozinhas, e ficam desabilitadas com o motivo escrito.
+
+Nada disso afirma alcançabilidade histórica (§11 do plano final). A tela diz "esta
+posição não serve: o roque curto das brancas está marcado, mas não há rei em e1 e torre
+em h1" — o que o projeto consegue provar, e só.
+
+### Os ids nascem antes do comando, e é por isso que o Refazer devolve o mesmo capítulo
+
+`prepararNovoCapitulo` confere o formulário e decide os quatro ids (`analise-…`,
+`capitulo-…`, `etapa-capitulo-…`, `no-…-0`) **sem tocar na aula**. O comando
+`ADICIONAR_CAPITULO` só carrega o que já foi decidido. Se o id nascesse dentro do
+executor, cada Refazer fabricaria um capítulo **parecido** com outro id — e qualquer
+narração, treino ou etapa que apontasse para ele ficaria apontando para um fantasma.
+
+Um apelido só é aceito quando os **quatro** ids que ele gera estão livres: conferir só o
+do capítulo deixaria passar a colisão do nó raiz, que é a que ninguém enxerga lendo a
+tela. Dois capítulos chamados "Oposição" viram `capitulo-oposicao` e
+`capitulo-oposicao-2`.
+
+A etapa entra **depois** da etapa do capítulo selecionado, e o seletor "Entra…" permite
+escolher outro lugar ou o fim da aula. O cadastro de capítulos continua sendo cadastro:
+o novo é o último dele e o segundo do fluxo ao mesmo tempo. **Não há segunda ordem.**
+
+A análise nasce com `inicio: { tipo: "fen" }`, como a importada, e pelo mesmo motivo de
+§12: FEN que não passou por revisão de proveniência não pode ganhar a aparência de
+posição aprovada. O validador emite `FEN_IMPORTADA_SEM_REVISAO` como **aviso** — o
+trabalho que falta, não um defeito da criação. A posição inicial do xadrez é a exceção e
+não gera aviso nenhum.
+
+### Evidência desta continuação
+
+**Os sete portões verdes:** tipos, lint, **890 testes** (17 novos), build, conteúdo (38
+consultas de tablebase, todas do cache), **42/42 mutações vermelhas** e repertório
+`--check`.
+
+Os 17 testes novos cobrem: recusa de nome vazio com o campo apontado; cinco posições
+impossíveis recusadas em português; `prepararNovoCapitulo` não tocando na aula; a
+criação inteira com ids estáveis e documento válido; a posição inicial padrão sem aviso
+de proveniência; a etapa entrando depois do capítulo atual e no fim quando não há
+escolha; o cadastro não virando segunda ordem; Desfazer removendo capítulo, análise e
+etapa e Refazer devolvendo **os mesmos quatro ids**; nomes repetidos; nome que não vira
+id; aplicação repetida recusada; a composição da FEN com o roque em ordem canônica; e os
+roques possíveis por posição.
+
+**No navegador autenticado, com a N0-LADDER:**
+
+- o diálogo abriu com o foco no campo do nome, `aria-modal`, e `Esc` fechou devolvendo o
+  foco ao botão que o abriu;
+- confirmar sem nome manteve o diálogo aberto e escreveu a recusa; confirmar com
+  `8/8/8/8/8/8/4k3/4K3 w - - 0 1` respondeu "esta posição não serve: reis adjacentes
+  (e1 e e2)" **sem apagar o nome nem a FEN já digitados**;
+- a porta da FEN criou o capítulo, que entrou logo depois do selecionado, foi escolhido
+  sozinho e abriu na sua posição inicial, com três peças no tabuleiro e o painel dizendo
+  "Arraste uma peça no tabuleiro para criar o primeiro lance";
+- Desfazer tirou o capítulo inteiro; Refazer devolveu `capitulo-rei-e-peao-pela-mao`,
+  `analise-rei-e-peao-pela-mao`, `no-rei-e-peao-pela-mao-0` e a etapa — os mesmos ids,
+  conferidos no arquivo gravado;
+- o autosave gravou e, depois de recarregar, a ordem do fluxo continuou
+  `introdução → capítulo → capítulo → treino → prática`;
+- **o montador foi exercitado com o ponteiro real**: Limpar esvaziou o tabuleiro (e
+  apagou sozinho os quatro roques), rei branco em e1, rei preto em e5 e peão branco em
+  e2 foram postos pelo caminho sem arrasto, e a linha de veredicto passou de "falta o
+  rei branco" a "Posição válida" com `8/8/8/4k3/8/8/4P3/4K3 w - - 0 1`;
+- o capítulo montado foi criado e gravado com exatamente essa FEN;
+- em **1366×768** a janela com o montador aberto mede 1.031 px e rola por dentro, mas o
+  rodapé é grudado: o botão **Criar capítulo** fica visível em `top 703`, e não há
+  rolagem horizontal;
+- o console ficou limpo. Uma reclamação do React sobre a etiqueta `<piece>` apareceu e
+  foi paga: o elemento passou a ser escrito como HTML cru, de duas listas fechadas do
+  próprio arquivo.
+
+Os arquivos temporários `content/rascunhos/lessons/N0-LADDER.json` e
+`.editor/v2/N0-LADDER.json` foram removidos no fim. O SHA-256 de
+`.editor/v2/N1-KPK.json` continua
+`92879926bfb4439b9d66ff8695566129c576424ec0ea7d14e60627cca3f7d243`, conferido antes e
+depois. Nenhuma aula publicada foi tocada.
+
+### Uma armadilha de medição, para quem vier depois
+
+Duas vezes o ensaio pareceu achar um defeito que não existia, e as duas causas valem
+mais que o susto:
+
+1. **O tabuleiro "parou de desenhar".** Com o painel do navegador atrás de outra janela,
+   o `requestAnimationFrame` não roda, e o chessground redesenha por ele: `cg-board`
+   fica sem filho nenhum enquanto a FEN no estado do React está certa. Uma fotografia
+   traz a página de volta e os 32 `<piece>` reaparecem. **Leia a FEN do estado, não a
+   contagem de peças no DOM**, quando o painel estiver escondido.
+2. **Seis cliques no mesmo lote viraram três peões.** Clique disparado por ferramenta
+   chega mais rápido que o React consegue confirmar o estado, e o `armada` que o
+   tabuleiro enxerga é o anterior. Um clique por chamada, com a leitura entre eles,
+   devolveu o resultado correto. Nenhum professor clica seis vezes em 16 ms.
+
+### O que esta rodada NÃO cobre
+
+- **O arrasto de verdade da paleta para o tabuleiro é teste humano.** O punho
+  (`api.dragNewPiece`) está ligado e o caminho sem arrasto foi exercitado com ponteiro
+  real, mas o gesto de arrastar não pode ser provado por script: o chessground recusa
+  evento não confiável (`if (!(s.trustAllEvents || e.isTrusted)) return`, `drag.js:6`).
+  Faltam também, no teste humano: arrastar peça já posta para outra casa, e arrastar
+  para fora para remover.
+- **Aula vazia.** O botão vive junto à lista de capítulos, e a tela ainda mostra "esta
+  aula ainda não tem capítulo editável" quando não há nenhum. Enquanto "Nova aula"
+  (§5.2) não existir, isso não acontece na prática — mas a porta precisa nascer junto
+  com ela.
+- **Continuam abertas, sem redução de escopo:** importação por URL do Lichess; writer e
+  exportação de PGN; as ações contextuais de §8.3 (**mostrar esta variante na aula**,
+  **começar desta posição**, **duplicar como independente**); **trocar a posição inicial
+  de um capítulo que já existe**, com poda por ramo e marcação para revisão (§9);
+  renomear/duplicar/excluir capítulo com impacto (§8.4); editor completo de treinos;
+  publicação v2; repertório; e a barra Stockfish.
+- A paleta clicável de **desenho** (a cor sem Shift/Alt) continua aberta — é outra
+  paleta, e não foi tocada aqui.
+
+### O próximo ponto exato
+
+**Trocar a posição inicial de um capítulo existente** (§9): o montador já existe e já
+sabe compor e validar a posição; o que falta é o cálculo de impacto — quais ramos
+continuam legais, poda a partir do primeiro lance ilegal de cada ramo, irmãos legais
+preservados, e comentários/narrações/desenhos/treinos afetados marcados para revisão,
+tudo numa transação com Desfazer.
 
 ---
 

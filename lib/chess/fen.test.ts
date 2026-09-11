@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { applyUci, fenProblem, pieceCount, samePosition } from "./fen.ts";
+import { applyUci, fenProblem, pieceCount, problemaDaPosicaoMontada, problemaDosCamposDaFen, samePosition } from "./fen.ts";
 
 /**
  * A checagem de posição possível, agora compartilhada entre o gate e o
@@ -101,4 +101,37 @@ test("o texto colado que não é FEN reclama em português", () => {
   // deixava passar em inglês a mensagem mais frequente do editor: a de quem
   // colou no campo alguma coisa que não é uma FEN.
   assert.equal(fenProblem("lixo qualquer"), "a FEN precisa dos 6 campos");
+});
+
+test("o peão na última fileira reclama em português", () => {
+  assert.equal(fenProblem("P3k3/8/8/8/8/8/8/4K3 w - - 0 1"), "há peão na primeira ou na oitava fileira");
+});
+
+/*
+ * As duas regras que a chess.js **não** cobre, e que um montador produz o tempo
+ * todo. Medido em 11/09/2026: `validateFen` devolve `{ok:true}` para os dois
+ * primeiros casos abaixo.
+ */
+test("o roque declarado exige rei e torre em casa", () => {
+  assert.equal(problemaDosCamposDaFen("4k3/8/8/8/8/8/8/4K3 w KQkq - 0 1"), "o roque curto das brancas está marcado, mas não há rei em e1 e torre em h1");
+  assert.equal(problemaDosCamposDaFen("4k3/8/8/8/8/8/8/R3K3 w Q - 0 1"), null);
+  assert.equal(problemaDosCamposDaFen("r3k3/8/8/8/8/8/8/4K3 w q - 0 1"), null);
+  assert.equal(problemaDosCamposDaFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"), null);
+});
+
+test("a casa de en passant exige o peão que passou por ela", () => {
+  // Peão preto acabou de ir de e7 a e5: com as brancas na vez, e6 é legítima.
+  assert.equal(problemaDosCamposDaFen("4k3/8/8/4p3/8/8/8/4K3 w - e6 0 1"), null);
+  assert.equal(problemaDosCamposDaFen("4k3/8/8/8/8/8/8/4K3 w - e6 0 1"), "a casa de en passant é e6, mas não há peão preto em e5");
+  // A fileira certa depende de quem está na vez, e não da cor do peão.
+  assert.equal(problemaDosCamposDaFen("4k3/8/8/4p3/8/8/8/4K3 b - e6 0 1"), "com as pretas na vez, a casa de en passant fica na 3ª fileira");
+  // O peão não pode ainda estar em e7, nem e6 pode estar ocupada.
+  assert.equal(problemaDosCamposDaFen("4k1p1/4p3/8/4p3/8/8/8/4K3 w - e6 0 1"), "a casa de en passant é e6, mas e6 e e7 precisam estar vazias");
+});
+
+test("problemaDaPosicaoMontada soma os dois juízos, e nesta ordem", () => {
+  // Sem os seis campos não há o que conferir entre eles: a queixa é a da forma.
+  assert.equal(problemaDaPosicaoMontada("lixo qualquer"), "a FEN precisa dos 6 campos");
+  assert.equal(problemaDaPosicaoMontada("4k3/8/8/8/8/8/8/4K3 w KQkq - 0 1"), "o roque curto das brancas está marcado, mas não há rei em e1 e torre em h1");
+  assert.equal(problemaDaPosicaoMontada("8/8/8/4k3/8/8/4P3/4K3 w - - 0 1"), null);
 });

@@ -3,6 +3,7 @@ import type { Position } from "../lesson/schema.ts";
 import { quadroDoNo } from "./arvore.ts";
 import { aplicarImportacaoPgn, type RelatorioImportacao } from "./importar-pgn.ts";
 import { mesmosDesenhos, noComDesenhos } from "./desenhos.ts";
+import { aplicarNovoCapitulo, type NovoCapituloV2 } from "./novo-capitulo.ts";
 import type { AulaV2, DesenhoV2, NoV2 } from "./modelo.ts";
 
 export type ComandoV2 =
@@ -25,6 +26,16 @@ export type ComandoV2 =
    * no histórico como qualquer outro gesto: um Ctrl+Z e a aula volta ao que era.
    */
   | { tipo: "IMPORTAR_JOGOS"; relatorio: RelatorioImportacao; escolhidos: number[] }
+  /**
+   * Cria um capítulo do nada: análise nova, capítulo e etapa, numa transação só.
+   *
+   * **Os ids chegam prontos, e isso é o ponto.** `NovoCapituloV2` é calculado por
+   * `prepararNovoCapitulo` no instante em que o professor confirma o diálogo; aqui
+   * nada é sorteado. Se o id nascesse neste executor, um Refazer criaria um
+   * capítulo com identidade diferente — e §8.3 pede que Refazer devolva o mesmo
+   * capítulo, não um parecido.
+   */
+  | { tipo: "ADICIONAR_CAPITULO"; novo: NovoCapituloV2 }
   | { tipo: "EDITAR_COMENTARIO"; analiseId: string; nodeId: string; comentario: string }
   | { tipo: "EDITAR_NARRACAO"; capituloId: string; narracaoId: string; texto: string }
   | { tipo: "ALTERNAR_NAG"; analiseId: string; nodeId: string; nag: number }
@@ -68,6 +79,11 @@ export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Rec
       : semEla.findIndex((etapa) => etapa.id === restantes.at(-1)?.id) + 1;
     semEla.splice(indice, 0, movida);
     return { ...aula, fluxo: semEla };
+  }
+  if (comando.tipo === "ADICIONAR_CAPITULO") {
+    const resultado = aplicarNovoCapitulo(aula, comando.novo);
+    if (!resultado.ok) throw new Error(resultado.mensagem);
+    return resultado.aula;
   }
   if (comando.tipo === "IMPORTAR_JOGOS") {
     // A recusa do importador é uma frase pronta, em português de professor, e ela

@@ -1293,3 +1293,37 @@ cg-board square.check {
     animation: professor-chega 220ms ease-out 1;
   }
 }
+
+/* --------------------------------------------------------------------------
+   A paleta de peças do montador (Editor v2, §9)
+
+   As peças da paleta são as **mesmas** do tabuleiro, e de propósito: o desenho
+   do sprite mora no `cburnett.css` do pacote, preso ao seletor
+   `.cg-wrap piece.<peça>.<cor>`. Trazer um segundo jogo de imagens só para a
+   paleta daria duas damas ligeiramente diferentes na mesma tela — e a de
+   arrastar não seria a que cai no tabuleiro.
+
+   Por isso o contêiner da paleta também é `.cg-wrap`, e este bloco desfaz as
+   três coisas que ele herda e que ali não fazem sentido: o rebordo e a sombra
+   (que são do tabuleiro, não de um botão), e o posicionamento absoluto a 12,5%
+   (que é a casa dentro do tabuleiro, não o quadrado da paleta).
+
+   `pointer-events` volta a valer porque na paleta a peça É o alvo do gesto: o
+   arrasto começa nela. No tabuleiro ela é decoração, e quem escuta é o
+   `cg-board` inteiro.
+   -------------------------------------------------------------------------- */
+.paleta-de-pecas {
+  outline: none;
+  box-shadow: none;
+}
+
+.paleta-de-pecas piece {
+  position: static;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+}

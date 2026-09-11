@@ -39,6 +39,7 @@
  */
 import { Chess } from "chess.js";
 import { lerPgns, type LancePgn, type PartidaPgn } from "../repertorio/pgn.ts";
+import { comoId } from "./ids.ts";
 import { LIMITES_V2, medidasDaAulaV2, problemasDeLimiteV2 } from "./limites.ts";
 import type { AnaliseV2, AulaV2, CapituloV2, CorDesenhoV2, CasaAcesaV2, NoV2, SetaV2 } from "./modelo.ts";
 
@@ -161,19 +162,6 @@ function separarComentario(bruto: string): { prosa: string; desenhos: Desenhos |
 function tituloDoJogo(partida: PartidaPgn, numero: number): string {
   const candidatos = [partida.tags.ChapterName, partida.tags.Event, [partida.tags.White, partida.tags.Black].filter(Boolean).join(" × ")];
   return candidatos.find((c) => c && c.trim() !== "") ?? `Jogo ${numero}`;
-}
-
-/** `P1.07 - Peão de cavalo` vira `p1-07-peao-de-cavalo`, que é o que o id v2 aceita. */
-function comoId(texto: string, reserva: string): string {
-  const limpo = texto
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 40)
-    .replace(/-+$/g, "");
-  return /^[a-z]/.test(limpo) ? limpo : reserva;
 }
 
 /**

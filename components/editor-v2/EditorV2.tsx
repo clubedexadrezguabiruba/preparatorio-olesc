@@ -12,6 +12,7 @@ import { PainelDeImportacao } from "@/components/editor-v2/PainelDeImportacao";
 import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
 import { PainelDeProblemas } from "@/components/editor-v2/PainelDeProblemas";
 import { ListaDeCapitulos } from "@/components/editor-v2/ListaDeCapitulos";
+import { DialogoNovoCapitulo } from "@/components/editor-v2/DialogoNovoCapitulo";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { analiseDaAula, mapaDaAnalise } from "@/lib/editor-v2/arvore";
 import { desenhoDeFormas } from "@/lib/editor-v2/desenhos";
@@ -27,6 +28,7 @@ import {
   type Historico,
 } from "@/lib/editor-v2/comandos";
 import type { RelatorioImportacao } from "@/lib/editor-v2/importar-pgn";
+import type { NovoCapituloV2 } from "@/lib/editor-v2/novo-capitulo";
 import { problemasDaAulaV2, validarAulaV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
 import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/editor-v2/recuperacao";
 import type { Position } from "@/lib/lesson/schema";
@@ -72,9 +74,11 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const [conflitoAtual, setConflitoAtual] = useState<{ textoAtual: string | null; hashAtual: string | null } | null>(null);
   const [falhaRecuperacao, setFalhaRecuperacao] = useState(false);
   const [importando, setImportando] = useState(false);
+  const [adicionando, setAdicionando] = useState(false);
   /** Cresce a cada navegação por teclado; é o sinal para o foco seguir a seta (§16). */
   const [pedidoDeFoco, setPedidoDeFoco] = useState(0);
   const botaoImportar = useRef<HTMLButtonElement>(null);
+  const botaoAdicionar = useRef<HTMLButtonElement>(null);
   const [sessaoId, setSessaoId] = useState<string | null>(null);
   const hash = useRef(hashInicial);
   const ultimoEnfileirado = useRef(documentoInicial);
@@ -177,12 +181,12 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
    * `preventDefault` é obrigatório: sem ele a seta rola a página junto, e o professor
    * vê o tabuleiro subir enquanto tenta só avançar um lance.
    */
-  const estadoDoTeclado = useRef({ analise, importando });
-  useEffect(() => { estadoDoTeclado.current = { analise, importando }; });
+  const estadoDoTeclado = useRef({ analise, janelaAberta: importando || adicionando });
+  useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta: importando || adicionando }; });
 
   useEffect(() => {
     const teclado = (evento: KeyboardEvent) => {
-      const { analise: arvore, importando: janelaAberta } = estadoDoTeclado.current;
+      const { analise: arvore, janelaAberta } = estadoDoTeclado.current;
       if (janelaAberta) return;
       if (ehCampoDeTexto(evento.target as HTMLElement | null)) return;
       const acao = acaoDeTeclado(evento);
@@ -310,6 +314,28 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
     }
     fecharImportacao();
   }, [aplicar, fecharImportacao]);
+
+  const fecharAdicionar = useCallback(() => {
+    setAdicionando(false);
+    botaoAdicionar.current?.focus();
+  }, []);
+
+  /**
+   * Cria o capítulo e vai para ele — §8.3: "seleciona automaticamente o capítulo
+   * e sua posição inicial".
+   *
+   * A seleção é movida **antes** de `aplicar` não por otimismo, e sim porque os
+   * ids já existem: `prepararNovoCapitulo` os decidiu. Se o comando for recusado
+   * (nome que colide, teto estourado), `aplicar` devolve o documento anterior e
+   * a seleção cai de volta no capítulo válido mais próximo, porque `capitulo`
+   * é resolvido contra a lista de verdade a cada render.
+   */
+  const criarCapitulo = useCallback((novo: NovoCapituloV2) => {
+    aplicar({ tipo: "ADICIONAR_CAPITULO", novo });
+    setCapituloId(novo.capituloId);
+    setNodeId(novo.raizId);
+    fecharAdicionar();
+  }, [aplicar, fecharAdicionar]);
 
   /** Leva a tela até o lugar do problema. É o que o botão da lista faz. */
   const irAoProblema = useCallback((destino: DestinoV2) => {
@@ -445,11 +471,28 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
       {recado ? <p role="alert" className="rounded-lg border border-erro bg-erro-superficie/10 p-3 text-sm text-erro-texto">{recado}</p> : null}
       <PainelDeProblemas visiveis={visiveis} resumo={resumo} aoIr={irAoProblema} />
       {importando ? <PainelDeImportacao aula={historico.presente} aoAplicar={importar} aoFechar={fecharImportacao} /> : null}
+      {adicionando ? (
+        <DialogoNovoCapitulo
+          aula={historico.presente}
+          capituloAtualId={capitulo.id}
+          orientacaoPadrao={historico.presente.metadados?.orientacaoPadrao ?? capitulo.orientacao}
+          aoCriar={criarCapitulo}
+          aoFechar={fecharAdicionar}
+        />
+      ) : null}
 
       <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[14rem_minmax(20rem,38rem)_minmax(18rem,1fr)]">
         <aside className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
           <h2 className="text-sm font-semibold text-tinta">Capítulos</h2>
           <p className="text-xs text-tinta-fraca">Arraste como um slide ou abra ••• para mover pelo teclado.</p>
+          <button
+            type="button"
+            ref={botaoAdicionar}
+            onClick={() => setAdicionando(true)}
+            className="foco rounded-md border border-borda px-2 py-2 text-sm text-tinta hover:bg-carta-toque"
+          >
+            + Adicionar capítulo
+          </button>
           <ListaDeCapitulos
             capitulos={capitulosOrdenados}
             atualId={capitulo.id}
