@@ -42,8 +42,8 @@ cada linha aponta a seção que conta a história inteira.
   devolve a ordem anterior. Ver “reordenar capítulos no fluxo”.
 - **Adicionar capítulo** — o botão junto à lista abre um diálogo com posição
   inicial, montador de peças e FEN colada; o capítulo entra depois do atual, num
-  Desfazer só, e o Refazer devolve os mesmos ids. **Falta a conferência humana do
-  arrasto da paleta.** Ver “adicionar capítulo e montar a posição”.
+  Desfazer só, e o Refazer devolve os mesmos ids. **Teste humano aprovado**,
+  inclusive os três arrastos. Ver “adicionar capítulo e montar a posição”.
 
 **Aberto, na ordem:**
 
@@ -1145,12 +1145,10 @@ mais que o susto:
 
 ### O que esta rodada NÃO cobre
 
-- **O arrasto de verdade da paleta para o tabuleiro é teste humano.** O punho
-  (`api.dragNewPiece`) está ligado e o caminho sem arrasto foi exercitado com ponteiro
-  real, mas o gesto de arrastar não pode ser provado por script: o chessground recusa
-  evento não confiável (`if (!(s.trustAllEvents || e.isTrusted)) return`, `drag.js:6`).
-  Faltam também, no teste humano: arrastar peça já posta para outra casa, e arrastar
-  para fora para remover.
+- Os três arrastos do montador **já foram conferidos pelo Doug** (seção abaixo); o
+  que continua valendo é a regra de método: gesto de arrastar não se prova por script,
+  porque o chessground recusa evento não confiável
+  (`if (!(s.trustAllEvents || e.isTrusted)) return`, `drag.js:6`).
 - **Aula vazia.** O botão vive junto à lista de capítulos, e a tela ainda mostra "esta
   aula ainda não tem capítulo editável" quando não há nenhum. Enquanto "Nova aula"
   (§5.2) não existir, isso não acontece na prática — mas a porta precisa nascer junto
@@ -1163,6 +1161,22 @@ mais que o susto:
   publicação v2; repertório; e a barra Stockfish.
 - A paleta clicável de **desenho** (a cor sem Shift/Alt) continua aberta — é outra
   paleta, e não foi tocada aqui.
+
+### Teste humano do montador — 11/9/2026, aprovado
+
+Doug exercitou os três gestos que o script não alcança, e os três passaram: **arrastar
+peça da paleta para o tabuleiro**, **arrastar peça já posta para outra casa** e
+**arrastar para fora para remover**. Com isso, §9 fica coberto nesta fatia pelas duas
+vias — o arrasto e o equivalente por clique.
+
+No mesmo teste ele montou, do zero, um capítulo de **dois peões contra cavalo**
+(`3k4/4n3/8/8/2PP4/8/8/4K3 w - - 0 1`) e jogou nele até 30 nós. Esse trabalho está no
+autosave local `.editor/v2/N1-KPK.json`, que **não** é versionado e **não** é conteúdo
+publicado.
+
+**A lição de protocolo, para a próxima rodada:** o teste foi feito na N1-KPK porque foi
+para lá que o endereço do agente apontou, e a N1-KPK é justamente o rascunho protegido
+do combinado. O endereço de ensaio é `/editor/v2/finais/N0-LADDER`, e só ele.
 
 ### O próximo ponto exato
 
