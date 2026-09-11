@@ -200,10 +200,78 @@ conteúdo (38 consultas de tablebase, todas do cache), repertório `--check` e
   `CERTIFICACAO_SEM_PROVENIENCIA`), não se ele **bate** com o conteúdo.
 - **Dívida de desempenho medida por leitura, não por benchmark:**
   `sansDaAnalise` chama `quadroDoNo` para cada nó, e `quadroDoNo` rejoga a partida
-  desde a raiz — custo quadrático. Numa partida de 60 lances são ~7 mil jogadas
-  repetidas; no alvo de 1.000 nós do plano (§17, abertura em até 2 s) são centenas
-  de milhares. O portão novo já usa o percurso barato; o painel ainda não. Isto
-  precisa ser resolvido **no Bloco B**, antes do corpus de partidas longas.
+  desde a raiz — custo quadrático. **Paga na continuação seguinte; ver abaixo.**
+
+## Continuação — a partida de 60 lances, medida e acelerada
+
+### O que foi exercitado no navegador (com o Doug logado)
+
+`/editor/v2/finais/N1-KPK` abriu com o rascunho real: tabuleiro, 20 lances, **nenhum
+problema na lista**. Numa cópia **temporária** da N0-LADDER, quebrada de propósito:
+*"1 problema impede a publicação"*, a frase nomeando o lance e o capítulo, o tabuleiro
+substituído pela explicação, e **"Ir para o problema" marcou o nó certo** (o 2º lance).
+Com a cópia válida: comentário escrito chegou ao disco, NAG aplicado, e
+**Desfazer/Refazer voltaram um gesto por vez** (comentário, depois símbolo) e
+devolveram o estado original.
+
+**Corpus de partida longa:** 60 lances completos (120 meios-lances) e 3 variantes em
+profundidades 2, 30 e 80 — 124 nós. A regra visual do Doug **se manteve**: a lista
+inteira tem só **duas** posições horizontais (linha principal e variante), **13 px** de
+recuo, **zero rolagem horizontal**. Numeração correta até `60.Rh7+`.
+
+### A dívida de desempenho: 758 ms → 24 ms
+
+`mapaDaAnalise` (novo, em `arvore.ts`) percorre a análise **uma vez**, com um tabuleiro
+e `undo`, e devolve posição, SAN e numeração de todos os nós. `sansDaAnalise` e
+`rotulosDaAnalise` passaram a ser leituras dele; a tela faz **uma** chamada em vez de
+três, e o mapa **não depende do nó selecionado** — trocar de lance na lista não
+recalcula a árvore.
+
+Medido em Node, sem navegador no meio, na árvore de 121 nós, média de 20 execuções:
+
+| | Antes | Depois |
+|---|---|---|
+| Calcular a árvore inteira | **757,8 ms** | **24,1 ms** |
+
+**32× mais rápido.** Na tela, com relógio confiável, a mediana de selecionar um lance
+ficou em **72 ms** (60, 66, 67, 72), abaixo do alvo de 100 ms do plano (§17).
+
+Teste de regressão conta as chamadas em vez de cronometrar: `jogadas === nós - 1`,
+um lance por nó. Cronômetro em teste falha sozinho em máquina lenta; contagem não.
+
+### Uma correção: as primeiras medidas de tela estavam infladas
+
+A primeira rodada relatou "1,1 s por clique" usando `requestAnimationFrame` duplo
+para esperar o render. **Neste navegador um rAF duplo VAZIO custa 392 ms**, e às vezes
+trava em 1 s exato. O problema era real — 758 ms de conta de verdade —, mas o número
+de tela não era o da conta. **Protocolo para as próximas rodadas:** medir com
+`setTimeout(0)` (custa 1 ms aqui), nunca com `requestAnimationFrame`, e confirmar com
+medida em Node quando o que se quer é o custo do algoritmo.
+
+### Outras duas coisas que a rodada ensinou
+
+- **O navegador embutido nunca tem foco** (`document.hasFocus() === false`), então
+  `elemento.blur()` não dispara nada e campos que salvam ao sair do campo parecem
+  quebrados. É preciso despachar `focusout` à mão. Isso me fez julgar um comentário
+  como perdido quando ele estava correto.
+- **O tabuleiro não aceita lance por evento simulado.** Quatro tentativas (ponteiro,
+  mouse, na peça, clique-clique); o chessground não seleciona. É o que o plano já
+  prevê (§19). **Arrastar peça continua sendo teste humano**, do Doug.
+
+### O que a rodada NÃO cobre, e é o próximo ponto
+
+- **A lista de lances não rola por dentro.** Com 123 lances ela fica com **4.420 px**
+  de altura e empurra a página para **5.452 px**: quem rola é a página, e o tabuleiro
+  sai da tela enquanto o professor procura um lance. Medido, não suposto. É ergonomia
+  do Bloco B e **não foi consertado**.
+- **Proveniência e certificação** continuam abertos: o validador confere se o registro
+  existe, não se ele bate com o conteúdo.
+
+Evidência desta continuação: **806 testes** do repositório verdes, **39 focados no
+v2**; tipos, lint, build Next, conteúdo (38 consultas de tablebase, todas do cache),
+repertório `--check` e **42/42 mutações** verdes. Artefatos temporários da N0-LADDER
+removidos. O rascunho real `.editor/v2/N1-KPK.json` continua com 20 nós e a mesma
+impressão digital (`92879926…`).
 
 ---
 

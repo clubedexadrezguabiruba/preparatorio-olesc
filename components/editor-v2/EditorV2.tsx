@@ -8,7 +8,7 @@ import { ChessBoard } from "@/components/board/ChessBoard";
 import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
 import { PainelDeProblemas } from "@/components/editor-v2/PainelDeProblemas";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
-import { analiseDaAula, quadroDoNo, rotulosDaAnalise, sansDaAnalise } from "@/lib/editor-v2/arvore";
+import { analiseDaAula, mapaDaAnalise } from "@/lib/editor-v2/arvore";
 import { problemasVisiveisV2, resumoDosProblemasV2, type DestinoV2 } from "@/lib/editor-v2/diagnostico-visual";
 import {
   aplicarNoHistorico,
@@ -162,17 +162,28 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
    * lista de problemas no lugar, com o botão que leva ao lance. O documento continua
    * intacto: nada aqui corrige nada sozinho.
    */
-  const derivado = useMemo(() => {
+  /*
+   * ## E por que é UMA passada, e não três
+   *
+   * Antes eram três percursos independentes — posição do nó, SAN de todos, numeração
+   * de todos — e cada um rejogava a partida desde a raiz por nó. Numa partida de 60
+   * lances isso levava 1,1 s por clique, medido. `mapaDaAnalise` faz os três numa
+   * descida só, com um tabuleiro e `undo`.
+   *
+   * As dependências também mudaram: o mapa **não depende do nó selecionado**, então
+   * trocar de lance na lista não recalcula a árvore — só lê `quadros[nodeIdAtual]`.
+   */
+  const mapa = useMemo(() => {
     try {
-      return {
-        quadro: quadroDoNo(historico.presente, analise.id, nodeIdAtual, positions),
-        sans: sansDaAnalise(historico.presente, analise.id, positions),
-        rotulos: rotulosDaAnalise(historico.presente, analise.id, positions),
-      };
+      return mapaDaAnalise(historico.presente, analise.id, positions);
     } catch {
       return null;
     }
-  }, [analise.id, historico.presente, nodeIdAtual, positions]);
+  }, [analise.id, historico.presente, positions]);
+
+  const derivado = mapa && mapa.quadros[nodeIdAtual]
+    ? { quadro: mapa.quadros[nodeIdAtual], sans: mapa.sans, rotulos: mapa.rotulos }
+    : null;
 
   const jogo = useMemo(() => new Chess(derivado?.quadro.fen), [derivado?.quadro.fen]);
   const selecionado = analise.nos[nodeIdAtual];

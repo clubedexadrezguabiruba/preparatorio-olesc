@@ -5,7 +5,7 @@ import test from "node:test";
 import { Chess } from "chess.js";
 import { lessonSchema, positionSchema, type Position } from "../lesson/schema.ts";
 import { adaptarLessonV1 } from "./adaptar-v1.ts";
-import { quadroDoNo } from "./arvore.ts";
+import { mapaDaAnalise, quadroDoNo } from "./arvore.ts";
 import { aplicarNoHistorico, desfazer, executarComando, iniciarHistorico, refazer } from "./comandos.ts";
 import { completarAulaV2Legada, problemasDaAulaV2, validarAulaV2, type AulaV2 } from "./modelo.ts";
 import { entradasVerticais } from "./painel.ts";
@@ -467,4 +467,91 @@ test("árvore quebrada não é percorrida com tabuleiro", () => {
   const codigos = problemasDaAulaV2(aula, positions).map((p) => p.codigo);
   assert.ok(codigos.includes("CICLO_NA_ARVORE"));
   assert.ok(!codigos.includes("LANCE_ILEGAL"));
+});
+
+/* ------------------------------------------------------------------ *
+ * O mapa da análise — uma passada só
+ * ------------------------------------------------------------------ */
+
+/** Uma linha longa e legal a partir da posição da aula, mais uma variante. */
+function aulaComLinhaLonga(meiosLances: number) {
+  const aula = structuredClone(adaptarLessonV1(lesson, positions));
+  const analise = aula.analises[0];
+  const fen = positions[(analise.inicio as { positionId: string }).positionId].fen;
+  const jogo = new Chess(fen);
+  const nos: Record<string, { id: string; uci?: string; filhos: string[] }> = {
+    [analise.raizId]: { id: analise.raizId, filhos: [] },
+  };
+  let pai = analise.raizId;
+  const caminho: string[] = [];
+  for (let i = 0; i < meiosLances; i += 1) {
+    // Escolhe sempre um lance que deixe a partida viva, para a linha não acabar cedo.
+    const op = jogo.moves({ verbose: true }).find((m) => {
+      jogo.move(m);
+      const vivo = jogo.moves().length > 0;
+      jogo.undo();
+      return vivo;
+    });
+    if (!op) break;
+    jogo.move(op);
+    const id = `no-longo-${i}`;
+    nos[id] = { id, uci: op.from + op.to + (op.promotion ?? ""), filhos: [] };
+    nos[pai].filhos.push(id);
+    pai = id;
+    caminho.push(id);
+  }
+  analise.nos = nos as typeof analise.nos;
+  aula.capitulos[0].inicioNodeId = analise.raizId;
+  aula.capitulos[0].caminho = caminho;
+  aula.capitulos[0].narracoes = [];
+  return { aula, analise, caminho };
+}
+
+test("o mapa joga cada lance UMA vez, e não recalcula a partida por nó", () => {
+  /*
+   * O teste que guarda o conserto de 10/09/2026. Antes, a tela calculava cada nó
+   * desde a raiz: com 120 meios-lances isso são ~7.200 jogadas, e o clique num lance
+   * levava 1,1 s no navegador (medido em três pontos da partida). Contar as chamadas
+   * é determinístico; cronometrar seria um teste que falha sozinho em máquina lenta.
+   */
+  const { aula, analise, caminho } = aulaComLinhaLonga(120);
+  const quantosNos = Object.keys(analise.nos).length;
+
+  const original = Chess.prototype.move;
+  let jogadas = 0;
+  Chess.prototype.move = function (...args: Parameters<typeof original>) {
+    jogadas += 1;
+    return original.apply(this, args);
+  };
+  let mapa;
+  try {
+    mapa = mapaDaAnalise(aula, analise.id, positions);
+  } finally {
+    Chess.prototype.move = original;
+  }
+
+  assert.equal(caminho.length, 120, "a linha de teste precisa ter 120 meios-lances");
+  assert.equal(jogadas, quantosNos - 1, "um lance por nó, fora a raiz");
+  assert.ok(jogadas < 200, `esperado ~${quantosNos}, e não o quadrado disso; foram ${jogadas}`);
+  assert.equal(Object.keys(mapa.quadros).length, quantosNos, "todo nó ganha posição");
+});
+
+test("a numeração da linha longa chega certa ao lance 60", () => {
+  const { aula, analise, caminho } = aulaComLinhaLonga(120);
+  const mapa = mapaDaAnalise(aula, analise.id, positions);
+  const inicial = positions[(analise.inicio as { positionId: string }).positionId].fen.split(" ");
+  const primeiroPly = (Number(inicial[5]) - 1) * 2 + (inicial[1] === "b" ? 1 : 0);
+  const ultimo = caminho[119];
+  const ply = primeiroPly + 119;
+  assert.equal(mapa.rotulos[ultimo], `${Math.floor(ply / 2) + 1}${ply % 2 === 0 ? "." : "…"}`);
+  assert.equal(mapa.rotulos[analise.raizId], undefined, "a posição de partida não recebe número de lance");
+});
+
+test("o mapa devolve o mesmo que o cálculo nó a nó", () => {
+  // A prova de que a troca preservou o resultado, e não só ficou mais rápida.
+  const { aula, analise } = aulaComLinhaLonga(24);
+  const mapa = mapaDaAnalise(aula, analise.id, positions);
+  for (const id of Object.keys(analise.nos)) {
+    assert.deepEqual(mapa.quadros[id], quadroDoNo(aula, analise.id, id, positions), id);
+  }
 });
