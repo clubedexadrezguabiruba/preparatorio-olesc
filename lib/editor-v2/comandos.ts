@@ -93,7 +93,19 @@ export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Rec
     proxima = { ...analise, nos: { ...analise.nos, [no.id]: editado } };
   }
   if (comando.tipo === "ALTERNAR_NAG") {
-    const nags = no.nags?.includes(comando.nag) ? no.nags.filter((n) => n !== comando.nag) : [...(no.nags ?? []), comando.nag];
+    const qualidadesDaInterface = new Set([1, 2, 3, 4, 5, 6]);
+    const jaSelecionado = no.nags?.includes(comando.nag) ?? false;
+    // Os seis símbolos da interface são alternativas, não etiquetas
+    // acumuláveis. NAGs importados que a interface não edita continuam
+    // preservados para que o ciclo PGN -> editor -> PGN não perca informação.
+    const nags = qualidadesDaInterface.has(comando.nag)
+      ? (() => {
+          const preservados = (no.nags ?? []).filter((n) => !qualidadesDaInterface.has(n));
+          return jaSelecionado ? preservados : [...preservados, comando.nag];
+        })()
+      : jaSelecionado
+        ? (no.nags ?? []).filter((n) => n !== comando.nag)
+        : [...(no.nags ?? []), comando.nag];
     const editado: NoV2 = { ...no };
     if (nags.length) editado.nags = nags; else delete editado.nags;
     proxima = { ...analise, nos: { ...analise.nos, [no.id]: editado } };

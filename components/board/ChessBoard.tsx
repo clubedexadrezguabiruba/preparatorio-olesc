@@ -66,7 +66,7 @@ const PINCEIS = [
  * Se um botão de tema voltar, o conserto é aqui e é conhecido: reexecutar isto
  * quando o atributo de tema do `<html>` mudar.
  */
-function pinceis(host: HTMLElement): Partial<DrawBrushes> {
+function pinceis(host: HTMLElement, espessuraUniforme = false): Partial<DrawBrushes> {
   const estilo = getComputedStyle(host);
   const tabela: Record<string, DrawBrush> = {};
   for (const { nome, token, opacity, lineWidth } of PINCEIS) {
@@ -77,7 +77,11 @@ function pinceis(host: HTMLElement): Partial<DrawBrushes> {
       console.error(`ChessBoard: o token ${token} não existe na folha de estilo`);
       continue;
     }
-    tabela[nome] = { key: nome, color: cor, opacity, lineWidth };
+    // O editor é uma superfície de autoria livre, equivalente ao desenho do
+    // Lichess: ali a cor é a única diferença e todos os traços medem 10. A
+    // espessura semântica acima continua valendo nas marcações pedagógicas da
+    // aula, onde vermelho/verde também precisam se separar sem depender da cor.
+    tabela[nome] = { key: nome, color: cor, opacity, lineWidth: espessuraUniforme ? 10 : lineWidth };
   }
   // A mesma regra do token ausente, um degrau acima: se a paleta de cores do autor
   // apontar para um pincel que esta tabela não tem, o chessground **não reclama** —
@@ -165,6 +169,8 @@ export type ChessBoardProps = {
     shapes: DrawShape[];
     onChange: (shapes: DrawShape[]) => void;
   };
+  /** No desenho livre de autoria, todas as cores usam a largura padrão 10. */
+  espessuraDeDesenhoUniforme?: boolean;
   /**
    * Modo montagem (B8.4): as peças andam livres, soltar fora do tabuleiro
    * apaga, e cada mudança devolve a FEN nova. Desligado por padrão — nada do
@@ -221,6 +227,7 @@ export function ChessBoard({
   matedKing = null,
   overlay,
   desenhavel,
+  espessuraDeDesenhoUniforme = false,
   montagem,
   onMove,
   onSelect,
@@ -317,7 +324,7 @@ export function ChessBoard({
         // O tipo do pacote exige a tabela inteira — os doze pincéis —, mas o
         // `configure()` dele faz `deepMerge`: o que não vier aqui continua
         // valendo o padrão. Trocamos os quatro que a aula usa e mais nada.
-        brushes: pinceis(host) as DrawBrushes,
+        brushes: pinceis(host, espessuraDeDesenhoUniforme) as DrawBrushes,
       },
     });
     apiRef.current = api;

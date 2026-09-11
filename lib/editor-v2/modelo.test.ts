@@ -206,6 +206,19 @@ test("editar comentário e NAG é transacional e desfaz/refaz", () => {
   assert.deepEqual(h.presente.analises[0].nos[nodeId].nags, [1]);
 });
 
+test("os seis símbolos de qualidade são exclusivos sem apagar outro NAG importado", () => {
+  const aula = adaptarLessonV1(lesson, positions);
+  const capitulo = aula.capitulos[0];
+  const nodeId = capitulo.caminho[0];
+  aula.analises[0].nos[nodeId].nags = [1, 10];
+
+  const trocado = executarComando(aula, { tipo: "ALTERNAR_NAG", analiseId: capitulo.analiseId, nodeId, nag: 4 }, positions);
+  assert.deepEqual(trocado.analises[0].nos[nodeId].nags, [10, 4]);
+
+  const removido = executarComando(trocado, { tipo: "ALTERNAR_NAG", analiseId: capitulo.analiseId, nodeId, nag: 4 }, positions);
+  assert.deepEqual(removido.analises[0].nos[nodeId].nags, [10]);
+});
+
 test("reordenar capítulo move sua etapa no fluxo, preserva IDs e cabe num Desfazer", () => {
   const aula = adaptarLessonV1(lesson, positions);
   const capituloOriginal = aula.capitulos[0];

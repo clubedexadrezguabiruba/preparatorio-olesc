@@ -178,25 +178,33 @@ export function PainelDeImportacao({
               <p className="text-sm text-tinta">
                 {relatorio.jogos.length} jogo(s) no arquivo · <strong>{relatorio.aproveitaveis}</strong> podem entrar
               </p>
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                <strong className="text-metodo-tinta">{escolhidos.length} selecionado(s) para importar</strong>
+                <span className="flex gap-2">
+                  <button type="button" onClick={() => setEscolhidos(relatorio.jogos.filter((jogo) => jogo.recusa === null).map((jogo) => jogo.numero))} className="foco rounded border border-borda px-2 py-1 text-tinta hover:bg-carta-toque">Selecionar todos</button>
+                  <button type="button" onClick={() => setEscolhidos([])} className="foco rounded border border-borda px-2 py-1 text-tinta hover:bg-carta-toque">Desmarcar todos</button>
+                </span>
+              </div>
               <ul className="flex max-h-72 flex-col gap-2 overflow-y-auto rounded-md border border-borda-fraca p-2">
                 {relatorio.jogos.map((jogo) => {
                   const marcado = escolhidos.includes(jogo.numero);
                   return (
-                    <li key={jogo.numero} className="border-t border-borda-fraca pt-2 text-sm first:border-t-0 first:pt-0">
-                      <label className="flex items-baseline gap-2">
+                    <li key={jogo.numero} className={`rounded-md border p-2 text-sm transition-colors ${marcado ? "border-metodo-cheio bg-metodo-superficie/14" : "border-borda-fraca bg-carta"}`}>
+                      <label className="flex cursor-pointer items-start gap-2">
                         <input
                           type="checkbox"
-                          className="foco mt-1 shrink-0"
+                          className="foco mt-0.5 h-4 w-4 shrink-0 accent-metodo-superficie"
                           checked={marcado}
                           disabled={jogo.recusa !== null}
                           onChange={() => setEscolhidos((atuais) => marcado ? atuais.filter((n) => n !== jogo.numero) : [...atuais, jogo.numero])}
                         />
                         <span className="min-w-0 flex-1">
-                          <span className={jogo.recusa ? "text-tinta-fraca line-through" : "text-tinta"}>{jogo.titulo}</span>
+                          <span className={jogo.recusa ? "text-tinta-fraca line-through" : marcado ? "font-medium text-metodo-tinta-alta" : "text-tinta"}>{jogo.titulo}</span>
                           {jogo.recusa ? null : (
                             <span className="text-tinta-fraca"> — {jogo.lances} lances, {jogo.variantes} variantes, {jogo.comentarios} comentários</span>
                           )}
                         </span>
+                        {!jogo.recusa ? <strong className={`shrink-0 text-xs ${marcado ? "text-metodo-tinta" : "text-tinta-fraca"}`}>{marcado ? "incluído" : "fora"}</strong> : null}
                       </label>
                       {jogo.recusa ? (
                         <p className="ml-6 mt-1 text-xs text-erro-texto"><span className="rotulo">não entra</span> {jogo.recusa.mensagem}</p>

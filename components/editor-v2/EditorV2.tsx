@@ -31,6 +31,7 @@ import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/edi
 import type { Position } from "@/lib/lesson/schema";
 
 type Estado = "salvo" | "alterado" | "salvando" | "erro" | "conflito";
+const SIMBOLOS_DE_QUALIDADE: Record<number, string> = { 1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!" };
 
 function novoId(): string {
   return `n-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -261,6 +262,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
    * desenho inteiro — e redesenho no meio de um traço é traço perdido.
    */
   const desenhos = useMemo(() => desenhoDaAutoriaV2(selecionado.desenhos), [selecionado.desenhos]);
+  const qualidadeSelecionada = selecionado.nags?.find((nag) => SIMBOLOS_DE_QUALIDADE[nag]);
 
   /**
    * O professor acabou de desenhar (ou apagar) alguma coisa nesta posição.
@@ -448,7 +450,14 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         <section className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
           {derivado ? (
             <>
-              <ChessBoard fen={derivado.quadro.fen} orientation={capitulo.orientacao} turnColor={toBoardColor(jogo.turn())} dests={legalDests(jogo)} lastMove={derivado.quadro.ultimoLance as [Key, Key] | null} check={jogo.inCheck()} onMove={mover} desenhavel={desenhavel} revision={historico.passados.length + historico.futuros.length} />
+              <div className="relative">
+                <ChessBoard fen={derivado.quadro.fen} orientation={capitulo.orientacao} turnColor={toBoardColor(jogo.turn())} dests={legalDests(jogo)} lastMove={derivado.quadro.ultimoLance as [Key, Key] | null} check={jogo.inCheck()} onMove={mover} desenhavel={desenhavel} espessuraDeDesenhoUniforme revision={historico.passados.length + historico.futuros.length} />
+                {qualidadeSelecionada ? (
+                  <span aria-live="polite" title="Símbolo do lance selecionado" className="pointer-events-none absolute right-2 top-2 z-10 rounded-md border border-aviso-superficie bg-papel/90 px-2 py-1 text-lg font-bold text-aviso-tinta shadow-sm">
+                    {SIMBOLOS_DE_QUALIDADE[qualidadeSelecionada]}
+                  </span>
+                ) : null}
+              </div>
               <p className="text-center text-xs text-tinta-fraca">Arraste uma peça para acrescentar um lance a partir da posição selecionada. Promoção usa dama por padrão.</p>
               {/* A ajuda fica escrita na tela pelo mesmo motivo dos atalhos de
                   navegação (§16, "ferramentas de desenho descobríveis sem botão
@@ -494,9 +503,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
             />
           </div>
           <div className="border-t border-borda-fraca pt-3">
-            <p className="mb-2 text-xs text-tinta-fraca">Avaliação do lance</p>
+            <p className="mb-2 text-xs text-tinta-fraca">Símbolo do lance (escolha um)</p>
             <div className="flex flex-wrap gap-1">
-              {Object.entries({ 1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!" }).map(([nag, simbolo]) => (
+              {Object.entries(SIMBOLOS_DE_QUALIDADE).map(([nag, simbolo]) => (
                 <button key={nag} type="button" disabled={!selecionado.uci} onClick={() => aplicar({ tipo: "ALTERNAR_NAG", analiseId: analise.id, nodeId: selecionado.id, nag: Number(nag) })} className={`foco rounded border px-2 py-1 text-sm disabled:opacity-40 ${selecionado.nags?.includes(Number(nag)) ? "border-aviso-superficie bg-aviso-superficie/10 text-aviso-tinta" : "border-borda text-tinta"}`}>{simbolo}</button>
               ))}
             </div>
