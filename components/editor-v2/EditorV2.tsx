@@ -6,6 +6,7 @@ import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Key } from "@lichess-org/chessground/types";
 import { salvarDocumentoV2 } from "@/app/editor/v2/acoes";
 import { ChessBoard } from "@/components/board/ChessBoard";
+import { NagOverlay } from "@/components/board/NagOverlay";
 import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
 import { PainelDeImportacao } from "@/components/editor-v2/PainelDeImportacao";
 import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
@@ -330,6 +331,19 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
     setNodeId(id);
   };
 
+  const desfazerTudo = () => {
+    if (historico.presente === documentoInicial) return;
+    const confirmou = window.confirm("Desfazer todas as alterações feitas desde que você abriu o editor? A aula inteira voltará ao estado daquela abertura.");
+    if (!confirmou) return;
+    const primeiro = capitulosNaOrdemDaAula(documentoInicial)[0];
+    setHistorico((atual) => aplicarNoHistorico(atual, documentoInicial));
+    if (primeiro) {
+      setCapituloId(primeiro.id);
+      setNodeId(primeiro.inicioNodeId);
+    }
+    setRecado(null);
+  };
+
   const baixarCopia = () => {
     const blob = new Blob([JSON.stringify(historico.presente, null, 2) + "\n"], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -399,6 +413,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
           <button type="button" ref={botaoImportar} onClick={() => setImportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Importar PGN</button>
           <button type="button" disabled={!historico.passados.length} onClick={() => setHistorico(desfazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Desfazer</button>
           <button type="button" disabled={!historico.futuros.length} onClick={() => setHistorico(refazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Refazer</button>
+          <button type="button" disabled={historico.presente === documentoInicial} onClick={desfazerTudo} className="foco rounded-md border border-aviso-superficie px-3 py-2 text-sm text-aviso-tinta disabled:opacity-40">Desfazer tudo</button>
           <span className={`text-xs ${estado === "erro" || estado === "conflito" ? "text-erro-texto" : "text-tinta-fraca"}`}>
             {estado === "salvo" ? "✓ salvo" : estado === "alterado" ? "alterado" : estado === "salvando" ? "salvando…" : estado}
           </span>
@@ -450,14 +465,21 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         <section className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
           {derivado ? (
             <>
-              <div className="relative">
-                <ChessBoard fen={derivado.quadro.fen} orientation={capitulo.orientacao} turnColor={toBoardColor(jogo.turn())} dests={legalDests(jogo)} lastMove={derivado.quadro.ultimoLance as [Key, Key] | null} check={jogo.inCheck()} onMove={mover} desenhavel={desenhavel} espessuraDeDesenhoUniforme revision={historico.passados.length + historico.futuros.length} />
-                {qualidadeSelecionada ? (
-                  <span aria-live="polite" title="Símbolo do lance selecionado" className="pointer-events-none absolute right-2 top-2 z-10 rounded-md border border-aviso-superficie bg-papel/90 px-2 py-1 text-lg font-bold text-aviso-tinta shadow-sm">
-                    {SIMBOLOS_DE_QUALIDADE[qualidadeSelecionada]}
-                  </span>
-                ) : null}
-              </div>
+              <ChessBoard
+                fen={derivado.quadro.fen}
+                orientation={capitulo.orientacao}
+                turnColor={toBoardColor(jogo.turn())}
+                dests={legalDests(jogo)}
+                lastMove={derivado.quadro.ultimoLance as [Key, Key] | null}
+                check={jogo.inCheck()}
+                onMove={mover}
+                desenhavel={desenhavel}
+                espessuraDeDesenhoUniforme
+                revision={historico.passados.length + historico.futuros.length}
+                overlay={qualidadeSelecionada && derivado.quadro.ultimoLance
+                  ? <NagOverlay casa={derivado.quadro.ultimoLance[1] as Key} orientation={capitulo.orientacao} simbolo={SIMBOLOS_DE_QUALIDADE[qualidadeSelecionada]} />
+                  : undefined}
+              />
               <p className="text-center text-xs text-tinta-fraca">Arraste uma peça para acrescentar um lance a partir da posição selecionada. Promoção usa dama por padrão.</p>
               {/* A ajuda fica escrita na tela pelo mesmo motivo dos atalhos de
                   navegação (§16, "ferramentas de desenho descobríveis sem botão
@@ -513,7 +535,12 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
               Comentário desta posição
               <textarea key={selecionado.id + (selecionado.comentario ?? "")} defaultValue={selecionado.comentario ?? ""} onBlur={(e) => aplicar({ tipo: "EDITAR_COMENTARIO", analiseId: analise.id, nodeId: selecionado.id, comentario: e.currentTarget.value })} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta" placeholder="Explique a ideia deste lance…" />
             </label>
-            {narracoes.length ? <div className="mt-3 rounded-md bg-papel p-2 text-sm text-tinta-media"><span className="text-xs text-tinta-fraca">Narração existente</span>{narracoes.map((n) => <p key={n.id} className="mt-1">{n.texto}</p>)}</div> : null}
+            {narracoes.map((narracao) => (
+              <label key={narracao.id} className="mt-3 flex flex-col gap-1 text-xs text-tinta-fraca">
+                Narração mostrada ao aluno
+                <textarea key={narracao.id + narracao.texto} defaultValue={narracao.texto} onBlur={(e) => aplicar({ tipo: "EDITAR_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, texto: e.currentTarget.value })} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta" placeholder="Apague o texto para remover esta narração." />
+              </label>
+            ))}
           </div>
         </section>
       </div>

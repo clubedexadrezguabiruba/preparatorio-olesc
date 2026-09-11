@@ -26,6 +26,7 @@ export type ComandoV2 =
    */
   | { tipo: "IMPORTAR_JOGOS"; relatorio: RelatorioImportacao; escolhidos: number[] }
   | { tipo: "EDITAR_COMENTARIO"; analiseId: string; nodeId: string; comentario: string }
+  | { tipo: "EDITAR_NARRACAO"; capituloId: string; narracaoId: string; texto: string }
   | { tipo: "ALTERNAR_NAG"; analiseId: string; nodeId: string; nag: number }
   | { tipo: "ADICIONAR_LANCE"; analiseId: string; nodeId: string; uci: string; novoNodeId: string }
   | { tipo: "PROMOVER_VARIANTE"; analiseId: string; parentId: string; nodeId: string }
@@ -75,6 +76,21 @@ export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Rec
     const resultado = aplicarImportacaoPgn(aula, comando.relatorio, comando.escolhidos);
     if (!resultado.ok) throw new Error(resultado.mensagem);
     return resultado.aula;
+  }
+  if (comando.tipo === "EDITAR_NARRACAO") {
+    const capitulo = aula.capitulos.find((item) => item.id === comando.capituloId);
+    if (!capitulo) throw new Error("capítulo inexistente");
+    if (!capitulo.narracoes.some((item) => item.id === comando.narracaoId)) throw new Error("narração inexistente");
+    const texto = comando.texto.trim();
+    return {
+      ...aula,
+      capitulos: aula.capitulos.map((item) => item.id !== capitulo.id ? item : {
+        ...item,
+        narracoes: texto
+          ? item.narracoes.map((narracao) => narracao.id === comando.narracaoId ? { ...narracao, texto } : narracao)
+          : item.narracoes.filter((narracao) => narracao.id !== comando.narracaoId),
+      }),
+    };
   }
   const indice = aula.analises.findIndex((a) => a.id === comando.analiseId);
   if (indice < 0) throw new Error("análise inexistente");

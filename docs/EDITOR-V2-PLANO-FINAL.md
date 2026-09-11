@@ -142,9 +142,9 @@ No caso de treino personalizado, a perda da fonte conserva sua cópia completa e
 
 ## 6. Textos, desenho e reprodução
 
-Separar comentário de análise, narração, dica, feedback por resposta e explicação de conclusão. A régua de voz incide sobre o texto apresentado ao aluno. Um comentário técnico reservado à autoria não vira fala automaticamente.
+Separar comentário de análise, narração, dica, feedback por resposta e explicação de conclusão. A régua de voz incide sobre o texto apresentado ao aluno. Na importação, o comentário inicia também a narração daquele lance por padrão; depois disso as duas cópias são independentes.
 
-Importar comentário não cria pausa. “Usar como narração” cria texto pedagógico explícito, com edição própria; a interface informa que editar o comentário depois não altera essa narração. Conversão em lote exige prévia.
+Importar comentário cria uma narração temporizada no mesmo lance. A tela mostra primeiro o comentário e logo abaixo a caixa de narração já preenchida; o autor decide ali se edita ou apaga. Não há escolha anterior à importação, e editar o comentário depois não altera a narração.
 
 Reprodução oferece aula inteira, capítulo e “daqui”, com voltar, avançar, pausar, repetir e velocidades `0,5×`, `1×`, `2×`. Por padrão a narração recebe pausa temporizada. O autor pode marcar uma pausa que exige “Continuar”.
 

@@ -219,6 +219,21 @@ test("os seis símbolos de qualidade são exclusivos sem apagar outro NAG import
   assert.deepEqual(removido.analises[0].nos[nodeId].nags, [10]);
 });
 
+test("narração pode ser editada ou apagada sem alterar o comentário do lance", () => {
+  const aula = adaptarLessonV1(lesson, positions);
+  const capitulo = aula.capitulos[0];
+  const narracao = capitulo.narracoes[0];
+  const comentarioAntes = aula.analises[0].nos[narracao.nodeId].comentario;
+
+  const editada = executarComando(aula, { tipo: "EDITAR_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, texto: "Nova fala." }, positions);
+  assert.equal(editada.capitulos[0].narracoes[0].texto, "Nova fala.");
+  assert.equal(editada.analises[0].nos[narracao.nodeId].comentario, comentarioAntes);
+
+  const apagada = executarComando(editada, { tipo: "EDITAR_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, texto: "   " }, positions);
+  assert.equal(apagada.capitulos[0].narracoes.some((item) => item.id === narracao.id), false);
+  assert.equal(apagada.analises[0].nos[narracao.nodeId].comentario, comentarioAntes);
+});
+
 test("reordenar capítulo move sua etapa no fluxo, preserva IDs e cabe num Desfazer", () => {
   const aula = adaptarLessonV1(lesson, positions);
   const capituloOriginal = aula.capitulos[0];

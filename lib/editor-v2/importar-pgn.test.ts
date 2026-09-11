@@ -143,6 +143,18 @@ test("a cor da seta e da casa acesa atravessa inteira, com o nome em português"
   assert.deepEqual(jogo.perdas, [], "as quatro cores do Lichess não são perda nenhuma");
 });
 
+test("comentário importado também inicia uma narração editável no mesmo lance", () => {
+  const jogo = lerImportacaoPgn("1. e4 { ocupe o centro } e5 { responda no centro } *").jogos[0];
+  const capitulo = jogo.capitulo!;
+  assert.deepEqual(
+    capitulo.narracoes.map((narracao) => ({ nodeId: narracao.nodeId, texto: narracao.texto, pausa: narracao.pausa })),
+    [
+      { nodeId: capitulo.caminho[0], texto: "ocupe o centro", pausa: "temporizada" },
+      { nodeId: capitulo.caminho[1], texto: "responda no centro", pausa: "temporizada" },
+    ],
+  );
+});
+
 test("letra de cor fora das quatro é recusada e anunciada, não adivinhada", () => {
   const jogo = lerImportacaoPgn("1. e4 { [%cal Ze2e4] } *").jogos[0];
   assert.equal(jogo.analise!.nos[jogo.capitulo!.caminho[0]].desenhos, undefined);

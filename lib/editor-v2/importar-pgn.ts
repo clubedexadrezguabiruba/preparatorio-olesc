@@ -332,7 +332,12 @@ function importarJogo(partida: PartidaPgn, numero: number, idsUsados: Set<string
     caminho,
     // De quem é a vez na posição inicial: é o lado que o professor quer ver de frente.
     orientacao: new Chess(fenDaRaiz).turn() === "w" ? "white" : "black",
-    narracoes: [],
+    // Na autoria do Doug, o comentário importado já é a primeira versão do que
+    // o aluno vai ouvir/ler. As duas cópias continuam independentes depois da
+    // importação: editar ou apagar uma narração não reescreve o comentário PGN.
+    narracoes: Object.values(nos).flatMap((no) => no.comentario
+      ? [{ id: `narracao-${no.id}`, nodeId: no.id, texto: no.comentario, pausa: "temporizada" as const }]
+      : []),
   };
 
   return { ...base, recusa: null, analise, capitulo, lances: contador.valor, comentarios: contas.comentarios, variantes: contas.variantes, perdas };

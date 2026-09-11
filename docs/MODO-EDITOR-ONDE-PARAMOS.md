@@ -1807,16 +1807,19 @@ O mesmo teste revelou três defeitos pequenos, corrigidos na rodada seguinte:
 - no desenho livre do editor, as quatro cores agora usam a espessura padrão 10 do
   Lichess; a espessura semântica diferente continua apenas nas marcações pedagógicas;
 - `!`, `?`, `!!`, `??`, `!?` e `?!` são escolhas exclusivas e o símbolo atual aparece
-  sobre o tabuleiro; NAGs importados fora desses seis continuam preservados;
+  junto ao lance na lista e sobre a peça de destino, como no Lichess; NAGs importados
+  fora desses seis continuam preservados;
 - a prévia de PGN destaca a linha inteira, escreve `incluído`/`fora`, conta os
   selecionados e oferece `Selecionar todos`/`Desmarcar todos`.
 
-Quatro itens do retorno são escopo ainda não entregue, e não regressão: criar capítulo
-com posição montada à mão, ação explícita/contextual para variante, barra Stockfish e
-uma ação de restauração total. Antes desta última é preciso definir se ela restaura o
-arquivo aberto ou apaga somente os desenhos. Copiar comentários importados para a
-narração também muda a separação aprovada entre comentário técnico e texto mostrado
-ao aluno; a solução segura precisa de prévia explícita e confirmação de autoria.
+Três itens do retorno são escopo ainda não entregue, e não regressão: criar capítulo
+com posição montada à mão, ação explícita/contextual para variante e barra Stockfish.
+Doug decidiu os outros dois em seguida: `Desfazer tudo` restaura a aula inteira ao
+estado da abertura; comentário importado também inicia, sem decisão anterior, uma
+narração temporizada no mesmo lance. Comentário e narração ficam independentes depois
+da importação, e a caixa de narração aparece abaixo para editar ou apagar. O símbolo
+de qualidade aparece no lance da lista e num selo sobre a casa de destino, conforme a
+referência visual do Lichess fornecida por Doug em 11/9/2026.
 
 ---
 
