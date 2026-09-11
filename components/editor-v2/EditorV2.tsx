@@ -6,8 +6,10 @@ import type { Key } from "@lichess-org/chessground/types";
 import { salvarDocumentoV2 } from "@/app/editor/v2/acoes";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
+import { PainelDeProblemas } from "@/components/editor-v2/PainelDeProblemas";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { analiseDaAula, quadroDoNo, rotulosDaAnalise, sansDaAnalise } from "@/lib/editor-v2/arvore";
+import { problemasVisiveisV2, resumoDosProblemasV2, type DestinoV2 } from "@/lib/editor-v2/diagnostico-visual";
 import {
   aplicarNoHistorico,
   desfazer,
@@ -17,7 +19,7 @@ import {
   type ComandoV2,
   type Historico,
 } from "@/lib/editor-v2/comandos";
-import { validarAulaV2, type AulaV2 } from "@/lib/editor-v2/modelo";
+import { problemasDaAulaV2, validarAulaV2, type AulaV2 } from "@/lib/editor-v2/modelo";
 import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/editor-v2/recuperacao";
 import type { Position } from "@/lib/lesson/schema";
 
@@ -135,15 +137,52 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
   }, []);
 
   const nodeIdAtual = analise.nos[nodeId] ? nodeId : capitulo?.inicioNodeId ?? analise.raizId;
-  const quadro = useMemo(
-    () => quadroDoNo(historico.presente, analise.id, nodeIdAtual, positions),
-    [analise.id, historico.presente, nodeIdAtual, positions],
+
+  /*
+   * Os problemas da aula que está na tela **agora**, e não os do arquivo no disco.
+   * É esta a lista que o professor vê enquanto escreve: um erro que só aparecesse
+   * ao salvar chegaria depois de ele já ter esquecido o que fez.
+   */
+  const problemas = useMemo(
+    () => problemasDaAulaV2(historico.presente, positions),
+    [historico.presente, positions],
   );
-  const jogo = useMemo(() => new Chess(quadro.fen), [quadro.fen]);
-  const sans = useMemo(() => sansDaAnalise(historico.presente, analise.id, positions), [analise.id, historico.presente, positions]);
-  const rotulos = useMemo(() => rotulosDaAnalise(historico.presente, analise.id, positions), [analise.id, historico.presente, positions]);
+  const visiveis = useMemo(() => problemasVisiveisV2(historico.presente, problemas), [historico.presente, problemas]);
+  const resumo = useMemo(() => resumoDosProblemasV2(problemas), [problemas]);
+
+  /*
+   * ## Por que isto é um `try`
+   *
+   * Reconstruir a posição de um nó exige jogar os lances desde a raiz, e um lance
+   * impossível faz a chess.js estourar. Sem este `try`, a exceção sobe e **apaga a
+   * tela inteira** — o professor recebe uma página em branco no exato momento em que
+   * mais precisa de um dedo apontando para o lance errado.
+   *
+   * Com ele, a tela deixa de desenhar o tabuleiro (que de fato não existe) e mostra a
+   * lista de problemas no lugar, com o botão que leva ao lance. O documento continua
+   * intacto: nada aqui corrige nada sozinho.
+   */
+  const derivado = useMemo(() => {
+    try {
+      return {
+        quadro: quadroDoNo(historico.presente, analise.id, nodeIdAtual, positions),
+        sans: sansDaAnalise(historico.presente, analise.id, positions),
+        rotulos: rotulosDaAnalise(historico.presente, analise.id, positions),
+      };
+    } catch {
+      return null;
+    }
+  }, [analise.id, historico.presente, nodeIdAtual, positions]);
+
+  const jogo = useMemo(() => new Chess(derivado?.quadro.fen), [derivado?.quadro.fen]);
   const selecionado = analise.nos[nodeIdAtual];
-  const narracoes = capitulo?.narracoes.filter((n) => n.nodeId === selecionado.id) ?? [];
+  const narracoes = capitulo?.narracoes.filter((n) => n.nodeId === selecionado?.id) ?? [];
+
+  /** Leva a tela até o lugar do problema. É o que o botão da lista faz. */
+  const irAoProblema = useCallback((destino: DestinoV2) => {
+    if (destino.capituloId) setCapituloId(destino.capituloId);
+    if (destino.nodeId) setNodeId(destino.nodeId);
+  }, []);
 
   const mover = (orig: Key, dest: Key) => {
     const peca = jogo.get(orig as Square);
@@ -236,6 +275,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
         </section>
       ) : null}
       {recado ? <p role="alert" className="rounded-lg border border-erro bg-erro-superficie/10 p-3 text-sm text-erro-texto">{recado}</p> : null}
+      <PainelDeProblemas visiveis={visiveis} resumo={resumo} aoIr={irAoProblema} />
 
       <div className="grid gap-4 lg:grid-cols-[14rem_minmax(20rem,38rem)_minmax(18rem,1fr)]">
         <aside className="cartao-vazio flex flex-col gap-3 p-3">
@@ -250,14 +290,36 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions }: {
         </aside>
 
         <section className="cartao-vazio flex flex-col gap-3 p-3">
-          <ChessBoard fen={quadro.fen} orientation={capitulo.orientacao} turnColor={toBoardColor(jogo.turn())} dests={legalDests(jogo)} lastMove={quadro.ultimoLance as [Key, Key] | null} check={jogo.inCheck()} onMove={mover} revision={historico.passados.length + historico.futuros.length} />
-          <p className="text-center text-xs text-tinta-fraca">Arraste uma peça para acrescentar um lance a partir da posição selecionada. Promoção usa dama por padrão.</p>
+          {derivado ? (
+            <>
+              <ChessBoard fen={derivado.quadro.fen} orientation={capitulo.orientacao} turnColor={toBoardColor(jogo.turn())} dests={legalDests(jogo)} lastMove={derivado.quadro.ultimoLance as [Key, Key] | null} check={jogo.inCheck()} onMove={mover} revision={historico.passados.length + historico.futuros.length} />
+              <p className="text-center text-xs text-tinta-fraca">Arraste uma peça para acrescentar um lance a partir da posição selecionada. Promoção usa dama por padrão.</p>
+            </>
+          ) : (
+            /* Sem tabuleiro possível, e dizendo por quê. A lista de problemas acima
+               já nomeia o lance; aqui explica-se por que o tabuleiro sumiu, para o
+               sumiço não parecer defeito do editor. */
+            <p className="p-4 text-sm text-tinta-media">
+              O tabuleiro não pode ser montado enquanto houver um lance impossível nesta partida — a posição
+              seguinte a ele nunca existiu. A lista acima diz qual é o lance e leva até ele.
+            </p>
+          )}
         </section>
 
         <section className="cartao-vazio flex min-h-[32rem] flex-col gap-4 p-3">
           <div className="flex min-h-0 flex-1 flex-col gap-2">
             <h2 className="text-sm font-semibold text-tinta">Lances e variantes</h2>
-            <PainelDeLances analise={analise} sans={sans} rotulos={rotulos} selecionado={selecionado.id} onSelecionar={setNodeId} onPromover={(parentId, id) => aplicar({ tipo: "PROMOVER_VARIANTE", analiseId: analise.id, parentId, nodeId: id })} />
+            {/* Sem as posições reconstruídas não há SAN nem numeração; o painel cai
+                para o UCI cru, que é feio mas legível, em vez de sumir junto com o
+                tabuleiro. O professor continua conseguindo clicar no lance errado. */}
+            <PainelDeLances
+              analise={analise}
+              sans={derivado?.sans ?? Object.fromEntries(Object.values(analise.nos).filter((no) => no.uci).map((no) => [no.id, no.uci!]))}
+              rotulos={derivado?.rotulos ?? {}}
+              selecionado={selecionado.id}
+              onSelecionar={setNodeId}
+              onPromover={(parentId, id) => aplicar({ tipo: "PROMOVER_VARIANTE", analiseId: analise.id, parentId, nodeId: id })}
+            />
           </div>
           <div className="border-t border-borda-fraca pt-3">
             <p className="mb-2 text-xs text-tinta-fraca">Avaliação do lance</p>

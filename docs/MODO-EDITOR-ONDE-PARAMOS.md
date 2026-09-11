@@ -120,6 +120,91 @@ localizado à ação visual de ir ao problema. Só então avançar ao Bloco B
 (importação/leitura de PGN, teclado e corpus de partidas longas). Este commit é
 um checkpoint seguro; não declara o Bloco 0/A nem o plano inteiro concluídos.
 
+## Continuação — o portão da legalidade e o diagnóstico na tela
+
+**As mutações foram concluídas: 42 de 42 vermelhas**, duas vezes — antes e depois
+das mudanças desta rodada. O número não é herdado de commit anterior.
+
+### O portão que faltava: legalidade dos lances
+
+O validador v2 emitia 35 códigos e **nenhum** julgava se os lances são jogáveis.
+Quem conferia era o desenhador do painel, e o modo de reprovar era **estourar uma
+exceção** (`arvore.ts`) — que apaga a tela inteira em vez de dizer qual lance está
+errado. Pior do que o código sugeria: o `throw new Error("lance ilegal no nó …")`
+daquele arquivo **nunca roda**, porque a chess.js 1.4 estoura dentro do próprio
+`move()` antes dele. O professor receberia `Invalid move: {...}`, em inglês.
+
+Agora `problemasDaAulaV2(aula, positions?)` e `validarAulaV2(valor, positions?)`
+aceitam as posições e, com elas, julgam legalidade. Quatro decisões que mordem:
+
+- **`positions` é opcional, e isso é contrato.** Quem tem o pacote (tela, gate)
+  recebe o julgamento de legalidade; quem só julga a forma do documento
+  (recuperação local, rascunho colado) chama sem e recebe **exatamente** o veredicto
+  de antes. Há teste que fixa isso nos dois sentidos.
+- **Poda por ramo, não por árvore** (plano final §5): achado o lance impossível, o
+  ramo para ali e os irmãos continuam sendo julgados. Sem isso um erro viraria uma
+  cascata que esconde o único que importa — há teste medindo "1 erro, e não um por
+  lance restante".
+- **Árvore quebrada não é percorrida com tabuleiro.** Ciclo, filho ausente, nó órfão
+  ou dois pais impedem o percurso; a legalidade só roda em análise cuja forma fechou.
+  Um "lance ilegal" num grafo quebrado seria consequência, não causa.
+- **Um tabuleiro só, com `undo`.** O percurso é em profundidade, cada lance jogado
+  uma vez. `arvore.ts` continua recalculando desde a raiz por nó — ver a dívida de
+  desempenho abaixo.
+
+Códigos novos: `LANCE_ILEGAL`, `LANCE_AUSENTE`, `POSICAO_INEXISTENTE`.
+
+### O diagnóstico chegou à tela
+
+`lib/editor-v2/diagnostico-visual.ts` (novo) traduz a localização estruturada no
+vocabulário do professor e diz para onde a tela deve ir. `analise-n1-kpk / node-7`
+vira **"o 2º lance do capítulo «Rei e peão contra rei»"**, com botão *Ir para o
+problema*. Cobre lance do percurso, posição de partida, lance de variante, quadro
+de introdução, pergunta e resposta de treino, prática, etapa do fluxo e a aula.
+
+Duas regras que a implementação fixa:
+
+- **Sem destino navegável, sem botão.** "Esta aula não declara seus metadados" é da
+  aula inteira; um botão ali não levaria a lugar nenhum, e um botão que não faz nada
+  ensina a desconfiar dos outros.
+- **Ordinal concorda em gênero.** "o 3º lance", "a 3ª etapa", "a 2ª pergunta". A
+  primeira versão escrevia "a 2º pergunta" na tela de um professor de português.
+
+Na tela (`PainelDeProblemas.tsx`, novo): lista com os bloqueantes na frente, cada
+item marcado *impede* ou *aviso*, e um resumo de uma linha — "2 problemas impedem a
+publicação · 1 aviso" —, porque "3 problemas" não responde se dá para publicar.
+
+**E o editor deixou de quebrar.** A reconstrução de posições em `EditorV2.tsx` está
+sob `try`: quando um lance impossível impede montar o tabuleiro, a tela mostra a
+lista de problemas e uma frase explicando por que o tabuleiro sumiu, em vez de uma
+página em branco. O painel de lances cai para o UCI cru e continua clicável, então o
+professor ainda alcança o lance errado. Nada é corrigido sozinho.
+
+### Evidência desta continuação
+
+**802 testes** do repositório verdes (eram 785), sendo **17 novos focados no v2** —
+7 do portão de legalidade e 10 do tradutor. Tipos, lint, build Next, validação de
+conteúdo (38 consultas de tablebase, todas do cache), repertório `--check` e
+**42/42 mutações** verdes. O rascunho real `.editor/v2/N1-KPK.json` não foi tocado:
+20 nós, e a impressão digital conferida antes e depois
+(`92879926bfb4439b9d66ff8695566129c576424ec0ea7d14e60627cca3f7d243`).
+
+### O que esta rodada NÃO cobre
+
+- **A rodada de navegador não foi feita.** `/editor/v2/finais/N1-KPK` pede login de
+  professor, e o agente não usa credencial do Doug. Falta conferir na tela: a aula
+  real abrindo sem problema na lista; uma aula **temporária** quebrada de propósito
+  mostrando a frase certa e o botão levando ao lance; e a remoção da temporária.
+- **Proveniência e certificação** continuam abertos como portões: hoje o validador
+  confere se o registro **existe** (`POSICAO_SEM_PROVENIENCIA`,
+  `CERTIFICACAO_SEM_PROVENIENCIA`), não se ele **bate** com o conteúdo.
+- **Dívida de desempenho medida por leitura, não por benchmark:**
+  `sansDaAnalise` chama `quadroDoNo` para cada nó, e `quadroDoNo` rejoga a partida
+  desde a raiz — custo quadrático. Numa partida de 60 lances são ~7 mil jogadas
+  repetidas; no alvo de 1.000 nós do plano (§17, abertura em até 2 s) são centenas
+  de milhares. O portão novo já usa o percurso barato; o painel ainda não. Isto
+  precisa ser resolvido **no Bloco B**, antes do corpus de partidas longas.
+
 ---
 
 ## Como ligar o editor

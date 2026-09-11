@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
+import { Chess } from "chess.js";
 import { lessonSchema, positionSchema, type Position } from "../lesson/schema.ts";
 import { adaptarLessonV1 } from "./adaptar-v1.ts";
 import { quadroDoNo } from "./arvore.ts";
@@ -68,7 +69,10 @@ test("todas as aulas v1 preservam etapas e bytes ao serem adaptadas", () => {
     });
     assert.equal(aulaV2.treinos.length, aulaV1.stages.guided ? 1 : 0, aulaV1.id);
     assert.equal(aulaV2.praticas.length, aulaV1.stages.practice ? 1 : 0, aulaV1.id);
-    assert.deepEqual(validarAulaV2(aulaV2), { ok: true, aula: aulaV2 }, aulaV1.id);
+    // Com as posições em mãos o veredicto passa a incluir a legalidade de cada
+    // lance. É a regressão que protege o conteúdo que já existe: nenhuma aula
+    // publicada pode deixar de ser jogável por causa de uma mudança no v2.
+    assert.deepEqual(validarAulaV2(aulaV2, todasAsPosicoes), { ok: true, aula: aulaV2 }, aulaV1.id);
     assert.equal(readFileSync(arquivo, "utf8"), antes, aulaV1.id);
   }
 });
@@ -349,4 +353,118 @@ test("validação semântica acusa início de treino e prática ausentes", () =>
   assert.ok(codigos.includes("TREINO_SEM_INICIO"));
   assert.ok(codigos.includes("TREINO_FORA_DO_FLUXO"));
   assert.ok(codigos.includes("FLUXO_SEM_PRATICA"));
+});
+
+/* ------------------------------------------------------------------ *
+ * O portão da legalidade — o lance é apontado, e não estoura
+ * ------------------------------------------------------------------ */
+
+/** Um lance legal na posição, em UCI, tirado do próprio tabuleiro. */
+function lanceLegal(fen: string, pular = 0): string {
+  const jogadas = new Chess(fen).moves({ verbose: true });
+  const jogada = jogadas[pular];
+  return `${jogada.from}${jogada.to}${jogada.promotion ?? ""}`;
+}
+
+test("o lance impossível é apontado no nó em vez de derrubar o painel", () => {
+  const aula = structuredClone(adaptarLessonV1(lesson, positions));
+  const analise = aula.analises[0];
+  const primeiro = aula.capitulos[0].caminho[0];
+  analise.nos[primeiro].uci = "a1a8";
+
+  /*
+   * Antes deste portão, a única reação era esta: uma exceção que apaga a tela
+   * inteira e não diz qual lance consertar. E ela é pior do que o código sugere —
+   * `arvore.ts` tem um `throw new Error("lance ilegal no nó …")` que NUNCA roda,
+   * porque a chess.js 1.4 estoura dentro do próprio `move()` antes disso. O que
+   * o professor receberia é o texto cru da biblioteca, em inglês.
+   */
+  assert.throws(() => quadroDoNo(aula, analise.id, primeiro, positions), /Invalid move/);
+
+  const problema = problemasDaAulaV2(aula, positions).find((p) => p.codigo === "LANCE_ILEGAL");
+  assert.ok(problema, "o lance impossível precisa virar diagnóstico");
+  assert.equal(problema.severidade, "erro");
+  assert.equal(problema.localizacao.analiseId, analise.id);
+  assert.equal(problema.localizacao.nodeId, primeiro);
+  assert.equal(problema.localizacao.campo, "uci");
+  assert.match(problema.mensagem, /a1a8/);
+  assert.equal(validarAulaV2(aula, positions).ok, false);
+});
+
+test("o ramo ilegal é podado sem levar os irmãos junto", () => {
+  const aula = structuredClone(adaptarLessonV1(lesson, positions));
+  const analise = aula.analises[0];
+  const raiz = analise.nos[analise.raizId];
+  const fenDaRaiz = quadroDoNo(aula, analise.id, analise.raizId, positions).fen;
+
+  // Dois irmãos novos na raiz: um impossível, um legal com continuação legal.
+  const legal = lanceLegal(fenDaRaiz);
+  const depoisDoLegal = quadroDoNo({ ...aula }, analise.id, analise.raizId, positions).fen;
+  const jogo = new Chess(depoisDoLegal);
+  jogo.move({ from: legal.slice(0, 2), to: legal.slice(2, 4) });
+  const legalSeguinte = lanceLegal(jogo.fen());
+
+  analise.nos["ramo-impossivel"] = { id: "ramo-impossivel", uci: "a1a8", filhos: [] };
+  analise.nos["ramo-bom"] = { id: "ramo-bom", uci: legal, filhos: ["ramo-bom-filho"] };
+  analise.nos["ramo-bom-filho"] = { id: "ramo-bom-filho", uci: legalSeguinte, filhos: [] };
+  raiz.filhos.push("ramo-impossivel", "ramo-bom");
+
+  const problemas = problemasDaAulaV2(aula, positions);
+  const ilegais = problemas.filter((p) => p.codigo === "LANCE_ILEGAL");
+  assert.equal(ilegais.length, 1, "só o ramo impossível é acusado");
+  assert.equal(ilegais[0].localizacao.nodeId, "ramo-impossivel");
+  // O irmão legal e o filho dele continuam sendo julgados, e passam.
+  assert.ok(!problemas.some((p) => p.localizacao.nodeId === "ramo-bom"));
+  assert.ok(!problemas.some((p) => p.localizacao.nodeId === "ramo-bom-filho"));
+});
+
+test("o ramo podado não vira cascata de erros nos descendentes", () => {
+  const aula = structuredClone(adaptarLessonV1(lesson, positions));
+  const analise = aula.analises[0];
+  const caminho = aula.capitulos[0].caminho;
+  // Quebrar o primeiro lance torna impossíveis todos os lances abaixo dele.
+  analise.nos[caminho[0]].uci = "a1a8";
+  const ilegais = problemasDaAulaV2(aula, positions).filter((p) => p.codigo === "LANCE_ILEGAL");
+  assert.equal(ilegais.length, 1, "um erro, e não um por lance restante do roteiro");
+  assert.equal(ilegais[0].localizacao.nodeId, caminho[0]);
+});
+
+test("nó fora da raiz sem lance é acusado com localização", () => {
+  const aula = structuredClone(adaptarLessonV1(lesson, positions));
+  const analise = aula.analises[0];
+  const primeiro = aula.capitulos[0].caminho[0];
+  delete analise.nos[primeiro].uci;
+  const problema = problemasDaAulaV2(aula, positions).find((p) => p.codigo === "LANCE_AUSENTE");
+  assert.ok(problema);
+  assert.equal(problema.localizacao.nodeId, primeiro);
+});
+
+test("posição que não está no pacote é apontada, e não some em silêncio", () => {
+  const aula = adaptarLessonV1(lesson, positions);
+  const problema = problemasDaAulaV2(aula, {}).find((p) => p.codigo === "POSICAO_INEXISTENTE");
+  assert.ok(problema);
+  assert.equal(problema.localizacao.analiseId, aula.analises[0].id);
+  assert.equal(problema.localizacao.campo, "inicio.positionId");
+});
+
+test("sem as posições o veredicto continua sendo exatamente o de antes", () => {
+  // A garantia de que o portão é aditivo: quem só julga a forma do documento
+  // (recuperação local, rascunho colado) não passa a receber erro novo.
+  const aula = structuredClone(adaptarLessonV1(lesson, positions));
+  aula.analises[0].nos[aula.capitulos[0].caminho[0]].uci = "a1a8";
+  assert.deepEqual(problemasDaAulaV2(aula), []);
+  assert.equal(validarAulaV2(aula).ok, true);
+  assert.equal(validarAulaV2(aula, positions).ok, false);
+});
+
+test("árvore quebrada não é percorrida com tabuleiro", () => {
+  // A forma vem primeiro: num grafo com ciclo o percurso não termina, e um
+  // "lance ilegal" ali seria consequência do ciclo, não um erro do professor.
+  const aula = structuredClone(adaptarLessonV1(lesson, positions));
+  const analise = aula.analises[0];
+  const fim = aula.capitulos[0].caminho.at(-1)!;
+  analise.nos[fim].filhos.push(analise.raizId);
+  const codigos = problemasDaAulaV2(aula, positions).map((p) => p.codigo);
+  assert.ok(codigos.includes("CICLO_NA_ARVORE"));
+  assert.ok(!codigos.includes("LANCE_ILEGAL"));
 });

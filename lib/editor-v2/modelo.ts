@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { fenSchema, generatedTemplatesSchema, lessonClassSchema, lessonIdSchema, uciSchema } from "../lesson/schema.ts";
+import { Chess } from "chess.js";
+import { fenSchema, generatedTemplatesSchema, lessonClassSchema, lessonIdSchema, uciSchema, type Position } from "../lesson/schema.ts";
 
 export const idV2Schema = z.string().regex(/^[a-z][a-z0-9-]*$/, "id interno inválido");
 export const aulaIdV2Schema = z.union([
@@ -265,8 +266,157 @@ type ProblemaBrutoV2 = {
   campo?: string;
 };
 
-/** Valida referências e a forma de árvore que o schema isolado não consegue enxergar. */
-export function problemasDaAulaV2(aula: AulaV2): ProblemaV2[] {
+/**
+ * Os lances da aula são jogáveis, um atrás do outro, a partir da posição de cada
+ * análise?
+ *
+ * ## O que este portão conserta
+ *
+ * Antes dele a legalidade era conferida só na hora de desenhar o painel, e o jeito
+ * de reprovar era **estourar uma exceção** (`arvore.ts`, "lance ilegal no nó X").
+ * Uma exceção não tem localização que a tela saiba usar: ela apaga o painel inteiro,
+ * e o professor fica com a tela vazia sem saber qual lance consertar — justamente
+ * quando ele mais precisa de um dedo apontando.
+ *
+ * ## Poda por ramo, e não por árvore
+ *
+ * Encontrado um lance ilegal, tudo o que vem depois dele naquele ramo é
+ * consequência: as posições seguintes nunca existiram, e julgá-las produziria uma
+ * cascata de erros que escondem o único que importa. Então o ramo é podado ali e os
+ * **irmãos continuam sendo julgados** — é a regra do plano final (§5), e é o que
+ * deixa uma variante errada conviver com as variantes certas ao lado.
+ *
+ * ## Um tabuleiro só, com `undo`
+ *
+ * O percurso é em profundidade num único `Chess`, desfazendo o lance ao voltar. A
+ * alternativa óbvia — recalcular a posição de cada nó desde a raiz — é o que
+ * `arvore.ts` faz hoje, e custa o quadrado do tamanho da árvore: numa partida de 60
+ * lances são milhares de jogadas repetidas, e no alvo de 1.000 nós do plano (§17),
+ * centenas de milhares. Aqui cada lance é jogado **uma vez**.
+ */
+function problemasDeLegalidade(
+  aula: AulaV2,
+  positions: Record<string, Position>,
+  analises: Map<string, AnaliseV2>,
+  saudaveis: Set<string>,
+): ProblemaBrutoV2[] {
+  const problemas: ProblemaBrutoV2[] = [];
+  /** `analiseId` → (`nodeId` → FEN). Ausente quando a análise não pôde ser percorrida. */
+  const fensPorAnalise = new Map<string, Map<string, string> | null>();
+  const resolvendo = new Set<string>();
+
+  function fenInicialDe(analise: AnaliseV2): string | null {
+    if (analise.inicio.tipo === "posicao") {
+      const position = positions[analise.inicio.positionId];
+      if (!position) {
+        problemas.push({
+          codigo: "POSICAO_INEXISTENTE",
+          mensagem: `a análise começa na posição "${analise.inicio.positionId}", que não está no pacote desta aula`,
+          analiseId: analise.id,
+          campo: "inicio.positionId",
+        });
+        return null;
+      }
+      return position.fen;
+    }
+    // Começar de um nó de outra análise: aquela precisa ser percorrida primeiro.
+    return caminhar(analise.inicio.origem.analiseId)?.get(analise.inicio.origem.nodeId) ?? null;
+  }
+
+  function caminhar(analiseId: string): Map<string, string> | null {
+    const jaFeita = fensPorAnalise.get(analiseId);
+    if (jaFeita !== undefined) return jaFeita;
+    // Ciclo entre inícios de análise: `CICLO_ENTRE_ANALISES` já o acusou.
+    if (resolvendo.has(analiseId)) return null;
+    const analise = analises.get(analiseId);
+    if (!analise || !saudaveis.has(analiseId)) {
+      fensPorAnalise.set(analiseId, null);
+      return null;
+    }
+
+    resolvendo.add(analiseId);
+    const inicial = fenInicialDe(analise);
+    resolvendo.delete(analiseId);
+    if (inicial === null) {
+      fensPorAnalise.set(analiseId, null);
+      return null;
+    }
+
+    const jogo = new Chess();
+    try {
+      jogo.load(inicial);
+    } catch {
+      // FEN malformada tem juiz próprio (`fenProblem`, no gate); não acusar duas
+      // vezes a mesma coisa em nome de campos diferentes.
+      fensPorAnalise.set(analiseId, null);
+      return null;
+    }
+
+    const fens = new Map<string, string>();
+    const andar = (id: string) => {
+      fens.set(id, jogo.fen());
+      for (const filhoId of analise.nos[id].filhos) {
+        const filho = analise.nos[filhoId];
+        if (!filho.uci) {
+          problemas.push({
+            codigo: "LANCE_AUSENTE",
+            mensagem: "só a raiz de uma análise pode existir sem lance",
+            analiseId,
+            nodeId: filhoId,
+            campo: "uci",
+          });
+          continue;
+        }
+        let jogado: { san: string } | null = null;
+        try {
+          jogado = jogo.move({
+            from: filho.uci.slice(0, 2),
+            to: filho.uci.slice(2, 4),
+            promotion: filho.uci.length > 4 ? filho.uci.slice(4) : undefined,
+          });
+        } catch {
+          jogado = null;
+        }
+        if (!jogado) {
+          problemas.push({
+            codigo: "LANCE_ILEGAL",
+            mensagem: `"${filho.uci}" não é um lance possível nesta posição`,
+            analiseId,
+            nodeId: filhoId,
+            campo: "uci",
+          });
+          continue;
+        }
+        andar(filhoId);
+        jogo.undo();
+      }
+    };
+    andar(analise.raizId);
+
+    fensPorAnalise.set(analiseId, fens);
+    return fens;
+  }
+
+  for (const analise of aula.analises) caminhar(analise.id);
+  return problemas;
+}
+
+/**
+ * Valida referências e a forma de árvore que o schema isolado não consegue enxergar.
+ *
+ * ## Por que `positions` é opcional
+ *
+ * A legalidade dos lances só pode ser conferida com as posições do pacote em mãos —
+ * a árvore guarda UCI, e um UCI só é legal ou ilegal *em relação a uma posição*.
+ * Quem tem o pacote (o servidor, o gate, a tela com a aula aberta) passa `positions`
+ * e recebe também os problemas de legalidade; quem só quer julgar a forma do
+ * documento (a recuperação local, um rascunho recém-colado) chama sem, e continua
+ * recebendo exatamente o que recebia antes.
+ *
+ * Sem isso, a legalidade ficaria onde estava: numa exceção dentro de `arvore.ts`,
+ * que derruba o painel inteiro em vez de dizer qual lance está errado.
+ */
+export function problemasDaAulaV2(aula: AulaV2, positions?: Record<string, Position>): ProblemaV2[] {
   const problemas: ProblemaBrutoV2[] = [];
   if (!aula.metadados) problemas.push(aula.origem?.formato === "lesson-v1"
     ? { codigo: "METADADOS_LEGADOS", severidade: "aviso", mensagem: "o rascunho foi criado antes dos metadados v2; eles serão completados ao abrir a aula", campo: "metadados" }
@@ -338,7 +488,15 @@ export function problemasDaAulaV2(aula: AulaV2): ProblemaV2[] {
     analisesVisitadas.add(id);
   };
   aula.analises.forEach((analise) => visitarDependencia(analise.id));
+  /*
+   * As análises cuja forma fechou — raiz presente, sem ciclo, sem filho ausente,
+   * sem nó órfão nem com dois pais. Só elas podem ser percorridas com um tabuleiro:
+   * num grafo quebrado o percurso não termina, e o segundo erro seria consequência
+   * do primeiro. Reportar os dois faria o professor consertar o lance errado.
+   */
+  const analisesSaudaveis = new Set<string>();
   for (const analise of aula.analises) {
+    const problemasAntes = problemas.length;
     for (const [chave, no] of Object.entries(analise.nos)) {
       if (chave !== no.id) {
         problemas.push({ codigo: "NO_CHAVE_DIVERGE", mensagem: `${chave} contém ${no.id}`, analiseId: analise.id, nodeId: no.id });
@@ -383,7 +541,10 @@ export function problemasDaAulaV2(aula: AulaV2): ProblemaV2[] {
       const dona = analises.get(analise.inicio.origem.analiseId);
       if (!dona?.nos[analise.inicio.origem.nodeId]) problemas.push({ codigo: "ORIGEM_AUSENTE", mensagem: "a posição de origem não existe", analiseId: analise.id });
     }
+    if (problemas.length === problemasAntes) analisesSaudaveis.add(analise.id);
   }
+
+  if (positions) problemas.push(...problemasDeLegalidade(aula, positions, analises, analisesSaudaveis));
 
   for (const capitulo of aula.capitulos) {
     const analise = analises.get(capitulo.analiseId);
@@ -450,7 +611,13 @@ export type ResultadoValidacaoAulaV2 =
   | { ok: true; aula: AulaV2; avisos?: ProblemaV2[] }
   | { ok: false; problemas: string[]; diagnosticos: ProblemaV2[] };
 
-export function validarAulaV2(valor: unknown): ResultadoValidacaoAulaV2 {
+/**
+ * `positions` é opcional pelo mesmo motivo de `problemasDaAulaV2`: quem tem o pacote
+ * da aula em mãos ganha também o julgamento de legalidade; quem só precisa saber se
+ * o documento tem forma de aula v2 (recuperação local, rascunho colado) continua
+ * chamando sem, e recebe o mesmo veredicto de antes.
+ */
+export function validarAulaV2(valor: unknown, positions?: Record<string, Position>): ResultadoValidacaoAulaV2 {
   const forma = aulaV2Schema.safeParse(valor);
   if (!forma.success) {
     const aulaId = typeof valor === "object" && valor !== null && "id" in valor && typeof valor.id === "string" ? valor.id : "aula-desconhecida";
@@ -462,7 +629,7 @@ export function validarAulaV2(valor: unknown): ResultadoValidacaoAulaV2 {
     }));
     return { ok: false, problemas: diagnosticos.map(formatarProblemaV2), diagnosticos };
   }
-  const diagnosticos = problemasDaAulaV2(forma.data);
+  const diagnosticos = problemasDaAulaV2(forma.data, positions);
   const erros = diagnosticos.filter((problema) => problema.severidade === "erro");
   const avisos = diagnosticos.filter((problema) => problema.severidade === "aviso");
   if (erros.length) return { ok: false, problemas: erros.map(formatarProblemaV2), diagnosticos };
