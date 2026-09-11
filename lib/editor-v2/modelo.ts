@@ -101,6 +101,31 @@ export const catalogoEditorialV2Schema = z.strictObject({
   mensagensGeradas: generatedTemplatesSchema.optional(),
 });
 
+/**
+ * "Isto continua legal, mas talvez não continue querendo dizer o mesmo."
+ *
+ * ## Por que a marca existe, e por que ela não é um erro
+ *
+ * §5 do plano final: "Lances ainda legais podem adquirir outro significado.
+ * Comentários, narrações e desenhos afetados ficam marcados para revisão;
+ * legalidade não comprova validade pedagógica." Quando a posição inicial de um
+ * capítulo troca, um comentário como "o rei branco já está na oposição" pode
+ * continuar gramaticalmente perfeito e factualmente falso — e nenhuma conta que
+ * a máquina saiba fazer distingue os dois casos. O que ela sabe é **avisar**.
+ *
+ * A marca é um aviso, nunca um erro: o documento continua válido, o autosave
+ * continua gravando, e o professor resolve quando chegar ali. §5 também manda
+ * que "revisões obrigatórias devem ser resolvidas antes da publicação" — é na
+ * publicação v2 que o aviso vira portão, não aqui.
+ *
+ * `motivo` é uma lista fechada, e não texto livre, porque quem lê a marca é a
+ * tela: ela precisa escrever a frase em português do jeito certo, e uma frase
+ * guardada dentro do arquivo envelheceria junto com o documento.
+ */
+export const revisaoPendenteV2Schema = z.strictObject({
+  motivo: z.enum(["posicao-inicial-trocada"]),
+});
+
 export const noV2Schema = z.strictObject({
   id: idV2Schema,
   uci: uciSchema.optional(),
@@ -124,6 +149,8 @@ export const noV2Schema = z.strictObject({
    * Nada aqui é executado nem interpretado. É texto guardado, não comando.
    */
   diretivas: z.array(z.string()).optional(),
+  /** Ver `revisaoPendenteV2Schema`: cobre o comentário e os desenhos deste nó. */
+  revisao: revisaoPendenteV2Schema.optional(),
 });
 
 export const analiseV2Schema = z.strictObject({
@@ -169,6 +196,7 @@ export const quadroIntroducaoV2Schema = z.strictObject({
     z.strictObject({ tipo: z.literal("fen"), fen: fenSchema }),
   ]),
   desenhos: desenhoV2Schema.optional(),
+  revisao: revisaoPendenteV2Schema.optional(),
 });
 
 export const introducaoV2Schema = z.strictObject({
@@ -182,6 +210,7 @@ export const narracaoV2Schema = z.strictObject({
   nodeId: idV2Schema,
   texto: z.string().min(1),
   pausa: z.enum(["temporizada", "manual"]).default("temporizada"),
+  revisao: revisaoPendenteV2Schema.optional(),
 });
 
 export const capituloV2Schema = z.strictObject({
@@ -292,6 +321,7 @@ export const aulaV2Schema = z.strictObject({
   origem: z.strictObject({ formato: z.literal("lesson-v1"), hash: z.string().min(1) }).optional(),
 });
 
+export type RevisaoPendenteV2 = z.infer<typeof revisaoPendenteV2Schema>;
 export type CorDesenhoV2 = z.infer<typeof corDesenhoV2Schema>;
 export type SetaV2 = z.infer<typeof setaV2Schema>;
 export type CasaAcesaV2 = z.infer<typeof casaAcesaV2Schema>;
@@ -588,6 +618,18 @@ function problemasDeProveniencia(
  * Sem isso, a legalidade ficaria onde estava: numa exceção dentro de `arvore.ts`,
  * que derruba o painel inteiro em vez de dizer qual lance está errado.
  */
+/**
+ * A frase de cada motivo de revisão, em português de professor.
+ *
+ * Ela mora aqui, e não dentro do arquivo, porque a marca guardada é um código:
+ * o texto que o professor lê pode melhorar amanhã sem reescrever documento
+ * nenhum, e um documento de 2026 continua explicando o que aconteceu.
+ */
+const MOTIVO_DA_REVISAO: Record<RevisaoPendenteV2["motivo"], string> = {
+  "posicao-inicial-trocada":
+    "a posição inicial do capítulo mudou depois que isto foi escrito — o texto continua legal, mas pode não dizer mais a verdade sobre o tabuleiro",
+};
+
 export function problemasDaAulaV2(
   aula: AulaV2,
   positions?: Record<string, Position>,
@@ -656,6 +698,7 @@ export function problemasDaAulaV2(
       if (quadro.posicao.tipo !== "referencia") continue;
       const analise = analises.get(quadro.posicao.origem.analiseId);
       if (!analise?.nos[quadro.posicao.origem.nodeId]) problemas.push({ codigo: "QUADRO_SEM_POSICAO", mensagem: "o quadro da introdução aponta para posição inexistente", introducaoId: introducao.id, quadroId: quadro.id, analiseId: quadro.posicao.origem.analiseId, nodeId: quadro.posicao.origem.nodeId });
+      if (quadro.revisao) problemas.push({ codigo: "REVISAO_PENDENTE", severidade: "aviso", mensagem: MOTIVO_DA_REVISAO[quadro.revisao.motivo], introducaoId: introducao.id, quadroId: quadro.id, campo: "revisao" });
     }
   }
   const visitandoAnalises = new Set<string>();
@@ -686,6 +729,9 @@ export function problemasDaAulaV2(
     for (const [chave, no] of Object.entries(analise.nos)) {
       if (chave !== no.id) {
         problemas.push({ codigo: "NO_CHAVE_DIVERGE", mensagem: `${chave} contém ${no.id}`, analiseId: analise.id, nodeId: no.id });
+      }
+      if (no.revisao) {
+        problemas.push({ codigo: "REVISAO_PENDENTE", severidade: "aviso", mensagem: MOTIVO_DA_REVISAO[no.revisao.motivo], analiseId: analise.id, nodeId: no.id, campo: "revisao" });
       }
       registrar(no.id, "nó", { analiseId: analise.id, nodeId: no.id });
     }
@@ -727,7 +773,13 @@ export function problemasDaAulaV2(
       const dona = analises.get(analise.inicio.origem.analiseId);
       if (!dona?.nos[analise.inicio.origem.nodeId]) problemas.push({ codigo: "ORIGEM_AUSENTE", mensagem: "a posição de origem não existe", analiseId: analise.id });
     }
-    if (problemas.length === problemasAntes) analisesSaudaveis.add(analise.id);
+    // Só **erro** derruba a saúde da análise. Um aviso — a marca de revisão de §5,
+    // por exemplo — diz que um texto precisa ser relido, não que a árvore está
+    // quebrada; deixá-lo tirar a análise daqui calaria o portão de legalidade
+    // exatamente na análise que acabou de mudar de posição inicial.
+    if (problemas.slice(problemasAntes).every((problema) => problema.severidade === "aviso")) {
+      analisesSaudaveis.add(analise.id);
+    }
   }
 
   if (positions) problemas.push(...problemasDeLegalidade(aula, positions, analises, analisesSaudaveis));
@@ -752,6 +804,7 @@ export function problemasDaAulaV2(
     }
     for (const narracao of capitulo.narracoes) {
       if (!analise.nos[narracao.nodeId]) problemas.push({ codigo: "NARRACAO_SEM_NO", mensagem: "a narração aponta para posição inexistente", capituloId: capitulo.id, narracaoId: narracao.id, nodeId: narracao.nodeId, campo: "nodeId" });
+      if (narracao.revisao) problemas.push({ codigo: "REVISAO_PENDENTE", severidade: "aviso", mensagem: MOTIVO_DA_REVISAO[narracao.revisao.motivo], capituloId: capitulo.id, narracaoId: narracao.id, nodeId: narracao.nodeId, campo: "revisao" });
     }
   }
 

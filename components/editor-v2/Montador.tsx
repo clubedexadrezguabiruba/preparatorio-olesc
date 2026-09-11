@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import type { Color, Key, Role } from "@lichess-org/chessground/types";
 import { ChessBoard, type ControlesDeMontagem } from "@/components/board/ChessBoard";
 import { problemaDaPosicaoMontada } from "@/lib/chess/fen";
-import { fenDoMontador, roquesPossiveis } from "@/lib/editor-v2/novo-capitulo";
+import { fenDoMontador, roquesPossiveis, type CamposDaFenV2 } from "@/lib/editor-v2/novo-capitulo";
 
 /**
  * O montador de posição — §9 da especificação funcional.
@@ -33,15 +33,12 @@ import { fenDoMontador, roquesPossiveis } from "@/lib/editor-v2/novo-capitulo";
  * casa, en passant com o peão que passou. Só isso, e isso ele prova.
  */
 
-export type CamposDaMontagem = {
-  /** Só a parte das peças da FEN. É o que o tabuleiro sabe dizer. */
-  pecas: string;
-  vez: "w" | "b";
-  roques: { K: boolean; Q: boolean; k: boolean; q: boolean };
-  enPassant: string;
-  meiosLances: number;
-  lance: number;
-};
+/**
+ * Os seis campos da FEN, separados. O tipo mora em `novo-capitulo.ts`, junto de
+ * `fenDoMontador` e `camposDaFen`, que são os dois caminhos entre ele e a FEN
+ * inteira; aqui fica só o nome pelo qual a tela o conhece.
+ */
+export type CamposDaMontagem = CamposDaFenV2;
 
 export const PECAS_VAZIAS = "8/8/8/8/8/8/8/8";
 export const PECAS_INICIAIS = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";

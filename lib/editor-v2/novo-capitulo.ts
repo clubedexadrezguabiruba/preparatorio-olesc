@@ -190,17 +190,52 @@ export function aplicarNovoCapitulo(aula: AulaV2, novo: NovoCapituloV2): Aplicac
  * passant e contadores são decisão do montador, não do tabuleiro. A ordem do
  * roque é a canônica `KQkq` porque é a que o `fenSchema` do projeto aceita.
  */
-export function fenDoMontador(campos: {
+export type CamposDaFenV2 = {
+  /** Só a parte das peças da FEN. É o que o tabuleiro sabe dizer. */
   pecas: string;
   vez: "w" | "b";
   roques: { K: boolean; Q: boolean; k: boolean; q: boolean };
   enPassant: string;
   meiosLances: number;
   lance: number;
-}): string {
+};
+
+export function fenDoMontador(campos: CamposDaFenV2): string {
   const roque = (["K", "Q", "k", "q"] as const).filter((letra) => campos.roques[letra]).join("") || "-";
   const enPassant = campos.enPassant.trim() === "" ? "-" : campos.enPassant.trim();
   return `${campos.pecas} ${campos.vez} ${roque} ${enPassant} ${campos.meiosLances} ${campos.lance}`;
+}
+
+/**
+ * O caminho de volta: a FEN inteira desmontada nos campos do montador.
+ *
+ * ## Por que ela precisa existir
+ *
+ * §9 manda que trocar a posição inicial de um capítulo "abra o montador já
+ * carregado com a posição atual". O montador só sabe ler os seis campos
+ * separados — foi assim que ele nasceu, porque é assim que o professor os
+ * edita. Sem este caminho de volta, trocar uma posição obrigaria a montá-la do
+ * zero, e o gesto mais comum (mover um peão uma casa) viraria o mais caro.
+ *
+ * Devolve `null` quando a FEN não tem os seis campos. Não julga a posição: quem
+ * julga é `problemaDaPosicaoMontada`, e o montador o chama a cada mudança.
+ */
+export function camposDaFen(fen: string): CamposDaFenV2 | null {
+  if (!fenSchema.safeParse(fen.trim()).success) return null;
+  const [pecas, vez, roque, enPassant, meiosLances, lance] = fen.trim().split(" ");
+  return {
+    pecas,
+    vez: vez === "b" ? "b" : "w",
+    roques: {
+      K: roque.includes("K"),
+      Q: roque.includes("Q"),
+      k: roque.includes("k"),
+      q: roque.includes("q"),
+    },
+    enPassant: enPassant === "-" ? "" : enPassant,
+    meiosLances: Number(meiosLances),
+    lance: Number(lance),
+  };
 }
 
 /**

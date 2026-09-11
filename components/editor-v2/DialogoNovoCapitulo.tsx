@@ -59,6 +59,21 @@ export function DialogoNovoCapitulo({
 
   const campoDoNome = useRef<HTMLInputElement>(null);
   const janela = useRef<HTMLElement>(null);
+  /**
+   * Onde o dedo **desceu**, e não onde ele subiu.
+   *
+   * ## O defeito que isto conserta, achado arrastando
+   *
+   * O véu fecha a janela ao clique, que é o gesto esperado de "cliquei fora".
+   * Só que arrastar uma peça para fora do tabuleiro — o jeito de **remover** uma
+   * peça, §9 — termina com o ponteiro no véu, e o navegador dispara o `click` no
+   * ancestral comum entre onde o botão desceu e onde subiu: o próprio véu. A
+   * janela fechava, e a posição montada ia junto.
+   *
+   * A regra passa a ser: só fecha se o gesto **começou** no véu. Soltar ali o que
+   * saiu de dentro da janela não é um pedido de fechar — é o fim de um arrasto.
+   */
+  const pressionouNoVeu = useRef(false);
   const tituloId = useId();
   const erroId = useId();
 
@@ -127,7 +142,10 @@ export function DialogoNovoCapitulo({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-veu p-4 backdrop-blur-[2px]" onClick={aoFechar}>
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-veu p-4 backdrop-blur-[2px]"
+      onMouseDown={(evento) => { pressionouNoVeu.current = evento.target === evento.currentTarget; }}
+      onClick={(evento) => { if (evento.target === evento.currentTarget && pressionouNoVeu.current) aoFechar(); }}
+    >
       <section
         role="dialog"
         aria-modal="true"

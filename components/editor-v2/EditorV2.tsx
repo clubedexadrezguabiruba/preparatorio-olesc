@@ -13,6 +13,7 @@ import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
 import { PainelDeProblemas } from "@/components/editor-v2/PainelDeProblemas";
 import { ListaDeCapitulos } from "@/components/editor-v2/ListaDeCapitulos";
 import { DialogoNovoCapitulo } from "@/components/editor-v2/DialogoNovoCapitulo";
+import { DialogoTrocarPosicao } from "@/components/editor-v2/DialogoTrocarPosicao";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { analiseDaAula, mapaDaAnalise } from "@/lib/editor-v2/arvore";
 import { desenhoDeFormas } from "@/lib/editor-v2/desenhos";
@@ -29,6 +30,7 @@ import {
 } from "@/lib/editor-v2/comandos";
 import type { RelatorioImportacao } from "@/lib/editor-v2/importar-pgn";
 import type { NovoCapituloV2 } from "@/lib/editor-v2/novo-capitulo";
+import type { PlanoDaTrocaV2 } from "@/lib/editor-v2/trocar-posicao";
 import { problemasDaAulaV2, validarAulaV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
 import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/editor-v2/recuperacao";
 import type { Position } from "@/lib/lesson/schema";
@@ -75,10 +77,12 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const [falhaRecuperacao, setFalhaRecuperacao] = useState(false);
   const [importando, setImportando] = useState(false);
   const [adicionando, setAdicionando] = useState(false);
+  const [trocandoPosicao, setTrocandoPosicao] = useState(false);
   /** Cresce a cada navegação por teclado; é o sinal para o foco seguir a seta (§16). */
   const [pedidoDeFoco, setPedidoDeFoco] = useState(0);
   const botaoImportar = useRef<HTMLButtonElement>(null);
   const botaoAdicionar = useRef<HTMLButtonElement>(null);
+  const botaoTrocarPosicao = useRef<HTMLButtonElement>(null);
   const [sessaoId, setSessaoId] = useState<string | null>(null);
   const hash = useRef(hashInicial);
   const ultimoEnfileirado = useRef(documentoInicial);
@@ -337,6 +341,25 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
     fecharAdicionar();
   }, [aplicar, fecharAdicionar]);
 
+  const fecharTroca = useCallback(() => {
+    setTrocandoPosicao(false);
+    botaoTrocarPosicao.current?.focus();
+  }, []);
+
+  /**
+   * Troca a posição inicial do capítulo aberto — §9.
+   *
+   * A seleção volta ao início do capítulo **antes** de aplicar porque o lance
+   * que estava selecionado pode ser um dos que a poda leva: continuar apontando
+   * para ele deixaria o painel olhando para um nó que não existe mais. A raiz da
+   * análise sempre sobrevive à troca — é ela que recebe a posição nova.
+   */
+  const trocarPosicao = useCallback((plano: PlanoDaTrocaV2) => {
+    setNodeId(analise.raizId);
+    aplicar({ tipo: "TROCAR_POSICAO_INICIAL", plano });
+    fecharTroca();
+  }, [analise.raizId, aplicar, fecharTroca]);
+
   /** Leva a tela até o lugar do problema. É o que o botão da lista faz. */
   const irAoProblema = useCallback((destino: DestinoV2) => {
     if (destino.capituloId) setCapituloId(destino.capituloId);
@@ -481,6 +504,18 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         />
       ) : null}
 
+      {trocandoPosicao ? (
+        <DialogoTrocarPosicao
+          aula={historico.presente}
+          analiseId={analise.id}
+          tituloDoCapitulo={capitulo.titulo}
+          orientacao={capitulo.orientacao}
+          positions={positions}
+          aoTrocar={trocarPosicao}
+          aoFechar={fecharTroca}
+        />
+      ) : null}
+
       <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[14rem_minmax(20rem,38rem)_minmax(18rem,1fr)]">
         <aside className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
           <h2 className="text-sm font-semibold text-tinta">Capítulos</h2>
@@ -503,6 +538,16 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
             Nome do capítulo
             <input key={capitulo.id + capitulo.titulo} defaultValue={capitulo.titulo} onBlur={(e) => aplicar({ tipo: "RENOMEAR_CAPITULO", capituloId: capitulo.id, titulo: e.currentTarget.value })} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm text-tinta" />
           </label>
+          {/* Trocar a posição inicial vive junto do nome porque as duas são
+              propriedades do capítulo aberto, e não gestos sobre a lista. */}
+          <button
+            type="button"
+            ref={botaoTrocarPosicao}
+            onClick={() => setTrocandoPosicao(true)}
+            className="foco rounded-md border border-borda px-2 py-2 text-xs text-tinta hover:bg-carta-toque"
+          >
+            Trocar a posição inicial…
+          </button>
         </aside>
 
         <section className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
@@ -574,15 +619,38 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
                 <button key={nag} type="button" disabled={!selecionado.uci} onClick={() => aplicar({ tipo: "ALTERNAR_NAG", analiseId: analise.id, nodeId: selecionado.id, nag: Number(nag) })} className={`foco rounded border px-2 py-1 text-sm disabled:opacity-40 ${selecionado.nags?.includes(Number(nag)) ? "border-aviso-superficie bg-aviso-superficie/10 text-aviso-tinta" : "border-borda text-tinta"}`}>{simbolo}</button>
               ))}
             </div>
+            {selecionado.revisao ? (
+              <p className="mt-3 flex flex-wrap items-center gap-2 rounded-md border border-aviso-superficie bg-aviso-superficie/10 p-2 text-xs text-aviso-tinta">
+                A posição inicial mudou depois que isto foi escrito — releia antes de publicar.
+                <button type="button" onClick={() => aplicar({ tipo: "REVISAO_RESOLVIDA", alvo: { analiseId: analise.id, nodeId: selecionado.id } })} className="foco rounded border border-aviso-superficie px-2 py-1">
+                  Já reli
+                </button>
+              </p>
+            ) : null}
             <label className="mt-3 flex flex-col gap-1 text-xs text-tinta-fraca">
               Comentário desta posição
               <textarea key={selecionado.id + (selecionado.comentario ?? "")} defaultValue={selecionado.comentario ?? ""} onBlur={(e) => aplicar({ tipo: "EDITAR_COMENTARIO", analiseId: analise.id, nodeId: selecionado.id, comentario: e.currentTarget.value })} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta" placeholder="Explique a ideia deste lance…" />
             </label>
             {narracoes.map((narracao) => (
-              <label key={narracao.id} className="mt-3 flex flex-col gap-1 text-xs text-tinta-fraca">
+              <div key={narracao.id} className="mt-3 flex flex-col gap-1 text-xs text-tinta-fraca">
+                {/* A tarja fica **fora** do `<label>`, e o botão com ela. Dentro,
+                    o texto do rótulo entrava no nome acessível do botão: o leitor
+                    de tela anunciava "Narração mostrada ao aluno Marcada para
+                    revisão… O rei preto anda para onde quiser… Já reli" — o
+                    parágrafo inteiro como nome de um botão de duas palavras. */}
+                {narracao.revisao ? (
+                  <p className="flex flex-wrap items-center gap-2 rounded-md border border-aviso-superficie bg-aviso-superficie/10 p-2 text-aviso-tinta">
+                    Marcada para revisão: a posição inicial mudou depois que ela foi escrita.
+                    <button type="button" onClick={() => aplicar({ tipo: "REVISAO_RESOLVIDA", alvo: { capituloId: capitulo.id, narracaoId: narracao.id } })} className="foco rounded border border-aviso-superficie px-2 py-1">
+                      Já reli
+                    </button>
+                  </p>
+                ) : null}
+                <label className="flex flex-col gap-1">
                 Narração mostrada ao aluno
                 <textarea key={narracao.id + narracao.texto} defaultValue={narracao.texto} onBlur={(e) => aplicar({ tipo: "EDITAR_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, texto: e.currentTarget.value })} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta" placeholder="Apague o texto para remover esta narração." />
-              </label>
+                </label>
+              </div>
             ))}
           </div>
         </section>

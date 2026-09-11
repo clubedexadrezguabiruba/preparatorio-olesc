@@ -1188,6 +1188,208 @@ tudo numa transação com Desfazer.
 
 ---
 
+## Trocar a posição inicial de um capítulo, entregue em 11/9/2026
+
+Até aqui a posição inicial de um capítulo nascia com ele e não mudava mais. Agora o
+botão **Trocar a posição inicial…**, na coluna da esquerda logo abaixo do nome do
+capítulo, abre o montador **já carregado com a posição de agora**, mostra as duas FENs
+lado a lado e recalcula o estrago a cada peça movida.
+
+### A regra é uma frase, e ela decide tudo
+
+§5 do plano final: *"podar no primeiro lance ilegal de cada ramo; não descartar os
+ramos legais"*. Duas coisas saem daí, e as duas têm teste:
+
+1. **O ramo cortado mantém o prefixo legal.** Uma linha que só fica ilegal no 8º lance
+   conserva os sete primeiros — eles continuam sendo lances legais de uma partida que
+   agora começa noutro lugar. Cortar o ramo inteiro jogaria fora trabalho válido.
+2. **Os irmãos não se contaminam.** O percurso é uma busca em profundidade com **um**
+   tabuleiro que desfaz o lance ao voltar, igual ao de `mapaDaAnalise`: cada irmão
+   parte da posição do pai, então um ramo morto não mata o vizinho.
+
+### O que a máquina sabe, e o que ela se recusa a fingir que sabe
+
+Ela sabe dizer que um lance ficou ilegal. Ela **não** sabe dizer que um comentário
+ficou mentiroso — "o rei branco já está na oposição" continua gramaticalmente perfeito
+e factualmente falso. Por isso nasceu `revisaoPendenteV2Schema`: um campo `revisao`
+opcional no nó (cobre comentário e desenhos), na narração e no quadro de introdução,
+com `motivo` de lista fechada. Tudo o que sobrevive à troca é marcado.
+
+A marca é **aviso, nunca erro** — o documento continua válido e o autosave continua
+gravando. Ela aparece no painel de problemas como `REVISAO_PENDENTE` e, junto do
+comentário e da narração, como uma tarja com o botão **Já reli**, que é um comando
+desfazível como qualquer outro. Marca sem porta de saída seria armadilha.
+
+**Um defeito de tabela que isto destapou, e foi pago junto.** `problemasDaAulaV2`
+considerava "saudável" a análise que não acrescentasse **nenhum** problema no seu laço
+— e o portão de legalidade só roda nas análises saudáveis. O primeiro aviso posto
+naquele laço (a marca de revisão) teria calado a conferência de legalidade exatamente
+na análise que acabou de mudar de chão. Agora só **erro** derruba a saúde da análise.
+
+### Por que existem bloqueios, e não só podas
+
+Um nó podado pode ser apontado **de fora** da análise: por um treino, por um quadro de
+introdução, por outra análise que comece nele. §5 manda "cancelar, remover
+explicitamente os dependentes ou materializar os dependentes como independentes" — e
+nenhuma das três é escolha de máquina. Então a troca **para**, diz o nome de quem
+depende, e o botão fica desabilitado. Medido na aula real: tirar o rei preto de e7 na
+N1-KPK mata `1…Ke6` e os dez lances seguintes, e o treino guiado — que tem questões em
+cinco deles — bloqueia a troca inteira.
+
+Cancelar nunca custa nada, porque `calcularTrocaDePosicao` **só lê**. É o mesmo par de
+`novo-capitulo.ts`: quem calcula não escreve, e o comando carrega o plano já decidido —
+é isso que faz o Refazer repetir a mesma poda, e não uma terceira.
+
+### O que a troca reabre
+
+- **Proveniência.** Quando a análise larga uma posição revisada e **nada mais na aula a
+  usa**, a revisão volta a `candidate`. Os treinos afetados não contam como "ainda
+  usam": é a mesma troca que reabre a certificação deles, e um selo que acabou de voltar
+  a pendente não atesta coisa nenhuma.
+- **Certificação e avaliação.** Todo treino que pisa nesta análise volta a
+  `revisaoAvaliacao: "pendente"`, a certificação volta a `estado: "pendente"`, e a
+  `fonte` passa a `alterada` quando havia receita. A `propriedade` **não** muda — §8:
+  fonte alterada e personalizado são condições distintas, e só um ajuste autoral
+  personaliza.
+- **Percursos.** O `caminho` do capítulo é truncado no primeiro nó podado; um
+  `inicioNodeId` podado devolve o capítulo à raiz com percurso vazio.
+
+### Escrito
+
+| Arquivo | O que é |
+|---|---|
+| `lib/editor-v2/trocar-posicao.ts` | **novo** — o cálculo do impacto, a poda, os bloqueios, a aplicação e o `semRevisao` |
+| `lib/editor-v2/trocar-posicao.test.ts` | **novo** — 20 testes |
+| `components/editor-v2/DialogoTrocarPosicao.tsx` | **novo** — a janela: duas FENs, colar FEN, o montador reusado e o impacto ao vivo |
+| `lib/editor-v2/modelo.ts` | `revisaoPendenteV2Schema`, o campo `revisao` em três lugares, o aviso `REVISAO_PENDENTE` e o conserto da saúde da análise |
+| `lib/editor-v2/comandos.ts` | `TROCAR_POSICAO_INICIAL` e `REVISAO_RESOLVIDA` |
+| `lib/editor-v2/novo-capitulo.ts` | `camposDaFen` — o caminho de volta da FEN para os seis campos do montador |
+| `components/editor-v2/Montador.tsx` | `CamposDaMontagem` passa a ser o tipo compartilhado |
+| `components/editor-v2/EditorV2.tsx` | o botão, a janela e as duas tarjas de "Já reli" |
+
+O montador **não** foi duplicado e `problemaDaPosicaoMontada` continua sendo o único
+juiz de posição, como o combinado mandava. `fluxo` não foi tocado: trocar a posição de
+um capítulo não mexe na ordem da aula.
+
+### Evidência — e o buraco dela
+
+**Os sete portões verdes:** tipos, lint, **912 testes** (22 novos), build, conteúdo (38
+consultas de tablebase, todas do cache), **42/42 mutações vermelhas** e repertório
+`--check`.
+
+Os 20 testes novos cobrem: as recusas em português (FEN vazia, sem os seis campos,
+posição impossível, e trocar uma posição por ela mesma); calcular sem tocar na aula; as
+duas FENs e o nome de cada ramo cortado com a numeração do painel (`1. e4`, `2. e4`); a
+poda a partir do primeiro ilegal e só dali; o irmão legal sobrevivendo, com o pai
+perdendo só o filho que caiu; o documento continuando válido e a árvore inteira legal na
+posição nova; comentário e desenho sobreviventes marcados e os podados sumindo com o nó;
+a narração do lance podado removida e as outras marcadas; o percurso truncado e o início
+reiniciado; o treino com avaliação, fonte e certificação reabertas; a proveniência
+reaberta quando fica órfã e mantida quando outra parte da aula ainda a usa; o quadro de
+introdução marcado; os três bloqueios (treino, introdução, análise dependente) com nome
+e com a aula intacta; Desfazer devolvendo a aula inteira e Refazer devolvendo os mesmos
+ids; e o "Já reli" desfazível.
+
+**No navegador autenticado, com a N0-LADDER:**
+
+- o botão abriu a janela com o montador **já carregado** com a posição do capítulo
+  (`8/8/8/8/8/4k3/6R1/6RK w - - 0 1`), as duas FENs lado a lado, e trocar a posição por
+  ela mesma foi recusado com "esta já é a posição inicial deste capítulo";
+- colar `k7/8/8/8/8/8/6R1/6RK` (rei preto tirado de e7 para a8) escreveu na hora
+  **`1… Kd2` deixa de ser legal — saem 8 lances, dele em diante**: o `1. Rg4` de antes
+  dele sobreviveu, que é a regra da fatia inteira, medida na tela;
+- no mesmo instante a tarja vermelha nomeou o **«Treino guiado»** e o botão **Trocar a
+  posição** ficou desabilitado — o bloqueio de §5 acontecendo de verdade, não em teste;
+- com um peão preto em a7 (que não atrapalha nenhum dos nove lances) nada foi podado, a
+  troca aplicou, e o painel de problemas passou a mostrar **17 avisos**: 16 marcas de
+  revisão mais o `FEN_IMPORTADA_SEM_REVISAO` que a análise ganha ao passar a começar
+  numa FEN crua;
+- **Desfazer** levou os avisos a 0 e devolveu a aula inteira; **Refazer** trouxe os 17
+  de volta com as mesmas tarjas;
+- **Já reli** tirou uma marca só (17 → 16 avisos, 2 → 1 tarja);
+- o autosave gravou, e o arquivo em disco trazia `inicio` na FEN nova, 10 nós, 12 de 13
+  narrações marcadas, 3 quadros marcados e o treino em `pendente / alterada / pendente`;
+- **depois de recarregar a página**, os 16 avisos, os 9 lances e a tarja continuavam lá;
+- em **1366×768** a janela mede 975 px e rola por dentro, com o rodapé grudado: o botão
+  **Trocar a posição** fica em `top 703`, e não há rolagem horizontal;
+- `Esc` fechou devolvendo o foco ao botão que abriu, e o console ficou limpo.
+
+### O teste humano — 11/9/2026, e os dois defeitos que ele achou
+
+Doug exercitou os três gestos que o script não alcança, e os três passaram: **arrastar
+peça da paleta para o tabuleiro**, **arrastar peça já posta para outra casa** e
+**arrastar para fora para remover**.
+
+O mais convincente foi o primeiro. Ele largou uma **dama preta em d5** — e o impacto
+respondeu `1. Rg4` deixa de ser legal. A torre continuava em g2: o lance não morreu por
+falta de peça, morreu porque a dama nova **cravou a torre** na diagonal d5–h1, que
+termina no rei branco. É regra de xadrez calculada na posição nova, e não contagem de
+peças.
+
+**Defeito 1 — o véu fechava a janela no meio do arrasto.** Soltar a peça fora do
+tabuleiro termina com o ponteiro no véu escuro, e o navegador dispara o `click` no
+ancestral comum entre onde o botão desceu e onde subiu: o próprio véu, que fechava a
+janela. A montagem ia junto. O véu passou a exigir que o gesto tenha **começado** nele
+— e a mesma correção foi para o **Adicionar capítulo**, que tinha o defeito idêntico e
+escapou do teste de 11/9 por sorte de onde a peça caiu. As duas condições foram
+conferidas na tela depois: arrastar para fora remove a peça e a janela fica; clicar na
+área escura sem arrastar continua fechando.
+
+**Defeito 2 — a contagem do bloqueio somava repetidos.** A tarja dizia *"«Treino
+guiado» usa **12** lances que a posição nova torna ilegal"* numa árvore que só tinha 8
+para perder: as três listas do treino (início, questões e receita de origem) se
+sobrepõem, e eram somadas cruas. Agora conta lances distintos, e o teste que cobria o
+caso foi corrigido junto. Confirmado na tela: com 9 nós podados, a tarja diz 9.
+
+**Defeito 3 — o "Já reli" engolia a narração inteira.** O botão vivia dentro do
+`<label>` do campo, então o nome acessível dele era *"Narração mostrada ao aluno
+Marcada para revisão… O rei preto anda para onde quiser… Já reli"* — o parágrafo
+inteiro anunciado como nome de um botão de duas palavras (§25). A tarja e o botão
+saíram de dentro do rótulo; o nome acessível agora é **"Já reli"**, conferido na árvore
+de acessibilidade.
+
+O `content/rascunhos/lessons/N0-LADDER.json` que apareceu durante a rodada foi removido
+no fim; `.editor/v2/N0-LADDER.json` nunca chegou a existir. O SHA-256 de
+`.editor/v2/N1-KPK.json` é
+`4be602ca224f065f630efe11948b696e33dbaa95a5fdfc12c03a6c912eacb822`, **igual** antes e
+depois. Nenhuma aula publicada foi tocada.
+
+### O que esta fatia NÃO cobre
+
+- **A cascata sobre análise dependente.** Uma análise que comece num nó desta muda de
+  tabuleiro junto, e a árvore dela também precisaria ser revalidada. Hoje isso
+  **bloqueia** a troca, com o nome do capítulo. Nenhum conteúdo atual cai nesse caso —
+  "começar desta posição" (§8.3) ainda não existe, e é ela que criaria
+  `inicio: { tipo: "referencia" }`. Quando existir, esta cascata precisa nascer junto.
+- **Limpar a marca de um quadro de introdução.** `semRevisao` trata nó e narração; o
+  quadro é marcado e ainda não tem botão, porque o editor de introdução não tem tela.
+- **Continuam abertas, sem redução de escopo:** importação por URL do Lichess; writer e
+  exportação de PGN; as ações contextuais de §8.3 (**mostrar esta variante na aula**,
+  **começar desta posição**, **duplicar como independente**); renomear/duplicar/excluir
+  capítulo com impacto (§8.4); editor completo de treinos; publicação v2; repertório;
+  e a barra Stockfish.
+
+### Uma lição de método, para quem vier depois
+
+**Os três defeitos desta rodada foram achados pelo gesto humano, não pelo teste.** Os
+912 testes automáticos estavam verdes com o véu fechando a janela, com a contagem
+somando repetidos e com o rótulo engolido — e os três são exatamente o tipo de coisa
+que só aparece com um ponteiro de verdade numa tela de verdade. O corolário prático: um
+diálogo com montador dentro precisa do ensaio de arrastar **antes** de ser dado por
+pronto, e o arrasto que termina fora do tabuleiro é o caso que mais vale testar, porque
+é o único que sai da janela.
+
+### O próximo ponto exato
+
+Com esta fatia fechada, o que segue em §8.4 e §8.3 é: **renomear, duplicar e excluir
+capítulo com impacto transitivo** — o mesmo par calcular/aplicar desta fatia, com os
+mesmos bloqueios, aplicado à exclusão; e as três ações contextuais (**mostrar esta
+variante na aula**, **começar desta posição**, **duplicar como independente**). A
+segunda delas é a que cria `inicio: { tipo: "referencia" }`, e é com ela que a cascata
+bloqueada aqui precisa nascer.
+
+---
+
 ## Como ligar o editor
 
 ```bash

@@ -4,6 +4,7 @@ import { quadroDoNo } from "./arvore.ts";
 import { aplicarImportacaoPgn, type RelatorioImportacao } from "./importar-pgn.ts";
 import { mesmosDesenhos, noComDesenhos } from "./desenhos.ts";
 import { aplicarNovoCapitulo, type NovoCapituloV2 } from "./novo-capitulo.ts";
+import { aplicarTrocaDePosicao, semRevisao, type PlanoDaTrocaV2 } from "./trocar-posicao.ts";
 import type { AulaV2, DesenhoV2, NoV2 } from "./modelo.ts";
 
 export type ComandoV2 =
@@ -36,6 +37,18 @@ export type ComandoV2 =
    * capítulo, não um parecido.
    */
   | { tipo: "ADICIONAR_CAPITULO"; novo: NovoCapituloV2 }
+  /**
+   * Troca a posição inicial de um capítulo que já existe — §9.
+   *
+   * **Pelo mesmo motivo do `ADICIONAR_CAPITULO`, o plano chega pronto.** Ele
+   * carrega a lista exata dos nós que somem, calculada e mostrada ao professor
+   * antes de ele confirmar. Recalcular aqui daria a chance de o executor podar
+   * uma coisa diferente da que a tela prometeu — e um Refazer poderia podar uma
+   * terceira. Com o plano fixo, desfazer e refazer devolvem os mesmos bytes.
+   */
+  | { tipo: "TROCAR_POSICAO_INICIAL"; plano: PlanoDaTrocaV2 }
+  /** Tira a marca de revisão de §5 depois que o professor releu o texto. */
+  | { tipo: "REVISAO_RESOLVIDA"; alvo: { analiseId: string; nodeId: string } | { capituloId: string; narracaoId: string } }
   | { tipo: "EDITAR_COMENTARIO"; analiseId: string; nodeId: string; comentario: string }
   | { tipo: "EDITAR_NARRACAO"; capituloId: string; narracaoId: string; texto: string }
   | { tipo: "ALTERNAR_NAG"; analiseId: string; nodeId: string; nag: number }
@@ -84,6 +97,14 @@ export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Rec
     const resultado = aplicarNovoCapitulo(aula, comando.novo);
     if (!resultado.ok) throw new Error(resultado.mensagem);
     return resultado.aula;
+  }
+  if (comando.tipo === "TROCAR_POSICAO_INICIAL") {
+    const resultado = aplicarTrocaDePosicao(aula, comando.plano);
+    if (!resultado.ok) throw new Error(resultado.mensagem);
+    return resultado.aula;
+  }
+  if (comando.tipo === "REVISAO_RESOLVIDA") {
+    return semRevisao(aula, comando.alvo);
   }
   if (comando.tipo === "IMPORTAR_JOGOS") {
     // A recusa do importador é uma frase pronta, em português de professor, e ela

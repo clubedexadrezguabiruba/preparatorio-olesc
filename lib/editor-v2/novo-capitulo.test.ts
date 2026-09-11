@@ -15,6 +15,7 @@ import { problemasDaAulaV2, validarAulaV2, type AulaV2 } from "./modelo.ts";
 import {
   FEN_DA_POSICAO_INICIAL,
   aplicarNovoCapitulo,
+  camposDaFen,
   fenDoMontador,
   prepararNovoCapitulo,
   roquesPossiveis,
@@ -226,4 +227,29 @@ test("o roque só é oferecido quando o rei e a torre estão em casa", () => {
   // Torre de h1 fora: o roque curto das brancas deixa de existir.
   assert.deepEqual(roquesPossiveis("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK3"), { K: false, Q: true, k: true, q: true });
   assert.deepEqual(roquesPossiveis("8/8/8/8/8/8/8/8"), { K: false, Q: false, k: false, q: false });
+});
+
+test("a FEN desmontada em campos e remontada volta idêntica", () => {
+  const casos = [
+    FEN_DA_POSICAO_INICIAL,
+    FEN_KPK,
+    "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2",
+    "8/8/8/4k3/8/8/4P3/R3K3 w Q - 13 47",
+  ];
+  for (const fen of casos) assert.equal(fenDoMontador(camposDaFen(fen)!), fen, fen);
+});
+
+test("desmontar devolve cada campo separado, e recusa o que não é FEN", () => {
+  assert.deepEqual(camposDaFen("8/8/8/4k3/8/8/4P3/R3K3 b Q - 13 47"), {
+    pecas: "8/8/8/4k3/8/8/4P3/R3K3",
+    vez: "b",
+    roques: { K: false, Q: true, k: false, q: false },
+    enPassant: "",
+    meiosLances: 13,
+    lance: 47,
+  });
+  // A casa de en passant chega vazia quando é `-`, que é como o montador a edita.
+  assert.equal(camposDaFen("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2")?.enPassant, "c6");
+  assert.equal(camposDaFen("não é uma FEN"), null);
+  assert.equal(camposDaFen("8/8/8/8/8/8/8/8 w"), null);
 });
