@@ -6,7 +6,7 @@ import { adaptarLessonV1 } from "./adaptar-v1.ts";
 import { aplicarNoHistorico, desfazer, executarComando, iniciarHistorico, refazer } from "./comandos.ts";
 import { validarAulaV2 } from "./modelo.ts";
 import { aplicarTreinosPreparados, prepararTreinosDaqui } from "./treinos.ts";
-import { catalogoComErro, prepararEdicaoDeTreino, proximoIdDeResposta } from "./autoria-treino.ts";
+import { catalogoComErro, efeitoAoTrocarTipo, prepararEdicaoDeTreino, proximoIdDeResposta } from "./autoria-treino.ts";
 
 const lesson = lessonSchema.parse(JSON.parse(readFileSync("content/lessons/N0-LADDER.json", "utf8")));
 const position = positionSchema.parse(JSON.parse(readFileSync("content/positions/N0/pos-n0-ladder-silman-yk7.json", "utf8")));
@@ -116,6 +116,25 @@ test("§16.3: conferir a edição não altera o que o professor está digitando"
   const antes = structuredClone(treino);
   prepararEdicaoDeTreino(aula, { treino, catalogo: aula.catalogo }, positions);
   assert.deepEqual(treino, antes);
+});
+
+test("§16.3: trocar o que vem depois da resposta e voltar não perde a defesa já escrita", () => {
+  // Achado no ensaio pelo Playwright: "Encerra → Mate" e de volta a "avança" trocava a
+  // defesa e3d2 do documento pelo marcador a1a2, e o Salvar não voltava a habilitar.
+  const { treino } = comTreino();
+  const original = treino.questoes[0].respostas[0].efeito;
+  assert.equal(original.tipo, "avanca");
+  const contexto = { proximaQuestaoId: treino.questoes[1].id, original };
+  assert.equal(efeitoAoTrocarTipo("encerra", contexto).tipo, "encerra");
+  assert.deepEqual(efeitoAoTrocarTipo("avanca", contexto), original);
+});
+
+test("§16.3: resposta nova, sem efeito no documento, recebe a continuação padrão", () => {
+  const { treino } = comTreino();
+  const proximaQuestaoId = treino.questoes[1].id;
+  assert.deepEqual(efeitoAoTrocarTipo("repete", { proximaQuestaoId }), { tipo: "repete" });
+  assert.deepEqual(efeitoAoTrocarTipo("encerra", { proximaQuestaoId }), { tipo: "encerra", condicao: "objetivo-autoral" });
+  assert.equal(efeitoAoTrocarTipo("avanca", { proximaQuestaoId }).tipo, "avanca");
 });
 
 test("§6.1 e §16.5: salvar sem mudar nada não personaliza o treino nem entra no histórico", () => {

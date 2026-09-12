@@ -153,6 +153,19 @@ export function aplicarEdicaoDeTreino(aula: AulaV2, edicao: EdicaoDeTreinoV2): A
   };
 }
 
+/** O efeito de uma resposta quando o professor troca o que vem depois dela. */
+export function efeitoAoTrocarTipo(
+  tipo: RespostaTreinoV2["efeito"]["tipo"],
+  contexto: { proximaQuestaoId: string; original?: RespostaTreinoV2["efeito"] },
+): RespostaTreinoV2["efeito"] {
+  // Voltar ao tipo que a resposta já tinha no documento devolve o que o professor
+  // escreveu (a defesa, a próxima pergunta, a condição), e não um marcador.
+  if (contexto.original?.tipo === tipo) return structuredClone(contexto.original);
+  if (tipo === "repete") return { tipo };
+  if (tipo === "encerra") return { tipo, condicao: "objetivo-autoral" };
+  return { tipo: "avanca", defesas: [{ move: "a1a2", proximaQuestaoId: contexto.proximaQuestaoId }] };
+}
+
 export function proximoIdDeResposta(aula: AulaV2, treino: TreinoV2, questaoId: string): string {
   const usados = idsDaAulaV2(aula);
   treino.questoes.flatMap((questao) => questao.respostas).forEach((resposta) => usados.add(resposta.id));

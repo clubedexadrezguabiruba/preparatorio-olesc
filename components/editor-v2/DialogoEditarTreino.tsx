@@ -7,6 +7,7 @@ import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
 import { quadroDoNo } from "@/lib/editor-v2/arvore";
 import {
   catalogoComErro,
+  efeitoAoTrocarTipo,
   prepararEdicaoDeTreino,
   proximoIdDeResposta,
   type CatalogoV2,
@@ -195,13 +196,10 @@ export function DialogoEditarTreino({ aula, treinoId, positions, aoSalvar, aoFec
                 <div className="mt-2 rounded-md border border-borda-fraca p-2">
                   <label className="flex flex-col gap-1 text-xs text-tinta">Depois desta resposta
                     <select value={resposta.efeito.tipo} onChange={(e) => {
-                      const tipo = e.currentTarget.value;
-                      atualizarResposta(resposta.id, (atual) => {
-                        if (tipo === "repete") return { ...atual, efeito: { tipo } };
-                        if (tipo === "encerra") return { ...atual, efeito: { tipo, condicao: "objetivo-autoral" } };
-                        const proxima = treino.questoes[indiceQuestao + 1] ?? treino.questoes[0];
-                        return { ...atual, efeito: { tipo: "avanca", defesas: [{ move: "a1a2", proximaQuestaoId: proxima.id }] } };
-                      });
+                      const tipo = e.currentTarget.value as RespostaTreinoV2["efeito"]["tipo"];
+                      const proxima = treino.questoes[indiceQuestao + 1] ?? treino.questoes[0];
+                      const noDocumento = original.questoes.flatMap((item) => item.respostas).find((item) => item.id === resposta.id)?.efeito;
+                      atualizarResposta(resposta.id, (atual) => ({ ...atual, efeito: efeitoAoTrocarTipo(tipo, { proximaQuestaoId: proxima.id, original: noDocumento }) }));
                     }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm"><option value="avanca">Defensor responde e avança</option><option value="repete">Aceita e repete esta pergunta</option><option value="encerra">Encerra o ramo</option></select>
                   </label>
                   {resposta.efeito.tipo === "avanca" ? resposta.efeito.defesas.map((defesa, di) => <div key={`${resposta.id}-${di}`} className="mt-2 grid gap-2 md:grid-cols-2">

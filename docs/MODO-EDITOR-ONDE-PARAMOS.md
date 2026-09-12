@@ -83,13 +83,13 @@ cada linha aponta a seção que conta a história inteira.
 - **Parada 6B no código (§16.3)** — a janela de autoria do treino: várias respostas
   corretas, correta fora do método, erro conhecido nomeado, feedback por resposta, dica
   com desenho, explicação final, continuação e término conferidos antes de salvar, num
-  Desfazer só. Dois defeitos achados na revisão e consertados. **Falta o teste humano**
-  — ver "fatia 6 — autoria das perguntas e respostas".
+  Desfazer só. Dois defeitos achados na revisão e um no ensaio, os três consertados.
+  **Roteiro de 13 itens aprovado na tela em 12/9, rodado pelo Playwright** a pedido do
+  Doug — ver "fatia 6 — autoria das perguntas e respostas".
 
 **Aberto, na ordem:**
 
-1. **Teste humano da parada 6B**, e depois **6C, defensor jogável** (§16.4) e **6D,
-   propriedade** (§16.5) — derivado/personalizado/independente com diff e refazer. A
+1. **6C, defensor jogável** (§16.4) e **6D, propriedade** (§16.5) — derivado/personalizado/independente com diff e refazer. A
    fatia 6 permanece aberta.
 2. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
    **importar por URL do Lichess** (§13.2), **introdução e quadros** (§7.1) e
@@ -2625,6 +2625,65 @@ menu da **posição inicial** usar **Criar treino daqui**, lado **brancas**, e c
 Depois do teste, apagar `content/rascunhos/lessons/N0-LADDER.json` e
 `.editor/v2/N0-LADDER.json`. **Não commitar.**
 
+### O roteiro rodado na tela pelo Playwright — 12/9/2026
+
+A pedido do Doug, o roteiro acima foi rodado pelo Playwright em vez da mão, em
+`/editor/v2/finais/N0-LADDER`, 1366×768, com o Doug fazendo o login. O Playwright passa
+pela entrada do próprio navegador: clique, teclado e **botão direito arrastado chegam
+como eventos confiáveis**, ao contrário do `dispatchEvent` que o chessground recusa
+(`drag.js:6`). O que ele não mede é a hesitação de uma pessoa — isso continua sendo do
+teste de uso de §20.
+
+Usou o treino que já existia na N0 (**"Treino guiado"**, brancas, 5 perguntas), com a
+Pergunta 1 em `8/8/8/8/8/4k3/6R1/6RK w - - 0 1`.
+
+| Item | Resultado medido |
+|---|---|
+| 1 | botão "Treino guiado · Brancas · 5 perguntas · ligado à aula · Abrir autoria" |
+| 2 | título, objetivo, explicação, término, 5 perguntas, tabuleiro e FEN; rodapé verde |
+| 3 | digitado tecla a tecla, o campo ficou **"Boa escolha, continue"** — espaços intactos |
+| 4 | Cancelar descartou a digitação e devolveu o foco ao treino; salvar sem mudar deixou **"ligado à aula"** e o **Desfazer apagado** |
+| 5 | "a1a2 não é legal na posição da pergunta 1", Salvar apagado |
+| 6 | `g2g3` repetindo, feedback próprio: rodapé verde, Salvar habilitado |
+| 7 | julgamentos `correta, correta, alternativa, erro`; rodapé verde |
+| 8 | "a posição final não é mate", Salvar apagado; **a volta a "avança" falhou** — ver abaixo |
+| 9 | seta g2→g4 com o botão direito arrastado no tabuleiro da dica: elementos desenhados 3 → 4 **nos dois tabuleiros** |
+| 10 | janela fechada, foco no botão do treino, **"personalizado"**, "✓ salvo" |
+| 11 | Ctrl+Z → "ligado à aula"; Ctrl+Shift+Z → "personalizado"; "✓ salvo" |
+| 12 | Esc fechou; o título mudado não ficou |
+| 13 | depois do F5: as 4 respostas, os feedbacks, "Torre ao alcance", a dica e a seta |
+
+Console do navegador: nenhum erro ou aviso durante todo o roteiro.
+
+### O terceiro defeito: trocar o que vem depois e voltar perdia a defesa escrita
+
+**Reproduzido na tela (item 8).** Na Resposta 1, "Encerra o ramo → Mate" e de volta a
+"Defensor responde e avança": a defesa `e3d2`, que estava no documento, virava o marcador
+`a1a2`, e o Salvar não reabilitava até se redigitar a defesa.
+
+**A causa:** `components/editor-v2/DialogoEditarTreino.tsx:197-204`, o `onChange` de
+"Depois desta resposta", montava o efeito do zero a cada troca, sem olhar o que a
+resposta tinha no documento.
+
+**O conserto:** a lógica foi para `efeitoAoTrocarTipo` (`autoria-treino.ts`) — primeiro
+**sem mudar o comportamento**, para o teste falhar pelo comportamento e não por função
+inexistente —, e depois ganhou uma linha: voltar ao tipo que a resposta já tinha no
+documento devolve o efeito do documento. Resposta nova continua recebendo o padrão.
+
+```
+ANTES   ✖ §16.3: trocar o que vem depois da resposta e voltar não perde a defesa já escrita
+            +  move: 'a1a2'   -  move: 'e3d2'
+DEPOIS  ✔ (autoria-treino.test.ts: 8 de 8)
+NA TELA volta a "avança": defesa e3d2, próxima pergunta 2, rodapé verde, Salvar habilitado
+```
+
+**O que o conserto não cobre:** numa resposta **nova**, ainda não salva, ir a outro tipo e
+voltar recomeça do marcador — ela não tem efeito no documento a devolver.
+
+Portões depois dos três consertos: tipos, lint, **1.038 testes**, build, conteúdo,
+**42/42 mutações vermelhas** e repertório `--check`. Artefatos do ensaio apagados e
+conferidos; SHA-256 da N1-KPK `4be602ca…b822`, intacto.
+
 ### O que esta parada NÃO cobre
 
 - **Lance pelo tabuleiro.** As respostas se escrevem em UCI (`g2g3`). Jogar a resposta
@@ -2643,8 +2702,8 @@ Depois do teste, apagar `content/rascunhos/lessons/N0-LADDER.json` e
 
 ### O próximo ponto exato
 
-1. O teste humano desta parada (roteiro acima).
-2. Parada 6C — defensor jogável (§16.4).
+Parada 6C — defensor jogável (§16.4): jogar o treino na prévia com o runtime do aluno,
+resposta estável na tentativa, rotação entre tentativas e escolha fixa.
 
 ---
 
