@@ -80,11 +80,17 @@ cada linha aponta a seção que conta a história inteira.
   pergunta e depois da última. Ensaio real aprovado na N0 e 1.030 testes verdes. Ver
   "fatia 6 — nascimento e colocação do treino".
 
+- **Parada 6B no código (§16.3)** — a janela de autoria do treino: várias respostas
+  corretas, correta fora do método, erro conhecido nomeado, feedback por resposta, dica
+  com desenho, explicação final, continuação e término conferidos antes de salvar, num
+  Desfazer só. Dois defeitos achados na revisão e consertados. **Falta o teste humano**
+  — ver "fatia 6 — autoria das perguntas e respostas".
+
 **Aberto, na ordem:**
 
-1. **Continuar autoria de treinos e defensor** (§16.3–§16.5) — completar respostas
-   alternativas, erros, dicas e feedback; rotação/fixação do defensor; e os estados
-   derivado/personalizado/independente com diff e refazer. A fatia 6 permanece aberta.
+1. **Teste humano da parada 6B**, e depois **6C, defensor jogável** (§16.4) e **6D,
+   propriedade** (§16.5) — derivado/personalizado/independente com diff e refazer. A
+   fatia 6 permanece aberta.
 2. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
    **importar por URL do Lichess** (§13.2), **introdução e quadros** (§7.1) e
    **aulas extras na trilha** (§22) continuam fora, sem redução de escopo.
@@ -2475,6 +2481,170 @@ O ensaio foi limpo: `content/rascunhos/lessons/N0-LADDER.json` e
 Parada 6B: abrir um treino da lista lateral e concluir a autoria de questões e
 respostas de §16.3, inclusive o caso medido pelo plano de duas respostas com feedback
 distinto e um erro conhecido.
+
+---
+
+## Fatia 6 — autoria das perguntas e respostas (parada 6B)
+
+Entregue em 12/09/2026, em duas mãos: o código foi escrito numa sessão do Codex, que
+parou pelo limite de uso no meio do ensaio no navegador; uma sessão do Claude Code
+retomou dali, revisou, achou e consertou dois defeitos, rodou os portões e commitou.
+**Não fecha §16**: 6C e 6D continuam abertas.
+
+### O que o professor ganha
+
+- Cada treino da lista lateral virou um botão **"Abrir autoria"**.
+- A janela edita, numa **cópia**: título, objetivo, explicação ao concluir, término de
+  segurança (objetivo, mate ou limite de meios-lances) e, por pergunta, a **dica sob
+  demanda** com **desenho próprio** (botão direito no tabuleiro da janela).
+- Por pergunta, três portas: **+ Resposta correta**, **+ Correta fora do método** e
+  **+ Erro conhecido**. Cada resposta tem lance(s) em UCI, julgamento, feedback próprio
+  e o que acontece depois: o defensor responde e avança para uma pergunta, aceita e
+  repete, ou encerra o ramo numa condição (mate, promoção, empate pelas regras, vitória
+  certificada ou objetivo autoral).
+- Erro conhecido ganha **nome curto e explicação**, guardados no catálogo da aula.
+- O rodapé diz, enquanto se edita, a primeira coisa que impede salvar. **Salvar autoria**
+  só habilita quando toda resposta aceita tem continuação ou término executável.
+
+### As regras que a conferência impõe (`lib/editor-v2/autoria-treino.ts`)
+
+- Lance ilegal na posição da pergunta é recusado.
+- O mesmo lance em duas respostas da mesma pergunta é recusado.
+- Toda pergunta precisa de pelo menos uma resposta aceita.
+- **Avançar** exige defesa legal **e** chegar exatamente à posição da próxima pergunta.
+- **Encerrar** exige provar a condição: mate é mate, promoção termina em promoção,
+  empate é empate pelas regras; vitória certificada só em final certificado; objetivo
+  autoral exige a explicação de conclusão.
+- Erro conhecido precisa de nome e explicação, e repete a pergunta.
+- Salvar é **um comando só** (`EDITAR_TREINO`): um Desfazer devolve o treino e o
+  catálogo; o Refazer devolve os mesmos IDs.
+- O primeiro ajuste material marca o treino como **personalizado** e a revisão de
+  avaliação como pendente — a proteção mínima para a máquina não sobrescrever autoria.
+  O diff e o "refazer a partir da aula" são da 6D.
+
+### Duas decisões de modelo, para quem contestar
+
+- **`julgamento` ganhou `alternativa`** (`modelo.ts`), ao lado de `correta` e `erro`:
+  aceita, mas fora do método ensinado. É o que §16.3 chama de "alternativas corretas
+  fora do método, com feedback próprio".
+- **O adaptador v1 passou a ler `methodAlternatives` como `alternativa`**, e não como
+  `correta` (`adaptar-v1.ts`). No v1 esse lance é elogiado com *"Boa alternativa.
+  Continue pela linha ensinada."* e a peça volta — aceito, mas não é a linha. Nenhum
+  outro código decide por esse valor; conteúdo v1 e as 42 mutações continuam verdes.
+- O catálogo de erros ganhou `nome`, **opcional**, para os catálogos v1 continuarem
+  legíveis.
+
+### Os dois defeitos achados na revisão
+
+**1. O espaço digitado sumia.** A janela confere a edição a cada tecla, e a conferência
+aparava o texto **no próprio objeto que a tela mostrava**: o espaço depois de "Boa"
+desaparecia antes da palavra seguinte.
+Causa: `autoria-treino.ts:58` fazia cópia **rasa** do treino; as perguntas e respostas
+continuavam sendo os objetos do estado da tela, e `:79` (apaga dica vazia) e `:92`
+(apara o feedback) os alteravam. Conserto: cópia funda (`structuredClone`) no começo.
+
+**2. Salvar sem mudar nada personalizava o treino.** Abrir a autoria e salvar marcava
+"personalizado" e entrava no Desfazer — contra §16.5 (só o primeiro ajuste materializa)
+e §6.1 (sem efeito, sem histórico).
+Causa: `autoria-treino.ts:62` marcava a propriedade antes de saber se algo mudou.
+Conserto: depois de conferir, se treino e catálogo são iguais aos do documento, devolve
+o próprio documento; só então marca personalizado.
+
+```
+ANTES   ✖ §16.3: conferir a edição não altera o que o professor está digitando
+            -  feedback: 'Boa ',   +  feedback: 'Boa',   -  dica: ''
+        ✖ §6.1 e §16.5: salvar sem mudar nada não personaliza o treino nem entra no histórico
+            + 'personalizado'   - 'derivado'
+DEPOIS  ✔ os dois (autoria-treino.test.ts: 6 de 6)
+```
+
+### Escrito
+
+| Arquivo | O que é |
+|---|---|
+| `lib/editor-v2/autoria-treino.ts` | **novo** — conferência da edição, aplicação, id de resposta e erro no catálogo |
+| `lib/editor-v2/autoria-treino.test.ts` | **novo** — 6 testes |
+| `components/editor-v2/DialogoEditarTreino.tsx` | **novo** — a janela de autoria |
+| `lib/editor-v2/comandos.ts` | `EDITAR_TREINO` |
+| `lib/editor-v2/modelo.ts` | `alternativa` no julgamento; `nome` opcional no erro do catálogo |
+| `lib/editor-v2/adaptar-v1.ts` | `methodAlternatives` → `alternativa` |
+| `components/editor-v2/EditorV2.tsx` | a lista de treinos clicável, a janela, o foco devolvido ao fechar |
+
+### Evidência
+
+**Os sete portões verdes:** tipos, lint, **1.036 testes**, build, conteúdo (18 posições,
+3 aulas, 38 consultas de tablebase do cache), **42/42 mutações vermelhas** e repertório
+`--check`.
+
+Os 6 testes da autoria, na N0 real: duas corretas com feedbacks distintos, uma correta
+fora do método, um erro nomeado, dica, desenho e explicação de conclusão, com o documento
+válido pelo `validarAulaV2`; continuação que não chega à próxima pergunta recusada;
+término "mate" recusado quando não é mate; Desfazer/Refazer conservando IDs e catálogo;
+e os dois defeitos acima.
+
+**O que esta rodada NÃO prova.** Nada foi visto na tela: o ensaio do Codex parou pelo
+limite, e o navegador desta sessão caiu no login. A janela, o desenho da dica pelo botão
+direito, o rodapé mudando enquanto se digita e o foco ao fechar ficam para o roteiro.
+
+**Os artefatos.** O ensaio interrompido deixou `content/rascunhos/lessons/N0-LADDER.json`
+(byte a byte igual à publicada, `943151…03c3`); foi apagado e conferido. O SHA-256 de
+`.editor/v2/N1-KPK.json` continuou `4be602ca…b822`.
+
+### O teste humano desta parada — o roteiro numerado
+
+Abrir `/editor/v2/finais/N0-LADDER`, logado, em 1366×768. Se ainda não houver treino, no
+menu da **posição inicial** usar **Criar treino daqui**, lado **brancas**, e criar.
+
+1. Na lateral, o treino aparece como botão, com **"Abrir autoria"**?
+2. Clicar abre a janela com título, objetivo, explicação ao concluir, término, a lista de
+   perguntas e o tabuleiro da **Pergunta 1**?
+3. **O defeito 1:** no feedback da primeira resposta, digitar "Boa escolha, continue". As
+   palavras ficam **separadas por espaço**?
+4. **O defeito 2:** fechar com Cancelar, abrir de novo e clicar **Salvar autoria** sem
+   mudar nada. O treino continua **"ligado à aula"** e o estado continua **"✓ salvo"**?
+5. Na Pergunta 1, **+ Resposta correta**: o rodapé fica vermelho dizendo que `a1a2` não é
+   legal, e **Salvar autoria** fica apagado?
+6. Trocar o lance para `g2g3` e "Depois desta resposta" para **Aceita e repete esta
+   pergunta**, com um feedback diferente do da resposta 1. O rodapé volta a dizer que
+   todas as respostas têm continuação ou término?
+7. **+ Correta fora do método** com `g2g5`, repetindo, e **+ Erro conhecido** com `g2h2`,
+   com nome e explicação. O rodapé continua verde?
+8. Na resposta 1, trocar para **Encerra o ramo → Mate**. O rodapé diz **"a posição final
+   não é mate"**? Voltar para "Defensor responde e avança" e conferir que volta a
+   habilitar.
+9. Na **Dica sob demanda**, escrever uma dica e desenhar uma seta com o **botão direito**
+   no tabuleiro de baixo. A seta aparece também no tabuleiro da pergunta?
+10. **Salvar autoria**: a janela fecha, o **foco volta ao botão do treino**, a lista diz
+    **"personalizado"** e o estado chega a "✓ salvo"?
+11. **Ctrl+Z** volta a "ligado à aula" de uma vez, e **Ctrl+Shift+Z** devolve
+    "personalizado"?
+12. **Esc** fecha a janela sem salvar nada?
+13. F5 depois do "✓ salvo": reabrindo a autoria, as quatro respostas, os feedbacks, o
+    nome do erro, a dica e o desenho continuam lá?
+
+Depois do teste, apagar `content/rascunhos/lessons/N0-LADDER.json` e
+`.editor/v2/N0-LADDER.json`. **Não commitar.**
+
+### O que esta parada NÃO cobre
+
+- **Lance pelo tabuleiro.** As respostas se escrevem em UCI (`g2g3`). Jogar a resposta
+  arrastando a peça é mais natural e não existe ainda — dívida de uso, não de contrato.
+- **A resposta nova nasce com `a1a2`**, um lance de marcador que o rodapé recusa até ser
+  trocado. Funciona, mas ensina pela recusa.
+- **Várias defesas numa resposta.** O modelo aceita a lista; a janela edita as que
+  existem e não oferece acrescentar outra. É o assunto da 6C.
+- **Parada 6C — defensor jogável (§16.4):** jogar o treino na prévia com o runtime do
+  aluno, resposta estável na tentativa, rotação entre tentativas e escolha fixa.
+- **Parada 6D — propriedade (§16.5):** fonte atual/alterada/removida, aviso e diff,
+  independente, refazer a partir da aula com snapshot, IDs de questão sobrevivendo, e o
+  gate nunca reescrevendo autoria.
+- Os itens de §28 sobre respostas, defensor e propriedade continuam desmarcados até o
+  teste humano desta parada e as paradas 6C e 6D.
+
+### O próximo ponto exato
+
+1. O teste humano desta parada (roteiro acima).
+2. Parada 6C — defensor jogável (§16.4).
 
 ---
 

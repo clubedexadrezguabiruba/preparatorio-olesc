@@ -21,6 +21,7 @@ import { DialogoDuplicarCapitulo } from "@/components/editor-v2/DialogoDuplicarC
 import { DialogoExcluirCapitulo } from "@/components/editor-v2/DialogoExcluirCapitulo";
 import { DialogoExportar } from "@/components/editor-v2/DialogoExportar";
 import { DialogoCriarTreino } from "@/components/editor-v2/DialogoCriarTreino";
+import { DialogoEditarTreino } from "@/components/editor-v2/DialogoEditarTreino";
 import { PaletaDeDesenho } from "@/components/editor-v2/PaletaDeDesenho";
 import { Dialogo } from "@/components/editor-v2/Dialogo";
 import { Previa } from "@/components/editor-v2/Previa";
@@ -166,6 +167,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const [cortando, setCortando] = useState<{ tipo: TipoDeCorteV2; nodeId: string; lance: string } | null>(null);
   const [exportando, setExportando] = useState(false);
   const [criandoTreino, setCriandoTreino] = useState<string | null>(null);
+  const [editandoTreino, setEditandoTreino] = useState<string | null>(null);
   /**
    * A prévia (§15), em dois estados: a escolha do escopo, e a prévia rodando.
    *
@@ -294,6 +296,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
    */
   const janelaAberta = importando || adicionando || trocandoPosicao || exportando
     || escolhendoPrevia || previa !== null
+    || criandoTreino !== null || editandoTreino !== null
     || duplicandoCapitulo !== null || excluindoCapitulo !== null || acaoDoLance !== null || cortando !== null;
   const estadoDoTeclado = useRef({ analise, janelaAberta });
   useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta }; });
@@ -972,6 +975,24 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         />
       ) : null}
 
+      {editandoTreino ? (
+        <DialogoEditarTreino
+          aula={historico.presente}
+          treinoId={editandoTreino}
+          positions={positions}
+          aoSalvar={(edicao) => {
+            aplicar({ tipo: "EDITAR_TREINO", edicao });
+            setEditandoTreino(null);
+            requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(`[data-treino-id="${editandoTreino}"]`)?.focus());
+          }}
+          aoFechar={() => {
+            const alvo = editandoTreino;
+            setEditandoTreino(null);
+            requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(`[data-treino-id="${alvo}"]`)?.focus());
+          }}
+        />
+      ) : null}
+
       {/* §15.1: as três entradas da prévia. Uma janela com três botões, e não um menu
           suspenso: são três destinos, não três variações de um. */}
       {escolhendoPrevia ? (
@@ -1035,11 +1056,19 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
             {treinosOrdenados.length ? (
               <ol className="mt-2 flex flex-col gap-2" aria-label="Treinos da aula">
                 {treinosOrdenados.map((treino) => (
-                  <li key={treino.id} className="rounded-md border border-borda-fraca p-2 text-xs text-tinta">
-                    <span className="block font-medium">{treino.titulo}</span>
-                    <span className="text-tinta-fraca">
-                      {treino.ladoAluno === "white" ? "Brancas" : "Pretas"} · {treino.questoes.length} pergunta{treino.questoes.length === 1 ? "" : "s"} · {treino.propriedade === "derivado" ? "ligado à aula" : treino.propriedade}
-                    </span>
+                  <li key={treino.id}>
+                    <button
+                      type="button"
+                      data-treino-id={treino.id}
+                      onClick={() => setEditandoTreino(treino.id)}
+                      className="foco w-full rounded-md border border-borda-fraca p-2 text-left text-xs text-tinta hover:bg-carta-toque"
+                    >
+                      <span className="block font-medium">{treino.titulo}</span>
+                      <span className="text-tinta-fraca">
+                        {treino.ladoAluno === "white" ? "Brancas" : "Pretas"} · {treino.questoes.length} pergunta{treino.questoes.length === 1 ? "" : "s"} · {treino.propriedade === "derivado" ? "ligado à aula" : treino.propriedade}
+                      </span>
+                      <span className="mt-1 block text-metodo-tinta">Abrir autoria</span>
+                    </button>
                   </li>
                 ))}
               </ol>

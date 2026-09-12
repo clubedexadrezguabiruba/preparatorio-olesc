@@ -23,6 +23,7 @@ import {
 } from "./acoes-do-lance.ts";
 import { comNarracaoMovida, comNarracaoNova, comPausaDaNarracao } from "./narracoes.ts";
 import { aplicarTreinosPreparados, type TreinosPreparadosV2 } from "./treinos.ts";
+import { aplicarEdicaoDeTreino, type EdicaoDeTreinoV2 } from "./autoria-treino.ts";
 import { semRevisoes } from "./revisoes.ts";
 import type { ResolucoesV2 } from "./impacto.ts";
 import type { AulaV2, DesenhoV2, NoV2 } from "./modelo.ts";
@@ -109,6 +110,8 @@ export type ComandoV2 =
   | { tipo: "DEFINIR_PAUSA_DA_NARRACAO"; capituloId: string; narracaoId: string; pausa: "temporizada" | "manual" }
   /** §16: um ou dois treinos, com ids e colocação decididos na prévia de criação. */
   | { tipo: "ADICIONAR_TREINOS"; preparo: TreinosPreparadosV2 }
+  /** §16.3: a autoria inteira do treino entra num único passo de Desfazer. */
+  | { tipo: "EDITAR_TREINO"; edicao: EdicaoDeTreinoV2 }
   | { tipo: "ALTERNAR_NAG"; analiseId: string; nodeId: string; nag: number }
   | { tipo: "ADICIONAR_LANCE"; analiseId: string; nodeId: string; uci: string; novoNodeId: string }
   | { tipo: "PROMOVER_VARIANTE"; analiseId: string; parentId: string; nodeId: string }
@@ -216,6 +219,7 @@ export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Rec
   if (comando.tipo === "MOVER_NARRACAO") return comNarracaoMovida(aula, comando);
   if (comando.tipo === "DEFINIR_PAUSA_DA_NARRACAO") return comPausaDaNarracao(aula, comando);
   if (comando.tipo === "ADICIONAR_TREINOS") return aplicarTreinosPreparados(aula, comando.preparo);
+  if (comando.tipo === "EDITAR_TREINO") return aplicarEdicaoDeTreino(aula, comando.edicao);
   if (comando.tipo === "EDITAR_NARRACAO") {
     const capitulo = aula.capitulos.find((item) => item.id === comando.capituloId);
     if (!capitulo) throw new Error("capítulo inexistente");

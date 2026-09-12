@@ -103,6 +103,8 @@ export const excecaoEditorialV2Schema = z.strictObject({
 export const catalogoEditorialV2Schema = z.strictObject({
   erros: z.array(z.strictObject({
     id: idV2Schema,
+    /** Nome curto mostrado ao professor; os catálogos v1 continuam legíveis sem ele. */
+    nome: z.string().min(1).optional(),
     julgamento: z.enum(["fora-do-metodo", "perde-resultado"]),
     texto: z.string().min(1),
   })),
@@ -246,7 +248,8 @@ const origemTreinoV2Schema = z.strictObject({
 export const respostaTreinoV2Schema = z.strictObject({
   id: idV2Schema,
   moves: z.array(uciSchema).min(1),
-  julgamento: z.enum(["correta", "erro"]),
+  /** `alternativa` é aceita, mas fica explicitamente fora do método ensinado. */
+  julgamento: z.enum(["correta", "alternativa", "erro"]),
   feedback: z.string().min(1),
   erroId: idV2Schema.optional(),
   efeito: z.discriminatedUnion("tipo", [

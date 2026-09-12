@@ -135,7 +135,7 @@ export function adaptarLessonV1(lesson: Lesson, positions: Record<string, Positi
       node.methodAlternatives?.forEach((move, indice) => respostas.push({
         id: id(`resposta-${lesson.id}-${nodeId}-metodo-${indice + 1}`),
         moves: [move],
-        julgamento: "correta",
+        julgamento: "alternativa",
         feedback: lesson.fallbacks.methodAlternative,
         efeito: { tipo: "repete" },
       }));
