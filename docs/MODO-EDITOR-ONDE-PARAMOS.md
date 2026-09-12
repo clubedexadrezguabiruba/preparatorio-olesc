@@ -56,23 +56,26 @@ cada linha aponta a seção que conta a história inteira.
   edições que perdem nós. Ver “sete fatias numa rodada”.
 
 - **Paleta clicável de desenho (§10.2 e §25)** — seta, casa, cor e limpar em botões; a
-  cor sem Shift/Alt, com os atalhos ainda valendo. Fecha a fatia 3 do roteiro. **Falta a
-  conferência humana do clique**, e com ela a reprodução de um defeito consertado: o
-  clique esquerdo apagava o desenho inteiro da posição. Ver “a paleta clicável de
-  desenho”.
+  cor sem Shift/Alt, com os atalhos ainda valendo. Fecha a fatia 3 do roteiro. **Teste
+  humano aprovado em 12/9**, inclusive a reprodução do defeito consertado: o clique
+  esquerdo apagava o desenho inteiro da posição. Ver “a paleta clicável de desenho”.
 
 - **Prévia, reprodução e comparação (§15)** — a prévia usa o player do aluno, com a
   aula inteira, o capítulo ou "daqui"; as velocidades não comprimem a leitura da
   narração; e a comparação volta ao ponto de escolha, com o caso de aceite de rei e
-  peão provado contra a regra do jogo. **Falta a conferência humana da tela**, inclusive
-  a geometria em 1366×768. Ver “prévia, reprodução e comparação”.
+  peão provado contra a regra do jogo. **Teste humano aprovado em 12/9**, inclusive a
+  geometria em 1366×768 e as duas metades da regra da velocidade. Ver “prévia,
+  reprodução e comparação”.
 
 **Aberto, na ordem:**
 
-1. **Autoria de treinos e defensor** (§16) — fatia 6 do roteiro. É o que destrava
+1. **O interruptor da pausa manual** (§12.2) — o modelo tem o campo e a prévia o
+   respeita, mas não há onde ligá-lo na tela. Meia entrega, e pequena de fechar.
+2. **Autoria de treinos e defensor** (§16) — fatia 6 do roteiro. É o que destrava
    "Criar treino daqui", hoje desabilitada com o motivo escrito.
-2. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23) e
-   **importar por URL do Lichess** (§13.2) continuam fora, sem redução de escopo.
+3. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
+   **importar por URL do Lichess** (§13.2), **introdução e quadros** (§7.1) e
+   **aulas extras na trilha** (§22) continuam fora, sem redução de escopo.
 
 **Dívida conhecida e não paga:** a lista de lances mostra ~10 lances por vez em
 1366×768; se incomodar, o espaço sai do bloco de edição abaixo dela.
@@ -2144,14 +2147,62 @@ Abrir `/editor/v2/finais/N0-LADDER` e clicar em **Pré-visualizar**:
   que o professor não consegue consertar.
 - **A pausa manual no meio de uma fala paginada.** A prévia para no passo, não na página;
   a régua de voz existe para a fala não paginar, e o caso não foi exercitado.
-- A prévia **não** foi vista no navegador nesta sessão: a porta do editor exige professor
-  autenticado e o navegador embutido estava deslogado. Tudo o que depende de ver a tela
-  está no roteiro acima.
+- A prévia **não** foi vista pelo agente no navegador: a porta do editor exige professor
+  autenticado e o navegador embutido estava deslogado. Quem a viu foi o Doug — seção
+  abaixo.
+
+### Teste humano da paleta e da prévia — 12/9/2026, aprovado
+
+O Doug rodou o roteiro numerado inteiro na `N0-LADDER`, logado, e **as 19 perguntas
+passaram**. Com isso ficam conferidos pela mão os gestos e as medidas que nenhum script
+alcança:
+
+- **a paleta**, com os três botões de ferramenta, as quatro cores nomeadas e a bolinha na
+  cor com que o traço sai;
+- **o desenho por clique**: a casa acesa num clique, o apagar pelo mesmo gesto, a troca de
+  cor sem empilhar traço, os dois cliques da seta com a frase que muda entre eles, e o
+  desistir;
+- **nenhuma peça se move** com a ferramenta na mão;
+- **o defeito do clique esquerdo**, que era o item mais importante do roteiro: os desenhos
+  continuaram na tela depois do clique numa casa vazia. Com isso a **reprodução** que
+  faltava a este conserto está feita — a causa já estava lida no pacote (`drag.js:17-20` →
+  `draw.js:65-71`), e agora o comportamento consertado foi visto;
+- **o que já existia não quebrou**: o desenho por posição, o Desfazer de cada traço, e os
+  quatro gestos de botão direito;
+- **a prévia**: as três entradas, o capítulo tocando com o relógio de leitura, os seis
+  controles, o retorno ao editor no mesmo capítulo e no mesmo lance sem sujar o `✓ salvo`;
+- **a regra da velocidade de §15.2, nas duas metades**: em 2× o trecho sem narração anda
+  mais rápido **e** o trecho com narração leva o mesmo tempo. Esta é a única conferência
+  possível dessa regra, e ela é do olho;
+- **a geometria em 1366×768**: o tabuleiro da prévia cabe inteiro e a página não ganhou
+  rolagem, apesar da barra a mais do cabeçalho da prévia;
+- **a comparação**, criada pela ação "mostrar esta variante na aula": ao chegar na
+  bifurcação o tabuleiro parou e a frase do retorno apareceu antes do lance alternativo.
+
+Os artefatos do ensaio foram removidos no fim: `content/rascunhos/lessons/N0-LADDER.json`
+(conferido byte a byte igual à aula publicada, SHA-256 `943151…03c3`, como no commit
+`15b390c`) e `.editor/v2/N0-LADDER.json`, que guardava os capítulos «4… Kc1» e «5. Rg1#»
+criados no teste da comparação. O SHA-256 de `.editor/v2/N1-KPK.json` continua
+`4be602ca224f065f630efe11948b696e33dbaa95a5fdfc12c03a6c912eacb822`, conferido antes e
+depois. Nenhuma aula publicada foi tocada.
+
+### A dívida que o teste humano destapou
+
+A **pausa manual não tem interruptor na tela**. O modelo tem o campo
+(`narracao.pausa: "manual"`), a prévia o respeita e há teste provando que ela não anda
+sozinha em velocidade nenhuma — mas a caixa de narração só edita o texto, e não há comando
+que escreva o campo. §12.2 pede o interruptor.
+
+É meia entrega: o player honra uma marca que ninguém consegue pôr. Fica registrada aqui
+como a primeira coisa a fazer antes ou junto da fatia 6, e não como "coberto por §15.2".
 
 ### O próximo ponto exato
 
-A fatia 6 do roteiro de §27: **autoria de treinos e defensor** (§16). Ela é a que destrava
-"Criar treino daqui", que hoje aparece no menu do lance desabilitada com o motivo escrito.
+O interruptor da pausa manual (§12.2), acima — é pequeno e fecha a meia entrega.
+
+Depois, a fatia 6 do roteiro de §27: **autoria de treinos e defensor** (§16). Ela é a que
+destrava "Criar treino daqui", que hoje aparece no menu do lance desabilitada com o motivo
+escrito.
 
 ---
 
