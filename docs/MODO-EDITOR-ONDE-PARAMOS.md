@@ -67,13 +67,17 @@ cada linha aponta a seção que conta a história inteira.
   geometria em 1366×768 e as duas metades da regra da velocidade. Ver “prévia,
   reprodução e comparação”.
 
+- **Narração criada, ordenada e com pausa manual (§12.2)** — as duas meias entregas
+  que o teste de 12/9 destapou: escrever narração num lance que não tinha nenhuma,
+  trocar a ordem de duas narrações do mesmo lance, e o interruptor "parar até o aluno
+  clicar em Continuar". **Falta o teste humano** — o navegador do agente caiu no
+  login. Ver "narração pela tela".
+
 **Aberto, na ordem:**
 
-1. **O interruptor da pausa manual** (§12.2) — o modelo tem o campo e a prévia o
-   respeita, mas não há onde ligá-lo na tela. Meia entrega, e pequena de fechar.
-2. **Autoria de treinos e defensor** (§16) — fatia 6 do roteiro. É o que destrava
+1. **Autoria de treinos e defensor** (§16) — fatia 6 do roteiro. É o que destrava
    "Criar treino daqui", hoje desabilitada com o motivo escrito.
-3. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
+2. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
    **importar por URL do Lichess** (§13.2), **introdução e quadros** (§7.1) e
    **aulas extras na trilha** (§22) continuam fora, sem redução de escopo.
 
@@ -2203,6 +2207,163 @@ O interruptor da pausa manual (§12.2), acima — é pequeno e fecha a meia entr
 Depois, a fatia 6 do roteiro de §27: **autoria de treinos e defensor** (§16). Ela é a que
 destrava "Criar treino daqui", que hoje aparece no menu do lance desabilitada com o motivo
 escrito.
+
+---
+
+## Narração pela tela: criar, ordenar e pausar — 12/9/2026
+
+Fecha as **duas meias entregas** que o teste humano de 12/9 destapou, antes de abrir a
+fatia 6. As duas eram do mesmo tipo: o dado existia no modelo, e não havia onde mexer
+nele pela tela.
+
+**Buraco 1 — criar narração.** Só existia `EDITAR_NARRACAO`, que exige a narração já
+existente, e a caixa só aparecia para as narrações que já estavam no documento. Numa aula
+montada do zero **não havia como escrever uma narração**: elas só nasciam de comentário
+de PGN importado, e a prévia entregue em 12/9 tocava em silêncio.
+
+**Buraco 2 — o interruptor da pausa manual.** `narracao.pausa` existia, a prévia o
+respeitava e havia teste disso; faltavam o comando e o controle.
+
+### O que o professor vê agora
+
+Abaixo do comentário, no lance selecionado:
+
+- **"+ Escrever narração"** (ou **"+ Outra narração neste lance"**, quando já há uma).
+  Abre uma caixa vazia com o cursor dentro. A narração nasce **quando a caixa perde o
+  foco com algo escrito**; deixada vazia, é desistência e nada é criado.
+- Em cada narração, a caixa **"Parar aqui até o aluno clicar em Continuar"**. A frase
+  diz o efeito, e não o nome do campo.
+- Com duas ou mais narrações no mesmo lance: o rótulo vira "Narração 1 de 2", e aparecem
+  **"↑ Antes"** e **"↓ Depois"**.
+- Num lance de **variante fora do percurso** do capítulo, em vez do botão, a frase: a
+  narração só existe nos lances que o capítulo reproduz.
+
+### As decisões, e o porquê
+
+**A narração continua sendo do capítulo, não do nó.** Os três comandos novos recebem o
+`capituloId` e não tocam no comentário da análise — o caso das duas comparações que
+explicam a mesma posição de jeitos diferentes continua provado em `previa.test.ts`.
+
+**A ordem é a do array, sem campo `ordem`.** A prévia já filtra `capitulo.narracoes` pelo
+nó e toca na ordem em que aparecem. Um campo a mais seria uma segunda verdade. "Mover"
+troca de lugar **só com a vizinha do mesmo lance**; narrações de lances diferentes nunca
+se atravessam, e na ponta o comando devolve a mesma aula (não entra no histórico).
+
+**Narração só em lance do percurso.** Numa variante, ela seria texto que a prévia nunca
+toca — escrito pelo professor achando que o aluno ia ler. O executor recusa com a frase,
+e a tela nem oferece o botão.
+
+**O id é calculado, não sorteado** (`narracao-<nó>`, o prefixo da importação, com sufixo
+só se já estiver em uso). Chega pronto no comando, pelo mesmo motivo do
+`ADICIONAR_CAPITULO`: o Refazer devolve a mesma narração, e não uma parecida.
+
+**Sem narração vazia no documento.** O schema pede `texto` com pelo menos um caractere, e
+§12.2 já diz que esvaziar remove. Por isso a caixa nova é estado da **sessão** até ganhar
+texto — e trocar de lance a fecha sem efeito nenhum, porque a chave deixa de casar.
+
+**Os botões de ordem usam `aria-disabled`, não `disabled`.** O desabilitado de verdade
+tiraria o foco de quem acabou de levar a narração até a ponta, e esconderia o `title` que
+explica. É a regra que a lixeira já documentava.
+
+### O defeito achado no caminho: sair da caixa sem mudar nada sujava o Desfazer
+
+**Reproduzido por teste.** Sair da caixa de narração — ou de comentário — sem mudar o
+texto empilhava um passo no Desfazer que não desfazia nada, e mandava gravar. §6.1: *"ação
+sem efeito não entra no histórico nem dispara autosave"*.
+
+**A causa, com arquivo e linha.** `aplicarNoHistorico` (`lib/editor-v2/comandos.ts:291`)
+só ignora o comando quando recebe **o mesmo objeto**; e `EDITAR_NARRACAO` (`:209-218`) e
+`EDITAR_COMENTARIO` (`:230-234`) montavam sempre uma aula nova, com texto igual ou não.
+Como as duas caixas gravam no `onBlur`, cada clique fora era uma edição.
+
+**O conserto** é uma linha em cada comando: texto igual devolve a mesma aula.
+
+```
+ANTES   ✖ §6.1: sair da caixa de narração sem mudar o texto não entra no histórico
+          AssertionError: Values have same structure but are not reference-equal
+        ✖ §6.1: sair da caixa de comentário sem mudar o texto não entra no histórico
+          AssertionError: Values have same structure but are not reference-equal
+DEPOIS  ✔ os dois (pass 2, fail 0)
+```
+
+### Escrito
+
+| Arquivo | O que é |
+|---|---|
+| `lib/editor-v2/narracoes.ts` | **novo** — `podeNarrar`, `novoIdDeNarracao`, e as três edições: nova, movida, pausa |
+| `lib/editor-v2/narracoes.test.ts` | **novo** — 11 testes |
+| `lib/editor-v2/comandos.ts` | `ADICIONAR_NARRACAO`, `MOVER_NARRACAO`, `DEFINIR_PAUSA_DA_NARRACAO`; e a porta do "sem efeito" nas duas caixas |
+| `components/editor-v2/EditorV2.tsx` | o botão, a caixa nova, o interruptor e os dois botões de ordem |
+
+### Evidência
+
+**Os sete portões verdes:** tipos, lint, **1.018 testes** (11 novos), build, conteúdo (38
+consultas de tablebase, todas do cache), **42/42 mutações vermelhas** e repertório
+`--check`.
+
+Os 11 testes: a primeira narração num lance mudo, **com a prévia passando de fala vazia a
+fala escrita** e o comentário intocado, e o documento válido pelo `validarAulaV2`; a
+segunda narração entrando depois da primeira; o id sem colisão, igual em duas chamadas, e
+o id repetido recusado; criar num Desfazer, com o Refazer devolvendo **o mesmo id**; texto
+vazio não criando nada; lance de variante recusado; mover para cima trocando a ordem **na
+prévia**, e voltando; mover na ponta sem efeito e sem atravessar outro lance; o
+interruptor escrevendo o campo, a prévia recebendo `pausaManual`, o Ctrl+Z desligando,
+ligar o que já está ligado não entrando no histórico; e os dois do defeito acima.
+
+**O que esta rodada NÃO prova.** Nada foi visto na tela: o navegador embutido caiu na
+tela de login (a porta do editor exige professor autenticado). Os comandos, a ordem na
+prévia e o histórico estão provados por teste; **o botão, o foco automático da caixa, o
+salvar ao clicar fora e a geometria** ficam para o roteiro abaixo.
+
+**Os artefatos.** Havia um `content/rascunhos/lessons/N0-LADDER.json` fora do git, de
+15:15, anterior a esta sessão e **byte a byte igual à aula publicada** (SHA-256
+`943151…03c3`). Foi apagado e conferido (`Test-Path` → `False`; `git status content/`
+vazio). O SHA-256 de `.editor/v2/N1-KPK.json` foi conferido antes e depois:
+`4be602ca…b822`.
+
+### O teste humano desta rodada — o roteiro numerado
+
+Abrir `/editor/v2/finais/N0-LADDER`, logado, em 1366×768. Perguntas de sim ou não:
+
+1. Num lance **do capítulo** sem narração, aparece **"+ Escrever narração"** logo abaixo
+   do comentário?
+2. Clicar nele abre uma caixa vazia **com o cursor já dentro**?
+3. Escrever "Teste um" e clicar fora: a caixa vira **"Narração mostrada ao aluno"** com o
+   texto, e o estado passa por "salvando" até **"✓ salvo"**?
+4. Com o foco fora das caixas, **Ctrl+Z** apaga a narração, e **Ctrl+Shift+Z** a devolve?
+5. Abrir a caixa nova e clicar fora **sem escrever**: nada aparece, e o estado continua
+   **"✓ salvo"**?
+6. **"+ Outra narração neste lance"**, escrever "Teste dois": os rótulos viram **"1 de 2"**
+   e **"2 de 2"**, com **↑ Antes** e **↓ Depois**?
+7. **↑ Antes** na segunda troca a ordem na tela? E **↑ Antes** na primeira aparece apagado
+   e não faz nada?
+8. Marcar **"Parar aqui até o aluno clicar em Continuar"** numa delas, e abrir
+   **Pré-visualizar → Só este capítulo**: as duas falas tocam **na ordem nova**, e a aula
+   **para** na marcada, com o botão virando **Continuar**?
+9. Num lance de **variante fora do capítulo**, aparece a frase "Este lance é de uma
+   variante fora do capítulo…" no lugar do botão?
+10. **O defeito consertado.** Clicar numa caixa de narração ou de comentário que já tem
+    texto e clicar fora **sem mudar nada**: o estado continua **"✓ salvo"**, sem passar a
+    "alterado"?
+11. Recarregar a página (F5) depois do "✓ salvo": as narrações, a ordem e a pausa
+    continuam lá?
+
+Depois do teste, os artefatos voltam: `content/rascunhos/lessons/N0-LADDER.json` e
+`.editor/v2/N0-LADDER.json`. **Não commitar**; apagar como no fim desta rodada.
+
+### O que esta rodada NÃO cobre
+
+- **Mover narração para outro lance.** §12.2 pede ordenar "quando houver mais de uma", e
+  a ordem que importa é dentro do lance. Levar uma fala de um lance para outro seria
+  recortar e colar; não foi pedido e não existe.
+- **Narração da introdução e dos quadros** (§7.1): continua sem tela, com a introdução.
+- **A régua de voz no texto novo** (§12.2, último item): **não verificada nesta rodada**.
+  A tela não avisa enquanto se digita, e a publicação v2 (§20), onde o texto do aluno
+  seria julgado, ainda não existe. Fica aberta com a publicação.
+
+### O próximo ponto exato
+
+A fatia 6 do roteiro de §27: **autoria de treinos e defensor** (§16).
 
 ---
 

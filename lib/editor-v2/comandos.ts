@@ -21,6 +21,7 @@ import {
   type PlanoDoCorteV2,
   type VarianteMostradaV2,
 } from "./acoes-do-lance.ts";
+import { comNarracaoMovida, comNarracaoNova, comPausaDaNarracao } from "./narracoes.ts";
 import { semRevisoes } from "./revisoes.ts";
 import type { ResolucoesV2 } from "./impacto.ts";
 import type { AulaV2, DesenhoV2, NoV2 } from "./modelo.ts";
@@ -99,6 +100,12 @@ export type ComandoV2 =
   | { tipo: "REVISOES_RESOLVIDAS"; alvos: AlvoDeRevisaoV2[] }
   | { tipo: "EDITAR_COMENTARIO"; analiseId: string; nodeId: string; comentario: string }
   | { tipo: "EDITAR_NARRACAO"; capituloId: string; narracaoId: string; texto: string }
+  /** §12.2: a narração nova de um lance do percurso. O id chega pronto, para o Refazer devolver a mesma. */
+  | { tipo: "ADICIONAR_NARRACAO"; capituloId: string; nodeId: string; narracaoId: string; texto: string }
+  /** §12.2: troca de lugar com a narração vizinha **do mesmo lance**. */
+  | { tipo: "MOVER_NARRACAO"; capituloId: string; narracaoId: string; direcao: "acima" | "abaixo" }
+  /** §12.2 e §15.2: pausa temporizada ou manual, a que exige "Continuar". */
+  | { tipo: "DEFINIR_PAUSA_DA_NARRACAO"; capituloId: string; narracaoId: string; pausa: "temporizada" | "manual" }
   | { tipo: "ALTERNAR_NAG"; analiseId: string; nodeId: string; nag: number }
   | { tipo: "ADICIONAR_LANCE"; analiseId: string; nodeId: string; uci: string; novoNodeId: string }
   | { tipo: "PROMOVER_VARIANTE"; analiseId: string; parentId: string; nodeId: string }
@@ -202,11 +209,18 @@ export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Rec
     if (!resultado.ok) throw new Error(resultado.mensagem);
     return resultado.aula;
   }
+  if (comando.tipo === "ADICIONAR_NARRACAO") return comNarracaoNova(aula, comando);
+  if (comando.tipo === "MOVER_NARRACAO") return comNarracaoMovida(aula, comando);
+  if (comando.tipo === "DEFINIR_PAUSA_DA_NARRACAO") return comPausaDaNarracao(aula, comando);
   if (comando.tipo === "EDITAR_NARRACAO") {
     const capitulo = aula.capitulos.find((item) => item.id === comando.capituloId);
     if (!capitulo) throw new Error("capítulo inexistente");
-    if (!capitulo.narracoes.some((item) => item.id === comando.narracaoId)) throw new Error("narração inexistente");
+    const atual = capitulo.narracoes.find((item) => item.id === comando.narracaoId);
+    if (!atual) throw new Error("narração inexistente");
     const texto = comando.texto.trim();
+    // Sair da caixa sem mudar nada não é edição (§6.1): sem esta porta, cada foco
+    // perdido empilhava um Desfazer vazio e mandava gravar.
+    if (texto === atual.texto) return aula;
     return {
       ...aula,
       capitulos: aula.capitulos.map((item) => item.id !== capitulo.id ? item : {
@@ -229,6 +243,7 @@ export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Rec
 
   if (comando.tipo === "EDITAR_COMENTARIO") {
     const comentario = comando.comentario.trim();
+    if (comentario === (no.comentario ?? "")) return aula;
     const editado: NoV2 = { ...no };
     if (comentario) editado.comentario = comentario; else delete editado.comentario;
     proxima = { ...analise, nos: { ...analise.nos, [no.id]: editado } };

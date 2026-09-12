@@ -65,6 +65,7 @@ import type {
   VarianteMostradaV2,
 } from "@/lib/editor-v2/acoes-do-lance";
 import type { ResolucoesV2 } from "@/lib/editor-v2/impacto";
+import { novoIdDeNarracao, podeNarrar } from "@/lib/editor-v2/narracoes";
 import { revisoesPendentesV2 } from "@/lib/editor-v2/revisoes";
 import { FEN_INICIAL_PADRAO, problemasDaAulaV2, validarAulaV2, type AnaliseV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
 import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/editor-v2/recuperacao";
@@ -160,6 +161,14 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
    */
   const [escolhendoPrevia, setEscolhendoPrevia] = useState(false);
   const [previa, setPrevia] = useState<PreviaV2 | null>(null);
+  /**
+   * A caixa da narração nova, aberta em qual lance de qual capítulo.
+   *
+   * É estado da sessão, não do documento: narração vazia não é válida (o schema pede
+   * texto), então ela só nasce quando a caixa perde o foco com algo escrito. Trocar de
+   * lance deixa de casar a chave, e a caixa some sem precisar de efeito.
+   */
+  const [escrevendoNarracao, setEscrevendoNarracao] = useState<string | null>(null);
   /** Cresce a cada navegação por teclado; é o sinal para o foco seguir a seta (§16). */
   const [pedidoDeFoco, setPedidoDeFoco] = useState(0);
   const botaoImportar = useRef<HTMLButtonElement>(null);
@@ -1101,7 +1110,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
               Comentário desta posição
               <textarea ref={campoDoComentario} key={selecionado.id + (selecionado.comentario ?? "")} defaultValue={selecionado.comentario ?? ""} onBlur={(e) => aplicar({ tipo: "EDITAR_COMENTARIO", analiseId: analise.id, nodeId: selecionado.id, comentario: e.currentTarget.value })} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta" placeholder="Explique a ideia deste lance…" />
             </label>
-            {narracoes.map((narracao) => (
+            {narracoes.map((narracao, ordem) => (
               <div key={narracao.id} className="mt-3 flex flex-col gap-1 text-xs text-tinta-fraca">
                 {/* A tarja fica **fora** do `<label>`, e o botão com ela. Dentro,
                     o texto do rótulo entrava no nome acessível do botão: o leitor
@@ -1117,11 +1126,57 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
                   </p>
                 ) : null}
                 <label className="flex flex-col gap-1">
-                Narração mostrada ao aluno
+                {narracoes.length > 1 ? `Narração ${ordem + 1} de ${narracoes.length}, mostrada ao aluno` : "Narração mostrada ao aluno"}
                 <textarea key={narracao.id + narracao.texto} defaultValue={narracao.texto} onBlur={(e) => aplicar({ tipo: "EDITAR_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, texto: e.currentTarget.value })} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta" placeholder="Apague o texto para remover esta narração." />
                 </label>
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* §12.2 e §15.2. A frase diz o efeito, e não o nome do campo: "manual"
+                      sozinho não conta ao professor que a aula vai parar. */}
+                  <label className="flex items-center gap-1.5 text-tinta">
+                    <input type="checkbox" checked={narracao.pausa === "manual"} onChange={(e) => aplicar({ tipo: "DEFINIR_PAUSA_DA_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, pausa: e.currentTarget.checked ? "manual" : "temporizada" })} className="foco" />
+                    Parar aqui até o aluno clicar em Continuar
+                  </label>
+                  {/* Os botões de ordem usam `aria-disabled`, e não `disabled`: o
+                      desabilitado de verdade tira o foco de quem acabou de mover a
+                      narração até a ponta, e esconde o `title` que explica. Na ponta o
+                      comando já não faz nada. */}
+                  {narracoes.length > 1 ? (
+                    <>
+                      <button type="button" aria-disabled={ordem === 0} title={ordem === 0 ? "Já é a primeira narração deste lance" : undefined} aria-label={`Mover a narração ${ordem + 1} para antes`} onClick={() => aplicar({ tipo: "MOVER_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, direcao: "acima" })} className="foco rounded border border-borda px-2 py-1 text-tinta aria-disabled:opacity-40">↑ Antes</button>
+                      <button type="button" aria-disabled={ordem === narracoes.length - 1} title={ordem === narracoes.length - 1 ? "Já é a última narração deste lance" : undefined} aria-label={`Mover a narração ${ordem + 1} para depois`} onClick={() => aplicar({ tipo: "MOVER_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, direcao: "abaixo" })} className="foco rounded border border-borda px-2 py-1 text-tinta aria-disabled:opacity-40">↓ Depois</button>
+                    </>
+                  ) : null}
+                </div>
               </div>
             ))}
+            {/* §12.2: criar. Sem esta porta, a narração só existia quando vinha de um PGN
+                importado, e a aula montada do zero tocava inteira em silêncio. */}
+            {capitulo && podeNarrar(capitulo, selecionado.id) ? (
+              escrevendoNarracao === `${capitulo.id}:${selecionado.id}` ? (
+                <label className="mt-3 flex flex-col gap-1 text-xs text-tinta-fraca">
+                  {narracoes.length ? `Narração ${narracoes.length + 1}, nova` : "Narração mostrada ao aluno, nova"}
+                  <textarea
+                    autoFocus
+                    rows={3}
+                    onBlur={(e) => {
+                      const texto = e.currentTarget.value;
+                      setEscrevendoNarracao(null);
+                      if (texto.trim()) aplicar({ tipo: "ADICIONAR_NARRACAO", capituloId: capitulo.id, nodeId: selecionado.id, narracaoId: novoIdDeNarracao(historico.presente, selecionado.id), texto });
+                    }}
+                    className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta"
+                    placeholder="O que o aluno lê neste lance. Deixe vazio para desistir."
+                  />
+                </label>
+              ) : (
+                <div className="mt-3">
+                  <button type="button" onClick={() => setEscrevendoNarracao(`${capitulo.id}:${selecionado.id}`)} className="foco rounded border border-borda px-2 py-1 text-xs text-tinta">
+                    {narracoes.length ? "+ Outra narração neste lance" : "+ Escrever narração"}
+                  </button>
+                </div>
+              )
+            ) : capitulo ? (
+              <p className="mt-3 text-xs text-tinta-fraca">Este lance é de uma variante fora do capítulo. A narração só existe nos lances que o capítulo reproduz.</p>
+            ) : null}
           </div>
         </section>
       </div>
