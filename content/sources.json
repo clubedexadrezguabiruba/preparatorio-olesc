@@ -119,11 +119,11 @@
       "protected": true,
       "license": "obra protegida — em regime integral desde 2026-09-08 (§1.1 do SOURCE-CORPUS): sem teto de citação e sem teto de rotação. Continua protegida, e o inventário da troca está em content/divida-de-licenca.md.",
       "file": "de-la-villa-100-endgames.pdf",
-      "role": "Livro-base didático e, desde 2026-09-08, **obra em regime integral** do módulo de finais: texto e posições das aulas seguem este manual, sem teto. O próprio autor declara que não cobre os mates elementares (\"I assume the reader knows the basic mates\"), e é por isso que a Classe E fica de fora dele. Progressão graduada, 100 finais numerados.",
+      "role": "Obra didática registrada e **em regime integral**, mas **não é o livro-base do módulo de finais** — desde 2026-09-12 o módulo inteiro segue o Silman (§1.1 do SOURCE-CORPUS). O regime integral continua de pé por um acervo legado: a aula N1-KPK, escrita antes da decisão, e as duas posições transcritas deste livro. O próprio autor declara que não cobre os mates elementares (\"I assume the reader knows the basic mates\"). Progressão graduada, 100 finais numerados.",
       "didactic": true,
       "integral": {
         "since": "2026-09-08",
-        "reason": "Decisão do Doug em 2026-09-08: o módulo de finais passa a seguir este livro inteiro, sem teto de citação nem de rotação. O formato novo gasta uma posição por aula nas três etapas, e uma trilha de dúzias de aulas não cabe num teto por aula — o que a protege deixa de ser o teto e passa a ser esta declaração, com prazo e inventário. O preparatório é gratuito e não será comercializado por ora; quando for, o conteúdo listado em content/divida-de-licenca.md será trocado por fonte pública.",
+        "reason": "Regime aberto em 2026-09-08, quando este livro era a base do módulo de finais, e **mantido em 2026-09-12 com o papel trocado**: o módulo inteiro passou a seguir o Silman, e esta obra fica registrada por um acervo legado — a aula N1-KPK, escrita antes da decisão e não reancorada, e as duas posições já transcritas. O regime continua porque é ele que mantém esse acervo inventariado: o que a protege não é o teto de citação, e sim esta declaração, com prazo e inventário. O preparatório é gratuito e não será comercializado por ora; quando for, o conteúdo listado em content/divida-de-licenca.md será trocado por fonte pública.",
         "replaceBefore": "2027-09-08"
       }
     },
@@ -153,9 +153,9 @@
       "author": "Jeremy Silman",
       "edition": "Siles Press, Los Angeles, 2007",
       "protected": true,
-      "license": "obra protegida — uso sob o teto da §12.7",
+      "license": "obra protegida — em regime integral desde 2026-09-08 (§1.1 do SOURCE-CORPUS): sem teto de citação e sem teto de rotação. Continua protegida, e o inventário da troca está em content/divida-de-licenca.md.",
       "file": "silman-complete-endgame-course.pdf",
-      "role": "Livro-base didático e, desde 2026-09-08, **obra em regime integral** do módulo de finais (§1.1 do SOURCE-CORPUS): texto e posições das aulas seguem este manual, sem teto de citação nem de rotação. É o único manual do acervo com progressão declarada por classe de força, e ele ensina de trás para frente — mostra o mate antes do caminho —, que é o desenho da etapa 1 do nosso schema. A Parte Um nomeia as duas técnicas (\"the Staircase\" e \"the Box\").",
+      "role": "**O** livro-base didático do módulo de finais — único, desde 2026-09-08 — e **obra em regime integral** (§1.1 do SOURCE-CORPUS): texto e posições de todas as aulas seguem este manual, sem teto de citação nem de rotação. A única exceção é a N1-KPK, escrita antes da decisão e declarada na §1.1. É o único manual do acervo com progressão declarada por classe de força, e ele ensina de trás para frente — mostra o mate antes do caminho —, que é o desenho da etapa 1 do nosso schema. A Parte Um nomeia as duas técnicas (\"the Staircase\" e \"the Box\").",
       "didactic": true,
       "integral": {
         "since": "2026-09-08",

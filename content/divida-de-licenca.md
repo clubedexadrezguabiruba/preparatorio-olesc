@@ -14,7 +14,7 @@ gratuito.
 - **slug:** `de-la-villa-100`
 - **desde:** 2026-09-08
 - **prazo:** 2027-09-08
-- **motivo:** Decisão do Doug em 2026-09-08: o módulo de finais passa a seguir este livro inteiro, sem teto de citação nem de rotação. O formato novo gasta uma posição por aula nas três etapas, e uma trilha de dúzias de aulas não cabe num teto por aula — o que a protege deixa de ser o teto e passa a ser esta declaração, com prazo e inventário. O preparatório é gratuito e não será comercializado por ora; quando for, o conteúdo listado em content/divida-de-licenca.md será trocado por fonte pública.
+- **motivo:** Regime aberto em 2026-09-08, quando este livro era a base do módulo de finais, e **mantido em 2026-09-12 com o papel trocado**: o módulo inteiro passou a seguir o Silman, e esta obra fica registrada por um acervo legado — a aula N1-KPK, escrita antes da decisão e não reancorada, e as duas posições já transcritas. O regime continua porque é ele que mantém esse acervo inventariado: o que a protege não é o teto de citação, e sim esta declaração, com prazo e inventário. O preparatório é gratuito e não será comercializado por ora; quando for, o conteúdo listado em content/divida-de-licenca.md será trocado por fonte pública.
 
 ### Aulas com esta obra como livro-base (1)
 

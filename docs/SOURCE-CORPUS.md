@@ -32,20 +32,33 @@ curso é escrito do zero, em PT-BR.
 
 Há um caso em que o teto de 2 é a régua errada: quando a decisão editorial é
 **"este módulo inteiro segue este livro"**. Foi o que o Doug decidiu em
-2026-09-08 para o módulo de finais. A decisão teve duas metades no mesmo dia, e
-as duas estão declaradas no registro:
+2026-09-08 para o módulo de finais, e o livro é o ***Silman's Complete Endgame
+Course***: *"todas as aulas de finais passam a seguir o Silman, texto e
+posições"*. É o único manual do acervo com progressão declarada **por classe de
+força**, que é a espinha de que a trilha precisa.
 
-- de manhã, o *Silman's Complete Endgame Course*, quando a trilha inteira ia
-  sair dele — é o único manual do acervo com progressão declarada **por classe
-  de força**;
-- no fim do dia, o ***100 Endgames You Must Know*, de Jesús de la Villa**, que é
-  hoje o livro-base do módulo: *"sem teto nenhum, quero usar o livro inteiro,
-  sem teto, para finais"* (Doug, 2026-09-08).
+> **2026-09-12 — o de la Villa deixou de ser livro-base, e esta seção passou a
+> dizer isso.** No fim do dia 8/9 uma segunda conversa pôs o *100 Endgames You
+> Must Know* como livro-base do módulo, e era essa segunda versão que este texto
+> narrava — como "duas metades no mesmo dia", com o Silman de reserva para a
+> Classe E. A régua nunca foi essa: **a decisão que vale é a do Silman em todo o
+> módulo**, e é a que sempre esteve escrita no `integral.reason` do
+> `silman-endgame-course`, em `content/sources.json`. O documento é que estava
+> atrasado.
 
-O Silman **continua declarado, com inventário zerado, de propósito**: a Classe E
-está em aberto e o de la Villa não ensina mate elementar — o próprio autor
-escreve que assume o leitor sabendo os mates básicos. Se a Classe E voltar a sair
-do Silman, o regime já está de pé e não precisa ser decidido de novo.
+**O de la Villa continua registrado e em regime integral, com o papel trocado.**
+Ele não é base de nenhuma aula nova; o regime fica de pé por um **acervo
+legado**, que é exatamente o que o inventário existe para rastrear:
+
+- a aula **`N1-KPK`**, escrita antes da decisão e **não reancorada** — trocar a
+  fonte dela não é trocar um campo. O gate `FONTE_DIDATICA_DIVERGE` exige que a
+  posição da aula saia do mesmo livro do livro-base, então seria preciso
+  transcrever posição nova do Silman, com os nove campos de proveniência, e
+  revalidar a aula que serve de piloto do formato novo. Decisão do Doug em
+  2026-09-12: **fica como está, declarada aqui**, e não lida como descuido;
+- as duas posições já transcritas e aprovadas — `pos-n1-kpk-dlv-1-3` e
+  `pos-n1-square-dlv-1-1`. A segunda continua no acervo sem aula que a consuma:
+  a ordem 7 da trilha, quando for escrita, sai do Silman como todas as outras.
 
 O motivo é de conteúdo, não de custo. O preparatório é gratuito e não será
 comercializado por ora; quando for, o conteúdo listado no inventário será
@@ -83,11 +96,16 @@ alguém procura é exceção esquecida.
 
 **O que cai junto, e nenhuma máquina confere.** A §5.1 abaixo proíbe diagramas
 em sequência da mesma obra numa aula — "sequência é a seleção do autor sendo
-copiada em miniatura". Numa obra em regime integral essa regra cai na prática:
-a trilha de finais anda pela numeração do de la Villa, e as duas posições já
-transcritas são a Position 1.1 e a Position 1.3 do capítulo 1 — sequência, pela
-definição da §5.1. Não há gate para isso; fica escrito aqui para não virar
-descoberta.
+copiada em miniatura". Numa obra em regime integral essa regra cai na prática, e
+agora cai sobre **uma obra só**: a trilha de finais anda pelos capítulos do
+Silman, aula após aula, e nenhuma máquina confere se a sequência dele está sendo
+reproduzida. O que segura isso não é gate — é a §5 da `TRILHA-FINAIS`, cuja
+ordem é por frequência em partida e por pré-requisito, e não pelo sumário do
+livro. Fica escrito aqui para não virar descoberta.
+
+O precedente antigo desta nota eram as duas posições do de la Villa, a Position
+1.1 e a Position 1.3 do mesmo capítulo 1 — sequência pela definição da §5.1. Elas
+continuam no acervo, e com o de la Villa fora do papel de base não crescem mais.
 
 ### 1.2 O teto por aula ficou sem sujeito no módulo de finais
 
@@ -524,7 +542,7 @@ O que volta a valer, e importa para a `N0-LADDER`:
 
 | Volta a valer | Por quê |
 |---|---|
-| `pandolfini-endgame-course` **ENDGAME 3** | é o diagrama da escadinha, e o Pandolfini é o livro-base que a rotação da §3.4 marca para esta aula |
+| `pandolfini-endgame-course` **ENDGAME 3** | é o diagrama da escadinha ~~e o Pandolfini é o livro-base que a rotação da §3.4 marca para esta aula~~ — **a segunda metade caiu em 2026-09-12**: o módulo de finais tem um livro-base só, o Silman (§1.1), e a `N0-LADDER` foi publicada com ele |
 | Staunton Diagrama 1, Rogers DIAGRAM XV | domínio público, sem teto, posição **em texto corrido** — o caminho de transcrição mais seguro (§6, critério 4) |
 
 A restrição que **continua de pé** é a de dentro da aula: se a `N0-LADDER`

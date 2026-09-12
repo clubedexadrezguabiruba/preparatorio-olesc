@@ -152,17 +152,23 @@ aula, contando os dois reis.
 
 ## 4. A regra de rotação de livros
 
+> **2026-09-12 — esta seção não governa mais o módulo de finais.** Ele tem
+> **um** livro-base, o Silman, e a rotação vale para os outros módulos. A regra
+> continua escrita aqui porque ela é do projeto, não deste módulo; o que mudou é
+> o sujeito. Quem governa os finais é a §1.1 do `SOURCE-CORPUS`.
+
 Cinco obras protegidas são **livro-base didático** (`"didactic": true` em
 `content/sources.json`): Silman, de la Villa, Müller *for Kids*, Pandolfini e
-Seirawan. De uma delas saem, obrigatoriamente, as etapas 1 e 2 de cada aula — o
-objetivo e o exemplo. Alternar entre elas é o que impede que a progressão de um
-autor seja copiada em série.
+Seirawan. Fora do módulo de finais, de uma delas saem obrigatoriamente as etapas
+1 e 2 de cada aula — o objetivo e o exemplo —, e alternar entre elas é o que
+impede que a progressão de um autor seja copiada em série.
 
 **A unidade desta regra é a `classe`, e não o nível** — é assim que
-`scripts/validate-content.ts:1259` agrupa, lendo o campo `classe` de
-`AulaDaTrilha`, que sobrevive até a Etapa 2 do plano dos níveis. Trocar a unidade
-é mudar o gate, e não foi feito nesta rodada: a §1 tirou a classe do **conteúdo**
-do documento, não do código.
+`checkDidacticRotation` agrupa (`scripts/validate-content.ts:1575-1609`). Ela lê
+o campo `class` do **arquivo da aula** (`lib/lesson/schema.ts`), e não o `classe`
+de `AulaDaTrilha`: o validador não importa a trilha, então aula planejada e não
+escrita não entra na conta. Trocar a unidade é mudar o gate, e não foi feito
+nesta rodada: a §1 tirou a classe do **conteúdo** do documento, não do código.
 
 O gate cobrava `FONTE_DIDATICA_DOMINA` como **"uma obra protegida é base de no
 máximo uma aula por nível"**. Com ~12 aulas por classe e 5 livros didáticos, isso
@@ -189,20 +195,26 @@ obra protegida por aula** (§12.7.1 do currículo) e a proibição de diagramas
 consecutivos **não seguram mais este módulo**. O teto é por aula, e da aula em
 diante uma aula é uma posição só (a apresentação desenha em FEN livre e não cita
 posição nenhuma) — ele ficou sem sujeito (§1.2 do
-`SOURCE-CORPUS`). E o livro-base do módulo, o de la Villa, está em **regime
-integral** desde 2026-09-08 por decisão do Doug — *"sem teto nenhum, quero usar o
-livro inteiro"* —, o que desliga para ele tanto o teto de citação quanto a
-rotação desta §4. O que segura o módulo é a declaração do regime, com prazo
-cobrado e inventário em `content/divida-de-licenca.md`.
+`SOURCE-CORPUS`). E o livro-base do módulo, o **Silman**, está em **regime
+integral** desde 2026-09-08 por decisão do Doug — *"todas as aulas de finais
+passam a seguir o Silman, texto e posições"* —, o que desliga para ele tanto o
+teto de citação quanto a rotação desta §4. O que segura o módulo é a declaração
+do regime, com prazo cobrado e inventário em `content/divida-de-licenca.md`.
 
-> **2026-09-09 — a rotação não morde em nenhuma aula deste módulo, e a tabela de
-> distribuição saiu daqui.**
+> **2026-09-12 — a rotação não morde neste módulo porque ele tem um livro só.**
 >
-> As duas obras que fundamentam o módulo estão em **regime integral** (§1.1 do
-> `SOURCE-CORPUS`) e por isso fora da régua da rotação: o **de la Villa**, desde
-> 8/9, e o **Silman**, que volta a ser livro-base ao lado dele — declarado com
-> inventário zerado desde 8/9 exatamente para este caso. Com os dois fora da
-> régua, não sobra aula do módulo para a rotação julgar.
+> O módulo de finais segue o **Silman**, e o Silman está em **regime integral**
+> (§1.1 do `SOURCE-CORPUS`), logo fora da régua da rotação. Não sobra aula do
+> módulo para ela julgar — nem se as 49 forem publicadas, porque o
+> `checkDidacticRotation` pula obra em regime integral antes de comparar com o
+> teto (`scripts/validate-content.ts:1598`).
+>
+> O **de la Villa** continua em regime integral e continua registrado, mas com o
+> papel trocado: não é mais livro-base de nada, e o regime dele fica de pé pelo
+> acervo legado — a `N1-KPK` e as duas posições já transcritas. O texto anterior
+> desta nota, de 9/9, dizia que "as duas obras que fundamentam o módulo" estavam
+> em regime integral e que o Silman voltava a ser livro-base *ao lado* do de la
+> Villa. Não é ao lado: é no lugar.
 >
 > A tabela de distribuição por classe que ficava aqui foi apagada. Ela já estava
 > marcada como *"desejo, não régua"* desde 8/9, e depois disto passou a ser
@@ -226,7 +238,24 @@ Protegidas: `SIL` Silman · `DLV` de la Villa · `MK` Müller *for Kids* · `PAN
 Pandolfini · `SEI` Seirawan · `RAB` Rabinovich · `AVE` Averbakh · `NUN` Nunn ·
 `MLA` Müller & Lamprecht.
 
-A coluna **Base** é o livro-base didático (etapas 1 e 2).
+A coluna **Base** é o livro-base didático (etapas 1 e 2), e desde 2026-09-12 ela
+diz `SIL` nas 49 linhas: **o módulo de finais tem um livro-base só, o Silman**,
+por decisão do Doug em 2026-09-08 — *"todas as aulas de finais passam a seguir o
+Silman, texto e posições"* —, sem teto de citação e sem rotação de obras (§1.1 do
+`SOURCE-CORPUS`). Quando o curso for comercializado, o conteúdo inventariado em
+`content/divida-de-licenca.md` é trocado por fonte pública.
+
+Até 9/9 esta coluna repartia as 49 entre cinco obras (SIL 19, DLV 14, SEI 7, MK
+5, PAN 4), e isso contradizia a própria tabela: **a coluna "Capítulo do estudo",
+ao lado, já apontava para o Silman nas 49 linhas** — os quatro estudos da legenda
+abaixo retranscrevem o Silman. Uma aula com base `DLV` e capítulo do Silman
+reprovaria em `FONTE_DIDATICA_DIVERGE` no dia de ser escrita. A coluna única
+conserta isso. **A única exceção é a ordem 10**, declarada abaixo da tabela do
+nível 2.
+
+As outras siglas de obra protegida continuam na legenda porque ainda aparecem no
+mapa de cobertura da §8 e nas medições históricas — não porque alguma delas seja
+base de alguma aula.
 
 **A coluna "Capítulo do estudo" substituiu duas colunas antigas**, e vale explicar
 o que ela é. "Posição (DP)" listava as fontes de domínio público da posição, e foi
@@ -262,23 +291,35 @@ porque "tem posição" não quer dizer "pode virar aula":
 | `posição DP` | há posição aprovada, de **domínio público**, e o gate a **recusa** como posição de aula |
 | `—` | nem uma coisa nem outra |
 
-> **A distinção não é preciosismo: é o gate.** `scripts/validate-content.ts:1163-1175`
-> exige que a posição de uma aula saia **do mesmo livro** declarado como
-> livro-base, e que esse livro seja um dos cinco `didactic: true`
-> (`FONTE_DIDATICA_DIVERGE` + `FONTE_NAO_DIDATICA`). Como toda aula tem a
-> etapa da aula assistida, isso vale para toda aula — e a exceção, se houver, é a
-> que declarar a ausência dela em `etapasAusentes` (§2).
+> **A distinção não é preciosismo: é o gate.**
+> `scripts/validate-content.ts:1500-1508` exige que a posição de uma aula saia
+> **do mesmo livro** declarado como livro-base, e `:1485-1496` que esse livro
+> seja um dos cinco `didactic: true` (`FONTE_DIDATICA_DIVERGE` +
+> `FONTE_NAO_DIDATICA`). Como toda aula tem a etapa da aula assistida, isso vale
+> para toda aula — e a exceção, se houver, é a que declarar a ausência dela em
+> `etapasAusentes` (§2).
 >
 > Medido em 2026-09-09: das 16 posições aprovadas, **14 são de domínio público** —
 > Freeborough, Capablanca, Staunton, Cook, Rogers — e nenhuma delas pode ser a
-> posição de uma aula. Só as duas do de la Villa servem, e é por isso que apenas
-> as ordens **7** e **10** dizem `posição`.
+> posição de uma aula. As duas que sobravam eram do de la Villa, e eram elas que
+> punham `posição` nas ordens **7** e **10**.
 >
-> As 14 não foram perdidas: continuam aprovadas, com proveniência completa, e
+> **Em 2026-09-12 esse atalho fechou.** Com o módulo inteiro saindo do Silman,
+> posição do de la Villa não serve mais de posição de aula: ela reprovaria no
+> mesmo `FONTE_DIDATICA_DIVERGE` acima. A ordem 7 caiu para `—`; a ordem 10 é a
+> `N1-KPK`, que já está escrita e é a exceção legado declarada logo acima da
+> tabela do nível 2. **Nenhuma das 16 posições aprovadas é hoje atalho para uma
+> aula nova** — toda aula nova nasce com posição transcrita do Silman (§13).
+>
+> As 16 não foram perdidas: continuam aprovadas, com proveniência completa, e
 > continuam sendo a resposta para qualquer uso que não seja a posição da aula. O
 > que elas deixaram de ser é atalho para escrever a aula.
 
 > **2026-09-08 — o corpus antigo saiu do disco, e o livro-base mudou.**
+>
+> **Lido em 2026-09-12: a troca de livro-base narrada aqui foi revertida.** O
+> módulo de finais segue o **Silman**, e só ele — ver a nota no fim deste bloco.
+> O resto do registro fica como está, porque é história do que aconteceu.
 >
 > Duas coisas aconteceram no mesmo dia, e a segunda é a que manda. Primeiro, as
 > cinco aulas escritas contra os livros anteriores foram apagadas de
@@ -301,7 +342,9 @@ porque "tem posição" não quer dizer "pode virar aula":
 > declarado** em `content/divida-de-licenca.md`, com inventário zerado: o mate
 > elementar continua em aberto, e se ele voltar a sair daquele livro o regime já
 > está de pé — **e é o que acontece agora**, com o Silman de volta a livro-base
-> ao lado do de la Villa.
+> ao lado do de la Villa. *(Corrigido em 2026-09-12: não é ao lado. O Silman é o
+> livro-base único do módulo, e o inventário dele já não é zero — são duas aulas
+> e duas posições.)*
 >
 > **As 16 posições de `content/positions/` não foram apagadas**: a demolição levou
 > aulas, não posições. São as ordens **2, 3, 4, 5, 6, 7, 10 e 44** — a numeração
@@ -309,9 +352,11 @@ porque "tem posição" não quer dizer "pode virar aula":
 >
 > **Mas o garimpo delas não é atalho para a aula**, e isso só foi medido em 9/9:
 > seis das oito são de domínio público, e o gate as recusa como posição de aula
-> (ver a legenda de **Estado**, acima). Para as ordens 7 e 10 o atalho vale; para
+> (ver a legenda de **Estado**, acima). Para as ordens 7 e 10 o atalho valia; para
 > as outras seis, o que a posição aprovada dá é conferência e proveniência, não a
-> posição da aula.
+> posição da aula. *(Corrigido em 2026-09-12: com o Silman como base única, o
+> atalho da ordem 7 também fechou — as oito dão conferência, nenhuma dá posição
+> de aula nova.)*
 >
 > A `lib/finais/trilha.ts` **não mudou** e nem devia: ela lista as 49 aulas
 > planejadas, e o teste que cruza a lista com o disco já pulava aula não escrita
@@ -345,44 +390,58 @@ porque "tem posição" não quer dizer "pode virar aula":
 
 | # | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
 |---|---|---|---|---|---|---|
-| 7 | `N1-SQUARE` | Regra do quadrado | 3 | DLV | ⚠ `TW` 20 *The square of the pawn* — **não está no estudo dos iniciantes** | posição |
+| 7 | `N1-SQUARE` | Regra do quadrado | 3 | SIL | ⚠ `TW` 20 *The square of the pawn* — **não está no estudo dos iniciantes** | — |
 | 8 | `N1-DIRECT-OPPOSITION` | Oposição | 3 | SIL | `yk` 17, 19 *Opposition (basics)* — o 18 é diagrama (§12) | — |
-| 9 | `N1-KEY-SQUARES` | Casas-chave | 3 | DLV | `yk` 33 *Two Squares in Front Always Does it* · `TW` 3–5 | — |
-| 10 | `N1-KPK` | Rei e peão contra rei: o rei na frente do peão | 3 | DLV | `yk` 30–32 *King and Pawn Endgames* · `TW` 2, 6–8 | **aula** |
-| 11 | `N1-KPK-RANKS` | Peão na 6ª e na 7ª: quem joga decide | 3 | MK | `TW` 6 (peão na 6ª), 7–8 (mesma FEN, os dois lados a jogar) · `yk` 31–32 | — |
-| 12 | `N1-ROOK-PAWN` | Peão de torre: o empate do canto | 3 | MK | `yk` 20–21 *Rook-Pawns* · `TW` 16–18 *Stalemating the Stronger Side* | — |
+| 9 | `N1-KEY-SQUARES` | Casas-chave | 3 | SIL | `yk` 33 *Two Squares in Front Always Does it* · `TW` 3–5 | — |
+| 10 | `N1-KPK` | Rei e peão contra rei: o rei na frente do peão | 3 | SIL ⚠ | `yk` 30–32 *King and Pawn Endgames* · `TW` 2, 6–8 | **aula** |
+| 11 | `N1-KPK-RANKS` | Peão na 6ª e na 7ª: quem joga decide | 3 | SIL | `TW` 6 (peão na 6ª), 7–8 (mesma FEN, os dois lados a jogar) · `yk` 31–32 | — |
+| 12 | `N1-ROOK-PAWN` | Peão de torre: o empate do canto | 3 | SIL | `yk` 20–21 *Rook-Pawns* · `TW` 16–18 *Stalemating the Stronger Side* | — |
+
+> ⚠ **A ordem 10 é a única exceção da coluna Base, e ela está publicada.** A
+> `N1-KPK` no disco declara `"source": "de-la-villa-100"` e usa a posição
+> `pos-n1-kpk-dlv-1-3`. Ela foi escrita antes da decisão do Silman e **não foi
+> reancorada**, por decisão do Doug em 2026-09-12: trocar a fonte de uma aula
+> obriga a trocar a posição também (`FONTE_DIDATICA_DIVERGE`), e isso significa
+> transcrever posição nova do Silman, com os nove campos de proveniência, e
+> revalidar a aula que serve de piloto do formato novo. O `SIL` da coluna é a
+> régua para quando ela for reancorada; a exceção está declarada na §1.1 do
+> `SOURCE-CORPUS` e inventariada em `content/divida-de-licenca.md`.
+>
+> A **ordem 7** perdeu o `posição` do Estado na mesma data. A
+> `pos-n1-square-dlv-1-1` continua aprovada e no acervo, mas ela é do de la
+> Villa e a aula sai do Silman — deixou de ser atalho para escrevê-la.
 
 ### Nível 3 — 6 aulas · FIDE 1000–1200
 
 | # | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
 |---|---|---|---|---|---|---|
 | 13 | `N2-KING-MANEUVER` | Oposição além do básico: a distante | 3 | SIL | `yk` 27 *Distant Opposition* — os 28 e 29 são diagrama (§12) | — |
-| 14 | `N4-B-VS-PAWNS` | Bispo contra peão | 4 | SEI | `yk` 38–39 *Bishop vs. Lone (rook) Pawn* | — |
-| 15 | `N4-N-VS-PAWNS` | Cavalo contra peão, inclusive o de torre na 7ª | 4 | DLV | `yk` 40–46 *Knight vs. Lone (Rook-)Pawn* — sete capítulos, um tópico | — |
+| 14 | `N4-B-VS-PAWNS` | Bispo contra peão | 4 | SIL | `yk` 38–39 *Bishop vs. Lone (rook) Pawn* | — |
+| 15 | `N4-N-VS-PAWNS` | Cavalo contra peão, inclusive o de torre na 7ª | 4 | SIL | `yk` 40–46 *Knight vs. Lone (Rook-)Pawn* — sete capítulos, um tópico | — |
 | 16 | `N3-R-VS-PAWN` | Torre contra peão: contar, cortar, aproximar | 4 | SIL | `yk` 47–49 *Rook vs. Lone Pawn* | — |
-| 17 | `N1-KING-VS-PAWNS` | Rei contra dois peões passados | 4 | PAN | `yk` 34 *Fox in the Chicken Coop* — 7 peças, no limite do envelope | — |
-| 18 | `N1-PAWNS-BLOCKADE` | Um peão segura dois: o bloqueio | 5 | SEI | `yk` 36 *The Deep Freeze* — o 35 é diagrama (§12) | — |
+| 17 | `N1-KING-VS-PAWNS` | Rei contra dois peões passados | 4 | SIL | `yk` 34 *Fox in the Chicken Coop* — 7 peças, no limite do envelope | — |
+| 18 | `N1-PAWNS-BLOCKADE` | Um peão segura dois: o bloqueio | 5 | SIL | `yk` 36 *The Deep Freeze* — o 35 é diagrama (§12) | — |
 
 ### Nível 4 — 16 aulas · FIDE 1200–1400
 
 | # | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
 |---|---|---|---|---|---|---|
 | 19 | `N3-LUCENA` | Lucena: a ponte | 5 | SIL | `TW` 33 *The Lucena Position* | — |
-| 20 | `N3-PHILIDOR` | Filidor: a defesa da terceira fila | 5 | DLV | `TW` 34 *The Philidor Position (Defense)* | — |
+| 20 | `N3-PHILIDOR` | Filidor: a defesa da terceira fila | 5 | SIL | `TW` 34 *The Philidor Position (Defense)* | — |
 | 21 | `N3-ROOK-BEHIND` | Torre atrás do peão passado | 5 | SIL | **furo** — `uu` 15–18 são a torre **na frente** do peão (§12) | — |
-| 22 | `N3-SIDE-CHECKS` | Lado curto, lado longo | 5 | DLV | ⚠ `uu` 22–27 *Rook and Pawn (on 5th/4th) vs. Rook* — o tema, sem o nome | — |
-| 23 | `N3-CUT-FILE` | Cortar o rei pela coluna | 5 | DLV | `TW` 38 *Trap The Enemy King Away From the Action* — o 39 tem 9 peças | — |
+| 22 | `N3-SIDE-CHECKS` | Lado curto, lado longo | 5 | SIL | ⚠ `uu` 22–27 *Rook and Pawn (on 5th/4th) vs. Rook* — o tema, sem o nome | — |
+| 23 | `N3-CUT-FILE` | Cortar o rei pela coluna | 5 | SIL | `TW` 38 *Trap The Enemy King Away From the Action* — o 39 tem 9 peças | — |
 | 24 | `N3-DEFENSIVE-EXCEPTIONS` | Defesa passiva: quando ela segura | 5 | SIL | `TW` 35–37 *The Philidor Position (Passive Rook)* | — |
-| 25 | `N3-R-VS-2P` | Torre contra dois peões | 5 | DLV | **furo** — acima da Classe A (§12) | — |
+| 25 | `N3-R-VS-2P` | Torre contra dois peões | 5 | SIL | **furo** — acima da Classe A (§12) | — |
 | 26 | `N2-OUTSIDE-PASSER` | Peão passado distante | 6 | SIL | `TW` 21 *The Outside Passed Pawns* — o 22 tem 8 peças | — |
-| 27 | `N2-PROTECTED-PASSER` | Peão passado protegido | 6 | DLV | **furo** — os estudos só trazem o passado **distante** (§12) | — |
-| 28 | `N1-K2P-VS-K` | Rei e dois peões contra rei: ligados e dobrados | 4–5 | MK | `TW` 14–15 (dobrados) · `p9` 1–8 *Two Healthy Pawns* (ligados e separados) | — |
-| 29 | `N2-PAWN-RACES` | Corrida de peões: quem promove primeiro | 4–6 | PAN | ⚠ `uu` 2–7 *King and pawns: Strange Races* | — |
+| 27 | `N2-PROTECTED-PASSER` | Peão passado protegido | 6 | SIL | **furo** — os estudos só trazem o passado **distante** (§12) | — |
+| 28 | `N1-K2P-VS-K` | Rei e dois peões contra rei: ligados e dobrados | 4–5 | SIL | `TW` 14–15 (dobrados) · `p9` 1–8 *Two Healthy Pawns* (ligados e separados) | — |
+| 29 | `N2-PAWN-RACES` | Corrida de peões: quem promove primeiro | 4–6 | SIL | ⚠ `uu` 2–7 *King and pawns: Strange Races* | — |
 | 30 | `N4-Q-VS-PAWN` | Dama contra peão na 7ª: quando ganha, e as exceções | 4 | SIL | `TW` 40–44 *Queen vs. King and Pawn on 6th/7th* | — |
-| 31 | `N4-WRONG-BISHOP` | Bispo errado com peão de torre | 4 | MK | `TW` 23–26 *Bishop and Wrong Colored Rook-Pawn* | — |
-| 32 | `N4-OPPOSITE-BISHOPS` | Bispos de cores opostas: a fortaleza com um peão a menos | 5 | SEI | `TW` 29 *Bishops of Opposite Colors* — os 30 e 31 têm 9 peças | — |
-| 33 | `N4-N-AND-ROOK-PAWN` | Cavalo e peão de torre na 6ª/7ª contra rei | 4 | PAN | `TW` 27–28 *Lone King vs. Knight and Rook-Pawn on the 6th* | — |
-| 34 | `N4-Q-VS-ROOK` | Dama contra torre: o básico | 4 | SEI | **furo** — o Silman diz por escrito que não cobre (§12) | — |
+| 31 | `N4-WRONG-BISHOP` | Bispo errado com peão de torre | 4 | SIL | `TW` 23–26 *Bishop and Wrong Colored Rook-Pawn* | — |
+| 32 | `N4-OPPOSITE-BISHOPS` | Bispos de cores opostas: a fortaleza com um peão a menos | 5 | SIL | `TW` 29 *Bishops of Opposite Colors* — os 30 e 31 têm 9 peças | — |
+| 33 | `N4-N-AND-ROOK-PAWN` | Cavalo e peão de torre na 6ª/7ª contra rei | 4 | SIL | `TW` 27–28 *Lone King vs. Knight and Rook-Pawn on the 6th* | — |
+| 34 | `N4-Q-VS-ROOK` | Dama contra torre: o básico | 4 | SIL | **furo** — o Silman diz por escrito que não cobre (§12) | — |
 
 ### Nível 5 — 15 aulas · FIDE 1400+
 
@@ -390,19 +449,19 @@ porque "tem posição" não quer dizer "pode virar aula":
 |---|---|---|---|---|---|---|
 | 35 | `N2-TRIANGULATION` | Triangulação | 4–6 | SIL | **sem capítulo usável** — `p9` 11–12 têm 10 peças (§12) | — |
 | 36 | `N2-OUTFLANKING` | Flanquear o rei | 3 | SIL | **sem capítulo usável** — `p9` 13 é diagrama (§12) | — |
-| 37 | `N2-RESERVE-TEMPI` | Tempos de reserva | 6 | DLV | ⚠ `uu` 8–12 *King and Pawn vs. King and Pawn* | — |
-| 38 | `N2-BREAKTHROUGH` | Ruptura de peões | 7 | DLV | `p9` 9 *Tactical Bombs (2p vs. 2p)*, 6 peças — o 10 (4p vs. 3p) tem 9 | — |
-| 39 | `N2-RETI` | Manobra de Réti: o rei que faz duas coisas | 4 | SEI | ⚠ `uu` 6 — FEN `7K/8/k1P5/7p/8/8/8/8`, o autor nomeia Réti 1921 · 7 é o Adamson 1922 | — |
+| 37 | `N2-RESERVE-TEMPI` | Tempos de reserva | 6 | SIL | ⚠ `uu` 8–12 *King and Pawn vs. King and Pawn* | — |
+| 38 | `N2-BREAKTHROUGH` | Ruptura de peões | 7 | SIL | `p9` 9 *Tactical Bombs (2p vs. 2p)*, 6 peças — o 10 (4p vs. 3p) tem 9 | — |
+| 39 | `N2-RETI` | Manobra de Réti: o rei que faz duas coisas | 4 | SIL | ⚠ `uu` 6 — FEN `7K/8/k1P5/7p/8/8/8/8`, o autor nomeia Réti 1921 · 7 é o Adamson 1922 | — |
 | 40 | `N3-R-2P-VS-R` | Torre e dois peões ligados contra torre | 6 | SIL | `p9` 14 *Rook and Two Connected Pawns vs. Rook* | — |
 | 41 | `N3-SEVENTH-RANK` | A sétima fila | 6 | SIL | **sem capítulo usável** — `p9` 15–16 têm 15 e 10 peças (§12) | — |
-| 42 | `N5-VANCURA` | Defesa de Vancura | 5 | DLV | ⚠ `uu` 19–21 *The Vancura Position* — o 21 ensina quando ela **não** serve | — |
-| 43 | `N3-R-VS-RN-PAWNS` | Torre contra peão de torre e de bispo: as exceções | 4 | DLV | ⚠ `uu` 13–14 *"Lucena" with a Rook-Pawn* · 21, 27 (peão de cavalo) | — |
-| 44 | `N0-2B-MATE` | Dois bispos contra rei | 4 | SEI | `p9` 18 *Two Bishops vs. Lone King* | posição DP |
-| 45 | `N4-OPPOSITE-BISHOPS-2P` | Bispos de cores opostas com dois peões: quando ganha | 6 | DLV | `p9` 19, 21–23 *Two Pawns* · `uu` 28–31 | — |
+| 42 | `N5-VANCURA` | Defesa de Vancura | 5 | SIL | ⚠ `uu` 19–21 *The Vancura Position* — o 21 ensina quando ela **não** serve | — |
+| 43 | `N3-R-VS-RN-PAWNS` | Torre contra peão de torre e de bispo: as exceções | 4 | SIL | ⚠ `uu` 13–14 *"Lucena" with a Rook-Pawn* · 21, 27 (peão de cavalo) | — |
+| 44 | `N0-2B-MATE` | Dois bispos contra rei | 4 | SIL | `p9` 18 *Two Bishops vs. Lone King* | posição DP |
+| 45 | `N4-OPPOSITE-BISHOPS-2P` | Bispos de cores opostas com dois peões: quando ganha | 6 | SIL | `p9` 19, 21–23 *Two Pawns* · `uu` 28–31 | — |
 | 46 | `N4-SAME-BISHOPS` | Bispo e peão contra bispo da mesma cor | 5 | SIL | ⚠ `uu` 32–37 *Fortresses in Bishop-up Endgames* | — |
-| 47 | `N4-BISHOP-VS-KNIGHT` | Bispo contra cavalo com um peão | 5 | SEI | **furo** — acima da Classe A (§12) | — |
-| 48 | `N2-DOUBLED-ISOLATED` | Peões dobrados e isolados no final de peões | 5–6 | MK | `TW` 14–15 *Two Doubled Pawns vs. Lone King* — **só a metade dobrada** (§12) | — |
-| 49 | `N2-ZUGZWANG` | Zugzwang: a obrigação de mover | 4 | PAN | `TW` 9–10 *Trébuchet* | — |
+| 47 | `N4-BISHOP-VS-KNIGHT` | Bispo contra cavalo com um peão | 5 | SIL | **furo** — acima da Classe A (§12) | — |
+| 48 | `N2-DOUBLED-ISOLATED` | Peões dobrados e isolados no final de peões | 5–6 | SIL | `TW` 14–15 *Two Doubled Pawns vs. Lone King* — **só a metade dobrada** (§12) | — |
+| 49 | `N2-ZUGZWANG` | Zugzwang: a obrigação de mover | 4 | SIL | `TW` 9–10 *Trébuchet* | — |
 
 **A conta, medida e não estimada:** das 49, **40 têm pelo menos um capítulo
 usável**; 6 são furo e 3 têm capítulo do tema sem nenhuma FEN aproveitável. **Nos
@@ -491,7 +550,9 @@ Uma fusão em relação ao rascunho do plano:
 > - **nas 16 posições já transcritas** e aprovadas em `content/positions/`, que
 >   têm proveniência de domínio público completa e não serão refeitas;
 > - **nas nove aulas da §12**, quando chegar a hora de decidir o que fazer com
->   elas: escrever pelo de la Villa, garimpar aqui, rebaixar a leitura, ou cortar.
+>   elas: garimpar aqui, declarar que não têm prática, ou cortar. *(Em 9/9 havia
+>   uma quarta saída — "escrever pelo de la Villa". Ela caiu em 2026-09-12, com o
+>   Silman como base única; o peso agora é maior sobre este garimpo.)*
 >
 > **Uma linha desta seção foi retirada em 9/9, e vale dizer qual.** Ela mandava a
 > `N0-MATING-MATERIAL` sair por **Freeborough X.VI**, e isso estava errado duas
@@ -643,10 +704,13 @@ Silman, que já está registrado e em regime integral (§13). A única mudança 
    com o motivo por escrito. Quem lê a ausência é `aprendeu`
    (`lib/finais/trilha.ts`), e a pergunta que ela faz é uma só — a aula tem
    prática? Sem prática, o que fecha a aula é a declaração do aluno de que leu.
-5. **A ordem dentro do nível 2 coloca o quadrado antes da oposição.** O de la Villa
-   põe o quadrado como F1 e a oposição como F2–3, e o quadrado não tem pré-requisito
-   nenhum — é a única ferramenta do nível que uma criança usa no mesmo dia em que
-   aprende.
+5. **A ordem dentro do nível 2 coloca o quadrado antes da oposição.** A razão que
+   fica de pé é a nossa: o quadrado **não tem pré-requisito nenhum** — é a única
+   ferramenta do nível que uma criança usa no mesmo dia em que aprende. *(A
+   justificativa original citava a numeração do de la Villa, que põe o quadrado
+   como F1 e a oposição como F2–3. Ela caiu em 2026-09-12 junto com o livro; a
+   ordem fica, agora assumida como decisão própria — e é coerente com a §5, cuja
+   ordem é por frequência e pré-requisito, não pelo sumário de um livro.)*
 
 **As de 2026-09-09, na rodada dos estudos:**
 
@@ -699,6 +763,12 @@ outras são minhas):
 Esta seção é o achado da rodada de 2026-09-09, e ele não cabe em nota de rodapé:
 **a lista de 49 é mais ambiciosa que o livro-base**, e agora isso está medido em
 vez de suposto.
+
+**O livro-base do título é o Silman** — sempre foi, mesmo quando a §4 chamava o
+de la Villa de base do módulo. A conferência foi feita contra os quatro estudos
+do `carbone144`, que retranscrevem o Silman (a legenda da §5), e o de la Villa
+nunca foi conferido tema a tema em lugar nenhum deste documento. Desde
+2026-09-12 o título e o fato dizem a mesma coisa.
 
 A conferência foi tema a tema, contra os quatro estudos, com dois testes por
 capítulo: a FEN tem de ser posição legal (a `chess.js` julga) e tem de caber no
@@ -760,10 +830,13 @@ classes acima disso.**
 Duas coisas menores, para não serem descobertas depois:
 
 - **A ordem 7 (regra do quadrado) não está no estudo dos iniciantes.** Ela é o
-  `TW` 20, do estudo da Classe C. O corte por nível continua de pé — a aula já tem
-  posição aprovada, do de la Villa (`pos-n1-square-dlv-1-1`) —, mas a frase "os
-  níveis 1 a 3 são tópico a tópico o que o livro cobre nessas classes" tem esta
-  exceção.
+  `TW` 20, do estudo da Classe C. O corte por nível continua de pé, mas a frase
+  "os níveis 1 a 3 são tópico a tópico o que o livro cobre nessas classes" tem
+  esta exceção. *(Corrigido em 2026-09-12: a aula tinha posição aprovada do de la
+  Villa, a `pos-n1-square-dlv-1-1`, e isso era metade do conforto desta linha.
+  Com o Silman como base única, aquela posição deixou de servir de posição de
+  aula — continua no acervo, e a ordem 7 volta a ser uma aula a escrever do zero,
+  pelo `TW` 20.)*
 - **A ordem 48 está coberta pela metade.** `TW` 14–15 é *King and Two Doubled
   Pawns vs. Lone King*: ensina os **dobrados**, e contra rei solitário. Os
   **isolados** não viram capítulo em estudo nenhum, e a aula se chama "peões
@@ -773,9 +846,19 @@ Duas coisas menores, para não serem descobertas depois:
 
 **Nada agora.** Oito das nove sem posição usável estão nos níveis 4 e 5, que a §1
 já declara pós-OLESC. Quando chegarem, as saídas estarão na mesa e são as mesmas
-para todas: escrevê-las pelo **de la Villa**, que também está em regime integral;
-garimpá-las no **domínio público** da §8; **declarar que elas não têm prática** (`etapasAusentes`); ou **cortá-las**,
-que é a alavanca 3 da §6 e já estava prevista.
+para todas: garimpá-las no **domínio público** da §8; **declarar que elas não têm
+prática** (`etapasAusentes`); ou **cortá-las**, que é a alavanca 3 da §6 e já
+estava prevista.
+
+> **2026-09-12 — eram quatro saídas, e agora são três.** A que caiu era
+> "escrevê-las pelo de la Villa, que também está em regime integral": com o
+> Silman como livro-base único do módulo, escrever uma aula por outro livro
+> deixou de ser opção. **É uma perda real, e ela é declarada aqui em vez de
+> descoberta depois:** as 16 aulas desta seção — os 6 furos, as 3 sem posição
+> dentro do envelope e as 7 uma ou duas faixas acima — ficam com uma alternativa
+> a menos, e o peso passa para o garimpo de domínio público da §8 e para a
+> tesoura. Nenhuma delas está escrita, então nada quebra hoje; a conta chega no
+> dia de escrevê-las.
 
 A única que precisa de decisão para a meta da OLESC é a **ordem 1**, e ela já está
 decidida — mas não pelo caminho que esta seção previa. Ver a **§14.1**.
