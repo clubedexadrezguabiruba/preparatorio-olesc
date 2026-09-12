@@ -607,7 +607,14 @@ export type AcaoDoLanceV2 = {
  * opinião sobre o que é possível — e as duas divergiriam no dia em que só uma
  * delas fosse corrigida.
  */
-export function acoesDoLance(analise: AnaliseV2, nodeId: string): AcaoDoLanceV2[] {
+export function acoesDoLance(
+  analise: AnaliseV2,
+  nodeId: string,
+  treino: { disponivel: boolean; motivo?: string } = {
+    disponivel: false,
+    motivo: "o editor de treinos ainda não existe; esta ação nasce com ele",
+  },
+): AcaoDoLanceV2[] {
   const no = analise.nos[nodeId];
   const ehRaiz = nodeId === analise.raizId;
   const pai = Object.values(analise.nos).find((item) => item.filhos.includes(nodeId));
@@ -644,8 +651,8 @@ export function acoesDoLance(analise: AnaliseV2, nodeId: string): AcaoDoLanceV2[
     {
       id: "treino",
       rotulo: "Criar treino daqui",
-      disponivel: false,
-      motivo: "o editor de treinos ainda não existe; esta ação nasce com ele",
+      disponivel: treino.disponivel,
+      ...(!treino.disponivel && treino.motivo ? { motivo: treino.motivo } : {}),
     },
     { id: "copiar-pgn", rotulo: "Copiar PGN desta variante", disponivel: true },
     {

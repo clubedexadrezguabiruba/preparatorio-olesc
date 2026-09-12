@@ -318,6 +318,12 @@ test("o menu oferece as onze ações de §11.3, e o que não dá vem desabilitad
   assert.match(porId.get("treino")!.motivo!, /editor de treinos/);
 });
 
+test("§16: o menu habilita criar treino quando o capítulo confirma que há trecho", () => {
+  const analise = aulaDeEnsaio().analises[0];
+  const porId = new Map(acoesDoLance(analise, "no-a-1", { disponivel: true }).map((acao) => [acao.id, acao]));
+  assert.deepEqual(porId.get("treino"), { id: "treino", rotulo: "Criar treino daqui", disponivel: true });
+});
+
 test("na posição inicial o menu desabilita o que não é de lance, e diz por quê", () => {
   const porId = new Map(acoesDoLance(aulaDeEnsaio().analises[0], "no-a-0").map((a) => [a.id, a]));
   assert.equal(porId.get("simbolo")!.disponivel, false);

@@ -6,7 +6,7 @@
  *
  * O plano final (§17) é explícito: "limites existem desde a primeira importação…
  * não esperar o último bloco para limitar bytes, número de nós, profundidade,
- * comentários, desenhos". Um importador sem teto aceita um arquivo de torneio
+ * comentários, desenhos e expansão de treino". Um importador sem teto aceita um arquivo de torneio
  * inteiro e derruba a tela **antes** de qualquer aviso aparecer — e o professor fica
  * com uma página branca e nenhuma explicação. Por isso os tetos nascem aqui, e o
  * importador já chega ao mundo com o freio de mão.
@@ -30,8 +30,7 @@
  *
  * Não prometem que uma aula abaixo deles é rápida em qualquer máquina: o alvo do
  * plano (interação p95 até 100 ms, abertura da árvore de 1.000 nós até 2 s) é do
- * notebook de referência. E não prometem nada sobre expansão de treino, que é
- * orçamento do derivador e entra quando o derivador entrar.
+ * notebook de referência.
  */
 import type { AulaV2, AnaliseV2 } from "./modelo.ts";
 
@@ -74,6 +73,15 @@ export const LIMITES_V2 = {
   comentarios: 4000,
   /** Setas e casas pintadas, somadas. Cada desenho é trabalho de render a cada quadro. */
   desenhos: 4000,
+  /**
+   * Trecho que uma criação de treino pode percorrer. Medido em 12/09/2026 no
+   * notebook de referência, Node 24/win32, após uma execução de aquecimento e 20
+   * amostras: derivar ambos os lados de 200 meios-lances teve p95 de **67,57 ms**;
+   * com 300, o p95 subiu para **222,49 ms**. O teto de 200 mantém a interação
+   * abaixo do alvo inicial de 100 ms do plano e ainda produz até 100 perguntas por
+   * tarefa (200 no total quando os dois lados são pedidos).
+   */
+  meiosLancesPorDerivacaoDeTreino: 200,
 } as const;
 
 export type MedidasAulaV2 = {

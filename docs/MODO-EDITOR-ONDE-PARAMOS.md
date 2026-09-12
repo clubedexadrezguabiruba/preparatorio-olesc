@@ -25,7 +25,7 @@ cada linha aponta a seção que conta a história inteira.
 
 - **Bloco 0/A inteiro** — legalidade dos lances, diagnóstico localizado na tela,
   regressão de conteúdo e proveniência/certificação. Ver “o Bloco 0/A fechado”.
-- **Corpus e tetos (§17)** — linha de 500 meios-lances, árvore de 1.000 nós, e seis
+- **Corpus e tetos (§17)** — linha de 500 meios-lances, árvore de 1.000 nós, e sete
   tetos com o número medido atrás de cada um. Ver “Bloco B começa pelo freio”.
 - **Importar PGN (§13.1)** — auditoria do que a varredura não lê, relatório de perdas
   antes de aplicar, lote transacional, recusa explícita de variante não padrão. Ver
@@ -70,13 +70,21 @@ cada linha aponta a seção que conta a história inteira.
 - **Narração criada, ordenada e com pausa manual (§12.2)** — as duas meias entregas
   que o teste de 12/9 destapou: escrever narração num lance que não tinha nenhuma,
   trocar a ordem de duas narrações do mesmo lance, e o interruptor "parar até o aluno
-  clicar em Continuar". **Falta o teste humano** — o navegador do agente caiu no
-  login. Ver "narração pela tela".
+  clicar em Continuar". **Teste humano aprovado em 12/9**, com as 11 perguntas do
+  roteiro. Ver "narração pela tela".
+
+- **Fatia 6 aberta, parada 6A fechada (§16.1, §16.2 e começo de §16.4)** — "Criar
+  treino daqui" está habilitado no percurso do capítulo, abre uma prévia e cria uma
+  ou duas tarefas derivadas com IDs estáveis, posição inicial, respostas, defensor,
+  término, obrigatoriedade e lugar no fluxo. O defensor pode jogar antes da primeira
+  pergunta e depois da última. Ensaio real aprovado na N0 e 1.030 testes verdes. Ver
+  "fatia 6 — nascimento e colocação do treino".
 
 **Aberto, na ordem:**
 
-1. **Autoria de treinos e defensor** (§16) — fatia 6 do roteiro. É o que destrava
-   "Criar treino daqui", hoje desabilitada com o motivo escrito.
+1. **Continuar autoria de treinos e defensor** (§16.3–§16.5) — completar respostas
+   alternativas, erros, dicas e feedback; rotação/fixação do defensor; e os estados
+   derivado/personalizado/independente com diff e refazer. A fatia 6 permanece aberta.
 2. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
    **importar por URL do Lichess** (§13.2), **introdução e quadros** (§7.1) e
    **aulas extras na trilha** (§22) continuam fora, sem redução de escopo.
@@ -85,8 +93,8 @@ cada linha aponta a seção que conta a história inteira.
 1366×768; se incomodar, o espaço sai do bloco de edição abaixo dela.
 
 **Isto não declara o editor pronto.** O roteiro de §27 tem as fatias 1 a 5 fechadas no
-código, com o teste humano das duas últimas pendente; as fatias 6 a 10 continuam
-abertas.
+código e no teste humano. A fatia 6 começou e tem uma primeira parada completa; as
+fatias 6 a 10 continuam abertas.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -2370,9 +2378,103 @@ no fim.
   A tela não avisa enquanto se digita, e a publicação v2 (§20), onde o texto do aluno
   seria julgado, ainda não existe. Fica aberta com a publicação.
 
+## Fatia 6 — nascimento e colocação do treino (parada 6A)
+
+Entregue em 12/09/2026. Esta seção abre a fatia 6; **não fecha §16 inteiro**.
+
+### O que ficou completo nesta parada
+
+- `Criar treino daqui`, antes apagado, fica disponível na posição inicial ou num
+  lance do percurso selecionado que ainda tenha continuação. Variante fora do
+  percurso e último lance continuam apagados, cada um com o motivo escrito.
+- A janela mostra antes da confirmação: título, FEN inicial, lado do aluno,
+  capítulo/trecho, perfil de linha autoral, objetivo, respostas derivadas, respostas
+  do defensor, feedback, condição de término, lugar no fluxo e obrigatoriedade.
+- O professor escolhe brancas, pretas ou ambos. Ambos cria duas tarefas e duas etapas
+  com IDs próprios. O turno vem de `chess.js`, nunca da posição par/ímpar do passo.
+- Se a linha começa na vez do defensor, `defesaInicial` executa antes da primeira
+  pergunta. Se ela acaba na vez dele, `defesaFinal` executa e então aplica a condição
+  terminal. A N0 prova os dois casos no treino das pretas.
+- O treino de capítulo entra logo depois do capítulo. A opção geral entra antes das
+  práticas finais. `fluxo` continua sendo a única ordem; nenhum campo de colocação é
+  salvo no treino.
+- Criar um ou dois treinos é um comando só. Desfazer remove o conjunto; Refazer devolve
+  os mesmos IDs porque todos já chegam decididos no comando. Lista vazia não foi
+  introduzida no documento.
+- A origem guarda análise, nós relevantes, versão do derivador e impressão digital
+  das dependências. Ancestrais, posição inicial, percurso, lado e objetivo participam;
+  título não participa. Variantes não viram solução automaticamente.
+- Uma derivação aceita no máximo 200 meios-lances. A recusa mostra o tamanho real e o
+  teto e manda começar mais adiante.
+
+Arquivos centrais: `lib/editor-v2/treinos.ts`,
+`components/editor-v2/DialogoCriarTreino.tsx`, `lib/editor-v2/modelo.ts`,
+`lib/editor-v2/comandos.ts`, `lib/editor-v2/acoes-do-lance.ts`,
+`components/editor-v2/PainelDeLances.tsx` e `components/editor-v2/EditorV2.tsx`.
+
+### Evidência automática e medida
+
+Os testes novos cobrem a N0 real, a N1 real sem escrevê-la, brancas, pretas, ambos,
+defesa inicial/final, mate, promoção, posições de cada pergunta, ordem no fluxo,
+IDs de Undo/Redo, recusas, hash de dependência, referência quebrada e teto 200/201.
+Rodada dirigida: **65/65**. Rodada completa: **1.030/1.030**.
+
+Medição em Node 24/win32, no notebook desta rodada, descartando a primeira execução:
+
+- N0-LADDER, ambos os lados, 9 perguntas: mediana 8,85 ms; p95 26,78 ms; máximo
+  58,08 ms, em 100 amostras;
+- N1-KPK, ambos, 11 perguntas: mediana 7,83 ms; p95 11,69 ms; máximo 13,81 ms,
+  em 100 amostras;
+- linha de 200 meios-lances, ambos: mediana 61,83 ms; p95 67,57 ms; máximo
+  67,73 ms, em 20 amostras;
+- linha de 300: p95 222,49 ms. Por isso 200, e não 300, virou o teto. A linha de 500
+  foi medida à parte com só 10 amostras (mediana 356,93 ms; máximo 570,84 ms); não foi
+  chamada de p95.
+
+Sete portões antes do commit: `typecheck`, `lint`, **1.030 testes**, `build`, conteúdo
+verde (18 posições, 3 aulas), **42/42 mutações vermelhas** e repertório `--check`
+(27 linhas em 11 arquivos, nada escrito).
+
+### Ensaio real pela tela — aprovado nesta rodada
+
+Em `/editor/v2/finais/N0-LADDER`, logado:
+
+1. o menu da posição inicial mostrou `Criar treino daqui` habilitado;
+2. a prévia mostrou cinco perguntas das brancas e quatro das pretas;
+3. no treino das pretas, mostrou o defensor começando com `g2g4` e terminando com
+   `g4g1`, em mate;
+4. criar inseriu as duas tarefas antes do treino v1 que já existia, e chegou a
+   `✓ salvo`;
+5. Desfazer removeu as duas de uma vez; Refazer restaurou as duas e os mesmos IDs;
+6. no último lance `Rg1#`, a ação ficou apagada com “não há nenhum lance depois desta
+   posição para virar treino”.
+
+Não houve gesto de tabuleiro nesta entrega. Portanto nada de ponteiro foi dado como
+provado por script.
+
+O ensaio foi limpo: `content/rascunhos/lessons/N0-LADDER.json` e
+`.editor/v2/N0-LADDER.json` não existem. O SHA-256 da N1 permaneceu
+`4be602ca224f065f630efe11948b696e33dbaa95a5fdfc12c03a6c912eacb822`.
+
+### O que continua aberto — sem reduzir §16 nem §28
+
+- **Parada 6B, autoria completa (§16.3):** editar dicas/desenhos, explicação final,
+  várias respostas corretas, alternativa correta fora do método com feedback próprio,
+  erro conhecido nomeado, continuação executável e todas as condições terminais.
+- **Parada 6C, defensor jogável (§16.4):** prévia no runtime do aluno, estabilidade
+  dentro da tentativa, rotação determinística entre tentativas e escolha fixa.
+- **Parada 6D, propriedade (§16.5):** primeiro ajuste materializa a cópia; fonte
+  atual/alterada/removida, aviso e diff; independente; refazer com snapshot e Undo;
+  IDs de questões sobrevivendo ao mesmo ponto de origem; gate sem sobrescrever autoria.
+- O checklist mestre de §28 continua desmarcado para respostas completas, defensor e
+  propriedade. A lista visível na lateral ainda é leitura, não a tela de edição dessas
+  três paradas.
+
 ### O próximo ponto exato
 
-A fatia 6 do roteiro de §27: **autoria de treinos e defensor** (§16).
+Parada 6B: abrir um treino da lista lateral e concluir a autoria de questões e
+respostas de §16.3, inclusive o caso medido pelo plano de duas respostas com feedback
+distinto e um erro conhecido.
 
 ---
 

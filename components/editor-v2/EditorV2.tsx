@@ -20,6 +20,7 @@ import { DialogoDeCorte } from "@/components/editor-v2/DialogoDeCorte";
 import { DialogoDuplicarCapitulo } from "@/components/editor-v2/DialogoDuplicarCapitulo";
 import { DialogoExcluirCapitulo } from "@/components/editor-v2/DialogoExcluirCapitulo";
 import { DialogoExportar } from "@/components/editor-v2/DialogoExportar";
+import { DialogoCriarTreino } from "@/components/editor-v2/DialogoCriarTreino";
 import { PaletaDeDesenho } from "@/components/editor-v2/PaletaDeDesenho";
 import { Dialogo } from "@/components/editor-v2/Dialogo";
 import { Previa } from "@/components/editor-v2/Previa";
@@ -66,6 +67,7 @@ import type {
 } from "@/lib/editor-v2/acoes-do-lance";
 import type { ResolucoesV2 } from "@/lib/editor-v2/impacto";
 import { novoIdDeNarracao, podeNarrar } from "@/lib/editor-v2/narracoes";
+import type { TreinosPreparadosV2 } from "@/lib/editor-v2/treinos";
 import { revisoesPendentesV2 } from "@/lib/editor-v2/revisoes";
 import { FEN_INICIAL_PADRAO, problemasDaAulaV2, validarAulaV2, type AnaliseV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
 import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/editor-v2/recuperacao";
@@ -112,6 +114,16 @@ function capitulosNaOrdemDaAula(aula: AulaV2): AulaV2["capitulos"] {
   });
 }
 
+/** Os treinos também são lidos do fluxo; o cadastro não ganha uma segunda ordem. */
+function treinosNaOrdemDaAula(aula: AulaV2): AulaV2["treinos"] {
+  const porId = new Map(aula.treinos.map((item) => [item.id, item]));
+  return aula.fluxo.flatMap((etapa) => {
+    if (etapa.tipo !== "treino") return [];
+    const item = porId.get(etapa.entidadeId);
+    return item ? [item] : [];
+  });
+}
+
 export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, problemasDaOrigem = [] }: {
   aulaId: string;
   documentoInicial: AulaV2;
@@ -127,6 +139,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const [historico, setHistorico] = useState<Historico<AulaV2>>(() => iniciarHistorico(documentoInicial));
   const [capituloId, setCapituloId] = useState(() => capitulosNaOrdemDaAula(documentoInicial)[0]?.id ?? "");
   const capitulosOrdenados = useMemo(() => capitulosNaOrdemDaAula(historico.presente), [historico.presente]);
+  const treinosOrdenados = useMemo(() => treinosNaOrdemDaAula(historico.presente), [historico.presente]);
   const capitulo = capitulosOrdenados.find((item) => item.id === capituloId) ?? capitulosOrdenados[0];
   const analiseDoCapitulo = capitulo ? analiseDaAula(historico.presente, capitulo.analiseId) : historico.presente.analises[0];
   /** Ver `ANALISE_DE_FAZ_DE_CONTA`: a aula sem capítulo ainda precisa renderizar. */
@@ -152,6 +165,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const [acaoDoLance, setAcaoDoLance] = useState<{ acao: AcaoContextualV2; nodeId: string } | null>(null);
   const [cortando, setCortando] = useState<{ tipo: TipoDeCorteV2; nodeId: string; lance: string } | null>(null);
   const [exportando, setExportando] = useState(false);
+  const [criandoTreino, setCriandoTreino] = useState<string | null>(null);
   /**
    * A prévia (§15), em dois estados: a escolha do escopo, e a prévia rodando.
    *
@@ -614,9 +628,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
       const rotulo = mapa?.rotulos[alvo];
       const san = mapa?.sans[alvo] ?? analise.nos[alvo]?.uci ?? "este lance";
       setCortando({ tipo: acao === "excluir-daqui" ? "excluir-daqui" : "substituir-continuacao", nodeId: alvo, lance: rotulo ? `${rotulo} ${san}` : san });
+      return;
     }
-    // "treino" chega desabilitado do menu e não tem caso aqui: o editor de
-    // treinos é §16, e a ação nasce com ele.
+    if (acao === "treino") setCriandoTreino(alvo);
   }, [analise, aplicar, mapa]);
 
   /** As marcas de revisão pendentes da aula inteira — §19.2. */
@@ -944,6 +958,20 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         />
       ) : null}
 
+      {criandoTreino ? (
+        <DialogoCriarTreino
+          aula={historico.presente}
+          capituloId={capitulo.id}
+          nodeId={criandoTreino}
+          positions={positions}
+          aoCriar={(preparo: TreinosPreparadosV2) => {
+            aplicar({ tipo: "ADICIONAR_TREINOS", preparo });
+            setCriandoTreino(null);
+          }}
+          aoFechar={() => setCriandoTreino(null)}
+        />
+      ) : null}
+
       {/* §15.1: as três entradas da prévia. Uma janela com três botões, e não um menu
           suspenso: são três destinos, não três variações de um. */}
       {escolhendoPrevia ? (
@@ -1002,6 +1030,21 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
             aoDuplicar={setDuplicandoCapitulo}
             aoExcluir={setExcluindoCapitulo}
           />
+          <div className="mt-3 border-t border-borda-fraca pt-3">
+            <h2 className="text-sm font-semibold text-tinta">Treinos</h2>
+            {treinosOrdenados.length ? (
+              <ol className="mt-2 flex flex-col gap-2" aria-label="Treinos da aula">
+                {treinosOrdenados.map((treino) => (
+                  <li key={treino.id} className="rounded-md border border-borda-fraca p-2 text-xs text-tinta">
+                    <span className="block font-medium">{treino.titulo}</span>
+                    <span className="text-tinta-fraca">
+                      {treino.ladoAluno === "white" ? "Brancas" : "Pretas"} · {treino.questoes.length} pergunta{treino.questoes.length === 1 ? "" : "s"} · {treino.propriedade === "derivado" ? "ligado à aula" : treino.propriedade}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            ) : <p className="mt-1 text-xs text-tinta-fraca">Nenhum treino nesta aula.</p>}
+          </div>
           <label className="mt-2 flex flex-col gap-1 text-xs text-tinta-fraca">
             Nome do capítulo
             <input key={capitulo.id + capitulo.titulo} defaultValue={capitulo.titulo} onBlur={(e) => aplicar({ tipo: "RENOMEAR_CAPITULO", capituloId: capitulo.id, titulo: e.currentTarget.value })} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm text-tinta" />
@@ -1086,6 +1129,15 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
               rotulos={derivado?.rotulos ?? {}}
               selecionado={selecionado.id}
               focar={pedidoDeFoco}
+              treinoNoNode={(id) => {
+                const percurso = [capitulo.inicioNodeId, ...capitulo.caminho];
+                const indice = percurso.indexOf(id);
+                return indice < 0
+                  ? { disponivel: false, motivo: "este lance está numa variante fora do percurso do capítulo" }
+                  : indice === percurso.length - 1
+                    ? { disponivel: false, motivo: "não há nenhum lance depois desta posição para virar treino" }
+                    : { disponivel: true };
+              }}
               onSelecionar={setNodeId}
               onPromover={(parentId, id) => aplicar({ tipo: "PROMOVER_VARIANTE", analiseId: analise.id, parentId, nodeId: id })}
               onAcao={aoAcaoDoLance}

@@ -255,7 +255,16 @@ export const respostaTreinoV2Schema = z.strictObject({
       defesas: z.array(z.strictObject({ move: uciSchema, proximaQuestaoId: idV2Schema })).min(1),
     }),
     z.strictObject({ tipo: z.literal("repete") }),
-    z.strictObject({ tipo: z.literal("encerra"), condicao: z.enum(["mate", "promotion", "draw-secured", "tablebase-win"]) }),
+    z.strictObject({
+      tipo: z.literal("encerra"),
+      condicao: z.enum(["mate", "promotion", "draw-secured", "tablebase-win", "objetivo-autoral"]),
+      /**
+       * A última resposta do defensor, quando a linha termina na vez dele.
+       * Sem este campo, treinar o outro lado de um percurso de tamanho ímpar
+       * obrigaria a cortar o último lance ou inventar uma pergunta sem lance do aluno.
+       */
+      defesaFinal: uciSchema.optional(),
+    }),
   ]),
 });
 
@@ -279,6 +288,11 @@ export const treinoV2Schema = z.strictObject({
   defensor: z.strictObject({
     politica: z.enum(["deterministica", "autoral"]),
   }),
+  /** Se o trecho começa na vez do defensor, ele joga antes da primeira pergunta. */
+  defesaInicial: z.strictObject({
+    move: uciSchema,
+    primeiraQuestaoId: idV2Schema,
+  }).optional(),
   termino: z.strictObject({
     tipo: z.enum(["objetivo", "mate", "limite"]),
     maxPlies: z.number().int().positive().optional(),
@@ -825,6 +839,7 @@ export function problemasDaAulaV2(
     const analise = analises.get(treino.inicio.analiseId);
     if (!analise?.nos[treino.inicio.nodeId]) problemas.push({ codigo: "TREINO_SEM_INICIO", mensagem: "o treino aponta para posição inicial inexistente", treinoId: treino.id, analiseId: treino.inicio.analiseId, nodeId: treino.inicio.nodeId, campo: "inicio" });
     const questoes = new Set(treino.questoes.map((questao) => questao.id));
+    if (treino.defesaInicial && !questoes.has(treino.defesaInicial.primeiraQuestaoId)) problemas.push({ codigo: "DEFESA_INICIAL_SEM_QUESTAO", mensagem: "a defesa inicial aponta para questão inexistente", treinoId: treino.id, campo: "defesaInicial.primeiraQuestaoId" });
     for (const questao of treino.questoes) {
       const analiseDaQuestao = analises.get(questao.posicao.analiseId);
       if (!analiseDaQuestao?.nos[questao.posicao.nodeId]) problemas.push({ codigo: "QUESTAO_SEM_POSICAO", mensagem: "a questão do treino aponta para posição inexistente", treinoId: treino.id, questaoId: questao.id, analiseId: questao.posicao.analiseId, nodeId: questao.posicao.nodeId, campo: "posicao" });
