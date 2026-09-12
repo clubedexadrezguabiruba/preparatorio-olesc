@@ -2031,10 +2031,13 @@ prévia mostra. Serve de dobradinha — ela também é o mapa do que falta escre
 
 ### Evidência
 
-**Cinco portões verdes, e dois vermelhos por causa de outra sessão** — ver a seção
-seguinte, que não é sobre este código.
+**Os sete portões verdes:** tipos, lint, **1.007 testes** (25 novos), build, conteúdo
+(38 consultas de tablebase, todas do cache), **42/42 mutações vermelhas** e repertório
+`--check`.
 
-Verdes: tipos, lint, **1.007 testes** (25 novos), build e repertório `--check`.
+Dois deles ficaram vermelhos por alguns minutos, por um motivo que não era deste código
+— a seção "os dois portões vermelhos", abaixo, conta o que foi, porque a lição de método
+vale mais que o susto.
 
 Os 25 testes novos, por assunto:
 
@@ -2072,7 +2075,7 @@ diferente em cada passagem** (§15.3, item 4); que a pausa manual do ponto de es
 chega ao relógio como `null`; e que a prévia do capítulo sozinho **não** inventa o
 retorno.
 
-### Os dois portões vermelhos, e por que eles não são deste código
+### Os dois portões que ficaram vermelhos por dez minutos, e a lição que sobra
 
 Enquanto esta parada rodava, **outra sessão do Claude Code estava editando o mesmo
 repositório** — `preparatorio-olesc-e1`, aberta às 13h22 — e reescreveu `content/sources.json`
@@ -2087,11 +2090,20 @@ do De la Villa para o Silman.
     o inventário do regime integral não bate com o conteúdo
 ```
 
-O mesmo `validate:content` passou verde nesta sessão às 13h3x, com este código já
-compilando, e os dois arquivos não foram tocados por nenhum commit desta rodada. A falha
-é um estado intermediário da edição da outra sessão, e quem a fecha é ela. **Nada foi
-alterado nesses arquivos daqui**, de propósito: mexer no trabalho em curso de outra
-sessão é a forma mais barata de perder os dois.
+O mesmo `validate:content` passou verde nesta sessão minutos antes, com este código já
+compilando, e os dois arquivos não foram tocados por nenhum commit desta rodada. Era um
+estado intermediário da edição da outra sessão. **Nada foi alterado nesses arquivos
+daqui**, de propósito: mexer no trabalho em curso de outra sessão é a forma mais barata
+de perder os dois. Minutos depois ela terminou — `divida-de-licenca.md` e
+`TRILHA-FINAIS.md` entraram junto — e os dois portões voltaram ao verde sozinhos, com
+**42/42 mutações vermelhas**.
+
+**A lição de método, para quem vier depois:** quando um portão de *conteúdo* fica
+vermelho numa rodada que só mexeu em *código*, a primeira pergunta não é "o que eu
+quebrei". É `git status` e `ls -la` nos arquivos que o portão nomeia. Aqui o carimbo de
+horário respondeu em dez segundos — `content/sources.json` escrito às 13:47:55, enquanto
+o portão rodava — e o `ListAgents` deu o nome da sessão vizinha. Dois comandos, e a
+alternativa era passar meia hora procurando um defeito que não existia no meu lado.
 
 ### O teste humano desta fatia — o roteiro numerado
 
