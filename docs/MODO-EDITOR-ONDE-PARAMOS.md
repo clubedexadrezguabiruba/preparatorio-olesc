@@ -2351,6 +2351,15 @@ Abrir `/editor/v2/finais/N0-LADDER`, logado, em 1366×768. Perguntas de sim ou n
 Depois do teste, os artefatos voltam: `content/rascunhos/lessons/N0-LADDER.json` e
 `.editor/v2/N0-LADDER.json`. **Não commitar**; apagar como no fim desta rodada.
 
+### Teste humano — 12/9/2026, aprovado
+
+O Doug rodou o roteiro na `N0-LADDER`, logado, e **as 11 perguntas passaram**: o botão,
+o foco automático da caixa, o salvar ao clicar fora, o Desfazer/Refazer, a desistência
+com a caixa vazia, a ordem com ↑/↓, a pausa manual parando a prévia no **Continuar**, a
+frase no lance de variante, o **defeito consertado** (sair da caixa sem mudar nada não
+suja o "✓ salvo") e a persistência depois do F5. Os artefatos do ensaio foram apagados
+no fim.
+
 ### O que esta rodada NÃO cobre
 
 - **Mover narração para outro lance.** §12.2 pede ordenar "quando houver mais de uma", e
