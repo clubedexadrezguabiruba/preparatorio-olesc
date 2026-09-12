@@ -14,7 +14,7 @@ import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { chaveDoDefensor, escolherResposta } from "@/lib/lesson/defensor";
 import { AVANCO, TREINO } from "@/lib/lesson/falas";
 import type { Lesson, MoveTree, Position } from "@/lib/lesson/schema";
-import { isPraise, judgeMove, throwsWinAway, toUci } from "@/lib/lesson/tree";
+import { aplicarUci, isPraise, judgeMove, throwsWinAway, toUci } from "@/lib/lesson/tree";
 import { restingMessage, useLessonStore, type PanelMessage, type TreeKey } from "@/lib/lesson/store";
 import { REPLY_DELAY_MS } from "@/lib/lesson/timing";
 import { playComplete, playForMove, playRefusal, playSuccess } from "@/lib/sound";
@@ -46,6 +46,7 @@ export function TreeStage({
   marcacao,
   onFinish,
   finishLabel,
+  v2,
 }: {
   lesson: Lesson;
   tree: MoveTree;
@@ -72,6 +73,22 @@ export function TreeStage({
   marcacao?: { shapes: DrawShape[] | null; onChange: (shapes: DrawShape[]) => void };
   onFinish?: () => void;
   finishLabel?: string;
+  /**
+   * Só o treino do Editor v2 (§16.4). A aula v1 não passa nada disto, e o caminho dela
+   * não muda uma linha:
+   *
+   * - `aberturaDoDefensor`: a linha começa na vez do defensor. O tabuleiro mostra a
+   *   posição de antes, o defensor joga, e só então a primeira pergunta abre. Acontece
+   *   de novo a cada tentativa;
+   * - `defesaFinal`: a linha termina na vez dele. O lance terminal do aluno recebe a
+   *   última resposta antes da conclusão;
+   * - `desenhoDoNo`: o desenho da pergunta, com a cor que o professor escolheu.
+   */
+  v2?: {
+    aberturaDoDefensor?: { fen: string; uci: string };
+    defesaFinal?: (nodeId: string, uci: string) => string | undefined;
+    desenhoDoNo?: (nodeId: string) => DrawShape[];
+  };
 }) {
   const state = useLessonStore((s) => s.trees[treeKey]);
   const message = useLessonStore((s) => s.message);
@@ -98,6 +115,8 @@ export function TreeStage({
   const [promotion, setPromotion] = useState<{ orig: Key; dest: Key } | null>(null);
   /** Sobe uma vez a cada mate: é o que dispara o confete. */
   const [celebration, setCelebration] = useState(0);
+  /** A tentativa cuja abertura do defensor já foi jogada. Só o treino v2 a usa. */
+  const [abertura, setAbertura] = useState(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   /** De onde o confete explode: o tabuleiro, não o centro da etapa. */
   const boardColumn = useRef<HTMLDivElement>(null);
@@ -112,8 +131,19 @@ export function TreeStage({
    * nó parado — que é o **anterior** ao mate — com a etapa fechada para lances.
    */
   const end = state?.end ?? null;
-  const boardFen = overlay?.fen ?? end?.fen ?? node?.fen ?? position.fen;
-  const lastMove = (overlay?.lastMove ?? end?.lastMove ?? null) as [Key, Key] | null;
+  /**
+   * O defensor que abre a linha (só v2). Enquanto ele não jogou nesta tentativa, o
+   * tabuleiro fica na posição de antes e fechado para lances. Derivado da tentativa, e
+   * não de um efeito que limpa: recomeçar sobe a tentativa e a abertura volta sozinha.
+   */
+  const aberturaDoDefensor = v2?.aberturaDoDefensor;
+  const naRaiz = Boolean(state && state.nodeId === state.rootId && state.studentMoves === 0);
+  const abrindo = Boolean(aberturaDoDefensor && abertura !== attempt && status === "playing" && naRaiz);
+  const lanceDaAbertura = aberturaDoDefensor && !abrindo && naRaiz
+    ? [aberturaDoDefensor.uci.slice(0, 2), aberturaDoDefensor.uci.slice(2, 4)]
+    : null;
+  const boardFen = abrindo ? aberturaDoDefensor!.fen : overlay?.fen ?? end?.fen ?? node?.fen ?? position.fen;
+  const lastMove = (abrindo ? null : overlay?.lastMove ?? end?.lastMove ?? lanceDaAbertura ?? null) as [Key, Key] | null;
   /**
    * O desfecho sobrevive à navegação entre etapas: `goToStage` apaga a mensagem
    * viva, e o texto — conclusão ou tentativa encerrada — volta da árvore.
@@ -122,6 +152,17 @@ export function TreeStage({
   const panel: PanelMessage | null = message ?? restingMessage(state);
 
   useEffect(() => () => (timer.current ? clearTimeout(timer.current) : undefined), []);
+
+  // O defensor abre a linha no mesmo compasso em que responde a um lance do aluno.
+  useEffect(() => {
+    if (!abrindo || !aberturaDoDefensor) return;
+    const handle = setTimeout(() => {
+      const lance = aplicarUci(aberturaDoDefensor.fen, aberturaDoDefensor.uci);
+      playForMove({ capture: lance.captura, check: lance.xeque });
+      setAbertura(attempt);
+    }, REPLY_DELAY_MS);
+    return () => clearTimeout(handle);
+  }, [abrindo, aberturaDoDefensor, attempt]);
 
   /** Volta ao nó raiz. Cancela a resposta do defensor que estava a caminho. */
   const restart = useCallback(() => {
@@ -152,7 +193,7 @@ export function TreeStage({
     };
   }, [boardFen]);
 
-  const interactive = status === "playing" && !busy && board.turn === orientation;
+  const interactive = status === "playing" && !busy && !abrindo && board.turn === orientation;
 
   const shapes: DrawShape[] = useMemo(() => {
     // Os destaques automáticos (corte e peça pendurada) saem da posição que
@@ -182,12 +223,12 @@ export function TreeStage({
      * do lugar, então some. No modo autor migra para o canal editável, senão
      * sairia desenhado duas vezes.
      */
-    if (allowHelp && !marcacao && !overlay && status === "playing" && node) {
-      list.push(...desenhoDaAutoria(node));
+    if (allowHelp && !marcacao && !overlay && !abrindo && status === "playing" && node && state) {
+      list.push(...(v2?.desenhoDoNo ? v2.desenhoDoNo(state.nodeId) : desenhoDaAutoria(node)));
     }
     if (message?.square) list.push({ orig: message.square as Key, brush: "red" });
     return list;
-  }, [allowHelp, boardFen, lastMove, marcacao, overlay, status, node, message]);
+  }, [allowHelp, boardFen, lastMove, marcacao, overlay, abrindo, status, node, state, v2, message]);
 
   /** O desenho que o arquivo guarda para este nó, no formato do tabuleiro. */
   const daAutoria: DrawShape[] = useMemo(() => desenhoDaAutoria(node), [node]);
@@ -239,6 +280,26 @@ export function TreeStage({
       // A posição do mate vai junto para a store: é a única cópia dela, porque
       // lance terminal não tem nó de destino.
       if (verdict.respostas.length === 0) {
+        // Treino v2 que termina na vez do defensor: ele responde, e a conclusão vem
+        // sobre a posição final — a única cópia dela vai para a store, como no mate.
+        const final = v2?.defesaFinal?.(state.nodeId, uci);
+        if (final) {
+          playForMove({ capture: Boolean(played.captured), check: game.isCheck() });
+          say("good", verdict.feedback);
+          setBusy(true);
+          timer.current = setTimeout(() => {
+            const fecho = aplicarUci(afterFen, final);
+            const ultimo = fecho.lastMove as [Key, Key];
+            playForMove({ capture: fecho.captura, check: fecho.xeque });
+            setDrawn({ fen: fecho.fen, lastMove: ultimo, attempt });
+            playComplete();
+            setCelebration((c) => c + 1);
+            treeAdvance(treeKey, null, { fen: fecho.fen, lastMove: ultimo, text: verdict.feedback });
+            celebrate(verdict.feedback);
+            setBusy(false);
+          }, REPLY_DELAY_MS);
+          return;
+        }
         playComplete();
         setCelebration((c) => c + 1);
         treeAdvance(treeKey, null, {
@@ -267,16 +328,11 @@ export function TreeStage({
         attempt,
       );
       timer.current = setTimeout(() => {
-        const after = new Chess(afterFen);
-        const answered = after.move({
-          from: reply.slice(0, 2),
-          to: reply.slice(2, 4),
-          promotion: reply.length > 4 ? reply.slice(4) : undefined,
-        });
-        playForMove({ capture: Boolean(answered.captured), check: after.isCheck() });
+        const resposta = aplicarUci(afterFen, reply);
+        playForMove({ capture: resposta.captura, check: resposta.xeque });
         setDrawn({
-          fen: after.fen(),
-          lastMove: [reply.slice(0, 2) as Key, reply.slice(2, 4) as Key],
+          fen: resposta.fen,
+          lastMove: resposta.lastMove as [Key, Key],
           attempt,
         });
         treeAdvance(treeKey, next);
@@ -303,6 +359,7 @@ export function TreeStage({
       treeKey,
       treeTry,
       tree.goal,
+      v2,
     ],
   );
 

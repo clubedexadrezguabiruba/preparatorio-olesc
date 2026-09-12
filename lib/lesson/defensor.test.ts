@@ -5,7 +5,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { chaveDoDefensor, escolherResposta, fnv1a } from "./defensor.ts";
 import { lessonSchema, type Lesson, type MoveTree } from "./schema.ts";
-import { judgeMove, respostasDe } from "./tree.ts";
+import { aplicarUci, judgeMove, respostasDe } from "./tree.ts";
 
 /**
  * A escolha da variante do defensor (B9/E6).
@@ -156,4 +156,25 @@ test("com uma variante escrita, duas tentativas dão duas aulas diferentes", () 
   console.log(
     `  tentativa 1: ${primeira[1]}   tentativa 2: ${segunda[1]}   (mesma aula, outra defesa)`,
   );
+});
+
+/* ------------------------------------------------------------------ *
+ * O lance do defensor no tabuleiro (§16.4)
+ * ------------------------------------------------------------------ */
+
+test("aplicarUci move a peça como a resposta do TreeStage movia: posição, último lance, captura e xeque", () => {
+  const simples = aplicarUci("8/8/8/8/8/4k3/6R1/6RK b - - 0 1", "e3d3");
+  assert.equal(simples.fen, "8/8/8/8/8/3k4/6R1/6RK w - - 1 2");
+  assert.deepEqual(simples.lastMove, ["e3", "d3"]);
+  assert.equal(simples.captura, false);
+  assert.equal(simples.xeque, false);
+
+  const mate = aplicarUci("6k1/8/8/8/8/8/6R1/6RK w - - 0 1", "g2g7");
+  assert.equal(mate.xeque, true);
+  assert.equal(aplicarUci("6k1/6R1/8/8/8/8/8/K7 b - - 0 1", "g8g7").captura, true);
+  assert.equal(aplicarUci("8/P7/8/8/8/8/k7/7K w - - 0 1", "a7a8q").fen.startsWith("Q7/"), true);
+});
+
+test("aplicarUci recusa lance ilegal em vez de seguir calado", () => {
+  assert.throws(() => aplicarUci("8/8/8/8/8/4k3/6R1/6RK b - - 0 1", "e3e2"));
 });

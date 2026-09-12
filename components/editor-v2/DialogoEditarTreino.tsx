@@ -13,8 +13,16 @@ import {
   type CatalogoV2,
   type EdicaoDeTreinoV2,
 } from "@/lib/editor-v2/autoria-treino";
+import {
+  acrescentarDefesa,
+  fugasDaAnalise,
+  proximoIdDeQuestao,
+  removerDefesa,
+  tornarDefesaFixa,
+} from "@/lib/editor-v2/defesas-do-treino";
 import { desenhoDeFormas } from "@/lib/editor-v2/desenhos";
 import type { AulaV2, QuestaoTreinoV2, RespostaTreinoV2, TreinoV2 } from "@/lib/editor-v2/modelo";
+import { MAXIMO_DE_DEFESAS } from "@/lib/editor-v2/treino-jogavel";
 import type { Position } from "@/lib/lesson/schema";
 import { Dialogo } from "./Dialogo";
 
@@ -50,6 +58,8 @@ export function DialogoEditarTreino({ aula, treinoId, positions, aoSalvar, aoFec
   const [treino, setTreino] = useState<TreinoV2>(() => clonar(original));
   const [catalogo, setCatalogo] = useState<CatalogoV2 | undefined>(() => aula.catalogo ? clonar(aula.catalogo) : undefined);
   const [questaoId, setQuestaoId] = useState(original.questoes[0].id);
+  /** A resposta cuja lista "+ Outra resposta do defensor" está aberta. */
+  const [escolhendoFuga, setEscolhendoFuga] = useState<string | null>(null);
   const questao = treino.questoes.find((item) => item.id === questaoId) ?? treino.questoes[0];
   const indiceQuestao = treino.questoes.indexOf(questao);
   const fen = quadroDoNo(aula, questao.posicao.analiseId, questao.posicao.nodeId, positions).fen;
@@ -131,6 +141,17 @@ export function DialogoEditarTreino({ aula, treinoId, positions, aoSalvar, aoFec
             </select>
             {treino.termino.tipo === "limite" ? <input aria-label="Máximo de meios-lances" type="number" min={1} value={treino.termino.maxPlies ?? 20} onChange={(e) => setTreino({ ...treino, termino: { tipo: "limite", maxPlies: Number(e.currentTarget.value) } })} className="foco mt-2 w-full rounded-md border border-borda bg-papel px-2 py-2 text-sm text-tinta" /> : null}
           </fieldset>
+          <fieldset className="rounded-md border border-borda p-2">
+            <legend className="px-1 text-sm font-medium text-tinta">Defensor</legend>
+            <select aria-label="Como o defensor escolhe entre defesas" value={treino.defensor.politica} onChange={(e) => {
+              const politica = e.currentTarget.value as TreinoV2["defensor"]["politica"];
+              setTreino({ ...treino, defensor: { politica } });
+            }} className="foco w-full rounded-md border border-borda bg-papel px-2 py-2 text-sm text-tinta">
+              <option value="deterministica">Troca de defesa a cada tentativa</option>
+              <option value="fixa">Joga sempre a primeira defesa</option>
+            </select>
+            <p className="mt-1 text-xs text-tinta-fraca">Só faz diferença onde uma resposta tem mais de uma defesa.</p>
+          </fieldset>
           <nav aria-label="Perguntas do treino" className="flex flex-col gap-1">
             {treino.questoes.map((item, indice) => <button key={item.id} type="button" onClick={() => setQuestaoId(item.id)} className={`foco rounded-md border px-2 py-2 text-left text-sm ${item.id === questao.id ? "border-foco bg-metodo-superficie text-metodo-tinta-alta" : "border-borda text-tinta"}`}>Pergunta {indice + 1} · {item.respostas.length} resposta{item.respostas.length === 1 ? "" : "s"}</button>)}
           </nav>
@@ -202,10 +223,64 @@ export function DialogoEditarTreino({ aula, treinoId, positions, aoSalvar, aoFec
                       atualizarResposta(resposta.id, (atual) => ({ ...atual, efeito: efeitoAoTrocarTipo(tipo, { proximaQuestaoId: proxima.id, original: noDocumento }) }));
                     }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm"><option value="avanca">Defensor responde e avança</option><option value="repete">Aceita e repete esta pergunta</option><option value="encerra">Encerra o ramo</option></select>
                   </label>
-                  {resposta.efeito.tipo === "avanca" ? resposta.efeito.defesas.map((defesa, di) => <div key={`${resposta.id}-${di}`} className="mt-2 grid gap-2 md:grid-cols-2">
-                    <label className="flex flex-col gap-1 text-xs text-tinta">Resposta do defensor<input value={defesa.move} onChange={(e) => { const valor = e.currentTarget.value.toLowerCase(); atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "avanca" ? atual : ({ ...atual, efeito: { ...atual.efeito, defesas: atual.efeito.defesas.map((item, i) => i === di ? { ...item, move: valor } : item) } })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm" /></label>
+                  {resposta.efeito.tipo === "avanca" ? resposta.efeito.defesas.map((defesa, di, defesas) => <div key={`${resposta.id}-${di}`} className="mt-2 grid gap-2 md:grid-cols-2">
+                    <label className="flex flex-col gap-1 text-xs text-tinta">Resposta do defensor{defesas.length > 1 ? ` ${di + 1}` : ""}<input value={defesa.move} onChange={(e) => { const valor = e.currentTarget.value.toLowerCase(); atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "avanca" ? atual : ({ ...atual, efeito: { ...atual.efeito, defesas: atual.efeito.defesas.map((item, i) => i === di ? { ...item, move: valor } : item) } })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm" /></label>
                     <label className="flex flex-col gap-1 text-xs text-tinta">Próxima pergunta<select value={defesa.proximaQuestaoId} onChange={(e) => { const valor = e.currentTarget.value; atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "avanca" ? atual : ({ ...atual, efeito: { ...atual.efeito, defesas: atual.efeito.defesas.map((item, i) => i === di ? { ...item, proximaQuestaoId: valor } : item) } })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm">{treino.questoes.map((item, i) => <option key={item.id} value={item.id}>Pergunta {i + 1}</option>)}</select></label>
+                    {defesas.length > 1 ? (
+                      <div className="flex flex-wrap items-center gap-2 md:col-span-2">
+                        {di === 0 ? (
+                          <span className="text-xs text-tinta-fraca">
+                            {treino.defensor.politica === "fixa" ? "Primeira da lista: é a que o defensor joga sempre." : "Primeira da lista; o defensor troca a cada tentativa."}
+                          </span>
+                        ) : (
+                          <button type="button" onClick={() => setTreino((atual) => tornarDefesaFixa(atual, questao.id, resposta.id, di))} className="foco rounded-md border border-borda px-2 py-1 text-xs text-tinta">Usar sempre esta</button>
+                        )}
+                        <button type="button" onClick={() => setTreino((atual) => removerDefesa(atual, questao.id, resposta.id, di))} className="foco rounded-md border border-borda px-2 py-1 text-xs text-tinta">Remover defesa {di + 1}</button>
+                      </div>
+                    ) : null}
                   </div>) : null}
+                  {resposta.efeito.tipo === "avanca" ? (
+                    <div className="mt-2">
+                      <button
+                        type="button"
+                        aria-expanded={escolhendoFuga === resposta.id}
+                        onClick={() => setEscolhendoFuga((atual) => atual === resposta.id ? null : resposta.id)}
+                        className="foco rounded-md border border-borda px-2 py-1 text-xs text-tinta"
+                      >
+                        + Outra resposta do defensor
+                      </button>
+                      <span className="ml-2 text-xs text-tinta-fraca">até {MAXIMO_DE_DEFESAS} por resposta</span>
+                      {escolhendoFuga === resposta.id ? (() => {
+                        const { fugas, motivo } = fugasDaAnalise(aula, treino, questao.id, resposta.id, positions);
+                        return (
+                          <div className="mt-2 rounded-md border border-borda-fraca p-2">
+                            {motivo ? <p className="text-xs text-tinta-media" role="status">Não há defesa para acrescentar: {motivo}.</p> : (
+                              <>
+                                <p className="text-xs text-tinta-fraca">Variantes do defensor que o capítulo já tem depois deste lance:</p>
+                                <ul className="mt-1 flex flex-wrap gap-2">
+                                  {fugas.map((fuga) => (
+                                    <li key={fuga.nodeId}>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setTreino((atual) => acrescentarDefesa(atual, questao.id, resposta.id, fuga, proximoIdDeQuestao(aula, atual, fuga.nodeId)));
+                                          setEscolhendoFuga(null);
+                                        }}
+                                        className="foco rounded-md border border-borda px-2 py-1 text-xs text-tinta hover:bg-carta-toque"
+                                      >
+                                        Defensor joga {fuga.san} ({fuga.move})
+                                      </button>
+                                    </li>
+                                  ))}
+                                </ul>
+                                <p className="mt-1 text-xs text-tinta-fraca">Se a posição depois dela ainda não tem pergunta, uma nova aparece na lista à esquerda, sem resposta: escreva ali o que o aluno joga.</p>
+                              </>
+                            )}
+                          </div>
+                        );
+                      })() : null}
+                    </div>
+                  ) : null}
                   {resposta.efeito.tipo === "encerra" ? <div className="mt-2 grid gap-2 md:grid-cols-2">
                     <label className="flex flex-col gap-1 text-xs text-tinta">Condição final<select value={resposta.efeito.condicao} onChange={(e) => { const valor = e.currentTarget.value as Extract<RespostaTreinoV2["efeito"], { tipo: "encerra" }>["condicao"]; atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "encerra" ? atual : ({ ...atual, efeito: { ...atual.efeito, condicao: valor } })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm">{Object.entries(NOMES_DO_FIM).map(([valor, nome]) => <option key={valor} value={valor}>{nome}</option>)}</select></label>
                     <label className="flex flex-col gap-1 text-xs text-tinta">Último lance do defensor (opcional)<input value={resposta.efeito.defesaFinal ?? ""} onChange={(e) => { const valor = e.currentTarget.value.toLowerCase() || undefined; atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "encerra" ? atual : ({ ...atual, efeito: { ...atual.efeito, defesaFinal: valor } })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm" /></label>

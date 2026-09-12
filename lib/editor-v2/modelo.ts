@@ -289,7 +289,12 @@ export const treinoV2Schema = z.strictObject({
   objetivo: z.string().min(1),
   questoes: z.array(questaoTreinoV2Schema).min(1),
   defensor: z.strictObject({
-    politica: z.enum(["deterministica", "autoral"]),
+    /**
+     * §16.4. `deterministica` gira as defesas entre tentativas pela conta de
+     * `lib/lesson/defensor.ts`; `fixa` joga sempre a primeira defesa de cada resposta,
+     * na ordem que o professor deu. Sorteio não existe, e não entra por acidente.
+     */
+    politica: z.enum(["deterministica", "fixa"]),
   }),
   /** Se o trecho começa na vez do defensor, ele joga antes da primeira pergunta. */
   defesaInicial: z.strictObject({

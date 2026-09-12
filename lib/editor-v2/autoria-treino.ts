@@ -3,6 +3,7 @@ import type { Position } from "../lesson/schema.ts";
 import { quadroDoNo } from "./arvore.ts";
 import { comoId, idsDaAulaV2 } from "./ids.ts";
 import type { AulaV2, RespostaTreinoV2, TreinoV2 } from "./modelo.ts";
+import { problemaDasDefesas } from "./defesas-do-treino.ts";
 
 export type CatalogoV2 = NonNullable<AulaV2["catalogo"]>;
 export type EdicaoDeTreinoV2 = { treino: TreinoV2; catalogo?: CatalogoV2 };
@@ -105,6 +106,13 @@ export function prepararEdicaoDeTreino(
         if (resposta.efeito.tipo !== "repete") return { ok: false, campo: `${campo}.efeito`, mensagem: "um erro conhecido precisa explicar e repetir a pergunta" };
       } else if (resposta.erroId) {
         return { ok: false, campo: `${campo}.erroId`, mensagem: "uma resposta aceita não pode apontar para um erro" };
+      }
+
+      // §16.4: antes da legalidade, porque uma lista com a mesma defesa duas vezes
+      // passaria lance a lance e daria ao defensor uma variante que não existe.
+      if (resposta.efeito.tipo === "avanca") {
+        const problema = problemaDasDefesas(resposta.efeito.defesas);
+        if (problema) return { ok: false, campo: `${campo}.efeito`, mensagem: `${problema} (resposta ${ri + 1} da pergunta ${qi + 1})` };
       }
 
       for (const move of resposta.moves) {

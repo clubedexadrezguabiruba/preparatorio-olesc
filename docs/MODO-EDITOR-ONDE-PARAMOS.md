@@ -87,11 +87,22 @@ cada linha aponta a seção que conta a história inteira.
   **Roteiro de 13 itens aprovado na tela em 12/9, rodado pelo Playwright** a pedido do
   Doug — ver "fatia 6 — autoria das perguntas e respostas".
 
+- **Parada 6C, defensor jogável (§16.4)** — "⏵ Jogar na prévia" joga o treino no
+  `TreeStage`, o runtime do aluno, sem gravar nada; a defesa é estável na tentativa,
+  gira entre tentativas e pode ser fixa; o defensor abre e fecha a linha quando ela
+  começa ou acaba na vez dele; e a autoria acrescenta a segunda defesa a partir de uma
+  variante da análise. **Roteiro de 14 itens aprovado na tela pelo Playwright em 12/9**,
+  1.052 testes e 42/42 mutações. Ver "fatia 6 — o defensor jogável".
+
 **Aberto, na ordem:**
 
-1. **6C, defensor jogável** (§16.4) e **6D, propriedade** (§16.5) — derivado/personalizado/independente com diff e refazer. A
+1. **6D, propriedade** (§16.5) — derivado/personalizado/independente com diff e refazer. A
    fatia 6 permanece aberta.
-2. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
+2. **Feedback que descreve a defesa** — com duas defesas, o texto da resposta que narra
+   a defesa mente numa das tentativas. Decisão do Doug pendente (ver a seção da 6C).
+3. **Lista de lances coberta em 1366×768 de CSS** — o bloco de edição fica por cima da
+   lista; registrado como tarefa separada.
+4. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
    **importar por URL do Lichess** (§13.2), **introdução e quadros** (§7.1) e
    **aulas extras na trilha** (§22) continuam fora, sem redução de escopo.
 
@@ -99,8 +110,8 @@ cada linha aponta a seção que conta a história inteira.
 1366×768; se incomodar, o espaço sai do bloco de edição abaixo dela.
 
 **Isto não declara o editor pronto.** O roteiro de §27 tem as fatias 1 a 5 fechadas no
-código e no teste humano. A fatia 6 começou e tem uma primeira parada completa; as
-fatias 6 a 10 continuam abertas.
+código e no teste humano. A fatia 6 tem três paradas completas (6A, 6B e 6C) e a 6D
+aberta; as fatias 6 a 10 continuam abertas.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -2704,6 +2715,186 @@ conferidos; SHA-256 da N1-KPK `4be602ca…b822`, intacto.
 
 Parada 6C — defensor jogável (§16.4): jogar o treino na prévia com o runtime do aluno,
 resposta estável na tentativa, rotação entre tentativas e escolha fixa.
+
+---
+
+## Fatia 6 — o defensor jogável (parada 6C)
+
+Entregue em 12/09/2026. **Não fecha §16**: a 6D (propriedade, diff e refazer a partir da
+aula) continua aberta.
+
+### O que o professor ganha
+
+- Cada treino da lista lateral ganhou **"⏵ Jogar na prévia"**. A prévia joga o treino no
+  **`TreeStage`**, o mesmo componente em que o aluno treina, com o mesmo juiz
+  (`judgeMove`) e a mesma escolha de defesa (`lib/lesson/defensor.ts`). Não há segundo
+  player. O cabeçalho diz a tentativa, a política do defensor e que nada é gravado.
+- **A defesa é estável dentro da tentativa e gira entre tentativas**, pela conta que já
+  existia (`(base + tentativa) % n`), sem `Math.random()`. A chave do lugar é o id da
+  pergunta, e o contador é o da store, que "Começar de novo" soma.
+- **Escolha fixa:** o seletor "Defensor" da autoria troca entre "Troca de defesa a cada
+  tentativa" e "Joga sempre a primeira defesa". O botão **"Usar sempre esta"** põe a
+  defesa no topo e liga a fixa.
+- **O defensor que começa joga antes da pergunta**, e o que fecha joga antes da
+  conclusão. As duas coisas se repetem a cada tentativa.
+- **A segunda defesa** entra por **"+ Outra resposta do defensor"**, até 4 por resposta.
+- **Lance legal fora da linha** recebe *"Este lance não faz parte da linha treinada. Tente
+  outro."* e não encerra a tentativa. Erro conhecido e correta fora do método usam o
+  feedback da própria resposta.
+
+### As duas decisões do Doug (12/9/2026)
+
+- **A. Escolha fixa:** `defensor.politica` passou de `"deterministica" | "autoral"` para
+  `"deterministica" | "fixa"`. `autoral` só aparecia em dois testes; a N1-KPK usa
+  `deterministica`. Na fixa, só a primeira defesa de cada resposta chega ao runtime, e
+  uma lista de um item devolve sempre ele: a conta do defensor não mudou.
+- **B. De onde vem a segunda defesa:** só de uma **variante que a análise já tem** depois
+  do lance do aluno. Toda pergunta aponta para uma posição da análise; criar essa
+  posição por dentro do treino mexeria na fonte dele, e isso é da 6D. Sem variante, a
+  janela diz: "jogue-a no tabuleiro do capítulo, como variante". A pergunta que vem
+  depois da defesa nova nasce **sem resposta**, e a conferência não deixa salvar antes
+  de o professor escrevê-la.
+
+### Como o treino chega ao runtime (`lib/editor-v2/treino-jogavel.ts`)
+
+É tradução, como `previa.ts` faz para capítulos. Pergunta → nó; resposta aceita que
+avança ou encerra → lance esperado (`reply`/`replies`); aceita que repete →
+`authorAlternatives`; erro conhecido → `mistakes`, com o texto da resposta. Todo lance
+legal conta como "não perde", exceto o erro classificado como **perde o resultado**; os
+dois textos de reserva viram a frase da linha treinada. `termino.limite` em
+meios-lances vira lances do aluno, metade arredondada para cima.
+
+O `TreeStage` ganhou uma entrada opcional `v2` — `aberturaDoDefensor`, `defesaFinal` e
+`desenhoDoNo`, este com a cor da autoria. **A aula v1 não passa nada disso, e o caminho
+dela ficou o mesmo.** A conta que aplicava a resposta do defensor por dentro do
+componente saiu, sem mudar o comportamento, para `aplicarUci` em `lib/lesson/tree.ts`,
+usada pelas três vezes em que o defensor joga.
+
+### As regras novas da conferência, com o teste antes e depois
+
+`problemaDasDefesas` (`lib/editor-v2/defesas-do-treino.ts`), chamada por
+`prepararEdicaoDeTreino` antes da legalidade:
+
+```
+ANTES   ✖ §16.4: a mesma defesa duas vezes na mesma resposta é recusada
+            actual: true   expected: false
+        ✖ §16.4: uma resposta aceita até 4 defesas, o teto do runtime do aluno
+            actual: "a continuação não chega à posição da próxima pergunta"   expected: /até 4 defesas/
+DEPOIS  ✔ os dois (autoria-treino.test.ts: 12 de 12)
+```
+
+### Escrito
+
+| Arquivo | O que é |
+|---|---|
+| `lib/editor-v2/treino-jogavel.ts` | **novo** — o treino traduzido para o `TreeStage` |
+| `lib/editor-v2/treino-jogavel.test.ts` | **novo** — 8 testes, com o "aluno simulado" |
+| `lib/editor-v2/defesas-do-treino.ts` | **novo** — variantes oferecidas, acrescentar, remover, usar sempre esta, as duas regras |
+| `components/editor-v2/PreviaDoTreino.tsx` | **novo** — a moldura da prévia jogável |
+| `components/lesson/TreeStage.tsx` | entrada opcional `v2`; resposta do defensor por `aplicarUci` |
+| `lib/lesson/tree.ts` | `aplicarUci` |
+| `lib/editor-v2/autoria-treino.ts` | chama `problemaDasDefesas` |
+| `components/editor-v2/DialogoEditarTreino.tsx` | seletor do defensor, segunda defesa, usar sempre esta, remover defesa |
+| `components/editor-v2/EditorV2.tsx` | o botão "⏵ Jogar na prévia" e o foco devolvido |
+| `lib/editor-v2/modelo.ts` | `politica: "deterministica" \| "fixa"` |
+
+### Evidência automática
+
+**Os sete portões verdes:** tipos, lint, **1.052 testes** (eram 1.038), build, conteúdo
+(18 posições, 3 aulas, 38 consultas de tablebase do cache e 0 pela rede), **42/42
+mutações vermelhas** e repertório `--check` (nada escrito).
+
+O "aluno simulado" joga a N0 real em Node, com a segunda defesa numa variante criada por
+`ADICIONAR_LANCE`:
+
+| tentativa | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| gira | e3d3 | e3d2 | e3d3 | e3d2 | e3d3 | e3d2 |
+| fixa | e3d2 | e3d2 | e3d2 | e3d2 | e3d2 | e3d2 |
+
+Também provados em Node: errar e voltar não muda a defesa; o treino das pretas abre com
+`g2g4` e fecha com `g4g1` em mate; a tradução não altera a aula; e um teste de imports
+prova que `PreviaDoTreino` e `TreeStage` não têm caminho até gravação, ações do
+servidor, Supabase ou `LessonPlayer`.
+
+### O roteiro rodado na tela pelo Playwright — 12/9/2026
+
+Em `/editor/v2/finais/N0-LADDER`, logado, em **1366×768 de CSS de verdade** (ver a
+armadilha abaixo). Arrastes com o mouse do Playwright, que chegam como eventos confiáveis.
+
+| Item | Resultado medido |
+|---|---|
+| 1 | "⏵ Jogar na prévia" na lista; a prévia abre com "Tentativa 1" e o aviso de final certificado |
+| 2 | geometria: tabuleiro 672 px (fim em 761), painel até 765, página sem rolagem (768/768 e 1366/1366) |
+| 3 | g2→g3: "Este lance não faz parte da linha treinada. Tente outro.", torre de volta a g2, ainda Tentativa 1 |
+| 4 | g2→g4: o defensor jogou **e3→d2** sozinho; último lance destacado e3-d2 |
+| 5 | g1g3, g3g2, g2e2, g4g1: respostas d2c1, c1b1, b1a1 e "PRONTO."; "Começar de novo" → **Tentativa 2**, peças de volta |
+| 6 | fechar: foco no botão "Jogar na prévia", Desfazer apagado, "✓ salvo"; **nenhuma chamada de rede** além dos 28 arquivos estáticos desde o carregamento |
+| 7 | treino das pretas criado; na prévia, aos 150 ms torre em g2 sem último lance; aos 1,45 s o defensor jogou **g2→g4** |
+| 8 | pretas até o fim: aos 200 ms de b1a1, rei em a1 e torre em g4; aos 1,5 s o defensor jogou **g4→g1** e veio "PRONTO." |
+| 9 | recomeçar as pretas: a Tentativa 2 refaz a abertura g2→g4 |
+| 10 | variante **1… Kd3** criada arrastando o rei no tabuleiro do capítulo; "✓ salvo" |
+| 11 | "+ Outra resposta do defensor" ofereceu só "Defensor joga Kd3 (e3d3)"; escolhida: defesas e3d2 e e3d3, "Pergunta 6 · 0 respostas", rodapé "a pergunta 6 precisa de ao menos uma resposta", Salvar apagado |
+| 12 | Pergunta 6: `a1a2` recusado; g1g3 repetindo deixou o rodapé verde; salvo → "6 perguntas · personalizado" |
+| 13 | rotação: tentativas 1, 2 e 3 → rei em **d2, d3, d2**; na tentativa 4, um erro antes e depois g2→g4 → **d3** |
+| 14 | "Usar sempre esta" → e3d3 no topo, política fixa e o aviso "é a que o defensor joga sempre"; salvo; tentativas 1, 2 e 3 → **d3, d3, d3**; no disco, `politica: "fixa"` e defesas `e3d3, e3d2` |
+
+Console da sessão inteira: 0 erros e 0 avisos.
+
+### A armadilha de medição desta rodada
+
+O navegador do Playwright desta máquina roda com **`devicePixelRatio` 0,667**.
+`setViewportSize(1366, 768)` entrega **2049×1152 px de CSS**, e nem `Control+0` nem
+`Emulation.setDeviceMetricsOverride` mudaram isso. Para medir 1366×768 de CSS, use
+**`setViewportSize(911, 512)`** e confira `innerWidth`/`innerHeight` antes de acreditar
+em qualquer número. As medidas de "1366×768" das rodadas anteriores provavelmente
+foram tiradas a 2049×1152.
+
+### Dois achados da rodada, abertos
+
+- **O feedback que descreve a defesa mente numa das tentativas.** O feedback é da
+  resposta do aluno, e o modelo não tem texto por defesa. No "Treino guiado", a
+  resposta diz "O rei preto desce para d2"; na tentativa em que o rei foi a d3, o painel
+  disse isso mesmo assim. O código faz o que o contrato manda; a decisão é do Doug:
+  texto por defesa no modelo, ou um aviso na autoria quando uma resposta ganha a
+  segunda defesa.
+- **A lista de lances fica coberta em 1366×768 de CSS de verdade.** O bloco de edição
+  (y 184→756) fica por cima da lista, que não rola por dentro; o clique no `•••` da
+  posição inicial caiu no botão "??". O teclado (foco e Enter) funcionou. Não é código
+  desta parada; ficou registrada como tarefa separada, com as medidas.
+
+### O que esta parada NÃO cobre
+
+- **Final certificado na prévia** não consulta a tablebase para lance fora da linha: o
+  cache mora no disco do servidor e a tentativa não pode consultar a rede. A prévia
+  responde com a frase da linha treinada e diz isso no cabeçalho. O julgamento
+  certificado continua em §17.
+- **A defesa nova só vem de variante.** Resposta com mais de um lance usa o primeiro
+  para achar a variante; a conferência recusa se os outros não chegarem à mesma
+  pergunta.
+- **Remover uma defesa** apaga junto a pergunta que ela abria só quando essa pergunta
+  está vazia. Pergunta com resposta escrita fica, e pode ficar sem caminho até ela.
+- **O treino das pretas termina em "PRONTO."** com o rei do aluno levando mate, porque a
+  derivação da 6A diz que o ramo encerra em mate. É a receita, não o runtime; vale
+  revisar o texto de conclusão desse caso.
+- **Não houve teste de uso com uma pessoa.** O Playwright não mede hesitação; isso é do
+  teste de §20.
+- **Parada 6D — propriedade (§16.5):** fonte atual/alterada/removida, aviso e diff,
+  independente, refazer a partir da aula com snapshot, IDs de questão sobrevivendo e o
+  gate nunca reescrevendo autoria.
+- Os itens de §28 sobre defensor e respostas continuam desmarcados até a 6D fechar a
+  fatia.
+
+**Os artefatos.** Antes do ensaio já existia `content/rascunhos/lessons/N0-LADDER.json`,
+das 20:01, byte a byte igual à publicada (`943151…03c3`), sem outra sessão do Claude
+rodando. O ensaio criou `.editor/v2/N0-LADDER.json`. Os dois foram apagados depois de o
+Playwright sair da página, e a ausência foi conferida. SHA-256 de `.editor/v2/N1-KPK.json`
+antes e depois: `4be602ca…b822`.
+
+### O próximo ponto exato
+
+Parada 6D — propriedade (§16.5). Antes dela, o Doug decide o que fazer com o feedback
+que descreve a defesa.
 
 ---
 

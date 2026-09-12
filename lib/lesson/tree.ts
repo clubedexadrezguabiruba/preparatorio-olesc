@@ -1,3 +1,4 @@
+import { Chess } from "chess.js";
 import type { Expect, Lesson, Reply, TreeNode } from "./schema";
 
 /**
@@ -13,6 +14,34 @@ import type { Expect, Lesson, Reply, TreeNode } from "./schema";
 /** Lance em UCI a partir do que o tabuleiro devolve. */
 export function toUci(orig: string, dest: string, promotion?: string): string {
   return `${orig}${dest}${promotion ?? ""}`;
+}
+
+/**
+ * Um lance do defensor, jogado na posição: o que o tabuleiro e o som precisam.
+ *
+ * É mover a peça, não julgar — a mesma conta que o `TreeStage` fazia por dentro para a
+ * resposta do defensor, trazida para cá para as três vezes em que o defensor joga
+ * (resposta, abertura e fecho do treino v2) serem uma só. Lance ilegal lança: a
+ * autoria foi conferida antes, e silêncio aqui esconderia um arquivo torto.
+ */
+export function aplicarUci(fen: string, uci: string): {
+  fen: string;
+  lastMove: [string, string];
+  captura: boolean;
+  xeque: boolean;
+} {
+  const game = new Chess(fen);
+  const lance = game.move({
+    from: uci.slice(0, 2),
+    to: uci.slice(2, 4),
+    promotion: uci.length > 4 ? uci.slice(4) : undefined,
+  });
+  return {
+    fen: game.fen(),
+    lastMove: [uci.slice(0, 2), uci.slice(2, 4)],
+    captura: Boolean(lance.captured),
+    xeque: game.isCheck(),
+  };
 }
 
 /**

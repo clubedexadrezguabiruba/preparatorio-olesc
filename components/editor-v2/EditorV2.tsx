@@ -25,6 +25,7 @@ import { DialogoEditarTreino } from "@/components/editor-v2/DialogoEditarTreino"
 import { PaletaDeDesenho } from "@/components/editor-v2/PaletaDeDesenho";
 import { Dialogo } from "@/components/editor-v2/Dialogo";
 import { Previa } from "@/components/editor-v2/Previa";
+import { PreviaDoTreino } from "@/components/editor-v2/PreviaDoTreino";
 import {
   podePreverDaqui,
   previaDaAula,
@@ -69,6 +70,7 @@ import type {
 import type { ResolucoesV2 } from "@/lib/editor-v2/impacto";
 import { novoIdDeNarracao, podeNarrar } from "@/lib/editor-v2/narracoes";
 import type { TreinosPreparadosV2 } from "@/lib/editor-v2/treinos";
+import { treinoJogavel, type TreinoJogavel } from "@/lib/editor-v2/treino-jogavel";
 import { revisoesPendentesV2 } from "@/lib/editor-v2/revisoes";
 import { FEN_INICIAL_PADRAO, problemasDaAulaV2, validarAulaV2, type AnaliseV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
 import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/editor-v2/recuperacao";
@@ -177,6 +179,10 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
    */
   const [escolhendoPrevia, setEscolhendoPrevia] = useState(false);
   const [previa, setPrevia] = useState<PreviaV2 | null>(null);
+  /** §16.4: o treino sendo jogado na prévia, traduzido no clique — ou por que não deu. */
+  const [jogandoTreino, setJogandoTreino] = useState<
+    { treinoId: string; titulo: string; perfil: "final-certificado" | "linha-autoral"; jogavel: TreinoJogavel | null; erro?: string } | null
+  >(null);
   /**
    * A caixa da narração nova, aberta em qual lance de qual capítulo.
    *
@@ -296,7 +302,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
    */
   const janelaAberta = importando || adicionando || trocandoPosicao || exportando
     || escolhendoPrevia || previa !== null
-    || criandoTreino !== null || editandoTreino !== null
+    || criandoTreino !== null || editandoTreino !== null || jogandoTreino !== null
     || duplicandoCapitulo !== null || excluindoCapitulo !== null || acaoDoLance !== null || cortando !== null;
   const estadoDoTeclado = useRef({ analise, janelaAberta });
   useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta }; });
@@ -1031,6 +1037,30 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
 
       {previa ? <Previa previa={previa} aoFechar={fecharPrevia} /> : null}
 
+      {jogandoTreino?.jogavel ? (
+        <PreviaDoTreino
+          treinoId={jogandoTreino.treinoId}
+          titulo={jogandoTreino.titulo}
+          perfil={jogandoTreino.perfil}
+          jogavel={jogandoTreino.jogavel}
+          aoFechar={() => {
+            const alvo = jogandoTreino.treinoId;
+            setJogandoTreino(null);
+            requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(`[data-jogar-treino-id="${alvo}"]`)?.focus());
+          }}
+        />
+      ) : null}
+      {jogandoTreino && !jogandoTreino.jogavel ? (
+        <Dialogo
+          titulo="Este treino ainda não pode ser jogado"
+          descricao={jogandoTreino.erro ?? "a tradução do treino falhou"}
+          aoFechar={() => setJogandoTreino(null)}
+          rodape={<button type="button" onClick={() => setJogandoTreino(null)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Fechar</button>}
+        >
+          <p className="text-sm text-tinta-media">Abra a autoria do treino e corrija o que o rodapé apontar.</p>
+        </Dialogo>
+      ) : null}
+
       <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[14rem_minmax(20rem,38rem)_minmax(18rem,1fr)]">
         <aside className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
           <h2 className="text-sm font-semibold text-tinta">Capítulos</h2>
@@ -1068,6 +1098,20 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
                         {treino.ladoAluno === "white" ? "Brancas" : "Pretas"} · {treino.questoes.length} pergunta{treino.questoes.length === 1 ? "" : "s"} · {treino.propriedade === "derivado" ? "ligado à aula" : treino.propriedade}
                       </span>
                       <span className="mt-1 block text-metodo-tinta">Abrir autoria</span>
+                    </button>
+                    <button
+                      type="button"
+                      data-jogar-treino-id={treino.id}
+                      onClick={() => {
+                        try {
+                          setJogandoTreino({ treinoId: treino.id, titulo: treino.titulo, perfil: treino.perfil, jogavel: treinoJogavel(historico.presente, treino.id, positions) });
+                        } catch (erro) {
+                          setJogandoTreino({ treinoId: treino.id, titulo: treino.titulo, perfil: treino.perfil, jogavel: null, erro: erro instanceof Error ? erro.message : undefined });
+                        }
+                      }}
+                      className="foco mt-1 w-full rounded-md border border-borda px-2 py-1 text-left text-xs text-tinta hover:bg-carta-toque"
+                    >
+                      ⏵ Jogar na prévia
                     </button>
                   </li>
                 ))}
