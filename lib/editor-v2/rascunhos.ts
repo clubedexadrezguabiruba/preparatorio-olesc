@@ -1,15 +1,23 @@
 import path from "node:path";
-import { closeSync, existsSync, mkdirSync, openSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { closeSync, existsSync, mkdirSync, openSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { caminhoDeAula, conflito, escreverAtomico, hashDoTexto, lerConteudo, serializar } from "../editor/rascunhos.ts";
 import { editorLigado } from "../editor/local.ts";
-import { completarAulaV2Legada, validarAulaV2, type AulaV2 } from "./modelo.ts";
+import { aulaIdV2Schema, completarAulaV2Legada, validarAulaV2, type AulaV2 } from "./modelo.ts";
 
 const PASTA_V2 = path.join(".editor", "v2");
 
 export type DocumentoV2 = { aula: AulaV2; texto: string; hash: string };
 
+/**
+ * O arquivo desta aula na pasta do v2.
+ *
+ * O schema é o do v2, e não o das aulas do curso: desde "Nova aula" (§5.2) esta
+ * pasta guarda também aulas extras, cujo id começa com `EX-`. As duas travas de
+ * `caminhoDeAula` continuam valendo — regex sem barra nem ponto, e conferência
+ * do caminho resolvido.
+ */
 function caminho(id: string, raiz = process.cwd()): string {
-  return caminhoDeAula(id, PASTA_V2, raiz);
+  return caminhoDeAula(id, PASTA_V2, raiz, aulaIdV2Schema);
 }
 
 function processoVivo(pid: number): boolean {
@@ -81,4 +89,21 @@ export function gravarDocumentoV2(id: string, cru: unknown, baseHash: string | n
 
 export function documentoV2Existe(id: string, raiz = process.cwd()): boolean {
   return existsSync(caminho(id, raiz));
+}
+
+/**
+ * Os ids que já têm documento v2 em disco.
+ *
+ * Serve a duas telas: o índice do editor, que precisa listar a aula criada por
+ * "Nova aula" mesmo antes de ela ter um arquivo v1 por trás; e a própria criação,
+ * que confere se o id novo já está ocupado. Sem isto, uma aula recém-criada
+ * existiria em disco e sumiria da lista — alcançável só por URL digitada.
+ */
+export function idsDeDocumentosV2(raiz = process.cwd()): string[] {
+  const pasta = path.join(raiz, PASTA_V2);
+  if (!existsSync(pasta)) return [];
+  return readdirSync(pasta)
+    .filter((nome) => nome.endsWith(".json"))
+    .map((nome) => nome.slice(0, -".json".length))
+    .sort();
 }

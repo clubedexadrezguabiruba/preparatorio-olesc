@@ -27,6 +27,27 @@
  * desfaz o lance ao voltar — o mesmo desenho de `mapaDaAnalise`, pelo mesmo
  * motivo: cada lance é jogado uma vez, e cada irmão parte da posição do pai.
  *
+ * ## A cascata: quando o chão que muda é o de outra árvore
+ *
+ * Uma análise pode **começar num nó desta** — é o que "começar desta posição"
+ * (§8.3) cria, com `inicio: { tipo: "referencia" }`. Quando a posição inicial da
+ * mãe muda, o nó de origem da filha continua existindo, mas a posição que ele
+ * representa é outra: a filha mudou de tabuleiro junto, sem que ninguém tocasse
+ * nela. A árvore dela precisa ser revalidada com a **mesma** regra — poda no
+ * primeiro ilegal de cada ramo, irmãos preservados, sobreviventes marcados para
+ * revisão —, na mesma transação, e o mesmo vale para as netas.
+ *
+ * Enquanto "começar desta posição" não existia, nenhum conteúdo caía nesse caso
+ * e a troca simplesmente **bloqueava**. Agora que existe, bloquear seria
+ * proibir o professor de mexer na posição inicial de qualquer capítulo do qual
+ * ele tenha derivado um segundo — exatamente o gesto que a função foi feita para
+ * permitir.
+ *
+ * Continua bloqueando **um** caso, e ele é diferente: quando o nó de origem da
+ * filha é justamente um dos podados. Aí a filha não mudou de chão — ela ficou
+ * **sem** chão, e §5 manda devolver a decisão ao professor: cancelar, remover a
+ * filha ou materializá-la como independente.
+ *
  * ## Por que o impacto é calculado antes, e devolvido inteiro
  *
  * §5: "a interface mostra nomes e contagens reais". Não "3 itens afetados" —
@@ -35,17 +56,6 @@
  * funções: `calcularTrocaDePosicao` só lê, e `aplicarTrocaDePosicao` recebe o
  * plano já calculado e escreve. É o mesmo par de `novo-capitulo.ts`, e pelo
  * mesmo motivo — o que o Refazer repete é o plano, não um sorteio novo.
- *
- * ## Por que existem bloqueios, e não só podas
- *
- * Um nó podado pode estar sendo apontado **de fora da análise**: por um treino,
- * por um quadro de introdução, por outra análise que começa nele. §5 é
- * explícito sobre esse caso: "excluir análise ou subárvore referenciada exige
- * cancelar, remover explicitamente os dependentes ou materializar os
- * dependentes como independentes". Nenhuma das três é uma coisa que a máquina
- * possa escolher sozinha. Então a troca **para**, diz o nome de quem depende, e
- * devolve a decisão a quem é dela. Um editor que apagasse o treino junto
- * estaria decidindo pelo professor a parte mais cara da aula.
  *
  * ## O que a máquina sabe e o que ela não sabe
  *
@@ -59,17 +69,29 @@ import { Chess } from "chess.js";
 import { problemaDaPosicaoMontada } from "../chess/fen.ts";
 import { fenSchema, type Position } from "../lesson/schema.ts";
 import { fenInicialDaAnalise, mapaDaAnalise } from "./arvore.ts";
+import {
+  capitulosTocados,
+  dependentesDasPerdas,
+  narracoesPerdidas,
+  reabrirTreinos,
+  treinosQuePisamEm,
+  type CapituloTocadoV2,
+  type PerdasPorAnaliseV2,
+  type TreinoAfetadoV2,
+} from "./impacto.ts";
 import type {
   AnaliseV2,
   AulaV2,
   CapituloV2,
   NoV2,
   RevisaoPendenteV2,
-  TreinoV2,
 } from "./modelo.ts";
 
 /** A marca única desta operação. Ver `revisaoPendenteV2Schema`. */
 const MARCA: RevisaoPendenteV2 = { motivo: "posicao-inicial-trocada" };
+
+/** Como esta edição destrói, em português, para a frase do dependente. */
+const VERBO = "a posição nova torna ilegal";
 
 export type PedidoDeTrocaV2 = {
   /** A análise cuja posição inicial muda. É a do capítulo aberto. */
@@ -98,20 +120,26 @@ export type BloqueioDaTrocaV2 = {
   motivo: string;
 };
 
-export type CapituloAfetadoV2 = {
-  id: string;
-  titulo: string;
-  /** O percurso do capítulo perdeu o fim porque ele passava por um lance podado. */
-  percursoCortado: boolean;
-  /** O capítulo começava num nó podado e volta a começar na raiz. */
-  inicioReiniciado: boolean;
-};
+export type CapituloAfetadoV2 = CapituloTocadoV2;
 
-export type TreinoAfetadoV2 = {
-  id: string;
-  titulo: string;
-  certificacaoReaberta: boolean;
-  fonteAlterada: boolean;
+export type { TreinoAfetadoV2 };
+
+/**
+ * A poda de **uma** árvore: a mãe, ou uma das filhas que mudaram de chão junto.
+ *
+ * As filhas aparecem com o nome do capítulo delas porque é assim que o professor
+ * as conhece — ele não sabe que existe uma "análise `analise-final-de-torre`";
+ * ele sabe que existe um capítulo com esse nome.
+ */
+export type ArvoreRevalidadaV2 = {
+  analiseId: string;
+  /** O título do capítulo que mostra esta análise, ou o id quando não há nenhum. */
+  nome: string;
+  fenAnterior: string;
+  fenNova: string;
+  podas: PodaDaTrocaV2[];
+  nosPodados: string[];
+  nosMarcados: string[];
 };
 
 /**
@@ -122,10 +150,15 @@ export type ImpactoDaTrocaV2 = {
   fenAnterior: string;
   fenNova: string;
   podas: PodaDaTrocaV2[];
-  /** Todos os nós que somem, inclusive as continuações dos lances podados. */
+  /** Todos os nós da análise-mãe que somem, inclusive as continuações. */
   nosPodados: string[];
-  /** Nós que sobrevivem e têm comentário ou desenho: ficam marcados para revisão. */
+  /** Nós da mãe que sobrevivem e têm comentário ou desenho: ficam marcados. */
   nosMarcados: string[];
+  /**
+   * As análises que começam nesta e foram revalidadas junto — §8.3/§9.
+   * Vazia no caso comum, em que ninguém deriva deste capítulo.
+   */
+  cascatas: ArvoreRevalidadaV2[];
   narracoesRemovidas: Array<{ capituloId: string; capitulo: string; narracaoId: string; texto: string }>;
   narracoesMarcadas: Array<{ capituloId: string; capitulo: string; narracaoId: string }>;
   quadrosMarcados: Array<{ introducaoId: string; introducao: string; quadroId: string }>;
@@ -168,11 +201,16 @@ function subarvore(analise: AnaliseV2, raiz: string): string[] {
  * Um tabuleiro só, em profundidade, desfazendo o lance ao voltar — cada irmão
  * parte da posição do pai, que é o que faz um ramo ilegal não contaminar o
  * vizinho.
+ *
+ * Devolve também a **FEN de cada nó sobrevivente**. Ela não é luxo: é o que a
+ * cascata precisa para saber em que posição uma análise filha passa a começar,
+ * e calculá-la depois obrigaria a rejogar a árvore uma segunda vez.
  */
 function podar(analise: AnaliseV2, fenNova: string, nomeDoLance: (id: string) => string) {
   const jogo = new Chess(fenNova);
   const podados = new Set<string>();
   const podas: PodaDaTrocaV2[] = [];
+  const fens = new Map<string, string>([[analise.raizId, jogo.fen()]]);
 
   const andar = (id: string) => {
     for (const filhoId of analise.nos[id].filhos) {
@@ -196,12 +234,13 @@ function podar(analise: AnaliseV2, fenNova: string, nomeDoLance: (id: string) =>
         podas.push({ nodeId: filhoId, lance: nomeDoLance(filhoId), nosRemovidos: caem.length });
         continue;
       }
+      fens.set(filhoId, jogo.fen());
       andar(filhoId);
       jogo.undo();
     }
   };
   andar(analise.raizId);
-  return { podados, podas };
+  return { podados, podas, fens };
 }
 
 /**
@@ -221,6 +260,22 @@ function aindaUsam(aula: AulaV2, positionId: string, analiseId: string, treinosA
     (item) => !treinosAfetados.has(item.id) && item.certificacao?.positionId === positionId,
   );
   return outrasAnalises || praticas || certificacoes;
+}
+
+/** O nome de cada lance como o painel o escreve — `12… Rd6` —, caindo para o UCI. */
+function nomeadorDeLances(aula: AulaV2, analise: AnaliseV2, positions: Record<string, Position>) {
+  try {
+    const mapa = mapaDaAnalise(aula, analise.id, positions);
+    return (id: string) => {
+      const san = mapa.sans[id];
+      if (!san) return analise.nos[id]?.uci ?? id;
+      const rotulo = mapa.rotulos[id];
+      return rotulo ? `${rotulo} ${san}` : san;
+    };
+  } catch {
+    // Sem mapa, o UCI. Nenhum nome é melhor do que um nome errado.
+    return (id: string) => analise.nos[id]?.uci ?? id;
+  }
 }
 
 /**
@@ -257,119 +312,99 @@ export function calcularTrocaDePosicao(
     return { ok: false, campo: "posicao", mensagem: "esta já é a posição inicial deste capítulo — não há o que trocar" };
   }
 
-  // Os nomes dos lances vêm da posição **antiga**, porque é ela que o professor
-  // está vendo no painel enquanto decide. Se a árvore já estiver quebrada, o
-  // mapa não sai; então o nome cai para o UCI, que é sempre verdade.
-  let nomeDoLance = (id: string) => analise.nos[id]?.uci ?? id;
-  try {
-    const mapa = mapaDaAnalise(aula, analise.id, positions);
-    nomeDoLance = (id) => {
-      const san = mapa.sans[id];
-      if (!san) return analise.nos[id]?.uci ?? id;
-      const rotulo = mapa.rotulos[id];
-      return rotulo ? `${rotulo} ${san}` : san;
-    };
-  } catch {
-    // Sem mapa, o UCI. Nenhum nome é melhor do que um nome errado.
-  }
+  /*
+   * A fila da cascata. A mãe entra primeiro; cada árvore processada descobre as
+   * filhas que começam nela **num nó que sobreviveu** e as enfileira com a
+   * posição nova delas já resolvida. Filha cujo nó de origem foi podado não
+   * entra aqui: ela virou dependente, e dependente é decisão do professor.
+   *
+   * `visitadas` existe porque o validador aceita — e acusa — ciclos entre
+   * inícios de análises; percorrer um deles aqui seria um laço infinito num
+   * documento que o professor ainda não consertou.
+   */
+  const fila: Array<{ analise: AnaliseV2; fenNova: string }> = [{ analise, fenNova }];
+  const visitadas = new Set<string>();
+  const revalidadas: ArvoreRevalidadaV2[] = [];
+  const perdas: PerdasPorAnaliseV2 = new Map();
 
-  const { podados, podas } = podar(analise, fenNova, nomeDoLance);
+  while (fila.length > 0) {
+    const { analise: atual, fenNova: fen } = fila.shift()!;
+    if (visitadas.has(atual.id)) continue;
+    visitadas.add(atual.id);
 
-  const capitulosDaAnalise = aula.capitulos.filter((item) => item.analiseId === analise.id);
+    // O nome de cada lance vem da posição **antiga**, porque é ela que o
+    // professor está vendo no painel enquanto decide.
+    const { podados, podas, fens } = podar(atual, fen, nomeadorDeLances(aula, atual, positions));
+    perdas.set(atual.id, podados);
 
-  const bloqueios: BloqueioDaTrocaV2[] = [];
-
-  for (const treino of aula.treinos) {
-    const apontados = [
-      ...(treino.inicio.analiseId === analise.id ? [treino.inicio.nodeId] : []),
-      ...treino.questoes.filter((q) => q.posicao.analiseId === analise.id).map((q) => q.posicao.nodeId),
-      ...(treino.origem?.analiseId === analise.id ? treino.origem.nodeIds : []),
-    ];
-    // **Sem repetidos.** As três listas se sobrepõem de propósito — a receita de
-    // um treino derivado costuma conter o nó de início e os das questões —, e
-    // somá-las cruas faria a tela dizer "usa 12 lances" de uma árvore que só tem
-    // 8 para perder. Contagem que não bate com o que o professor vê no painel
-    // ensina a desconfiar do resto do aviso.
-    const perdidos = new Set(apontados.filter((id) => podados.has(id)));
-    if (perdidos.size > 0) {
-      bloqueios.push({
-        tipo: "treino",
-        nome: treino.titulo,
-        motivo: `usa ${perdidos.size === 1 ? "um lance que" : `${perdidos.size} lances que`} a posição nova torna ilegal`,
-      });
+    let fenDeAntes = "";
+    try {
+      fenDeAntes = fenInicialDaAnalise(aula, atual, positions);
+    } catch {
+      fenDeAntes = "";
     }
-  }
 
-  for (const introducao of aula.introducoes) {
-    for (const quadro of introducao.quadros) {
-      if (quadro.posicao.tipo !== "referencia" || quadro.posicao.origem.analiseId !== analise.id) continue;
-      if (podados.has(quadro.posicao.origem.nodeId)) {
-        bloqueios.push({
-          tipo: "introducao",
-          nome: introducao.titulo,
-          motivo: "um dos seus quadros mostra um lance que a posição nova torna ilegal",
-        });
-      }
-    }
-  }
+    // Sobreviventes com texto ou desenho: legais, e nem por isso ainda verdadeiros.
+    const nosMarcados = Object.values(atual.nos)
+      .filter((no) => !podados.has(no.id) && (no.comentario !== undefined || no.desenhos !== undefined))
+      .map((no) => no.id);
 
-  for (const outra of aula.analises) {
-    if (outra.id === analise.id || outra.inicio.tipo !== "referencia") continue;
-    if (outra.inicio.origem.analiseId !== analise.id) continue;
-    const nome = aula.capitulos.find((c) => c.analiseId === outra.id)?.titulo ?? outra.id;
-    bloqueios.push({
-      tipo: "analise",
-      nome,
-      motivo: podados.has(outra.inicio.origem.nodeId)
-        ? "começa num lance que a posição nova torna ilegal"
-        : "começa numa posição deste capítulo, e mudaria de tabuleiro junto — desfaça essa dependência antes",
+    revalidadas.push({
+      analiseId: atual.id,
+      nome: aula.capitulos.find((c) => c.analiseId === atual.id)?.titulo ?? atual.id,
+      fenAnterior: fenDeAntes,
+      fenNova: fen,
+      podas,
+      nosPodados: [...podados],
+      nosMarcados,
     });
+
+    for (const filha of aula.analises) {
+      if (filha.id === atual.id || filha.inicio.tipo !== "referencia") continue;
+      if (filha.inicio.origem.analiseId !== atual.id) continue;
+      const chaoNovo = fens.get(filha.inicio.origem.nodeId);
+      // Sem FEN nova, o nó de origem foi podado: a filha ficou sem chão, e isso
+      // é dependência, não cascata. `dependentesDasPerdas` a apanha logo abaixo.
+      if (chaoNovo) fila.push({ analise: filha, fenNova: chaoNovo });
+    }
   }
 
-  // Sobreviventes com texto ou desenho: legais, e nem por isso ainda verdadeiros.
-  const nosMarcados = Object.values(analise.nos)
-    .filter((no) => !podados.has(no.id) && (no.comentario !== undefined || no.desenhos !== undefined))
-    .map((no) => no.id);
+  const mae = revalidadas[0];
+  const cascatas = revalidadas.slice(1);
 
-  const narracoesRemovidas: ImpactoDaTrocaV2["narracoesRemovidas"] = [];
+  const dependentes = dependentesDasPerdas(aula, perdas, positions, VERBO);
+  const bloqueios: BloqueioDaTrocaV2[] = dependentes.map((dependente) => ({
+    tipo: dependente.tipo,
+    nome: dependente.nome,
+    motivo: dependente.motivo,
+  }));
+
+  const analisesAfetadas = new Set(revalidadas.map((item) => item.analiseId));
+
+  const narracoesRemovidas = narracoesPerdidas(aula, perdas);
+  const removidas = new Set(narracoesRemovidas.map((item) => item.narracaoId));
   const narracoesMarcadas: ImpactoDaTrocaV2["narracoesMarcadas"] = [];
-  for (const capitulo of capitulosDaAnalise) {
+  for (const capitulo of aula.capitulos) {
+    if (!analisesAfetadas.has(capitulo.analiseId)) continue;
     for (const narracao of capitulo.narracoes) {
-      if (podados.has(narracao.nodeId)) {
-        narracoesRemovidas.push({ capituloId: capitulo.id, capitulo: capitulo.titulo, narracaoId: narracao.id, texto: narracao.texto });
-      } else {
-        narracoesMarcadas.push({ capituloId: capitulo.id, capitulo: capitulo.titulo, narracaoId: narracao.id });
-      }
+      if (removidas.has(narracao.id)) continue;
+      narracoesMarcadas.push({ capituloId: capitulo.id, capitulo: capitulo.titulo, narracaoId: narracao.id });
     }
   }
 
   const quadrosMarcados: ImpactoDaTrocaV2["quadrosMarcados"] = [];
   for (const introducao of aula.introducoes) {
     for (const quadro of introducao.quadros) {
-      if (quadro.posicao.tipo !== "referencia" || quadro.posicao.origem.analiseId !== analise.id) continue;
-      if (podados.has(quadro.posicao.origem.nodeId)) continue;
+      if (quadro.posicao.tipo !== "referencia") continue;
+      const origem = quadro.posicao.origem;
+      if (!analisesAfetadas.has(origem.analiseId)) continue;
+      if (perdas.get(origem.analiseId)?.has(origem.nodeId)) continue;
       quadrosMarcados.push({ introducaoId: introducao.id, introducao: introducao.titulo, quadroId: quadro.id });
     }
   }
 
-  const capitulosAfetados: CapituloAfetadoV2[] = capitulosDaAnalise.map((capitulo) => ({
-    id: capitulo.id,
-    titulo: capitulo.titulo,
-    inicioReiniciado: podados.has(capitulo.inicioNodeId),
-    percursoCortado: capitulo.caminho.some((id) => podados.has(id)),
-  }));
-
-  const treinosAfetados: TreinoAfetadoV2[] = aula.treinos
-    .filter((treino) =>
-      treino.inicio.analiseId === analise.id ||
-      treino.questoes.some((q) => q.posicao.analiseId === analise.id) ||
-      treino.origem?.analiseId === analise.id)
-    .map((treino) => ({
-      id: treino.id,
-      titulo: treino.titulo,
-      certificacaoReaberta: treino.certificacao !== undefined && treino.certificacao.estado !== "pendente",
-      fonteAlterada: treino.origem !== undefined && treino.fonte === "atual",
-    }));
+  const capitulosAfetados = capitulosTocados(aula, perdas);
+  const treinosAfetados = treinosQuePisamEm(aula, analisesAfetadas);
 
   const positionIdAnterior = analise.inicio.tipo === "posicao" ? analise.inicio.positionId : null;
   const aindaEmUso = positionIdAnterior !== null
@@ -383,9 +418,10 @@ export function calcularTrocaDePosicao(
       impacto: {
         fenAnterior,
         fenNova,
-        podas,
-        nosPodados: [...podados],
-        nosMarcados,
+        podas: mae.podas,
+        nosPodados: mae.nosPodados,
+        nosMarcados: mae.nosMarcados,
+        cascatas,
         narracoesRemovidas,
         narracoesMarcadas,
         quadrosMarcados,
@@ -413,9 +449,9 @@ function comRevisao<T extends { revisao?: RevisaoPendenteV2 }>(item: T): T {
  *
  * A aula nova é montada inteira numa cópia; a que entrou nunca é tocada. Com o
  * histórico guardando documentos inteiros, isto é o que faz a troca ser uma
- * transação só: um Ctrl+Z devolve os lances podados, as narrações apagadas, as
- * marcas de revisão e a proveniência, todos juntos — e o Refazer devolve
- * exatamente os mesmos ids, porque o plano é o mesmo objeto.
+ * transação só: um Ctrl+Z devolve os lances podados **da mãe e das filhas**, as
+ * narrações apagadas, as marcas de revisão e a proveniência, todos juntos — e o
+ * Refazer devolve exatamente os mesmos ids, porque o plano é o mesmo objeto.
  */
 export function aplicarTrocaDePosicao(aula: AulaV2, plano: PlanoDaTrocaV2): AplicacaoDaTrocaV2 {
   const indice = aula.analises.findIndex((item) => item.id === plano.analiseId);
@@ -425,25 +461,42 @@ export function aplicarTrocaDePosicao(aula: AulaV2, plano: PlanoDaTrocaV2): Apli
     return { ok: false, mensagem: `não dá para trocar a posição enquanto houver quem dependa do que seria apagado: ${nomes}. Nada foi mudado.` };
   }
 
-  const analise = aula.analises[indice];
-  const podados = new Set(plano.impacto.nosPodados);
-  const marcados = new Set(plano.impacto.nosMarcados);
+  /**
+   * A mãe e as filhas, na mesma lista. Só a mãe troca de `inicio`: a filha
+   * continua começando **no mesmo nó** da mãe — o que mudou foi a posição que
+   * esse nó representa, e reescrever a referência dela apagaria justamente a
+   * dependência que o professor pediu quando fez "começar desta posição".
+   */
+  const revalidadas = [
+    { analiseId: plano.analiseId, fen: plano.fen, nosPodados: plano.impacto.nosPodados, nosMarcados: plano.impacto.nosMarcados },
+    ...plano.impacto.cascatas.map((item) => ({ analiseId: item.analiseId, fen: null, nosPodados: item.nosPodados, nosMarcados: item.nosMarcados })),
+  ];
+  const porAnalise = new Map(revalidadas.map((item) => [item.analiseId, item]));
 
-  const nos: Record<string, NoV2> = {};
-  for (const no of Object.values(analise.nos)) {
-    if (podados.has(no.id)) continue;
-    const filhos = no.filhos.filter((id) => !podados.has(id));
-    const base: NoV2 = { ...no, filhos };
-    nos[no.id] = marcados.has(no.id) ? comRevisao(base) : base;
-  }
-
-  const proxima: AnaliseV2 = { ...analise, inicio: { tipo: "fen", fen: plano.fen }, nos };
+  const analises = aula.analises.map((analise) => {
+    const revalidada = porAnalise.get(analise.id);
+    if (!revalidada) return analise;
+    const podados = new Set(revalidada.nosPodados);
+    const marcados = new Set(revalidada.nosMarcados);
+    const nos: Record<string, NoV2> = {};
+    for (const no of Object.values(analise.nos)) {
+      if (podados.has(no.id)) continue;
+      const base: NoV2 = { ...no, filhos: no.filhos.filter((id) => !podados.has(id)) };
+      nos[no.id] = marcados.has(no.id) ? comRevisao(base) : base;
+    }
+    return revalidada.fen
+      ? { ...analise, inicio: { tipo: "fen" as const, fen: revalidada.fen }, nos }
+      : { ...analise, nos };
+  });
 
   const capitulos: CapituloV2[] = aula.capitulos.map((capitulo) => {
-    if (capitulo.analiseId !== analise.id) return capitulo;
+    const revalidada = porAnalise.get(capitulo.analiseId);
+    if (!revalidada) return capitulo;
+    const podados = new Set(revalidada.nosPodados);
+    const raizId = aula.analises.find((item) => item.id === capitulo.analiseId)!.raizId;
     // O nó de partida podado leva o percurso inteiro junto: tudo o que vinha
     // depois dele era descendente dele, e descendente de nó podado foi podado.
-    const inicioNodeId = podados.has(capitulo.inicioNodeId) ? proxima.raizId : capitulo.inicioNodeId;
+    const inicioNodeId = podados.has(capitulo.inicioNodeId) ? raizId : capitulo.inicioNodeId;
     const corte = capitulo.caminho.findIndex((id) => podados.has(id));
     const caminho = podados.has(capitulo.inicioNodeId)
       ? []
@@ -458,31 +511,14 @@ export function aplicarTrocaDePosicao(aula: AulaV2, plano: PlanoDaTrocaV2): Apli
     };
   });
 
+  const analisesAfetadas = new Set(revalidadas.map((item) => item.analiseId));
   const introducoes = aula.introducoes.map((introducao) => ({
     ...introducao,
     quadros: introducao.quadros.map((quadro) =>
-      quadro.posicao.tipo === "referencia" && quadro.posicao.origem.analiseId === analise.id
+      quadro.posicao.tipo === "referencia" && analisesAfetadas.has(quadro.posicao.origem.analiseId)
         ? comRevisao(quadro)
         : quadro),
   }));
-
-  const afetados = new Set(plano.impacto.treinosAfetados.map((item) => item.id));
-  const treinos: TreinoV2[] = aula.treinos.map((treino) => {
-    if (!afetados.has(treino.id)) return treino;
-    return {
-      ...treino,
-      // §10 do plano final: a revisão da avaliação volta a ficar pendente quando
-      // a avaliação muda de posição. Título e lugar no fluxo não fariam isso;
-      // o chão debaixo das questões, sim.
-      revisaoAvaliacao: "pendente",
-      // §8: "um treino pode ser personalizado e ter fonte alterada
-      // simultaneamente" — por isso `fonte` muda e `propriedade` não.
-      ...(treino.origem && treino.fonte === "atual" ? { fonte: "alterada" as const } : {}),
-      // §9 da funcional: "reabre proveniência/certificação vinculada à posição
-      // antiga". Um selo conferido contra outro tabuleiro não é um selo.
-      ...(treino.certificacao ? { certificacao: { ...treino.certificacao, estado: "pendente" as const } } : {}),
-    };
-  });
 
   const proveniencia = plano.impacto.provenienciaReaberta
     ? aula.proveniencia.map((item) =>
@@ -491,18 +527,19 @@ export function aplicarTrocaDePosicao(aula: AulaV2, plano: PlanoDaTrocaV2): Apli
           : item)
     : aula.proveniencia;
 
-  return {
-    ok: true,
-    aula: {
-      ...aula,
-      analises: aula.analises.map((item, i) => (i === indice ? proxima : item)),
-      capitulos,
-      introducoes,
-      treinos,
-      proveniencia,
-    },
-  };
+  const comTreinos = reabrirTreinos(
+    { ...aula, analises, capitulos, introducoes, proveniencia },
+    new Set(plano.impacto.treinosAfetados.map((item) => item.id)),
+  );
+
+  return { ok: true, aula: comTreinos };
 }
+
+/** Onde uma marca de revisão pode estar — os três lugares que o schema aceita. */
+export type AlvoDeRevisaoV2 =
+  | { analiseId: string; nodeId: string }
+  | { capituloId: string; narracaoId: string }
+  | { introducaoId: string; quadroId: string };
 
 /**
  * Tira a marca de revisão de um nó, de uma narração ou de um quadro.
@@ -511,8 +548,13 @@ export function aplicarTrocaDePosicao(aula: AulaV2, plano: PlanoDaTrocaV2): Apli
  * revisões sejam resolvidas antes de publicar, e resolver é um gesto do
  * professor — ele releu, e o texto está de pé. É um comando como outro
  * qualquer, e portanto desfazível.
+ *
+ * O quadro de introdução entrou depois dos outros dois: ele era marcado pela
+ * troca e **não tinha como ser desmarcado**, porque o editor de introdução ainda
+ * não tem tela. A lista de revisões pendentes (§19.2) é essa tela — e sem este
+ * caso ela teria itens que ninguém consegue resolver.
  */
-export function semRevisao(aula: AulaV2, alvo: { analiseId: string; nodeId: string } | { capituloId: string; narracaoId: string }): AulaV2 {
+export function semRevisao(aula: AulaV2, alvo: AlvoDeRevisaoV2): AulaV2 {
   if ("nodeId" in alvo) {
     return {
       ...aula,
@@ -526,15 +568,32 @@ export function semRevisao(aula: AulaV2, alvo: { analiseId: string; nodeId: stri
       }),
     };
   }
+  if ("narracaoId" in alvo) {
+    return {
+      ...aula,
+      capitulos: aula.capitulos.map((capitulo) => {
+        if (capitulo.id !== alvo.capituloId) return capitulo;
+        return {
+          ...capitulo,
+          narracoes: capitulo.narracoes.map((narracao) => {
+            if (narracao.id !== alvo.narracaoId || !narracao.revisao) return narracao;
+            const limpo = { ...narracao };
+            delete limpo.revisao;
+            return limpo;
+          }),
+        };
+      }),
+    };
+  }
   return {
     ...aula,
-    capitulos: aula.capitulos.map((capitulo) => {
-      if (capitulo.id !== alvo.capituloId) return capitulo;
+    introducoes: aula.introducoes.map((introducao) => {
+      if (introducao.id !== alvo.introducaoId) return introducao;
       return {
-        ...capitulo,
-        narracoes: capitulo.narracoes.map((narracao) => {
-          if (narracao.id !== alvo.narracaoId || !narracao.revisao) return narracao;
-          const limpo = { ...narracao };
+        ...introducao,
+        quadros: introducao.quadros.map((quadro) => {
+          if (quadro.id !== alvo.quadroId || !quadro.revisao) return quadro;
+          const limpo = { ...quadro };
           delete limpo.revisao;
           return limpo;
         }),

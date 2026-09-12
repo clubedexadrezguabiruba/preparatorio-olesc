@@ -12,8 +12,14 @@ import { PainelDeImportacao } from "@/components/editor-v2/PainelDeImportacao";
 import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
 import { PainelDeProblemas } from "@/components/editor-v2/PainelDeProblemas";
 import { ListaDeCapitulos } from "@/components/editor-v2/ListaDeCapitulos";
+import { ListaDeRevisoes } from "@/components/editor-v2/ListaDeRevisoes";
 import { DialogoNovoCapitulo } from "@/components/editor-v2/DialogoNovoCapitulo";
 import { DialogoTrocarPosicao } from "@/components/editor-v2/DialogoTrocarPosicao";
+import { DialogoDoLance, type AcaoContextualV2 } from "@/components/editor-v2/DialogoDoLance";
+import { DialogoDeCorte } from "@/components/editor-v2/DialogoDeCorte";
+import { DialogoDuplicarCapitulo } from "@/components/editor-v2/DialogoDuplicarCapitulo";
+import { DialogoExcluirCapitulo } from "@/components/editor-v2/DialogoExcluirCapitulo";
+import { DialogoExportar } from "@/components/editor-v2/DialogoExportar";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { analiseDaAula, mapaDaAnalise } from "@/lib/editor-v2/arvore";
 import { desenhoDeFormas } from "@/lib/editor-v2/desenhos";
@@ -30,8 +36,20 @@ import {
 } from "@/lib/editor-v2/comandos";
 import type { RelatorioImportacao } from "@/lib/editor-v2/importar-pgn";
 import type { NovoCapituloV2 } from "@/lib/editor-v2/novo-capitulo";
-import type { PlanoDaTrocaV2 } from "@/lib/editor-v2/trocar-posicao";
-import { problemasDaAulaV2, validarAulaV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
+import type { AlvoDeRevisaoV2, PlanoDaTrocaV2 } from "@/lib/editor-v2/trocar-posicao";
+import type { CapituloDuplicadoV2, PlanoDeExclusaoV2 } from "@/lib/editor-v2/capitulo";
+import { orientacaoDaFen } from "@/lib/editor-v2/acoes-do-lance";
+import type {
+  AcaoDoLanceV2,
+  ComecoDaquiV2,
+  DuplicataIndependenteV2,
+  PlanoDoCorteV2,
+  TipoDeCorteV2,
+  VarianteMostradaV2,
+} from "@/lib/editor-v2/acoes-do-lance";
+import type { ResolucoesV2 } from "@/lib/editor-v2/impacto";
+import { revisoesPendentesV2 } from "@/lib/editor-v2/revisoes";
+import { FEN_INICIAL_PADRAO, problemasDaAulaV2, validarAulaV2, type AnaliseV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
 import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/editor-v2/recuperacao";
 import type { Position } from "@/lib/lesson/schema";
 
@@ -41,6 +59,30 @@ const SIMBOLOS_DE_QUALIDADE: Record<number, string> = { 1: "!", 2: "?", 3: "!!",
 function novoId(): string {
   return `n-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
+
+/**
+ * A árvore de faz de conta da aula sem capítulo nenhum — §5.2.
+ *
+ * ## Por que um bolo de isopor, e não um `if` em cada linha
+ *
+ * Uma aula recém-criada não tem análise, e os ganchos do React não podem ser
+ * condicionais: tudo o que é calculado aqui dentro — o mapa da partida, o
+ * desenho selecionado, a posição do tabuleiro — roda **antes** de a tela decidir
+ * o que desenhar. Espalhar `analise?.` por vinte expressões tornaria cada uma
+ * delas ambígua ("isto pode ser nulo por quê?") para atender a um caso em que
+ * nenhuma delas vai à tela.
+ *
+ * Este objeto é uma análise vazia e válida: os ganchos calculam sobre ele sem
+ * estourar, e a tela devolve a porta da aula vazia antes de desenhar qualquer
+ * coisa que dependa dele. Nada daqui chega ao documento — ele não é gravado nem
+ * mostrado.
+ */
+const ANALISE_DE_FAZ_DE_CONTA: AnaliseV2 = {
+  id: "",
+  inicio: { tipo: "fen", fen: FEN_INICIAL_PADRAO },
+  raizId: "no-vazio",
+  nos: { "no-vazio": { id: "no-vazio", filhos: [] } },
+};
 
 /** A lista que a tela mostra nasce do fluxo; `capitulos` é só o cadastro. */
 function capitulosNaOrdemDaAula(aula: AulaV2): AulaV2["capitulos"] {
@@ -68,7 +110,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const [capituloId, setCapituloId] = useState(() => capitulosNaOrdemDaAula(documentoInicial)[0]?.id ?? "");
   const capitulosOrdenados = useMemo(() => capitulosNaOrdemDaAula(historico.presente), [historico.presente]);
   const capitulo = capitulosOrdenados.find((item) => item.id === capituloId) ?? capitulosOrdenados[0];
-  const analise = capitulo ? analiseDaAula(historico.presente, capitulo.analiseId) : historico.presente.analises[0];
+  const analiseDoCapitulo = capitulo ? analiseDaAula(historico.presente, capitulo.analiseId) : historico.presente.analises[0];
+  /** Ver `ANALISE_DE_FAZ_DE_CONTA`: a aula sem capítulo ainda precisa renderizar. */
+  const analise = analiseDoCapitulo ?? ANALISE_DE_FAZ_DE_CONTA;
   const [nodeId, setNodeId] = useState(() => capitulo?.inicioNodeId ?? analise.raizId);
   const [estado, setEstado] = useState<Estado>("salvo");
   const [recado, setRecado] = useState<string | null>(null);
@@ -78,11 +122,24 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const [importando, setImportando] = useState(false);
   const [adicionando, setAdicionando] = useState(false);
   const [trocandoPosicao, setTrocandoPosicao] = useState(false);
+  /*
+   * As janelas desta rodada. Cada uma guarda o **alvo** dela, e não só um
+   * booleano: o diálogo de excluir precisa saber qual capítulo, o do lance
+   * precisa saber qual lance e qual das três ações. Um booleano por janela mais
+   * um "alvo" compartilhado seria a mesma informação em dois lugares, e os dois
+   * discordariam no dia em que uma fechasse sem limpar o outro.
+   */
+  const [duplicandoCapitulo, setDuplicandoCapitulo] = useState<string | null>(null);
+  const [excluindoCapitulo, setExcluindoCapitulo] = useState<string | null>(null);
+  const [acaoDoLance, setAcaoDoLance] = useState<{ acao: AcaoContextualV2; nodeId: string } | null>(null);
+  const [cortando, setCortando] = useState<{ tipo: TipoDeCorteV2; nodeId: string; lance: string } | null>(null);
+  const [exportando, setExportando] = useState(false);
   /** Cresce a cada navegação por teclado; é o sinal para o foco seguir a seta (§16). */
   const [pedidoDeFoco, setPedidoDeFoco] = useState(0);
   const botaoImportar = useRef<HTMLButtonElement>(null);
   const botaoAdicionar = useRef<HTMLButtonElement>(null);
   const botaoTrocarPosicao = useRef<HTMLButtonElement>(null);
+  const botaoExportar = useRef<HTMLButtonElement>(null);
   const [sessaoId, setSessaoId] = useState<string | null>(null);
   const hash = useRef(hashInicial);
   const ultimoEnfileirado = useRef(documentoInicial);
@@ -185,8 +242,10 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
    * `preventDefault` é obrigatório: sem ele a seta rola a página junto, e o professor
    * vê o tabuleiro subir enquanto tenta só avançar um lance.
    */
-  const estadoDoTeclado = useRef({ analise, janelaAberta: importando || adicionando });
-  useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta: importando || adicionando }; });
+  const janelaAberta = importando || adicionando || trocandoPosicao || exportando
+    || duplicandoCapitulo !== null || excluindoCapitulo !== null || acaoDoLance !== null || cortando !== null;
+  const estadoDoTeclado = useRef({ analise, janelaAberta });
+  useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta }; });
 
   useEffect(() => {
     const teclado = (evento: KeyboardEvent) => {
@@ -248,6 +307,24 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
       return null;
     }
   }, [analise.id, historico.presente, positions]);
+
+  /**
+   * O nome do lance como o painel o escreve — `12… Rd6` —, para as janelas.
+   *
+   * A raiz não tem lance: ela é "a posição inicial", e é assim que a janela a
+   * chama. Chamá-la de `no-…-0` seria mostrar ao professor um id interno, que
+   * §4 da especificação proíbe.
+   */
+  const nomeDoLance = (id: string): string => {
+    const san = mapa?.sans[id];
+    if (!san) return "a posição inicial";
+    const rotulo = mapa?.rotulos[id];
+    return rotulo ? `${rotulo} ${san}` : san;
+  };
+
+  /** De quem é a vez naquela posição: é o lado que o capítulo novo mostra. */
+  const orientacaoDoLance = (id: string): "white" | "black" =>
+    orientacaoDaFen(mapa?.quadros[id]?.fen ?? "");
 
   const derivado = mapa && mapa.quadros[nodeIdAtual]
     ? { quadro: mapa.quadros[nodeIdAtual], sans: mapa.sans, rotulos: mapa.rotulos }
@@ -366,7 +443,111 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
     if (destino.nodeId) setNodeId(destino.nodeId);
   }, []);
 
+  /*
+   * ## O despachante do menu do lance (§11.3)
+   *
+   * As onze ações não fazem onze coisas diferentes: quatro são edições diretas
+   * (promover, comentar, anotar, criar variante), três abrem o diálogo de §8.3,
+   * duas abrem o diálogo do corte, uma abre a exportação e uma está desligada.
+   * Este despachante é o único lugar que sabe disso — o painel só diz qual foi.
+   *
+   * "Comentar" e "criar variante" não abrem janela nenhuma: a caixa de
+   * comentário e o tabuleiro já estão na tela. O que a ação faz é **levar o
+   * professor até eles** — selecionar o lance e pôr o foco no campo certo. Uma
+   * janela para escrever um comentário que cabe na tela seria um passo a mais
+   * para fazer o mesmo.
+   */
+  const campoDoComentario = useRef<HTMLTextAreaElement>(null);
+  const [dicaDaVariante, setDicaDaVariante] = useState(false);
+
+  const aoAcaoDoLance = useCallback((acao: AcaoDoLanceV2["id"], alvo: string) => {
+    setNodeId(alvo);
+    if (acao === "principal") {
+      const pai = Object.values(analise.nos).find((no) => no.filhos.includes(alvo));
+      if (pai) aplicar({ tipo: "PROMOVER_VARIANTE", analiseId: analise.id, parentId: pai.id, nodeId: alvo });
+      return;
+    }
+    if (acao === "comentar") {
+      // O `requestAnimationFrame` espera o React trocar o `key` do campo (que
+      // depende do nó selecionado): focar antes pegaria o campo do lance velho.
+      requestAnimationFrame(() => campoDoComentario.current?.focus());
+      return;
+    }
+    if (acao === "simbolo") {
+      document.getElementById("simbolos-do-lance")?.querySelector("button")?.focus();
+      return;
+    }
+    if (acao === "variante") {
+      setDicaDaVariante(true);
+      return;
+    }
+    if (acao === "mostrar-variante" || acao === "comecar-daqui" || acao === "duplicar-independente") {
+      setAcaoDoLance({ acao, nodeId: alvo });
+      return;
+    }
+    if (acao === "copiar-pgn") {
+      setExportando(true);
+      return;
+    }
+    if (acao === "substituir-continuacao" || acao === "excluir-daqui") {
+      const rotulo = mapa?.rotulos[alvo];
+      const san = mapa?.sans[alvo] ?? analise.nos[alvo]?.uci ?? "este lance";
+      setCortando({ tipo: acao === "excluir-daqui" ? "excluir-daqui" : "substituir-continuacao", nodeId: alvo, lance: rotulo ? `${rotulo} ${san}` : san });
+    }
+    // "treino" chega desabilitado do menu e não tem caso aqui: o editor de
+    // treinos é §16, e a ação nasce com ele.
+  }, [analise, aplicar, mapa]);
+
+  /** As marcas de revisão pendentes da aula inteira — §19.2. */
+  const revisoes = useMemo(() => revisoesPendentesV2(historico.presente), [historico.presente]);
+
+  const duplicarCapitulo = useCallback((novo: CapituloDuplicadoV2) => {
+    aplicar({ tipo: "DUPLICAR_CAPITULO", novo });
+    setCapituloId(novo.capituloId);
+    setNodeId(novo.nos[Object.keys(novo.nos)[0]] ?? "");
+    setDuplicandoCapitulo(null);
+  }, [aplicar]);
+
+  /**
+   * Exclui o capítulo e devolve a seleção a um que exista.
+   *
+   * A seleção muda **antes** do comando, e não depois, pelo mesmo motivo da
+   * criação: se o capítulo excluído continuasse selecionado por um render, o
+   * painel tentaria desenhar uma partida que já não está na aula.
+   */
+  const excluirCapitulo = useCallback((plano: PlanoDeExclusaoV2, resolucoes: ResolucoesV2) => {
+    const sobrando = capitulosOrdenados.find((item) => item.id !== plano.capituloId);
+    if (sobrando) {
+      setCapituloId(sobrando.id);
+      setNodeId(sobrando.inicioNodeId);
+    }
+    aplicar({ tipo: "EXCLUIR_CAPITULO", plano, resolucoes });
+    setExcluindoCapitulo(null);
+  }, [aplicar, capitulosOrdenados]);
+
+  const criarDoLance = useCallback((capituloNovoId: string, nodeNovoId: string, comando: ComandoV2) => {
+    aplicar(comando);
+    setCapituloId(capituloNovoId);
+    setNodeId(nodeNovoId);
+    setAcaoDoLance(null);
+  }, [aplicar]);
+
+  const cortar = useCallback((plano: PlanoDoCorteV2, resolucoes: ResolucoesV2) => {
+    // A seleção volta ao lance que **fica**: o de partida na substituição, o pai
+    // na exclusão. Continuar apontando para um nó apagado deixaria o painel
+    // olhando para o vazio — o mesmo cuidado da troca de posição inicial.
+    if (plano.tipo === "excluir-daqui") {
+      const pai = Object.values(analise.nos).find((no) => no.filhos.includes(plano.nodeId));
+      setNodeId(pai?.id ?? analise.raizId);
+    } else {
+      setNodeId(plano.nodeId);
+    }
+    aplicar({ tipo: "CORTAR", plano, resolucoes });
+    setCortando(null);
+  }, [analise, aplicar]);
+
   const mover = (orig: Key, dest: Key) => {
+    setDicaDaVariante(false);
     const peca = jogo.get(orig as Square);
     const promocao = peca?.type === "p" && (dest[1] === "1" || dest[1] === "8") ? "q" : "";
     const uci = `${orig}${dest}${promocao}`;
@@ -428,7 +609,62 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
     setEstado("salvo");
   };
 
-  if (!capitulo) return <main className="p-4 text-erro-texto">Esta aula ainda não tem capítulo editável.</main>;
+  /*
+   * ## A porta da aula vazia (§5.2)
+   *
+   * Até esta rodada, uma aula sem capítulo mostrava a frase "esta aula ainda não
+   * tem capítulo editável" e mais nada — um beco. Enquanto "Nova aula" não
+   * existia, ninguém chegava lá; agora chega **toda** aula recém-criada, e a
+   * primeira coisa que o professor vê não pode ser um aviso sem botão.
+   *
+   * §5.2: "criar abre a nova aula e oferece imediatamente **Adicionar
+   * capítulo**". É isso que está aqui: o mesmo título, os mesmos dois botões que
+   * criam conteúdo, e o mesmo diálogo da coluna da esquerda.
+   */
+  if (!capitulo) {
+    return (
+      <main className="mx-auto flex w-full max-w-3xl flex-col gap-4 p-4">
+        <header className="flex flex-col gap-1">
+          <p className="text-xs font-medium uppercase tracking-wide text-metodo-tinta">Editor v2 · aula nova</p>
+          <h1 className="titulo">{historico.presente.titulo}</h1>
+          <p className="text-sm text-tinta-media">
+            Esta aula ainda não tem capítulo. Um capítulo é uma posição ou partida com o percurso que você quer mostrar —
+            comece por uma posição montada, por uma FEN colada ou por um PGN.
+          </p>
+        </header>
+
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            ref={botaoAdicionar}
+            onClick={() => setAdicionando(true)}
+            className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta"
+          >
+            + Adicionar capítulo
+          </button>
+          <button type="button" ref={botaoImportar} onClick={() => setImportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">
+            Importar PGN
+          </button>
+          <span className={`self-center text-xs ${estado === "erro" || estado === "conflito" ? "text-erro-texto" : "text-tinta-fraca"}`}>
+            {estado === "salvo" ? "✓ salvo" : estado === "alterado" ? "alterado" : estado === "salvando" ? "salvando…" : estado}
+          </span>
+        </div>
+
+        {recado ? <p role="alert" className="rounded-lg border border-erro bg-erro-superficie/10 p-3 text-sm text-erro-texto">{recado}</p> : null}
+        <PainelDeProblemas visiveis={visiveis} resumo={resumo} aoIr={irAoProblema} />
+        {importando ? <PainelDeImportacao aula={historico.presente} aoAplicar={importar} aoFechar={fecharImportacao} /> : null}
+        {adicionando ? (
+          <DialogoNovoCapitulo
+            aula={historico.presente}
+            capituloAtualId=""
+            orientacaoPadrao={historico.presente.metadados?.orientacaoPadrao ?? "white"}
+            aoCriar={criarCapitulo}
+            aoFechar={fecharAdicionar}
+          />
+        ) : null}
+      </main>
+    );
+  }
 
   return (
     /*
@@ -460,6 +696,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         </div>
         <div className="flex items-center gap-2">
           <button type="button" ref={botaoImportar} onClick={() => setImportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Importar PGN</button>
+          <button type="button" ref={botaoExportar} onClick={() => setExportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Exportar</button>
           <button type="button" disabled={!historico.passados.length} onClick={() => setHistorico(desfazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Desfazer</button>
           <button type="button" disabled={!historico.futuros.length} onClick={() => setHistorico(refazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Refazer</button>
           <button type="button" disabled={historico.presente === documentoInicial} onClick={desfazerTudo} className="foco rounded-md border border-aviso-superficie px-3 py-2 text-sm text-aviso-tinta disabled:opacity-40">Desfazer tudo</button>
@@ -493,6 +730,14 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
       ) : null}
       {recado ? <p role="alert" className="rounded-lg border border-erro bg-erro-superficie/10 p-3 text-sm text-erro-texto">{recado}</p> : null}
       <PainelDeProblemas visiveis={visiveis} resumo={resumo} aoIr={irAoProblema} />
+      {/* §19.2: as marcas de revisão, juntas e com porta de saída — inclusive a
+          do quadro de introdução, que era marcada e não tinha como ser resolvida. */}
+      <ListaDeRevisoes
+        revisoes={revisoes}
+        aoIr={irAoProblema}
+        aoResolver={(alvo: AlvoDeRevisaoV2) => aplicar({ tipo: "REVISAO_RESOLVIDA", alvo })}
+        aoResolverTodas={(alvos: AlvoDeRevisaoV2[]) => aplicar({ tipo: "REVISOES_RESOLVIDAS", alvos })}
+      />
       {importando ? <PainelDeImportacao aula={historico.presente} aoAplicar={importar} aoFechar={fecharImportacao} /> : null}
       {adicionando ? (
         <DialogoNovoCapitulo
@@ -516,6 +761,67 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         />
       ) : null}
 
+      {duplicandoCapitulo ? (
+        <DialogoDuplicarCapitulo
+          aula={historico.presente}
+          capituloId={duplicandoCapitulo}
+          positions={positions}
+          aoDuplicar={duplicarCapitulo}
+          aoFechar={() => setDuplicandoCapitulo(null)}
+        />
+      ) : null}
+
+      {excluindoCapitulo ? (
+        <DialogoExcluirCapitulo
+          aula={historico.presente}
+          capituloId={excluindoCapitulo}
+          positions={positions}
+          aoExcluir={excluirCapitulo}
+          aoFechar={() => setExcluindoCapitulo(null)}
+        />
+      ) : null}
+
+      {acaoDoLance ? (
+        <DialogoDoLance
+          aula={historico.presente}
+          acao={acaoDoLance.acao}
+          analiseId={analise.id}
+          nodeId={acaoDoLance.nodeId}
+          capituloId={capitulo.id}
+          nomeSugerido={nomeDoLance(acaoDoLance.nodeId)}
+          orientacaoPadrao={orientacaoDoLance(acaoDoLance.nodeId)}
+          positions={positions}
+          aoMostrarVariante={(novo: VarianteMostradaV2) => criarDoLance(novo.capituloId, novo.caminho.at(-1) ?? novo.inicioNodeId, { tipo: "MOSTRAR_VARIANTE", novo })}
+          aoComecarDaqui={(novo: ComecoDaquiV2) => criarDoLance(novo.capituloId, novo.raizId, { tipo: "COMECAR_DAQUI", novo })}
+          aoDuplicar={(novo: DuplicataIndependenteV2) => criarDoLance(novo.capituloId, novo.nos[acaoDoLance.nodeId], { tipo: "DUPLICAR_INDEPENDENTE", novo })}
+          aoFechar={() => setAcaoDoLance(null)}
+        />
+      ) : null}
+
+      {cortando ? (
+        <DialogoDeCorte
+          aula={historico.presente}
+          tipo={cortando.tipo}
+          analiseId={analise.id}
+          nodeId={cortando.nodeId}
+          lance={cortando.lance}
+          positions={positions}
+          aoCortar={cortar}
+          aoFechar={() => setCortando(null)}
+        />
+      ) : null}
+
+      {exportando ? (
+        <DialogoExportar
+          aula={historico.presente}
+          analiseId={analise.id}
+          nodeId={nodeIdAtual}
+          capituloId={capitulo.id}
+          positions={positions}
+          aoFechar={() => { setExportando(false); botaoExportar.current?.focus(); }}
+        />
+      ) : null}
+
       <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[14rem_minmax(20rem,38rem)_minmax(18rem,1fr)]">
         <aside className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
           <h2 className="text-sm font-semibold text-tinta">Capítulos</h2>
@@ -533,6 +839,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
             atualId={capitulo.id}
             aoEscolher={(item) => { setCapituloId(item.id); setNodeId(item.inicioNodeId); }}
             aoMover={(id, vao) => aplicar({ tipo: "MOVER_CAPITULO", capituloId: id, vao })}
+            aoDuplicar={setDuplicandoCapitulo}
+            aoExcluir={setExcluindoCapitulo}
           />
           <label className="mt-2 flex flex-col gap-1 text-xs text-tinta-fraca">
             Nome do capítulo
@@ -568,7 +876,16 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
                   ? <NagOverlay casa={derivado.quadro.ultimoLance[1] as Key} orientation={capitulo.orientacao} simbolo={SIMBOLOS_DE_QUALIDADE[qualidadeSelecionada]} />
                   : undefined}
               />
-              <p className="text-center text-xs text-tinta-fraca">Arraste uma peça para acrescentar um lance a partir da posição selecionada. Promoção usa dama por padrão.</p>
+              {/* §11.3, "criar variante daqui": a ação não abre janela — ela
+                  põe o professor na posição certa e diz o gesto. A dica só
+                  aparece quando ele pediu, e some no primeiro lance jogado. */}
+              {dicaDaVariante ? (
+                <p role="status" className="rounded-md border border-metodo-superficie bg-metodo-superficie/10 p-2 text-center text-xs text-metodo-tinta">
+                  Jogue no tabuleiro a partir de {nomeDoLance(nodeIdAtual)}: um lance diferente dos que já existem nasce como variante, e a continuação de agora fica onde está.
+                </p>
+              ) : (
+                <p className="text-center text-xs text-tinta-fraca">Arraste uma peça para acrescentar um lance a partir da posição selecionada. Promoção usa dama por padrão.</p>
+              )}
               {/* A ajuda fica escrita na tela pelo mesmo motivo dos atalhos de
                   navegação (§16, "ferramentas de desenho descobríveis sem botão
                   direito"): quem não souber do botão direito nunca desenha. As
@@ -610,11 +927,12 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
               focar={pedidoDeFoco}
               onSelecionar={setNodeId}
               onPromover={(parentId, id) => aplicar({ tipo: "PROMOVER_VARIANTE", analiseId: analise.id, parentId, nodeId: id })}
+              onAcao={aoAcaoDoLance}
             />
           </div>
           <div className="border-t border-borda-fraca pt-3">
             <p className="mb-2 text-xs text-tinta-fraca">Símbolo do lance (escolha um)</p>
-            <div className="flex flex-wrap gap-1">
+            <div id="simbolos-do-lance" className="flex flex-wrap gap-1">
               {Object.entries(SIMBOLOS_DE_QUALIDADE).map(([nag, simbolo]) => (
                 <button key={nag} type="button" disabled={!selecionado.uci} onClick={() => aplicar({ tipo: "ALTERNAR_NAG", analiseId: analise.id, nodeId: selecionado.id, nag: Number(nag) })} className={`foco rounded border px-2 py-1 text-sm disabled:opacity-40 ${selecionado.nags?.includes(Number(nag)) ? "border-aviso-superficie bg-aviso-superficie/10 text-aviso-tinta" : "border-borda text-tinta"}`}>{simbolo}</button>
               ))}
@@ -629,7 +947,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
             ) : null}
             <label className="mt-3 flex flex-col gap-1 text-xs text-tinta-fraca">
               Comentário desta posição
-              <textarea key={selecionado.id + (selecionado.comentario ?? "")} defaultValue={selecionado.comentario ?? ""} onBlur={(e) => aplicar({ tipo: "EDITAR_COMENTARIO", analiseId: analise.id, nodeId: selecionado.id, comentario: e.currentTarget.value })} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta" placeholder="Explique a ideia deste lance…" />
+              <textarea ref={campoDoComentario} key={selecionado.id + (selecionado.comentario ?? "")} defaultValue={selecionado.comentario ?? ""} onBlur={(e) => aplicar({ tipo: "EDITAR_COMENTARIO", analiseId: analise.id, nodeId: selecionado.id, comentario: e.currentTarget.value })} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta" placeholder="Explique a ideia deste lance…" />
             </label>
             {narracoes.map((narracao) => (
               <div key={narracao.id} className="mt-3 flex flex-col gap-1 text-xs text-tinta-fraca">

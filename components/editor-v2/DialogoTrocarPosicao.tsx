@@ -245,6 +245,7 @@ function Linha({ children }: { children: React.ReactNode }) {
 function Impacto({ impacto }: { impacto: ImpactoDaTrocaV2 }) {
   const nada =
     impacto.podas.length === 0 &&
+    impacto.cascatas.length === 0 &&
     impacto.nosMarcados.length === 0 &&
     impacto.narracoesRemovidas.length === 0 &&
     impacto.narracoesMarcadas.length === 0 &&
@@ -278,6 +279,21 @@ function Impacto({ impacto }: { impacto: ImpactoDaTrocaV2 }) {
         {impacto.podas.map((poda) => (
           <Linha key={poda.nodeId}>
             <strong>{poda.lance}</strong> deixa de ser legal — saem {poda.nosRemovidos === 1 ? "este lance" : `${poda.nosRemovidos} lances, dele em diante`}.
+          </Linha>
+        ))}
+        {/* A cascata de §8.3/§9: as análises que começam nesta mudam de chão
+            junto, e são revalidadas na mesma transação. Ela vem logo depois das
+            podas da própria partida porque é a consequência delas — e porque
+            uma poda invisível numa segunda árvore é a pior surpresa possível. */}
+        {impacto.cascatas.map((cascata) => (
+          <Linha key={cascata.analiseId}>
+            O capítulo «{cascata.nome}» começa nesta partida e muda de tabuleiro junto:{" "}
+            {cascata.podas.length === 0
+              ? "a árvore dele continua inteira de pé"
+              : `${cascata.podas.length === 1 ? "1 lance dele deixa" : `${cascata.podas.length} lances dele deixam`} de ser legal, e ${cascata.nosPodados.length === 1 ? "sai 1 lance" : `saem ${cascata.nosPodados.length} lances`}`}
+            {cascata.nosMarcados.length > 0
+              ? `; ${cascata.nosMarcados.length === 1 ? "1 texto dele fica marcado" : `${cascata.nosMarcados.length} textos dele ficam marcados`} para revisão`
+              : ""}.
           </Linha>
         ))}
         {percursos.map((capitulo) => (

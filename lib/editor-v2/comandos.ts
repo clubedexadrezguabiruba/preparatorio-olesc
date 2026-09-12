@@ -4,7 +4,25 @@ import { quadroDoNo } from "./arvore.ts";
 import { aplicarImportacaoPgn, type RelatorioImportacao } from "./importar-pgn.ts";
 import { mesmosDesenhos, noComDesenhos } from "./desenhos.ts";
 import { aplicarNovoCapitulo, type NovoCapituloV2 } from "./novo-capitulo.ts";
-import { aplicarTrocaDePosicao, semRevisao, type PlanoDaTrocaV2 } from "./trocar-posicao.ts";
+import { aplicarTrocaDePosicao, semRevisao, type AlvoDeRevisaoV2, type PlanoDaTrocaV2 } from "./trocar-posicao.ts";
+import {
+  aplicarDuplicacaoDeCapitulo,
+  aplicarExclusaoDeCapitulo,
+  type CapituloDuplicadoV2,
+  type PlanoDeExclusaoV2,
+} from "./capitulo.ts";
+import {
+  aplicarComecarDaqui,
+  aplicarCorte,
+  aplicarDuplicarIndependente,
+  aplicarMostrarVariante,
+  type ComecoDaquiV2,
+  type DuplicataIndependenteV2,
+  type PlanoDoCorteV2,
+  type VarianteMostradaV2,
+} from "./acoes-do-lance.ts";
+import { semRevisoes } from "./revisoes.ts";
+import type { ResolucoesV2 } from "./impacto.ts";
 import type { AulaV2, DesenhoV2, NoV2 } from "./modelo.ts";
 
 export type ComandoV2 =
@@ -47,8 +65,38 @@ export type ComandoV2 =
    * terceira. Com o plano fixo, desfazer e refazer devolvem os mesmos bytes.
    */
   | { tipo: "TROCAR_POSICAO_INICIAL"; plano: PlanoDaTrocaV2 }
+  /**
+   * Duplica um capítulo inteiro como independente — §8.4.
+   *
+   * O `novo` traz o **mapa de ids** decidido antes: cada nó, cada narração, o
+   * capítulo, a análise e a etapa. É o que faz o Refazer devolver a mesma cópia.
+   */
+  | { tipo: "DUPLICAR_CAPITULO"; novo: CapituloDuplicadoV2 }
+  /**
+   * Exclui um capítulo, e a análise dele quando o professor pediu — §8.4.
+   *
+   * `resolucoes` é o que ele escolheu para cada dependente: remover ou
+   * materializar como independente. Sem escolha para todos, o executor recusa —
+   * §5 do plano não deixa a máquina decidir isso sozinha.
+   */
+  | { tipo: "EXCLUIR_CAPITULO"; plano: PlanoDeExclusaoV2; resolucoes?: ResolucoesV2 }
+  /** §8.3: um capítulo que aponta para o percurso que já existe, sem copiar lances. */
+  | { tipo: "MOSTRAR_VARIANTE"; novo: VarianteMostradaV2 }
+  /** §8.3: análise nova cuja raiz referencia a posição selecionada. */
+  | { tipo: "COMECAR_DAQUI"; novo: ComecoDaquiV2 }
+  /** §8.3: materializa posição e conteúdo, com ids novos, e encerra a dependência. */
+  | { tipo: "DUPLICAR_INDEPENDENTE"; novo: DuplicataIndependenteV2 }
+  /** §11.3: excluir a partir daqui, ou substituir a continuação deste lance. */
+  | { tipo: "CORTAR"; plano: PlanoDoCorteV2; resolucoes?: ResolucoesV2 }
   /** Tira a marca de revisão de §5 depois que o professor releu o texto. */
-  | { tipo: "REVISAO_RESOLVIDA"; alvo: { analiseId: string; nodeId: string } | { capituloId: string; narracaoId: string } }
+  | { tipo: "REVISAO_RESOLVIDA"; alvo: AlvoDeRevisaoV2 }
+  /**
+   * Resolve várias marcas de uma vez, pela lista de §19.2.
+   *
+   * Um comando só para um gesto só: o professor releu tudo e diz que está de
+   * pé. Como N comandos, desfazer aquilo exigiria N Ctrl+Z.
+   */
+  | { tipo: "REVISOES_RESOLVIDAS"; alvos: AlvoDeRevisaoV2[] }
   | { tipo: "EDITAR_COMENTARIO"; analiseId: string; nodeId: string; comentario: string }
   | { tipo: "EDITAR_NARRACAO"; capituloId: string; narracaoId: string; texto: string }
   | { tipo: "ALTERNAR_NAG"; analiseId: string; nodeId: string; nag: number }
@@ -105,6 +153,46 @@ export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Rec
   }
   if (comando.tipo === "REVISAO_RESOLVIDA") {
     return semRevisao(aula, comando.alvo);
+  }
+  if (comando.tipo === "REVISOES_RESOLVIDAS") {
+    return semRevisoes(aula, comando.alvos);
+  }
+  /*
+   * As seis edições estruturais de §8.3, §8.4 e §11.3 seguem o mesmo molde: o
+   * plano (ou o mapa de ids) chega pronto, o executor só aplica, e a recusa sobe
+   * com a frase em português que a função de aplicação escreveu. Reescrevê-la
+   * aqui perderia o motivo exato — "«Treino guiado» usa 3 lances que esta
+   * exclusão apaga" não é a mesma coisa que "não deu certo".
+   */
+  if (comando.tipo === "DUPLICAR_CAPITULO") {
+    const resultado = aplicarDuplicacaoDeCapitulo(aula, comando.novo);
+    if (!resultado.ok) throw new Error(resultado.mensagem);
+    return resultado.aula;
+  }
+  if (comando.tipo === "EXCLUIR_CAPITULO") {
+    const resultado = aplicarExclusaoDeCapitulo(aula, comando.plano, comando.resolucoes ?? {});
+    if (!resultado.ok) throw new Error(resultado.mensagem);
+    return resultado.aula;
+  }
+  if (comando.tipo === "MOSTRAR_VARIANTE") {
+    const resultado = aplicarMostrarVariante(aula, comando.novo);
+    if (!resultado.ok) throw new Error(resultado.mensagem);
+    return resultado.aula;
+  }
+  if (comando.tipo === "COMECAR_DAQUI") {
+    const resultado = aplicarComecarDaqui(aula, comando.novo);
+    if (!resultado.ok) throw new Error(resultado.mensagem);
+    return resultado.aula;
+  }
+  if (comando.tipo === "DUPLICAR_INDEPENDENTE") {
+    const resultado = aplicarDuplicarIndependente(aula, comando.novo);
+    if (!resultado.ok) throw new Error(resultado.mensagem);
+    return resultado.aula;
+  }
+  if (comando.tipo === "CORTAR") {
+    const resultado = aplicarCorte(aula, comando.plano, comando.resolucoes ?? {});
+    if (!resultado.ok) throw new Error(resultado.mensagem);
+    return resultado.aula;
   }
   if (comando.tipo === "IMPORTAR_JOGOS") {
     // A recusa do importador é uma frase pronta, em português de professor, e ela

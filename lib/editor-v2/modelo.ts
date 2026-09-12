@@ -61,6 +61,19 @@ export const metadadosAulaV2Schema = z.strictObject({
   orientacaoPadrao: z.enum(["white", "black"]),
   criterioDominio: z.enum(["D1", "D2", "D3", "D4"]),
   classe: lessonClassSchema.optional(),
+  /**
+   * O nível do currículo a que a aula pertence.
+   *
+   * **Por que ele existe, se as aulas do curso já o trazem no id.** Porque as
+   * aulas extras (§22) não o trazem: o id delas é `EX-…`, sem número, e §22
+   * exige "nível explícito". Sem este campo, a única forma de declarar o nível
+   * de uma extra criada pela tela seria editar a trilha à mão — que é código.
+   *
+   * Opcional porque as aulas do curso continuam declarando o nível por onde
+   * sempre declararam: `N1-KPK` é nível 1, e duplicar essa informação no
+   * documento criaria duas fontes para a mesma resposta.
+   */
+  nivel: z.number().int().min(0).max(5).optional(),
   estadoEditorial: z.enum(["rascunho", "publicado"]),
   estadoDaOrigem: z.enum(["rascunho", "publicado"]).optional(),
   fonteDidatica: z.string().min(1).optional(),

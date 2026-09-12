@@ -3,12 +3,16 @@
 import { useState, type DragEvent, type MouseEvent } from "react";
 import type { CapituloV2 } from "@/lib/editor-v2/modelo";
 
-export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover }: {
+export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDuplicar, aoExcluir }: {
   capitulos: CapituloV2[];
   atualId: string;
   aoEscolher: (capitulo: CapituloV2) => void;
   /** Move o capítulo para um vão, contado na ordem anterior ao gesto. */
   aoMover: (capituloId: string, vao: number) => void;
+  /** §8.4: abre o diálogo da cópia independente. */
+  aoDuplicar: (capituloId: string) => void;
+  /** §8.4: abre o diálogo da exclusão, com o impacto. */
+  aoExcluir: (capituloId: string) => void;
 }) {
   const [arrastando, setArrastando] = useState<number | null>(null);
   const [vaoAlvo, setVaoAlvo] = useState<number | null>(null);
@@ -111,6 +115,24 @@ export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover }: {
                   className="foco rounded px-2 py-1.5 text-left text-sm hover:bg-carta-toque disabled:opacity-40"
                 >
                   Mover para baixo
+                </button>
+                {/* §8.4 vive aqui, e não num botão solto ao lado do nome, porque
+                    as duas são ações **sobre este capítulo** — e o `•••` é o
+                    equivalente por teclado que §25 exige do botão direito. */}
+                <hr className="my-1 border-borda-fraca" />
+                <button
+                  type="button"
+                  onClick={(evento) => { fecharMenu(evento); aoDuplicar(capitulo.id); }}
+                  className="foco rounded px-2 py-1.5 text-left text-sm hover:bg-carta-toque"
+                >
+                  Duplicar como independente
+                </button>
+                <button
+                  type="button"
+                  onClick={(evento) => { fecharMenu(evento); aoExcluir(capitulo.id); }}
+                  className="foco rounded px-2 py-1.5 text-left text-sm text-erro-texto hover:bg-erro-superficie/20"
+                >
+                  Excluir capítulo…
                 </button>
               </div>
             </details>

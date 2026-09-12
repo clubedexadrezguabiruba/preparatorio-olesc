@@ -93,13 +93,29 @@ export function lerConteudo(caminho: string): Conteudo | null {
  * uma expressão regular que alguém pode afrouxar um dia, e a segunda é sobre o
  * caminho de verdade.
  */
-export function caminhoDeAula(id: string, pasta: string, raiz: string = process.cwd()): string {
-  const conferido = lessonIdSchema.safeParse(id);
+export function caminhoDeAula(
+  id: string,
+  pasta: string,
+  raiz: string = process.cwd(),
+  /**
+   * Qual regra de id vale nesta pasta.
+   *
+   * O padrão é o das aulas do curso (`N0-…`), que é o que as pastas do v1
+   * guardam. A pasta do Editor v2 passa o schema dela, que também aceita o
+   * namespace `EX-` das aulas extras (§22) — sem isto, "Nova aula" criava um id
+   * que o próprio projeto aceita e que esta função recusava na hora de gravar.
+   *
+   * **Continua sendo uma expressão regular sem barra e sem ponto**, e a segunda
+   * trava — a conferência do caminho resolvido — vale para as duas.
+   */
+  schema: { safeParse: (valor: string) => { success: boolean; data?: string } } = lessonIdSchema,
+): string {
+  const conferido = schema.safeParse(id);
   if (!conferido.success) {
     throw new Error(`id de aula inválido: ${JSON.stringify(id)}`);
   }
   const base = path.resolve(raiz, pasta);
-  const alvo = path.resolve(base, `${conferido.data}.json`);
+  const alvo = path.resolve(base, `${conferido.data as string}.json`);
   if (!alvo.startsWith(base + path.sep)) {
     throw new Error(`caminho fora da pasta: ${JSON.stringify(id)}`);
   }

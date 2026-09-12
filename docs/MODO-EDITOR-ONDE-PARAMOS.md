@@ -11,7 +11,8 @@
 > ler plano + especificação antes deste diário; este arquivo diz o estado, não redefine
 > o produto.
 
-**Data:** 2026-09-11. **Branch:** `modo-editor`, sincronizada com o `origin`. A menção
+**Data:** 2026-09-12. **Branch:** `modo-editor`, à frente do `origin` (o push é decisão
+do Doug, não consequência de commitar). A menção
 histórica a “Bloco 2 suspenso” nas seções antigas explica a interrupção que levou à
 nova arquitetura; não rege mais o trabalho.
 
@@ -26,40 +27,50 @@ cada linha aponta a seção que conta a história inteira.
   regressão de conteúdo e proveniência/certificação. Ver “o Bloco 0/A fechado”.
 - **Corpus e tetos (§17)** — linha de 500 meios-lances, árvore de 1.000 nós, e seis
   tetos com o número medido atrás de cada um. Ver “Bloco B começa pelo freio”.
-- **Importar PGN (§11)** — auditoria do que a varredura não lê, relatório de perdas
+- **Importar PGN (§13.1)** — auditoria do que a varredura não lê, relatório de perdas
   antes de aplicar, lote transacional, recusa explícita de variante não padrão. Ver
   “o importador de PGN” e “a tela de importar”.
 - **Cor do desenho** — as quatro cores do Lichess atravessam do PGN ao tabuleiro. Ver
   “a cor do desenho, como no Lichess”.
-- **Navegação por teclado (§16)** — ← → ↑ ↓, Home e End andam na árvore; o foco segue a
+- **Navegação por teclado (§7)** — ← → ↑ ↓, Home e End andam na árvore; o foco segue a
   seta; campo de texto engole o atalho. **Falta a conferência humana da tecla real.**
   Ver “o teclado anda na árvore”.
-- **Desenhar com o botão direito** — seta e casa acesa nascem com o mouse, nas quatro
-  cores do Lichess, e cada desenho entra no Desfazer. **Falta a conferência humana do
-  gesto real.** Ver “desenhar com o botão direito”.
-- **Reordenar capítulos** — a coluna segue a ordem única do fluxo; arrastar muda o
-  capítulo como um slide, o menu oferece a mesma ação pelo teclado e um Desfazer
+- **Desenhar com o botão direito (§10.2)** — seta e casa acesa nascem com o mouse, nas
+  quatro cores do Lichess, e cada desenho entra no Desfazer. **Falta a conferência
+  humana do gesto real.** Ver “desenhar com o botão direito”.
+- **Reordenar capítulos (§8.2)** — a coluna segue a ordem única do fluxo; arrastar muda
+  o capítulo como um slide, o menu oferece a mesma ação pelo teclado e um Desfazer
   devolve a ordem anterior. Ver “reordenar capítulos no fluxo”.
-- **Adicionar capítulo** — o botão junto à lista abre um diálogo com posição
-  inicial, montador de peças e FEN colada; o capítulo entra depois do atual, num
-  Desfazer só, e o Refazer devolve os mesmos ids. **Teste humano aprovado**,
-  inclusive os três arrastos. Ver “adicionar capítulo e montar a posição”.
+- **Adicionar capítulo (§8.3)** — três das cinco portas: posição inicial, montador de
+  peças e FEN colada. **Teste humano aprovado**, inclusive os três arrastos. Ver
+  “adicionar capítulo e montar a posição”.
+- **Trocar a posição inicial de um capítulo (§9)** — poda a partir do primeiro lance
+  ilegal de cada ramo, irmãos legais preservados, textos afetados marcados para
+  revisão, e a cascata que revalida as análises filhas e netas. Ver “trocar a posição
+  inicial de um capítulo”.
+- **As sete fatias de 11/9 (§8.3, §8.4, §9, §11.3, §14, §5.2, §19.2)** — renomear,
+  duplicar e excluir capítulo com impacto; as três ações contextuais do lance; o menu
+  do lance com as onze ações no botão direito e no `•••`; o escritor e as quatro saídas
+  de PGN; “Nova aula” com id derivado e a porta da aula vazia; e a lista das revisões
+  pendentes. Um calculador de impacto só (`lib/editor-v2/impacto.ts`) atende às quatro
+  edições que perdem nós. Ver “sete fatias numa rodada”.
 
 **Aberto, na ordem:**
 
-1. **Trocar a posição inicial de um capítulo** (§9) — o montador já existe; falta o
-   cálculo de impacto sobre os lances que já estão lá.
-2. **Ações contextuais de §8.3** — mostrar esta variante na aula, começar desta
-   posição e duplicar como independente.
-3. **Paleta clicável de desenho** — hoje a cor se escolhe segurando Shift/Alt.
-4. **Importar por URL do Lichess** (§11) e **exportar PGN** continuam fora.
+1. **Paleta clicável de desenho** (§10.2 e §25) — hoje a cor só se escolhe segurando
+   Shift/Alt, e atalho que ninguém descobre não existe. É o que falta da fatia 3 do
+   roteiro de §27.
+2. **Prévia, reprodução e comparação** (§15) — fatia 5 do roteiro. É a que fecha o
+   piloto de rei e peão que motivou o v2.
+3. **Editor de treinos** (§16), **publicação v2** (§20), **repertório** (§21), **barra
+   Stockfish** (§23) e **importar por URL do Lichess** (§13.2) continuam fora, sem
+   redução de escopo.
 
 **Dívida conhecida e não paga:** a lista de lances mostra ~10 lances por vez em
 1366×768; se incomodar, o espaço sai do bloco de edição abaixo dela.
 
-**Isto não declara o editor pronto.** Do Bloco B saíram a leitura da árvore, a
-navegação, o desenho e a ordem dos capítulos; exportar e os blocos seguintes do plano
-continuam abertos.
+**Isto não declara o editor pronto.** O roteiro de §27 tem as fatias 1, 2 e 4 fechadas
+e a 3 quase; as fatias 5 a 10 continuam abertas.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -1387,6 +1398,342 @@ mesmos bloqueios, aplicado à exclusão; e as três ações contextuais (**mostr
 variante na aula**, **começar desta posição**, **duplicar como independente**). A
 segunda delas é a que cria `inicio: { tipo: "referencia" }`, e é com ela que a cascata
 bloqueada aqui precisa nascer.
+
+---
+
+## Sete fatias numa rodada, entregues em 11/9/2026
+
+Esta foi uma rodada longa: sete fatias de uma vez, com os portões rodados ao longo do
+caminho e **um** teste humano no fim. O que entrou:
+
+| § | Fatia |
+|---|---|
+| 8.4 | Renomear, duplicar e excluir capítulo, com impacto |
+| 8.3 | As três ações contextuais do lance |
+| 9 | A cascata que antes bloqueava |
+| 11.3 | O menu do lance: botão direito e `•••` com o mesmo conjunto |
+| 14 | Writer e exportação de PGN |
+| 5.2 | Nova aula, e a porta da aula vazia |
+| 19.2 | A lista das revisões pendentes |
+
+### A decisão que organizou a rodada: um calculador de impacto, não quatro
+
+Quatro edições diferentes desta rodada perdem nós — trocar a posição inicial, excluir
+capítulo com a análise, excluir a partir de um lance, substituir a continuação — e as
+quatro fazem **a mesma pergunta**: quem aponta para o que vai sumir, e com que nome o
+professor o conhece?
+
+A primeira resposta já existia, escrita dentro de `trocar-posicao.ts`. O caminho barato
+seria copiá-la três vezes; o resultado seriam quatro opiniões sobre o que é uma
+dependência, divergindo no dia em que só uma fosse corrigida. Então ela saiu de lá para
+`lib/editor-v2/impacto.ts`, **antes** de qualquer fatia nova ser escrita, e as quatro
+passaram a usar a mesma conta. `trocar-posicao.ts` encolheu; nenhum dos 20 testes dele
+mudou de veredicto por causa da mudança.
+
+### As três saídas de §5, e a que não cabe em todo mundo
+
+O plano final manda "cancelar, remover explicitamente os dependentes ou materializar os
+dependentes como independentes". Nenhuma das três é escolha de máquina, então a tela
+pergunta **item por item**, e o botão de confirmar fica desabilitado com a conta do que
+falta ("Faltam decidir 2 dependentes").
+
+A terceira não serve a todos, e dizer isso em voz alta foi parte do trabalho:
+
+- uma **análise** que começa num nó desta materializa-se guardando a FEN daquele nó;
+- um **quadro de introdução** faz o mesmo, trocando a referência pela FEN;
+- um **treino** não faz. Toda questão dele nomeia um `{analiseId, nodeId}`, e o schema
+  não sabe representar uma questão sem esse endereço; materializar um treino exigiria
+  copiar a árvore que ele percorre, e isso é o editor de treinos (§16). A opção fica
+  **desabilitada com o motivo escrito na tela**, e não só num `title` — §11.3 pede o
+  motivo, e `title` só aparece para quem já parou o mouse em cima.
+
+A FEN da materialização é resolvida **no cálculo** e viaja dentro do plano, porque
+aplicá-la depois seria perguntar a posição de um nó que já não existe.
+
+### A cascata: o bloqueio de ontem deixou de ser a resposta
+
+A fatia anterior bloqueava a troca quando outra análise começava num nó desta, e o
+diário registrou por quê: "começar desta posição" não existia, nenhum conteúdo caía
+nesse caso, e revalidar uma segunda árvore era trabalho sem cliente. A fatia §8.3 desta
+rodada criou exatamente o cliente.
+
+Agora a troca **enfileira** as filhas: para cada análise que começa num nó que
+**sobreviveu**, a poda calcula a FEN nova daquele nó e revalida a árvore dela com a
+mesma regra — primeiro ilegal de cada ramo, irmãos preservados, sobreviventes marcados
+—, na mesma transação. E atravessa as netas: uma análise que começa na filha entra na
+fila atrás dela. `visitadas` existe porque o validador aceita e acusa ciclos entre
+inícios de análises, e percorrer um deles aqui seria um laço infinito num documento que
+o professor ainda não consertou.
+
+**Um caso continua bloqueando, e é outro caso.** Quando o nó de origem da filha é
+justamente um dos podados, ela não mudou de chão — ela ficou **sem** chão, e aí §5
+manda devolver a decisão a quem é dela. A diferença entre "mudou de tabuleiro" e "ficou
+sem tabuleiro" é a fatia inteira, e as duas foram medidas na tela (abaixo).
+
+### As três ações de §8.3 são três coisas, e a tela explica qual
+
+| Ação | O que copia | Do que continua dependendo |
+|---|---|---|
+| Mostrar esta variante | nada | dos próprios lances da partida |
+| Começar desta posição | nada | só da posição escolhida |
+| Duplicar como independente | tudo daqui para baixo | de nada |
+
+As três dividem o mesmo formulário — nome, orientação, onde entra — e por isso moram
+numa janela só; o que muda entre elas é explicação, não campo, e três janelas iguais com
+um parágrafo diferente ensinariam o professor a pular o parágrafo. O parágrafo traz o
+número real: "esta posição e 6 lances daqui para baixo são copiados".
+
+Na duplicação, **o lance selecionado vira a raiz da cópia e larga o `uci`**: a posição
+que ele produzia agora é o chão da análise nova. O comentário, os desenhos, os símbolos
+e as diretivas opacas dele vão junto — são da posição, e a posição é a mesma.
+
+### O escritor de PGN, e o aviso do plano que ele respeita
+
+§6 do plano final é um aviso explícito: "a conversão atual [de `annotations.ts`] não
+preserva necessariamente as cores de autoria. A exportação não pode prometer preservação
+de cor usando uma conversão que a descarta".
+
+`escrever-pgn.ts` **não passa por `annotations.ts`**. Ele lê `no.desenhos`, onde a cor
+está guardada com o nome dela, e escreve a letra do Lichess direto — a mesma tabela da
+importação, no sentido inverso. Medido no ciclo: `[%cal Ge2e4,Rd1h5]` entra, vira seta
+verde e seta vermelha, e sai `[%cal Ge2e4,Rd1h5]`.
+
+Sobra um caso em que a cor **não** atravessa, e ele é anunciado em vez de escondido: as
+setas na forma curta do material v1 (`["e2","e4"]`) não declaram cor. Saem em verde, e
+cada uma vira uma perda declarada com o nome da casa.
+
+**Uma regra só, nos dois sentidos:** `%cal` e `%csl` são sempre reconstruídos a partir
+de `desenhos`, que é o que o professor edita. As outras diretivas guardadas saem
+verbatim. A exceção que fecha a regra é o `%cal` com uma letra de cor que o editor não
+modela — o importador a recusou e anunciou a perda; se o escritor a descartasse também,
+quem perdeu na importação perderia de novo, agora em silêncio. Ela é reemitida.
+
+E o que **não** cabe num PGN é dito com a contagem desta aula, não num parágrafo fixo:
+"13 narrações ficam de fora", "1 treino não cabe". Aviso genérico o professor aprende a
+pular; um que diz *quantas* ele lê.
+
+### Nova aula, e o beco que ela teria criado
+
+Até aqui, uma aula sem capítulo mostrava "esta aula ainda não tem capítulo editável" e
+mais nada. Enquanto "Nova aula" não existia, ninguém chegava lá. Com ela, **toda** aula
+recém-criada chega — e a primeira coisa que o professor veria seria um aviso sem botão.
+
+A porta da aula vazia nasceu junto, como o diário da fatia anterior pediu: o mesmo
+título, os mesmos dois botões que criam conteúdo, e o mesmo diálogo da coluna da
+esquerda.
+
+O identificador é **derivado** do título e do nível (`N2-PEAO-DE-TORRE-NA-SETIMA`,
+`EX-ENSAIO-DE-AULA-NOVA`) e mostrado desabilitado enquanto o professor digita. §5.2 diz
+que o professor não digita ids internos; ele também não pode ficar sem ver o que vai
+virar nome de arquivo, URL e chave do progresso do aluno.
+
+**A aula extra ganhou um campo `nivel` nos metadados.** §22 exige nível explícito, e o
+`EX-` não traz número nenhum; sem o campo, a única forma de declará-lo seria editar a
+trilha à mão, que é código. As aulas do curso continuam sem ele: o `N2` do id já responde,
+e duas fontes seriam duas respostas.
+
+A tela diz, em voz alta, o que ela **não** faz: pôr a aula na trilha do curso é passo
+separado, porque a trilha é uma lista em código.
+
+### O buraco das revisões pendentes, fechado pelos dois lados
+
+`semRevisao` tratava nó e narração. O **quadro de introdução** era marcado pela troca de
+posição e não tinha como ser desmarcado, porque o editor de introdução não tem tela —
+uma marca sem porta de saída é uma armadilha, e §5 manda resolvê-las antes de publicar.
+Ele passou a ser um terceiro caso do mesmo comando.
+
+E nasceu a lista de §19.2: um `<details>` fechado que diz quantas são, e que abre com o
+**trecho** de cada texto marcado, o endereço em português, um botão que leva até lá e um
+"Já reli". Ela é fechada por padrão porque é lista de trabalho, não alarme: dezesseis
+linhas abertas no alto empurrariam o tabuleiro para fora da janela.
+
+**"Já reli todas" fica no fim da lista, não ao lado do cabeçalho**, e pede confirmação.
+Ao lado do cabeçalho ela seria o primeiro botão da tela, e apagaria dezesseis avisos com
+um clique de quem só queria fechar o painel. É uma ação só no histórico: um Ctrl+Z
+devolve as dezesseis.
+
+### Um casco de diálogo, e o defeito do véu pago uma vez só
+
+Havia duas janelas com o mesmo casco de acessibilidade escrito duas vezes, e esta rodada
+acrescentaria cinco. Sete cópias de um contrato de foco são sete chances de uma
+envelhecer sozinha — e a prova já estava no diário: o defeito do véu que fechava a janela
+no meio do arrasto existia nas **duas**, e só uma tinha sido exercitada.
+
+`components/editor-v2/Dialogo.tsx` guarda o contrato inteiro: `role="dialog"`,
+`aria-modal`, foco ao abrir, `Tab` que não escapa, `Esc` que fecha, rodapé grudado — e a
+regra do véu, que só fecha quando o gesto **começou** nele.
+
+### Escrito
+
+| Arquivo | O que é |
+|---|---|
+| `lib/editor-v2/impacto.ts` | **novo** — o calculador de impacto comum, os dependentes e as três saídas de §5 |
+| `lib/editor-v2/capitulo.ts` | **novo** — duplicar e excluir capítulo (§8.4) |
+| `lib/editor-v2/acoes-do-lance.ts` | **novo** — as três ações de §8.3, o corte de §11.3 e a lista do menu |
+| `lib/editor-v2/escrever-pgn.ts` | **novo** — o writer de PGN (§14) |
+| `lib/editor-v2/nova-aula.ts` | **novo** — o id derivado e a aula vazia válida (§5.2) |
+| `lib/editor-v2/revisoes.ts` | **novo** — a lista de §19.2 |
+| `lib/editor-v2/trocar-posicao.ts` | a cascata, e o impacto tirado daqui para `impacto.ts` |
+| `lib/editor-v2/comandos.ts` | seis comandos novos, e `REVISOES_RESOLVIDAS` |
+| `lib/editor-v2/modelo.ts` | `metadados.nivel`, para a aula extra declarar o nível |
+| `lib/editor-v2/rascunhos.ts` | `idsDeDocumentosV2`, e a pasta v2 passando a aceitar `EX-` |
+| `lib/editor/rascunhos.ts` | `caminhoDeAula` ganha o schema da pasta — ver o defeito abaixo |
+| `components/editor-v2/Dialogo.tsx` | **novo** — o casco de todas as janelas |
+| `components/editor-v2/PainelDeResolucoes.tsx` | **novo** — a escolha por dependente |
+| `components/editor-v2/MenuDoLance.tsx` | **novo** — o menu do botão direito e do `•••` |
+| `components/editor-v2/DialogoDoLance.tsx` | **novo** — as três ações de §8.3 numa janela |
+| `components/editor-v2/DialogoDeCorte.tsx` | **novo** — excluir a partir daqui e substituir continuação |
+| `components/editor-v2/DialogoExcluirCapitulo.tsx`, `DialogoDuplicarCapitulo.tsx` | **novos** — §8.4 |
+| `components/editor-v2/DialogoExportar.tsx` | **novo** — as quatro saídas de §14 |
+| `components/editor-v2/ListaDeRevisoes.tsx` | **novo** — §19.2 |
+| `components/editor-v2/FormularioDeNovaAula.tsx` | **novo** — §5.2 |
+| `app/editor/v2/nova/page.tsx` | **nova** — a porta de "Nova aula" |
+| `app/editor/v2/acoes.ts` | `criarAulaV2` |
+| `app/editor/page.tsx` | "+ Nova aula" e a lista dos rascunhos que só existem no v2 |
+| `app/editor/v2/finais/[aula]/page.tsx` | abre também a aula que não tem v1 por trás |
+| `components/editor-v2/EditorV2.tsx`, `PainelDeLances.tsx`, `ListaDeCapitulos.tsx` | a ligação de tudo, e a porta da aula vazia |
+
+`fluxo` continua sendo a única fonte da ordem dos capítulos, e o montador continua sendo
+um só, com `problemaDaPosicaoMontada` como único juiz de posição.
+
+### Evidência
+
+**Os sete portões verdes:** tipos, lint, **967 testes** (55 novos), build, conteúdo (38
+consultas de tablebase, todas do cache), **42/42 mutações vermelhas** e repertório
+`--check`.
+
+Os 55 testes novos cobrem, por fatia:
+
+- **cascata (3):** a filha revalidada com a FEN nova do nó de origem e o comentário dela
+  marcado; a neta atravessada; e a filha cujo nó de origem foi podado continuando a
+  bloquear;
+- **§8.4 (12):** nome vazio que não apaga o anterior; a duplicação que não toca na aula e
+  decide todos os ids de uma vez; a cópia com ids novos, percurso e narração remapeados,
+  atribuição conservada e a prova de independência (editar o original não a alcança); a
+  cópia de um capítulo que começava numa referência materializando a FEN; Desfazer e
+  Refazer com os mesmos ids; excluir só o capítulo sem levar a análise, com o aviso de
+  órfã; a recusa de levar a análise compartilhada, nomeando quem mais a usa; as contagens
+  reais do que vai junto; a recusa sem escolha para cada dependente; remover e
+  materializar na mesma transação; a análise dependente removida levando o capítulo dela;
+  e a exclusão inteira voltando com um Desfazer;
+- **§8.3 e §11.3 (15):** a variante mostrada sem copiar lance nenhum; a promoção posterior
+  que **não** muda o percurso escolhido; começar desta posição criando `referencia` com
+  continuação vazia; a duplicação materializando a FEN, largando o `uci` da raiz e
+  trazendo as narrações; excluir a partir daqui contra substituir continuação; as
+  contagens e o percurso cortado; a recusa de excluir a posição inicial; o bloqueio com
+  nome e a materialização que o resolve; o Desfazer do corte; e as onze ações do menu,
+  com as impossíveis desabilitadas e o motivo;
+- **§14 (16):** sete **expectativas independentes** — o PGN da posição padrão sem
+  FEN/SetUp, a variante depois do lance que ela substitui, o número forçado depois do
+  comentário, os símbolos colados e o `$140`, a FEN de agora e não a do cabeçalho
+  importado, a seta v1 em verde com a perda declarada, e a chave no comentário — mais
+  nove de round-trip: a árvore idêntica depois do ciclo, as cores atravessando inteiras,
+  o NAG sem botão e o `[%clk]` sobrevivendo, a cor desconhecida reemitida, o desenho
+  apagado que **não** ressuscita, a variante com a FEN do ponto de partida, o `[Event]`
+  preservado, a ordem do fluxo e as contagens do que não cabe;
+- **§5.2 e §19.2 (9):** o id derivado com acentos resolvidos; a aula vazia válida e sem
+  aviso nenhum; a extra declarando o nível no documento e a do curso não; as quatro
+  recusas apontando o campo; os três tipos de marca com trecho e endereço; o quadro de
+  introdução que agora se resolve; "Já reli todas" como uma ação só; o desenho sem
+  comentário listado pelo que ele é; e a aula extra **gravada e relida em disco**.
+
+**No navegador autenticado, com a N0-LADDER:**
+
+- o `•••` de um lance abriu as onze ações de §11.3, com "Tornar linha principal"
+  desabilitada dizendo "este lance já é a linha principal da posição anterior" e "Criar
+  treino daqui" dizendo "o editor de treinos ainda não existe";
+- **mostrar esta variante** criou «A escada, passo 2» e a lista de lances continuou com
+  os mesmos 9 — nenhuma análise nova, nenhum lance copiado;
+- **começar desta posição** a partir de `3. Rg2` criou um capítulo que abriu dizendo
+  "Arraste uma peça no tabuleiro para criar o primeiro lance" — continuação vazia, como
+  §4 manda;
+- **a cascata, medida nos dois sentidos.** Com o rei preto no lugar e um peão a mais, a
+  janela da troca escreveu *"O capítulo «Derivada do passo 3» começa nesta partida e muda
+  de tabuleiro junto: a árvore dele continua inteira de pé"* e o botão **ficou
+  habilitado**. Com o rei preto tirado de e3 para a8, o mesmo capítulo voltou a aparecer
+  como bloqueio — *"começa num lance que a posição nova torna ilegal"* —, ao lado do
+  «Treino guiado» com 8 lances;
+- **excluir a partir de `3. Rg2`** mostrou 5 lances, 7 narrações pelo texto, o percurso
+  cortado e o treino reaberto; os dois dependentes com escolha própria; o treino com
+  "Tornar independente" apagado e o motivo escrito embaixo; e o rodapé dizendo "Faltam
+  decidir 2 dependentes" enquanto o botão estava desabilitado. Com «remover o treino» e
+  «tornar independente» o capítulo, a exclusão aconteceu — e o capítulo derivado passou a
+  acusar `FEN_IMPORTADA_SEM_REVISAO`, que é exatamente o que materializar faz;
+- **um Desfazer** devolveu os 5 lances, o treino e a referência da filha, juntos;
+- **Exportar** mostrou as quatro saídas e o texto antes de copiar. O PGN do capítulo saiu
+  com `[SetUp "1"]`, `[FEN "8/8/8/8/8/4k3/6R1/6RK w - - 0 1"]` e
+  `1. Rg4 Kd2 2. R1g3 Kc1 3. Rg2 Kb1 4. Re2 Ka1 5. Rg1# *`. "PGN de todas as partidas"
+  trouxe os dois jogos, e o segundo com a FEN **resolvida** da referência
+  (`8/8/8/8/6R1/8/6R1/2k4K b - - 5 3`). O rodapé disse "13 narrações ficam de fora" e "1
+  treino não cabe";
+- **a lista de revisões** apareceu com 16 textos depois da troca, e os três primeiros
+  eram os **quadros da introdução** — os que antes não tinham botão. Um "Já reli" levou
+  17 avisos a 16 e 16 marcas a 15; "Já reli todas", com a confirmação, levou a 1 aviso; um
+  Desfazer devolveu as 15;
+- **Nova aula:** o identificador `EX-ENSAIO-DE-AULA-NOVA` apareceu enquanto o título era
+  digitado, a aula foi criada, o navegador foi levado a ela, e a tela mostrou a **porta da
+  aula vazia** — "Esta aula ainda não tem capítulo", com "+ Adicionar capítulo" e
+  "Importar PGN". O capítulo criado ali abriu no editor completo, com "✓ salvo".
+
+Os arquivos temporários `content/rascunhos/lessons/N0-LADDER.json`,
+`.editor/v2/N0-LADDER.json` e `.editor/v2/EX-ENSAIO-DE-AULA-NOVA.json` foram removidos no
+fim. O SHA-256 de `.editor/v2/N1-KPK.json` continua
+`4be602ca224f065f630efe11948b696e33dbaa95a5fdfc12c03a6c912eacb822`, conferido antes e
+depois. Nenhuma aula publicada foi tocada.
+
+### O defeito que 966 testes não pegaram, e o navegador pegou no primeiro clique
+
+Criar a primeira aula extra pela tela devolveu **uma tela de erro de servidor**. A causa,
+com arquivo e linha: `caminhoDeAula` (`lib/editor/rascunhos.ts:96`) conferia todo id com
+`lessonIdSchema`, que é `^N[0-9]+-[A-Z0-9-]+$`. O `EX-` que `aulaIdV2Schema` aceita — e
+que o próprio §22 exige — era recusado na hora de escrever o arquivo.
+
+**Por que nenhum teste chegou perto.** Todos os testes que usam aula extra a fabricam
+**em memória** (`EX-TROCA`, `EX-CAPITULO`, `EX-PGN`…), e memória não tem guardião de
+caminho. Nenhum tinha escrito uma em disco.
+
+O conserto foi dar a `caminhoDeAula` o schema da pasta: o v1 continua com o id do curso,
+a pasta do v2 passa o dela. **As duas travas continuam de pé** — a expressão regular sem
+barra nem ponto, e a conferência do caminho resolvido —, e o teste novo cobre as duas:
+grava um `EX-…` de verdade num diretório temporário, relê, e confere que `../fora`
+continua estourando.
+
+A lição de método, para quem vier depois: **um schema que aceita uma forma nova não prova
+que o caminho inteiro a aceita.** O teste que vale é o que leva a forma nova até o disco.
+
+### O que esta rodada NÃO cobre
+
+- **Os gestos de ponteiro.** Arrastar peça no montador, arrastar capítulo para reordenar,
+  desenhar com o botão direito e abrir o menu com o botão direito do mouse continuam
+  sendo teste humano: o chessground recusa evento não confiável, e um `click` disparado
+  por ferramenta prova o manipulador, não o gesto.
+- **"Desfazer tudo"** usa `window.confirm`, que o navegador embutido não responde; ele
+  não foi exercitado nesta rodada.
+- **Um ruído de console honesto:** o painel do navegador guarda as duas linhas do erro de
+  servidor **anterior** ao conserto do `EX-`, e o leitor de console não as limpa na
+  navegação. Depois do conserto, a página recarrega com todas as requisições em 200 e
+  desenha normalmente.
+- **Continuam abertas, sem redução de escopo:** importação por URL do Lichess (§13.2);
+  editor completo de treinos (§16); publicação v2 (§20); repertório (§21); e a barra
+  Stockfish (§23). Nenhuma saiu do escopo do projeto.
+- A paleta clicável de **desenho** (a cor sem Shift/Alt) continua aberta.
+- **"Criar treino daqui"** aparece no menu **desabilitada, com motivo** — ela nasce com
+  §16, e aparecer apagada é melhor do que sumir sem explicação.
+
+### O próximo ponto exato
+
+O roteiro de §27 tem as fatias 1, 2 e 4 fechadas, e a 3 (ferramentas de desenho e edição
+contextual) quase — falta a **paleta clicável de cor**, que é o que torna o desenho
+descobrível sem Shift/Alt (§10.2 e §25).
+
+Depois dela, a fatia 5 do roteiro: **reprodução, pausas, velocidades e comparação**
+(§15). Ela é a que fecha o piloto que motivou o v2 — "uma posição de rei e peão: linha
+correta até o empate, retorno ao ponto de escolha e linha errada até a derrota, na mesma
+aula" —, e agora ela tem com que ser feita: "mostrar esta variante na aula" existe, e é
+por ela que os dois capítulos de comparação nascem.
+
+A importação por URL do Lichess (§13.2) segue deliberadamente fora: é a única que depende
+de rede, e isso é outra classe de risco.
 
 ---
 

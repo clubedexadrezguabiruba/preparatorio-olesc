@@ -355,27 +355,100 @@ test("o quadro de introdução que aponta para um lance podado também bloqueia"
   assert.deepEqual(impacto.bloqueios.map((b) => [b.tipo, b.nome]), [["introducao", "Antes de começar"]]);
 });
 
-test("uma análise que começa dentro desta bloqueia, porque mudaria de tabuleiro junto", () => {
-  const aula = aulaDeEnsaio();
+/**
+ * Pendura em `aula` uma análise que **começa** num nó de outra — é o que
+ * "começar desta posição" (§8.3) cria, e é o caso que a cascata trata.
+ *
+ * A árvore da filha, a partir de `no-4` (depois de `1. Rf2`, pretas a jogar):
+ *
+ * ```
+ * raiz
+ *  └─ d1  e8e7   ← legal nos dois mundos
+ *      ├─ d2  e2e4   ← legal só enquanto o peão está em e2
+ *      └─ d3  f2g3   ← legal nos dois, e irmão do que cai
+ * ```
+ */
+function comFilha(aula: AulaV2, nodeDeOrigem = "no-4"): AulaV2 {
   aula.analises.push({
     id: "analise-derivada",
-    inicio: { tipo: "referencia", origem: { analiseId: "analise-ensaio", nodeId: "no-4" } },
+    inicio: { tipo: "referencia", origem: { analiseId: "analise-ensaio", nodeId: nodeDeOrigem } },
     raizId: "no-derivada-0",
-    nos: { "no-derivada-0": { id: "no-derivada-0", filhos: [] } },
+    nos: {
+      "no-derivada-0": { id: "no-derivada-0", filhos: ["no-derivada-1"] },
+      "no-derivada-1": { id: "no-derivada-1", uci: "e8e7", filhos: ["no-derivada-2", "no-derivada-3"], comentario: "O rei preto se aproxima." },
+      "no-derivada-2": { id: "no-derivada-2", uci: "e2e4", filhos: [] },
+      "no-derivada-3": { id: "no-derivada-3", uci: "f2g3", filhos: [] },
+    },
   });
   aula.capitulos.push({
     id: "capitulo-derivado",
     titulo: "Daqui em diante",
     analiseId: "analise-derivada",
     inicioNodeId: "no-derivada-0",
-    caminho: [],
+    caminho: ["no-derivada-1", "no-derivada-2"],
     orientacao: "white",
-    narracoes: [],
+    narracoes: [{ id: "narracao-derivada", nodeId: "no-derivada-1", texto: "Repare no rei.", pausa: "temporizada" }],
   });
   aula.fluxo.push({ id: "etapa-derivado", tipo: "capitulo", entidadeId: "capitulo-derivado" });
+  return aula;
+}
+
+test("a análise que começa num nó sobrevivente é revalidada em cascata, e não bloqueia", () => {
+  const { impacto } = calcular(comFilha(aulaDeEnsaio()), FEN_NOVA);
+
+  assert.deepEqual(impacto.bloqueios, [], "o nó de origem continua lá: a filha mudou de chão, não ficou sem ele");
+  assert.equal(impacto.cascatas.length, 1);
+  const cascata = impacto.cascatas[0];
+  assert.equal(cascata.analiseId, "analise-derivada");
+  assert.equal(cascata.nome, "Daqui em diante", "o professor conhece a análise pelo nome do capítulo dela");
+  assert.equal(cascata.fenAnterior, "4k3/8/8/8/8/8/4PK2/8 b - - 1 1");
+  assert.equal(cascata.fenNova, "4k3/8/8/8/8/4P3/5K2/8 b - - 1 1", "o chão novo da filha é a posição do nó de origem depois da troca");
+  assert.deepEqual(cascata.podas.map((p) => p.nodeId), ["no-derivada-2"], "poda no primeiro ilegal da filha");
+  assert.deepEqual(cascata.nosMarcados, ["no-derivada-1"], "o comentário que sobrevive na filha é marcado igual aos da mãe");
+});
+
+test("a cascata poda a filha de verdade, preserva o irmão legal e corta o percurso dela", () => {
+  const depois = trocar(comFilha(aulaDeEnsaio()), FEN_NOVA);
+  const filha = depois.analises.find((a) => a.id === "analise-derivada")!;
+
+  assert.deepEqual(Object.keys(filha.nos).sort(), ["no-derivada-0", "no-derivada-1", "no-derivada-3"]);
+  assert.deepEqual(filha.nos["no-derivada-1"].filhos, ["no-derivada-3"], "o irmão legal não se contamina");
+  assert.equal(filha.inicio.tipo, "referencia", "a filha continua começando no mesmo nó da mãe: a dependência é o que o professor pediu");
+
+  const capitulo = depois.capitulos.find((c) => c.id === "capitulo-derivado")!;
+  assert.deepEqual(capitulo.caminho, ["no-derivada-1"], "o percurso da filha é truncado no lance que caiu");
+  assert.equal(capitulo.narracoes[0].revisao?.motivo, "posicao-inicial-trocada", "a narração da filha também é marcada");
+  assert.equal(filha.nos["no-derivada-1"].revisao?.motivo, "posicao-inicial-trocada");
+
+  assert.equal(validarAulaV2(depois, positions).ok, true, "a aula continua válida com mãe e filha podadas na mesma transação");
+});
+
+test("a cascata atravessa a neta: quem começa na filha também é revalidado", () => {
+  const aula = comFilha(aulaDeEnsaio());
+  aula.analises.push({
+    id: "analise-neta",
+    inicio: { tipo: "referencia", origem: { analiseId: "analise-derivada", nodeId: "no-derivada-1" } },
+    raizId: "no-neta-0",
+    nos: {
+      "no-neta-0": { id: "no-neta-0", filhos: ["no-neta-1"] },
+      "no-neta-1": { id: "no-neta-1", uci: "e2e4", filhos: [] },
+    },
+  });
+  aula.capitulos.push({
+    id: "capitulo-neta", titulo: "Mais adiante", analiseId: "analise-neta",
+    inicioNodeId: "no-neta-0", caminho: [], orientacao: "white", narracoes: [],
+  });
+  aula.fluxo.push({ id: "etapa-neta", tipo: "capitulo", entidadeId: "capitulo-neta" });
 
   const { impacto } = calcular(aula, FEN_NOVA);
+  assert.deepEqual(impacto.cascatas.map((c) => c.analiseId), ["analise-derivada", "analise-neta"]);
+  assert.deepEqual(impacto.cascatas[1].podas.map((p) => p.nodeId), ["no-neta-1"], "o peão também não está em e2 para a neta");
+});
+
+test("a análise que começa num nó PODADO continua bloqueando: ela ficou sem chão, não mudou de chão", () => {
+  const { impacto } = calcular(comFilha(aulaDeEnsaio(), "no-2"), FEN_NOVA);
   assert.deepEqual(impacto.bloqueios.map((b) => [b.tipo, b.nome]), [["analise", "Daqui em diante"]]);
+  assert.deepEqual(impacto.cascatas, [], "sem chão não há o que revalidar — a decisão volta ao professor");
 });
 
 test("Desfazer devolve a aula inteira, e Refazer devolve os mesmos ids", () => {
