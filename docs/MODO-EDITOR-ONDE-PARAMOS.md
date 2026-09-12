@@ -61,19 +61,25 @@ cada linha aponta a seção que conta a história inteira.
   clique esquerdo apagava o desenho inteiro da posição. Ver “a paleta clicável de
   desenho”.
 
+- **Prévia, reprodução e comparação (§15)** — a prévia usa o player do aluno, com a
+  aula inteira, o capítulo ou "daqui"; as velocidades não comprimem a leitura da
+  narração; e a comparação volta ao ponto de escolha, com o caso de aceite de rei e
+  peão provado contra a regra do jogo. **Falta a conferência humana da tela**, inclusive
+  a geometria em 1366×768. Ver “prévia, reprodução e comparação”.
+
 **Aberto, na ordem:**
 
-1. **Prévia, reprodução e comparação** (§15) — fatia 5 do roteiro. É a que fecha o
-   piloto de rei e peão que motivou o v2.
-2. **Editor de treinos** (§16), **publicação v2** (§20), **repertório** (§21), **barra
-   Stockfish** (§23) e **importar por URL do Lichess** (§13.2) continuam fora, sem
-   redução de escopo.
+1. **Autoria de treinos e defensor** (§16) — fatia 6 do roteiro. É o que destrava
+   "Criar treino daqui", hoje desabilitada com o motivo escrito.
+2. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23) e
+   **importar por URL do Lichess** (§13.2) continuam fora, sem redução de escopo.
 
 **Dívida conhecida e não paga:** a lista de lances mostra ~10 lances por vez em
 1366×768; se incomodar, o espaço sai do bloco de edição abaixo dela.
 
-**Isto não declara o editor pronto.** O roteiro de §27 tem as fatias 1, 2, 3 e 4
-fechadas; as fatias 5 a 10 continuam abertas.
+**Isto não declara o editor pronto.** O roteiro de §27 tem as fatias 1 a 5 fechadas no
+código, com o teste humano das duas últimas pendente; as fatias 6 a 10 continuam
+abertas.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -1906,6 +1912,234 @@ protegido), em 1366×768:
 ### O próximo ponto exato
 
 A fatia 5 do roteiro de §27: **prévia, reprodução e comparação** (§15).
+
+---
+
+## Prévia, reprodução e comparação, entregue em 12/9/2026
+
+Fecha a fatia 5 do roteiro de §27 — a que motivou o v2. O professor abre
+**Pré-visualizar** e vê a aula como o aluno a vê: a aula inteira, só o capítulo, ou daqui
+em diante.
+
+### A decisão que manda em tudo: não existe um segundo player
+
+§15.1 não é uma preferência, é um requisito com a palavra "nunca": *"usa o mesmo runtime
+do aluno, **nunca** um segundo player aproximado"*. O plano final §16 repete: *"não
+reproduzir o comportamento pedagógico em um segundo player exclusivo do editor"*.
+
+O runtime do aluno é o `ObjectiveStage` — a aula assistida das aulas de finais. É lá que
+moram as cinco coisas que fazem a aula ser a aula: o relógio que espera a leitura, a
+digitação da fala caractere a caractere, o som do lance, as duas camadas de desenho e o
+palco de altura fechada. Um player só do editor copiaria as cinco e divergiria na
+primeira que alguém consertasse.
+
+Então **o player do aluno cresceu controles**, em vez de ganhar um irmão. Uma prop nova,
+opcional, chamada `previa`; sem ela, o componente se comporta exatamente como antes, e é
+assim que a página do aluno continua o chamando. O que ela leva:
+
+| Campo | Para quê |
+|---|---|
+| `relogio` | o tempo de cada passo, e `null` quando ele não anda sozinho |
+| `autoria` | o desenho do documento v2, que tem cor — o do v1 não tem |
+| `animacaoMs` | o "movimento" que a velocidade altera |
+| `aoTerminar` | encadeia o próximo capítulo na prévia da aula inteira |
+| `controles` | troca os dois botões do aluno pela barra de §15.2 |
+
+`controles` é render-prop pelo mesmo motivo que `edicaoDaFala` já era: o player não deve
+saber o que é uma velocidade nem o que é fechar uma prévia.
+
+### A velocidade, e o que ela pode e não pode acelerar
+
+§15.2 e o plano final §6 dizem a mesma frase: *"velocidade altera movimentos e
+intervalos; o tempo de leitura da narração permanece calculado pela régua existente"* —
+*"isso evita acelerar involuntariamente a leitura"*.
+
+A tradução para este runtime é uma linha, e ela é a fatia inteira:
+
+- **onde há texto**, o relógio é a régua de leitura do aluno (`pausaDoPasso`), e a
+  velocidade **não encosta nela**;
+- **onde não há texto**, o que corre não é leitura, é intervalo — o lance acontece e o
+  próximo vem. Aí a velocidade vale inteira.
+
+Isso não é um meio-termo: é o que faz o 2× ser de fato duas vezes mais rápido numa
+partida importada, onde a maioria dos lances ainda não tem narração, **e** manter legível
+o capítulo narrado. A animação da peça obedece à velocidade porque ela é literalmente o
+"movimento" da frase: 180 ms a 1×, 90 a 2×, 360 a 0,5×.
+
+Os dois números têm o mesmo valor e significados diferentes — o piso de leitura do aluno
+e o intervalo sem fala são ambos 1000 ms — e por isso estão escritos em dois lugares, com
+o motivo em cada um. Fundi-los faria a velocidade acelerar a leitura pela porta dos
+fundos.
+
+### A comparação é lida dos percursos, e não declarada num campo
+
+§15.3 pede que a experiência mostre a linha, **volte de forma compreensível à posição de
+comparação** e mostre a alternativa. O documento não tem um campo "isto é uma
+comparação", e não deve ter: os capítulos de comparação nascem de *"mostrar esta variante
+na aula"*, que só cria um capítulo apontando para um percurso. Um campo a mais seria uma
+segunda verdade, pronta para divergir do percurso no dia em que um dos dois mudasse.
+
+Então a comparação é **calculada**: dois capítulos da mesma análise que compartilham um
+começo e depois se separam estão comparando linhas, e o último nó em comum é o ponto de
+escolha. Com mais de um candidato vale o de começo comum mais longo — é a bifurcação mais
+perto, e é a que o professor acabou de criar.
+
+**O retorno é um passo do player, não uma tela.** Ele entra logo depois do último passo
+da bifurcação, sem lance, com o tabuleiro parado na posição da escolha:
+
+> Voltamos à posição inicial. Em «A defesa certa: o empate» a partida seguiu com 1… Kd7;
+> agora, a outra escolha: 1… Ke8.
+
+Uma tela intermediária tiraria o tabuleiro justamente do momento em que ele é o
+argumento. E o passo de retorno só existe na prévia da **aula inteira**: no capítulo
+sozinho não há de onde voltar, e inventar o aviso ali seria mentir sobre o que o aluno
+verá.
+
+### Quatro decisões menores, e o porquê
+
+**A prévia toma a tela inteira.** O palco da aula (`.aula-palco`) é dimensionado pela
+altura da janela, e a promessa dele é rolagem zero. Espremido dentro do casco do
+`Dialogo` — centrado, rolando por dentro, com rodapé grudado — o professor veria um palco
+que o aluno nunca vê. O contrato de teclado é o mesmo (`Esc` fecha, `Tab` não escapa), e
+por isso ele saiu do `Dialogo` para `components/editor-v2/foco.ts`: dois cascos, um
+contrato. É a mesma lição que criou o `Dialogo`.
+
+**A prévia guarda o cálculo, não o pedido.** Ela recebe um retrato do documento no
+instante em que abriu. É o isolamento que §15.1 exige — da seleção e do Undo da autoria —
+e ele sai de graça: não há comando, não há `aplicar`, não há caminho daqui até o
+documento.
+
+**Nada é gravado.** O `onStageDone` do runtime do aluno simplesmente não é passado; não
+existe caminho da prévia até `registrarEtapa`. §20.2 exige isso, e a tela **diz** isso,
+em vez de deixar o professor descobrir depois.
+
+**Lance sem narração vira passo de fala vazia.** A prévia não inventa texto: se o
+professor ainda não escreveu, o aluno veria o lance em silêncio, e é o silêncio que a
+prévia mostra. Serve de dobradinha — ela também é o mapa do que falta escrever.
+
+### Escrito
+
+| Arquivo | O que é |
+|---|---|
+| `lib/editor-v2/previa.ts` | **novo** — a tradução do documento em passos, a comparação calculada e o relógio de §15.2 |
+| `components/editor-v2/Previa.tsx` | **novo** — a moldura, a barra de controles e a passagem de capítulo |
+| `components/editor-v2/foco.ts` | **novo** — `Esc` e a prisão do `Tab`, agora num lugar só |
+| `components/lesson/ObjectiveStage.tsx` | a prop `previa`, opcional; o aluno não passa nada |
+| `components/board/ChessBoard.tsx` | `animacaoMs`, para a velocidade alcançar o movimento |
+| `components/editor-v2/Dialogo.tsx` | passou a usar o `foco.ts` |
+| `components/editor-v2/EditorV2.tsx` | o botão, a janela das três entradas e a prévia |
+
+### Evidência
+
+**Cinco portões verdes, e dois vermelhos por causa de outra sessão** — ver a seção
+seguinte, que não é sobre este código.
+
+Verdes: tipos, lint, **1.007 testes** (25 novos), build e repertório `--check`.
+
+Os 25 testes novos, por assunto:
+
+- **§15.1, os passos (6):** o primeiro passo é a posição de partida e não tem lance; cada
+  lance do percurso vira um passo, na ordem; lance sem narração vira fala vazia e a
+  prévia não inventa texto; duas narrações no mesmo nó viram dois passos com o lance
+  jogado **uma vez**; a pausa manual atravessa; e os desenhos viajam com a cor da autoria;
+- **§15.1, «daqui» (3):** começa na posição do lance escolhido e não no começo do
+  capítulo, com a FEN conferida contra a chess.js; lance fora do percurso **não** abre
+  «daqui», porque variante não toca sozinha; e o percurso é o início mais o caminho;
+- **§15.1, a aula inteira (2):** a ordem é a do `fluxo` e não a do cadastro; cada capítulo
+  leva a própria orientação, e os dois lados convivem na mesma prévia;
+- **§15.2, o relógio (4):** a velocidade **não** comprime a leitura, em 0,5× e em 2×, e o
+  número é o da régua do aluno; vale inteira no intervalo sem fala; a pausa manual não
+  anda em velocidade nenhuma; e o movimento obedece;
+- **§15.3, a comparação (4):** a bifurcação achada num lance, com o rótulo e o que cada
+  linha joga dali; a bifurcação na posição inicial; o capítulo que é só o começo do outro
+  **não** é comparação; e, com três linhas, o começo comum mais longo ganha;
+- **§15.3, o caso de aceite obrigatório (6):** abaixo.
+
+**O caso de aceite de §15.3, com a regra do jogo por trás.** A posição é rei branco d5,
+peão e4, rei preto e7, **pretas jogam** — `8/4k3/8/3K4/4P3/8/8/8 b - - 0 1`, com o preto
+segurando a oposição. Duas linhas, na mesma aula:
+
+- **«A defesa certa: o empate»** — `1… Kd7 2.e5 Ke7 3.e6 Ke8 4.Kd6 Kd8 5.e7+ Ke8 6.Ke6`,
+  e o teste confere na chess.js que a posição final é **afogamento**, e portanto empate;
+- **«O engano: a derrota»** — `1… Ke8? 2.Ke6 Kd8 3.Kf7 Kd7 4.e5 Kd8 5.e6 Kc7 6.e7 Kd7
+  7.e8=Q+`, e o teste confere que a dama está em e8 e que não há empate nenhum.
+
+Os testes provam, além das duas linhas: que a prévia da aula inteira traz as duas na
+ordem do fluxo; que o passo de retorno aparece **na posição da escolha**, sem lance, logo
+antes do primeiro lance diferente, com a frase inteira conferida palavra por palavra; que
+fora esse passo os lances são exatamente o percurso; que a **narração da mesma posição é
+diferente em cada passagem** (§15.3, item 4); que a pausa manual do ponto de escolha
+chega ao relógio como `null`; e que a prévia do capítulo sozinho **não** inventa o
+retorno.
+
+### Os dois portões vermelhos, e por que eles não são deste código
+
+Enquanto esta parada rodava, **outra sessão do Claude Code estava editando o mesmo
+repositório** — `preparatorio-olesc-e1`, aberta às 13h22 — e reescreveu `content/sources.json`
+(13:47:55) e `docs/SOURCE-CORPUS.md` (13:48:50), trocando o livro-base do módulo de finais
+do De la Villa para o Silman.
+
+`content/divida-de-licenca.md` ainda não foi atualizado junto, e é isso que deixa
+`validate:content` e `validate:mutations` vermelhos:
+
+```
+✖ [DIVIDA_DESATUALIZADA] content/divida-de-licenca.md
+    o inventário do regime integral não bate com o conteúdo
+```
+
+O mesmo `validate:content` passou verde nesta sessão às 13h3x, com este código já
+compilando, e os dois arquivos não foram tocados por nenhum commit desta rodada. A falha
+é um estado intermediário da edição da outra sessão, e quem a fecha é ela. **Nada foi
+alterado nesses arquivos daqui**, de propósito: mexer no trabalho em curso de outra
+sessão é a forma mais barata de perder os dois.
+
+### O teste humano desta fatia — o roteiro numerado
+
+Abrir `/editor/v2/finais/N0-LADDER` e clicar em **Pré-visualizar**:
+
+1. **As três entradas.** A janela oferece "A aula inteira", "Só este capítulo" e "Daqui em
+   diante". Com um lance de variante selecionado, a terceira fica **apagada**, e a
+   explicação embaixo dela diz por quê.
+2. **O capítulo toca.** O tabuleiro anda sozinho, a fala é digitada, e o passo só vira
+   depois do tempo de leitura — como na aula do aluno.
+3. **Pausar e continuar.** `⏸ Pausar` para; `⏵ Reproduzir` volta a andar.
+4. **Voltar e avançar** andam um passo por clique, e atravessam a borda do capítulo
+   quando há outro antes ou depois.
+5. **A velocidade.** Em 2×, um trecho **sem narração** anda visivelmente mais rápido; um
+   trecho **com narração** leva o mesmo tempo. É este o teste da regra de §15.2, e é o
+   único jeito de conferi-la com o olho.
+6. **Repetir capítulo** volta ao primeiro passo do capítulo; **Reiniciar** volta ao
+   primeiro capítulo da prévia.
+7. **A pausa manual.** Numa narração marcada como pausa manual, a aula **para** e o botão
+   vira **Continuar**.
+8. **A comparação.** Criar, pela ação "mostrar esta variante na aula", dois capítulos que
+   se separam num lance; abrir "A aula inteira": ao chegar na bifurcação o tabuleiro para
+   e a frase "Voltamos a …" aparece antes do lance alternativo.
+9. **Isolamento.** `Esc` ou "Fechar prévia" devolve o editor **no mesmo capítulo e no
+   mesmo lance** em que estava, e o `✓ salvo` não vira "alterado" por ter assistido.
+10. **A geometria em 1366×768.** O palco da prévia tem uma barra a mais que o do aluno —
+    o cabeçalho da prévia. Conferir que o tabuleiro não é empurrado para fora e que a
+    página não ganha rolagem. **Este é o item com maior chance de precisar de ajuste**, e
+    é medição, não opinião.
+
+### O que esta fatia NÃO cobre
+
+- **Treino dentro da prévia.** A prévia reproduz capítulos. Jogar o treino como o aluno
+  joga nasce com o editor de treinos (§16), que não existe.
+- **Prática contra Stockfish** (§17.1) na prévia, pelo mesmo motivo.
+- **Introdução e quadros explicativos** (§7.1) não entram na prévia ainda: o editor de
+  introdução não tem tela, e reproduzir o que não se pode editar seria mostrar um trecho
+  que o professor não consegue consertar.
+- **A pausa manual no meio de uma fala paginada.** A prévia para no passo, não na página;
+  a régua de voz existe para a fala não paginar, e o caso não foi exercitado.
+- A prévia **não** foi vista no navegador nesta sessão: a porta do editor exige professor
+  autenticado e o navegador embutido estava deslogado. Tudo o que depende de ver a tela
+  está no roteiro acima.
+
+### O próximo ponto exato
+
+A fatia 6 do roteiro de §27: **autoria de treinos e defensor** (§16). Ela é a que destrava
+"Criar treino daqui", que hoje aparece no menu do lance desabilitada com o motivo escrito.
 
 ---
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, type ReactNode } from "react";
+import { usePrisaoDeFoco } from "./foco";
 
 /**
  * O casco de todas as janelas do Editor v2 — §25.
@@ -60,30 +61,9 @@ export function Dialogo({
     janela.current?.querySelector<HTMLElement>("button, input, textarea, select")?.focus();
   }, []);
 
-  useEffect(() => {
-    const tecla = (evento: KeyboardEvent) => {
-      if (evento.key === "Escape") {
-        aoFechar();
-        return;
-      }
-      if (evento.key !== "Tab" || !janela.current) return;
-      const focaveis = janela.current.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), textarea, input:not([disabled]), select, summary, details',
-      );
-      if (focaveis.length === 0) return;
-      const primeiro = focaveis[0];
-      const ultimo = focaveis[focaveis.length - 1];
-      if (!evento.shiftKey && document.activeElement === ultimo) {
-        evento.preventDefault();
-        primeiro.focus();
-      } else if (evento.shiftKey && document.activeElement === primeiro) {
-        evento.preventDefault();
-        ultimo.focus();
-      }
-    };
-    window.addEventListener("keydown", tecla);
-    return () => window.removeEventListener("keydown", tecla);
-  }, [aoFechar]);
+  // `Esc` e a prisão do `Tab` moram em `foco.ts`, porque a prévia (§15) precisa do
+  // mesmo contrato num casco de tela inteira.
+  usePrisaoDeFoco(janela, aoFechar);
 
   return (
     <div

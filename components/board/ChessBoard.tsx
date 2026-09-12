@@ -188,6 +188,16 @@ export type ChessBoardProps = {
    */
   desenhando?: boolean;
   /**
+   * Quanto dura a animação da peça, em ms. Padrão 180 — o número da aula.
+   *
+   * Existe para a prévia do editor (§15.2): *"velocidade altera movimentos e
+   * intervalos"*, e o movimento é exatamente isto. Passa pelo `set`, que chama
+   * `applyAnimation` antes de animar (`config.js`), então a troca vale já no lance
+   * seguinte. `enabled: true` vai junto porque o pacote **desliga** a animação abaixo
+   * de 70 ms e nunca mais a religa sozinho.
+   */
+  animacaoMs?: number;
+  /**
    * Modo montagem (B8.4): as peças andam livres, soltar fora do tabuleiro
    * apaga, e cada mudança devolve a FEN nova. Desligado por padrão — nada do
    * caminho do aluno passa por aqui.
@@ -279,6 +289,7 @@ export function ChessBoard({
   desenhavel,
   espessuraDeDesenhoUniforme = false,
   desenhando = false,
+  animacaoMs = 180,
   montagem,
   onMove,
   onSelect,
@@ -334,7 +345,7 @@ export function ChessBoard({
       // Rolagem da página fica bloqueada durante o arraste no celular.
       blockTouchScroll: true,
       highlight: { lastMove: true, check: true },
-      animation: { enabled: true, duration: 180 },
+      animation: { enabled: true, duration: animacaoMs },
       movable: {
         // Em montagem a peça vai para qualquer casa: não há partida, há
         // posição sendo composta.
@@ -435,6 +446,7 @@ export function ChessBoard({
       check,
       viewOnly,
       lastMove: lastMove ?? undefined,
+      animation: { enabled: true, duration: animacaoMs },
       movable: monta
         ? { free: true, color: "both" as const, dests: undefined }
         : {
@@ -448,7 +460,7 @@ export function ChessBoard({
     // `desenhavel` fora da lista: a identidade do objeto muda a cada render do
     // pai, e o efeito abaixo já cuida de quando as **formas** mudam.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fen, orientation, turnColor, dests, lastMove, check, viewOnly, revision, desenhando]);
+  }, [fen, orientation, turnColor, dests, lastMove, check, viewOnly, revision, desenhando, animacaoMs]);
 
   // Formas trocadas sem a FEN mudar — o autor desenhando, ou o painel
   // devolvendo o que estava no arquivo.

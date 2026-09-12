@@ -81,6 +81,7 @@ export function ObjectiveStage({
   edicaoDaFala,
   edicaoDaTecnica,
   marcacao,
+  previa,
 }: {
   stage: ObjectiveStageData;
   /** A posição da aula — a MESMA das três etapas, e de onde o roteiro parte. */
@@ -120,6 +121,47 @@ export function ObjectiveStage({
    * cada troca de diagrama.
    */
   marcacao?: { shapes: DrawShape[]; onChange: (shapes: DrawShape[]) => void };
+  /**
+   * **A prévia do Editor v2 (§15).** O aluno não passa nada disto; sem ele, este
+   * componente se comporta exatamente como antes.
+   *
+   * ## Por que a prévia entra aqui, e não num player só dela
+   *
+   * §15.1 é um requisito, não uma preferência: *"usa o mesmo runtime do aluno, nunca
+   * um segundo player aproximado"*, e o plano final §16 repete — *"não reproduzir o
+   * comportamento pedagógico em um segundo player exclusivo do editor"*. O que faz a
+   * aula ser a aula está aqui dentro: o relógio que espera a leitura, a digitação da
+   * fala, o som do lance, as duas camadas de desenho e o palco. Um segundo player
+   * copiaria as cinco coisas e divergiria na primeira que alguém consertasse.
+   *
+   * Então o player **cresce controles**, em vez de ganhar um irmão. É um objeto só, e
+   * não cinco props soltas, porque ou a prévia está ligada ou não está: meia prévia
+   * não é estado que exista.
+   *
+   * - `relogio` devolve `null` quando o passo **não anda sozinho** — é a pausa manual
+   *   de §15.2, e é o professor que aperta "Continuar";
+   * - `autoria` substitui o desenho deduzido do passo pelo do documento v2, que tem
+   *   cor; `desenhoDaAutoria` lê a forma do arquivo v1, que não tem;
+   * - `animacaoMs` é o "movimento" que a velocidade altera;
+   * - `aoTerminar` encadeia o próximo capítulo na prévia da aula inteira;
+   * - `controles` substitui os dois botões do aluno pela barra da prévia. É
+   *   render-prop pelo mesmo motivo de `edicaoDaFala`: este componente não deve saber
+   *   o que é uma velocidade nem o que é fechar uma prévia.
+   */
+  previa?: {
+    relogio: (passo: number) => number | null;
+    autoria: (passo: number) => DrawShape[];
+    animacaoMs: number;
+    aoTerminar: () => void;
+    controles: (api: {
+      passo: number;
+      total: number;
+      tocando: boolean;
+      alternar: () => void;
+      irPara: (passo: number) => void;
+      reiniciar: () => void;
+    }) => ReactNode;
+  };
 }) {
   const [passo, setPasso] = useState(() =>
     Math.min(Math.max(passoInicial, 0), stage.roteiro.length - 1),
@@ -163,11 +205,29 @@ export function ObjectiveStage({
     comentarioRef.current = comentario;
   });
 
+  /**
+   * O aviso de fim, por referência.
+   *
+   * A prévia da aula inteira encadeia o próximo capítulo aqui. Vai por `useRef` para
+   * o aviso não sair de novo a cada render do pai — e o efeito depende só de
+   * `terminou`, que vira uma vez.
+   */
+  const aoTerminarRef = useRef(previa?.aoTerminar);
+  useEffect(() => {
+    aoTerminarRef.current = previa?.aoTerminar;
+  });
+  useEffect(() => {
+    if (terminou) aoTerminarRef.current?.();
+  }, [terminou]);
+
   /** O relógio: a fala acaba, o aluno lê, e o próximo passo entra. */
   useEffect(() => {
     if (!tocando || digitando) return;
     if (ultimo && naUltima) return;
-    const espera = pausaDoPasso(atual);
+    // Na prévia o relógio é o de §15.2: a leitura fica intacta, o intervalo obedece à
+    // velocidade, e `null` é a pausa manual — que não anda até o professor mandar.
+    const espera = previa ? previa.relogio(passo) : pausaDoPasso(atual);
+    if (espera === null) return;
     const relogio = setTimeout(() => {
       // Página antes de passo: uma fala partida é lida inteira, e só então o
       // tabuleiro anda.
@@ -175,7 +235,7 @@ export function ObjectiveStage({
       else setPasso((p) => Math.min(p + 1, stage.roteiro.length - 1));
     }, espera);
     return () => clearTimeout(relogio);
-  }, [tocando, digitando, naUltima, ultimo, atual, stage.roteiro.length]);
+  }, [tocando, digitando, naUltima, ultimo, atual, passo, previa, stage.roteiro.length]);
 
   /**
    * O som do lance, por passo.
@@ -205,14 +265,18 @@ export function ObjectiveStage({
       // (por `marcacao`) — repeti-lo aqui o desenharia duas vezes. Os
       // destaques deduzidos ficam: o professor precisa ver o mesmo tabuleiro
       // que o aluno vai ver, e eles não são dele para apagar.
-      ...(marcacao ? [] : desenhoDaAutoria(atual)),
+      ...(marcacao ? [] : previa ? previa.autoria(passo) : desenhoDaAutoria(atual)),
     ],
-    [quadro, atual, marcacao],
+    [quadro, atual, marcacao, previa, passo],
   );
 
   const rever = () => {
     setPasso(0);
     setTocando(true);
+  };
+
+  const irPara = (n: number) => {
+    setPasso(Math.min(Math.max(n, 0), stage.roteiro.length - 1));
   };
 
   return (
@@ -229,6 +293,7 @@ export function ObjectiveStage({
           shapes={shapes}
           matedKing={quadro.matedColor}
           desenhavel={marcacao}
+          animacaoMs={previa?.animacaoMs}
           viewOnly
         />
       }
@@ -256,16 +321,29 @@ export function ObjectiveStage({
           )}
 
           <AulaRodape>
-            {/* O botão de pausa some quando a aula acaba: pausar o que já parou
-                não é controle, é botão morto. */}
-            {!terminou && (
-              <LessonButton onClick={() => setTocando((t) => !t)}>
-                {tocando ? "Pausar" : "Continuar"}
-              </LessonButton>
+            {previa ? (
+              previa.controles({
+                passo,
+                total: stage.roteiro.length,
+                tocando,
+                alternar: () => setTocando((t) => !t),
+                irPara,
+                reiniciar: rever,
+              })
+            ) : (
+              <>
+                {/* O botão de pausa some quando a aula acaba: pausar o que já parou
+                    não é controle, é botão morto. */}
+                {!terminou && (
+                  <LessonButton onClick={() => setTocando((t) => !t)}>
+                    {tocando ? "Pausar" : "Continuar"}
+                  </LessonButton>
+                )}
+                <LessonButton variant={terminou ? "primary" : "default"} onClick={rever}>
+                  Ver de novo
+                </LessonButton>
+              </>
             )}
-            <LessonButton variant={terminou ? "primary" : "default"} onClick={rever}>
-              Ver de novo
-            </LessonButton>
             {rodape}
           </AulaRodape>
         </>

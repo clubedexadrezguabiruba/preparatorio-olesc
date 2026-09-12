@@ -21,6 +21,14 @@ import { DialogoDuplicarCapitulo } from "@/components/editor-v2/DialogoDuplicarC
 import { DialogoExcluirCapitulo } from "@/components/editor-v2/DialogoExcluirCapitulo";
 import { DialogoExportar } from "@/components/editor-v2/DialogoExportar";
 import { PaletaDeDesenho } from "@/components/editor-v2/PaletaDeDesenho";
+import { Dialogo } from "@/components/editor-v2/Dialogo";
+import { Previa } from "@/components/editor-v2/Previa";
+import {
+  podePreverDaqui,
+  previaDaAula,
+  previaDoCapitulo,
+  type Previa as PreviaV2,
+} from "@/lib/editor-v2/previa";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { analiseDaAula, mapaDaAnalise } from "@/lib/editor-v2/arvore";
 import { desenhoDeFormas } from "@/lib/editor-v2/desenhos";
@@ -143,12 +151,22 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const [acaoDoLance, setAcaoDoLance] = useState<{ acao: AcaoContextualV2; nodeId: string } | null>(null);
   const [cortando, setCortando] = useState<{ tipo: TipoDeCorteV2; nodeId: string; lance: string } | null>(null);
   const [exportando, setExportando] = useState(false);
+  /**
+   * A prévia (§15), em dois estados: a escolha do escopo, e a prévia rodando.
+   *
+   * A prévia rodando guarda o **cálculo**, e não o pedido: ela é um retrato do
+   * documento no instante em que abriu, e é isso que a isola da autoria. Guardar só
+   * "qual capítulo" a faria recalcular a cada tecla digitada atrás dela.
+   */
+  const [escolhendoPrevia, setEscolhendoPrevia] = useState(false);
+  const [previa, setPrevia] = useState<PreviaV2 | null>(null);
   /** Cresce a cada navegação por teclado; é o sinal para o foco seguir a seta (§16). */
   const [pedidoDeFoco, setPedidoDeFoco] = useState(0);
   const botaoImportar = useRef<HTMLButtonElement>(null);
   const botaoAdicionar = useRef<HTMLButtonElement>(null);
   const botaoTrocarPosicao = useRef<HTMLButtonElement>(null);
   const botaoExportar = useRef<HTMLButtonElement>(null);
+  const botaoPrevia = useRef<HTMLButtonElement>(null);
   const [sessaoId, setSessaoId] = useState<string | null>(null);
   const hash = useRef(hashInicial);
   const ultimoEnfileirado = useRef(documentoInicial);
@@ -252,6 +270,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
    * vê o tabuleiro subir enquanto tenta só avançar um lance.
    */
   const janelaAberta = importando || adicionando || trocandoPosicao || exportando
+    || escolhendoPrevia || previa !== null
     || duplicandoCapitulo !== null || excluindoCapitulo !== null || acaoDoLance !== null || cortando !== null;
   const estadoDoTeclado = useRef({ analise, janelaAberta });
   useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta }; });
@@ -460,6 +479,34 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
     }
     fecharImportacao();
   }, [aplicar, fecharImportacao]);
+
+  /**
+   * §15.1: a prévia abre com o documento **de agora**, calculado uma vez.
+   *
+   * O cálculo acontece aqui, e não dentro da prévia, por causa do isolamento que §15.1
+   * pede: o que a prévia recebe é um retrato. Editar atrás dela — o que não dá, porque
+   * ela toma a tela — não mudaria o que está tocando.
+   */
+  const daquiDisponivel = Boolean(capitulo && podePreverDaqui(capitulo, nodeIdAtual));
+  const abrirPrevia = useCallback((escopo: "aula" | "capitulo" | "daqui") => {
+    const documento = historico.presente;
+    setPrevia(
+      escopo === "aula" || !capitulo
+        ? previaDaAula(documento, positions)
+        : previaDoCapitulo(documento, positions, capitulo.id, escopo === "daqui" ? nodeIdAtual : undefined),
+    );
+    setEscolhendoPrevia(false);
+  }, [capitulo, historico.presente, nodeIdAtual, positions]);
+
+  /** Fechar devolve o foco ao botão que abriu (§15.1 e §25). */
+  const fecharPrevia = useCallback(() => {
+    setPrevia(null);
+    botaoPrevia.current?.focus();
+  }, []);
+  const fecharEscolhaDaPrevia = useCallback(() => {
+    setEscolhendoPrevia(false);
+    botaoPrevia.current?.focus();
+  }, []);
 
   const fecharAdicionar = useCallback(() => {
     setAdicionando(false);
@@ -762,6 +809,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         <div className="flex items-center gap-2">
           <button type="button" ref={botaoImportar} onClick={() => setImportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Importar PGN</button>
           <button type="button" ref={botaoExportar} onClick={() => setExportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Exportar</button>
+          <button type="button" ref={botaoPrevia} onClick={() => setEscolhendoPrevia(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Pré-visualizar</button>
           <button type="button" disabled={!historico.passados.length} onClick={() => setHistorico(desfazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Desfazer</button>
           <button type="button" disabled={!historico.futuros.length} onClick={() => setHistorico(refazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Refazer</button>
           <button type="button" disabled={historico.presente === documentoInicial} onClick={desfazerTudo} className="foco rounded-md border border-aviso-superficie px-3 py-2 text-sm text-aviso-tinta disabled:opacity-40">Desfazer tudo</button>
@@ -886,6 +934,44 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
           aoFechar={() => { setExportando(false); botaoExportar.current?.focus(); }}
         />
       ) : null}
+
+      {/* §15.1: as três entradas da prévia. Uma janela com três botões, e não um menu
+          suspenso: são três destinos, não três variações de um. */}
+      {escolhendoPrevia ? (
+        <Dialogo
+          titulo="Pré-visualizar"
+          descricao="A aula aparece como o aluno a vê. Nada é gravado no progresso."
+          largura="max-w-lg"
+          aoFechar={fecharEscolhaDaPrevia}
+          rodape={<button type="button" onClick={fecharEscolhaDaPrevia} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Cancelar</button>}
+        >
+          <div className="flex flex-col gap-2">
+            <button type="button" onClick={() => abrirPrevia("aula")} className="foco rounded-md border border-borda px-3 py-2 text-left text-sm text-tinta hover:bg-carta-toque">
+              A aula inteira
+              <span className="block text-xs text-tinta-fraca">Todos os capítulos, na ordem do fluxo, com o retorno ao ponto de escolha quando duas linhas se comparam.</span>
+            </button>
+            <button type="button" onClick={() => abrirPrevia("capitulo")} className="foco rounded-md border border-borda px-3 py-2 text-left text-sm text-tinta hover:bg-carta-toque">
+              Só este capítulo
+              <span className="block text-xs text-tinta-fraca">«{capitulo.titulo}», do começo.</span>
+            </button>
+            <button
+              type="button"
+              disabled={!daquiDisponivel}
+              onClick={() => abrirPrevia("daqui")}
+              className="foco rounded-md border border-borda px-3 py-2 text-left text-sm text-tinta hover:bg-carta-toque disabled:opacity-40"
+            >
+              Daqui em diante
+              <span className="block text-xs text-tinta-fraca">
+                {daquiDisponivel
+                  ? `A partir de ${nomeDoLance(nodeIdAtual)}.`
+                  : "o lance selecionado não está no percurso deste capítulo — o capítulo reproduz só o percurso dele"}
+              </span>
+            </button>
+          </div>
+        </Dialogo>
+      ) : null}
+
+      {previa ? <Previa previa={previa} aoFechar={fecharPrevia} /> : null}
 
       <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[14rem_minmax(20rem,38rem)_minmax(18rem,1fr)]">
         <aside className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
