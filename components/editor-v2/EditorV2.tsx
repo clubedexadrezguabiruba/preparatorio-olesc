@@ -20,9 +20,18 @@ import { DialogoDeCorte } from "@/components/editor-v2/DialogoDeCorte";
 import { DialogoDuplicarCapitulo } from "@/components/editor-v2/DialogoDuplicarCapitulo";
 import { DialogoExcluirCapitulo } from "@/components/editor-v2/DialogoExcluirCapitulo";
 import { DialogoExportar } from "@/components/editor-v2/DialogoExportar";
+import { PaletaDeDesenho } from "@/components/editor-v2/PaletaDeDesenho";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { analiseDaAula, mapaDaAnalise } from "@/lib/editor-v2/arvore";
 import { desenhoDeFormas } from "@/lib/editor-v2/desenhos";
+import {
+  cliqueNaCasa,
+  desistirDaSeta,
+  escolherCor,
+  escolherFerramenta,
+  ESTADO_INICIAL_DA_PALETA,
+  type EstadoDaPaleta,
+} from "@/lib/editor-v2/paleta-de-desenho";
 import { acaoDeTeclado, ehCampoDeTexto, navegar } from "@/lib/editor-v2/navegacao";
 import { problemasVisiveisV2, resumoDosProblemasV2, type DestinoV2 } from "@/lib/editor-v2/diagnostico-visual";
 import {
@@ -367,6 +376,62 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   }, [analise.id, aplicar, nodeIdAtual]);
 
   const desenhavel = useMemo(() => ({ shapes: desenhos, onChange: aoDesenhar }), [desenhos, aoDesenhar]);
+
+  /**
+   * A paleta clicável de desenho (§10.2 e §25).
+   *
+   * O estado é da sessão, não do documento: qual ferramenta está na mão não é conteúdo
+   * da aula, e por isso não entra no autosave nem no Desfazer. O que entra no Desfazer
+   * é o traço, pelo mesmo comando do botão direito.
+   */
+  const [paletaGuardada, setPaleta] = useState({ estado: ESTADO_INICIAL_DA_PALETA, no: "" });
+  /**
+   * Uma seta pela metade pertence ao lance em que começou.
+   *
+   * O lance de origem viaja junto do estado, e a seta pendurada é **derivada**: trocar
+   * de lance a esquece sem custar um efeito que chama `setState` — que é cascata de
+   * render, e o lint do projeto recusa com razão.
+   */
+  const paleta = paletaGuardada.no === nodeIdAtual ? paletaGuardada.estado : desistirDaSeta(paletaGuardada.estado);
+  const desenhando = paleta.ferramenta !== "mover";
+  const mudarPaleta = useCallback((muda: (atual: EstadoDaPaleta) => EstadoDaPaleta) => {
+    setPaleta((guardada) => ({
+      estado: muda(guardada.no === nodeIdAtual ? guardada.estado : desistirDaSeta(guardada.estado)),
+      no: nodeIdAtual,
+    }));
+  }, [nodeIdAtual]);
+
+  const aoClicarNaCasa = useCallback((casa: string) => {
+    const efeito = cliqueNaCasa(paleta, desenhos, casa);
+    setPaleta({ estado: efeito.estado, no: nodeIdAtual });
+    if (efeito.formas) {
+      aplicar({
+        tipo: "DEFINIR_DESENHOS",
+        analiseId: analise.id,
+        nodeId: nodeIdAtual,
+        desenhos: desenhoDeFormas(efeito.formas),
+      });
+    }
+  }, [analise.id, aplicar, desenhos, nodeIdAtual, paleta]);
+
+  /**
+   * Esc sai do desenho por degraus: primeiro esquece a seta pela metade, depois devolve
+   * o tabuleiro ao movimento de peça. Um modo em que não se sabe sair é uma armadilha,
+   * e a tecla de escapar é a que todo mundo já tenta.
+   */
+  useEffect(() => {
+    const teclado = (evento: KeyboardEvent) => {
+      if (evento.key !== "Escape" || estadoDoTeclado.current.janelaAberta) return;
+      setPaleta((guardada) => {
+        const atual = guardada.estado;
+        if (atual.ferramenta === "mover") return guardada;
+        const estado = atual.origem ? desistirDaSeta(atual) : escolherFerramenta(atual, atual.ferramenta);
+        return { ...guardada, estado };
+      });
+    };
+    window.addEventListener("keydown", teclado);
+    return () => window.removeEventListener("keydown", teclado);
+  }, []);
   const narracoes = capitulo?.narracoes.filter((n) => n.nodeId === selecionado?.id) ?? [];
 
   /**
@@ -869,7 +934,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
                 lastMove={derivado.quadro.ultimoLance as [Key, Key] | null}
                 check={jogo.inCheck()}
                 onMove={mover}
+                onSelect={aoClicarNaCasa}
                 desenhavel={desenhavel}
+                desenhando={desenhando}
                 espessuraDeDesenhoUniforme
                 revision={historico.passados.length + historico.futuros.length}
                 overlay={qualidadeSelecionada && derivado.quadro.ultimoLance
@@ -879,25 +946,24 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
               {/* §11.3, "criar variante daqui": a ação não abre janela — ela
                   põe o professor na posição certa e diz o gesto. A dica só
                   aparece quando ele pediu, e some no primeiro lance jogado. */}
-              {dicaDaVariante ? (
+              {/* A dica da variante só faz sentido com o tabuleiro no modo de mover
+                  peça; com a seta na mão, "jogue no tabuleiro" seria uma instrução
+                  que o clique seguinte não cumpre. */}
+              {dicaDaVariante && !desenhando ? (
                 <p role="status" className="rounded-md border border-metodo-superficie bg-metodo-superficie/10 p-2 text-center text-xs text-metodo-tinta">
                   Jogue no tabuleiro a partir de {nomeDoLance(nodeIdAtual)}: um lance diferente dos que já existem nasce como variante, e a continuação de agora fica onde está.
                 </p>
-              ) : (
-                <p className="text-center text-xs text-tinta-fraca">Arraste uma peça para acrescentar um lance a partir da posição selecionada. Promoção usa dama por padrão.</p>
-              )}
-              {/* A ajuda fica escrita na tela pelo mesmo motivo dos atalhos de
-                  navegação (§16, "ferramentas de desenho descobríveis sem botão
-                  direito"): quem não souber do botão direito nunca desenha. As
-                  teclas são as do chessground, e portanto as mesmas do Lichess. */}
-              <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-tinta-fraca">
-                <span>Botão direito arrasta seta e acende casa:</span>
-                <span className="inline-flex items-center gap-1"><i aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: "var(--color-pincel-defendida)" }} />sozinho</span>
-                <span className="inline-flex items-center gap-1"><i aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: "var(--color-pincel-pendurada)" }} />Shift</span>
-                <span className="inline-flex items-center gap-1"><i aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: "var(--color-pincel-plano)" }} />Alt</span>
-                <span className="inline-flex items-center gap-1"><i aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: "var(--color-pincel-alternativa)" }} />Shift+Alt</span>
-                <button type="button" disabled={!desenhos.length} onClick={() => aplicar({ tipo: "DEFINIR_DESENHOS", analiseId: analise.id, nodeId: nodeIdAtual, desenhos: undefined })} className="foco rounded border border-borda px-2 py-1 text-tinta disabled:opacity-40">Apagar desenhos desta posição</button>
-              </div>
+              ) : null}
+              {/* §10.2 e §25: as ferramentas clicáveis, para o desenho ser descoberto
+                  sem conhecer Shift/Alt. Os atalhos continuam valendo, e a legenda
+                  deles ficou dentro da paleta. */}
+              <PaletaDeDesenho
+                estado={paleta}
+                temDesenho={desenhos.length > 0}
+                aoTrocarFerramenta={(ferramenta) => mudarPaleta((atual) => escolherFerramenta(atual, ferramenta))}
+                aoTrocarCor={(cor) => mudarPaleta((atual) => escolherCor(atual, cor))}
+                aoApagar={() => aplicar({ tipo: "DEFINIR_DESENHOS", analiseId: analise.id, nodeId: nodeIdAtual, desenhos: undefined })}
+              />
             </>
           ) : (
             /* Sem tabuleiro possível, e dizendo por quê. A lista de problemas acima

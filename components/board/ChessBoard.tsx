@@ -172,6 +172,22 @@ export type ChessBoardProps = {
   /** No desenho livre de autoria, todas as cores usam a largura padrão 10. */
   espessuraDeDesenhoUniforme?: boolean;
   /**
+   * A paleta de desenho está com uma ferramenta ligada: **ninguém move peça**, mas o
+   * toque na casa continua chegando ao `onSelect`.
+   *
+   * Sem isto, o mesmo clique faria as duas coisas — o chessground selecionaria a peça
+   * para arrastar *e* a paleta marcaria a origem da seta. É trocado pelo efeito de
+   * sincronização, e não na criação, porque é um modo que liga e desliga o tempo todo;
+   * o que se lê uma vez na criação (`desenhavel`, `montagem`) exigiria `key`.
+   *
+   * `movable.color = undefined` é o desligamento certo: `isMovable` passa a ser falso
+   * para toda casa (`board.js`), nenhuma peça arrasta e nenhuma fica selecionada — e
+   * o `events.select`, que é chamado no **topo** do `selectSquare`, continua falando.
+   * `viewOnly` não serviria: ele barra o `drag.start` inteiro, e o toque na casa nunca
+   * chegaria.
+   */
+  desenhando?: boolean;
+  /**
    * Modo montagem (B8.4): as peças andam livres, soltar fora do tabuleiro
    * apaga, e cada mudança devolve a FEN nova. Desligado por padrão — nada do
    * caminho do aluno passa por aqui.
@@ -262,6 +278,7 @@ export function ChessBoard({
   overlay,
   desenhavel,
   espessuraDeDesenhoUniforme = false,
+  desenhando = false,
   montagem,
   onMove,
   onSelect,
@@ -354,7 +371,28 @@ export function ChessBoard({
         shapes: desenhavel?.shapes ?? [],
         // A ref e não a prop: reconfigurar o chessground só porque a função
         // mudou de identidade custaria um redesenho por render.
-        onChange: (formas) => desenhoRef.current?.onChange(formas),
+        onChange: (formas) => {
+          // **O clique esquerdo apagava o desenho inteiro da posição.** O
+          // `drag.start` do pacote começa por `drawClear(s)` sempre que não há
+          // casa selecionada e o clique não cai numa peça movível
+          // (`drag.js:17-20`), e o `clear` avisa o `onChange` com a lista vazia
+          // (`draw.js:65-71`). Num tabuleiro do Lichess isso é o certo — a seta
+          // é rabisco de análise. Num editor de autoria é perda de trabalho: o
+          // desenho é conteúdo do arquivo, e um clique numa casa vazia o
+          // apagava sem o professor pedir.
+          //
+          // Ignorar toda lista vazia quebraria o gesto legítimo de apagar o
+          // último traço. O que separa os dois é o `drawable.current`: o traço
+          // apagado pelo botão direito chega aqui com o gesto **ainda de pé**
+          // (o `end` chama `addShape` antes de `cancel`), e a limpeza do clique
+          // chega sem gesto nenhum.
+          const api = apiRef.current;
+          if (formas.length === 0 && api && !api.state.drawable.current) {
+            api.setShapes([...(desenhoRef.current?.shapes ?? [])]);
+            return;
+          }
+          desenhoRef.current?.onChange(formas);
+        },
         // O tipo do pacote exige a tabela inteira — os doze pincéis —, mas o
         // `configure()` dele faz `deepMerge`: o que não vier aqui continua
         // valendo o padrão. Trocamos os quatro que a aula usa e mais nada.
@@ -401,8 +439,8 @@ export function ChessBoard({
         ? { free: true, color: "both" as const, dests: undefined }
         : {
             free: false,
-            color: viewOnly ? undefined : turnColor,
-            dests: viewOnly ? new Map() : dests,
+            color: viewOnly || desenhando ? undefined : turnColor,
+            dests: viewOnly || desenhando ? new Map() : dests,
           },
       // Re-passado junto da FEN de propósito — ver a prop `desenhavel`.
       ...(desenhaAqui ? { drawable: { shapes: desenhavel?.shapes ?? [] } } : {}),
@@ -410,7 +448,7 @@ export function ChessBoard({
     // `desenhavel` fora da lista: a identidade do objeto muda a cada render do
     // pai, e o efeito abaixo já cuida de quando as **formas** mudam.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fen, orientation, turnColor, dests, lastMove, check, viewOnly, revision]);
+  }, [fen, orientation, turnColor, dests, lastMove, check, viewOnly, revision, desenhando]);
 
   // Formas trocadas sem a FEN mudar — o autor desenhando, ou o painel
   // devolvendo o que estava no arquivo.

@@ -55,22 +55,25 @@ cada linha aponta a seção que conta a história inteira.
   pendentes. Um calculador de impacto só (`lib/editor-v2/impacto.ts`) atende às quatro
   edições que perdem nós. Ver “sete fatias numa rodada”.
 
+- **Paleta clicável de desenho (§10.2 e §25)** — seta, casa, cor e limpar em botões; a
+  cor sem Shift/Alt, com os atalhos ainda valendo. Fecha a fatia 3 do roteiro. **Falta a
+  conferência humana do clique**, e com ela a reprodução de um defeito consertado: o
+  clique esquerdo apagava o desenho inteiro da posição. Ver “a paleta clicável de
+  desenho”.
+
 **Aberto, na ordem:**
 
-1. **Paleta clicável de desenho** (§10.2 e §25) — hoje a cor só se escolhe segurando
-   Shift/Alt, e atalho que ninguém descobre não existe. É o que falta da fatia 3 do
-   roteiro de §27.
-2. **Prévia, reprodução e comparação** (§15) — fatia 5 do roteiro. É a que fecha o
+1. **Prévia, reprodução e comparação** (§15) — fatia 5 do roteiro. É a que fecha o
    piloto de rei e peão que motivou o v2.
-3. **Editor de treinos** (§16), **publicação v2** (§20), **repertório** (§21), **barra
+2. **Editor de treinos** (§16), **publicação v2** (§20), **repertório** (§21), **barra
    Stockfish** (§23) e **importar por URL do Lichess** (§13.2) continuam fora, sem
    redução de escopo.
 
 **Dívida conhecida e não paga:** a lista de lances mostra ~10 lances por vez em
 1366×768; se incomodar, o espaço sai do bloco de edição abaixo dela.
 
-**Isto não declara o editor pronto.** O roteiro de §27 tem as fatias 1, 2 e 4 fechadas
-e a 3 quase; as fatias 5 a 10 continuam abertas.
+**Isto não declara o editor pronto.** O roteiro de §27 tem as fatias 1, 2, 3 e 4
+fechadas; as fatias 5 a 10 continuam abertas.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -1734,6 +1737,175 @@ por ela que os dois capítulos de comparação nascem.
 
 A importação por URL do Lichess (§13.2) segue deliberadamente fora: é a única que depende
 de rede, e isso é outra classe de risco.
+
+---
+
+## A paleta clicável de desenho, entregue em 12/9/2026
+
+Fecha a fatia 3 do roteiro de §27. Até aqui o desenho do editor só nascia do botão
+direito, e a cor só se escolhia segurando Shift, Alt ou os dois. §10.2 pede o contrário
+em voz alta — *"a tela também possui ferramentas clicáveis: seta, casa, cor e limpar,
+**para que o recurso seja descoberto sem conhecer atalhos**"* —, e §25 repete pelo outro
+lado: *"ação de botão direito tem equivalente em botão/teclado"*.
+
+Agora desenhar é: escolher **Seta** ou **Casa**, escolher a cor, clicar nas casas.
+Nenhuma tecla segurada. **Os atalhos continuam valendo**, e a legenda deles ficou dentro
+da paleta, porque quem já aprendeu o Shift continua precisando dela — e porque é ela que
+explica por que a mesma cor aparece de dois jeitos.
+
+### Uma sala, duas portas, e uma regra só
+
+O chessground, no `addShape` (`draw.js`), faz três coisas com o traço novo: se já existe
+um com **as mesmas pontas** e a **mesma cor**, apaga; se existe com cor diferente, troca
+a cor; se não existe, acrescenta. A paleta repete isso à risca, em
+`lib/editor-v2/paleta-de-desenho.ts`. Duas portas para o mesmo desenho com duas regras
+diferentes seriam duas maneiras de o professor se enganar.
+
+A seta precisa de dois cliques, porque o tabuleiro só sabe falar de uma casa por vez.
+Entre os dois, a paleta guarda a origem e a tela diz em voz alta que está esperando o
+destino. **Clicar duas vezes na mesma casa desiste da seta**, e não vira casa acesa:
+acender casa é a outra ferramenta, e adivinhar qual delas o professor queria seria
+inventar intenção.
+
+`Esc` sai por degraus — primeiro esquece a seta pela metade, depois devolve o tabuleiro
+ao movimento de peça. Clicar na ferramenta que já está ligada também a desliga. Um modo
+em que não se sabe sair é uma armadilha.
+
+### O defeito que a paleta destapou: o clique esquerdo apagava o desenho inteiro
+
+Para a paleta funcionar, o clique esquerdo na casa precisa chegar ao editor. Ao ligar
+esse caminho, apareceu um defeito que já existia — e que apagava trabalho do professor.
+
+**A causa, com arquivo e linha.** O `drag.start` do chessground
+(`node_modules/@lichess-org/chessground/dist/drag.js:17-20`) começa assim:
+
+```js
+if (!previouslySelected && s.drawable.enabled &&
+    (s.drawable.eraseOnMovablePieceClick || !piece || piece.color !== s.turnColor))
+    drawClear(s);
+```
+
+e o `clear` (`draw.js:65-71`) zera as formas **e avisa o `onChange`** com a lista vazia.
+Num tabuleiro do Lichess isso é o certo: a seta é rabisco de análise, e o primeiro clique
+limpa a mesa. Num editor de autoria é perda de trabalho — o desenho é conteúdo do
+arquivo. Um clique numa casa vazia apagava as setas da posição sem ninguém pedir.
+
+**Por que ignorar toda lista vazia não serve.** Apagar o último traço com o botão direito
+também chega ao `onChange` com a lista vazia, e é um gesto legítimo. O que separa os dois
+é o `drawable.current`: o traço apagado pelo botão direito chega com o gesto **ainda de
+pé** (o `end` chama `addShape` antes do `cancel`), e a limpeza do clique chega sem gesto
+nenhum. O conserto é essa linha, em `components/board/ChessBoard.tsx`, e devolve ao
+tabuleiro as formas que o React já tinha.
+
+**A honestidade da evidência.** Este defeito foi **lido no código do pacote, não
+reproduzido na tela**: `drag.start` sai na primeira linha quando o evento não é confiável
+(`drag.js:6`), então nenhum script chega até ele. Ele entra no roteiro do teste humano
+abaixo como item 6, e é o único desta rodada cuja *reprodução* ainda falta — a causa e o
+conserto estão escritos.
+
+### Três decisões de acabamento
+
+**A cor escolhida não se anuncia só pela cor.** §25 é explícito: *"estado não depende
+apenas de cor: seleção usa forma/texto/borda"*. Cada botão traz o nome da cor escrito e,
+quando é o escolhido, ganha o aro e o `✓`.
+
+**A bolinha mostra a cor com que o traço vai sair.** O azul do professor é desenhado com
+o pincel `plano` deste site — a explicação inteira está em `annotations.ts`. Mostrar um
+azul diferente do que aparece no tabuleiro seria mentir na etiqueta.
+
+**Com a ferramenta na mão, ninguém move peça.** `movable.color` vira `undefined`, e com
+isso `isMovable` é falso para toda casa: nenhuma peça arrasta e nenhuma fica selecionada.
+`viewOnly` não serviria — ele barra o `drag.start` inteiro, e o toque na casa nunca
+chegaria ao editor. O interruptor entra pelo **efeito de sincronização**, e não na
+criação: `desenhavel` e `montagem` são lidas uma vez e exigiriam `key`, mas este modo
+liga e desliga o tempo todo.
+
+### Escrito
+
+| Arquivo | O que é |
+|---|---|
+| `lib/editor-v2/paleta-de-desenho.ts` | **novo** — a máquina de estados: ferramenta, cor, seta pela metade e a regra do segundo clique |
+| `components/editor-v2/PaletaDeDesenho.tsx` | **novo** — os botões, a instrução que muda sozinha e a legenda dos atalhos |
+| `components/board/ChessBoard.tsx` | a prop `desenhando` e a guarda contra o `drawClear` do clique |
+| `components/editor-v2/EditorV2.tsx` | o estado da paleta, o clique na casa e o `Esc` |
+
+O estado da paleta é **da sessão, não do documento**: qual ferramenta está na mão não é
+conteúdo da aula, e por isso não entra no autosave nem no Desfazer. O que entra no
+Desfazer é o traço, pelo mesmo comando `DEFINIR_DESENHOS` do botão direito.
+
+Uma nota de React, para quem vier depois: a seta pela metade guarda **o lance em que
+começou**, e a origem pendurada é *derivada* — trocar de lance a esquece sem custar um
+efeito que chama `setState`. O lint do projeto recusa esse efeito, e com razão: é cascata
+de render.
+
+### Evidência
+
+**Os sete portões verdes:** tipos, lint, **982 testes** (15 novos), build, conteúdo (38
+consultas de tablebase, todas do cache), **42/42 mutações vermelhas** e repertório
+`--check`.
+
+Os 15 testes novos cobrem: o clique que não desenha nada enquanto nenhuma ferramenta
+está na mão; a casa acesa num clique; o azul saindo no pincel `plano` e voltando "azul"
+no arquivo; os dois cliques da seta e o primeiro que não desenha; o segundo clique na
+mesma casa desistindo; a repetição com a mesma cor apagando e com outra cor trocando; a
+seta e a casa da mesma origem convivendo; o resto do desenho intocado; o botão da
+ferramenta ligada desligando; a troca de ferramenta esquecendo a origem e a troca de cor
+**não** esquecendo; a instrução da tela batendo com o estado; e o caminho inteiro —
+paleta → formas → arquivo —, com **apagar o último traço omitindo o campo** em vez de
+gravar lista vazia, que é o que §10.2 exige.
+
+**O que esta rodada NÃO prova, e por quê.** Nenhum clique no tabuleiro foi exercitado:
+o `drag.start` do chessground sai na primeira linha quando o evento não é confiável
+(`drag.js:6`), e o navegador embutido desta sessão caiu na tela de login — a porta do
+editor exige professor autenticado (`lib/editor/acesso.ts`). Tudo o que depende de ver a
+tela está no roteiro numerado abaixo.
+
+### O teste humano desta fatia — o roteiro numerado
+
+Abrir `/editor/v2/finais/N0-LADDER` (e **só** esse endereço; a N1-KPK é o rascunho
+protegido), em 1366×768:
+
+1. **A paleta aparece?** Embaixo do tabuleiro devem estar três botões — Mover peças,
+   Seta, Casa —, quatro botões de cor com o nome escrito, e "Apagar desenhos desta
+   posição".
+2. **Casa acesa num clique.** Clicar em **Casa**, escolher **vermelho**, clicar em `d4`.
+   A casa acende em vermelho. Clicar em `d4` de novo: apaga. Clicar em `d4`, trocar para
+   **amarelo**, clicar em `d4`: troca a cor, sem empilhar dois traços.
+3. **Seta em dois cliques.** Clicar em **Seta**, **verde**, clicar em `e2` — a frase
+   embaixo deve dizer "Seta de e2: clique na casa de destino" — e clicar em `e4`. A seta
+   verde nasce.
+4. **Desistir.** Clicar em **Seta**, clicar em `a1`, clicar em `a1` de novo: nada é
+   desenhado, e a frase volta ao início. `Esc` no meio de uma seta faz o mesmo.
+5. **Nenhuma peça se mexe com a ferramenta na mão.** Com **Seta** ou **Casa** ligada,
+   tentar arrastar uma torre: ela não deve sair do lugar, e nenhum lance novo pode
+   aparecer na lista.
+6. **O defeito consertado — este é o item importante.** Voltar a **Mover peças**,
+   desenhar duas ou três setas (pela paleta ou pelo botão direito) e então **clicar com
+   o botão esquerdo numa casa vazia**. Os desenhos **têm de continuar lá**. Antes deste
+   conserto eles sumiam todos.
+7. **O desenho é da posição.** Desenhar em um lance, andar para o seguinte (`→`), voltar
+   (`←`): o desenho tem de voltar com ele.
+8. **Desfazer.** `Ctrl+Z` depois de cada traço devolve o desenho anterior, inclusive
+   quando o gesto foi apagar.
+9. **Os gestos antigos continuam.** Botão direito arrastando (verde), com Shift
+   (vermelho), com Alt (azul) e com Shift+Alt (amarelo).
+10. **Apagar desenhos desta posição** apaga só a posição atual — conferir que o lance
+    vizinho manteve o dele.
+
+### O que esta fatia NÃO cobre
+
+- **Desenhar pelo teclado.** A paleta tira o Shift/Alt do caminho, mas apontar a casa
+  continua sendo gesto de ponteiro — como mover peça, que também não tem caminho de
+  teclado no editor. Não é regressão; é uma porta que ainda não existe, e fica escrita
+  aqui para não ser dada por fechada.
+- **A espessura.** Continua 10 para todas as cores no desenho livre, como §10.2 manda; a
+  paleta não oferece escolha de espessura, e não deve oferecer.
+- **Alvo/dica de treino.** §10.2 separa desenho explicativo de alvo de treino em dois
+  contextos. O segundo nasce com o editor de treinos (§16) e não existe ainda.
+
+### O próximo ponto exato
+
+A fatia 5 do roteiro de §27: **prévia, reprodução e comparação** (§15).
 
 ---
 
