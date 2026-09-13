@@ -4,7 +4,7 @@ import { Chess, type Square } from "chess.js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Key } from "@lichess-org/chessground/types";
-import { salvarDocumentoV2 } from "@/app/editor/v2/acoes";
+import { guardarSnapshotDeRefazerV2, salvarDocumentoV2 } from "@/app/editor/v2/acoes";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { NagOverlay } from "@/components/board/NagOverlay";
 import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
@@ -22,6 +22,7 @@ import { DialogoExcluirCapitulo } from "@/components/editor-v2/DialogoExcluirCap
 import { DialogoExportar } from "@/components/editor-v2/DialogoExportar";
 import { DialogoCriarTreino } from "@/components/editor-v2/DialogoCriarTreino";
 import { DialogoEditarTreino } from "@/components/editor-v2/DialogoEditarTreino";
+import { DialogoPropriedadeTreino } from "@/components/editor-v2/DialogoPropriedadeTreino";
 import { PaletaDeDesenho } from "@/components/editor-v2/PaletaDeDesenho";
 import { Dialogo } from "@/components/editor-v2/Dialogo";
 import { Previa } from "@/components/editor-v2/Previa";
@@ -72,6 +73,7 @@ import type { ResolucoesV2 } from "@/lib/editor-v2/impacto";
 import { novoIdDeNarracao, podeNarrar } from "@/lib/editor-v2/narracoes";
 import type { TreinosPreparadosV2 } from "@/lib/editor-v2/treinos";
 import { treinoJogavel, type TreinoJogavel } from "@/lib/editor-v2/treino-jogavel";
+import type { PlanoDeRefazerTreinoV2 } from "@/lib/editor-v2/propriedade-treino";
 import { revisoesPendentesV2 } from "@/lib/editor-v2/revisoes";
 import { FEN_INICIAL_PADRAO, problemasDaAulaV2, validarAulaV2, type AnaliseV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
 import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/editor-v2/recuperacao";
@@ -173,6 +175,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const [exportando, setExportando] = useState(false);
   const [criandoTreino, setCriandoTreino] = useState<string | null>(null);
   const [editandoTreino, setEditandoTreino] = useState<string | null>(null);
+  const [propriedadeTreino, setPropriedadeTreino] = useState<string | null>(null);
+  const [salvandoSnapshot, setSalvandoSnapshot] = useState(false);
   /**
    * A prévia (§15), em dois estados: a escolha do escopo, e a prévia rodando.
    *
@@ -305,7 +309,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
    */
   const janelaAberta = importando || adicionando || trocandoPosicao || exportando
     || escolhendoPrevia || previa !== null
-    || criandoTreino !== null || editandoTreino !== null || jogandoTreino !== null
+    || criandoTreino !== null || editandoTreino !== null || propriedadeTreino !== null || jogandoTreino !== null
     || duplicandoCapitulo !== null || excluindoCapitulo !== null || acaoDoLance !== null || cortando !== null;
   const estadoDoTeclado = useRef({ analise, janelaAberta });
   useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta }; });
@@ -538,6 +542,24 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
     setPrevia(null);
     botaoPrevia.current?.focus();
   }, []);
+
+  const fecharPropriedade = useCallback(() => {
+    const alvo = propriedadeTreino;
+    setPropriedadeTreino(null);
+    requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(`[data-propriedade-treino-id="${alvo}"]`)?.focus());
+  }, [propriedadeTreino]);
+
+  const refazerTreinoDaAula = useCallback(async (plano: PlanoDeRefazerTreinoV2) => {
+    setSalvandoSnapshot(true);
+    const resposta = await guardarSnapshotDeRefazerV2(aulaId, JSON.stringify(historico.presente), plano.treinoId);
+    setSalvandoSnapshot(false);
+    if (!resposta.ok) {
+      setRecado(resposta.erro);
+      return;
+    }
+    aplicar({ tipo: "REFAZER_TREINO", plano });
+    fecharPropriedade();
+  }, [aplicar, aulaId, fecharPropriedade, historico.presente]);
   const fecharEscolhaDaPrevia = useCallback(() => {
     setEscolhendoPrevia(false);
     botaoPrevia.current?.focus();
@@ -1003,6 +1025,21 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         />
       ) : null}
 
+      {propriedadeTreino ? (
+        <DialogoPropriedadeTreino
+          aula={historico.presente}
+          treinoId={propriedadeTreino}
+          positions={positions}
+          salvandoSnapshot={salvandoSnapshot}
+          aoRefazer={(plano) => { void refazerTreinoDaAula(plano); }}
+          aoTornarIndependente={() => {
+            aplicar({ tipo: "TORNAR_TREINO_INDEPENDENTE", treinoId: propriedadeTreino });
+            fecharPropriedade();
+          }}
+          aoFechar={fecharPropriedade}
+        />
+      ) : null}
+
       {/* §15.1: as três entradas da prévia. Uma janela com três botões, e não um menu
           suspenso: são três destinos, não três variações de um. */}
       {escolhendoPrevia ? (
@@ -1116,6 +1153,14 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
                       className="foco mt-1 w-full rounded-md border border-borda px-2 py-1 text-left text-xs text-tinta hover:bg-carta-toque"
                     >
                       ⏵ Jogar na prévia
+                    </button>
+                    <button
+                      type="button"
+                      data-propriedade-treino-id={treino.id}
+                      onClick={() => setPropriedadeTreino(treino.id)}
+                      className={`foco mt-1 w-full rounded-md border px-2 py-1 text-left text-xs hover:bg-carta-toque ${treino.fonte === "atual" ? "border-borda text-tinta" : "border-aviso-superficie text-aviso-tinta"}`}
+                    >
+                      Propriedade e fonte · {treino.fonte}
                     </button>
                   </li>
                 ))}

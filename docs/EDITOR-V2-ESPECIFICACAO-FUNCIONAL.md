@@ -800,9 +800,9 @@ Ao final de cada fatia:
 - [ ] Reprodução, pausa, repetição e três velocidades.
 - [ ] Comparação com retorno à posição de escolha.
 - [ ] Vários treinos por capítulo e por aula.
-- [ ] Respostas corretas, alternativas, erros, feedback, dicas e término.
-- [ ] Defensor determinístico e treino dos dois lados.
-- [ ] Derivado/personalizado/independente e refazer com diff.
+- [x] Respostas corretas, alternativas, erros, feedback, dicas e término.
+- [x] Defensor determinístico e treino dos dois lados.
+- [x] Derivado/personalizado/independente e refazer com diff.
 - [ ] Final certificado e linha autoral julgados corretamente.
 - [ ] Práticas avaliativas configuráveis e versionadas.
 - [ ] Metadados, proveniência e exceções editáveis com segurança.

@@ -27,6 +27,12 @@ import { aplicarEdicaoDeTreino, type EdicaoDeTreinoV2 } from "./autoria-treino.t
 import { semRevisoes } from "./revisoes.ts";
 import type { ResolucoesV2 } from "./impacto.ts";
 import type { AulaV2, DesenhoV2, NoV2 } from "./modelo.ts";
+import {
+  aplicarRefazerTreino,
+  comEstadosDasFontes,
+  tornarTreinoIndependente,
+  type PlanoDeRefazerTreinoV2,
+} from "./propriedade-treino.ts";
 
 export type ComandoV2 =
   | { tipo: "RENOMEAR_CAPITULO"; capituloId: string; titulo: string }
@@ -112,6 +118,10 @@ export type ComandoV2 =
   | { tipo: "ADICIONAR_TREINOS"; preparo: TreinosPreparadosV2 }
   /** §16.3: a autoria inteira do treino entra num único passo de Desfazer. */
   | { tipo: "EDITAR_TREINO"; edicao: EdicaoDeTreinoV2 }
+  /** §16.5: materializa a cópia e encerra a dependência operacional. */
+  | { tipo: "TORNAR_TREINO_INDEPENDENTE"; treinoId: string }
+  /** §16.5: aplica exatamente o antes/depois que a comparação mostrou. */
+  | { tipo: "REFAZER_TREINO"; plano: PlanoDeRefazerTreinoV2 }
   | { tipo: "ALTERNAR_NAG"; analiseId: string; nodeId: string; nag: number }
   | { tipo: "ADICIONAR_LANCE"; analiseId: string; nodeId: string; uci: string; novoNodeId: string }
   | { tipo: "PROMOVER_VARIANTE"; analiseId: string; parentId: string; nodeId: string }
@@ -127,7 +137,7 @@ export type ComandoV2 =
    */
   | { tipo: "DEFINIR_DESENHOS"; analiseId: string; nodeId: string; desenhos: DesenhoV2 | undefined };
 
-export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Record<string, Position>): AulaV2 {
+function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<string, Position>): AulaV2 {
   if (comando.tipo === "RENOMEAR_CAPITULO") {
     return { ...aula, capitulos: aula.capitulos.map((c) => c.id === comando.capituloId ? { ...c, titulo: comando.titulo.trim() || c.titulo } : c) };
   }
@@ -220,6 +230,8 @@ export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Rec
   if (comando.tipo === "DEFINIR_PAUSA_DA_NARRACAO") return comPausaDaNarracao(aula, comando);
   if (comando.tipo === "ADICIONAR_TREINOS") return aplicarTreinosPreparados(aula, comando.preparo);
   if (comando.tipo === "EDITAR_TREINO") return aplicarEdicaoDeTreino(aula, comando.edicao);
+  if (comando.tipo === "TORNAR_TREINO_INDEPENDENTE") return tornarTreinoIndependente(aula, comando.treinoId, positions);
+  if (comando.tipo === "REFAZER_TREINO") return aplicarRefazerTreino(aula, comando.plano);
   if (comando.tipo === "EDITAR_NARRACAO") {
     const capitulo = aula.capitulos.find((item) => item.id === comando.capituloId);
     if (!capitulo) throw new Error("capítulo inexistente");
@@ -306,6 +318,14 @@ export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Rec
     proxima = { ...analise, nos };
   }
   return { ...aula, analises: aula.analises.map((a, i) => i === indice ? proxima : a) };
+}
+
+/**
+ * Toda edição passa pela mesma conferência de fonte. Assim comentário, narração,
+ * lance, troca de posição e exclusão não mantêm opiniões diferentes sobre o treino.
+ */
+export function executarComando(aula: AulaV2, comando: ComandoV2, positions: Record<string, Position>): AulaV2 {
+  return comEstadosDasFontes(aula, executarComandoCru(aula, comando, positions));
 }
 
 export type Historico<T> = { presente: T; passados: T[]; futuros: T[] };

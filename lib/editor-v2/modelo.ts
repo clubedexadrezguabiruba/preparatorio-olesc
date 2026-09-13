@@ -243,6 +243,22 @@ const origemTreinoV2Schema = z.strictObject({
   nodeIds: z.array(idV2Schema).min(1),
   hash: z.string().min(1),
   derivadorVersao: z.number().int().positive(),
+  /** Receita suficiente para localizar novamente o mesmo trecho. Opcional nos rascunhos anteriores à 6D. */
+  capituloId: idV2Schema.optional(),
+  inicioNodeId: idV2Schema.optional(),
+  objetivo: z.string().min(1).optional(),
+});
+
+const posicaoMaterializadaTreinoV2Schema = z.strictObject({
+  fen: z.string().min(1),
+  /** Caminho desde a raiz. Conserva o histórico quando uma regra não cabe só nos seis campos da FEN. */
+  historicoUci: z.array(uciSchema),
+  origem: referenciaNoSchema,
+});
+
+const copiaTreinoV2Schema = z.strictObject({
+  inicio: posicaoMaterializadaTreinoV2Schema,
+  questoes: z.record(idV2Schema, posicaoMaterializadaTreinoV2Schema),
 });
 
 export const respostaTreinoV2Schema = z.strictObject({
@@ -321,6 +337,8 @@ export const treinoV2Schema = z.strictObject({
   propriedade: z.enum(["derivado", "personalizado", "independente"]),
   fonte: z.enum(["atual", "alterada", "removida"]),
   origem: origemTreinoV2Schema.optional(),
+  /** Conteúdo operacional próprio. Em personalizado/independente, a análise deixa de ser necessária para jogar. */
+  copia: copiaTreinoV2Schema.optional(),
   obrigatorio: z.boolean().default(true),
   revisaoAvaliacao: z.enum(["pendente", "confirmada"]).default("pendente"),
   certificacao: z.strictObject({
@@ -333,7 +351,7 @@ export const treinoV2Schema = z.strictObject({
 }).superRefine((treino, ctx) => {
   if (treino.perfil === "final-certificado" && !treino.certificacao) ctx.addIssue({ code: "custom", path: ["certificacao"], message: "final certificado precisa declarar o estado da certificação" });
   if (treino.propriedade === "derivado" && !treino.origem) ctx.addIssue({ code: "custom", path: ["origem"], message: "treino derivado precisa declarar sua receita de origem" });
-  if (treino.propriedade === "independente" && treino.origem) ctx.addIssue({ code: "custom", path: ["origem"], message: "treino independente não mantém origem operacional" });
+  if (treino.propriedade === "derivado" && treino.copia) ctx.addIssue({ code: "custom", path: ["copia"], message: "treino derivado usa a aula diretamente e não guarda cópia operacional" });
   if (treino.termino.tipo === "limite" && !treino.termino.maxPlies) ctx.addIssue({ code: "custom", path: ["termino", "maxPlies"], message: "término por limite precisa de maxPlies" });
 });
 
@@ -857,20 +875,23 @@ export function problemasDaAulaV2(
   }
 
   for (const treino of aula.treinos) {
+    // Rascunhos anteriores à 6D podem ter sido marcados como personalizados sem a
+    // cópia nova. Eles continuam legíveis e dependentes até a primeira materialização.
+    const dependeDaAula = treino.propriedade === "derivado" || !treino.copia;
     const analise = analises.get(treino.inicio.analiseId);
-    if (!analise?.nos[treino.inicio.nodeId]) problemas.push({ codigo: "TREINO_SEM_INICIO", mensagem: "o treino aponta para posição inicial inexistente", treinoId: treino.id, analiseId: treino.inicio.analiseId, nodeId: treino.inicio.nodeId, campo: "inicio" });
+    if (dependeDaAula && !analise?.nos[treino.inicio.nodeId]) problemas.push({ codigo: "TREINO_SEM_INICIO", mensagem: "o treino aponta para posição inicial inexistente", treinoId: treino.id, analiseId: treino.inicio.analiseId, nodeId: treino.inicio.nodeId, campo: "inicio" });
     const questoes = new Set(treino.questoes.map((questao) => questao.id));
     if (treino.defesaInicial && !questoes.has(treino.defesaInicial.primeiraQuestaoId)) problemas.push({ codigo: "DEFESA_INICIAL_SEM_QUESTAO", mensagem: "a defesa inicial aponta para questão inexistente", treinoId: treino.id, campo: "defesaInicial.primeiraQuestaoId" });
     for (const questao of treino.questoes) {
       const analiseDaQuestao = analises.get(questao.posicao.analiseId);
-      if (!analiseDaQuestao?.nos[questao.posicao.nodeId]) problemas.push({ codigo: "QUESTAO_SEM_POSICAO", mensagem: "a questão do treino aponta para posição inexistente", treinoId: treino.id, questaoId: questao.id, analiseId: questao.posicao.analiseId, nodeId: questao.posicao.nodeId, campo: "posicao" });
+      if (dependeDaAula && !analiseDaQuestao?.nos[questao.posicao.nodeId]) problemas.push({ codigo: "QUESTAO_SEM_POSICAO", mensagem: "a questão do treino aponta para posição inexistente", treinoId: treino.id, questaoId: questao.id, analiseId: questao.posicao.analiseId, nodeId: questao.posicao.nodeId, campo: "posicao" });
       for (const resposta of questao.respostas) {
         if (resposta.erroId && !errosCatalogados.has(resposta.erroId)) problemas.push({ codigo: "ERRO_NAO_CATALOGADO", mensagem: `a resposta usa o erro ${resposta.erroId}, que não existe no catálogo`, treinoId: treino.id, questaoId: questao.id, respostaId: resposta.id, campo: "erroId" });
         if (resposta.efeito.tipo !== "avanca") continue;
         for (const defesa of resposta.efeito.defesas) if (!questoes.has(defesa.proximaQuestaoId)) problemas.push({ codigo: "DEFESA_SEM_QUESTAO", mensagem: "a resposta do defensor aponta para questão inexistente", treinoId: treino.id, questaoId: questao.id, respostaId: resposta.id, campo: "efeito.defesas.proximaQuestaoId" });
       }
     }
-    if (treino.origem && !(treino.propriedade === "personalizado" && treino.fonte === "removida")) {
+    if (treino.origem && treino.propriedade === "derivado") {
       const origem = analises.get(treino.origem.analiseId);
       for (const nodeId of treino.origem.nodeIds) if (!origem?.nos[nodeId]) problemas.push({ codigo: "FONTE_TREINO_AUSENTE", mensagem: "a receita do treino aponta para nó inexistente", treinoId: treino.id, analiseId: treino.origem.analiseId, nodeId, campo: "origem.nodeIds" });
     }

@@ -48,7 +48,7 @@ test("§16.1: criar treino daqui deriva as seis perguntas do aluno e fecha na pr
   assert.deepEqual(treino.questoes.at(-1)!.respostas[0].efeito, { tipo: "encerra", condicao: "promotion" });
   assert.equal(treino.propriedade, "derivado");
   assert.equal(treino.fonte, "atual");
-  assert.equal(treino.origem?.hash.length, 8);
+  assert.match(treino.origem?.hash ?? "", /^v2-[0-9a-f]{8}$/);
   assert.equal(treino.revisaoAvaliacao, "pendente");
   const aplicada = aplicarTreinosPreparados(aula, preparo);
   assert.deepEqual(validarAulaV2(aplicada, positions), { ok: true, aula: aplicada });

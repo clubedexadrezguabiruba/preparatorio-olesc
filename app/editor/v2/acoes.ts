@@ -1,7 +1,7 @@
 "use server";
 
 import { exigirEditor } from "@/lib/editor/acesso";
-import { documentoV2Existe, gravarDocumentoV2, idsDeDocumentosV2 } from "@/lib/editor-v2/rascunhos";
+import { documentoV2Existe, gravarDocumentoV2, guardarSnapshotAntesDeRefazerV2, idsDeDocumentosV2 } from "@/lib/editor-v2/rascunhos";
 import { prepararNovaAula, type PedidoDeNovaAulaV2 } from "@/lib/editor-v2/nova-aula";
 import { indiceDeAulas } from "@/lib/finais/conteudo";
 
@@ -10,6 +10,13 @@ export async function salvarDocumentoV2(aula: string, texto: string, baseHash: s
   let cru: unknown;
   try { cru = JSON.parse(texto); } catch { return { ok: false as const, erro: "o navegador enviou um documento quebrado" }; }
   return gravarDocumentoV2(aula, cru, baseHash);
+}
+
+export async function guardarSnapshotDeRefazerV2(aula: string, texto: string, treinoId: string) {
+  await exigirEditor();
+  let cru: unknown;
+  try { cru = JSON.parse(texto); } catch { return { ok: false as const, erro: "o navegador enviou uma cópia quebrada" }; }
+  return guardarSnapshotAntesDeRefazerV2(aula, cru, treinoId);
 }
 
 export type CriacaoDeAulaV2 =

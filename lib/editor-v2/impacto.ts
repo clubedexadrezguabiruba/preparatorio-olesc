@@ -13,25 +13,18 @@
  * de `trocar-posicao.ts`; esta é a mesma conta, tirada de lá para poder servir
  * às outras três sem cópia.
  *
- * ## As três saídas de §5, e a que não cabe em todo mundo
+ * ## As três saídas de §5
  *
  * O plano final (§5) é explícito sobre o que fazer quando há dependente:
  * "cancelar, remover explicitamente os dependentes ou materializar os
  * dependentes como independentes". Nenhuma das três é escolha de máquina, então
  * o cálculo **só diz quem são**; quem escolhe é o professor, item por item.
  *
- * A terceira saída não serve a todos, e dizer isso em voz alta é parte do
- * trabalho:
- *
  * - uma **análise** que começa num nó desta materializa-se guardando a FEN
  *   daquele nó — ela passa a ter chão próprio e larga a dependência;
  * - um **quadro de introdução** faz o mesmo, trocando a referência pela FEN;
- * - um **treino** não faz. Toda questão dele nomeia um `{analiseId, nodeId}`, e
- *   o schema não sabe representar uma questão sem esse endereço. Materializar um
- *   treino exigiria copiar a árvore inteira que ele percorre, e isso é o editor
- *   de treinos (§16), que ainda não existe. Então a tela mostra a opção
- *   desabilitada **com o motivo escrito**, como §11.3 manda, em vez de oferecer
- *   um botão que mente.
+ * - um **treino** copia a FEN e o histórico UCI de cada posição que usa; as
+ *   referências ficam apenas como origem histórica e deixam de bloquear a aula.
  *
  * ## A FEN é resolvida antes, e guardada no plano
  *
@@ -43,6 +36,7 @@
 import { quadroDoNo } from "./arvore.ts";
 import type { Position } from "../lesson/schema.ts";
 import type { AulaV2, IntroducaoV2, TreinoV2 } from "./modelo.ts";
+import { comCopiaMaterializada } from "./propriedade-treino.ts";
 
 /**
  * Os nós que somem, por análise.
@@ -65,7 +59,8 @@ export function perdeu(perdas: PerdasPorAnaliseV2, analiseId: string, nodeId: st
 /** O que a aplicação precisa saber para materializar um dependente. */
 export type MaterializacaoV2 =
   | { tipo: "analise"; analiseId: string; fen: string }
-  | { tipo: "introducao"; introducaoId: string; quadros: Array<{ quadroId: string; fen: string }> };
+  | { tipo: "introducao"; introducaoId: string; quadros: Array<{ quadroId: string; fen: string }> }
+  | { tipo: "treino"; treino: TreinoV2 };
 
 /**
  * Alguém de fora que aponta para um nó perdido, e por isso não deixa a edição
@@ -89,11 +84,11 @@ export type DependenteV2 = {
 export type ResolucaoV2 = "remover" | "materializar";
 export type ResolucoesV2 = Record<string, ResolucaoV2>;
 
-const MOTIVO_TREINO_NAO_MATERIALIZA =
-  "um treino não vira independente enquanto o editor de treinos não existir: todas as perguntas dele apontam para lances desta análise, e copiá-las é trabalho de §16";
-
 /** Quantos nós **distintos** deste treino a edição leva. Ver a nota sobre repetidos. */
 function nosPerdidosDoTreino(treino: TreinoV2, perdas: PerdasPorAnaliseV2): Set<string> {
+  // Personalizado e independente já jogam a partir da cópia. A referência que
+  // conservam é origem histórica e nunca bloqueia uma edição na aula.
+  if (treino.propriedade !== "derivado" && treino.copia) return new Set();
   const apontados: Array<readonly [string, string]> = [
     [treino.inicio.analiseId, treino.inicio.nodeId] as const,
     ...treino.questoes.map((q) => [q.posicao.analiseId, q.posicao.nodeId] as const),
@@ -165,13 +160,26 @@ export function dependentesDasPerdas(
   for (const treino of aula.treinos) {
     const perdidos = nosPerdidosDoTreino(treino, perdas);
     if (perdidos.size === 0) continue;
+    let materializacao: Extract<MaterializacaoV2, { tipo: "treino" }> | null;
+    try {
+      materializacao = {
+        tipo: "treino",
+        treino: {
+          ...comCopiaMaterializada(aula, treino, positions),
+          propriedade: "independente",
+          fonte: "removida",
+        },
+      };
+    } catch {
+      materializacao = null;
+    }
     dependentes.push({
       tipo: "treino",
       id: treino.id,
       nome: treino.titulo,
       motivo: `usa ${perdidos.size === 1 ? "um lance que" : `${perdidos.size} lances que`} ${verbo}`,
-      materializacao: null,
-      motivoSemMaterializar: MOTIVO_TREINO_NAO_MATERIALIZA,
+      materializacao,
+      ...(materializacao ? {} : { motivoSemMaterializar: "uma das posições do treino não pôde ser reconstruída para formar a cópia" }),
     });
   }
 
@@ -247,6 +255,12 @@ export function resolucoesCompletas(dependentes: DependenteV2[], resolucoes: Res
 }
 
 function materializar(aula: AulaV2, materializacao: MaterializacaoV2): AulaV2 {
+  if (materializacao.tipo === "treino") {
+    return {
+      ...aula,
+      treinos: aula.treinos.map((item) => item.id === materializacao.treino.id ? materializacao.treino : item),
+    };
+  }
   if (materializacao.tipo === "analise") {
     return {
       ...aula,

@@ -266,8 +266,8 @@ test("excluir a análise mostra nomes e contagens reais do que vai junto", () =>
       ["analise", "Daqui em diante", "começa num lance que esta exclusão apaga"],
     ],
   );
-  assert.equal(impacto.dependentes[0].materializacao, null, "um treino não vira independente hoje");
-  assert.match(impacto.dependentes[0].motivoSemMaterializar!, /editor de treinos/);
+  assert.equal(impacto.dependentes[0].materializacao?.tipo, "treino", "a 6D materializa a cópia completa antes de apagar a fonte");
+  assert.ok(impacto.dependentes[0].materializacao?.tipo === "treino" && impacto.dependentes[0].materializacao.treino.copia);
   assert.equal(impacto.dependentes[2].materializacao?.tipo, "analise");
 });
 

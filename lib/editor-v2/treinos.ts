@@ -53,7 +53,7 @@ function hashDaReceita(valor: unknown): string {
     hash ^= texto.charCodeAt(i);
     hash = Math.imul(hash, 0x01000193) >>> 0;
   }
-  return hash.toString(16).padStart(8, "0");
+  return `v2-${hash.toString(16).padStart(8, "0")}`;
 }
 
 function aplicar(game: Chess, uci: string): void {
@@ -168,9 +168,17 @@ function prepararUmLado(
   const receita = {
     derivadorVersao: VERSAO_DERIVADOR_TREINO_V2,
     analiseInicio: analise.inicio,
-    nodes: origemIds.map((id) => ({ id, uci: analise.nos[id]?.uci ?? null })),
+    nodes: origemIds.map((id) => ({
+      id,
+      uci: analise.nos[id]?.uci ?? null,
+      comentario: analise.nos[id]?.comentario ?? null,
+    })),
+    narracoes: capitulo.narracoes
+      .filter((item) => origemIds.includes(item.nodeId))
+      .map((item) => ({ nodeId: item.nodeId, texto: item.texto })),
     lado,
     objetivo,
+    inicioNodeId: nodeIds[0],
   };
 
   return {
@@ -191,6 +199,9 @@ function prepararUmLado(
       nodeIds: origemIds,
       hash: hashDaReceita(receita),
       derivadorVersao: VERSAO_DERIVADOR_TREINO_V2,
+      capituloId: capitulo.id,
+      inicioNodeId: nodeIds[0],
+      objetivo,
     },
     obrigatorio,
     revisaoAvaliacao: "pendente",

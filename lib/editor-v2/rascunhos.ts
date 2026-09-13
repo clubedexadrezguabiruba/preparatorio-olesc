@@ -1,5 +1,6 @@
 import path from "node:path";
 import { closeSync, existsSync, mkdirSync, openSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { randomUUID } from "node:crypto";
 import { caminhoDeAula, conflito, escreverAtomico, hashDoTexto, lerConteudo, serializar } from "../editor/rascunhos.ts";
 import { editorLigado } from "../editor/local.ts";
 import { aulaIdV2Schema, completarAulaV2Legada, validarAulaV2, type AulaV2 } from "./modelo.ts";
@@ -106,4 +107,35 @@ export function idsDeDocumentosV2(raiz = process.cwd()): string[] {
     .filter((nome) => nome.endsWith(".json"))
     .map((nome) => nome.slice(0, -".json".length))
     .sort();
+}
+
+/**
+ * Snapshot durável imediatamente anterior a «Refazer a partir da aula».
+ * O documento inteiro entra porque o catálogo de erros pode participar da autoria.
+ * Mantemos os 20 mais recentes por aula; o Undo da sessão continua sendo a volta rápida.
+ */
+export function guardarSnapshotAntesDeRefazerV2(
+  id: string,
+  cru: unknown,
+  treinoId: string,
+  raiz = process.cwd(),
+): { ok: true; arquivo: string } | { ok: false; erro: string } {
+  const validado = validarAulaV2(cru);
+  if (!validado.ok || validado.aula.id !== id || !validado.aula.treinos.some((treino) => treino.id === treinoId)) {
+    return { ok: false, erro: "não foi possível validar a cópia anterior do treino" };
+  }
+  // Reusa as duas guardas de caminho do documento antes de formar a subpasta.
+  caminho(id, raiz);
+  const pasta = path.join(raiz, PASTA_V2, "snapshots", id);
+  mkdirSync(pasta, { recursive: true });
+  const nome = `${new Date().toISOString().replaceAll(":", "-")}-${randomUUID()}.json`;
+  const destino = path.join(pasta, nome);
+  try {
+    escreverAtomico(destino, serializar({ tipo: "antes-de-refazer-treino", treinoId, criadoEm: new Date().toISOString(), aula: validado.aula }));
+    const arquivos = readdirSync(pasta).filter((item) => item.endsWith(".json")).sort();
+    for (const antigo of arquivos.slice(0, Math.max(0, arquivos.length - 20))) rmSync(path.join(pasta, antigo), { force: true });
+    return { ok: true, arquivo: destino };
+  } catch {
+    return { ok: false, erro: "não foi possível guardar a cópia anterior; o treino não foi substituído" };
+  }
 }

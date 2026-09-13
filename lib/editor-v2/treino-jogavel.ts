@@ -41,7 +41,7 @@
  */
 import { Chess } from "chess.js";
 import type { Expect, Lesson, MoveTree, Position, TreeNode } from "../lesson/schema.ts";
-import { quadroDoNo } from "./arvore.ts";
+import { fenDaQuestaoDoTreino, fenInicialDoTreino } from "./propriedade-treino.ts";
 import type { AulaV2, DesenhoV2, RespostaTreinoV2, TreinoV2 } from "./modelo.ts";
 
 /** §16.3: o lance legal fora da linha autoral, sem inventar erro objetivo. */
@@ -149,7 +149,7 @@ export function treinoJogavel(aula: AulaV2, treinoId: string, positions: Record<
   const desenhos: Record<string, DesenhoV2 | undefined> = {};
 
   for (const questao of treino.questoes) {
-    const fen = quadroDoNo(aula, questao.posicao.analiseId, questao.posicao.nodeId, positions).fen;
+    const fen = fenDaQuestaoDoTreino(aula, treino, questao, positions);
     const expects: Expect[] = [];
     const authorAlternatives: NonNullable<TreeNode["authorAlternatives"]> = [];
     const mistakes: NonNullable<TreeNode["mistakes"]> = [];
@@ -202,7 +202,7 @@ export function treinoJogavel(aula: AulaV2, treinoId: string, positions: Record<
   const raiz = treino.defesaInicial?.primeiraQuestaoId
     ?? treino.questoes.find((questao) => questao.posicao.nodeId === treino.inicio.nodeId)?.id
     ?? treino.questoes[0].id;
-  const fenInicial = quadroDoNo(aula, treino.inicio.analiseId, treino.inicio.nodeId, positions).fen;
+  const fenInicial = fenInicialDoTreino(aula, treino, positions);
 
   return {
     lesson: {

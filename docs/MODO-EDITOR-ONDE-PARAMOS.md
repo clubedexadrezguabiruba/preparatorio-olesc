@@ -11,8 +11,7 @@
 > ler plano + especificação antes deste diário; este arquivo diz o estado, não redefine
 > o produto.
 
-**Data:** 2026-09-13. **Branch:** `modo-editor`, à frente do `origin` (o push é decisão
-do Doug, não consequência de commitar). A menção
+**Data:** 2026-09-13. **Branch:** `modo-editor`. A menção
 histórica a “Bloco 2 suspenso” nas seções antigas explica a interrupção que levou à
 nova arquitetura; não rege mais o trabalho.
 
@@ -106,11 +105,16 @@ cada linha aponta a seção que conta a história inteira.
   impede salvar. 1.067 testes, 42/42 mutações, e **ensaio pelo Playwright**: tentativas
   1, 2 e 3 → d2, d3, d2, cada uma com o seu texto. Ver "o texto de cada defesa".
 
+- **Parada 6D, propriedade (§16.5)** — treino derivado, personalizado e independente;
+  cópia operacional no primeiro ajuste pedagógico; origem histórica preservada; fonte
+  atual, alterada ou removida; diff, snapshot e Refazer em um Desfazer; troca explícita
+  de fonte e IDs preservados quando o ponto de origem é o mesmo. **Roteiro aprovado no
+  Playwright em 13/9**, com arrasto real pela cópia sem fonte, 1.082 testes e 42/42
+  mutações. A fatia 6 está fechada. Ver "fatia 6 — propriedade do treino".
+
 **Aberto, na ordem:**
 
-1. **6D, propriedade** (§16.5) — derivado/personalizado/independente com diff e refazer. A
-   fatia 6 permanece aberta.
-2. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
+1. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
    **importar por URL do Lichess** (§13.2), **introdução e quadros** (§7.1) e
    **aulas extras na trilha** (§22) continuam fora, sem redução de escopo.
 
@@ -3121,6 +3125,115 @@ depois: `4be602ca…b822`.
 ### O próximo ponto exato
 
 Parada 6D — propriedade (§16.5).
+
+---
+
+## Fatia 6 — propriedade do treino (parada 6D, 13/9/2026)
+
+Fecha §16.5 sem refazer as paradas 6A, 6B e 6C. Fecha também os três itens de §28 que
+ficaram deliberadamente esperando esta parada: respostas completas, defensor e treino
+dos dois lados, e propriedade com refazer e diff.
+
+### O contrato que ficou no documento
+
+- Treino novo nasce **derivado** de análise e receita versionada. A impressão digital
+  inclui a versão do derivador, o início da análise, os nós e lances usados, comentários,
+  narrações relevantes, lado, objetivo original e ponto de início. Título e texto próprio
+  de defesa ficam fora: são autoria do treino, não entrada da receita.
+- O primeiro ajuste em resposta, posição, objetivo, dica, desenho, feedback ou catálogo
+  materializa FEN, histórico UCI e referência histórica da posição inicial e de cada
+  pergunta. O treino vira **personalizado**. Trocar só o título conserva a derivação.
+- Personalizado e **independente** jogam pela cópia. Independente encerra a dependência
+  operacional, mas conserva análise, capítulo, ponto, receita e hash como origem
+  histórica. Por isso uma exclusão destrutiva não o lista como dependente.
+- Propriedade e fonte são eixos separados. Qualquer comando que muda a aula recalcula a
+  fonte relevante como **atual**, **alterada** ou **removida**, sem reescrever a cópia.
+- **Refazer a partir da aula** compara posição, objetivo, perguntas, respostas e
+  feedbacks, dicas e desenhos, textos das defesas, explicação e término. O botão aplica
+  exatamente o estado comparado, recusa se treino ou aula mudaram enquanto a janela
+  estava aberta, grava antes um snapshot integral no servidor e entra como uma ação no
+  Desfazer.
+- Decisão desta rodada para o ponto que ficou aberto na 6C: refazer **substitui também o
+  texto próprio de cada defesa**. Ele aparece no diff antes da confirmação e no snapshot
+  anterior; não entra na impressão digital da fonte.
+- Se a fonte sumiu, refazer fica desabilitado e explica o motivo. Havendo outro capítulo,
+  a lista começa vazia: o professor precisa escolhê-lo; não há escolha automática. IDs de
+  perguntas são conservados pelo par `analiseId/nodeId` quando esse ponto de origem
+  continua o mesmo.
+
+Compatibilidade: rascunhos anteriores à 6D, que podiam estar personalizados sem a nova
+cópia, continuam legíveis e dependentes da aula. A próxima edição material que ainda
+consiga resolver a fonte cria a cópia completa.
+
+### Código e provas automáticas
+
+`lib/editor-v2/propriedade-treino.ts` concentra impressão digital, materialização,
+estado da fonte, independência, diff, preparo e aplicação segura do refazer.
+`DialogoPropriedadeTreino.tsx` apresenta o contrato em português. O executor comum de
+comandos atualiza fontes depois de qualquer edição, e o runtime e a autoria resolvem a
+posição pela cópia quando ela é a autoridade. A exclusão com impacto agora consegue
+materializar também um treino. `guardarSnapshotAntesDeRefazerV2` grava o documento
+inteiro, atomicamente, e conserva os 20 snapshots mais recentes por aula.
+
+Foram acrescentados **15 testes de §16.5**. Eles cobrem os cinco gatilhos pedidos,
+título sem personalização, alteração relevante/irrelevante/remoção da fonte, autoria
+intocada pela máquina, jogo e edição pela cópia, independência, diff dos textos das
+defesas, IDs estáveis, fonte nova, comparação vencida por mudança no treino ou na aula,
+snapshot integral com retenção e renovação seletiva da posição copiada. A suíte completa
+ficou em **1.082/1.082**.
+
+### O ensaio pelo Playwright — 13/9/2026
+
+Em `/editor/v2/finais/N0-LADDER`, logado. A janela física foi configurada em
+**911×512**; a emulação do zoom de 0,667 foi conferida em `innerWidth = 1366` e
+`innerHeight = 768`. Cliques, teclado e o arrasto do tabuleiro foram do Playwright.
+
+| Item | Resultado medido |
+|---|---|
+| 1 | fonte inicial **atual**; a comparação do treino derivado mostrou 2 grupos diferentes do conteúdo v1 adaptado |
+| 2 | feedback próprio salvo → cartão **personalizado · fonte atual**; no disco, cópia com FEN/histórico para as 5 perguntas |
+| 3 | comparação mostrou o feedback próprio antes e a geração da aula depois; Refazer habilitado |
+| 4 | Refazer → **derivado · atual**; snapshot anterior integral criado; os 5 IDs continuaram `n1…n5` |
+| 5 | um Desfazer restaurou **personalizado** e o feedback; comentário relevante na aula mudou só a fonte para **alterada** |
+| 6 | janela mostrou aviso **Fonte: alterada**, 2 linhas de diff e a garantia de que a cópia não seria sobrescrita |
+| 7 | Tornar independente → **independente · alterada**; no disco ficaram origem histórica e 5 posições copiadas |
+| 8 | segundo roteiro: capítulo substituto duplicado; feedback e texto próprio da defesa salvos; excluir a análise original listou só a introdução como dependente, não o treino personalizado |
+| 9 | depois da exclusão: **personalizado · fonte removida**; na prévia, arrasto real g2→g4 executou a resposta e mostrou “Feedback próprio…” + “Texto próprio da defesa…” |
+| 10 | propriedade removida abriu sem fonte escolhida e com Refazer desabilitado; após escolher “Fonte substituta 6D”, habilitou e mostrou 5 grupos de diff, inclusive **Textos próprios das defesas** |
+| 11 | Refazer pela fonte nova → **derivado · atual**; snapshot guardou personalizado/removida, feedback e texto da defesa |
+| 12 | um Desfazer restaurou **personalizado · removida**; Refazer voltou a **derivado · atual** |
+
+Console da sessão inteira: **0 erros e 0 avisos**. O ensaio encontrou antes do fechamento
+que a fonte removida vinha pré-selecionada; corrigido, repetido e medido no item 10.
+
+### Os sete portões
+
+`typecheck`, lint, **1.082 testes**, build, conteúdo (18 posições, 3 aulas, 38 consultas
+de tablebase do cache e 0 pela rede), **42/42 mutações vermelhas** e
+`npm run repertorio:compilar -- --check` sem escrita.
+
+### O que esta rodada NÃO cobre
+
+- A tela especial de aula sem nenhum capítulo mostra apenas as portas para adicionar ou
+  importar capítulo. Um treino personalizado/independente continua no arquivo e no fluxo,
+  mas volta a aparecer na tela só depois que existir um capítulo. É uma dívida de
+  usabilidade da porta de aula vazia; não houve perda de dados no ensaio.
+- Snapshots desta ação já são duráveis e têm retenção, mas a interface geral para listar
+  e restaurar snapshots pertence à publicação/recuperação de §20.
+- Certificação e julgamento de linha autoral continuam nos itens próprios de §17/§20;
+  fechar propriedade não os marcou no checklist.
+- Nenhum teste de uso com uma pessoa. O Playwright prova o comportamento e o gesto do
+  mouse, não mede compreensão ou hesitação.
+
+**Os artefatos.** O ensaio usou apenas N0-LADDER. O perfil isolado do Playwright e os
+snapshots do ensaio foram apagados. `content/rascunhos/lessons/N0-LADDER.json` e
+`.editor/v2/N0-LADDER.json` foram apagados e tiveram a ausência conferida. SHA-256 de
+`.editor/v2/N1-KPK.json` antes e depois: `4be602ca…b822`.
+
+### O próximo ponto exato
+
+Fatia 7, **publicação v2 (§20)**: gate autoral único, comparação do que será publicado,
+publicação atômica com snapshot/rollback, progresso por revisão e migração explícita.
 
 ---
 

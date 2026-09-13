@@ -1,9 +1,9 @@
 import { Chess } from "chess.js";
 import type { Position } from "../lesson/schema.ts";
-import { quadroDoNo } from "./arvore.ts";
 import { comoId, idsDaAulaV2 } from "./ids.ts";
 import type { AulaV2, RespostaTreinoV2, TreinoV2 } from "./modelo.ts";
 import { problemaDasDefesas } from "./defesas-do-treino.ts";
+import { comCopiaMaterializada, comOrigemHistoricaCompleta, fenDaQuestaoDoTreino } from "./propriedade-treino.ts";
 
 export type CatalogoV2 = NonNullable<AulaV2["catalogo"]>;
 export type EdicaoDeTreinoV2 = { treino: TreinoV2; catalogo?: CatalogoV2 };
@@ -107,7 +107,7 @@ export function prepararEdicaoDeTreino(
     const prefixo = `questoes.${qi}`;
     if (!questao.dica?.trim()) delete questao.dica;
     let fen: string;
-    try { fen = quadroDoNo(aula, questao.posicao.analiseId, questao.posicao.nodeId, positions).fen; }
+    try { fen = fenDaQuestaoDoTreino(aula, treino, questao, positions); }
     catch { return { ok: false, campo: `${prefixo}.posicao`, mensagem: `a pergunta ${qi + 1} aponta para uma posição que não existe` }; }
     if (!questao.respostas.length) return { ok: false, campo: `${prefixo}.respostas`, mensagem: `a pergunta ${qi + 1} precisa de ao menos uma resposta` };
     if (!questao.respostas.some((resposta) => resposta.julgamento !== "erro")) {
@@ -159,7 +159,7 @@ export function prepararEdicaoDeTreino(
             if (!aplicar(depois, defesa.move)) return { ok: false, campo: `${campo}.efeito`, mensagem: `${defesa.move} não é uma resposta legal do defensor` };
             const proxima = questoes.get(defesa.proximaQuestaoId);
             if (!proxima) return { ok: false, campo: `${campo}.efeito`, mensagem: "a continuação aponta para uma pergunta que não existe" };
-            const fenDaProxima = quadroDoNo(aula, proxima.posicao.analiseId, proxima.posicao.nodeId, positions).fen;
+            const fenDaProxima = fenDaQuestaoDoTreino(aula, treino, proxima, positions);
             if (!mesmaPosicao(depois.fen(), fenDaProxima)) return { ok: false, campo: `${campo}.efeito`, mensagem: "a continuação não chega à posição da próxima pergunta" };
           }
         } else {
@@ -176,9 +176,22 @@ export function prepararEdicaoDeTreino(
   const nadaMudou = JSON.stringify(treino) === JSON.stringify(original)
     && JSON.stringify(catalogo) === JSON.stringify(aula.catalogo);
   if (nadaMudou) return { ok: true, edicao: { treino: original, ...(aula.catalogo ? { catalogo: aula.catalogo } : {}) } };
-  treino.propriedade = treino.propriedade === "independente" ? "independente" : "personalizado";
-  treino.revisaoAvaliacao = "pendente";
-  return { ok: true, edicao: { treino, ...(catalogo ? { catalogo } : {}) } };
+  // Título não muda a tarefa e, por contrato, não rompe a derivação. Todo outro
+  // ajuste desta janela é autoria pedagógica e materializa a cópia no primeiro toque.
+  const semTituloNovo = { ...treino, titulo: original.titulo };
+  const houveAjustePedagogico = JSON.stringify(semTituloNovo) !== JSON.stringify(original)
+    || JSON.stringify(catalogo) !== JSON.stringify(aula.catalogo);
+  const comOrigem = houveAjustePedagogico && original.origem
+    ? { ...treino, origem: comOrigemHistoricaCompleta(aula, original).origem }
+    : treino;
+  const materializado = houveAjustePedagogico
+    ? comCopiaMaterializada(aula, comOrigem, positions)
+    : comOrigem;
+  materializado.propriedade = materializado.propriedade === "independente"
+    ? "independente"
+    : houveAjustePedagogico ? "personalizado" : materializado.propriedade;
+  if (houveAjustePedagogico) materializado.revisaoAvaliacao = "pendente";
+  return { ok: true, edicao: { treino: materializado, ...(catalogo ? { catalogo } : {}) } };
 }
 
 export function aplicarEdicaoDeTreino(aula: AulaV2, edicao: EdicaoDeTreinoV2): AulaV2 {
