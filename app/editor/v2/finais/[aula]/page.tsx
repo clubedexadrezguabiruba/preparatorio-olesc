@@ -5,6 +5,7 @@ import { abrirRascunhoDeAula } from "@/lib/editor/rascunhos";
 import { adaptarLessonV1 } from "@/lib/editor-v2/adaptar-v1";
 import { hashDaPosicao } from "@/lib/editor-v2/hash";
 import { aulaIdV2Schema, problemasDaAulaV2 } from "@/lib/editor-v2/modelo";
+import { recuperarTransacaoV2 } from "@/lib/editor-v2/publicar";
 import { documentoInicialV2, lerDocumentoV2 } from "@/lib/editor-v2/rascunhos";
 import { pacoteDaAula } from "@/lib/finais/conteudo";
 import { lessonIdSchema, lessonSchema } from "@/lib/lesson/schema";
@@ -27,6 +28,8 @@ export default async function PaginaDoEditorV2({ params }: { params: Promise<{ a
    * impede um `../` de sair da pasta de rascunhos.
    */
   if (!aulaIdV2Schema.safeParse(aula).success) notFound();
+  // §20.1: uma publicação interrompida é terminada ou desfeita antes de a aula abrir.
+  recuperarTransacaoV2(aula);
 
   /*
    * Uma aula extra (`EX-…`) não tem — e não pode ter — arquivo v1: as pastas do

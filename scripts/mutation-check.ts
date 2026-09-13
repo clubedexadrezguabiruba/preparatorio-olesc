@@ -15,6 +15,8 @@ import { Chess } from "chess.js";
 import { hashDoAlvo } from "../lib/lesson/excecoes.ts";
 import { MARCA_DE_MOLDE, type Lesson } from "../lib/lesson/schema.ts";
 import { goalMovesOf, Tablebase } from "./tablebase.ts";
+import { revisoesDaAulaV2 } from "../lib/editor-v2/avaliacao.ts";
+import { posicoesDoPacoteV2, selarPacoteV2, type PacoteV2 } from "../lib/editor-v2/pacote.ts";
 
 /**
  * O gate testado contra si mesmo (plano da F1, §3.4).
@@ -181,6 +183,43 @@ function instalarFixtures(dir: string) {
       cpSync(path.join(cache, arquivo), path.join(dir, "tablebase-cache", arquivo));
     }
   }
+  // A aula v2 publicada da fatia 7 (`scripts/fixture-aula-v2.ts`).
+  const aulasV2 = path.join(fixtures, "aulas-v2");
+  if (existsSync(aulasV2)) cpSync(aulasV2, path.join(dir, "aulas-v2"), { recursive: true });
+}
+
+/* ------------------------------------------------------------------ *
+ * A aula v2 publicada (fatia 7)
+ * ------------------------------------------------------------------ */
+
+const AULA_V2_FIXTURE = "N0-FIXTURE-V2";
+
+/** O pacote ativo da fixture v2, já instalada na cópia. */
+function lerPacoteV2(dir: string): { pacote: PacoteV2; arquivo: string; ponteiro: string } {
+  const pasta = path.join(dir, "aulas-v2", AULA_V2_FIXTURE);
+  const ponteiro = path.join(pasta, "ativa.json");
+  const { publicationId } = JSON.parse(readFileSync(ponteiro, "utf8")) as { publicationId: string };
+  const arquivo = path.join(pasta, "publicacoes", `${publicationId}.json`);
+  return { pacote: JSON.parse(readFileSync(arquivo, "utf8")) as PacoteV2, arquivo, ponteiro };
+}
+
+/**
+ * Estraga o pacote v2 e o regrava **coerente**: revisões recalculadas, manifesto e id
+ * resselados, arquivo renomeado e ponteiro trocado. Sem isto, toda mutação semântica ficaria
+ * vermelha só por "pacote adulterado", e nenhuma provaria a regra dela.
+ *
+ * `selar: "so-manifesto"` mantém as revisões como o estrago as deixou (a mutação da revisão);
+ * `selar: "nada"` grava o estrago cru (a mutação do pacote adulterado).
+ */
+function mutarPacoteV2(dir: string, estragar: (pacote: PacoteV2) => void, selar: "tudo" | "so-manifesto" | "nada" = "tudo") {
+  const { pacote, arquivo, ponteiro } = lerPacoteV2(dir);
+  estragar(pacote);
+  const final = selar === "nada"
+    ? pacote
+    : selarPacoteV2(selar === "tudo" ? { ...pacote, revisoes: revisoesDaAulaV2(pacote.aula, posicoesDoPacoteV2(pacote)) } : pacote);
+  rmSync(arquivo);
+  gravar(path.join(path.dirname(arquivo), `${final.publicationId}.json`), final);
+  gravar(ponteiro, { publicationId: final.publicationId, anterior: null, ativadaEm: "2026-09-13T00:00:00.000Z" });
 }
 
 /** Lê uma aula de fixture **já instalada** na cópia de trabalho. */
@@ -1093,6 +1132,148 @@ const MUTACOES: Mutation[] = [
       json.stages.intro.passos[0].fen = posicao.fen;
       gravar(file, json);
       return "intro.passos[0].fen → a FEN da própria posição da aula, que se diz omitindo o campo";
+    },
+  },
+
+  // ---- Fatia 7: a aula v2 publicada (content/aulas-v2/) -----------------------------------
+  {
+    titulo: "pacote v2 com um texto trocado depois de publicado",
+    codigo: "PACOTE_ADULTERADO",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => { p.aula.capitulos[0].narracoes[0].texto += " (editado à mão)"; }, "nada");
+      return "narração 1 editada no pacote, sem resselar — o hash da aula não bate com o manifesto";
+    },
+  },
+  {
+    titulo: "ponteiro v2 apontando para publicação que não existe",
+    codigo: "PONTEIRO_SEM_PACOTE",
+    fixtures: true,
+    aplicar: async (dir) => {
+      const { ponteiro } = lerPacoteV2(dir);
+      gravar(ponteiro, { publicationId: "pub-0000000000000000", anterior: null, ativadaEm: "2026-09-13T00:00:00.000Z" });
+      return "ativa.json → pub-0000000000000000";
+    },
+  },
+  {
+    titulo: "revisão de avaliação gravada que não é a do conteúdo",
+    codigo: "AVALIACAO_REVISAO_DIVERGE",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => {
+        const pratica = p.aula.praticas[0].id;
+        p.revisoes[pratica] = { ...p.revisoes[pratica], revisao: `ar_${"0".repeat(64)}` };
+      }, "so-manifesto");
+      return "revisoes[prática] trocada e o pacote resselado — o progresso seria gravado contra outra tarefa";
+    },
+  },
+  {
+    titulo: "v2: proveniência registrada com hash de outro conteúdo",
+    codigo: "PROVENIENCIA_CADUCA",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => { p.aula.proveniencia[0].conteudoHash = "0".repeat(64); });
+      return "proveniencia[0].conteudoHash → 000…";
+    },
+  },
+  {
+    titulo: "v2: proveniência diz candidata sobre posição aprovada",
+    codigo: "PROVENIENCIA_DIVERGE",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => { p.aula.proveniencia[0].estado = "candidate"; });
+      return "proveniencia[0].estado → candidate";
+    },
+  },
+  {
+    titulo: "v2: análise publicada começando numa FEN importada sem revisão",
+    codigo: "FEN_IMPORTADA_SEM_REVISAO",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => {
+        const inicio = p.aula.analises[0].inicio;
+        if (inicio.tipo === "posicao") p.aula.analises[0].inicio = { tipo: "fen", fen: p.posicoes[inicio.positionId].fen };
+      });
+      return "analises[0].inicio → { tipo: fen }";
+    },
+  },
+  {
+    titulo: "v2: narração publicada com revisão pendente",
+    codigo: "REVISAO_PENDENTE",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => { p.aula.capitulos[0].narracoes[0].revisao = { motivo: "posicao-inicial-trocada" }; });
+      return "capitulos[0].narracoes[0].revisao → posicao-inicial-trocada";
+    },
+  },
+  {
+    titulo: "v2: final certificado publicado com a certificação herdada do v1",
+    codigo: "CERTIFICACAO_PENDENTE",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => { p.aula.treinos[0].certificacao!.estado = "herdada-v1"; });
+      return "treinos[0].certificacao.estado → herdada-v1";
+    },
+  },
+  {
+    titulo: "v2: evidência da tablebase que o cache desmente",
+    codigo: "CERTIFICACAO_CADUCA",
+    contem: "não bate com a tablebase",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => {
+        const evidencia = Object.values(p.aula.treinos[0].certificacao!.evidencias!)[0];
+        evidencia.winningMoves = evidencia.winningMoves.slice(1);
+      });
+      return "evidência da pergunta 1 sem o primeiro lance vencedor";
+    },
+  },
+  {
+    titulo: "v2: resposta aceita que a tablebase diz perder",
+    codigo: "CERTIFICACAO_REFUTADA",
+    fixtures: true,
+    aplicar: async (dir) => {
+      let feito = "";
+      mutarPacoteV2(dir, (p) => {
+        const treino = p.aula.treinos[0];
+        // Só a pergunta que tem um lance perdedor serve: na N0-LADDER, a última (g4b4
+        // afoga). Nas outras todo lance legal ganha, e o estrago viraria `undefined`.
+        for (const [i, questao] of treino.questoes.entries()) {
+          const evidencia = treino.certificacao!.evidencias![questao.id];
+          const preservam = new Set(evidencia.winningMoves);
+          const lance = new Chess(evidencia.fen).moves({ verbose: true }).map((m) => `${m.from}${m.to}${m.promotion ?? ""}`).find((uci) => !preservam.has(uci));
+          if (!lance) continue;
+          questao.respostas[0].moves = [lance];
+          feito = `pergunta ${i + 1} aceita ${lance}, fora dos lances que preservam a vitória`;
+          return;
+        }
+        throw new Error("a fixture v2 não tem pergunta com lance que perde");
+      });
+      return feito;
+    },
+  },
+  {
+    titulo: "v2: aula publicada sem prática",
+    codigo: "PRATICA_AUSENTE",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => {
+        p.aula.fluxo = p.aula.fluxo.filter((etapa) => etapa.tipo !== "pratica");
+        p.aula.praticas = [];
+      });
+      return "praticas → [] e a etapa sai do fluxo";
+    },
+  },
+  {
+    titulo: "v2: aula publicada com duas práticas",
+    codigo: "PRATICAS_MULTIPLAS",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => {
+        p.aula.praticas.push({ ...p.aula.praticas[0], id: "pratica-segunda" });
+        p.aula.fluxo.push({ id: "etapa-pratica-segunda", tipo: "pratica", entidadeId: "pratica-segunda" });
+      });
+      return "uma segunda prática, com etapa própria no fluxo";
     },
   },
 ];

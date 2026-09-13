@@ -49,7 +49,12 @@ import {
 import { respostasDe } from "../lib/lesson/tree.ts";
 import { falasDaAula } from "../lib/lesson/voz.ts";
 import { validarNotas } from "../lib/repertorio/notas.ts";
-import { CacheMissError, goalMovesOf, Tablebase, type TbEntry } from "./tablebase.ts";
+import { CacheMissError, goalMovesOf, normalizeFen, Tablebase, type TbEntry } from "./tablebase.ts";
+import { revisoesDaAulaV2, type RevisoesDaAulaV2 } from "../lib/editor-v2/avaliacao.ts";
+import { problemasParaPublicarV2 } from "../lib/editor-v2/conferencia.ts";
+import { posicoesDoPacoteV2, problemasDoPacoteV2, type PacoteV2 } from "../lib/editor-v2/pacote.ts";
+import { fenDaQuestaoDoTreino } from "../lib/editor-v2/propriedade-treino.ts";
+import { idsDeAulasV2, idsDePublicacoesV2, lerPonteiroV2, lerPublicacaoCruaV2 } from "../lib/editor-v2/publicacoes.ts";
 
 /**
  * O gate de conteúdo (plano da F1, §3.4).
@@ -1777,6 +1782,107 @@ for (const loaded of lessons) {
 checkDidacticRotation();
 checkIntegralRegime();
 checkDivida();
+progresso("conferindo as aulas v2 publicadas");
+await checkAulasV2();
+
+/* ------------------------------------------------------------------ *
+ * As aulas v2 publicadas (fatia 7 do Editor v2)
+ *
+ * O Editor v2 publica em `content/aulas-v2/<AULA>/`: um ponteiro `ativa.json` e os pacotes
+ * imutáveis em `publicacoes/`. Esta seção põe essas publicações sob o mesmo gate que roda
+ * no CI e no teste de mutações — sem ela, um pacote editado à mão depois de publicado
+ * chegaria ao aluno sem que nenhuma conferência o lesse.
+ *
+ * Cada pacote guardado é conferido por inteiro (hashes, revisões, id): os antigos também,
+ * porque uma aba antiga rejulga contra eles. As **regras de publicação** valem só para o
+ * ativo, e só com o cache da tablebase (a rede, só com `--refresh-cache`, como no resto do
+ * gate). A régua de voz não entra aqui: ela avisa no editor e não decide o CI.
+ * ------------------------------------------------------------------ */
+async function checkAulasV2() {
+  for (const id of idsDeAulasV2(contentDir)) {
+    const where = `aula v2 ${id}`;
+    for (const publicationId of idsDePublicacoesV2(contentDir, id)) {
+      let cru: unknown;
+      try {
+        cru = lerPublicacaoCruaV2(contentDir, id, publicationId);
+      } catch (error) {
+        fail("PACOTE_ADULTERADO", `${where} / ${publicationId}`, `JSON ilegível: ${error instanceof Error ? error.message : String(error)}`);
+        continue;
+      }
+      const problemas = problemasDoPacoteV2(cru);
+      for (const problema of problemas) fail("PACOTE_ADULTERADO", `${where} / ${publicationId}`, problema);
+      if (!problemas.length && (cru as PacoteV2).publicationId !== publicationId) {
+        fail("PACOTE_ADULTERADO", `${where} / ${publicationId}`, `o arquivo se chama ${publicationId} e o pacote diz ser ${(cru as PacoteV2).publicationId}`);
+      }
+    }
+
+    let ponteiro: ReturnType<typeof lerPonteiroV2>;
+    try {
+      ponteiro = lerPonteiroV2(contentDir, id);
+    } catch (error) {
+      fail("PONTEIRO_V2_INVALIDO", where, `ativa.json ilegível: ${error instanceof Error ? error.message : String(error)}`);
+      continue;
+    }
+    if (!ponteiro) {
+      fail("PONTEIRO_V2_INVALIDO", where, "a pasta da aula v2 não tem ativa.json");
+      continue;
+    }
+    let ativo: unknown;
+    try {
+      ativo = lerPublicacaoCruaV2(contentDir, id, ponteiro.publicationId);
+    } catch {
+      // Ilegível: o laço de cima já acusou PACOTE_ADULTERADO por este arquivo.
+      continue;
+    }
+    if (!ativo) {
+      fail("PONTEIRO_SEM_PACOTE", where, `ativa.json aponta para ${ponteiro.publicationId}, que não está em publicacoes/`);
+      continue;
+    }
+    if (ponteiro.anterior && !lerPublicacaoCruaV2(contentDir, id, ponteiro.anterior)) {
+      fail("PONTEIRO_SEM_PACOTE", where, `ativa.json guarda a anterior ${ponteiro.anterior}, que não está em publicacoes/`);
+    }
+    const pacote = ativo as PacoteV2;
+    // A forma precisa fechar para as regras rodarem; o adulterado já foi acusado acima.
+    if (problemasDoPacoteV2(pacote).some((p) => /forma|não é um pacote|não é um objeto/.test(p))) continue;
+    if (pacote.aula.id !== id) fail("PACOTE_ADULTERADO", where, `o pacote ativo é da aula ${pacote.aula.id}`);
+
+    const posicoes = posicoesDoPacoteV2(pacote);
+    const entradas = new Map<string, TbEntry | null>();
+    for (const treino of pacote.aula.treinos) {
+      if (treino.perfil !== "final-certificado") continue;
+      for (const questao of treino.questoes) {
+        let fen: string;
+        try {
+          fen = fenDaQuestaoDoTreino(pacote.aula, treino, questao, posicoes);
+        } catch {
+          // Pergunta sem posição é acusada pelas regras de forma, logo abaixo.
+          continue;
+        }
+        if (entradas.has(normalizeFen(fen))) continue;
+        entradas.set(normalizeFen(fen), await ask(fen, `${where} / treino ${treino.id} / ${questao.id}`));
+      }
+    }
+    let recalculadas: RevisoesDaAulaV2 = {};
+    try {
+      recalculadas = revisoesDaAulaV2(pacote.aula, posicoes);
+    } catch {
+      // `problemasDoPacoteV2` já disse por que a revisão não pôde ser recalculada.
+    }
+    const julgados = problemasParaPublicarV2(pacote.aula, {
+      positions: posicoes,
+      tablebase: (fen, resultado) => {
+        const entrada = entradas.get(normalizeFen(fen));
+        return entrada ? goalMovesOf(entrada, resultado) : null;
+      },
+      revisoes: { gravadas: pacote.revisoes, recalculadas },
+    });
+    for (const problema of julgados) {
+      if (problema.severidade !== "erro") continue;
+      const local = Object.entries(problema.localizacao).filter(([chave]) => chave !== "aulaId").map(([chave, valor]) => `${chave}=${valor}`).join(" ");
+      fail(problema.codigo, `${where} / ${ponteiro.publicationId}${local ? ` / ${local}` : ""}`, problema.mensagem);
+    }
+  }
+}
 
 /* ------------------------------------------------------------------ *
  * As páginas de princípios do repertório

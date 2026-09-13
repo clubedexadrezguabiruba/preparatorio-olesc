@@ -88,11 +88,31 @@ export function montarPacoteV2(aula: AulaV2, positions: Record<string, Position>
   }
   // Uma cópia desligada do documento de entrada: o pacote é imutável, e quem o montou
   // continuar editando a aula não pode mudá-lo por referência.
-  const copia = JSON.parse(jsonCanonico(aula)) as AulaV2;
-  const posicoesCopia = JSON.parse(jsonCanonico(posicoes)) as Record<string, Position>;
+  //
+  // **Na ordem de chaves do schema, e não na canônica.** A identidade do pacote é canônica
+  // (não depende da ordem), mas dois hashes antigos dependem: o da proveniência
+  // (`hashDaPosicao`) e o da fonte do treino (`propriedade-treino.ts`). Uma posição com as
+  // chaves em ordem alfabética acusaria "caduca" em todo pacote.
+  const copia = aulaV2Schema.parse(structuredClone(aula));
+  const posicoesCopia = Object.fromEntries(Object.entries(posicoes).map(([id, posicao]) => [id, positionSchema.parse(structuredClone(posicao))]));
   const revisoes = revisoesDaAulaV2(copia, posicoesCopia);
-  const manifesto = manifestoDe(copia, posicoesCopia, revisoes);
-  return { formato: FORMATO_PACOTE_V2, versao: 1, publicationId: idDaPublicacaoV2(manifesto), aula: copia, posicoes: posicoesCopia, revisoes, manifesto };
+  return selarPacoteV2({ formato: FORMATO_PACOTE_V2, versao: 1, publicationId: "", aula: copia, posicoes: posicoesCopia, revisoes, manifesto: manifestoDe(copia, posicoesCopia, revisoes) });
+}
+
+/**
+ * Recalcula manifesto e id a partir do que está no pacote, **sem** recalcular as revisões.
+ *
+ * Existe para o teste de mutações: uma revisão adulterada com o pacote resselado precisa
+ * disparar a regra da revisão, e não só "pacote adulterado".
+ */
+export function selarPacoteV2(pacote: PacoteV2): PacoteV2 {
+  const manifesto = manifestoDe(pacote.aula, pacote.posicoes, pacote.revisoes);
+  return { ...pacote, manifesto, publicationId: idDaPublicacaoV2(manifesto) };
+}
+
+/** Lê as posições do pacote na ordem do schema — a que os hashes de proveniência esperam. */
+export function posicoesDoPacoteV2(pacote: PacoteV2): Record<string, Position> {
+  return Object.fromEntries(Object.entries(pacote.posicoes).map(([id, posicao]) => [id, positionSchema.parse(posicao)]));
 }
 
 /**

@@ -3328,6 +3328,120 @@ posições, 3 aulas, 38 consultas do cache e 0 pela rede), **42/42 mutações** 
 **O que a 7A não cobre:** a tela não edita desenho nem espera por narração; nenhuma regra
 de publicação existe ainda (7B); o rascunho real `.editor/v2/N1-KPK.json` não foi aberto.
 
+### Parada 7B — Conferir
+
+- `lib/editor-v2/conferencia.ts`: `problemasParaPublicarV2` usa a régua do rascunho e sobe a
+  altura. **Promove a erro** quatro avisos que o próprio código dizia "quando a publicação v2
+  existir, esta passa a impedir": `PROVENIENCIA_CADUCA`, `PROVENIENCIA_DIVERGE`,
+  `FEN_IMPORTADA_SEM_REVISAO`, `REVISAO_PENDENTE`. **Acrescenta**: `CERTIFICACAO_PENDENTE`
+  (herdada, pendente ou indisponível), `CERTIFICACAO_CADUCA` (alvo mudou, pergunta sem
+  evidência, ou evidência que o cache desmente), `CERTIFICACAO_REFUTADA` (resposta aceita que a
+  tablebase diz perder), `PRATICA_AUSENTE` e `PRATICAS_MULTIPLAS` (esta fatia aceita uma
+  prática, obrigatória) e `AVALIACAO_REVISAO_DIVERGE`. A régua de voz (`VOZ_CARACTERES`,
+  `VOZ_PALAVRAS`, `VOZ_PROIBIDA`) colhe título, introdução, resumo, narrações, treino,
+  mensagens de reserva do final certificado e prática — **sempre aviso**.
+- `lib/editor-v2/gate.ts`: a trava é a do v1 (uma conferência por vez no repositório). A
+  **passada A** renova só `treino.certificacao` (resultado, evidência por pergunta, alvo) e
+  grava por `gravarDocumentoV2` com `baseHash`. A **passada B** relê o disco sem rede e prova
+  que o documento é o que A gravou e que, sem a certificação, é o que A leu. O verde vai para
+  `.editor/gate/v2/<AULA>.json` com o hash do **manifesto** (aula, cada posição, alvo de cada
+  certificação, entrada do cache de cada posição certificada, versões dos juízes e da
+  conferência). `podePublicarV2` recalcula tudo e compara.
+- `lib/editor-v2/publicacoes.ts`: o lugar e a leitura de `content/aulas-v2/<AULA>/`
+  (`ativa.json` + `publicacoes/<id>.json`).
+- `scripts/validate-content.ts` ganhou `checkAulasV2()`: todo pacote guardado conferido por
+  inteiro (`PACOTE_ADULTERADO`), ponteiro (`PONTEIRO_V2_INVALIDO`, `PONTEIRO_SEM_PACOTE`) e as
+  regras de publicação sobre o ativo, só com o cache. O v2 publicado passa a ir para o CI e
+  para o teste de mutações.
+- `scripts/fixture-aula-v2.ts` gera `content/fixtures/aulas-v2/N0-FIXTURE-V2` (a N0-LADDER com
+  outro id, certificação renovada pelo cache, data fixa; `--check` confere que é reprodutível).
+  `scripts/mutation-check.ts` instala a fixture e ganhou **12 mutações** com um ajudante que
+  ressela o pacote (revisões, manifesto, id, ponteiro) — sem isso toda mutação ficaria
+  vermelha só por "pacote adulterado".
+- Tela: action `conferirAulaV2Acao`; botão **Conferir** no cabeçalho, habilitado só com a aula
+  salva; o resultado entra no `PainelDeProblemas` com contagens, "pode publicar" e "Ir para o
+  problema", e vira "a aula mudou depois disso — confira de novo" no primeiro lápis.
+
+**Dois defeitos achados rodando, e o que eles ensinam:**
+
+1. **O pacote acusaria a própria proveniência como caduca.** A primeira versão guardava as
+   posições com as chaves em ordem alfabética, e `hashDaPosicao` depende da ordem. Conserto:
+   aula e posições na ordem do schema; a identidade continua canônica. A primeira guarda
+   passava **mesmo com o defeito**, porque o leitor normaliza a ordem; ela foi reescrita para
+   conferir também as posições como gravadas, e aí sim: **antes ✖, depois ✔**.
+2. **O estrago da `CERTIFICACAO_REFUTADA` não existia.** Nas perguntas 1 a 4 da N0-LADDER
+   **todo lance legal ainda ganha** (20/20, 23/23, 23/23, 23/23); só a 5 tem um que perde
+   (`g4b4`, que afoga). O teste unitário procurava na pergunta 1, não achava, e punha
+   `undefined` — que a regra "pegava". A mutação fez o mesmo e **passou batido** (vermelha por
+   `PACOTE_ADULTERADO`, não pela regra): **53 de 54** na primeira rodada. Os dois estragos
+   agora procuram a pergunta que tem lance perdedor e exigem um lance de verdade. Foi o teste
+   de mutações pegando um teste falso, que é para isso que ele existe.
+
+**Testes, antes e depois** (antes = os mesmos testes contra a régua do rascunho sem regras
+novas e um gate que não confere):
+
+```
+ANTES   conferencia + gate: tests 19, pass 1, fail 18
+          (o verde é a guarda "no rascunho as promovidas continuam aviso")
+DEPOIS  tests 19, pass 19
+```
+
+Os 19: a N0-LADDER conferida pode publicar; toda regra da lista tem um estrago; cada uma das
+dez regras **ligada acusa e desligada deixa passar**; promovidas continuam aviso no
+rascunho; voz avisa e não impede; erros antes dos avisos; conferir renova a herdada, fica
+verde, 0 consultas pela rede e acende o Publicar; **treino personalizado sai com o documento
+byte a byte igual fora da certificação**; mudar um campo da posição em `content/positions/`
+apaga o Publicar, desfazer a mudança o reacende, editar o título o apaga; conferência
+vermelha não acende.
+
+**Número da parada — mutações: 42/42 → 54/54 vermelhas**, com os dois controles verdes (a
+segunda rodada, com o estrago corrigido).
+
+### Parada 7C — Publicar atômico
+
+- `lib/editor-v2/publicar.ts`: transação em `.editor/v2/publicacao/<AULA>/` com as fases
+  **candidato → validado → instalado → ativado**, cada uma registrada **depois** de feita. O
+  candidato é validado **relido do disco**. A instalação e a troca do ponteiro usam `rename`
+  com até 5 tentativas curtas contra `EPERM`/`EBUSY` (antivírus no Windows).
+  `recuperarTransacaoV2` roda ao abrir a aula, antes de conferir e antes de publicar: até
+  "instalado" apaga o candidato e o pacote que **esta** transação instalou e ninguém ativou;
+  em "ativado" só limpa. Mesmo conteúdo cai no mesmo arquivo; bytes diferentes sob o mesmo id
+  são recusados. Snapshot `antes-de-publicar` do documento, com a retenção de 20.
+- `reativarPublicacaoV2` (rollback: só troca o ponteiro) e `desativarV2` (o aluno volta ao v1;
+  nenhuma publicação é apagada). O `podePublicar` do v1 recusa aula com ponteiro v2.
+- `lib/editor-v2/impacto-publicacao.ts`: avaliação por avaliação (nova, mudou, igual,
+  removida), nível pela trilha, prática antes e depois, e as frases de professor. A action
+  soma a contagem de alunos com progresso na aula (`finais_progresso`), e diz que faltou quando
+  o banco não responde.
+- Tela: `prepararPublicacaoV2Acao` → janela **Publicar** com o impacto; o hash do impacto
+  volta no clique e o servidor recusa se ele mudou. O botão **Publicar** só aparece com uma
+  conferência verde para o documento que está na tela. **Mais opções** → publicações
+  guardadas, reativar com confirmação na própria linha, desativar o v2.
+
+**Testes, antes e depois** (antes = recuperação desligada e sem a trava do v1):
+
+```
+ANTES   publicar.test.ts: tests 10, pass 3, fail 7
+          ✖ instala sem resto de transação · ✖ interrompida em candidato/validado/instalado/ativado
+          ✖ bytes diferentes sob o mesmo id · ✖ reativar/desativar e v1 recusado
+DEPOIS  tests 10, pass 10
+```
+
+Para cada fase: uma publicação ativa antes, a aula editada e conferida, a segunda publicação
+**interrompida depois daquela fase**, recuperação, e então: até "instalado" o ponteiro continua
+na primeira e só ela está em disco (nenhum órfão); em "ativado" o ponteiro está na segunda
+com `anterior` na primeira; todo pacote apontado passa em `problemasDoPacoteV2`; e a
+publicação seguinte corre normalmente.
+
+**Os sete portões da 7B e da 7C** (um commit só para as duas: a tela e as actions das duas
+moram nos mesmos arquivos): tipos, lint, **1.144 testes**, build, conteúdo (18 posições, 3
+aulas, 38 do cache e 0 pela rede), **54/54 mutações** e repertório `--check` sem escrita.
+
+**O que a 7B e a 7C não cobrem:** exceção do professor a `CERTIFICACAO_REFUTADA` (o v1 tem;
+o v2 ainda não lê `excecoes` nessa regra); o impacto não conta alunos por revisão — a tabela
+por revisão nasce na 7E; a tela de publicações não mostra data nem diff entre duas
+publicações; o lock é de repositório (uma conferência ou publicação por vez, v1 ou v2).
+
 ---
 
 ## Como ligar o editor

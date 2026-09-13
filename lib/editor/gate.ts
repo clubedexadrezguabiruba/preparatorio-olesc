@@ -235,6 +235,12 @@ export function podePublicar(
   aula: string,
   raiz: string = process.cwd(),
 ): { pode: boolean; motivo: string | null } {
+  // Uma aula com publicação v2 ativa é publicada pelo Editor v2 (fatia 7). Copiar a v1 por
+  // cima não mudaria o que o aluno recebe — o ponteiro v2 vence — e daria a impressão de que
+  // mudou.
+  if (existsSync(path.join(raiz, "content", "aulas-v2", aula, "ativa.json"))) {
+    return { pode: false, motivo: "esta aula é publicada pelo Editor v2 — publique por lá, ou desative o v2 antes" };
+  }
   const ultima = ultimaConferencia(aula, raiz);
   if (!ultima) return { pode: false, motivo: "esta aula ainda não foi conferida" };
   if (!ultima.verde) return { pode: false, motivo: "a última conferência encontrou problemas" };

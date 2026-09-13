@@ -4,12 +4,14 @@ import { Chess, type Square } from "chess.js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Key } from "@lichess-org/chessground/types";
-import { guardarSnapshotDeRefazerV2, salvarDocumentoV2 } from "@/app/editor/v2/acoes";
+import { conferirAulaV2Acao, guardarSnapshotDeRefazerV2, salvarDocumentoV2, type ResultadoDoConferirV2 } from "@/app/editor/v2/acoes";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { NagOverlay } from "@/components/board/NagOverlay";
 import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
 import { PainelDeImportacao } from "@/components/editor-v2/PainelDeImportacao";
 import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
+import { DialogoPublicacoes } from "@/components/editor-v2/DialogoPublicacoes";
+import { DialogoPublicar } from "@/components/editor-v2/DialogoPublicar";
 import { PainelDeProblemas } from "@/components/editor-v2/PainelDeProblemas";
 import { ListaDeCapitulos } from "@/components/editor-v2/ListaDeCapitulos";
 import { ListaDeRevisoes } from "@/components/editor-v2/ListaDeRevisoes";
@@ -198,6 +200,20 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
    * lance deixa de casar a chave, e a caixa some sem precisar de efeito.
    */
   const [escrevendoNarracao, setEscrevendoNarracao] = useState<string | null>(null);
+  /**
+   * §19.3: o último Conferir, e **qual documento** ele julgou.
+   *
+   * Guardar a referência do documento é o que apaga o veredito no primeiro lápis: qualquer
+   * edição cria outro objeto, e a tela passa a dizer "a aula mudou depois disso". O servidor
+   * confere de novo antes de publicar; isto só impede a tela de prometer o que não vale.
+   */
+  const [conferencia, setConferencia] = useState<{ resultado: Extract<ResultadoDoConferirV2, { ok: true }>; aula: AulaV2 } | null>(null);
+  const [conferindo, setConferindo] = useState(false);
+  const [publicandoAula, setPublicandoAula] = useState(false);
+  const [vendoPublicacoes, setVendoPublicacoes] = useState(false);
+  const [publicada, setPublicada] = useState<string | null>(null);
+  const botaoPublicar = useRef<HTMLButtonElement>(null);
+  const botaoMaisOpcoes = useRef<HTMLButtonElement>(null);
   /** Cresce a cada navegação por teclado; é o sinal para o foco seguir a seta (§16). */
   const [pedidoDeFoco, setPedidoDeFoco] = useState(0);
   const botaoImportar = useRef<HTMLButtonElement>(null);
@@ -310,7 +326,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const janelaAberta = importando || adicionando || trocandoPosicao || exportando
     || escolhendoPrevia || previa !== null
     || criandoTreino !== null || editandoTreino !== null || propriedadeTreino !== null || jogandoTreino !== null
-    || duplicandoCapitulo !== null || excluindoCapitulo !== null || acaoDoLance !== null || cortando !== null;
+    || duplicandoCapitulo !== null || excluindoCapitulo !== null || acaoDoLance !== null || cortando !== null
+    || publicandoAula || vendoPublicacoes;
   const estadoDoTeclado = useRef({ analise, janelaAberta });
   useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta }; });
 
@@ -753,6 +770,43 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
     URL.revokeObjectURL(url);
   };
 
+  /**
+   * O botão Conferir. Só com a aula salva: o servidor julga o disco, e julgar outra coisa
+   * que a tela mostra seria um verde sobre o que o professor não está vendo.
+   *
+   * A passada A pode renovar a certificação no disco. O documento que volta substitui o
+   * presente **sem** limpar o Desfazer: desfazer depois disso restaura a certificação
+   * antiga, o autosave a grava, e a conferência passa a dizer que venceu — que é a verdade.
+   */
+  const conferir = async () => {
+    if (estado !== "salvo" || conferindo) return;
+    setConferindo(true);
+    setRecado(null);
+    try {
+      const resposta = await conferirAulaV2Acao(aulaId);
+      if (!resposta.ok) {
+        setRecado(`Conferir falhou: ${resposta.erro}`);
+        return;
+      }
+      let julgada = historico.presente;
+      if (resposta.documento && resposta.documento.hash !== hash.current) {
+        const validada = validarAulaV2(JSON.parse(resposta.documento.texto));
+        if (validada.ok) {
+          julgada = validada.aula;
+          hash.current = resposta.documento.hash;
+          maisRecente.current = julgada;
+          ultimoEnfileirado.current = julgada;
+          setHistorico((atual) => ({ ...atual, presente: julgada }));
+        }
+      }
+      setConferencia({ resultado: resposta, aula: julgada });
+    } catch {
+      setRecado("Não foi possível conferir agora. Nada foi alterado.");
+    } finally {
+      setConferindo(false);
+    }
+  };
+
   const adotarVersaoDoDisco = async () => {
     if (!conflitoAtual?.textoAtual || !conflitoAtual.hashAtual) return;
     let cru: unknown;
@@ -867,6 +921,23 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
           <button type="button" ref={botaoImportar} onClick={() => setImportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Importar PGN</button>
           <button type="button" ref={botaoExportar} onClick={() => setExportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Exportar</button>
           <button type="button" ref={botaoPrevia} onClick={() => setEscolhendoPrevia(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Pré-visualizar</button>
+          <button
+            type="button"
+            onClick={() => void conferir()}
+            disabled={estado !== "salvo" || conferindo}
+            title={estado !== "salvo" ? "Espere a aula salvar para conferir" : undefined}
+            className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque disabled:opacity-40"
+          >
+            {conferindo ? "Conferindo…" : "Conferir"}
+          </button>
+          {/* §5.3: "Publicar, somente quando permitido" — o botão nem aparece antes de uma
+              conferência verde para o documento que está na tela. */}
+          {conferencia && conferencia.aula === historico.presente && conferencia.resultado.publicar.pode ? (
+            <button type="button" ref={botaoPublicar} onClick={() => setPublicandoAula(true)} className="foco rounded-md border border-metodo-superficie bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta">
+              Publicar
+            </button>
+          ) : null}
+          <button type="button" ref={botaoMaisOpcoes} onClick={() => setVendoPublicacoes(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Mais opções</button>
           <button type="button" disabled={!historico.passados.length} onClick={() => setHistorico(desfazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Desfazer</button>
           <button type="button" disabled={!historico.futuros.length} onClick={() => setHistorico(refazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Refazer</button>
           <button type="button" disabled={historico.presente === documentoInicial} onClick={desfazerTudo} className="foco rounded-md border border-aviso-superficie px-3 py-2 text-sm text-aviso-tinta disabled:opacity-40">Desfazer tudo</button>
@@ -899,6 +970,38 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         </section>
       ) : null}
       {recado ? <p role="alert" className="rounded-lg border border-erro bg-erro-superficie/10 p-3 text-sm text-erro-texto">{recado}</p> : null}
+      {publicada ? (
+        <p role="status" className="rounded-lg border border-metodo-superficie bg-metodo-superficie/10 p-3 text-sm text-metodo-tinta-alta">
+          Publicada neste computador ({publicada}). Os alunos do site recebem depois do commit, do push e do deploy.
+          <button type="button" className="foco ml-2 underline" onClick={() => setPublicada(null)}>Fechar</button>
+        </p>
+      ) : null}
+      {publicandoAula ? (
+        <DialogoPublicar
+          aulaId={aulaId}
+          aoFechar={() => { setPublicandoAula(false); queueMicrotask(() => botaoPublicar.current?.focus()); }}
+          aoPublicar={(publicationId) => { setPublicandoAula(false); setPublicada(publicationId); queueMicrotask(() => botaoMaisOpcoes.current?.focus()); }}
+        />
+      ) : null}
+      {vendoPublicacoes ? (
+        <DialogoPublicacoes aulaId={aulaId} aoFechar={() => { setVendoPublicacoes(false); queueMicrotask(() => botaoMaisOpcoes.current?.focus()); }} />
+      ) : null}
+      {conferencia ? (
+        <PainelDeProblemas
+          visiveis={problemasVisiveisV2(historico.presente, conferencia.resultado.conferencia.problemas)}
+          resumo={null}
+          aoIr={irAoProblema}
+          aoFechar={() => setConferencia(null)}
+          conferencia={{
+            em: conferencia.resultado.conferencia.em,
+            erros: conferencia.resultado.conferencia.contagem.erros,
+            avisos: conferencia.resultado.conferencia.contagem.avisos,
+            podePublicar: conferencia.resultado.publicar.pode,
+            impedimento: conferencia.resultado.conferencia.impedimento,
+            vencida: conferencia.aula !== historico.presente,
+          }}
+        />
+      ) : null}
       <PainelDeProblemas visiveis={visiveis} resumo={resumo} aoIr={irAoProblema} />
       {/* §19.2: as marcas de revisão, juntas e com porta de saída — inclusive a
           do quadro de introdução, que era marcada e não tinha como ser resolvida. */}

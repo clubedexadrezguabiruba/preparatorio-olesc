@@ -14,7 +14,9 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import { lessonSchema, positionSchema, type Position } from "../lesson/schema.ts";
 import { adaptarLessonV1 } from "./adaptar-v1.ts";
-import { montarPacoteV2, problemasDoPacoteV2 } from "./pacote.ts";
+import { hashDaPosicao } from "./hash.ts";
+import { problemasDaAulaV2 } from "./modelo.ts";
+import { montarPacoteV2, posicoesDoPacoteV2, problemasDoPacoteV2 } from "./pacote.ts";
 
 const lesson = lessonSchema.parse(JSON.parse(readFileSync("content/lessons/N0-LADDER.json", "utf8")));
 const position = positionSchema.parse(JSON.parse(readFileSync("content/positions/N0/pos-n0-ladder-silman-yk7.json", "utf8")));
@@ -71,6 +73,18 @@ test("§13: o pacote íntegro passa, e um byte adulterado em qualquer parte é d
   assert.match(problemasDoPacoteV2(revisao).join(" "), /revisão/);
 
   assert.notDeepEqual(problemasDoPacoteV2({ formato: "outro" }), []);
+});
+
+test("§12: o pacote lido do disco não acusa a própria proveniência como caduca", () => {
+  // O defeito que isto trava: a primeira versão guardava as posições com as chaves em ordem
+  // alfabética, e o hash de proveniência — que depende da ordem — acusava toda posição.
+  const pacote = JSON.parse(JSON.stringify(montarPacoteV2(adaptarLessonV1(lesson, positions), positions)));
+  // As duas leituras: a normalizada, que os leitores do projeto usam, e a crua, como está no
+  // arquivo — quem ler o pacote sem passar pelo schema também não pode ver alarme falso.
+  for (const posicoes of [posicoesDoPacoteV2(pacote), pacote.posicoes]) {
+    const codigos = problemasDaAulaV2(pacote.aula, posicoes, hashDaPosicao).map((p) => p.codigo);
+    assert.equal(codigos.includes("PROVENIENCIA_CADUCA"), false, codigos.join(", "));
+  }
 });
 
 test("§13: aula que usa posição fora do pacote de posições não vira pacote", () => {
