@@ -27,7 +27,9 @@ time).
   Laboratório de Finais num curso dos 100 finais do de la Villa
   (`laboratorio-torneio`) e **vai publicá-lo para os alunos**. O preparatório
   aponta para ele nas tarefas e reserva um bloco de sábado para finais práticos de
-  torneio. Dependência: esse site precisa estar no ar até o Sábado 2 (19/9).
+  torneio. Dependência: esse site precisa estar no ar até ~~o Sábado 2 (19/9)~~
+  **18/09/2026**. *(Nota de 13/09/2026, decisão do Doug: não há alunos reais no site até
+  18/09 — só contas de teste —, e 18/09 é também o prazo das fatias 7–10 do Editor v2.)*
 - **Aberturas:** cada aluno joga algo hoje; o Doug vai **recomendar e ensinar um
   repertório do clube**, a definir junto comigo (proposta na §Aberturas).
 - **Materiais:** livros gratuitos **e pagos** (Doug compra digital, me entrega em

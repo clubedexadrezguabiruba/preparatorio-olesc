@@ -11,6 +11,11 @@
 > ler plano + especificação antes deste diário; este arquivo diz o estado, não redefine
 > o produto.
 
+> **Prazo e alunos reais (13/09/2026, decisão do Doug):** não há alunos reais no site até
+> **18/09/2026** — só contas de teste —, e 18/09 é o prazo das fatias 7–10. O banco pode
+> receber migração aditiva sem nova consulta. Na fatia 7, a N0-LADDER é publicada em v2 de
+> verdade como piloto; o arquivo v1 dela não muda um byte.
+
 **Data:** 2026-09-13. **Branch:** `modo-editor`. A menção
 histórica a “Bloco 2 suspenso” nas seções antigas explica a interrupção que levou à
 nova arquitetura; não rege mais o trabalho.

@@ -773,6 +773,11 @@ tela:
 9. worker Stockfish;
 10. desempenho, acessibilidade e teste de uso final.
 
+> **Prazo (nota de 13/09/2026, decisão do Doug):** as fatias 7, 8, 9 e 10 fecham até
+> **18/09/2026**. Até essa data não há alunos reais no site, só contas de teste. Se a
+> fatia 7 atrasar, os cortes ficam registrados como abertos no diário — o checklist de §28
+> não é reduzido.
+
 Ao final de cada fatia:
 
 1. atualizar `docs/MODO-EDITOR-ONDE-PARAMOS.md`;

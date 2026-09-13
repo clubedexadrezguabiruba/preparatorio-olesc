@@ -357,6 +357,12 @@ O motor pode ser implementado independentemente após B, quando houver espaço d
 
 O primeiro piloto deve demonstrar uma aula real de rei e peão, da importação à comparação e ao treino personalizado. Os demais recursos continuam no escopo, mas o piloto verifica cedo o caminho que motivou a mudança. Não atribuir datas sem medir a velocidade de implementação; preservar o curso disponível durante o trabalho.
 
+> **Nota de 13/09/2026 — prazo fixado pelo Doug.** Medida a velocidade das fatias 1–6, o
+> Doug fixou **18/09/2026** como prazo das fatias 7–10 de §27 da especificação. Até essa
+> data não há alunos reais no site, só contas de teste; por isso a migração aditiva do
+> banco da fatia 7 é aplicada no Supabase único sem nova consulta. Deploy exige merge em
+> `main` e push antes de 18/09; publicar localmente continua não sendo deploy.
+
 ## 19. Testes e evidência
 
 Antes de modificar código Next, ler os guias locais pertinentes em `node_modules/next/dist/docs/`, conforme `AGENTS.md`. Não atualizar dependências como parte do editor.

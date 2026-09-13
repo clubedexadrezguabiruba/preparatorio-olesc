@@ -135,7 +135,9 @@ Hoje é **domingo, 6 de setembro de 2026**.
 Três consequências práticas para o seu trabalho:
 
 1. **A rotina de casa começa em 13/9**, no dia seguinte ao Sábado 1. A partir
-   dali, **uma dica de meio-jogo por dia**. As dicas do degrau mais baixo são
+   dali, **uma dica de meio-jogo por dia**. *(Nota de 13/09/2026, decisão do Doug: os
+   alunos entram no site a partir de **18/09/2026**; até lá só há contas de teste. As
+   datas dos sábados não mudam.)* As dicas do degrau mais baixo são
    consumidas primeiro, e são as primeiras que precisam estar de pé.
 2. **O Sábado 3 (26/9) é a aula presencial de meio-jogo.** O bloco de 45 minutos
    que abre o dia é "planos simples de meio-jogo", com quatro posições projetadas
