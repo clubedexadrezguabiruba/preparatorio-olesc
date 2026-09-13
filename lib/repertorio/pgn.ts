@@ -97,6 +97,16 @@ type Token =
   | { t: "desconhecido"; texto: string };
 
 /**
+ * O token com o trecho do texto de onde saiu (`inicio` incluso, `fim` excluso).
+ *
+ * As posições existem para o editor do repertório (fatia 8 do Editor v2): gravar
+ * uma edição reescreve **só o jogo editado** e copia o resto do arquivo byte a
+ * byte, e para isso é preciso saber onde cada jogo começa e termina. Elas não
+ * mudam nada do que `lerPgns` devolve.
+ */
+type TokenComPosicao = Token & { inicio: number; fim: number };
+
+/**
  * A varredura, em uma passada.
  *
  * A ordem das alternativas importa e cada troca aqui é uma decisão:
@@ -147,13 +157,18 @@ function separarNags(bruto: string): { san: string; nags: string[] } {
  * Espaço em branco não conta, claro. O que conta é `1.e4 e5 ¿ Nf3` — o `¿` vira um
  * `desconhecido`, e o professor lê "não entendi isto" em vez de nunca ficar sabendo.
  */
-function varrer(texto: string): Token[] {
-  const tokens: Token[] = [];
+function varrer(texto: string): TokenComPosicao[] {
+  const tokens: TokenComPosicao[] = [];
   let fimDoAnterior = 0;
   for (const m of texto.matchAll(VARREDURA)) {
-    const buraco = texto.slice(fimDoAnterior, m.index).trim();
+    const trecho = texto.slice(fimDoAnterior, m.index);
+    const buraco = trecho.trim();
+    if (buraco !== "") {
+      const inicio = fimDoAnterior + trecho.indexOf(buraco);
+      tokens.push({ t: "desconhecido", texto: buraco, inicio, fim: inicio + buraco.length });
+    }
     fimDoAnterior = m.index + m[0].length;
-    if (buraco !== "") tokens.push({ t: "desconhecido", texto: buraco });
+    const onde = { inicio: m.index, fim: fimDoAnterior };
     const [
       ,
       chave,
@@ -170,24 +185,28 @@ function varrer(texto: string): Token[] {
       san,
       soltos,
     ] = m;
-    if (chave !== undefined) tokens.push({ t: "tag", chave, valor: valor ?? "" });
-    else if (comentario !== undefined) tokens.push({ t: "comentario", texto: comentario.trim() });
-    else if (ateOFim !== undefined) tokens.push({ t: "comentario", texto: ateOFim.trim() });
-    else if (abre !== undefined) tokens.push({ t: "abre" });
-    else if (fecha !== undefined) tokens.push({ t: "fecha" });
-    else if (nag !== undefined) tokens.push({ t: "nag", texto: nag });
-    else if (resultado !== undefined) tokens.push({ t: "resultado", texto: resultado });
+    if (chave !== undefined) tokens.push({ t: "tag", chave, valor: valor ?? "", ...onde });
+    else if (comentario !== undefined) tokens.push({ t: "comentario", texto: comentario.trim(), ...onde });
+    else if (ateOFim !== undefined) tokens.push({ t: "comentario", texto: ateOFim.trim(), ...onde });
+    else if (abre !== undefined) tokens.push({ t: "abre", ...onde });
+    else if (fecha !== undefined) tokens.push({ t: "fecha", ...onde });
+    else if (nag !== undefined) tokens.push({ t: "nag", texto: nag, ...onde });
+    else if (resultado !== undefined) tokens.push({ t: "resultado", texto: resultado, ...onde });
     else if (roque !== undefined)
       // O algarismo vira letra aqui, e só aqui: a `chess.js` recusa `0-0`.
-      tokens.push({ t: "san", texto: roque.replaceAll("0", "O") + (roqueDepois ?? "") });
-    else if (numero !== undefined) tokens.push({ t: "numero" });
-    else if (san !== undefined) tokens.push({ t: "san", texto: san });
-    else if (soltos !== undefined) tokens.push({ t: "nag", texto: soltos });
+      tokens.push({ t: "san", texto: roque.replaceAll("0", "O") + (roqueDepois ?? ""), ...onde });
+    else if (numero !== undefined) tokens.push({ t: "numero", ...onde });
+    else if (san !== undefined) tokens.push({ t: "san", texto: san, ...onde });
+    else if (soltos !== undefined) tokens.push({ t: "nag", texto: soltos, ...onde });
   }
   // O rabo do arquivo, depois do último casamento: é onde mora a chave que ninguém
   // fechou e o lixo que o exportador deixou no fim.
-  const sobra = texto.slice(fimDoAnterior).trim();
-  if (sobra !== "") tokens.push({ t: "desconhecido", texto: sobra });
+  const rabo = texto.slice(fimDoAnterior);
+  const sobra = rabo.trim();
+  if (sobra !== "") {
+    const inicio = fimDoAnterior + rabo.indexOf(sobra);
+    tokens.push({ t: "desconhecido", texto: sobra, inicio, fim: inicio + sobra.length });
+  }
   return tokens;
 }
 
@@ -315,6 +334,65 @@ export function lerPgns(texto: string): PartidaPgn[] {
   if (jaViuLance) jogos.push(corrente);
 
   return jogos.map(montar);
+}
+
+/** Um jogo do arquivo e o trecho do texto que ele ocupa (`fim` excluso). */
+export type JogoComIntervalo = { partida: PartidaPgn; inicio: number; fim: number };
+
+export type ArquivoComIntervalos = {
+  /** O que vem antes do primeiro jogo: os comentários `;` do cabeçalho do arquivo. */
+  preambulo: { inicio: 0; fim: number };
+  jogos: JogoComIntervalo[];
+};
+
+/**
+ * Lê os jogos **e onde cada um mora no texto** — a base do escritor emendador do
+ * editor do repertório.
+ *
+ * Três diferenças de `lerPgns`, todas de propósito:
+ *
+ * 1. **O preâmbulo não é do primeiro jogo.** Em `lerPgns` os `;` antes da primeira
+ *    tag viram a `intro` do jogo 1, e ninguém percebe porque `expandir` não lê a
+ *    intro. Aqui eles são o preâmbulo do arquivo, copiado byte a byte com as quebras
+ *    de linha — reescrever o jogo 1 não pode reescrever o cabeçalho do arquivo.
+ * 2. **Um jogo começa na primeira tag dele** e termina no fim do último token dele
+ *    (o `*`, quase sempre). O que fica entre dois jogos é separador, e também é
+ *    copiado.
+ * 3. **Um bloco só de tags é um jogo** (sem lances). É como nasce uma abertura nova
+ *    no editor: o cabeçalho existe antes do primeiro lance. `lerPgns` o descarta,
+ *    e o compilador continua usando `lerPgns`.
+ */
+export function lerPgnsComIntervalos(texto: string): ArquivoComIntervalos {
+  const tokens = varrer(texto);
+  const blocos: TokenComPosicao[][] = [];
+  let corrente: TokenComPosicao[] = [];
+  let jaViuLance = false;
+  let jaViuTag = false;
+
+  for (const token of tokens) {
+    if (token.t === "tag" && jaViuLance) {
+      blocos.push(corrente);
+      corrente = [];
+      jaViuLance = false;
+      jaViuTag = false;
+    }
+    if (token.t === "san") jaViuLance = true;
+    if (token.t === "tag") jaViuTag = true;
+    corrente.push(token);
+  }
+  if (jaViuLance || jaViuTag) blocos.push(corrente);
+
+  const jogos: JogoComIntervalo[] = [];
+  for (const [i, bloco] of blocos.entries()) {
+    // Só o primeiro bloco carrega preâmbulo: nos seguintes, a primeira tag é o
+    // primeiro token, porque é ela que abre o bloco.
+    const primeiraTag = i === 0 ? bloco.findIndex((t) => t.t === "tag") : 0;
+    const doJogo = primeiraTag > 0 ? bloco.slice(primeiraTag) : bloco;
+    if (doJogo.length === 0) continue;
+    jogos.push({ partida: montar(doJogo), inicio: doJogo[0].inicio, fim: doJogo[doJogo.length - 1].fim });
+  }
+
+  return { preambulo: { inicio: 0, fim: jogos[0]?.inicio ?? texto.length }, jogos };
 }
 
 /**
