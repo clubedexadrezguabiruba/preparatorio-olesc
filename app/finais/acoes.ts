@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { lerAula } from "@/lib/finais/conteudo";
 import { gravarTentativaDeAula, type ResultadoDeAula, type TentativaDeAula } from "@/lib/finais/gravar";
+import { gravarTentativaV2NoBanco } from "@/lib/finais/gravar-v2-banco";
+import type { ResultadoDeAulaV2, TentativaDeAulaV2 } from "@/lib/finais/tentativa-v2";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 
 export type { TentativaDeAula } from "@/lib/finais/gravar";
@@ -20,6 +22,16 @@ export type { TentativaDeAula } from "@/lib/finais/gravar";
 export async function registrarEtapa(tentativa: TentativaDeAula): Promise<ResultadoDeAula> {
   const perfil = await perfilAtual();
   return gravarTentativaDeAula(perfil.id, tentativa);
+}
+
+/**
+ * Grava uma etapa jogada de uma aula **v2** (fatia 7). Mesma casca: o aluno é o do cookie;
+ * o que chega do navegador são lances, publicação, revisão e o id idempotente da tentativa.
+ * Quem rejulga contra o snapshot jogado e decide o domínio é `lib/finais/gravar-v2.ts`.
+ */
+export async function registrarEtapaV2(tentativa: TentativaDeAulaV2): Promise<ResultadoDeAulaV2> {
+  const perfil = await perfilAtual();
+  return gravarTentativaV2NoBanco(perfil.id, tentativa);
 }
 
 /**

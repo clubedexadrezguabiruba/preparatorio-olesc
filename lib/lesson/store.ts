@@ -24,11 +24,17 @@ import { TRILHA } from "./falas.ts";
  *
  * Ver `lessonSchema`.
  */
-export type StageKey = "intro" | "objective" | "guided" | "practice";
-/** Só uma árvore roteirizada sobrou, e ela é a terceira. */
-export type TreeKey = "guided";
+export type EtapaV1 = "intro" | "objective" | "guided" | "practice";
+/**
+ * A chave de uma etapa aberta. Na aula v1 é uma das quatro de `EtapaV1`; na aula v2 é o id
+ * da etapa do `fluxo` (fatia 7), porque uma aula v2 pode ter vários capítulos e vários
+ * treinos. `(string & {})` mantém os quatro literais no autocompletar sem fechar o tipo.
+ */
+export type StageKey = EtapaV1 | (string & {});
+/** Na aula v1, só uma árvore roteirizada sobrou, e ela é a terceira; na v2, uma por treino. */
+export type TreeKey = "guided" | (string & {});
 
-export const STAGE_ORDER: StageKey[] = ["intro", "objective", "guided", "practice"];
+export const STAGE_ORDER: EtapaV1[] = ["intro", "objective", "guided", "practice"];
 
 /**
  * Os quatro rótulos, e eles moram em `lib/lesson/falas.ts` como toda fala de
@@ -36,7 +42,16 @@ export const STAGE_ORDER: StageKey[] = ["intro", "objective", "guided", "practic
  * desenho do sistema em vez do que o aluno faz em cada um. Ver a §4 de
  * `docs/VOZ-DO-CURSO.md`.
  */
-export const STAGE_LABEL: Record<StageKey, string> = TRILHA;
+export const STAGE_LABEL: Record<EtapaV1, string> = TRILHA;
+
+/**
+ * O id de uma tentativa (fatia 7): o identificador idempotente que o servidor usa para não
+ * gravar duas vezes a mesma tentativa num retry (§20.2). Nasce a cada tentativa nova — abrir
+ * a etapa ou recomeçá-la —, e não a cada envio.
+ */
+export function novoIdDeTentativa(): string {
+  return globalThis.crypto.randomUUID();
+}
 
 export type MessageTone = "good" | "bad" | "warn" | "neutral";
 
@@ -119,6 +134,13 @@ export type TreeState = {
   startedAt: number;
   /** Quantas vezes a etapa 4 recomeçou do zero. */
   attempt: number;
+  /** O id idempotente desta tentativa (ver `novoIdDeTentativa`). */
+  tentativaId: string;
+  /**
+   * As perguntas cuja dica o aluno viu nesta tentativa. Plano §8: "ajuda utilizada
+   * registrada separadamente de domínio" — ela sobe com a tentativa e não decide nada.
+   */
+  ajudas: string[];
   status: TreeStatus;
   /** Preenchido só quando `status` é `done`. */
   end: TreeEnd | null;
@@ -134,6 +156,8 @@ function freshTree(rootId: string, attempt = 1): TreeState {
     moves: [],
     startedAt: Date.now(),
     attempt,
+    tentativaId: novoIdDeTentativa(),
+    ajudas: [],
     status: "playing",
     end: null,
     failure: null,
@@ -170,7 +194,7 @@ export function restingMessage(tree: TreeState | undefined): PanelMessage | null
  * revisão. A etapa 6 saiu em 2026-09-08: quem revisa agora é a escada de
  * `lib/finais/`, na MESMA posição, em dias espaçados.
  */
-export type PracticeKey = "practice";
+export type PracticeKey = "practice" | (string & {});
 
 export type PracticeEnd = {
   result: "win-white" | "win-black" | "draw";
@@ -198,6 +222,8 @@ export type PracticeState = {
   /** Quando esta partida começou, em `Date.now()`. Vira o `tempo_ms` da linha. */
   startedAt: number;
   attempt: number;
+  /** O id idempotente desta partida (ver `novoIdDeTentativa`). */
+  tentativaId: string;
   status: "playing" | "passed" | "failed";
   end: PracticeEnd | null;
 };
@@ -209,6 +235,7 @@ function freshPractice(positionId: string, startFen: string, attempt = 1): Pract
     moves: [],
     startedAt: Date.now(),
     attempt,
+    tentativaId: novoIdDeTentativa(),
     status: "playing",
     end: null,
   };
@@ -233,7 +260,7 @@ export function restingPracticeMessage(practice: PracticeState | undefined): Pan
  * tira o selo. Quem zera é `open()`, ou seja, trocar de aula — que é
  * exatamente o "na mesma sessão" que a definição de D1 pede.
  */
-export type Cleared = { practice: boolean };
+export type Cleared = { practice: boolean } & Record<string, boolean>;
 
 type LessonStore = {
   lessonId: string | null;
@@ -284,6 +311,8 @@ type LessonStore = {
    * lance que o autor acabou de jogar seria desfeito.
    */
   treeSeek: (key: TreeKey, nodeId: string, studentMoves: number) => void;
+  /** O aluno viu a dica desta pergunta nesta tentativa. Registra; não julga. */
+  treeHelp: (key: TreeKey, nodeId: string) => void;
 
   /** Um lance aceito na partida — do aluno ou do motor, os dois entram aqui. */
   practiceMove: (key: PracticeKey, uci: string) => void;
@@ -305,10 +334,11 @@ export const useLessonStore = create<LessonStore>((set) => ({
       lessonId,
       stage,
       message: null,
-      cleared: { practice: false },
-      trees: {
-        ...(roots.guided ? { guided: freshTree(roots.guided) } : {}),
-      },
+      cleared: { practice: false, ...Object.fromEntries(practices.map((p) => [p.key, false])) },
+      // Todas as árvores pedidas: a v1 manda só `guided`, a v2 uma por treino do fluxo.
+      trees: Object.fromEntries(
+        Object.entries(roots).filter((par): par is [string, string] => Boolean(par[1])).map(([key, root]) => [key, freshTree(root)]),
+      ),
       practices: Object.fromEntries(
         practices.map((p) => [p.key, freshPractice(p.positionId, p.startFen)]),
       ),
@@ -383,6 +413,13 @@ export const useLessonStore = create<LessonStore>((set) => ({
       };
     }),
 
+  treeHelp: (key, nodeId) =>
+    set((state) => {
+      const tree = state.trees[key];
+      if (!tree || tree.status !== "playing" || tree.ajudas.includes(nodeId)) return state;
+      return { trees: { ...state.trees, [key]: { ...tree, ajudas: [...tree.ajudas, nodeId] } } };
+    }),
+
   treeFail: (key, reason) =>
     set((state) => {
       const tree = state.trees[key];
@@ -424,8 +461,7 @@ export const useLessonStore = create<LessonStore>((set) => ({
       const practice = state.practices[key];
       if (!practice) return state;
       return {
-        cleared:
-          key === "practice" && end.passed ? { ...state.cleared, practice: true } : state.cleared,
+        cleared: end.passed ? { ...state.cleared, [key]: true } : state.cleared,
         practices: {
           ...state.practices,
           [key]: { ...practice, status: end.passed ? "passed" : "failed", end },

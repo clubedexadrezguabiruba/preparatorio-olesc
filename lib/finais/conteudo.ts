@@ -1,6 +1,9 @@
 import "server-only";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { aulaDoAlunoV2, type AulaDoAlunoV2 } from "../editor-v2/fluxo-do-aluno.ts";
+import type { PacoteV2 } from "../editor-v2/pacote.ts";
+import { idsDeAulasV2Ativas, pacoteAtivoDoAluno } from "./conteudo-v2.ts";
 import { referencedPositionIds } from "../lesson/refs.ts";
 import { lessonSchema, positionSchema, type Lesson, type Position } from "../lesson/schema.ts";
 
@@ -78,9 +81,31 @@ function lerPosicoes(): Record<string, Position> {
   return porId;
 }
 
-/** Os ids de aula que existem em `content/lessons/`, em ordem alfabética. */
-export function idsDeAula(): string[] {
+/** Os ids de aula v1 que existem em `content/lessons/`, em ordem alfabética. */
+function idsDeAulaV1(): string[] {
   return varrer(AULAS).map((arquivo) => path.basename(arquivo, ".json"));
+}
+
+/**
+ * Os ids de aula que o aluno pode abrir: as v1 de `content/lessons/` **e** as v2 com
+ * publicação ativa (fatia 7). Uma aula que existe nas duas formas aparece uma vez.
+ */
+export function idsDeAula(): string[] {
+  return [...new Set([...idsDeAulaV1(), ...idsDeAulasV2Ativas()])].sort();
+}
+
+/**
+ * O que o aluno recebe numa aula: a v2 ativa, se houver — **a v2 vence a v1 do mesmo id** —,
+ * ou a v1. `null` se o id não existe em nenhuma das duas.
+ */
+export function lerPacoteDoAluno(id: string):
+  | { versao: 1; pacote: PacoteDeAula }
+  | { versao: 2; pacote: PacoteV2; aula: AulaDoAlunoV2 }
+  | null {
+  const v2 = pacoteAtivoDoAluno(id);
+  if (v2) return { versao: 2, pacote: v2, aula: aulaDoAlunoV2(v2) };
+  const v1 = lerPacote(id);
+  return v1 ? { versao: 1, pacote: v1 } : null;
 }
 
 /** A aula, validada, ou `null` se o id não existe. */
@@ -140,15 +165,29 @@ export function indiceDeAulas(): Array<{
   temPratica: boolean;
   status: Lesson["status"];
 }> {
-  return idsDeAula()
-    .map((id) => lessonSchema.parse(lerJson(path.join(AULAS, `${id}.json`))))
-    .map((aula) => ({
+  const v2 = new Set(idsDeAulasV2Ativas());
+  return idsDeAula().map((id) => {
+    // A v2 ativa vence a v1 do mesmo id (fatia 7): é ela que o aluno abre, e é o fluxo dela
+    // que diz quantas etapas há e se há prática. Publicada no v2 é publicada.
+    if (v2.has(id)) {
+      const pacote = pacoteAtivoDoAluno(id)!;
+      return {
+        id,
+        titulo: pacote.aula.titulo,
+        etapas: pacote.aula.fluxo.length,
+        temPratica: pacote.aula.praticas.length > 0,
+        status: "published" as const,
+      };
+    }
+    const aula = lessonSchema.parse(lerJson(path.join(AULAS, `${id}.json`)));
+    return {
       id: aula.id,
       titulo: aula.title,
       etapas: Object.keys(aula.stages).length,
       temPratica: aula.stages.practice !== undefined,
       status: aula.status,
-    }));
+    };
+  });
 }
 
 /**

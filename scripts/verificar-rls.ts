@@ -68,6 +68,7 @@
  * rodar de graça no meio de uma tarefa.
  */
 
+import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -574,6 +575,32 @@ try {
     .select("*", { count: "exact", head: true })
     .eq("aluno", criados[0]);
   afirmar(nivelDeASobrou === 1, `A não apaga o próprio nível (sobrou ${nivelDeASobrou})`);
+
+  // Fatia 7 do Editor v2 (migration 0010). O molde do item 11: o servidor grava a escada
+  // por revisão, cada aluno lê a sua; e a tentativa guardada sem snapshot é só do professor.
+  console.log("\n12. Aula v2: a escada por revisão é do servidor, e cada um lê a sua");
+  const revisaoDeEnsaio = `ar_${"a".repeat(64)}`;
+  const { error: erroEscadaDeA } = await alunoA.from("avaliacoes_progresso").insert({
+    aluno: criados[0], aula: "N0-LADDER", entidade_id: "pratica-forjada", assessment_revision: revisaoDeEnsaio, degrau: 3, revisar_em: new Date().toISOString(),
+  });
+  afirmar(erroEscadaDeA?.code === "42501", `A não grava a própria escada v2 (${erroEscadaDeA?.code})`);
+  for (const id of criados) {
+    const { error } = await admin.from("avaliacoes_progresso").insert({
+      aluno: id, aula: "N0-LADDER", entidade_id: "pratica-semeada", assessment_revision: revisaoDeEnsaio, degrau: 1, revisar_em: new Date().toISOString(), tentativas: 1,
+    });
+    afirmar(!error, `a chave de serviço semeia a escada v2 (${error?.message ?? "sem erro"})`);
+  }
+  const { data: escadaV2PorA } = await alunoA.from("avaliacoes_progresso").select("aluno");
+  afirmar(escadaV2PorA?.length === 1 && escadaV2PorA[0].aluno === criados[0], `A vê 1 linha de escada v2, a dele (viu ${escadaV2PorA?.length})`);
+  const { data: escadaV2PorB } = await alunoB.from("avaliacoes_progresso").select("aluno").eq("aluno", criados[0]);
+  afirmar(escadaV2PorB?.length === 0, `B não lê a escada v2 de A (viu ${escadaV2PorB?.length})`);
+
+  const { error: erroSemSnapshot } = await admin.from("tentativas_v2_sem_snapshot").insert({
+    aluno: criados[0], aula: "N0-LADDER", publication_id: "pub-0000000000000000", tentativa_id: randomUUID(), corpo: { ensaio: true },
+  });
+  afirmar(!erroSemSnapshot, `a chave de serviço guarda a tentativa sem snapshot (${erroSemSnapshot?.message ?? "sem erro"})`);
+  const { data: semSnapshotPorA } = await alunoA.from("tentativas_v2_sem_snapshot").select("id");
+  afirmar(semSnapshotPorA?.length === 0, `nem o dono lê a tentativa sem snapshot — é do professor (viu ${semSnapshotPorA?.length})`);
 
 } finally {
   await limpar();

@@ -1,5 +1,6 @@
 import "server-only";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
+import { idsDeAulasV2Ativas, pacoteAtivoDoAluno } from "@/lib/finais/conteudo-v2";
 import type { ProgressoDaEscada } from "@/lib/finais/escada";
 import { AULA_ZERADA, type ProgressoDaAula } from "@/lib/finais/trilha";
 
@@ -35,6 +36,25 @@ import { AULA_ZERADA, type ProgressoDaAula } from "@/lib/finais/trilha";
  * *qual* aluno olhar, e não para proteger nada — se ele fosse a proteção,
  * apagá-lo não mudaria nada na tela e mudaria tudo na segurança.
  */
+
+/**
+ * A prática (única, nesta fatia) e a revisão ativa de cada aula v2 publicada. Conteúdo lido do
+ * disco; se um pacote estiver quebrado, a aula fica de fora daqui e quem acusa é a página dela.
+ */
+function revisoesAtivasDasPraticasV2(): Map<string, { entidadeId: string; revisao: string }> {
+  const ativas = new Map<string, { entidadeId: string; revisao: string }>();
+  for (const aula of idsDeAulasV2Ativas()) {
+    try {
+      const pacote = pacoteAtivoDoAluno(aula);
+      const pratica = pacote?.aula.praticas[0];
+      const revisao = pratica ? pacote!.revisoes[pratica.id]?.revisao : undefined;
+      if (pratica && revisao) ativas.set(aula, { entidadeId: pratica.id, revisao });
+    } catch {
+      // Pacote quebrado: a página da aula lança e mostra o defeito; aqui ele não derruba a trilha.
+    }
+  }
+  return ativas;
+}
 
 type LinhaDaView = {
   aluno: string;
@@ -111,17 +131,44 @@ async function ler(aluno?: string): Promise<Map<string, Map<string, ProgressoDaA
     aulas.set(linha.aula, { ...(aulas.get(linha.aula) ?? AULA_ZERADA), lida: true });
   }
 
+  /*
+   * **A aula v2 publicada lê a escada da revisão ativa, e só dela (fatia 7).**
+   *
+   * O domínio de uma aula v2 mora em `avaliacoes_progresso`, por avaliação e revisão
+   * (migration 0010). Mudar a tarefa cria revisão nova, e o degrau da antiga fica no banco
+   * como história — mas não vale para a aula de hoje. Por isso a escada de `finais_progresso`
+   * é ignorada nas aulas v2: ela é da tarefa v1, e só entra na v2 por migração explícita, que
+   * copia a linha para a revisão equivalente.
+   */
+  const ativasV2 = revisoesAtivasDasPraticasV2();
+  const escadaDe = (linha: LinhaDaEscada): ProgressoDaEscada => ({
+    degrau: linha.degrau,
+    revisarEm: linha.revisar_em,
+    tentativas: linha.tentativas,
+    erros: linha.erros,
+    aprendidaEm: linha.aprendida_em,
+    ultimaEm: linha.ultima_em,
+  });
+
   for (const linha of (naEscada.data ?? []) as LinhaDaEscada[]) {
+    if (ativasV2.has(linha.aula)) continue;
     const aulas = doAluno(linha.aluno);
-    const escada: ProgressoDaEscada = {
-      degrau: linha.degrau,
-      revisarEm: linha.revisar_em,
-      tentativas: linha.tentativas,
-      erros: linha.erros,
-      aprendidaEm: linha.aprendida_em,
-      ultimaEm: linha.ultima_em,
-    };
-    aulas.set(linha.aula, { ...(aulas.get(linha.aula) ?? AULA_ZERADA), escada });
+    aulas.set(linha.aula, { ...(aulas.get(linha.aula) ?? AULA_ZERADA), escada: escadaDe(linha) });
+  }
+
+  if (ativasV2.size) {
+    let daAvaliacao = supabase
+      .from("avaliacoes_progresso")
+      .select("aluno, aula, entidade_id, assessment_revision, degrau, revisar_em, tentativas, erros, aprendida_em, ultima_em")
+      .in("aula", [...ativasV2.keys()]);
+    if (aluno) daAvaliacao = daAvaliacao.eq("aluno", aluno);
+    const { data } = await daAvaliacao;
+    for (const linha of (data ?? []) as Array<LinhaDaEscada & { entidade_id: string; assessment_revision: string }>) {
+      const ativa = ativasV2.get(linha.aula);
+      if (!ativa || ativa.entidadeId !== linha.entidade_id || ativa.revisao !== linha.assessment_revision) continue;
+      const aulas = doAluno(linha.aluno);
+      aulas.set(linha.aula, { ...(aulas.get(linha.aula) ?? AULA_ZERADA), escada: escadaDe(linha) });
+    }
   }
 
   return porAluno;

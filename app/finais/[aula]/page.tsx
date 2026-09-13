@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { idsDeAula, lerPacote } from "@/lib/finais/conteudo";
+import { idsDeAula, lerPacoteDoAluno } from "@/lib/finais/conteudo";
 import { aulaDaTrilha } from "@/lib/finais/trilha";
 import { AulaNoNavegador } from "./AulaNoNavegador";
 import { Leitura } from "./Leitura";
@@ -37,16 +37,33 @@ export const dynamicParams = false;
 
 export async function generateMetadata({ params }: PageProps<"/finais/[aula]">): Promise<Metadata> {
   const { aula } = await params;
-  const pacote = lerPacote(aula);
+  const doAluno = lerPacoteDoAluno(aula);
+  const titulo = doAluno?.versao === 2 ? doAluno.aula.titulo : doAluno?.pacote.lesson.title;
   return {
-    title: pacote ? `${pacote.lesson.title} — Finais` : "Aula não encontrada",
+    title: titulo ? `${titulo} — Finais` : "Aula não encontrada",
   };
 }
 
 export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]">) {
   const { aula } = await params;
-  const pacote = lerPacote(aula);
-  if (!pacote) notFound();
+  const doAluno = lerPacoteDoAluno(aula);
+  if (!doAluno) notFound();
+
+  /*
+   * **A aula v2 publicada vence a v1 do mesmo id (fatia 7).** O aluno segue o fluxo dela, no
+   * mesmo player. O pacote inteiro fica aqui no servidor; ao navegador vão só as etapas
+   * traduzidas, sem comentário privado de análise (plano §12).
+   */
+  if (doAluno.versao === 2) {
+    return (
+      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
+        <Suspense fallback={null}>
+          <AulaNoNavegador aulaV2={doAluno.aula} />
+        </Suspense>
+      </main>
+    );
+  }
+  const pacote = doAluno.pacote;
 
   /*
    * **Quem sabe se a aula é de leitura é o ARQUIVO dela, e não mais a trilha.**

@@ -82,6 +82,8 @@ export function ObjectiveStage({
   edicaoDaTecnica,
   marcacao,
   previa,
+  autoria,
+  relogio: relogioDoPasso,
 }: {
   stage: ObjectiveStageData;
   /** A posição da aula — a MESMA das três etapas, e de onde o roteiro parte. */
@@ -162,6 +164,16 @@ export function ObjectiveStage({
       reiniciar: () => void;
     }) => ReactNode;
   };
+  /**
+   * **A aula v2 do aluno (fatia 7).** O desenho de cada passo com a cor da autoria, no lugar
+   * do desenho deduzido da forma v1. Sem isto, nada muda.
+   */
+  autoria?: (passo: number) => DrawShape[];
+  /**
+   * **A aula v2 do aluno (fatia 7).** Quanto cada passo espera; `null` é a pausa manual, e
+   * então aparece **Continuar** para o aluno andar. Sem isto, vale `pausaDoPasso`.
+   */
+  relogio?: (passo: number) => number | null;
 }) {
   const [passo, setPasso] = useState(() =>
     Math.min(Math.max(passoInicial, 0), stage.roteiro.length - 1),
@@ -226,7 +238,7 @@ export function ObjectiveStage({
     if (ultimo && naUltima) return;
     // Na prévia o relógio é o de §15.2: a leitura fica intacta, o intervalo obedece à
     // velocidade, e `null` é a pausa manual — que não anda até o professor mandar.
-    const espera = previa ? previa.relogio(passo) : pausaDoPasso(atual);
+    const espera = previa ? previa.relogio(passo) : relogioDoPasso ? relogioDoPasso(passo) : pausaDoPasso(atual);
     if (espera === null) return;
     const relogio = setTimeout(() => {
       // Página antes de passo: uma fala partida é lida inteira, e só então o
@@ -235,7 +247,7 @@ export function ObjectiveStage({
       else setPasso((p) => Math.min(p + 1, stage.roteiro.length - 1));
     }, espera);
     return () => clearTimeout(relogio);
-  }, [tocando, digitando, naUltima, ultimo, atual, passo, previa, stage.roteiro.length]);
+  }, [tocando, digitando, naUltima, ultimo, atual, passo, previa, relogioDoPasso, stage.roteiro.length]);
 
   /**
    * O som do lance, por passo.
@@ -265,10 +277,17 @@ export function ObjectiveStage({
       // (por `marcacao`) — repeti-lo aqui o desenharia duas vezes. Os
       // destaques deduzidos ficam: o professor precisa ver o mesmo tabuleiro
       // que o aluno vai ver, e eles não são dele para apagar.
-      ...(marcacao ? [] : previa ? previa.autoria(passo) : desenhoDaAutoria(atual)),
+      ...(marcacao ? [] : previa ? previa.autoria(passo) : autoria ? autoria(passo) : desenhoDaAutoria(atual)),
     ],
-    [quadro, atual, marcacao, previa, passo],
+    [quadro, atual, marcacao, previa, autoria, passo],
   );
+
+  /** O passo de pausa manual da aula v2: o relógio não anda, e quem anda é o aluno. */
+  const pausaManual = Boolean(relogioDoPasso && !previa && !terminou && relogioDoPasso(passo) === null && !digitando);
+  const continuar = () => {
+    if (!comentarioRef.current.naUltima) comentarioRef.current.virar();
+    else setPasso((p) => Math.min(p + 1, stage.roteiro.length - 1));
+  };
 
   const rever = () => {
     setPasso(0);
@@ -334,7 +353,11 @@ export function ObjectiveStage({
               <>
                 {/* O botão de pausa some quando a aula acaba: pausar o que já parou
                     não é controle, é botão morto. */}
-                {!terminou && (
+                {pausaManual ? (
+                  <LessonButton variant="primary" onClick={continuar}>
+                    Continuar
+                  </LessonButton>
+                ) : !terminou && (
                   <LessonButton onClick={() => setTocando((t) => !t)}>
                     {tocando ? "Pausar" : "Continuar"}
                   </LessonButton>

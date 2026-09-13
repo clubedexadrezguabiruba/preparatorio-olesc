@@ -1,17 +1,24 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useSyncExternalStore, type ReactNode } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import Link from "next/link";
 import type { PacoteDeAula } from "@/lib/finais/conteudo";
 import type { TentativaDeAula } from "@/lib/finais/gravar";
+import type { TentativaDeAulaV2 } from "@/lib/finais/tentativa-v2";
 import { IntroStage } from "@/components/lesson/IntroStage";
+import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
+import type { AulaDoAlunoV2, EtapaDoAlunoV2 } from "@/lib/editor-v2/fluxo-do-aluno";
+import { ganchosDoTreinoV2 } from "@/lib/editor-v2/ganchos-do-treino";
 import { AVANCO, PARTIDA } from "@/lib/lesson/falas";
 import { masteryReport } from "@/lib/lesson/mastery";
+import { pausaDoPasso } from "@/lib/lesson/roteiro";
+import type { IntroStage as IntroStageData, ObjectiveStage as ObjectiveStageData, Position, RoteiroPasso } from "@/lib/lesson/schema";
 import {
   STAGE_LABEL,
   STAGE_ORDER,
   useLessonStore,
+  type EtapaV1,
   type PracticeKey,
   type StageKey,
   type TreeKey,
@@ -27,7 +34,23 @@ import { TreeStage } from "./TreeStage";
  * do componente de cada uma. Toda a leitura de xadrez vem do arquivo da aula —
  * este componente não sabe as regras do jogo, só a ordem das etapas.
  */
-export function LessonPlayer({
+export function LessonPlayer(props: Parameters<typeof LessonPlayerV1>[0] | {
+  /**
+   * **A aula v2 publicada (fatia 7).** O mesmo player: cabeçalho, trilha e os quatro
+   * componentes de etapa são os de sempre; muda só de onde vem a ordem — o `fluxo` — e o
+   * que cada etapa recebe. Ver `lib/editor-v2/fluxo-do-aluno.ts`.
+   */
+  aulaV2: AulaDoAlunoV2;
+  /** Aberta pelo cartão de revisão: começa na prática. */
+  revisao?: boolean;
+  /** A server action que grava a etapa jogada. A prévia do editor não passa. */
+  onEtapaFeita?: (tentativa: TentativaDeAulaV2) => void | Promise<unknown>;
+}) {
+  if ("aulaV2" in props) return <PlayerDoFluxoV2 {...props} />;
+  return <LessonPlayerV1 {...props} />;
+}
+
+function LessonPlayerV1({
   bundle,
   startAt,
   marcacao,
@@ -139,7 +162,8 @@ export function LessonPlayer({
   const cleared = useLessonStore((s) => s.cleared);
   const practice = useLessonStore((s) => s.practices.practice);
 
-  const available = STAGE_ORDER.filter((key) => lesson.stages[key] !== undefined);
+  // A aula v1 só tem as quatro etapas fixas; o tipo largo é o da store, que também serve à v2.
+  const available: StageKey[] = STAGE_ORDER.filter((key) => lesson.stages[key] !== undefined);
 
   // Navegador nenhum toca áudio antes de um gesto. O primeiro toque na página
   // destrava o som — inclusive o clique que abre a etapa 2, que roda sozinha.
@@ -255,33 +279,7 @@ export function LessonPlayer({
    * que ainda não são a mesma; quando a segunda cópia nascer igual, ela sobe.
    */
   const trilha = (
-    <nav aria-label="Etapas da aula" className="flex flex-wrap gap-2">
-      {available.map((key, index) => {
-        const active = key === stage;
-        return (
-          <button
-            key={key}
-            type="button"
-            onClick={() => goToStage(key)}
-            aria-current={active ? "step" : undefined}
-            className={`min-h-11 rounded-md px-3 py-2 text-sm font-medium ring-1 transition foco ${
-              active
-                ? "bg-metodo-cheio text-tinta-inversa ring-metodo/30"
-                : "bg-carta text-tinta-media ring-borda hover:bg-carta-alta"
-            }`}
-          >
-            {/* O numeral recua **só** na aba inativa. Na ativa ele herda a
-                tinta do botão: a aba cheia já é a barulhenta da fila, e um
-                cinza de fundo claro sobre o verde cheio media 1,39:1 — a pior
-                reprovação que a régua achou no B6.1. */}
-            <span className={`tabular-nums ${active ? "" : "text-tinta-fraca"}`}>
-              {index + 1}.
-            </span>{" "}
-            {STAGE_LABEL[key]}
-          </button>
-        );
-      })}
-    </nav>
+    <TrilhaDaAula itens={available.map((key) => ({ key, rotulo: STAGE_LABEL[key as EtapaV1] }))} ativa={stage} aoIr={goToStage} />
   );
 
   return (
@@ -408,6 +406,234 @@ export function LessonPlayer({
         {stage === "objective" && leitura}
       </section>
     </div>
+  );
+}
+
+/** A trilha das etapas — a mesma peça nas aulas v1 e v2. Ver o comentário em `trilha`. */
+function TrilhaDaAula({ itens, ativa, aoIr }: { itens: Array<{ key: StageKey; rotulo: string }>; ativa: StageKey; aoIr: (key: StageKey) => void }) {
+  return (
+    <nav aria-label="Etapas da aula" className="flex flex-wrap gap-2">
+      {itens.map(({ key, rotulo }, index) => {
+        const active = key === ativa;
+        return (
+          <button
+            key={key}
+            type="button"
+            onClick={() => aoIr(key)}
+            aria-current={active ? "step" : undefined}
+            className={`min-h-11 rounded-md px-3 py-2 text-sm font-medium ring-1 transition foco ${
+              active
+                ? "bg-metodo-cheio text-tinta-inversa ring-metodo/30"
+                : "bg-carta text-tinta-media ring-borda hover:bg-carta-alta"
+            }`}
+          >
+            {/* O numeral recua **só** na aba inativa. Na ativa ele herda a
+                tinta do botão: a aba cheia já é a barulhenta da fila, e um
+                cinza de fundo claro sobre o verde cheio media 1,39:1 — a pior
+                reprovação que a régua achou no B6.1. */}
+            <span className={`tabular-nums ${active ? "" : "text-tinta-fraca"}`}>
+              {index + 1}.
+            </span>{" "}
+            {rotulo}
+          </button>
+        );
+      })}
+    </nav>
+  );
+}
+
+/**
+ * O que o botão do fim de cada etapa diz, pelo tipo da **próxima** — as mesmas frases da
+ * aula v1 (`AVANCO`).
+ */
+function avancoPara(proxima: EtapaDoAlunoV2 | undefined): string {
+  if (!proxima) return AVANCO.padrao;
+  if (proxima.tipo === "capitulo") return AVANCO.paraAula;
+  if (proxima.tipo === "treino") return AVANCO.paraTreino;
+  if (proxima.tipo === "pratica") return AVANCO.paraValendo;
+  return AVANCO.padrao;
+}
+
+/**
+ * A aula v2 do aluno, na ordem do fluxo (fatia 7).
+ *
+ * A store é a mesma do v1, com a etapa, a árvore e a partida endereçadas pelo **id da etapa**
+ * do fluxo: uma aula v2 pode ter vários capítulos e vários treinos. A gravação segue a regra
+ * do v1 — só sobe o que foi jogado, os lances, e quem julga é o servidor —, com a publicação,
+ * a revisão e o id idempotente da tentativa junto.
+ */
+function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, onEtapaFeita }: {
+  aulaV2: AulaDoAlunoV2;
+  revisao?: boolean;
+  onEtapaFeita?: (tentativa: TentativaDeAulaV2) => void | Promise<unknown>;
+}) {
+  const idNaStore = `${aula.id}@${aula.publicationId}`;
+  const stage = useLessonStore((s) => s.stage);
+  const lessonId = useLessonStore((s) => s.lessonId);
+  const open = useLessonStore((s) => s.open);
+  const goToStage = useLessonStore((s) => s.goToStage);
+  const cleared = useLessonStore((s) => s.cleared);
+  const trees = useLessonStore((s) => s.trees);
+  const practices = useLessonStore((s) => s.practices);
+
+  useEffect(() => armAudioOnFirstGesture(), []);
+
+  useEffect(() => {
+    const roots: Record<string, string> = {};
+    const partidas: Array<{ key: PracticeKey; positionId: string; startFen: string }> = [];
+    for (const etapa of aula.etapas) {
+      if (etapa.tipo === "treino") roots[etapa.id] = etapa.jogavel.tree.root;
+      if (etapa.tipo === "pratica") partidas.push({ key: etapa.id, positionId: etapa.positionId, startFen: etapa.fen });
+    }
+    const pratica = aula.etapas.find((etapa) => etapa.tipo === "pratica");
+    const inicial = revisao && pratica ? pratica.id : aula.etapas[0]?.id ?? "";
+    open(idNaStore, inicial, roots, partidas);
+    // Reabrir a aula (ou outra publicação dela) é o que zera o estado.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idNaStore]);
+
+  const enviadas = useRef(new Set<string>());
+  useEffect(() => {
+    if (!onEtapaFeita || lessonId !== idNaStore) return;
+    const enviar = (tentativa: TentativaDeAulaV2) => {
+      if (enviadas.current.has(tentativa.tentativaId)) return;
+      enviadas.current.add(tentativa.tentativaId);
+      void onEtapaFeita(tentativa);
+    };
+    for (const etapa of aula.etapas) {
+      if (etapa.tipo === "pratica") {
+        const partida = practices[etapa.id];
+        if (!partida || partida.status === "playing") continue;
+        enviar({
+          aula: aula.id, publicationId: aula.publicationId, etapaId: etapa.id, entidadeId: etapa.entidadeId, tipo: "pratica",
+          assessmentRevision: etapa.revisao, tentativaId: partida.tentativaId, tentativaNumero: partida.attempt,
+          lances: partida.moves, tempoMs: Date.now() - partida.startedAt,
+        });
+      }
+      if (etapa.tipo === "treino") {
+        const arvore = trees[etapa.id];
+        if (!arvore || arvore.status === "playing") continue;
+        enviar({
+          aula: aula.id, publicationId: aula.publicationId, etapaId: etapa.id, entidadeId: etapa.entidadeId, tipo: "treino",
+          assessmentRevision: etapa.revisao, tentativaId: arvore.tentativaId, tentativaNumero: arvore.attempt,
+          lances: arvore.moves, tempoMs: Date.now() - arvore.startedAt,
+          politicaDefensor: etapa.jogavel.politica, ajuda: arvore.ajudas.length > 0,
+        });
+      }
+    }
+  }, [aula, idNaStore, lessonId, onEtapaFeita, practices, trees]);
+
+  if (lessonId !== idNaStore) return null;
+
+  const indice = Math.max(0, aula.etapas.findIndex((etapa) => etapa.id === stage));
+  const atual = aula.etapas[indice];
+  const proxima = aula.etapas[indice + 1];
+  const trilha = <TrilhaDaAula itens={aula.etapas.map((etapa) => ({ key: etapa.id, rotulo: etapa.rotulo }))} ativa={atual?.id ?? ""} aoIr={goToStage} />;
+  const rodape = proxima ? <StageFooter next={proxima.id} onGo={goToStage} label={avancoPara(proxima)} /> : null;
+
+  return (
+    <div className="flex w-full flex-1 flex-col gap-3">
+      <header className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+        <Link href="/finais" className="foco rotulo text-tinta-fraca hover:underline">
+          ← Finais
+        </Link>
+        <h1 className="titulo">{aula.titulo}</h1>
+        <div className="ml-auto self-center">
+          <SoundToggle />
+        </div>
+      </header>
+
+      <section className="flex flex-1 flex-col">
+        {atual?.tipo === "introducao" ? (
+          <IntroStage
+            key={atual.id}
+            stage={{ passos: atual.passos } as unknown as IntroStageData}
+            position={{ fen: atual.passos[0]?.fen ?? "" } as unknown as Position}
+            orientation={aula.orientacao}
+            trilha={trilha}
+            rodape={rodape}
+          />
+        ) : null}
+
+        {atual?.tipo === "capitulo" ? (
+          <CapituloDoAlunoV2 key={atual.id} etapa={atual} trilha={trilha} rodape={rodape} />
+        ) : null}
+
+        {atual?.tipo === "treino" ? (
+          <TreinoDoAlunoV2
+            key={atual.id}
+            etapa={atual}
+            trilha={trilha}
+            onFinish={proxima ? () => goToStage(proxima.id) : undefined}
+            finishLabel={avancoPara(proxima)}
+          />
+        ) : null}
+
+        {atual?.tipo === "pratica" ? (
+          <PracticeStage
+            key={atual.id}
+            practiceKey={atual.id}
+            trilha={trilha}
+            position={{ id: atual.positionId, fen: atual.fen } as unknown as Position}
+            orientation={atual.lado}
+            goal={atual.goal}
+            engine={atual.engine}
+            intro={PARTIDA.abertura}
+            seal={
+              <MasterySeal
+                report={masteryReport({ hasPractice: true, practiceWon: Boolean(cleared[atual.id]), practiceGoal: atual.goal })}
+              />
+            }
+          />
+        ) : null}
+      </section>
+    </div>
+  );
+}
+
+/** O capítulo v2 no `ObjectiveStage` do aluno: desenho com cor, pausa extra e pausa manual. */
+function CapituloDoAlunoV2({ etapa, trilha, rodape }: { etapa: Extract<EtapaDoAlunoV2, { tipo: "capitulo" }>; trilha: ReactNode; rodape: ReactNode }) {
+  const stage = useMemo(() => ({
+    technique: { name: etapa.titulo, summary: etapa.resumo },
+    roteiro: etapa.passos.map((passo) => ({ fala: passo.fala, ...(passo.lance ? { lance: passo.lance } : {}), ...(passo.espera ? { espera: passo.espera } : {}) })),
+  }) as unknown as ObjectiveStageData, [etapa]);
+  const position = useMemo(() => ({ fen: etapa.fen }) as unknown as Position, [etapa.fen]);
+  const autoria = useCallback((n: number): DrawShape[] => desenhoDaAutoriaV2(etapa.passos[n]?.desenhos), [etapa]);
+  const relogio = useCallback((n: number): number | null => {
+    const passo = etapa.passos[n];
+    if (!passo) return null;
+    return passo.pausaManual ? null : pausaDoPasso({ fala: passo.fala, espera: passo.espera } as RoteiroPasso);
+  }, [etapa]);
+  return (
+    <ObjectiveStage stage={stage} position={position} orientation={etapa.orientacao} trilha={trilha} rodape={rodape} autoria={autoria} relogio={relogio} />
+  );
+}
+
+/** O treino v2 no `TreeStage` do aluno, com os mesmos ganchos da prévia do editor. */
+function TreinoDoAlunoV2({ etapa, trilha, onFinish, finishLabel }: {
+  etapa: Extract<EtapaDoAlunoV2, { tipo: "treino" }>;
+  trilha: ReactNode;
+  onFinish?: () => void;
+  finishLabel: string;
+}) {
+  const { jogavel } = etapa;
+  const position = useMemo(() => ({ fen: jogavel.fenInicial }) as unknown as Position, [jogavel.fenInicial]);
+  const v2 = useMemo(() => ganchosDoTreinoV2(jogavel), [jogavel]);
+  return (
+    <TreeStage
+      lesson={jogavel.lesson}
+      tree={jogavel.tree}
+      treeKey={etapa.id}
+      trilha={trilha}
+      position={position}
+      orientation={jogavel.orientacao}
+      allowHelp
+      moveLimit={jogavel.moveLimit}
+      intro={jogavel.intro}
+      onFinish={onFinish}
+      finishLabel={finishLabel}
+      v2={v2}
+    />
   );
 }
 

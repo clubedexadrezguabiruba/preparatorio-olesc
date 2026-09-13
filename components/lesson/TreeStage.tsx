@@ -92,6 +92,11 @@ export function TreeStage({
     defesaFinal?: (nodeId: string, uci: string) => string | undefined;
     desenhoDoNo?: (nodeId: string) => DrawShape[];
     falaDepoisDaDefesa?: (nodeId: string, uciDoAluno: string, uciDoDefensor: string) => string | undefined;
+    /**
+     * A árvore na conta da rotação do defensor. Na aula do aluno a `treeKey` é o id da etapa;
+     * a rotação usa esta, a mesma da prévia e do rejulgamento no servidor.
+     */
+    arvoreDoDefensor?: string;
   };
 }) {
   const state = useLessonStore((s) => s.trees[treeKey]);
@@ -156,6 +161,17 @@ export function TreeStage({
   const panel: PanelMessage | null = message ?? restingMessage(state);
 
   useEffect(() => () => (timer.current ? clearTimeout(timer.current) : undefined), []);
+
+  /**
+   * A dica apareceu na tela (fatia 7): ela é o `placeholder` do painel, visível enquanto não
+   * há mensagem viva. A store registra a pergunta uma vez por tentativa; quem lê isso é a
+   * tentativa gravada — plano §8, "ajuda utilizada registrada separadamente de domínio".
+   */
+  const treeHelp = useLessonStore((s) => s.treeHelp);
+  const dicaNaTela = Boolean(allowHelp && node?.hint && !panel && status === "playing" && state);
+  useEffect(() => {
+    if (dicaNaTela && state) treeHelp(treeKey, state.nodeId);
+  }, [dicaNaTela, state, treeHelp, treeKey]);
 
   // O defensor abre a linha no mesmo compasso em que responde a um lance do aluno.
   useEffect(() => {
@@ -330,7 +346,7 @@ export function TreeStage({
       // comportamento da aula publicada não muda.
       const { reply, next } = escolherResposta(
         verdict.respostas,
-        chaveDoDefensor(treeKey, state.nodeId),
+        chaveDoDefensor(v2?.arvoreDoDefensor ?? treeKey, state.nodeId),
         attempt,
       );
       timer.current = setTimeout(() => {

@@ -3442,6 +3442,103 @@ o v2 ainda não lê `excecoes` nessa regra); o impacto não conta alunos por rev
 por revisão nasce na 7E; a tela de publicações não mostra data nem diff entre duas
 publicações; o lock é de repositório (uma conferência ou publicação por vez, v1 ou v2).
 
+### Parada 7D — o aluno segue o fluxo
+
+- **Um player só** (decisão do Doug). `LessonPlayer` aceita `bundle` (v1, caminho de sempre)
+  ou `aulaV2`; o ramo v2 usa o mesmo cabeçalho, a mesma trilha (`TrilhaDaAula`, extraída sem
+  mudar o v1) e os mesmos quatro componentes de etapa, na ordem do `fluxo`.
+- `lib/editor-v2/fluxo-do-aluno.ts`: introdução → `IntroStage` com a FEN de cada quadro
+  resolvida; capítulo → `ObjectiveStage` pela tradução da prévia (fala, lance, pausa extra,
+  pausa manual, desenho por fala e o retorno das comparações); treino → `TreeStage` por
+  `treinoJogavel`; prática → `PracticeStage`. Ao navegador vão só as etapas — **comentário
+  privado da análise não atravessa** (teste).
+- `ObjectiveStage` ganhou `autoria` (desenho com cor) e `relogio` opcionais; `null` no relógio
+  é a pausa manual, e aparece **Continuar** para o aluno andar.
+- `lib/editor-v2/ganchos-do-treino.ts`: o montador das entradas `v2` do `TreeStage` saiu de
+  `PreviaDoTreino.tsx` para servir à prévia e ao aluno. **A árvore da rotação do defensor é
+  `guided` nas duas e no servidor**, a mesma da prévia aprovada na 6C; na aula do aluno a
+  `treeKey` é o id da etapa, e a rotação não depende dela.
+- Store: `StageKey`/`TreeKey`/`PracticeKey` aceitam texto (os literais v1 continuam), selo por
+  chave de prática, `tentativaId` (`crypto.randomUUID`) em cada tentativa nova, e `treeHelp`
+  registra a dica vista uma vez por pergunta. O `TreeStage` chama `treeHelp` quando a dica está
+  na tela.
+- `lib/finais/conteudo-v2.ts` + `conteudo.ts`: `lerPacoteDoAluno` devolve v1 ou v2 — **a v2
+  ativa vence a v1 do mesmo id**; `idsDeAula`, `indiceDeAulas`, `aulasPublicadas` e
+  `aulasComPratica` incluem as v2 ativas sem duplicar. Pacote ativo adulterado **lança** em vez
+  de cair calado para a v1.
+- Rota `/finais/[aula]` e `AulaNoNavegador` recebem a união; `generateStaticParams` sem
+  duplicar. Guias lidos antes: Next 16.3, `params` é Promise, `dynamicParams = false`,
+  `./content/**` já rastreia `content/aulas-v2`.
+
+```
+ANTES   fluxo-do-aluno + store-v2 (módulo ausente, store sem os campos): tests 5, pass 0, fail 5
+DEPOIS  fluxo-do-aluno (4) + store-v2 (4) + store v1 (18): tests 26, pass 26
+```
+
+**Número da parada:** `next build` com **3 rotas estáticas** em `/finais/[aula]`, sem
+duplicata; o `.nft.json` da rota leva `content/**` (6 arquivos de aula, 36 de posição, 76 de
+cache). `content/aulas-v2` ainda **0** arquivos, porque nada foi publicado — remedido na 7F.
+
+### Parada 7E — progresso por revisão
+
+- `supabase/migrations/0010_aulas_v2.sql` (aditiva): em `tentativas_aula`, `tentativa_id`
+  (índice único), `publication_id`, `entidade_id`, `assessment_revision`, `tentativa_numero`,
+  `politica_defensor` e `ajuda`, com um `check` de coerência (as identidades v2 andam juntas;
+  treino só em linha v2); etapa aceita `treino`. Tabela `avaliacoes_progresso` (a escada por
+  aluno, aula, avaliação e revisão, com `origem` jogada|migrada-v1; RLS de leitura do próprio
+  ou professor). Tabela `tentativas_v2_sem_snapshot` (só professor lê). `progresso_aula`
+  recriada sem contar treino.
+- **Aplicada com `npm run db:migrar` em 13/9/2026, 17:37 UTC**, com o Doug avisado na hora.
+  `0010_aulas_v2.sql` está em `migrations_aplicadas`; antes das provas o banco tinha 16 linhas
+  em `tentativas_aula`, 7 em `finais_progresso` e 0 nas duas tabelas novas.
+- `lib/finais/rejulgar.ts`: `rejulgarPartidaDe({fen, goal, lado}, lances)` extraída sem mudar a
+  conta; os wrappers v1 intactos (7 testes antigos verdes). `lib/finais/rejulgar-v2.ts`:
+  prática pela posição, objetivo e lado do pacote; treino lance a lance na ordem do
+  `TreeStage.play`, com `escolherResposta(chaveDoDefensor("guided", pergunta), tentativa)`.
+- `lib/finais/gravar-v2.ts` (banco injetável): forma → **snapshot pelo `publicationId`
+  enviado** (sem ele, guarda à parte e responde "reabrir") → etapa no fluxo daquela publicação →
+  revisão igual à do snapshot → rejulgamento → linha idempotente por `tentativa_id` (a
+  política do defensor vem do snapshot, não do navegador) → só a prática da **revisão ativa**
+  move a escada; aba antiga grava como `historico`; treino é `registro`.
+  `gravar-v2-banco.ts` liga ao Supabase com a chave de serviço; `registrarEtapaV2` na action.
+- `lib/finais/progresso.ts`: aula v2 ativa lê a escada **só da revisão ativa** da prática, e
+  ignora a de `finais_progresso` (que é da tarefa v1).
+
+```
+ANTES   gravar-v2 + rejulgar-v2 (módulos ausentes): os dois arquivos falham ao carregar
+DEPOIS  tests 11 (6 gravar-v2 + 5 rejulgar-v2), pass 11 — e os 7 de rejulgar.ts verdes
+```
+
+Os puros: linha certa aceita; lance fora da linha no meio continua a tentativa; ilegal,
+depois do fim, inacabado e vazio recusados; **com duas defesas, a mesma lista vale em
+exatamente uma das tentativas 1 e 2**; teto de lances encerra como fracasso; retry não
+duplica nem sobe degrau; aba antiga sem domínio; sem snapshot guarda e manda reabrir; revisão
+trocada, etapa de outro tipo e id malformado recusados.
+
+**No banco de verdade** (`npm run db:finais:v2`, script novo, contas de teste criadas e
+apagadas): **18/18** — 1 linha com publicação e revisão e 1 degrau; o retry devolve o mesmo
+veredito e continua 1 linha, 1 degrau e 1 tentativa na escada; a aba antiga grava com a
+publicação antiga e 0 escada para a revisão velha; o treino grava `deterministica` e
+`ajuda: true` e a view conta 2 práticas, não o treino; sem snapshot, 1 linha guardada à parte
+e nenhuma julgada; o Beto lê 0 linhas da Ana. **`npm run db:rls`: 52/52**, com a seção 12 nova
+(o aluno não grava a própria escada v2, cada um lê a sua, e nem o dono lê a tentativa sem
+snapshot).
+
+**Declarado, e anterior a esta fatia:** `npm run db:finais` **já falhava antes da 7E** — o
+próprio cabeçalho dele diz que perdeu o alvo quando o corpus foi refeito em 8/9 (as partidas
+escritas ali são de um KRK que não existe mais: "lance ilegal no lance 1: e1e2"). Não foi
+consertado nesta fatia; a prova v2 ficou num script próprio para não se afogar nesse vermelho.
+
+**Os sete portões da 7D e da 7E** (um commit só: a casca do aluno liga as duas): tipos, lint,
+**1.166 testes**, build (3 rotas estáticas), conteúdo (38 do cache, 0 pela rede),
+**54/54 mutações** e repertório `--check`.
+
+**O que a 7D e a 7E não cobrem:** a cor do desenho da **introdução** não chega ao aluno (o
+`IntroStage` lê a forma curta; a do capítulo e a do treino chegam); o painel do professor não
+mostra as tentativas de treino nem `tentativas_v2_sem_snapshot`; o domínio por treino não
+existe (fora da fatia, por decisão); a contagem de alunos no impacto ainda é por aula
+(`finais_progresso`), não por revisão; `db:finais` (v1) segue quebrado desde antes.
+
 ---
 
 ## Como ligar o editor

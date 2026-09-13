@@ -3,9 +3,10 @@
 import { useSearchParams } from "next/navigation";
 import type { ReactNode } from "react";
 import { LessonPlayer } from "@/components/lesson/LessonPlayer";
+import type { AulaDoAlunoV2 } from "@/lib/editor-v2/fluxo-do-aluno";
 import type { PacoteDeAula } from "@/lib/finais/conteudo";
 import type { StageKey } from "@/lib/lesson/store";
-import { registrarEtapa } from "../acoes";
+import { registrarEtapa, registrarEtapaV2 } from "../acoes";
 
 /**
  * A casca de cliente que lê `?revisao=1` e abre a aula na etapa certa.
@@ -31,25 +32,28 @@ import { registrarEtapa } from "../acoes";
  * do formato em 2026-09-08, e quem revisa agora é a escada — mesma aula, mesma
  * posição, noutro dia. Quem volta para revisar já sabe a técnica; o que ele
  * vem fazer é a passada, e ela é a partida.
+ *
+ * ## A aula v2 (fatia 7)
+ *
+ * Recebe as etapas do fluxo já traduzidas no servidor e grava por `registrarEtapaV2`, que
+ * rejulga contra a publicação que o aluno jogou.
  */
-export function AulaNoNavegador({
-  pacote,
-  leitura,
-}: {
-  pacote: PacoteDeAula;
-  leitura?: ReactNode;
-}) {
+export function AulaNoNavegador(props: { pacote: PacoteDeAula; leitura?: ReactNode } | { aulaV2: AulaDoAlunoV2 }) {
   const revisao = useSearchParams().get("revisao") === "1";
+
+  if ("aulaV2" in props) {
+    return <LessonPlayer aulaV2={props.aulaV2} revisao={revisao} onEtapaFeita={registrarEtapaV2} />;
+  }
 
   const etapa: StageKey | undefined = revisao ? "practice" : undefined;
 
   return (
     <LessonPlayer
-      bundle={pacote}
+      bundle={props.pacote}
       startAt={etapa ? { stage: etapa } : undefined}
       revisao={revisao}
       onStageDone={registrarEtapa}
-      leitura={leitura}
+      leitura={props.leitura}
     />
   );
 }

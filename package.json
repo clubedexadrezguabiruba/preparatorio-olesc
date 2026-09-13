@@ -15,6 +15,7 @@
     "db:rls": "node scripts/verificar-rls.ts",
     "db:tatica": "node --conditions=react-server scripts/verificar-tatica.ts",
     "db:finais": "node --conditions=react-server scripts/verificar-finais.ts",
+    "db:finais:v2": "node --conditions=react-server scripts/verificar-finais-v2.ts",
     "validate:content": "node scripts/validate-content.ts",
     "validate:mutations": "node scripts/mutation-check.ts",
     "db:f2": "node --conditions=react-server scripts/quatro-numeros-da-f2.ts",

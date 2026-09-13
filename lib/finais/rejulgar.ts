@@ -155,11 +155,22 @@ export function rejulgarRevisao(
 function rejulgarPartida(lesson: Lesson, posicao: Position, lances: string[]): Rejulgamento {
   // O `!` é seguro: os dois chamadores conferem a existência da prática antes.
   const pratica = lesson.stages.practice!;
+  return rejulgarPartidaDe({ fen: posicao.fen, goal: pratica.goal, lado: lesson.orientation }, lances);
+}
+
+/**
+ * A partida julgada a partir do que ela precisa, e não da aula v1 inteira.
+ *
+ * Saiu de `rejulgarPartida` na fatia 7, sem mudar uma linha da conta: a prática da aula v2
+ * guarda posição, objetivo e lado no próprio documento, e não tem `lesson.stages`. Os dois
+ * formatos passam pelo mesmo juiz.
+ */
+export function rejulgarPartidaDe(partida: { fen: string; goal: "win" | "draw"; lado: "white" | "black" }, lances: string[]): Rejulgamento {
   if (lances.length === 0) return { erro: "partida sem lance nenhum" };
   if (lances.length > LANCES_MAXIMOS) return { erro: "lances demais para uma partida" };
 
-  const leitura = { balancedPawnlessIsDraw: pratica.goal === "draw" };
-  const jogo = new Chess(posicao.fen);
+  const leitura = { balancedPawnlessIsDraw: partida.goal === "draw" };
+  const jogo = new Chess(partida.fen);
 
   for (const [i, uci] of lances.entries()) {
     // A partida já tinha acabado e a lista continua: ou é outra partida colada
@@ -179,7 +190,7 @@ function rejulgarPartida(lesson: Lesson, posicao: Position, lances: string[]): R
   }
 
   const outcome = readOutcome(jogo, leitura);
-  const verdict = judgePractice(outcome, pratica.goal, lesson.orientation);
+  const verdict = judgePractice(outcome, partida.goal, partida.lado);
 
   // Partida em andamento não tem o que julgar. O aluno que fecha a aba no meio
   // não fracassou — ele não terminou, e um fracasso gravado seria o servidor

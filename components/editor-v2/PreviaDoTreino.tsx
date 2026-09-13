@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import type { DrawShape } from "@lichess-org/chessground/draw";
 import { TreeStage } from "@/components/lesson/TreeStage";
-import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
-import { chaveDaDefesaFinal, chaveDaFalaDoDefensor, type TreinoJogavel } from "@/lib/editor-v2/treino-jogavel";
+import { ganchosDoTreinoV2 } from "@/lib/editor-v2/ganchos-do-treino";
+import type { TreinoJogavel } from "@/lib/editor-v2/treino-jogavel";
 import type { Position } from "@/lib/lesson/schema";
 import { useLessonStore } from "@/lib/lesson/store";
 import { usePrisaoDeFoco } from "./foco";
@@ -46,14 +45,8 @@ export function PreviaDoTreino({ treinoId, titulo, perfil, jogavel, aoFechar }: 
   }, [idDaPrevia, jogavel.tree.root]);
 
   const position = useMemo(() => ({ fen: jogavel.fenInicial }) as unknown as Position, [jogavel.fenInicial]);
-  const v2 = useMemo(() => ({
-    ...(jogavel.defesaInicial
-      ? { aberturaDoDefensor: { fen: jogavel.fenInicial, uci: jogavel.defesaInicial, ...(jogavel.textoDaDefesaInicial ? { texto: jogavel.textoDaDefesaInicial } : {}) } }
-      : {}),
-    defesaFinal: (nodeId: string, uci: string) => jogavel.defesasFinais[chaveDaDefesaFinal(nodeId, uci)],
-    desenhoDoNo: (nodeId: string): DrawShape[] => desenhoDaAutoriaV2(jogavel.desenhos[nodeId]),
-    falaDepoisDaDefesa: (nodeId: string, uciDoAluno: string, uciDoDefensor: string) => jogavel.falasDoDefensor[chaveDaFalaDoDefensor(nodeId, uciDoAluno, uciDoDefensor)],
-  }), [jogavel]);
+  // O mesmo montador da aula do aluno: duas cópias divergiriam na primeira correção.
+  const v2 = useMemo(() => ganchosDoTreinoV2(jogavel), [jogavel]);
 
   return (
     <div ref={camada} role="dialog" aria-modal="true" aria-label={`Jogar o treino: ${titulo}`} className="fixed inset-0 z-50 flex flex-col bg-papel">
