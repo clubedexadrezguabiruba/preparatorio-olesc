@@ -60,10 +60,13 @@ export function PreviaDoTreino({ treinoId, titulo, perfil, jogavel, aoFechar }: 
               : "Com mais de uma defesa, o defensor troca a cada tentativa; recomece para ver a outra."}{" "}
             Nada aqui é gravado no progresso, e a aula atrás não muda.
           </p>
+          {/* Fatia 7: com a evidência da tablebase guardada no treino, a prévia julga como o
+              aluno julga. A frase antiga ("não consulta a tablebase") ficou falsa nesse caso. */}
           {perfil === "final-certificado" ? (
             <p className="text-xs text-tinta-fraca">
-              Final certificado: a prévia ainda não consulta a tablebase para lances fora da linha e
-              responde que eles não fazem parte da linha treinada.
+              {jogavel.certificado
+                ? "Final certificado: lances fora da linha são julgados pela evidência da tablebase guardada no treino, como o aluno vê."
+                : "Final certificado sem evidência para todas as perguntas: lances fora da linha recebem a frase da linha treinada. Conferir renova a evidência."}
             </p>
           ) : null}
         </div>

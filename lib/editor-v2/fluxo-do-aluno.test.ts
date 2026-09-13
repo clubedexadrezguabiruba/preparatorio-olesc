@@ -52,6 +52,13 @@ test("§18: introdução com a FEN resolvida, treino com a revisão do pacote, p
   assert.deepEqual(introducao.passos[0].highlights, ["g1", "g2", "e3"]);
   assert.equal(treino.revisao, pacote.revisoes[treino.entidadeId].revisao);
   assert.equal(Object.keys(treino.jogavel.tree.nodes).length, 5);
+  // A prévia e o aluno dizem se o treino é julgado pela tablebase por esta marca (achado no
+  // roteiro da 7F: a prévia dizia "não consulta a tablebase" já julgando por ela).
+  assert.equal(treino.jogavel.certificado, true);
+  const semEvidencia = adaptarLessonV1(lesson, positions);
+  delete semEvidencia.treinos[0].certificacao!.evidencias;
+  const outro = aulaDoAlunoV2(montarPacoteV2(semEvidencia, positions)).etapas.find((e) => e.tipo === "treino");
+  assert.equal(outro?.tipo === "treino" && outro.jogavel.certificado, false);
   assert.equal(pratica.revisao, pacote.revisoes[pratica.entidadeId].revisao);
   assert.deepEqual([pratica.fen, pratica.goal, pratica.lado], [position.fen, "win", "white"]);
 });

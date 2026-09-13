@@ -420,7 +420,16 @@ export const aulaV2Schema = z.strictObject({
   treinos: z.array(treinoV2Schema),
   praticas: z.array(praticaV2Schema).default([]),
   fluxo: z.array(etapaV2Schema),
-  origem: z.strictObject({ formato: z.literal("lesson-v1"), hash: z.string().min(1) }).optional(),
+  origem: z.strictObject({
+    formato: z.literal("lesson-v1"),
+    hash: z.string().min(1),
+    /**
+     * A conversão explícita (plano §14, especificação §20.3; fatia 7): o professor viu o diff,
+     * o snapshot anterior foi guardado, e a partir daqui os ids deste documento são os
+     * permanentes. Ausente: o documento ainda é a adaptação em leitura da aula v1.
+     */
+    convertidaEm: z.string().min(1).optional(),
+  }).optional(),
 });
 
 export type RevisaoPendenteV2 = z.infer<typeof revisaoPendenteV2Schema>;

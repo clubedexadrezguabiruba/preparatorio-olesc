@@ -1,10 +1,13 @@
 "use server";
 
+import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { exigirEditor } from "@/lib/editor/acesso";
+import { guardarSnapshotAntesDeMigrarV1, prepararMigracaoV1, type PreparoDaMigracaoV1 } from "@/lib/editor-v2/migrar-v1";
 import { adaptarLessonV1 } from "@/lib/editor-v2/adaptar-v1";
 import { conferirAulaV2, podePublicarV2, type ConferenciaV2 } from "@/lib/editor-v2/gate";
 import { frasesDoImpactoV2 } from "@/lib/editor-v2/impacto-publicacao";
-import { aulaIdV2Schema } from "@/lib/editor-v2/modelo";
+import { aulaIdV2Schema, aulaV2Schema } from "@/lib/editor-v2/modelo";
 import { publicationIdSchema } from "@/lib/editor-v2/publicacoes";
 import { desativarV2, prepararPublicacaoV2, publicacoesDaAulaV2, publicarAulaV2, reativarPublicacaoV2, recuperarTransacaoV2 } from "@/lib/editor-v2/publicar";
 import { documentoV2Existe, gravarDocumentoV2, guardarSnapshotAntesDeRefazerV2, idsDeDocumentosV2, lerDocumentoV2 } from "@/lib/editor-v2/rascunhos";
@@ -123,6 +126,46 @@ export async function desativarV2Acao(aula: string) {
   await exigirEditor();
   if (!aulaIdV2Schema.safeParse(aula).success) return { ok: false as const, motivo: "pedido inválido" };
   return desativarV2(aula);
+}
+
+/**
+ * A aula v1 publicada, em texto, e as posições dela — a origem da conversão (§20.3). O texto é
+ * lido em bytes do arquivo de `content/lessons/`, que a conversão nunca escreve.
+ */
+function origemV1(aula: string) {
+  if (!lessonIdSchema.safeParse(aula).success) return null;
+  const arquivo = path.join(process.cwd(), "content", "lessons", `${aula}.json`);
+  if (!existsSync(arquivo)) return null;
+  const pacote = lerPacote(aula);
+  return pacote ? { texto: readFileSync(arquivo, "utf8"), ...pacote } : null;
+}
+
+export type PreparoDaConversaoNaTelaV2 =
+  | { ok: false; motivo: string }
+  | { ok: true; preparo: PreparoDaMigracaoV1 };
+
+/** O diff da conversão, calculado sobre o documento que está na tela (§20.3). */
+export async function prepararConversaoV1Acao(aula: string, texto: string): Promise<PreparoDaConversaoNaTelaV2> {
+  await exigirEditor();
+  const origem = origemV1(aula);
+  if (!origem) return { ok: false, motivo: "esta aula não tem arquivo no formato antigo" };
+  let cru: unknown;
+  try { cru = JSON.parse(texto); } catch { return { ok: false, motivo: "o navegador enviou um documento quebrado" }; }
+  const validado = aulaV2Schema.safeParse(cru);
+  if (!validado.success || validado.data.id !== aula) return { ok: false, motivo: "o documento não é desta aula" };
+  return { ok: true, preparo: prepararMigracaoV1(origem.lesson, origem.texto, origem.positions, validado.data) };
+}
+
+/** Guarda o snapshot `antes-de-migrar` — só depois dele a tela aplica a conversão. */
+export async function guardarSnapshotDeMigracaoV1Acao(aula: string, texto: string) {
+  await exigirEditor();
+  const origem = origemV1(aula);
+  if (!origem) return { ok: false as const, erro: "esta aula não tem arquivo no formato antigo" };
+  let cru: unknown;
+  try { cru = JSON.parse(texto); } catch { return { ok: false as const, erro: "o navegador enviou um documento quebrado" }; }
+  const validado = aulaV2Schema.safeParse(cru);
+  if (!validado.success || validado.data.id !== aula) return { ok: false as const, erro: "o documento não é desta aula" };
+  return guardarSnapshotAntesDeMigrarV1(aula, origem.texto, validado.data);
 }
 
 export type CriacaoDeAulaV2 =

@@ -117,9 +117,17 @@ cada linha aponta a seção que conta a história inteira.
   Playwright em 13/9**, com arrasto real pela cópia sem fonte, 1.082 testes e 42/42
   mutações. A fatia 6 está fechada. Ver "fatia 6 — propriedade do treino".
 
+- **Fatia 7, publicação v2 (§20), 13/9** — Conferir com as regras que impedem publicar e o
+  verde preso ao manifesto; publicação atômica recuperável fase a fase, com reativar e
+  desativar; o aluno segue o fluxo v2 no mesmo player; progresso por publicação e revisão,
+  idempotente, com a migração 0010 aplicada; conversão explícita da v1 com diff, snapshot e
+  Desfazer. **A N0-LADDER está publicada em v2 localmente** (`pub-64ffac2c7bb1e700`), com 0
+  divergências da v1. 54/54 mutações, `db:rls` 52/52, `db:finais:v2` 18/18 e **roteiro de 10
+  itens no Playwright**. Ver "fatia 7 — publicação v2".
+
 **Aberto, na ordem:**
 
-1. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
+1. **Repertório** (§21), **barra Stockfish** (§23),
    **importar por URL do Lichess** (§13.2), **introdução e quadros** (§7.1) e
    **aulas extras na trilha** (§22) continuam fora, sem redução de escopo.
 
@@ -131,8 +139,9 @@ de conteúdo), anterior a este conserto e não investigada.
 **Isto não declara o editor pronto.** O roteiro de §27 tem as fatias 1 a 5 fechadas no
 código e no teste humano. A fatia 6 está fechada no código, com as quatro paradas (6A,
 6B, 6C e 6D) aprovadas em roteiro pelo Playwright — sem teste com uma pessoa; o Doug
-decidiu em 13/9 não fazê-lo agora. As fatias 7 a 10 continuam abertas, e a próxima é a
-**7, publicação v2 (§20)**.
+decidiu em 13/9 não fazê-lo agora. A fatia 7 fechou em 13/9 no código e no roteiro pelo
+Playwright (sem teste com uma pessoa). As fatias 8 a 10 continuam abertas, e a próxima é a
+**8, repertório e aulas extras (§21 e §22)**. Prazo das fatias 7–10: 18/09/2026.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -3538,6 +3547,78 @@ consertado nesta fatia; a prova v2 ficou num script próprio para não se afogar
 mostra as tentativas de treino nem `tentativas_v2_sem_snapshot`; o domínio por treino não
 existe (fora da fatia, por decisão); a contagem de alunos no impacto ainda é por aula
 (`finais_progresso`), não por revisão; `db:finais` (v1) segue quebrado desde antes.
+
+### Parada 7F — o piloto N0-LADDER, e o roteiro no Playwright
+
+- `lib/editor-v2/migrar-v1.ts`: `prepararMigracaoV1` (diff pedagógico, ids que ficam
+  permanentes, SHA-256 do arquivo v1) e `guardarSnapshotAntesDeMigrarV1` (o arquivo v1 **em
+  texto** e o documento anterior; retenção de 20). O comando `CONVERTER_V1` marca
+  `origem.convertidaEm` e entra no Desfazer. Tela: botão **Converter para o formato novo**
+  (só enquanto há o que converter) e `DialogoConverterV1` com o diff antes do botão.
+- `scripts/migrar-progresso-v1.ts <AULA> [--aplicar]`: copia `finais_progresso` para
+  `avaliacoes_progresso` com `origem migrada-v1` **só se** a revisão da prática v1 adaptada é
+  igual à da prática na publicação ativa; rodar de novo não copia nada.
+
+```
+ANTES   migrar-v1.test.ts (módulo ausente): o arquivo falha ao carregar
+DEPOIS  tests 3, pass 3 — 0 divergências e 10 posições, 13 narrações, 5 perguntas contadas;
+        converter / desfazer / refazer / não converter duas vezes; snapshot com o v1 byte a byte
+```
+
+**O roteiro, rodado em 13/9/2026** em `http://localhost:3000/editor/v2/finais/N0-LADDER`,
+com o Doug entrando pela tela de login (o PIN dele não foi digitado pelo agente):
+
+| Item | Resultado medido |
+|---|---|
+| medida | **a armadilha do zoom não se repetiu**: hoje `devicePixelRatio` 1, `setViewportSize(911, 512)` deu 911×512; o roteiro rodou em `1366×768` conferido em `innerWidth`/`innerHeight` |
+| 1 | SHA-256 antes: v1 `943151286d67…03c3`, `.editor/v2/N1-KPK.json` `4be602ca…b822` |
+| 2 | "Converter para o formato novo": **0 diferenças**, "ficam permanentes: 1 capítulo, 13 narrações, 10 posições, 1 treino com 5 perguntas, 1 prática e 4 etapas", aula antiga conferida por `943151286d67…`; converter → botão some, `convertidaEm` no disco e snapshot `antes-de-migrar` |
+| 3 | Desfazer → botão volta e `convertidaEm` some do disco; Refazer → volta; SHA v1 igual |
+| 4 | antes de conferir **não existe** botão Publicar; Conferir em **2,4 s**: "0 problemas impedem publicar, 0 avisos. Pode publicar." e o Publicar aparece |
+| 5 | nome do capítulo editado → Publicar some e o painel diz "a aula mudou depois disso — confira de novo"; Desfazer → o documento conferido e o Publicar voltam |
+| 6 | impacto: "É a primeira publicação v2 desta aula… nível 1… Prática: avaliação nova — o domínio passa a depender dela… Treino: avaliação nova… 1 aluno(s) têm progresso"; Publicar → `pub-64ffac2c7bb1e700` (27 KB) e `ativa.json` gravados, nenhuma transação sobrando, foco em "Mais opções" |
+| 7 | aluno de teste criado pelo agente, noutra sessão: a aula abre em v2 (4 etapas, resumo da técnica no capítulo); treino jogado por **arrasto real** até "Xeque-mate…"; o banco ganhou **1 linha**: `treino`, sucesso, `publication_id pub-64ffac2c7bb1e700`, tentativa 1, `deterministica`, `ajuda: true`. Console do aluno: 0 erros e 0 avisos |
+| 8 | na prévia do editor, g2→g3 respondeu **"Esse lance ainda ganha, mas não é o caminho da aula…"** (o juiz certificado da 7A na tela) e a linha foi até o mate; o banco continuou com 2 linhas da aula e 0 escadas v2 |
+| 9 | "Mais opções": a publicação ativa listada, "Desativar o v2 desta aula"; Esc devolve o foco. **Reativar a anterior e a aba antiga não foram exercitados na tela** (há uma publicação só) — cobertos pelos testes da 7C e pelo `db:finais:v2` |
+| 10 | console do editor na sessão inteira: **0 erros e 0 avisos**; SHA-256 depois: iguais aos do item 1 |
+| extra | `migrar-progresso-v1.ts`: prática v1 e v2 com a mesma revisão `ar_1f8b45f1d98d…` → **1 linha copiada** com `migrada-v1`; a segunda rodada copia 0 |
+| extra | depois de publicar, `next build`: continuam **3 rotas estáticas**; o `.nft.json` de `/finais/[aula]` agora leva `content/aulas-v2/N0-LADDER/ativa.json` e o pacote; o HTML estático da N0-LADDER traz a publicação e nenhum "comentario" |
+
+**O defeito que o roteiro achou, consertado na mesma sessão:** a prévia do treino dizia "a
+prévia ainda não consulta a tablebase para lances fora da linha" enquanto já julgava pela
+evidência (item 8). `TreinoJogavel` ganhou `certificado`, e a frase depende dele. Teste:
+**antes ✖** (a marca não existia), **depois ✔**.
+
+**Artefatos.** Ficam, de propósito: `content/aulas-v2/N0-LADDER/` (o piloto publicado, a
+versionar), `.editor/v2/N0-LADDER.json` (o documento convertido, fonte da próxima publicação),
+os snapshots e o estado do gate em `.editor/`. Apagados: o rascunho v1
+`content/rascunhos/lessons/N0-LADDER.json` que a abertura da página criou (byte a byte igual
+ao publicado) e a conta de aluno de teste. `.editor/v2/N1-KPK.json` não foi aberto.
+
+**Os portões finais:** tipos, lint, **1.169 testes**, build, conteúdo (com a N0-LADDER v2
+publicada conferida; 38 do cache, 0 pela rede), **54/54 mutações** com os dois controles
+verdes (o controle agora inclui a N0-LADDER v2 real) e repertório `--check`;
+`db:rls` **52/52** e `db:finais:v2` **18/18** no estado final.
+
+### O que a fatia 7 NÃO cobre — registrado, sem reduzir §20 nem §28
+
+- **O título da aula não é editável no cabeçalho do v2** (§5.3 pede); o item 5 usou o nome
+  do capítulo.
+- **A prática não foi jogada na tela** pelo aluno de teste (o Stockfish defende de verdade);
+  a gravação da prática v2 está provada no banco (`db:finais:v2`) e nos testes puros.
+- **Reativar pela tela e aba antiga na tela** (item 9 do roteiro), cortes previstos no plano.
+- A cor do desenho da introdução no aluno; editar desenho e pausa por narração na tela; o
+  título editável; a exceção do professor à `CERTIFICACAO_REFUTADA`; o impacto por revisão;
+  o painel do professor para tentativas de treino e sem snapshot.
+- Mais de uma prática, prática opcional e domínio por treino (fora da fatia por decisão);
+  migração em massa; N0-MATING-MATERIAL e N1-KPK continuam v1.
+- `npm run db:finais` (v1) segue quebrado desde 8/9, anterior a esta fatia.
+- **Publicar localmente não é deploy**: a N0-LADDER v2 chega ao aluno do site só depois de
+  commit, push e deploy — e isso é do Doug.
+
+### O próximo ponto exato
+
+Fatia 8 de §27: **repertório (§21) e aulas extras (§22)**.
 
 ---
 

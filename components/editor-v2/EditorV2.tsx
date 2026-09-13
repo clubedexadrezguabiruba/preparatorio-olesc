@@ -10,6 +10,7 @@ import { NagOverlay } from "@/components/board/NagOverlay";
 import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
 import { PainelDeImportacao } from "@/components/editor-v2/PainelDeImportacao";
 import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
+import { DialogoConverterV1 } from "@/components/editor-v2/DialogoConverterV1";
 import { DialogoPublicacoes } from "@/components/editor-v2/DialogoPublicacoes";
 import { DialogoPublicar } from "@/components/editor-v2/DialogoPublicar";
 import { PainelDeProblemas } from "@/components/editor-v2/PainelDeProblemas";
@@ -210,6 +211,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const [conferencia, setConferencia] = useState<{ resultado: Extract<ResultadoDoConferirV2, { ok: true }>; aula: AulaV2 } | null>(null);
   const [conferindo, setConferindo] = useState(false);
   const [publicandoAula, setPublicandoAula] = useState(false);
+  const [convertendoV1, setConvertendoV1] = useState(false);
+  const botaoConverter = useRef<HTMLButtonElement>(null);
   const [vendoPublicacoes, setVendoPublicacoes] = useState(false);
   const [publicada, setPublicada] = useState<string | null>(null);
   const botaoPublicar = useRef<HTMLButtonElement>(null);
@@ -327,7 +330,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
     || escolhendoPrevia || previa !== null
     || criandoTreino !== null || editandoTreino !== null || propriedadeTreino !== null || jogandoTreino !== null
     || duplicandoCapitulo !== null || excluindoCapitulo !== null || acaoDoLance !== null || cortando !== null
-    || publicandoAula || vendoPublicacoes;
+    || publicandoAula || vendoPublicacoes || convertendoV1;
   const estadoDoTeclado = useRef({ analise, janelaAberta });
   useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta }; });
 
@@ -937,6 +940,12 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
               Publicar
             </button>
           ) : null}
+          {/* §20.3: a conversão é explícita, e o botão só existe enquanto há o que converter. */}
+          {historico.presente.origem?.formato === "lesson-v1" && !historico.presente.origem.convertidaEm ? (
+            <button type="button" ref={botaoConverter} onClick={() => setConvertendoV1(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">
+              Converter para o formato novo
+            </button>
+          ) : null}
           <button type="button" ref={botaoMaisOpcoes} onClick={() => setVendoPublicacoes(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Mais opções</button>
           <button type="button" disabled={!historico.passados.length} onClick={() => setHistorico(desfazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Desfazer</button>
           <button type="button" disabled={!historico.futuros.length} onClick={() => setHistorico(refazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Refazer</button>
@@ -981,6 +990,18 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
           aulaId={aulaId}
           aoFechar={() => { setPublicandoAula(false); queueMicrotask(() => botaoPublicar.current?.focus()); }}
           aoPublicar={(publicationId) => { setPublicandoAula(false); setPublicada(publicationId); queueMicrotask(() => botaoMaisOpcoes.current?.focus()); }}
+        />
+      ) : null}
+      {convertendoV1 ? (
+        <DialogoConverterV1
+          aulaId={aulaId}
+          aula={historico.presente}
+          aoFechar={() => { setConvertendoV1(false); queueMicrotask(() => botaoConverter.current?.focus()); }}
+          aoConverter={() => {
+            aplicar({ tipo: "CONVERTER_V1", convertidaEm: new Date().toISOString() });
+            setConvertendoV1(false);
+            queueMicrotask(() => botaoMaisOpcoes.current?.focus());
+          }}
         />
       ) : null}
       {vendoPublicacoes ? (

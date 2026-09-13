@@ -78,6 +78,8 @@ export type TreinoJogavel = {
   moveLimit?: number;
   politica: TreinoV2["defensor"]["politica"];
   intro: string;
+  /** O treino é julgado como final certificado, com a evidência da tablebase de cada pergunta. */
+  certificado: boolean;
 };
 
 /** A chave de `defesasFinais`. Uma função só, para a tradução e a tela não divergirem. */
@@ -242,5 +244,6 @@ export function treinoJogavel(aula: AulaV2, treinoId: string, positions: Record<
       : {}),
     politica: treino.defensor.politica,
     intro: treino.introducao ?? treino.objetivo,
+    certificado,
   };
 }

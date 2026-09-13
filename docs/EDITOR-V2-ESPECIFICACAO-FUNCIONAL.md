@@ -813,9 +813,9 @@ Ao final de cada fatia:
 - [ ] Metadados, proveniência e exceções editáveis com segurança.
 - [ ] Fluxo completo de introdução, capítulos, treinos e práticas.
 - [ ] Problemas localizados e corrigíveis pela tela.
-- [ ] Publicação atômica, snapshots e recuperação.
-- [ ] Progresso por revisão e rejulgamento no servidor.
-- [ ] Migração v1 explícita e conteúdo antigo preservado.
+- [x] Publicação atômica, snapshots e recuperação.
+- [x] Progresso por revisão e rejulgamento no servidor.
+- [x] Migração v1 explícita e conteúdo antigo preservado.
 - [ ] Repertório editado pela fonte PGN e compilação coerente.
 - [ ] Barra Stockfish isolada do motor do aluno.
 - [ ] Limites e metas de desempenho comprovados.

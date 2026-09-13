@@ -135,9 +135,19 @@ export type ComandoV2 =
    * adivinhar, por diferença, o que o professor fez; a lista inteira não adivinha
    * nada. E como cada uma entra no histórico, um Ctrl+Z devolve o desenho anterior.
    */
-  | { tipo: "DEFINIR_DESENHOS"; analiseId: string; nodeId: string; desenhos: DesenhoV2 | undefined };
+  | { tipo: "DEFINIR_DESENHOS"; analiseId: string; nodeId: string; desenhos: DesenhoV2 | undefined }
+  /**
+   * §20.3: a conversão permanente da aula v1. Marca o documento como convertido; o diff e o
+   * snapshot anterior ficam por conta de quem pede (`migrar-v1.ts`). Um Desfazer desmarca.
+   */
+  | { tipo: "CONVERTER_V1"; convertidaEm: string };
 
 function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<string, Position>): AulaV2 {
+  if (comando.tipo === "CONVERTER_V1") {
+    if (aula.origem?.formato !== "lesson-v1") throw new Error("esta aula não veio do formato antigo — não há o que converter");
+    if (aula.origem.convertidaEm) return aula;
+    return { ...aula, origem: { ...aula.origem, convertidaEm: comando.convertidaEm } };
+  }
   if (comando.tipo === "RENOMEAR_CAPITULO") {
     return { ...aula, capitulos: aula.capitulos.map((c) => c.id === comando.capituloId ? { ...c, titulo: comando.titulo.trim() || c.titulo } : c) };
   }

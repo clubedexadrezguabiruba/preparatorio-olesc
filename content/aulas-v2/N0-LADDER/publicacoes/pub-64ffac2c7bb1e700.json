@@ -1,0 +1,774 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-64ffac2c7bb1e700",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "N0-LADDER",
+    "titulo": "Mate da escada: duas torres, e dama e torre",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "classe": "E",
+      "estadoEditorial": "rascunho",
+      "estadoDaOrigem": "publicado",
+      "fonteDidatica": "silman-endgame-course"
+    },
+    "proveniencia": [
+      {
+        "positionId": "pos-n0-ladder-silman-yk7",
+        "conteudoHash": "459340887eac6ec8674e6e9f000733d9f6669108a6125bd135a1a51cda592e5b",
+        "estado": "approved"
+      }
+    ],
+    "excecoes": [],
+    "catalogo": {
+      "erros": [],
+      "mensagensPadrao": {
+        "vitoriaForaDoMetodo": "Esse lance ainda ganha, mas não é o caminho da aula. Aqui cada torre fecha uma fileira, e o rei preto desce.",
+        "perdeResultado": "Esse lance joga a vitória fora: o rei preto alcança uma das suas torres. Com uma torre só, o mate fica bem mais longe.",
+        "alternativaDoMetodo": "Esse lance é a mesma ideia por outro caminho."
+      }
+    },
+    "analises": [
+      {
+        "id": "analise-n0-ladder-objetivo",
+        "inicio": {
+          "tipo": "posicao",
+          "positionId": "pos-n0-ladder-silman-yk7"
+        },
+        "raizId": "node-n0-ladder-objetivo-raiz",
+        "nos": {
+          "node-n0-ladder-objetivo-raiz": {
+            "id": "node-n0-ladder-objetivo-raiz",
+            "filhos": [
+              "node-n0-ladder-objetivo-passo-3"
+            ],
+            "desenhos": {
+              "highlights": [
+                "g1",
+                "g2",
+                "e3"
+              ]
+            }
+          },
+          "node-n0-ladder-objetivo-passo-3": {
+            "id": "node-n0-ladder-objetivo-passo-3",
+            "uci": "g2g4",
+            "filhos": [
+              "node-n0-ladder-objetivo-passo-4"
+            ],
+            "desenhos": {
+              "highlights": [
+                "e4"
+              ]
+            }
+          },
+          "node-n0-ladder-objetivo-passo-4": {
+            "id": "node-n0-ladder-objetivo-passo-4",
+            "uci": "e3d2",
+            "filhos": [
+              "node-n0-ladder-objetivo-passo-5"
+            ]
+          },
+          "node-n0-ladder-objetivo-passo-5": {
+            "id": "node-n0-ladder-objetivo-passo-5",
+            "uci": "g1g3",
+            "filhos": [
+              "node-n0-ladder-objetivo-passo-6"
+            ]
+          },
+          "node-n0-ladder-objetivo-passo-6": {
+            "id": "node-n0-ladder-objetivo-passo-6",
+            "uci": "d2c1",
+            "filhos": [
+              "node-n0-ladder-objetivo-passo-7"
+            ]
+          },
+          "node-n0-ladder-objetivo-passo-7": {
+            "id": "node-n0-ladder-objetivo-passo-7",
+            "uci": "g3g2",
+            "filhos": [
+              "node-n0-ladder-objetivo-passo-8"
+            ]
+          },
+          "node-n0-ladder-objetivo-passo-8": {
+            "id": "node-n0-ladder-objetivo-passo-8",
+            "uci": "c1b1",
+            "filhos": [
+              "node-n0-ladder-objetivo-passo-9"
+            ]
+          },
+          "node-n0-ladder-objetivo-passo-9": {
+            "id": "node-n0-ladder-objetivo-passo-9",
+            "uci": "g2e2",
+            "filhos": [
+              "node-n0-ladder-objetivo-passo-10"
+            ]
+          },
+          "node-n0-ladder-objetivo-passo-10": {
+            "id": "node-n0-ladder-objetivo-passo-10",
+            "uci": "b1a1",
+            "filhos": [
+              "node-n0-ladder-objetivo-passo-11"
+            ]
+          },
+          "node-n0-ladder-objetivo-passo-11": {
+            "id": "node-n0-ladder-objetivo-passo-11",
+            "uci": "g4g1",
+            "filhos": []
+          }
+        }
+      }
+    ],
+    "introducoes": [
+      {
+        "id": "introducao-n0-ladder",
+        "titulo": "Apresentação",
+        "quadros": [
+          {
+            "id": "quadro-n0-ladder-introducao-1",
+            "texto": "Duas torres e o rei contra um rei sozinho. Isto ganha sempre — e ganha rápido.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-n0-ladder-objetivo",
+                "nodeId": "node-n0-ladder-objetivo-raiz"
+              }
+            },
+            "desenhos": {
+              "highlights": [
+                "g1",
+                "g2",
+                "e3"
+              ]
+            }
+          },
+          {
+            "id": "quadro-n0-ladder-introducao-2",
+            "texto": "As torres não correm atrás dele. Cada uma fecha uma fileira, e ele desce uma de cada vez.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-n0-ladder-objetivo",
+                "nodeId": "node-n0-ladder-objetivo-raiz"
+              }
+            },
+            "desenhos": {
+              "arrows": [
+                [
+                  "e3",
+                  "e1"
+                ]
+              ]
+            }
+          },
+          {
+            "id": "quadro-n0-ladder-introducao-3",
+            "texto": "Quando não sobrar nenhuma fileira para descer, é mate. É a fileira de baixo.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-n0-ladder-objetivo",
+                "nodeId": "node-n0-ladder-objetivo-raiz"
+              }
+            },
+            "desenhos": {
+              "highlights": [
+                "a1",
+                "b1",
+                "c1",
+                "d1",
+                "e1",
+                "f1",
+                "g1",
+                "h1"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "capitulos": [
+      {
+        "id": "capitulo-n0-ladder-objetivo",
+        "titulo": "Uma fileira de cada vez",
+        "resumo": "As torres não correm atrás do rei preto. Cada uma fecha uma fileira, e ele desce até não sobrar nenhuma.",
+        "analiseId": "analise-n0-ladder-objetivo",
+        "inicioNodeId": "node-n0-ladder-objetivo-raiz",
+        "caminho": [
+          "node-n0-ladder-objetivo-passo-3",
+          "node-n0-ladder-objetivo-passo-4",
+          "node-n0-ladder-objetivo-passo-5",
+          "node-n0-ladder-objetivo-passo-6",
+          "node-n0-ladder-objetivo-passo-7",
+          "node-n0-ladder-objetivo-passo-8",
+          "node-n0-ladder-objetivo-passo-9",
+          "node-n0-ladder-objetivo-passo-10",
+          "node-n0-ladder-objetivo-passo-11"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-n0-ladder-1",
+            "nodeId": "node-n0-ladder-objetivo-raiz",
+            "texto": "Você joga de brancas: as suas torres estão em g1 e g2, e o rei preto está sozinho em e3.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-n0-ladder-2",
+            "nodeId": "node-n0-ladder-objetivo-raiz",
+            "texto": "O rei preto anda para onde quiser — por e4 ele sobe, e o tabuleiro inteiro é dele.",
+            "pausa": "temporizada",
+            "desenhos": {
+              "highlights": [
+                "e4"
+              ]
+            }
+          },
+          {
+            "id": "narracao-n0-ladder-3",
+            "nodeId": "node-n0-ladder-objetivo-passo-3",
+            "texto": "A torre vai a g4. A quarta fileira inteira ficou tomada, e por e4 ele não passa mais.",
+            "pausa": "temporizada",
+            "esperaMs": 600
+          },
+          {
+            "id": "narracao-n0-ladder-4",
+            "nodeId": "node-n0-ladder-objetivo-passo-4",
+            "texto": "Para cima não dá mais. O rei preto desce para d2.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-n0-ladder-5",
+            "nodeId": "node-n0-ladder-objetivo-passo-5",
+            "texto": "A outra torre vai a g3 e fecha a terceira fileira. O rei preto perdeu mais uma.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-n0-ladder-6",
+            "nodeId": "node-n0-ladder-objetivo-passo-6",
+            "texto": "Sobraram duas fileiras para ele andar. O rei preto desce para c1, na de baixo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-n0-ladder-7",
+            "nodeId": "node-n0-ladder-objetivo-passo-7",
+            "texto": "A torre desce a g2 e fecha a segunda fileira. Agora ele está preso na fileira de baixo.",
+            "pausa": "temporizada",
+            "esperaMs": 600
+          },
+          {
+            "id": "narracao-n0-ladder-8",
+            "nodeId": "node-n0-ladder-objetivo-passo-8",
+            "texto": "Não sobrou para onde ir, a não ser de lado. O rei preto anda para b1.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-n0-ladder-9",
+            "nodeId": "node-n0-ladder-objetivo-passo-9",
+            "texto": "As suas duas torres estão na mesma coluna, e uma tapa o caminho da outra. Esta vai a e2, sem largar a segunda fileira.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-n0-ladder-10",
+            "nodeId": "node-n0-ladder-objetivo-passo-10",
+            "texto": "O rei preto vai a a1, o canto. Ele não tem mais nenhuma fileira para descer.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-n0-ladder-11",
+            "nodeId": "node-n0-ladder-objetivo-passo-11",
+            "texto": "A torre de g4 desce a g1. Xeque-mate: o rei preto não tem nenhuma casa para onde ir.",
+            "pausa": "temporizada",
+            "esperaMs": 900
+          },
+          {
+            "id": "narracao-n0-ladder-12",
+            "nodeId": "node-n0-ladder-objetivo-passo-11",
+            "texto": "Olhe o caminho que as torres fizeram: g4, g3, g2, g1. Isso tem nome — é o mate da escada.",
+            "pausa": "temporizada",
+            "desenhos": {
+              "highlights": [
+                "g4",
+                "g3",
+                "g2",
+                "g1"
+              ]
+            },
+            "esperaMs": 800
+          },
+          {
+            "id": "narracao-n0-ladder-13",
+            "nodeId": "node-n0-ladder-objetivo-passo-11",
+            "texto": "Uma dama e uma torre fazem a mesma escada. Uma fecha a fileira, a outra fecha a de baixo.",
+            "pausa": "temporizada",
+            "esperaMs": 600
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-n0-ladder-guiado",
+        "titulo": "Treino guiado",
+        "introducao": "A mesma posição, agora jogada. Você é as brancas, e cada torre fecha uma fileira.",
+        "perfil": "final-certificado",
+        "inicio": {
+          "analiseId": "analise-n0-ladder-objetivo",
+          "nodeId": "node-n0-ladder-objetivo-raiz"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Converter a posição em vitória.",
+        "questoes": [
+          {
+            "id": "questao-n0-ladder-n1",
+            "posicao": {
+              "analiseId": "analise-n0-ladder-objetivo",
+              "nodeId": "node-n0-ladder-objetivo-raiz"
+            },
+            "dica": "O rei preto quer subir por e4. Feche a fileira antes que ele entre nela.",
+            "desenhos": {
+              "arrows": [
+                [
+                  "e3",
+                  "e4"
+                ]
+              ],
+              "highlights": [
+                "e4"
+              ]
+            },
+            "respostas": [
+              {
+                "id": "resposta-n0-ladder-n1-esperada-1",
+                "moves": [
+                  "g2g4"
+                ],
+                "julgamento": "correta",
+                "feedback": "A torre vai a g4. A quarta fileira inteira ficou tomada, e por e4 ele não passa mais. Para cima não dá mais. O rei preto desce para d2.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e3d2",
+                      "proximaQuestaoId": "questao-n0-ladder-n2"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-n0-ladder-n2",
+            "posicao": {
+              "analiseId": "analise-n0-ladder-objetivo",
+              "nodeId": "node-n0-ladder-objetivo-passo-4"
+            },
+            "dica": "O rei preto desceu uma fileira. Feche a que ele acabou de deixar, para ele não voltar.",
+            "desenhos": {
+              "arrows": [
+                [
+                  "d2",
+                  "d3"
+                ]
+              ],
+              "highlights": [
+                "d3"
+              ]
+            },
+            "respostas": [
+              {
+                "id": "resposta-n0-ladder-n2-esperada-1",
+                "moves": [
+                  "g1g3"
+                ],
+                "julgamento": "correta",
+                "feedback": "A outra torre vai a g3 e fecha a terceira fileira. O rei preto perdeu mais uma. Sobraram duas fileiras para ele andar. O rei preto desce para c1, na de baixo.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d2c1",
+                      "proximaQuestaoId": "questao-n0-ladder-n3"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-n0-ladder-n3",
+            "posicao": {
+              "analiseId": "analise-n0-ladder-objetivo",
+              "nodeId": "node-n0-ladder-objetivo-passo-6"
+            },
+            "dica": "De novo: ele desceu, e a fileira que ele deixou fica aberta. Feche com a torre de cima.",
+            "desenhos": {
+              "arrows": [
+                [
+                  "c1",
+                  "c2"
+                ]
+              ],
+              "highlights": [
+                "c2"
+              ]
+            },
+            "respostas": [
+              {
+                "id": "resposta-n0-ladder-n3-esperada-1",
+                "moves": [
+                  "g3g2"
+                ],
+                "julgamento": "correta",
+                "feedback": "A torre desce a g2 e fecha a segunda fileira. Agora ele está preso na fileira de baixo. Não sobrou para onde ir, a não ser de lado. O rei preto anda para b1.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c1b1",
+                      "proximaQuestaoId": "questao-n0-ladder-n4"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-n0-ladder-n4",
+            "posicao": {
+              "analiseId": "analise-n0-ladder-objetivo",
+              "nodeId": "node-n0-ladder-objetivo-passo-8"
+            },
+            "dica": "A torre de g4 precisa descer até g1, e a sua outra torre está no caminho. Tire-a de lá sem largar a segunda fileira.",
+            "desenhos": {
+              "arrows": [
+                [
+                  "g4",
+                  "g1"
+                ]
+              ],
+              "highlights": [
+                "g2"
+              ]
+            },
+            "respostas": [
+              {
+                "id": "resposta-n0-ladder-n4-esperada-1",
+                "moves": [
+                  "g2e2"
+                ],
+                "julgamento": "correta",
+                "feedback": "As suas duas torres estão na mesma coluna, e uma tapa o caminho da outra. Esta vai a e2, sem largar a segunda fileira. O rei preto vai a a1, o canto. Ele não tem mais nenhuma fileira para descer.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b1a1",
+                      "proximaQuestaoId": "questao-n0-ladder-n5"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-n0-ladder-n5",
+            "posicao": {
+              "analiseId": "analise-n0-ladder-objetivo",
+              "nodeId": "node-n0-ladder-objetivo-passo-10"
+            },
+            "dica": "O rei preto está na fileira de baixo e não tem mais para onde descer. Feche essa também.",
+            "desenhos": {
+              "highlights": [
+                "a1"
+              ]
+            },
+            "respostas": [
+              {
+                "id": "resposta-n0-ladder-n5-esperada-1",
+                "moves": [
+                  "g4g1"
+                ],
+                "julgamento": "correta",
+                "feedback": "A torre de g4 desce a g1. Xeque-mate: o rei preto não tem nenhuma casa para onde ir.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "derivado",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-n0-ladder-objetivo",
+          "nodeIds": [
+            "node-n0-ladder-objetivo-raiz",
+            "node-n0-ladder-objetivo-passo-3",
+            "node-n0-ladder-objetivo-passo-4",
+            "node-n0-ladder-objetivo-passo-5",
+            "node-n0-ladder-objetivo-passo-6",
+            "node-n0-ladder-objetivo-passo-7",
+            "node-n0-ladder-objetivo-passo-8",
+            "node-n0-ladder-objetivo-passo-9",
+            "node-n0-ladder-objetivo-passo-10",
+            "node-n0-ladder-objetivo-passo-11"
+          ],
+          "hash": "e4a6436186dc2e7c4e082b0c01cd95f88a071c074dbc6fe680c9fa17f7081630",
+          "derivadorVersao": 1
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "confirmada",
+        "certificacao": {
+          "tipo": "tablebase",
+          "estado": "confirmada",
+          "positionId": "pos-n0-ladder-silman-yk7",
+          "alvoHash": "ee8c62bd7181e53f8f1ae4bfaf62b8697f7480b6dec8756d3930a3770e37e292",
+          "resultado": "win",
+          "evidencias": {
+            "questao-n0-ladder-n1": {
+              "fen": "8/8/8/8/8/4k3/6R1/6RK w - - 0 1",
+              "winningMoves": [
+                "g1a1",
+                "g1b1",
+                "g1c1",
+                "g1d1",
+                "g1e1",
+                "g1f1",
+                "g2a2",
+                "g2b2",
+                "g2c2",
+                "g2d2",
+                "g2e2",
+                "g2f2",
+                "g2g3",
+                "g2g4",
+                "g2g5",
+                "g2g6",
+                "g2g7",
+                "g2g8",
+                "g2h2",
+                "h1h2"
+              ]
+            },
+            "questao-n0-ladder-n2": {
+              "fen": "8/8/8/8/6R1/8/3k4/6RK w - - 2 2",
+              "winningMoves": [
+                "g1a1",
+                "g1b1",
+                "g1c1",
+                "g1d1",
+                "g1e1",
+                "g1f1",
+                "g1g2",
+                "g1g3",
+                "g4a4",
+                "g4b4",
+                "g4c4",
+                "g4d4",
+                "g4e4",
+                "g4f4",
+                "g4g2",
+                "g4g3",
+                "g4g5",
+                "g4g6",
+                "g4g7",
+                "g4g8",
+                "g4h4",
+                "h1g2",
+                "h1h2"
+              ]
+            },
+            "questao-n0-ladder-n3": {
+              "fen": "8/8/8/8/6R1/6R1/8/2k4K w - - 4 3",
+              "winningMoves": [
+                "g3a3",
+                "g3b3",
+                "g3c3",
+                "g3d3",
+                "g3e3",
+                "g3f3",
+                "g3g1",
+                "g3g2",
+                "g3h3",
+                "g4a4",
+                "g4b4",
+                "g4c4",
+                "g4d4",
+                "g4e4",
+                "g4f4",
+                "g4g5",
+                "g4g6",
+                "g4g7",
+                "g4g8",
+                "g4h4",
+                "h1g1",
+                "h1g2",
+                "h1h2"
+              ]
+            },
+            "questao-n0-ladder-n4": {
+              "fen": "8/8/8/8/6R1/8/6R1/1k5K w - - 6 4",
+              "winningMoves": [
+                "g2a2",
+                "g2b2",
+                "g2c2",
+                "g2d2",
+                "g2e2",
+                "g2f2",
+                "g2g1",
+                "g2g3",
+                "g2h2",
+                "g4a4",
+                "g4b4",
+                "g4c4",
+                "g4d4",
+                "g4e4",
+                "g4f4",
+                "g4g3",
+                "g4g5",
+                "g4g6",
+                "g4g7",
+                "g4g8",
+                "g4h4",
+                "h1g1",
+                "h1h2"
+              ]
+            },
+            "questao-n0-ladder-n5": {
+              "fen": "8/8/8/8/6R1/8/4R3/k6K w - - 8 5",
+              "winningMoves": [
+                "e2a2",
+                "e2b2",
+                "e2c2",
+                "e2d2",
+                "e2e1",
+                "e2e3",
+                "e2e4",
+                "e2e5",
+                "e2e6",
+                "e2e7",
+                "e2e8",
+                "e2f2",
+                "e2g2",
+                "e2h2",
+                "g4a4",
+                "g4c4",
+                "g4d4",
+                "g4e4",
+                "g4f4",
+                "g4g1",
+                "g4g2",
+                "g4g3",
+                "g4g5",
+                "g4g6",
+                "g4g7",
+                "g4g8",
+                "g4h4",
+                "h1g1",
+                "h1g2",
+                "h1h2"
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "praticas": [
+      {
+        "id": "pratica-n0-ladder-stockfish",
+        "titulo": "Prática contra o computador",
+        "positionId": "pos-n0-ladder-silman-yk7",
+        "ladoAluno": "white",
+        "objetivo": "win",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-n0-ladder-introducao",
+        "tipo": "introducao",
+        "entidadeId": "introducao-n0-ladder"
+      },
+      {
+        "id": "etapa-n0-ladder-objetivo",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-n0-ladder-objetivo"
+      },
+      {
+        "id": "etapa-n0-ladder-treino",
+        "tipo": "treino",
+        "entidadeId": "treino-n0-ladder-guiado"
+      },
+      {
+        "id": "etapa-n0-ladder-pratica",
+        "tipo": "pratica",
+        "entidadeId": "pratica-n0-ladder-stockfish"
+      }
+    ],
+    "origem": {
+      "formato": "lesson-v1",
+      "hash": "8ab6f3707820deb591246af3005c41f3f71e13790e7bc3a7b4219e928d642071",
+      "convertidaEm": "2026-09-13T17:49:57.567Z"
+    }
+  },
+  "posicoes": {
+    "pos-n0-ladder-silman-yk7": {
+      "id": "pos-n0-ladder-silman-yk7",
+      "fen": "8/8/8/8/8/4k3/6R1/6RK w - - 0 1",
+      "expectedResult": "win-white",
+      "tags": [
+        "KRRK",
+        "escada",
+        "mate-de-duas-torres",
+        "ensino"
+      ],
+      "status": "approved",
+      "provenance": {
+        "externalHumanSource": "Jeremy Silman, na seção em que ensina o mate de rei e duas torres contra rei solitário — a técnica que ele nomeia 'the Staircase' na Parte Um do livro",
+        "bibliographicSource": "Silman, Silman's Complete Endgame Course, Siles Press, Los Angeles, 2007, Parte Um 'Endgames for Beginners (Unrated-999)', seção 'King and Two Rooks vs. Lone King' — página impressa não conferida. A seção é o capítulo 7 do estudo que retranscreve o livro, e o nome acima é o do capítulo, não o da página impressa.",
+        "originalGame": "não se aplica — posição de ensino de manual, não vem de partida",
+        "authorComposer": "não se aplica — é o quadro que ilustra uma técnica de mate (duas torres fecham uma fileira de cada vez), e não uma composição autoral",
+        "license": "obra protegida por direito autoral, em regime integral desde 2026-09-08 (§1.1 do SOURCE-CORPUS): o módulo de finais segue este livro, e por isso o teto de citação da §12.7 e a rotação da §4 não se aplicam a ele. O texto da aula é original em português; nada da prosa do autor é reproduzido, e os PGN do estudo — que carregam a prosa transcrita por OCR — ficam fora do repositório (§13 da TRILHA-FINAIS).",
+        "editionFile": "silman-complete-endgame-course.pdf",
+        "fenMethod": "Não é transcrição de diagrama impresso: a FEN veio do cabeçalho [FEN] do PGN do capítulo 7 do estudo público https://lichess.org/study/yk2b24vS ('King and Two Rooks vs. Lone King', capítulo https://lichess.org/study/yk2b24vS/323XMJc9), que retranscreve este livro. O PGN foi baixado por `npm run finais:extrair` e o par (número, nome, FEN) está versionado em content/finais/capitulos.json. É o atalho da §13 da TRILHA-FINAIS, com o custo declarado ali: das três pernas de cruzamento que a N1-KPK usa, a linha impressa lida no PDF não foi usada — sobram a FEN do estudo e a tablebase.",
+        "qaApplied": "garimpo de 2026-09-09. A Syzygy julga o expectedResult no `npm run validate:content -- --refresh-cache`: a posição é ganha para as brancas, com DTM 9 meios-lances (mate em 5). A linha da aula assistida foi conferida lance a lance contra a mesma tablebase, com o preto jogando sempre a defesa mais dura: 1.Tg4 Rd2 2.T1g3 Rc1 3.Tg2 Rb1 4.Te2 Ra1 5.Tg1#. Os cinco lances brancos são todos lances de DTM ótimo — nenhum deles depende de o preto colaborar.",
+        "pendingRisk": "transcrição de terceiro; página do livro não conferida. O resultado é julgado pela tablebase, a atribuição ao livro não. Some-se a isto que o nome do capítulo vem truncado em 80 caracteres pela fonte (§13 da TRILHA-FINAIS): quem identifica o capítulo é o par (estudo, número), e a url está no capitulos.json."
+      }
+    }
+  },
+  "revisoes": {
+    "treino-n0-ladder-guiado": {
+      "tipo": "treino",
+      "revisao": "ar_0e70ba4e7bb8602e149352f933c63c69df27431b000604f92843138a01b1a48d"
+    },
+    "pratica-n0-ladder-stockfish": {
+      "tipo": "pratica",
+      "revisao": "ar_1f8b45f1d98d0a8a3aa504af408d5d3717682a6c978ce338c17950f8f1f5fa97"
+    }
+  },
+  "manifesto": {
+    "aulaId": "N0-LADDER",
+    "aula": "6472ad5379b4e1049cc792b12f3c58473665794348d26ac3d5f4ea2a0f54a313",
+    "posicoes": {
+      "pos-n0-ladder-silman-yk7": "6c4efc054b9ad682bfd6786866861fd959686b80b42982f835542e324ad15b95"
+    },
+    "revisoes": "f00718c1357761e3cbc3e85e73d7b9188b7dbe7b06142136e1cb71b1382c76ce",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}
