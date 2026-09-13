@@ -134,6 +134,12 @@ export type AulaDaTrilha = {
   readonly nivel: Nivel;
   /** Uma linha: é o que o aluno lê no cartão antes de abrir. */
   readonly nome: string;
+  /**
+   * Aula extra (§22 da especificação do Editor v2): `EX-…`, publicada em v2, com nível e
+   * classe declarados no documento. Não está nas 49 escritas aqui — entra pelos dados, em
+   * `trilhaCompleta`.
+   */
+  readonly extra?: true;
 };
 
 /**
@@ -230,9 +236,62 @@ export const TRILHA: readonly AulaDaTrilha[] = [
 
 const POR_ID = new Map(TRILHA.map((aula) => [aula.id, aula]));
 
-/** A aula da trilha, ou `undefined` se o id não é do curso. */
-export function aulaDaTrilha(id: string): AulaDaTrilha | undefined {
-  return POR_ID.get(id);
+/**
+ * A aula da trilha, ou `undefined` se o id não é do curso.
+ *
+ * `extras` são as aulas extras publicadas (`aulasExtras()` em `lib/finais/conteudo.ts`).
+ * O padrão vazio mantém as chamadas antigas respondendo só pelas 49.
+ */
+export function aulaDaTrilha(id: string, extras: readonly AulaDaTrilha[] = []): AulaDaTrilha | undefined {
+  return POR_ID.get(id) ?? extras.find((aula) => aula.id === id);
+}
+
+/* ------------------------------------------------------------------ *
+ * Aulas extras: na trilha por dados (§22)
+ * ------------------------------------------------------------------ */
+
+/** Onde as extras começam a ser numeradas: depois das 49, e sem encostar nelas. */
+export const ORDEM_DAS_EXTRAS = 1000;
+
+/** O que uma aula v2 publicada precisa ter para virar extra da trilha. */
+export type AulaExtraPublicada = {
+  readonly id: string;
+  readonly titulo: string;
+  readonly metadados?: { readonly nivel?: number; readonly classe?: string };
+};
+
+/**
+ * As aulas extras que entram na trilha: id `EX-`, nível de 1 a 5 e classe declarados.
+ *
+ * Uma extra sem nível ou sem classe **não** entra — a conferência da publicação v2 recusa
+ * publicá-la assim (`EXTRA_SEM_NIVEL`, `EXTRA_SEM_CLASSE`), e se um pacote chegar sem os
+ * dois, contá-la num nível inventado seria pior do que deixá-la fora. Id que colide com as 49
+ * também fica fora: a aula do curso ganha.
+ *
+ * A ordem é por nível e depois pelo id, e começa em {@link ORDEM_DAS_EXTRAS}: dentro do nível,
+ * a extra vem depois das aulas do curso, que são pré-requisito.
+ */
+export function extrasDaTrilha(aulas: readonly AulaExtraPublicada[]): AulaDaTrilha[] {
+  const validas = aulas
+    .filter((aula) => /^EX-[A-Z0-9-]+$/.test(aula.id) && !POR_ID.has(aula.id))
+    .filter((aula) => {
+      const nivel = aula.metadados?.nivel;
+      return Number.isInteger(nivel) && nivel! >= 1 && nivel! <= 5 && CLASSES.includes(aula.metadados?.classe as Classe);
+    })
+    .sort((a, b) => a.metadados!.nivel! - b.metadados!.nivel! || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  return validas.map((aula, i) => ({
+    id: aula.id,
+    ordem: ORDEM_DAS_EXTRAS + i,
+    nivel: aula.metadados!.nivel as Nivel,
+    classe: aula.metadados!.classe as Classe,
+    nome: aula.titulo,
+    extra: true,
+  }));
+}
+
+/** As 49 e, depois delas, as extras — sem repetir id. */
+export function trilhaCompleta(extras: readonly AulaDaTrilha[] = []): AulaDaTrilha[] {
+  return [...TRILHA, ...extras.filter((aula) => !POR_ID.has(aula.id))];
 }
 
 /** As aulas de uma classe, na ordem da lista. */
@@ -257,8 +316,8 @@ export function doNivel(aulas: readonly AulaDaTrilha[], nivel: Nivel): AulaDaTri
   return aulas.filter((aula) => aula.nivel === nivel);
 }
 
-export function aulasAbertas(publicadas: ReadonlySet<string>): AulaDaTrilha[] {
-  return TRILHA.filter((aula) => publicadas.has(aula.id));
+export function aulasAbertas(publicadas: ReadonlySet<string>, extras: readonly AulaDaTrilha[] = []): AulaDaTrilha[] {
+  return trilhaCompleta(extras).filter((aula) => publicadas.has(aula.id));
 }
 
 /* ------------------------------------------------------------------ *

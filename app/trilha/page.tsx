@@ -22,7 +22,7 @@ import {
   type Situacao,
 } from "@/lib/curso/nivel";
 import { nivelConquistado } from "@/lib/curso/progresso";
-import { aulasComPratica, aulasPublicadas } from "@/lib/finais/conteudo";
+import { aulasComPratica, aulasExtras, aulasPublicadas } from "@/lib/finais/conteudo";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import { temaAberto } from "@/lib/tatica/conteudo";
 import { progressoPorTema } from "@/lib/tatica/progresso";
@@ -85,6 +85,7 @@ export default async function Trilha() {
     aulasPublicadas: aulasPublicadas(),
     aulasComPratica: aulasComPratica(),
     nivelDoAluno: aqui,
+    extras: aulasExtras(),
   });
 
   // A legenda só nomeia o que a página de fato desenha. Uma legenda com uma

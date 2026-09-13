@@ -194,9 +194,9 @@ function instalarFixtures(dir: string) {
 
 const AULA_V2_FIXTURE = "N0-FIXTURE-V2";
 
-/** O pacote ativo da fixture v2, já instalada na cópia. */
-function lerPacoteV2(dir: string): { pacote: PacoteV2; arquivo: string; ponteiro: string } {
-  const pasta = path.join(dir, "aulas-v2", AULA_V2_FIXTURE);
+/** O pacote ativo de uma aula v2 na cópia — a fixture, por padrão. */
+function lerPacoteV2(dir: string, aula = AULA_V2_FIXTURE): { pacote: PacoteV2; arquivo: string; ponteiro: string } {
+  const pasta = path.join(dir, "aulas-v2", aula);
   const ponteiro = path.join(pasta, "ativa.json");
   const { publicationId } = JSON.parse(readFileSync(ponteiro, "utf8")) as { publicationId: string };
   const arquivo = path.join(pasta, "publicacoes", `${publicationId}.json`);
@@ -211,8 +211,8 @@ function lerPacoteV2(dir: string): { pacote: PacoteV2; arquivo: string; ponteiro
  * `selar: "so-manifesto"` mantém as revisões como o estrago as deixou (a mutação da revisão);
  * `selar: "nada"` grava o estrago cru (a mutação do pacote adulterado).
  */
-function mutarPacoteV2(dir: string, estragar: (pacote: PacoteV2) => void, selar: "tudo" | "so-manifesto" | "nada" = "tudo") {
-  const { pacote, arquivo, ponteiro } = lerPacoteV2(dir);
+function mutarPacoteV2(dir: string, estragar: (pacote: PacoteV2) => void, selar: "tudo" | "so-manifesto" | "nada" = "tudo", aula = AULA_V2_FIXTURE) {
+  const { pacote, arquivo, ponteiro } = lerPacoteV2(dir, aula);
   estragar(pacote);
   const final = selar === "nada"
     ? pacote
@@ -1262,6 +1262,33 @@ const MUTACOES: Mutation[] = [
         p.aula.praticas = [];
       });
       return "praticas → [] e a etapa sai do fluxo";
+    },
+  },
+  // ---- Fatia 8: aulas extras na trilha por dados (§22) ------------------------------------
+  {
+    titulo: "v2: aula extra publicada sem nível",
+    codigo: "EXTRA_SEM_NIVEL",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => { delete p.aula.metadados!.nivel; }, "tudo", "EX-FIXTURE-V2");
+      return "EX-FIXTURE-V2: metadados.nivel apagado e o pacote resselado — a extra não teria nível em que contar";
+    },
+  },
+  {
+    titulo: "v2: aula extra publicada sem classe",
+    codigo: "EXTRA_SEM_CLASSE",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => { delete p.aula.metadados!.classe; }, "tudo", "EX-FIXTURE-V2");
+      return "EX-FIXTURE-V2: metadados.classe apagada e o pacote resselado";
+    },
+  },
+  {
+    titulo: "v2: aula do curso declarando nível diferente da trilha",
+    codigo: "NIVEL_DIVERGE",
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => { p.aula.metadados = { ...p.aula.metadados!, nivel: 3 }; }, "tudo", "N0-LADDER");
+      return "N0-LADDER (nível 1 na trilha) publicada com metadados.nivel 3";
     },
   },
   {

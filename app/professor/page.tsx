@@ -4,7 +4,7 @@ import { professorAtual } from "@/lib/auth/perfil";
 import { editorLigado } from "@/lib/editor/local";
 import { nivelDoAluno } from "@/lib/curso/nivel";
 import { niveisDaTurma } from "@/lib/curso/progresso";
-import { aulasComPratica, aulasPublicadas } from "@/lib/finais/conteudo";
+import { aulasComPratica, aulasExtras, aulasPublicadas } from "@/lib/finais/conteudo";
 import { finaisDaTurma } from "@/lib/finais/progresso";
 import { aprendidasDaTrilha, aulasAbertas, CLASSES, daClasse } from "@/lib/finais/trilha";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
@@ -38,7 +38,7 @@ export default async function Professor() {
    * abertas), e é justamente por ser a mesma que o professor pode dizer o
    * número em voz alta com o aluno na frente.
    */
-  const abertas = aulasAbertas(aulasPublicadas());
+  const abertas = aulasAbertas(aulasPublicadas(), aulasExtras());
   const comPratica = aulasComPratica();
   const [finais, niveis] = await Promise.all([finaisDaTurma(), niveisDaTurma()]);
 

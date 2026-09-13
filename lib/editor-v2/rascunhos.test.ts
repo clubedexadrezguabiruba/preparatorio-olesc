@@ -89,7 +89,7 @@ test("uma aula extra pode ser gravada e relida na pasta do v2", () => {
     schemaVersion: 2 as const,
     id: "EX-ENSAIO-DO-DISCO",
     titulo: "Ensaio do disco",
-    metadados: { orientacaoPadrao: "white" as const, criterioDominio: "D1" as const, estadoEditorial: "rascunho" as const, nivel: 0 },
+    metadados: { orientacaoPadrao: "white" as const, criterioDominio: "D1" as const, estadoEditorial: "rascunho" as const, nivel: 1 },
     proveniencia: [],
     excecoes: [],
     analises: [],

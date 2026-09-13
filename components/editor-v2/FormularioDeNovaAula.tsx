@@ -31,6 +31,7 @@ export function FormularioDeNovaAula() {
   const [nivel, setNivel] = useState(0);
   const [orientacaoPadrao, setOrientacaoPadrao] = useState<"white" | "black">("white");
   const [criterioDominio, setCriterioDominio] = useState<"D1" | "D2" | "D3" | "D4">("D1");
+  const [classe, setClasse] = useState<"" | "E" | "D" | "C" | "B">("");
   const [erro, setErro] = useState<{ campo: string; mensagem: string } | null>(null);
   const [criando, comTransicao] = useTransition();
 
@@ -39,7 +40,7 @@ export function FormularioDeNovaAula() {
   function criar() {
     setErro(null);
     comTransicao(async () => {
-      const resultado = await criarAulaV2(JSON.stringify({ titulo, tipo, nivel, orientacaoPadrao, criterioDominio }));
+      const resultado = await criarAulaV2(JSON.stringify({ titulo, tipo, nivel, orientacaoPadrao, criterioDominio, ...(classe ? { classe } : {}) }));
       if (!resultado.ok) {
         setErro(resultado);
         return;
@@ -72,24 +73,58 @@ export function FormularioDeNovaAula() {
           Tipo
           <select
             value={tipo}
-            onChange={(evento) => setTipo(evento.currentTarget.value === "extra" ? "extra" : "curso")}
+            onChange={(evento) => {
+              const novo = evento.currentTarget.value === "extra" ? "extra" : "curso";
+              setTipo(novo);
+              // Nível 0 não existe numa extra; a série N0 existe numa aula do curso.
+              if (novo === "extra" && nivel === 0) setNivel(1);
+            }}
             className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm text-tinta"
           >
             <option value="curso">Aula do curso</option>
             <option value="extra">Aula extra (EX-)</option>
           </select>
         </label>
-        <label className="flex flex-col gap-1 text-sm text-tinta">
-          Nível
-          <select
-            value={nivel}
-            onChange={(evento) => setNivel(Number(evento.currentTarget.value))}
-            aria-invalid={erro?.campo === "nivel" ? true : undefined}
-            className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm text-tinta"
-          >
-            {[0, 1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>Nível {n}</option>)}
-          </select>
-        </label>
+        {tipo === "curso" ? (
+          <label className="flex flex-col gap-1 text-sm text-tinta">
+            Série do identificador
+            <select
+              value={nivel}
+              onChange={(evento) => setNivel(Number(evento.currentTarget.value))}
+              aria-invalid={erro?.campo === "nivel" ? true : undefined}
+              className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm text-tinta"
+            >
+              {[0, 1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>N{n}</option>)}
+            </select>
+            <span className="text-xs text-tinta-fraca">Não é o nível: o nível de uma aula do curso vem da trilha.</span>
+          </label>
+        ) : (
+          <>
+            <label className="flex flex-col gap-1 text-sm text-tinta">
+              Nível
+              <select
+                value={nivel}
+                onChange={(evento) => setNivel(Number(evento.currentTarget.value))}
+                aria-invalid={erro?.campo === "nivel" ? true : undefined}
+                className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm text-tinta"
+              >
+                {[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>Nível {n}</option>)}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-sm text-tinta">
+              Classe
+              <select
+                value={classe}
+                onChange={(evento) => setClasse(evento.currentTarget.value as "" | "E" | "D" | "C" | "B")}
+                aria-invalid={erro?.campo === "classe" ? true : undefined}
+                className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm text-tinta"
+              >
+                <option value="">— escolha —</option>
+                {(["E", "D", "C", "B"] as const).map((c) => <option key={c} value={c}>Classe {c}</option>)}
+              </select>
+            </label>
+          </>
+        )}
         <label className="flex flex-col gap-1 text-sm text-tinta">
           Tabuleiro visto por
           <select
@@ -116,7 +151,7 @@ export function FormularioDeNovaAula() {
       <p className="rounded-md border border-borda-fraca bg-carta p-3 text-sm text-tinta">
         Identificador: <code className="font-mono text-xs">{id || "—"}</code>
         <span className="block text-xs text-tinta-fraca">
-          Gerado pelo título e pelo nível. É o nome do arquivo e o endereço da aula; não dá para mudá-lo depois sem mexer no progresso do aluno.
+          Gerado pelo título{tipo === "curso" ? " e pela série" : ""}. É o nome do arquivo e o endereço da aula; não dá para mudá-lo depois sem mexer no progresso do aluno.
         </span>
       </p>
 
@@ -124,7 +159,9 @@ export function FormularioDeNovaAula() {
 
       <p className="text-xs text-tinta-fraca">
         A aula nasce vazia e é salva como rascunho — isso é permitido, e a tela seguinte oferece «Adicionar capítulo».
-        Pôr a aula na trilha do curso é passo separado, e ainda não é feito por aqui.
+        {tipo === "extra"
+          ? "Aula extra: com nível e classe, ela entra na trilha quando for publicada, e passa a contar para o fechamento daquele nível."
+          : "Pôr uma aula do curso na trilha é passo separado (a trilha das 49 é código), e não é feito por aqui."}
       </p>
 
       <div className="flex flex-wrap justify-end gap-3">

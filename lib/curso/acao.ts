@@ -166,7 +166,7 @@ export function proximaAcao(d: ParaDecidir): Acao {
   if (fecho.finais.feitos < fecho.finais.exigidas) {
     // A primeira publicada que ele ainda não aprendeu, na ordem da trilha — que
     // é ordem de pré-requisito, e não a ordem em que ele abriu as abas.
-    const proxima = aulasDoNivel(d.nivel).find(
+    const proxima = aulasDoNivel(d.nivel, d.progresso.extras).find(
       (a) =>
         d.progresso.publicadas.has(a.id) &&
         !aprendeu(d.progresso.comPratica.has(a.id), d.progresso.finais.get(a.id) ?? AULA_ZERADA),

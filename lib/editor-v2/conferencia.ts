@@ -32,6 +32,7 @@
  * resultado pronto, pela action do botão Conferir.
  */
 import { reprovacoes, type Fala, type Regua } from "../lesson/regua.ts";
+import { aulaDaTrilha } from "../finais/trilha.ts";
 import type { Position } from "../lesson/schema.ts";
 import type { RevisoesDaAulaV2 } from "./avaliacao.ts";
 import { hashCanonico, hashDaPosicao } from "./hash.ts";
@@ -93,7 +94,46 @@ const ESTADO_DITO: Record<string, string> = {
   indisponivel: "não pôde ser calculada: a tablebase não alcança uma das posições",
 };
 
+const ehExtra = (aula: AulaV2) => aula.id.startsWith("EX-");
+
 export const REGRAS_PUBLICACAO_V2: RegraDePublicacaoV2[] = [
+  /*
+   * §22 — aula extra: namespace `EX-`, nível explícito, e na trilha por dados. Sem nível ou
+   * sem classe a extra não entra em `trilhaCompleta`, e publicá-la assim seria prometer ao
+   * professor uma aula que nenhum fechamento de nível lê.
+   */
+  {
+    codigo: "EXTRA_SEM_NIVEL",
+    impede: "aula extra sem o nível (1 a 5) declarado",
+    julgar: (aula) => ehExtra(aula) && !aula.metadados?.nivel
+      ? [erro(aula, "EXTRA_SEM_NIVEL", "esta aula extra não declara o nível (1 a 5) — sem ele ela não entra na trilha nem conta para o fechamento de nível nenhum. Escolha em Mais opções.", { campo: "metadados.nivel" })]
+      : [],
+  },
+  {
+    codigo: "EXTRA_SEM_CLASSE",
+    impede: "aula extra sem a classe (E, D, C ou B) declarada",
+    julgar: (aula) => ehExtra(aula) && !aula.metadados?.classe
+      ? [erro(aula, "EXTRA_SEM_CLASSE", "esta aula extra não declara a classe (E, D, C ou B) — é por ela que a lista de finais a mostra. Escolha em Mais opções.", { campo: "metadados.classe" })]
+      : [],
+  },
+  {
+    codigo: "NIVEL_DIVERGE",
+    impede: "aula do curso declarando um nível diferente do da trilha",
+    julgar: (aula) => {
+      const naTrilha = aulaDaTrilha(aula.id);
+      const declarado = aula.metadados?.nivel;
+      return naTrilha && declarado !== undefined && declarado !== naTrilha.nivel
+        ? [erro(aula, "NIVEL_DIVERGE", `esta aula declara o nível ${declarado}, e a trilha do curso a põe no nível ${naTrilha.nivel} — é a trilha que decide; tire o nível em Mais opções ou corrija a trilha`, { campo: "metadados.nivel" })]
+        : [];
+    },
+  },
+  {
+    codigo: "AULA_FORA_DA_TRILHA",
+    impede: "aviso: aula do curso que não está na trilha — publica, mas não conta para nível nenhum",
+    julgar: (aula) => !ehExtra(aula) && !aulaDaTrilha(aula.id)
+      ? [{ codigo: "AULA_FORA_DA_TRILHA", severidade: "aviso" as const, mensagem: "esta aula não está na trilha do curso: publicada, ela abre pelo endereço, mas não aparece em /finais nem conta para o fechamento de nível nenhum", localizacao: { aulaId: aula.id } }]
+      : [],
+  },
   { codigo: "PROVENIENCIA_CADUCA", impede: "posição mudou depois de a revisão ser registrada", promove: true },
   { codigo: "PROVENIENCIA_DIVERGE", impede: "estado da revisão diferente do arquivo da posição", promove: true },
   { codigo: "FEN_IMPORTADA_SEM_REVISAO", impede: "análise começa numa FEN importada sem revisão", promove: true },

@@ -27,7 +27,8 @@ import type { AulaV2, ProblemaV2 } from "./modelo.ts";
  */
 
 /** Para onde a tela deve ir. `null` quando o problema não tem lugar navegável. */
-export type DestinoV2 = { capituloId?: string; analiseId?: string; nodeId?: string };
+/** `maisOpcoes`: o problema é dos dados da aula (nível, classe) e se corrige em "Mais opções". */
+export type DestinoV2 = { capituloId?: string; analiseId?: string; nodeId?: string; maisOpcoes?: true };
 
 export type ProblemaVisivelV2 = {
   problema: ProblemaV2;
@@ -174,6 +175,10 @@ export function descreverProblemaV2(aula: AulaV2, problema: ProblemaV2): Problem
       onde: capitulo ? `a partida do capítulo ${entreAspas(capitulo.titulo)}` : "uma análise desta aula",
       destino: capitulo ? { capituloId: capitulo.id, analiseId: capitulo.analiseId } : { analiseId: local.analiseId },
     };
+  }
+
+  if (local.campo?.startsWith("metadados.")) {
+    return { problema, onde: "os dados da aula, em Mais opções", destino: { maisOpcoes: true } };
   }
 
   return { problema, onde: "a aula", destino: null };

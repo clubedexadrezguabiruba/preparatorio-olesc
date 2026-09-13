@@ -1,4 +1,4 @@
-import { aprendeu, TRILHA, type ProgressoDaAula } from "../finais/trilha.ts";
+import { aprendeu, trilhaCompleta, type AulaDaTrilha, type ProgressoDaAula } from "../finais/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
 import {
@@ -76,6 +76,8 @@ export type ProgressoParaOMapa = {
   readonly aulasComPratica: ReadonlySet<string>;
   /** O degrau em que o aluno está, de `nivelDoAluno()`. */
   readonly nivelDoAluno: Nivel;
+  /** As aulas extras publicadas (§22): aparecem no nível delas, depois das do curso. */
+  readonly extras?: readonly AulaDaTrilha[];
 };
 
 export type ItemDoNivel = {
@@ -144,7 +146,7 @@ export function montarMapa(p: ProgressoParaOMapa): Map<Nivel, ModuloDoNivel[]> {
   // cabem em cinco níveis. Quem diz o que "aprendida" significa é
   // `aulasComPratica` — a coluna `formato`, que respondia isso antes, foi
   // apagada em 9/9/2026 junto com os três formatos.
-  for (const aula of TRILHA) {
+  for (const aula of trilhaCompleta(p.extras)) {
     const progresso = p.finais.get(aula.id);
     guardar(aula.nivel, "finais", {
       id: aula.id,

@@ -70,10 +70,14 @@ export const metadadosAulaV2Schema = z.strictObject({
    * de uma extra criada pela tela seria editar a trilha à mão — que é código.
    *
    * Opcional porque as aulas do curso continuam declarando o nível por onde
-   * sempre declararam: `N1-KPK` é nível 1, e duplicar essa informação no
-   * documento criaria duas fontes para a mesma resposta.
+   * sempre declararam: **a trilha** (`lib/finais/trilha.ts`). O prefixo do id não é o
+   * nível — `N1-KPK` é do nível **2** da trilha; o comentário antigo dizia "nível 1", e o
+   * formulário tratava o prefixo como nível (D7 da fatia 8). Quando uma aula do curso
+   * declara o campo, ele tem de bater com a trilha (`NIVEL_DIVERGE`).
+   *
+   * De 1 a 5, os níveis de `lib/curso/nivel.ts`: não existe nível 0.
    */
-  nivel: z.number().int().min(0).max(5).optional(),
+  nivel: z.number().int().min(1).max(5).optional(),
   estadoEditorial: z.enum(["rascunho", "publicado"]),
   estadoDaOrigem: z.enum(["rascunho", "publicado"]).optional(),
   fonteDidatica: z.string().min(1).optional(),

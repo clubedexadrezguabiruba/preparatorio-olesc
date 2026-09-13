@@ -66,14 +66,23 @@ export async function conferirAulaV2Acao(aula: string): Promise<ResultadoDoConfe
 /**
  * Quantos alunos têm progresso nesta aula — a parte do impacto que mora no banco.
  *
+ * **Os alunos distintos das duas tabelas** (D6 da fatia 8): `finais_progresso` é a escada da
+ * aula v1, `avaliacoes_progresso` a da v2, por revisão. Até a fatia 8 só a v1 era lida, e
+ * uma aula nascida no v2 (a extra) dizia "nenhum aluno" com aluno jogando.
+ *
  * `null` quando o banco não responde: o impacto do conteúdo continua valendo, e a tela diz
  * que a contagem faltou em vez de dizer "nenhum aluno".
  */
 async function alunosComProgresso(aula: string): Promise<number | null> {
   try {
     const { criarClienteAdmin } = await import("@/lib/supabase/admin");
-    const { count, error } = await criarClienteAdmin().from("finais_progresso").select("aluno", { count: "exact", head: true }).eq("aula", aula);
-    return error ? null : count ?? 0;
+    const admin = criarClienteAdmin();
+    const [v1, v2] = await Promise.all([
+      admin.from("finais_progresso").select("aluno").eq("aula", aula),
+      admin.from("avaliacoes_progresso").select("aluno").eq("aula", aula),
+    ]);
+    if (v1.error || v2.error) return null;
+    return new Set([...(v1.data ?? []), ...(v2.data ?? [])].map((linha) => (linha as { aluno: string }).aluno)).size;
   } catch {
     return null;
   }
@@ -170,7 +179,7 @@ export async function guardarSnapshotDeMigracaoV1Acao(aula: string, texto: strin
 
 export type CriacaoDeAulaV2 =
   | { ok: true; id: string }
-  | { ok: false; campo: "titulo" | "nivel" | "id" | "disco"; mensagem: string };
+  | { ok: false; campo: "titulo" | "nivel" | "classe" | "id" | "disco"; mensagem: string };
 
 /**
  * "Nova aula" — §5.2.

@@ -1,4 +1,4 @@
-import { aulaDaTrilha, type Classe } from "../finais/trilha.ts";
+import { aulaDaTrilha, type AulaDaTrilha, type Classe } from "../finais/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import type { ProgressoDoTema } from "../tatica/progresso.ts";
 import type { Tarefa } from "./tarefas.ts";
@@ -78,10 +78,12 @@ export function somarBlocos(
 export function somarFinais(
   dominadas: ReadonlySet<string>,
   classes: readonly Classe[],
+  /** As aulas extras publicadas (§22): contam na classe que declaram. */
+  extras: readonly AulaDaTrilha[] = [],
 ): number {
   let total = 0;
   for (const id of dominadas) {
-    const aula = aulaDaTrilha(id);
+    const aula = aulaDaTrilha(id, extras);
     if (aula && classes.includes(aula.classe)) total += 1;
   }
   return total;

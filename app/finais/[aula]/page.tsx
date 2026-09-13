@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { idsDeAula, lerPacoteDoAluno } from "@/lib/finais/conteudo";
+import { idsDeAula, lerPacoteDoAluno, aulasExtras } from "@/lib/finais/conteudo";
 import { aulaDaTrilha } from "@/lib/finais/trilha";
 import { AulaNoNavegador } from "./AulaNoNavegador";
 import { Leitura } from "./Leitura";
@@ -76,7 +76,7 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
    * Aula fora da trilha — um rascunho que o Doug abre para revisar — continua
    * sem o controle: o botão grava progresso, e rascunho não grava.
    */
-  const naTrilha = aulaDaTrilha(aula) !== undefined;
+  const naTrilha = aulaDaTrilha(aula, aulasExtras()) !== undefined;
   const deLeitura = naTrilha && pacote.lesson.stages.practice === undefined;
 
   return (

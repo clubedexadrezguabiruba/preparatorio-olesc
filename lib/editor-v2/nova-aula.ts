@@ -36,7 +36,11 @@ import { aulaIdV2Schema, type AulaV2 } from "./modelo.ts";
 export type PedidoDeNovaAulaV2 = {
   titulo: string;
   tipo: "curso" | "extra";
-  /** 0 a 5. Obrigatório nos dois casos: é ele que dá o prefixo ou o campo. */
+  /**
+   * Na aula do curso, a **série do id** (0 a 5): o `N<série>-` do identificador, que **não é o
+   * nível** — `N1-KPK` é do nível 2 da trilha (D7 da fatia 8). Na extra, o **nível** (1 a 5),
+   * que vai para `metadados.nivel` e é por onde a trilha a lê.
+   */
   nivel: number;
   orientacaoPadrao: "white" | "black";
   criterioDominio: "D1" | "D2" | "D3" | "D4";
@@ -45,7 +49,7 @@ export type PedidoDeNovaAulaV2 = {
 
 export type PreparoDeNovaAulaV2 =
   | { ok: true; aula: AulaV2 }
-  | { ok: false; campo: "titulo" | "nivel" | "id"; mensagem: string };
+  | { ok: false; campo: "titulo" | "nivel" | "classe" | "id"; mensagem: string };
 
 /**
  * `Peão de torre na sétima` vira `PEAO-DE-TORRE-NA-SETIMA`.
@@ -84,8 +88,15 @@ export function prepararNovaAula(pedido: PedidoDeNovaAulaV2, idsExistentes: Set<
   if (titulo === "") {
     return { ok: false, campo: "titulo", mensagem: "dê um título à aula — é por ele que você vai reconhecê-la na lista" };
   }
-  if (!Number.isInteger(pedido.nivel) || pedido.nivel < 0 || pedido.nivel > 5) {
-    return { ok: false, campo: "nivel", mensagem: "escolha um nível de 0 a 5" };
+  if (pedido.tipo === "extra") {
+    if (!Number.isInteger(pedido.nivel) || pedido.nivel < 1 || pedido.nivel > 5) {
+      return { ok: false, campo: "nivel", mensagem: "escolha o nível da aula extra, de 1 a 5 — é nele que ela vai contar" };
+    }
+    if (!pedido.classe || !["E", "D", "C", "B"].includes(pedido.classe)) {
+      return { ok: false, campo: "classe", mensagem: "escolha a classe da aula extra (E, D, C ou B) — é por ela que a lista de finais a mostra" };
+    }
+  } else if (!Number.isInteger(pedido.nivel) || pedido.nivel < 0 || pedido.nivel > 5) {
+    return { ok: false, campo: "nivel", mensagem: "escolha a série do identificador, de N0 a N5" };
   }
 
   const id = idDaNovaAula({ ...pedido, titulo });

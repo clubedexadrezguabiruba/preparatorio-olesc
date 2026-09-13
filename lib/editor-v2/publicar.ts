@@ -41,7 +41,8 @@ import { revisoesDaAulaV2 } from "./avaliacao.ts";
 import { problemasParaPublicarV2 } from "./conferencia.ts";
 import { lerPosicoesDoConteudoV2, podePublicarV2 } from "./gate.ts";
 import { hashCanonico } from "./hash.ts";
-import { impactoDaPublicacaoV2, type ImpactoDaPublicacaoV2 } from "./impacto-publicacao.ts";
+import { impactoDaPublicacaoV2, type CursoNoImpactoV2, type ImpactoDaPublicacaoV2 } from "./impacto-publicacao.ts";
+import { extrasPublicadas, publicadasEmDisco } from "../finais/trilha-em-disco.ts";
 import { aulaIdV2Schema } from "./modelo.ts";
 import { montarPacoteV2, posicoesDoPacoteV2, problemasDoPacoteV2, type PacoteV2 } from "./pacote.ts";
 import {
@@ -134,6 +135,14 @@ export function pacoteAtivoV2(id: string, raiz = process.cwd()): PacoteV2 | null
   return cru && !problemasDoPacoteV2(cru).length ? (cru as PacoteV2) : null;
 }
 
+/**
+ * O retrato do curso que o impacto usa: publicadas e extras **em disco agora**. Lido igual no
+ * preparo e no clique, para o hash do impacto só mudar se o curso mudou de verdade.
+ */
+function cursoEmDisco(raiz: string): CursoNoImpactoV2 {
+  return { publicadas: publicadasEmDisco(contentDe(raiz)), extras: extrasPublicadas(contentDe(raiz)) };
+}
+
 export type PreparoDaPublicacaoV2 =
   | { ok: false; motivo: string }
   | { ok: true; impacto: ImpactoDaPublicacaoV2; impactoHash: string; publicationId: string };
@@ -149,7 +158,7 @@ export async function prepararPublicacaoV2(id: string, raiz = process.cwd()): Pr
   const documento = lerDocumentoV2(id, raiz);
   if (!documento) return { ok: false, motivo: "a aula não tem documento v2 em disco" };
   const pacote = montarPacoteV2(documento.aula, lerPosicoesDoConteudoV2(raiz));
-  const impacto = impactoDaPublicacaoV2(pacoteAtivoV2(id, raiz), pacote);
+  const impacto = impactoDaPublicacaoV2(pacoteAtivoV2(id, raiz), pacote, cursoEmDisco(raiz));
   return { ok: true, impacto, impactoHash: hashCanonico(impacto), publicationId: pacote.publicationId };
 }
 
@@ -183,7 +192,7 @@ export async function publicarAulaV2(id: string, opcoes: OpcoesDaPublicacaoV2 = 
     const pacote = montarPacoteV2(documento.aula, positions);
     const ponteiroAnterior = lerPonteiroV2(contentDe(raiz), id);
     const ativo = pacoteAtivoV2(id, raiz);
-    if (impactoHash !== undefined && hashCanonico(impactoDaPublicacaoV2(ativo, pacote)) !== impactoHash) {
+    if (impactoHash !== undefined && hashCanonico(impactoDaPublicacaoV2(ativo, pacote, cursoEmDisco(raiz))) !== impactoHash) {
       return { ok: false, motivo: "o que a publicação faria mudou desde que o impacto foi mostrado — veja o impacto de novo" };
     }
 

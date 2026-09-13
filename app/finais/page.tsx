@@ -7,7 +7,7 @@ import { Bolinhas } from "@/components/Bolinhas";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { editorLigado } from "@/lib/editor/local";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
-import { aulasComPratica, aulasPublicadas, indiceDeAulas } from "@/lib/finais/conteudo";
+import { aulasComPratica, aulasExtras, aulasPublicadas, indiceDeAulas } from "@/lib/finais/conteudo";
 import { DEGRAU_APRENDIDA } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import {
@@ -20,6 +20,7 @@ import {
   estadoDaAula,
   proximaAula,
   TRILHA,
+  trilhaCompleta,
   type AulaDaTrilha,
   type EstadoDeAula,
   type ProgressoDaAula,
@@ -72,7 +73,10 @@ export default async function Finais() {
 
   const publicadas = aulasPublicadas();
   const comPratica = aulasComPratica();
-  const abertas = aulasAbertas(publicadas);
+  // As aulas extras publicadas (§22 do Editor v2) entram na classe e no nível que declaram.
+  const extras = aulasExtras();
+  const trilha = trilhaCompleta(extras);
+  const abertas = aulasAbertas(publicadas, extras);
   const idsAbertos = new Set(abertas.map((a) => a.id));
   const [progresso, cabecalho] = await Promise.all([
     progressoDeFinais(perfil.id),
@@ -81,7 +85,7 @@ export default async function Finais() {
   const feitas = aprendidasDaTrilha(abertas, progresso, comPratica);
   const proxima = proximaAula(abertas, progresso, comPratica);
 
-  const naTrilha = new Set(TRILHA.map((a) => a.id));
+  const naTrilha = new Set(trilha.map((a) => a.id));
   // O editor não existe em produção, e o link para ele também não. A conta é a
   // mesma que a página do editor faz para decidir se abre ou responde 404.
   const comEditor = perfil.papel === "professor" && editorLigado();
@@ -146,7 +150,7 @@ export default async function Finais() {
       {CLASSES.map((classe) => {
         // A classe inteira, aberta ou não: é o mapa do curso. A contagem ao
         // lado continua sobre as abertas, que é o que dá para fazer hoje.
-        const aulas = daClasse(TRILHA, classe);
+        const aulas = daClasse(trilha, classe);
         const abertasAqui = aulas.filter((a) => idsAbertos.has(a.id));
         const aprendidasAqui = abertasAqui.filter((a) => feitas.has(a.id)).length;
 
@@ -231,7 +235,8 @@ export default async function Finais() {
                     HTML inválido, e o leitor de tela anuncia um alvo só. */}
                 {comEditor ? (
                   <Link
-                    href={`/editor/finais/${aula.id}`}
+                    // A aula extra só existe no Editor v2: o editor v1 responde 404 para `EX-`.
+                    href={aula.id.startsWith("EX-") ? `/editor/v2/finais/${aula.id}` : `/editor/finais/${aula.id}`}
                     className="foco rotulo mt-1 inline-block px-4 text-tinta-fraca underline"
                   >
                     Editar
@@ -272,11 +277,14 @@ function Cartao({
             : "border-borda-forte text-tinta-fraca"
         }`}
       >
-        {estado === "aprendida" ? "✓" : aula.ordem}
+        {estado === "aprendida" ? "✓" : aula.extra ? "+" : aula.ordem}
       </span>
 
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <p className="truncate text-sm font-medium text-tinta">{aula.nome}</p>
+        <p className="truncate text-sm font-medium text-tinta">
+          {aula.nome}
+          {aula.extra ? <span className="ml-2 rounded-full border border-borda px-1.5 py-0.5 text-[0.65rem] font-medium text-tinta-media">extra · nível {aula.nivel}</span> : null}
+        </p>
         {/*
           **A linha de formato saiu daqui em 9/9/2026, com os formatos.** Ela
           dizia "Aula completa · objetivo, com ajuda e sem ajuda". Com um

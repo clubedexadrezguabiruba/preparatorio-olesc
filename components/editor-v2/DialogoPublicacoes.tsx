@@ -2,6 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { desativarV2Acao, publicacoesDaAulaV2Acao, reativarPublicacaoV2Acao } from "@/app/editor/v2/acoes";
+import type { ComandoV2 } from "@/lib/editor-v2/comandos";
+import type { MetadadosAulaV2 } from "@/lib/editor-v2/modelo";
+import { aulaDaTrilha, CLASSE, CLASSES } from "@/lib/finais/trilha";
 import { Dialogo } from "./Dialogo";
 
 type Publicacao = Awaited<ReturnType<typeof publicacoesDaAulaV2Acao>>[number];
@@ -13,7 +16,13 @@ type Publicacao = Awaited<ReturnType<typeof publicacoesDaAulaV2Acao>>[number];
  * Desativar o v2 devolve o aluno à aula v1. As duas ações pedem confirmação escrita na
  * própria linha, porque mudam o que o aluno recebe.
  */
-export function DialogoPublicacoes({ aulaId, aoFechar }: { aulaId: string; aoFechar: () => void }) {
+export function DialogoPublicacoes({ aulaId, metadados, aoEditarMetadados, aoFechar }: {
+  aulaId: string;
+  metadados?: MetadadosAulaV2;
+  /** Nível e classe entram no Desfazer como qualquer edição (`EDITAR_METADADOS`). */
+  aoEditarMetadados?: (comando: ComandoV2) => void;
+  aoFechar: () => void;
+}) {
   const [lista, setLista] = useState<Publicacao[] | null>(null);
   const [confirmando, setConfirmando] = useState<string | null>(null);
   const [recado, setRecado] = useState<string | null>(null);
@@ -41,12 +50,13 @@ export function DialogoPublicacoes({ aulaId, aoFechar }: { aulaId: string; aoFec
 
   return (
     <Dialogo
-      titulo="Publicações desta aula"
-      descricao="Cada publicação fica guardada. Reativar troca a que o aluno recebe; nada é apagado."
+      titulo="Mais opções"
+      descricao="Os dados da aula e as publicações guardadas. Reativar troca a que o aluno recebe; nada é apagado."
       largura="max-w-xl"
       aoFechar={aoFechar}
       rodape={<div className="flex justify-end"><button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Fechar</button></div>}
     >
+      {aoEditarMetadados ? <DadosDaAula aulaId={aulaId} metadados={metadados} aoEditar={aoEditarMetadados} /> : null}
       {!lista ? <p role="status" className="text-sm text-tinta-media">Lendo as publicações…</p> : null}
       {lista && !lista.length ? <p className="text-sm text-tinta-media">Esta aula ainda não foi publicada pelo Editor v2.</p> : null}
       {lista?.length ? (
@@ -82,5 +92,53 @@ export function DialogoPublicacoes({ aulaId, aoFechar }: { aulaId: string; aoFec
       ) : null}
       {recado ? <p role="status" className="text-sm text-tinta">{recado}</p> : null}
     </Dialogo>
+  );
+}
+
+/**
+ * Nível e classe da aula — §19.1 ("nível, classe…") e §22 (aula extra com nível explícito).
+ *
+ * Numa extra os dois são obrigatórios para publicar, e é daqui que a trilha os lê. Numa aula
+ * do curso quem decide o nível é a trilha: o campo mostra o nível dela, e declarar outro é o
+ * erro `NIVEL_DIVERGE` da conferência.
+ */
+function DadosDaAula({ aulaId, metadados, aoEditar }: { aulaId: string; metadados?: MetadadosAulaV2; aoEditar: (comando: ComandoV2) => void }) {
+  const extra = aulaId.startsWith("EX-");
+  const naTrilha = aulaDaTrilha(aulaId);
+  return (
+    <section aria-label="Dados da aula" className="flex flex-col gap-2 rounded-md border border-borda-fraca p-2">
+      <h3 className="text-sm font-semibold text-tinta">Dados da aula</h3>
+      <div className="flex flex-wrap gap-4">
+        <label className="flex flex-col gap-1 text-sm text-tinta">
+          Nível
+          <select
+            value={metadados?.nivel ?? ""}
+            onChange={(e) => aoEditar({ tipo: "EDITAR_METADADOS", campo: "nivel", valor: e.target.value === "" ? null : (Number(e.target.value) as 1 | 2 | 3 | 4 | 5) })}
+            className="foco w-fit rounded-md border border-borda bg-papel px-2 py-1.5"
+          >
+            <option value="">{extra ? "— escolha —" : naTrilha ? `o da trilha (${naTrilha.nivel})` : "sem nível"}</option>
+            {[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>Nível {n}</option>)}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1 text-sm text-tinta">
+          Classe
+          <select
+            value={metadados?.classe ?? ""}
+            onChange={(e) => aoEditar({ tipo: "EDITAR_METADADOS", campo: "classe", valor: e.target.value === "" ? null : (e.target.value as "E" | "D" | "C" | "B") })}
+            className="foco w-fit rounded-md border border-borda bg-papel px-2 py-1.5"
+          >
+            <option value="">— escolha —</option>
+            {CLASSES.map((c) => <option key={c} value={c}>{CLASSE[c].nome}</option>)}
+          </select>
+        </label>
+      </div>
+      <p className="text-xs text-tinta-fraca">
+        {extra
+          ? "Aula extra: com nível e classe, ela entra na trilha ao publicar e passa a contar para o fechamento daquele nível."
+          : naTrilha
+            ? `Esta aula é do nível ${naTrilha.nivel} pela trilha do curso. Deixe o nível como está: um nível diferente impede publicar.`
+            : "Esta aula não está na trilha do curso: publicada, não conta para nível nenhum."}
+      </p>
+    </section>
   );
 }

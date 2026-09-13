@@ -94,6 +94,8 @@ test("aulaDoOnde acha o id nos cinco formatos que o gate usa", () => {
   assert.equal(aulaDoOnde("N0-MATING-MATERIAL / guided"), "N0-MATING-MATERIAL");
   assert.equal(aulaDoOnde("N1-KPK / guided / n3"), "N1-KPK");
   assert.equal(aulaDoOnde("content/lessons/N0-LADDER.json"), "N0-LADDER");
+  // D8 (fatia 8): a aula extra também é aula.
+  assert.equal(aulaDoOnde("aula v2 EX-FIXTURE-V2 / pub-38e879bb30048748"), "EX-FIXTURE-V2");
   assert.equal(aulaDoOnde("posição pos-n1-kpk-dlv-1-3"), null);
   assert.equal(aulaDoOnde("argumentos"), null);
   assert.equal(aulaDoOnde("classe D"), null);

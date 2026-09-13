@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { exigirEditor } from "@/lib/editor/acesso";
 import { idsDeDocumentosV2, lerDocumentoV2 } from "@/lib/editor-v2/rascunhos";
-import { indiceDeAulas } from "@/lib/finais/conteudo";
+import { aulasExtras, indiceDeAulas } from "@/lib/finais/conteudo";
 import { aulaDaTrilha } from "@/lib/finais/trilha";
 
 /**
@@ -25,6 +25,7 @@ export const metadata = { title: "Editor" };
 export default async function IndiceDoEditor() {
   await exigirEditor();
   const aulas = indiceDeAulas();
+  const extras = aulasExtras();
 
   /*
    * ## As aulas que só existem no v2
@@ -41,7 +42,7 @@ export default async function IndiceDoEditor() {
     .flatMap((id) => {
       try {
         const documento = lerDocumentoV2(id);
-        return documento ? [{ id, titulo: documento.aula.titulo, capitulos: documento.aula.capitulos.length }] : [];
+        return documento ? [{ id, titulo: documento.aula.titulo, capitulos: documento.aula.capitulos.length, nivel: documento.aula.metadados?.nivel, classe: documento.aula.metadados?.classe }] : [];
       } catch {
         // Rascunho quebrado não pode derrubar o índice inteiro: ele some da
         // lista e continua no disco, para o professor recuperar pela URL.
@@ -88,7 +89,13 @@ export default async function IndiceDoEditor() {
                   <span className="flex min-w-0 flex-1 flex-col gap-1">
                     <span className="truncate text-sm font-medium text-tinta">{aula.titulo}</span>
                     <span className="text-xs text-tinta-fraca tabular-nums">
-                      {aula.id} · {aula.capitulos === 0 ? "sem capítulo ainda" : `${aula.capitulos} ${aula.capitulos === 1 ? "capítulo" : "capítulos"}`} · fora da trilha
+                      {aula.id} · {aula.capitulos === 0 ? "sem capítulo ainda" : `${aula.capitulos} ${aula.capitulos === 1 ? "capítulo" : "capítulos"}`}
+                      {/* §5.1: distinguir aula do curso, aula extra e repertório. */}
+                      {aula.id.startsWith("EX-")
+                        ? aula.nivel && aula.classe
+                          ? ` · aula extra · nível ${aula.nivel}, classe ${aula.classe} — entra na trilha ao publicar`
+                          : " · aula extra sem nível ou classe — fora da trilha"
+                        : " · fora da trilha"}
                     </span>
                   </span>
                   <span aria-hidden className="text-tinta-fraca">✎</span>
@@ -101,11 +108,13 @@ export default async function IndiceDoEditor() {
 
       <ul className="flex flex-col gap-2">
         {aulas.map((aula) => {
-          const naTrilha = aulaDaTrilha(aula.id);
+          const naTrilha = aulaDaTrilha(aula.id, extras);
+          // Aula extra só existe no Editor v2 (D9): o editor v1 responderia 404.
+          const soNoEditorV2 = aula.id.startsWith("EX-");
           return (
             <li key={aula.id} className="cartao-vazio flex items-stretch gap-1 p-1">
               <Link
-                href={`/editor/finais/${aula.id}`}
+                href={soNoEditorV2 ? `/editor/v2/finais/${aula.id}` : `/editor/finais/${aula.id}`}
                 className="foco flex min-w-0 flex-1 items-center gap-3 rounded-md px-3 py-2 transition-colors hover:bg-carta-toque"
               >
                 <span className="flex min-w-0 flex-1 flex-col gap-1">
@@ -113,7 +122,7 @@ export default async function IndiceDoEditor() {
                   <span className="text-xs text-tinta-fraca tabular-nums">
                     {aula.id} · {aula.etapas} {aula.etapas === 1 ? "etapa" : "etapas"}
                     {aula.status === "draft" ? " · rascunho" : " · publicada"}
-                    {naTrilha ? ` · nível ${naTrilha.nivel}` : " · fora da trilha"}
+                    {naTrilha ? ` · ${naTrilha.extra ? "aula extra · " : ""}nível ${naTrilha.nivel}` : soNoEditorV2 ? " · aula extra fora da trilha" : " · fora da trilha"}
                   </span>
                 </span>
                 <span aria-hidden className="text-tinta-fraca">

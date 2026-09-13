@@ -3831,6 +3831,73 @@ sessão do professor, e o login não precisou ser digitado.
 **Os sete portões:** tipos, lint, **1.211 testes**, build (com `ƒ /editor/repertorio` e
 `ƒ /editor/repertorio/[arquivo]`), conteúdo, **54/54 mutações** e repertório `--check`.
 
+### Parada 8E — aulas extras na trilha por dados, portão e impacto real
+
+- **Trilha (D10):** `AulaDaTrilha.extra`; `extrasDaTrilha` (só `EX-` com nível 1–5 e classe,
+  ordem a partir de 1000, por nível e id, sem colidir com as 49); `trilhaCompleta(extras)`;
+  `aulaDaTrilha(id, extras)` e `aulasAbertas(publicadas, extras)` com padrão vazio.
+  `lib/finais/trilha-em-disco.ts` (pasta injetável): `extrasPublicadas` e `publicadasEmDisco`;
+  `aulasExtras()` em `conteudo.ts`. `extras` atravessa `aulasDoNivel`, `fechamentoDoNivel`,
+  `proximoPasso`, `montarMapa`, `proximaAcao` e `somarFinais`; `estadoParaONivel` o preenche, e
+  com isso a prova de nível e a action que a encerra também contam a extra.
+- **Telas:** `/finais` mostra a extra na classe dela com a marca "extra · nível N"; `/painel`,
+  `/trilha`, `/professor` e `/professor/[aluno]` passam as extras; `/finais/[aula]` as conhece.
+- **Conferência:** `EXTRA_SEM_NIVEL` e `EXTRA_SEM_CLASSE` (erro), `NIVEL_DIVERGE` (erro: aula das
+  49 declarando nível diferente do da trilha) e `AULA_FORA_DA_TRILHA` (aviso — a `N0-FIXTURE-V2`
+  cai nele, e por isso é aviso). Problema de `metadados.*` ganhou destino "Mais opções": o botão
+  **Ir para o problema** abre a janela com os campos.
+- **Mais opções** do Editor v2 ganhou **Dados da aula** (nível e classe) pelo comando novo
+  `EDITAR_METADADOS` (entra no Desfazer; mesmo valor não entra).
+- **Impacto (D5):** `impactoDaPublicacaoV2(anterior, novo, curso)` diz `lugar` (curso, extra,
+  fora) e `fechamento` antes e depois pela própria `fechamentoDoNivel`; `publicar.ts` lê o retrato
+  do curso do disco no preparo e no clique, então o hash do impacto só muda se o curso mudou. As
+  frases: "Aula extra: entra na conta do nível 2: para fechar o nível, antes 1 aula de finais,
+  depois 2 aulas (o nível declara 4; publicadas no nível: 1 → 2)", "já conta…", "sai da conta do
+  nível X", "não está na trilha do curso", "não tem nível e classe declarados".
+- **Contagem de alunos (D6):** alunos distintos de `finais_progresso` ∪ `avaliacoes_progresso`.
+- **Formulário e modelo (D7):** aula do curso pede **série do identificador** (N0–N5), com o
+  aviso "não é o nível"; extra pede **Nível 1–5** e **Classe**, e `prepararNovaAula` recusa sem um
+  dos dois apontando o campo; `metadados.nivel` agora é `min(1)`; o comentário que dizia
+  "N1-KPK é nível 1" foi corrigido (é 2).
+- **D8:** `aulaDoOnde` e a busca da exceção no validador aceitam `EX-`. **E um defeito que não
+  estava no mapeamento:** na linha do validador, o `\b` da expressão era um **caractere de controle
+  literal** (backspace, 0x08) — a expressão nunca casava, e a exceção nunca era procurada pela aula
+  nomeada no `where`. Varridos todos os `.ts`/`.tsx`: era o único. `validate:content` continuou
+  verde com o conserto.
+- **D9:** `/editor` e a bancada de `/finais` levam `EX-` ao Editor v2, `/editor/finais/EX-…`
+  redireciona para lá, e o índice distingue "aula extra · nível N, classe C — entra na trilha ao
+  publicar" de "fora da trilha".
+- **Fixture:** `scripts/fixture-aula-v2.ts` gera as duas (`--extra` só a extra; `--check` confere
+  as duas) — `EX-FIXTURE-V2` é a N0-LADDER com nível 1 e classe E (`pub-55947670bbcd7bd0`); a
+  `N0-FIXTURE-V2` saiu byte a byte igual. **3 mutações** novas: extra sem nível, extra sem classe e
+  a N0-LADDER real declarando nível 3.
+
+```
+ANTES   (testes novos contra conferencia.ts, trilha.ts, nivel.ts e nova-aula.ts do commit 8D)
+        conferencia + nova-aula + trilha-extras: tests 28, pass 21, fail 7
+          ✖ toda regra da lista tem um estrago · ✖ EXTRA_SEM_NIVEL · ✖ EXTRA_SEM_CLASSE
+          ✖ NIVEL_DIVERGE · ✖ AULA_FORA_DA_TRILHA · ✖ a extra declara nível e classe
+          ✖ trilha-extras.test.ts (as funções não existiam: falha ao carregar)
+DEPOIS  conferencia 23/23 · nova-aula 9/9 · trilha-extras 5/5 · impacto-publicacao 5/5
+```
+
+Os de trilha e nível: extras válidas entram e as inválidas ficam fora; a extra publicada abre e
+soma na classe; **no nível 2, exigidas 1 → 2** com a extra (o nível 1 não muda); sem a extra o
+próximo passo do nível 2 é o repertório, com ela é a aula extra, e o mapa a lista; em disco a
+fixture é lida como extra e a trilha passa de **49 para 50**. Os de impacto: extra nova (1 → 2 e
+"passa a precisar de mais 1 aula"), republicação ("já conta"), mudança de nível, fora da trilha
+(fixture e extra sem nível), aula do curso já publicada em v1 ("já conta").
+
+**Um teste antigo mudou, e o motivo é o D7:** `rascunhos.test.ts` gravava uma extra com
+`nivel: 0`, que o modelo agora recusa; passou a nível 1. Nenhum documento real usa nível 0: "Nova
+aula" só escrevia nível em extra, e não há extra em `.editor/v2/` (o `N1-KPK.json` não foi aberto).
+
+**Número da parada:** mutações **54/54 → 57/57** vermelhas, com os dois controles verdes (a cópia
+intacta, agora com a `EX-FIXTURE-V2` instalada, passa); `trilhaCompleta` **49 → 50** com a fixture.
+
+**Os sete portões:** tipos, lint, **1.226 testes**, build, conteúdo (38 do cache, 0 pela rede),
+**57/57 mutações** e repertório `--check`.
+
 ---
 
 ## Como ligar o editor

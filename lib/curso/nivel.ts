@@ -1,4 +1,4 @@
-import { aprendeu, AULA_ZERADA, TRILHA, type ProgressoDaAula } from "../finais/trilha.ts";
+import { aprendeu, AULA_ZERADA, trilhaCompleta, type AulaDaTrilha, type ProgressoDaAula } from "../finais/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { etapaAtual, type Feitos } from "../tatica/serie.ts";
 
@@ -157,9 +157,14 @@ export function temasDoNivel(n: Nivel): readonly string[] {
   return BLOCOS.filter((b) => b.nivel === n).flatMap((b) => b.temas.map((t) => t.tag));
 }
 
-/** As aulas de finais do nível, na ordem da trilha (que é ordem de pré-requisito). */
-export function aulasDoNivel(n: Nivel) {
-  return TRILHA.filter((a) => a.nivel === n);
+/**
+ * As aulas de finais do nível, na ordem da trilha (que é ordem de pré-requisito).
+ *
+ * `extras`: as aulas extras publicadas (§22). Elas contam no nível que declaram, depois das
+ * aulas do curso. Padrão vazio: quem não passa continua respondendo pelas 49.
+ */
+export function aulasDoNivel(n: Nivel, extras: readonly AulaDaTrilha[] = []) {
+  return trilhaCompleta(extras).filter((a) => a.nivel === n);
 }
 
 /**
@@ -253,6 +258,8 @@ export type ProgressoParaONivel = {
   readonly linhasAprendidas: number;
   /** `baseCompleto()`, que é o requisito do nível 5 no lugar do número 20. */
   readonly baseCompleto: boolean;
+  /** As aulas extras publicadas (§22), que contam no nível delas. Ausente = nenhuma. */
+  readonly extras?: readonly AulaDaTrilha[];
 };
 
 export type FechamentoDoNivel = {
@@ -306,7 +313,7 @@ export function fechamentoDoNivel(n: Nivel, p: ProgressoParaONivel): FechamentoD
   const temas = temasDoNivel(n);
   const taticaFeitos = temas.filter((tag) => temaFechado(p.temas.get(tag))).length;
 
-  const aulas = aulasDoNivel(n);
+  const aulas = aulasDoNivel(n, p.extras);
   const publicadas = aulas.filter((a) => p.publicadas.has(a.id)).length;
   const declaradas = NIVEL[n].aulasParaFechar;
   const exigidas = Math.min(declaradas, publicadas);
@@ -418,7 +425,7 @@ export function proximoPasso(
   if (fecho.finais.feitos < fecho.finais.exigidas) {
     // A primeira publicada que ele ainda não aprendeu, na ordem da trilha —
     // que é ordem de pré-requisito, e não a ordem em que ele abriu as abas.
-    const aula = aulasDoNivel(doAluno).find(
+    const aula = aulasDoNivel(doAluno, p.extras).find(
       (a) => p.publicadas.has(a.id) && !aprendeu(p.comPratica.has(a.id), p.finais.get(a.id) ?? AULA_ZERADA),
     );
     if (aula) return { tipo: "aula", id: aula.id, nome: aula.nome, href: `/finais/${aula.id}` };

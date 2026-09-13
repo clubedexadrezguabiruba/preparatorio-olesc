@@ -148,13 +148,28 @@ export type ComandoV2 =
    * antes de `Result`, que é onde o arquivo do repertório a escreveria. Valor vazio não
    * apaga: uma tag obrigatória sumindo por um campo esvaziado seria perda sem aviso.
    */
-  | { tipo: "EDITAR_TAG_PGN"; analiseId: string; chave: string; valor: string };
+  | { tipo: "EDITAR_TAG_PGN"; analiseId: string; chave: string; valor: string }
+  /**
+   * Nível e classe da aula, em Mais opções (fatia 8, §19.1 e §22). `null` tira o campo — é
+   * como uma aula do curso deixa a trilha decidir o nível.
+   */
+  | { tipo: "EDITAR_METADADOS"; campo: "nivel"; valor: 1 | 2 | 3 | 4 | 5 | null }
+  | { tipo: "EDITAR_METADADOS"; campo: "classe"; valor: "E" | "D" | "C" | "B" | null };
 
 function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<string, Position>): AulaV2 {
   if (comando.tipo === "CONVERTER_V1") {
     if (aula.origem?.formato !== "lesson-v1") throw new Error("esta aula não veio do formato antigo — não há o que converter");
     if (aula.origem.convertidaEm) return aula;
     return { ...aula, origem: { ...aula.origem, convertidaEm: comando.convertidaEm } };
+  }
+  if (comando.tipo === "EDITAR_METADADOS") {
+    const atuais = aula.metadados ?? { orientacaoPadrao: "white" as const, criterioDominio: "D1" as const, estadoEditorial: "rascunho" as const };
+    if ((atuais[comando.campo] ?? null) === comando.valor) return aula;
+    const metadados = { ...atuais };
+    if (comando.valor === null) delete metadados[comando.campo];
+    else if (comando.campo === "nivel") metadados.nivel = comando.valor;
+    else metadados.classe = comando.valor;
+    return { ...aula, metadados };
   }
   if (comando.tipo === "EDITAR_TAG_PGN") {
     const analise = aula.analises.find((item) => item.id === comando.analiseId);

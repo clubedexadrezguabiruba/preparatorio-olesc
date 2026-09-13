@@ -4,6 +4,8 @@ import path from "node:path";
 import { aulaDoAlunoV2, type AulaDoAlunoV2 } from "../editor-v2/fluxo-do-aluno.ts";
 import type { PacoteV2 } from "../editor-v2/pacote.ts";
 import { idsDeAulasV2Ativas, pacoteAtivoDoAluno } from "./conteudo-v2.ts";
+import { extrasPublicadas } from "./trilha-em-disco.ts";
+import type { AulaDaTrilha } from "./trilha.ts";
 import { referencedPositionIds } from "../lesson/refs.ts";
 import { lessonSchema, positionSchema, type Lesson, type Position } from "../lesson/schema.ts";
 
@@ -210,6 +212,15 @@ export function aulasPublicadas(): Set<string> {
  * prática? —, e a resposta mora no arquivo da aula, e não numa tabela ao lado
  * que pode divergir dele.
  */
+/**
+ * As aulas extras publicadas (§22 do Editor v2), na forma da trilha: `EX-…` com publicação
+ * v2 ativa, nível e classe. Quem pergunta pela trilha passa isto como `extras` —
+ * `aulasAbertas`, `fechamentoDoNivel`, o mapa e o painel —, e a extra conta no nível dela.
+ */
+export function aulasExtras(): AulaDaTrilha[] {
+  return extrasPublicadas();
+}
+
 export function aulasComPratica(): Set<string> {
   return new Set(indiceDeAulas().filter((a) => a.temPratica).map((a) => a.id));
 }

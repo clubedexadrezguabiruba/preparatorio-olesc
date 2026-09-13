@@ -51,16 +51,23 @@ test("a aula nova nasce vazia e é um documento v2 válido", () => {
 });
 
 test("a aula extra declara o nível no documento, porque o id dela não o traz", () => {
-  const preparo = prepararNovaAula({ ...pedido, tipo: "extra", nivel: 3 }, new Set());
+  const preparo = prepararNovaAula({ ...pedido, tipo: "extra", nivel: 3, classe: "C" }, new Set());
   assert.equal(preparo.ok, true);
   if (!preparo.ok) return;
   assert.equal(preparo.aula.id, "EX-PEAO-DE-TORRE-NA-SETIMA");
   assert.equal(preparo.aula.metadados?.nivel, 3);
+  assert.equal(preparo.aula.metadados?.classe, "C");
+
+  // D7 (fatia 8): extra sem classe, ou com nível 0, é recusada apontando o campo.
+  const semClasse = prepararNovaAula({ ...pedido, tipo: "extra", nivel: 3 }, new Set());
+  assert.equal(semClasse.ok ? null : semClasse.campo, "classe");
+  const nivelZero = prepararNovaAula({ ...pedido, tipo: "extra", nivel: 0, classe: "E" }, new Set());
+  assert.equal(nivelZero.ok ? null : nivelZero.campo, "nivel");
 
   const doCurso = prepararNovaAula(pedido, new Set());
   assert.equal(doCurso.ok, true);
   if (!doCurso.ok) return;
-  assert.equal(doCurso.aula.metadados?.nivel, undefined, "o N2 do id já diz o nível: duas fontes seriam duas respostas");
+  assert.equal(doCurso.aula.metadados?.nivel, undefined, "a série N2 do id não é o nível: o nível da aula do curso é o da trilha");
 });
 
 test("título vazio, nível fora da escala e id repetido são recusados apontando o campo", () => {
@@ -169,4 +176,17 @@ test("o desenho sem comentário também é listado, e diz que o que mudou foi o 
   aula.analises[0].nos["no-a-1"].desenhos = { arrows: [{ de: "e2", para: "e4", cor: "verde" }] };
   const lista = revisoesPendentesV2(aula);
   assert.match(lista[1].trecho, /desenhos desta posição/);
+});
+
+test("Mais opções: EDITAR_METADADOS põe e tira nível e classe, e gesto sem efeito não entra no histórico", async () => {
+  const { executarComando } = await import("./comandos.ts");
+  const preparo = prepararNovaAula({ ...pedido, tipo: "extra", nivel: 2, classe: "D" }, new Set());
+  assert.ok(preparo.ok);
+  if (!preparo.ok) return;
+  const semNivel = executarComando(preparo.aula, { tipo: "EDITAR_METADADOS", campo: "nivel", valor: null }, {});
+  assert.equal(semNivel.metadados?.nivel, undefined);
+  assert.equal(semNivel.metadados?.classe, "D", "tirar o nível não mexe na classe");
+  const deNovo = executarComando(semNivel, { tipo: "EDITAR_METADADOS", campo: "nivel", valor: 4 }, {});
+  assert.equal(deNovo.metadados?.nivel, 4);
+  assert.equal(executarComando(deNovo, { tipo: "EDITAR_METADADOS", campo: "nivel", valor: 4 }, {}), deNovo, "mesmo valor devolve a mesma aula");
 });

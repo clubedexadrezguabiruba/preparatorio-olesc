@@ -1,5 +1,5 @@
 import "server-only";
-import { aulasComPratica, aulasPublicadas } from "@/lib/finais/conteudo";
+import { aulasComPratica, aulasExtras, aulasPublicadas } from "@/lib/finais/conteudo";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import { lerIndice } from "@/lib/repertorio/banco";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
@@ -50,5 +50,6 @@ export async function estadoParaONivel(aluno: string): Promise<ProgressoParaONiv
     comPratica: aulasComPratica(),
     linhasAprendidas,
     baseCompleto: destravado,
+    extras: aulasExtras(),
   };
 }

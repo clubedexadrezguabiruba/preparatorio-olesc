@@ -119,7 +119,10 @@ function fail(code: string, where: string, message: string) {
      * referencia. Se duas aulas usarem a mesma posição, cada uma responde pela
      * sua, e basta uma tê-la perdoado.
      */
-    const nomeada = /N[0-9]+-[A-Z0-9-]+/.exec(where)?.[0];
+    // `EX-` é aula também (§22): sem ele, o problema de uma extra não achava a dona (D8). E o
+    // `\b` desta linha era um caractere de controle literal (backspace, 0x08) até a fatia 8: a
+    // expressão nunca casava, e a exceção nunca era procurada pela aula nomeada.
+    const nomeada = /\b(?:N[0-9]+|EX)-[A-Z0-9-]+/.exec(where)?.[0];
     const candidatas = nomeada
       ? lessons.filter((l) => l.lesson.id === nomeada)
       : alvo?.startsWith("pos-")

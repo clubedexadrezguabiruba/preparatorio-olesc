@@ -628,6 +628,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
 
   /** Leva a tela até o lugar do problema. É o que o botão da lista faz. */
   const irAoProblema = useCallback((destino: DestinoV2) => {
+    // Nível e classe moram em "Mais opções" (fatia 8): o problema abre a janela certa.
+    if (destino.maisOpcoes) { setVendoPublicacoes(true); return; }
     if (destino.capituloId) setCapituloId(destino.capituloId);
     if (destino.nodeId) setNodeId(destino.nodeId);
   }, []);
@@ -1005,7 +1007,12 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         />
       ) : null}
       {vendoPublicacoes ? (
-        <DialogoPublicacoes aulaId={aulaId} aoFechar={() => { setVendoPublicacoes(false); queueMicrotask(() => botaoMaisOpcoes.current?.focus()); }} />
+        <DialogoPublicacoes
+          aulaId={aulaId}
+          metadados={historico.presente.metadados}
+          aoEditarMetadados={aplicar}
+          aoFechar={() => { setVendoPublicacoes(false); queueMicrotask(() => botaoMaisOpcoes.current?.focus()); }}
+        />
       ) : null}
       {conferencia ? (
         <PainelDeProblemas

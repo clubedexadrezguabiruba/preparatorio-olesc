@@ -16,7 +16,7 @@ import { fechamentoDoNivel, nivelDoAluno, temaFechado } from "@/lib/curso/nivel"
 import { selos } from "@/lib/curso/selos";
 import { minutosPorDia, partidasDeclaradas } from "@/lib/curso/minutos";
 import { nivelConquistado } from "@/lib/curso/progresso";
-import { aulasComPratica, aulasPublicadas } from "@/lib/finais/conteudo";
+import { aulasComPratica, aulasExtras, aulasPublicadas } from "@/lib/finais/conteudo";
 import { aulasVencidas } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import { aprendidasDaTrilha, aulasAbertas } from "@/lib/finais/trilha";
@@ -135,7 +135,9 @@ export default async function Painel() {
   // duas contas são as mesmas de `/finais` — a tela lá e o cartão aqui não
   // podem discordar, e é por isso que nenhuma das duas as refaz.
   const publicadas = aulasPublicadas();
-  const aulasDeFinais = aulasAbertas(publicadas);
+  // As aulas extras publicadas (§22 do Editor v2) entram na trilha por dados.
+  const extras = aulasExtras();
+  const aulasDeFinais = aulasAbertas(publicadas, extras);
   // Quem tem a etapa 4 decide o que "aprendida" quer dizer, desde que os três
   // formatos saíram em 9/9/2026.
   const comPratica = aulasComPratica();
@@ -189,6 +191,7 @@ export default async function Painel() {
     comPratica,
     linhasAprendidas,
     baseCompleto: avancadoLiberado,
+    extras,
   };
   const fechamento = fechamentoDoNivel(nivel, paraONivel);
   const acao = proximaAcao({

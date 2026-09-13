@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Editor } from "@/components/editor/Editor";
 import { exigirEditor } from "@/lib/editor/acesso";
 import { podePublicar, ultimaConferencia } from "@/lib/editor/gate";
@@ -37,6 +37,8 @@ export default async function PaginaDoEditor({ params }: { params: Promise<{ aul
   const { aula } = await params;
   // O id vem da URL, e URL é entrada de fora. A camada de disco confere de
   // novo; conferir aqui é o que troca uma exceção por um 404 honesto.
+  // Aula extra (`EX-…`) só existe no Editor v2: mandar para lá é melhor do que um 404 (D9).
+  if (/^EX-[A-Z0-9-]+$/.test(aula)) redirect(`/editor/v2/finais/${aula}`);
   if (!lessonIdSchema.safeParse(aula).success) notFound();
 
   // Abrir cria o rascunho a partir da publicada, por cópia de bytes, na

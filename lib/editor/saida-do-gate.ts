@@ -63,7 +63,9 @@ export type EventoDoGate = Problema | Progresso | Resumo | Fim;
  * minúsculos (`pos-…`), então não há como confundir os dois.
  */
 export function aulaDoOnde(onde: string): string | null {
-  const achado = /\bN[0-9]+-[A-Z0-9-]+/.exec(onde);
+  // `EX-…` é o namespace das aulas extras (§22). Até a fatia 8 o padrão só aceitava `N…`,
+  // e um problema de extra perdia a aula dona (D8).
+  const achado = /\b(?:N[0-9]+|EX)-[A-Z0-9-]+/.exec(onde);
   if (!achado) return null;
   // Um hífen no fim viria de um `where` como "N1-KPK - alguma coisa"; o id não
   // termina em hífen.

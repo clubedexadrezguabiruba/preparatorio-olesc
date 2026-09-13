@@ -57,7 +57,7 @@ test("§19.3: a N0-LADDER conferida, sem estrago, pode publicar", async () => {
   assert.equal(aula.treinos[0].certificacao?.resultado, "win");
 });
 
-type Estrago = { codigo: string; estragar: (aula: AulaV2) => ContextoDePublicacaoV2 | void };
+type Estrago = { codigo: string; aviso?: true; estragar: (aula: AulaV2) => ContextoDePublicacaoV2 | void };
 
 /**
  * A primeira pergunta que tem um lance legal que joga o resultado fora, e esse lance.
@@ -78,6 +78,11 @@ function lanceQuePerde(aula: AulaV2): { questao: number; lance: string } {
 }
 
 const ESTRAGOS: Estrago[] = [
+  // Fatia 8, §22: aula extra e trilha. A N0-LADDER conferida vira extra trocando o id.
+  { codigo: "EXTRA_SEM_NIVEL", estragar: (a) => { a.id = "EX-LADDER-TESTE"; a.metadados = { ...a.metadados!, classe: "E" }; delete a.metadados.nivel; } },
+  { codigo: "EXTRA_SEM_CLASSE", estragar: (a) => { a.id = "EX-LADDER-TESTE"; a.metadados = { ...a.metadados!, nivel: 1 }; delete a.metadados.classe; } },
+  { codigo: "NIVEL_DIVERGE", estragar: (a) => { a.metadados = { ...a.metadados!, nivel: 3 }; } },
+  { codigo: "AULA_FORA_DA_TRILHA", aviso: true, estragar: (a) => { a.id = "N0-FORA-DA-TRILHA"; } },
   { codigo: "PROVENIENCIA_CADUCA", estragar: (a) => { a.proveniencia[0].conteudoHash = "0".repeat(64); } },
   { codigo: "PROVENIENCIA_DIVERGE", estragar: (a) => { a.proveniencia[0].estado = "candidate"; } },
   { codigo: "FEN_IMPORTADA_SEM_REVISAO", estragar: (a) => { a.analises[0].inicio = { tipo: "fen", fen: position.fen }; } },
@@ -127,10 +132,17 @@ test("§19: toda regra da lista tem um estrago que a prova", () => {
   assert.deepEqual(ESTRAGOS.map((e) => e.codigo).sort(), REGRAS_PUBLICACAO_V2.map((r) => r.codigo).sort());
 });
 
-for (const { codigo, estragar } of ESTRAGOS) {
-  test(`§19: ${codigo} impede publicar, e desligada deixa o estrago passar`, async () => {
+for (const { codigo, estragar, aviso } of ESTRAGOS) {
+  test(`§19: ${codigo} ${aviso ? "avisa" : "impede publicar"}, e desligada deixa o estrago passar`, async () => {
     const aula = await aulaConferida();
     const ctx = estragar(aula) ?? contexto();
+    if (aviso) {
+      const codigos = (desligadas: string[] = []) => problemasParaPublicarV2(aula, ctx, new Set(desligadas)).map((p) => `${p.severidade}:${p.codigo}`);
+      assert.ok(codigos().includes(`aviso:${codigo}`), codigos().join(", "));
+      assert.ok(!codigos([codigo]).some((c) => c.endsWith(codigo)));
+      assert.ok(!erros(aula, ctx).includes(codigo), "é aviso: não impede publicar");
+      return;
+    }
     assert.ok(erros(aula, ctx).includes(codigo), `ligada: ${erros(aula, ctx).join(", ")}`);
     assert.ok(!erros(aula, ctx, [codigo]).includes(codigo), "desligada, o código não pode aparecer como erro");
   });

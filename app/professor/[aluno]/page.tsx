@@ -14,7 +14,7 @@ import {
   serieDeDias,
 } from "@/lib/curso/hoje";
 import { minutosPorDia, partidasDeclaradas } from "@/lib/curso/minutos";
-import { aulasComPratica, aulasPublicadas } from "@/lib/finais/conteudo";
+import { aulasComPratica, aulasExtras, aulasPublicadas } from "@/lib/finais/conteudo";
 import { DEGRAUS_EM_DIAS, diasAteRevisar } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import {
@@ -88,7 +88,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   ]);
 
   const nivel = nivelDoAluno(conquistado);
-  const abertas = aulasAbertas(aulasPublicadas());
+  const abertas = aulasAbertas(aulasPublicadas(), aulasExtras());
   const comPratica = aulasComPratica();
   // As partidas entram na série: sem elas o gráfico do professor e a barra do
   // aluno somariam totais diferentes para o mesmo dia — e o professor diria o
