@@ -3985,8 +3985,8 @@ prática ainda não se cria pela tela (§17.1).
   (8B), mas o diff da Alapin mostrou 7 trechos em que o autor quebrava a linha antes de um número de
   lance e o escritor junta. Preservar o espaço original entre tokens intocados é o próximo passo do
   emendador.
-- **"N registros de N alunos" conta contas, não só alunos**: a `professorteste` entrou na conta do
-  item 5. Filtrar por papel é decisão do Doug.
+- ~~"N registros de N alunos" conta contas, não só alunos~~ — **resolvido no mesmo dia, por decisão
+  do Doug**: ver "só contas de aluno no impacto", logo abaixo.
 - Desenho do repertório **na tela do aluno** (`LinhaSchema.desenhos`), e o botão direito no editor
   do repertório (o escritor já preserva `%cal`/`%csl`).
 - Recuperação no IndexedDB para o repertório (há rascunho em disco com `baseHash`).
@@ -4001,6 +4001,24 @@ prática ainda não se cria pela tela (§17.1).
   exceção a `CERTIFICACAO_REFUTADA`, várias práticas, `db:finais` v1 quebrado).
 - **Push, merge e deploy**: só quando o Doug pedir. O repertório e a trilha mudaram em `content/`,
   `public/` e no código; nada disso chega ao site sem commit, push e deploy.
+
+### Só contas de aluno no impacto — 13/9/2026, decisão do Doug
+
+O item 5 do roteiro mostrou "2 registros de 2 alunos", e um dos dois era a conta `professorteste`.
+O Doug decidiu: **o impacto conta só alunos**.
+
+- `lib/curso/so-alunos.ts` (puro): `contarSoAlunos(linhas, papelPorConta)` conta só as linhas cuja
+  conta tem `perfis.papel = 'aluno'`; conta sem papel conhecido não entra.
+- Usado nas duas contagens do servidor: `contarProgressoQueMorre` (Aplicar no repertório) e
+  `alunosComProgresso` (Publicar aula v2), com uma consulta a `perfis` pelas contas das linhas.
+
+```
+ANTES   so-alunos.test.ts: módulo ausente, o arquivo falha ao carregar (tests 1, fail 1)
+DEPOIS  tests 3, pass 3
+```
+
+**No banco de verdade**, na linha `brancas-alapin-5eb647e6` (onde, depois de apagada a conta do aluno
+de teste, só resta a `professorteste`): **1 de 1 → 0 registros de 0 alunos**.
 
 ### O próximo ponto exato
 

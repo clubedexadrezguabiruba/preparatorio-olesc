@@ -2,6 +2,7 @@
 
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { contarSoAlunos, contasDasLinhas } from "@/lib/curso/so-alunos";
 import { exigirEditor } from "@/lib/editor/acesso";
 import { guardarSnapshotAntesDeMigrarV1, prepararMigracaoV1, type PreparoDaMigracaoV1 } from "@/lib/editor-v2/migrar-v1";
 import { adaptarLessonV1 } from "@/lib/editor-v2/adaptar-v1";
@@ -66,7 +67,8 @@ export async function conferirAulaV2Acao(aula: string): Promise<ResultadoDoConfe
 /**
  * Quantos alunos têm progresso nesta aula — a parte do impacto que mora no banco.
  *
- * **Os alunos distintos das duas tabelas** (D6 da fatia 8): `finais_progresso` é a escada da
+ * **Os alunos distintos das duas tabelas** (D6 da fatia 8), e **só contas de aluno** (decisão do
+ * Doug, 13/9: a conta de professor que testou a aula não entra): `finais_progresso` é a escada da
  * aula v1, `avaliacoes_progresso` a da v2, por revisão. Até a fatia 8 só a v1 era lida, e
  * uma aula nascida no v2 (a extra) dizia "nenhum aluno" com aluno jogando.
  *
@@ -82,7 +84,12 @@ async function alunosComProgresso(aula: string): Promise<number | null> {
       admin.from("avaliacoes_progresso").select("aluno").eq("aula", aula),
     ]);
     if (v1.error || v2.error) return null;
-    return new Set([...(v1.data ?? []), ...(v2.data ?? [])].map((linha) => (linha as { aluno: string }).aluno)).size;
+    const linhas = [...(v1.data ?? []), ...(v2.data ?? [])] as Array<{ aluno: string }>;
+    if (linhas.length === 0) return 0;
+    const perfis = await admin.from("perfis").select("id, papel").in("id", contasDasLinhas(linhas));
+    if (perfis.error) return null;
+    const papeis = new Map((perfis.data ?? []).map((p) => [p.id as string, p.papel as string]));
+    return contarSoAlunos(linhas, papeis).alunos;
   } catch {
     return null;
   }
