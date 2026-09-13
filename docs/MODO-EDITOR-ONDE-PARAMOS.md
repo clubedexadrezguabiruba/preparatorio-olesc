@@ -11,7 +11,7 @@
 > ler plano + especificação antes deste diário; este arquivo diz o estado, não redefine
 > o produto.
 
-**Data:** 2026-09-12. **Branch:** `modo-editor`, à frente do `origin` (o push é decisão
+**Data:** 2026-09-13. **Branch:** `modo-editor`, à frente do `origin` (o push é decisão
 do Doug, não consequência de commitar). A menção
 histórica a “Bloco 2 suspenso” nas seções antigas explica a interrupção que levou à
 nova arquitetura; não rege mais o trabalho.
@@ -94,20 +94,25 @@ cada linha aponta a seção que conta a história inteira.
   variante da análise. **Roteiro de 14 itens aprovado na tela pelo Playwright em 12/9**,
   1.052 testes e 42/42 mutações. Ver "fatia 6 — o defensor jogável".
 
+- **Lista de lances coberta em 1366×768, consertada em 13/9 (§7, §25)** — o bloco de
+  edição ficava por cima da lista e roubava o clique do `•••`. Agora ele tem teto de
+  metade da coluna e rola por dentro; a lista rola na própria coluna e o clique do mouse
+  abre o menu. Ver "a lista de lances deixa de ficar coberta".
+
 **Aberto, na ordem:**
 
 1. **6D, propriedade** (§16.5) — derivado/personalizado/independente com diff e refazer. A
    fatia 6 permanece aberta.
 2. **Feedback que descreve a defesa** — com duas defesas, o texto da resposta que narra
    a defesa mente numa das tentativas. Decisão do Doug pendente (ver a seção da 6C).
-3. **Lista de lances coberta em 1366×768 de CSS** — o bloco de edição fica por cima da
-   lista; registrado como tarefa separada.
-4. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
+3. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
    **importar por URL do Lichess** (§13.2), **introdução e quadros** (§7.1) e
    **aulas extras na trilha** (§22) continuam fora, sem redução de escopo.
 
-**Dívida conhecida e não paga:** a lista de lances mostra ~10 lances por vez em
-1366×768; se incomodar, o espaço sai do bloco de edição abaixo dela.
+**Dívida conhecida e não paga:** em 1366×768 de CSS de verdade a lista mostra **5
+lances inteiros** por vez (169 px), e o bloco de edição rola por dentro. Se incomodar, o
+ajuste é o teto de 50% do bloco. Em 375 px a página tem **rolagem para o lado** (600 px
+de conteúdo), anterior a este conserto e não investigada.
 
 **Isto não declara o editor pronto.** O roteiro de §27 tem as fatias 1 a 5 fechadas no
 código e no teste humano. A fatia 6 tem três paradas completas (6A, 6B e 6C) e a 6D
@@ -2861,7 +2866,8 @@ foram tiradas a 2049×1152.
 - **A lista de lances fica coberta em 1366×768 de CSS de verdade.** O bloco de edição
   (y 184→756) fica por cima da lista, que não rola por dentro; o clique no `•••` da
   posição inicial caiu no botão "??". O teclado (foco e Enter) funcionou. Não é código
-  desta parada; ficou registrada como tarefa separada, com as medidas.
+  desta parada; ficou registrada como tarefa separada, com as medidas. **Consertado em
+  13/9** — ver "a lista de lances deixa de ficar coberta".
 
 ### O que esta parada NÃO cobre
 
@@ -2895,6 +2901,75 @@ antes e depois: `4be602ca…b822`.
 
 Parada 6D — propriedade (§16.5). Antes dela, o Doug decide o que fazer com o feedback
 que descreve a defesa.
+
+---
+
+## Continuação — a lista de lances deixa de ficar coberta (13/9/2026)
+
+Fecha o segundo achado da 6C (§7, §11.3 e §25: "alvos não se sobrepõem").
+
+### Reproduzido na medida certa
+
+Playwright com `setViewportSize(911, 512)`, conferido `innerWidth` 1366 e `innerHeight`
+768, na N0-LADDER, logado:
+
+| O quê | Antes | Depois |
+|---|---|---|
+| Coluna da direita | y 155→752, 597 px | igual |
+| Caixa da lista (título, ajuda, posição inicial e `<ol>`) | **0 px** | 269 px |
+| `<ol>` dos lances | **0 px** visíveis de 304 | **169 px** visíveis de 304; rola até 133 px, a página não se move |
+| Bloco de edição | y 184→**756**, 572 px, passa do fim da coluna | y 453→739, 284 px, rola por dentro (570 px de conteúdo) |
+| Sobreposição lista × bloco | o bloco pintado por cima | **0 px** |
+| `elementFromPoint` no centro do `•••` (x1037 y240) | botão **"??"** | o próprio **`•••`** |
+| Clique do mouse no `•••` | caía no "??" | **menu aberto**, 11 ações, `aria-expanded="true"` |
+| Lances inteiros visíveis / clicáveis no centro | 0 / 0 | **5 / 5** |
+| Tabuleiro | — | 558 px, y 168→727 |
+| Página | 768×1366, sem rolagem | igual |
+
+Console: 0 erros e 0 avisos.
+
+### A causa, uma só
+
+`components/editor-v2/EditorV2.tsx:1219` (antes do conserto): o bloco de edição é um item
+flex da coluna, sem teto e sem rolagem. Um item flex tem `min-height: auto` e **não
+encolhe abaixo do próprio conteúdo**, então exigia os 570 px dele. A caixa da lista
+(linha 1191, `flex-1 min-h-0`) fica com o que sobra, e sobrava zero. O conteúdo dela
+transbordava a caixa de altura zero e era pintado **por baixo** do bloco, que vem depois no
+DOM.
+
+A continuação "a lista de lances passa a rolar por dentro" mediu 369 px de lista em
+"1366×768". Foi medida sem a correção de zoom da 6C: a tela real tinha 2049×1152, onde o
+bloco cabia.
+
+### O conserto
+
+`lg:max-h-[50%] lg:overflow-y-auto` no bloco de edição: ele nunca passa da metade da
+coluna e rola por dentro quando tem mais que isso. Com pouco conteúdo, fica do tamanho do
+conteúdo e a lista ganha o resto. Só vale a partir de `lg`; abaixo disso as colunas
+empilham e nada mudou (conferido em 375×811: `<ol>` de 304 px inteira, bloco de 548 px
+inteiro, página rolando).
+
+### Por que não há teste automático
+
+Não há lógica: é uma classe de CSS. Os testes do projeto rodam em Node, sem motor de
+layout, e o repositório não tem suíte de navegador. A prova é a geometria da tabela, antes
+e depois, com `elementFromPoint` e o clique do mouse.
+
+### O que esta rodada NÃO cobre
+
+- **5 lances inteiros por vez** em 1366×768. É utilizável; se incomodar, o ajuste é o teto
+  de 50%.
+- **Rolagem para o lado em 375 px** (600 px de conteúdo). Não é deste conserto, que só age
+  a partir de `lg`; não foi investigada.
+- Não medido com um capítulo de muitas narrações. O teto é proporcional, então o bloco
+  rola em vez de crescer, mas não foi olhado na tela.
+
+**Os artefatos e o navegador.** O navegador do Playwright estava preso pela sessão da 6C,
+aberta desde 12/9 às 20:14; com autorização do Doug, só aquele Chrome foi encerrado. O
+ensaio criou `content/rascunhos/lessons/N0-LADDER.json`; `.editor/v2/N0-LADDER.json` não
+chegou a nascer, porque nada foi editado. O rascunho foi apagado depois de o Playwright sair
+da página, e a ausência dos dois foi conferida. SHA-256 de `.editor/v2/N1-KPK.json` antes e
+depois: `4be602ca…b822`.
 
 ---
 

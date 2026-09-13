@@ -1216,7 +1216,11 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
               onAcao={aoAcaoDoLance}
             />
           </div>
-          <div className="border-t border-borda-fraca pt-3">
+          {/* Teto de metade da coluna e rolagem própria. Sem eles, este bloco é um item
+              flex que não encolhe abaixo do próprio conteúdo (~570 px com narração): em
+              1366×768 a lista acima ficava com 0 px e o bloco era pintado por cima dela,
+              roubando o clique do `•••` da posição inicial. */}
+          <div className="border-t border-borda-fraca pt-3 lg:max-h-[50%] lg:overflow-y-auto">
             <p className="mb-2 text-xs text-tinta-fraca">Símbolo do lance (escolha um)</p>
             <div id="simbolos-do-lance" className="flex flex-wrap gap-1">
               {Object.entries(SIMBOLOS_DE_QUALIDADE).map(([nag, simbolo]) => (
