@@ -140,13 +140,38 @@ export type ComandoV2 =
    * §20.3: a conversão permanente da aula v1. Marca o documento como convertido; o diff e o
    * snapshot anterior ficam por conta de quem pede (`migrar-v1.ts`). Um Desfazer desmarca.
    */
-  | { tipo: "CONVERTER_V1"; convertidaEm: string };
+  | { tipo: "CONVERTER_V1"; convertidaEm: string }
+  /**
+   * Uma tag do cabeçalho PGN da análise (fatia 8: Nome, Nível e Fonte do repertório).
+   *
+   * A ordem das tags é preservada — a tag editada fica onde estava, e uma tag nova entra
+   * antes de `Result`, que é onde o arquivo do repertório a escreveria. Valor vazio não
+   * apaga: uma tag obrigatória sumindo por um campo esvaziado seria perda sem aviso.
+   */
+  | { tipo: "EDITAR_TAG_PGN"; analiseId: string; chave: string; valor: string };
 
 function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<string, Position>): AulaV2 {
   if (comando.tipo === "CONVERTER_V1") {
     if (aula.origem?.formato !== "lesson-v1") throw new Error("esta aula não veio do formato antigo — não há o que converter");
     if (aula.origem.convertidaEm) return aula;
     return { ...aula, origem: { ...aula.origem, convertidaEm: comando.convertidaEm } };
+  }
+  if (comando.tipo === "EDITAR_TAG_PGN") {
+    const analise = aula.analises.find((item) => item.id === comando.analiseId);
+    if (!analise) throw new Error("análise inexistente");
+    if (!/^\w+$/.test(comando.chave)) throw new Error("nome de tag inválido");
+    const valor = comando.valor.trim();
+    const tags = analise.origemPgn?.tags ?? {};
+    if (!valor || tags[comando.chave] === valor) return aula;
+    const novas: Record<string, string> = {};
+    let entrou = comando.chave in tags;
+    for (const [chave, atual] of Object.entries(tags)) {
+      if (!entrou && chave === "Result") { novas[comando.chave] = valor; entrou = true; }
+      novas[chave] = chave === comando.chave ? valor : atual;
+    }
+    if (!entrou) novas[comando.chave] = valor;
+    const origemPgn = { naoReconhecidos: [], ...analise.origemPgn, tags: novas };
+    return { ...aula, analises: aula.analises.map((item) => item.id === analise.id ? { ...item, origemPgn } : item) };
   }
   if (comando.tipo === "RENOMEAR_CAPITULO") {
     return { ...aula, capitulos: aula.capitulos.map((c) => c.id === comando.capituloId ? { ...c, titulo: comando.titulo.trim() || c.titulo } : c) };

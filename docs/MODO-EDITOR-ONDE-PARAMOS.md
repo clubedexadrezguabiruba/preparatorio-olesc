@@ -3759,6 +3759,78 @@ compilar os 11 em memória **mediana 66,6 ms, p95 89,7 ms** (25 rodadas, Node, e
 tipos, lint, **1.202 testes**, build, conteúdo (38 do cache, 0 pela rede), **54/54 mutações** com os
 dois controles verdes e repertório `--check`.
 
+### Parada 8D — a tela do repertório e a abertura nova
+
+Guias lidos antes das rotas: `dynamic-routes.md` (params é Promise) e `server-actions.md` ("render-time
+gating is not a security boundary" — toda action chama `exigirEditor()`).
+
+- `/editor` ganhou **Repertório de aberturas** (§5.1: distinguir repertório). `/editor/repertorio`
+  lista os `.pgn` com linhas, Base e Avançado da compilação de agora, marca "com rascunho", mostra
+  as aberturas que só existem como rascunho e tem **Nova abertura** (cor, nome, endereço derivado e
+  ajustável, nível, fonte; Cancelar não chama o servidor).
+- `/editor/repertorio/[arquivo]` confere `^(brancas|pretas)-[a-z0-9-]+$` antes de montar caminho e
+  recupera transação interrompida antes de abrir. `app/editor/repertorio/acoes.ts`: salvar rascunho
+  (com `baseHash` e teto de 1 MB), descartar, preparar aplicação (impacto + contagem de
+  `repertorio_progresso` nos ids que morrem), aplicar (apaga o rascunho depois), criar abertura nova.
+- `components/editor-repertorio/EditorDeRepertorio.tsx`: jogos do arquivo à esquerda; tabuleiro,
+  os seis símbolos (cada um diz o efeito: alternativa aceita, erro nomeado, erro do adversário, só
+  anota), comentário com as quebras do autor e, **na ponta da linha em lance nosso**, os campos do
+  `[%plano]`; à direita o `PainelDeLances` do v2 (com um filtro novo que tira as ações de
+  capítulo e treino) e a conferência com "Ir até a linha". Jogar avisa **linha nova** (ramo do
+  adversário), **continuação** ou **alternativa ou erro** (ramo nosso). Excluir a partir daqui
+  mostra os ids que morrem antes de confirmar. **Mais opções**: Nome, Nível e Fonte pelo comando
+  novo `EDITAR_TAG_PGN` (a ordem das tags fica; vazio não apaga); Cor e Abertura travadas com o
+  motivo. Desfazer/Refazer, Ctrl+Z/Ctrl+Y fora de campo, setas na árvore, autosave do PGN em 600 ms,
+  conflito com **Baixar minha cópia**. Aplicar só com rascunho salvo e zero erros.
+- `lib/repertorio/editor/sessao.ts` (puro): `classificarLance`, `efeitoDoSimbolo`, `conferirCasca`
+  (as regras do compilador por jogo, com o lance para onde levar), `planoDoComentario` /
+  `comentarioComPlano`, `pgnDaAberturaNova` e `slugDaAbertura`.
+
+```
+ANTES   sessao.test.ts: módulo ausente, o arquivo falha ao carregar
+DEPOIS  tests 9, pass 9
+```
+
+Os 9, na Escocesa real e pelos comandos do v2: os 11 arquivos conferem sem erro na tela; lance novo
+no adversário é "linha nova", a conferência acusa a ponta no lance novo, e com a nossa resposta
+nasce **uma** linha com o id previsto e "sem comentário" leva ao lance mudo; lance nosso ao lado é
+"alternativa ou erro"; excluir um ramo mata exatamente os ids que o impacto mostra; comentário não
+muda id; Mais opções preserva a ordem das tags e reescreve só aquele jogo; o `[%plano]` em campos
+vai e volta (inclusive os blocos reais da Caro-Kann); a abertura nova gera só as tags e recusa aspas;
+e **por dados**: numa pasta temporária o último jogo da Siciliana vira `pretas-siciliana-teste`,
+aplicado — o índice passa a **12** e o leitor do banco acha a abertura e as linhas dela.
+
+**Dois defeitos achados rodando a tela (Playwright, `next dev`), consertados na mesma sessão:**
+
+1. **Desfazer não voltava a caixa de comentário.** O documento voltava (o rascunho em disco ficou
+   byte a byte igual à fonte), mas a caixa guardava o texto novo, porque o estado local só nascia na
+   montagem. Conserto: a caixa remonta quando o comentário do documento muda. Medido antes: depois
+   de Desfazer, `inputValue` ≠ original; depois: Desfazer e Refazer devolvem os dois textos.
+2. **Editar comentário na Siciliana passava da meta de §24.** A cada comentário confirmado o
+   escritor relia o arquivo original inteiro e a conferência reexpandia os 6 jogos. Conserto: o
+   escritor aceita os intervalos já lidos, e a conferência guarda o resultado por jogo pela
+   identidade do objeto (os comandos são imutáveis: jogo intocado é o mesmo objeto). E o
+   tabuleiro encolheu de 34 rem para 27 rem, porque a página rolava na vertical.
+
+**Número da parada** (1366×768 conferido: `innerWidth` 1366, `innerHeight` 768, `devicePixelRatio`
+1; `next dev`, Siciliana, 24 lances):
+
+| Medida | Antes | Depois |
+|---|---|---|
+| selecionar lance, p95 (40 cliques até o quadro seguinte) | 24,1 ms | **18,0 ms** |
+| confirmar comentário, p95 (20 → 30 edições) | **132,8 ms** (acima de 100) | **39,3 ms** |
+| altura da página | 957 px (rolava) | **768 px** |
+| rolagem horizontal | não | **não** |
+
+Tocando o tabuleiro por clique do Playwright (1.e4 → e7-e5 na Alapin): "Linha nova…" e a
+conferência com 3 erros (ponta no adversário, último lance sem comentário, 1 lance nosso de 12);
+Ctrl+Z → "nenhum erro" e o rascunho igual à fonte. Console: **0 erros, 0 avisos**. O rascunho das
+medidas foi apagado; `content/` e `public/` intocados. O navegador do Playwright já estava com a
+sessão do professor, e o login não precisou ser digitado.
+
+**Os sete portões:** tipos, lint, **1.211 testes**, build (com `ƒ /editor/repertorio` e
+`ƒ /editor/repertorio/[arquivo]`), conteúdo, **54/54 mutações** e repertório `--check`.
+
 ---
 
 ## Como ligar o editor

@@ -7,7 +7,7 @@ import type { AnaliseV2 } from "@/lib/editor-v2/modelo";
 import { entradasVerticais } from "@/lib/editor-v2/painel";
 
 const NAG: Record<number, string> = { 1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!" };
-export function PainelDeLances({ analise, sans, rotulos, selecionado, focar = 0, treinoNoNode, onSelecionar, onPromover, onAcao }: {
+export function PainelDeLances({ analise, sans, rotulos, selecionado, focar = 0, treinoNoNode, filtrarAcoes = (acoes) => acoes, onSelecionar, onPromover, onAcao }: {
   analise: AnaliseV2;
   sans: Record<string, string>;
   rotulos: Record<string, string>;
@@ -21,6 +21,12 @@ export function PainelDeLances({ analise, sans, rotulos, selecionado, focar = 0,
    */
   focar?: number;
   treinoNoNode?: (nodeId: string) => { disponivel: boolean; motivo?: string };
+  /**
+   * Quais ações o menu oferece neste editor. O repertório (fatia 8) usa o mesmo painel sem
+   * capítulos nem treinos, e ação que não existe ali some — em vez de ficar apagada com um
+   * motivo que não se aplica a nada.
+   */
+  filtrarAcoes?: (acoes: AcaoDoLanceV2[]) => AcaoDoLanceV2[];
   onSelecionar: (nodeId: string) => void;
   onPromover: (parentId: string, nodeId: string) => void;
   /** §11.3: o que o botão direito e o `•••` fazem. O painel só escolhe o alvo. */
@@ -76,7 +82,7 @@ export function PainelDeLances({ analise, sans, rotulos, selecionado, focar = 0,
           Posição inicial
         </button>
         <MenuDoLance
-          acoes={acoesDoLance(analise, raiz.id, treinoNoNode?.(raiz.id))}
+          acoes={filtrarAcoes(acoesDoLance(analise, raiz.id, treinoNoNode?.(raiz.id)))}
           aberto={menuAberto === raiz.id}
           rotulo="posição inicial"
           aoAbrir={() => { onSelecionar(raiz.id); setMenuAberto(raiz.id); }}
@@ -107,7 +113,7 @@ export function PainelDeLances({ analise, sans, rotulos, selecionado, focar = 0,
                 </button>
                 {!principal ? <button type="button" className="foco rounded px-1.5 py-1 text-xs text-tinta-fraca hover:bg-carta-toque hover:text-tinta" onClick={() => onPromover(parentId, nodeId)} title="Tornar esta variante a linha principal">principal</button> : <span />}
                 <MenuDoLance
-                  acoes={acoesDoLance(analise, nodeId, treinoNoNode?.(nodeId))}
+                  acoes={filtrarAcoes(acoesDoLance(analise, nodeId, treinoNoNode?.(nodeId)))}
                   aberto={menuAberto === nodeId}
                   rotulo={`${rotulos[nodeId] ?? ""} ${nome}`.trim()}
                   aoAbrir={() => { onSelecionar(nodeId); setMenuAberto(nodeId); }}

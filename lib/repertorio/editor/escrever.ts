@@ -1,7 +1,7 @@
 import type { AnaliseV2, AulaV2 } from "../../editor-v2/modelo.ts";
 import { FEN_INICIAL_PADRAO } from "../../editor-v2/modelo.ts";
 import type { LancePgn, PartidaPgn } from "../pgn.ts";
-import { cascaDoArquivo, numeroDoJogo, partidaDaAnalise, type FormasDosNags } from "./adaptar.ts";
+import { cascaDoArquivo, numeroDoJogo, partidaDaAnalise, type CascaDoArquivo, type FormasDosNags } from "./adaptar.ts";
 
 /**
  * O escritor do repertório — um **emendador**, não um reimpressor.
@@ -165,8 +165,18 @@ export type ArquivoEscrito = { texto: string; problemas: string[] };
  * original (jogo novo) entra no fim, depois do último jogo. Tirar um jogo do meio não é
  * suportado: os ids dos seguintes são a posição deles no arquivo.
  */
-export function escreverArquivo(original: string, casca: AulaV2, tocados: ReadonlySet<string>): ArquivoEscrito {
-  const { intervalos, formas } = cascaDoArquivo("original", original);
+export function escreverArquivo(
+  original: string,
+  casca: AulaV2,
+  tocados: ReadonlySet<string>,
+  /**
+   * Os intervalos e as formas do original, quando quem chama já os tem. A tela abre a casca
+   * uma vez e escreve a cada edição: reler o arquivo inteiro a cada tecla confirmada custava
+   * mais que a própria reescrita (medido na 8D, Siciliana).
+   */
+  lido: Pick<CascaDoArquivo, "intervalos" | "formas"> = cascaDoArquivo("original", original),
+): ArquivoEscrito {
+  const { intervalos, formas } = lido;
   const problemas: string[] = [];
   const porId = new Map(casca.analises.map((a) => [a.id, a]));
 

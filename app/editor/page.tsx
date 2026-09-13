@@ -54,12 +54,20 @@ export default async function IndiceDoEditor() {
       <header className="flex flex-col gap-1">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h1 className="titulo">Editor</h1>
-          <Link
-            href="/editor/v2/nova"
-            className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta"
-          >
-            + Nova aula
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/editor/repertorio"
+              className="foco rounded-md border border-borda px-3 py-2 text-sm font-medium text-tinta hover:bg-carta-toque"
+            >
+              Repertório de aberturas
+            </Link>
+            <Link
+              href="/editor/v2/nova"
+              className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta"
+            >
+              + Nova aula
+            </Link>
+          </div>
         </div>
         <p className="text-sm text-tinta-media">
           As {aulas.length} aulas que existem em disco. Abrir uma cria o rascunho dela; o
