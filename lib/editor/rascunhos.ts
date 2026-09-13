@@ -184,6 +184,34 @@ export function escreverAtomico(caminho: string, texto: string): void {
 }
 
 /**
+ * `escreverAtomico` com até 5 tentativas curtas — para o que é conteúdo publicado.
+ *
+ * No Windows, um antivírus ou o indexador abrindo o destino por um instante faz o
+ * `rename` falhar com `EPERM`/`EBUSY`. Esperar e tentar de novo resolve; desistir na
+ * primeira deixaria uma transação parada na fase anterior — recuperável, mas sem motivo.
+ *
+ * Nasceu em `lib/editor-v2/publicar.ts` (fatia 7) e mudou para cá na fatia 8, quando a
+ * aplicação do repertório passou a precisar da mesma troca.
+ */
+export function trocarArquivo(destino: string, texto: string): void {
+  const tmp = prepararEscrita(destino, texto);
+  for (let tentativa = 1; ; tentativa += 1) {
+    try {
+      renameSync(tmp, destino);
+      return;
+    } catch (erro) {
+      const codigo = (erro as NodeJS.ErrnoException).code;
+      if (tentativa >= 5 || (codigo !== "EPERM" && codigo !== "EBUSY" && codigo !== "EACCES")) {
+        rmSync(tmp, { force: true });
+        throw erro;
+      }
+      // Espera curta e síncrona: quem chama já tem a trava do repositório.
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 40 * tentativa);
+    }
+  }
+}
+
+/**
  * O arquivo em disco ainda é aquele sobre o qual esta aba decidiu?
  *
  * `baseHash` é o hash dos bytes que a tela abriu ou gravou por último; `null`

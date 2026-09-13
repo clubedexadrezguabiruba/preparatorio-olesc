@@ -32,11 +32,11 @@
  * Commit, push e deploy (§20.1). O pacote fica em `content/`, e chega ao aluno do site
  * quando o Doug fizer o deploy.
  */
-import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync } from "node:fs";
 import path from "node:path";
 import { destravarConferencia, travarConferencia } from "../editor/gate.ts";
 import { editorLigado } from "../editor/local.ts";
-import { caminhoDeAula, escreverAtomico, prepararEscrita, serializar } from "../editor/rascunhos.ts";
+import { caminhoDeAula, escreverAtomico, serializar, trocarArquivo } from "../editor/rascunhos.ts";
 import { revisoesDaAulaV2 } from "./avaliacao.ts";
 import { problemasParaPublicarV2 } from "./conferencia.ts";
 import { lerPosicoesDoConteudoV2, podePublicarV2 } from "./gate.ts";
@@ -85,31 +85,6 @@ function lerTransacao(id: string, raiz: string): TransacaoV2 | null {
     return JSON.parse(readFileSync(arquivo, "utf8")) as TransacaoV2;
   } catch {
     return null;
-  }
-}
-
-/**
- * Troca um arquivo por `rename`, com até 5 tentativas curtas.
- *
- * No Windows, um antivírus ou o indexador abrindo o destino por um instante faz o `rename`
- * falhar com `EPERM`/`EBUSY`. Esperar e tentar de novo resolve; desistir na primeira deixaria
- * a publicação parada na fase anterior — recuperável, mas sem motivo.
- */
-function trocarArquivo(destino: string, texto: string): void {
-  const tmp = prepararEscrita(destino, texto);
-  for (let tentativa = 1; ; tentativa += 1) {
-    try {
-      renameSync(tmp, destino);
-      return;
-    } catch (erro) {
-      const codigo = (erro as NodeJS.ErrnoException).code;
-      if (tentativa >= 5 || (codigo !== "EPERM" && codigo !== "EBUSY" && codigo !== "EACCES")) {
-        rmSync(tmp, { force: true });
-        throw erro;
-      }
-      // Espera curta e síncrona: a trava da conferência já é nossa, e ninguém mais escreve aqui.
-      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 40 * tentativa);
-    }
   }
 }
 

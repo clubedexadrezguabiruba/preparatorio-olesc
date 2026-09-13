@@ -3664,6 +3664,101 @@ DEPOIS  tests 5, pass 5 — e o --check novo: "o compilado em disco bate com a f
 **Os sete portões:** tipos, lint, **1.174 testes**, build, conteúdo (38 do cache, 0 pela rede),
 **54/54 mutações** e repertório `--check` — agora comparando com o disco.
 
+### Parada 8B — leitor com intervalos, adaptador e escritor emendador
+
+**Medido no corpus antes de escrever** (13/9/2026): os `;` só aparecem no preâmbulo; os jogos são
+separados por uma linha em branco; **311** comentários têm quebra de linha dentro (1.109 quebras);
+**10** blocos `[%plano]` dentro de comentário (as outras 29 menções a `[%plano]` são prosa do
+preâmbulo); **6** NAGs escritos `$n` (`$2 $2 $4 $5 $5 $6`) e **1** símbolo colado (`!`);
+**77** variações; **3** comentários logo depois de `)`; **0** comentário no início de variação;
+**0** `%cal`/`%csl`; **0** aspas escapadas. Daí as quatro decisões do escritor: guardar a forma de
+cada NAG, não colapsar espaço em comentário, deixar o `[%plano]` dentro do texto e recusar o que o
+leitor não relê (aspas em tag, `}` em comentário).
+
+- `lib/repertorio/pgn.ts`: a varredura guarda o trecho de cada token; `lerPgnsComIntervalos`
+  devolve o preâmbulo e `{partida, inicio, fim}` de cada jogo. **O preâmbulo deixa de ser a
+  `intro` do jogo 1** (em `lerPgns` ele era, e ninguém via porque `expandir` não lê a intro), e um
+  bloco só de tags conta como jogo (a abertura nova nasce assim). `lerPgns` intacto.
+- `lib/repertorio/editor/adaptar.ts`: `cascaDoArquivo` (uma `AulaV2` em memória, uma análise e um
+  capítulo por jogo, ids `analise-j<k>`/`no-j<k>-<n>` determinísticos, tags em `origemPgn`),
+  `analiseDoJogo`, `partidaDaAnalise` (a árvore do leitor sem passar por texto — é o que a
+  conferência instantânea da tela usa) e `separarDesenhos`/`juntarDesenhos` (só `%cal`/`%csl` de
+  cor conhecida saem do texto; o espaço só muda na emenda).
+- `lib/repertorio/editor/escrever.ts`: `escreverArquivo(original, casca, tocados)` copia preâmbulo,
+  jogos intactos e separadores byte a byte e reescreve só os tocados; `escreverJogo` escreve tags na
+  ordem, comentário verbatim, NAG na forma do arquivo (NAG novo: símbolo colado para os seis,
+  `$n` para o resto), número de lance nunca sozinho no fim da linha, e recusa tag com aspas,
+  quebra em tag e `}` em comentário.
+
+```
+ANTES   escrever.test.ts: os módulos adaptar.ts/escrever.ts e lerPgnsComIntervalos não existiam —
+        o arquivo falha ao carregar
+DEPOIS  tests 11, pass 11 (e os 29 de pgn.test.ts continuam verdes)
+```
+
+Os 11: 23 jogos abrem sem problema; **(a)** sem edição os 11 arquivos saem byte a byte; **(b)** os
+23 jogos forçados a reescrever expandem igual (linhas, ids, avisos, problemas) e a compilação dos
+11 reescritos é byte a byte a de hoje; **(c)** as contagens acima, feitas por expressão regular no
+texto e não pelo leitor, são as mesmas antes e depois, o preâmbulo é igual e nenhum `) {` sobra;
+`$5` continua `$5` e `!?` continua `!?`; aspas em tag e `}` recusados; editar um comentário da
+Siciliana muda só o trecho daquele jogo; `%cal`/`%csl` vão e voltam; D13 registrado (comentário no
+início de variação é fundido no lance que ela substitui, e o escritor o devolve depois do lance —
+não ocorre nos 11).
+
+**Número da parada:** **11/11** arquivos byte a byte sem edição; **23/23** jogos com expansão
+idêntica depois de reescritos.
+
+### Parada 8C — Aplicar transacional, impacto e cache por data de modificação
+
+- `trocarArquivo` (rename com 5 tentativas contra `EPERM`/`EBUSY`) saiu de
+  `lib/editor-v2/publicar.ts` para `lib/editor/rascunhos.ts`; a publicação v2 usa a mesma.
+- `lib/repertorio/editor/aplicar.ts`: transação em `.editor/repertorio/transacao/` com as fases
+  **candidato → validado → fonte-trocada → compilado**, cada uma registrada depois de feita. O
+  candidato é validado **relido do disco**, com as outras 10 fontes também do disco. A recuperação
+  descarta até "validado" — **salvo** quando o hash da fonte em disco já é o do candidato (o
+  processo morreu entre o `rename` e o registro), caso em que termina — e depois disso termina
+  recompilando das fontes. Trava única do repositório. `prepararAplicacao` compila o candidato em
+  memória, recusa arquivo sem nenhuma linha e devolve impacto, hash do impacto (que inclui o hash
+  da fonte e do candidato) e os ids que morrem.
+- `lib/repertorio/editor/impacto.ts` (puro): ids que nascem e morrem, nível trocado, texto mudado,
+  ordem, Base e Avançado antes e depois, e **re-tranca** — qualquer id do Base que não existia antes.
+  O teste pegou um erro de raciocínio **meu**, não do código: esticar uma linha do Base também
+  re-tranca o Avançado (id novo, progresso zero), mesmo com o Base do mesmo tamanho. A frase foi
+  corrigida para dizer isso.
+- `lib/repertorio/editor/rascunho.ts`: o rascunho em PGN em `.editor/repertorio/<arquivo>.pgn`, com
+  `baseHash` (a primeira edição parte do hash da fonte) e o nome do arquivo conferido por
+  `^(brancas|pretas)-[a-z0-9-]+$` antes de virar caminho.
+- `lib/repertorio/progresso-que-morre.ts`: registros e alunos de `repertorio_progresso` nos ids que
+  morrem, pela chave de serviço; `null` se o banco não responde.
+- **D4 consertado:** `lib/repertorio/leitor-do-banco.ts` guarda cada JSON pela data de modificação
+  e pelo tamanho; `banco.ts` virou a casca `server-only` dele. Aplicar no `next dev` passa a chegar
+  ao aluno sem reiniciar.
+
+```
+ANTES   aplicar.test.ts com a recuperação desligada: tests 9, pass 3, fail 6
+          ✖ aplicar sem interrupção · ✖ interrompida depois de candidato/validado/fonte-trocada/compilado
+          ✖ entre a troca da fonte e o registro da fase
+        impacto.test.ts e leitor-do-banco.test.ts: módulos ausentes, os arquivos falham ao carregar
+DEPOIS  aplicar 9/9 · impacto 5/5 · leitor-do-banco 3/3
+```
+
+Os testes rodam numa pasta temporária com a cópia dos 11 `.pgn` e do compilado: aplicar a frase
+nova no 2.c3 da Alapin troca a fonte e só `brancas/alapin.json` (o índice não muda); para cada uma
+das quatro fases, interrompida → recuperada → `compiladoCoerente` vazio, nenhuma transação
+sobrando, fonte nova só a partir de "fonte-trocada", e a aplicação seguinte corre; candidato com
+lance mudo reprovado sem tocar fonte nem compilado; hash de impacto trocado, editor desligado e
+`../fora` recusados; rascunho com `baseHash` e conflito. O impacto nas linhas reais da Escocesa:
+sem edição nada muda; esticar mata 1 id e cria 1; resposta nova do adversário cria 1 linha e
+re-tranca; comentário mantém os ids; trocar o nível do jogo Avançado muda o nível linha a linha.
+O leitor do banco relê `alapin.json` e `index.json` reescritos e não guarda leitura que falhou.
+
+**Número da parada:** **4/4** interrupções recuperadas (e a quinta, entre o `rename` e o registro);
+compilar os 11 em memória **mediana 66,6 ms, p95 89,7 ms** (25 rodadas, Node, este notebook).
+
+**Os sete portões da 8B e da 8C** (rodados uma vez sobre as duas, como na 7B+7C; dois commits):
+tipos, lint, **1.202 testes**, build, conteúdo (38 do cache, 0 pela rede), **54/54 mutações** com os
+dois controles verdes e repertório `--check`.
+
 ---
 
 ## Como ligar o editor
