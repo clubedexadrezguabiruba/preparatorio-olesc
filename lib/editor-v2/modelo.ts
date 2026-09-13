@@ -225,12 +225,32 @@ export const narracaoV2Schema = z.strictObject({
   nodeId: idV2Schema,
   texto: z.string().min(1),
   pausa: z.enum(["temporizada", "manual"]).default("temporizada"),
+  /**
+   * O desenho **desta** narração, quando ele não é o da posição (fatia 7, 13/9/2026).
+   *
+   * O desenho mora no nó (§6 do plano), e isso cobre o caso comum. Não cobre duas falas
+   * sobre a mesma posição que apontam coisas diferentes — a N0-LADDER tem duas na posição
+   * inicial ("as suas torres" acende g1, g2 e e3; "por e4 ele sobe" acende e4) e três
+   * no mate. Sem este campo, converter a aula apagaria esses desenhos em silêncio.
+   *
+   * Ausente: vale o desenho do nó. `{}`: esta fala não desenha nada, mesmo que o nó
+   * desenhe. A tela ainda não o edita; ele é preservado e tocado.
+   */
+  desenhos: desenhoV2Schema.optional(),
+  /**
+   * Pausa extra depois da leitura, em ms — o `espera` do roteiro v1, pelo mesmo motivo:
+   * a posição que precisa ser olhada com calma. Não é comprimida pela velocidade da prévia,
+   * porque é tempo de leitura (§15.2).
+   */
+  esperaMs: z.number().int().min(0).max(4000).optional(),
   revisao: revisaoPendenteV2Schema.optional(),
 });
 
 export const capituloV2Schema = z.strictObject({
   id: idV2Schema,
   titulo: z.string().min(1),
+  /** A linha que resume a técnica (o `summary` do v1); o aluno a lê debaixo do título. */
+  resumo: z.string().min(1).optional(),
   analiseId: idV2Schema,
   inicioNodeId: idV2Schema,
   caminho: z.array(idV2Schema),
@@ -346,6 +366,22 @@ export const treinoV2Schema = z.strictObject({
     estado: z.enum(["pendente", "herdada-v1", "confirmada", "indisponivel"]),
     positionId: z.string().min(1),
     alvoHash: z.string().min(8),
+    /**
+     * O resultado que a tablebase certifica: ganhar ou segurar o empate. O juiz do aluno
+     * escreve "joga a vitória fora" ou "joga o empate fora" por ele; sem o campo, a aula
+     * de empate diria vitória.
+     */
+    resultado: z.enum(["win", "draw"]).optional(),
+    /**
+     * A evidência calculada, por pergunta: os lances que ainda preservam o resultado
+     * naquela posição (o `winningMoves` do v1). É **certificação, não autoria** (§8 do
+     * plano): o gate a renova, o professor não a edita. A FEN vai junto porque evidência
+     * de outra posição não vale — se a pergunta mudou de lugar, ela é ignorada.
+     */
+    evidencias: z.record(idV2Schema, z.strictObject({
+      fen: z.string().min(1),
+      winningMoves: z.array(uciSchema),
+    })).optional(),
   }).optional(),
   explicacaoConclusao: z.string().min(1).optional(),
 }).superRefine((treino, ctx) => {

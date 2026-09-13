@@ -34,6 +34,40 @@ test("v2 grava atomically, recusa hash velho e não escreve com editor desligado
 });
 
 /**
+ * "Erro impede publicar, não salvar" (`limites.ts`, plano §7).
+ *
+ * O rascunho aceita pendência editorial identificada: teto estourado, lance ilegal,
+ * proveniência por registrar. Só o que impede **montar** o documento — forma do schema,
+ * árvore quebrada, referência a entidade que não existe — é recusado ao salvar e ao
+ * reabrir. Sem isto, a aula grande demais prenderia o professor num arquivo que ele não
+ * consegue nem guardar para encolher.
+ */
+test("rascunho com teto estourado, lance ilegal e posição sem proveniência grava e reabre", () => {
+  const raiz = mkdtempSync(path.join(tmpdir(), "editor-v2-pendencia-"));
+  test.after(() => rmSync(raiz, { recursive: true, force: true }));
+  const nos: AulaV2["analises"][number]["nos"] = { "raiz-a": { id: "raiz-a", filhos: ["no-ilegal"] }, "no-ilegal": { id: "no-ilegal", uci: "a1a8", filhos: [] } };
+  const pendente: AulaV2 = {
+    ...structuredClone(aula),
+    proveniencia: [],
+    analises: [{ id: "analise-a", inicio: { tipo: "posicao", positionId: "pos-a" }, raizId: "raiz-a", nos: { ...nos, "raiz-a": { ...nos["raiz-a"], comentario: "x".repeat(2 * 1024 * 1024 + 10) } } }],
+  };
+  const gravado = gravarDocumentoV2(pendente.id, pendente, null, raiz, ligada);
+  assert.equal(gravado.ok, true, gravado.ok ? "" : `${gravado.erro}: ${gravado.problemas?.join("; ")}`);
+  const relido = lerDocumentoV2(pendente.id, raiz);
+  assert.equal(relido?.aula.analises[0].nos["no-ilegal"].uci, "a1a8");
+});
+
+test("rascunho com a árvore quebrada continua recusado ao salvar", () => {
+  const raiz = mkdtempSync(path.join(tmpdir(), "editor-v2-forma-"));
+  test.after(() => rmSync(raiz, { recursive: true, force: true }));
+  const quebrado = structuredClone(aula);
+  quebrado.analises[0].nos["raiz-a"].filhos = ["nao-existe"];
+  const gravado = gravarDocumentoV2(quebrado.id, quebrado, null, raiz, ligada);
+  assert.equal(gravado.ok, false);
+  assert.match(gravado.ok ? "" : gravado.problemas?.join(" ") ?? "", /FILHO_AUSENTE/);
+});
+
+/**
  * O id de aula extra atravessa o guardião de caminho.
  *
  * ## O defeito que este teste trava

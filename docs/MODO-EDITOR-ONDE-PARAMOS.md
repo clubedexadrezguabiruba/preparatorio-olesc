@@ -3244,6 +3244,92 @@ publicação atômica com snapshot/rollback, progresso por revisão e migração
 
 ---
 
+## Fatia 7 — publicação v2 (§20), em andamento desde 13/9/2026
+
+Plano executado de uma vez, por decisão do Doug: paradas 7A → 7F, um commit por parada,
+a bateria do Playwright só no fim (7F). Esta seção cresce a cada parada.
+
+### Parada 7A — o contrato puro
+
+**Três defeitos achados no mapeamento, antes de codar:**
+
+1. **O adaptador v1 perdia desenho, pausa e resumo.** `adaptar-v1.ts` criava a narração sem
+   os `arrows`/`highlights` do passo do roteiro, sem o `espera` e sem o `technique.summary`.
+   Os testes contavam narrações (13) e passavam; o validador dizia 0 problemas. Converter a
+   N0-LADDER apagaria todos os desenhos do roteiro dela.
+2. **O salvamento recusava qualquer erro**, inclusive teto e posição sem proveniência —
+   contra `limites.ts` ("erro impede publicar, não salvar") e contra o plano §7.
+3. **O desenho por nó não representa duas falas da mesma posição que apontam coisas
+   diferentes.** A N0-LADDER tem duas na posição inicial e três no mate.
+
+E dois que só a comparação lance a lance mostrou:
+
+4. **O treino v2 jogava a aula de empate como vitória**: `treino-jogavel.ts` fixava
+   `goal: "win"`. Na N0-MATING-MATERIAL o aluno leria "joga a vitória fora".
+5. **O final certificado perdia a tablebase no aluno**: todo lance fora da linha ouvia "não
+   faz parte da linha treinada", onde o v1 diz "ainda ganha, mas não é o caminho" ou "joga a
+   vitória fora". Na N0-LADDER, 115 lances legais recebiam outra frase.
+
+**O contrato que ficou:**
+
+- `narracao.desenhos` (ausente = o desenho do nó; `{}` = esta fala não desenha) e
+  `narracao.esperaMs`; `capitulo.resumo`. O adaptador põe o desenho da **primeira** fala no
+  nó — é o que o editor mostra e edita — e só as falas seguintes que desenham diferente
+  guardam o seu. A tela ainda não edita o desenho por fala: preservado e tocado.
+- `certificacao.resultado` (`win`/`draw`) e `certificacao.evidencias` (por pergunta: FEN e
+  `winningMoves`). O adaptador as traz do v1 como **herdada-v1**, nunca confirmada. O treino
+  só é julgado como final certificado quando **toda** pergunta tem evidência da própria FEN.
+- O rascunho guarda pendência editorial (tetos, lance ilegal, proveniência, certificação,
+  fonte de treino ausente) e recusa só o que impede montar o documento. A lista é do que
+  **passa**: código novo nasce recusado até alguém decidir que é pendência.
+- `equivalencia-v1.ts`: compara o que o **aluno** recebe — introdução quadro a quadro,
+  capítulo pela prévia (fala, lance, desenho, espera, pausa), treino pelo juiz **para cada
+  lance legal** de cada pergunta, respostas do defensor, prática e ordem das etapas.
+- `avaliacao.ts`: `assessmentRevision` = `ar_` + SHA-256 do JSON canônico. Prática: FEN,
+  lado, objetivo, motor, versão do juiz. Treino: perfil, lado, FEN inicial, defesa inicial,
+  política, término, resultado, e as perguntas pela FEN com respostas, julgamento, efeito,
+  defesas na ordem (a rotação depende dela) e presença de dica. Fora: título, feedback,
+  texto de defesa, desenho, narração, texto da dica, ordem das respostas e do fluxo.
+- `pacote.ts`: aula + posições embutidas + revisões + manifesto (hash de cada parte e
+  versão dos juízes); `publicationId` = `pub-` + 16 hex do hash canônico do manifesto, sem
+  data. `problemasDoPacoteV2` recalcula tudo e não confia no nome.
+- `hash.ts` ganhou `jsonCanonico`/`hashCanonico`: a identidade que vai ao banco não pode
+  depender da ordem das chaves, e `hashDoConteudo` depende (e diz isso por escrito).
+
+**O número da parada — divergências pedagógicas, em memória:**
+
+| Aula | Antes | Depois |
+|---|---|---|
+| N0-LADDER | **15** (resumo, 4 desenhos, 5 esperas, 5 perguntas com frase trocada em 19–30 lances cada) | **0** |
+| N0-MATING-MATERIAL | **10** (resumo, 5 desenhos, 3 esperas, objetivo empate → vitória) | **0** |
+| N1-KPK | **16** (resumo, 7 desenhos, 3 esperas, 5 perguntas com frase trocada) | **0** |
+
+**Testes, antes e depois:**
+
+```
+ANTES   equivalencia-v1 + rascunhos: tests 9, pass 5, fail 4
+          ✖ N0-LADDER 15 · N0-MATING-MATERIAL 10 · N1-KPK 16 divergências
+          ✖ rascunho com teto estourado… grava e reabre
+            [POSICAO_SEM_PROVENIENCIA] …; [LIMITE_BYTES] a aula ocupa 2049 KB e o limite é 2048 KB
+        avaliacao + pacote (módulos vazios): tests 25, pass 0, fail 25
+DEPOIS  tests 9, pass 9 · tests 25, pass 25
+```
+
+Os 25: forma e estabilidade da revisão; oito coisas que **não** a mudam (título, feedback,
+texto de defesa, desenho, dica escrita, narração, ordem do fluxo e das respostas); treze
+campos do treino e cinco da prática que **a mudam**; id estável com as chaves embaralhadas
+em todos os níveis; só as posições usadas; um ponto final a mais muda o id; e um byte
+adulterado detectado na aula, numa posição embutida, no id e numa revisão.
+
+**Os sete portões:** tipos, lint, **1.114 testes** (eram 1.082), build, conteúdo (18
+posições, 3 aulas, 38 consultas do cache e 0 pela rede), **42/42 mutações** e repertório
+`--check` sem escrita.
+
+**O que a 7A não cobre:** a tela não edita desenho nem espera por narração; nenhuma regra
+de publicação existe ainda (7B); o rascunho real `.editor/v2/N1-KPK.json` não foi aberto.
+
+---
+
 ## Como ligar o editor
 
 ```bash

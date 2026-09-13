@@ -1,9 +1,15 @@
 import { Chess } from "chess.js";
 import type { Lesson, Position } from "../lesson/schema.ts";
 import { hashDoConteudo as hash } from "./hash.ts";
-import { validarAulaV2, type AulaV2, type NoV2 } from "./modelo.ts";
+import { validarAulaV2, type AulaV2, type DesenhoV2, type NoV2 } from "./modelo.ts";
 
 const id = (parte: string) => parte.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+/** O desenho de um passo v1, sem campo vazio: ausente quando o passo não desenha. */
+function desenhoDoPasso(passo: { arrows?: [string, string][]; highlights?: string[] }): DesenhoV2 | undefined {
+  if (!passo.arrows && !passo.highlights) return undefined;
+  return { ...(passo.arrows ? { arrows: passo.arrows } : {}), ...(passo.highlights ? { highlights: passo.highlights } : {}) };
+}
 
 /**
  * Adaptador de leitura. Não modifica nem reserializa o arquivo v1.
@@ -58,6 +64,8 @@ export function adaptarLessonV1(lesson: Lesson, positions: Record<string, Positi
   const fenParaNo = new Map([[game.fen(), raizId]]);
   let atual = raizId;
 
+  /** Nós que já receberam a primeira fala — é ela que dá o desenho do nó. */
+  const nosComFala = new Set<string>();
   for (const [indice, passo] of objective.roteiro.entries()) {
     if (passo.lance) {
       try {
@@ -72,7 +80,19 @@ export function adaptarLessonV1(lesson: Lesson, positions: Record<string, Positi
       fenParaNo.set(game.fen(), nodeId);
       caminho.push(nodeId);
     }
-    narracoes.push({ id: id(`narracao-${lesson.id}-${indice + 1}`), nodeId: atual, texto: passo.fala, pausa: "temporizada" });
+    // O desenho do passo vai para o nó na primeira fala dele — é o que o editor mostra e
+    // edita no tabuleiro. As falas seguintes do mesmo nó só guardam desenho próprio quando
+    // ele é diferente; `{}` diz "esta fala não desenha", mesmo que o nó desenhe.
+    const desenho = desenhoDoPasso(passo);
+    const narracao: AulaV2["capitulos"][number]["narracoes"][number] = { id: id(`narracao-${lesson.id}-${indice + 1}`), nodeId: atual, texto: passo.fala, pausa: "temporizada" };
+    if (!nosComFala.has(atual)) {
+      nosComFala.add(atual);
+      if (desenho) nos[atual] = { ...nos[atual], desenhos: desenho };
+    } else if (JSON.stringify(desenho ?? {}) !== JSON.stringify(nos[atual].desenhos ?? {})) {
+      narracao.desenhos = desenho ?? {};
+    }
+    if (passo.espera) narracao.esperaMs = passo.espera;
+    narracoes.push(narracao);
   }
 
   const pratica = lesson.stages.practice ? {
@@ -93,7 +113,7 @@ export function adaptarLessonV1(lesson: Lesson, positions: Record<string, Positi
       posicao: passo.fen
         ? { tipo: "fen" as const, fen: passo.fen }
         : { tipo: "referencia" as const, origem: { analiseId, nodeId: raizId } },
-      ...(passo.arrows || passo.highlights ? { desenhos: { arrows: passo.arrows, highlights: passo.highlights } } : {}),
+      ...(desenhoDoPasso(passo) ? { desenhos: desenhoDoPasso(passo) } : {}),
     })),
   } satisfies AulaV2["introducoes"][number] : null;
 
@@ -150,7 +170,7 @@ export function adaptarLessonV1(lesson: Lesson, positions: Record<string, Positi
         id: questaoIdDoLegado(nodeId),
         posicao: { analiseId, nodeId: posicaoNodeId },
         ...(node.hint ? { dica: node.hint } : {}),
-        ...(node.arrows || node.highlights ? { desenhos: { arrows: node.arrows, highlights: node.highlights } } : {}),
+        ...(desenhoDoPasso(node) ? { desenhos: desenhoDoPasso(node) } : {}),
         respostas,
       };
     }),
@@ -161,7 +181,16 @@ export function adaptarLessonV1(lesson: Lesson, positions: Record<string, Positi
     origem: { analiseId, nodeIds: [...new Set([raizId, ...[...fenParaNo.values()]])], hash: hash(guided), derivadorVersao: 1 },
     obrigatorio: true,
     revisaoAvaliacao: "confirmada" as const,
-    certificacao: { tipo: "tablebase" as const, estado: "herdada-v1" as const, positionId: guided.positionId, alvoHash: hash(guided) },
+    // A evidência vem do arquivo v1, que o gate v1 escreveu a partir da tablebase. Ela
+    // entra como **herdada**, nunca como confirmada: quem confirma é o Conferir do v2.
+    certificacao: {
+      tipo: "tablebase" as const,
+      estado: "herdada-v1" as const,
+      positionId: guided.positionId,
+      alvoHash: hash(guided),
+      resultado: guided.goal,
+      evidencias: Object.fromEntries(Object.entries(guided.nodes).map(([nodeId, node]) => [questaoIdDoLegado(nodeId), { fen: node.fen, winningMoves: node.winningMoves }])),
+    },
     ...(guided.intro ? { introducao: guided.intro } : {}),
   } satisfies AulaV2["treinos"][number] : null;
 
@@ -175,7 +204,7 @@ export function adaptarLessonV1(lesson: Lesson, positions: Record<string, Positi
     catalogo,
     analises: [{ id: analiseId, inicio: { tipo: "posicao", positionId: objective.positionId }, raizId, nos }],
     introducoes: introducao ? [introducao] : [],
-    capitulos: [{ id: capituloId, titulo: objective.technique.name, analiseId, inicioNodeId: raizId, caminho, orientacao: lesson.orientation, narracoes }],
+    capitulos: [{ id: capituloId, titulo: objective.technique.name, resumo: objective.technique.summary, analiseId, inicioNodeId: raizId, caminho, orientacao: lesson.orientation, narracoes }],
     treinos: treino ? [treino] : [],
     praticas: pratica ? [pratica] : [],
     fluxo: [

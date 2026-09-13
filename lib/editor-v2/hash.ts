@@ -31,6 +31,35 @@ export function hashDoConteudo(valor: unknown): string {
   return createHash("sha256").update(JSON.stringify(valor)).digest("hex");
 }
 
+/**
+ * JSON com as chaves em ordem alfabética em todos os níveis, e sem os campos `undefined`.
+ *
+ * ## Por que existe, se `hashDoConteudo` já serve à proveniência
+ *
+ * `hashDoConteudo` confia na ordem de chaves que o Zod devolve, e diz isso por escrito:
+ * serve a "mudou desde que foi conferido", dentro do mesmo programa. A identidade de uma
+ * publicação e de uma revisão de avaliação vai para o **banco** e é comparada entre
+ * versões do programa (plano §10) — uma aba antiga, um retry, uma migração. Ali a ordem das
+ * chaves não pode decidir nada, e `JSON.stringify` puro decidiria.
+ */
+export function jsonCanonico(valor: unknown): string {
+  const ordenar = (item: unknown): unknown => {
+    if (Array.isArray(item)) return item.map((elemento) => (elemento === undefined ? null : ordenar(elemento)));
+    if (item && typeof item === "object") {
+      return Object.fromEntries(Object.keys(item).sort()
+        .filter((chave) => (item as Record<string, unknown>)[chave] !== undefined)
+        .map((chave) => [chave, ordenar((item as Record<string, unknown>)[chave])]));
+    }
+    return item;
+  };
+  return JSON.stringify(ordenar(valor));
+}
+
+/** SHA-256 em hexadecimal do JSON canônico. */
+export function hashCanonico(valor: unknown): string {
+  return createHash("sha256").update(jsonCanonico(valor)).digest("hex");
+}
+
 /** O mesmo hash, com o tipo que o validador espera receber injetado. */
 export function hashDaPosicao(posicao: Position): string {
   return hashDoConteudo(posicao);

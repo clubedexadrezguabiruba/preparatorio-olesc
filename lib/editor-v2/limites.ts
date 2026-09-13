@@ -141,6 +141,9 @@ export function medidasDaAulaV2(aula: AulaV2): MedidasAulaV2 {
   for (const introducao of aula.introducoes) {
     for (const quadro of introducao.quadros) desenhos += (quadro.desenhos?.arrows?.length ?? 0) + (quadro.desenhos?.highlights?.length ?? 0);
   }
+  for (const capitulo of aula.capitulos) {
+    for (const narracao of capitulo.narracoes) desenhos += (narracao.desenhos?.arrows?.length ?? 0) + (narracao.desenhos?.highlights?.length ?? 0);
+  }
 
   // `TextEncoder`, e não `Buffer.byteLength`: este módulo é lido pelo validador, que
   // roda **também no navegador**, onde `Buffer` não existe.

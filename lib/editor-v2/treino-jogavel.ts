@@ -147,9 +147,18 @@ export function treinoJogavel(aula: AulaV2, treinoId: string, positions: Record<
   const defesasFinais: Record<string, string> = {};
   const falasDoDefensor: Record<string, string> = {};
   const desenhos: Record<string, DesenhoV2 | undefined> = {};
+  const fens = new Map(treino.questoes.map((questao) => [questao.id, fenDaQuestaoDoTreino(aula, treino, questao, positions)]));
+  /**
+   * O treino é julgado como final certificado só quando **toda** pergunta tem evidência da
+   * própria posição. Metade certificado, metade linha autoral, daria ao aluno dois juízes
+   * diferentes na mesma tentativa.
+   */
+  const certificado = treino.perfil === "final-certificado"
+    && Boolean(aula.catalogo)
+    && treino.questoes.every((questao) => treino.certificacao?.evidencias?.[questao.id]?.fen === fens.get(questao.id));
 
   for (const questao of treino.questoes) {
-    const fen = fenDaQuestaoDoTreino(aula, treino, questao, positions);
+    const fen = fens.get(questao.id)!;
     const expects: Expect[] = [];
     const authorAlternatives: NonNullable<TreeNode["authorAlternatives"]> = [];
     const mistakes: NonNullable<TreeNode["mistakes"]> = [];
@@ -188,13 +197,19 @@ export function treinoJogavel(aula: AulaV2, treinoId: string, positions: Record<
       }
     }
 
+    // Com evidência da tablebase para esta mesma posição, o juiz é o do final certificado:
+    // lance fora da linha que ainda ganha ouve o texto de "ainda ganha", e o que joga o
+    // resultado fora ouve o de "perde". Sem evidência, a linha autoral não inventa erro.
+    const evidencia = certificado ? treino.certificacao?.evidencias?.[questao.id] : undefined;
     nodes[questao.id] = {
       fen,
       ...(questao.dica ? { hint: questao.dica } : {}),
       expects,
       ...(mistakes.length ? { mistakes } : {}),
       ...(authorAlternatives.length ? { authorAlternatives } : {}),
-      winningMoves: legais(fen).filter((move) => !perdem.has(move)),
+      winningMoves: evidencia && evidencia.fen === fen
+        ? evidencia.winningMoves
+        : legais(fen).filter((move) => !perdem.has(move)),
     };
     desenhos[questao.id] = questao.desenhos;
   }
@@ -209,12 +224,12 @@ export function treinoJogavel(aula: AulaV2, treinoId: string, positions: Record<
       id: aula.id,
       errors,
       fallbacks: {
-        winningOffMethod: FORA_DA_LINHA,
-        losesWin: FORA_DA_LINHA,
+        winningOffMethod: certificado ? aula.catalogo!.mensagensPadrao.vitoriaForaDoMetodo : FORA_DA_LINHA,
+        losesWin: certificado ? aula.catalogo!.mensagensPadrao.perdeResultado : FORA_DA_LINHA,
         methodAlternative: aula.catalogo?.mensagensPadrao.alternativaDoMetodo ?? ALTERNATIVA_PADRAO,
       },
     } as unknown as Lesson,
-    tree: { positionId: treino.inicio.nodeId, root: raiz, goal: "win", nodes },
+    tree: { positionId: treino.inicio.nodeId, root: raiz, goal: treino.certificacao?.resultado ?? "win", nodes },
     orientacao: treino.ladoAluno,
     fenInicial: treino.defesaInicial ? fenInicial : nodes[raiz].fen,
     ...(treino.defesaInicial ? { defesaInicial: treino.defesaInicial.move } : {}),

@@ -51,6 +51,8 @@ export type PassoDaPrevia = {
   desenhos?: DesenhoV2;
   /** §15.2: a pausa que exige "Continuar" em vez de andar sozinha. */
   pausaManual: boolean;
+  /** A pausa extra da narração, somada à leitura (o `espera` do roteiro v1). */
+  esperaMs?: number;
   /**
    * §15.3: este passo é o **retorno ao ponto de escolha**, e não uma narração do
    * professor. Ele nasce na prévia da aula inteira, some na prévia do capítulo
@@ -163,8 +165,10 @@ function passosDoTrecho(aula: AulaV2, capitulo: CapituloV2, de: string): PassoDa
         // posição. Repetir o lance o jogaria duas vezes.
         lance: ordem === 0 ? lance : undefined,
         fala: narracao.texto,
-        desenhos: no.desenhos,
+        // A fala com desenho próprio manda nele; sem, vale o desenho da posição.
+        desenhos: narracao.desenhos ?? no.desenhos,
         pausaManual: narracao.pausa === "manual",
+        ...(narracao.esperaMs ? { esperaMs: narracao.esperaMs } : {}),
       });
     });
   }
@@ -341,8 +345,10 @@ export function pausaDaPrevia(
   reguaDeLeitura: (fala: string) => number,
 ): number | null {
   if (passo.pausaManual) return null;
-  if (!passo.fala) return Math.round(INTERVALO_SEM_FALA_MS / velocidade);
-  return reguaDeLeitura(passo.fala);
+  // A pausa extra do autor é tempo de olhar a posição, como a leitura: não acelera.
+  const extra = passo.esperaMs ?? 0;
+  if (!passo.fala) return Math.round(INTERVALO_SEM_FALA_MS / velocidade) + extra;
+  return reguaDeLeitura(passo.fala) + extra;
 }
 
 /** A duração da animação da peça, que é "movimento" e por isso obedece à velocidade. */

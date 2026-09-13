@@ -3,11 +3,51 @@ import { closeSync, existsSync, mkdirSync, openSync, readFileSync, readdirSync, 
 import { randomUUID } from "node:crypto";
 import { caminhoDeAula, conflito, escreverAtomico, hashDoTexto, lerConteudo, serializar } from "../editor/rascunhos.ts";
 import { editorLigado } from "../editor/local.ts";
-import { aulaIdV2Schema, completarAulaV2Legada, validarAulaV2, type AulaV2 } from "./modelo.ts";
+import { aulaIdV2Schema, aulaV2Schema, completarAulaV2Legada, formatarProblemaV2, validarAulaV2, type AulaV2, type ProblemaV2 } from "./modelo.ts";
 
 const PASTA_V2 = path.join(".editor", "v2");
 
 export type DocumentoV2 = { aula: AulaV2; texto: string; hash: string };
+
+/**
+ * As pendências editoriais que o rascunho **guarda** e a publicação cobra.
+ *
+ * "Erro impede publicar, não salvar" (`limites.ts`; plano §7: "o rascunho versionado exige
+ * estrutura íntegra, mas pode conter pendências editoriais identificadas"). Até a fatia 7
+ * o salvamento recusava qualquer erro — um teto estourado prendia o professor num arquivo
+ * grande demais para ele conseguir encolher.
+ *
+ * A lista é do que **pode** passar, e não do que é barrado, de propósito: um código novo
+ * nasce recusado ao salvar até alguém decidir que ele é pendência, e não o contrário.
+ * Fica de fora tudo o que impede montar o documento — forma do schema, árvore quebrada,
+ * referência a entidade que não existe.
+ */
+const PENDENCIAS_QUE_O_RASCUNHO_GUARDA = new Set([
+  // tetos (§17)
+  "LIMITE_NOS_ANALISE", "LIMITE_PROFUNDIDADE", "LIMITE_NOS_AULA", "LIMITE_BYTES", "LIMITE_COMENTARIOS", "LIMITE_DESENHOS",
+  // legalidade (só com as posições em mãos)
+  "LANCE_ILEGAL", "POSICAO_INEXISTENTE",
+  // proveniência e certificação (§12)
+  "POSICAO_SEM_PROVENIENCIA", "PRATICA_SEM_PROVENIENCIA", "CERTIFICACAO_SEM_PROVENIENCIA", "PROVENIENCIA_DUPLICADA",
+  "CERTIFICACAO_SEM_APROVACAO",
+  // receita de treino derivado com fonte ausente (§5: bloqueia a publicação até ser reparada)
+  "FONTE_TREINO_AUSENTE",
+]);
+
+/** Os erros que impedem guardar ou reabrir o rascunho — os de forma. */
+export function errosDeFormaV2(diagnosticos: ProblemaV2[]): ProblemaV2[] {
+  return diagnosticos.filter((problema) => problema.severidade === "erro" && !PENDENCIAS_QUE_O_RASCUNHO_GUARDA.has(problema.codigo));
+}
+
+/** Valida para o rascunho: forma fechada, pendências editoriais aceitas. */
+function validarRascunhoV2(cru: unknown): { ok: true; aula: AulaV2 } | { ok: false; problemas: string[] } {
+  const validado = validarAulaV2(cru);
+  if (validado.ok) return { ok: true, aula: validado.aula };
+  const impedem = errosDeFormaV2(validado.diagnosticos);
+  if (impedem.length) return { ok: false, problemas: impedem.map(formatarProblemaV2) };
+  // Só pendências: a forma passou no schema (SCHEMA_V2 nunca é pendência).
+  return { ok: true, aula: aulaV2Schema.parse(cru) };
+}
 
 /**
  * O arquivo desta aula na pasta do v2.
@@ -56,7 +96,7 @@ export function lerDocumentoV2(id: string, raiz = process.cwd()): DocumentoV2 | 
   if (!conteudo) return null;
   let cru: unknown;
   try { cru = JSON.parse(conteudo.texto); } catch { throw new Error("o rascunho v2 contém JSON inválido"); }
-  const validado = validarAulaV2(cru);
+  const validado = validarRascunhoV2(cru);
   if (!validado.ok) throw new Error(`o rascunho v2 é inválido: ${validado.problemas.join("; ")}`);
   return { aula: validado.aula, texto: conteudo.texto, hash: conteudo.hash };
 }
@@ -72,7 +112,7 @@ export function gravarDocumentoV2(id: string, cru: unknown, baseHash: string | n
   | { ok: true; hash: string }
   | { ok: false; erro: string; conflito?: { textoAtual: string | null; hashAtual: string | null }; problemas?: string[] } {
   if (!editorLigado(env)) return { ok: false, erro: "o editor local está desligado" };
-  const validado = validarAulaV2(cru);
+  const validado = validarRascunhoV2(cru);
   if (!validado.ok) return { ok: false, erro: "o documento v2 ainda não é válido", problemas: validado.problemas };
   if (validado.aula.id !== id) return { ok: false, erro: "o documento pertence a outra aula" };
   const resultado = comExclusao(id, raiz, () => {
