@@ -16,8 +16,10 @@ type Publicacao = Awaited<ReturnType<typeof publicacoesDaAulaV2Acao>>[number];
  * Desativar o v2 devolve o aluno à aula v1. As duas ações pedem confirmação escrita na
  * própria linha, porque mudam o que o aluno recebe.
  */
-export function DialogoPublicacoes({ aulaId, metadados, aoEditarMetadados, aoFechar }: {
+export function DialogoPublicacoes({ aulaId, metadados, aoEditarMetadados, aoReativar, aoFechar }: {
   aulaId: string;
+  /** Avisa o editor depois de reativar (D11): a conferência da tela deixa de valer. */
+  aoReativar?: (publicationId: string) => void;
   metadados?: MetadadosAulaV2;
   /** Nível e classe entram no Desfazer como qualquer edição (`EDITAR_METADADOS`). */
   aoEditarMetadados?: (comando: ComandoV2) => void;
@@ -26,6 +28,8 @@ export function DialogoPublicacoes({ aulaId, metadados, aoEditarMetadados, aoFec
   const [lista, setLista] = useState<Publicacao[] | null>(null);
   const [confirmando, setConfirmando] = useState<string | null>(null);
   const [recado, setRecado] = useState<string | null>(null);
+  /** A troca do ponteiro leva ~1 s no `next dev` (roteiro 8F): sem este estado a confirmação parecia não ter pegado. */
+  const [trocando, setTrocando] = useState(false);
 
   const carregar = useCallback(() => {
     publicacoesDaAulaV2Acao(aulaId).then(setLista).catch(() => setLista([]));
@@ -33,9 +37,11 @@ export function DialogoPublicacoes({ aulaId, metadados, aoEditarMetadados, aoFec
   useEffect(() => { carregar(); }, [carregar]);
 
   const reativar = async (publicationId: string) => {
-    const resultado = await reativarPublicacaoV2Acao(aulaId, publicationId);
+    setTrocando(true);
+    const resultado = await reativarPublicacaoV2Acao(aulaId, publicationId).finally(() => setTrocando(false));
     setConfirmando(null);
     setRecado(resultado.ok ? `A publicação ${publicationId} voltou a ser a ativa.` : `Não foi possível reativar: ${resultado.motivo}.`);
+    if (resultado.ok) aoReativar?.(publicationId);
     carregar();
   };
 
@@ -65,11 +71,11 @@ export function DialogoPublicacoes({ aulaId, metadados, aoEditarMetadados, aoFec
             <li key={item.publicationId} className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-borda-fraca p-2 text-sm">
               <span className="min-w-0">
                 <span className="font-medium text-tinta">{item.titulo ?? "(pacote ilegível)"}</span>
-                <span className="block text-xs text-tinta-fraca">{item.publicationId}{item.ativa ? " · ativa" : ""}{item.integra ? "" : " · não está íntegra"}</span>
+                <span className="block text-xs text-tinta-fraca">{item.publicationId}{item.ativa ? " · ativa — é a que o aluno recebe" : ""}{item.anterior ? " · a anterior" : ""}{item.integra ? "" : " · não está íntegra"}</span>
               </span>
               {item.ativa || !item.integra ? null : confirmando === item.publicationId ? (
                 <span className="flex gap-2">
-                  <button type="button" onClick={() => void reativar(item.publicationId)} className="foco rounded-md border border-aviso-superficie px-2 py-1 text-xs text-aviso-tinta">Sim, reativar esta</button>
+                  <button type="button" disabled={trocando} onClick={() => void reativar(item.publicationId)} className="foco rounded-md border border-aviso-superficie px-2 py-1 text-xs text-aviso-tinta disabled:opacity-60">{trocando ? "Reativando…" : "Sim, reativar esta"}</button>
                   <button type="button" onClick={() => setConfirmando(null)} className="foco rounded-md border border-borda px-2 py-1 text-xs text-tinta">Cancelar</button>
                 </span>
               ) : (

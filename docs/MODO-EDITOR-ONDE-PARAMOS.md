@@ -125,11 +125,20 @@ cada linha aponta a seção que conta a história inteira.
   divergências da v1. 54/54 mutações, `db:rls` 52/52, `db:finais:v2` 18/18 e **roteiro de 10
   itens no Playwright**. Ver "fatia 7 — publicação v2".
 
+- **Fatia 8, repertório (§21) e aulas extras (§22), 13/9** — o `--check` do repertório passa a
+  comparar com o disco (o JSON tinha 1.099 `\r\n` fora da fonte); o escritor emendador reescreve só
+  o jogo tocado (11/11 arquivos byte a byte, 23/23 jogos com expansão idêntica); Aplicar é
+  transação recuperável com impacto em ids e progresso; `/editor/repertorio` edita pelo painel e
+  pelos comandos do v2 e cria abertura nova; as extras `EX-` com nível e classe entram na trilha
+  por dados e a publicação mostra o efeito real no fechamento do nível. 57/57 mutações, `db:rls`
+  52/52, `db:finais:v2` 18/18 e **roteiro de 14 itens no Playwright**, com 5 defeitos achados e
+  consertados na sessão. Ver "fatia 8 — repertório e aulas extras".
+
 **Aberto, na ordem:**
 
-1. **Repertório** (§21), **barra Stockfish** (§23),
-   **importar por URL do Lichess** (§13.2), **introdução e quadros** (§7.1) e
-   **aulas extras na trilha** (§22) continuam fora, sem redução de escopo.
+1. **Barra Stockfish** (§23, fatia 9), **importar por URL do Lichess** (§13.2) e **introdução e
+   quadros** (§7.1) continuam fora, sem redução de escopo. Do repertório e das extras, o que ficou
+   aberto está listado no fim da fatia 8.
 
 **Dívida conhecida e não paga:** em 1366×768 de CSS de verdade a lista mostra **5
 lances inteiros** por vez (169 px), e o bloco de edição rola por dentro. Se incomodar, o
@@ -3622,7 +3631,7 @@ Fatia 8 de §27: **repertório (§21) e aulas extras (§22)**.
 
 ---
 
-## Fatia 8 — repertório (§21) e aulas extras (§22), em andamento desde 13/9/2026
+## Fatia 8 — repertório (§21) e aulas extras (§22), fechada em 13/9/2026
 
 Plano executado de uma vez, como a fatia 7: paradas 8A → 8F, um commit por parada, o roteiro
 do Playwright só no fim (8F). O escritor do repertório é um **emendador** (só o jogo editado é
@@ -3897,6 +3906,105 @@ intacta, agora com a `EX-FIXTURE-V2` instalada, passa); `trilhaCompleta` **49 �
 
 **Os sete portões:** tipos, lint, **1.226 testes**, build, conteúdo (38 do cache, 0 pela rede),
 **57/57 mutações** e repertório `--check`.
+
+### Parada 8F — sobras da fatia 7, o roteiro no Playwright, e limpeza
+
+- **D12:** comando `RENOMEAR_AULA` (vazio ou igual não muda nada nem entra no histórico) e o título
+  da aula editável no cabeçalho do Editor v2 (Enter confirma, Esc volta).
+- **D11:** `publicacoesDaAulaV2` devolve a ativa primeiro, a anterior em seguida e marca
+  `anterior`; a lista diz "ativa — é a que o aluno recebe" e "a anterior"; reativar avisa o editor,
+  que apaga a conferência verde da tela e diz "confira de novo antes de publicar"; o botão de
+  confirmar mostra "Reativando…" enquanto a troca acontece.
+
+```
+ANTES   renomear-e-publicacoes.test.ts contra comandos.ts e publicar.ts da 8E: tests 2, pass 0, fail 2
+DEPOIS  tests 2, pass 2
+```
+
+**O roteiro, rodado em 13/9/2026** em `http://localhost:3000` (`next dev`), com o navegador do
+Playwright já na sessão do professor e o aluno de teste numa segunda sessão. Medida conferida:
+`innerWidth` 1366, `innerHeight` 768, `devicePixelRatio` 1.
+
+| Item | Resultado medido |
+|---|---|
+| preparo | `git status` só com a 8F; **29** SHA-256 de antes (`N1-KPK.json` `4be602ca…`, 3 aulas v1, 11 `.pgn`, 12 JSON, `content/aulas-v2/N0-LADDER`); aluno de teste criado; `.editor/v2/EX-ENSAIO.json` gerado por script (N0-LADDER adaptada, nível 2, classe D) |
+| 1 | login: a sessão do professor já estava aberta no navegador — o PIN não foi digitado |
+| 2 | `/editor`: "Repertório de aberturas" e "EX-ENSAIO · aula extra · nível 2, classe D — entra na trilha ao publicar"; `/editor/repertorio`: **11** aberturas, **27** linhas = `index.json` |
+| 3 | Alapin, 2.c3: frase acrescentada → "salvo · rascunho" e `.editor/repertorio/brancas-alapin.pgn` |
+| 4 | 1.e4 → e7-e5 no tabuleiro: "Linha nova…", conferência com 3 erros (ponta no adversário, último lance sem comentário, 1 lance nosso de 12); Ctrl+Z → "nenhum erro". p95 de selecionar: 18 ms (medido na 8D) |
+| 5 | progresso do aluno de teste semeado na `brancas-alapin-5eb647e6`; a linha esticada (12…Rb8 13.a4 comentado) → impacto "1 linha deixa de existir… **2 registros de 2 alunos**… 1 linha nova… Entra no Base uma linha que ninguém aprendeu ainda…"; **Cancelar** não mudou nada. Os 2: o aluno de teste e a conta `professorteste`, que tem 9 tentativas nessa linha desde 9/9 — a conta está certa |
+| 6 | desfeito o esticamento, **Aplicar** a frase: só `brancas-alapin.pgn` e `brancas/alapin.json` mudam (o JSON só no comentário "2"), preâmbulo igual, `--check` verde, pasta da transação vazia, os outros **27** SHAs iguais |
+| 7 | aluno de teste em `/aberturas/brancas/alapin`: **a frase nova aparece sem reiniciar o `dev`** (D4 provado na tela) |
+| 8 | "+ Nova abertura": Cancelar fecha sem criar; "Defesa Holandesa de Ensaio" → `pretas-defesa-holandesa-de-ensaio.pgn` só com as tags. Aplicação real não feita: não há semente válida (sequência repetida vale no banco inteiro); a abertura nova por dados fica provada pelo teste da 8D (índice 12) |
+| 9 | `/editor/v2/nova`: curso pede "Série do identificador" (N0–N5, "não é o nível"); extra pede Nível 1–5 e Classe; criar sem classe é recusado com a frase; Cancelar e a recusa não criaram arquivo |
+| 10 | EX-ENSAIO: Conferir "0 problemas… Pode publicar"; impacto **"Aula extra: entra na conta do nível 2: para fechar o nível, antes 1 aula de finais, depois 2 aulas (o nível declara 4; publicadas no nível: 1 → 2)"** e "Quem ainda não fechou o nível 2 passa a precisar de mais 1 aula de finais"; publicada `pub-9c52e7a466af9bfd` |
+| 11 | nível tirado em Mais opções → Conferir: "1 problema impede publicar" com `EXTRA_SEM_NIVEL`, **Ir para o problema** abre Mais opções; Desfazer → "Pode publicar" |
+| 12 | aluno: `/finais` mostra "Ensaio de aula extra · extra · nível 2" na classe D e "0 de **4** publicadas" (eram 3); `/trilha` a lista no nível 2; `/finais/EX-ENSAIO` abre; `/professor` conta "0 de 4 · E 0/2 · D 0/2". `/painel` mostra o nível 1, porque o aluno de teste está no nível 1 — a exigência do nível 2 aparece na trilha e no impacto, não no cartão dele |
+| 13 | título renomeado no cabeçalho → Conferir → Publicar (`pub-a4bfc630ebcf3ce5`, impacto "já conta… a exigência continua 2 aulas") → Mais opções lista **2**, a ativa primeiro e "a anterior" → Reativar a anterior → o editor diz "A publicação pub-9c52… voltou a ser a que o aluno recebe… confira de novo" e esconde o Publicar; o aluno vê o título anterior |
+| 14 | console do aluno: **0 erros**, 1 aviso de imagem LCP em `/entrar` (anterior à fatia); console do professor: **0 avisos e 1 erro** `net::ERR_INSUFFICIENT_RESOURCES` no instante do item 6. **Não reproduziu**: uma segunda aplicação inteira com escuta de console e de requisição falha deu 0 e 0; a primeira coincidiu com o `dev` recompilando a página |
+
+**Cinco defeitos achados rodando, consertados e reconferidos na mesma sessão:**
+
+1. **Abertura nova dizia "passa nas regras" e habilitava Aplicar** (item 8). Uma casca só de
+   cabeçalho não gera linha, e a conferência ficava vazia. Agora é erro com a lista do que falta
+   (12 lances nossos, roque, peças menores fora, comentário), e Aplicar fica travado. Teste:
+   `sessao.test.ts` **antes 8/9, depois 9/9**; na tela, "1 erro(s)" e Aplicar desabilitado.
+2. **Aula `EX-` abria no editor com o pacote de posições vazio** (item 10): uma extra montada sobre
+   uma posição do curso acusava "a posição não está no pacote desta aula" e o tabuleiro não montava,
+   enquanto o Conferir do servidor dava verde. A página passa as posições que o documento referencia.
+   Na tela: o problema some e o tabuleiro monta.
+3. **"Os alunos deixam de receber a versão antiga"** na primeira publicação de uma extra, que não
+   tem versão antiga (item 10). Teste: `impacto-publicacao.test.ts` **antes 4/5, depois 5/5**.
+4. **"— em os dados da aula"** no painel de problemas (item 11). `emOnde` contrai também `os`/`as`.
+   Teste: `diagnostico-visual.test.ts` **antes 10/11, depois 11/11**.
+5. **Confirmar a reativação ficava ~1 s sem retorno** (item 13): parecia que o clique não pegou.
+   Estado "Reativando…" com o botão desabilitado.
+
+**Limpeza e prova final:** `git checkout` do `.pgn` da Alapin e recompilado; apagados
+`.editor/repertorio/` (rascunho da holandesa e a pasta de transação), `.editor/v2/EX-ENSAIO.json`,
+`content/aulas-v2/EX-ENSAIO/`, `.editor/gate/v2/EX-ENSAIO.json`, snapshots e transação da
+EX-ENSAIO, os scripts do roteiro e o `content/rascunhos/lessons/N0-LADDER.json` que o `dev` criou
+ao pré-carregar o link "Abrir v2" do índice (byte a byte igual ao publicado); conta do aluno de
+teste apagada (o progresso semeado vai junto). **29/29 SHA-256 iguais aos de antes**;
+`content/aulas-v2/N0-LADDER/` presente. `EX-FIXTURE-V2` fica, versionada.
+
+**Os portões finais** (sobre a 8F, com o conteúdo limpo): tipos, lint, **1.228 testes**, build,
+conteúdo (38 do cache, 0 pela rede), **57/57 mutações** com os controles verdes, repertório
+`--check`, **`db:rls` 52/52** e **`db:finais:v2` 18/18**. A fatia 8 não mudou schema do banco.
+
+**§28:** marcado "Repertório editado pela fonte PGN e compilação coerente" — o PGN é a fonte, a
+tela edita pela casca e grava PGN, Aplicar é transação recuperável (4/4 interrupções) com impacto
+em ids e progresso, os 11 arquivos saem byte a byte sem edição e o roteiro aplicou uma edição real
+até o aluno. "Nova aula e aula extra pela tela" **continua desmarcado**: a extra pede nível e
+classe e publica com o efeito real no nível, mas a EX-ENSAIO do roteiro nasceu por script, porque a
+prática ainda não se cria pela tela (§17.1).
+
+### O que a fatia 8 NÃO cobre — registrado, sem reduzir §21, §22 nem §28
+
+- **O jogo reescrito reflui as quebras de linha entre lances.** A semântica é provada idêntica
+  (8B), mas o diff da Alapin mostrou 7 trechos em que o autor quebrava a linha antes de um número de
+  lance e o escritor junta. Preservar o espaço original entre tokens intocados é o próximo passo do
+  emendador.
+- **"N registros de N alunos" conta contas, não só alunos**: a `professorteste` entrou na conta do
+  item 5. Filtrar por papel é decisão do Doug.
+- Desenho do repertório **na tela do aluno** (`LinhaSchema.desenhos`), e o botão direito no editor
+  do repertório (o escritor já preserva `%cal`/`%csl`).
+- Recuperação no IndexedDB para o repertório (há rascunho em disco com `baseHash`).
+- Formulário de `notas.json`, botão commit/push e importar estudo no repertório (opcionais em §21).
+- Aplicar uma abertura nova **pela tela**, com linha completa (provado só no teste, por falta de
+  semente que não repita sequência).
+- Data em cada publicação v2 e diff entre publicações; contar quem ainda não fechou o nível.
+- Criar uma extra **com prática** pela tela (§17.1 é de outra fatia; a EX-ENSAIO nasceu por script).
+- Abrir `/editor` faz o `next dev` pré-carregar "Abrir v2" e criar o rascunho v1 da aula como
+  efeito colateral de um GET (comportamento anterior à fatia).
+- Pendências antigas da fatia 7 que não são desta (desenho/pausa por narração, cor da introdução,
+  exceção a `CERTIFICACAO_REFUTADA`, várias práticas, `db:finais` v1 quebrado).
+- **Push, merge e deploy**: só quando o Doug pedir. O repertório e a trilha mudaram em `content/`,
+  `public/` e no código; nada disso chega ao site sem commit, push e deploy.
+
+### O próximo ponto exato
+
+Fatia 9 de §27: **worker Stockfish do professor (§23)**.
 
 ---
 

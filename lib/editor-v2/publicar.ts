@@ -261,16 +261,23 @@ function guardarSnapshotDePublicacao(id: string, raiz: string, texto: string, pu
   for (const antigo of arquivos.slice(0, Math.max(0, arquivos.length - 20))) rmSync(path.join(pasta, antigo), { force: true });
 }
 
-/** As publicações guardadas de uma aula, da mais recente para a mais antiga, com a ativa marcada. */
-export function publicacoesDaAulaV2(id: string, raiz = process.cwd()): Array<{ publicationId: string; ativa: boolean; integra: boolean; titulo: string | null }> {
+/**
+ * As publicações guardadas de uma aula: **a ativa primeiro, a anterior em seguida**, e o resto
+ * pelo id. O comentário antigo prometia "da mais recente para a mais antiga", e a lista saía na
+ * ordem do hash (D11): a publicação que o professor acabou de fazer podia aparecer por último.
+ * O id é hash do conteúdo, sem data; o ponteiro é o único que sabe quem veio antes.
+ */
+export function publicacoesDaAulaV2(id: string, raiz = process.cwd()): Array<{ publicationId: string; ativa: boolean; anterior: boolean; integra: boolean; titulo: string | null }> {
   const content = contentDe(raiz);
   let ponteiro: PonteiroV2 | null = null;
   try { ponteiro = lerPonteiroV2(content, id); } catch { ponteiro = null; }
-  return idsDePublicacoesV2(content, id).map((publicationId) => {
+  const peso = (publicationId: string) => (publicationId === ponteiro?.publicationId ? 0 : publicationId === ponteiro?.anterior ? 1 : 2);
+  const ids = [...idsDePublicacoesV2(content, id)].sort((a, b) => peso(a) - peso(b) || (a < b ? -1 : a > b ? 1 : 0));
+  return ids.map((publicationId) => {
     let cru: unknown = null;
     try { cru = lerPublicacaoCruaV2(content, id, publicationId); } catch { cru = null; }
     const integra = cru !== null && problemasDoPacoteV2(cru).length === 0;
-    return { publicationId, ativa: ponteiro?.publicationId === publicationId, integra, titulo: integra ? (cru as PacoteV2).aula.titulo : null };
+    return { publicationId, ativa: ponteiro?.publicationId === publicationId, anterior: ponteiro?.anterior === publicationId, integra, titulo: integra ? (cru as PacoteV2).aula.titulo : null };
   });
 }
 

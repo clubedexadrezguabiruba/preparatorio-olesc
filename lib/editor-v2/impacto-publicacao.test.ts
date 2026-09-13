@@ -50,6 +50,8 @@ test("extra nova no nível 2: entra na conta, exigidas 1 → 2, e a frase diz is
   assert.ok(frases.includes("Aula extra: entra na conta do nível 2: para fechar o nível, antes 1 aula de finais, depois 2 aulas (o nível declara 4; publicadas no nível: 1 → 2)."), frases.join("\n"));
   assert.ok(frases.some((f) => f.startsWith("Quem ainda não fechou o nível 2 passa a precisar de mais 1 aula")));
   assert.ok(!frases.some((f) => f === "A aula conta para o fechamento do nível 2."), "a frase antiga, falsa para a extra, não volta");
+  // Achado no roteiro da 8F: a extra não tem versão antiga para os alunos "deixarem de receber".
+  assert.equal(frases[0], "É a primeira publicação desta aula extra: ela passa a existir para os alunos.");
 });
 
 test("republicar a mesma extra: já conta, a exigência não muda", () => {

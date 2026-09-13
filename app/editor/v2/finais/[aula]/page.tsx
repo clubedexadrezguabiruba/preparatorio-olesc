@@ -3,7 +3,9 @@ import { EditorV2 } from "@/components/editor-v2/EditorV2";
 import { exigirEditor } from "@/lib/editor/acesso";
 import { abrirRascunhoDeAula } from "@/lib/editor/rascunhos";
 import { adaptarLessonV1 } from "@/lib/editor-v2/adaptar-v1";
+import { lerPosicoesDoConteudoV2 } from "@/lib/editor-v2/gate";
 import { hashDaPosicao } from "@/lib/editor-v2/hash";
+import { idsDePosicoesDaAulaV2 } from "@/lib/editor-v2/pacote";
 import { aulaIdV2Schema, problemasDaAulaV2 } from "@/lib/editor-v2/modelo";
 import { recuperarTransacaoV2 } from "@/lib/editor-v2/publicar";
 import { documentoInicialV2, lerDocumentoV2 } from "@/lib/editor-v2/rascunhos";
@@ -52,12 +54,24 @@ export default async function PaginaDoEditorV2({ params }: { params: Promise<{ a
   if (!aberto) {
     const documento = lerDocumentoV2(aula);
     if (!documento) notFound();
+    /*
+     * As posições que o documento referencia, lidas de `content/positions/`. Até a fatia 8 ia
+     * um pacote vazio, com a premissa de que "uma aula nova não referencia posição revisada" —
+     * falsa para uma extra montada sobre uma posição do curso: o painel acusava "a posição não
+     * está no pacote" e o tabuleiro não montava, enquanto o Conferir (que lê o disco) dava
+     * verde. Achado no roteiro da 8F, com a EX-ENSAIO.
+     */
+    const todas = lerPosicoesDoConteudoV2();
+    const positions = Object.fromEntries(idsDePosicoesDaAulaV2(documento.aula).filter((id) => todas[id]).map((id) => [id, todas[id]]));
+    const daProveniencia = problemasDaAulaV2(documento.aula, positions, hashDaPosicao)
+      .filter((problema) => problema.codigo.startsWith("PROVENIENCIA_") || problema.codigo === "CERTIFICACAO_SEM_APROVACAO");
     return (
       <EditorV2
         aulaId={aula}
         documentoInicial={documento.aula}
         hashInicial={documento.hash}
-        positions={{}}
+        positions={positions}
+        problemasDaOrigem={daProveniencia}
         regua={lerRegua()}
       />
     );

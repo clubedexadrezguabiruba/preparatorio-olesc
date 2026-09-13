@@ -854,7 +854,19 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
       <main className="mx-auto flex w-full max-w-3xl flex-col gap-4 p-4">
         <header className="flex flex-col gap-1">
           <p className="text-xs font-medium uppercase tracking-wide text-metodo-tinta">Editor v2 · aula nova</p>
-          <h1 className="titulo">{historico.presente.titulo}</h1>
+          <h1 className="titulo">
+            <input
+              key={historico.presente.titulo}
+              aria-label="Título da aula"
+              defaultValue={historico.presente.titulo}
+              onBlur={(e) => aplicar({ tipo: "RENOMEAR_AULA", titulo: e.currentTarget.value })}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") e.currentTarget.blur();
+                if (e.key === "Escape") { e.currentTarget.value = historico.presente.titulo; e.currentTarget.blur(); }
+              }}
+              className="foco -mx-1 w-full min-w-[12rem] rounded-md border border-transparent bg-transparent px-1 hover:border-borda focus:border-borda"
+            />
+          </h1>
           <p className="text-sm text-tinta-media">
             Esta aula ainda não tem capítulo. Um capítulo é uma posição ou partida com o percurso que você quer mostrar —
             comece por uma posição montada, por uma FEN colada ou por um PGN.
@@ -919,7 +931,19 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs font-medium uppercase tracking-wide text-metodo-tinta">Editor v2 · piloto</p>
-          <h1 className="titulo">{historico.presente.titulo}</h1>
+          <h1 className="titulo">
+            <input
+              key={historico.presente.titulo}
+              aria-label="Título da aula"
+              defaultValue={historico.presente.titulo}
+              onBlur={(e) => aplicar({ tipo: "RENOMEAR_AULA", titulo: e.currentTarget.value })}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") e.currentTarget.blur();
+                if (e.key === "Escape") { e.currentTarget.value = historico.presente.titulo; e.currentTarget.blur(); }
+              }}
+              className="foco -mx-1 w-full min-w-[12rem] rounded-md border border-transparent bg-transparent px-1 hover:border-borda focus:border-borda"
+            />
+          </h1>
           <p className="text-sm text-tinta-fraca">Formato novo separado. A aula publicada e o editor atual não são alterados.</p>
         </div>
         <div className="flex items-center gap-2">
@@ -1011,6 +1035,13 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
           aulaId={aulaId}
           metadados={historico.presente.metadados}
           aoEditarMetadados={aplicar}
+          aoReativar={(publicationId) => {
+            // D11: o aluno passou a receber outra publicação. A conferência verde da tela era
+            // sobre o documento contra a ativa de antes, e o botão Publicar não pode continuar
+            // prometendo o que prometia.
+            setConferencia(null);
+            setRecado(`A publicação ${publicationId} voltou a ser a que o aluno recebe. O documento na tela continua o seu rascunho: confira de novo antes de publicar.`);
+          }}
           aoFechar={() => { setVendoPublicacoes(false); queueMicrotask(() => botaoMaisOpcoes.current?.focus()); }}
         />
       ) : null}

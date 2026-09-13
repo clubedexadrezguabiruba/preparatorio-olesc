@@ -816,7 +816,7 @@ Ao final de cada fatia:
 - [x] Publicação atômica, snapshots e recuperação.
 - [x] Progresso por revisão e rejulgamento no servidor.
 - [x] Migração v1 explícita e conteúdo antigo preservado.
-- [ ] Repertório editado pela fonte PGN e compilação coerente.
+- [x] Repertório editado pela fonte PGN e compilação coerente.
 - [ ] Barra Stockfish isolada do motor do aluno.
 - [ ] Limites e metas de desempenho comprovados.
 - [ ] Acessibilidade e teste humano final aprovados.

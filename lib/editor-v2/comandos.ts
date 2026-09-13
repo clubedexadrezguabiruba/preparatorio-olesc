@@ -35,6 +35,8 @@ import {
 } from "./propriedade-treino.ts";
 
 export type ComandoV2 =
+  /** §5.3: o título da aula, editável no cabeçalho. Vazio não apaga o título anterior. */
+  | { tipo: "RENOMEAR_AULA"; titulo: string }
   | { tipo: "RENOMEAR_CAPITULO"; capituloId: string; titulo: string }
   /**
    * Move a etapa de um capítulo para um dos vãos entre os capítulos visíveis.
@@ -187,6 +189,12 @@ function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<
     if (!entrou) novas[comando.chave] = valor;
     const origemPgn = { naoReconhecidos: [], ...analise.origemPgn, tags: novas };
     return { ...aula, analises: aula.analises.map((item) => item.id === analise.id ? { ...item, origemPgn } : item) };
+  }
+  if (comando.tipo === "RENOMEAR_AULA") {
+    const titulo = comando.titulo.trim();
+    // Vazio não apaga (§8.4 diz o mesmo do capítulo), e o mesmo título não é edição (§6.1).
+    if (!titulo || titulo === aula.titulo) return aula;
+    return { ...aula, titulo };
   }
   if (comando.tipo === "RENOMEAR_CAPITULO") {
     return { ...aula, capitulos: aula.capitulos.map((c) => c.id === comando.capituloId ? { ...c, titulo: comando.titulo.trim() || c.titulo } : c) };

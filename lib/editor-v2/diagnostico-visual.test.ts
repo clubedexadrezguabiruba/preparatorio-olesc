@@ -148,6 +148,8 @@ test("a aula real do piloto não produz problema nenhum para mostrar", () => {
 test("a preposição contrai como em português, e não fica «em o»", () => {
   assert.equal(emOnde("o 2º lance do capítulo «X»"), "no 2º lance do capítulo «X»");
   assert.equal(emOnde("a 3ª etapa do roteiro da aula"), "na 3ª etapa do roteiro da aula");
+  // Achado no roteiro da 8F: o destino dos metadados é plural, e a tela escrevia "em os dados".
+  assert.equal(emOnde("os dados da aula, em Mais opções"), "nos dados da aula, em Mais opções");
   assert.equal(emOnde("um lance de variante, no capítulo «X»"), "num lance de variante, no capítulo «X»");
   assert.equal(emOnde("uma prática que não existe mais"), "numa prática que não existe mais");
   // Sem artigo na frente, a preposição fica solta mesmo — é o certo.

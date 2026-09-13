@@ -168,7 +168,12 @@ test("abertura nova: o formulário gera só as tags, e recusa o que o PGN não g
   assert.ok(nova.ok && nova.texto.startsWith('[Abertura "gambito-evans"]\n[Nome "Gambito Évans"]'));
   const casca = cascaDoArquivo("brancas-gambito-evans", nova.ok ? nova.texto : "");
   assert.equal(casca.aula.analises.length, 1, "o cabeçalho sem lances já é um jogo que a tela edita");
-  assert.ok(conferirCasca(casca.aula, casca.formas).linhas.length === 0);
+  const vazia = conferirCasca(casca.aula, casca.formas);
+  assert.equal(vazia.linhas.length, 0);
+  // Achado no roteiro da 8F: sem este erro a tela dizia "este jogo passa nas regras" e
+  // habilitava Aplicar numa abertura sem lance nenhum.
+  assert.equal(vazia.itens.filter((i) => i.severidade === "erro").length, 1);
+  assert.match(vazia.itens[0].mensagem, /ainda não tem nenhuma linha/);
 
   const recusada = pgnDaAberturaNova({ cor: "brancas", nome: 'A "melhor"', nivel: "base", fonte: "" }, ["brancas-a-melhor"]);
   assert.equal(recusada.ok, false);

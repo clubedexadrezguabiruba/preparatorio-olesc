@@ -174,6 +174,17 @@ function conferirAnaliseSemCache(analise: AnaliseV2, formas?: FormasDosNags): Co
       itens.push({ severidade: "erro", mensagem: `faltam no jogo: ${lido.faltando.join(", ")} (em Mais opções)`, analiseId: analise.id, nodeId: null });
       return { itens, linhas };
     }
+    if (partida.lances.length === 0) {
+      // A abertura que acabou de nascer tem só o cabeçalho. Sem este erro a conferência
+      // ficava vazia — "passa nas regras" — e Aplicar parecia possível (achado no roteiro 8F).
+      itens.push({
+        severidade: "erro",
+        mensagem: "este jogo ainda não tem nenhuma linha: jogue os lances no tabuleiro. A abertura só entra no repertório com ao menos uma linha completa — 12 lances nossos, o roque feito, as peças menores fora e todo lance nosso comentado.",
+        analiseId: analise.id,
+        nodeId: analise.raizId,
+      });
+      return { itens, linhas };
+    }
     const expansao = expandir(partida, lido.cabecalho);
     for (const p of expansao.problemas) itens.push({ severidade: "erro", mensagem: p, analiseId: analise.id, nodeId: null });
     for (const aviso of expansao.avisos) {

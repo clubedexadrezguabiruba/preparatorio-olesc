@@ -64,6 +64,8 @@ export function emOnde(onde: string): string {
   const contracoes: [RegExp, string][] = [
     [/^o /, "no "],
     [/^a /, "na "],
+    [/^os /, "nos "],
+    [/^as /, "nas "],
     [/^um /, "num "],
     [/^uma /, "numa "],
   ];

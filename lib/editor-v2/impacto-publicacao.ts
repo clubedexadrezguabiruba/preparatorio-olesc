@@ -116,7 +116,11 @@ export function frasesDoImpactoV2(impacto: ImpactoDaPublicacaoV2, alunos: { comP
   const frases: string[] = [];
   frases.push(impacto.publicationIdAnterior
     ? "Substitui a publicação v2 ativa; ela continua guardada e pode ser reativada."
-    : "É a primeira publicação v2 desta aula: os alunos deixam de receber a versão antiga.");
+    // Uma extra nunca teve versão v1: dizer que os alunos "deixam de receber a versão antiga"
+    // era falso para ela (achado no roteiro da 8F).
+    : impacto.aulaId.startsWith("EX-")
+      ? "É a primeira publicação desta aula extra: ela passa a existir para os alunos."
+      : "É a primeira publicação v2 desta aula: os alunos deixam de receber a versão antiga.");
   frases.push(...frasesDoFechamento(impacto));
   for (const avaliacao of impacto.avaliacoes) {
     const nome = `${avaliacao.tipo === "pratica" ? "Prática" : "Treino"} «${avaliacao.titulo}»`;
