@@ -3622,6 +3622,50 @@ Fatia 8 de §27: **repertório (§21) e aulas extras (§22)**.
 
 ---
 
+## Fatia 8 — repertório (§21) e aulas extras (§22), em andamento desde 13/9/2026
+
+Plano executado de uma vez, como a fatia 7: paradas 8A → 8F, um commit por parada, o roteiro
+do Playwright só no fim (8F). O escritor do repertório é um **emendador** (só o jogo editado é
+reescrito; o resto sai byte a byte), a tela reaproveita o painel do v2 por uma casca em memória,
+a persistência é sempre PGN, e as aulas extras entram na trilha por dados.
+
+### Parada 8A — compilador puro e `--check` honesto
+
+**O defeito:** `npm run repertorio:compilar -- --check` compilava os onze PGN e saía verde
+**sem abrir `public/repertorio/`**. O JSON publicado carregava **1.099** quebras `\r\n` dentro
+dos comentários (medido em 13/9/2026; o mapeamento tinha estimado 64 contando outra coisa) —
+resto de uma compilação feita quando os PGN ainda eram CRLF no Windows. Os PGN são LF desde o
+`.gitattributes`; o derivado nunca foi refeito, e nenhum dos sete portões via.
+
+- `lib/repertorio/compilar.ts`: `compilarRepertorio(fontes, notas)` devolve problemas, avisos,
+  placar, resumo por arquivo, linhas e `saida` (caminho → os bytes exatos de cada JSON e do
+  `index.json`). `diferencasDoCompilado` diz arquivo **desatualizado**, **faltando** e
+  **sobrando**. As notas entram por parâmetro: o editor compila candidatos em que uma abertura
+  pode nascer ou morrer.
+- `lib/repertorio/compilar-em-disco.ts`: ler fontes, ler compilado, escrever compilado (e apagar
+  o JSON de abertura que saiu). Não é transação — a do editor é a da 8C.
+- `scripts/compilar-repertorio.ts` virou linha de comando fina, com `--origem`/`--destino`; o
+  `--check` falha com "compilado desatualizado" e a lista.
+- `public/repertorio/` recompilado.
+
+```
+ANTES   compilar.test.ts: tests 5, pass 4, fail 1
+          ✖ o compilado em public/repertorio/ é byte a byte o que a fonte produz
+            + 11 × 'public/repertorio/<cor>/<abertura>.json: desatualizado'
+        --check antigo: "(--check: nada foi escrito.)", saída 0
+DEPOIS  tests 5, pass 5 — e o --check novo: "o compilado em disco bate com a fonte"
+```
+
+**Número da parada:** `\r\n` escapado nos JSON **1.099 → 0**; a diferença de cada um dos 11 JSON
+é **só** essa (conferido trocando `\r\n` por `\n` no texto antigo: 11 de 11 idênticos ao novo);
+`index.json` sem mudança, **27 ids** iguais antes e depois, incluídos os do Avançado; SHA-256 dos
+11 `.pgn` iguais (0 alterados).
+
+**Os sete portões:** tipos, lint, **1.174 testes**, build, conteúdo (38 do cache, 0 pela rede),
+**54/54 mutações** e repertório `--check` — agora comparando com o disco.
+
+---
+
 ## Como ligar o editor
 
 ```bash
