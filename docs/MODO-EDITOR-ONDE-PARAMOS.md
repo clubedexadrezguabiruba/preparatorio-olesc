@@ -124,8 +124,10 @@ ajuste é o teto de 50% do bloco. Em 375 px a página tem **rolagem para o lado*
 de conteúdo), anterior a este conserto e não investigada.
 
 **Isto não declara o editor pronto.** O roteiro de §27 tem as fatias 1 a 5 fechadas no
-código e no teste humano. A fatia 6 tem três paradas completas (6A, 6B e 6C) e a 6D
-aberta; as fatias 6 a 10 continuam abertas.
+código e no teste humano. A fatia 6 está fechada no código, com as quatro paradas (6A,
+6B, 6C e 6D) aprovadas em roteiro pelo Playwright — sem teste com uma pessoa; o Doug
+decidiu em 13/9 não fazê-lo agora. As fatias 7 a 10 continuam abertas, e a próxima é a
+**7, publicação v2 (§20)**.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -4077,33 +4079,19 @@ referência visual do Lichess fornecida por Doug em 11/9/2026.
 
 ## O próximo passo
 
-**A dívida do palco está paga** (seção acima, com os números das duas direções).
-O selo está inteiro, e o gesto de arrastar tem onde nascer.
+> **Esta seção foi reescrita em 13/9/2026.** A versão anterior, de 10/9, dizia que o
+> Bloco 2 estava suspenso à espera da proposta v2. Isso não vale mais: o
+> [`EDITOR-V2-PLANO-FINAL.md`](EDITOR-V2-PLANO-FINAL.md) foi aprovado e o trabalho segue
+> o roteiro de §27 da especificação. Os itens do antigo Bloco 2 foram absorvidos pelas
+> fatias: desenho e pausa já entregues (fatias 3 e 5), barra de avaliação na fatia 9.
 
-**O Bloco 2B e o arrastar estão entregues** (seções acima). **Mas o Bloco 2 está
-suspenso**: em 10/9/2026 o Doug abriu uma mudança de arquitetura que muda o que um
-selo é, e continuar os gestos antes de decidi-la é construir em cima de coisa que
-pode mudar. Ver "A conversa que mudou o rumo", acima, e
-[`EDITOR-V2-PROPOSTA.md`](EDITOR-V2-PROPOSTA.md) — **não aprovada**.
+**O próximo passo é a fatia 7, publicação v2 (§20):** gate autoral único, comparação do
+que será publicado, publicação atômica com snapshot/rollback, progresso por revisão e
+migração explícita. Depois, na ordem: fatia 8 (repertório e aulas extras), fatia 9
+(worker Stockfish) e fatia 10 (desempenho, acessibilidade e teste de uso final). O estado
+detalhado está em "Estado de hoje, em vinte linhas", no topo.
 
-O que sobra do Bloco 2, para quando a decisão sair:
-
-1. A **barrinha do tabuleiro** (flecha, casa, limpar, virar) e o chip
-   "desenho deste diagrama / alvo do treino". **Come altura** do palco — a conta
-   dele foi refeita e medida; conversar antes de escrever.
-2. O **lance por arrastar** no diagrama. Depende do remonte por `key` para ligar
-   `montagem`/`desenhavel`, o mesmo mecanismo da barrinha.
-3. O **`espera`** como controle de pausa — a única parada do arrastar que não foi
-   feita. Regra que morde: **zero OMITE o campo**, nunca `espera: 0`.
-4. `criarMotor()` extraído de `stockfish.ts` e a **barra de avaliação** com
-   worker próprio. **Come largura** ao lado do tabuleiro; é a última de propósito,
-   porque é a única que pode ser cortada sem deixar um gesto pela metade.
-
-Os itens 1 e 2 são os que a proposta do editor v2 mais atinge: se um selo passar a
-ser um capítulo com painel de lances, o "lance por arrastar" muda de dono. O item 4
-não é atingido por nada, e é o mais seguro de fazer enquanto a decisão não sai.
-
-E as três coisas levantadas que economizam tempo:
+Três lições técnicas das rodadas antigas continuam valendo:
 
 - **Ligar `montagem` (e `desenhavel`) exige `key` no `ChessBoard`.** As duas são
   lidas uma vez, com `useState(() => …)` (`ChessBoard.tsx:245` e `:247`), porque
