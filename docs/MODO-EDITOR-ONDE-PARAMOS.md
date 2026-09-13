@@ -99,13 +99,18 @@ cada linha aponta a seção que conta a história inteira.
   metade da coluna e rola por dentro; a lista rola na própria coluna e o clique do mouse
   abre o menu. Ver "a lista de lances deixa de ficar coberta".
 
+- **Texto próprio de cada defesa, e a régua de voz no treino, em 13/9 (§16.3, §16.4, plano
+  §6 e §12)** — cada resposta do defensor, a de abertura e a de fecho ganham um texto
+  opcional, que o aluno lê logo depois do feedback só quando o defensor joga aquele lance.
+  Todo texto do treino que chega ao aluno passa pela régua, que avisa na janela e não
+  impede salvar. 1.067 testes, 42/42 mutações, e **ensaio pelo Playwright**: tentativas
+  1, 2 e 3 → d2, d3, d2, cada uma com o seu texto. Ver "o texto de cada defesa".
+
 **Aberto, na ordem:**
 
 1. **6D, propriedade** (§16.5) — derivado/personalizado/independente com diff e refazer. A
    fatia 6 permanece aberta.
-2. **Feedback que descreve a defesa** — com duas defesas, o texto da resposta que narra
-   a defesa mente numa das tentativas. Decisão do Doug pendente (ver a seção da 6C).
-3. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
+2. **Publicação v2** (§20), **repertório** (§21), **barra Stockfish** (§23),
    **importar por URL do Lichess** (§13.2), **introdução e quadros** (§7.1) e
    **aulas extras na trilha** (§22) continuam fora, sem redução de escopo.
 
@@ -2970,6 +2975,152 @@ ensaio criou `content/rascunhos/lessons/N0-LADDER.json`; `.editor/v2/N0-LADDER.j
 chegou a nascer, porque nada foi editado. O rascunho foi apagado depois de o Playwright sair
 da página, e a ausência dos dois foi conferida. SHA-256 de `.editor/v2/N1-KPK.json` antes e
 depois: `4be602ca…b822`.
+
+---
+
+## Continuação — o texto de cada defesa, e a régua de voz no treino (13/9/2026)
+
+Fecha o primeiro achado da 6C: *o feedback que descreve a defesa mente numa das
+tentativas*. **Decisão do Doug, caminho (a):** cada defesa ganha um texto próprio e
+opcional, que o aluno lê quando o defensor joga aquele lance — também a de abertura e a
+de fecho. E, pedida junto: **todo texto do treino que chega ao aluno passa pela régua de
+voz, que avisa e não impede salvar.** Não antecipa nada da 6D.
+
+### O que o professor ganha
+
+- Embaixo de cada "Resposta do defensor", a caixa **"O que o aluno lê quando o defensor
+  joga e3d2 (opcional)"**. Embaixo do "Último lance do defensor", a mesma caixa para o
+  fecho. No bloco "Defensor", quando o treino começa na vez dele, a caixa da abertura
+  (**antes a janela nem mostrava a defesa inicial**).
+- Na prévia, o painel mostra o **feedback da resposta seguido do texto da defesa que saiu
+  naquela tentativa**, numa fala só. Sem texto, fica só o feedback, como antes.
+- Na lateral da janela, **"Régua de voz: N avisos"**, com o lugar em nomes (Pergunta 1 ·
+  resposta 1 · defesa e3d3) e o motivo; o rodapé soma "· N avisos da régua de voz". O
+  Salvar continua habilitado.
+
+### As decisões, e o porquê
+
+- **Feedback + texto, e não o texto no lugar do feedback** (Doug). O defensor responde em
+  620 ms; trocar o texto apagaria o que foi dito sobre o lance do aluno antes de ele ler.
+- **A régua confere a soma**, porque é a soma que o aluno lê: um feedback de 150
+  caracteres e um texto de 60 cabem sozinhos e estouram juntos. A tradução e a régua usam
+  a mesma função (`juntarFala`), para a conta e a tela não divergirem.
+- **Avisa, não bloqueia** (Doug), como o editor v1 já fazia no salvamento
+  (`app/editor/acoes.ts:66`). Decidir se a publicação v2 bloqueia é da fatia 7.
+- **Texto do fecho sem o lance do fecho é recusado** pela conferência: o texto não teria
+  quando aparecer, e apagá-lo em silêncio perderia autoria.
+- **A chave do texto inclui o lance do aluno** (`pergunta:lanceDoAluno:defesa`): duas
+  respostas da mesma pergunta podem levar à mesma defesa com feedbacks diferentes.
+- **O formato v1 não ganhou campo.** O texto viaja por um mapa ao lado da árvore
+  (`falasDoDefensor`) e chega ao `TreeStage` pela entrada opcional `v2`; a aula v1 não passa
+  essa entrada, e cada linha nova está atrás de `v2?.`. Um teste prova que `replySchema`
+  continua recusando `texto`.
+- **As contas da régua mudaram de arquivo, sem mudar uma linha.** Moravam em
+  `lib/lesson/voz.ts`, que importa `node:fs` e por isso não roda na janela, que é do
+  navegador. Foram para `lib/lesson/regua.ts`; `voz.ts` as reexporta, e a página do v2 lê
+  os números do documento no servidor e os entrega à janela.
+- **Dois textos padrão da própria janela usavam "método"**, palavra proibida: o feedback
+  com que nasce a "correta fora do método" e a mensagem padrão do catálogo vazio. Viraram
+  "…mas não é o caminho ensinado."
+
+### O que a régua colhe do treino (`lib/editor-v2/voz-do-treino.ts`)
+
+Título (rótulo), objetivo, introdução, explicação ao concluir, texto da abertura, dica de
+cada pergunta, e por resposta: feedback + texto de cada defesa que tem texto, feedback +
+texto do fecho, e o feedback sozinho onde ele aparece sozinho. **Fica fora** o texto do
+catálogo de erros e as mensagens padrão, que o treino v2 não mostra (o erro conhecido usa
+o feedback da resposta; o lance fora da linha usa a frase fixa da linha treinada).
+
+### Os testes, antes e depois
+
+15 testes novos em `texto-da-defesa.test.ts` e `voz-do-treino.test.ts`. Antes, com o
+mínimo para os arquivos carregarem e nenhum comportamento novo:
+
+```
+ANTES   ✖ o documento aceita um texto na defesa, na defesa inicial e na defesa final
+            actual: false   expected: true
+        ✖ cada tentativa lê o texto da defesa que o defensor jogou
+            actual: 'A torre fecha mais uma fileira.'
+            expected: 'A torre fecha mais uma fileira. O rei preto vai para d3.'
+        ✖ com a escolha fixa, o painel lê sempre o texto da primeira defesa
+        ✖ o treino das pretas lê o texto da abertura e o do fecho
+            actual: undefined   expected: 'As brancas levam a torre para g4.'
+        ✖ conferência: o texto da defesa é aparado, o vazio é omitido, e a tela não é alterada
+        ✖ conferência: texto do último lance do defensor sem o lance é recusado
+            actual: true   expected: false
+        ✖ salvar o mesmo texto não personaliza; escrever um texto novo personaliza
+        ✖ régua: a soma feedback + texto paga o teto de uma fala     actual: 0   expected: 1
+        ✖ régua: palavra de bastidor na abertura e no fecho é apontada
+        ✖ régua: dica, objetivo e explicação ao concluir entram na conta
+        ✖ régua: os treinos que "Criar treino daqui" faz na N0 passam sem aviso
+        ✖ régua: os textos com que a janela preenche uma resposta nova passam na régua
+            usa "método": 'Este lance funciona, mas segue outro método.'
+        ✔ (3 guardas: defesa sem texto fica só com o feedback; o texto anda com a defesa
+           em "usar sempre esta", remover e trocar o tipo e voltar; replySchema v1 sem texto)
+        ℹ tests 15  pass 3  fail 12
+DEPOIS  ℹ tests 15  pass 15  fail 0
+          gira — tentativa 1: e3d3 → "A torre fecha mais uma fileira. O rei preto vai para d3."
+          gira — tentativa 2: e3d2 → "A torre fecha mais uma fileira. O rei preto desce para d2."
+          (e assim até a 6, alternando)
+```
+
+### Os sete portões
+
+Tipos, lint, **1.067 testes** (eram 1.052), build, conteúdo (18 posições, 3 aulas, 38
+consultas de tablebase do cache e 0 pela rede), **42/42 mutações vermelhas** e repertório
+`--check` (nada escrito).
+
+### O ensaio pelo Playwright — 13/9/2026
+
+Em `/editor/v2/finais/N0-LADDER`, logado, `setViewportSize(911, 512)` conferido em
+`innerWidth` 1366 e `innerHeight` 768. Clique, teclado e arraste do mouse do Playwright.
+
+| Item | Resultado medido |
+|---|---|
+| 1 | variante **1… Kd3** criada arrastando o rei de e3 a d3 no tabuleiro do capítulo; "✓ salvo" |
+| 2 | autoria do "Treino guiado": a caixa nova embaixo da defesa; **0 avisos** da régua |
+| 3 | feedback reescrito pelo teclado sem "O rei preto desce para d2."; na defesa e3d2, "O rei preto desce para d2." |
+| 4 | "+ Outra resposta do defensor" ofereceu só "Defensor joga Kd3 (e3d3)" |
+| 5 | texto de e3d3 digitado com "Nesta tentativa…": **"Régua de voz: 1 aviso — Pergunta 1 · resposta 1 · defesa e3d3: usa "tentativa""**, rodapé "…· 1 aviso da régua de voz" |
+| 6 | corrigido para "O rei preto vai para d3.": **0 avisos** |
+| 7 | Pergunta 6: resposta g1g3 que repete; rodapé verde; salvo → "6 perguntas · personalizado" |
+| 8 | no disco: defesas `e3d2` e `e3d3`, cada uma com o seu `texto`; o feedback sem a frase |
+| 9 | prévia, g2→g4 arrastado: **tentativa 1 → rei em d2**, painel "…Para cima não dá mais. O rei preto desce para d2." |
+| 10 | **tentativa 2 → rei em d3**, painel "…Para cima não dá mais. O rei preto vai para d3." |
+| 11 | **tentativa 3 → rei em d2**, texto do d2 de novo |
+| 12 | fechar a prévia devolveu o foco ao botão "Jogar na prévia" do treino |
+| 13 | "Criar treino daqui" pelas **pretas**; na autoria, abertura "As brancas levam a torre para g4." e fecho "A torre desce para g1 e dá mate."; no disco, os dois textos |
+| 14 | prévia das pretas: aos 150 ms o painel diz "Faça o seu lance…"; **aos 1,65 s, depois de g2→g4, "As brancas levam a torre para g4."** |
+| 15 | pretas até b1→a1: conclusão **"PRONTO. O rei preto vai a a1, o canto. Ele não tem mais nenhuma fileira para descer. A torre desce para g1 e dá mate."** |
+
+Console da sessão inteira: 0 erros e 0 avisos. Um tropeço de roteiro, não de código: no
+item 15 a primeira vez abriu a prévia do "Treino guiado" (o último botão da lista); refeito
+escolhendo o treino pelo id.
+
+### O que esta rodada NÃO cobre
+
+- **A abertura apaga a dica da primeira pergunta.** O painel mostra uma mensagem por vez, e
+  a dica só aparece enquanto não há mensagem. Quando o defensor abre com texto, a dica da
+  Pergunta 1 some até o próximo lance — o mesmo que já acontece depois de toda resposta do
+  defensor. Não medido com uma dica escrita.
+- **A derivação não reparte o texto.** Os treinos que "Criar treino daqui" faz continuam
+  com a narração da defesa dentro do feedback (no das pretas, "O rei preto desce para d2").
+  Com uma defesa só isso é verdade; quem acrescenta a segunda defesa precisa mover a frase,
+  como no item 3. Não há aviso automático disso.
+- **A régua avisa e não bloqueia**, e só dentro da janela. A lista de problemas da aula não
+  a mostra; o que a publicação v2 faz com ela é da fatia 7.
+- **O texto não entra na impressão digital das dependências** — é autoria, não fonte. A
+  6D decide o que "refazer a partir da aula" faz com ele.
+- Nenhum teste de uso com uma pessoa; o Playwright não mede hesitação.
+
+**Os artefatos e o navegador.** O ensaio criou `content/rascunhos/lessons/N0-LADDER.json` e
+`.editor/v2/N0-LADDER.json`; os dois foram apagados depois de o Playwright ir para
+`about:blank`, e a ausência foi conferida. SHA-256 de `.editor/v2/N1-KPK.json` antes e
+depois: `4be602ca…b822`.
+
+### O próximo ponto exato
+
+Parada 6D — propriedade (§16.5).
 
 ---
 

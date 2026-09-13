@@ -8,6 +8,7 @@ import { aulaIdV2Schema, problemasDaAulaV2 } from "@/lib/editor-v2/modelo";
 import { documentoInicialV2, lerDocumentoV2 } from "@/lib/editor-v2/rascunhos";
 import { pacoteDaAula } from "@/lib/finais/conteudo";
 import { lessonIdSchema, lessonSchema } from "@/lib/lesson/schema";
+import { lerRegua } from "@/lib/lesson/voz";
 
 export const dynamic = "force-dynamic";
 
@@ -54,6 +55,7 @@ export default async function PaginaDoEditorV2({ params }: { params: Promise<{ a
         documentoInicial={documento.aula}
         hashInicial={documento.hash}
         positions={{}}
+        regua={lerRegua()}
       />
     );
   }
@@ -79,6 +81,7 @@ export default async function PaginaDoEditorV2({ params }: { params: Promise<{ a
       hashInicial={documento.hash}
       positions={positions}
       problemasDaOrigem={daProveniencia}
+      regua={lerRegua()}
     />
   );
 }

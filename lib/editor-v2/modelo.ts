@@ -255,7 +255,16 @@ export const respostaTreinoV2Schema = z.strictObject({
   efeito: z.discriminatedUnion("tipo", [
     z.strictObject({
       tipo: z.literal("avanca"),
-      defesas: z.array(z.strictObject({ move: uciSchema, proximaQuestaoId: idV2Schema })).min(1),
+      defesas: z.array(z.strictObject({
+        move: uciSchema,
+        proximaQuestaoId: idV2Schema,
+        /**
+         * O que o aluno lê, logo depois do feedback, quando o defensor joga **este** lance
+         * (decisão do Doug, 13/9/2026). O feedback é da resposta do aluno; com duas
+         * defesas, só um texto por defesa diz a verdade nas duas tentativas.
+         */
+        texto: z.string().min(1).optional(),
+      })).min(1),
     }),
     z.strictObject({ tipo: z.literal("repete") }),
     z.strictObject({
@@ -267,6 +276,8 @@ export const respostaTreinoV2Schema = z.strictObject({
        * obrigaria a cortar o último lance ou inventar uma pergunta sem lance do aluno.
        */
       defesaFinal: uciSchema.optional(),
+      /** O que o aluno lê com a conclusão, quando o defensor fecha com `defesaFinal`. */
+      textoDaDefesaFinal: z.string().min(1).optional(),
     }),
   ]),
 });
@@ -300,6 +311,8 @@ export const treinoV2Schema = z.strictObject({
   defesaInicial: z.strictObject({
     move: uciSchema,
     primeiraQuestaoId: idV2Schema,
+    /** O que o aluno lê quando o defensor abre a linha com este lance. */
+    texto: z.string().min(1).optional(),
   }).optional(),
   termino: z.strictObject({
     tipo: z.enum(["objetivo", "mate", "limite"]),

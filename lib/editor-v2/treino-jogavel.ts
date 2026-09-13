@@ -64,6 +64,14 @@ export type TreinoJogavel = {
   defesaInicial?: string;
   /** A última resposta do defensor, por `perguntaId:lance` do aluno. */
   defesasFinais: Record<string, string>;
+  /**
+   * O que o painel diz depois que o defensor joga, por `chaveDaFalaDoDefensor`: o
+   * feedback da resposta seguido do texto **daquela** defesa. Só existe onde a defesa tem
+   * texto; sem ele, o painel continua com o feedback, como antes.
+   */
+  falasDoDefensor: Record<string, string>;
+  /** O que o aluno lê quando o defensor abre a linha. */
+  textoDaDefesaInicial?: string;
   /** Os desenhos de cada pergunta, com a cor da autoria. */
   desenhos: Record<string, DesenhoV2 | undefined>;
   /** `termino.limite` conta meios-lances; o runtime conta lances do aluno. */
@@ -75,6 +83,22 @@ export type TreinoJogavel = {
 /** A chave de `defesasFinais`. Uma função só, para a tradução e a tela não divergirem. */
 export function chaveDaDefesaFinal(perguntaId: string, uci: string): string {
   return `${perguntaId}:${uci}`;
+}
+
+/**
+ * A chave de `falasDoDefensor`. O lance do aluno entra porque duas respostas da mesma
+ * pergunta podem levar à mesma defesa, e cada uma tem o seu feedback.
+ */
+export function chaveDaFalaDoDefensor(perguntaId: string, uciDoAluno: string, uciDoDefensor: string): string {
+  return `${perguntaId}:${uciDoAluno}:${uciDoDefensor}`;
+}
+
+/**
+ * O feedback e o texto da defesa, como o aluno os lê: uma fala só. A régua de voz confere
+ * esta mesma soma (`voz-do-treino.ts`), para a conta e a tela não divergirem.
+ */
+export function juntarFala(feedback: string, textoDaDefesa: string): string {
+  return `${feedback} ${textoDaDefesa}`;
 }
 
 /**
@@ -121,6 +145,7 @@ export function treinoJogavel(aula: AulaV2, treinoId: string, positions: Record<
   const errors: Lesson["errors"] = {};
   const nodes: MoveTree["nodes"] = {};
   const defesasFinais: Record<string, string> = {};
+  const falasDoDefensor: Record<string, string> = {};
   const desenhos: Record<string, DesenhoV2 | undefined> = {};
 
   for (const questao of treino.questoes) {
@@ -144,8 +169,18 @@ export function treinoJogavel(aula: AulaV2, treinoId: string, positions: Record<
       const expect = esperado(resposta, treino);
       if (expect) {
         expects.push(expect);
-        if (resposta.efeito.tipo === "encerra" && resposta.efeito.defesaFinal) {
-          for (const move of resposta.moves) defesasFinais[chaveDaDefesaFinal(questao.id, move)] = resposta.efeito.defesaFinal;
+        const { efeito } = resposta;
+        for (const move of resposta.moves) {
+          if (efeito.tipo === "avanca") {
+            for (const defesa of efeito.defesas) {
+              if (defesa.texto) falasDoDefensor[chaveDaFalaDoDefensor(questao.id, move, defesa.move)] = juntarFala(resposta.feedback, defesa.texto);
+            }
+          } else if (efeito.tipo === "encerra" && efeito.defesaFinal) {
+            defesasFinais[chaveDaDefesaFinal(questao.id, move)] = efeito.defesaFinal;
+            if (efeito.textoDaDefesaFinal) {
+              falasDoDefensor[chaveDaFalaDoDefensor(questao.id, move, efeito.defesaFinal)] = juntarFala(resposta.feedback, efeito.textoDaDefesaFinal);
+            }
+          }
         }
       } else {
         // Aceita e repete: elogia, a peça volta, a pergunta continua.
@@ -183,7 +218,9 @@ export function treinoJogavel(aula: AulaV2, treinoId: string, positions: Record<
     orientacao: treino.ladoAluno,
     fenInicial: treino.defesaInicial ? fenInicial : nodes[raiz].fen,
     ...(treino.defesaInicial ? { defesaInicial: treino.defesaInicial.move } : {}),
+    ...(treino.defesaInicial?.texto ? { textoDaDefesaInicial: treino.defesaInicial.texto } : {}),
     defesasFinais,
+    falasDoDefensor,
     desenhos,
     ...(treino.termino.tipo === "limite" && treino.termino.maxPlies
       ? { moveLimit: Math.ceil(treino.termino.maxPlies / 2) }

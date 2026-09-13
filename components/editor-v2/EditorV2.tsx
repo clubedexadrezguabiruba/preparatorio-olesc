@@ -26,6 +26,7 @@ import { PaletaDeDesenho } from "@/components/editor-v2/PaletaDeDesenho";
 import { Dialogo } from "@/components/editor-v2/Dialogo";
 import { Previa } from "@/components/editor-v2/Previa";
 import { PreviaDoTreino } from "@/components/editor-v2/PreviaDoTreino";
+import type { Regua } from "@/lib/lesson/regua";
 import {
   podePreverDaqui,
   previaDaAula,
@@ -127,11 +128,13 @@ function treinosNaOrdemDaAula(aula: AulaV2): AulaV2["treinos"] {
   });
 }
 
-export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, problemasDaOrigem = [] }: {
+export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, problemasDaOrigem = [], regua }: {
   aulaId: string;
   documentoInicial: AulaV2;
   hashInicial: string;
   positions: Record<string, Position>;
+  /** A régua de voz, lida do documento pelo servidor (o navegador não lê disco). */
+  regua?: Regua;
   /**
    * As conferências que só o servidor pode fazer — proveniência e certificação, que
    * comparam hashes. Elas não mudam enquanto o professor escreve: descrevem o arquivo
@@ -986,6 +989,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
           aula={historico.presente}
           treinoId={editandoTreino}
           positions={positions}
+          regua={regua}
           aoSalvar={(edicao) => {
             aplicar({ tipo: "EDITAR_TREINO", edicao });
             setEditandoTreino(null);

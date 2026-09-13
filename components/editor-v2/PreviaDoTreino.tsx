@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import { TreeStage } from "@/components/lesson/TreeStage";
 import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
-import { chaveDaDefesaFinal, type TreinoJogavel } from "@/lib/editor-v2/treino-jogavel";
+import { chaveDaDefesaFinal, chaveDaFalaDoDefensor, type TreinoJogavel } from "@/lib/editor-v2/treino-jogavel";
 import type { Position } from "@/lib/lesson/schema";
 import { useLessonStore } from "@/lib/lesson/store";
 import { usePrisaoDeFoco } from "./foco";
@@ -47,9 +47,12 @@ export function PreviaDoTreino({ treinoId, titulo, perfil, jogavel, aoFechar }: 
 
   const position = useMemo(() => ({ fen: jogavel.fenInicial }) as unknown as Position, [jogavel.fenInicial]);
   const v2 = useMemo(() => ({
-    ...(jogavel.defesaInicial ? { aberturaDoDefensor: { fen: jogavel.fenInicial, uci: jogavel.defesaInicial } } : {}),
+    ...(jogavel.defesaInicial
+      ? { aberturaDoDefensor: { fen: jogavel.fenInicial, uci: jogavel.defesaInicial, ...(jogavel.textoDaDefesaInicial ? { texto: jogavel.textoDaDefesaInicial } : {}) } }
+      : {}),
     defesaFinal: (nodeId: string, uci: string) => jogavel.defesasFinais[chaveDaDefesaFinal(nodeId, uci)],
     desenhoDoNo: (nodeId: string): DrawShape[] => desenhoDaAutoriaV2(jogavel.desenhos[nodeId]),
+    falaDepoisDaDefesa: (nodeId: string, uciDoAluno: string, uciDoDefensor: string) => jogavel.falasDoDefensor[chaveDaFalaDoDefensor(nodeId, uciDoAluno, uciDoDefensor)],
   }), [jogavel]);
 
   return (

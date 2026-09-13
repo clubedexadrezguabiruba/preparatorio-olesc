@@ -82,12 +82,16 @@ export function TreeStage({
    *   de novo a cada tentativa;
    * - `defesaFinal`: a linha termina na vez dele. O lance terminal do aluno recebe a
    *   última resposta antes da conclusão;
-   * - `desenhoDoNo`: o desenho da pergunta, com a cor que o professor escolheu.
+   * - `desenhoDoNo`: o desenho da pergunta, com a cor que o professor escolheu;
+   * - `aberturaDoDefensor.texto` e `falaDepoisDaDefesa`: o que o painel diz quando o
+   *   defensor joga um lance que tem texto próprio. Sem texto, o painel fica com o
+   *   feedback da resposta, como sempre.
    */
   v2?: {
-    aberturaDoDefensor?: { fen: string; uci: string };
+    aberturaDoDefensor?: { fen: string; uci: string; texto?: string };
     defesaFinal?: (nodeId: string, uci: string) => string | undefined;
     desenhoDoNo?: (nodeId: string) => DrawShape[];
+    falaDepoisDaDefesa?: (nodeId: string, uciDoAluno: string, uciDoDefensor: string) => string | undefined;
   };
 }) {
   const state = useLessonStore((s) => s.trees[treeKey]);
@@ -160,9 +164,10 @@ export function TreeStage({
       const lance = aplicarUci(aberturaDoDefensor.fen, aberturaDoDefensor.uci);
       playForMove({ capture: lance.captura, check: lance.xeque });
       setAbertura(attempt);
+      if (aberturaDoDefensor.texto) say("neutral", aberturaDoDefensor.texto);
     }, REPLY_DELAY_MS);
     return () => clearTimeout(handle);
-  }, [abrindo, aberturaDoDefensor, attempt]);
+  }, [abrindo, aberturaDoDefensor, attempt, say]);
 
   /** Volta ao nó raiz. Cancela a resposta do defensor que estava a caminho. */
   const restart = useCallback(() => {
@@ -284,6 +289,7 @@ export function TreeStage({
         // sobre a posição final — a única cópia dela vai para a store, como no mate.
         const final = v2?.defesaFinal?.(state.nodeId, uci);
         if (final) {
+          const conclusao = v2?.falaDepoisDaDefesa?.(state.nodeId, uci, final) ?? verdict.feedback;
           playForMove({ capture: Boolean(played.captured), check: game.isCheck() });
           say("good", verdict.feedback);
           setBusy(true);
@@ -294,8 +300,8 @@ export function TreeStage({
             setDrawn({ fen: fecho.fen, lastMove: ultimo, attempt });
             playComplete();
             setCelebration((c) => c + 1);
-            treeAdvance(treeKey, null, { fen: fecho.fen, lastMove: ultimo, text: verdict.feedback });
-            celebrate(verdict.feedback);
+            treeAdvance(treeKey, null, { fen: fecho.fen, lastMove: ultimo, text: conclusao });
+            celebrate(conclusao);
             setBusy(false);
           }, REPLY_DELAY_MS);
           return;
@@ -337,6 +343,10 @@ export function TreeStage({
         });
         treeAdvance(treeKey, next);
         setBusy(false);
+        // Só o treino v2: o texto desta defesa entra depois do feedback, e só agora,
+        // quando se sabe qual defesa o defensor jogou nesta tentativa.
+        const fala = v2?.falaDepoisDaDefesa?.(state.nodeId, uci, reply);
+        if (fala) say("good", fala);
         if (outOfMoves) {
           const text = TREINO.acabaramOsLances(moveLimit, tree.goal);
           treeFail(treeKey, { tone: "warn", text });

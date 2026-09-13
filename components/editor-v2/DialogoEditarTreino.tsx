@@ -8,6 +8,7 @@ import { quadroDoNo } from "@/lib/editor-v2/arvore";
 import {
   catalogoComErro,
   efeitoAoTrocarTipo,
+  FEEDBACK_DE_RESPOSTA_NOVA,
   prepararEdicaoDeTreino,
   proximoIdDeResposta,
   type CatalogoV2,
@@ -23,6 +24,8 @@ import {
 import { desenhoDeFormas } from "@/lib/editor-v2/desenhos";
 import type { AulaV2, QuestaoTreinoV2, RespostaTreinoV2, TreinoV2 } from "@/lib/editor-v2/modelo";
 import { MAXIMO_DE_DEFESAS } from "@/lib/editor-v2/treino-jogavel";
+import { falasDoTreinoV2 } from "@/lib/editor-v2/voz-do-treino";
+import { reprovacoes, type Regua } from "@/lib/lesson/regua";
 import type { Position } from "@/lib/lesson/schema";
 import { Dialogo } from "./Dialogo";
 
@@ -47,10 +50,12 @@ function movimentos(texto: string): string[] {
   return texto.split(/[\s,;]+/).map((item) => item.trim().toLowerCase()).filter(Boolean);
 }
 
-export function DialogoEditarTreino({ aula, treinoId, positions, aoSalvar, aoFechar }: {
+export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar, aoFechar }: {
   aula: AulaV2;
   treinoId: string;
   positions: Record<string, Position>;
+  /** A régua de voz, lida do documento pelo servidor. Sem ela, a janela não avisa nada. */
+  regua?: Regua;
   aoSalvar: (edicao: EdicaoDeTreinoV2) => void;
   aoFechar: () => void;
 }) {
@@ -64,6 +69,8 @@ export function DialogoEditarTreino({ aula, treinoId, positions, aoSalvar, aoFec
   const indiceQuestao = treino.questoes.indexOf(questao);
   const fen = quadroDoNo(aula, questao.posicao.analiseId, questao.posicao.nodeId, positions).fen;
   const resultado = useMemo(() => prepararEdicaoDeTreino(aula, { treino, catalogo }, positions), [aula, catalogo, positions, treino]);
+  /** §6 e §12: o que o aluno lê passa pela régua. Avisa, não impede salvar. */
+  const avisosDeVoz = useMemo(() => regua ? reprovacoes(falasDoTreinoV2(treino), regua) : [], [regua, treino]);
 
   const atualizarQuestao = (muda: (atual: QuestaoTreinoV2) => QuestaoTreinoV2) => {
     setTreino((atual) => ({ ...atual, questoes: atual.questoes.map((item) => item.id === questao.id ? muda(item) : item) }));
@@ -80,13 +87,13 @@ export function DialogoEditarTreino({ aula, treinoId, positions, aoSalvar, aoFec
       setCatalogo(novo.catalogo);
       atualizarQuestao((atual) => ({ ...atual, respostas: [...atual.respostas, {
         id, moves: ["a1a2"], julgamento: "erro", erroId: novo.erroId,
-        feedback: "Explique o erro e peça ao aluno que tente de novo.", efeito: { tipo: "repete" },
+        feedback: FEEDBACK_DE_RESPOSTA_NOVA.erro, efeito: { tipo: "repete" },
       }] }));
       return;
     }
     atualizarQuestao((atual) => ({ ...atual, respostas: [...atual.respostas, {
       id, moves: ["a1a2"], julgamento,
-      feedback: julgamento === "alternativa" ? "Este lance funciona, mas segue outro método." : "Boa escolha. Continue.",
+      feedback: FEEDBACK_DE_RESPOSTA_NOVA[julgamento],
       efeito: efeitoModelo(atual),
     }] }));
   };
@@ -114,6 +121,7 @@ export function DialogoEditarTreino({ aula, treinoId, positions, aoSalvar, aoFec
         <>
           <span className={`mr-auto text-xs ${resultado.ok ? "text-metodo-tinta" : "text-erro-texto"}`} role={resultado.ok ? undefined : "alert"}>
             {resultado.ok ? "Todas as respostas têm continuação ou término executável." : resultado.mensagem}
+            {avisosDeVoz.length ? <span className="text-tinta-media"> · {avisosDeVoz.length} {avisosDeVoz.length === 1 ? "aviso" : "avisos"} da régua de voz</span> : null}
           </span>
           <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta">Cancelar</button>
           <button type="button" disabled={!resultado.ok} onClick={() => { if (resultado.ok) aoSalvar(resultado.edicao); }} className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-semibold text-metodo-tinta-alta disabled:opacity-40">Salvar autoria</button>
@@ -151,10 +159,28 @@ export function DialogoEditarTreino({ aula, treinoId, positions, aoSalvar, aoFec
               <option value="fixa">Joga sempre a primeira defesa</option>
             </select>
             <p className="mt-1 text-xs text-tinta-fraca">Só faz diferença onde uma resposta tem mais de uma defesa.</p>
+            {treino.defesaInicial ? (
+              <label className="mt-2 flex flex-col gap-1 text-xs text-tinta">O que o aluno lê quando o defensor abre com {treino.defesaInicial.move} (opcional)
+                <textarea value={treino.defesaInicial.texto ?? ""} onChange={(e) => { const valor = e.currentTarget.value; setTreino((atual) => atual.defesaInicial ? { ...atual, defesaInicial: { ...atual.defesaInicial, texto: valor || undefined } } : atual); }} rows={2} className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm" />
+              </label>
+            ) : null}
           </fieldset>
           <nav aria-label="Perguntas do treino" className="flex flex-col gap-1">
             {treino.questoes.map((item, indice) => <button key={item.id} type="button" onClick={() => setQuestaoId(item.id)} className={`foco rounded-md border px-2 py-2 text-left text-sm ${item.id === questao.id ? "border-foco bg-metodo-superficie text-metodo-tinta-alta" : "border-borda text-tinta"}`}>Pergunta {indice + 1} · {item.respostas.length} resposta{item.respostas.length === 1 ? "" : "s"}</button>)}
           </nav>
+          {avisosDeVoz.length ? (
+            <section aria-label="Régua de voz" className="rounded-md border border-borda p-2">
+              <h3 className="text-sm font-medium text-tinta">Régua de voz: {avisosDeVoz.length} {avisosDeVoz.length === 1 ? "aviso" : "avisos"}</h3>
+              <p className="text-xs text-tinta-fraca">O aluno lê estes textos. O aviso não impede salvar.</p>
+              <ul className="mt-1 flex flex-col gap-1">
+                {avisosDeVoz.map((aviso, indice) => (
+                  <li key={`${aviso.onde}-${aviso.regra}-${indice}`} className="text-xs text-tinta-media">
+                    <span className="font-medium text-tinta">{aviso.onde.split(" · ").slice(1).join(" · ")}</span>: {aviso.detalhe}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
         </aside>
 
         <section className="flex min-w-0 flex-col gap-3">
@@ -226,6 +252,9 @@ export function DialogoEditarTreino({ aula, treinoId, positions, aoSalvar, aoFec
                   {resposta.efeito.tipo === "avanca" ? resposta.efeito.defesas.map((defesa, di, defesas) => <div key={`${resposta.id}-${di}`} className="mt-2 grid gap-2 md:grid-cols-2">
                     <label className="flex flex-col gap-1 text-xs text-tinta">Resposta do defensor{defesas.length > 1 ? ` ${di + 1}` : ""}<input value={defesa.move} onChange={(e) => { const valor = e.currentTarget.value.toLowerCase(); atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "avanca" ? atual : ({ ...atual, efeito: { ...atual.efeito, defesas: atual.efeito.defesas.map((item, i) => i === di ? { ...item, move: valor } : item) } })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm" /></label>
                     <label className="flex flex-col gap-1 text-xs text-tinta">Próxima pergunta<select value={defesa.proximaQuestaoId} onChange={(e) => { const valor = e.currentTarget.value; atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "avanca" ? atual : ({ ...atual, efeito: { ...atual.efeito, defesas: atual.efeito.defesas.map((item, i) => i === di ? { ...item, proximaQuestaoId: valor } : item) } })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm">{treino.questoes.map((item, i) => <option key={item.id} value={item.id}>Pergunta {i + 1}</option>)}</select></label>
+                    <label className="flex flex-col gap-1 text-xs text-tinta md:col-span-2">O que o aluno lê quando o defensor joga {defesa.move || "este lance"} (opcional)
+                      <textarea value={defesa.texto ?? ""} onChange={(e) => { const valor = e.currentTarget.value; atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "avanca" ? atual : ({ ...atual, efeito: { ...atual.efeito, defesas: atual.efeito.defesas.map((item, i) => i === di ? { ...item, texto: valor || undefined } : item) } })); }} rows={2} placeholder="Aparece depois do feedback, só quando o defensor joga este lance" className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm" />
+                    </label>
                     {defesas.length > 1 ? (
                       <div className="flex flex-wrap items-center gap-2 md:col-span-2">
                         {di === 0 ? (
@@ -284,6 +313,9 @@ export function DialogoEditarTreino({ aula, treinoId, positions, aoSalvar, aoFec
                   {resposta.efeito.tipo === "encerra" ? <div className="mt-2 grid gap-2 md:grid-cols-2">
                     <label className="flex flex-col gap-1 text-xs text-tinta">Condição final<select value={resposta.efeito.condicao} onChange={(e) => { const valor = e.currentTarget.value as Extract<RespostaTreinoV2["efeito"], { tipo: "encerra" }>["condicao"]; atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "encerra" ? atual : ({ ...atual, efeito: { ...atual.efeito, condicao: valor } })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm">{Object.entries(NOMES_DO_FIM).map(([valor, nome]) => <option key={valor} value={valor}>{nome}</option>)}</select></label>
                     <label className="flex flex-col gap-1 text-xs text-tinta">Último lance do defensor (opcional)<input value={resposta.efeito.defesaFinal ?? ""} onChange={(e) => { const valor = e.currentTarget.value.toLowerCase() || undefined; atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "encerra" ? atual : ({ ...atual, efeito: { ...atual.efeito, defesaFinal: valor } })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm" /></label>
+                    <label className="flex flex-col gap-1 text-xs text-tinta md:col-span-2">O que o aluno lê quando o defensor fecha com este lance (opcional)
+                      <textarea value={resposta.efeito.textoDaDefesaFinal ?? ""} onChange={(e) => { const valor = e.currentTarget.value; atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "encerra" ? atual : ({ ...atual, efeito: { ...atual.efeito, textoDaDefesaFinal: valor || undefined } })); }} rows={2} placeholder="Aparece com a conclusão, depois do feedback" className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm" />
+                    </label>
                   </div> : null}
                 </div>
               )}

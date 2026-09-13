@@ -11,10 +11,19 @@ export type ResultadoDaEdicaoDeTreinoV2 =
   | { ok: true; edicao: EdicaoDeTreinoV2 }
   | { ok: false; campo: string; mensagem: string };
 
-const CATALOGO_VAZIO: CatalogoV2 = {
+/** O feedback com que uma resposta nova nasce na janela, até o professor escrever o dele. */
+export const FEEDBACK_DE_RESPOSTA_NOVA: Record<RespostaTreinoV2["julgamento"], string> = {
+  correta: "Boa escolha. Continue.",
+  // A régua de voz proíbe "método" no que o aluno lê, e este texto chega a ele se o
+  // professor não o trocar.
+  alternativa: "Este lance também funciona, mas não é o caminho ensinado.",
+  erro: "Explique o erro e peça ao aluno que tente de novo.",
+};
+
+export const CATALOGO_VAZIO: CatalogoV2 = {
   erros: [],
   mensagensPadrao: {
-    vitoriaForaDoMetodo: "Este lance funciona, mas não aplica o método treinado.",
+    vitoriaForaDoMetodo: "Este lance funciona, mas não é o caminho ensinado.",
     perdeResultado: "Este lance perde o resultado que a posição permitia.",
     alternativaDoMetodo: "Boa alternativa. Continue pela linha ensinada.",
   },
@@ -27,6 +36,23 @@ function aplicar(game: Chess, uci: string): boolean {
   } catch {
     return false;
   }
+}
+
+/**
+ * Apara um texto opcional **na cópia** e tira do objeto o que sobrar vazio: campo vazio é
+ * omitido, e não salvo como `""` ou `undefined`.
+ */
+function apararOpcional(alvo: object, campo: string): void {
+  const registro = alvo as Record<string, unknown>;
+  const valor = registro[campo];
+  if (valor === undefined) {
+    delete registro[campo];
+    return;
+  }
+  if (typeof valor !== "string") return;
+  const aparado = valor.trim();
+  if (aparado) registro[campo] = aparado;
+  else delete registro[campo];
 }
 
 function mesmaPosicao(a: string, b: string): boolean {
@@ -68,6 +94,7 @@ export function prepararEdicaoDeTreino(
       : {}),
   };
   if (!pedido.explicacaoConclusao?.trim()) delete treino.explicacaoConclusao;
+  if (treino.defesaInicial) apararOpcional(treino.defesaInicial, "texto");
   if (!treino.titulo) return { ok: false, campo: "titulo", mensagem: "escreva um título para o treino" };
   if (!treino.objetivo) return { ok: false, campo: "objetivo", mensagem: "explique o objetivo do treino" };
   const catalogo = edicao.catalogo;
@@ -94,6 +121,13 @@ export function prepararEdicaoDeTreino(
       resposta.feedback = resposta.feedback.trim();
       if (!resposta.feedback) return { ok: false, campo: `${campo}.feedback`, mensagem: `escreva o feedback da resposta ${ri + 1} da pergunta ${qi + 1}` };
       if (!resposta.moves.length) return { ok: false, campo: `${campo}.moves`, mensagem: `informe o lance da resposta ${ri + 1}` };
+      if (resposta.efeito.tipo === "avanca") resposta.efeito.defesas.forEach((defesa) => apararOpcional(defesa, "texto"));
+      if (resposta.efeito.tipo === "encerra") {
+        apararOpcional(resposta.efeito, "textoDaDefesaFinal");
+        if (resposta.efeito.textoDaDefesaFinal && !resposta.efeito.defesaFinal) {
+          return { ok: false, campo: `${campo}.efeito.textoDaDefesaFinal`, mensagem: `o texto do último lance do defensor precisa do lance: escreva o lance ou apague o texto (resposta ${ri + 1} da pergunta ${qi + 1})` };
+        }
+      }
       for (const move of resposta.moves) {
         if (movimentos.has(move)) return { ok: false, campo: `${campo}.moves`, mensagem: `o lance ${move} aparece em duas respostas da pergunta ${qi + 1}` };
         movimentos.add(move);
