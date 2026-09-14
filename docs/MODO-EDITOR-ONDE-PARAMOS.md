@@ -4244,6 +4244,76 @@ fica para a fatia 10.
   meio-jogo pesado nem em celular — o editor é desktop.
 - A 375 px o editor não foi olhado nesta fatia (a dívida da rolagem lateral é anterior).
 
+---
+
+## Fatia 10 — desempenho, acessibilidade e teste de uso final, em andamento desde 14/9/2026
+
+Plano aprovado pelo Doug em 14/9, ampliado por ele: além de §24 e §25, a fatia constrói as três
+telas que faltavam para uma aula nascer inteira pela tela (**proveniência** §19.1, **prática**
+§17.1, **introdução** §7.1), a **ordem das etapas** (§18), **importar do Lichess por link** (§13.2)
+com os modos do estudo, **atalhos** num registro único (`x` vira o tabuleiro), e **ensaios de
+navegador guardados no repositório** (`npm run e2e`). Paradas 10A → 10I, um commit por parada.
+
+**Pedido do Doug no meio da 10A (14/9):** o ensaio "aula do zero" passa a ser a **recriação, à mão e
+pela tela, do estudo dele "Mate de Dama e Rei"** (`lichess.org/study/hf09xMzS`, 9 capítulos) —
+introdução, aulas guiadas com as variantes, os treinos com as respostas diferentes (inclusive o erro
+do afogamento) e a prática livre —, comparada no fim com a mesma aula importada do Lichess. A
+exportação de 13/9 (11.245 bytes, SHA-256 `9cdd5898…f274`) virou fixture em
+`e2e/fixtures/lichess-mate-dama-hf09xMzS.pgn`.
+
+### Parada 10A — a estrutura dos ensaios e a linha de base
+
+- `playwright.config.ts`: `testDir: "e2e"`, `workers: 1`, `trace: "retain-on-failure"`, `pt-BR`,
+  `webServer` com o `next dev` que já estiver na porta 3000; perfis `editor-1366` (todos os
+  ensaios) e `editor-1280`, `editor-1920`, `aluno-375` (só `layout.spec`). Instalados
+  `@playwright/test@1.62.1` (a mesma versão do `playwright` que já havia) e `axe-core@4.13.0`.
+  Guia lido antes: `01-app/02-guides/testing/playwright.md`.
+- `e2e/preparo/`:
+  - `protecao.ts` — impressão digital SHA-256 de `content/**`, `.editor/repertorio/**`,
+    `public/repertorio/**`, `.editor/v2/N0-LADDER.json` e `.editor/v2/N1-KPK.json`; a lista dos
+    lugares em que um ensaio pode escrever, sempre com `EX-E2E-` no nome. O rascunho v1 que o
+    `next dev` cria ao pré-carregar `/editor` fica fora da comparação, com o motivo escrito.
+  - `global-setup.ts` — **recusa** rodar se houver resto `EX-E2E-…`; grava a impressão; cria
+    `professore2e` (PIN **sorteado a cada rodada**, só na memória) e `alunoteste`; entra pela tela
+    de login real e guarda as duas sessões em `.editor/e2e/` (fora do Git); copia a aula de fixture
+    `EX-FIXTURE-V2` para `.editor/v2/EX-E2E-BASE.json`.
+  - `limpeza.ts`, `global-teardown.ts` e `npm run e2e:limpar` — apagam só `EX-E2E-…` e as duas
+    contas, refazem o SHA-256 e **falham** se um arquivo protegido mudou, surgiu ou sumiu (a N1-KPK
+    também pelo nome).
+  - `fixtures.ts` — o `test` de todos os ensaios: erro de console reprova; **a rota do editor de
+    qualquer aula `N…` é bloqueada na rede** (nenhum ensaio abre N0-LADDER ou N1-KPK, nem por
+    pré-carregamento); `aluno` numa sessão separada; `conferirTamanho` antes de medir (memória do
+    zoom).
+  - `tabuleiro.ts` — `jogar`, `jogarLinha`, `desenharSeta`, `acenderCasa` por `page.mouse` (evento
+    confiável, que o chessground aceita). Prova clique-clique e botão direito; **não** prova arrasto.
+  - `medidas.ts` — largura da página e culpados, axe (só sérias e críticas), lances inteiros
+    visíveis, botões cobertos (a régua da 9D).
+- Scripts: `e2e`, `e2e:base`, `e2e:layout`, `e2e:a11y`, `e2e:desempenho`, `e2e:limpar`.
+- `e2e/editor/fumaca.spec.ts` — professor abre a `EX-E2E-BASE`, joga um lance novo por clique, o
+  arquivo em disco ganha o lance, Ctrl+Z tira; o aluno abre `/painel`. **Verde em 5,6 s.**
+
+**Dois tropeços do próprio ensaio, na primeira rodada:** o rótulo "✓ salvo" casava com o texto
+"não são alterados" do cabeçalho (seletor trocado por um exato); e o ensaio lia "salvo" antes de o
+autosave (600 ms) trocar o estado — a prova passou a ser o arquivo em disco, e só depois o rótulo.
+
+**A limpeza provada:** nas quatro rodadas, **972 de 972** arquivos protegidos iguais, 1 resto
+apagado (a aula base) e as duas contas apagadas.
+
+**A linha de base** (`npm run e2e:base`, `.editor/e2e/linha-de-base.json`, 14/9/2026, antes de
+qualquer conserto; `innerWidth` conferido, `devicePixelRatio` 1):
+
+| Tela | Largura do conteúdo | Axe (sérias/críticas) | Outras |
+|---|---|---|---|
+| Editor 1366×768 | 1366 (0 a mais) | `color-contrast` ×3 | **6** lances inteiros, **0 de 50** botões cobertos |
+| Editor 375 px | **865** (490 a mais — a dívida registrada era 600) | — | culpado: a fileira de botões do cabeçalho (`div.flex.items-center.gap-2`, sem quebra) |
+| Aluno 375: `/painel` | 375 | `color-contrast` ×2 | — |
+| Aluno 375: `/trilha`, `/finais`, `/finais/N0-LADDER`, `/tatica` | 375 | 0 | — |
+| Aluno 375: `/aberturas` | 375 | `color-contrast` ×5 | — |
+| `/entrar` 375, sem sessão | 375 | `color-contrast` ×2 | — |
+
+**Os sete portões:** tipos, lint, **1.247 testes**, build, conteúdo (38 do cache, 0 pela rede),
+**57/57 mutações** e repertório `--check`.
+
 
 ## Como ligar o editor
 
