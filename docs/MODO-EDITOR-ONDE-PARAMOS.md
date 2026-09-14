@@ -4824,9 +4824,10 @@ As medidas estão na tabela da 10G. Duas saídas:
   limites" se o corpus não cumprir. O que sobra é o React de desenvolvimento, nada mais cresce com a
   árvore, e a maior aula de hoje tem 50 nós (`.editor/v2/N1-KPK.json`; a N0-LADDER, 10), contados em 14/9. O item de §28 continua desmarcado, com o número.
 
-**Recomendação:** registrar agora e deixar o **bloco E da 10I** decidir. Se o Doug sentir atraso na
-árvore de 1.000 nós, a divisão do `EditorV2` entra depois de 18/09; se não sentir, o alvo passa a ser o
-medido.
+**Decidido pelo Doug em 14/9: registrar o limite.** Nada muda no código agora. No teste humano (item 45 do
+roteiro) ele anda na árvore de 1.000 nós: se sentir atraso, a divisão do `EditorV2` entra **depois de
+18/09**; se não sentir, o alvo passa a ser o medido e o item de §28 é revisto com esse número. Até lá, o
+item continua desmarcado.
 
 ### O próximo ponto exato (14/9/2026 — retomar daqui)
 
@@ -4844,9 +4845,11 @@ regra certa (`TEXTO_SEM_DIREITO_DECLARADO`).
 **O que falta, na ordem:**
 
 1. ~~**10H**~~ — feita em 14/9 (ver "Parada 10H" acima), commit só de documentos.
-2. **Decisão do Doug sobre o desempenho** (perseguir os 20–50 ms ou registrar o limite; recomendação na 10H).
-3. **10I:** o teste humano do Doug pelo roteiro abaixo, agora com **44 itens** (o bloco G traz as perguntas
-   essenciais 1, 2, 3, 9 e 11, que não têm prova completa).
+2. ~~Decisão do desempenho~~ — o Doug decidiu em 14/9 **registrar o limite** e julgar pelo item 45.
+3. **10I:** o teste humano do Doug pelo roteiro abaixo, agora com **45 itens** (o bloco G traz as perguntas
+   essenciais 1, 2, 3, 9 e 11, que não têm prova completa, e o item 45 do desempenho). **Antes de começar,
+   o agente grava a aula de medida** `.editor/v2/EX-E2E-ARVORE.json` (a mesma função `gravarAulaDeMedida`
+   de `e2e/desempenho.spec.ts`) e **apaga depois** com `npm run e2e:limpar`.
 4. Pendências abertas: a importação perde as quebras de parágrafo de um comentário (1 narração); a
    prática não tem campo de texto para o aluno (o "OBJETIVO: VENCER" do estudo não tem onde entrar).
 
@@ -4970,6 +4973,10 @@ Para cada tarefa, anote **achei sozinho? (sim/não)** e o **tempo**:
     (pergunta 11)
 44. Faça o bloco A de novo **sem o mouse** do item 5 ao 15, exceto mexer peças e desenhar. Algum passo
     obrigou a pegar o mouse? Qual? (pergunta 9)
+45. Abra `/editor/v2/finais/EX-E2E-ARVORE` (a aula de **1.000 lances**, gravada pelo agente antes do teste).
+    Segure a seta → por uns segundos, desenhe duas setas, escreva um comentário e aperte Ctrl+Z. **Pareceu
+    lento em algum momento?** Se sim, em quê? (pergunta 7 — decide se o desempenho é consertado depois de
+    18/09)
 
 
 ## Como ligar o editor
