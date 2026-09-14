@@ -10,6 +10,20 @@ import { conferirAulaV2, podePublicarV2, type ConferenciaV2 } from "@/lib/editor
 import { frasesDoImpactoV2 } from "@/lib/editor-v2/impacto-publicacao";
 import { aulaIdV2Schema, aulaV2Schema, revisaoDaFenV2Schema } from "@/lib/editor-v2/modelo";
 import { adicionarPosicaoAoAcervo, type AdicaoAoAcervoV2, type PedidoDePosicaoNoAcervoV2 } from "@/lib/editor-v2/acervo-em-disco";
+import { buscarPgnDoLichess } from "@/lib/editor-v2/lichess-url";
+
+/**
+ * §13.2 (fatia 10): busca o PGN do Lichess pelo endereço que o professor colou. O servidor só aceita
+ * partida, capítulo e estudo públicos, e monta o endereço oficial da API — ver `lichess-url.ts`.
+ */
+export async function buscarPgnDoLichessAcao(colado: string): Promise<{ ok: true; pgn: string; bytes: number; descricao: string } | { ok: false; mensagem: string }> {
+  await exigirEditor();
+  const resposta = await buscarPgnDoLichess(String(colado ?? "").slice(0, 500));
+  if (!resposta.ok) return resposta;
+  const e = resposta.endereco;
+  const descricao = e.tipo === "estudo" ? `estudo ${e.estudoId}` : e.tipo === "capitulo" ? `capítulo ${e.capituloId} do estudo ${e.estudoId}` : `partida ${e.partidaId}`;
+  return { ok: true, pgn: resposta.pgn, bytes: resposta.bytes, descricao };
+}
 import { publicationIdSchema } from "@/lib/editor-v2/publicacoes";
 import { desativarV2, prepararPublicacaoV2, publicacoesDaAulaV2, publicarAulaV2, reativarPublicacaoV2, recuperarTransacaoV2 } from "@/lib/editor-v2/publicar";
 import { documentoV2Existe, gravarDocumentoV2, guardarSnapshotAntesDeRefazerV2, idsDeDocumentosV2, lerDocumentoV2 } from "@/lib/editor-v2/rascunhos";

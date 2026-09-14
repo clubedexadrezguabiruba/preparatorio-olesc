@@ -4466,8 +4466,72 @@ DEPOIS  introducao 3/3 · novo-capitulo, importar-pgn e fluxo-do-aluno verdes (3
 
 **Os sete portões:** tipos, lint, **1.268 testes**, build, conteúdo, **58/58 mutações** e repertório `--check`.
 
-**Número da parada:** `introducao.spec` e `fluxo.spec` verdes; ordem do aluno = `fluxo` (a mesma função
+**Número da parada (10D):** `introducao.spec` e `fluxo.spec` verdes; ordem do aluno = `fluxo` (a mesma função
 `passosDaIntroducao` e o `etapasDoAlunoV2` na ordem do fluxo, provados em `fluxo-do-aluno.test.ts`).
+
+### Parada 10E — importar do Lichess por link (§13.2) e os modos do estudo
+
+**A fixture foi trocada.** A exportação de 13/9 (11.245 bytes) não tinha `ChapterMode`, `Orientation`
+nem as variantes dos treinos: o Doug mexeu no estudo depois. A de hoje, baixada pelo próprio leitor de
+endereço (`/api/study/hf09xMzS.pgn?orientation=true&clocks=false`), tem **11.691 bytes**, SHA-256
+`e498a948…40b2`, e é a que o plano descreveu: `ChapterMode "gamebook"` em 04–07, `Qg6??` em 02, 03 e 06,
+e Qg6#/Qh3#/Qh4# mais Qg7+ no 07.
+
+- **O leitor do estudo** (`lerPgnsDoEstudo`, em `lib/repertorio/pgn.ts`): `lerPgns` só fecha um jogo
+  quando viu lance, e engolia os capítulos só de texto — **6 jogos em vez de 9**. A função nova fecha o
+  jogo em qualquer corpo; `lerPgns` ficou intacta, porque o compilador do repertório depende dela.
+- `lib/editor-v2/importar-estudo.ts`: `lerEstudo` (destino sugerido por capítulo com a pista, lado por
+  `Orientation`/"Aluno", as perdas — dicas e desvios da lição interativa, modo "praticar contra o
+  computador", texto da prática sem lugar —, autor e link do estudo), `planejarEstudo` (tudo com ids,
+  sem tocar na aula) e `aplicarPlanoDoEstudo`, pelo comando **`IMPORTAR_ESTUDO`** (um Desfazer). O
+  treino nasce pela derivação de sempre (`prepararTreinosDaqui`) num rascunho, fica **independente**, e
+  ganha as variantes do lance do aluno: `#`/`!`/`!!` → correta; `?`/`??`/`?!` → **erro nomeado no
+  catálogo**; sem símbolo → erro **marcado para revisar**. O texto do lance do defensor vira o texto da
+  defesa. A análise do treino fica na aula, sem capítulo, com a proveniência. O quadro da introdução
+  guarda os parágrafos e aponta o capítulo que tem a mesma posição. Importar o mesmo estudo de novo é
+  recusado ("parece já ter sido importado").
+- `buscarPgnDoLichessAcao` (servidor, autenticada) e a tela: campo **Endereço do Lichess** com Buscar e
+  Cancelar no `PainelDeImportacao`; a quinta porta de Adicionar capítulo leva até ele. Estudo detectado →
+  `PainelDoEstudo.tsx`: um seletor **Vira** por capítulo, proveniência pré-preenchida (estudo do Lichess,
+  autor, obra, link, crédito, direito dos textos), obra do registro e resultado declarado da prática, o
+  resumo "a aula ganha…" e os avisos antes do botão. A prática entra no acervo pelo servidor antes do
+  comando.
+
+**Um defeito achado rodando, consertado:** trocar o seletor **Vira** derrubava a página ("This page
+couldn't load"): o valor era lido de `e.currentTarget` dentro da função de atualização do estado, que o
+React roda depois do evento. Reproduzido no navegador com a exceção capturada
+(`Cannot read properties of null (reading 'value')`); lido antes de chamar o estado, o ensaio passou.
+
+```
+ANTES   importar-estudo.test.ts: os módulos não existiam — falha ao carregar
+        com o módulo e lerPgns: "as pistas": 6 !== 9 capítulos
+DEPOIS  importar-estudo.test.ts 3/3
+```
+
+**Os ensaios** (`e2e/editor/importar-estudo.spec.ts`): pelo **arquivo**, os 9 seletores vêm com
+`introducao, introducao, capitulo, capitulo, treino, treino, treino, treino, pratica`; "a aula ganha 2
+quadros, 2 capítulos, 4 treinos e 1 prática"; o aviso "Qg7+ não tem símbolo"; importar → fluxo
+`introducao, capitulo×2, treino×4, pratica`, quadro com parágrafos, mates `g4g6 g4h3 g4h4`, prática em
+`pos-ex-e2e-lichess-1` (resultado **declarado**: a posição não está no cache da tablebase); importar de
+novo → "parece já ter sido importado"; **Conferir: "0 problemas impedem publicar, 12 avisos. Pode
+publicar."** (os avisos são da régua de voz: textos longos do estudo). Pelo **link real** (`@rede`), os
+mesmos 9 destinos; endereço de outro site recusado sem busca.
+
+**Um achado para o Doug no texto do estudo:** o quadro 1 diz "usar sua dama para criar uma e prender o
+rei" — parece faltar "caixa".
+
+**Número da parada:** estudo `hf09xMzS`: **9/9** capítulos no destino certo (2 quadros, 2 capítulos, 4
+treinos, 1 prática), **2/2** `Qg6??` nos capítulos (e o do treino 06 como erro nomeado), **3/3** mates do
+treino 07, perdas listadas, Conferir sem erro.
+
+**Outra sessão no mesmo repositório (15/9, 09:20):** a sessão `preparatorio-olesc-e0` estava editando
+`lib/repertorio/{arvore,linhas,passada,editor/impacto}.ts`, `app/globals.css` e `ChessBoard.tsx`, e o
+`passada.test.ts` dela em andamento quebrava o typecheck do repositório. Combinei com ela por mensagem;
+nada dela foi tocado nem commitado. Os portões da 10E rodaram numa **cópia isolada** (`git worktree`
+em `../olesc-portoes`, com o último commit e só os arquivos da 10E) e o commit saiu de lá.
+
+**Os sete portões (na cópia isolada):** tipos, lint, **1.271 testes**, build, conteúdo (38 do cache, 0
+pela rede), **58/58 mutações** e repertório `--check`.
 
 
 ## Como ligar o editor

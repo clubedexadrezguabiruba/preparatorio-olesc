@@ -14,6 +14,7 @@
 [ChapterURL "https://lichess.org/study/hf09xMzS/0mwp9nuK"]
 [FEN "8/8/8/8/4k3/8/8/3QK3 w - - 0 1"]
 [SetUp "1"]
+[Orientation "white"]
 
 { Nesta aula, você vai aprender uma técnica excelente para dar xeque-mate com dama e rei contra um rei sozinho.
 
@@ -37,10 +38,11 @@ Vamos começar! }
 [ECO "?"]
 [Opening "?"]
 [StudyName "Capitulo_0.3_Mate_de_Dama_e_Rei_v1"]
-[ChapterName "01 - DIAGNÓSTICO - Como você começaria?"]
+[ChapterName "01 - AULA DIAGNÓSTICO - Como você começaria?"]
 [ChapterURL "https://lichess.org/study/hf09xMzS/wVzC9ZcH"]
 [FEN "8/8/8/8/4k3/8/8/3QK3 w - - 0 1"]
 [SetUp "1"]
+[Orientation "white"]
 
 { Você já sabe que dama + rei conseguem forçar mate contra um rei sozinho. Agora vem a parte importante: COMO fazer isso com segurança?
 
@@ -66,6 +68,7 @@ Tente imaginar uma forma de usar a dama para criar uma "caixa" ao redor do rei a
 [ChapterURL "https://lichess.org/study/hf09xMzS/C79fIsps"]
 [FEN "8/8/8/4k3/8/8/8/3QK3 w - - 0 1"]
 [SetUp "1"]
+[Orientation "white"]
 
 { Primeiro, esqueça a ideia de ficar dando xeques. Nossa primeira tarefa é TIRAR ESPAÇO do rei preto.
 
@@ -89,6 +92,7 @@ Use a técnica do L: coloque a dama a um salto de cavalo do rei adversário. A p
 [ChapterURL "https://lichess.org/study/hf09xMzS/BYDI82hC"]
 [FEN "8/8/8/8/4k3/8/8/3QK3 w - - 0 1"]
 [SetUp "1"]
+[Orientation "white"]
 
 { Agora veja o método completo em outra defesa. Não tente decorar os lances. A cada jogada do rei preto, faça a mesma pergunta: como posso manter a dama segura e reduzir o espaço dele? }
 1. Qd2! { Comece criando a caixa. A dama corta a coluna d e a 2ª fileira. O rei preto ainda pode escolher caminhos diferentes; o importante é entender o padrão, não decorar uma única resposta. } { [%cal Gd2d8,Gd2h2] } 1... Ke5 2. Qd3! { O rei foi para cima; a dama acompanha e volta a ficar a um salto de cavalo. A caixa já ficou menor. } { [%cal Gd3d8,Gd3h3] } 2... Kf6 3. Qe4! { O rei mudou de direção. Você muda a dama junto, mantendo o L e fechando espaço sem dar xeque. } { [%cal Ge4e8,Ge4h4] } 3... Kf7 4. Qe5! { Mesmo plano: acompanhe, corte casas e obrigue o rei a recuar. } { [%cal Ge5e8,Ge5h5] } 4... Kg6 5. Qf4! { A caixa continua encolhendo. Observe como a dama trabalha sozinha nesta primeira fase. } { [%cal Gf4f8,Gf4h4] } 5... Kg7 6. Qf5! { Mais um passo seguindo o rei. Ele já está sendo empurrado para a borda. } { [%cal Gf5f8,Gf5h5] } 6... Kh6 7. Qg4! { Pronto: o rei preto ficou confinado perto do canto. A partir daqui, não precisamos aproximar ainda mais a dama. } { [%cal Gg4g8,Gg4h4] } 7... Kh7 8. Ke2! { Agora começa a segunda fase: TRAGA O REI. A dama mantém a caixa enquanto o rei branco caminha para ajudar no mate. } { [%cal Ge1e2,Ge2e3,Ge3f4,Gf4f5,Gf5f6] } 8... Kh6 9. Ke3! { Continue aproximando o rei. Não dê xeques aleatórios: a dama já está fazendo seu trabalho. } 9... Kh7 10. Kf4! { O rei branco chega cada vez mais perto das casas que vão sustentar o golpe final. } 10... Kh8 11. Kf5! { Certo. Em vez de apertar a caixa, aproxime o rei. } (11. Qg6?? { A dama ficou perto demais e tirou a última casa do rei preto. Como ele não está em xeque, isto é afogamento: empate. A dama deve esperar. } { [%csl Rg6,Rh8] }) 11... Kh7 12. Kf6! { Agora o rei branco participa diretamente: ele controla g7 e ajuda a dama a formar a rede de mate. } { [%csl Gf6,Gg7] } 12... Kh8 13. Qg7# { Xeque-mate. A dama ataca o rei e está protegida pelo rei branco. A vitória veio em três fases: CAIXA, REI, MATE. } { [%csl Gf6,Gg7,Rh8] } *
@@ -110,6 +114,8 @@ Use a técnica do L: coloque a dama a um salto de cavalo do rei adversário. A p
 [ChapterURL "https://lichess.org/study/hf09xMzS/zGQlRnMI"]
 [FEN "8/4k3/8/8/2KQ4/8/8/8 w - - 25 13"]
 [SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
 
 { TREINO GUIADO 1. O rei preto ainda tem espaço. Use a técnica do L para diminuir a caixa. }
 13. Qd5! { Certo. A dama fica a um salto de cavalo do rei e corta mais casas. } { [%cal Gd5d8,Gd5h5] } 13... Kf6 14. Qe4! { Muito bem. O rei mudou de lugar e você acompanhou mantendo o padrão. } { [%cal Ge4e8,Ge4h4] } *
@@ -131,6 +137,8 @@ Use a técnica do L: coloque a dama a um salto de cavalo do rei adversário. A p
 [ChapterURL "https://lichess.org/study/hf09xMzS/0KhsjjiJ"]
 [FEN "8/6k1/8/3K4/5Q2/8/8/8 w - - 25 13"]
 [SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
 
 { TREINO GUIADO 2. A caixa já está menor. Continue seguindo o rei com a dama sem dar xeques desnecessários. }
 13. Qf5! { Isso. Mantenha o L e reduza o espaço. } { [%cal Gf5f8,Gf5h5] } 13... Kh6 14. Qg4! { Perfeito. O rei está sendo empurrado para a borda. } { [%cal Gg4g8,Gg4h4] } *
@@ -152,6 +160,8 @@ Use a técnica do L: coloque a dama a um salto de cavalo do rei adversário. A p
 [ChapterURL "https://lichess.org/study/hf09xMzS/f9rqT7mP"]
 [FEN "8/7k/8/8/3K1Q2/8/8/8 w - - 25 13"]
 [SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
 
 { TREINO GUIADO 3. Termine de fechar a caixa, mas fique atento: quando o rei chegar ao canto, a dama deve parar. }
 13. Qg5! { Certo. A caixa ficou mínima, mas o rei preto ainda possui uma casa legal. } { [%cal Gg5g8,Gg5h5] } 13... Kh8 { Agora pare a dama e traga o rei. } 14. Ke5! { Exatamente. A dama mantém o rei preso enquanto o seu rei se aproxima. } { [%cal Gd4e5,Ge5f6] } (14. Qg6?? { Afogamento. Você tirou a última casa legal sem dar xeque. }) 14... Kh7 15. Kf6! { O rei branco chega à posição de apoio. Agora procure o golpe final. } { [%csl Gf6,Gg7] } 15... Kh8 16. Qg7# { Mate. Dama e rei trabalham juntos. } *
@@ -173,9 +183,11 @@ Use a técnica do L: coloque a dama a um salto de cavalo do rei adversário. A p
 [ChapterURL "https://lichess.org/study/hf09xMzS/2daGvKiL"]
 [FEN "8/8/7k/8/3K2Q1/8/8/8 w - - 25 13"]
 [SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
 
 { TREINO GUIADO 4. O rei preto já está preso. Não aperte mais a caixa com a dama. Agora é a vez do seu rei fazer o trabalho. }
-13. Ke5! { Boa. Aproxime o rei enquanto a dama continua controlando o espaço. } 13... Kh7 14. Kf6! { Agora seu rei está perto o bastante para apoiar o mate. } { [%csl Gf6] } 14... Kh6 15. Qg6# { Xeque-mate. A dama dá o golpe final e o rei garante sua proteção. } { [%csl Gf6,Gg6,Rh6] } *
+13. Ke5! { Boa. Aproxime o rei enquanto a dama continua controlando o espaço. } 13... Kh7 14. Kf6! { Agora seu rei está perto o bastante para apoiar o mate. } { [%csl Gf6] } 14... Kh6 15. Qg6# { Xeque-mate. A dama dá o golpe final e o rei garante sua proteção. } { [%csl Gf6,Gg6,Rh6] } (15. Qh3# { Xeque-mate! Parabéns! }) (15. Qh4# { Xeque-mate! Parabéns! }) (15. Qg7+ { Ops, tente de novo! Tem xeque-mate em 1 lance aqui! }) *
 
 
 [Event "50 Finais OLESC - Capitulo 0.3"]
@@ -194,6 +206,7 @@ Use a técnica do L: coloque a dama a um salto de cavalo do rei adversário. A p
 [ChapterURL "https://lichess.org/study/hf09xMzS/5NBQBB8b"]
 [FEN "8/8/8/8/4k3/8/8/3QK3 w - - 0 1"]
 [SetUp "1"]
+[Orientation "white"]
 
 { PRÁTICA LIVRE CONTRA A ENGINE. Jogue de Brancas e dê xeque-mate. Lembre-se de usar a técnica aprendida:
 

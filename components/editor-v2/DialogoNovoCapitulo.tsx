@@ -44,7 +44,10 @@ export function DialogoNovoCapitulo({
   aoCriar,
   aoFechar,
   acervo = [],
+  aoImportarDoLichess,
 }: {
+  /** Fatia 10: a quinta porta de §8.3 — abre a importação com o campo do endereço. */
+  aoImportarDoLichess?: () => void;
   /** Fatia 10: as posições de `content/positions/`, com o hash calculado no servidor. */
   acervo?: PosicaoDoAcervoV2[];
   aula: AulaV2;
@@ -210,8 +213,11 @@ export function DialogoNovoCapitulo({
           ))}
         </div>
         <p className="text-xs text-tinta-fraca">
-          Para trazer partidas de um arquivo, use <strong>Importar PGN</strong>, no alto da tela.
-          Importar por endereço do Lichess ainda não existe.
+          Para trazer partidas de um arquivo ou de um endereço do Lichess (partida, capítulo ou estudo público),
+          use{" "}
+          {aoImportarDoLichess
+            ? <button type="button" onClick={aoImportarDoLichess} className="foco underline">Importar do Lichess ou de PGN</button>
+            : <strong>Importar PGN</strong>}.
         </p>
 
         {porta === "inicial" ? (

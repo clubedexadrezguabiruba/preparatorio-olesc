@@ -159,6 +159,12 @@ function separarComentario(bruto: string): { prosa: string; desenhos: Desenhos |
   return { prosa, desenhos: arrows.length + highlights.length > 0 ? desenhos : undefined, diretivas, cores };
 }
 
+/** A prosa e os desenhos com cor de um comentário — para os quadros da introdução do estudo (fatia 10). */
+export function prosaEDesenhos(bruto: string): { prosa: string; desenhos: Desenhos | undefined } {
+  const { prosa, desenhos } = separarComentario(bruto);
+  return { prosa, desenhos };
+}
+
 /** O título do capítulo, na ordem em que o professor reconheceria o jogo. */
 function tituloDoJogo(partida: PartidaPgn, numero: number): string {
   const candidatos = [partida.tags.ChapterName, partida.tags.Event, [partida.tags.White, partida.tags.Black].filter(Boolean).join(" × ")];
@@ -243,7 +249,7 @@ function converter(
 }
 
 /** Um jogo do arquivo vira análise mais capítulo — ou uma recusa com motivo. */
-function importarJogo(partida: PartidaPgn, numero: number, idsUsados: Set<string>): JogoImportado {
+export function importarJogo(partida: PartidaPgn, numero: number, idsUsados: Set<string>): JogoImportado {
   const titulo = tituloDoJogo(partida, numero);
   const base: Omit<JogoImportado, "recusa" | "analise" | "capitulo"> = { numero, titulo, lances: 0, comentarios: 0, variantes: 0, perdas: [] };
   const recusar = (codigo: RecusaImportacao["codigo"], mensagem: string): JogoImportado => ({ ...base, recusa: { codigo, mensagem }, analise: null, capitulo: null });

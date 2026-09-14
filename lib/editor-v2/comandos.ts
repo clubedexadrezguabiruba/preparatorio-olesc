@@ -30,6 +30,7 @@ import type { AulaV2, DesenhoV2, NoV2, RevisaoDaFenV2 } from "./modelo.ts";
 import { aplicarRevisaoDaFen } from "./proveniencia.ts";
 import { ehComandoDeIntroducao, executarComandoDeIntroducao, type ComandoDeIntroducaoV2 } from "./introducao.ts";
 import { excluirTreino, moverEtapa } from "./fluxo.ts";
+import { aplicarPlanoDoEstudo, type PlanoDoEstudoV2 } from "./importar-estudo.ts";
 import { aplicarEdicaoDePratica, aplicarExclusaoDePratica, aplicarNovaPratica, type PraticaPreparadaV2 } from "./pratica.ts";
 import {
   aplicarRefazerTreino,
@@ -163,6 +164,11 @@ export type ComandoV2 =
   /** §7.1 (fatia 10): a introdução e os quadros — ver `introducao.ts`. */
   | ComandoDeIntroducaoV2
   /**
+   * §13 (fatia 10): um estudo do Lichess inteiro — introdução, capítulos, treinos e a prática — num
+   * Desfazer. A prática chega pronta (a posição já entrou no acervo pelo servidor) ou não chega.
+   */
+  | { tipo: "IMPORTAR_ESTUDO"; plano: PlanoDoEstudoV2; pratica?: AulaV2["praticas"][number]; registroDaPratica?: AulaV2["proveniencia"][number] }
+  /**
    * Uma tag do cabeçalho PGN da análise (fatia 8: Nome, Nível e Fonte do repertório).
    *
    * A ordem das tags é preservada — a tag editada fica onde estava, e uma tag nova entra
@@ -184,6 +190,7 @@ function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<
     return { ...aula, origem: { ...aula.origem, convertidaEm: comando.convertidaEm } };
   }
   if (ehComandoDeIntroducao(comando)) return executarComandoDeIntroducao(aula, comando, positions);
+  if (comando.tipo === "IMPORTAR_ESTUDO") return aplicarPlanoDoEstudo(aula, comando.plano, comando.pratica, comando.registroDaPratica);
   if (comando.tipo === "MOVER_ETAPA") return moverEtapa(aula, comando.etapaId, comando.para);
   if (comando.tipo === "EXCLUIR_TREINO") return excluirTreino(aula, comando.treinoId);
   if (comando.tipo === "ADICIONAR_PRATICA") return aplicarNovaPratica(aula, comando.preparo);

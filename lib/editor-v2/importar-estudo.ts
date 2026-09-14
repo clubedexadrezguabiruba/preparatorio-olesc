@@ -1,0 +1,351 @@
+/**
+ * Importar um **estudo do Lichess** com os modos de cada capítulo — especificação §13, fatia 10 (10E).
+ *
+ * ## O que o Lichess exporta, e o que não (conferido em `lila/modules/study/PgnDump.scala` e no estudo
+ * real do Doug, `hf09xMzS`, exportado em 14/9/2026)
+ *
+ * - **Vem:** `StudyName`, `ChapterName`, `ChapterURL`, `Annotator`, `Orientation` (com
+ *   `orientation=true`), `FEN`, variantes, comentários, `%cal`/`%csl`, e **só um modo**:
+ *   `[ChapterMode "gamebook"]` (lição interativa).
+ * - **Não vem:** "Pratique com o computador", "Ocultar próximos lances", e as dicas e textos de desvio
+ *   que o autor escreve dentro da lição interativa. Isso vai para as perdas, antes de aplicar.
+ *
+ * ## Para onde cada capítulo vai — a pista, e o professor decide
+ *
+ * | Pista | Sugestão |
+ * |---|---|
+ * | sem lances, antes do primeiro capítulo com lances | **Introdução** (um quadro) |
+ * | `ChapterMode "gamebook"` | **Treino** |
+ * | `White` ou `Black` = "Engine", sem lances, até 7 peças | **Prática** |
+ * | o resto | **Capítulo** |
+ *
+ * ## O treino que nasce da lição interativa
+ *
+ * A linha principal vira as perguntas — os lances do lado do aluno com o comentário como feedback, os
+ * do outro lado como defesa com o próprio texto (derivação de `treinos.ts`, a mesma de "Criar treino
+ * daqui"). Depois o treino fica **independente** (a cópia operacional é materializada) e ganha o que
+ * a derivação não sabe: as variantes do lance do aluno.
+ *
+ * - variante com `#`, `!` ou `!!` → resposta **correta** (se termina em mate, encerra ali);
+ * - variante com `?`, `??` ou `?!` → **erro nomeado** (catálogo), com o comentário como mensagem, e o
+ *   aluno tenta de novo;
+ * - variante sem símbolo e sem mate → vira erro **e fica marcada para revisar** — símbolo só sugere
+ *   (§16.1), e ausência de símbolo sugere menos ainda;
+ * - variante aceita que continua depois do primeiro lance → a continuação é perda anunciada.
+ *
+ * A análise do treino fica na aula (sem capítulo), com os comentários e variantes originais: é a
+ * origem histórica, e é onde a proveniência da posição é registrada.
+ */
+import { Chess } from "chess.js";
+import type { Position } from "../lesson/schema.ts";
+import { lerPgnsDoEstudo, type PartidaPgn } from "../repertorio/pgn.ts";
+import { indiceAntesDaPratica } from "./fluxo.ts";
+import { idsDaAulaV2 } from "./ids.ts";
+import { importarJogo, prosaEDesenhos, type JogoImportado } from "./importar-pgn.ts";
+import { problemasDeLimiteV2 } from "./limites.ts";
+import type { AnaliseV2, AulaV2, CapituloV2, IntroducaoV2, RevisaoDaFenV2, TreinoV2 } from "./modelo.ts";
+import { tornarTreinoIndependente } from "./propriedade-treino.ts";
+import { aplicarTreinosPreparados, prepararTreinosDaqui } from "./treinos.ts";
+
+export type DestinoNoEstudo = "introducao" | "capitulo" | "treino" | "pratica" | "fora";
+
+export type CapituloDoEstudo = {
+  numero: number;
+  titulo: string;
+  fen: string;
+  lado: "white" | "black";
+  modo: "analise" | "gamebook";
+  lances: number;
+  variantes: number;
+  comentarios: number;
+  sugerido: DestinoNoEstudo;
+  possiveis: DestinoNoEstudo[];
+  /** Por que a sugestão é essa, em uma frase. */
+  pista: string;
+  perdas: string[];
+  jogo: JogoImportado;
+  partida: PartidaPgn;
+};
+
+export type LeituraDoEstudo = {
+  capitulos: CapituloDoEstudo[];
+  estudo: { nome?: string; autor?: string; link?: string };
+  /** O que o Lichess não exporta — dito uma vez para o arquivo inteiro. */
+  perdasGerais: string[];
+};
+
+const semNumero = (titulo: string) => titulo.replace(/^\s*\d+\s*[-–—.]\s*/, "").trim() || titulo;
+const pecas = (fen: string) => (fen.split(" ")[0].match(/[prnbqk]/gi) ?? []).length;
+
+/** O texto de um comentário do estudo com os parágrafos intactos, sem as diretivas. */
+export function textoComParagrafos(bruto: string | null): string {
+  if (!bruto) return "";
+  return bruto.replace(/\[%[^\]]*\]/g, " ").split(/\n/).map((linha) => linha.replace(/[ \t]+/g, " ").trim()).join("\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
+export function lerEstudo(texto: string): LeituraDoEstudo {
+  const partidas = lerPgnsDoEstudo(texto);
+  const idsUsados = new Set<string>();
+  let primeiroComLances = partidas.findIndex((partida) => partida.lances.length > 0);
+  if (primeiroComLances < 0) primeiroComLances = partidas.length;
+
+  const capitulos = partidas.map((partida, indice): CapituloDoEstudo => {
+    const numero = indice + 1;
+    const jogo = importarJogo(partida, numero, idsUsados);
+    const fen = partida.tags.FEN?.trim() || new Chess().fen();
+    const orientacao = partida.tags.Orientation?.toLowerCase();
+    const aluno = /aluno/i.test(partida.tags.Black ?? "") ? "black" : /aluno/i.test(partida.tags.White ?? "") ? "white" : undefined;
+    const lado = orientacao === "black" || orientacao === "white" ? orientacao : aluno ?? (fen.split(" ")[1] === "b" ? "black" : "white");
+    const modo = partida.tags.ChapterMode === "gamebook" ? "gamebook" : "analise";
+    const contraMaquina = /engine|stockfish|computador/i.test(`${partida.tags.White ?? ""} ${partida.tags.Black ?? ""}`);
+    const temLances = partida.lances.length > 0 && jogo.recusa === null;
+
+    const possiveis: DestinoNoEstudo[] = [];
+    if (!jogo.recusa || jogo.recusa.codigo === "JOGO_SEM_LANCES") possiveis.push("introducao");
+    if (temLances) possiveis.push("capitulo", "treino");
+    if (pecas(fen) <= 7 && (!jogo.recusa || jogo.recusa.codigo === "JOGO_SEM_LANCES")) possiveis.push("pratica");
+    possiveis.push("fora");
+
+    let sugerido: DestinoNoEstudo;
+    let pista: string;
+    if (modo === "gamebook" && temLances) { sugerido = "treino"; pista = "é uma lição interativa no Lichess"; }
+    else if (contraMaquina && !temLances && possiveis.includes("pratica")) { sugerido = "pratica"; pista = "o adversário é o computador"; }
+    else if (!temLances && indice < primeiroComLances && possiveis.includes("introducao")) { sugerido = "introducao"; pista = "não tem lances e vem antes dos capítulos"; }
+    else if (temLances) { sugerido = "capitulo"; pista = "tem lances para mostrar"; }
+    else if (possiveis.includes("introducao")) { sugerido = "introducao"; pista = "não tem lances"; }
+    else { sugerido = "fora"; pista = jogo.recusa?.mensagem ?? "não pôde ser lido"; }
+
+    const perdas = jogo.perdas.map((perda) => perda.mensagem);
+    if (modo === "gamebook") perdas.push("as dicas e os textos de desvio da lição interativa não vêm na exportação do Lichess — escreva-os na autoria do treino");
+    if (contraMaquina) perdas.push("o modo \"praticar contra o computador\" do Lichess não vem na exportação; a pista foi o nome do adversário");
+    if (partida.lances.length === 0 && textoComParagrafos(partida.intro)) perdas.push("na prática, o texto do capítulo não tem lugar (a prática desta versão não mostra texto próprio)");
+
+    return {
+      numero, titulo: semNumero(jogo.titulo), fen, lado, modo,
+      lances: jogo.lances, variantes: jogo.variantes, comentarios: jogo.comentarios,
+      sugerido, possiveis, pista, perdas, jogo, partida,
+    };
+  });
+
+  const primeira = partidas[0]?.tags ?? {};
+  const autor = primeira.Annotator?.replace(/^https?:\/\/lichess\.org\/@\//, "").trim();
+  const link = primeira.ChapterURL?.replace(/\/[A-Za-z0-9]{8}$/, "");
+  return {
+    capitulos,
+    estudo: { ...(primeira.StudyName ? { nome: primeira.StudyName.replace(/_/g, " ") } : {}), ...(autor ? { autor } : {}), ...(link ? { link } : {}) },
+    perdasGerais: capitulos.some((c) => c.partida.tags.ChapterURL)
+      ? ["o Lichess não exporta o modo \"ocultar próximos lances\" nem o relógio de estudo; se o estudo os usa, ajuste depois"]
+      : [],
+  };
+}
+
+export type PraticaDoEstudo = { numero: number; titulo: string; fen: string; lado: "white" | "black" };
+
+/** O que foi decidido na janela, pronto para o comando `IMPORTAR_ESTUDO` — tudo com ids. */
+export type PlanoDoEstudoV2 = {
+  analises: AnaliseV2[];
+  capitulos: CapituloV2[];
+  treinos: TreinoV2[];
+  erros: NonNullable<AulaV2["catalogo"]>["erros"];
+  introducao?: IntroducaoV2;
+  /** As etapas novas, na ordem do estudo, sem a da introdução. Entram antes da prática. */
+  etapas: AulaV2["fluxo"];
+  /** Marcadas para o professor revisar (variante sem símbolo que virou erro, por exemplo). */
+  avisos: string[];
+  /** A prática sugerida: a posição ainda precisa entrar no acervo (servidor) antes do comando. */
+  pratica?: PraticaDoEstudo;
+};
+
+export type EscolhasDoEstudo = { destinos: Record<number, DestinoNoEstudo>; revisao?: RevisaoDaFenV2 };
+
+const SIMBOLO = { certo: new Set(["!", "!!", "$1", "$3"]), errado: new Set(["?", "??", "?!", "$2", "$4", "$6"]) };
+
+function primeiraFrase(texto: string): string {
+  const frase = texto.split(/(?<=[.!?])\s/)[0]?.trim() ?? texto;
+  return frase.length > 48 ? `${frase.slice(0, 45).trim()}…` : frase;
+}
+
+/**
+ * Monta o plano. **Não toca na aula.** Recusa com frase quando o que foi escolhido não cabe.
+ */
+export function planejarEstudo(aula: AulaV2, leitura: LeituraDoEstudo, escolhas: EscolhasDoEstudo, positions: Record<string, Position>):
+  | { ok: true; plano: PlanoDoEstudoV2 }
+  | { ok: false; mensagem: string } {
+  const destino = (c: CapituloDoEstudo) => escolhas.destinos[c.numero] ?? c.sugerido;
+  const escolhidos = leitura.capitulos.filter((c) => destino(c) !== "fora");
+  if (!escolhidos.length) return { ok: false, mensagem: "nenhum capítulo do estudo foi escolhido para entrar" };
+  for (const c of escolhidos) if (!c.possiveis.includes(destino(c))) return { ok: false, mensagem: `«${c.titulo}» não pode virar ${destino(c)}: ${c.pista}` };
+  const praticas = escolhidos.filter((c) => destino(c) === "pratica");
+  if (praticas.length > 1) return { ok: false, mensagem: "o estudo tem mais de um capítulo marcado como prática, e a aula aceita uma só" };
+  if (praticas.length && aula.praticas.length) return { ok: false, mensagem: "esta aula já tem uma prática; marque o capítulo de prática do estudo como fora, ou exclua a prática da aula antes" };
+
+  const usados = idsDaAulaV2(aula);
+  for (const c of escolhidos) {
+    if (!c.jogo.analise) continue;
+    for (const id of [c.jogo.analise.id, c.jogo.capitulo!.id, `etapa-${c.jogo.capitulo!.id}`]) {
+      if (usados.has(id)) return { ok: false, mensagem: `a aula já tem uma parte chamada "${id}" — este estudo parece já ter sido importado. Nada foi aplicado.` };
+    }
+  }
+
+  const comRevisao = (analise: AnaliseV2): AnaliseV2 => (escolhas.revisao && analise.inicio.tipo === "fen"
+    ? { ...analise, inicio: { ...analise.inicio, revisao: { ...escolhas.revisao, fenRevisada: analise.inicio.fen } } }
+    : analise);
+
+  const analises: AnaliseV2[] = [];
+  const capitulos: CapituloV2[] = [];
+  const etapas: AulaV2["fluxo"] = [];
+  const avisos: string[] = [];
+  const erros: PlanoDoEstudoV2["erros"] = [];
+  const treinos: TreinoV2[] = [];
+
+  // Os capítulos entram primeiro, para a introdução poder apontar a posição deles.
+  for (const c of escolhidos.filter((item) => destino(item) === "capitulo")) {
+    analises.push(comRevisao(c.jogo.analise!));
+    capitulos.push({ ...c.jogo.capitulo!, titulo: c.titulo, orientacao: c.lado });
+  }
+
+  // Treinos: derivados num rascunho da aula, e então independentes e completados.
+  let rascunho: AulaV2 = { ...aula, analises: [...aula.analises, ...analises], capitulos: [...aula.capitulos, ...capitulos] };
+  for (const c of escolhidos.filter((item) => destino(item) === "treino")) {
+    const analise = comRevisao(c.jogo.analise!);
+    const temporario = { ...c.jogo.capitulo!, orientacao: c.lado };
+    rascunho = { ...rascunho, analises: [...rascunho.analises, analise], capitulos: [...rascunho.capitulos, temporario], fluxo: [...rascunho.fluxo, { id: `etapa-${temporario.id}`, tipo: "capitulo", entidadeId: temporario.id }] };
+    const objetivo = textoComParagrafos(c.partida.intro) || `Jogue a linha de «${c.titulo}».`;
+    const preparo = prepararTreinosDaqui(rascunho, { capituloId: temporario.id, nodeId: temporario.inicioNodeId, titulo: c.titulo, objetivo, lado: c.lado, colocacao: "fim-da-aula", obrigatorio: true }, positions);
+    if (!preparo.ok) return { ok: false, mensagem: `o treino «${c.titulo}» não pôde ser montado: ${preparo.mensagem}` };
+    rascunho = aplicarTreinosPreparados(rascunho, preparo.preparo);
+    const treinoId = preparo.preparo.treinos[0].id;
+    rascunho = tornarTreinoIndependente(rascunho, treinoId, positions);
+    const completado = completarTreino(rascunho.treinos.find((t) => t.id === treinoId)!, analise, c, erros, avisos, new Set([...idsDaAulaV2(rascunho), ...erros.map((e) => e.id)]));
+    treinos.push({ ...completado, introducao: objetivo });
+    analises.push(analise);
+    etapas.push({ id: preparo.preparo.etapas[0].id, tipo: "treino", entidadeId: treinoId });
+    // O capítulo temporário sai: a aula do estudo tem treino, não um capítulo repetido.
+    rascunho = { ...rascunho, capitulos: rascunho.capitulos.filter((item) => item.id !== temporario.id), fluxo: rascunho.fluxo.filter((etapa) => etapa.entidadeId !== temporario.id) };
+  }
+
+  // A ordem das etapas segue a do estudo.
+  const ordem = new Map(escolhidos.map((c, i) => [c.jogo.capitulo?.id ?? `#${c.numero}`, i]));
+  for (const capitulo of capitulos) etapas.push({ id: `etapa-${capitulo.id}`, tipo: "capitulo", entidadeId: capitulo.id });
+  const posicaoNoEstudo = (etapa: AulaV2["fluxo"][number]) => {
+    if (etapa.tipo === "capitulo") return ordem.get(etapa.entidadeId) ?? 0;
+    const treino = treinos.find((t) => t.id === etapa.entidadeId);
+    return ordem.get(treino?.origem?.capituloId ?? "") ?? 0;
+  };
+  etapas.sort((a, b) => posicaoNoEstudo(a) - posicaoNoEstudo(b));
+
+  // Introdução: um quadro por capítulo escolhido, com a posição apontando o capítulo que tem a mesma.
+  const quadros = escolhidos.filter((c) => destino(c) === "introducao").map((c) => {
+    const mesma = capitulos.find((capitulo) => {
+      const analise = analises.find((a) => a.id === capitulo.analiseId);
+      return analise?.inicio.tipo === "fen" && analise.inicio.fen.split(" ").slice(0, 4).join(" ") === c.fen.split(" ").slice(0, 4).join(" ");
+    });
+    const { desenhos } = prosaEDesenhos(c.partida.intro ?? "");
+    return {
+      id: `quadro-${c.jogo.capitulo?.id.replace(/^capitulo-/, "") ?? `estudo-${c.numero}`}`,
+      titulo: c.titulo,
+      texto: textoComParagrafos(c.partida.intro) || c.titulo,
+      posicao: mesma ? { tipo: "referencia" as const, origem: { analiseId: mesma.analiseId, nodeId: mesma.inicioNodeId } } : { tipo: "fen" as const, fen: c.fen },
+      ...(desenhos ? { desenhos } : {}),
+    };
+  });
+  const introducao = quadros.length && !aula.introducoes.length
+    ? { id: `introducao-${quadros[0].id.replace(/^quadro-/, "")}`, titulo: "Introdução", quadros }
+    : undefined;
+  if (quadros.length && aula.introducoes.length) avisos.push("a aula já tem introdução: os quadros do estudo não entraram — acrescente-os à mão");
+
+  const pratica = praticas[0] ? { numero: praticas[0].numero, titulo: praticas[0].titulo, fen: praticas[0].fen, lado: praticas[0].lado } : undefined;
+  return { ok: true, plano: { analises, capitulos, treinos, erros, etapas, avisos, ...(introducao ? { introducao } : {}), ...(pratica ? { pratica } : {}) } };
+}
+
+/** As variantes do lance do aluno viram respostas; o texto do lance do defensor vira o texto da defesa. */
+function completarTreino(treino: TreinoV2, analise: AnaliseV2, c: CapituloDoEstudo, erros: PlanoDoEstudoV2["erros"], avisos: string[], usados: Set<string>): TreinoV2 {
+  const livre = (base: string) => { let id = base; for (let n = 2; usados.has(id); n += 1) id = `${base}-${n}`; usados.add(id); return id; };
+  // As variantes vêm da análise já importada: UCI, legalidade conferida, símbolo e comentário no nó.
+
+  const questoes = treino.questoes.map((questao) => {
+    const pai = analise.nos[questao.posicao.nodeId];
+    const principal = questao.respostas[0];
+    const filhos = pai.filhos.map((id) => analise.nos[id]);
+    const respostas = [...questao.respostas];
+    for (const filho of filhos) {
+      if (!filho.uci || principal.moves.includes(filho.uci)) continue;
+      const jogo = new Chess(treino.copia?.questoes[questao.id]?.fen ?? "");
+      let mate = false;
+      try { jogo.move({ from: filho.uci.slice(0, 2), to: filho.uci.slice(2, 4), promotion: filho.uci.slice(4) || undefined }); mate = jogo.isCheckmate(); } catch { continue; }
+      const simbolos = (filho.nags ?? []).map((n) => `$${n}`);
+      const certo = mate || simbolos.some((s) => SIMBOLO.certo.has(s));
+      const errado = simbolos.some((s) => SIMBOLO.errado.has(s));
+      const texto = filho.comentario ?? (certo ? "Boa, também funciona." : "Este lance não é o da lição. Tente de novo.");
+      const san = (() => { try { return new Chess(treino.copia?.questoes[questao.id]?.fen ?? "").move({ from: filho.uci.slice(0, 2), to: filho.uci.slice(2, 4), promotion: filho.uci.slice(4) || undefined }).san; } catch { return filho.uci; } })();
+      if (certo && !errado) {
+        if (filho.filhos.length) c.perdas.push(`a continuação depois de ${san} (resposta aceita no treino «${c.titulo}») não entrou: o treino aceita o lance e encerra ali — revise`);
+        respostas.push({ id: livre(`resposta-${filho.id}`), moves: [filho.uci], julgamento: "correta", feedback: texto, efeito: mate ? { tipo: "encerra", condicao: "mate" } : { tipo: "repete" } });
+        if (!mate) avisos.push(`no treino «${c.titulo}», ${san} está marcado como certo mas não termina a lição: entrou como "repete" — revise`);
+      } else {
+        const erroId = livre(`erro-${filho.id}`);
+        erros.push({ id: erroId, nome: primeiraFrase(texto), julgamento: simbolos.some((s) => s === "$4") ? "perde-resultado" : "fora-do-metodo", texto });
+        respostas.push({ id: livre(`resposta-${filho.id}`), moves: [filho.uci], julgamento: "erro", feedback: texto, erroId, efeito: { tipo: "repete" } });
+        if (!errado) avisos.push(`no treino «${c.titulo}», ${san} não tem símbolo no estudo e entrou como erro — confira`);
+      }
+    }
+    // O texto do lance do defensor, quando o estudo o escreveu.
+    const respostasComTexto = respostas.map((resposta) => {
+      if (resposta !== principal || resposta.efeito.tipo !== "avanca") return resposta;
+      const noDoAluno = pai.filhos.map((id) => analise.nos[id]).find((no) => no.uci === resposta.moves[0]);
+      return {
+        ...resposta,
+        efeito: {
+          ...resposta.efeito,
+          defesas: resposta.efeito.defesas.map((defesa) => {
+            const noDaDefesa = noDoAluno?.filhos.map((id) => analise.nos[id]).find((no) => no.uci === defesa.move);
+            return noDaDefesa?.comentario ? { ...defesa, texto: noDaDefesa.comentario } : defesa;
+          }),
+        },
+      };
+    });
+    return { ...questao, respostas: respostasComTexto };
+  });
+
+  const ultima = questoes.at(-1)?.respostas[0];
+  const precisaConclusao = ultima?.efeito.tipo === "encerra" && ultima.efeito.condicao === "objetivo-autoral";
+  return {
+    ...treino,
+    questoes,
+    ...(precisaConclusao && !treino.explicacaoConclusao ? { explicacaoConclusao: ultima!.feedback } : {}),
+  };
+}
+
+export function aplicarPlanoDoEstudo(aula: AulaV2, plano: PlanoDoEstudoV2, pratica?: AulaV2["praticas"][number], registroDaPratica?: AulaV2["proveniencia"][number]): AulaV2 {
+  const usados = idsDaAulaV2(aula);
+  const novos = [...plano.analises.map((a) => a.id), ...plano.capitulos.map((c) => c.id), ...plano.treinos.map((t) => t.id), ...plano.etapas.map((e) => e.id), ...(plano.introducao ? [plano.introducao.id] : [])];
+  const repetido = novos.find((id) => usados.has(id));
+  if (repetido) throw new Error(`a aula já tem uma parte chamada "${repetido}" — este estudo parece já ter sido importado. Nada foi aplicado.`);
+  if (pratica && aula.praticas.length) throw new Error("esta aula já tem uma prática");
+
+  const antes = indiceAntesDaPratica(aula.fluxo);
+  const fluxo = [
+    ...(plano.introducao ? [{ id: `etapa-${plano.introducao.id}`, tipo: "introducao" as const, entidadeId: plano.introducao.id }] : []),
+    ...aula.fluxo.slice(0, antes),
+    ...plano.etapas,
+    ...aula.fluxo.slice(antes),
+    ...(pratica ? [{ id: `etapa-${pratica.id}`, tipo: "pratica" as const, entidadeId: pratica.id }] : []),
+  ];
+  const catalogo = plano.erros.length
+    ? { ...(aula.catalogo ?? { erros: [], mensagensPadrao: { vitoriaForaDoMetodo: "Este lance funciona, mas não é o caminho ensinado.", perdeResultado: "Este lance perde o resultado que a posição permitia.", alternativaDoMetodo: "Boa alternativa. Continue pela linha ensinada." } }), erros: [...(aula.catalogo?.erros ?? []), ...plano.erros] }
+    : aula.catalogo;
+  const nova: AulaV2 = {
+    ...aula,
+    ...(catalogo ? { catalogo } : {}),
+    proveniencia: registroDaPratica && !aula.proveniencia.some((p) => p.positionId === registroDaPratica.positionId) ? [...aula.proveniencia, registroDaPratica] : aula.proveniencia,
+    analises: [...aula.analises, ...plano.analises],
+    introducoes: plano.introducao ? [...aula.introducoes, plano.introducao] : aula.introducoes,
+    capitulos: [...aula.capitulos, ...plano.capitulos],
+    treinos: [...aula.treinos, ...plano.treinos],
+    praticas: pratica ? [...aula.praticas, pratica] : aula.praticas,
+    fluxo,
+  };
+  const excedidos = problemasDeLimiteV2(nova);
+  if (excedidos.length) throw new Error(`com este estudo a aula passa do que o editor aguenta: ${excedidos.map((p) => p.mensagem).join("; ")}. Nada foi aplicado.`);
+  return nova;
+}

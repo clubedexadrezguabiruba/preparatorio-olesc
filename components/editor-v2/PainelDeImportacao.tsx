@@ -1,7 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { buscarPgnDoLichessAcao } from "@/app/editor/v2/acoes";
+import { PainelDoEstudo, type PedidoDeImportacaoDeEstudo } from "@/components/editor-v2/PainelDoEstudo";
+import type { ObraDoRegistro } from "@/lib/editor-v2/acervo-em-disco";
+import { lerEstudo } from "@/lib/editor-v2/importar-estudo";
 import { lerImportacaoPgn, medirImportacao, type RelatorioImportacao } from "@/lib/editor-v2/importar-pgn";
+import type { Position } from "@/lib/lesson/schema";
 import { LIMITES_V2 } from "@/lib/editor-v2/limites";
 import type { AulaV2 } from "@/lib/editor-v2/modelo";
 
@@ -34,15 +39,36 @@ import type { AulaV2 } from "@/lib/editor-v2/modelo";
  * caixa de texto; `Esc` fecha; ao fechar, o foco volta para o botão que abriu. Sem
  * isso, quem navega por teclado cai no começo da página a cada abertura.
  */
+const SEM_POSICOES: Record<string, Position> = {};
+const SEM_OBRAS: ObraDoRegistro[] = [];
+
 export function PainelDeImportacao({
   aula,
   aoAplicar,
   aoFechar,
+  aoImportarEstudo,
+  positions = SEM_POSICOES,
+  obras = SEM_OBRAS,
+  professor = "professor",
+  enderecoInicial = "",
 }: {
   aula: AulaV2;
   aoAplicar: (relatorio: RelatorioImportacao, escolhidos: number[]) => void;
   aoFechar: () => void;
+  /** Fatia 10: aplica um estudo do Lichess com os modos. Devolve a recusa, ou `null`. */
+  aoImportarEstudo?: (pedido: PedidoDeImportacaoDeEstudo) => Promise<string | null>;
+  positions?: Record<string, Position>;
+  obras?: ObraDoRegistro[];
+  professor?: string;
+  /** O endereço do Lichess que a porta "Endereço do Lichess" de Adicionar capítulo trouxe. */
+  enderecoInicial?: string;
 }) {
+  const [endereco, setEndereco] = useState(enderecoInicial);
+  const [buscando, setBuscando] = useState(false);
+  const [recadoDaBusca, setRecadoDaBusca] = useState<string | null>(null);
+  const buscaAtual = useRef(0);
+  const [aplicandoEstudo, setAplicandoEstudo] = useState(false);
+  const [recusaDoEstudo, setRecusaDoEstudo] = useState<string | null>(null);
   const [texto, setTexto] = useState("");
   const [nomeDoArquivo, setNomeDoArquivo] = useState<string | null>(null);
   const [relatorio, setRelatorio] = useState<RelatorioImportacao | null>(null);
@@ -118,6 +144,28 @@ export function PainelDeImportacao({
     setTexto(await arquivo.text());
   }, []);
 
+  /*
+   * §13.2: o servidor reconhece o endereço e monta o da API oficial; o navegador só manda o texto
+   * colado. Cancelar não interrompe o servidor (ele tem o próprio prazo de 20 s): a resposta que
+   * chegar depois do cancelamento é ignorada, e nada entra.
+   */
+  const buscar = async () => {
+    const numero = ++buscaAtual.current;
+    setBuscando(true);
+    setRecadoDaBusca(null);
+    const resposta = await buscarPgnDoLichessAcao(endereco);
+    if (numero !== buscaAtual.current) return;
+    setBuscando(false);
+    if (!resposta.ok) { setRecadoDaBusca(resposta.mensagem); return; }
+    setNomeDoArquivo(`${resposta.descricao} · ${Math.ceil(resposta.bytes / 1024)} KB`);
+    setLendo(true);
+    setTexto(resposta.pgn);
+  };
+  const cancelarBusca = () => { buscaAtual.current += 1; setBuscando(false); setRecadoDaBusca("busca cancelada — nada foi importado"); };
+
+  /** Um estudo do Lichess (tem capítulos): a leitura com os modos, em vez da lista de jogos. */
+  const estudo = useMemo(() => (!lendo && aoImportarEstudo && /\[(ChapterName|StudyName|ChapterMode) "/.test(texto) ? lerEstudo(texto) : null), [aoImportarEstudo, lendo, texto]);
+
   const medida = relatorio ? medirImportacao(aula, relatorio, escolhidos) : null;
   const podeAplicar = relatorio !== null && escolhidos.length > 0 && medida !== null && medida.cabe;
 
@@ -139,13 +187,33 @@ export function PainelDeImportacao({
         <header className="flex items-start justify-between gap-3">
           <div>
             <h2 id={tituloId} className="text-base font-semibold text-tinta">Importar PGN</h2>
-            <p className="text-sm text-tinta-fraca">Cada jogo do arquivo vira um capítulo. Nada entra na aula antes de você escolher.</p>
+            <p className="text-sm text-tinta-fraca">Por endereço do Lichess, arquivo ou texto colado. Nada entra na aula antes de você escolher.</p>
           </div>
           <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Fechar</button>
         </header>
 
+        <div className="flex flex-col gap-1 text-sm text-tinta">
+          <label htmlFor={`${tituloId}-endereco`}>Endereço do Lichess — partida, capítulo ou estudo público</label>
+          <div className="flex flex-wrap gap-2">
+            <input
+              id={`${tituloId}-endereco`}
+              type="url"
+              value={endereco}
+              onChange={(evento) => { setEndereco(evento.currentTarget.value); setRecadoDaBusca(null); }}
+              onKeyDown={(evento) => { if (evento.key === "Enter") { evento.preventDefault(); void buscar(); } }}
+              placeholder="https://lichess.org/study/…"
+              className="foco min-w-0 flex-1 rounded-md border border-borda bg-carta px-2 py-2 text-sm text-tinta"
+            />
+            {buscando
+              ? <button type="button" onClick={cancelarBusca} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta">Cancelar busca</button>
+              : <button type="button" disabled={!endereco.trim()} onClick={() => void buscar()} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque disabled:opacity-40">Buscar no Lichess</button>}
+          </div>
+          {buscando ? <p role="status" className="text-xs text-tinta-fraca">buscando no Lichess…</p> : null}
+          {recadoDaBusca ? <p role="alert" className="text-xs text-erro-texto">{recadoDaBusca}</p> : null}
+        </div>
+
         <label className="flex flex-col gap-1 text-sm text-tinta">
-          Cole o PGN aqui, ou arraste o arquivo para esta janela
+          Ou cole o PGN aqui, ou arraste o arquivo para esta janela
           <textarea
             ref={caixa}
             value={texto}
@@ -168,7 +236,26 @@ export function PainelDeImportacao({
 
         {lendo ? <p className="text-sm text-tinta-fraca">lendo o arquivo…</p> : null}
 
-        {relatorio && !lendo ? (
+        {estudo && aoImportarEstudo ? (
+          <>
+            <PainelDoEstudo
+              aula={aula}
+              leitura={estudo}
+              positions={positions}
+              obras={obras}
+              professor={professor}
+              aplicando={aplicandoEstudo}
+              aoAplicar={async (pedido) => {
+                setAplicandoEstudo(true);
+                setRecusaDoEstudo(null);
+                const recusa = await aoImportarEstudo(pedido);
+                setAplicandoEstudo(false);
+                if (recusa) setRecusaDoEstudo(recusa);
+              }}
+            />
+            {recusaDoEstudo ? <p role="alert" className="rounded-md border border-erro bg-erro-superficie/10 p-2 text-sm text-erro-texto">{recusaDoEstudo}</p> : null}
+          </>
+        ) : relatorio && !lendo ? (
           relatorio.jogos.length === 0 ? (
             <p role="alert" className="rounded-lg border border-aviso-superficie bg-aviso-superficie/10 p-3 text-sm text-aviso-tinta">
               Não encontrei jogo nenhum neste texto. Um PGN precisa ter pelo menos um lance.
@@ -220,7 +307,7 @@ export function PainelDeImportacao({
           )
         ) : null}
 
-        {medida ? (
+        {medida && !estudo ? (
           <p className={`text-sm ${medida.cabe ? "text-tinta-fraca" : "text-erro-texto"}`}>
             Com o que está marcado, a aula fica com <strong>{medida.lances}</strong> de {medida.teto} lances.
             {medida.cabe ? null : ` Passa do que o editor aguenta — desmarque capítulos até caber, ou importe em duas aulas. O limite de profundidade é ${LIMITES_V2.profundidade} meios-lances por linha.`}
@@ -231,6 +318,7 @@ export function PainelDeImportacao({
           <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Cancelar</button>
           <button
             type="button"
+            hidden={Boolean(estudo)}
             disabled={!podeAplicar}
             onClick={() => { if (relatorio) aoAplicar(relatorio, escolhidos); }}
             className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"

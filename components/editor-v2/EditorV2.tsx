@@ -32,6 +32,9 @@ import { EditorDeIntroducao } from "@/components/editor-v2/EditorDeIntroducao";
 import { PreviaDaIntroducao } from "@/components/editor-v2/PreviaDaIntroducao";
 import { OrdemDaAula } from "@/components/editor-v2/OrdemDaAula";
 import type { ComandoDeIntroducaoV2 } from "@/lib/editor-v2/introducao";
+import { planejarEstudo } from "@/lib/editor-v2/importar-estudo";
+import { ADVERSARIO_PADRAO, prepararPratica } from "@/lib/editor-v2/pratica";
+import type { PedidoDeImportacaoDeEstudo } from "@/components/editor-v2/PainelDoEstudo";
 import { PreviaDaPratica } from "@/components/editor-v2/PreviaDaPratica";
 import type { ObraDoRegistro } from "@/lib/editor-v2/acervo-em-disco";
 import type { PraticaV2 } from "@/lib/editor-v2/modelo";
@@ -575,6 +578,43 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
   }, []);
 
   /**
+   * Fatia 10 (§13): o estudo do Lichess com os modos. A prática, se houver, entra no acervo pelo
+   * servidor **antes** do comando; o resto é um comando só, com um Desfazer.
+   */
+  const importarEstudo = useCallback(async (pedido: PedidoDeImportacaoDeEstudo): Promise<string | null> => {
+    const documento = historico.presente;
+    const plano = planejarEstudo(documento, pedido.leitura, { destinos: pedido.destinos, revisao: pedido.revisao }, positions);
+    if (!plano.ok) return plano.mensagem;
+    let pratica: AulaV2["praticas"][number] | undefined;
+    let registro: AulaV2["proveniencia"][number] | undefined;
+    let posicoes = positions;
+    if (plano.plano.pratica) {
+      const { fen, titulo, lado } = plano.plano.pratica;
+      const resposta = await adicionarAoAcervoV2Acao(JSON.stringify({ aulaId, fen, revisao: { ...pedido.revisao, fenRevisada: fen }, obra: pedido.obraDaPratica, resultadoDeclarado: pedido.resultadoDaPratica, etiqueta: titulo }));
+      if (resposta.ok && resposta.avisos.length) plano.plano.avisos.push(...resposta.avisos);
+      if (!resposta.ok) return `a prática não entrou: ${resposta.mensagem}`;
+      setAcervoDaSessao((atual) => atual.some((item) => item.position.id === resposta.item.position.id) ? atual : [...atual, resposta.item]);
+      posicoes = { ...positions, [resposta.item.position.id]: resposta.item.position };
+      registro = { positionId: resposta.item.position.id, conteudoHash: resposta.item.conteudoHash, estado: resposta.item.position.status };
+      const objetivo = resposta.item.position.expectedResult === "draw" ? "draw" : "win";
+      const preparo = prepararPratica(documento, { titulo, positionId: resposta.item.position.id, ladoAluno: lado, objetivo, ...ADVERSARIO_PADRAO }, posicoes, registro);
+      if (!preparo.ok) return `a prática não entrou: ${preparo.mensagem}`;
+      pratica = preparo.preparo.pratica;
+    }
+    try {
+      executarComando(documento, { tipo: "IMPORTAR_ESTUDO", plano: plano.plano, pratica, registroDaPratica: registro }, posicoes);
+    } catch (erro) {
+      return erro instanceof Error ? erro.message : "não foi possível importar o estudo";
+    }
+    aplicar({ tipo: "IMPORTAR_ESTUDO", plano: plano.plano, pratica, registroDaPratica: registro });
+    const primeiro = plano.plano.capitulos[0];
+    if (primeiro) { setCapituloId(primeiro.id); setNodeId(primeiro.inicioNodeId); }
+    if (plano.plano.avisos.length) setRecado(`Estudo importado. Para revisar: ${plano.plano.avisos.join("; ")}.`);
+    fecharImportacao();
+    return null;
+  }, [aplicar, aulaId, fecharImportacao, historico.presente, positions]);
+
+  /**
    * Aplica a importação e leva a tela ao primeiro capítulo que entrou.
    *
    * Importar e continuar olhando para o capítulo antigo faria o professor duvidar de
@@ -957,13 +997,14 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
 
         {recado ? <p role="alert" className="rounded-lg border border-erro bg-erro-superficie/10 p-3 text-sm text-erro-texto">{recado}</p> : null}
         <PainelDeProblemas visiveis={visiveis} resumo={resumo} aoIr={irAoProblema} />
-        {importando ? <PainelDeImportacao aula={historico.presente} aoAplicar={importar} aoFechar={fecharImportacao} /> : null}
+        {importando ? <PainelDeImportacao aula={historico.presente} aoAplicar={importar} aoFechar={fecharImportacao} aoImportarEstudo={importarEstudo} positions={positions} obras={obras} professor={professor} /> : null}
         {adicionando ? (
           <DialogoNovoCapitulo
             aula={historico.presente}
             capituloAtualId=""
             orientacaoPadrao={historico.presente.metadados?.orientacaoPadrao ?? "white"}
             aoCriar={criarCapitulo}
+            aoImportarDoLichess={() => { setAdicionando(false); setImportando(true); }}
             acervo={acervo}
             aoFechar={fecharAdicionar}
           />
@@ -1136,13 +1177,14 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
         aoResolver={(alvo: AlvoDeRevisaoV2) => aplicar({ tipo: "REVISAO_RESOLVIDA", alvo })}
         aoResolverTodas={(alvos: AlvoDeRevisaoV2[]) => aplicar({ tipo: "REVISOES_RESOLVIDAS", alvos })}
       />
-      {importando ? <PainelDeImportacao aula={historico.presente} aoAplicar={importar} aoFechar={fecharImportacao} /> : null}
+      {importando ? <PainelDeImportacao aula={historico.presente} aoAplicar={importar} aoFechar={fecharImportacao} aoImportarEstudo={importarEstudo} positions={positions} obras={obras} professor={professor} /> : null}
       {adicionando ? (
         <DialogoNovoCapitulo
           aula={historico.presente}
           capituloAtualId={capitulo.id}
           orientacaoPadrao={historico.presente.metadados?.orientacaoPadrao ?? capitulo.orientacao}
           aoCriar={criarCapitulo}
+            aoImportarDoLichess={() => { setAdicionando(false); setImportando(true); }}
           acervo={acervo}
           aoFechar={fecharAdicionar}
         />

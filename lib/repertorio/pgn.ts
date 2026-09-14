@@ -336,6 +336,31 @@ export function lerPgns(texto: string): PartidaPgn[] {
   return jogos.map(montar);
 }
 
+/**
+ * Os jogos de um **estudo do Lichess**, inclusive os capítulos sem lance nenhum (fatia 10).
+ *
+ * `lerPgns` só fecha um jogo quando viu lance, e por isso um capítulo só de texto — a introdução, a
+ * pergunta de diagnóstico, a prática livre — é engolido pelo cabeçalho do capítulo seguinte. Aqui
+ * qualquer corpo (comentário, resultado, lance) fecha o jogo na próxima tag. `lerPgns` continua como
+ * era: o compilador do repertório depende do comportamento dele byte a byte.
+ */
+export function lerPgnsDoEstudo(texto: string): PartidaPgn[] {
+  const jogos: Token[][] = [];
+  let corrente: Token[] = [];
+  let viuCorpo = false;
+  for (const token of varrer(texto)) {
+    if (token.t === "tag" && viuCorpo) {
+      jogos.push(corrente);
+      corrente = [];
+      viuCorpo = false;
+    }
+    if (token.t !== "tag") viuCorpo = true;
+    corrente.push(token);
+  }
+  if (corrente.some((token) => token.t === "tag") || viuCorpo) jogos.push(corrente);
+  return jogos.map(montar);
+}
+
 /** Um jogo do arquivo e o trecho do texto que ele ocupa (`fim` excluso). */
 export type JogoComIntervalo = { partida: PartidaPgn; inicio: number; fim: number };
 
