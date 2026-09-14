@@ -57,7 +57,7 @@ export function DialogoConverterV1({ aulaId, aula, aoFechar, aoConverter }: {
       rodape={(
         <div className="flex justify-end gap-2">
           <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Cancelar</button>
-          <button type="button" onClick={() => void converter()} disabled={!p?.podeConverter || convertendo} className="foco rounded-md border border-metodo-superficie bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40">
+          <button type="button" onClick={() => void converter()} disabled={!p?.podeConverter || convertendo} className="foco rounded-md border border-metodo-superficie bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40">
             {convertendo ? "Convertendo…" : "Converter"}
           </button>
         </div>

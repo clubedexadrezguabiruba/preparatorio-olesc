@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
+import { useTeclasDoTabuleiro } from "@/components/atalhos/Atalhos";
 import { IntroStage } from "@/components/lesson/IntroStage";
 import { passosDaIntroducao } from "@/lib/editor-v2/fluxo-do-aluno";
 import type { AulaV2 } from "@/lib/editor-v2/modelo";
@@ -20,7 +21,9 @@ export function PreviaDaIntroducao({ aula, introducaoId, positions, aoFechar }: 
   aoFechar: () => void;
 }) {
   const camada = useRef<HTMLDivElement>(null);
-  usePrisaoDeFoco(camada, aoFechar);
+  const camadaDeAtalhos = usePrisaoDeFoco(camada, aoFechar);
+  // x vira a vista e ? mostra os atalhos também por cima do editor (fatia 10).
+  useTeclasDoTabuleiro(camadaDeAtalhos);
   const introducao = aula.introducoes.find((item) => item.id === introducaoId);
   const passos = useMemo(() => {
     if (!introducao) return null;

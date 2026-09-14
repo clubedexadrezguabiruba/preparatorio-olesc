@@ -72,7 +72,7 @@ export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDu
             onDrop={(evento) => aoSoltar(evento, indice)}
             className={`relative flex items-stretch rounded-md border transition-colors ${
               selecionado
-                ? "border-foco bg-metodo-superficie text-metodo-tinta-alta"
+                ? "border-foco bg-metodo-superficie/25 text-metodo-tinta-alta"
                 : "border-transparent text-tinta hover:border-borda-fraca hover:bg-carta-toque"
             } ${arrastando === indice ? "opacity-40" : ""}`}
           >
@@ -93,9 +93,9 @@ export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDu
               type="button"
               onClick={() => aoEscolher(capitulo)}
               aria-current={selecionado ? "true" : undefined}
-              className="foco min-w-0 flex-1 px-1 py-2 text-left text-sm"
+              className={`foco min-w-0 flex-1 px-1 py-2 text-left text-sm ${selecionado ? "font-semibold" : ""}`}
             >
-              {capitulo.titulo}
+              {selecionado ? <span aria-hidden>▸ </span> : null}{capitulo.titulo}
               {proveniencia[capitulo.id] && proveniencia[capitulo.id] !== "revisada" ? (
                 <span className="ml-1 text-xs text-aviso-tinta" title="A origem desta posição ainda não foi registrada">⚑<span className="sr-only"> (origem da posição a revisar)</span></span>
               ) : null}

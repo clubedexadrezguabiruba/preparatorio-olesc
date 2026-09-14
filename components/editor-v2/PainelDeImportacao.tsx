@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { usePrisaoDeFoco } from "@/components/editor-v2/foco";
 import { buscarPgnDoLichessAcao } from "@/app/editor/v2/acoes";
 import { PainelDoEstudo, type PedidoDeImportacaoDeEstudo } from "@/components/editor-v2/PainelDoEstudo";
 import type { ObraDoRegistro } from "@/lib/editor-v2/acervo-em-disco";
@@ -90,28 +91,8 @@ export function PainelDeImportacao({
    * aula que, para quem escuta, não existe. Aqui a janela tem muitos controles, então
    * a prisão é a volta da lista: do último para o primeiro, e do primeiro para trás.
    */
-  useEffect(() => {
-    const tecla = (evento: KeyboardEvent) => {
-      if (evento.key === "Escape") {
-        aoFechar();
-        return;
-      }
-      if (evento.key !== "Tab" || !janela.current) return;
-      const focaveis = janela.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), textarea, input:not([disabled]), select');
-      if (focaveis.length === 0) return;
-      const primeiro = focaveis[0];
-      const ultimo = focaveis[focaveis.length - 1];
-      if (!evento.shiftKey && document.activeElement === ultimo) {
-        evento.preventDefault();
-        primeiro.focus();
-      } else if (evento.shiftKey && document.activeElement === primeiro) {
-        evento.preventDefault();
-        ultimo.focus();
-      }
-    };
-    window.addEventListener("keydown", tecla);
-    return () => window.removeEventListener("keydown", tecla);
-  }, [aoFechar]);
+  // Esc, Tab preso, atalhos de trás mudos e foco devolvido: o contrato comum de `foco.ts` (fatia 10).
+  usePrisaoDeFoco(janela, aoFechar);
 
   /*
    * A leitura espera o professor parar de digitar.
@@ -227,6 +208,7 @@ export function PainelDeImportacao({
         <div className="flex flex-wrap items-center gap-3 text-sm">
           <input
             type="file"
+            aria-label="Escolher um arquivo PGN do computador"
             accept=".pgn,text/plain"
             onChange={(evento) => void receberArquivo(evento.currentTarget.files?.[0])}
             className="foco text-xs text-tinta-fraca file:mr-2 file:rounded-md file:border file:border-borda file:bg-carta file:px-3 file:py-1 file:text-tinta"
@@ -321,7 +303,7 @@ export function PainelDeImportacao({
             hidden={Boolean(estudo)}
             disabled={!podeAplicar}
             onClick={() => { if (relatorio) aoAplicar(relatorio, escolhidos); }}
-            className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
+            className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
           >
             {escolhidos.length === 0 ? "Escolha um capítulo" : `Importar ${escolhidos.length} capítulo(s)`}
           </button>

@@ -169,7 +169,7 @@ export function FormularioDeNovaAula() {
         <button
           type="submit"
           disabled={criando || id === ""}
-          className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
+          className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
         >
           {criando ? "Criando…" : "Criar aula"}
         </button>

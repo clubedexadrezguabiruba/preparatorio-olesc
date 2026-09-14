@@ -1,7 +1,8 @@
 "use client";
 
 import { Chess } from "chess.js";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { useAtalho, useTeclasDoTabuleiro } from "@/components/atalhos/Atalhos";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Key } from "@lichess-org/chessground/types";
 import { ChessBoard } from "@/components/board/ChessBoard";
@@ -11,7 +12,6 @@ import { mapaDaAnalise } from "@/lib/editor-v2/arvore";
 import { desenhoDeFormas } from "@/lib/editor-v2/desenhos";
 import { fenDoQuadro, problemaDaPosicaoDoQuadro, quadroDepoisDoLance, type ComandoDeIntroducaoV2, type PosicaoDoQuadroV2 } from "@/lib/editor-v2/introducao";
 import type { AulaV2, QuadroIntroducaoV2 } from "@/lib/editor-v2/modelo";
-import { ehCampoDeTexto } from "@/lib/editor-v2/navegacao";
 import type { Position } from "@/lib/lesson/schema";
 import { usePrisaoDeFoco } from "./foco";
 
@@ -41,7 +41,9 @@ export function EditorDeIntroducao({ aula, introducaoId, quadroInicial, position
   aoFechar: () => void;
 }) {
   const camada = useRef<HTMLDivElement>(null);
-  usePrisaoDeFoco(camada, aoFechar);
+  const camadaDeAtalhos = usePrisaoDeFoco(camada, aoFechar);
+  // x vira a vista e ? mostra os atalhos também por cima do editor (fatia 10).
+  useTeclasDoTabuleiro(camadaDeAtalhos);
   const introducao = introducaoId ? aula.introducoes.find((item) => item.id === introducaoId) : undefined;
   const [quadroId, setQuadroId] = useState(quadroInicial ?? introducao?.quadros[0]?.id ?? "");
   const quadro = introducao?.quadros.find((item) => item.id === quadroId) ?? introducao?.quadros[0];
@@ -49,23 +51,14 @@ export function EditorDeIntroducao({ aula, introducaoId, quadroInicial, position
   const [novoTexto, setNovoTexto] = useState("");
   const [recado, setRecado] = useState<string | null>(null);
 
-  // ← e → trocam de quadro, fora de campo de texto (§7.1 e a tabela de atalhos).
-  const estado = useRef({ introducao, indice });
-  useEffect(() => { estado.current = { introducao, indice }; });
-  useEffect(() => {
-    const tecla = (evento: KeyboardEvent) => {
-      if (ehCampoDeTexto(evento.target as HTMLElement | null)) return;
-      if (evento.key !== "ArrowLeft" && evento.key !== "ArrowRight") return;
-      const { introducao: atual, indice: i } = estado.current;
-      if (!atual) return;
-      const proximo = atual.quadros[i + (evento.key === "ArrowRight" ? 1 : -1)];
-      if (!proximo) return;
-      evento.preventDefault();
-      setQuadroId(proximo.id);
-    };
-    window.addEventListener("keydown", tecla);
-    return () => window.removeEventListener("keydown", tecla);
-  }, []);
+  // ← e → trocam de quadro, fora de campo de texto (§7.1), pela tabela de atalhos.
+  const andarQuadro = (passo: 1 | -1) => {
+    const proximo = introducao?.quadros[indice + passo];
+    if (!proximo) return false;
+    setQuadroId(proximo.id);
+  };
+  useAtalho("quadro-anterior", () => andarQuadro(-1), { camada: camadaDeAtalhos });
+  useAtalho("quadro-seguinte", () => andarQuadro(1), { camada: camadaDeAtalhos });
 
   const executar = useCallback((comando: ComandoDeIntroducaoV2): boolean => {
     const recusa = aoComando(comando);
@@ -134,7 +127,7 @@ export function EditorDeIntroducao({ aula, introducaoId, quadroInicial, position
               const atual = item.id === quadro?.id;
               return (
                 <li key={item.id}>
-                  <button type="button" aria-current={atual ? "step" : undefined} onClick={() => setQuadroId(item.id)} className={`foco w-full rounded-md border px-2 py-1.5 text-left text-xs ${atual ? "border-foco bg-metodo-superficie font-semibold text-metodo-tinta-alta" : "border-borda-fraca text-tinta hover:bg-carta-toque"}`}>
+                  <button type="button" aria-current={atual ? "step" : undefined} onClick={() => setQuadroId(item.id)} className={`foco w-full rounded-md border px-2 py-1.5 text-left text-xs ${atual ? "border-foco bg-metodo-superficie/25 font-semibold text-metodo-tinta-alta" : "border-borda-fraca text-tinta hover:bg-carta-toque"}`}>
                     <span className="tabular-nums">{atual ? "▸ " : ""}{i + 1}.</span> {item.titulo ?? item.texto.slice(0, 48)}
                   </button>
                 </li>
@@ -238,7 +231,7 @@ function EscolherPosicao({ aula, positions, atual, aoEscolher }: {
       <legend className="px-1 text-xs font-medium text-tinta">Posição do quadro</legend>
       <div role="group" aria-label="De onde vem a posição" className="flex flex-wrap gap-2">
         {([["capitulo", "De um capítulo"], ["fen", "FEN própria"]] as const).map(([chave, rotulo]) => (
-          <button key={chave} type="button" aria-pressed={modo === chave} onClick={() => setModo(chave)} className={`foco rounded-md border px-2 py-1 text-xs ${modo === chave ? "border-foco bg-metodo-superficie text-metodo-tinta-alta" : "border-borda text-tinta"}`}>{modo === chave ? "✓ " : ""}{rotulo}</button>
+          <button key={chave} type="button" aria-pressed={modo === chave} onClick={() => setModo(chave)} className={`foco rounded-md border px-2 py-1 text-xs ${modo === chave ? "border-foco bg-metodo-superficie/25 text-metodo-tinta-alta" : "border-borda text-tinta"}`}>{modo === chave ? "✓ " : ""}{rotulo}</button>
         ))}
       </div>
       {modo === "capitulo" ? (
@@ -310,7 +303,7 @@ function CriarIntroducao({ aula, positions, aoCriar, aoFechar }: {
             const introducaoId = novoId("introducao");
             aoCriar({ tipo: "ADICIONAR_INTRODUCAO", introducaoId, etapaId: `etapa-${introducaoId}`, titulo, quadro: { id: novoId("quadro"), texto: texto.trim(), posicao } });
           }}
-          className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta"
+          className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta"
         >
           Criar introdução
         </button>

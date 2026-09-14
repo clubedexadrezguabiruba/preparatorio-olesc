@@ -140,7 +140,7 @@ export function PainelDoEstudo({ aula, leitura, positions, obras, professor, apl
           type="button"
           disabled={!plano.ok || aplicando}
           onClick={() => aoAplicar({ leitura, destinos, revisao, obraDaPratica, resultadoDaPratica })}
-          className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
+          className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
         >
           {aplicando ? "Importando…" : "Importar o estudo"}
         </button>

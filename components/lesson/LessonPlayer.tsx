@@ -1,5 +1,6 @@
 "use client";
 
+import { VistaDoTabuleiro } from "@/components/atalhos/Atalhos";
 import { useCallback, useEffect, useMemo, useRef, useSyncExternalStore, type ReactNode } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import Link from "next/link";
@@ -46,8 +47,9 @@ export function LessonPlayer(props: Parameters<typeof LessonPlayerV1>[0] | {
   /** A server action que grava a etapa jogada. A prévia do editor não passa. */
   onEtapaFeita?: (tentativa: TentativaDeAulaV2) => void | Promise<unknown>;
 }) {
-  if ("aulaV2" in props) return <PlayerDoFluxoV2 {...props} />;
-  return <LessonPlayerV1 {...props} />;
+  // Fatia 10: x vira a vista e ? mostra os atalhos em toda etapa com tabuleiro.
+  if ("aulaV2" in props) return <VistaDoTabuleiro escopos={["aluno-introducao", "aluno-capitulo", "aluno-treino", "aluno-pratica"]}><PlayerDoFluxoV2 {...props} /></VistaDoTabuleiro>;
+  return <VistaDoTabuleiro escopos={["aluno-introducao", "aluno-capitulo", "aluno-treino", "aluno-pratica"]}><LessonPlayerV1 {...props} /></VistaDoTabuleiro>;
 }
 
 function LessonPlayerV1({
@@ -541,6 +543,15 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, onEtapaFeita }: {
         <div className="ml-auto self-center">
           <SoundToggle />
         </div>
+        {/* Fatia 10: onde o aluno está, em texto, e o caminho de volta sem depender da trilha. */}
+        <p className="basis-full text-sm text-tinta-media" aria-live="polite">
+          Etapa {indice + 1} de {aula.etapas.length}{atual ? ` · ${atual.rotulo}` : ""}
+          {indice > 0 ? (
+            <button type="button" onClick={() => goToStage(aula.etapas[indice - 1].id)} className="foco ml-3 rounded-md px-2 py-1 text-sm text-tinta-media underline hover:text-tinta">
+              ← Etapa anterior
+            </button>
+          ) : null}
+        </p>
       </header>
 
       <section className="flex flex-1 flex-col">

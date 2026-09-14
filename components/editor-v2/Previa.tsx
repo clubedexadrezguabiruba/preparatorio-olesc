@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import { useTeclasDoTabuleiro } from "@/components/atalhos/Atalhos";
 import { ObjectiveStage } from "@/components/lesson/ObjectiveStage";
 import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
 import { pausaDoPasso } from "@/lib/lesson/roteiro";
@@ -48,7 +49,9 @@ import { usePrisaoDeFoco } from "./foco";
  */
 export function Previa({ previa, aoFechar }: { previa: PreviaV2; aoFechar: () => void }) {
   const camada = useRef<HTMLDivElement>(null);
-  usePrisaoDeFoco(camada, aoFechar);
+  const camadaDeAtalhos = usePrisaoDeFoco(camada, aoFechar);
+  // x vira a vista e ? mostra os atalhos também por cima do editor (fatia 10).
+  useTeclasDoTabuleiro(camadaDeAtalhos);
 
   const [indice, setIndice] = useState(0);
   const [velocidade, setVelocidade] = useState<Velocidade>(1);
@@ -181,7 +184,7 @@ function BarraDaPrevia({ api, manual, temAnterior, temSeguinte, velocidade, aoTr
   return (
     <div className="flex w-full flex-wrap items-center gap-2">
       {manual ? (
-        <button type="button" onClick={aoAvancar} className="foco rounded-md border border-metodo-superficie bg-metodo-superficie px-3 py-1.5 text-xs text-metodo-tinta-alta">
+        <button type="button" onClick={aoAvancar} className="foco rounded-md border border-metodo-superficie bg-metodo-superficie/25 px-3 py-1.5 text-xs text-metodo-tinta-alta">
           Continuar
         </button>
       ) : (

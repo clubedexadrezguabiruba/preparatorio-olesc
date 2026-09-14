@@ -62,7 +62,7 @@ export function DialogoPublicar({ aulaId, aoFechar, aoPublicar }: {
               type="button"
               onClick={() => void publicar()}
               disabled={!preparo?.ok || publicando}
-              className="foco rounded-md border border-metodo-superficie bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
+              className="foco rounded-md border border-metodo-superficie bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
             >
               {publicando ? "Publicando…" : preparo?.ok && preparo.mesmoConteudo ? "Republicar igual" : "Publicar"}
             </button>

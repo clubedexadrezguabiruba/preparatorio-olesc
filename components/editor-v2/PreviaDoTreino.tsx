@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
+import { useTeclasDoTabuleiro } from "@/components/atalhos/Atalhos";
 import { TreeStage } from "@/components/lesson/TreeStage";
 import { ganchosDoTreinoV2 } from "@/lib/editor-v2/ganchos-do-treino";
 import type { TreinoJogavel } from "@/lib/editor-v2/treino-jogavel";
@@ -33,7 +34,9 @@ export function PreviaDoTreino({ treinoId, titulo, perfil, jogavel, aoFechar }: 
   aoFechar: () => void;
 }) {
   const camada = useRef<HTMLDivElement>(null);
-  usePrisaoDeFoco(camada, aoFechar);
+  const camadaDeAtalhos = usePrisaoDeFoco(camada, aoFechar);
+  // x vira a vista e ? mostra os atalhos também por cima do editor (fatia 10).
+  useTeclasDoTabuleiro(camadaDeAtalhos);
 
   const idDaPrevia = `previa-treino:${treinoId}`;
   const lessonId = useLessonStore((s) => s.lessonId);

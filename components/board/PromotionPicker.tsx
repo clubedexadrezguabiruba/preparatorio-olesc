@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import type { Color } from "@lichess-org/chessground/types";
 
 const CHOICES = [
@@ -20,15 +21,34 @@ export function PromotionPicker({
   onChoose: (piece: PromotionChoice) => void;
   onCancel: () => void;
 }) {
+  /*
+   * Fatia 10 (§25): foco na dama ao abrir, ← → e ↑ ↓ andam entre as peças, Esc cancela. Sem isto a
+   * promoção só se escolhia com o mouse, e o foco ficava no tabuleiro atrás da janela.
+   */
+  const caixa = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    caixa.current?.querySelector<HTMLButtonElement>("button")?.focus();
+  }, []);
+  const teclar = (evento: React.KeyboardEvent<HTMLDivElement>) => {
+    const botoes = Array.from(caixa.current?.querySelectorAll<HTMLButtonElement>("button") ?? []);
+    const atual = botoes.indexOf(document.activeElement as HTMLButtonElement);
+    if (evento.key === "Escape") { evento.preventDefault(); evento.stopPropagation(); onCancel(); return; }
+    const passo = evento.key === "ArrowRight" || evento.key === "ArrowDown" ? 1 : evento.key === "ArrowLeft" || evento.key === "ArrowUp" ? -1 : 0;
+    if (!passo || !botoes.length) return;
+    evento.preventDefault();
+    evento.stopPropagation();
+    botoes[(atual + passo + botoes.length) % botoes.length].focus();
+  };
   return (
     <div
       className="absolute inset-0 z-20 flex items-center justify-center bg-veu backdrop-blur-[2px]"
       role="dialog"
       aria-modal="true"
       aria-label="Escolha a peça da promoção"
+      onKeyDown={teclar}
     >
       {/* A classe cg-wrap é o que faz os desenhos de peça do chessground valerem aqui dentro. */}
-      <div className="cg-wrap flex gap-2 rounded-lg bg-carta p-3 shadow-xl ring-1 ring-borda">
+      <div ref={caixa} className="cg-wrap flex gap-2 rounded-lg bg-carta p-3 shadow-xl ring-1 ring-borda">
         {CHOICES.map((choice) => (
           <button
             key={choice.letter}
@@ -68,7 +88,7 @@ export function PromotionPicker({
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md px-3 text-sm text-tinta-fraca transition hover:text-tinta"
+          className="foco rounded-md px-3 text-sm text-tinta-fraca transition hover:text-tinta"
         >
           Cancelar
         </button>

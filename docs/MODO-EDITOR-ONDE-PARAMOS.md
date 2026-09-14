@@ -4533,6 +4533,80 @@ em `../olesc-portoes`, com o último commit e só os arquivos da 10E) e o commit
 **Os sete portões (na cópia isolada):** tipos, lint, **1.271 testes**, build, conteúdo (38 do cache, 0
 pela rede), **58/58 mutações** e repertório `--check`.
 
+### Parada 10F — atalhos, acessibilidade e layout
+
+- **Tabela única** (`lib/atalhos/tabela.ts`): cada atalho com teclas, escopo (tabuleiro, editor,
+  repertório, introdução do editor, etapas do aluno, passada, janela) e a frase da ajuda;
+  `conflitosDaTabela` (nenhuma tecla repetida no escopo, e `x`/`?` do tabuleiro sem colisão com nada).
+- **Despachante** (`lib/atalhos/registro.ts`, puro): um ouvinte só, **pilha de camadas** — cada janela
+  modal empilha a sua, e os atalhos de baixo ficam mudos; campo de texto engole a tecla, menos o Esc; o
+  Desfazer do documento vale com janela aberta, como valia.
+- **Tela** (`components/atalhos/Atalhos.tsx`): `useAtalho`, `useCamadaDeJanela`, `VistaDoTabuleiro`
+  (**`x` vira só a vista** — um contexto que o `ChessBoard` lê; não muda a aula, não entra no Desfazer e
+  não muda o lado do aluno na prática ou no treino), `useTeclasDoTabuleiro` e a ajuda **`?`** gerada da
+  tabela, que também preenche o `(?)` da lista de lances.
+- **O que passou para o registro:** Ctrl+Z/Ctrl+Y, setas/Home/End e Esc do desenho no `EditorV2`; o `L`
+  do motor (`useControlesDoMotor`, nos dois editores); ← → da tela cheia da introdução; Esc de todas as
+  janelas (`foco.ts`); o menu `•••` do lance, que agora é uma camada — **o `L` com o menu aberto deixou
+  de ligar o motor** (aberto desde a fatia 9) e o Esc devolve o foco ao `•••`. `x` e `?` valem no editor,
+  nas quatro prévias, na introdução, no player do aluno (v1 e v2) e na tática.
+- **Não passou (cortes registrados):** as setas do `EditorDeRepertorio` e da introdução do aluno
+  (`IntroStage`) continuam com o ouvinte próprio; a **passada do repertório** está só na tabela — o
+  arquivo estava sendo editado pela outra sessão. Espaço = Continuar no capítulo do aluno não foi feito.
+- **Foco:** `usePrisaoDeFoco` virou o contrato único — Esc pela camada, Tab preso (inclusive vindo de
+  fora da janela) e **o foco volta sozinho** a quem abriu. As prisões copiadas do `DialogoNovoCapitulo`,
+  do `PainelDeImportacao` e do `DialogoTrocarPosicao` saíram. `PromotionPicker`: foco na dama, setas
+  entre as peças e Esc cancela.
+- **Cor não é o único sinal:** capítulo selecionado com "▸" e negrito; lance selecionado com negrito e
+  anel. A escolha na janela da origem, da prática e do acervo já tinha "✓".
+- **Contraste:** o verde de seleção era usado **sólido** (`bg-metodo-superficie` com texto verde-claro)
+  em 37 lugares do editor, contra o próprio sistema de cores ("a superfície é o mesmo tom com alfa");
+  passou a `/25`. No aluno, os números de `/aberturas` e a falta dos selos em `/painel` passaram de
+  `tinta-muda` para `tinta-fraca` — carregam informação. O campo de arquivo da importação ganhou rótulo.
+- **Layout:** o cabeçalho do editor quebra linha; o player v2 do aluno mostra **"Etapa X de Y · nome"** e
+  **← Etapa anterior**.
+- **Uma correção pedida pela outra sessão:** a orientação do `ChessBoard` virou
+  `useOrientacaoDaVista(orientacaoPedida)` com o mesmo nome `orientation`, e o efeito da seta dela
+  (`setaQueEnsina`) usa a orientação já virada. Commit só do meu trecho.
+
+```
+ANTES   tabela.test.ts: os módulos não existiam — falha ao carregar
+DEPOIS  tabela.test.ts 3/3 (sem conflitos; tecla do evento; despachante com campo, janela e Esc)
+```
+
+**Os ensaios** (`atalhos.spec`, `layout.spec @layout` nos quatro perfis, `acessibilidade.spec @a11y`):
+
+| Medida | Linha de base (10A) | Agora |
+|---|---|---|
+| editor a 375 px | **865** px de conteúdo | **375** (0 a mais) |
+| axe sérias/críticas — editor | `color-contrast` ×3 | **0** |
+| axe — janelas (Adicionar capítulo, Importar, Prática, Ordem, Introdução, Pré-visualizar, Atalhos) | não medido | **0** (1 crítico achado e consertado: campo de arquivo sem rótulo) |
+| axe — `/painel`, `/aberturas`, `/entrar` | 2, 5, 2 | **0, 0, 0** |
+| axe — `/trilha`, `/finais`, `/finais/N0-LADDER`, `/tatica` | 0 | 0 |
+| lances inteiros visíveis | 6 (1366×768) | 6 (1366×768), 5 (1280×720), 9 (1920×1080) |
+| botões cobertos | 0 de 50 | 0 de 51 · 0 de 40 · 0 de 64 |
+| aluno a 375 px, as 7 telas e as 4 etapas da N0-LADDER pela trilha | — | 0 px a mais em todas |
+
+`atalhos.spec`: `x` vira e desvira com o arquivo em disco **igual**; `?` lista as descrições da tabela;
+`L` liga e desliga; "l" digitado no comentário não liga; com o menu `•••` aberto o `L` fica mudo e o Esc
+devolve o foco; → anda na lista; 30 × Tab dentro da janela não saem dela; com a janela aberta as setas
+não mudam o lance; Esc fecha e o foco volta a "+ Adicionar capítulo". No aluno: `x`, `?`, "Etapa 2 de 4"
+e "← Etapa anterior".
+
+**A rodada inteira (`--project=editor-1366`, 22 ensaios) e um achado do próprio ensaio:** a prática
+"falhou" na rodada completa porque a importação do estudo, antes dela, já tinha posto a mesma FEN no
+acervo — e o editor, certo, reaproveitou `pos-ex-e2e-lichess-1` em vez de criar outra. O ensaio passou a
+aceitar a posição reaproveitada. Na mesma rodada **a limpeza acusou diferença**: eram os PGN e JSON do
+repertório que a outra sessão estava gravando naquele minuto — a proteção por SHA-256 funcionando, não
+um estrago do ensaio. Rodando de novo, 972/972 iguais.
+
+**Número da parada:** 0 conflitos na tabela; axe **3+2+5+2 → 0**; editor a 375 px **865 → 375**; foco preso
+e devolvido nas janelas ensaiadas (Adicionar capítulo pelo teclado; as outras pelo contrato único).
+
+**Os sete portões (na cópia isolada, sem os arquivos da outra sessão):** tipos, lint, **1.274 testes**,
+build, conteúdo (38 do cache, 0 pela rede), **58/58 mutações** e repertório `--check`. Do
+`ChessBoard.tsx`, só o trecho da orientação entrou no commit.
+
 
 ## Como ligar o editor
 

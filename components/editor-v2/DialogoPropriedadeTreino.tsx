@@ -56,7 +56,7 @@ export function DialogoPropriedadeTreino({
             type="button"
             disabled={!plano.ok || salvandoSnapshot}
             onClick={() => { if (plano.ok) aoRefazer(plano.plano); }}
-            className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-semibold text-papel disabled:opacity-40"
+            className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-semibold text-papel disabled:opacity-40"
           >
             {salvandoSnapshot ? "Guardando cópia…" : "Refazer a partir da aula"}
           </button>

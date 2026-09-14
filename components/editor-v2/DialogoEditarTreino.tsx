@@ -124,7 +124,7 @@ export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar
             {avisosDeVoz.length ? <span className="text-tinta-media"> · {avisosDeVoz.length} {avisosDeVoz.length === 1 ? "aviso" : "avisos"} da régua de voz</span> : null}
           </span>
           <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta">Cancelar</button>
-          <button type="button" disabled={!resultado.ok} onClick={() => { if (resultado.ok) aoSalvar(resultado.edicao); }} className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-semibold text-metodo-tinta-alta disabled:opacity-40">Salvar autoria</button>
+          <button type="button" disabled={!resultado.ok} onClick={() => { if (resultado.ok) aoSalvar(resultado.edicao); }} className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-semibold text-metodo-tinta-alta disabled:opacity-40">Salvar autoria</button>
         </>
       )}
     >
@@ -166,7 +166,7 @@ export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar
             ) : null}
           </fieldset>
           <nav aria-label="Perguntas do treino" className="flex flex-col gap-1">
-            {treino.questoes.map((item, indice) => <button key={item.id} type="button" onClick={() => setQuestaoId(item.id)} className={`foco rounded-md border px-2 py-2 text-left text-sm ${item.id === questao.id ? "border-foco bg-metodo-superficie text-metodo-tinta-alta" : "border-borda text-tinta"}`}>Pergunta {indice + 1} · {item.respostas.length} resposta{item.respostas.length === 1 ? "" : "s"}</button>)}
+            {treino.questoes.map((item, indice) => <button key={item.id} type="button" onClick={() => setQuestaoId(item.id)} className={`foco rounded-md border px-2 py-2 text-left text-sm ${item.id === questao.id ? "border-foco bg-metodo-superficie/25 text-metodo-tinta-alta" : "border-borda text-tinta"}`}>Pergunta {indice + 1} · {item.respostas.length} resposta{item.respostas.length === 1 ? "" : "s"}</button>)}
           </nav>
           {avisosDeVoz.length ? (
             <section aria-label="Régua de voz" className="rounded-md border border-borda p-2">

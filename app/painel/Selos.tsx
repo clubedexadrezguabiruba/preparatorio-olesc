@@ -65,7 +65,7 @@ export function Selos({ lista }: { lista: readonly Selo[] }) {
             className="flex items-center gap-1.5 rounded-full border border-dashed border-borda px-3 py-1.5 text-xs text-tinta-fraca"
           >
             {selo.nome}
-            <span className="text-tinta-muda">— {selo.falta}</span>
+            <span className="text-tinta-fraca">— {selo.falta}</span>
           </li>
         ))}
       </ul>

@@ -1,3 +1,4 @@
+import { VistaDoTabuleiro } from "@/components/atalhos/Atalhos";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -98,6 +99,8 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
 
   return (
     <Moldura tema={tema.nome} bloco={bloco.nome}>
+      {/* Fatia 10: x vira a vista e ? mostra os atalhos. */}
+      <VistaDoTabuleiro escopos={[]}>
       <Serie
         /*
          * A `key` é o que faz o botão "Continuar" funcionar.
@@ -121,6 +124,7 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
         procure={escrito.procure}
         cuidado={escrito.cuidado ?? null}
       />
+      </VistaDoTabuleiro>
     </Moldura>
   );
 }

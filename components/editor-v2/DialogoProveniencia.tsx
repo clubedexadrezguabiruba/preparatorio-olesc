@@ -80,7 +80,7 @@ export function DialogoProveniencia({ aula, analiseId, professor, aoRegistrar, a
       rodape={(
         <>
           <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Cancelar</button>
-          <button type="button" onClick={registrar} className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta">Registrar revisão</button>
+          <button type="button" onClick={registrar} className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta">Registrar revisão</button>
         </>
       )}
     >

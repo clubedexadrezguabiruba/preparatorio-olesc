@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useOrientacaoDaVista } from "@/components/atalhos/Atalhos";
 import { PINCEL_POR_COR } from "@/lib/chess/annotations";
 import { Chessground } from "@lichess-org/chessground";
 import type { Api } from "@lichess-org/chessground/api";
@@ -280,7 +281,7 @@ export type ControlesDeMontagem = {
  */
 export function ChessBoard({
   fen,
-  orientation = "white",
+  orientation: orientacaoPedida = "white",
   turnColor,
   dests,
   lastMove,
@@ -298,6 +299,8 @@ export function ChessBoard({
   onMove,
   onSelect,
 }: ChessBoardProps) {
+  // Fatia 10: a tecla x vira só a vista (`VistaDoTabuleiro`); sem provedor, é a orientação pedida.
+  const orientation = useOrientacaoDaVista(orientacaoPedida);
   const hostRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const apiRef = useRef<Api | null>(null);

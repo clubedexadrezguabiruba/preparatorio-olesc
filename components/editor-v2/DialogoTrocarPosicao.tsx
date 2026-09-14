@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { usePrisaoDeFoco } from "@/components/editor-v2/foco";
 import type { Color } from "@lichess-org/chessground/types";
 import { Montador, type CamposDaMontagem } from "@/components/editor-v2/Montador";
 import { fenInicialDaAnalise } from "@/lib/editor-v2/arvore";
@@ -101,30 +102,8 @@ export function DialogoTrocarPosicao({
     primeiroBotao.current?.focus();
   }, []);
 
-  useEffect(() => {
-    const tecla = (evento: KeyboardEvent) => {
-      if (evento.key === "Escape") {
-        aoFechar();
-        return;
-      }
-      if (evento.key !== "Tab" || !janela.current) return;
-      const focaveis = janela.current.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), textarea, input:not([disabled]), select, summary, details',
-      );
-      if (focaveis.length === 0) return;
-      const primeiro = focaveis[0];
-      const ultimo = focaveis[focaveis.length - 1];
-      if (!evento.shiftKey && document.activeElement === ultimo) {
-        evento.preventDefault();
-        primeiro.focus();
-      } else if (evento.shiftKey && document.activeElement === primeiro) {
-        evento.preventDefault();
-        ultimo.focus();
-      }
-    };
-    window.addEventListener("keydown", tecla);
-    return () => window.removeEventListener("keydown", tecla);
-  }, [aoFechar]);
+  // Esc, Tab preso, atalhos de trás mudos e foco devolvido: o contrato comum de `foco.ts` (fatia 10).
+  usePrisaoDeFoco(janela, aoFechar);
 
   const fenNova = montagem ? fenDoMontador(montagem) : "";
   const calculo = useMemo(
@@ -227,7 +206,7 @@ export function DialogoTrocarPosicao({
             type="button"
             disabled={!calculo.ok || bloqueado}
             onClick={() => { if (calculo.ok) aoTrocar(calculo.plano); }}
-            className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
+            className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
           >
             Trocar a posição
           </button>

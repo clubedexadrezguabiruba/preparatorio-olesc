@@ -1,5 +1,7 @@
 "use client";
 
+import { useOrientacaoDaVista } from "@/components/atalhos/Atalhos";
+
 /**
  * A barra de avaliação ao lado do tabuleiro (§23 e §23.1).
  *
@@ -22,6 +24,7 @@ export function BarraDeAvaliacao({ altura, orientacao }: {
   orientacao: "white" | "black";
 }) {
   const ligada = altura !== null;
+  const vista = useOrientacaoDaVista(orientacao);
   return (
     <div
       aria-hidden
@@ -30,7 +33,7 @@ export function BarraDeAvaliacao({ altura, orientacao }: {
     >
       {ligada ? (
         <div
-          className={`absolute inset-x-0 bg-tinta transition-[height] duration-300 ease-out motion-reduce:transition-none ${orientacao === "white" ? "bottom-0" : "top-0"}`}
+          className={`absolute inset-x-0 bg-tinta transition-[height] duration-300 ease-out motion-reduce:transition-none ${vista === "white" ? "bottom-0" : "top-0"}`}
           style={{ height: `${altura}%` }}
         />
       ) : null}

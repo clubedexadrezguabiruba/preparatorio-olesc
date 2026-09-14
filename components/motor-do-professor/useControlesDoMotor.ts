@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
+import { useAtalho } from "@/components/atalhos/Atalhos";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Key } from "@lichess-org/chessground/types";
-import { ehCampoDeTexto } from "@/lib/editor-v2/navegacao";
 import { useMotorDoProfessor } from "@/lib/engine/useMotorDoProfessor";
 
 /**
@@ -17,28 +17,15 @@ import { useMotorDoProfessor } from "@/lib/engine/useMotorDoProfessor";
  * Meta e sem janela aberta. O ouvinte é registrado uma vez; o "tem janela aberta" chega
  * por uma caixinha atualizada a cada desenho, como no `EditorV2`.
  */
-export function useControlesDoMotor(fen: string, { pausado }: { pausado: boolean }) {
+export function useControlesDoMotor(fen: string, { pausado, idDoAtalho = "motor" }: { pausado: boolean; idDoAtalho?: "motor" | "repertorio-motor" }) {
   const [ligado, setLigado] = useState(false);
   const [seta, setSeta] = useState(false);
   const [linhas, setLinhas] = useState(2);
   const estado = useMotorDoProfessor(fen, { ligado, linhas, pausado });
 
-  const bloqueado = useRef(pausado);
-  useEffect(() => {
-    bloqueado.current = pausado;
-  });
-
-  useEffect(() => {
-    const teclado = (evento: KeyboardEvent) => {
-      if (evento.key !== "l" && evento.key !== "L") return;
-      if (evento.ctrlKey || evento.metaKey || evento.altKey) return;
-      if (bloqueado.current || ehCampoDeTexto(evento.target as HTMLElement | null)) return;
-      evento.preventDefault();
-      setLigado((atual) => !atual);
-    };
-    window.addEventListener("keydown", teclado);
-    return () => window.removeEventListener("keydown", teclado);
-  }, []);
+  // Fatia 10: a tecla L pela tabela de atalhos. Campo de texto e janela aberta (inclusive o menu •••)
+  // já emudecem a tecla no registro; `pausado` cobre a prévia e as janelas que a tela conta.
+  useAtalho(idDoAtalho, () => { setLigado((atual) => !atual); }, { ativo: !pausado });
 
   const lance = ligado && seta ? estado.linhas[0]?.primeiroLance ?? null : null;
   /*

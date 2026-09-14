@@ -49,7 +49,7 @@ export function DialogoCriarTreino({ aula, capituloId, nodeId, positions, aoCria
       rodape={(
         <>
           <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta">Cancelar</button>
-          <button type="button" disabled={!resultado.ok} onClick={() => { if (resultado.ok) aoCriar(resultado.preparo); }} className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-semibold text-metodo-tinta-alta disabled:opacity-40">Criar treino</button>
+          <button type="button" disabled={!resultado.ok} onClick={() => { if (resultado.ok) aoCriar(resultado.preparo); }} className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-semibold text-metodo-tinta-alta disabled:opacity-40">Criar treino</button>
         </>
       )}
     >

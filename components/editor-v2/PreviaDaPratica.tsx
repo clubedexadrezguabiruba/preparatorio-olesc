@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
+import { useTeclasDoTabuleiro } from "@/components/atalhos/Atalhos";
 import { PracticeStage } from "@/components/lesson/PracticeStage";
 import type { PraticaV2 } from "@/lib/editor-v2/modelo";
 import type { Position } from "@/lib/lesson/schema";
@@ -16,7 +17,9 @@ import { usePrisaoDeFoco } from "./foco";
  */
 export function PreviaDaPratica({ pratica, posicao, aoFechar }: { pratica: PraticaV2; posicao: Position; aoFechar: () => void }) {
   const camada = useRef<HTMLDivElement>(null);
-  usePrisaoDeFoco(camada, aoFechar);
+  const camadaDeAtalhos = usePrisaoDeFoco(camada, aoFechar);
+  // x vira a vista e ? mostra os atalhos também por cima do editor (fatia 10).
+  useTeclasDoTabuleiro(camadaDeAtalhos);
   const idDaPrevia = `previa-pratica:${pratica.id}`;
   const chave = "previa-pratica";
   const lessonId = useLessonStore((s) => s.lessonId);

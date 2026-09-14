@@ -1,5 +1,6 @@
 "use client";
 
+import { useAtalho, useCamadaDeJanela } from "@/components/atalhos/Atalhos";
 import { useEffect, useRef } from "react";
 import type { AcaoDoLanceV2 } from "@/lib/editor-v2/acoes-do-lance";
 
@@ -56,19 +57,17 @@ export function MenuDoLance({
     const fora = (evento: MouseEvent) => {
       if (!caixa.current?.contains(evento.target as Node)) aoFechar();
     };
-    const tecla = (evento: KeyboardEvent) => {
-      if (evento.key === "Escape") { evento.stopPropagation(); aoFechar(); }
-    };
     window.addEventListener("mousedown", fora);
-    window.addEventListener("keydown", tecla, true);
     return () => {
       window.removeEventListener("mousedown", fora);
-      window.removeEventListener("keydown", tecla, true);
     };
   }, [aberto, aoFechar]);
 
   return (
     <div ref={caixa} className="relative shrink-0">
+      {/* Fatia 10: o menu aberto é uma camada de atalhos — o L do motor e as setas ficam mudos
+          atrás dele, e o Esc fecha e devolve o foco ao •••. */}
+      {aberto ? <CamadaDoMenu aoFechar={() => { aoFechar(); caixa.current?.querySelector<HTMLButtonElement>("button")?.focus(); }} /> : null}
       <button
         type="button"
         aria-label={`Ações do lance ${rotulo}`}
@@ -103,4 +102,10 @@ export function MenuDoLance({
       ) : null}
     </div>
   );
+}
+
+function CamadaDoMenu({ aoFechar }: { aoFechar: () => void }) {
+  const { camada } = useCamadaDeJanela();
+  useAtalho("fechar-janela", () => { aoFechar(); }, { camada });
+  return null;
 }

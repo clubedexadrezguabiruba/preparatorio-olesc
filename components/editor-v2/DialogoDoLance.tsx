@@ -120,7 +120,7 @@ export function DialogoDoLance({
             type="button"
             disabled={!preparo.resultado.ok}
             onClick={confirmar}
-            className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
+            className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
           >
             Criar capítulo
           </button>

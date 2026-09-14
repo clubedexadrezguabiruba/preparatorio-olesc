@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { usePrisaoDeFoco } from "@/components/editor-v2/foco";
 import type { Color } from "@lichess-org/chessground/types";
 import { MONTAGEM_INICIAL, Montador, type CamposDaMontagem } from "@/components/editor-v2/Montador";
 import { SeletorDoAcervo } from "@/components/editor-v2/SeletorDoAcervo";
@@ -90,30 +91,8 @@ export function DialogoNovoCapitulo({
     campoDoNome.current?.focus();
   }, []);
 
-  useEffect(() => {
-    const tecla = (evento: KeyboardEvent) => {
-      if (evento.key === "Escape") {
-        aoFechar();
-        return;
-      }
-      if (evento.key !== "Tab" || !janela.current) return;
-      const focaveis = janela.current.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), textarea, input:not([disabled]), select, summary, details',
-      );
-      if (focaveis.length === 0) return;
-      const primeiro = focaveis[0];
-      const ultimo = focaveis[focaveis.length - 1];
-      if (!evento.shiftKey && document.activeElement === ultimo) {
-        evento.preventDefault();
-        primeiro.focus();
-      } else if (evento.shiftKey && document.activeElement === primeiro) {
-        evento.preventDefault();
-        ultimo.focus();
-      }
-    };
-    window.addEventListener("keydown", tecla);
-    return () => window.removeEventListener("keydown", tecla);
-  }, [aoFechar]);
+  // Esc, Tab preso, atalhos de trás mudos e foco devolvido: o contrato comum de `foco.ts` (fatia 10).
+  usePrisaoDeFoco(janela, aoFechar);
 
   /** A ordem da coluna vem do fluxo, e o seletor de lugar tem de vir dela também. */
   const capitulosNaOrdem: CapituloV2[] = aula.fluxo.flatMap((etapa) => {
@@ -203,7 +182,7 @@ export function DialogoNovoCapitulo({
               onClick={() => { setPorta(item.chave); if (erro?.campo === "posicao") setErro(null); }}
               className={`foco flex-1 basis-40 rounded-md border px-3 py-2 text-left text-sm ${
                 porta === item.chave
-                  ? "border-foco bg-metodo-superficie text-metodo-tinta-alta"
+                  ? "border-foco bg-metodo-superficie/25 text-metodo-tinta-alta"
                   : "border-borda text-tinta hover:bg-carta-toque"
               }`}
             >
@@ -300,7 +279,7 @@ export function DialogoNovoCapitulo({
             que precisa rolar para terminar o que começou. */}
         <footer className="sticky bottom-0 -mx-4 -mb-4 flex flex-wrap items-center justify-end gap-3 rounded-b-lg border-t border-borda-fraca bg-papel px-4 py-3">
           <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Cancelar</button>
-          <button type="button" onClick={confirmar} className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta">
+          <button type="button" onClick={confirmar} className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta">
             Criar capítulo
           </button>
         </footer>

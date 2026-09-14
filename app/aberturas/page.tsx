@@ -160,7 +160,7 @@ export default async function Aberturas() {
                       <div className="flex w-20 shrink-0 flex-col items-end">
                         <span className="text-sm font-semibold text-tinta tabular-nums">
                           {feitas}
-                          <span className="text-tinta-muda">/{visiveis}</span>
+                          <span className="text-tinta-fraca">/{visiveis}</span>
                         </span>
                         <span
                           className={`text-xs ${vencendo > 0 ? "text-aviso-tinta" : "text-tinta-fraca"}`}
@@ -212,9 +212,9 @@ export default async function Aberturas() {
               </p>
               <Barra feitos={total - faltam} de={total} />
             </div>
-            <span className="shrink-0 text-sm font-semibold text-tinta-muda tabular-nums">
+            <span className="shrink-0 text-sm font-semibold text-tinta-fraca tabular-nums">
               {total - faltam}
-              <span className="text-tinta-muda">/{total}</span>
+              <span className="text-tinta-fraca">/{total}</span>
             </span>
           </div>
         </section>
@@ -251,7 +251,7 @@ export default async function Aberturas() {
               >
                 <span className="flex flex-col gap-0.5">
                   <span className="text-sm text-tinta">{nota.nome}</span>
-                  <span className="text-xs text-tinta-muda">Você de {nota.cor}</span>
+                  <span className="text-xs text-tinta-fraca">Você de {nota.cor}</span>
                 </span>
                 <span className="text-xs text-tinta-fraca tabular-nums">
                   {lancesEmPortugues(nota.lances)}
@@ -262,7 +262,7 @@ export default async function Aberturas() {
         </ul>
       </section>
 
-      <p className="text-xs text-tinta-muda">
+      <p className="text-xs text-tinta-fraca">
         As linhas vêm dos cursos do clube e do motor, e cada uma diz de onde veio. Na
         primeira vez, o site joga a linha com você e desenha a seta; depois cobra de
         memória, e o botão &ldquo;Dica&rdquo; acende a peça quando você travar.

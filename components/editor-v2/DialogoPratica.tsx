@@ -117,7 +117,7 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
           {atual ? <button type="button" onClick={() => aoExcluir(atual.id)} className="foco mr-auto rounded-md border border-erro px-3 py-2 text-sm text-erro-texto hover:bg-erro-superficie/20">Excluir prática…</button> : null}
           <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Cancelar</button>
           <button type="button" disabled={!preparo.ok} title={preparo.ok ? undefined : preparo.mensagem} onClick={() => preparo.ok && aoPrever(preparo.preparo.pratica)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque disabled:opacity-40">⏵ Jogar na prévia</button>
-          <button type="button" onClick={salvar} className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta">{atual ? "Salvar prática" : "Criar prática"}</button>
+          <button type="button" onClick={salvar} className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta">{atual ? "Salvar prática" : "Criar prática"}</button>
         </>
       )}
     >
@@ -137,7 +137,7 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
           <legend className="mb-1 text-sm font-medium text-tinta">Posição</legend>
           <div role="group" aria-label="De onde vem a posição" className="flex flex-wrap gap-2">
             {([["acervo", "Do acervo do curso"], ["capitulo", "De um capítulo desta aula"]] as const).map(([chave, rotulo]) => (
-              <button key={chave} type="button" aria-pressed={fonte === chave} onClick={() => setFonte(chave)} className={`foco rounded-md border px-3 py-1.5 text-sm ${fonte === chave ? "border-foco bg-metodo-superficie text-metodo-tinta-alta" : "border-borda text-tinta hover:bg-carta-toque"}`}>
+              <button key={chave} type="button" aria-pressed={fonte === chave} onClick={() => setFonte(chave)} className={`foco rounded-md border px-3 py-1.5 text-sm ${fonte === chave ? "border-foco bg-metodo-superficie/25 text-metodo-tinta-alta" : "border-borda text-tinta hover:bg-carta-toque"}`}>
                 {fonte === chave ? "✓ " : ""}{rotulo}
               </button>
             ))}

@@ -32,7 +32,7 @@ export function FormularioDeAberturaNova() {
 
   if (!aberto) {
     return (
-      <button type="button" onClick={() => setAberto(true)} className="foco w-fit rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta">
+      <button type="button" onClick={() => setAberto(true)} className="foco w-fit rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta">
         + Nova abertura
       </button>
     );
@@ -96,7 +96,7 @@ export function FormularioDeAberturaNova() {
       </p>
       <div className="flex gap-2">
         <button type="button" onClick={() => { setAberto(false); setProblemas([]); }} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Cancelar</button>
-        <button type="submit" disabled={criando} className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40">
+        <button type="submit" disabled={criando} className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40">
           {criando ? "Criando…" : "Criar rascunho"}
         </button>
       </div>

@@ -55,7 +55,7 @@ export function PaletaDeDesenho({ estado, temDesenho, aoTrocarFerramenta, aoTroc
                 type="button"
                 aria-pressed={ligada}
                 onClick={() => aoTrocarFerramenta(chave)}
-                className={`foco rounded border px-2 py-1 text-xs ${ligada ? "border-metodo-superficie bg-metodo-superficie text-metodo-tinta-alta" : "border-borda text-tinta hover:bg-carta-toque"}`}
+                className={`foco rounded border px-2 py-1 text-xs ${ligada ? "border-metodo-superficie bg-metodo-superficie/25 text-metodo-tinta-alta" : "border-borda text-tinta hover:bg-carta-toque"}`}
               >
                 <span aria-hidden className="mr-1">{sinal}</span>{rotulo}
               </button>

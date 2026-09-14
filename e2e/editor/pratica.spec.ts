@@ -65,13 +65,16 @@ test("editar avisa a versão nova; excluir → Conferir acusa; criar pela janela
   await expect(pratica.getByText(/Origem já registrada no capítulo: Autoria própria/)).toBeVisible();
   await pratica.getByRole("button", { name: "Adicionar ao acervo e usar" }).click();
   const pedeResultado = pratica.getByLabel("Resultado esperado (sem cache da tablebase)");
-  await expect(pratica.getByText(/✓ pos-ex-e2e-base-1 ·/).or(pedeResultado)).toBeVisible();
+  await expect(pratica.getByText(/✓ pos-ex-e2e-(base|lichess)-1 ·/).or(pedeResultado)).toBeVisible();
   if (await pedeResultado.isVisible()) {
     await pedeResultado.selectOption({ label: "brancas ganham" });
     await pratica.getByRole("button", { name: "Adicionar ao acervo e usar" }).click();
   }
-  await expect(pratica.getByText(/✓ pos-ex-e2e-base-1 ·/)).toBeVisible();
-  expect(existsSync(path.join(RAIZ, "content/positions/EX/pos-ex-e2e-base-1.json"))).toBe(true);
+  // A mesma FEN já no acervo (a importação do estudo, na mesma rodada) é reaproveitada, e não duplicada.
+  const escolhida = pratica.getByText(/✓ pos-ex-e2e-(base|lichess)-1 ·/);
+  await expect(escolhida).toBeVisible();
+  const positionId = ((await escolhida.textContent()) ?? "").match(/pos-ex-e2e-[a-z]+-1/)![0];
+  expect(existsSync(path.join(RAIZ, `content/positions/EX/${positionId}.json`))).toBe(true);
 
   // 6. Jogar na prévia: o computador responde, e nada é gravado.
   await pratica.getByRole("button", { name: "⏵ Jogar na prévia" }).click();
@@ -89,7 +92,7 @@ test("editar avisa a versão nova; excluir → Conferir acusa; criar pela janela
   await previa.getByRole("button", { name: "Fechar prévia" }).click();
 
   await pratica.getByRole("button", { name: "Criar prática" }).click();
-  await expect.poll(() => arquivo().praticas.map((p) => p.positionId)).toEqual(["pos-ex-e2e-base-1"]);
+  await expect.poll(() => arquivo().praticas.map((p) => p.positionId)).toEqual([positionId]);
   expect(arquivo().fluxo.at(-1)?.tipo).toBe("pratica");
   await expect(salvo).toHaveText("✓ salvo");
 

@@ -31,7 +31,7 @@ export function FaixaDoMotor({ estado, ligado, aoAlternar, seta, aoAlternarSeta,
         aria-pressed={ligado}
         title="Liga e desliga o motor (tecla L)"
         onClick={aoAlternar}
-        className={`foco inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs ${ligado ? "border-metodo-superficie bg-metodo-superficie text-metodo-tinta-alta" : "border-borda text-tinta hover:bg-carta-toque"}`}
+        className={`foco inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs ${ligado ? "border-metodo-superficie bg-metodo-superficie/25 text-metodo-tinta-alta" : "border-borda text-tinta hover:bg-carta-toque"}`}
       >
         <span aria-hidden className={`h-2 w-2 rounded-full ${ligado ? "bg-metodo-tinta-alta" : "border border-tinta-fraca"}`} />
         Motor

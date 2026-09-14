@@ -1,8 +1,10 @@
+import { useOrientacaoDaVista } from "@/components/atalhos/Atalhos";
 import type { Color, Key } from "@lichess-org/chessground/types";
 import { posicaoDoNag } from "@/lib/chess/nag-overlay";
 
 export function NagOverlay({ casa, orientation, simbolo }: { casa: Key; orientation: Color; simbolo: string }) {
-  const ponto = posicaoDoNag(casa, orientation);
+  // Acompanha a vista virada pela tecla x, como o tabuleiro embaixo dele (fatia 10).
+  const ponto = posicaoDoNag(casa, useOrientacaoDaVista(orientation));
   return (
     <span
       aria-hidden

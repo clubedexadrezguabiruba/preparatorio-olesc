@@ -67,7 +67,8 @@ import {
   ESTADO_INICIAL_DA_PALETA,
   type EstadoDaPaleta,
 } from "@/lib/editor-v2/paleta-de-desenho";
-import { acaoDeTeclado, ehCampoDeTexto, navegar } from "@/lib/editor-v2/navegacao";
+import { navegar } from "@/lib/editor-v2/navegacao";
+import { ListaDeAtalhos, useAtalho, VistaDoTabuleiro } from "@/components/atalhos/Atalhos";
 import { problemasVisiveisV2, resumoDosProblemasV2, type DestinoV2 } from "@/lib/editor-v2/diagnostico-visual";
 import {
   aplicarNoHistorico,
@@ -345,22 +346,10 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
     return () => clearTimeout(relogio);
   }, [aulaId, historico.presente, sessaoId]);
 
-  useEffect(() => {
-    const teclado = (evento: KeyboardEvent) => {
-      if (!(evento.ctrlKey || evento.metaKey) || evento.altKey) return;
-      const tag = (evento.target as HTMLElement | null)?.tagName;
-      if (tag === "INPUT" || tag === "TEXTAREA") return;
-      if (evento.key.toLowerCase() === "z") {
-        evento.preventDefault();
-        setHistorico((h) => evento.shiftKey ? refazer(h) : desfazer(h));
-      } else if (evento.key.toLowerCase() === "y") {
-        evento.preventDefault();
-        setHistorico(refazer);
-      }
-    };
-    window.addEventListener("keydown", teclado);
-    return () => window.removeEventListener("keydown", teclado);
-  }, []);
+  // Fatia 10: Ctrl+Z e Ctrl+Y pela tabela de atalhos (`lib/atalhos/tabela.ts`). Dentro de campo de
+  // texto o registro deixa o desfazer nativo do texto agir (§6.1).
+  useAtalho("desfazer", () => { setHistorico(desfazer); }, { emTodasAsCamadas: true });
+  useAtalho("refazer", () => { setHistorico(refazer); }, { emTodasAsCamadas: true });
 
   /*
    * ## O teclado anda na árvore (§16)
@@ -382,20 +371,18 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
   const estadoDoTeclado = useRef({ analise, janelaAberta });
   useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta }; });
 
-  useEffect(() => {
-    const teclado = (evento: KeyboardEvent) => {
-      const { analise: arvore, janelaAberta } = estadoDoTeclado.current;
-      if (janelaAberta) return;
-      if (ehCampoDeTexto(evento.target as HTMLElement | null)) return;
-      const acao = acaoDeTeclado(evento);
-      if (!acao) return;
-      evento.preventDefault();
-      setNodeId((atual) => navegar(arvore, atual, acao));
-      setPedidoDeFoco((pedido) => pedido + 1);
-    };
-    window.addEventListener("keydown", teclado);
-    return () => window.removeEventListener("keydown", teclado);
+  const andarNaArvore = useCallback((acao: "anterior" | "proximo" | "acima" | "abaixo" | "inicio" | "fim") => {
+    const { analise: arvore, janelaAberta: aberta } = estadoDoTeclado.current;
+    if (aberta) return false;
+    setNodeId((atual) => navegar(arvore, atual, acao));
+    setPedidoDeFoco((pedido) => pedido + 1);
   }, []);
+  useAtalho("lance-anterior", () => andarNaArvore("anterior"));
+  useAtalho("lance-seguinte", () => andarNaArvore("proximo"));
+  useAtalho("item-acima", () => andarNaArvore("acima"));
+  useAtalho("item-abaixo", () => andarNaArvore("abaixo"));
+  useAtalho("primeiro-lance", () => andarNaArvore("inicio"));
+  useAtalho("ultimo-lance", () => andarNaArvore("fim"));
 
   const nodeIdAtual = analise.nos[nodeId] ? nodeId : capitulo?.inicioNodeId ?? analise.raizId;
 
@@ -551,19 +538,15 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
    * o tabuleiro ao movimento de peça. Um modo em que não se sabe sair é uma armadilha,
    * e a tecla de escapar é a que todo mundo já tenta.
    */
-  useEffect(() => {
-    const teclado = (evento: KeyboardEvent) => {
-      if (evento.key !== "Escape" || estadoDoTeclado.current.janelaAberta) return;
-      setPaleta((guardada) => {
-        const atual = guardada.estado;
-        if (atual.ferramenta === "mover") return guardada;
-        const estado = atual.origem ? desistirDaSeta(atual) : escolherFerramenta(atual, atual.ferramenta);
-        return { ...guardada, estado };
-      });
-    };
-    window.addEventListener("keydown", teclado);
-    return () => window.removeEventListener("keydown", teclado);
-  }, []);
+  useAtalho("sair-do-desenho", () => {
+    if (estadoDoTeclado.current.janelaAberta) return false;
+    setPaleta((guardada) => {
+      const atual = guardada.estado;
+      if (atual.ferramenta === "mover") return guardada;
+      const estado = atual.origem ? desistirDaSeta(atual) : escolherFerramenta(atual, atual.ferramenta);
+      return { ...guardada, estado };
+    });
+  });
   const narracoes = capitulo?.narracoes.filter((n) => n.nodeId === selecionado?.id) ?? [];
 
   /**
@@ -983,7 +966,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
             type="button"
             ref={botaoAdicionar}
             onClick={() => setAdicionando(true)}
-            className="foco rounded-md bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta"
+            className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta"
           >
             + Adicionar capítulo
           </button>
@@ -1034,6 +1017,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
      * diz que o alvo da autoria é o desktop; isto não promete paridade no celular,
      * só evita quebrar o que já funcionava.
      */
+    <VistaDoTabuleiro escopos={["editor"]}>
     <main className="mx-auto flex w-full max-w-7xl flex-col gap-4 p-4 lg:h-dvh">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div>
@@ -1053,7 +1037,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
           </h1>
           <p className="text-sm text-tinta-fraca">Formato novo separado. A aula publicada e o editor atual não são alterados.</p>
         </div>
-        <div className="flex items-center gap-2">
+        {/* flex-wrap: a 375 px a fileira sem quebra media 865 px e rolava a página para o lado (10A). */}
+        <div className="flex flex-wrap items-center gap-2">
           <button type="button" ref={botaoImportar} onClick={() => setImportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Importar PGN</button>
           <button type="button" ref={botaoExportar} onClick={() => setExportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Exportar</button>
           <button type="button" ref={botaoPrevia} onClick={() => setEscolhendoPrevia(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Pré-visualizar</button>
@@ -1069,7 +1054,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
           {/* §5.3: "Publicar, somente quando permitido" — o botão nem aparece antes de uma
               conferência verde para o documento que está na tela. */}
           {conferencia && conferencia.aula === historico.presente && conferencia.resultado.publicar.pode ? (
-            <button type="button" ref={botaoPublicar} onClick={() => setPublicandoAula(true)} className="foco rounded-md border border-metodo-superficie bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta">
+            <button type="button" ref={botaoPublicar} onClick={() => setPublicandoAula(true)} className="foco rounded-md border border-metodo-superficie bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta">
               Publicar
             </button>
           ) : null}
@@ -1669,7 +1654,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
                   existe (§16, "descobrível sem botão direito"); ela só deixou de ocupar
                   uma linha fixa da coluna. */}
               <AjudaDeAtalhos rotulo="Atalhos da lista de lances">
-                <p>← → andam na linha · ↑ ↓ andam na lista, variantes incluídas · Home e End vão ao começo e ao fim · L liga e desliga o motor</p>
+                <ListaDeAtalhos escopos={["editor", "tabuleiro"]} />
               </AjudaDeAtalhos>
             </div>
             {/* Sem as posições reconstruídas não há SAN nem numeração; o painel cai
@@ -1791,5 +1776,6 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
         </section>
       </div>
     </main>
+    </VistaDoTabuleiro>
   );
 }

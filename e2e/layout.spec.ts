@@ -1,0 +1,62 @@
+/**
+ * @layout — cabe na tela, sem rolagem para o lado e sem botão coberto (fatia 10, 10F; §25 e §7).
+ *
+ * Roda nos quatro perfis: o editor em 1366, 1280 e 1920; o aluno a 375 px.
+ */
+import { AULA_BASE } from "./preparo/global-setup.ts";
+import { conferirTamanho, expect, test } from "./preparo/fixtures.ts";
+import { botoesCobertos, culpadosDaLargura, lancesInteirosVisiveis, larguraDaPagina } from "./preparo/medidas.ts";
+import { guardarJson, lerJson } from "./preparo/protecao.ts";
+
+const TELAS_DO_ALUNO = ["/painel", "/trilha", "/finais", "/finais/N0-LADDER", "/aberturas", "/tatica"];
+
+test("@layout o editor cabe e não cobre botão", async ({ page }, info) => {
+  test.skip(info.project.name === "aluno-375", "o editor é desktop (§3)");
+  const tamanho = page.viewportSize()!;
+  await page.goto(`/editor/v2/finais/${AULA_BASE}`);
+  await expect(page.locator(".cg-wrap").first()).toBeVisible();
+  await page.waitForTimeout(700);
+  await conferirTamanho(page, tamanho.width, tamanho.height);
+  const largura = await larguraDaPagina(page);
+  const lances = await lancesInteirosVisiveis(page);
+  const botoes = await botoesCobertos(page);
+  const medidas = lerJson<Record<string, unknown>>("layout.json") ?? {};
+  guardarJson("layout.json", { ...medidas, [`editor ${info.project.name}`]: { largura, lances, botoes } });
+  expect(largura.transborda, JSON.stringify(await culpadosDaLargura(page))).toBe(0);
+  expect(botoes.cobertos).toEqual([]);
+  if (tamanho.height >= 768) expect(lances.inteiros).toBeGreaterThanOrEqual(5);
+});
+
+test("@layout o editor a 375 px não rola para o lado", async ({ page }, info) => {
+  test.skip(info.project.name !== "aluno-375");
+  await page.goto(`/editor/v2/finais/${AULA_BASE}`);
+  await expect(page.locator(".cg-wrap").first()).toBeVisible();
+  await page.waitForTimeout(700);
+  await conferirTamanho(page, 375, 812);
+  const largura = await larguraDaPagina(page);
+  const medidas = lerJson<Record<string, unknown>>("layout.json") ?? {};
+  guardarJson("layout.json", { ...medidas, "editor 375": { largura, culpados: await culpadosDaLargura(page) } });
+  expect(largura.transborda, JSON.stringify(await culpadosDaLargura(page))).toBe(0);
+});
+
+for (const tela of [...TELAS_DO_ALUNO, "/entrar"]) {
+  test(`@layout aluno a 375 px: ${tela}`, async ({ aluno, browser }, info) => {
+    test.skip(info.project.name !== "aluno-375");
+    let pagina = aluno;
+    if (tela === "/entrar") pagina = await (await browser.newContext({ viewport: { width: 375, height: 812 }, baseURL: "http://localhost:3000" })).newPage();
+    await pagina.goto(tela);
+    await pagina.waitForTimeout(600);
+    const largura = await larguraDaPagina(pagina);
+    expect(largura.transborda, JSON.stringify(await culpadosDaLargura(pagina))).toBe(0);
+    if (tela === "/finais/N0-LADDER") {
+      // O aluno no celular anda por todas as etapas pela trilha.
+      const botoes = pagina.getByRole("navigation", { name: "Etapas da aula" }).getByRole("button");
+      const total = await botoes.count();
+      for (let i = 0; i < total; i += 1) {
+        await botoes.nth(i).click();
+        await expect(pagina.getByText(new RegExp(`Etapa ${i + 1} de ${total}`))).toBeVisible();
+        expect((await larguraDaPagina(pagina)).transborda).toBe(0);
+      }
+    }
+  });
+}

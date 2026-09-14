@@ -207,7 +207,7 @@ export function EditorDeRepertorio({ arquivo, textoInicial, hashInicial, origem,
    * Pausa com as janelas desta tela abertas, como no editor de aulas.
    */
   const fenDoMotor = analise && mapa ? mapa.quadros[analise.nos[nodeId] ? nodeId : analise.raizId]?.fen ?? "" : "";
-  const motor = useControlesDoMotor(fenDoMotor, { pausado: janelaAberta });
+  const motor = useControlesDoMotor(fenDoMotor, { pausado: janelaAberta, idDoAtalho: "repertorio-motor" });
 
   if (!analise || !mapa) {
     return (
@@ -319,7 +319,7 @@ export function EditorDeRepertorio({ arquivo, textoInicial, hashInicial, origem,
           disabled={!podeAplicar}
           title={motivoDeNaoAplicar}
           onClick={() => setAplicando(true)}
-          className="foco rounded-md border border-metodo-superficie bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
+          className="foco rounded-md border border-metodo-superficie bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
         >
           Aplicar
         </button>
@@ -353,7 +353,7 @@ export function EditorDeRepertorio({ arquivo, textoInicial, hashInicial, origem,
                     type="button"
                     aria-current={a.id === analise.id ? "true" : undefined}
                     onClick={() => { setAnaliseId(a.id); setNodeId(a.raizId); setAviso(null); }}
-                    className={`foco flex w-full flex-col rounded-md px-2 py-1.5 text-left text-sm ${a.id === analise.id ? "bg-metodo-superficie text-metodo-tinta-alta" : "text-tinta hover:bg-carta-toque"}`}
+                    className={`foco flex w-full flex-col rounded-md px-2 py-1.5 text-left text-sm ${a.id === analise.id ? "bg-metodo-superficie/25 text-metodo-tinta-alta" : "text-tinta hover:bg-carta-toque"}`}
                   >
                     <span className="font-medium">{tags.Nome ?? `Jogo ${i + 1}`}</span>
                     <span className="text-xs opacity-80">
@@ -411,7 +411,7 @@ export function EditorDeRepertorio({ arquivo, textoInicial, hashInicial, origem,
                     aria-label={`${simbolo}: ${efeito}`}
                     title={efeito}
                     onClick={() => aplicar({ tipo: "ALTERNAR_NAG", analiseId: analise.id, nodeId: nodeIdAtual, nag })}
-                    className={`foco min-w-10 rounded-md border px-2 py-1 text-sm font-semibold disabled:opacity-40 ${qualidade === nag ? "border-metodo-superficie bg-metodo-superficie text-metodo-tinta-alta" : "border-borda text-tinta hover:bg-carta-toque"}`}
+                    className={`foco min-w-10 rounded-md border px-2 py-1 text-sm font-semibold disabled:opacity-40 ${qualidade === nag ? "border-metodo-superficie bg-metodo-superficie/25 text-metodo-tinta-alta" : "border-borda text-tinta hover:bg-carta-toque"}`}
                   >
                     {simbolo}
                   </button>
@@ -674,7 +674,7 @@ function DialogoMaisOpcoes({ tags, aoFechar, aoGuardar }: {
       rodape={(
         <div className="flex gap-2">
           <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Cancelar</button>
-          <button type="button" onClick={guardar} className="foco rounded-md border border-metodo-superficie bg-metodo-superficie px-3 py-2 text-sm font-medium text-metodo-tinta-alta">Guardar</button>
+          <button type="button" onClick={guardar} className="foco rounded-md border border-metodo-superficie bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta">Guardar</button>
         </div>
       )}
     >

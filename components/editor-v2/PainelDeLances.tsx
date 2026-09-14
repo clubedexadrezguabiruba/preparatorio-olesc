@@ -77,7 +77,7 @@ export function PainelDeLances({ analise, sans, rotulos, selecionado, focar = 0,
           aria-current={selecionado === raiz.id ? "true" : undefined}
           onClick={() => onSelecionar(raiz.id)}
           onContextMenu={(evento) => aoBotaoDireito(evento, raiz.id)}
-          className={`foco w-fit rounded-md px-2 py-1 text-xs ${selecionado === raiz.id ? "bg-metodo-superficie text-metodo-tinta-alta" : "text-tinta-fraca hover:bg-carta-toque"}`}
+          className={`foco w-fit rounded-md px-2 py-1 text-xs ${selecionado === raiz.id ? "bg-metodo-superficie/25 font-semibold text-metodo-tinta-alta ring-1 ring-foco" : "text-tinta-fraca hover:bg-carta-toque"}`}
         >
           Posição inicial
         </button>
@@ -104,7 +104,7 @@ export function PainelDeLances({ analise, sans, rotulos, selecionado, focar = 0,
                   aria-current={selecionado === nodeId ? "true" : undefined}
                   onClick={() => onSelecionar(nodeId)}
                   onContextMenu={(evento) => aoBotaoDireito(evento, nodeId)}
-                  className={`foco min-w-0 rounded-md px-2 py-1.5 text-left text-sm transition-colors ${selecionado === nodeId ? "bg-metodo-superficie text-metodo-tinta-alta" : "text-tinta hover:bg-carta-toque"}`}
+                  className={`foco min-w-0 rounded-md px-2 py-1.5 text-left text-sm transition-colors ${selecionado === nodeId ? "bg-metodo-superficie/25 font-semibold text-metodo-tinta-alta ring-1 ring-foco" : "text-tinta hover:bg-carta-toque"}`}
                 >
                   <span className="font-medium">{nome}</span>
                   {no.nags?.map((nag) => <span key={nag} className="ml-0.5 text-aviso-tinta">{NAG[nag] ?? `$${nag}`}</span>)}
