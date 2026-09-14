@@ -8,6 +8,10 @@ import { descartarRascunhoDoRepertorioAcao, salvarRascunhoDoRepertorioAcao } fro
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { NagOverlay } from "@/components/board/NagOverlay";
 import { Dialogo } from "@/components/editor-v2/Dialogo";
+import { BarraDeAvaliacao } from "@/components/motor-do-professor/BarraDeAvaliacao";
+import { FaixaDoMotor } from "@/components/motor-do-professor/FaixaDoMotor";
+import { LinhasDoMotor } from "@/components/motor-do-professor/LinhasDoMotor";
+import { useControlesDoMotor } from "@/components/motor-do-professor/useControlesDoMotor";
 import { PainelDeLances } from "@/components/editor-v2/PainelDeLances";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import type { AcaoDoLanceV2 } from "@/lib/editor-v2/acoes-do-lance";
@@ -198,6 +202,13 @@ export function EditorDeRepertorio({ arquivo, textoInicial, hashInicial, origem,
     try { return mapaDaAnalise(aula, analise.id, {}); } catch { return null; }
   }, [aula, analise]);
 
+  /*
+   * O motor do professor (fatia 9, §23.1), antes do retorno antecipado abaixo: é um hook.
+   * Pausa com as janelas desta tela abertas, como no editor de aulas.
+   */
+  const fenDoMotor = analise && mapa ? mapa.quadros[analise.nos[nodeId] ? nodeId : analise.raizId]?.fen ?? "" : "";
+  const motor = useControlesDoMotor(fenDoMotor, { pausado: janelaAberta });
+
   if (!analise || !mapa) {
     return (
       <main className="mx-auto flex max-w-2xl flex-col gap-3 p-4">
@@ -357,10 +368,15 @@ export function EditorDeRepertorio({ arquivo, textoInicial, hashInicial, origem,
 
         {/* ---- tabuleiro, símbolos e comentário ---- */}
         <section aria-label="Posição" className="flex min-w-0 flex-col gap-2">
-          <div className="mx-auto w-full max-w-[27rem]">
+          {/* 28,125 rem = os 27 rem do tabuleiro + a barra (0,875) + o vão (0,25): a barra
+              entrou sem encolher o tabuleiro que a parada 8D mediu. */}
+          <div className="mx-auto flex w-full max-w-[28.125rem] gap-1">
+            <BarraDeAvaliacao altura={motor.estado.barra} orientacao={orientacao} />
+            <div className="min-w-0 flex-1">
             <ChessBoard
               fen={quadro.fen}
               orientation={orientacao}
+              shapes={motor.shapes}
               turnColor={toBoardColor(new Chess(quadro.fen).turn())}
               dests={legalDests(new Chess(quadro.fen))}
               lastMove={quadro.ultimoLance as [Key, Key] | null}
@@ -371,6 +387,7 @@ export function EditorDeRepertorio({ arquivo, textoInicial, hashInicial, origem,
                 ? <NagOverlay casa={quadro.ultimoLance[1] as Key} orientation={orientacao} simbolo={SIMBOLOS.find((s) => s.nag === qualidade)!.simbolo} />
                 : undefined}
             />
+            </div>
           </div>
           {aviso ? <p role="status" className="rounded-md border border-metodo-superficie bg-metodo-superficie/10 p-2 text-sm text-metodo-tinta">{aviso}</p> : null}
           {problemasDoJogo.length > 0 ? (
@@ -417,6 +434,18 @@ export function EditorDeRepertorio({ arquivo, textoInicial, hashInicial, origem,
 
         {/* ---- lances e conferência ---- */}
         <aside aria-label="Lances e conferência" className="flex min-h-0 flex-col gap-3">
+          <div className="flex shrink-0 flex-col gap-1 border-b border-borda-fraca pb-2">
+            <FaixaDoMotor
+              estado={motor.estado}
+              ligado={motor.ligado}
+              aoAlternar={motor.alternar}
+              seta={motor.seta}
+              aoAlternarSeta={motor.alternarSeta}
+              linhas={motor.linhas}
+              aoMudarLinhas={motor.mudarLinhas}
+            />
+            <LinhasDoMotor estado={motor.estado} quantas={motor.linhas} />
+          </div>
           <div className="flex max-h-[21rem] min-h-0 flex-col">
             <PainelDeLances
               analise={analise}

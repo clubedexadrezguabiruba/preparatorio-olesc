@@ -7,6 +7,7 @@ import {
   type FerramentaDeDesenho,
 } from "@/lib/editor-v2/paleta-de-desenho";
 import type { CorDesenhoV2 } from "@/lib/editor-v2/modelo";
+import { AjudaDeAtalhos } from "@/components/motor-do-professor/AjudaDeAtalhos";
 
 /**
  * As ferramentas clicáveis de desenho (§10.2 e §25).
@@ -27,9 +28,11 @@ import type { CorDesenhoV2 } from "@/lib/editor-v2/modelo";
  * e, quando é o escolhido, ganha o aro e o "✓". Quem não distingue verde de vermelho
  * continua sabendo qual está ligada.
  *
- * **A legenda dos atalhos ficou.** Ela não é redundância: o professor que já aprendeu
- * o Shift continua precisando dela, e ela é o que explica por que a mesma cor aparece
- * de dois jeitos.
+ * **A legenda dos atalhos ficou, a um clique.** Ela não é redundância: o professor que já
+ * aprendeu o Shift continua precisando dela, e ela é o que explica por que a mesma cor
+ * aparece de dois jeitos. Na fatia 9 ela saiu da linha fixa para o `(?)` ao lado de
+ * "Apagar", e a frase de instrução passou a aparecer só com a seta ou a casa na mão: as
+ * duas linhas pagaram o espaço do motor do professor.
  */
 export function PaletaDeDesenho({ estado, temDesenho, aoTrocarFerramenta, aoTrocarCor, aoApagar }: {
   estado: EstadoDaPaleta;
@@ -87,22 +90,27 @@ export function PaletaDeDesenho({ estado, temDesenho, aoTrocarFerramenta, aoTroc
         >
           Apagar desenhos desta posição
         </button>
+
+        <AjudaDeAtalhos rotulo="Atalhos de desenho" lado="esquerda">
+          <p className="mb-1">{instrucaoDaPaleta({ ...estado, ferramenta: "mover" })}</p>
+          <p className="flex flex-wrap items-center gap-2">
+            <span>Ou com o botão direito, sem escolher nada aqui:</span>
+            {ATALHOS.map(({ token, tecla }) => (
+              <span key={tecla} className="inline-flex items-center gap-1">
+                <i aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: `var(${token})` }} />
+                {tecla}
+              </span>
+            ))}
+          </p>
+        </AjudaDeAtalhos>
       </div>
 
       {/* `role="status"` porque a frase muda sozinha entre um clique e outro — quem usa
-          leitor de tela precisa ouvir que a seta está esperando o destino. */}
-      <p role="status" className={`text-center text-xs ${desenhando ? "text-metodo-tinta" : "text-tinta-fraca"}`}>
-        {instrucaoDaPaleta(estado)}
-      </p>
-
-      <p className="flex flex-wrap items-center justify-center gap-2 text-xs text-tinta-fraca">
-        <span>Ou com o botão direito, sem escolher nada aqui:</span>
-        {ATALHOS.map(({ token, tecla }) => (
-          <span key={tecla} className="inline-flex items-center gap-1">
-            <i aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: `var(${token})` }} />
-            {tecla}
-          </span>
-        ))}
+          leitor de tela precisa ouvir que a seta está esperando o destino. A região fica
+          sempre montada (vazia com "Mover peças"), para o leitor de tela não perder o
+          anúncio da primeira troca; só a caixa visível some. */}
+      <p role="status" className={`text-center text-xs text-metodo-tinta ${desenhando ? "" : "sr-only"}`}>
+        {desenhando ? instrucaoDaPaleta(estado) : ""}
       </p>
     </div>
   );

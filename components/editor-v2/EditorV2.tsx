@@ -27,6 +27,11 @@ import { DialogoCriarTreino } from "@/components/editor-v2/DialogoCriarTreino";
 import { DialogoEditarTreino } from "@/components/editor-v2/DialogoEditarTreino";
 import { DialogoPropriedadeTreino } from "@/components/editor-v2/DialogoPropriedadeTreino";
 import { PaletaDeDesenho } from "@/components/editor-v2/PaletaDeDesenho";
+import { AjudaDeAtalhos } from "@/components/motor-do-professor/AjudaDeAtalhos";
+import { BarraDeAvaliacao } from "@/components/motor-do-professor/BarraDeAvaliacao";
+import { FaixaDoMotor } from "@/components/motor-do-professor/FaixaDoMotor";
+import { LinhasDoMotor } from "@/components/motor-do-professor/LinhasDoMotor";
+import { useControlesDoMotor } from "@/components/motor-do-professor/useControlesDoMotor";
 import { Dialogo } from "@/components/editor-v2/Dialogo";
 import { Previa } from "@/components/editor-v2/Previa";
 import { PreviaDoTreino } from "@/components/editor-v2/PreviaDoTreino";
@@ -418,6 +423,12 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
     : null;
 
   const jogo = useMemo(() => new Chess(derivado?.quadro.fen), [derivado?.quadro.fen]);
+  /*
+   * O motor do professor (fatia 9, §23.1). Pausa com qualquer janela aberta — a prévia
+   * inclusa, que roda o player do aluno e não pode disputar processador com a análise — e a
+   * tecla L obedece à mesma guarda. Sem posição montável, a FEN vazia não analisa nada.
+   */
+  const motor = useControlesDoMotor(derivado?.quadro.fen ?? "", { pausado: janelaAberta });
   const selecionado = analise.nos[nodeIdAtual];
   /**
    * As setas e casas acesas do lance selecionado, nas cores que o professor escolheu.
@@ -1348,9 +1359,15 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         <section className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
           {derivado ? (
             <>
+              {/* A barra ocupa o vão sempre, ligada ou não: o tabuleiro não muda de
+                  tamanho quando o motor liga (§23.1). */}
+              <div className="flex gap-1">
+              <BarraDeAvaliacao altura={motor.estado.barra} orientacao={capitulo.orientacao} />
+              <div className="min-w-0 flex-1">
               <ChessBoard
                 fen={derivado.quadro.fen}
                 orientation={capitulo.orientacao}
+                shapes={motor.shapes}
                 turnColor={toBoardColor(jogo.turn())}
                 dests={legalDests(jogo)}
                 lastMove={derivado.quadro.ultimoLance as [Key, Key] | null}
@@ -1365,6 +1382,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
                   ? <NagOverlay casa={derivado.quadro.ultimoLance[1] as Key} orientation={capitulo.orientacao} simbolo={SIMBOLOS_DE_QUALIDADE[qualidadeSelecionada]} />
                   : undefined}
               />
+              </div>
+              </div>
               {/* §11.3, "criar variante daqui": a ação não abre janela — ela
                   põe o professor na posição certa e diz o gesto. A dica só
                   aparece quando ele pediu, e some no primeiro lance jogado. */}
@@ -1378,7 +1397,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
               ) : null}
               {/* §10.2 e §25: as ferramentas clicáveis, para o desenho ser descoberto
                   sem conhecer Shift/Alt. Os atalhos continuam valendo, e a legenda
-                  deles ficou dentro da paleta. */}
+                  deles mora no (?) da paleta desde a fatia 9. */}
               <PaletaDeDesenho
                 estado={paleta}
                 temDesenho={desenhos.length > 0}
@@ -1398,12 +1417,32 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
           )}
         </section>
 
-        <section className="cartao-vazio flex min-h-[32rem] flex-col gap-4 p-3 lg:min-h-0">
+        <section className="cartao-vazio flex min-h-[32rem] flex-col gap-3 p-3 lg:min-h-0">
+          {/* O motor do professor no topo (§23.1): desligado, uma linha só; ligado, cresce
+              só as linhas pedidas. O espaço saiu das duas legendas fixas, que foram para
+              os (?). */}
+          <div className="flex shrink-0 flex-col gap-1 border-b border-borda-fraca pb-2">
+            <FaixaDoMotor
+              estado={motor.estado}
+              ligado={motor.ligado}
+              aoAlternar={motor.alternar}
+              seta={motor.seta}
+              aoAlternarSeta={motor.alternarSeta}
+              linhas={motor.linhas}
+              aoMudarLinhas={motor.mudarLinhas}
+            />
+            <LinhasDoMotor estado={motor.estado} quantas={motor.linhas} />
+          </div>
           <div className="flex min-h-0 flex-1 flex-col gap-2">
-            <h2 className="text-sm font-semibold text-tinta">Lances e variantes</h2>
-            {/* A ajuda fica escrita na tela porque atalho que ninguém descobre não
-                existe (§16, "descobrível sem botão direito"). */}
-            <p className="text-xs text-tinta-fraca">← → andam na linha · ↑ ↓ andam na lista, variantes incluídas · Home e End vão ao começo e ao fim</p>
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-semibold text-tinta">Lances e variantes</h2>
+              {/* A ajuda continua a um clique porque atalho que ninguém descobre não
+                  existe (§16, "descobrível sem botão direito"); ela só deixou de ocupar
+                  uma linha fixa da coluna. */}
+              <AjudaDeAtalhos rotulo="Atalhos da lista de lances">
+                <p>← → andam na linha · ↑ ↓ andam na lista, variantes incluídas · Home e End vão ao começo e ao fim · L liga e desliga o motor</p>
+              </AjudaDeAtalhos>
+            </div>
             {/* Sem as posições reconstruídas não há SAN nem numeração; o painel cai
                 para o UCI cru, que é feio mas legível, em vez de sumir junto com o
                 tabuleiro. O professor continua conseguindo clicar no lance errado. */}
@@ -1427,11 +1466,13 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
               onAcao={aoAcaoDoLance}
             />
           </div>
-          {/* Teto de metade da coluna e rolagem própria. Sem eles, este bloco é um item
-              flex que não encolhe abaixo do próprio conteúdo (~570 px com narração): em
-              1366×768 a lista acima ficava com 0 px e o bloco era pintado por cima dela,
-              roubando o clique do `•••` da posição inicial. */}
-          <div className="border-t border-borda-fraca pt-3 lg:max-h-[50%] lg:overflow-y-auto">
+          {/* Teto e rolagem própria. Sem eles, este bloco é um item flex que não encolhe
+              abaixo do próprio conteúdo (~570 px com narração): em 1366×768 a lista acima
+              ficava com 0 px e o bloco era pintado por cima dela, roubando o clique do `•••`
+              da posição inicial. O teto era metade da coluna; a faixa do motor (fatia 9)
+              tirou 9 px da lista e ela caiu de 5 para 4 lances inteiros, então passou a 40%,
+              o primeiro recuo da regra de aceite. */}
+          <div className="border-t border-borda-fraca pt-3 lg:max-h-[40%] lg:overflow-y-auto">
             <p className="mb-2 text-xs text-tinta-fraca">Símbolo do lance (escolha um)</p>
             <div id="simbolos-do-lance" className="flex flex-wrap gap-1">
               {Object.entries(SIMBOLOS_DE_QUALIDADE).map(([nag, simbolo]) => (

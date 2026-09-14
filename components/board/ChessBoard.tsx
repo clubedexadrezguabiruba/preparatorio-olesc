@@ -51,6 +51,10 @@ const PINCEIS = [
   // outros. Traço mais fino que os selos: a seta do plano fala do que vem
   // DEPOIS do fim da linha, e não pode competir com o veredito do lance.
   { nome: "plano", token: "--color-pincel-plano", opacity: 1, lineWidth: 8 },
+  // O sétimo, só dos editores: a seta do melhor lance do motor do professor (fatia 9).
+  // Cinza translúcido, para nunca ser lida como uma das quatro cores de autoria — ela
+  // entra pelo canal automático (`shapes`) e não vai para o arquivo.
+  { nome: "motor", token: "--color-pincel-motor", opacity: 0.6, lineWidth: 10 },
 ] as const;
 
 /**

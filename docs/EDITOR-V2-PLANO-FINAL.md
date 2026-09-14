@@ -317,7 +317,7 @@ Aplicar repertório exige compilar candidato, mostrar impacto nos IDs/progresso 
 
 Aula extra conserva namespace `EX-`, nível explícito e inclusão na trilha. O editor apresenta o efeito real no fechamento do nível calculado pelo código, não uma promessa de “não afetar progresso”. Capítulos novos dentro da aula não viram aulas extras automaticamente.
 
-Stockfish do professor usa worker próprio, separado do singleton do aluno, com cancelamento de análise antiga, descarte de resposta obsoleta e liberação ao sair. É apoio autoral; não certifica automaticamente resultado nem escreve respostas de treino. Opening Explorer fica posterior.
+Stockfish do professor usa worker próprio, separado do singleton do aluno, com cancelamento de análise antiga, descarte de resposta obsoleta e liberação ao sair. É apoio autoral; não certifica automaticamente resultado nem escreve respostas de treino. Opening Explorer fica posterior. Em 13/09/2026 o Doug ampliou o motor do professor para linhas, seta opcional e liga/desliga nos dois editores, invisível ao aluno — ver §23.1 da especificação funcional.
 
 ## 16. Interface e acesso
 

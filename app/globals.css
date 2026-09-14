@@ -290,6 +290,17 @@
      uma parede opaca de seis casas no Laboratório de Finais, este desenha duas
      ou três setas finas no repertório, e os dois nunca aparecem na mesma tela. */
   --color-pincel-plano: oklch(40% 0.19 310);
+
+  /* O sétimo: a seta do **motor do professor** (fatia 9 do Editor v2, §23.1). Só existe nos
+     editores, nunca na tela do aluno.
+
+     Cinza e translúcido de propósito: as quatro cores do professor são conteúdo da aula e
+     vão para o arquivo; esta é opinião de máquina, some ao desligar e não é gravada. Uma
+     seta colorida na mesma tela seria confundida com um desenho que o aluno vai ver. A
+     transparência (0,6 no `ChessBoard`) deixa a peça e a casa aparecerem por baixo. Croma zero:
+     com um pingo de azul (a primeira versão, matiz 250) ele puxava para as casas azuis do
+     tabuleiro e para o traço do professor. */
+  --color-pincel-motor: oklch(30% 0 0);
 }
 
 /* --------------------------------------------------------------------------

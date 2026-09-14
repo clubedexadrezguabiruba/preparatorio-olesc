@@ -21,20 +21,34 @@ import {
  * O motor de xadrez da etapa 5 (plano da F1, §5).
  *
  * **Este é o único arquivo do projeto com `Promise`, junto com o
- * `useEngine.ts` ao lado.** Todo o resto — componentes, store, as outras libs —
- * é síncrono, e a regra existe para continuar assim: quem quer um lance do
- * motor usa o hook, que entrega por callback. Nenhuma promessa atravessa a
- * fronteira de `lib/engine/`.
+ * `useEngine.ts` e o `useMotorDoProfessor.ts` ao lado.** Todo o resto —
+ * componentes, store, as outras libs — é síncrono, e a regra existe para
+ * continuar assim: quem quer um lance do motor usa um hook, que entrega por
+ * callback. Nenhuma promessa atravessa a fronteira de `lib/engine/`.
  *
  * O motor roda num **Web Worker**: um processo separado do navegador. Sem isso,
  * os 300 ms que ele passa pensando congelariam a página inteira — o aluno não
  * conseguiria nem rolar a tela.
  *
- * ## Instância única, com contagem de referências
+ * ## Uma fábrica, duas instâncias
+ *
+ * Até a fatia 9 do Editor v2 o estado do motor morava solto no módulo: um worker
+ * só na página. O professor precisa de um **worker próprio** (§15 do plano: "separado
+ * do singleton do aluno"), com cancelamento e descarte próprios, e duas conversas
+ * UCI no mesmo worker seriam um `stop` de uma matando a busca da outra. Por isso o
+ * estado foi embrulhado em `criarMotor`: cada chamada é um worker, um carimbo de
+ * pedido e uma fila de `readyok` independentes.
+ *
+ * O aluno continua com **uma** instância, criada aqui embaixo (`motorDoAluno`), e as
+ * exportações de antes (`acquireEngine`, `releaseEngine`, `subscribeEngineStatus`,
+ * `getEngineStatus`, `readEngineTimings`) têm a mesma assinatura: `useEngine` e o
+ * `PracticeStage` não mudaram uma linha.
+ *
+ * ## Instância do aluno, com contagem de referências
  *
  * São 7,3 MB de WebAssembly. Carregar duas vezes é inaceitável, e recarregar ao
- * pular da etapa 5 para a 6 e voltar seria pior ainda. Por isso o worker é um
- * só na página, `acquire`/`release` contam quem o está usando, e a demolição
+ * pular da etapa 5 para a 6 e voltar seria pior ainda. Por isso o worker do aluno
+ * é um só na página, `acquire`/`release` contam quem o está usando, e a demolição
  * espera 30 segundos depois do último `release` — tempo de sobra para uma
  * navegação entre etapas, curto o bastante para não segurar memória à toa.
  *
@@ -74,6 +88,12 @@ const SEARCH_GRACE_MS = 5_000;
 const DISPOSE_DELAY_MS = 30_000;
 /** Teto de uma análise. `go depth` termina sozinho; isto é o guarda contra o motor mudo. */
 const ANALYSIS_TIMEOUT_MS = 60_000;
+/**
+ * O ritmo da análise do professor: no máximo **4 atualizações por segundo**. Nas
+ * profundidades baixas o Stockfish fecha dezenas por segundo, e redesenhar a faixa a
+ * cada uma faria o número piscar sem que ninguém conseguisse lê-lo.
+ */
+const INTERVALO_MINIMO_MS = 250;
 
 /**
  * A análise de uma posição (B9/E7b): as linhas candidatas na profundidade
@@ -92,11 +112,70 @@ export type AnaliseRequest = {
   multiPv: number;
 };
 
+/** O pedido da análise contínua do professor. */
+export type AnaliseContinuaRequest = {
+  fen: string;
+  /**
+   * Quantas linhas **completam** uma profundidade. Quem chama já desconta a posição
+   * com menos lances legais do que as linhas pedidas: o Stockfish publica só as que
+   * existem, e esperar a terceira de uma posição com dois lances seria esperar para
+   * sempre.
+   */
+  multiPv: number;
+  /** O teto. A busca para sozinha nele — `go depth`, nunca `go infinite`. */
+  profundidade: number;
+};
+
+/** O que a análise contínua entrega a cada profundidade completa. */
+export type AtualizacaoDaAnalise = Analise & {
+  /** A posição a que isto se refere — quem desenha confere antes de mostrar. */
+  fen: string;
+  /** `true` só na última, a do `bestmove`. */
+  final: boolean;
+};
+
 /**
- * O pedido em voo. Duas formas, e o `bestmove` fecha as duas: a busca da etapa
- * 5, que quer um lance, e a análise do Estúdio, que quer as linhas `info` que a
- * primeira descarta. Uma só de cada vez — `bestMove` e `analyse` começam
- * cancelando o que houver.
+ * O pedaço do `Worker` que o motor usa. Existe para o teste trocar o worker de
+ * verdade por um falso — Worker e WebAssembly não existem no `node --test`.
+ */
+export type WorkerDoMotor = Pick<Worker, "postMessage" | "terminate" | "onmessage" | "onerror" | "onmessageerror">;
+
+export type OpcoesDoMotor = {
+  /** Padrão: `new Worker` com o script servido de `public/engine/`. */
+  criarWorker?: (url: string) => WorkerDoMotor;
+  /**
+   * Grava as marcas `engine:*` do `performance`. Só o motor do aluno mede: é o que o
+   * `readEngineTimings` lê, e a análise do professor misturaria números de outra coisa.
+   */
+  medir?: boolean;
+  /** Intervalo mínimo entre duas atualizações da análise contínua. */
+  intervaloMinimoMs?: number;
+};
+
+/** Uma instância do motor: um worker, um carimbo de pedido, uma fila. */
+export type MotorDeXadrez = {
+  handle: EngineHandle;
+  /** Toma uma referência, criando o worker se for a primeira. */
+  acquire: (nextBuild?: EngineBuild) => EngineHandle;
+  /** Devolve a referência. O worker só morre 30 s depois da última. */
+  release: () => void;
+  subscribe: (fn: (status: EngineStatus) => void) => () => void;
+  getStatus: () => EngineStatus;
+  /**
+   * Analisa até a profundidade pedida, chamando `aoAtualizar` a cada profundidade
+   * completa (e na última). Uma posição nova — outra chamada — cancela esta.
+   */
+  analisarContinuo: (req: AnaliseContinuaRequest, aoAtualizar: (atualizacao: AtualizacaoDaAnalise) => void) => Promise<Analise>;
+  cancel: () => void;
+  /** Cancela, manda `quit` e encerra o worker agora, sem os 30 s de espera. */
+  dispose: () => void;
+};
+
+/**
+ * O pedido em voo. Três formas, e o `bestmove` fecha as três: a busca da etapa
+ * 5, que quer um lance; a análise do Estúdio, que quer as linhas `info` que a
+ * primeira descarta; e a análise contínua do professor, que as quer também no
+ * meio do caminho. Uma só de cada vez — todas começam cancelando o que houver.
  */
 type Pending =
   | {
@@ -114,51 +193,15 @@ type Pending =
       timer: ReturnType<typeof setTimeout>;
       /** A última linha vista de cada candidata — a mais profunda vence. */
       linhas: Map<number, InfoLine>;
+      /** Só na análise contínua. */
+      continua?: {
+        fen: string;
+        multiPv: number;
+        aoAtualizar: (atualizacao: AtualizacaoDaAnalise) => void;
+        ultimaEm: number;
+        adiada: ReturnType<typeof setTimeout> | null;
+      };
     };
-
-let build = ENGINE_BUILD;
-let worker: Worker | null = null;
-let status: EngineStatus = "loading";
-let refs = 0;
-let disposeTimer: ReturnType<typeof setTimeout> | null = null;
-let loadTimer: ReturnType<typeof setTimeout> | null = null;
-
-/**
- * Carimbo monotônico de pedido. É a primeira das quatro defesas contra o lance
- * fantasma: `stop` **não cancela** uma busca no protocolo UCI — ele força um
- * `bestmove` imediato. Sem o carimbo, essa resposta órfã seria entregue como se
- * fosse o lance da busca seguinte, e o aluno veria uma peça se mexendo sozinha.
- */
-let requestId = 0;
-let pending: Pending | null = null;
-
-/**
- * Fila de quem espera `readyok`. O motor responde `readyok` a cada `isready`, e
- * mandamos `isready` em dois momentos diferentes (fim do aperto de mão e troca
- * de partida) — casar resposta com pedido por posição na fila é o que impede um
- * `readyok` de partida nova ser lido como o do aperto de mão.
- */
-let readyWaiters: Array<() => void> = [];
-
-/** A força já configurada no motor, para não remandar `setoption` a cada lance. */
-let currentSkill: number | null = null;
-
-/**
- * O `MultiPV` já configurado. Memoizado por um motivo medível: com ele acima de
- * 1 o Stockfish busca todas as linhas com o mesmo cuidado, e o defensor da
- * etapa 5 fica **mais lento e mais fraco** — sem erro nenhum, só um número
- * pior. É o risco declarado do plano do B9, e a volta forçada a 1 dentro do
- * `bestMove` é o que o fecha.
- */
-let currentMultiPv = 1;
-
-const listeners = new Set<(status: EngineStatus) => void>();
-
-function setStatus(next: EngineStatus): void {
-  if (status === next) return;
-  status = next;
-  for (const fn of listeners) fn(next);
-}
 
 function abortedError(): Error {
   const error = new Error("busca cancelada");
@@ -171,198 +214,504 @@ export function isAborted(error: unknown): boolean {
   return error instanceof Error && error.name === "EngineAborted";
 }
 
-function post(command: string): void {
-  worker?.postMessage(command);
+function ordenadas(linhas: Map<number, InfoLine>): InfoLine[] {
+  return [...linhas.values()].sort((a, b) => a.multipv - b.multipv);
 }
 
-function settleFailure(reason: string): void {
-  if (pending) {
-    clearTimeout(pending.timer);
-    pending.reject(new Error(reason));
-    pending = null;
+export function criarMotor(buildInicial: EngineBuild = ENGINE_BUILD, opcoes: OpcoesDoMotor = {}): MotorDeXadrez {
+  const medir = opcoes.medir ?? true;
+  const intervaloMinimoMs = opcoes.intervaloMinimoMs ?? INTERVALO_MINIMO_MS;
+  let build = buildInicial;
+  let worker: WorkerDoMotor | null = null;
+  let status: EngineStatus = "loading";
+  let refs = 0;
+  let disposeTimer: ReturnType<typeof setTimeout> | null = null;
+  let loadTimer: ReturnType<typeof setTimeout> | null = null;
+
+  /**
+   * Carimbo monotônico de pedido. É a primeira das quatro defesas contra o lance
+   * fantasma: `stop` **não cancela** uma busca no protocolo UCI — ele força um
+   * `bestmove` imediato. Sem o carimbo, essa resposta órfã seria entregue como se
+   * fosse o lance da busca seguinte, e o aluno veria uma peça se mexendo sozinha.
+   */
+  let requestId = 0;
+  let pending: Pending | null = null;
+
+  /**
+   * Fila de quem espera `readyok`. O motor responde `readyok` a cada `isready`, e
+   * mandamos `isready` em dois momentos diferentes (fim do aperto de mão e troca
+   * de partida) — casar resposta com pedido por posição na fila é o que impede um
+   * `readyok` de partida nova ser lido como o do aperto de mão.
+   */
+  let readyWaiters: Array<() => void> = [];
+
+  /** A força já configurada no motor, para não remandar `setoption` a cada lance. */
+  let currentSkill: number | null = null;
+
+  /**
+   * O `MultiPV` já configurado. Memoizado por um motivo medível: com ele acima de
+   * 1 o Stockfish busca todas as linhas com o mesmo cuidado, e o defensor da
+   * etapa 5 fica **mais lento e mais fraco** — sem erro nenhum, só um número
+   * pior. É o risco declarado do plano do B9, e a volta forçada a 1 dentro do
+   * `bestMove` é o que o fecha.
+   */
+  let currentMultiPv = 1;
+
+  const listeners = new Set<(status: EngineStatus) => void>();
+
+  function marcar(nome: string): void {
+    if (medir) performance.mark(nome);
   }
-  readyWaiters = [];
-  setStatus("failed");
-}
 
-function handleLine(raw: string): void {
-  // As linhas `info` só interessam a uma análise em voo. `parseLine` continua
-  // chamando-as de ruído — é contrato escrito, coberto pelo `uci.test.ts` —, e
-  // a leitura da avaliação entra **ao lado** dela, nunca dentro.
-  if (pending?.kind === "analise" && pending.id === requestId) {
-    const info = parseInfo(raw);
-    if (info) {
-      const anterior = pending.linhas.get(info.multipv);
-      if (!anterior || info.depth >= anterior.depth) pending.linhas.set(info.multipv, info);
-      return;
+  function medirEntre(nome: string, inicio: string, fim: string): void {
+    if (!medir) return;
+    try {
+      performance.measure(nome, inicio, fim);
+    } catch {
+      // Medição é diagnóstico, nunca requisito: marca ausente não derruba a aula.
     }
   }
 
-  const line = parseLine(raw);
+  function setStatus(next: EngineStatus): void {
+    if (status === next) return;
+    status = next;
+    for (const fn of listeners) fn(next);
+  }
 
-  if (line.kind === "uciok") {
-    post(READY_COMMAND);
-    readyWaiters.push(() => {
-      if (loadTimer) clearTimeout(loadTimer);
-      loadTimer = null;
-      performance.mark("engine:ready");
-      try {
-        performance.measure("engine:load", "engine:load-start", "engine:ready");
-      } catch {
-        // Medição é diagnóstico, nunca requisito: marca ausente não derruba a aula.
+  function post(command: string): void {
+    worker?.postMessage(command);
+  }
+
+  function limparAdiada(p: Pending | null): void {
+    if (p?.kind === "analise" && p.continua?.adiada) {
+      clearTimeout(p.continua.adiada);
+      p.continua.adiada = null;
+    }
+  }
+
+  function settleFailure(reason: string): void {
+    if (pending) {
+      clearTimeout(pending.timer);
+      limparAdiada(pending);
+      pending.reject(new Error(reason));
+      pending = null;
+    }
+    readyWaiters = [];
+    setStatus("failed");
+  }
+
+  /**
+   * Uma profundidade completa da análise contínua: entrega agora, ou guarda para o
+   * fim do intervalo. Guardar substitui a guardada — quem chega ao fim do intervalo
+   * é sempre a mais funda, nunca a primeira da fila.
+   */
+  function atualizarContinua(p: Extract<Pending, { kind: "analise" }>): void {
+    const continua = p.continua;
+    if (!continua) return;
+    for (let i = 1; i <= continua.multiPv; i += 1) if (!p.linhas.has(i)) return;
+
+    const entregar = () => {
+      if (pending !== p || p.id !== requestId) return;
+      continua.adiada = null;
+      continua.ultimaEm = Date.now();
+      const atuais = ordenadas(p.linhas);
+      continua.aoAtualizar({ fen: continua.fen, depth: atuais[0]?.depth ?? 0, linhas: atuais, final: false });
+    };
+
+    const espera = continua.ultimaEm + intervaloMinimoMs - Date.now();
+    if (espera <= 0 && !continua.adiada) {
+      entregar();
+      return;
+    }
+    if (!continua.adiada) continua.adiada = setTimeout(entregar, Math.max(0, espera));
+  }
+
+  function handleLine(raw: string): void {
+    // As linhas `info` só interessam a uma análise em voo. `parseLine` continua
+    // chamando-as de ruído — é contrato escrito, coberto pelo `uci.test.ts` —, e
+    // a leitura da avaliação entra **ao lado** dela, nunca dentro.
+    if (pending?.kind === "analise" && pending.id === requestId) {
+      const info = parseInfo(raw);
+      if (info) {
+        const anterior = pending.linhas.get(info.multipv);
+        if (!anterior || info.depth >= anterior.depth) pending.linhas.set(info.multipv, info);
+        if (pending.continua && info.multipv === pending.continua.multiPv) atualizarContinua(pending);
+        return;
       }
-      setStatus("ready");
-    });
-    return;
-  }
+    }
 
-  if (line.kind === "readyok") {
-    readyWaiters.shift()?.();
-    return;
-  }
+    const line = parseLine(raw);
 
-  if (line.kind === "bestmove") {
-    if (!pending) return; // resposta sem dono: busca já abandonada.
-    if (pending.id !== requestId) {
-      // O `bestmove` órfão que o `stop` forçou. Morre aqui.
+    if (line.kind === "uciok") {
+      post(READY_COMMAND);
+      readyWaiters.push(() => {
+        if (loadTimer) clearTimeout(loadTimer);
+        loadTimer = null;
+        marcar("engine:ready");
+        medirEntre("engine:load", "engine:load-start", "engine:ready");
+        setStatus("ready");
+      });
       return;
     }
 
-    if (pending.kind === "analise") {
-      const { resolve, timer, linhas } = pending;
+    if (line.kind === "readyok") {
+      readyWaiters.shift()?.();
+      return;
+    }
+
+    if (line.kind === "bestmove") {
+      if (!pending) return; // resposta sem dono: busca já abandonada.
+      if (pending.id !== requestId) {
+        // O `bestmove` órfão que o `stop` forçou. Morre aqui.
+        return;
+      }
+
+      if (pending.kind === "analise") {
+        const { resolve, timer, linhas, continua } = pending;
+        clearTimeout(timer);
+        limparAdiada(pending);
+        pending = null;
+        const final = ordenadas(linhas);
+        const depth = final[0]?.depth ?? 0;
+        continua?.aoAtualizar({ fen: continua.fen, depth, linhas: final, final: true });
+        resolve({ depth, linhas: final });
+        return;
+      }
+
+      marcar("engine:bestmove");
+      medirEntre("engine:think", "engine:go", "engine:bestmove");
+      const { resolve, reject, timer } = pending;
       clearTimeout(timer);
       pending = null;
-      const ordenadas = [...linhas.values()].sort((a, b) => a.multipv - b.multipv);
-      resolve({ depth: ordenadas[0]?.depth ?? 0, linhas: ordenadas });
+      if (line.uci === null) reject(new Error("o motor não encontrou lance nesta posição"));
+      else resolve(line.uci);
+    }
+  }
+
+  function start(): void {
+    if (worker) return;
+    if (!opcoes.criarWorker && typeof window === "undefined") return;
+
+    setStatus("loading");
+    currentSkill = null;
+    readyWaiters = [];
+    marcar("engine:load-start");
+
+    try {
+      /*
+       * O script é servido cru de `public/engine/` e **não** passa pelo
+       * empacotador. Dois motivos: a cola é artefato pré-compilado que localiza o
+       * próprio `.wasm` a partir da própria URL — empacotá-la renomearia o script
+       * para um chunk com hash e quebraria essa derivação —, e não há nada a
+       * ganhar, são 21 KB já minificados. O `turbopackIgnore` é a forma
+       * documentada de dizer isso ao Turbopack, que é o empacotador padrão desta
+       * versão do Next (e que ignora em silêncio qualquer config de `webpack()`,
+       * então a rota dos tutoriais de internet não funcionaria aqui).
+       *
+       * Sem `{ type: "module" }`: a cola é um script clássico, não um módulo.
+       */
+      worker = opcoes.criarWorker
+        ? opcoes.criarWorker(engineWorkerUrl(build))
+        : new Worker(/* turbopackIgnore: true */ engineWorkerUrl(build));
+    } catch {
+      settleFailure("não foi possível criar o worker do motor");
       return;
     }
 
-    performance.mark("engine:bestmove");
-    try {
-      performance.measure("engine:think", "engine:go", "engine:bestmove");
-    } catch {
-      // idem
-    }
-    const { resolve, reject, timer } = pending;
-    clearTimeout(timer);
-    pending = null;
-    if (line.uci === null) reject(new Error("o motor não encontrou lance nesta posição"));
-    else resolve(line.uci);
-  }
-}
+    worker.onmessage = (event: MessageEvent<string>) => {
+      if (typeof event.data === "string") handleLine(event.data);
+    };
+    // A cola relança a falha de instanciação do WebAssembly num `setTimeout`, o
+    // que a transforma em erro não capturado dentro do worker — e chega aqui.
+    worker.onerror = () => settleFailure("o motor falhou ao carregar");
+    worker.onmessageerror = () => settleFailure("o motor enviou uma mensagem ilegível");
 
-function start(): void {
-  if (worker || typeof window === "undefined") return;
+    loadTimer = setTimeout(() => settleFailure("o motor demorou demais para carregar"), LOAD_TIMEOUT_MS);
 
-  setStatus("loading");
-  currentSkill = null;
-  readyWaiters = [];
-  performance.mark("engine:load-start");
-
-  try {
-    /*
-     * O script é servido cru de `public/engine/` e **não** passa pelo
-     * empacotador. Dois motivos: a cola é artefato pré-compilado que localiza o
-     * próprio `.wasm` a partir da própria URL — empacotá-la renomearia o script
-     * para um chunk com hash e quebraria essa derivação —, e não há nada a
-     * ganhar, são 21 KB já minificados. O `turbopackIgnore` é a forma
-     * documentada de dizer isso ao Turbopack, que é o empacotador padrão desta
-     * versão do Next (e que ignora em silêncio qualquer config de `webpack()`,
-     * então a rota dos tutoriais de internet não funcionaria aqui).
-     *
-     * Sem `{ type: "module" }`: a cola é um script clássico, não um módulo.
-     */
-    worker = new Worker(/* turbopackIgnore: true */ engineWorkerUrl(build));
-  } catch {
-    settleFailure("não foi possível criar o worker do motor");
-    return;
+    post(UCI_COMMAND);
   }
 
-  worker.onmessage = (event: MessageEvent<string>) => {
-    if (typeof event.data === "string") handleLine(event.data);
-  };
-  // A cola relança a falha de instanciação do WebAssembly num `setTimeout`, o
-  // que a transforma em erro não capturado dentro do worker — e chega aqui.
-  worker.onerror = () => settleFailure("o motor falhou ao carregar");
-  worker.onmessageerror = () => settleFailure("o motor enviou uma mensagem ilegível");
-
-  loadTimer = setTimeout(() => settleFailure("o motor demorou demais para carregar"), LOAD_TIMEOUT_MS);
-
-  post(UCI_COMMAND);
-}
-
-function dispose(): void {
-  if (loadTimer) clearTimeout(loadTimer);
-  loadTimer = null;
-  cancel();
-  if (worker) {
-    try {
-      worker.postMessage(QUIT_COMMAND);
-    } catch {
-      // Worker já morto: nada a encerrar.
-    }
-    worker.terminate();
-    worker = null;
-  }
-  readyWaiters = [];
-  currentSkill = null;
-  currentMultiPv = 1;
-  status = "loading";
-}
-
-function cancel(): void {
-  // Incrementar **antes** de mandar `stop` é o que faz o `bestmove` forçado
-  // chegar com id vencido e ser descartado em `handleLine`.
-  requestId += 1;
-  if (pending) {
-    clearTimeout(pending.timer);
-    pending.reject(abortedError());
-    pending = null;
-  }
-  if (worker && status === "ready") post(STOP_COMMAND);
-}
-
-/**
- * Espera o motor ficar **ocioso** — não só carregado.
- *
- * Sem isto o motor morre, e a morte é feia: `RuntimeError: unreachable` dentro
- * do WebAssembly, worker inerte e tabuleiro parado sem explicação. O `stop` do
- * UCI é assíncrono: quando ele é enviado, a busca ainda está desenrolando, e
- * qualquer `ucinewgame` ou `go` que chegue nesse intervalo pega o motor em
- * estado inconsistente. Foi exatamente o que aconteceu ao recomeçar a partida
- * enquanto o computador pensava.
- *
- * `isready` é a barreira que o protocolo oferece: o motor só responde `readyok`
- * depois de digerir tudo o que veio antes, busca inclusive. Custa um ida e
- * volta de microssegundos e transforma a corrida inteira em fila.
- */
-function whenIdle(): Promise<void> {
-  return new Promise((resolve) => {
-    post(READY_COMMAND);
-    readyWaiters.push(resolve);
-  });
-}
-
-function whenReady(): Promise<void> {
-  if (status === "ready") return Promise.resolve();
-  if (status === "failed") return Promise.reject(new Error("o motor não está disponível"));
-  return new Promise((resolve, reject) => {
-    const unsubscribe = subscribe((next) => {
-      if (next === "ready") {
-        unsubscribe();
-        resolve();
-      } else if (next === "failed") {
-        unsubscribe();
-        reject(new Error("o motor não está disponível"));
+  function dispose(): void {
+    if (loadTimer) clearTimeout(loadTimer);
+    loadTimer = null;
+    if (disposeTimer) clearTimeout(disposeTimer);
+    disposeTimer = null;
+    cancel();
+    if (worker) {
+      try {
+        worker.postMessage(QUIT_COMMAND);
+      } catch {
+        // Worker já morto: nada a encerrar.
       }
+      worker.terminate();
+      worker = null;
+    }
+    readyWaiters = [];
+    currentSkill = null;
+    currentMultiPv = 1;
+    status = "loading";
+  }
+
+  function cancel(): void {
+    // Incrementar **antes** de mandar `stop` é o que faz o `bestmove` forçado
+    // chegar com id vencido e ser descartado em `handleLine`.
+    requestId += 1;
+    if (pending) {
+      clearTimeout(pending.timer);
+      limparAdiada(pending);
+      pending.reject(abortedError());
+      pending = null;
+    }
+    if (worker && status === "ready") post(STOP_COMMAND);
+  }
+
+  /**
+   * Espera o motor ficar **ocioso** — não só carregado.
+   *
+   * Sem isto o motor morre, e a morte é feia: `RuntimeError: unreachable` dentro
+   * do WebAssembly, worker inerte e tabuleiro parado sem explicação. O `stop` do
+   * UCI é assíncrono: quando ele é enviado, a busca ainda está desenrolando, e
+   * qualquer `ucinewgame` ou `go` que chegue nesse intervalo pega o motor em
+   * estado inconsistente. Foi exatamente o que aconteceu ao recomeçar a partida
+   * enquanto o computador pensava.
+   *
+   * `isready` é a barreira que o protocolo oferece: o motor só responde `readyok`
+   * depois de digerir tudo o que veio antes, busca inclusive. Custa um ida e
+   * volta de microssegundos e transforma a corrida inteira em fila.
+   */
+  function whenIdle(): Promise<void> {
+    return new Promise((resolve) => {
+      post(READY_COMMAND);
+      readyWaiters.push(resolve);
     });
-  });
+  }
+
+  function whenReady(): Promise<void> {
+    if (status === "ready") return Promise.resolve();
+    if (status === "failed") return Promise.reject(new Error("o motor não está disponível"));
+    return new Promise((resolve, reject) => {
+      const unsubscribe = subscribe((next) => {
+        if (next === "ready") {
+          unsubscribe();
+          resolve();
+        } else if (next === "failed") {
+          unsubscribe();
+          reject(new Error("o motor não está disponível"));
+        }
+      });
+    });
+  }
+
+  function subscribe(fn: (status: EngineStatus) => void): () => void {
+    listeners.add(fn);
+    return () => listeners.delete(fn);
+  }
+
+  async function bestMove(req: BestMoveRequest): Promise<string> {
+    start();
+    cancel();
+    // Capturado logo depois do `cancel`, que acabou de incrementar: este número é
+    // *o nosso* pedido. Se outro `bestMove` ou um `cancel` entrar durante as
+    // esperas abaixo, o número muda e nós desistimos — sem isso, dois pedidos
+    // simultâneos mandariam dois `go` e o motor receberia comandos entrelaçados.
+    const id = requestId;
+    await whenReady();
+    await whenIdle();
+    if (id !== requestId) throw abortedError();
+
+    const promise = new Promise<string>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        if (pending?.id !== id) return;
+        pending = null;
+        reject(new Error("o motor não respondeu a tempo"));
+      }, req.moveTimeMs + SEARCH_GRACE_MS);
+      pending = { kind: "bestmove", id, resolve, reject, timer };
+    });
+
+    if (req.skill !== currentSkill) {
+      post(skillCommand(req.skill));
+      currentSkill = req.skill;
+    }
+    // **`MultiPV` volta a 1 antes de todo lance.** Uma análise anterior o deixou
+    // alto, e o defensor herdaria uma busca mais lenta e mais fraca sem que nada
+    // reclamasse. Memoizado: com uma partida inteira sem análise, isto não manda
+    // comando nenhum.
+    if (currentMultiPv !== 1) {
+      post(multiPvCommand(1));
+      currentMultiPv = 1;
+    }
+    post(positionCommand(req.fen));
+    marcar("engine:go");
+    post(goCommand(req.moveTimeMs));
+
+    return promise;
+  }
+
+  function configurarMultiPv(pedido: number): number {
+    const linhas = Math.max(1, Math.min(8, Math.round(pedido)));
+    if (linhas !== currentMultiPv) {
+      post(multiPvCommand(linhas));
+      currentMultiPv = linhas;
+    }
+    return linhas;
+  }
+
+  /**
+   * Analisa uma posição e devolve as linhas candidatas (B9/E7b).
+   *
+   * Mesmo carimbo de pedido do `bestMove`, mesma fila do `whenIdle`: as duas
+   * conversas com o motor passam pelo mesmo funil, e por isso não se atropelam.
+   * A busca é por **profundidade fixa** — ela termina sozinha, e o `stop`, que no
+   * UCI não cancela nada, deixa de ser necessário.
+   *
+   * Quem chama é o Estúdio, e só acima de 7 peças: abaixo disso a tablebase dá o
+   * fato em vez da opinião, e sem carregar 7,3 MB de WebAssembly.
+   */
+  async function analyse(req: AnaliseRequest): Promise<Analise> {
+    start();
+    cancel();
+    const id = requestId;
+    await whenReady();
+    await whenIdle();
+    if (id !== requestId) throw abortedError();
+
+    const promise = new Promise<Analise>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        if (pending?.id !== id) return;
+        pending = null;
+        reject(new Error("o motor não terminou a análise a tempo"));
+      }, ANALYSIS_TIMEOUT_MS);
+      pending = { kind: "analise", id, resolve, reject, timer, linhas: new Map() };
+    });
+
+    configurarMultiPv(req.multiPv);
+    post(positionCommand(req.fen));
+    post(goDepthCommand(req.depth));
+
+    return promise;
+  }
+
+  /**
+   * A análise do professor (fatia 9): o mesmo funil do `analyse`, com duas diferenças.
+   *
+   * 1. **Entrega no meio do caminho.** A cada profundidade em que todas as linhas pedidas
+   *    chegaram, `aoAtualizar` recebe o retrato — no máximo uma vez por intervalo —, e a
+   *    última entrega, a do `bestmove`, vem marcada `final`.
+   * 2. **O teto de tempo não é erro.** Numa posição pesada a profundidade pedida pode
+   *    demorar mais que o teto; aí o motor recebe `stop` **sem** trocar o carimbo, e o
+   *    `bestmove` forçado fecha a análise com o que ela já tinha. Um segundo teto, o de
+   *    folga, só pega o motor mudo.
+   *
+   * Resposta vencida é descartada pelo carimbo, como no resto: uma `info` ou um
+   * `bestmove` da posição anterior chega com `pending` já trocado e morre em `handleLine`.
+   */
+  async function analisarContinuo(
+    req: AnaliseContinuaRequest,
+    aoAtualizar: (atualizacao: AtualizacaoDaAnalise) => void,
+  ): Promise<Analise> {
+    start();
+    cancel();
+    const id = requestId;
+    await whenReady();
+    await whenIdle();
+    if (id !== requestId) throw abortedError();
+
+    const multiPv = Math.max(1, Math.min(8, Math.round(req.multiPv)));
+    const promise = new Promise<Analise>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        if (pending?.id !== id) return;
+        post(STOP_COMMAND);
+        const folga = setTimeout(() => {
+          if (pending?.id !== id) return;
+          limparAdiada(pending);
+          pending = null;
+          reject(new Error("o motor não terminou a análise a tempo"));
+        }, SEARCH_GRACE_MS);
+        if (pending) pending.timer = folga;
+      }, ANALYSIS_TIMEOUT_MS);
+      pending = {
+        kind: "analise",
+        id,
+        resolve,
+        reject,
+        timer,
+        linhas: new Map(),
+        continua: { fen: req.fen, multiPv, aoAtualizar, ultimaEm: -Infinity, adiada: null },
+      };
+    });
+
+    configurarMultiPv(multiPv);
+    post(positionCommand(req.fen));
+    post(goDepthCommand(req.profundidade));
+
+    return promise;
+  }
+
+  function newGame(): void {
+    if (!worker || status !== "ready") return;
+    cancel();
+    // `ucinewgame` **só** depois de o motor confirmar que parou. Mandá-lo logo
+    // atrás do `stop` é o que matava o WebAssembly — ver `whenIdle`.
+    post(READY_COMMAND);
+    readyWaiters.push(() => {
+      post(NEW_GAME_COMMAND);
+      post(READY_COMMAND);
+      readyWaiters.push(() => {
+        // Ocioso e com a memória de busca limpa. O próximo `position` é seguro.
+      });
+    });
+  }
+
+  const handle: EngineHandle = {
+    status: () => status,
+    subscribe,
+    newGame,
+    bestMove,
+    analyse,
+    cancel,
+    retry: () => {
+      dispose();
+      start();
+    },
+    get build() {
+      return build;
+    },
+  };
+
+  return {
+    handle,
+    acquire(nextBuild = build) {
+      build = nextBuild;
+      refs += 1;
+      if (disposeTimer) {
+        clearTimeout(disposeTimer);
+        disposeTimer = null;
+      }
+      start();
+      return handle;
+    },
+    release() {
+      refs = Math.max(0, refs - 1);
+      cancel();
+      if (refs > 0 || disposeTimer) return;
+      disposeTimer = setTimeout(() => {
+        disposeTimer = null;
+        if (refs === 0) dispose();
+      }, DISPOSE_DELAY_MS);
+    },
+    subscribe,
+    getStatus: () => status,
+    analisarContinuo,
+    cancel,
+    dispose,
+  };
 }
 
-function subscribe(fn: (status: EngineStatus) => void): () => void {
-  listeners.add(fn);
-  return () => listeners.delete(fn);
-}
+/* ------------------------------------------------------------------ *
+ * O motor do aluno — a instância única da página, com as exportações de sempre
+ * ------------------------------------------------------------------ */
+
+const motorDoAluno = criarMotor(ENGINE_BUILD);
 
 /**
  * Assinatura e leitura do estado para `useSyncExternalStore` — o mesmo padrão
@@ -370,145 +719,24 @@ function subscribe(fn: (status: EngineStatus) => void): () => void {
  * permite ao componente ler o estado sem `setState` dentro de efeito.
  */
 export function subscribeEngineStatus(fn: () => void): () => void {
-  return subscribe(fn);
+  return motorDoAluno.subscribe(fn);
 }
 
 export function getEngineStatus(): EngineStatus {
-  return status;
+  return motorDoAluno.getStatus();
 }
-
-async function bestMove(req: BestMoveRequest): Promise<string> {
-  start();
-  cancel();
-  // Capturado logo depois do `cancel`, que acabou de incrementar: este número é
-  // *o nosso* pedido. Se outro `bestMove` ou um `cancel` entrar durante as
-  // esperas abaixo, o número muda e nós desistimos — sem isso, dois pedidos
-  // simultâneos mandariam dois `go` e o motor receberia comandos entrelaçados.
-  const id = requestId;
-  await whenReady();
-  await whenIdle();
-  if (id !== requestId) throw abortedError();
-
-  const promise = new Promise<string>((resolve, reject) => {
-    const timer = setTimeout(() => {
-      if (pending?.id !== id) return;
-      pending = null;
-      reject(new Error("o motor não respondeu a tempo"));
-    }, req.moveTimeMs + SEARCH_GRACE_MS);
-    pending = { kind: "bestmove", id, resolve, reject, timer };
-  });
-
-  if (req.skill !== currentSkill) {
-    post(skillCommand(req.skill));
-    currentSkill = req.skill;
-  }
-  // **`MultiPV` volta a 1 antes de todo lance.** Uma análise anterior o deixou
-  // alto, e o defensor herdaria uma busca mais lenta e mais fraca sem que nada
-  // reclamasse. Memoizado: com uma partida inteira sem análise, isto não manda
-  // comando nenhum.
-  if (currentMultiPv !== 1) {
-    post(multiPvCommand(1));
-    currentMultiPv = 1;
-  }
-  post(positionCommand(req.fen));
-  performance.mark("engine:go");
-  post(goCommand(req.moveTimeMs));
-
-  return promise;
-}
-
-/**
- * Analisa uma posição e devolve as linhas candidatas (B9/E7b).
- *
- * Mesmo carimbo de pedido do `bestMove`, mesma fila do `whenIdle`: as duas
- * conversas com o motor passam pelo mesmo funil, e por isso não se atropelam.
- * A busca é por **profundidade fixa** — ela termina sozinha, e o `stop`, que no
- * UCI não cancela nada, deixa de ser necessário.
- *
- * Quem chama é o Estúdio, e só acima de 7 peças: abaixo disso a tablebase dá o
- * fato em vez da opinião, e sem carregar 7,3 MB de WebAssembly.
- */
-async function analyse(req: AnaliseRequest): Promise<Analise> {
-  start();
-  cancel();
-  const id = requestId;
-  await whenReady();
-  await whenIdle();
-  if (id !== requestId) throw abortedError();
-
-  const promise = new Promise<Analise>((resolve, reject) => {
-    const timer = setTimeout(() => {
-      if (pending?.id !== id) return;
-      pending = null;
-      reject(new Error("o motor não terminou a análise a tempo"));
-    }, ANALYSIS_TIMEOUT_MS);
-    pending = { kind: "analise", id, resolve, reject, timer, linhas: new Map() };
-  });
-
-  const linhas = Math.max(1, Math.min(8, Math.round(req.multiPv)));
-  if (linhas !== currentMultiPv) {
-    post(multiPvCommand(linhas));
-    currentMultiPv = linhas;
-  }
-  post(positionCommand(req.fen));
-  post(goDepthCommand(req.depth));
-
-  return promise;
-}
-
-function newGame(): void {
-  if (!worker || status !== "ready") return;
-  cancel();
-  // `ucinewgame` **só** depois de o motor confirmar que parou. Mandá-lo logo
-  // atrás do `stop` é o que matava o WebAssembly — ver `whenIdle`.
-  post(READY_COMMAND);
-  readyWaiters.push(() => {
-    post(NEW_GAME_COMMAND);
-    post(READY_COMMAND);
-    readyWaiters.push(() => {
-      // Ocioso e com a memória de busca limpa. O próximo `position` é seguro.
-    });
-  });
-}
-
-const handle: EngineHandle = {
-  status: () => status,
-  subscribe,
-  newGame,
-  bestMove,
-  analyse,
-  cancel,
-  retry: () => {
-    dispose();
-    start();
-  },
-  build,
-};
 
 /**
  * Toma uma referência ao motor, criando-o se for a primeira. Chamar de um
  * `useEffect` — nunca no corpo do componente.
  */
 export function acquireEngine(nextBuild: EngineBuild = ENGINE_BUILD): EngineHandle {
-  build = nextBuild;
-  refs += 1;
-  if (disposeTimer) {
-    clearTimeout(disposeTimer);
-    disposeTimer = null;
-  }
-  start();
-  return handle;
+  return motorDoAluno.acquire(nextBuild);
 }
 
 /** Devolve a referência. O worker só morre 30 s depois da última. */
 export function releaseEngine(): void {
-  refs = Math.max(0, refs - 1);
-  cancel();
-  if (refs > 0 || disposeTimer) return;
-  disposeTimer = setTimeout(() => {
-    disposeTimer = null;
-    if (refs === 0) dispose();
-  }, DISPOSE_DELAY_MS);
+  motorDoAluno.release();
 }
 
 /**

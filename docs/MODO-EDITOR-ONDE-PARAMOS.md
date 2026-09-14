@@ -134,23 +134,34 @@ cada linha aponta a seção que conta a história inteira.
   52/52, `db:finais:v2` 18/18 e **roteiro de 14 itens no Playwright**, com 5 defeitos achados e
   consertados na sessão. Ver "fatia 8 — repertório e aulas extras".
 
+- **Fatia 9, Stockfish do professor (§23 e §23.1), 13/9** — o motor virou fábrica (`criarMotor`),
+  com o aluno numa instância e as exportações de sempre; a análise contínua do professor entrega
+  por profundidade, 4 por segundo, e descarta a posição velha; barra, faixa de uma linha, linhas em
+  SAN, seta cinza, tecla L, pausa com prévia/janela/aba, nos dois editores e **nunca para o aluno**
+  (guarda automática de imports). A regra de aceite da tela foi aplicada inteira: bloco de edição a
+  40% e linhas recolhidas em 1 com "+N" → 5 lances inteiros ligado, 6 desligado, tabuleiro igual.
+  1.247 testes, 57/57 mutações e **roteiro de 14 itens no Playwright**, p95 da troca de posição 33,6 ms. Ver
+  "fatia 9 — Stockfish do professor".
+
 **Aberto, na ordem:**
 
-1. **Barra Stockfish** (§23, fatia 9), **importar por URL do Lichess** (§13.2) e **introdução e
-   quadros** (§7.1) continuam fora, sem redução de escopo. Do repertório e das extras, o que ficou
-   aberto está listado no fim da fatia 8.
+1. **Importar por URL do Lichess** (§13.2) e **introdução e quadros** (§7.1) continuam fora, sem
+   redução de escopo. Do repertório, das extras e do motor, o que ficou aberto está listado no fim
+   das fatias 8 e 9.
+2. **Fatia 10** — desempenho, acessibilidade e o teste humano final de tudo o que o Playwright
+   aprovou nas fatias 6 a 9.
 
-**Dívida conhecida e não paga:** em 1366×768 de CSS de verdade a lista mostra **5
-lances inteiros** por vez (169 px), e o bloco de edição rola por dentro. Se incomodar, o
-ajuste é o teto de 50% do bloco. Em 375 px a página tem **rolagem para o lado** (600 px
+**Dívida conhecida e não paga:** em 1366×768 de CSS de verdade a lista mostra **6 lances
+inteiros** com o motor desligado e **5** ligado (o teto do bloco de edição passou a 40% na
+fatia 9), e o bloco de edição rola por dentro. Em 375 px a página tem **rolagem para o lado** (600 px
 de conteúdo), anterior a este conserto e não investigada.
 
 **Isto não declara o editor pronto.** O roteiro de §27 tem as fatias 1 a 5 fechadas no
 código e no teste humano. A fatia 6 está fechada no código, com as quatro paradas (6A,
 6B, 6C e 6D) aprovadas em roteiro pelo Playwright — sem teste com uma pessoa; o Doug
 decidiu em 13/9 não fazê-lo agora. A fatia 7 fechou em 13/9 no código e no roteiro pelo
-Playwright (sem teste com uma pessoa). As fatias 8 a 10 continuam abertas, e a próxima é a
-**8, repertório e aulas extras (§21 e §22)**. Prazo das fatias 7–10: 18/09/2026.
+Playwright (sem teste com uma pessoa), e as fatias 8 e 9 também, em 13/9. A próxima é a **10,
+desempenho, acessibilidade e teste de uso final**. Prazo das fatias 7–10: 18/09/2026.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -4022,9 +4033,217 @@ de teste, só resta a `professorteste`): **1 de 1 → 0 registros de 0 alunos**.
 
 ### O próximo ponto exato
 
-Fatia 9 de §27: **worker Stockfish do professor (§23)**.
+Fatia 9 de §27: **worker Stockfish do professor (§23)** — feita logo abaixo.
 
 ---
+
+## Fatia 9 — Stockfish do professor (§23 e §23.1), fechada em 13/9/2026
+
+Plano executado de uma vez, paradas 9A → 9F, com o roteiro do Playwright no fim. Em 13/9 o Doug
+ampliou §23 olhando Lichess e Chess.com — linhas, profundidade, liga/desliga, seta opcional, os
+dois editores, sempre desligado ao abrir, e **o aluno não vê motor nem barra, nem na prévia (por
+agora)**. A decisão entrou como §23.1 da especificação e numa frase de §15 do plano; "clicar numa
+linha para virar variante" ficou registrado como posterior, junto do Opening Explorer.
+
+### Parada 9A — o motor em fábrica, com um worker por instância
+
+- `lib/engine/stockfish.ts`: o estado que morava solto no módulo (worker, carimbo de pedido, fila
+  de `readyok`, `MultiPV`) foi embrulhado em `criarMotor(build, { criarWorker, medir,
+  intervaloMinimoMs })`. O aluno é `const motorDoAluno = criarMotor(ENGINE_BUILD)`, e
+  `acquireEngine`, `releaseEngine`, `subscribeEngineStatus`, `getEngineStatus`,
+  `readEngineTimings` e `isAborted` continuam com a mesma assinatura: `useEngine` e `PracticeStage`
+  não mudaram uma linha.
+- `analisarContinuo({ fen, multiPv, profundidade }, aoAtualizar)`: o mesmo funil do `analyse`
+  (`cancel` → `whenReady` → `whenIdle` → carimbo), `go depth` com teto e nunca `infinite`. Entrega a
+  cada profundidade em que **todas** as linhas pedidas chegaram, no máximo 4 por segundo (a adiada
+  é sempre a mais funda), e a última, a do `bestmove`, marcada `final`. O teto de tempo não é erro:
+  manda `stop` sem trocar o carimbo, e o `bestmove` forçado fecha com o que havia.
+- Só o motor do aluno grava as marcas `engine:*` do `performance`: a análise do professor
+  misturaria números no `readEngineTimings`.
+
+```
+ANTES   stockfish.test.ts: "does not provide an export named 'criarMotor'" — tests 1, fail 1
+DEPOIS  stockfish.test.ts 6/6 · uci.test.ts e manifest.test.ts continuam 22/22
+```
+
+Os 6, com um worker falso que responde `uciok`/`readyok` sozinho: duas instâncias (o `bestMove` do
+aluno em voo e a análise do professor não trocam `stop` nem `MultiPV`); posição nova cancela a
+anterior e nenhuma atualização da posição velha chega; atualização só com as duas linhas do
+MultiPV 2, e `lowerbound` não conta; ritmo (dez profundidades seguidas dão 1 entrega agora e 1
+adiada, a da profundidade 10); `dispose` manda `quit` por último e encerra o worker; as exportações
+do aluno continuam lá.
+
+### Parada 9B — as contas da faixa, puras
+
+`lib/engine/avaliacao-do-professor.ts`: `avaliacaoParaBrancas` (reaproveita o `paraBrancas` de
+`lib/repertorio/motor.ts`, sem copiar; o mate troca de sinal junto), `formatarAvaliacao` (`+0,5`,
+`−1,2`, `#5`, `−#3`, e por extenso para o leitor de tela), `alturaDaBarra` (curva de chances do
+Lichess, ±1000 cp, só o mate encosta no fim), `pvEmSanDaFen` (numeração do sexto campo da FEN e
+`3…a6` com as pretas na vez — as reticências do painel de lances, e não `3...`, para as duas colunas
+falarem igual; lance ilegal corta a linha), `resultadoTerminal`/`estadoTerminal` (texto do
+`readOutcome`), `contaPecas` e `linhasEsperadas` (as pedidas ou os lances legais, o que for menor —
+senão uma posição com um lance só esperaria a segunda linha para sempre).
+
+```
+ANTES   avaliacao-do-professor.test.ts: módulo ausente, o arquivo falha ao carregar
+        (e, escrito o módulo, 6/7: "vantagem das brancas de 0,5 peões" — plural errado)
+DEPOIS  8/8 (o oitavo, da barra no fim de partida, nasceu na 9D; ver abaixo)
+```
+
+### Parada 9C — hook, componentes e o Editor v2
+
+- `lib/engine/useMotorDoProfessor.ts`: cria a instância só na primeira vez que liga; espera 120 ms
+  de posição parada e cancela a análise anterior na hora; pausa com `pausado` ou `document.hidden`;
+  `dispose()` ao desmontar; descarta atualização de outra FEN (segunda defesa, depois do carimbo).
+  Desligar só para a busca — o worker fica até sair da tela, para o `L` seguinte não baixar 7 MB.
+  Profundidade: `PROFUNDIDADE_DO_PROFESSOR = 22`.
+- `components/motor-do-professor/`: `BarraDeAvaliacao` (vão sempre reservado, acompanha a
+  orientação, `aria-hidden` porque o número está por extenso na faixa), `FaixaDoMotor`
+  (interruptor e seta com `aria-pressed`, menu `⋯` com `menuitemradio` 1/2/3, Esc devolve o foco),
+  `LinhasDoMotor`, `AjudaDeAtalhos` (o `(?)`, popover com `role="dialog"`) e
+  `useControlesDoMotor` (os três estados sem memória, a tecla `L` com a guarda das setas — fora de
+  campo de texto e sem janela aberta — e a forma da seta memorizada pelo lance).
+- Pincel novo `motor` em `ChessBoard.tsx` (cinza, opacidade 0,6) e o token `--color-pincel-motor`;
+  a seta vai pelo canal automático (`shapes`), que no editor estava vazio, e nunca pelo `desenhavel`.
+- `EditorV2.tsx`: barra à esquerda do tabuleiro, faixa e linhas no topo da coluna direita, `shapes`
+  no tabuleiro, `pausado = janelaAberta` (a prévia inclusa).
+- **Guarda "só editor"** (`lib/engine/so-editor.test.ts`): falha se `components/motor-do-professor/`
+  ou `useMotorDoProfessor` forem importados fora de `components/editor-v2/`,
+  `components/editor-repertorio/` e `app/editor/`, ou pela prévia; e segue os imports a partir de
+  toda `page.tsx`/`layout.tsx` fora de `app/editor/`. Provada com duas mutações temporárias,
+  desfeitas em seguida: importar a barra em `Previa.tsx` e o hook em `components/lesson/Comentario.tsx`
+  → **2/2 vermelhos**, com o caminho `app/finais/[aula]/page.tsx → AulaNoNavegador.tsx →
+  LessonPlayer.tsx → IntroStage.tsx → Comentario.tsx → useMotorDoProfessor.ts`; restaurado → 2/2.
+
+### Parada 9D — a organização da tela, medida
+
+- A legenda das setas do teclado foi para o `(?)` ao lado de "Lances e variantes" (com a tecla L);
+  a legenda do botão direito foi para o `(?)` ao lado de "Apagar desenhos desta posição"; a frase de
+  instrução da paleta só aparece com Seta ou Casa na mão (a região `role="status"` fica montada,
+  vazia, para o leitor de tela não perder o primeiro anúncio).
+- **A regra de aceite foi aplicada inteira, os dois recuos.** Medido na N0-LADDER:
+
+| Situação (1366×768 de CSS) | Lista de lances | Lances inteiros |
+|---|---|---|
+| desligado, bloco de edição a 50% | 160 px | **4** (abaixo do alvo) |
+| desligado, bloco a **40%** (1º recuo) | 217 px | 6 |
+| ligado, 2 linhas abertas, bloco a 40% | 153 px | **4** (abaixo do alvo) |
+| ligado, **linhas recolhidas em 1 com "+1"** (2º recuo) | 175 px | **5** |
+
+  O menu `⋯` continua escolhendo quantas linhas o motor calcula; a tela mostra a melhor e o "+N"
+  abre as outras (abertas em 2, a lista volta a 4 — escolha do professor, na sessão).
+- **Barra no fim de partida** (achado olhando a medida): numa posição de mate a barra ficava vazia,
+  igual à do motor desligado. `resultadoTerminal` devolve a barra — 100 ou 0 para quem deu mate, 50
+  no empate. Teste: `avaliacao-do-professor.test.ts` **antes** falha ao carregar
+  (`resultadoTerminal` não existia), **depois 8/8**.
+
+Geometria final, conferida `innerWidth` 1366 e `innerHeight` 768 (neste trecho com
+`devicePixelRatio` 0,9 — ver "a medida e o zoom" abaixo):
+
+| Medida | Desligado | Ligado |
+|---|---|---|
+| tabuleiro | 545 px | **545 px** |
+| barra | 14 × 545 px | 14 × 545 px |
+| lances inteiros na lista | 6 | 5 |
+| página | 1366 × 768, sem rolagem | igual |
+| botões cobertos (`elementFromPoint` no centro de cada visível) | 0 de 44 (cabeçalho 8, paleta 7) | 0 de 44 |
+| faixa | 32 px, sem transbordar | 32 px, sem transbordar |
+
+O detector de sobreposição acusou primeiro 12 pares e depois 4 botões "cobertos" na coluna de
+capítulos: eram os itens de um `<details>` **fechado**, que o Chromium mantém com posição e sem
+pintar, e botões rolados para fora das colunas com rolagem própria. A medida final recorta cada
+botão pelos ancestrais com rolagem e ignora `details` fechado.
+
+### Parada 9E — o repertório
+
+`EditorDeRepertorio.tsx`: a mesma faixa e as mesmas linhas no topo da coluna direita, a barra ao
+lado do tabuleiro e a seta pelo `shapes`, com o hook antes do retorno antecipado do componente. O
+invólucro passou de `max-w-[27rem]` para `max-w-[28.25rem]` (27 + barra 0,875 + vão 0,375): o
+tabuleiro continua com os 27 rem que a 8D mediu. `pausado` = as janelas desta tela.
+
+Medido na Alapin (1366×768 de CSS): tabuleiro **432 px ligado e desligado**, barra 14 × 432, página
+1366 × 768 sem rolagem, 0 botões cobertos (19 desligado, 22 ligado).
+
+### Parada 9F — o roteiro no Playwright
+
+Rodado em 13/9/2026 em `http://localhost:3000` (`next dev`), com o navegador do Playwright já na
+sessão do professor. Um contador instalado antes da página (`addInitScript`) embrulhou `Worker`
+para contar criações, encerramentos e cada comando enviado.
+
+| Item | Resultado medido |
+|---|---|
+| preparo | **887** SHA-256 de `.editor/v2`, `content/lessons`, `content/aulas-v2`, `content/repertorio` e `public/repertorio`; `N1-KPK.json` `4be602ca…b822` |
+| 1 | N0-LADDER abre com "Motor desligado · tecla L liga", barra reservada e **0 workers** |
+| 2 | `L` → 1 worker (`uci`, `MultiPV 2`, `position`, `go depth 22`); "carregando…" → prof 17 → prof 22 em ~1 s; **#10 brancas**, barra 100%, `1.Rg5 Kf3 2.R5g4 Ke2 3.Kg2 Ke3` |
+| 3 | `↗` → uma linha na camada automática com o pincel `lab(21% …)` a 0,6, diferente dos quatro pincéis do professor; `L` desliga: camada vazia, barra vazia; religar reaproveita o worker (continua 1). `.editor/v2/N0-LADDER.json` com o mesmo hash (`753ce4e5…`) |
+| 4 | 6 × `→` em 240 ms: 7 `stop` e **um só** `position` + `go`, o da última posição (Kb1); a faixa só mostrou linhas dela (`+6,8 4.R2g3` → `#2 4.Rf4 Kc1 5.Rf1#`) |
+| 5 | `⋯` abre com o foco no item marcado; **3 linhas** → `MultiPV 3` e três linhas; Esc fecha e devolve o foco; **1 linha** → `MultiPV 1`, sem "+N" |
+| 6 | fim da linha: "**Xeque-mate.**", barra 100%, nenhum comando ao motor; Tg4–b4 jogado por clique no tabuleiro (variante) → "**Rei afogado — empate.**", barra 50%, nenhum comando; Ctrl+Z tira a variante e volta a "salvo" com o rascunho de **hash igual** |
+| 7 | com 2 torres e 2 reis: "final de até 7 peças: quem julga é a tablebase"; na Alapin (32 peças) a nota não aparece |
+| 8 | abrir a prévia manda `stop`, a faixa atrás diz "pausado", **0** `go` em 2 s; fechar devolve o foco a "Pré-visualizar" e retoma (`position` + `go depth 22`). "Mais opções" do repertório pausa igual, e o `L` fica bloqueado com ela aberta |
+| 9 | sair para `/editor` (navegação do próprio Next): `stop`, `quit` e **worker encerrado na hora** (0 → 1); idem no repertório |
+| 10 | geometria da 9D, na tabela acima |
+| 11 | repertório: 0 workers ao abrir; `+0,4 brancas`, prof 22, `1.e4 e5 2.Nf3 Nf6…`; pretas na vez → `1…e6 2.Nc3 d5…` com a avaliação ainda do lado das brancas; da abertura 1.e4 c5 à profundidade 22 em **3,4 s**; seta, pausa e saída como acima |
+| 12 | console do professor: **1 erro**, `net::ERR_INSUFFICIENT_RESOURCES` numa requisição para `/editor/repertorio/brancas-alapin`, o mesmo da 8F. **Não reproduziu**: 24 trocas, seta e 3 linhas com escuta de requisição falha deram 0 falhas e 0 erros, e os arquivos do motor foram baixados uma vez só, sem nenhum POST |
+| 13 | p95 da troca de posição com o motor analisando (40 trocas, até o quadro seguinte): N0-LADDER **mediana 30,6 ms, p95 32,1 ms**, máx. 38,9; Alapin **mediana 21,1 ms, p95 33,6 ms**, máx. 40,3, nenhuma acima de 100 ms |
+| 14 | prévia com o motor ligado atrás: **0** elementos do motor, 0 setas cinza, nenhum texto do motor. Aluno de teste (criado e apagado por `scripts/aluno-de-teste.ts`) numa segunda sessão: `/finais/N0-LADDER` e `/aberturas/brancas/alapin` com **0** elementos, 0 textos, 0 setas e **0 workers**; `/editor/v2/…` o manda a `/painel`. Console do aluno: só o aviso de imagem LCP anterior à fatia |
+| aba escondida | trazer outra aba para a frente **não** escondeu a página neste navegador (`document.hidden` continuou falso). Provado com o sinal simulado (`document.hidden` = verdadeiro + `visibilitychange`): `stop` e "pausado"; de volta, `position` + `go`. Prova o manipulador, não o sinal real do navegador |
+
+**Três ocorrências da sessão que não são defeitos do código, registradas para ninguém tropeçar:**
+
+1. **A medida e o zoom.** No meio do roteiro o navegador passou de `devicePixelRatio` 1 para 0,9
+   (`innerWidth` 1517). As medidas feitas nesse intervalo foram descartadas; `Control+0` não
+   voltou, e `setViewportSize(1230, 692)` deu de novo 1366×768 de CSS. A geometria final é dessa
+   medida.
+2. **Uma variante apareceu sozinha no rascunho do repertório.** Às 22:00:05, 14 s depois de começar
+   uma rodada em que o script só apertou `→` uma vez e ficou lendo a faixa, o rascunho
+   `.editor/repertorio/brancas-alapin.pgn` foi gravado com `(1... e5 2. Nf3 f6 3. Nxe5 fxe5 4. Qh5+
+   Ke7 5. Qxe5+ Kf7 6. Bc4+ Kg6)` — a armadilha da Damiano, lance a lance. Nenhuma outra sessão
+   gravou arquivo naquele minuto; o motor não tem caminho de escrita; a reprodução com o mesmo
+   roteiro não criou nada (nenhum POST). A hipótese mais provável é mão humana na janela visível do
+   Playwright, que também explicaria o zoom. **O arquivo não foi apagado** e foi levado ao Doug.
+   Nada publicado mudou: 887/887 hashes iguais.
+3. O máximo de **1.021 ms** numa troca de posição, na rodada da variante, não se repetiu na rodada
+   limpa (máx. 40,3 ms).
+
+**Acabamento visual depois do roteiro.** Uma captura com o motor ligado e outra desligado foram
+descritas por um subagente, e cinco ajustes de classe entraram: a barra desligada ganhou borda
+tracejada (com fundo escuro ela parecia a trilha de rolagem da coluna), a marca do meio passou do
+âmbar para cinza, o vão barra–tabuleiro de 6 para 4 px (o repertório passou a `max-w-[28.125rem]`),
+o "+N" ficou mais legível e a nota da tablebase alinhou com os lances. O cinza da seta perdeu o
+pingo de azul (`oklch(30% 0 0)`), que puxava para as casas do tabuleiro. **Remedido depois:** Editor
+v2 com tabuleiro de 547 px ligado e desligado, 6 e 5 lances inteiros, 0 botões cobertos, sem
+rolagem; repertório com 432 px nos dois estados.
+
+**Limpeza e prova final:** o aluno de teste foi apagado; `content/rascunhos/lessons/N0-LADDER.json`,
+criado às 21:43 pelo pré-carregamento do `next dev` e byte a byte igual ao publicado, foi apagado;
+**886 dos 887 SHA-256 iguais**, `N1-KPK.json` `4be602ca…b822` intocado. O que mudou foi
+`.editor/v2/N0-LADDER.json` (`753ce4e5…` → `85582ac7…`, 21.655 → 26.254 bytes): ganhou **25 lances
+de variante**, cujos ids carregam a hora em que nasceram — entre **22:09:45 e 22:30:17**, um a um. A
+última ação desta sessão no navegador foi às 22:11:38, deixando a página em `about:blank`, e nenhum
+script do roteiro clicou no tabuleiro fora do item 6 (desfeito, com hash conferido às 21:56). É
+autoria de outra pessoa na N0-LADDER, preservada sem ser aberta no editor; o mesmo vale para o
+rascunho `.editor/repertorio/brancas-alapin.pgn` (ocorrência 2 acima). Os dois foram levados ao Doug.
+
+**§28:** marcado "Barra e linhas Stockfish isoladas do motor do aluno" — worker próprio provado por
+teste com duas instâncias e pelo contador de workers na tela, invisível ao aluno provado pela guarda
+de imports e pela conta de aluno de teste, com o roteiro de 14 itens; sem teste com uma pessoa, que
+fica para a fatia 10.
+
+### O que a fatia 9 NÃO cobre — registrado, sem reduzir §23 nem §28
+
+- **Teste humano**: fica para a sessão final da fatia 10 (ritmo de rodada longa). O motor não tem
+  arrasto novo; o `(?)` e os botões são clique.
+- Clicar numa linha do motor para virar variante (posterior, §23.1), e o Opening Explorer.
+- A pausa por aba escondida está provada só com o sinal simulado.
+- Com 2 ou 3 linhas **abertas**, a lista cai para 4 lances inteiros em 1366×768; por isso abrem
+  recolhidas.
+- A tecla `L` com o menu `•••` de um lance aberto ainda liga/desliga o motor (o menu não conta como
+  janela aberta).
+- Profundidade 22 medida em duas posições (duas torres: ~1 s; 1.e4 c5: 3,4 s); não medida num
+  meio-jogo pesado nem em celular — o editor é desktop.
+- A 375 px o editor não foi olhado nesta fatia (a dívida da rolagem lateral é anterior).
+
 
 ## Como ligar o editor
 

@@ -691,6 +691,30 @@ vinculado ao manifesto completo julgado; mudança posterior invalida a conferên
 - Não substitui tablebase em final certificado.
 - Opening Explorer é posterior.
 
+### 23.1 Linhas, seta e liga/desliga (decisão do Doug de 13/09/2026)
+
+Olhando Lichess e Chess.com, o Doug ampliou esta seção:
+
+- **Nos dois editores:** aulas de finais (`/editor/v2/finais/[aula]`) e repertório
+  (`/editor/repertorio/[arquivo]`).
+- **Sempre desligado ao abrir.** A tela não lembra a escolha anterior.
+- **Liga/desliga** no topo da coluna direita, junto da avaliação e da profundidade; a
+  tecla `L` faz o mesmo, fora de campo de texto e sem janela aberta.
+- **Avaliação do ponto de vista das brancas**, com o rótulo "brancas"; mate como `#5`, com
+  texto por extenso para o leitor de tela. Posição final (mate, afogamento, material
+  insuficiente) mostra o que a regra do jogo diz, sem cálculo.
+- **Melhores lances:** 2 linhas por padrão, configurável de 1 a 3, cada uma com avaliação
+  e cerca de 6 lances em SAN, com a numeração certa a partir da posição.
+- **Seta do melhor lance:** desligada por padrão, com botão próprio; cor diferente das
+  quatro cores do professor, e nunca gravada no arquivo.
+- **Pausa:** com a prévia aberta, outra janela aberta ou a aba escondida, o motor para e
+  retoma ao fechar.
+- **Até 7 peças:** uma nota curta lembra que quem julga o final é a tablebase.
+- **O aluno não vê motor nem barra, nem na prévia (por agora).** Só as duas telas de editor
+  montam esses componentes.
+- **Posterior:** clicar numa linha do motor para inserir como variante — junto com o
+  Opening Explorer.
+
 ## 24. Limites e desempenho
 
 Limites iniciais:
@@ -817,7 +841,7 @@ Ao final de cada fatia:
 - [x] Progresso por revisão e rejulgamento no servidor.
 - [x] Migração v1 explícita e conteúdo antigo preservado.
 - [x] Repertório editado pela fonte PGN e compilação coerente.
-- [ ] Barra Stockfish isolada do motor do aluno.
+- [x] Barra e linhas Stockfish isoladas do motor do aluno.
 - [ ] Limites e metas de desempenho comprovados.
 - [ ] Acessibilidade e teste humano final aprovados.
 
