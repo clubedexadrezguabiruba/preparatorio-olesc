@@ -817,25 +817,25 @@ Ao final de cada fatia:
 - [ ] Nova aula e aula extra pela tela.
 - [ ] Introdução e quadros explicativos completos.
 - [ ] Adicionar capítulo pelas cinco portas.
-- [ ] Montar e editar posição completa.
+- [x] Montar e editar posição completa.
 - [ ] Referenciar posição/variante e duplicar independente.
-- [ ] Renomear, reordenar e excluir capítulo com impacto.
+- [x] Renomear, reordenar e excluir capítulo com impacto.
 - [ ] Jogar, promover, reordenar, substituir e excluir variantes.
 - [ ] Menu de contexto e `•••` equivalentes.
 - [ ] Comentário, símbolo, desenho e narração completos.
 - [ ] Importar PGN por texto/arquivo e URL Lichess.
 - [ ] Exportar variante, capítulo, aula PGN e pacote v2.
 - [ ] Prévia real da aula, capítulo e daqui.
-- [ ] Reprodução, pausa, repetição e três velocidades.
-- [ ] Comparação com retorno à posição de escolha.
-- [ ] Vários treinos por capítulo e por aula.
+- [x] Reprodução, pausa, repetição e três velocidades.
+- [x] Comparação com retorno à posição de escolha.
+- [x] Vários treinos por capítulo e por aula.
 - [x] Respostas corretas, alternativas, erros, feedback, dicas e término.
 - [x] Defensor determinístico e treino dos dois lados.
 - [x] Derivado/personalizado/independente e refazer com diff.
 - [ ] Final certificado e linha autoral julgados corretamente.
 - [ ] Práticas avaliativas configuráveis e versionadas.
 - [ ] Metadados, proveniência e exceções editáveis com segurança.
-- [ ] Fluxo completo de introdução, capítulos, treinos e práticas.
+- [x] Fluxo completo de introdução, capítulos, treinos e práticas.
 - [ ] Problemas localizados e corrigíveis pela tela.
 - [x] Publicação atômica, snapshots e recuperação.
 - [x] Progresso por revisão e rejulgamento no servidor.

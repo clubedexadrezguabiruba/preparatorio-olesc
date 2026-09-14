@@ -16,7 +16,7 @@
 > receber migração aditiva sem nova consulta. Na fatia 7, a N0-LADDER é publicada em v2 de
 > verdade como piloto; o arquivo v1 dela não muda um byte.
 
-**Data:** 2026-09-13. **Branch:** `modo-editor`. A menção
+**Data:** 2026-09-14. **Branch:** `modo-editor`. A menção
 histórica a “Bloco 2 suspenso” nas seções antigas explica a interrupção que levou à
 nova arquitetura; não rege mais o trabalho.
 
@@ -143,25 +143,31 @@ cada linha aponta a seção que conta a história inteira.
   1.247 testes, 57/57 mutações e **roteiro de 14 itens no Playwright**, p95 da troca de posição 33,6 ms. Ver
   "fatia 9 — Stockfish do professor".
 
+- **Fatia 10, paradas 10A–10H, 14/9** — ensaios de navegador guardados no repositório (`npm run e2e`,
+  limpeza por SHA-256); **proveniência** (§19.1) e porta "Posição do acervo"; **prática** pela tela
+  (§17.1); **introdução e quadros** (§7.1) e **ordem da aula** (§18); **importar estudo do Lichess
+  por link e por arquivo** (§13.2), 9/9 capítulos no destino; **atalhos** numa tabela única (`x`,
+  `?`), foco preso e devolvido, axe sérias/críticas **→ 0**, editor a 375 px **865 → 375**. A **aula
+  do zero** (o estudo "Mate de Dama e Rei" recriado à mão) e a **aula importada** foram publicadas e
+  jogadas pelo aluno de teste até o mate, com 5 tentativas no banco cada. **Desempenho medido e
+  acelerado, mas 5 das 6 metas de §24 ainda passam do alvo** (116–149 ms contra 100; abrir a árvore
+  de 1.000 nós em 2.031 ms contra 2.000) — decisão do Doug pendente. Ver "Fatia 10" e "Parada 10H".
+
 **Aberto, na ordem:**
 
-1. **Importar por URL do Lichess** (§13.2) e **introdução e quadros** (§7.1) continuam fora, sem
-   redução de escopo. Do repertório, das extras e do motor, o que ficou aberto está listado no fim
-   das fatias 8 e 9.
-2. **Fatia 10** — desempenho, acessibilidade e o teste humano final de tudo o que o Playwright
-   aprovou nas fatias 6 a 9.
+1. **10I — o teste humano do Doug** pelo roteiro numerado (blocos A–G), e a decisão do desempenho.
+2. Os itens de §28 ainda desmarcados, com o que falta em cada um, estão na tabela da Parada 10H.
+3. Pendências da fatia 10: a importação junta os parágrafos de 1 narração; a prática não tem campo de
+   texto para o aluno; setas do `EditorDeRepertorio`, da introdução do aluno e da passada fora do
+   registro único de atalhos.
 
-**Dívida conhecida e não paga:** em 1366×768 de CSS de verdade a lista mostra **6 lances
-inteiros** com o motor desligado e **5** ligado (o teto do bloco de edição passou a 40% na
-fatia 9), e o bloco de edição rola por dentro. Em 375 px a página tem **rolagem para o lado** (600 px
-de conteúdo), anterior a este conserto e não investigada.
+**Dívida conhecida:** a lista mostra **6 lances inteiros** em 1366×768 (5 com o motor ligado) e **5** em
+1280×720. A rolagem lateral a 375 px foi paga na 10F.
 
 **Isto não declara o editor pronto.** O roteiro de §27 tem as fatias 1 a 5 fechadas no
-código e no teste humano. A fatia 6 está fechada no código, com as quatro paradas (6A,
-6B, 6C e 6D) aprovadas em roteiro pelo Playwright — sem teste com uma pessoa; o Doug
-decidiu em 13/9 não fazê-lo agora. A fatia 7 fechou em 13/9 no código e no roteiro pelo
-Playwright (sem teste com uma pessoa), e as fatias 8 e 9 também, em 13/9. A próxima é a **10,
-desempenho, acessibilidade e teste de uso final**. Prazo das fatias 7–10: 18/09/2026.
+código e no teste humano. As fatias 6 a 9 e as paradas 10A–10G estão fechadas no código e em
+ensaios pelo Playwright, **sem teste com uma pessoa** — ele é a 10I. §28 tem **14 de 30** itens
+marcados. Prazo das fatias 7–10: 18/09/2026.
 
 Este arquivo existe para outro agente (ou outra conta) continuar de onde este
 parou, sem ter a conversa na mão. O plano inteiro está em
@@ -4736,6 +4742,92 @@ rodadas; nada mais cresce com o tamanho da árvore. Um perfil de CPU no navegado
 perseguir os últimos 20–50 ms (dividir o `EditorV2`, virtualizar a lista) ou aceitar e registrar o limite.
 §28 "limites e metas de desempenho comprovados" **não** é marcado.
 
+### Parada 10H — o estado, as doze perguntas e o §28 com evidência (14/9/2026)
+
+**Os quatro portões que a sessão dos símbolos não rodou**, sobre `61906c7` puro na cópia isolada
+`../olesc-portoes` (nenhum arquivo rastreado modificado): `typecheck` ✓, `npm test` **1.293/1.293** (a
+trava `marcas-das-fontes.test.ts` verde: 28 marcas em lance do adversário cortado e 347 em ramos fora do
+repertório, impressas, sem reprovar), `validate:content` ✓ (38 do cache, 0 pela rede) e
+`repertorio:compilar --check` ✓. Esta parada só mexe em documentos.
+
+**"Estado de hoje, em vinte linhas"** reescrito no topo com a fatia 10.
+
+#### As doze perguntas essenciais do plano, com a evidência que existe
+
+"Sim" só com prova executada; "em parte" diz qual metade falta. As que dependem de gesto ou de tempo
+real foram para o **bloco G** do roteiro humano (itens 40–44).
+
+| # | Pergunta | Resposta | Evidência | O que falta |
+|---|---|---|---|---|
+| 1 | Desfazer tudo volta à abertura? | **em parte** | `aula-do-zero.spec`: Ctrl+Z ×5 / Ctrl+Y ×5 com o arquivo byte a byte igual | o botão **Desfazer tudo** nunca foi exercido (usa `window.confirm`; ver "o que esta rodada NÃO cobre" das sete fatias) → item 40 |
+| 2 | Recarregar ou fechar a aba perde algo? | **em parte** | recarregar depois do "✓ salvo" mantém tudo (`aula-do-zero.spec`, `introducao.spec`, trocar posição); a cópia no IndexedDB sobreviveu ao reload no ensaio de 10/9 | fechar a aba **antes** do autosave de 600 ms nunca ensaiado → item 41 |
+| 3 | Duas abas brigam? | **não brigam — provado em 10/9** | duas abas do mesmo hash: B recebe conflito sem sobrescrever A, abre o disco só depois do ACK do IndexedDB, e a cópia baixada tem a edição de B; `rascunhos.test.ts` | nunca repetido depois das fatias 1–10 e sem ensaio guardado → item 42 |
+| 4 | A mensagem diz como corrigir, em português, sem id? | **em parte** | `diagnostico-visual.test.ts` 11/11 ("nenhum mostra id"); recusas com o campo nas regras de proveniência e prática | nenhuma varredura das regras novas de 10B–10E; "diz como corrigir" não é conferido por teste |
+| 5 | Ir para o problema leva ao lugar certo nos tipos novos? | **em parte** | prática e proveniência abrem a janela certa (`pratica.spec`, `proveniencia.spec`) | quadro da introdução e treino só em teste unitário do destino, sem ensaio de tela |
+| 6 | Prévia igual ao publicado? | **em parte** | a mesma função serve os dois (`passosDaIntroducao`, `etapasDoAlunoV2`; `fluxo-do-aluno.test.ts`); a comparação importação × aula do zero bate etapa a etapa | nenhum ensaio compara a prévia com a aula publicada; a prévia "aula inteira" encadeia só capítulos |
+| 7 | Aula de 1.000 lances continua ágil? | **em parte — não cumpre a meta** | `desempenho.spec`: 116–149 ms de p95 nas interações (meta 100) e 2.031 ms para abrir (meta 2.000), em `next dev` num i3-1215U | decisão do Doug: perseguir ou registrar o limite |
+| 8 | Botão coberto ou fora da tela em 1280×720? | **não, na tela principal** | `layout.spec` perfil `editor-1280`: 0 de 40 botões cobertos, 5 lances inteiros | janelas, prévias e tela cheia da introdução não medidas a 1280 |
+| 9 | A aula inteira sem mouse? | **em parte** | `atalhos.spec`: Tab preso, Esc devolve o foco, setas na lista; menu do capítulo pelo teclado | nenhum ensaio da aula inteira pelo teclado → item 44 |
+| 10 | Aluno no celular passa por todas as etapas? | **em parte** | `layout.spec` `aluno-375`: 7 telas e as 4 etapas da N0-LADDER com 0 px a mais | treino e prática **jogados** a 375 px nunca; celular de verdade é o item 28 |
+| 11 | Republicar só texto preserva o progresso? | **em parte** | `avaliacao.test.ts`: título, feedback e narração não mudam a revisão da avaliação; a escada lê a revisão ativa; `db:finais:v2` 18/18 | nenhum ensaio republica com aluno que já tem progresso → item 43 |
+| 12 | Importar o mesmo estudo duas vezes? | **sim, avisa e recusa** | `importar-estudo.test.ts` e `importar-estudo.spec`: "parece já ter sido importado" | só pelo arquivo; pelo link a repetição não foi ensaiada |
+
+#### §28 — marcados nesta parada, e por quê
+
+Seis itens passam a `[x]`, cada um com o caminho inteiro provado:
+
+| Item | Evidência |
+|---|---|
+| Montar e editar posição completa | montador com os três arrastos em **teste humano aprovado** (11/9); trocar a posição inicial com poda, 17 avisos, Desfazer/Refazer e recarga no navegador |
+| Renomear, reordenar e excluir capítulo com impacto | reordenar com **teste humano 10/10** (11/9); renomear e excluir com dependentes listados nas rodadas das sete fatias e da 6D |
+| Reprodução, pausa, repetição e três velocidades | testes do relógio (4) e **teste humano de 12/9** nas duas metades da regra da velocidade |
+| Comparação com retorno à posição de escolha | o caso de aceite de rei e peão (6 testes contra a regra do jogo) e **teste humano de 12/9** |
+| Vários treinos por capítulo e por aula | treino dos dois lados (6A); 4 treinos na mesma aula na `aula-do-zero` e na importação, jogados pelo aluno |
+| Fluxo completo de introdução, capítulos, treinos e práticas | `aula-do-zero.spec` e `aula-do-lichess.spec`: aula publicada, o aluno faz as 8 etapas na ordem do fluxo, 5 tentativas com `publication_id` |
+
+Os quatro últimos, como os três de treino marcados na 6D, estão sem teste com uma pessoa; a 10I cobre.
+
+#### §28 — continuam desmarcados, com o que falta
+
+| Item | Falta |
+|---|---|
+| Nova aula e aula extra | aula do **curso** (série N) criada pela tela; item 1 do roteiro |
+| Introdução e quadros completos | cor do desenho da introdução no aluno; narração e pausa por quadro |
+| Cinco portas | porta URL a partir de Adicionar capítulo sem ensaio de tela |
+| Referenciar e duplicar independente | "Duplicar como independente" só em teste unitário |
+| Variantes | promover e substituir sem ensaio de tela; **reordenar variantes irmãs sem nenhuma evidência** |
+| Menu de contexto e `•••` | abrir o menu pelo **botão direito** nunca exercido |
+| Comentário, símbolo, desenho e narração | desenho e pausa **por narração** não editáveis na tela |
+| Importar PGN e URL | URL de partida e de capítulo só no teste do endereço; Cancelar e tempo esgotado sem ensaio |
+| Exportar | "PGN da variante" e pacote v2 nunca vistos na tela; restaurar o pacote |
+| Prévia real | a prévia "aula inteira" não mostra introdução, treino e prática |
+| Final certificado e linha autoral | exceção do professor a `CERTIFICACAO_REFUTADA` |
+| Práticas avaliativas | várias práticas, prática opcional, ajuda e limite de lances |
+| Metadados, proveniência e exceções | **exceções sem tela** |
+| Problemas corrigíveis pela tela | destino de quadro e de treino sem ensaio de tela |
+| Limites e metas de desempenho | 5 de 6 metas acima do alvo (acima) |
+| Acessibilidade e teste humano final | a 10I; a meta de ≥ 90% sem ajuda sem medida |
+
+**Uma observação sobre um item já marcado, para o Doug decidir:** "Publicação atômica, snapshots e
+recuperação" foi marcado na fatia 7 pelas fases da publicação e pelo snapshot anterior (§20.1). A tela para
+**listar e restaurar** snapshots (§6.3) não existe — a 6D registrou que ela "pertence à publicação". Não
+desmarquei; se §28 incluir §6.3 nesse item, ele volta a aberto.
+
+#### A decisão do desempenho, para o Doug
+
+As medidas estão na tabela da 10G. Duas saídas:
+
+- **Perseguir os 20–50 ms:** dividir o `EditorV2.tsx` (1.781 linhas) para uma seta ou comentário não
+  redesenhar a tela inteira, e virtualizar a lista. Estimativa: um dia, mexendo no componente central
+  a quatro dias do prazo, com risco de regressão nos ensaios de tela.
+- **Registrar o limite:** o plano §17 chama 100 ms e 2 s de "alvos iniciais de engenharia" e manda "rever os
+  limites" se o corpus não cumprir. O que sobra é o React de desenvolvimento, nada mais cresce com a
+  árvore, e a maior aula de hoje tem 50 nós (`.editor/v2/N1-KPK.json`; a N0-LADDER, 10), contados em 14/9. O item de §28 continua desmarcado, com o número.
+
+**Recomendação:** registrar agora e deixar o **bloco E da 10I** decidir. Se o Doug sentir atraso na
+árvore de 1.000 nós, a divisão do `EditorV2` entra depois de 18/09; se não sentir, o alvo passa a ser o
+medido.
+
 ### O próximo ponto exato (14/9/2026 — retomar daqui)
 
 **Commits da fatia 10:** `795d2d9` (10A), `e567599` (10B), `dce1fe6` (10C), `28a1b3e` (10D), `7290a3c`
@@ -4751,14 +4843,16 @@ regra certa (`TEXTO_SEM_DIREITO_DECLARADO`).
 
 **O que falta, na ordem:**
 
-1. **10H:** "Estado de hoje, em vinte linhas", as perguntas essenciais 1–12 do plano com evidência, e §28
-   só com evidência.
-2. **10I:** o teste humano do Doug pelo roteiro abaixo. **Pergunta nova do desempenho** para ele decidir.
-3. Pendências abertas: a importação perde as quebras de parágrafo de um comentário (1 narração); a
+1. ~~**10H**~~ — feita em 14/9 (ver "Parada 10H" acima), commit só de documentos.
+2. **Decisão do Doug sobre o desempenho** (perseguir os 20–50 ms ou registrar o limite; recomendação na 10H).
+3. **10I:** o teste humano do Doug pelo roteiro abaixo, agora com **44 itens** (o bloco G traz as perguntas
+   essenciais 1, 2, 3, 9 e 11, que não têm prova completa).
+4. Pendências abertas: a importação perde as quebras de parágrafo de um comentário (1 narração); a
    prática não tem campo de texto para o aluno (o "OBJETIVO: VENCER" do estudo não tem onde entrar).
 
 **Duas sessões, duas cópias.** A sessão `preparatorio-olesc-f3` (tabuleiro estilo Chess.com, marcas das
-fontes, regra dos símbolos) usa `../olesc-portoes` com os arquivos dela, sem commit. Esta continuação usou
+fontes, regra dos símbolos) commitou até `61906c7`; os quatro portões que ela não rodou passaram na 10H.
+Ela usava `../olesc-portoes`. Esta continuação usou
 `../olesc-portoes-e6` (worktree nova, `node_modules` copiado). No `ChessBoard.tsx` cada commit leva só o
 próprio trecho: o desta é `esquecerRetangulo`; o dela é `setaQueEnsina`/`setAutoShapes`. Quem commitar
 depois atualiza a branch e roda os portões de novo.
@@ -4862,6 +4956,20 @@ Para cada tarefa, anote **achei sozinho? (sim/não)** e o **tempo**:
 38. Treino: jogar o treino na prévia **arrastando** as peças (não clicando). Funciona igual?
 39. Motor: ligue o motor e **troque de aba** do navegador por 10 s. Ao voltar, ele tinha parado ("pausado")
     e retoma?
+
+### G. As perguntas essenciais que ainda não têm prova (acrescentado na 10H)
+
+40. Na aula do bloco A, **Desfazer tudo** → confirme. A aula voltou a como estava quando você abriu o
+    editor, e um Ctrl+Z traz tudo de volta? (pergunta 1)
+41. Escreva um comentário e **feche a aba em menos de 1 segundo**, antes do "✓ salvo". Reabra: o editor
+    oferece a cópia preservada neste navegador? (pergunta 2)
+42. Abra a mesma aula em **duas abas**, mude uma coisa em cada. A segunda avisa conflito, sem apagar a
+    mudança da primeira? (pergunta 3)
+43. Com o aluno de teste já tendo feito o treino da aula publicada, mude **só a narração** de um capítulo,
+    Conferir → Publicar. O impacto diz que o progresso continua, e o aluno ainda vê o treino como feito?
+    (pergunta 11)
+44. Faça o bloco A de novo **sem o mouse** do item 5 ao 15, exceto mexer peças e desenhar. Algum passo
+    obrigou a pegar o mouse? Qual? (pergunta 9)
 
 
 ## Como ligar o editor
