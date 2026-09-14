@@ -45,6 +45,12 @@ export type PedidoDeCapituloV2 = {
    * fluxo — a etapa entra no fim, que é o comportamento da importação.
    */
   depoisDoCapituloId?: string;
+  /**
+   * Fatia 10: a posição veio do **acervo** do curso (`content/positions/`). A análise nasce com
+   * `inicio: { tipo: "posicao" }`, e a revisão da posição entra no registro de proveniência da aula
+   * com o hash calculado no servidor — a FEN crua não precisa de revisão nova.
+   */
+  doAcervo?: { positionId: string; conteudoHash: string; estado: "fixture" | "candidate" | "approved" };
 };
 
 /**
@@ -60,6 +66,7 @@ export type NovoCapituloV2 = {
   fen: string;
   orientacao: "white" | "black";
   depoisDoCapituloId?: string;
+  doAcervo?: PedidoDeCapituloV2["doAcervo"];
 };
 
 /** Os quatro ids que um apelido gera, sempre nesta ordem. */
@@ -117,6 +124,7 @@ export function prepararNovoCapitulo(aula: AulaV2, pedido: PedidoDeCapituloV2): 
       fen,
       orientacao: pedido.orientacao,
       ...(pedido.depoisDoCapituloId ? { depoisDoCapituloId: pedido.depoisDoCapituloId } : {}),
+      ...(pedido.doAcervo ? { doAcervo: pedido.doAcervo } : {}),
     },
   };
 }
@@ -144,7 +152,7 @@ export function aplicarNovoCapitulo(aula: AulaV2, novo: NovoCapituloV2): Aplicac
     // mesmo motivo de §12: FEN que não passou por revisão de proveniência não
     // pode ganhar a aparência de posição aprovada. O validador avisa, e o aviso
     // é o trabalho que ainda falta — não um defeito desta criação.
-    inicio: { tipo: "fen", fen: novo.fen },
+    inicio: novo.doAcervo ? { tipo: "posicao", positionId: novo.doAcervo.positionId } : { tipo: "fen", fen: novo.fen },
     raizId: novo.raizId,
     nos: { [novo.raizId]: { id: novo.raizId, filhos: [] } },
   };
@@ -168,8 +176,10 @@ export function aplicarNovoCapitulo(aula: AulaV2, novo: NovoCapituloV2): Aplicac
     : -1;
   fluxo.splice(depois < 0 ? fluxo.length : depois + 1, 0, etapa);
 
+  const registrada = novo.doAcervo && aula.proveniencia.some((item) => item.positionId === novo.doAcervo!.positionId);
   const nova: AulaV2 = {
     ...aula,
+    ...(novo.doAcervo && !registrada ? { proveniencia: [...aula.proveniencia, novo.doAcervo] } : {}),
     analises: [...aula.analises, analise],
     capitulos: [...aula.capitulos, capitulo],
     fluxo,

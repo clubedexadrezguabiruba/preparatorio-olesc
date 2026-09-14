@@ -27,6 +27,7 @@ import type { AulaV2, DesenhoV2 } from "./modelo.ts";
 import type { PacoteV2 } from "./pacote.ts";
 import { posicoesDoPacoteV2 } from "./pacote.ts";
 import { previaDaAula } from "./previa.ts";
+import { creditosDaAula } from "./proveniencia.ts";
 import { treinoJogavel, type TreinoJogavel } from "./treino-jogavel.ts";
 
 export type PassoDoCapituloDoAlunoV2 = {
@@ -83,6 +84,11 @@ export type AulaDoAlunoV2 = {
   publicationId: string;
   orientacao: "white" | "black";
   etapas: EtapaDoAlunoV2[];
+  /**
+   * As linhas de crédito que o professor pediu para mostrar (§19.1, fatia 10): "Posição: Dvoretsky,
+   * Manual de Finais". Só a frase atravessa — a revisão inteira fica no pacote.
+   */
+  creditos?: string[];
 };
 
 /** O desenho v2 na forma curta do v1 — a do `IntroStage`. A cor não atravessa (ver o diário). */
@@ -180,5 +186,6 @@ export function aulaDoAlunoV2(pacote: PacoteV2): AulaDoAlunoV2 {
     publicationId: pacote.publicationId,
     orientacao: pacote.aula.metadados?.orientacaoPadrao ?? "white",
     etapas: etapasDoAlunoV2(pacote.aula, positions, pacote.revisoes),
+    ...(creditosDaAula(pacote.aula).length ? { creditos: creditosDaAula(pacote.aula) } : {}),
   };
 }

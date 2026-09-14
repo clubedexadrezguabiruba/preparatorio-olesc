@@ -485,7 +485,8 @@ export function aplicarTrocaDePosicao(aula: AulaV2, plano: PlanoDaTrocaV2): Apli
       nos[no.id] = marcados.has(no.id) ? comRevisao(base) : base;
     }
     return revalidada.fen
-      ? { ...analise, inicio: { tipo: "fen" as const, fen: revalidada.fen }, nos }
+      // A revisão de proveniência fica, com a FEN antiga: é a diferença que a torna caduca (§9, plano §12).
+      ? { ...analise, inicio: { tipo: "fen" as const, fen: revalidada.fen, ...(analise.inicio.tipo === "fen" && analise.inicio.revisao ? { revisao: analise.inicio.revisao } : {}) }, nos }
       : { ...analise, nos };
   });
 

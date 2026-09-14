@@ -42,7 +42,7 @@ async function entrar(baseURL: string, usuario: string, pin: string, destino: st
   }
 }
 
-function criarAulaBase() {
+export function criarAulaBase() {
   const pasta = path.join(RAIZ, "content/fixtures/aulas-v2/EX-FIXTURE-V2");
   const { publicationId } = JSON.parse(readFileSync(path.join(pasta, "ativa.json"), "utf8")) as { publicationId: string };
   const pacote = JSON.parse(readFileSync(path.join(pasta, "publicacoes", `${publicationId}.json`), "utf8")) as { aula: Record<string, unknown> };

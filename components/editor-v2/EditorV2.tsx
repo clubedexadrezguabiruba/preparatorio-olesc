@@ -26,6 +26,9 @@ import { DialogoExportar } from "@/components/editor-v2/DialogoExportar";
 import { DialogoCriarTreino } from "@/components/editor-v2/DialogoCriarTreino";
 import { DialogoEditarTreino } from "@/components/editor-v2/DialogoEditarTreino";
 import { DialogoPropriedadeTreino } from "@/components/editor-v2/DialogoPropriedadeTreino";
+import { DialogoProveniencia } from "@/components/editor-v2/DialogoProveniencia";
+import { estadoDaProveniencia } from "@/lib/editor-v2/proveniencia";
+import type { PosicaoDoAcervoV2 } from "@/lib/editor-v2/acervo";
 import { PaletaDeDesenho } from "@/components/editor-v2/PaletaDeDesenho";
 import { AjudaDeAtalhos } from "@/components/motor-do-professor/AjudaDeAtalhos";
 import { BarraDeAvaliacao } from "@/components/motor-do-professor/BarraDeAvaliacao";
@@ -90,6 +93,8 @@ import type { Position } from "@/lib/lesson/schema";
 type Estado = "salvo" | "alterado" | "salvando" | "erro" | "conflito";
 const SIMBOLOS_DE_QUALIDADE: Record<number, string> = { 1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!" };
 
+const SEM_ACERVO: PosicaoDoAcervoV2[] = [];
+
 function novoId(): string {
   return `n-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
@@ -138,7 +143,7 @@ function treinosNaOrdemDaAula(aula: AulaV2): AulaV2["treinos"] {
   });
 }
 
-export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, problemasDaOrigem = [], regua }: {
+export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: posicoesDaAula, problemasDaOrigem = [], regua, professor = "professor", acervo = SEM_ACERVO }: {
   aulaId: string;
   documentoInicial: AulaV2;
   hashInicial: string;
@@ -151,7 +156,19 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
    * da posição, não o texto dele. Chegam prontas e se juntam às que a tela recalcula.
    */
   problemasDaOrigem?: ProblemaV2[];
+  /** O nome de quem está editando: vai para a revisão de proveniência (§19.1). */
+  professor?: string;
+  /** Fatia 10: o acervo de `content/positions/`, para as portas que escolhem posição do curso. */
+  acervo?: PosicaoDoAcervoV2[];
 }) {
+  /*
+   * As posições que a tela conhece: as que a aula já usa e as do acervo. Sem as do acervo, um
+   * capítulo recém-criado a partir dele acusaria "a posição não está no pacote" até o reload.
+   */
+  const positions = useMemo(
+    () => ({ ...Object.fromEntries(acervo.map((item) => [item.position.id, item.position])), ...posicoesDaAula }),
+    [acervo, posicoesDaAula],
+  );
   const [historico, setHistorico] = useState<Historico<AulaV2>>(() => iniciarHistorico(documentoInicial));
   const [capituloId, setCapituloId] = useState(() => capitulosNaOrdemDaAula(documentoInicial)[0]?.id ?? "");
   const capitulosOrdenados = useMemo(() => capitulosNaOrdemDaAula(historico.presente), [historico.presente]);
@@ -184,6 +201,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const [criandoTreino, setCriandoTreino] = useState<string | null>(null);
   const [editandoTreino, setEditandoTreino] = useState<string | null>(null);
   const [propriedadeTreino, setPropriedadeTreino] = useState<string | null>(null);
+  /** §19.1 (fatia 10): a janela "De onde veio esta posição?", aberta para qual análise. */
+  const [revisandoProveniencia, setRevisandoProveniencia] = useState<string | null>(null);
   const [salvandoSnapshot, setSalvandoSnapshot] = useState(false);
   /**
    * A prévia (§15), em dois estados: a escolha do escopo, e a prévia rodando.
@@ -335,7 +354,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
     || escolhendoPrevia || previa !== null
     || criandoTreino !== null || editandoTreino !== null || propriedadeTreino !== null || jogandoTreino !== null
     || duplicandoCapitulo !== null || excluindoCapitulo !== null || acaoDoLance !== null || cortando !== null
-    || publicandoAula || vendoPublicacoes || convertendoV1;
+    || publicandoAula || vendoPublicacoes || convertendoV1 || revisandoProveniencia !== null;
   const estadoDoTeclado = useRef({ analise, janelaAberta });
   useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta }; });
 
@@ -641,6 +660,12 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
   const irAoProblema = useCallback((destino: DestinoV2) => {
     // Nível e classe moram em "Mais opções" (fatia 8): o problema abre a janela certa.
     if (destino.maisOpcoes) { setVendoPublicacoes(true); return; }
+    if (destino.janela?.tipo === "treino") { setEditandoTreino(destino.janela.treinoId); return; }
+    if (destino.janela?.tipo === "proveniencia") {
+      if (destino.capituloId) setCapituloId(destino.capituloId);
+      setRevisandoProveniencia(destino.janela.analiseId);
+      return;
+    }
     if (destino.capituloId) setCapituloId(destino.capituloId);
     if (destino.nodeId) setNodeId(destino.nodeId);
   }, []);
@@ -910,6 +935,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
             capituloAtualId=""
             orientacaoPadrao={historico.presente.metadados?.orientacaoPadrao ?? "white"}
             aoCriar={criarCapitulo}
+            acervo={acervo}
             aoFechar={fecharAdicionar}
           />
         ) : null}
@@ -1088,6 +1114,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
           capituloAtualId={capitulo.id}
           orientacaoPadrao={historico.presente.metadados?.orientacaoPadrao ?? capitulo.orientacao}
           aoCriar={criarCapitulo}
+          acervo={acervo}
           aoFechar={fecharAdicionar}
         />
       ) : null}
@@ -1198,6 +1225,19 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
         />
       ) : null}
 
+      {revisandoProveniencia ? (
+        <DialogoProveniencia
+          aula={historico.presente}
+          analiseId={revisandoProveniencia}
+          professor={professor}
+          aoRegistrar={(revisao) => {
+            aplicar({ tipo: "REGISTRAR_PROVENIENCIA", analiseId: revisandoProveniencia, revisao });
+            setRevisandoProveniencia(null);
+          }}
+          aoFechar={() => setRevisandoProveniencia(null)}
+        />
+      ) : null}
+
       {propriedadeTreino ? (
         <DialogoPropriedadeTreino
           aula={historico.presente}
@@ -1294,6 +1334,15 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions, pro
             aoMover={(id, vao) => aplicar({ tipo: "MOVER_CAPITULO", capituloId: id, vao })}
             aoDuplicar={setDuplicandoCapitulo}
             aoExcluir={setExcluindoCapitulo}
+            proveniencia={Object.fromEntries(capitulosOrdenados.flatMap((item) => {
+              const dela = historico.presente.analises.find((a) => a.id === item.analiseId);
+              const estadoDela = dela ? estadoDaProveniencia(dela) : "nao-se-aplica";
+              return estadoDela === "nao-se-aplica" ? [] : [[item.id, estadoDela]];
+            }))}
+            aoProveniencia={(id) => {
+              const alvo = capitulosOrdenados.find((item) => item.id === id);
+              if (alvo) setRevisandoProveniencia(alvo.analiseId);
+            }}
           />
           <div className="mt-3 border-t border-borda-fraca pt-3">
             <h2 className="text-sm font-semibold text-tinta">Treinos</h2>

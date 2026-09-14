@@ -26,7 +26,8 @@ import { aplicarTreinosPreparados, type TreinosPreparadosV2 } from "./treinos.ts
 import { aplicarEdicaoDeTreino, type EdicaoDeTreinoV2 } from "./autoria-treino.ts";
 import { semRevisoes } from "./revisoes.ts";
 import type { ResolucoesV2 } from "./impacto.ts";
-import type { AulaV2, DesenhoV2, NoV2 } from "./modelo.ts";
+import type { AulaV2, DesenhoV2, NoV2, RevisaoDaFenV2 } from "./modelo.ts";
+import { aplicarRevisaoDaFen } from "./proveniencia.ts";
 import {
   aplicarRefazerTreino,
   comEstadosDasFontes,
@@ -144,6 +145,11 @@ export type ComandoV2 =
    */
   | { tipo: "CONVERTER_V1"; convertidaEm: string }
   /**
+   * §19.1 (fatia 10): a revisão de proveniência de uma análise que começa numa FEN crua. A revisão
+   * chega pronta — data e professor decididos no clique —, para o Refazer devolver os mesmos bytes.
+   */
+  | { tipo: "REGISTRAR_PROVENIENCIA"; analiseId: string; revisao: RevisaoDaFenV2 }
+  /**
    * Uma tag do cabeçalho PGN da análise (fatia 8: Nome, Nível e Fonte do repertório).
    *
    * A ordem das tags é preservada — a tag editada fica onde estava, e uma tag nova entra
@@ -163,6 +169,11 @@ function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<
     if (aula.origem?.formato !== "lesson-v1") throw new Error("esta aula não veio do formato antigo — não há o que converter");
     if (aula.origem.convertidaEm) return aula;
     return { ...aula, origem: { ...aula.origem, convertidaEm: comando.convertidaEm } };
+  }
+  if (comando.tipo === "REGISTRAR_PROVENIENCIA") {
+    const resultado = aplicarRevisaoDaFen(aula, comando.analiseId, comando.revisao);
+    if (!resultado.ok) throw new Error(resultado.mensagem);
+    return resultado.aula;
   }
   if (comando.tipo === "EDITAR_METADADOS") {
     const atuais = aula.metadados ?? { orientacaoPadrao: "white" as const, criterioDominio: "D1" as const, estadoEditorial: "rascunho" as const };

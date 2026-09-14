@@ -28,7 +28,16 @@ import type { AulaV2, ProblemaV2 } from "./modelo.ts";
 
 /** Para onde a tela deve ir. `null` quando o problema não tem lugar navegável. */
 /** `maisOpcoes`: o problema é dos dados da aula (nível, classe) e se corrige em "Mais opções". */
-export type DestinoV2 = { capituloId?: string; analiseId?: string; nodeId?: string; maisOpcoes?: true };
+/**
+ * `janela` (fatia 10): o problema se corrige numa janela própria — a proveniência de uma posição, a
+ * autoria de um treino, a prática, um quadro da introdução. "Ir para o problema" abre essa janela.
+ */
+export type JanelaDoProblemaV2 =
+  | { tipo: "proveniencia"; analiseId: string }
+  | { tipo: "treino"; treinoId: string }
+  | { tipo: "pratica"; praticaId?: string }
+  | { tipo: "introducao"; introducaoId: string; quadroId?: string };
+export type DestinoV2 = { capituloId?: string; analiseId?: string; nodeId?: string; maisOpcoes?: true; janela?: JanelaDoProblemaV2 };
 
 export type ProblemaVisivelV2 = {
   problema: ProblemaV2;
@@ -139,30 +148,31 @@ export function descreverProblemaV2(aula: AulaV2, problema: ProblemaV2): Problem
     const nome = introducao ? entreAspas(introducao.titulo) : "que não existe mais";
     if (local.quadroId && introducao) {
       const indice = introducao.quadros.findIndex((q) => q.id === local.quadroId);
-      if (indice !== -1) return { problema, onde: `o ${ordinal(indice + 1, "m")} quadro da introdução ${nome}`, destino: null };
+      if (indice !== -1) return { problema, onde: `o ${ordinal(indice + 1, "m")} quadro da introdução ${nome}`, destino: { janela: { tipo: "introducao", introducaoId: introducao.id, quadroId: local.quadroId } } };
     }
-    return { problema, onde: `a introdução ${nome}`, destino: null };
+    return { problema, onde: `a introdução ${nome}`, destino: introducao ? { janela: { tipo: "introducao", introducaoId: introducao.id } } : null };
   }
 
   if (local.treinoId) {
     const treino = aula.treinos.find((t) => t.id === local.treinoId);
     const nome = treino ? entreAspas(treino.titulo) : "que não existe mais";
+    const aoTreino: DestinoV2 | null = treino ? { janela: { tipo: "treino", treinoId: treino.id } } : null;
     if (treino && local.questaoId) {
       const indice = treino.questoes.findIndex((q) => q.id === local.questaoId);
       if (indice !== -1) {
         const pergunta = `${ordinal(indice + 1, "f")} pergunta do treino ${nome}`;
-        if (!local.respostaId) return { problema, onde: `a ${pergunta}`, destino: null };
+        if (!local.respostaId) return { problema, onde: `a ${pergunta}`, destino: aoTreino };
         const resposta = treino.questoes[indice].respostas.findIndex((r) => r.id === local.respostaId);
         const qual = resposta === -1 ? "uma resposta" : `a ${ordinal(resposta + 1, "f")} resposta`;
-        return { problema, onde: `${qual} da ${pergunta}`, destino: null };
+        return { problema, onde: `${qual} da ${pergunta}`, destino: aoTreino };
       }
     }
-    return { problema, onde: `o treino ${nome}`, destino: null };
+    return { problema, onde: `o treino ${nome}`, destino: aoTreino };
   }
 
   if (local.praticaId) {
     const pratica = aula.praticas.find((p) => p.id === local.praticaId);
-    return { problema, onde: pratica ? `a prática ${entreAspas(pratica.titulo)}` : "uma prática que não existe mais", destino: null };
+    return { problema, onde: pratica ? `a prática ${entreAspas(pratica.titulo)}` : "uma prática que não existe mais", destino: pratica ? { janela: { tipo: "pratica", praticaId: pratica.id } } : null };
   }
 
   if (local.etapaId) {
@@ -172,12 +182,17 @@ export function descreverProblemaV2(aula: AulaV2, problema: ProblemaV2): Problem
 
   if (local.analiseId) {
     const capitulo = aula.capitulos.find((c) => c.analiseId === local.analiseId);
+    const janela: JanelaDoProblemaV2 | undefined = local.campo === "inicio.revisao" ? { tipo: "proveniencia", analiseId: local.analiseId } : undefined;
     return {
       problema,
-      onde: capitulo ? `a partida do capítulo ${entreAspas(capitulo.titulo)}` : "uma análise desta aula",
-      destino: capitulo ? { capituloId: capitulo.id, analiseId: capitulo.analiseId } : { analiseId: local.analiseId },
+      onde: capitulo
+        ? `${janela ? "a posição inicial" : "a partida"} do capítulo ${entreAspas(capitulo.titulo)}`
+        : "uma análise desta aula",
+      destino: capitulo ? { capituloId: capitulo.id, analiseId: capitulo.analiseId, ...(janela ? { janela } : {}) } : { analiseId: local.analiseId, ...(janela ? { janela } : {}) },
     };
   }
+
+  if (local.campo === "praticas") return { problema, onde: "a prática da aula", destino: { janela: { tipo: "pratica" } } };
 
   if (local.campo?.startsWith("metadados.")) {
     return { problema, onde: "os dados da aula, em Mais opções", destino: { maisOpcoes: true } };

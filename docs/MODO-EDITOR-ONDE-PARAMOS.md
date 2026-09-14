@@ -4314,6 +4314,65 @@ qualquer conserto; `innerWidth` conferido, `devicePixelRatio` 1):
 **Os sete portões:** tipos, lint, **1.247 testes**, build, conteúdo (38 do cache, 0 pela rede),
 **57/57 mutações** e repertório `--check`.
 
+### Parada 10B — proveniência (§19.1) e o seletor do acervo
+
+- **Modelo, mudança aditiva** (`modelo.ts`): `inicio {tipo: "fen"}` ganhou `revisao?` —
+  `origem` (obra, estudo-lichess, partida, autoria-propria, desconhecida; **o único campo
+  obrigatório**, decisão do Doug), autor, obra, página, link, licença e nota opcionais, `fenRevisada`,
+  `revisadoEm`, `professor`, `mostrarCredito` e `direitoDosTextos`. `FEN_IMPORTADA_SEM_REVISAO` passou
+  a olhar a revisão: ausente, ou com `fenRevisada` diferente da FEN de agora (mensagem com o antes e o
+  depois). `ORIGEM_DESCONHECIDA` é aviso novo, nunca promovido nem resolvível. Trocar a posição
+  inicial (`trocar-posicao.ts`) conserva a revisão com a FEN antiga — é isso que a torna caduca.
+- **Uma decisão minha, contra a letra do plano:** o plano fala em `hashDaFen`. Guardei a própria FEN
+  (`fenRevisada`): o comando roda no navegador, onde `node:crypto` não existe, e a FEN é menor que o
+  hash e igualmente exata.
+- `lib/editor-v2/proveniencia.ts`: `prepararRevisaoDaFen` (recusa sem origem e link sem `http`, com o
+  campo), `aplicarRevisaoDaFen` (recusa se a FEN mudou com a janela aberta; a mesma revisão não é
+  edição), `estadoDaProveniencia`, `linhaDeCredito` ("Posição: Dvoretsky, Manual de Finais, p. 12") e
+  `creditosDaAula`. Comando `REGISTRAR_PROVENIENCIA`, com Desfazer.
+- **Regra de publicação nova** `TEXTO_SEM_DIREITO_DECLARADO` (§12.3): narração de capítulo cuja posição
+  veio de obra, estudo ou partida só publica com a marca "os textos são meus ou tenho direito". O
+  comentário da árvore não conta — ele é privado e não atravessa. Estrago no teste e **mutação nova**.
+- **Tela:** `DialogoProveniencia.tsx` sobre o `Dialogo` comum (tabuleiro pequeno, FEN, a origem em
+  rádio com "✓", detalhes opcionais recolhidos, crédito ao aluno com a prévia da linha, e a marca do
+  direito só para terceiros). Abre por **Ir para o problema** (o destino ganhou `janela`, que também
+  leva à autoria do treino e, na 10C, à prática) e pelo `•••` do capítulo ("De onde veio a posição…");
+  capítulo sem revisão mostra ⚑ na lista. A página passa o nome do professor.
+- **Crédito ao aluno:** `AulaDoAlunoV2.creditos` leva só as frases; o `LessonPlayer` as mostra,
+  discretas, na última etapa. A revisão inteira fica no pacote.
+- **Acervo:** `lib/editor-v2/acervo.ts` e `SeletorDoAcervo.tsx` (grupo de rádio com miniatura,
+  resultado esperado, estado, peças, busca sem acento, escolha marcada por borda, fundo e "✓"). A
+  página calcula o hash de cada posição no servidor. **Porta nova** "Posição do acervo" em Adicionar
+  capítulo: a análise nasce `inicio {tipo: "posicao"}` e a posição entra uma vez só no registro de
+  proveniência. O editor passou a conhecer as posições do acervo além das da aula.
+- Adiantado da 10E, sem tela ainda: `lib/editor-v2/lichess-url.ts` com os três endereços conferidos na
+  especificação oficial (`lichess-org/api`, 14/9): `/game/export/{id}`,
+  `/api/study/{id}/{capitulo}.pgn` e `/api/study/{id}.pgn`, com `orientation=true&clocks=false`.
+  Recusa host que não é `lichess.org` (inclusive `lichess.org.evil`, usuário e senha, porta),
+  redirecionamento para fora, mais de 2 MB, 20 s e cancelamento. 3 testes.
+
+```
+ANTES   proveniencia.test.ts: o módulo não existia — falha ao carregar (1 fail)
+        conferencia.test.ts: tests 20, pass 18, fail 2
+          ✖ toda regra da lista tem um estrago · ✖ TEXTO_SEM_DIREITO_DECLARADO impede publicar
+DEPOIS  proveniencia 5/5 · conferencia 20/20 · acervo 2/2 · diagnostico-visual 11/11 · lichess-url 3/3
+```
+
+Um teste antigo mudou de propósito: `diagnostico-visual.test.ts` afirmava "o piloto ainda não navega
+até um treino" — agora navega (abre a autoria).
+
+**O ensaio `e2e/editor/proveniencia.spec.ts`, verde em 5,3 s:** capítulo por FEN colada → a lista de
+problemas mostra **1** "ainda não passou por revisão de proveniência" e o capítulo ganha ⚑ → **Ir para o
+problema** abre a janela → Registrar sem origem é recusado com a frase → Autoria própria → **0** avisos,
+e o disco tem `origem autoria-propria`, `fenRevisada` e `professor "Professor de Ensaio"` → o `•••`
+reabre com "Revisada em … por Professor de Ensaio" → Ctrl+Z traz o aviso de volta, Ctrl+Y tira →
+"Posição do acervo" com a busca "cook" cria o capítulo com `inicio posicao` e o registro, sem aviso.
+
+**Número da parada:** `FEN_IMPORTADA_SEM_REVISAO` **1 → 0** na aula de ensaio; mutações **57 → 58**.
+
+**Os sete portões:** tipos, lint, **1.258 testes**, build, conteúdo (38 do cache, 0 pela rede),
+**58/58 mutações** e repertório `--check`. Limpeza do ensaio: 972/972 iguais.
+
 
 ## Como ligar o editor
 

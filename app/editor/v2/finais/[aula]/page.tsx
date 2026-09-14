@@ -12,6 +12,14 @@ import { documentoInicialV2, lerDocumentoV2 } from "@/lib/editor-v2/rascunhos";
 import { pacoteDaAula } from "@/lib/finais/conteudo";
 import { lessonIdSchema, lessonSchema } from "@/lib/lesson/schema";
 import { lerRegua } from "@/lib/lesson/voz";
+import type { PosicaoDoAcervoV2 } from "@/lib/editor-v2/acervo";
+
+/** O acervo inteiro, com o hash que a proveniência registra — calculado aqui, no servidor. */
+function acervoDoEditor(): PosicaoDoAcervoV2[] {
+  return Object.values(lerPosicoesDoConteudoV2())
+    .sort((a, b) => a.id.localeCompare(b.id))
+    .map((position) => ({ position, conteudoHash: hashDaPosicao(position) }));
+}
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ aula: str
 }
 
 export default async function PaginaDoEditorV2({ params }: { params: Promise<{ aula: string }> }) {
-  await exigirEditor();
+  const perfil = await exigirEditor();
   const { aula } = await params;
   /*
    * O id é conferido pelo schema do v2, e não pelo das aulas do curso: desde
@@ -73,6 +81,8 @@ export default async function PaginaDoEditorV2({ params }: { params: Promise<{ a
         positions={positions}
         problemasDaOrigem={daProveniencia}
         regua={lerRegua()}
+        professor={perfil.nome || perfil.usuario}
+        acervo={acervoDoEditor()}
       />
     );
   }
@@ -99,6 +109,8 @@ export default async function PaginaDoEditorV2({ params }: { params: Promise<{ a
       positions={positions}
       problemasDaOrigem={daProveniencia}
       regua={lerRegua()}
+      professor={perfil.nome || perfil.usuario}
+      acervo={acervoDoEditor()}
     />
   );
 }

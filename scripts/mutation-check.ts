@@ -1198,6 +1198,24 @@ const MUTACOES: Mutation[] = [
     },
   },
   {
+    titulo: "v2: narração de estudo de outra pessoa publicada sem declarar o direito de uso",
+    codigo: "TEXTO_SEM_DIREITO_DECLARADO",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => {
+        const inicio = p.aula.analises[0].inicio;
+        if (inicio.tipo !== "posicao") return;
+        const fen = p.posicoes[inicio.positionId].fen;
+        p.aula.analises[0].inicio = {
+          tipo: "fen",
+          fen,
+          revisao: { origem: "estudo-lichess", autor: "Outra Pessoa", fenRevisada: fen, revisadoEm: "2026-09-14T00:00:00.000Z", professor: "mutacao", mostrarCredito: false, direitoDosTextos: false },
+        };
+      });
+      return "analises[0].inicio → fen revisada de estudo do Lichess, sem direito dos textos";
+    },
+  },
+  {
     titulo: "v2: narração publicada com revisão pendente",
     codigo: "REVISAO_PENDENTE",
     fixtures: true,

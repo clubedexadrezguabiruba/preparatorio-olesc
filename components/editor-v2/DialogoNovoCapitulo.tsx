@@ -3,6 +3,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import type { Color } from "@lichess-org/chessground/types";
 import { MONTAGEM_INICIAL, Montador, type CamposDaMontagem } from "@/components/editor-v2/Montador";
+import { SeletorDoAcervo } from "@/components/editor-v2/SeletorDoAcervo";
+import type { PosicaoDoAcervoV2 } from "@/lib/editor-v2/acervo";
 import {
   FEN_DA_POSICAO_INICIAL,
   fenDoMontador,
@@ -41,7 +43,10 @@ export function DialogoNovoCapitulo({
   orientacaoPadrao,
   aoCriar,
   aoFechar,
+  acervo = [],
 }: {
+  /** Fatia 10: as posições de `content/positions/`, com o hash calculado no servidor. */
+  acervo?: PosicaoDoAcervoV2[];
   aula: AulaV2;
   /** O capítulo selecionado agora: é depois dele que o novo entra, por padrão. */
   capituloAtualId: string;
@@ -50,7 +55,8 @@ export function DialogoNovoCapitulo({
   aoFechar: () => void;
 }) {
   const [nome, setNome] = useState("");
-  const [porta, setPorta] = useState<"inicial" | "montar" | "fen">("inicial");
+  const [porta, setPorta] = useState<"inicial" | "montar" | "fen" | "acervo">("inicial");
+  const [doAcervo, setDoAcervo] = useState<PosicaoDoAcervoV2 | null>(null);
   const [fenColada, setFenColada] = useState("");
   const [montagem, setMontagem] = useState<CamposDaMontagem>(MONTAGEM_INICIAL);
   const [orientacao, setOrientacao] = useState<Color>(orientacaoPadrao);
@@ -117,7 +123,9 @@ export function DialogoNovoCapitulo({
     ? FEN_DA_POSICAO_INICIAL
     : porta === "montar"
       ? fenDoMontador(montagem)
-      : fenColada;
+      : porta === "acervo"
+        ? doAcervo?.position.fen ?? ""
+        : fenColada;
 
   function confirmar() {
     const preparo = prepararNovoCapitulo(aula, {
@@ -125,6 +133,9 @@ export function DialogoNovoCapitulo({
       fen,
       orientacao,
       ...(depoisDe ? { depoisDoCapituloId: depoisDe } : {}),
+      ...(porta === "acervo" && doAcervo
+        ? { doAcervo: { positionId: doAcervo.position.id, conteudoHash: doAcervo.conteudoHash, estado: doAcervo.position.status } }
+        : {}),
     });
     if (!preparo.ok) {
       setErro({ campo: preparo.campo, mensagem: preparo.mensagem });
@@ -139,6 +150,7 @@ export function DialogoNovoCapitulo({
     { chave: "inicial" as const, rotulo: "Posição inicial", ajuda: "O tabuleiro padrão do xadrez." },
     { chave: "montar" as const, rotulo: "Montar posição", ajuda: "Arraste as peças uma a uma." },
     { chave: "fen" as const, rotulo: "Colar FEN", ajuda: "A posição copiada do Lichess ou de um livro." },
+    ...(acervo.length ? [{ chave: "acervo" as const, rotulo: "Posição do acervo", ajuda: "Uma posição do curso, já com a origem registrada." }] : []),
   ];
 
   return (
@@ -225,6 +237,14 @@ export function DialogoNovoCapitulo({
               No Lichess: análise → o campo FEN embaixo do tabuleiro.
             </span>
           </label>
+        ) : null}
+
+        {porta === "acervo" ? (
+          <SeletorDoAcervo
+            acervo={acervo}
+            escolhida={doAcervo?.position.id ?? null}
+            aoEscolher={(item) => { setDoAcervo(item); if (erro?.campo === "posicao") setErro(null); if (!nome.trim()) setNome(item.position.tags[0] ?? ""); }}
+          />
         ) : null}
 
         {porta === "montar" ? (

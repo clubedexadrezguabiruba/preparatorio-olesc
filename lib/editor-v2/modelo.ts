@@ -145,6 +145,48 @@ export const revisaoPendenteV2Schema = z.strictObject({
   motivo: z.enum(["posicao-inicial-trocada"]),
 });
 
+/**
+ * De onde veio uma posição que entrou como FEN crua — especificação §19.1, plano §12.
+ *
+ * ## Um campo obrigatório só (decisão do Doug, 14/9/2026)
+ *
+ * "De onde veio" é o único campo que o professor **precisa** responder. Os outros — autor, obra,
+ * página, link, licença e nota — são opcionais: exigir a página de um livro de quem montou a posição
+ * de cabeça seria um formulário que ensina a inventar.
+ *
+ * - `autoria-propria`: a posição é do professor; publica, e o crédito é dele.
+ * - `desconhecida`: publica, mas deixa o aviso permanente `ORIGEM_DESCONHECIDA`, que não se marca
+ *   como resolvido — só some quando a origem é preenchida.
+ *
+ * ## `fenRevisada`, e não um hash
+ *
+ * O plano fala em hash da evidência. Aqui a evidência é a própria FEN — uma linha menor que o hash
+ * e igualmente exata —, e o comando que registra a revisão roda **no navegador**, onde
+ * `node:crypto` não existe. Trocar a posição inicial conserva a revisão com a FEN antiga: a
+ * diferença entre as duas é o que a torna caduca e o que mostra o antes e o depois.
+ */
+export const ORIGENS_DA_POSICAO = ["obra", "estudo-lichess", "partida", "autoria-propria", "desconhecida"] as const;
+export const revisaoDaFenV2Schema = z.strictObject({
+  origem: z.enum(ORIGENS_DA_POSICAO),
+  autor: z.string().min(1).optional(),
+  obra: z.string().min(1).optional(),
+  pagina: z.string().min(1).optional(),
+  link: z.string().min(1).optional(),
+  licenca: z.string().min(1).optional(),
+  nota: z.string().min(1).optional(),
+  /** A FEN que o professor tinha na frente quando registrou. */
+  fenRevisada: fenSchema,
+  revisadoEm: z.string().min(1),
+  professor: z.string().min(1),
+  /** Uma linha discreta no fim da aula, para o aluno. Privada por padrão. */
+  mostrarCredito: z.boolean(),
+  /**
+   * §12.3: os comentários e narrações que vieram com a posição são do professor, ou ele tem direito
+   * de publicá-los. Só é perguntado quando a origem é de outra pessoa (obra, estudo, partida).
+   */
+  direitoDosTextos: z.boolean().optional(),
+});
+
 export const noV2Schema = z.strictObject({
   id: idV2Schema,
   uci: uciSchema.optional(),
@@ -187,7 +229,12 @@ export const analiseV2Schema = z.strictObject({
      * que distingue os dois. Aqui a diferença é estrutural: enquanto a análise começa em
      * `fen`, ela **não pode** ser certificada, e o validador diz isso em voz alta.
      */
-    z.strictObject({ tipo: z.literal("fen"), fen: fenSchema }),
+    z.strictObject({
+      tipo: z.literal("fen"),
+      fen: fenSchema,
+      /** A revisão de proveniência desta FEN (§19.1, fatia 10). Ausente: ainda não revisada. */
+      revisao: revisaoDaFenV2Schema.optional(),
+    }),
   ]),
   /**
    * O cabeçalho do PGN de onde a análise veio, guardado inteiro e **nunca
@@ -437,6 +484,8 @@ export const aulaV2Schema = z.strictObject({
 });
 
 export type RevisaoPendenteV2 = z.infer<typeof revisaoPendenteV2Schema>;
+export type RevisaoDaFenV2 = z.infer<typeof revisaoDaFenV2Schema>;
+export type OrigemDaPosicaoV2 = RevisaoDaFenV2["origem"];
 export type CorDesenhoV2 = z.infer<typeof corDesenhoV2Schema>;
 export type SetaV2 = z.infer<typeof setaV2Schema>;
 export type CasaAcesaV2 = z.infer<typeof casaAcesaV2Schema>;
@@ -798,7 +847,13 @@ export function problemasDaAulaV2(
       // ninguém, não afirma nada e não tem o que revisar. Importar vinte partidas
       // completas produziria vinte avisos que não pedem trabalho nenhum — e alarme que
       // não pede trabalho ensina o professor a ignorar os que pedem.
-      if (analise.inicio.tipo === "fen" && analise.inicio.fen !== FEN_INICIAL_PADRAO) problemas.push({ codigo: "FEN_IMPORTADA_SEM_REVISAO", severidade: "aviso", mensagem: "esta análise começa numa posição importada, que ainda não passou por revisão de proveniência", analiseId: analise.id, campo: "inicio.fen" });
+      if (analise.inicio.tipo === "fen" && analise.inicio.fen !== FEN_INICIAL_PADRAO) {
+        const revisao = analise.inicio.revisao;
+        if (!revisao) problemas.push({ codigo: "FEN_IMPORTADA_SEM_REVISAO", severidade: "aviso", mensagem: "esta análise começa numa posição que ainda não passou por revisão de proveniência — diga de onde ela veio", analiseId: analise.id, campo: "inicio.revisao" });
+        else if (revisao.fenRevisada !== analise.inicio.fen) problemas.push({ codigo: "FEN_IMPORTADA_SEM_REVISAO", severidade: "aviso", mensagem: `a posição mudou depois da revisão de proveniência (revisada: ${revisao.fenRevisada}; agora: ${analise.inicio.fen}) — confirme a origem de novo`, analiseId: analise.id, campo: "inicio.revisao" });
+        // Nunca promovido nem resolvível: some só quando a origem é dita (decisão do Doug, 14/9).
+        else if (revisao.origem === "desconhecida") problemas.push({ codigo: "ORIGEM_DESCONHECIDA", severidade: "aviso", mensagem: "a origem desta posição está registrada como desconhecida — a aula publica, mas o aviso fica até alguém dizer de onde ela veio", analiseId: analise.id, campo: "inicio.revisao" });
+      }
     }
     for (const pratica of aula.praticas) {
       if (!proveniencia.has(pratica.positionId)) problemas.push({ codigo: "PRATICA_SEM_PROVENIENCIA", mensagem: `a prática usa ${pratica.positionId} sem registrar sua revisão`, praticaId: pratica.id, campo: "positionId" });

@@ -86,6 +86,16 @@ const ESTRAGOS: Estrago[] = [
   { codigo: "PROVENIENCIA_CADUCA", estragar: (a) => { a.proveniencia[0].conteudoHash = "0".repeat(64); } },
   { codigo: "PROVENIENCIA_DIVERGE", estragar: (a) => { a.proveniencia[0].estado = "candidate"; } },
   { codigo: "FEN_IMPORTADA_SEM_REVISAO", estragar: (a) => { a.analises[0].inicio = { tipo: "fen", fen: position.fen }; } },
+  {
+    codigo: "TEXTO_SEM_DIREITO_DECLARADO",
+    estragar: (a) => {
+      a.analises[0].inicio = {
+        tipo: "fen",
+        fen: position.fen,
+        revisao: { origem: "estudo-lichess", autor: "Outra Pessoa", fenRevisada: position.fen, revisadoEm: "2026-09-14T00:00:00.000Z", professor: "doug", mostrarCredito: true, direitoDosTextos: false },
+      };
+    },
+  },
   { codigo: "REVISAO_PENDENTE", estragar: (a) => { a.capitulos[0].narracoes[0].revisao = { motivo: "posicao-inicial-trocada" }; } },
   { codigo: "CERTIFICACAO_PENDENTE", estragar: (a) => { a.treinos[0].certificacao!.estado = "herdada-v1"; } },
   {

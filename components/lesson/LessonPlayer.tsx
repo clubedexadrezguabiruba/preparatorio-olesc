@@ -587,6 +587,12 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, onEtapaFeita }: {
           />
         ) : null}
       </section>
+      {/* §19.1 (fatia 10): o crédito que o professor pediu para mostrar, discreto, no fim da aula. */}
+      {aula.creditos?.length && !proxima ? (
+        <footer className="text-xs text-tinta-fraca">
+          {aula.creditos.map((linha) => <p key={linha}>{linha}</p>)}
+        </footer>
+      ) : null}
     </div>
   );
 }

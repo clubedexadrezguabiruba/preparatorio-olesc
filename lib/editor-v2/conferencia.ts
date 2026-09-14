@@ -38,6 +38,7 @@ import type { RevisoesDaAulaV2 } from "./avaliacao.ts";
 import { hashCanonico, hashDaPosicao } from "./hash.ts";
 import { problemasDaAulaV2, type AulaV2, type LocalizacaoProblemaV2, type ProblemaV2, type TreinoV2 } from "./modelo.ts";
 import { fenDaQuestaoDoTreino } from "./propriedade-treino.ts";
+import { analiseTemTexto, origemDeTerceiro } from "./proveniencia.ts";
 import { falasDoTreinoV2 } from "./voz-do-treino.ts";
 
 export type ContextoDePublicacaoV2 = {
@@ -138,6 +139,21 @@ export const REGRAS_PUBLICACAO_V2: RegraDePublicacaoV2[] = [
   { codigo: "PROVENIENCIA_DIVERGE", impede: "estado da revisão diferente do arquivo da posição", promove: true },
   { codigo: "FEN_IMPORTADA_SEM_REVISAO", impede: "análise começa numa FEN importada sem revisão", promove: true },
   { codigo: "REVISAO_PENDENTE", impede: "texto marcado para revisão depois de trocar a posição", promove: true },
+  /*
+   * §12.3 e plano §12 (fatia 10): narração que chegou com uma posição de outra pessoa — obra, estudo
+   * do Lichess, partida — só publica com a declaração do professor de que o texto é dele ou que ele
+   * tem direito de usá-lo. Copiar o comentário para a narração na importação não concede o direito.
+   */
+  {
+    codigo: "TEXTO_SEM_DIREITO_DECLARADO",
+    impede: "narração de posição de terceiros sem a declaração de direito de uso",
+    julgar: (aula) => aula.analises.flatMap((analise) => {
+      const revisao = analise.inicio.tipo === "fen" ? analise.inicio.revisao : undefined;
+      if (!revisao || !origemDeTerceiro(revisao.origem) || revisao.direitoDosTextos || !analiseTemTexto(aula, analise)) return [];
+      const capitulo = aula.capitulos.find((item) => item.analiseId === analise.id);
+      return [erro(aula, "TEXTO_SEM_DIREITO_DECLARADO", `as narrações ${capitulo ? `do capítulo «${capitulo.titulo}» ` : ""}vieram com uma posição de outra pessoa — marque na proveniência que os textos são seus ou que você tem direito de usá-los, ou reescreva-os`, { analiseId: analise.id, campo: "inicio.revisao" })];
+    }),
+  },
   {
     codigo: "CERTIFICACAO_PENDENTE",
     impede: "final certificado sem certificação confirmada",

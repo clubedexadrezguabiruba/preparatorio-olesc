@@ -87,8 +87,12 @@ test("problema sem lugar navegável não oferece botão que não leva a lugar ne
   assert.equal(daAula.onde, "a aula");
   assert.equal(daAula.destino, null);
 
+  // Fatia 10: o treino, a prática e a proveniência passaram a ter janela — o botão abre a autoria.
   const doTreino = descreverProblemaV2(aula, problema({ localizacao: { aulaId: aula.id, treinoId: aula.treinos[0].id } }));
-  assert.equal(doTreino.destino, null, "o piloto ainda não navega até um treino");
+  assert.deepEqual(doTreino.destino, { janela: { tipo: "treino", treinoId: aula.treinos[0].id } });
+  const daPosicao = descreverProblemaV2(aula, problema({ localizacao: { aulaId: aula.id, analiseId: aula.capitulos[0].analiseId, campo: "inicio.revisao" } }));
+  assert.equal(daPosicao.destino?.janela?.tipo, "proveniencia");
+  assert.match(daPosicao.onde, /^a posição inicial do capítulo/);
 });
 
 test("entidade apagada não quebra a frase nem promete destino", () => {

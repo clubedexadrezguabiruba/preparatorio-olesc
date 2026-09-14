@@ -3,7 +3,7 @@
 import { useState, type DragEvent, type MouseEvent } from "react";
 import type { CapituloV2 } from "@/lib/editor-v2/modelo";
 
-export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDuplicar, aoExcluir }: {
+export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDuplicar, aoExcluir, proveniencia = {}, aoProveniencia }: {
   capitulos: CapituloV2[];
   atualId: string;
   aoEscolher: (capitulo: CapituloV2) => void;
@@ -13,6 +13,12 @@ export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDu
   aoDuplicar: (capituloId: string) => void;
   /** §8.4: abre o diálogo da exclusão, com o impacto. */
   aoExcluir: (capituloId: string) => void;
+  /**
+   * Fatia 10, §19.1: o estado da proveniência de cada capítulo que começa numa FEN crua. Os que não
+   * aparecem aqui começam numa posição do acervo ou numa referência, e o menu não oferece a janela.
+   */
+  proveniencia?: Record<string, "sem-revisao" | "caduca" | "desconhecida" | "revisada">;
+  aoProveniencia?: (capituloId: string) => void;
 }) {
   const [arrastando, setArrastando] = useState<number | null>(null);
   const [vaoAlvo, setVaoAlvo] = useState<number | null>(null);
@@ -90,6 +96,9 @@ export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDu
               className="foco min-w-0 flex-1 px-1 py-2 text-left text-sm"
             >
               {capitulo.titulo}
+              {proveniencia[capitulo.id] && proveniencia[capitulo.id] !== "revisada" ? (
+                <span className="ml-1 text-xs text-aviso-tinta" title="A origem desta posição ainda não foi registrada">⚑<span className="sr-only"> (origem da posição a revisar)</span></span>
+              ) : null}
             </button>
             <details className="relative shrink-0">
               <summary
@@ -120,6 +129,15 @@ export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDu
                     as duas são ações **sobre este capítulo** — e o `•••` é o
                     equivalente por teclado que §25 exige do botão direito. */}
                 <hr className="my-1 border-borda-fraca" />
+                {aoProveniencia && proveniencia[capitulo.id] ? (
+                  <button
+                    type="button"
+                    onClick={(evento) => { fecharMenu(evento); aoProveniencia(capitulo.id); }}
+                    className="foco rounded px-2 py-1.5 text-left text-sm hover:bg-carta-toque"
+                  >
+                    De onde veio a posição…
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   onClick={(evento) => { fecharMenu(evento); aoDuplicar(capitulo.id); }}
