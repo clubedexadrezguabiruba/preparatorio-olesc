@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useOrientacaoDaVista } from "@/components/atalhos/Atalhos";
 import { PINCEL_POR_COR } from "@/lib/chess/annotations";
+import { setaQueEnsina } from "@/lib/chess/desenhos-do-tabuleiro";
 import { Chessground } from "@lichess-org/chessground";
 import type { Api } from "@lichess-org/chessground/api";
 import type { DrawBrush, DrawBrushes, DrawShape } from "@lichess-org/chessground/draw";
@@ -40,6 +41,9 @@ const PINCEIS = [
   // mesmo em escala de cinza, onde a cor não separa.
   { nome: "green", token: "--color-pincel-defendida", opacity: 1, lineWidth: 9 },
   { nome: "red", token: "--color-pincel-pendurada", opacity: 1, lineWidth: 14 },
+  // O azul desenha só o círculo da dica desde 14/9/2026. A seta azul não chega ao
+  // pacote como seta: vira a seta que ensina, pulsando — ver o efeito de
+  // `setAutoShapes` no fim deste arquivo.
   { nome: "blue", token: "--color-pincel-seta", opacity: 1, lineWidth: 10 },
   { nome: "paleRed", token: "--color-pincel-corte", opacity: 0.55, lineWidth: 15 },
   // O selo de "alternativa" do treinador de repertório. Mesma espessura de
@@ -489,9 +493,24 @@ export function ChessBoard({
 
   // Depois do `set` acima: `setAutoShapes` redesenha a camada inteira, então
   // uma lista vazia é o jeito de apagar o que havia.
+  //
+  // **A seta azul não chega ao pacote como seta.** Ela é a seta que ensina, e
+  // desde 14/9/2026 pulsa em verde vivo — o que o chessground não sabe fazer.
+  // Vai trocada pelo desenho próprio (`setaQueEnsina`), que precisa da
+  // orientação para saber para que lado aponta. As setas azuis do desenho do
+  // **professor** (`desenhavel`) ficam no estado do pacote, onde o botão direito
+  // as apaga; ganham a nossa por cima, e a linha dele some por CSS.
   useEffect(() => {
-    apiRef.current?.setAutoShapes(shapes ?? []);
-  }, [shapes, fen, revision]);
+    const ensinaAzul = (s: DrawShape): s is DrawShape & { dest: Key } =>
+      s.brush === "blue" && s.dest !== undefined && s.dest !== s.orig;
+    const automaticas = (shapes ?? []).map((s) => (ensinaAzul(s) ? setaQueEnsina(s.orig, s.dest, orientation) : s));
+    const doProfessor = desenhaAqui
+      ? (desenhavel?.shapes ?? []).filter(ensinaAzul).map((s) => setaQueEnsina(s.orig, s.dest, orientation))
+      : [];
+    apiRef.current?.setAutoShapes([...automaticas, ...doProfessor]);
+    // `fen` e `revision` não são lidos aqui, e ficam: o `set` do efeito de cima
+    // pode redesenhar a camada, e é a troca de posição que manda redesenhar.
+  }, [shapes, desenhavel?.shapes, desenhaAqui, orientation, fen, revision]);
 
   return (
     <div ref={frameRef} className="relative w-full">

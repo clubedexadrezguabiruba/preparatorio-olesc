@@ -48,7 +48,7 @@ const resumo = (l: Linha): LinhaNoImpacto => ({ id: l.id, nome: l.nome, nivel: l
 
 /** O que o aluno lê de uma linha, fora os lances. */
 const textoDaLinha = (l: Linha): string =>
-  JSON.stringify([l.nome, l.comentarios, l.plano, l.fonte, l.alternativas, l.errosNomeados]);
+  JSON.stringify([l.nome, l.comentarios, l.plano, l.fonte, l.alternativas, l.errosNomeados, l.marcas ?? {}]);
 
 export function impactoDoRepertorio(antes: readonly Linha[], depois: readonly Linha[]): ImpactoDoRepertorio {
   const porIdAntes = new Map(antes.map((l) => [l.id, l]));

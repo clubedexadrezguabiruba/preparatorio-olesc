@@ -210,6 +210,17 @@ export const LinhaSchema = z
      * vire resposta certa por ser irmão do lance principal.
      */
     errosNomeados: z.record(z.string(), z.array(z.string())).default({}),
+    /**
+     * A marca **boa** que a fonte deu a um lance nosso da linha, por meio-lance:
+     * `!!` ou `!` (`$3` e `$1` chegam aqui já traduzidos). É o que o treino
+     * mostra como Brilhante e Ótimo quando o aluno acerta aquele lance.
+     *
+     * **Opcional, e não `.default({})`**, ao contrário dos vizinhos: o compilador
+     * só escreve o campo quando há marca. Com padrão, cada uma das linhas do
+     * repertório ganharia um `"marcas": {}` no JSON publicado sem nada ter
+     * mudado para o aluno — e o `--check` acusaria os onze arquivos.
+     */
+    marcas: z.record(z.string(), z.enum(["!!", "!"])).optional(),
     /** O texto do professor, por meio-lance. Redigido do zero, nunca do curso. */
     comentarios: z.record(z.string(), z.string()),
     /**

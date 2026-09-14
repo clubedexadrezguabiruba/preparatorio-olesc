@@ -208,7 +208,9 @@
   --color-coordenada: oklch(26% 0.015 160);
 
   --color-destino: oklch(38% 0.14 152);
-  --color-ultimo-lance: oklch(41% 0.1 88);
+  /* O amarelo do Chess.com a 50%, desde 14/9/2026 — ver `square.last-move` mais
+     abaixo, e a dívida registrada em `lib/tema/pares.ts`. */
+  --color-ultimo-lance: rgb(255 255 51 / 0.5);
   --color-xeque: oklch(34% 0.19 25);
   --color-premove: oklch(40% 0.15 262);
 }
@@ -301,6 +303,33 @@
      com um pingo de azul (a primeira versão, matiz 250) ele puxava para as casas azuis do
      tabuleiro e para o traço do professor. */
   --color-pincel-motor: oklch(30% 0 0);
+
+  /* **O tabuleiro estilo Chess.com (14/9/2026).** Escolhido pelo Doug olhando a
+     prévia `.playwright-mcp/previa-tabuleiro.html`, com as cores medidas no
+     Chess.com. Estas **não** entram pela tabela de pincéis do `ChessBoard.tsx`:
+     são desenhos próprios (`lib/chess/desenhos-do-tabuleiro.ts`), e a cor chega
+     a eles por classe, mais abaixo (`.simbolo-cor-*`).
+
+     A seta que ensina: verde vivo, opaco e sem contorno. **Fica abaixo do piso
+     de 3:1** — 2,0:1 na casa clara e 1,11:1 na escura —, e o Doug foi avisado
+     antes de escolher; o que a segura na tela é o pulso e a ponta larga. Está
+     registrada como dívida em `lib/tema/pares.ts`, com a troca já vista na
+     prévia se incomodar: o mesmo verde com contorno de `pincel-seta` (V8).
+     O `pincel-seta` escuro continua vivo no círculo da **dica**. */
+  --color-seta-ensina: #81b64c;
+
+  /* Os símbolos do veredito, no canto da casa de chegada. O desenho é nosso — a
+     estrela é traço próprio e os sinais são texto —, nunca o SVG deles. `?!`
+     (#F7C631) fica sem uso: o repertório não tem imprecisão, tem erro. */
+  --color-simbolo-acerto: #81b64c;
+  --color-simbolo-alternativa: #7979a1;
+  --color-simbolo-erro: #ffa459;
+  --color-simbolo-armadilha: #fa412d;
+  --color-simbolo-brilhante: #26c2a3;
+  --color-simbolo-otimo: #749bbf;
+  /* A tinta que cobre a casa na entrada grande, a 0,8 por cima da peça. */
+  --color-tinta-brilhante: rgb(27 172 166);
+  --color-tinta-otimo: rgb(92 139 176);
 }
 
 /* --------------------------------------------------------------------------
@@ -979,31 +1008,30 @@ cg-board square.premove-dest.hover {
   background: color-mix(in oklab, var(--color-premove) 45%, transparent);
 }
 
-/* O último lance é um ARO, e não a casa cheia. Foi preenchimento até 8/9/2026,
-   e a troca saiu de medição, não de gosto.
+/* O último lance é a casa CHEIA, em amarelo a 50% — o destaque do Chess.com,
+   desde 14/9/2026.
 
-   O que o Doug via: as duas casas do último lance pareciam ter cores
-   diferentes. Medido com `getComputedStyle` nas duas, na Escandinava depois de
-   1.e4, num tabuleiro de 768 px: **as duas têm exatamente o mesmo valor**
-   (`lab(31.68 6.99 52.14)`, o token abaixo). O que difere é o que está em cima
-   — a casa de ORIGEM está vazia e mostra o tom inteiro; a de DESTINO tem a peça
-   desenhada por cima e sobra uma moldura fina. Duas casas com a mesma tinta
-   lidas como duas cores, porque metade de uma delas está escondida.
+   Foi aro escuro de 8/9 a 14/9, e aquela troca saiu de medição: as duas casas
+   do último lance **pareciam** de cores diferentes tendo o mesmo valor, porque a
+   de destino tem a peça por cima e mostra só uma moldura do tom. O aro resolvia
+   pela borda, onde peça nenhuma chega.
 
-   O aro conserta pela raiz: ele mora na borda da casa, que é justamente onde
-   peça nenhuma chega. As duas passam a mostrar o mesmo desenho, com peça ou
-   sem. A espessura é 9% da casa e sai de `---cg-width`, que o próprio
-   chessground publica (o nome tem três traços mesmo) — 8,6 px num tabuleiro de
-   768 e 2,7 px num de 240, em vez de um valor fixo que some no grande e
-   engole o pequeno.
+   A volta ao cheio é escolha do Doug, olhando as três lado a lado na prévia
+   `.playwright-mcp/previa-tabuleiro.html`, e ele foi avisado dos preços antes:
+   a casa com peça pode voltar a parecer de outra cor, e sobre o nosso azul o
+   amarelo a 50% não fica amarelo — vira verde-limão na casa escura e creme na
+   clara. Translúcido de propósito, como no Chess.com: é o que deixa ver se a
+   casa por baixo é clara ou escura. Mede abaixo de 3:1, e a dívida está
+   registrada em `lib/tema/pares.ts`.
 
-   Opaco de propósito, como era: translucidez aqui clarearia a marca até abaixo
-   do piso de 3:1, e o realce amarelo-claro do pacote media 1,50:1.
+   `background-color` e não o atalho `background`: o ponto do destino legal é
+   uma `background-image`, e o atalho apagaria o ponto na casa que é as duas
+   coisas ao mesmo tempo.
 
-   A casa selecionada e o pré-lance continuam cheios: são estados de interação
-   ao vivo, em que a peça está na mão do aluno e não em cima da casa. */
+   A casa selecionada e o pré-lance continuam com as cores deles: são estados
+   de interação ao vivo, em que a peça está na mão do aluno. */
 cg-board square.last-move {
-  box-shadow: inset 0 0 0 calc(var(---cg-width, 512px) / 8 * 0.09) var(--color-ultimo-lance);
+  background-color: var(--color-ultimo-lance);
 }
 
 cg-board square.selected {
@@ -1035,6 +1063,73 @@ cg-board square.check {
    carregar o próprio alfa em `components/board/ChessBoard.tsx`. */
 .cg-wrap .cg-shapes {
   opacity: 1;
+}
+
+/* A seta que ensina, desenhada por nós (`lib/chess/desenhos-do-tabuleiro.ts`).
+
+   Nos editores a seta azul da autoria continua sendo desenhada **também** pelo
+   chessground, porque é lá que ela mora como traço do professor — é o estado dele
+   que o botão direito apaga. Esta regra esconde só a linha dele; a que se vê é a
+   nossa, pulsando por cima. O seletor pega a seta pelo marcador, que é o único
+   atributo em que o pacote escreve o nome do pincel (`svg.js`). */
+.cg-wrap svg.cg-shapes line[marker-end="url(#arrowhead-blue)"] {
+  visibility: hidden;
+}
+
+.seta-ensina {
+  fill: var(--color-seta-ensina);
+}
+
+/* As cores dos símbolos, uma classe por veredito (`simbolo-cor-*`, `tinta-*`). */
+.simbolo-cor-acerto {
+  fill: var(--color-simbolo-acerto);
+}
+.simbolo-cor-alternativa {
+  fill: var(--color-simbolo-alternativa);
+}
+.simbolo-cor-erro {
+  fill: var(--color-simbolo-erro);
+}
+.simbolo-cor-armadilha {
+  fill: var(--color-simbolo-armadilha);
+}
+.simbolo-cor-brilhante {
+  fill: var(--color-simbolo-brilhante);
+}
+.simbolo-cor-otimo {
+  fill: var(--color-simbolo-otimo);
+}
+.tinta-brilhante {
+  fill: var(--color-tinta-brilhante);
+}
+.tinta-otimo {
+  fill: var(--color-tinta-otimo);
+}
+
+/* O pulso encolhe a haste a partir da cauda: origem no começo da seta. */
+.seta-ensina .seta-haste {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+/* A entrada grande, **em repouso no estado final**: o disco pequeno no canto, sem
+   tinta e sem etiqueta. É o que vê quem desligou as animações, e é onde a
+   animação termina — as duas coisas precisam ser a mesma. Raio 35 a 0,57 dá os
+   20 do disco pequeno. */
+.entrada-grande .entrada-tinta {
+  opacity: 0;
+}
+
+.entrada-grande .entrada-icone {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transform: translate(94px, 6px) scale(0.57);
+}
+
+.entrada-grande .entrada-rotulo-miolo {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 /* O fantasma do arraste — a peça que fica para trás enquanto o aluno arrasta.
@@ -1261,9 +1356,145 @@ cg-board square.check {
   --cor-anel: var(--color-erro);
 }
 
+/* A seta que ensina, medida no Chess.com: a cauda fica, a ponta recua 14% de uma
+   casa e volta, 1,4 s por ciclo, suave. A haste encolhe o mesmo tanto, e cada
+   seta traz o próprio `--encolhe`, porque 14 é fração diferente de cada
+   comprimento. Dentro do desenho, 100 unidades são uma casa. */
+@keyframes seta-ponta {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-14px);
+  }
+}
+
+@keyframes seta-haste {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(var(--encolhe, 1));
+  }
+}
+
+/* O símbolo no canto surge em 150 ms e fica. */
+@keyframes simbolo-surge {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* A entrada grande do Brilhante e do Ótimo: 1,3 s — 23% é o fim dos 300 ms de
+   entrada, 77% o fim dos 700 ms parados. Os números são os da prévia aprovada. */
+@keyframes entrada-tinta {
+  0% {
+    opacity: 0;
+  }
+  23%,
+  77% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes entrada-icone {
+  0% {
+    opacity: 0;
+    transform: translate(50px, 62.5px) scale(0.4);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+  23% {
+    opacity: 1;
+    transform: translate(50px, 62.5px) scale(1);
+  }
+  77% {
+    opacity: 1;
+    transform: translate(50px, 62.5px) scale(1);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(94px, 6px) scale(0.57);
+  }
+}
+
+/* O disco só ganha cor chegando ao canto: no meio da casa o sinal branco está
+   sobre a tinta, e um disco cheio ali taparia a peça duas vezes. */
+@keyframes entrada-bola {
+  0%,
+  77% {
+    fill-opacity: 0;
+  }
+  100% {
+    fill-opacity: 1;
+  }
+}
+
+@keyframes entrada-rotulo {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scaleX(1);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+  23% {
+    opacity: 1;
+    transform: translateY(0) scaleX(1);
+  }
+  77% {
+    opacity: 1;
+    transform: translateY(0) scaleX(1);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0) scaleX(0);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .anel-pulso {
     animation: pulso-anel 620ms ease-out 1;
+  }
+
+  /* Os desenhos estilo Chess.com. Nenhum deles é elemento que o chessground
+     escreva — ele só escreve o `transform` do `<g>` que os embrulha —, então a
+     regra 3 acima não os alcança. Com as animações desligadas, a seta fica
+     inteira e parada, o símbolo aparece sem surgir, e a entrada grande vira o
+     disco no canto direto. */
+  .seta-ensina .seta-haste {
+    animation: seta-haste 1.4s ease-in-out infinite;
+  }
+
+  .seta-ensina .seta-ponta {
+    animation: seta-ponta 1.4s ease-in-out infinite;
+  }
+
+  .simbolo-lance {
+    animation: simbolo-surge 150ms cubic-bezier(0, 0, 0.4, 1) both;
+  }
+
+  .entrada-grande .entrada-tinta {
+    animation: entrada-tinta 1.3s linear forwards;
+  }
+
+  .entrada-grande .entrada-icone {
+    animation: entrada-icone 1.3s both;
+  }
+
+  .entrada-grande .entrada-bola {
+    animation: entrada-bola 1.3s both;
+  }
+
+  .entrada-grande .entrada-rotulo-miolo {
+    animation: entrada-rotulo 1.3s both;
   }
 
   /* O seletor exclui de propósito o fantasma do arraste e as peças de

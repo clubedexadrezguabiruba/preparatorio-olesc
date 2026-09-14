@@ -83,6 +83,24 @@ export type Fase =
 /** O que aconteceu com um lance nosso. É o que a fita do boletim desenha. */
 export type Selo = "acerto" | "alternativa" | "falha";
 
+/**
+ * O símbolo que fica no canto da casa de chegada — o desenho, e não o boletim.
+ *
+ * É mais fino que `Selo` em duas pontas, e as duas são da fonte, não do aluno:
+ * o acerto num lance que a fonte marcou `!!` ou `!` vira `brilhante` ou `otimo`,
+ * e o erro que a fonte mostra de propósito (`errosNomeados`) vira `armadilha`.
+ * Na fita os três continuam sendo acerto e falha — o placar não muda porque a
+ * fonte achou um lance bonito.
+ */
+export type Simbolo = "acerto" | "brilhante" | "otimo" | "alternativa" | "erro" | "armadilha";
+
+/**
+ * Quanto dura a entrada grande do Brilhante e do Ótimo: 300 ms entrando, 700
+ * parada e 300 indo para o canto. É também quanto o adversário espera para
+ * responder depois deles — ver `esperaOAdversario`.
+ */
+export const ENTRADA_GRANDE_MS = 1300;
+
 export type Tom = "calma" | "bom" | "aviso" | "ruim";
 
 /**
@@ -145,6 +163,15 @@ export type EstadoDaPassada = {
    * fase em que a frente ficou esperando. Nulo quando ele está na frente.
    */
   readonly olhando: { readonly meioLance: number; readonly deVolta: Fase } | null;
+  /**
+   * O símbolo no canto da casa de chegada do último lance do aluno.
+   *
+   * **Mora no estado, e não num relógio da casca**, porque a regra é "fica até
+   * o próximo lance": era um aro de 0,8 s que sumia sozinho, e agora quem o
+   * apaga é a posição mudar — o lance dele, a linha do clube entrando, ou o
+   * aluno olhando para trás. Um relógio não sabe nada disso; o redutor sabe.
+   */
+  readonly simbolo: { readonly casa: string; readonly qual: Simbolo } | null;
 };
 
 export type Evento =
@@ -169,8 +196,6 @@ export type Efeito =
    * toca no lance que fecha o quiz: ali quem toca é o prêmio.
    */
   | { readonly tipo: "som-certo" }
-  /** O disco transitório na casa de destino, que carrega o veredito. */
-  | { readonly tipo: "selo"; readonly casa: string; readonly qual: Selo }
   /**
    * Manda os lances ao servidor. Acontece **uma vez** por passada, e só no
    * quiz — é `gravar` quem o emite, e ninguém mais.
@@ -293,6 +318,7 @@ export function inicio(linha: Linha, modo: Modo): EstadoDaPassada {
     revisao: 0,
     revelado: null,
     olhando: null,
+    simbolo: null,
   };
   return { ...cru, cartao: emRepouso(linha, cru) };
 }
@@ -363,6 +389,7 @@ function aplicar(
   estado: EstadoDaPassada,
   noTabuleiro: string,
   doAluno: string,
+  simbolo: Simbolo | null = null,
 ): Passo {
   const depois = applyUci(estado.fen, noTabuleiro);
   // Lance ilegal aqui é impossível por construção — o compilador do repertório
@@ -382,6 +409,7 @@ function aplicar(
     passo: passo + 1,
     pendente: null,
     dicaNoPasso: null,
+    simbolo: simbolo ? { casa: noTabuleiro.slice(2, 4), qual: simbolo } : null,
     // Nas etapas de memória o comentário não aparece — nem sem travar, como o
     // quiz fazia até 8/9. O texto de um lance costuma nomear o plano e o lance
     // seguinte ("c3 prepara d4"), e deixá-lo no painel é dar a resposta da
@@ -416,7 +444,16 @@ function aplicar(
   const seguinte: EstadoDaPassada = { ...andou, fase: trava ? "lendo" : "jogando" };
   return {
     estado: { ...seguinte, cartao: emRepouso(linha, seguinte) },
-    efeitos: [som, ...esperaOAdversario(linha, seguinte)],
+    efeitos: [
+      som,
+      // A entrada grande não pode ser cortada pelo lance dele no meio: ele
+      // apagaria o símbolo antes de o símbolo chegar ao canto.
+      ...esperaOAdversario(
+        linha,
+        seguinte,
+        simbolo === "brilhante" || simbolo === "otimo" ? Math.max(RESPOSTA_MS, ENTRADA_GRANDE_MS) : RESPOSTA_MS,
+      ),
+    ],
   };
 }
 
@@ -446,6 +483,7 @@ function revelar(
     pendente: null,
     fase: "resolvido",
     comentario: comentarioDe(linha, estado.passo),
+    simbolo: null,
   };
   return {
     estado: { ...fim, cartao: emRepouso(linha, fim) },
@@ -497,10 +535,10 @@ const esperaAVolta: Efeito = {
  * evento anterior de onde emiti-lo, e ele espera mais — o aluno precisa ver a
  * posição parada antes de a primeira peça andar.
  */
-function esperaOAdversario(linha: Linha, estado: EstadoDaPassada): Efeito[] {
+function esperaOAdversario(linha: Linha, estado: EstadoDaPassada, ms = RESPOSTA_MS): Efeito[] {
   if (estado.fase !== "jogando") return [];
   if (estado.passo >= linha.lances.length || minhaVez(linha, estado.passo)) return [];
-  return [{ tipo: "agendar", evento: { tipo: "adversarioJogou" }, ms: RESPOSTA_MS }];
+  return [{ tipo: "agendar", evento: { tipo: "adversarioJogou" }, ms }];
 }
 
 /* ------------------------------------------------------------------ *
@@ -525,6 +563,7 @@ export function reduzir(linha: Linha, estado: EstadoDaPassada, evento: Evento): 
         fen: depois.fen,
         ultimoLance: casas(uci),
         passo: estado.passo + 1,
+        simbolo: null,
         comentario: estado.modo === "assistido" ? comentario : null,
         // Os 4 comentários do repertório que caem em lance **dele** travavam
         // nada antes deste bloco: o efeito de resposta automática atropelava a
@@ -643,19 +682,22 @@ function jogou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
 
   if (veredito === "alternativa") {
     return {
-      estado: mostrar(
-        linha,
-        marcar(estado, k, "alternativa"),
-        {
-          comando: "Também vale",
-          estado: ultimoPly
-            ? `A linha do clube termina com ${san}.`
-            : `A linha do clube joga ${san}.`,
-          tom: "aviso",
-        },
-        { noTabuleiro: principal, doAluno: uci },
-      ),
-      efeitos: [{ tipo: "selo", casa: destino, qual: "alternativa" }, esperaAVolta],
+      estado: {
+        ...mostrar(
+          linha,
+          marcar(estado, k, "alternativa"),
+          {
+            comando: "Também vale",
+            estado: ultimoPly
+              ? `A linha do clube termina com ${san}.`
+              : `A linha do clube joga ${san}.`,
+            tom: "aviso",
+          },
+          { noTabuleiro: principal, doAluno: uci },
+        ),
+        simbolo: { casa: destino, qual: "alternativa" },
+      },
+      efeitos: [esperaAVolta],
     };
   }
 
@@ -684,9 +726,9 @@ function jogou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
       ...mostrar(linha, gravado.estado, cartao, { noTabuleiro: principal, doAluno: uci }),
       errou: true,
       revelado: { passo, uci: principal, san },
+      simbolo: { casa: destino, qual: veredito === "erro-nomeado" ? "armadilha" : "erro" },
     },
     efeitos: [
-      { tipo: "selo", casa: destino, qual: "falha" },
       { tipo: "som-recusa" },
       ...gravado.efeitos,
       esperaAVolta,
@@ -695,17 +737,22 @@ function jogou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
 }
 
 /**
- * O lance certo, nas três etapas: entra no tabuleiro, com o selo verde e o som
- * de acerto. O acerto fica de fora quando o prêmio já toca — é o lance que fecha
- * o quiz, e dois sons de vitória juntos viram barulho.
+ * O lance certo, nas três etapas: entra no tabuleiro, com o símbolo no canto da
+ * casa e o som de acerto. O acerto fica de fora quando o prêmio já toca — é o
+ * lance que fecha o quiz, e dois sons de vitória juntos viram barulho.
+ *
+ * O símbolo é a estrela, a menos que a fonte tenha marcado o lance: `!!` é
+ * Brilhante e `!` é Ótimo. Nas três etapas igual — a marca é da fonte, e seguir
+ * a seta até um lance brilhante continua sendo jogar um lance brilhante.
  */
 function acertou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
-  const feito = aplicar(linha, estado, uci, uci);
+  const marca = linha.marcas?.[String(estado.passo)];
+  const simbolo: Simbolo = marca === "!!" ? "brilhante" : marca === "!" ? "otimo" : "acerto";
+  const feito = aplicar(linha, estado, uci, uci, simbolo);
   const premio = feito.efeitos.some((e) => e.tipo === "som-premio");
-  const selo: Efeito = { tipo: "selo", casa: uci.slice(2, 4), qual: "acerto" };
   return {
     estado: feito.estado,
-    efeitos: premio ? [selo, ...feito.efeitos] : [selo, { tipo: "som-certo" }, ...feito.efeitos],
+    efeitos: premio ? feito.efeitos : [{ tipo: "som-certo" }, ...feito.efeitos],
   };
 }
 
@@ -880,6 +927,18 @@ function olhou(linha: Linha, estado: EstadoDaPassada, para: "tras" | "frente"): 
       tom: "calma",
     },
   });
+}
+
+/**
+ * O símbolo que a tela desenha agora.
+ *
+ * Olhando para trás ele some, porque a casa dele é da posição da frente — o
+ * `f3` do cavalo que, três meios-lances atrás, ainda está em `g1`. Mas o estado
+ * **não** o apaga: voltar à frente devolve a passada exatamente como estava, e o
+ * símbolo do último lance faz parte dela.
+ */
+export function simboloNaTela(estado: EstadoDaPassada): EstadoDaPassada["simbolo"] {
+  return estado.olhando ? null : estado.simbolo;
 }
 
 /* ------------------------------------------------------------------ *

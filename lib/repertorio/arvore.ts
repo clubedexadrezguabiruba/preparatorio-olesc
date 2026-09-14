@@ -83,6 +83,20 @@ const temMarcaBoa = (l: Anotado): boolean => l.nags.some((n) => NAGS_BONS.has(n)
 const temMarcaRuim = (l: Anotado): boolean => l.nags.some((n) => NAGS_RUINS.has(n));
 
 /**
+ * A marca que vira Brilhante (`!!`) ou Ótimo (`!`) no treino, num lance da linha.
+ *
+ * Irmão de `temMarcaBoa`, e com uma pergunta diferente: lá a marca decide se um
+ * lance **fora** da linha é aceito, e `!?` basta; aqui ela diz **quão bom** é o
+ * lance da própria linha, e `!?` não diz "ótimo". Se a fonte escreveu as duas
+ * (`!!` e `$1` no mesmo lance), vale a maior.
+ */
+function marcaBoa(l: Anotado): "!!" | "!" | null {
+  if (l.nags.some((n) => n === "!!" || n === "$3")) return "!!";
+  if (l.nags.some((n) => n === "!" || n === "$1")) return "!";
+  return null;
+}
+
+/**
  * O comentário é uma pergunta de "homework"?
  *
  * Os draft do ChessMood param em perguntas em vez de dar o lance ("Do you
@@ -180,8 +194,13 @@ export function expandir(partida: PartidaPgn, cabecalho: Cabecalho): Expansao {
     const sans = caminho.map((p) => p.san);
     const meus: number[] = [];
     const comentarios: Record<string, string> = {};
+    const marcas: Record<string, "!!" | "!"> = {};
     for (const [i, passo] of caminho.entries()) {
-      if (ehMeu(i, cabecalho.cor)) meus.push(i);
+      if (ehMeu(i, cabecalho.cor)) {
+        meus.push(i);
+        const marca = marcaBoa(passo);
+        if (marca) marcas[String(i)] = marca;
+      }
       if (passo.comentario) comentarios[String(i)] = passo.comentario;
       // O `[%plano]` diz o que a LINHA não fechou, e a linha só termina na
       // ponta. Escrito no meio, ele descreveria uma posição que a linha ainda
@@ -237,6 +256,8 @@ export function expandir(partida: PartidaPgn, cabecalho: Cabecalho): Expansao {
       meus,
       alternativas: comoTexto(alternativas),
       errosNomeados: comoTexto(errosNomeados),
+      // Só quando há: ver o campo em `linhas.ts`.
+      ...(Object.keys(marcas).length > 0 ? { marcas } : {}),
       comentarios,
       plano: caminho[ultimo].plano,
       fonte: cabecalho.fonte,

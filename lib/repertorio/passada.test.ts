@@ -5,6 +5,7 @@ import {
   acuracia,
   inicio,
   reduzir,
+  simboloNaTela,
   type EstadoDaPassada,
   type Efeito,
   type Evento,
@@ -620,4 +621,82 @@ test("lance errado e lance do adversário não tocam o acerto", () => {
   const depoisDoMeu = correr(l, inicio(l, "quiz"), [jogou("e2e4")]).estado;
   const dele = reduzir(l, depoisDoMeu, responde).efeitos;
   assert.equal(quantos(dele, "som-certo"), 0, "o lance dele não é acerto do aluno");
+});
+
+/* ------------------------------------------------------------------ *
+ * O símbolo no canto da casa de chegada (14/9/2026)
+ * ------------------------------------------------------------------ */
+
+test("o acerto deixa a estrela na casa de chegada, nas três etapas", () => {
+  const l = linha();
+  for (const modo of ["assistido", "treino", "quiz"] as const) {
+    const { estado } = correr(l, inicio(l, modo), [jogou("e2e4")]);
+    assert.deepEqual(estado.simbolo, { casa: "e4", qual: "acerto" }, `${modo}: estrela em e4`);
+  }
+});
+
+test("o símbolo fica até o próximo lance: o lance dele o apaga, e olhar para trás o esconde", () => {
+  // Era um aro de 0,8 s que sumia sozinho. Agora fica — e quem o tira é a
+  // posição mudar, porque um símbolo em cima de uma casa que já mudou mente.
+  const l = linha();
+  let estado = correr(l, inicio(l, "quiz"), [jogou("e2e4")]).estado;
+  assert.deepEqual(estado.simbolo, { casa: "e4", qual: "acerto" });
+  estado = correr(l, estado, [responde]).estado;
+  assert.equal(estado.simbolo, null, "a resposta dele tirou o símbolo");
+
+  let assistida = correr(l, inicio(l, "assistido"), [jogou("e2e4"), responde, jogou("g1f3")]).estado;
+  assert.deepEqual(simboloNaTela(assistida), { casa: "f3", qual: "acerto" });
+  assistida = correr(l, assistida, [tras]).estado;
+  assert.equal(simboloNaTela(assistida), null, "na posição de antes, f3 está vazia");
+  assistida = correr(l, assistida, [frente]).estado;
+  assert.deepEqual(simboloNaTela(assistida), { casa: "f3", qual: "acerto" }, "de volta à frente, a posição é a do lance");
+});
+
+test("no quiz o erro é `?`, e a armadilha que a fonte mostra é `??` — até a linha do clube entrar", () => {
+  const l = linha({ errosNomeados: { "4": ["b1c3"] } });
+  const antes = correr(l, inicio(l, "quiz"), [jogou("e2e4"), responde, jogou("g1f3"), responde]).estado;
+
+  const erro = correr(l, antes, [jogou("d1h5")]).estado;
+  assert.deepEqual(erro.simbolo, { casa: "h5", qual: "erro" });
+  assert.equal(correr(l, erro, [segue]).estado.simbolo, null, "o lance certo entrou e levou o `?`");
+
+  const armadilha = correr(l, antes, [jogou("b1c3")]).estado;
+  assert.deepEqual(armadilha.simbolo, { casa: "c3", qual: "armadilha" });
+  assert.equal(armadilha.boletim[2], "falha", "na fita as duas continuam sendo falha");
+});
+
+test("a alternativa do quiz é `!?`, e sai quando a linha do clube entra", () => {
+  const l = linha({ alternativas: { "4": ["f1b5"] } });
+  let estado = correr(l, inicio(l, "quiz"), [jogou("e2e4"), responde, jogou("g1f3"), responde, jogou("f1b5")]).estado;
+  assert.deepEqual(estado.simbolo, { casa: "b5", qual: "alternativa" });
+  estado = correr(l, estado, [segue]).estado;
+  assert.equal(estado.simbolo, null);
+});
+
+test("acerto num lance marcado `!!` na fonte é Brilhante; marcado `!`, Ótimo; sem marca, a estrela", () => {
+  const l = linha({ marcas: { "0": "!!", "2": "!" } });
+  for (const modo of ["assistido", "treino", "quiz"] as const) {
+    let estado = correr(l, inicio(l, modo), [jogou("e2e4")]).estado;
+    assert.deepEqual(estado.simbolo, { casa: "e4", qual: "brilhante" }, `${modo}: e4!!`);
+    estado = correr(l, estado, [responde, jogou("g1f3")]).estado;
+    assert.deepEqual(estado.simbolo, { casa: "f3", qual: "otimo" }, `${modo}: Nf3!`);
+    estado = correr(l, estado, [responde, jogou("f1c4")]).estado;
+    assert.deepEqual(estado.simbolo, { casa: "c4", qual: "acerto" }, `${modo}: Bc4 sem marca`);
+  }
+});
+
+test("o adversário espera a entrada grande do Brilhante e do Ótimo acabar antes de responder", () => {
+  // A entrada grande dura 1,3 s (300 entra, 700 parada, 300 vai ao canto). Com
+  // a resposta de sempre, 480 ms, o lance dele cortaria o efeito no meio — e o
+  // símbolo sai no próximo lance.
+  const esperaDele = (efeitos: readonly Efeito[]): number[] =>
+    efeitos.flatMap((e) => (e.tipo === "agendar" && e.evento.tipo === "adversarioJogou" ? [e.ms] : []));
+
+  const marcada = linha({ marcas: { "0": "!!", "2": "!" } });
+  assert.deepEqual(esperaDele(reduzir(marcada, inicio(marcada, "quiz"), jogou("e2e4")).efeitos), [1300]);
+  const depoisDoPrimeiro = correr(marcada, inicio(marcada, "quiz"), [jogou("e2e4"), responde]).estado;
+  assert.deepEqual(esperaDele(reduzir(marcada, depoisDoPrimeiro, jogou("g1f3")).efeitos), [1300]);
+
+  const comum = linha();
+  assert.deepEqual(esperaDele(reduzir(comum, inicio(comum, "quiz"), jogou("e2e4")).efeitos), [480], "sem marca, o ritmo não muda");
 });

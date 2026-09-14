@@ -105,17 +105,23 @@ const CARTA_TOQUE = ["carta-toque"];
  * serem os 2,29:1 do tabuleiro do lichess.org está escrito em `globals.css`,
  * com o nome das quatro marcas que cairiam.
  */
-const MARCAS: { onde: string; token: string; piso: number }[] = [
+const MARCAS: { onde: string; token: string; piso: number; divida?: string }[] = [
   {
     onde: "coordenada (a–h, 1–8) — tinta única para as duas casas, e é ela que fecha o orçamento do par",
     token: "coordenada",
     piso: AA_TEXTO,
   },
   { onde: "destino de lance legal e casa selecionada", token: "destino", piso: AA_COMPONENTE },
-  // O aro na borda da casa, desde 8/9/2026 — era a casa cheia, e a peça
-  // escondia metade dele no destino. A tinta não mudou, e por isso o par não
-  // muda: aro e preenchimento são medidos do mesmo jeito contra as duas casas.
-  { onde: "aro do último lance", token: "ultimo-lance", piso: AA_COMPONENTE },
+  // A casa cheia de novo desde 14/9/2026, em amarelo a 50% — o destaque do
+  // Chess.com (foi aro escuro de 8/9 a 14/9). A tinta translúcida compõe com a
+  // própria casa, e é essa composição que se mede contra a casa.
+  {
+    onde: "casa do último lance, amarela a 50%",
+    token: "ultimo-lance",
+    piso: AA_COMPONENTE,
+    divida:
+      "Escolha do Doug em 14/9/2026, olhando a prévia `.playwright-mcp/previa-tabuleiro.html` lado a lado com o aro escuro de 8/9 (que media acima de 3:1): o amarelo do Chess.com, rgb(255 255 51) a 50%, nas duas casas. Mede 1,04:1 na casa clara e 1,40:1 na escura — é um tingimento, não uma marca, e ele foi avisado antes de escolher. A conta a pagar, se o destaque sumir para alguém: voltar ao aro de 9% da casa (o `box-shadow` inset que ficou registrado no comentário de `square.last-move`, em `app/globals.css`).",
+  },
   { onde: "clarão do rei em xeque", token: "xeque", piso: AA_COMPONENTE },
   { onde: "destino de pré-lance", token: "premove", piso: AA_COMPONENTE },
 
@@ -132,14 +138,22 @@ const MARCAS: { onde: string; token: string; piso: number }[] = [
   { onde: "borda da caixa do rei nas etapas 2 e 3 (BoxOverlay)", token: "pincel-corte", piso: AA_COMPONENTE },
   { onde: "pincel da peça pendurada", token: "pincel-pendurada", piso: AA_COMPONENTE },
   { onde: "pincel da peça defendida", token: "pincel-defendida", piso: AA_COMPONENTE },
-  { onde: "pincel da seta do exemplo", token: "pincel-seta", piso: AA_COMPONENTE },
+  // O pincel azul continua vivo, mas só no círculo da dica: a seta saiu dele.
+  { onde: "círculo da dica (pincel azul do chessground)", token: "pincel-seta", piso: AA_COMPONENTE },
+  {
+    onde: "seta que ensina, pulsando (lib/chess/desenhos-do-tabuleiro.ts)",
+    token: "seta-ensina",
+    piso: AA_COMPONENTE,
+    divida:
+      "Escolha do Doug em 14/9/2026 (V7 da prévia `.playwright-mcp/previa-tabuleiro.html`): o verde do Chess.com, #81B64C, opaco e sem contorno, pulsando. Mede cerca de 2:1 na casa clara e 1,1:1 na escura, e ele foi avisado antes de escolher; na tela o que a segura é o pulso e a ponta larga. A conta a pagar, já vista na prévia: a V8, o mesmo verde com contorno de `pincel-seta` a 0,035 casa — o contorno bate o piso nas duas casas.",
+  },
   { onde: "selo de alternativa do repertório", token: "pincel-alternativa", piso: AA_COMPONENTE },
   { onde: "seta do plano — o que a linha não fechou", token: "pincel-plano", piso: AA_COMPONENTE },
 ];
 
-const NAS_DUAS_CASAS: Par[] = MARCAS.flatMap(({ onde, token, piso }) => [
-  { onde: `${onde} — na casa clara`, texto: token, fundo: ["casa-clara"], piso },
-  { onde: `${onde} — na casa escura`, texto: token, fundo: ["casa-escura"], piso },
+const NAS_DUAS_CASAS: Par[] = MARCAS.flatMap(({ onde, token, piso, divida }) => [
+  { onde: `${onde} — na casa clara`, texto: token, fundo: ["casa-clara"], piso, ...(divida ? { divida } : {}) },
+  { onde: `${onde} — na casa escura`, texto: token, fundo: ["casa-escura"], piso, ...(divida ? { divida } : {}) },
 ]);
 
 /**

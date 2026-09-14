@@ -220,3 +220,23 @@ test("sintaxe torta no bloco vira problema com o lance nomeado", () => {
   for (const p of problemas) assert.match(p, /em "Nf3"/);
   assert.match(problemas[0], /antes de qualquer entrada/);
 });
+
+/* ------------------------------------------------------------------ *
+ * As marcas boas do lance da linha (14/9/2026)
+ * ------------------------------------------------------------------ */
+
+test("a marca `!!` ou `!` de um lance nosso da linha principal chega à linha; a do adversário, não", () => {
+  // É o que acende o Brilhante e o Ótimo no treino. `$3` e `$1` são as mesmas
+  // marcas escritas em número, como alguns exportadores as gravam.
+  const { linhas } = expandirTexto("1. e4!! e5! 2. Nf3 $1 Nc6 $3 3. Bc4 $3 Bc5 4. c3! *");
+  assert.equal(linhas.length, 1);
+  assert.deepEqual(linhas[0].marcas, { "0": "!!", "2": "!", "4": "!!", "6": "!" });
+});
+
+test("sem `!!` nem `!` num lance nosso, a linha não ganha o campo — e o JSON publicado não muda", () => {
+  // `!?` é "também vale", não "ótimo": não entra. E o irmão marcado com `!`
+  // continua sendo só alternativa, porque o lance treinado é o da linha.
+  const { linhas } = expandirTexto("1. e4 e5 2. Nf3 $5 (2. Bc4!) Nc6 *");
+  assert.equal("marcas" in linhas[0], false);
+  assert.deepEqual(linhas[0].alternativas, { "2": ["f1c4"] });
+});

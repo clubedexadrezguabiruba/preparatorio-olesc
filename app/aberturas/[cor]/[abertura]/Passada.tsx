@@ -6,6 +6,7 @@ import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color, Key } from "@lichess-org/chessground/types";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { PromotionPicker, type PromotionChoice } from "@/components/board/PromotionPicker";
+import { simboloNaCasa } from "@/lib/chess/desenhos-do-tabuleiro";
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { lerPlano } from "@/lib/repertorio/esquema";
 import type { Linha } from "@/lib/repertorio/linhas";
@@ -13,10 +14,10 @@ import {
   acuracia,
   inicio,
   reduzir,
+  simboloNaTela,
   type Efeito,
   type Evento,
   type Modo,
-  type Selo,
 } from "@/lib/repertorio/passada";
 import { playCorrect, playForMove, playRefusal, playSuccess } from "@/lib/sound";
 import { ABERTURA_MS } from "@/lib/tatica/tempos";
@@ -74,21 +75,6 @@ const BARRA_DO_MODO: Record<Modo, number> = { assistido: 0, treino: 1, quiz: 2 }
  * estado de uma passada volta ao zero, e é por isso que não há nenhum
  * `useEffect` aqui tentando ressincronizar coisa alguma quando a linha muda.
  */
-
-/** Quanto o disco do veredito fica na casa de destino. */
-const SELO_MS = 800;
-
-/**
- * O pincel de cada selo. Os três reaproveitam a paleta pedagógica de
- * `app/globals.css` — o aro verde e o aro vermelho são literalmente o mesmo
- * desenho de `defendida` e `pendurada` na tática, e o âmbar entrou com este
- * bloco porque aqui os vereditos são três, e não dois.
- */
-const PINCEL: Record<Selo, string> = {
-  acerto: "green",
-  alternativa: "yellow",
-  falha: "red",
-};
 
 export type PassadaProps = {
   linha: Linha;
@@ -158,7 +144,6 @@ export function Passada({
    */
   const estadoRef = useRef(estado);
 
-  const [marca, setMarca] = useState<{ casa: string; qual: Selo } | null>(null);
   const [promocao, setPromocao] = useState<{ orig: Key; dest: Key } | null>(null);
   /**
    * O chessground move a peça na tela por conta própria antes de perguntar.
@@ -210,10 +195,6 @@ export function Passada({
           break;
         case "som-certo":
           playCorrect();
-          break;
-        case "selo":
-          setMarca({ casa: efeito.casa, qual: efeito.qual });
-          agendar(() => setMarca(null), SELO_MS);
           break;
         case "decidir":
           aoDecidir([...efeito.lances], efeito.porQue);
@@ -384,12 +365,15 @@ export function Passada({
 
   /**
    * Três camadas no mesmo canal (`setAutoShapes`): a seta da fase assistida, a
-   * casa acesa da dica, e o selo do veredito.
+   * casa acesa da dica, e o símbolo do veredito.
    *
    * A seta e a dica nunca aparecem juntas — a assistida não tem dica, porque a
-   * seta já está lá. O selo convive com as duas: ele dura menos de um segundo e
-   * é o que permite ao cartão ser quase monocromático.
+   * seta já está lá. O símbolo convive com as duas: desde 14/9/2026 ele é o
+   * disco no canto da casa de chegada, estilo Chess.com, e fica até o próximo
+   * lance — quem decide quando ele sai é o redutor (`simbolo` no estado), e não
+   * mais um relógio de 0,8 s aqui.
    */
+  const simbolo = simboloNaTela(estado);
   const shapes: DrawShape[] = useMemo(() => {
     const lista: DrawShape[] = [];
     const esperado = linha.lances[estado.passo];
@@ -413,7 +397,7 @@ export function Passada({
       }
     }
 
-    if (marca) lista.push({ orig: marca.casa as Key, brush: PINCEL[marca.qual] });
+    if (simbolo) lista.push(simboloNaCasa(simbolo.casa as Key, simbolo.qual));
 
     // A quarta camada, e a única que aparece DEPOIS do fim: as setas do
     // `[%plano]`. Elas convivem com o resto sem disputa porque, no `resolvido`,
@@ -447,10 +431,10 @@ export function Passada({
     jogo,
     linha.lances,
     linha.plano,
-    marca,
     meuLado,
     minhaVez,
     modo,
+    simbolo,
   ]);
 
   const fim = estado.fase === "resolvido";
