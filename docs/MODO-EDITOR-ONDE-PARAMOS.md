@@ -4223,7 +4223,7 @@ de variante**, cujos ids carregam a hora em que nasceram — entre **22:09:45 e 
 última ação desta sessão no navegador foi às 22:11:38, deixando a página em `about:blank`, e nenhum
 script do roteiro clicou no tabuleiro fora do item 6 (desfeito, com hash conferido às 21:56). É
 autoria de outra pessoa na N0-LADDER, preservada sem ser aberta no editor; o mesmo vale para o
-rascunho `.editor/repertorio/brancas-alapin.pgn` (ocorrência 2 acima). Os dois foram levados ao Doug.
+rascunho `.editor/repertorio/brancas-alapin.pgn` (ocorrência 2 acima). Os dois foram levados ao Doug. **O Doug confirmou que foi ele e pediu para desfazer (14/9/2026):** a N0-LADDER voltou ao snapshot `antes-de-publicar-pub-64ffac2c7bb1e700` (hash `753ce4e5…`, o mesmo de antes do roteiro) e o rascunho da Alapin foi apagado; **887/887 SHA-256 iguais** aos de antes. Cópia das duas versões desfeitas ficou fora do repositório, no rascunho da sessão.
 
 **§28:** marcado "Barra e linhas Stockfish isoladas do motor do aluno" — worker próprio provado por
 teste com duas instâncias e pelo contador de workers na tela, invisível ao aluno provado pela guarda
