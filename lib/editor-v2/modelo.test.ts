@@ -8,7 +8,7 @@ import { adaptarLessonV1 } from "./adaptar-v1.ts";
 import { mapaDaAnalise, quadroDoNo } from "./arvore.ts";
 import { hashDaPosicao } from "./hash.ts";
 import { aplicarNoHistorico, desfazer, executarComando, iniciarHistorico, refazer } from "./comandos.ts";
-import { completarAulaV2Legada, problemasDaAulaV2, validarAulaV2, type AulaV2 } from "./modelo.ts";
+import { assinaturaDosLancesV2, completarAulaV2Legada, problemasDaAulaV2, validarAulaV2, type AulaV2 } from "./modelo.ts";
 import { entradasVerticais } from "./painel.ts";
 
 const lesson = lessonSchema.parse(JSON.parse(readFileSync("content/lessons/N1-KPK.json", "utf8")));
@@ -707,4 +707,54 @@ test("o hash da revisão e o do adaptador são a MESMA função", () => {
   // "toda posição está caduca" — um alarme falso que ensina a ignorar o alarme.
   const aula = adaptarLessonV1(lesson, positions);
   assert.equal(aula.proveniencia[0].conteudoHash, hashDaPosicao(positions[aula.proveniencia[0].positionId]));
+});
+
+test("fatia 10: o rejogo guardado da legalidade não esconde lance mudado no mesmo objeto, e comentário não o invalida", () => {
+  const aula = structuredClone(adaptarLessonV1(lesson, positions));
+  const analise = aula.analises[0];
+  const primeiro = aula.capitulos[0].caminho[0];
+  const original = analise.nos[primeiro].uci!;
+  const ilegais = () => problemasDaAulaV2(aula, positions).filter((p) => p.codigo === "LANCE_ILEGAL").map((p) => p.localizacao.nodeId);
+
+  assert.deepEqual(ilegais(), []);
+  analise.nos[primeiro].comentario = "um texto novo não muda nenhum lance";
+  assert.deepEqual(ilegais(), []);
+  // Mutação no próprio objeto, como faz um teste ou um comando descuidado: a guarda é pelo conteúdo.
+  analise.nos[primeiro].uci = "a1a8";
+  assert.deepEqual(ilegais(), [primeiro]);
+  assert.deepEqual(ilegais(), [primeiro], "a segunda leitura, já guardada, acusa o mesmo lance");
+  analise.nos[primeiro].uci = original;
+  assert.deepEqual(ilegais(), []);
+});
+
+test("fatia 10: a assinatura dos lances muda com lance e filhos, e não com texto ou desenho", () => {
+  const aula = structuredClone(adaptarLessonV1(lesson, positions));
+  const analise = aula.analises[0];
+  const primeiro = aula.capitulos[0].caminho[0];
+  const antes = assinaturaDosLancesV2(analise);
+  analise.nos[primeiro].comentario = "texto";
+  analise.nos[primeiro].desenhos = { arrows: [{ de: "a1", para: "a2", cor: "verde" }] };
+  assert.equal(assinaturaDosLancesV2(analise), antes);
+  analise.nos[primeiro].uci = "a1a8";
+  assert.notEqual(assinaturaDosLancesV2(analise), antes, "outro lance é outra árvore");
+  analise.nos[primeiro].uci = undefined;
+  analise.nos[analise.raizId].filhos = [...analise.nos[analise.raizId].filhos, "no-inventado"];
+  assert.notEqual(assinaturaDosLancesV2(analise), antes, "filho a mais (ou promovido para a frente) muda o percurso");
+});
+
+test("fatia 10: o mapa da análise fica guardado enquanto os lances não mudam, e é refeito quando um muda", () => {
+  const aula = structuredClone(adaptarLessonV1(lesson, positions));
+  const analise = aula.analises[0];
+  const primeiro = aula.capitulos[0].caminho[0];
+  const antes = mapaDaAnalise(aula, analise.id, positions);
+  analise.nos[primeiro].comentario = "texto novo";
+  assert.equal(mapaDaAnalise(aula, analise.id, positions), antes, "comentário não refaz o percurso");
+
+  const fenDaRaiz = antes.quadros[analise.raizId].fen;
+  const outro = new Chess(fenDaRaiz).moves({ verbose: true }).find((m) => m.from + m.to !== analise.nos[primeiro].uci && !m.promotion)!;
+  analise.nos[primeiro].uci = outro.from + outro.to;
+  analise.nos[primeiro].filhos = [];
+  const depois = mapaDaAnalise(aula, analise.id, positions);
+  assert.notEqual(depois, antes);
+  assert.equal(depois.sans[primeiro], outro.san);
 });

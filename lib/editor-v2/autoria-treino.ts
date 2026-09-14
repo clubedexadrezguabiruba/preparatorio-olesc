@@ -92,8 +92,12 @@ export function prepararEdicaoDeTreino(
     ...(pedido.explicacaoConclusao?.trim()
       ? { explicacaoConclusao: pedido.explicacaoConclusao.trim() }
       : {}),
+    // O texto de abertura vence o objetivo na tela do aluno (`treino-jogavel.ts`); o treino
+    // importado do Lichess nasce com ele. Vazio, sai — e o aluno volta a ler o objetivo.
+    ...(pedido.introducao?.trim() ? { introducao: pedido.introducao.trim() } : {}),
   };
   if (!pedido.explicacaoConclusao?.trim()) delete treino.explicacaoConclusao;
+  if (!pedido.introducao?.trim()) delete treino.introducao;
   if (treino.defesaInicial) apararOpcional(treino.defesaInicial, "texto");
   if (!treino.titulo) return { ok: false, campo: "titulo", mensagem: "escreva um título para o treino" };
   if (!treino.objetivo) return { ok: false, campo: "objetivo", mensagem: "explique o objetivo do treino" };

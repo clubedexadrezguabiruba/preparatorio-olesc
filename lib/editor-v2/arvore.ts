@@ -1,6 +1,6 @@
 import { Chess } from "chess.js";
 import type { Position } from "../lesson/schema.ts";
-import type { AnaliseV2, AulaV2, NoV2 } from "./modelo.ts";
+import { assinaturaDosLancesV2, type AnaliseV2, type AulaV2, type NoV2 } from "./modelo.ts";
 
 export type QuadroV2 = { fen: string; san: string | null; ultimoLance: [string, string] | null };
 
@@ -94,9 +94,25 @@ export type MapaDaAnaliseV2 = {
  * A numeração sai de graça: a profundidade do percurso já é o meio-lance, e não
  * precisa de uma segunda subida até a raiz por nó.
  */
+/*
+ * ## Guardado enquanto os lances não mudam (fatia 10, parada 10G)
+ *
+ * Mesmo numa passada, a árvore de 1.000 nós custava 111 ms em Node, e o editor refazia o mapa a
+ * cada comentário, narração e desenho — que não mudam posição, SAN nem numeração. O mapa depende da
+ * posição inicial e de `uci`/`filhos`; fica guardado por essa assinatura (`assinaturaDosLancesV2`).
+ * Quem recebe o mapa só lê: o mesmo objeto volta para chamadas com os mesmos lances.
+ */
+const MAPAS_GUARDADOS = new Map<string, MapaDaAnaliseV2>();
+const MAXIMO_DE_MAPAS_GUARDADOS = 16;
+
 export function mapaDaAnalise(aula: AulaV2, analiseId: string, positions: Record<string, Position>): MapaDaAnaliseV2 {
   const analise = analiseDaAula(aula, analiseId);
   const inicial = fenInicialDaAnalise(aula, analise, positions);
+  const chave = `${analiseId}
+${inicial}
+${assinaturaDosLancesV2(analise)}`;
+  const guardado = MAPAS_GUARDADOS.get(chave);
+  if (guardado) return guardado;
   const campos = inicial.split(" ");
   const primeiroPly = (Number(campos[5]) - 1) * 2 + (campos[1] === "b" ? 1 : 0);
 
@@ -121,7 +137,10 @@ export function mapaDaAnalise(aula: AulaV2, analiseId: string, positions: Record
     }
   };
   andar(analise.raizId, null, null, 0);
-  return { quadros, sans, rotulos };
+  const mapa = { quadros, sans, rotulos };
+  if (MAPAS_GUARDADOS.size >= MAXIMO_DE_MAPAS_GUARDADOS) MAPAS_GUARDADOS.delete(MAPAS_GUARDADOS.keys().next().value!);
+  MAPAS_GUARDADOS.set(chave, mapa);
+  return mapa;
 }
 
 export function sansDaAnalise(aula: AulaV2, analiseId: string, positions: Record<string, Position>): Record<string, string> {

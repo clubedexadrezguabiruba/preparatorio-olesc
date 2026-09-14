@@ -579,7 +579,25 @@ type ProblemaBrutoV2 = {
  * `arvore.ts` faz hoje, e custa o quadrado do tamanho da árvore: numa partida de 60
  * lances são milhares de jogadas repetidas, e no alvo de 1.000 nós do plano (§17),
  * centenas de milhares. Aqui cada lance é jogado **uma vez**.
+ *
+ * ## E o percurso fica guardado enquanto os lances não mudam (fatia 10, parada 10G)
+ *
+ * Mesmo jogando cada lance uma vez, a árvore de 1.000 nós custava 114 ms em Node **a cada
+ * edição** — e a edição mais comum (comentário, narração, desenho) não muda lance nenhum. O
+ * resultado deste percurso depende só da posição inicial e de `uci`/`filhos` de cada nó; ele fica
+ * guardado por essa assinatura. A chave é o **conteúdo**, e não a identidade do objeto: um nó
+ * mudado no lugar muda a assinatura, e o percurso é refeito.
  */
+const PERCURSOS_GUARDADOS = new Map<string, { fens: Map<string, string>; problemas: ProblemaBrutoV2[] }>();
+const MAXIMO_DE_PERCURSOS_GUARDADOS = 16;
+
+/** Os lances de uma análise como texto: muda com `uci` e `filhos`, e não com texto ou desenho. */
+export function assinaturaDosLancesV2(analise: AnaliseV2): string {
+  let assinatura = `${analise.raizId};`;
+  for (const [id, no] of Object.entries(analise.nos)) assinatura += `${id}:${no.uci ?? ""}:${no.filhos.join(",")};`;
+  return assinatura;
+}
+
 function problemasDeLegalidade(
   aula: AulaV2,
   positions: Record<string, Position>,
@@ -628,6 +646,15 @@ function problemasDeLegalidade(
       fensPorAnalise.set(analiseId, null);
       return null;
     }
+
+    const chave = `${analiseId}\n${inicial}\n${assinaturaDosLancesV2(analise)}`;
+    const guardado = PERCURSOS_GUARDADOS.get(chave);
+    if (guardado) {
+      problemas.push(...guardado.problemas.map((problema) => ({ ...problema })));
+      fensPorAnalise.set(analiseId, guardado.fens);
+      return guardado.fens;
+    }
+    const problemasAntes = problemas.length;
 
     const jogo = new Chess();
     try {
@@ -681,6 +708,10 @@ function problemasDeLegalidade(
     andar(analise.raizId);
 
     fensPorAnalise.set(analiseId, fens);
+    if (PERCURSOS_GUARDADOS.size >= MAXIMO_DE_PERCURSOS_GUARDADOS) {
+      PERCURSOS_GUARDADOS.delete(PERCURSOS_GUARDADOS.keys().next().value!);
+    }
+    PERCURSOS_GUARDADOS.set(chave, { fens, problemas: problemas.slice(problemasAntes).map((problema) => ({ ...problema })) });
     return fens;
   }
 

@@ -136,6 +136,11 @@ export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar
           <label className="flex flex-col gap-1 text-sm text-tinta">Objetivo
             <textarea value={treino.objetivo} onChange={(e) => setTreino({ ...treino, objetivo: e.currentTarget.value })} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2" />
           </label>
+          {/* Fatia 10: o treino importado do Lichess traz este texto, e ele vence o objetivo na tela
+              do aluno — sem o campo, corrigir o objetivo não mudava o que o aluno lia. */}
+          <label className="flex flex-col gap-1 text-sm text-tinta">Texto de abertura
+            <textarea value={treino.introducao ?? ""} onChange={(e) => setTreino({ ...treino, introducao: e.currentTarget.value || undefined })} rows={3} placeholder="Vazio: o aluno lê o objetivo" className="foco resize-y rounded-md border border-borda bg-papel p-2" />
+          </label>
           <label className="flex flex-col gap-1 text-sm text-tinta">Explicação ao concluir
             <textarea value={treino.explicacaoConclusao ?? ""} onChange={(e) => setTreino({ ...treino, explicacaoConclusao: e.currentTarget.value || undefined })} rows={3} placeholder="O que o aluno deve entender no fim" className="foco resize-y rounded-md border border-borda bg-papel p-2" />
           </label>

@@ -6,11 +6,8 @@
  * o erro do afogamento no 06, `Qg7+` e `Qh4#` no 07) e a prática contra o computador até o mate, com os
  * lances do aluno escolhidos pelo Stockfish em Node. No fim, as tentativas no banco com a publicação.
  */
-import { utimesSync } from "node:fs";
-import path from "node:path";
 import { Chess } from "chess.js";
-import { RAIZ } from "../preparo/protecao.ts";
-import { criarAulaVazia, FIXTURE_DO_ESTUDO } from "../preparo/aulas.ts";
+import { abrirAulaPublicada, criarAulaVazia, FIXTURE_DO_ESTUDO } from "../preparo/aulas.ts";
 import { tentativasDoAluno } from "../preparo/contas.ts";
 import { expect, test } from "../preparo/fixtures.ts";
 import { jogarEsperarResposta, jogarPraticaComMotor } from "../preparo/partida.ts";
@@ -41,22 +38,6 @@ test("importar, conferir e publicar o estudo", async ({ page }) => {
   await publicar.getByRole("button", { name: "Publicar", exact: true }).click();
   await expect(page.getByRole("status").filter({ hasText: "Publicada neste computador" })).toBeVisible({ timeout: 60_000 });
 });
-
-/**
- * `/finais/[aula]` tem `dynamicParams = false`, e o `next dev` guarda a lista de aulas da primeira vez
- * que compilou a rota: a aula publicada depois dá 404 até a rota recompilar. Tocar a data do arquivo (sem
- * mudar um byte) faz o `dev` recompilar. No site isto não existe — a lista sai do build.
- */
-export async function abrirAulaPublicada(pagina: import("@playwright/test").Page, aula: string) {
-  const agora = new Date();
-  utimesSync(path.join(RAIZ, "app/finais/[aula]/page.tsx"), agora, agora);
-  for (let tentativa = 0; tentativa < 10; tentativa += 1) {
-    const resposta = await pagina.goto(`/finais/${aula}`);
-    if (resposta?.status() !== 404) return;
-    await pagina.waitForTimeout(1500);
-  }
-  throw new Error(`a aula ${aula} continuou 404 depois de publicada`);
-}
 
 test("o aluno faz a aula inteira, e as tentativas chegam ao banco", async ({ aluno }) => {
   await aluno.setViewportSize({ width: 1366, height: 768 });

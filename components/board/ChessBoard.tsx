@@ -418,6 +418,15 @@ export function ChessBoard({
       },
     });
     apiRef.current = api;
+    // **O retângulo do tabuleiro é medido de novo a cada toque.** O chessground guarda o
+    // `getBoundingClientRect` do tabuleiro e só o esquece em rolagem, resize da janela ou mudança
+    // de tamanho do próprio tabuleiro (`events.js`). Quando algo *acima* dele muda de altura — o
+    // aviso de proveniência que some, a lista de problemas que cresce —, o tabuleiro muda de lugar
+    // sem nenhum desses eventos, e o clique vira a casa errada: o lance não entra. Na captura, este
+    // ouvinte roda antes do `mousedown` do pacote, que está no `cg-board` lá dentro.
+    const esquecerRetangulo = () => api.state.dom.bounds.clear();
+    host.addEventListener("mousedown", esquecerRetangulo, { capture: true });
+    host.addEventListener("touchstart", esquecerRetangulo, { capture: true, passive: true });
     // O punho da paleta só existe depois que o chessground existe — e some com
     // ele. Passar `null` na limpeza evita que o montador segure um tabuleiro
     // destruído e arraste uma peça para lugar nenhum.
@@ -437,6 +446,8 @@ export function ChessBoard({
     });
 
     return () => {
+      host.removeEventListener("mousedown", esquecerRetangulo, { capture: true });
+      host.removeEventListener("touchstart", esquecerRetangulo, { capture: true });
       montagemRef.current?.aoLigar?.(null);
       api.destroy();
       apiRef.current = null;

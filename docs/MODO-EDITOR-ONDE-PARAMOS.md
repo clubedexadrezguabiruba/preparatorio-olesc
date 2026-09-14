@@ -4607,7 +4607,7 @@ e devolvido nas janelas ensaiadas (Adicionar capítulo pelo teclado; as outras p
 build, conteúdo (38 do cache, 0 pela rede), **58/58 mutações** e repertório `--check`. Do
 `ChessBoard.tsx`, só o trecho da orientação entrou no commit.
 
-### Parada 10G — os ensaios grandes e o desempenho (em andamento)
+### Parada 10G — os ensaios grandes e o desempenho
 
 **Um defeito de produto achado ao preparar a aula do zero, consertado:** num capítulo criado do zero,
 os lances jogados entravam na análise e o **percurso do capítulo ficava vazio para sempre**
@@ -4634,66 +4634,147 @@ guarda a lista de aulas da primeira compilação da rota. Uma aula publicada **d
 recompilar. O ensaio toca a data do arquivo da rota (sem mudar um byte). No teste humano: se a aula
 recém-publicada der 404, reiniciar o `npm run dev` resolve. No site a lista sai do build.
 
-### O próximo ponto exato (15/9/2026, fim do chat — retomar daqui)
+### Parada 10G, continuação de 14/9/2026 — a aula do zero, dois defeitos e o desempenho
 
-**Commits da fatia 10 na branch `modo-editor`:** `795d2d9` (10A), `e567599` (10B), `dce1fe6` (10C),
-`28a1b3e` (10D), `7290a3c` (10E), `ef6c351` (10F). Nada foi enviado ao servidor (push é do Doug).
+**Os quatro portões que faltavam sobre `bbc7c05`**, rodados na cópia isolada: `build` ✓,
+`validate:content` ✓, `validate:mutations` **58/58 vermelhas**, `repertorio:compilar --check` ✓ ("o
+compilado em disco bate com a fonte").
 
-**Commit parcial da 10G a pedido do Doug (15/9, antes do `/clear`):** os arquivos da tabela abaixo entraram
-num commit com **três dos sete portões** rodados na cópia isolada — tipos, lint e **1.275 testes** verdes.
-**Build, conteúdo, mutações e repertório `--check` ainda não rodaram sobre ele**: rodar antes do próximo
-commit de código.
+**`e2e/editor/aula-do-zero.spec.ts`, verde.** O estudo "Mate de Dama e Rei" recriado à mão pela tela na
+`EX-E2E-ZERO`, sem importar nada (o PGN da fixture é só a folha de dados: lances, textos e cores):
 
-**Trabalho da 10G (commitado parcialmente; os ensaios de desempenho e repertório nunca rodaram):**
+- **Nova aula** extra, nível 1, classe E, e título trocado depois;
+- **capítulo 02** com a posição **montada peça por peça** (clique na paleta e na casa), e o **03** por FEN,
+  cada um com os lances, os `!`, as setas e casas nas quatro cores (botão direito com Shift/Alt), as
+  narrações (a de abertura na posição inicial) e as variantes `Qg6??` com o comentário;
+- a origem registrada pelo `•••` ("Autoria própria");
+- os **treinos 04–07**, cada um num capítulo de rascunho → "Criar treino daqui" (lugar "no fim") →
+  autoria com o texto de abertura, o feedback de cada resposta, o texto do defensor, o **erro do
+  afogamento** (`g5g6`), os mates `Qh3#`/`Qh4#` como corretas e `Qg7+` como erro → o rascunho excluído
+  ("Tornar independente");
+- a **introdução** com os quadros 00 e 01 (ligados à posição inicial do capítulo 03), e um quadro de
+  sobra com título, duplicar, "↑ Antes", seta, lance inserido e três exclusões;
+- a **prática** "De um capítulo desta aula" → Adicionar ao acervo;
+- **Ordem da aula** (subir e descer um treino), **Ctrl+Z ×5 / Ctrl+Y ×5** com o arquivo byte a byte igual
+  ao de antes, **recarregar**, prévia de capítulo e de treino com `x` e `?`, **Conferir** ("Pode
+  publicar") e **Publicar**.
 
-| Arquivo | O que é | Estado |
+Depois o aluno faz as 8 etapas: introdução com ←/→, os dois capítulos, os treinos (com o "Afogamento…"
+recusado no 06, e `Qg7+` recusado e `Qh4#` aceito no 07) e a prática **até o mate** com o Stockfish em
+Node. No banco, **5 tentativas** com `publication_id`. O professor leva 1,3–1,5 min; o aluno, 49 s.
+
+**A comparação com a importação** (`EX-E2E-LICHESS`, na mesma rodada) passa: as mesmas etapas, os textos
+e as posições da introdução, as posições, os lances e as variantes dos capítulos, as narrações, os
+treinos (posição de cada pergunta, respostas aceitas com julgamento e término, defesas, feedback e texto
+de abertura) e a prática. **Uma diferença fica como pendência:** a importação junta os parágrafos de
+**1 narração** numa linha só (o leitor de PGN normaliza os espaços do comentário); a tela guarda as
+quebras. O ensaio compara o texto sem as quebras e imprime a contagem.
+
+**Dois defeitos de produto que a aula do zero achou, consertados com teste antes/depois:**
+
+1. **O clique caía na casa errada depois que algo acima do tabuleiro mudava de altura.** O chessground
+   guarda o `getBoundingClientRect` do tabuleiro e só o esquece em rolagem, resize ou mudança de tamanho
+   do próprio tabuleiro. O aviso de proveniência sumia ao "Registrar revisão", o tabuleiro subia, e o
+   clique virava outra casa: o lance não entrava (medido: props do React certas, estado do chessground
+   limpo, `mousedown` confiável chegando ao `cg-board`, e mesmo assim nada selecionado). Conserto em
+   `components/board/ChessBoard.tsx`: um ouvinte de captura esquece o retângulo antes de cada toque.
+   Pegaria o professor com o mouse do mesmo jeito.
+   ```
+   e2e/editor/tabuleiro-deslocado.spec.ts   SEM o conserto: 9 lances (esperado 10) ✖   COM: ✔
+   ```
+2. **O texto de abertura do treino não tinha campo.** O treino importado do Lichess nasce com
+   `introducao`, que vence o objetivo na tela do aluno (`treino-jogavel.ts`): corrigir o "Objetivo" não
+   mudava o que o aluno lia. A janela de autoria ganhou "Texto de abertura" (vazio: o aluno lê o
+   objetivo), aparado e retirado quando vazio.
+   ```
+   lib/editor-v2/autoria-treino.test.ts   ANTES: tests 13, pass 12, fail 1   DEPOIS: tests 13, pass 13
+   ```
+
+**`e2e/editor/repertorio.spec.ts`, verde (4–5 s):** comentar, desfazer, `x` e descartar o rascunho na
+`pretas-colle`, com os arquivos protegidos iguais antes e depois.
+
+**Todos os ensaios de tela, menos o de desempenho (`npx playwright test --grep-invert @desempenho`):
+39 passaram, 25 pulados de propósito (cada perfil de tela só roda o layout dele), 0 falhas, em 5,2 min;
+limpeza com 981 arquivos iguais.**
+
+#### O desempenho (§24), medido e acelerado — parcial
+
+`e2e/desempenho.spec.ts` rodou pela primeira vez e **as seis metas reprovaram**. O editor só existe em
+`next dev`, então o número de `dev` é o que o professor sente. Máquina: Intel i3-1215U, 8 núcleos, com
+outras sessões ligadas. O ensaio ganhou a divisão servidor/tela da abertura e deixou de ser serial (uma
+meta reprovada não impede as outras medidas).
+
+Um perfil em Node deu as causas, com arquivo e custo na árvore de 1.000 nós:
+
+| Conta | Custo | Quando rodava |
 |---|---|---|
-| `lib/editor-v2/comandos.ts` | `ADICIONAR_LANCE` com `capituloId` estende o percurso do capítulo | teste unitário verde |
-| `components/editor-v2/EditorV2.tsx` | o `mover` passa `capituloId: capitulo.id` | tipos verdes |
-| `lib/editor-v2/percurso-do-capitulo.test.ts` | antes ✖ (`caminho []`), depois ✔ | verde |
-| `e2e/preparo/aulas.ts`, `e2e/preparo/partida.ts` | aula vazia de ensaio; jogar lendo o último lance e a prática com Stockfish em Node | usados pelo spec abaixo |
-| `e2e/editor/aula-do-lichess.spec.ts` | estudo importado, publicado e jogado pelo aluno | **verde** (56 s) |
-| `e2e/desempenho.spec.ts` | abertura da árvore de 1.000 nós e da linha de 500; p95 de navegar, comentar, Ctrl+Z e desenhar | **escrito, nunca rodado** |
-| `e2e/editor/repertorio.spec.ts` | comentar, desfazer, `x` e descartar rascunho na `pretas-colle`, `--check` igual | **escrito, nunca rodado** |
-| `docs/MODO-EDITOR-ONDE-PARAMOS.md` | 10G até aqui e o roteiro humano | escrito |
+| `acoesDoLance` de todas as linhas (`PainelDeLances.tsx`) | 100 ms | a cada render do painel, **inclusive a cada seta** |
+| `problemasDaAulaV2` — o rejogo da legalidade (`modelo.ts`) | 114 ms | a cada edição, até comentário e desenho |
+| `mapaDaAnalise` — o rejogo de posição/SAN (`arvore.ts`) | 111 ms | idem |
+
+Consertos: as ações só são calculadas para o menu aberto; as linhas e a lista inteira são memorizadas, e
+o lance selecionado chega às linhas por uma loja pequena (`useSyncExternalStore`), para trocar de lance
+redesenhar só as duas linhas afetadas; e os dois rejogos ficam guardados pela **assinatura dos lances**
+(`assinaturaDosLancesV2`: `uci` e `filhos` de cada nó). Comentário e desenho não os refazem; mudar um
+lance, mesmo no próprio objeto, refaz. Em Node, com os lances iguais: **114 → 2,2 ms** e
+**111 → 0,3 ms**. Testes novos em `modelo.test.ts` (o guardado não esconde lance ilegal novo; o mapa é o
+mesmo objeto depois de um comentário e é refeito quando um lance muda) — antes, 41 testes com 1 falha;
+depois, 41/41; e as 407 provas de `lib/editor-v2` verdes.
+
+| Medida (p95 nas interações) | Antes | Depois | Meta |
+|---|---|---|---|
+| Abrir a árvore de 1.000 nós (mediana) | 3.953 ms (servidor 1.712 + tela 2.217) | **2.031 ms** (805 + 997) | ≤ 2.000 ✖ por 31 ms |
+| Abrir a linha de 500 (mediana) | 2.961 ms | **1.948 ms** | ≤ 2.000 ✔ |
+| Navegar por tecla | 655 ms | **124 ms** (mediana 97) | ≤ 100 ✖ |
+| Confirmar comentário | 1.082 ms | **135 ms** | ≤ 100 ✖ |
+| Ctrl+Z | 795 ms | **116 ms** (mediana 73) | ≤ 100 ✖ |
+| Desenhar seta | 1.419 ms | **149 ms** | ≤ 100 ✖ |
+
+**O que sobra** (~100 ms) é o render geral do `EditorV2` no React de desenvolvimento, e varia ~20% entre
+rodadas; nada mais cresce com o tamanho da árvore. Um perfil de CPU no navegador mostrou o `jsxDEV` das
+1.000 linhas (resolvido pela lista memorizada) e o `focus`/rolagem da lista. **Decisão para o Doug:**
+perseguir os últimos 20–50 ms (dividir o `EditorV2`, virtualizar a lista) ou aceitar e registrar o limite.
+§28 "limites e metas de desempenho comprovados" **não** é marcado.
+
+### O próximo ponto exato (14/9/2026 — retomar daqui)
+
+**Commits da fatia 10:** `795d2d9` (10A), `e567599` (10B), `dce1fe6` (10C), `28a1b3e` (10D), `7290a3c`
+(10E), `ef6c351` (10F), `bbc7c05` (10G parcial) e o commit desta continuação (10G). Nada foi enviado ao
+servidor (push é do Doug).
+
+**Portões do commit da 10G, na cópia isolada `../olesc-portoes-e6`:** `typecheck` ✓, `lint` ✓, `npm test`
+**1.279/1.279**, `build` ✓, `validate:content` ✓, `validate:mutations` **58/58**, `repertorio:compilar
+--check` ✓, `db:rls` **52/52** ("A RLS segura"), `db:finais:v2` **18/18**. A primeira rodada das mutações
+deu 57/58: o processo da mutação 49 **quebrou** (0xC0000409, sem memória — 1,07 GB de RAM livre e 2,3 GB
+de memória virtual com cinco sessões ligadas e o disco a 97%); a segunda deu 58/58, com a 49 pega pela
+regra certa (`TEXTO_SEM_DIREITO_DECLARADO`).
 
 **O que falta, na ordem:**
 
-1. **`e2e/editor/aula-do-zero.spec.ts` — não existe ainda.** Um subagente começou e foi interrompido antes
-   de criar o arquivo. O pedido do Doug está no plano (item 10G): recriar à mão, pela tela, o estudo
-   "Mate de Dama e Rei" da fixture — introdução (2 quadros), os capítulos 02 e 03 com a variante Dg6??,
-   os treinos 04–07 (capítulo auxiliar por FEN → "Criar treino daqui" → autoria com respostas, defesa, erro
-   do afogamento, Dh3#/Dh4#, Dg7+ como erro → excluir o capítulo auxiliar materializando o treino), a
-   prática pelo "De um capítulo desta aula", ordem, Ctrl+Z/Y, recarregar, Conferir, Publicar, e o aluno
-   jogando (copiar o fim de `aula-do-lichess.spec.ts`). Id da aula: título "E2E ZERO" → `EX-E2E-ZERO`, depois
-   renomear. **Defeitos de produto que aparecerem viram conserto com teste antes/depois.** No fim, comparar
-   o que o aluno recebe com a `EX-E2E-LICHESS`.
-2. Rodar `desempenho.spec` (sem nada mais usando a máquina) e `repertorio.spec`; registrar os números aqui.
-3. Os sete portões da 10G **na cópia isolada** (ver abaixo), `npm run db:rls` e `npm run db:finais:v2`, e
-   o commit da 10G.
-4. **10H:** atualizar "Estado de hoje, em vinte linhas", as perguntas essenciais 1–12 do plano com
-   evidência, e marcar em §28 da especificação só o que tem evidência (candidatos: introdução e quadros;
-   cinco portas; importar por URL; práticas configuráveis; metadados/proveniência; fluxo completo;
-   problemas corrigíveis pela tela; acessibilidade — o teste humano ainda falta).
-5. **10I:** o teste humano do Doug pelo roteiro abaixo.
+1. **10H:** "Estado de hoje, em vinte linhas", as perguntas essenciais 1–12 do plano com evidência, e §28
+   só com evidência.
+2. **10I:** o teste humano do Doug pelo roteiro abaixo. **Pergunta nova do desempenho** para ele decidir.
+3. Pendências abertas: a importação perde as quebras de parágrafo de um comentário (1 narração); a
+   prática não tem campo de texto para o aluno (o "OBJETIVO: VENCER" do estudo não tem onde entrar).
 
-**Como rodar os portões enquanto a outra sessão mexe no repertório.** A sessão
-`preparatorio-olesc-e0` está editando, sem commit, `lib/repertorio/{arvore,linhas,passada,editor/impacto,
-editor/escrever.test}.ts`, `content/repertorio/*.pgn`, `public/repertorio/**`, `app/globals.css`,
-`app/aberturas/[cor]/[abertura]/Passada.tsx`, `lib/tema/pares.ts`, `lib/chess/desenhos-do-tabuleiro*`,
-`scripts/extrair-estudo.ts` e um trecho do `components/board/ChessBoard.tsx` (o efeito `setAutoShapes`;
-o trecho da orientação no começo é da fatia 10 e já está commitado). **Não tocar nem commitar nada disso.**
-Os portões rodam na cópia `../olesc-portoes` (`git worktree`, com `node_modules` copiado de verdade —
-junção quebra o build do Turbopack): colocar a cópia no último commit (`git -C ../olesc-portoes checkout
---detach modo-editor`), copiar para ela só os arquivos da fatia, rodar os sete portões lá, commitar lá,
-e na pasta principal `git update-ref refs/heads/modo-editor <novo> <antigo>` seguido de `git reset` (sem
-`--hard`: só o índice volta, os arquivos de trabalho ficam). Os logs `portoes-10e*.log`/`portoes-10f.log`
-na cópia são descartáveis.
+**Duas sessões, duas cópias.** A sessão `preparatorio-olesc-f3` (tabuleiro estilo Chess.com, marcas das
+fontes, regra dos símbolos) usa `../olesc-portoes` com os arquivos dela, sem commit. Esta continuação usou
+`../olesc-portoes-e6` (worktree nova, `node_modules` copiado). No `ChessBoard.tsx` cada commit leva só o
+próprio trecho: o desta é `esquecerRetangulo`; o dela é `setaQueEnsina`/`setAutoShapes`. Quem commitar
+depois atualiza a branch e roda os portões de novo.
+O jeito: copiar para a cópia só os arquivos da fatia, rodar os sete portões lá, commitar lá (`git
+-C ../olesc-portoes-e6 commit`), e na pasta principal `git update-ref refs/heads/modo-editor <novo>
+<antigo>` seguido de `git reset` (sem `--hard`: só o índice volta, os arquivos de trabalho ficam).
 
 **Lições de método desta rodada, para não repetir:** (a) ensaio que lê texto do `Comentario` do aluno
 precisa de `.last()` (há cópia invisível para a animação); (b) quem roda dois `playwright test` ao mesmo
 tempo quebra o preparo e a limpeza (as contas são as mesmas); (c) a limpeza por SHA-256 acusa gravação da
-outra sessão em `content/repertorio` — se acusar, conferir `git status` antes de suspeitar do ensaio.
+outra sessão em `content/repertorio` — se acusar, conferir `git status` antes de suspeitar do ensaio;
+(d) lance que "não entra" no ensaio pode ser defeito do tabuleiro: medir props, estado do chessground e
+`elementsFromPoint` antes de enfeitar o ensaio com repetições — a repetição escondia o defeito e ainda
+clicava na casa errada; (e) `getByLabel` num `<label>` com `<textarea>` dentro inclui o texto do campo no
+nome: usar `getByRole("textbox", { name, exact: true })`; (f) o perfil de CPU do navegador feito com
+localizadores do Playwright mede o Playwright (`visitNode`, `getElementLabels`), não o editor.
 
 ---
 

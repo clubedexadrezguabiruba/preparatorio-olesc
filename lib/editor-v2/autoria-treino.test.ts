@@ -235,3 +235,17 @@ test("§16.4: usar sempre esta põe a defesa no topo; remover apaga só a pergun
   const semDefesa = removerDefesa(paraExistente, questao.id, resposta.id, 1);
   assert.equal(semDefesa.questoes.length, treino.questoes.length, "pergunta com resposta escrita não é apagada");
 });
+
+test("fatia 10: o texto de abertura do treino é editável — aparado, e retirado quando fica vazio", () => {
+  const { aula, treino } = comTreino();
+  treino.introducao = "  Feche as fileiras, uma de cada vez.  ";
+  const comTexto = prepararEdicaoDeTreino(aula, { treino }, positions);
+  if (!comTexto.ok) assert.fail(comTexto.mensagem);
+  assert.equal(comTexto.edicao.treino.introducao, "Feche as fileiras, uma de cada vez.");
+
+  treino.introducao = "   ";
+  const vazio = prepararEdicaoDeTreino(aula, { treino }, positions);
+  if (!vazio.ok) assert.fail(vazio.mensagem);
+  assert.equal("introducao" in vazio.edicao.treino, false, "sem texto de abertura, o aluno volta a ler o objetivo");
+  assert.equal(validarAulaV2(aplicarEdicaoDeTreino(aula, vazio.edicao)).ok, true);
+});

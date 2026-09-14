@@ -52,29 +52,49 @@ const lerMedidas = (pagina: Page) => pagina.evaluate(() => { const j = window as
 
 const resultado: Record<string, unknown> = { em: new Date().toISOString(), servidor: "next dev", cpu: os.cpus()[0]?.model, nucleos: os.cpus().length };
 
-test.describe.configure({ mode: "serial" });
+/** Grava a aula de medida no rascunho e devolve quantos lances ela tem. */
+function gravarAulaDeMedida(nome: "arvore-1000" | "linha-500"): { id: string; lances: number } {
+  const id = nome === "arvore-1000" ? "EX-E2E-ARVORE" : "EX-E2E-LINHA";
+  const aula = comoEnsaio(nome === "arvore-1000" ? arvoreLargaV2(1000) : linhaLongaV2(500), id);
+  writeFileSync(path.join(RAIZ, ".editor/v2", `${id}.json`), JSON.stringify(aula, null, 2) + "\n");
+  return { id, lances: Object.keys(aula.analises[0].nos).length - 1 };
+}
 
-for (const [nome, gerar, id] of [["arvore-1000", () => arvoreLargaV2(1000), "EX-E2E-ARVORE"], ["linha-500", () => linhaLongaV2(500), "EX-E2E-LINHA"]] as const) {
+// Cada ensaio grava a aula que usa: sem modo serial, a abertura reprovada não impede a medida das
+// interações — os números saem todos, e cada meta reprova no próprio ensaio.
+for (const nome of ["arvore-1000", "linha-500"] as const) {
   test(`@desempenho abrir a ${nome}`, async ({ page }) => {
-    const aula = comoEnsaio(gerar(), id);
-    writeFileSync(path.join(RAIZ, ".editor/v2", `${id}.json`), JSON.stringify(aula, null, 2) + "\n");
-    const lances = Object.keys(aula.analises[0].nos).length - 1;
+    const { id, lances } = gravarAulaDeMedida(nome);
     await page.setViewportSize({ width: 1366, height: 768 });
     const tempos: number[] = [];
+    const servidor: number[] = [];
+    const tela: number[] = [];
     for (let rodada = 0; rodada < 6; rodada += 1) {
       const inicio = Date.now();
       await page.goto(`/editor/v2/finais/${id}`);
       await page.waitForFunction((total) => document.querySelectorAll('ol[aria-label="Lances da análise"] > li').length >= total, lances, { timeout: 60_000 });
-      await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
-      if (rodada > 0) tempos.push(Date.now() - inicio);
+      // Onde o tempo foi: até a resposta do servidor terminar de chegar, e dali até o quadro pintado.
+      const partes = await page.evaluate(() => new Promise<{ resposta: number; pronto: number }>((r) => requestAnimationFrame(() => requestAnimationFrame(() => {
+        const navegacao = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+        r({ resposta: navegacao.responseEnd, pronto: performance.now() });
+      }))));
+      if (rodada > 0) {
+        tempos.push(Date.now() - inicio);
+        servidor.push(partes.resposta);
+        tela.push(partes.pronto - partes.resposta);
+      }
     }
     await conferirTamanho(page, 1366, 768);
-    resultado[`abrir ${nome} (${lances} lances)`] = estatistica(tempos);
-    expect(estatistica(tempos).mediana).toBeLessThanOrEqual(2000);
+    const medida = { ...estatistica(tempos), servidor: estatistica(servidor), tela: estatistica(tela) };
+    resultado[`abrir ${nome} (${lances} lances)`] = medida;
+    guardarJson(`medidas-${new Date().toISOString().slice(0, 10)}-abrir-${nome}.json`, { ...resultado });
+    console.log(`[e2e] abrir ${nome}: ${JSON.stringify(medida)}`);
+    expect(medida.mediana).toBeLessThanOrEqual(2000);
   });
 }
 
 test("@desempenho interações na árvore de 1.000 nós", async ({ page }) => {
+  gravarAulaDeMedida("arvore-1000");
   await page.setViewportSize({ width: 1366, height: 768 });
   await page.goto("/editor/v2/finais/EX-E2E-ARVORE");
   await expect(page.locator(".cg-wrap").first()).toBeVisible();
