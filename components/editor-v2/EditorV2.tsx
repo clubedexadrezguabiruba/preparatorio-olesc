@@ -836,7 +836,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
       return;
     }
     const id = novoId();
-    aplicar({ tipo: "ADICIONAR_LANCE", analiseId: analise.id, nodeId: selecionado.id, uci, novoNodeId: id });
+    aplicar({ tipo: "ADICIONAR_LANCE", analiseId: analise.id, nodeId: selecionado.id, uci, novoNodeId: id, capituloId: capitulo.id });
     setNodeId(id);
   };
 

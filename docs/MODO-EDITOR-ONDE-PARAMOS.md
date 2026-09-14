@@ -4607,6 +4607,181 @@ e devolvido nas janelas ensaiadas (Adicionar capítulo pelo teclado; as outras p
 build, conteúdo (38 do cache, 0 pela rede), **58/58 mutações** e repertório `--check`. Do
 `ChessBoard.tsx`, só o trecho da orientação entrou no commit.
 
+### Parada 10G — os ensaios grandes e o desempenho (em andamento)
+
+**Um defeito de produto achado ao preparar a aula do zero, consertado:** num capítulo criado do zero,
+os lances jogados entravam na análise e o **percurso do capítulo ficava vazio para sempre**
+(`ADICIONAR_LANCE` não estendia `capitulo.caminho`). O capítulo não tinha lance para narrar ("este lance
+é de uma variante fora do capítulo"), nem para "Criar treino daqui", e a prévia não mostrava nada. As
+aulas convertidas do v1 e as importadas já nascem com percurso, e por isso nenhuma rodada anterior viu.
+Agora o comando recebe o capítulo aberto e, quando o lance sai do **fim** do percurso e é a primeira
+continuação daquela posição, o percurso ganha o lance; variante e continuação no meio não mudam nada.
+
+```
+ANTES   percurso-do-capitulo.test.ts: caminho [] (esperado ["n-1","n-2"]) — tests 1, fail 1
+DEPOIS  tests 1, pass 1 (e as 403 provas de lib/editor-v2 verdes)
+```
+
+**`aula-do-lichess.spec.ts`, verde (56 s):** o estudo importado, conferido ("Pode publicar"), publicado,
+e o aluno de teste faz as 8 etapas: introdução com ← →, os capítulos, o treino 04 (Dd5, a defesa Rf6, De4),
+o 05, o **06 com Dg6?? recusado com "Afogamento…"** e a linha até Dg7#, o **07 com Dg7+ recusado ("tente de
+novo") e Dh4# aceito com "Parabéns"**, e a **prática contra o Stockfish do navegador até o mate em 19
+meios-lances** (os lances do aluno escolhidos pelo Stockfish em Node). No banco, **5 tentativas** — 4 de
+treino e a prática, todas com sucesso e com `publication_id pub-bc3be7234b93946a`.
+
+**Um comportamento do `next dev`, não do site:** `/finais/[aula]` tem `dynamicParams = false`, e o `dev`
+guarda a lista de aulas da primeira compilação da rota. Uma aula publicada **depois** dá 404 até a rota
+recompilar. O ensaio toca a data do arquivo da rota (sem mudar um byte). No teste humano: se a aula
+recém-publicada der 404, reiniciar o `npm run dev` resolve. No site a lista sai do build.
+
+### O próximo ponto exato (15/9/2026, fim do chat — retomar daqui)
+
+**Commits da fatia 10 na branch `modo-editor`:** `795d2d9` (10A), `e567599` (10B), `dce1fe6` (10C),
+`28a1b3e` (10D), `7290a3c` (10E), `ef6c351` (10F). Nada foi enviado ao servidor (push é do Doug).
+
+**Commit parcial da 10G a pedido do Doug (15/9, antes do `/clear`):** os arquivos da tabela abaixo entraram
+num commit com **três dos sete portões** rodados na cópia isolada — tipos, lint e **1.275 testes** verdes.
+**Build, conteúdo, mutações e repertório `--check` ainda não rodaram sobre ele**: rodar antes do próximo
+commit de código.
+
+**Trabalho da 10G (commitado parcialmente; os ensaios de desempenho e repertório nunca rodaram):**
+
+| Arquivo | O que é | Estado |
+|---|---|---|
+| `lib/editor-v2/comandos.ts` | `ADICIONAR_LANCE` com `capituloId` estende o percurso do capítulo | teste unitário verde |
+| `components/editor-v2/EditorV2.tsx` | o `mover` passa `capituloId: capitulo.id` | tipos verdes |
+| `lib/editor-v2/percurso-do-capitulo.test.ts` | antes ✖ (`caminho []`), depois ✔ | verde |
+| `e2e/preparo/aulas.ts`, `e2e/preparo/partida.ts` | aula vazia de ensaio; jogar lendo o último lance e a prática com Stockfish em Node | usados pelo spec abaixo |
+| `e2e/editor/aula-do-lichess.spec.ts` | estudo importado, publicado e jogado pelo aluno | **verde** (56 s) |
+| `e2e/desempenho.spec.ts` | abertura da árvore de 1.000 nós e da linha de 500; p95 de navegar, comentar, Ctrl+Z e desenhar | **escrito, nunca rodado** |
+| `e2e/editor/repertorio.spec.ts` | comentar, desfazer, `x` e descartar rascunho na `pretas-colle`, `--check` igual | **escrito, nunca rodado** |
+| `docs/MODO-EDITOR-ONDE-PARAMOS.md` | 10G até aqui e o roteiro humano | escrito |
+
+**O que falta, na ordem:**
+
+1. **`e2e/editor/aula-do-zero.spec.ts` — não existe ainda.** Um subagente começou e foi interrompido antes
+   de criar o arquivo. O pedido do Doug está no plano (item 10G): recriar à mão, pela tela, o estudo
+   "Mate de Dama e Rei" da fixture — introdução (2 quadros), os capítulos 02 e 03 com a variante Dg6??,
+   os treinos 04–07 (capítulo auxiliar por FEN → "Criar treino daqui" → autoria com respostas, defesa, erro
+   do afogamento, Dh3#/Dh4#, Dg7+ como erro → excluir o capítulo auxiliar materializando o treino), a
+   prática pelo "De um capítulo desta aula", ordem, Ctrl+Z/Y, recarregar, Conferir, Publicar, e o aluno
+   jogando (copiar o fim de `aula-do-lichess.spec.ts`). Id da aula: título "E2E ZERO" → `EX-E2E-ZERO`, depois
+   renomear. **Defeitos de produto que aparecerem viram conserto com teste antes/depois.** No fim, comparar
+   o que o aluno recebe com a `EX-E2E-LICHESS`.
+2. Rodar `desempenho.spec` (sem nada mais usando a máquina) e `repertorio.spec`; registrar os números aqui.
+3. Os sete portões da 10G **na cópia isolada** (ver abaixo), `npm run db:rls` e `npm run db:finais:v2`, e
+   o commit da 10G.
+4. **10H:** atualizar "Estado de hoje, em vinte linhas", as perguntas essenciais 1–12 do plano com
+   evidência, e marcar em §28 da especificação só o que tem evidência (candidatos: introdução e quadros;
+   cinco portas; importar por URL; práticas configuráveis; metadados/proveniência; fluxo completo;
+   problemas corrigíveis pela tela; acessibilidade — o teste humano ainda falta).
+5. **10I:** o teste humano do Doug pelo roteiro abaixo.
+
+**Como rodar os portões enquanto a outra sessão mexe no repertório.** A sessão
+`preparatorio-olesc-e0` está editando, sem commit, `lib/repertorio/{arvore,linhas,passada,editor/impacto,
+editor/escrever.test}.ts`, `content/repertorio/*.pgn`, `public/repertorio/**`, `app/globals.css`,
+`app/aberturas/[cor]/[abertura]/Passada.tsx`, `lib/tema/pares.ts`, `lib/chess/desenhos-do-tabuleiro*`,
+`scripts/extrair-estudo.ts` e um trecho do `components/board/ChessBoard.tsx` (o efeito `setAutoShapes`;
+o trecho da orientação no começo é da fatia 10 e já está commitado). **Não tocar nem commitar nada disso.**
+Os portões rodam na cópia `../olesc-portoes` (`git worktree`, com `node_modules` copiado de verdade —
+junção quebra o build do Turbopack): colocar a cópia no último commit (`git -C ../olesc-portoes checkout
+--detach modo-editor`), copiar para ela só os arquivos da fatia, rodar os sete portões lá, commitar lá,
+e na pasta principal `git update-ref refs/heads/modo-editor <novo> <antigo>` seguido de `git reset` (sem
+`--hard`: só o índice volta, os arquivos de trabalho ficam). Os logs `portoes-10e*.log`/`portoes-10f.log`
+na cópia são descartáveis.
+
+**Lições de método desta rodada, para não repetir:** (a) ensaio que lê texto do `Comentario` do aluno
+precisa de `.last()` (há cópia invisível para a animação); (b) quem roda dois `playwright test` ao mesmo
+tempo quebra o preparo e a limpeza (as contas são as mesmas); (c) a limpeza por SHA-256 acusa gravação da
+outra sessão em `content/repertorio` — se acusar, conferir `git status` antes de suspeitar do ensaio.
+
+---
+
+## O teste humano da fatia 10 — o roteiro numerado
+
+**Para quem:** o Doug, no computador dele, com o `npm run dev` ligado. **Quando:** depois de todos os
+ensaios automáticos verdes (parada 10I). **Resolução:** a tela normal do notebook (a de referência é
+1366×768). Cada pergunta é sim ou não; anote o tempo das do bloco E. O que der "não" vira conserto na
+mesma sessão.
+
+Antes de começar: `node scripts/aluno-de-teste.ts criar` (aluno `alunoteste`, PIN `112233`) e uma janela
+anônima para o aluno.
+
+### A. Aula do zero, pela mão (os gestos que o robô não prova)
+
+1. Em `/editor`, **Nova aula** → aula extra, nível 1, classe E, título "Mate de Dama e Rei (Doug)". A aula
+   abre com "+ Adicionar capítulo"? 
+2. **Adicionar capítulo** → **Montar posição**: arraste o rei preto para e5, o rei branco para e1 e a dama
+   para d1. As peças ficaram onde você soltou?
+3. Arraste uma peça **para fora do tabuleiro**. Ela sumiu e **a janela continuou aberta**?
+4. Criar capítulo "O L e a caixa". Jogue Dd3, Re6, Dd4… **arrastando** as peças. Cada lance aparece na
+   lista à direita?
+5. Com o lance selecionado, clique em **+ Escrever narração**, escreva e clique fora. A narração ficou?
+6. Volte a 7…Rh8 e jogue **Dg6** arrastando. Nasceu uma variante, e a linha principal continua com Rf2?
+7. Na variante, marque **??** e escreva o comentário do afogamento. O símbolo aparece ao lado do lance e
+   no canto da casa g6?
+8. **Botão direito**: arraste uma seta de d3 a d8; com **Shift**, acenda h8 em vermelho. Ficaram?
+9. Na lista de problemas, **Ir para o problema** da "revisão de proveniência" → **Autoria própria** →
+   Registrar. O aviso sumiu?
+10. **Criar introdução** com 2 quadros (os textos 00 e 01 do seu estudo), a posição ligada ao capítulo.
+    Em "Pré-visualizar a introdução", os dois quadros aparecem com os parágrafos?
+11. **+ Criar prática** → "De um capítulo desta aula" → **Adicionar ao acervo e usar** → Criar. O cartão
+    "Prática" mostra "Brancas · vencer"?
+12. **Ordem da aula**: a prática é a última? Suba um capítulo e desça de novo com as setas ↑ ↓.
+13. **Ctrl+Z** cinco vezes e **Ctrl+Y** cinco vezes. Voltou tudo?
+14. Recarregue a página (F5). Nada se perdeu?
+15. **Conferir** → **Publicar**. O impacto diz "Aula extra: entra na conta do nível 1"?
+
+### B. O seu estudo do Lichess
+
+16. Numa aula extra nova e vazia, **Importar PGN** → cole `https://lichess.org/study/hf09xMzS` →
+    **Buscar no Lichess**. Aparecem os 9 capítulos, com a sugestão "Introdução, Introdução, Capítulo,
+    Capítulo, Treino ×4, Prática"?
+17. Os avisos de **perda** ("dicas e textos de desvio da lição interativa não vêm na exportação")
+    batem com o que você escreveu no Lichess e não veio?
+18. Marque "os textos são meus" → **Importar o estudo** → **Conferir** → **Publicar**.
+19. Abra o estudo no Lichess ao lado. Como aluno, faça a aula: a introdução, os capítulos com as
+    variantes Dg6??, os 4 treinos (no 06 tente Dg6 — aparece "Afogamento…"? no 07 tente Dg7+ e depois
+    Dh3#) e a prática até o mate. **Alguma coisa ficou diferente do estudo?** Anote.
+20. Repita o 16 com outro estudo seu que o ensaio não conhece (por exemplo o "P1 — Fundamentos"). As
+    sugestões fazem sentido?
+
+### C. Teclado
+
+21. No editor, **x** vira o tabuleiro, e **x** de novo desvira? A aula continua "✓ salvo" (nada mudou)?
+22. **?** (Shift + /) abre a lista de atalhos? **Esc** fecha?
+23. **L** liga o motor; com o menu **•••** de um lance aberto, **L** não faz nada?
+24. ← → ↑ ↓ Home End andam na lista de lances?
+25. Numa janela (Adicionar capítulo), **Tab** várias vezes fica dentro da janela? **Esc** fecha e o
+    cursor volta ao botão que abriu?
+26. No aluno, **x** e **?** funcionam no treino e na prática?
+
+### D. O aluno
+
+27. No computador: "Etapa X de Y" aparece em cima, e **← Etapa anterior** volta?
+28. No **celular de verdade**, com o endereço do seu computador na rede (ou depois do deploy): consegue
+    passar por todas as etapas sem rolar a tela para o lado?
+29. O crédito "Posição: …" aparece discreto no fim da aula quando o interruptor está ligado?
+
+### E. Primeira impressão de quem não conhece (meta do plano §20: ≥ 90% sem ajuda)
+
+Para cada tarefa, anote **achei sozinho? (sim/não)** e o **tempo**:
+
+30. Criar um capítulo a partir de uma posição do acervo.
+31. Escrever a narração de um lance.
+32. Transformar um lance em variante e marcar "?".
+33. Criar um treino a partir de um capítulo.
+34. Dizer de onde veio uma posição.
+35. Mudar a ordem das etapas.
+36. Pré-visualizar só a introdução.
+37. Publicar e abrir como aluno.
+
+### F. Pendências das fatias 6–9 que só a mão prova
+
+38. Treino: jogar o treino na prévia **arrastando** as peças (não clicando). Funciona igual?
+39. Motor: ligue o motor e **troque de aba** do navegador por 10 s. Ao voltar, ele tinha parado ("pausado")
+    e retoma?
+
 
 ## Como ligar o editor
 

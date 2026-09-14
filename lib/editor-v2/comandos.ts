@@ -130,7 +130,12 @@ export type ComandoV2 =
   /** §16.5: aplica exatamente o antes/depois que a comparação mostrou. */
   | { tipo: "REFAZER_TREINO"; plano: PlanoDeRefazerTreinoV2 }
   | { tipo: "ALTERNAR_NAG"; analiseId: string; nodeId: string; nag: number }
-  | { tipo: "ADICIONAR_LANCE"; analiseId: string; nodeId: string; uci: string; novoNodeId: string }
+  /**
+   * `capituloId` (fatia 10): o capítulo aberto na tela. Quando o lance sai do **fim** do percurso dele e é
+   * a primeira continuação daquela posição, o percurso ganha o lance. Sem isto, um capítulo criado do
+   * zero nunca tinha percurso — nem narração, nem treino, nem prévia.
+   */
+  | { tipo: "ADICIONAR_LANCE"; analiseId: string; nodeId: string; uci: string; novoNodeId: string; capituloId?: string }
   | { tipo: "PROMOVER_VARIANTE"; analiseId: string; parentId: string; nodeId: string }
   | { tipo: "EXCLUIR_RAMO"; analiseId: string; parentId: string; nodeId: string }
   /**
@@ -390,6 +395,15 @@ function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<
     const existente = no.filhos.find((filho) => analise.nos[filho]?.uci === comando.uci);
     if (existente) return aula;
     proxima = { ...analise, nos: { ...analise.nos, [no.id]: { ...no, filhos: [...no.filhos, comando.novoNodeId] }, [comando.novoNodeId]: { id: comando.novoNodeId, uci: comando.uci, filhos: [] } } };
+    const capitulo = comando.capituloId ? aula.capitulos.find((item) => item.id === comando.capituloId && item.analiseId === analise.id) : undefined;
+    const fimDoPercurso = capitulo ? capitulo.caminho.at(-1) ?? capitulo.inicioNodeId : undefined;
+    if (capitulo && fimDoPercurso === no.id && no.filhos.length === 0) {
+      return {
+        ...aula,
+        analises: aula.analises.map((a, i) => i === indice ? proxima : a),
+        capitulos: aula.capitulos.map((item) => item.id === capitulo.id ? { ...item, caminho: [...item.caminho, comando.novoNodeId] } : item),
+      };
+    }
   }
   if (comando.tipo === "DEFINIR_DESENHOS") {
     // Gesto sem efeito não entra no histórico (§6 do plano). O tabuleiro avisa da
