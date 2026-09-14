@@ -30,6 +30,23 @@ import { previaDaAula } from "./previa.ts";
 import { creditosDaAula } from "./proveniencia.ts";
 import { treinoJogavel, type TreinoJogavel } from "./treino-jogavel.ts";
 
+/** Um quadro da introdução na forma do `IntroStage`, com a FEN resolvida (e título e lance, fatia 10). */
+export type PassoDaIntroducaoDoAlunoV2 = { fala: string; fen: string; titulo?: string; lance?: string; arrows?: [string, string][]; highlights?: string[] };
+
+/**
+ * Os quadros de uma introdução como o aluno os recebe. É **a mesma função** para o aluno e para a
+ * prévia do editor (§15.1: um runtime só) — extraída de `etapasDoAlunoV2` na fatia 10.
+ */
+export function passosDaIntroducao(aula: AulaV2, introducao: AulaV2["introducoes"][number], positions: Record<string, Position>): PassoDaIntroducaoDoAlunoV2[] {
+  return introducao.quadros.map((quadro) => ({
+    fala: quadro.texto,
+    fen: quadro.posicao.tipo === "fen" ? quadro.posicao.fen : quadroDoNo(aula, quadro.posicao.origem.analiseId, quadro.posicao.origem.nodeId, positions).fen,
+    ...(quadro.titulo ? { titulo: quadro.titulo } : {}),
+    ...(quadro.lance ? { lance: quadro.lance } : {}),
+    ...desenhoCurto(quadro.desenhos),
+  }));
+}
+
 export type PassoDoCapituloDoAlunoV2 = {
   fala: string;
   lance?: string;
@@ -44,7 +61,7 @@ export type EtapaDoAlunoV2 =
       tipo: "introducao";
       rotulo: string;
       /** Na forma do `IntroStage`: cada quadro com a FEN já resolvida. */
-      passos: Array<{ fala: string; fen: string; arrows?: [string, string][]; highlights?: string[] }>;
+      passos: PassoDaIntroducaoDoAlunoV2[];
     }
   | {
       id: string;
@@ -116,11 +133,7 @@ export function etapasDoAlunoV2(aula: AulaV2, positions: Record<string, Position
         id: etapa.id,
         tipo: "introducao",
         rotulo: rotuloDe(aula, "introducao", introducao.titulo),
-        passos: introducao.quadros.map((quadro) => ({
-          fala: quadro.texto,
-          fen: quadro.posicao.tipo === "fen" ? quadro.posicao.fen : quadroDoNo(aula, quadro.posicao.origem.analiseId, quadro.posicao.origem.nodeId, positions).fen,
-          ...desenhoCurto(quadro.desenhos),
-        })),
+        passos: passosDaIntroducao(aula, introducao, positions),
       });
     } else if (etapa.tipo === "capitulo") {
       const capitulo = aula.capitulos.find((item) => item.id === etapa.entidadeId);

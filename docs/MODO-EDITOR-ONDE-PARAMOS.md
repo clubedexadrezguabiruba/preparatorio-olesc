@@ -4417,6 +4417,58 @@ prévia joga Dd4 e o rei preto sai de e4 (o Stockfish respondeu) → Criar → *
 **58/58 mutações** e repertório `--check`. `db:rls` e `db:finais:v2` não rodaram nesta parada: nada no
 banco nem na gravação mudou; ficam para a 10G, com a prática jogada pelo aluno.
 
+### Parada 10D — introdução (§7.1) e ordem das etapas (§18)
+
+- **Modelo, aditivo:** o quadro ganhou `titulo?` e `lance?` (o lance que levou à posição, para o
+  aluno ver de onde a peça saiu).
+- `lib/editor-v2/introducao.ts`: comandos `ADICIONAR_INTRODUCAO` (entra no **começo** do fluxo),
+  `EXCLUIR_INTRODUCAO`, `RENOMEAR_INTRODUCAO`, `ADICIONAR_QUADRO` (também duplica), `EXCLUIR_QUADRO`
+  (recusa o último: "use Excluir introdução"), `EDITAR_QUADRO` (esvaziar o texto não apaga),
+  `DEFINIR_POSICAO_DO_QUADRO` (referência a um lance do capítulo ou FEN própria), 
+  `DEFINIR_DESENHOS_DO_QUADRO` e `MOVER_QUADRO`; `quadroDepoisDoLance` ("inserir lance"). **A FEN
+  escrita igual à posição inicial de um capítulo é recusada com o nome dele** — a referência é a
+  fonte única —, e os contadores de lance não fazem outra posição.
+- `lib/editor-v2/fluxo.ts`: `MOVER_ETAPA`, `EXCLUIR_TREINO`, `indiceAntesDaPratica` e `etapasNaOrdem`
+  com a frase do lugar ("depois do capítulo «X»"). **Capítulo novo e capítulo importado sem lugar
+  escolhido passam a entrar antes da prática** (`novo-capitulo.ts`, `importar-pgn.ts`); antes caíam
+  depois dela. Um teste antigo de `novo-capitulo.test.ts` afirmava o fim do fluxo e foi atualizado
+  com o motivo.
+- `passosDaIntroducao` saiu de `etapasDoAlunoV2`: a aula publicada e a prévia usam a mesma função. O
+  `IntroStage` do aluno mostra o título do quadro, marca o lance e anuncia "Quadro X de Y" ao leitor
+  de tela.
+- **Tela:** `EditorDeIntroducao.tsx` em tela cheia — quadros à esquerda (↑ ↓, duplicar, excluir,
+  quadro novo com texto), tabuleiro no centro (botão direito desenha; **jogar uma peça cria o quadro
+  seguinte**), título, texto e posição à direita; ← e → trocam de quadro fora dos campos; a recusa
+  aparece na própria tela cheia. `PreviaDaIntroducao.tsx` com o `IntroStage`. `OrdemDaAula.tsx` com
+  ↑ ↓ e o aviso "a prática não é a última etapa". Na coluna esquerda, o cartão **Introdução · N
+  quadros** (ou "+ Criar introdução") e **Ordem da aula · N etapas…**; cada treino ganhou **Excluir
+  treino…** com confirmação. "Ir para o problema" de um quadro abre o editor da introdução nele.
+- O impacto de excluir capítulo ou cortar lance referenciado por quadro já existia (`impacto.ts`,
+  "virar FEN" ou remover); não foi refeito.
+
+```
+ANTES   introducao.test.ts: os módulos introducao.ts e fluxo.ts não existiam — falha ao carregar
+        novo-capitulo.test.ts com a regra nova: 1 falha ("no fim" esperava capítulo por último)
+DEPOIS  introducao 3/3 · novo-capitulo, importar-pgn e fluxo-do-aluno verdes (38/38 nos quatro)
+```
+
+**Os ensaios, verdes na primeira rodada:**
+
+- `e2e/editor/introducao.spec.ts` (8,2 s): na introdução de 3 quadros da aula base, → troca de quadro;
+  título "Diagnóstico" gravado; quadro novo e duplicado (5); desenho g2→g6 pelo botão direito gravado
+  no quadro; **Tg1–a1 jogado no tabuleiro cria o quadro 4 de 6** com `lance g1a1` e a FEN
+  `8/8/8/8/8/4k3/6R1/R6K b - - 1 1`; a FEN igual à do capítulo é recusada com "posição inicial do
+  capítulo «Uma fileira de cada vez»"; excluir → 5, Ctrl+Z → 6; a prévia mostra o título no
+  `IntroStage`; recarregar mantém os 6 quadros.
+- `e2e/editor/fluxo.spec.ts` (7,5 s): 4 etapas; subir a prática grava `…pratica, treino` e mostra o
+  aviso; Ctrl+Z volta e o aviso some; fechar devolve o foco ao botão; capítulo "no fim da aula" entra
+  como `…treino, capitulo, pratica`; excluir o treino deixa `introducao, capitulo, capitulo, pratica`.
+
+**Os sete portões:** tipos, lint, **1.268 testes**, build, conteúdo, **58/58 mutações** e repertório `--check`.
+
+**Número da parada:** `introducao.spec` e `fluxo.spec` verdes; ordem do aluno = `fluxo` (a mesma função
+`passosDaIntroducao` e o `etapasDoAlunoV2` na ordem do fluxo, provados em `fluxo-do-aluno.test.ts`).
+
 
 ## Como ligar o editor
 

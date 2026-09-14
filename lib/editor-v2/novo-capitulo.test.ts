@@ -129,11 +129,12 @@ test("a etapa entra depois do capítulo atual, e não no fim do fluxo", () => {
   assert.deepEqual(aplicado.aula.fluxo.map((etapa) => etapa.tipo), ["introducao", "capitulo", "capitulo", "treino", "pratica"]);
   assert.equal(aplicado.aula.fluxo[2].entidadeId, novo.capituloId);
 
-  // Sem ponto de inserção, vai para o fim — o mesmo que a importação faz.
+  // Sem ponto de inserção, entra antes da prática — o mesmo que a importação faz (fatia 10, §18).
+  // Até a 10D entrava no fim, depois da avaliação que fecha a aula.
   const noFim = aplicarNovoCapitulo(aula, criar(aula, "No fim", FEN_KPK));
   assert.equal(noFim.ok, true);
   if (!noFim.ok) return;
-  assert.equal(noFim.aula.fluxo.at(-1)!.tipo, "capitulo");
+  assert.deepEqual(noFim.aula.fluxo.map((etapa) => etapa.tipo), ["introducao", "capitulo", "treino", "capitulo", "pratica"]);
 });
 
 test("o cadastro de capítulos não é uma segunda ordem: só o fluxo muda de forma", () => {

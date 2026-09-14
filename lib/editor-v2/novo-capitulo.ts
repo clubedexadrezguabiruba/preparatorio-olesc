@@ -31,6 +31,7 @@ import { pecaNaCasa, problemaDaPosicaoMontada } from "../chess/fen.ts";
 import { fenSchema } from "../lesson/schema.ts";
 import { comoId, idsDaAulaV2 } from "./ids.ts";
 import { problemasDeLimiteV2 } from "./limites.ts";
+import { indiceAntesDaPratica } from "./fluxo.ts";
 import { FEN_INICIAL_PADRAO, type AnaliseV2, type AulaV2, type CapituloV2 } from "./modelo.ts";
 
 /** O que o professor preencheu no diálogo. */
@@ -174,7 +175,8 @@ export function aplicarNovoCapitulo(aula: AulaV2, novo: NovoCapituloV2): Aplicac
   const depois = novo.depoisDoCapituloId
     ? fluxo.findIndex((item) => item.tipo === "capitulo" && item.entidadeId === novo.depoisDoCapituloId)
     : -1;
-  fluxo.splice(depois < 0 ? fluxo.length : depois + 1, 0, etapa);
+  // Sem lugar escolhido, antes da prática: a avaliação fecha a aula (§18, fatia 10). Antes caía depois dela.
+  fluxo.splice(depois < 0 ? indiceAntesDaPratica(fluxo) : depois + 1, 0, etapa);
 
   const registrada = novo.doAcervo && aula.proveniencia.some((item) => item.positionId === novo.doAcervo!.positionId);
   const nova: AulaV2 = {

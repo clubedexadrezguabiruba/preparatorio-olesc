@@ -28,6 +28,10 @@ import { DialogoEditarTreino } from "@/components/editor-v2/DialogoEditarTreino"
 import { DialogoPropriedadeTreino } from "@/components/editor-v2/DialogoPropriedadeTreino";
 import { DialogoProveniencia } from "@/components/editor-v2/DialogoProveniencia";
 import { DialogoPratica } from "@/components/editor-v2/DialogoPratica";
+import { EditorDeIntroducao } from "@/components/editor-v2/EditorDeIntroducao";
+import { PreviaDaIntroducao } from "@/components/editor-v2/PreviaDaIntroducao";
+import { OrdemDaAula } from "@/components/editor-v2/OrdemDaAula";
+import type { ComandoDeIntroducaoV2 } from "@/lib/editor-v2/introducao";
 import { PreviaDaPratica } from "@/components/editor-v2/PreviaDaPratica";
 import type { ObraDoRegistro } from "@/lib/editor-v2/acervo-em-disco";
 import type { PraticaV2 } from "@/lib/editor-v2/modelo";
@@ -215,6 +219,10 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
   /** §17.1 (fatia 10): a janela da prática ("nova" ou o id) e a prática sendo jogada na prévia. */
   const [editandoPratica, setEditandoPratica] = useState<string | null>(null);
   const [jogandoPratica, setJogandoPratica] = useState<PraticaV2 | null>(null);
+  /** §7.1 e §18 (fatia 10): o editor da introdução (id `null` = criar), a prévia dela e a ordem da aula. */
+  const [editandoIntroducao, setEditandoIntroducao] = useState<{ id: string | null; quadro?: string } | null>(null);
+  const [previaDaIntroducao, setPreviaDaIntroducao] = useState<string | null>(null);
+  const [vendoOrdem, setVendoOrdem] = useState(false);
   const [salvandoSnapshot, setSalvandoSnapshot] = useState(false);
   /**
    * A prévia (§15), em dois estados: a escolha do escopo, e a prévia rodando.
@@ -366,7 +374,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
     || escolhendoPrevia || previa !== null
     || criandoTreino !== null || editandoTreino !== null || propriedadeTreino !== null || jogandoTreino !== null
     || duplicandoCapitulo !== null || excluindoCapitulo !== null || acaoDoLance !== null || cortando !== null
-    || publicandoAula || vendoPublicacoes || convertendoV1 || revisandoProveniencia !== null || editandoPratica !== null || jogandoPratica !== null;
+    || publicandoAula || vendoPublicacoes || convertendoV1 || revisandoProveniencia !== null || editandoPratica !== null || jogandoPratica !== null
+    || editandoIntroducao !== null || previaDaIntroducao !== null || vendoOrdem;
   const estadoDoTeclado = useRef({ analise, janelaAberta });
   useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta }; });
 
@@ -673,6 +682,10 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
     // Nível e classe moram em "Mais opções" (fatia 8): o problema abre a janela certa.
     if (destino.maisOpcoes) { setVendoPublicacoes(true); return; }
     if (destino.janela?.tipo === "treino") { setEditandoTreino(destino.janela.treinoId); return; }
+    if (destino.janela?.tipo === "introducao") {
+      setEditandoIntroducao({ id: destino.janela.introducaoId, quadro: destino.janela.quadroId });
+      return;
+    }
     if (destino.janela?.tipo === "pratica") {
       setEditandoPratica(destino.janela.praticaId ?? historico.presente.praticas[0]?.id ?? "nova");
       return;
@@ -1254,6 +1267,39 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
         />
       ) : null}
 
+      {editandoIntroducao ? (
+        <EditorDeIntroducao
+          aula={historico.presente}
+          introducaoId={editandoIntroducao.id}
+          quadroInicial={editandoIntroducao.quadro}
+          positions={positions}
+          aoComando={(comando: ComandoDeIntroducaoV2) => {
+            // Confere antes, para a recusa aparecer na própria tela cheia, e não atrás dela.
+            try { executarComando(historico.presente, comando, positions); } catch (erro) { return erro instanceof Error ? erro.message : "não foi possível fazer esta edição"; }
+            aplicar(comando);
+            if (comando.tipo === "ADICIONAR_INTRODUCAO") setEditandoIntroducao({ id: comando.introducaoId, quadro: comando.quadro.id });
+            return null;
+          }}
+          aoPrever={setPreviaDaIntroducao}
+          aoFechar={() => {
+            setEditandoIntroducao(null);
+            requestAnimationFrame(() => document.querySelector<HTMLButtonElement>("[data-introducao]")?.focus());
+          }}
+        />
+      ) : null}
+
+      {previaDaIntroducao ? (
+        <PreviaDaIntroducao aula={historico.presente} introducaoId={previaDaIntroducao} positions={positions} aoFechar={() => setPreviaDaIntroducao(null)} />
+      ) : null}
+
+      {vendoOrdem ? (
+        <OrdemDaAula
+          aula={historico.presente}
+          aoMover={(etapaId, para) => aplicar({ tipo: "MOVER_ETAPA", etapaId, para })}
+          aoFechar={() => { setVendoOrdem(false); requestAnimationFrame(() => document.querySelector<HTMLButtonElement>("[data-ordem-da-aula]")?.focus()); }}
+        />
+      ) : null}
+
       {editandoPratica ? (
         <DialogoPratica
           aula={historico.presente}
@@ -1369,6 +1415,20 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
 
       <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[14rem_minmax(20rem,38rem)_minmax(18rem,1fr)]">
         <aside className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
+          {/* §7.1 e §18 (fatia 10): a introdução abre a coluna, e a ordem da aula inteira fica a um clique. */}
+          <div className="flex flex-col gap-2 border-b border-borda-fraca pb-3">
+            <h2 className="text-sm font-semibold text-tinta">Introdução</h2>
+            {historico.presente.introducoes.length ? historico.presente.introducoes.map((introducao) => (
+              <button key={introducao.id} type="button" data-introducao={introducao.id} onClick={() => setEditandoIntroducao({ id: introducao.id })} className="foco w-full rounded-md border border-borda-fraca p-2 text-left text-xs text-tinta hover:bg-carta-toque">
+                <span className="block font-medium">{introducao.titulo}</span>
+                <span className="text-tinta-fraca">{introducao.quadros.length} quadro{introducao.quadros.length === 1 ? "" : "s"}</span>
+                <span className="mt-1 block text-metodo-tinta">Editar introdução</span>
+              </button>
+            )) : (
+              <button type="button" data-introducao="nova" onClick={() => setEditandoIntroducao({ id: null })} className="foco w-full rounded-md border border-borda px-2 py-2 text-sm text-tinta hover:bg-carta-toque">+ Criar introdução</button>
+            )}
+            <button type="button" data-ordem-da-aula onClick={() => setVendoOrdem(true)} className="foco w-full rounded-md border border-borda px-2 py-1.5 text-xs text-tinta hover:bg-carta-toque">Ordem da aula · {historico.presente.fluxo.length} etapas…</button>
+          </div>
           <h2 className="text-sm font-semibold text-tinta">Capítulos</h2>
           <p className="text-xs text-tinta-fraca">Arraste como um slide ou abra ••• para mover pelo teclado.</p>
           <button
@@ -1435,6 +1495,13 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
                       className={`foco mt-1 w-full rounded-md border px-2 py-1 text-left text-xs hover:bg-carta-toque ${treino.fonte === "atual" ? "border-borda text-tinta" : "border-aviso-superficie text-aviso-tinta"}`}
                     >
                       Propriedade e fonte · {treino.fonte}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { if (window.confirm(`Excluir o treino «${treino.titulo}»? Ele sai da aula e da ordem das etapas. O Desfazer devolve.`)) aplicar({ tipo: "EXCLUIR_TREINO", treinoId: treino.id }); }}
+                      className="foco mt-1 w-full rounded-md border border-erro px-2 py-1 text-left text-xs text-erro-texto hover:bg-erro-superficie/20"
+                    >
+                      Excluir treino…
                     </button>
                   </li>
                 ))}

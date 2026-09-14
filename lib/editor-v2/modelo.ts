@@ -256,7 +256,14 @@ export const analiseV2Schema = z.strictObject({
 
 export const quadroIntroducaoV2Schema = z.strictObject({
   id: idV2Schema,
+  /** §7.1 (fatia 10): "título e texto de cada quadro". Opcional; o aluno lê acima do texto. */
+  titulo: z.string().min(1).optional(),
   texto: z.string().min(1),
+  /**
+   * O lance que levou a esta posição a partir do quadro anterior ("inserir lance", §7.1). Só marca
+   * de onde a peça saiu no tabuleiro do aluno; a posição continua sendo a de `posicao`.
+   */
+  lance: uciSchema.optional(),
   posicao: z.discriminatedUnion("tipo", [
     z.strictObject({ tipo: z.literal("referencia"), origem: referenciaNoSchema }),
     z.strictObject({ tipo: z.literal("fen"), fen: fenSchema }),

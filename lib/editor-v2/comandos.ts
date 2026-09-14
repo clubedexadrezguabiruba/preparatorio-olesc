@@ -28,6 +28,8 @@ import { semRevisoes } from "./revisoes.ts";
 import type { ResolucoesV2 } from "./impacto.ts";
 import type { AulaV2, DesenhoV2, NoV2, RevisaoDaFenV2 } from "./modelo.ts";
 import { aplicarRevisaoDaFen } from "./proveniencia.ts";
+import { ehComandoDeIntroducao, executarComandoDeIntroducao, type ComandoDeIntroducaoV2 } from "./introducao.ts";
+import { excluirTreino, moverEtapa } from "./fluxo.ts";
 import { aplicarEdicaoDePratica, aplicarExclusaoDePratica, aplicarNovaPratica, type PraticaPreparadaV2 } from "./pratica.ts";
 import {
   aplicarRefazerTreino,
@@ -154,6 +156,12 @@ export type ComandoV2 =
   | { tipo: "ADICIONAR_PRATICA"; preparo: PraticaPreparadaV2 }
   | { tipo: "EDITAR_PRATICA"; preparo: PraticaPreparadaV2 }
   | { tipo: "EXCLUIR_PRATICA"; praticaId: string }
+  /** §18 (fatia 10): uma etapa do fluxo para a posição `para` — introdução, capítulo, treino ou prática. */
+  | { tipo: "MOVER_ETAPA"; etapaId: string; para: number }
+  /** §8.4 para o treino (fatia 10): exclui o treino e a etapa dele, pelo `•••` do cartão. */
+  | { tipo: "EXCLUIR_TREINO"; treinoId: string }
+  /** §7.1 (fatia 10): a introdução e os quadros — ver `introducao.ts`. */
+  | ComandoDeIntroducaoV2
   /**
    * Uma tag do cabeçalho PGN da análise (fatia 8: Nome, Nível e Fonte do repertório).
    *
@@ -175,6 +183,9 @@ function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<
     if (aula.origem.convertidaEm) return aula;
     return { ...aula, origem: { ...aula.origem, convertidaEm: comando.convertidaEm } };
   }
+  if (ehComandoDeIntroducao(comando)) return executarComandoDeIntroducao(aula, comando, positions);
+  if (comando.tipo === "MOVER_ETAPA") return moverEtapa(aula, comando.etapaId, comando.para);
+  if (comando.tipo === "EXCLUIR_TREINO") return excluirTreino(aula, comando.treinoId);
   if (comando.tipo === "ADICIONAR_PRATICA") return aplicarNovaPratica(aula, comando.preparo);
   if (comando.tipo === "EDITAR_PRATICA") return aplicarEdicaoDePratica(aula, comando.preparo);
   if (comando.tipo === "EXCLUIR_PRATICA") return aplicarExclusaoDePratica(aula, comando.praticaId);

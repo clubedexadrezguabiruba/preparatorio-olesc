@@ -37,6 +37,7 @@
  * não soube ler, uma letra de cor fora das quatro conhecidas. Recusar o jogo inteiro
  * por causa de uma variante torta jogaria fora as vinte que estão certas.
  */
+import { indiceAntesDaPratica } from "./fluxo.ts";
 import { Chess } from "chess.js";
 import { lerPgns, type LancePgn, type PartidaPgn } from "../repertorio/pgn.ts";
 import { comoId } from "./ids.ts";
@@ -379,7 +380,12 @@ export function aplicarImportacaoPgn(aula: AulaV2, relatorio: RelatorioImportaca
     ...aula,
     analises: [...aula.analises, ...jogos.map((jogo) => jogo.analise!)],
     capitulos: [...aula.capitulos, ...jogos.map((jogo) => jogo.capitulo!)],
-    fluxo: [...aula.fluxo, ...jogos.map((jogo) => ({ id: `etapa-${jogo.capitulo!.id}`, tipo: "capitulo" as const, entidadeId: jogo.capitulo!.id }))],
+    // Os capítulos importados entram antes da prática, que fecha a aula (§18, fatia 10).
+    fluxo: [
+      ...aula.fluxo.slice(0, indiceAntesDaPratica(aula.fluxo)),
+      ...jogos.map((jogo) => ({ id: `etapa-${jogo.capitulo!.id}`, tipo: "capitulo" as const, entidadeId: jogo.capitulo!.id })),
+      ...aula.fluxo.slice(indiceAntesDaPratica(aula.fluxo)),
+    ],
   };
 
   const excedidos = problemasDeLimiteV2(nova);

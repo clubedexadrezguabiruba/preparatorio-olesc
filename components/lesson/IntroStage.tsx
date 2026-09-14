@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
-import type { Color } from "@lichess-org/chessground/types";
+import type { Color, Key } from "@lichess-org/chessground/types";
 import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { Comentario, useComentarioPaginado } from "@/components/lesson/Comentario";
@@ -99,6 +99,8 @@ export function IntroStage({
     Math.min(Math.max(passoInicial, 0), stage.passos.length - 1),
   );
   const atual = stage.passos[passo];
+  /** Fatia 10: o quadro v2 pode ter título e o lance que levou a ele. O v1 não tem nenhum dos dois. */
+  const extra = atual as typeof atual & { titulo?: string; lance?: string };
   const primeiro = passo === 0;
   const ultimo = passo >= stage.passos.length - 1;
 
@@ -147,12 +149,16 @@ export function IntroStage({
           orientation={orientation}
           shapes={shapes}
           desenhavel={marcacao}
+          lastMove={extra.lance ? [extra.lance.slice(0, 2) as Key, extra.lance.slice(2, 4) as Key] : null}
           viewOnly
         />
       }
       painel={
         <>
           {trilha}
+
+          {extra.titulo ? <p className="rotulo text-tinta">{extra.titulo}</p> : null}
+          <p className="sr-only" aria-live="polite">Quadro {passo + 1} de {stage.passos.length}</p>
 
           {edicaoDaFala ? (
             edicaoDaFala(passo, atual.fala)
