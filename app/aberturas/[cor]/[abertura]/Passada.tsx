@@ -18,7 +18,7 @@ import {
   type Modo,
   type Selo,
 } from "@/lib/repertorio/passada";
-import { playForMove, playRefusal, playSuccess } from "@/lib/sound";
+import { playCorrect, playForMove, playRefusal, playSuccess } from "@/lib/sound";
 import { ABERTURA_MS } from "@/lib/tatica/tempos";
 import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
 import { BotaoPrincipal, BotaoSecundario } from "@/components/lesson/BotoesDaAula";
@@ -207,6 +207,9 @@ export function Passada({
           break;
         case "som-premio":
           playSuccess();
+          break;
+        case "som-certo":
+          playCorrect();
           break;
         case "selo":
           setMarca({ casa: efeito.casa, qual: efeito.qual });

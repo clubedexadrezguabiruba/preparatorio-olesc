@@ -8,7 +8,8 @@ import { guardarSnapshotAntesDeMigrarV1, prepararMigracaoV1, type PreparoDaMigra
 import { adaptarLessonV1 } from "@/lib/editor-v2/adaptar-v1";
 import { conferirAulaV2, podePublicarV2, type ConferenciaV2 } from "@/lib/editor-v2/gate";
 import { frasesDoImpactoV2 } from "@/lib/editor-v2/impacto-publicacao";
-import { aulaIdV2Schema, aulaV2Schema } from "@/lib/editor-v2/modelo";
+import { aulaIdV2Schema, aulaV2Schema, revisaoDaFenV2Schema } from "@/lib/editor-v2/modelo";
+import { adicionarPosicaoAoAcervo, type AdicaoAoAcervoV2, type PedidoDePosicaoNoAcervoV2 } from "@/lib/editor-v2/acervo-em-disco";
 import { publicationIdSchema } from "@/lib/editor-v2/publicacoes";
 import { desativarV2, prepararPublicacaoV2, publicacoesDaAulaV2, publicarAulaV2, reativarPublicacaoV2, recuperarTransacaoV2 } from "@/lib/editor-v2/publicar";
 import { documentoV2Existe, gravarDocumentoV2, guardarSnapshotAntesDeRefazerV2, idsDeDocumentosV2, lerDocumentoV2 } from "@/lib/editor-v2/rascunhos";
@@ -230,4 +231,19 @@ export async function criarAulaV2(pedidoEmTexto: string): Promise<CriacaoDeAulaV
   const gravacao = gravarDocumentoV2(preparo.aula.id, preparo.aula, null);
   if (!gravacao.ok) return { ok: false, campo: "disco", mensagem: gravacao.erro };
   return { ok: true, id: preparo.aula.id };
+}
+
+/**
+ * "Adicionar ao acervo" (§17.1, fatia 10): a posição nova de uma prática vira arquivo candidato em
+ * `content/positions/`, com o resultado do cache da tablebase e a proveniência que o
+ * `validate:content` exige. As regras moram em `acervo-em-disco.ts`.
+ */
+export async function adicionarAoAcervoV2Acao(pedidoEmTexto: string): Promise<AdicaoAoAcervoV2> {
+  await exigirEditor();
+  let pedido: PedidoDePosicaoNoAcervoV2;
+  try { pedido = JSON.parse(pedidoEmTexto) as PedidoDePosicaoNoAcervoV2; } catch { return { ok: false, campo: "posicao", mensagem: "o navegador enviou um pedido quebrado" }; }
+  if (!aulaIdV2Schema.safeParse(pedido.aulaId).success) return { ok: false, campo: "posicao", mensagem: "id de aula inválido" };
+  const revisao = revisaoDaFenV2Schema.safeParse(pedido.revisao);
+  if (!revisao.success) return { ok: false, campo: "origem", mensagem: "a revisão de proveniência veio incompleta — diga de onde a posição veio" };
+  return adicionarPosicaoAoAcervo({ ...pedido, revisao: revisao.data });
 }

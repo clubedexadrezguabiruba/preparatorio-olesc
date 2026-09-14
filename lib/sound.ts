@@ -567,6 +567,41 @@ export const VARIANTS: Record<EffectName, Record<string, (ctx: BaseAudioContext)
   },
 
   /**
+   * Lance certo no treino de aberturas: o **"tu-lí"** do move trainer do
+   * Chess.com, medido e não copiado. Toca junto com o som do lance.
+   *
+   * A curva de envelope da referência, a partir do ataque, em janelas de 5 ms e
+   * dB relativos ao pico — e a desta síntese logo abaixo:
+   *
+   * ```
+   * ref   -4  0 -1 -1 -3 -8 -10  0 -1 -2 -8 -16 -22 -25 -30 -36
+   * v1    -6  0  0  0  0 -3  -7 -2  0 -1 -6 -11 -16 -20 -21 -25
+   *        0  5 10 15 20 25  30 35 40 45 50  55  60  65  70  75 ms
+   * ```
+   *
+   * **A primeira nota não pode morrer antes da segunda.** Com um platô curto ela
+   * caía 28 dB no vão entre as duas, e as notas viravam dois toques separados;
+   * na referência o vão é de 10 dB, e é isso que as faz soar como um gesto.
+   *
+   * **O volume é o do Chess.com, de propósito.** Lá o acerto mede 10 dB de RMS
+   * acima do som de lance, e esta síntese fica 10 dB acima do nosso `lance`. É
+   * mais alto que a captura. Uma versão 6 dB mais baixa foi ouvida ao lado, e o
+   * Doug escolheu esta.
+   */
+  certo: {
+    v1: (ctx) => {
+      tone(ctx, { freq: 374, duration: 0.095, gain: 0.2, attack: 0.004, hold: 0.017 });
+      tone(ctx, { freq: 748, duration: 0.03, gain: 0.006, attack: 0.004 });
+      tone(ctx, { freq: 561, duration: 0.071, gain: 0.2, attack: 0.004, hold: 0.006, delay: 0.034 });
+      tone(ctx, { freq: 1122, duration: 0.04, gain: 0.005, attack: 0.004, delay: 0.034 });
+      // A ressonância baixa das duas notas, que na referência fica em −33 dB até
+      // os 105 ms.
+      tone(ctx, { freq: 561, duration: 0.07, gain: 0.012, attack: 0.02, delay: 0.05 });
+      tone(ctx, { freq: 374, duration: 0.07, gain: 0.008, attack: 0.02, delay: 0.05 });
+    },
+  },
+
+  /**
    * Xeque-mate: **duas batidas, a segunda mais grave — e sem borda.**
    *
    * O gesto vem do `game-end.mp3` do Chess.com, medido e não copiado (o arquivo
@@ -695,6 +730,11 @@ export function playRefusal(): void {
 /** Puzzle resolvido sem mate: dois graus subindo. */
 export function playSuccess(): void {
   play("acerto");
+}
+
+/** Lance certo no treino de aberturas: o "tu-lí", junto com o som do lance. */
+export function playCorrect(): void {
+  play("certo");
 }
 
 /** Xeque-mate: as duas batidas, a segunda mais grave. */

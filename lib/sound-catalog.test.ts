@@ -25,11 +25,11 @@ import { VARIANTS } from "./sound.ts";
  * `RESPOSTA_MS` no futuro para o gate, em vez de estragar o som calado.
  */
 
-test("os sete efeitos existem, uma vez cada", () => {
+test("os oito efeitos existem, uma vez cada", () => {
   const nomes = CATALOG.map((effect) => effect.name);
   assert.deepEqual(
     [...nomes].sort(),
-    ["acerto", "captura", "conclusao", "lance", "mate", "recusa", "xeque"],
+    ["acerto", "captura", "certo", "conclusao", "lance", "mate", "recusa", "xeque"],
     `o catálogo tem [${nomes}]`,
   );
   assert.equal(new Set(nomes).size, nomes.length, "efeito repetido no catálogo");
@@ -92,13 +92,13 @@ test("cada efeito tem título e texto de quando toca", () => {
   }
 });
 
-test("lance, captura e xeque cabem no intervalo da resposta do adversário", () => {
+test("lance, captura, xeque e acerto de lance cabem no intervalo da resposta do adversário", () => {
   // O teto é medível, não gosto: som mais longo que o intervalo entre o lance
   // certo do aluno e a resposta do adversário transforma os dois lances em lama.
   // A duração real de cada síntese é medida na `/sons` do laboratório, que
   // renderiza fora do tempo real; aqui o gate cobra o teto **declarado**, que é
   // o contrato do desenho.
-  for (const nome of ["lance", "captura", "xeque"] as const) {
+  for (const nome of ["lance", "captura", "xeque", "certo"] as const) {
     const effect = CATALOG.find((item) => item.name === nome);
     assert.ok(effect, `${nome} não está no catálogo`);
     assert.ok(

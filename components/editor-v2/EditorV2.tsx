@@ -4,7 +4,7 @@ import { Chess, type Square } from "chess.js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Key } from "@lichess-org/chessground/types";
-import { conferirAulaV2Acao, guardarSnapshotDeRefazerV2, salvarDocumentoV2, type ResultadoDoConferirV2 } from "@/app/editor/v2/acoes";
+import { adicionarAoAcervoV2Acao, conferirAulaV2Acao, guardarSnapshotDeRefazerV2, salvarDocumentoV2, type ResultadoDoConferirV2 } from "@/app/editor/v2/acoes";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { NagOverlay } from "@/components/board/NagOverlay";
 import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
@@ -27,6 +27,10 @@ import { DialogoCriarTreino } from "@/components/editor-v2/DialogoCriarTreino";
 import { DialogoEditarTreino } from "@/components/editor-v2/DialogoEditarTreino";
 import { DialogoPropriedadeTreino } from "@/components/editor-v2/DialogoPropriedadeTreino";
 import { DialogoProveniencia } from "@/components/editor-v2/DialogoProveniencia";
+import { DialogoPratica } from "@/components/editor-v2/DialogoPratica";
+import { PreviaDaPratica } from "@/components/editor-v2/PreviaDaPratica";
+import type { ObraDoRegistro } from "@/lib/editor-v2/acervo-em-disco";
+import type { PraticaV2 } from "@/lib/editor-v2/modelo";
 import { estadoDaProveniencia } from "@/lib/editor-v2/proveniencia";
 import type { PosicaoDoAcervoV2 } from "@/lib/editor-v2/acervo";
 import { PaletaDeDesenho } from "@/components/editor-v2/PaletaDeDesenho";
@@ -94,6 +98,7 @@ type Estado = "salvo" | "alterado" | "salvando" | "erro" | "conflito";
 const SIMBOLOS_DE_QUALIDADE: Record<number, string> = { 1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!" };
 
 const SEM_ACERVO: PosicaoDoAcervoV2[] = [];
+const SEM_OBRAS: ObraDoRegistro[] = [];
 
 function novoId(): string {
   return `n-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -143,7 +148,7 @@ function treinosNaOrdemDaAula(aula: AulaV2): AulaV2["treinos"] {
   });
 }
 
-export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: posicoesDaAula, problemasDaOrigem = [], regua, professor = "professor", acervo = SEM_ACERVO }: {
+export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: posicoesDaAula, problemasDaOrigem = [], regua, professor = "professor", acervo = SEM_ACERVO, obras = SEM_OBRAS }: {
   aulaId: string;
   documentoInicial: AulaV2;
   hashInicial: string;
@@ -160,14 +165,18 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
   professor?: string;
   /** Fatia 10: o acervo de `content/positions/`, para as portas que escolhem posição do curso. */
   acervo?: PosicaoDoAcervoV2[];
+  /** As obras de `content/sources.json`, para "Adicionar ao acervo" (§17.1). */
+  obras?: ObraDoRegistro[];
 }) {
+  /** O acervo cresce na sessão quando a prática adiciona uma posição nova. */
+  const [acervoDaSessao, setAcervoDaSessao] = useState(acervo);
   /*
    * As posições que a tela conhece: as que a aula já usa e as do acervo. Sem as do acervo, um
    * capítulo recém-criado a partir dele acusaria "a posição não está no pacote" até o reload.
    */
   const positions = useMemo(
-    () => ({ ...Object.fromEntries(acervo.map((item) => [item.position.id, item.position])), ...posicoesDaAula }),
-    [acervo, posicoesDaAula],
+    () => ({ ...Object.fromEntries(acervoDaSessao.map((item) => [item.position.id, item.position])), ...posicoesDaAula }),
+    [acervoDaSessao, posicoesDaAula],
   );
   const [historico, setHistorico] = useState<Historico<AulaV2>>(() => iniciarHistorico(documentoInicial));
   const [capituloId, setCapituloId] = useState(() => capitulosNaOrdemDaAula(documentoInicial)[0]?.id ?? "");
@@ -203,6 +212,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
   const [propriedadeTreino, setPropriedadeTreino] = useState<string | null>(null);
   /** §19.1 (fatia 10): a janela "De onde veio esta posição?", aberta para qual análise. */
   const [revisandoProveniencia, setRevisandoProveniencia] = useState<string | null>(null);
+  /** §17.1 (fatia 10): a janela da prática ("nova" ou o id) e a prática sendo jogada na prévia. */
+  const [editandoPratica, setEditandoPratica] = useState<string | null>(null);
+  const [jogandoPratica, setJogandoPratica] = useState<PraticaV2 | null>(null);
   const [salvandoSnapshot, setSalvandoSnapshot] = useState(false);
   /**
    * A prévia (§15), em dois estados: a escolha do escopo, e a prévia rodando.
@@ -354,7 +366,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
     || escolhendoPrevia || previa !== null
     || criandoTreino !== null || editandoTreino !== null || propriedadeTreino !== null || jogandoTreino !== null
     || duplicandoCapitulo !== null || excluindoCapitulo !== null || acaoDoLance !== null || cortando !== null
-    || publicandoAula || vendoPublicacoes || convertendoV1 || revisandoProveniencia !== null;
+    || publicandoAula || vendoPublicacoes || convertendoV1 || revisandoProveniencia !== null || editandoPratica !== null || jogandoPratica !== null;
   const estadoDoTeclado = useRef({ analise, janelaAberta });
   useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta }; });
 
@@ -661,6 +673,10 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
     // Nível e classe moram em "Mais opções" (fatia 8): o problema abre a janela certa.
     if (destino.maisOpcoes) { setVendoPublicacoes(true); return; }
     if (destino.janela?.tipo === "treino") { setEditandoTreino(destino.janela.treinoId); return; }
+    if (destino.janela?.tipo === "pratica") {
+      setEditandoPratica(destino.janela.praticaId ?? historico.presente.praticas[0]?.id ?? "nova");
+      return;
+    }
     if (destino.janela?.tipo === "proveniencia") {
       if (destino.capituloId) setCapituloId(destino.capituloId);
       setRevisandoProveniencia(destino.janela.analiseId);
@@ -668,7 +684,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
     }
     if (destino.capituloId) setCapituloId(destino.capituloId);
     if (destino.nodeId) setNodeId(destino.nodeId);
-  }, []);
+  }, [historico.presente.praticas]);
 
   /*
    * ## O despachante do menu do lance (§11.3)
@@ -1238,6 +1254,42 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
         />
       ) : null}
 
+      {editandoPratica ? (
+        <DialogoPratica
+          aula={historico.presente}
+          praticaId={editandoPratica === "nova" ? null : editandoPratica}
+          positions={positions}
+          acervo={acervoDaSessao}
+          obras={obras}
+          professor={professor}
+          aoAdicionarAoAcervo={async (pedido) => {
+            const resposta = await adicionarAoAcervoV2Acao(JSON.stringify(pedido));
+            if (resposta.ok) setAcervoDaSessao((atual) => atual.some((item) => item.position.id === resposta.item.position.id) ? atual : [...atual, resposta.item].sort((a, b) => a.position.id.localeCompare(b.position.id)));
+            return resposta;
+          }}
+          aoPrever={setJogandoPratica}
+          aoSalvar={(preparo, nova) => {
+            aplicar({ tipo: nova ? "ADICIONAR_PRATICA" : "EDITAR_PRATICA", preparo });
+            setEditandoPratica(null);
+            requestAnimationFrame(() => document.querySelector<HTMLButtonElement>("[data-pratica]")?.focus());
+          }}
+          aoExcluir={(praticaId) => {
+            const pratica = historico.presente.praticas.find((item) => item.id === praticaId);
+            if (!window.confirm(`Excluir a prática «${pratica?.titulo ?? ""}»? A aula fica sem avaliação e não publica até ter outra. O Desfazer devolve.`)) return;
+            aplicar({ tipo: "EXCLUIR_PRATICA", praticaId });
+            setEditandoPratica(null);
+          }}
+          aoFechar={() => {
+            setEditandoPratica(null);
+            requestAnimationFrame(() => document.querySelector<HTMLButtonElement>("[data-pratica]")?.focus());
+          }}
+        />
+      ) : null}
+
+      {jogandoPratica && positions[jogandoPratica.positionId] ? (
+        <PreviaDaPratica pratica={jogandoPratica} posicao={positions[jogandoPratica.positionId]} aoFechar={() => setJogandoPratica(null)} />
+      ) : null}
+
       {propriedadeTreino ? (
         <DialogoPropriedadeTreino
           aula={historico.presente}
@@ -1388,6 +1440,25 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
                 ))}
               </ol>
             ) : <p className="mt-1 text-xs text-tinta-fraca">Nenhum treino nesta aula.</p>}
+          </div>
+          {/* §17.1 (fatia 10): a prática, a avaliação da aula. */}
+          <div className="mt-3 border-t border-borda-fraca pt-3">
+            <h2 className="text-sm font-semibold text-tinta">Prática</h2>
+            {historico.presente.praticas.length ? historico.presente.praticas.map((pratica) => (
+              <div key={pratica.id} className="mt-2 flex flex-col gap-1">
+                <button type="button" data-pratica={pratica.id} onClick={() => setEditandoPratica(pratica.id)} className="foco w-full rounded-md border border-borda-fraca p-2 text-left text-xs text-tinta hover:bg-carta-toque">
+                  <span className="block font-medium">{pratica.titulo}</span>
+                  <span className="text-tinta-fraca">{pratica.ladoAluno === "white" ? "Brancas" : "Pretas"} · {pratica.objetivo === "win" ? "vencer" : "empatar"} · força {pratica.engine.skill}</span>
+                  <span className="mt-1 block text-metodo-tinta">Editar prática</span>
+                </button>
+                <button type="button" onClick={() => setJogandoPratica(pratica)} className="foco w-full rounded-md border border-borda px-2 py-1 text-left text-xs text-tinta hover:bg-carta-toque">⏵ Jogar na prévia</button>
+              </div>
+            )) : (
+              <>
+                <p className="mt-1 text-xs text-tinta-fraca">Sem prática, a aula não publica: o domínio depende dela.</p>
+                <button type="button" data-pratica="nova" onClick={() => setEditandoPratica("nova")} className="foco mt-2 w-full rounded-md border border-borda px-2 py-2 text-sm text-tinta hover:bg-carta-toque">+ Criar prática</button>
+              </>
+            )}
           </div>
           <label className="mt-2 flex flex-col gap-1 text-xs text-tinta-fraca">
             Nome do capítulo

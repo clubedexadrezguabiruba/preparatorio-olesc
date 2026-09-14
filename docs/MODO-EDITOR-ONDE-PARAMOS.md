@@ -4373,6 +4373,50 @@ reabre com "Revisada em … por Professor de Ensaio" → Ctrl+Z traz o aviso de 
 **Os sete portões:** tipos, lint, **1.258 testes**, build, conteúdo (38 do cache, 0 pela rede),
 **58/58 mutações** e repertório `--check`. Limpeza do ensaio: 972/972 iguais.
 
+### Parada 10C — a prática pela tela (§17.1)
+
+- `lib/editor-v2/pratica.ts`: `prepararPratica` (título, posição de até 7 peças, lado que não perde,
+  objetivo compatível com o resultado esperado — vencer numa posição de empate é recusado —, força
+  0–20 e 50–5000 ms; ids decididos no clique e mantidos na edição), comandos `ADICIONAR_PRATICA` (no
+  **fim** do fluxo, recusa a segunda prática), `EDITAR_PRATICA` e `EXCLUIR_PRATICA`, e
+  `mudancasDeAvaliacao` (posição, lado, objetivo, adversário — o título não entra, igual à conta de
+  `avaliacao.ts`). Padrão do adversário: o da N0-LADDER, força 20 e 300 ms.
+- **Não inventei campo que o runtime não joga.** Ajuda permitida na prática, limite de lances
+  configurável, várias práticas e prática opcional ficam **abertos** em §17.1 e §28.
+- `lib/editor-v2/acervo-em-disco.ts` + action `adicionarAoAcervoV2Acao`: "Adicionar ao acervo" grava
+  `content/positions/<série>/pos-<aula>-<n>.json` como **candidate**, com os 9 campos de proveniência
+  que o `validate:content` exige e a obra do registro (`posicoes-do-preparatorio` para autoria própria,
+  `lichess-open-database` para partida, escolhida da lista para obra e estudo). O resultado vem do
+  **cache** da tablebase, sem rede; sem cache, o professor declara e a tela avisa para rodar o
+  `validate:content`. Até 7 peças; origem desconhecida recusada (o acervo exige obra); a mesma FEN é
+  reaproveitada em vez de duplicada.
+- `DialogoPratica.tsx`: título, posição (do acervo, com as de mais de 7 peças desabilitadas e o motivo;
+  ou de um capítulo desta aula, com a origem já registrada nele), lado, objetivo, computador, os três
+  fatos fixos em texto, e o aviso **"Mudar adversário cria uma nova versão da avaliação"** antes de
+  salvar. `PreviaDaPratica.tsx`: o `PracticeStage` do aluno sob um id próprio da store, sem gravar; o
+  motor do professor pausa atrás. Cartão **Prática** na coluna esquerda; "Ir para o problema" da
+  `PRATICA_AUSENTE` abre a janela.
+- A limpeza dos ensaios passou a apagar também `pos-ex-e2e-*` do acervo (e a pasta `EX` vazia).
+
+```
+ANTES   pratica.test.ts: os módulos não existiam — falha ao carregar
+DEPOIS  pratica.test.ts 4/4 (criar/editar/excluir com Desfazer; título não muda a revisão e o
+        adversário muda; as recusas com campo; adicionar ao acervo numa pasta temporária)
+```
+
+**O ensaio `e2e/editor/pratica.spec.ts`, verde em 16,1 s:** renomear não avisa nada; força 10 mostra o
+aviso de versão nova; salvar; excluir com a confirmação → **Conferir: 1** "não tem prática contra o
+computador" → capítulo com a FEN da prática livre do estudo (`8/8/8/8/4k3/8/8/3QK3 w`) e origem
+"autoria própria" → **Ir para o problema** abre a prática nova → "De um capítulo desta aula" →
+"Adicionar ao acervo e usar" cria `pos-ex-e2e-base-1` com "brancas ganham" **vindo do cache** → a
+prévia joga Dd4 e o rei preto sai de e4 (o Stockfish respondeu) → Criar → **Conferir: 0**.
+
+**Número da parada:** `PRATICA_AUSENTE` **1 → 0**.
+
+**Os sete portões:** tipos, lint, **1.265 testes**, build, conteúdo (38 do cache, 0 pela rede),
+**58/58 mutações** e repertório `--check`. `db:rls` e `db:finais:v2` não rodaram nesta parada: nada no
+banco nem na gravação mudou; ficam para a 10G, com a prática jogada pelo aluno.
+
 
 ## Como ligar o editor
 

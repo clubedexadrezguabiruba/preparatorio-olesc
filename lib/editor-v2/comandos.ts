@@ -28,6 +28,7 @@ import { semRevisoes } from "./revisoes.ts";
 import type { ResolucoesV2 } from "./impacto.ts";
 import type { AulaV2, DesenhoV2, NoV2, RevisaoDaFenV2 } from "./modelo.ts";
 import { aplicarRevisaoDaFen } from "./proveniencia.ts";
+import { aplicarEdicaoDePratica, aplicarExclusaoDePratica, aplicarNovaPratica, type PraticaPreparadaV2 } from "./pratica.ts";
 import {
   aplicarRefazerTreino,
   comEstadosDasFontes,
@@ -149,6 +150,10 @@ export type ComandoV2 =
    * chega pronta — data e professor decididos no clique —, para o Refazer devolver os mesmos bytes.
    */
   | { tipo: "REGISTRAR_PROVENIENCIA"; analiseId: string; revisao: RevisaoDaFenV2 }
+  /** §17.1 (fatia 10): a prática nasce com ids e registro de posição decididos na janela, no fim do fluxo. */
+  | { tipo: "ADICIONAR_PRATICA"; preparo: PraticaPreparadaV2 }
+  | { tipo: "EDITAR_PRATICA"; preparo: PraticaPreparadaV2 }
+  | { tipo: "EXCLUIR_PRATICA"; praticaId: string }
   /**
    * Uma tag do cabeçalho PGN da análise (fatia 8: Nome, Nível e Fonte do repertório).
    *
@@ -170,6 +175,9 @@ function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<
     if (aula.origem.convertidaEm) return aula;
     return { ...aula, origem: { ...aula.origem, convertidaEm: comando.convertidaEm } };
   }
+  if (comando.tipo === "ADICIONAR_PRATICA") return aplicarNovaPratica(aula, comando.preparo);
+  if (comando.tipo === "EDITAR_PRATICA") return aplicarEdicaoDePratica(aula, comando.preparo);
+  if (comando.tipo === "EXCLUIR_PRATICA") return aplicarExclusaoDePratica(aula, comando.praticaId);
   if (comando.tipo === "REGISTRAR_PROVENIENCIA") {
     const resultado = aplicarRevisaoDaFen(aula, comando.analiseId, comando.revisao);
     if (!resultado.ok) throw new Error(resultado.mensagem);

@@ -163,6 +163,12 @@ export type Efeito =
   | { readonly tipo: "som-lance"; readonly captura: boolean; readonly xeque: boolean }
   | { readonly tipo: "som-recusa" }
   | { readonly tipo: "som-premio" }
+  /**
+   * O "tu-lí" de cada lance certo do aluno, **junto** com o som do lance — como
+   * no move trainer do Chess.com, onde os dois saem no mesmo milissegundo. Não
+   * toca no lance que fecha o quiz: ali quem toca é o prêmio.
+   */
+  | { readonly tipo: "som-certo" }
   /** O disco transitório na casa de destino, que carrega o veredito. */
   | { readonly tipo: "selo"; readonly casa: string; readonly qual: Selo }
   /**
@@ -583,13 +589,7 @@ function jogou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
 
   /* --- A assistida: a seta é a lei ------------------------------------ */
   if (estado.modo === "assistido") {
-    if (veredito === "certo") {
-      const feito = aplicar(linha, estado, uci, uci);
-      return {
-        estado: feito.estado,
-        efeitos: [{ tipo: "selo", casa: destino, qual: "acerto" }, ...feito.efeitos],
-      };
-    }
+    if (veredito === "certo") return acertou(linha, estado, uci);
     // Nem a `alternativa` passa aqui, e é deliberado: a seta aponta para uma
     // casa, e ver a peça parar noutra ensinaria que a seta não vale nada.
     return {
@@ -605,15 +605,9 @@ function jogou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
 
   /* --- O treino: recusa, e não pune ----------------------------------- */
   if (estado.modo === "treino") {
-    if (veredito === "certo") {
-      // Sem selo no boletim: aqui toda tentativa acaba certa, e uma fita toda
-      // verde de uma etapa em que errar não conta não diria nada.
-      const feito = aplicar(linha, estado, uci, uci);
-      return {
-        estado: feito.estado,
-        efeitos: [{ tipo: "selo", casa: destino, qual: "acerto" }, ...feito.efeitos],
-      };
-    }
+    // Sem selo no boletim: aqui toda tentativa acaba certa, e uma fita toda
+    // verde de uma etapa em que errar não conta não diria nada.
+    if (veredito === "certo") return acertou(linha, estado, uci);
     // O cartão **não revela o lance certo**, e isso é a diferença para a
     // assistida: lá a seta já o dava. Revelar aqui viraria "erra, lê, joga" —
     // a assistida de novo, sem a seta. Quem precisa de ajuda tem a dica, que
@@ -645,13 +639,7 @@ function jogou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
   }
 
   /* --- O quiz --------------------------------------------------------- */
-  if (veredito === "certo") {
-    const feito = aplicar(linha, marcar(estado, k, "acerto"), uci, uci);
-    return {
-      estado: feito.estado,
-      efeitos: [{ tipo: "selo", casa: destino, qual: "acerto" }, ...feito.efeitos],
-    };
-  }
+  if (veredito === "certo") return acertou(linha, marcar(estado, k, "acerto"), uci);
 
   if (veredito === "alternativa") {
     return {
@@ -703,6 +691,21 @@ function jogou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
       ...gravado.efeitos,
       esperaAVolta,
     ],
+  };
+}
+
+/**
+ * O lance certo, nas três etapas: entra no tabuleiro, com o selo verde e o som
+ * de acerto. O acerto fica de fora quando o prêmio já toca — é o lance que fecha
+ * o quiz, e dois sons de vitória juntos viram barulho.
+ */
+function acertou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
+  const feito = aplicar(linha, estado, uci, uci);
+  const premio = feito.efeitos.some((e) => e.tipo === "som-premio");
+  const selo: Efeito = { tipo: "selo", casa: uci.slice(2, 4), qual: "acerto" };
+  return {
+    estado: feito.estado,
+    efeitos: premio ? [selo, ...feito.efeitos] : [selo, { tipo: "som-certo" }, ...feito.efeitos],
   };
 }
 

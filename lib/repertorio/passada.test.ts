@@ -587,3 +587,37 @@ test("o cartão em repouso é o único lugar em que treino e quiz diferem para o
   assert.match(treino.estado, /não conta/);
   assert.match(quiz.estado, /valendo/);
 });
+
+/* ------------------------------------------------------------------ *
+ * O som do lance certo
+ * ------------------------------------------------------------------ */
+
+test("todo lance certo do aluno toca o som de acerto, nas três etapas", () => {
+  // O pedido do Doug, de 14/9: o "tu-lí" do move trainer do Chess.com em cada
+  // acerto. Na assistida e no treino são os quatro lances; no quiz são três,
+  // porque o último fecha a linha e ali o prêmio toca no lugar.
+  const l = linha();
+  for (const [modo, esperado] of [["assistido", 4], ["treino", 4], ["quiz", 3]] as const) {
+    const { efeitos } = correr(l, inicio(l, modo), LIMPA);
+    assert.equal(quantos(efeitos, "som-certo"), esperado, `${modo}: um acerto por lance certo`);
+  }
+});
+
+test("o último lance do quiz toca só o prêmio, sem o acerto junto", () => {
+  const l = linha();
+  const antes = correr(l, inicio(l, "quiz"), LIMPA.slice(0, -1)).estado;
+  const { efeitos } = reduzir(l, antes, jogou("c2c3"));
+  assert.equal(quantos(efeitos, "som-premio"), 1);
+  assert.equal(quantos(efeitos, "som-certo"), 0, "dois sons de vitória empilhados viram barulho");
+});
+
+test("lance errado e lance do adversário não tocam o acerto", () => {
+  const l = linha();
+  for (const modo of ["assistido", "treino", "quiz"] as const) {
+    const errado = correr(l, inicio(l, modo), [jogou("d2d4")]).efeitos;
+    assert.equal(quantos(errado, "som-certo"), 0, `${modo}: errar não é acertar`);
+  }
+  const depoisDoMeu = correr(l, inicio(l, "quiz"), [jogou("e2e4")]).estado;
+  const dele = reduzir(l, depoisDoMeu, responde).efeitos;
+  assert.equal(quantos(dele, "som-certo"), 0, "o lance dele não é acerto do aluno");
+});

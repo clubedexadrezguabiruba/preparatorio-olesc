@@ -13,6 +13,7 @@ import { pacoteDaAula } from "@/lib/finais/conteudo";
 import { lessonIdSchema, lessonSchema } from "@/lib/lesson/schema";
 import { lerRegua } from "@/lib/lesson/voz";
 import type { PosicaoDoAcervoV2 } from "@/lib/editor-v2/acervo";
+import { obrasDoRegistro } from "@/lib/editor-v2/acervo-em-disco";
 
 /** O acervo inteiro, com o hash que a proveniência registra — calculado aqui, no servidor. */
 function acervoDoEditor(): PosicaoDoAcervoV2[] {
@@ -83,6 +84,7 @@ export default async function PaginaDoEditorV2({ params }: { params: Promise<{ a
         regua={lerRegua()}
         professor={perfil.nome || perfil.usuario}
         acervo={acervoDoEditor()}
+        obras={obrasDoRegistro()}
       />
     );
   }
@@ -111,6 +113,7 @@ export default async function PaginaDoEditorV2({ params }: { params: Promise<{ a
       regua={lerRegua()}
       professor={perfil.nome || perfil.usuario}
       acervo={acervoDoEditor()}
+        obras={obrasDoRegistro()}
     />
   );
 }

@@ -21,6 +21,7 @@ import { fileURLToPath } from "node:url";
 export const RAIZ = fileURLToPath(new URL("../..", import.meta.url));
 export const PASTA_E2E = path.join(RAIZ, ".editor", "e2e");
 export const PREFIXO = "EX-E2E-";
+export const PREFIXO_DE_POSICAO = "pos-ex-e2e-";
 
 /** As pastas cujos arquivos inteiros entram na impressão digital. */
 const PASTAS_PROTEGIDAS = ["content", ".editor/repertorio", "public/repertorio"];
@@ -91,7 +92,8 @@ export function restosDoEnsaio(): string[] {
   for (const lugar of LUGARES_DO_ENSAIO) {
     const absoluto = path.join(RAIZ, lugar);
     if (!existsSync(absoluto)) continue;
-    for (const nome of readdirSync(absoluto)) if (nome.startsWith(PREFIXO)) achados.push(`${lugar}/${nome}`);
+    // Posição do acervo não pode ter maiúscula no id: a de ensaio nasce `pos-ex-e2e-…` ("Adicionar ao acervo").
+    for (const nome of readdirSync(absoluto)) if (nome.startsWith(PREFIXO) || nome.startsWith(PREFIXO_DE_POSICAO)) achados.push(`${lugar}/${nome}`);
   }
   return achados;
 }
@@ -100,6 +102,9 @@ export function restosDoEnsaio(): string[] {
 export function apagarRestosDoEnsaio(): string[] {
   const restos = restosDoEnsaio();
   for (const resto of restos) rmSync(path.join(RAIZ, resto), { recursive: true, force: true });
+  // A pasta das extras no acervo só existe por causa do ensaio enquanto nenhuma extra real tiver posição.
+  const ex = path.join(RAIZ, "content/positions/EX");
+  if (existsSync(ex) && readdirSync(ex).length === 0) rmSync(ex, { recursive: true, force: true });
   return restos;
 }
 

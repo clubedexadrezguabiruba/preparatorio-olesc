@@ -42,6 +42,7 @@ export type EffectName =
   | "xeque"
   | "recusa"
   | "acerto"
+  | "certo"
   | "mate"
   | "conclusao";
 
@@ -228,6 +229,35 @@ export const CATALOG: Effect[] = [
         note: "660 e 880 Hz em sequência, senos puros. Aprovado sem alteração.",
       },
     ],
+  },
+  {
+    name: "certo",
+    title: "Lance certo",
+    when:
+      "Cada lance certo do aluno no treino de aberturas, junto com o som do lance. Não toca no lance que fecha o quiz: ali toca o prêmio.",
+    // Toca por cima do lance e antes da resposta dele: o teto é o `RESPOSTA_MS`,
+    // como o do lance. A síntese mede 90 ms audíveis.
+    maxDurationMs: 150,
+    chosenVariant: "v1",
+    variants: [
+      {
+        id: "v1",
+        title: "Tu-lí fiel",
+        note: "Duas notas em seno, 374 e 561 Hz — uma quinta subindo —, a segunda 34 ms depois, ataque de 4 ms e a primeira ainda soando por baixo da segunda. Oitavas a −30 dB e uma ressonância baixa das duas no fim. Nível do Chess.com: 10 dB acima do lance, medido nos dois arquivos deles. O Doug ouviu quatro opções em 14/9 — o original, esta, esta 6 dB mais baixa e uma com ataque de 12 ms — e escolheu esta.",
+      },
+    ],
+    reference: {
+      source:
+        "sounds/puzzles/correct.mp3 (Chess.com, move trainer dos cursos) — arquivo proprietário, medido e não copiado",
+      attackMs: 6,
+      decay40Ms: 105,
+      centroidAttackHz: 563,
+      centroidTailHz: 614,
+      flatness: 0.006,
+      peaksHz: [374, 561, 748, 1122],
+      lesson:
+        "Não é um sino: são duas notas curtas coladas, 374 → 561 Hz, cada uma com ~15 ms de platô. O que faz soar como um gesto só e não dois toques é a primeira nota cair só 10 dB quando a segunda entra — a primeira síntese a deixava cair 28 dB e soava como 'tic-tic'.",
+    },
   },
   {
     name: "mate",
