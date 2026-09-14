@@ -158,6 +158,15 @@ type Capitulo = {
   fen: string | null;
   /** A linha principal em UCI, reproduzida lance a lance. */
   uci: string[];
+  /**
+   * Os símbolos da fonte (`!`, `?`, `$14`…) por meio-lance de `uci`, como vieram.
+   *
+   * **A regra de 14/9/2026: o símbolo vai junto com o lance** (ver "Símbolos de lance"
+   * em `AGENTS.md`). Até ali esta tabela guardava só os lances, e o `!` do estudo
+   * morria aqui. Só aparece quando há símbolo, para a tabela não mudar de bytes nos
+   * capítulos que não têm nenhum. Símbolo é fato do lance, não prosa do autor.
+   */
+  simbolos?: Record<string, string[]>;
   /** O link do capítulo no estudo público, para conferir no tabuleiro. */
   url: string | null;
   /** Por que este capítulo não é `posicao`, na palavra da chess.js. */
@@ -172,6 +181,13 @@ const ARRUMAR_ESPACO = (texto: string): string => texto.replace(/\s+/g, " ").tri
 /** Só a linha principal: o primeiro filho de cada lance, sem entrar em variação. */
 function principal(lances: readonly LancePgn[]): string[] {
   return lances.map((l) => l.san);
+}
+
+/** Os símbolos da linha principal por meio-lance, até onde a UCI chegou. */
+function simbolosDaPrincipal(lances: readonly LancePgn[], ate: number): Record<string, string[]> | null {
+  const saida: Record<string, string[]> = {};
+  for (const [i, lance] of lances.slice(0, ate).entries()) if (lance.nags.length > 0) saida[String(i)] = [...lance.nags];
+  return Object.keys(saida).length > 0 ? saida : null;
 }
 
 /**
@@ -300,7 +316,8 @@ function extrair(id: string, faixa: string, nivel: string, texto: string): Extra
       continue;
     }
 
-    const { uci, problema, ilegal } = paraUci(fen, principal(lerPgn(movetext).lances));
+    const lances = lerPgn(movetext).lances;
+    const { uci, problema, ilegal } = paraUci(fen, principal(lances));
 
     if (ilegal) {
       capitulos.push({ ...base, tipo: "diagrama", uci: [], porque: ilegal });
@@ -308,7 +325,8 @@ function extrair(id: string, faixa: string, nivel: string, texto: string): Extra
     }
 
     if (problema) problemas.push(`cap. ${numero} "${nome}" — ${problema}`);
-    capitulos.push({ ...base, tipo: "posicao", uci });
+    const simbolos = simbolosDaPrincipal(lances, uci.length);
+    capitulos.push({ ...base, tipo: "posicao", uci, ...(simbolos ? { simbolos } : {}) });
   }
 
   return { id, faixa, nivel, capitulos, problemas };

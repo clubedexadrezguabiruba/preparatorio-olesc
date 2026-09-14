@@ -2281,3 +2281,72 @@ nas telas de treino das duas cores.
    número para reler quando a §25 vier.
 
 ---
+
+## 25. As marcas das fontes voltaram — e o grupo C fica onde a poda o deixou, 14/9/2026
+
+O pedido do Doug, depois de o treino ganhar o Brilhante e o Ótimo pela marca da fonte:
+*"devolva todos os símbolos de todas as fontes"*, e, logo depois, *"coloque uma regra global
+para sempre puxar o símbolo junto"*. A regra está em `AGENTS.md` ("Símbolos de lance") e a
+trava em `lib/repertorio/marcas-das-fontes.ts`, que roda no `npm test`.
+
+### 25.1 Onde as marcas se perderam
+
+Os rascunhos guardam os NAGs por construção (`apenasLances`). A perda foi na revisão à mão,
+rascunho → PGN revisado: o comentário do professor foi redigido do zero e os `$1` ficaram no
+rascunho. Nenhum portão comparava os dois lados. Medido contra o commit anterior, a trava acusa
+**24 lances que existem nas fontes e no repertório sem o símbolo** e **7 irmãos nossos marcados
+cortados**.
+
+### 25.2 As quatro situações, e o que foi feito em cada uma
+
+| grupo | o que é | marcas | feito |
+|---|---|---|---|
+| A | o lance está no repertório | 34 | todas presentes: 26 devolvidas em 5 PGNs, o resto já estava |
+| B | irmão NOSSO marcado, cortado | 7 | devolvidos como variação com o símbolo — viram "também vale" (`!`, `!?`) ou armadilha (`?!`) |
+| C | lance DELE marcado, cortado, numa posição do repertório | 28 | **não devolvidos** — ver 25.3 |
+| D | ramo que o repertório não tem | 347 (5 `!!`) | fora, por decisão já existente |
+
+Os ids das 27 linhas não mudaram. O treino passou a ter **16 lances com `!`** (Ótimo) e nenhum com
+`!!`: os cinco `!!` das fontes estão todos no grupo D.
+
+### 25.3 Por que o grupo C não vira linha
+
+Lance do adversário na árvore é linha nova, e linha nova tem de fechar a régua da §24. Somando o
+caminho do repertório com a continuação das fontes, **só uma das 33 linhas possíveis fecharia**.
+
+Mais importante: as posições do grupo C que chamam atenção **já têm decisão**. Medido no explorer
+(`lichess-1000-1999`, rapid+classical) em 14/9:
+
+- **Nas posições-chave da §6 do `REPERTORIO.md`** (1.e4 e5 2.Cf3, Escocesa 3.d4, Escandinava
+  2.exd5) os lances C ficam fora do corte dos 80 %: de 0,3 % a 3,8 %.
+- **Escocesa 4…Cxd4 5.Dxd4 Cf6?** (25,3 %) e **5…c5** (16 %) foram cortados de propósito na poda
+  (§23.2) e vivem na página `escocesa-dama-em-d4`, sem fonte que explique o lance (Correção 3).
+- **Alapin pelas pretas 4.Bc4!** (13 %) é o ⚠7 do `REPERTORIO.md`: espera o Avançado, "menos de um
+  jogo em mil". Quando vier, a fonte das brancas é o Krikor, que manda jogar exatamente 4.Bc4! (§2.3).
+- Os demais que "entrariam" pela conta dos 80 % estão em **caudas** (lance 4 a 7), onde a §24.4
+  segue uma resposta só por desenho. A regra dos 80 % vale nas posições-chave, não em toda posição.
+
+**O erro que esta seção registra para não se repetir.** Na mesma sessão, antes de ler a §23, a
+recomendação foi transformar 5…Cf6 e 4.Bc4 em linhas do Base como "buracos da regra dos 80 %".
+Estava errada pelos dois motivos acima. Antes de propor linha a partir de marca, leia a §23 e os
+⚠ da §8 do `REPERTORIO.md`.
+
+### 25.4 Onde o símbolo do grupo C chega ao aluno
+
+Nas páginas de princípios, que já são o lugar dessas posições. Em 14/9 as duas que citam lances
+marcados pelas fontes ganharam o símbolo, no campo `lances` e nas citações do texto:
+
+- `escocesa-dama-em-d4`: 3.d4!, 4…Cxd4?, 5…Cf6? e a resposta 6.e5!;
+- `alapin-centro-grande`: 2…d6?!, 2…Cf6! e 2…d5!.
+
+O 5…c5 e o 6.De3 continuam sem símbolo: nenhuma fonte os marca, e a regra é levar o símbolo que
+existe, não inventar um.
+
+### 25.5 Pendências
+
+1. **As 28 marcas do grupo C e as 347 do D** seguem fora do treino; a trava imprime as duas
+   contagens a cada rodada.
+2. **`npm run finais:extrair`** passou a gravar os símbolos por meio-lance (`simbolos`), mas não
+   rodou: os estudos não estão baixados nesta máquina e a extração pede rede.
+
+---
