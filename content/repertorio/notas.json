@@ -26,17 +26,17 @@
     "nome": "Escocesa — a dama em d4",
     "cor": "brancas",
     "abertura": "escocesa",
-    "lances": "1.e4 e5 2.Nf3 Nc6 3.d4 exd4 4.Nxd4 Nxd4 5.Qxd4 Nf6 (ou 1.e4 e5 2.Nf3 Nc6 3.d4 exd4 4.Nxd4 Nxd4 5.Qxd4 c5)",
-    "frequencia": "O 4…Cxd4 é 52% das respostas ao nosso 4.Cxd4 — de longe a mais comum. Daqui ele tem quatro lances de verdade (…Cf6 30,8%, …d6 25,4%, …c5 16,4%, …b6 8,5%) e nenhum domina.",
+    "lances": "1.e4 e5 2.Nf3 Nc6 3.d4! exd4 4.Nxd4 Nxd4? 5.Qxd4 Nf6? (ou 1.e4 e5 2.Nf3 Nc6 3.d4! exd4 4.Nxd4 Nxd4? 5.Qxd4 c5)",
+    "frequencia": "O 4…Cxd4? é 52% das respostas ao nosso 4.Cxd4 — de longe a mais comum. Daqui ele tem quatro lances de verdade (…Cf6 30,8%, …d6 25,4%, …c5 16,4%, …b6 8,5%) e nenhum domina.",
     "porque": "Quatro respostas e nenhuma dominante: 81% espalhados em quatro. Decorar quatro sequências para uma posição só é o dobro do trabalho pelo mesmo aprendizado — e as quatro se respondem com DUAS regras e uma montagem. A linha do …d6 continua no treinador, e é lá que você aprende a montagem; esta página diz o que muda nas outras três.",
     "explicacao": [
-      "A dama no meio do tabuleiro costuma ser perigosa, e aqui não é: não há peça dele pronta para expulsá-la de graça. Ele vai ter de empurrá-la com peão — e cada peão que anda é um lance que ele não usou para desenvolver. É por isso que este 4…Cxd4 é bom para nós: ele troca peças e nos entrega o centro e o tempo.",
+      "A dama no meio do tabuleiro costuma ser perigosa, e aqui não é: não há peça dele pronta para expulsá-la de graça. Ele vai ter de empurrá-la com peão — e cada peão que anda é um lance que ele não usou para desenvolver. É por isso que este 4…Cxd4? é bom para nós: ele troca peças e nos entrega o centro e o tempo.",
       "A montagem é sempre a mesma, e você já a treina na linha do …d6: Cc3 defendendo e4, Bf4 mirando d6 e abrindo a casa c1, e roque grande, com a torre caindo na coluna d bem em frente ao peão dele. Depois vêm f3 e g4, e os peões andam contra o rei dele.",
-      "As duas regras que cobrem o resto: se ele atacar a dama com peão, ela vai para e3 — fica na coluna e, ainda ativa, e de olho no peão que a atacou. Se ele puser o cavalo em f6 antes de estar pronto, e5 o expulsa, e o cavalo tem de voltar para g8. Medido no Stockfish 18, profundidade 20: depois de 5…Cf6 6.e5 as brancas ficam +1,52, e depois de 5…c5 6.De3, +1,37."
+      "As duas regras que cobrem o resto: se ele atacar a dama com peão, ela vai para e3 — fica na coluna e, ainda ativa, e de olho no peão que a atacou. Se ele puser o cavalo em f6 antes de estar pronto, e5 o expulsa, e o cavalo tem de voltar para g8. Medido no Stockfish 18, profundidade 20: depois de 5…Cf6? 6.e5! as brancas ficam +1,52, e depois de 5…c5 6.De3, +1,37."
     ],
     "faca": [
       "Contra 5…d6 e 5…b6, a montagem inteira: Cc3, Bf4, O-O-O. É a linha que você treina no site.",
-      "Contra 5…Cf6, empurre 6.e5. O cavalo não tem casa boa e volta para g8 — você ganhou espaço e um tempo.",
+      "Contra 5…Cf6?, empurre 6.e5! O cavalo não tem casa boa e volta para g8 — você ganhou espaço e um tempo.",
       "Contra 5…c5, recue a dama para e3. Ela sai do ataque, continua na coluna e e fica de olho no peão de c5 que acabou de andar.",
       "Contra 5…Df6 e 5…De7, que são mais raros, troque as damas sem medo: no final você tem o centro e o desenvolvimento, e ele tem peões andados à toa.",
       "Depois de qualquer um deles, volte para a montagem: Cc3, Bf4, roque grande, f3 e g4."
@@ -48,20 +48,20 @@
     "nome": "Alapin — o centro grande",
     "cor": "brancas",
     "abertura": "alapin",
-    "lances": "1.e4 c5 2.c3 d6 (ou 1.e4 c5 2.c3 e6) (ou 1.e4 c5 2.c3 Nf6) (ou 1.e4 c5 2.c3 d5)",
+    "lances": "1.e4 c5 2.c3 d6?! (ou 1.e4 c5 2.c3 e6) (ou 1.e4 c5 2.c3 Nf6!) (ou 1.e4 c5 2.c3 d5!)",
     "frequencia": "O 2.c3 é a nossa resposta a toda Siciliana. As quatro respostas mais comuns dele somam só 78%, e a quinta e a sexta ainda aparecem em um jogo a cada quinze.",
     "porque": "É a posição mais espalhada do lado das brancas: seis respostas com peso parecido, e o mesmo plano nosso serve para todas. Uma linha por resposta seriam seis sequências para decorar quando o que decide é uma frase só — o peão de c3 existe para o de d2 andar dois passos. A resposta mais comum (2…Cc6) continua no treinador; aqui está o resto.",
     "explicacao": [
       "O 2.c3 é o lance mais estranho do repertório e o mais simples de entender: ele não ataca nada. Ele guarda lugar. O que queremos é jogar d4 no lance seguinte e, se ele comer, recapturar COM O PEÃO DE C3 — e aí ficamos com dois peões no centro, e4 e d4, contra nenhum.",
       "Sabendo disso, quase toda resposta dele se responde sozinha: se o lance dele não impede o d4, jogue d4. Se ele comer, cxd4. Se ele não comer, o centro é seu de graça e você desenvolve por cima dele.",
-      "As duas respostas que pedem um segundo pensamento são as que atacam o e4 direto: o 2…Cf6 e o 2…d5. Nas duas, o peão de e4 anda ou troca em vez de ficar sendo atacado — e4-e5 expulsa o cavalo, exd5 troca e devolve a dama dele ao meio do tabuleiro, onde o nosso d4 ganha tempo em cima dela."
+      "As duas respostas que pedem um segundo pensamento são as que atacam o e4 direto: o 2…Cf6! e o 2…d5! Nas duas, o peão de e4 anda ou troca em vez de ficar sendo atacado — e4-e5 expulsa o cavalo, exd5 troca e devolve a dama dele ao meio do tabuleiro, onde o nosso d4 ganha tempo em cima dela."
     ],
     "faca": [
       "Jogue 3.d4 sempre que ele não impedir. Se ele comer, recapture com o peão de c3: dois peões no centro contra nenhum.",
-      "Contra 2…d6, jogue 3.d4 e ponha o bispo em d3 apoiando o e4. Ele não brigou pelo centro, então o centro é seu.",
+      "Contra 2…d6?!, jogue 3.d4 e ponha o bispo em d3 apoiando o e4. Ele não brigou pelo centro, então o centro é seu.",
       "Contra 2…e6, jogue 3.d4 e, depois de 3…d5, empurre 4.e5. O centro trava com o bispo de c8 dele preso atrás dos próprios peões.",
-      "Contra 2…Cf6, jogue 3.e5 e depois d4: o cavalo tem de andar de novo, e você ganha espaço com tempo.",
-      "Contra 2…d5, troque com 3.exd5 e depois 4.d4: a dama dele volta ao meio do tabuleiro, e o seu peão de d4 a incomoda enquanto você desenvolve."
+      "Contra 2…Cf6!, jogue 3.e5 e depois d4: o cavalo tem de andar de novo, e você ganha espaço com tempo.",
+      "Contra 2…d5!, troque com 3.exd5 e depois 4.d4: a dama dele volta ao meio do tabuleiro, e o seu peão de d4 a incomoda enquanto você desenvolve."
     ],
     "cuidado": "Não defenda o peão de e4 parado quando ele for atacado. Nesta abertura o e4 sempre tem para onde ir — andar ou trocar — e cada lance gasto defendendo é um lance que o d4 não deu."
   },

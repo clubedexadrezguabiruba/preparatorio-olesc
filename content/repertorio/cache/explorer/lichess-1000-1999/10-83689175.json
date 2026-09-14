@@ -1,0 +1,133 @@
+{
+  "white": 21461,
+  "draws": 3231,
+  "black": 28200,
+  "moves": [
+    {
+      "uci": "g1f3",
+      "san": "Nf3",
+      "averageRating": 1805,
+      "white": 7800,
+      "draws": 1114,
+      "black": 9195,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1c4",
+      "san": "Bc4",
+      "averageRating": 1769,
+      "white": 4666,
+      "draws": 665,
+      "black": 6401,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e5d6",
+      "san": "exd6",
+      "averageRating": 1798,
+      "white": 3322,
+      "draws": 594,
+      "black": 4253,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f2f4",
+      "san": "f4",
+      "averageRating": 1830,
+      "white": 2658,
+      "draws": 319,
+      "black": 3580,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "b1c3",
+      "san": "Nc3",
+      "averageRating": 1797,
+      "white": 1314,
+      "draws": 243,
+      "black": 2066,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1b5",
+      "san": "Bb5+",
+      "averageRating": 1779,
+      "white": 1018,
+      "draws": 202,
+      "black": 1525,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1f3",
+      "san": "Qf3",
+      "averageRating": 1744,
+      "white": 157,
+      "draws": 16,
+      "black": 259,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1b3",
+      "san": "Qb3",
+      "averageRating": 1773,
+      "white": 173,
+      "draws": 18,
+      "black": 241,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d1a4",
+      "san": "Qa4+",
+      "averageRating": 1665,
+      "white": 91,
+      "draws": 12,
+      "black": 200,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "h2h3",
+      "san": "h3",
+      "averageRating": 1781,
+      "white": 65,
+      "draws": 10,
+      "black": 93,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "e5e6",
+      "san": "e6",
+      "averageRating": 1693,
+      "white": 29,
+      "draws": 4,
+      "black": 60,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f1d3",
+      "san": "Bd3",
+      "averageRating": 1849,
+      "white": 29,
+      "draws": 5,
+      "black": 53,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B22",
+    "name": "Sicilian Defense: Alapin Variation, Smith-Morra Declined"
+  }
+}

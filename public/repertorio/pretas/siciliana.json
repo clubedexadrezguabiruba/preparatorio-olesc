@@ -595,11 +595,23 @@
       21,
       23
     ],
-    "alternativas": {},
+    "alternativas": {
+      "3": [
+        "e7e5",
+        "d7d5"
+      ]
+    },
     "errosNomeados": {
+      "3": [
+        "g7g6",
+        "d7d6"
+      ],
       "5": [
         "f6e4"
       ]
+    },
+    "marcas": {
+      "3": "!"
     },
     "comentarios": {
       "1": "A Siciliana. Repare que não espelhamos o lance dele — e é de propósito. O peão de c5 não ocupa o meio: ele MIRA o meio, guardando a casa d4. Com peões diferentes dos dois lados, a partida fica desequilibrada desde o primeiro lance, e desequilíbrio é o que dá chance de ganhar em vez de empatar.",

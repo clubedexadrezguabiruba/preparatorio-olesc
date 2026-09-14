@@ -1,0 +1,142 @@
+{
+  "white": 11193241,
+  "draws": 921503,
+  "black": 8438067,
+  "moves": [
+    {
+      "uci": "d5d8",
+      "san": "Qd8",
+      "averageRating": 1555,
+      "white": 3207256,
+      "draws": 297602,
+      "black": 2511891,
+      "game": null,
+      "opening": {
+        "eco": "B01",
+        "name": "Scandinavian Defense: Valencian Variation"
+      }
+    },
+    {
+      "uci": "d5a5",
+      "san": "Qa5",
+      "averageRating": 1583,
+      "white": 2874199,
+      "draws": 246857,
+      "black": 2674559,
+      "game": null,
+      "opening": {
+        "eco": "B01",
+        "name": "Scandinavian Defense: Main Line"
+      }
+    },
+    {
+      "uci": "d5e6",
+      "san": "Qe6+",
+      "averageRating": 1403,
+      "white": 1923189,
+      "draws": 146513,
+      "black": 1303064,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d5e5",
+      "san": "Qe5+",
+      "averageRating": 1420,
+      "white": 1865815,
+      "draws": 145122,
+      "black": 1161516,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d5d6",
+      "san": "Qd6",
+      "averageRating": 1555,
+      "white": 629582,
+      "draws": 54089,
+      "black": 518493,
+      "game": null,
+      "opening": {
+        "eco": "B01",
+        "name": "Scandinavian Defense: Gubinsky-Melts Defense"
+      }
+    },
+    {
+      "uci": "d5d7",
+      "san": "Qd7",
+      "averageRating": 1374,
+      "white": 134109,
+      "draws": 9009,
+      "black": 81375,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d5c6",
+      "san": "Qc6",
+      "averageRating": 1336,
+      "white": 166153,
+      "draws": 4531,
+      "black": 34771,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d5f5",
+      "san": "Qf5",
+      "averageRating": 1355,
+      "white": 84372,
+      "draws": 4925,
+      "black": 48619,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d5c5",
+      "san": "Qc5",
+      "averageRating": 1330,
+      "white": 88524,
+      "draws": 4539,
+      "black": 42331,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d5d4",
+      "san": "Qd4",
+      "averageRating": 1303,
+      "white": 77484,
+      "draws": 4318,
+      "black": 34571,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d5g5",
+      "san": "Qg5",
+      "averageRating": 1326,
+      "white": 38177,
+      "draws": 1903,
+      "black": 17653,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d5h5",
+      "san": "Qh5",
+      "averageRating": 1371,
+      "white": 15645,
+      "draws": 296,
+      "black": 1487,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "B01",
+    "name": "Scandinavian Defense: Mieses-Kotroc Variation"
+  }
+}

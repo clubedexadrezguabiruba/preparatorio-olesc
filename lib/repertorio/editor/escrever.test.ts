@@ -138,9 +138,16 @@ test("(c) expectativas independentes contadas no texto sobrevivem à reescrita",
     comentariosComQuebra: 311,
     quebrasDentroDeComentario: 1109,
     blocosDePlano: 10,
-    nagsNumericos: ["$2", "$2", "$4", "$5", "$5", "$6"],
+    // Eram 6 NAGs e 77 variações até 14/9/2026, quando as marcas das fontes originais
+    // voltaram (regra "Símbolos de lance" do AGENTS.md): 26 nos lances das linhas e 7
+    // irmãos nossos marcados, cada um numa variação nova. Ver `marcas-das-fontes.ts`.
+    nagsNumericos: [
+      "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1",
+      "$14", "$16", "$16", "$16", "$16", "$2", "$2", "$2", "$2", "$37", "$4",
+      "$5", "$5", "$5", "$5", "$5", "$5", "$5", "$6", "$6", "$6", "$6",
+    ],
     simbolosColados: ["!"],
-    variacoes: 77,
+    variacoes: 84,
   });
 });
 

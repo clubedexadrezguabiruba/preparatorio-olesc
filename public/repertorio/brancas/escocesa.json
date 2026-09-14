@@ -83,6 +83,9 @@
     ],
     "alternativas": {},
     "errosNomeados": {},
+    "marcas": {
+      "4": "!"
+    },
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",
@@ -176,6 +179,9 @@
     ],
     "alternativas": {},
     "errosNomeados": {},
+    "marcas": {
+      "4": "!"
+    },
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",
@@ -278,6 +284,10 @@
     ],
     "alternativas": {},
     "errosNomeados": {},
+    "marcas": {
+      "4": "!",
+      "12": "!"
+    },
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",
@@ -385,6 +395,11 @@
       ]
     },
     "errosNomeados": {},
+    "marcas": {
+      "4": "!",
+      "14": "!",
+      "18": "!"
+    },
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",
@@ -481,6 +496,11 @@
       ]
     },
     "errosNomeados": {},
+    "marcas": {
+      "4": "!",
+      "6": "!",
+      "8": "!"
+    },
     "comentarios": {
       "0": "Abrimos sempre com 1.e4, e o motivo cabe numa frase: é o lance que solta DUAS peças de uma vez. O peão sai do caminho do bispo de f1 e do da dama, e os dois passam a enxergar o tabuleiro inteiro. Nenhum outro primeiro lance faz isso. Além disso ele ocupa uma casa do meio — e quem manda no meio manda no jogo, porque de lá as peças alcançam os dois lados.",
       "2": "Cavalo para f3, e ele faz três coisas ao mesmo tempo: ataca o peão de e5, desenvolve uma peça e libera a casa do roque. É a ordem que vale para toda abertura — peças pequenas primeiro, rei seguro depois, dama por último.",

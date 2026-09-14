@@ -1,0 +1,142 @@
+{
+  "white": 4709165,
+  "draws": 367982,
+  "black": 3827705,
+  "moves": [
+    {
+      "uci": "b8c6",
+      "san": "Nc6",
+      "averageRating": 1565,
+      "white": 1178820,
+      "draws": 88841,
+      "black": 1334507,
+      "game": null,
+      "opening": {
+        "eco": "C42",
+        "name": "Petrov's Defense: Stafford Gambit"
+      }
+    },
+    {
+      "uci": "f6e4",
+      "san": "Nxe4",
+      "averageRating": 1310,
+      "white": 1451143,
+      "draws": 84593,
+      "black": 699675,
+      "game": null,
+      "opening": {
+        "eco": "C42",
+        "name": "Petrov's Defense: Damiano Variation"
+      }
+    },
+    {
+      "uci": "d7d6",
+      "san": "d6",
+      "averageRating": 1577,
+      "white": 987144,
+      "draws": 110238,
+      "black": 890126,
+      "game": null,
+      "opening": {
+        "eco": "C42",
+        "name": "Petrov's Defense"
+      }
+    },
+    {
+      "uci": "d8e7",
+      "san": "Qe7",
+      "averageRating": 1486,
+      "white": 719724,
+      "draws": 62187,
+      "black": 646061,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8c5",
+      "san": "Bc5",
+      "averageRating": 1421,
+      "white": 197393,
+      "draws": 11825,
+      "black": 147670,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8d6",
+      "san": "Bd6",
+      "averageRating": 1370,
+      "white": 75345,
+      "draws": 4418,
+      "black": 43265,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "d7d5",
+      "san": "d5",
+      "averageRating": 1495,
+      "white": 51455,
+      "draws": 3329,
+      "black": 38836,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "c7c6",
+      "san": "c6",
+      "averageRating": 1524,
+      "white": 13674,
+      "draws": 849,
+      "black": 12204,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8b4",
+      "san": "Bb4",
+      "averageRating": 1314,
+      "white": 9428,
+      "draws": 442,
+      "black": 4190,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f8e7",
+      "san": "Be7",
+      "averageRating": 1523,
+      "white": 7563,
+      "draws": 454,
+      "black": 5064,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "g7g6",
+      "san": "g6",
+      "averageRating": 1289,
+      "white": 4797,
+      "draws": 276,
+      "black": 2430,
+      "game": null,
+      "opening": null
+    },
+    {
+      "uci": "f6g4",
+      "san": "Ng4",
+      "averageRating": 1183,
+      "white": 2314,
+      "draws": 70,
+      "black": 515,
+      "game": null,
+      "opening": null
+    }
+  ],
+  "recentGames": [],
+  "topGames": [],
+  "opening": {
+    "eco": "C42",
+    "name": "Petrov's Defense"
+  }
+}
