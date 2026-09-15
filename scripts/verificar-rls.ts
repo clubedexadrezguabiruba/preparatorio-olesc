@@ -602,6 +602,34 @@ try {
   const { data: semSnapshotPorA } = await alunoA.from("tentativas_v2_sem_snapshot").select("id");
   afirmar(semSnapshotPorA?.length === 0, `nem o dono lê a tentativa sem snapshot — é do professor (viu ${semSnapshotPorA?.length})`);
 
+  // Partidas modelo (migration 0011). O molde do item 10: o veredito é de máquina,
+  // então o aluno não grava — nem o próprio acerto, nem no nome de outro — e lê só o seu.
+  console.log("\n13. Partidas modelo: o servidor grava o lance julgado, e cada um lê o seu");
+  const lanceForjado = {
+    partida: "morphy-isouard", momento: 4, versao: "forjada0", resposta_uci: "b3b8", acertou: true, tentativa: 1, apoio: 0, tempo_ms: 1,
+  };
+  const { error: erroLanceDeA } = await alunoA.from("tentativa_partida_momento").insert({ aluno: criados[0], ...lanceForjado });
+  afirmar(erroLanceDeA?.code === "42501", `A não grava o próprio acerto na partida (${erroLanceDeA?.code})`);
+  const { error: erroLanceDeB } = await alunoA.from("tentativa_partida_momento").insert({ aluno: criados[1], ...lanceForjado });
+  afirmar(Boolean(erroLanceDeB), `A não grava lance no nome de B (${erroLanceDeB?.code ?? "PASSOU!"})`);
+  for (const id of criados) {
+    const { error } = await admin.from("tentativa_partida_momento").insert({ aluno: id, ...lanceForjado, versao: "semeada0", tempo_ms: 20_000 });
+    afirmar(!error, `a chave de serviço grava o lance julgado (${error?.message ?? "sem erro"})`);
+  }
+  const { data: lancesPorA } = await alunoA.from("tentativa_partida_momento").select("aluno, primeira");
+  afirmar(
+    lancesPorA?.length === 1 && lancesPorA[0].aluno === criados[0] && lancesPorA[0].primeira === true,
+    `A vê 1 lance, o dele, com a coluna gerada "primeira" (viu ${lancesPorA?.length})`,
+  );
+  const { data: lancesDeAporB } = await alunoB.from("tentativa_partida_momento").select("aluno").eq("aluno", criados[0]);
+  afirmar(lancesDeAporB?.length === 0, `B não lê os lances de A (viu ${lancesDeAporB?.length})`);
+  await alunoA.from("tentativa_partida_momento").delete().eq("aluno", criados[0]);
+  const { count: lancesDeASobraram } = await admin
+    .from("tentativa_partida_momento")
+    .select("*", { count: "exact", head: true })
+    .eq("aluno", criados[0]);
+  afirmar(lancesDeASobraram === 1, `A não apaga o próprio lance (sobrou ${lancesDeASobraram})`);
+
 } finally {
   await limpar();
   console.log("\nContas de mentira apagadas.");

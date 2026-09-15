@@ -62,7 +62,7 @@ export default async function ProvaDeNivel({ params }: PageProps<"/nivel/[n]/pro
             A prova do nível {nivel} ainda não abriu.
           </p>
           <p className="text-sm text-tinta-media">
-            Ela é o selo do degrau, e não o exame de entrada: vem depois de as três trilhas
+            Ela é o selo do nível, e não o exame de entrada: vem depois de as trilhas
             fecharem. Falta{" "}
             {[
               fecho.tatica.feitos < fecho.tatica.total
@@ -73,6 +73,9 @@ export default async function ProvaDeNivel({ params }: PageProps<"/nivel/[n]/pro
                 : null,
               fecho.repertorio.feitas < fecho.repertorio.exigidas
                 ? `${fecho.repertorio.exigidas - fecho.repertorio.feitas} linha(s) do repertório`
+                : null,
+              fecho.partidas.feitas < fecho.partidas.exigidas
+                ? `${fecho.partidas.exigidas - fecho.partidas.feitas} partida(s) modelo`
                 : null,
             ]
               .filter(Boolean)

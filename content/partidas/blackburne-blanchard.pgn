@@ -1,0 +1,38 @@
+[Event "Blindfold simultaneous exhibition"]
+[Site "London ENG"]
+[Date "1891.??.??"]
+[White "Joseph Henry Blackburne"]
+[Black "Blanchard"]
+[Result "1-0"]
+[ECO "C30"]
+[Nome "Blackburne × Blanchard"]
+[Ordem "1"]
+[Nivel "3"]
+[Cor "brancas"]
+[Tema "Preparar o ataque e dar mate em h7 e f7"]
+[FonteSlug "chernev-logical-chess-1957"]
+[Fonte "Irving Chernev, Logical Chess: Move by Move, Game 4, pp. 29–35"]
+[Status "rascunho"]
+
+1. e4 e5 2. f4 {[%autoria PARÁFRASE FIEL — Irving Chernev] Blackburne oferece o peão f para disputar o centro.}
+Bc5 3. Nc3 Nc6 4. Nf3 exf4 {[%autoria PARÁFRASE FIEL — Irving Chernev] As pretas tomam em f4. As brancas vão recuperar esse peão enquanto desenvolvem as peças.}
+5. d4! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 5.d4! faz três coisas: ocupa o centro, ataca o bispo de c5 e abre a diagonal do bispo de c1.}
+Bb4 6. Bxf4 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 6.Bxf4 recupera o peão e desenvolve o bispo no mesmo lance. Um lance que faz duas tarefas vale mais.}
+d5 7. e5 {[%autoria PARÁFRASE FIEL — Irving Chernev] O peão vai a e5 e ganha espaço.}
+Bxc3+ 8. bxc3 {[%autoria PARÁFRASE FIEL — Irving Chernev] Os peões de c ficam dobrados. Em troca, a coluna b se abre para a torre.}
+Be6 9. Bd3 {[%autoria PARÁFRASE FIEL — Irving Chernev] O bispo vai a d3 e aponta para h7, perto do rei preto.}
+h6?! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 9...h6?! mexe um peão que protege o rei. Esse peão avançado vai virar alvo.}
+10. O-O {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Blackburne não corre. Primeiro o roque: o rei fica seguro e a torre chega a f1. O peão de h6 continua lá.}
+Nge7 11. Rb1! {[%autoria PARÁFRASE FIEL — Irving Chernev] 11.Tb1! põe a torre na coluna aberta e ataca o peão de b7.}
+b6 12. Qd2! {[%autoria PARÁFRASE FIEL — Irving Chernev] 12.Dd2! tira a dama da primeira fileira e liga as torres. A dama também fica mais perto de h6.}
+O-O? {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 12...O-O? leva o rei justamente para o lado do peão de h6. Agora o sacrifício faz sentido.}
+13. Bxh6! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 13.Bxh6! abre o escudo do rei. Se as pretas tomarem, a dama entra em h6 no lance seguinte.}
+gxh6 14. Qxh6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Antes de sacrificar perto do rei, confira se suas outras peças chegam logo depois. Aqui a dama chegou.}
+Ng6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 14...Cg6 fecha a diagonal do bispo de d3 até h7.}
+15. Ng5! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 15.Cg5! traz mais um atacante e defende h7. A ameaça é 16.Dh7#, porque a torre de f8 tapa a fuga do rei.}
+Re8 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 15...Te8 abre f8 para o rei. Quem ataca traz peças novas com ameaça; quem defende gasta os lances só para sobreviver.}
+16. Rxf7! {[%autoria PARÁFRASE FIEL — Irving Chernev] 16.Txf7! entrega a torre. O rei não pode tomar, porque o cavalo de g5 cobre f7.}
+Bxf7 {[%autoria PARÁFRASE FIEL — Irving Chernev] O bispo tomou em f7. Agora a dama e o cavalo miram as mesmas duas casas: h7 e f7.}
+17. Qh7+ {[%autoria PARÁFRASE FIEL — Irving Chernev] 17.Dh7+ com o apoio do cavalo. O rei só tem f8.}
+Kf8 18. Qxf7# {[%autoria PARÁFRASE FIEL — Irving Chernev] 18.Dxf7#. O sacrifício foi o último passo de uma preparação: centro, roque, torres ligadas e peças apontadas para o rei.}
+1-0

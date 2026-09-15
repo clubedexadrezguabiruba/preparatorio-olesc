@@ -1,0 +1,208 @@
+{
+  "slug": "marshall-tarrasch",
+  "intro": [
+    "Nuremberg, 1905: a primeira partida do match entre Marshall e Tarrasch. Você joga com as pretas, de Tarrasch.",
+    "A lição não começa com ataque ao rei. Começa com uma pergunta: uma peça que parece defender pode mesmo sair do lugar?",
+    "Tarrasch crava o cavalo de c3, junta atacantes e ganha material. Depois muda de plano e passa a trocar peças.",
+    "Marshall era um atacante perigoso, e alguns lances dele aqui foram fracos. Observe o que cada troca tira dele."
+  ],
+  "objetivos": [
+    "Ver quando uma peça cravada parece defender, mas não pode sair do lugar.",
+    "Juntar atacantes contra um alvo antes de capturar.",
+    "Com material a mais, trocar peças para tirar os golpes do adversário.",
+    "Abrir linhas para a torre e a dama no fim da partida."
+  ],
+  "momentoFinal": [
+    "42...Txd4! toma o último peão do centro branco. A torre fica protegida pelo peão de e5.",
+    "Se 43.Dxd4, as pretas tomam de volta com o peão e ficam com dama contra cavalo.",
+    "Marshall jogou 43.g6+ e 44.Rh2, e abandonou depois de 44...De2+.",
+    "A dama e a torre pretas entram pela primeira fileira, e o rei branco não tem defesa. As peças pretas terminam em linhas abertas."
+  ],
+  "resumo": [
+    "Uma peça cravada parece defender, mas não pode sair do lugar.",
+    "Junte atacantes contra o alvo e só então capture.",
+    "Com material a mais, trocar peças tira do adversário as chances de golpe."
+  ],
+  "perguntas": [
+    "Por que 8.Cf3? foi um lance fraco, mesmo desenvolvendo uma peça?",
+    "O que mudou em c3 para 16...Txc3! funcionar?",
+    "Por que 27...Bb5! ajuda as pretas, mesmo sem ganhar material?"
+  ],
+  "fonte": {
+    "slug": "chernev-logical-chess-1957",
+    "referencia": "Game 29, pp. 206–217"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "6...Qa5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "8.Nf3",
+      "simbolo": "?"
+    },
+    {
+      "lance": "8...Bb4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "9...c5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "16...Rxc3",
+      "simbolo": "!"
+    },
+    {
+      "lance": "27...Bb5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "41...e5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "42...Rxd4",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [
+    {
+      "onde": "momento 35...Nxe3+, pergunta",
+      "ficha": "Qual captura com cheque elimina mais uma peça branca?",
+      "correcao": "É \"xeque\", não \"cheque\"."
+    },
+    {
+      "onde": "Desafio final, FEN",
+      "ficha": "8/pp4pk/8/3rp1P1/P2Pqp1P/2Q2N2/6K1/8 b - h3 0 42",
+      "correcao": "A casa de en passant h3 não existe: nenhum peão preto pode tomar em h3. A FEN da partida leva \"-\"."
+    }
+  ],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "Juntar atacantes contra o cavalo cravado",
+      "ply": 15,
+      "fen": "r1b1kb1r/pp1n1ppp/2p1p3/q2n2B1/3P4/2N1PN2/PPQ2PPP/R3KB1R b KQkq - 1 8",
+      "lado": "pretas",
+      "pergunta": "Sua dama em a5 crava o cavalo de c3 no rei de e1. Qual peça sua ainda pode atacar esse cavalo?",
+      "san": "Bb4",
+      "uci": "f8b4",
+      "desafioFinal": false,
+      "ideia": "8...Bb4! Bispo e cavalo de d5 atacam c3, com a dama atrás do bispo. O cavalo continua cravado e não pode fugir.",
+      "feedback": "Conte quem ataca c3 e quem defende. Depois pergunte: o cavalo branco pode sair dali sem deixar o rei em xeque?",
+      "alternativas": "8...f6 e 8...h6 também são bons: expulsam o bispo de g5. 8...Be7 desenvolve, mas solta a pressão sobre c3.",
+      "alternativasBoas": [
+        "f7f6",
+        "h7h6"
+      ],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 2,
+      "titulo": "Abrir a coluna c",
+      "ply": 17,
+      "fen": "r1b1k2r/pp1n1ppp/2p1p3/q2n2B1/1b1P4/2N1PN2/PPQK1PPP/R4B1R b kq - 3 9",
+      "lado": "pretas",
+      "pergunta": "O rei branco foi a d2 para defender c3, e ficou no centro. Qual avanço de peão abre linhas contra ele?",
+      "san": "c5",
+      "uci": "c6c5",
+      "desafioFinal": false,
+      "ideia": "9...c5! ataca o peão de d4 e abre a coluna c, onde está o cavalo cravado. O rei branco em d2 fica ainda mais exposto.",
+      "feedback": "Uma coluna aberta é boa quando sua torre e sua dama podem usá-la. Qual peão seu abre uma coluna perto do rei branco?",
+      "alternativas": "9...h6 e 9...f6 também são bons: atacam o bispo de g5. 9...O-O é seguro, mas dá tempo às brancas.",
+      "alternativasBoas": [
+        "h7h6",
+        "f7f6"
+      ],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 3,
+      "titulo": "Colher o peão de c3",
+      "ply": 31,
+      "fen": "2r2rk1/pp1b1ppp/1n2p3/q2n2B1/3P4/PQPB1N2/4KPPP/R1R5 b - - 8 16",
+      "lado": "pretas",
+      "pergunta": "16.Re2 tirou um defensor de c3. Conte quem ataca e quem defende esse peão. O que você faz?",
+      "san": "Rxc3",
+      "uci": "c8c3",
+      "desafioFinal": false,
+      "ideia": "16...Txc3! Três peças pretas atacavam c3, e só duas defendiam. A pressão acumulada vira um peão a mais.",
+      "feedback": "Conte as peças pretas que atacam c3 e as brancas que defendem. Quem tem mais pode tomar.",
+      "alternativas": "16...Ba4 também é forte: ataca a dama de b3 antes. 16...Cxc3+ também ganha o peão, mas deixa menos vantagem.",
+      "alternativasBoas": [
+        "d7a4"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    },
+    {
+      "n": 4,
+      "titulo": "Trocar a peça ativa do adversário",
+      "ply": 53,
+      "fen": "2r3k1/ppq2pp1/4p3/8/b2P4/P1nB1N2/3B1PPP/Q4K2 b - - 0 27",
+      "lado": "pretas",
+      "pergunta": "Você tem uma torre contra um bispo. O bispo branco de d3 é uma peça ativa. Como oferecer a troca dele?",
+      "san": "Bb5",
+      "uci": "a4b5",
+      "desafioFinal": false,
+      "ideia": "27...Bb5! oferece a troca dos bispos. Com menos peças brancas, Marshall tem menos chances de golpe.",
+      "feedback": "Com material a mais, cada troca ajuda você. Procure o lance que põe o seu bispo na frente do bispo branco.",
+      "alternativas": "Aqui vários lances mantêm a vantagem. A troca em b5 é a mais clara: tira do jogo a peça branca mais ativa.",
+      "alternativasBoas": [
+        "a4c2",
+        "c3d5",
+        "a4d1",
+        "c7c6",
+        "a7a6",
+        "a4d7",
+        "a4e8",
+        "e6e5"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    },
+    {
+      "n": 5,
+      "titulo": "Mais uma troca, com xeque",
+      "ply": 69,
+      "fen": "6k1/pp3pp1/4p3/3r1n2/P2Pq3/4BNP1/1Q3PKP/8 b - - 4 35",
+      "lado": "pretas",
+      "pergunta": "O bispo branco de e3 defende o peão de d4. Qual captura sua, com xeque, tira essa peça do tabuleiro?",
+      "san": "Nxe3+",
+      "uci": "f5e3",
+      "desafioFinal": false,
+      "ideia": "35...Cxe3+ troca o bispo. Depois de 36.fxe3, a dama toma em e3 e ganha mais um peão.",
+      "feedback": "Com material a mais, veja quais trocas deixam o adversário com menos peças. Qual peça sua alcança e3?",
+      "alternativas": "Com tanta vantagem, outros lances também ganham. A troca em e3 é o caminho mais limpo.",
+      "alternativasBoas": [
+        "d5d6",
+        "b7b6",
+        "f5h4",
+        "d5a5",
+        "d5d8",
+        "e6e5",
+        "b7b5",
+        "g7g5"
+      ],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 6,
+      "titulo": "Tomar o último peão do centro",
+      "ply": 83,
+      "fen": "8/pp4pk/8/3rp1P1/P2Pqp1P/2Q2N2/6K1/8 b - - 0 42",
+      "lado": "pretas",
+      "pergunta": "O peão de d4 é o último do centro branco. Qual captura abre linhas para a sua torre e a sua dama?",
+      "san": "Rxd4",
+      "uci": "d5d4",
+      "desafioFinal": true,
+      "ideia": "42...Txd4! A torre fica protegida pelo peão de e5 e passa a atacar pela coluna d.",
+      "feedback": "Olhe o peão de d4: quem o ataca e quem o defende? Depois pense qual peça sua fica mais ativa ao tomá-lo.",
+      "alternativas": "42...exd4 e 42...De2+ também ganham. A torre em d4 é a peça que entra mais depressa no ataque.",
+      "alternativasBoas": [
+        "e4e2",
+        "e5d4"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev + ADAPTAÇÃO DIDÁTICA DO PROJETO"
+    }
+  ]
+}

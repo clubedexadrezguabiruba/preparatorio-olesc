@@ -78,6 +78,17 @@ export type ProgressoParaOMapa = {
   readonly nivelDoAluno: Nivel;
   /** As aulas extras publicadas (§22): aparecem no nível delas, depois das do curso. */
   readonly extras?: readonly AulaDaTrilha[];
+  /**
+   * As partidas modelo da curadoria, com o nome e o estado. `publicada` = revisada
+   * pelo Doug; a que não está aparece "em escrita". Ausente = coluna vazia.
+   */
+  readonly partidas?: readonly {
+    readonly slug: string;
+    readonly nome: string;
+    readonly nivel: Nivel;
+    readonly publicada: boolean;
+    readonly concluida: boolean;
+  }[];
 };
 
 export type ItemDoNivel = {
@@ -105,7 +116,7 @@ export function estaAberto(item: ItemDoNivel): boolean {
 }
 
 export type ModuloDoNivel = {
-  readonly modulo: "tatica" | "finais";
+  readonly modulo: "tatica" | "finais" | "partidas";
   readonly itens: readonly ItemDoNivel[];
 };
 
@@ -163,7 +174,19 @@ export function montarMapa(p: ProgressoParaOMapa): Map<Nivel, ModuloDoNivel[]> {
   // tática e depois finais —, a mesma do cartão "Hoje". Sair da ordem de
   // inserção evitaria que um nível sem tema de tática mostrasse finais
   // primeiro e o de baixo mostrasse tática primeiro.
-  const ORDEM: ModuloDoNivel["modulo"][] = ["tatica", "finais"];
+  for (const partida of p.partidas ?? []) {
+    guardar(partida.nivel, "partidas", {
+      id: partida.slug,
+      nome: partida.nome,
+      href: `/partidas/${partida.slug}`,
+      total: 1,
+      feitos: partida.concluida ? 1 : 0,
+      situacao: situacaoDoItem(partida.nivel, p.nivelDoAluno, partida.publicada),
+      nivel: partida.nivel,
+    });
+  }
+
+  const ORDEM: ModuloDoNivel["modulo"][] = ["tatica", "finais", "partidas"];
   for (const [nivel, modulos] of porNivel) {
     porNivel.set(
       nivel,
@@ -211,7 +234,7 @@ export function tamanhoDoNivel(n: Nivel): { tatica: number; finais: number } {
  * legível de relance. O que preenche a coluna vazia é o `vazio` de cada módulo,
  * que diz **por que** ela está vazia.
  */
-export const MODULOS_EM_ORDEM = ["tatica", "finais"] as const;
+export const MODULOS_EM_ORDEM = ["tatica", "finais", "partidas"] as const;
 
 /** O nome do módulo na tela, e o que a barra dele conta. */
 export const MODULO: Record<
@@ -237,5 +260,12 @@ export const MODULO: Record<
     conta: "Aulas aprendidas — três passadas em dias distintos, cada uma certificada pela tablebase.",
     href: "/finais",
     vazio: "Nenhuma aula de finais neste degrau.",
+  },
+  partidas: {
+    nome: "Partidas modelo",
+    unidade: "partidas",
+    conta: "Partidas concluídas — todos os momentos resolvidos e o Desafio final de primeira.",
+    href: "/partidas",
+    vazio: "Nenhuma partida modelo neste nível.",
   },
 };

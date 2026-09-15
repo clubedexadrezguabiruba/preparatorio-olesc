@@ -9,21 +9,18 @@ import { armAudioOnFirstGesture } from "@/lib/sound";
 import { Passada } from "@/app/aberturas/[cor]/[abertura]/Passada";
 
 /**
- * **TESTE.** A casca de uma sessão numa partida instrutiva.
+ * A casca da partida modelo inteira — o caminho opcional.
  *
  * É o `Treino.tsx` do repertório com **a metade de baixo arrancada**: mesma
  * `Passada`, mesmas duas fases (assistida e depois de memória), e nenhum
- * servidor. `aoDecidir` recebe os lances e os joga fora — nada de
- * `registrarTreino`, nada de `repertorio_progresso`, nada de escada de
- * revisão. O teste é sobre **como é jogar uma partida inteira no treinador**;
- * medir e gravar é a pergunta seguinte, e ela só vale a pena se esta primeira
- * for respondida com sim.
+ * servidor. `aoDecidir` joga os lances fora de propósito: o que conta no nível
+ * são os momentos de decisão, que gravam em `app/partidas/acoes.ts`.
  *
  * A `key` da `Passada` é o que zera uma passada: trocar de fase ou pedir "de
  * novo" desmonta o componente, que é o jeito do React de voltar tudo ao zero.
  * Mesma decisão do repertório, e pelo mesmo motivo.
  */
-export function Sessao({ linha, resumo }: { linha: Linha; resumo: string | null }) {
+export function Sessao({ linha, slug }: { linha: Linha; slug: string }) {
   useEffect(() => armAudioOnFirstGesture(), []);
 
   const [modo, setModo] = useState<Modo>("assistido");
@@ -49,26 +46,19 @@ export function Sessao({ linha, resumo }: { linha: Linha; resumo: string | null 
 
   return (
     <div className="flex flex-col gap-3">
-      {resumo && rodada === 0 ? (
-        <p className="cartao px-4 py-3 text-sm text-tinta-media">
-          {semQuebras(resumo)}
-        </p>
-      ) : null}
-
       <Passada
         key={`${modo}:${rodada}`}
         linha={linha}
         modo={modo}
         aoDecidir={() => {
-          /* o teste não grava nada. */
+          /* a partida inteira é opcional e não grava. */
         }}
         aoTerminar={setPlacar}
         /*
-         * Este teste continua com **duas** etapas, e não com as três do
-         * repertório: aqui não há escada de revisão nem gravação, e a etapa do
-         * meio existe para separar "praticar" de "ser medido" — uma distinção
-         * que não faz sentido onde nada é medido. Por isso `aoAvancarEtapa`
-         * emenda direto o de memória. A trilha, pelo mesmo motivo, fica de fora.
+         * **Duas** etapas, e não as três do repertório: aqui não há escada de
+         * revisão nem gravação, e a etapa do meio existe para separar "praticar"
+         * de "ser medido" — o que não faz sentido onde nada é medido. Por isso
+         * `aoAvancarEtapa` emenda direto o de memória.
          */
         aoAvancarEtapa={deMemoria}
       />
@@ -96,7 +86,7 @@ export function Sessao({ linha, resumo }: { linha: Linha; resumo: string | null 
             }
           />
           <p className="text-xs text-tinta-fraca">
-            Este é um teste: nada foi gravado, e esta partida não conta em lugar nenhum.
+            A partida inteira é treino livre: ela não conta no nível. O que conta são os momentos.
           </p>
           <div className="flex flex-wrap gap-2">
             <Botao principal onClick={deMemoria}>
@@ -104,10 +94,10 @@ export function Sessao({ linha, resumo }: { linha: Linha; resumo: string | null 
             </Botao>
             <Botao onClick={comASeta}>Rever com a seta</Botao>
             <Link
-              href="/partidas"
+              href={`/partidas/${slug}`}
               className="foco rounded-lg border border-borda px-4 py-2.5 text-sm font-medium text-tinta-media transition-colors hover:bg-carta-toque"
             >
-              Outra partida
+              Voltar aos momentos
             </Link>
           </div>
         </div>
@@ -121,10 +111,10 @@ export function Sessao({ linha, resumo }: { linha: Linha; resumo: string | null 
             Recomeçar com a seta
           </button>
           <Link
-            href="/partidas"
+            href={`/partidas/${slug}`}
             className="foco text-xs font-medium text-metodo-tinta hover:underline"
           >
-            Escolher outra partida →
+            Voltar aos momentos →
           </Link>
         </div>
       )}

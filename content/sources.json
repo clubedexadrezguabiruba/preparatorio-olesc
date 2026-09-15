@@ -285,6 +285,46 @@
       "license": "Domínio público no Brasil desde 1º de janeiro de 2012. Emanuel Lasker morreu em 11 de janeiro de 1941, e a Lei 9.610 (art. 41) conta setenta anos a partir de 1º de janeiro do ano seguinte ao da morte. Fica declarado o que **não** foi conferido: o original é alemão, de 1926, e a folha de rosto desta edição não nomeia tradutor — o mesmo tipo de prazo em aberto que o My System teve até 2026-09-07. A diferença é que aqui isso não muda nada, pela §3.1: a camada protegida de uma tradução é o texto, e a FEN de um diagrama não deve nada ao tradutor. Se alguma prosa desta obra for citada algum dia, a pergunta volta a existir e tem de ser respondida antes.",
       "file": "lasker-manual-1927.pdf",
       "role": "Fonte de posição para o meio-jogo, registrada junto com o Common Sense em 2026-09-07. O texto é mais de exposição que de partida anotada, e por isso ela entra como segunda opção: onde houver partida impressa desde o primeiro lance, vale o mesmo caminho de reconstrução do Common Sense."
+    },
+    {
+      "slug": "chernev-logical-chess-1957",
+      "title": "Logical Chess: Move by Move",
+      "author": "Irving Chernev",
+      "edition": "Batsford, edição algébrica de 1998 (original de 1957)",
+      "protected": true,
+      "license": "Obra protegida. As partidas modelo usam paráfrase e adaptação com a fonte citada, sem copiar comentário em bloco; o site é fechado por login.",
+      "file": null,
+      "role": "Fonte das partidas modelo (docs/PARTIDAS-MODELO.md): o score e a leitura pedagógica de nove das quinze partidas obrigatórias. Não é fonte de posição de aula."
+    },
+    {
+      "slug": "chernev-most-instructive-1965",
+      "title": "The Most Instructive Games of Chess Ever Played",
+      "author": "Irving Chernev",
+      "edition": null,
+      "protected": true,
+      "license": "Obra protegida. As partidas modelo usam paráfrase e adaptação com a fonte citada, sem copiar comentário em bloco; o site é fechado por login.",
+      "file": null,
+      "role": "Fonte da partida modelo Porges–Lasker (Game 13, pp. 64–66). A edição não foi conferida na folha de rosto."
+    },
+    {
+      "slug": "weeramantry-eusebi-1993",
+      "title": "Best Lessons of a Chess Coach",
+      "author": "Sunil Weeramantry e Ed Eusebi",
+      "edition": "David McKay, 1993",
+      "protected": true,
+      "license": "Obra protegida. As partidas modelo usam paráfrase e adaptação com a fonte citada, sem copiar comentário em bloco; o site é fechado por login.",
+      "file": null,
+      "role": "Fonte das partidas modelo Morphy–Isouard, Lasker–Bauer e Paulsen–Morphy."
+    },
+    {
+      "slug": "giddins-50-lessons-2006",
+      "title": "50 Essential Chess Lessons",
+      "author": "Steve Giddins",
+      "edition": "Gambit Publications, 2006",
+      "protected": true,
+      "license": "Obra protegida. As partidas modelo usam paráfrase e adaptação com a fonte citada, sem copiar comentário em bloco; o site é fechado por login.",
+      "file": null,
+      "role": "Fonte das partidas modelo Polgar–Mamedyarov (Game 3) e Averbakh–Sarvarov (Game 1)."
     }
   ]
 }

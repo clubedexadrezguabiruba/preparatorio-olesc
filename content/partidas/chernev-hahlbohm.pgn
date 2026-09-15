@@ -1,0 +1,27 @@
+[Event "U.S. Championship"]
+[Site "New York, NY USA"]
+[Date "1942.04.25"]
+[White "Irving Chernev"]
+[Black "Herman H. Hahlbohm"]
+[Result "1-0"]
+[ECO "D05"]
+[Nome "Chernev × Hahlbohm"]
+[Ordem "2"]
+[Nivel "4"]
+[Cor "brancas"]
+[Tema "O sacrifício com a conta feita"]
+[FonteSlug "chernev-logical-chess-1957"]
+[Fonte "Irving Chernev, Logical Chess: Move by Move, Game 21, pp. 134–141"]
+[Status "rascunho"]
+
+1. d4 d5 2. Nf3 e6 3. e3 c5 4. c3 Nf6 5. Bd3 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O bispo vai a d3 e aponta para h7, do lado onde o rei preto vai fazer o roque.} Nc6 6. Nbd2 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo vai a d2 para apoiar o avanço e4.} Be7 7. O-O O-O
+8. Qe2 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A dama em e2 também apoia e4. Bispo, cavalo e dama preparam o mesmo avanço.} Re8 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Um plano fica mais forte quando várias peças ajudam a mesma ideia.}
+9. dxc5! {[%autoria PARÁFRASE FIEL — Irving Chernev] Antes de jogar e4, Chernev troca em c5.} Bxc5 {[%autoria PARÁFRASE FIEL — Irving Chernev] O bispo preto sai de e7 e vai para c5.} 10. e4! {[%autoria PARÁFRASE FIEL — Irving Chernev] Só agora vem o avanço. O lance já estava claro, mas Chernev preparou a posição antes de jogá-lo.} e5
+11. exd5 Nxd5 12. Nb3! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo ataca o bispo de c5 e abre a diagonal do bispo de c1. Um lance só melhora duas coisas.} Qb6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Com a dama em b6, ninguém mais defende o cavalo de d5. Chernev percebe isso na hora.}
+13. Bxh7+! {[%autoria PARÁFRASE FIEL — Irving Chernev] O sacrifício em h7 só funciona porque existe um lance concreto depois dele.} Kxh7 {[%autoria PARÁFRASE FIEL — Irving Chernev] Não decore a regra de sacrificar em h7. Faça a conta inteira antes de entregar a peça.} 14. Qe4+! {[%autoria PARÁFRASE FIEL — Irving Chernev] A dama dá xeque e ataca o cavalo de d5 ao mesmo tempo. As brancas vão recuperar a peça.} Kg8
+15. Qxd5 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A dama toma o cavalo. As brancas têm um peão a mais, e o rei preto está sem o peão de h7.} Bf8 16. Ng5! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo chega perto de h7 e f7. Com o rei exposto, trazer mais um atacante já é um bom lance.} Be6
+17. Qe4 {[%autoria PARÁFRASE FIEL — Irving Chernev] A dama volta a e4 e ameaça Dh7+.} g6 18. Qh4 {[%autoria PARÁFRASE FIEL — Irving Chernev] As pretas fecham a diagonal com o peão em g6, e a dama passa para a coluna h.} Bg7 {[%autoria PARÁFRASE FIEL — Irving Chernev] As pretas montaram uma defesa. Chernev não força outro sacrifício.}
+19. Be3! {[%autoria PARÁFRASE FIEL — Irving Chernev] O bispo sai de c1, a última peça parada, e ataca a dama de b6. Antes de atacar de novo, veja se falta alguma peça no jogo.} Qa6 {[%autoria ANÁLISE DO PROJETO] A dama foge para a6 e ataca a torre de f1.}
+20. Nc5! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo ataca a dama outra vez e mantém as pretas ocupadas.} Qc4 21. Qh7+! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Agora começam os xeques. O rei só tem a casa f8.} Kf8
+22. Ncxe6+! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo de c5, que estava atacado, toma o bispo de e6 com xeque.} fxe6 23. Qxg6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Sem o peão de f7, a dama toma g6. O rei preto fica sem peões por perto.} Nd8
+24. Nh7+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O ataque termina porque as pretas nunca tiveram tempo de reorganizar as peças. Hahlbohm abandona.} 1-0

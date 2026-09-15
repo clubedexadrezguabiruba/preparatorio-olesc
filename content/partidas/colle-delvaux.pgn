@@ -1,0 +1,39 @@
+[Event "Gand-Terneuzen"]
+[Site "?"]
+[Date "1929.??.??"]
+[White "Edgard Colle"]
+[Black "Delvaux"]
+[Result "1-0"]
+[ECO "D05"]
+[Nome "Colle × Delvaux"]
+[Ordem "2"]
+[Nivel "1"]
+[Cor "brancas"]
+[Tema "Preparar o ataque ao rei"]
+[FonteSlug "chernev-logical-chess-1957"]
+[Fonte "Irving Chernev, Logical Chess: Move by Move, Game 3, pp. 23–29"]
+[Status "rascunho"]
+
+1. d4 d5 2. Nf3 Nf6 3. e3 e6 4. Bd3 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Colle monta uma posição calma. Cada peça branca tem uma tarefa: apoiar o centro e preparar o avanço do peão para e4.}
+c5 5. c3 Nc6 6. Nbd2 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo em d2 também apoia a casa e4.}
+Be7 7. O-O {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O rei branco fica seguro antes de o centro abrir. Abrir o jogo com o rei em e1 daria um contra-ataque às pretas.}
+c4 8. Bc2 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O peão c4 empurra o bispo, mas em c2 ele continua mirando h7.}
+b5 9. e4! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Chega o avanço preparado. O peão em e4 abre linhas e desafia o centro preto.}
+dxe4 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O avanço é forte porque não vem sozinho: bispo, cavalo, dama e torre já têm caminho para entrar.}
+10. Nxe4 O-O 11. Qe2 Bb7 12. Nfg5! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O outro cavalo salta para g5, perto do rei preto.}
+h6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] As pretas expulsam o cavalo com o peão h. Esse peão saiu de h7, e a proteção do rei mudou.}
+13. Nxf6+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Colle troca o cavalo de f6, o melhor defensor do roque preto.}
+Bxf6 14. Qe4! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A dama em e4 e o bispo em c2 miram a mesma diagonal. A ameaça é mate em h7.}
+g6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] As pretas tapam a diagonal com o peão g. Agora dois peões do roque andaram, e as casas perto do rei ficaram fracas.}
+15. Nxe6! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo toma em e6 e ataca a dama e a torre ao mesmo tempo.}
+fxe6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O peão f7 toma o cavalo e deixa de defender g6.}
+16. Qxg6+! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A dama entra em g6 com xeque. O sacrifício serviu para tirar um defensor do caminho.}
+Bg7 17. Qh7+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Colle mantém o rei preto andando com xeques. O bispo de c2 protege a dama em h7.}
+Kf7 18. Bg6+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O bispo entra na rede com mais um xeque.}
+Kf6 19. Bh5 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O bispo recua para h5 e passa a vigiar g6 e f7.}
+Ne7 20. Bxh6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O outro bispo toma em h6 e também entra no ataque.}
+Rg8 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O rei preto não consegue voltar a um lugar seguro. As peças brancas estão perto dele, e juntas.}
+21. h4! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O peão em h4 tira do rei a casa g5.}
+Bxh6 {[%autoria ANÁLISE DO PROJETO] As pretas ganham o bispo, mas o bispo delas sai de g7. Era ele que tapava o caminho da dama de h7 até f7.}
+22. Qf7# {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A dama dá xeque em f7, e o bispo de h5 a protege. O ataque termina como começou: peças trabalhando juntas.}
+1-0

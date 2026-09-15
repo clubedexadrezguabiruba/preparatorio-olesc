@@ -1,0 +1,145 @@
+{
+  "slug": "morphy-isouard",
+  "intro": [
+    "Paris, 1858. Paul Morphy joga contra o Duque Karl e o Conde Isouard, que escolhiam os lances juntos.",
+    "É a Partida da Ópera, uma das mais famosas da história. Ela acaba em 17 lances.",
+    "Enquanto os lances passam, conte quantas peças cada lado já pôs em jogo. É essa conta que explica o final."
+  ],
+  "objetivos": [
+    "Comparar quantas peças de cada lado já entraram no jogo.",
+    "Explicar por que abrir o centro é perigoso para um rei que ainda não fez o roque.",
+    "Achar lances que fazem duas tarefas de uma vez, como proteger o rei e trazer a torre.",
+    "Dizer o que um sacrifício ganhou: linhas abertas, xeques ou mate."
+  ],
+  "momentoFinal": [
+    "Depois de 15...Cxd7, só o cavalo em d7 separa a torre de d1 do rei em e8.",
+    "16.Db8+! põe a dama onde ela vai ser tomada. O cavalo é a única peça que responde ao xeque.",
+    "Com o cavalo em b8, a coluna d abre. 17.Td8# é mate, e o bispo de g5 protege a torre.",
+    "A dama não foi entregue por beleza. Ela tirou do caminho a última peça que tapava a coluna."
+  ],
+  "resumo": [
+    "Ponha as peças em jogo antes de procurar combinações.",
+    "Um rei que fica no centro sofre quando as linhas se abrem.",
+    "O ataque final funcionou porque várias peças brancas chegaram juntas."
+  ],
+  "perguntas": [
+    "Por que 3.d4! é mais perigoso para as pretas enquanto o rei delas ainda está em e8?",
+    "O que 12.O-O-O! faz além de proteger o rei branco?",
+    "Por que 16.Db8+! funciona mesmo entregando a dama?"
+  ],
+  "fonte": {
+    "slug": "weeramantry-eusebi-1993",
+    "referencia": "pp. 153–154, Supplementary Games [Quick Development]"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "3.d4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "4.dxe5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "6.Bc4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "7.Qb3",
+      "simbolo": "!"
+    },
+    {
+      "lance": "9.Bg5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "10.Nxb5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "12.O-O-O",
+      "simbolo": "!"
+    },
+    {
+      "lance": "13.Rxd7",
+      "simbolo": "!"
+    },
+    {
+      "lance": "16.Qb8+",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [
+    {
+      "onde": "Todo o texto do aluno",
+      "ficha": "\"cheque\" e \"roçou\"",
+      "correcao": "\"xeque\" e \"fez o roque\""
+    }
+  ],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "Abrir linhas com um sacrifício",
+      "ply": 18,
+      "fen": "rn2kb1r/p3qppp/2p2n2/1p2p1B1/2B1P3/1QN5/PPP2PPP/R3K2R w KQkq - 0 10",
+      "lado": "brancas",
+      "pergunta": "O peão b5 ataca seu bispo de c4, e recuar gasta um lance. Qual lance abre linhas contra o rei preto, que está em e8?",
+      "san": "Nxb5",
+      "uci": "c3b5",
+      "desafioFinal": false,
+      "ideia": "10.Cxb5! entrega o cavalo por dois peões. Em troca, vem xeque em b5, a coluna d aberta e o rei preto preso no centro.",
+      "feedback": "Recuar o bispo dá às pretas o tempo que faltava para o roque. Procure um lance que use as peças que já estão em jogo.",
+      "alternativas": "Recuar o bispo para e2 ou d3 é seguro, mas deixa o rei preto escapar do centro.",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 2,
+      "titulo": "Roque que também ataca",
+      "ply": 22,
+      "fen": "r3kb1r/p2nqppp/5n2/1B2p1B1/4P3/1Q6/PPP2PPP/R3K2R w KQkq - 1 12",
+      "lado": "brancas",
+      "pergunta": "Qual lance põe seu rei em segurança e sua torre na coluna d ao mesmo tempo?",
+      "san": "O-O-O",
+      "uci": "e1c1",
+      "desafioFinal": false,
+      "ideia": "O roque grande leva o rei para c1 e a torre para d1. Um lance só protege o rei e ataca o cavalo de d7.",
+      "feedback": "Não pense no roque só como esconder o rei. Olhe para onde vai a torre depois dele.",
+      "alternativas": "12.O-O também protege o rei, mas a torre fica em f1, longe da coluna d.",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA DO PROJETO"
+    },
+    {
+      "n": 3,
+      "titulo": "Tirar a peça que tapa a coluna",
+      "ply": 24,
+      "fen": "3rkb1r/p2nqppp/5n2/1B2p1B1/4P3/1Q6/PPP2PPP/2KR3R w k - 3 13",
+      "lado": "brancas",
+      "pergunta": "O cavalo em d7 tapa a coluna d. Que lance tira esse cavalo e deixa a coluna para a sua outra torre?",
+      "san": "Rxd7",
+      "uci": "d1d7",
+      "desafioFinal": false,
+      "ideia": "13.Txd7! entrega a torre pelo cavalo. Depois de 13...Txd7, a outra torre vai a d1 e ataca de novo a torre presa pelo bispo.",
+      "feedback": "Depois de pensar numa troca, olhe a posição que sobra. Aqui a torre de h1 chega a d1 em um lance.",
+      "alternativas": "Lances lentos dão às pretas o tempo de tirar o rei de e8.",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 4,
+      "titulo": "A dama abre a casa do mate",
+      "ply": 30,
+      "fen": "4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 0 16",
+      "lado": "brancas",
+      "pergunta": "Só o cavalo de d7 fica entre a sua torre e a casa d8. Existe um xeque que obriga esse cavalo a sair?",
+      "san": "Qb8+",
+      "uci": "b3b8",
+      "desafioFinal": true,
+      "ideia": "16.Db8+! só tem uma resposta: 16...Cxb8. Com o cavalo fora de d7, 17.Td8# é mate.",
+      "feedback": "Olhe primeiro os xeques, porque eles obrigam a resposta. Qual deles faz o cavalo de d7 sair do caminho da torre?",
+      "alternativas": "Nenhum outro lance dá mate. 16.Dc3 também ganha, mas dá tempo às pretas.",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    }
+  ]
+}

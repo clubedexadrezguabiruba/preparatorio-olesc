@@ -1,0 +1,31 @@
+[Event "Hastings"]
+[Site "Hastings ENG"]
+[Date "1895.08.17"]
+[White "Harry Nelson Pillsbury"]
+[Black "James Mason"]
+[Result "1-0"]
+[ECO "D50"]
+[Nome "Pillsbury × Mason"]
+[Ordem "3"]
+[Nivel "4"]
+[Cor "brancas"]
+[Tema "A torre ativa na coluna c"]
+[FonteSlug "chernev-logical-chess-1957"]
+[Fonte "Irving Chernev, Logical Chess: Move by Move, Game 17, pp. 101–111"]
+[Status "rascunho"]
+
+1. d4 d5 2. c4! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O peão de c4 ataca d5 e disputa o centro. Ele também prepara a coluna c, que vai ser a estrada desta partida.} e6 3. Nc3 Nf6
+4. Bg5! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O bispo sai com um lance útil: ele crava o cavalo de f6 na dama de d8.} Be7 5. Nf3 b6 6. e3 Bb7
+7. Rc1 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A torre vai cedo para c1, porque essa coluna tende a abrir.} dxc4 8. Bxc4 Nbd7 9. O-O O-O {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Pillsbury não esperou a coluna abrir para pensar na torre. Ele a colocou antes na linha que vai importar.}
+10. Qe2 Nd5 11. Bxe7 Qxe7 12. Nxd5 exd5 13. Bb5 Qd6 14. Rc2! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A torre sobe para c2 e abre espaço para a outra torre chegar a c1.} c6
+15. Bd3 Nf6 16. Rfc1 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Duas torres na mesma coluna, uma atrás da outra, ajudando uma à outra. Isso tem nome: torres dobradas.} Rac8
+17. Ba6! {[%autoria PARÁFRASE FIEL — Irving Chernev] Pillsbury oferece a troca do bispo de b7, que defendia o peão de c6.} Bxa6 18. Qxa6 {[%autoria PARÁFRASE FIEL — Irving Chernev] A dama chega a a6 e ataca a torre de c8.} Rc7
+19. Ne5 {[%autoria PARÁFRASE FIEL — Irving Chernev] Agora o peão de c6 tem três atacantes: o cavalo e as duas torres. As pretas o empurram para c5.} c5
+20. Rxc5! {[%autoria ANÁLISE DO PROJETO] A torre toma c5. O peão de b6 não pode tomar de volta. Ele tapa a sexta fileira entre a dama branca e a preta.} Rxc5 21. Rxc5 {[%autoria PARÁFRASE FIEL — Irving Chernev] A coluna aberta virou um peão a mais, e a torre branca está dentro do campo preto.} Nd7
+22. Rc6! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo atacou a torre, e ela avança para c6, atacando a dama de d6.} Nb8 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo vai a b8 e ataca a torre de c6 e a dama de a6 ao mesmo tempo.}
+23. Rxd6! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A torre toma a dama preta.} Nxa6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo toma a dama branca. As damas saíram, e a torre branca continua ativa na sexta fileira.}
+24. Nc6! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo vai para c6, onde nenhum peão preto pode atacá-lo, e mira o peão de a7.} g6 25. Nxa7 Ra8 26. Nc6 Kg7
+27. a3 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O peão em a3 tira a casa b4 do cavalo de a6.} Rc8 28. g4 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Com g4, o rei ganha a casa g2. Lances pequenos de segurança, como a3 e g4, tiram das pretas o pouco jogo que elas têm.} Nc7
+29. Ne7 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo ataca a torre de c8, que precisa sair.} Rb8 30. Rd7! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A torre entra na sétima fileira e ataca o cavalo de c7, que ninguém defende.} Ne6
+31. Nxd5 {[%autoria PARÁFRASE FIEL — Irving Chernev] O cavalo de e7 toma d5, e depois 32.Cxb6 leva mais um peão.} Rc8 32. Nxb6 Rc2 33. b4 {[%autoria PARÁFRASE FIEL — Irving Chernev] Os peões brancos de a e b não têm nenhum peão preto na frente. São peões passados.} Ng5
+34. a4! {[%autoria PARÁFRASE FIEL — Irving Chernev] Pillsbury segue o plano sem abrir caminho para xeques perto do próprio rei.} Ne4 35. a5 Nxf2 36. a6 {[%autoria PARÁFRASE FIEL — Irving Chernev] O peão está a duas casas da promoção, e Mason abandona.} 1-0

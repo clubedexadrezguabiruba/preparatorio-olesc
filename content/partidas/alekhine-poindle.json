@@ -1,0 +1,135 @@
+{
+  "slug": "alekhine-poindle",
+  "intro": [
+    "Alexander Alekhine contra Poindle, numa simultânea em Viena, 1936. Chernev usa esta partida para mostrar o preço de perder tempo na abertura.",
+    "O cavalo preto faz cinco viagens e acaba capturado. Enquanto isso, Alekhine faz uma ameaça atrás da outra.",
+    "Observe a coluna e e o bispo branco de g5. No fim, um xeque de cavalo abre a linha do bispo, e a dama preta cai."
+  ],
+  "objetivos": [
+    "Perceber o que custa mover a mesma peça muitas vezes na abertura.",
+    "Usar ameaças para não deixar o adversário terminar o desenvolvimento.",
+    "Achar um ataque descoberto: a peça que sai dá xeque, e a que fica ataca a dama.",
+    "Calcular uma sequência curta em que cada lance força a resposta."
+  ],
+  "momentoFinal": [
+    "O lance que decide é 18.Txe7!. Depois de 18...Dxe7, a dama preta fica na diagonal do bispo de g5.",
+    "Então o cavalo de f6 salta para h7 com xeque e abre essa diagonal. As pretas precisam cuidar do rei, e o bispo toma a dama.",
+    "No fim da troca, as brancas têm dama e cavalo contra torre e dois bispos. Alekhine mantém as peças ativas até Poindle abandonar."
+  ],
+  "resumo": [
+    "Mover a mesma peça muitas vezes na abertura custa tempo, a menos que cada lance ganhe algo.",
+    "Ameaças seguidas não deixam um adversário atrasado se organizar.",
+    "Num ataque descoberto, a peça que sai dá xeque, e a que fica pega a dama."
+  ],
+  "perguntas": [
+    "Quantas vezes o cavalo preto se moveu até ser capturado em d6? O que as brancas ganharam com isso?",
+    "Por que 11.Dh6 impede o roque das pretas?",
+    "Qual é a função de 17.Dc4+ antes de 18.Txe7?"
+  ],
+  "fonte": {
+    "slug": "chernev-logical-chess-1957",
+    "referencia": "Game 15, pp. 87–93"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "5.d4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "9.Ng5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "10.Qh5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "13.Ne4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "18.Rxe7",
+      "simbolo": "!"
+    },
+    {
+      "lance": "19.Nh7+",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [
+    {
+      "onde": "O momento final",
+      "ficha": "19.Nh7+ força a torre a capturar e abre a diagonal do bispo",
+      "correcao": "19.Ch7+ não força a torre: o rei também pode ir a e8. Nos dois casos, 20.Bxe7 toma a dama."
+    }
+  ],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "Dama com ameaça de mate",
+      "ply": 18,
+      "fen": "r1bqk2r/ppppbppp/2n5/6N1/P7/8/1PP2PPP/RNBQ1RK1 w kq - 2 10",
+      "lado": "brancas",
+      "pergunta": "O cavalo de g5 mira f7 e h7. Qual lance da dama cria uma ameaça que as pretas precisam responder já?",
+      "san": "Qh5",
+      "uci": "d1h5",
+      "desafioFinal": false,
+      "ideia": "A dama em h5 ameaça Dxf7 mate, com o cavalo defendendo. Depois de 10...g6, as casas f6 e h6 perdem a defesa do peão.",
+      "feedback": "Dama perto do rei sem apoio vira alvo. Procure uma casa onde ela ataque junto com o cavalo de g5.",
+      "alternativas": "Só este lance funciona. Sem a ameaça, as pretas terminam o desenvolvimento e ficam com o peão a mais.",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 2,
+      "titulo": "A ameaça de mate em f6",
+      "ply": 24,
+      "fen": "r1bqkb1r/ppppnp1p/6pQ/6N1/P7/8/1PP2PPP/RNB1R1K1 w kq - 4 13",
+      "lado": "brancas",
+      "pergunta": "O rei preto em e8 está cercado pelas próprias peças. Qual lance do cavalo ameaça um xeque que seria mate?",
+      "san": "Ne4",
+      "uci": "g5e4",
+      "desafioFinal": false,
+      "ideia": "De e4, o cavalo ameaça Cf6 mate. O rei não teria casa livre. Com 13...f5, as pretas abrem f7 para ele fugir.",
+      "feedback": "Olhe as casas ao redor do rei em e8: estão todas ocupadas. De qual casa um cavalo daria xeque nele?",
+      "alternativas": "Lances de dama como 13.Dh4 são mais fracos: dão às pretas o tempo que elas precisam.",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 3,
+      "titulo": "O xeque que prepara a combinação",
+      "ply": 32,
+      "fen": "r1bq3r/ppppnkb1/5Npp/5pB1/P6Q/8/1PP2PPP/RN2R1K1 w - - 0 17",
+      "lado": "brancas",
+      "pergunta": "O peão de h6 ataca o seu bispo de g5. Qual lance da dama obriga as pretas a responder antes de capturá-lo?",
+      "san": "Qc4+",
+      "uci": "h4c4",
+      "desafioFinal": false,
+      "ideia": "O xeque não dá tempo para tomar o bispo. Depois de 17...Rf8, o rei fica numa casa onde Ch7 será xeque.",
+      "feedback": "Antes de salvar uma peça atacada, procure um xeque. Ele obriga uma resposta e pode pôr o rei onde você quer.",
+      "alternativas": "Aqui não há outro lance bom. Sem o xeque, as pretas tomam o bispo e as brancas perdem material.",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 4,
+      "titulo": "O ataque descoberto",
+      "ply": 34,
+      "fen": "r1bq1k1r/ppppn1b1/5Npp/5pB1/P1Q5/8/1PP2PPP/RN2R1K1 w - - 2 18",
+      "lado": "brancas",
+      "pergunta": "Suas peças miram o rei em f8. Qual sacrifício de torre começa a sequência que ganha a dama preta?",
+      "san": "Rxe7",
+      "uci": "e1e7",
+      "desafioFinal": true,
+      "ideia": "Depois de 18...Dxe7, 19.Ch7+ dá xeque e abre a diagonal do bispo de g5. Em seguida, o bispo toma a dama.",
+      "feedback": "Não pare na primeira captura. Depois da recaptura, veja o que acontece se o cavalo de f6 sair com xeque.",
+      "alternativas": "18.Ch7+ também ganha: é a mesma ideia com os lances em outra ordem.",
+      "alternativasBoas": [
+        "f6h7",
+        "f6d7"
+      ],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    }
+  ]
+}

@@ -273,3 +273,20 @@ test("uma aula de finais já aprendida não volta como aula nova", () => {
   );
   assert.notEqual(acao.tipo, "aula");
 });
+
+test("fechados tática e finais, a partida modelo publicada vem antes das linhas", () => {
+  const progresso: ProgressoParaONivel = {
+    ...comTaticaAte(1),
+    partidas: {
+      publicadas: new Map([["morphy-isouard", "Morphy × Isouard"]]),
+      concluidas: new Set(),
+    },
+  };
+  const acao = proximaAcao(zerado({ progresso }));
+  assert.equal(acao.tipo, "partida");
+  assert.equal(acao.href, "/partidas/morphy-isouard");
+  assert.equal(acao.titulo, "Morphy × Isouard");
+
+  const concluida = { ...progresso, partidas: { ...progresso.partidas!, concluidas: new Set(["morphy-isouard"]) } };
+  assert.equal(proximaAcao(zerado({ progresso: concluida })).tipo, "linha");
+});

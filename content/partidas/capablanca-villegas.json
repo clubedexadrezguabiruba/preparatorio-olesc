@@ -1,0 +1,321 @@
+{
+  "slug": "capablanca-villegas",
+  "intro": [
+    "Capablanca × Villegas, Buenos Aires, 1914. Você joga com as brancas de José Raúl Capablanca, que depois foi campeão mundial.",
+    "Aqui não há ataque ao rei. As peças são trocadas, e sobra uma vantagem pequena: três peões contra dois na ala da dama.",
+    "Observe como essa vantagem vira um peão passado, e como cada lance pequeno prepara o avanço dele."
+  ],
+  "objetivos": [
+    "Usar três peões contra dois numa ala para criar um peão passado.",
+    "Pôr a torre atrás do próprio peão para apoiar o avanço.",
+    "Fazer o lance pequeno de segurança antes de avançar.",
+    "Perguntar como o adversário quer parar o peão, e tirar essa defesa dele."
+  ],
+  "momentoFinal": [
+    "Depois de 32.De5+ f6, a dama branca está atacada pelo peão de f6.",
+    "Capablanca joga 33.Dxd6! e entrega a dama pela torre que atacava o peão de c6.",
+    "Depois de 33...Dxd6, a dama preta saiu de c7, a casa bem na frente do peão.",
+    "Vem 34.c7, protegido pela torre de c1. Nada preto cobre c8, e Villegas abandona."
+  ],
+  "resumo": [
+    "Três peões contra dois numa ala podem virar um peão passado.",
+    "Antes de empurrar, organize: rei com casa de fuga e torre atrás do peão.",
+    "Quando o peão está parado, tire do caminho as peças que o seguram."
+  ],
+  "perguntas": [
+    "Como três peões contra dois criam um peão passado?",
+    "Por que 25.Tc1! ajuda o peão de c4?",
+    "Que casa 31.a4! tira da torre preta, e por que isso importa?"
+  ],
+  "fonte": {
+    "slug": "chernev-logical-chess-1957",
+    "referencia": "Game 30, pp. 217–224"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "5.c4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "13.e4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "18.Nxd7",
+      "simbolo": "!"
+    },
+    {
+      "lance": "22.b4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "24.g3",
+      "simbolo": "!"
+    },
+    {
+      "lance": "25.Rc1",
+      "simbolo": "!"
+    },
+    {
+      "lance": "27.c5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "28.Qe4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "31.a4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "32.Qe5+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "33.Qxd6",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [
+    {
+      "onde": "Trainer 2 — 'Escolher a torre que vai para a coluna aberta' (21.Rfd1)",
+      "ficha": "'Qual torre deve ir para d1, deixando a torre de e4 ativa?' e '21.Red1 também coloca uma torre em d1'.",
+      "correcao": "No lance 21 a torre está em d4 (20.Rxd4), e não há torre em e4 nem Red1 possível. O momento saiu."
+    },
+    {
+      "onde": "Desafio final 33.Qxd6! (ideia, alternativas, momento final e narração)",
+      "ficha": "A torre de d6 seria 'o último bloqueador' do peão passado, a peça 'que impede o peão de chegar a c8'.",
+      "correcao": "Quem bloqueia c7 é a dama preta. A torre de d6 é quem ataca o peão de c6. 33.Qxd6 elimina essa torre; depois de 33...Qxd6 a dama sai de c7, e 34.c7 não pode mais ser parado."
+    },
+    {
+      "onde": "PGN, lance 24 das pretas",
+      "ficha": "O PGN v4 e a ficha escrevem 24...Rac8.",
+      "correcao": "Só há uma torre preta; o SAN canônico é 24...Rc8, e é o que o PGN do repositório leva."
+    },
+    {
+      "onde": "Trainer 7 — 31.a4!",
+      "ficha": "'impede a torre preta de usar b5 para atacá-lo por trás'.",
+      "correcao": "Uma torre em b5 não ataca o peão de c6 por trás. O texto diz só o que o lance faz: 31.a4 tira a casa b5 da torre preta."
+    }
+  ],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "Pôr a maioria em marcha",
+      "ply": 42,
+      "fen": "r2r2k1/ppq2ppp/4p3/8/2PR4/1P2Q3/P4PPP/3R2K1 w - - 3 22",
+      "lado": "brancas",
+      "pergunta": "Na ala da dama, você tem três peões contra dois. Qual avanço começa a usar essa vantagem?",
+      "san": "b4",
+      "uci": "b3b4",
+      "desafioFinal": false,
+      "ideia": "22.b4! põe os peões em marcha. O plano é trocar um par e sobrar um peão sem peão preto à frente.",
+      "feedback": "Conte os peões de cada ala. Onde você tem mais, eles andam juntos, um apoiando o outro.",
+      "alternativas": "Lances de espera, como h3 ou Dd3, também mantêm a vantagem. Mas só o avanço dos peões põe o plano em marcha.",
+      "alternativasBoas": [
+        "h2h4",
+        "h2h3",
+        "g2g3",
+        "d1d3",
+        "e3d3",
+        "e3g5",
+        "e3e4",
+        "e3e5",
+        "e3f4",
+        "e3d2",
+        "e3f3",
+        "a2a4",
+        "d4d3",
+        "d1d2",
+        "g1f1",
+        "e3g3",
+        "g1h1",
+        "d4d2",
+        "e3c3",
+        "a2a3",
+        "d1e1",
+        "d4d8",
+        "g2g4",
+        "f2f3",
+        "d1c1",
+        "d1a1",
+        "c4c5",
+        "d1f1",
+        "d1b1",
+        "f2f4",
+        "e3e1",
+        "e3c1",
+        "e3e2",
+        "e3h3"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    },
+    {
+      "n": 2,
+      "titulo": "Casa de fuga",
+      "ply": 46,
+      "fen": "r5k1/p1q2ppp/1p2p3/8/1PPQ4/8/P4PPP/3R2K1 w - - 0 24",
+      "lado": "brancas",
+      "pergunta": "As pretas têm dama e torre, e o seu rei está preso atrás de f2, g2 e h2. Que lance pequeno resolve isso?",
+      "san": "g3",
+      "uci": "g2g3",
+      "desafioFinal": false,
+      "ideia": "24.g3! dá ao rei a casa g2. Agora um xeque na primeira fileira não prende mais o rei.",
+      "feedback": "Mesmo estando melhor, confira o seu rei. Com três peões na frente dele, um xeque na primeira fileira pode virar mate.",
+      "alternativas": "24.c5 também é possível, mas Capablanca resolve primeiro a segurança do rei.",
+      "alternativasBoas": [
+        "h2h4",
+        "h2h3",
+        "d1c1",
+        "c4c5",
+        "a2a3",
+        "d4c3",
+        "d4d3",
+        "f2f3",
+        "d4d2",
+        "d1f1",
+        "d4e4",
+        "d1b1",
+        "g2g4",
+        "f2f4",
+        "d1d3",
+        "d4h4",
+        "g1h1",
+        "d1e1",
+        "d1d2",
+        "d4g4",
+        "b4b5",
+        "d4d7",
+        "a2a4"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    },
+    {
+      "n": 3,
+      "titulo": "Torre atrás do peão",
+      "ply": 48,
+      "fen": "2r3k1/p1q2ppp/1p2p3/8/1PPQ4/6P1/P4P1P/3R2K1 w - - 1 25",
+      "lado": "brancas",
+      "pergunta": "O seu peão de c4 vai avançar. Onde a torre de d1 o apoia sem ficar na frente dele?",
+      "san": "Rc1",
+      "uci": "d1c1",
+      "desafioFinal": false,
+      "ideia": "25.Tc1! põe a torre atrás do peão c. Quanto mais o peão anda, mais casas a torre controla na coluna.",
+      "feedback": "Uma torre na frente do peão tapa o caminho dele. Atrás, ela apoia de longe e ganha espaço a cada avanço.",
+      "alternativas": "25.Dd3 mantém a dama ativa, mas não prepara o avanço do peão c.",
+      "alternativasBoas": [
+        "h2h4",
+        "a2a3",
+        "d4c3",
+        "h2h3",
+        "c4c5",
+        "d4d3",
+        "d4e4",
+        "a2a4"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    },
+    {
+      "n": 4,
+      "titulo": "Avançar antes do bloqueio",
+      "ply": 52,
+      "fen": "3r1k2/p1q2ppp/1p2p3/8/1PP5/4Q1P1/P4P1P/2R3K1 w - - 5 27",
+      "lado": "brancas",
+      "pergunta": "Suas peças estão prontas: torre atrás do peão, rei com casa de fuga. Qual peão avança e força uma troca?",
+      "san": "c5",
+      "uci": "c4c5",
+      "desafioFinal": false,
+      "ideia": "27.c5! força 27...bxc5. Depois de 29.bxc5, o peão de c5 não tem peão preto à frente nem ao lado.",
+      "feedback": "Se o adversário bloquear tudo, os seus peões ficam parados. Quando o avanço é seguro, use a chance.",
+      "alternativas": "27.Rg2 é seguro, mas dá mais tempo para as pretas organizarem o bloqueio.",
+      "alternativasBoas": [
+        "e3e4",
+        "h2h4",
+        "h2h3",
+        "b4b5",
+        "a2a3",
+        "e3c3",
+        "g1g2",
+        "e3e1",
+        "e3a3",
+        "e3b3"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    },
+    {
+      "n": 5,
+      "titulo": "O lance intermediário",
+      "ply": 54,
+      "fen": "3r1k2/p1q2ppp/4p3/2p5/1P6/4Q1P1/P4P1P/2R3K1 w - - 0 28",
+      "lado": "brancas",
+      "pergunta": "Antes de retomar em c5, repare: esse peão preto não pode fugir. Que lance de dama cria uma ameaça primeiro?",
+      "san": "Qe4",
+      "uci": "e3e4",
+      "desafioFinal": false,
+      "ideia": "28.De4! ataca h7 e a diagonal até a8. O peão de c5 espera: se 28...cxb4, a torre toma a dama em c7.",
+      "feedback": "Retomar logo não é erro. Mas antes veja: o peão de c5 está cravado na dama de c7, então dá tempo de ameaçar algo.",
+      "alternativas": "Retomar na hora com 28.bxc5 ou 28.Dxc5+ também mantém a vantagem.",
+      "alternativasBoas": [
+        "e3c5",
+        "b4c5"
+      ],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 6,
+      "titulo": "Tirar a casa da defesa",
+      "ply": 60,
+      "fen": "8/p1q2pkp/2P1p1p1/3r4/4Q3/6P1/P4P1P/2R3K1 w - - 1 31",
+      "lado": "brancas",
+      "pergunta": "Antes de empurrar o peão de c6, pergunte: que casa a torre preta de d5 usaria para se defender? Que avanço pequeno a tira?",
+      "san": "a4",
+      "uci": "a2a4",
+      "desafioFinal": false,
+      "ideia": "31.a4! controla b5 e tira essa casa da torre preta. Primeiro Capablanca fecha o caminho da defesa; depois empurra o peão.",
+      "feedback": "Não olhe só para o seu plano. Veja por quais casas a torre preta chegaria perto do seu peão de c6.",
+      "alternativas": "Lances de dama como 31.Df3 ou 31.Db4 também mantêm a vantagem.",
+      "alternativasBoas": [
+        "e4f3",
+        "e4b4",
+        "g1g2",
+        "h2h4",
+        "e4e2",
+        "e4b1",
+        "e4c2",
+        "c1c4",
+        "a2a3",
+        "h2h3",
+        "c1c3",
+        "e4g4",
+        "e4a4",
+        "g1f1",
+        "g1h1",
+        "e4e1",
+        "e4c4",
+        "e4e3",
+        "c1c2",
+        "e4h4",
+        "e4h1",
+        "e4g2"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    },
+    {
+      "n": 7,
+      "titulo": "Tirar quem ataca o peão",
+      "ply": 64,
+      "fen": "8/p1q3kp/2Prppp1/4Q3/P7/6P1/5P1P/2R3K1 w - - 0 33",
+      "lado": "brancas",
+      "pergunta": "Sua dama está atacada pelo peão de f6. Quem ataca o seu peão de c6, e quem está na frente dele?",
+      "san": "Qxd6",
+      "uci": "e5d6",
+      "desafioFinal": true,
+      "ideia": "33.Dxd6! tira a torre que atacava c6. Depois de 33...Dxd6, a dama preta sai de c7, e 34.c7 não pode mais ser parado.",
+      "feedback": "Não conte só o material. Veja qual peça preta ataca o seu peão, e o que acontece se ela sumir.",
+      "alternativas": "33.Dc5 salva a dama, mas as pretas ganham tempo para cercar o peão. A entrega decide na hora.",
+      "alternativasBoas": [],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    }
+  ]
+}

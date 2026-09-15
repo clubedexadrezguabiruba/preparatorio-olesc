@@ -1,0 +1,165 @@
+{
+  "slug": "blackburne-blanchard",
+  "intro": [
+    "Londres, 1891. Blackburne jogava várias partidas ao mesmo tempo, sem ver os tabuleiros: uma simultânea às cegas.",
+    "O ataque dele não começa com um sacrifício. Primeiro ele ocupa o centro, desenvolve, faz o roque e põe a torre na coluna aberta.",
+    "Só depois ele abre o rei preto. Observe em que lance o ataque fica pronto.",
+    "O fim traz um padrão de mate que você vai ver muitas vezes: dama e cavalo contra h7 e f7."
+  ],
+  "objetivos": [
+    "Perceber quando o ataque está pronto: suas peças chegam ao rei logo depois do sacrifício.",
+    "Abrir o escudo de peões do rei com um sacrifício de bispo em h6.",
+    "Trazer peças novas com ameaça, em vez de mover sempre a mesma.",
+    "Dar o mate de dama e cavalo em h7 e f7."
+  ],
+  "momentoFinal": [
+    "16.Txf7! entrega a torre. O rei não pode tomar, porque o cavalo de g5 cobre f7.",
+    "Depois de 16...Bxf7, a dama dá xeque em h7 com o apoio do cavalo. O rei só tem f8.",
+    "Então 18.Dxf7#: a dama toma o bispo, de novo protegida pelo cavalo, e cobre g8, g7 e e7. A torre de e8 tapa a última casa.",
+    "Um cavalo em g5 cobre h7 e f7 ao mesmo tempo. Com a dama perto, essas duas casas viram casas de mate."
+  ],
+  "resumo": [
+    "Prepare antes de sacrificar: centro, roque, torres ligadas e peças apontadas para o rei.",
+    "Antes de abrir o rei, confira se a dama entra logo depois da troca.",
+    "Cavalo em g5 e dama por perto: procure o mate em h7 ou em f7."
+  ],
+  "perguntas": [
+    "Por que 10.O-O vem antes de 13.Bxh6?",
+    "Depois de 15.Cg5, qual lance de dama dava mate se as pretas não fizessem nada?",
+    "Por que o rei preto não pode tomar a torre depois de 16.Txf7?"
+  ],
+  "fonte": {
+    "slug": "chernev-logical-chess-1957",
+    "referencia": "Game 4, pp. 29–35"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "5.d4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "9...h6",
+      "simbolo": "?!"
+    },
+    {
+      "lance": "11.Rb1",
+      "simbolo": "!"
+    },
+    {
+      "lance": "12.Qd2",
+      "simbolo": "!"
+    },
+    {
+      "lance": "12...O-O",
+      "simbolo": "?"
+    },
+    {
+      "lance": "13.Bxh6",
+      "simbolo": "!"
+    },
+    {
+      "lance": "15.Ng5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "16.Rxf7",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [
+    {
+      "onde": "narração, bloco 12...O-O? 13.Bxh6! gxh6 14.Qxh6",
+      "ficha": "O rei preto roçou para o lado onde o peão h já avançou.",
+      "correcao": "\"fez o roque\", não \"roçou\"."
+    },
+    {
+      "onde": "Desafio final (16.Rxf7), feedback para erro",
+      "ficha": "Depois de 16.Rxf7! Bxf7, vem 17.Qh7+ Kf8 18.Qxf7#.",
+      "correcao": "O feedback de erro entregava o lance esperado e a sequência inteira. Passou a apontar as casas f7 e h7 sem dar o lance."
+    }
+  ],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "Abrir o escudo do rei",
+      "ply": 24,
+      "fen": "r2q1rk1/p1p1npp1/1pn1b2p/3pP3/3P1B2/2PB1N2/P1PQ2PP/1R3RK1 w - - 2 13",
+      "lado": "brancas",
+      "pergunta": "O rei preto fez o roque do lado em que o peão h já avançou. Como abrir esse lado para a sua dama entrar?",
+      "san": "Bxh6",
+      "uci": "f4h6",
+      "desafioFinal": false,
+      "ideia": "13.Bxh6! abre o escudo do rei. Se 13...gxh6, a dama toma em h6 e fica colada no rei preto.",
+      "feedback": "Antes de entregar uma peça, confira a resposta. Se as pretas tomarem, sua dama chega logo à casa aberta?",
+      "alternativas": "13.Cg5 também olha para o rei, mas deixa as pretas se defenderem. O bispo em h6 abre o rei na hora.",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 2,
+      "titulo": "Trazer mais um atacante",
+      "ply": 28,
+      "fen": "r2q1rk1/p1p2p2/1pn1b1nQ/3pP3/3P4/2PB1N2/P1P3PP/1R3RK1 w - - 1 15",
+      "lado": "brancas",
+      "pergunta": "Sua dama em h6 quer dar mate em h7, mas lá ela não tem apoio. Qual peça sua pode proteger h7?",
+      "san": "Ng5",
+      "uci": "f3g5",
+      "desafioFinal": false,
+      "ideia": "15.Cg5! protege h7. A ameaça é 16.Dh7#, porque a torre de f8 tapa a fuga do rei.",
+      "feedback": "O bispo de d3 não alcança h7: o cavalo de g6 fecha a diagonal. Procure outra peça que chegue a proteger h7.",
+      "alternativas": "",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 3,
+      "titulo": "O sacrifício que abre f7",
+      "ply": 30,
+      "fen": "r2qr1k1/p1p2p2/1pn1b1nQ/3pP1N1/3P4/2PB4/P1P3PP/1R3RK1 w - - 3 16",
+      "lado": "brancas",
+      "pergunta": "15...Te8 deu a casa f8 ao rei. Suas peças já apontam para ele. Qual sacrifício começa o mate?",
+      "san": "Rxf7",
+      "uci": "f1f7",
+      "desafioFinal": true,
+      "ideia": "16.Txf7! O rei não pode tomar, porque o cavalo de g5 cobre f7. Se 16...Bxf7, a dama dá mate em dois lances.",
+      "feedback": "Olhe f7 e h7: o cavalo de g5 cobre as duas. Que lance obriga uma peça preta a ir para f7, onde a dama pode tomar?",
+      "alternativas": "16.Dh7+ também dá mate em três: Rf8, Cxe6+ Txe6 e Dxf7#. É o mesmo mate em f7, em outra ordem.",
+      "alternativasBoas": [
+        "h6h7"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev + ADAPTAÇÃO DIDÁTICA DO PROJETO"
+    },
+    {
+      "n": 4,
+      "titulo": "Xeque com o apoio do cavalo",
+      "ply": 32,
+      "fen": "r2qr1k1/p1p2b2/1pn3nQ/3pP1N1/3P4/2PB4/P1P3PP/1R4K1 w - - 0 17",
+      "lado": "brancas",
+      "pergunta": "O cavalo de g5 cobre duas casas coladas no rei preto. Qual xeque de dama usa esse apoio?",
+      "san": "Qh7+",
+      "uci": "h6h7",
+      "desafioFinal": false,
+      "ideia": "17.Dh7+ O rei não pode tomar a dama, porque o cavalo protege h7. Ele só tem f8, e a dama já olha para f7.",
+      "feedback": "Um xeque sem apoio perde a dama. Procure a casa colada no rei que o cavalo de g5 protege.",
+      "alternativas": "",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 5,
+      "titulo": "Mate de dama e cavalo em f7",
+      "ply": 34,
+      "fen": "r2qrk2/p1p2b1Q/1pn3n1/3pP1N1/3P4/2PB4/P1P3PP/1R4K1 w - - 2 18",
+      "lado": "brancas",
+      "pergunta": "O rei preto está em f8. Qual captura da dama, com o apoio do cavalo, dá mate?",
+      "san": "Qxf7#",
+      "uci": "h7f7",
+      "desafioFinal": false,
+      "ideia": "18.Dxf7#. O cavalo protege a dama. Ela cobre g8, g7 e e7, e a torre de e8 tapa a última casa do rei.",
+      "feedback": "Conte as casas do rei em f8. Qual casa colada nele o cavalo de g5 protege?",
+      "alternativas": "",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    }
+  ]
+}

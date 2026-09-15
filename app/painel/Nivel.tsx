@@ -57,13 +57,14 @@ export function Modulos({
   return (
     <section aria-labelledby="modulos" className="flex flex-col gap-3">
       <h2 id="modulos" className="rotulo text-tinta-fraca">
-        O degrau, em três frentes
+        O nível, em quatro frentes
       </h2>
 
-      {/* Grade no desktop, empilhados no celular: três cartões numa coluna de
-          360 px viram três telas de rolagem, e três numa de 1366 px viram uma
-          coluna estreita com dois terços de vazio ao lado. */}
-      <ul className="grid gap-3 sm:grid-cols-3">
+      {/* Grade no desktop, empilhados no celular: quatro cartões numa coluna de
+          360 px viram quatro telas de rolagem, e numa de 1366 px uma coluna
+          estreita deixaria três quartos de vazio ao lado. Duas por linha no
+          tablet, as quatro juntas a partir de 1024 px. */}
+      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Modulo
           nome="Tática"
           href="/tatica"
@@ -110,6 +111,24 @@ export function Modulos({
               : "Quaisquer linhas — quem adiantou repertório atravessa de graça."
           }
           alerta={linhasARevisar > 0}
+        />
+        <Modulo
+          nome="Partidas"
+          href="/partidas"
+          feitos={fechamento.partidas.feitas}
+          de={fechamento.partidas.exigidas}
+          conta={
+            fechamento.partidas.exigidas === 0
+              ? "nenhuma ainda"
+              : `${fechamento.partidas.feitas} de ${fechamento.partidas.exigidas} ${
+                  fechamento.partidas.exigidas === 1 ? "partida" : "partidas"
+                }`
+          }
+          nota={
+            fechamento.partidas.publicadas < fechamento.partidas.declaradas
+              ? `${fechamento.partidas.publicadas} de ${fechamento.partidas.declaradas} partidas publicadas — o nível fecha com o que existe hoje.`
+              : "Cada partida conta quando você acerta o Desafio final de primeira."
+          }
         />
       </ul>
     </section>

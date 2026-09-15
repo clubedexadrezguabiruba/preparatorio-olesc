@@ -1,0 +1,194 @@
+{
+  "slug": "averbakh-sarvarov",
+  "intro": [
+    "Averbakh × Sarvarov, Campeonato Soviético por Equipes, Moscou, 1959. Você joga com as brancas de Yuri Averbakh.",
+    "Os reis vão rocar em lados opostos. Quando isso acontece, os peões podem correr contra o rei adversário.",
+    "Mas esse peão não corre para promover. Ele corre para abrir linhas para a dama e as torres.",
+    "Observe quem abre o rei adversário primeiro — e o que cada entrega de material compra."
+  ],
+  "objetivos": [
+    "Reconhecer o plano quando os reis rocam em lados opostos.",
+    "Usar peões para abrir linhas contra o rei adversário.",
+    "Entregar material só quando outra peça está pronta para usar a linha aberta.",
+    "Seguir com lances que ameaçam o rei, em vez de recuperar material cedo demais."
+  ],
+  "momentoFinal": [
+    "Depois de 22.Tg6!, a ameaça é Th6, mate. As pretas só se defendem com 22...Dd6.",
+    "A dama preta foi obrigada a entrar na defesa, e 23.Txd6! a captura.",
+    "Averbakh não para aí: 24.Cg6+ e 26.Cf8+ seguem com xeque, e o rei preto nunca se reorganiza.",
+    "Depois de 28.De7, a dama ataca b7 e g7 ao mesmo tempo, e Sarvarov abandona."
+  ],
+  "resumo": [
+    "Com os reis em lados opostos, os peões correm contra o rei adversário.",
+    "O peão de ataque serve para abrir linhas para a dama e as torres.",
+    "Entregue material só quando souber qual peça vai usar a linha aberta."
+  ],
+  "perguntas": [
+    "Por que 11.O-O-O muda o plano dos peões das brancas?",
+    "O que 20.Txg7! consegue, além de entregar uma torre?",
+    "Por que 22.Tg6! obriga a dama preta a entrar na defesa?"
+  ],
+  "fonte": {
+    "slug": "giddins-50-lessons-2006",
+    "referencia": "Game 1, pp. 9–10"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "11.O-O-O",
+      "simbolo": "!"
+    },
+    {
+      "lance": "11...b5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "16.Bxh7+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "17.g6",
+      "simbolo": "!"
+    },
+    {
+      "lance": "20.Rxg7",
+      "simbolo": "!"
+    },
+    {
+      "lance": "22.Rg6",
+      "simbolo": "!"
+    },
+    {
+      "lance": "23.Rxd6",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [
+    {
+      "onde": "Desafio final",
+      "ficha": "O Desafio final era 23.Rxd6, a captura da dama preta.",
+      "correcao": "Decisão da curadoria: o Desafio final passou a ser 22.Rg6!, o lance sem xeque que ameaça Rh6#. 23.Rxd6 é consequência forçada e ficou na narração."
+    },
+    {
+      "onde": "Momento 'A corrida começa' (11...b5)",
+      "ficha": "Pedia ao aluno o lance 11...b5, das pretas.",
+      "correcao": "Saiu: o aluno joga de brancas. O símbolo 11...b5! continua no PGN."
+    },
+    {
+      "onde": "Autoria dos momentos",
+      "ficha": "O rótulo vinha colado a restos de edição: 'PARÁFRASE FIEL — Steve Giddins]; FEN validado contra o PGN v4.'",
+      "correcao": "Rótulo limpo, só com a autoria."
+    }
+  ],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "Reis em lados opostos",
+      "ply": 20,
+      "fen": "r1bqrnk1/pp2bppp/2p2n2/3p4/3P1B2/2NBPN1P/PPQ2PP1/R3K2R w KQ - 1 11",
+      "lado": "brancas",
+      "pergunta": "O rei preto está em g8. Onde você põe o seu rei para que os peões g e h fiquem livres para avançar?",
+      "san": "O-O-O",
+      "uci": "e1c1",
+      "desafioFinal": false,
+      "ideia": "Com o roque grande, o rei vai para c1, longe do rei preto. Agora os peões g e h podem avançar sem expor o rei branco.",
+      "feedback": "Olhe onde está o rei preto. Se o seu rei ficar do outro lado do tabuleiro, os peões perto do rei preto viram atacantes.",
+      "alternativas": "O roque pequeno também é bom, mas põe os dois reis do mesmo lado. Aí, avançar os peões g e h expõe o seu próprio rei.",
+      "alternativasBoas": [
+        "a1b1",
+        "f4g3",
+        "a1c1",
+        "f4h2",
+        "a1d1",
+        "e1g1",
+        "f4e5",
+        "a2a3",
+        "b2b3",
+        "f3g5",
+        "a2a4",
+        "f3d2",
+        "c2d1",
+        "f3e5",
+        "c2a4",
+        "d3e2",
+        "c2b3",
+        "f4g5",
+        "c3e2",
+        "c2b1",
+        "c2d2",
+        "c2c1",
+        "c3b1",
+        "c3a4",
+        "g2g4",
+        "d3f1",
+        "c3d1",
+        "g2g3",
+        "c2e2"
+      ],
+      "autoria": "PARÁFRASE FIEL — Steve Giddins"
+    },
+    {
+      "n": 2,
+      "titulo": "Entregar o bispo em h7",
+      "ply": 30,
+      "fen": "r2qrnk1/1b2bppp/2p5/1p1pN1Pn/p2P1B2/2NBP2P/PPQ2P2/2K3RR w - - 1 16",
+      "lado": "brancas",
+      "pergunta": "O peão g5 quer avançar, mas o cavalo de f8 cobre g6 e h7. Que entrega com xeque tira esse cavalo de f8?",
+      "san": "Bxh7+",
+      "uci": "d3h7",
+      "desafioFinal": false,
+      "ideia": "16.Bxh7+! puxa o cavalo de f8 para h7. Ali ele não cobre mais g6, e o peão g avança atacando.",
+      "feedback": "Não entregue só porque o rei está perto. Pergunte qual defensor sai do lugar e qual casa fica livre para o peão g.",
+      "alternativas": "Um lance lento, como Rb1, dá tempo às pretas de abrir o seu rei com os peões a e b.",
+      "alternativasBoas": [],
+      "autoria": "PARÁFRASE FIEL — Steve Giddins"
+    },
+    {
+      "n": 3,
+      "titulo": "Continuar sem parar",
+      "ply": 32,
+      "fen": "r2qr1k1/1b2bppn/2p5/1p1pN1Pn/p2P1B2/2N1P2P/PPQ2P2/2K3RR w - - 0 17",
+      "lado": "brancas",
+      "pergunta": "Você entregou o bispo, e o cavalo foi para h7. Que avanço ataca duas coisas perto do rei preto de uma vez?",
+      "san": "g6",
+      "uci": "g5g6",
+      "desafioFinal": false,
+      "ideia": "17.g6! ataca f7 e o cavalo de h7. Depois de 17...fxg6, a dama entra em g6, colada no rei.",
+      "feedback": "Depois de entregar material, um lance lento dá tempo à defesa. Procure um lance que ataque alguma coisa agora.",
+      "alternativas": "",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins"
+    },
+    {
+      "n": 4,
+      "titulo": "Abrir a coluna g",
+      "ply": 38,
+      "fen": "r2qr2k/1b2bQp1/2p2n2/1p1pN2n/p2P1B2/2N1P2P/PP3P2/2K3RR w - - 3 20",
+      "lado": "brancas",
+      "pergunta": "Suas torres estão em g1 e h1, e só o peão de g7 fecha a coluna g. Que entrega abre essa coluna?",
+      "san": "Rxg7",
+      "uci": "g1g7",
+      "desafioFinal": false,
+      "ideia": "20.Txg7! dá a torre pelo peão. Depois de 20...Cxg7, a torre de h1 chega a g1 pela coluna aberta.",
+      "feedback": "Conte quem entra na coluna g depois da troca. Se há uma segunda torre pronta, entregar a primeira pode valer.",
+      "alternativas": "20.Bh6 também ataca, mas dá às pretas mais tempo para se defender.",
+      "alternativasBoas": [],
+      "autoria": "PARÁFRASE FIEL — Steve Giddins"
+    },
+    {
+      "n": 5,
+      "titulo": "A ameaça sem xeque",
+      "ply": 42,
+      "fen": "r2qr2k/1b2bQn1/2p5/1p1pN2n/p2P1B2/2N1P2P/PP3P2/2K3R1 w - - 2 22",
+      "lado": "brancas",
+      "pergunta": "O rei preto está em h8, e sua dama cobre g8. Que lance de torre, sem xeque, prepara um mate na coluna h?",
+      "san": "Rg6",
+      "uci": "g1g6",
+      "desafioFinal": true,
+      "ideia": "22.Tg6! ameaça Th6, mate. A única defesa é 22...Dd6, e 23.Txd6! toma a dama.",
+      "feedback": "Não procure só xeques. Veja em que casa uma torre daria mate no rei de h8, e como chegar lá num lance.",
+      "alternativas": "22.Bh6 também é forte, mas dá às pretas um lance a mais para se defender.",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins"
+    }
+  ]
+}

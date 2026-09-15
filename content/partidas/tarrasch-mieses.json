@@ -1,0 +1,211 @@
+{
+  "slug": "tarrasch-mieses",
+  "intro": [
+    "Siegbert Tarrasch contra Jacques Mieses, Gotemburgo, 1920. A dama preta sai cedo, e Tarrasch desenvolve atacando a dama.",
+    "As damas saem do tabuleiro no lance 12. Sem elas, o rei branco fica no centro e ainda ajuda as peças.",
+    "Observe os dois cavalos brancos. Um xeque abre caminho para um garfo, e depois o rei branco dá um xeque descoberto."
+  ],
+  "objetivos": [
+    "Desenvolver uma peça atacando a dama adversária.",
+    "Achar o xeque de cavalo que prepara um garfo.",
+    "Usar o xeque descoberto: o rei sai da frente, e a torre dá xeque.",
+    "Conferir os xeques do adversário antes de avançar um peão."
+  ],
+  "momentoFinal": [
+    "Depois de 40...Cd7+, o rei branco está em xeque. Tarrasch responde 41.Txd7+!, trocando a torre pelo cavalo.",
+    "Sem torres, o cavalo de a7 sozinho não segura os peões brancos de a6, b4 e c4.",
+    "O último lance não é bonito, mas é o que a posição pede. Mieses abandona."
+  ],
+  "resumo": [
+    "Desenvolva atacando: 3.Cc3 ganha tempo sobre a dama que saiu cedo.",
+    "Rei e torre a um salto de cavalo da mesma casa são alvo de garfo.",
+    "Sem damas, o rei é peça de ataque. Aqui ele até deu xeque descoberto."
+  ],
+  "perguntas": [
+    "O que Tarrasch ganha com 3.Cc3, além de atacar a dama?",
+    "Depois de 13...O-O-O, por que o rei e a torre pretos viraram alvo dos cavalos?",
+    "Em 19.Rd3+, qual peça dá o xeque? E por que o rei branco pode andar assim no meio do tabuleiro?"
+  ],
+  "fonte": {
+    "slug": "chernev-logical-chess-1957",
+    "referencia": "Game 28, pp. 197–206"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "3.Nc3",
+      "simbolo": "!"
+    },
+    {
+      "lance": "4.d4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "5.Nf3",
+      "simbolo": "!"
+    },
+    {
+      "lance": "9.Ncb5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "13.Rhe1",
+      "simbolo": "!"
+    },
+    {
+      "lance": "14.Nxa7+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "15.Nac6+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "18.Rad1+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "25.a4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "27.Rd3",
+      "simbolo": "!"
+    },
+    {
+      "lance": "41.Rxd7+",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [
+    {
+      "onde": "Desafio final e o momento final",
+      "ficha": "41.Rxd7+ remove o último bloqueador importante; retirar a peça que ainda bloqueia os peões",
+      "correcao": "O cavalo de d7 não bloqueava peão nenhum: ele dava xeque. 41.Txd7+ responde ao xeque trocando a torre pelo cavalo, e o final sem torres é ganho (Stockfish do projeto, +7,7)."
+    }
+  ],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "A torre atrás do rei",
+      "ply": 24,
+      "fen": "r3k1nr/ppp2ppp/n7/1N6/3N4/8/PPP1KPPP/R6R w kq - 1 13",
+      "lado": "brancas",
+      "pergunta": "O rei preto ainda está em e8, na coluna do seu rei. Qual torre vai para trás do seu rei? A de a1 tem trabalho na coluna d.",
+      "san": "Rhe1",
+      "uci": "h1e1",
+      "desafioFinal": false,
+      "ideia": "Com a torre em e1, um passo do rei branco para o lado dá xeque descoberto. O rei preto não fica tranquilo em e8.",
+      "feedback": "Sem damas, o rei em e2 não corre perigo. Procure a torre que chega à coluna do rei preto sem atrapalhar a outra.",
+      "alternativas": "13.Tae1 também põe uma torre na coluna e. Mas a torre de a1 vai ser útil na coluna d.",
+      "alternativasBoas": [],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    },
+    {
+      "n": 2,
+      "titulo": "O xeque que abre o garfo",
+      "ply": 28,
+      "fen": "1k1r2nr/Npp2ppp/n7/8/3N4/8/PPP1KPPP/R3R3 w - - 1 15",
+      "lado": "brancas",
+      "pergunta": "O rei preto em b8 e a torre em d8 estão a um salto de cavalo da casa c6. Qual xeque prepara um garfo ali?",
+      "san": "Nac6+",
+      "uci": "a7c6",
+      "desafioFinal": false,
+      "ideia": "Se 15...bxc6, o outro cavalo recaptura em c6 com xeque e ataca rei e torre ao mesmo tempo. É o garfo.",
+      "feedback": "Não salve o cavalo de a7 por reflexo. Procure a casa de onde um cavalo ataca b8 e d8 juntos.",
+      "alternativas": "15.Cdc6+ vale o mesmo: os cavalos trocam de papel, e o garfo é igual.",
+      "alternativasBoas": [
+        "d4c6"
+      ],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 3,
+      "titulo": "Coluna aberta com xeque",
+      "ply": 34,
+      "fen": "3k2nr/2p2ppp/n7/8/8/8/PPP1KPPP/R3R3 w - - 0 18",
+      "lado": "brancas",
+      "pergunta": "O rei preto está em d8, numa coluna aberta. Qual torre chega a essa coluna com xeque?",
+      "san": "Rad1+",
+      "uci": "a1d1",
+      "desafioFinal": false,
+      "ideia": "A torre ocupa a coluna d com xeque. As pretas gastam o lance com o rei, e a torre fica ativa.",
+      "feedback": "Depois de ganhar material, mantenha as peças ativas. Um xeque que também ocupa uma coluna faz dois trabalhos.",
+      "alternativas": "Lances calmos como 18.Rd1 ou 18.a4 também mantêm a vantagem. O xeque da partida ganha tempo e ocupa a coluna aberta.",
+      "alternativasBoas": [
+        "e2d1",
+        "a2a4",
+        "e2f1",
+        "c2c4",
+        "e2d2",
+        "f2f3",
+        "c2c3",
+        "a2a3",
+        "a1b1",
+        "e2d3"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    },
+    {
+      "n": 4,
+      "titulo": "O xeque descoberto do rei",
+      "ply": 36,
+      "fen": "4k1nr/2p2ppp/n7/8/8/8/PPP1KPPP/3RR3 w - - 2 19",
+      "lado": "brancas",
+      "pergunta": "Entre a sua torre de e1 e o rei preto, só está o seu rei. Qual lance dá xeque e leva o rei rumo à ala da dama?",
+      "san": "Kd3+",
+      "uci": "e2d3",
+      "desafioFinal": false,
+      "ideia": "O rei sai da coluna e, e a torre de e1 dá xeque. É um xeque descoberto: o rei anda sem perder tempo, rumo a c4.",
+      "feedback": "Quem está entre a torre de e1 e o rei preto? Se essa peça sair da coluna, a torre dá xeque.",
+      "alternativas": "Outros passos do rei também dão xeque. Rd3 é o que leva o rei para perto do cavalo de a6.",
+      "alternativasBoas": [
+        "c2c3",
+        "a2a3",
+        "d1d4",
+        "d1d3",
+        "e2f1",
+        "a2a4",
+        "e2f3"
+      ],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 5,
+      "titulo": "Avançar sem cair no garfo",
+      "ply": 48,
+      "fen": "7r/2p1nkp1/2n2p2/7p/1PK2P2/4R3/P1P3PP/4R3 w - - 1 25",
+      "lado": "brancas",
+      "pergunta": "Você quer criar um peão passado na ala da dama. Qual avanço prepara isso sem dar xeques ao cavalo de c6?",
+      "san": "a4",
+      "uci": "a2a4",
+      "desafioFinal": false,
+      "ideia": "O peão de a avança sem atacar o cavalo. Com 25.b5?, viria Ca5+ 26.Rb4 Cd5+: garfo no rei e na torre de e3.",
+      "feedback": "Mesmo ganhando, confira os xeques do adversário. Se um peão atacar o cavalo de c6, para onde ele salta?",
+      "alternativas": "Lances calmos de torre ou de rei também mantêm a vantagem. O lance a evitar é 25.b5?, que joga fora a vantagem.",
+      "alternativasBoas": [
+        "e3d3",
+        "e1d1",
+        "e3e2",
+        "c2c3",
+        "c4c5"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    },
+    {
+      "n": 6,
+      "titulo": "O último golpe",
+      "ply": 80,
+      "fen": "8/n1knR3/P1p2pp1/2K4p/1PP2P2/6P1/7P/8 w - - 11 41",
+      "lado": "brancas",
+      "pergunta": "O cavalo de d7 dá xeque no seu rei. Qual resposta troca material e deixa um final ganho?",
+      "san": "Rxd7+",
+      "uci": "e7d7",
+      "desafioFinal": true,
+      "ideia": "A torre toma o cavalo que dava xeque. Sem torres, o cavalo de a7 sozinho não segura os peões brancos da ala da dama.",
+      "feedback": "Antes de fugir com o rei, conte o material depois de cada resposta. Veja quem fica com os peões mais perto de virar dama.",
+      "alternativas": "Fugir com 41.Rd4 deixa as brancas melhor, mas a troca ganha com muito mais facilidade.",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    }
+  ]
+}

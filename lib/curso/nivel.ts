@@ -1,6 +1,7 @@
 import { aprendeu, AULA_ZERADA, trilhaCompleta, type AulaDaTrilha, type ProgressoDaAula } from "../finais/trilha.ts";
 import { BLOCOS } from "../tatica/blocos.ts";
 import { etapaAtual, type Feitos } from "../tatica/serie.ts";
+import { partidasDoNivel } from "../partidas/curadoria.ts";
 
 /**
  * A escada de níveis — o eixo do site, no lugar do calendário.
@@ -64,6 +65,15 @@ export type DescricaoDoNivel = {
    * {@link fechamentoDoNivel}.
    */
   readonly aulasParaFechar: number;
+  /**
+   * Quantas partidas modelo o nível pede — **todas as do nível**, 3 em cada,
+   * pela curadoria aprovada pelo Doug em 15/9/2026 (`docs/PARTIDAS-MODELO.md`).
+   *
+   * Declarado pelo mesmo motivo de `aulasParaFechar`, e cobrado com o mesmo
+   * clamp: `min(partidasParaFechar, publicadas)`. Enquanto nenhuma partida do
+   * nível estiver revisada pelo Doug, o requisito vale zero e não tranca ninguém.
+   */
+  readonly partidasParaFechar: number;
 };
 
 /**
@@ -81,30 +91,35 @@ export const NIVEL: Record<Nivel, DescricaoDoNivel> = {
     fide: [0, 800],
     resumo: "Ver o mate em um lance e não entregar peça de graça.",
     aulasParaFechar: 4,
+    partidasParaFechar: 3,
   },
   2: {
     numero: 2,
     fide: [800, 1000],
     resumo: "Garfo, cravada, espeto, descoberto — o vocabulário que decide partida.",
     aulasParaFechar: 4,
+    partidasParaFechar: 3,
   },
   3: {
     numero: 3,
     fide: [1000, 1200],
     resumo: "Os padrões de mate que se reconhecem de longe.",
     aulasParaFechar: 4,
+    partidasParaFechar: 3,
   },
   4: {
     numero: 4,
     fide: [1200, 1400],
     resumo: "Mates de padrão avançado, e remover quem defende.",
     aulasParaFechar: 4,
+    partidasParaFechar: 3,
   },
   5: {
     numero: 5,
     fide: [1400, null],
     resumo: "Ataque ao rei, lances finos, defesa e conversão.",
     aulasParaFechar: 4,
+    partidasParaFechar: 3,
   },
 };
 
@@ -260,6 +275,19 @@ export type ProgressoParaONivel = {
   readonly baseCompleto: boolean;
   /** As aulas extras publicadas (§22), que contam no nível delas. Ausente = nenhuma. */
   readonly extras?: readonly AulaDaTrilha[];
+  /**
+   * As partidas modelo: as publicadas (revisadas pelo Doug), com o nome, e as que
+   * o aluno concluiu. Ausente = nenhuma publicada, e o requisito vale zero —
+   * é o que mantém válidos os construtores escritos antes das partidas.
+   */
+  readonly partidas?: ProgressoDasPartidas;
+};
+
+export type ProgressoDasPartidas = {
+  /** slug → nome, só das que o aluno pode ver (`[Status "revisado-doug"]`). */
+  readonly publicadas: ReadonlyMap<string, string>;
+  /** Os slugs concluídos: todos os momentos resolvidos e o Desafio final de primeira. */
+  readonly concluidas: ReadonlySet<string>;
 };
 
 export type FechamentoDoNivel = {
@@ -273,6 +301,13 @@ export type FechamentoDoNivel = {
     readonly publicadas: number;
   };
   readonly repertorio: { readonly feitas: number; readonly exigidas: number };
+  /** Os mesmos quatro números dos finais, pelo mesmo clamp. */
+  readonly partidas: {
+    readonly feitas: number;
+    readonly exigidas: number;
+    readonly declaradas: number;
+    readonly publicadas: number;
+  };
   readonly fechado: boolean;
 };
 
@@ -292,8 +327,17 @@ export function temaFechado(feitos: Feitos | undefined): boolean {
   return feitos !== undefined && etapaAtual(feitos) === null;
 }
 
+/** As partidas modelo publicadas do nível, na ordem da curadoria. */
+export function partidasPublicadasDoNivel(n: Nivel, p: ProgressoParaONivel): string[] {
+  return partidasDoNivel(n).filter((slug) => p.partidas?.publicadas.has(slug));
+}
+
 /**
- * As três trilhas do nível, com os números que a tela mostra.
+ * As quatro trilhas do nível, com os números que a tela mostra.
+ *
+ * A quarta, as partidas modelo, entrou em 15/9/2026. **Nível já conquistado não
+ * reabre**: o nível do aluno vem de `nivel_conquistado`, que é log (ver
+ * {@link nivelDoAluno}), e esta função só decide o degrau em que ele está.
  *
  * ## O clamp dos finais, e por que ele não é um remendo
  *
@@ -321,6 +365,11 @@ export function fechamentoDoNivel(n: Nivel, p: ProgressoParaONivel): FechamentoD
     aprendeu(p.comPratica.has(a.id), p.finais.get(a.id) ?? AULA_ZERADA),
   ).length;
 
+  const partidasPublicadas = partidasPublicadasDoNivel(n, p);
+  const partidasDeclaradas = NIVEL[n].partidasParaFechar;
+  const partidasExigidas = Math.min(partidasDeclaradas, partidasPublicadas.length);
+  const partidasFeitas = partidasPublicadas.filter((slug) => p.partidas?.concluidas.has(slug)).length;
+
   const exigidasNoRepertorio = LINHAS_POR_NIVEL * n;
   // O nível 5 chama a função, e não o número: os dois valem 20 hoje, mas se o
   // Base crescer, o número mente sobre o que é "o repertório inteiro".
@@ -331,7 +380,17 @@ export function fechamentoDoNivel(n: Nivel, p: ProgressoParaONivel): FechamentoD
     tatica: { feitos: taticaFeitos, total: temas.length },
     finais: { feitos: finaisFeitos, exigidas, declaradas, publicadas },
     repertorio: { feitas: p.linhasAprendidas, exigidas: exigidasNoRepertorio },
-    fechado: taticaFeitos >= temas.length && finaisFeitos >= exigidas && repertorioOk,
+    partidas: {
+      feitas: partidasFeitas,
+      exigidas: partidasExigidas,
+      declaradas: partidasDeclaradas,
+      publicadas: partidasPublicadas.length,
+    },
+    fechado:
+      taticaFeitos >= temas.length &&
+      finaisFeitos >= exigidas &&
+      repertorioOk &&
+      partidasFeitas >= partidasExigidas,
   };
 }
 
@@ -389,7 +448,7 @@ export function nivelDoAluno(conquistado: 0 | Nivel): Nivel {
  *    vencidos. A fila vem antes de conteúdo novo porque é ela que impede o
  *    "aprendi e esqueci" — e ela mistura **todos os níveis já percorridos**, de
  *    graça, porque já é derivada de todas as linhas de `tentativas_puzzle`.
- * 2. **`tema` / `aula` / `linha`** — o que falta no nível, nesta ordem.
+ * 2. **`tema` / `aula` / `partida` / `linha`** — o que falta no nível, nesta ordem.
  * 3. **`prova-de-nivel`** — a prova é sempre a última coisa do nível. Ela é o
  *    selo, não o exame de admissão, e por construção só sobra quando as três
  *    trilhas fecharam.
@@ -399,6 +458,7 @@ export type ProximoPasso =
   | { readonly tipo: "revisao"; readonly vencidos: number }
   | { readonly tipo: "tema"; readonly tag: string; readonly nome: string; readonly href: string }
   | { readonly tipo: "aula"; readonly id: string; readonly nome: string; readonly href: string }
+  | { readonly tipo: "partida"; readonly slug: string; readonly nome: string; readonly href: string }
   | { readonly tipo: "linha"; readonly faltam: number }
   | { readonly tipo: "prova-de-nivel"; readonly nivel: Nivel }
   | { readonly tipo: "nivel-fechado" };
@@ -431,6 +491,9 @@ export function proximoPasso(
     if (aula) return { tipo: "aula", id: aula.id, nome: aula.nome, href: `/finais/${aula.id}` };
   }
 
+  const partida = proximaPartida(doAluno, p);
+  if (partida) return { tipo: "partida", ...partida };
+
   const faltamLinhas =
     doAluno === 5
       ? p.baseCompleto
@@ -444,4 +507,19 @@ export function proximoPasso(
   }
 
   return { tipo: "nivel-fechado" };
+}
+
+/**
+ * A próxima partida modelo pendente do nível, na ordem da curadoria — ou `null`
+ * quando o requisito das partidas já está cumprido.
+ */
+export function proximaPartida(
+  n: Nivel,
+  p: ProgressoParaONivel,
+): { slug: string; nome: string; href: string } | null {
+  const fecho = fechamentoDoNivel(n, p);
+  if (fecho.partidas.feitas >= fecho.partidas.exigidas) return null;
+  const slug = partidasPublicadasDoNivel(n, p).find((s) => !p.partidas?.concluidas.has(s));
+  if (!slug) return null;
+  return { slug, nome: p.partidas?.publicadas.get(slug) ?? slug, href: `/partidas/${slug}` };
 }

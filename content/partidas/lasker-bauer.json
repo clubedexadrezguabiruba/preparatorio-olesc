@@ -1,0 +1,180 @@
+{
+  "slug": "lasker-bauer",
+  "intro": [
+    "Amsterdã, 1889. Emanuel Lasker, que depois seria campeão do mundo, joga de brancas contra Johann Bauer.",
+    "Lasker entrega os dois bispos, em h7 e em g7, para abrir o rei preto. Esse golpe ficou famoso com o nome desta partida.",
+    "Antes de cada sacrifício, conte quem defende o rei preto e qual peça sua chega no lance seguinte.",
+    "Observe também o fim: o ataque ganha material, mas a partida ainda precisa ser terminada."
+  ],
+  "objetivos": [
+    "Tirar um defensor do rei antes de abrir os peões dele.",
+    "Saber qual é o lance seguinte antes de entregar uma peça.",
+    "Trazer a torre ao ataque pela terceira fileira.",
+    "Achar o ataque duplo que ganha uma peça depois da combinação."
+  ],
+  "momentoFinal": [
+    "O golpe final foi 30.Txf6+! A torre toma o peão de f6 com xeque, e o bispo de g7 precisa tomá-la.",
+    "Depois vêm 31.Dxf6+ e os xeques em h8 e g7. Quando o rei sai da sétima fileira, 34.Dxb7 leva a torre.",
+    "Com dama contra torre, Lasker junta peões. Em 38.Dxd3 a dama tira o último peão preto que avançava, e Bauer abandona."
+  ],
+  "resumo": [
+    "Antes de abrir o rei, tire a peça que o defende: 14.Ch5 tirou o cavalo de f6.",
+    "Um sacrifício contra o rei precisa do lance seguinte pronto — aqui, sempre um xeque da dama.",
+    "Depois de abrir o rei, traga a peça que falta. Foi a torre, por f3 e h3, que ganhou a dama."
+  ],
+  "perguntas": [
+    "Por que 14.Ch5 veio antes dos sacrifícios em h7 e g7?",
+    "Depois de 19.Tf3, o que a torre ameaçava, e por que as pretas jogaram 19...e5?",
+    "Em 22.Dd7, quais peças pretas a dama atacou ao mesmo tempo?"
+  ],
+  "fonte": {
+    "slug": "weeramantry-eusebi-1993",
+    "referencia": "pp. 155–156 [Destructive Sacrifice]"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "14.Nh5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "15.Bxh7+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "17.Bxg7",
+      "simbolo": "!"
+    },
+    {
+      "lance": "19.Rf3",
+      "simbolo": "!"
+    },
+    {
+      "lance": "20.Rh3+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "30.Rxf6+",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [
+    {
+      "onde": "Trainer 5 (20.Rh3+), ideia principal",
+      "ficha": "Usar Rh3+ para manter o rei respondendo e atacar a dama defensora.",
+      "correcao": "Th3+ não ataca a dama de c6. O xeque obriga a dama a se colocar em h6 (ou o bispo em h4), e aí 21.Txh6+ a ganha."
+    },
+    {
+      "onde": "Partida comentada (30.Rxf6+ até 38.Qxd3) e Desafio final antigo",
+      "ficha": "No fim, captura o peão passado em d3.",
+      "correcao": "O peão de d3 não era passado: o peão branco de d2 está na frente dele, e o de c2 o ataca. A narração diz só que a dama tira o último peão preto que avançava."
+    },
+    {
+      "onde": "Partida comentada (15.Bxh7+ Kxh7 16.Qxh5+)",
+      "ficha": "O rei foi puxado para h7 e a dama chega com cheque, mantendo a iniciativa.",
+      "correcao": "Grafia \"xeque\" e sem \"iniciativa\" (palavra fora da régua da voz). O conteúdo foi mantido."
+    }
+  ],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "Trocar o defensor de h7",
+      "ply": 26,
+      "fen": "r4rk1/1b2bppp/ppq1pn2/2ppB3/5P2/1P1BP1N1/P1PPQ1PP/R4RK1 w - - 0 14",
+      "lado": "brancas",
+      "pergunta": "Seu bispo de d3 mira h7, mas o cavalo de f6 defende essa casa. Como você ataca esse cavalo mais uma vez?",
+      "san": "Nh5",
+      "uci": "g3h5",
+      "desafioFinal": false,
+      "ideia": "Em h5 o cavalo ataca f6 junto com o bispo de e5. Depois de 14...Cxh5, só o rei defende h7.",
+      "feedback": "Olhe quem defende h7. Enquanto o cavalo de f6 estiver lá, um sacrifício em h7 não abre nada.",
+      "alternativas": "",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 2,
+      "titulo": "O primeiro bispo em h7",
+      "ply": 28,
+      "fen": "r4rk1/1b2bppp/ppq1p3/2ppB2n/5P2/1P1BP3/P1PPQ1PP/R4RK1 w - - 0 15",
+      "lado": "brancas",
+      "pergunta": "O cavalo saiu de f6, e h7 ficou só com o rei de guarda. Qual captura com xeque abre o roque preto?",
+      "san": "Bxh7+",
+      "uci": "d3h7",
+      "desafioFinal": false,
+      "ideia": "Depois de 15...Rxh7, a dama toma em h5 o cavalo que capturou o seu, com xeque. E o rei fica sem o peão de h7.",
+      "feedback": "Pense no lance seguinte. Se o rei tomar em h7, qual peça sua chega com xeque?",
+      "alternativas": "Tomar logo com 15.Dxh5 só recupera o cavalo. Com o xeque em h7 antes, o rei perde o peão que o cobria.",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 3,
+      "titulo": "O segundo bispo em g7",
+      "ply": 32,
+      "fen": "r4rk1/1b2bpp1/ppq1p3/2ppB2Q/5P2/1P2P3/P1PP2PP/R4RK1 w - - 1 17",
+      "lado": "brancas",
+      "pergunta": "O rei voltou a g8, e só o peão de g7 ainda o cobre. Seu bispo de e5 pode fazer alguma coisa contra isso?",
+      "san": "Bxg7",
+      "uci": "e5g7",
+      "desafioFinal": false,
+      "ideia": "O bispo em g7 ameaça Dh8 mate. Depois de 17...Rxg7, a dama dá xeque em g4 e o rei está sem peões em volta.",
+      "feedback": "Antes de entregar a segunda peça, procure o xeque seguinte. A dama de h5 tem caminho até a coluna g.",
+      "alternativas": "",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 4,
+      "titulo": "A torre pela terceira fileira",
+      "ply": 36,
+      "fen": "r4r2/1b2bp1k/ppq1p3/2pp4/5PQ1/1P2P3/P1PP2PP/R4RK1 w - - 2 19",
+      "lado": "brancas",
+      "pergunta": "Dama e bispos já fizeram a parte deles. Qual peça sua ainda está longe do rei, e por onde ela chega?",
+      "san": "Rf3",
+      "uci": "f1f3",
+      "desafioFinal": false,
+      "ideia": "A torre sobe a f3 e quer ir a h3 com xeque. Ali o rei preto não teria para onde fugir. Por isso as pretas jogam 19...e5.",
+      "feedback": "A dama sozinha não dá mate. Olhe a torre de f1: por qual fileira ela chega à coluna h?",
+      "alternativas": "Dh5+ ou Dh3+ repetem xeques e voltam à mesma posição. Não estragam nada, mas não trazem a peça que falta.",
+      "alternativasBoas": [
+        "g4h5",
+        "g4h3"
+      ],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 5,
+      "titulo": "Chegar com xeque",
+      "ply": 38,
+      "fen": "r4r2/1b2bp1k/ppq5/2ppp3/5PQ1/1P2PR2/P1PP2PP/R5K1 w - - 0 20",
+      "lado": "brancas",
+      "pergunta": "As pretas jogaram ...e5 para a dama poder defender em h6. Qual xeque obriga essa dama a ir para lá?",
+      "san": "Rh3+",
+      "uci": "f3h3",
+      "desafioFinal": false,
+      "ideia": "Depois de 20.Th3+ o rei não se mexe. A dama se põe em h6, e 21.Txh6+ a ganha em troca da torre.",
+      "feedback": "Procure um xeque que as pretas não possam tomar. Na coluna h, o rei preto fica sem casa para fugir.",
+      "alternativas": "",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 6,
+      "titulo": "A dama ataca os dois bispos",
+      "ply": 42,
+      "fen": "r4r2/1b2bp2/pp5k/2ppp3/5PQ1/1P2P3/P1PP2PP/R5K1 w - - 0 22",
+      "lado": "brancas",
+      "pergunta": "O ataque ao rei acabou, e agora a conta é de material. Quais peças pretas estão sem defesa?",
+      "san": "Qd7",
+      "uci": "g4d7",
+      "desafioFinal": true,
+      "ideia": "Em d7 a dama ataca o bispo de e7 e o de b7, os dois sem defesa. As pretas salvam um, e 23.Dxb7 leva o outro.",
+      "feedback": "Não procure outro xeque. Ache as peças pretas que ninguém defende e uma casa que ataque duas delas.",
+      "alternativas": "Dh3+ repete o xeque e volta à mesma posição. Não estraga nada, mas a peça continua sendo ganha em d7.",
+      "alternativasBoas": [
+        "g4h3"
+      ],
+      "autoria": "ANÁLISE DO PROJETO"
+    }
+  ]
+}

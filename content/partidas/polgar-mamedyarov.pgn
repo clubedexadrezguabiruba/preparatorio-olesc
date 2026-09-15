@@ -1,0 +1,35 @@
+[Event "35th Chess Olympiad"]
+[Site "Bled SLO"]
+[Date "2002.10.29"]
+[White "Judit Polgar"]
+[Black "Shakhriyar Mamedyarov"]
+[Result "1-0"]
+[ECO "C80"]
+[Nome "Polgar × Mamedyarov"]
+[Ordem "3"]
+[Nivel "1"]
+[Cor "brancas"]
+[Tema "Xeques e ameaças contra o rei no centro"]
+[FonteSlug "giddins-50-lessons-2006"]
+[Fonte "Steve Giddins, 50 Essential Chess Lessons, Game 3, pp. 14–16"]
+[Status "rascunho"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Nxe4 6. d4 b5 7. Bb3 d5 8. dxe5 Be6
+9. Nbd2 Nc5 10. c3 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] As pretas têm peças ativas e peões avançados na ala da dama.}
+d4 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] Só que o rei preto continua em e8. Isso vira problema quando as linhas abrem e as brancas jogam com ameaças.}
+11. Ng5! {[%autoria PARÁFRASE FIEL — Steve Giddins] Polgar leva o cavalo para g5. Ele ataca o bispo de e6 e mira a casa f7.}
+Bd5 12. Nxf7! {[%autoria PARÁFRASE FIEL — Steve Giddins] Agora o cavalo se entrega em f7, atacando a dama e a torre.}
+Kxf7 {[%autoria PARÁFRASE FIEL — Steve Giddins] O rei toma e fica exposto no centro. Polgar não queria peões: queria esse rei fora de casa.}
+13. Qf3+! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] A dama entra com xeque. As pretas gastam mais um lance só para responder.}
+Ke6 14. Qg4+! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] Mais um xeque. Cada lance do rei é um lance que as pretas não usam para se defender.}
+Kf7 15. Qf5+ Ke7 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] O rei chega a e7, ainda no meio do tabuleiro. A dama e as torres pretas continuam nas casas de origem.}
+16. e6! {[%autoria PARÁFRASE FIEL — Steve Giddins] O peão avança para e6 e se oferece.}
+Bxe6 {[%autoria PARÁFRASE FIEL — Steve Giddins] O bispo toma, e a coluna e fica aberta até o rei.}
+17. Re1! {[%autoria PARÁFRASE FIEL — Steve Giddins] A torre chega a e1 e crava o bispo de e6 contra o rei. Em vez de pegar material, Polgar traz mais uma peça.}
+Qd6 18. Bxe6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] Polgar troca o bispo. O cavalo que retoma em e6 fica cravado do mesmo jeito.}
+Nxe6 19. Ne4! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] O cavalo entra em e4 atacando a dama. Ao sair de d2, ele também abre o caminho do bispo de c1.}
+Qe5 20. Bg5+! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] O bispo de c1 entra com xeque. Agora quase todas as peças brancas estão no ataque.}
+Kd7 21. Nc5+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] O cavalo se entrega em c5 com xeque. Ele tira de f8 o bispo preto, que vigiava a casa e7.}
+Bxc5 22. Qf7+ Kd6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] O rei preto chega a d6. As torres pretas ainda não saíram de a8 e h8.}
+23. Be7+! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins; término histórico conforme relatório 21] Mais um xeque, agora com o bispo. As pretas responderam 23...Rd5 e abandonaram. A partida termina aqui.}
+Kd5 1-0

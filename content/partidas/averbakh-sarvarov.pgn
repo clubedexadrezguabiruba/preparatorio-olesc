@@ -1,0 +1,35 @@
+[Event "6th Soviet Team Championship"]
+[Site "Moscow URS"]
+[Date "1959.08.??"]
+[White "Yuri Averbakh"]
+[Black "M. Sarvarov"]
+[Result "1-0"]
+[ECO "D35"]
+[Nome "Averbakh × Sarvarov"]
+[Ordem "1"]
+[Nivel "5"]
+[Cor "brancas"]
+[Tema "Roques opostos: corrida para abrir o rei"]
+[FonteSlug "giddins-50-lessons-2006"]
+[Fonte "Steve Giddins, 50 Essential Chess Lessons, Game 1, pp. 9–10"]
+[Status "rascunho"]
+
+1. c4 e6 2. d4 d5 3. Nf3 Nf6 4. Nc3 Nbd7 5. cxd5 exd5 6. Bf4 c6 7. Qc2 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] Bispo em f4, dama em c2: as casas entre o rei e a torre de a1 vão ficando livres. Averbakh prepara o roque grande.}
+Be7 8. e3 O-O 9. Bd3 Re8 10. h3 Nf8 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] Até aqui, a posição parece calma. O lado em que cada rei ficar vai decidir o que os peões fazem.}
+11. O-O-O! {[%autoria PARÁFRASE FIEL — Steve Giddins] Roque grande: o rei branco vai para c1, e o preto está em g8. Com os reis em lados opostos, começa uma corrida.}
+b5! {[%autoria PARÁFRASE FIEL — Steve Giddins] Os peões g e h das brancas vão contra o rei preto. Sarvarov responde com 11...b5! contra o rei branco. Quem abrir linhas primeiro sai na frente.}
+12. Ne5 Bb7 13. g4 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] Os dois lados empurram peões na direção do rei adversário. Esses peões não correm para promover: correm para abrir caminho às peças.}
+a5 14. Rdg1 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] A torre de d1 vai para g1. Ela fica atrás do peão g, pronta para a coluna que ele vai abrir.}
+a4 15. g5 Nh5 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] O peão g5 expulsou o cavalo de f6, que foi para h5. Os peões pretos já estão em a4 e b5.}
+16. Bxh7+! {[%autoria PARÁFRASE FIEL — Steve Giddins] Averbakh entrega o bispo para puxar o cavalo de f8 até h7. Em f8, o cavalo cobria g6; em h7, ele vira alvo do peão g.}
+Nxh7 17. g6! {[%autoria PARÁFRASE FIEL — Steve Giddins] 17.g6! ataca f7 e o cavalo de h7 ao mesmo tempo. As pretas tomam o peão, mas abrem a casa g6 para a dama.}
+fxg6 18. Qxg6 {[%autoria PARÁFRASE FIEL — Steve Giddins] A dama entra em g6, colada no rei preto. O bispo foi entregue, mas comprou o caminho até o rei.}
+N7f6 19. Qf7+ Kh8 20. Rxg7! {[%autoria PARÁFRASE FIEL — Steve Giddins] Mais uma entrega: 20.Txg7! dá a torre pelo peão de g7. O objetivo é abrir a coluna g.}
+Nxg7 21. Rg1 {[%autoria PARÁFRASE FIEL — Steve Giddins] A outra torre entra em g1. A entrega só fazia sentido porque havia uma peça atrás, pronta para usar a coluna aberta.}
+Nfh5 22. Rg6! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] 22.Tg6! não dá xeque, mas ameaça Th6. Seria mate: o rei não tem casa, e nenhuma peça preta toma a torre.}
+Qd6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] A única defesa é 22...Dd6. A dama ataca a torre, e se a torre for a h6, a dama toma.}
+23. Rxd6! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] 23.Txd6! toma a dama. O ataque obrigou a defesa a usar a dama, e agora as pretas devolvem material.}
+Bxd6 24. Ng6+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] Averbakh não para para contar peças. 24.Cg6+ continua com xeque, e o rei preto não tem tempo de se organizar.}
+Kh7 25. Bxd6 Re6 26. Nf8+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] 26.Cf8+ é mais um xeque. As pretas tomam o cavalo, e o bispo toma de volta em f8.}
+Rxf8 27. Bxf8 Rf6 28. Qe7 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins] 28.De7 ataca o bispo de b7 e o cavalo de g7 ao mesmo tempo. Sarvarov abandona: vai perder mais uma peça.}
+1-0

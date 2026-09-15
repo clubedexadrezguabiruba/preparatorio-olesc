@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { progressoDasPartidas } from "@/lib/partidas/progresso";
 import Link from "next/link";
 import { sair } from "@/app/entrar/acoes";
 import { Cabecalho } from "@/components/Cabecalho";
@@ -109,6 +110,7 @@ export default async function Painel() {
     indice,
     repertorio,
     conquistado,
+    partidasModelo,
   ] = await Promise.all([
     progressoPorTema(perfil.id),
     tarefasMarcadas(perfil.id),
@@ -129,6 +131,7 @@ export default async function Painel() {
     lerIndice(),
     progressoDoRepertorio(),
     nivelConquistado(perfil.id),
+    progressoDasPartidas(perfil.id),
   ]);
 
   // A trilha de finais: o que está publicado, e o que dele já foi aprendido. As
@@ -194,6 +197,7 @@ export default async function Painel() {
     linhasAprendidas,
     baseCompleto: avancadoLiberado,
     extras,
+    partidas: partidasModelo,
   };
   const fechamento = fechamentoDoNivel(nivel, paraONivel);
   const acao = proximaAcao({

@@ -218,6 +218,14 @@ subagente consegue achar página por busca de texto (teste da §4).
 | 25 | `znosko-middle-game-1930` | Znosko-Borovsky, _The Middle Game in Chess_ | G. Bell and Sons, Londres, 1930 — reimpressão de julho de 1930 do texto de 1922 | 2 | sim (248 pág., 6.576 caracteres) |
 | 26 | `lasker-common-sense-1910` | Lasker, _Common Sense in Chess_ | J. S. Ogilvie, Nova York, [1910] — reimpressão das doze palestras de Londres, 1895 | sem teto | sim (148 pág., 4.926 caracteres) |
 | 27 | `lasker-manual-1927` | Lasker, _Lasker's Manual of Chess_ | E. P. Dutton, Nova York, 1927, com 306 diagramas — versão inglesa do _Lehrbuch des Schachspiels_ (1926) | sem teto | sim (424 pág., 5.953 caracteres) |
+| 28 | `chernev-logical-chess-1957` | Chernev, _Logical Chess: Move by Move_ | Batsford, edição algébrica de 1998 (original de 1957) | protegida | sem arquivo |
+| 29 | `chernev-most-instructive-1965` | Chernev, _The Most Instructive Games of Chess Ever Played_ | não conferida | protegida | sem arquivo |
+| 30 | `weeramantry-eusebi-1993` | Weeramantry & Eusebi, _Best Lessons of a Chess Coach_ | David McKay, 1993 | protegida | sem arquivo |
+| 31 | `giddins-50-lessons-2006` | Giddins, _50 Essential Chess Lessons_ | Gambit Publications, 2006 | protegida | sem arquivo |
+
+**As entradas 28 a 31 são das partidas modelo** (`docs/PARTIDAS-MODELO.md`), registradas em 2026-09-15. Elas
+não dão posição de aula: dão o score e a leitura pedagógica das 15 partidas, com o texto adaptado e a fonte
+citada. Nenhuma tem arquivo em `biblioteca/` — o material de trabalho foram as fichas do projeto de origem.
 
 **As entradas 23 a 25 são o meio-jogo, e são as três primeiras obras do corpus
 que não são de finais.** As trinta dicas de `content/meio-jogo.json` saem delas:

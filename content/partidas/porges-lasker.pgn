@@ -1,0 +1,43 @@
+[Event "Nuremberg"]
+[Site "Nuremberg GER"]
+[Date "1896.07.20"]
+[White "Moritz Porges"]
+[Black "Emanuel Lasker"]
+[Result "0-1"]
+[ECO "C67"]
+[Nome "Porges × Lasker"]
+[Ordem "2"]
+[Nivel "3"]
+[Cor "pretas"]
+[Tema "Cada lance, uma ameaça, até o mate com o peão"]
+[FonteSlug "chernev-most-instructive-1965"]
+[Fonte "Irving Chernev, The Most Instructive Games of Chess Ever Played, Game 13, pp. 64–66"]
+[Status "rascunho"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Nxe4 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 4...Cxe4 aceita o peão. Lasker não vai tentar segurá-lo a qualquer preço.}
+5. d4 Be7 6. Qe2 Nd6 7. Bxc6 bxc6 8. dxe5 Nb7 9. b3 O-O {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Primeiro o rei em segurança. Um peão a mais não ajuda se as peças ficam presas.}
+10. Bb2 d5! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 10...d5! abre o centro e dá espaço às peças pretas.}
+11. exd6 cxd6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] É a primeira ameaça com propósito: o lance mexe no centro e solta várias peças de uma vez.}
+12. Nbd2 Re8! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 12...Te8! leva a torre para a coluna e, no centro.}
+13. Rfe1 Bd7 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O bispo sai da primeira fileira. Lasker não corre atrás de material: põe as peças onde elas criam problemas.}
+14. Ne4?! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 14.Ce4?! foi fraco. Em e4 o cavalo pode ser atacado por um peão, e as pretas ganham tempo.}
+d5! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 14...d5! ataca o cavalo, que precisa recuar.}
+15. Ned2 Ba3! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 15...Ba3! cria outra ameaça, agora contra o bispo de b2.}
+16. Be5 f6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 16...f6 ataca o bispo de novo. As brancas gastam os lances fugindo, e as pretas melhoram as peças.}
+17. Qa6 fxe5 18. Qxa3 e4 19. Nd4 Qf6 20. c3 Rf8 21. f3 Qg5! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 21...Dg5! A dama chega perto do rei branco e ataca o cavalo de d2.}
+22. Qc1 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A dama branca volta para defender. As brancas continuam sem tempo para organizar as peças.}
+Nc5! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 22...Cc5! começa a viagem do cavalo rumo ao rei branco.}
+23. Nf1 Qg6 24. Re3 Nd3! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 24...Cd3! ataca a dama de c1.}
+25. Qd1 Nf4! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 25...Cf4! O cavalo chega perto do rei. Mover a mesma peça valeu a pena, porque cada salto veio com um motivo.}
+26. Ng3 h5 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 26...h5 prepara h4, para expulsar o cavalo de g3.}
+27. Nde2 Nxg2! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 27...Cxg2! As ameaças viram ataque direto: o cavalo arranca o peão que protegia o rei.}
+28. Kxg2 exf3+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Agora vêm os xeques. 28...exf3+ dá xeque com o peão.}
+29. Rxf3 Bh3+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 29...Bh3+ entrega o bispo para puxar o rei a h3.}
+30. Kxh3 Qg4+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 30...Dg4+ empurra o rei de volta.}
+31. Kg2 Qxf3+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 31...Dxf3+ toma a torre, de novo com xeque.}
+32. Kg1 h4 {[%autoria ANÁLISE DO PROJETO] 32...h4 ataca o cavalo de g3 e leva o peão para perto do rei.}
+33. Nh1 {[%autoria ANÁLISE DO PROJETO] 33.Ch1 foi um erro: depois dele, as pretas têm mate forçado. As brancas já estavam perdidas, mas assim acaba mais cedo.}
+Qe3+ {[%autoria ANÁLISE DO PROJETO] 33...De3+ dá xeque pela diagonal até g1.}
+34. Kg2 {[%autoria ANÁLISE DO PROJETO] 34.Rg2 foi outro erro, e deixa mate em um. 34.Cf2 tapava o xeque e resistia mais.}
+h3# {[%autoria ANÁLISE DO PROJETO] 34...h3#. O peão dá o xeque, a dama protege h3 e fecha as fugas, e a torre de f8 cobre f1. A rede foi montada lance a lance.}
+0-1

@@ -29,6 +29,8 @@ import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { BLOCOS } from "@/lib/tatica/blocos";
 import { linhasDeTentativas, progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
 import { filaCompleta, INTERVALOS_DA_REVISAO } from "@/lib/tatica/revisao";
+import { listarPartidas } from "@/lib/partidas/carregar";
+import { situacoesDoAluno } from "@/lib/partidas/progresso";
 
 /**
  * O relatório de um aluno — a tela que o professor abre antes da conversa.
@@ -78,13 +80,15 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   const hoje = hojeNoBrasil();
   const desde = somarDias(hoje, -(DIAS - 1));
 
-  const [tatica, linhas, finais, minutos, partidas, conquistado] = await Promise.all([
+  const [tatica, linhas, finais, minutos, partidas, conquistado, modelo, situacoesModelo] = await Promise.all([
     progressoPorTema(id),
     linhasDeTentativas(id),
     progressoDeFinais(id),
     minutosPorDia(id, desde),
     partidasDeclaradas(id, desde),
     nivelConquistado(id),
+    listarPartidas(true),
+    situacoesDoAluno(id, true),
   ]);
 
   const nivel = nivelDoAluno(conquistado);
@@ -412,6 +416,67 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
               </div>
             );
           })}
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      <section className="flex flex-col gap-3">
+        <div className="flex flex-col gap-0.5">
+          <h2 className="rotulo text-tinta-fraca">Partidas modelo</h2>
+          <p className="text-sm text-tinta-media">
+            Concluída é todos os momentos resolvidos e o Desafio final acertado de primeira, sem
+            ajuda. &ldquo;De primeira&rdquo; conta os momentos acertados sem erro antes. As em
+            revisão ainda não contam no nível do aluno.
+          </p>
+        </div>
+        <div className="overflow-x-auto rounded-xl border border-borda-fraca">
+          <table className="w-full min-w-[34rem] text-left text-sm">
+            <thead className="bg-carta text-xs text-tinta-fraca">
+              <tr>
+                <Th>Nível</Th>
+                <Th>Partida</Th>
+                <Th>Resolvidos</Th>
+                <Th>De primeira</Th>
+                <Th>Situação</Th>
+              </tr>
+            </thead>
+            <tbody>
+              {modelo.map((p) => {
+                const s = situacoesModelo.get(p.slug);
+                const total = p.momentos.length;
+                return (
+                  <tr key={p.slug} className="border-t border-borda-fraca">
+                    <Td>{p.nivel}</Td>
+                    <Td>
+                      {p.nome}
+                      {p.status === "rascunho" ? (
+                        <span className="ml-1.5 text-xs text-aviso-tinta">em revisão</span>
+                      ) : null}
+                    </Td>
+                    <Td>
+                      <span className="tabular-nums">
+                        {s?.resolvidos ?? 0} de {total}
+                      </span>
+                    </Td>
+                    <Td>
+                      <span className="tabular-nums">
+                        {s?.dePrimeira ?? 0} de {total}
+                      </span>
+                    </Td>
+                    <Td>
+                      {s?.concluida
+                        ? "✓ concluída"
+                        : s && s.resolvidos === total
+                          ? "falta o Desafio de primeira"
+                          : (s?.resolvidos ?? 0) > 0
+                            ? "em andamento"
+                            : "—"}
+                    </Td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </section>
 

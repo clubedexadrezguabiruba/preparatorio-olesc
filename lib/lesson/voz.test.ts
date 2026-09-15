@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
+import { falasDasPartidas } from "../partidas/voz.ts";
 import { TODAS_AS_FALAS } from "./falas.ts";
 import { lessonSchema } from "./schema.ts";
 import {
@@ -77,6 +78,18 @@ test("toda aula de content/lessons/ cabe na régua da voz", () => {
   // `assert.ok` e não `assert.equal("")`: o relatório já é a mensagem, e o
   // diff de igualdade a imprimiria uma segunda vez, inteira, ao lado dela.
   const problema = relatorio(aulas.flatMap(falasDaAula));
+  assert.ok(problema === "", problema);
+});
+
+/**
+ * As partidas modelo (`content/partidas/`) seguem a mesma régua das aulas —
+ * decisão do Doug de 15/9/2026. Intro, objetivos, momentos, fecho, resumo,
+ * perguntas e a narração lance a lance do PGN. Ver `lib/partidas/voz.ts`.
+ */
+test("toda partida modelo de content/partidas/ cabe na régua da voz", () => {
+  const falas = falasDasPartidas(raiz);
+  assert.ok(falas.length > 0, "não achei partida modelo nenhuma para medir");
+  const problema = relatorio(falas);
   assert.ok(problema === "", problema);
 });
 

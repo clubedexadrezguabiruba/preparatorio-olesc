@@ -1,0 +1,34 @@
+[Event "Vienna"]
+[Site "Vienna AUT"]
+[Date "1926.??.??"]
+[White "Rudolf Spielmann"]
+[Black "V. Wahle"]
+[Result "1-0"]
+[ECO "C01"]
+[Nome "Spielmann × Wahle"]
+[Ordem "1"]
+[Nivel "2"]
+[Cor "brancas"]
+[Tema "A peça cravada e quem a defende"]
+[FonteSlug "chernev-logical-chess-1957"]
+[Fonte "Irving Chernev, Logical Chess: Move by Move, Game 7, pp. 43–47"]
+[Status "rascunho"]
+
+1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. exd5 exd5 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Uma Defesa Francesa que se abre logo com a troca em d5. Os dois lados têm linhas livres para desenvolver.}
+5. Bg5 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O bispo sai para g5 e crava o cavalo de f6 na dama de d8.}
+Be7 6. Bd3 Nc6 7. Nge2 Nb4 8. Ng3 Nxd3+ 9. Qxd3 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo preto gastou três lances para trocar o bispo de d3. A dama branca recaptura e fica ativa.}
+g6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O peão em g6 tira a casa f5 do cavalo de g3. Mas f6 e h6 perdem a defesa desse peão.}
+10. O-O! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Primeiro, o rei seguro. O roque tira o rei do centro e liga as torres.}
+c6 11. Rae1! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Depois, a torre de a1 vai para a coluna aberta. Ela mira o bispo de e7, e atrás dele ainda está o rei preto.}
+O-O {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] As pretas fazem o roque. Spielmann ainda não atacou nada, mas todas as peças dele já estão em jogo.}
+12. Rxe7! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 12.Txe7! entrega a torre pelo bispo. Era esse bispo que ajudava a defender o cavalo de f6.}
+Qxe7 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A dama recaptura em e7. Agora o bispo de g5 crava o cavalo de f6 na dama.}
+13. Qf3 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 13.Df3 ataca o cavalo cravado pela segunda vez. Bispo e dama batem em f6, e só a dama preta defende.}
+Kg7 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O rei vai a g7 para defender f6. São dois atacantes contra dois defensores.}
+14. Nce4! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 14.Cce4! traz o terceiro atacante. O cavalo se oferece em e4, onde o peão de d5 pode capturar.}
+dxe4 15. Nxe4 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O outro cavalo recaptura e também bate em f6. Contra um alvo defendido, some mais um atacante antes de capturar.}
+Qe6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A dama sai de e7 e desfaz a cravada. Mas o cavalo de f6 continua atacado três vezes e defendido duas.}
+16. Bxf6+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 16.Bxf6+ captura o cavalo com xeque. As brancas recuperam a peça que entregaram em e4.}
+Kg8 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O rei volta a g8. Sem o peão em g7, o bispo de f6 controla g7 e a dama branca pode chegar a h6.}
+17. Qf4! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 17.Df4! não é xeque, mas ameaça Dh6 e Dg7 mate. Para parar o mate, as pretas teriam de dar a dama. Wahle abandona.}
+1-0

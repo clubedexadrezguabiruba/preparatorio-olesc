@@ -1,35 +1,36 @@
-[Partida "morphy-isouard"]
-[Nome "Morphy x Duque de Brunswick e Conde Isouard"]
+[Event "Paris Opera Game"]
+[Site "Paris FRA"]
+[Date "1858.??.??"]
+[White "Paul Morphy"]
+[Black "Duke Karl / Count Isouard"]
+[Result "1-0"]
+[ECO "C41"]
+[Nome "Morphy × Duque Karl e Conde Isouard"]
+[Ordem "1"]
+[Nivel "1"]
 [Cor "brancas"]
-[Fonte "Sunil Weeramantry & Ed Eusebi, Best Lessons of a Chess Coach, pp. 153–154, Supplementary Games [Quick Development]"]
+[Tema "Desenvolvimento rápido e rei no centro"]
+[FonteSlug "weeramantry-eusebi-1993"]
+[Fonte "Weeramantry & Eusebi, Best Lessons of a Chess Coach, pp. 153–154, Supplementary Games [Quick Development]"]
+[Status "rascunho"]
 
-{É uma aula extremamente curta sobre uma relação que o aluno precisa memorizar cedo:
-quando um lado desenvolve todas as peças e o outro deixa o rei no centro, abrir linhas
-pode ser mais importante do que conservar material. A partida também mostra que rocar
-pode ser um lance ofensivo, porque a torre entra imediatamente na coluna aberta. Dentro
-da Etapa I, ela funciona como uma das primeiras âncoras para desenvolvimento, tempo e
-segurança do rei.}
-
-1. e4 e5 2. Nf3 d6 {[Essencial] As brancas já colocam um peão e um
-cavalo no centro da luta. As pretas defendem e5, mas o bispo de f8 continua preso atrás
-do peão d6.} 3. d4 {[Clube] Morphy não perde tempo com um ataque lateral: desafia
-imediatamente o centro. Se o centro se abrir, suas peças terão mais linhas e o rei preto
-poderá ficar sem tempo para rocar.} Bg4 4. dxe5 Bxf3 5. Qxf3 dxe5 {[Avançada] A troca em
-f3 coloca a dama branca em jogo sem custo adicional. Depois das trocas centrais, a
-posição fica mais aberta — exatamente o tipo de posição em que vantagem de
-desenvolvimento pesa.} 6. Bc4 Nf6 7. Qb3 {[Essencial] O bispo aponta para f7 e a dama
-acrescenta pressão sobre f7 e b7. Dois lances sucessivos melhoram peças e criam
-ameaças.} Qe7 8. Nc3 c6 9. Bg5 {[Essencial] Os dois cavalos e os dois bispos brancos já
-participam. A pergunta para o aluno é visual: quantas peças brancas jogam e quantas
-peças pretas ainda estão na primeira fileira?} b5 10. Nxb5 cxb5 11. Bxb5+ {[Clube] Em
-vez de recuar, Morphy investe um cavalo para abrir linhas com xeque. O ponto não é
-'sacrifício bonito'; é transformar a vantagem de atividade em acesso concreto ao rei.}
-Nbd7 12. O-O-O {[Essencial] O roque resolve dois problemas de uma vez: protege o rei
-branco e coloca a torre de a1 na coluna d. O aluno deve aprender a procurar lances que
-cumprem duas funções.} Rd8 13. Rxd7 Rxd7 14. Rd1 {[Clube] A primeira torre elimina o
-bloqueador; a segunda ocupa imediatamente a coluna. A coordenação é mais importante que
-a contagem isolada de pontos.} Qe6 15. Bxd7+ Nxd7 16. Qb8+ {[Avançada] O xeque de dama
-atrai o cavalo para b8. Ao sair de d7, ele deixa a casa d8 livre para a torre. É um
-exemplo limpo de atração/desvio.} Nxb8 17. Rd8# {[Essencial] A torre chega à oitava
-fileira e dá mate. O final resume toda a partida: peças desenvolvidas, linhas abertas e
-rei adversário preso no centro.}
+1. e4 e5 2. Nf3 {[%autoria ADAPTAÇÃO DIDÁTICA DO PROJETO] Morphy ocupa o centro com o peão e já traz o cavalo para o jogo.}
+d6 {[%autoria ADAPTAÇÃO DIDÁTICA DO PROJETO] As pretas defendem e5 com o peão d6. Só que agora o bispo de f8 fica preso atrás desse peão.}
+3. d4! {[%autoria ANÁLISE DO PROJETO] Morphy abre o centro cedo, com o rei preto ainda em e8.}
+Bg4 4. dxe5! Bxf3 5. Qxf3 {[%autoria ANÁLISE DO PROJETO] Depois das trocas, a dama branca chega a f3 sem gastar lance.}
+dxe5 {[%autoria ANÁLISE DO PROJETO] O centro abriu. Numa posição aberta, quem já tem as peças em jogo chega primeiro aos alvos.}
+6. Bc4! {[%autoria ANÁLISE DO PROJETO] O bispo em c4 aponta para f7.}
+Nf6 7. Qb3! {[%autoria ANÁLISE DO PROJETO] A dama em b3 ataca f7 e b7. Bispo e dama trabalham juntos, e as pretas têm dois problemas para resolver.}
+Qe7 8. Nc3 {[%autoria ADAPTAÇÃO DIDÁTICA DO PROJETO] Mais uma peça branca entra no jogo.}
+c6 9. Bg5! {[%autoria ADAPTAÇÃO DIDÁTICA DO PROJETO] Conte as peças em jogo: quatro brancas. Das pretas, só a dama e o cavalo de f6 saíram da primeira fileira.}
+b5 {[%autoria ANÁLISE DO PROJETO] As pretas atacam o bispo de c4 com o peão.}
+10. Nxb5! {[%autoria ANÁLISE DO PROJETO] Em vez de recuar o bispo, Morphy entrega o cavalo por dois peões.}
+cxb5 11. Bxb5+ {[%autoria ANÁLISE DO PROJETO] Em troca, ele tem xeque, a coluna d aberta e o rei preto preso no centro. Sacrifício só vale quando você sabe dizer o que ganhou.}
+Nbd7 12. O-O-O! {[%autoria ADAPTAÇÃO DIDÁTICA DO PROJETO] O roque faz duas tarefas. Protege o rei branco e põe a torre na coluna d, de frente para o cavalo de d7.}
+Rd8 13. Rxd7! {[%autoria ANÁLISE DO PROJETO] Morphy entrega a torre para tirar o cavalo que tapava a coluna d.}
+Rxd7 14. Rd1 {[%autoria ANÁLISE DO PROJETO] A outra torre ocupa d1 na hora. Quando uma coluna leva ao rei, vale pôr mais de uma peça nela.}
+Qe6 {[%autoria ANÁLISE DO PROJETO] As pretas oferecem a troca das damas para aliviar a defesa.}
+15. Bxd7+ {[%autoria ANÁLISE DO PROJETO] Morphy não troca as damas: toma a torre com xeque.}
+Nxd7 16. Qb8+! {[%autoria ANÁLISE DO PROJETO] A dama vai a b8, onde vai ser tomada. É o que Morphy quer: o cavalo é obrigado a sair de d7.}
+Nxb8 17. Rd8# {[%autoria ANÁLISE DO PROJETO] A casa d8 ficou livre, e a torre dá mate, protegida pelo bispo de g5. Peças em jogo, linhas abertas e rei no centro: a partida inteira num lance.}
+1-0

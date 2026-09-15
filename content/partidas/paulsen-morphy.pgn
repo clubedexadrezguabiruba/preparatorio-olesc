@@ -1,0 +1,39 @@
+[Event "1st American Chess Congress"]
+[Site "New York, NY USA"]
+[Date "1857.11.03"]
+[White "Louis Paulsen"]
+[Black "Paul Morphy"]
+[Result "0-1"]
+[ECO "C48"]
+[Nome "Paulsen × Morphy"]
+[Ordem "2"]
+[Nivel "5"]
+[Cor "pretas"]
+[Tema "Todas as peças prontas antes da entrega"]
+[FonteSlug "weeramantry-eusebi-1993"]
+[Fonte "Weeramantry & Eusebi, Best Lessons of a Chess Coach, Lesson 5, pp. 124–151"]
+[Status "rascunho"]
+
+1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bb5 Bc5 5. O-O O-O {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Weeramantry & Eusebi] Os dois lados desenvolvem e rocam. Daqui em diante, repare nos lances que melhoram uma peça e criam um problema ao mesmo tempo.}
+6. Nxe5 Re8! {[%autoria PARÁFRASE FIEL — Weeramantry & Eusebi] 6...Te8! põe a torre em jogo e ataca o cavalo de e5 no mesmo lance.}
+7. Nxc6 dxc6! {[%autoria PARÁFRASE FIEL — Weeramantry & Eusebi] 7...dxc6! abre a coluna d e a diagonal do bispo de c8. A regra de tomar para o centro vale menos que peças ativas.}
+8. Bc4 b5! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Weeramantry & Eusebi] 8...b5! ataca o bispo e ganha tempo: Paulsen tem de mexer a mesma peça de novo.}
+9. Be2 Nxe4 10. Nxe4 Rxe4 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Weeramantry & Eusebi] Morphy recupera o peão do centro, e a torre chega a e4. Cada lance preto melhora uma peça, e Paulsen só responde.}
+11. Bf3 Re6! {[%autoria PARÁFRASE FIEL — Weeramantry & Eusebi] 11...Te6! sai do ataque do bispo e ainda defende c6. Da sexta fileira, essa torre pode ir para o lado do rei.}
+12. c3 Qd3! {[%autoria PARÁFRASE FIEL — Weeramantry & Eusebi] 12...Dd3! não captura nada, mas trava o peão de d2. Sem ele andar, o bispo de c1 não tem por onde sair.}
+13. b4 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Weeramantry & Eusebi] 13.b4 é fraco: empurra peões na ala da dama e deixa o bispo de c1 parado. Não copie esse plano.}
+Bb6 14. a4 bxa4 15. Qxa4 Bd7! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Weeramantry & Eusebi] 15...Bd7! desenvolve o último bispo. Morphy completa o time antes de procurar o golpe.}
+16. Ra2 Rae8! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Weeramantry & Eusebi] Com 16...Tae8!, a última torre chega à coluna e. Agora todas as peças pretas têm uma tarefa.}
+17. Qa6 {[%autoria ANÁLISE DO PROJETO] 17.Da6 é o erro que permite o golpe: a dama branca vai para longe do próprio rei. Não copie esse lance.}
+Qxf3! {[%autoria PARÁFRASE FIEL — Weeramantry & Eusebi] Só agora vem a entrega. 17...Dxf3! dá a dama pelo bispo para destruir os peões do rei branco.}
+18. gxf3 Rg6+! {[%autoria PARÁFRASE FIEL — Weeramantry & Eusebi] 18...Tg6+! entra pela coluna g, que o peão branco acabou de abrir.}
+19. Kh1 Bh3! {[%autoria PARÁFRASE FIEL — Weeramantry & Eusebi] 19...Bh3! é um lance quieto. Ameaça Bg2+ e depois Bxf3, mate.}
+20. Rd1 {[%autoria ANÁLISE DO PROJETO] 20.Td1 abre f1 para o rei fugir. Melhor era 20.Dd3, trazendo a dama de volta para defender.}
+Bg2+ 21. Kg1 Bxf3+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Weeramantry & Eusebi] O bispo toma em f3, e a torre de g6 dá xeque descoberto.}
+22. Kf1 Bg2+ {[%autoria ANÁLISE DO PROJETO] Aqui 22...Tg2! dava mate forçado. Um exemplo: 22...Tg2! 23.Dd3 Txf2+ 24.Rg1 Tg2+ 25.Rh1 Tg1#.}
+23. Kg1 Bh3+ 24. Kh1 Bxf2 {[%autoria ANÁLISE DO PROJETO] Com 24...Bxf2, o mate passou: 24...Bg2+ ainda chegava lá. Mesmo assim, as pretas seguem ganhando.}
+25. Qf1 Bxf1 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Weeramantry & Eusebi] Paulsen devolve a dama para evitar Bg2, mate. Depois das trocas, as pretas ficam com dois peões a mais.}
+26. Rxf1 Re2! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Weeramantry & Eusebi] 26...Te2! invade a segunda fileira das brancas. O bispo de c1 fica preso, defendendo o peão de d2.}
+27. Ra1 Rh6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Weeramantry & Eusebi] 27...Th6 põe a outra torre na coluna h, mirando o peão de h2, ao lado do rei.}
+28. d4 Be3 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Weeramantry & Eusebi] 28...Be3 sai de f2, e as duas torres atacam h2. Tomar o bispo não salva o rei, e Paulsen abandona.}
+0-1

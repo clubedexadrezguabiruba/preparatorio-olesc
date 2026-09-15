@@ -39,7 +39,7 @@ async function fecharAulasDoCurso(contexto: BrowserContext) {
 }
 
 async function contextoDoAluno(browser: Browser, viewport = { width: 375, height: 812 }) {
-  const contexto = await browser.newContext({ storageState: SESSAO_DO_ALUNO, locale: "pt-BR", viewport, baseURL: "http://localhost:3000" });
+  const contexto = await browser.newContext({ storageState: SESSAO_DO_ALUNO, locale: "pt-BR", viewport, baseURL: `http://localhost:${process.env.E2E_PORTA ?? "3000"}` });
   await fecharAulasDoCurso(contexto);
   return contexto;
 }

@@ -1,0 +1,126 @@
+{
+  "slug": "spielmann-wahle",
+  "intro": [
+    "Rudolf Spielmann contra V. Wahle, Viena, 1926. Chernev usa esta partida para mostrar a ordem das coisas num ataque.",
+    "Spielmann não começa sacrificando. Primeiro faz o roque, põe a torre na coluna aberta e aproxima as peças.",
+    "Observe o cavalo preto de f6. Ele é o alvo, e cada lance branco soma mais uma peça contra ele."
+  ],
+  "objetivos": [
+    "Achar a peça que defende o alvo e tirá-la do tabuleiro.",
+    "Atacar uma peça cravada com mais uma peça.",
+    "Trazer mais um atacante antes de capturar.",
+    "Achar uma ameaça de mate que não começa com xeque."
+  ],
+  "momentoFinal": [
+    "Depois de 17.Df4, a dama quer ir a h6. De lá, Dg7 é mate, porque o bispo de f6 defende g7.",
+    "O caminho foi preparado aos poucos: 9...g6 deixou h6 sem peão, 12.Txe7 tirou um defensor, 16.Bxf6+ tirou o outro.",
+    "Para parar o mate, as pretas teriam de entregar a dama pelo bispo. Wahle abandona."
+  ],
+  "resumo": [
+    "Antes de sacrificar, deixe o rei seguro e todas as peças em jogo.",
+    "Ache quem defende o alvo. Tirar esse defensor pode valer uma torre.",
+    "Peça cravada não foge: some atacantes contra ela, um de cada vez."
+  ],
+  "perguntas": [
+    "O que 10.O-O e 11.Tae1 fizeram antes do sacrifício?",
+    "Depois de 12.Txe7 Dxe7, qual peça preta ficou cravada, e em qual peça?",
+    "Qual é a ameaça de 17.Df4, e o que as pretas teriam de entregar para pará-la?"
+  ],
+  "fonte": {
+    "slug": "chernev-logical-chess-1957",
+    "referencia": "Game 7, pp. 43–47"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "10.O-O",
+      "simbolo": "!"
+    },
+    {
+      "lance": "11.Rae1",
+      "simbolo": "!"
+    },
+    {
+      "lance": "12.Rxe7",
+      "simbolo": "!"
+    },
+    {
+      "lance": "14.Nce4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "17.Qf4",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "Tirar o defensor",
+      "ply": 22,
+      "fen": "r1bq1rk1/pp2bp1p/2p2np1/3p2B1/3P4/2NQ2N1/PPP2PPP/4RRK1 w - - 2 12",
+      "lado": "brancas",
+      "pergunta": "O cavalo de f6 é o alvo. Qual peça preta ajuda a defendê-lo, e como tirar essa peça do tabuleiro?",
+      "san": "Rxe7",
+      "uci": "e1e7",
+      "desafioFinal": false,
+      "ideia": "A torre se entrega pelo bispo de e7, que defendia f6. Depois de 12...Dxe7, o bispo de g5 crava o cavalo na dama.",
+      "feedback": "Conte quem defende o cavalo de f6. Um sacrifício precisa comprar algo concreto: aqui, a saída de um defensor.",
+      "alternativas": "Sem o sacrifício, as brancas ficam só um pouco melhor. Um lance calmo como 12.f4 não cria alvo nenhum.",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 2,
+      "titulo": "Atacar a peça cravada",
+      "ply": 24,
+      "fen": "r1b2rk1/pp2qp1p/2p2np1/3p2B1/3P4/2NQ2N1/PPP2PPP/5RK1 w - - 0 13",
+      "lado": "brancas",
+      "pergunta": "O cavalo de f6 não pode sair: atrás dele está a dama preta. Como somar mais um ataque contra ele?",
+      "san": "Qf3",
+      "uci": "d3f3",
+      "desafioFinal": false,
+      "ideia": "A dama em f3 é o segundo atacante de f6. Com dois contra um, Bxf6 ganharia uma peça.",
+      "feedback": "Peça cravada não foge. Conte quantas peças suas batem em f6 e quantas pretas o defendem.",
+      "alternativas": "Só este lance mantém a vantagem. Com 13.Dd2 ou 13.f4, as pretas se reorganizam e a torre entregue faz falta.",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 3,
+      "titulo": "Mais um atacante",
+      "ply": 26,
+      "fen": "r1b2r2/pp2qpkp/2p2np1/3p2B1/3P4/2N2QN1/PPP2PPP/5RK1 w - - 2 14",
+      "lado": "brancas",
+      "pergunta": "O rei foi a g7, e f6 agora tem dois defensores. Qual peça soma o terceiro ataque, mesmo podendo ser capturada?",
+      "san": "Nce4",
+      "uci": "c3e4",
+      "desafioFinal": false,
+      "ideia": "O cavalo em e4 bate em f6. Se 14...dxe4, o outro cavalo recaptura e continua mirando f6.",
+      "feedback": "Se o alvo tem defesa suficiente, traga mais uma peça antes de capturar. Procure uma casa de onde se ataca f6.",
+      "alternativas": "14.Cge4 vale o mesmo: o outro cavalo faz o mesmo trabalho.",
+      "alternativasBoas": [
+        "g3e4"
+      ],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 4,
+      "titulo": "A ameaça sem xeque",
+      "ply": 32,
+      "fen": "r1b2rk1/pp3p1p/2p1qBp1/8/3PN3/5Q2/PPP2PPP/5RK1 w - - 1 17",
+      "lado": "brancas",
+      "pergunta": "Não há xeque que resolva. Qual lance da dama prepara a entrada em h6 e a ameaça de mate em g7?",
+      "san": "Qf4",
+      "uci": "f3f4",
+      "desafioFinal": true,
+      "ideia": "De f4, a dama ameaça Dh6 e Dg7 mate. Para parar o mate, as pretas teriam de entregar a dama.",
+      "feedback": "Não procure só xeques. Veja qual casa perto do rei preto o bispo de f6 controla, e por onde a dama chega lá.",
+      "alternativas": "17.De3 também funciona: a dama chega a h6 pela mesma diagonal.",
+      "alternativasBoas": [
+        "f3e3"
+      ],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    }
+  ]
+}

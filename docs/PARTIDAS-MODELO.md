@@ -9,7 +9,7 @@
   `git push -u origin partidas-modelo`, nunca para a `main`.
 - **Preparação:** `.env.local` copiado (ignorado pelo git) e `npm install` feito.
 - **Linha de base:** `npm test` com 1319 testes, 1319 passando e 0 falhando.
-- **Próximo passo:** bloco 0 (registrar a curadoria e a tabela de momentos neste arquivo), depois o bloco 1.
+- **Próximo passo (cumprido em 15/9):** bloco 0, depois o bloco 1. Ver as entradas abaixo e as "Decisões pendentes do Doug".
 
 ### 15/09/2026 — bloco 0: tabela de momentos registrada
 - **Resultado:** 15 partidas e 80 momentos (13 + 14 + 17 + 18 + 18 por nível), gerados do PGN canônico v4 e
@@ -31,6 +31,104 @@
 - **SAN não canônico no v4:** Capablanca–Villegas `24...Rac8` é `Rc8`. O PGN do repositório leva `Rc8`.
 - **Motor [motor]:** os 7 momentos de alternativas (Morphy 10, Colle 17, Spielmann 14, Blackburne 16, Marshall 16,
   Paulsen 17, Villegas 33) rodam no Stockfish no bloco 2.
+
+### 15/09/2026 — bloco 1: dados e travas
+- **Formato:** cada partida é `content/partidas/<slug>.pgn` (lances, símbolos, narração com `[%autoria …]`, tags
+  `[Nome] [Ordem] [Nivel] [Cor] [Tema] [FonteSlug] [Fonte] [Status]`) + `<slug>.json` (a ficha: intro, objetivos,
+  momentoFinal, resumo, perguntas, fonte, `marcasDaFonte`, `correcoes` e os momentos). O `momentos.json` único do
+  piloto saiu.
+- **Código:** `lib/partidas/{momentos,ficha,curadoria,montar,ler,conferir,voz}.ts`. `momentos.ts` e `ficha.ts` não
+  usam disco; `ler.ts` usa e não é `server-only` (roda no teste); `carregar.ts` é o `server-only`.
+- **Símbolos:** extraídos das fichas (o "Lance esperado" e os lances da narração) e conferidos na partida:
+  **135 marcas** nas 15, todas em lance jogado. Foram para o PGN e para `marcasDaFonte`. Os subagentes do bloco 2
+  acrescentaram mais 2 que a extração não pegou: `17.Qf4!` (Spielmann) e `41.Rxd7+!` (Tarrasch–Mieses).
+- **Travas** (`lib/partidas/conteudo.test.ts`, também no `validate:content`): as 9 do plano, mais três. São elas:
+  notação inglesa no texto do aluno, lance numerado citado que não cabe na partida, e comentário sem `[%autoria]`.
+  **17 testes**, cada trava com um caso que prova que ela morde.
+- **Prova de que a trava funciona:** antes da reescrita, o piloto antigo reprovava com **19 problemas**.
+- **Fontes:** 4 obras em `content/sources.json`, com `file: null`.
+- **Voz:** caso novo em `lib/lesson/voz.test.ts` medindo `falasDasPartidas()`.
+- **Motor:** `npm run partidas:motor -- <slug> [n] [--gravar]`. O critério é "não pior que o lance da partida": até
+  0,30 abaixo, sem limite para cima, olhando todos os lances quando os 12 primeiros ainda empatam. A primeira versão
+  usava diferença absoluta e punia lance **melhor**; três subagentes acharam o defeito, e ele foi corrigido.
+
+### 15/09/2026 — bloco 2: o texto das 15 partidas (rascunho)
+- Escrito por 5 subagentes em paralelo, um por nível, a partir das fichas, e conferido pela trava: **0 reprovações
+  de conteúdo e 0 de voz** nas 15. Todas continuam `[Status "rascunho"]`. O aluno não vê nenhuma até o Doug aprovar.
+- As `correcoes` de cada ficha estão no JSON. As principais estão na seção "Decisões pendentes do Doug", abaixo.
+
+### 15/09/2026 — bloco 3: telas
+- `/partidas`: lista por nível, com o selo "em revisão" (rascunho, só professor e ambiente local) e "✓ concluída".
+- `/partidas/[jogo]`: apresentação → objetivos → momentos → o desfecho, resumo e perguntas. O desfecho só aparece
+  depois da série, porque explica o Desafio. A partida inteira, opcional, foi para `/partidas/[jogo]/inteira`.
+- `Desafio.tsx`: alternativa boa ("bom lance, mas na partida foi outro — tente achar", sem contar erro), selo
+  "Desafio final", símbolo da fonte depois do acerto e gravação de cada lance.
+- **Playwright** (`e2e/partidas.spec.ts`), nível 1, em `aluno-375` e `editor-1366`, com `innerWidth` conferido antes
+  de medir: **2 de 2 passaram**. O teste cobre: lista sem rolagem lateral; erro que não avança e mostra a ajuda;
+  momentos resolvidos; Desafio de primeira; "Partida concluída!"; selo na lista.
+- **Porta do ensaio:** a 3000 era de outra cópia do projeto, e o Playwright a reaproveitava sem avisar. Agora
+  `E2E_PORTA=3005`.
+- **Falta:** o Doug arrastar as peças com a mão.
+
+### 15/09/2026 — bloco 4: gravar e cobrar
+- **Migração `0011_partidas.sql`** aplicada no banco: tabela `tentativa_partida_momento`, só leitura na RLS
+  (o dono lê o seu, o professor lê tudo). `npm run db:rls` verde, com a seção 13 nova: o aluno não grava o próprio
+  acerto, não grava no nome de outro, não apaga, e só lê o seu.
+- **Gravação:** `lib/partidas/gravar.ts` + `app/partidas/acoes.ts`. O navegador manda o lance; o servidor julga
+  com a mesma `julgarResposta` da tela e deriva "concluída" (`lib/partidas/concluir.ts`, 7 testes).
+- **Requisito:** `partidasParaFechar: 3` em `nivel.ts`, cobrado como `min(3, publicadas)`. Entrou em
+  `fechamentoDoNivel`, `proximoPasso`, `proximaAcao` (painel "Hoje"), no cartão do nível, na `/trilha` (coluna
+  "Partidas modelo"), na tela da prova de nível e no relatório do professor. **Nível já conquistado não reabre**, e
+  há teste para isso. Partida em rascunho não conta, então hoje o requisito vale zero para todos.
+- **Prova na conta de teste:** com as 3 do nível 1 marcadas como revisadas **só na cópia local**, e desfeito depois,
+  concluir Morphy levou o cartão do painel de "0 de 3" para "1 de 3", e a prova do nível passou a pedir "2 partida(s)
+  modelo".
+- **Limite declarado:** o "de primeira" conta a série no navegador; recarregar a página zera a contagem. É o mesmo
+  limite dos puzzles, com o `tempo_ms` e o relatório do professor como defesa.
+- **Conflito possível no merge:** `modo-editor` ainda mexe em `app/painel/Tarefas.tsx` e `app/trilha/page.tsx`.
+
+### 15/09/2026 — portões e estado
+- `typecheck` verde; `npm test` **1352/1352** (eram 1319); `validate:content` verde; `lint` limpo; `build` verde;
+  `validate:mutations` 34/34; `db:migrar` aplicou a 0011; `db:rls` verde.
+- **Motor final:** as 80 posições rodaram com o critério corrigido. Morphy foi a profundidade 22 e as outras 14 a 18,
+  porque a lista inteira de lances a 22 levaria horas. `--gravar` só acrescenta, então o que os subagentes puseram
+  ficou.
+- **Entregue:** código completo dos blocos 1, 3 e 4, e o texto do bloco 2 em rascunho. **Não entregue:** a aprovação
+  do Doug (nenhuma partida conta ainda) e o teste com a mão no tabuleiro.
+
+## Decisões pendentes do Doug
+
+1. **Aprovar o texto, nível por nível.** No site local ou como professor, cada partida aparece com "em revisão". Ao
+   aprovar, o Claude troca `[Status]` para `revisado-doug` e registra aqui.
+2. **Momentos que não são decisão de lance único.** O motor aceita mais da metade dos lances legais:
+   - Averbakh 1 (11.O-O-O): 29 de 56;
+   - Villegas 1 (22.b4): 34 de 43;
+   - Villegas 2 (24.g3): 23 de 37;
+   - Villegas 6 (31.a4): 22 de 39;
+   - Pillsbury 1 (14.Tc2): 28 de 38;
+   - Pillsbury 2 (17.Ba6): 24 de 36.
+
+   Com a regra de 15/9 o aluno não é punido: ele lê "bom lance, mas na partida foi outro". Mas o momento vira
+   "adivinhe o plano". Manter, trocar a pergunta para pedir a ideia, ou cortar? Com menos, mas no mesmo caso:
+   Tarrasch–Mieses 3 (10 de 26), Villegas 4 (10 de 35), Marshall 4 e 5 (8 cada), Pillsbury 5 e Desafio (8 cada).
+3. **Desafios finais em que o motor aceita outro lance.** O outro lance não quebra o "de primeira", mas enfraquece a
+   lição:
+   - **Chernev 22.Ccxe6+:** 22.Cgxe6+ é melhor (+6,14 contra +5,28). A premissa do "qual cavalo", que justificou a
+     troca do Desafio, não se sustenta.
+   - **Marshall 42...Txd4:** 42...exd4 é melhor.
+   - **Alekhine 18.Txe7:** entram 18.Ch7+ (transposição) e 18.Cxd7+ (melhor).
+   - **Lasker–Bauer 22.Dd7:** 22.Dh3+ é xeque repetido.
+   - **Blackburne 16.Txf7:** 16.Dh7+ também é mate em 3.
+   - **Pillsbury 34.a4:** 8 lances aceitos.
+4. **Polgar, momento 1 (11.Cg5!):** o motor dá 0,00 ao lance jogado. O momento cobra uma ideia de ataque, não um lance
+   que ganha.
+5. **Paulsen–Morphy, lance 22:** pelo motor, 22...Bg2+ ainda mantinha mate. O mate escapou em 24...Bxf2, quando
+   24...Bg2+ dava mate em 5. A narração conta assim, e 22...Tg2! aparece como o caminho mais curto. Conferir.
+6. **Alternativas que são outra lição**, aceitas por regra: xeques repetidos (Lasker–Bauer), lances quietos
+   (Chernev 1, Tarrasch–Mieses 3–5) e ...f6/...h6 contra o bispo (Marshall 1–2). Ficam?
+7. **Símbolos que a curadoria cita e a ficha não dá:** "22.Dd7!" (Lasker–Bauer) e "13...O-O-O??" (Tarrasch–Mieses).
+   Não foram postos. A regra de 14/9 manda seguir a fonte.
+8. **Nome:** "Duque Karl e Conde Isouard", como o PGN canônico, ou "Duque de Brunswick", como o piloto antigo?
 
 Versão 3, de 15/09/2026. Incorpora a revisão Fable do plano, a pesquisa de nível e a curadoria Fable das partidas.
 

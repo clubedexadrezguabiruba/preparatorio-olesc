@@ -1,0 +1,202 @@
+{
+  "slug": "porges-lasker",
+  "intro": [
+    "Nuremberg, 1896. Você joga com as pretas, de Emanuel Lasker, campeão do mundo naquele ano.",
+    "Chernev chamou esta partida de \"Cada lance, uma ameaça\". A ameaça boa melhora uma peça sua e cria um problema para o adversário.",
+    "As brancas passam a partida fugindo das ameaças, e vários lances delas foram fracos. Não os copie.",
+    "Os momentos começam no lance 27, quando as ameaças viram ataque ao rei. Observe como as peças pretas fecham a rede de mate."
+  ],
+  "objetivos": [
+    "Separar a ameaça útil da ameaça vazia: a boa também melhora uma peça sua.",
+    "Abrir o rei com um sacrifício quando suas peças já estão perto dele.",
+    "Escolher, entre vários xeques, o que traz mais uma peça para o ataque.",
+    "Montar a rede de mate de dama, torre e peão."
+  ],
+  "momentoFinal": [
+    "32...h4 ataca o cavalo de g3. 33.Ch1 foi um erro: depois dele, as pretas têm mate forçado.",
+    "33...De3+ dá xeque pela diagonal. 34.Cf2 tapava o xeque, mas as brancas jogaram 34.Rg2, outro erro.",
+    "Então 34...h3#. O peão dá o xeque, e o rei não pode tomá-lo, porque a dama de e3 protege h3.",
+    "A dama cobre g1, f2, g3 e f3. A torre de f8 cobre f1, e as próprias peças brancas tapam h1 e h2."
+  ],
+  "resumo": [
+    "A ameaça boa também melhora uma peça sua.",
+    "Um sacrifício perto do rei funciona quando dama, torre e bispo já estão prontos para entrar.",
+    "Até um peão dá mate, se as outras peças fecham as casas do rei."
+  ],
+  "perguntas": [
+    "O que 27...Cxg2! tira do rei branco?",
+    "Por que 29...Bh3+ é o xeque certo, e 29...Dxg3+ não?",
+    "Por que 34...h3# é mate, se o rei está colado no peão?"
+  ],
+  "fonte": {
+    "slug": "chernev-most-instructive-1965",
+    "referencia": "Game 13, pp. 64–66"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "10...d5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "12...Re8",
+      "simbolo": "!"
+    },
+    {
+      "lance": "14.Ne4",
+      "simbolo": "?!"
+    },
+    {
+      "lance": "14...d5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "15...Ba3",
+      "simbolo": "!"
+    },
+    {
+      "lance": "21...Qg5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "22...Nc5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "24...Nd3",
+      "simbolo": "!"
+    },
+    {
+      "lance": "25...Nf4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "27...Nxg2",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [
+    {
+      "onde": "narração, bloco 27.Nde2 … 31...Qxf3+",
+      "ficha": "Depois vêm cheques sucessivos: ...exf3+, ...Bh3+ e ...Qg4+. (e \"Qxf3+ … com cheque\")",
+      "correcao": "É \"xeque\", não \"cheque\"."
+    },
+    {
+      "onde": "narração, bloco 32.Kg1 h4 33.Nh1 Qe3+ 34.Kg2 h3#, e O momento final",
+      "ficha": "Qe3+ força o rei para g2.",
+      "correcao": "Não força: 34.Nf2 tapa o xeque (o motor dá mate em 11). 34.Kg2 foi um erro das brancas, que permitiu o mate em um."
+    },
+    {
+      "onde": "narração, bloco 32.Kg1 h4",
+      "ficha": "O peão h avança e restringe as casas perto do rei.",
+      "correcao": "O que o avanço faz de concreto é atacar o cavalo de g3. 33.Nh1 foi erro: o motor prefere 33.Nd4 (-4,8)."
+    },
+    {
+      "onde": "Desafio final",
+      "ficha": "Desafio final: 34...h3#.",
+      "correcao": "Decisão da curadoria aprovada pelo Doug: o Desafio final passou a ser 27...Nxg2!; 34...h3# virou momento comum."
+    }
+  ],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "Sacrifício em g2",
+      "ply": 53,
+      "fen": "r4rk1/p2b2p1/2p3q1/3p3p/4pn2/1PP1RPN1/P3N1PP/R2Q2K1 b - - 1 27",
+      "lado": "pretas",
+      "pergunta": "Dama em g6, cavalo em f4, torre em f8 e peão em e4: tudo mira o rei branco. Qual sacrifício abre o abrigo dele?",
+      "san": "Nxg2",
+      "uci": "f4g2",
+      "desafioFinal": true,
+      "ideia": "27...Cxg2! arranca o peão que protegia o rei. Se 28.Rxg2, o peão de e4 toma em f3 com xeque, e os xeques continuam.",
+      "feedback": "O rei branco se esconde atrás de peões. Qual deles uma peça sua, já perto do rei, pode tomar?",
+      "alternativas": "",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 2,
+      "titulo": "Xeque com o peão",
+      "ply": 55,
+      "fen": "r4rk1/p2b2p1/2p3q1/3p3p/4p3/1PP1RPN1/P3N1KP/R2Q4 b - - 0 28",
+      "lado": "pretas",
+      "pergunta": "O rei branco tomou em g2 e ficou sem o peão da frente. Antes das peças grandes, olhe os peões: algum deles dá xeque?",
+      "san": "exf3+",
+      "uci": "e4f3",
+      "desafioFinal": false,
+      "ideia": "28...exf3+ dá xeque com o peão. Se a torre tomar em f3, ela fica na frente da sua torre de f8 e vira alvo.",
+      "feedback": "Olhe o peão de e4. Ele pode tomar alguma coisa e, no mesmo lance, dar xeque no rei de g2?",
+      "alternativas": "",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 3,
+      "titulo": "O único xeque bom",
+      "ply": 57,
+      "fen": "r4rk1/p2b2p1/2p3q1/3p3p/8/1PP2RN1/P3N1KP/R2Q4 b - - 0 29",
+      "lado": "pretas",
+      "pergunta": "Você tem dois xeques, e um deles perde a dama. Qual xeque traz mais uma peça para o ataque?",
+      "san": "Bh3+",
+      "uci": "d7h3",
+      "desafioFinal": false,
+      "ideia": "29...Bh3+! entrega o bispo. Se 30.Rxh3, a dama dá xeque em g4 e depois toma a torre de f3, de novo com xeque.",
+      "feedback": "Antes do xeque, veja quem toma a sua peça. Um xeque de dama em g3 parece forte, mas o peão de h2 toma a dama.",
+      "alternativas": "",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 4,
+      "titulo": "Xeque com a dama protegida",
+      "ply": 59,
+      "fen": "r4rk1/p5p1/2p3q1/3p3p/8/1PP2RNK/P3N2P/R2Q4 b - - 0 30",
+      "lado": "pretas",
+      "pergunta": "O rei branco foi a h3, sem peões na frente. Qual xeque de dama segue o ataque numa casa que o rei não pode tomar?",
+      "san": "Qg4+",
+      "uci": "g6g4",
+      "desafioFinal": false,
+      "ideia": "30...Dg4+ O peão de h5 protege a dama, e o rei volta a g2. Depois 31...Dxf3+ toma a torre com xeque.",
+      "feedback": "Uma dama colada no rei precisa de apoio. Qual casa perto do rei branco o seu peão de h5 protege?",
+      "alternativas": "30...Txf3 também ganha a torre na hora, porque nenhuma peça branca defende f3.",
+      "alternativasBoas": [
+        "f8f3"
+      ],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 5,
+      "titulo": "O peão entra no ataque",
+      "ply": 63,
+      "fen": "r4rk1/p5p1/2p5/3p3p/8/1PP2qN1/P3N2P/R2Q2K1 b - - 1 32",
+      "lado": "pretas",
+      "pergunta": "Não há xeque que ganhe mais nada. Qual peça branca ainda defende o rei, e qual peão seu pode atacá-la?",
+      "san": "h4",
+      "uci": "h5h4",
+      "desafioFinal": false,
+      "ideia": "32...h4 ataca o cavalo de g3. Se o cavalo sair, o peão segue para h3 e ajuda a fechar o rei.",
+      "feedback": "Nem todo lance forte é xeque. Veja qual peça branca está colada no rei e qual peão seu chega a atacá-la.",
+      "alternativas": "32...Df2+ e 32...De3+ também servem: são xeques que ganham tempo antes de h4.",
+      "alternativasBoas": [
+        "f3f2",
+        "f3e3"
+      ],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 6,
+      "titulo": "Mate com o peão",
+      "ply": 67,
+      "fen": "r4rk1/p5p1/2p5/3p4/7p/1PP1q3/P3N1KP/R2Q3N b - - 3 34",
+      "lado": "pretas",
+      "pergunta": "O rei branco está em g2. Sua dama e sua torre já cobrem quase todas as casas dele. Qual lance fecha a rede?",
+      "san": "h3#",
+      "uci": "h4h3",
+      "desafioFinal": false,
+      "ideia": "34...h3#. O peão dá o xeque, a dama protege h3 e cobre g1, f2, g3 e f3. A torre de f8 fecha f1.",
+      "feedback": "Antes de procurar um lance de dama, olhe os peões. Eles também atacam casas e podem fechar a rede de mate.",
+      "alternativas": "",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    }
+  ]
+}

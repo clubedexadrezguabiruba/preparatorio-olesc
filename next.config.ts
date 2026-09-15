@@ -66,6 +66,16 @@ const nextConfig: NextConfig = {
      * entrou pela porta de um merge.
      */
     "/painel": ["./content/**", "./public/repertorio/**"],
+    /*
+     * As partidas modelo (15/9/2026): `lib/partidas/ler.ts` lê `content/partidas/`
+     * por caminho, e a server action que grava roda no pacote da página que a
+     * chama. A prova de nível entra junto porque `estadoParaONivel` passou a ler
+     * as partidas — e já lia as aulas de `content/` antes, sem estar listada.
+     */
+    "/partidas": ["./content/**"],
+    "/partidas/[jogo]": ["./content/**"],
+    "/partidas/[jogo]/inteira": ["./content/**"],
+    "/nivel/[n]/prova": ["./content/**", "./public/repertorio/**"],
   },
   /**
    * **O selo de desenvolvimento do Next sai da tela.**

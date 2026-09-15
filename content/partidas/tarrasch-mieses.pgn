@@ -1,0 +1,44 @@
+[Event "Gothenburg"]
+[Site "Gothenburg SWE"]
+[Date "1920.??.??"]
+[White "Siegbert Tarrasch"]
+[Black "Jacques Mieses"]
+[Result "1-0"]
+[ECO "B01"]
+[Nome "Tarrasch × Mieses"]
+[Ordem "3"]
+[Nivel "2"]
+[Cor "brancas"]
+[Tema "Garfo de cavalo e xeque descoberto"]
+[FonteSlug "chernev-logical-chess-1957"]
+[Fonte "Irving Chernev, Logical Chess: Move by Move, Game 28, pp. 197–206"]
+[Status "rascunho"]
+
+1. e4 d5 2. exd5 Qxd5 3. Nc3! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 3.Cc3! desenvolve o cavalo e ataca a dama. Ela precisa sair de novo.}
+Qa5 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A dama recua para a5. É o segundo lance dela, e nenhuma peça preta saiu ainda.}
+4. d4! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 4.d4! usa o tempo ganho para ocupar o centro e abrir a diagonal do bispo de c1.}
+e5 5. Nf3! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 5.Cf3! desenvolve mais uma peça e defende o peão de d4.}
+Bb4 6. Bd2 Bg4 7. Be2 exd4 8. Nxd4 Qe5 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A dama preta faz o terceiro lance dela. As brancas já têm quatro peças em jogo.}
+9. Ncb5! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 9.Ccb5! defende o cavalo de d4 e abre a diagonal do bispo de d2, que agora ataca o bispo de b4.}
+Bxe2 10. Qxe2 Bxd2+ 11. Kxd2 Qxe2+ 12. Kxe2 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] As damas saem do tabuleiro. Sem elas, o rei branco em e2 não corre perigo e pode ajudar as outras peças.}
+Na6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 12...Ca6 defende c7. Sem esse lance, Cxc7+ seria um garfo no rei e na torre de a8.}
+13. Rhe1! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 13.The1! põe a torre atrás do rei branco, na coluna do rei preto. Um passo do rei branco para o lado dará xeque descoberto.}
+O-O-O {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 13...O-O-O é um erro. O rei vai a c8 e a torre a d8, casas que os cavalos brancos alcançam com xeque.}
+14. Nxa7+! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 14.Cxa7+! toma um peão com xeque.}
+Kb8 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O rei vai a b8. Agora ele e a torre de d8 estão a um salto de cavalo da casa c6.}
+15. Nac6+! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 15.Cac6+! entrega o cavalo. Se o peão captura, o outro cavalo chega a c6.}
+bxc6 16. Nxc6+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 16.Cxc6+ é o garfo: o cavalo ataca o rei em b8 e a torre em d8.}
+Kc8 17. Nxd8 Kxd8 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] As pretas recuperam o cavalo. As brancas ficam com torre e dois peões contra os dois cavalos.}
+18. Rad1+! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 18.Tad1+! ocupa a coluna aberta com xeque. A vantagem de desenvolvimento virou material.}
+Ke8 19. Kd3+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 19.Rd3+ é xeque descoberto: o rei sai da coluna e, e a torre de e1 dá o xeque.}
+Ne7 20. Kc4 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O rei branco segue para c4, rumo à ala da dama e ao cavalo de a6.}
+h5 21. Rd3 Nb8 22. Rde3 Nc6 23. b4 f6 24. f4 Kf7 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Já não há ataque ao rei. É um final em que o rei e as torres brancas trabalham juntos.}
+25. a4! {[%autoria PARÁFRASE FIEL — Irving Chernev] 25.a4! prepara um peão passado sem pressa. Com 25.b5?, as pretas teriam Ca5+ e depois um garfo de cavalo em d5.}
+Rb8 26. c3 Rd8 27. Rd3! {[%autoria PARÁFRASE FIEL — Irving Chernev] 27.Td3! oferece a troca de torres.}
+Rxd3 28. Kxd3 {[%autoria PARÁFRASE FIEL — Irving Chernev] Com menos peças, o rei branco fica mais forte. Os peões da ala da dama ficam mais fáceis de apoiar.}
+Ke8 29. a5 Kd7 30. a6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O peão chega a a6, a duas casas de virar dama.}
+Nd5 31. Ra1 Na7 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Um cavalo preto vai para a7 só para segurar o peão.}
+32. g3 c6 33. Ra4 Nb6 34. Ra5 g6 35. c4 Nbc8 36. Ra1 Nd6 37. Kd4 Ndc8 38. Kc5 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O rei chega a c5, ao lado dos peões da ala da dama.}
+Kc7 39. Re1 Nb6 40. Re7+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A torre entra na sétima fileira com xeque.}
+Nd7+ 41. Rxd7+! {[%autoria ANÁLISE DO PROJETO] 41.Txd7+! troca a torre pelo cavalo que dava xeque. Sem torres, o cavalo de a7 sozinho não segura os peões brancos. Mieses abandona.}
+1-0

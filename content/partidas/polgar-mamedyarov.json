@@ -1,0 +1,174 @@
+{
+  "slug": "polgar-mamedyarov",
+  "intro": [
+    "Judit Polgar contra Shakhriyar Mamedyarov, na Olimpíada de Bled, em 2002. É a partida mais moderna deste nível.",
+    "Ela mostra uma ideia antiga: o rei que fica no centro sofre quando as linhas se abrem.",
+    "Repare como Polgar não para para ganhar material. Cada xeque e cada ameaça traz mais uma peça para o ataque.",
+    "Pense nisto enquanto os lances passam: o que acontece se você der ao adversário um lance livre para se defender?"
+  ],
+  "objetivos": [
+    "Reconhecer quando um rei no centro vira alvo.",
+    "Usar xeques e ameaças para trazer peças ao ataque sem gastar lances.",
+    "Abrir a coluna e para a torre.",
+    "Saber onde a partida acabou: no abandono, depois de 23...Rd5."
+  ],
+  "momentoFinal": [
+    "No Desafio final, o rei preto está em d6. 23.Be7+! é mais um xeque, agora com o bispo.",
+    "As pretas responderam 23...Rd5 e abandonaram. A partida termina aí, e qualquer lance depois disso seria análise.",
+    "O rei preto ficou em d5, no meio do tabuleiro. As torres pretas nunca saíram de a8 e h8.",
+    "Polgar não parou para contar material. Cada xeque trouxe mais uma peça, até as pretas ficarem sem defesa."
+  ],
+  "resumo": [
+    "Um rei no centro vira alvo quando as linhas se abrem.",
+    "Um xeque vale mais quando também traz uma peça nova para o ataque.",
+    "Com o rei adversário exposto, não pare para pegar material: continue trazendo peças."
+  ],
+  "perguntas": [
+    "Por que 12.Cxf7! não é só uma busca por peões?",
+    "O que 17.Te1! acrescenta ao ataque?",
+    "Qual foi o último lance jogado na partida, antes do abandono?"
+  ],
+  "fonte": {
+    "slug": "giddins-50-lessons-2006",
+    "referencia": "Game 3, pp. 14–16"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "11.Ng5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "12.Nxf7",
+      "simbolo": "!"
+    },
+    {
+      "lance": "13.Qf3+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "14.Qg4+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "16.e6",
+      "simbolo": "!"
+    },
+    {
+      "lance": "17.Re1",
+      "simbolo": "!"
+    },
+    {
+      "lance": "19.Ne4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "20.Bg5+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "23.Be7+",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [
+    {
+      "onde": "Fonte da partida",
+      "ficha": "A ficha de origem cita Weeramantry & Eusebi, com a edição e as páginas de outro livro (Gambit 2006, Game 3, pp. 14–16)",
+      "correcao": "A fonte é Steve Giddins, 50 Essential Chess Lessons (Gambit, 2006), Game 3, pp. 14–16, como no PGN canônico."
+    },
+    {
+      "onde": "Todo o texto do aluno",
+      "ficha": "\"cheque\", \"score\" e \"iniciativa\"",
+      "correcao": "\"xeque\", \"a partida\" e o que o lance faz em palavras comuns"
+    }
+  ],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "Trazer o cavalo com ameaça",
+      "ply": 20,
+      "fen": "r2qkb1r/2p2ppp/p1n1b3/1pn1P3/3p4/1BP2N2/PP1N1PPP/R1BQ1RK1 w kq - 0 11",
+      "lado": "brancas",
+      "pergunta": "O bispo preto de e6 já é atacado pelo seu bispo de b3. Que peça pode atacá-lo de novo, chegando perto de f7?",
+      "san": "Ng5",
+      "uci": "f3g5",
+      "desafioFinal": false,
+      "ideia": "11.Cg5! ataca o bispo de e6 pela segunda vez e mira f7. Com o rei preto ainda em e8, cada peça que chega perto conta.",
+      "feedback": "Quando o rei adversário está no centro, procure peças que se aproximem dele com ameaça.",
+      "alternativas": "Tomar em e6 com o bispo ou em d4 com o peão também são bons lances. O cavalo em g5 prepara o golpe da partida.",
+      "alternativasBoas": [
+        "b3e6",
+        "b3c2",
+        "c3d4",
+        "f3d4",
+        "d1e2",
+        "f1e1"
+      ],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins"
+    },
+    {
+      "n": 2,
+      "titulo": "O garfo que tira o rei de casa",
+      "ply": 22,
+      "fen": "r2qkb1r/2p2ppp/p1n5/1pnbP1N1/3p4/1BP5/PP1N1PPP/R1BQ1RK1 w kq - 2 12",
+      "lado": "brancas",
+      "pergunta": "A dama preta está em d8 e a torre em h8. Qual captura ataca as duas e obriga o rei a sair de e8?",
+      "san": "Nxf7",
+      "uci": "g5f7",
+      "desafioFinal": false,
+      "ideia": "12.Cxf7! ataca a dama e a torre ao mesmo tempo. O rei toma com 12...Rxf7 e fica exposto no centro.",
+      "feedback": "Não sacrifique só para dar xeque. Procure a captura que ataca duas peças pretas e tira o rei de e8.",
+      "alternativas": "Um lance calmo, como 12.Te1, dá às pretas tempo de tirar o bispo de f8 e fazer o roque.",
+      "alternativasBoas": [],
+      "autoria": "PARÁFRASE FIEL — Steve Giddins"
+    },
+    {
+      "n": 3,
+      "titulo": "O peão abre a coluna e",
+      "ply": 30,
+      "fen": "r2q1b1r/2p1k1pp/p1n5/1pnbPQ2/3p4/1BP5/PP1N1PPP/R1B2RK1 w - - 6 16",
+      "lado": "brancas",
+      "pergunta": "O rei preto está em e7, e o seu peão de e5 tapa essa coluna. Que lance de peão começa a abri-la?",
+      "san": "e6",
+      "uci": "e5e6",
+      "desafioFinal": false,
+      "ideia": "16.e6! entrega o peão. Depois de 16...Bxe6, a torre vai a e1 e crava o bispo contra o rei.",
+      "feedback": "Nem todo peão avança para promover. Às vezes ele avança para abrir uma coluna para a torre.",
+      "alternativas": "Levar a torre a e1 antes do avanço é lento: o peão de e5 ainda tapa a coluna.",
+      "alternativasBoas": [],
+      "autoria": "PARÁFRASE FIEL — Steve Giddins"
+    },
+    {
+      "n": 4,
+      "titulo": "Mais uma peça com ameaça",
+      "ply": 36,
+      "fen": "r4b1r/2p1k1pp/p1nqn3/1p3Q2/3p4/2P5/PP1N1PPP/R1B1R1K1 w - - 0 19",
+      "lado": "brancas",
+      "pergunta": "O cavalo de d2 é a última peça branca fora do ataque. Onde ele entra atacando a dama preta?",
+      "san": "Ne4",
+      "uci": "d2e4",
+      "desafioFinal": false,
+      "ideia": "19.Ce4! ataca a dama em d6. Ao sair de d2, o cavalo também abre o caminho do bispo de c1 até g5.",
+      "feedback": "Conte quantas peças suas estão perto do rei preto. Se uma pode entrar com ameaça, traga essa peça.",
+      "alternativas": "19.Cb3 também é forte, mas o cavalo em e4 fica mais perto do rei.",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins"
+    },
+    {
+      "n": 5,
+      "titulo": "O último xeque da partida",
+      "ply": 44,
+      "fen": "r6r/2p2Qpp/p1nkn3/1pb1q1B1/3p4/2P5/PP3PPP/R3R1K1 w - - 2 23",
+      "lado": "brancas",
+      "pergunta": "O rei preto está em d6, e a sua dama em f7 vigia a casa e7. Qual xeque aproveita essa casa?",
+      "san": "Be7+",
+      "uci": "g5e7",
+      "desafioFinal": true,
+      "ideia": "23.Be7+! traz o bispo com xeque, protegido pela dama. As pretas responderam 23...Rd5 e abandonaram.",
+      "feedback": "Liste todos os xeques que você tem. Procure o que vem protegido e não deixa o rei preto ganhar um lance livre.",
+      "alternativas": "Tomar o peão d4 dá às pretas o lance que faltava para se defender.",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Steve Giddins; término histórico conforme relatório 21"
+    }
+  ]
+}

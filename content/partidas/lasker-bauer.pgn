@@ -1,0 +1,32 @@
+[Event "Amsterdam"]
+[Site "Amsterdam NED"]
+[Date "1889.08.26"]
+[White "Emanuel Lasker"]
+[Black "Johann Hermann Bauer"]
+[Result "1-0"]
+[ECO "A03"]
+[Nome "Lasker × Bauer"]
+[Ordem "1"]
+[Nivel "4"]
+[Cor "brancas"]
+[Tema "Os dois bispos contra o roque"]
+[FonteSlug "weeramantry-eusebi-1993"]
+[Fonte "Weeramantry & Eusebi, Best Lessons of a Chess Coach, pp. 155–156 [Destructive Sacrifice]"]
+[Status "rascunho"]
+
+1. f4 d5 2. e3 Nf6 3. b3 e6 4. Bb2 Be7 5. Bd3 {[%autoria ANÁLISE DO PROJETO] Os dois bispos brancos, em b2 e d3, já apontam para o lado do rei preto.} b6 6. Nf3 Bb7 7. Nc3 Nbd7
+8. O-O {[%autoria ANÁLISE DO PROJETO] Os dois lados desenvolvem as peças e fazem o roque.} O-O {[%autoria ANÁLISE DO PROJETO] Ainda não há motivo para sacrificar nada. Primeiro, cada peça vai para uma casa útil.}
+9. Ne2 c5 10. Ng3 {[%autoria ANÁLISE DO PROJETO] O cavalo de c3 passa por e2 e chega a g3, perto do roque preto.} Qc7 11. Ne5 Nxe5 12. Bxe5 {[%autoria ANÁLISE DO PROJETO] O bispo de b2 chega a e5. Ele mira o cavalo de f6 e, atrás dele, g7.} Qc6
+13. Qe2 {[%autoria ANÁLISE DO PROJETO] A dama vai a e2. O ataque cresce assim: uma peça de cada vez olhando para o mesmo rei.} a6
+14. Nh5! {[%autoria ANÁLISE DO PROJETO] O cavalo de f6 é quem defende h7. Com Ch5, Lasker ataca esse cavalo pela segunda vez.} Nxh5 {[%autoria ANÁLISE DO PROJETO] O cavalo preto sai de f6 e toma em h5. Agora h7 não tem outro defensor além do rei.}
+15. Bxh7+! {[%autoria ANÁLISE DO PROJETO] O bispo toma o peão de h7 com xeque.} Kxh7 16. Qxh5+ {[%autoria ANÁLISE DO PROJETO] A dama toma com xeque o cavalo de h5. O rei preto já não tem o peão de h7 na frente.} Kg8
+17. Bxg7! {[%autoria ANÁLISE DO PROJETO] Agora o outro bispo toma g7. Ele ameaça Dh8 mate, e as pretas tomam.} Kxg7 {[%autoria ANÁLISE DO PROJETO] Os dois peões que cobriam o rei, h7 e g7, saíram. Isso tem nome: tirar os defensores do rei.}
+18. Qg4+ {[%autoria ANÁLISE DO PROJETO] Os bispos só podiam ser entregues porque a dama continua com xeque, de h5 para g4.} Kh7
+19. Rf3! {[%autoria ANÁLISE DO PROJETO] Falta uma peça. A torre de f1 sobe para f3 e quer chegar à coluna h.} e5 {[%autoria ANÁLISE DO PROJETO] As pretas abrem a sexta fileira para a dama poder defender em h6.}
+20. Rh3+! {[%autoria ANÁLISE DO PROJETO] A torre chega com xeque, e o rei preto não tem para onde ir. A melhor defesa é pôr a dama em h6.} Qh6 21. Rxh6+ {[%autoria ANÁLISE DO PROJETO] Os bispos abriram o rei, e a torre ganhou a dama. Sem a torre, os sacrifícios não bastavam.} Kxh6
+22. Qd7 {[%autoria ANÁLISE DO PROJETO] O ataque ao rei acabou. Em d7 a dama ataca os dois bispos pretos de uma vez.} Bf6 23. Qxb7 {[%autoria ANÁLISE DO PROJETO] Um bispo se salvou em f6, e o de b7 caiu.} Kg7
+24. Rf1 {[%autoria ANÁLISE DO PROJETO] Lasker muda de tarefa. Ele traz a torre de volta e cuida para as pretas não criarem jogo.} Rab8 25. Qd7 Rfd8 26. Qg4+ Kf8
+27. fxe5 {[%autoria ANÁLISE DO PROJETO] A dama e a torre continuam ativas. O peão de f4 toma em e5 e depois avança até e6.} Bg7 28. e6 Rb7 29. Qg6 {[%autoria ANÁLISE DO PROJETO] A dama chega a g6, outra vez perto do rei preto.} f6
+30. Rxf6+! {[%autoria ANÁLISE DO PROJETO] A torre toma o peão de f6 com xeque, e o bispo de g7 precisa tomá-la.} Bxf6 31. Qxf6+ {[%autoria ANÁLISE DO PROJETO] A dama toma o bispo com xeque. A torre voltou em forma de peça e peão.} Ke8
+32. Qh8+ Ke7 33. Qg7+ {[%autoria ANÁLISE DO PROJETO] Xeque em g7. Quando o rei sair da sétima fileira, a torre de b7 fica sem proteção.} Kxe6 34. Qxb7 {[%autoria ANÁLISE DO PROJETO] A dama leva a torre. Agora é dama contra torre.} Rd6
+35. Qxa6 {[%autoria ANÁLISE DO PROJETO] O resto é juntar peões sem dar chance às pretas.} d4 36. exd4 cxd4 37. h4 d3 38. Qxd3 {[%autoria ANÁLISE DO PROJETO] A dama tira o último peão preto que avançava. Bauer abandona.} 1-0

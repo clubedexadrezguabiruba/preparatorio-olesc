@@ -1,0 +1,134 @@
+{
+  "slug": "colle-delvaux",
+  "intro": [
+    "Edgard Colle contra Delvaux, em 1929. A abertura das brancas leva o nome dele: o Sistema Colle.",
+    "Esta partida mostra que o ataque forte começa muito antes do primeiro sacrifício.",
+    "Repare na ordem das tarefas. Primeiro Colle prepara as peças e abre o centro.",
+    "Depois ele obriga os peões do roque preto a andar. Só então vem o ataque."
+  ],
+  "objetivos": [
+    "Explicar por que 9.e4! abre o jogo na hora certa, com as peças brancas prontas.",
+    "Ver como o cavalo em g5 e a dama em e4 obrigam os peões do roque a andar.",
+    "Entender 15.Cxe6! como um jeito de tirar o peão f7 da defesa de g6.",
+    "Achar o mate final com dama e bispo trabalhando juntos."
+  ],
+  "momentoFinal": [
+    "Pare antes de 22.Df7#. O rei preto está em f6, a dama branca em h7 e o bispo branco em h5.",
+    "A dama vai a f7 e dá xeque. O rei não pode tomá-la, porque o bispo de h5 protege f7.",
+    "O rei não tem fuga. O peão d4 cuida de e5 e o peão h4 cuida de g5. A dama cuida de f5, g6 e g7.",
+    "O mate só existe porque cada peça branca chegou antes, com uma tarefa."
+  ],
+  "resumo": [
+    "Ataque forte começa com peças preparadas, não com sacrifício por impulso.",
+    "Você pode criar fraquezas obrigando os peões do roque a andar.",
+    "No mate final, dama e bispo trabalham juntos."
+  ],
+  "perguntas": [
+    "Por que 9.e4! funciona melhor depois que o rei branco já fez o roque?",
+    "O que muda para o rei preto depois que os peões h e g andam?",
+    "Qual é a função de 15.Cxe6! antes de a dama tomar em g6?"
+  ],
+  "fonte": {
+    "slug": "chernev-logical-chess-1957",
+    "referencia": "Game 3, pp. 23–29"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "9.e4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "12.Nfg5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "14.Qe4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "15.Nxe6",
+      "simbolo": "!"
+    },
+    {
+      "lance": "16.Qxg6+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "21.h4",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [
+    {
+      "onde": "Todo o texto do aluno",
+      "ficha": "\"cheque\" e \"rocou\"",
+      "correcao": "\"xeque\" e \"fez o roque\""
+    }
+  ],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "Afastar o peão f",
+      "ply": 28,
+      "fen": "r2q1rk1/pb3p2/2n1pbpp/1p4N1/2pPQ3/2P5/PPB2PPP/R1B2RK1 w - - 0 15",
+      "lado": "brancas",
+      "pergunta": "O peão f7 é quem defende g6. Existe um lance do seu cavalo que obriga esse peão a sair de f7?",
+      "san": "Nxe6",
+      "uci": "g5e6",
+      "desafioFinal": false,
+      "ideia": "15.Cxe6! ataca a dama em d8 e a torre em f8. As pretas tomam com 15...fxe6, e o peão deixa de defender g6.",
+      "feedback": "Não sacrifique só porque o rei parece fraco. Descubra qual defensor precisa sair para o seu próximo lance funcionar.",
+      "alternativas": "Recuar o cavalo para f3 ou h3 é seguro, mas desfaz o ataque.",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 2,
+      "titulo": "Entrar com xeque",
+      "ply": 30,
+      "fen": "r2q1rk1/pb6/2n1pbpp/1p6/2pPQ3/2P5/PPB2PPP/R1B2RK1 w - - 0 16",
+      "lado": "brancas",
+      "pergunta": "O peão f7 saiu. Olhe agora para o peão g6: quem ainda o defende?",
+      "san": "Qxg6+",
+      "uci": "e4g6",
+      "desafioFinal": false,
+      "ideia": "16.Dxg6+! toma com xeque. As pretas não têm tempo de reorganizar a defesa e tapam com 16...Bg7.",
+      "feedback": "Depois de entregar material, procure lances que obrigam a resposta. Um xeque não deixa a defesa se reorganizar.",
+      "alternativas": "16.Bxh6 também ataca, mas sem xeque dá às pretas um lance livre.",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 3,
+      "titulo": "O xeque protegido pelo bispo",
+      "ply": 32,
+      "fen": "r2q1rk1/pb4b1/2n1p1Qp/1p6/2pP4/2P5/PPB2PPP/R1B2RK1 w - - 1 17",
+      "lado": "brancas",
+      "pergunta": "Seu bispo de c2 mira a diagonal até h7, e a sua dama está nela. Qual xeque aproveita esse apoio?",
+      "san": "Qh7+",
+      "uci": "g6h7",
+      "desafioFinal": false,
+      "ideia": "17.Dh7+ vem protegida pelo bispo de c2. O rei não pode tomar a dama e só tem uma casa: f7.",
+      "feedback": "Olhe primeiro os xeques da dama. Depois confira qual deles vem protegido, para o rei não poder tomar.",
+      "alternativas": "17.Dxe6+ também é xeque, mas não empurra o rei para fora do roque, e as pretas se defendem melhor.",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 4,
+      "titulo": "Mate com dama e bispo",
+      "ply": 42,
+      "fen": "r2q2r1/pb2n2Q/4pk1b/1p5B/2pP3P/2P5/PP3PP1/R4RK1 w - - 0 22",
+      "lado": "brancas",
+      "pergunta": "As pretas acabaram de tomar em h6. Existe um mate em um lance. Qual é?",
+      "san": "Qf7#",
+      "uci": "h7f7",
+      "desafioFinal": true,
+      "ideia": "22.Df7# é mate. O bispo de h5 protege a dama, e o rei em f6 não tem casa livre.",
+      "feedback": "Olhe todos os xeques antes das capturas. Confira se a peça que dá xeque está protegida e se o rei tem para onde fugir.",
+      "alternativas": "Nenhum outro lance dá mate aqui.",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    }
+  ]
+}

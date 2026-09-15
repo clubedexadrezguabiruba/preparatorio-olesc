@@ -40,6 +40,8 @@ import {
 } from "../lib/lesson/excecoes.ts";
 import { respostasDe } from "../lib/lesson/tree.ts";
 import { falasDaAula } from "../lib/lesson/voz.ts";
+import { problemasDasPartidas } from "../lib/partidas/conferir.ts";
+import { lerPartidas } from "../lib/partidas/ler.ts";
 import { validarNotas } from "../lib/repertorio/notas.ts";
 import { revisoesDaAulaV2, type RevisoesDaAulaV2 } from "../lib/editor-v2/avaliacao.ts";
 import { problemasParaPublicarV2 } from "../lib/editor-v2/conferencia.ts";
@@ -1259,6 +1261,8 @@ checkIntegralRegime();
 checkDivida();
 progresso("conferindo as aulas v2 publicadas");
 checkAulasV2();
+progresso("conferindo as partidas modelo");
+checkPartidas();
 
 /* ------------------------------------------------------------------ *
  * As aulas v2 publicadas (fatia 7 do Editor v2)
@@ -1272,6 +1276,25 @@ checkAulasV2();
  * porque uma aba antiga rejulga contra eles. As **regras de publicação** valem só para o
  * ativo. A régua de voz não entra aqui: ela avisa no editor e não decide o CI.
  * ------------------------------------------------------------------ */
+/* ------------------------------------------------------------------ *
+ * As partidas modelo (docs/PARTIDAS-MODELO.md)
+ *
+ * A mesma trava de `lib/partidas/conteudo.test.ts`, com o mesmo código: FEN e
+ * lance de cada momento contra a partida, um Desafio final, os símbolos da ficha
+ * no PGN, a fonte registrada e a contagem da curadoria.
+ * ------------------------------------------------------------------ */
+function checkPartidas() {
+  // Só no conteúdo de verdade: as rodadas com `--content` apontando para um
+  // diretório de teste não têm partidas, e não devem reprovar por isso.
+  if (path.basename(contentDir) !== "content" || !existsSync(path.join(contentDir, "partidas"))) return;
+  const { partidas, problemas } = lerPartidas(path.dirname(contentDir));
+  const fontes = new Set([...sourcesByKey.values()].map((s) => s.slug));
+  for (const problema of [...problemas, ...problemasDasPartidas(partidas, fontes)]) {
+    const [onde, ...resto] = problema.split(": ");
+    fail("PARTIDA_MODELO", onde, resto.join(": ") || problema);
+  }
+}
+
 function checkAulasV2() {
   for (const id of idsDeAulasV2(contentDir)) {
     const where = `aula v2 ${id}`;

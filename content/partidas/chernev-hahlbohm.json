@@ -1,0 +1,205 @@
+{
+  "slug": "chernev-hahlbohm",
+  "intro": [
+    "Nova York, 1942, Campeonato dos Estados Unidos. Irving Chernev joga de brancas contra Herman Hahlbohm.",
+    "Chernev escreveu livros que explicam o motivo de cada lance. Esta partida é dele, e ele mesmo a comentou.",
+    "Observe primeiro como várias peças brancas preparam o avanço e4.",
+    "Depois, repare que cada sacrifício já tem o lance seguinte pronto — quase sempre um xeque."
+  ],
+  "objetivos": [
+    "Reconhecer quando várias peças preparam o mesmo avanço de peão.",
+    "Calcular o lance seguinte antes de sacrificar em h7.",
+    "Achar o xeque que também ataca uma peça sem defesa.",
+    "Escolher a peça certa quando duas podem fazer a mesma captura."
+  ],
+  "momentoFinal": [
+    "Depois de 22.Ccxe6+ fxe6, o peão de f7 saiu, e 23.Dxg6 leva mais um peão do rei.",
+    "As pretas jogam 23...Cd8 para proteger e6 e f7. Então o cavalo que ficou em g5 salta para h7 com xeque.",
+    "Depois de 24.Ch7+, o rei só pode ir a g8 ou e7. Nas duas casas, a dama ou o cavalo dão outro xeque. Hahlbohm abandona."
+  ],
+  "resumo": [
+    "Um plano fica forte quando várias peças o preparam, como Bd3, Cbd2 e De2 antes de e4.",
+    "Antes de sacrificar, saiba como recuperar o material. Em h7, a conta era o xeque em e4.",
+    "Quando duas peças podem fazer a mesma captura, escolha a que deixa a outra trabalhando."
+  ],
+  "perguntas": [
+    "Quais peças brancas prepararam o avanço 10.e4, e o que cada uma fazia?",
+    "Por que 13.Bxh7+ só funcionou depois que a dama preta foi para b6?",
+    "Em 22.Ccxe6+, o que muda se o cavalo de g5 tomar em e6?"
+  ],
+  "fonte": {
+    "slug": "chernev-logical-chess-1957",
+    "referencia": "Game 21, pp. 134–141"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "9.dxc5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "10.e4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "12.Nb3",
+      "simbolo": "!"
+    },
+    {
+      "lance": "13.Bxh7+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "14.Qe4+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "16.Ng5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "19.Be3",
+      "simbolo": "!"
+    },
+    {
+      "lance": "20.Nc5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "21.Qh7+",
+      "simbolo": "!"
+    },
+    {
+      "lance": "22.Ncxe6+",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [
+    {
+      "onde": "Desafio final antigo (21.Qh7+), feedback para erro",
+      "ficha": "Depois de 21.Qh7+ Kf8, as brancas continuam trazendo os cavalos com cheque. A partida termina em 24.Nh7+ 1-0.",
+      "correcao": "O texto lido depois do erro entregava o lance esperado. O feedback novo dá a pista (um xeque que não pode ser tomado) sem dizer o lance."
+    },
+    {
+      "onde": "O momento final",
+      "ficha": "Depois de 21.Qh7+!, o rei preto é obrigado a continuar respondendo; as brancas ganham defensores e mantêm a iniciativa.",
+      "correcao": "As brancas não ganham defensores: elas tiram os defensores do rei preto (o bispo de e6 em 22.Ccxe6+ e o peão de g6 em 23.Dxg6). Sem \"iniciativa\", palavra fora da régua da voz."
+    }
+  ],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "Sacrifício com a conta feita",
+      "ply": 24,
+      "fen": "r1b1r1k1/pp3ppp/1qn5/2bnp3/8/1NPB1N2/PP2QPPP/R1B2RK1 w - - 2 13",
+      "lado": "brancas",
+      "pergunta": "O cavalo de d5 ficou sem defesa. Qual xeque começa uma sequência que ganha esse cavalo dois lances depois?",
+      "san": "Bxh7+",
+      "uci": "d3h7",
+      "desafioFinal": false,
+      "ideia": "Depois de 13...Rxh7, vem 14.De4+: xeque no rei e ataque ao cavalo de d5. Você recupera a peça e o rei fica sem o peão de h7.",
+      "feedback": "Antes de sacrificar, diga o que acontece se o rei tomar. Que xeque sua dama tem, e o que mais ele ataca?",
+      "alternativas": "O sacrifício não é o único bom lance: 13.Cg5 também é forte. A lição aqui é sacrificar só com a conta feita.",
+      "alternativasBoas": [
+        "b3c5",
+        "f1e1",
+        "d3c2",
+        "f3g5",
+        "d3c4",
+        "h2h3",
+        "d3e4"
+      ],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 2,
+      "titulo": "Xeque com ataque duplo",
+      "ply": 26,
+      "fen": "r1b1r3/pp3ppk/1qn5/2bnp3/8/1NP2N2/PP2QPPP/R1B2RK1 w - - 0 14",
+      "lado": "brancas",
+      "pergunta": "O rei foi para h7, e o cavalo de d5 continua sem defesa. Existe um lance que ataca os dois ao mesmo tempo?",
+      "san": "Qe4+",
+      "uci": "e2e4",
+      "desafioFinal": false,
+      "ideia": "De e4, a dama dá xeque pela diagonal até h7 e ataca o cavalo de d5. As pretas cuidam do rei, e 15.Dxd5 recupera a peça.",
+      "feedback": "Um xeque que só dá xeque não basta aqui. Procure a casa da dama que também olha para d5.",
+      "alternativas": "14.Dd3+ faz o mesmo: xeque pela diagonal e ataque a d5. 14.Dc4 também ataca o cavalo, sem dar xeque.",
+      "alternativasBoas": [
+        "e2c4",
+        "e2d3"
+      ],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 3,
+      "titulo": "Mais uma peça perto do rei",
+      "ply": 30,
+      "fen": "r1b1rbk1/pp3pp1/1qn5/3Qp3/8/1NP2N2/PP3PPP/R1B2RK1 w - - 1 16",
+      "lado": "brancas",
+      "pergunta": "Você recuperou o cavalo e tem um peão a mais. O rei preto perdeu o peão de h7. Qual peça sua pode chegar perto dele?",
+      "san": "Ng5",
+      "uci": "f3g5",
+      "desafioFinal": false,
+      "ideia": "Em g5 o cavalo mira h7 e f7. Junto com a dama, ele ameaça Dxf7+, e as pretas precisam gastar lances na defesa.",
+      "feedback": "Não relaxe depois de ganhar material. O rei preto está sem o peão de h7: qual peça sua ainda está longe dele?",
+      "alternativas": "16.Be3 desenvolve uma peça, mas não ameaça nada. Com 16.Cg5, as pretas são obrigadas a responder.",
+      "alternativasBoas": [],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 4,
+      "titulo": "Atacar a dama e ganhar tempo",
+      "ply": 38,
+      "fen": "r3r1k1/pp3pb1/q1n1b1p1/4p1N1/7Q/1NP1B3/PP3PPP/R4RK1 w - - 4 20",
+      "lado": "brancas",
+      "pergunta": "A dama preta em a6 ataca sua torre de f1. Em vez de defender, procure um lance que ataque a dama e o bispo de e6.",
+      "san": "Nc5",
+      "uci": "b3c5",
+      "desafioFinal": false,
+      "ideia": "Em c5 o cavalo ataca a dama de a6 e o bispo de e6, que protege f7. As pretas salvam a dama, e você ganha tempo para os xeques.",
+      "feedback": "Defender a torre é lento. Procure um lance que obrigue as pretas a cuidar da própria dama.",
+      "alternativas": "20.Dh7+ logo também ganha. Na partida, o cavalo foi antes a c5 para atacar a dama e o bispo.",
+      "alternativasBoas": [
+        "h4h7"
+      ],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 5,
+      "titulo": "O xeque que prende o rei",
+      "ply": 40,
+      "fen": "r3r1k1/pp3pb1/2n1b1p1/2N1p1N1/2q4Q/2P1B3/PP3PPP/R4RK1 w - - 6 21",
+      "lado": "brancas",
+      "pergunta": "O cavalo de c5 e a torre de f1 estão atacados. Qual xeque da dama não dá tempo para as pretas tomarem nada?",
+      "san": "Qh7+",
+      "uci": "h4h7",
+      "desafioFinal": false,
+      "ideia": "Depois de 21.Dh7+ o rei só tem f8. De lá, os dois cavalos estão a um salto de dar xeque em e6.",
+      "feedback": "Com peças atacadas, o lance precisa forçar. Procure um xeque em que a dama não possa ser tomada.",
+      "alternativas": "",
+      "alternativasBoas": [],
+      "autoria": "ANÁLISE DO PROJETO"
+    },
+    {
+      "n": 6,
+      "titulo": "Qual cavalo toma",
+      "ply": 42,
+      "fen": "r3rk2/pp3pbQ/2n1b1p1/2N1p1N1/2q5/2P1B3/PP3PPP/R4RK1 w - - 8 22",
+      "lado": "brancas",
+      "pergunta": "Há mais de um xeque aqui. Procure o que tira um defensor do rei e deixa suas outras peças prontas para o lance seguinte.",
+      "san": "Ncxe6+",
+      "uci": "c5e6",
+      "desafioFinal": true,
+      "ideia": "O cavalo de c5 estava atacado pela dama, e é ele que toma em e6. O de g5 fica onde está, pronto para Ch7+ depois.",
+      "feedback": "Conte o que sobra depois do xeque. Um dos seus cavalos está atacado, e o outro ainda tem trabalho perto do rei.",
+      "alternativas": "22.Cgxe6+ também ganha, e o motor até o prefere. Chernev guardou o cavalo de g5 para o Ch7+ do fim.",
+      "alternativasBoas": [
+        "b2b3",
+        "a1d1",
+        "g5e4",
+        "g5e6",
+        "f1d1"
+      ],
+      "autoria": "ANÁLISE DO PROJETO"
+    }
+  ]
+}

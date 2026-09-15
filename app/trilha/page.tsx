@@ -24,6 +24,8 @@ import {
 import { nivelConquistado } from "@/lib/curso/progresso";
 import { aulasComPratica, aulasExtras, aulasPublicadas } from "@/lib/finais/conteudo";
 import { progressoDeFinais } from "@/lib/finais/progresso";
+import { listarPartidas } from "@/lib/partidas/carregar";
+import { situacoesDoAluno } from "@/lib/partidas/progresso";
 import { temaAberto } from "@/lib/tatica/conteudo";
 import { progressoPorTema } from "@/lib/tatica/progresso";
 
@@ -70,11 +72,14 @@ export const metadata: Metadata = { title: "A trilha — Preparatório OLESC" };
 export default async function Trilha() {
   const perfil = await perfilAtual();
 
-  const [tatica, finais, conquistado, cabecalho] = await Promise.all([
+  const [tatica, finais, conquistado, cabecalho, partidas, situacoes] = await Promise.all([
     progressoPorTema(perfil.id),
     progressoDeFinais(perfil.id),
     nivelConquistado(perfil.id),
     dadosDoCabecalho(perfil.id),
+    // As em rascunho entram para aparecer "em escrita"; só as revisadas abrem.
+    listarPartidas(true),
+    situacoesDoAluno(perfil.id, true),
   ]);
   const aqui = nivelDoAluno(conquistado);
 
@@ -86,11 +91,18 @@ export default async function Trilha() {
     aulasComPratica: aulasComPratica(),
     nivelDoAluno: aqui,
     extras: aulasExtras(),
+    partidas: partidas.map((partida) => ({
+      slug: partida.slug,
+      nome: partida.nome,
+      nivel: partida.nivel as Nivel,
+      publicada: partida.status === "revisado-doug",
+      concluida: situacoes.get(partida.slug)?.concluida ?? false,
+    })),
   });
 
   // A legenda só nomeia o que a página de fato desenha. Uma legenda com uma
   // entrada sem referente ensina o aluno a procurar um desenho que não existe.
-  const situacoes = new Set<Situacao>(
+  const aparencias = new Set<Situacao>(
     [...mapa.values()].flat().flatMap((m) => m.itens.map((i) => i.situacao)),
   );
 
@@ -106,11 +118,11 @@ export default async function Trilha() {
       <header className="flex flex-col gap-2">
         <h1 className="titulo text-tinta">A trilha do curso</h1>
         <p className="text-sm text-tinta-media">
-          Tudo o que o preparatório tem, em cinco degraus: tática e finais lado a lado.
+          Tudo o que o preparatório tem, em cinco níveis: tática, finais e partidas modelo lado a lado.
           Você não precisa esperar o degrau certo — <strong>tudo o que está escrito
           continua clicável</strong>, em qualquer um.
         </p>
-        <Legenda situacoes={situacoes} />
+        <Legenda situacoes={aparencias} />
       </header>
 
       {NIVEIS.map((nivel) => {
@@ -153,7 +165,7 @@ export default async function Trilha() {
                 porque item de grade nasce com `min-width: auto`, e uma pastilha
                 longa empurrava o cartão para fora da coluna — que era o defeito
                 nº 1 da revisão das capturas. */}
-            <div className="grid items-start gap-3 sm:grid-cols-2">
+            <div className="grid items-start gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {MODULOS_EM_ORDEM.map((nome) => (
                 <Coluna
                   key={nome}

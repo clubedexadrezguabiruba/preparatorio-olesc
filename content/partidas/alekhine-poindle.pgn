@@ -1,0 +1,46 @@
+[Event "Simultaneous exhibition"]
+[Site "Vienna AUT"]
+[Date "1936.??.??"]
+[White "Alexander Alekhine"]
+[Black "Poindle"]
+[Result "1-0"]
+[ECO "C67"]
+[Nome "Alekhine × Poindle"]
+[Ordem "2"]
+[Nivel "2"]
+[Cor "brancas"]
+[Tema "Ameaças seguidas e ataque descoberto"]
+[FonteSlug "chernev-logical-chess-1957"]
+[Fonte "Irving Chernev, Logical Chess: Move by Move, Game 15, pp. 87–93"]
+[Status "rascunho"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Alekhine desenvolve duas peças e faz o roque.}
+Nxe4 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Poindle toma o peão com o cavalo. Agora esse cavalo precisa de uma casa segura, e as outras peças pretas esperam.}
+5. d4! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 5.d4! abre o centro. A coluna e vai se abrir, e o rei preto ainda está em e8.}
+Nd6 6. dxe5 Nxb5 7. a4 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo preto já andou quatro vezes, e 7.a4 o ataca de novo.}
+Nd6 8. exd6 Bxd6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Na quinta viagem, o cavalo cai em d6. As pretas têm um peão a mais, mas o rei ainda está no centro.}
+9. Ng5! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 9.Cg5! move uma peça que já saiu, mas com ameaça: o cavalo mira f7 e h7.}
+Be7 10. Qh5! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 10.Dh5! ameaça Dxf7 mate. O cavalo de g5 defende a dama.}
+g6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O peão bloqueia e ataca a dama. Mas ele sai de g7, e as casas f6 e h6 perdem essa defesa.}
+11. Qh6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 11.Dh6 ataca a casa f8. Com f8 atacada, as pretas não podem fazer o roque pequeno.}
+Bf8 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O bispo volta a f8 para atacar a dama. É mais um lance preto que não desenvolve peça nova.}
+12. Re1+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 12.Te1+ entra na coluna aberta com xeque.}
+Ne7 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo bloqueia em e7 e fica cravado: atrás dele está o rei.}
+13. Ne4! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 13.Ce4! ameaça Cf6 mate. O rei em e8 está cercado pelas próprias peças.}
+f5 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] Com 13...f5, o rei ganha a casa f7 para fugir.}
+14. Nf6+ Kf7 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O cavalo dá xeque em f6 mesmo assim, e o rei vai a f7. As pretas quase nunca têm um lance livre para desenvolver.}
+15. Qh4 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] A dama sai do ataque do bispo de f8 e fica perto do rei preto.}
+Bg7 16. Bg5 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 16.Bg5 traz o bispo. Ele fica atrás do cavalo de f6, na mesma diagonal da casa e7.}
+h6 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O peão ataca o bispo de g5. As brancas precisam de um lance forte, e rápido.}
+17. Qc4+ {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 17.Dc4+ vem com xeque. O rei precisa responder, e a defesa não ganha tempo para tomar o bispo.}
+Kf8 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O rei vai a f8. Agora um salto do cavalo para h7 será xeque.}
+18. Rxe7! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 18.Txe7! toma o cavalo. Se 18...Dxe7, a dama preta entra na diagonal do bispo de g5.}
+Qxe7 19. Nh7+! {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] 19.Ch7+! é xeque, e o cavalo sai da frente do bispo. É um ataque descoberto: o rei está em xeque, e o bispo ataca a dama.}
+Rxh7 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] As pretas tomam o cavalo. O rei também podia ir a e8, mas nos dois casos a dama cai.}
+20. Bxe7+ Kxe7 {[%autoria ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev] O bispo toma a dama com xeque. Contando tudo, as brancas têm dama e cavalo contra torre e dois bispos.}
+21. Qxc7 {[%autoria ANÁLISE DO PROJETO] A dama ganha um peão e entra no campo preto.}
+Bxb2 22. Ra2 {[%autoria ANÁLISE DO PROJETO] A torre sai do ataque do bispo. Alekhine não procura outro sacrifício: ele protege o que precisa.}
+Bf6 23. c4 Kf7 24. Re2 {[%autoria ANÁLISE DO PROJETO] A torre volta à coluna e. As peças brancas vão para casas ativas, uma de cada vez.}
+Rh8 25. Qd6 a5 26. Nc3 {[%autoria ANÁLISE DO PROJETO] Até o cavalo de b1 entra no jogo. Cada lance branco deixa a posição um pouco mais fácil de ganhar.}
+Ra6 27. Qd5+ Kg7 28. Nb5 Re6 29. Nd6 Rd8 30. Kf1 {[%autoria ANÁLISE DO PROJETO] Depois de 30.Rf1, Poindle abandona. O lance que decidiu a partida veio antes: 18.Txe7!.}
+1-0

@@ -15,6 +15,12 @@ import { defineConfig } from "@playwright/test";
 
 const SO_LAYOUT = /layout\.spec\.ts$/;
 
+/**
+ * A porta do ensaio. Padrão 3000; `E2E_PORTA=3005` quando outra cópia do projeto já ocupa a
+ * 3000 — com `reuseExistingServer`, o ensaio usaria o servidor da outra cópia sem avisar.
+ */
+const PORTA = process.env.E2E_PORTA ?? "3000";
+
 export default defineConfig({
   testDir: "e2e",
   testMatch: "**/*.spec.ts",
@@ -28,7 +34,7 @@ export default defineConfig({
   globalSetup: "./e2e/preparo/global-setup.ts",
   globalTeardown: "./e2e/preparo/global-teardown.ts",
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: `http://localhost:${PORTA}`,
     locale: "pt-BR",
     timezoneId: "America/Sao_Paulo",
     trace: "retain-on-failure",
@@ -37,8 +43,8 @@ export default defineConfig({
     navigationTimeout: 90_000,
   },
   webServer: {
-    command: "npm run dev",
-    url: "http://localhost:3000/entrar",
+    command: `npx next dev -p ${PORTA}`,
+    url: `http://localhost:${PORTA}/entrar`,
     reuseExistingServer: true,
     timeout: 180_000,
   },
@@ -46,6 +52,7 @@ export default defineConfig({
     { name: "editor-1366", use: { viewport: { width: 1366, height: 768 } } },
     { name: "editor-1280", use: { viewport: { width: 1280, height: 720 } }, testMatch: SO_LAYOUT },
     { name: "editor-1920", use: { viewport: { width: 1920, height: 1080 } }, testMatch: SO_LAYOUT },
-    { name: "aluno-375", use: { viewport: { width: 375, height: 812 }, hasTouch: true }, testMatch: SO_LAYOUT },
+    // As partidas modelo são tela de aluno: rodam também a 375 px.
+    { name: "aluno-375", use: { viewport: { width: 375, height: 812 }, hasTouch: true }, testMatch: /(layout|partidas)\.spec\.ts$/ },
   ],
 });

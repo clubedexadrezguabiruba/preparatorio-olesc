@@ -351,3 +351,71 @@ test("passar é 9 de 12, e o número está num lugar só", () => {
   assert.equal(PROVA_DE_NIVEL.paraPassar, 9);
   assert.ok(PROVA_DE_NIVEL.paraPassar <= PROVA_DE_NIVEL.puzzles);
 });
+
+/* ------------------------------------------------------------------ *
+ * As partidas modelo — a quarta trilha, de 15/9/2026
+ * ------------------------------------------------------------------ */
+
+const NIVEL_1 = ["morphy-isouard", "colle-delvaux", "polgar-mamedyarov"];
+
+function comPartidas(publicadas: string[], concluidas: string[], base = VAZIO): ProgressoParaONivel {
+  return {
+    ...base,
+    partidas: {
+      publicadas: new Map(publicadas.map((s) => [s, `Partida ${s}`])),
+      concluidas: new Set(concluidas),
+    },
+  };
+}
+
+test("todo nível declara 3 partidas modelo", () => {
+  for (const n of NIVEIS) assert.equal(NIVEL[n].partidasParaFechar, 3, `nível ${n}`);
+});
+
+test("sem partida publicada o requisito vale zero, e o construtor antigo continua valendo", () => {
+  const f = fechamentoDoNivel(1, VAZIO);
+  assert.deepEqual(f.partidas, { feitas: 0, exigidas: 0, declaradas: 3, publicadas: 0 });
+});
+
+test("o requisito é min(3, publicadas): duas revisadas pedem duas", () => {
+  const p = comPartidas(NIVEL_1.slice(0, 2), [NIVEL_1[0]]);
+  assert.deepEqual(fechamentoDoNivel(1, p).partidas, { feitas: 1, exigidas: 2, declaradas: 3, publicadas: 2 });
+});
+
+test("partida publicada de outro nível não conta neste", () => {
+  const p = comPartidas(["lasker-bauer"], ["lasker-bauer"]);
+  assert.equal(fechamentoDoNivel(1, p).partidas.publicadas, 0);
+  assert.equal(fechamentoDoNivel(4, p).partidas.feitas, 1);
+});
+
+test("com as 3 publicadas, o nível só fecha depois das 3 concluídas", () => {
+  const semPartidas = comTaticaAte(1);
+  const linhas = { ...semPartidas, linhasAprendidas: LINHAS_POR_NIVEL };
+  // VAZIO não publica aula de finais: pelo clamp, tática e repertório fecham o
+  // nível — até as partidas entrarem.
+  assert.equal(fechamentoDoNivel(1, linhas).fechado, true);
+  const comDuas = comPartidas(NIVEL_1, NIVEL_1.slice(0, 2), linhas);
+  const comTres = comPartidas(NIVEL_1, NIVEL_1, linhas);
+  assert.equal(fechamentoDoNivel(1, comDuas).fechado, false);
+  assert.equal(fechamentoDoNivel(1, comTres).fechado, true);
+});
+
+test("o próximo passo aponta a primeira partida pendente, na ordem da curadoria", () => {
+  const base = { ...comTaticaAte(1), linhasAprendidas: LINHAS_POR_NIVEL };
+  const p = comPartidas(NIVEL_1, ["morphy-isouard"], base);
+  const passo = proximoPasso(1, p, 0);
+  assert.deepEqual(passo, {
+    tipo: "partida",
+    slug: "colle-delvaux",
+    nome: "Partida colle-delvaux",
+    href: "/partidas/colle-delvaux",
+  });
+});
+
+test("nível conquistado não reabre: a partida nova muda o fechamento, não o nível do aluno", () => {
+  // `nivelDoAluno` lê só o log de `nivel_conquistado`; o progresso não entra.
+  assert.equal(nivelDoAluno(1), 2);
+  const p = comPartidas(NIVEL_1, []);
+  assert.equal(fechamentoDoNivel(1, p).fechado, false);
+  assert.equal(nivelDoAluno(1), 2);
+});

@@ -3,6 +3,7 @@ import { BLOCOS } from "../tatica/blocos.ts";
 import {
   aulasDoNivel,
   fechamentoDoNivel,
+  proximaPartida,
   temaFechado,
   temasDoNivel,
   type Nivel,
@@ -62,6 +63,7 @@ export type TipoDeAcao =
   | "revisao-finais"
   | "tema"
   | "aula"
+  | "partida"
   | "linha"
   | "prova"
   | "nada";
@@ -111,9 +113,10 @@ function plural(n: number, um: string, muitos: string): string {
  * 2. revisão de **finais** vencida;
  * 3. o **tema** de tática do nível;
  * 4. a **aula** de finais do nível;
- * 5. a **linha** do repertório;
- * 6. a **prova** do nível;
- * 7. nada a fazer.
+ * 5. a **partida modelo** do nível (desde 15/9/2026);
+ * 6. a **linha** do repertório;
+ * 7. a **prova** do nível;
+ * 8. nada a fazer.
  *
  * Tática antes de finais porque é o bloco maior da rotina (45 min contra 30) e
  * porque a fila de tática cresce mais depressa: 36 temas de 39 puzzles contra
@@ -185,6 +188,19 @@ export function proximaAcao(d: ParaDecidir): Acao {
     }
   }
 
+  const partida = proximaPartida(d.nivel, d.progresso);
+  if (partida) {
+    return {
+      tipo: "partida",
+      titulo: partida.nome,
+      motivo:
+        `A próxima partida modelo do nível ${d.nivel}. ` +
+        "Você resolve os momentos de decisão e fecha com o Desafio final.",
+      botao: "Abrir a partida",
+      href: partida.href,
+    };
+  }
+
   const faltamLinhas =
     d.nivel === 5
       ? d.progresso.baseCompleto
@@ -211,7 +227,7 @@ export function proximaAcao(d: ParaDecidir): Acao {
       tipo: "prova",
       titulo: `A prova do nível ${d.nivel}`,
       motivo:
-        "As três trilhas do degrau fecharam. São 12 puzzles, e a prova não diz o " +
+        "As trilhas do nível fecharam. São 12 puzzles, e a prova não diz o " +
         "tema — é a única medida do site que não entrega metade da resposta.",
       botao: "Fazer a prova",
       href: `/nivel/${d.nivel}/prova`,

@@ -1,6 +1,7 @@
 import "server-only";
 import { aulasComPratica, aulasExtras, aulasPublicadas } from "@/lib/finais/conteudo";
 import { progressoDeFinais } from "@/lib/finais/progresso";
+import { progressoDasPartidas } from "@/lib/partidas/progresso";
 import { lerIndice } from "@/lib/repertorio/banco";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
 import { aprendidasDaAbertura, baseCompleto } from "@/lib/repertorio/treino";
@@ -31,11 +32,12 @@ import type { ProgressoParaONivel } from "./nivel";
  * mover.
  */
 export async function estadoParaONivel(aluno: string): Promise<ProgressoParaONivel> {
-  const [tatica, finais, indice, repertorio] = await Promise.all([
+  const [tatica, finais, indice, repertorio, partidas] = await Promise.all([
     progressoPorTema(aluno),
     progressoDeFinais(aluno),
     lerIndice(),
     progressoDoRepertorio(aluno),
+    progressoDasPartidas(aluno),
   ]);
 
   const destravado = baseCompleto(repertorio, indice);
@@ -51,5 +53,6 @@ export async function estadoParaONivel(aluno: string): Promise<ProgressoParaONiv
     linhasAprendidas,
     baseCompleto: destravado,
     extras: aulasExtras(),
+    partidas,
   };
 }

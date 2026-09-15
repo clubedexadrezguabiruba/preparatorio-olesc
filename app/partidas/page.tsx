@@ -4,86 +4,97 @@ import { Cabecalho } from "@/components/Cabecalho";
 import { Moldura } from "@/components/Moldura";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
-import { listarPartidas } from "@/lib/partidas/carregar";
-import { quantosMomentos } from "@/lib/partidas/momentos";
+import { NIVEIS, NIVEL } from "@/lib/curso/nivel";
+import { listarPartidas, podeVerRascunho } from "@/lib/partidas/carregar";
+import { situacoesDoAluno } from "@/lib/partidas/progresso";
 
-export const metadata: Metadata = { title: "Partidas instrutivas — Preparatório OLESC" };
+export const metadata: Metadata = { title: "Partidas modelo — Preparatório OLESC" };
 
 /**
- * A lista das partidas instrutivas de `content/partidas/`.
+ * As partidas modelo, por nível: 3 em cada, pela curadoria de 15/9/2026.
  *
- * **Ela deixou de ser órfã em 2026-09-09.** Até ali não havia um único link para
- * cá em todo o site — três partidas e 28 momentos de decisão funcionando, e a
- * página só alcançável digitando a URL. O argumento de então (*"enquanto for
- * teste é o certo, um aluno que tropeçasse nisto acharia que é matéria do
- * curso"*) protegia o aluno de conteúdo inacabado, e cobrava o preço de que
- * ninguém nunca o visse. Ela entra no "Mais" do cabeçalho, que é onde mora o que
- * é do curso mas não é da rotina do dia — e o aviso de que nada aqui é gravado
- * continua na tela, dito ao aluno em vez de escondido dele.
- *
- * **O caminho principal são os momentos de decisão**, e a partida inteira é o
- * link secundário. É a ordem que os números pedem: a Marshall–Tarrasch tem 44
- * lances das pretas e 10 momentos, e cobrar os 44 de memória não é exercício.
+ * Deixou de ser o teste das fichas-piloto: cada partida conta no nível dela
+ * (`lib/curso/nivel.ts`), e o placar é gravado. O que o aluno vê é só o que o
+ * Doug revisou; o professor e o ambiente local veem também o rascunho, com o selo
+ * "em revisão" — é por aqui que o Doug aprova sem abrir arquivo.
  */
 export default async function Partidas() {
   const perfil = await perfilAtual();
-  const [partidas, cabecalho] = await Promise.all([
-    listarPartidas(),
+  const verRascunho = podeVerRascunho(perfil.papel);
+  const [partidas, situacoes, cabecalho] = await Promise.all([
+    listarPartidas(verRascunho),
+    situacoesDoAluno(perfil.id, verRascunho),
     dadosDoCabecalho(perfil.id),
   ]);
 
   return (
     <>
-      <Cabecalho
-        atual="partidas"
-        nivel={cabecalho.nivel}
-        sequencia={cabecalho.sequencia}
-        largura="leitura"
-      />
-      <Moldura largura="leitura" barraInferior className="gap-5">
-      <header className="flex flex-col gap-1">
-        <h1 className="titulo text-tinta">Partidas instrutivas</h1>
-        <p className="text-xs text-tinta-fraca">
-          Teste das fichas-piloto. Nada aqui é gravado.
-        </p>
-      </header>
+      <Cabecalho atual="partidas" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} largura="leitura" />
+      <Moldura largura="leitura" barraInferior className="gap-6">
+        <header className="flex flex-col gap-1">
+          <h1 className="titulo text-tinta">Partidas modelo</h1>
+          <p className="text-sm text-tinta-media">
+            Partidas de mestres, escolhidas para o seu nível. Você resolve os momentos de decisão e
+            fecha com o Desafio final. As três do nível contam para passar de nível.
+          </p>
+        </header>
 
-      {partidas.length === 0 ? (
-        <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
-          Nenhum PGN em <code>content/partidas/</code>.
-        </p>
-      ) : (
-        <ul className="flex flex-col gap-2">
-          {partidas.map((p) => {
-            const momentos = quantosMomentos(p.slug);
-            return (
-              <li
-                key={p.slug}
-                className="flex flex-col gap-2 cartao px-3 py-3"
-              >
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-sm font-medium text-tinta">{p.nome}</span>
-                  <span className="text-xs text-tinta-fraca">{p.fonte}</span>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Link
-                    href={`/partidas/${p.slug}/momentos`}
-                    className="foco rounded-lg bg-metodo-cheio px-3 py-2 text-xs font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque"
-                  >
-                    {momentos} momentos
-                  </Link>
-                  <Link
-                    href={`/partidas/${p.slug}`}
-                    className="foco rounded-lg border border-borda px-3 py-2 text-xs font-medium text-tinta-media transition-colors hover:bg-carta-toque"
-                  >
-                    Partida inteira · {p.lancesNossos} lances de {p.cor}
-                  </Link>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+        {partidas.length === 0 ? (
+          <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
+            As partidas modelo ainda estão em revisão. Volte em breve.
+          </p>
+        ) : null}
+
+        {NIVEIS.map((nivel) => {
+          const doNivel = partidas.filter((p) => p.nivel === nivel);
+          if (doNivel.length === 0) return null;
+          const aqui = cabecalho.nivel === nivel;
+          return (
+            <section key={nivel} className="flex flex-col gap-2" aria-labelledby={`nivel-${nivel}`}>
+              <div className="flex flex-wrap items-baseline gap-x-2">
+                <h2 id={`nivel-${nivel}`} className="text-base font-semibold text-tinta">
+                  Nível {nivel}
+                </h2>
+                {aqui ? <span className="rotulo text-metodo-tinta">o seu nível</span> : null}
+              </div>
+              <p className="text-xs text-tinta-fraca">{NIVEL[nivel].resumo}</p>
+              <ul className="flex flex-col gap-2">
+                {doNivel.map((p) => {
+                  const s = situacoes.get(p.slug);
+                  return (
+                    <li key={p.slug}>
+                      <Link
+                        href={`/partidas/${p.slug}`}
+                        className="foco flex flex-col gap-1 cartao px-4 py-3 transition-colors hover:bg-carta-toque"
+                      >
+                        <span className="flex flex-wrap items-center gap-2">
+                          <span className="text-sm font-semibold text-tinta">{p.nome}</span>
+                          {p.status === "rascunho" ? (
+                            <span className="rounded-full border border-aviso px-2 py-0.5 text-xs font-medium text-aviso-tinta">
+                              em revisão
+                            </span>
+                          ) : null}
+                          {s?.concluida ? (
+                            <span className="rounded-full bg-metodo-cheio px-2 py-0.5 text-xs font-semibold text-tinta-inversa">
+                              ✓ concluída
+                            </span>
+                          ) : null}
+                        </span>
+                        <span className="text-xs text-tinta-media">{p.tema}</span>
+                        <span className="text-xs text-tinta-fraca tabular-nums">
+                          {p.ano} · você joga de {p.cor} · {p.momentos.length} momentos
+                          {s && !s.concluida && s.resolvidos > 0
+                            ? ` · ${s.resolvidos} de ${p.momentos.length} resolvidos`
+                            : ""}
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          );
+        })}
       </Moldura>
     </>
   );

@@ -1,0 +1,269 @@
+{
+  "slug": "pillsbury-mason",
+  "intro": [
+    "Hastings, 1895, um dos torneios mais fortes do seu tempo. Harry Pillsbury joga de brancas contra James Mason.",
+    "Aqui não há ataque ao rei. A vantagem cresce pela coluna c, com as torres.",
+    "Observe como as duas torres se juntam na coluna c e como uma delas entra no campo preto.",
+    "No fim, quem decide são os peões da ala da dama, que avançam sem dar xeques às pretas."
+  ],
+  "objetivos": [
+    "Juntar as duas torres numa coluna aberta.",
+    "Tirar um defensor antes de invadir com a torre.",
+    "Preferir a torre ativa a um peão imediato, quando ela rende mais.",
+    "Avançar um peão passado sem abrir caminho para os xeques do adversário."
+  ],
+  "momentoFinal": [
+    "Depois de 34.a4, o peão corre: 35.a5 e 36.a6. Nenhum peão preto pode pará-lo.",
+    "As pretas tomaram f2 com o cavalo, mas é tarde. A torre de d7 cobre a7, e o cavalo de b6 cobre a8.",
+    "Mason abandona. Não houve mate: a torre e o cavalo fizeram o trabalho, e o peão só precisou andar."
+  ],
+  "resumo": [
+    "Torres ficam fortes numa coluna aberta, e mais fortes ainda quando estão dobradas nela.",
+    "Antes de invadir, tire o defensor: 17.Ba6 trocou o bispo que cuidava de c6.",
+    "Com a partida ganha, avance o peão passado sem abrir caminho para os xeques do adversário."
+  ],
+  "perguntas": [
+    "Por que 14.Tc2 ajudou a outra torre?",
+    "Em 20.Txc5!, por que o peão de b6 não podia tomar a torre?",
+    "Por que 34.a4 era melhor que 34.f4?"
+  ],
+  "fonte": {
+    "slug": "chernev-logical-chess-1957",
+    "referencia": "Game 17, pp. 101–111"
+  },
+  "marcasDaFonte": [
+    {
+      "lance": "2.c4",
+      "simbolo": "!"
+    },
+    {
+      "lance": "4.Bg5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "14.Rc2",
+      "simbolo": "!"
+    },
+    {
+      "lance": "17.Ba6",
+      "simbolo": "!"
+    },
+    {
+      "lance": "20.Rxc5",
+      "simbolo": "!"
+    },
+    {
+      "lance": "22.Rc6",
+      "simbolo": "!"
+    },
+    {
+      "lance": "23.Rxd6",
+      "simbolo": "!"
+    },
+    {
+      "lance": "24.Nc6",
+      "simbolo": "!"
+    },
+    {
+      "lance": "30.Rd7",
+      "simbolo": "!"
+    },
+    {
+      "lance": "34.a4",
+      "simbolo": "!"
+    }
+  ],
+  "correcoes": [
+    {
+      "onde": "Partida comentada (1.d4 d5 2.c4! e6 3.Nc3 Nf6 4.Bg5!)",
+      "ficha": "Pillsbury disputa o centro e desenvolve o bispo com uma ameaça.",
+      "correcao": "4.Bg5 não ameaça nada: ele crava o cavalo de f6 na dama de d8. A narração diz a cravada."
+    },
+    {
+      "onde": "Partida comentada (16...Rac8 até 21...Nd7)",
+      "ficha": "Quando ...c5 finalmente aparece, invade com Rxc5.",
+      "correcao": "Faltava o motivo de 20.Txc5 funcionar: o peão de b6 não pode tomar de volta, porque tapa a sexta fileira entre a dama branca de a6 e a preta de d6 (20...bxc5 21.Dxd6). Conferido no Stockfish."
+    },
+    {
+      "onde": "Desafio final (34.a4), alternativas",
+      "ficha": "Evite 34.f4?, que na análise de Chernev permite contrajogo por cheques.",
+      "correcao": "Conferido no Stockfish (profundidade 18): 34.f4 Nf3+ 35.Kf1 Rd2 dá xeques sem fim e empata (0,00); 34.a4 fica em +3,67. Grafia \"xeque\"."
+    }
+  ],
+  "momentos": [
+    {
+      "n": 1,
+      "titulo": "Dobrar as torres",
+      "ply": 26,
+      "fen": "r4rk1/pbpn1ppp/1p1q4/1B1p4/3P4/4PN2/PP2QPPP/2R2RK1 w - - 2 14",
+      "lado": "brancas",
+      "pergunta": "Suas torres estão em c1 e f1, e a coluna c é a estrada. Que lance abre espaço para as duas usarem essa coluna?",
+      "san": "Rc2",
+      "uci": "c1c2",
+      "desafioFinal": false,
+      "ideia": "A torre sobe para c2 e libera c1. Com 16.Tfc1, as duas torres ficam na coluna c, uma atrás da outra.",
+      "feedback": "As duas torres querem a coluna c, mas não cabem na mesma casa. Uma delas precisa abrir espaço.",
+      "alternativas": "Vários lances calmos valem o mesmo aqui, como 14.Dc2 ou 14.Tc3. Chernev destaca 14.Tc2 porque prepara a outra torre.",
+      "alternativasBoas": [
+        "b5d7",
+        "e2c2",
+        "b2b3",
+        "c1c3",
+        "h2h3",
+        "f3g5",
+        "e2d3",
+        "h2h4",
+        "a2a3",
+        "b2b4",
+        "b5d3",
+        "b5a6",
+        "f3h4",
+        "f1e1",
+        "f1d1",
+        "e2d2",
+        "f3e1",
+        "f3d2",
+        "e2d1",
+        "c1b1",
+        "c1a1",
+        "e2e1",
+        "g1h1",
+        "b5a4",
+        "a2a4",
+        "c1d1",
+        "c1e1",
+        "g2g3"
+      ],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 2,
+      "titulo": "Trocar o bispo que defende",
+      "ply": 32,
+      "fen": "2r2rk1/pb3ppp/1ppq1n2/3p4/3P4/3BPN2/PPR1QPPP/2R3K1 w - - 4 17",
+      "lado": "brancas",
+      "pergunta": "O bispo preto de b7 defende o peão de c6. Qual lance oferece a troca desse bispo?",
+      "san": "Ba6",
+      "uci": "d3a6",
+      "desafioFinal": false,
+      "ideia": "Depois de 17...Bxa6 18.Dxa6, o peão de c6 perde um defensor. E a dama em a6 ataca a torre de c8.",
+      "feedback": "Não troque peças só porque pode. Pergunte qual defensor desaparece e o que fica fraco sem ele.",
+      "alternativas": "Lances calmos como 17.Ce5 também valem o mesmo. 17.Ba6 foi o lance da partida porque tira o defensor de c6.",
+      "alternativasBoas": [
+        "f3e5",
+        "a2a3",
+        "h2h3",
+        "a2a4",
+        "b2b3",
+        "e2e1",
+        "f3e1",
+        "h2h4",
+        "e2d2",
+        "g2g3",
+        "e2d1",
+        "c2c3",
+        "d3f5",
+        "g1h1",
+        "e2f1",
+        "f3d2",
+        "c1a1",
+        "c1d1",
+        "c1b1",
+        "f3h4",
+        "f3g5",
+        "c1f1",
+        "c1e1",
+        "g1f1"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    },
+    {
+      "n": 3,
+      "titulo": "A torre ataca a dama",
+      "ply": 42,
+      "fen": "5rk1/p2n1ppp/Qp1q4/2RpN3/3P4/4P3/PP3PPP/6K1 w - - 1 22",
+      "lado": "brancas",
+      "pergunta": "O cavalo de d7 ataca sua torre de c5. Em vez de recuar, procure uma casa em que ela ataque alguma coisa.",
+      "san": "Rc6",
+      "uci": "c5c6",
+      "desafioFinal": false,
+      "ideia": "Em c6 a torre ataca a dama de d6. Depois de 22...Cb8 23.Txd6 Cxa6, as damas saem, e você fica com um peão a mais.",
+      "feedback": "Uma torre que recua fica passiva. Procure uma casa em que ela continue no campo preto e ataque uma peça.",
+      "alternativas": "Trocar com 22.Cxd7 rende bem menos. A torre ativa em c6 vale mais que a troca.",
+      "alternativasBoas": [],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    },
+    {
+      "n": 4,
+      "titulo": "O cavalo na casa forte",
+      "ply": 46,
+      "fen": "5rk1/p4ppp/np1R4/3pN3/3P4/4P3/PP3PPP/6K1 w - - 0 24",
+      "lado": "brancas",
+      "pergunta": "As damas saíram, e você tem um peão a mais. Onde o cavalo de e5 ataca um peão e não pode ser expulso por peão nenhum?",
+      "san": "Nc6",
+      "uci": "e5c6",
+      "desafioFinal": false,
+      "ideia": "Em c6 nenhum peão preto pode atacar o cavalo. Ele ataca o peão de a7 e tira as casas b4 e b8 do cavalo de a6.",
+      "feedback": "Não precisa pegar um peão agora. Procure uma casa em que o cavalo ataque alguma coisa e fique firme.",
+      "alternativas": "Lances calmos como 24.g3 valem o mesmo para o motor. Na partida, 24.Cc6 atacou a7 e ficou firme em c6.",
+      "alternativasBoas": [
+        "g2g3",
+        "h2h4",
+        "h2h3",
+        "g2g4",
+        "d6d7"
+      ],
+      "autoria": "ADAPTAÇÃO DIDÁTICA — a partir de Irving Chernev"
+    },
+    {
+      "n": 5,
+      "titulo": "A torre na sétima fileira",
+      "ply": 58,
+      "fen": "1r6/2n1Npkp/1p1R2p1/3p4/3P2P1/P3P3/1P3P1P/6K1 w - - 3 30",
+      "lado": "brancas",
+      "pergunta": "O peão de d5 pode esperar. Existe um lance da torre que ataca uma peça preta sem defesa?",
+      "san": "Rd7",
+      "uci": "d6d7",
+      "desafioFinal": false,
+      "ideia": "Em d7 a torre ataca o cavalo de c7, que ninguém defende. Depois de 30...Ce6, o peão de d5 cai do mesmo jeito.",
+      "feedback": "Compare a captura de um peão com a entrada da torre na sétima fileira. Qual deixa as pretas com mais problemas?",
+      "alternativas": "30.Cxd5 também é bom, e o motor o avalia igual. Chernev preferiu levar a torre à sétima fileira antes.",
+      "alternativasBoas": [
+        "e7d5",
+        "h2h4",
+        "g4g5",
+        "g1g2",
+        "d6c6",
+        "e7c6",
+        "g1f1",
+        "a3a4"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev"
+    },
+    {
+      "n": 6,
+      "titulo": "O avanço sem xeques",
+      "ply": 66,
+      "fen": "8/3R1pkp/1N4p1/6n1/1P1P2P1/P3P3/2r2P1P/6K1 w - - 1 34",
+      "lado": "brancas",
+      "pergunta": "Você está ganhando, e as pretas só têm um jogo: xeques com a torre e o cavalo. Qual avanço de peão segue seu plano sem ajudar esses xeques?",
+      "san": "a4",
+      "uci": "a3a4",
+      "desafioFinal": true,
+      "ideia": "34.a4 avança o peão passado sem mexer nos peões do rei. O peão de f2 continua fechando a segunda fileira para a torre preta.",
+      "feedback": "Antes de empurrar um peão, confira os xeques que ele libera. Os peões perto do seu rei ainda têm trabalho.",
+      "alternativas": "Evite 34.f4?, que abre a segunda fileira. Depois de Cf3+, a torre e o cavalo dão xeques sem parar, e a partida empata.",
+      "alternativasBoas": [
+        "b6d5",
+        "d7e7",
+        "d7a7",
+        "g1g2",
+        "b4b5",
+        "d4d5",
+        "b6a4",
+        "d7b7"
+      ],
+      "autoria": "PARÁFRASE FIEL — Irving Chernev + ADAPTAÇÃO DIDÁTICA DO PROJETO"
+    }
+  ]
+}
