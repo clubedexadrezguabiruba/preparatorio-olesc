@@ -1,10 +1,12 @@
+import type { Puzzle } from "./puzzles.ts";
+
 /**
  * O vocabulário do modo "tática com rating", num lugar só e sem `server-only`.
  *
  * Quem lê: o script que recorta o CSV (`scripts/base-rating.ts`), o banco de
  * puzzles do servidor (`lib/tatica/banco.ts`), a escolha
  * (`lib/tatica/rating-escolher.ts`) e as telas, inclusive as de cliente — por
- * isso este arquivo não importa nada.
+ * isso este arquivo só importa tipos.
  */
 
 /**
@@ -29,3 +31,37 @@ export const NOME_DA_BASE = "Tática rating";
  * e `"rating":` em cada uma quase dobraria o arquivo.
  */
 export type LinhaDoIndice = readonly [id: string, origem: string, rating: number];
+
+/**
+ * O que as telas mostram do rating de um aluno. O rating vai cru, com as casas
+ * decimais do banco; quem arredonda é a tela.
+ *
+ * Os tipos do modo moram aqui, e não em `gravar-rating.ts`, porque aquele é
+ * `server-only` e a tela de jogo roda no navegador — a fronteira de
+ * `lib/tatica/puzzles.ts`, pelo mesmo motivo.
+ */
+export type EstadoDoRating = {
+  readonly rating: number;
+  readonly sequencia: number;
+  readonly melhorSequencia: number;
+  readonly ratingMaximo: number;
+  readonly resolvidos: number;
+};
+
+/** O veredito de uma resposta do modo rating. */
+export type VereditoDoRating = {
+  readonly acertou: boolean;
+  /** O "+8 / −12" da tela. */
+  readonly delta: number;
+  readonly rating: number;
+  readonly sequencia: number;
+  readonly melhorSequencia: number;
+  /** A linha inteira do problema, para o tabuleiro mostrá-la depois do erro. */
+  readonly solucao: readonly string[];
+  /** O próximo problema, já gravado como pendente — ou `null` se não há. */
+  readonly proximo: (Puzzle & { readonly origem: string }) | null;
+  /** A resposta valeu, mas algo menor falhou (a linha do histórico). */
+  readonly aviso: string | null;
+};
+
+export type RespostaDoRating = VereditoDoRating | { readonly erro: string };

@@ -6,7 +6,6 @@ import {
   useMemo,
   useRef,
   useState,
-  useSyncExternalStore,
   type ReactNode,
 } from "react";
 import Link from "next/link";
@@ -14,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { Chess, type Square } from "chess.js";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color, Key } from "@lichess-org/chessground/types";
+import { BotaoDeSom } from "@/components/BotaoDeSom";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { PromotionPicker, type PromotionChoice } from "@/components/board/PromotionPicker";
 import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
@@ -26,13 +26,10 @@ import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { applyUci, type Applied } from "@/lib/chess/fen";
 import {
   armAudioOnFirstGesture,
-  isSoundOn,
   playComplete,
   playForMove,
   playRefusal,
   playSuccess,
-  setSoundOn,
-  subscribeSound,
 } from "@/lib/sound";
 import { temaPorTag } from "@/lib/tatica/blocos";
 import { lanceCerto } from "@/lib/tatica/conferir";
@@ -419,26 +416,6 @@ export function Serie({
 function nomeDoPadrao(p: PuzzleServido): string {
   if (p.origem === ORIGEM_BASE) return NOME_DA_BASE;
   return temaPorTag(p.origem)?.nome ?? p.origem;
-}
-
-/**
- * Liga e desliga o som. A preferência mora no `localStorage`, fora do React —
- * por isso `useSyncExternalStore`: no servidor o som é "ligado", e a leitura
- * real do armazenamento entra na hidratação sem acusar divergência.
- */
-function BotaoDeSom() {
-  const ligado = useSyncExternalStore(subscribeSound, isSoundOn, () => true);
-  return (
-    <button
-      type="button"
-      onClick={() => setSoundOn(!ligado)}
-      aria-pressed={ligado}
-      className="foco min-h-11 shrink-0 rounded-lg px-2 text-lg leading-none transition-colors hover:bg-carta-toque"
-    >
-      <span aria-hidden>{ligado ? "🔊" : "🔇"}</span>
-      <span className="sr-only">{ligado ? "Desligar o som" : "Ligar o som"}</span>
-    </button>
-  );
 }
 
 /* ------------------------------------------------------------------ *

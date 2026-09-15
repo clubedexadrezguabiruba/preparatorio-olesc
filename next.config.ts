@@ -41,6 +41,11 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/tatica/[tema]": ["./public/puzzles/**"],
     "/tatica/revisao": ["./public/puzzles/**"],
+    // A tática com rating lê o índice (`rating-indice.json`) e os problemas de
+    // 600–700 (`rating-base/`) por caminho — o mesmo glob já os pega. A
+    // evolução relê os problemas de 600–700 para contar os temas fracos.
+    "/tatica/rating": ["./public/puzzles/**"],
+    "/tatica/rating/evolucao": ["./public/puzzles/**"],
     "/finais": ["./content/**"],
     "/finais/[aula]": ["./content/**"],
     "/trilha": ["./content/**"],

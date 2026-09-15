@@ -5,7 +5,9 @@ import { conferirSolucao } from "./conferir.ts";
 import { aposPuzzle, INICIO } from "./glicko2.ts";
 import type { PuzzleServido } from "./puzzles.ts";
 import { escolherPorRating } from "./rating-escolher.ts";
-import type { LinhaDoIndice } from "./rating.ts";
+import type { EstadoDoRating, LinhaDoIndice, RespostaDoRating } from "./rating.ts";
+
+export type { EstadoDoRating, RespostaDoRating } from "./rating.ts";
 
 /**
  * O servidor do modo "tática com rating": servir o problema e julgar a resposta.
@@ -57,33 +59,7 @@ type LinhaDoRating = {
   pendente_desde: string | null;
 };
 
-/** O que as telas mostram. O rating vai cru; quem arredonda é a tela. */
-export type EstadoDoRating = {
-  readonly rating: number;
-  readonly sequencia: number;
-  readonly melhorSequencia: number;
-  readonly ratingMaximo: number;
-  readonly resolvidos: number;
-};
-
 export type Servido = { readonly puzzle: PuzzleServido; readonly estado: EstadoDoRating };
-
-export type RespostaDoRating =
-  | {
-      readonly acertou: boolean;
-      /** O "+8 / −12" da tela. */
-      readonly delta: number;
-      readonly rating: number;
-      readonly sequencia: number;
-      readonly melhorSequencia: number;
-      /** A linha inteira do problema, para o tabuleiro mostrá-la depois do erro. */
-      readonly solucao: readonly string[];
-      /** O próximo problema, já gravado como pendente — ou `null` se não há. */
-      readonly proximo: PuzzleServido | null;
-      /** A resposta valeu, mas algo menor falhou (a linha do histórico). */
-      readonly aviso: string | null;
-    }
-  | { readonly erro: string };
 
 export type Opcoes = {
   /** Um número em [0, 1). O servidor usa `Math.random`; o script, também. */

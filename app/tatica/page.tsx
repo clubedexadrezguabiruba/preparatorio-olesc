@@ -10,6 +10,7 @@ import { nivelConquistado } from "@/lib/curso/progresso";
 import { BLOCOS } from "@/lib/tatica/blocos";
 import { temaAberto } from "@/lib/tatica/conteudo";
 import { progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
+import { ratingDoAluno } from "@/lib/tatica/rating-leitura";
 
 export const metadata: Metadata = { title: "Tática — Preparatório OLESC" };
 
@@ -27,10 +28,11 @@ export const metadata: Metadata = { title: "Tática — Preparatório OLESC" };
  */
 export default async function Tatica() {
   const perfil = await perfilAtual();
-  const [progresso, conquistado, cabecalho] = await Promise.all([
+  const [progresso, conquistado, cabecalho, rating] = await Promise.all([
     progressoPorTema(),
     nivelConquistado(perfil.id),
     dadosDoCabecalho(perfil.id),
+    ratingDoAluno(perfil.id),
   ]);
   const nivel = nivelDoAluno(conquistado);
 
@@ -54,6 +56,8 @@ export default async function Tatica() {
           </p>
         ) : null}
       </header>
+
+      <CartaoDoRating rating={rating} />
 
       {BLOCOS.map((bloco) => (
         <section key={bloco.id} className="flex flex-col gap-3">
@@ -138,6 +142,57 @@ export default async function Tatica() {
       </p>
       </Moldura>
     </>
+  );
+}
+
+/**
+ * A entrada da tática com rating, no topo da página (decisão do Doug, 15/9).
+ *
+ * O `prefetch={false}` no "Jogar" não é enfeite: a página do modo **grava** o
+ * problema pendente e a hora em que ele foi servido (`garantirPendente`). Um
+ * prefetch do Next abriria a página sem o aluno ter clicado, e o tempo gravado
+ * daquele problema começaria a contar antes.
+ */
+function CartaoDoRating({ rating }: { rating: Awaited<ReturnType<typeof ratingDoAluno>> }) {
+  return (
+    <section aria-labelledby="rating-titulo" className="flex flex-col gap-3 cartao px-4 py-4">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+        <h2 id="rating-titulo" className="text-base font-semibold text-tinta">
+          Tática rating
+        </h2>
+        <p className="text-xs text-tinta-fraca">Problemas misturados, e o rating sobe e desce a cada um.</p>
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        {rating ? (
+          <dl className="flex items-baseline gap-5 tabular-nums">
+            <div className="flex flex-col">
+              <dt className="text-xs text-tinta-fraca">Rating</dt>
+              <dd className="text-3xl font-semibold text-tinta">{Math.round(rating.rating)}</dd>
+            </div>
+            <div className="flex flex-col">
+              <dt className="text-xs text-tinta-fraca">Melhor sequência</dt>
+              <dd className="text-lg font-semibold text-tinta">{rating.melhorSequencia}</dd>
+            </div>
+          </dl>
+        ) : (
+          <p className="text-sm text-tinta-media">Você começa em 400. Um lance errado encerra o problema.</p>
+        )}
+        <div className="flex items-center gap-3">
+          {rating ? (
+            <Link href="/tatica/rating/evolucao" className="foco text-sm font-medium text-metodo-tinta underline">
+              Ver evolução
+            </Link>
+          ) : null}
+          <Link
+            href="/tatica/rating"
+            prefetch={false}
+            className="foco inline-flex min-h-11 items-center rounded-lg bg-metodo-cheio px-5 py-2.5 text-sm font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque"
+          >
+            Jogar
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 }
 

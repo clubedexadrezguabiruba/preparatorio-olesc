@@ -1,9 +1,8 @@
 "use server";
 
 import { perfilAtual } from "@/lib/auth/perfil";
-import { responderRating, type RespostaDoRating } from "@/lib/tatica/gravar-rating";
-
-export type { RespostaDoRating } from "@/lib/tatica/gravar-rating";
+import { responderRating } from "@/lib/tatica/gravar-rating";
+import type { RespostaDoRating } from "@/lib/tatica/rating";
 
 /**
  * Responde ao problema pendente do modo rating.

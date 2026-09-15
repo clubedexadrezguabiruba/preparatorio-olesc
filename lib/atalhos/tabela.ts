@@ -16,6 +16,7 @@
  * - `editor`: o editor de aulas; `repertorio`: o editor do repertório; `introducao-editor`: a tela
  *   cheia da introdução.
  * - `aluno-*`: as etapas da aula do aluno.
+ * - `tatica-rating`: a tela de jogo da tática com rating (Enter = próximo, depois de um erro).
  * - `janela`: com uma janela aberta, só o que é da janela funciona (Esc, Tab preso). As teclas dos
  *   escopos de baixo ficam mudas — é o que resolve o `L` com o menu `•••` aberto.
  */
@@ -30,6 +31,7 @@ export type EscopoDeAtalho =
   | "aluno-treino"
   | "aluno-pratica"
   | "passada"
+  | "tatica-rating"
   | "janela";
 
 export type Atalho = {
@@ -76,6 +78,8 @@ export const ATALHOS: Atalho[] = [
 
   { id: "passada-anterior", teclas: ["ArrowLeft"], escopo: "passada", descricao: "lance anterior na linha do repertório", soNaTabela: true },
   { id: "passada-seguinte", teclas: ["ArrowRight"], escopo: "passada", descricao: "lance seguinte na linha do repertório", soNaTabela: true },
+
+  { id: "rating-proximo", teclas: ["Enter"], escopo: "tatica-rating", descricao: "vai ao próximo problema, depois de ver a solução" },
 
   { id: "fechar-janela", teclas: ["Escape"], escopo: "janela", descricao: "fecha a janela e devolve o foco a quem a abriu" },
 ];
