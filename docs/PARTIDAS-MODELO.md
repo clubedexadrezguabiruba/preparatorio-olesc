@@ -96,6 +96,28 @@
 - **Entregue:** código completo dos blocos 1, 3 e 4, e o texto do bloco 2 em rascunho. **Não entregue:** a aprovação
   do Doug (nenhuma partida conta ainda) e o teste com a mão no tabuleiro.
 
+### 15/09/2026 — o Doug corrige a direção: a partida é o conteúdo
+- **O que estava errado:** os blocos 1–4 fizeram dos momentos o caminho principal e da partida inteira um opcional.
+  O Doug quer o contrário. O aluno **assiste à partida inteira**, lance a lance, com explicação. Só nos momentos
+  críticos ele é **testado depois, em modo quiz**, que é o treino guiado do motor de aula de finais. O move trainer
+  entra no fim.
+- **Decisões do Doug nesta conversa:**
+  - **Ritmo:** a assistida anda **automática, com pausa** (o aluno pode pausar e voltar).
+  - **Frases:** **todo meio-lance** tem frase, das brancas e das pretas. É uma **frase curta** por lance, e nos
+    pontos-chave entra uma segunda fala com a ideia maior (até 200 caracteres).
+  - **Momentos críticos na assistida:** a aula **para e pergunta** para o aluno pensar, e mostra o lance depois. Não
+    conta nota. O teste que vale é o quiz, que vem depois.
+  - **Move trainer** da partida inteira: no fim, **opcional**, sem contar para concluir.
+  - **Conclusão:** mantém a regra de 15/9 (todos os momentos resolvidos no quiz e o Desafio final de primeira, sem
+    revelação).
+  - **Motor:** onde a partida vive (aula do Editor v2, motor v1 de finais ou outro) é decisão técnica do plano novo.
+  - **Escopo agora:** **um piloto só, Morphy × Isouard.** Fica em rascunho, visível só para o Doug (professor e
+    ambiente local), e não conta no nível.
+  - **O que já existe na branch** (as 15 partidas em rascunho, as travas, as telas, a gravação, a migração 0011 e o
+    requisito): **guardar como insumo**. Texto, momentos e símbolos alimentam o piloto; telas e requisito são revistos
+    no plano novo.
+- **Próximo passo:** planejar o piloto num chat novo.
+
 ## Decisões pendentes do Doug
 
 1. **Aprovar o texto, nível por nível.** No site local ou como professor, cada partida aparece com "em revisão". Ao
