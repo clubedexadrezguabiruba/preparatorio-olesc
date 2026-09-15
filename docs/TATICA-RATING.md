@@ -197,3 +197,44 @@ muda nela não mexe na pasta principal), seguindo `docs/COMO-TRABALHAR-COM-BRANC
 - A pasta principal tem alterações de outra frente (`docs/TRILHA-FINAIS.md`, `lib/finais/trilha*`, `N0-LADDER`). O worktree não as enxerga e não mexe nelas.
 - A migration só acrescenta; nada é apagado. Ela é aplicada antes do deploy (regra da `0005_revisao.sql:24-29`).
 - **Achado lateral, fora do escopo:** `/nivel/[n]/prova` lê o disco e não está em `outputFileTracingIncludes`. Esse defeito é anterior a este plano. Aviso, e não corrijo em silêncio.
+
+## Execução — 15/9 (onde paramos)
+Os cinco pontos de parada estão feitos, cada um num commit da branch `tatica-rating`
+(`d267c47`, `52bf70b`, `9a9739c`, `4ea1cad`, `cc4fed8`). A migration `0011` está aplicada
+no banco de teste. **Não foi publicado nada no `main`.**
+
+**Números medidos:**
+- Glicko-2: o exemplo do Glickman bate a 0,01 (a conta exata dá 1464,051; o artigo
+  arredonda no meio). Cinco casos batem com a função SQL do vtracer, rodada numa
+  transação desfeita.
+- A partir de 400: +201/−152 contra um problema de 450, **+302/−99 contra 600**,
+  +383/−71 contra 700 (o plano estimava ≈ +420).
+- **O CSV não tem problemas de 400 a 600.** O menor rating é 545; há 117 abaixo de 600,
+  e nenhum passa nos filtros. A base ficou em 600–650 e 650–700: 6.000 problemas, 1,05 MB.
+- Índice: 147.026 puzzles (34.961 repetidos entre temas saíram), 3,92 MB.
+- `filtrar-puzzles.ts` refatorado regravou os 224 arquivos de tema idênticos.
+- Portões: typecheck, lint, 1.352 testes, build, conteúdo, 34/34 mutações e repertório
+  `--check`, todos verdes. `db:tatica:rating` com 40 afirmações; `db:tatica` com 39;
+  `db:rls` com 56 (a seção 6, do professor, pulada sem o PIN).
+- Navegador (1366×768 e 360×740, contas descartáveis já apagadas): F5 traz o mesmo
+  problema; acerto, erro com solução e Enter; rede caída com "Tentar de novo"; o palco não
+  rola; evolução, temas fracos, revisão do dia, professor e painel conferidos.
+
+**Decisões para o Doug:**
+1. **Início em 400 ou em 600?** Como não há problema abaixo de 600, o aluno de 400 recebe
+   problemas de ~600 e sobe ~300 no primeiro acerto. Mantive 400, que foi a sua decisão.
+2. A família de selos `rating` ficou no fim da lista, para não tirar do painel o próximo
+   selo de finais. O convite para o modo já está no cartão do painel.
+
+**Correção lateral feita:** a tabela de alunos de `/professor` tinha o título "Rating" sem
+célula desde `394f75d`, e o nível aparecia embaixo dele. A célula voltou, com o título
+"Rating de entrada".
+
+**Achados laterais, não corrigidos:**
+- `puzzlesJaVistos()` (`lib/tatica/progresso.ts`) não pagina: a API do Supabase devolve no
+  máximo 1.000 linhas, e passado isso o sorteio dos temas pode repetir problema. O modo
+  rating usa uma leitura própria, que pagina.
+- `/nivel/[n]/prova` lê o disco e não está em `outputFileTracingIncludes` (já registrado acima).
+
+**Falta:** o teste humano do Doug, o "pode publicar" e, depois dele, `git push origin
+HEAD:main` e `git worktree remove`.
