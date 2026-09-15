@@ -69,6 +69,12 @@ export function useOrientacaoDaVista(orientacao: "white" | "black"): "white" | "
   return virada ? (orientacao === "white" ? "black" : "white") : orientacao;
 }
 
+/** O mesmo `x`, para um botão (§10.2 "Virar tabuleiro"): `virada` diz se a vista está invertida agora. */
+export function useVirarTabuleiro(): { virada: boolean; virar: () => void } {
+  const { virada, virar } = useContext(VistaContexto);
+  return { virada, virar };
+}
+
 /**
  * Registra `x` e `?` na camada de quem chama. As telas cheias (prévias, introdução) chamam isto
  * com a camada delas, para as duas teclas continuarem valendo por cima do editor.
@@ -79,7 +85,16 @@ export function useTeclasDoTabuleiro(camada?: number) {
   useAtalho("ajuda-atalhos", abrirAjuda, { camada });
 }
 
-export function VistaDoTabuleiro({ escopos, children }: { escopos: EscopoDeAtalho[]; children: ReactNode }) {
+/** Abre a lista de atalhos da tela, como a tecla `?` — para um item de menu ("Atalhos do teclado"). */
+export function useAbrirAjudaDosAtalhos(): () => void {
+  return useContext(VistaContexto).abrirAjuda;
+}
+
+/**
+ * `camada`: onde `x` e `?` ficam registrados. A raiz (0) serve à página do aluno; a aula feita como
+ * aluno por cima do editor passa a camada da própria tela cheia, senão as teclas ficam mudas.
+ */
+export function VistaDoTabuleiro({ escopos, camada = 0, children }: { escopos: EscopoDeAtalho[]; camada?: number; children: ReactNode }) {
   const [virada, setVirada] = useState(false);
   const [ajuda, setAjuda] = useState(false);
   const virar = useCallback(() => setVirada((atual) => !atual), []);
@@ -87,7 +102,7 @@ export function VistaDoTabuleiro({ escopos, children }: { escopos: EscopoDeAtalh
   const valor = useMemo(() => ({ virada, virar, abrirAjuda }), [abrirAjuda, virada, virar]);
   return (
     <VistaContexto.Provider value={valor}>
-      <TeclasNaRaiz />
+      <TeclasNaRaiz camada={camada} />
       {virada ? <p role="status" className="sr-only">Tabuleiro virado</p> : null}
       {children}
       {ajuda ? <AjudaDosAtalhos escopos={escopos} aoFechar={() => setAjuda(false)} /> : null}
@@ -95,8 +110,8 @@ export function VistaDoTabuleiro({ escopos, children }: { escopos: EscopoDeAtalh
   );
 }
 
-function TeclasNaRaiz() {
-  useTeclasDoTabuleiro(0);
+function TeclasNaRaiz({ camada }: { camada: number }) {
+  useTeclasDoTabuleiro(camada);
   return null;
 }
 

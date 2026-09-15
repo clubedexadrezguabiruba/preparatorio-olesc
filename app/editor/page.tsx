@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { exigirEditor } from "@/lib/editor/acesso";
+import { BotaoExcluirAula, LixeiraDoEditor } from "@/components/editor-v2/ExcluirAula";
+import { lixeiraV2 } from "@/lib/editor-v2/excluir-aula";
 import { idsDeDocumentosV2, lerDocumentoV2 } from "@/lib/editor-v2/rascunhos";
 import { aulasExtras, indiceDeAulas } from "@/lib/finais/conteudo";
 import { aulaDaTrilha } from "@/lib/finais/trilha";
@@ -71,14 +73,13 @@ export default async function IndiceDoEditor() {
           </div>
         </div>
         <p className="text-sm text-tinta-media">
-          As {aulas.length} aulas que existem em disco. Abrir uma cria o rascunho dela; o
-          aluno continua vendo a versão publicada até você clicar em “Publicar no curso”.
+          Suas aulas. O aluno só vê uma mudança depois que você publica.
         </p>
       </header>
 
       {soNoV2.length > 0 ? (
         <section className="flex flex-col gap-2">
-          <h2 className="text-sm font-semibold text-tinta">Rascunhos novos, só no Editor v2</h2>
+          <h2 className="text-sm font-semibold text-tinta">Aulas novas</h2>
           <ul className="flex flex-col gap-2">
             {soNoV2.map((aula) => (
               <li key={aula.id} className="cartao-vazio flex items-stretch gap-1 p-1">
@@ -89,17 +90,18 @@ export default async function IndiceDoEditor() {
                   <span className="flex min-w-0 flex-1 flex-col gap-1">
                     <span className="truncate text-sm font-medium text-tinta">{aula.titulo}</span>
                     <span className="text-xs text-tinta-fraca tabular-nums">
-                      {aula.id} · {aula.capitulos === 0 ? "sem capítulo ainda" : `${aula.capitulos} ${aula.capitulos === 1 ? "capítulo" : "capítulos"}`}
+                      {aula.capitulos === 0 ? "sem capítulo ainda" : `${aula.capitulos} ${aula.capitulos === 1 ? "capítulo" : "capítulos"}`}
                       {/* §5.1: distinguir aula do curso, aula extra e repertório. */}
                       {aula.id.startsWith("EX-")
                         ? aula.nivel && aula.classe
-                          ? ` · aula extra · nível ${aula.nivel}, classe ${aula.classe} — entra na trilha ao publicar`
-                          : " · aula extra sem nível ou classe — fora da trilha"
+                          ? ` · aula extra · nível ${aula.nivel}, classe ${aula.classe}`
+                          : " · aula extra sem nível — não entra no curso"
                         : " · fora da trilha"}
                     </span>
                   </span>
                   <span aria-hidden className="text-tinta-fraca">✎</span>
                 </Link>
+                {aula.id.startsWith("EX-") ? <BotaoExcluirAula aulaId={aula.id} titulo={aula.titulo} /> : null}
               </li>
             ))}
           </ul>
@@ -133,16 +135,19 @@ export default async function IndiceDoEditor() {
                 href={`/editor/v2/finais/${aula.id}`}
                 className="foco flex shrink-0 items-center rounded-md border border-metodo-superficie px-3 py-2 text-xs font-medium text-metodo-tinta transition-colors hover:bg-metodo-superficie/10"
               >
-                Abrir v2
+                Abrir
               </Link>
+              {/* Só extra se exclui pela tela; aula do curso nunca (excluir-aula.ts). */}
+              {soNoEditorV2 ? <BotaoExcluirAula aulaId={aula.id} titulo={aula.titulo} /> : null}
             </li>
           );
         })}
       </ul>
 
+      <LixeiraDoEditor itens={lixeiraV2()} />
+
       <p className="text-xs text-tinta-fraca">
-        Esta tela só existe na sua máquina, em <code>npm run dev</code>. O site publicado não
-        tem editor — o disco dele é somente leitura.
+        O editor só abre neste computador. O site dos alunos não tem editor.
       </p>
     </main>
   );

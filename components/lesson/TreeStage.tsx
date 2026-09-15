@@ -40,6 +40,7 @@ export function TreeStage({
   position,
   orientation,
   allowHelp,
+  marcasAutomaticas = true,
   showBox = false,
   moveLimit,
   intro,
@@ -56,6 +57,12 @@ export function TreeStage({
   position: Position;
   orientation: Color;
   allowHelp: boolean;
+  /**
+   * O corte roxo e o aro da peça atacada, deduzidos da posição (`teachingShapes`), quando há ajuda.
+   * **Desligado em todo treino do formato novo** — decisão do Doug de 14/9/2026: lá o professor
+   * desenha o próprio corte, e a marca automática aparecia no player sem nunca aparecer no editor.
+   */
+  marcasAutomaticas?: boolean;
   /**
    * Desenha a caixa do rei por cima do tabuleiro. A etapa 3 liga (é a prática
    * *com* a zona visível, a ponte entre ver e fazer); a 4 nunca — o currículo
@@ -219,7 +226,7 @@ export function TreeStage({
   const shapes: DrawShape[] = useMemo(() => {
     // Os destaques automáticos (corte e peça pendurada) saem da posição que
     // está na tela, então continuam certos mesmo durante a animação do lance.
-    const list: DrawShape[] = allowHelp ? teachingShapes(boardFen, lastMove) : [];
+    const list: DrawShape[] = allowHelp && marcasAutomaticas ? teachingShapes(boardFen, lastMove) : [];
     /*
      * **O desenho da autoria fica na tela SEMPRE, e não atrás de um botão.**
      *
@@ -249,7 +256,7 @@ export function TreeStage({
     }
     if (message?.square) list.push({ orig: message.square as Key, brush: "red" });
     return list;
-  }, [allowHelp, boardFen, lastMove, marcacao, overlay, abrindo, status, node, state, v2, message]);
+  }, [allowHelp, marcasAutomaticas, boardFen, lastMove, marcacao, overlay, abrindo, status, node, state, v2, message]);
 
   /** O desenho que o arquivo guarda para este nó, no formato do tabuleiro. */
   const daAutoria: DrawShape[] = useMemo(() => desenhoDaAutoria(node), [node]);

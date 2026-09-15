@@ -59,8 +59,8 @@ export function PreviaDoTreino({ treinoId, titulo, perfil, jogavel, aoFechar }: 
           <p className="text-xs text-tinta-fraca" aria-live="polite">
             Tentativa {tentativa}.{" "}
             {jogavel.politica === "fixa"
-              ? "O defensor joga sempre a defesa escolhida."
-              : "Com mais de uma defesa, o defensor troca a cada tentativa; recomece para ver a outra."}{" "}
+              ? "O adversário responde sempre igual."
+              : "Com mais de uma resposta, o adversário muda a cada tentativa."}{" "}
             Nada aqui é gravado no progresso, e a aula atrás não muda.
           </p>
           {/* Fatia 7: com a evidência da tablebase guardada no treino, a prévia julga como o
@@ -89,6 +89,7 @@ export function PreviaDoTreino({ treinoId, titulo, perfil, jogavel, aoFechar }: 
             position={position}
             orientation={jogavel.orientacao}
             allowHelp
+            marcasAutomaticas={false}
             moveLimit={jogavel.moveLimit}
             intro={jogavel.intro}
             v2={v2}

@@ -7,6 +7,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { AULA_BASE, criarAulaBase } from "../preparo/global-setup.ts";
+import { maisAcoes } from "../preparo/aulas.ts";
 import { expect, test } from "../preparo/fixtures.ts";
 import { RAIZ } from "../preparo/protecao.ts";
 import { jogar } from "../preparo/tabuleiro.ts";
@@ -25,9 +26,9 @@ test("editar avisa a versão nova; excluir → Conferir acusa; criar pela janela
   const janela = page.getByRole("dialog", { name: "Prática contra o computador" });
   await janela.getByLabel("Título").fill("Vença sem afogar");
   await expect(janela.getByText(/nova versão da avaliação/)).toHaveCount(0);
-  await janela.getByLabel("Força (0 a 20)").fill("10");
+  await janela.getByLabel("Nível do computador (0 a 20)").fill("10");
   await expect(janela.getByRole("status").filter({ hasText: /Mudar adversário cria uma nova versão da avaliação/ })).toBeVisible();
-  await janela.getByLabel("Força (0 a 20)").fill("20");
+  await janela.getByLabel("Nível do computador (0 a 20)").fill("20");
   await janela.getByRole("button", { name: "Salvar prática" }).click();
   await expect.poll(() => arquivo().praticas[0]?.titulo).toBe("Vença sem afogar");
 
@@ -39,41 +40,41 @@ test("editar avisa a versão nova; excluir → Conferir acusa; criar pela janela
   await expect(salvo).toHaveText("✓ salvo");
 
   // 3. Conferir: PRATICA_AUSENTE = 1.
-  await page.getByRole("button", { name: "Conferir" }).click();
+  await maisAcoes(page, /Conferir sem publicar/);
   const resultado = page.getByRole("region", { name: "Resultado da conferência" });
-  const ausente = resultado.getByRole("listitem").filter({ hasText: /não tem prática contra o computador/ });
+  const ausente = resultado.getByRole("listitem").filter({ hasText: /não tem prática contra o computador/i });
   await expect(ausente).toHaveCount(1);
 
   // 4. Capítulo com a posição da prática livre do estudo, com a origem registrada.
   await page.getByRole("button", { name: "+ Adicionar capítulo" }).click();
   const novo = page.getByRole("dialog", { name: "Adicionar capítulo" });
   await novo.getByLabel("Nome do capítulo").fill("Prática livre — K+D×R");
-  await novo.getByRole("button", { name: /Colar FEN/ }).click();
+  await novo.getByRole("button", { name: /Colar código da posição/ }).click();
   await novo.getByLabel("FEN da posição").fill(FEN_DA_PRATICA);
   await novo.getByRole("button", { name: "Criar capítulo" }).click();
-  await page.getByRole("region", { name: "Problemas desta aula" }).getByRole("listitem").filter({ hasText: /revisão de proveniência/ }).getByRole("button", { name: "Ir para o problema" }).click();
+  await page.getByRole("region", { name: /Problemas desta aula|Resultado da conferência/ }).getByRole("listitem").filter({ hasText: /falta dizer de onde veio/i }).getByRole("button", { name: "Resolver" }).click();
   const origem = page.getByRole("dialog", { name: "De onde veio esta posição?" });
   await origem.getByRole("radio", { name: /Autoria própria/ }).check();
   await origem.getByRole("button", { name: "Registrar revisão" }).click();
 
   // 5. Ir para o problema da conferência abre a prática nova; a posição vem do capítulo.
-  await ausente.getByRole("button", { name: "Ir para o problema" }).click();
+  await ausente.getByRole("button", { name: "Resolver" }).click();
   const pratica = page.getByRole("dialog", { name: "Nova prática contra o computador" });
   await pratica.getByLabel("Título").fill("Vença sem afogar");
   await pratica.getByRole("button", { name: /De um capítulo desta aula/ }).click();
   await pratica.getByLabel("Capítulo").selectOption({ label: "Prática livre — K+D×R" });
   await expect(pratica.getByText(/Origem já registrada no capítulo: Autoria própria/)).toBeVisible();
   await pratica.getByRole("button", { name: "Adicionar ao acervo e usar" }).click();
-  const pedeResultado = pratica.getByLabel("Resultado esperado (sem cache da tablebase)");
-  await expect(pratica.getByText(/✓ pos-ex-e2e-(base|lichess)-1 ·/).or(pedeResultado)).toBeVisible();
+  const pedeResultado = pratica.getByLabel("Resultado esperado");
+  await expect(pratica.getByText(/✓ pos-ex-[a-z0-9-]+-\d+ ·/).or(pedeResultado)).toBeVisible();
   if (await pedeResultado.isVisible()) {
     await pedeResultado.selectOption({ label: "brancas ganham" });
     await pratica.getByRole("button", { name: "Adicionar ao acervo e usar" }).click();
   }
   // A mesma FEN já no acervo (a importação do estudo, na mesma rodada) é reaproveitada, e não duplicada.
-  const escolhida = pratica.getByText(/✓ pos-ex-e2e-(base|lichess)-1 ·/);
+  const escolhida = pratica.getByText(/✓ pos-ex-[a-z0-9-]+-\d+ ·/); // ou a do acervo real com a mesma FEN (a do Doug, 14/9/2026)
   await expect(escolhida).toBeVisible();
-  const positionId = ((await escolhida.textContent()) ?? "").match(/pos-ex-e2e-[a-z]+-1/)![0];
+  const positionId = ((await escolhida.textContent()) ?? "").match(/pos-ex-[a-z0-9-]+-\d+/)![0];
   expect(existsSync(path.join(RAIZ, `content/positions/EX/${positionId}.json`))).toBe(true);
 
   // 6. Jogar na prévia: o computador responde, e nada é gravado.
@@ -97,7 +98,7 @@ test("editar avisa a versão nova; excluir → Conferir acusa; criar pela janela
   await expect(salvo).toHaveText("✓ salvo");
 
   // 7. Conferir de novo: PRATICA_AUSENTE = 0.
-  await page.getByRole("button", { name: "Conferir" }).click();
+  await maisAcoes(page, /Conferir sem publicar/);
   await expect(page.getByRole("region", { name: "Resultado da conferência" })).toBeVisible();
-  await expect(page.getByRole("region", { name: "Resultado da conferência" }).getByText(/não tem prática contra o computador/)).toHaveCount(0);
+  await expect(page.getByRole("region", { name: "Resultado da conferência" }).getByText(/não tem prática contra o computador/i)).toHaveCount(0);
 });

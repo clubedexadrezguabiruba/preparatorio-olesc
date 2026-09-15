@@ -75,6 +75,23 @@ export function aplicarRevisaoDaFen(aula: AulaV2, analiseId: string, revisao: Re
   return { ok: true, aula: { ...aula, analises: aula.analises.map((item) => (item.id === analiseId ? { ...item, inicio } : item)) } };
 }
 
+/**
+ * As outras posições que vieram da **mesma origem** que esta — mesma origem de terceiro, mesma obra e mesmo
+ * link —, na ordem da aula. É o estudo importado inteiro: achado do Doug no teste humano de 14/9/2026, que
+ * teve de abrir a janela da origem capítulo por capítulo para declarar a mesma coisa.
+ */
+export function posicoesDaMesmaOrigem(aula: AulaV2, analiseId: string): string[] {
+  const esta = aula.analises.find((item) => item.id === analiseId);
+  const referencia = esta?.inicio.tipo === "fen" ? esta.inicio.revisao : undefined;
+  if (!referencia || !origemDeTerceiro(referencia.origem) || !(referencia.obra || referencia.link)) return [];
+  return aula.analises
+    .filter((item) => item.id !== analiseId && item.inicio.tipo === "fen" && item.inicio.revisao
+      && item.inicio.revisao.origem === referencia.origem
+      && (item.inicio.revisao.obra ?? "") === (referencia.obra ?? "")
+      && (item.inicio.revisao.link ?? "") === (referencia.link ?? ""))
+    .map((item) => item.id);
+}
+
 /** O estado que a tela escreve ao lado do capítulo. */
 export function estadoDaProveniencia(analise: AnaliseV2): "nao-se-aplica" | "sem-revisao" | "caduca" | "desconhecida" | "revisada" {
   if (analise.inicio.tipo !== "fen") return "nao-se-aplica";

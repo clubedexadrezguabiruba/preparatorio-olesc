@@ -28,11 +28,11 @@ test("@a11y editor e as janelas", async ({ page }) => {
 
   const janelas: Array<[string, () => Promise<void>, string]> = [
     ["Adicionar capítulo", () => page.getByRole("button", { name: "+ Adicionar capítulo" }).click(), '[role="dialog"]'],
-    ["Importar PGN", () => page.getByRole("button", { name: "Importar PGN" }).click(), '[role="dialog"]'],
+    ["Importar", async () => { await page.getByRole("button", { name: "Mais ações" }).click(); await page.getByRole("menuitem", { name: /Importar do Lichess ou PGN/ }).click(); }, '[role="dialog"]'],
     ["Prática", () => page.getByRole("button", { name: /Prática contra o computador/ }).first().click(), '[role="dialog"]'],
     ["Ordem da aula", () => page.getByRole("button", { name: /Ordem da aula/ }).click(), '[role="dialog"]'],
     ["Introdução", () => page.getByRole("button", { name: /Apresentação/ }).first().click(), '[role="dialog"]'],
-    ["Pré-visualizar", () => page.getByRole("button", { name: "Pré-visualizar" }).click(), '[role="dialog"]'],
+    ["Pré-visualizar", () => page.getByRole("button", { name: "Ver como aluno" }).click(), '[role="dialog"]'],
     ["Atalhos", async () => { await page.locator("body").click({ position: { x: 3, y: 3 } }); await page.keyboard.press("Shift+?"); }, '[role="dialog"]'],
   ];
   for (const [nome, abrir, seletor] of janelas) {

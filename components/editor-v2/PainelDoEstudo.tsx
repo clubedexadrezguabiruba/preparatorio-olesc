@@ -111,7 +111,7 @@ export function PainelDoEstudo({ aula, leitura, positions, obras, professor, apl
         ) : null}
         {contagem("pratica") ? (
           <label className="flex flex-col gap-1 text-xs text-tinta-fraca">
-            Obra do registro para a posição da prática entrar no acervo
+            De que obra vem a posição da prática
             <select value={obraDaPratica} onChange={(e) => setObraDaPratica(e.currentTarget.value)} className={campo}>
               {obras.map((item) => <option key={item.slug} value={item.slug}>{item.titulo}</option>)}
             </select>
@@ -119,7 +119,7 @@ export function PainelDoEstudo({ aula, leitura, positions, obras, professor, apl
         ) : null}
         {contagem("pratica") ? (
           <label className="flex flex-col gap-1 text-xs text-tinta-fraca">
-            Resultado esperado da prática — vale só se a tablebase ainda não tiver a posição no cache
+            Resultado esperado da prática, se o curso ainda não o conhecer
             <select value={resultadoDaPratica} onChange={(e) => setResultadoDaPratica(e.currentTarget.value as PedidoDeImportacaoDeEstudo["resultadoDaPratica"])} className={campo}>
               <option value="win-white">brancas ganham</option>
               <option value="win-black">pretas ganham</option>

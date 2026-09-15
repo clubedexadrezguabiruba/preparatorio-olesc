@@ -23,16 +23,16 @@ test("FEN colada → aviso → Ir para o problema → Autoria própria → aviso
   await page.getByRole("button", { name: "+ Adicionar capítulo" }).click();
   const janela = page.getByRole("dialog", { name: "Adicionar capítulo" });
   await janela.getByLabel("Nome do capítulo").fill("O L e a caixa");
-  await janela.getByRole("button", { name: /Colar FEN/ }).click();
+  await janela.getByRole("button", { name: /Colar código da posição/ }).click();
   await janela.getByLabel("FEN da posição").fill(FEN);
   await janela.getByRole("button", { name: "Criar capítulo" }).click();
   await expect(janela).toBeHidden();
 
-  const aviso = problemas.getByText(/ainda não passou por revisão de proveniência/);
+  const aviso = problemas.getByText(/falta dizer de onde veio esta posição/i);
   await expect(aviso).toHaveCount(1);
   await expect(page.getByRole("button", { name: /O L e a caixa/ })).toContainText("⚑");
 
-  await problemas.getByRole("listitem").filter({ hasText: /ainda não passou por revisão de proveniência/ }).getByRole("button", { name: "Ir para o problema" }).click();
+  await problemas.getByRole("listitem").filter({ hasText: /falta dizer de onde veio esta posição/i }).getByRole("button", { name: "Resolver" }).click();
   const revisao = page.getByRole("dialog", { name: "De onde veio esta posição?" });
   await expect(revisao).toBeVisible();
 
@@ -43,7 +43,7 @@ test("FEN colada → aviso → Ir para o problema → Autoria própria → aviso
   await revisao.getByRole("radio", { name: /Autoria própria/ }).check();
   await revisao.getByRole("button", { name: "Registrar revisão" }).click();
   await expect(revisao).toBeHidden();
-  await expect(problemas.getByText(/ainda não passou por revisão de proveniência/)).toHaveCount(0);
+  await expect(problemas.getByText(/falta dizer de onde veio esta posição/i)).toHaveCount(0);
 
   await expect.poll(() => {
     const aula = JSON.parse(arquivo()) as AulaCrua;
@@ -62,19 +62,19 @@ test("FEN colada → aviso → Ir para o problema → Autoria própria → aviso
   // Ctrl+Z desfaz a revisão: o aviso volta.
   await page.locator("body").click({ position: { x: 5, y: 5 } });
   await page.keyboard.press("Control+z");
-  await expect(problemas.getByText(/ainda não passou por revisão de proveniência/)).toHaveCount(1);
+  await expect(problemas.getByText(/falta dizer de onde veio esta posição/i)).toHaveCount(1);
   await page.keyboard.press("Control+y");
-  await expect(problemas.getByText(/ainda não passou por revisão de proveniência/)).toHaveCount(0);
+  await expect(problemas.getByText(/falta dizer de onde veio esta posição/i)).toHaveCount(0);
 
   // Porta nova: posição do acervo.
   await page.getByRole("button", { name: "+ Adicionar capítulo" }).click();
   await janela.getByLabel("Nome do capítulo").fill("Mate em dois do Cook");
-  await janela.getByRole("button", { name: /Posição do acervo/ }).click();
+  await janela.getByRole("button", { name: /Posição salva do curso/ }).click();
   await janela.getByLabel("Procurar no acervo").fill("cook");
   await janela.getByRole("radio", { name: /pos-n0-qmate-cook-d1/ }).check({ force: true });
   await janela.getByRole("button", { name: "Criar capítulo" }).click();
   await expect(janela).toBeHidden();
   await expect.poll(() => (JSON.parse(arquivo()) as AulaCrua).analises.some((a) => a.inicio.positionId === "pos-n0-qmate-cook-d1")).toBe(true);
   expect((JSON.parse(arquivo()) as AulaCrua).proveniencia.map((p) => p.positionId)).toContain("pos-n0-qmate-cook-d1");
-  await expect(problemas.getByText(/não está no pacote|revisão de proveniência/)).toHaveCount(0);
+  await expect(problemas.getByText(/não está no pacote|falta dizer de onde veio/i)).toHaveCount(0);
 });

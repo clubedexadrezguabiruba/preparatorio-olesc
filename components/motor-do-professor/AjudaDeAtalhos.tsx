@@ -54,7 +54,7 @@ export function AjudaDeAtalhos({ rotulo, children, lado = "direita" }: {
         aria-controls={aberta ? id : undefined}
         title={rotulo}
         onClick={() => setAberta((a) => !a)}
-        className="foco inline-flex h-5 w-5 items-center justify-center rounded-full border border-borda text-[11px] leading-none text-tinta-fraca hover:bg-carta-toque hover:text-tinta"
+        className="foco inline-flex h-7 w-7 items-center justify-center rounded-full border border-borda text-[11px] leading-none text-tinta-fraca hover:bg-carta-toque hover:text-tinta"
       >
         ?
       </button>

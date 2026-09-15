@@ -28,7 +28,7 @@ function lanceNovoDaRaiz(): string {
 
 test("professor edita a aula base e desfaz; aluno abre o painel", async ({ page, aluno }) => {
   await page.goto("/editor");
-  await expect(page.getByText(AULA_BASE).first()).toBeVisible();
+  await expect(page.getByText("Ensaio automático — aula base").first()).toBeVisible();
 
   await page.goto(`/editor/v2/finais/${AULA_BASE}`);
   await expect(page.getByRole("textbox", { name: "Título da aula" })).toHaveValue("Ensaio automático — aula base");

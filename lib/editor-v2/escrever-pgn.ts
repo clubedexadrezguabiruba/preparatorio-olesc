@@ -290,15 +290,15 @@ function oQueNaoCabe(aula: AulaV2, analiseIds: string[]): string[] {
     .filter((c) => analiseIds.includes(c.analiseId))
     .reduce((total, c) => total + c.narracoes.length, 0);
   if (narracoes > 0) {
-    avisos.push(`${narracoes} ${narracoes === 1 ? "narração fica de fora" : "narrações ficam de fora"}: o PGN guarda o comentário da posição, não o texto que o aluno ouve`);
+    avisos.push(`${narracoes} ${narracoes === 1 ? "fala para o aluno fica de fora" : "falas para o aluno ficam de fora"}: o arquivo leva só a nota do professor`);
   }
   if (aula.treinos.length > 0) {
-    avisos.push(`${aula.treinos.length} ${aula.treinos.length === 1 ? "treino não cabe" : "treinos não cabem"} num PGN — respostas, defensor, dicas e término não têm representação no formato`);
+    avisos.push(`${aula.treinos.length} ${aula.treinos.length === 1 ? "treino fica de fora" : "treinos ficam de fora"}: o arquivo só leva lances`);
   }
   if (aula.introducoes.length > 0) {
-    avisos.push(`a introdução da aula não cabe num PGN`);
+    avisos.push(`a introdução fica de fora`);
   }
-  avisos.push("a ordem da aula, o histórico e a certificação só voltam pelo pacote JSON v2");
+  avisos.push("a ordem da aula e o resto só voltam pela cópia completa da aula (backup)");
   return avisos;
 }
 

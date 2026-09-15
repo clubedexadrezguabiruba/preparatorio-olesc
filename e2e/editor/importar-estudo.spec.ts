@@ -7,6 +7,7 @@
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { maisAcoes, abrirImportar } from "../preparo/aulas.ts";
 import { expect, test } from "../preparo/fixtures.ts";
 import { RAIZ } from "../preparo/protecao.ts";
 
@@ -32,8 +33,8 @@ test.beforeEach(() => criarAulaVazia(AULA_LICHESS, "Mate de Dama e Rei (importad
 
 test("o arquivo do estudo: seletor com as pistas, importar, e Conferir sem erro", async ({ page }) => {
   await page.goto(`/editor/v2/finais/${AULA_LICHESS}`);
-  await page.getByRole("button", { name: "Importar PGN" }).click();
-  const janela = page.getByRole("dialog", { name: "Importar PGN" });
+  await abrirImportar(page);
+  const janela = page.getByRole("dialog", { name: "Importar do Lichess ou PGN" });
   await janela.locator('input[type="file"]').setInputFiles(FIXTURE);
 
   const lista = janela.getByRole("list", { name: "Capítulos do estudo" });
@@ -56,11 +57,13 @@ test("o arquivo do estudo: seletor com as pistas, importar, e Conferir sem erro"
   expect(aula.fluxo.map((e) => e.tipo)).toEqual(["introducao", "capitulo", "capitulo", "treino", "treino", "treino", "treino", "pratica"]);
   const mates = aula.treinos[3].questoes.at(-1)!.respostas.filter((r) => r.julgamento === "correta").map((r) => r.moves[0]).sort();
   expect(mates).toEqual(["g4g6", "g4h3", "g4h4"]);
-  expect(aula.praticas[0].positionId).toBe("pos-ex-e2e-lichess-1");
+  // A posição nova da prática, ou — se o acervo já tem a mesma FEN, como depois que o Doug importou o
+  // estudo dele (pos-ex-promocao-peao-1, 14/9/2026) — a que já existe: o acervo não duplica FEN.
+  expect(aula.praticas[0].positionId).toMatch(/^pos-ex-[a-z0-9-]+-\d+$/);
   expect(aula.praticas[0].objetivo).toBe("win");
 
   // Importar de novo avisa, e não duplica.
-  await page.getByRole("button", { name: "Importar PGN" }).click();
+  await abrirImportar(page);
   await janela.locator('input[type="file"]').setInputFiles(FIXTURE);
   await janela.getByRole("combobox", { name: /O que «PRÁTICA LIVRE/ }).selectOption("fora");
   await expect(janela.getByRole("alert")).toHaveText(/já ter sido importado/);
@@ -68,7 +71,7 @@ test("o arquivo do estudo: seletor com as pistas, importar, e Conferir sem erro"
 
   const salvo = page.locator("header span").filter({ hasText: /^(✓ salvo|alterado|salvando…|erro|conflito)$/ });
   await expect(salvo).toHaveText("✓ salvo");
-  await page.getByRole("button", { name: "Conferir" }).click();
+  await maisAcoes(page, /Conferir sem publicar/);
   const resultado = page.getByRole("region", { name: "Resultado da conferência" });
   await expect(resultado).toBeVisible({ timeout: 60_000 });
   await expect(resultado).toContainText(/Pode publicar/);
@@ -77,8 +80,8 @@ test("o arquivo do estudo: seletor com as pistas, importar, e Conferir sem erro"
 
 test("@rede o link real chega ao mesmo estudo", async ({ page }) => {
   await page.goto(`/editor/v2/finais/${AULA_LICHESS}`);
-  await page.getByRole("button", { name: "Importar PGN" }).click();
-  const janela = page.getByRole("dialog", { name: "Importar PGN" });
+  await abrirImportar(page);
+  const janela = page.getByRole("dialog", { name: "Importar do Lichess ou PGN" });
   await janela.getByLabel(/Endereço do Lichess/).fill("https://lichess.org/study/hf09xMzS");
   await janela.getByRole("button", { name: "Buscar no Lichess" }).click();
   const lista = janela.getByRole("list", { name: "Capítulos do estudo" });

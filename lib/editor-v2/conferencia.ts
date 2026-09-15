@@ -151,7 +151,7 @@ export const REGRAS_PUBLICACAO_V2: RegraDePublicacaoV2[] = [
       const revisao = analise.inicio.tipo === "fen" ? analise.inicio.revisao : undefined;
       if (!revisao || !origemDeTerceiro(revisao.origem) || revisao.direitoDosTextos || !analiseTemTexto(aula, analise)) return [];
       const capitulo = aula.capitulos.find((item) => item.analiseId === analise.id);
-      return [erro(aula, "TEXTO_SEM_DIREITO_DECLARADO", `as narrações ${capitulo ? `do capítulo «${capitulo.titulo}» ` : ""}vieram com uma posição de outra pessoa — marque na proveniência que os textos são seus ou que você tem direito de usá-los, ou reescreva-os`, { analiseId: analise.id, campo: "inicio.revisao" })];
+      return [erro(aula, "TEXTO_SEM_DIREITO_DECLARADO", `as narrações ${capitulo ? `do capítulo «${capitulo.titulo}» ` : ""}vieram de outra pessoa — em «De onde veio a posição», marque que os textos são seus ou que você pode usá-los`, { analiseId: analise.id, campo: "inicio.revisao" })];
     }),
   },
   {

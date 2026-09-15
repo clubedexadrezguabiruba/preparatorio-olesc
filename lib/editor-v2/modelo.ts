@@ -887,8 +887,8 @@ export function problemasDaAulaV2(
       // não pede trabalho ensina o professor a ignorar os que pedem.
       if (analise.inicio.tipo === "fen" && analise.inicio.fen !== FEN_INICIAL_PADRAO) {
         const revisao = analise.inicio.revisao;
-        if (!revisao) problemas.push({ codigo: "FEN_IMPORTADA_SEM_REVISAO", severidade: "aviso", mensagem: "esta análise começa numa posição que ainda não passou por revisão de proveniência — diga de onde ela veio", analiseId: analise.id, campo: "inicio.revisao" });
-        else if (revisao.fenRevisada !== analise.inicio.fen) problemas.push({ codigo: "FEN_IMPORTADA_SEM_REVISAO", severidade: "aviso", mensagem: `a posição mudou depois da revisão de proveniência (revisada: ${revisao.fenRevisada}; agora: ${analise.inicio.fen}) — confirme a origem de novo`, analiseId: analise.id, campo: "inicio.revisao" });
+        if (!revisao) problemas.push({ codigo: "FEN_IMPORTADA_SEM_REVISAO", severidade: "aviso", mensagem: "falta dizer de onde veio esta posição — use «Resolver»", analiseId: analise.id, campo: "inicio.revisao" });
+        else if (revisao.fenRevisada !== analise.inicio.fen) problemas.push({ codigo: "FEN_IMPORTADA_SEM_REVISAO", severidade: "aviso", mensagem: `a posição mudou depois que você disse de onde ela veio — confirme a origem de novo`, analiseId: analise.id, campo: "inicio.revisao" });
         // Nunca promovido nem resolvível: some só quando a origem é dita (decisão do Doug, 14/9).
         else if (revisao.origem === "desconhecida") problemas.push({ codigo: "ORIGEM_DESCONHECIDA", severidade: "aviso", mensagem: "a origem desta posição está registrada como desconhecida — a aula publica, mas o aviso fica até alguém dizer de onde ela veio", analiseId: analise.id, campo: "inicio.revisao" });
       }

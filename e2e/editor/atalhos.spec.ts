@@ -42,18 +42,19 @@ test("editor: x, ?, L, setas, Esc e Tab", async ({ page }) => {
 
   // L liga e desliga o motor; digitando "l" num campo, não.
   await page.keyboard.press("l");
-  await expect(page.getByText("desligado · tecla L liga")).toHaveCount(0);
+  await expect(page.getByText("desligado", { exact: true })).toHaveCount(0);
   await page.keyboard.press("l");
-  await expect(page.getByText("desligado · tecla L liga").first()).toBeVisible();
-  await page.getByLabel("Comentário desta posição").click();
+  await expect(page.getByText("desligado", { exact: true }).first()).toBeVisible();
+  await page.getByRole("tab", { name: /^Nota do professor/ }).click();
+  await page.getByRole("textbox", { name: "Nota do professor" }).click();
   await page.keyboard.type("l");
-  await expect(page.getByText("desligado · tecla L liga").first()).toBeVisible();
-  await page.getByLabel("Comentário desta posição").fill("");
+  await expect(page.getByText("desligado", { exact: true }).first()).toBeVisible();
+  await page.getByRole("textbox", { name: "Nota do professor" }).fill("");
 
   // Com o menu ••• de um lance aberto, o L fica mudo, e Esc devolve o foco ao •••.
   await page.getByRole("button", { name: /Ações do lance/ }).first().click();
   await page.keyboard.press("l");
-  await expect(page.getByText("desligado · tecla L liga").first()).toBeVisible();
+  await expect(page.getByText("desligado", { exact: true }).first()).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("button", { name: /Ações do lance/ }).first()).toBeFocused();
 
@@ -75,6 +76,35 @@ test("editor: x, ?, L, setas, Esc e Tab", async ({ page }) => {
   await expect(janela).toBeHidden();
   await expect(abrir).toBeFocused();
   expect(await page.getByRole("list", { name: "Lances da análise" }).locator('[aria-current="true"]').textContent()).toBe(lanceAntes);
+});
+
+test("editor: o botão Virar tabuleiro vira só a vista, e o ••• do capítulo muda o lado do aluno", async ({ page }) => {
+  const orientacaoNoArquivo = () => (JSON.parse(arquivo()) as { capitulos: { orientacao: string }[] }).capitulos.map((c) => c.orientacao);
+  await page.goto(`/editor/v2/finais/${AULA_BASE}`);
+  await expect(page.locator(".cg-wrap").first()).toBeVisible();
+  const antes = arquivo();
+  const [lado] = orientacaoNoArquivo();
+  const outro = lado === "white" ? "black" : "white";
+
+  // O botão faz o mesmo que o x: a vista vira e volta, o arquivo não muda.
+  const virar = page.getByRole("button", { name: "Virar tabuleiro" });
+  await virar.click();
+  await expect.poll(() => orientacao(page)).toContain(`orientation-${outro}`);
+  await expect(virar).toHaveAttribute("aria-pressed", "true");
+  await virar.click();
+  await expect.poll(() => orientacao(page)).toContain(`orientation-${lado}`);
+  await page.waitForTimeout(900);
+  expect(arquivo()).toBe(antes);
+
+  // O ••• do capítulo grava o lado do aluno; o Ctrl+Z devolve.
+  await page.getByLabel(/^Ações do capítulo/).first().click();
+  await page.getByRole("button", { name: new RegExp(`^O aluno vê com as ${outro === "black" ? "pretas" : "brancas"} embaixo`) }).click();
+  await expect.poll(() => orientacao(page)).toContain(`orientation-${outro}`);
+  await expect.poll(() => orientacaoNoArquivo()[0], { timeout: 10_000 }).toBe(outro);
+  await page.locator("body").click({ position: { x: 3, y: 3 } });
+  await page.keyboard.press("Control+z");
+  await expect.poll(() => orientacao(page)).toContain(`orientation-${lado}`);
+  await expect.poll(() => orientacaoNoArquivo()[0], { timeout: 10_000 }).toBe(lado);
 });
 
 test("aluno: x vira a vista, ? mostra os atalhos, e a etapa aparece em texto", async ({ aluno }) => {

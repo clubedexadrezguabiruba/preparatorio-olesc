@@ -46,9 +46,15 @@ export function LessonPlayer(props: Parameters<typeof LessonPlayerV1>[0] | {
   revisao?: boolean;
   /** A server action que grava a etapa jogada. A prévia do editor não passa. */
   onEtapaFeita?: (tentativa: TentativaDeAulaV2) => void | Promise<unknown>;
+  /**
+   * "Fazer a aula inteira como aluno", no editor (14/9/2026): o "← Finais" do cabeçalho vira um botão
+   * que sai da aula, e `x`/`?` ficam na camada da tela cheia. O aluno não passa nenhum dos dois.
+   */
+  aoSair?: () => void;
+  camadaDeAtalhos?: number;
 }) {
   // Fatia 10: x vira a vista e ? mostra os atalhos em toda etapa com tabuleiro.
-  if ("aulaV2" in props) return <VistaDoTabuleiro escopos={["aluno-introducao", "aluno-capitulo", "aluno-treino", "aluno-pratica"]}><PlayerDoFluxoV2 {...props} /></VistaDoTabuleiro>;
+  if ("aulaV2" in props) return <VistaDoTabuleiro escopos={["aluno-introducao", "aluno-capitulo", "aluno-treino", "aluno-pratica"]} camada={props.camadaDeAtalhos}><PlayerDoFluxoV2 {...props} /></VistaDoTabuleiro>;
   return <VistaDoTabuleiro escopos={["aluno-introducao", "aluno-capitulo", "aluno-treino", "aluno-pratica"]}><LessonPlayerV1 {...props} /></VistaDoTabuleiro>;
 }
 
@@ -464,10 +470,11 @@ function avancoPara(proxima: EtapaDoAlunoV2 | undefined): string {
  * do v1 — só sobe o que foi jogado, os lances, e quem julga é o servidor —, com a publicação,
  * a revisão e o id idempotente da tentativa junto.
  */
-function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, onEtapaFeita }: {
+function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, onEtapaFeita, aoSair }: {
   aulaV2: AulaDoAlunoV2;
   revisao?: boolean;
   onEtapaFeita?: (tentativa: TentativaDeAulaV2) => void | Promise<unknown>;
+  aoSair?: () => void;
 }) {
   const idNaStore = `${aula.id}@${aula.publicationId}`;
   const stage = useLessonStore((s) => s.stage);
@@ -536,9 +543,15 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, onEtapaFeita }: {
   return (
     <div className="flex w-full flex-1 flex-col gap-3">
       <header className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
-        <Link href="/finais" className="foco rotulo text-tinta-fraca hover:underline">
-          ← Finais
-        </Link>
+        {aoSair ? (
+          <button type="button" onClick={aoSair} className="foco rotulo text-tinta-fraca hover:underline">
+            ← Sair da aula
+          </button>
+        ) : (
+          <Link href="/finais" className="foco rotulo text-tinta-fraca hover:underline">
+            ← Finais
+          </Link>
+        )}
         <h1 className="titulo">{aula.titulo}</h1>
         <div className="ml-auto self-center">
           <SoundToggle />
@@ -622,7 +635,7 @@ function CapituloDoAlunoV2({ etapa, trilha, rodape }: { etapa: Extract<EtapaDoAl
     return passo.pausaManual ? null : pausaDoPasso({ fala: passo.fala, espera: passo.espera } as RoteiroPasso);
   }, [etapa]);
   return (
-    <ObjectiveStage stage={stage} position={position} orientation={etapa.orientacao} trilha={trilha} rodape={rodape} autoria={autoria} relogio={relogio} />
+    <ObjectiveStage stage={stage} position={position} orientation={etapa.orientacao} trilha={trilha} rodape={rodape} autoria={autoria} relogio={relogio} marcasAutomaticas={false} />
   );
 }
 
@@ -645,6 +658,7 @@ function TreinoDoAlunoV2({ etapa, trilha, onFinish, finishLabel }: {
       position={position}
       orientation={jogavel.orientacao}
       allowHelp
+      marcasAutomaticas={false}
       moveLimit={jogavel.moveLimit}
       intro={jogavel.intro}
       onFinish={onFinish}

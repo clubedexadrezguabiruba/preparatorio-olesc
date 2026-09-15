@@ -3,7 +3,7 @@
 import { useState, type DragEvent, type MouseEvent } from "react";
 import type { CapituloV2 } from "@/lib/editor-v2/modelo";
 
-export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDuplicar, aoExcluir, proveniencia = {}, aoProveniencia }: {
+export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDuplicar, aoExcluir, proveniencia = {}, aoProveniencia, aoRenomear, aoTrocarPosicao, aoTrocarOrientacao }: {
   capitulos: CapituloV2[];
   atualId: string;
   aoEscolher: (capitulo: CapituloV2) => void;
@@ -19,7 +19,17 @@ export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDu
    */
   proveniencia?: Record<string, "sem-revisao" | "caduca" | "desconhecida" | "revisada">;
   aoProveniencia?: (capituloId: string) => void;
+  /**
+   * Revisão de experiência (14/9/2026): o nome e a posição inicial moravam num campo e num botão soltos no
+   * pé da coluna, longe do capítulo. Agora são ações do próprio capítulo — no `•••`, e o nome também com
+   * dois cliques, como se renomeia um arquivo.
+   */
+  aoRenomear?: (capituloId: string, titulo: string) => void;
+  aoTrocarPosicao?: (capituloId: string) => void;
+  /** Qual cor fica embaixo no tabuleiro do aluno — um clique, desfeito pelo Ctrl+Z. */
+  aoTrocarOrientacao?: (capituloId: string, orientacao: CapituloV2["orientacao"]) => void;
 }) {
+  const [renomeando, setRenomeando] = useState<string | null>(null);
   const [arrastando, setArrastando] = useState<number | null>(null);
   const [vaoAlvo, setVaoAlvo] = useState<number | null>(null);
 
@@ -89,26 +99,64 @@ export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDu
                 <circle cx="4" cy="13" r="1" /><circle cx="8" cy="13" r="1" />
               </svg>
             </span>
+            {renomeando === capitulo.id && aoRenomear ? (
+              <input
+                autoFocus
+                aria-label="Nome do capítulo"
+                defaultValue={capitulo.titulo}
+                onFocus={(evento) => evento.currentTarget.select()}
+                onBlur={(evento) => { aoRenomear(capitulo.id, evento.currentTarget.value); setRenomeando(null); }}
+                onKeyDown={(evento) => {
+                  if (evento.key === "Enter") evento.currentTarget.blur();
+                  if (evento.key === "Escape") { evento.currentTarget.value = capitulo.titulo; evento.currentTarget.blur(); }
+                }}
+                className="foco my-1 min-w-0 flex-1 rounded border border-borda bg-papel px-1 py-1 text-sm text-tinta"
+              />
+            ) : (
             <button
               type="button"
               onClick={() => aoEscolher(capitulo)}
+              onDoubleClick={() => { if (aoRenomear) setRenomeando(capitulo.id); }}
               aria-current={selecionado ? "true" : undefined}
-              className={`foco min-w-0 flex-1 px-1 py-2 text-left text-sm ${selecionado ? "font-semibold" : ""}`}
+              title={`${capitulo.titulo}${aoRenomear ? " — dois cliques para renomear" : ""}`}
+              className={`foco min-w-0 flex-1 px-1 py-1.5 text-left text-sm leading-snug line-clamp-2 break-words ${selecionado ? "font-semibold" : ""}`}
             >
-              {selecionado ? <span aria-hidden>▸ </span> : null}{capitulo.titulo}
+              {capitulo.titulo}
               {proveniencia[capitulo.id] && proveniencia[capitulo.id] !== "revisada" ? (
                 <span className="ml-1 text-xs text-aviso-tinta" title="A origem desta posição ainda não foi registrada">⚑<span className="sr-only"> (origem da posição a revisar)</span></span>
               ) : null}
             </button>
+            )}
             <details className="relative shrink-0">
               <summary
                 aria-label={`Ações do capítulo ${capitulo.titulo}`}
                 title="Mais ações"
-                className="foco flex h-full cursor-pointer list-none items-center rounded px-2 text-tinta-fraca hover:bg-carta-alta"
+                className="foco flex h-full min-h-8 min-w-8 cursor-pointer list-none items-center justify-center rounded px-2 text-tinta-fraca hover:bg-carta-alta"
               >
                 <span aria-hidden>•••</span>
               </summary>
-              <div className="absolute right-0 z-20 mt-1 flex w-44 flex-col rounded-md border border-borda bg-carta p-1 shadow-lg">
+              <div className="absolute right-0 z-20 mt-1 flex w-52 flex-col rounded-md border border-borda bg-carta p-1 shadow-lg">
+                {aoRenomear ? (
+                  <button type="button" onClick={(evento) => { fecharMenu(evento); setRenomeando(capitulo.id); }} className="foco rounded px-2 py-1.5 text-left text-sm hover:bg-carta-toque">
+                    Renomear
+                  </button>
+                ) : null}
+                {aoTrocarPosicao ? (
+                  <button type="button" onClick={(evento) => { fecharMenu(evento); aoTrocarPosicao(capitulo.id); }} className="foco rounded px-2 py-1.5 text-left text-sm hover:bg-carta-toque">
+                    Trocar a posição inicial…
+                  </button>
+                ) : null}
+                {aoTrocarOrientacao ? (
+                  <button
+                    type="button"
+                    onClick={(evento) => { fecharMenu(evento); aoTrocarOrientacao(capitulo.id, capitulo.orientacao === "white" ? "black" : "white"); }}
+                    className="foco rounded px-2 py-1.5 text-left text-sm hover:bg-carta-toque"
+                  >
+                    O aluno vê com as {capitulo.orientacao === "white" ? "pretas" : "brancas"} embaixo
+                    <span className="block text-xs text-tinta-fraca">Hoje: {capitulo.orientacao === "white" ? "brancas" : "pretas"} embaixo</span>
+                  </button>
+                ) : null}
+                <hr className="my-1 border-borda-fraca" />
                 <button
                   type="button"
                   disabled={indice === 0}

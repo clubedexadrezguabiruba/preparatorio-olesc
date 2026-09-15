@@ -84,7 +84,15 @@ export function ObjectiveStage({
   previa,
   autoria,
   relogio: relogioDoPasso,
+  marcasAutomaticas = true,
 }: {
+  /**
+   * O corte roxo e o aro da peça atacada, deduzidos da posição (`teachingShapes`). Ligado na aula
+   * antiga, que não tem desenho do professor. **Desligado em toda aula do formato novo** — decisão do
+   * Doug de 14/9/2026: lá o professor desenha o próprio corte, e a marca automática aparecia no player
+   * sem nunca ter aparecido no editor.
+   */
+  marcasAutomaticas?: boolean;
   stage: ObjectiveStageData;
   /** A posição da aula — a MESMA das três etapas, e de onde o roteiro parte. */
   position: Position;
@@ -272,14 +280,14 @@ export function ObjectiveStage({
    */
   const shapes = useMemo(
     () => [
-      ...teachingShapes(quadro.fen, quadro.lastMove),
+      ...(marcasAutomaticas ? teachingShapes(quadro.fen, quadro.lastMove) : []),
       // Com o editor ligado, o desenho da autoria vive na camada do usuário
       // (por `marcacao`) — repeti-lo aqui o desenharia duas vezes. Os
       // destaques deduzidos ficam: o professor precisa ver o mesmo tabuleiro
       // que o aluno vai ver, e eles não são dele para apagar.
       ...(marcacao ? [] : previa ? previa.autoria(passo) : autoria ? autoria(passo) : desenhoDaAutoria(atual)),
     ],
-    [quadro, atual, marcacao, previa, autoria, passo],
+    [quadro, atual, marcacao, previa, autoria, passo, marcasAutomaticas],
   );
 
   /** O passo de pausa manual da aula v2: o relógio não anda, e quem anda é o aluno. */

@@ -135,3 +135,41 @@ export function prepararNovaAula(pedido: PedidoDeNovaAulaV2, idsExistentes: Set<
     },
   };
 }
+
+/**
+ * "Nova aula" importando: o que o arquivo já sabe, para o professor não digitar de novo.
+ *
+ * Pedido do Doug no teste humano de 14/9/2026: "se eu vou importar uma aula, o nome já está no PGN,
+ * ou no link. Por que eu tenho que escrever de novo?". A tela preenche o título com esta sugestão, e
+ * ele continua editável — é sugestão, não decisão.
+ *
+ * - **Título:** o nome do estudo (`StudyName`), depois o do capítulo (`ChapterName`), depois o evento
+ *   (menos os genéricos do Lichess, "Rated Blitz game", "Casual…"), depois "Brancas × Pretas", depois o
+ *   nome do arquivo. O Lichess troca espaço por `_` no nome do estudo, e o professor costuma terminar com
+ *   uma marca de versão (`_v1`) que não é título de aula: as duas coisas saem.
+ * - **Orientação:** só quando todos os capítulos com `Orientation` dizem o mesmo lado.
+ *
+ * Tipo, nível e classe o arquivo não sabe, e continuam sendo escolha do professor.
+ */
+export function sugestaoDaImportacao(texto: string, nomeDoArquivo?: string): { titulo: string; orientacao: "white" | "black" | null } {
+  const tags = (nome: string) => [...texto.matchAll(new RegExp(String.raw`^\s*\[${nome}\s+"((?:[^"\\]|\\.)*)"\s*\]`, "gm"))]
+    .map((achado) => achado[1].replace(/\\(["\\])/g, "$1").trim());
+  const util = (valor: string | undefined) => valor !== undefined && valor !== "" && valor !== "?";
+  const limpo = (valor: string) => valor.replace(/_/g, " ").replace(/\s+v\d+$/i, "").replace(/\s+/g, " ").trim();
+
+  const evento = tags("Event").find(util);
+  const brancas = tags("White").find(util);
+  const pretas = tags("Black").find(util);
+  const candidatos = [
+    tags("StudyName").find(util),
+    tags("ChapterName").find(util),
+    evento && !/^(rated|casual)\b/i.test(evento) ? evento : undefined,
+    brancas && pretas ? `${brancas} × ${pretas}` : undefined,
+    nomeDoArquivo?.replace(/\.pgn$/i, "").replace(/[-_]+/g, " "),
+  ];
+  const titulo = limpo(candidatos.find(util) ?? "");
+
+  const lados = new Set(tags("Orientation").map((lado) => lado.toLowerCase()));
+  const orientacao = lados.size === 1 && (lados.has("white") || lados.has("black")) ? ([...lados][0] as "white" | "black") : null;
+  return { titulo, orientacao };
+}

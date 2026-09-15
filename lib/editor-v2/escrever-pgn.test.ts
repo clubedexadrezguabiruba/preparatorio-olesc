@@ -285,6 +285,6 @@ test("a aula inteira sai na ordem do fluxo, um jogo atrás do outro", () => {
 test("a exportação diz, com número, o que o PGN não leva", () => {
   const aula = importar(PGN_COMPLETO);
   const { naoCabe } = pgnDaAnalise(aula, aula.analises[0].id, positions);
-  assert.match(naoCabe[0], /^3 narrações ficam de fora/, "a importação criou uma narração por comentário, e nenhuma delas cabe no PGN");
-  assert.match(naoCabe.at(-1)!, /pacote JSON v2/);
+  assert.match(naoCabe[0], /^3 falas para o aluno ficam de fora/, "a importação criou uma narração por comentário, e nenhuma delas cabe no PGN");
+  assert.match(naoCabe.at(-1)!, /cópia completa da aula/);
 });

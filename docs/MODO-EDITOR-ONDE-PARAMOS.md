@@ -155,7 +155,8 @@ cada linha aponta a seção que conta a história inteira.
 
 **Aberto, na ordem:**
 
-1. **10I — o teste humano do Doug** pelo roteiro numerado (blocos A–G), e a decisão do desempenho.
+1. **10I — o teste humano do Doug** pelo roteiro numerado, reescrito em 14/9 em torno de "editar uma aula
+   pronta e criar uma do zero, comparando com o Lichess" (48 itens, Partes 0–5).
 2. Os itens de §28 ainda desmarcados, com o que falta em cada um, estão na tabela da Parada 10H.
 3. Pendências da fatia 10: a importação junta os parágrafos de 1 narração; a prática não tem campo de
    texto para o aluno; setas do `EditorDeRepertorio`, da introdução do aluno e da passada fora do
@@ -4829,6 +4830,10 @@ roteiro) ele anda na árvore de 1.000 nós: se sentir atraso, a divisão do `Edi
 18/09**; se não sentir, o alvo passa a ser o medido e o item de §28 é revisto com esse número. Até lá, o
 item continua desmarcado.
 
+**Atualização de 14/9, mesmo dia:** o Doug tirou a árvore de 1.000 nós do teste humano — nenhum estudo do
+site chega perto. O critério passa a ser a pergunta 21 do roteiro novo (a aula real, importada do estudo
+dele, pareceu lenta?); a medida de 1.000 nós continua no ensaio automático como margem.
+
 ### O próximo ponto exato (14/9/2026 — retomar daqui)
 
 **Commits da fatia 10:** `795d2d9` (10A), `e567599` (10B), `dce1fe6` (10C), `28a1b3e` (10D), `7290a3c`
@@ -4846,10 +4851,11 @@ regra certa (`TEXTO_SEM_DIREITO_DECLARADO`).
 
 1. ~~**10H**~~ — feita em 14/9 (ver "Parada 10H" acima), commit só de documentos.
 2. ~~Decisão do desempenho~~ — o Doug decidiu em 14/9 **registrar o limite** e julgar pelo item 45.
-3. **10I:** o teste humano do Doug pelo roteiro abaixo, agora com **45 itens** (o bloco G traz as perguntas
-   essenciais 1, 2, 3, 9 e 11, que não têm prova completa, e o item 45 do desempenho). **Antes de começar,
-   o agente grava a aula de medida** `.editor/v2/EX-E2E-ARVORE.json` (a mesma função `gravarAulaDeMedida`
-   de `e2e/desempenho.spec.ts`) e **apaga depois** com `npm run e2e:limpar`.
+3. **10I:** o teste humano do Doug pelo roteiro abaixo, **reescrito em 14/9** a pedido dele: 48 itens em seis
+   partes (trazer o estudo, mexer numa aula pronta, criar do zero, quando dá errado, teclado, veredito), com
+   comparação ao Lichess nos itens ⚖️. As perguntas essenciais 1, 2, 3, 7, 9 e 11 continuam dentro dele.
+   **A árvore de 1.000 lances saiu do teste humano** (o Doug: nenhum estudo do site chega perto; o estudo
+   dele tem 64 meios-lances) — a `EX-E2E-ARVORE` não é gravada; a medida fica só no ensaio automático.
 4. Pendências abertas: a importação perde as quebras de parágrafo de um comentário (1 narração); a
    prática não tem campo de texto para o aluno (o "OBJETIVO: VENCER" do estudo não tem onde entrar).
 
@@ -4877,106 +4883,362 @@ localizadores do Playwright mede o Playwright (`visitNode`, `getElementLabels`),
 
 ## O teste humano da fatia 10 — o roteiro numerado
 
-**Para quem:** o Doug, no computador dele, com o `npm run dev` ligado. **Quando:** depois de todos os
-ensaios automáticos verdes (parada 10I). **Resolução:** a tela normal do notebook (a de referência é
-1366×768). Cada pergunta é sim ou não; anote o tempo das do bloco E. O que der "não" vira conserto na
-mesma sessão.
+> **Atualizado depois da revisão de experiência de 14/9/2026:** a tela foi reorganizada (ver "Revisão de
+> experiência" acima). Onde o roteiro cita um botão que mudou de lugar, vale o nome novo: Importar, Exportar,
+> Conferir, Nível e publicações, Atalhos e Desfazer tudo estão em **⋯ Mais ações**; "Pré-visualizar" virou
+> **Ver como aluno**; comentário e narração são as abas **Nota do professor** e **Fala para o aluno**.
 
-Antes de começar: `node scripts/aluno-de-teste.ts criar` (aluno `alunoteste`, PIN `112233`) e uma janela
-anônima para o aluno.
+> **Reescrito em 14/9/2026 a pedido do Doug.** O roteiro anterior (45 itens, blocos A–G) conferia
+> funções uma a uma. Este responde à pergunta que decide o editor: **um professor de xadrez — o Doug ou
+> outro — fica tão confortável aqui quanto no estudo do Lichess, ou mais?** Por isso ele segue as duas
+> situações de verdade: **mexer numa aula pronta** e **criar uma aula do zero**. Os gestos que só a mão
+> prova, e as perguntas 1, 2, 3, 7, 9 e 11 da Parada 10H, continuam dentro dele.
+>
+> **A árvore de 1.000 lances saiu do teste humano** (era o item 45). Nenhum estudo do curso chega perto
+> disso — a maior aula de hoje tem 50 lances, e o seu estudo do Lichess inteiro, 64 meios-lances nos 9 capítulos. Os 1.000 são
+> margem de segurança contra uma partida muito analisada importada de uma vez; essa medida continua no
+> ensaio automático (`e2e/desempenho.spec.ts`). O que decide o desempenho passa a ser a pergunta 21:
+> **a aula real pareceu lenta em algum momento?**
 
-### A. Aula do zero, pela mão (os gestos que o robô não prova)
+**Para quem:** o Doug, no computador dele, com o `npm run dev` ligado. **Resolução:** a tela normal do
+notebook. **Duração estimada:** 2 h a 2 h 30 — cada parte é um ponto de parada: mande o resultado ao fim
+dela, e o que der errado é consertado antes da parte seguinte.
 
-1. Em `/editor`, **Nova aula** → aula extra, nível 1, classe E, título "Mate de Dama e Rei (Doug)". A aula
-   abre com "+ Adicionar capítulo"? 
-2. **Adicionar capítulo** → **Montar posição**: arraste o rei preto para e5, o rei branco para e1 e a dama
-   para d1. As peças ficaram onde você soltou?
-3. Arraste uma peça **para fora do tabuleiro**. Ela sumiu e **a janela continuou aberta**?
-4. Criar capítulo "O L e a caixa". Jogue Dd3, Re6, Dd4… **arrastando** as peças. Cada lance aparece na
-   lista à direita?
-5. Com o lance selecionado, clique em **+ Escrever narração**, escreva e clique fora. A narração ficou?
-6. Volte a 7…Rh8 e jogue **Dg6** arrastando. Nasceu uma variante, e a linha principal continua com Rf2?
-7. Na variante, marque **??** e escreva o comentário do afogamento. O símbolo aparece ao lado do lance e
-   no canto da casa g6?
-8. **Botão direito**: arraste uma seta de d3 a d8; com **Shift**, acenda h8 em vermelho. Ficaram?
-9. Na lista de problemas, **Ir para o problema** da "revisão de proveniência" → **Autoria própria** →
-   Registrar. O aviso sumiu?
-10. **Criar introdução** com 2 quadros (os textos 00 e 01 do seu estudo), a posição ligada ao capítulo.
-    Em "Pré-visualizar a introdução", os dois quadros aparecem com os parágrafos?
-11. **+ Criar prática** → "De um capítulo desta aula" → **Adicionar ao acervo e usar** → Criar. O cartão
-    "Prática" mostra "Brancas · vencer"?
-12. **Ordem da aula**: a prática é a última? Suba um capítulo e desça de novo com as setas ↑ ↓.
-13. **Ctrl+Z** cinco vezes e **Ctrl+Y** cinco vezes. Voltou tudo?
-14. Recarregue a página (F5). Nada se perdeu?
-15. **Conferir** → **Publicar**. O impacto diz "Aula extra: entra na conta do nível 1"?
+**Como anotar cada item:**
 
-### B. O seu estudo do Lichess
+- ✅ fiz sozinho · ⚠️ fiz, mas travei (diga onde) · ❌ não consegui;
+- nos itens com **⚖️**, compare com o Lichess numa palavra — **aqui melhor**, **igual** ou **lá melhor** —
+  e, se não for "igual", o porquê numa frase;
+- anote a hora no começo e no fim de cada parte.
 
-16. Numa aula extra nova e vazia, **Importar PGN** → cole `https://lichess.org/study/hf09xMzS` →
-    **Buscar no Lichess**. Aparecem os 9 capítulos, com a sugestão "Introdução, Introdução, Capítulo,
-    Capítulo, Treino ×4, Prática"?
-17. Os avisos de **perda** ("dicas e textos de desvio da lição interativa não vêm na exportação")
-    batem com o que você escreveu no Lichess e não veio?
-18. Marque "os textos são meus" → **Importar o estudo** → **Conferir** → **Publicar**.
-19. Abra o estudo no Lichess ao lado. Como aluno, faça a aula: a introdução, os capítulos com as
-    variantes Dg6??, os 4 treinos (no 06 tente Dg6 — aparece "Afogamento…"? no 07 tente Dg7+ e depois
-    Dh3#) e a prática até o mate. **Alguma coisa ficou diferente do estudo?** Anote.
-20. Repita o 16 com outro estudo seu que o ensaio não conhece (por exemplo o "P1 — Fundamentos"). As
-    sugestões fazem sentido?
+**Preparado pelo agente antes do teste:** `npm run dev` ligado; aluno de teste criado (`alunoteste`, PIN
+`112233`); SHA-256 da `.editor/v2/N1-KPK.json` anotado para conferir no fim.
 
-### C. Teclado
+**O Doug prepara:** entrar como professor em `http://localhost:3000/editor`; uma **janela anônima** para o
+aluno; no Lichess, abrir o estudo `https://lichess.org/study/hf09xMzS` e **cloná-lo** (as comparações da
+Parte 1 mexem no clone, nunca no original).
 
-21. No editor, **x** vira o tabuleiro, e **x** de novo desvira? A aula continua "✓ salvo" (nada mudou)?
-22. **?** (Shift + /) abre a lista de atalhos? **Esc** fecha?
-23. **L** liga o motor; com o menu **•••** de um lance aberto, **L** não faz nada?
-24. ← → ↑ ↓ Home End andam na lista de lances?
-25. Numa janela (Adicionar capítulo), **Tab** várias vezes fica dentro da janela? **Esc** fecha e o
-    cursor volta ao botão que abriu?
-26. No aluno, **x** e **?** funcionam no treino e na prática?
+### Achado no próprio teste, e já feito (14/9/2026)
 
-### D. O aluno
+**Nova aula nascendo de uma importação.** No item 1 o Doug perguntou: "se eu vou importar uma aula, o
+nome já está no PGN, ou no link. Por que eu tenho que escrever de novo?". §5.2 mandava criar a aula vazia
+e importar lá dentro; o Doug decidiu mudar. Agora **Nova aula** tem duas portas, **Vazia** e **Importando
+do Lichess ou de um PGN** (link, arquivo ou texto colado). A segunda lê o PGN antes de criar, mostra
+quantos capítulos vieram e preenche o título (`sugestaoDaImportacao` em `lib/editor-v2/nova-aula.ts`:
+nome do estudo sem `_` e sem a marca `v1`, depois capítulo, evento, jogadores, arquivo) e a orientação
+quando todos os capítulos concordam. Tipo, nível e classe continuam do professor. Criar grava a mesma
+aula vazia de sempre e deixa o PGN na aba (`sessionStorage`); o editor abre a janela de importar com ele
+lido, uma vez só. A importação em si não mudou.
 
-27. No computador: "Etapa X de Y" aparece em cima, e **← Etapa anterior** volta?
-28. No **celular de verdade**, com o endereço do seu computador na rede (ou depois do deploy): consegue
-    passar por todas as etapas sem rolar a tela para o lado?
-29. O crédito "Posição: …" aparece discreto no fim da aula quando o interruptor está ligado?
+```
+lib/editor-v2/nova-aula.test.ts   ANTES: SyntaxError — o módulo não exporta sugestaoDaImportacao (arquivo reprovado)
+                                  DEPOIS: tests 12, pass 12
+e2e/editor/nova-aula-importando.spec.ts   1.ª rodada: ✖ "6 capítulos" (o leitor de jogos pula os capítulos
+                                  só de texto) → contagem pelo leitor de estudo → ✔ 1 passed (6,4 s)
+```
 
-### E. Primeira impressão de quem não conhece (meta do plano §20: ≥ 90% sem ajuda)
+`typecheck` ✓ e `lint` ✓ nos arquivos tocados. `npm test`: **1.295 de 1.296** — a falha é
+`pratica.test.ts` ("adicionar ao acervo"), que copia o `content/positions` real e supõe que a FEN
+`8/8/8/8/4k3/8/8/3QK3 w - - 0 1` não está no acervo; a importação do Doug em `EX-PROMOCAO-PEAO` gravou
+`content/positions/EX/pos-ex-promocao-peao-1.json` com essa FEN. Teste frágil, não defeito desta mudança —
+consertado logo depois (ver abaixo). `build`, `validate:content`, `validate:mutations` e
+`repertorio --check` **não rodados** (o `next dev` do teste está ligado na mesma pasta); sem commit.
 
-Para cada tarefa, anote **achei sozinho? (sim/não)** e o **tempo**:
+**Fazer a aula inteira como aluno, antes de publicar.** Pedido do Doug depois de publicar a aula importada:
+"ao clicar em Publicar, quero a opção de fazer a aula inteira, inclusive os treinos e a prática livre, e
+saber quanto tempo demora — não uma prévia, a aula completa; e poder negar". Feito:
 
-30. Criar um capítulo a partir de uma posição do acervo.
-31. Escrever a narração de um lance.
-32. Transformar um lance em variante e marcar "?".
-33. Criar um treino a partir de um capítulo.
-34. Dizer de onde veio uma posição.
-35. Mudar a ordem das etapas.
-36. Pré-visualizar só a introdução.
-37. Publicar e abrir como aluno.
+- **Publicar** pergunta antes: "Antes de publicar, quer fazer a aula inteira como aluno?" — **Fazer a aula
+  inteira**, **Publicar sem fazer** ou Cancelar. Se a mesma versão já foi feita, não pergunta; se a aula
+  mudou depois, pergunta e diz a hora e o tempo da vez anterior.
+- **Pré-visualizar** ganhou **Fazer a aula inteira como aluno** no topo; "A aula inteira" virou **Assistir aos
+  capítulos** (o que ela sempre fez).
+- A tela cheia (`AulaComoAluno.tsx`) pede ao servidor a aula **da tela** montada como a publicação montaria
+  (`aulaComoAlunoV2Acao`: `montarPacoteV2` + `aulaDoAlunoV2`, sem gravar nada) e a toca no `LessonPlayer`
+  do aluno **sem** `onEtapaFeita`: introdução, capítulos, treinos com o defensor e a prática contra o
+  Stockfish. Barra com ⏱; `Esc`, "← Sair da aula" e "Terminar e ver o tempo" levam ao **resumo** (tempo
+  por etapa, tentativa e situação de cada treino e prática, total), com **Continuar de onde parei**,
+  **Voltar ao editor** e, com a conferência verde da mesma versão, **Publicar agora**.
+- No player, duas opções que o aluno não passa: `aoSair` (o "← Finais" vira "← Sair da aula") e a camada de
+  atalhos (`VistaDoTabuleiro camada`), para `x` e `?` valerem por cima do editor. Isto fecha o buraco
+  "a prévia aula inteira só encadeia capítulos" de §28 "Prévia real".
 
-### F. Pendências das fatias 6–9 que só a mão prova
+```
+lib/editor-v2/aula-como-aluno.test.ts          3/3 (relógio por etapa, formato, resumo)
+e2e/editor/aula-como-aluno.spec.ts             1.ª rodada: passos ✔, mas 56 erros "NaN" de seta no console — o
+                                               player escondido com display:none atrás do resumo desenhava a
+                                               seta com tamanho zero → resumo por cima, player `inert` → ✔ 19 s
+                                               (pergunta, 8 etapas, treino 04 jogado, "concluída · 1.ª
+                                               tentativa", x, Esc, Continuar, 0 tentativas no banco, Publicar
+                                               agora, e o Publicar da mesma versão sem perguntar)
+aula-do-lichess.spec (o aluno real até o mate)  ✔ 5 tentativas no banco com publication_id — o aluno não mudou
+aula-do-zero, pratica, importar-estudo, atalhos, nova-aula-importando   ✔ (limpeza: 982 arquivos iguais)
+npm test                                        1.299/1.299
+```
 
-38. Treino: jogar o treino na prévia **arrastando** as peças (não clicando). Funciona igual?
-39. Motor: ligue o motor e **troque de aba** do navegador por 10 s. Ao voltar, ele tinha parado ("pausado")
-    e retoma?
+Os ensaios que publicam passaram a responder "Publicar sem fazer" (`abrirPublicar` em `e2e/preparo/aulas.ts`).
+**A falha de `pratica.test.ts` foi consertada**: o teste copiava `content/positions/EX/`, que muda com o uso do
+editor; agora copia o acervo sem `EX/` (antes 3/4, depois 4/4). Três ensaios (`importar-estudo`, `aula-do-zero`,
+`pratica`) esperavam criar `pos-ex-e2e-…-1` e passaram a aceitar a posição do acervo com a mesma FEN — o
+acervo não duplica FEN, e a do Doug (`pos-ex-promocao-peao-1`) já existe. Cada rodada de ensaio apaga e o agente
+recria o `alunoteste`. Portões `build`, `validate:content`, `validate:mutations` e `repertorio --check` ainda
+não rodados; sem commit.
 
-### G. As perguntas essenciais que ainda não têm prova (acrescentado na 10H)
+**Casas roxas no player do aluno — decisão do Doug: sem marcas automáticas no formato novo.** O Doug viu
+casas roxas "pré-selecionadas de outra aula". Medido no navegador, etapa por etapa: a aula não tem desenho roxo
+nenhum; o roxo é o pincel `paleRed`, o **corte** que o player antigo deduz da posição (`teachingShapes`,
+`lib/chess/annotations.ts:32`), chamado por `ObjectiveStage.tsx:275` e `TreeStage.tsx:222` — 7 casas no
+capítulo, 14 no treino 04 (coluna d e fileira 4 da dama). Foi pedido do Doug nas aulas antigas ("eu não vejo o
+corte acontecer"); no formato novo o professor desenha o próprio corte, e a marca da máquina aparecia no
+player sem nunca aparecer no editor. Das três saídas (interruptor por aula, tirar do formato novo, deixar), o
+Doug escolheu **tirar de todas as aulas do formato novo**, inclusive a N0-LADDER convertida. Conserto:
+`marcasAutomaticas` (padrão ligado) em `ObjectiveStage` e `TreeStage`; os quatro chamadores do formato novo
+passam `false` (`LessonPlayer` capítulo e treino v2, `Previa`, `PreviaDoTreino`). As 49 aulas antigas (player
+v1) não mudam.
 
-40. Na aula do bloco A, **Desfazer tudo** → confirme. A aula voltou a como estava quando você abriu o
-    editor, e um Ctrl+Z traz tudo de volta? (pergunta 1)
-41. Escreva um comentário e **feche a aba em menos de 1 segundo**, antes do "✓ salvo". Reabra: o editor
+```
+e2e/editor/aula-como-aluno.spec.ts   ANTES: ✖ "corte roxo no capítulo" Expected 0, Received 7
+                                     DEPOIS: ✔ 18,5 s (0 no capítulo e 0 no treino 04)
+aula-do-lichess (aluno real até o mate) ✔ · atalhos ✔ · npm test 1.299/1.299
+```
+
+**Excluir aula, e os três achados da fila — pedido do Doug, 14/9/2026.** O Doug não gostou da aula
+importada e não achou como apagar; pediu o botão e o conserto dos três achados da Parte 0.
+
+1. **Excluir aula…** no índice `/editor`, em toda aula extra (`EX-`). A janela calcula antes o que sai (capítulos,
+   treinos, prática, quadros, e as posições do acervo que só esta aula usava) e o que fica (a posição
+   compartilhada, com quem a usa). "Mover para a lixeira" leva o rascunho, o registro da conferência e essas
+   posições para `.editor/v2/lixeira/<AULA>--<carimbo>/`, com `manifesto.json`; a seção **Lixeira** do
+   índice restaura byte a byte. Aula publicada é desativada (as publicações ficam guardadas) e guarda as
+   posições. **Aula do curso (série N) não tem o botão, e o servidor recusa** — protege as 49 e a N1-KPK.
+   Restaurar recusa sem mexer em nada se o id foi ocupado, e um manifesto adulterado não escreve fora dos
+   lugares da lixeira. Regras em `lib/editor-v2/excluir-aula.ts`.
+2. **Publicar sempre na tela** (a especificação §5.3 dizia "somente quando permitido", e o botão nem existia
+   antes de um Conferir verde). Com a conferência verde desta versão, abre a publicação; sem ela, **confere
+   sozinho** — verde, segue para a pergunta de antes de publicar; com problema, o recado "Ainda não dá para
+   publicar: N problemas impedem" e a lista. Nada publica sem conferência verde: só o caminho ficou à vista.
+3. **A mesma declaração para o estudo inteiro.** A janela "De onde veio esta posição?" oferece, marcado,
+   "Registrar o mesmo para as outras N posições que vieram de «obra»" (`posicoesDaMesmaOrigem`: mesma
+   origem de terceiro, obra e link). Tudo num Desfazer só (`REGISTRAR_PROVENIENCIAS`).
+4. **A lista da conferência se atualiza sozinha.** Com o resultado aberto e a aula mudada, o editor confere
+   de novo 0,8 s depois do "✓ salvo"; o cabeçalho diz "A aula mudou depois disso — conferindo de novo…".
+
+```
+lib/editor-v2/excluir-aula.test.ts      5/5 (sai/fica, série N recusada, volta byte a byte, id ocupado, manifesto adulterado)
+e2e/editor/excluir-aula.spec.ts         ✔ (lixeira, rascunho some do disco, Restaurar devolve igual)
+e2e/editor/publicar-visivel.spec.ts     ANTES: ✖✖ (botão Publicar não existe) → DEPOIS: ✔✔
+                                        + achados 2 e 3: ANTES ✖ (a caixa "Registrar o mesmo…" não existe)
+                                        → DEPOIS ✔ (uma janela, e a lista chega a "Pode publicar" sem clicar em Conferir)
+lib/editor-v2/proveniencia.test.ts      ANTES: o módulo não exporta posicoesDaMesmaOrigem → DEPOIS 6/6
+npm test                                1.305/1.305
+```
+
+**Revisão de experiência — a tela limpa, inspirada no editor do Lichess (14/9/2026).** O Doug achou o editor
+"complicado, muitas funções, tela poluída" e pediu uma revisão com Playwright olhando a experiência de um
+professor leigo. Método: um passeio automático (`e2e/editor/tour-ux.spec.ts`, `--grep @tour`) por 28 telas de
+uma aula real, com foto a 1366×768, contagem de palavras técnicas no texto visível e medidas de layout; as fotos
+foram lidas por subagentes (a tela principal, as janelas, e o Lichess medido ao vivo: 35–41 controles visíveis,
+uma fileira de ícones sob os lances, ações do lance no clique direito, nenhuma frase de explicação na tela).
+
+O que mudou:
+
+- **Barra do topo com 5 controles:** ↶ ↷ (Desfazer/Refazer), **Ver como aluno** (era Pré-visualizar), **Publicar**
+  (o único botão cheio, confere sozinho) e **⋯ Mais ações** (Importar do Lichess ou PGN, Exportar, Conferir sem
+  publicar, Nível e publicações, Converter aula antiga, Atalhos do teclado, Desfazer tudo em vermelho). Saíram
+  "Editor v2 · piloto" e "Formato novo separado…". Componente novo `Menu.tsx`.
+- **Resultado da conferência numa faixa:** "Ainda não dá para publicar: N problemas impedem." ou "Pode publicar.",
+  com **Ver lista / Esconder lista** (aberta só quando algo impede) e **Resolver** (era "Ir para o problema"). O
+  recado vermelho duplicado sumiu.
+- **Coluna da aula:** seções Introdução / Capítulos / Treinos / Prática com "+" no cabeçalho, uma linha por item.
+  Treino: a linha abre a edição, **▶** testa, **•••** tem Editar, Testar, Ligação com a aula (era "Propriedade e
+  fonte") e Excluir. O campo solto "Nome do capítulo" e o botão "Trocar a posição inicial" foram para o **•••** do
+  capítulo (Renomear, com dois cliques no nome também). Saiu "Arraste como um slide…".
+- **Paleta de desenho em ícones** (♟ ↗ ◎, bolinhas de cor, 🗑), cada um com nome acessível; motor "desligado".
+- **Painel do lance:** o nome do lance, os símbolos só quando há lance, e duas abas — **Fala para o aluno**
+  (narração, "Esperar o aluno clicar em Continuar") e **Nota do professor** (comentário, que já aparece na lista
+  de lances). O menu do lance esconde as ações impossíveis (fica só "Criar treino daqui" com motivo) e segue a
+  ordem de uso.
+- **Textos:** Nova aula começa como aula extra, nível 1, e "Critério de domínio" e o código da aula foram para
+  **Opções avançadas**; treino diz **adversário** (não "defensor"), "Quando o treino acaba", "Salvar treino";
+  prática "Nível do computador", "Posições salvas do curso"; exportar "Este capítulo / Todos os capítulos / Cópia
+  completa da aula (backup)"; índice "Suas aulas…", "Aulas novas", "Abrir"; mensagens de origem sem
+  "proveniência" nem FEN; "Tirar esta aula dos alunos" no lugar de "Desativar o v2".
+
+```
+passeio @tour (28 telas)        palavras técnicas visíveis 127 → 32 · alvos de clique < 24 px 190 → 26
+                                tela principal: 5 → 1 ("D4", casa do tabuleiro num comentário: falso positivo)
+                                autoria do treino: 9 → 0 · índice 6 → 0 · Nova aula 12 → 1
+npm test                        1.305/1.305 (proveniencia.test e escrever-pgn.test ajustados às frases novas)
+todos os ensaios de navegador   44 passaram, 25 pulados de propósito, 0 falhas (7,4 min); limpeza 982 iguais
+```
+
+Uma segunda revisão por foto, depois da primeira rodada, achou e fez consertar: o resultado da conferência
+passou a flutuar no canto em vez de empurrar o tabuleiro (e a lista viva some enquanto ele está aberto, para
+não repetir a frase); os nomes da coluna da aula ocupam até 2 linhas; o menu do lance abre em posição fixa,
+virando para cima quando não cabe (antes saía cortado dentro da lista); "Editar treino" ficou com um tabuleiro
+só, sem o código da posição; a caixa "Esperar o aluno" e as bolinhas de cor escuras ficaram visíveis.
+Portões `build`, `validate:content`, `validate:mutations` e `repertorio --check` **não rodados**; sem commit.
+
+O "controles sem nome" do passeio subiu, mas é defeito do medidor: conta os itens de menus `•••` fechados.
+
+**Virar o tabuleiro e o lado do aluno num capítulo que já existe — pedido do Doug, 14/9/2026.** Depois de
+importar o estudo, o Doug não achou como virar o tabuleiro nem como mudar a posição de um capítulo. A posição
+já existia ("•••" do capítulo → Trocar a posição inicial…). Faltavam duas coisas:
+
+1. **Botão "Virar tabuleiro" (⇅)** na barra de desenho, o que §10.2 pedia e só existia na tecla `x`. É o mesmo
+   `x` (`useVirarTabuleiro` em `Atalhos.tsx`): vira só a vista do professor, não grava e não entra no Desfazer,
+   com `aria-pressed` enquanto virado.
+2. **"O aluno vê com as pretas/brancas embaixo"** no "•••" do capítulo, com "Hoje: … embaixo" logo abaixo. Um
+   clique grava `capitulo.orientacao` pelo comando novo `DEFINIR_ORIENTACAO_CAPITULO`, e o Ctrl+Z desfaz. A
+   orientação só se escolhia ao criar o capítulo, e o capítulo importado ficava com a do estudo. Repetir a
+   mesma orientação devolve a mesma aula e fica fora do Desfazer (§6.1).
+
+```
+lib/editor-v2/capitulo.test.ts   ANTES: tests 13, pass 12, fail 1 (o comando não existia: "análise inexistente")
+                                 DEPOIS: tests 13, pass 13
+e2e/editor/atalhos.spec.ts       teste novo "o botão Virar tabuleiro…": vira e desvira com o arquivo igual; o •••
+  (editor-1366, com o x antigo)  grava "black" no arquivo e o Ctrl+Z devolve "white" → 2 passed (15,8 s);
+                                 limpeza 982 iguais; alunoteste recriado depois (PIN 112233)
+```
+
+**Portões, na cópia isolada `../olesc-portoes`, sobre `be2b0f4` com todas as mudanças sem commit desta data**
+(revisão de experiência, excluir aula, aula como aluno, nova aula importando e este pedido; fora do commit
+ficaram o rascunho v1 `content/rascunhos/lessons/N0-LADDER.json`, recriado por teste como em `15b390c`, e a
+posição `content/positions/EX/pos-ex-promocao-peao-1.json` da importação do Doug): `typecheck` ✓, `lint` ✓,
+`npm test` **1.306/1.306**, `build` ✓, `validate:content` ✓ (18 posições, 3 aulas), `validate:mutations`
+**58/58** e `repertorio:compilar --check` ✓. Os ensaios de navegador das outras mudanças são os
+registrados acima. Esta rodada só repetiu `atalhos.spec` (editor).
+
+### O que ainda não existe — se fizer falta, anote, mas não procure
+
+- arrastar uma variante para cima ou para baixo entre as irmãs (só existe **Tornar linha principal**);
+- desenho próprio de cada narração;
+- a tela da exceção do professor ao juiz externo;
+- a lista de versões antigas para restaurar (o **Desfazer tudo** existe);
+- a importação junta numa linha os parágrafos de uma narração; a prática não tem texto para o aluno;
+- clicar numa linha do motor para virar variante, e o Opening Explorer (posteriores).
+
+### Parte 0 — Trazer o que você já tem (≈ 15 min)
+
+1. Em `/editor`, **Nova aula** → **Importando do Lichess ou de um PGN** → cole o link do seu estudo →
+   **Buscar no Lichess**. Aparece "9 capítulos", e o título veio preenchido do estudo? Ajuste o título,
+   escolha **Aula extra**, nível 1, classe E → **Criar aula e importar**.
+2. A aula abre **já** na janela de importar, com os 9 capítulos. A sugestão do que cada um vira
+   (introdução, capítulo, treino, prática) faz sentido?
+3. Os avisos do que **não vem** do Lichess batem com o que você escreveu lá?
+4. Marque "os textos são meus" → **Importar o estudo**. Passe pelos capítulos com o estudo ao lado:
+   lances, variantes, comentários, símbolos e setas vieram iguais? ⚖️ **O que ficou diferente?**
+
+### Parte 1 — Mexer numa aula pronta (≈ 45 min)
+
+A aula é a que acabou de chegar. Faça **cada edição aqui e a mesma no clone do Lichess**, e compare.
+
+5. ⚖️ **Achar e corrigir.** No capítulo dos lances, vá a um lance do meio pelas setas ← → e reescreva a **Nota do professor**.
+6. ⚖️ **Trocar um lance.** Jogue outro lance no lugar, **arrastando** a peça. Nasceu uma variante, e a
+   linha antiga continua lá? Agora, **botão direito** no lance novo → **Tornar linha principal**.
+7. ⚖️ **Apagar e se arrepender.** Botão direito na linha que ficou de lado → **Excluir a partir daqui**.
+   A janela diz o que se perde? Confirme, e **Ctrl+Z** traz de volta? (No Lichess não há desfazer.)
+8. ⚖️ **Símbolo.** Marque **!** num lance e depois **!?**. Fica só um? Ele aparece ao lado do lance e no
+   canto da casa de destino?
+9. ⚖️ **Desenho.** Com o botão direito: seta verde; **Shift** vermelha; **Alt** azul; **Shift+Alt**
+   amarela; clique direito acende casa. Depois faça o mesmo pela **paleta** de botões. Por fim
+   **Apagar desenhos desta posição** — sumiu só desta posição?
+10. **Comentário e narração.** Num lance importado com texto, a caixa de narração logo abaixo veio
+    preenchida? Mude **só a narração** — o comentário continuou igual? Ligue **Esperar o aluno clicar em Continuar**.
+11. ⚖️ **Organizar capítulos.** Renomeie um capítulo (dois cliques no nome, ou **•••** → Renomear); **arraste** para outra posição; no **•••**, **Mover
+    para cima**; **Duplicar como independente**; e **Excluir capítulo…** a cópia. Cada coisa fez o que o
+    nome diz?
+12. ⚖️ **••• do capítulo → Trocar a posição inicial…** (mude uma peça de casa). A janela mostra o que
+    continua valendo e o que se perde, **antes** de aplicar? Aplique e desfaça com Ctrl+Z. (O Lichess não
+    tem.)
+13. ⚖️ **Mudar um treino.** Abra o treino do afogamento → **Editar treino**: acrescente uma segunda
+    resposta certa **ou** reescreva o texto do erro Dg6. **▶ (Testar)**, **arrastando** as peças:
+    o texto novo aparece? (A lição interativa do Lichess aceita um lance certo só.)
+14. **Assistir.** Num lance do capítulo, **Ver como aluno → Daqui em diante**. Teste pausar, voltar, repetir e as
+    velocidades 0,5× 1× 2×. Ao fechar, você voltou ao mesmo lugar?
+15. ⚖️ **Comparar.** Na variante Dg6??, botão direito → **Mostrar esta variante como capítulo**. Em **Ver como aluno
+    → Assistir aos capítulos**, a aula mostra a linha certa, **volta ao ponto de escolha** e mostra a errada? (É o que no Lichess você
+    teve de escrever em prosa: "Compare com P1.03".)
+16. ⚖️ **Motor.** **L** liga; as linhas e a seta aparecem? Troque de aba do navegador por 10 s: ao voltar,
+    ele tinha pausado e retoma?
+17. ⚖️ **Levar para fora.** **⋯ Mais ações → Exportar… → Este capítulo** → copie e cole num capítulo novo do clone no
+    Lichess (PGN). Os lances, os comentários, os símbolos e as setas chegaram lá?
+18. **Publicar** (confere sozinho) → a pergunta "Antes de publicar, quer fazer a aula inteira como aluno?" →
+    **Fazer a aula inteira**. Faça tudo, treinos e prática. O resumo mostra o tempo de cada etapa, e ele
+    parece certo? **Publicar agora**: o que a tela diz antes de publicar dá para entender sem ajuda?
+19. **Como aluno** (janela anônima, `alunoteste`): faça a aula inteira — introdução, capítulos, os treinos
+    (no do afogamento tente Dg6: aparece o **seu** texto novo?) e a prática até o mate. "Etapa X de Y"
+    aparece, e **← Etapa anterior** volta? **x** vira o tabuleiro e **?** mostra os atalhos no treino?
+20. **Republicar só texto.** De volta ao editor, mude **só uma narração** → Conferir → Publicar. A tela
+    diz que o progresso continua? No aluno, os treinos seguem feitos? (pergunta 11)
+21. **Pareceu lento em algum momento** nesta parte? Em quê? (pergunta 7 — decide se o desempenho é
+    consertado depois de 18/09)
+
+### Parte 2 — Criar uma aula do zero (≈ 45 min)
+
+Uma aula curta **sua**, do jeito que você daria amanhã. Sugestão: a da oposição do rei e peão, a que no
+Lichess precisou de dois capítulos e uma frase "compare com". Anote a hora de início e de fim.
+
+22. **Nova aula** → aula extra, com o título que quiser.
+23. ⚖️ **Adicionar capítulo → Montar posição.** Arraste as peças da paleta; arraste uma **para fora** —
+    ela some e a janela continua aberta? Escolha quem joga.
+24. ⚖️ **Jogar a linha** arrastando as peças. Cada lance aparece na lista?
+25. **Narrar só onde importa.** **+ Escrever fala para o aluno** nos lances que pedem texto, e nenhum texto nos
+    outros. Na prévia do capítulo, os lances sem texto correm sozinhos e ele para nos que têm?
+26. ⚖️ **O erro que se ensina.** Volte ao ponto de escolha, jogue o lance errado (nasce a variante), marque
+    **?** ou **??**, comente e desenhe uma seta.
+27. ⚖️ **A comparação** (item 15, agora na sua aula): **Mostrar esta variante como capítulo**, e em
+    **Ver como aluno → Assistir aos capítulos** a aula volta ao ponto de escolha.
+28. **De onde veio a posição.** Na lista de problemas, **Ir para o problema** → **Autoria própria** →
+    Registrar. O aviso sumiu?
+29. **Introdução.** **Criar introdução** com 2 quadros ligados à posição do capítulo → **Pré-visualizar a introdução**.
+30. ⚖️ **Treino.** No capítulo, **Criar treino daqui** → **Editar treino**: duas respostas certas, um erro
+    conhecido com texto próprio e uma dica. **▶ (Testar)**: teste o erro e a dica.
+31. **Prática.** **+ Criar prática** → "De um capítulo desta aula".
+32. **Ordem da aula.** Mude a ordem das etapas com ↑ ↓ e deixe como quer.
+33. **Conferir → Publicar**, e o aluno faz a aula. **Quanto tempo levou a Parte 2, e quanto levaria no
+    Lichess** (sem o treino com dois lances certos, que lá não existe)?
+
+### Parte 3 — Quando dá errado (≈ 15 min)
+
+Na aula da Parte 2.
+
+34. **Ctrl+Z** cinco vezes e **Ctrl+Y** cinco vezes. Voltou tudo?
+35. **⋯ Mais ações → Desfazer tudo…** → confirme. A aula voltou a como estava ao abrir o editor, e um Ctrl+Z traz tudo de
+    volta? (pergunta 1)
+36. Com "✓ salvo", recarregue (F5). Nada se perdeu?
+37. Escreva um comentário e **feche a aba em menos de 1 segundo**, antes do "✓ salvo". Reabra: o editor
     oferece a cópia preservada neste navegador? (pergunta 2)
-42. Abra a mesma aula em **duas abas**, mude uma coisa em cada. A segunda avisa conflito, sem apagar a
+38. Abra a mesma aula em **duas abas** e mude uma coisa em cada. A segunda avisa conflito, sem apagar a
     mudança da primeira? (pergunta 3)
-43. Com o aluno de teste já tendo feito o treino da aula publicada, mude **só a narração** de um capítulo,
-    Conferir → Publicar. O impacto diz que o progresso continua, e o aluno ainda vê o treino como feito?
-    (pergunta 11)
-44. Faça o bloco A de novo **sem o mouse** do item 5 ao 15, exceto mexer peças e desenhar. Algum passo
-    obrigou a pegar o mouse? Qual? (pergunta 9)
-45. Abra `/editor/v2/finais/EX-E2E-ARVORE` (a aula de **1.000 lances**, gravada pelo agente antes do teste).
-    Segure a seta → por uns segundos, desenhe duas setas, escreva um comentário e aperte Ctrl+Z. **Pareceu
-    lento em algum momento?** Se sim, em quê? (pergunta 7 — decide se o desempenho é consertado depois de
-    18/09)
+
+### Parte 4 — Teclado (≈ 10 min)
+
+39. **x** vira e desvira o tabuleiro sem mudar a aula? **?** abre os atalhos e **Esc** fecha? Com o **•••**
+    de um lance aberto, **L** não faz nada?
+40. ← → ↑ ↓ **Home** **End** andam na lista de lances?
+41. Em **Adicionar capítulo**, **Tab** várias vezes fica dentro da janela? **Esc** fecha e o cursor volta ao
+    botão?
+42. Refaça os itens 25 a 33 **sem o mouse**, exceto mexer peças e desenhar. Algum passo obrigou a pegar o
+    mouse? Qual? (pergunta 9)
+
+### Parte 5 — O veredito (≈ 5 min)
+
+43. De 0 a 10, o conforto para **mexer numa aula pronta** — aqui, e no Lichess.
+44. De 0 a 10, o conforto para **criar uma aula do zero** — aqui, e no Lichess.
+45. Um professor que nunca viu o editor faria as Partes 1 e 2 sem você explicar? **O que ele não acharia
+    sozinho?**
+46. O que o Lichess faz melhor e **faz falta aqui**?
+47. O que aqui é melhor a ponto de você **não querer voltar** ao Lichess para montar aula?
+48. Qual foi o momento **mais irritante** do teste?
+
+**Fora deste roteiro, para depois do deploy:** o aluno no **celular de verdade** passando por todas as
+etapas sem rolar para o lado. Pelo `next dev` o celular não serve: o Next bloqueia os arquivos de
+desenvolvimento pedidos de outro endereço (`allowedDevOrigins`), e a página pode abrir sem funcionar.
+
+**Depois do teste, o agente:** confere o SHA-256 da N1-KPK; lista as aulas `EX-` criadas e publicadas no
+teste e **pergunta ao Doug** quais ficam (a da Parte 2 pode ser conteúdo de verdade); registra aqui as
+respostas, a conta de ✅ contra a meta do plano §20 (≥ 90% sem ajuda) e os consertos.
 
 
 ## Como ligar o editor

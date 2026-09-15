@@ -84,7 +84,10 @@ test("as recusas dizem o campo e como corrigir", () => {
 test("adicionar ao acervo: arquivo candidato com obra registrada, resultado do cache, sem duplicar a FEN", async () => {
   const raiz = mkdtempSync(path.join(tmpdir(), "acervo-"));
   try {
-    cpSync("content/positions", path.join(raiz, "content/positions"), { recursive: true });
+    // Sem `EX/`: as posições que os professores criam para aulas extras mudam com o uso do editor (a do
+    // estudo do Doug, 14/9/2026, tem a mesma FEN que este teste cria), e o teste precisa de um acervo fixo.
+    const pastaEx = path.join("content", "positions", "EX");
+    cpSync("content/positions", path.join(raiz, "content/positions"), { recursive: true, filter: (origem) => !path.normalize(origem).startsWith(pastaEx) });
     cpSync("content/tablebase-cache", path.join(raiz, "content/tablebase-cache"), { recursive: true });
     cpSync("content/sources.json", path.join(raiz, "content/sources.json"));
     const revisao = { origem: "autoria-propria" as const, fenRevisada: "", revisadoEm: "2026-09-14T12:00:00.000Z", professor: "Doug", mostrarCredito: false };

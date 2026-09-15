@@ -130,6 +130,29 @@ test("renomear com nome vazio não apaga o nome anterior", () => {
 });
 
 /* ------------------------------------------------------------------ *
+ * Orientação do aluno
+ * ------------------------------------------------------------------ */
+
+test("trocar o lado de baixo do tabuleiro do aluno muda só aquele capítulo, e o Desfazer devolve", () => {
+  const aula = aulaDeEnsaio();
+  const [primeiro, segundo] = aula.capitulos;
+  assert.equal(primeiro.orientacao, "white");
+
+  const mesma = executarComando(aula, { tipo: "DEFINIR_ORIENTACAO_CAPITULO", capituloId: primeiro.id, orientacao: "white" }, positions);
+  assert.equal(mesma, aula, "a orientação que já está não é edição: não entra no Desfazer (§6.1)");
+
+  const h = aplicarNoHistorico(iniciarHistorico(aula), executarComando(aula, { tipo: "DEFINIR_ORIENTACAO_CAPITULO", capituloId: primeiro.id, orientacao: "black" }, positions));
+  assert.equal(h.presente.capitulos[0].orientacao, "black");
+  assert.equal(h.presente.capitulos[1].orientacao, segundo.orientacao, "o outro capítulo não muda");
+  assert.deepEqual({ ...h.presente.capitulos[0], orientacao: "white" }, primeiro, "nada além da orientação muda no capítulo");
+  assert.equal(validarAulaV2(h.presente).ok, true);
+  assert.equal(desfazer(h).presente, aula);
+  assert.equal(refazer(desfazer(h)).presente.capitulos[0].orientacao, "black");
+
+  assert.throws(() => executarComando(aula, { tipo: "DEFINIR_ORIENTACAO_CAPITULO", capituloId: "nao-existe", orientacao: "black" }, positions), /capítulo/);
+});
+
+/* ------------------------------------------------------------------ *
  * Duplicar
  * ------------------------------------------------------------------ */
 

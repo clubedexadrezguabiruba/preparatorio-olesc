@@ -6,7 +6,10 @@ import { contarSoAlunos, contasDasLinhas } from "@/lib/curso/so-alunos";
 import { exigirEditor } from "@/lib/editor/acesso";
 import { guardarSnapshotAntesDeMigrarV1, prepararMigracaoV1, type PreparoDaMigracaoV1 } from "@/lib/editor-v2/migrar-v1";
 import { adaptarLessonV1 } from "@/lib/editor-v2/adaptar-v1";
-import { conferirAulaV2, podePublicarV2, type ConferenciaV2 } from "@/lib/editor-v2/gate";
+import { conferirAulaV2, lerPosicoesDoConteudoV2, podePublicarV2, type ConferenciaV2 } from "@/lib/editor-v2/gate";
+import { aulaDoAlunoV2, type AulaDoAlunoV2 } from "@/lib/editor-v2/fluxo-do-aluno";
+import { montarPacoteV2 } from "@/lib/editor-v2/pacote";
+import { excluirAulaV2, impactoDaExclusaoV2, restaurarAulaV2 } from "@/lib/editor-v2/excluir-aula";
 import { frasesDoImpactoV2 } from "@/lib/editor-v2/impacto-publicacao";
 import { aulaIdV2Schema, aulaV2Schema, revisaoDaFenV2Schema } from "@/lib/editor-v2/modelo";
 import { adicionarPosicaoAoAcervo, type AdicaoAoAcervoV2, type PedidoDePosicaoNoAcervoV2 } from "@/lib/editor-v2/acervo-em-disco";
@@ -16,6 +19,48 @@ import { buscarPgnDoLichess } from "@/lib/editor-v2/lichess-url";
  * §13.2 (fatia 10): busca o PGN do Lichess pelo endereço que o professor colou. O servidor só aceita
  * partida, capítulo e estudo públicos, e monta o endereço oficial da API — ver `lichess-url.ts`.
  */
+/**
+ * "Fazer a aula inteira como aluno" (pedido do Doug, 14/9/2026): a aula **da tela**, montada como o
+ * pacote que a publicação montaria e traduzida pela mesma função que serve o aluno. Não grava nada:
+ * nem pacote, nem publicação, nem tentativa — o player recebe um gancho de gravação local.
+ *
+ * É servidor porque as revisões de avaliação usam `node:crypto` e as posições moram no disco.
+ */
+export async function aulaComoAlunoV2Acao(aula: string, texto: string): Promise<{ ok: true; aula: AulaDoAlunoV2 } | { ok: false; motivo: string }> {
+  await exigirEditor();
+  let cru: unknown;
+  try { cru = JSON.parse(texto); } catch { return { ok: false, motivo: "o navegador enviou uma aula quebrada — recarregue a página" }; }
+  const lida = aulaV2Schema.safeParse(cru);
+  if (!lida.success || lida.data.id !== aula) return { ok: false, motivo: "a aula enviada não tem a forma do editor — recarregue a página" };
+  try {
+    const pacote = montarPacoteV2(lida.data, lerPosicoesDoConteudoV2());
+    const doAluno = aulaDoAlunoV2(pacote);
+    if (doAluno.etapas.length === 0) return { ok: false, motivo: "a aula ainda não tem nenhuma etapa que o aluno veja — crie um capítulo, um treino ou uma introdução" };
+    return { ok: true, aula: doAluno };
+  } catch (erro) {
+    return { ok: false, motivo: erro instanceof Error ? erro.message : "não foi possível montar a aula" };
+  }
+}
+
+/**
+ * Excluir aula com lixeira (pedido do Doug, 14/9/2026) — as regras moram em `excluir-aula.ts`: só aula
+ * extra, posição do acervo só se nenhuma outra aula usar, aula publicada desativada, e tudo restaurável.
+ */
+export async function impactoDaExclusaoDeAulaV2Acao(aula: string) {
+  await exigirEditor();
+  return impactoDaExclusaoV2(String(aula ?? ""));
+}
+
+export async function excluirAulaV2Acao(aula: string) {
+  await exigirEditor();
+  return excluirAulaV2(String(aula ?? ""));
+}
+
+export async function restaurarAulaV2Acao(nome: string) {
+  await exigirEditor();
+  return restaurarAulaV2(String(nome ?? ""));
+}
+
 export async function buscarPgnDoLichessAcao(colado: string): Promise<{ ok: true; pgn: string; bytes: number; descricao: string } | { ok: false; mensagem: string }> {
   await exigirEditor();
   const resposta = await buscarPgnDoLichess(String(colado ?? "").slice(0, 500));

@@ -4,7 +4,7 @@ import { useId, useState } from "react";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { Dialogo } from "@/components/editor-v2/Dialogo";
 import { ORIGENS_DA_POSICAO, type AulaV2, type OrigemDaPosicaoV2, type RevisaoDaFenV2 } from "@/lib/editor-v2/modelo";
-import { analiseTemTexto, estadoDaProveniencia, linhaDeCredito, origemDeTerceiro, prepararRevisaoDaFen, ROTULO_DA_ORIGEM, type PedidoDeRevisaoDaFen } from "@/lib/editor-v2/proveniencia";
+import { analiseTemTexto, estadoDaProveniencia, linhaDeCredito, origemDeTerceiro, posicoesDaMesmaOrigem, prepararRevisaoDaFen, ROTULO_DA_ORIGEM, type PedidoDeRevisaoDaFen } from "@/lib/editor-v2/proveniencia";
 
 /**
  * "De onde veio esta posição?" — §19.1 e plano §12, fatia 10.
@@ -18,7 +18,8 @@ export function DialogoProveniencia({ aula, analiseId, professor, aoRegistrar, a
   aula: AulaV2;
   analiseId: string;
   professor: string;
-  aoRegistrar: (revisao: RevisaoDaFenV2) => void;
+  /** `outras`: a mesma declaração nas posições da mesma origem, quando o professor deixa marcado. */
+  aoRegistrar: (revisao: RevisaoDaFenV2, outras: Array<{ analiseId: string; revisao: RevisaoDaFenV2 }>) => void;
   aoFechar: () => void;
 }) {
   const analise = aula.analises.find((item) => item.id === analiseId);
@@ -37,6 +38,9 @@ export function DialogoProveniencia({ aula, analiseId, professor, aoRegistrar, a
     direitoDosTextos: anterior?.direitoDosTextos ?? false,
   }));
   const [erro, setErro] = useState<{ campo: "origem" | "link"; mensagem: string } | null>(null);
+  // Achado do Doug (14/9/2026): o estudo importado inteiro recebe a mesma declaração de uma vez.
+  const mesmaOrigem = posicoesDaMesmaOrigem(aula, analiseId);
+  const [paraTodas, setParaTodas] = useState(true);
   const erroId = useId();
   const nomeDoGrupo = useId();
 
@@ -59,12 +63,19 @@ export function DialogoProveniencia({ aula, analiseId, professor, aoRegistrar, a
   };
 
   const registrar = () => {
-    const preparo = prepararRevisaoDaFen(pedido, inicio.fen, professor, new Date());
+    const agora = new Date();
+    const preparo = prepararRevisaoDaFen(pedido, inicio.fen, professor, agora);
     if (!preparo.ok) {
       setErro({ campo: preparo.campo, mensagem: preparo.mensagem });
       return;
     }
-    aoRegistrar(preparo.revisao);
+    const outras = (paraTodas ? mesmaOrigem : []).flatMap((outraId) => {
+      const outra = aula.analises.find((item) => item.id === outraId);
+      if (outra?.inicio.tipo !== "fen") return [];
+      const daOutra = prepararRevisaoDaFen(pedido, outra.inicio.fen, professor, agora);
+      return daOutra.ok ? [{ analiseId: outraId, revisao: daOutra.revisao }] : [];
+    });
+    aoRegistrar(preparo.revisao, outras);
   };
 
   const previaDoCredito = pedido.origem
@@ -166,6 +177,18 @@ export function DialogoProveniencia({ aula, analiseId, professor, aoRegistrar, a
                   {analiseTemTexto(aula, analise)
                     ? "Este capítulo tem narração. Sem esta marca, a aula não publica — reescreva os textos ou marque."
                     : "Este capítulo ainda não tem narração; a marca vale para a que vier."}
+                </span>
+              </span>
+            </label>
+          ) : null}
+
+          {mesmaOrigem.length ? (
+            <label className="flex items-start gap-2 rounded-md border border-borda-fraca p-2 text-sm text-tinta">
+              <input type="checkbox" checked={paraTodas} onChange={(e) => setParaTodas(e.currentTarget.checked)} className="foco mt-1" />
+              <span>
+                Registrar o mesmo para as outras {mesmaOrigem.length} {mesmaOrigem.length === 1 ? "posição" : "posições"} que vieram de «{anterior?.obra || anterior?.link}»
+                <span className="block text-xs text-tinta-fraca">
+                  {mesmaOrigem.map((outraId) => aula.capitulos.find((item) => item.analiseId === outraId)?.titulo).filter(Boolean).join(" · ") || "posições usadas pelos treinos importados"}
                 </span>
               </span>
             </label>

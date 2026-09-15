@@ -9,7 +9,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import type { Position } from "../lesson/schema.ts";
 import { aplicarNoHistorico, desfazer, executarComando, iniciarHistorico } from "./comandos.ts";
-import { idDaNovaAula, prepararNovaAula } from "./nova-aula.ts";
+import { idDaNovaAula, prepararNovaAula, sugestaoDaImportacao } from "./nova-aula.ts";
+import { readFileSync } from "node:fs";
 import { revisoesPendentesV2 } from "./revisoes.ts";
 import { problemasDaAulaV2, validarAulaV2, type AulaV2 } from "./modelo.ts";
 
@@ -189,4 +190,27 @@ test("Mais opções: EDITAR_METADADOS põe e tira nível e classe, e gesto sem e
   const deNovo = executarComando(semNivel, { tipo: "EDITAR_METADADOS", campo: "nivel", valor: 4 }, {});
   assert.equal(deNovo.metadados?.nivel, 4);
   assert.equal(executarComando(deNovo, { tipo: "EDITAR_METADADOS", campo: "nivel", valor: 4 }, {}), deNovo, "mesmo valor devolve a mesma aula");
+});
+
+/* ------------------------------------------------------------------ *
+ * Nova aula importando (pedido do Doug no teste humano de 14/9/2026)
+ * ------------------------------------------------------------------ */
+
+test("o estudo do Lichess sugere o título pelo nome do estudo, limpo, e a orientação dos capítulos", () => {
+  const pgn = readFileSync(new URL("../../e2e/fixtures/lichess-mate-dama-hf09xMzS.pgn", import.meta.url), "utf8");
+  assert.deepEqual(sugestaoDaImportacao(pgn), { titulo: "Capitulo 0.3 Mate de Dama e Rei", orientacao: "white" });
+});
+
+test("sem nome de estudo: capítulo, depois evento, depois os jogadores, depois o nome do arquivo", () => {
+  assert.equal(sugestaoDaImportacao('[Event "?"]\n[ChapterName "A oposição"]\n\n1. e4 *').titulo, "A oposição");
+  assert.equal(sugestaoDaImportacao('[Event "Final de torres"]\n\n1. e4 *').titulo, "Final de torres");
+  assert.equal(sugestaoDaImportacao('[Event "Rated Blitz game"]\n[White "Carlsen"]\n[Black "Nakamura"]\n\n1. e4 *').titulo, "Carlsen × Nakamura");
+  assert.equal(sugestaoDaImportacao("1. e4 e5 *", "peao-de-torre.pgn").titulo, "peao de torre");
+  assert.equal(sugestaoDaImportacao("1. e4 e5 *").titulo, "");
+});
+
+test("orientação só é sugerida quando todos os capítulos concordam, e aspas escapadas voltam a ser aspas", () => {
+  const misto = '[StudyName "Dois lados"]\n[Orientation "white"]\n\n1. e4 *\n\n[StudyName "Dois lados"]\n[Orientation "black"]\n\n1. d4 *';
+  assert.equal(sugestaoDaImportacao(misto).orientacao, null);
+  assert.equal(sugestaoDaImportacao('[Event "O \\"L\\" da dama"]\n\n1. e4 *').titulo, 'O "L" da dama');
 });

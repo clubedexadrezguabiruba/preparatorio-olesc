@@ -44,6 +44,12 @@ export type ComandoV2 =
   | { tipo: "RENOMEAR_AULA"; titulo: string }
   | { tipo: "RENOMEAR_CAPITULO"; capituloId: string; titulo: string }
   /**
+   * Qual cor fica embaixo no tabuleiro do aluno, num capítulo que já existe — §4 ("capítulo com
+   * orientação própria") e §9. Antes só se escolhia ao criar, e um capítulo importado do Lichess
+   * ficava com a do estudo para sempre. Não é o `x`, que vira só a vista do professor.
+   */
+  | { tipo: "DEFINIR_ORIENTACAO_CAPITULO"; capituloId: string; orientacao: "white" | "black" }
+  /**
    * Move a etapa de um capítulo para um dos vãos entre os capítulos visíveis.
    *
    * `fluxo` continua sendo a única fonte da ordem pedagógica: não reordenamos o
@@ -158,6 +164,8 @@ export type ComandoV2 =
    * chega pronta — data e professor decididos no clique —, para o Refazer devolver os mesmos bytes.
    */
   | { tipo: "REGISTRAR_PROVENIENCIA"; analiseId: string; revisao: RevisaoDaFenV2 }
+  /** A mesma declaração em várias posições da mesma origem, num Desfazer só (achado do Doug, 14/9/2026). */
+  | { tipo: "REGISTRAR_PROVENIENCIAS"; itens: Array<{ analiseId: string; revisao: RevisaoDaFenV2 }> }
   /** §17.1 (fatia 10): a prática nasce com ids e registro de posição decididos na janela, no fim do fluxo. */
   | { tipo: "ADICIONAR_PRATICA"; preparo: PraticaPreparadaV2 }
   | { tipo: "EDITAR_PRATICA"; preparo: PraticaPreparadaV2 }
@@ -206,6 +214,15 @@ function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<
     if (!resultado.ok) throw new Error(resultado.mensagem);
     return resultado.aula;
   }
+  if (comando.tipo === "REGISTRAR_PROVENIENCIAS") {
+    let atual = aula;
+    for (const item of comando.itens) {
+      const resultado = aplicarRevisaoDaFen(atual, item.analiseId, item.revisao);
+      if (!resultado.ok) throw new Error(resultado.mensagem);
+      atual = resultado.aula;
+    }
+    return atual;
+  }
   if (comando.tipo === "EDITAR_METADADOS") {
     const atuais = aula.metadados ?? { orientacaoPadrao: "white" as const, criterioDominio: "D1" as const, estadoEditorial: "rascunho" as const };
     if ((atuais[comando.campo] ?? null) === comando.valor) return aula;
@@ -240,6 +257,13 @@ function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<
   }
   if (comando.tipo === "RENOMEAR_CAPITULO") {
     return { ...aula, capitulos: aula.capitulos.map((c) => c.id === comando.capituloId ? { ...c, titulo: comando.titulo.trim() || c.titulo } : c) };
+  }
+  if (comando.tipo === "DEFINIR_ORIENTACAO_CAPITULO") {
+    const alvo = aula.capitulos.find((c) => c.id === comando.capituloId);
+    if (!alvo) throw new Error("capítulo inexistente");
+    // A mesma orientação não é edição (§6.1): devolver o mesmo objeto a deixa fora do Desfazer.
+    if (alvo.orientacao === comando.orientacao) return aula;
+    return { ...aula, capitulos: aula.capitulos.map((c) => c === alvo ? { ...c, orientacao: comando.orientacao } : c) };
   }
   if (comando.tipo === "MOVER_CAPITULO") {
     const etapas = aula.fluxo.filter((etapa) => etapa.tipo === "capitulo");

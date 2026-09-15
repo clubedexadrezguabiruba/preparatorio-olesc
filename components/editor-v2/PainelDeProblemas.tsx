@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { emOnde, type DestinoV2, type ProblemaVisivelV2 } from "@/lib/editor-v2/diagnostico-visual";
 
 /** O cabeçalho do resultado do botão Conferir (§19.3): contagens e o veredito. */
@@ -10,7 +11,7 @@ export type ResumoDaConferenciaV2 = {
   podePublicar: boolean;
   /** A conferência nem julgou: trava, conflito, aula ausente. */
   impedimento?: string;
-  /** A aula mudou depois da conferência: o resultado não vale mais. */
+  /** A aula mudou depois da conferência: o resultado não vale mais, e o editor já está conferindo de novo. */
   vencida: boolean;
 };
 
@@ -55,6 +56,12 @@ export function PainelDeProblemas({
   conferencia?: ResumoDaConferenciaV2;
   aoFechar?: () => void;
 }) {
+  // Revisão de experiência (14/9/2026): a lista começa aberta quando algo impede publicar, e fechada
+  // quando só há avisos — aviso não é tarefa, e doze avisos abertos empurravam o tabuleiro para baixo.
+  const temErro = visiveis.some((item) => item.problema.severidade === "erro");
+  const [aberta, setAberta] = useState<boolean | null>(null);
+  // A lista viva (sem conferência) com poucos avisos continua aberta: são tarefas do capítulo aberto.
+  const listaAberta = aberta ?? (temErro || (!conferencia && visiveis.length <= 3));
   if (!visiveis.length && !conferencia) return null;
   const impede = conferencia ? !conferencia.podePublicar || Boolean(conferencia.impedimento) : visiveis.some((item) => item.problema.severidade === "erro");
   const tom = conferencia?.vencida
@@ -62,32 +69,42 @@ export function PainelDeProblemas({
     : impede ? "border-erro bg-erro-superficie/10" : conferencia ? "border-metodo-superficie bg-metodo-superficie/10" : "border-aviso-superficie bg-aviso-superficie/10";
 
   return (
-    <section aria-label={conferencia ? "Resultado da conferência" : "Problemas desta aula"} className={`rounded-lg border p-3 ${tom}`}>
-      {conferencia ? (
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <p className={`text-sm font-medium ${conferencia.vencida ? "text-tinta-media" : impede ? "text-erro-texto" : "text-metodo-tinta-alta"}`} role="status">
+    <section aria-label={conferencia ? "Resultado da conferência" : "Problemas desta aula"} className={`rounded-lg border p-3 ${tom} ${conferencia ? "bg-papel" : ""}`}>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        {conferencia ? (
+          <p
+            className={`text-sm font-medium ${conferencia.vencida ? "text-tinta-media" : impede ? "text-erro-texto" : "text-metodo-tinta-alta"}`}
+            role="status"
+            title={`Conferência das ${new Date(conferencia.em).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`}
+          >
             {conferencia.impedimento
-              ? `A conferência não chegou a julgar: ${conferencia.impedimento}.`
-              : `Conferência das ${new Date(conferencia.em).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}: ` +
-                `${conferencia.erros} ${conferencia.erros === 1 ? "problema impede" : "problemas impedem"} publicar, ` +
-                `${conferencia.avisos} ${conferencia.avisos === 1 ? "aviso" : "avisos"}. ` +
-                (conferencia.vencida
-                  ? "A aula mudou depois disso — confira de novo."
-                  : conferencia.podePublicar ? "Pode publicar." : "Ainda não pode publicar.")}
+              ? `Não deu para conferir: ${conferencia.impedimento}.`
+              : conferencia.vencida
+                ? "A aula mudou — conferindo de novo…"
+                : conferencia.podePublicar
+                  ? `Pode publicar.${conferencia.avisos ? ` ${conferencia.avisos} ${conferencia.avisos === 1 ? "aviso" : "avisos"}, que não impedem.` : ""}`
+                  : `Ainda não dá para publicar: ${conferencia.erros} ${conferencia.erros === 1 ? "problema impede" : "problemas impedem"}.${conferencia.avisos ? ` E ${conferencia.avisos} ${conferencia.avisos === 1 ? "aviso" : "avisos"}.` : ""}`}
           </p>
-          {aoFechar ? (
-            <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-2 py-0.5 text-xs text-tinta hover:bg-carta-toque">
-              Fechar resultado
+        ) : (
+          <p className={`text-sm font-medium ${impede ? "text-erro-texto" : "text-aviso-tinta"}`}>{resumo}</p>
+        )}
+        <span className="flex gap-2">
+          {visiveis.length ? (
+            <button type="button" aria-expanded={listaAberta} onClick={() => setAberta(!listaAberta)} className="foco rounded-md border border-borda px-2 py-1 text-xs text-tinta hover:bg-carta-toque">
+              {listaAberta ? "Esconder lista" : `Ver lista (${visiveis.length})`}
             </button>
           ) : null}
-        </div>
-      ) : (
-        <p className={`text-sm font-medium ${impede ? "text-erro-texto" : "text-aviso-tinta"}`}>{resumo}</p>
-      )}
+          {conferencia && aoFechar ? (
+            <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-2 py-1 text-xs text-tinta hover:bg-carta-toque">
+              Fechar
+            </button>
+          ) : null}
+        </span>
+      </div>
       {/* Teto com rolagem própria: a página tem altura fechada, e uma lista de
           quarenta problemas espremeria o tabuleiro até ele sumir. O resumo acima
           continua visível, então o professor sabe quantos são mesmo sem rolar. */}
-      {visiveis.length ? (
+      {visiveis.length && listaAberta ? (
         <ul className="mt-2 flex max-h-40 flex-col gap-2 overflow-y-auto">
           {visiveis.map((item, indice) => (
             <li
@@ -99,7 +116,7 @@ export function PainelDeProblemas({
               <span className={`rotulo shrink-0 ${item.problema.severidade === "erro" ? "text-erro-texto" : "text-aviso-tinta"}`}>
                 {item.problema.severidade === "erro" ? "impede" : "aviso"}
               </span>
-              <span className="text-tinta">{item.problema.mensagem}</span>
+              <span className="text-tinta">{item.problema.mensagem.charAt(0).toUpperCase() + item.problema.mensagem.slice(1)}</span>
               <span className="text-tinta-fraca">— {emOnde(item.onde)}</span>
               {item.destino ? (
                 <button
@@ -107,7 +124,7 @@ export function PainelDeProblemas({
                   onClick={() => aoIr(item.destino!)}
                   className="foco shrink-0 rounded-md border border-borda px-2 py-0.5 text-xs font-medium text-tinta hover:bg-carta-toque"
                 >
-                  Ir para o problema
+                  Resolver
                 </button>
               ) : null}
             </li>

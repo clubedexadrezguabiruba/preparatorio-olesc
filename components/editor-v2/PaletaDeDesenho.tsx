@@ -8,6 +8,7 @@ import {
 } from "@/lib/editor-v2/paleta-de-desenho";
 import type { CorDesenhoV2 } from "@/lib/editor-v2/modelo";
 import { AjudaDeAtalhos } from "@/components/motor-do-professor/AjudaDeAtalhos";
+import { useVirarTabuleiro } from "@/components/atalhos/Atalhos";
 
 /**
  * As ferramentas clicáveis de desenho (§10.2 e §25).
@@ -43,6 +44,7 @@ export function PaletaDeDesenho({ estado, temDesenho, aoTrocarFerramenta, aoTroc
   aoApagar: () => void;
 }) {
   const desenhando = estado.ferramenta !== "mover";
+  const vista = useVirarTabuleiro();
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
@@ -55,9 +57,11 @@ export function PaletaDeDesenho({ estado, temDesenho, aoTrocarFerramenta, aoTroc
                 type="button"
                 aria-pressed={ligada}
                 onClick={() => aoTrocarFerramenta(chave)}
-                className={`foco rounded border px-2 py-1 text-xs ${ligada ? "border-metodo-superficie bg-metodo-superficie/25 text-metodo-tinta-alta" : "border-borda text-tinta hover:bg-carta-toque"}`}
+                aria-label={rotulo}
+                title={rotulo}
+                className={`foco flex min-h-8 min-w-8 items-center justify-center rounded border text-base leading-none ${ligada ? "border-metodo-superficie bg-metodo-superficie/25 text-metodo-tinta-alta" : "border-borda text-tinta hover:bg-carta-toque"}`}
               >
-                <span aria-hidden className="mr-1">{sinal}</span>{rotulo}
+                <span aria-hidden>{sinal}</span>
               </button>
             );
           })}
@@ -72,11 +76,11 @@ export function PaletaDeDesenho({ estado, temDesenho, aoTrocarFerramenta, aoTroc
                 type="button"
                 aria-pressed={escolhida}
                 onClick={() => aoTrocarCor(cor)}
-                className={`foco inline-flex items-center gap-1 rounded border px-2 py-1 text-xs capitalize ${escolhida ? "border-tinta text-tinta" : "border-borda text-tinta-fraca hover:bg-carta-toque"}`}
+                aria-label={`Cor ${cor}`}
+                title={`Cor ${cor}`}
+                className={`foco flex min-h-8 min-w-8 items-center justify-center rounded-full border-2 ${escolhida ? "border-tinta" : "border-transparent hover:border-borda"}`}
               >
-                <i aria-hidden className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: `var(${TOKEN_DA_COR[cor]})` }} />
-                {cor}
-                {escolhida ? <span aria-hidden>✓</span> : null}
+                <i aria-hidden className="h-4 w-4 shrink-0 rounded-full ring-1 ring-tinta/40" style={{ background: `var(${TOKEN_DA_COR[cor]})` }} />
               </button>
             );
           })}
@@ -86,9 +90,24 @@ export function PaletaDeDesenho({ estado, temDesenho, aoTrocarFerramenta, aoTroc
           type="button"
           disabled={!temDesenho}
           onClick={aoApagar}
-          className="foco rounded border border-borda px-2 py-1 text-xs text-tinta disabled:opacity-40"
+          aria-label="Apagar desenhos desta posição"
+          title="Apagar desenhos desta posição"
+          className="foco flex min-h-8 min-w-8 items-center justify-center rounded border border-borda text-base leading-none text-tinta hover:bg-carta-toque disabled:opacity-40"
         >
-          Apagar desenhos desta posição
+          <span aria-hidden>🗑</span>
+        </button>
+
+        {/* §10.2 "Virar tabuleiro": o mesmo `x`, só a vista do professor. O lado que o aluno vê
+            mora no ••• do capítulo. */}
+        <button
+          type="button"
+          aria-pressed={vista.virada}
+          onClick={vista.virar}
+          aria-label="Virar tabuleiro"
+          title="Virar tabuleiro (tecla x) — só na sua tela; o aluno não muda"
+          className={`foco flex min-h-8 min-w-8 items-center justify-center rounded border text-base leading-none ${vista.virada ? "border-metodo-superficie bg-metodo-superficie/25 text-metodo-tinta-alta" : "border-borda text-tinta hover:bg-carta-toque"}`}
+        >
+          <span aria-hidden>⇅</span>
         </button>
 
         <AjudaDeAtalhos rotulo="Atalhos de desenho" lado="esquerda">

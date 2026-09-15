@@ -131,8 +131,8 @@ export function DialogoNovoCapitulo({
   const portas = [
     { chave: "inicial" as const, rotulo: "Posição inicial", ajuda: "O tabuleiro padrão do xadrez." },
     { chave: "montar" as const, rotulo: "Montar posição", ajuda: "Arraste as peças uma a uma." },
-    { chave: "fen" as const, rotulo: "Colar FEN", ajuda: "A posição copiada do Lichess ou de um livro." },
-    ...(acervo.length ? [{ chave: "acervo" as const, rotulo: "Posição do acervo", ajuda: "Uma posição do curso, já com a origem registrada." }] : []),
+    { chave: "fen" as const, rotulo: "Colar código da posição (FEN)", ajuda: "Copiado do Lichess ou de outro site." },
+    ...(acervo.length ? [{ chave: "acervo" as const, rotulo: "Posição salva do curso", ajuda: "Uma posição que o curso já usa." }] : []),
   ];
 
   return (
@@ -192,11 +192,10 @@ export function DialogoNovoCapitulo({
           ))}
         </div>
         <p className="text-xs text-tinta-fraca">
-          Para trazer partidas de um arquivo ou de um endereço do Lichess (partida, capítulo ou estudo público),
-          use{" "}
+          Para trazer um estudo ou uma partida, use{" "}
           {aoImportarDoLichess
             ? <button type="button" onClick={aoImportarDoLichess} className="foco underline">Importar do Lichess ou de PGN</button>
-            : <strong>Importar PGN</strong>}.
+            : <strong>Importar do Lichess ou PGN</strong>}.
         </p>
 
         {porta === "inicial" ? (

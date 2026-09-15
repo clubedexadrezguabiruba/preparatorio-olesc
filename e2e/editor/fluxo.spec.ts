@@ -44,7 +44,8 @@ test("mover etapas, desfazer, excluir treino e capítulo novo antes da prática"
 
   // Excluir o treino pelo cartão, com confirmação.
   page.once("dialog", (d) => void d.accept());
-  await page.getByRole("button", { name: "Excluir treino…" }).click();
+  await page.getByRole("list", { name: "Treinos da aula" }).getByRole("button", { name: /^Ações do treino/ }).first().click();
+  await page.getByRole("menuitem", { name: "Excluir treino…" }).click();
   await expect.poll(fluxo).toEqual(["introducao", "capitulo", "capitulo", "pratica"]);
-  await expect(page.getByText("Nenhum treino nesta aula.")).toBeVisible();
+  await expect(page.getByText(/Nasce de um lance/)).toBeVisible();
 });

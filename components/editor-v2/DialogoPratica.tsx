@@ -83,7 +83,7 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
       const r = prepararRevisaoDaFen({ origem, mostrarCredito: false }, escolhido.fen, professor, new Date());
       return r.ok ? r.revisao : null;
     })();
-    if (!revisao) { setErro({ campo: "origem", mensagem: "diga de onde a posição veio antes de ela entrar no acervo" }); return; }
+    if (!revisao) { setErro({ campo: "origem", mensagem: "diga de onde a posição veio antes de salvá-la no curso" }); return; }
     setAdicionando(true);
     try {
       const resposta = await aoAdicionarAoAcervo({ aulaId: aula.id, fen: escolhido.fen, revisao, ...(obra ? { obra } : {}), ...(resultado ? { resultadoDeclarado: resultado } : {}), etiqueta: escolhido.capitulo.titulo });
@@ -109,7 +109,7 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
   return (
     <Dialogo
       titulo={atual ? "Prática contra o computador" : "Nova prática contra o computador"}
-      descricao="A avaliação da aula: o aluno joga a posição contra o Stockfish até vencer ou segurar o empate."
+      descricao="A prova final da aula: o aluno joga esta posição contra o computador."
       largura="max-w-4xl"
       aoFechar={aoFechar}
       rodape={(
@@ -121,11 +121,7 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
         </>
       )}
     >
-      <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-tinta-fraca">
-        <li>• Obrigatória: o domínio da aula depende dela</li>
-        <li>• Uma por aula, no fim do fluxo</li>
-        <li>• Até {MAX_PECAS_DA_PRATICA} peças: quem julga é a tablebase</li>
-      </ul>
+      <p className="text-xs text-tinta-fraca">Uma por aula, sempre no fim. Até {MAX_PECAS_DA_PRATICA} peças.</p>
 
       <label className="flex flex-col gap-1 text-sm text-tinta">
         Título
@@ -136,7 +132,7 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
         <fieldset className="flex flex-col gap-2">
           <legend className="mb-1 text-sm font-medium text-tinta">Posição</legend>
           <div role="group" aria-label="De onde vem a posição" className="flex flex-wrap gap-2">
-            {([["acervo", "Do acervo do curso"], ["capitulo", "De um capítulo desta aula"]] as const).map(([chave, rotulo]) => (
+            {([["acervo", "Posições salvas do curso"], ["capitulo", "De um capítulo desta aula"]] as const).map(([chave, rotulo]) => (
               <button key={chave} type="button" aria-pressed={fonte === chave} onClick={() => setFonte(chave)} className={`foco rounded-md border px-3 py-1.5 text-sm ${fonte === chave ? "border-foco bg-metodo-superficie/25 text-metodo-tinta-alta" : "border-borda text-tinta hover:bg-carta-toque"}`}>
                 {fonte === chave ? "✓ " : ""}{rotulo}
               </button>
@@ -178,7 +174,7 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
               ) : null}
               {pedeResultado ? (
                 <label className="flex flex-col gap-1 text-xs text-tinta-fraca">
-                  Resultado esperado (sem cache da tablebase)
+                  Resultado esperado
                   <select value={resultado} onChange={(e) => setResultado(e.currentTarget.value as Position["expectedResult"])} className={campo}>
                     <option value="">— escolha —</option>
                     {(["win-white", "win-black", "draw"] as const).map((item) => <option key={item} value={item}>{ROTULO_DO_RESULTADO[item]}</option>)}
@@ -212,7 +208,7 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
           </fieldset>
           <fieldset className="flex flex-col gap-1 text-sm text-tinta">
             <legend className="text-sm font-medium">Computador</legend>
-            <label className="flex items-center justify-between gap-2 text-xs">Força (0 a 20)<input type="number" min={0} max={20} value={skill} onChange={(e) => setSkill(e.currentTarget.value)} className={`${campo} w-20`} /></label>
+            <label className="flex items-center justify-between gap-2 text-xs">Nível do computador (0 a 20)<input type="number" min={0} max={20} value={skill} onChange={(e) => setSkill(e.currentTarget.value)} className={`${campo} w-20`} /></label>
             <label className="flex items-center justify-between gap-2 text-xs">Tempo por lance (ms)<input type="number" min={50} max={5000} step={50} value={tempo} onChange={(e) => setTempo(e.currentTarget.value)} className={`${campo} w-20`} /></label>
             <span className="text-xs text-tinta-fraca">Padrão: força {ADVERSARIO_PADRAO.skill}, {ADVERSARIO_PADRAO.moveTimeMs} ms.</span>
           </fieldset>

@@ -106,7 +106,8 @@ test("@desempenho interações na árvore de 1.000 nós", async ({ page }) => {
   await page.waitForTimeout(300);
   resultado["navegar (40 teclas)"] = estatistica(await lerMedidas(page));
 
-  const campo = page.getByLabel("Comentário desta posição");
+  await page.getByRole("tab", { name: /^Nota do professor/ }).click();
+  const campo = page.getByRole("textbox", { name: "Nota do professor" });
   const comentarios: number[] = [];
   for (let i = 0; i < 20; i += 1) {
     await campo.click();

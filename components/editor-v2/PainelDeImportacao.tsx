@@ -52,6 +52,8 @@ export function PainelDeImportacao({
   obras = SEM_OBRAS,
   professor = "professor",
   enderecoInicial = "",
+  textoInicial = "",
+  nomeInicial = null,
 }: {
   aula: AulaV2;
   aoAplicar: (relatorio: RelatorioImportacao, escolhidos: number[]) => void;
@@ -63,6 +65,9 @@ export function PainelDeImportacao({
   professor?: string;
   /** O endereço do Lichess que a porta "Endereço do Lichess" de Adicionar capítulo trouxe. */
   enderecoInicial?: string;
+  /** O PGN que "Nova aula → Importar" já buscou ou leu, para a janela abrir com ele lido. */
+  textoInicial?: string;
+  nomeInicial?: string | null;
 }) {
   const [endereco, setEndereco] = useState(enderecoInicial);
   const [buscando, setBuscando] = useState(false);
@@ -70,11 +75,11 @@ export function PainelDeImportacao({
   const buscaAtual = useRef(0);
   const [aplicandoEstudo, setAplicandoEstudo] = useState(false);
   const [recusaDoEstudo, setRecusaDoEstudo] = useState<string | null>(null);
-  const [texto, setTexto] = useState("");
-  const [nomeDoArquivo, setNomeDoArquivo] = useState<string | null>(null);
+  const [texto, setTexto] = useState(textoInicial);
+  const [nomeDoArquivo, setNomeDoArquivo] = useState<string | null>(nomeInicial);
   const [relatorio, setRelatorio] = useState<RelatorioImportacao | null>(null);
   const [escolhidos, setEscolhidos] = useState<number[]>([]);
-  const [lendo, setLendo] = useState(false);
+  const [lendo, setLendo] = useState(textoInicial !== "");
   const caixa = useRef<HTMLTextAreaElement>(null);
   const janela = useRef<HTMLElement>(null);
   const tituloId = useId();
@@ -167,7 +172,7 @@ export function PainelDeImportacao({
       >
         <header className="flex items-start justify-between gap-3">
           <div>
-            <h2 id={tituloId} className="text-base font-semibold text-tinta">Importar PGN</h2>
+            <h2 id={tituloId} className="text-base font-semibold text-tinta">Importar do Lichess ou PGN</h2>
             <p className="text-sm text-tinta-fraca">Por endereço do Lichess, arquivo ou texto colado. Nada entra na aula antes de você escolher.</p>
           </div>
           <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Fechar</button>

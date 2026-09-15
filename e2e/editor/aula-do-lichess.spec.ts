@@ -7,7 +7,7 @@
  * lances do aluno escolhidos pelo Stockfish em Node. No fim, as tentativas no banco com a publicação.
  */
 import { Chess } from "chess.js";
-import { abrirAulaPublicada, criarAulaVazia, FIXTURE_DO_ESTUDO } from "../preparo/aulas.ts";
+import { abrirAulaPublicada, abrirPublicar, criarAulaVazia, FIXTURE_DO_ESTUDO, maisAcoes, abrirImportar } from "../preparo/aulas.ts";
 import { tentativasDoAluno } from "../preparo/contas.ts";
 import { expect, test } from "../preparo/fixtures.ts";
 import { jogarEsperarResposta, jogarPraticaComMotor } from "../preparo/partida.ts";
@@ -21,8 +21,8 @@ test.beforeAll(() => criarAulaVazia(AULA, "Mate de Dama e Rei (do Lichess)"));
 
 test("importar, conferir e publicar o estudo", async ({ page }) => {
   await page.goto(`/editor/v2/finais/${AULA}`);
-  await page.getByRole("button", { name: "Importar PGN" }).click();
-  const janela = page.getByRole("dialog", { name: "Importar PGN" });
+  await abrirImportar(page);
+  const janela = page.getByRole("dialog", { name: "Importar do Lichess ou PGN" });
   await janela.locator('input[type="file"]').setInputFiles(FIXTURE_DO_ESTUDO);
   await janela.getByRole("checkbox", { name: /são meus, ou tenho direito/ }).check();
   await janela.getByRole("button", { name: "Importar o estudo" }).click();
@@ -30,10 +30,9 @@ test("importar, conferir e publicar o estudo", async ({ page }) => {
 
   const salvo = page.locator("header span").filter({ hasText: /^(✓ salvo|alterado|salvando…|erro|conflito)$/ });
   await expect(salvo).toHaveText("✓ salvo");
-  await page.getByRole("button", { name: "Conferir" }).click();
+  await maisAcoes(page, /Conferir sem publicar/);
   await expect(page.getByRole("region", { name: "Resultado da conferência" })).toContainText("Pode publicar", { timeout: 60_000 });
-  await page.getByRole("button", { name: "Publicar", exact: true }).click();
-  const publicar = page.getByRole("dialog", { name: "Publicar a aula" });
+  const publicar = await abrirPublicar(page);
   await expect(publicar).toContainText(/primeira publicação|Aula extra/);
   await publicar.getByRole("button", { name: "Publicar", exact: true }).click();
   await expect(page.getByRole("status").filter({ hasText: "Publicada neste computador" })).toBeVisible({ timeout: 60_000 });

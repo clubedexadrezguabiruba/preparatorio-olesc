@@ -66,8 +66,8 @@ export async function apagarContasDoEnsaio(): Promise<string[]> {
 }
 
 /** As linhas de tentativa de aula v2 do aluno de ensaio — a prova "no banco" da parada 10G. */
-export async function tentativasDoAluno(aulaId: string): Promise<Array<{ etapa: string; publication_id: string | null; sucesso: boolean | null }>> {
-  const id = await idDaConta(ALUNO);
+export async function tentativasDoAluno(aulaId: string, usuario: string = ALUNO): Promise<Array<{ etapa: string; publication_id: string | null; sucesso: boolean | null }>> {
+  const id = await idDaConta(usuario);
   if (!id) return [];
   const { data, error } = await admin().from("tentativas_aula").select("*").eq("aluno", id).eq("aula", aulaId);
   if (error) throw new Error(`leitura de tentativas_aula falhou: ${error.message}`);

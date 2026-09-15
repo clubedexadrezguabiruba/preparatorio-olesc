@@ -16,7 +16,7 @@ function resumoDoFim(efeito: AulaV2["treinos"][number]["questoes"][number]["resp
   if (efeito.tipo === "avanca") return `${efeito.defesas.length} resposta${efeito.defesas.length === 1 ? "" : "s"} do defensor`;
   if (efeito.tipo === "repete") return "repete a pergunta";
   const nomes = { mate: "mate", promotion: "promoção", "draw-secured": "empate assegurado", "tablebase-win": "vitória certificada", "objetivo-autoral": "objetivo da linha" };
-  return `${efeito.defesaFinal ? `defensor joga ${efeito.defesaFinal} e ` : ""}termina em ${nomes[efeito.condicao]}`;
+  return `${efeito.defesaFinal ? `adversário joga ${efeito.defesaFinal} e ` : ""}termina em ${nomes[efeito.condicao]}`;
 }
 
 /** A prévia de criação exigida por §16.1: nada entra no documento antes de confirmar. */
@@ -100,7 +100,7 @@ export function DialogoCriarTreino({ aula, capituloId, nodeId, positions, aoCria
             <section key={treino.id} className="rounded-md border border-borda p-3">
               <h4 className="font-medium text-tinta">{treino.titulo}</h4>
               <p className="text-xs text-tinta-fraca">{nomeDoLado(treino.ladoAluno)} · {treino.questoes.length} pergunta{treino.questoes.length === 1 ? "" : "s"} · defensor determinístico</p>
-              {treino.defesaInicial ? <p className="mt-2 text-xs text-metodo-tinta">O defensor começa com {treino.defesaInicial.move}, antes da primeira pergunta.</p> : null}
+              {treino.defesaInicial ? <p className="mt-2 text-xs text-metodo-tinta">O adversário começa com {treino.defesaInicial.move}, antes da primeira pergunta.</p> : null}
               <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm text-tinta">
                 {treino.questoes.map((questao) => {
                   const resposta = questao.respostas[0];

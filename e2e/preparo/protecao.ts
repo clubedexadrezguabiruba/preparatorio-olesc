@@ -43,6 +43,7 @@ const LUGARES_DO_ENSAIO = [
   ".editor/v2",
   ".editor/v2/snapshots",
   ".editor/v2/publicacao",
+  ".editor/v2/lixeira",
   ".editor/gate/v2",
   "content/aulas-v2",
   "content/positions/N0",

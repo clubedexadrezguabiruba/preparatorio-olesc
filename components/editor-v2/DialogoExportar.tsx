@@ -101,10 +101,10 @@ export function DialogoExportar({
     >
       <div className="flex flex-wrap gap-2" role="group" aria-label="O que exportar">
         {([
-          ["variante", "PGN desta variante"],
-          ["capitulo", "PGN deste capítulo"],
-          ["aula", "PGN de todas as partidas"],
-          ["pacote", "Pacote JSON v2"],
+          ["variante", "Só esta linha"],
+          ["capitulo", "Este capítulo"],
+          ["aula", "Todos os capítulos"],
+          ["pacote", "Cópia completa da aula (backup)"],
         ] as const).map(([valor, rotulo]) => (
           <button
             key={valor}
@@ -120,13 +120,13 @@ export function DialogoExportar({
 
       <p className="rounded-md border border-borda-fraca bg-carta p-3 text-sm text-tinta">
         {saida === "pacote"
-          ? "O pacote JSON v2 é o único formato que promete trazer a aula inteira de volta: narração, ordem, treinos, proveniência e certificação."
-          : "O PGN guarda o xadrez — posição inicial, lances, variantes, comentários da posição, símbolos e desenhos com cor. Ele não é um retrato da aula."}
+          ? "Guarda a aula inteira, com falas, treinos e prática, para trazer de volta ao editor."
+          : "Arquivo PGN, para o Lichess: lances, variantes, notas, símbolos e setas. Falas, treinos e prática não vão."}
       </p>
 
       {exportado.naoCabe.length > 0 ? (
         <section className="rounded-md border border-aviso-superficie bg-aviso-superficie/10 p-3 text-sm text-aviso-tinta">
-          <p className="font-medium">O que este PGN não leva:</p>
+          <p className="font-medium">Não vai para o arquivo:</p>
           <ul className="mt-1 list-disc pl-5">
             {exportado.naoCabe.map((aviso) => <li key={aviso}>{aviso}</li>)}
           </ul>
@@ -135,7 +135,7 @@ export function DialogoExportar({
 
       {exportado.perdas.length > 0 ? (
         <section className="rounded-md border border-erro bg-erro-superficie/10 p-3 text-sm text-erro-texto">
-          <p className="font-medium">O que atravessou com perda:</p>
+          <p className="font-medium">Foi com alguma perda:</p>
           <ul className="mt-1 list-disc pl-5">
             {exportado.perdas.map((perda, indice) => <li key={`${perda.codigo}-${indice}`}>{perda.mensagem}</li>)}
           </ul>

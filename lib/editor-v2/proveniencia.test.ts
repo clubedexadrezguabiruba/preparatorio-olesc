@@ -6,7 +6,7 @@ import test from "node:test";
 import { executarComando, aplicarNoHistorico, desfazer, iniciarHistorico, refazer } from "./comandos.ts";
 import { aplicarNovoCapitulo, prepararNovoCapitulo } from "./novo-capitulo.ts";
 import { problemasDaAulaV2, validarAulaV2, type AulaV2 } from "./modelo.ts";
-import { creditosDaAula, estadoDaProveniencia, linhaDeCredito, prepararRevisaoDaFen } from "./proveniencia.ts";
+import { creditosDaAula, estadoDaProveniencia, linhaDeCredito, posicoesDaMesmaOrigem, prepararRevisaoDaFen } from "./proveniencia.ts";
 import { etapasDoAlunoV2 } from "./fluxo-do-aluno.ts";
 
 const FEN = "8/8/8/4k3/8/8/8/3QK3 w - - 0 1";
@@ -49,7 +49,7 @@ test("registrar a proveniência tira o FEN_IMPORTADA_SEM_REVISAO (1 → 0), num 
   assert.equal(historico.presente.analises[0].inicio.tipo === "fen" && historico.presente.analises[0].inicio.revisao?.revisadoEm, AGORA.toISOString());
 });
 
-test("trocar a FEN deixa a revisão caduca, com o antes e o depois na mensagem", () => {
+test("trocar a FEN deixa a revisão caduca: a lista pede para confirmar, e a janela guarda a FEN de antes", () => {
   const aula = aulaComCapituloDeFen();
   const preparo = prepararRevisaoDaFen({ origem: "obra", autor: "Dvoretsky", obra: "Manual de Finais", pagina: "12", mostrarCredito: true, direitoDosTextos: true }, FEN, "doug", AGORA);
   assert.ok(preparo.ok);
@@ -58,7 +58,10 @@ test("trocar a FEN deixa a revisão caduca, com o antes e o depois na mensagem",
   const trocada: AulaV2 = { ...revisada, analises: revisada.analises.map((a) => ({ ...a, inicio: a.inicio.tipo === "fen" ? { ...a.inicio, fen: outra } : a.inicio })) };
   const problema = problemasDaAulaV2(trocada).find((p) => p.codigo === "FEN_IMPORTADA_SEM_REVISAO");
   assert.ok(problema);
-  assert.match(problema.mensagem, /revisada: 8\/8\/8\/4k3.*agora: 8\/8\/8\/8\/4k3/);
+  // Revisão de experiência (14/9/2026): a lista fala sem FEN; o antes e o depois ficam na janela da origem,
+  // que mostra a FEN revisada guardada ao lado do tabuleiro de agora.
+  assert.match(problema.mensagem, /mudou depois que você disse de onde ela veio/);
+  assert.equal(trocada.analises[0].inicio.tipo === "fen" && trocada.analises[0].inicio.revisao?.fenRevisada, FEN);
   assert.equal(estadoDaProveniencia(trocada.analises[0]), "caduca");
   assert.deepEqual(creditosDaAula(trocada), [], "revisão caduca não credita ninguém");
   // Registrar sobre a FEN errada é recusado: a janela estava velha.
@@ -99,4 +102,47 @@ test("a linha de crédito, e ela chega ao aluno só com o interruptor ligado", (
   assert.deepEqual(creditosDaAula(desligado), []);
   // O que atravessa para o aluno continua sendo só as etapas: a revisão inteira não vai junto.
   assert.equal(JSON.stringify(etapasDoAlunoV2(comCredito, {}, {})).includes("revisadoEm"), false);
+});
+
+/* Achado do Doug no teste humano de 14/9/2026: o estudo importado sem "os textos são meus" obrigava a
+   abrir a janela da origem capítulo por capítulo. A declaração passa a valer para todas as posições que
+   vieram da mesma obra, numa ação só de Desfazer. */
+test("as posições da mesma origem recebem a mesma declaração de uma vez, e um Desfazer volta todas", () => {
+  const vazia: AulaV2 = {
+    schemaVersion: 2, id: "EX-PROVENIENCIA", titulo: "Estudo importado",
+    metadados: { orientacaoPadrao: "white", criterioDominio: "D1", estadoEditorial: "rascunho", nivel: 1, classe: "E" },
+    proveniencia: [], excecoes: [], analises: [], introducoes: [], capitulos: [], treinos: [], praticas: [], fluxo: [],
+  };
+  const fens = ["8/8/8/4k3/8/8/8/3QK3 w - - 0 1", "8/8/8/8/4k3/8/8/3QK3 w - - 0 1", "8/8/4k3/8/8/8/8/3QK3 w - - 0 1", "8/8/8/8/8/4k3/8/3QK3 w - - 0 1"];
+  let aula = vazia;
+  for (const [indice, fen] of fens.entries()) {
+    const preparo = prepararNovoCapitulo(aula, { nome: `Capítulo ${indice + 1}`, fen, orientacao: "white" });
+    assert.ok(preparo.ok);
+    const aplicado = aplicarNovoCapitulo(aula, preparo.novo);
+    assert.ok(aplicado.ok);
+    aula = aplicado.aula;
+  }
+  const doEstudo = { origem: "estudo-lichess" as const, obra: "Mate de Dama e Rei", link: "https://lichess.org/study/hf09xMzS", mostrarCredito: true };
+  for (const [indice, analise] of aula.analises.entries()) {
+    const pedido = indice === 3 ? { origem: "autoria-propria" as const, mostrarCredito: false } : doEstudo;
+    const preparo = prepararRevisaoDaFen(pedido, fens[indice], "doug", AGORA);
+    assert.ok(preparo.ok);
+    aula = executarComando(aula, { tipo: "REGISTRAR_PROVENIENCIA", analiseId: analise.id, revisao: preparo.revisao }, {});
+  }
+
+  const [primeira, segunda, terceira, quarta] = aula.analises.map((analise) => analise.id);
+  assert.deepEqual(posicoesDaMesmaOrigem(aula, primeira), [segunda, terceira], "a de autoria própria não é da mesma origem");
+  assert.deepEqual(posicoesDaMesmaOrigem(aula, quarta), []);
+
+  const itens = [primeira, segunda, terceira].map((analiseId, indice) => {
+    const preparo = prepararRevisaoDaFen({ ...doEstudo, direitoDosTextos: true }, fens[indice], "doug", AGORA);
+    assert.ok(preparo.ok);
+    return { analiseId, revisao: preparo.revisao };
+  });
+  let historico = iniciarHistorico(aula);
+  historico = aplicarNoHistorico(historico, executarComando(historico.presente, { tipo: "REGISTRAR_PROVENIENCIAS", itens }, {}));
+  const direitos = (alvo: AulaV2) => alvo.analises.map((analise) => (analise.inicio.tipo === "fen" ? analise.inicio.revisao?.direitoDosTextos ?? null : null));
+  assert.deepEqual(direitos(historico.presente), [true, true, true, null]);
+  historico = desfazer(historico);
+  assert.deepEqual(direitos(historico.presente), [false, false, false, null]);
 });

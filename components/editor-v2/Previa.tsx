@@ -150,6 +150,7 @@ export function Previa({ previa, aoFechar }: { previa: PreviaV2; aoFechar: () =>
             position={position}
             orientation={trecho.orientacao}
             previa={contrato}
+            marcasAutomaticas={false}
           />
         ) : (
           <p className="p-8 text-center text-sm text-tinta-media">

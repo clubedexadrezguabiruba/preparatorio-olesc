@@ -23,7 +23,7 @@ export default async function PaginaDeNovaAula() {
         <Link href="/editor" className="foco w-fit text-xs text-tinta-fraca hover:text-tinta">← Editor</Link>
         <h1 className="titulo">Nova aula</h1>
         <p className="text-sm text-tinta-media">
-          Cria o rascunho v2 de uma aula nova. A aula publicada e o editor atual não são alterados.
+          Comece vazia ou traga um estudo do Lichess.
         </p>
       </header>
 

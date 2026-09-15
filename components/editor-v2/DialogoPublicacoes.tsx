@@ -48,7 +48,7 @@ export function DialogoPublicacoes({ aulaId, metadados, aoEditarMetadados, aoRea
   const desativar = async () => {
     const resultado = await desativarV2Acao(aulaId);
     setConfirmando(null);
-    setRecado(resultado.ok ? "O v2 foi desativado: os alunos voltam a receber a aula antiga. As publicações continuam guardadas." : `Não foi possível desativar: ${resultado.motivo}.`);
+    setRecado(resultado.ok ? "A aula foi tirada dos alunos. As versões publicadas continuam guardadas." : `Não foi possível desativar: ${resultado.motivo}.`);
     carregar();
   };
 
@@ -64,7 +64,7 @@ export function DialogoPublicacoes({ aulaId, metadados, aoEditarMetadados, aoRea
     >
       {aoEditarMetadados ? <DadosDaAula aulaId={aulaId} metadados={metadados} aoEditar={aoEditarMetadados} /> : null}
       {!lista ? <p role="status" className="text-sm text-tinta-media">Lendo as publicações…</p> : null}
-      {lista && !lista.length ? <p className="text-sm text-tinta-media">Esta aula ainda não foi publicada pelo Editor v2.</p> : null}
+      {lista && !lista.length ? <p className="text-sm text-tinta-media">Esta aula ainda não foi publicada.</p> : null}
       {lista?.length ? (
         <ul className="flex flex-col gap-2">
           {lista.map((item) => (
@@ -89,11 +89,11 @@ export function DialogoPublicacoes({ aulaId, metadados, aoEditarMetadados, aoRea
         confirmando === "desativar" ? (
           <p className="flex flex-wrap items-center gap-2 text-sm text-aviso-tinta">
             Os alunos voltam a receber a aula antiga.
-            <button type="button" onClick={() => void desativar()} className="foco rounded-md border border-aviso-superficie px-2 py-1 text-xs">Sim, desativar o v2</button>
+            <button type="button" onClick={() => void desativar()} className="foco rounded-md border border-aviso-superficie px-2 py-1 text-xs">Sim, tirar dos alunos</button>
             <button type="button" onClick={() => setConfirmando(null)} className="foco rounded-md border border-borda px-2 py-1 text-xs text-tinta">Cancelar</button>
           </p>
         ) : (
-          <button type="button" onClick={() => setConfirmando("desativar")} className="foco self-start rounded-md border border-borda px-2 py-1 text-xs text-tinta hover:bg-carta-toque">Desativar o v2 desta aula</button>
+          <button type="button" onClick={() => setConfirmando("desativar")} className="foco self-start rounded-md border border-borda px-2 py-1 text-xs text-tinta hover:bg-carta-toque">Tirar esta aula dos alunos</button>
         )
       ) : null}
       {recado ? <p role="status" className="text-sm text-tinta">{recado}</p> : null}

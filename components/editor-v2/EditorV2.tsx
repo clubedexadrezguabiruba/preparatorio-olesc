@@ -1,7 +1,7 @@
 "use client";
 
 import { Chess, type Square } from "chess.js";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Key } from "@lichess-org/chessground/types";
 import { adicionarAoAcervoV2Acao, conferirAulaV2Acao, guardarSnapshotDeRefazerV2, salvarDocumentoV2, type ResultadoDoConferirV2 } from "@/app/editor/v2/acoes";
@@ -41,12 +41,14 @@ import type { PraticaV2 } from "@/lib/editor-v2/modelo";
 import { estadoDaProveniencia } from "@/lib/editor-v2/proveniencia";
 import type { PosicaoDoAcervoV2 } from "@/lib/editor-v2/acervo";
 import { PaletaDeDesenho } from "@/components/editor-v2/PaletaDeDesenho";
-import { AjudaDeAtalhos } from "@/components/motor-do-professor/AjudaDeAtalhos";
 import { BarraDeAvaliacao } from "@/components/motor-do-professor/BarraDeAvaliacao";
 import { FaixaDoMotor } from "@/components/motor-do-professor/FaixaDoMotor";
 import { LinhasDoMotor } from "@/components/motor-do-professor/LinhasDoMotor";
 import { useControlesDoMotor } from "@/components/motor-do-professor/useControlesDoMotor";
 import { Dialogo } from "@/components/editor-v2/Dialogo";
+import { Menu, type ItemDeMenu } from "@/components/editor-v2/Menu";
+import { AulaComoAluno } from "@/components/editor-v2/AulaComoAluno";
+import { formatarDuracao } from "@/lib/editor-v2/aula-como-aluno";
 import { Previa } from "@/components/editor-v2/Previa";
 import { PreviaDoTreino } from "@/components/editor-v2/PreviaDoTreino";
 import type { Regua } from "@/lib/lesson/regua";
@@ -68,7 +70,7 @@ import {
   type EstadoDaPaleta,
 } from "@/lib/editor-v2/paleta-de-desenho";
 import { navegar } from "@/lib/editor-v2/navegacao";
-import { ListaDeAtalhos, useAtalho, VistaDoTabuleiro } from "@/components/atalhos/Atalhos";
+import { useAbrirAjudaDosAtalhos, useAtalho, VistaDoTabuleiro } from "@/components/atalhos/Atalhos";
 import { problemasVisiveisV2, resumoDosProblemasV2, type DestinoV2 } from "@/lib/editor-v2/diagnostico-visual";
 import {
   aplicarNoHistorico,
@@ -201,6 +203,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
   const [conflitoAtual, setConflitoAtual] = useState<{ textoAtual: string | null; hashAtual: string | null } | null>(null);
   const [falhaRecuperacao, setFalhaRecuperacao] = useState(false);
   const [importando, setImportando] = useState(false);
+  const [importacaoInicial, setImportacaoInicial] = useState<{ texto: string; nome: string | null } | null>(null);
   const [adicionando, setAdicionando] = useState(false);
   const [trocandoPosicao, setTrocandoPosicao] = useState(false);
   /*
@@ -259,18 +262,23 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
   const [conferencia, setConferencia] = useState<{ resultado: Extract<ResultadoDoConferirV2, { ok: true }>; aula: AulaV2 } | null>(null);
   const [conferindo, setConferindo] = useState(false);
   const [publicandoAula, setPublicandoAula] = useState(false);
+  /*
+   * "Fazer a aula inteira como aluno" (pedido do Doug, 14/9/2026). `aulaFeita` guarda o documento que
+   * ele fez — pela referência, como a conferência — para Publicar não perguntar de novo pela mesma versão.
+   */
+  const [fazendoComoAluno, setFazendoComoAluno] = useState(false);
+  const [perguntandoAntesDePublicar, setPerguntandoAntesDePublicar] = useState(false);
+  const [aulaFeita, setAulaFeita] = useState<{ aula: AulaV2; totalMs: number; em: Date; concluida: boolean } | null>(null);
   const [convertendoV1, setConvertendoV1] = useState(false);
-  const botaoConverter = useRef<HTMLButtonElement>(null);
   const [vendoPublicacoes, setVendoPublicacoes] = useState(false);
   const [publicada, setPublicada] = useState<string | null>(null);
   const botaoPublicar = useRef<HTMLButtonElement>(null);
-  const botaoMaisOpcoes = useRef<HTMLButtonElement>(null);
+  const botaoMaisAcoes = useRef<HTMLButtonElement>(null);
   /** Cresce a cada navegação por teclado; é o sinal para o foco seguir a seta (§16). */
   const [pedidoDeFoco, setPedidoDeFoco] = useState(0);
   const botaoImportar = useRef<HTMLButtonElement>(null);
   const botaoAdicionar = useRef<HTMLButtonElement>(null);
   const botaoTrocarPosicao = useRef<HTMLButtonElement>(null);
-  const botaoExportar = useRef<HTMLButtonElement>(null);
   const botaoPrevia = useRef<HTMLButtonElement>(null);
   const [sessaoId, setSessaoId] = useState<string | null>(null);
   const hash = useRef(hashInicial);
@@ -367,7 +375,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
     || criandoTreino !== null || editandoTreino !== null || propriedadeTreino !== null || jogandoTreino !== null
     || duplicandoCapitulo !== null || excluindoCapitulo !== null || acaoDoLance !== null || cortando !== null
     || publicandoAula || vendoPublicacoes || convertendoV1 || revisandoProveniencia !== null || editandoPratica !== null || jogandoPratica !== null
-    || editandoIntroducao !== null || previaDaIntroducao !== null || vendoOrdem;
+    || editandoIntroducao !== null || previaDaIntroducao !== null || vendoOrdem
+    || fazendoComoAluno || perguntandoAntesDePublicar;
   const estadoDoTeclado = useRef({ analise, janelaAberta });
   useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta }; });
 
@@ -555,9 +564,35 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
    * Sem isto, quem navega por teclado volta ao começo da página toda vez que fecha —
    * e precisa atravessar o cabeçalho inteiro para chegar de novo onde estava.
    */
+  /*
+   * "Nova aula → Importar do Lichess ou de um PGN" (pedido do Doug, 14/9/2026): o formulário já buscou
+   * ou leu o PGN e o deixou nesta aba, com a chave da aula. A janela de importar abre sozinha com ele
+   * lido, uma vez só — a chave é apagada ao ler, e recarregar a página não reabre a janela.
+   */
+  useEffect(() => {
+    const chave = `editor-v2-importar-ao-abrir:${aulaId}`;
+    let lido: { texto: string; nome: string | null } | null = null;
+    try {
+      const cru = JSON.parse(sessionStorage.getItem(chave) ?? "null") as { texto?: unknown; nome?: unknown } | null;
+      if (cru && typeof cru.texto === "string" && cru.texto !== "") lido = { texto: cru.texto, nome: typeof cru.nome === "string" ? cru.nome : null };
+    } catch { /* guardado quebrado ou armazenamento bloqueado: a aula abre vazia, e o botão Importar PGN continua ali */ }
+    if (!lido) return;
+    // A chave só é apagada quando a janela de fato abre: o modo estrito do React monta, desmonta e
+    // monta de novo, e apagar na primeira montagem deixaria a segunda sem o PGN.
+    let ativo = true;
+    queueMicrotask(() => {
+      if (!ativo) return;
+      try { sessionStorage.removeItem(chave); } catch { /* sem armazenamento, nada a apagar */ }
+      setImportacaoInicial(lido);
+      setImportando(true);
+    });
+    return () => { ativo = false; };
+  }, [aulaId]);
+
   const fecharImportacao = useCallback(() => {
     setImportando(false);
-    botaoImportar.current?.focus();
+    setImportacaoInicial(null);
+    (botaoImportar.current ?? botaoMaisAcoes.current)?.focus();
   }, []);
 
   /**
@@ -737,6 +772,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
    * para fazer o mesmo.
    */
   const campoDoComentario = useRef<HTMLTextAreaElement>(null);
+  const [abaDoLance, setAbaDoLance] = useState<"fala" | "nota">("fala");
   const [dicaDaVariante, setDicaDaVariante] = useState(false);
 
   const aoAcaoDoLance = useCallback((acao: AcaoDoLanceV2["id"], alvo: string) => {
@@ -747,8 +783,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
       return;
     }
     if (acao === "comentar") {
-      // O `requestAnimationFrame` espera o React trocar o `key` do campo (que
-      // depende do nó selecionado): focar antes pegaria o campo do lance velho.
+      // O comentário mora na aba "Nota do professor"; o `requestAnimationFrame` espera a aba abrir e o
+      // React trocar o `key` do campo (focar antes pegaria o campo do lance velho).
+      setAbaDoLance("nota");
       requestAnimationFrame(() => campoDoComentario.current?.focus());
       return;
     }
@@ -871,7 +908,12 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
    * presente **sem** limpar o Desfazer: desfazer depois disso restaura a certificação
    * antiga, o autosave a grava, e a conferência passa a dizer que venceu — que é a verdade.
    */
-  const conferir = async () => {
+  /**
+   * `depois: "publicar"` — o botão Publicar clicado sem conferência verde (achado do Doug, 14/9/2026:
+   * "não achei o botão de publicar"). A conferência roda do mesmo jeito; verde, segue para a pergunta de
+   * antes de publicar; com problema, o recado diz que ainda não dá e a lista mostra por quê.
+   */
+  const conferir = async (depois?: "publicar") => {
     if (estado !== "salvo" || conferindo) return;
     setConferindo(true);
     setRecado(null);
@@ -893,12 +935,35 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
         }
       }
       setConferencia({ resultado: resposta, aula: julgada });
+      if (depois === "publicar") {
+        if (resposta.publicar.pode) {
+          if (aulaFeita?.aula === julgada) setPublicandoAula(true);
+          else setPerguntandoAntesDePublicar(true);
+        }
+        // Sem verde, a própria faixa da conferência diz "Ainda não dá para publicar" e abre a lista —
+        // um recado vermelho a mais repetia a mesma frase (revisão de experiência, 14/9/2026).
+      }
     } catch {
       setRecado("Não foi possível conferir agora. Nada foi alterado.");
     } finally {
       setConferindo(false);
     }
   };
+
+  /*
+   * A lista da conferência se atualiza sozinha (achado do Doug, 14/9/2026). Antes, consertar um problema
+   * deixava a lista velha na tela com "a aula mudou — confira de novo", e o Doug achou que o conserto não
+   * tinha pegado. Agora, com o resultado aberto e a aula mudada, o editor confere de novo assim que o
+   * autosave confirma ("✓ salvo"), com uma folga para não conferir a cada tecla. Fechar o resultado para.
+   */
+  const conferirDeNovo = useRef(conferir);
+  useEffect(() => { conferirDeNovo.current = conferir; });
+  const conferenciaVencida = conferencia !== null && conferencia.aula !== historico.presente;
+  useEffect(() => {
+    if (!conferenciaVencida || estado !== "salvo" || conferindo) return;
+    const relogio = setTimeout(() => void conferirDeNovo.current(), 800);
+    return () => clearTimeout(relogio);
+  }, [conferenciaVencida, estado, conferindo, historico.presente]);
 
   const adotarVersaoDoDisco = async () => {
     if (!conflitoAtual?.textoAtual || !conflitoAtual.hashAtual) return;
@@ -941,7 +1006,6 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
     return (
       <main className="mx-auto flex w-full max-w-3xl flex-col gap-4 p-4">
         <header className="flex flex-col gap-1">
-          <p className="text-xs font-medium uppercase tracking-wide text-metodo-tinta">Editor v2 · aula nova</p>
           <h1 className="titulo">
             <input
               key={historico.presente.titulo}
@@ -956,8 +1020,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
             />
           </h1>
           <p className="text-sm text-tinta-media">
-            Esta aula ainda não tem capítulo. Um capítulo é uma posição ou partida com o percurso que você quer mostrar —
-            comece por uma posição montada, por uma FEN colada ou por um PGN.
+            Comece pelo primeiro capítulo: uma posição para explicar, ou traga um estudo do Lichess.
           </p>
         </header>
 
@@ -971,7 +1034,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
             + Adicionar capítulo
           </button>
           <button type="button" ref={botaoImportar} onClick={() => setImportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">
-            Importar PGN
+            Importar do Lichess ou PGN
           </button>
           <span className={`self-center text-xs ${estado === "erro" || estado === "conflito" ? "text-erro-texto" : "text-tinta-fraca"}`}>
             {estado === "salvo" ? "✓ salvo" : estado === "alterado" ? "alterado" : estado === "salvando" ? "salvando…" : estado}
@@ -980,7 +1043,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
 
         {recado ? <p role="alert" className="rounded-lg border border-erro bg-erro-superficie/10 p-3 text-sm text-erro-texto">{recado}</p> : null}
         <PainelDeProblemas visiveis={visiveis} resumo={resumo} aoIr={irAoProblema} />
-        {importando ? <PainelDeImportacao aula={historico.presente} aoAplicar={importar} aoFechar={fecharImportacao} aoImportarEstudo={importarEstudo} positions={positions} obras={obras} professor={professor} /> : null}
+        {importando ? <PainelDeImportacao aula={historico.presente} aoAplicar={importar} aoFechar={fecharImportacao} aoImportarEstudo={importarEstudo} positions={positions} obras={obras} professor={professor} textoInicial={importacaoInicial?.texto} nomeInicial={importacaoInicial?.nome} /> : null}
         {adicionando ? (
           <DialogoNovoCapitulo
             aula={historico.presente}
@@ -1019,58 +1082,66 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
      */
     <VistaDoTabuleiro escopos={["editor"]}>
     <main className="mx-auto flex w-full max-w-7xl flex-col gap-4 p-4 lg:h-dvh">
-      <header className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="text-xs font-medium uppercase tracking-wide text-metodo-tinta">Editor v2 · piloto</p>
-          <h1 className="titulo">
+      {/* A barra do topo (revisão de experiência, 14/9/2026): o Doug achou a tela "poluída", com dez
+          botões do mesmo peso. Como no editor do Lichess, fica à vista só o que se usa a toda hora —
+          Desfazer, Refazer, Ver como aluno e Publicar —, e o resto mora no "⋯ Mais ações". */}
+      <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <div className="flex min-w-0 flex-1 items-baseline gap-3">
+          <h1 className="titulo min-w-0 flex-1">
             <input
               key={historico.presente.titulo}
               aria-label="Título da aula"
+              title="Clique para mudar o título"
               defaultValue={historico.presente.titulo}
               onBlur={(e) => aplicar({ tipo: "RENOMEAR_AULA", titulo: e.currentTarget.value })}
               onKeyDown={(e) => {
                 if (e.key === "Enter") e.currentTarget.blur();
                 if (e.key === "Escape") { e.currentTarget.value = historico.presente.titulo; e.currentTarget.blur(); }
               }}
-              className="foco -mx-1 w-full min-w-[12rem] rounded-md border border-transparent bg-transparent px-1 hover:border-borda focus:border-borda"
+              className="foco -mx-1 w-full min-w-[12rem] truncate rounded-md border border-transparent bg-transparent px-1 hover:border-borda focus:border-borda"
             />
           </h1>
-          <p className="text-sm text-tinta-fraca">Formato novo separado. A aula publicada e o editor atual não são alterados.</p>
-        </div>
-        {/* flex-wrap: a 375 px a fileira sem quebra media 865 px e rolava a página para o lado (10A). */}
-        <div className="flex flex-wrap items-center gap-2">
-          <button type="button" ref={botaoImportar} onClick={() => setImportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Importar PGN</button>
-          <button type="button" ref={botaoExportar} onClick={() => setExportando(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Exportar</button>
-          <button type="button" ref={botaoPrevia} onClick={() => setEscolhendoPrevia(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Pré-visualizar</button>
-          <button
-            type="button"
-            onClick={() => void conferir()}
-            disabled={estado !== "salvo" || conferindo}
-            title={estado !== "salvo" ? "Espere a aula salvar para conferir" : undefined}
-            className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque disabled:opacity-40"
+          <span
+            title="A aula salva sozinha. O aluno só vê as mudanças depois de Publicar."
+            className={`shrink-0 text-xs ${estado === "erro" || estado === "conflito" ? "text-erro-texto" : "text-tinta-fraca"}`}
           >
-            {conferindo ? "Conferindo…" : "Conferir"}
-          </button>
-          {/* §5.3: "Publicar, somente quando permitido" — o botão nem aparece antes de uma
-              conferência verde para o documento que está na tela. */}
-          {conferencia && conferencia.aula === historico.presente && conferencia.resultado.publicar.pode ? (
-            <button type="button" ref={botaoPublicar} onClick={() => setPublicandoAula(true)} className="foco rounded-md border border-metodo-superficie bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta">
-              Publicar
-            </button>
-          ) : null}
-          {/* §20.3: a conversão é explícita, e o botão só existe enquanto há o que converter. */}
-          {historico.presente.origem?.formato === "lesson-v1" && !historico.presente.origem.convertidaEm ? (
-            <button type="button" ref={botaoConverter} onClick={() => setConvertendoV1(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">
-              Converter para o formato novo
-            </button>
-          ) : null}
-          <button type="button" ref={botaoMaisOpcoes} onClick={() => setVendoPublicacoes(true)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Mais opções</button>
-          <button type="button" disabled={!historico.passados.length} onClick={() => setHistorico(desfazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Desfazer</button>
-          <button type="button" disabled={!historico.futuros.length} onClick={() => setHistorico(refazer)} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta disabled:opacity-40">Refazer</button>
-          <button type="button" disabled={historico.presente === documentoInicial} onClick={desfazerTudo} className="foco rounded-md border border-aviso-superficie px-3 py-2 text-sm text-aviso-tinta disabled:opacity-40">Desfazer tudo</button>
-          <span className={`text-xs ${estado === "erro" || estado === "conflito" ? "text-erro-texto" : "text-tinta-fraca"}`}>
             {estado === "salvo" ? "✓ salvo" : estado === "alterado" ? "alterado" : estado === "salvando" ? "salvando…" : estado}
           </span>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" aria-label="Desfazer" title="Desfazer (Ctrl+Z)" disabled={!historico.passados.length} onClick={() => setHistorico(desfazer)} className="foco flex min-h-9 min-w-9 items-center justify-center rounded-md border border-borda text-lg leading-none text-tinta hover:bg-carta-toque disabled:opacity-40"><span aria-hidden>↶</span></button>
+          <button type="button" aria-label="Refazer" title="Refazer (Ctrl+Y)" disabled={!historico.futuros.length} onClick={() => setHistorico(refazer)} className="foco flex min-h-9 min-w-9 items-center justify-center rounded-md border border-borda text-lg leading-none text-tinta hover:bg-carta-toque disabled:opacity-40"><span aria-hidden>↷</span></button>
+          <button type="button" ref={botaoPrevia} onClick={() => setEscolhendoPrevia(true)} className="foco min-h-9 rounded-md border border-borda px-3 text-sm text-tinta hover:bg-carta-toque">Ver como aluno</button>
+          {/* Publicar está sempre na tela e confere sozinho antes (achado do Doug, 14/9/2026): nada publica
+              sem conferência verde, só o caminho ficou à vista. */}
+          <button
+            type="button"
+            ref={botaoPublicar}
+            disabled={estado !== "salvo" || conferindo}
+            title={estado !== "salvo" ? "Espere a aula salvar para publicar" : conferindo ? "Conferindo a aula…" : "Confere a aula e publica"}
+            onClick={() => {
+              const verde = conferencia && conferencia.aula === historico.presente && conferencia.resultado.publicar.pode;
+              if (!verde) { void conferir("publicar"); return; }
+              if (aulaFeita?.aula === historico.presente) setPublicandoAula(true);
+              else setPerguntandoAntesDePublicar(true);
+            }}
+            className="foco min-h-9 rounded-md bg-metodo-cheio px-4 text-sm font-medium text-tinta-inversa hover:bg-metodo-cheio-toque disabled:opacity-40"
+          >
+            {conferindo ? "Conferindo…" : "Publicar"}
+          </button>
+          <MenuMaisAcoes
+            refDoBotao={botaoMaisAcoes}
+            itens={[
+              { rotulo: "Importar do Lichess ou PGN…", aoEscolher: () => setImportando(true) },
+              { rotulo: "Exportar…", ajuda: "Para o Lichess, ou uma cópia completa da aula", aoEscolher: () => setExportando(true) },
+              { rotulo: "Conferir sem publicar", ajuda: "Mostra o que ainda impede publicar", disponivel: estado === "salvo" && !conferindo, motivo: "espere a aula salvar", aoEscolher: () => void conferir() },
+              { rotulo: "Nível e publicações…", aoEscolher: () => setVendoPublicacoes(true) },
+              ...(historico.presente.origem?.formato === "lesson-v1" && !historico.presente.origem.convertidaEm
+                ? [{ rotulo: "Converter aula antiga…", aoEscolher: () => setConvertendoV1(true) }]
+                : []),
+              { rotulo: "Desfazer tudo…", ajuda: "Volta a aula a como estava quando você abriu", perigo: true, separar: true, disponivel: historico.presente !== documentoInicial, motivo: "nada mudou desde que você abriu", aoEscolher: desfazerTudo },
+            ]}
+          />
         </div>
       </header>
 
@@ -1103,22 +1174,55 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
           <button type="button" className="foco ml-2 underline" onClick={() => setPublicada(null)}>Fechar</button>
         </p>
       ) : null}
+      {perguntandoAntesDePublicar ? (
+        <Dialogo
+          titulo="Antes de publicar, quer fazer a aula inteira como aluno?"
+          descricao="Introdução, capítulos, treinos e a prática, do jeito que o aluno vai fazer. Nada é gravado, e no fim aparece quanto tempo cada etapa levou."
+          largura="max-w-lg"
+          aoFechar={() => { setPerguntandoAntesDePublicar(false); queueMicrotask(() => botaoPublicar.current?.focus()); }}
+          rodape={(
+            <div className="flex flex-wrap justify-end gap-2">
+              <button type="button" onClick={() => { setPerguntandoAntesDePublicar(false); queueMicrotask(() => botaoPublicar.current?.focus()); }} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Cancelar</button>
+              <button type="button" onClick={() => { setPerguntandoAntesDePublicar(false); setPublicandoAula(true); }} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Publicar sem fazer</button>
+              <button type="button" onClick={() => { setPerguntandoAntesDePublicar(false); setFazendoComoAluno(true); }} className="foco rounded-md border border-metodo-superficie bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta">Fazer a aula inteira</button>
+            </div>
+          )}
+        >
+          {aulaFeita ? (
+            <p className="text-sm text-tinta-media">
+              Você fez uma versão anterior às {aulaFeita.em.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}, em {formatarDuracao(aulaFeita.totalMs)}; a aula mudou depois disso.
+            </p>
+          ) : null}
+        </Dialogo>
+      ) : null}
+
+      {fazendoComoAluno ? (
+        <AulaComoAluno
+          aulaId={aulaId}
+          documento={historico.presente}
+          podePublicar={Boolean(conferencia && conferencia.aula === historico.presente && conferencia.resultado.publicar.pode)}
+          aoTerminar={(resumo) => setAulaFeita({ aula: historico.presente, totalMs: resumo.totalMs, em: new Date(), concluida: resumo.concluida })}
+          aoFechar={() => setFazendoComoAluno(false)}
+          aoPublicar={() => { setFazendoComoAluno(false); setPublicandoAula(true); }}
+        />
+      ) : null}
+
       {publicandoAula ? (
         <DialogoPublicar
           aulaId={aulaId}
           aoFechar={() => { setPublicandoAula(false); queueMicrotask(() => botaoPublicar.current?.focus()); }}
-          aoPublicar={(publicationId) => { setPublicandoAula(false); setPublicada(publicationId); queueMicrotask(() => botaoMaisOpcoes.current?.focus()); }}
+          aoPublicar={(publicationId) => { setPublicandoAula(false); setPublicada(publicationId); queueMicrotask(() => botaoMaisAcoes.current?.focus()); }}
         />
       ) : null}
       {convertendoV1 ? (
         <DialogoConverterV1
           aulaId={aulaId}
           aula={historico.presente}
-          aoFechar={() => { setConvertendoV1(false); queueMicrotask(() => botaoConverter.current?.focus()); }}
+          aoFechar={() => { setConvertendoV1(false); queueMicrotask(() => botaoMaisAcoes.current?.focus()); }}
           aoConverter={() => {
             aplicar({ tipo: "CONVERTER_V1", convertidaEm: new Date().toISOString() });
             setConvertendoV1(false);
-            queueMicrotask(() => botaoMaisOpcoes.current?.focus());
+            queueMicrotask(() => botaoMaisAcoes.current?.focus());
           }}
         />
       ) : null}
@@ -1134,10 +1238,14 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
             setConferencia(null);
             setRecado(`A publicação ${publicationId} voltou a ser a que o aluno recebe. O documento na tela continua o seu rascunho: confira de novo antes de publicar.`);
           }}
-          aoFechar={() => { setVendoPublicacoes(false); queueMicrotask(() => botaoMaisOpcoes.current?.focus()); }}
+          aoFechar={() => { setVendoPublicacoes(false); queueMicrotask(() => botaoMaisAcoes.current?.focus()); }}
         />
       ) : null}
+      {/* O resultado da conferência flutua no canto, sob a barra do topo, e não empurra o tabuleiro
+          (revisão de experiência, 14/9/2026: a lista aberta descia a tela ~230 px). Enquanto ele está
+          aberto, a lista viva some — as duas diziam a mesma frase. */}
       {conferencia ? (
+        <div className="lg:fixed lg:right-4 lg:top-16 lg:z-30 lg:w-[30rem] lg:max-w-[calc(100vw-2rem)] lg:shadow-xl">
         <PainelDeProblemas
           visiveis={problemasVisiveisV2(historico.presente, conferencia.resultado.conferencia.problemas)}
           resumo={null}
@@ -1152,8 +1260,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
             vencida: conferencia.aula !== historico.presente,
           }}
         />
+        </div>
       ) : null}
-      <PainelDeProblemas visiveis={visiveis} resumo={resumo} aoIr={irAoProblema} />
+      {conferencia ? null : <PainelDeProblemas visiveis={visiveis} resumo={resumo} aoIr={irAoProblema} />}
       {/* §19.2: as marcas de revisão, juntas e com porta de saída — inclusive a
           do quadro de introdução, que era marcada e não tinha como ser resolvida. */}
       <ListaDeRevisoes
@@ -1162,7 +1271,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
         aoResolver={(alvo: AlvoDeRevisaoV2) => aplicar({ tipo: "REVISAO_RESOLVIDA", alvo })}
         aoResolverTodas={(alvos: AlvoDeRevisaoV2[]) => aplicar({ tipo: "REVISOES_RESOLVIDAS", alvos })}
       />
-      {importando ? <PainelDeImportacao aula={historico.presente} aoAplicar={importar} aoFechar={fecharImportacao} aoImportarEstudo={importarEstudo} positions={positions} obras={obras} professor={professor} /> : null}
+      {importando ? <PainelDeImportacao aula={historico.presente} aoAplicar={importar} aoFechar={fecharImportacao} aoImportarEstudo={importarEstudo} positions={positions} obras={obras} professor={professor} textoInicial={importacaoInicial?.texto} nomeInicial={importacaoInicial?.nome} /> : null}
       {adicionando ? (
         <DialogoNovoCapitulo
           aula={historico.presente}
@@ -1244,7 +1353,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
           nodeId={nodeIdAtual}
           capituloId={capitulo.id}
           positions={positions}
-          aoFechar={() => { setExportando(false); botaoExportar.current?.focus(); }}
+          aoFechar={() => { setExportando(false); botaoMaisAcoes.current?.focus(); }}
         />
       ) : null}
 
@@ -1286,8 +1395,10 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
           aula={historico.presente}
           analiseId={revisandoProveniencia}
           professor={professor}
-          aoRegistrar={(revisao) => {
-            aplicar({ tipo: "REGISTRAR_PROVENIENCIA", analiseId: revisandoProveniencia, revisao });
+          aoRegistrar={(revisao, outras) => {
+            aplicar(outras.length
+              ? { tipo: "REGISTRAR_PROVENIENCIAS", itens: [{ analiseId: revisandoProveniencia, revisao }, ...outras] }
+              : { tipo: "REGISTRAR_PROVENIENCIA", analiseId: revisandoProveniencia, revisao });
             setRevisandoProveniencia(null);
           }}
           aoFechar={() => setRevisandoProveniencia(null)}
@@ -1382,15 +1493,19 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
           suspenso: são três destinos, não três variações de um. */}
       {escolhendoPrevia ? (
         <Dialogo
-          titulo="Pré-visualizar"
+          titulo="Ver como aluno"
           descricao="A aula aparece como o aluno a vê. Nada é gravado no progresso."
           largura="max-w-lg"
           aoFechar={fecharEscolhaDaPrevia}
           rodape={<button type="button" onClick={fecharEscolhaDaPrevia} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Cancelar</button>}
         >
           <div className="flex flex-col gap-2">
+            <button type="button" onClick={() => { fecharEscolhaDaPrevia(); setFazendoComoAluno(true); }} className="foco rounded-md border border-metodo-superficie bg-metodo-superficie/10 px-3 py-2 text-left text-sm text-tinta hover:bg-carta-toque">
+              Fazer a aula inteira como aluno
+              <span className="block text-xs text-tinta-fraca">Introdução, capítulos, treinos e prática, do começo ao fim, com o tempo de cada etapa. Nada é gravado.</span>
+            </button>
             <button type="button" onClick={() => abrirPrevia("aula")} className="foco rounded-md border border-borda px-3 py-2 text-left text-sm text-tinta hover:bg-carta-toque">
-              A aula inteira
+              Assistir aos capítulos
               <span className="block text-xs text-tinta-fraca">Todos os capítulos, na ordem do fluxo, com o retorno ao ponto de escolha quando duas linhas se comparam.</span>
             </button>
             <button type="button" onClick={() => abrirPrevia("capitulo")} className="foco rounded-md border border-borda px-3 py-2 text-left text-sm text-tinta hover:bg-carta-toque">
@@ -1441,133 +1556,123 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
       ) : null}
 
       <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[14rem_minmax(20rem,38rem)_minmax(18rem,1fr)]">
-        <aside className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
-          {/* §7.1 e §18 (fatia 10): a introdução abre a coluna, e a ordem da aula inteira fica a um clique. */}
-          <div className="flex flex-col gap-2 border-b border-borda-fraca pb-3">
-            <h2 className="text-sm font-semibold text-tinta">Introdução</h2>
+        {/* A coluna da aula (revisão de experiência, 14/9/2026): uma linha por item, como a lista de
+            capítulos do Lichess. O que se faz a toda hora — abrir, testar — fica na linha; o resto mora no
+            "•••" de cada item. Sumiram as frases fixas e o campo solto do nome do capítulo. */}
+        <aside className="cartao-vazio flex flex-col gap-4 p-3 lg:min-h-0 lg:overflow-y-auto">
+          <button type="button" data-ordem-da-aula onClick={() => setVendoOrdem(true)} title="Ver e mudar a ordem de todas as etapas" className="foco w-full rounded-md border border-borda px-2 py-1.5 text-left text-xs text-tinta hover:bg-carta-toque">Ordem da aula · {historico.presente.fluxo.length} etapas…</button>
+
+          <section className="flex flex-col gap-1">
+            <CabecalhoDaSecao titulo="Introdução">
+              {historico.presente.introducoes.length ? null : (
+                <BotaoMais rotulo="+ Criar introdução" dado={{ "data-introducao": "nova" }} aoClicar={() => setEditandoIntroducao({ id: null })} />
+              )}
+            </CabecalhoDaSecao>
             {historico.presente.introducoes.length ? historico.presente.introducoes.map((introducao) => (
-              <button key={introducao.id} type="button" data-introducao={introducao.id} onClick={() => setEditandoIntroducao({ id: introducao.id })} className="foco w-full rounded-md border border-borda-fraca p-2 text-left text-xs text-tinta hover:bg-carta-toque">
-                <span className="block font-medium">{introducao.titulo}</span>
-                <span className="text-tinta-fraca">{introducao.quadros.length} quadro{introducao.quadros.length === 1 ? "" : "s"}</span>
-                <span className="mt-1 block text-metodo-tinta">Editar introdução</span>
+              <button key={introducao.id} type="button" data-introducao={introducao.id} onClick={() => setEditandoIntroducao({ id: introducao.id })} title="Abrir a introdução" className="foco flex w-full items-baseline justify-between gap-2 rounded-md px-2 py-2 text-left text-sm text-tinta hover:bg-carta-toque">
+                <span className="leading-snug line-clamp-2 break-words">{introducao.titulo}</span>
+                <span className="shrink-0 text-xs text-tinta-fraca">{introducao.quadros.length} quadro{introducao.quadros.length === 1 ? "" : "s"}</span>
               </button>
-            )) : (
-              <button type="button" data-introducao="nova" onClick={() => setEditandoIntroducao({ id: null })} className="foco w-full rounded-md border border-borda px-2 py-2 text-sm text-tinta hover:bg-carta-toque">+ Criar introdução</button>
-            )}
-            <button type="button" data-ordem-da-aula onClick={() => setVendoOrdem(true)} className="foco w-full rounded-md border border-borda px-2 py-1.5 text-xs text-tinta hover:bg-carta-toque">Ordem da aula · {historico.presente.fluxo.length} etapas…</button>
-          </div>
-          <h2 className="text-sm font-semibold text-tinta">Capítulos</h2>
-          <p className="text-xs text-tinta-fraca">Arraste como um slide ou abra ••• para mover pelo teclado.</p>
-          <button
-            type="button"
-            ref={botaoAdicionar}
-            onClick={() => setAdicionando(true)}
-            className="foco rounded-md border border-borda px-2 py-2 text-sm text-tinta hover:bg-carta-toque"
-          >
-            + Adicionar capítulo
-          </button>
-          <ListaDeCapitulos
-            capitulos={capitulosOrdenados}
-            atualId={capitulo.id}
-            aoEscolher={(item) => { setCapituloId(item.id); setNodeId(item.inicioNodeId); }}
-            aoMover={(id, vao) => aplicar({ tipo: "MOVER_CAPITULO", capituloId: id, vao })}
-            aoDuplicar={setDuplicandoCapitulo}
-            aoExcluir={setExcluindoCapitulo}
-            proveniencia={Object.fromEntries(capitulosOrdenados.flatMap((item) => {
-              const dela = historico.presente.analises.find((a) => a.id === item.analiseId);
-              const estadoDela = dela ? estadoDaProveniencia(dela) : "nao-se-aplica";
-              return estadoDela === "nao-se-aplica" ? [] : [[item.id, estadoDela]];
-            }))}
-            aoProveniencia={(id) => {
-              const alvo = capitulosOrdenados.find((item) => item.id === id);
-              if (alvo) setRevisandoProveniencia(alvo.analiseId);
-            }}
-          />
-          <div className="mt-3 border-t border-borda-fraca pt-3">
-            <h2 className="text-sm font-semibold text-tinta">Treinos</h2>
+            )) : <p className="px-2 text-xs text-tinta-fraca">Opcional: slides antes dos capítulos.</p>}
+          </section>
+
+          <section className="flex flex-col gap-1">
+            <CabecalhoDaSecao titulo="Capítulos">
+              <BotaoMais rotulo="+ Adicionar capítulo" refDoBotao={botaoAdicionar} aoClicar={() => setAdicionando(true)} />
+            </CabecalhoDaSecao>
+            <ListaDeCapitulos
+              capitulos={capitulosOrdenados}
+              atualId={capitulo.id}
+              aoEscolher={(item) => { setCapituloId(item.id); setNodeId(item.inicioNodeId); }}
+              aoMover={(id, vao) => aplicar({ tipo: "MOVER_CAPITULO", capituloId: id, vao })}
+              aoDuplicar={setDuplicandoCapitulo}
+              aoExcluir={setExcluindoCapitulo}
+              aoRenomear={(id, titulo) => aplicar({ tipo: "RENOMEAR_CAPITULO", capituloId: id, titulo })}
+              aoTrocarOrientacao={(id, orientacao) => aplicar({ tipo: "DEFINIR_ORIENTACAO_CAPITULO", capituloId: id, orientacao })}
+              aoTrocarPosicao={(id) => {
+                const alvo = capitulosOrdenados.find((item) => item.id === id);
+                if (alvo && alvo.id !== capitulo.id) { setCapituloId(alvo.id); setNodeId(alvo.inicioNodeId); }
+                setTrocandoPosicao(true);
+              }}
+              proveniencia={Object.fromEntries(capitulosOrdenados.flatMap((item) => {
+                const dela = historico.presente.analises.find((a) => a.id === item.analiseId);
+                const estadoDela = dela ? estadoDaProveniencia(dela) : "nao-se-aplica";
+                return estadoDela === "nao-se-aplica" ? [] : [[item.id, estadoDela]];
+              }))}
+              aoProveniencia={(id) => {
+                const alvo = capitulosOrdenados.find((item) => item.id === id);
+                if (alvo) setRevisandoProveniencia(alvo.analiseId);
+              }}
+            />
+          </section>
+
+          <section className="flex flex-col gap-1">
+            <CabecalhoDaSecao titulo="Treinos" />
             {treinosOrdenados.length ? (
-              <ol className="mt-2 flex flex-col gap-2" aria-label="Treinos da aula">
-                {treinosOrdenados.map((treino) => (
-                  <li key={treino.id}>
-                    <button
-                      type="button"
-                      data-treino-id={treino.id}
-                      onClick={() => setEditandoTreino(treino.id)}
-                      className="foco w-full rounded-md border border-borda-fraca p-2 text-left text-xs text-tinta hover:bg-carta-toque"
-                    >
-                      <span className="block font-medium">{treino.titulo}</span>
-                      <span className="text-tinta-fraca">
-                        {treino.ladoAluno === "white" ? "Brancas" : "Pretas"} · {treino.questoes.length} pergunta{treino.questoes.length === 1 ? "" : "s"} · {treino.propriedade === "derivado" ? "ligado à aula" : treino.propriedade}
-                      </span>
-                      <span className="mt-1 block text-metodo-tinta">Abrir autoria</span>
-                    </button>
-                    <button
-                      type="button"
-                      data-jogar-treino-id={treino.id}
-                      onClick={() => {
-                        try {
-                          setJogandoTreino({ treinoId: treino.id, titulo: treino.titulo, perfil: treino.perfil, jogavel: treinoJogavel(historico.presente, treino.id, positions) });
-                        } catch (erro) {
-                          setJogandoTreino({ treinoId: treino.id, titulo: treino.titulo, perfil: treino.perfil, jogavel: null, erro: erro instanceof Error ? erro.message : undefined });
-                        }
-                      }}
-                      className="foco mt-1 w-full rounded-md border border-borda px-2 py-1 text-left text-xs text-tinta hover:bg-carta-toque"
-                    >
-                      ⏵ Jogar na prévia
-                    </button>
-                    <button
-                      type="button"
-                      data-propriedade-treino-id={treino.id}
-                      onClick={() => setPropriedadeTreino(treino.id)}
-                      className={`foco mt-1 w-full rounded-md border px-2 py-1 text-left text-xs hover:bg-carta-toque ${treino.fonte === "atual" ? "border-borda text-tinta" : "border-aviso-superficie text-aviso-tinta"}`}
-                    >
-                      Propriedade e fonte · {treino.fonte}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => { if (window.confirm(`Excluir o treino «${treino.titulo}»? Ele sai da aula e da ordem das etapas. O Desfazer devolve.`)) aplicar({ tipo: "EXCLUIR_TREINO", treinoId: treino.id }); }}
-                      className="foco mt-1 w-full rounded-md border border-erro px-2 py-1 text-left text-xs text-erro-texto hover:bg-erro-superficie/20"
-                    >
-                      Excluir treino…
-                    </button>
-                  </li>
-                ))}
+              <ol className="flex flex-col gap-0.5" aria-label="Treinos da aula">
+                {treinosOrdenados.map((treino) => {
+                  const jogar = () => {
+                    try {
+                      setJogandoTreino({ treinoId: treino.id, titulo: treino.titulo, perfil: treino.perfil, jogavel: treinoJogavel(historico.presente, treino.id, positions) });
+                    } catch (erro) {
+                      setJogandoTreino({ treinoId: treino.id, titulo: treino.titulo, perfil: treino.perfil, jogavel: null, erro: erro instanceof Error ? erro.message : undefined });
+                    }
+                  };
+                  return (
+                    <li key={treino.id} className="flex items-stretch rounded-md hover:bg-carta-toque">
+                      <button
+                        type="button"
+                        data-treino-id={treino.id}
+                        onClick={() => setEditandoTreino(treino.id)}
+                        title={`Editar o treino «${treino.titulo}»`}
+                        className="foco min-w-0 flex-1 px-2 py-1.5 text-left text-sm text-tinta"
+                      >
+                        <span className="block leading-snug line-clamp-2 break-words">{treino.titulo}</span>
+                        <span className="block text-xs text-tinta-fraca">
+                          {treino.ladoAluno === "white" ? "Brancas" : "Pretas"} · {treino.questoes.length} pergunta{treino.questoes.length === 1 ? "" : "s"}
+                          {treino.fonte !== "atual" ? <span className="text-aviso-tinta"> · a aula mudou</span> : null}
+                        </span>
+                      </button>
+                      <button type="button" data-jogar-treino-id={treino.id} onClick={jogar} aria-label={`Testar o treino «${treino.titulo}»`} title="Testar como aluno" className="foco flex min-w-8 items-center justify-center rounded text-sm text-tinta-fraca hover:text-tinta">
+                        <span aria-hidden>▶</span>
+                      </button>
+                      <Menu
+                        rotulo={`Ações do treino «${treino.titulo}»`}
+                        classeDoBotao="foco flex h-full min-w-8 items-center justify-center rounded text-tinta-fraca hover:text-tinta"
+                        botao={<span aria-hidden>•••</span>}
+                        itens={[
+                          { rotulo: "Editar treino", aoEscolher: () => setEditandoTreino(treino.id) },
+                          { rotulo: "Testar como aluno", aoEscolher: jogar },
+                          { rotulo: "Ligação com a aula…", ajuda: treino.fonte === "atual" ? "Refazer a partir da aula, ou deixar independente" : "A aula mudou depois deste treino", aoEscolher: () => setPropriedadeTreino(treino.id) },
+                          { rotulo: "Excluir treino…", perigo: true, separar: true, aoEscolher: () => { if (window.confirm(`Excluir o treino «${treino.titulo}»? Ele sai da aula e da ordem das etapas. O Desfazer devolve.`)) aplicar({ tipo: "EXCLUIR_TREINO", treinoId: treino.id }); } },
+                        ]}
+                      />
+                    </li>
+                  );
+                })}
               </ol>
-            ) : <p className="mt-1 text-xs text-tinta-fraca">Nenhum treino nesta aula.</p>}
-          </div>
+            ) : <p className="px-2 text-xs text-tinta-fraca">Nasce de um lance: ••• → Criar treino daqui.</p>}
+          </section>
+
           {/* §17.1 (fatia 10): a prática, a avaliação da aula. */}
-          <div className="mt-3 border-t border-borda-fraca pt-3">
-            <h2 className="text-sm font-semibold text-tinta">Prática</h2>
+          <section className="flex flex-col gap-1">
+            <CabecalhoDaSecao titulo="Prática">
+              {historico.presente.praticas.length ? null : (
+                <BotaoMais rotulo="+ Criar prática" dado={{ "data-pratica": "nova" }} aoClicar={() => setEditandoPratica("nova")} />
+              )}
+            </CabecalhoDaSecao>
             {historico.presente.praticas.length ? historico.presente.praticas.map((pratica) => (
-              <div key={pratica.id} className="mt-2 flex flex-col gap-1">
-                <button type="button" data-pratica={pratica.id} onClick={() => setEditandoPratica(pratica.id)} className="foco w-full rounded-md border border-borda-fraca p-2 text-left text-xs text-tinta hover:bg-carta-toque">
-                  <span className="block font-medium">{pratica.titulo}</span>
-                  <span className="text-tinta-fraca">{pratica.ladoAluno === "white" ? "Brancas" : "Pretas"} · {pratica.objetivo === "win" ? "vencer" : "empatar"} · força {pratica.engine.skill}</span>
-                  <span className="mt-1 block text-metodo-tinta">Editar prática</span>
+              <div key={pratica.id} className="flex items-stretch rounded-md hover:bg-carta-toque">
+                <button type="button" data-pratica={pratica.id} onClick={() => setEditandoPratica(pratica.id)} title={`Editar a prática «${pratica.titulo}»`} className="foco min-w-0 flex-1 px-2 py-1.5 text-left text-sm text-tinta">
+                  <span className="block leading-snug line-clamp-2 break-words">{pratica.titulo}</span>
+                  <span className="block text-xs text-tinta-fraca">{pratica.ladoAluno === "white" ? "Brancas" : "Pretas"} · {pratica.objetivo === "win" ? "vencer" : "empatar"}</span>
                 </button>
-                <button type="button" onClick={() => setJogandoPratica(pratica)} className="foco w-full rounded-md border border-borda px-2 py-1 text-left text-xs text-tinta hover:bg-carta-toque">⏵ Jogar na prévia</button>
+                <button type="button" onClick={() => setJogandoPratica(pratica)} aria-label={`Testar a prática «${pratica.titulo}»`} title="Jogar contra o computador" className="foco flex min-w-8 items-center justify-center rounded text-sm text-tinta-fraca hover:text-tinta">
+                  <span aria-hidden>▶</span>
+                </button>
               </div>
-            )) : (
-              <>
-                <p className="mt-1 text-xs text-tinta-fraca">Sem prática, a aula não publica: o domínio depende dela.</p>
-                <button type="button" data-pratica="nova" onClick={() => setEditandoPratica("nova")} className="foco mt-2 w-full rounded-md border border-borda px-2 py-2 text-sm text-tinta hover:bg-carta-toque">+ Criar prática</button>
-              </>
-            )}
-          </div>
-          <label className="mt-2 flex flex-col gap-1 text-xs text-tinta-fraca">
-            Nome do capítulo
-            <input key={capitulo.id + capitulo.titulo} defaultValue={capitulo.titulo} onBlur={(e) => aplicar({ tipo: "RENOMEAR_CAPITULO", capituloId: capitulo.id, titulo: e.currentTarget.value })} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm text-tinta" />
-          </label>
-          {/* Trocar a posição inicial vive junto do nome porque as duas são
-              propriedades do capítulo aberto, e não gestos sobre a lista. */}
-          <button
-            type="button"
-            ref={botaoTrocarPosicao}
-            onClick={() => setTrocandoPosicao(true)}
-            className="foco rounded-md border border-borda px-2 py-2 text-xs text-tinta hover:bg-carta-toque"
-          >
-            Trocar a posição inicial…
-          </button>
+            )) : <p className="px-2 text-xs text-aviso-tinta">Obrigatória para publicar: o aluno joga contra o computador.</p>}
+          </section>
         </aside>
 
         <section className="cartao-vazio flex flex-col gap-3 p-3 lg:min-h-0 lg:overflow-y-auto">
@@ -1648,15 +1753,6 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
             <LinhasDoMotor estado={motor.estado} quantas={motor.linhas} />
           </div>
           <div className="flex min-h-0 flex-1 flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold text-tinta">Lances e variantes</h2>
-              {/* A ajuda continua a um clique porque atalho que ninguém descobre não
-                  existe (§16, "descobrível sem botão direito"); ela só deixou de ocupar
-                  uma linha fixa da coluna. */}
-              <AjudaDeAtalhos rotulo="Atalhos da lista de lances">
-                <ListaDeAtalhos escopos={["editor", "tabuleiro"]} />
-              </AjudaDeAtalhos>
-            </div>
             {/* Sem as posições reconstruídas não há SAN nem numeração; o painel cai
                 para o UCI cru, que é feio mas legível, em vez de sumir junto com o
                 tabuleiro. O professor continua conseguindo clicar no lance errado. */}
@@ -1680,102 +1776,147 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
               onAcao={aoAcaoDoLance}
             />
           </div>
-          {/* Teto e rolagem própria. Sem eles, este bloco é um item flex que não encolhe
-              abaixo do próprio conteúdo (~570 px com narração): em 1366×768 a lista acima
-              ficava com 0 px e o bloco era pintado por cima dela, roubando o clique do `•••`
-              da posição inicial. O teto era metade da coluna; a faixa do motor (fatia 9)
-              tirou 9 px da lista e ela caiu de 5 para 4 lances inteiros, então passou a 40%,
-              o primeiro recuo da regra de aceite. */}
-          <div className="border-t border-borda-fraca pt-3 lg:max-h-[40%] lg:overflow-y-auto">
-            <p className="mb-2 text-xs text-tinta-fraca">Símbolo do lance (escolha um)</p>
-            <div id="simbolos-do-lance" className="flex flex-wrap gap-1">
-              {Object.entries(SIMBOLOS_DE_QUALIDADE).map(([nag, simbolo]) => (
-                <button key={nag} type="button" disabled={!selecionado.uci} onClick={() => aplicar({ tipo: "ALTERNAR_NAG", analiseId: analise.id, nodeId: selecionado.id, nag: Number(nag) })} className={`foco rounded border px-2 py-1 text-sm disabled:opacity-40 ${selecionado.nags?.includes(Number(nag)) ? "border-aviso-superficie bg-aviso-superficie/10 text-aviso-tinta" : "border-borda text-tinta"}`}>{simbolo}</button>
-              ))}
+          {/* O lance escolhido (revisão de experiência, 14/9/2026). O comentário já aparece na própria lista
+              de lances, como no Lichess; aqui só se escreve. Comentário e narração pareciam a mesma coisa
+              lado a lado, e viraram duas abas com o nome do que são: o que o aluno lê, e a nota do professor. */}
+          <div className="flex flex-col gap-2 border-t border-borda-fraca pt-3 lg:max-h-[45%] lg:overflow-y-auto">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-sm font-medium text-tinta">{selecionado.uci ? nomeDoLance(selecionado.id) : "Posição inicial"}</p>
+              {selecionado.uci ? (
+                <div id="simbolos-do-lance" role="group" aria-label="Símbolo do lance" className="flex flex-wrap gap-1">
+                  {Object.entries(SIMBOLOS_DE_QUALIDADE).map(([nag, simbolo]) => (
+                    <button key={nag} type="button" aria-pressed={selecionado.nags?.includes(Number(nag)) ?? false} onClick={() => aplicar({ tipo: "ALTERNAR_NAG", analiseId: analise.id, nodeId: selecionado.id, nag: Number(nag) })} className={`foco min-h-8 min-w-8 rounded border px-1.5 text-sm ${selecionado.nags?.includes(Number(nag)) ? "border-aviso-superficie bg-aviso-superficie/10 text-aviso-tinta" : "border-borda text-tinta hover:bg-carta-toque"}`}>{simbolo}</button>
+                  ))}
+                </div>
+              ) : null}
             </div>
             {selecionado.revisao ? (
-              <p className="mt-3 flex flex-wrap items-center gap-2 rounded-md border border-aviso-superficie bg-aviso-superficie/10 p-2 text-xs text-aviso-tinta">
-                A posição inicial mudou depois que isto foi escrito — releia antes de publicar.
+              <p className="flex flex-wrap items-center gap-2 rounded-md border border-aviso-superficie bg-aviso-superficie/10 p-2 text-xs text-aviso-tinta">
+                A posição inicial mudou depois que isto foi escrito — releia.
                 <button type="button" onClick={() => aplicar({ tipo: "REVISAO_RESOLVIDA", alvo: { analiseId: analise.id, nodeId: selecionado.id } })} className="foco rounded border border-aviso-superficie px-2 py-1">
                   Já reli
                 </button>
               </p>
             ) : null}
-            <label className="mt-3 flex flex-col gap-1 text-xs text-tinta-fraca">
-              Comentário desta posição
-              <textarea ref={campoDoComentario} key={selecionado.id + (selecionado.comentario ?? "")} defaultValue={selecionado.comentario ?? ""} onBlur={(e) => aplicar({ tipo: "EDITAR_COMENTARIO", analiseId: analise.id, nodeId: selecionado.id, comentario: e.currentTarget.value })} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta" placeholder="Explique a ideia deste lance…" />
-            </label>
-            {narracoes.map((narracao, ordem) => (
-              <div key={narracao.id} className="mt-3 flex flex-col gap-1 text-xs text-tinta-fraca">
-                {/* A tarja fica **fora** do `<label>`, e o botão com ela. Dentro,
-                    o texto do rótulo entrava no nome acessível do botão: o leitor
-                    de tela anunciava "Narração mostrada ao aluno Marcada para
-                    revisão… O rei preto anda para onde quiser… Já reli" — o
-                    parágrafo inteiro como nome de um botão de duas palavras. */}
-                {narracao.revisao ? (
-                  <p className="flex flex-wrap items-center gap-2 rounded-md border border-aviso-superficie bg-aviso-superficie/10 p-2 text-aviso-tinta">
-                    Marcada para revisão: a posição inicial mudou depois que ela foi escrita.
-                    <button type="button" onClick={() => aplicar({ tipo: "REVISAO_RESOLVIDA", alvo: { capituloId: capitulo.id, narracaoId: narracao.id } })} className="foco rounded border border-aviso-superficie px-2 py-1">
-                      Já reli
+            <div role="tablist" aria-label="O que escrever neste lance" className="flex gap-1 border-b border-borda-fraca">
+              {([["fala", `Fala para o aluno${narracoes.length ? ` (${narracoes.length})` : ""}`], ["nota", `Nota do professor${selecionado.comentario ? " ✓" : ""}`]] as const).map(([aba, rotulo]) => (
+                <button
+                  key={aba}
+                  type="button"
+                  role="tab"
+                  aria-selected={abaDoLance === aba}
+                  onClick={() => setAbaDoLance(aba)}
+                  className={`foco -mb-px min-h-8 border-b-2 px-2 text-xs ${abaDoLance === aba ? "border-metodo-tinta font-medium text-tinta" : "border-transparent text-tinta-fraca hover:text-tinta"}`}
+                >
+                  {rotulo}
+                </button>
+              ))}
+            </div>
+
+            {abaDoLance === "nota" ? (
+              <label className="flex flex-col gap-1 text-xs text-tinta-fraca">
+                <span className="sr-only">Nota do professor</span>
+                <textarea ref={campoDoComentario} aria-label="Nota do professor" key={selecionado.id + (selecionado.comentario ?? "")} defaultValue={selecionado.comentario ?? ""} onBlur={(e) => aplicar({ tipo: "EDITAR_COMENTARIO", analiseId: analise.id, nodeId: selecionado.id, comentario: e.currentTarget.value })} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta" placeholder="Aparece na lista de lances e no PGN." />
+              </label>
+            ) : (
+              <>
+                {narracoes.map((narracao, ordem) => (
+                  <div key={narracao.id} className="flex flex-col gap-1 text-xs text-tinta-fraca">
+                    {narracao.revisao ? (
+                      <p className="flex flex-wrap items-center gap-2 rounded-md border border-aviso-superficie bg-aviso-superficie/10 p-2 text-aviso-tinta">
+                        A posição inicial mudou depois que esta fala foi escrita.
+                        <button type="button" onClick={() => aplicar({ tipo: "REVISAO_RESOLVIDA", alvo: { capituloId: capitulo.id, narracaoId: narracao.id } })} className="foco rounded border border-aviso-superficie px-2 py-1">
+                          Já reli
+                        </button>
+                      </p>
+                    ) : null}
+                    <textarea
+                      aria-label={narracoes.length > 1 ? `Fala ${ordem + 1} de ${narracoes.length} para o aluno` : "Fala para o aluno"}
+                      key={narracao.id + narracao.texto}
+                      defaultValue={narracao.texto}
+                      onBlur={(e) => aplicar({ tipo: "EDITAR_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, texto: e.currentTarget.value })}
+                      rows={4}
+                      className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta"
+                      placeholder="Apague o texto para remover esta fala."
+                    />
+                    <div className="flex flex-wrap items-center gap-2">
+                      <label className="flex items-center gap-1.5 text-tinta" title="Sem marcar, a aula segue sozinha depois do tempo de leitura">
+                        <input type="checkbox" checked={narracao.pausa === "manual"} onChange={(e) => aplicar({ tipo: "DEFINIR_PAUSA_DA_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, pausa: e.currentTarget.checked ? "manual" : "temporizada" })} className="foco h-4 w-4 accent-metodo-superficie" />
+                        Esperar o aluno clicar em Continuar
+                      </label>
+                      {narracoes.length > 1 ? (
+                        <>
+                          <button type="button" aria-disabled={ordem === 0} title={ordem === 0 ? "Já é a primeira fala deste lance" : undefined} aria-label={`Mover a narração ${ordem + 1} para antes`} onClick={() => aplicar({ tipo: "MOVER_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, direcao: "acima" })} className="foco min-h-8 rounded border border-borda px-2 text-tinta aria-disabled:opacity-40">↑ Antes</button>
+                          <button type="button" aria-disabled={ordem === narracoes.length - 1} title={ordem === narracoes.length - 1 ? "Já é a última fala deste lance" : undefined} aria-label={`Mover a narração ${ordem + 1} para depois`} onClick={() => aplicar({ tipo: "MOVER_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, direcao: "abaixo" })} className="foco min-h-8 rounded border border-borda px-2 text-tinta aria-disabled:opacity-40">↓ Depois</button>
+                        </>
+                      ) : null}
+                    </div>
+                  </div>
+                ))}
+                {/* §12.2: criar. Sem esta porta, a narração só existia quando vinha de um PGN importado. */}
+                {capitulo && podeNarrar(capitulo, selecionado.id) ? (
+                  escrevendoNarracao === `${capitulo.id}:${selecionado.id}` ? (
+                    <textarea
+                      autoFocus
+                      aria-label={narracoes.length ? `Fala ${narracoes.length + 1}, nova` : "Fala para o aluno, nova"}
+                      rows={3}
+                      onBlur={(e) => {
+                        const texto = e.currentTarget.value;
+                        setEscrevendoNarracao(null);
+                        if (texto.trim()) aplicar({ tipo: "ADICIONAR_NARRACAO", capituloId: capitulo.id, nodeId: selecionado.id, narracaoId: novoIdDeNarracao(historico.presente, selecionado.id), texto });
+                      }}
+                      className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta"
+                      placeholder="O que o aluno lê neste lance. Deixe vazio para desistir."
+                    />
+                  ) : (
+                    <button type="button" onClick={() => setEscrevendoNarracao(`${capitulo.id}:${selecionado.id}`)} className="foco min-h-8 w-fit rounded border border-borda px-2 text-xs text-tinta hover:bg-carta-toque">
+                      {narracoes.length ? "+ Outra fala neste lance" : "+ Escrever fala para o aluno"}
                     </button>
-                  </p>
+                  )
+                ) : capitulo ? (
+                  <p className="text-xs text-tinta-fraca">Este lance está numa variante: o aluno só assiste à linha do capítulo.</p>
                 ) : null}
-                <label className="flex flex-col gap-1">
-                {narracoes.length > 1 ? `Narração ${ordem + 1} de ${narracoes.length}, mostrada ao aluno` : "Narração mostrada ao aluno"}
-                <textarea key={narracao.id + narracao.texto} defaultValue={narracao.texto} onBlur={(e) => aplicar({ tipo: "EDITAR_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, texto: e.currentTarget.value })} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta" placeholder="Apague o texto para remover esta narração." />
-                </label>
-                <div className="flex flex-wrap items-center gap-2">
-                  {/* §12.2 e §15.2. A frase diz o efeito, e não o nome do campo: "manual"
-                      sozinho não conta ao professor que a aula vai parar. */}
-                  <label className="flex items-center gap-1.5 text-tinta">
-                    <input type="checkbox" checked={narracao.pausa === "manual"} onChange={(e) => aplicar({ tipo: "DEFINIR_PAUSA_DA_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, pausa: e.currentTarget.checked ? "manual" : "temporizada" })} className="foco" />
-                    Parar aqui até o aluno clicar em Continuar
-                  </label>
-                  {/* Os botões de ordem usam `aria-disabled`, e não `disabled`: o
-                      desabilitado de verdade tira o foco de quem acabou de mover a
-                      narração até a ponta, e esconde o `title` que explica. Na ponta o
-                      comando já não faz nada. */}
-                  {narracoes.length > 1 ? (
-                    <>
-                      <button type="button" aria-disabled={ordem === 0} title={ordem === 0 ? "Já é a primeira narração deste lance" : undefined} aria-label={`Mover a narração ${ordem + 1} para antes`} onClick={() => aplicar({ tipo: "MOVER_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, direcao: "acima" })} className="foco rounded border border-borda px-2 py-1 text-tinta aria-disabled:opacity-40">↑ Antes</button>
-                      <button type="button" aria-disabled={ordem === narracoes.length - 1} title={ordem === narracoes.length - 1 ? "Já é a última narração deste lance" : undefined} aria-label={`Mover a narração ${ordem + 1} para depois`} onClick={() => aplicar({ tipo: "MOVER_NARRACAO", capituloId: capitulo.id, narracaoId: narracao.id, direcao: "abaixo" })} className="foco rounded border border-borda px-2 py-1 text-tinta aria-disabled:opacity-40">↓ Depois</button>
-                    </>
-                  ) : null}
-                </div>
-              </div>
-            ))}
-            {/* §12.2: criar. Sem esta porta, a narração só existia quando vinha de um PGN
-                importado, e a aula montada do zero tocava inteira em silêncio. */}
-            {capitulo && podeNarrar(capitulo, selecionado.id) ? (
-              escrevendoNarracao === `${capitulo.id}:${selecionado.id}` ? (
-                <label className="mt-3 flex flex-col gap-1 text-xs text-tinta-fraca">
-                  {narracoes.length ? `Narração ${narracoes.length + 1}, nova` : "Narração mostrada ao aluno, nova"}
-                  <textarea
-                    autoFocus
-                    rows={3}
-                    onBlur={(e) => {
-                      const texto = e.currentTarget.value;
-                      setEscrevendoNarracao(null);
-                      if (texto.trim()) aplicar({ tipo: "ADICIONAR_NARRACAO", capituloId: capitulo.id, nodeId: selecionado.id, narracaoId: novoIdDeNarracao(historico.presente, selecionado.id), texto });
-                    }}
-                    className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm text-tinta"
-                    placeholder="O que o aluno lê neste lance. Deixe vazio para desistir."
-                  />
-                </label>
-              ) : (
-                <div className="mt-3">
-                  <button type="button" onClick={() => setEscrevendoNarracao(`${capitulo.id}:${selecionado.id}`)} className="foco rounded border border-borda px-2 py-1 text-xs text-tinta">
-                    {narracoes.length ? "+ Outra narração neste lance" : "+ Escrever narração"}
-                  </button>
-                </div>
-              )
-            ) : capitulo ? (
-              <p className="mt-3 text-xs text-tinta-fraca">Este lance é de uma variante fora do capítulo. A narração só existe nos lances que o capítulo reproduz.</p>
-            ) : null}
+              </>
+            )}
           </div>
         </section>
       </div>
     </main>
     </VistaDoTabuleiro>
+  );
+}
+
+/** O título de uma seção da coluna da aula, com a ação de acrescentar à direita. */
+function CabecalhoDaSecao({ titulo, children }: { titulo: string; children?: ReactNode }) {
+  return (
+    <div className="flex min-h-8 items-center justify-between gap-2 px-2">
+      <h2 className="text-xs font-semibold uppercase tracking-wide text-tinta-fraca">{titulo}</h2>
+      {children}
+    </div>
+  );
+}
+
+/** O "+" de uma seção. O nome acessível diz o que ele cria; na tela, só o sinal. */
+function BotaoMais({ rotulo, aoClicar, refDoBotao, dado }: { rotulo: string; aoClicar: () => void; refDoBotao?: RefObject<HTMLButtonElement | null>; dado?: Record<string, string> }) {
+  return (
+    <button type="button" ref={refDoBotao} aria-label={rotulo} title={rotulo.slice(2)} onClick={aoClicar} {...dado} className="foco flex min-h-8 min-w-8 items-center justify-center rounded-md border border-borda text-base leading-none text-tinta hover:bg-carta-toque">
+      <span aria-hidden>+</span>
+    </button>
+  );
+}
+
+/**
+ * O "⋯ Mais ações" da barra do topo, com "Atalhos do teclado" no fim. É um componente à parte porque a
+ * lista de atalhos mora no contexto do tabuleiro, que só existe dentro da tela do editor.
+ */
+function MenuMaisAcoes({ itens, refDoBotao }: { itens: ItemDeMenu[]; refDoBotao: RefObject<HTMLButtonElement | null> }) {
+  const abrirAjuda = useAbrirAjudaDosAtalhos();
+  return (
+    <Menu
+      rotulo="Mais ações"
+      refDoBotao={refDoBotao}
+      largura="w-72"
+      itens={[...itens.slice(0, -1), { rotulo: "Atalhos do teclado", ajuda: "Também com a tecla ?", aoEscolher: abrirAjuda }, ...itens.slice(-1)]}
+    />
   );
 }

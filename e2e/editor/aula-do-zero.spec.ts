@@ -18,7 +18,7 @@ import type { Locator, Page } from "@playwright/test";
 import { Chess } from "chess.js";
 import { lerPgnsDoEstudo, type LancePgn, type PartidaPgn } from "../../lib/repertorio/pgn.ts";
 import { textoComParagrafos } from "../../lib/editor-v2/importar-estudo.ts";
-import { abrirAulaPublicada, FIXTURE_DO_ESTUDO } from "../preparo/aulas.ts";
+import { abrirAulaPublicada, abrirPublicar, FIXTURE_DO_ESTUDO, maisAcoes } from "../preparo/aulas.ts";
 import { tentativasDoAluno } from "../preparo/contas.ts";
 import { expect, test } from "../preparo/fixtures.ts";
 import { jogarEsperarResposta, jogarPraticaComMotor } from "../preparo/partida.ts";
@@ -131,14 +131,18 @@ async function desenhar(page: Page, desenhos: Desenho[]) {
 }
 
 async function narrar(page: Page, texto: string) {
-  await page.getByRole("button", { name: "+ Escrever narração" }).click();
+  const aba = page.getByRole("tab", { name: /^Fala para o aluno/ });
+  if ((await aba.getAttribute("aria-selected")) !== "true") await aba.click();
+  await page.getByRole("button", { name: "+ Escrever fala para o aluno" }).click();
   await page.getByPlaceholder("O que o aluno lê neste lance. Deixe vazio para desistir.").fill(texto);
   await page.keyboard.press("Tab");
-  await expect(page.getByRole("textbox", { name: "Narração mostrada ao aluno", exact: true })).toHaveValue(texto);
+  await expect(page.getByRole("textbox", { name: "Fala para o aluno", exact: true })).toHaveValue(texto);
 }
 
 async function comentar(page: Page, texto: string) {
-  const campo = page.getByLabel("Comentário desta posição");
+  const aba = page.getByRole("tab", { name: /^Nota do professor/ });
+  if ((await aba.getAttribute("aria-selected")) !== "true") await aba.click();
+  const campo = page.getByRole("textbox", { name: "Nota do professor" });
   await campo.fill(texto);
   await page.keyboard.press("Tab");
 }
@@ -147,7 +151,7 @@ async function novoCapituloPorFen(page: Page, nome: string, fen: string) {
   await page.getByRole("button", { name: "+ Adicionar capítulo" }).click();
   const janela = page.getByRole("dialog", { name: "Adicionar capítulo" });
   await janela.getByLabel("Nome do capítulo").fill(nome);
-  await janela.getByRole("button", { name: /Colar FEN/ }).click();
+  await janela.getByRole("button", { name: /Colar código da posição/ }).click();
   await janela.getByLabel("FEN da posição").fill(fen);
   const lugar = janela.getByRole("combobox");
   if (await lugar.count()) await lugar.selectOption({ label: "no fim da aula" });
@@ -208,6 +212,7 @@ test("criar a aula do zero pela tela, conferir e publicar", async ({ page }) => 
   await page.getByLabel("Tipo").selectOption({ label: "Aula extra (EX-)" });
   await page.getByLabel("Nível").selectOption({ label: "Nível 1" });
   await page.getByLabel("Classe").selectOption({ label: "Classe E" });
+  await page.getByText("Opções avançadas").click();
   await expect(page.getByText(AULA, { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Criar aula" }).click();
   await page.waitForURL(`**/editor/v2/finais/${AULA}`);
@@ -270,8 +275,8 @@ test("criar a aula do zero pela tela, conferir e publicar", async ({ page }) => 
   await pratica.getByRole("button", { name: /De um capítulo desta aula/ }).click();
   await pratica.getByLabel("Capítulo").selectOption({ label: nomeDe(CAP_03) });
   await pratica.getByRole("button", { name: "Adicionar ao acervo e usar" }).click();
-  const pedeResultado = pratica.getByLabel("Resultado esperado (sem cache da tablebase)");
-  const escolhida = pratica.getByText(/✓ pos-ex-e2e-[a-z]+-\d+ ·/);
+  const pedeResultado = pratica.getByLabel("Resultado esperado");
+  const escolhida = pratica.getByText(/✓ pos-ex-[a-z0-9-]+-\d+ ·/); // reaproveita a posição do acervo com a mesma FEN, se houver
   await expect(escolhida.or(pedeResultado)).toBeVisible();
   if (await pedeResultado.isVisible()) {
     await pedeResultado.selectOption({ label: "brancas ganham" });
@@ -312,8 +317,8 @@ test("criar a aula do zero pela tela, conferir e publicar", async ({ page }) => 
   expect(readFileSync(arquivo(), "utf8")).toBe(antesDoDesfazer);
 
   // A prévia de um capítulo e a de um treino, com `x` e `?` (§25 e a tabela de atalhos).
-  await page.getByRole("button", { name: "Pré-visualizar" }).click();
-  await page.getByRole("dialog", { name: "Pré-visualizar" }).getByRole("button", { name: /Só este capítulo/ }).click();
+  await page.getByRole("button", { name: "Ver como aluno" }).click();
+  await page.getByRole("dialog", { name: "Ver como aluno" }).getByRole("button", { name: /Só este capítulo/ }).click();
   const previa = page.getByRole("dialog", { name: /^Prévia: / });
   await expect(previa.locator(".cg-wrap").first()).toBeVisible();
   await conferirXeInterrogacao(page, previa);
@@ -327,12 +332,11 @@ test("criar a aula do zero pela tela, conferir e publicar", async ({ page }) => 
   await expect(treinoNaPrevia).toBeHidden();
 
   // Conferir e publicar.
-  await page.getByRole("button", { name: "Conferir" }).click();
+  await maisAcoes(page, /Conferir sem publicar/);
   const resultado = page.getByRole("region", { name: "Resultado da conferência" });
   await expect(resultado).toBeVisible({ timeout: 60_000 });
   await expect(resultado, `a conferência não liberou:\n${await resultado.innerText().catch(() => "")}`).toContainText("Pode publicar", { timeout: 60_000 });
-  await page.getByRole("button", { name: "Publicar", exact: true }).click();
-  const publicar = page.getByRole("dialog", { name: "Publicar a aula" });
+  const publicar = await abrirPublicar(page);
   await expect(publicar).toContainText(/Aula extra/);
   await publicar.getByRole("button", { name: "Publicar", exact: true }).click();
   await expect(page.getByRole("status").filter({ hasText: "Publicada neste computador" })).toBeVisible({ timeout: 60_000 });
@@ -377,7 +381,7 @@ async function escreverTreino(page: Page, partida: PartidaPgn) {
   await expect(criar).toBeHidden();
 
   // A autoria: o feedback de cada resposta, o texto do defensor, e as variantes do estudo.
-  await page.getByRole("list", { name: "Treinos da aula" }).getByRole("button", { name: new RegExp(`^${nome}.*Abrir autoria`) }).click();
+  await page.getByRole("list", { name: "Treinos da aula" }).getByRole("button", { name: new RegExp(`^${nome}`) }).first().click();
   const autoria = page.getByRole("dialog", { name: `Editar treino — ${nome}` });
   await autoria.getByLabel("Texto de abertura").fill(prosa(partida.intro));
   const perguntas = autoria.getByRole("navigation", { name: "Perguntas do treino" }).getByRole("button");
@@ -393,7 +397,7 @@ async function escreverTreino(page: Page, partida: PartidaPgn) {
     await primeira.getByLabel("Feedback desta resposta").fill(prosa(lance.comentario));
     const defesa = doDefensor[i];
     if (defesa?.comentario) {
-      await primeira.getByLabel(/^O que o aluno lê quando o defensor joga/).fill(prosa(defesa.comentario));
+      await primeira.getByLabel(/^O que o aluno lê quando o adversário joga/).fill(prosa(defesa.comentario));
     }
     if (i === doAluno.length - 1 && !ramo.isCheckmate()) {
       await autoria.getByLabel("Explicação ao concluir").fill(prosa(lance.comentario));
@@ -406,7 +410,7 @@ async function escreverTreino(page: Page, partida: PartidaPgn) {
       const errado = alternativo.nags.some((n) => ["?", "??", "?!"].includes(n)) || !teste.isCheckmate();
       await autoria.getByRole("button", { name: errado ? "+ Erro conhecido" : "+ Resposta correta" }).click();
       const nova = autoria.locator("article").last();
-      await nova.getByLabel("Lance(s) UCI, separados por vírgula").fill(uci);
+      await nova.getByLabel("Lance(s) no formato de casas, como e2e4, separados por vírgula").fill(uci);
       await nova.getByLabel("Feedback desta resposta").fill(texto);
       if (errado) {
         await nova.getByLabel("Nome do erro conhecido").fill(primeiraFrase(texto));
@@ -415,8 +419,8 @@ async function escreverTreino(page: Page, partida: PartidaPgn) {
     }
     if (defesa) ramo.move(defesa.san);
   }
-  await expect(autoria.getByText("Todas as respostas têm continuação ou término executável.")).toBeVisible();
-  await autoria.getByRole("button", { name: "Salvar autoria" }).click();
+  await expect(autoria.getByText("Todas as respostas levam a outra pergunta ou a um fim.")).toBeVisible();
+  await autoria.getByRole("button", { name: "Salvar treino" }).click();
   await expect(autoria).toBeHidden();
   await esperarSalvo(page);
 
