@@ -54,8 +54,10 @@ export const LIMITES = {
 } as const;
 
 /**
- * Onde o aluno começa: **o rating de entrada que o professor anotou no perfil**
- * (`perfis.rating`), com piso de 600 — decisão do Doug de 15/9, depois de testar.
+ * Onde o aluno começa: **600, para todos** — decisão do Doug de 15/9, depois de
+ * testar. O rating anotado no perfil não entra: "como que o meu aluno de 700
+ * vai começar em 1100?". 600 é o problema mais fácil do recorte
+ * (`scripts/base-rating.ts`); o aluno forte sobe sozinho.
  *
  * ## Por que o RD começa em 80, e não nos 350 do clube
  *
@@ -74,21 +76,11 @@ export const LIMITES = {
  * Com o uso, o RD assenta sozinho perto de 61 e o salto em ~11 pontos (medido em
  * 300 respostas alternadas), sem descer disso: fica no "de 10 a 20" pedido.
  *
- * O salto pequeno é o que obriga o início pelo rating de entrada: sem ele, um
- * aluno de 1400 levaria ~50 acertos para chegar à altura dele. O piso de 600 é
- * o problema mais fácil do recorte (`scripts/base-rating.ts`) — começar abaixo
- * seria subir de graça contra problemas que não mudam.
+ * O preço aceito: com saltos pequenos, um aluno forte leva uns 31 acertos para
+ * ir de 600 a 1000. Começar abaixo de 600 seria subir de graça contra problemas
+ * que não mudam, porque não há problema mais fácil que isso.
  */
-export const INICIO = { rd: 80, volatilidade: 0.06 } as const;
-
-/** O menor rating de início: o problema mais fácil que o recorte tem. */
-export const PISO_DO_INICIO = 600;
-
-/** O rating de início de um aluno, a partir do rating de entrada do perfil (ou nenhum). */
-export function ratingInicial(ratingDeEntrada: number | null | undefined): number {
-  const entrada = typeof ratingDeEntrada === "number" && Number.isFinite(ratingDeEntrada) ? ratingDeEntrada : 0;
-  return Math.min(LIMITES.rating[1], Math.max(PISO_DO_INICIO, Math.round(entrada)));
-}
+export const INICIO = { rating: 600, rd: 80, volatilidade: 0.06 } as const;
 
 /** Ver o cabeçalho: o recorte não guarda o RD do puzzle. */
 export const RD_DO_PUZZLE = 75;

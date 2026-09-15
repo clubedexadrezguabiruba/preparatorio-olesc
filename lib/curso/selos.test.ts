@@ -245,7 +245,7 @@ test("tática rating: +100 acima do início, 1000, 1200 e 1400 pelo máximo, e 1
   assert.equal(acha(jogou(1210.6), "rating-1400").falta, "faltam 189 pontos no seu recorde");
 });
 
-test("tática rating: o +100 é contado do início de cada aluno (piso 600 ou o rating de entrada)", () => {
+test("tática rating: o +100 é contado do início guardado na linha do aluno", () => {
   assert.equal(acha(jogou(699, { inicio: 600 }), "rating-mais-100").ganho, false);
   assert.equal(acha(jogou(700, { inicio: 600 }), "rating-mais-100").ganho, true);
   assert.equal(acha(jogou(1250, { inicio: 1200 }), "rating-mais-100").falta, "faltam 50 pontos no seu recorde");

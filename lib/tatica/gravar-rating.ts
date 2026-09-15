@@ -2,7 +2,7 @@ import "server-only";
 import { criarClienteAdmin } from "../supabase/admin.ts";
 import { lerIndiceDoRating, puzzlePorId } from "./banco.ts";
 import { conferirSolucao } from "./conferir.ts";
-import { aposPuzzle, INICIO, ratingInicial } from "./glicko2.ts";
+import { aposPuzzle, INICIO } from "./glicko2.ts";
 import type { PuzzleServido } from "./puzzles.ts";
 import { escolherPorRating } from "./rating-escolher.ts";
 import type { EstadoDoRating, LinhaDoIndice, RespostaDoRating } from "./rating.ts";
@@ -162,8 +162,8 @@ async function carregar(linha: LinhaDoIndice | null): Promise<PuzzleServido | nu
  * problema.
  *
  * 1. Cria a linha inicial com `upsert ignoreDuplicates` — a segunda chamada não
- *    sobrescreve nada. O rating nasce no **rating de entrada do perfil**, com
- *    piso de 600, e o RD em 80 (`INICIO` e `ratingInicial` em `glicko2.ts`).
+ *    sobrescreve nada. Todo aluno nasce em 600, com RD 80 (`INICIO` em
+ *    `glicko2.ts`); o rating anotado no perfil não entra.
  * 2. Sem pendente, sorteia e grava com `update … where puzzle_pendente is null`:
  *    duas abas abertas ao mesmo tempo sorteiam cada uma, e só uma gravação casa.
  *    A volta seguinte relê e devolve a que ficou.
@@ -174,26 +174,20 @@ export async function garantirPendente(aluno: string, opcoes: Opcoes = {}): Prom
   const agora = opcoes.agora ?? Date.now;
   const db = criarClienteAdmin();
 
-  // O perfil só é lido na primeira vez: depois a linha existe, e o início dela
-  // não muda nem se o professor corrigir o rating de entrada.
-  if (!(await lerLinha(db, aluno))) {
-    const { data: perfil } = await db.from("perfis").select("rating").eq("id", aluno).maybeSingle();
-    const inicio = ratingInicial((perfil as { rating: number | null } | null)?.rating);
-    const { error: erroAoCriar } = await db
-      .from("rating_tatica")
-      .upsert(
-        {
-          aluno,
-          rating: inicio,
-          rating_inicial: inicio,
-          rating_maximo: inicio,
-          rd: INICIO.rd,
-          volatilidade: INICIO.volatilidade,
-        },
-        { onConflict: "aluno", ignoreDuplicates: true },
-      );
-    if (erroAoCriar) return { erro: erroAoCriar.message };
-  }
+  const { error: erroAoCriar } = await db
+    .from("rating_tatica")
+    .upsert(
+      {
+        aluno,
+        rating: INICIO.rating,
+        rating_inicial: INICIO.rating,
+        rating_maximo: INICIO.rating,
+        rd: INICIO.rd,
+        volatilidade: INICIO.volatilidade,
+      },
+      { onConflict: "aluno", ignoreDuplicates: true },
+    );
+  if (erroAoCriar) return { erro: erroAoCriar.message };
 
   // Três voltas bastam: uma para sortear, uma para reler o que ficou, e uma de
   // folga para o pendente que sumiu do disco.

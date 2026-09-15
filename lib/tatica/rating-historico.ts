@@ -41,8 +41,8 @@ function emOrdem<T extends { criada_em: string }>(linhas: readonly T[]): T[] {
  * O recorde é o **máximo de todas as tentativas** até ali, e não o máximo dos
  * pontos do gráfico: o aluno que foi a 900 às 15h e terminou o dia em 850 bateu
  * 900, e é o 900 que `rating_tatica.rating_maximo` guarda. Começa no rating de
- * antes do primeiro problema — o início do aluno, que desde 15/9 é o rating de
- * entrada do perfil (piso 600), e não um número fixo.
+ * antes do primeiro problema, o início do aluno: 600, e 400 para quem jogou
+ * pela regra do primeiro dia.
  */
 export function historicoPorDia(linhas: readonly TentativaDoRating[]): PontoDoRating[] {
   const pontos: PontoDoRating[] = [];

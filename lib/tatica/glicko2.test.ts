@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { aposPuzzle, glicko2, INICIO, LIMITES, RD_DO_PUZZLE, ratingInicial, type Jogador } from "./glicko2.ts";
+import { aposPuzzle, glicko2, INICIO, LIMITES, RD_DO_PUZZLE, type Jogador } from "./glicko2.ts";
 
 /**
  * A fórmula, contra duas réguas que não fomos nós que escrevemos.
@@ -92,7 +92,7 @@ test("sem resultado, só o RD cresce", () => {
 });
 
 test("a progressão de 20 em 20 (Doug, 15/9): com RD 80, seis acertos seguidos dão +17 +17 +16 +16 +16 +15", () => {
-  let j: Jogador = { rating: 600, ...INICIO };
+  let j: Jogador = { ...INICIO };
   const saltos: number[] = [];
   for (let i = 0; i < 6; i++) {
     const depois = aposPuzzle(j, Math.round(j.rating), true);
@@ -101,11 +101,11 @@ test("a progressão de 20 em 20 (Doug, 15/9): com RD 80, seis acertos seguidos d
   }
   assert.deepEqual(saltos, [17, 17, 16, 16, 16, 15]);
   // E errar desce na mesma medida.
-  assert.equal(aposPuzzle({ rating: 600, ...INICIO }, 600, false).delta, -17);
+  assert.equal(aposPuzzle(INICIO, 600, false).delta, -17);
 });
 
 test("com o uso o salto assenta perto de 11, e não some", () => {
-  let j: Jogador = { rating: 800, ...INICIO };
+  let j: Jogador = { ...INICIO, rating: 800 };
   let ultimo = 0;
   for (let i = 1; i <= 300; i++) {
     const depois = aposPuzzle(j, Math.round(j.rating), i % 2 === 0);
@@ -115,13 +115,8 @@ test("com o uso o salto assenta perto de 11, e não some", () => {
   assert.ok(ultimo >= 10 && ultimo <= 12, `depois de 300 problemas o salto é ${ultimo}`);
 });
 
-test("o início é o rating de entrada do perfil, com piso de 600", () => {
-  assert.equal(ratingInicial(1400), 1400);
-  assert.equal(ratingInicial(1187.6), 1188);
-  assert.equal(ratingInicial(450), 600, "abaixo do problema mais fácil, começa nele");
-  assert.equal(ratingInicial(null), 600, "sem rating anotado, 600");
-  assert.equal(ratingInicial(undefined), 600);
-  assert.equal(ratingInicial(9000), 3000, "e não passa do teto do Glicko");
+test("todo aluno começa em 600, com RD 80 (Doug, 15/9)", () => {
+  assert.deepEqual(INICIO, { rating: 600, rd: 80, volatilidade: 0.06 });
 });
 
 test("o delta é a diferença dos ratings arredondados", () => {

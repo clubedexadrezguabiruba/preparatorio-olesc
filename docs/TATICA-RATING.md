@@ -248,16 +248,18 @@ junto). Pediu progressão "de 10 ou 20 em 20". Decidido por ele, no pop-up:
 - **RD inicial 80, e não 350** (`lib/tatica/glicko2.ts`, `INICIO`). A fórmula é a mesma; muda
   a incerteza inicial. Medido: seis acertos seguidos dão +17 +17 +16 +16 +16 +15, e com o uso
   o salto assenta em ~11 (300 respostas simuladas). De 600 a 1000 são ~31 acertos.
-- **Início no rating de entrada do perfil, com piso 600** (`ratingInicial`). Sem rating
-  anotado, 600. Mudar o rating de entrada depois não mexe em quem já começou.
+- **Todo aluno começa em 600** (`INICIO.rating`). Houve uma versão intermediária que começava
+  no rating anotado no perfil; o Doug corrigiu no mesmo dia ("como que o meu aluno de 700 vai
+  começar no nível 1100?"). O rating do perfil não entra. Migration `0013` só corrige o texto
+  da coluna.
 - **Janela de escolha ±20**, depois ±50, ±100, ±200 e ±400 (`lib/tatica/rating-escolher.ts`).
   Há mais de mil problemas a ±20 de 1200.
 - **Migration `0012_tatica_rating_inicio.sql`** (aplicada no banco de teste): coluna
   `rating_inicial` e os defaults novos. O selo "+100" passou a contar do início de cada aluno
   (`rating-mais-100`); os de 1000/1200/1400 exigem ao menos um problema resolvido.
-- Conferido: `db:tatica:rating` com 46 afirmações (entrada 1250 começa em 1250, entrada 450
-  começa em 600, nenhum salto acima de 20, próximo problema a até 20 pontos); no navegador,
-  Correto +17 e +16, Incorreto −17 e −15.
+- Conferido: `db:tatica:rating` com 44 afirmações (conta com 1250 anotado no perfil começa em
+  600, nenhum salto acima de 20, próximo problema a até 20 pontos); no navegador, Correto +17 e
+  +15, Incorreto −16.
 
 **Defeito achado no caminho e corrigido:** com a leitura nova de `garantirPendente`, a página
 respondia "não deu para servir um problema" com a linha já no banco. Causa: o Next reaproveita
@@ -266,7 +268,8 @@ leitura da linha devolvia a primeira. Fix: `abortSignal` novo em `lerLinha`
 (`lib/tatica/gravar-rating.ts`), a saída que a documentação do Next indica. O script do banco
 não roda dentro do Next e não pegava isso; o roteiro de navegador falhava antes e passa depois.
 
-**A conta `alunoteste`** jogou 27 problemas pela regra antiga (400 → 1419, RD 350).
+**A conta `alunoteste`** jogou 27 problemas pela regra antiga (400 → 1419, RD 350). O modo
+rating dela foi zerado a pedido do Doug; ela recomeça em 600.
 
 **Falta:** o teste humano do Doug, o "pode publicar" e, depois dele, `git push origin
 HEAD:main` e `git worktree remove`.

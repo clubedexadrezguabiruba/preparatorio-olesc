@@ -10,7 +10,7 @@ import { nivelConquistado } from "@/lib/curso/progresso";
 import { BLOCOS } from "@/lib/tatica/blocos";
 import { temaAberto } from "@/lib/tatica/conteudo";
 import { progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
-import { ratingInicial } from "@/lib/tatica/glicko2";
+import { INICIO } from "@/lib/tatica/glicko2";
 import { ratingDoAluno } from "@/lib/tatica/rating-leitura";
 
 export const metadata: Metadata = { title: "Tática — Preparatório OLESC" };
@@ -58,7 +58,7 @@ export default async function Tatica() {
         ) : null}
       </header>
 
-      <CartaoDoRating rating={rating} inicio={ratingInicial(perfil.rating)} />
+      <CartaoDoRating rating={rating} inicio={INICIO.rating} />
 
       {BLOCOS.map((bloco) => (
         <section key={bloco.id} className="flex flex-col gap-3">

@@ -22,7 +22,7 @@ export function RatingDeTatica({
 }: {
   estado: EstadoDoRating | null;
   pontos: readonly PontoDoRating[];
-  /** Onde ele começaria, se nunca jogou: o rating de entrada, com piso 600. */
+  /** Onde ele começaria, se nunca jogou (`INICIO.rating`). */
   inicio: number;
 }) {
   return (

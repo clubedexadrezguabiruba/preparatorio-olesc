@@ -12,8 +12,7 @@
  *
  * O que ele afirma:
  *
- *   1. o servidor cria a linha no rating de entrada do perfil (piso 600) com RD
- *      80, serve um pendente a até 20 pontos, e chamar de novo devolve o mesmo
+ *   1. o servidor cria a linha em 600 com RD 80, serve um pendente a até 20 pontos, e chamar de novo devolve o mesmo
  *      (recarregar a página traz o mesmo problema);
  *   2. o pendente é exigido: resposta a outro id é recusada e não grava nada;
  *   3. lances forjados são recusados: o servidor julga, e lance errado não é
@@ -28,8 +27,8 @@
  *   9. o erro vai para a revisão do dia (hoje+2) e não para a prova do tema;
  *  10. `gravarTentativa` recusa o modo rating — ele só entra pela porta própria;
  *  11. o salto é pequeno (Doug, 15/9): o rating anda menos de 20 por problema, e o
- *      próximo problema vem a até 20 pontos do rating novo; quem tem rating de
- *      entrada 1250 começa em 1250, e quem tem 450 começa no piso de 600.
+ *      próximo problema vem a até 20 pontos do rating novo; e o rating anotado no
+ *      perfil não mexe no início: quem tem 1250 anotado começa em 600.
  *
  * No fim, apaga a conta de mentira. `on delete cascade` leva a linha do rating e
  * as tentativas.
@@ -135,7 +134,7 @@ try {
   if ("erro" in primeiro) throw new Error(primeiro.erro);
   afirmar(
     primeiro.estado.rating === 600 && primeiro.estado.ratingInicial === 600,
-    `sem rating de entrada, a linha nasce no piso de 600 (nasceu em ${primeiro.estado.rating})`,
+    `a linha nasce em 600 (nasceu em ${primeiro.estado.rating})`,
   );
   const inicial = await linhaDoRating(aluno);
   afirmar(inicial.rd === 80 && inicial.resolvidos === 0, `RD 80 e zero resolvidos (${inicial.rd}, ${inicial.resolvidos})`);
@@ -307,7 +306,7 @@ try {
   afirmar("erro" in pelaPortaErrada, "gravarTentativa recusa modo = rating");
 
   /* -------------------------------------------------------------- */
-  console.log("\n11. O salto é pequeno, e o início é o rating de entrada");
+  console.log("\n11. O salto é pequeno, e todo aluno começa em 600");
   const todasDoAluno = await tentativas(aluno);
   const saltos = todasDoAluno.map((t) => Math.abs(Math.round(t.rating_depois!) - Math.round(t.rating_antes!)));
   afirmar(saltos.every((s) => s <= 20), `nenhum problema mexeu mais de 20 pontos (${saltos.join(", ")})`);
@@ -322,25 +321,12 @@ try {
   const servido1250 = await garantirPendente(deEntrada1250);
   if ("erro" in servido1250) throw new Error(servido1250.erro);
   afirmar(
-    servido1250.estado.rating === 1250 && servido1250.estado.ratingInicial === 1250,
-    `rating de entrada 1250: começa em 1250 (começou em ${servido1250.estado.rating})`,
+    servido1250.estado.rating === 600 && servido1250.estado.ratingInicial === 600,
+    `rating 1250 anotado no perfil: começa em 600 mesmo assim (começou em ${servido1250.estado.rating})`,
   );
   afirmar(
-    Math.abs(servido1250.puzzle.rating - 1250) <= 20,
-    `e o primeiro problema é de ~1250 (${servido1250.puzzle.rating}, de ${servido1250.puzzle.origem})`,
-  );
-
-  const deEntrada450 = await criarAluno(`teste.rating.b${sufixo}`, 450);
-  const servido450 = await garantirPendente(deEntrada450);
-  if ("erro" in servido450) throw new Error(servido450.erro);
-  afirmar(servido450.estado.rating === 600, `rating de entrada 450: começa no piso de 600 (começou em ${servido450.estado.rating})`);
-
-  // O professor corrige o rating de entrada depois: o início de quem já começou não muda.
-  await admin.from("perfis").update({ rating: 1500 }).eq("id", deEntrada1250);
-  const denovo1250 = await garantirPendente(deEntrada1250);
-  afirmar(
-    !("erro" in denovo1250) && denovo1250.estado.rating === 1250,
-    "mudar o rating de entrada depois não mexe no rating de quem já começou",
+    Math.abs(servido1250.puzzle.rating - 600) <= 20,
+    `e o primeiro problema é de ~600 (${servido1250.puzzle.rating}, de ${servido1250.puzzle.origem})`,
   );
 } catch (erro) {
   falhas.push(erro instanceof Error ? erro.message : String(erro));

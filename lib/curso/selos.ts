@@ -75,9 +75,9 @@ export const DEGRAUS: Record<
   tatica: [3, 7, 13, 24, 36],
   /**
    * Quanto o **recorde** subiu acima do rating com que o aluno começou o modo — o
-   * "+100". Desde 15/9 cada aluno começa no próprio rating de entrada (piso 600),
-   * então o "+100" não pode ser um número fixo como era (500, para quem começava
-   * em 400).
+   * "+100". Conta a partir de `rating_inicial` guardado na linha do aluno (600
+   * para todos), e não de um número escrito aqui: quem jogou pela regra do
+   * primeiro dia começou em 400.
    */
   ratingAcimaDoInicio: [100],
   /**

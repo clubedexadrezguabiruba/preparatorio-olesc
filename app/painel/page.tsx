@@ -38,7 +38,7 @@ import { AGENDA } from "@/lib/tarefas/conteudo";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
 import { BLOCOS } from "@/lib/tatica/blocos";
 import { progressoPorTema, revisaoDeHoje } from "@/lib/tatica/progresso";
-import { ratingInicial } from "@/lib/tatica/glicko2";
+import { INICIO } from "@/lib/tatica/glicko2";
 import { historicoPorDia, ultimosDias } from "@/lib/tatica/rating-historico";
 import { ratingDoAluno, tentativasDoRating } from "@/lib/tatica/rating-leitura";
 import { Agenda } from "./Agenda";
@@ -323,7 +323,7 @@ export default async function Painel() {
           linhasARevisar={linhasARevisar}
         />
 
-        <RatingDeTatica estado={ratingTatica} pontos={curvaDoRating} inicio={ratingInicial(perfil.rating)} />
+        <RatingDeTatica estado={ratingTatica} pontos={curvaDoRating} inicio={INICIO.rating} />
 
         <Prova nivel={nivel} fechado={fechamento.fechado} conquistado={conquistado} />
 
