@@ -11,6 +11,7 @@ import { BLOCOS } from "@/lib/tatica/blocos";
 import { temaAberto } from "@/lib/tatica/conteudo";
 import { progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
 import { INICIO } from "@/lib/tatica/glicko2";
+import { PROBLEMAS_POR_DIA } from "@/lib/tatica/rating";
 import { ratingDoAluno } from "@/lib/tatica/rating-leitura";
 
 export const metadata: Metadata = { title: "Tática — Preparatório OLESC" };
@@ -149,6 +150,10 @@ export default async function Tatica() {
 /**
  * A entrada da tática com rating, no topo da página (decisão do Doug, 15/9).
  *
+ * O subtítulo diz **quando** jogar: depois da revisão e da série, até
+ * `PROBLEMAS_POR_DIA`. Sem isso o modo mais divertido toma o lugar do que a
+ * rotina manda fazer primeiro (revisão de 15/9, item 7).
+ *
  * O `prefetch={false}` no "Jogar" não é enfeite: a página do modo **grava** o
  * problema pendente e a hora em que ele foi servido (`garantirPendente`). Um
  * prefetch do Next abriria a página sem o aluno ter clicado, e o tempo gravado
@@ -161,7 +166,9 @@ function CartaoDoRating({ rating, inicio }: { rating: Awaited<ReturnType<typeof 
         <h2 id="rating-titulo" className="text-base font-semibold text-tinta">
           Tática rating
         </h2>
-        <p className="text-xs text-tinta-fraca">Problemas misturados, e o rating sobe e desce a cada um.</p>
+        <p className="text-xs text-tinta-fraca">
+          Depois da revisão e da série do tema: até {PROBLEMAS_POR_DIA} problemas por dia.
+        </p>
       </div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         {rating ? (
@@ -176,7 +183,7 @@ function CartaoDoRating({ rating, inicio }: { rating: Awaited<ReturnType<typeof 
             </div>
           </dl>
         ) : (
-          <p className="text-sm text-tinta-media">Você começa em {inicio}. Um lance errado encerra o problema.</p>
+          <p className="text-sm text-tinta-media">Problemas misturados, e o rating sobe e desce a cada um. Você começa em {inicio}.</p>
         )}
         <div className="flex items-center gap-3">
           {rating ? (

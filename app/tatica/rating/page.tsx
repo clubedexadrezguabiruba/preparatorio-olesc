@@ -3,6 +3,7 @@ import Link from "next/link";
 import { VistaDoTabuleiro } from "@/components/atalhos/Atalhos";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { garantirPendente } from "@/lib/tatica/gravar-rating";
+import { problemasDeHoje } from "@/lib/tatica/rating-leitura";
 import { Rodada } from "./Rodada";
 
 export const metadata: Metadata = { title: "Tática rating — Preparatório OLESC" };
@@ -19,13 +20,16 @@ export const metadata: Metadata = { title: "Tática rating — Preparatório OLE
  * fechada, cabeçalho de uma linha, sem o `Cabecalho` do site — cada pixel fora
  * do tabuleiro sai do tabuleiro.
  *
+ * O cabeçalho não explica a regra ("errou um lance, o problema acaba"): o Doug
+ * achou a frase estranha e ruim (15/9), e a tela já a mostra acontecendo.
+ *
  * A `key` da `Rodada` é o problema servido: o botão "Recarregar" chama
  * `router.refresh()`, que troca as props sem desmontar o componente de cliente;
  * sem a `key`, o estado velho ficaria na tela com o problema novo.
  */
 export default async function TaticaRating() {
   const perfil = await perfilAtual();
-  const servido = await garantirPendente(perfil.id);
+  const [servido, feitosHoje] = await Promise.all([garantirPendente(perfil.id), problemasDeHoje(perfil.id)]);
 
   return (
     <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
@@ -34,8 +38,6 @@ export default async function TaticaRating() {
           ← Tática
         </Link>
         <h1 className="titulo text-tinta">Tática rating</h1>
-        {/* Só a partir de `lg`: a 360 px esta linha quebrava e fazia o palco rolar 14 px (medido em 15/9). */}
-        <p className="hidden text-xs text-tinta-fraca lg:block">Problemas misturados. Errou um lance, o problema acaba.</p>
       </header>
 
       {"erro" in servido ? (
@@ -45,7 +47,7 @@ export default async function TaticaRating() {
         </div>
       ) : (
         <VistaDoTabuleiro escopos={["tatica-rating"]}>
-          <Rodada key={servido.puzzle.id} inicial={servido} />
+          <Rodada key={servido.puzzle.id} aluno={perfil.id} inicial={servido} feitosHoje={feitosHoje} />
         </VistaDoTabuleiro>
       )}
     </main>

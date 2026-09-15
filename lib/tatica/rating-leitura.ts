@@ -1,18 +1,21 @@
 import "server-only";
+import { hojeNoBrasil } from "@/lib/curso/calendario";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { puzzlesDoTema } from "@/lib/tatica/banco";
 import { ORIGEM_BASE, type EstadoDoRating } from "@/lib/tatica/rating";
 import {
   historicoPorDia,
   resumo,
+  semanaDoAluno,
   temasDaTentativa,
   temasFracos,
-  variacaoNaSemana,
   type PontoDoRating,
   type Resumo,
+  type SemanaDoAluno,
   type TemaFraco,
   type TentativaDoRating,
 } from "@/lib/tatica/rating-historico";
+import { tentativasDaSemanaDaTurma } from "@/lib/tatica/rating-turma";
 
 /**
  * A leitura do modo rating para as telas — do cartão de `/tatica` à tabela da
@@ -56,6 +59,25 @@ export async function ratingDoAluno(aluno: string): Promise<EstadoDoRating | nul
 }
 
 /**
+ * Quantos problemas do modo rating o aluno respondeu hoje, no dia de Guabiruba.
+ * É o "hoje 7 de 70" da tela de jogo (`PROBLEMAS_POR_DIA`).
+ */
+export async function problemasDeHoje(aluno: string, agora: Date = new Date()): Promise<number> {
+  const supabase = await criarClienteServidor();
+  // São Paulo não tem horário de verão desde 2019: a meia-noite de lá é −03:00
+  // (a mesma conta de `lib/finais/escada.ts`).
+  const meiaNoite = new Date(`${hojeNoBrasil(agora)}T00:00:00-03:00`).toISOString();
+  const { count, error } = await supabase
+    .from("tentativas_puzzle")
+    .select("id", { count: "exact", head: true })
+    .eq("aluno", aluno)
+    .eq("modo", "rating")
+    .gte("criada_em", meiaNoite);
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+}
+
+/**
  * Todas as tentativas do modo rating de um aluno, em ordem de data.
  *
  * Pagina, pelo motivo de `idsJaVistos` em `gravar-rating.ts`: a API devolve no
@@ -69,7 +91,7 @@ export async function tentativasDoRating(aluno: string): Promise<TentativaDoRati
   for (let de = 0; ; de += PAGINA) {
     const { data, error } = await supabase
       .from("tentativas_puzzle")
-      .select("puzzle_id, origem, acertou, rating_antes, rating_depois, criada_em")
+      .select("puzzle_id, origem, acertou, rating_antes, rating_depois, temas, criada_em")
       .eq("aluno", aluno)
       .eq("modo", "rating")
       .order("criada_em")
@@ -83,17 +105,17 @@ export async function tentativasDoRating(aluno: string): Promise<TentativaDoRati
 }
 
 /**
- * Os temas fracos de um aluno, com os problemas de 600–700 contados pelos temas
- * que eles próprios trazem (`temasDaTentativa`). Por isso esta leitura abre os
- * dois arquivos de `rating-base/` — uma vez por processo, pelo cache de
- * `lib/tatica/banco.ts`.
+ * Os temas fracos de um aluno, cada problema contado por todos os temas que
+ * traz (`temasDaTentativa`). Desde a 0014 os temas vêm gravados na tentativa;
+ * só uma tentativa de 600–700 anterior a ela obriga a abrir os dois arquivos de
+ * `rating-base/` — uma vez por processo, pelo cache de `lib/tatica/banco.ts`.
  */
 export async function temasFracosDoAluno(linhas: readonly TentativaDoRating[]): Promise<TemaFraco[]> {
-  const precisaDaBase = linhas.some((l) => l.origem === ORIGEM_BASE);
+  const precisaDaBase = linhas.some((l) => l.temas === null && l.origem === ORIGEM_BASE);
   const base = precisaDaBase ? new Map((await puzzlesDoTema(ORIGEM_BASE)).map((p) => [p.id, p.temas])) : new Map();
   return temasFracos(
     linhas.map((l) => ({
-      temas: temasDaTentativa(l.origem, l.origem === ORIGEM_BASE ? (base.get(l.puzzle_id) ?? null) : null),
+      temas: temasDaTentativa(l.origem, l.temas, base.get(l.puzzle_id) ?? null),
       acertou: l.acertou,
     })),
   );
@@ -121,38 +143,33 @@ export async function evolucaoDoAluno(aluno: string, quantasUltimas = 10): Promi
   };
 }
 
-export type RatingNaTurma = EstadoDoRating & { readonly variacao7Dias: number };
+export type RatingNaTurma = EstadoDoRating & {
+  readonly semana: SemanaDoAluno;
+  /** Quando ele respondeu o último problema (ISO), ou `null` se nunca respondeu. */
+  readonly ultimaResposta: string | null;
+};
 
 /**
- * O rating de tática de cada aluno da turma, com a variação dos últimos 7 dias.
- * Só o professor lê todas as linhas — a RLS devolve ao aluno só a dele.
+ * O rating de tática de cada aluno da turma, com a semana dele (variação,
+ * problemas e acerto) e a última vez que jogou. Só o professor lê todas as
+ * linhas — a RLS devolve ao aluno só a dele.
  */
 export async function ratingsDaTurma(agora: Date = new Date()): Promise<Map<string, RatingNaTurma>> {
   const supabase = await criarClienteServidor();
-  // Oito dias atrás cobre com folga os 7 dias de Guabiruba em qualquer fuso;
-  // quem corta no dia certo é `variacaoNaSemana`.
-  const desde = new Date(agora.getTime() - 8 * 24 * 3600 * 1000).toISOString();
-  const [{ data: linhas }, { data: semana }] = await Promise.all([
-    supabase.from("rating_tatica").select(COLUNAS),
-    supabase
-      .from("tentativas_puzzle")
-      .select("aluno, rating_antes, criada_em")
-      .eq("modo", "rating")
-      .gte("criada_em", desde)
-      .order("criada_em")
-      .limit(10_000),
+  const [{ data: linhas }, porAluno] = await Promise.all([
+    supabase.from("rating_tatica").select(`${COLUNAS}, atualizado_em`),
+    tentativasDaSemanaDaTurma(supabase, agora),
   ]);
-  const porAluno = new Map<string, { rating_antes: number; criada_em: string }[]>();
-  for (const l of (semana ?? []) as { aluno: string; rating_antes: number | null; criada_em: string }[]) {
-    if (l.rating_antes === null) continue;
-    const lista = porAluno.get(l.aluno) ?? [];
-    lista.push({ rating_antes: l.rating_antes, criada_em: l.criada_em });
-    porAluno.set(l.aluno, lista);
-  }
   return new Map(
-    ((linhas ?? []) as LinhaDoRating[]).map((l) => [
+    ((linhas ?? []) as (LinhaDoRating & { atualizado_em: string })[]).map((l) => [
       l.aluno,
-      { ...estadoDe(l), variacao7Dias: variacaoNaSemana(porAluno.get(l.aluno) ?? [], l.rating, agora) },
+      {
+        ...estadoDe(l),
+        semana: semanaDoAluno(porAluno.get(l.aluno) ?? [], l.rating, agora),
+        // `atualizado_em` nasce com a linha, na primeira abertura do modo; só
+        // conta como "jogou" depois de uma resposta.
+        ultimaResposta: l.resolvidos > 0 ? l.atualizado_em : null,
+      },
     ]),
   );
 }

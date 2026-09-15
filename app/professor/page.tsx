@@ -9,6 +9,7 @@ import { finaisDaTurma } from "@/lib/finais/progresso";
 import { aprendidasDaTrilha, aulasAbertas, CLASSES, daClasse } from "@/lib/finais/trilha";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { formatarDelta } from "@/lib/tatica/rating";
+import { ultimaVez } from "@/lib/tatica/rating-historico";
 import { ratingsDaTurma } from "@/lib/tatica/rating-leitura";
 import { CadastroDeAluno } from "./CadastroDeAluno";
 
@@ -153,8 +154,8 @@ export default async function Professor() {
           <div className="flex flex-col gap-0.5">
             <h2 className="rotulo text-tinta-fraca">Tática rating — a turma</h2>
             <p className="text-sm text-tinta-media">
-              O rating de tática (todos começam em 600) e quanto ele andou nos últimos 7 dias. Só você vê
-              esta tabela.
+              O rating de tática (todos começam em 600) e a semana de cada um: quanto o rating andou, quantos
+              problemas e o acerto nos últimos 7 dias. Só você vê esta tabela.
             </p>
           </div>
           <div className="cartao overflow-x-auto">
@@ -164,12 +165,16 @@ export default async function Professor() {
                   <Th>Aluno</Th>
                   <Th>Rating de tática</Th>
                   <Th>7 dias</Th>
+                  <Th>Na semana</Th>
+                  <Th>Acerto na semana</Th>
+                  <Th>Última vez</Th>
                   <Th>Resolvidos</Th>
                 </tr>
               </thead>
               <tbody>
                 {turmaNoRating.map((aluno) => {
                   const r = ratings.get(aluno.id);
+                  const acerto = r?.semana.acerto ?? null;
                   return (
                     <tr key={aluno.id} className="border-b border-borda-fraca last:border-0">
                       <Td>
@@ -181,8 +186,24 @@ export default async function Professor() {
                         <span className="font-semibold tabular-nums">{r ? Math.round(r.rating) : "—"}</span>
                       </Td>
                       <Td>
-                        <span className={`tabular-nums ${!r ? "text-tinta-fraca" : r.variacao7Dias < 0 ? "text-erro-texto" : ""}`}>
-                          {r ? formatarDelta(r.variacao7Dias) : "—"}
+                        <span className={`tabular-nums ${!r ? "text-tinta-fraca" : r.semana.variacao < 0 ? "text-erro-texto" : ""}`}>
+                          {r ? formatarDelta(r.semana.variacao) : "—"}
+                        </span>
+                      </Td>
+                      {/* Sem os problemas ao lado, "±0" não separa quem ficou parado de quem jogou e empatou. */}
+                      <Td>
+                        <span className={`tabular-nums ${r?.semana.problemas ? "" : "text-tinta-fraca"}`}>
+                          {r ? r.semana.problemas : "—"}
+                        </span>
+                      </Td>
+                      <Td>
+                        <span className={`tabular-nums ${acerto === null ? "text-tinta-fraca" : ""}`}>
+                          {acerto === null ? "—" : `${acerto}%`}
+                        </span>
+                      </Td>
+                      <Td>
+                        <span className={r?.ultimaResposta ? "" : "text-tinta-fraca"}>
+                          {r?.ultimaResposta ? ultimaVez(r.ultimaResposta) : "—"}
                         </span>
                       </Td>
                       <Td>

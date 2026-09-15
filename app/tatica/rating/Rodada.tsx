@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Chess, type Square } from "chess.js";
+import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color, Key } from "@lichess-org/chessground/types";
 import { useAtalho } from "@/components/atalhos/Atalhos";
 import { BotaoDeSom } from "@/components/BotaoDeSom";
@@ -15,9 +16,19 @@ import { CartaoDeComando, type TomDoCartao } from "@/components/lesson/CartaoDeC
 import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import { applyUci, type Applied } from "@/lib/chess/fen";
 import { armAudioOnFirstGesture, playComplete, playForMove, playRefusal, playSuccess } from "@/lib/sound";
+import { temaPorTag } from "@/lib/tatica/blocos";
 import { lanceCerto, posicaoInicial } from "@/lib/tatica/conferir";
 import type { PuzzleServido } from "@/lib/tatica/puzzles";
-import { formatarDelta, type EstadoDoRating, type RespostaDoRating, type VereditoDoRating } from "@/lib/tatica/rating";
+import {
+  formatarDelta,
+  PROBLEMAS_POR_DIA,
+  type EstadoDoRating,
+  type RespostaDoRating,
+  type VereditoDoRating,
+} from "@/lib/tatica/rating";
+import { armazemDoNavegador, esquecerResposta, guardarResposta, respostaGuardada } from "@/lib/tatica/rating-guardada";
+import { temasDoProblema } from "@/lib/tatica/rating-historico";
+import { quadrosDaSolucao, type Quadro } from "@/lib/tatica/solucao";
 import { ABERTURA_MS, RESPOSTA_MS } from "@/lib/tatica/tempos";
 import { responder } from "./acoes";
 
@@ -39,16 +50,24 @@ import { responder } from "./acoes";
  * ## As regras do Doug (15/9), e onde cada uma mora
  *
  * - **Um lance errado encerra o problema como falha.** Não há segunda chance: o
- *   primeiro lance errado vai ao servidor na hora.
+ *   primeiro lance errado vai ao servidor na hora — e fica guardado no aparelho
+ *   até o servidor julgar, para um F5 sem internet não virar segunda chance
+ *   (`lib/tatica/rating-guardada.ts`).
  * - **Acerto:** "Correto! +8" e a sequência com 🔥; o próximo entra sozinho em
  *   1,5 s (`FIM_DO_ACERTO_MS`).
- * - **Erro:** "Incorreto −12"; o tabuleiro joga a linha certa, lance a lance, e
- *   espera o botão "Próximo" (ou Enter) — errar tem de dar tempo de ver.
+ * - **Erro:** "Incorreto −12", e o nome da tática que o problema era (sem link:
+ *   a tela é de jogo, não de estudo). O tabuleiro joga a linha certa, lance a
+ *   lance, a partir da seta vermelha no lance que o aluno jogou; ◀ ▶ (ou as
+ *   setas do teclado) voltam e avançam, e o "Próximo" (ou Enter) só libera
+ *   depois que a linha foi vista até o fim.
  * - **O tempo não aparece.** Nem relógio, nem "você levou 12 s": o servidor mede
  *   e grava, e o tempo não mexe no rating.
+ * - **Um teto por dia, depois da revisão e da série** (`PROBLEMAS_POR_DIA`): a
+ *   tela conta os de hoje e sugere parar; não trava.
  * - **Falha de rede:** a tela não avança e oferece "Tentar de novo". Reenviar é
  *   seguro — o servidor aceita cada problema uma vez, e o reenvio de uma
- *   resposta já aceita devolve o mesmo resultado.
+ *   resposta já aceita devolve o mesmo resultado. Falha do **servidor** diz que
+ *   foi o servidor, e não "Sem conexão".
  *
  * ## O navegador não decide nada
  *
@@ -79,12 +98,27 @@ type Fase =
   | "errou"
   /** A rede caiu no meio: nada avança até o reenvio. */
   | "sem-rede"
+  /** O servidor falhou ao julgar (banco fora): nada avança até o reenvio. */
+  | "falha"
   /** O servidor recusou (o problema mudou embaixo da aba, por exemplo). */
   | "recusado";
 
 type Estado = Pick<EstadoDoRating, "rating" | "sequencia" | "melhorSequencia">;
 
-export function Rodada({ inicial }: { inicial: { puzzle: PuzzleServido; estado: EstadoDoRating } }) {
+type OndeErrou = { fen: string; indice: number };
+
+const casasDe = (uci: string): [Key, Key] => [uci.slice(0, 2) as Key, uci.slice(2, 4) as Key];
+
+export function Rodada({
+  aluno,
+  inicial,
+  feitosHoje: feitosAoAbrir,
+}: {
+  aluno: string;
+  inicial: { puzzle: PuzzleServido; estado: EstadoDoRating };
+  /** Quantos problemas do modo ele respondeu hoje, quando a página abriu. */
+  feitosHoje: number;
+}) {
   const router = useRouter();
   useEffect(() => armAudioOnFirstGesture(), []);
 
@@ -92,11 +126,13 @@ export function Rodada({ inicial }: { inicial: { puzzle: PuzzleServido; estado: 
   const [estado, setEstado] = useState<Estado>(inicial.estado);
   /** O "+8 / −12" do último problema respondido, enquanto ele está na tela. */
   const [delta, setDelta] = useState<number | null>(null);
+  const [feitosHoje, setFeitosHoje] = useState(feitosAoAbrir);
   const [acabou, setAcabou] = useState(false);
 
   const aoVeredito = useCallback((r: VereditoDoRating) => {
     setEstado({ rating: r.rating, sequencia: r.sequencia, melhorSequencia: r.melhorSequencia });
     setDelta(r.delta);
+    setFeitosHoje((n) => n + 1);
   }, []);
 
   const aoProximo = useCallback(
@@ -129,9 +165,11 @@ export function Rodada({ inicial }: { inicial: { puzzle: PuzzleServido; estado: 
   return (
     <Problema
       key={puzzle.id}
+      aluno={aluno}
       puzzle={puzzle}
       estado={estado}
       delta={delta}
+      feitosHoje={feitosHoje}
       aoVeredito={aoVeredito}
       aoProximo={aoProximo}
     />
@@ -144,21 +182,29 @@ function somDoLance({ game }: Applied): void {
   playForMove({ capture: Boolean(lance?.captured), check: game.inCheck() });
 }
 
+function somDoQuadro(quadro: Quadro): void {
+  playForMove({ capture: quadro.captura, check: quadro.xeque });
+}
+
 /**
  * Um problema. Mora num componente próprio pelo motivo da `NoTabuleiro` da
- * série: todo o estado dele — posição, fase, promoção — volta ao zero quando o
- * próximo entra, e `key={puzzle.id}` faz isso desmontando.
+ * série: todo o estado dele — posição, fase, promoção, solução — volta ao zero
+ * quando o próximo entra, e `key={puzzle.id}` faz isso desmontando.
  */
 function Problema({
+  aluno,
   puzzle,
   estado,
   delta,
+  feitosHoje,
   aoVeredito,
   aoProximo,
 }: {
+  aluno: string;
   puzzle: PuzzleServido;
   estado: Estado;
   delta: number | null;
+  feitosHoje: number;
   aoVeredito: (r: VereditoDoRating) => void;
   aoProximo: (proximo: PuzzleServido | null) => void;
 }) {
@@ -171,10 +217,17 @@ function Problema({
   const [revisao, setRevisao] = useState(0);
   const [promocao, setPromocao] = useState<{ orig: Key; dest: Key } | null>(null);
   const [recusa, setRecusa] = useState<string | null>(null);
+  /** A solução depois do erro, quadro a quadro, e o lance que o aluno jogou. */
+  const [solucao, setSolucao] = useState<{ quadros: Quadro[]; lanceErrado: [Key, Key] | null } | null>(null);
+  const [quadro, setQuadro] = useState(0);
+  /** O "Próximo" só libera depois que o último quadro da solução apareceu. */
+  const [viuAteOFim, setViuAteOFim] = useState(false);
 
   const jogadosRef = useRef<string[]>([]);
   /** O que foi (ou vai) ao servidor — o reenvio manda o mesmo. */
-  const enviadoRef = useRef<{ lances: string[]; ondeErrou: { fen: string; indice: number } | null } | null>(null);
+  const enviadoRef = useRef<{ lances: string[]; ondeErrou: OndeErrou | null } | null>(null);
+  /** Uma resposta no ar: um segundo envio (clique duplo, efeito dobrado do modo estrito) não sai. */
+  const enviandoRef = useRef(false);
   const proximoRef = useRef<PuzzleServido | null>(null);
   const relogiosRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
@@ -182,44 +235,28 @@ function Problema({
     relogiosRef.current.push(setTimeout(fazer, ms));
   }, []);
 
-  // A abertura: a posição parada, e o erro do adversário meio segundo depois.
-  // A limpeza mata todo relógio pendente — o do adversário, o da solução e o
-  // do avanço —, senão um lance do problema desmontado cai no seguinte.
-  useEffect(() => {
-    const relogios = relogiosRef;
-    relogios.current.push(
-      setTimeout(() => {
-        const depois = applyUci(puzzle.fen, puzzle.lances[0]);
-        if (!depois) return;
-        somDoLance(depois);
-        setFen(depois.fen);
-        setUltimoLance([puzzle.lances[0].slice(0, 2) as Key, puzzle.lances[0].slice(2, 4) as Key]);
-        setFase("jogando");
-      }, ABERTURA_MS),
-    );
-    return () => {
-      for (const id of relogios.current) clearTimeout(id);
-      relogios.current = [];
-    };
-  }, [puzzle]);
+  const pararRelogios = useCallback(() => {
+    for (const id of relogiosRef.current) clearTimeout(id);
+    relogiosRef.current = [];
+  }, []);
 
   /**
-   * Joga a linha certa no tabuleiro, lance a lance, a partir de `de` (a posição
-   * e o índice em que o aluno errou). Se o servidor discordou da tela — ela
-   * achou certo e ele não —, a linha recomeça do lance do adversário.
+   * Monta a linha certa em quadros a partir de `de` (a posição e o índice em que
+   * o aluno errou) e a joga sozinha, um quadro por passo. Se o servidor
+   * discordou da tela — ela achou certo e ele não —, a linha recomeça do lance
+   * do adversário, e não há lance errado para marcar.
    */
   const mostrarSolucao = useCallback(
-    (solucao: readonly string[], de: { fen: string; indice: number }) => {
-      let atual = de.fen;
-      solucao.slice(de.indice).forEach((uci, k) => {
+    (lista: readonly string[], de: OndeErrou, lanceErrado: [Key, Key] | null) => {
+      const quadros = quadrosDaSolucao(lista, de);
+      setSolucao({ quadros, lanceErrado });
+      setQuadro(0);
+      setViuAteOFim(quadros.length <= 1);
+      quadros.slice(1).forEach((q, k) => {
         agendar(() => {
-          const depois = applyUci(atual, uci);
-          if (!depois) return;
-          atual = depois.fen;
-          somDoLance(depois);
-          setFen(depois.fen);
-          setUltimoLance([uci.slice(0, 2) as Key, uci.slice(2, 4) as Key]);
-          if (depois.game.isCheckmate()) setReiMatado(toBoardColor(depois.game.turn()));
+          somDoQuadro(q);
+          setQuadro(k + 1);
+          if (k + 2 === quadros.length) setViuAteOFim(true);
         }, (k + 1) * PASSO_DA_SOLUCAO_MS);
       });
     },
@@ -227,8 +264,12 @@ function Problema({
   );
 
   const enviar = useCallback(
-    async (lances: string[], ondeErrou: { fen: string; indice: number } | null) => {
+    async (lances: string[], ondeErrou: OndeErrou | null) => {
+      if (enviandoRef.current) return;
+      enviandoRef.current = true;
       enviadoRef.current = { lances, ondeErrou };
+      // Guardada ANTES de sair: é o que impede a segunda chance do F5 sem internet.
+      guardarResposta(armazemDoNavegador(), aluno, { puzzleId: puzzle.id, lances, ondeErrou });
       setFase("conferindo");
       setRecusa(null);
       let resposta: RespostaDoRating;
@@ -237,13 +278,23 @@ function Problema({
       } catch {
         setFase("sem-rede");
         return;
+      } finally {
+        enviandoRef.current = false;
       }
+
       if ("erro" in resposta) {
         setRecusa(resposta.erro);
+        if (resposta.falhaDoServidor) {
+          setFase("falha");
+          return;
+        }
+        // Recusa de vez (o pendente é outro): a guardada não serve mais.
+        esquecerResposta(armazemDoNavegador(), aluno);
         setFase("recusado");
         return;
       }
 
+      esquecerResposta(armazemDoNavegador(), aluno);
       aoVeredito(resposta);
       proximoRef.current = resposta.proximo;
 
@@ -255,12 +306,56 @@ function Problema({
 
       setFase("errou");
       setRevisao((r) => r + 1);
-      const de = ondeErrou ?? { fen: posicaoInicial(puzzle).fen(), indice: 1 };
-      setFen(de.fen);
-      mostrarSolucao(resposta.solucao, de);
+      const errado = ondeErrou ? lances.at(-1) : undefined;
+      mostrarSolucao(
+        resposta.solucao,
+        ondeErrou ?? { fen: posicaoInicial(puzzle).fen(), indice: 1 },
+        errado ? casasDe(errado) : null,
+      );
     },
-    [agendar, aoProximo, aoVeredito, mostrarSolucao, puzzle],
+    [agendar, aluno, aoProximo, aoVeredito, mostrarSolucao, puzzle],
   );
+
+  const enviarRef = useRef(enviar);
+  useEffect(() => {
+    enviarRef.current = enviar;
+  });
+
+  // A abertura: a posição parada, e o erro do adversário meio segundo depois.
+  //
+  // Com uma resposta guardada para este problema (o F5 depois de a internet
+  // cair), não há abertura nem tabuleiro livre: a posição vai direto para a do
+  // aluno e a resposta guardada sai. Pelo relógio, e não direto no efeito: o
+  // modo estrito monta, desmonta e monta de novo, e a limpeza mata o primeiro
+  // relógio antes de ele disparar — sai um envio só.
+  //
+  // A limpeza mata todo relógio pendente — o do adversário, o da solução e o
+  // do avanço —, senão um lance do problema desmontado cai no seguinte.
+  useEffect(() => {
+    const relogios = relogiosRef;
+    const guardada = respostaGuardada(armazemDoNavegador(), aluno, puzzle.id);
+    relogios.current.push(
+      setTimeout(
+        () => {
+          const depois = applyUci(puzzle.fen, puzzle.lances[0]);
+          if (!depois) return;
+          setFen(depois.fen);
+          setUltimoLance(casasDe(puzzle.lances[0]));
+          if (guardada) {
+            void enviarRef.current([...guardada.lances], guardada.ondeErrou);
+            return;
+          }
+          somDoLance(depois);
+          setFase("jogando");
+        },
+        guardada ? 0 : ABERTURA_MS,
+      ),
+    );
+    return () => {
+      for (const id of relogios.current) clearTimeout(id);
+      relogios.current = [];
+    };
+  }, [aluno, puzzle]);
 
   const jogar = useCallback(
     (uci: string) => {
@@ -278,7 +373,7 @@ function Problema({
       if (!depois) return;
       jogadosRef.current.push(uci);
       setFen(depois.fen);
-      setUltimoLance([uci.slice(0, 2) as Key, uci.slice(2, 4) as Key]);
+      setUltimoLance(casasDe(uci));
 
       const matou = depois.game.isCheckmate();
       if (matou || passo + 1 >= puzzle.lances.length) {
@@ -299,10 +394,7 @@ function Problema({
         if (!resposta) return;
         somDoLance(resposta);
         setFen(resposta.fen);
-        setUltimoLance([
-          puzzle.lances[passo + 1].slice(0, 2) as Key,
-          puzzle.lances[passo + 1].slice(2, 4) as Key,
-        ]);
+        setUltimoLance(casasDe(puzzle.lances[passo + 1]));
         setPasso(passo + 2);
         setFase("jogando");
       }, RESPOSTA_MS);
@@ -314,16 +406,50 @@ function Problema({
     if (enviadoRef.current) void enviar(enviadoRef.current.lances, enviadoRef.current.ondeErrou);
   }, [enviar]);
 
-  const proximo = useCallback(() => {
-    if (fase !== "errou") return false;
+  /**
+   * Vai a um quadro da solução. Mexer à mão para a solução automática: o aluno
+   * que voltou um lance para olhar não quer o tabuleiro andando sozinho por
+   * cima.
+   */
+  const irParaQuadro = useCallback(
+    (alvo: number) => {
+      if (fase !== "errou" || !solucao) return false;
+      const n = Math.max(0, Math.min(solucao.quadros.length - 1, alvo));
+      if (n === quadro) return false;
+      pararRelogios();
+      if (n > quadro) somDoQuadro(solucao.quadros[n]);
+      setQuadro(n);
+      if (n === solucao.quadros.length - 1) setViuAteOFim(true);
+    },
+    [fase, pararRelogios, quadro, solucao],
+  );
+
+  const podeSeguir = fase === "errou" && viuAteOFim;
+  const seguir = useCallback(() => {
+    if (!podeSeguir) return false;
     aoProximo(proximoRef.current);
-  }, [aoProximo, fase]);
+  }, [aoProximo, podeSeguir]);
 
-  useAtalho("rating-proximo", proximo, { ativo: fase === "errou" });
+  useAtalho("rating-proximo", seguir, { ativo: podeSeguir });
+  useAtalho("rating-lance-anterior", () => irParaQuadro(quadro - 1), { ativo: fase === "errou" });
+  useAtalho("rating-lance-seguinte", () => irParaQuadro(quadro + 1), { ativo: fase === "errou" });
 
-  const jogo = useMemo(() => new Chess(fen), [fen]);
+  // Depois do erro, o tabuleiro mostra o quadro da solução; antes, o jogo.
+  const naSolucao = fase === "errou" && solucao ? solucao.quadros[quadro] : null;
+  const fenNaTela = naSolucao?.fen ?? fen;
+  const jogo = useMemo(() => new Chess(fenNaTela), [fenNaTela]);
   const podeMover = fase === "jogando";
   const meuLado: Color = puzzle.fen.split(" ")[1] === "w" ? "black" : "white";
+  const setaDoErro: DrawShape[] | undefined =
+    naSolucao && quadro === 0 && solucao?.lanceErrado
+      ? [{ orig: solucao.lanceErrado[0], dest: solucao.lanceErrado[1], brush: "red" }]
+      : undefined;
+
+  /** "Garfo · Cravada" e o resumo do primeiro — o que o problema era. */
+  const tatica = useMemo(() => {
+    const temas = temasDoProblema(puzzle.origem, puzzle.temas).flatMap((tag) => temaPorTag(tag) ?? []);
+    return temas.length ? { nomes: temas.slice(0, 2).map((t) => t.nome).join(" · "), resumo: temas[0].resumo } : null;
+  }, [puzzle]);
 
   const aoMover = useCallback(
     (orig: Key, dest: Key) => {
@@ -341,7 +467,7 @@ function Problema({
     [jogar, jogo, podeMover],
   );
 
-  const cartao = cartaoDaFase(fase, { meuLado, delta, sequencia: estado.sequencia, recusa });
+  const cartao = cartaoDaFase(fase, { meuLado, delta, sequencia: estado.sequencia, recusa, tatica, feitosHoje });
 
   return (
     <AulaShell
@@ -349,15 +475,16 @@ function Problema({
       tabuleiro={
         <div className="relative">
           <ChessBoard
-            fen={fen}
+            fen={fenNaTela}
             orientation={meuLado}
             turnColor={toBoardColor(jogo.turn())}
             dests={podeMover ? legalDests(jogo) : new Map()}
-            lastMove={ultimoLance}
+            lastMove={naSolucao ? (naSolucao.lance as [Key, Key] | null) : ultimoLance}
             check={jogo.inCheck()}
             viewOnly={!podeMover}
             revision={revisao}
-            matedKing={reiMatado}
+            shapes={setaDoErro}
+            matedKing={naSolucao ? (naSolucao.mateDe ? toBoardColor(naSolucao.mateDe) : null) : reiMatado}
             onMove={aoMover}
           />
           {promocao ? (
@@ -380,7 +507,10 @@ function Problema({
         <>
           <div className="flex items-center justify-between gap-3">
             <p className="rotulo text-metodo-tinta">Tática rating</p>
-            <BotaoDeSom />
+            <div className="flex items-center gap-2">
+              <ContagemDoDia feitos={feitosHoje} />
+              <BotaoDeSom />
+            </div>
           </div>
 
           <div className="flex items-end justify-between gap-3" aria-live="polite">
@@ -406,8 +536,30 @@ function Problema({
           <CartaoDeComando {...cartao} />
 
           <AulaRodape>
-            {fase === "errou" ? <BotaoPrincipal onClick={() => aoProximo(proximoRef.current)}>Próximo →</BotaoPrincipal> : null}
-            {fase === "sem-rede" ? <BotaoPrincipal onClick={reenviar}>Tentar de novo</BotaoPrincipal> : null}
+            {fase === "errou" && solucao && solucao.quadros.length > 1 ? (
+              <div className="flex items-center gap-1" role="group" aria-label="Rever a solução">
+                <BotaoDeLance
+                  rotulo="Lance anterior da solução"
+                  desligado={quadro === 0}
+                  onClick={() => irParaQuadro(quadro - 1)}
+                >
+                  ◀
+                </BotaoDeLance>
+                <BotaoDeLance
+                  rotulo="Lance seguinte da solução"
+                  desligado={quadro === solucao.quadros.length - 1}
+                  onClick={() => irParaQuadro(quadro + 1)}
+                >
+                  ▶
+                </BotaoDeLance>
+              </div>
+            ) : null}
+            {fase === "errou" ? (
+              <BotaoPrincipal onClick={seguir} esperando={!viuAteOFim}>
+                Próximo →
+              </BotaoPrincipal>
+            ) : null}
+            {fase === "sem-rede" || fase === "falha" ? <BotaoPrincipal onClick={reenviar}>Tentar de novo</BotaoPrincipal> : null}
             {fase === "recusado" ? <BotaoPrincipal onClick={() => router.refresh()}>Recarregar</BotaoPrincipal> : null}
             <Link href="/tatica/rating/evolucao" className="foco rounded-lg px-2 py-2.5 text-sm font-medium text-metodo-tinta underline">
               Ver evolução
@@ -419,11 +571,72 @@ function Problema({
   );
 }
 
+/**
+ * "hoje 7 de 70", e ao chegar ao teto, o convite a parar. Uma linha no cabeçalho
+ * do painel, onde não empurra o tabuleiro: a 360 px o palco não tem pixel
+ * sobrando.
+ */
+function ContagemDoDia({ feitos }: { feitos: number }) {
+  if (feitos >= PROBLEMAS_POR_DIA) {
+    return (
+      <span className="rounded-md bg-aviso-superficie/15 px-2 py-1 text-xs font-medium text-aviso-tinta tabular-nums">
+        {feitos} hoje · já pode parar
+      </span>
+    );
+  }
+  return (
+    <span className="text-xs text-tinta-fraca tabular-nums">
+      hoje {feitos} de {PROBLEMAS_POR_DIA}
+    </span>
+  );
+}
+
+function BotaoDeLance({
+  rotulo,
+  desligado,
+  onClick,
+  children,
+}: {
+  rotulo: string;
+  desligado: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={rotulo}
+      title={rotulo}
+      disabled={desligado}
+      onClick={onClick}
+      className="foco flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-borda text-sm text-tinta-media transition-colors hover:bg-carta-toque disabled:opacity-40"
+    >
+      {children}
+    </button>
+  );
+}
+
 function cartaoDaFase(
   fase: Fase,
-  { meuLado, delta, sequencia, recusa }: { meuLado: Color; delta: number | null; sequencia: number; recusa: string | null },
+  {
+    meuLado,
+    delta,
+    sequencia,
+    recusa,
+    tatica,
+    feitosHoje,
+  }: {
+    meuLado: Color;
+    delta: number | null;
+    sequencia: number;
+    recusa: string | null;
+    tatica: { nomes: string; resumo: string } | null;
+    feitosHoje: number;
+  },
 ): { comando: string; estado?: string; tom: TomDoCartao } {
   const lado = meuLado === "white" ? "brancas" : "pretas";
+  // O problema que acabou de fechar a conta do dia diz isso uma vez, no veredito.
+  const fechouODia = feitosHoje === PROBLEMAS_POR_DIA ? `${PROBLEMAS_POR_DIA} hoje: bom lugar para parar.` : null;
   switch (fase) {
     case "abrindo":
       return { comando: "Olhe a posição", estado: "O adversário vai jogar.", tom: "calma" };
@@ -436,17 +649,21 @@ function cartaoDaFase(
     case "acertou":
       return {
         comando: `Correto! ${delta === null ? "" : formatarDelta(delta)}`.trim(),
-        estado: sequencia > 1 ? `🔥 ${sequencia} seguidos` : "O próximo já vem.",
+        estado: fechouODia ?? (sequencia > 1 ? `🔥 ${sequencia} seguidos` : "O próximo já vem."),
         tom: "bom",
       };
     case "errou":
       return {
         comando: `Incorreto ${delta === null ? "" : formatarDelta(delta)}`.trim(),
-        estado: "Veja a solução no tabuleiro. Enter ou Próximo para seguir.",
+        estado: [tatica ? `A tática: ${tatica.nomes}. ${tatica.resumo}` : "Veja a solução no tabuleiro.", fechouODia]
+          .filter(Boolean)
+          .join(" "),
         tom: "ruim",
       };
     case "sem-rede":
       return { comando: "Sem conexão", estado: "Sua resposta não se perdeu: tente de novo.", tom: "aviso" };
+    case "falha":
+      return { comando: "O servidor não conferiu", estado: "Sua resposta está guardada: tente de novo.", tom: "aviso" };
     case "recusado":
       return { comando: "Não deu para conferir", estado: recusa ?? "Recarregue a página.", tom: "aviso" };
   }

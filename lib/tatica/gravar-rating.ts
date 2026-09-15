@@ -5,6 +5,7 @@ import { conferirSolucao } from "./conferir.ts";
 import { aposPuzzle, INICIO } from "./glicko2.ts";
 import type { PuzzleServido } from "./puzzles.ts";
 import { escolherPorRating } from "./rating-escolher.ts";
+import { temasDoProblema } from "./rating-historico.ts";
 import type { EstadoDoRating, LinhaDoIndice, RespostaDoRating } from "./rating.ts";
 
 export type { EstadoDoRating, RespostaDoRating } from "./rating.ts";
@@ -33,14 +34,23 @@ export type { EstadoDoRating, RespostaDoRating } from "./rating.ts";
  * ## O risco conhecido, aceito
  *
  * A solução está no JSON público do tema, como documentam `gravar.ts` e
- * `conferir.ts`: um aluno determinado abre o arquivo e copia. Aqui ele ainda
- * precisaria achar o id pendente em 147 mil. O que sobra contra isso é o
- * `tempo_ms`, que aqui nem vem do navegador: é medido pelo servidor, de
- * `pendente_desde` até a resposta.
+ * `conferir.ts` — e, mais perto ainda, nas props da própria página: a tela de
+ * jogo recebe `puzzle.lances` para dizer "certo" no instante do lance. Um aluno
+ * determinado lê e copia. O que sobra contra isso é o `tempo_ms`, que aqui nem
+ * vem do navegador: é medido pelo servidor, de `pendente_desde` até a resposta.
  */
 
-/** Meia hora, como em `gravar.ts`: acima disso é aba esquecida, não problema pensado. */
-const TEMPO_MAXIMO_MS = 30 * 60 * 1000;
+/**
+ * Cinco minutos: acima disso é aba esquecida, não problema pensado.
+ *
+ * A série usa meia hora (`gravar.ts`), mas lá o relógio é do problema na tela.
+ * Aqui o `pendente_desde` do próximo nasce na resposta do anterior, e cobre a
+ * pausa, a solução mostrada e a aba largada aberta. O tempo não mexe no rating,
+ * mas soma na meta do dia (`minutos_por_dia`, que lê todas as tentativas): com
+ * meia hora, uma aba esquecida valia metade do mínimo que mantém a sequência
+ * (revisão de 15/9).
+ */
+const TEMPO_MAXIMO_MS = 5 * 60 * 1000;
 
 /** Quantos lances uma resposta pode ter. O maior puzzle do recorte tem menos de 20. */
 const LANCES_MAXIMOS = 40;
@@ -197,7 +207,19 @@ export async function garantirPendente(aluno: string, opcoes: Opcoes = {}): Prom
 
     if (linha.puzzle_pendente && linha.tema_pendente) {
       const puzzle = await puzzlePorId(linha.tema_pendente, linha.puzzle_pendente);
-      if (puzzle) return { puzzle: { ...puzzle, origem: linha.tema_pendente }, estado: estadoDe(linha) };
+      if (puzzle) {
+        // O relógio recomeça quando o problema volta à tela. Sem isto, quem
+        // fechou a aba ontem e abriu hoje contava a noite inteira (revisão de
+        // 15/9). O F5 no meio perde os segundos de antes — contar a menos é o
+        // erro barato: o tempo não mexe no rating.
+        const { error } = await db
+          .from("rating_tatica")
+          .update({ pendente_desde: new Date(agora()).toISOString() })
+          .eq("aluno", aluno)
+          .eq("puzzle_pendente", linha.puzzle_pendente);
+        if (error) return { erro: error.message };
+        return { puzzle: { ...puzzle, origem: linha.tema_pendente }, estado: estadoDe(linha) };
+      }
 
       const { error } = await db
         .from("rating_tatica")
@@ -232,7 +254,7 @@ export async function garantirPendente(aluno: string, opcoes: Opcoes = {}): Prom
  * ## A ordem é a trava contra a corrida
  *
  * 1. Lê a linha, julga os lances com `conferirSolucao`, calcula o Glicko-2 e o
- *    tempo (`agora − pendente_desde`, com teto de 30 min) e sorteia o próximo.
+ *    tempo (`agora − pendente_desde`, com teto de 5 min) e sorteia o próximo.
  * 2. **Primeiro** o `update` do rating, com
  *    `where aluno = X and puzzle_pendente = P` e `.select()`.
  * 3. Voltou zero linhas: outro pedido já respondeu P. Recusa, sem gravar nada.
@@ -307,7 +329,8 @@ export async function responderRating(
     .eq("puzzle_pendente", puzzleId)
     .select("aluno");
 
-  if (erroNoRating) return { erro: erroNoRating.message };
+  // Nada foi gravado, e o pendente ainda é este: reenviar é seguro.
+  if (erroNoRating) return { erro: erroNoRating.message, falhaDoServidor: true };
   if (!atualizadas || atualizadas.length === 0) {
     return (await respostaJaGravada(db, aluno, puzzleId, null)) ?? { erro: "este problema já foi respondido" };
   }
@@ -323,6 +346,7 @@ export async function responderRating(
     rating_antes: linha.rating,
     rating_depois: depois.rating,
     rd_depois: depois.rd,
+    temas: temasDoProblema(origem, puzzle.temas),
   });
 
   return {

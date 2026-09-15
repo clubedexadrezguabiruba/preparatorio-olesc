@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { GraficoRating } from "@/components/tatica/GraficoRating";
-import type { EstadoDoRating } from "@/lib/tatica/rating";
+import { PROBLEMAS_POR_DIA, type EstadoDoRating } from "@/lib/tatica/rating";
 import type { PontoDoRating } from "@/lib/tatica/rating-historico";
+
+/** Quando jogar — a mesma frase do cartão de `/tatica` (revisão de 15/9, item 7). */
+const QUANDO = `Depois da revisão e da série do tema: até ${PROBLEMAS_POR_DIA} problemas por dia.`;
 
 /**
  * A tática rating no painel: o número, a minicurva dos últimos 30 dias e o link
@@ -56,11 +59,12 @@ export function RatingDeTatica({
               Jogar
             </Link>
           </div>
+          <p className="basis-full text-xs text-tinta-fraca">{QUANDO}</p>
         </div>
       ) : (
         <div className="flex flex-wrap items-center justify-between gap-3 cartao-vazio px-4 py-3">
           <p className="text-sm text-tinta-media">
-            Problemas misturados, e um rating que sobe e desce a cada um. Você começa em {inicio}.
+            Problemas misturados, e um rating que sobe e desce a cada um. Você começa em {inicio}. {QUANDO}
           </p>
           <Link href="/tatica/rating" prefetch={false} className="foco text-sm font-medium text-metodo-tinta underline">
             Experimentar

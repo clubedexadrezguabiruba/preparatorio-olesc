@@ -66,7 +66,50 @@ export type VereditoDoRating = {
   readonly aviso: string | null;
 };
 
-export type RespostaDoRating = VereditoDoRating | { readonly erro: string };
+export type RecusaDoRating = {
+  readonly erro: string;
+  /**
+   * O servidor falhou (banco fora, exceção), e não recusou: a resposta não foi
+   * julgada e reenviar é seguro. A tela oferece "Tentar de novo" em vez de
+   * "Recarregar" — e não diz "Sem conexão", que seria mentira.
+   */
+  readonly falhaDoServidor?: true;
+};
+
+export type RespostaDoRating = VereditoDoRating | RecusaDoRating;
+
+/**
+ * Quantos problemas por dia a tela sugere, **depois** da revisão e da série do
+ * tema (revisão de 15/9, item 7). O modo é o mais divertido da tática, e sem um
+ * número ele toma o lugar do que a rotina manda fazer primeiro.
+ *
+ * **70, por decisão do Doug (15/9).** A proposta era 15; ele subiu o teto. O
+ * bloco de tática tem 45 min por dia e a turma resolve de 100 a 150 problemas
+ * por semana (`docs/00-PLANO-MESTRE.md`), então 70 num dia é muito treino, e
+ * não um dia normal. É sugestão: nada trava no 71º.
+ */
+export const PROBLEMAS_POR_DIA = 70;
+
+/**
+ * A resposta do servidor, com toda exceção virada `falhaDoServidor`.
+ *
+ * Sem isto, uma exceção dentro da server action chegava ao navegador como a
+ * promessa rejeitada — a mesma de uma queda de rede —, e a tela dizia "Sem
+ * conexão" ao aluno cuja internet estava boa (revisão de 15/9, defeito 4).
+ * Com isto, promessa rejeitada volta a significar só uma coisa: a resposta não
+ * chegou.
+ */
+export async function respostaProtegida(
+  responder: () => Promise<RespostaDoRating>,
+  aoFalhar: (erro: unknown) => void = () => {},
+): Promise<RespostaDoRating> {
+  try {
+    return await responder();
+  } catch (erro) {
+    aoFalhar(erro);
+    return { erro: "o servidor não conseguiu conferir", falhaDoServidor: true };
+  }
+}
 
 /** "+8", "−12" (com o sinal de menos tipográfico), "±0" — o delta como a tela o escreve. */
 export function formatarDelta(delta: number): string {

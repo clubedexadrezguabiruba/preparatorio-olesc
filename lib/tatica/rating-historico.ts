@@ -1,4 +1,4 @@
-import { hojeNoBrasil, somarDias } from "../curso/calendario.ts";
+import { diasEntre, hojeNoBrasil, somarDias } from "../curso/calendario.ts";
 import { TEMAS } from "./blocos.ts";
 import { ORIGEM_BASE } from "./rating.ts";
 
@@ -20,6 +20,8 @@ export type TentativaDoRating = {
   readonly acertou: boolean;
   readonly rating_antes: number;
   readonly rating_depois: number;
+  /** Os temas do currículo que o problema traz; `null` antes da 0014. */
+  readonly temas: readonly string[] | null;
   /** ISO, como o Supabase devolve. */
   readonly criada_em: string;
 };
@@ -96,12 +98,58 @@ export function variacaoNaSemana(
   return primeira ? Math.round(ratingAtual) - Math.round(primeira.rating_antes) : 0;
 }
 
+export type SemanaDoAluno = {
+  /** A coluna "7 dias": quanto o rating andou (`variacaoNaSemana`). */
+  readonly variacao: number;
+  /** Quantos problemas ele respondeu nos últimos 7 dias. */
+  readonly problemas: number;
+  readonly acertos: number;
+  /** 0 a 100, arredondado; `null` sem problema na semana. */
+  readonly acerto: number | null;
+};
+
+/**
+ * A semana de um aluno na tabela da turma: a variação, quantos problemas e o
+ * acerto. Sem os problemas ao lado, um "±0" não separa quem ficou parado de
+ * quem jogou cinquenta e empatou — e é essa a pergunta do professor.
+ *
+ * Os mesmos 7 dias de `variacaoNaSemana`, contando hoje, no dia de Guabiruba.
+ */
+export function semanaDoAluno(
+  linhas: readonly Pick<TentativaDoRating, "acertou" | "rating_antes" | "criada_em">[],
+  ratingAtual: number,
+  agora: Date = new Date(),
+): SemanaDoAluno {
+  const desde = somarDias(hojeNoBrasil(agora), -6);
+  const daSemana = linhas.filter((l) => hojeNoBrasil(new Date(l.criada_em)) >= desde);
+  const { resolvidos, acertos, acerto } = resumo(daSemana);
+  return { variacao: variacaoNaSemana(daSemana, ratingAtual, agora), problemas: resolvidos, acertos, acerto };
+}
+
+/**
+ * "hoje", "ontem", "há 3 dias" — quando o aluno respondeu o último problema, no
+ * dia de Guabiruba. A coluna "Última vez" da tabela da turma.
+ */
+export function ultimaVez(quando: string, agora: Date = new Date()): string {
+  const dias = diasEntre(hojeNoBrasil(new Date(quando)), hojeNoBrasil(agora));
+  if (dias <= 0) return "hoje";
+  if (dias === 1) return "ontem";
+  return `há ${dias} dias`;
+}
+
 /* ------------------------------------------------------------------ *
  * Os temas fracos
  * ------------------------------------------------------------------ */
 
-/** Abaixo disto, um tema não entra na conta: 1 de 2 é sorte, não fraqueza. */
-export const MINIMO_POR_TEMA = 5;
+/**
+ * Abaixo disto, um tema não entra na conta.
+ *
+ * Era 5 até a revisão de 15/9: com 5 problemas, 2 acertos contra 3 é ruído, e o
+ * aluno era mandado estudar um tema por causa de um dia ruim. Com 15 a taxa já
+ * diz alguma coisa — e, como o problema agora conta por todos os temas que
+ * traz, os temas comuns chegam a 15 depressa.
+ */
+export const MINIMO_POR_TEMA = 15;
 
 /** Quantos temas fracos a tela mostra. */
 export const TEMAS_FRACOS = 3;
@@ -110,17 +158,36 @@ const TAGS = new Set(TEMAS.map((t) => t.tag));
 const ORDEM = new Map(TEMAS.map((t, i) => [t.tag, i]));
 
 /**
+ * Os temas do currículo que um problema traz: o tema do arquivo de onde ele foi
+ * servido primeiro, depois os outros do Lichess que o currículo tem, sem
+ * repetir. `middlegame`, `short`, `crushing` e afins ficam fora — não são tema
+ * que o aluno estude.
+ *
+ * É o que `responderRating` grava em `tentativas_puzzle.temas`, e o que a tela
+ * de jogo diz depois de um erro ("Era: Garfo").
+ */
+export function temasDoProblema(origem: string, temas: readonly string[]): string[] {
+  return [...new Set([origem, ...temas])].filter((t) => TAGS.has(t));
+}
+
+/**
  * Por quais temas do currículo uma tentativa conta.
  *
- * - Problema servido do arquivo de um tema: conta por **aquele** tema, o mesmo
- *   que a tentativa grava em `tema`.
- * - Problema de 600–700 (`rating-base`), que não mora em tema nenhum: conta
- *   pelos temas que o **próprio problema** traz (`temas[]` do Lichess), dos que
- *   o currículo tem. Um "mateIn1 hangingPiece" errado conta nos dois.
+ * - Com `temas` gravados (desde a 0014): por **todos** eles. Um problema de
+ *   garfo e cravada errado conta nos dois.
+ * - Tentativa antiga, sem `temas`, servida do arquivo de um tema: por aquele
+ *   tema, o mesmo que ela grava em `tema`.
+ * - Tentativa antiga de 600–700 (`rating-base`), que não mora em tema nenhum:
+ *   pelos temas que o próprio problema traz no arquivo (`temasDaBase`).
  */
-export function temasDaTentativa(origem: string, temasDoProblema: readonly string[] | null): string[] {
+export function temasDaTentativa(
+  origem: string,
+  temasGravados: readonly string[] | null,
+  temasDaBase: readonly string[] | null = null,
+): string[] {
+  if (temasGravados) return [...new Set(temasGravados)].filter((t) => TAGS.has(t));
   if (origem !== ORIGEM_BASE) return TAGS.has(origem) ? [origem] : [];
-  return (temasDoProblema ?? []).filter((t) => TAGS.has(t));
+  return (temasDaBase ?? []).filter((t) => TAGS.has(t));
 }
 
 export type TemaFraco = {

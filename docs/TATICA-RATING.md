@@ -273,3 +273,64 @@ rating dela foi zerado a pedido do Doug; ela recomeça em 600.
 
 **Falta:** o teste humano do Doug, o "pode publicar" e, depois dele, `git push origin
 HEAD:main` e `git worktree remove`.
+
+## Pente fino de 15/9 — o que o Doug escolheu, e o que ficou de fora
+
+Com o modo pronto, dois assistentes leram o código: um pelo lado do aluno e do professor,
+outro pela parte técnica. O Doug escolheu da lista: corrigir os quatro defeitos, e fazer os
+itens 5 (dizer a tática no erro, **sem link**), 6 (rever a solução), 7 (dizer quando jogar),
+9 (temas fracos) e 10 (a tabela da turma).
+
+**Fora, por decisão dele:** dar pesos aos temas na mistura (item 8) e mostrar o tempo ao
+professor (item 13). O item 11 (erros lotando a revisão) fica para **medir depois de uma
+semana com a turma** — nada foi mexido. O item 12 (modo aquecimento antes das rodadas)
+segue sem decisão.
+
+**Além da lista, decisão do Doug:** a frase "Problemas misturados. Errou um lance, o
+problema acaba" **sai da tela de jogo** ("estranha e ruim"). O cartão de `/tatica` guarda o
+que ela dizia de útil.
+
+### Os quatro defeitos, com o antes e o depois medidos
+
+| # | Defeito | Onde | Prova |
+|---|---|---|---|
+| 1 | A coluna "7 dias" do professor lia a semana da turma numa consulta só, e a API corta em 1.000 linhas: quem jogou **depois** das mil primeiras respostas da turma aparecia com "±0". | `lib/tatica/rating-turma.ts` (novo, com `todasAsPaginas`) | `db:tatica:rating` §12, contra o banco: com 1.000 linhas de um aluno e 5 de outro, o segundo lia **0 problemas e ±0** antes; agora lê 5, 3 acertos e +50. |
+| 2 | O relógio do próximo problema começava na resposta do anterior, com teto de 30 min — e esse tempo **soma na meta do dia** (`minutos_por_dia`). Fechar a aba e voltar amanhã dava meia hora de "treino" num problema. | `gravar-rating.ts`: `garantirPendente` regrava `pendente_desde` ao servir, e o teto do modo cai para **5 min** | `db:tatica:rating` §7: três horas de pendente davam 1.800.000 ms; agora a reabertura mede **76 ms**, e a aba esquecida sem reabrir para em 300.000 ms. |
+| 3 | **Segunda chance sem querer:** a tela percebe o lance errado antes do servidor. Sem internet nessa hora, um F5 trazia o mesmo problema zerado e o aluno jogava o lance certo. | `lib/tatica/rating-guardada.ts` (novo) + `Rodada.tsx`: a resposta é guardada no aparelho antes de sair e reenviada ao abrir | `tatica:rating:tela -- segunda-chance`: antes, depois do F5 o cartão dizia "Encontre o melhor lance" e o banco tinha **0 tentativas**; agora diz "Incorreto" e o banco tem o erro. |
+| 4 | Toda exceção do servidor chegava à tela como "Sem conexão", com a internet do aluno boa. | `rating.ts` (`respostaProtegida`), `acoes.ts`, fase `falha` na tela | `lib/tatica/rating.test.ts`: exceção vira `falhaDoServidor`, e o cartão passa a dizer "O servidor não conferiu" com "Tentar de novo". |
+
+### As melhorias
+
+- **Item 5 — a tática no erro.** O cartão diz "A tática: Garfo. Uma peça ataca duas ao mesmo
+  tempo." (nome e resumo de `blocos.ts`, até dois nomes). Sem link, como o Doug pediu.
+- **Item 6 — rever a solução.** A linha certa vira quadros (`lib/tatica/solucao.ts`, com
+  teste): o "Próximo" só libera depois do último quadro, ◀ ▶ (e ← →) andam pela linha, e uma
+  **seta vermelha** marca o lance que o aluno jogou, na posição do erro.
+- **Item 7 — quando jogar.** `PROBLEMAS_POR_DIA` = **70** (a proposta era 15; o Doug subiu o
+  teto). Os cartões de `/tatica` e do painel dizem "Depois da revisão e da série do tema: até
+  70 problemas por dia"; a tela de jogo conta "hoje 7 de 70" e, no 70º, troca para
+  "70 hoje · já pode parar". Não trava nada.
+- **Item 9 — temas fracos.** O mínimo por tema vai de 5 para **15**, e cada problema conta
+  por **todos** os temas do currículo que traz. Para isso, a migration aditiva
+  **`0014_tatica_rating_temas.sql`** (aplicada no banco de teste) guarda `temas` na tentativa:
+  a alternativa era abrir ~33 MB de arquivos a cada abertura da evolução. Tentativa antiga,
+  sem a coluna, cai na regra de antes.
+- **Item 10 — a tabela da turma.** Colunas novas: **Na semana**, **Acerto na semana** e
+  **Última vez** (`semanaDoAluno` e `ultimaVez`, puras, com teste). "±0" sozinho não separava
+  quem ficou parado de quem jogou e empatou.
+
+### Verificação desta rodada
+
+- **Portões:** typecheck, lint, **1.377 testes** (eram 1.352), build, conteúdo, 34/34
+  mutações e repertório `--check`.
+- **Banco:** `db:tatica:rating` com **49 afirmações**; `db:rls` verde.
+- **Navegador:** `npm run tatica:rating:tela` (novo, `scripts/conferir-tatica-rating.ts`) com
+  **48 afirmações** em cinco cenários — segunda chance, erro e solução a 1366×768 **e a
+  360×740**, acerto com a contagem do dia, e a tabela do professor. A página **não rola** no
+  erro nas duas telas (0 px). Contas descartáveis, apagadas no fim; o rating da `alunoteste`
+  não se mexe.
+- **Dois defeitos do próprio roteiro**, achados e corrigidos (não eram do site): medir as
+  setas antes de a animação assentar, e jogar o segundo lance enquanto o adversário respondia
+  — o tabuleiro trava nessa fase de propósito.
+- **Falta:** o teste humano do Doug (o arrasto de peça só se prova com a mão) e o item 11,
+  para medir com a turma.

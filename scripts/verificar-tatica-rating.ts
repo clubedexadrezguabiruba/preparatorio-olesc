@@ -18,17 +18,21 @@
  *   3. lances forjados são recusados: o servidor julga, e lance errado não é
  *      acerto; resposta malformada nem chega a julgar;
  *   4. o rating muda — sobe no acerto, desce no erro — e a tentativa guarda o
- *      antes e o depois, com `tema = origem` e `modo = 'rating'`;
+ *      antes e o depois, com `tema = origem`, `modo = 'rating'` e os temas do
+ *      currículo que o problema traz;
  *   5. `Promise.all` de duas respostas iguais grava **exatamente uma** linha e
  *      move o rating uma vez;
  *   6. um pendente que sumiu do disco é substituído por um que existe;
- *   7. o tempo é medido no servidor, de `pendente_desde` até a resposta;
+ *   7. o tempo é medido no servidor, de `pendente_desde` até a resposta; a
+ *      página reaberta recomeça o relógio, e a aba esquecida para em 5 min;
  *   8. o próximo nunca é um problema já visto;
  *   9. o erro vai para a revisão do dia (hoje+2) e não para a prova do tema;
  *  10. `gravarTentativa` recusa o modo rating — ele só entra pela porta própria;
  *  11. o salto é pequeno (Doug, 15/9): o rating anda menos de 20 por problema, e o
  *      próximo problema vem a até 20 pontos do rating novo; e o rating anotado no
- *      perfil não mexe no início: quem tem 1250 anotado começa em 600.
+ *      perfil não mexe no início: quem tem 1250 anotado começa em 600;
+ *  12. a semana da turma (tabela do professor) lê todas as tentativas: o aluno
+ *      que jogou depois de outras mil respostas da turma aparece inteiro.
  *
  * No fim, apaga a conta de mentira. `on delete cascade` leva a linha do rating e
  * as tentativas.
@@ -41,6 +45,8 @@ import { garantirPendente, responderRating } from "../lib/tatica/gravar-rating.t
 import { gravarTentativa } from "../lib/tatica/gravar.ts";
 import type { PuzzleServido } from "../lib/tatica/puzzles.ts";
 import { filaDeRevisao, INTERVALOS_DA_REVISAO, type LinhaDeTentativa } from "../lib/tatica/revisao.ts";
+import { semanaDoAluno, temasDoProblema } from "../lib/tatica/rating-historico.ts";
+import { tentativasDaSemanaDaTurma } from "../lib/tatica/rating-turma.ts";
 import { idsErradosParaAProva } from "../lib/tatica/serie.ts";
 import { carregarEnv } from "./env-local.ts";
 
@@ -85,11 +91,12 @@ async function linhaDoRating(aluno: string): Promise<Linha> {
 async function tentativas(aluno: string) {
   const { data, error } = await admin
     .from("tentativas_puzzle")
-    .select("puzzle_id, tema, origem, modo, acertou, tempo_ms, rating_antes, rating_depois, rd_depois, criada_em")
+    .select("puzzle_id, tema, origem, modo, acertou, tempo_ms, rating_antes, rating_depois, rd_depois, temas, criada_em")
     .eq("aluno", aluno)
     .order("criada_em");
   if (error) throw new Error(`não leu tentativas: ${error.message}`);
   return data as (LinhaDeTentativa & {
+    temas: string[] | null;
     tempo_ms: number;
     rating_antes: number | null;
     rating_depois: number | null;
@@ -198,6 +205,11 @@ try {
     t1?.rating_antes === 600 && t1.rating_depois === depoisDoErro.rating && t1.rd_depois === depoisDoErro.rd,
     `e guarda rating_antes 600, rating_depois ${t1?.rating_depois?.toFixed(2)} e rd_depois ${t1?.rd_depois?.toFixed(2)}`,
   );
+  const temasEsperados = temasDoProblema(primeiro.puzzle.origem, primeiro.puzzle.temas);
+  afirmar(
+    JSON.stringify(t1?.temas) === JSON.stringify(temasEsperados),
+    `e guarda os temas do currículo que o problema traz (${JSON.stringify(t1?.temas)}, do Lichess: ${primeiro.puzzle.temas.join(" ")})`,
+  );
   afirmar(
     forjada.proximo !== null && depoisDoErro.puzzle_pendente === forjada.proximo.id,
     `o próximo já está pendente (${forjada.proximo?.id}, rating ${forjada.proximo?.rating})`,
@@ -264,14 +276,28 @@ try {
   if ("erro" in cronometrado) throw new Error(cronometrado.erro);
   const tempo = (await tentativas(aluno)).find((t) => t.puzzle_id === substituto.id)?.tempo_ms ?? -1;
   afirmar(tempo >= 42_000 && tempo < 60_000, `42 s de pendente viram ${tempo} ms na tentativa`);
+  // Revisão de 15/9, defeito 2: o relógio do próximo começa na resposta do
+  // anterior. Quem fechava a aba e voltava no dia seguinte levava 30 min de
+  // "treino" num problema só — e esses minutos entram na meta do dia.
   await admin
     .from("rating_tatica")
     .update({ pendente_desde: new Date(Date.now() - 3 * 3600_000).toISOString() })
     .eq("aluno", aluno);
-  const esquecido = cronometrado.proximo!;
-  await responderRating(aluno, esquecido.id, ["a1a1"]);
-  const tempoEsquecido = (await tentativas(aluno)).find((t) => t.puzzle_id === esquecido.id)?.tempo_ms ?? -1;
-  afirmar(tempoEsquecido === 30 * 60_000, `três horas de aba aberta ficam no teto de 30 min (${tempoEsquecido})`);
+  const reaberto = cronometrado.proximo!;
+  const servidoDeNovo = await pendente(aluno);
+  afirmar(servidoDeNovo.id === reaberto.id, "a página reaberta três horas depois traz o mesmo problema");
+  await responderRating(aluno, reaberto.id, ["a1a1"]);
+  const tempoReaberto = (await tentativas(aluno)).find((t) => t.puzzle_id === reaberto.id)?.tempo_ms ?? -1;
+  afirmar(tempoReaberto >= 0 && tempoReaberto < 60_000, `e o relógio recomeça na reabertura: a tentativa leva ${tempoReaberto} ms, não 3 h`);
+
+  const esquecido = (await linhaDoRating(aluno)).puzzle_pendente!;
+  await admin
+    .from("rating_tatica")
+    .update({ pendente_desde: new Date(Date.now() - 3 * 3600_000).toISOString() })
+    .eq("aluno", aluno);
+  await responderRating(aluno, esquecido, ["a1a1"]);
+  const tempoEsquecido = (await tentativas(aluno)).find((t) => t.puzzle_id === esquecido)?.tempo_ms ?? -1;
+  afirmar(tempoEsquecido === 5 * 60_000, `três horas de aba aberta, sem reabrir, ficam no teto de 5 min (${tempoEsquecido})`);
 
   /* -------------------------------------------------------------- */
   console.log("\n8. O próximo nunca é um problema já visto");
@@ -327,6 +353,44 @@ try {
   afirmar(
     Math.abs(servido1250.puzzle.rating - 600) <= 20,
     `e o primeiro problema é de ~600 (${servido1250.puzzle.rating}, de ${servido1250.puzzle.origem})`,
+  );
+
+  /* -------------------------------------------------------------- */
+  // Revisão de 15/9, defeito 1: a tabela da turma lia a semana numa consulta
+  // só, e a API corta em 1.000 linhas. Em ordem de data, sumiam as mais novas:
+  // o aluno que jogou depois dos mil primeiros da turma aparecia com "±0".
+  console.log("\n12. A semana da turma lê todas as tentativas, e não só as 1.000 primeiras");
+  const muitoAtivo = await criarAluno(`teste.rating.m${sufixo}`);
+  const poucoAtivo = await criarAluno(`teste.rating.p${sufixo}`);
+  const seisDiasAtras = Date.now() - 6 * 24 * 3600_000;
+  const linhaFalsa = (dono: string, i: number, quando: number, acertou: boolean, ratingAntes: number) => ({
+    aluno: dono,
+    puzzle_id: `falso${i}`,
+    tema: "fork",
+    origem: "fork",
+    acertou,
+    tempo_ms: 1000,
+    modo: "rating",
+    rating_antes: ratingAntes,
+    rating_depois: ratingAntes,
+    rd_depois: 80,
+    criada_em: new Date(quando).toISOString(),
+  });
+  const { error: erroMuito } = await admin
+    .from("tentativas_puzzle")
+    .insert(Array.from({ length: 1000 }, (_, i) => linhaFalsa(muitoAtivo, i, seisDiasAtras + i * 1000, i % 2 === 0, 600)));
+  if (erroMuito) throw new Error(`não inseriu as mil: ${erroMuito.message}`);
+  const { error: erroPouco } = await admin
+    .from("tentativas_puzzle")
+    .insert(Array.from({ length: 5 }, (_, i) => linhaFalsa(poucoAtivo, i, Date.now() - (5 - i) * 60_000, i < 3, 700 + 10 * i)));
+  if (erroPouco) throw new Error(`não inseriu as cinco: ${erroPouco.message}`);
+
+  const semana = await tentativasDaSemanaDaTurma(admin);
+  afirmar(semana.get(muitoAtivo)?.length === 1000, `as mil do aluno muito ativo foram lidas (${semana.get(muitoAtivo)?.length ?? 0})`);
+  const doPoucoAtivo = semanaDoAluno(semana.get(poucoAtivo) ?? [], 750);
+  afirmar(
+    doPoucoAtivo.problemas === 5 && doPoucoAtivo.acertos === 3 && doPoucoAtivo.variacao === 50,
+    `o aluno que jogou depois dos mil aparece com 5 problemas, 3 acertos e +50 (${doPoucoAtivo.problemas}, ${doPoucoAtivo.acertos}, ${doPoucoAtivo.variacao})`,
   );
 } catch (erro) {
   falhas.push(erro instanceof Error ? erro.message : String(erro));
