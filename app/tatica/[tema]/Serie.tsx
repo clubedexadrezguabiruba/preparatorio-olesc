@@ -45,6 +45,7 @@ import {
   type Fase,
 } from "@/lib/tatica/fala";
 import type { PuzzleServido } from "@/lib/tatica/puzzles";
+import { NOME_DA_BASE, ORIGEM_BASE } from "@/lib/tatica/rating";
 import { NOME_DO_MODO, type Etapa, type Modo } from "@/lib/tatica/serie";
 import {
   ABERTURA_MS,
@@ -409,8 +410,14 @@ export function Serie({
   );
 }
 
-/** O nome em portugues do tema de que o puzzle veio — o que a prova revela. */
+/**
+ * O nome em portugues do tema de que o puzzle veio — o que a prova revela.
+ *
+ * O erro do modo rating num problema de 600–700 volta na revisão do dia com a
+ * origem `rating-base`, que não é tema nenhum: ali o nome é "Tática rating".
+ */
 function nomeDoPadrao(p: PuzzleServido): string {
+  if (p.origem === ORIGEM_BASE) return NOME_DA_BASE;
   return temaPorTag(p.origem)?.nome ?? p.origem;
 }
 

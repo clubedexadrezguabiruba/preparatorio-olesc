@@ -47,6 +47,9 @@
  *      fronteira, e é de propósito: `dica_lida` é declaração e o aluno grava;
  *      `tentativa_meiojogo` é veredito de máquina, e um `insert` dele ali seria
  *      o aluno escrevendo o próprio relatório.
+ *  13. na tática com rating (0011) o aluno lê só a própria linha de
+ *      `rating_tatica`, não a atualiza e não a cria — o rating não pode morar
+ *      em `perfis`, que o aluno atualiza.
  *
  * O `with check` é a linha inteira da defesa nas tabelas em que o aluno
  * escreve — sem ele, um `insert` com o `aluno` trocado passaria, a política de
@@ -601,6 +604,30 @@ try {
   afirmar(!erroSemSnapshot, `a chave de serviço guarda a tentativa sem snapshot (${erroSemSnapshot?.message ?? "sem erro"})`);
   const { data: semSnapshotPorA } = await alunoA.from("tentativas_v2_sem_snapshot").select("id");
   afirmar(semSnapshotPorA?.length === 0, `nem o dono lê a tentativa sem snapshot — é do professor (viu ${semSnapshotPorA?.length})`);
+
+  // Tática com rating (migration 0011). É **por causa desta seção** que o rating
+  // mora em tabela própria e não em `perfis.rating`: `perfis_atualiza_o_seu`
+  // deixaria o aluno escrever "2400" no próprio perfil.
+  console.log("\n13. Tática com rating: cada um lê o seu, e ninguém se dá rating");
+  for (const [i, id] of criados.entries()) {
+    const { error } = await admin.from("rating_tatica").insert({ aluno: id, rating: 500 + i * 100, rating_maximo: 500 + i * 100 });
+    if (error) throw new Error(`não semeou rating_tatica de ${id}: ${error.message}`);
+  }
+  const { data: ratingPorA } = await alunoA.from("rating_tatica").select("aluno, rating");
+  afirmar(ratingPorA?.length === 1 && ratingPorA[0].aluno === criados[0], `A lê 1 linha de rating, a dele (viu ${ratingPorA?.length})`);
+  const { data: ratingDeAPorB } = await alunoB.from("rating_tatica").select("aluno").eq("aluno", criados[0]);
+  afirmar(ratingDeAPorB?.length === 0, `B não lê a linha de rating de A (viu ${ratingDeAPorB?.length})`);
+
+  // `update` sem política não dá erro: some calado, com zero linhas. A prova é
+  // reler pelo admin e ver o número de antes.
+  await alunoA.from("rating_tatica").update({ rating: 2400, rating_maximo: 2400, puzzle_pendente: null }).eq("aluno", criados[0]);
+  const { data: ratingDeADepois } = await admin.from("rating_tatica").select("rating, rating_maximo").eq("aluno", criados[0]).single();
+  afirmar(
+    ratingDeADepois?.rating === 500 && ratingDeADepois.rating_maximo === 500,
+    `A não atualiza o próprio rating (continua ${ratingDeADepois?.rating})`,
+  );
+  const { error: erroRatingForjado } = await alunoB.from("rating_tatica").insert({ aluno: criados[1], rating: 3000 });
+  afirmar(Boolean(erroRatingForjado), `B não cria linha de rating por conta própria (${erroRatingForjado?.code ?? "PASSOU!"})`);
 
 } finally {
   await limpar();

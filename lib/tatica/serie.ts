@@ -68,14 +68,20 @@ export const NOME_DA_ETAPA: Record<Etapa, string> = {
  * A fila de revisão a absorve sem mudança nenhuma: ela reage a `acertou`, e
  * não ao modo.
  */
-export type Modo = Etapa | "revisao" | "prova-de-nivel";
+export type Modo = Etapa | "revisao" | "prova-de-nivel" | "rating";
 
-export const MODOS_GRAVAVEIS: readonly Modo[] = [...ETAPAS, "revisao", "prova-de-nivel"];
+/**
+ * `rating` está aqui porque é gravável, mas **não** passa por `gravarTentativa`:
+ * o modo rating tem o próprio caminho (`lib/tatica/gravar-rating.ts`), que exige
+ * o problema pendente e atualiza o rating junto. `gravarTentativa` o recusa.
+ */
+export const MODOS_GRAVAVEIS: readonly Modo[] = [...ETAPAS, "revisao", "prova-de-nivel", "rating"];
 
 export const NOME_DO_MODO: Record<Modo, string> = {
   ...NOME_DA_ETAPA,
   revisao: "Revisão do dia",
   "prova-de-nivel": "Prova de nível",
+  rating: "Tática rating",
 };
 
 /** Quantos puzzles a revisão do dia serve de uma vez. */
@@ -97,7 +103,11 @@ export type LinhaDoTema = {
 
 /**
  * Os ids que o aluno errou no aquecimento ou na série **e ainda não tentou na
- * prova**, na ordem em que apareceram. É o que a tela promete desde o começo
+ * prova**, na ordem em que apareceram.
+ *
+ * O erro do **modo rating** não entra (decisão do Doug, 15/9): ele vai só para a
+ * revisão do dia. O modo rating mistura temas e o aluno não abriu tema nenhum —
+ * cobrá-lo na prova de um tema que ele nem começou seria surpresa, não revisão. É o que a tela promete desde o começo
  * ("os que você errou voltam misturados na prova deste tema") e que, até a
  * F2, o sorteio não cumpria: `sortear` exclui tudo o que já foi visto.
  *
@@ -110,7 +120,7 @@ export function idsErradosParaAProva(linhas: readonly LinhaDoTema[]): string[] {
   const vistos = new Set<string>();
   const errados: string[] = [];
   for (const l of linhas) {
-    if (l.acertou || l.modo === "prova" || l.modo === "revisao") continue;
+    if (l.acertou || l.modo === "prova" || l.modo === "revisao" || l.modo === "rating") continue;
     if (naProva.has(l.puzzle_id) || vistos.has(l.puzzle_id)) continue;
     vistos.add(l.puzzle_id);
     errados.push(l.puzzle_id);

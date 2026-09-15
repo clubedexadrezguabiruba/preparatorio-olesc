@@ -39,6 +39,18 @@ test("puzzle errado volta em dois dias, e não antes", () => {
   assert.equal(filaCompleta(linhas)[0].nivel, 1);
 });
 
+test("o erro do modo rating volta na revisão do dia, com a origem de onde ele sai", () => {
+  // Decisão do Doug de 15/9: o erro no modo rating vai para a revisão do dia (e
+  // não para a prova do tema). A fila reage a `acertou`, não ao modo — este
+  // teste é o que impede alguém de "consertar" isso filtrando por modo.
+  const linhas = [
+    linha("a", "2026-09-14", false, "rating", { tema: "rating-base", origem: "rating-base" }),
+  ];
+  const fila = filaDeRevisao(linhas, "2026-09-16");
+  assert.deepEqual(ids(fila), ["a"]);
+  assert.equal(fila[0].origem, "rating-base");
+});
+
 test("puzzle nunca errado não entra na fila", () => {
   assert.deepEqual(filaCompleta([linha("a", "2026-09-14", true)]), []);
 });

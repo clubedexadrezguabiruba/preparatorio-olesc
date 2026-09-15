@@ -103,6 +103,15 @@ test("os errados da série voltam na prova, e só até ela", () => {
   assert.deepEqual(idsErradosParaAProva(linhas), ["a", "c"]);
 });
 
+test("o erro do modo rating não vai para a prova do tema (decisão do Doug, 15/9)", () => {
+  // Ele vai só para a revisão do dia — ver o teste irmão em `revisao.test.ts`.
+  const linhas = [
+    { puzzle_id: "a", modo: "rating", acertou: false },
+    { puzzle_id: "b", modo: "serie", acertou: false },
+  ];
+  assert.deepEqual(idsErradosParaAProva(linhas), ["b"]);
+});
+
 test("os errados ocupam no máximo metade da prova", () => {
   assert.equal(vagasParaErrados(10, 7), 5);
   assert.equal(vagasParaErrados(3, 7), 2);
