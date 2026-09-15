@@ -31,6 +31,7 @@ import { aplicarRevisaoDaFen } from "./proveniencia.ts";
 import { ehComandoDeIntroducao, executarComandoDeIntroducao, type ComandoDeIntroducaoV2 } from "./introducao.ts";
 import { excluirTreino, moverEtapa } from "./fluxo.ts";
 import { aplicarPlanoDoEstudo, type PlanoDoEstudoV2 } from "./importar-estudo.ts";
+import { mudarModo, type ModoDaParteV2, type ParteDaAulaV2 } from "./mudar-modo.ts";
 import { aplicarEdicaoDePratica, aplicarExclusaoDePratica, aplicarNovaPratica, type PraticaPreparadaV2 } from "./pratica.ts";
 import {
   aplicarRefazerTreino,
@@ -177,6 +178,11 @@ export type ComandoV2 =
   /** §7.1 (fatia 10): a introdução e os quadros — ver `introducao.ts`. */
   | ComandoDeIntroducaoV2
   /**
+   * Muda uma parte da aula para outro modo — introdução, capítulo ou treino (pedido do Doug, 15/9/2026).
+   * A conta é determinística (`mudar-modo.ts`): o que a janela mostrou é o que entra, num Desfazer só.
+   */
+  | { tipo: "MUDAR_MODO"; parte: ParteDaAulaV2; destino: ModoDaParteV2 }
+  /**
    * §13 (fatia 10): um estudo do Lichess inteiro — introdução, capítulos, treinos e a prática — num
    * Desfazer. A prática chega pronta (a posição já entrou no acervo pelo servidor) ou não chega.
    */
@@ -204,6 +210,11 @@ function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<
   }
   if (ehComandoDeIntroducao(comando)) return executarComandoDeIntroducao(aula, comando, positions);
   if (comando.tipo === "IMPORTAR_ESTUDO") return aplicarPlanoDoEstudo(aula, comando.plano, comando.pratica, comando.registroDaPratica);
+  if (comando.tipo === "MUDAR_MODO") {
+    const resultado = mudarModo(aula, comando.parte, comando.destino, positions);
+    if (!resultado.ok) throw new Error(resultado.mensagem);
+    return resultado.mudanca.aula;
+  }
   if (comando.tipo === "MOVER_ETAPA") return moverEtapa(aula, comando.etapaId, comando.para);
   if (comando.tipo === "EXCLUIR_TREINO") return excluirTreino(aula, comando.treinoId);
   if (comando.tipo === "ADICIONAR_PRATICA") return aplicarNovaPratica(aula, comando.preparo);

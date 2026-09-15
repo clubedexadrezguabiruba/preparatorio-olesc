@@ -30,7 +30,7 @@ const novoId = (prefixo: string) => `${prefixo}-${Date.now().toString(36)}-${Mat
  *
  * Cada gesto é um comando do editor, com Desfazer; a tela não guarda cópia do documento.
  */
-export function EditorDeIntroducao({ aula, introducaoId, quadroInicial, positions, aoComando, aoPrever, aoFechar }: {
+export function EditorDeIntroducao({ aula, introducaoId, quadroInicial, positions, aoComando, aoPrever, aoMudarModo, aoFechar }: {
   aula: AulaV2;
   introducaoId: string | null;
   quadroInicial?: string;
@@ -38,6 +38,8 @@ export function EditorDeIntroducao({ aula, introducaoId, quadroInicial, position
   /** Aplica o comando no editor e devolve a recusa em português, ou `null`. */
   aoComando: (comando: ComandoDeIntroducaoV2) => string | null;
   aoPrever: (introducaoId: string) => void;
+  /** "Mudar para…" capítulo ou treino, para o quadro aberto (pedido do Doug, 15/9/2026). */
+  aoMudarModo?: (quadroId: string) => void;
   aoFechar: () => void;
 }) {
   const camada = useRef<HTMLDivElement>(null);
@@ -140,6 +142,9 @@ export function EditorDeIntroducao({ aula, introducaoId, quadroInicial, position
               <button type="button" aria-disabled={indice === introducao.quadros.length - 1} onClick={() => executar({ tipo: "MOVER_QUADRO", introducaoId: introducao.id, quadroId: quadro.id, direcao: "abaixo" })} className="foco rounded border border-borda px-2 py-1 text-xs text-tinta aria-disabled:opacity-40">↓ Depois</button>
               <button type="button" onClick={() => { const copia: QuadroIntroducaoV2 = { ...structuredClone(quadro), id: novoId("quadro") }; if (executar({ tipo: "ADICIONAR_QUADRO", introducaoId: introducao.id, quadro: copia, depoisDe: quadro.id })) setQuadroId(copia.id); }} className="foco rounded border border-borda px-2 py-1 text-xs text-tinta">Duplicar</button>
               <button type="button" onClick={() => { const vizinho = introducao.quadros[indice + 1] ?? introducao.quadros[indice - 1]; if (executar({ tipo: "EXCLUIR_QUADRO", introducaoId: introducao.id, quadroId: quadro.id }) && vizinho) setQuadroId(vizinho.id); }} className="foco rounded border border-erro px-2 py-1 text-xs text-erro-texto">Excluir quadro</button>
+              {aoMudarModo ? (
+                <button type="button" data-mudar-modo-quadro={quadro.id} onClick={() => aoMudarModo(quadro.id)} title="Transformar este quadro em capítulo ou treino" className="foco col-span-2 rounded border border-borda px-2 py-1 text-xs text-tinta hover:bg-carta-toque">Mudar este quadro para…</button>
+              ) : null}
             </div>
           ) : null}
           <label className="mt-2 flex flex-col gap-1 text-xs text-tinta-fraca">

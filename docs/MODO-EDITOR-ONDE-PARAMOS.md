@@ -153,6 +153,11 @@ cada linha aponta a seção que conta a história inteira.
   acelerado, mas 5 das 6 metas de §24 ainda passam do alvo** (116–149 ms contra 100; abrir a árvore
   de 1.000 nós em 2.031 ms contra 2.000) — decisão do Doug pendente. Ver "Fatia 10" e "Parada 10H".
 
+- **Mudar o modo de uma parte, 15/9 (pedido do Doug)** — "Mudar para…" no `•••` do capítulo, do treino e
+  do quadro da introdução: introdução ↔ capítulo ↔ treino, com o que sai e o que fica à vista antes de
+  confirmar e um Desfazer. A importação deixou de perder os lances de um capítulo marcado como introdução.
+  6 testes, ensaio no navegador. **Prática fica para a parada 2.** Ver "Mudar o modo de uma parte".
+
 **Aberto, na ordem:**
 
 1. **10I — o teste humano do Doug** pelo roteiro numerado, reescrito em 14/9 em torno de "editar uma aula
@@ -4833,6 +4838,65 @@ item continua desmarcado.
 **Atualização de 14/9, mesmo dia:** o Doug tirou a árvore de 1.000 nós do teste humano — nenhum estudo do
 site chega perto. O critério passa a ser a pergunta 21 do roteiro novo (a aula real, importada do estudo
 dele, pareceu lenta?); a medida de 1.000 nós continua no ensaio automático como margem.
+
+### Mudar o modo de uma parte depois de importar (15/9/2026, pedido do Doug)
+
+**O pedido:** "importei os capítulos, escolhi o que cada um é — apresentação, aula, treino, prática — e
+depois de confirmar não tem como mudar. Se marquei sem querer um capítulo como apresentação, quero
+poder transformá-lo em treino guiado." Conferido no código: **não existia**. O modo só era escolhido na
+janela do estudo (`PainelDoEstudo`, seletor **Vira**), e cada escolha vira uma estrutura diferente
+(quadro de introdução, capítulo, treino, prática) sem comando que leve de uma à outra. Pior: um capítulo
+**com lances** marcado como introdução **perdia os lances** na importação — o quadro guardava só texto e
+posição.
+
+**As duas decisões do Doug (15/9):** (1) **"Mudar para…" no `•••` de cada parte**, e não reabrir a janela
+do estudo; (2) **guardar o possível** — o que não cabe na parte nova sai, listado antes de confirmar, e o
+Desfazer devolve.
+
+**Parada 1 — introdução ↔ capítulo ↔ treino (entregue):**
+
+- `lib/editor-v2/mudar-modo.ts`: **o capítulo é a ponte** — toda mudança é "a parte vira capítulo" e
+  depois "o capítulo vira o destino" (treino → introdução passa por capítulo). A conta é determinística e
+  roda duas vezes: na janela, para mostrar **Sai / Fica / Para revisar**, e no comando **`MUDAR_MODO`**
+  (um Desfazer).
+  - **capítulo → treino:** a mesma derivação de "Criar treino daqui", independente, e completada como na
+    importação (`completarTreino`, agora exportada): variante com `!`/`!!`/mate → correta, com `?`/`??`/`?!`
+    → erro nomeado no catálogo, sem símbolo → erro marcado para revisar. A narração vira feedback, texto
+    da defesa e objetivo. O treino fica **no lugar do capítulo** no fluxo. Treinos derivados que
+    acompanhavam o capítulo viram independentes antes (senão ficariam com fonte removida e não publicariam).
+  - **treino → capítulo:** a linha principal da análise do treino; feedback, textos das defesas,
+    introdução e explicação final viram narração em cada lance; volta o **id do capítulo de origem** quando
+    está livre; os erros nomeados que só aquele treino usava saem do catálogo.
+  - **capítulo/treino → introdução:** um quadro que aponta para a posição inicial, no fim da introdução
+    que existe (ou uma nova, no lugar da etapa). **A análise fica na aula**, sem capítulo.
+  - **quadro → capítulo:** se a análise do quadro não é mostrada por nenhum capítulo, os lances guardados
+    **voltam**; se é de outro capítulo (o quadro só emprestou a posição), nasce um capítulo de **posição
+    parada**, sem roubar os lances do vizinho. O texto vira narração com pausa manual. **quadro → treino**
+    sem lances é recusado com o motivo.
+- `importar-estudo.ts`: capítulo com lances que vira introdução **guarda a análise** e o quadro aponta
+  para ela.
+- Tela: `DialogoMudarModo.tsx`; "Mudar para…" no `•••` do capítulo (`ListaDeCapitulos`), no `•••` do
+  treino e em "Mudar este quadro para…" no editor da introdução. Opção impossível fica desabilitada com o
+  motivo. Depois de mudar, o capítulo abre, o treino recebe o foco, o quadro abre na introdução.
+
+**Evidência:** `mudar-modo.test.ts` **6/6** sobre o estudo real `hf09xMzS` — importar 03 como introdução
+guarda os lances e "Mudar para capítulo" os traz; capítulo → treino (Qg6?? vira erro, treino jogável) →
+capítulo (mesmo id, mesmo caminho, mesmo lugar, catálogo de volta ao tamanho); capítulo → introdução →
+capítulo; quadro 00 → capítulo parado e treino recusado; treino 07 → introdução → treino (os 3 mates
+voltam); Desfazer devolve o mesmo objeto e recusa não muda nada — **zero problemas de severidade erro**
+em cada estado. `importar-estudo.test.ts` 3/3 intacto. **Ensaio no navegador** (`e2e/editor/mudar-modo.spec.ts`,
+1366×768): capítulo → treino pelo `•••`, treino → capítulo pelo menu do treino (volta o mesmo capítulo
+no mesmo lugar), quadro → treino desabilitado com motivo e → capítulo aceito, Ctrl+Z devolve o quadro —
+**1 passed**; limpeza "984 arquivos conferidos, todos iguais". Foto da janela descrita por subagente:
+nada cortado, rodapé visível sem rolar.
+
+**Os sete portões**, na cópia isolada `../olesc-portoes-00` (duas outras sessões abertas no repositório):
+`typecheck` ✓, `lint` ✓, `npm test` **1.312/1.312**, `build` ✓, `validate:content` ✓ (18 posições, 3
+aulas), `validate:mutations` **58/58**, `repertorio:compilar --check` ✓.
+
+**Parada 2 — prática (aberta):** entrar e sair do modo prática. Depende do acervo (a posição precisa
+entrar pelo servidor, com resultado) e da regra de uma prática por aula, obrigatória para publicar.
+**Não cobre ainda:** teste humano do Doug; "Mudar para…" pelo botão direito (o `•••` é o caminho).
 
 ### O próximo ponto exato (14/9/2026 — retomar daqui)
 

@@ -3,7 +3,7 @@
 import { useState, type DragEvent, type MouseEvent } from "react";
 import type { CapituloV2 } from "@/lib/editor-v2/modelo";
 
-export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDuplicar, aoExcluir, proveniencia = {}, aoProveniencia, aoRenomear, aoTrocarPosicao, aoTrocarOrientacao }: {
+export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDuplicar, aoExcluir, proveniencia = {}, aoProveniencia, aoRenomear, aoTrocarPosicao, aoTrocarOrientacao, aoMudarModo }: {
   capitulos: CapituloV2[];
   atualId: string;
   aoEscolher: (capitulo: CapituloV2) => void;
@@ -28,6 +28,8 @@ export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDu
   aoTrocarPosicao?: (capituloId: string) => void;
   /** Qual cor fica embaixo no tabuleiro do aluno — um clique, desfeito pelo Ctrl+Z. */
   aoTrocarOrientacao?: (capituloId: string, orientacao: CapituloV2["orientacao"]) => void;
+  /** "Mudar para…" introdução ou treino (pedido do Doug, 15/9/2026). */
+  aoMudarModo?: (capituloId: string) => void;
 }) {
   const [renomeando, setRenomeando] = useState<string | null>(null);
   const [arrastando, setArrastando] = useState<number | null>(null);
@@ -154,6 +156,12 @@ export function ListaDeCapitulos({ capitulos, atualId, aoEscolher, aoMover, aoDu
                   >
                     O aluno vê com as {capitulo.orientacao === "white" ? "pretas" : "brancas"} embaixo
                     <span className="block text-xs text-tinta-fraca">Hoje: {capitulo.orientacao === "white" ? "brancas" : "pretas"} embaixo</span>
+                  </button>
+                ) : null}
+                {aoMudarModo ? (
+                  <button type="button" data-mudar-modo-capitulo={capitulo.id} onClick={(evento) => { fecharMenu(evento); aoMudarModo(capitulo.id); }} className="foco rounded px-2 py-1.5 text-left text-sm hover:bg-carta-toque">
+                    Mudar para…
+                    <span className="block text-xs text-tinta-fraca">introdução ou treino</span>
                   </button>
                 ) : null}
                 <hr className="my-1 border-borda-fraca" />

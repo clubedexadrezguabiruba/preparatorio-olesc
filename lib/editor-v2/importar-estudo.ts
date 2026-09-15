@@ -236,6 +236,20 @@ export function planejarEstudo(aula: AulaV2, leitura: LeituraDoEstudo, escolhas:
 
   // Introdução: um quadro por capítulo escolhido, com a posição apontando o capítulo que tem a mesma.
   const quadros = escolhidos.filter((c) => destino(c) === "introducao").map((c) => {
+    // Capítulo com lances que virou quadro: os lances ficam guardados na aula, sem capítulo, e o quadro
+    // aponta para eles. Sem isto, "Mudar para capítulo" depois não teria o que trazer de volta (15/9/2026).
+    if (!aula.introducoes.length && c.lances > 0 && c.jogo.analise) {
+      const propria = comRevisao(c.jogo.analise);
+      analises.push(propria);
+      const { desenhos } = prosaEDesenhos(c.partida.intro ?? "");
+      return {
+        id: `quadro-${c.jogo.capitulo?.id.replace(/^capitulo-/, "") ?? `estudo-${c.numero}`}`,
+        titulo: c.titulo,
+        texto: textoComParagrafos(c.partida.intro) || c.titulo,
+        posicao: { tipo: "referencia" as const, origem: { analiseId: propria.id, nodeId: propria.raizId } },
+        ...(desenhos ? { desenhos } : {}),
+      };
+    }
     const mesma = capitulos.find((capitulo) => {
       const analise = analises.find((a) => a.id === capitulo.analiseId);
       return analise?.inicio.tipo === "fen" && analise.inicio.fen.split(" ").slice(0, 4).join(" ") === c.fen.split(" ").slice(0, 4).join(" ");
@@ -258,8 +272,11 @@ export function planejarEstudo(aula: AulaV2, leitura: LeituraDoEstudo, escolhas:
   return { ok: true, plano: { analises, capitulos, treinos, erros, etapas, avisos, ...(introducao ? { introducao } : {}), ...(pratica ? { pratica } : {}) } };
 }
 
-/** As variantes do lance do aluno viram respostas; o texto do lance do defensor vira o texto da defesa. */
-function completarTreino(treino: TreinoV2, analise: AnaliseV2, c: CapituloDoEstudo, erros: PlanoDoEstudoV2["erros"], avisos: string[], usados: Set<string>): TreinoV2 {
+/**
+ * As variantes do lance do aluno viram respostas; o texto do lance do defensor vira o texto da defesa.
+ * Serve também a "Mudar para treino" (`mudar-modo.ts`): um capítulo que vira treino ganha as mesmas respostas.
+ */
+export function completarTreino(treino: TreinoV2, analise: AnaliseV2, c: Pick<CapituloDoEstudo, "titulo" | "perdas">, erros: PlanoDoEstudoV2["erros"], avisos: string[], usados: Set<string>): TreinoV2 {
   const livre = (base: string) => { let id = base; for (let n = 2; usados.has(id); n += 1) id = `${base}-${n}`; usados.add(id); return id; };
   // As variantes vêm da análise já importada: UCI, legalidade conferida, símbolo e comentário no nó.
 
@@ -316,6 +333,12 @@ function completarTreino(treino: TreinoV2, analise: AnaliseV2, c: CapituloDoEstu
   };
 }
 
+/** O catálogo da aula com os erros nomeados novos no fim; sem erro novo, o catálogo fica como estava. */
+export function comErrosNoCatalogo(aula: AulaV2, erros: PlanoDoEstudoV2["erros"]): AulaV2["catalogo"] {
+  if (!erros.length) return aula.catalogo;
+  return { ...(aula.catalogo ?? { erros: [], mensagensPadrao: { vitoriaForaDoMetodo: "Este lance funciona, mas não é o caminho ensinado.", perdeResultado: "Este lance perde o resultado que a posição permitia.", alternativaDoMetodo: "Boa alternativa. Continue pela linha ensinada." } }), erros: [...(aula.catalogo?.erros ?? []), ...erros] };
+}
+
 export function aplicarPlanoDoEstudo(aula: AulaV2, plano: PlanoDoEstudoV2, pratica?: AulaV2["praticas"][number], registroDaPratica?: AulaV2["proveniencia"][number]): AulaV2 {
   const usados = idsDaAulaV2(aula);
   const novos = [...plano.analises.map((a) => a.id), ...plano.capitulos.map((c) => c.id), ...plano.treinos.map((t) => t.id), ...plano.etapas.map((e) => e.id), ...(plano.introducao ? [plano.introducao.id] : [])];
@@ -331,9 +354,7 @@ export function aplicarPlanoDoEstudo(aula: AulaV2, plano: PlanoDoEstudoV2, prati
     ...aula.fluxo.slice(antes),
     ...(pratica ? [{ id: `etapa-${pratica.id}`, tipo: "pratica" as const, entidadeId: pratica.id }] : []),
   ];
-  const catalogo = plano.erros.length
-    ? { ...(aula.catalogo ?? { erros: [], mensagensPadrao: { vitoriaForaDoMetodo: "Este lance funciona, mas não é o caminho ensinado.", perdeResultado: "Este lance perde o resultado que a posição permitia.", alternativaDoMetodo: "Boa alternativa. Continue pela linha ensinada." } }), erros: [...(aula.catalogo?.erros ?? []), ...plano.erros] }
-    : aula.catalogo;
+  const catalogo = comErrosNoCatalogo(aula, plano.erros);
   const nova: AulaV2 = {
     ...aula,
     ...(catalogo ? { catalogo } : {}),

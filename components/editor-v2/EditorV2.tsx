@@ -31,6 +31,8 @@ import { DialogoPratica } from "@/components/editor-v2/DialogoPratica";
 import { EditorDeIntroducao } from "@/components/editor-v2/EditorDeIntroducao";
 import { PreviaDaIntroducao } from "@/components/editor-v2/PreviaDaIntroducao";
 import { OrdemDaAula } from "@/components/editor-v2/OrdemDaAula";
+import { DialogoMudarModo } from "@/components/editor-v2/DialogoMudarModo";
+import type { ParteDaAulaV2 } from "@/lib/editor-v2/mudar-modo";
 import type { ComandoDeIntroducaoV2 } from "@/lib/editor-v2/introducao";
 import { planejarEstudo } from "@/lib/editor-v2/importar-estudo";
 import { ADVERSARIO_PADRAO, prepararPratica } from "@/lib/editor-v2/pratica";
@@ -230,6 +232,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
   const [editandoIntroducao, setEditandoIntroducao] = useState<{ id: string | null; quadro?: string } | null>(null);
   const [previaDaIntroducao, setPreviaDaIntroducao] = useState<string | null>(null);
   const [vendoOrdem, setVendoOrdem] = useState(false);
+  /** "Mudar para…" (pedido do Doug, 15/9/2026): a parte cujo modo muda — capítulo, treino ou quadro. */
+  const [mudandoModo, setMudandoModo] = useState<ParteDaAulaV2 | null>(null);
   const [salvandoSnapshot, setSalvandoSnapshot] = useState(false);
   /**
    * A prévia (§15), em dois estados: a escolha do escopo, e a prévia rodando.
@@ -375,7 +379,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
     || criandoTreino !== null || editandoTreino !== null || propriedadeTreino !== null || jogandoTreino !== null
     || duplicandoCapitulo !== null || excluindoCapitulo !== null || acaoDoLance !== null || cortando !== null
     || publicandoAula || vendoPublicacoes || convertendoV1 || revisandoProveniencia !== null || editandoPratica !== null || jogandoPratica !== null
-    || editandoIntroducao !== null || previaDaIntroducao !== null || vendoOrdem
+    || editandoIntroducao !== null || previaDaIntroducao !== null || vendoOrdem || mudandoModo !== null
     || fazendoComoAluno || perguntandoAntesDePublicar;
   const estadoDoTeclado = useRef({ analise, janelaAberta });
   useEffect(() => { estadoDoTeclado.current = { analise, janelaAberta }; });
@@ -1419,6 +1423,11 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
             return null;
           }}
           aoPrever={setPreviaDaIntroducao}
+          aoMudarModo={(quadroId) => {
+            if (!editandoIntroducao.id) return;
+            setMudandoModo({ tipo: "quadro", introducaoId: editandoIntroducao.id, quadroId });
+            setEditandoIntroducao(null);
+          }}
           aoFechar={() => {
             setEditandoIntroducao(null);
             requestAnimationFrame(() => document.querySelector<HTMLButtonElement>("[data-introducao]")?.focus());
@@ -1435,6 +1444,27 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
           aula={historico.presente}
           aoMover={(etapaId, para) => aplicar({ tipo: "MOVER_ETAPA", etapaId, para })}
           aoFechar={() => { setVendoOrdem(false); requestAnimationFrame(() => document.querySelector<HTMLButtonElement>("[data-ordem-da-aula]")?.focus()); }}
+        />
+      ) : null}
+
+      {mudandoModo ? (
+        <DialogoMudarModo
+          aula={historico.presente}
+          parte={mudandoModo}
+          positions={positions}
+          aoMudar={(destino, mudanca) => {
+            aplicar({ tipo: "MUDAR_MODO", parte: mudandoModo, destino });
+            setMudandoModo(null);
+            // A tela vai para a parte nova: o capítulo abre no tabuleiro; o treino e o quadro ganham o foco.
+            const nova = mudanca.nova;
+            const ordem = mudanca.aula.fluxo.flatMap((etapa) => etapa.tipo === "capitulo" ? mudanca.aula.capitulos.filter((c) => c.id === etapa.entidadeId) : []);
+            const alvo = nova.tipo === "capitulo" ? ordem.find((c) => c.id === nova.capituloId) : ordem.find((c) => c.id === capitulo?.id) ?? ordem[0];
+            if (alvo && alvo.id !== capitulo?.id) { setCapituloId(alvo.id); setNodeId(alvo.inicioNodeId); }
+            if (nova.tipo === "quadro") setEditandoIntroducao({ id: nova.introducaoId, quadro: nova.quadroId });
+            if (nova.tipo === "treino") requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(`[data-treino-id="${nova.treinoId}"]`)?.focus());
+            if (mudanca.avisos.length) setRecado(`Modo mudado. Para revisar: ${mudanca.avisos.join("; ")}.`);
+          }}
+          aoFechar={() => setMudandoModo(null)}
         />
       ) : null}
 
@@ -1589,6 +1619,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
               aoExcluir={setExcluindoCapitulo}
               aoRenomear={(id, titulo) => aplicar({ tipo: "RENOMEAR_CAPITULO", capituloId: id, titulo })}
               aoTrocarOrientacao={(id, orientacao) => aplicar({ tipo: "DEFINIR_ORIENTACAO_CAPITULO", capituloId: id, orientacao })}
+              aoMudarModo={(id) => setMudandoModo({ tipo: "capitulo", capituloId: id })}
               aoTrocarPosicao={(id) => {
                 const alvo = capitulosOrdenados.find((item) => item.id === id);
                 if (alvo && alvo.id !== capitulo.id) { setCapituloId(alvo.id); setNodeId(alvo.inicioNodeId); }
@@ -1644,6 +1675,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
                           { rotulo: "Editar treino", aoEscolher: () => setEditandoTreino(treino.id) },
                           { rotulo: "Testar como aluno", aoEscolher: jogar },
                           { rotulo: "Ligação com a aula…", ajuda: treino.fonte === "atual" ? "Refazer a partir da aula, ou deixar independente" : "A aula mudou depois deste treino", aoEscolher: () => setPropriedadeTreino(treino.id) },
+                          { rotulo: "Mudar para…", ajuda: "capítulo ou introdução", aoEscolher: () => setMudandoModo({ tipo: "treino", treinoId: treino.id }) },
                           { rotulo: "Excluir treino…", perigo: true, separar: true, aoEscolher: () => { if (window.confirm(`Excluir o treino «${treino.titulo}»? Ele sai da aula e da ordem das etapas. O Desfazer devolve.`)) aplicar({ tipo: "EXCLUIR_TREINO", treinoId: treino.id }); } },
                         ]}
                       />
