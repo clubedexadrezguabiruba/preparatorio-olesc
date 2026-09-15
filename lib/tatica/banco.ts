@@ -2,6 +2,7 @@ import "server-only";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Indice, Puzzle, TemaNoIndice } from "./puzzles.ts";
+import { ORIGEM_BASE, type LinhaDoIndice } from "./rating.ts";
 
 /**
  * O banco de puzzles, lido **do disco pelo servidor**.
@@ -33,6 +34,8 @@ import type { Indice, Puzzle, TemaNoIndice } from "./puzzles.ts";
 const RAIZ = path.join(process.cwd(), "public", "puzzles");
 
 let indiceEmMemoria: Promise<Indice> | null = null;
+let baseEmMemoria: Promise<TemaNoIndice> | null = null;
+let indiceDoRatingEmMemoria: Promise<LinhaDoIndice[]> | null = null;
 const faixasEmMemoria = new Map<string, Promise<Puzzle[]>>();
 
 async function lerJson<T>(relativo: string): Promise<T> {
@@ -59,7 +62,38 @@ export function lerFaixa(arquivo: string): Promise<Puzzle[]> {
   return promessa;
 }
 
+/**
+ * O "tema" dos problemas de 600–700 do modo rating, que não é tema nenhum.
+ *
+ * Mora fora do `index.json` de propósito: aquele índice é o currículo, e cada
+ * entrada dele vira cartão em `/tatica`, série e prova. Estes problemas não
+ * aparecem em lugar nenhum disso. Mas o formato é o mesmo (`TemaNoIndice`), e é
+ * isso que deixa `puzzlePorId(ORIGEM_BASE, id)` — e com ele a gravação, a
+ * revisão do dia e a conferência — funcionar sem caminho especial.
+ */
+function lerBase(): Promise<TemaNoIndice> {
+  baseEmMemoria ??= lerJson<TemaNoIndice>(`${ORIGEM_BASE}/indice.json`).catch((erro) => {
+    baseEmMemoria = null;
+    throw erro;
+  });
+  return baseEmMemoria;
+}
+
+/**
+ * O índice do modo rating: `[id, origem, rating]` de todo puzzle servível, em
+ * rating crescente (`npm run puzzles:indice-rating`). ~120 mil linhas em
+ * memória — o mesmo cache, e pelo mesmo motivo, dos arquivos de faixa.
+ */
+export function lerIndiceDoRating(): Promise<LinhaDoIndice[]> {
+  indiceDoRatingEmMemoria ??= lerJson<LinhaDoIndice[]>("rating-indice.json").catch((erro) => {
+    indiceDoRatingEmMemoria = null;
+    throw erro;
+  });
+  return indiceDoRatingEmMemoria;
+}
+
 export async function temaNoIndice(tag: string): Promise<TemaNoIndice | null> {
+  if (tag === ORIGEM_BASE) return lerBase();
   const indice = await lerIndice();
   return indice.temas.find((t) => t.tag === tag) ?? null;
 }

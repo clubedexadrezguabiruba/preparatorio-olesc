@@ -10,15 +10,9 @@
  * (`lib/tatica/blocos.ts`), por faixa de rating, com teto por arquivo para o
  * celular carregar rápido. A fonte fica em `dados/`, que é `.gitignore`d.
  *
- * Colunas, na ordem em que o Lichess as publica:
- *   0 PuzzleId · 1 FEN · 2 Moves · 3 Rating · 4 RatingDeviation
- *   5 Popularity · 6 NbPlays · 7 Themes · 8 GameUrl · 9+ OpeningTags
- *
- * O `9+` não é engano: `OpeningTags` traz várias etiquetas **separadas por
- * vírgula e sem aspas**, então um `split(",")` devolve mais de dez campos numa
- * linha com abertura marcada. Os nove primeiros continuam certos, que é o que
- * importa — e ficar no `split` cru em vez de um parser com aspas vale minutos
- * neste arquivo.
+ * A leitura da linha, os filtros de qualidade e a conferência dos lances
+ * moram em `scripts/puzzles-lichess.ts`, porque `scripts/base-rating.ts` (os
+ * problemas de 400–700 do modo rating) usa os mesmos.
  *
  * ## Por que a amostra é por hash, e não pelas primeiras N linhas
  *
@@ -32,13 +26,21 @@
  * recorte) e não depende da ordem de leitura.
  */
 
-import { createReadStream, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { createReadStream, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { createInterface } from "node:readline";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { applyUci, fenProblem } from "../lib/chess/fen.ts";
 import { BLOCOS } from "../lib/tatica/blocos.ts";
 import { chaveDe } from "../lib/tatica/chave.ts";
+import { ORIGEM_BASE } from "../lib/tatica/rating.ts";
+import {
+  DESVIO_MAXIMO,
+  JOGADAS_MINIMAS,
+  lerLinha,
+  POPULARIDADE_MINIMA,
+  problemaDo,
+  type Bruto as Lido,
+} from "./puzzles-lichess.ts";
 
 const RAIZ = fileURLToPath(new URL("..", import.meta.url));
 
@@ -47,15 +49,7 @@ const RAIZ = fileURLToPath(new URL("..", import.meta.url));
  * ------------------------------------------------------------------ */
 
 /**
- * Os quatro filtros, e o que cada um tira de cima da mesa.
- *
- * `POPULARIDADE` e `JOGADAS`: o Lichess publica todo puzzle que o gerador
- * produziu, inclusive os que ninguém jogou e os que quem jogou reprovou. Um
- * puzzle com popularidade baixa costuma ser um de solução ambígua — duas
- * continuações igualmente boas, e o aluno acerta xadrez e leva errado.
- *
- * `DESVIO`: rating com desvio alto é rating que ainda não assentou. Numa série
- * "em rating crescente", ele é o degrau que não está onde diz estar.
+ * Popularidade, jogadas e desvio vêm de `scripts/puzzles-lichess.ts`.
  *
  * `RATING`: 700–2100, decisão do Doug. A turma joga de 700 a 1700 de rápidas
  * no chess.com, e o piso sobe de 600 para 700 porque abaixo disso o puzzle é
@@ -63,9 +57,6 @@ const RAIZ = fileURLToPath(new URL("..", import.meta.url));
  * `lib/tatica/blocos.ts` — porque a série de cada tema sobe sozinha em rating:
  * quem chega ao topo dela é quem aguenta o topo. Não há teto didático.
  */
-const POPULARIDADE_MINIMA = 50;
-const JOGADAS_MINIMAS = 100;
-const DESVIO_MAXIMO = 100;
 const RATING_MINIMO = 700;
 const RATING_MAXIMO = 2100;
 
@@ -86,14 +77,7 @@ const LARGURA_DA_FAIXA = 200;
  * Amostra determinística
  * ------------------------------------------------------------------ */
 
-type Bruto = {
-  id: string;
-  fen: string;
-  lances: string[];
-  rating: number;
-  temas: string[];
-  chave: number;
-};
+type Bruto = Lido & { chave: number };
 
 type Balde = {
   tag: string;
@@ -175,20 +159,9 @@ async function varrer(): Promise<{ linhas: number; candidatos: number }> {
 
   for await (const linha of leitor) {
     linhas++;
-    if (linhas === 1 && linha.startsWith("PuzzleId")) continue;
-    if (!linha) continue;
-
-    const campo = linha.split(",");
-    if (campo.length < 8) continue;
-
-    const rating = Number(campo[3]);
-    if (!Number.isFinite(rating) || rating < RATING_MINIMO || rating > RATING_MAXIMO) continue;
-    if (Number(campo[4]) > DESVIO_MAXIMO) continue;
-    if (Number(campo[5]) < POPULARIDADE_MINIMA) continue;
-    if (Number(campo[6]) < JOGADAS_MINIMAS) continue;
-    if (!campo[7]) continue;
-
-    const temas = campo[7].split(" ").filter(Boolean);
+    const lido = lerLinha(linha, RATING_MINIMO, RATING_MAXIMO);
+    if (!lido) continue;
+    const { rating, temas } = lido;
     let usado = false;
 
     for (const tema of temas) {
@@ -198,20 +171,13 @@ async function varrer(): Promise<{ linhas: number; candidatos: number }> {
         if (rating < balde.de || rating >= balde.ate) continue;
         balde.vistos++;
 
-        const chave = chaveDe(campo[0]);
+        const chave = chaveDe(lido.id);
         // O balde já está cheio e esta chave é pior que a pior de lá: não vale
         // nem materializar o objeto.
         if (balde.amostra.length >= teto && chave > balde.amostra[balde.amostra.length - 1].chave) {
           continue;
         }
-        balde.amostra.push({
-          id: campo[0],
-          fen: campo[1],
-          lances: campo[2].split(" ").filter(Boolean),
-          rating,
-          temas,
-          chave,
-        });
+        balde.amostra.push({ ...lido, chave });
         if (balde.amostra.length > FOLGA) aparar(balde);
         usado = true;
       }
@@ -224,31 +190,6 @@ async function varrer(): Promise<{ linhas: number; candidatos: number }> {
   }
 
   return { linhas, candidatos };
-}
-
-/* ------------------------------------------------------------------ *
- * A conferência: FEN possível e linha inteira legal
- * ------------------------------------------------------------------ */
-
-/**
- * O puzzle do Lichess começa **um lance antes**: a FEN é a posição em que o
- * adversário ainda vai errar, e `lances[0]` é o erro dele. Quem resolve joga a
- * partir de `lances[1]`, e a cor do aluno é a *oposta* à da FEN.
- *
- * Conferir a linha inteira, e não só o primeiro lance, é o que impede um
- * puzzle truncado de chegar ao aluno como "sem solução".
- */
-function problemaDo(p: Bruto): string | null {
-  const problema = fenProblem(p.fen);
-  if (problema) return `FEN: ${problema}`;
-  if (p.lances.length < 2) return "a linha tem menos de dois lances";
-  let fen = p.fen;
-  for (const [i, uci] of p.lances.entries()) {
-    const aplicado = applyUci(fen, uci);
-    if (!aplicado) return `lance ${i + 1} (${uci}) é ilegal`;
-    fen = aplicado.fen;
-  }
-  return null;
 }
 
 /* ------------------------------------------------------------------ *
@@ -286,8 +227,14 @@ async function principal(): Promise<void> {
   // build daria 33 MB duplicados e — pior — dois arquivos que podem divergir,
   // com o servidor julgando o lance por uma solução e o aluno vendo outra.
   const destino = path.join(RAIZ, "public/puzzles");
-  rmSync(destino, { recursive: true, force: true });
+  // Apaga o recorte dos temas, e não a pasta: `rating-base/` sai de outro
+  // script (`npm run puzzles:base-rating`), de outra faixa do mesmo CSV, e
+  // `rating-indice.json` é refeito a partir dos dois — ver o aviso no fim.
+  const DE_OUTROS = new Set([ORIGEM_BASE, "rating-indice.json"]);
   mkdirSync(destino, { recursive: true });
+  for (const nome of readdirSync(destino)) {
+    if (!DE_OUTROS.has(nome)) rmSync(path.join(destino, nome), { recursive: true, force: true });
+  }
 
   const indice: TemaNoIndice[] = [];
   let gravados = 0;
@@ -370,6 +317,9 @@ async function principal(): Promise<void> {
   }
   console.log(`\nTotal no site: ${gravados.toLocaleString("pt-BR")} puzzles.`);
   if (recusados) console.log(`Recusados na conferência: ${recusados}.`);
+  // Os ids dos temas mudaram (ou podem ter mudado): o índice do modo rating
+  // aponta para eles pelo arquivo de origem.
+  console.log("\nRefaça o índice do modo rating: npm run puzzles:indice-rating");
 
   if (vazios.length) {
     console.error(`\nTags sem nenhum puzzle: ${vazios.join(", ")}`);
