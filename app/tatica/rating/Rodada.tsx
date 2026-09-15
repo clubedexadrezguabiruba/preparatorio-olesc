@@ -17,7 +17,7 @@ import { applyUci, type Applied } from "@/lib/chess/fen";
 import { armAudioOnFirstGesture, playComplete, playForMove, playRefusal, playSuccess } from "@/lib/sound";
 import { lanceCerto, posicaoInicial } from "@/lib/tatica/conferir";
 import type { PuzzleServido } from "@/lib/tatica/puzzles";
-import type { EstadoDoRating, RespostaDoRating, VereditoDoRating } from "@/lib/tatica/rating";
+import { formatarDelta, type EstadoDoRating, type RespostaDoRating, type VereditoDoRating } from "@/lib/tatica/rating";
 import { ABERTURA_MS, RESPOSTA_MS } from "@/lib/tatica/tempos";
 import { responder } from "./acoes";
 
@@ -417,13 +417,6 @@ function Problema({
       }
     />
   );
-}
-
-/** "+8", "−12" (com o sinal de menos tipográfico), "±0". */
-export function formatarDelta(delta: number): string {
-  if (delta > 0) return `+${delta}`;
-  if (delta < 0) return `−${Math.abs(delta)}`;
-  return "±0";
 }
 
 function cartaoDaFase(

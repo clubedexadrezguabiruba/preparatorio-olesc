@@ -65,3 +65,10 @@ export type VereditoDoRating = {
 };
 
 export type RespostaDoRating = VereditoDoRating | { readonly erro: string };
+
+/** "+8", "−12" (com o sinal de menos tipográfico), "±0" — o delta como a tela o escreve. */
+export function formatarDelta(delta: number): string {
+  if (delta > 0) return `+${delta}`;
+  if (delta < 0) return `−${Math.abs(delta)}`;
+  return "±0";
+}
