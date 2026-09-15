@@ -220,20 +220,25 @@ no banco de teste. **Não foi publicado nada no `main`.**
   problema; acerto, erro com solução e Enter; rede caída com "Tentar de novo"; o palco não
   rola; evolução, temas fracos, revisão do dia, professor e painel conferidos.
 
-**Decisões para o Doug:**
-1. **Início em 400 ou em 600?** Como não há problema abaixo de 600, o aluno de 400 recebe
-   problemas de ~600 e sobe ~300 no primeiro acerto. Mantive 400, que foi a sua decisão.
-2. A família de selos `rating` ficou no fim da lista, para não tirar do painel o próximo
-   selo de finais. O convite para o modo já está no cartão do painel.
+**Decididas pelo Doug (15/9, depois da execução):**
+1. **O início fica em 400**, mesmo com os problemas começando em ~600 (1º acerto +302).
+2. **Os selos `rating` ficam no fim da lista**, para não tirar do painel o próximo selo de
+   finais. O convite para o modo fica no cartão do painel.
+3. **O achado das 1.000 linhas é corrigido nesta branch** (ver abaixo).
 
 **Correção lateral feita:** a tabela de alunos de `/professor` tinha o título "Rating" sem
 célula desde `394f75d`, e o nível aparecia embaixo dele. A célula voltou, com o título
 "Rating de entrada".
 
-**Achados laterais, não corrigidos:**
-- `puzzlesJaVistos()` (`lib/tatica/progresso.ts`) não pagina: a API do Supabase devolve no
-  máximo 1.000 linhas, e passado isso o sorteio dos temas pode repetir problema. O modo
-  rating usa uma leitura própria, que pagina.
+**Corrigido depois, por decisão do Doug:** `puzzlesJaVistos()` e `linhasDeTentativas()`
+(`lib/tatica/progresso.ts`) liam numa consulta só, e o Supabase corta em 1.000 linhas sem
+aviso. Reproduzido contra o banco: com 1.005 tentativas, as duas leram 1.000. Em ordem de
+data, as perdidas eram as **mais novas**, então os erros recentes de um aluno veterano não
+chegariam à revisão do dia. Agora as duas paginam (`lib/supabase/paginar.ts`), e o mesmo
+script leu 1.005. O teste de `paginar.test.ts` falha com a consulta única e passa com a
+paginada.
+
+**Achado lateral, não corrigido:**
 - `/nivel/[n]/prova` lê o disco e não está em `outputFileTracingIncludes` (já registrado acima).
 
 **Falta:** o teste humano do Doug, o "pode publicar" e, depois dele, `git push origin

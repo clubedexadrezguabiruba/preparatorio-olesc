@@ -1,6 +1,7 @@
 import "server-only";
 import { hojeNoBrasil } from "@/lib/curso/calendario";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
+import { idsVistos, linhasDeTentativasCom } from "@/lib/tatica/leituras";
 import { filaDeRevisao, type ItemDaFila, type LinhaDeTentativa } from "@/lib/tatica/revisao";
 import { ETAPAS, type Etapa, type Feitos, type LinhaDoTema } from "@/lib/tatica/serie";
 
@@ -122,14 +123,9 @@ export async function linhasDoTema(tema: string): Promise<LinhaDoTema[]> {
  * dia são umas 500 linhas por mês, de seis colunas curtas — cabe.
  */
 export async function linhasDeTentativas(aluno?: string): Promise<LinhaDeTentativa[]> {
-  const supabase = await criarClienteServidor();
-  let consulta = supabase
-    .from("tentativas_puzzle")
-    .select("puzzle_id, tema, origem, modo, acertou, criada_em")
-    .order("criada_em");
-  if (aluno) consulta = consulta.eq("aluno", aluno);
-  const { data } = await consulta;
-  return (data ?? []) as LinhaDeTentativa[];
+  // Paginada (`lib/tatica/leituras.ts`): uma consulta só parava em 1.000 linhas
+  // e, em ordem de data, as que sumiam eram as mais novas.
+  return linhasDeTentativasCom(await criarClienteServidor(), aluno);
 }
 
 /** O que está devido hoje na revisão espaçada, do aluno pedido (ou de quem está logado). */
@@ -147,7 +143,6 @@ export async function revisaoDeHoje(aluno?: string): Promise<ItemDaFila[]> {
  * Quem limita ao próprio aluno é a RLS, como em toda consulta daqui.
  */
 export async function puzzlesJaVistos(): Promise<Set<string>> {
-  const supabase = await criarClienteServidor();
-  const { data } = await supabase.from("tentativas_puzzle").select("puzzle_id");
-  return new Set((data ?? []).map((l) => (l as { puzzle_id: string }).puzzle_id));
+  // Paginada pelo mesmo motivo: passado de 1.000, a série repetia problema.
+  return idsVistos(await criarClienteServidor());
 }
