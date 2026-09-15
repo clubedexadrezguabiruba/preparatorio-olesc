@@ -37,8 +37,8 @@ export type MedidaDeFinais = {
  * barra para todas e escreve palavras diferentes embaixo — "puzzles", "aulas
  * dominadas", "capítulos aprovados". Sem a etiqueta, a tela teria de reabrir a tarefa
  * para descobrir o que a barra está medindo. E as três contam coisas de peso
- * diferente: puzzle resolvido é medido, aula dominada é certificada pela
- * tablebase.
+ * diferente: puzzle resolvido é medido, aula dominada é a prática vencida em
+ * três dias diferentes.
  */
 export type Medida = MedidaDeTatica | MedidaDeFinais;
 

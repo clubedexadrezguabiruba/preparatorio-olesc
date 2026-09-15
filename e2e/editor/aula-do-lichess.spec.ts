@@ -104,9 +104,13 @@ test("o aluno faz a aula inteira, e as tentativas chegam ao banco", async ({ alu
   // Prática: contra o computador, até o mate.
   await irPara(7);
   await aluno.waitForTimeout(4000);
+  // O contador dos 50 lances aparece durante a partida e some com ela terminada (teste de uso de 15/9).
+  const contador = aluno.getByText(/^Sem progresso: \d+ de 50$/);
+  await expect(contador).toBeVisible();
   const partida = await jogarPraticaComMotor(aluno, tabuleiro(), "8/8/8/8/4k3/8/8/3QK3 w - - 0 1");
   console.log(`[e2e] prática do estudo: ${partida.fim} em ${partida.lances.length} meios-lances — ${partida.lances.join(" ")}`);
   expect(partida.fim).toBe("mate");
+  await expect(contador).toHaveCount(0);
   await aluno.waitForTimeout(3000);
 
   // No banco: uma linha por treino (e a prática), todas com a publicação.

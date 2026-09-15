@@ -33,7 +33,7 @@ test("com aviso (textos sem direito declarado): Publicar confere sozinho, public
   await pergunta.getByRole("button", { name: "Cancelar" }).click();
 
   const resultado = page.getByRole("region", { name: "Resultado da conferência" });
-  await expect(resultado).toContainText(/Pode publicar\. \d+ avisos?, que não impedem/);
+  await expect(resultado).toContainText(/Pode publicar\. (1 aviso, que não impede|\d+ avisos, que não impedem)\./);
   await expect(resultado.getByText("impede", { exact: true })).toHaveCount(0);
 
   // Achado 2: a declaração vale para todas as posições do mesmo estudo, numa janela só.

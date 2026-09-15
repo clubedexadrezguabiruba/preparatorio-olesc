@@ -35,6 +35,7 @@ import { DialogoMudarModo } from "@/components/editor-v2/DialogoMudarModo";
 import type { ParteDaAulaV2 } from "@/lib/editor-v2/mudar-modo";
 import type { ComandoDeIntroducaoV2 } from "@/lib/editor-v2/introducao";
 import { planejarEstudo } from "@/lib/editor-v2/importar-estudo";
+import { oQueAAulaInteiraTem } from "@/lib/editor-v2/frases";
 import { ADVERSARIO_PADRAO, aplicarNovaPratica, prepararPratica } from "@/lib/editor-v2/pratica";
 import type { PedidoDeImportacaoDeEstudo } from "@/components/editor-v2/PainelDoEstudo";
 import { PreviaDaPratica } from "@/components/editor-v2/PreviaDaPratica";
@@ -102,7 +103,7 @@ import type { TreinosPreparadosV2 } from "@/lib/editor-v2/treinos";
 import { treinoJogavel, type TreinoJogavel } from "@/lib/editor-v2/treino-jogavel";
 import type { PlanoDeRefazerTreinoV2 } from "@/lib/editor-v2/propriedade-treino";
 import { revisoesPendentesV2 } from "@/lib/editor-v2/revisoes";
-import { FEN_INICIAL_PADRAO, problemasDaAulaV2, validarAulaV2, type AnaliseV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
+import { FEN_INICIAL_PADRAO, problemasDaAulaV2, resultadoDoTreinoV2, validarAulaV2, type AnaliseV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
 import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/editor-v2/recuperacao";
 import type { Position } from "@/lib/lesson/schema";
 
@@ -1126,7 +1127,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
           <button
             type="button"
             ref={botaoPublicar}
-            disabled={estado !== "salvo" || conferindo}
+            // Com a janela de publicar aberta, o botão dela é o único Publicar ligado (teste de uso de 15/9/2026):
+            // este, atrás do véu, aparecia ligado ao lado de "Calculando o impacto…".
+            disabled={estado !== "salvo" || conferindo || publicandoAula || perguntandoAntesDePublicar}
             title={estado !== "salvo" ? "Espere a aula salvar para publicar" : conferindo ? "Conferindo a aula…" : "Confere a aula e publica"}
             onClick={() => {
               const verde = conferencia && conferencia.aula === historico.presente && conferencia.resultado.publicar.pode;
@@ -1186,7 +1189,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
       {perguntandoAntesDePublicar ? (
         <Dialogo
           titulo="Antes de publicar, quer fazer a aula inteira como aluno?"
-          descricao="Introdução, capítulos, treinos e a prática, do jeito que o aluno vai fazer. Nada é gravado, e no fim aparece quanto tempo cada etapa levou."
+          descricao={`${oQueAAulaInteiraTem(historico.presente.fluxo)}, do jeito que o aluno vai fazer. Nada é gravado, e no fim aparece quanto tempo cada etapa levou.`}
           largura="max-w-lg"
           aoFechar={() => { setPerguntandoAntesDePublicar(false); queueMicrotask(() => botaoPublicar.current?.focus()); }}
           rodape={(
@@ -1665,7 +1668,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
                       >
                         <span className="block leading-snug line-clamp-2 break-words">{treino.titulo}</span>
                         <span className="block text-xs text-tinta-fraca">
-                          {treino.ladoAluno === "white" ? "Brancas" : "Pretas"} · {treino.questoes.length} pergunta{treino.questoes.length === 1 ? "" : "s"}
+                          {treino.ladoAluno === "white" ? "Brancas" : "Pretas"} · {resultadoDoTreinoV2(treino) === "draw" ? "empate" : "vencer"} · {treino.questoes.length} pergunta{treino.questoes.length === 1 ? "" : "s"}
                           {treino.fonte !== "atual" ? <span className="text-aviso-tinta"> · a aula mudou</span> : null}
                         </span>
                       </button>

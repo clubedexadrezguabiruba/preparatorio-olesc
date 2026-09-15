@@ -5006,6 +5006,89 @@ isso precisa de medida antes de conserto.
   navegador com duas práticas vencendo em dias diferentes. Nada desta rodada teve teste humano.
 - Sem commit: o Doug pede. Ao commitar, os arquivos do Plichta (lint) não entram — não são desta rodada.
 
+### O teste de uso das travas de 15/9 — consertos (15/9/2026, noite)
+
+**O pedido:** consertar o que o teste de uso do commit `ac2cfd1` achou, com as decisões do Doug. O Doug pediu no
+meio da rodada para não parar: as escolhas de texto e de saída abaixo foram do agente, e estão declaradas. Sem commit.
+
+**Textos (itens 1 a 5).**
+1. **Tablebase na tela.** Varredura de `app/`, `components/` e `lib/`: das ~185 menções, só duas eram texto que o aluno
+   lê. Painel, Conquistas (`selos.ts`): "Cada aula é certificada pela tablebase, em três dias diferentes." → "Conta
+   quando você vence a prática em três dias diferentes — ou assiste até o fim à aula sem prática." `/trilha`
+   (`mapa.ts`): "Aulas aprendidas — três passadas em dias distintos, cada uma certificada pela tablebase." (tinha
+   ainda "passadas", palavra proibida) → "Aulas aprendidas — a prática vencida em três dias diferentes, ou a aula sem
+   prática assistida até o fim." Comentários com a mesma promessa: `mapa.test.ts`, `app/trilha/page.tsx`,
+   `Nivel.tsx` (2), `Tarefas.tsx`, `mapa.ts`, `tarefas/estado.ts`, e `acervo.ts` ("só aceita até 7"). O resto é nome
+   interno, registro histórico ou regra da aula v1; as telas que sobram ("Vitória (aula antiga)", "Aula antiga: lances
+   fora da linha…") dizem a verdade.
+2. **Concordância.** A frase saiu do `PainelDeProblemas` para `resumoDaConferencia` (`lib/editor-v2/frases.ts`).
+3. **Pergunta antes de publicar.** `oQueAAulaInteiraTem(fluxo)` conta as etapas: "O capítulo, os 2 treinos e a
+   prática", "…e as 2 práticas", sem prática não a cita; aula vazia, "A aula inteira".
+4. **«Editar treino» sem nome acessível: não reproduzido.** A janela usa o casco `Dialogo` (`aria-labelledby` no
+   título). Medido pelo cartão e pelo `•••`: `dialog "Editar treino — Treino guiado"`, também no `ariaSnapshot` (a
+   leitura do Playwright MCP). O ensaio novo guarda isso. O que o teste provavelmente viu é o item 6.
+5. **"SEM PROGRESSO: 11 DE 50" depois do mate.** É o contador da regra dos 50 lances (`PARTIDA.semProgresso`,
+   `lib/lesson/falas.ts:128`; o grep não achou porque a classe `rotulo` põe em maiúsculas), desenhado em
+   `PracticeStage.tsx` **sempre**, desde 8/9 (`f71c450`). "11" eram os lances desde a última captura ou lance de
+   peão. Conserto: só aparece com a partida em jogo.
+
+```
+lib/editor-v2/frases.test.ts   ANTES: ✖ "Pode publicar. 1 aviso, que não impedem." ≠ "… que não impede."  (pass 1, fail 1)
+                               DEPOIS: tests 3, pass 3
+aula-do-lichess.spec           o contador está na tela antes do 1.º lance e some depois do mate (mate em 11 meios-lances)
+```
+
+**Publicar (item 6).** Dentro da janela o botão **já** nascia desligado: segurando as ações de servidor no ensaio,
+`disabled: true` durante o cálculo e 1,5 s depois, e ligado só com o impacto na tela. O que ficava ligado era o
+**Publicar da barra**, atrás do véu, com o mesmo nome — na árvore de acessibilidade, um "Publicar" ligado ao lado de
+"Calculando o impacto…". Conserto: a barra desliga enquanto a pergunta ou a janela de publicar estão abertas; o da
+janela ganhou o título "Espere o cálculo do impacto". Fechar devolve o foco à barra (conferido).
+
+```
+e2e/editor/travas-15-9.spec.ts  ANTES: ✖ "nenhum Publicar ligado enquanto calcula" Expected 0, Received 1
+                                DEPOIS: ✔ (e o da janela liga com o impacto, e o foco volta à barra)
+```
+
+**Aviso treino × resultado da posição (item 7).** `TREINO_RESULTADO_DIVERGE`, **aviso**, em `REGRAS_PUBLICACAO_V2`.
+De onde vem o resultado da posição (decisão do agente, pedida ao Doug e delegada):
+- **acervo** — a posição de `content/positions/` com a mesma FEN, sem contadores, de onde o treino começa
+  (`fenInicialDoTreino`). Pela FEN e não pelo `positionId`: o treino que começa no meio da linha só é comparado se
+  aquela posição exata está no acervo, e a FEN colada que coincide com uma do acervo também é. O resultado é lido do
+  lado do aluno: vitória dele, empate, ou perdida (que diverge de vencer e de empatar);
+- **certificação antiga** (`certificacao.resultado`), só quando o professor declarou outro resultado;
+- **motor do professor, não:** roda no navegador, e a conferência roda no servidor sem tablebase.
+- **FEN colada fora do acervo e sem certificação: sem aviso** — não há com o que comparar; a decisão é só do professor.
+
+Mensagem do caso real (EX-E2E-BASE, treino trocado para "Segurar o empate"): "o treino «Treino guiado» cobra segurar o
+empate, e no acervo, a posição onde ele começa dá vitória das brancas; e a certificação antiga guarda vitória — a aula
+publica assim; se não era isso, troque em «Editar treino»", com **Resolver** abrindo a janela do treino. O cartão do
+treino mostra "Brancas · vencer · N perguntas" / "Brancas · empate · N perguntas".
+
+```
+lib/editor-v2/conferencia.test.ts  ANTES: ✖ 5 de 28 (regra sem estrago, caso real, só acervo, posição perdida)
+                                   DEPOIS: tests 28, pass 28 (inclui igual não avisa e FEN colada sem aviso)
+travas-15-9.spec (navegador)       cartão "Brancas · vencer" → salva empate → "Brancas · empate"; Publicar confere,
+                                   "Pode publicar", publica ("Publicada neste computador"), um aviso com as duas fontes
+```
+
+**Portões** (cópia isolada `../olesc-portoes-00` no `ac2cfd1` + os arquivos desta rodada; o `next dev` da pasta
+principal ficou ligado): `lint` ✓ (sem os arquivos do Plichta, que não estão na cópia) · `typecheck` ✓ ·
+`npm test` **1.328/1.328** (eram 1.319: +3 de frases, +6 da conferência) · `build` ✓ · `validate:content` ✓ (19 posições,
+3 aulas) · `validate:mutations` **34/34**, com os dois controles verdes · `repertorio:compilar --check` ✓.
+
+**Ensaios de navegador** (pasta principal, contas de teste, só `EX-E2E-*`): `travas-15-9`, `aula-do-lichess`, `publicar-visivel`,
+`aula-como-aluno`, `aula-sem-pratica` e `pratica`. Primeira rodada **10/11**, com os portões rodando ao mesmo tempo
+na outra cópia: `pratica.spec` gravou "Prática contra o computador" em vez de "Vença sem afogar"; sozinho passou
+(44,9 s), e a rodada repetida com a máquina livre deu **11/11** — carga, não esta mudança, que não toca a janela da
+prática. Limpeza: 987 arquivos iguais, 21 restos apagados, contas de ensaio apagadas. SHA-256 da
+`.editor/v2/N1-KPK.json` `4be602ca…` antes e depois.
+
+**Fora, declarado:**
+- A prática tem o mesmo risco (objetivo × resultado do acervo) e **não** ganhou aviso — o pedido era o treino.
+- O item 4 não foi reproduzido; se o Doug viu a janela sem nome por outro caminho, falta saber qual.
+- `publicar-visivel.spec.ts` e `aula-do-lichess.spec.ts` foram ajustados (concordância; contador dos 50 lances).
+- Nada disto teve teste humano.
+
 ### O próximo ponto exato (14/9/2026 — retomar daqui)
 
 **Commits da fatia 10:** `795d2d9` (10A), `e567599` (10B), `dce1fe6` (10C), `28a1b3e` (10D), `7290a3c`

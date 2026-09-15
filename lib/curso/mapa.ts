@@ -44,7 +44,7 @@ import {
  * | finais | uma aula | 1 — ela é dominada ou não |
  *
  * Não há como uniformizar isso sem mentir: um tema tem progresso parcial
- * medido, e uma aula tem um critério de domínio que a tablebase certifica. A
+ * medido, e uma aula é aprendida vencendo a prática em três dias diferentes. A
  * tela mostra as duas lado a lado **e** escreve o que cada barra conta — é a
  * mesma disciplina do selo de domínio.
  *
@@ -234,7 +234,7 @@ export const MODULO: Record<
   finais: {
     nome: "Finais",
     unidade: "aulas",
-    conta: "Aulas aprendidas — três passadas em dias distintos, cada uma certificada pela tablebase.",
+    conta: "Aulas aprendidas — a prática vencida em três dias diferentes, ou a aula sem prática assistida até o fim.",
     href: "/finais",
     vazio: "Nenhuma aula de finais neste degrau.",
   },

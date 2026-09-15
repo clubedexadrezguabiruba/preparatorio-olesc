@@ -22,7 +22,7 @@ export const ROTULO_DO_ESTADO: Record<Position["status"], string> = {
   fixture: "de teste — não publica",
 };
 
-/** Quantas peças há na posição: a prática contra o computador só aceita até 7 (tablebase). */
+/** Quantas peças há na posição. Desde 15/9/2026 não há limite de peças na prática (trava 1). */
 export function pecasDaFen(fen: string): number {
   return (fen.split(" ")[0].match(/[prnbqk]/gi) ?? []).length;
 }

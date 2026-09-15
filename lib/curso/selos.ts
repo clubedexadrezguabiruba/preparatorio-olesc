@@ -177,7 +177,7 @@ export function selos(p: ParaOsSelos): Selo[] {
         degrau,
         p.aulasAprendidas,
         `${degrau} ${degrau === 1 ? "aula" : "aulas"} de finais`,
-        "Cada aula é certificada pela tablebase, em três dias diferentes.",
+        "Conta quando você vence a prática em três dias diferentes — ou assiste até o fim à aula sem prática.",
         ["aula", "aulas"],
       ),
     );

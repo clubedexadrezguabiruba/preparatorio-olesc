@@ -18,8 +18,8 @@ import { PROVA_DE_NIVEL, type FechamentoDoNivel, type Nivel } from "@/lib/curso/
  * ## Três barras, e elas contam coisas diferentes
  *
  * Tema fechado, aula aprendida e linha decorada não somam na mesma barra: a
- * primeira é medida pelo servidor puzzle a puzzle, a segunda é certificada pela
- * tablebase, a terceira é uma escada de três dias. É a mesma disciplina da
+ * primeira é medida pelo servidor puzzle a puzzle, a segunda é a prática vencida
+ * em três dias diferentes, a terceira é uma escada de três dias. É a mesma disciplina da
  * `/trilha` — cada barra escreve embaixo o que ela conta.
  *
  * ## O clamp dos finais aparece na tela, e é isso que o torna honesto
@@ -171,7 +171,7 @@ function Modulo({
  * A prova é **ofertada só depois** das três trilhas: ela é o selo, não o exame
  * de admissão. E é o único lugar do curso onde o aluno vê um puzzle **sem saber
  * o tema** — as outras quatro medidas de "eu sei isto" (a prova do tema, a
- * tablebase, os degraus do repertório, a fila de revisão) todas dizem qual é o
+ * prática dos finais, os degraus do repertório, a fila de revisão) todas dizem qual é o
  * motivo. Na partida ninguém avisa "aqui tem um garfo".
  *
  * ## Ela não repete o botão do "Agora"

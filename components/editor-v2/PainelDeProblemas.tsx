@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { emOnde, type DestinoV2, type ProblemaVisivelV2 } from "@/lib/editor-v2/diagnostico-visual";
+import { resumoDaConferencia } from "@/lib/editor-v2/frases";
 
 /** O cabeçalho do resultado do botão Conferir (§19.3): contagens e o veredito. */
 export type ResumoDaConferenciaV2 = {
@@ -77,13 +78,7 @@ export function PainelDeProblemas({
             role="status"
             title={`Conferência das ${new Date(conferencia.em).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`}
           >
-            {conferencia.impedimento
-              ? `Não deu para conferir: ${conferencia.impedimento}.`
-              : conferencia.vencida
-                ? "A aula mudou — conferindo de novo…"
-                : conferencia.podePublicar
-                  ? `Pode publicar.${conferencia.avisos ? ` ${conferencia.avisos} ${conferencia.avisos === 1 ? "aviso" : "avisos"}, que não impedem.` : ""}`
-                  : `Ainda não dá para publicar: ${conferencia.erros} ${conferencia.erros === 1 ? "problema impede" : "problemas impedem"}.${conferencia.avisos ? ` E ${conferencia.avisos} ${conferencia.avisos === 1 ? "aviso" : "avisos"}.` : ""}`}
+            {resumoDaConferencia(conferencia)}
           </p>
         ) : (
           <p className={`text-sm font-medium ${impede ? "text-erro-texto" : "text-aviso-tinta"}`}>{resumo}</p>

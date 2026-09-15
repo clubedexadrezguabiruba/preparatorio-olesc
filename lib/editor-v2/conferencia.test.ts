@@ -60,6 +60,8 @@ const ESTRAGOS: Estrago[] = [
     },
   },
   { codigo: "REVISAO_PENDENTE", estragar: (a) => { a.capitulos[0].narracoes[0].revisao = { motivo: "posicao-inicial-trocada" }; } },
+  // Teste de uso de 15/9: a cópia da N0-LADDER com o treino trocado para "Segurar o empate".
+  { codigo: "TREINO_RESULTADO_DIVERGE", aviso: true, estragar: (a) => { a.treinos[0].resultado = "draw"; } },
   {
     codigo: "AVALIACAO_REVISAO_DIVERGE",
     estragar: (a) => {
@@ -90,6 +92,57 @@ for (const { codigo, estragar, aviso } of ESTRAGOS) {
     assert.ok(!erros(aula, ctx, [codigo]).includes(codigo), "desligada, o código não pode aparecer como erro");
   });
 }
+
+/*
+ * Treino × resultado da posição (decisão do Doug, 15/9/2026): a máquina avisa, o professor decide.
+ * Duas fontes, as duas no servidor: o resultado que o acervo guarda para a posição onde o treino
+ * começa (achada pela FEN, sem os contadores) e o da certificação antiga. O motor do professor fica
+ * no navegador e não entra na conferência.
+ */
+const divergencias = (aula: AulaV2, ctx = contexto()) => problemasParaPublicarV2(aula, ctx).filter((p) => p.codigo === "TREINO_RESULTADO_DIVERGE");
+
+test("treino × posição: o caso do teste de uso avisa pelas duas fontes, e publica", () => {
+  const aula = aulaConferida();
+  aula.treinos[0].resultado = "draw";
+  const [aviso, ...resto] = divergencias(aula);
+  assert.equal(resto.length, 0, "um aviso por treino");
+  assert.equal(aviso.severidade, "aviso");
+  assert.equal(aviso.localizacao.treinoId, aula.treinos[0].id);
+  assert.match(aviso.mensagem, /cobra segurar o empate/);
+  assert.match(aviso.mensagem, /no acervo, a posição onde ele começa dá vitória das brancas/);
+  assert.match(aviso.mensagem, /a certificação antiga guarda vitória/);
+  assert.equal(contarProblemasV2(problemasParaPublicarV2(aula, contexto())).podePublicar, true);
+});
+
+test("treino × posição: resultado igual ao da posição não avisa", () => {
+  assert.deepEqual(divergencias(aulaConferida()), []);
+});
+
+test("treino × posição: sem certificação, o acervo sozinho avisa", () => {
+  const aula = aulaConferida();
+  delete aula.treinos[0].certificacao;
+  aula.treinos[0].resultado = "draw";
+  const [aviso] = divergencias(aula);
+  assert.match(aviso.mensagem, /no acervo, a posição onde ele começa dá vitória das brancas/);
+  assert.doesNotMatch(aviso.mensagem, /certificação/);
+});
+
+test("treino × posição: posição perdida para o aluno avisa mesmo cobrando empate", () => {
+  const aula = aulaConferida();
+  delete aula.treinos[0].certificacao;
+  const perdida = { ...position, expectedResult: "win-black" as const };
+  const [aviso] = divergencias(aula, contexto({ positions: { [position.id]: perdida } }));
+  assert.match(aviso.mensagem, /cobra vencer/);
+  assert.match(aviso.mensagem, /dá vitória das pretas/);
+});
+
+test("treino × posição: FEN colada fora do acervo, sem certificação, não tem com que comparar", () => {
+  const aula = aulaConferida();
+  delete aula.treinos[0].certificacao;
+  aula.treinos[0].resultado = "draw";
+  aula.analises[0].inicio = { tipo: "fen", fen: position.fen };
+  assert.deepEqual(divergencias(aula, contexto({ positions: {} })), []);
+});
 
 test("§19.2: no rascunho a revisão pendente continua aviso — só a publicação a cobra", () => {
   const aula = aulaConferida();
