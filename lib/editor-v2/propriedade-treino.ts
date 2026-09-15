@@ -274,6 +274,8 @@ export function prepararRefazerTreino(
     id: antes.id,
     titulo: antes.titulo,
     perfil: antes.perfil,
+    // O resultado declarado pelo professor é dele, não da derivação: refazer não o apaga.
+    ...(antes.resultado ? { resultado: antes.resultado } : {}),
     ...(antes.certificacao ? { certificacao: { ...antes.certificacao, estado: "pendente" } } : {}),
     origem: {
       ...comIds.origem!,

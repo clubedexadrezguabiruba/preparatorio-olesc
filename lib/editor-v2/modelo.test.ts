@@ -176,7 +176,8 @@ test("manifesto e catálogo impedem dependências editoriais silenciosas", () =>
   const problemas = problemasDaAulaV2(aula);
   assert.ok(problemas.some((problema) => problema.codigo === "POSICAO_SEM_PROVENIENCIA" && problema.localizacao.analiseId === aula.analises[0].id));
   assert.ok(problemas.some((problema) => problema.codigo === "PRATICA_SEM_PROVENIENCIA" && problema.localizacao.praticaId === aula.praticas[0].id));
-  assert.ok(problemas.some((problema) => problema.codigo === "CERTIFICACAO_SEM_PROVENIENCIA" && problema.localizacao.treinoId === aula.treinos[0].id));
+  // CERTIFICACAO_SEM_PROVENIENCIA saiu em 15/9/2026: a certificação antiga é dado congelado.
+  assert.ok(!problemas.some((problema) => problema.codigo.startsWith("CERTIFICACAO_")));
   assert.ok(problemas.some((problema) => problema.codigo === "ERRO_NAO_CATALOGADO" && problema.localizacao.respostaId === "resposta-com-erro-ausente"));
 });
 
@@ -387,7 +388,8 @@ test("contrato recusa treino derivado sem receita e limite sem número de lances
   });
   assert.equal(invalida.ok, false);
   if (!invalida.ok) {
-    assert.ok(invalida.problemas.some((problema) => problema.includes("estado da certificação")));
+    // "final certificado precisa declarar o estado da certificação" saiu em 15/9/2026 (trava 2).
+    assert.ok(!invalida.problemas.some((problema) => problema.includes("estado da certificação")));
     assert.ok(invalida.problemas.some((problema) => problema.includes("receita de origem")));
     assert.ok(invalida.problemas.some((problema) => problema.includes("maxPlies")));
   }
@@ -666,19 +668,22 @@ test("aula que diz «aprovada» sobre posição que não está aprovada é acusa
   assert.match(problema.mensagem, /candidate/);
 });
 
-test("treino não pode dizer «conferido» sobre posição que a aula não aprovou", () => {
+test("travas de 15/9: certificação «confirmada» sobre posição não aprovada não recusa mais o documento", () => {
   /*
-   * Erro, e não aviso: isto não é o mundo de fora mudando, é o documento
-   * contradizendo a si mesmo — e quem escreveu pode desfazer na hora.
+   * Até 15/9/2026 isto era CERTIFICACAO_SEM_APROVACAO, erro. A tablebase saiu (travas 2 e 3):
+   * a certificação é dado congelado de aula antiga e não afirma nada que precise de aprovação.
    */
   const aula = structuredClone(adaptarLessonV1(lesson, positions));
   aula.proveniencia = aula.proveniencia.map((p) => ({ ...p, estado: "candidate" as const }));
   aula.treinos[0].certificacao = { ...aula.treinos[0].certificacao!, estado: "confirmada" };
-  const problema = problemasDaAulaV2(aula, positions, hashDaPosicao).find((p) => p.codigo === "CERTIFICACAO_SEM_APROVACAO");
-  assert.ok(problema);
-  assert.equal(problema.severidade, "erro");
-  assert.equal(problema.localizacao.treinoId, aula.treinos[0].id);
-  assert.equal(validarAulaV2(aula, positions, hashDaPosicao).ok, false);
+  assert.ok(!problemasDaAulaV2(aula, positions, hashDaPosicao).some((p) => p.codigo.startsWith("CERTIFICACAO_")));
+  assert.equal(validarAulaV2(aula, positions, hashDaPosicao).ok, true);
+});
+
+test("travas de 15/9: final certificado sem certificação é um treino válido", () => {
+  const aula = structuredClone(adaptarLessonV1(lesson, positions));
+  delete aula.treinos[0].certificacao;
+  assert.equal(validarAulaV2(aula, positions, hashDaPosicao).ok, true);
 });
 
 test("o adaptador nunca inventa confirmação: o que vem do v1 é herdado", () => {

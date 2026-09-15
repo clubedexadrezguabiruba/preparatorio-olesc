@@ -219,6 +219,17 @@ IDs de questões persistem quando o ponto correspondente permanece. Usar mapeame
 
 ## 9. Julgamento enxadrístico e defensor
 
+> **15/09/2026 — decisão do Doug: a tablebase saiu do julgamento** (travas 1 a 3 e 9 de
+> `docs/TRILHA-FINAIS.md`). O perfil "final certificado" deixou de existir como regra: nada
+> consulta, renova ou cobra certificação. O treino declara o resultado que cobra
+> (`treino.resultado`, vitória ou empate), e julga como a **linha autoral** abaixo: a linha
+> do professor é aceita, os erros que ele nomeou são apontados, e lance legal fora disso ouve
+> "este lance não faz parte da linha treinada". A certificação gravada nas aulas antigas fica
+> como **dado congelado** — a N0-LADDER publicada continua julgando com ela, com a mesma
+> `assessmentRevision`. O Conferir virou uma passada só, sem escrita no documento (§13), e o
+> `validate:content` não lê mais o cache. Sem limite de peças, e a aula tem nenhuma, uma ou
+> várias práticas (§10). O texto abaixo é o registro do contrato anterior.
+
 O editor suporta dois perfis explícitos de treino:
 
 1. **Final certificado:** preserva o contrato atual de tablebase, objetivo e técnica. A cache deve conter as evidências exigidas pelo gate.
@@ -238,7 +249,7 @@ Preservar exceções do professor por código, alvo estável, motivo e hash de c
 
 `fluxo` é a única fonte da ordem: etapas com ID e referência para introdução, capítulo, treino ou prática. Não persistir também `placement` como segunda ordem autoritativa. A interface “após capítulo” atualiza o fluxo. Um treino final é uma etapa no fim, não um tipo de árvore diferente.
 
-A prática atual contra Stockfish e a escada de revisão são preservadas. Assistir ao capítulo ou concluir treino com ajuda não concede automaticamente o domínio que hoje depende da prática. Uma aula v2 declara quais práticas/tarefas de avaliação são obrigatórias; capítulos e treinos assistidos preparam para elas. Criar novas regras de domínio por treino assistido exige medição posterior, não entra por acidente na mudança da store.
+A prática atual contra Stockfish e a escada de revisão são preservadas. *(15/09/2026: a aula tem nenhuma, uma ou várias práticas; com várias, é aprendida quando todas chegam ao degrau 3, e sem prática o aluno a fecha marcando que assistiu.)* Assistir ao capítulo ou concluir treino com ajuda não concede automaticamente o domínio que hoje depende da prática. Uma aula v2 declara quais práticas/tarefas de avaliação são obrigatórias; capítulos e treinos assistidos preparam para elas. Criar novas regras de domínio por treino assistido exige medição posterior, não entra por acidente na mudança da store.
 
 Persistir progresso por entidade e **revisão de avaliação**, não por índice. Definir duas identidades distintas:
 
@@ -284,6 +295,10 @@ Preservar comentário num round-trip técnico não autoriza publicá-lo no curso
 Comentários privados de análise não entram no pacote entregue ao aluno. Todo texto que de fato chega à aula recebe a revisão de voz correspondente. Respeitar tetos e registros existentes sem inventar uma nova política jurídica nesta tarefa.
 
 ## 13. Gate e publicação consistente
+
+> **15/09/2026:** a "certificação" saiu da lista do que o gate valida, e com ela a passada de
+> geração controlada (§9). O manifesto do verde é aula + posições + versão dos juízes; a
+> procedência é aviso (trava 7). Ver o diário, "As travas de 15/9".
 
 O gate nasce com o modelo novo. Validação estrutural, referências, legalidade, proveniência, certificação e voz acompanham os blocos; a interface clicável nasce junto com as primeiras edições.
 

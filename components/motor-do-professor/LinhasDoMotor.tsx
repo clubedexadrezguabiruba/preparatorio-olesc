@@ -54,11 +54,6 @@ export function LinhasDoMotor({ estado, quantas }: { estado: EstadoDoMotorDoProf
           </li>
         ))}
       </ol>
-      {estado.poucasPecas ? (
-        <p className="truncate pl-[3.25rem] text-[11px] text-tinta-fraca" title="Com até 7 peças, o resultado certificado é o da tablebase; o motor é só apoio.">
-          até 7 peças: o resultado certo vem da base de finais
-        </p>
-      ) : null}
     </div>
   );
 }

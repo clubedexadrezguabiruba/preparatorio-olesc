@@ -1,8 +1,9 @@
 /**
  * A prática pela tela — fatia 10, parada 10C (§17.1).
  *
- * Número da parada: na aula de ensaio sem prática, o Conferir acusa `PRATICA_AUSENTE` (**1**); a
- * prática criada pela janela — com a posição de um capítulo adicionada ao acervo — leva a **0**.
+ * Desde 15/9/2026 (trava 9) a prática é opcional: a aula de ensaio sem prática confere sem acusar nada
+ * sobre prática (**0**), a lista diz "Opcional", e a prática criada pela janela — com a posição de um
+ * capítulo adicionada ao acervo, o resultado declarado pelo professor — entra, e o botão continua lá.
  */
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -17,7 +18,7 @@ const arquivo = () => JSON.parse(readFileSync(path.join(RAIZ, ".editor/v2", `${A
 
 test.beforeEach(() => criarAulaBase());
 
-test("editar avisa a versão nova; excluir → Conferir acusa; criar pela janela com posição nova no acervo → some", async ({ page }) => {
+test("editar avisa a versão nova; excluir → Conferir não acusa (trava 9); criar pela janela com posição nova no acervo", async ({ page }) => {
   await page.goto(`/editor/v2/finais/${AULA_BASE}`);
   const salvo = page.locator("header span").filter({ hasText: /^(✓ salvo|alterado|salvando…|erro|conflito)$/ });
 
@@ -39,11 +40,12 @@ test("editar avisa a versão nova; excluir → Conferir acusa; criar pela janela
   await expect.poll(() => arquivo().praticas.length).toBe(0);
   await expect(salvo).toHaveText("✓ salvo");
 
-  // 3. Conferir: PRATICA_AUSENTE = 1.
+  // 3. Conferir: a aula sem prática não é mais acusada (trava 9, 15/9/2026), e a lista diz que é opcional.
   await maisAcoes(page, /Conferir sem publicar/);
   const resultado = page.getByRole("region", { name: "Resultado da conferência" });
-  const ausente = resultado.getByRole("listitem").filter({ hasText: /não tem prática contra o computador/i });
-  await expect(ausente).toHaveCount(1);
+  await expect(resultado).toBeVisible();
+  await expect(resultado.getByRole("listitem").filter({ hasText: /não tem prática contra o computador/i })).toHaveCount(0);
+  await expect(page.getByText(/Opcional\. Sem prática, o aluno fecha a aula marcando que assistiu/)).toBeVisible();
 
   // 4. Capítulo com a posição da prática livre do estudo, com a origem registrada.
   await page.getByRole("button", { name: "+ Adicionar capítulo" }).click();
@@ -52,25 +54,30 @@ test("editar avisa a versão nova; excluir → Conferir acusa; criar pela janela
   await novo.getByRole("button", { name: /Colar código da posição/ }).click();
   await novo.getByLabel("FEN da posição").fill(FEN_DA_PRATICA);
   await novo.getByRole("button", { name: "Criar capítulo" }).click();
-  await page.getByRole("region", { name: /Problemas desta aula|Resultado da conferência/ }).getByRole("listitem").filter({ hasText: /falta dizer de onde veio/i }).getByRole("button", { name: "Resolver" }).click();
+  // Com a conferência aberta e só avisos, a lista começa fechada (revisão de experiência de 14/9); desde a
+  // trava 7 a origem que falta é aviso, então é preciso abrir a lista para achar o "Resolver".
+  const regiao = page.getByRole("region", { name: /Problemas desta aula|Resultado da conferência/ });
+  const resolverOrigem = regiao.getByRole("listitem").filter({ hasText: /falta dizer de onde veio/i }).getByRole("button", { name: "Resolver" });
+  await expect(async () => {
+    const verLista = regiao.getByRole("button", { name: /Ver lista/ });
+    if (await verLista.isVisible()) await verLista.click();
+    await expect(resolverOrigem).toBeVisible({ timeout: 2000 });
+  }).toPass({ timeout: 30_000 });
+  await resolverOrigem.click();
   const origem = page.getByRole("dialog", { name: "De onde veio esta posição?" });
   await origem.getByRole("radio", { name: /Autoria própria/ }).check();
   await origem.getByRole("button", { name: "Registrar revisão" }).click();
 
-  // 5. Ir para o problema da conferência abre a prática nova; a posição vem do capítulo.
-  await ausente.getByRole("button", { name: "Resolver" }).click();
+  // 5. "+ Criar prática" abre a prática nova; a posição vem do capítulo.
+  await page.getByRole("button", { name: "+ Criar prática" }).click();
   const pratica = page.getByRole("dialog", { name: "Nova prática contra o computador" });
   await pratica.getByLabel("Título").fill("Vença sem afogar");
   await pratica.getByRole("button", { name: /De um capítulo desta aula/ }).click();
   await pratica.getByLabel("Capítulo").selectOption({ label: "Prática livre — K+D×R" });
   await expect(pratica.getByText(/Origem já registrada no capítulo: Autoria própria/)).toBeVisible();
+  // O resultado é do professor (trava 2): escolhido antes de adicionar, sem consulta a tablebase.
+  await pratica.getByLabel(/Resultado da posição/).selectOption({ label: "brancas ganham" });
   await pratica.getByRole("button", { name: "Adicionar ao acervo e usar" }).click();
-  const pedeResultado = pratica.getByLabel("Resultado esperado");
-  await expect(pratica.getByText(/✓ pos-ex-[a-z0-9-]+-\d+ ·/).or(pedeResultado)).toBeVisible();
-  if (await pedeResultado.isVisible()) {
-    await pedeResultado.selectOption({ label: "brancas ganham" });
-    await pratica.getByRole("button", { name: "Adicionar ao acervo e usar" }).click();
-  }
   // A mesma FEN já no acervo (a importação do estudo, na mesma rodada) é reaproveitada, e não duplicada.
   const escolhida = pratica.getByText(/✓ pos-ex-[a-z0-9-]+-\d+ ·/); // ou a do acervo real com a mesma FEN (a do Doug, 14/9/2026)
   await expect(escolhida).toBeVisible();
@@ -97,8 +104,6 @@ test("editar avisa a versão nova; excluir → Conferir acusa; criar pela janela
   expect(arquivo().fluxo.at(-1)?.tipo).toBe("pratica");
   await expect(salvo).toHaveText("✓ salvo");
 
-  // 7. Conferir de novo: PRATICA_AUSENTE = 0.
-  await maisAcoes(page, /Conferir sem publicar/);
-  await expect(page.getByRole("region", { name: "Resultado da conferência" })).toBeVisible();
-  await expect(page.getByRole("region", { name: "Resultado da conferência" }).getByText(/não tem prática contra o computador/i)).toHaveCount(0);
+  // 7. Com uma prática, o botão de criar outra continua (trava 9: nenhuma, uma ou várias).
+  await expect(page.getByRole("button", { name: "+ Criar prática" })).toBeVisible();
 });

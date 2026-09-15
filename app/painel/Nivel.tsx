@@ -93,7 +93,7 @@ export function Modulos({
           nota={
             fechamento.finais.publicadas < fechamento.finais.declaradas
               ? `${fechamento.finais.publicadas} de ${fechamento.finais.declaradas} aulas publicadas — o nível fecha com o que existe hoje.`
-              : "Cada aula é certificada pela tablebase, em três dias diferentes."
+              : "Cada aula conta quando você vence a prática em três dias diferentes."
           }
         />
         <Modulo

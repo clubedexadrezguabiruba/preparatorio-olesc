@@ -77,8 +77,11 @@ test("origem desconhecida publica, mas o aviso fica e não se resolve", () => {
   assert.deepEqual(creditosDaAula(revisada), []);
 });
 
-test("o formulário: só a origem é obrigatória; link sem http é recusado; direito só para terceiros", () => {
-  assert.deepEqual(prepararRevisaoDaFen({ origem: "", mostrarCredito: false }, FEN, "doug", AGORA), { ok: false, campo: "origem", mensagem: "diga de onde a posição veio — é o único campo obrigatório" });
+test("o formulário: nada é obrigatório (trava 7); link sem http é recusado; direito só para terceiros", () => {
+  // Até 15/9/2026 a origem era obrigatória. Sem ela, agora, a revisão fica "desconhecida" e a conferência avisa.
+  const semOrigem = prepararRevisaoDaFen({ origem: "", mostrarCredito: false }, FEN, "doug", AGORA);
+  assert.ok(semOrigem.ok);
+  assert.equal(semOrigem.revisao.origem, "desconhecida");
   const link = prepararRevisaoDaFen({ origem: "estudo-lichess", link: "lichess.org/study/x", mostrarCredito: true }, FEN, "doug", AGORA);
   assert.equal(!link.ok && link.campo, "link");
   const propria = prepararRevisaoDaFen({ origem: "autoria-propria", autor: "  ", mostrarCredito: false, direitoDosTextos: false }, FEN, "doug", AGORA);

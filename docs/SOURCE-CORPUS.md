@@ -10,6 +10,19 @@
 > `npm run validate:content`. Os dois têm de dizer a mesma coisa; quando
 > divergirem, o `sources.json` é o que morde e este arquivo é o que está errado.
 
+> **2026-09-15 — as travas de fonte caíram, por decisão do Doug.** No módulo de
+> finais **não há mais livro-base obrigatório**: qualquer livro, estudo do Lichess
+> ou posição do próprio Doug pode ser a posição de uma aula. Saíram do gate
+> `FONTE_NAO_DIDATICA`, `FONTE_DIDATICA_DIVERGE`, `FONTE_DIDATICA_DOMINA` (a
+> rotação da §3.4) e `TETO_DE_CITACAO` (o teto de 2 da §1). **A procedência virou
+> aviso**: a ficha "de onde veio" é opcional, e a falta dela, a FEN importada sem
+> revisão, a origem desconhecida e o texto de terceiros sem direito declarado
+> aparecem na conferência como aviso, não impedem publicar. O inventário
+> `content/divida-de-licenca.md` continua sendo gerado, e a divergência dele
+> também é aviso. **O que não mudou:** a IA não cria, espelha, gira nem recolore
+> posição (`TRILHA-FINAIS.md` §14.7, regra 7). O resto deste documento é o registro
+> de como as regras eram, e continua valendo como **boa prática** para quem garimpa.
+
 ---
 
 ## 1. A regra em três frases
@@ -29,6 +42,12 @@ tradução, seleção completa de exercícios ou estrutura editorial. Todo texto
 curso é escrito do zero, em PT-BR.
 
 ### 1.1 A exceção: o regime integral
+
+> **2026-09-15:** com o fim do teto e do livro-base obrigatório (nota do topo), o
+> regime integral deixou de ser condição para publicar. Ele continua declarado,
+> porque é o que alimenta o inventário da dívida de licença; o prazo vencido
+> (`REGIME_INTEGRAL_VENCIDO`) e o inventário desatualizado (`DIVIDA_DESATUALIZADA`)
+> passaram a **aviso**.
 
 Há um caso em que o teto de 2 é a régua errada: quando a decisão editorial é
 **"este módulo inteiro segue este livro"**. Foi o que o Doug decidiu em
@@ -661,6 +680,12 @@ Obras que não são obtíveis, anotadas para não repetir a busca:
 ### 3.4 Livros-base didáticos — a rotação do objetivo e do exemplo
 
 *Decidido em 2026-08-19, depois de a `N0-R-MATE` reprovar pedagogicamente.*
+
+> **2026-09-15 — esta seção deixou de ser regra.** As duas travas mecânicas abaixo
+> (`FONTE_DIDATICA_DIVERGE` e `FONTE_DIDATICA_DOMINA`), e também
+> `FONTE_NAO_DIDATICA`, saíram do gate por decisão do Doug (nota do topo). A marca
+> `"didactic": true` continua em `content/sources.json` como informação. Alternar
+> livros escritos para iniciante continua sendo bom conselho; não é mais cobrado.
 
 O mapa de cobertura acima responde "de onde tirar uma posição legítima". Ele não
 responde "de onde tirar uma posição que **ensina**", e essa era a pergunta que

@@ -65,7 +65,7 @@ function fimValido(game: Chess, resposta: RespostaTreinoV2, treino: TreinoV2): s
   if (resposta.efeito.condicao === "mate" && !game.isCheckmate()) return "a posição final não é mate";
   if (resposta.efeito.condicao === "promotion" && ultimo.length !== 5) return "o ramo não termina em promoção";
   if (resposta.efeito.condicao === "draw-secured" && !game.isDraw()) return "a posição final ainda não é um empate pelas regras";
-  if (resposta.efeito.condicao === "tablebase-win" && treino.perfil !== "final-certificado") return "vitória certificada só cabe em final certificado";
+  if (resposta.efeito.condicao === "tablebase-win" && treino.perfil !== "final-certificado") return "este fim só existe nas aulas antigas; escolha mate, promoção, empate ou objetivo autoral";
   if (resposta.efeito.condicao === "objetivo-autoral" && !treino.explicacaoConclusao?.trim()) return "explique a conclusão do objetivo autoral";
   return null;
 }

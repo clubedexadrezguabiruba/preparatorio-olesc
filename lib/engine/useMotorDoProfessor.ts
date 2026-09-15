@@ -5,7 +5,6 @@ import { ENGINE_BUILD } from "./build.ts";
 import {
   alturaDaBarra,
   avaliacaoParaBrancas,
-  contaPecas,
   resultadoTerminal,
   formatarAvaliacao,
   linhasEsperadas,
@@ -59,8 +58,6 @@ export type EstadoDoMotorDoProfessor = {
   barra: number | null;
   /** O fim de partida pela regra do jogo, quando a posição já acabou. */
   terminal: string | null;
-  /** Até 7 peças: a nota da tablebase. */
-  poucasPecas: boolean;
   erro: string | null;
 };
 
@@ -97,7 +94,6 @@ export function useMotorDoProfessor(
 
   const fim = useMemo(() => resultadoTerminal(fen), [fen]);
   const terminal = fim?.texto ?? null;
-  const poucasPecas = useMemo(() => contaPecas(fen) <= 7, [fen]);
   const chave = `${fen}|${linhas}`;
   const parado = pausado || escondida;
 
@@ -166,7 +162,6 @@ export function useMotorDoProfessor(
     linhas: ligado && atual ? atual.linhas : [],
     barra: ligado ? barra : null,
     terminal: ligado ? terminal : null,
-    poucasPecas,
     erro: ligado ? erro ?? (statusDoMotor === "failed" ? "o motor não carregou" : null) : null,
   };
 }

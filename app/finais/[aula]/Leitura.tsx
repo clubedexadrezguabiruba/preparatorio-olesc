@@ -71,11 +71,11 @@ export function Leitura({ aula }: { aula: string }) {
 
       <div className="flex flex-col gap-1">
         <p className="text-sm font-medium text-tinta">
-          {lida ? "Aula lida." : "Li o objetivo e vi o exemplo até o fim."}
+          {lida ? "Aula feita." : "Assisti à aula até o fim."}
         </p>
         <p className="text-xs text-tinta-fraca">
-          Esta aula não tem tabuleiro para jogar — ela é de leitura. Marcar aqui é o que a
-          conta como aprendida na trilha.
+          Esta aula não tem partida contra o computador. Marcar aqui é o que a conta
+          como aprendida na trilha.
         </p>
       </div>
     </div>

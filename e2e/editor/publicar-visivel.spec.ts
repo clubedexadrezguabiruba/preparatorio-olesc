@@ -21,18 +21,24 @@ async function importar(page: import("@playwright/test").Page, aula: string, tex
   await expect(salvo).toHaveText("✓ salvo");
 }
 
-test("com problema (textos sem direito declarado): Publicar está na tela, confere sozinho e diz o que impede", async ({ page }) => {
+test("com aviso (textos sem direito declarado): Publicar confere sozinho, publica mesmo assim, e o aviso se resolve pela lista", async ({ page }) => {
+  // Até 15/9/2026 o texto de terceiros sem declaração IMPEDIA publicar. Virou aviso (decisão do Doug sobre
+  // direitos autorais): a conferência diz "Pode publicar", e o aviso continua à vista até ser resolvido.
   await importar(page, "EX-E2E-PUBLICAR-PROBLEMA", false);
   const publicar = page.getByRole("button", { name: "Publicar", exact: true });
   await expect(publicar).toBeVisible();
   await publicar.click();
-  await expect(page.getByRole("region", { name: "Resultado da conferência" })).toContainText("Ainda não dá para publicar", { timeout: 60_000 });
-  
-  await expect(page.getByRole("dialog", { name: "Publicar a aula" })).toHaveCount(0);
+  const pergunta = page.getByRole("dialog", { name: "Antes de publicar, quer fazer a aula inteira como aluno?" });
+  await expect(pergunta).toBeVisible({ timeout: 60_000 });
+  await pergunta.getByRole("button", { name: "Cancelar" }).click();
+
+  const resultado = page.getByRole("region", { name: "Resultado da conferência" });
+  await expect(resultado).toContainText(/Pode publicar\. \d+ avisos?, que não impedem/);
+  await expect(resultado.getByText("impede", { exact: true })).toHaveCount(0);
 
   // Achado 2: a declaração vale para todas as posições do mesmo estudo, numa janela só.
-  const resultado = page.getByRole("region", { name: "Resultado da conferência" });
-  await resultado.getByRole("button", { name: "Resolver" }).first().click();
+  await resultado.getByRole("button", { name: /Ver lista/ }).click();
+  await resultado.getByRole("listitem").filter({ hasText: /vieram de outra pessoa/ }).getByRole("button", { name: "Resolver" }).first().click();
   const origem = page.getByRole("dialog", { name: "De onde veio esta posição?" });
   await origem.getByRole("checkbox", { name: /Os textos que vieram com esta posição são meus/ }).check();
   await expect(origem.getByRole("checkbox", { name: /Registrar o mesmo para as outras \d+ posições/ })).toBeChecked();
@@ -41,9 +47,7 @@ test("com problema (textos sem direito declarado): Publicar está na tela, confe
 
   // Achado 3: a lista se atualiza sozinha depois do conserto — sem clicar em Conferir.
   await expect(resultado).toContainText("Pode publicar", { timeout: 60_000 });
-  await expect(resultado.getByText("impede", { exact: true })).toHaveCount(0);
-  await page.getByRole("button", { name: "Publicar", exact: true }).click();
-  await expect(page.getByRole("dialog", { name: "Antes de publicar, quer fazer a aula inteira como aluno?" })).toBeVisible();
+  await expect(resultado.getByText(/vieram de outra pessoa/)).toHaveCount(0, { timeout: 60_000 });
 });
 
 test("aula pronta: Publicar sem Conferir antes leva direto à pergunta", async ({ page }) => {

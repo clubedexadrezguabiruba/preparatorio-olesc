@@ -1,6 +1,6 @@
 ---
 name: revisar-aula
-description: Confere uma aula de finais pronta no site local — gates, voz, flechas, tempo, experiência e coerência —, corrige o que dá para corrigir e devolve um relatório com o antes e o depois. Use quando uma aula de `content/lessons/` acabou de ser escrita ou alterada, ou quando o Doug pedir "/revisar-aula <ID>".
+description: Confere uma aula de finais pronta no site local — gates, voz, flechas, tempo, experiência, coerência e montagem —, corrige o que dá para corrigir e devolve um relatório com o antes e o depois. Use quando uma aula de `content/lessons/` acabou de ser escrita ou alterada, ou quando o Doug pedir "/revisar-aula <ID>".
 ---
 
 # `/revisar-aula <ID>` — a régua rodando
@@ -64,20 +64,23 @@ e nunca reabra uma imagem já descrita.
 
 ---
 
-## 4. Os seis quesitos, e o que cada um mede
+## 4. Os sete quesitos, e o que cada um mede
 
 | Quesito | O que é medido, e por quem |
 |---|---|
-| **Voz e texto** | `node --test lib/lesson/voz.test.ts` — teto de caracteres por fala, teto de palavras por frase e a lista de palavras de bastidor, sobre `content/lessons/*.json` **e** sobre `lib/lesson/falas.ts`. O que a máquina **não** mede está na §7 do documento: "uma ideia por fala", elogio vazio, exclamação, repreensão. Esses você lê. |
+| **Voz e texto** | `node --test lib/lesson/voz.test.ts` — teto de caracteres por fala, teto de palavras por frase e a lista de palavras proibidas (quinze desde 15/9: saíram objetivo, método, avaliação, teoria e estrutura), sobre `content/lessons/*.json` **e** sobre `lib/lesson/falas.ts`. O que a máquina **não** mede está na §7 do documento: "uma ideia por fala", elogio vazio, exclamação, repreensão. Esses você lê. |
 | **Flechas e casas** | `medir.mjs`: toda casa citada numa fala está desenhada naquele passo; todo desenho é citado; **todo nó do treino aponta o alvo — com seta ou com casa acesa**; nenhuma seta liga a origem ao destino do lance certo; a **prática real** tem **zero** desenho. O desenho do treino não se edita na árvore: ele mora em `objective.roteiro[…].treino`. |
 | **Tempo** | `medir.mjs`: o comentário **nunca pagina** — se paginou, a fala passou do teto —, e `Pausar` segura por 10 s. **A duração da aula assistida é observação (`·`), não veredito**, desde 9/9/2026: a faixa de 40 a 70 s saiu da régua a pedido do Doug (§3.1b da voz). O número continua impresso, e recusar uma aula de dois minutos é do olho. |
 | **Experiência** | `medir.mjs`: rolagem zero nas **quatro** telas e nas duas resoluções (página **e** blocos internos); botões acima do alvo mínimo, que muda com o que aponta; e a apresentação anda com `→` e volta com `←`. |
-| **Coerência da aula** | O treino jogado até o fim com o mouse; e a linha do roteiro é a linha da árvore (`lib/lesson/roteiro.test.ts`). As etapas, da aula em diante, jogarem a MESMA posição já é recusa de arquivo (`lessonSchema`), então não se confere de novo aqui. |
+| **Coerência da aula** | O treino jogado até o fim com o mouse; e a linha do roteiro é a linha da árvore (`lib/lesson/roteiro.test.ts`). Desde 15/9 a aula pode ter várias posições e as etapas que tiver (travas 8–10 da `docs/TRILHA-FINAIS.md`): etapa ausente não é defeito, e aula sem prática fecha pelo "assisti". |
 | **O treino é derivado, e o gate o reproduz sem diff** | `npm run validate:content` **sem** `--write`. A etapa 3 é saída de `lib/lesson/derivar-treino.ts`: se o que está no arquivo não é o que o roteiro produz, sai `TREINO_DESATUALIZADO`. Se você editou a árvore à mão, o próximo `--write` apaga o que você escreveu — o conserto mora em `objective.roteiro[…].treino`. Para provar o contrato: apague `stages.guided`, rode `--refresh-cache --write`, e leia o `git diff`; ele tem de voltar campo por campo. |
+| **Montagem** (`docs/TRILHA-FINAIS.md §14.7`, desde 2026-09-14) | Lido, não medido. (1) O **primeiro passo da apresentação é uma pergunta** — "ganha, empata ou perde?" ou "qual é a primeira coisa a fazer?" — e a resposta só vem no passo seguinte. (2) A aula assistida **fecha com "LEMBRE-SE"** (era "Guarde isto" até 15/9): de uma a três regras, uma por fala, em passos sem lance. (3) **A prática real testa a frase "sai sabendo"** da aula (§5.1 da trilha): se o lance que a frase pede não aparece contra o motor, marque. (4) **Procedência é aviso desde 15/9**: diagrama sem "de onde veio" vai para o relatório como nota, não como defeito — qualquer livro, estudo ou posição do Doug serve. Posição inventada, espelhada ou com cor trocada pela IA **continua proibida e não se conserta**: marque para o Doug decidir. |
 
 ---
 
 ## 5. O que você conserta, e o que você marca
+
+**O professor tem a última palavra** (decisão global de 2026-09-15, `docs/TRILHA-FINAIS.md` §14.7, regra 10). Tudo o que esta revisão aponta sobre a posição e o resultado é **aviso para o Doug**, não veredito: a conferência do resultado é a do motor do professor (o Stockfish do editor), e a tablebase deixou de ser obrigatória. Se o motor discordar do que a aula afirma, escreva os dois lados no relatório e deixe a decisão com ele. Lance ilegal continua sendo defeito.
 
 **Conserte o que precisar.** Texto fora da régua, rótulo de bastidor, casa
 citada e não desenhada, botão duplicado: corrija na árvore de trabalho e

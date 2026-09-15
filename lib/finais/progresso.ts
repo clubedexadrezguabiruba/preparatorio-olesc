@@ -1,7 +1,7 @@
 import "server-only";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { idsDeAulasV2Ativas, pacoteAtivoDoAluno } from "@/lib/finais/conteudo-v2";
-import type { ProgressoDaEscada } from "@/lib/finais/escada";
+import { juntarEscadas, zerada, type ProgressoDaEscada } from "@/lib/finais/escada";
 import { AULA_ZERADA, type ProgressoDaAula } from "@/lib/finais/trilha";
 
 /**
@@ -38,17 +38,21 @@ import { AULA_ZERADA, type ProgressoDaAula } from "@/lib/finais/trilha";
  */
 
 /**
- * A prática (única, nesta fatia) e a revisão ativa de cada aula v2 publicada. Conteúdo lido do
- * disco; se um pacote estiver quebrado, a aula fica de fora daqui e quem acusa é a página dela.
+ * **Todas** as práticas de cada aula v2 publicada, com a revisão ativa de cada uma (trava 9,
+ * 15/9/2026: a aula tem nenhuma, uma ou várias). Aula v2 sem prática entra com a lista vazia —
+ * ela também não lê a escada v1. Conteúdo lido do disco; se um pacote estiver quebrado, a aula
+ * fica de fora daqui e quem acusa é a página dela.
  */
-function revisoesAtivasDasPraticasV2(): Map<string, { entidadeId: string; revisao: string }> {
-  const ativas = new Map<string, { entidadeId: string; revisao: string }>();
+function revisoesAtivasDasPraticasV2(): Map<string, Array<{ entidadeId: string; revisao: string }>> {
+  const ativas = new Map<string, Array<{ entidadeId: string; revisao: string }>>();
   for (const aula of idsDeAulasV2Ativas()) {
     try {
       const pacote = pacoteAtivoDoAluno(aula);
-      const pratica = pacote?.aula.praticas[0];
-      const revisao = pratica ? pacote!.revisoes[pratica.id]?.revisao : undefined;
-      if (pratica && revisao) ativas.set(aula, { entidadeId: pratica.id, revisao });
+      if (!pacote) continue;
+      ativas.set(aula, pacote.aula.praticas.flatMap((pratica) => {
+        const revisao = pacote.revisoes[pratica.id]?.revisao;
+        return revisao ? [{ entidadeId: pratica.id, revisao }] : [];
+      }));
     } catch {
       // Pacote quebrado: a página da aula lança e mostra o defeito; aqui ele não derruba a trilha.
     }
@@ -139,6 +143,9 @@ async function ler(aluno?: string): Promise<Map<string, Map<string, ProgressoDaA
    * como história — mas não vale para a aula de hoje. Por isso a escada de `finais_progresso`
    * é ignorada nas aulas v2: ela é da tarefa v1, e só entra na v2 por migração explícita, que
    * copia a linha para a revisão equivalente.
+   *
+   * **Com várias práticas (15/9/2026)**, cada uma tem a sua escada, e a da aula é a junção
+   * (`juntarEscadas`): aprendida só quando todas estão; a revisão vence quando qualquer uma vence.
    */
   const ativasV2 = revisoesAtivasDasPraticasV2();
   const escadaDe = (linha: LinhaDaEscada): ProgressoDaEscada => ({
@@ -156,18 +163,38 @@ async function ler(aluno?: string): Promise<Map<string, Map<string, ProgressoDaA
     aulas.set(linha.aula, { ...(aulas.get(linha.aula) ?? AULA_ZERADA), escada: escadaDe(linha) });
   }
 
-  if (ativasV2.size) {
+  const comPraticaV2 = [...ativasV2].filter(([, praticas]) => praticas.length > 0).map(([aula]) => aula);
+  if (comPraticaV2.length) {
     let daAvaliacao = supabase
       .from("avaliacoes_progresso")
       .select("aluno, aula, entidade_id, assessment_revision, degrau, revisar_em, tentativas, erros, aprendida_em, ultima_em")
-      .in("aula", [...ativasV2.keys()]);
+      .in("aula", comPraticaV2);
     if (aluno) daAvaliacao = daAvaliacao.eq("aluno", aluno);
     const { data } = await daAvaliacao;
+    // aluno → aula → prática → escada da revisão ativa.
+    const lidas = new Map<string, Map<string, Map<string, ProgressoDaEscada>>>();
     for (const linha of (data ?? []) as Array<LinhaDaEscada & { entidade_id: string; assessment_revision: string }>) {
-      const ativa = ativasV2.get(linha.aula);
-      if (!ativa || ativa.entidadeId !== linha.entidade_id || ativa.revisao !== linha.assessment_revision) continue;
-      const aulas = doAluno(linha.aluno);
-      aulas.set(linha.aula, { ...(aulas.get(linha.aula) ?? AULA_ZERADA), escada: escadaDe(linha) });
+      const ativa = ativasV2.get(linha.aula)?.find((pratica) => pratica.entidadeId === linha.entidade_id);
+      if (!ativa || ativa.revisao !== linha.assessment_revision) continue;
+      const doAlunoLido = lidas.get(linha.aluno) ?? new Map<string, Map<string, ProgressoDaEscada>>();
+      lidas.set(linha.aluno, doAlunoLido);
+      const daAula = doAlunoLido.get(linha.aula) ?? new Map<string, ProgressoDaEscada>();
+      doAlunoLido.set(linha.aula, daAula);
+      daAula.set(linha.entidade_id, escadaDe(linha));
+    }
+    for (const [idAluno, porAula] of lidas) {
+      const aulas = doAluno(idAluno);
+      for (const [aula, porPratica] of porAula) {
+        // A prática que o aluno ainda não jogou entra zerada: ela é o que impede "aprendida".
+        const { escada, praticaParaRevisar } = juntarEscadas(
+          (ativasV2.get(aula) ?? []).map((pratica) => ({ id: pratica.entidadeId, escada: porPratica.get(pratica.entidadeId) ?? zerada() })),
+        );
+        aulas.set(aula, {
+          ...(aulas.get(aula) ?? AULA_ZERADA),
+          escada,
+          ...(praticaParaRevisar ? { praticaParaRevisar } : {}),
+        });
+      }
     }
   }
 

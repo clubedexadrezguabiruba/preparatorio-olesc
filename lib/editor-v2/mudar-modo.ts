@@ -26,7 +26,8 @@
  * aquela análise**; se outro capítulo a mostra, o quadro só emprestou a posição, e o capítulo novo
  * começa parado nela, sem roubar os lances do vizinho.
  *
- * Prática fica fora desta parada: ela depende do acervo (servidor) e da regra de uma prática por aula.
+ * Prática fica fora desta parada: ela depende do acervo (servidor). A regra de uma prática por aula, que
+ * também a prendia, caiu em 15/9/2026 (trava 9).
  */
 import type { Position } from "../lesson/schema.ts";
 import { comErrosNoCatalogo, completarTreino } from "./importar-estudo.ts";

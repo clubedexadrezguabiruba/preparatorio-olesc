@@ -301,7 +301,6 @@ function Impacto({ impacto }: { impacto: ImpactoDaTrocaV2 }) {
         {impacto.treinosAfetados.map((treino) => (
           <Linha key={treino.id}>
             O treino «{treino.titulo}» volta a ter a avaliação pendente
-            {treino.certificacaoReaberta ? ", e a certificação dele é reaberta" : ""}
             {treino.fonteAlterada ? ", e a fonte dele passa a constar como alterada" : ""}.
           </Linha>
         ))}

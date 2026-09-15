@@ -65,6 +65,15 @@ export async function apagarContasDoEnsaio(): Promise<string[]> {
   return apagadas;
 }
 
+/** A marcação de "assisti" do aluno de ensaio nesta aula (trava 9, 15/9/2026: a aula sem prática fecha por ela). */
+export async function leituraDoAluno(aulaId: string, usuario: string = ALUNO): Promise<boolean> {
+  const id = await idDaConta(usuario);
+  if (!id) return false;
+  const { data, error } = await admin().from("aula_lida").select("aula").eq("aluno", id).eq("aula", aulaId);
+  if (error) throw new Error(`leitura de aula_lida falhou: ${error.message}`);
+  return (data ?? []).length > 0;
+}
+
 /** As linhas de tentativa de aula v2 do aluno de ensaio — a prova "no banco" da parada 10G. */
 export async function tentativasDoAluno(aulaId: string, usuario: string = ALUNO): Promise<Array<{ etapa: string; publication_id: string | null; sucesso: boolean | null }>> {
   const id = await idDaConta(usuario);

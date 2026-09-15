@@ -1,7 +1,7 @@
 {
   "formato": "pacote-aula-v2",
   "versao": 1,
-  "publicationId": "pub-55947670bbcd7bd0",
+  "publicationId": "pub-88c0dd0da6928993",
   "aula": {
     "schemaVersion": 2,
     "id": "EX-FIXTURE-V2",
@@ -529,11 +529,12 @@
         },
         "obrigatorio": true,
         "revisaoAvaliacao": "confirmada",
+        "resultado": "win",
         "certificacao": {
           "tipo": "tablebase",
-          "estado": "confirmada",
+          "estado": "herdada-v1",
           "positionId": "pos-n0-ladder-silman-yk7",
-          "alvoHash": "ee8c62bd7181e53f8f1ae4bfaf62b8697f7480b6dec8756d3930a3770e37e292",
+          "alvoHash": "e4a6436186dc2e7c4e082b0c01cd95f88a071c074dbc6fe680c9fa17f7081630",
           "resultado": "win",
           "evidencias": {
             "questao-n0-ladder-n1": {
@@ -761,7 +762,7 @@
   },
   "manifesto": {
     "aulaId": "EX-FIXTURE-V2",
-    "aula": "67e006719dea666f2867d7629fca6f2e06cca8e5a51f5b389652a7a250ceead5",
+    "aula": "ee224bcc8b885a63b0df2a76baa03f8c8dde5cac401e7e9520c47794cb4f605d",
     "posicoes": {
       "pos-n0-ladder-silman-yk7": "6c4efc054b9ad682bfd6786866861fd959686b80b42982f835542e324ad15b95"
     },

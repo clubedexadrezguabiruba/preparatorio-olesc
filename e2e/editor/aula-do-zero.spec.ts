@@ -274,14 +274,10 @@ test("criar a aula do zero pela tela, conferir e publicar", async ({ page }) => 
   await pratica.getByLabel("Título").fill(nomeDe(PRATICA));
   await pratica.getByRole("button", { name: /De um capítulo desta aula/ }).click();
   await pratica.getByLabel("Capítulo").selectOption({ label: nomeDe(CAP_03) });
+  // O resultado é do professor (trava 2, 15/9/2026): escolhido antes, sem consulta a tablebase.
+  await pratica.getByLabel(/Resultado da posição/).selectOption({ label: "brancas ganham" });
   await pratica.getByRole("button", { name: "Adicionar ao acervo e usar" }).click();
-  const pedeResultado = pratica.getByLabel("Resultado esperado");
   const escolhida = pratica.getByText(/✓ pos-ex-[a-z0-9-]+-\d+ ·/); // reaproveita a posição do acervo com a mesma FEN, se houver
-  await expect(escolhida.or(pedeResultado)).toBeVisible();
-  if (await pedeResultado.isVisible()) {
-    await pedeResultado.selectOption({ label: "brancas ganham" });
-    await pratica.getByRole("button", { name: "Adicionar ao acervo e usar" }).click();
-  }
   await expect(escolhida).toBeVisible();
   await pratica.getByRole("button", { name: "Criar prática" }).click();
   await expect(page.getByRole("button", { name: new RegExp(`${nomeDe(PRATICA)}.*Brancas · vencer`) })).toBeVisible();

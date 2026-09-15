@@ -12,9 +12,7 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { Chess } from "chess.js";
-import { hashDoAlvo } from "../lib/lesson/excecoes.ts";
-import { MARCA_DE_MOLDE, type Lesson } from "../lib/lesson/schema.ts";
-import { goalMovesOf, Tablebase } from "./tablebase.ts";
+import { MARCA_DE_MOLDE } from "../lib/lesson/schema.ts";
 import { revisoesDaAulaV2 } from "../lib/editor-v2/avaliacao.ts";
 import { posicoesDoPacoteV2, selarPacoteV2, type PacoteV2 } from "../lib/editor-v2/pacote.ts";
 
@@ -90,28 +88,6 @@ function gravarRascunhoDeAula(dir: string, id: string, json: unknown) {
   const pasta = path.join(dir, "rascunhos", "lessons");
   mkdirSync(pasta, { recursive: true });
   gravar(path.join(pasta, `${id}.json`), json);
-}
-
-/**
- * Promove uma fixture a `candidate` com os 9 campos de proveniência
- * preenchidos, apontando a obra pedida. Sem isso a mutação bateria antes na
- * PROVENIENCIA_INCOMPLETA e o check sob teste nunca rodaria.
- */
-function promover(dir: string, id: string, editionFile: string) {
-  const { file, json } = lerPosicao(dir, id);
-  json.status = "candidate";
-  json.provenance = {
-    externalHumanSource: "diagrama de livro impresso",
-    bibliographicSource: `${editionFile}, p. 42, diagrama 7`,
-    originalGame: "não se aplica — posição teórica",
-    authorComposer: "não se aplica",
-    license: "citação de posição isolada",
-    editionFile,
-    fenMethod: "transcrição verificada do diagrama",
-    qaApplied: "mutação de teste",
-    pendingRisk: "nenhum",
-  };
-  gravar(file, json);
 }
 
 /**
@@ -299,6 +275,18 @@ function lanceIlegal(game: Chess): string {
 }
 
 const MUTACOES: Mutation[] = [
+  /*
+   * **Em 2026-09-15 saíram 21 códigos desta suíte** (e a mutação de SCHEMA_AULA da aula publicada sem
+   * uma das quatro etapas — trava 8), com as travas do Doug (docs/TRILHA-FINAIS.md):
+   * as regras da tablebase (RESULTADO_ERRADO, METODO_NAO_GANHA, DEFENSOR_FROUXO, ALTERNATIVA_NAO_GANHA,
+   * TERMINAL_NAO_SEGURA, TERMINAL_FORA_DO_OBJETIVO, TERMINAL_LONGE_DEMAIS e as três CERTIFICACAO_), as de
+   * livro-base (FONTE_DIDATICA_DIVERGE, FONTE_DIDATICA_DOMINA), a de uma prática por aula
+   * (PRATICA_AUSENTE, PRATICAS_MULTIPLAS), e as que viraram aviso (POSICAO_NAO_PUBLICAVEL,
+   * OBRA_NAO_REGISTRADA, REGIME_INTEGRAL_VENCIDO, PROVENIENCIA_CADUCA, PROVENIENCIA_DIVERGE,
+   * FEN_IMPORTADA_SEM_REVISAO, TEXTO_SEM_DIREITO_DECLARADO). Aviso não reprova, e esta suíte só aceita
+   * erro como prova (`linhasDoCodigo`). O lado "a trava caiu e o estrago passa" está provado em
+   * `lib/editor-v2/conferencia.test.ts` ("travas de 15/9").
+   */
   {
     titulo: "FEN ilegal (reis adjacentes) na posição de ensino",
     codigo: "FEN_ILEGAL",
@@ -307,78 +295,6 @@ const MUTACOES: Mutation[] = [
       json.fen = "8/8/8/1k6/1K6/8/8/R7 w - - 0 1";
       gravar(file, json);
       return "fen → 8/8/8/1k6/1K6/8/8/R7 (rei branco em b4, colado no preto em b5)";
-    },
-  },
-  {
-    titulo: "resultado esperado errado",
-    codigo: "RESULTADO_ERRADO",
-    aplicar: async (dir) => {
-      const { file, json } = lerPosicao(dir, posicaoDeEnsino(dir));
-      json.expectedResult = "draw";
-      gravar(file, json);
-      return 'expectedResult → "draw" numa posição que a tablebase dá como ganha';
-    },
-  },
-  /**
-   * As duas mutações da exceção do professor (decisão 10 do plano do editor).
-   *
-   * Elas são de um tipo diferente das outras: não plantam um erro para ver se o
-   * gate o pega — plantam um **perdão indevido** para ver se o gate o recusa. O
-   * erro de base é o mesmo dos dois lados (`RESULTADO_ERRADO`, com a posição
-   * mentindo sobre o resultado); o que muda é a exceção que o acompanha.
-   *
-   * Se alguém afrouxar a regra — parar de conferir o hash, ou passar a casar
-   * exceção só pelo alvo —, estas duas ficam **verdes**, e verde aqui é a
-   * suíte gritando. É o único jeito de uma regra que *perdoa* ter mutação.
-   */
-  {
-    titulo: "exceção com hash velho perdoando o erro que ela descrevia",
-    codigo: "RESULTADO_ERRADO",
-    aplicar: async (dir) => {
-      const id = posicaoDeEnsino(dir);
-      const { file: fp, json: posicao } = lerPosicao(dir, id);
-      posicao.expectedResult = "draw";
-      gravar(fp, posicao);
-
-      const { file: fa, json: aula } = lerAula(dir);
-      aula.excecoes = [
-        {
-          codigo: "RESULTADO_ERRADO",
-          alvo: id,
-          // O hash descreve uma posição que não é mais esta.
-          hash: "00000000000000000000000000000000",
-          motivo: "Divergência que eu assumi quando a posição era outra, e ninguém reviu.",
-          em: "2026-09-10",
-        },
-      ];
-      gravar(fa, aula);
-      return `exceção de ${id} com hash velho — o erro tem de voltar a bloquear`;
-    },
-  },
-  {
-    titulo: "exceção de outro código perdoando este erro",
-    codigo: "RESULTADO_ERRADO",
-    aplicar: async (dir) => {
-      const id = posicaoDeEnsino(dir);
-      const { file: fp, json: posicao } = lerPosicao(dir, id);
-      posicao.expectedResult = "draw";
-      gravar(fp, posicao);
-
-      const { file: fa, json: aula } = lerAula(dir);
-      // Hash **certo**: a exceção descreve exatamente esta posição. O que não
-      // bate é o código — ela perdoa `METODO_NAO_GANHA`, e o erro é outro.
-      const hash = hashDoAlvo(aula as Lesson, () => posicao.fen as string, id);
-      aula.excecoes = [
-        {
-          codigo: "METODO_NAO_GANHA",
-          alvo: id,
-          hash,
-          motivo: "Assumo que a linha do método não ganha, e é só isso que assumo aqui.",
-          em: "2026-09-10",
-        },
-      ];
-      gravar(fa, aula);
-      return `exceção de METODO_NAO_GANHA, com hash certo, sobre um erro de RESULTADO_ERRADO`;
     },
   },
   /**
@@ -414,52 +330,6 @@ const MUTACOES: Mutation[] = [
     },
   },
   {
-    titulo: "posição não aprovada referenciada por aula publicável",
-    codigo: "POSICAO_NAO_PUBLICAVEL",
-    aplicar: async (dir) => {
-      // Antes do B5 esta mutação só publicava a aula, e ficava vermelha porque
-      // as 4 posições ainda eram fixtures. Com o garimpo feito, todas são
-      // "approved" e a mutação precisa PLANTAR o estrago em vez de herdá-lo —
-      // que aliás sempre foi o desenho certo dela.
-      const ensino = posicaoDeEnsino(dir);
-      const posicao = lerPosicao(dir, ensino);
-      posicao.json.status = "candidate";
-      gravar(posicao.file, posicao.json);
-      const { file, json } = lerAula(dir);
-      json.status = "published";
-      // Desde a FN1/B2 o schema cobra a classe de quem publica: sem ela a
-      // mutação morreria em SCHEMA_AULA e a regra sob teste nunca rodaria.
-      json.class = "E";
-      gravar(file, json);
-      return `status da aula → "published" (classe E) com ${ensino} rebaixada a "candidate"`;
-    },
-  },
-  {
-    titulo: "lance perdedor marcado como método",
-    codigo: "METODO_NAO_GANHA",
-    aplicar: async (dir) => {
-      const { file, json } = lerAula(dir);
-      // Procurado, não fixado à mão: qualquer nó onde exista lance legal fora
-      // do winningMoves serve, e assim a mutação sobrevive à troca de posição.
-      for (const [id, node] of Object.entries(json.stages.guided.nodes) as Array<
-        [string, { fen: string; winningMoves: string[]; expects: Array<{ moves: string[] }>; mistakes?: Array<{ moves: string[] }> }]
-      >) {
-        const game = new Chess(node.fen);
-        const perdedor = game
-          .moves({ verbose: true })
-          .map((m) => `${m.from}${m.to}`)
-          .find((uci) => !node.winningMoves.includes(uci));
-        if (!perdedor) continue;
-        node.expects[0].moves = [perdedor];
-        node.mistakes = (node.mistakes ?? []).filter((m) => !m.moves.includes(perdedor));
-        if (node.mistakes.length === 0) delete node.mistakes;
-        gravar(file, json);
-        return `${id}: expects passa a ser ${perdedor}, que joga a vitória fora`;
-      }
-      throw new Error("nenhum nó guiado tem lance perdedor para plantar a mutação");
-    },
-  },
-  {
     // O estrago mudou de forma com o piloto do de la Villa. Ele antes só
     // trocava o lance final por um que ganha sem dar mate, porque o terminal
     // da aula de então **declarava** `ends: "mate"`. O terminal do piloto
@@ -491,177 +361,6 @@ const MUTACOES: Mutation[] = [
       return `${id}: o lance final vira ${naoDaMate} e o nó passa a declarar ends "mate" — mas não há mate`;
     },
   },
-  {
-    // **Roda sobre a fixture, e não sobre a aula publicada.** O piloto do de la
-    // Villa é rei e peão contra rei com o rei muito à frente: ali o defensor
-    // não tem escolha nenhuma que encurte o mate em mais de 2 lances — todas
-    // as fugas do rei preto valem quase o mesmo. Sem espalhamento não há
-    // defesa frouxa a plantar, e a regra ficaria sem sujeito.
-    //
-    // A `N1-FIXTURE-KRK` é o mate de torre, onde o defensor **tem** escolhas
-    // que custam muitos lances de diferença. É a mesma razão pela qual as
-    // outras mutações da B2 moram em fixture: a regra é do gate, não do
-    // currículo, e não pode depender de qual aula está escrita hoje.
-    titulo: "defensor frouxo (resposta que encurta o mate)",
-    codigo: "DEFENSOR_FROUXO",
-    fixtures: true,
-    aplicar: async (dir) => {
-      const { file, json } = lerFixture(dir, "N1-FIXTURE-KRK");
-      const tablebase = new Tablebase(path.join(dir, "tablebase-cache"), true);
-      for (const nodeId of Object.keys(json.stages.guided.nodes)) {
-        const node = json.stages.guided.nodes[nodeId];
-        const expect = node.expects[0];
-        if (!expect.reply) continue;
-        const game = new Chess(node.fen);
-        const move = expect.moves[0];
-        game.move({ from: move.slice(0, 2), to: move.slice(2, 4) });
-        const entry = await tablebase.lookup(game.fen());
-        const defesas = entry.moves
-          .map((m) => ({ uci: m.uci, plies: m.checkmate ? 0 : Math.abs(m.dtm ?? 0) }))
-          .sort((a, b) => a.plies - b.plies);
-        const pior = defesas[0];
-        const melhor = defesas[defesas.length - 1];
-        if (melhor.plies - pior.plies <= 2) continue;
-        expect.reply = pior.uci;
-        gravar(file, json);
-        return (
-          `${nodeId}: a resposta do defensor vira ${pior.uci} (mate em ${pior.plies} plies), ` +
-          `quando a melhor defesa aguenta ${melhor.plies}`
-        );
-      }
-      throw new Error("nenhum nó tem defesa fraca o bastante para plantar a mutação");
-    },
-  },
-  {
-    titulo: "posição citando obra que não está no registro",
-    codigo: "OBRA_NAO_REGISTRADA",
-    aplicar: async (dir) => {
-      promover(dir, posicaoDeEnsino(dir), "dvoretsky-endgame-manual.pdf");
-      return (
-        'pos-...-fx-a promovida a "candidate" com os 9 campos preenchidos, mas ' +
-        'editionFile → "dvoretsky-endgame-manual.pdf", obra ausente de content/sources.json'
-      );
-    },
-  },
-  {
-    titulo: "livro-base declarado que não é o de nenhuma cena",
-    codigo: "FONTE_DIDATICA_DIVERGE",
-    aplicar: async (dir) => {
-      const { file, json } = lerAula(dir);
-      // **A obra errada é COLHIDA, e não escrita aqui — e essa é a terceira
-      // versão desta linha.** Ela já foi "silman-endgame-course" e apodreceu no
-      // dia em que a aula passou a ser genuinamente do Silman; virou
-      // "de-la-villa-100" e apodreceu de novo em 2026-09-08, quando o piloto
-      // passou a ser do de la Villa. Nas duas vezes o sintoma foi o mesmo: a
-      // mutação vira no-op e passa batido, verde, sem provar nada.
-      //
-      // Agora ela pergunta ao registro qual é a outra: qualquer obra didática
-      // que não seja a que a aula declara. Não há mais nome de obra escrito
-      // nesta mutação, e por isso ela não tem como apodrecer numa terceira.
-      const registro = JSON.parse(readFileSync(path.join(dir, "sources.json"), "utf8"));
-      const antes = json.stages.objective.source;
-      const outra = registro.sources.find(
-        (o: { didactic?: boolean; slug: string }) => o.didactic && o.slug !== antes,
-      );
-      if (!outra) throw new Error("o registro não tem uma segunda obra didática");
-      json.stages.objective.source = outra.slug;
-      gravar(file, json);
-      return (
-        `objective.source: "${antes}" → "${outra.slug}", obra didática registrada ` +
-        "mas de onde não sai a posição da aula"
-      );
-    },
-  },
-  {
-    // FN1/B2: a regra deixou de ser "uma aula por nível" e passou a ser
-    // `max(2, floor(N/3))` aulas **publicadas** por classe. Com o piso de 2, duas
-    // aulas do mesmo autor são legítimas — a mutação precisa de **três**.
-    titulo: "obra protegida como livro-base de 3 aulas publicadas da mesma classe",
-    codigo: "FONTE_DIDATICA_DOMINA",
-    // O teto é `max(2, floor(N/3))`, e N é o número de aulas publicadas da
-    // classe — que cresce a cada aula nova. Fixar o texto inteiro (era
-    // "max(2, floor(3/3))", escrito quando a classe E tinha 3 aulas) faz a
-    // mutação ficar verde sozinha no dia em que a quarta aula entra. Cobrar só
-    // a fórmula prova a mesma coisa sem depender do N do dia.
-    contem: "max(2, floor(",
-    aplicar: async (dir) => {
-      // A obra tem de ser protegida, didática e **fora do regime integral**:
-      // para quem está em regime integral a rotação é desligada de propósito, e
-      // o `fail` nunca sai. Ela é colhida do registro, e não escrita — o livro
-      // do piloto já mudou duas vezes, e em 2026-09-08 ele **entrou** em regime
-      // integral (o de la Villa passou a ser o livro do módulo inteiro, por
-      // decisão do Doug). Foi exatamente isso que deixou esta mutação sem alvo:
-      // ela ficou verde sozinha, e o run a pegou.
-      const registro = JSON.parse(readFileSync(path.join(dir, "sources.json"), "utf8")) as {
-        sources: Array<{ slug: string; file: string | null; protected?: boolean; didactic?: boolean; integral?: unknown }>;
-      };
-      const alvo = registro.sources.find((o) => o.protected && o.didactic && !o.integral);
-      if (!alvo) throw new Error("o registro não tem obra protegida, didática e fora do regime integral");
-
-      // A posição da aula sai de uma obra em regime integral, e ela consta do
-      // inventário de `content/divida-de-licenca.md`. Trocar a proveniência
-      // dela faria a mutação disparar `DIVIDA_DESATUALIZADA` junto, e uma
-      // mutação que acende dois códigos deixa de provar qual dos dois pegou o
-      // estrago. Em vez disso: uma **cópia** da posição, com id novo e a
-      // proveniência do alvo. Mesma FEN e mesmo resultado, então nenhuma outra
-      // regra reclama; e como o alvo não está em regime integral, o inventário
-      // não muda um byte.
-      const original = lerAula(dir);
-      const idPosicao = original.json.stages.objective.positionId as string;
-      const posicao = lerPosicao(dir, idPosicao).json;
-      const idCopia = `${idPosicao}-rotacao`;
-      posicao.id = idCopia;
-      posicao.provenance.editionFile = alvo.file ?? alvo.slug;
-      gravar(path.join(dir, "positions", pastaDaPosicao(idCopia), `${idCopia}.json`), posicao);
-
-      // Três aulas publicadas da mesma classe, todas com o alvo como livro-base.
-      // Três é o menor N que estoura: com duas o teto é max(2, 0) = 2, e 2 não é
-      // maior que 2. A aula original fica **intacta** — ela é classe D, o
-      // livro dela é o do regime integral, e mexer nela é o que sujaria o
-      // inventário.
-      const aulas: string[] = [];
-      for (let k = 0; k < 3; k += 1) {
-        const { json } = lerAula(dir);
-        json.id = `${json.id}-ROTACAO${k + 1}`;
-        json.status = "published";
-        json.class = "E";
-        json.stages.objective.source = alvo.slug;
-        for (const etapa of ["objective", "guided", "practice"] as const) {
-          if (json.stages[etapa]) json.stages[etapa].positionId = idCopia;
-        }
-        gravar(path.join(dir, "lessons", `${json.id}.json`), json);
-        aulas.push(json.id as string);
-      }
-      return (
-        `${aulas.length} aulas publicadas da classe E declaram "${alvo.slug}" como ` +
-        "livro-base — acima do teto de max(2, floor(N/3))"
-      );
-    },
-  },
-  /* ---------------------------------------------------------------- *
-   * O regime integral (§1.1 do SOURCE-CORPUS)
-   *
-   * A exceção nasce com mutação plantada, como toda regra do gate. Sem estas
-   * três, o `integral` seria um campo que desliga duas regras e não tem nada
-   * cobrando que o desligamento continue medido.
-   * ---------------------------------------------------------------- */
-  {
-    titulo: "prazo do regime integral vencido",
-    codigo: "REGIME_INTEGRAL_VENCIDO",
-    aplicar: async (dir) => {
-      const file = path.join(dir, "sources.json");
-      const json = JSON.parse(readFileSync(file, "utf8"));
-      const obra = json.sources.find((s: { integral?: unknown }) => s.integral);
-      if (!obra) throw new Error("nenhuma obra em regime integral para vencer");
-      obra.integral.since = "2020-01-01";
-      obra.integral.replaceBefore = "2021-01-01";
-      gravar(file, json);
-      return (
-        `o prazo de "${obra.slug}" recuado para 2021-01-01 — a exceção temporária que ninguém ` +
-        "renovou tem de reprovar sozinha"
-      );
-    },
-  },
   /* ---------------------------------------------------------------- *
    * B8.2 — "este lance também vale"
    *
@@ -670,29 +369,6 @@ const MUTACOES: Mutation[] = [
    * mesma ideia das outras — um lance não pode estar em duas listas ao mesmo
    * tempo — e passa a ser cobrada junto com elas.
    * ---------------------------------------------------------------- */
-  {
-    titulo: "lance que perde declarado válido pela autoria",
-    codigo: "ALTERNATIVA_NAO_GANHA",
-    aplicar: async (dir) => {
-      const { file, json } = lerAula(dir);
-      for (const [id, node] of Object.entries(json.stages.guided.nodes) as Array<
-        [string, NoDaAula & { authorAlternatives?: unknown }]
-      >) {
-        const game = new Chess(node.fen);
-        const perdedor = game
-          .moves({ verbose: true })
-          .map((m) => `${m.from}${m.to}`)
-          .find((uci) => !node.winningMoves.includes(uci));
-        if (!perdedor) continue;
-        node.mistakes = (node.mistakes ?? []).filter((m) => !m.moves.includes(perdedor));
-        if (node.mistakes.length === 0) delete node.mistakes;
-        node.authorAlternatives = [{ moves: [perdedor], feedback: "este também vale" }];
-        gravar(file, json);
-        return `${id}: ${perdedor} é declarado válido pela autoria e joga a vitória fora`;
-      }
-      throw new Error("nenhum nó guiado tem lance perdedor para plantar a mutação");
-    },
-  },
   {
     titulo: "mesmo lance em mistakes e em authorAlternatives",
     codigo: "ALTERNATIVA_E_ERRO",
@@ -954,15 +630,10 @@ const MUTACOES: Mutation[] = [
     aplicar: async (dir) => {
       const { file, json } = lerFixture(dir, "N1-FIXTURE-PROMOCAO");
       json.stages.guided.goal = "draw";
-      // A mentira é plantada **inteira**: trocar o objetivo troca a lista de
-      // lances que o preservam, e deixar a lista velha faria a mutação ficar
-      // vermelha por WINNING_MOVES_DESATUALIZADO — um vermelho verdadeiro pelo
-      // motivo errado, que não provaria nada sobre a regra sob teste.
-      const tablebase = new Tablebase(path.join(dir, "tablebase-cache"), true);
-      const node = json.stages.guided.nodes.p1;
-      node.winningMoves = goalMovesOf(await tablebase.lookup(node.fen), "draw");
+      // Desde 2026-09-15 os `winningMoves` são dado congelado e ninguém os cobra: trocar só o
+      // objetivo basta, e o vermelho é o da incoerência entre o objetivo e o resultado declarado.
       gravar(file, json);
-      return 'stages.guided.goal → "draw" numa posição que a tablebase dá como ganha para as brancas';
+      return 'stages.guided.goal → "draw" numa posição que o próprio arquivo declara ganha para as brancas';
     },
   },
   {
@@ -988,42 +659,6 @@ const MUTACOES: Mutation[] = [
       expect.moves = ["e6d7"];
       gravar(file, json);
       return `o lance terminal "${antes}" vira "e6d7" — ainda ganha, e ends continua "promotion"`;
-    },
-  },
-  {
-    titulo: "terminal que promete empate seguro numa posição ganha",
-    codigo: "TERMINAL_NAO_SEGURA",
-    fixtures: true,
-    aplicar: async (dir) => {
-      const { file, json } = lerFixture(dir, "N1-FIXTURE-PROMOCAO");
-      json.stages.guided.nodes.p1.expects[0].ends = "draw-secured";
-      gravar(file, json);
-      return 'ends do terminal → "draw-secured" depois de e7e8q, que deixa posição ganha, não empatada';
-    },
-  },
-  {
-    titulo: "terminal que promete vitória de tablebase e para num empate",
-    codigo: "TERMINAL_FORA_DO_OBJETIVO",
-    fixtures: true,
-    aplicar: async (dir) => {
-      const { file, json } = lerFixture(dir, "N1-FIXTURE-EMPATE");
-      json.stages.guided.nodes.n2.expects[0].ends = "tablebase-win";
-      gravar(file, json);
-      return 'ends do terminal → "tablebase-win" numa posição que a tablebase dá como empate';
-    },
-  },
-  {
-    titulo: "terminal de vitória sem DTM para medir os 40 lances",
-    codigo: "TERMINAL_LONGE_DEMAIS",
-    fixtures: true,
-    aplicar: async (dir) => {
-      const { file, json } = lerFixture(dir, "N1-FIXTURE-PROMOCAO");
-      json.stages.guided.nodes.p1.expects[0].ends = "tablebase-win";
-      gravar(file, json);
-      return (
-        'ends → "tablebase-win" numa posição de 7 peças: a posição é ganha mesmo, ' +
-        "mas a API só dá DTM até 5 peças e a régua fica sem o que medir"
-      );
     },
   },
 
@@ -1103,17 +738,6 @@ const MUTACOES: Mutation[] = [
    * apagar sem ninguém notar.
    * ---------------------------------------------------------------- */
   {
-    titulo: "aula publicada sem uma das quatro etapas, e sem dizer por quê",
-    codigo: "SCHEMA_AULA",
-    contem: 'não tem a etapa "intro"',
-    aplicar: async (dir) => {
-      const { file, json } = lerAula(dir);
-      delete json.stages.intro;
-      gravar(file, json);
-      return "stages.intro apagado sem entrar em etapasAusentes — um formato só, e a ausência se escreve";
-    },
-  },
-  {
     titulo: "diagrama de apresentação com os dois reis colados",
     codigo: "INTRO_FEN_ILEGAL",
     aplicar: async (dir) => {
@@ -1168,118 +792,12 @@ const MUTACOES: Mutation[] = [
     },
   },
   {
-    titulo: "v2: proveniência registrada com hash de outro conteúdo",
-    codigo: "PROVENIENCIA_CADUCA",
-    fixtures: true,
-    aplicar: async (dir) => {
-      mutarPacoteV2(dir, (p) => { p.aula.proveniencia[0].conteudoHash = "0".repeat(64); });
-      return "proveniencia[0].conteudoHash → 000…";
-    },
-  },
-  {
-    titulo: "v2: proveniência diz candidata sobre posição aprovada",
-    codigo: "PROVENIENCIA_DIVERGE",
-    fixtures: true,
-    aplicar: async (dir) => {
-      mutarPacoteV2(dir, (p) => { p.aula.proveniencia[0].estado = "candidate"; });
-      return "proveniencia[0].estado → candidate";
-    },
-  },
-  {
-    titulo: "v2: análise publicada começando numa FEN importada sem revisão",
-    codigo: "FEN_IMPORTADA_SEM_REVISAO",
-    fixtures: true,
-    aplicar: async (dir) => {
-      mutarPacoteV2(dir, (p) => {
-        const inicio = p.aula.analises[0].inicio;
-        if (inicio.tipo === "posicao") p.aula.analises[0].inicio = { tipo: "fen", fen: p.posicoes[inicio.positionId].fen };
-      });
-      return "analises[0].inicio → { tipo: fen }";
-    },
-  },
-  {
-    titulo: "v2: narração de estudo de outra pessoa publicada sem declarar o direito de uso",
-    codigo: "TEXTO_SEM_DIREITO_DECLARADO",
-    fixtures: true,
-    aplicar: async (dir) => {
-      mutarPacoteV2(dir, (p) => {
-        const inicio = p.aula.analises[0].inicio;
-        if (inicio.tipo !== "posicao") return;
-        const fen = p.posicoes[inicio.positionId].fen;
-        p.aula.analises[0].inicio = {
-          tipo: "fen",
-          fen,
-          revisao: { origem: "estudo-lichess", autor: "Outra Pessoa", fenRevisada: fen, revisadoEm: "2026-09-14T00:00:00.000Z", professor: "mutacao", mostrarCredito: false, direitoDosTextos: false },
-        };
-      });
-      return "analises[0].inicio → fen revisada de estudo do Lichess, sem direito dos textos";
-    },
-  },
-  {
     titulo: "v2: narração publicada com revisão pendente",
     codigo: "REVISAO_PENDENTE",
     fixtures: true,
     aplicar: async (dir) => {
       mutarPacoteV2(dir, (p) => { p.aula.capitulos[0].narracoes[0].revisao = { motivo: "posicao-inicial-trocada" }; });
       return "capitulos[0].narracoes[0].revisao → posicao-inicial-trocada";
-    },
-  },
-  {
-    titulo: "v2: final certificado publicado com a certificação herdada do v1",
-    codigo: "CERTIFICACAO_PENDENTE",
-    fixtures: true,
-    aplicar: async (dir) => {
-      mutarPacoteV2(dir, (p) => { p.aula.treinos[0].certificacao!.estado = "herdada-v1"; });
-      return "treinos[0].certificacao.estado → herdada-v1";
-    },
-  },
-  {
-    titulo: "v2: evidência da tablebase que o cache desmente",
-    codigo: "CERTIFICACAO_CADUCA",
-    contem: "não bate com a tablebase",
-    fixtures: true,
-    aplicar: async (dir) => {
-      mutarPacoteV2(dir, (p) => {
-        const evidencia = Object.values(p.aula.treinos[0].certificacao!.evidencias!)[0];
-        evidencia.winningMoves = evidencia.winningMoves.slice(1);
-      });
-      return "evidência da pergunta 1 sem o primeiro lance vencedor";
-    },
-  },
-  {
-    titulo: "v2: resposta aceita que a tablebase diz perder",
-    codigo: "CERTIFICACAO_REFUTADA",
-    fixtures: true,
-    aplicar: async (dir) => {
-      let feito = "";
-      mutarPacoteV2(dir, (p) => {
-        const treino = p.aula.treinos[0];
-        // Só a pergunta que tem um lance perdedor serve: na N0-LADDER, a última (g4b4
-        // afoga). Nas outras todo lance legal ganha, e o estrago viraria `undefined`.
-        for (const [i, questao] of treino.questoes.entries()) {
-          const evidencia = treino.certificacao!.evidencias![questao.id];
-          const preservam = new Set(evidencia.winningMoves);
-          const lance = new Chess(evidencia.fen).moves({ verbose: true }).map((m) => `${m.from}${m.to}${m.promotion ?? ""}`).find((uci) => !preservam.has(uci));
-          if (!lance) continue;
-          questao.respostas[0].moves = [lance];
-          feito = `pergunta ${i + 1} aceita ${lance}, fora dos lances que preservam a vitória`;
-          return;
-        }
-        throw new Error("a fixture v2 não tem pergunta com lance que perde");
-      });
-      return feito;
-    },
-  },
-  {
-    titulo: "v2: aula publicada sem prática",
-    codigo: "PRATICA_AUSENTE",
-    fixtures: true,
-    aplicar: async (dir) => {
-      mutarPacoteV2(dir, (p) => {
-        p.aula.fluxo = p.aula.fluxo.filter((etapa) => etapa.tipo !== "pratica");
-        p.aula.praticas = [];
-      });
-      return "praticas → [] e a etapa sai do fluxo";
     },
   },
   // ---- Fatia 8: aulas extras na trilha por dados (§22) ------------------------------------
@@ -1309,24 +827,12 @@ const MUTACOES: Mutation[] = [
       return "N0-LADDER (nível 1 na trilha) publicada com metadados.nivel 3";
     },
   },
-  {
-    titulo: "v2: aula publicada com duas práticas",
-    codigo: "PRATICAS_MULTIPLAS",
-    fixtures: true,
-    aplicar: async (dir) => {
-      mutarPacoteV2(dir, (p) => {
-        p.aula.praticas.push({ ...p.aula.praticas[0], id: "pratica-segunda" });
-        p.aula.fluxo.push({ id: "etapa-pratica-segunda", tipo: "pratica", entidadeId: "pratica-segunda" });
-      });
-      return "uma segunda prática, com etapa própria no fluxo";
-    },
-  },
 ];
 
 function rodarValidador(dir: string, flags: string[] = []) {
   const result = spawnSync(
     process.execPath,
-    [validator, "--content", dir, "--refresh-cache", ...flags],
+    [validator, "--content", dir, ...flags],
     { cwd: repo, encoding: "utf8" },
   );
   return { status: result.status ?? -1, saida: `${result.stdout ?? ""}${result.stderr ?? ""}` };

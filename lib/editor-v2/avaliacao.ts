@@ -34,7 +34,7 @@
  */
 import type { Position } from "../lesson/schema.ts";
 import { hashCanonico, jsonCanonico } from "./hash.ts";
-import type { AulaV2, TreinoV2 } from "./modelo.ts";
+import { resultadoDoTreinoV2, type AulaV2, type TreinoV2 } from "./modelo.ts";
 import { fenDaQuestaoDoTreino, fenInicialDoTreino } from "./propriedade-treino.ts";
 
 /** Sobe quando o juiz da prática muda de regra, e toda revisão de prática muda junto. */
@@ -95,7 +95,9 @@ export function conteudoDoTreinoV2(aula: AulaV2, treinoId: string, positions: Re
     defesaInicial: treino.defesaInicial ? { move: treino.defesaInicial.move, primeira: fenDe(treino.defesaInicial.primeiraQuestaoId) } : null,
     politica: treino.defensor.politica,
     termino: { tipo: treino.termino.tipo, maxPlies: treino.termino.maxPlies ?? null },
-    resultado: treino.certificacao?.resultado ?? null,
+    // Declarado pelo professor desde 15/9/2026; numa aula antiga, o da certificação congelada. O
+    // valor é o mesmo nos dois lugares, e por isso a revisão das aulas publicadas não muda.
+    resultado: resultadoDoTreinoV2(treino),
     questoes,
   };
 }

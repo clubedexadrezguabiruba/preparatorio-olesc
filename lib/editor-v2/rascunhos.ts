@@ -27,9 +27,8 @@ const PENDENCIAS_QUE_O_RASCUNHO_GUARDA = new Set([
   "LIMITE_NOS_ANALISE", "LIMITE_PROFUNDIDADE", "LIMITE_NOS_AULA", "LIMITE_BYTES", "LIMITE_COMENTARIOS", "LIMITE_DESENHOS",
   // legalidade (só com as posições em mãos)
   "LANCE_ILEGAL", "POSICAO_INEXISTENTE",
-  // proveniência e certificação (§12)
-  "POSICAO_SEM_PROVENIENCIA", "PRATICA_SEM_PROVENIENCIA", "CERTIFICACAO_SEM_PROVENIENCIA", "PROVENIENCIA_DUPLICADA",
-  "CERTIFICACAO_SEM_APROVACAO",
+  // proveniência (§12). As duas de certificação saíram em 15/9/2026, com a tablebase.
+  "POSICAO_SEM_PROVENIENCIA", "PRATICA_SEM_PROVENIENCIA", "PROVENIENCIA_DUPLICADA",
   // receita de treino derivado com fonte ausente (§5: bloqueia a publicação até ser reparada)
   "FONTE_TREINO_AUSENTE",
 ]);

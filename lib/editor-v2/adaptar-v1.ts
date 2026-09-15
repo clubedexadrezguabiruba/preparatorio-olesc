@@ -181,8 +181,10 @@ export function adaptarLessonV1(lesson: Lesson, positions: Record<string, Positi
     origem: { analiseId, nodeIds: [...new Set([raizId, ...[...fenParaNo.values()]])], hash: hash(guided), derivadorVersao: 1 },
     obrigatorio: true,
     revisaoAvaliacao: "confirmada" as const,
-    // A evidência vem do arquivo v1, que o gate v1 escreveu a partir da tablebase. Ela
-    // entra como **herdada**, nunca como confirmada: quem confirma é o Conferir do v2.
+    // O resultado que o treino cobra, declarado (trava 2, 15/9/2026): é o `goal` da árvore v1.
+    resultado: guided.goal,
+    // A evidência vem do arquivo v1, que o gate v1 escreveu a partir da tablebase. Ela entra
+    // como **herdada** e fica congelada: desde 15/9/2026 ninguém a confirma nem a renova.
     certificacao: {
       tipo: "tablebase" as const,
       estado: "herdada-v1" as const,

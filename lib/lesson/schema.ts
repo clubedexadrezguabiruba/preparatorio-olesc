@@ -1085,65 +1085,32 @@ const lessonBaseSchema = z.strictObject({
  * fase começa dentro da linha — é do gate, que já monta os quadros.
  */
 export const lessonSchema = lessonBaseSchema.superRefine((lesson, ctx) => {
-  // A rotação de livros-base (§4 da trilha) é contada por classe, sobre as
-  // aulas publicadas. Publicar sem declarar a classe é sair da conta.
+  // A classe é do nível (trava 17, mantida). A rotação de livros-base que a usava
+  // saiu em 2026-09-15.
   if (lesson.status === "published" && lesson.class === undefined) {
     ctx.addIssue({
       code: "custom",
       path: ["class"],
       message:
         'aula publicada precisa declarar a classe ("E", "D", "C" ou "B") — ' +
-        "é por ela que a rotação de livros-base é contada",
+        "é por ela que a lista de finais agrupa as aulas",
     });
   }
 
-  // **A trava que exigia a etapa 2 saiu com ela.** O objetivo apontava quadros
-  // da animação, então uma aula com objetivo e sem exemplo era incoerente. No
-  // formato de três etapas o objetivo tem posição própria e desenha nela, e
-  // nada mais precisa existir para ele fazer sentido.
-  //
-  // Sobra uma coerência nova, e é a que dá nome ao formato: **da aula em diante,
-  // todas as etapas jogam a MESMA posição**. Sem isto, "uma posição só" seria
-  // promessa de prosa; aqui é recusa do arquivo.
-  //
-  // **A apresentação é a exceção, e ela nem chega neste laço.** Ela não tem
-  // `positionId`: os diagramas dela são FEN livre, escrita no próprio arquivo
-  // da aula. É de propósito — o passo que diz "estas peças dão mate" precisa
-  // mostrar peças que não estão na posição da aula, e às vezes mais de sete
-  // delas. O preço é que a proveniência daqueles diagramas não tem defesa
-  // mecânica; a regra escrita está na §7 de `docs/VOZ-DO-CURSO.md`, e quem a
-  // cobra é o olho.
-  const { objective, guided, practice } = lesson.stages;
-  const posicoes: Array<[string, string]> = [];
-  if (objective) posicoes.push(["objective", objective.positionId]);
-  if (guided) posicoes.push(["guided", guided.positionId]);
-  if (practice) posicoes.push(["practice", practice.positionId]);
-  const primeira = posicoes[0];
-  if (primeira) {
-    for (const [etapa, id] of posicoes.slice(1)) {
-      if (id === primeira[1]) continue;
-      ctx.addIssue({
-        code: "custom",
-        path: ["stages", etapa, "positionId"],
-        message:
-          `a etapa "${etapa}" joga "${id}" e a etapa "${primeira[0]}" joga "${primeira[1]}" — ` +
-          "da aula em diante, as etapas de uma aula de finais são a MESMA posição " +
-          "(a apresentação é a exceção: ela desenha em FEN livre)",
-      });
-    }
-  }
+  // **"Uma posição por aula" saiu em 2026-09-15** (trava 10 de
+  // `docs/TRILHA-FINAIS.md`): as etapas podem jogar posições diferentes. Até ali o
+  // schema recusava o arquivo em que objective, guided e practice não apontassem o
+  // mesmo `positionId`. O treino continua derivado do roteiro, e por isso joga a
+  // posição do `objective`; a prática pode ser outra.
+  const { objective, guided } = lesson.stages;
 
   /*
-   * **A aula publicada tem as quatro etapas, ou declara qual falta.**
+   * **As quatro etapas deixaram de ser obrigatórias em 2026-09-15** (trava 8 de
+   * `docs/TRILHA-FINAIS.md`): a aula publica com as etapas que tiver, e
+   * `etapasAusentes` é aceito nos arquivos antigos, sem ser exigido.
    *
-   * É o que substituiu os três formatos da trilha (ver `etapasAusentes`). A
-   * trava é sobre a aula **publicada** porque rascunho é aula em construção: a
-   * etapa que ainda não foi escrita não é uma etapa que falta, é uma etapa que
-   * está sendo escrita.
-   *
-   * A segunda metade da trava é a que impede a declaração de virar formalidade:
-   * declarar ausente uma etapa **que existe** é uma frase que o arquivo
-   * desmente, e ninguém a leria de novo para conferir.
+   * O que continua é a metade que impede a declaração de mentir: declarar ausente
+   * uma etapa **que existe** é uma frase que o arquivo desmente.
    */
   {
     const ETAPAS = ["intro", "objective", "guided", "practice"] as const;
@@ -1160,38 +1127,6 @@ export const lessonSchema = lessonBaseSchema.superRefine((lesson, ctx) => {
           message:
             `a aula declara que não tem a etapa "${etapa}" e ela está em stages — ` +
             "apague a declaração ou apague a etapa, nunca as duas",
-        });
-      }
-      /*
-       * **`guided` é SAÍDA, e por isso não se cobra dele o mesmo.**
-       *
-       * Onde há `objective` há roteiro, e onde há roteiro a etapa 3 é derivada
-       * dele (`lib/lesson/derivar-treino.ts`): um arquivo sem `guided` ali não
-       * é uma aula a que falta o treino, é um arquivo que ainda não passou pelo
-       * `--write`. Cobrá-lo aqui trancava a porta pela qual ele se conserta — a
-       * aula era recusada no schema, sumia da carga do gate, e a derivação, que
-       * é a única coisa capaz de escrevê-la, nunca chegava a rodar. Era o
-       * contrato de `guidedStageSchema` — *apague, rode `--write`, e ele volta
-       * byte por byte* — virando mentira.
-       *
-       * Quem cobra a etapa 3 ausente é o gate, e com o código certo:
-       * `TREINO_DESATUALIZADO`, "o roteiro da aula produz uma etapa 3 e o
-       * arquivo não tem nenhuma". Aula publicada **sem** `objective` continua
-       * tendo de declarar a ausência do treino, porque aí não há de onde
-       * derivá-lo.
-       */
-      if (
-        lesson.status === "published" &&
-        !existe &&
-        !declarada &&
-        !(etapa === "guided" && lesson.stages.objective !== undefined)
-      ) {
-        ctx.addIssue({
-          code: "custom",
-          path: ["stages", etapa],
-          message:
-            `a aula publicada não tem a etapa "${etapa}" e não diz por quê — ` +
-            "um formato só, quatro etapas, e a ausência se escreve em `etapasAusentes`",
         });
       }
     }

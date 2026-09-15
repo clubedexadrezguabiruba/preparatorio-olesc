@@ -36,10 +36,15 @@ test("FEN colada → aviso → Ir para o problema → Autoria própria → aviso
   const revisao = page.getByRole("dialog", { name: "De onde veio esta posição?" });
   await expect(revisao).toBeVisible();
 
-  // O único campo obrigatório: registrar sem ele é recusado com a frase, e a janela fica.
+  // Nada é obrigatório desde 15/9/2026 (trava 7): registrar sem origem fecha a janela, e o aviso passa a
+  // ser o de origem desconhecida — que fica à vista até alguém dizer de onde a posição veio.
   await revisao.getByRole("button", { name: "Registrar revisão" }).click();
-  await expect(revisao.getByRole("alert")).toHaveText(/único campo obrigatório/);
+  await expect(revisao).toBeHidden();
+  await expect(problemas.getByText(/registrada como desconhecida/i)).toHaveCount(1);
 
+  await page.getByRole("group").filter({ hasText: "•••" }).last().locator("summary").click();
+  await page.getByRole("button", { name: "De onde veio a posição…" }).click();
+  await expect(revisao).toBeVisible();
   await revisao.getByRole("radio", { name: /Autoria própria/ }).check();
   await revisao.getByRole("button", { name: "Registrar revisão" }).click();
   await expect(revisao).toBeHidden();
@@ -59,12 +64,12 @@ test("FEN colada → aviso → Ir para o problema → Autoria própria → aviso
   await expect(page.getByRole("dialog", { name: "De onde veio esta posição?" }).getByText(/Revisada em .* por Professor de Ensaio/)).toBeVisible();
   await page.keyboard.press("Escape");
 
-  // Ctrl+Z desfaz a revisão: o aviso volta.
+  // Ctrl+Z desfaz a revisão: volta a anterior, a de origem desconhecida, e o aviso dela.
   await page.locator("body").click({ position: { x: 5, y: 5 } });
   await page.keyboard.press("Control+z");
-  await expect(problemas.getByText(/falta dizer de onde veio esta posição/i)).toHaveCount(1);
+  await expect(problemas.getByText(/registrada como desconhecida/i)).toHaveCount(1);
   await page.keyboard.press("Control+y");
-  await expect(problemas.getByText(/falta dizer de onde veio esta posição/i)).toHaveCount(0);
+  await expect(problemas.getByText(/registrada como desconhecida/i)).toHaveCount(0);
 
   // Porta nova: posição do acervo.
   await page.getByRole("button", { name: "+ Adicionar capítulo" }).click();

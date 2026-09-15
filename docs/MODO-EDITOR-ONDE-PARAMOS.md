@@ -16,6 +16,9 @@
 > receber migração aditiva sem nova consulta. Na fatia 7, a N0-LADDER é publicada em v2 de
 > verdade como piloto; o arquivo v1 dela não muda um byte.
 
+> **As travas de 15/09/2026 (decisão do Doug):** tablebase, limite de 7 peças, livro-base, prática única, quatro
+> etapas e ficha obrigatória saíram do código; o treino declara o resultado que cobra. Ver a seção "As travas de 15/9".
+
 **Data:** 2026-09-14. **Branch:** `modo-editor`. A menção
 histórica a “Bloco 2 suspenso” nas seções antigas explica a interrupção que levou à
 nova arquitetura; não rege mais o trabalho.
@@ -4897,6 +4900,111 @@ aulas), `validate:mutations` **58/58**, `repertorio:compilar --check` ✓.
 **Parada 2 — prática (aberta):** entrar e sair do modo prática. Depende do acervo (a posição precisa
 entrar pelo servidor, com resultado) e da regra de uma prática por aula, obrigatória para publicar.
 **Não cobre ainda:** teste humano do Doug; "Mudar para…" pelo botão direito (o `•••` é o caminho).
+
+### As travas de 15/9 — o currículo mais flexível, alinhado no código (15/9/2026, decisão do Doug)
+
+**O pedido:** das 21 travas do currículo de finais, o Doug marcou quais caem, quais afrouxam e quais ficam
+(tabela no topo de `docs/TRILHA-FINAIS.md`). A lista de 50 aulas não muda. Plano executado em quatro blocos
+contínuos, sem commit (o Doug pede quando quiser).
+
+**Bloco 0 — documentos.** `TRILHA-FINAIS.md` (tabela das travas no topo; notas em §1, §2, §3, §4, §5, §10, §12,
+§13; §14.5 **corrigida**: a posição da aula 1 é o Diagram 38 do Silman, `6k1/8/5NK1/4N3/8/8/8/8 b`, e não uma
+posição do Doug; §14.7 regras 2, 5, 7 e 8), `VOZ-DO-CURSO.md` (15 palavras proibidas; saíram objetivo, método,
+avaliação, teoria, estrutura), `SOURCE-CORPUS.md` (topo, §1.1, §3.4), `/revisar-aula` (LEMBRE-SE, procedência
+como aviso, várias posições), rascunho `.editor/v2/EX-O-QUE-DA-MATE-AULA-PILOTO.json` (16 × "GUARDE ISTO" →
+"LEMBRE-SE", cópia anterior no scratchpad), plano e especificação do Editor v2 (§9, §10, §13; §4, §17, §17.1, §19.1,
+§23, §23.1, §28). Pacote global **v3.2** em Downloads (subagente): v3.1 em `Historico/v3.1/`, 50 aulas, PGNs só com
+"GUARDE ISTO:" → "LEMBRE-SE:" (9 trocas, símbolos de lance na mesma sequência), e a nota "o site foi alinhado em
+15/09/2026". Busca nos documentos: nenhuma regra antiga afirmada como vigente — o que sobra é registro com nota.
+
+**Bloco 1 — fonte, peças e voz.** `validate-content.ts` sem `FONTE_NAO_DIDATICA`, `FONTE_DIDATICA_DIVERGE`,
+`FONTE_DIDATICA_DOMINA` e `TETO_DE_CITACAO`; sem limite de 7 peças na prática (`pratica.ts`), no acervo
+(`acervo-em-disco.ts`), na importação de estudo e no seletor; sem a nota "até 7 peças" do motor do professor;
+`nivelDaOrdem` e os tamanhos 6/6/6/16/15 fora da trilha e dos testes (fica: nível 1–5 e lista em ordem de nível).
+**Número:** `npm test` 1.308/1.310 — as 2 falhas eram testes da conferência que usavam "método" como palavra
+proibida, reescritos no Bloco 2.
+
+**Bloco 2 — tablebase fora.**
+- `modelo.ts`: `treino.resultado` (vitória ou empate, **declarado**); `resultadoDoTreinoV2` lê o declarado ou, na aula
+  antiga, o da certificação. `certificacao` fica só para leitura; saíram `CERTIFICACAO_SEM_APROVACAO`,
+  `CERTIFICACAO_SEM_PROVENIENCIA` e a exigência de certificação no final certificado.
+- `conferencia.ts`: saíram `CERTIFICACAO_PENDENTE/CADUCA/REFUTADA`. `gate.ts`: **uma passada só**, sem tablebase e sem
+  escrita no documento; manifesto = aula + posições + juízes; `VERSAO_CONFERENCIA_V2` = 2.
+- `treino-jogavel.ts`: o `goal` vem do resultado declarado; a evidência antiga (`temEvidenciaCongelada`) continua
+  julgando onde existe. `avaliacao.ts`: a revisão lê o mesmo valor — **a N0-LADDER publicada tem as duas revisões
+  gravadas iguais às recalculadas** (treino `ar_0e70ba4e…`, prática `ar_1f8b45f1…`).
+- `adaptar-v1.ts` grava `resultado: guided.goal`; refazer treino preserva o resultado; trocar a posição não reabre mais
+  certificação (e as janelas não dizem mais "a certificação é reaberta").
+- `validate-content.ts`: nenhum import de tablebase; `RESULTADO_ERRADO`, `METODO_NAO_GANHA`, `VEREDITO_ERRADO`,
+  `DEFENSOR_FROUXO`, `ALTERNATIVA_NAO_GANHA`, `WINNING_MOVES_DESATUALIZADO`, `ALTERNATIVAS_DESATUALIZADAS`, as regras de
+  DTM e `TERMINAL_NAO_SEGURA/FORA_DO_OBJETIVO/LONGE_DEMAIS` saíram; `winningMoves` e `methodAlternatives` congelados (a
+  derivação copia a lista do arquivo pela FEN). `--refresh-cache` aceito e sem efeito; `--prune-cache` saiu. Gate v1 do
+  editor e CI sem `--refresh-cache`.
+- Telas: «Editar treino» ganhou **"O treino cobra: Vencer / Segurar o empate"**; "Vitória certificada" só aparece na
+  aula antiga que já a usa; o resultado da posição que entra no acervo é sempre escolhido pelo professor; o painel do
+  aluno não diz mais "certificada pela tablebase".
+**Números:** `npm test` 1.314/1.314; `validate:content` **verde com `content/tablebase-cache` fora do lugar** (19
+posições, 3 aulas; pasta devolvida em seguida); `--write` não mudou nenhum arquivo de aula.
+
+**Bloco 3 — formato da aula.**
+- Schema v1: saíram "uma posição por aula" e "quatro etapas ou `etapasAusentes`" (a declaração que o arquivo desmente
+  continua recusada). Tocador v1: a aula **só com apresentação** não quebra mais (`posicaoDaApresentacao`; antes era
+  um `!` sobre `undefined`), e o "assisti" aparece na última etapa quando não há objetivo.
+- Procedência (trava 7): `PROVENIENCIA_CADUCA/DIVERGE` e `FEN_IMPORTADA_SEM_REVISAO` não são mais promovidas;
+  `TEXTO_SEM_DIREITO_DECLARADO`, `PROVENIENCIA_INCOMPLETA`, `OBRA_NAO_REGISTRADA`, `POSICAO_NAO_PUBLICAVEL`,
+  `REGIME_INTEGRAL_VENCIDO` e `DIVIDA_DESATUALIZADA` viraram **aviso** (`avisar()` no validador). "De onde veio" é
+  opcional na janela de proveniência, na prática e no acervo (sem origem = desconhecida, com aviso).
+- Práticas (trava 9): saíram `PRATICA_AUSENTE`, `PRATICAS_MULTIPLAS` e os bloqueios do editor ("+ Criar prática" fica
+  sempre) e da importação de estudo (vários capítulos de prática, cada um com o seu resultado). `juntarEscadas`
+  (`lib/finais/escada.ts`): aprendida só quando todas estão; revisão vence com qualquer uma e diz qual
+  (`praticaParaRevisar`); `progresso.ts` lê todas as práticas da revisão ativa; o cartão abre
+  `?revisao=1&pratica=<id>`; a aula v2 sem prática ganha o "assisti" no fim do fluxo.
+- `DialogoCriarTreino` não promete mais edição "na próxima parada".
+**Número:** `npm test` 1.319/1.319 (novos: duas práticas — vencer só uma 3× não aprende, vencer as duas aprende,
+revisão pela que venceu; aula só com apresentação e etapas com posições diferentes aceitas; origem vazia vira
+desconhecida; régua com "objetivo" passa e com "roteiro" é apontada; as 9 travas da conferência que caíram publicam).
+
+**Bloco 4 — portões** (na pasta principal; nenhuma outra sessão aberta):
+- `npm run lint` ✓ **no código do projeto** — o lint completo acusa 12 erros em
+  `content/repertorio/rascunhos-anotados/fonte-plichta/` (arquivos de 15/9 08:29, ignorados pelo git, **de outra
+  sessão ou do Doug**, não desta); fora dessa pasta, 0 problemas.
+- `typecheck` ✓ · `npm test` **1.319/1.319** · `build` ✓ · `repertorio:compilar --check` ✓.
+- `validate:content` ✓ **sem `content/tablebase-cache`** (19 posições, 3 aulas; a pasta voltou intacta).
+- `validate:mutations` **34/34**, com os dois controles verdes. Saíram 23 mutações: as 22 dos 21 códigos que caíram ou
+  viraram aviso, e a de `SCHEMA_AULA` "aula publicada sem uma das quatro etapas" — ela foi a única que **passou
+  batido** na primeira rodada (34/35), exatamente porque a trava 8 caiu. Fixtures v2 regeneradas
+  (`N0-FIXTURE-V2` `pub-3be3f0b6…`, `EX-FIXTURE-V2` `pub-88c0dd0d…`), porque o adaptador passou a gravar o resultado.
+- **Ensaios de navegador** (1366×768): primeira rodada 5/11 — as 6 falhas eram ensaios presos à regra antiga
+  (id fixo da fixture, o seletor novo de resultado contado como mais uma lista, "Resolver" na lista de avisos que
+  começa fechada, o Desfazer da origem) ou instabilidade (abaixo); corrigidos, 7/7. **Ensaio novo
+  `aula-sem-pratica.spec.ts`**: importa o estudo com a prática "Fora", publica, e o aluno fecha a aula pelo "assisti"
+  no fim do fluxo, com a linha em `aula_lida`. Rodada final: 14/16 + `publicar-visivel` reescrito 2/2 (o texto de
+  terceiros sem declaração agora **publica com aviso**) + `aula-do-zero` sozinha 2/2. Limpeza: 987 arquivos, todos
+  iguais; SHA-256 da `.editor/v2/N1-KPK.json` igual antes e depois (`4be602ca…`).
+
+**Dois defeitos achados rodando, e consertados:**
+1. **O "assisti" da aula v2 não gravava nada.** `marcarLeitura` conferia a aula com `lerAula`, que só lê
+   `content/lessons/` (v1). Conserto: `lerPacoteDoAluno` (v1 ou v2). Prova: com a linha antiga o ensaio novo falha em
+   `leituraDoAluno` (esperado `true`, recebido `false`); com o conserto, passa.
+2. **Aviso de `key` do React** ao renderizar o `<Leitura>` vindo do servidor dentro do tocador v2 (o guarda de
+   console do ensaio reprovou). Conserto: `key="leitura"` na página. O texto do controle virou "Assisti à aula até o
+   fim." — o antigo dizia "Li o objetivo… não tem tabuleiro", falso numa aula v2 com treinos.
+
+**Instabilidade aberta, não mascarada:** a prática da `aula-do-zero` ficou "inacabada" em 2 de 3 rodadas **em lote**
+(parou esperando a resposta do computador aos 13 e aos 29 meios-lances) e deu mate nas 2 rodadas **sozinha** (35 e 23
+meios-lances). A mesma posição deu mate na `aula-do-lichess` nas mesmas rodadas, e o tocador de prática não foi mexido
+aqui. Não aumentei o prazo do ensaio: pela lição (d) da 10G, lance que "não entra" pode ser defeito do tabuleiro, e
+isso precisa de medida antes de conserto.
+
+**O que ficou de fora, declarado:**
+- **Sem a tablebase, erro não nomeado não aparece como erro** para o aluno: o treino novo só aponta os erros que o
+  professor nomeou. A qualidade depende do catálogo de erros.
+- A dívida de licença deixou de bloquear; o inventário continua sendo gerado, mas nada impede publicar com ele velho.
+- A mecânica de exceção do professor (`excecoes`) ficou no código sem nenhum código que ela ainda possa perdoar.
+- `content/tablebase-cache/` e `scripts/tablebase.ts` continuam no repositório como consulta; nada os lê nos portões.
+- "Revisão abrindo a segunda prática" só tem teste de função pura (`juntarEscadas`, `proximaAcao`); não há ensaio de
+  navegador com duas práticas vencendo em dias diferentes. Nada desta rodada teve teste humano.
+- Sem commit: o Doug pede. Ao commitar, os arquivos do Plichta (lint) não entram — não são desta rodada.
 
 ### O próximo ponto exato (14/9/2026 — retomar daqui)
 

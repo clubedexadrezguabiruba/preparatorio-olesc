@@ -58,7 +58,8 @@ test("régua: palavra de bastidor no texto da defesa inicial e da defesa final �
   treino.defesaInicial!.texto = "Nesta tentativa as brancas começam.";
   const fecho = treino.questoes.at(-1)!.respostas[0];
   if (fecho.efeito.tipo !== "encerra") assert.fail("a última resposta deveria encerrar");
-  fecho.efeito.textoDaDefesaFinal = "Mate, pelo método.";
+  // "método" saiu da lista em 15/9/2026; "roteiro" continua nela.
+  fecho.efeito.textoDaDefesaFinal = "Mate, pelo roteiro.";
   const proibidas = reprovacoes(falasDoTreinoV2(treino), regua).filter((achado) => achado.regra === "proibida");
   assert.deepEqual(proibidas.map((achado) => achado.onde.split(" · ").at(-1)).sort(), ["defesa final g4g1", "defesa inicial g2g4"]);
 });
@@ -66,13 +67,25 @@ test("régua: palavra de bastidor no texto da defesa inicial e da defesa final �
 test("régua: dica, objetivo e explicação ao concluir entram na conta", () => {
   const { brancas } = comTreinos();
   const treino = structuredClone(brancas);
-  treino.objetivo = "O objetivo é dar mate.";
+  // "objetivo" saiu da lista em 15/9/2026: a fala do objetivo reprova por outra palavra.
+  treino.objetivo = "Siga o roteiro até dar mate.";
   treino.explicacaoConclusao = "Cada etapa fechou uma fileira.";
   treino.questoes[0].dica = "Olhe o teto do rei.";
   const onde = reprovacoes(falasDoTreinoV2(treino), regua).map((achado) => achado.onde);
   assert.ok(onde.some((texto) => /objetivo/.test(texto)), onde.join("\n"));
   assert.ok(onde.some((texto) => /explicação ao concluir/.test(texto)), onde.join("\n"));
   assert.ok(onde.some((texto) => /Pergunta 1 · dica/.test(texto)), onde.join("\n"));
+});
+
+test("régua de 15/9: objetivo, método, avaliação, teoria e estrutura passam; roteiro continua apontada", () => {
+  const liberadas = ["objetivo", "método", "avaliação", "teoria", "estrutura"];
+  for (const palavra of liberadas) assert.ok(!regua.proibidas.includes(palavra), `${palavra} ainda está na lista`);
+  assert.equal(regua.proibidas.length, 15);
+  const falas = [
+    { onde: "liberada", texto: "O objetivo é dar mate, e o método é a escada.", tipo: "fala" as const },
+    { onde: "presa", texto: "Siga o roteiro.", tipo: "fala" as const },
+  ];
+  assert.deepEqual(reprovacoes(falas, regua).filter((achado) => achado.regra === "proibida").map((achado) => achado.onde), ["presa"]);
 });
 
 test("régua: os treinos que \"Criar treino daqui\" faz na N0 passam sem aviso", () => {

@@ -55,10 +55,13 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
    * traduzidas, sem comentário privado de análise (plano §12).
    */
   if (doAluno.versao === 2) {
+    // Aula v2 sem prática (trava 9, 15/9/2026): o aluno a fecha marcando que assistiu, como na v1.
+    const semPratica = !doAluno.aula.etapas.some((etapa) => etapa.tipo === "pratica");
+    const naTrilhaV2 = aulaDaTrilha(aula, aulasExtras()) !== undefined;
     return (
       <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
         <Suspense fallback={null}>
-          <AulaNoNavegador aulaV2={doAluno.aula} />
+          <AulaNoNavegador aulaV2={doAluno.aula} leitura={semPratica && naTrilhaV2 ? <Leitura key="leitura" aula={aula} /> : undefined} />
         </Suspense>
       </main>
     );
@@ -106,7 +109,7 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
       <Suspense fallback={null}>
         <AulaNoNavegador
           pacote={pacote}
-          leitura={deLeitura ? <Leitura aula={aula} /> : undefined}
+          leitura={deLeitura ? <Leitura key="leitura" aula={aula} /> : undefined}
         />
       </Suspense>
     </main>

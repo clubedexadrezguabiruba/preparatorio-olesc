@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { perfilAtual } from "@/lib/auth/perfil";
-import { lerAula } from "@/lib/finais/conteudo";
+import { lerPacoteDoAluno } from "@/lib/finais/conteudo";
 import { gravarTentativaDeAula, type ResultadoDeAula, type TentativaDeAula } from "@/lib/finais/gravar";
 import { gravarTentativaV2NoBanco } from "@/lib/finais/gravar-v2-banco";
 import type { ResultadoDeAulaV2, TentativaDeAulaV2 } from "@/lib/finais/tentativa-v2";
@@ -51,7 +51,9 @@ export async function registrarEtapaV2(tentativa: TentativaDeAulaV2): Promise<Re
  */
 export async function marcarLeitura(aula: string, lida: boolean): Promise<void> {
   const perfil = await perfilAtual();
-  if (!lerAula(aula)) return;
+  // Aula v1 ou v2 publicada (trava 9, 15/9/2026: a aula v2 sem prática também fecha pelo "assisti").
+  // Até ali era `lerAula`, que só lê `content/lessons/`, e a marcação de uma aula v2 sumia calada.
+  if (!lerPacoteDoAluno(aula)) return;
 
   const supabase = await criarClienteServidor();
 

@@ -95,7 +95,7 @@ export type ResultadoDoConferirV2 =
   | {
       ok: true;
       conferencia: ConferenciaV2;
-      /** O documento em disco depois da passada A — a certificação pode ter mudado. */
+      /** O documento em disco depois de conferir — muda só quando a aula foi guardada pela primeira vez. */
       documento: { texto: string; hash: string } | null;
       publicar: { pode: boolean; motivo: string | null };
     };
@@ -294,8 +294,8 @@ export async function criarAulaV2(pedidoEmTexto: string): Promise<CriacaoDeAulaV
 
 /**
  * "Adicionar ao acervo" (§17.1, fatia 10): a posição nova de uma prática vira arquivo candidato em
- * `content/positions/`, com o resultado do cache da tablebase e a proveniência que o
- * `validate:content` exige. As regras moram em `acervo-em-disco.ts`.
+ * `content/positions/`, com o resultado declarado pelo professor e a proveniência que ele disser
+ * (opcional desde 15/9/2026). As regras moram em `acervo-em-disco.ts`.
  */
 export async function adicionarAoAcervoV2Acao(pedidoEmTexto: string): Promise<AdicaoAoAcervoV2> {
   await exigirEditor();

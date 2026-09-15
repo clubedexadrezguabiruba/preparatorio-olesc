@@ -12,13 +12,11 @@ import {
 import path from "node:path";
 import { Chess } from "chess.js";
 import { z } from "zod";
-import { applyUci, fenProblem, pieceCount, samePosition } from "../lib/chess/fen.ts";
-import { OutOfScopeError, techniqueScope } from "../lib/chess/technique.ts";
+import { applyUci, fenProblem, samePosition } from "../lib/chess/fen.ts";
 import {
   lessonSchema,
   MARCA_DE_MOLDE,
   positionSchema,
-  PROTECTED_SOURCE_CAP,
   PROVENANCE_FIELDS,
   sourceRegistrySchema,
   type Lesson,
@@ -26,18 +24,12 @@ import {
   type Position,
   type Source,
   type TerminalEnd,
-  type TreeGoal,
 } from "../lib/lesson/schema.ts";
 // O gerador de RAMOS (`generateBranches`, `branchesDiffer`, `longestLine`,
 // `GeneratorError`) deixou de ser importado em 2026-09-08: ele servia à etapa
 // 4, que saiu do formato. O módulo continua inteiro e testado em
 // `scripts/branches.ts` — ver o bloco "O bloco da etapa 4 saiu inteiro daqui".
-import {
-  alternativesDiffer,
-  authorialExpects,
-  generateAlternatives,
-  GENERATED_ID,
-} from "./branches.ts";
+import { authorialExpects, GENERATED_ID } from "./branches.ts";
 import { derivarTreino, esqueletoDoTreino } from "../lib/lesson/derivar-treino.ts";
 import {
   aceitaExcecao,
@@ -49,25 +41,25 @@ import {
 import { respostasDe } from "../lib/lesson/tree.ts";
 import { falasDaAula } from "../lib/lesson/voz.ts";
 import { validarNotas } from "../lib/repertorio/notas.ts";
-import { CacheMissError, goalMovesOf, normalizeFen, Tablebase, type TbEntry } from "./tablebase.ts";
 import { revisoesDaAulaV2, type RevisoesDaAulaV2 } from "../lib/editor-v2/avaliacao.ts";
 import { problemasParaPublicarV2 } from "../lib/editor-v2/conferencia.ts";
 import { posicoesDoPacoteV2, problemasDoPacoteV2, type PacoteV2 } from "../lib/editor-v2/pacote.ts";
-import { fenDaQuestaoDoTreino } from "../lib/editor-v2/propriedade-treino.ts";
 import { idsDeAulasV2, idsDePublicacoesV2, lerPonteiroV2, lerPublicacaoCruaV2 } from "../lib/editor-v2/publicacoes.ts";
 
 /**
  * O gate de conteúdo (plano da F1, §3.4).
  *
- * Confere tudo que o motor vai acreditar em runtime: a legalidade das posições,
- * a proveniência, a coerência das árvores de lances, e — o ponto central — a
- * verdade xadrezística de cada nó, certificada pela tablebase e não pelo
- * palpite de quem escreveu a aula.
+ * Confere tudo que o motor vai acreditar em runtime: a legalidade das posições e
+ * dos lances, a coerência das árvores, o treino derivado e as publicações v2.
  *
- *   npm run validate:content                       # offline, a partir do cache
- *   npm run validate:content -- --refresh-cache    # autoria: pode usar a rede
- *   npm run validate:content -- --refresh-cache --write
- *                                                  # grava os winningMoves
+ * **Desde 2026-09-15 não consulta tablebase nenhuma** (travas 2 e 3 de
+ * `docs/TRILHA-FINAIS.md`): o professor tem a última palavra, e o motor dele no
+ * editor é quem confere. Os `winningMoves` e `methodAlternatives` gravados nas
+ * aulas v1 ficam **congelados como dado** — nada os recalcula nem os cobra. A
+ * procedência (ficha, obra registrada, texto de terceiros) é **aviso**.
+ *
+ *   npm run validate:content            # sem rede, sem cache
+ *   npm run validate:content -- --write # regrava o treino derivado e o inventário
  */
 
 const VERDE = "\u001b[32m";
@@ -172,6 +164,15 @@ function fail(code: string, where: string, message: string) {
   emitir({ tipo: "problema", code, onde: where, message });
 }
 
+/**
+ * O que a conferência aponta e não recusa (travas de 2026-09-15): procedência e
+ * licença. Sai em amarelo, junto com as exceções, e não muda o código de saída.
+ */
+function avisar(code: string, where: string, message: string) {
+  avisos.push({ code, where, message });
+  emitir({ tipo: "aviso", code, onde: where, message });
+}
+
 /* ------------------------------------------------------------------ *
  * A saída em JSONL, para o editor
  * ------------------------------------------------------------------ */
@@ -221,7 +222,12 @@ function option(name: string, fallback: string): string {
 }
 
 /** Tudo que o gate aceita. Qualquer outra coisa é erro duro, nunca silêncio. */
-const FLAGS = ["refresh-cache", "write", "prune-cache", "rascunhos", "aplicar", "jsonl"] as const;
+/**
+ * `--refresh-cache` continua aceito e não faz nada desde 2026-09-15: o editor v1 e a suíte de
+ * mutações ainda o passam, e recusá-lo derrubaria os dois por um argumento que ficou sem sujeito.
+ * `--prune-cache` saiu junto com o cache.
+ */
+const FLAGS = ["refresh-cache", "write", "rascunhos", "aplicar", "jsonl"] as const;
 const OPCOES = ["content"] as const;
 
 /**
@@ -273,9 +279,7 @@ for (let i = 0; i < argv.length; i += 1) {
 }
 
 const contentDir = path.resolve(option("content", "content"));
-const allowNetwork = flag("refresh-cache");
 const writeBack = flag("write");
-const pruneCache = flag("prune-cache");
 /** Modo autor (B8): o que houver em `content/rascunhos/` sobrepõe por id. */
 const useRascunhos = flag("rascunhos");
 /** Promover os rascunhos julgados a arquivo de verdade, se tudo ficar verde. */
@@ -288,20 +292,12 @@ if (aplicar && writeBack) {
   morrer(
     "FLAGS_INCOMPATIVEIS",
     "--aplicar e --write juntos julgariam com o juiz enfraquecido — o --write desliga " +
-      "WINNING_MOVES_DESATUALIZADO, ALTERNATIVAS_DESATUALIZADAS e RAMO_DESATUALIZADO enquanto grava. " +
-      "Regenere numa passada, aplique em outra.",
-  );
-}
-if (aplicar && pruneCache) {
-  morrer(
-    "FLAGS_INCOMPATIVEIS",
-    "--prune-cache não entra em fluxo de autor: cache recém-gravado ainda não tem uso",
+      "TREINO_DESATUALIZADO e DIVIDA_DESATUALIZADA enquanto grava. Regenere numa passada, aplique em outra.",
   );
 }
 
 const positionsDir = path.join(contentDir, "positions");
 const lessonsDir = path.join(contentDir, "lessons");
-const cacheDir = path.join(contentDir, "tablebase-cache");
 const sourcesFile = path.join(contentDir, "sources.json");
 /**
  * A pasta do modo autor. É **irmã** de `lessons/` e `positions/`, e não filha:
@@ -309,31 +305,6 @@ const sourcesFile = path.join(contentDir, "sources.json");
  * rascunho para a home e para a build.
  */
 const rascunhosDir = path.join(contentDir, "rascunhos");
-const tablebase = new Tablebase(cacheDir, allowNetwork);
-
-/* ------------------------------------------------------------------ *
- * Ferramentas de xadrez
- *
- * `fenProblem` e `pieceCount` moram em `lib/chess/fen.ts` desde o B8.4: o
- * montador de posição do modo autor precisa recusar reis colados **antes** de
- * salvar, e duas cópias da mesma checagem seriam dois juízes com opiniões
- * diferentes sobre o que é uma posição possível.
- * ------------------------------------------------------------------ */
-
-/** Consulta a tablebase e devolve `null` (registrando o erro) quando não dá. */
-async function ask(fen: string, where: string): Promise<TbEntry | null> {
-  if (pieceCount(fen) > 7) {
-    fail("TABLEBASE_FORA_DE_ALCANCE", where, `posição com mais de 7 peças: ${fen}`);
-    return null;
-  }
-  try {
-    return await tablebase.lookup(fen);
-  } catch (error) {
-    const code = error instanceof CacheMissError ? "CACHE_FALTANDO" : "TABLEBASE_FALHOU";
-    fail(code, where, error instanceof Error ? error.message : String(error));
-    return null;
-  }
-}
 
 /* ------------------------------------------------------------------ *
  * Carga dos arquivos
@@ -556,7 +527,7 @@ const sourcesByKey = new Map<string, Source>();
  * Conferência por posição
  * ------------------------------------------------------------------ */
 
-async function checkPosition(position: Position) {
+function checkPosition(position: Position) {
   const where = `posição ${position.id}`;
 
   const problem = fenProblem(position.fen);
@@ -565,9 +536,10 @@ async function checkPosition(position: Position) {
     return; // sem posição legal, nada mais faz sentido conferir
   }
 
+  // Procedência é aviso desde 2026-09-15 (trava 7): "de onde veio" é opcional.
   const missing = PROVENANCE_FIELDS.filter((field) => position.provenance[field] === null);
   if (position.status !== "fixture" && missing.length > 0) {
-    fail(
+    avisar(
       "PROVENIENCIA_INCOMPLETA",
       where,
       `status "${position.status}" exige os 9 campos preenchidos; nulos: ${missing.join(", ")}`,
@@ -579,7 +551,7 @@ async function checkPosition(position: Position) {
   if (position.status !== "fixture") {
     const key = position.provenance.editionFile;
     if (key !== null && !sourcesByKey.has(key)) {
-      fail(
+      avisar(
         "OBRA_NAO_REGISTRADA",
         where,
         `provenance.editionFile "${key}" não está em content/sources.json — ` +
@@ -588,164 +560,36 @@ async function checkPosition(position: Position) {
     }
   }
 
-  const entry = await ask(position.fen, where);
-  if (!entry) return;
-
-  const real =
-    entry.category === "win"
-      ? new Chess(position.fen).turn() === "w"
-        ? "win-white"
-        : "win-black"
-      : entry.category === "loss"
-        ? new Chess(position.fen).turn() === "w"
-          ? "win-black"
-          : "win-white"
-        : entry.category === "draw"
-          ? "draw"
-          : null;
-
-  if (real === null) {
-    fail("TABLEBASE_INDEFINIDA", where, `a tablebase devolveu "${entry.category}" — resultado não decidido`);
-  } else if (real !== position.expectedResult) {
-    fail(
-      "RESULTADO_ERRADO",
-      where,
-      `expectedResult diz "${position.expectedResult}", a tablebase diz "${real}"`,
-    );
-  }
+  /*
+   * `RESULTADO_ERRADO`, `TABLEBASE_INDEFINIDA`, `TABLEBASE_FORA_DE_ALCANCE` e
+   * `CACHE_FALTANDO` saíram em 2026-09-15: o `expectedResult` é o que o professor
+   * declarou, e ninguém o confronta com a tablebase.
+   */
 }
 
 /* ------------------------------------------------------------------ *
- * O lance terminal — o que ele declara, e o que a tablebase confirma
+ * O lance terminal — o que ele declara, e o que o tabuleiro confirma
  * ------------------------------------------------------------------ */
-
-/**
- * Teto de DTM para um terminal `tablebase-win`, em lances do aluno.
- *
- * Quarenta é o número da regra dos 50 lances com folga: o aluno que sai da
- * posição terminal ainda precisa dar o mate antes de a partida ser declarada
- * empatada. Acima disso, "daqui você ganha" é verdade de tablebase e mentira
- * de tabuleiro.
- */
-const TETO_DE_DTM_EM_LANCES = 40;
-
-/** O resultado da posição **visto pelo aluno**, seja de quem for a vez. */
-function resultadoParaOAluno(
-  entry: TbEntry,
-  fen: string,
-  orientation: "white" | "black",
-): "win" | "draw" | "loss" | "indefinido" {
-  const bruto =
-    entry.category === "win"
-      ? "win"
-      : entry.category === "loss"
-        ? "loss"
-        : entry.category === "draw"
-          ? "draw"
-          : "indefinido";
-  if (bruto === "draw" || bruto === "indefinido") return bruto;
-  // A categoria é sempre vista por quem está na vez. Quando não é o aluno, o
-  // resultado dele é o contrário.
-  const alunoNaVez = new Chess(fen).turn() === (orientation === "white" ? "w" : "b");
-  if (alunoNaVez) return bruto;
-  return bruto === "win" ? "loss" : "win";
-}
 
 /**
  * O lance terminal entrega o que o arquivo diz que ele entrega? (§7.3 do plano)
  *
- * Até a FN1/B2 havia uma resposta só, e implícita: **mate**. Quem escrevesse um
- * expect sem resposta do defensor estava afirmando "aqui acaba em mate", e o
- * gate cobrava exatamente isso. Lucena termina em promoção com a partida bem
- * viva, e Filidor termina num empate segurado — nenhuma das duas cabia.
- *
- * Cada valor de `ends` é uma afirmação diferente, e cada uma é conferida contra
- * a tablebase, nunca aceita como palavra do autor. O código de erro diz **qual**
- * afirmação caiu, e é por isso que são quatro e não um só.
+ * Desde 2026-09-15 só se confere o que **o tabuleiro** prova sozinho: o mate é mate
+ * e a promoção promove. `draw-secured` e `tablebase-win` são afirmações do
+ * professor sobre o resultado, e o resultado é dele (trava 2) — saíram
+ * `TERMINAL_NAO_SEGURA`, `TERMINAL_FORA_DO_OBJETIVO` e `TERMINAL_LONGE_DEMAIS`.
  */
-async function checkTerminal(
-  where: string,
-  goal: TreeGoal,
-  ends: TerminalEnd,
-  uci: string,
-  after: { fen: string; game: Chess },
-  orientation: "white" | "black",
-) {
-  /*
-   * Não há aqui nenhuma tabela de "qual `ends` combina com qual `goal`". Cada
-   * afirmação é conferida contra o tabuleiro, e a incoerência aparece por ela
-   * mesma: um `draw-secured` numa árvore de vitória cai em `TERMINAL_NAO_SEGURA`
-   * (a posição é ganha, não empatada) ou já caiu antes em `METODO_NAO_GANHA`.
-   * Uma tabela seria um segundo juiz, com opinião própria e sem tablebase.
-   */
-  if (ends === "mate") {
-    if (!after.game.isCheckmate()) {
-      fail("TERMINAL_SEM_MATE", where, `"${uci}" encerra o nó sem dar mate`);
-    }
+function checkTerminal(where: string, ends: TerminalEnd, uci: string, after: { fen: string; game: Chess }) {
+  if (ends === "mate" && !after.game.isCheckmate()) {
+    fail("TERMINAL_SEM_MATE", where, `"${uci}" encerra o nó sem dar mate`);
     return;
   }
-
   if (ends === "promotion" && uci.length !== 5) {
     fail(
       "TERMINAL_SEM_PROMOCAO",
       where,
       `"${uci}" é declarado como "promotion" e não promove peça nenhuma — ` +
         `um lance de promoção em UCI tem cinco caracteres (ex.: e7e8q)`,
-    );
-    return;
-  }
-
-  const entry = await ask(after.fen, where);
-  if (!entry) return;
-  const resultado = resultadoParaOAluno(entry, after.fen, orientation);
-
-  if (ends === "draw-secured") {
-    if (resultado !== "draw") {
-      fail(
-        "TERMINAL_NAO_SEGURA",
-        where,
-        `"${uci}" é declarado como "draw-secured" e a tablebase dá a posição resultante como ` +
-          `"${entry.category}" (para o aluno: ${resultado}) — o empate não está seguro ali`,
-      );
-    }
-    return;
-  }
-
-  if (ends === "tablebase-win") {
-    if (resultado !== "win") {
-      fail(
-        "TERMINAL_FORA_DO_OBJETIVO",
-        where,
-        `"${uci}" é declarado como "tablebase-win" e a posição resultante não é ganha para o ` +
-          `aluno (tablebase: "${entry.category}", para o aluno: ${resultado})`,
-      );
-      return;
-    }
-    const lances = entry.dtm === null ? null : Math.ceil(Math.abs(entry.dtm) / 2);
-    if (lances === null || lances > TETO_DE_DTM_EM_LANCES) {
-      fail(
-        "TERMINAL_LONGE_DEMAIS",
-        where,
-        entry.dtm === null
-          ? `"${uci}" para numa posição ganha sem DTM na tablebase (a API só dá DTM até 5 peças) — ` +
-            `sem régua não há como afirmar que o mate cabe em ${TETO_DE_DTM_EM_LANCES} lances`
-          : `"${uci}" para numa posição cujo mate leva ${lances} lances, e o teto é ` +
-            `${TETO_DE_DTM_EM_LANCES} — deixar o aluno ali é deixá-lo com a regra dos 50 lances pela frente`,
-      );
-    }
-    return;
-  }
-
-  // Sobrou `promotion`: promover é meio caminho, e o outro meio é a posição
-  // resultante continuar valendo o objetivo da aula.
-  const preserva =
-    goal === "win" ? resultado === "win" : resultado === "win" || resultado === "draw";
-  if (!preserva) {
-    fail(
-      "TERMINAL_FORA_DO_OBJETIVO",
-      where,
-      `"${uci}" promove, mas a posição resultante não entrega o objetivo "${goal}" ` +
-        `(tablebase: "${entry.category}", para o aluno: ${resultado})`,
     );
   }
 }
@@ -760,7 +604,7 @@ type TreeOptions = {
   moveLimit?: number;
 };
 
-async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options: TreeOptions) {
+function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options: TreeOptions) {
   const where = `${lesson.id} / ${stage}`;
   const start = positions.get(tree.positionId);
   if (!start) return; // a ausência já foi registrada na conferência de referências
@@ -775,10 +619,9 @@ async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options:
     fail("FEN_DO_NO", `${where} / ${tree.root}`, `a FEN do nó raiz não é a da posição ${start.id}`);
   }
 
-  // O objetivo da árvore tem de ser o que a tablebase diz da posição da raiz.
-  // Prometer empate onde há vitória ensina o aluno a se contentar com menos;
-  // prometer vitória onde só há empate o faz perder a tarde tentando ganhar
-  // uma posição empatada.
+  // O objetivo da árvore tem de ser o resultado que a posição declara. As duas
+  // coisas são do professor; o que se cobra é que ele não diga duas coisas
+  // diferentes sobre a mesma posição.
   const esperado = tree.goal === "win" ? `win-${lesson.orientation}` : "draw";
   if (start.expectedResult !== esperado) {
     fail(
@@ -787,34 +630,6 @@ async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options:
       `a árvore tem goal "${tree.goal}", que pede uma posição "${esperado}", e ` +
         `"${start.id}" é "${start.expectedResult}"`,
     );
-  }
-
-  /**
-   * A régua de DTM só serve a **um** caso: árvore de vitória cujas linhas todas
-   * acabam em mate. Fora dele o DTM da raiz não mede o que a aula pede — numa
-   * árvore de empate ele é 0 e não diz nada, e numa que acaba em promoção ele
-   * conta lances que o aluno nunca vai jogar dentro da aula. Nesses casos quem
-   * mede é o `LINHA_ESTOURA_TETO`, que conta os lances escritos.
-   */
-  const soAcabaEmMate = Object.values(tree.nodes).every((node) =>
-    node.expects.every((e) => respostasDe(e).length > 0 || (e.ends ?? "mate") === "mate"),
-  );
-  if (options.moveLimit !== undefined && tree.goal === "win" && soAcabaEmMate) {
-    const entry = await ask(start.fen, where);
-    if (entry) {
-      if (entry.dtm === null) {
-        fail("DTM_INDISPONIVEL", where, "a tablebase não deu DTM — impossível conferir o moveLimit");
-      } else {
-        const studentMoves = Math.ceil(Math.abs(entry.dtm) / 2);
-        if (options.moveLimit < studentMoves) {
-          fail(
-            "TETO_IMPOSSIVEL",
-            where,
-            `moveLimit ${options.moveLimit} é menor que o DTM da posição (${studentMoves} lances do aluno)`,
-          );
-        }
-      }
-    }
   }
 
   const visited = new Set<string>();
@@ -838,29 +653,9 @@ async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options:
       continue;
     }
 
-    // winningMoves: gerado pela tablebase, conferido contra o arquivo.
-    const entry = await ask(node.fen, nodeWhere);
-    // "winningMoves" manteve o nome e mudou de sentido: são os lances que
-    // preservam o **objetivo** da árvore (§7.2 do plano). Numa árvore de
-    // vitória a lista é a mesma de sempre.
-    const winning = entry ? goalMovesOf(entry, tree.goal) : null;
-    if (winning) {
-      if (writeBack) {
-        node.winningMoves = winning;
-      } else if (
-        node.winningMoves.length !== winning.length ||
-        [...node.winningMoves].sort().some((m, i) => m !== winning[i])
-      ) {
-        fail(
-          "WINNING_MOVES_DESATUALIZADO",
-          nodeWhere,
-          `a lista do arquivo não bate com a tablebase (arquivo: ${node.winningMoves.length} lances, ` +
-            `tablebase: ${winning.length}) — rode com --refresh-cache --write`,
-        );
-      }
-    }
-    const winningSet = new Set(winning ?? node.winningMoves);
-
+    // `winningMoves` é dado congelado desde 2026-09-15: ninguém o recalcula nem o
+    // cobra (`WINNING_MOVES_DESATUALIZADO`, `METODO_NAO_GANHA`, `VEREDITO_ERRADO`,
+    // `ALTERNATIVA_NAO_GANHA` e `DEFENSOR_FROUXO` saíram com a tablebase).
     const expectedMoves = new Set<string>();
     for (const expect of node.expects) {
       /**
@@ -898,24 +693,8 @@ async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options:
           fail("LANCE_ILEGAL", nodeWhere, `o lance esperado "${move}" não é legal nesta posição`);
           continue;
         }
-        if (winning && !winningSet.has(move)) {
-          fail(
-            "METODO_NAO_GANHA",
-            nodeWhere,
-            `"${move}" está em expects mas não preserva ` +
-              `${tree.goal === "win" ? "a vitória" : "o empate"} (não está em winningMoves)`,
-          );
-        }
-
         if (respostas.length === 0) {
-          await checkTerminal(
-            nodeWhere,
-            tree.goal,
-            expect.ends ?? "mate",
-            move,
-            afterMove,
-            lesson.orientation,
-          );
+          checkTerminal(nodeWhere, expect.ends ?? "mate", move, afterMove);
           continue;
         }
 
@@ -929,10 +708,6 @@ async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options:
           continue;
         }
 
-        // Uma pergunta de tablebase por lance do aluno, e não por variante: as
-        // variantes partem todas da mesma posição, e o cache é por FEN.
-        const afterMoveEntry = await ask(afterMove.fen, nodeWhere);
-
         for (const { reply, next } of respostas) {
           const afterReply = applyUci(afterMove.fen, reply);
           if (!afterReply) {
@@ -942,26 +717,6 @@ async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options:
               `a resposta "${reply}" não é legal depois de "${move}"`,
             );
             continue;
-          }
-
-          // Defensor resistente: não pode encurtar o mate em mais de 2 plies
-          // em relação à melhor defesa da tablebase. Vale para **cada**
-          // variante: uma segunda defesa fraca seria um caminho fácil escondido
-          // atrás de uma primeira boa.
-          if (afterMoveEntry) {
-            const options_ = afterMoveEntry.moves
-              .map((m) => ({ uci: m.uci, plies: m.checkmate ? 0 : m.dtm === null ? null : Math.abs(m.dtm) }))
-              .filter((m): m is { uci: string; plies: number } => m.plies !== null);
-            const chosen = options_.find((m) => m.uci === reply);
-            const best = options_.reduce((acc, m) => Math.max(acc, m.plies), -1);
-            if (chosen && best >= 0 && best - chosen.plies > 2) {
-              fail(
-                "DEFENSOR_FROUXO",
-                nodeWhere,
-                `a resposta "${reply}" leva ao mate em ${chosen.plies} plies; a melhor defesa aguenta ` +
-                  `${best} — diferença de ${best - chosen.plies}, o teto é 2`,
-              );
-            }
           }
 
           const target = tree.nodes[next];
@@ -996,33 +751,16 @@ async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options:
         if (expectedMoves.has(move)) {
           fail("ERRO_E_METODO", nodeWhere, `"${move}" está ao mesmo tempo em expects e em mistakes`);
         }
-        if (!winning) continue;
-        const preservesWin = winningSet.has(move);
-        if (declared.verdict === "off-method" && !preservesWin) {
-          fail(
-            "VEREDITO_ERRADO",
-            nodeWhere,
-            `"${move}" é anunciado como off-method ("ainda ganha"), mas joga a vitória fora`,
-          );
-        }
-        if (declared.verdict === "loses-win" && preservesWin) {
-          fail(
-            "VEREDITO_ERRADO",
-            nodeWhere,
-            `"${move}" é anunciado como loses-win, mas ainda ganha — o texto mentiria para o aluno`,
-          );
-        }
       }
     }
 
     /* -------------------------------------------------------------- *
      * Os lances que a autoria declara válidos (B8.2)
      *
-     * A divisão de poder é esta: **o autor manda na técnica, a tablebase
-     * manda no que ganha**. Nenhum lance entra como válido sem que a
-     * tablebase confirme que ele preserva a vitória, e nenhum lance pode
-     * estar em duas listas ao mesmo tempo — aceitar um lance que hoje é erro
-     * é *mover* de uma lista para a outra, nunca escrever nas duas.
+     * Desde 2026-09-15 o professor manda na técnica **e** no resultado. O que
+     * continua cobrado é que nenhum lance esteja em duas listas ao mesmo
+     * tempo — aceitar um lance que hoje é erro é *mover* de uma lista para a
+     * outra, nunca escrever nas duas.
      * -------------------------------------------------------------- */
     const erros = new Set((node.mistakes ?? []).flatMap((m) => m.moves));
     const declaradas = new Set<string>();
@@ -1057,14 +795,6 @@ async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options:
               `que era erro é movê-lo de uma lista para a outra, não escrever nas duas`,
           );
         }
-        if (winning && !winningSet.has(move)) {
-          fail(
-            "ALTERNATIVA_NAO_GANHA",
-            nodeWhere,
-            `"${move}" é declarado válido mas joga a vitória fora (não está em winningMoves) — ` +
-              `você manda na técnica, a tablebase manda no resultado`,
-          );
-        }
       }
     }
   }
@@ -1077,139 +807,31 @@ async function checkTree(lesson: Lesson, stage: string, tree: MoveTree, options:
 }
 
 /* ------------------------------------------------------------------ *
- * Ramos equivalentes — geração na autoria, conferência offline
+ * Ramos equivalentes — congelados desde 2026-09-15
+ *
+ * O gerador de `methodAlternatives` perguntava à tablebase quais lances ainda
+ * ganhavam (KRK/KQK) e regravava a lista com `--write`. Sem tablebase, a lista
+ * gravada fica como dado, e `ALTERNATIVAS_DESATUALIZADAS` saiu. O que continua é
+ * a forma da autoria: o teto de expects escritos à mão e o id reservado.
  * ------------------------------------------------------------------ */
 
-/**
- * O ramo gerado é derivado, não escrito: o mesmo contrato do `winningMoves`.
- * Com `--write` ele é regravado; sem `--write` o validador recomputa e compara.
- * A regeneração começa sempre da árvore autoral, então é idempotente.
- */
-
-type RawNode = { expects?: Array<Record<string, unknown>>; [key: string]: unknown };
-type RawTree = { nodes?: Record<string, RawNode> };
-
-
-/**
- * Apaga tudo que o gerador escreveu, para a regeneração começar sempre da
- * árvore autoral — é o que a torna idempotente.
- *
- * **Não encosta em `authorAlternatives`** (B8.2), e isso é a linha inteira da
- * decisão: aquele campo é do autor, não do gerador. Se ele fosse apagado aqui,
- * o primeiro `--write` depois de uma declaração a levaria embora em silêncio,
- * e o autor descobriria pelo aluno.
- */
-function stripGeneratedFrom(tree: MoveTree, raw: RawTree | undefined) {
-  for (const id of Object.keys(tree.nodes)) {
-    if (GENERATED_ID.test(id)) {
-      delete tree.nodes[id];
-      if (raw?.nodes) delete raw.nodes[id];
-      continue;
-    }
-    const node = tree.nodes[id];
-    node.expects = authorialExpects(node);
-    delete node.methodAlternatives;
-
-    const rawNode = raw?.nodes?.[id];
-    if (!rawNode) continue;
-    if (Array.isArray(rawNode.expects)) {
-      rawNode.expects = rawNode.expects.filter((expect) => expect.generated !== true);
-    }
-    delete rawNode.methodAlternatives;
-  }
-}
-
-
-/** A posição é KRK/KQK? Fora disso o gerador recusa em vez de gerar lixo. */
-function inScope(tree: MoveTree): boolean {
-  const root = tree.nodes[tree.root];
-  if (!root) return false;
-  try {
-    techniqueScope(root.fen);
-    return true;
-  } catch (error) {
-    if (error instanceof OutOfScopeError) return false;
-    throw error;
-  }
-}
-
-
-function writeAlternatives(
-  tree: MoveTree,
-  raw: RawTree | undefined,
-  alternatives: Map<string, string[]>,
-) {
-  stripGeneratedFrom(tree, raw);
-  for (const [id, list] of alternatives) {
-    const node = tree.nodes[id];
-    if (node) node.methodAlternatives = [...list];
-    const rawNode = raw?.nodes?.[id];
-    if (rawNode) rawNode.methodAlternatives = [...list];
-  }
-}
-
-async function generateFor(loaded: LoadedLesson) {
+function checkAutoria(loaded: LoadedLesson) {
   const { lesson } = loaded;
-  const rawStages = (loaded.raw as { stages?: Record<string, RawTree> }).stages ?? {};
-  const ask2 = (fen: string, at: string) => ask(fen, at);
-
-  // Teto da autoria: o schema deixa 8 expects por nó, mas 4 deles no máximo
-  // podem ter sido escritos por gente — o resto é do gerador.
-  // Uma árvore só desde 2026-09-08: a etapa 4 saiu do formato, e com ela os
-  // ramos gerados. O laço sobre `["guided", "solo"]` virou o bloco abaixo.
-  {
-    const tree = lesson.stages.guided;
-    for (const [id, node] of Object.entries(tree?.nodes ?? {})) {
-      if (authorialExpects(node).length > 4) {
-        fail(
-          "EXPECTS_AUTORAIS_DEMAIS",
-          `aula ${lesson.id} / guided / ${id}`,
-          `${authorialExpects(node).length} expects escritos à mão; o teto da autoria é 4`,
-        );
-      }
-    }
-  }
-
-  /* A etapa com ajuda — só a lista de alternativas, sem ramo. */
   const guided = lesson.stages.guided;
-  if (guided) {
-    const where = `aula ${lesson.id} / guided`;
-    for (const id of Object.keys(guided.nodes)) {
-      if (GENERATED_ID.test(id)) {
-        fail("ID_RESERVADO", `${where} / ${id}`, `"g<número>" é reservado ao gerador de ramos`);
-      }
+  if (!guided) return;
+  const where = `aula ${lesson.id} / guided`;
+  for (const [id, node] of Object.entries(guided.nodes)) {
+    if (GENERATED_ID.test(id)) {
+      fail("ID_RESERVADO", `${where} / ${id}`, `"g<número>" é reservado ao gerador de ramos`);
     }
-
-    const derived = inScope(guided) ? await generateAlternatives(guided, ask2, where) : new Map();
-    if (writeBack) {
-      writeAlternatives(guided, rawStages.guided, derived);
-    } else {
-      const problem = alternativesDiffer(guided, derived);
-      if (problem) {
-        fail(
-          "ALTERNATIVAS_DESATUALIZADAS",
-          where,
-          `${problem} — rode \`npm run validate:content -- --refresh-cache --write\``,
-        );
-      }
+    if (authorialExpects(node).length > 4) {
+      fail(
+        "EXPECTS_AUTORAIS_DEMAIS",
+        `${where} / ${id}`,
+        `${authorialExpects(node).length} expects escritos à mão; o teto da autoria é 4`,
+      );
     }
   }
-
-  /*
-   * **O bloco da etapa 4 saiu inteiro daqui, e com ele o gerador de ramos.**
-   *
-   * Ele cobria: `ALTERNATIVA_NO_SOLO` (methodAlternatives era proibido lá),
-   * `TEMPLATE_FALTANDO`, a geração dos ramos derivados e o `LINHA_ESTOURA_TETO`
-   * contra o `moveLimit`. Nenhuma dessas perguntas existe mais: a etapa sem
-   * ajuda deixou de ser uma árvore roteirizada e passou a ser partida contra o
-   * Stockfish, que não tem nó, nem ramo, nem teto de lances escrito à mão — o
-   * limite dela é o de falta de progresso, e quem o aplica é o `PracticeStage`.
-   *
-   * O gerador de ramos continua em `lib/lesson/` e continua testado. Ele não é
-   * chamado por nenhuma aula hoje, e isso está declarado: é a peça mais cara
-   * que a mudança de formato deixou parada, e apagá-la seria jogar fora um mês
-   * de trabalho por uma decisão de produto que pode voltar atrás.
-   */
 }
 
 /* ------------------------------------------------------------------ *
@@ -1231,17 +853,7 @@ async function generateFor(loaded: LoadedLesson) {
  * em que existir, ela é a exceção declarada de que fala a §5 da trilha.
  * ------------------------------------------------------------------ */
 
-/** A tablebase sem acusar: quem acusa cache faltando é o `checkTree`, uma vez. */
-async function perguntarQuieto(fen: string): Promise<TbEntry | null> {
-  if (pieceCount(fen) > 7) return null;
-  try {
-    return await tablebase.lookup(fen);
-  } catch {
-    return null;
-  }
-}
-
-async function derivarEtapa3(loaded: LoadedLesson) {
+function derivarEtapa3(loaded: LoadedLesson) {
   const { lesson } = loaded;
   const objective = lesson.stages.objective;
   if (!objective) return;
@@ -1250,21 +862,17 @@ async function derivarEtapa3(loaded: LoadedLesson) {
 
   const where = `aula ${lesson.id} / treino`;
 
-  // Primeira passada, a seco: ela não precisa da tablebase para saber a linha,
-  // e é ela que diz QUAIS posições perguntar.
-  const seco = derivarTreino(lesson, posicao, () => null);
-  for (const problema of seco.problemas) {
+  // Os `winningMoves` são congelados (2026-09-15): a derivação os copia da árvore
+  // que o arquivo já tem, pela posição, e posição nova nasce com a lista vazia.
+  // `esqueletoDoTreino` não compara a lista, então isto não muda o veredito.
+  const congelados = new Map<string, string[]>(
+    Object.values(lesson.stages.guided?.nodes ?? {}).map((node) => [node.fen, node.winningMoves]),
+  );
+  const { tree, problemas } = derivarTreino(lesson, posicao, (fen) => congelados.get(fen) ?? null);
+  for (const problema of problemas) {
     const onde = problema.passo === null ? where : `${where} / roteiro[${problema.passo}]`;
     fail(problema.code, onde, problema.message);
   }
-  if (!seco.tree) return;
-
-  const lances = new Map<string, string[]>();
-  for (const node of Object.values(seco.tree.nodes)) {
-    const entry = await perguntarQuieto(node.fen);
-    if (entry) lances.set(node.fen, goalMovesOf(entry, seco.tree.goal));
-  }
-  const { tree } = derivarTreino(lesson, posicao, (fen) => lances.get(fen) ?? null);
   if (!tree) return;
 
   if (!writeBack) {
@@ -1279,7 +887,7 @@ async function derivarEtapa3(loaded: LoadedLesson) {
         (doArquivo === undefined
           ? "o roteiro da aula produz uma etapa 3 e o arquivo não tem nenhuma"
           : "a etapa 3 do arquivo não é a que o roteiro da aula produz") +
-          " — rode `npm run validate:content -- --refresh-cache --write` e leia o diff",
+          " — rode `npm run validate:content -- --write` e leia o diff",
       );
     }
     return;
@@ -1318,7 +926,7 @@ function referencedPositionIds(lesson: Lesson): Array<{ id: string; stage: strin
   return refs;
 }
 
-async function checkLesson(loaded: LoadedLesson) {
+function checkLesson(loaded: LoadedLesson) {
   const { lesson } = loaded;
   const where = `aula ${lesson.id}`;
 
@@ -1360,8 +968,9 @@ async function checkLesson(loaded: LoadedLesson) {
       fail("POSICAO_INEXISTENTE", `${where} / ${ref.stage}`, `não existe a posição "${ref.id}"`);
       continue;
     }
+    // Aviso desde 2026-09-15 (trava 7): a revisão humana da posição é recomendada, não exigida.
     if (lesson.status === "published" && position.status !== "approved") {
-      fail(
+      avisar(
         "POSICAO_NAO_PUBLICAVEL",
         `${where} / ${ref.stage}`,
         `aula publicada referencia a posição "${ref.id}", de status "${position.status}" — ` +
@@ -1370,49 +979,12 @@ async function checkLesson(loaded: LoadedLesson) {
     }
   }
 
-  // §12.7: obra protegida contribui no máximo PROTECTED_SOURCE_CAP posições
-  // para a mesma aula. O que a lei protege é a *coleção* do autor, não a
-  // posição isolada — e é copiando sequência de uma obra só que se copia a
-  // coleção. Domínio público e CC0 não têm teto.
-  //
-  // **ESTA REGRA ESTÁ DORMENTE DESDE 2026-09-08, e é de propósito.** O teto é
-  // por aula, e no formato de três etapas uma aula é uma posição só — o
-  // `lessonSchema` recusa quem não apontar o mesmo id nas três, e o `Set`
-  // abaixo desduplica. `ids.size` é sempre 1, e 1 nunca passa de 2: o `fail`
-  // não tem como disparar, e é por isso que não há mutação plantada para o
-  // código `TETO_DE_CITACAO` — não há o que plantar. O bloco fica porque volta
-  // a ter sujeito no dia em que algum formato usar mais de uma posição na
-  // mesma aula; enquanto isso, **ele não é o que protege o módulo de finais**.
-  // O que protege é o regime integral (§1.1 e §1.2 do docs/SOURCE-CORPUS.md):
-  // declaração escrita, prazo cobrado em REGIME_INTEGRAL_VENCIDO e inventário
-  // em content/divida-de-licenca.md. O teto por obra no módulo, que devolveria
-  // a mordida, foi proposto ao Doug em 2026-09-08 e recusado: "sem teto nenhum".
-  const bySource = new Map<string, { source: Source; ids: Set<string> }>();
-  for (const id of new Set(refs.map((r) => r.id))) {
-    const position = positions.get(id);
-    if (!position || position.status === "fixture") continue;
-    const key = position.provenance.editionFile;
-    const source = key === null ? undefined : sourcesByKey.get(key);
-    if (!source) continue; // já reportado como OBRA_NAO_REGISTRADA
-    const bucket = bySource.get(source.slug) ?? { source, ids: new Set<string>() };
-    bucket.ids.add(id);
-    bySource.set(source.slug, bucket);
-  }
-  for (const { source, ids } of bySource.values()) {
-    // Regime integral (§1.1 do SOURCE-CORPUS): a obra foi declarada base
-    // integral do módulo, com data e prazo no `sources.json`. O teto sai para
-    // ela — e só para ela. Ela continua protegida, e continua no inventário
-    // de `content/divida-de-licenca.md`.
-    if (source.integral) continue;
-    if (source.protected && ids.size > PROTECTED_SOURCE_CAP) {
-      fail(
-        "TETO_DE_CITACAO",
-        where,
-        `${ids.size} posições saem de "${source.title}", obra protegida, e o teto da §12.7 é ` +
-          `${PROTECTED_SOURCE_CAP} por aula — misture fontes (${[...ids].sort().join(", ")})`,
-      );
-    }
-  }
+  /*
+   * **`TETO_DE_CITACAO` saiu em 2026-09-15**, por decisão do Doug (trava 4 de
+   * `docs/TRILHA-FINAIS.md`): não há mais teto de posições por obra protegida nem
+   * livro-base obrigatório. O inventário de `content/divida-de-licenca.md` continua
+   * sendo gerado, e é aviso.
+   */
 
   /*
    * **`POSICAO_REAPROVEITADA` saiu, e o motivo é que ela virou o contrário.**
@@ -1483,40 +1055,11 @@ async function checkLesson(loaded: LoadedLesson) {
     }
   }
 
-  // A etapa 2: a obra tem de ser um dos livros-base didáticos — a decisão
-  // editorial de 2026-08-19, que tirou o objetivo da biblioteca inteira e o
-  // prendeu a uma rotação de cinco obras escritas para iniciante.
-  const objective = lesson.stages.objective;
-  if (objective) {
-    const base = sourcesByKey.get(objective.source);
-    if (!base) {
-      fail(
-        "FONTE_NAO_DIDATICA",
-        `${where} / objective`,
-        `"${objective.source}" não está em content/sources.json`,
-      );
-    } else if (!base.didactic) {
-      fail(
-        "FONTE_NAO_DIDATICA",
-        `${where} / objective`,
-        `"${base.title}" não é livro-base didático — o objetivo sai da rotação ` +
-          `de obras marcadas com "didactic": true`,
-      );
-    } else {
-      // O livro-base não é um selo decorativo: a posição da aula tem de sair
-      // mesmo dele. Era "ao menos uma cena", porque havia várias; com uma
-      // posição só, a conta é direta.
-      const daPosicao = positions.get(objective.positionId)?.provenance.editionFile;
-      const obra = daPosicao == null ? undefined : sourcesByKey.get(daPosicao)?.slug;
-      if (obra && obra !== base.slug) {
-        fail(
-          "FONTE_DIDATICA_DIVERGE",
-          `${where} / objective`,
-          `o objetivo declara "${base.slug}" e a posição da aula sai de "${obra}"`,
-        );
-      }
-    }
-  }
+  /*
+   * **`FONTE_NAO_DIDATICA` e `FONTE_DIDATICA_DIVERGE` saíram em 2026-09-15** (trava 4):
+   * `objective.source` continua sendo um campo da aula, e qualquer obra — ou nenhuma do
+   * registro — serve. A posição não precisa sair do livro que a aula cita.
+   */
 
   // A etapa 5 tem o mesmo campo `goal` das árvores desde o começo, e nunca teve
   // quem conferisse: uma prática de objetivo "win" numa posição empatada manda
@@ -1537,84 +1080,15 @@ async function checkLesson(loaded: LoadedLesson) {
 
   // Uma árvore só, e ela é a *com ajuda*. A etapa 4 era a outra chamada aqui.
   if (lesson.stages.guided) {
-    await checkTree(lesson, "guided", lesson.stages.guided, { allowHelp: true });
+    checkTree(lesson, "guided", lesson.stages.guided, { allowHelp: true });
   }
 }
 
-/**
- * A rotação dos livros-base, cobrada mecanicamente (§4 de `docs/TRILHA-FINAIS.md`).
- *
- * A regra editorial de 2026-08-19 diz que o objetivo e o exemplo de toda aula
- * saem de uma rotação de obras didáticas, **alternando** entre elas. Alternar
- * não é gentileza: obra protegida cujo método inteiro fosse copiado aula após
- * aula deixaria de ser citação e passaria a ser a coleção do autor — que é
- * exatamente o que a §12.7 evita no varejo, com o teto por aula, e o que esta
- * regra evita no atacado.
- *
- * ## O que mudou na FN1/B2, e por quê
- *
- * A regra antiga era "uma obra protegida é base de no máximo **uma** aula por
- * nível". Ela cabia num corpus de duas aulas e é aritmeticamente impossível no
- * curso desenhado: são cinco livros didáticos para ~12 aulas por classe. A nova:
- *
- * > Nenhuma obra protegida é livro-base de mais de `max(2, floor(N/3))` aulas
- * > **publicadas** de uma mesma classe, onde `N` é o número de aulas publicadas
- * > daquela classe.
- *
- * Duas coisas na fórmula não são enfeite:
- *
- * - **`floor`, e não `ceil`** — `ceil(16/3)` é 6, que já seria 37,5% de uma
- *   classe de 16, e a regra diz "um terço";
- * - **o piso de 2** — as classes abrem em fatias (a classe C começa com quatro
- *   aulas na FN2 e só fecha na FN3). Sem o piso, uma classe recém-aberta com
- *   duas aulas do mesmo autor seria reprovada, e a regra viraria obstáculo à
- *   publicação incremental em vez de regra editorial.
- *
- * E conta **aula publicada**, não aula escrita: a regra é sobre o que chega ao
- * aluno. Rascunho ainda não escolheu classe, e por isso o schema só cobra o
- * campo `class` de quem publica.
- *
- * Domínio público não entra na conta: não há coleção protegida a copiar.
+/*
+ * **A rotação dos livros-base (`FONTE_DIDATICA_DOMINA`) saiu em 2026-09-15**, por decisão
+ * do Doug (trava 4 de `docs/TRILHA-FINAIS.md`). Alternar livros escritos para iniciante
+ * continua sendo bom conselho (§3.4 do `SOURCE-CORPUS`); não é mais cobrado.
  */
-export function tetoDeRotacao(publicadasNaClasse: number): number {
-  return Math.max(2, Math.floor(publicadasNaClasse / 3));
-}
-
-function checkDidacticRotation() {
-  const porClasse = new Map<string, { total: number; porObra: Map<string, string[]> }>();
-  for (const { lesson } of lessons) {
-    // Rascunho não conta: a regra é sobre o que o aluno vê.
-    if (lesson.status !== "published" || !lesson.class) continue;
-    const daClasse = porClasse.get(lesson.class) ?? { total: 0, porObra: new Map<string, string[]>() };
-    daClasse.total += 1;
-    porClasse.set(lesson.class, daClasse);
-
-    const source = lesson.stages.objective?.source;
-    if (!source) continue;
-    const obra = sourcesByKey.get(source);
-    if (!obra?.protected) continue;
-    // A obra em regime integral **continua contada aqui**, de propósito: é
-    // desta lista que sai o inventário de `content/divida-de-licenca.md`. O
-    // que ela não sofre é a reprovação, pulada lá embaixo.
-    daClasse.porObra.set(obra.slug, [...(daClasse.porObra.get(obra.slug) ?? []), lesson.id]);
-  }
-  for (const [classe, { total, porObra }] of porClasse) {
-    const teto = tetoDeRotacao(total);
-    for (const [slug, aulas] of porObra) {
-      // Regime integral (§1.1 do SOURCE-CORPUS): quem decidiu que o módulo
-      // inteiro segue este livro decidiu junto que a rotação não se aplica.
-      if (sourcesByKey.get(slug)?.integral) continue;
-      if (aulas.length > teto) {
-        fail(
-          "FONTE_DIDATICA_DOMINA",
-          `classe ${classe}`,
-          `"${slug}" é livro-base de ${aulas.length} das ${total} aulas publicadas da classe ` +
-            `(${aulas.sort().join(", ")}) e o teto é ${teto} — max(2, floor(${total}/3))`,
-        );
-      }
-    }
-  }
-}
 
 /* ------------------------------------------------------------------ *
  * Regime integral — a exceção que se mede sozinha
@@ -1644,8 +1118,9 @@ const hoje = new Date().toISOString().slice(0, 10);
 function checkIntegralRegime() {
   for (const source of obrasIntegrais()) {
     const { since, replaceBefore } = source.integral!;
+    // Aviso desde 2026-09-15 (decisão sobre direitos autorais): o inventário continua.
     if (hoje > replaceBefore) {
-      fail(
+      avisar(
         "REGIME_INTEGRAL_VENCIDO",
         `obra ${source.slug}`,
         `o regime integral começou em ${since} e valia até ${replaceBefore}; hoje é ${hoje} — ` +
@@ -1741,7 +1216,8 @@ function checkDivida() {
   }
   const atual = existsSync(dividaFile) ? readFileSync(dividaFile, "utf8") : null;
   if (atual === esperado) return;
-  fail(
+  // Aviso desde 2026-09-15: o inventário é gerado e lido, e não recusa conteúdo.
+  avisar(
     "DIVIDA_DESATUALIZADA",
     relative(dividaFile),
     atual === null
@@ -1766,27 +1242,23 @@ excecoesPorAula = new Map(
 
 progresso(`derivando a etapa 3 de ${lessons.length} aula(s)`);
 for (const loaded of lessons) {
-  await derivarEtapa3(loaded);
+  derivarEtapa3(loaded);
 }
-// A geração vem depois: o que ela produz passa pelas mesmas conferências que
-// o resto da árvore — nó gerado é nó comum.
-progresso("gerando alternativas de método");
 for (const loaded of lessons) {
-  await generateFor(loaded);
+  checkAutoria(loaded);
 }
-progresso(`conferindo ${positions.size} posição(ões) contra a tablebase`);
+progresso(`conferindo ${positions.size} posição(ões)`);
 for (const position of positions.values()) {
-  await checkPosition(position);
+  checkPosition(position);
 }
 progresso(`conferindo ${lessons.length} aula(s)`);
 for (const loaded of lessons) {
-  await checkLesson(loaded);
+  checkLesson(loaded);
 }
-checkDidacticRotation();
 checkIntegralRegime();
 checkDivida();
 progresso("conferindo as aulas v2 publicadas");
-await checkAulasV2();
+checkAulasV2();
 
 /* ------------------------------------------------------------------ *
  * As aulas v2 publicadas (fatia 7 do Editor v2)
@@ -1798,10 +1270,9 @@ await checkAulasV2();
  *
  * Cada pacote guardado é conferido por inteiro (hashes, revisões, id): os antigos também,
  * porque uma aba antiga rejulga contra eles. As **regras de publicação** valem só para o
- * ativo, e só com o cache da tablebase (a rede, só com `--refresh-cache`, como no resto do
- * gate). A régua de voz não entra aqui: ela avisa no editor e não decide o CI.
+ * ativo. A régua de voz não entra aqui: ela avisa no editor e não decide o CI.
  * ------------------------------------------------------------------ */
-async function checkAulasV2() {
+function checkAulasV2() {
   for (const id of idsDeAulasV2(contentDir)) {
     const where = `aula v2 ${id}`;
     for (const publicationId of idsDePublicacoesV2(contentDir, id)) {
@@ -1850,21 +1321,6 @@ async function checkAulasV2() {
     if (pacote.aula.id !== id) fail("PACOTE_ADULTERADO", where, `o pacote ativo é da aula ${pacote.aula.id}`);
 
     const posicoes = posicoesDoPacoteV2(pacote);
-    const entradas = new Map<string, TbEntry | null>();
-    for (const treino of pacote.aula.treinos) {
-      if (treino.perfil !== "final-certificado") continue;
-      for (const questao of treino.questoes) {
-        let fen: string;
-        try {
-          fen = fenDaQuestaoDoTreino(pacote.aula, treino, questao, posicoes);
-        } catch {
-          // Pergunta sem posição é acusada pelas regras de forma, logo abaixo.
-          continue;
-        }
-        if (entradas.has(normalizeFen(fen))) continue;
-        entradas.set(normalizeFen(fen), await ask(fen, `${where} / treino ${treino.id} / ${questao.id}`));
-      }
-    }
     let recalculadas: RevisoesDaAulaV2 = {};
     try {
       recalculadas = revisoesDaAulaV2(pacote.aula, posicoes);
@@ -1873,10 +1329,6 @@ async function checkAulasV2() {
     }
     const julgados = problemasParaPublicarV2(pacote.aula, {
       positions: posicoes,
-      tablebase: (fen, resultado) => {
-        const entrada = entradas.get(normalizeFen(fen));
-        return entrada ? goalMovesOf(entrada, resultado) : null;
-      },
       revisoes: { gravadas: pacote.revisoes, recalculadas },
     });
     for (const problema of julgados) {
@@ -1937,16 +1389,6 @@ if (writeBack) {
   }
 }
 
-const orphanCache = tablebase
-  .existingFiles()
-  .filter((file) => !tablebase.usedFiles().has(file));
-
-// Só é seguro apagar cache órfão quando a conferência inteira rodou: se alguma
-// posição nem chegou a ser consultada, "sem uso" não quer dizer "não serve".
-if (pruneCache && issues.length === 0) {
-  for (const file of orphanCache) rmSync(path.join(cacheDir, file));
-}
-
 /* ------------------------------------------------------------------ *
  * Promoção — só no ramo verde
  * ------------------------------------------------------------------ */
@@ -1985,10 +1427,6 @@ console.log(
     `obras: ${new Set(sourcesByKey.values()).size} ` +
     `(${[...new Set(sourcesByKey.values())].filter((s) => s.protected).length} com teto)`,
 );
-console.log(
-  `  tablebase: ${tablebase.usedFiles().size} posições consultadas ` +
-    `(${tablebase.hits} do cache, ${tablebase.fetched} pela rede)`,
-);
 // A exceção aparece em **toda** rodada verde, e não só quando alguém procura:
 // exceção que só se vê procurando é exceção esquecida.
 {
@@ -2010,13 +1448,6 @@ if (promovidos.length > 0) {
   console.log(`  aplicado: ${promovidos.length} arquivo(s) promovido(s)`);
   for (const file of promovidos) console.log(`    → ${file}`);
 }
-if (orphanCache.length > 0) {
-  console.log(
-    pruneCache && issues.length === 0
-      ? `  cache: ${orphanCache.length} arquivo(s) sem uso — removidos`
-      : `  cache: ${orphanCache.length} arquivo(s) sem uso — rode com --prune-cache para remover`,
-  );
-}
 console.log("");
 
 // O resumo em dados, para a tela poder dizer "12 posições, 3 pela rede" sem
@@ -2025,11 +1456,6 @@ emitir({
   tipo: "resumo",
   posicoes: positions.size,
   aulas: lessons.length,
-  tablebase: {
-    consultadas: tablebase.usedFiles().size,
-    doCache: tablebase.hits,
-    pelaRede: tablebase.fetched,
-  },
   rascunhos: useRascunhos
     ? { aulas: rascunhosDeAula.length, posicoes: rascunhosDePosicao.length }
     : null,

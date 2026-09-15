@@ -109,6 +109,45 @@ export function aprendida(p: ProgressoDaEscada): boolean {
   return p.aprendidaEm !== null;
 }
 
+/**
+ * A escada de uma aula com **várias práticas** (trava 9 de `docs/TRILHA-FINAIS.md`, 15/9/2026).
+ *
+ * Cada prática tem a sua escada. A da aula é a junção, com três regras decididas pelo Doug:
+ *
+ * - **aprendida só quando todas estão** — `aprendidaEm` é a data da última a chegar lá, ou nulo
+ *   enquanto faltar uma (inclusive a que nunca foi jogada);
+ * - **a revisão vence quando qualquer uma vence** — `revisarEm` é o mais cedo entre as que estão
+ *   na escada, e `praticaParaRevisar` diz qual é, para o cartão abrir essa e não a primeira;
+ * - **o degrau é o da menos avançada** entre as que estão na escada (0 se nenhuma está).
+ *
+ * Com uma prática só, devolve a escada dela como está.
+ */
+export function juntarEscadas(
+  praticas: ReadonlyArray<{ readonly id: string; readonly escada: ProgressoDaEscada }>,
+): { escada: ProgressoDaEscada; praticaParaRevisar: string | null } {
+  if (praticas.length === 0) return { escada: zerada(), praticaParaRevisar: null };
+  if (praticas.length === 1) {
+    // Com uma só não há o que escolher: o cartão abre a prática da aula, como sempre abriu.
+    return { escada: praticas[0].escada, praticaParaRevisar: null };
+  }
+  const naEscada = praticas.filter((p) => p.escada.degrau > 0 && p.escada.revisarEm !== null);
+  const primeira = [...naEscada].sort((a, b) => Date.parse(a.escada.revisarEm!) - Date.parse(b.escada.revisarEm!))[0];
+  const todasAprendidas = praticas.every((p) => p.escada.aprendidaEm !== null);
+  const maisTarde = (datas: Array<string | null>) =>
+    datas.filter((d): d is string => d !== null).sort((a, b) => Date.parse(b) - Date.parse(a))[0] ?? null;
+  return {
+    escada: {
+      tentativas: praticas.reduce((soma, p) => soma + p.escada.tentativas, 0),
+      erros: praticas.reduce((soma, p) => soma + p.escada.erros, 0),
+      aprendidaEm: todasAprendidas ? maisTarde(praticas.map((p) => p.escada.aprendidaEm)) : null,
+      ultimaEm: maisTarde(praticas.map((p) => p.escada.ultimaEm)),
+      degrau: naEscada.length ? Math.min(...naEscada.map((p) => p.escada.degrau)) : 0,
+      revisarEm: primeira?.escada.revisarEm ?? null,
+    },
+    praticaParaRevisar: primeira?.id ?? null,
+  };
+}
+
 /** A meia-noite em Guabiruba do dia a que este instante pertence. */
 function meiaNoiteNoBrasil(agora: string): number {
   return Date.parse(`${hojeNoBrasil(new Date(agora))}T00:00:00-03:00`);

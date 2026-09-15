@@ -85,7 +85,7 @@ export function DialogoProveniencia({ aula, analiseId, professor, aoRegistrar, a
   return (
     <Dialogo
       titulo="De onde veio esta posição?"
-      descricao={capitulo ? `Capítulo «${capitulo.titulo}». Só a origem é obrigatória.` : "Só a origem é obrigatória."}
+      descricao={capitulo ? `Capítulo «${capitulo.titulo}». Tudo aqui é opcional; sem origem, a conferência avisa.` : "Tudo aqui é opcional; sem origem, a conferência avisa."}
       largura="max-w-2xl"
       aoFechar={aoFechar}
       rodape={(
@@ -111,7 +111,7 @@ export function DialogoProveniencia({ aula, analiseId, professor, aoRegistrar, a
           ) : null}
 
           <fieldset aria-describedby={erro?.campo === "origem" ? erroId : undefined} className="flex flex-col gap-1">
-            <legend className="mb-1 text-sm font-medium text-tinta">De onde veio <span className="text-erro-texto" aria-hidden>*</span><span className="sr-only">(obrigatório)</span></legend>
+            <legend className="mb-1 text-sm font-medium text-tinta">De onde veio <span className="text-xs font-normal text-tinta-fraca">(opcional)</span></legend>
             {ORIGENS_DA_POSICAO.map((origem) => (
               <label key={origem} className={`flex cursor-pointer items-start gap-2 rounded-md border p-2 text-sm ${pedido.origem === origem ? "border-foco bg-metodo-superficie/10" : "border-borda-fraca"}`}>
                 <input type="radio" name={nomeDoGrupo} checked={pedido.origem === origem} onChange={() => escolherOrigem(origem)} className="foco mt-1" />
@@ -175,7 +175,7 @@ export function DialogoProveniencia({ aula, analiseId, professor, aoRegistrar, a
                 Os textos que vieram com esta posição são meus, ou tenho direito de usá-los
                 <span className="block text-xs text-tinta-fraca">
                   {analiseTemTexto(aula, analise)
-                    ? "Este capítulo tem narração. Sem esta marca, a aula não publica — reescreva os textos ou marque."
+                    ? "Este capítulo tem narração. Sem esta marca, a conferência avisa — reescreva os textos ou marque."
                     : "Este capítulo ainda não tem narração; a marca vale para a que vier."}
                 </span>
               </span>

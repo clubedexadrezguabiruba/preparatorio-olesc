@@ -9,8 +9,9 @@
  *
  * Um pacote tem hashes de tudo e um id que é hash do manifesto: escrito à mão, ele nasceria
  * adulterado, e toda mutação ficaria vermelha por "pacote adulterado" em vez da regra que ela
- * quer provar. A fixture é a N0-LADDER real, adaptada, com a certificação renovada a partir do
- * cache versionado (sem rede) e o id trocado — para não colidir com a N0-LADDER de verdade.
+ * quer provar. A fixture é a N0-LADDER real, adaptada, com o id trocado — para não colidir com a
+ * N0-LADDER de verdade. Desde 15/9/2026 não há certificação a renovar: a evidência herdada do v1
+ * vai como dado congelado, e nenhuma tablebase é lida.
  *
  * ## As duas
  *
@@ -24,18 +25,16 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { adaptarLessonV1 } from "../lib/editor-v2/adaptar-v1.ts";
-import { lerPosicoesDoConteudoV2, renovarCertificacoesV2 } from "../lib/editor-v2/gate.ts";
+import { lerPosicoesDoConteudoV2 } from "../lib/editor-v2/gate.ts";
 import type { AulaV2 } from "../lib/editor-v2/modelo.ts";
 import { montarPacoteV2 } from "../lib/editor-v2/pacote.ts";
 import { lessonSchema } from "../lib/lesson/schema.ts";
-import { Tablebase } from "./tablebase.ts";
 
 const checar = process.argv.includes("--check");
 const soExtra = process.argv.includes("--extra");
 
 const positions = lerPosicoesDoConteudoV2();
 const lesson = lessonSchema.parse(JSON.parse(readFileSync(path.join("content", "lessons", "N0-LADDER.json"), "utf8")));
-const tablebase = new Tablebase(path.join("content", "tablebase-cache"), false);
 const adaptada = adaptarLessonV1(lesson, positions);
 
 const FIXTURES: Array<{ id: string; aula: (base: AulaV2) => AulaV2 }> = [
@@ -49,7 +48,7 @@ const FIXTURES: Array<{ id: string; aula: (base: AulaV2) => AulaV2 }> = [
 let divergentes: string[] = [];
 for (const fixture of FIXTURES.filter((f) => !soExtra || f.id.startsWith("EX-"))) {
   const destino = path.join("content", "fixtures", "aulas-v2", fixture.id);
-  const { aula } = await renovarCertificacoesV2(fixture.aula(adaptada), positions, (fen) => tablebase.lookup(fen));
+  const aula = fixture.aula(adaptada);
   const pacote = montarPacoteV2(aula, positions);
   const arquivos: Record<string, string> = {
     [path.join(destino, "ativa.json")]: `${JSON.stringify({ publicationId: pacote.publicationId, anterior: null, ativadaEm: "2026-09-13T00:00:00.000Z" }, null, 2)}\n`,

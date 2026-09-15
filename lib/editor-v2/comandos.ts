@@ -186,7 +186,7 @@ export type ComandoV2 =
    * §13 (fatia 10): um estudo do Lichess inteiro — introdução, capítulos, treinos e a prática — num
    * Desfazer. A prática chega pronta (a posição já entrou no acervo pelo servidor) ou não chega.
    */
-  | { tipo: "IMPORTAR_ESTUDO"; plano: PlanoDoEstudoV2; pratica?: AulaV2["praticas"][number]; registroDaPratica?: AulaV2["proveniencia"][number] }
+  | { tipo: "IMPORTAR_ESTUDO"; plano: PlanoDoEstudoV2; praticas?: AulaV2["praticas"]; registrosDasPraticas?: AulaV2["proveniencia"] }
   /**
    * Uma tag do cabeçalho PGN da análise (fatia 8: Nome, Nível e Fonte do repertório).
    *
@@ -209,7 +209,7 @@ function executarComandoCru(aula: AulaV2, comando: ComandoV2, positions: Record<
     return { ...aula, origem: { ...aula.origem, convertidaEm: comando.convertidaEm } };
   }
   if (ehComandoDeIntroducao(comando)) return executarComandoDeIntroducao(aula, comando, positions);
-  if (comando.tipo === "IMPORTAR_ESTUDO") return aplicarPlanoDoEstudo(aula, comando.plano, comando.pratica, comando.registroDaPratica);
+  if (comando.tipo === "IMPORTAR_ESTUDO") return aplicarPlanoDoEstudo(aula, comando.plano, comando.praticas, comando.registrosDasPraticas);
   if (comando.tipo === "MUDAR_MODO") {
     const resultado = mudarModo(aula, comando.parte, comando.destino, positions);
     if (!resultado.ok) throw new Error(resultado.mensagem);

@@ -41,7 +41,7 @@ async function pastaConferida(): Promise<string> {
   mkdirSync(path.join(raiz, "content", "positions", "N0"), { recursive: true });
   cpSync(ARQUIVO_DA_POSICAO, path.join(raiz, ARQUIVO_DA_POSICAO));
   cpSync("content/tablebase-cache", path.join(raiz, "content", "tablebase-cache"), { recursive: true });
-  const conferencia = await conferirAulaV2(ID, { raiz, env: ligada, rede: false, regua, documentoInicial: adaptarLessonV1(lesson, positions) });
+  const conferencia = await conferirAulaV2(ID, { raiz, env: ligada, regua, documentoInicial: adaptarLessonV1(lesson, positions) });
   assert.equal(conferencia.verde, true);
   return raiz;
 }
@@ -57,7 +57,7 @@ const restoDeTransacao = (raiz: string) => {
 async function editarEConferir(raiz: string, titulo: string) {
   const documento = lerDocumentoV2(ID, raiz)!;
   assert.equal(gravarDocumentoV2(ID, { ...documento.aula, titulo }, documento.hash, raiz, ligada).ok, true);
-  const conferencia = await conferirAulaV2(ID, { raiz, env: ligada, rede: false, regua });
+  const conferencia = await conferirAulaV2(ID, { raiz, env: ligada, regua });
   assert.equal(conferencia.verde, true);
 }
 

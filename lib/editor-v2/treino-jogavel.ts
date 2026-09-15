@@ -42,7 +42,7 @@
 import { Chess } from "chess.js";
 import type { Expect, Lesson, MoveTree, Position, TreeNode } from "../lesson/schema.ts";
 import { fenDaQuestaoDoTreino, fenInicialDoTreino } from "./propriedade-treino.ts";
-import type { AulaV2, DesenhoV2, RespostaTreinoV2, TreinoV2 } from "./modelo.ts";
+import { resultadoDoTreinoV2, type AulaV2, type DesenhoV2, type RespostaTreinoV2, type TreinoV2 } from "./modelo.ts";
 
 /** §16.3: o lance legal fora da linha autoral, sem inventar erro objetivo. */
 export const FORA_DA_LINHA = "Este lance não faz parte da linha treinada. Tente outro.";
@@ -113,6 +113,17 @@ export function defesasEmJogo<T>(defesas: readonly T[], politica: TreinoV2["defe
   return politica === "fixa" ? defesas.slice(0, 1) : [...defesas];
 }
 
+/**
+ * O treino traz a evidência congelada de uma aula antiga (o `winningMoves` que o gate v1 gravou)?
+ *
+ * Desde 15/9/2026 ninguém calcula nem renova essa evidência (travas 2 e 3 de
+ * `docs/TRILHA-FINAIS.md`). Onde ela existe, e ainda fala das posições do treino, o aluno joga
+ * com ela como sempre jogou — a N0-LADDER publicada é assim. Treino novo nasce sem ela.
+ */
+export function temEvidenciaCongelada(treino: TreinoV2): boolean {
+  return treino.perfil === "final-certificado" && Boolean(treino.certificacao?.evidencias);
+}
+
 function aceita(resposta: RespostaTreinoV2): boolean {
   return resposta.julgamento !== "erro";
 }
@@ -155,7 +166,7 @@ export function treinoJogavel(aula: AulaV2, treinoId: string, positions: Record<
    * própria posição. Metade certificado, metade linha autoral, daria ao aluno dois juízes
    * diferentes na mesma tentativa.
    */
-  const certificado = treino.perfil === "final-certificado"
+  const certificado = temEvidenciaCongelada(treino)
     && Boolean(aula.catalogo)
     && treino.questoes.every((questao) => treino.certificacao?.evidencias?.[questao.id]?.fen === fens.get(questao.id));
 
@@ -231,7 +242,7 @@ export function treinoJogavel(aula: AulaV2, treinoId: string, positions: Record<
         methodAlternative: aula.catalogo?.mensagensPadrao.alternativaDoMetodo ?? ALTERNATIVA_PADRAO,
       },
     } as unknown as Lesson,
-    tree: { positionId: treino.inicio.nodeId, root: raiz, goal: treino.certificacao?.resultado ?? "win", nodes },
+    tree: { positionId: treino.inicio.nodeId, root: raiz, goal: resultadoDoTreinoV2(treino) ?? "win", nodes },
     orientacao: treino.ladoAluno,
     fenInicial: treino.defesaInicial ? fenInicial : nodes[raiz].fen,
     ...(treino.defesaInicial ? { defesaInicial: treino.defesaInicial.move } : {}),

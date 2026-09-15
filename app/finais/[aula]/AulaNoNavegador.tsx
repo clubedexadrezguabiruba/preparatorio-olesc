@@ -38,11 +38,13 @@ import { registrarEtapa, registrarEtapaV2 } from "../acoes";
  * Recebe as etapas do fluxo já traduzidas no servidor e grava por `registrarEtapaV2`, que
  * rejulga contra a publicação que o aluno jogou.
  */
-export function AulaNoNavegador(props: { pacote: PacoteDeAula; leitura?: ReactNode } | { aulaV2: AulaDoAlunoV2 }) {
-  const revisao = useSearchParams().get("revisao") === "1";
+export function AulaNoNavegador(props: { pacote: PacoteDeAula; leitura?: ReactNode } | { aulaV2: AulaDoAlunoV2; leitura?: ReactNode }) {
+  const parametros = useSearchParams();
+  const revisao = parametros.get("revisao") === "1";
 
   if ("aulaV2" in props) {
-    return <LessonPlayer aulaV2={props.aulaV2} revisao={revisao} onEtapaFeita={registrarEtapaV2} />;
+    // `pratica`: com várias práticas, o cartão de revisão diz qual venceu (trava 9, 15/9/2026).
+    return <LessonPlayer aulaV2={props.aulaV2} revisao={revisao} praticaDaRevisao={parametros.get("pratica") ?? undefined} onEtapaFeita={registrarEtapaV2} leitura={props.leitura} />;
   }
 
   const etapa: StageKey | undefined = revisao ? "practice" : undefined;

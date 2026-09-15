@@ -358,7 +358,6 @@ export function capitulosTocados(aula: AulaV2, perdas: PerdasPorAnaliseV2): Capi
 export type TreinoAfetadoV2 = {
   id: string;
   titulo: string;
-  certificacaoReaberta: boolean;
   fonteAlterada: boolean;
 };
 
@@ -380,13 +379,13 @@ export function treinosQuePisamEm(aula: AulaV2, analiseIds: Set<string>): Treino
     .map((treino) => ({
       id: treino.id,
       titulo: treino.titulo,
-      certificacaoReaberta: treino.certificacao !== undefined && treino.certificacao.estado !== "pendente",
       fonteAlterada: treino.origem !== undefined && treino.fonte === "atual",
     }));
 }
 
 /**
- * Reabre avaliação, fonte e certificação dos treinos atingidos.
+ * Reabre avaliação e fonte dos treinos atingidos. A certificação antiga fica como está: desde
+ * 15/9/2026 ela é dado congelado e ninguém a confere (travas 2 e 3).
  *
  * §8 do plano: "um treino pode ser personalizado e ter fonte alterada
  * simultaneamente" — por isso `fonte` muda e `propriedade` **não**. Só um ajuste
@@ -402,7 +401,6 @@ export function reabrirTreinos(aula: AulaV2, afetados: Set<string>): AulaV2 {
         ...treino,
         revisaoAvaliacao: "pendente" as const,
         ...(treino.origem && treino.fonte === "atual" ? { fonte: "alterada" as const } : {}),
-        ...(treino.certificacao ? { certificacao: { ...treino.certificacao, estado: "pendente" as const } } : {}),
       };
     }),
   };

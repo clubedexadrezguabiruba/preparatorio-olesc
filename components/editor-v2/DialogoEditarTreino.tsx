@@ -22,7 +22,7 @@ import {
   tornarDefesaFixa,
 } from "@/lib/editor-v2/defesas-do-treino";
 import { desenhoDeFormas } from "@/lib/editor-v2/desenhos";
-import type { AulaV2, QuestaoTreinoV2, RespostaTreinoV2, TreinoV2 } from "@/lib/editor-v2/modelo";
+import { resultadoDoTreinoV2, type AulaV2, type QuestaoTreinoV2, type RespostaTreinoV2, type TreinoV2 } from "@/lib/editor-v2/modelo";
 import { MAXIMO_DE_DEFESAS } from "@/lib/editor-v2/treino-jogavel";
 import { falasDoTreinoV2 } from "@/lib/editor-v2/voz-do-treino";
 import { reprovacoes, type Regua } from "@/lib/lesson/regua";
@@ -33,7 +33,8 @@ const NOMES_DO_FIM: Record<Extract<RespostaTreinoV2["efeito"], { tipo: "encerra"
   mate: "Mate",
   promotion: "Promoção",
   "draw-secured": "Empate pelas regras",
-  "tablebase-win": "Vitória certificada",
+  // Só aparece na aula antiga que já o usa: desde 15/9/2026 ninguém certifica vitória.
+  "tablebase-win": "Vitória (aula antiga)",
   "objetivo-autoral": "Objetivo autoral alcançado",
 };
 
@@ -143,6 +144,15 @@ export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar
           </label>
           <label className="flex flex-col gap-1 text-sm text-tinta">Explicação ao concluir
             <textarea value={treino.explicacaoConclusao ?? ""} onChange={(e) => setTreino({ ...treino, explicacaoConclusao: e.currentTarget.value || undefined })} rows={3} placeholder="O que o aluno deve entender no fim" className="foco resize-y rounded-md border border-borda bg-papel p-2" />
+          </label>
+          {/* Trava 2 de 15/9/2026: o resultado é declarado pelo professor. É por ele que o aluno lê
+              "joga a vitória fora" ou "joga o empate fora" num erro conhecido que perde. */}
+          <label className="flex flex-col gap-1 text-sm text-tinta">O treino cobra
+            <select value={resultadoDoTreinoV2(treino) ?? "win"} onChange={(e) => setTreino({ ...treino, resultado: e.currentTarget.value as "win" | "draw" })} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm text-tinta">
+              <option value="win">Vencer</option>
+              <option value="draw">Segurar o empate</option>
+            </select>
+            <span className="text-xs text-tinta-fraca">Você decide. O motor do editor ajuda a conferir.</span>
           </label>
           <fieldset className="rounded-md border border-borda p-2">
             <legend className="px-1 text-sm font-medium text-tinta">Quando o treino acaba</legend>
@@ -313,7 +323,7 @@ export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar
                     </div>
                   ) : null}
                   {resposta.efeito.tipo === "encerra" ? <div className="mt-2 grid gap-2 md:grid-cols-2">
-                    <label className="flex flex-col gap-1 text-xs text-tinta">Condição final<select value={resposta.efeito.condicao} onChange={(e) => { const valor = e.currentTarget.value as Extract<RespostaTreinoV2["efeito"], { tipo: "encerra" }>["condicao"]; atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "encerra" ? atual : ({ ...atual, efeito: { ...atual.efeito, condicao: valor } })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm">{Object.entries(NOMES_DO_FIM).map(([valor, nome]) => <option key={valor} value={valor}>{nome}</option>)}</select></label>
+                    <label className="flex flex-col gap-1 text-xs text-tinta">Condição final<select value={resposta.efeito.condicao} onChange={(e) => { const valor = e.currentTarget.value as Extract<RespostaTreinoV2["efeito"], { tipo: "encerra" }>["condicao"]; atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "encerra" ? atual : ({ ...atual, efeito: { ...atual.efeito, condicao: valor } })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm">{Object.entries(NOMES_DO_FIM).filter(([valor]) => valor !== "tablebase-win" || resposta.efeito.tipo === "encerra" && resposta.efeito.condicao === "tablebase-win").map(([valor, nome]) => <option key={valor} value={valor}>{nome}</option>)}</select></label>
                     <label className="flex flex-col gap-1 text-xs text-tinta">Último lance do adversário (opcional)<input value={resposta.efeito.defesaFinal ?? ""} onChange={(e) => { const valor = e.currentTarget.value.toLowerCase() || undefined; atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "encerra" ? atual : ({ ...atual, efeito: { ...atual.efeito, defesaFinal: valor } })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm" /></label>
                     <label className="flex flex-col gap-1 text-xs text-tinta md:col-span-2">O que o aluno lê quando o adversário fecha com este lance (opcional)
                       <textarea value={resposta.efeito.textoDaDefesaFinal ?? ""} onChange={(e) => { const valor = e.currentTarget.value; atualizarResposta(resposta.id, (atual) => atual.efeito.tipo !== "encerra" ? atual : ({ ...atual, efeito: { ...atual.efeito, textoDaDefesaFinal: valor || undefined } })); }} rows={2} placeholder="Aparece com a conclusão, depois do feedback" className="foco resize-y rounded-md border border-borda bg-papel p-2 text-sm" />

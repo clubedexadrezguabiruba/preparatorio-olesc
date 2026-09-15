@@ -35,7 +35,7 @@ import { DialogoMudarModo } from "@/components/editor-v2/DialogoMudarModo";
 import type { ParteDaAulaV2 } from "@/lib/editor-v2/mudar-modo";
 import type { ComandoDeIntroducaoV2 } from "@/lib/editor-v2/introducao";
 import { planejarEstudo } from "@/lib/editor-v2/importar-estudo";
-import { ADVERSARIO_PADRAO, prepararPratica } from "@/lib/editor-v2/pratica";
+import { ADVERSARIO_PADRAO, aplicarNovaPratica, prepararPratica } from "@/lib/editor-v2/pratica";
 import type { PedidoDeImportacaoDeEstudo } from "@/components/editor-v2/PainelDoEstudo";
 import { PreviaDaPratica } from "@/components/editor-v2/PreviaDaPratica";
 import type { ObraDoRegistro } from "@/lib/editor-v2/acervo-em-disco";
@@ -607,28 +607,33 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
     const documento = historico.presente;
     const plano = planejarEstudo(documento, pedido.leitura, { destinos: pedido.destinos, revisao: pedido.revisao }, positions);
     if (!plano.ok) return plano.mensagem;
-    let pratica: AulaV2["praticas"][number] | undefined;
-    let registro: AulaV2["proveniencia"][number] | undefined;
+    // Várias práticas desde 15/9/2026 (trava 9): cada posição entra no acervo, com o resultado que o
+    // professor declarou para ela, e os ids são decididos em sequência para duas não colidirem.
+    const praticas: AulaV2["praticas"] = [];
+    const registros: AulaV2["proveniencia"] = [];
     let posicoes = positions;
-    if (plano.plano.pratica) {
-      const { fen, titulo, lado } = plano.plano.pratica;
-      const resposta = await adicionarAoAcervoV2Acao(JSON.stringify({ aulaId, fen, revisao: { ...pedido.revisao, fenRevisada: fen }, obra: pedido.obraDaPratica, resultadoDeclarado: pedido.resultadoDaPratica, etiqueta: titulo }));
+    let comAsAnteriores = documento;
+    for (const doEstudo of plano.plano.praticas) {
+      const { fen, titulo, lado, numero } = doEstudo;
+      const resposta = await adicionarAoAcervoV2Acao(JSON.stringify({ aulaId, fen, revisao: { ...pedido.revisao, fenRevisada: fen }, obra: pedido.obraDaPratica, resultadoDeclarado: pedido.resultadosDasPraticas[numero], etiqueta: titulo }));
       if (resposta.ok && resposta.avisos.length) plano.plano.avisos.push(...resposta.avisos);
-      if (!resposta.ok) return `a prática não entrou: ${resposta.mensagem}`;
+      if (!resposta.ok) return `a prática «${titulo}» não entrou: ${resposta.mensagem}`;
       setAcervoDaSessao((atual) => atual.some((item) => item.position.id === resposta.item.position.id) ? atual : [...atual, resposta.item]);
-      posicoes = { ...positions, [resposta.item.position.id]: resposta.item.position };
-      registro = { positionId: resposta.item.position.id, conteudoHash: resposta.item.conteudoHash, estado: resposta.item.position.status };
+      posicoes = { ...posicoes, [resposta.item.position.id]: resposta.item.position };
+      const registro = { positionId: resposta.item.position.id, conteudoHash: resposta.item.conteudoHash, estado: resposta.item.position.status };
       const objetivo = resposta.item.position.expectedResult === "draw" ? "draw" : "win";
-      const preparo = prepararPratica(documento, { titulo, positionId: resposta.item.position.id, ladoAluno: lado, objetivo, ...ADVERSARIO_PADRAO }, posicoes, registro);
-      if (!preparo.ok) return `a prática não entrou: ${preparo.mensagem}`;
-      pratica = preparo.preparo.pratica;
+      const preparo = prepararPratica(comAsAnteriores, { titulo, positionId: resposta.item.position.id, ladoAluno: lado, objetivo, ...ADVERSARIO_PADRAO }, posicoes, registro);
+      if (!preparo.ok) return `a prática «${titulo}» não entrou: ${preparo.mensagem}`;
+      praticas.push(preparo.preparo.pratica);
+      registros.push(registro);
+      comAsAnteriores = aplicarNovaPratica(comAsAnteriores, preparo.preparo);
     }
     try {
-      executarComando(documento, { tipo: "IMPORTAR_ESTUDO", plano: plano.plano, pratica, registroDaPratica: registro }, posicoes);
+      executarComando(documento, { tipo: "IMPORTAR_ESTUDO", plano: plano.plano, praticas, registrosDasPraticas: registros }, posicoes);
     } catch (erro) {
       return erro instanceof Error ? erro.message : "não foi possível importar o estudo";
     }
-    aplicar({ tipo: "IMPORTAR_ESTUDO", plano: plano.plano, pratica, registroDaPratica: registro });
+    aplicar({ tipo: "IMPORTAR_ESTUDO", plano: plano.plano, praticas, registrosDasPraticas: registros });
     const primeiro = plano.plano.capitulos[0];
     if (primeiro) { setCapituloId(primeiro.id); setNodeId(primeiro.inicioNodeId); }
     if (plano.plano.avisos.length) setRecado(`Estudo importado. Para revisar: ${plano.plano.avisos.join("; ")}.`);
@@ -908,9 +913,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
    * O botão Conferir. Só com a aula salva: o servidor julga o disco, e julgar outra coisa
    * que a tela mostra seria um verde sobre o que o professor não está vendo.
    *
-   * A passada A pode renovar a certificação no disco. O documento que volta substitui o
-   * presente **sem** limpar o Desfazer: desfazer depois disso restaura a certificação
-   * antiga, o autosave a grava, e a conferência passa a dizer que venceu — que é a verdade.
+   * Desde 15/9/2026 a conferência não escreve no documento (a tablebase saiu). Se o disco voltar
+   * diferente — a aula guardada pela primeira vez —, o documento que volta substitui o presente
+   * **sem** limpar o Desfazer.
    */
   /**
    * `depois: "publicar"` — o botão Publicar clicado sem conferência verde (achado do Doug, 14/9/2026:
@@ -1689,9 +1694,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
           {/* §17.1 (fatia 10): a prática, a avaliação da aula. */}
           <section className="flex flex-col gap-1">
             <CabecalhoDaSecao titulo="Prática">
-              {historico.presente.praticas.length ? null : (
-                <BotaoMais rotulo="+ Criar prática" dado={{ "data-pratica": "nova" }} aoClicar={() => setEditandoPratica("nova")} />
-              )}
+              {/* Nenhuma, uma ou várias (trava 9, 15/9/2026): o botão fica sempre. */}
+              <BotaoMais rotulo="+ Criar prática" dado={{ "data-pratica": "nova" }} aoClicar={() => setEditandoPratica("nova")} />
             </CabecalhoDaSecao>
             {historico.presente.praticas.length ? historico.presente.praticas.map((pratica) => (
               <div key={pratica.id} className="flex items-stretch rounded-md hover:bg-carta-toque">
@@ -1703,7 +1707,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
                   <span aria-hidden>▶</span>
                 </button>
               </div>
-            )) : <p className="px-2 text-xs text-aviso-tinta">Obrigatória para publicar: o aluno joga contra o computador.</p>}
+            )) : <p className="px-2 text-xs text-tinta-fraca">Opcional. Sem prática, o aluno fecha a aula marcando que assistiu.</p>}
           </section>
         </aside>
 

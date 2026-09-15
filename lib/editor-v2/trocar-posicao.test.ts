@@ -270,17 +270,18 @@ test("o percurso do capítulo é cortado no lance podado, e o início podado vol
   assert.deepEqual(aula.capitulos[1].caminho, []);
 });
 
-test("o treino afetado tem a avaliação reaberta, a fonte marcada como alterada e a certificação pendente", () => {
+test("o treino afetado tem a avaliação reaberta e a fonte marcada como alterada; a certificação antiga fica como estava", () => {
   const antes = aulaDeEnsaio();
   const { impacto } = calcular(antes, FEN_NOVA);
   assert.deepEqual(impacto.treinosAfetados, [
-    { id: "treino-ensaio", titulo: "Treino do rei", certificacaoReaberta: true, fonteAlterada: true },
+    { id: "treino-ensaio", titulo: "Treino do rei", fonteAlterada: true },
   ]);
 
   const treino = trocar(antes, FEN_NOVA).treinos[0];
   assert.equal(treino.revisaoAvaliacao, "pendente");
   assert.equal(treino.fonte, "alterada");
-  assert.equal(treino.certificacao?.estado, "pendente");
+  // Desde 15/9/2026 ninguém confere a certificação: trocar a posição não a mexe.
+  assert.equal(treino.certificacao?.estado, antes.treinos[0].certificacao?.estado);
   // §8: personalizado e fonte alterada são condições distintas. A propriedade
   // não muda por causa da troca — só um ajuste autoral a mudaria.
   assert.equal(treino.propriedade, "derivado");

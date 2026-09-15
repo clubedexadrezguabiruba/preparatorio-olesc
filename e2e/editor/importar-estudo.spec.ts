@@ -39,10 +39,10 @@ test("o arquivo do estudo: seletor com as pistas, importar, e Conferir sem erro"
 
   const lista = janela.getByRole("list", { name: "Capítulos do estudo" });
   await expect(lista.getByRole("listitem")).toHaveCount(9);
-  const destinos = await lista.getByRole("combobox").evaluateAll((selects) => selects.map((s) => (s as HTMLSelectElement).value));
+  const destinos = await lista.getByRole("combobox", { name: /^O que «.*» vira$/ }).evaluateAll((selects) => selects.map((s) => (s as HTMLSelectElement).value));
   expect(destinos).toEqual(["introducao", "introducao", "capitulo", "capitulo", "treino", "treino", "treino", "treino", "pratica"]);
   await expect(janela.getByText(/dicas e os textos de desvio da lição interativa/).first()).toBeVisible();
-  await expect(janela.getByRole("status").filter({ hasText: "A aula ganha" })).toHaveText(/2 quadro\(s\) de introdução, 2 capítulo\(s\), 4 treino\(s\) e 1 prática/);
+  await expect(janela.getByRole("status").filter({ hasText: "A aula ganha" })).toHaveText(/2 quadro\(s\) de introdução, 2 capítulo\(s\), 4 treino\(s\) e 1 prática\(s\)/);
   await expect(janela.getByText(/Qg7\+ não tem símbolo/)).toBeVisible();
 
   await janela.getByRole("checkbox", { name: /são meus, ou tenho direito/ }).check();
@@ -86,7 +86,7 @@ test("@rede o link real chega ao mesmo estudo", async ({ page }) => {
   await janela.getByRole("button", { name: "Buscar no Lichess" }).click();
   const lista = janela.getByRole("list", { name: "Capítulos do estudo" });
   await expect(lista.getByRole("listitem")).toHaveCount(9, { timeout: 30_000 });
-  const destinos = await lista.getByRole("combobox").evaluateAll((selects) => selects.map((s) => (s as HTMLSelectElement).value));
+  const destinos = await lista.getByRole("combobox", { name: /^O que «.*» vira$/ }).evaluateAll((selects) => selects.map((s) => (s as HTMLSelectElement).value));
   expect(destinos).toEqual(["introducao", "introducao", "capitulo", "capitulo", "treino", "treino", "treino", "treino", "pratica"]);
 
   // Endereço de fora é recusado sem busca.

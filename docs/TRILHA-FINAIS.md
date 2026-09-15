@@ -15,6 +15,46 @@ la Villa publica na p. 11 do dele, e o mapa de competências N0–N5 do currícu
 e a ordem é por **frequência em partida** e por **pré-requisito**, não pela ordem
 de nenhum sumário. É essa `ordem` que corta os níveis (§1).
 
+> **2026-09-15 — duas decisões globais do Doug, que valem para o documento
+> inteiro.** O que estiver escrito abaixo e contradisser as duas é história, e
+> perde para elas.
+>
+> 1. **A tablebase deixa de ser obrigatória.** A conferência com o **motor do
+>    professor** — o Stockfish rápido que o Editor v2 já roda no navegador — é
+>    suficiente para dizer se uma posição ganha, empata ou perde e se um lance
+>    joga o resultado fora. A tablebase continua disponível como consulta, não
+>    como condição.
+> 2. **O professor tem a última palavra.** Se o Doug diz que a posição está
+>    correta, ela está: a posição é correta quando atinge o que ele definiu para
+>    a aula. A máquina **avisa**; quem decide é ele. Um desacordo entre o motor e
+>    o professor vira nota na aula, não reprovação.
+>
+> **2026-09-15, à tarde — as 21 travas, uma por uma.** O Doug decidiu quais caem,
+> quais afrouxam e quais ficam. **A lista de conteúdos (§5) não muda.** O código
+> foi alinhado na mesma data (diário do Editor v2, "As travas de 15/9"). Onde uma
+> seção abaixo disser o contrário, a tabela vence; as seções que governavam uma
+> trava levam uma nota de 15/9.
+>
+> | # | Trava | Decisão | Como fica |
+> |---|---|---|---|
+> | 1 | Máx. 7 peças (5 se acaba em mate) | **cai** | nenhum limite de peças (§3) |
+> | 2 | Publicar exige certificado da tablebase | **cai** | o professor declara o resultado do treino (vitória ou empate); o treino aceita a linha dele, aponta os erros que ele nomeou, e lance fora disso ouve "não é o lance da aula"; o motor do professor fica na tela para conferir, sem gravar nem bloquear |
+> | 3 | `validate:content` consulta a tablebase | **cai** | o gate confere legalidade; os `winningMoves` gravados nas aulas v1 ficam congelados como dado |
+> | 4 | Silman livro-base único | **cai** | qualquer livro, estudo ou posição própria (§4) |
+> | 5 | Posição do Doug só como exceção | **cai** | posição autoral é origem comum (§14.7, regra 8) |
+> | 6 | IA não cria nem espelha posição | **fica** | §14.7, regra 7 |
+> | 7 | Ficha de procedência obrigatória | **afrouxa** | o registro técnico é automático; "de onde veio" é opcional e a falta é aviso; texto de terceiros sem declaração também é aviso |
+> | 8 | Quatro etapas obrigatórias | **cai** | a aula publica com as etapas que tiver (§2) |
+> | 9 | Exatamente uma prática | **flexível** | 0, 1 ou várias; aprendida = **todas** as práticas aprendidas; sem prática, o aluno marca que assistiu |
+> | 10 | Uma posição por aula | **cai** | várias posições por aula (§14.7, regra 5) |
+> | 11 | Treino repete a aula | **fica, editável** | nasce automático e o professor edita (Editor v2) |
+> | 12 | Regras de montagem | **fica** | "Guarde isto" passa a se chamar **"LEMBRE-SE"** (§14.7, regra 2) |
+> | 13 | Regras de desenho | **fica** | — |
+> | 14 | Régua de voz | **afrouxa** | 200 caracteres e 20 palavras ficam; saem da lista *objetivo, método, avaliação, teoria, estrutura* |
+> | 15 | Perigo só no erro | **fica** | — |
+> | 16 | Níveis de tamanho fixo | **cai** | cada aula declara o nível; a lista anda em ordem de nível, sem corte por posição (§1) |
+> | 17–19 | Nível/classe; aprendida = 3 vitórias; revisar antes de publicar | **ficam** | — |
+
 ---
 
 ## 1. A espinha: cinco níveis
@@ -31,9 +71,29 @@ de nenhum sumário. É essa `ordem` que corta os níveis (§1).
 |---|---|---|---|---|
 | **1** | até 800 | 1–6 | 6 | mates básicos, afogamento, o que dá mate, o rei como peça |
 | **2** | 800–1000 | 7–12 | 6 | rei e peão: quadrado, oposição, casas-chave, KPK, peão de torre |
-| **3** | 1000–1200 | 13–18 | 6 | oposição distante; bispo, cavalo e torre contra peão; o bloqueio |
-| **4** | 1200–1400 | 19–34 | 16 | torres (Lucena, Filidor, cortar o rei); passados; bispo errado; dama contra peão |
-| **5** | 1400+ | 35–49 | 15 | triangulação, Réti, Vancura, sétima fila, bispos de cores opostas |
+| **3** | 1000–1200 | 13–18 | 6 | torre e bispo contra peão; corrida de peões; dama contra peão na 7ª; rei contra dois peões; o bloqueio |
+| **4** | 1200–1400 | 19–34 | 16 | torres (Lucena, Filidor, cortar o rei); passados; oposição distante; cavalo contra peão; bispo errado; zugzwang |
+| **5** | 1400+ | 35–49 | 15 | triangulação, Réti, Vancura, sétima fila, bispos de cores opostas, dama contra torre |
+
+> **2026-09-15 — o tamanho dos níveis deixou de ser regra** (trava 16). As colunas
+> "Finais" e "Aulas" dizem como a lista está **hoje**, não quantas aulas cada
+> nível tem de ter. Cada aula declara o próprio nível em `lib/finais/trilha.ts`;
+> o teste confere só que todo nível é de 1 a 5 e que a lista anda em ordem de
+> nível. Saíram `nivelDaOrdem`, os tamanhos 6/6/6/16/15 e a ordem cravada dos
+> níveis 1 e 3. Mover uma aula de nível é editar a linha dela.
+
+> **2026-09-14 — o nível 3 trocou dois pares com o nível 4**, por decisão do Doug,
+> na revisão contra o currículo proposto pelo Codex (§11.16 a §11.22). Corrida de
+> peões e dama contra peão na 7ª acontecem toda rodada numa partida de criança;
+> oposição distante e cavalo contra peão, quase nunca. Os tamanhos dos níveis não
+> mudaram.
+
+**A meta da OLESC tem duas camadas** desde 2026-09-14: as **12 aulas dos níveis 1
+e 2 são o núcleo inegociável**; as 6 do nível 3 entram **em ordem de prioridade**,
+até onde o prazo deixar — aula publicada na véspera do torneio não dá tempo de o
+aluno estudar. Os nomes do pacote global (Base, Bronze, Prata, Ouro) casam com
+isso: **Base** = nível 1; **Bronze** = níveis 1–2; **Prata** = níveis 1–3, a meta
+da OLESC; **Ouro** = níveis 4–5, pós-torneio.
 
 **A faixa é FIDE, não chess.com, e isso é decisão do plano dos níveis**: FIDE ≈
 chess.com rápidas − 300/400, e rotular por FIDE impede que o aluno de 1700 rapid
@@ -43,8 +103,9 @@ conclua que pode pular os níveis baixos. A turma (700–1700 rapid) ocupa de ~4
 **Os níveis 1 a 3 são a meta da OLESC** — 18 aulas. Os níveis 4 e 5 são
 declaradamente pós-torneio, e a tela diz isso.
 
-O nível entra na trilha como campo `nivel` de `AulaDaTrilha`, derivado da
-`ordem`, com um teste que confere o corte (`lib/finais/trilha.test.ts`). O
+O nível entra na trilha como campo `nivel` de `AulaDaTrilha`, declarado aula a
+aula desde 15/9 (antes era derivado da `ordem`, com um teste que conferia o
+corte). O
 `classe` continua no arquivo até a Etapa 2 do plano dos níveis rodar no outro
 branch — enquanto isso a trilha carrega dois eixos, e é a `app/finais/page.tsx`
 que ainda agrupa por classe.
@@ -84,9 +145,17 @@ que a derivação está certa é o `git diff` vazio da `N1-KPK`: apague
 
 ### As quatro etapas
 
+> **2026-09-15 — nenhuma etapa é obrigatória** (travas 8 e 9). As quatro abaixo são
+> o formato **completo**, não o mínimo: a aula publica com as etapas que tiver, e
+> `etapasAusentes` deixou de ser exigido (os arquivos antigos que o têm continuam
+> aceitos). A prática real pode ser **nenhuma, uma ou várias**. Com várias, cada
+> prática tem a sua escada, e a aula só é aprendida quando **todas** chegam ao
+> degrau 3; o cartão de revisão aparece quando qualquer uma vence. Sem prática, o
+> aluno fecha a aula marcando que assistiu — nos dois tocadores, v1 e v2.
+
 | # | Etapa | Aba | O que o aluno faz |
 |---|---|---|---|
-| 1 | **Apresentação** | Apresentação | Lê o que está em jogo — se ganha, se empata, qual é a técnica — e **avança ele mesmo**, com a seta. É a única etapa que pode trocar de diagrama entre um passo e outro, em FEN livre. |
+| 1 | **Apresentação** | Apresentação | Lê o que está em jogo — se ganha, se empata, qual é a técnica — e **avança ele mesmo**, com a seta. É a única etapa que pode trocar de diagrama entre um passo e outro, em FEN livre — livre de lance, não de procedência: a regra de posição da §14.7 vale aqui. **O primeiro passo é uma pergunta** (§14.7). |
 | 2 | **Aula** | Aula | Assiste: o tabuleiro toca sozinho e o professor comenta, um passo por vez. |
 | 3 | **Treino** | Treino | Joga a mesma linha, com flecha ou casa acesa sempre na tela. Reproduz e lembra o que assistiu. **Derivada da etapa 2.** |
 | 4 | **Prática real** | Prática real | Joga a posição contra o Stockfish, nua. É o que conta para a escada. |
@@ -97,6 +166,9 @@ sabe dá-lo no sábado. A aula **sem prática** fica fora da escada — o que a 
 é a declaração do aluno de que leu.
 
 ### A ausência de etapa é exceção declarada, e não formato
+
+> *Histórico — caiu em 15/9 (trava 8, nota acima). O texto fica como o porquê de
+> então.*
 
 A aula publicada tem as quatro etapas, **ou diz por escrito qual falta e por
 quê**, no campo `etapasAusentes` do próprio arquivo. A diferença entre isso e um
@@ -112,7 +184,7 @@ existir na aula.
 **A explicação mora dentro da aula**, e é isso que substitui o professor quando a
 criança estuda sozinha no celular na quarta à noite. **Como ela é escrita é régua,
 não gosto:** `docs/VOZ-DO-CURSO.md` fixa o professor Douglas falando com **um**
-aluno, fala ≤ 200 caracteres, frase ≤ 20 palavras, as vinte palavras proibidas,
+aluno, fala ≤ 200 caracteres, frase ≤ 20 palavras, as palavras proibidas (quinze desde 15/9),
 e — desde 9/9/2026 — os **cinco movimentos de quem ensina** (§2.1), **como uma
 palavra técnica entra** (§4.1, mostra → nomeia → usa) e o **português de manual de
 adulto** que sai (§4.2). Os números daquele documento são lidos por
@@ -127,6 +199,12 @@ documento.
 ---
 
 ## 3. O envelope: toda posição tem no máximo 7 peças
+
+> **2026-09-15 — esta trava caiu** (trava 1 da nota do topo). Ela existia porque a
+> tablebase para em 7 peças, e a tablebase deixou de ser obrigatória. **Não há mais
+> limite de peças** em lugar nenhum: posição de aula, prática, acervo, importação,
+> portões e telas. A coluna `Peças` da lista continua como informação. O texto
+> abaixo fica como o porquê original.
 
 A verdade xadrezística do curso vem da tablebase Syzygy, e ela para em **7 peças**
 (os dois reis incluídos). Posição com 8 não tem juiz; sem juiz, o gate de conteúdo
@@ -151,6 +229,14 @@ aula, contando os dois reis.
 ---
 
 ## 4. A regra de rotação de livros
+
+> **2026-09-15 — o módulo de finais não tem mais livro-base obrigatório** (trava 4).
+> Qualquer livro, estudo ou posição do Doug serve. Saíram do gate a rotação
+> (`FONTE_DIDATICA_DOMINA`), a exigência de livro didático (`FONTE_NAO_DIDATICA`),
+> a de a posição sair do livro-base (`FONTE_DIDATICA_DIVERGE`) e o teto de citação
+> (`TETO_DE_CITACAO`). O inventário da dívida de licença continua sendo gerado, e o
+> que ele aponta é aviso. Esta seção e a coluna **Base** da §5 são o registro de
+> como era.
 
 > **2026-09-12 — esta seção não governa mais o módulo de finais.** Ele tem
 > **um** livro-base, o Silman, e a rotação vale para os outros módulos. A regra
@@ -231,6 +317,35 @@ do regime, com prazo cobrado e inventário em `content/divida-de-licenca.md`.
 
 ## 5. A lista — 49 aulas
 
+> **2026-09-14 — revisão contra o currículo do Codex.** O Doug recebeu do Codex um
+> pacote global com outra lista ("Nível 0 + 50 Finais") e pediu a comparação. A
+> revisão foi feita duas vezes, por dois modelos, e as duas chegaram ao mesmo
+> veredito: **esta lista fica**; do Codex entram regras de montagem de aula
+> (§14.7) e uma aula candidata (a 50, abaixo do nível 5). O que mudou nesta lista:
+>
+> 1. **nível 3 ↔ nível 4, dois pares**: `N2-PAWN-RACES` (29 → 14) e `N4-Q-VS-PAWN`
+>    (30 → 15) sobem; `N2-KING-MANEUVER` (13 → 26) e `N4-N-VS-PAWNS` (15 → 30)
+>    descem. Dentro do nível 3 a ordem passou a ser torre, corrida, dama, rei contra
+>    dois peões, bloqueio, bispo;
+> 2. **`N2-ZUGZWANG` (Trébuchet, 4 peças) sobe de 49 para 34**, porque é
+>    pré-requisito da triangulação (35); **`N4-Q-VS-ROOK` desce de 34 para 49** —
+>    furo do livro, rara e difícil nesta faixa;
+> 3. **`N0-STALEMATE` ensina os dois lados**: evitar o afogamento quando se ganha e
+>    procurá-lo quando se perde — sem aula nova;
+> 4. **a ordem 17 antiga tinha 4 peças na coluna e 7 na nota**: medido no
+>    `capitulos.json`, o `yk` 34 tem **7** (`8/8/1k3p2/5Pp1/KP4P1/8/8/8`);
+> 5. **o título da ordem 43 dizia "peão de bispo"**, e o id e os capítulos são de
+>    peão de **cavalo**;
+> 6. **a classe acompanha a posição**: as que subiram viraram `D`, as que desceram
+>    viraram `C`, a 34 virou `C` e a 49 virou `B`. Nenhuma das seis está escrita, então
+>    nenhum arquivo de aula muda.
+>
+> Os números de ordem citados nas seções 8, 10 e 12 foram atualizados junto.
+>
+> **Achado da mesma revisão:** a coluna Estado das ordens 1 e 2 ainda dizia `—` e
+> `posição DP`, e as duas aulas estão publicadas em `content/lessons/` desde 9/9.
+> Corrigido para `aula`.
+
 **Legenda de obras.** Domínio público: `CAP` Capablanca 1921 · `KH` Kling &
 Horwitz 1889 · `FRE` Freeborough 1891 · `WAL` Walker 1832 · `STA` Staunton 1848 ·
 `COO` Cook 1880 · `ROG` Rogers 1907 · `CUN` Cunnington 1903 · `LIC` Lichess (CC0).
@@ -291,6 +406,11 @@ porque "tem posição" não quer dizer "pode virar aula":
 | `posição DP` | há posição aprovada, de **domínio público**, e o gate a **recusa** como posição de aula |
 | `—` | nem uma coisa nem outra |
 
+> **2026-09-15 — a distinção abaixo deixou de ser do gate** (travas 4 e 5). Posição
+> de domínio público, de outro livro ou do Doug pode ser posição de aula; `posição
+> DP` passa a significar só "há posição aprovada, de domínio público". O bloco fica
+> como registro.
+>
 > **A distinção não é preciosismo: é o gate.**
 > `scripts/validate-content.ts:1500-1508` exige que a posição de uma aula saia
 > **do mesmo livro** declarado como livro-base, e `:1485-1496` que esse livro
@@ -366,8 +486,8 @@ porque "tem posição" não quer dizer "pode virar aula":
 
 | # | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
 |---|---|---|---|---|---|---|
-| 1 | `N0-MATING-MATERIAL` | O que dá mate e o que não dá | 4 | SIL | **furo** — o estudo pula a seção, e a posição veio do Doug (§14.1) | — |
-| 2 | `N0-LADDER` | Mate da escada: duas torres, e dama e torre | 4 | SIL | `yk` 3–4 *The Staircase* · 7 (duas torres) | posição DP |
+| 1 | `N0-MATING-MATERIAL` | O que dá mate e o que não dá | 4 | SIL | **furo** — o estudo pula a seção; a posição é o Diagram 38 do próprio livro (§14.5) | **aula** |
+| 2 | `N0-LADDER` | Mate da escada: duas torres, e dama e torre | 4 | SIL | `yk` 3–4 *The Staircase* · 7 (duas torres) | **aula** |
 | 3 | `N0-Q-MATE` | Mate de dama e rei: **a técnica do L** | 3 | SIL | `yk` 8 *Queen vs lone King* · 5–7 (mates de excesso) | posição DP |
 | 4 | `N0-R-MATE` | Mate de torre e rei: a caixa | 3 | SIL | `yk` 9–11 *King and Rook vs. Lone King* | posição DP |
 | 5 | `N0-STALEMATE` | Afogamento: como não empatar a partida ganha | 3–4 | SIL | `yk` 13 *Carful Stalemate!* | posição DP |
@@ -415,12 +535,12 @@ porque "tem posição" não quer dizer "pode virar aula":
 
 | # | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
 |---|---|---|---|---|---|---|
-| 13 | `N2-KING-MANEUVER` | Oposição além do básico: a distante | 3 | SIL | `yk` 27 *Distant Opposition* — os 28 e 29 são diagrama (§12) | — |
-| 14 | `N4-B-VS-PAWNS` | Bispo contra peão | 4 | SIL | `yk` 38–39 *Bishop vs. Lone (rook) Pawn* | — |
-| 15 | `N4-N-VS-PAWNS` | Cavalo contra peão, inclusive o de torre na 7ª | 4 | SIL | `yk` 40–46 *Knight vs. Lone (Rook-)Pawn* — sete capítulos, um tópico | — |
-| 16 | `N3-R-VS-PAWN` | Torre contra peão: contar, cortar, aproximar | 4 | SIL | `yk` 47–49 *Rook vs. Lone Pawn* | — |
-| 17 | `N1-KING-VS-PAWNS` | Rei contra dois peões passados | 4 | SIL | `yk` 34 *Fox in the Chicken Coop* — 7 peças, no limite do envelope | — |
-| 18 | `N1-PAWNS-BLOCKADE` | Um peão segura dois: o bloqueio | 5 | SIL | `yk` 36 *The Deep Freeze* — o 35 é diagrama (§12) | — |
+| 13 | `N3-R-VS-PAWN` | Torre contra peão: contar, cortar, aproximar | 4 | SIL | `yk` 47–49 *Rook vs. Lone Pawn* | — |
+| 14 | `N2-PAWN-RACES` | Corrida de peões: quem promove primeiro | 4–6 | SIL | ⚠ `uu` 2–7 *King and pawns: Strange Races* — o 4 e o 5 são corrida pura de 4 peças | — |
+| 15 | `N4-Q-VS-PAWN` | Dama contra peão na 7ª: quando ganha, e as exceções | 4 | SIL | `TW` 40–44 *Queen vs. King and Pawn on 6th/7th* | — |
+| 16 | `N1-KING-VS-PAWNS` | Rei contra dois peões passados | 7 | SIL | `yk` 34 *Fox in the Chicken Coop* — 7 peças, no limite do envelope | — |
+| 17 | `N1-PAWNS-BLOCKADE` | Um peão segura dois: o bloqueio | 5 | SIL | `yk` 36 *The Deep Freeze* — o 35 é diagrama (§12) | — |
+| 18 | `N4-B-VS-PAWNS` | Bispo contra peão | 4 | SIL | `yk` 38–39 *Bishop vs. Lone (rook) Pawn* | — |
 
 ### Nível 4 — 16 aulas · FIDE 1200–1400
 
@@ -433,15 +553,15 @@ porque "tem posição" não quer dizer "pode virar aula":
 | 23 | `N3-CUT-FILE` | Cortar o rei pela coluna | 5 | SIL | `TW` 38 *Trap The Enemy King Away From the Action* — o 39 tem 9 peças | — |
 | 24 | `N3-DEFENSIVE-EXCEPTIONS` | Defesa passiva: quando ela segura | 5 | SIL | `TW` 35–37 *The Philidor Position (Passive Rook)* | — |
 | 25 | `N3-R-VS-2P` | Torre contra dois peões | 5 | SIL | **furo** — acima da Classe A (§12) | — |
-| 26 | `N2-OUTSIDE-PASSER` | Peão passado distante | 6 | SIL | `TW` 21 *The Outside Passed Pawns* — o 22 tem 8 peças | — |
-| 27 | `N2-PROTECTED-PASSER` | Peão passado protegido | 6 | SIL | **furo** — os estudos só trazem o passado **distante** (§12) | — |
-| 28 | `N1-K2P-VS-K` | Rei e dois peões contra rei: ligados e dobrados | 4–5 | SIL | `TW` 14–15 (dobrados) · `p9` 1–8 *Two Healthy Pawns* (ligados e separados) | — |
-| 29 | `N2-PAWN-RACES` | Corrida de peões: quem promove primeiro | 4–6 | SIL | ⚠ `uu` 2–7 *King and pawns: Strange Races* | — |
-| 30 | `N4-Q-VS-PAWN` | Dama contra peão na 7ª: quando ganha, e as exceções | 4 | SIL | `TW` 40–44 *Queen vs. King and Pawn on 6th/7th* | — |
+| 26 | `N2-KING-MANEUVER` | Oposição além do básico: a distante | 3 | SIL | `yk` 27 *Distant Opposition* — os 28 e 29 são diagrama (§12) | — |
+| 27 | `N2-OUTSIDE-PASSER` | Peão passado distante | 6 | SIL | `TW` 21 *The Outside Passed Pawns* — o 22 tem 8 peças | — |
+| 28 | `N2-PROTECTED-PASSER` | Peão passado protegido | 6 | SIL | **furo** — os estudos só trazem o passado **distante** (§12) | — |
+| 29 | `N1-K2P-VS-K` | Rei e dois peões contra rei: ligados e dobrados | 4–5 | SIL | `TW` 14–15 (dobrados) · `p9` 1–8 *Two Healthy Pawns* (ligados e separados) | — |
+| 30 | `N4-N-VS-PAWNS` | Cavalo contra peão, inclusive o de torre na 7ª | 4 | SIL | `yk` 40–46 *Knight vs. Lone (Rook-)Pawn* — sete capítulos, um tópico | — |
 | 31 | `N4-WRONG-BISHOP` | Bispo errado com peão de torre | 4 | SIL | `TW` 23–26 *Bishop and Wrong Colored Rook-Pawn* | — |
 | 32 | `N4-OPPOSITE-BISHOPS` | Bispos de cores opostas: a fortaleza com um peão a menos | 5 | SIL | `TW` 29 *Bishops of Opposite Colors* — os 30 e 31 têm 9 peças | — |
 | 33 | `N4-N-AND-ROOK-PAWN` | Cavalo e peão de torre na 6ª/7ª contra rei | 4 | SIL | `TW` 27–28 *Lone King vs. Knight and Rook-Pawn on the 6th* | — |
-| 34 | `N4-Q-VS-ROOK` | Dama contra torre: o básico | 4 | SIL | **furo** — o Silman diz por escrito que não cobre (§12) | — |
+| 34 | `N2-ZUGZWANG` | Zugzwang: a obrigação de mover | 4 | SIL | `TW` 9–10 *Trébuchet* | — |
 
 ### Nível 5 — 15 aulas · FIDE 1400+
 
@@ -455,18 +575,95 @@ porque "tem posição" não quer dizer "pode virar aula":
 | 40 | `N3-R-2P-VS-R` | Torre e dois peões ligados contra torre | 6 | SIL | `p9` 14 *Rook and Two Connected Pawns vs. Rook* | — |
 | 41 | `N3-SEVENTH-RANK` | A sétima fila | 6 | SIL | **sem capítulo usável** — `p9` 15–16 têm 15 e 10 peças (§12) | — |
 | 42 | `N5-VANCURA` | Defesa de Vancura | 5 | SIL | ⚠ `uu` 19–21 *The Vancura Position* — o 21 ensina quando ela **não** serve | — |
-| 43 | `N3-R-VS-RN-PAWNS` | Torre contra peão de torre e de bispo: as exceções | 4 | SIL | ⚠ `uu` 13–14 *"Lucena" with a Rook-Pawn* · 21, 27 (peão de cavalo) | — |
+| 43 | `N3-R-VS-RN-PAWNS` | Torre contra peão de torre e de cavalo: as exceções | 4 | SIL | ⚠ `uu` 13–14 *"Lucena" with a Rook-Pawn* · 21, 27 (peão de cavalo) | — |
 | 44 | `N0-2B-MATE` | Dois bispos contra rei | 4 | SIL | `p9` 18 *Two Bishops vs. Lone King* | posição DP |
 | 45 | `N4-OPPOSITE-BISHOPS-2P` | Bispos de cores opostas com dois peões: quando ganha | 6 | SIL | `p9` 19, 21–23 *Two Pawns* · `uu` 28–31 | — |
 | 46 | `N4-SAME-BISHOPS` | Bispo e peão contra bispo da mesma cor | 5 | SIL | ⚠ `uu` 32–37 *Fortresses in Bishop-up Endgames* | — |
 | 47 | `N4-BISHOP-VS-KNIGHT` | Bispo contra cavalo com um peão | 5 | SIL | **furo** — acima da Classe A (§12) | — |
 | 48 | `N2-DOUBLED-ISOLATED` | Peões dobrados e isolados no final de peões | 5–6 | SIL | `TW` 14–15 *Two Doubled Pawns vs. Lone King* — **só a metade dobrada** (§12) | — |
-| 49 | `N2-ZUGZWANG` | Zugzwang: a obrigação de mover | 4 | SIL | `TW` 9–10 *Trébuchet* | — |
+| 49 | `N4-Q-VS-ROOK` | Dama contra torre: o básico | 4 | SIL | **furo** — o Silman diz por escrito que não cobre (§12) | — |
+
+**Candidata a 50ª aula — fora da `lib/finais/trilha.ts` até ter posição.**
+
+| # | Id | Aula | Peças | Base | Capítulo do estudo | Estado |
+|---|---|---|---|---|---|---|
+| 50 | `N2-TRADE-INTO-PAWNS` | A troca que leva ao final de peões | 7 | SIL ou autoral | **sem capítulo levantado** — a família canônica é T+2P × T+P: troca as torres e sobra o final de peões | candidata |
+
+Veio do currículo do Codex (cap. 46 de lá) e entrou por decisão do Doug em
+2026-09-14: antes de trocar a última peça, calcular se o final de peões que sobra
+está ganho é **a decisão de final mais frequente numa partida de criança**. Cabe
+no envelope (7 peças). Ela só entra na trilha do site quando
+houver posição com proveniência — do Silman ou autoral do Doug (§14.7) —, para
+não abrir no site um cartão "em escrita" sem posição nenhuma atrás.
 
 **A conta, medida e não estimada:** das 49, **40 têm pelo menos um capítulo
 usável**; 6 são furo e 3 têm capítulo do tema sem nenhuma FEN aproveitável. **Nos
 níveis 1 a 3, 17 das 18 têm capítulo** — o único furo é a ordem 1, e ela já está
-resolvida por fora do estudo (§14.1).
+resolvida por fora do estudo (§14.1). Desde 2026-09-14 a meta tem **uma** aula com
+capítulo de faixa acima (`⚠`): a corrida de peões (14), cujo estudo é o da Classe A
+— mas os capítulos 4 e 5 dele são corrida pura de 4 peças, a forma mais simples
+do tema.
+
+### 5.1 O que o aluno sai sabendo
+
+Uma frase por aula, desde 2026-09-14 (a "competência de saída" do currículo do
+Codex, adotada na §14.7). Ela é o **critério de aceite** da aula: a prática real
+tem de testar exatamente esta frase, e a `/revisar-aula` pergunta isso. **Estas
+frases são para o professor, não para a tela** — algumas usam palavras que a
+`VOZ-DO-CURSO` não deixa chegar ao aluno.
+
+| # | Id | Sai sabendo |
+|---|---|---|
+| 1 | `N0-MATING-MATERIAL` | Diz, olhando o material, se dá para forçar mate contra o rei sozinho: dama, torre, dois bispos e bispo com cavalo dão; bispo, cavalo e dois cavalos não. |
+| 2 | `N0-LADDER` | Dá mate com duas torres (ou dama e torre) em escada, sem deixar o rei adversário atacar uma torre. |
+| 3 | `N0-Q-MATE` | Dá mate de dama e rei: prende o rei com a dama a um salto de cavalo, traz o próprio rei e não afoga. |
+| 4 | `N0-R-MATE` | Dá mate de torre e rei: corta o rei com a torre, aproxima o próprio rei e encolhe a caixa até a borda. |
+| 5 | `N0-STALEMATE` | Reconhece o afogamento: evita quando está ganhando e procura quando está perdendo. |
+| 6 | `N1-KING-ACTIVITY` | Leva o rei para o centro e para perto dos peões assim que as peças fortes saem do tabuleiro. |
+| 7 | `N1-SQUARE` | Decide na hora, pelo quadrado, se o rei alcança o peão passado. |
+| 8 | `N1-DIRECT-OPPOSITION` | Toma a oposição frente a frente para passar com o rei, ou para impedir a passagem. |
+| 9 | `N1-KEY-SQUARES` | Aponta as casas-chave de um peão e leva o rei até uma delas. |
+| 10 | `N1-KPK` | Com rei e peão contra rei, põe o rei na frente do peão antes de empurrá-lo. |
+| 11 | `N1-KPK-RANKS` | Com o peão na 6ª ou na 7ª, sabe que quem tem o lance decide, e joga o lance certo. |
+| 12 | `N1-ROOK-PAWN` | Sabe que o peão de torre empata quando o rei defensor chega ao canto, e corre para o canto quando defende. |
+| 13 | `N3-R-VS-PAWN` | Conta os lances para saber se a torre para o peão, e usa o corte e o próprio rei para pará-lo. |
+| 14 | `N2-PAWN-RACES` | Conta os lances dos dois lados numa corrida e vê se a dama que nasce primeiro dá xeque ou captura a outra. |
+| 15 | `N4-Q-VS-PAWN` | Ganha com a dama contra peão central ou de cavalo na 7ª, obrigando o rei a ficar na frente do peão; reconhece o empate do peão de bispo e de torre com o próprio rei longe. |
+| 16 | `N1-KING-VS-PAWNS` | Decide se o rei consegue parar e comer dois peões passados, ou se eles se protegem sozinhos. |
+| 17 | `N1-PAWNS-BLOCKADE` | Segura dois peões com um só, bloqueando na casa certa. |
+| 18 | `N4-B-VS-PAWNS` | Para o peão controlando com o bispo uma casa do caminho dele, antes que o peão chegue lá. |
+| 19 | `N3-LUCENA` | Ganha torre e peão contra torre com o rei adversário cortado, construindo a ponte com a torre. |
+| 20 | `N3-PHILIDOR` | Empata com a torre na 3ª fila e, quando o peão avança, passa a dar xeques por trás. |
+| 21 | `N3-ROOK-BEHIND` | Põe a torre atrás do peão passado, seja o próprio, seja o do adversário. |
+| 22 | `N3-SIDE-CHECKS` | Defende dando xeques laterais do lado longo, com o rei no lado curto. |
+| 23 | `N3-CUT-FILE` | Corta o rei adversário numa coluna com a torre e mantém o corte enquanto o peão avança. |
+| 24 | `N3-DEFENSIVE-EXCEPTIONS` | Sabe que a torre passiva na 1ª fila segura contra peão de cavalo e de torre, e perde contra peão central e de bispo. |
+| 25 | `N3-R-VS-2P` | Sabe que dois peões ligados na 6ª ganham da torre sem o rei dela por perto, e traz o rei a tempo quando defende. |
+| 26 | `N2-KING-MANEUVER` | Toma a oposição de longe, contando as casas entre os reis. |
+| 27 | `N2-OUTSIDE-PASSER` | Usa o peão passado distante para desviar o rei e ganhar os peões do outro lado. |
+| 28 | `N2-PROTECTED-PASSER` | Usa o peão passado protegido, que o rei adversário não pode comer, para ganhar do outro lado. |
+| 29 | `N1-K2P-VS-K` | Ganha com dois peões contra o rei, e sabe que os peões ligados se defendem sozinhos enquanto o rei chega. |
+| 30 | `N4-N-VS-PAWNS` | Para o peão com o cavalo, e sabe que o peão de torre é o mais difícil para ele. |
+| 31 | `N4-WRONG-BISHOP` | Reconhece que bispo e peão de torre não ganham quando o bispo não controla a casa de promoção e o rei defensor chega ao canto. |
+| 32 | `N4-OPPOSITE-BISHOPS` | Segura o empate com um peão a menos em bispos de cores opostas, bloqueando com o bispo e o rei. |
+| 33 | `N4-N-AND-ROOK-PAWN` | Converte cavalo e peão de torre avançado contra o rei, sem cair no afogamento do canto. |
+| 34 | `N2-ZUGZWANG` | Reconhece o Trébuchet: com reis e peões travados, quem tem de jogar perde. |
+| 35 | `N2-TRIANGULATION` | Perde um lance com o rei em triângulo para devolver a obrigação de jogar ao adversário. |
+| 36 | `N2-OUTFLANKING` | Contorna o rei adversário quando a oposição sozinha não passa. |
+| 37 | `N2-RESERVE-TEMPI` | Conta os lances de peão que sobram para ganhar a disputa de oposição. |
+| 38 | `N2-BREAKTHROUGH` | Sacrifica peões para criar um passado que o rei adversário não alcança. |
+| 39 | `N2-RETI` | Anda com o rei em diagonal para correr atrás do peão adversário e apoiar o próprio ao mesmo tempo. |
+| 40 | `N3-R-2P-VS-R` | Ganha torre e dois peões ligados contra torre, empurrando os peões juntos com o apoio do rei. |
+| 41 | `N3-SEVENTH-RANK` | Põe a torre na sétima fila para prender o rei e atacar os peões. |
+| 42 | `N5-VANCURA` | Empata contra peão de torre com a torre ao lado do peão, atacando-o pela fila. |
+| 43 | `N3-R-VS-RN-PAWNS` | Reconhece os casos da torre contra peão de torre e de cavalo em que a ponte da Lucena não basta. |
+| 44 | `N0-2B-MATE` | Dá mate com dois bispos, empurrando o rei para o canto. |
+| 45 | `N4-OPPOSITE-BISHOPS-2P` | Sabe quando dois peões ganham em bispos de cores opostas: em geral, afastados sim; juntos e bloqueados, não. |
+| 46 | `N4-SAME-BISHOPS` | Converte bispo e peão contra bispo da mesma cor, tirando o bispo defensor da diagonal. |
+| 47 | `N4-BISHOP-VS-KNIGHT` | Avalia bispo e peão contra cavalo, e sabe quando o cavalo consegue bloquear. |
+| 48 | `N2-DOUBLED-ISOLATED` | Ataca com o rei os peões dobrados e isolados no final de peões. |
+| 49 | `N4-Q-VS-ROOK` | Ganha dama contra torre na posição básica, separando a torre do rei. |
+| 50 | `N2-TRADE-INTO-PAWNS` | Antes de trocar a última peça, calcula se o final de peões que sobra está ganho. |
 
 ---
 
@@ -578,17 +775,17 @@ acervo público que cobre quase toda a lista, e por isso aparece em 46 das 49 au
 
 | Cap. | Seções | Serve às aulas |
 |---|---|---|
-| I Elementary positions | I distâncias (14) · II peões que se sustentam (15) · III rei contra três peões (16) · IV posições ganhas depois da promoção (17) · V dois peões contra dois (18) · VI ruptura (18) · VII o rei à frente (28) | 6, 7, 17, 18, 28, 29, 38 |
-| II The Kings in opposition | I oposição (24) · II rei atrás dos peões (26) · III K+P vs K (38) | 8, 9, 10, 13, 36 |
+| I Elementary positions | I distâncias (14) · II peões que se sustentam (15) · III rei contra três peões (16) · IV posições ganhas depois da promoção (17) · V dois peões contra dois (18) · VI ruptura (18) · VII o rei à frente (28) | 6, 7, 14, 16, 17, 29, 38 |
+| II The Kings in opposition | I oposição (24) · II rei atrás dos peões (26) · III K+P vs K (38) | 8, 9, 10, 26, 36 |
 | III Side pawns | I peão de cavalo (42) · II dificuldades do peão de torre (44) · III peão de torre na defesa (48) | 12, 31 |
-| IV Pawns against pawns | I empatar com força inferior (54) · II ganhar com superior (58) · III igualdade de peões (66) | 26, 27, 37, 48 |
-| V The Queen | II–V dama contra peão central/bispo/cavalo/torre (77–82) · VI contra dois peões (84) · VII Q+P na 7ª vs Q (86) | 5, 30 |
-| VI Queen vs inferior pieces | I dama contra torre (98) | 34 |
-| VII The Rook | I R vs K (121) · II 2R vs K (123) · III torre contra peão · IV contra dois peões · V contra três | 2, 4, 16, 25, 43 |
+| IV Pawns against pawns | I empatar com força inferior (54) · II ganhar com superior (58) · III igualdade de peões (66) | 27, 28, 37, 48 |
+| V The Queen | II–V dama contra peão central/bispo/cavalo/torre (77–82) · VI contra dois peões (84) · VII Q+P na 7ª vs Q (86) | 5, 15 |
+| VI Queen vs inferior pieces | I dama contra torre (98) | 49 |
+| VII The Rook | I R vs K (121) · II 2R vs K (123) · III torre contra peão · IV contra dois peões · V contra três | 2, 4, 13, 25, 43 |
 | VIII Rook and pawn(s) | III R+P vs R (162) · IV R+2P vs R (167) · V R+P vs R+P (172) | 19, 20, 21, 22, 23, 24, 40, 41, 42 |
-| X Minor pieces | I bispo e peões (194) · II cavalo contra peões (200) · IV C+P vs K (204) · V 2B vs K (206) · VI B+C vs K (208) | 14, 15, 33, 44 |
+| X Minor pieces | I bispo e peões (194) · II cavalo contra peões (200) · IV C+P vs K (204) · V 2B vs K (206) · VI B+C vs K (208) | 18, 30, 33, 44 |
 | XI Minor pieces opposed | II B+P vs C (222) · III C+P vs B (224) · IV B+P vs B (226) | 32, 45, 46, 47 |
-| refs avulsas | Le Trébuchet (34) · bispo com peão de torre (45, 194) · torre, melhor posição (120, 134) · oposição, como obter (31) e manter (33) | 31, 35, 49 |
+| refs avulsas | Le Trébuchet (34) · bispo com peão de torre (45, 194) · torre, melhor posição (120, 134) · oposição, como obter (31) e manter (33) | 31, 34, 35 |
 
 **`capablanca-1921`** — §1 mates simples (3) · §2 promoção (9) · §3 finais de peões
 (13) · §11 obter passado (40) · §12 quem promove primeiro (41) · §13 a oposição
@@ -608,7 +805,7 @@ torre.
 **`cunnington-1903`** — cap. I reis e peões · II bispos, cavalos e peões · III
 torres e peões · VI damas e peões · VII dama contra forças variadas. A introdução
 dele já nomeia, em prosa, "quando dois peões isolados estão a salvo do rei inimigo"
-e a natureza do peão de torre — as aulas 18 e 12.
+e a natureza do peão de torre — as aulas 17 e 12.
 
 **`rogers-1907`, cap. XI** — Ex. I dama · II torre · III B+C vs K+P · IV **K+P vs
 K** · V dois bispos · VI **K+B+P vs K empatado** (o bispo errado, a aula 31).
@@ -671,16 +868,19 @@ Silman, que já está registrado e em regime integral (§13). A única mudança 
 
 ## 10. Riscos desta lista
 
+> **2026-09-15:** os riscos que dependem do envelope de 7 peças, da tablebase ou do
+> livro-base único perderam o sujeito com as travas da nota do topo. Ficam como registro.
+
 | Risco | Aula | O que fazer |
 |---|---|---|
 | **Ritmo de autoria** | todas | É o risco dominante do plano inteiro, e continua sendo: **46 aulas a escrever, 3 escritas**. Ele baixou em 9/9/2026, quando o treino deixou de ser escrito à mão (§2 e §6), e ainda não foi remedido: o número que vale é o dos níveis 1 e 2 fechados, com doze aulas de quatro etapas; os níveis 4 e 5 não começam sem esse número na mesa. |
 | **Nove aulas sem posição usável** | §12 | Seis furos e três com capítulo fora do envelope. Oito das nove estão nos níveis 4 e 5, que já são pós-OLESC. A decisão é a alavanca 3 da §6. |
 | **A página impressa não é conferida** em nenhuma aula vinda de estudo | todas as novas | §13. É perda de proveniência, não de verdade xadrezística — a tablebase continua julgando o resultado sozinha. |
 | **FEN de terceiro, não do PDF** | todas as novas | O gate pega **resultado errado**, não posição certa do tema errado nem tema trocado. Toda posição vinda de estudo vai ao tabuleiro com o Doug antes de publicar. É a única verificação que máquina nenhuma faz aqui, e ela não mudou de natureza — mudou de origem. |
-| **Sete capítulos são diagrama didático**, não posição de partida | 8, 13, 18, 36 | O autor desenha com peão na 1ª fila ou dois reis brancos. A `finais:extrair` os marca `tipo: "diagrama"` e eles ficam fora da coluna da §5. Onde o tema depende deles, a posição é montada do zero — ver §12. |
+| **Sete capítulos são diagrama didático**, não posição de partida | 8, 17, 26, 36 | O autor desenha com peão na 1ª fila ou dois reis brancos. A `finais:extrair` os marca `tipo: "diagrama"` e eles ficam fora da coluna da §5. Onde o tema depende deles, a posição é montada do zero — ver §12. |
 | **Ruptura de peões não cabe em 7 peças** na versão clássica (3×3 = 8) | 38 | **Resolvido, e não como estava previsto:** o `p9` 9 (*Tactical Bombs*, 2p vs. 2p) tem 6 peças e cabe. Conferir no tabuleiro se o tema dele é mesmo ruptura antes de fechar. |
 | **Freeborough carrega 46 das 49 aulas** no domínio público | as 16 posições já feitas | Continua valendo só para elas, que é onde o domínio público continua sendo a fonte. Para as novas, a concentração editorial mudou de nome: **quatro estudos do mesmo transcritor, sobre um livro só**. |
-| **Treino que acaba em mate exige DTM (≤ 5 peças)** | 7, 10, 16, 19, 20, 21 | Todas as seis já estão em 3–5 peças. Conferido, e os capítulos do estudo confirmam: nenhum passa de 5. Era "aula completa"; os formatos saíram em 9/9/2026, e o que a régua mede é como a linha **acaba**. |
+| **Treino que acaba em mate exige DTM (≤ 5 peças)** | 7, 10, 13, 19, 20, 21 | Todas as seis já estão em 3–5 peças. Conferido, e os capítulos do estudo confirmam: nenhum passa de 5. Era "aula completa"; os formatos saíram em 9/9/2026, e o que a régua mede é como a linha **acaba**. |
 
 ---
 
@@ -756,9 +956,38 @@ outras são minhas):
     corrigida para outra seção. Não havia seção certa: nenhuma obra de domínio
     público do acervo serve como posição de aula, pelo gate.
 
+**As de 2026-09-14, na revisão contra o currículo do Codex** (16 a 18 e a regra
+da §14.7 são do Doug; 19 a 23 são minhas):
+
+16. **O nível 3 trocou dois pares com o nível 4** (§5): corrida de peões e dama
+    contra peão na 7ª entram na meta; oposição distante e cavalo contra peão saem.
+17. **O Trébuchet subiu para 34 e dama contra torre desceu para 49** (§5).
+18. **O afogamento ensina os dois lados** — evitar quando ganha, procurar quando
+    perde —, e a lista inteira ganhou a frase "sai sabendo" (§5.1).
+19. **A candidata 50 não entra na `lib/finais/trilha.ts`** até ter posição. A
+    trilha é o que o site mostra ao aluno, e um cartão "em escrita" sem posição
+    atrás promete o que ninguém sabe ainda se dá para cumprir.
+20. **A ordem dentro do nível 3** é torre, corrida, dama, rei contra dois peões,
+    bloqueio, bispo: a torre contra peão ensina a **contar**, que é o que a corrida
+    e a dama contra peão usam logo depois.
+21. **A classe acompanha a posição na lista**, porque o teste exige as classes em
+    blocos: as que subiram viraram `D`, as que desceram viraram `C`.
+22. **Base, Bronze, Prata e Ouro**, os marcos do pacote do Codex, foram casados
+    com os níveis (§1) em vez de apagados: são os nomes que o Doug já usa com a
+    equipe. O que mudou é o sentido de **Prata**: lá eram 41 capítulos "antes do
+    estadual, se houver tempo"; aqui são as 18 da meta.
+23. **Diagrama de vitrine não é posição** (§14.7). Sem essa distinção, a regra de
+    procedência do Doug reprovaria a apresentação da `N0-MATING-MATERIAL`, que
+    enfileira dama, torre e bispos numa fila só para dar nome ao material — e ali
+    ninguém joga, ninguém avalia e nada é afirmado sobre resultado.
+
 ---
 
 ## 12. O que o livro-base discorda de nós
+
+> **2026-09-15:** esta seção mede capítulos contra o envelope de 7 peças e o
+> livro-base único, e as duas travas caíram (nota do topo). Um capítulo com mais de 7
+> peças, ou de outro livro, pode ser posição de aula. A contagem fica como registro.
 
 Esta seção é o achado da rodada de 2026-09-09, e ele não cabe em nota de rodapé:
 **a lista de 49 é mais ambiciosa que o livro-base**, e agora isso está medido em
@@ -788,11 +1017,11 @@ que a lista descola do livro.
 
 | Ordem | Nível | Aula | O que se sabe |
 |---|---|---|---|
-| 1 | 1 | `N0-MATING-MATERIAL` | É a abertura da Parte Dois no livro, e o estudo **pula a seção**. É a única das 18 dos níveis 1 a 3 que não vem de estudo — e a única do módulo cuja **posição não veio de livro nenhum**: veio do Doug. O livro entra como fundamento da afirmação, não como fonte do diagrama. **§14.1.** |
+| 1 | 1 | `N0-MATING-MATERIAL` | É a abertura da Parte Dois no livro, e o estudo **pula a seção**. É a única das 18 dos níveis 1 a 3 que não vem de estudo. A posição é o Diagram 38 do próprio Silman *(corrigido em 15/9: dizia que a posição tinha vindo do Doug — ver §14.5)*. **§14.1.** |
 | 21 | 4 | `N3-ROOK-BEHIND` | Os caps. 15–18 do `uu` tratam da torre **na frente** do peão — o caso oposto. Medido: o cap. 16, *"inversed rook"*, tem a torre branca em a8 **na frente** do próprio peão a7. Não é ausência de transcrição; é o livro tratando o outro caso. |
 | 25 | 4 | `N3-R-VS-2P` | Acima da Classe A. Não está em nenhum dos sete estudos da série. |
-| 27 | 4 | `N2-PROTECTED-PASSER` | Os estudos só trazem o passado **distante** (`TW` 21–22). O protegido não vira capítulo em nenhum. **Este furo não estava previsto**: o levantamento anterior dava a aula como coberta. |
-| 34 | 4 | `N4-Q-VS-ROOK` | **O próprio Silman diz por escrito que não cobre**, dentro do `uu` cap. 13: *"a glance in our Contents shows that I don't even cover that endgame… too rare and too hard for this book"*. É o furo mais bem documentado dos seis. |
+| 28 | 4 | `N2-PROTECTED-PASSER` | Os estudos só trazem o passado **distante** (`TW` 21–22). O protegido não vira capítulo em nenhum. **Este furo não estava previsto**: o levantamento anterior dava a aula como coberta. |
+| 49 | 5 | `N4-Q-VS-ROOK` | **O próprio Silman diz por escrito que não cobre**, dentro do `uu` cap. 13: *"a glance in our Contents shows that I don't even cover that endgame… too rare and too hard for this book"*. É o furo mais bem documentado dos seis. |
 | 47 | 5 | `N4-BISHOP-VS-KNIGHT` | Acima da Classe A. Não está em nenhum dos sete estudos. |
 
 ### As três com capítulo e sem posição
@@ -812,8 +1041,8 @@ nível em que as pomos. Na tabela da §5 elas levam `⚠`.
 
 | Ordem | Nível | Aula | Onde está |
 |---|---|---|---|
+| 14 | 3 | `N2-PAWN-RACES` | `uu` 2–7 *Strange Races* — desde 2026-09-14 dentro da meta da OLESC; o 4 e o 5 são corrida pura de 4 peças |
 | 22 | 4 | `N3-SIDE-CHECKS` | `uu` 22–27 — o tema por conteúdo, sem o nome "lado curto/lado longo" |
-| 29 | 4 | `N2-PAWN-RACES` | `uu` 2–7 *Strange Races* |
 | 37 | 5 | `N2-RESERVE-TEMPI` | `uu` 8–12 |
 | 39 | 5 | `N2-RETI` | `uu` 6–7 |
 | 42 | 5 | `N5-VANCURA` | `uu` 19–21 |
@@ -824,6 +1053,10 @@ Some-se a isto o que a §1 já diz: os níveis 4 e 5 são FIDE 1200+, e o topo r
 turma é ~1350 FIDE ([[forca-real-dos-alunos]]). **São aulas escritas para um aluno
 que o curso quase não tem, a partir de um capítulo escrito para um aluno duas
 classes acima disso.**
+
+*(2026-09-14: a corrida de peões, ordem 14, é a exceção — subiu para a meta da
+OLESC porque acontece toda rodada. O estudo é da Classe A, mas os capítulos 4 e 5
+dele são corrida pura de 4 peças, a forma que uma criança de 1000 FIDE resolve.)*
 
 ### Uma exceção nos níveis baixos, e uma meia-aula
 
@@ -866,6 +1099,10 @@ decidida — mas não pelo caminho que esta seção previa. Ver a **§14.1**.
 ---
 
 ## 13. O que o atalho do estudo custa, e como pagá-lo
+
+> **2026-09-15:** onde esta seção diz que "a tablebase continua julgando", leia
+> "o motor do professor confere e o Doug decide" (nota do topo). A página impressa
+> não conferida continua sendo perda de procedência — que agora é aviso.
 
 Trabalhar pelo estudo do Lichess em vez de pelo PDF tem um preço, e ele precisa
 estar escrito aqui, não descoberto na primeira revisão de proveniência.
@@ -951,7 +1188,7 @@ está em jogo — se ganha, se empata, qual é a técnica — em diagrama e fala
 é a **única etapa que o aluno faz andar**: não há relógio, há seta (`←` e `→`, ou
 os botões). São de 2 a 6 passos: um só é cartão de título, e sete cliques antes de
 a primeira peça andar é um manual com botão de "próximo". Ela pode trocar de
-diagrama entre um passo e outro, em **FEN livre** — é o que permite dizer "estas
+diagrama entre um passo e outro, em **FEN livre** (com a procedência da §14.7) — é o que permite dizer "estas
 peças dão mate" num tabuleiro e "estas não dão" no seguinte.
 
 A etapa 2 **anda sozinha** (`components/lesson/ObjectiveStage.tsx:88`): ninguém
@@ -1024,9 +1261,20 @@ que deu nome à regra, e o §14.5 conta o resto.
 
 ### 14.5 A `N0-MATING-MATERIAL`, e por que ela é a exceção do módulo
 
-A posição é `6k1/4N3/6K1/6N1/8/8/8/8 b - - 0 1` — rei preto em g8; rei branco em
-g6, cavalos brancos em e7 e g5, pretas a jogar. **Ela veio do Doug, não de livro
-nenhum**, e é a única do módulo assim.
+> **Corrigido em 2026-09-15.** Esta seção dizia que a posição era
+> `6k1/4N3/6K1/6N1/8/8/8/8 b - - 0 1` e que "veio do Doug, não de livro nenhum".
+> **As duas coisas eram falsas** quando conferidas com o disco: a aula publicada
+> (`content/lessons/N0-MATING-MATERIAL.json`) usa a posição
+> `pos-n0-mating-material-silman-38`, que é o **Diagram 38 do Silman** (p. impressa
+> 34, seção *"What Can (or Cannot) Mate vs. Lone King"*), com FEN
+> `6k1/8/5NK1/4N3/8/8/8/8 b - - 0 1` — rei preto em g8; rei branco em g6, cavalos
+> em f6 e e5, pretas a jogar e em xeque. A escolha binária é a mesma (`Kf8` empata,
+> `Kh8` leva `Nf7#`), então o que a seção diz da aula continua certo; a origem, não.
+> O que ela tem de exceção hoje é só ser a aula do "o que dá mate". Com as travas de
+> 15/9, posição do Doug deixou de ser exceção de qualquer jeito (trava 5).
+
+A posição é a do Diagram 38 do Silman (nota acima). *(O texto original desta
+seção, que atribuía a posição ao Doug, foi substituído por esta frase.)*
 
 Conferida por três vias que não se falam: a `chess.js`, o Stockfish a
 profundidade 65, e a Syzygy quando virar arquivo. O preto está **em xeque** e tem
@@ -1064,7 +1312,7 @@ colabora. As duas coisas têm de ser ditas, porque metade só é a metade que pe
 partida. E a linha que empata não foge para o meio: o rei preto anda na última
 fila entre f8, e8 e d8, longe dos dois cantos.
 
-**A fonte, com o papel trocado.** O livro-base é o Silman, que tem a seção que o
+**A fonte** *(parágrafo corrigido em 15/9: a posição é o Diagram 38, então o livro origina o diagrama — o que segue sobre "papel trocado" não vale)*. O livro-base é o Silman, que tem a seção que o
 estudo pula (*"What Can (or Cannot) Mate vs. Lone King"*). Mas como a posição não
 veio dele, o livro entra **fundamentando a afirmação**, não originando o diagrama
 — e o `fenMethod` diz isso com todas as letras.
@@ -1106,3 +1354,86 @@ observação (`·`), então uma aula de dois minutos passa e é do olho recusá-
 lida por um subagente; e a instrução que fecha a skill — ***"se a aula passar
 limpa, desconfie e diga isso"***, porque quem escreve e quem revisa são o mesmo
 agente.
+
+### 14.7 As regras de montagem que vieram do Codex
+
+Decisão do Doug em 2026-09-14. O pacote global do Codex tinha uma lista pior e um
+jeito de montar aula melhor em alguns pontos; estes são os pontos que entram,
+traduzidos para as quatro etapas do site. **Valem também para os estudos que o
+Doug escreve no Lichess**, porque é pela importação do Editor v2 que eles viram
+aula aqui. O documento global que vai para a equipe — pacote em
+`Downloads/Pacote_Global_Projeto_50_Finais_OLESC_v2`, versão 3.2 desde 15/9 — repete estas
+regras para quem não abre o repositório; **quando os dois discordarem, vale este**.
+
+**1. O primeiro passo da apresentação é uma pergunta.** *"Ganha, empata ou
+perde?"* — ou, quando o resultado é óbvio, *"qual é a primeira coisa a fazer?"*. A
+resposta vem no passo seguinte, nunca no mesmo. O aluno que chuta antes de ver
+presta atenção na aula para saber se acertou. Não muda schema: é um passo.
+
+**2. "LEMBRE-SE" fecha a aula assistida.** *(Até 15/9 o nome era "Guarde isto";
+o Doug trocou.)* De uma a três regras curtas, cada
+uma na sua fala, dentro da régua de caracteres da `VOZ-DO-CURSO §3`. São os
+últimos passos da etapa 2, sem lance. Mais de três é resumo, e resumo a criança
+não guarda.
+
+**3. Toda aula tem uma frase "sai sabendo"** (§5.1), e **a prática real testa
+essa frase**. Se a prática não consegue testá-la — o lance que a frase pede não
+aparece contra o motor —, a posição da prática está errada, não a frase.
+
+**4. Primeiro o caso simples, depois a exceção.** A exceção mora na apresentação
+(um diagrama de contraste: *"agora o rei está em a1 — o que muda?"*) e nos erros
+com nome do treino, **não em aula própria** — a menos que ela mude o resultado
+e peça outra prática.
+
+**5. Várias posições por aula são normais** (trava 10, 15/9). Até 15/9 a regra
+era "uma posição por aula é o padrão; várias, a exceção declarada", e o schema v1
+cobrava. Caiu: a aula tem as posições que o tema pedir, e o Editor v2 já aceitava
+várias análises, treinos e práticas. Uma posição só continua sendo um bom começo
+para a aula simples.
+
+**6. A variante é conferida pelo motor do professor e decidida pelo Doug.** A
+regra 8 das instruções de PGN do Codex — *"a IA não pode criar um erro natural;
+todos os lances da variante devem estar documentados em fonte"* — **não entra**:
+ela mataria os erros com nome do treino, que são justamente os lances que o livro
+não traz. *(Até 2026-09-15 esta regra dizia "até 7 peças, julgada pela tablebase;
+acima, só a fonte". Mudou com as decisões globais do topo: o Stockfish do editor
+confere, o professor decide, e o número de peças deixou de mudar quem julga.)*
+
+**7. Procedência da posição — a regra do Doug, com uma definição.** Nenhuma
+posição é criada, espelhada, girada, recolorida, com o lado a jogar trocado ou com
+peça mexida pela IA. Toda posição vem de uma fonte — qualquer livro, estudo ou partida — ou é
+**posição autoral do Doug**. *(Desde 15/9 — trava 7 — dizer de onde veio é
+**opcional**: a falta vira aviso na conferência, não impede publicar. O que fica
+obrigatório é a primeira frase: a IA não fabrica posição.)*
+**Posição** é todo diagrama sobre o qual o aluno joga, avalia, ou lê uma
+afirmação de resultado. Não é posição — e por isso não pede procedência:
+
+- o **diagrama de vitrine**, com peças enfileiradas só para dar nome a elas;
+- o diagrama que **sai de uma linha** jogada a partir da posição da aula, que
+  herda a procedência dela (é o caso do mate `Kh8 Nf7#` da §14.5).
+
+**8. A posição autoral do Doug é origem comum** (trava 5, 15/9). Até 15/9 esta
+regra dizia que ela era "um regime" e deixava pendente como o validador o
+reconheceria, porque uma aula com posição autoral reprovava em
+`FONTE_DIDATICA_DIVERGE`. A pendência se resolveu por eliminação: essa trava saiu
+do gate, e "autoria própria" é uma origem como qualquer outra no Editor v2.
+
+**9. O texto que o aluno vê é só de professor para aluno.** Procedência,
+validação e nota de produção ficam nos campos de proveniência, nunca na fala. O
+site já fazia isso; o Codex escreveu a regra para o Lichess, onde não havia campo
+separado.
+
+**10. O professor tem a última palavra** (decisão global de 2026-09-15). Toda
+conferência desta seção — do motor, da `/revisar-aula`, da régua de voz — **avisa**.
+Se o Doug diz que a posição atinge o que ele definiu para a aula, ela está
+correta, e o aviso vira nota. O que não se decide por declaração é a legalidade:
+lance ilegal continua sendo ilegal.
+
+**O que não entrou, e por quê:**
+
+| Do Codex | Motivo |
+|---|---|
+| A lista de 56 capítulos | Revisada duas vezes: temas repetidos para chegar a 50, erros de conteúdo (caps. 16, 25, 31), temas faltando (Réti, rei contra dois peões, passado protegido, sétima fila) e uma meta que não cabe em 4 semanas |
+| "Testar para sair" do nível 1 | Boa ideia, mas é mudança de produto; fica para depois da OLESC |
+| Prática livre em todo caso do "o que dá mate" | Prática em rei e bispo contra rei, ou num mate em um, não testa nada — o próprio modelo do Codex proíbe prática decorativa |
+| Os estudos do Codex importados em bloco | As posições não são do Silman e os textos não passam na `VOZ-DO-CURSO`. O 0.3 (mate de dama) é a exceção que vale aproveitar: mesma técnica do L decidida em 9/9, lances conferidos |

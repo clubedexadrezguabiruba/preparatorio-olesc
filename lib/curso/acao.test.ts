@@ -120,6 +120,11 @@ test("a revisão de finais também é a ação, e com o mesmo link do cartão", 
   assert.equal(acao.href, oQueOCartaoHojeAponta(d));
 });
 
+test("com várias práticas, a revisão abre a prática que venceu (trava 9, 15/9/2026)", () => {
+  const d = zerado({ vencidasDeFinais: [{ id: "EX-DUAS", nome: "Aula de duas práticas", pratica: "pratica-segunda" }] });
+  assert.equal(proximaAcao(d).href, "/finais/EX-DUAS?revisao=1&pratica=pratica-segunda");
+});
+
 /* ------------------------------------------------------------------ *
  * A ordem
  * ------------------------------------------------------------------ */

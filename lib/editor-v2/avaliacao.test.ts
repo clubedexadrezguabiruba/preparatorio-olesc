@@ -61,7 +61,9 @@ const mudancasDoTreino: Array<[string, (aula: AulaV2) => void]> = [
   ["lado do aluno", (a) => { treinoDe(a).ladoAluno = "black"; }],
   ["política do defensor", (a) => { treinoDe(a).defensor.politica = "fixa"; }],
   ["término", (a) => { treinoDe(a).termino = { tipo: "limite", maxPlies: 20 }; }],
-  ["resultado certificado", (a) => { treinoDe(a).certificacao!.resultado = "draw"; }],
+  // Declarado pelo professor desde 15/9/2026 (trava 2); o adaptador o traz do `goal` do v1.
+  ["resultado declarado", (a) => { treinoDe(a).resultado = "draw"; }],
+  ["resultado da certificação antiga, num treino que não declara", (a) => { delete treinoDe(a).resultado; treinoDe(a).certificacao!.resultado = "draw"; }],
   ["lances de uma resposta", (a) => { treinoDe(a).questoes[0].respostas[0].moves = ["c6b7"]; }],
   ["julgamento de uma resposta", (a) => { treinoDe(a).questoes[0].respostas[0].julgamento = "alternativa"; }],
   ["efeito de uma resposta", (a) => { treinoDe(a).questoes[0].respostas[0].efeito = { tipo: "repete" }; }],

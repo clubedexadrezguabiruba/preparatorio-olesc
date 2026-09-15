@@ -15,7 +15,7 @@ function nomeDoLado(lado: "white" | "black"): string {
 function resumoDoFim(efeito: AulaV2["treinos"][number]["questoes"][number]["respostas"][number]["efeito"]): string {
   if (efeito.tipo === "avanca") return `${efeito.defesas.length} resposta${efeito.defesas.length === 1 ? "" : "s"} do defensor`;
   if (efeito.tipo === "repete") return "repete a pergunta";
-  const nomes = { mate: "mate", promotion: "promoção", "draw-secured": "empate assegurado", "tablebase-win": "vitória certificada", "objetivo-autoral": "objetivo da linha" };
+  const nomes = { mate: "mate", promotion: "promoção", "draw-secured": "empate assegurado", "tablebase-win": "vitória", "objetivo-autoral": "objetivo da linha" };
   return `${efeito.defesaFinal ? `adversário joga ${efeito.defesaFinal} e ` : ""}termina em ${nomes[efeito.condicao]}`;
 }
 
@@ -112,7 +112,7 @@ export function DialogoCriarTreino({ aula, capituloId, nodeId, positions, aoCria
                   );
                 })}
               </ol>
-              <p className="mt-2 text-xs text-tinta-fraca">Dicas, alternativas corretas, erros conhecidos e feedback podem ser personalizados na próxima parada desta fatia.</p>
+              <p className="mt-2 text-xs text-tinta-fraca">Depois de criar, «Editar treino» personaliza dicas, alternativas corretas, erros conhecidos, feedback e o resultado que o treino cobra; «Refazer a partir da aula» volta ao que a aula gera.</p>
             </section>
           ))}
         </div>

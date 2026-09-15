@@ -150,7 +150,7 @@ test("aula publicada com classe passa", () => {
  * Um formato só, e a ausência por escrito (2026-09-09)
  * ------------------------------------------------------------------ */
 
-test("aula publicada sem uma das quatro etapas e sem dizer por quê é recusada", () => {
+test("travas de 15/9: aula publicada sem uma das quatro etapas, e sem dizer por quê, passa (trava 8)", () => {
   const r = lessonSchema.safeParse(
     aula({
       status: "published",
@@ -158,8 +158,15 @@ test("aula publicada sem uma das quatro etapas e sem dizer por quê é recusada"
       etapasAusentes: { intro: "a", objective: "b", guided: "c" },
     }),
   );
-  assert.equal(r.success, false);
-  assert.match(r.error?.issues[0].message ?? "", /"practice" e não diz por quê/);
+  assert.equal(r.success, true);
+  const soApresentacao = lessonSchema.safeParse(
+    aula({
+      status: "published",
+      class: "E",
+      stages: { intro: { passos: [{ fala: "Olhe as peças.", fen: "4k3/8/8/8/8/8/8/R3K3 w - - 0 1" }, { fala: "A torre dá mate com o rei.", fen: "4k3/8/8/8/8/8/8/R3K3 w - - 0 1" }] } },
+    }),
+  );
+  assert.equal(soApresentacao.success, true, "aula só com apresentação é aula");
 });
 
 test("declarar ausente uma etapa que existe é recusado", () => {
@@ -249,7 +256,7 @@ test("o nó do treino sem flecha e sem casa acesa é recusado, e a mensagem mand
   );
 });
 
-test("a trava da MESMA posição vale da aula em diante, e diz que a apresentação é a exceção", () => {
+test("travas de 15/9: as etapas podem jogar posições diferentes (trava 10)", () => {
   const r = lessonSchema.safeParse(
     publicada({
       objective: {
@@ -261,8 +268,7 @@ test("a trava da MESMA posição vale da aula em diante, e diz que a apresentaç
       practice: { positionId: "pos-outra", goal: "win", engine: { skill: 20, moveTimeMs: 300 } },
     }),
   );
-  assert.equal(r.success, false);
-  assert.match(r.error?.issues[0].message ?? "", /apresentação é a exceção/);
+  assert.equal(r.success, true, r.success ? "" : r.error.issues.map((i) => i.message).join(" | "));
 });
 
 test("aula publicada com aula e sem treino passa no schema — o treino é derivado", () => {
@@ -293,8 +299,7 @@ test("aula publicada com aula e sem treino passa no schema — o treino é deriv
   assert.equal(r.success, true);
 });
 
-test("aula publicada SEM aula e sem treino ainda precisa declarar o treino", () => {
-  // Sem roteiro não há de onde derivar, e aí a ausência volta a ser ausência.
+test("travas de 15/9: aula publicada sem aula e sem treino não precisa declarar nada (trava 8)", () => {
   const r = lessonSchema.safeParse(
     aula({
       status: "published",
@@ -302,6 +307,5 @@ test("aula publicada SEM aula e sem treino ainda precisa declarar o treino", () 
       etapasAusentes: { intro: "a", objective: "b", practice: "c" },
     }),
   );
-  assert.equal(r.success, false);
-  assert.match(r.error?.issues[0].message ?? "", /não tem a etapa "guided"/);
+  assert.equal(r.success, true);
 });

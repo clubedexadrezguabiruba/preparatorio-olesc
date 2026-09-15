@@ -67,7 +67,7 @@ teste de uso concluídas sem ajuda.
 - **Análise:** árvore autoral de posições, lances, variantes, comentários e desenhos.
 - **Capítulo:** percurso escolhido de uma análise, com orientação e narração próprias.
 - **Treino:** tarefa jogável, com respostas, feedback, defesa e término.
-- **Prática:** avaliação já existente contra Stockfish/tablebase, preservada no v2.
+- **Prática:** avaliação já existente contra o Stockfish, preservada no v2 (nenhuma, uma ou várias por aula desde 15/09/2026).
 - **Fluxo:** ordem única em que introduções, capítulos, treinos e práticas aparecem.
 
 O professor não precisa conhecer “nó”, “hash”, “manifesto” ou “AST”. Mensagens devem
@@ -542,6 +542,19 @@ técnica. Resposta sem continuação ou término válido não pode ser aceita.
 
 ## 17. Julgamento, prática e certificação
 
+> **Decisão do Doug de 15/09/2026 — as travas do currículo** (`docs/TRILHA-FINAIS.md`, nota do
+> topo). Esta seção descrevia dois perfis e a tablebase como juiz. Vale agora:
+>
+> - **Não há mais final certificado como regra.** O treino declara o que cobra (vencer ou
+>   segurar o empate) em «Editar treino», e é julgado como linha autoral: linha do professor
+>   aceita, erros nomeados apontados, lance fora da linha sem mentira objetiva. A certificação
+>   das aulas antigas é dado congelado; nada a renova, confirma ou exige.
+> - **O Conferir não consulta tablebase** e não escreve no documento; `CERTIFICACAO_PENDENTE`,
+>   `CERTIFICACAO_CADUCA`, `CERTIFICACAO_REFUTADA`, `CERTIFICACAO_SEM_APROVACAO` e
+>   `CERTIFICACAO_SEM_PROVENIENCIA` saíram.
+> - **Sem limite de peças** na prática, no acervo e na importação.
+> - O que segue abaixo é o contrato anterior, mantido como registro.
+
 Existem dois perfis:
 
 1. **Final certificado:** tablebase/contratos atuais verificam resultado, técnica,
@@ -560,6 +573,13 @@ Existem dois perfis:
 - Assistir ou concluir treino com ajuda não concede domínio automaticamente.
 
 ### 17.1 Configuração de práticas
+
+> **15/09/2026 (trava 9):** nenhuma, uma ou várias práticas por aula. `PRATICA_AUSENTE` e
+> `PRATICAS_MULTIPLAS` saíram; "+ Criar prática" fica sempre na lista, e a importação de estudo
+> aceita vários capítulos de prática, cada um com o resultado declarado. Com várias, a aula é
+> aprendida quando **todas** chegam ao degrau 3; o cartão de revisão abre a prática que venceu.
+> Sem prática, o aluno fecha a aula com o "assisti", no tocador v1 e no v2. O resultado da posição
+> que entra no acervo é **declarado pelo professor**, sem consulta a cache.
 
 O professor pode preservar, criar e editar práticas de avaliação, definindo:
 
@@ -589,6 +609,14 @@ impacto antes de publicar. Reordenar ou renomear não invalida domínio.
 ## 19. Problemas, conferência e correção
 
 ### 19.1 Metadados, proveniência e exceções
+
+> **15/09/2026 (travas 4, 7 e 8):** "de onde veio" é **opcional** — sem origem, a revisão fica
+> "desconhecida" e a conferência avisa. `PROVENIENCIA_CADUCA`, `PROVENIENCIA_DIVERGE` e
+> `FEN_IMPORTADA_SEM_REVISAO` não são mais promovidos a erro na publicação, e
+> `TEXTO_SEM_DIREITO_DECLARADO` é aviso. Fonte didática e justificativa de etapa ausente deixaram
+> de ser exigidas (nenhum livro-base obrigatório; a aula publica com as etapas que tiver). O
+> registro técnico que prende a posição ao pacote (`POSICAO_SEM_PROVENIENCIA`,
+> `PRATICA_SEM_PROVENIENCIA`) continua, e é automático.
 
 “Mais opções” permite editar, quando aplicável:
 
@@ -688,7 +716,8 @@ vinculado ao manifesto completo julgado; mudança posterior invalida a conferên
 - Mostra avaliação da posição, mate quando aplicável e perspectiva claramente nomeada.
 - Pode apoiar revisão, mas não escreve símbolo, resposta, comentário ou certificação
   automaticamente.
-- Não substitui tablebase em final certificado.
+- ~~Não substitui tablebase em final certificado.~~ *(15/09/2026: a tablebase saiu; o motor do
+  professor é a conferência, e a decisão é do professor.)*
 - Opening Explorer é posterior.
 
 ### 23.1 Linhas, seta e liga/desliga (decisão do Doug de 13/09/2026)
@@ -709,7 +738,8 @@ Olhando Lichess e Chess.com, o Doug ampliou esta seção:
   quatro cores do professor, e nunca gravada no arquivo.
 - **Pausa:** com a prévia aberta, outra janela aberta ou a aba escondida, o motor para e
   retoma ao fechar.
-- **Até 7 peças:** uma nota curta lembra que quem julga o final é a tablebase.
+- ~~**Até 7 peças:** uma nota curta lembra que quem julga o final é a tablebase.~~ *(Removida em
+  15/09/2026, com a tablebase.)*
 - **O aluno não vê motor nem barra, nem na prévia (por agora).** Só as duas telas de editor
   montam esses componentes.
 - **Posterior:** clicar numa linha do motor para inserir como variante — junto com o
@@ -832,7 +862,8 @@ Ao final de cada fatia:
 - [x] Respostas corretas, alternativas, erros, feedback, dicas e término.
 - [x] Defensor determinístico e treino dos dois lados.
 - [x] Derivado/personalizado/independente e refazer com diff.
-- [ ] Final certificado e linha autoral julgados corretamente.
+- [ ] Final certificado e linha autoral julgados corretamente. *(15/09/2026: o final certificado
+  saiu como regra — ver §17; o item passa a medir a linha autoral com resultado declarado.)*
 - [ ] Práticas avaliativas configuráveis e versionadas.
 - [ ] Metadados, proveniência e exceções editáveis com segurança.
 - [x] Fluxo completo de introdução, capítulos, treinos e práticas.

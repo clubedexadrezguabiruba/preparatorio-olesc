@@ -105,7 +105,8 @@ test("o nível 2 é o das táticas fundamentais, na frente dos padrões de mate"
   assert.ok(!temasDoNivel(2).includes("backRankMate"), "o mate do corredor não é do nível 2");
 });
 
-test("as aulas de finais são cortadas pela ordem, e a ordem não se cruza", () => {
+test("as aulas de finais andam em ordem de nível: a ordem de um nível não se cruza com a de outro", () => {
+  // O corte fixo por ordem (1–6, 7–12…) saiu em 2026-09-15 (trava 16); o pré-requisito fica.
   for (const n of NIVEIS) {
     const ordens = aulasDoNivel(n).map((a) => a.ordem);
     const maiorAqui = Math.max(...ordens);
@@ -162,8 +163,10 @@ test("o clamp segue o publicado até bater no declarado, e para lá", () => {
   assert.equal(duas.finais.exigidas, 2);
 
   const todas = fechamentoDoNivel(4, { ...VAZIO, publicadas: new Set(doNivel4) });
-  assert.equal(todas.finais.publicadas, 16);
-  assert.equal(todas.finais.exigidas, declaradas, "publicar 16 não faz o nível pedir 16");
+  // O tamanho do nível não é fixo desde 2026-09-15 (trava 16): conta-se o que a trilha tem.
+  assert.equal(todas.finais.publicadas, doNivel4.length);
+  assert.ok(doNivel4.length > declaradas, "o caso pede um nível com mais aulas que o declarado");
+  assert.equal(todas.finais.exigidas, declaradas, "publicar todas não faz o nível pedir todas");
 });
 
 test("o repertório é acumulado: o nível 3 pede 12, e não 4", () => {

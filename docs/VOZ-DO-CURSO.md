@@ -114,7 +114,6 @@ nenhum:** quem precisa deles os lê daqui.
   "alvoDeToquePx": 44,
   "alvoDePonteiroPx": 24,
   "proibidas": [
-    "método",
     "roteiro",
     "tentativa",
     "teto",
@@ -124,25 +123,28 @@ nenhum:** quem precisa deles os lê daqui.
     "critério",
     "domínio",
     "mostrando",
-    "objetivo",
     "conversão",
     "posicional",
-    "avaliação",
     "compensação",
     "iniciativa",
     "elementar",
-    "teoria",
-    "profilaxia",
-    "estrutura"
+    "profilaxia"
   ]
 }
 ```
 
-A lista tem **duas metades e um propósito só**. As onze primeiras são jargão de
-bastidor — palavra nossa que vazou para a tela (§4). As nove últimas são o
+A lista tem **duas metades e um propósito só**. As nove primeiras são jargão de
+bastidor — palavra nossa que vazou para a tela (§4). As seis últimas são o
 **português de manual de xadrez para adulto** (§4.2). A máquina não distingue as
-duas, e não precisa: as vinte têm em comum serem palavras que um professor não
+duas, e não precisa: as quinze têm em comum serem palavras que um professor não
 diria a uma criança de doze anos com o tabuleiro na frente.
+
+> **2026-09-15 — cinco palavras saíram da lista, por decisão do Doug:**
+> **objetivo, método, avaliação, teoria e estrutura.** Eram vinte, ficam quinze.
+> Os dois tetos (200 caracteres por fala, 20 palavras por frase) não mudaram.
+> As cinco continuam nas tabelas da §4 e da §4.2 como **sugestão de quem revisa**,
+> não como trava: a máquina não as aponta mais, e o professor decide se a
+> palavra cabe na fala.
 
 ### 3.1 Fala ≤ 200 caracteres
 
@@ -218,12 +220,12 @@ vez. É jargão de **professor e de desenvolvedor** que vazou para a tela.
 
 | Está na tela | Vira |
 |---|---|
-| "o método da aula", "siga o roteiro" | "o jeito certo", "o caminho da aula" |
+| "siga o roteiro" (e "o método da aula", só sugestão desde 15/9) | "o jeito certo", "o caminho da aula" |
 | "tentativa" | "de novo", "mais uma vez" |
 | "o teto de N lances acabou" | "acabaram os N lances" |
 | "Etapa concluída." | "Pronto." |
 | "critério de domínio", "passada", "degrau" | não aparecem ao aluno |
-| "Objetivo / Com ajuda / Sem ajuda" | **"Apresentação / Aula / Treino / Prática real"** |
+| "Objetivo / Com ajuda / Sem ajuda" (como nome das abas) | **"Apresentação / Aula / Treino / Prática real"** |
 | "A técnica, em 3 passos" | (some — vira a fala do professor) |
 | "Mostrando: …" | (some) |
 
@@ -291,14 +293,14 @@ gente grande e para de ler.
 | Está na tela | Vira |
 |---|---|
 | "converter a vantagem", "a conversão" | "transformar isso em vitória", "ganhar a partida" |
-| "avaliar a posição", "a avaliação" | "olhar quem está melhor" |
+| "avaliar a posição", "a avaliação" *(sugestão desde 15/9)* | "olhar quem está melhor" |
 | "compensação" | (some — diga o que o lado *tem*: "um peão a menos, mas o rei ativo") |
 | "posicionalmente melhor" | "melhor colocado", "no lugar certo" |
 | "a iniciativa" | "quem manda no jogo" |
 | "mate elementar", "é elementar" | (some — e ver a §2: ele não avisa que algo é fácil) |
-| "na teoria", "a teoria diz" | (some — o tabuleiro é que diz) |
+| "na teoria", "a teoria diz" *(sugestão desde 15/9)* | (some — o tabuleiro é que diz) |
 | "profilaxia" | "impedir antes", "tirar a ideia dele" |
-| "a estrutura de peões" | "os peões", "os peões de vocês dois" |
+| "a estrutura de peões" *(sugestão desde 15/9)* | "os peões", "os peões de vocês dois" |
 | "simplificar" | "trocar peças" |
 | "neutralizar" | "parar", "segurar" |
 
@@ -437,11 +439,11 @@ casa acesa, sem dica.
 7. **A lista proibida não pega verbo conjugado.** `usaProibida` casa palavra
    inteira com plural (`lib/lesson/voz.ts:112`), então "simplificação" reprova e
    "simplificando" passa. Foi escolha, não descuido: um casador por radical
-   reprovaria "objeto" por causa de "objetivo", e falso positivo em régua de voz
+   reprovaria "dominar a casa" por causa de "domínio", e falso positivo em régua de voz
    treina quem escreve a ignorá-la. As duas linhas de verbo da §4.2 ficam com o
    revisor, e estão declaradas lá.
 
-8. **A §4.2 não foi medida contra o corpus antigo.** As nove palavras novas foram
+8. **A §4.2 não foi medida contra o corpus antigo.** As nove palavras de então (seis na lista desde 15/9) foram
    conferidas contra `content/lessons/` e `lib/lesson/falas.ts` — os dois lugares
    que o teste varre — e nenhuma aparecia. **Não** foram conferidas contra as
    telas de aberturas, tática e painel, que a dívida 1 já declara fora da
@@ -450,7 +452,7 @@ casa acesa, sem dica.
 9. **A proveniência dos diagramas da apresentação não tem defesa mecânica**
    (9/9/2026). A etapa 1 desenha em **FEN livre**, escrita no próprio arquivo da
    aula: ela não vira `content/positions/`, não tem os 9 campos de proveniência e
-   não passa pela tablebase. É deliberado — o passo que diz "estas peças dão
+   não passa pela tablebase (que desde 15/9 não confere mais nada). É deliberado — o passo que diz "estas peças dão
    mate" precisa mostrar peças que não estão na posição da aula, às vezes mais de
    sete delas, e ninguém joga ali.
 

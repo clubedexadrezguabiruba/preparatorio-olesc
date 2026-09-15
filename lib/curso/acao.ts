@@ -94,7 +94,8 @@ export type ParaDecidir = {
   /** Quantos puzzles a fila de revisão deve hoje. */
   readonly vencidosDeTatica: number;
   /** As aulas de finais vencidas hoje, em ordem de vencimento. */
-  readonly vencidasDeFinais: readonly { readonly id: string; readonly nome: string }[];
+  /** `pratica`: na aula com várias práticas, a que venceu — o cartão abre essa. */
+  readonly vencidasDeFinais: readonly { readonly id: string; readonly nome: string; readonly pratica?: string }[];
 };
 
 function plural(n: number, um: string, muitos: string): string {
@@ -143,7 +144,7 @@ export function proximaAcao(d: ParaDecidir): Acao {
           ? `Esta aula venceu na escada de revisão, e há mais ${outras} atrás dela.`
           : "Esta aula venceu na escada de revisão. Uma passada e ela sobe de degrau.",
       botao: "Abrir a aula",
-      href: `/finais/${vencida.id}?revisao=1`,
+      href: `/finais/${vencida.id}?revisao=1${vencida.pratica ? `&pratica=${encodeURIComponent(vencida.pratica)}` : ""}`,
     };
   }
 

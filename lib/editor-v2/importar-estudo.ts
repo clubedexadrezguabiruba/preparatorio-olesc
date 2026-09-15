@@ -16,7 +16,7 @@
  * |---|---|
  * | sem lances, antes do primeiro capítulo com lances | **Introdução** (um quadro) |
  * | `ChapterMode "gamebook"` | **Treino** |
- * | `White` ou `Black` = "Engine", sem lances, até 7 peças | **Prática** |
+ * | `White` ou `Black` = "Engine", sem lances | **Prática** |
  * | o resto | **Capítulo** |
  *
  * ## O treino que nasce da lição interativa
@@ -75,7 +75,6 @@ export type LeituraDoEstudo = {
 };
 
 const semNumero = (titulo: string) => titulo.replace(/^\s*\d+\s*[-–—.]\s*/, "").trim() || titulo;
-const pecas = (fen: string) => (fen.split(" ")[0].match(/[prnbqk]/gi) ?? []).length;
 
 /** O texto de um comentário do estudo com os parágrafos intactos, sem as diretivas. */
 export function textoComParagrafos(bruto: string | null): string {
@@ -103,7 +102,7 @@ export function lerEstudo(texto: string): LeituraDoEstudo {
     const possiveis: DestinoNoEstudo[] = [];
     if (!jogo.recusa || jogo.recusa.codigo === "JOGO_SEM_LANCES") possiveis.push("introducao");
     if (temLances) possiveis.push("capitulo", "treino");
-    if (pecas(fen) <= 7 && (!jogo.recusa || jogo.recusa.codigo === "JOGO_SEM_LANCES")) possiveis.push("pratica");
+    if (!jogo.recusa || jogo.recusa.codigo === "JOGO_SEM_LANCES") possiveis.push("pratica");
     possiveis.push("fora");
 
     let sugerido: DestinoNoEstudo;
@@ -152,8 +151,11 @@ export type PlanoDoEstudoV2 = {
   etapas: AulaV2["fluxo"];
   /** Marcadas para o professor revisar (variante sem símbolo que virou erro, por exemplo). */
   avisos: string[];
-  /** A prática sugerida: a posição ainda precisa entrar no acervo (servidor) antes do comando. */
-  pratica?: PraticaDoEstudo;
+  /**
+   * As práticas escolhidas, na ordem do estudo: cada posição ainda precisa entrar no acervo
+   * (servidor) antes do comando. Várias desde 15/9/2026 (trava 9).
+   */
+  praticas: PraticaDoEstudo[];
 };
 
 export type EscolhasDoEstudo = { destinos: Record<number, DestinoNoEstudo>; revisao?: RevisaoDaFenV2 };
@@ -175,9 +177,8 @@ export function planejarEstudo(aula: AulaV2, leitura: LeituraDoEstudo, escolhas:
   const escolhidos = leitura.capitulos.filter((c) => destino(c) !== "fora");
   if (!escolhidos.length) return { ok: false, mensagem: "nenhum capítulo do estudo foi escolhido para entrar" };
   for (const c of escolhidos) if (!c.possiveis.includes(destino(c))) return { ok: false, mensagem: `«${c.titulo}» não pode virar ${destino(c)}: ${c.pista}` };
+  // Nenhuma, uma ou várias práticas (trava 9, 15/9/2026): as do estudo somam às que a aula já tem.
   const praticas = escolhidos.filter((c) => destino(c) === "pratica");
-  if (praticas.length > 1) return { ok: false, mensagem: "o estudo tem mais de um capítulo marcado como prática, e a aula aceita uma só" };
-  if (praticas.length && aula.praticas.length) return { ok: false, mensagem: "esta aula já tem uma prática; marque o capítulo de prática do estudo como fora, ou exclua a prática da aula antes" };
 
   const usados = idsDaAulaV2(aula);
   for (const c of escolhidos) {
@@ -268,8 +269,8 @@ export function planejarEstudo(aula: AulaV2, leitura: LeituraDoEstudo, escolhas:
     : undefined;
   if (quadros.length && aula.introducoes.length) avisos.push("a aula já tem introdução: os quadros do estudo não entraram — acrescente-os à mão");
 
-  const pratica = praticas[0] ? { numero: praticas[0].numero, titulo: praticas[0].titulo, fen: praticas[0].fen, lado: praticas[0].lado } : undefined;
-  return { ok: true, plano: { analises, capitulos, treinos, erros, etapas, avisos, ...(introducao ? { introducao } : {}), ...(pratica ? { pratica } : {}) } };
+  const praticasDoPlano = praticas.map((c) => ({ numero: c.numero, titulo: c.titulo, fen: c.fen, lado: c.lado }));
+  return { ok: true, plano: { analises, capitulos, treinos, erros, etapas, avisos, ...(introducao ? { introducao } : {}), praticas: praticasDoPlano } };
 }
 
 /**
@@ -339,12 +340,13 @@ export function comErrosNoCatalogo(aula: AulaV2, erros: PlanoDoEstudoV2["erros"]
   return { ...(aula.catalogo ?? { erros: [], mensagensPadrao: { vitoriaForaDoMetodo: "Este lance funciona, mas não é o caminho ensinado.", perdeResultado: "Este lance perde o resultado que a posição permitia.", alternativaDoMetodo: "Boa alternativa. Continue pela linha ensinada." } }), erros: [...(aula.catalogo?.erros ?? []), ...erros] };
 }
 
-export function aplicarPlanoDoEstudo(aula: AulaV2, plano: PlanoDoEstudoV2, pratica?: AulaV2["praticas"][number], registroDaPratica?: AulaV2["proveniencia"][number]): AulaV2 {
+export function aplicarPlanoDoEstudo(aula: AulaV2, plano: PlanoDoEstudoV2, praticas: AulaV2["praticas"] = [], registrosDasPraticas: AulaV2["proveniencia"] = []): AulaV2 {
   const usados = idsDaAulaV2(aula);
   const novos = [...plano.analises.map((a) => a.id), ...plano.capitulos.map((c) => c.id), ...plano.treinos.map((t) => t.id), ...plano.etapas.map((e) => e.id), ...(plano.introducao ? [plano.introducao.id] : [])];
   const repetido = novos.find((id) => usados.has(id));
   if (repetido) throw new Error(`a aula já tem uma parte chamada "${repetido}" — este estudo parece já ter sido importado. Nada foi aplicado.`);
-  if (pratica && aula.praticas.length) throw new Error("esta aula já tem uma prática");
+  const repetida = praticas.find((pratica) => usados.has(pratica.id));
+  if (repetida) throw new Error(`a aula já tem uma prática chamada "${repetida.id}". Nada foi aplicado.`);
 
   const antes = indiceAntesDaPratica(aula.fluxo);
   const fluxo = [
@@ -352,18 +354,18 @@ export function aplicarPlanoDoEstudo(aula: AulaV2, plano: PlanoDoEstudoV2, prati
     ...aula.fluxo.slice(0, antes),
     ...plano.etapas,
     ...aula.fluxo.slice(antes),
-    ...(pratica ? [{ id: `etapa-${pratica.id}`, tipo: "pratica" as const, entidadeId: pratica.id }] : []),
+    ...praticas.map((pratica) => ({ id: `etapa-${pratica.id}`, tipo: "pratica" as const, entidadeId: pratica.id })),
   ];
   const catalogo = comErrosNoCatalogo(aula, plano.erros);
   const nova: AulaV2 = {
     ...aula,
     ...(catalogo ? { catalogo } : {}),
-    proveniencia: registroDaPratica && !aula.proveniencia.some((p) => p.positionId === registroDaPratica.positionId) ? [...aula.proveniencia, registroDaPratica] : aula.proveniencia,
+    proveniencia: [...aula.proveniencia, ...registrosDasPraticas.filter((registro, i, todos) => !aula.proveniencia.some((p) => p.positionId === registro.positionId) && todos.findIndex((r) => r.positionId === registro.positionId) === i)],
     analises: [...aula.analises, ...plano.analises],
     introducoes: plano.introducao ? [...aula.introducoes, plano.introducao] : aula.introducoes,
     capitulos: [...aula.capitulos, ...plano.capitulos],
     treinos: [...aula.treinos, ...plano.treinos],
-    praticas: pratica ? [...aula.praticas, pratica] : aula.praticas,
+    praticas: [...aula.praticas, ...praticas],
     fluxo,
   };
   const excedidos = problemasDeLimiteV2(nova);

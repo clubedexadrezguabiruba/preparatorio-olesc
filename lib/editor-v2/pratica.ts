@@ -4,13 +4,13 @@
  * ## O que a prática é, e o que ela não é
  *
  * É a avaliação que já existia no v1 e que a publicação v2 preservou: o aluno joga a posição
- * contra o Stockfish e precisa **vencer** ou **segurar o empate**; o juiz é a tablebase (por isso
- * até 7 peças). Nesta versão a aula tem **uma** prática, obrigatória, no fim do fluxo — é dela que o
- * domínio depende (`PRATICA_AUSENTE`, `PRATICAS_MULTIPLAS`).
+ * contra o Stockfish e precisa **vencer** ou **segurar o empate**. Desde 15/9/2026 (travas 1 e 9 de
+ * `docs/TRILHA-FINAIS.md`) não há limite de peças, e a aula tem **nenhuma, uma ou várias** práticas:
+ * com várias, a aula é aprendida quando todas são; sem nenhuma, o aluno a fecha marcando que assistiu.
  *
  * Os campos são os que o `PracticeStage` sabe jogar: título, posição, lado, objetivo e o
  * adversário (força e tempo por lance). O que §17.1 pede e o runtime não tem — ajuda permitida
- * na prática, limite de lances configurável, várias práticas opcionais — não é inventado aqui;
+ * na prática, limite de lances configurável, prática opcional — não é inventado aqui;
  * fica aberto no diário.
  *
  * ## A versão da avaliação
@@ -19,14 +19,12 @@
  * não. A tela avisa antes de salvar quando a mudança cria versão nova — a conta exata do hash roda
  * no servidor, mas **quais campos** a movem é conhecido e cabe aqui, no navegador.
  */
-import { pecasDaFen } from "./acervo.ts";
 import { comoId, idsDaAulaV2 } from "./ids.ts";
 import type { AulaV2, PraticaV2 } from "./modelo.ts";
 import type { Position } from "../lesson/schema.ts";
 
 /** O adversário padrão, o da N0-LADDER publicada: força máxima, 300 ms por lance. */
 export const ADVERSARIO_PADRAO = { skill: 20, moveTimeMs: 300 } as const;
-export const MAX_PECAS_DA_PRATICA = 7;
 
 export type PedidoDePraticaV2 = {
   titulo: string;
@@ -61,8 +59,6 @@ export function prepararPratica(
   if (!titulo) return { ok: false, campo: "titulo", mensagem: "dê um título à prática — é o que o aluno lê na trilha" };
   const posicao = positions[pedido.positionId];
   if (!posicao) return { ok: false, campo: "posicao", mensagem: "escolha a posição da prática no acervo" };
-  const pecas = pecasDaFen(posicao.fen);
-  if (pecas > MAX_PECAS_DA_PRATICA) return { ok: false, campo: "posicao", mensagem: `a posição tem ${pecas} peças; a prática só aceita até ${MAX_PECAS_DA_PRATICA}, porque quem julga é a tablebase` };
   const esperado = posicao.expectedResult;
   const doAluno = esperado === "draw" ? "draw" : (esperado === "win-white") === (pedido.ladoAluno === "white") ? "win" : "loss";
   if (doAluno === "loss") return { ok: false, campo: "posicao", mensagem: "nesta posição o lado do aluno perde — a prática não tem objetivo possível" };
@@ -95,7 +91,6 @@ function comRegistro(aula: AulaV2, registro: RegistroDaPosicaoV2 | undefined): A
 /** Acrescenta a prática no **fim** do fluxo — a avaliação vem depois do que prepara para ela (§18). */
 export function aplicarNovaPratica(aula: AulaV2, preparo: PraticaPreparadaV2): AulaV2 {
   if (aula.praticas.some((item) => item.id === preparo.pratica.id)) throw new Error("esta prática já existe");
-  if (aula.praticas.length) throw new Error("esta aula já tem uma prática — nesta versão o domínio depende de uma só; edite a que existe");
   return {
     ...aula,
     proveniencia: comRegistro(aula, preparo.registro),

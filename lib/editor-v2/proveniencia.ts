@@ -45,20 +45,21 @@ const aparado = (valor: string | undefined) => {
 };
 
 export function prepararRevisaoDaFen(pedido: PedidoDeRevisaoDaFen, fen: string, professor: string, agora: Date): PreparoDaRevisao {
-  if (!pedido.origem) return { ok: false, campo: "origem", mensagem: "diga de onde a posição veio — é o único campo obrigatório" };
+  // "De onde veio" é opcional desde 15/9/2026 (trava 7): sem resposta, a origem fica desconhecida e a conferência avisa.
+  const origem = pedido.origem || "desconhecida";
   const link = aparado(pedido.link);
   if (link && !/^https?:\/\/\S+$/i.test(link)) return { ok: false, campo: "link", mensagem: "o link precisa começar com http:// ou https:// — copie da barra do navegador" };
   const opcionais = { autor: aparado(pedido.autor), obra: aparado(pedido.obra), pagina: aparado(pedido.pagina), link, licenca: aparado(pedido.licenca), nota: aparado(pedido.nota) };
   return {
     ok: true,
     revisao: {
-      origem: pedido.origem,
+      origem,
       ...Object.fromEntries(Object.entries(opcionais).filter(([, valor]) => valor !== undefined)),
       fenRevisada: fen,
       revisadoEm: agora.toISOString(),
       professor: professor.trim() || "professor",
       mostrarCredito: pedido.mostrarCredito,
-      ...(origemDeTerceiro(pedido.origem) ? { direitoDosTextos: pedido.direitoDosTextos === true } : {}),
+      ...(origemDeTerceiro(origem) ? { direitoDosTextos: pedido.direitoDosTextos === true } : {}),
     },
   };
 }

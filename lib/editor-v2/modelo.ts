@@ -419,6 +419,18 @@ export const treinoV2Schema = z.strictObject({
   copia: copiaTreinoV2Schema.optional(),
   obrigatorio: z.boolean().default(true),
   revisaoAvaliacao: z.enum(["pendente", "confirmada"]).default("pendente"),
+  /**
+   * O que o treino cobra: ganhar ou segurar o empate — **declarado pelo professor** (trava 2 de
+   * `docs/TRILHA-FINAIS.md`, 15/9/2026). O juiz do aluno escreve "joga a vitória fora" ou "joga o
+   * empate fora" por ele. Ausente: vale o `resultado` da certificação antiga, se houver, e por fim
+   * vitória (`resultadoDoTreinoV2`). A revisão da avaliação lê o mesmo valor, venha de onde vier.
+   */
+  resultado: z.enum(["win", "draw"]).optional(),
+  /**
+   * **Só compatibilidade de leitura desde 15/9/2026.** A tablebase deixou de ser consultada: nada
+   * renova, confirma ou cobra este campo. As aulas antigas o trazem, e a evidência gravada nele (os
+   * `winningMoves` do v1) continua valendo como dado congelado no juiz do aluno.
+   */
   certificacao: z.strictObject({
     tipo: z.literal("tablebase"),
     estado: z.enum(["pendente", "herdada-v1", "confirmada", "indisponivel"]),
@@ -443,7 +455,6 @@ export const treinoV2Schema = z.strictObject({
   }).optional(),
   explicacaoConclusao: z.string().min(1).optional(),
 }).superRefine((treino, ctx) => {
-  if (treino.perfil === "final-certificado" && !treino.certificacao) ctx.addIssue({ code: "custom", path: ["certificacao"], message: "final certificado precisa declarar o estado da certificação" });
   if (treino.propriedade === "derivado" && !treino.origem) ctx.addIssue({ code: "custom", path: ["origem"], message: "treino derivado precisa declarar sua receita de origem" });
   if (treino.propriedade === "derivado" && treino.copia) ctx.addIssue({ code: "custom", path: ["copia"], message: "treino derivado usa a aula diretamente e não guarda cópia operacional" });
   if (treino.termino.tipo === "limite" && !treino.termino.maxPlies) ctx.addIssue({ code: "custom", path: ["termino", "maxPlies"], message: "término por limite precisa de maxPlies" });
@@ -489,6 +500,15 @@ export const aulaV2Schema = z.strictObject({
     convertidaEm: z.string().min(1).optional(),
   }).optional(),
 });
+
+/**
+ * O resultado que o treino cobra: o declarado pelo professor; numa aula antiga, o da certificação
+ * congelada; `null` quando nenhum dos dois existe. Uma função só, para o juiz do aluno e a revisão
+ * da avaliação lerem o mesmo valor.
+ */
+export function resultadoDoTreinoV2(treino: { resultado?: "win" | "draw"; certificacao?: { resultado?: "win" | "draw" } }): "win" | "draw" | null {
+  return treino.resultado ?? treino.certificacao?.resultado ?? null;
+}
 
 export type RevisaoPendenteV2 = z.infer<typeof revisaoPendenteV2Schema>;
 export type RevisaoDaFenV2 = z.infer<typeof revisaoDaFenV2Schema>;
@@ -738,14 +758,10 @@ function problemasDeLegalidade(
  * a revisão ter sido registrada. Travar o salvamento por causa disso prenderia o
  * professor num rascunho que ele não consegue nem guardar, por um estrago que não foi
  * ele que fez. O plano (§7) é explícito: o rascunho aceita pendência editorial
- * identificada; quem exige tudo em ordem é a publicação. **Quando a publicação v2
- * existir, estas duas passam a impedir** — está escrito aqui para não se perder.
+ * identificada. A publicação v2 as promovia a erro até 15/9/2026; desde a trava 7 de
+ * `docs/TRILHA-FINAIS.md` elas são aviso também ao publicar.
  *
- * **`CERTIFICACAO_SEM_APROVACAO` é ERRO.** Ela não descreve o mundo de fora: descreve
- * o documento contradizendo a si mesmo. Um treino que diz "conferido" sobre uma
- * posição que a própria aula não registra como aprovada é uma afirmação falsa escrita
- * pelo autor, e o autor pode desfazê-la na hora. O adaptador nunca a produz — ele
- * carimba `herdada-v1` justamente para não inventar confirmação que ninguém fez.
+ * **`CERTIFICACAO_SEM_APROVACAO` saiu em 15/9/2026**, com a tablebase (travas 2 e 3).
  *
  * ## Por que o hash entra por fora
  *
@@ -761,7 +777,6 @@ function problemasDeProveniencia(
   hashDaPosicao?: (posicao: Position) => string,
 ): ProblemaBrutoV2[] {
   const problemas: ProblemaBrutoV2[] = [];
-  const registro = new Map(aula.proveniencia.map((item) => [item.positionId, item]));
 
   for (const item of aula.proveniencia) {
     const posicao = positions[item.positionId];
@@ -787,20 +802,8 @@ function problemasDeProveniencia(
     }
   }
 
-  for (const treino of aula.treinos) {
-    const certificacao = treino.certificacao;
-    if (certificacao?.estado !== "confirmada") continue;
-    const daPosicao = registro.get(certificacao.positionId);
-    if (daPosicao?.estado === "approved") continue;
-    problemas.push({
-      codigo: "CERTIFICACAO_SEM_APROVACAO",
-      mensagem:
-        `este treino afirma que a posição "${certificacao.positionId}" foi conferida, ` +
-        `mas a aula ${daPosicao ? `a registra como "${daPosicao.estado}"` : "não registra a revisão dela"}`,
-      treinoId: treino.id,
-      campo: "certificacao.estado",
-    });
-  }
+  // `CERTIFICACAO_SEM_APROVACAO` saiu em 15/9/2026: a certificação é dado congelado de aula
+  // antiga e não afirma mais nada que precise de aprovação (travas 2 e 3).
 
   return problemas;
 }
@@ -895,9 +898,6 @@ export function problemasDaAulaV2(
     }
     for (const pratica of aula.praticas) {
       if (!proveniencia.has(pratica.positionId)) problemas.push({ codigo: "PRATICA_SEM_PROVENIENCIA", mensagem: `a prática usa ${pratica.positionId} sem registrar sua revisão`, praticaId: pratica.id, campo: "positionId" });
-    }
-    for (const treino of aula.treinos) {
-      if (treino.certificacao && !proveniencia.has(treino.certificacao.positionId)) problemas.push({ codigo: "CERTIFICACAO_SEM_PROVENIENCIA", mensagem: `a certificação usa ${treino.certificacao.positionId} sem registrar sua revisão`, treinoId: treino.id, campo: "certificacao.positionId" });
     }
   }
 

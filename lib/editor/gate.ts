@@ -19,18 +19,17 @@ import {
  *
  * `scripts/validate-content.ts --write` julga **com o juiz enfraquecido**. Ele
  * diz isso de si mesmo (linhas 137-139 de lá): enquanto grava os derivados, os
- * códigos `WINNING_MOVES_DESATUALIZADO`, `ALTERNATIVAS_DESATUALIZADAS` e
- * `TREINO_DESATUALIZADO` não são cobrados — não faria sentido acusar de estar
+ * códigos `TREINO_DESATUALIZADO` e `DIVIDA_DESATUALIZADA` não são cobrados — não faria sentido acusar de estar
  * desatualizado exatamente o que ele está atualizando. Uma rodada de `--write`
  * verde, portanto, não quer dizer que o conteúdo está bom; quer dizer que ele
  * está gravado.
  *
  * Então:
  *
- * - **Passada A** — `--rascunhos --refresh-cache --write`. Gera a etapa 3, os
- *   `winningMoves` e as alternativas, consultando a tablebase (e a rede, se
- *   faltar cache). Depois dela o rascunho em disco **mudou**, e a tela precisa
- *   recarregar: é aqui que a etapa 3 de verdade nasce.
+ * - **Passada A** — `--rascunhos --write`. Gera a etapa 3 a partir do roteiro.
+ *   Desde 2026-09-15 nenhuma tablebase é consultada: os `winningMoves` e as
+ *   alternativas gravados ficam congelados. Depois dela o rascunho em disco pode
+ *   ter **mudado**, e a tela precisa recarregar: é aqui que a etapa 3 nasce.
  * - **Passada B** — `--rascunhos`, sem nada. Lê limpo o que A escreveu, com o
  *   juiz inteiro e sem tocar em nada.
  *
@@ -181,7 +180,7 @@ export async function conferir(
 
   try {
     const receitas: Array<{ nome: "A" | "B"; args: string[] }> = [
-      { nome: "A", args: ["--rascunhos", "--refresh-cache", "--write", "--jsonl"] },
+      { nome: "A", args: ["--rascunhos", "--write", "--jsonl"] },
       { nome: "B", args: ["--rascunhos", "--jsonl"] },
     ];
 

@@ -73,7 +73,7 @@ export default async function PaginaDoEditorV2({ params }: { params: Promise<{ a
     const todas = lerPosicoesDoConteudoV2();
     const positions = Object.fromEntries(idsDePosicoesDaAulaV2(documento.aula).filter((id) => todas[id]).map((id) => [id, todas[id]]));
     const daProveniencia = problemasDaAulaV2(documento.aula, positions, hashDaPosicao)
-      .filter((problema) => problema.codigo.startsWith("PROVENIENCIA_") || problema.codigo === "CERTIFICACAO_SEM_APROVACAO");
+      .filter((problema) => problema.codigo.startsWith("PROVENIENCIA_"));
     return (
       <EditorV2
         aulaId={aula}
@@ -102,7 +102,7 @@ export default async function PaginaDoEditorV2({ params }: { params: Promise<{ a
    * recalculado na tela. Cada conferência roda onde ela pode rodar, e no ritmo dela.
    */
   const daProveniencia = problemasDaAulaV2(documento.aula, positions, hashDaPosicao)
-    .filter((problema) => problema.codigo.startsWith("PROVENIENCIA_") || problema.codigo === "CERTIFICACAO_SEM_APROVACAO");
+    .filter((problema) => problema.codigo.startsWith("PROVENIENCIA_"));
   return (
     <EditorV2
       aulaId={aula}

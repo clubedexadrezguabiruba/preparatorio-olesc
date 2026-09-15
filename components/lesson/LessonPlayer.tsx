@@ -44,6 +44,10 @@ export function LessonPlayer(props: Parameters<typeof LessonPlayerV1>[0] | {
   aulaV2: AulaDoAlunoV2;
   /** Aberta pelo cartão de revisão: começa na prática. */
   revisao?: boolean;
+  /** Com várias práticas, a que o cartão de revisão pediu (trava 9, 15/9/2026). */
+  praticaDaRevisao?: string;
+  /** O "assisti" da aula v2 sem prática, no fim do fluxo. */
+  leitura?: ReactNode;
   /** A server action que grava a etapa jogada. A prévia do editor não passa. */
   onEtapaFeita?: (tentativa: TentativaDeAulaV2) => void | Promise<unknown>;
   /**
@@ -329,10 +333,9 @@ function LessonPlayerV1({
             // posição nenhuma, e é por isso que a trava da MESMA posição não a
             // alcança (ver `lessonSchema`).
             position={
-              positions[
-                (lesson.stages.objective ?? lesson.stages.guided ?? lesson.stages.practice)!
-                  .positionId
-              ]
+              // A aula só com apresentação (trava 8, 15/9/2026) não tem posição de etapa: o
+              // diagrama sem FEN própria cai no primeiro que declara uma. Antes, o `!` quebrava a aula.
+              posicaoDaApresentacao(lesson, positions)
             }
             orientation={lesson.orientation}
             trilha={trilha}
@@ -410,11 +413,19 @@ function LessonPlayerV1({
         )}
 
         {/* A aula de leitura não joga: o fim dela é o fim do objetivo, e é ali
-            que ela pergunta se foi lida. */}
-        {stage === "objective" && leitura}
+            que ela pergunta se foi lida. Sem objetivo (trava 8), é a última etapa que a aula tem. */}
+        {stage === (available.includes("objective") ? "objective" : available.at(-1)) && leitura}
       </section>
     </div>
   );
+}
+
+/** A posição do diagrama da apresentação que não declara FEN própria. */
+function posicaoDaApresentacao(lesson: PacoteDeAula["lesson"], positions: PacoteDeAula["positions"]): Position {
+  const daAula = lesson.stages.objective ?? lesson.stages.guided ?? lesson.stages.practice;
+  if (daAula) return positions[daAula.positionId];
+  const fen = lesson.stages.intro?.passos.find((passo) => passo.fen)?.fen ?? "8/8/8/8/8/8/8/8 w - - 0 1";
+  return { id: `${lesson.id}-apresentacao`, fen } as unknown as Position;
 }
 
 /** A trilha das etapas — a mesma peça nas aulas v1 e v2. Ver o comentário em `trilha`. */
@@ -470,9 +481,13 @@ function avancoPara(proxima: EtapaDoAlunoV2 | undefined): string {
  * do v1 — só sobe o que foi jogado, os lances, e quem julga é o servidor —, com a publicação,
  * a revisão e o id idempotente da tentativa junto.
  */
-function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, onEtapaFeita, aoSair }: {
+function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEtapaFeita, aoSair, leitura }: {
   aulaV2: AulaDoAlunoV2;
   revisao?: boolean;
+  /** Com várias práticas, a que o cartão de revisão pediu (a entidade). Ausente: a primeira. */
+  praticaDaRevisao?: string;
+  /** O "assisti" da aula sem prática (trava 9, 15/9/2026), no fim do fluxo. */
+  leitura?: ReactNode;
   onEtapaFeita?: (tentativa: TentativaDeAulaV2) => void | Promise<unknown>;
   aoSair?: () => void;
 }) {
@@ -494,7 +509,8 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, onEtapaFeita, aoSair }
       if (etapa.tipo === "treino") roots[etapa.id] = etapa.jogavel.tree.root;
       if (etapa.tipo === "pratica") partidas.push({ key: etapa.id, positionId: etapa.positionId, startFen: etapa.fen });
     }
-    const pratica = aula.etapas.find((etapa) => etapa.tipo === "pratica");
+    const praticas = aula.etapas.filter((etapa) => etapa.tipo === "pratica");
+    const pratica = praticas.find((etapa) => etapa.entidadeId === praticaDaRevisao) ?? praticas[0];
     const inicial = revisao && pratica ? pratica.id : aula.etapas[0]?.id ?? "";
     open(idNaStore, inicial, roots, partidas);
     // Reabrir a aula (ou outra publicação dela) é o que zera o estado.
@@ -611,6 +627,7 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, onEtapaFeita, aoSair }
           />
         ) : null}
       </section>
+      {!proxima && leitura ? leitura : null}
       {/* §19.1 (fatia 10): o crédito que o professor pediu para mostrar, discreto, no fim da aula. */}
       {aula.creditos?.length && !proxima ? (
         <footer className="text-xs text-tinta-fraca">

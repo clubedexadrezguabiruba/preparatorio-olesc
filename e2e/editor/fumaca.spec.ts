@@ -18,7 +18,11 @@ type AulaCrua = { analises: Array<{ inicio: { positionId: string }; raizId: stri
 function lanceNovoDaRaiz(): string {
   const aula = JSON.parse(readFileSync(path.join(RAIZ, ".editor/v2", `${AULA_BASE}.json`), "utf8")) as AulaCrua;
   const analise = aula.analises[0];
-  const pacote = JSON.parse(readFileSync(path.join(RAIZ, "content/fixtures/aulas-v2/EX-FIXTURE-V2/publicacoes/pub-55947670bbcd7bd0.json"), "utf8")) as { posicoes: Record<string, { fen: string }> };
+  // O pacote ativo pelo ponteiro, e não por um id escrito aqui: a fixture é regenerada quando o adaptador muda
+  // (15/9/2026, o resultado declarado no treino), e o id é hash do conteúdo.
+  const pastaDaFixture = path.join(RAIZ, "content/fixtures/aulas-v2/EX-FIXTURE-V2");
+  const { publicationId } = JSON.parse(readFileSync(path.join(pastaDaFixture, "ativa.json"), "utf8")) as { publicationId: string };
+  const pacote = JSON.parse(readFileSync(path.join(pastaDaFixture, "publicacoes", `${publicationId}.json`), "utf8")) as { posicoes: Record<string, { fen: string }> };
   const jogo = new Chess(pacote.posicoes[analise.inicio.positionId].fen);
   const existentes = new Set(analise.nos[analise.raizId].filhos.map((id) => analise.nos[id].uci));
   const lance = jogo.moves({ verbose: true }).find((m) => !existentes.has(m.from + m.to) && !m.promotion);

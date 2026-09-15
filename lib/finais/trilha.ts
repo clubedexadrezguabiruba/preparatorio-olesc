@@ -73,17 +73,17 @@ export const CLASSE: Record<Classe, { nome: string; faixa: string; resumo: strin
   D: {
     nome: "Classe D",
     faixa: "~1350 a 1550",
-    resumo: "Rei e peão: quadrado, oposição, casas-chave. Peça menor e torre contra peão.",
+    resumo: "Rei e peão: quadrado, oposição, casas-chave. Torre e bispo contra peão, corrida, dama contra peão na 7ª.",
   },
   C: {
     nome: "Classe C",
     faixa: "~1550 a 1800",
-    resumo: "Torres: Lucena, Filidor, torre atrás do peão. Passados, bispo errado, dama contra peão.",
+    resumo: "Torres: Lucena, Filidor, torre atrás do peão. Passados, oposição distante, cavalo contra peão, bispo errado, zugzwang.",
   },
   B: {
     nome: "Classe B",
     faixa: "~1800 a 2000",
-    resumo: "Triangulação, oposição distante, corridas, sétima fila, Vancura, dois bispos.",
+    resumo: "Triangulação, Réti, sétima fila, Vancura, dois bispos, dama contra torre.",
   },
 };
 
@@ -124,10 +124,9 @@ export type AulaDaTrilha = {
   /**
    * O degrau da escada em que a aula mora — 1 a 5, de `lib/curso/nivel.ts`.
    *
-   * **Cortado pela `ordem`, e não pela `classe`.** Quatro classes não cabem em
-   * cinco níveis, e o teste que exigia "as 4 classes em 4 níveis distintos" era
-   * a própria prova de que derivar da classe não escala. A `ordem` já é ordem
-   * de pré-requisito: os cortes são 1–6, 7–12, 13–18, 19–34 e 35–49.
+   * **Declarado aula a aula** desde 15/9/2026 (trava 16): não há mais corte fixo
+   * pela `ordem`. O que continua valendo é a lista andar em ordem de nível, porque
+   * a `ordem` é ordem de pré-requisito.
    *
    * O campo é declarado, como em `Bloco.nivel`, e pelo mesmo motivo.
    */
@@ -153,20 +152,12 @@ export type AulaDaTrilha = {
  * tela; não conserta. O caminho barato, quando alguém encarar, são os ~135 mil
  * puzzles de final CC0 já em disco que o `filtrar-puzzles.ts` sabe recortar.
  */
-/**
- * O corte da §1 do documento: em que nível a `ordem` cai.
- *
- * Existe como função, e não só como a coluna escrita na lista, porque é ela que
- * o teste usa para conferir as 49 linhas uma a uma. Uma lista escrita à mão erra
- * uma célula; a função não erra a mesma célula duas vezes.
+/*
+ * **`nivelDaOrdem` saiu em 2026-09-15** (trava 16 de `docs/TRILHA-FINAIS.md`): os níveis
+ * deixaram de ter tamanho fixo. Cada linha abaixo declara o próprio `nivel`, e o teste
+ * confere só que ele é de 1 a 5 e que a lista anda em ordem de nível. Mover uma aula de
+ * nível é editar a linha dela.
  */
-export function nivelDaOrdem(ordem: number): Nivel {
-  if (ordem <= 6) return 1;
-  if (ordem <= 12) return 2;
-  if (ordem <= 18) return 3;
-  if (ordem <= 34) return 4;
-  return 5;
-}
 
 export const TRILHA: readonly AulaDaTrilha[] = [
   // ---------------------------------------------------------------- Nível 1  ·  FIDE até 800
@@ -191,12 +182,17 @@ export const TRILHA: readonly AulaDaTrilha[] = [
   { ordem: 11, id: "N1-KPK-RANKS", nivel: 2, classe: "D", nome: "Peão na 6ª e na 7ª: quem joga decide" },
   { ordem: 12, id: "N1-ROOK-PAWN", nivel: 2, classe: "D", nome: "Peão de torre: o empate do canto" },
   // ---------------------------------------------------------------- Nível 3  ·  FIDE 1000–1200
-  { ordem: 13, id: "N2-KING-MANEUVER", nivel: 3, classe: "D", nome: "Oposição além do básico: a distante" },
-  { ordem: 14, id: "N4-B-VS-PAWNS", nivel: 3, classe: "D", nome: "Bispo contra peão" },
-  { ordem: 15, id: "N4-N-VS-PAWNS", nivel: 3, classe: "D", nome: "Cavalo contra peão" },
-  { ordem: 16, id: "N3-R-VS-PAWN", nivel: 3, classe: "D", nome: "Torre contra peão: contar, cortar, aproximar" },
-  { ordem: 17, id: "N1-KING-VS-PAWNS", nivel: 3, classe: "D", nome: "Rei contra dois peões passados" },
-  { ordem: 18, id: "N1-PAWNS-BLOCKADE", nivel: 3, classe: "D", nome: "Um peão segura dois: o bloqueio" },
+  //
+  // Dois pares trocados com o nível 4 em 2026-09-14, por decisão do Doug (§5 e
+  // §11.16 do documento): corrida de peões e dama contra peão na 7ª acontecem
+  // toda rodada numa partida de criança; oposição distante e cavalo contra peão,
+  // quase nunca. Os dois que sobem entram na meta da OLESC.
+  { ordem: 13, id: "N3-R-VS-PAWN", nivel: 3, classe: "D", nome: "Torre contra peão: contar, cortar, aproximar" },
+  { ordem: 14, id: "N2-PAWN-RACES", nivel: 3, classe: "D", nome: "Corrida de peões: quem promove primeiro" },
+  { ordem: 15, id: "N4-Q-VS-PAWN", nivel: 3, classe: "D", nome: "Dama contra peão na 7ª, e as exceções" },
+  { ordem: 16, id: "N1-KING-VS-PAWNS", nivel: 3, classe: "D", nome: "Rei contra dois peões passados" },
+  { ordem: 17, id: "N1-PAWNS-BLOCKADE", nivel: 3, classe: "D", nome: "Um peão segura dois: o bloqueio" },
+  { ordem: 18, id: "N4-B-VS-PAWNS", nivel: 3, classe: "D", nome: "Bispo contra peão" },
 
   // ---------------------------------------------------------------- Nível 4  ·  FIDE 1200–1400
   { ordem: 19, id: "N3-LUCENA", nivel: 4, classe: "C", nome: "Lucena: a ponte" },
@@ -206,15 +202,15 @@ export const TRILHA: readonly AulaDaTrilha[] = [
   { ordem: 23, id: "N3-CUT-FILE", nivel: 4, classe: "C", nome: "Cortar o rei pela coluna" },
   { ordem: 24, id: "N3-DEFENSIVE-EXCEPTIONS", nivel: 4, classe: "C", nome: "Defesa passiva: quando ela segura" },
   { ordem: 25, id: "N3-R-VS-2P", nivel: 4, classe: "C", nome: "Torre contra dois peões" },
-  { ordem: 26, id: "N2-OUTSIDE-PASSER", nivel: 4, classe: "C", nome: "Peão passado distante" },
-  { ordem: 27, id: "N2-PROTECTED-PASSER", nivel: 4, classe: "C", nome: "Peão passado protegido" },
-  { ordem: 28, id: "N1-K2P-VS-K", nivel: 4, classe: "C", nome: "Rei e dois peões contra rei: ligados e dobrados" },
-  { ordem: 29, id: "N2-PAWN-RACES", nivel: 4, classe: "C", nome: "Corrida de peões: quem promove primeiro" },
-  { ordem: 30, id: "N4-Q-VS-PAWN", nivel: 4, classe: "C", nome: "Dama contra peão na 7ª, e as exceções" },
+  { ordem: 26, id: "N2-KING-MANEUVER", nivel: 4, classe: "C", nome: "Oposição além do básico: a distante" },
+  { ordem: 27, id: "N2-OUTSIDE-PASSER", nivel: 4, classe: "C", nome: "Peão passado distante" },
+  { ordem: 28, id: "N2-PROTECTED-PASSER", nivel: 4, classe: "C", nome: "Peão passado protegido" },
+  { ordem: 29, id: "N1-K2P-VS-K", nivel: 4, classe: "C", nome: "Rei e dois peões contra rei: ligados e dobrados" },
+  { ordem: 30, id: "N4-N-VS-PAWNS", nivel: 4, classe: "C", nome: "Cavalo contra peão" },
   { ordem: 31, id: "N4-WRONG-BISHOP", nivel: 4, classe: "C", nome: "Bispo errado com peão de torre" },
   { ordem: 32, id: "N4-OPPOSITE-BISHOPS", nivel: 4, classe: "C", nome: "Bispos de cores opostas: a fortaleza" },
   { ordem: 33, id: "N4-N-AND-ROOK-PAWN", nivel: 4, classe: "C", nome: "Cavalo e peão de torre contra rei" },
-  { ordem: 34, id: "N4-Q-VS-ROOK", nivel: 4, classe: "C", nome: "Dama contra torre: o básico" },
+  { ordem: 34, id: "N2-ZUGZWANG", nivel: 4, classe: "C", nome: "Zugzwang: a obrigação de mover" },
 
   // ---------------------------------------------------------------- Nível 5  ·  FIDE 1400+
   { ordem: 35, id: "N2-TRIANGULATION", nivel: 5, classe: "B", nome: "Triangulação" },
@@ -225,13 +221,13 @@ export const TRILHA: readonly AulaDaTrilha[] = [
   { ordem: 40, id: "N3-R-2P-VS-R", nivel: 5, classe: "B", nome: "Torre e dois peões ligados contra torre" },
   { ordem: 41, id: "N3-SEVENTH-RANK", nivel: 5, classe: "B", nome: "A sétima fila" },
   { ordem: 42, id: "N5-VANCURA", nivel: 5, classe: "B", nome: "Defesa de Vancura" },
-  { ordem: 43, id: "N3-R-VS-RN-PAWNS", nivel: 5, classe: "B", nome: "Torre contra peão de torre e de bispo: as exceções" },
+  { ordem: 43, id: "N3-R-VS-RN-PAWNS", nivel: 5, classe: "B", nome: "Torre contra peão de torre e de cavalo: as exceções" },
   { ordem: 44, id: "N0-2B-MATE", nivel: 5, classe: "B", nome: "Dois bispos contra rei" },
   { ordem: 45, id: "N4-OPPOSITE-BISHOPS-2P", nivel: 5, classe: "B", nome: "Bispos de cores opostas com dois peões" },
   { ordem: 46, id: "N4-SAME-BISHOPS", nivel: 5, classe: "B", nome: "Bispo e peão contra bispo da mesma cor" },
   { ordem: 47, id: "N4-BISHOP-VS-KNIGHT", nivel: 5, classe: "B", nome: "Bispo contra cavalo com um peão" },
   { ordem: 48, id: "N2-DOUBLED-ISOLATED", nivel: 5, classe: "B", nome: "Peões dobrados e isolados no final de peões" },
-  { ordem: 49, id: "N2-ZUGZWANG", nivel: 5, classe: "B", nome: "Zugzwang: a obrigação de mover" },
+  { ordem: 49, id: "N4-Q-VS-ROOK", nivel: 5, classe: "B", nome: "Dama contra torre: o básico" },
 ];
 
 const POR_ID = new Map(TRILHA.map((aula) => [aula.id, aula]));
@@ -352,6 +348,12 @@ export type ProgressoDaAula = {
    * (aluno, aula), escrita pelo servidor depois de reproduzir a partida.
    */
   readonly escada: ProgressoDaEscada;
+  /**
+   * Na aula v2 com várias práticas, a que venceu primeiro na escada — o cartão de revisão abre
+   * essa (`juntarEscadas` em `lib/finais/escada.ts`). Ausente: a aula tem uma prática só, ou
+   * nenhuma está na escada.
+   */
+  readonly praticaParaRevisar?: string;
 };
 
 export const AULA_ZERADA: ProgressoDaAula = {

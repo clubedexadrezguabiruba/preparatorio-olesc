@@ -4,10 +4,10 @@ import { useId, useMemo, useState } from "react";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { Dialogo } from "@/components/editor-v2/Dialogo";
 import { SeletorDoAcervo } from "@/components/editor-v2/SeletorDoAcervo";
-import { pecasDaFen, ROTULO_DO_RESULTADO, type PosicaoDoAcervoV2 } from "@/lib/editor-v2/acervo";
+import { ROTULO_DO_RESULTADO, type PosicaoDoAcervoV2 } from "@/lib/editor-v2/acervo";
 import type { AdicaoAoAcervoV2, ObraDoRegistro, PedidoDePosicaoNoAcervoV2 } from "@/lib/editor-v2/acervo-em-disco";
 import { ORIGENS_DA_POSICAO, type AulaV2, type OrigemDaPosicaoV2, type PraticaV2 } from "@/lib/editor-v2/modelo";
-import { ADVERSARIO_PADRAO, MAX_PECAS_DA_PRATICA, mudancasDeAvaliacao, prepararPratica, type PraticaPreparadaV2 } from "@/lib/editor-v2/pratica";
+import { ADVERSARIO_PADRAO, mudancasDeAvaliacao, prepararPratica, type PraticaPreparadaV2 } from "@/lib/editor-v2/pratica";
 import { ROTULO_DA_ORIGEM, estadoDaProveniencia, prepararRevisaoDaFen } from "@/lib/editor-v2/proveniencia";
 import type { Position } from "@/lib/lesson/schema";
 
@@ -15,7 +15,7 @@ import type { Position } from "@/lib/lesson/schema";
  * A prática contra o computador — §17.1, fatia 10.
  *
  * Os campos são os que o `PracticeStage` sabe jogar; os fatos que não se escolhem aparecem em
- * texto (obrigatória, uma por aula, juiz até 7 peças). Editar posição, lado, objetivo ou adversário
+ * texto (quantas a aula quiser, no fim do fluxo). Editar posição, lado, objetivo ou adversário
  * cria nova versão da avaliação, e a janela diz isso **antes** de salvar.
  */
 export function DialogoPratica({ aula, praticaId, positions, acervo, obras, professor, aoSalvar, aoExcluir, aoPrever, aoAdicionarAoAcervo, aoFechar }: {
@@ -48,7 +48,7 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
   // A posição nova a partir de um capítulo desta aula.
   const capitulosComFen = useMemo(() => aula.capitulos.flatMap((capitulo) => {
     const analise = aula.analises.find((item) => item.id === capitulo.analiseId);
-    if (analise?.inicio.tipo !== "fen" || pecasDaFen(analise.inicio.fen) > MAX_PECAS_DA_PRATICA) return [];
+    if (analise?.inicio.tipo !== "fen") return [];
     return [{ capitulo, analise, fen: analise.inicio.fen }];
   }), [aula]);
   const [capituloId, setCapituloId] = useState(capitulosComFen[0]?.capitulo.id ?? "");
@@ -57,7 +57,6 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
   const [origem, setOrigem] = useState<OrigemDaPosicaoV2 | "">("");
   const [obra, setObra] = useState("");
   const [resultado, setResultado] = useState<Position["expectedResult"] | "">("");
-  const [pedeResultado, setPedeResultado] = useState(false);
   const [adicionando, setAdicionando] = useState(false);
 
   const posicao = positions[positionId];
@@ -79,17 +78,17 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
 
   const adicionar = async () => {
     if (!escolhido) return;
+    // "De onde veio" é opcional desde 15/9 (trava 7): sem resposta, fica desconhecida e a conferência avisa.
     const revisao = revisaoDoCapitulo ?? (() => {
-      const r = prepararRevisaoDaFen({ origem, mostrarCredito: false }, escolhido.fen, professor, new Date());
+      const r = prepararRevisaoDaFen({ origem: origem || "desconhecida", mostrarCredito: false }, escolhido.fen, professor, new Date());
       return r.ok ? r.revisao : null;
     })();
-    if (!revisao) { setErro({ campo: "origem", mensagem: "diga de onde a posição veio antes de salvá-la no curso" }); return; }
+    if (!revisao) { setErro({ campo: "origem", mensagem: "não foi possível registrar a origem desta posição" }); return; }
     setAdicionando(true);
     try {
       const resposta = await aoAdicionarAoAcervo({ aulaId: aula.id, fen: escolhido.fen, revisao, ...(obra ? { obra } : {}), ...(resultado ? { resultadoDeclarado: resultado } : {}), etiqueta: escolhido.capitulo.titulo });
       if (!resposta.ok) {
         setErro({ campo: resposta.campo, mensagem: resposta.mensagem });
-        if (resposta.campo === "resultado") setPedeResultado(true);
         return;
       }
       setAvisos(resposta.avisos);
@@ -121,7 +120,7 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
         </>
       )}
     >
-      <p className="text-xs text-tinta-fraca">Uma por aula, sempre no fim. Até {MAX_PECAS_DA_PRATICA} peças.</p>
+      <p className="text-xs text-tinta-fraca">Entra no fim da aula. A aula pode ter mais de uma: ela só fica aprendida quando o aluno aprende todas.</p>
 
       <label className="flex flex-col gap-1 text-sm text-tinta">
         Título
@@ -139,9 +138,9 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
             ))}
           </div>
           {fonte === "acervo" ? (
-            <SeletorDoAcervo acervo={acervo} escolhida={positionId || null} aoEscolher={escolherPosicao} maxPecas={MAX_PECAS_DA_PRATICA} />
+            <SeletorDoAcervo acervo={acervo} escolhida={positionId || null} aoEscolher={escolherPosicao} />
           ) : capitulosComFen.length === 0 ? (
-            <p className="text-sm text-tinta-fraca">Nenhum capítulo desta aula começa numa FEN própria de até {MAX_PECAS_DA_PRATICA} peças.</p>
+            <p className="text-sm text-tinta-fraca">Nenhum capítulo desta aula começa numa FEN própria.</p>
           ) : (
             <div className="flex flex-col gap-2 rounded-md border border-borda-fraca p-2">
               <label className="flex flex-col gap-1 text-sm text-tinta">
@@ -165,22 +164,20 @@ export function DialogoPratica({ aula, praticaId, positions, acervo, obras, prof
               )}
               {(revisaoDoCapitulo?.origem ?? origem) === "obra" || (revisaoDoCapitulo?.origem ?? origem) === "estudo-lichess" ? (
                 <label className="flex flex-col gap-1 text-xs text-tinta-fraca">
-                  Obra do registro (content/sources.json)
+                  Obra do registro (opcional)
                   <select value={obra} onChange={(e) => setObra(e.currentTarget.value)} className={campo}>
                     <option value="">— escolha —</option>
                     {obras.map((item) => <option key={item.slug} value={item.slug}>{item.titulo}</option>)}
                   </select>
                 </label>
               ) : null}
-              {pedeResultado ? (
-                <label className="flex flex-col gap-1 text-xs text-tinta-fraca">
-                  Resultado esperado
-                  <select value={resultado} onChange={(e) => setResultado(e.currentTarget.value as Position["expectedResult"])} className={campo}>
-                    <option value="">— escolha —</option>
-                    {(["win-white", "win-black", "draw"] as const).map((item) => <option key={item} value={item}>{ROTULO_DO_RESULTADO[item]}</option>)}
-                  </select>
-                </label>
-              ) : null}
+              <label className="flex flex-col gap-1 text-xs text-tinta-fraca">
+                Resultado da posição (você decide; o motor do editor ajuda a conferir)
+                <select value={resultado} onChange={(e) => { setResultado(e.currentTarget.value as Position["expectedResult"]); setErro(null); }} aria-invalid={erro?.campo === "resultado" || undefined} className={campo}>
+                  <option value="">— escolha —</option>
+                  {(["win-white", "win-black", "draw"] as const).map((item) => <option key={item} value={item}>{ROTULO_DO_RESULTADO[item]}</option>)}
+                </select>
+              </label>
               <button type="button" disabled={adicionando} onClick={() => void adicionar()} className="foco w-fit rounded-md border border-borda px-3 py-1.5 text-sm text-tinta hover:bg-carta-toque disabled:opacity-40">
                 {adicionando ? "Adicionando…" : "Adicionar ao acervo e usar"}
               </button>

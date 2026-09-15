@@ -49,13 +49,13 @@ test("D11: a lista traz a ativa e a anterior primeiro; reativar devolve a anteri
     cpSync(ARQUIVO_DA_POSICAO, path.join(raiz, ARQUIVO_DA_POSICAO));
     cpSync("content/tablebase-cache", path.join(raiz, "content", "tablebase-cache"), { recursive: true });
     const regua = lerRegua();
-    assert.equal((await conferirAulaV2(ID, { raiz, env: ligada, rede: false, regua, documentoInicial: adaptarLessonV1(lesson, positions) })).verde, true);
+    assert.equal((await conferirAulaV2(ID, { raiz, env: ligada, regua, documentoInicial: adaptarLessonV1(lesson, positions) })).verde, true);
     const a = await publicarAulaV2(ID, { raiz, env: ligada });
 
     const documento = lerDocumentoV2(ID, raiz)!;
     const renomeada = executarComando(documento.aula, { tipo: "RENOMEAR_AULA", titulo: "Segunda publicação" }, positions);
     assert.equal(gravarDocumentoV2(ID, renomeada, documento.hash, raiz, ligada).ok, true);
-    assert.equal((await conferirAulaV2(ID, { raiz, env: ligada, rede: false, regua })).verde, true);
+    assert.equal((await conferirAulaV2(ID, { raiz, env: ligada, regua })).verde, true);
     const b = await publicarAulaV2(ID, { raiz, env: ligada });
     assert.ok(a.ok && b.ok);
 

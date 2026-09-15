@@ -11,10 +11,10 @@ export type PedidoDeImportacaoDeEstudo = {
   leitura: LeituraDoEstudo;
   destinos: Record<number, DestinoNoEstudo>;
   revisao: RevisaoDaFenV2;
-  /** A obra do registro para a posição da prática entrar no acervo. */
+  /** A obra do registro de onde vem a posição da prática. Vazio: não informada (a conferência avisa). */
   obraDaPratica: string;
-  /** Usado só se a tablebase não tiver a posição da prática no cache — o servidor avisa. */
-  resultadoDaPratica: "win-white" | "win-black" | "draw";
+  /** O resultado da posição de cada prática, pelo número do capítulo — declarado pelo professor (trava 2, 15/9/2026). */
+  resultadosDasPraticas: Record<number, "win-white" | "win-black" | "draw">;
 };
 
 const ROTULO: Record<DestinoNoEstudo, string> = { introducao: "Introdução", capitulo: "Capítulo", treino: "Treino", pratica: "Prática", fora: "Fora" };
@@ -43,8 +43,9 @@ export function PainelDoEstudo({ aula, leitura, positions, obras, professor, apl
   const [credito, setCredito] = useState(true);
   const [direito, setDireito] = useState(false);
   const [obraDaPratica, setObraDaPratica] = useState("posicoes-do-preparatorio");
-  const ladoDaPratica = leitura.capitulos.find((c) => c.sugerido === "pratica")?.lado ?? "white";
-  const [resultadoDaPratica, setResultadoDaPratica] = useState<PedidoDeImportacaoDeEstudo["resultadoDaPratica"]>(ladoDaPratica === "black" ? "win-black" : "win-white");
+  const [resultadosDasPraticas, setResultadosDasPraticas] = useState<PedidoDeImportacaoDeEstudo["resultadosDasPraticas"]>(
+    () => Object.fromEntries(leitura.capitulos.map((c) => [c.numero, c.lado === "black" ? "win-black" : "win-white"])),
+  );
   const grupo = useId();
 
   const revisao: RevisaoDaFenV2 = useMemo(() => ({
@@ -84,6 +85,16 @@ export function PainelDoEstudo({ aula, leitura, positions, obras, professor, apl
                 </select>
               </label>
             </div>
+            {destinos[c.numero] === "pratica" ? (
+              <label className="mt-1 flex flex-wrap items-center gap-1 text-xs text-tinta-fraca">
+                Resultado desta posição (você decide; o motor do editor ajuda a conferir)
+                <select aria-label={`Resultado da prática «${c.titulo}»`} value={resultadosDasPraticas[c.numero]} onChange={(e) => { const valor = e.currentTarget.value as PedidoDeImportacaoDeEstudo["resultadosDasPraticas"][number]; setResultadosDasPraticas((atual) => ({ ...atual, [c.numero]: valor })); }} className={campo}>
+                  <option value="win-white">brancas ganham</option>
+                  <option value="win-black">pretas ganham</option>
+                  <option value="draw">empate</option>
+                </select>
+              </label>
+            ) : null}
             {c.perdas.map((perda) => <p key={perda} className="mt-1 text-xs text-aviso-tinta"><span className="rotulo">perda</span> {perda}</p>)}
           </li>
         ))}
@@ -107,30 +118,21 @@ export function PainelDoEstudo({ aula, leitura, positions, obras, professor, apl
         </div>
         <label className="flex items-center gap-2 text-xs text-tinta"><input type="checkbox" checked={credito} onChange={(e) => setCredito(e.currentTarget.checked)} className="foco" />Mostrar crédito ao aluno no fim da aula</label>
         {origemDeTerceiro(origem) ? (
-          <label className="flex items-center gap-2 text-xs text-tinta"><input type="checkbox" checked={direito} onChange={(e) => setDireito(e.currentTarget.checked)} className="foco" />Os comentários e narrações do estudo são meus, ou tenho direito de usá-los (sem isto a aula não publica)</label>
+          <label className="flex items-center gap-2 text-xs text-tinta"><input type="checkbox" checked={direito} onChange={(e) => setDireito(e.currentTarget.checked)} className="foco" />Os comentários e narrações do estudo são meus, ou tenho direito de usá-los (sem isto a conferência avisa)</label>
         ) : null}
         {contagem("pratica") ? (
           <label className="flex flex-col gap-1 text-xs text-tinta-fraca">
-            De que obra vem a posição da prática
+            De que obra vêm as posições das práticas (opcional)
             <select value={obraDaPratica} onChange={(e) => setObraDaPratica(e.currentTarget.value)} className={campo}>
+              <option value="">— não informar —</option>
               {obras.map((item) => <option key={item.slug} value={item.slug}>{item.titulo}</option>)}
-            </select>
-          </label>
-        ) : null}
-        {contagem("pratica") ? (
-          <label className="flex flex-col gap-1 text-xs text-tinta-fraca">
-            Resultado esperado da prática, se o curso ainda não o conhecer
-            <select value={resultadoDaPratica} onChange={(e) => setResultadoDaPratica(e.currentTarget.value as PedidoDeImportacaoDeEstudo["resultadoDaPratica"])} className={campo}>
-              <option value="win-white">brancas ganham</option>
-              <option value="win-black">pretas ganham</option>
-              <option value="draw">empate</option>
             </select>
           </label>
         ) : null}
       </fieldset>
 
       <p role="status" className="text-sm text-tinta">
-        A aula ganha: {contagem("introducao")} quadro(s) de introdução, {contagem("capitulo")} capítulo(s), {contagem("treino")} treino(s) e {contagem("pratica")} prática.
+        A aula ganha: {contagem("introducao")} quadro(s) de introdução, {contagem("capitulo")} capítulo(s), {contagem("treino")} treino(s) e {contagem("pratica")} prática(s).
       </p>
       {plano.ok ? plano.plano.avisos.map((aviso) => <p key={aviso} className="text-xs text-aviso-tinta"><span className="rotulo">revisar</span> {aviso}</p>) : (
         <p role="alert" className="rounded-md border border-erro bg-erro-superficie/10 p-2 text-sm text-erro-texto">{plano.mensagem}</p>
@@ -139,7 +141,7 @@ export function PainelDoEstudo({ aula, leitura, positions, obras, professor, apl
         <button
           type="button"
           disabled={!plano.ok || aplicando}
-          onClick={() => aoAplicar({ leitura, destinos, revisao, obraDaPratica, resultadoDaPratica })}
+          onClick={() => aoAplicar({ leitura, destinos, revisao, obraDaPratica, resultadosDasPraticas })}
           className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
         >
           {aplicando ? "Importando…" : "Importar o estudo"}

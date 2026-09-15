@@ -33,7 +33,7 @@ test("aplicado: 2 quadros, 2 capítulos com Qg6??, 4 treinos, 3 mates no 07 e Qg
   const leitura = lerEstudo(PGN);
   const plano = planejarEstudo(vazia(), leitura, { destinos: {}, revisao }, {});
   assert.ok(plano.ok, !plano.ok ? plano.mensagem : "");
-  assert.deepEqual(plano.plano.pratica, { numero: 9, titulo: "PRÁTICA LIVRE - Vença sem afogar", fen: "8/8/8/8/4k3/8/8/3QK3 w - - 0 1", lado: "white" });
+  assert.deepEqual(plano.plano.praticas, [{ numero: 9, titulo: "PRÁTICA LIVRE - Vença sem afogar", fen: "8/8/8/8/4k3/8/8/3QK3 w - - 0 1", lado: "white" }]);
   const aula = executarComando(vazia(), { tipo: "IMPORTAR_ESTUDO", plano: plano.plano }, {});
 
   assert.deepEqual(aula.fluxo.map((e) => e.tipo), ["introducao", "capitulo", "capitulo", "treino", "treino", "treino", "treino"]);

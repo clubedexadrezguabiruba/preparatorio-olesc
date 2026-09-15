@@ -5,20 +5,29 @@
  *
  * `problemasDaAulaV2` é a régua do **rascunho**: ela aponta tudo, e parte do que aponta é
  * aviso de propósito, porque o professor precisa conseguir guardar uma aula no meio do
- * caminho (plano §7). Várias dessas conferências trazem escrito, no próprio comentário,
- * "quando a publicação v2 existir, esta passa a impedir". Este arquivo é essa publicação.
+ * caminho (plano §7).
  *
  * `problemasParaPublicarV2` usa a mesma régua e sobe a altura em dois movimentos:
  *
- * 1. **promove** a erro quatro avisos do rascunho — proveniência caduca ou divergente, FEN
- *    importada sem revisão e revisão pendente (§5: "revisões obrigatórias devem ser
+ * 1. **promove** a erro o aviso de revisão pendente (§5: "revisões obrigatórias devem ser
  *    resolvidas antes da publicação");
- * 2. **acrescenta** as regras que só fazem sentido para publicar: certificação pendente,
- *    caduca ou refutada; a prática única; e a revisão de avaliação gravada que não é a que
- *    o conteúdo produz.
+ * 2. **acrescenta** as regras que só fazem sentido para publicar: aula extra sem nível ou
+ *    classe, nível diferente da trilha, e a revisão de avaliação gravada que não é a que o
+ *    conteúdo produz.
  *
- * A régua de voz entra aqui como **aviso, sempre** (decisão do Doug, 13/9/2026): ela é
- * editorial, e a última palavra é do professor.
+ * ## As travas de 15/9/2026 (decisão do Doug, `docs/TRILHA-FINAIS.md`)
+ *
+ * **O professor tem a última palavra.** Saíram daqui, e não impedem mais publicar:
+ *
+ * - `CERTIFICACAO_PENDENTE`, `CERTIFICACAO_CADUCA` e `CERTIFICACAO_REFUTADA` (travas 2 e 3):
+ *   a tablebase não é mais consultada. O resultado do treino é declarado pelo professor
+ *   (`treino.resultado`); a certificação gravada nas aulas antigas fica como dado congelado.
+ * - `PRATICA_AUSENTE` e `PRATICAS_MULTIPLAS` (trava 9): a aula tem nenhuma, uma ou várias.
+ * - A promoção de `PROVENIENCIA_CADUCA`, `PROVENIENCIA_DIVERGE` e `FEN_IMPORTADA_SEM_REVISAO`
+ *   (trava 7): continuam aparecendo, como aviso.
+ * - `TEXTO_SEM_DIREITO_DECLARADO` virou aviso (decisão sobre direitos autorais).
+ *
+ * A régua de voz entra aqui como **aviso, sempre** (decisão do Doug, 13/9/2026).
  *
  * ## Por que uma lista de regras, e não uma função comprida
  *
@@ -28,28 +37,23 @@
  *
  * ## Onde roda
  *
- * No servidor (o hash da posição e o da certificação vêm do `node:crypto`). A tela recebe o
- * resultado pronto, pela action do botão Conferir.
+ * No servidor (o hash da posição vem do `node:crypto`). A tela recebe o resultado pronto,
+ * pela action do botão Conferir.
  */
 import { reprovacoes, type Fala, type Regua } from "../lesson/regua.ts";
 import { aulaDaTrilha } from "../finais/trilha.ts";
 import type { Position } from "../lesson/schema.ts";
 import type { RevisoesDaAulaV2 } from "./avaliacao.ts";
-import { hashCanonico, hashDaPosicao } from "./hash.ts";
-import { problemasDaAulaV2, type AulaV2, type LocalizacaoProblemaV2, type ProblemaV2, type TreinoV2 } from "./modelo.ts";
-import { fenDaQuestaoDoTreino } from "./propriedade-treino.ts";
+import { hashDaPosicao } from "./hash.ts";
+import { problemasDaAulaV2, type AulaV2, type LocalizacaoProblemaV2, type ProblemaV2 } from "./modelo.ts";
 import { analiseTemTexto, origemDeTerceiro } from "./proveniencia.ts";
+import { temEvidenciaCongelada } from "./treino-jogavel.ts";
 import { falasDoTreinoV2 } from "./voz-do-treino.ts";
 
 export type ContextoDePublicacaoV2 = {
   positions: Record<string, Position>;
   /** A régua de voz. Sem ela, a voz não é conferida — e isso não impede nada. */
   regua?: Regua;
-  /**
-   * Os lances que preservam o resultado, pelo **cache** da tablebase, sem rede. `null` quando
-   * a posição não está no cache. Sem a função, a evidência é conferida só contra o alvo.
-   */
-  tablebase?: (fen: string, resultado: "win" | "draw") => string[] | null;
   /** As revisões gravadas num pacote, para comparar com as recalculadas. */
   revisoes?: { gravadas: RevisoesDaAulaV2; recalculadas: RevisoesDaAulaV2 };
 };
@@ -69,31 +73,6 @@ const erro = (aula: AulaV2, codigo: string, mensagem: string, localizacao: Omit<
   mensagem,
   localizacao: { aulaId: aula.id, ...localizacao },
 });
-
-/**
- * O alvo da certificação de um treino: o resultado e a posição de cada pergunta.
- *
- * É o que a evidência afirma — "nestas posições, estes lances preservam este resultado". Uma
- * pergunta que muda de posição, ou o resultado que muda, deixa a evidência falando de outra
- * coisa. Respostas e textos ficam de fora: eles são julgados **contra** a evidência, e não
- * fazem parte dela.
- */
-export function alvoDaCertificacaoV2(aula: AulaV2, treino: TreinoV2, positions: Record<string, Position>): string {
-  return hashCanonico({
-    resultado: treino.certificacao?.resultado ?? null,
-    questoes: treino.questoes.map((questao) => [questao.id, fenDaQuestaoDoTreino(aula, treino, questao, positions)]).sort(),
-  });
-}
-
-function certificados(aula: AulaV2): TreinoV2[] {
-  return aula.treinos.filter((treino) => treino.perfil === "final-certificado" && treino.certificacao);
-}
-
-const ESTADO_DITO: Record<string, string> = {
-  pendente: "ainda não foi conferida contra a tablebase",
-  "herdada-v1": "veio da aula v1 e ainda não foi confirmada pelo Conferir do v2",
-  indisponivel: "não pôde ser calculada: a tablebase não alcança uma das posições",
-};
 
 const ehExtra = (aula: AulaV2) => aula.id.startsWith("EX-");
 
@@ -135,112 +114,22 @@ export const REGRAS_PUBLICACAO_V2: RegraDePublicacaoV2[] = [
       ? [{ codigo: "AULA_FORA_DA_TRILHA", severidade: "aviso" as const, mensagem: "esta aula não está na trilha do curso: publicada, ela abre pelo endereço, mas não aparece em /finais nem conta para o fechamento de nível nenhum", localizacao: { aulaId: aula.id } }]
       : [],
   },
-  { codigo: "PROVENIENCIA_CADUCA", impede: "posição mudou depois de a revisão ser registrada", promove: true },
-  { codigo: "PROVENIENCIA_DIVERGE", impede: "estado da revisão diferente do arquivo da posição", promove: true },
-  { codigo: "FEN_IMPORTADA_SEM_REVISAO", impede: "análise começa numa FEN importada sem revisão", promove: true },
   { codigo: "REVISAO_PENDENTE", impede: "texto marcado para revisão depois de trocar a posição", promove: true },
   /*
    * §12.3 e plano §12 (fatia 10): narração que chegou com uma posição de outra pessoa — obra, estudo
-   * do Lichess, partida — só publica com a declaração do professor de que o texto é dele ou que ele
-   * tem direito de usá-lo. Copiar o comentário para a narração na importação não concede o direito.
+   * do Lichess, partida — sem a declaração do professor de que o texto é dele ou que ele tem direito
+   * de usá-lo. **Aviso desde 15/9/2026** (decisão do Doug sobre direitos autorais): publica, e o
+   * aviso fica à vista até a declaração ser feita.
    */
   {
     codigo: "TEXTO_SEM_DIREITO_DECLARADO",
-    impede: "narração de posição de terceiros sem a declaração de direito de uso",
+    impede: "aviso: narração de posição de terceiros sem a declaração de direito de uso — publica",
     julgar: (aula) => aula.analises.flatMap((analise) => {
       const revisao = analise.inicio.tipo === "fen" ? analise.inicio.revisao : undefined;
       if (!revisao || !origemDeTerceiro(revisao.origem) || revisao.direitoDosTextos || !analiseTemTexto(aula, analise)) return [];
       const capitulo = aula.capitulos.find((item) => item.analiseId === analise.id);
-      return [erro(aula, "TEXTO_SEM_DIREITO_DECLARADO", `as narrações ${capitulo ? `do capítulo «${capitulo.titulo}» ` : ""}vieram de outra pessoa — em «De onde veio a posição», marque que os textos são seus ou que você pode usá-los`, { analiseId: analise.id, campo: "inicio.revisao" })];
+      return [{ ...erro(aula, "TEXTO_SEM_DIREITO_DECLARADO", `as narrações ${capitulo ? `do capítulo «${capitulo.titulo}» ` : ""}vieram de outra pessoa — a aula publica, mas em «De onde veio a posição» vale marcar que os textos são seus ou que você pode usá-los`, { analiseId: analise.id, campo: "inicio.revisao" }), severidade: "aviso" as const }];
     }),
-  },
-  {
-    codigo: "CERTIFICACAO_PENDENTE",
-    impede: "final certificado sem certificação confirmada",
-    julgar: (aula) => certificados(aula)
-      .filter((treino) => treino.certificacao!.estado !== "confirmada")
-      .map((treino) => erro(aula, "CERTIFICACAO_PENDENTE", `a certificação do treino «${treino.titulo}» ${ESTADO_DITO[treino.certificacao!.estado] ?? "não está confirmada"}`, { treinoId: treino.id, campo: "certificacao.estado" })),
-  },
-  {
-    codigo: "CERTIFICACAO_CADUCA",
-    impede: "evidência que não fala mais das posições do treino, ou que o cache desmente",
-    julgar: (aula, contexto) => {
-      const problemas: ProblemaV2[] = [];
-      for (const treino of certificados(aula)) {
-        const certificacao = treino.certificacao!;
-        if (certificacao.estado !== "confirmada") continue;
-        const onde = { treinoId: treino.id, campo: "certificacao" };
-        if (!certificacao.resultado) {
-          problemas.push(erro(aula, "CERTIFICACAO_CADUCA", `a certificação do treino «${treino.titulo}» não diz se certifica vitória ou empate`, onde));
-          continue;
-        }
-        if (certificacao.alvoHash !== alvoDaCertificacaoV2(aula, treino, contexto.positions)) {
-          problemas.push(erro(aula, "CERTIFICACAO_CADUCA", `o treino «${treino.titulo}» mudou de posição ou de resultado depois de ser certificado — confira de novo`, onde));
-          continue;
-        }
-        treino.questoes.forEach((questao, i) => {
-          const fen = fenDaQuestaoDoTreino(aula, treino, questao, contexto.positions);
-          const evidencia = certificacao.evidencias?.[questao.id];
-          const lugar = { treinoId: treino.id, questaoId: questao.id, campo: "certificacao.evidencias" };
-          if (!evidencia || evidencia.fen !== fen) {
-            problemas.push(erro(aula, "CERTIFICACAO_CADUCA", `a pergunta ${i + 1} do treino «${treino.titulo}» não tem evidência da tablebase para a posição dela`, lugar));
-            return;
-          }
-          if (!contexto.tablebase) return;
-          const doCache = contexto.tablebase(fen, certificacao.resultado!);
-          if (doCache === null) {
-            problemas.push(erro(aula, "CERTIFICACAO_CADUCA", `a evidência da pergunta ${i + 1} do treino «${treino.titulo}» não pôde ser conferida: falta o cache da tablebase desta posição`, lugar));
-          } else if (JSON.stringify([...doCache].sort()) !== JSON.stringify([...evidencia.winningMoves].sort())) {
-            problemas.push(erro(aula, "CERTIFICACAO_CADUCA", `a evidência da pergunta ${i + 1} do treino «${treino.titulo}» não bate com a tablebase (gravada: ${evidencia.winningMoves.length} lances, tablebase: ${doCache.length})`, lugar));
-          }
-        });
-      }
-      return problemas;
-    },
-  },
-  {
-    codigo: "CERTIFICACAO_REFUTADA",
-    impede: "resposta aceita que a tablebase diz jogar o resultado fora",
-    julgar: (aula, contexto) => {
-      const problemas: ProblemaV2[] = [];
-      for (const treino of certificados(aula)) {
-        const certificacao = treino.certificacao!;
-        if (certificacao.estado !== "confirmada") continue;
-        treino.questoes.forEach((questao, i) => {
-          const evidencia = certificacao.evidencias?.[questao.id];
-          if (!evidencia || evidencia.fen !== fenDaQuestaoDoTreino(aula, treino, questao, contexto.positions)) return;
-          const preservam = new Set(evidencia.winningMoves);
-          questao.respostas.forEach((resposta, r) => {
-            if (resposta.julgamento === "erro") return;
-            for (const lance of resposta.moves) {
-              if (preservam.has(lance)) continue;
-              const resultado = certificacao.resultado === "draw" ? "o empate" : "a vitória";
-              problemas.push(erro(
-                aula,
-                "CERTIFICACAO_REFUTADA",
-                `na pergunta ${i + 1} do treino «${treino.titulo}», a resposta ${r + 1} aceita "${lance}", e a tablebase diz que esse lance joga ${resultado} fora`,
-                { treinoId: treino.id, questaoId: questao.id, respostaId: resposta.id, campo: "moves" },
-              ));
-            }
-          });
-        });
-      }
-      return problemas;
-    },
-  },
-  {
-    codigo: "PRATICA_AUSENTE",
-    impede: "aula sem prática: o domínio depende dela",
-    julgar: (aula) => aula.praticas.length === 0
-      ? [erro(aula, "PRATICA_AUSENTE", "a aula não tem prática contra o computador — nesta versão o domínio da aula depende dela", { campo: "praticas" })]
-      : [],
-  },
-  {
-    codigo: "PRATICAS_MULTIPLAS",
-    impede: "mais de uma prática: esta versão aceita uma, obrigatória",
-    julgar: (aula) => aula.praticas.length > 1
-      ? [erro(aula, "PRATICAS_MULTIPLAS", `a aula tem ${aula.praticas.length} práticas, e esta versão da publicação aceita uma só — o domínio por várias avaliações ainda não existe`, { campo: "praticas" })]
-      : [],
   },
   {
     codigo: "AVALIACAO_REVISAO_DIVERGE",
@@ -269,9 +158,9 @@ export function falasDaAulaV2(aula: AulaV2): Fala[] {
     capitulo.narracoes.forEach((narracao, i) => falas.push({ onde: `${nome} · narração ${i + 1}`, texto: narracao.texto, tipo: "fala" }));
   }
   for (const treino of aula.treinos) falas.push(...falasDoTreinoV2(treino));
-  // No final certificado o aluno lê as mensagens de reserva do catálogo (ver
-  // `treino-jogavel.ts`); fora dele, não.
-  if (aula.catalogo && certificados(aula).length) {
+  // Com a evidência congelada de uma aula antiga, o aluno lê as mensagens de reserva do
+  // catálogo (ver `treino-jogavel.ts`); fora dela, não.
+  if (aula.catalogo && aula.treinos.some((treino) => temEvidenciaCongelada(treino))) {
     const m = aula.catalogo.mensagensPadrao;
     falas.push(
       { onde: "Catálogo · lance que ainda ganha, fora do caminho", texto: m.vitoriaForaDoMetodo, tipo: "fala" },

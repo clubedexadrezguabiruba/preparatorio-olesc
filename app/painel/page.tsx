@@ -159,6 +159,8 @@ export default async function Painel() {
   ).map((id) => ({
     id,
     nome: aulasDeFinais.find((a) => a.id === id)?.nome ?? id,
+    // Aula v2 com várias práticas: o cartão abre a que venceu (trava 9, 15/9/2026).
+    ...(finais.get(id)?.praticaParaRevisar ? { pratica: finais.get(id)!.praticaParaRevisar } : {}),
   }));
 
   // O painel conta o mesmo que `/aberturas`: enquanto o portão do Avançado está
