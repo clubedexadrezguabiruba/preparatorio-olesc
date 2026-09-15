@@ -8,7 +8,8 @@
  * período. Um puzzle é o caso de **um resultado só** — o aluno "jogou" contra o
  * problema, e o placar é 1 se acertou e 0 se errou.
  *
- * O método (τ, limites, valores iniciais, e a correção do passo 5) é o do clube,
+ * O método (τ, limites e a correção do passo 5) é o do clube — o início não:
+ * ver `INICIO` —,
  * portado de `recruta64-vtracer/supabase/migrations/
  * 20260217200000_fix_revanche_queue_definitive.sql:46-175`. Copiamos o método,
  * não o arquivo: lá ele é uma função SQL amarrada à RPC do puzzle; aqui o
@@ -18,7 +19,7 @@
  * A correção que o clube teve de fazer em 17/02 vem junto: quando
  * `Δ² ≤ φ² + v`, o artigo manda procurar o menor `k` com `f(a − kτ) < 0`.
  * A versão antiga de lá tirava `ln` de um número negativo e quebrava toda
- * derrota de um jogador em 400/350 — exatamente o aluno que começa aqui.
+ * derrota de um jogador em 400/350.
  *
  * ## O RD do puzzle é constante: 75
  *
@@ -52,8 +53,42 @@ export const LIMITES = {
   volatilidade: [0.01, 0.15],
 } as const;
 
-/** Onde todo aluno começa — decisão do Doug de 15/9: 400, e não os 1500 do artigo. */
-export const INICIO = { rating: 400, rd: 350, volatilidade: 0.06 } as const;
+/**
+ * Onde o aluno começa: **o rating de entrada que o professor anotou no perfil**
+ * (`perfis.rating`), com piso de 600 — decisão do Doug de 15/9, depois de testar.
+ *
+ * ## Por que o RD começa em 80, e não nos 350 do clube
+ *
+ * O RD é a incerteza do Glicko sobre o aluno, e é ele que decide o tamanho do
+ * salto. Com 350, o primeiro acerto valia +175 e o problema seguinte vinha 175
+ * pontos mais difícil. O Doug pediu progressão de "20 em 20". Medido em 15/9, a
+ * partir de 600 e com o problema na altura do aluno:
+ *
+ * | RD inicial | seis acertos seguidos            | acertos de 600 a 1000 |
+ * |------------|----------------------------------|-----------------------|
+ * | 350        | +175 +118 +88 +72 +59 +51        | 4                     |
+ * | 100        | +26 +25 +23 +22 +22 +20          | 23                    |
+ * | **80**     | **+17 +17 +16 +16 +16 +15**      | **31**                |
+ * | 60         | +10 +10 +10 +10 +11 +10          | 40                    |
+ *
+ * Com o uso, o RD assenta sozinho perto de 61 e o salto em ~11 pontos (medido em
+ * 300 respostas alternadas), sem descer disso: fica no "de 10 a 20" pedido.
+ *
+ * O salto pequeno é o que obriga o início pelo rating de entrada: sem ele, um
+ * aluno de 1400 levaria ~50 acertos para chegar à altura dele. O piso de 600 é
+ * o problema mais fácil do recorte (`scripts/base-rating.ts`) — começar abaixo
+ * seria subir de graça contra problemas que não mudam.
+ */
+export const INICIO = { rd: 80, volatilidade: 0.06 } as const;
+
+/** O menor rating de início: o problema mais fácil que o recorte tem. */
+export const PISO_DO_INICIO = 600;
+
+/** O rating de início de um aluno, a partir do rating de entrada do perfil (ou nenhum). */
+export function ratingInicial(ratingDeEntrada: number | null | undefined): number {
+  const entrada = typeof ratingDeEntrada === "number" && Number.isFinite(ratingDeEntrada) ? ratingDeEntrada : 0;
+  return Math.min(LIMITES.rating[1], Math.max(PISO_DO_INICIO, Math.round(entrada)));
+}
 
 /** Ver o cabeçalho: o recorte não guarda o RD do puzzle. */
 export const RD_DO_PUZZLE = 75;

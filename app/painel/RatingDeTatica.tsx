@@ -15,7 +15,16 @@ import type { PontoDoRating } from "@/lib/tatica/rating-historico";
  * O `prefetch={false}` do "Jogar" pelo motivo do cartão de `/tatica`: a página
  * do modo grava o problema pendente e a hora em que ele foi servido.
  */
-export function RatingDeTatica({ estado, pontos }: { estado: EstadoDoRating | null; pontos: readonly PontoDoRating[] }) {
+export function RatingDeTatica({
+  estado,
+  pontos,
+  inicio,
+}: {
+  estado: EstadoDoRating | null;
+  pontos: readonly PontoDoRating[];
+  /** Onde ele começaria, se nunca jogou: o rating de entrada, com piso 600. */
+  inicio: number;
+}) {
   return (
     <section aria-labelledby="rating-de-tatica" className="flex flex-col gap-3">
       <h2 id="rating-de-tatica" className="rotulo text-tinta-fraca">
@@ -51,7 +60,7 @@ export function RatingDeTatica({ estado, pontos }: { estado: EstadoDoRating | nu
       ) : (
         <div className="flex flex-wrap items-center justify-between gap-3 cartao-vazio px-4 py-3">
           <p className="text-sm text-tinta-media">
-            Problemas misturados, e um rating que sobe e desce a cada um. Você começa em 400.
+            Problemas misturados, e um rating que sobe e desce a cada um. Você começa em {inicio}.
           </p>
           <Link href="/tatica/rating" prefetch={false} className="foco text-sm font-medium text-metodo-tinta underline">
             Experimentar

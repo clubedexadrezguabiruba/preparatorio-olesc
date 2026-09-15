@@ -14,23 +14,24 @@ const NUNCA = new Set<string>();
 const primeiro = () => 0;
 const ultimo = () => 0.999999;
 
-test("dentro de ±100: o sorteio anda de ponta a ponta da janela", () => {
-  assert.equal(escolherPorRating(INDICE, 1200, NUNCA, primeiro)?.[2], 1100);
-  assert.equal(escolherPorRating(INDICE, 1200, NUNCA, ultimo)?.[2], 1300);
+test("dentro de ±20: o problema fica colado ao rating (Doug, 15/9)", () => {
+  assert.equal(escolherPorRating(INDICE, 1200, NUNCA, primeiro)?.[2], 1180);
+  assert.equal(escolherPorRating(INDICE, 1200, NUNCA, ultimo)?.[2], 1220);
 });
 
 test("aceita rating com casas decimais, como o banco guarda", () => {
-  assert.equal(escolherPorRating(INDICE, 1143.62, NUNCA, primeiro)?.[2], 1050);
+  assert.equal(escolherPorRating(INDICE, 1143.62, NUNCA, primeiro)?.[2], 1130);
 });
 
-test("não repete o que o aluno já viu: a janela cresce para ±200 e depois ±400", () => {
-  const ate100 = new Set(INDICE.filter((l) => Math.abs(l[2] - 1200) <= 100).map((l) => l[0]));
-  const achado200 = escolherPorRating(INDICE, 1200, ate100, primeiro);
-  assert.equal(achado200?.[2], 1000);
-  assert.ok(!ate100.has(achado200![0]));
+test("não repete o que o aluno já viu: a janela cresce de ±20 para ±50, ±100…", () => {
+  const perto = (raio: number) => new Set(INDICE.filter((l) => Math.abs(l[2] - 1200) <= raio).map((l) => l[0]));
+  const ate20 = perto(20);
+  const achado50 = escolherPorRating(INDICE, 1200, ate20, primeiro);
+  assert.equal(achado50?.[2], 1150);
+  assert.ok(!ate20.has(achado50![0]));
 
-  const ate200 = new Set(INDICE.filter((l) => Math.abs(l[2] - 1200) <= 200).map((l) => l[0]));
-  assert.equal(escolherPorRating(INDICE, 1200, ate200, ultimo)?.[2], 1600);
+  assert.equal(escolherPorRating(INDICE, 1200, perto(50), ultimo)?.[2], 1300);
+  assert.equal(escolherPorRating(INDICE, 1200, perto(200), ultimo)?.[2], 1600);
 });
 
 test("janela vazia por baixo: rating 100 recebe o puzzle mais próximo (600)", () => {
@@ -57,8 +58,8 @@ test("sorteio uniforme: 1000 sorteios cobrem a janela inteira", () => {
     const r = escolherPorRating(INDICE, 1200, NUNCA, aleatorio)![2];
     contagem.set(r, (contagem.get(r) ?? 0) + 1);
   }
-  assert.equal(contagem.size, 21);
-  for (const n of contagem.values()) assert.ok(n > 20, `uma nota saiu só ${n} vezes em 1000`);
+  assert.equal(contagem.size, 5, "1180, 1190, 1200, 1210 e 1220");
+  for (const n of contagem.values()) assert.ok(n > 120, `uma nota saiu só ${n} vezes em 1000`);
 });
 
 /* ------------------------------------------------------------------ *
@@ -81,6 +82,10 @@ test("o rating-indice.json está em rating crescente, sem id repetido, e toda or
     assert.ok(origens.has(origem), `origem desconhecida: ${origem}`);
     ids.add(id);
   }
-  // O aluno que começa em 400 alcança a base de 600–700 na janela de ±200.
-  assert.equal(escolherPorRating(real, 400, NUNCA, primeiro)?.[1], ORIGEM_BASE);
+  // O aluno que começa no piso (600) recebe um problema da base de 600–700,
+  // colado ao rating dele — e há milhares de candidatos na janela de ±20.
+  const noPiso = escolherPorRating(real, 600, NUNCA, ultimo);
+  assert.equal(noPiso?.[1], ORIGEM_BASE);
+  assert.ok(noPiso![2] <= 620);
+  assert.ok(real.filter((l) => Math.abs(l[2] - 1200) <= 20).length > 1000, "±20 em 1200 tem mais de mil problemas");
 });

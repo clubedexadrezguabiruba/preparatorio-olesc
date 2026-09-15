@@ -31,6 +31,7 @@ type LinhaDoRating = {
   sequencia: number;
   melhor_sequencia: number;
   rating_maximo: number;
+  rating_inicial: number | null;
   resolvidos: number;
 };
 
@@ -40,11 +41,12 @@ function estadoDe(l: LinhaDoRating): EstadoDoRating {
     sequencia: l.sequencia,
     melhorSequencia: l.melhor_sequencia,
     ratingMaximo: l.rating_maximo,
+    ratingInicial: l.rating_inicial ?? l.rating_maximo,
     resolvidos: l.resolvidos,
   };
 }
 
-const COLUNAS = "aluno, rating, sequencia, melhor_sequencia, rating_maximo, resolvidos";
+const COLUNAS = "aluno, rating, sequencia, melhor_sequencia, rating_maximo, rating_inicial, resolvidos";
 
 /** O rating do aluno, ou `null` se ele nunca abriu o modo. */
 export async function ratingDoAluno(aluno: string): Promise<EstadoDoRating | null> {

@@ -63,7 +63,10 @@ export type Selo = {
  * "1 tema" — o que está certo hoje e vira um erro de compilação na primeira vez
  * que alguém acrescentar um degrau 1. O tipo declarado deixa a lista ser dado.
  */
-export const DEGRAUS: Record<"tatica" | "rating" | "ratingSeguidos" | "finais" | "constante", readonly number[]> = {
+export const DEGRAUS: Record<
+  "tatica" | "ratingAcimaDoInicio" | "rating" | "ratingSeguidos" | "finais" | "constante",
+  readonly number[]
+> = {
   /**
    * **13 no lugar de 10**, e o motivo é o currículo: 13 é a meta da OLESC (os
    * temas dos níveis 1 a 3), o número que a `/trilha` já celebra. Um selo em 13
@@ -71,11 +74,19 @@ export const DEGRAUS: Record<"tatica" | "rating" | "ratingSeguidos" | "finais" |
    */
   tatica: [3, 7, 13, 24, 36],
   /**
+   * Quanto o **recorde** subiu acima do rating com que o aluno começou o modo — o
+   * "+100". Desde 15/9 cada aluno começa no próprio rating de entrada (piso 600),
+   * então o "+100" não pode ser um número fixo como era (500, para quem começava
+   * em 400).
+   */
+  ratingAcimaDoInicio: [100],
+  /**
    * O **máximo** já atingido na tática rating, e não o rating de agora: selo
    * ganho não se perde num dia ruim (a mesma regra da `maiorSequencia`). Números
-   * propostos pelo Doug em 15/9. O 500 é o "+100": todo aluno começa em 400.
+   * propostos pelo Doug em 15/9. Exigem ao menos um problema resolvido: quem
+   * começa em 1300 não ganha o de 1000 só por abrir a página.
    */
-  rating: [500, 1000, 1200, 1400],
+  rating: [1000, 1200, 1400],
   /** Acertos seguidos na tática rating — a **melhor** sequência, não a atual. */
   ratingSeguidos: [10],
   /**
@@ -113,7 +124,13 @@ export type ParaOsSelos = {
    * A tática rating, lida de `rating_tatica` — ou `null` se ele nunca jogou.
    * `maximo` e `melhorSequencia` são os recordes, que só sobem.
    */
-  readonly ratingTatica: { readonly maximo: number; readonly melhorSequencia: number } | null;
+  readonly ratingTatica: {
+    readonly maximo: number;
+    readonly melhorSequencia: number;
+    /** O rating com que ele começou o modo. */
+    readonly inicio: number;
+    readonly resolvidos: number;
+  } | null;
 };
 
 function plural(n: number, um: string, muitos: string): string {
@@ -277,23 +294,35 @@ export function selos(p: ParaOsSelos): Selo[] {
    * convite para o modo já está no cartão do painel; os selos ganhos aparecem
    * como os outros.
    */
+  const maximo = Math.round(p.ratingTatica?.maximo ?? 0);
+  const jogou = (p.ratingTatica?.resolvidos ?? 0) > 0;
+  const faltaNoRecorde = (alvo: number) =>
+    p.ratingTatica === null || !jogou
+      ? "jogue a tática rating"
+      : `${alvo - maximo === 1 ? "falta 1 ponto" : `faltam ${alvo - maximo} pontos`} no seu recorde`;
+
+  for (const acima of DEGRAUS.ratingAcimaDoInicio) {
+    const alvo = Math.round(p.ratingTatica?.inicio ?? 0) + acima;
+    const ganho = jogou && maximo >= alvo;
+    lista.push({
+      id: `rating-mais-${acima}`,
+      familia: "rating",
+      nome: `+${acima} na tática rating`,
+      conta: `O recorde subiu ${acima} pontos acima do rating com que você começou o modo.`,
+      ganho,
+      falta: ganho ? null : faltaNoRecorde(alvo),
+    });
+  }
+
   for (const degrau of DEGRAUS.rating) {
-    const maximo = Math.round(p.ratingTatica?.maximo ?? 0);
-    const ganho = maximo >= degrau;
+    const ganho = jogou && maximo >= degrau;
     lista.push({
       id: `rating-${degrau}`,
       familia: "rating",
-      nome: degrau === 500 ? "+100 na tática rating" : `Rating ${degrau} na tática`,
-      conta:
-        degrau === 500
-          ? "Subiu 100 pontos acima dos 400 com que todo aluno começa."
-          : `O recorde da tática rating chegou a ${degrau}. Um dia ruim não tira este selo.`,
+      nome: `Rating ${degrau} na tática`,
+      conta: `O recorde da tática rating chegou a ${degrau}. Um dia ruim não tira este selo.`,
       ganho,
-      falta: ganho
-        ? null
-        : p.ratingTatica === null
-          ? "jogue a tática rating"
-          : `${degrau - maximo === 1 ? "falta 1 ponto" : `faltam ${degrau - maximo} pontos`} no seu recorde`,
+      falta: ganho ? null : faltaNoRecorde(degrau),
     });
   }
 

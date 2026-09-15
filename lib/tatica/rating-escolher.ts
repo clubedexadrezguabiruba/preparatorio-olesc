@@ -3,12 +3,17 @@ import type { LinhaDoIndice } from "./rating.ts";
 /**
  * Qual puzzle o aluno de rating X recebe agora — código puro, sem disco.
  *
- * ## A janela do clube: ±100, depois ±200, depois ±400
+ * ## A janela: ±20, depois ±50, ±100, ±200 e ±400
  *
- * Primeiro um puzzle a até 100 pontos do aluno; se não sobrou nenhum que ele
- * não viu, até 200; depois até 400. É o método do clube (vtracer) e é o que
- * mantém o placar esperado perto de meio a meio — o ponto em que um acerto e
- * um erro dizem mais ao Glicko sobre o aluno.
+ * Primeiro um puzzle a até 20 pontos do aluno; se não sobrou nenhum que ele
+ * não viu, até 50; e assim por diante. É o que mantém o placar esperado perto
+ * de meio a meio — o ponto em que um acerto e um erro dizem mais ao Glicko.
+ *
+ * O clube (vtracer) começa em ±100. **Aqui começa em ±20 por decisão do Doug
+ * (15/9):** com o salto do rating em ~16 pontos (`INICIO` em `glicko2.ts`), uma
+ * janela de ±100 faria o problema pular até 100 pontos de um para o outro — o
+ * rating subiria de 16 em 16 e a dificuldade, não. Há ~100 problemas por ponto
+ * de rating no índice, então ±20 são milhares de candidatos.
  *
  * Dentro da janela o sorteio é uniforme: sem ele, o aluno em 1143 receberia
  * sempre o puzzle mais próximo de 1143, e dois alunos com o mesmo rating
@@ -16,7 +21,7 @@ import type { LinhaDoIndice } from "./rating.ts";
  *
  * ## A janela vazia
  *
- * Com ±400 vazia, vale o puzzle **mais próximo** que ele não viu, de qualquer
+ * Com todas vazias, vale o puzzle **mais próximo** que ele não viu, de qualquer
  * lado. Isso só acontece nas pontas do índice — o recorte vai de 600 a 2099,
  * então abaixo de 200 e acima de 2500 —, e o rating do aluno vai de 100 a 3000
  * (`LIMITES` de `glicko2.ts`). O teste cobre os dois lados.
@@ -28,7 +33,7 @@ import type { LinhaDoIndice } from "./rating.ts";
  * que dizer. Não há braço de "fim do banco" que repete.
  */
 
-export const JANELAS = [100, 200, 400] as const;
+export const JANELAS = [20, 50, 100, 200, 400] as const;
 
 /** O primeiro índice cuja nota é `>= alvo`. */
 function primeiroAPartirDe(indice: readonly LinhaDoIndice[], alvo: number): number {

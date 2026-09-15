@@ -41,8 +41,9 @@ test("o recorde conta o pico de dentro do dia, e nunca desce", () => {
   assert.deepEqual(pontos.map((p) => p.rating), [850, 800]);
 });
 
-test("o recorde começa em 400: quem só errou tem recorde 400", () => {
-  assert.equal(historicoPorDia([linha("2026-09-14", 400, 300, false)])[0].recorde, 400);
+test("o recorde começa no rating de antes do primeiro problema: quem só errou tem recorde no início", () => {
+  assert.equal(historicoPorDia([linha("2026-09-14", 600, 583, false)])[0].recorde, 600);
+  assert.equal(historicoPorDia([linha("2026-09-14", 1200, 1184, false)])[0].recorde, 1200, "o início é o de cada aluno");
   assert.deepEqual(historicoPorDia([]), []);
 });
 

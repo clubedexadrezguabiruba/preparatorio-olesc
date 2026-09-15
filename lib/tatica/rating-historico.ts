@@ -1,6 +1,5 @@
 import { hojeNoBrasil, somarDias } from "../curso/calendario.ts";
 import { TEMAS } from "./blocos.ts";
-import { INICIO } from "./glicko2.ts";
 import { ORIGEM_BASE } from "./rating.ts";
 
 /**
@@ -41,13 +40,15 @@ function emOrdem<T extends { criada_em: string }>(linhas: readonly T[]): T[] {
  *
  * O recorde é o **máximo de todas as tentativas** até ali, e não o máximo dos
  * pontos do gráfico: o aluno que foi a 900 às 15h e terminou o dia em 850 bateu
- * 900, e é o 900 que `rating_tatica.rating_maximo` guarda. Começa em 400, o
- * rating de todo aluno antes do primeiro problema.
+ * 900, e é o 900 que `rating_tatica.rating_maximo` guarda. Começa no rating de
+ * antes do primeiro problema — o início do aluno, que desde 15/9 é o rating de
+ * entrada do perfil (piso 600), e não um número fixo.
  */
 export function historicoPorDia(linhas: readonly TentativaDoRating[]): PontoDoRating[] {
   const pontos: PontoDoRating[] = [];
-  let recorde: number = INICIO.rating;
-  for (const linha of emOrdem(linhas)) {
+  const ordenadas = emOrdem(linhas);
+  let recorde = ordenadas[0]?.rating_antes ?? 0;
+  for (const linha of ordenadas) {
     const dia = hojeNoBrasil(new Date(linha.criada_em));
     recorde = Math.max(recorde, linha.rating_depois);
     const ultimo = pontos.at(-1);

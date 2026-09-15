@@ -46,6 +46,8 @@ export type EstadoDoRating = {
   readonly melhorSequencia: number;
   readonly ratingMaximo: number;
   readonly resolvidos: number;
+  /** O rating com que ele começou o modo (o de entrada do perfil, com piso 600). */
+  readonly ratingInicial: number;
 };
 
 /** O veredito de uma resposta do modo rating. */

@@ -315,8 +315,8 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         <div className="flex flex-col gap-0.5">
           <h2 className="rotulo text-tinta-fraca">Rating de tática</h2>
           <p className="text-sm text-tinta-media">
-            O modo de problemas misturados (Glicko-2, começa em 400). Não é o rating de entrada
-            do cabeçalho: este sobe e desce a cada problema. O erro dele volta na revisão do dia,
+            O modo de problemas misturados (Glicko-2). Começa no rating de entrada, com piso 600, e
+            a partir daí sobe e desce a cada problema, de 10 a 20 pontos. O erro dele volta na revisão do dia,
             e não na prova do tema.
           </p>
         </div>

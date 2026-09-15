@@ -12,8 +12,9 @@
  *
  * O que ele afirma:
  *
- *   1. o servidor cria a linha em 400/350 e serve um pendente, e chamar de novo
- *      devolve o mesmo (recarregar a página traz o mesmo problema);
+ *   1. o servidor cria a linha no rating de entrada do perfil (piso 600) com RD
+ *      80, serve um pendente a até 20 pontos, e chamar de novo devolve o mesmo
+ *      (recarregar a página traz o mesmo problema);
  *   2. o pendente é exigido: resposta a outro id é recusada e não grava nada;
  *   3. lances forjados são recusados: o servidor julga, e lance errado não é
  *      acerto; resposta malformada nem chega a julgar;
@@ -25,7 +26,10 @@
  *   7. o tempo é medido no servidor, de `pendente_desde` até a resposta;
  *   8. o próximo nunca é um problema já visto;
  *   9. o erro vai para a revisão do dia (hoje+2) e não para a prova do tema;
- *  10. `gravarTentativa` recusa o modo rating — ele só entra pela porta própria.
+ *  10. `gravarTentativa` recusa o modo rating — ele só entra pela porta própria;
+ *  11. o salto é pequeno (Doug, 15/9): o rating anda menos de 20 por problema, e o
+ *      próximo problema vem a até 20 pontos do rating novo; quem tem rating de
+ *      entrada 1250 começa em 1250, e quem tem 450 começa no piso de 600.
  *
  * No fim, apaga a conta de mentira. `on delete cascade` leva a linha do rating e
  * as tentativas.
@@ -100,35 +104,48 @@ async function pendente(aluno: string): Promise<PuzzleServido> {
   return servido.puzzle;
 }
 
-let alunoId: string | null = null;
+const contasCriadas: string[] = [];
 
-try {
-  console.log(`Banco: ${process.env.NEXT_PUBLIC_SUPABASE_URL}\n`);
-  const usuario = `teste.rating.${Date.now().toString(36).slice(-5)}`;
-  const { data: criado, error: erroConta } = await admin.auth.admin.createUser({
+async function criarAluno(usuario: string, ratingDeEntrada?: number): Promise<string> {
+  const { data, error } = await admin.auth.admin.createUser({
     email: emailDoUsuario(usuario),
     password: "424242",
     email_confirm: true,
-    user_metadata: { usuario, nome: "Aluno do Rating", papel: "aluno", equipe: "M" },
+    user_metadata: {
+      usuario,
+      nome: "Aluno do Rating",
+      papel: "aluno",
+      equipe: "M",
+      ...(ratingDeEntrada === undefined ? {} : { rating: String(ratingDeEntrada) }),
+    },
   });
-  if (erroConta || !criado.user) throw new Error(`não criou a conta: ${erroConta?.message}`);
-  const aluno = criado.user.id;
-  alunoId = aluno;
+  if (error || !data.user) throw new Error(`não criou a conta: ${error?.message}`);
+  contasCriadas.push(data.user.id);
+  return data.user.id;
+}
+
+try {
+  console.log(`Banco: ${process.env.NEXT_PUBLIC_SUPABASE_URL}\n`);
+  const sufixo = Date.now().toString(36).slice(-5);
+  const aluno = await criarAluno(`teste.rating.${sufixo}`);
 
   /* -------------------------------------------------------------- */
   console.log("1. O servidor serve um pendente, e recarregar traz o mesmo");
   const primeiro = await garantirPendente(aluno);
   if ("erro" in primeiro) throw new Error(primeiro.erro);
-  afirmar(primeiro.estado.rating === 400, `a linha nasce em 400 (nasceu em ${primeiro.estado.rating})`);
+  afirmar(
+    primeiro.estado.rating === 600 && primeiro.estado.ratingInicial === 600,
+    `sem rating de entrada, a linha nasce no piso de 600 (nasceu em ${primeiro.estado.rating})`,
+  );
   const inicial = await linhaDoRating(aluno);
-  afirmar(inicial.rd === 350 && inicial.resolvidos === 0, `RD 350 e zero resolvidos (${inicial.rd}, ${inicial.resolvidos})`);
+  afirmar(inicial.rd === 80 && inicial.resolvidos === 0, `RD 80 e zero resolvidos (${inicial.rd}, ${inicial.resolvidos})`);
   afirmar(
     inicial.puzzle_pendente === primeiro.puzzle.id && inicial.tema_pendente === primeiro.puzzle.origem,
     `o pendente ficou gravado (${primeiro.puzzle.id}, de ${primeiro.puzzle.origem}, rating ${primeiro.puzzle.rating})`,
   );
   afirmar(
-    Math.abs(primeiro.puzzle.rating - 400) <= 400,
-    `o problema está na janela do aluno de 400 (${primeiro.puzzle.rating})`,
+    Math.abs(primeiro.puzzle.rating - 600) <= 20,
+    `o problema está a até 20 pontos do aluno de 600 (${primeiro.puzzle.rating})`,
   );
   const deNovo = await pendente(aluno);
   const eMaisUma = await pendente(aluno);
@@ -150,7 +167,7 @@ try {
   const inventado = await responderRating(aluno, "naoexiste", []);
   afirmar("erro" in inventado, "resposta a um id inventado é recusada");
   afirmar((await tentativas(aluno)).length === 0, "e nenhuma das duas virou linha");
-  afirmar((await linhaDoRating(aluno)).rating === 400, "e o rating não se mexeu");
+  afirmar((await linhaDoRating(aluno)).rating === 600, "e o rating não se mexeu");
 
   /* -------------------------------------------------------------- */
   console.log("\n3. Lances forjados são recusados");
@@ -169,9 +186,9 @@ try {
   /* -------------------------------------------------------------- */
   console.log("\n4. O rating muda, e a tentativa guarda o antes e o depois");
   const depoisDoErro = await linhaDoRating(aluno);
-  afirmar(depoisDoErro.rating < 400, `o erro desceu o rating (400 → ${depoisDoErro.rating.toFixed(2)}, delta ${forjada.delta})`);
+  afirmar(depoisDoErro.rating < 600, `o erro desceu o rating (600 → ${depoisDoErro.rating.toFixed(2)}, delta ${forjada.delta})`);
   afirmar(depoisDoErro.sequencia === 0 && depoisDoErro.resolvidos === 1, "sequência 0, um resolvido");
-  afirmar(forjada.delta === Math.round(depoisDoErro.rating) - 400, "o delta devolvido é o da tabela");
+  afirmar(forjada.delta === Math.round(depoisDoErro.rating) - 600, "o delta devolvido é o da tabela");
   afirmar(forjada.solucao.join(" ") === primeiro.puzzle.lances.join(" "), "a resposta traz a solução para a tela mostrar");
   const [t1] = await tentativas(aluno);
   afirmar(
@@ -179,8 +196,8 @@ try {
     `a tentativa: modo rating, tema = origem = ${t1?.origem}, errada`,
   );
   afirmar(
-    t1?.rating_antes === 400 && t1.rating_depois === depoisDoErro.rating && t1.rd_depois === depoisDoErro.rd,
-    `e guarda rating_antes 400, rating_depois ${t1?.rating_depois?.toFixed(2)} e rd_depois ${t1?.rd_depois?.toFixed(2)}`,
+    t1?.rating_antes === 600 && t1.rating_depois === depoisDoErro.rating && t1.rd_depois === depoisDoErro.rd,
+    `e guarda rating_antes 600, rating_depois ${t1?.rating_depois?.toFixed(2)} e rd_depois ${t1?.rd_depois?.toFixed(2)}`,
   );
   afirmar(
     forjada.proximo !== null && depoisDoErro.puzzle_pendente === forjada.proximo.id,
@@ -288,14 +305,49 @@ try {
     tempoMs: 1000,
   });
   afirmar("erro" in pelaPortaErrada, "gravarTentativa recusa modo = rating");
+
+  /* -------------------------------------------------------------- */
+  console.log("\n11. O salto é pequeno, e o início é o rating de entrada");
+  const todasDoAluno = await tentativas(aluno);
+  const saltos = todasDoAluno.map((t) => Math.abs(Math.round(t.rating_depois!) - Math.round(t.rating_antes!)));
+  afirmar(saltos.every((s) => s <= 20), `nenhum problema mexeu mais de 20 pontos (${saltos.join(", ")})`);
+  const agora = await pendente(aluno);
+  const ratingAgora = (await linhaDoRating(aluno)).rating;
+  afirmar(
+    Math.abs(agora.rating - ratingAgora) <= 20,
+    `o próximo problema está a até 20 pontos do rating novo (${agora.rating} para ${ratingAgora.toFixed(1)})`,
+  );
+
+  const deEntrada1250 = await criarAluno(`teste.rating.e${sufixo}`, 1250);
+  const servido1250 = await garantirPendente(deEntrada1250);
+  if ("erro" in servido1250) throw new Error(servido1250.erro);
+  afirmar(
+    servido1250.estado.rating === 1250 && servido1250.estado.ratingInicial === 1250,
+    `rating de entrada 1250: começa em 1250 (começou em ${servido1250.estado.rating})`,
+  );
+  afirmar(
+    Math.abs(servido1250.puzzle.rating - 1250) <= 20,
+    `e o primeiro problema é de ~1250 (${servido1250.puzzle.rating}, de ${servido1250.puzzle.origem})`,
+  );
+
+  const deEntrada450 = await criarAluno(`teste.rating.b${sufixo}`, 450);
+  const servido450 = await garantirPendente(deEntrada450);
+  if ("erro" in servido450) throw new Error(servido450.erro);
+  afirmar(servido450.estado.rating === 600, `rating de entrada 450: começa no piso de 600 (começou em ${servido450.estado.rating})`);
+
+  // O professor corrige o rating de entrada depois: o início de quem já começou não muda.
+  await admin.from("perfis").update({ rating: 1500 }).eq("id", deEntrada1250);
+  const denovo1250 = await garantirPendente(deEntrada1250);
+  afirmar(
+    !("erro" in denovo1250) && denovo1250.estado.rating === 1250,
+    "mudar o rating de entrada depois não mexe no rating de quem já começou",
+  );
 } catch (erro) {
   falhas.push(erro instanceof Error ? erro.message : String(erro));
   console.error(`\n${erro instanceof Error ? erro.message : erro}`);
 } finally {
-  if (alunoId) {
-    await admin.auth.admin.deleteUser(alunoId);
-    console.log("\nConta de teste apagada.");
-  }
+  for (const id of contasCriadas) await admin.auth.admin.deleteUser(id);
+  if (contasCriadas.length) console.log(`\n${contasCriadas.length} conta(s) de teste apagada(s).`);
 }
 
 if (falhas.length) {

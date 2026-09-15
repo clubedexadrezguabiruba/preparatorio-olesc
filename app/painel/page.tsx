@@ -38,6 +38,7 @@ import { AGENDA } from "@/lib/tarefas/conteudo";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
 import { BLOCOS } from "@/lib/tatica/blocos";
 import { progressoPorTema, revisaoDeHoje } from "@/lib/tatica/progresso";
+import { ratingInicial } from "@/lib/tatica/glicko2";
 import { historicoPorDia, ultimosDias } from "@/lib/tatica/rating-historico";
 import { ratingDoAluno, tentativasDoRating } from "@/lib/tatica/rating-leitura";
 import { Agenda } from "./Agenda";
@@ -266,7 +267,12 @@ export default async function Painel() {
     maiorSequencia: maiorSequenciaDeDias(minutos),
     // O máximo e a melhor sequência, que só sobem: selo ganho não some.
     ratingTatica: ratingTatica
-      ? { maximo: ratingTatica.ratingMaximo, melhorSequencia: ratingTatica.melhorSequencia }
+      ? {
+          maximo: ratingTatica.ratingMaximo,
+          melhorSequencia: ratingTatica.melhorSequencia,
+          inicio: ratingTatica.ratingInicial,
+          resolvidos: ratingTatica.resolvidos,
+        }
       : null,
   });
   const grupos = agrupar(emOrdemDeData(AGENDA));
@@ -317,7 +323,7 @@ export default async function Painel() {
           linhasARevisar={linhasARevisar}
         />
 
-        <RatingDeTatica estado={ratingTatica} pontos={curvaDoRating} />
+        <RatingDeTatica estado={ratingTatica} pontos={curvaDoRating} inicio={ratingInicial(perfil.rating)} />
 
         <Prova nivel={nivel} fechado={fechamento.fechado} conquistado={conquistado} />
 

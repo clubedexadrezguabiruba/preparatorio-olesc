@@ -153,7 +153,7 @@ export default async function Professor() {
           <div className="flex flex-col gap-0.5">
             <h2 className="rotulo text-tinta-fraca">Tática rating — a turma</h2>
             <p className="text-sm text-tinta-media">
-              O rating de tática (começa em 400) e quanto ele andou nos últimos 7 dias. Só você vê
+              O rating de tática (começa no rating de entrada, com piso 600) e quanto ele andou nos últimos 7 dias. Só você vê
               esta tabela.
             </p>
           </div>

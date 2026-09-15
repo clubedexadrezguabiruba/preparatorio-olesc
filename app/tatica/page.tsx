@@ -10,6 +10,7 @@ import { nivelConquistado } from "@/lib/curso/progresso";
 import { BLOCOS } from "@/lib/tatica/blocos";
 import { temaAberto } from "@/lib/tatica/conteudo";
 import { progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
+import { ratingInicial } from "@/lib/tatica/glicko2";
 import { ratingDoAluno } from "@/lib/tatica/rating-leitura";
 
 export const metadata: Metadata = { title: "Tática — Preparatório OLESC" };
@@ -57,7 +58,7 @@ export default async function Tatica() {
         ) : null}
       </header>
 
-      <CartaoDoRating rating={rating} />
+      <CartaoDoRating rating={rating} inicio={ratingInicial(perfil.rating)} />
 
       {BLOCOS.map((bloco) => (
         <section key={bloco.id} className="flex flex-col gap-3">
@@ -153,7 +154,7 @@ export default async function Tatica() {
  * prefetch do Next abriria a página sem o aluno ter clicado, e o tempo gravado
  * daquele problema começaria a contar antes.
  */
-function CartaoDoRating({ rating }: { rating: Awaited<ReturnType<typeof ratingDoAluno>> }) {
+function CartaoDoRating({ rating, inicio }: { rating: Awaited<ReturnType<typeof ratingDoAluno>>; inicio: number }) {
   return (
     <section aria-labelledby="rating-titulo" className="flex flex-col gap-3 cartao px-4 py-4">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
@@ -175,7 +176,7 @@ function CartaoDoRating({ rating }: { rating: Awaited<ReturnType<typeof ratingDo
             </div>
           </dl>
         ) : (
-          <p className="text-sm text-tinta-media">Você começa em 400. Um lance errado encerra o problema.</p>
+          <p className="text-sm text-tinta-media">Você começa em {inicio}. Um lance errado encerra o problema.</p>
         )}
         <div className="flex items-center gap-3">
           {rating ? (

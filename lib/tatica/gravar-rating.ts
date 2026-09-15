@@ -2,7 +2,7 @@ import "server-only";
 import { criarClienteAdmin } from "../supabase/admin.ts";
 import { lerIndiceDoRating, puzzlePorId } from "./banco.ts";
 import { conferirSolucao } from "./conferir.ts";
-import { aposPuzzle, INICIO } from "./glicko2.ts";
+import { aposPuzzle, INICIO, ratingInicial } from "./glicko2.ts";
 import type { PuzzleServido } from "./puzzles.ts";
 import { escolherPorRating } from "./rating-escolher.ts";
 import type { EstadoDoRating, LinhaDoIndice, RespostaDoRating } from "./rating.ts";
@@ -53,6 +53,7 @@ type LinhaDoRating = {
   sequencia: number;
   melhor_sequencia: number;
   rating_maximo: number;
+  rating_inicial: number | null;
   resolvidos: number;
   puzzle_pendente: string | null;
   tema_pendente: string | null;
@@ -69,7 +70,7 @@ export type Opcoes = {
 };
 
 const COLUNAS =
-  "aluno, rating, rd, volatilidade, sequencia, melhor_sequencia, rating_maximo, resolvidos, puzzle_pendente, tema_pendente, pendente_desde";
+  "aluno, rating, rd, volatilidade, sequencia, melhor_sequencia, rating_maximo, rating_inicial, resolvidos, puzzle_pendente, tema_pendente, pendente_desde";
 
 type Cliente = ReturnType<typeof criarClienteAdmin>;
 
@@ -79,12 +80,31 @@ function estadoDe(linha: LinhaDoRating): EstadoDoRating {
     sequencia: linha.sequencia,
     melhorSequencia: linha.melhor_sequencia,
     ratingMaximo: linha.rating_maximo,
+    ratingInicial: linha.rating_inicial ?? linha.rating_maximo,
     resolvidos: linha.resolvidos,
   };
 }
 
+/**
+ * A linha do aluno, **sempre lida de novo do banco**.
+ *
+ * O `abortSignal` novo a cada chamada não é enfeite. Dentro da montagem de uma
+ * página, o Next reaproveita a resposta de todo `fetch` GET com a mesma URL
+ * (`node_modules/next/dist/docs/01-app/03-api-reference/04-functions/fetch.md`,
+ * "Memoization"), e o supabase-js lê por `fetch`. `garantirPendente` lê esta
+ * linha, grava, e lê de novo: sem o sinal, a segunda leitura devolvia a
+ * primeira ("não existe linha"), e a página respondia "não deu para servir um
+ * problema" com a linha já no banco (15/9). O sinal é a saída que a
+ * documentação indica. O script `db:tatica:rating` não roda dentro do Next, e
+ * por isso não enxergava o defeito.
+ */
 async function lerLinha(db: Cliente, aluno: string): Promise<LinhaDoRating | null> {
-  const { data, error } = await db.from("rating_tatica").select(COLUNAS).eq("aluno", aluno).maybeSingle();
+  const { data, error } = await db
+    .from("rating_tatica")
+    .select(COLUNAS)
+    .eq("aluno", aluno)
+    .abortSignal(new AbortController().signal)
+    .maybeSingle();
   if (error) throw new Error(error.message);
   return data as LinhaDoRating | null;
 }
@@ -141,8 +161,9 @@ async function carregar(linha: LinhaDoIndice | null): Promise<PuzzleServido | nu
  * o que a página chama a cada abertura, e é por isso que recarregar traz o mesmo
  * problema.
  *
- * 1. Cria a linha inicial (400/350/0,06) com `upsert ignoreDuplicates` — a
- *    segunda chamada não sobrescreve nada.
+ * 1. Cria a linha inicial com `upsert ignoreDuplicates` — a segunda chamada não
+ *    sobrescreve nada. O rating nasce no **rating de entrada do perfil**, com
+ *    piso de 600, e o RD em 80 (`INICIO` e `ratingInicial` em `glicko2.ts`).
  * 2. Sem pendente, sorteia e grava com `update … where puzzle_pendente is null`:
  *    duas abas abertas ao mesmo tempo sorteiam cada uma, e só uma gravação casa.
  *    A volta seguinte relê e devolve a que ficou.
@@ -153,13 +174,26 @@ export async function garantirPendente(aluno: string, opcoes: Opcoes = {}): Prom
   const agora = opcoes.agora ?? Date.now;
   const db = criarClienteAdmin();
 
-  const { error: erroAoCriar } = await db
-    .from("rating_tatica")
-    .upsert(
-      { aluno, rating: INICIO.rating, rd: INICIO.rd, volatilidade: INICIO.volatilidade, rating_maximo: INICIO.rating },
-      { onConflict: "aluno", ignoreDuplicates: true },
-    );
-  if (erroAoCriar) return { erro: erroAoCriar.message };
+  // O perfil só é lido na primeira vez: depois a linha existe, e o início dela
+  // não muda nem se o professor corrigir o rating de entrada.
+  if (!(await lerLinha(db, aluno))) {
+    const { data: perfil } = await db.from("perfis").select("rating").eq("id", aluno).maybeSingle();
+    const inicio = ratingInicial((perfil as { rating: number | null } | null)?.rating);
+    const { error: erroAoCriar } = await db
+      .from("rating_tatica")
+      .upsert(
+        {
+          aluno,
+          rating: inicio,
+          rating_inicial: inicio,
+          rating_maximo: inicio,
+          rd: INICIO.rd,
+          volatilidade: INICIO.volatilidade,
+        },
+        { onConflict: "aluno", ignoreDuplicates: true },
+      );
+    if (erroAoCriar) return { erro: erroAoCriar.message };
+  }
 
   // Três voltas bastam: uma para sortear, uma para reler o que ficou, e uma de
   // folga para o pendente que sumiu do disco.

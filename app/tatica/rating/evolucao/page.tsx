@@ -5,6 +5,7 @@ import { Moldura } from "@/components/Moldura";
 import { EvolucaoDoRating } from "@/components/tatica/EvolucaoDoRating";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
+import { ratingInicial } from "@/lib/tatica/glicko2";
 import { evolucaoDoAluno } from "@/lib/tatica/rating-leitura";
 
 export const metadata: Metadata = { title: "Evolução na tática rating — Preparatório OLESC" };
@@ -45,7 +46,7 @@ export default async function Evolucao() {
         ) : (
           <div className="flex flex-col gap-2 cartao-vazio px-4 py-6 text-center">
             <p className="text-sm font-medium text-tinta">Você ainda não jogou a tática rating.</p>
-            <p className="text-sm text-tinta-media">Você começa em 400, e o rating sobe e desce a cada problema.</p>
+            <p className="text-sm text-tinta-media">Você começa em {ratingInicial(perfil.rating)}, e o rating sobe e desce a cada problema.</p>
           </div>
         )}
       </Moldura>

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { aposPuzzle, glicko2, INICIO, LIMITES, RD_DO_PUZZLE } from "./glicko2.ts";
+import { aposPuzzle, glicko2, INICIO, LIMITES, RD_DO_PUZZLE, ratingInicial, type Jogador } from "./glicko2.ts";
 
 /**
  * A fórmula, contra duas réguas que não fomos nós que escrevemos.
@@ -91,13 +91,37 @@ test("sem resultado, só o RD cresce", () => {
   assert.ok(depois.rd > 50);
 });
 
-test("o primeiro puzzle a partir de 400: +201 no acerto e −152 no erro contra 450 (+383 contra 700)", () => {
-  // O número que motivou o recorte de 400–700 (decisão do Doug, 15/9): contra
-  // um puzzle de 700, o piso dos temas, o primeiro acerto dá +383 (o plano
-  // estimava ≈ +420; medido em 15/9) e o primeiro erro, −71.
-  assert.equal(aposPuzzle(INICIO, 450, true).delta, 201);
-  assert.equal(aposPuzzle(INICIO, 450, false).delta, -152);
-  assert.equal(aposPuzzle(INICIO, 700, true).delta, 383);
+test("a progressão de 20 em 20 (Doug, 15/9): com RD 80, seis acertos seguidos dão +17 +17 +16 +16 +16 +15", () => {
+  let j: Jogador = { rating: 600, ...INICIO };
+  const saltos: number[] = [];
+  for (let i = 0; i < 6; i++) {
+    const depois = aposPuzzle(j, Math.round(j.rating), true);
+    saltos.push(depois.delta);
+    j = depois;
+  }
+  assert.deepEqual(saltos, [17, 17, 16, 16, 16, 15]);
+  // E errar desce na mesma medida.
+  assert.equal(aposPuzzle({ rating: 600, ...INICIO }, 600, false).delta, -17);
+});
+
+test("com o uso o salto assenta perto de 11, e não some", () => {
+  let j: Jogador = { rating: 800, ...INICIO };
+  let ultimo = 0;
+  for (let i = 1; i <= 300; i++) {
+    const depois = aposPuzzle(j, Math.round(j.rating), i % 2 === 0);
+    ultimo = Math.abs(depois.delta);
+    j = depois;
+  }
+  assert.ok(ultimo >= 10 && ultimo <= 12, `depois de 300 problemas o salto é ${ultimo}`);
+});
+
+test("o início é o rating de entrada do perfil, com piso de 600", () => {
+  assert.equal(ratingInicial(1400), 1400);
+  assert.equal(ratingInicial(1187.6), 1188);
+  assert.equal(ratingInicial(450), 600, "abaixo do problema mais fácil, começa nele");
+  assert.equal(ratingInicial(null), 600, "sem rating anotado, 600");
+  assert.equal(ratingInicial(undefined), 600);
+  assert.equal(ratingInicial(9000), 3000, "e não passa do teto do Glicko");
 });
 
 test("o delta é a diferença dos ratings arredondados", () => {
