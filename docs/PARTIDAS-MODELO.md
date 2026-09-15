@@ -116,6 +116,11 @@
   - **O que já existe na branch** (as 15 partidas em rascunho, as travas, as telas, a gravação, a migração 0011 e o
     requisito): **guardar como insumo**. Texto, momentos e símbolos alimentam o piloto; telas e requisito são revistos
     no plano novo.
+- **A função é ensinar.** São as partidas mais instrutivas. Por isso a explicação lance a lance tem de vir
+  **principalmente dos comentários dos livros de onde as partidas saíram**: Chernev, Weeramantry & Eusebi e Giddins.
+  As fichas do projeto de origem entram como apoio, não como fonte principal. O Doug vai mandar a biblioteca dos
+  livros. O uso segue a regra das obras protegidas: paráfrase fiel e adaptação, com a autoria marcada
+  (`[%autoria PARÁFRASE FIEL — Autor]`) e a fonte citada, sem copiar comentário em bloco.
 - **Próximo passo:** planejar o piloto num chat novo.
 
 ## Decisões pendentes do Doug
