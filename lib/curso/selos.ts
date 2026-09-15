@@ -40,7 +40,7 @@ import { NIVEIS, type Nivel } from "./nivel.ts";
  * treinador. É por isso que {@link Selo} tem `falta` e não um booleano.
  */
 
-export type Familia = "tatica" | "finais" | "repertorio" | "nivel" | "hora" | "constante";
+export type Familia = "tatica" | "finais" | "repertorio" | "nivel" | "hora" | "constante" | "rating";
 
 export type Selo = {
   /** Único, e estável: ele vira `key` de lista e um dia vira linha de banco. */
@@ -63,13 +63,21 @@ export type Selo = {
  * "1 tema" — o que está certo hoje e vira um erro de compilação na primeira vez
  * que alguém acrescentar um degrau 1. O tipo declarado deixa a lista ser dado.
  */
-export const DEGRAUS: Record<"tatica" | "finais" | "constante", readonly number[]> = {
+export const DEGRAUS: Record<"tatica" | "rating" | "ratingSeguidos" | "finais" | "constante", readonly number[]> = {
   /**
    * **13 no lugar de 10**, e o motivo é o currículo: 13 é a meta da OLESC (os
    * temas dos níveis 1 a 3), o número que a `/trilha` já celebra. Um selo em 13
    * é *"cheguei ao torneio pronto"*; um selo em 10 é um número redondo.
    */
   tatica: [3, 7, 13, 24, 36],
+  /**
+   * O **máximo** já atingido na tática rating, e não o rating de agora: selo
+   * ganho não se perde num dia ruim (a mesma regra da `maiorSequencia`). Números
+   * propostos pelo Doug em 15/9. O 500 é o "+100": todo aluno começa em 400.
+   */
+  rating: [500, 1000, 1200, 1400],
+  /** Acertos seguidos na tática rating — a **melhor** sequência, não a atual. */
+  ratingSeguidos: [10],
   /**
    * **O degrau 1 existe para ser alcançável hoje.** São 49 aulas na taxonomia e
    * 2 publicadas. Os degraus 5, 10, 25 e 49 já ficam escritos e acendem sozinhos
@@ -101,6 +109,11 @@ export type ParaOsSelos = {
   readonly diasComUmaHora: number;
   /** A **maior** sequência de dias seguidos já atingida — não a atual. */
   readonly maiorSequencia: number;
+  /**
+   * A tática rating, lida de `rating_tatica` — ou `null` se ele nunca jogou.
+   * `maximo` e `melhorSequencia` são os recordes, que só sobem.
+   */
+  readonly ratingTatica: { readonly maximo: number; readonly melhorSequencia: number } | null;
 };
 
 function plural(n: number, um: string, muitos: string): string {
@@ -253,6 +266,49 @@ export function selos(p: ParaOsSelos): Selo[] {
         `${degrau} dias seguidos`,
         "Dias seguidos com 60 minutos de treino no site. A partida declarada não conta.",
         ["dia", "dias"],
+      ),
+    );
+  }
+
+  /*
+   * A tática rating vem **por último** de propósito. `proximos` mostra um selo
+   * por família, na ordem desta lista; no segundo lugar, o convite do rating
+   * tiraria do painel o próximo selo de finais, que o aluno via até 15/9. O
+   * convite para o modo já está no cartão do painel; os selos ganhos aparecem
+   * como os outros.
+   */
+  for (const degrau of DEGRAUS.rating) {
+    const maximo = Math.round(p.ratingTatica?.maximo ?? 0);
+    const ganho = maximo >= degrau;
+    lista.push({
+      id: `rating-${degrau}`,
+      familia: "rating",
+      nome: degrau === 500 ? "+100 na tática rating" : `Rating ${degrau} na tática`,
+      conta:
+        degrau === 500
+          ? "Subiu 100 pontos acima dos 400 com que todo aluno começa."
+          : `O recorde da tática rating chegou a ${degrau}. Um dia ruim não tira este selo.`,
+      ganho,
+      falta: ganho
+        ? null
+        : p.ratingTatica === null
+          ? "jogue a tática rating"
+          : `${degrau - maximo === 1 ? "falta 1 ponto" : `faltam ${degrau - maximo} pontos`} no seu recorde`,
+    });
+  }
+
+  for (const degrau of DEGRAUS.ratingSeguidos) {
+    const melhor = p.ratingTatica?.melhorSequencia ?? 0;
+    lista.push(
+      porCondicao(
+        "rating",
+        `rating-seguidos-${degrau}`,
+        melhor >= degrau,
+        `${degrau} seguidos na tática rating`,
+        `${degrau} problemas certos em sequência, sem nenhum erro no meio.`,
+        p.ratingTatica === null
+          ? "jogue a tática rating"
+          : `acerte ${degrau} em sequência (seu melhor: ${melhor})`,
       ),
     );
   }

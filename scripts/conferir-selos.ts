@@ -134,6 +134,9 @@ try {
     conquistado: conquistado as ParaOsSelos["conquistado"],
     diasComUmaHora: diasComOMinimo(historico),
     maiorSequencia: maiorSequenciaDeDias(historico),
+    // Este script confere os selos de tempo; os da tática rating têm teste puro
+    // em `lib/curso/selos.test.ts` e dependem só de `rating_tatica`.
+    ratingTatica: null,
   };
 
   console.log("\nOs números que saíram do banco:");

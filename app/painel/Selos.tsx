@@ -1,4 +1,11 @@
-import { ganhos, proximos, type Selo } from "@/lib/curso/selos";
+import { ganhos, proximos, type Familia, type Selo } from "@/lib/curso/selos";
+
+/**
+ * O sinal na frente do selo ganho. Todas as famílias usam o ✓, menos a tática
+ * rating, que ganha o 📈 — é a única em que o número pode descer, e o sinal diz
+ * que o selo é do recorde, que não desce.
+ */
+const ICONE: Partial<Record<Familia, string>> = { rating: "📈" };
 
 /**
  * Os selos: o que o aluno já conquistou, e os dois que estão mais perto.
@@ -53,7 +60,7 @@ export function Selos({ lista }: { lista: readonly Selo[] }) {
             title={selo.conta}
             className="flex items-center gap-1.5 rounded-full border border-metodo-cheio bg-metodo-superficie/12 px-3 py-1.5 text-xs font-medium text-metodo-tinta-alta"
           >
-            <span aria-hidden>✓</span>
+            <span aria-hidden>{ICONE[selo.familia] ?? "✓"}</span>
             {selo.nome}
           </li>
         ))}
@@ -64,6 +71,7 @@ export function Selos({ lista }: { lista: readonly Selo[] }) {
             title={selo.conta}
             className="flex items-center gap-1.5 rounded-full border border-dashed border-borda px-3 py-1.5 text-xs text-tinta-fraca"
           >
+            {ICONE[selo.familia] ? <span aria-hidden>{ICONE[selo.familia]}</span> : null}
             {selo.nome}
             <span className="text-tinta-fraca">— {selo.falta}</span>
           </li>

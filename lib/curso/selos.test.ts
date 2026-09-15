@@ -25,6 +25,7 @@ const ZERADO: ParaOsSelos = {
   conquistado: 0,
   diasComUmaHora: 0,
   maiorSequencia: 0,
+  ratingTatica: null,
 };
 
 const com = (mudancas: Partial<ParaOsSelos>): ParaOsSelos => ({ ...ZERADO, ...mudancas });
@@ -129,6 +130,7 @@ test("todo selo trancado diz o que falta, e nenhum ganho diz", () => {
     conquistado: 1,
     diasComUmaHora: 3,
     maiorSequencia: 4,
+    ratingTatica: { maximo: 730, melhorSequencia: 3 },
   });
   for (const s of selos(meio)) {
     if (s.ganho) assert.equal(s.falta, null, `${s.id} está ganho e ainda diz o que falta`);
@@ -158,6 +160,7 @@ test("o aluno zerado não tem selo nenhum, e o aluno completo tem todos", () => 
     conquistado: 5,
     diasComUmaHora: 40,
     maiorSequencia: 40,
+    ratingTatica: { maximo: 1400, melhorSequencia: 10 },
   };
   const lista = selos(tudo);
   assert.equal(ganhos(lista).length, lista.length, "sobrou selo trancado no aluno completo");
@@ -201,7 +204,13 @@ test("os dois próximos vêm de famílias diferentes", () => {
 
 test("`proximos` pula a família que já está completa", () => {
   const lista = selos(
-    com({ temasFechados: 36, aulasAprendidas: 49, diasComUmaHora: 1, maiorSequencia: 30 }),
+    com({
+      temasFechados: 36,
+      aulasAprendidas: 49,
+      diasComUmaHora: 1,
+      maiorSequencia: 30,
+      ratingTatica: { maximo: 1500, melhorSequencia: 12 },
+    }),
   );
   for (const s of proximos(lista, 4)) {
     assert.ok(["repertorio", "nivel"].includes(s.familia), `${s.id} não devia estar pendente`);
@@ -217,4 +226,42 @@ test("o repertório tem os quatro selos declarados, e o Base é o portão", () =
     "repertorio-avancado",
   ]);
   assert.match(acha(ZERADO, "repertorio-base").conta, /abre o Avançado/);
+});
+
+/* ------------------------------------------------------------------ *
+ * A tática rating (15/9)
+ * ------------------------------------------------------------------ */
+
+test("tática rating: +100, 1000, 1200 e 1400 pelo máximo, e 10 seguidos pela melhor sequência", () => {
+  const ids = selos(ZERADO).filter((s) => s.familia === "rating").map((s) => s.id);
+  assert.deepEqual(ids, ["rating-500", "rating-1000", "rating-1200", "rating-1400", "rating-seguidos-10"]);
+  assert.deepEqual(DEGRAUS.rating, [500, 1000, 1200, 1400]);
+
+  const lista = selos(com({ ratingTatica: { maximo: 1210.6, melhorSequencia: 10 } }));
+  const doRating = lista.filter((s) => s.familia === "rating");
+  assert.deepEqual(doRating.map((s) => s.ganho), [true, true, true, false, true]);
+  assert.equal(acha(com({ ratingTatica: { maximo: 1210.6, melhorSequencia: 10 } }), "rating-1400").falta, "faltam 189 pontos no seu recorde");
+});
+
+test("tática rating: é o máximo que conta — o selo não some quando o rating de agora cai", () => {
+  // O painel passa `rating_maximo`, e não o rating atual: um aluno que foi a 1003
+  // e hoje está em 940 continua com o selo de 1000.
+  assert.equal(acha(com({ ratingTatica: { maximo: 1003, melhorSequencia: 0 } }), "rating-1000").ganho, true);
+  assert.equal(acha(com({ ratingTatica: { maximo: 499.4, melhorSequencia: 0 } }), "rating-500").ganho, false);
+  assert.equal(acha(com({ ratingTatica: { maximo: 499.6, melhorSequencia: 0 } }), "rating-500").ganho, true, "arredonda como a tela");
+});
+
+test("tática rating: quem nunca jogou tem os selos trancados e o convite escrito", () => {
+  for (const s of selos(ZERADO).filter((x) => x.familia === "rating")) {
+    assert.equal(s.ganho, false);
+    assert.equal(s.falta, "jogue a tática rating");
+  }
+  assert.equal(acha(com({ ratingTatica: { maximo: 400, melhorSequencia: 7 } }), "rating-seguidos-10").falta, "acerte 10 em sequência (seu melhor: 7)");
+  assert.equal(acha(com({ ratingTatica: { maximo: 999, melhorSequencia: 0 } }), "rating-1000").falta, "falta 1 ponto no seu recorde");
+});
+
+test("tática rating: vem por último, e não tira do painel o próximo selo de finais", () => {
+  const lista = selos(ZERADO);
+  assert.equal(lista.at(-1)?.id, "rating-seguidos-10");
+  assert.deepEqual(proximos(lista).map((s) => s.familia), ["tatica", "finais"]);
 });
