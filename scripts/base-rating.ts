@@ -46,10 +46,13 @@ import { createReadStream, mkdirSync, rmSync, statSync, writeFileSync } from "no
 import { createInterface } from "node:readline";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { chaveDe } from "../lib/tatica/chave.ts";
 import { ORIGEM_BASE } from "../lib/tatica/rating.ts";
 import {
+  chaveDaAmostra,
+  comEtiquetasNossas,
   DESVIO_MAXIMO,
+  idsEmDisco,
+  lerEtiquetasNossas,
   JOGADAS_MINIMAS,
   lerLinha,
   POPULARIDADE_MINIMA,
@@ -84,13 +87,22 @@ const csv =
   argv.find((a, i) => !a.startsWith("--") && !(iLimite >= 0 && i === iLimite + 1)) ??
   path.join(RAIZ, "dados/lichess_db_puzzle.csv");
 
-type Balde = { de: number; ate: number; vistos: number; amostra: (Bruto & { chave: number })[] };
+/** `limite`: a maior chave que ainda cabe, medida na última poda — ver `filtrar-puzzles.ts`. */
+type Balde = { de: number; ate: number; vistos: number; limite: number; amostra: (Bruto & { chave: number })[] };
 
-const baldes: Balde[] = FAIXAS.map(([de, ate]) => ({ de, ate, vistos: 0, amostra: [] }));
+/** Os ids que já estão no site passam na frente da amostra — ver `idsEmDisco`. */
+const fixados = idsEmDisco(path.join(RAIZ, "public/puzzles", ORIGEM_BASE));
+const nossas = lerEtiquetasNossas(path.join(RAIZ, "dados/etiquetas-nossas.tsv"));
+
+const baldes: Balde[] = FAIXAS.map(([de, ate]) => ({ de, ate, vistos: 0, limite: Infinity, amostra: [] }));
 
 function aparar(balde: Balde): void {
   balde.amostra.sort((a, b) => a.chave - b.chave);
-  balde.amostra.length = Math.min(balde.amostra.length, teto);
+  // Todo id fixado fica, mesmo passando do teto — ver `aparar` em `filtrar-puzzles.ts`.
+  const fixos = balde.amostra.findIndex((p) => p.chave >= 0);
+  const quantosFixos = fixos < 0 ? balde.amostra.length : fixos;
+  balde.amostra.length = Math.min(balde.amostra.length, Math.max(teto, quantosFixos));
+  if (balde.amostra.length >= teto) balde.limite = balde.amostra[teto - 1].chave;
 }
 
 async function principal(): Promise<void> {
@@ -108,13 +120,14 @@ async function principal(): Promise<void> {
   for await (const linha of leitor) {
     linhas++;
     // `lerLinha` aceita o teto; o `< ate` de cada balde é quem tira o 700.
-    const lido = lerLinha(linha, FAIXAS[0][0], FAIXAS.at(-1)![1]);
-    if (!lido) continue;
+    const cru = lerLinha(linha, FAIXAS[0][0], FAIXAS.at(-1)![1]);
+    if (!cru) continue;
+    const lido = comEtiquetasNossas(cru, nossas);
     const balde = baldes.find((b) => lido.rating >= b.de && lido.rating < b.ate);
     if (!balde) continue;
     balde.vistos++;
-    const chave = chaveDe(lido.id);
-    if (balde.amostra.length >= teto && chave > balde.amostra[balde.amostra.length - 1].chave) continue;
+    const chave = chaveDaAmostra(lido.id, fixados);
+    if (chave >= 0 && chave > balde.limite) continue;
     balde.amostra.push({ ...lido, chave });
     if (balde.amostra.length > teto * 2) aparar(balde);
   }
@@ -130,6 +143,7 @@ async function principal(): Promise<void> {
   let noBanco = 0;
   let recusados = 0;
   let bytes = 0;
+  let mantidos = 0;
 
   console.log("Faixa      no site   no banco      KB");
   for (const balde of baldes) {
@@ -147,6 +161,7 @@ async function principal(): Promise<void> {
       .map(({ id, fen, lances, rating, temas }) => ({ id, fen, lances, rating, temas }))
       .sort((a, b) => a.rating - b.rating || (a.id < b.id ? -1 : 1));
 
+    mantidos += bons.filter((p) => fixados.has(p.id)).length;
     const arquivo = `${ORIGEM_BASE}/${balde.de}-${balde.ate}.json`;
     const caminho = path.join(RAIZ, "public/puzzles", arquivo);
     writeFileSync(caminho, JSON.stringify(bons), "utf8");
@@ -167,6 +182,7 @@ async function principal(): Promise<void> {
   );
 
   console.log(`\nTotal: ${total.toLocaleString("pt-BR")} problemas, ${(bytes / 1024 / 1024).toFixed(2)} MB.`);
+  console.log(`Fixados: ${mantidos} mantidos, ${fixados.size - mantidos} sumiram.`);
   if (recusados) console.log(`Recusados na conferência: ${recusados}.`);
   if (baldes.some((b) => b.amostra.length === 0)) {
     console.error("Há faixa sem nenhum problema.");

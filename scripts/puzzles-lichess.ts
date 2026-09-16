@@ -4,7 +4,7 @@
  *
  * Dois scripts leem o mesmo CSV:
  *
- * - `scripts/filtrar-puzzles.ts` — os 36 temas, de 700 a 2100;
+ * - `scripts/filtrar-puzzles.ts` — os 63 temas, de 700 a 2100;
  * - `scripts/base-rating.ts` — os problemas de 400 a 700, só do modo rating
  *   (decisão do Doug de 15/9, `docs/TATICA-RATING.md`).
  *
@@ -15,7 +15,10 @@
  * `lib/tatica/blocos.ts` já recusa para a taxonomia.
  */
 
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { applyUci, fenProblem } from "../lib/chess/fen.ts";
+import { chaveDe } from "../lib/tatica/chave.ts";
 
 /**
  * Os filtros de qualidade, e o que cada um tira de cima da mesa.
@@ -98,4 +101,86 @@ export function problemaDo(p: Pick<Bruto, "fen" | "lances">): string | null {
     fen = aplicado.fen;
   }
   return null;
+}
+
+/* ------------------------------------------------------------------ *
+ * Os ids que já estão no site
+ * ------------------------------------------------------------------ */
+
+/**
+ * Os ids hoje em disco numa pasta de `public/puzzles/` (todos os `.json` dela,
+ * menos o índice), lidos **antes** de a regeneração apagar a pasta.
+ *
+ * ## Por que segurar os ids
+ *
+ * O progresso do aluno é guardado por id, e a fila de revisão também. Um CSV
+ * novo muda a amostra por hash — entram puzzles novos e, com eles, saem antigos
+ * que continuam no banco do Lichess. O puzzle que o aluno errou ontem sumiria da
+ * revisão sem motivo nenhum. Então o id que já estava no site passa na frente
+ * da fila da amostra (`chaveDaAmostra`) e só sai se o Lichess o tirou, se ele
+ * não passa mais nos filtros ou se perdeu a tag.
+ */
+export function idsEmDisco(pasta: string): Set<string> {
+  const ids = new Set<string>();
+  if (!existsSync(pasta)) return ids;
+  for (const nome of readdirSync(pasta)) {
+    if (!nome.endsWith(".json") || nome === "indice.json") continue;
+    for (const p of JSON.parse(readFileSync(path.join(pasta, nome), "utf8")) as { id: string }[]) {
+      ids.add(p.id);
+    }
+  }
+  return ids;
+}
+
+/**
+ * A chave da amostra por hash: a menor fica. O id já servido ganha uma chave
+ * abaixo de qualquer outra, e entre os fixados a ordem continua a do hash.
+ */
+export function chaveDaAmostra(id: string, fixados: ReadonlySet<string>): number {
+  const chave = chaveDe(id);
+  return fixados.has(id) ? chave - 2 ** 32 : chave;
+}
+
+/* ------------------------------------------------------------------ *
+ * As nossas etiquetas
+ * ------------------------------------------------------------------ */
+
+/**
+ * O arquivo lateral de `npm run puzzles:etiquetar` — `dados/etiquetas-nossas.tsv`.
+ *
+ * Uma linha `id<TAB>tag tag` por puzzle que ganhou alguma tag nossa, e um
+ * cabeçalho `# governa: tag tag` com as tags que **este arquivo decide**: para
+ * elas, a coluna `Themes` do Lichess é ignorada e vale só o que está aqui. É o
+ * caso dos padrões que o Lichess não etiqueta (Damiano, Lolli...) e dos que ele
+ * etiqueta frouxo demais e a gente reconfere (`epauletteMate`, `killBoxMate`).
+ *
+ * Sem o arquivo, nada muda: os temas saem só com as tags do Lichess.
+ */
+export type EtiquetasNossas = {
+  readonly governa: ReadonlySet<string>;
+  readonly porId: ReadonlyMap<string, readonly string[]>;
+};
+
+export function lerEtiquetasNossas(arquivo: string): EtiquetasNossas {
+  const governa = new Set<string>();
+  const porId = new Map<string, string[]>();
+  if (!existsSync(arquivo)) return { governa, porId };
+  for (const linha of readFileSync(arquivo, "utf8").split("\n")) {
+    if (linha.startsWith("# governa:")) {
+      for (const tag of linha.slice("# governa:".length).trim().split(/\s+/).filter(Boolean)) governa.add(tag);
+      continue;
+    }
+    if (!linha.trim() || linha.startsWith("#")) continue;
+    const [id, tags = ""] = linha.split("\t");
+    porId.set(id, tags.trim().split(/\s+/).filter(Boolean));
+  }
+  return { governa, porId };
+}
+
+/** As tags do puzzle com as nossas aplicadas: tira as que o arquivo governa e põe as dele. */
+export function comEtiquetasNossas(p: Bruto, nossas: EtiquetasNossas): Bruto {
+  if (nossas.governa.size === 0) return p;
+  const temas = p.temas.filter((t) => !nossas.governa.has(t));
+  for (const tag of nossas.porId.get(p.id) ?? []) if (!temas.includes(tag)) temas.push(tag);
+  return { ...p, temas };
 }

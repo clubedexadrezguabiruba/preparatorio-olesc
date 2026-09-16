@@ -16,6 +16,8 @@
     "e2e:a11y": "playwright test --project editor-1366 --grep @a11y",
     "e2e:desempenho": "playwright test --project editor-1366 --grep @desempenho",
     "e2e:limpar": "node e2e/preparo/limpar.ts",
+    "puzzles:etiquetar": "node scripts/etiquetar-puzzles.ts",
+    "puzzles:auditar": "node scripts/auditar-etiquetas.ts",
     "puzzles:filtrar": "node scripts/filtrar-puzzles.ts",
     "puzzles:base-rating": "node scripts/base-rating.ts",
     "puzzles:indice-rating": "node scripts/indice-rating.ts",
