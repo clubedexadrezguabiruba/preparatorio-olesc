@@ -64,7 +64,7 @@ calibrada na própria amostra dela, a rodada 3 (`--semente rodada3`) mediu de no
 | `dovetailMate` (Cozio) | Cauda de andorinha | nosso + Lichess | 40/40 | — | — | 4.599 |
 | `greekGift` | Sacrifício grego | nosso | 21/40 | 37/40 → regra | — | 1.417 |
 | `counterCheck` | Contra-xeque | nosso | 10/40 | **36/40** | — | 4.723 |
-| `desperado` | Desperado — **fora do currículo** | nosso | 5/40 | 15/40 → regra | 32/40 (80%) | — |
+| `desperado` | Desperado — **em teste** (fora da contagem) | nosso | 5/40 | 15/40 → regra | 32/40 (80%) | 39 |
 | `operaMate` | Mate da ópera | Lichess + validador | 19/40 | **38/40** | — | 5.437 |
 | `pillsburysMate` | Mate de Pillsbury | Lichess + validador | 8/40 | 39/40 → regra | **39/40** | 1.641 |
 | `epauletteMate` | Mate das dragonas | Lichess + validador | 22/40 | 33/40 → regra | — | 3.557 |
@@ -125,6 +125,12 @@ Anderssen #3, Greco #3 e cauda de andorinha #3.
   terceira auditoria propôs duas travas que, na amostra dela, deixam 32/32: a peça colhida tem de
   estar pendurada de verdade antes do 1º lance (sem defensor, ou atacada por peça menor), e quem
   resolve não pode começar em xeque. Aplicar, medir numa quarta amostra nova e decidir.
+
+  **16/9/2026 — no site como teste.** O Doug quis conferir o detector como está (sem as
+  travas): 39 posições novas, fora de toda amostra auditada, estão em `/tatica/desperado`
+  com a pastilha "Em teste" e na tabela `docs/DESPERADO-TESTE.md` (script
+  `scripts/desperado-teste.ts`). `Tema.emTeste` o deixa fora de nível, prova de nível,
+  trilha, selos, tarefas e modo rating. A régua: 36 de 39 certas.
 
 - **Mayet e Greco de torre** — 50% e 87% já são ópera e Pillsbury.
 - **Peça sobrecarregada** — sem teste geométrico confiável; entra como explicação nos textos de

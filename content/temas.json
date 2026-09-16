@@ -520,6 +520,19 @@
     "cuidado": "Xeque de volta não resolve se ele responde comendo a sua peça com outro xeque. Veja a resposta dele antes de mover."
   },
   {
+    "tag": "desperado",
+    "explicacao": [
+      "Uma peça sua ficou atacada e não tem como se salvar: fugir não dá, defender não dá. Ela vai cair de qualquer jeito. Então, antes de cair, ela come alguma coisa dele — e só depois é capturada.",
+      "É vender caro o que já estava perdido. O nome é o de quem não tem mais nada a perder. O erro comum é olhar só para a peça atacada e deixar que ela caia sem levar nada."
+    ],
+    "procure": [
+      "Qual peça sua está atacada e sem jeito de se salvar?",
+      "Antes de cair, o que ela alcança para comer?",
+      "Entre o que ela alcança, o que vale mais?"
+    ],
+    "cuidado": "Antes de entregar a peça, confirme que ela está mesmo perdida. Se existe fuga ou defesa, salvar a peça vale mais que levar um peão."
+  },
+  {
     "tag": "operaMate",
     "explicacao": [
       "O rei dele está na borda. A sua torre encosta nele, ao longo dessa borda, e dá xeque. Ele não pode comer a torre, porque um bispo seu a defende de longe, pela diagonal.",

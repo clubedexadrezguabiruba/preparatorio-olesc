@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { depoisDaPassada, zerada } from "../finais/escada.ts";
 import { AULA_ZERADA, TRILHA } from "../finais/trilha.ts";
-import { BLOCOS } from "../tatica/blocos.ts";
+import { BLOCOS, contaNoCurso } from "../tatica/blocos.ts";
 import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
 import { contarAberto, montarMapa, MODULO, tamanhoDoNivel, type ProgressoParaOMapa } from "./mapa.ts";
 import { NIVEIS } from "./nivel.ts";
@@ -30,7 +30,8 @@ const VAZIO: ProgressoParaOMapa = {
   nivelDoAluno: 5,
 };
 
-const TEMAS = BLOCOS.flatMap((b) => b.temas);
+// Os temas que contam: o tema em teste (`Tema.emTeste`) não entra no mapa.
+const TEMAS = BLOCOS.flatMap((b) => b.temas).filter(contaNoCurso);
 
 function itens(mapa: ReturnType<typeof montarMapa>, modulo: string) {
   return [...mapa.values()]
@@ -46,6 +47,7 @@ test("o mapa carrega o curso inteiro, sem sobra e sem repetido", () => {
     const ids = itens(mapa, modulo).map((i) => i.id);
     assert.equal(new Set(ids).size, ids.length, `${modulo}: item repetido no mapa`);
   }
+  assert.ok(!itens(mapa, "tatica").some((i) => i.id === "desperado"), "o desperado em teste entrou na trilha");
 });
 
 test("os cinco níveis existem, e nenhum deles fica vazio de tática", () => {

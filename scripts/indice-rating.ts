@@ -31,7 +31,7 @@
 import { readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { TEMAS } from "../lib/tatica/blocos.ts";
+import { contaNoCurso, TEMAS } from "../lib/tatica/blocos.ts";
 import type { Indice, Puzzle, TemaNoIndice } from "../lib/tatica/puzzles.ts";
 import { eMateCurto, ORIGEM_BASE, type LinhaDoIndice } from "../lib/tatica/rating.ts";
 
@@ -47,9 +47,10 @@ const base = ler<TemaNoIndice>(`${ORIGEM_BASE}/indice.json`);
 
 const porTag = new Map(indice.temas.map((t) => [t.tag, t]));
 // A ordem de `BLOCOS`, e não a do `index.json`: é a regra do desempate, e ela
-// não pode depender da ordem em que outro script gravou.
+// não pode depender da ordem em que outro script gravou. Tema em teste não entra
+// no modo rating (`Tema.emTeste`).
 const origens: TemaNoIndice[] = [
-  ...TEMAS.map((t) => {
+  ...TEMAS.filter(contaNoCurso).map((t) => {
     const noIndice = porTag.get(t.tag);
     if (!noIndice) throw new Error(`"${t.tag}" está em BLOCOS e não está no index.json`);
     return noIndice;

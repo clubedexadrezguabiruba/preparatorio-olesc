@@ -9,7 +9,7 @@ import { perfilAtual } from "@/lib/auth/perfil";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import { METAL, NIVEL, nivelDoAluno, podeAbrir, situacaoDoItem, temaFechado } from "@/lib/curso/nivel";
 import { nivelConquistado } from "@/lib/curso/progresso";
-import { BLOCOS } from "@/lib/tatica/blocos";
+import { BLOCOS, contaNoCurso } from "@/lib/tatica/blocos";
 import { temaAberto } from "@/lib/tatica/conteudo";
 import { progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
 import { INICIO } from "@/lib/tatica/glicko2";
@@ -104,7 +104,9 @@ export default async function Tatica() {
         ) : null}
 
         {BLOCOS.map((bloco) => {
-          const fechados = bloco.temas.filter((t) => temaFechado(progresso.get(t.tag)?.feitos)).length;
+          // O tema em teste aparece, mas fica fora do "X de N concluídos".
+          const contam = bloco.temas.filter(contaNoCurso);
+          const fechados = contam.filter((t) => temaFechado(progresso.get(t.tag)?.feitos)).length;
           return (
             <section key={bloco.id} aria-labelledby={`bloco-${bloco.id}`} className="flex flex-col gap-3">
               <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
@@ -115,8 +117,8 @@ export default async function Tatica() {
                   <span className={`rounded-full border px-2 py-0.5 font-semibold ${COR_DO_NIVEL[bloco.nivel].pastilha}`}>
                     Nível {bloco.nivel} · {METAL[bloco.nivel]}
                   </span>
-                  FIDE {faixaFide(bloco.nivel)} · {fechados} de {bloco.temas.length}{" "}
-                  {bloco.temas.length === 1 ? "concluído" : "concluídos"}
+                  FIDE {faixaFide(bloco.nivel)} · {fechados} de {contam.length}{" "}
+                  {contam.length === 1 ? "concluído" : "concluídos"}
                 </span>
               </div>
 

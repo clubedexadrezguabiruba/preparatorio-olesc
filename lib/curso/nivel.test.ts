@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { AULA_ZERADA, TRILHA, type ProgressoDaAula } from "../finais/trilha.ts";
-import { BLOCOS } from "../tatica/blocos.ts";
+import { BLOCOS, temaPorTag } from "../tatica/blocos.ts";
 import { METAS, type Feitos } from "../tatica/serie.ts";
 import {
   aulasDoNivel,
@@ -118,9 +118,21 @@ test("as aulas de finais andam em ordem de nível: a ordem de um nível não se 
   }
 });
 
+test("o tema em teste está no bloco 7 e fora de todo nível e de toda prova de nível", () => {
+  // O desperado (16/9/2026) entrou para o Doug conferir 39 posições. Nenhum
+  // aluno pode ficar preso nele: se alguém tirar o `emTeste` sem decidir, este
+  // teste pergunta por quê.
+  assert.equal(temaPorTag("desperado")?.bloco, 7);
+  assert.equal(temaPorTag("desperado")?.emTeste, true);
+  for (const n of NIVEIS) {
+    assert.ok(!temasDoNivel(n).includes("desperado"), `o desperado entrou no nível ${n}`);
+    assert.ok(!temasDaProva(n).includes("desperado"), `o desperado entrou na prova do nível ${n}`);
+  }
+});
+
 test("`nivelDoTema` acha as 63 tags e recusa o que não é do currículo", () => {
   for (const bloco of BLOCOS) {
-    for (const tema of bloco.temas) assert.equal(nivelDoTema(tema.tag), bloco.nivel);
+    for (const tema of bloco.temas) assert.equal(nivelDoTema(tema.tag), tema.emTeste ? undefined : bloco.nivel);
   }
   // `castling` existe no Lichess e ficou fora do currículo de propósito (16/9).
   assert.equal(nivelDoTema("castling"), undefined);

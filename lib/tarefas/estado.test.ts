@@ -70,6 +70,14 @@ test("somar blocos conta só os temas dos blocos pedidos", () => {
   assert.deepEqual(somarBlocos(progresso, [7]), { feitos: 0, certos: 0 });
 });
 
+test("somar blocos não conta o tema em teste", () => {
+  const progresso = new Map([
+    ["counterCheck", tema(5, 4)], // bloco 7
+    ["desperado", tema(39, 30)], // bloco 7, em teste
+  ]);
+  assert.deepEqual(somarBlocos(progresso, [7]), { feitos: 5, certos: 4 });
+});
+
 test("a tarefa de tática fecha pela contagem, não pelo acerto", () => {
   // 60 puzzles com 50% de acerto: a tarefa está feita. A caixa que o aluno não
   // consegue marcar por mais que trabalhe é a caixa que ensina a desistir — o

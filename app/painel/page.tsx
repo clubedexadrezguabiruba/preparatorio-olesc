@@ -36,7 +36,7 @@ import {
 } from "@/lib/tarefas/agenda";
 import { AGENDA } from "@/lib/tarefas/conteudo";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
-import { BLOCOS } from "@/lib/tatica/blocos";
+import { BLOCOS, contaNoCurso } from "@/lib/tatica/blocos";
 import { progressoPorTema, revisaoDeHoje } from "@/lib/tatica/progresso";
 import { INICIO } from "@/lib/tatica/glicko2";
 import { serieDoGrafico } from "@/lib/tatica/rating-grafico";
@@ -234,7 +234,7 @@ export default async function Painel() {
    * um selo de "13 temas" que zerasse ao subir de nível não seria um selo.
    */
   const temasFechados = BLOCOS.flatMap((b) => b.temas).filter((t) =>
-    temaFechado(progresso.get(t.tag)?.feitos),
+    contaNoCurso(t) && temaFechado(progresso.get(t.tag)?.feitos),
   ).length;
 
   const aBase = (cor: "brancas" | "pretas") => {

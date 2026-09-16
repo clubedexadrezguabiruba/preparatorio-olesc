@@ -12,7 +12,7 @@
     "desvioMaximo": 100,
     "tetoPorArquivo": 1000
   },
-  "totalNoSite": 271885,
+  "totalNoSite": 271924,
   "temas": [
     {
       "tag": "mateIn1",
@@ -1636,6 +1636,45 @@
       ],
       "total": 4723,
       "noBanco": 7016
+    },
+    {
+      "tag": "desperado",
+      "bloco": 7,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1100,
+          "ate": 1300,
+          "arquivo": "desperado/1100-1300.json",
+          "total": 8
+        },
+        {
+          "de": 1300,
+          "ate": 1500,
+          "arquivo": "desperado/1300-1500.json",
+          "total": 8
+        },
+        {
+          "de": 1500,
+          "ate": 1700,
+          "arquivo": "desperado/1500-1700.json",
+          "total": 8
+        },
+        {
+          "de": 1700,
+          "ate": 1900,
+          "arquivo": "desperado/1700-1900.json",
+          "total": 8
+        },
+        {
+          "de": 1900,
+          "ate": 2100,
+          "arquivo": "desperado/1900-2100.json",
+          "total": 7
+        }
+      ],
+      "total": 39,
+      "noBanco": 8102
     },
     {
       "tag": "defensiveMove",

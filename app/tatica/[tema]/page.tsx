@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { perfilAtual } from "@/lib/auth/perfil";
-import { BLOCOS, temaPorTag } from "@/lib/tatica/blocos";
+import { EmTeste } from "@/components/tatica/CartaoDoTema";
+import { BLOCOS, contaNoCurso, temaPorTag } from "@/lib/tatica/blocos";
 import { temaAberto, temaEscrito } from "@/lib/tatica/conteudo";
 import { escolherPuzzles } from "@/lib/tatica/escolher";
 import {
@@ -49,7 +50,7 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
   // liberados que pudesse discordar desta.
   if (!escrito || !bloco) {
     return (
-      <Moldura tema={tema.nome} bloco={bloco?.nome ?? ""}>
+      <Moldura tema={tema.nome} bloco={bloco?.nome ?? ""} emTeste={tema.emTeste}>
         <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
           Este tema é do currículo, mas o texto dele ainda não foi escrito. Siga pelos
           temas que já estão abertos.
@@ -64,7 +65,7 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
 
   if (!etapa) {
     return (
-      <Moldura tema={tema.nome} bloco={bloco.nome}>
+      <Moldura tema={tema.nome} bloco={bloco.nome} emTeste={tema.emTeste}>
         <div className="flex flex-col gap-3 cartao px-4 py-6 text-center">
           <p className="titulo text-tinta">Tema concluído</p>
           <p className="text-sm text-tinta-media tabular-nums">
@@ -93,12 +94,16 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
     faltam,
     semente,
     jaVistos,
-    outrosTemas: [...todosOsProgressos.keys()].filter((t) => t !== tag && temaAberto(t)),
+    // Tema em teste não se mistura na prova dos outros.
+    outrosTemas: [...todosOsProgressos.keys()].filter((t) => {
+      const outro = temaPorTag(t);
+      return t !== tag && temaAberto(t) && outro !== undefined && contaNoCurso(outro);
+    }),
     errados,
   });
 
   return (
-    <Moldura tema={tema.nome} bloco={bloco.nome}>
+    <Moldura tema={tema.nome} bloco={bloco.nome} emTeste={tema.emTeste}>
       {/* Fatia 10: x vira a vista e ? mostra os atalhos. */}
       <VistaDoTabuleiro escopos={[]}>
       <Serie
@@ -136,10 +141,13 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
 function Moldura({
   tema,
   bloco,
+  emTeste = false,
   children,
 }: {
   tema: string;
   bloco: string;
+  /** `Tema.emTeste`: a pastilha e a frase curta, na mesma linha do título. */
+  emTeste?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -169,6 +177,11 @@ function Moldura({
         </Link>
         <h1 className="titulo text-tinta">{tema}</h1>
         {bloco ? <p className="text-xs text-tinta-fraca">{bloco}</p> : null}
+        {emTeste ? (
+          <p className="text-xs text-aviso-tinta">
+            <EmTeste /> Não conta para nível, selos nem tarefas.
+          </p>
+        ) : null}
       </header>
       {children}
     </main>

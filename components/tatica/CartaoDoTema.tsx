@@ -33,6 +33,9 @@ import { COR_DO_NIVEL, SeloDoTema } from "./SeloDoTema";
  * `destaque` é o "Continue de onde parou" do topo: largo, com borda do método e
  * o botão "Continuar", tracejado nunca — mesmo quando o tema é de nível adiante,
  * ali ele é o próximo passo, e não um desvio.
+ *
+ * O tema **em teste** (`Tema.emTeste`) ganha a pastilha âmbar "Em teste" ao lado
+ * do nome: ele está aberto, mas não conta para nada.
  */
 export function CartaoDoTema({
   tema,
@@ -79,7 +82,7 @@ export function CartaoDoTema({
     <li className="h-full">
       <Link
         href={`/tatica/${tema.tag}`}
-        aria-label={`${tema.nome}: ${feitos} de ${PUZZLES_POR_TEMA} puzzles${acerto === null ? "" : `, ${acerto}% de acerto`}. ${onde}.`}
+        aria-label={`${tema.nome}${tema.emTeste ? " (em teste)" : ""}: ${feitos} de ${PUZZLES_POR_TEMA} puzzles${acerto === null ? "" : `, ${acerto}% de acerto`}. ${onde}.`}
         className={`foco flex h-full gap-3 ${destaque ? "flex-wrap items-center px-4 py-4 sm:flex-nowrap sm:px-5" : "px-4 py-3.5"} ${
           adiante ? "cartao-vazio transition-colors hover:bg-carta-toque" : "cartao-alvo"
         } ${cor.borda}`}
@@ -88,6 +91,12 @@ export function CartaoDoTema({
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <p className={`${destaque ? "text-base" : "text-sm"} leading-snug font-semibold ${adiante ? "text-tinta-media" : "text-tinta"}`}>
             {tema.nome}
+            {tema.emTeste ? (
+              <>
+                {" "}
+                <EmTeste />
+              </>
+            ) : null}
           </p>
           <p className="text-xs text-tinta-fraca">{tema.resumo}</p>
           {/* Etapa e acerto um embaixo do outro, sempre: lado a lado, o acerto descia
@@ -116,5 +125,17 @@ export function CartaoDoTema({
         ) : null}
       </Link>
     </li>
+  );
+}
+
+/**
+ * A pastilha "Em teste" — âmbar, que é a cor de aviso do site. A mesma no cartão
+ * e no cabeçalho da página do tema.
+ */
+export function EmTeste() {
+  return (
+    <span className="inline-block rounded-full border border-aviso-superficie px-2 py-px align-[0.1em] text-[11px] leading-4 font-semibold whitespace-nowrap text-aviso-tinta">
+      Em teste
+    </span>
   );
 }

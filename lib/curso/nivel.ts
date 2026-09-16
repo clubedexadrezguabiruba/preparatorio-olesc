@@ -1,5 +1,5 @@
 import { aprendeu, AULA_ZERADA, trilhaCompleta, type AulaDaTrilha, type ProgressoDaAula } from "../finais/trilha.ts";
-import { BLOCOS } from "../tatica/blocos.ts";
+import { BLOCOS, contaNoCurso } from "../tatica/blocos.ts";
 import { etapaAtual, type Feitos } from "../tatica/serie.ts";
 
 /**
@@ -168,9 +168,9 @@ export const PROVA_DE_NIVEL = { puzzles: 12, paraPassar: 9 } as const;
  * O que cai em cada nível
  * ------------------------------------------------------------------ */
 
-/** As tags de tática do nível, na ordem dos blocos. */
+/** As tags de tática do nível, na ordem dos blocos — sem os temas em teste. */
 export function temasDoNivel(n: Nivel): readonly string[] {
-  return BLOCOS.filter((b) => b.nivel === n).flatMap((b) => b.temas.map((t) => t.tag));
+  return BLOCOS.filter((b) => b.nivel === n).flatMap((b) => b.temas.filter(contaNoCurso).map((t) => t.tag));
 }
 
 /**
@@ -201,9 +201,9 @@ export function temasDaProva(nivel: Nivel): string[] {
   return NIVEIS.filter((n) => n <= nivel).flatMap((n) => [...temasDoNivel(n)]);
 }
 
-/** Em que nível mora um tema de tática. `undefined` se a tag não é do currículo. */
+/** Em que nível mora um tema de tática. `undefined` se a tag não é do currículo (ou está em teste). */
 export function nivelDoTema(tag: string): Nivel | undefined {
-  return BLOCOS.find((b) => b.temas.some((t) => t.tag === tag))?.nivel;
+  return BLOCOS.find((b) => b.temas.some((t) => t.tag === tag && contaNoCurso(t)))?.nivel;
 }
 
 /* ------------------------------------------------------------------ *

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { TRILHA } from "../finais/trilha.ts";
-import { BLOCOS } from "../tatica/blocos.ts";
+import { BLOCOS, contaNoCurso } from "../tatica/blocos.ts";
 import { MINIMO_DA_SEQUENCIA_MIN, diasComOMinimo, maiorSequenciaDeDias, type MinutosDoDia } from "./hoje.ts";
 import { NIVEIS } from "./nivel.ts";
 import { DEGRAUS, ganhos, proximos, selos, type ParaOsSelos } from "./selos.ts";
@@ -85,7 +85,7 @@ test("um dia curto quebra a sequência, e a partida declarada não a sustenta", 
  * ------------------------------------------------------------------ */
 
 test("os degraus de tática cabem no currículo, e o último é o currículo inteiro", () => {
-  const temas = BLOCOS.flatMap((b) => b.temas).length;
+  const temas = BLOCOS.flatMap((b) => b.temas).filter(contaNoCurso).length;
   assert.equal(DEGRAUS.tatica[DEGRAUS.tatica.length - 1], temas, "o último degrau são os 63");
   for (const d of DEGRAUS.tatica) assert.ok(d <= temas, `o degrau ${d} não existe no currículo`);
 });
@@ -106,7 +106,7 @@ test("os degraus sobem, e nunca repetem", () => {
 test("o degrau 14 de tática é a meta da OLESC, e não um número redondo", () => {
   // Se alguém trocar por 10 achando que fica mais bonito, este teste pergunta
   // por quê: 14 é o total de temas dos níveis 1 a 3, que é a meta declarada.
-  const ate3 = BLOCOS.filter((b) => b.nivel <= 3).flatMap((b) => b.temas).length;
+  const ate3 = BLOCOS.filter((b) => b.nivel <= 3).flatMap((b) => b.temas).filter(contaNoCurso).length;
   assert.equal(ate3, 14);
   assert.ok(DEGRAUS.tatica.includes(14));
 });

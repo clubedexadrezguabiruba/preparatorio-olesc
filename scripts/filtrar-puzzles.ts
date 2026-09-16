@@ -164,6 +164,13 @@ const fixados = new Map<string, Set<string>>(
 );
 const todosOsFixados = new Set([...fixados.values()].flatMap((ids) => [...ids]));
 /**
+ * Os temas em teste (`Tema.emTeste`) não são amostrados: ficam só os ids que já
+ * estão em disco, escolhidos à mão para o Doug conferir
+ * (`scripts/desperado-teste.ts`). Sem a pasta, o tema sai vazio e o fim do
+ * script reprova.
+ */
+const emTeste = new Set(BLOCOS.flatMap((b) => b.temas).filter((t) => t.emTeste).map((t) => t.tag));
+/**
  * Fixados que apareceram no CSV (em qualquer linha), os que passaram nos filtros
  * com a tag, e os que passaram mas com a nota fora da faixa do bloco.
  */
@@ -220,6 +227,7 @@ async function varrer(): Promise<{ linhas: number; candidatos: number }> {
         fixadosQuePassaram.get(tema)!.add(lido.id);
         if (rating < baldes[0].de || rating >= baldes[baldes.length - 1].ate) fixadosForaDaFaixa.get(tema)!.add(lido.id);
       }
+      if (emTeste.has(tema) && !fixadosDoTema.has(lido.id)) continue;
       for (const balde of baldes) {
         if (rating < balde.de || rating >= balde.ate) continue;
         balde.vistos++;

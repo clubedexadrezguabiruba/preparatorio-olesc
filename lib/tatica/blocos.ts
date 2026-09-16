@@ -48,7 +48,24 @@ export type Tema = {
    * precisão medida em `docs/TATICA-PADROES.md`. Sem o campo, vale `"lichess"`.
    */
   readonly origem?: "lichess" | "nosso";
+  /**
+   * **Tema em teste** — está no site para o Doug conferir, e fora de tudo o que
+   * conta: níveis, prova de nível, trilha, selos, tarefas, a contagem de temas e
+   * o modo rating (`contaNoCurso`). Nenhum aluno fica preso nele. A tela mostra
+   * "Em teste" no cartão e na página do tema.
+   *
+   * O primeiro é o desperado (16/9/2026): 80% na terceira auditoria, abaixo da
+   * régua de 90%. Os puzzles dele são exatamente os 39 de
+   * `docs/DESPERADO-TESTE.md` — `scripts/filtrar-puzzles.ts` só aceita, num tema
+   * em teste, os ids que já estão em disco.
+   */
+  readonly emTeste?: true;
 };
+
+/** Se o tema conta no curso — tudo, menos os temas em teste. */
+export function contaNoCurso(tema: Tema): boolean {
+  return !tema.emTeste;
+}
 
 export type Bloco = {
   readonly id: number;
@@ -167,6 +184,7 @@ export const BLOCOS: readonly Bloco[] = [
       { tag: "interference", nome: "Interferência", resumo: "Pôr uma peça no meio do caminho de quem defende." },
       { tag: "zugzwang", nome: "Zugzwang", resumo: "Jogar é obrigatório, e todo lance piora." },
       { tag: "counterCheck", nome: "Contra-xeque", resumo: "Em xeque, em vez de fugir com o rei, tape ou capture dando xeque de volta.", origem: "nosso" },
+      { tag: "desperado", nome: "Desperado", resumo: "A peça que vai cair de qualquer jeito come alguma coisa antes de ser capturada.", origem: "nosso", emTeste: true },
     ],
   },
   {

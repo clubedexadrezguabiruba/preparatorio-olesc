@@ -484,6 +484,17 @@ const DESENHOS: Record<string, ReactNode> = {
       <P t="k" x={12} y={26.5} s={0.5} clara />
     </>
   ),
+  // O cavalo atacado pelo peão come o bispo antes de cair (em teste, 16/9).
+  desperado: (
+    <>
+      <L x1={9} y1={10} x2={10.5} y2={19} />
+      <P t="p" x={8} y={8.5} s={0.45} />
+      <S x1={15.5} y1={20} x2={21.5} y2={14} />
+      <P t="b" x={25} y={10} s={0.5} />
+      <X x={25} y={9.5} r={3.4} />
+      <P t="n" x={10.5} y={25.5} s={0.55} clara />
+    </>
+  ),
 
   // 9. Padrões de mate III.
   operaMate: (

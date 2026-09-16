@@ -1,5 +1,5 @@
 import { diasEntre, hojeNoBrasil, somarDias } from "../curso/calendario.ts";
-import { TEMAS } from "./blocos.ts";
+import { contaNoCurso, TEMAS } from "./blocos.ts";
 import { ORIGEM_BASE } from "./rating.ts";
 
 /**
@@ -174,7 +174,8 @@ export const MINIMO_POR_TEMA = 15;
 /** Quantos temas fracos a tela mostra. */
 export const TEMAS_FRACOS = 3;
 
-const TAGS = new Set(TEMAS.map((t) => t.tag));
+// Sem os temas em teste: o modo rating não os nomeia nem os mede.
+const TAGS = new Set(TEMAS.filter(contaNoCurso).map((t) => t.tag));
 const ORDEM = new Map(TEMAS.map((t, i) => [t.tag, i]));
 
 /**

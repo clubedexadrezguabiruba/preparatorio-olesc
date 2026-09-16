@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { BLOCOS } from "@/lib/tatica/blocos";
+import { BLOCOS, contaNoCurso } from "@/lib/tatica/blocos";
 
 export default function Home() {
-  const temas = BLOCOS.reduce((soma, bloco) => soma + bloco.temas.length, 0);
+  const temas = BLOCOS.reduce((soma, bloco) => soma + bloco.temas.filter(contaNoCurso).length, 0);
 
   return (
     <main className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center gap-8 px-5 py-16">
