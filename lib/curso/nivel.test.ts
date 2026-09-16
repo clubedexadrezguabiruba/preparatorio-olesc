@@ -78,22 +78,22 @@ test("toda aula de finais cai num nível de 1 a 5", () => {
   }
 });
 
-test("os 36 temas e as 49 aulas se repartem sem sobra e sem repetição", () => {
+test("os 63 temas e as 49 aulas se repartem sem sobra e sem repetição", () => {
   // A conta que a escada anterior errava: ela punha os 36 temas todos no nível
   // 1, e ninguém percebia porque nenhum teste somava as partes de volta.
   const temas = NIVEIS.flatMap((n) => temasDoNivel(n));
-  assert.equal(temas.length, 36);
-  assert.equal(new Set(temas).size, 36, "algum tema caiu em dois níveis");
+  assert.equal(temas.length, 63);
+  assert.equal(new Set(temas).size, 63, "algum tema caiu em dois níveis");
 
   const aulas = NIVEIS.flatMap((n) => aulasDoNivel(n).map((a) => a.id));
   assert.equal(aulas.length, 49);
   assert.equal(new Set(aulas).size, 49, "alguma aula caiu em dois níveis");
 });
 
-test("a escada tem a forma decidida: 3, 5, 5, 9 e 14 temas", () => {
+test("a escada tem a forma decidida: 3, 6, 5, 15 e 34 temas", () => {
   assert.deepEqual(
     NIVEIS.map((n) => temasDoNivel(n).length),
-    [3, 5, 5, 9, 14],
+    [3, 6, 5, 15, 34],
   );
 });
 
@@ -118,11 +118,12 @@ test("as aulas de finais andam em ordem de nível: a ordem de um nível não se 
   }
 });
 
-test("`nivelDoTema` acha as 36 tags e recusa o que não é do currículo", () => {
+test("`nivelDoTema` acha as 63 tags e recusa o que não é do currículo", () => {
   for (const bloco of BLOCOS) {
     for (const tema of bloco.temas) assert.equal(nivelDoTema(tema.tag), bloco.nivel);
   }
-  assert.equal(nivelDoTema("queensideAttack"), undefined);
+  // `castling` existe no Lichess e ficou fora do currículo de propósito (16/9).
+  assert.equal(nivelDoTema("castling"), undefined);
 });
 
 /* ------------------------------------------------------------------ *
@@ -327,11 +328,11 @@ test("a prova sorteia do nível e de todos os anteriores, sem repetir tema", () 
   assert.deepEqual(temasDaProva(1), [...temasDoNivel(1)]);
 
   const doTres = temasDaProva(3);
-  assert.equal(doTres.length, 3 + 5 + 5);
+  assert.equal(doTres.length, 3 + 6 + 5);
   assert.equal(new Set(doTres).size, doTres.length, "algum tema entrou duas vezes");
   for (const tag of temasDoNivel(1)) assert.ok(doTres.includes(tag), `${tag} ficou de fora`);
 
-  assert.equal(temasDaProva(5).length, 36, "a prova do nível 5 alcança o currículo inteiro");
+  assert.equal(temasDaProva(5).length, 63, "a prova do nível 5 alcança o currículo inteiro");
 });
 
 test("a prova de um nível contém a do nível abaixo, inteira", () => {

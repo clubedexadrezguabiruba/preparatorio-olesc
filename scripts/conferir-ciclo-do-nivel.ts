@@ -265,7 +265,7 @@ try {
 
   console.log("\ng. A escada não tem buraco: os cinco níveis existem e somam o currículo");
   const total = NIVEIS.reduce((s, n) => s + temasDoNivel(n).length, 0);
-  afirmar(total === 36, `os 36 temas do currículo estão na escada (viu ${total})`);
+  afirmar(total === 63, `os 63 temas do currículo estão na escada (viu ${total})`);
 } finally {
   await limpar();
   console.log("\nO que este script escreveu foi apagado.");

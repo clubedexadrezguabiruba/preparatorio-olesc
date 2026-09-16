@@ -86,7 +86,7 @@ test("um dia curto quebra a sequência, e a partida declarada não a sustenta", 
 
 test("os degraus de tática cabem no currículo, e o último é o currículo inteiro", () => {
   const temas = BLOCOS.flatMap((b) => b.temas).length;
-  assert.equal(DEGRAUS.tatica[DEGRAUS.tatica.length - 1], temas, "o último degrau são os 36");
+  assert.equal(DEGRAUS.tatica[DEGRAUS.tatica.length - 1], temas, "o último degrau são os 63");
   for (const d of DEGRAUS.tatica) assert.ok(d <= temas, `o degrau ${d} não existe no currículo`);
 });
 
@@ -103,12 +103,12 @@ test("os degraus sobem, e nunca repetem", () => {
   }
 });
 
-test("o degrau 13 de tática é a meta da OLESC, e não um número redondo", () => {
+test("o degrau 14 de tática é a meta da OLESC, e não um número redondo", () => {
   // Se alguém trocar por 10 achando que fica mais bonito, este teste pergunta
-  // por quê: 13 é o total de temas dos níveis 1 a 3, que é a meta declarada.
+  // por quê: 14 é o total de temas dos níveis 1 a 3, que é a meta declarada.
   const ate3 = BLOCOS.filter((b) => b.nivel <= 3).flatMap((b) => b.temas).length;
-  assert.equal(ate3, 13);
-  assert.ok(DEGRAUS.tatica.includes(13));
+  assert.equal(ate3, 14);
+  assert.ok(DEGRAUS.tatica.includes(14));
 });
 
 test("o primeiro degrau de finais é alcançável com o que existe hoje", () => {
@@ -149,7 +149,7 @@ test("o aluno zerado não tem selo nenhum, e o aluno completo tem todos", () => 
   assert.deepEqual(ganhos(selos(ZERADO)), []);
 
   const tudo: ParaOsSelos = {
-    temasFechados: 36,
+    temasFechados: 63,
     aulasAprendidas: 49,
     repertorio: {
       brancasCompletas: true,
@@ -168,13 +168,13 @@ test("o aluno zerado não tem selo nenhum, e o aluno completo tem todos", () => 
 });
 
 test("os degraus acendem na ordem, e não pulam", () => {
-  const doze = selos(com({ temasFechados: 12 })).filter((s) => s.familia === "tatica");
+  const treze = selos(com({ temasFechados: 13 })).filter((s) => s.familia === "tatica");
   assert.deepEqual(
-    doze.map((s) => s.ganho),
+    treze.map((s) => s.ganho),
     [true, true, false, false, false],
-    "com 12 temas, os degraus 3 e 7 acendem e o 13 não",
+    "com 13 temas, os degraus 3 e 7 acendem e o 14 não",
   );
-  assert.equal(doze[2].falta, "falta 1 tema", "e o 13 diz que falta um");
+  assert.equal(treze[2].falta, "falta 1 tema", "e o 14 diz que falta um");
 });
 
 test("os níveis acendem até o conquistado, e o próximo diz o que fazer", () => {
@@ -205,7 +205,7 @@ test("os dois próximos vêm de famílias diferentes", () => {
 test("`proximos` pula a família que já está completa", () => {
   const lista = selos(
     com({
-      temasFechados: 36,
+      temasFechados: 63,
       aulasAprendidas: 49,
       diasComUmaHora: 1,
       maiorSequencia: 30,

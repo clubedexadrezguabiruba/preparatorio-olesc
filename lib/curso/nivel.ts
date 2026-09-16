@@ -85,7 +85,7 @@ export const NIVEL: Record<Nivel, DescricaoDoNivel> = {
   2: {
     numero: 2,
     fide: [800, 1000],
-    resumo: "Garfo, cravada, espeto, descoberto — o vocabulário que decide partida.",
+    resumo: "Garfo, cravada, espeto, ataque e xeque descoberto — o vocabulário que decide partida.",
     aulasParaFechar: 4,
   },
   3: {
@@ -97,13 +97,13 @@ export const NIVEL: Record<Nivel, DescricaoDoNivel> = {
   4: {
     numero: 4,
     fide: [1200, 1400],
-    resumo: "Mates de padrão avançado, e remover quem defende.",
+    resumo: "Mais padrões de mate, e remover quem defende.",
     aulasParaFechar: 4,
   },
   5: {
     numero: 5,
     fide: [1400, null],
-    resumo: "Ataque ao rei, lances finos, defesa e conversão.",
+    resumo: "Ataque ao rei, lances finos, defesa e conversão, e os mates raros.",
     aulasParaFechar: 4,
   },
 };

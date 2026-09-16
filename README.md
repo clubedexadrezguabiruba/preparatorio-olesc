@@ -117,23 +117,37 @@ node scripts/aluno-de-teste.ts apagar
 
 ## Os puzzles
 
-Os 175.987 puzzles de `public/puzzles/` são um recorte do banco público do
-Lichess (CC0), gerado por `npm run puzzles:filtrar` a partir do CSV bruto em
-`dados/` — que tem 570 MB e **não** é versionado.
+Os 271.885 puzzles de `public/puzzles/` são um recorte do banco público do
+Lichess (CC0, dump de set/2026), gerado a partir do CSV bruto em `dados/` —
+que tem 1,1 GB e **não** é versionado.
 
-O recorte é por tema do currículo (`lib/tatica/blocos.ts`) e por faixa de
-rating: de **700 a 2100**, em faixas de 200 pontos, com teto de **1.000 puzzles
-por arquivo**. Dentro de cada tema, os puzzles saem **em rating crescente**, e
-as faixas vêm na ordem: a série que o aluno resolve sobe de dificuldade
-sozinha. O teto de 2100 é o mesmo para os oito blocos — o que muda entre eles é
-o piso.
+O recorte é por tema do currículo (`lib/tatica/blocos.ts`, 63 temas em onze
+blocos) e por faixa de rating: de **700 a 2100**, em faixas de 200 pontos, com
+teto de **1.000 puzzles por arquivo**. Dentro de cada tema, os puzzles saem **em
+rating crescente**, e as faixas vêm na ordem: a série que o aluno resolve sobe
+de dificuldade sozinha. O teto de 2100 é o mesmo para os onze blocos — o que muda
+entre eles é o piso.
 
-Refazer o recorte:
+**21 temas não vêm só da etiqueta do Lichess.** Dez padrões de mate e duas
+táticas o Lichess não etiqueta, e nove etiquetas dele se mostraram frouxas (o
+mate do canto acertava 32%). Quem decide essas tags são os detectores de
+`lib/tatica/padroes/`, com a precisão medida puzzle a puzzle em
+`docs/TATICA-PADROES.md`.
+
+Refazer o recorte, na ordem:
 
 ```bash
-bzip2 -dkc ~/Desktop/Ccdxdatalichess_db_puzzle.csv.bz2 > dados/lichess_db_puzzle.csv
-npm run puzzles:filtrar
+zstd -d lichess_db_puzzle.csv.zst -o dados/lichess_db_puzzle.csv
+npm run puzzles:etiquetar          # ~30 min: as nossas tags, em dados/etiquetas-nossas.tsv
+npm run puzzles:filtrar -- --dump 2026-09
+npm run puzzles:base-rating
+npm run puzzles:indice-rating
+npm run tatica:origens             # a prova serve cada puzzle do arquivo certo
 ```
+
+A regeneração **segura os ids** que já estão no site: o progresso e a fila de
+revisão do aluno são guardados por id, e um CSV novo só tira um puzzle que o
+Lichess apagou, que não passa mais nos filtros ou cuja nota saiu da faixa.
 
 ## Licenças
 

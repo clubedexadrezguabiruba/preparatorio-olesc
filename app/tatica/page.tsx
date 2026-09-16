@@ -120,8 +120,13 @@ export default async function Tatica() {
                 </span>
               </div>
 
-              {/* Quatro temas em três colunas deixavam dois buracos (3 + 1); em duas, fecham 2 + 2. */}
-              <ul className={`grid gap-3 sm:grid-cols-2 ${bloco.temas.length === 4 ? "" : "lg:grid-cols-3"}`}>
+              {/*
+               * Três colunas, salvo quando elas deixariam um cartão sozinho na
+               * última linha e duas colunas fecham certo: quatro temas (3 + 1 →
+               * 2 + 2) e dez (3 + 3 + 3 + 1 → cinco linhas de 2). Sete fica em três:
+               * em duas também sobraria um.
+               */}
+              <ul className={`grid gap-3 sm:grid-cols-2 ${duasColunas(bloco.temas.length) ? "" : "lg:grid-cols-3"}`}>
                 {bloco.temas.map((tema) => (
                   <CartaoDoTema
                     key={tema.tag}
@@ -237,6 +242,11 @@ function CartaoDoRating({ rating, serie, inicio }: { rating: EstadoDoRating | nu
 }
 
 /** "800 a 1000", "1400+" — o rótulo do degrau, sem o `null` do teto na tela. */
+/** Duas colunas quando três deixariam um cartão sozinho e duas não deixam. */
+function duasColunas(temas: number): boolean {
+  return temas % 3 === 1 && temas % 2 === 0;
+}
+
 function faixaFide(nivel: 1 | 2 | 3 | 4 | 5): string {
   const [piso, teto] = NIVEL[nivel].fide;
   if (teto === null) return `${piso}+`;

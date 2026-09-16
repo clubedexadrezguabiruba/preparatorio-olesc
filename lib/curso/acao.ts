@@ -116,7 +116,7 @@ function plural(n: number, um: string, muitos: string): string {
  * 7. nada a fazer.
  *
  * Tática antes de finais porque é o bloco maior da rotina (45 min contra 30) e
- * porque a fila de tática cresce mais depressa: 36 temas de 39 puzzles contra
+ * porque a fila de tática cresce mais depressa: 63 temas de 39 puzzles contra
  * 49 aulas. Empatar as duas por "quem venceu primeiro" faria o aluno alternar
  * de assunto a cada carregamento de página, que é o oposto de uma rotina.
  */

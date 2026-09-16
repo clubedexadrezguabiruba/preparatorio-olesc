@@ -68,11 +68,13 @@ export const DEGRAUS: Record<
   readonly number[]
 > = {
   /**
-   * **13 no lugar de 10**, e o motivo é o currículo: 13 é a meta da OLESC (os
-   * temas dos níveis 1 a 3), o número que a `/trilha` já celebra. Um selo em 13
-   * é *"cheguei ao torneio pronto"*; um selo em 10 é um número redondo.
+   * **14 no lugar de 10**, e o motivo é o currículo: 14 é a meta da OLESC (os
+   * temas dos níveis 1 a 3), o número que a `/trilha` já celebra. Um selo em 14
+   * é *"cheguei ao torneio pronto"*; um selo em 10 é um número redondo. Era 13
+   * até 16/9/2026, quando o xeque descoberto entrou no nível 2. O 29 é o fim do
+   * nível 4, e o 63 o currículo inteiro.
    */
-  tatica: [3, 7, 13, 24, 36],
+  tatica: [3, 7, 14, 29, 63],
   /**
    * Quanto o **recorde** subiu acima do rating com que o aluno começou o modo — o
    * "+100". Conta a partir de `rating_inicial` guardado na linha do aluno (600
@@ -192,8 +194,8 @@ export function selos(p: ParaOsSelos): Selo[] {
         degrau,
         p.temasFechados,
         `${degrau} temas de tática`,
-        degrau === 13
-          ? "Os 13 temas dos níveis 1 a 3 — a meta da OLESC."
+        degrau === 14
+          ? "Os 14 temas dos níveis 1 a 3 — a meta da OLESC."
           : "Um tema fecha com aquecimento, série e prova.",
         ["tema", "temas"],
       ),

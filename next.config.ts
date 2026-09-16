@@ -11,8 +11,10 @@ const nextConfig: NextConfig = {
    * repositório inteiro; na Vercel, a página do tema responderia
    * `ENOENT: index.json` no primeiro aluno que abrisse a tarefa.
    *
-   * São 33 MB no pacote do servidor, contra o teto de 250 MB. O que se compra
-   * com eles: o servidor escolhe os 24 puzzles da série (em vez de mandar 1,4
+   * São 62 MB no pacote do servidor (medido em 16/9: os 63 temas do dump de
+   * set/2026, mais o índice e os problemas de 600–700 do modo rating; eram 40
+   * MB com os 36 temas de jan/2026), contra o teto de 250 MB por função. O que
+   * se compra com eles: o servidor escolhe os 24 puzzles da série (em vez de mandar 1,4
    * MB ao celular para ele sortear) e reconfere o lance antes de gravar.
    */
   /**

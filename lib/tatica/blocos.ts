@@ -1,7 +1,7 @@
 import type { Nivel } from "../curso/nivel.ts";
 
 /**
- * O currículo de tática, em oito blocos.
+ * O currículo de tática, em onze blocos (eram oito até 16/9/2026).
  *
  * **Este arquivo é a única fonte da taxonomia.** O script que recorta o CSV do
  * Lichess (`scripts/filtrar-puzzles.ts`) e as telas de `/tatica` leem daqui.
@@ -15,7 +15,7 @@ import type { Nivel } from "../curso/nivel.ts";
  * silêncio em vermelho.
  *
  * A faixa de rating é do **bloco**. O piso é dele — mate em 1 começa mais
- * embaixo que lance quieto —, mas **o teto é 2100 em todos os oito**, decisão
+ * embaixo que lance quieto —, mas **o teto é 2100 em todos os onze**, decisão
  * do Doug.
  *
  * Houve aqui o argumento contrário, e ele está registrado para não voltar:
@@ -32,12 +32,22 @@ import type { Nivel } from "../curso/nivel.ts";
  */
 
 export type Tema = {
-  /** A tag do Lichess, como vem na coluna `Themes`. */
+  /**
+   * A tag, como vem na coluna `Themes` do Lichess — ou, para `origem: "nosso"`,
+   * como `scripts/etiquetar-puzzles.ts` a grava em `dados/etiquetas-nossas.tsv`.
+   */
   readonly tag: string;
   /** O nome em português que o aluno lê. */
   readonly nome: string;
   /** Uma linha explicando o motivo — vira o subtítulo do cartão do tema. */
   readonly resumo: string;
+  /**
+   * Quem classificou os puzzles do tema. `"lichess"` quando a tag vem do banco
+   * do Lichess; `"nosso"` quando o Lichess não etiqueta o padrão e quem o
+   * reconhece são os detectores de `lib/tatica/padroes/detectores.ts`, com a
+   * precisão medida em `docs/TATICA-PADROES.md`. Sem o campo, vale `"lichess"`.
+   */
+  readonly origem?: "lichess" | "nosso";
 };
 
 export type Bloco = {
@@ -115,6 +125,7 @@ export const BLOCOS: readonly Bloco[] = [
       { tag: "skewer", nome: "Espeto", resumo: "A peça valiosa da frente é atacada, sai, e a de trás cai." },
       { tag: "discoveredAttack", nome: "Ataque descoberto", resumo: "Sai uma peça e quem ataca é a de trás." },
       { tag: "doubleCheck", nome: "Xeque duplo", resumo: "Duas peças dão xeque: só o rei pode se mexer." },
+      { tag: "discoveredCheck", nome: "Xeque descoberto", resumo: "Sai uma peça e a de trás dá xeque — a que saiu fica livre para ganhar o que quiser." },
     ],
   },
   {
@@ -140,6 +151,8 @@ export const BLOCOS: readonly Bloco[] = [
       { tag: "attackingF2F7", nome: "Ataque em f2/f7", resumo: "No começo, esse peão só tem o rei de defensor — o ataque entra por ali." },
       { tag: "kingsideAttack", nome: "Ataque na ala do rei", resumo: "Ele rocou pequeno: é para lá que suas peças e peões vão." },
       { tag: "sacrifice", nome: "Sacrifício", resumo: "Dar material agora porque o que vem depois vale mais." },
+      { tag: "queensideAttack", nome: "Ataque na ala da dama", resumo: "Ele rocou grande: é para o lado da dama que suas peças e peões vão." },
+      { tag: "greekGift", nome: "Sacrifício grego", resumo: "O bispo toma em h7 com xeque, o cavalo salta para g5 e a dama chega a h5.", origem: "nosso" },
     ],
   },
   {
@@ -153,6 +166,7 @@ export const BLOCOS: readonly Bloco[] = [
       { tag: "clearance", nome: "Liberação", resumo: "Tire a própria peça do caminho, de preferência com ameaça, e libere a casa ou a linha para outra." },
       { tag: "interference", nome: "Interferência", resumo: "Pôr uma peça no meio do caminho de quem defende." },
       { tag: "zugzwang", nome: "Zugzwang", resumo: "Jogar é obrigatório, e todo lance piora." },
+      { tag: "counterCheck", nome: "Contra-xeque", resumo: "Em xeque, em vez de fugir com o rei, tape ou capture dando xeque de volta.", origem: "nosso" },
     ],
   },
   {
@@ -179,6 +193,63 @@ export const BLOCOS: readonly Bloco[] = [
       { tag: "promotion", nome: "Promoção", resumo: "Chegar na última fileira, e escolher a peça certa." },
       { tag: "underPromotion", nome: "Subpromoção", resumo: "Quando a dama não serve: cavalo pelo xeque, torre ou bispo para não afogar." },
       { tag: "enPassant", nome: "En passant", resumo: "O peão que avançou duas casas e parou ao lado do seu: capture como se ele tivesse andado uma." },
+    ],
+  },
+  /*
+   * Os blocos 9 a 11 (16/9/2026) entram **no fim** da lista, e não ao lado dos
+   * blocos 2 e 3, de propósito. O índice do modo rating dá a cada puzzle repetido
+   * a origem do primeiro tema na ordem desta lista (`scripts/indice-rating.ts`);
+   * acrescentar no fim não muda a origem de puzzle nenhum que já existia.
+   *
+   * Os padrões com `origem: "nosso"` não têm tag no Lichess: quem os reconhece é
+   * `lib/tatica/padroes/detectores.ts`. Cozio não é tema — o detector dele
+   * acrescenta `dovetailMate`, que é a mesma figura.
+   */
+  {
+    id: 9,
+    nome: "Padrões de mate III",
+    faixa: [1000, 2100],
+    nivel: 4,
+    temas: [
+      { tag: "operaMate", nome: "Mate da ópera", resumo: "A torre dá o mate na fileira do rei, e o bispo, de longe, defende a torre." },
+      { tag: "pillsburysMate", nome: "Mate de Pillsbury", resumo: "A torre dá o mate pela coluna, e o bispo, na diagonal, tira a fuga do rei." },
+      { tag: "epauletteMate", nome: "Mate das dragonas", resumo: "A dama dá xeque de frente, e as peças dele, dos dois lados do rei, tapam a fuga." },
+      { tag: "swallowstailMate", nome: "Mate de Guéridon", resumo: "A dama colada de frente dá o mate; as duas casas atrás do rei, na diagonal, estão tapadas pelas peças dele." },
+      { tag: "damianoMate", nome: "Mate de Damiano", resumo: "A dama encosta no rei pela diagonal, apoiada por peão ou bispo; a peça dele à frente do rei tapa a fuga.", origem: "nosso" },
+      { tag: "lolliMate", nome: "Mate de Lolli", resumo: "O peão chega à porta do rei, e a dama entra logo à frente dele, apoiada pelo peão.", origem: "nosso" },
+    ],
+  },
+  {
+    id: 10,
+    nome: "Padrões de mate IV",
+    faixa: [1000, 2100],
+    nivel: 5,
+    temas: [
+      { tag: "morphysMate", nome: "Mate de Morphy", resumo: "O bispo dá o mate ao rei no canto, e a torre o prende na borda." },
+      { tag: "cornerMate", nome: "Mate do canto", resumo: "Torre ou dama prende o rei no canto, e o cavalo dá o mate." },
+      { tag: "triangleMate", nome: "Mate do triângulo", resumo: "Dama e torre, lado a lado com o rei no meio, fecham um triângulo; a dama dá o mate." },
+      { tag: "blindSwineMate", nome: "Mate dos porcos cegos", resumo: "Duas torres na sétima fileira varrem tudo pelo caminho até o mate." },
+      { tag: "killBoxMate", nome: "Mate da caixa", resumo: "Torre colada ao rei e dama na diagonal dela fecham o rei num quadrado de 3 por 3." },
+      { tag: "anderssenMate", nome: "Mate de Anderssen", resumo: "Torre ou dama dá o mate ao lado do rei, apoiada pelo peão que chegou à frente dele.", origem: "nosso" },
+      { tag: "pawnMate", nome: "Mate de peão", resumo: "O peão, a menor peça, dá o mate — e as peças dele mesmo tapam a fuga.", origem: "nosso" },
+      { tag: "grecoMate", nome: "Mate de Greco", resumo: "Rei no canto, peça dele na diagonal: a torre ou a dama dá o mate pela borda, e o bispo tira a última casa.", origem: "nosso" },
+      { tag: "suffocationMate", nome: "Mate da asfixia", resumo: "O cavalo dá o mate, e os bispos tiram as poucas casas que as peças dele deixaram livres.", origem: "nosso" },
+      { tag: "mateIn4", nome: "Mate em 4", resumo: "Quatro lances seus até o mate: a linha inteira calculada antes do primeiro." },
+    ],
+  },
+  {
+    id: 11,
+    nome: "Mates raros e armadilhas",
+    faixa: [1000, 2100],
+    nivel: 5,
+    temas: [
+      { tag: "vukovicMate", nome: "Mate de Vuković", resumo: "Torre e cavalo juntos: a torre dá o mate colada ao rei, e o cavalo tira as fugas." },
+      { tag: "balestraMate", nome: "Mate da balestra", resumo: "O bispo dá o mate de longe, e a dama fecha as casas que sobraram." },
+      { tag: "blackburneMate", nome: "Mate de Blackburne", resumo: "Dois bispos e um cavalo: um bispo dá o mate, e as peças menores fecham o resto.", origem: "nosso" },
+      { tag: "retiMate", nome: "Mate de Réti", resumo: "O bispo colado dá o mate, apoiado pela torre de longe, com o rei cercado pelas próprias peças.", origem: "nosso" },
+      { tag: "maxLangeMate", nome: "Mate de Max Lange", resumo: "A dama encosta no rei na borda, pela diagonal, apoiada pelo bispo colado nela.", origem: "nosso" },
+      { tag: "legalMate", nome: "Mate de Légal", resumo: "O fim da armadilha de Légal: o cavalo dá o mate, com o bispo colado no rei e o outro cavalo.", origem: "nosso" },
+      { tag: "mateIn5", nome: "Mate em 5", resumo: "Cinco lances seus até o mate: cálculo longo, e cada resposta dele conferida." },
     ],
   },
 ] as const;

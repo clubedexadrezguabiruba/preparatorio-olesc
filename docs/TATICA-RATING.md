@@ -435,3 +435,40 @@ linha de lista.
 
 **`e2e`:** `/tatica/rating/evolucao` entrou nas listas de `@layout`, `@base` e `@a11y`. Elas não
 rodaram nesta pasta: o Playwright usa a porta 3000, que serve a outra cópia do repositório.
+
+## Banco novo — 16/9: dump de set/2026 e 63 temas
+
+O currículo de tática passou de 36 para 63 temas (`docs/TATICA-PADROES.md`), e o banco foi
+gerado de novo a partir do CSV de set/2026. O modo rating lê o mesmo `public/puzzles/`, então
+muda com ele.
+
+| | Antes (jan/2026, 36 temas) | Depois (set/2026, 63 temas) |
+|---|---|---|
+| Puzzles no site (`totalNoSite`, soma por tema) | 175.987 | **271.885** |
+| Puzzles distintos nos temas | — | 227.897 |
+| Linhas de `rating-indice.json` (distintos + 6.000 de 600–700) | 147.026 | **233.897** |
+| Marcados como mate curto (`1` no fim da linha) | 38.379 (26%) | **89.776 (38%)** |
+| Tamanho de `rating-indice.json` | 3,99 MB | 6,50 MB |
+| `public/puzzles/` inteiro | 40 MB | **62 MB** (391 arquivos) |
+
+- **Mais mates curtos.** Os 21 temas de mate novos trazem muito mate em 1 e em 2; a parte
+  marcada subiu de 26% para 38%. A regra "nunca dois mates curtos seguidos" (acima) continua
+  valendo e não mudou; ela só tem mais a evitar.
+- **Os ids seguram.** `puzzles:filtrar` dá prioridade aos ids que já estavam em cada tema. Dos
+  175.987 ids antigos, **154.289 continuam no mesmo tema**. Os 21.698 que saíram foram
+  conferidos um a um contra o CSV novo — **nenhum saiu por defeito**:
+
+  | Motivo | Ids |
+  |---|---|
+  | O Lichess apagou o puzzle | 11.533 |
+  | A nota mudou e saiu da faixa do bloco | 6.749 |
+  | Não passa mais nos filtros de qualidade | 3.338 |
+  | Perdeu a tag (a nossa definição manda) | 78 |
+
+- **O aluno não trava por isso.** Um id que sumiu não vence para sempre no topo da revisão: a
+  fila passa por `soOServivel` (`lib/tatica/progresso.ts`), no painel, na revisão, na próxima
+  ação e no relatório do professor. Por isso o `/painel` agora lista `public/puzzles/**` no
+  `next.config.ts`.
+- **A origem é o arquivo.** `amostraDeTemas` carimba cada puzzle com a tag do arquivo lido; a
+  prova do tema não grava mais com a primeira tag do currículo. `npm run tatica:origens`
+  confere o banco inteiro.

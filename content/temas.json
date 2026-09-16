@@ -466,5 +466,356 @@
       "Essa captura abre alguma coluna ou reta a seu favor?"
     ],
     "cuidado": "O en passant vale só no lance imediatamente seguinte. Jogou outra coisa, perdeu o direito naquele peão para sempre."
+  },
+  {
+    "tag": "discoveredCheck",
+    "explicacao": [
+      "Uma peça sua está parada entre outra peça sua e o rei dele. Você tira a da frente, e a de trás dá xeque. Isso é o xeque descoberto.",
+      "O xeque vem de trás, então a peça que saiu fica livre — pode até comer a dama dele. Ele é obrigado a cuidar do xeque primeiro. No lance seguinte, você leva o que a peça ameaçou."
+    ],
+    "procure": [
+      "Alguma peça sua tapa a reta entre outra peça sua e o rei dele?",
+      "Para onde essa peça sai comendo ou atacando o que vale mais?",
+      "Depois que ele sair do xeque, a ameaça dela continua de pé?"
+    ],
+    "cuidado": "Veja como ele sai do xeque. Se ele sai dando xeque em você, ou comendo a peça que andou, o ganho some."
+  },
+  {
+    "tag": "queensideAttack",
+    "explicacao": [
+      "Ele rocou grande, e o rei dele foi para c8 (c1, se ele joga de brancas). É para esse lado que as suas peças e os seus peões vão: colunas a, b e c.",
+      "Repare que o rei em c8 não encosta em a7: esse peão fica sem o rei por perto. Se você rocou do outro lado, os seus peões de a e b avançam sem abrir o seu próprio rei."
+    ],
+    "procure": [
+      "Qual coluna perto do rei dele — a, b ou c — dá para abrir?",
+      "Quem defende os peões de a7 e b7 dele?",
+      "Quantas peças suas chegam a esse lado em dois lances?"
+    ],
+    "cuidado": "Abrir a coluna sem peça sua atrás dá a coluna para ele usar primeiro. Traga as peças antes, e só depois abra."
+  },
+  {
+    "tag": "greekGift",
+    "explicacao": [
+      "O rei dele está rocado em g8, e nenhum cavalo dele está em f6 defendendo h7. O seu bispo toma em h7 com xeque, e o rei come o bispo. Esse é o sacrifício grego.",
+      "Agora o cavalo salta de f3 para g5, com xeque. Saindo de f3, ele abre o caminho da dama até h5. Com dama em h5 e cavalo em g5, a ameaça é mate em h7. De pretas é o mesmo, espelhado: o bispo toma em h2."
+    ],
+    "procure": [
+      "O rei dele está em g8, sem cavalo em f6 defendendo h7?",
+      "Seu cavalo chega a g5 sem ser capturado? Quem guarda g5?",
+      "Sua dama chega a h5 no lance seguinte, com o caminho livre?"
+    ],
+    "cuidado": "Depois do cavalo em g5, o rei pode ir a g8, h8, g6 ou h6. Confira todas — se uma escapa, o bispo foi de graça."
+  },
+  {
+    "tag": "counterCheck",
+    "explicacao": [
+      "Ele deu xeque, e o reflexo é fugir com o rei. Olhe antes as outras duas saídas: tapar o xeque, ou capturar quem deu. Se a peça que tapa ou captura também dá xeque nele, isso é o contra-xeque.",
+      "Fugir com o rei gasta o seu lance, e o ataque dele continua de pé. O contra-xeque resolve o seu problema e cria um problema para ele, no mesmo lance. Agora é ele quem tem de responder."
+    ],
+    "procure": [
+      "Quais peças suas podem tapar o xeque ou capturar quem deu?",
+      "Alguma delas, chegando lá, dá xeque no rei dele?",
+      "Depois da resposta dele, o ataque contra o seu rei continua?"
+    ],
+    "cuidado": "Xeque de volta não resolve se ele responde comendo a sua peça com outro xeque. Veja a resposta dele antes de mover."
+  },
+  {
+    "tag": "operaMate",
+    "explicacao": [
+      "O rei dele está na borda. A sua torre encosta nele, ao longo dessa borda, e dá xeque. Ele não pode comer a torre, porque um bispo seu a defende de longe, pela diagonal.",
+      "O nome vem de uma partida de Morphy, jogada durante uma ópera em Paris, em 1858. Ela terminou assim: rei preto em e8, torre branca em d8 e bispo em g5 defendendo a torre. Td8, mate."
+    ],
+    "procure": [
+      "O rei dele está na borda, com a casa ao lado vazia?",
+      "Sua torre chega a essa casa com xeque?",
+      "Um bispo seu defende essa casa de longe?"
+    ],
+    "cuidado": "Olhe as casas da frente do rei, fora da borda. Se nem a torre nem o bispo cobrem uma delas, o rei foge por ali."
+  },
+  {
+    "tag": "pillsburysMate",
+    "explicacao": [
+      "O rei dele está no canto, ou na casa colada ao canto, na última fileira. A sua torre vem pela coluna do rei e dá xeque. Sozinha, ela deixaria uma casa livre ao lado dele.",
+      "É aí que entra o bispo, de longe, pela diagonal: ele tira essa fuga. Com o rei em g8, a torre dá xeque pela coluna g, e o bispo na diagonal grande tira h8."
+    ],
+    "procure": [
+      "A coluna do rei dele está aberta até a sua torre?",
+      "Depois do xeque da torre, que casa sobra para o rei?",
+      "Algum bispo seu alcança essa casa pela diagonal?"
+    ],
+    "cuidado": "A diagonal do bispo precisa estar livre até a casa de fuga. Um peão no meio do caminho, e o rei escapa por ali."
+  },
+  {
+    "tag": "epauletteMate",
+    "explicacao": [
+      "A dama (ou a torre) dá xeque em linha reta, de longe, com casa vazia no meio. Dos dois lados do rei, coladas nele, estão duas peças dele. O rei não consegue andar para os lados.",
+      "As duas peças são as dragonas: as ombreiras de uma farda, uma em cada ombro. Com o rei em e8, as torres dele em d8 e f8 e a sua dama em e6, é mate."
+    ],
+    "procure": [
+      "O rei dele tem peças dele coladas dos dois lados?",
+      "Sua dama ou torre chega à linha do rei, de longe?",
+      "As casas da frente do rei ficam cobertas depois do xeque?"
+    ],
+    "cuidado": "Se a dama encosta no rei sem defesa, ele a come. O xeque das dragonas vem de longe, com ao menos uma casa vazia no meio."
+  },
+  {
+    "tag": "swallowstailMate",
+    "explicacao": [
+      "A dama encosta no rei, bem de frente, e alguma peça sua a defende. As duas casas atrás do rei, na diagonal, estão ocupadas por peças dele. O rei não tem para onde recuar.",
+      "Um exemplo: rei em e7, torres dele em d8 e f8. A dama em e6, defendida por um peão em d5, dá mate. É parente da cauda de andorinha, mas aqui a dama chega de frente. Guéridon é o nome francês de uma mesinha."
+    ],
+    "procure": [
+      "As duas casas atrás do rei, na diagonal, têm peças dele?",
+      "Sua dama chega colada ao rei, bem de frente?",
+      "Quem defende a dama nessa casa?"
+    ],
+    "cuidado": "A dama colada ao rei sem apoio é só uma dama entregue. Ache quem defende a casa antes de encostar."
+  },
+  {
+    "tag": "damianoMate",
+    "explicacao": [
+      "O rei dele está na primeira fileira dele. A sua dama encosta nele pela diagonal da frente: dama em h7, contra o rei em g8. Uma peça dele está bem na frente do rei, e tapa essa fuga.",
+      "Quem segura a dama ali é um peão seu em g6, duas casas à frente do rei. Um bispo pela diagonal também serve. O nome é de Pedro Damiano, um português que publicou um livro de xadrez em 1512."
+    ],
+    "procure": [
+      "A casa bem na frente do rei dele tem peça dele?",
+      "Sua dama chega à casa da diagonal da frente do rei?",
+      "Um peão ou um bispo seu defende essa casa?"
+    ],
+    "cuidado": "Olhe a casa do outro lado do rei, na fileira dele. Se ela está vazia e ninguém a cobre, o rei escapa por lá."
+  },
+  {
+    "tag": "lolliMate",
+    "explicacao": [
+      "Um peão seu chegou a f6 (ou h6), perto do rei dele em g8. Com esse apoio, a dama entra em g7, bem na frente do rei. O rei não come a dama, porque o peão a defende.",
+      "Colada de frente, a dama cobre sozinha todas as casas em volta do rei. Só falta uma coisa: ninguém poder comê-la. É o peão que resolve isso, e por isso ele chega primeiro."
+    ],
+    "procure": [
+      "Você tem um peão em f6 ou h6, perto do rei dele?",
+      "Sua dama chega à casa logo à frente do rei?",
+      "Alguma peça dele pode comer a dama ou o peão antes?"
+    ],
+    "cuidado": "O peão que apoia é o alvo dele. Se ele come o peão antes, a dama chega sem apoio e o rei a captura."
+  },
+  {
+    "tag": "morphysMate",
+    "explicacao": [
+      "O rei dele está no canto, com um peão dele na frente. A sua torre ocupa a coluna vizinha e prende o rei ali. Aí o bispo anda até a diagonal do rei e dá o mate com o próprio lance.",
+      "É parente do mate de Pillsbury, com os papéis trocados. Lá a torre dá o xeque e o bispo ajuda. Aqui o bispo dá o xeque, e a torre prende."
+    ],
+    "procure": [
+      "O rei dele está no canto, com a coluna vizinha livre?",
+      "Sua torre já prende o rei nessa coluna?",
+      "Qual lance do bispo chega à diagonal do rei?"
+    ],
+    "cuidado": "O peão dele na frente do rei faz parte do mate: ele tapa a última casa. Se esse peão já avançou, o rei foge por ali."
+  },
+  {
+    "tag": "cornerMate",
+    "explicacao": [
+      "O rei dele está no canto, e a sua torre (ou dama) fecha a coluna ou a fileira do lado. Sobra ao rei quase nada, e quem dá o mate é o cavalo.",
+      "Rei em h8, peão dele em h7, sua torre na coluna g: o cavalo em f7 dá mate. Xeque de cavalo não se tapa: ou ele come o cavalo, ou o rei foge."
+    ],
+    "procure": [
+      "O rei dele está no canto, preso por torre ou dama sua?",
+      "Que casas de cavalo dão xeque nesse canto?",
+      "Seu cavalo chega a uma delas sem ser capturado?"
+    ],
+    "cuidado": "Ao pousar, o cavalo pode tapar a linha da própria torre. Veja se a torre continua prendendo o rei depois do salto."
+  },
+  {
+    "tag": "triangleMate",
+    "explicacao": [
+      "A dama e a torre estão na mesma linha, com uma casa vazia entre elas. O rei dele encosta nessa casa do meio. A dama dá o xeque, e a torre a defende através dessa casa.",
+      "Rei em d8, dama em e7, torre em c7: é mate, e as três peças desenham um triângulo. A torre defende a dama, a dama defende a torre, e o rei não come nenhuma das duas."
+    ],
+    "procure": [
+      "Dama e torre podem ficar na mesma linha, com uma casa entre elas?",
+      "O rei dele encosta nessa casa do meio?",
+      "A torre defende a dama através dessa casa?"
+    ],
+    "cuidado": "A casa do meio tem de estar vazia. Com qualquer peça ali, a torre deixa de defender a dama, e o rei a come."
+  },
+  {
+    "tag": "blindSwineMate",
+    "explicacao": [
+      "Duas torres suas chegaram à fileira logo à frente do rei dele — a sétima, se ele joga de pretas. Uma delas dá o mate, e a outra ajuda. Vale também com torre e dama.",
+      "O nome vem das duas torres que andam pela sétima comendo peão atrás de peão, como porcos cegos. Rei em g8, torre dele em f8: suas torres em g7 e h7 dão mate, e uma defende a outra."
+    ],
+    "procure": [
+      "Duas peças suas, torres ou dama, chegam à fileira da frente do rei?",
+      "Uma delas dá xeque colada ao rei, com a outra defendendo?",
+      "Se o rei corre para o canto, a outra peça alcança?"
+    ],
+    "cuidado": "Uma torre sozinha na sétima dá xeque, e o rei come a torre ou foge. O mate só vem com a segunda peça já ali."
+  },
+  {
+    "tag": "killBoxMate",
+    "explicacao": [
+      "A sua torre encosta no rei dele, na mesma coluna ou fileira, e dá xeque. A dama está dois passos em diagonal da torre, e a defende. As duas fecham um quadrado de três casas por três, com o rei dentro.",
+      "É a caixa: torre e dama em cantos opostos do quadrado. Com o rei em e8, a torre em d8 e a dama em f6, é mate."
+    ],
+    "procure": [
+      "Sua torre chega colada ao rei, na coluna ou na fileira?",
+      "A dama defende essa casa estando dois passos na diagonal?",
+      "O rei dele fica dentro do quadrado que as duas desenham?"
+    ],
+    "cuidado": "A diagonal entre a dama e a torre precisa estar vazia. Com uma peça no meio, a torre fica sem apoio e o rei a come."
+  },
+  {
+    "tag": "anderssenMate",
+    "explicacao": [
+      "Um peão seu chegou à casa bem na frente do rei dele: g7, contra o rei em g8. A torre ou a dama entra colada ao rei, na fileira dele, e dá xeque. O peão defende a torre.",
+      "O peão faz dois serviços: segura a torre e tira casas do rei. Mas ele mesmo precisa de apoio. Sem peça sua defendendo o peão, o rei o come e escapa."
+    ],
+    "procure": [
+      "Você tem um peão colado na frente do rei dele?",
+      "Torre ou dama chega à casa ao lado do rei, na fileira dele?",
+      "Quem defende o seu peão, se o rei tentar comê-lo?"
+    ],
+    "cuidado": "O rei não come a torre, mas pode comer o peão. Antes do xeque, confira que o peão tem uma peça sua por trás."
+  },
+  {
+    "tag": "pawnMate",
+    "explicacao": [
+      "O peão, a peça que vale menos, dá o mate com o próprio lance. Ele não vira dama: continua peão. Os peões do próprio rei, colados a ele, tapam as fugas.",
+      "Aparece com o rei dele no meio dos próprios peões. Quem só procura xeque de dama e de torre passa direto pelo lance mais barato do tabuleiro."
+    ],
+    "procure": [
+      "O rei dele está cercado pelos próprios peões?",
+      "Algum peão seu dá xeque andando ou capturando?",
+      "Suas outras peças cobrem as casas que sobram ao rei?"
+    ],
+    "cuidado": "Peão dá xeque na diagonal, e não para a frente. Confira as casas que ele ataca depois de pousar, e não a casa da frente."
+  },
+  {
+    "tag": "grecoMate",
+    "explicacao": [
+      "O rei dele está no canto, em h8, com um peão dele em g7. A sua dama ou torre dá xeque de longe, pela coluna h. A casa que sobra é g8, e um bispo seu a tira pela diagonal de a2 a g8.",
+      "Greco foi um italiano que deixou partidas escritas no começo dos anos 1600. A diagonal de a2 a g8 é a do bispo em c4, que muitas vezes está ali desde a abertura."
+    ],
+    "procure": [
+      "O rei dele está no canto, com peça dele na diagonal de dentro?",
+      "Seu bispo mira a casa ao lado do rei, na fileira dele?",
+      "A coluna da borda está aberta para a dama ou a torre?"
+    ],
+    "cuidado": "O bispo só tira g8 com f7 vazia. Um peão dele em f7 tapa a diagonal, e o rei foge por g8."
+  },
+  {
+    "tag": "suffocationMate",
+    "explicacao": [
+      "O cavalo dá o xeque. Em volta do rei, quase tudo está tapado pelas peças dele. As poucas casas vazias estão na mira dos seus bispos. Cavalo e bispos, só eles, fazem o mate.",
+      "É parente do mate sufocado, mas o rei não está todo trancado. Sobram casas, e são os bispos, de longe, que as tiram. Por isso vale olhar as diagonais antes de olhar o cavalo."
+    ],
+    "procure": [
+      "Quais casas em volta do rei estão vazias? Conte.",
+      "Seus bispos cobrem todas essas casas pelas diagonais?",
+      "O cavalo chega a uma casa de xeque sem ser capturado?"
+    ],
+    "cuidado": "A peça dele que tapa uma fuga ainda pode comer o cavalo. Confira quem alcança a casa do cavalo antes de saltar."
+  },
+  {
+    "tag": "mateIn4",
+    "explicacao": [
+      "Quatro lances seus até o mate, e cada um obriga a resposta dele. Muitas vezes você acha o fim antes do começo. Vê o desenho do mate e pergunta que lances levam o rei até lá.",
+      "O que derruba um mate longo é a resposta dele que você não olhou. Em cada lance, liste as saídas dele: fugir, tapar, capturar. Depois de um xeque elas são poucas, e dá para conferir todas."
+    ],
+    "procure": [
+      "Que desenho de mate pode aparecer no fim desta posição?",
+      "Seu primeiro lance deixa quantas respostas para ele?",
+      "Depois de cada resposta, você ainda tem xeque ou ameaça?"
+    ],
+    "cuidado": "Não jogue o primeiro lance com o resto da linha no chute. Uma fuga no terceiro lance joga fora o sacrifício do primeiro."
+  },
+  {
+    "tag": "mateIn5",
+    "explicacao": [
+      "Cinco lances seus até o mate — nove, contando os dele. Ninguém segura isso na cabeça decorando. Você segura porque cada lance seu é xeque ou ameaça, e deixa uma resposta só.",
+      "Num mate longo, o lance que deixa uma saída só vale mais que o lance bonito. Onde ele tiver duas respostas, a linha dobra de tamanho. Aí você confere as duas, até o mate."
+    ],
+    "procure": [
+      "Qual lance seu deixa só uma resposta para ele?",
+      "Onde ele tem duas respostas, você chegou ao mate nas duas?",
+      "No fim da linha, que desenho de mate aparece?"
+    ],
+    "cuidado": "Cansar no meio da linha é o erro de sempre. Antes do primeiro lance, refaça a linha inteira, com as respostas dele."
+  },
+  {
+    "tag": "vukovicMate",
+    "explicacao": [
+      "Torre e cavalo, juntos, contra o rei. A torre encosta no rei e dá xeque, apoiada por outra peça sua: o rei, um peão, ou mais alguém. O cavalo tira as casas que a torre não cobre.",
+      "Parece o mate árabe, com uma diferença: aqui não é o cavalo que defende a torre. Ele só cobre fugas. Por isso esse mate não precisa do canto."
+    ],
+    "procure": [
+      "Sua torre chega colada ao rei, com uma peça sua defendendo?",
+      "Que casas em volta do rei a torre não cobre?",
+      "Seu cavalo alcança uma casa de onde cobre essas fugas?"
+    ],
+    "cuidado": "O cavalo não dá conta de defender a torre e cobrir as fugas ao mesmo tempo. Ache primeiro a terceira peça que apoia a torre."
+  },
+  {
+    "tag": "balestraMate",
+    "explicacao": [
+      "O bispo dá o mate de longe, com o próprio lance, com casas vazias entre ele e o rei. As fugas que o bispo não cobre, a dama cobre. São só os dois.",
+      "Balestra, em italiano, é a besta: a arma que atira a flecha de longe. Por isso vale olhar a diagonal inteira, até a borda. O bispo que mata pode estar longe da briga."
+    ],
+    "procure": [
+      "Sua dama já cobre quase todas as fugas do rei?",
+      "De que casa, de longe, um bispo seu dá xeque no rei?",
+      "A diagonal até o rei está livre de peças?"
+    ],
+    "cuidado": "Xeque de longe pode ser tapado. Antes de jogar o bispo, veja se alguma peça dele entra no meio da diagonal."
+  },
+  {
+    "tag": "blackburneMate",
+    "explicacao": [
+      "O rei dele está na última fileira. Dois bispos e um cavalo seus fazem a rede. Um bispo dá o mate, e as outras duas peças fecham o resto. Não há torre nem dama no mate.",
+      "Rei em g8, torre dele em f8: o bispo dá mate em h7, defendido pelo cavalo em g5. O outro bispo, na diagonal grande, tira g7 e h8."
+    ],
+    "procure": [
+      "Seus dois bispos miram o rei dele por diagonais diferentes?",
+      "Seu cavalo defende a casa onde o bispo vai dar o xeque?",
+      "Que casa sobra ao rei? Qual das suas peças a cobre?"
+    ],
+    "cuidado": "Se o cavalo não defende a casa do mate, o rei come o bispo. Traga o cavalo antes de mexer o bispo."
+  },
+  {
+    "tag": "retiMate",
+    "explicacao": [
+      "O rei dele não está na borda: saiu para o meio, e as próprias peças o cercam. Um bispo seu encosta nele e dá xeque. Uma torre sua, de longe e em linha reta, defende o bispo.",
+      "Em 1910, Réti entregou a dama em d8, e o rei de Tartakower a comeu. Dois lances depois veio o mate: rei preto em c7, bispo em d8, torre em d1 defendendo o bispo."
+    ],
+    "procure": [
+      "O rei dele está fora da borda, cercado pelas próprias peças?",
+      "Um bispo seu chega colado ao rei, na diagonal?",
+      "Uma torre ou dama sua defende essa casa pela coluna ou fileira?"
+    ],
+    "cuidado": "A coluna da torre precisa estar livre até o bispo. Com qualquer peça no meio, o rei come o bispo."
+  },
+  {
+    "tag": "maxLangeMate",
+    "explicacao": [
+      "O rei dele está na borda. A dama encosta nele pela diagonal, e um bispo seu, colado nela, a defende. O bispo ainda faz um segundo serviço: tira uma fuga que a dama não alcança.",
+      "Rei em h7, peões dele em g7 e h6, dama em g8, bispo em f7. A dama não vê g6, porque o peão de g7 tapa. Quem tira g6 é o bispo."
+    ],
+    "procure": [
+      "O rei dele está na borda, com a casa colada na diagonal livre?",
+      "Sua dama chega lá, com um bispo seu colado a ela?",
+      "Que fuga o bispo cobre e a dama não cobre?"
+    ],
+    "cuidado": "A dama e o bispo não fecham tudo sozinhos: na figura, é o peão dele em h6 que tapa a última fuga. Sem ele, confira quem cobre h6."
+  },
+  {
+    "tag": "legalMate",
+    "explicacao": [
+      "O cavalo dá o mate. Um bispo seu está colado ao rei, na mesma fileira ou coluna, e o outro cavalo defende esse bispo. Não há torre nem dama na rede: só o bispo e os cavalos.",
+      "É o fim da armadilha de Légal, em que as brancas deixam a dama ser comida. O bispo toma em f7 com xeque, o rei vai a e7, e o cavalo salta para d5: mate. Nos puzzles, a mesma rede aparece também na borda e no canto."
+    ],
+    "procure": [
+      "Um bispo seu pode ficar colado ao rei, em linha reta?",
+      "Um cavalo seu defende a casa desse bispo?",
+      "O outro cavalo chega a uma casa de xeque?"
+    ],
+    "cuidado": "Entregar a dama só vale se o mate vier logo depois. Antes, confira que o bispo colado ao rei continua defendido pelo cavalo."
   }
 ]

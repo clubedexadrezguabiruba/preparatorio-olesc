@@ -183,7 +183,7 @@ export default async function Trilha() {
             <span aria-hidden className="text-tinta-muda">
               —{" "}
             </span>
-            <strong>A meta da OLESC são os degraus 1 a 3.</strong> São 13 temas e 507
+            <strong>A meta da OLESC são os degraus 1 a 3.</strong> São 14 temas e 546
             puzzles, que cabem no tempo até o torneio. Os degraus 4 e 5 são o treino do
             clube <em>depois</em> dele — ninguém está atrasado por não os ter feito.
           </li>

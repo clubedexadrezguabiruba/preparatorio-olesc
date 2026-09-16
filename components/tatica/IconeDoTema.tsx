@@ -10,7 +10,7 @@ import type { ReactNode } from "react";
  * Numa grade de 32×32, com **seis peças** desenhadas uma vez (`PECA`) e três
  * marcas: seta, linha de ação tracejada e o X da captura. Cada tema é uma
  * combinação delas — o cavalo com duas setas é o garfo, o bispo atrás de duas
- * peças numa linha é a cravada. Um vocabulário pequeno é o que faz os 36
+ * peças numa linha é a cravada. Um vocabulário pequeno é o que faz os 63
  * parecerem uma família, e o que deixa o próximo tema ser desenhado em cinco
  * linhas.
  *
@@ -137,7 +137,7 @@ function B({ x1, y1, x2, y2 }: { x1: number; y1: number; x2: number; y2: number 
 }
 
 /**
- * Os 36 desenhos. As brancas atacam de baixo; o rei preto mora em cima.
+ * Os 63 desenhos. As brancas atacam de baixo; o rei preto mora em cima.
  * Linhas tracejadas vêm antes das peças, para a peça cobrir a linha.
  */
 const DESENHOS: Record<string, ReactNode> = {
@@ -442,6 +442,252 @@ const DESENHOS: Record<string, ReactNode> = {
       <X x={10.5} y={20} r={3} />
       <P t="p" x={22} y={21} s={0.55} clara />
       <S x1={19} y1={16} x2={14} y2={11} />
+    </>
+  ),
+
+  // 4. Táticas fundamentais (acrescentado em 16/9).
+  discoveredCheck: (
+    <>
+      <L x1={6} y1={26} x2={25} y2={7} />
+      <P t="b" x={6} y={26} s={0.55} clara />
+      <P t="n" x={15.5} y={17} s={0.5} clara />
+      <P t="k" x={25.5} y={7} s={0.5} />
+      <C x1={19} y1={20} cx={27} cy={20} x2={27} y2={28} />
+    </>
+  ),
+
+  // 6. Ataque ao rei (acrescentados em 16/9).
+  queensideAttack: (
+    <>
+      <S x1={28} y1={20} x2={18} y2={10} />
+      <S x1={24} y1={27} x2={14} y2={17} />
+      <S x1={17} y1={29} x2={10} y2={22} />
+      <P t="k" x={7} y={8} s={0.55} />
+    </>
+  ),
+  greekGift: (
+    <>
+      <L x1={7} y1={25} x2={23} y2={14} />
+      <P t="k" x={25} y={6.5} s={0.5} />
+      <P t="p" x={25} y={14.5} s={0.45} />
+      <X x={25} y={14} r={3.4} />
+      <P t="b" x={6.5} y={26} s={0.55} clara />
+    </>
+  ),
+
+  // 7. Lances finos (acrescentados em 16/9).
+  counterCheck: (
+    <>
+      <S x1={12} y1={11} x2={12} y2={21} />
+      <S x1={20} y1={21} x2={20} y2={11} />
+      <P t="k" x={20} y={6.5} s={0.5} />
+      <P t="k" x={12} y={26.5} s={0.5} clara />
+    </>
+  ),
+
+  // 9. Padrões de mate III.
+  operaMate: (
+    <>
+      <L x1={26} y1={25} x2={14} y2={10} />
+      <P t="r" x={12.5} y={7.5} s={0.5} clara />
+      <P t="k" x={22.5} y={7.5} s={0.5} />
+      <P t="b" x={26} y={25.5} s={0.55} clara />
+    </>
+  ),
+  pillsburysMate: (
+    <>
+      <L x1={16} y1={23} x2={16} y2={10} />
+      <L x1={6} y1={26} x2={26} y2={6} />
+      <P t="k" x={16} y={6.5} s={0.5} />
+      <P t="r" x={16} y={26.5} s={0.5} clara />
+      <P t="b" x={5.5} y={26.5} s={0.5} clara />
+    </>
+  ),
+  epauletteMate: (
+    <>
+      <L x1={16} y1={22} x2={16} y2={12} />
+      <P t="r" x={6.5} y={7.5} s={0.5} />
+      <P t="k" x={16} y={7.5} s={0.5} />
+      <P t="r" x={25.5} y={7.5} s={0.5} />
+      <P t="q" x={16} y={25.5} s={0.55} clara />
+    </>
+  ),
+  swallowstailMate: (
+    <>
+      <P t="r" x={7} y={8.5} s={0.45} />
+      <P t="r" x={25} y={8.5} s={0.45} />
+      <P t="k" x={16} y={15} s={0.5} />
+      <P t="q" x={16} y={24} s={0.55} clara />
+    </>
+  ),
+  damianoMate: (
+    <>
+      <L x1={19} y1={21} x2={23} y2={18} />
+      <P t="k" x={17} y={7.5} s={0.5} />
+      <P t="q" x={25.5} y={15.5} s={0.5} clara />
+      <P t="p" x={17} y={23.5} s={0.45} clara />
+    </>
+  ),
+  lolliMate: (
+    <>
+      <L x1={10} y1={22} x2={13} y2={18} />
+      <P t="k" x={16} y={7} s={0.5} />
+      <P t="q" x={16} y={15.5} s={0.5} clara />
+      <P t="p" x={8} y={24.5} s={0.45} clara />
+      <P t="p" x={16} y={24.5} s={0.45} />
+    </>
+  ),
+
+  // 10. Padrões de mate IV.
+  morphysMate: (
+    <>
+      <L x1={6} y1={26} x2={24} y2={8} />
+      <L x1={19} y1={23} x2={19} y2={4} />
+      <P t="k" x={26} y={6.5} s={0.5} />
+      <P t="b" x={5.5} y={26.5} s={0.5} clara />
+      <P t="r" x={19} y={26.5} s={0.5} clara />
+    </>
+  ),
+  cornerMate: (
+    <>
+      <L x1={19} y1={23} x2={19} y2={12} />
+      <P t="k" x={26} y={6.5} s={0.5} />
+      <P t="p" x={26} y={14.5} s={0.45} />
+      <P t="r" x={19} y={26.5} s={0.5} clara />
+      <S x1={14} y1={11} x2={22} y2={8} />
+      <P t="n" x={11} y={14.5} s={0.55} clara />
+    </>
+  ),
+  triangleMate: (
+    <>
+      <polygon points="16,9 7,22 25,22" className="stroke-current" strokeWidth={1.6} strokeDasharray="2 2" strokeLinejoin="round" fill="none" />
+      <P t="k" x={16} y={8.5} s={0.5} />
+      <P t="q" x={7} y={23} s={0.5} clara />
+      <P t="r" x={25} y={23} s={0.5} clara />
+    </>
+  ),
+  blindSwineMate: (
+    <>
+      <S x1={20} y1={16} x2={28} y2={16} />
+      <P t="k" x={24} y={6.5} s={0.5} />
+      <P t="r" x={6} y={16.5} s={0.5} clara />
+      <P t="r" x={14} y={16.5} s={0.5} clara />
+      <P t="p" x={12} y={26.5} s={0.45} />
+      <X x={12} y={26} r={3.2} />
+    </>
+  ),
+  killBoxMate: (
+    <>
+      <rect x={5} y={4} width={22} height={22} rx={1.5} className="stroke-current" strokeWidth={1.6} strokeDasharray="2 1.6" fill="none" />
+      <L x1={13} y1={17.5} x2={20} y2={13} />
+      <P t="k" x={16} y={10} s={0.45} />
+      <P t="r" x={23} y={10} s={0.45} clara />
+      <P t="q" x={10} y={20} s={0.5} clara />
+    </>
+  ),
+  anderssenMate: (
+    <>
+      <L x1={17} y1={13} x2={23} y2={9} />
+      <P t="k" x={14} y={7.5} s={0.5} />
+      <P t="r" x={25} y={7.5} s={0.5} clara />
+      <P t="p" x={14} y={16.5} s={0.45} clara />
+      <P t="k" x={14} y={26.5} s={0.45} clara />
+    </>
+  ),
+  pawnMate: (
+    <>
+      <P t="p" x={7} y={9} s={0.45} />
+      <P t="k" x={16} y={8.5} s={0.5} />
+      <P t="p" x={25} y={9} s={0.45} />
+      <P t="p" x={22} y={18} s={0.55} clara />
+      <S x1={22} y1={30} x2={22} y2={25} />
+    </>
+  ),
+  grecoMate: (
+    <>
+      <L x1={26} y1={23} x2={26} y2={12} />
+      <L x1={6} y1={20} x2={18} y2={8} />
+      <P t="k" x={26} y={6.5} s={0.5} />
+      <P t="p" x={19} y={15} s={0.45} />
+      <P t="q" x={26} y={26.5} s={0.5} clara />
+      <P t="b" x={5.5} y={20.5} s={0.5} clara />
+    </>
+  ),
+  suffocationMate: (
+    <>
+      <L x1={16} y1={26} x2={27} y2={15} />
+      <P t="r" x={13} y={6.5} s={0.45} />
+      <P t="k" x={22} y={6.5} s={0.5} />
+      <P t="n" x={13} y={17} s={0.55} clara />
+      <P t="b" x={15.5} y={26.5} s={0.5} clara />
+    </>
+  ),
+  mateIn4: (
+    <>
+      <P t="k" x={13} y={18} s={1} />
+      <Numero n="4" />
+    </>
+  ),
+
+  // 11. Mates raros e armadilhas.
+  vukovicMate: (
+    <>
+      <L x1={20} y1={24} x2={17} y2={17} />
+      <P t="k" x={16} y={6.5} s={0.5} />
+      <P t="r" x={16} y={15} s={0.5} clara />
+      <P t="k" x={21} y={26} s={0.45} clara />
+      <P t="n" x={6} y={21} s={0.55} clara />
+    </>
+  ),
+  balestraMate: (
+    <>
+      <L x1={6} y1={26} x2={22} y2={10} />
+      <P t="k" x={25} y={7} s={0.5} />
+      <P t="b" x={5.5} y={26.5} s={0.5} clara />
+      <P t="q" x={11} y={11} s={0.55} clara />
+    </>
+  ),
+  blackburneMate: (
+    <>
+      <L x1={6} y1={26} x2={19} y2={16} />
+      <P t="k" x={25} y={6.5} s={0.5} />
+      <P t="b" x={26} y={15} s={0.45} clara />
+      <P t="b" x={5.5} y={26.5} s={0.5} clara />
+      <P t="n" x={25} y={24} s={0.55} clara />
+    </>
+  ),
+  retiMate: (
+    <>
+      <L x1={23} y1={25} x2={23} y2={19} />
+      <P t="p" x={9} y={7} s={0.4} />
+      <P t="k" x={16} y={9} s={0.5} />
+      <P t="p" x={9} y={15} s={0.4} />
+      <P t="b" x={23} y={16} s={0.45} clara />
+      <P t="r" x={23} y={27} s={0.5} clara />
+    </>
+  ),
+  maxLangeMate: (
+    <>
+      <L x1={9} y1={17} x2={16} y2={10} />
+      <P t="k" x={26} y={15} s={0.5} />
+      <P t="q" x={18} y={8} s={0.5} clara />
+      <P t="b" x={9} y={17} s={0.5} clara />
+      <P t="p" x={26} y={25} s={0.45} />
+    </>
+  ),
+  legalMate: (
+    <>
+      <L x1={25} y1={22} x2={24} y2={13} />
+      <P t="k" x={14} y={9} s={0.5} />
+      <P t="b" x={24} y={9} s={0.45} clara />
+      <P t="n" x={25} y={25} s={0.5} clara />
+      <P t="n" x={7} y={21} s={0.5} clara />
+    </>
+  ),
+  mateIn5: (
+    <>
+      <P t="k" x={13} y={18} s={1} />
+      <Numero n="5" />
     </>
   ),
 };

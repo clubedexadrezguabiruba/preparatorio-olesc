@@ -44,6 +44,8 @@ export type FaixaNoIndice = {
 export type TemaNoIndice = {
   readonly tag: string;
   readonly bloco: number;
+  /** Quem classificou os puzzles (`Tema.origem`). Ausente no índice da base do rating. */
+  readonly origem?: "lichess" | "nosso";
   readonly faixas: readonly FaixaNoIndice[];
   readonly total: number;
   /** Quantos existiam no banco do Lichess antes do teto por arquivo. */
