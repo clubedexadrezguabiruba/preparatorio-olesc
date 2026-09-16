@@ -41,7 +41,7 @@ test("@base editor em 375 px", async ({ page }) => {
   medidas["editor-375"] = { largura: await larguraDaPagina(page), culpados: await culpadosDaLargura(page) };
 });
 
-const TELAS_DO_ALUNO = ["/painel", "/trilha", "/finais", "/finais/N0-LADDER", "/aberturas", "/tatica"];
+const TELAS_DO_ALUNO = ["/painel", "/trilha", "/finais", "/finais/N0-LADDER", "/aberturas", "/tatica", "/tatica/rating/evolucao"];
 
 for (const tela of TELAS_DO_ALUNO) {
   test(`@base aluno em 375 px: ${tela}`, async ({ aluno }) => {

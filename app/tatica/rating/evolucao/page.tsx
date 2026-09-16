@@ -11,8 +11,9 @@ import { evolucaoDoAluno } from "@/lib/tatica/rating-leitura";
 export const metadata: Metadata = { title: "Evolução na tática rating — Preparatório OLESC" };
 
 /**
- * A evolução do aluno no modo rating: o gráfico do último rating de cada dia
- * com a linha do recorde, os números, os temas fracos e as últimas tentativas.
+ * A evolução do aluno no modo rating: o rating com a curva (por dia, ou por
+ * problema nos primeiros dias) e o recorde em degraus, os números, os temas
+ * fracos e as últimas tentativas — em cartões, na moldura larga (Doug, 16/9).
  *
  * O tempo de cada problema é gravado, mas **não aparece aqui nem em tela
  * nenhuma** (decisão do Doug, 15/9).
@@ -24,7 +25,7 @@ export default async function Evolucao() {
   return (
     <>
       <Cabecalho atual="tatica" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} />
-      <Moldura largura="painel" barraInferior>
+      <Moldura largura="larga" barraInferior>
         <header className="flex flex-wrap items-end justify-between gap-3">
           <div className="flex flex-col gap-1">
             <Link href="/tatica" className="foco rotulo w-fit text-metodo-tinta hover:underline">

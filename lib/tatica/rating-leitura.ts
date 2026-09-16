@@ -1,15 +1,15 @@
 import "server-only";
-import { hojeNoBrasil } from "@/lib/curso/calendario";
+import { hojeNoBrasil, somarDias } from "@/lib/curso/calendario";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { puzzlesDoTema } from "@/lib/tatica/banco";
 import { ORIGEM_BASE, type EstadoDoRating } from "@/lib/tatica/rating";
+import { serieDoGrafico, type SerieDoGrafico } from "@/lib/tatica/rating-grafico";
 import {
-  historicoPorDia,
   resumo,
   semanaDoAluno,
   temasDaTentativa,
   temasFracos,
-  type PontoDoRating,
+  variacaoNaSemana,
   type Resumo,
   type SemanaDoAluno,
   type TemaFraco,
@@ -123,7 +123,13 @@ export async function temasFracosDoAluno(linhas: readonly TentativaDoRating[]): 
 
 export type EvolucaoDoAluno = {
   readonly estado: EstadoDoRating;
-  readonly pontos: readonly PontoDoRating[];
+  /** O que o gráfico desenha: por dia, ou por problema para quem tem poucos dias. */
+  readonly serie: SerieDoGrafico;
+  /**
+   * Quanto o rating andou nos últimos 7 dias (`variacaoNaSemana`), ou `null`
+   * quando ele começou dentro deles — aí a semana é o "desde o começo" repetido.
+   */
+  readonly semana: number | null;
   readonly resumo: Resumo;
   readonly fracos: readonly TemaFraco[];
   /** As últimas tentativas, da mais recente para a mais antiga. */
@@ -136,11 +142,18 @@ export async function evolucaoDoAluno(aluno: string, quantasUltimas = 10): Promi
   if (!estado) return null;
   return {
     estado,
-    pontos: historicoPorDia(linhas),
+    serie: serieDoGrafico(linhas),
+    semana: comecouNaSemana(linhas) ? null : variacaoNaSemana(linhas, estado.rating),
     resumo: resumo(linhas),
     fracos: await temasFracosDoAluno(linhas),
     ultimas: linhas.slice(-quantasUltimas).reverse(),
   };
+}
+
+/** A primeira tentativa do aluno caiu nos últimos 7 dias (os mesmos de `variacaoNaSemana`)? */
+function comecouNaSemana(linhas: readonly TentativaDoRating[], agora: Date = new Date()): boolean {
+  const primeira = linhas.reduce<string | null>((menor, l) => (menor === null || l.criada_em < menor ? l.criada_em : menor), null);
+  return primeira === null || hojeNoBrasil(new Date(primeira)) >= somarDias(hojeNoBrasil(agora), -6);
 }
 
 export type RatingNaTurma = EstadoDoRating & {

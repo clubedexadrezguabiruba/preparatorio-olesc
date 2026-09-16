@@ -108,6 +108,22 @@ export const NIVEL: Record<Nivel, DescricaoDoNivel> = {
   },
 };
 
+/**
+ * O metal de cada nível — Madeira, Ferro, Bronze, Prata e Ouro (Doug, 16/9).
+ *
+ * Nasceu nos cartões de tema de `/tatica`, que ganharam a cor do nível, e é a
+ * escala que se lê sem legenda: ninguém precisa perguntar se prata vem antes de
+ * ouro. As cores moram em `app/globals.css` (`--color-nivel-N-*`), com o
+ * contraste medido em `lib/tema/pares.ts`.
+ */
+export const METAL: Record<Nivel, string> = {
+  1: "Madeira",
+  2: "Ferro",
+  3: "Bronze",
+  4: "Prata",
+  5: "Ouro",
+};
+
 /** Os níveis que são a meta declarada da OLESC de 2026. */
 export const META_DA_OLESC: readonly Nivel[] = [1, 2, 3];
 

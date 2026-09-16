@@ -380,3 +380,58 @@ problema vem da mesma faixa.
 - **Verificação:** os sete portões (1.382 testes), `db:tatica:rating` com **50 afirmações**, e
   `tatica:rating:tela` com **54**, incluindo o cenário novo `mistura-dos-mates` (três mates
   errados na tela, nenhum próximo mate curto).
+
+## Redesign — 16/9: temas em cartões, e a linha que sobe
+
+**Pedido do Doug:** "não gosto de lista, prefiro cartões" para a página de temas (`/tatica`),
+com o rating junto; e na evolução "o aluno tem de ver o gráfico subindo — a linha sobe em 90°,
+não em 180°". Entre três desenhos de cartão, escolheu o **anel de progresso**. Alcance: `/tatica`,
+`/tatica/rating/evolucao`, o relatório do professor (mesmo componente) e o cartão do painel.
+
+- **Por que a linha deitava:** o eixo abria no mínimo 100 pontos, com 20 de folga e marcas de 50
+  em 50; e o gráfico ocupava a largura da página. Duas causas, duas correções:
+  - **Escala** — `escalaDoRating` (`lib/tatica/rating-grafico.ts`, com teste) abraça os dados:
+    6% de folga, faixa mínima de 20, marcas redondas dentro do eixo. De 600 a 630 o eixo cobria
+    **100** pontos e passou a cobrir **33,6**. Os números do eixo continuam na tela; uma queda
+    também fica íngreme, e isso é verdade.
+  - **Proporção** — gráfico de 260 px de altura; no notebook o topo da evolução virou duas colunas
+    (números à esquerda, curva à direita); as minicurvas têm largura máxima.
+- **Aluno com poucos dias:** com menos de 3 dias de jogo o eixo é **por problema**
+  (`serieDoGrafico` + `historicoPorTentativa`). Antes, quem jogou só hoje via um ponto solto.
+- **O recorde** foi desenhado em degraus e voltou atrás no mesmo dia: a escada cruzava a linha
+  na subida e subia onde a linha nunca chegou (o pico de dentro de um dia). Ficou **uma linha
+  tracejada** no valor do recorde, com o número escrito.
+- **Defeito achado no caminho:** a primeira `serieDoGrafico` recortava os 30 dias **antes** de
+  calcular o recorde, e o recorde de dentro da janela esquecia o pico de antes dela (a regra que
+  o painel já seguia). O teste falhou (`[700, 716]` em vez de `[800, 800]`) e passa depois.
+- **Cartões** (`components/tatica/CartaoDoTema.tsx`, `components/AnelDeProgresso.tsx`): anel com o
+  progresso das três etapas (cada uma até a meta), rodapé com a etapa atual ("Série · 13 de 24") e
+  o acerto; fechado é `temaFechado`, a régua do painel; adiante continua tracejado e clicável, com
+  "Pode adiantar". Acima dos blocos, **"Continue de onde parou"**: o último tema tocado que não
+  fechou, largo, com o botão Continuar. Blocos de 4 temas em 2 colunas (3 + 1 deixava buracos).
+- **Evolução:** "+N desde o começo" e "nos últimos 7 dias" com o sinal verdadeiro (o da semana
+  some quando o aluno começou dentro dela — seria o mesmo número); temas fracos em cartões com
+  anel de acerto; últimas tentativas em ladrilhos.
+- **Movimento:** a linha se desenha uma vez ao abrir (`.linha-desenha` em `globals.css`), dentro
+  da guarda de `prefers-reduced-motion`.
+
+**Medido** no navegador (porta 3001, contas descartáveis com a mesma semente: um aluno de 600 a
+693 em 14 dias, com queda no meio; e um de 1 dia, 15 problemas). Ângulo da subida do primeiro ao
+último ponto:
+
+| Tela | Antes | Depois |
+|---|---|---|
+| Evolução, celular 375 | 19,7° | **34,8°** |
+| Evolução, 1 dia de jogo, celular | 0° (ponto solto) | **26,1°** |
+| Evolução, notebook 1366 | 8,5° | **19,8°** |
+| Minicurva do painel, celular | 10,5° | **17,8°** |
+| Minicurva de `/tatica`, celular | — | 10,7° |
+
+Nenhuma das dez telas rola para o lado; axe sem violação séria nas telas mexidas. A única
+violação achada é antiga e fora deste trabalho: a tabela `overflow-x-auto` do relatório do
+professor (`scrollable-region-focusable`, `app/professor/[aluno]/page.tsx:237`). A página de temas
+no celular ficou mais alta (4.803 → 5.803 px): cartão com descrição e rodapé ocupa mais que uma
+linha de lista.
+
+**`e2e`:** `/tatica/rating/evolucao` entrou nas listas de `@layout`, `@base` e `@a11y`. Elas não
+rodaram nesta pasta: o Playwright usa a porta 3000, que serve a outra cópia do repositório.

@@ -138,6 +138,35 @@
   --color-dica-superficie: oklch(62% 0.13 235);
   --color-dica-tinta: oklch(82% 0.105 235);
 
+  /* Os metais dos níveis — Madeira, Ferro, Bronze, Prata e Ouro (Doug, 16/9:
+     "cada cor de cartão baseada no seu nível, até os temas finos serem de ouro").
+
+     Três faces por nível, e cada uma tem uma função só:
+     - `fundo`: o quadro da ilustração do tema. Escuro, para as peças claras e
+       as setas lerem por cima.
+     - `borda`: a borda do cartão, lida contra a página (1.4.11, 3:1).
+     - `tinta`: as setas e marcas da ilustração, e o nome do metal escrito.
+
+     A escalada é de **claridade e croma juntos**: a madeira é a mais apagada, o
+     ouro a mais clara e saturada. Por isso a ordem se lê sem legenda — quem vê
+     só a cor ainda sabe qual está acima. Ferro e prata são os dois sem matiz;
+     a prata é a ferro com a claridade de cima. */
+  --color-nivel-1-fundo: oklch(33% 0.05 58);
+  --color-nivel-1-borda: oklch(58% 0.08 60);
+  --color-nivel-1-tinta: oklch(82% 0.08 68);
+  --color-nivel-2-fundo: oklch(33% 0.022 245);
+  --color-nivel-2-borda: oklch(62% 0.035 245);
+  --color-nivel-2-tinta: oklch(85% 0.035 240);
+  --color-nivel-3-fundo: oklch(34% 0.07 42);
+  --color-nivel-3-borda: oklch(65% 0.12 45);
+  --color-nivel-3-tinta: oklch(84% 0.1 55);
+  --color-nivel-4-fundo: oklch(40% 0.01 250);
+  --color-nivel-4-borda: oklch(80% 0.012 250);
+  --color-nivel-4-tinta: oklch(94% 0.008 250);
+  --color-nivel-5-fundo: oklch(38% 0.08 85);
+  --color-nivel-5-borda: oklch(80% 0.15 88);
+  --color-nivel-5-tinta: oklch(91% 0.14 94);
+
   /* ------------------------------------------------------------------------
      O tabuleiro
 
@@ -1459,7 +1488,36 @@ cg-board square.check {
   }
 }
 
+/* A linha do rating se desenhando ao abrir a evolução (`GraficoRating`). O
+   caminho tem `pathLength="1"`, então o traço inteiro mede 1 e o deslocamento
+   vai de 1 (nada desenhado) a 0 (tudo). Com o movimento desligado a linha
+   simplesmente está lá, cheia. A área chega depois, para o olho seguir a ponta. */
+@keyframes linha-desenha {
+  from {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes area-surge {
+  from {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  .linha-desenha {
+    animation: linha-desenha 800ms cubic-bezier(0.3, 0, 0.2, 1) both;
+  }
+
+  .area-surge {
+    animation: area-surge 500ms ease-out 400ms both;
+  }
+
   .anel-pulso {
     animation: pulso-anel 620ms ease-out 1;
   }

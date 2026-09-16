@@ -39,7 +39,7 @@ import { tarefasMarcadas } from "@/lib/tarefas/progresso";
 import { BLOCOS } from "@/lib/tatica/blocos";
 import { progressoPorTema, revisaoDeHoje } from "@/lib/tatica/progresso";
 import { INICIO } from "@/lib/tatica/glicko2";
-import { historicoPorDia, ultimosDias } from "@/lib/tatica/rating-historico";
+import { serieDoGrafico } from "@/lib/tatica/rating-grafico";
 import { ratingDoAluno, tentativasDoRating } from "@/lib/tatica/rating-leitura";
 import { Agenda } from "./Agenda";
 import { Agora } from "./Agora";
@@ -249,9 +249,9 @@ export default async function Painel() {
     0,
   );
 
-  // Os pontos do histórico inteiro, e só então o recorte de 30 dias: o recorde
-  // de cada ponto tem de contar o pico de antes da janela.
-  const curvaDoRating = ultimosDias(historicoPorDia(tentativasNoRating), 30, hoje);
+  // Os últimos 30 dias; o recorte vem depois da conta, dentro de `serieDoGrafico`,
+  // para o recorde de cada ponto contar o pico de antes da janela.
+  const curvaDoRating = serieDoGrafico(tentativasNoRating, { dias: 30, hoje });
 
   const listaDeSelos = selos({
     temasFechados,
@@ -323,7 +323,7 @@ export default async function Painel() {
           linhasARevisar={linhasARevisar}
         />
 
-        <RatingDeTatica estado={ratingTatica} pontos={curvaDoRating} inicio={INICIO.rating} />
+        <RatingDeTatica estado={ratingTatica} serie={curvaDoRating} inicio={INICIO.rating} />
 
         <Prova nivel={nivel} fechado={fechamento.fechado} conquistado={conquistado} />
 

@@ -8,7 +8,7 @@ import { conferirTamanho, expect, test } from "./preparo/fixtures.ts";
 import { botoesCobertos, culpadosDaLargura, lancesInteirosVisiveis, larguraDaPagina } from "./preparo/medidas.ts";
 import { guardarJson, lerJson } from "./preparo/protecao.ts";
 
-const TELAS_DO_ALUNO = ["/painel", "/trilha", "/finais", "/finais/N0-LADDER", "/aberturas", "/tatica"];
+const TELAS_DO_ALUNO = ["/painel", "/trilha", "/finais", "/finais/N0-LADDER", "/aberturas", "/tatica", "/tatica/rating/evolucao"];
 
 test("@layout o editor cabe e não cobre botão", async ({ page }, info) => {
   test.skip(info.project.name === "aluno-375", "o editor é desktop (§3)");

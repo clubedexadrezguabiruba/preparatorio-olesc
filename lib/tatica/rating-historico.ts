@@ -60,6 +60,26 @@ export function historicoPorDia(linhas: readonly TentativaDoRating[]): PontoDoRa
   return pontos;
 }
 
+/**
+ * O rating antes do primeiro problema, e depois de cada um — o eixo por
+ * problema do gráfico, para quem ainda tem poucos dias de jogo. O recorde segue
+ * a regra de `historicoPorDia`: começa no início e nunca desce.
+ */
+export function historicoPorTentativa(linhas: readonly TentativaDoRating[]): PontoDoRating[] {
+  const ordenadas = emOrdem(linhas);
+  const primeira = ordenadas[0];
+  if (!primeira) return [];
+  let recorde = primeira.rating_antes;
+  const pontos: PontoDoRating[] = [
+    { dia: hojeNoBrasil(new Date(primeira.criada_em)), rating: primeira.rating_antes, recorde },
+  ];
+  for (const linha of ordenadas) {
+    recorde = Math.max(recorde, linha.rating_depois);
+    pontos.push({ dia: hojeNoBrasil(new Date(linha.criada_em)), rating: linha.rating_depois, recorde });
+  }
+  return pontos;
+}
+
 /** Só os pontos dos últimos `dias` dias, contando hoje. A minicurva do painel. */
 export function ultimosDias(pontos: readonly PontoDoRating[], dias: number, hoje: string): PontoDoRating[] {
   const desde = somarDias(hoje, -(dias - 1));
