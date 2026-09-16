@@ -25,12 +25,30 @@ export const NOME_DA_BASE = "Tática rating";
 
 /**
  * Uma linha de `public/puzzles/rating-indice.json`: o id, o arquivo de onde ele
- * é lido (uma tag de tema ou `ORIGEM_BASE`) e o rating.
+ * é lido (uma tag de tema ou `ORIGEM_BASE`), o rating e, quando o problema é
+ * mate em 1 ou mate em 2, um `1` no fim (`eMateCurto`).
  *
- * Tupla e não objeto porque são ~120 mil linhas: repetir `"id":`, `"origem":`
- * e `"rating":` em cada uma quase dobraria o arquivo.
+ * Tupla e não objeto porque são ~150 mil linhas: repetir `"id":`, `"origem":`
+ * e `"rating":` em cada uma quase dobraria o arquivo. Pelo mesmo motivo a marca
+ * só aparece em quem é mate — a linha dos outros fica com três campos.
  */
-export type LinhaDoIndice = readonly [id: string, origem: string, rating: number];
+export type LinhaDoIndice = readonly [id: string, origem: string, rating: number, mateCurto?: 1];
+
+/** As tags do Lichess que contam como "mate curto" para a regra da mistura. */
+export const MATES_CURTOS: readonly string[] = ["mateIn1", "mateIn2"];
+
+/**
+ * Mate em 1 ou mate em 2, pelos temas do próprio problema — não pelo arquivo
+ * de onde ele é servido: um garfo que termina em mate em 2 também conta.
+ *
+ * É a regra da mistura do modo rating (Doug, 16/9): **nunca dois mates curtos
+ * seguidos**. Entre 600 e 900, onde todo aluno passa as primeiras dezenas de
+ * problemas, dois em cada três problemas do recorte são mate curto — medido no
+ * índice —, e o aluno recebia um atrás do outro. Ver `escolherPorRating`.
+ */
+export function eMateCurto(temas: readonly string[]): boolean {
+  return temas.some((t) => MATES_CURTOS.includes(t));
+}
 
 /**
  * O que as telas mostram do rating de um aluno. O rating vai cru, com as casas

@@ -4,9 +4,9 @@ import { lerIndiceDoRating, puzzlePorId } from "./banco.ts";
 import { conferirSolucao } from "./conferir.ts";
 import { aposPuzzle, INICIO } from "./glicko2.ts";
 import type { PuzzleServido } from "./puzzles.ts";
-import { escolherPorRating } from "./rating-escolher.ts";
+import { escolherPorRating, type OpcoesDaEscolha } from "./rating-escolher.ts";
 import { temasDoProblema } from "./rating-historico.ts";
-import type { EstadoDoRating, LinhaDoIndice, RespostaDoRating } from "./rating.ts";
+import { eMateCurto, type EstadoDoRating, type LinhaDoIndice, type RespostaDoRating } from "./rating.ts";
 
 export type { EstadoDoRating, RespostaDoRating } from "./rating.ts";
 
@@ -152,10 +152,11 @@ async function sortear(
   rating: number,
   tambemVistos: readonly string[],
   sorteio: () => number,
+  opcoes: OpcoesDaEscolha = {},
 ): Promise<LinhaDoIndice | null> {
   const [indice, vistos] = await Promise.all([lerIndiceDoRating(), idsJaVistos(db, aluno)]);
   for (const id of tambemVistos) vistos.add(id);
-  return escolherPorRating(indice, rating, vistos, sorteio);
+  return escolherPorRating(indice, rating, vistos, sorteio, opcoes);
 }
 
 async function carregar(linha: LinhaDoIndice | null): Promise<PuzzleServido | null> {
@@ -308,7 +309,12 @@ export async function responderRating(
   const decorrido = agora() - Date.parse(linha.pendente_desde);
   const tempoMs = Math.min(Math.max(0, Math.round(decorrido) || 0), TEMPO_MAXIMO_MS);
 
-  const proximoNoIndice = await sortear(db, aluno, depois.rating, [puzzleId], sorteio);
+  // Nunca dois mates curtos seguidos (Doug, 16/9): o próximo sabe o que este era.
+  // `garantirPendente` não aplica a regra — ele só sorteia no primeiro problema
+  // do aluno, ou quando o pendente sumiu, e ali não há "anterior" na tela.
+  const proximoNoIndice = await sortear(db, aluno, depois.rating, [puzzleId], sorteio, {
+    evitarMateCurto: eMateCurto(puzzle.temas),
+  });
 
   const { data: atualizadas, error: erroNoRating } = await db
     .from("rating_tatica")

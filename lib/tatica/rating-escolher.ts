@@ -31,9 +31,37 @@ import type { LinhaDoIndice } from "./rating.ts";
  * `vistos` são os ids de todas as tentativas do aluno, de todos os modos. Se
  * **todos** os 147 mil já foram vistos, devolve `null` e quem chama decide o
  * que dizer. Não há braço de "fim do banco" que repete.
+ *
+ * ## Nunca dois mates curtos seguidos (Doug, 16/9)
+ *
+ * O sorteio uniforme trata todo problema igual, e os problemas fáceis do Lichess
+ * são quase todos mate: entre 600 e 900, dois em cada três do índice são mate em
+ * 1 ou em 2. Medido com 100 problemas seguidos e o rating parado, o aluno em 600
+ * recebia **81 mates, com 64 pares seguidos**; em 750, 87 e 74.
+ *
+ * Com `evitarMateCurto` (o problema anterior era mate curto), a escolha procura
+ * primeiro um que **não** seja: na janela em que a escolha de sempre acharia
+ * problema, e na seguinte. Para quem está no meio do índice isso é ±20 e ±50.
+ * Achou, é ele. Não achou, a regra cede e vale a escolha de sempre — o mate
+ * perto do rating é melhor que um não-mate muito longe, porque o salto pequeno
+ * também é decisão do Doug. O mate não sai do modo: só deixa de vir em
+ * sequência.
+ *
+ * "A janela em que acharia", e não "±20" fixo: o índice começa em 600, e o
+ * aluno que errou muito e caiu para 560 não tem problema nenhum a ±20. Com a
+ * janela fixa a regra desistia ali — medido contra o banco, 6 de 10 mates
+ * respondidos abaixo de 600 serviam outro mate.
  */
 
 export const JANELAS = [20, 50, 100, 200, 400] as const;
+
+/** Quantas janelas além da primeira com problema a regra dos mates olha. */
+export const JANELAS_A_MAIS_SEM_MATE = 1;
+
+export type OpcoesDaEscolha = {
+  /** O problema anterior era mate em 1 ou em 2: o próximo, se der, não é. */
+  readonly evitarMateCurto?: boolean;
+};
 
 /** O primeiro índice cuja nota é `>= alvo`. */
 function primeiroAPartirDe(indice: readonly LinhaDoIndice[], alvo: number): number {
@@ -70,18 +98,31 @@ export function escolherPorRating(
   rating: number,
   vistos: ReadonlySet<string>,
   sorteio: () => number,
+  { evitarMateCurto = false }: OpcoesDaEscolha = {},
 ): LinhaDoIndice | null {
-  for (const janela of JANELAS) {
+  const livresNaJanela = (janela: number, aceita: (linha: LinhaDoIndice) => boolean): LinhaDoIndice[] => {
     const de = primeiroAPartirDe(indice, rating - janela);
     const ate = primeiroDepoisDe(indice, rating + janela);
     const livres: LinhaDoIndice[] = [];
     for (let i = de; i < ate; i++) {
-      if (!vistos.has(indice[i][0])) livres.push(indice[i]);
+      if (!vistos.has(indice[i][0]) && aceita(indice[i])) livres.push(indice[i]);
     }
-    if (livres.length > 0) {
-      return livres[Math.min(livres.length - 1, Math.floor(sorteio() * livres.length))];
+    return livres;
+  };
+  const sortearEntre = (livres: readonly LinhaDoIndice[]) =>
+    livres[Math.min(livres.length - 1, Math.floor(sorteio() * livres.length))];
+
+  const qualquer = () => true;
+  const primeira = JANELAS.findIndex((janela) => livresNaJanela(janela, qualquer).length > 0);
+
+  if (evitarMateCurto && primeira >= 0) {
+    for (const janela of JANELAS.slice(primeira, primeira + 1 + JANELAS_A_MAIS_SEM_MATE)) {
+      const semMate = livresNaJanela(janela, (linha) => linha[3] !== 1);
+      if (semMate.length > 0) return sortearEntre(semMate);
     }
   }
+
+  if (primeira >= 0) return sortearEntre(livresNaJanela(JANELAS[primeira], qualquer));
 
   // Janela vazia: o mais próximo que ele não viu, andando para os dois lados.
   let esquerda = primeiroAPartirDe(indice, rating) - 1;

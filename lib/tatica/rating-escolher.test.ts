@@ -63,8 +63,70 @@ test("sorteio uniforme: 1000 sorteios cobrem a janela inteira", () => {
 });
 
 /* ------------------------------------------------------------------ *
+ * Nunca dois mates curtos seguidos (Doug, 16/9)
+ * ------------------------------------------------------------------ */
+
+/** Um índice de mentira em que só os ratings listados em `semMate` não são mate curto. */
+function indiceDeMates(semMate: readonly number[]): LinhaDoIndice[] {
+  return INDICE.map(([id, origem, rating]) => (semMate.includes(rating) ? [id, origem, rating] : [id, "mateIn1", rating, 1]));
+}
+
+test("depois de um mate curto, o próximo não é mate — dentro de ±20, se houver", () => {
+  const indice = indiceDeMates([1210]);
+  assert.equal(escolherPorRating(indice, 1200, NUNCA, primeiro, { evitarMateCurto: true })?.[2], 1210);
+  assert.equal(escolherPorRating(indice, 1200, NUNCA, primeiro, { evitarMateCurto: false })?.[2], 1180, "sem a regra, nada muda");
+  assert.equal(escolherPorRating(indice, 1200, NUNCA, primeiro)?.[2], 1180, "e a regra é desligada por padrão");
+});
+
+test("sem problema não-mate a ±20, a regra vai até ±50, e não além", () => {
+  assert.equal(escolherPorRating(indiceDeMates([1150]), 1200, NUNCA, primeiro, { evitarMateCurto: true })?.[2], 1150);
+  // Só a 80 pontos há um que não é mate: a regra cede, e vale o mate perto do rating.
+  const cedeu = escolherPorRating(indiceDeMates([1280]), 1200, NUNCA, primeiro, { evitarMateCurto: true });
+  assert.equal(cedeu?.[2], 1180);
+  assert.equal(cedeu?.[3], 1);
+});
+
+test("abaixo do índice, a regra parte da janela em que a escolha acharia problema, e não desiste", () => {
+  // O índice começa em 600. Em 560, ±20 está vazio e ±50 só alcança o 600 e o
+  // 610 — mates. A regra vai à janela seguinte (±100) e acha o 650.
+  const indice = indiceDeMates([650]);
+  assert.equal(escolherPorRating(indice, 560, NUNCA, primeiro)?.[2], 600, "a escolha de sempre fica no 600");
+  assert.equal(escolherPorRating(indice, 560, NUNCA, primeiro, { evitarMateCurto: true })?.[2], 650);
+});
+
+test("a regra respeita os vistos: o não-mate já visto não volta", () => {
+  const indice = indiceDeMates([1190, 1210]);
+  assert.equal(escolherPorRating(indice, 1200, new Set(["p1190"]), primeiro, { evitarMateCurto: true })?.[2], 1210);
+});
+
+/* ------------------------------------------------------------------ *
  * O índice de verdade, no disco
  * ------------------------------------------------------------------ */
+
+test("no índice de verdade, 100 problemas seguidos em 560, 600, 750 e 900 nunca trazem dois mates curtos em sequência", () => {
+  const real = JSON.parse(readFileSync(path.join(RAIZ, "public/puzzles/rating-indice.json"), "utf8")) as LinhaDoIndice[];
+  // 560: o aluno que errou muito e caiu abaixo do começo do índice (600).
+  for (const rating of [560, 600, 750, 900]) {
+    let semente = 11;
+    const aleatorio = () => ((semente = (semente * 16807) % 2147483647) - 1) / 2147483646;
+    const vistos = new Set<string>();
+    let anteriorEraMate = false;
+    let seguidos = 0;
+    let mates = 0;
+    for (let i = 0; i < 100; i++) {
+      const linha: LinhaDoIndice = escolherPorRating(real, rating, vistos, aleatorio, { evitarMateCurto: anteriorEraMate })!;
+      const eMate: boolean = linha[3] === 1;
+      if (anteriorEraMate && eMate) seguidos++;
+      if (eMate) mates++;
+      const teto = rating < 600 ? 100 : 50;
+      assert.ok(Math.abs(linha[2] - rating) <= teto, `em ${rating}, a regra levou o problema a ${linha[2]}`);
+      vistos.add(linha[0]);
+      anteriorEraMate = eMate;
+    }
+    assert.equal(seguidos, 0, `em ${rating}: ${seguidos} pares de mates seguidos em 100 (${mates} mates)`);
+    assert.ok(mates <= 50, `em ${rating}: ${mates} mates em 100`);
+  }
+});
 
 const RAIZ = fileURLToPath(new URL("../..", import.meta.url));
 

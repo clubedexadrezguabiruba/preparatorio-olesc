@@ -334,3 +334,49 @@ que ela dizia de útil.
   — o tabuleiro trava nessa fase de propósito.
 - **Falta:** o teste humano do Doug (o arrasto de peça só se prova com a mão) e o item 11,
   para medir com a turma.
+
+## Nunca dois mates curtos seguidos — 16/9
+
+No teste humano, o Doug achou os problemas pouco misturados: "vem muitos mate em um na
+sequência, ou mate em dois". **Medido no índice**, a parte de problemas que são mate em 1 ou
+em 2 a ±20 do aluno:
+
+| Rating | Mate em 1 | Mate em 2 | Sem mate |
+|---|---|---|---|
+| 600 | 28% | 52% | 17% |
+| 750 | 50% | 38% | 13% |
+| 900 | 27% | 26% | 43% |
+| 1200 | 10% | 18% | 63% |
+
+A causa é o recorte, e não um defeito do sorteio: os problemas fáceis do Lichess são quase
+todos mate, e o sorteio trata todo problema igual.
+
+**Decisão do Doug** (entre "nunca 2 seguidos", "no máximo 1 a cada 3" e deixar): **nunca dois
+mates curtos seguidos**. Depois de um mate em 1 ou em 2, o próximo não é mate curto — se
+houver outro na janela em que a escolha de sempre acharia problema, ou na seguinte. Não
+havendo, vale a escolha de sempre. O mate não sai do modo, e o rating continua justo: o
+problema vem da mesma faixa.
+
+- **Índice:** `rating-indice.json` ganhou um `1` no fim da linha dos mates curtos (pelos temas
+  do próprio problema, `eMateCurto` em `lib/tatica/rating.ts`). 147.026 problemas, **38.379
+  marcados**, 3,99 MB (era 3,92).
+- **Escolha:** `escolherPorRating(…, { evitarMateCurto })`, ligada por `responderRating` com
+  os temas do problema que acabou de ser respondido.
+- **Antes e depois**, 100 problemas seguidos com o rating parado (mesma semente):
+
+  | Rating | Antes: mates / pares seguidos | Depois | Maior distância depois |
+  |---|---|---|---|
+  | 600 | 81 / 64 | 46 / **0** | 20 |
+  | 750 | 87 / 74 | 48 / **0** | 20 |
+  | 900 | 46 / 23 | 32 / **0** | 20 |
+  | 1200 | 34 / 16 | 23 / **0** | 20 |
+  | 540 | — | 46 / **0** | 100 |
+
+- **Defeito achado no caminho:** a primeira versão procurava o não-mate só a ±20 e ±50 do
+  rating. O script do banco pegou: abaixo de 600 (onde o índice começa) a regra desistia, e
+  **6 de 10** mates respondidos serviam outro mate. Agora ela parte da primeira janela em que a
+  escolha acharia problema. O teste "abaixo do índice" falhava antes e passa depois; o script
+  deu **10 de 10**.
+- **Verificação:** os sete portões (1.382 testes), `db:tatica:rating` com **50 afirmações**, e
+  `tatica:rating:tela` com **54**, incluindo o cenário novo `mistura-dos-mates` (três mates
+  errados na tela, nenhum próximo mate curto).

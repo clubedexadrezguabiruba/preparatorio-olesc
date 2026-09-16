@@ -32,7 +32,8 @@
  *      próximo problema vem a até 20 pontos do rating novo; e o rating anotado no
  *      perfil não mexe no início: quem tem 1250 anotado começa em 600;
  *  12. a semana da turma (tabela do professor) lê todas as tentativas: o aluno
- *      que jogou depois de outras mil respostas da turma aparece inteiro.
+ *      que jogou depois de outras mil respostas da turma aparece inteiro;
+ *  13. depois de um mate em 1 ou em 2, o próximo servido não é mate curto.
  *
  * No fim, apaga a conta de mentira. `on delete cascade` leva a linha do rating e
  * as tentativas.
@@ -45,6 +46,8 @@ import { garantirPendente, responderRating } from "../lib/tatica/gravar-rating.t
 import { gravarTentativa } from "../lib/tatica/gravar.ts";
 import type { PuzzleServido } from "../lib/tatica/puzzles.ts";
 import { filaDeRevisao, INTERVALOS_DA_REVISAO, type LinhaDeTentativa } from "../lib/tatica/revisao.ts";
+import { lerIndiceDoRating } from "../lib/tatica/banco.ts";
+import { eMateCurto, type LinhaDoIndice } from "../lib/tatica/rating.ts";
 import { semanaDoAluno, temasDoProblema } from "../lib/tatica/rating-historico.ts";
 import { tentativasDaSemanaDaTurma } from "../lib/tatica/rating-turma.ts";
 import { idsErradosParaAProva } from "../lib/tatica/serie.ts";
@@ -391,6 +394,35 @@ try {
   afirmar(
     doPoucoAtivo.problemas === 5 && doPoucoAtivo.acertos === 3 && doPoucoAtivo.variacao === 50,
     `o aluno que jogou depois dos mil aparece com 5 problemas, 3 acertos e +50 (${doPoucoAtivo.problemas}, ${doPoucoAtivo.acertos}, ${doPoucoAtivo.variacao})`,
+  );
+
+  /* -------------------------------------------------------------- */
+  // Doug, 16/9: entre 600 e 900 dois em cada três problemas são mate curto, e
+  // vinham um atrás do outro. Dez vezes, o pendente vira um mate curto perto do
+  // rating do aluno; a resposta tem de servir um próximo que não é.
+  console.log("\n13. Depois de um mate em 1 ou em 2, o próximo não é mate curto");
+  const indiceDoRating = await lerIndiceDoRating();
+  const proximosDeMate: string[] = [];
+  for (let vez = 0; vez < 10; vez++) {
+    const { rating: ratingAgora } = await linhaDoRating(aluno);
+    const vistosAgora = new Set((await tentativas(aluno)).map((t) => t.puzzle_id));
+    // O mais próximo, e não "a até 20": os erros de propósito das seções acima
+    // levam o aluno para abaixo de 600, onde o índice começa.
+    const mate = indiceDoRating
+      .filter((l) => l[3] === 1 && !vistosAgora.has(l[0]))
+      .reduce<LinhaDoIndice | null>((melhor, l) => (!melhor || Math.abs(l[2] - ratingAgora) < Math.abs(melhor[2] - ratingAgora) ? l : melhor), null);
+    if (!mate) throw new Error(`nenhum mate curto livre perto de ${ratingAgora}`);
+    await admin
+      .from("rating_tatica")
+      .update({ puzzle_pendente: mate[0], tema_pendente: mate[1], pendente_desde: new Date().toISOString() })
+      .eq("aluno", aluno);
+    const resposta = await responderRating(aluno, mate[0], ["a1a1"]);
+    if ("erro" in resposta || !resposta.proximo) throw new Error(`o mate ${mate[0]} não voltou julgado`);
+    proximosDeMate.push(eMateCurto(resposta.proximo.temas) ? `${resposta.proximo.id} (MATE)` : resposta.proximo.id);
+  }
+  afirmar(
+    proximosDeMate.every((p) => !p.endsWith("(MATE)")),
+    `dez mates respondidos, e nenhum próximo é mate curto (${proximosDeMate.join(", ")})`,
   );
 } catch (erro) {
   falhas.push(erro instanceof Error ? erro.message : String(erro));

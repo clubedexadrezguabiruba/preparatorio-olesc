@@ -8,7 +8,9 @@
  *
  * ## O que é
  *
- * Uma linha `[id, origem, rating]` por puzzle servível, **em rating crescente**.
+ * Uma linha `[id, origem, rating]` por puzzle servível, **em rating crescente**,
+ * com um `1` no fim quando o puzzle é mate em 1 ou mate em 2 — a marca da regra
+ * "nunca dois mates curtos seguidos" (`eMateCurto`, em `lib/tatica/rating.ts`).
  * O servidor guarda o arquivo em memória (`lerIndiceDoRating`, em
  * `lib/tatica/banco.ts`) e a escolha faz busca binária nele
  * (`lib/tatica/rating-escolher.ts`): achar "um puzzle perto de 1143 que o aluno
@@ -31,7 +33,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { TEMAS } from "../lib/tatica/blocos.ts";
 import type { Indice, Puzzle, TemaNoIndice } from "../lib/tatica/puzzles.ts";
-import { ORIGEM_BASE, type LinhaDoIndice } from "../lib/tatica/rating.ts";
+import { eMateCurto, ORIGEM_BASE, type LinhaDoIndice } from "../lib/tatica/rating.ts";
 
 const RAIZ = fileURLToPath(new URL("..", import.meta.url));
 const PUZZLES = path.join(RAIZ, "public/puzzles");
@@ -65,7 +67,7 @@ for (const origem of origens) {
       lidos++;
       if (vistos.has(p.id)) continue;
       vistos.add(p.id);
-      linhas.push([p.id, origem.tag, p.rating]);
+      linhas.push(eMateCurto(p.temas) ? [p.id, origem.tag, p.rating, 1] : [p.id, origem.tag, p.rating]);
     }
   }
 }
@@ -80,4 +82,5 @@ console.log(`Lidos: ${lidos.toLocaleString("pt-BR")} puzzles em ${origens.length
 console.log(`Repetidos entre temas: ${(lidos - linhas.length).toLocaleString("pt-BR")} (ficou o primeiro na ordem de BLOCOS).`);
 console.log(`No índice: ${linhas.length.toLocaleString("pt-BR")} puzzles, de ${linhas[0][2]} a ${linhas.at(-1)![2]}.`);
 console.log(`Da base 600–700: ${linhas.filter((l) => l[1] === ORIGEM_BASE).length.toLocaleString("pt-BR")}.`);
+console.log(`Mate em 1 ou em 2 (marcados com 1): ${linhas.filter((l) => l[3] === 1).length.toLocaleString("pt-BR")}.`);
 console.log(`Tamanho: ${mb.toFixed(2)} MB.`);

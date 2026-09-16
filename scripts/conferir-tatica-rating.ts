@@ -5,12 +5,12 @@ import { jogar } from "../e2e/preparo/tabuleiro.ts";
 import { emailDoUsuario } from "../lib/auth/usuario.ts";
 import { applyUci } from "../lib/chess/fen.ts";
 import { hojeNoBrasil } from "../lib/curso/calendario.ts";
-import { puzzlePorId } from "../lib/tatica/banco.ts";
+import { lerIndiceDoRating, puzzlePorId } from "../lib/tatica/banco.ts";
 import { temaPorTag } from "../lib/tatica/blocos.ts";
 import { lanceCerto } from "../lib/tatica/conferir.ts";
 import { garantirPendente, responderRating } from "../lib/tatica/gravar-rating.ts";
 import type { Puzzle } from "../lib/tatica/puzzles.ts";
-import { PROBLEMAS_POR_DIA } from "../lib/tatica/rating.ts";
+import { eMateCurto, PROBLEMAS_POR_DIA } from "../lib/tatica/rating.ts";
 import { MINIMO_POR_TEMA, temasDoProblema } from "../lib/tatica/rating-historico.ts";
 import { RESPOSTA_MS } from "../lib/tatica/tempos.ts";
 import { carregarEnv } from "./env-local.ts";
@@ -343,6 +343,35 @@ const CENARIOS: Cenario[] = [
         (await pagina.getByText(`Depois da revisão e da série do tema: até ${PROBLEMAS_POR_DIA} problemas por dia.`).count()) === 1,
         "o cartão de /tatica diz quando jogar",
       );
+    },
+  },
+  {
+    /* Doug, 16/9: depois de um mate em 1 ou em 2, a tela não serve outro. */
+    nome: "mistura-dos-mates",
+    rodar: async (_contexto, pagina, aluno) => {
+      const servido = await garantirPendente(aluno.id);
+      if ("erro" in servido) throw new Error(servido.erro);
+      const indice = await lerIndiceDoRating();
+      const vezes: string[] = [];
+      for (let vez = 0; vez < 3; vez++) {
+        const { data } = await admin.from("rating_tatica").select("rating").eq("aluno", aluno.id).single();
+        const vistos = new Set((await tentativas(aluno.id)).map((t) => t.puzzle_id));
+        // O mais próximo: cada erro de propósito desce o rating, e abaixo de 600 o índice acaba.
+        const mate = indice
+          .filter((l) => l[3] === 1 && !vistos.has(l[0]))
+          .sort((a, b) => Math.abs(a[2] - data!.rating) - Math.abs(b[2] - data!.rating))[0];
+        if (!mate) throw new Error(`nenhum mate curto perto de ${data!.rating}`);
+        await admin.from("rating_tatica").update({ puzzle_pendente: mate[0], tema_pendente: mate[1] }).eq("aluno", aluno.id);
+
+        await abrirModo(pagina);
+        const { puzzle, fen } = await pendente(aluno.id);
+        afirmar(puzzle.id === mate[0] && eMateCurto(puzzle.temas), `a tela abriu o mate curto ${mate[0]} (${puzzle.temas.join(" ")})`);
+        await jogar(pagina, lanceErrado(fen, puzzle.lances[1]));
+        if (!(await esperarCartao(pagina, "Incorreto"))) throw new Error("o erro de propósito não voltou Incorreto");
+        const proximo = await pendente(aluno.id);
+        vezes.push(`${proximo.puzzle.id}: ${proximo.puzzle.temas.filter((t) => t.startsWith("mate")).join(" ") || "sem mate"}`);
+        afirmar(!eMateCurto(proximo.puzzle.temas), `e o próximo não é mate curto (${vezes.at(-1)})`);
+      }
     },
   },
   {
