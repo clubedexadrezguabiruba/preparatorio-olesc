@@ -2,7 +2,8 @@ import "server-only";
 import { hojeNoBrasil } from "@/lib/curso/calendario";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { idsVistos, linhasDeTentativasCom } from "@/lib/tatica/leituras";
-import { filaDeRevisao, type ItemDaFila, type LinhaDeTentativa } from "@/lib/tatica/revisao";
+import { idsDoTema, origensDoBanco } from "@/lib/tatica/banco";
+import { filaDeRevisao, filaServivel, type ItemDaFila, type LinhaDeTentativa } from "@/lib/tatica/revisao";
 import { ETAPAS, type Etapa, type Feitos, type LinhaDoTema } from "@/lib/tatica/serie";
 
 /**
@@ -128,9 +129,32 @@ export async function linhasDeTentativas(aluno?: string): Promise<LinhaDeTentati
   return linhasDeTentativasCom(await criarClienteServidor(), aluno);
 }
 
-/** O que está devido hoje na revisão espaçada, do aluno pedido (ou de quem está logado). */
+/**
+ * O que está devido hoje na revisão espaçada, do aluno pedido (ou de quem está
+ * logado) — só o que o disco ainda serve (`filaServivel`).
+ *
+ * A revisão, o painel e a próxima ação leem daqui, e por isso contam a mesma
+ * fila: o painel não manda revisar um puzzle que a revisão não consegue abrir.
+ */
 export async function revisaoDeHoje(aluno?: string): Promise<ItemDaFila[]> {
-  return filaDeRevisao(await linhasDeTentativas(aluno), hojeNoBrasil());
+  return soOServivel(filaDeRevisao(await linhasDeTentativas(aluno), hojeNoBrasil()));
+}
+
+/**
+ * A fila sem os puzzles que saíram do banco, e com a origem corrigida dos que
+ * mudaram de arquivo. Lê os ids dos temas que a fila cita; o índice do modo
+ * rating só é aberto se algum item não estiver nem na origem nem no tema.
+ */
+export async function soOServivel(fila: readonly ItemDaFila[]): Promise<ItemDaFila[]> {
+  if (fila.length === 0) return [];
+  const tags = [...new Set(fila.flatMap((item) => [item.origem, item.tema]))];
+  const ids = new Map(await Promise.all(tags.map(async (tag) => [tag, await idsDoTema(tag)] as const)));
+  const estaEm = (tag: string, id: string) => ids.get(tag)?.has(id) ?? false;
+
+  const perdidos = fila.some((i) => !estaEm(i.origem, i.puzzleId) && !estaEm(i.tema, i.puzzleId));
+  const origens = perdidos ? await origensDoBanco() : null;
+
+  return filaServivel(fila, { estaEm, outraOrigem: (id) => origens?.get(id) });
 }
 
 /**

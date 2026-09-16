@@ -27,7 +27,7 @@ import {
 } from "@/lib/finais/trilha";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { BLOCOS } from "@/lib/tatica/blocos";
-import { linhasDeTentativas, progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
+import { linhasDeTentativas, progressoPorTema, PUZZLES_POR_TEMA, soOServivel, temaZerado } from "@/lib/tatica/progresso";
 import { filaCompleta, INTERVALOS_DA_REVISAO } from "@/lib/tatica/revisao";
 import { evolucaoDoAluno } from "@/lib/tatica/rating-leitura";
 import { EvolucaoDoRating } from "@/components/tatica/EvolucaoDoRating";
@@ -98,7 +98,8 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   // número em voz alta com o aluno na frente, olhando outro número.
   const serie = serieDeDias(minutos, hoje, DIAS, partidas);
   const sequencia = sequenciaDeDias(minutos, hoje);
-  const fila = filaCompleta(linhas);
+  // Só o que o disco ainda serve — a mesma fila que o painel do aluno conta.
+  const fila = await soOServivel(filaCompleta(linhas));
   const devidosHoje = fila.filter((f) => f.devidoEm <= hoje);
   const pico = Math.max(META_DO_DIA_MIN, ...serie.map((d) => d.total));
 

@@ -88,19 +88,16 @@ export async function escolherPuzzles({
     origem: tag,
   }));
 
+  // A origem vem carimbada por `amostraDeTemas`: o arquivo de onde o puzzle foi
+  // lido. Sem ela, o servidor procuraria a solução no arquivo do tema atual e
+  // recusaria a tentativa como "puzzle desconhecido".
   const deOutros = anteriores.length
     ? sortear(
         await amostraDeTemas(anteriores),
         restantes - doTema.length,
         `${semente}:mistura`,
         jaVistos,
-      ).map((p) => ({
-        ...p,
-        // A origem é o tema de onde o arquivo veio. Sem ela, o servidor
-        // procuraria a solução no arquivo do tema atual e recusaria a
-        // tentativa como "puzzle desconhecido".
-        origem: anteriores.find((t) => p.temas.includes(t)) ?? anteriores[0],
-      }))
+      )
     : [];
 
   return misturar(semRepetidos([...repetir, ...doTema, ...deOutros]), semente);

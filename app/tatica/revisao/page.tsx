@@ -50,9 +50,10 @@ export default async function Revisao() {
     )
     .slice(0, REVISAO_POR_DIA);
 
-  // O puzzle que saiu do recorte (o banco foi refeito) não existe mais no
-  // disco: `null`, e fica de fora sem barulho. A linha dele continua no
-  // histórico, e ele nunca mais vence — o que é o correto.
+  // `revisaoDeHoje` já tirou da fila o puzzle que saiu do recorte e corrigiu a
+  // origem do que mudou de arquivo (`filaServivel`) — antes de escolher os dez,
+  // e não depois: órfãos no topo ocupavam as vagas e a página dizia "nada para
+  // revisar". O `null` abaixo só cobre um deploy trocando o banco no meio.
   const carregados = await Promise.all(
     escolhidos.map(async (item) => {
       const p = await puzzlePorId(item.origem, item.puzzleId);

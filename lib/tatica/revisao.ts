@@ -127,3 +127,46 @@ export function filaCompleta(linhas: readonly LinhaDeTentativa[]): ItemDaFila[] 
 export function filaDeRevisao(linhas: readonly LinhaDeTentativa[], hoje: string): ItemDaFila[] {
   return filaCompleta(linhas).filter((item) => item.devidoEm <= hoje);
 }
+
+/** Onde a fila procura um puzzle — o disco, visto por quem chama. */
+export type ProcuraNoBanco = {
+  /** O puzzle `id` está no arquivo do tema `tag`? */
+  readonly estaEm: (tag: string, id: string) => boolean;
+  /** Outro arquivo em que o puzzle mora, se ele saiu da origem e do tema. */
+  readonly outraOrigem: (id: string) => string | undefined;
+};
+
+/**
+ * A fila, só com o que o disco ainda serve — e cada item apontando para um
+ * arquivo em que o puzzle está.
+ *
+ * ## Por que a fila precisa disto
+ *
+ * A fila guarda o puzzle pelo id e pela origem, e o banco é refeito de tempos em
+ * tempos (`npm run puzzles:filtrar`). Um id que saiu do recorte **nunca mais
+ * vence**: ninguém o acerta, então ele fica devido para sempre e, por ser o mais
+ * atrasado, sobe ao topo. A revisão pegava os dez do topo, não achava nenhum no
+ * disco e dizia "nada para revisar" — enquanto o painel, contando a fila crua,
+ * mandava revisar.
+ *
+ * ## A ordem da busca
+ *
+ * 1. a `origem` gravada — o arquivo de onde ele foi servido;
+ * 2. o `tema` da tentativa;
+ * 3. qualquer outro arquivo do currículo (`outraOrigem`).
+ *
+ * O que não está em nenhum dos três sai da fila. A linha dele continua no
+ * histórico; só deixa de ser cobrada.
+ */
+export function filaServivel(fila: readonly ItemDaFila[], banco: ProcuraNoBanco): ItemDaFila[] {
+  const servivel: ItemDaFila[] = [];
+  for (const item of fila) {
+    const origem = banco.estaEm(item.origem, item.puzzleId)
+      ? item.origem
+      : banco.estaEm(item.tema, item.puzzleId)
+        ? item.tema
+        : banco.outraOrigem(item.puzzleId);
+    if (origem) servivel.push(origem === item.origem ? item : { ...item, origem });
+  }
+  return servivel;
+}

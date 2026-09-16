@@ -69,8 +69,14 @@ const nextConfig: NextConfig = {
      * `ENOENT` aparecendo só na Vercel, no primeiro aluno que abrisse o site.
      * É exatamente a falha que o comentário do F2 acima descreve, e ela quase
      * entrou pela porta de um merge.
+     *
+     * **E, desde 16/9, lê também os puzzles.** A fila de revisão que o painel
+     * conta passa por `soOServivel` (`lib/tatica/progresso.ts`), que confere no
+     * disco se cada puzzle ainda existe — senão o painel mandaria revisar o que
+     * a revisão não consegue abrir. Sem esta entrada, a primeira leitura seria
+     * `ENOENT: index.json` na Vercel, na página inicial de todo aluno.
      */
-    "/painel": ["./content/**", "./public/repertorio/**"],
+    "/painel": ["./content/**", "./public/repertorio/**", "./public/puzzles/**"],
   },
   /**
    * **O selo de desenvolvimento do Next sai da tela.**
