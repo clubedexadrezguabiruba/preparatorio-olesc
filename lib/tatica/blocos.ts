@@ -60,7 +60,8 @@ export type Bloco = {
    * resumo de `hangingPiece` aqui embaixo já chama a peça pendurada de *"o erro
    * nº 1 em 1000–1400"*. Garfo, cravada, espeto e descoberto são o vocabulário
    * de que os outros blocos são feitos: `capturingDefender` e `deflection` (B5)
-   * são operações **sobre** uma cravada.
+   * existem para abrir caminho a um deles — tirar a defesa e colher com garfo
+   * ou cravada.
    */
   readonly nivel: Nivel;
   readonly temas: readonly Tema[];
@@ -74,8 +75,8 @@ export const BLOCOS: readonly Bloco[] = [
     nivel: 1,
     temas: [
       { tag: "mateIn1", nome: "Mate em 1", resumo: "Um lance e acabou. O olho treina aqui." },
-      { tag: "mateIn2", nome: "Mate em 2", resumo: "O lance que obriga, e depois o mate." },
-      { tag: "hangingPiece", nome: "Peça de graça", resumo: "A peça que ninguém defende — o erro nº 1 em 1000–1400." },
+      { tag: "mateIn2", nome: "Mate em 2", resumo: "Dois lances seus até o mate — e o primeiro nem sempre é xeque." },
+      { tag: "hangingPiece", nome: "Peça de graça", resumo: "A peça sem defesa, ou com defesa de menos — o erro nº 1 em 1000–1400." },
     ],
   },
   {
@@ -84,11 +85,11 @@ export const BLOCOS: readonly Bloco[] = [
     faixa: [800, 2100],
     nivel: 3,
     temas: [
-      { tag: "backRankMate", nome: "Mate do corredor", resumo: "O rei preso atrás dos próprios peões." },
+      { tag: "backRankMate", nome: "Mate do corredor", resumo: "O rei preso na última fileira pelas próprias peças, e a torre ou a dama dá o mate." },
       { tag: "smotheredMate", nome: "Mate sufocado", resumo: "O cavalo mata o rei cercado pelas próprias peças." },
       { tag: "arabianMate", nome: "Mate árabe", resumo: "Torre e cavalo prendem o rei no canto." },
-      { tag: "anastasiaMate", nome: "Mate de Anastasia", resumo: "O cavalo tapa as fugas e a torre entra pela coluna." },
-      { tag: "hookMate", nome: "Mate do gancho", resumo: "Torre, cavalo e peão fechando a saída." },
+      { tag: "anastasiaMate", nome: "Mate de Anastasia", resumo: "O cavalo tapa as fugas, uma peça dele prende o rei na borda, e torre ou dama dá o mate." },
+      { tag: "hookMate", nome: "Mate do gancho", resumo: "A torre dá o mate, o cavalo a defende, o peão defende o cavalo — e um peão dele tapa a fuga." },
     ],
   },
   {
@@ -97,10 +98,10 @@ export const BLOCOS: readonly Bloco[] = [
     faixa: [1000, 2100],
     nivel: 4,
     temas: [
-      { tag: "bodenMate", nome: "Mate de Boden", resumo: "Os dois bispos em diagonais que se cruzam." },
-      { tag: "doubleBishopMate", nome: "Mate dos dois bispos", resumo: "Dois bispos em diagonais vizinhas, e o rei no canto." },
-      { tag: "dovetailMate", nome: "Mate da cauda de andorinha", resumo: "A dama ao lado do rei, com as fugas tapadas." },
-      { tag: "mateIn3", nome: "Mate em 3", resumo: "Três lances forçados: onde o cálculo começa a doer." },
+      { tag: "bodenMate", nome: "Mate de Boden", resumo: "Dois bispos em diagonais que se cruzam; as próprias peças do rei tapam a fuga." },
+      { tag: "doubleBishopMate", nome: "Mate dos dois bispos", resumo: "Dois bispos em diagonais vizinhas; as próprias peças do rei tapam a fuga." },
+      { tag: "dovetailMate", nome: "Mate da cauda de andorinha", resumo: "A dama colada no rei, e as duas fugas tapadas pelas peças dele." },
+      { tag: "mateIn3", nome: "Mate em 3", resumo: "Três lances seus até o mate: aqui o cálculo faz diferença." },
     ],
   },
   {
@@ -110,8 +111,8 @@ export const BLOCOS: readonly Bloco[] = [
     nivel: 2,
     temas: [
       { tag: "fork", nome: "Garfo", resumo: "Uma peça ataca duas ao mesmo tempo." },
-      { tag: "pin", nome: "Cravada", resumo: "A peça que não pode sair porque atrás dela há coisa melhor." },
-      { tag: "skewer", nome: "Espeto", resumo: "A cravada ao contrário: a peça grande na frente." },
+      { tag: "pin", nome: "Cravada", resumo: "A peça que não pode sair sem expor o rei ou uma peça mais valiosa atrás dela." },
+      { tag: "skewer", nome: "Espeto", resumo: "A peça valiosa da frente é atacada, sai, e a de trás cai." },
       { tag: "discoveredAttack", nome: "Ataque descoberto", resumo: "Sai uma peça e quem ataca é a de trás." },
       { tag: "doubleCheck", nome: "Xeque duplo", resumo: "Duas peças dão xeque: só o rei pode se mexer." },
     ],
@@ -122,11 +123,11 @@ export const BLOCOS: readonly Bloco[] = [
     faixa: [1000, 2100],
     nivel: 4,
     temas: [
-      { tag: "capturingDefender", nome: "Capturar o defensor", resumo: "Tire quem segura, e o resto cai." },
-      { tag: "deflection", nome: "Desvio", resumo: "Obrigue a peça a sair do posto que ela guarda." },
-      { tag: "attraction", nome: "Atração", resumo: "Puxe a peça para a casa onde ela vira alvo." },
-      { tag: "trappedPiece", nome: "Peça presa", resumo: "A peça sem casa para onde ir." },
-      { tag: "xRayAttack", nome: "Raio X", resumo: "O ataque que atravessa a peça do meio." },
+      { tag: "capturingDefender", nome: "Capturar o defensor", resumo: "Capture a peça que defende outra: a defendida fica solta e cai no lance seguinte." },
+      { tag: "deflection", nome: "Desvio", resumo: "Distraia a peça do que ela defende e ganhe o que ficou sem guarda." },
+      { tag: "attraction", nome: "Atração", resumo: "Um sacrifício força a peça a ir a uma casa — e ali entra a tática seguinte: garfo, cravada ou mate." },
+      { tag: "trappedPiece", nome: "Peça presa", resumo: "A peça sem casa segura para fugir: ataque e ela cai." },
+      { tag: "xRayAttack", nome: "Raio X", resumo: "A peça ataca ou defende uma casa através de uma peça inimiga no meio." },
     ],
   },
   {
@@ -135,10 +136,10 @@ export const BLOCOS: readonly Bloco[] = [
     faixa: [1000, 2100],
     nivel: 5,
     temas: [
-      { tag: "exposedKing", nome: "Rei exposto", resumo: "Rei sem casas e sem defensores: procure o xeque." },
-      { tag: "attackingF2F7", nome: "Ataque em f2/f7", resumo: "A casa mais fraca do começo de partida." },
-      { tag: "kingsideAttack", nome: "Ataque na ala do rei", resumo: "Onde ele roca, é para lá que as peças vão." },
-      { tag: "sacrifice", nome: "Sacrifício", resumo: "Dar uma peça porque o que vem depois vale mais." },
+      { tag: "exposedKing", nome: "Rei exposto", resumo: "Rei com poucos defensores por perto: os xeques chegam, e muitas vezes o mate." },
+      { tag: "attackingF2F7", nome: "Ataque em f2/f7", resumo: "No começo, esse peão só tem o rei de defensor — o ataque entra por ali." },
+      { tag: "kingsideAttack", nome: "Ataque na ala do rei", resumo: "Ele rocou pequeno: é para lá que suas peças e peões vão." },
+      { tag: "sacrifice", nome: "Sacrifício", resumo: "Dar material agora porque o que vem depois vale mais." },
     ],
   },
   {
@@ -147,9 +148,9 @@ export const BLOCOS: readonly Bloco[] = [
     faixa: [1100, 2100],
     nivel: 5,
     temas: [
-      { tag: "intermezzo", nome: "Lance intermediário", resumo: "Antes de recapturar, um xeque que muda tudo." },
+      { tag: "intermezzo", nome: "Lance intermediário", resumo: "Em vez do lance esperado, primeiro uma ameaça que ele é obrigado a responder." },
       { tag: "quietMove", nome: "Lance quieto", resumo: "Sem xeque e sem captura — e a ameaça é imparável." },
-      { tag: "clearance", nome: "Liberação", resumo: "Tirar a própria peça da frente." },
+      { tag: "clearance", nome: "Liberação", resumo: "Tire a própria peça do caminho, de preferência com ameaça, e libere a casa ou a linha para outra." },
       { tag: "interference", nome: "Interferência", resumo: "Pôr uma peça no meio do caminho de quem defende." },
       { tag: "zugzwang", nome: "Zugzwang", resumo: "Jogar é obrigatório, e todo lance piora." },
     ],
@@ -174,10 +175,10 @@ export const BLOCOS: readonly Bloco[] = [
     nivel: 5,
     temas: [
       { tag: "defensiveMove", nome: "Lance defensivo", resumo: "O único lance que segura — treinar não desistir." },
-      { tag: "advancedPawn", nome: "Peão avançado", resumo: "O peão que vai virar dama e decide a partida." },
-      { tag: "promotion", nome: "Promoção", resumo: "Chegar na oitava, e escolher a peça certa." },
-      { tag: "underPromotion", nome: "Subpromoção", resumo: "Quando a dama não serve e o cavalo ganha." },
-      { tag: "enPassant", nome: "En passant", resumo: "A regra que ninguém lembra na hora." },
+      { tag: "advancedPawn", nome: "Peão avançado", resumo: "O peão já fundo no campo dele, muitas vezes ameaçando virar dama." },
+      { tag: "promotion", nome: "Promoção", resumo: "Chegar na última fileira, e escolher a peça certa." },
+      { tag: "underPromotion", nome: "Subpromoção", resumo: "Quando a dama não serve: cavalo pelo xeque, torre ou bispo para não afogar." },
+      { tag: "enPassant", nome: "En passant", resumo: "O peão que avançou duas casas e parou ao lado do seu: capture como se ele tivesse andado uma." },
     ],
   },
 ] as const;
