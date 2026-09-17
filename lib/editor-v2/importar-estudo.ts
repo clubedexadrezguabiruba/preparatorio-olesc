@@ -12,6 +12,20 @@
  *
  * ## Para onde cada capítulo vai — a pista, e o professor decide
  *
+ * **O nome do capítulo vem primeiro** (pedido do Doug, 16/9/2026): ele escreve o modo no nome —
+ * "00 - Introdução da aula", "02 - AULA EXPLICADA", "04 - TREINO GUIADO 1", "08 - PRÁTICA LIVRE". Com
+ * mais de uma palavra no nome, manda a que aparece primeiro. Se o nome pede o que o capítulo não pode
+ * virar (treino sem lances), valem as pistas abaixo, e a frase da pista diz por quê.
+ *
+ * | Palavra no nome (sem acento, maiúscula ou não) | Sugestão |
+ * |---|---|
+ * | introdução, apresentação, introduction | **Introdução** |
+ * | aula, lição, explicação, lesson | **Capítulo** (sem lances: posição parada) |
+ * | treino, exercício, training, exercise | **Treino** |
+ * | prática, pratique, practice | **Prática** |
+ *
+ * Sem palavra no nome, as pistas do Lichess:
+ *
  * | Pista | Sugestão |
  * |---|---|
  * | sem lances, antes do primeiro capítulo com lances | **Introdução** (um quadro) |
@@ -40,8 +54,8 @@ import { Chess } from "chess.js";
 import type { Position } from "../lesson/schema.ts";
 import { lerPgnsDoEstudo, type PartidaPgn } from "../repertorio/pgn.ts";
 import { indiceAntesDaPratica } from "./fluxo.ts";
-import { idsDaAulaV2 } from "./ids.ts";
-import { importarJogo, prosaEDesenhos, type JogoImportado } from "./importar-pgn.ts";
+import { comoId, idsDaAulaV2 } from "./ids.ts";
+import { enderecoDaOrigem, enderecosDaAula, importarJogo, prosaEDesenhos, type JogoImportado } from "./importar-pgn.ts";
 import { problemasDeLimiteV2 } from "./limites.ts";
 import type { AnaliseV2, AulaV2, CapituloV2, IntroducaoV2, RevisaoDaFenV2, TreinoV2 } from "./modelo.ts";
 import { tornarTreinoIndependente } from "./propriedade-treino.ts";
@@ -64,6 +78,8 @@ export type CapituloDoEstudo = {
   pista: string;
   perdas: string[];
   jogo: JogoImportado;
+  /** Capítulo sem lances com posição válida: o capítulo de posição parada que ele vira, se escolhido. */
+  parado: { analise: AnaliseV2; capitulo: CapituloV2 } | null;
   partida: PartidaPgn;
 };
 
@@ -76,15 +92,71 @@ export type LeituraDoEstudo = {
 
 const semNumero = (titulo: string) => titulo.replace(/^\s*\d+\s*[-–—.]\s*/, "").trim() || titulo;
 
+const ROTULO_DO_DESTINO: Record<Exclude<DestinoNoEstudo, "fora">, string> = { introducao: "introdução", capitulo: "aula", treino: "treino", pratica: "prática" };
+
+/** As palavras que o professor usa no nome do capítulo para dizer o que ele é. Sem acento: o nome é comparado sem acento. */
+const PALAVRAS_DO_NOME: [Exclude<DestinoNoEstudo, "fora">, RegExp][] = [
+  ["introducao", /\b(introducao|apresentacao|introduction)\b/g],
+  ["capitulo", /\b(aula|licao|explicacao|lesson)\b/g],
+  ["treino", /\b(treino|treinos|exercicio|exercicios|training|exercise|exercises)\b/g],
+  ["pratica", /\b(pratica|praticas|pratique|practice)\b/g],
+];
+
+/** O modo que o nome do capítulo declara — a palavra que aparece primeiro —, ou nada. */
+export function destinoPeloNome(nome: string): Exclude<DestinoNoEstudo, "fora"> | null {
+  const limpo = nome.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  let achado: { destino: Exclude<DestinoNoEstudo, "fora">; indice: number } | null = null;
+  for (const [destino, palavras] of PALAVRAS_DO_NOME) {
+    for (const casamento of limpo.matchAll(palavras)) {
+      if (!achado || casamento.index < achado.indice) achado = { destino, indice: casamento.index };
+    }
+  }
+  return achado?.destino ?? null;
+}
+
+/**
+ * O capítulo sem lances como capítulo de posição parada: o texto fica como comentário da posição e
+ * como narração que espera o "Continuar" — o mesmo arranjo de "Mudar para capítulo" num quadro
+ * (`mudar-modo.ts`). Os ids seguem os de `importarJogo`, na mesma reserva.
+ */
+function capituloParado(partida: PartidaPgn, titulo: string, numero: number, fen: string, idsUsados: Set<string>): CapituloDoEstudo["parado"] {
+  try { new Chess(fen); } catch { return null; }
+  const ocupado = (candidato: string) => [candidato, `analise-${candidato}`, `capitulo-${candidato}`, `no-${candidato}-0`].some((id) => idsUsados.has(id));
+  let sufixo = comoId(partida.tags.ChapterName ?? titulo, `jogo-${numero}`);
+  while (ocupado(sufixo)) sufixo = `${sufixo}-${numero}`;
+  idsUsados.add(sufixo);
+  const raizId = `no-${sufixo}-0`;
+  const { desenhos } = prosaEDesenhos(partida.intro ?? "");
+  const texto = textoComParagrafos(partida.intro);
+  const analise: AnaliseV2 = {
+    id: `analise-${sufixo}`,
+    inicio: { tipo: "fen", fen },
+    origemPgn: { tags: partida.tags, ...(partida.resultado ? { resultado: partida.resultado } : {}), naoReconhecidos: partida.naoReconhecidos },
+    raizId,
+    nos: { [raizId]: { id: raizId, filhos: [], ...(texto ? { comentario: texto } : {}), ...(desenhos ? { desenhos } : {}) } },
+  };
+  const capitulo: CapituloV2 = {
+    id: `capitulo-${sufixo}`,
+    titulo,
+    analiseId: analise.id,
+    inicioNodeId: raizId,
+    caminho: [],
+    orientacao: new Chess(fen).turn() === "w" ? "white" : "black",
+    // Sem lance para tocar, a narração temporizada passaria sozinha: o aluno lê e clica em Continuar.
+    narracoes: texto ? [{ id: `narracao-${raizId}`, nodeId: raizId, texto, pausa: "manual" }] : [],
+  };
+  return { analise, capitulo };
+}
+
 /** O texto de um comentário do estudo com os parágrafos intactos, sem as diretivas. */
 export function textoComParagrafos(bruto: string | null): string {
   if (!bruto) return "";
   return bruto.replace(/\[%[^\]]*\]/g, " ").split(/\n/).map((linha) => linha.replace(/[ \t]+/g, " ").trim()).join("\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 
-export function lerEstudo(texto: string): LeituraDoEstudo {
+export function lerEstudo(texto: string, idsDaAula: ReadonlySet<string> = new Set()): LeituraDoEstudo {
   const partidas = lerPgnsDoEstudo(texto);
-  const idsUsados = new Set<string>();
+  const idsUsados = new Set(idsDaAula);
   let primeiroComLances = partidas.findIndex((partida) => partida.lances.length > 0);
   if (primeiroComLances < 0) primeiroComLances = partidas.length;
 
@@ -98,10 +170,14 @@ export function lerEstudo(texto: string): LeituraDoEstudo {
     const modo = partida.tags.ChapterMode === "gamebook" ? "gamebook" : "analise";
     const contraMaquina = /engine|stockfish|computador/i.test(`${partida.tags.White ?? ""} ${partida.tags.Black ?? ""}`);
     const temLances = partida.lances.length > 0 && jogo.recusa === null;
+    const parado = jogo.recusa?.codigo === "JOGO_SEM_LANCES" && partida.lances.length === 0
+      ? capituloParado(partida, jogo.titulo, numero, fen, idsUsados)
+      : null;
 
     const possiveis: DestinoNoEstudo[] = [];
     if (!jogo.recusa || jogo.recusa.codigo === "JOGO_SEM_LANCES") possiveis.push("introducao");
-    if (temLances) possiveis.push("capitulo", "treino");
+    if (temLances || parado) possiveis.push("capitulo");
+    if (temLances) possiveis.push("treino");
     if (!jogo.recusa || jogo.recusa.codigo === "JOGO_SEM_LANCES") possiveis.push("pratica");
     possiveis.push("fora");
 
@@ -114,6 +190,18 @@ export function lerEstudo(texto: string): LeituraDoEstudo {
     else if (possiveis.includes("introducao")) { sugerido = "introducao"; pista = "não tem lances"; }
     else { sugerido = "fora"; pista = jogo.recusa?.mensagem ?? "não pôde ser lido"; }
 
+    // O nome que o professor deu vence as pistas; quando pede o impossível, a pista fica e diz por quê.
+    const peloNome = destinoPeloNome(partida.tags.ChapterName ?? "");
+    if (peloNome && possiveis.includes(peloNome)) {
+      const parada = peloNome === "capitulo" && !temLances;
+      pista = parada ? `o nome diz «aula» — sem lances, a posição fica parada`
+        : peloNome === sugerido || sugerido === "fora" ? `o nome diz «${ROTULO_DO_DESTINO[peloNome]}»`
+        : `o nome diz «${ROTULO_DO_DESTINO[peloNome]}»; sem o nome, seria ${ROTULO_DO_DESTINO[sugerido]} (${pista})`;
+      sugerido = peloNome;
+    } else if (peloNome && sugerido !== "fora") {
+      pista = `o nome diz «${ROTULO_DO_DESTINO[peloNome]}», mas ${peloNome === "treino" && !temLances ? "um treino sem lances não tem o que cobrar" : "não dá"}: ${pista}`;
+    }
+
     const perdas = jogo.perdas.map((perda) => perda.mensagem);
     if (modo === "gamebook") perdas.push("as dicas e os textos de desvio da lição interativa não vêm na exportação do Lichess — escreva-os na autoria do treino");
     if (contraMaquina) perdas.push("o modo \"praticar contra o computador\" do Lichess não vem na exportação; a pista foi o nome do adversário");
@@ -122,7 +210,7 @@ export function lerEstudo(texto: string): LeituraDoEstudo {
     return {
       numero, titulo: semNumero(jogo.titulo), fen, lado, modo,
       lances: jogo.lances, variantes: jogo.variantes, comentarios: jogo.comentarios,
-      sugerido, possiveis, pista, perdas, jogo, partida,
+      sugerido, possiveis, pista, perdas, jogo, parado, partida,
     };
   });
 
@@ -180,10 +268,16 @@ export function planejarEstudo(aula: AulaV2, leitura: LeituraDoEstudo, escolhas:
   // Nenhuma, uma ou várias práticas (trava 9, 15/9/2026): as do estudo somam às que a aula já tem.
   const praticas = escolhidos.filter((c) => destino(c) === "pratica");
 
+  // "Já importado" é o endereço do capítulo, e não o id: ver `enderecoDaOrigem` (15/9/2026).
+  const jaNaAula = enderecosDaAula(aula);
+  const repetido = escolhidos.find((c) => jaNaAula.has(enderecoDaOrigem((c.jogo.analise ?? c.parado?.analise)?.origemPgn?.tags) ?? ""));
+  if (repetido) return { ok: false, mensagem: `«${repetido.titulo}» já está nesta aula — este estudo parece já ter sido importado. Nada foi aplicado.` };
+
   const usados = idsDaAulaV2(aula);
   for (const c of escolhidos) {
-    if (!c.jogo.analise) continue;
-    for (const id of [c.jogo.analise.id, c.jogo.capitulo!.id, `etapa-${c.jogo.capitulo!.id}`]) {
+    const proprio = c.jogo.analise && c.jogo.capitulo ? { analise: c.jogo.analise, capitulo: c.jogo.capitulo } : c.parado;
+    if (!proprio) continue;
+    for (const id of [proprio.analise.id, proprio.capitulo.id, `etapa-${proprio.capitulo.id}`]) {
       if (usados.has(id)) return { ok: false, mensagem: `a aula já tem uma parte chamada "${id}" — este estudo parece já ter sido importado. Nada foi aplicado.` };
     }
   }
@@ -201,8 +295,10 @@ export function planejarEstudo(aula: AulaV2, leitura: LeituraDoEstudo, escolhas:
 
   // Os capítulos entram primeiro, para a introdução poder apontar a posição deles.
   for (const c of escolhidos.filter((item) => destino(item) === "capitulo")) {
-    analises.push(comRevisao(c.jogo.analise!));
-    capitulos.push({ ...c.jogo.capitulo!, titulo: c.titulo, orientacao: c.lado });
+    // Sem lances, o capítulo é a posição parada (16/9/2026): "AULA DIAGNÓSTICO - Como você começaria?".
+    const { analise, capitulo } = c.jogo.analise ? { analise: c.jogo.analise, capitulo: c.jogo.capitulo! } : c.parado!;
+    analises.push(comRevisao(analise));
+    capitulos.push({ ...capitulo, titulo: c.titulo, orientacao: c.lado });
   }
 
   // Treinos: derivados num rascunho da aula, e então independentes e completados.
@@ -226,7 +322,7 @@ export function planejarEstudo(aula: AulaV2, leitura: LeituraDoEstudo, escolhas:
   }
 
   // A ordem das etapas segue a do estudo.
-  const ordem = new Map(escolhidos.map((c, i) => [c.jogo.capitulo?.id ?? `#${c.numero}`, i]));
+  const ordem = new Map(escolhidos.map((c, i) => [c.jogo.capitulo?.id ?? c.parado?.capitulo.id ?? `#${c.numero}`, i]));
   for (const capitulo of capitulos) etapas.push({ id: `etapa-${capitulo.id}`, tipo: "capitulo", entidadeId: capitulo.id });
   const posicaoNoEstudo = (etapa: AulaV2["fluxo"][number]) => {
     if (etapa.tipo === "capitulo") return ordem.get(etapa.entidadeId) ?? 0;

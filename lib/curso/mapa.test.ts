@@ -207,7 +207,7 @@ test("a trava é mole: o que está adiante é contado à parte, não escondido",
 
 test("todo módulo tem rótulo e diz o que a barra dele conta", () => {
   // A tela põe as duas barras lado a lado, e elas contam coisas diferentes —
-  // puzzle medido e aula certificada pela tablebase. Uma barra sem essa frase
+  // puzzle medido e aula vencida em três dias diferentes. Uma barra sem essa frase
   // ao lado vira um percentual que o professor não sabe defender.
   for (const chave of ["tatica", "finais"] as const) {
     assert.ok(MODULO[chave].nome.length > 2);

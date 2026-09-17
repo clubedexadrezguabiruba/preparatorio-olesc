@@ -1,19 +1,14 @@
 import { notFound } from "next/navigation";
 import { EditorV2 } from "@/components/editor-v2/EditorV2";
 import { exigirEditor } from "@/lib/editor/acesso";
-import { abrirRascunhoDeAula } from "@/lib/editor/rascunhos";
-import { adaptarLessonV1 } from "@/lib/editor-v2/adaptar-v1";
 import { lerPosicoesDoConteudoV2 } from "@/lib/editor-v2/gate";
 import { hashDaPosicao } from "@/lib/editor-v2/hash";
-import { idsDePosicoesDaAulaV2 } from "@/lib/editor-v2/pacote";
 import { aulaIdV2Schema, problemasDaAulaV2 } from "@/lib/editor-v2/modelo";
 import { recuperarTransacaoV2 } from "@/lib/editor-v2/publicar";
-import { documentoInicialV2, lerDocumentoV2 } from "@/lib/editor-v2/rascunhos";
-import { pacoteDaAula } from "@/lib/finais/conteudo";
-import { lessonIdSchema, lessonSchema } from "@/lib/lesson/schema";
 import { lerRegua } from "@/lib/lesson/voz";
 import type { PosicaoDoAcervoV2 } from "@/lib/editor-v2/acervo";
 import { obrasDoRegistro } from "@/lib/editor-v2/acervo-em-disco";
+import { documentoDoEditorV2 } from "../../documento-do-editor";
 
 /** O acervo inteiro, com o hash que a proveniência registra — calculado aqui, no servidor. */
 function acervoDoEditor(): PosicaoDoAcervoV2[] {
@@ -42,56 +37,10 @@ export default async function PaginaDoEditorV2({ params }: { params: Promise<{ a
   // §20.1: uma publicação interrompida é terminada ou desfeita antes de a aula abrir.
   recuperarTransacaoV2(aula);
 
-  /*
-   * Uma aula extra (`EX-…`) não tem — e não pode ter — arquivo v1: as pastas do
-   * v1 só aceitam o id do curso, e pedir o rascunho v1 de uma extra estouraria
-   * dentro do guardião de caminho. A pergunta "existe v1?" só faz sentido para
-   * quem podia ter um.
-   */
-  const aberto = lessonIdSchema.safeParse(aula).success ? abrirRascunhoDeAula(aula) : null;
+  // A leitura mora em `documento-do-editor.ts`, compartilhada com "Assistir como aluno".
+  const documento = documentoDoEditorV2(aula);
+  if (!documento) notFound();
 
-  /*
-   * ## As aulas que só existem no v2
-   *
-   * Uma aula criada por "Nova aula" não tem arquivo v1 por trás — não há o que
-   * adaptar, e `pacoteDaAula` não tem lesson para ler. Ela é aberta direto do
-   * documento v2, com o pacote de posições vazio: uma aula nova não referencia
-   * nenhuma posição revisada, porque ainda não tem capítulo. Quando passar a
-   * ter, as posições dela nascerão como FEN crua, que é o caminho de §12 e não
-   * depende deste pacote.
-   */
-  if (!aberto) {
-    const documento = lerDocumentoV2(aula);
-    if (!documento) notFound();
-    /*
-     * As posições que o documento referencia, lidas de `content/positions/`. Até a fatia 8 ia
-     * um pacote vazio, com a premissa de que "uma aula nova não referencia posição revisada" —
-     * falsa para uma extra montada sobre uma posição do curso: o painel acusava "a posição não
-     * está no pacote" e o tabuleiro não montava, enquanto o Conferir (que lê o disco) dava
-     * verde. Achado no roteiro da 8F, com a EX-ENSAIO.
-     */
-    const todas = lerPosicoesDoConteudoV2();
-    const positions = Object.fromEntries(idsDePosicoesDaAulaV2(documento.aula).filter((id) => todas[id]).map((id) => [id, todas[id]]));
-    const daProveniencia = problemasDaAulaV2(documento.aula, positions, hashDaPosicao)
-      .filter((problema) => problema.codigo.startsWith("PROVENIENCIA_"));
-    return (
-      <EditorV2
-        aulaId={aula}
-        documentoInicial={documento.aula}
-        hashInicial={documento.hash}
-        positions={positions}
-        problemasDaOrigem={daProveniencia}
-        regua={lerRegua()}
-        professor={perfil.nome || perfil.usuario}
-        acervo={acervoDoEditor()}
-        obras={obrasDoRegistro()}
-      />
-    );
-  }
-
-  const lesson = lessonSchema.parse(JSON.parse(aberto.texto));
-  const { positions } = pacoteDaAula(lesson);
-  const documento = documentoInicialV2(aula, adaptarLessonV1(lesson, positions));
   /*
    * A conferência de proveniência é feita **aqui**, e não na tela, porque ela compara
    * hashes e o hash vem do `node:crypto`, que não existe no navegador.
@@ -101,19 +50,19 @@ export default async function PaginaDoEditorV2({ params }: { params: Promise<{ a
    * muda a cada tecla — forma, referências, legalidade dos lances — continua sendo
    * recalculado na tela. Cada conferência roda onde ela pode rodar, e no ritmo dela.
    */
-  const daProveniencia = problemasDaAulaV2(documento.aula, positions, hashDaPosicao)
+  const daProveniencia = problemasDaAulaV2(documento.aula, documento.positions, hashDaPosicao)
     .filter((problema) => problema.codigo.startsWith("PROVENIENCIA_"));
   return (
     <EditorV2
       aulaId={aula}
       documentoInicial={documento.aula}
       hashInicial={documento.hash}
-      positions={positions}
+      positions={documento.positions}
       problemasDaOrigem={daProveniencia}
       regua={lerRegua()}
       professor={perfil.nome || perfil.usuario}
       acervo={acervoDoEditor()}
-        obras={obrasDoRegistro()}
+      obras={obrasDoRegistro()}
     />
   );
 }

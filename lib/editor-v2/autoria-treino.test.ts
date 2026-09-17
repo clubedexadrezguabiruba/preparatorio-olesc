@@ -6,7 +6,7 @@ import { adaptarLessonV1 } from "./adaptar-v1.ts";
 import { aplicarNoHistorico, desfazer, executarComando, iniciarHistorico, refazer } from "./comandos.ts";
 import { validarAulaV2 } from "./modelo.ts";
 import { aplicarTreinosPreparados, prepararTreinosDaqui } from "./treinos.ts";
-import { aplicarEdicaoDeTreino, catalogoComErro, efeitoAoTrocarTipo, prepararEdicaoDeTreino, proximoIdDeResposta } from "./autoria-treino.ts";
+import { aplicarEdicaoDeTreino, catalogoComErro, destinoDoLanceDoTabuleiro, efeitoAoTrocarTipo, lanceDoTabuleiro, prepararEdicaoDeTreino, proximoIdDeResposta } from "./autoria-treino.ts";
 import { Chess } from "chess.js";
 import { quadroDoNo } from "./arvore.ts";
 import { acrescentarDefesa, fugasDaAnalise, proximoIdDeQuestao, removerDefesa, tornarDefesaFixa } from "./defesas-do-treino.ts";
@@ -248,4 +248,23 @@ test("fatia 10: o texto de abertura do treino é editável — aparado, e retira
   if (!vazio.ok) assert.fail(vazio.mensagem);
   assert.equal("introducao" in vazio.edicao.treino, false, "sem texto de abertura, o aluno volta a ler o objetivo");
   assert.equal(validarAulaV2(aplicarEdicaoDeTreino(aula, vazio.edicao)).ok, true);
+});
+
+test("16/9: o lance jogado no tabuleiro da janela vira o lance da resposta, sem digitar", () => {
+  const { treino } = comTreino();
+  const questao = treino.questoes[0];
+  const [primeira] = questao.respostas;
+  const outra = { ...structuredClone(primeira), id: "resposta-nova", moves: [] };
+  questao.respostas.push(outra);
+
+  assert.equal(lanceDoTabuleiro("4k3/8/8/8/8/8/8/4K2R w K - 0 1", "e1", "g1"), "e1g1", "roque sai em casas, como o aluno joga");
+  assert.equal(lanceDoTabuleiro("8/4P3/8/8/8/8/k7/4K3 w - - 0 1", "e7", "e8"), "e7e8q", "promoção entra como dama; o campo aceita trocar");
+  assert.equal(lanceDoTabuleiro("4k3/8/8/8/8/8/8/4K3 w - - 0 1", "e1", "e3"), null, "lance ilegal não preenche nada");
+
+  assert.deepEqual(destinoDoLanceDoTabuleiro(questao, outra.id, "g2g3"), { tipo: "preencher", respostaId: outra.id },
+    "com uma resposta aberta, o lance vai para ela");
+  assert.deepEqual(destinoDoLanceDoTabuleiro(questao, outra.id, primeira.moves[0]), { tipo: "abrir", respostaId: primeira.id },
+    "lance que já é de outra resposta abre aquela, em vez de repetir o lance em duas");
+  assert.deepEqual(destinoDoLanceDoTabuleiro(questao, null, "g2g3"), { tipo: "nova" },
+    "sem resposta aberta, o lance vira uma resposta correta nova");
 });

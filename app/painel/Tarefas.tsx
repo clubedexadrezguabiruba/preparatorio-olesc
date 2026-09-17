@@ -10,8 +10,8 @@ import { alternarTarefa } from "./acoes";
  * O que a barra de cada tipo de tarefa está contando.
  *
  * As três palavras existem porque as três barras têm o mesmo desenho e pesos
- * diferentes: puzzle resolvido o servidor mediu, aula dominada a tablebase
- * certificou, e dica resolvida é o aluno tendo acertado o lance de **todos** os
+ * diferentes: puzzle resolvido o servidor mediu, aula dominada é a prática vencida
+ * em três dias, e dica resolvida é o aluno tendo acertado o lance de **todos** os
  * exercícios dela. A tela não pode chamar as três de "feitas".
  *
  * "dicas lidas" era a palavra até 2026-09-07, e ela dizia a verdade: aquela

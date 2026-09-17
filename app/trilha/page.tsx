@@ -51,7 +51,8 @@ import { progressoPorTema } from "@/lib/tatica/progresso";
  *
  * ## Duas barras que contam coisas diferentes
  *
- * Puzzle resolvido é medido; aula aprendida é certificada pela tablebase. Pôr
+ * Puzzle resolvido é medido; aula aprendida é a prática vencida em três dias
+ * diferentes (ou a aula sem prática assistida até o fim). Pôr
  * as duas lado a lado sem dizer isso seria fabricar um percentual único que o
  * professor não saberia defender com o aluno na frente — então cada barra
  * carrega a frase que diz o que ela conta (`MODULO` em `lib/curso/mapa.ts`).

@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import { useTeclasDoTabuleiro } from "@/components/atalhos/Atalhos";
 import { ObjectiveStage } from "@/components/lesson/ObjectiveStage";
 import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
+import { simboloDoCirculo } from "@/lib/chess/nag-overlay";
 import { pausaDoPasso } from "@/lib/lesson/roteiro";
 import type { ObjectiveStage as ObjectiveStageData, Position, RoteiroPasso } from "@/lib/lesson/schema";
 import {
@@ -151,6 +152,8 @@ export function Previa({ previa, aoFechar }: { previa: PreviaV2; aoFechar: () =>
             orientation={trecho.orientacao}
             previa={contrato}
             marcasAutomaticas={false}
+            simbolo={(n) => simboloDoCirculo(trecho.passos[n]?.nags)}
+            quebrasDeLinha
           />
         ) : (
           <p className="p-8 text-center text-sm text-tinta-media">

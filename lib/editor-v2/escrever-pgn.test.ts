@@ -288,3 +288,12 @@ test("a exportação diz, com número, o que o PGN não leva", () => {
   assert.match(naoCabe[0], /^3 falas para o aluno ficam de fora/, "a importação criou uma narração por comentário, e nenhuma delas cabe no PGN");
   assert.match(naoCabe.at(-1)!, /cópia completa da aula/);
 });
+
+test("dois símbolos no mesmo lance não se colam num terceiro: o segundo sai como $n", () => {
+  // Achado no teste final de 15/9/2026: `Bb5 $1 $2` saía `Bb5!?`, que a releitura lê como $5.
+  const aula = importar("1. e4 $1 $2 e5 $5 $6 $14 *");
+  const { texto } = pgnDaAnalise(aula, aula.analises[0].id, positions, { titulo: "Dois símbolos" });
+  assert.match(texto, /1\. e4! \$2 e5!\? \$6 \$14 \*/);
+  const segunda = importar(texto);
+  assert.deepEqual(forma(segunda.analises[0]), forma(aula.analises[0]));
+});

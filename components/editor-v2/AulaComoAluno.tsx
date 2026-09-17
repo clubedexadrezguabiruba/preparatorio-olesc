@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { aulaComoAlunoV2Acao } from "@/app/editor/v2/acoes";
 import { LessonPlayer } from "@/components/lesson/LessonPlayer";
 import { formatarDuracao, gastoAte, iniciarRelogio, resumoDaAulaComoAluno, trocarEtapa, type ResumoDaAulaComoAluno } from "@/lib/editor-v2/aula-como-aluno";
@@ -31,8 +31,12 @@ import { usePrisaoDeFoco } from "./foco";
  * `Esc` e "← Sair da aula" levam ao resumo, e não direto ao editor: no meio de uma prática, uma
  * tecla não pode jogar fora o tempo medido. Do resumo dá para continuar de onde parou.
  */
-export function AulaComoAluno({ aulaId, documento, podePublicar, aoTerminar, aoFechar, aoPublicar }: {
+export function AulaComoAluno({ aulaId, documento, podePublicar, aoTerminar, aoFechar, aoPublicar, textoDeVolta = "Voltar ao editor", aviso }: {
   aulaId: string;
+  /** "Assistir como aluno", da lista de aulas (16/9/2026): a volta é para a lista, não para o editor. */
+  textoDeVolta?: string;
+  /** Uma linha no cabeçalho — hoje, o aviso de mudanças ainda não publicadas. */
+  aviso?: ReactNode;
   documento: AulaV2;
   /** A conferência verde é deste mesmo documento: o resumo pode oferecer "Publicar agora". */
   podePublicar: boolean;
@@ -122,6 +126,7 @@ export function AulaComoAluno({ aulaId, documento, podePublicar, aoTerminar, aoF
         <div className="min-w-0">
           <p className="text-sm font-semibold text-tinta">Fazendo a aula como aluno</p>
           <p className="text-xs text-tinta-fraca">A aula que está no editor agora, do jeito que o aluno vai fazer. Nada é gravado no progresso.</p>
+          {aviso}
         </div>
         <div className="flex items-center gap-3">
           {parcial ? (
@@ -151,13 +156,13 @@ export function AulaComoAluno({ aulaId, documento, podePublicar, aoTerminar, aoF
         {falha ? (
           <div className="mx-auto flex max-w-xl flex-col gap-3 p-4">
             <p role="alert" className="rounded-md border border-erro bg-erro-superficie/10 p-3 text-sm text-erro-texto">Não deu para abrir a aula como aluno: {falha}.</p>
-            <button type="button" onClick={aoFechar} className="foco w-fit rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Voltar ao editor</button>
+            <button type="button" onClick={aoFechar} className="foco w-fit rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">{textoDeVolta}</button>
           </div>
         ) : !aula ? (
           <p role="status" className="p-4 text-sm text-tinta-media">Montando a aula…</p>
         ) : resumo ? (
           <div className="absolute inset-0 z-10 overflow-y-auto bg-papel p-4">
-            <ResumoDaAula resumo={resumo} podePublicar={podePublicar} aoContinuar={continuar} aoFechar={aoFechar} aoPublicar={aoPublicar} />
+            <ResumoDaAula resumo={resumo} podePublicar={podePublicar} aoContinuar={continuar} aoFechar={aoFechar} aoPublicar={aoPublicar} textoDeVolta={textoDeVolta} />
           </div>
         ) : null}
       </div>
@@ -172,8 +177,9 @@ const SITUACAO: Record<ResumoDaAulaComoAluno["linhas"][number]["situacao"], stri
   "nao-visitada": "não aberta",
 };
 
-function ResumoDaAula({ resumo, podePublicar, aoContinuar, aoFechar, aoPublicar }: {
+function ResumoDaAula({ resumo, podePublicar, aoContinuar, aoFechar, aoPublicar, textoDeVolta }: {
   resumo: ResumoDaAulaComoAluno;
+  textoDeVolta: string;
   podePublicar: boolean;
   aoContinuar: () => void;
   aoFechar: () => void;
@@ -217,7 +223,7 @@ function ResumoDaAula({ resumo, podePublicar, aoContinuar, aoFechar, aoPublicar 
       <p className="text-xs text-tinta-fraca">O tempo é o que cada etapa ficou aberta. Nada disso foi gravado.</p>
       <div className="flex flex-wrap justify-end gap-2">
         <button type="button" onClick={aoContinuar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Continuar de onde parei</button>
-        <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Voltar ao editor</button>
+        <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">{textoDeVolta}</button>
         {podePublicar ? (
           <button type="button" onClick={aoPublicar} className="foco rounded-md border border-metodo-superficie bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta">Publicar agora</button>
         ) : null}

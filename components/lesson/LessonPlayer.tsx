@@ -9,6 +9,7 @@ import type { TentativaDeAula } from "@/lib/finais/gravar";
 import type { TentativaDeAulaV2 } from "@/lib/finais/tentativa-v2";
 import { IntroStage } from "@/components/lesson/IntroStage";
 import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
+import { simboloDoCirculo } from "@/lib/chess/nag-overlay";
 import type { AulaDoAlunoV2, EtapaDoAlunoV2 } from "@/lib/editor-v2/fluxo-do-aluno";
 import { ganchosDoTreinoV2 } from "@/lib/editor-v2/ganchos-do-treino";
 import { AVANCO, PARTIDA } from "@/lib/lesson/falas";
@@ -592,6 +593,7 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
             orientation={aula.orientacao}
             trilha={trilha}
             rodape={rodape}
+            quebrasDeLinha
           />
         ) : null}
 
@@ -646,13 +648,14 @@ function CapituloDoAlunoV2({ etapa, trilha, rodape }: { etapa: Extract<EtapaDoAl
   }) as unknown as ObjectiveStageData, [etapa]);
   const position = useMemo(() => ({ fen: etapa.fen }) as unknown as Position, [etapa.fen]);
   const autoria = useCallback((n: number): DrawShape[] => desenhoDaAutoriaV2(etapa.passos[n]?.desenhos), [etapa]);
+  const simbolo = useCallback((n: number) => simboloDoCirculo(etapa.passos[n]?.nags), [etapa]);
   const relogio = useCallback((n: number): number | null => {
     const passo = etapa.passos[n];
     if (!passo) return null;
     return passo.pausaManual ? null : pausaDoPasso({ fala: passo.fala, espera: passo.espera } as RoteiroPasso);
   }, [etapa]);
   return (
-    <ObjectiveStage stage={stage} position={position} orientation={etapa.orientacao} trilha={trilha} rodape={rodape} autoria={autoria} relogio={relogio} marcasAutomaticas={false} />
+    <ObjectiveStage stage={stage} position={position} orientation={etapa.orientacao} trilha={trilha} rodape={rodape} autoria={autoria} relogio={relogio} marcasAutomaticas={false} simbolo={simbolo} quebrasDeLinha />
   );
 }
 

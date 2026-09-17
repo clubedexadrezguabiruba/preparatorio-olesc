@@ -1,11 +1,13 @@
 "use client";
 
 import { Chess, type Square } from "chess.js";
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent as EventoDeMouse, type ReactNode, type RefObject } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Key } from "@lichess-org/chessground/types";
 import { adicionarAoAcervoV2Acao, conferirAulaV2Acao, guardarSnapshotDeRefazerV2, salvarDocumentoV2, type ResultadoDoConferirV2 } from "@/app/editor/v2/acoes";
 import { ChessBoard } from "@/components/board/ChessBoard";
+import { PromotionPicker, type PromotionChoice } from "@/components/board/PromotionPicker";
 import { NagOverlay } from "@/components/board/NagOverlay";
 import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
 import { PainelDeImportacao } from "@/components/editor-v2/PainelDeImportacao";
@@ -35,6 +37,7 @@ import { DialogoMudarModo } from "@/components/editor-v2/DialogoMudarModo";
 import type { ParteDaAulaV2 } from "@/lib/editor-v2/mudar-modo";
 import type { ComandoDeIntroducaoV2 } from "@/lib/editor-v2/introducao";
 import { planejarEstudo } from "@/lib/editor-v2/importar-estudo";
+import { oQueAAulaInteiraTem } from "@/lib/editor-v2/frases";
 import { ADVERSARIO_PADRAO, aplicarNovaPratica, prepararPratica } from "@/lib/editor-v2/pratica";
 import type { PedidoDeImportacaoDeEstudo } from "@/components/editor-v2/PainelDoEstudo";
 import { PreviaDaPratica } from "@/components/editor-v2/PreviaDaPratica";
@@ -102,7 +105,7 @@ import type { TreinosPreparadosV2 } from "@/lib/editor-v2/treinos";
 import { treinoJogavel, type TreinoJogavel } from "@/lib/editor-v2/treino-jogavel";
 import type { PlanoDeRefazerTreinoV2 } from "@/lib/editor-v2/propriedade-treino";
 import { revisoesPendentesV2 } from "@/lib/editor-v2/revisoes";
-import { FEN_INICIAL_PADRAO, problemasDaAulaV2, validarAulaV2, type AnaliseV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
+import { FEN_INICIAL_PADRAO, problemasDaAulaV2, resultadoDoTreinoV2, validarAulaV2, type AnaliseV2, type AulaV2, type ProblemaV2 } from "@/lib/editor-v2/modelo";
 import { apagarRecuperacao, guardarRecuperacao, lerRecuperacao } from "@/lib/editor-v2/recuperacao";
 import type { Position } from "@/lib/lesson/schema";
 
@@ -289,6 +292,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
   const ultimoEnfileirado = useRef(documentoInicial);
   const fila = useRef(Promise.resolve());
   const maisRecente = useRef(documentoInicial);
+  /** Liga a gravação imediata do próximo comando (a importação; ver o efeito do autossalvamento). */
+  const gravarSemEspera = useRef(false);
 
   useEffect(() => {
     const chave = `editor-v2-sessao:${aulaId}`;
@@ -321,6 +326,11 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
 
   useEffect(() => {
     if (ultimoEnfileirado.current === historico.presente) return;
+    // A espera de 600 ms serve para a digitação. Depois de uma importação — muito conteúdo de uma vez,
+    // e o professor costuma recarregar para ver o resultado — a gravação sai na hora: recarregar antes
+    // dela perdia tudo, sem disco e sem recuperação (15/9/2026).
+    const espera = gravarSemEspera.current ? 0 : 600;
+    gravarSemEspera.current = false;
     ultimoEnfileirado.current = historico.presente;
     setEstado("alterado");
     const aula = historico.presente;
@@ -354,7 +364,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
         setEstado("erro");
         setRecado("Não foi possível salvar. Suas mudanças continuam guardadas neste navegador.");
       });
-    }, 600);
+    }, espera);
     return () => clearTimeout(relogio);
   }, [aulaId, historico.presente, sessaoId]);
 
@@ -605,6 +615,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
    */
   const importarEstudo = useCallback(async (pedido: PedidoDeImportacaoDeEstudo): Promise<string | null> => {
     const documento = historico.presente;
+    gravarSemEspera.current = true;
     const plano = planejarEstudo(documento, pedido.leitura, { destinos: pedido.destinos, revisao: pedido.revisao }, positions);
     if (!plano.ok) return plano.mensagem;
     // Várias práticas desde 15/9/2026 (trava 9): cada posição entra no acervo, com o resultado que o
@@ -647,15 +658,24 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
    * Importar e continuar olhando para o capítulo antigo faria o professor duvidar de
    * que alguma coisa aconteceu. O primeiro capítulo novo é a resposta visível.
    */
-  const importar = useCallback((relatorio: RelatorioImportacao, escolhidos: number[]) => {
+  const importar = useCallback((relatorio: RelatorioImportacao, escolhidos: number[]): string | null => {
+    gravarSemEspera.current = true;
     const primeiro = relatorio.jogos.find((jogo) => escolhidos.includes(jogo.numero) && jogo.capitulo);
+    // Confere antes de aplicar: a recusa volta para a janela, que fica aberta com o texto do professor
+    // (§8.3). Antes a janela fechava e o recado aparecia atrás dela, com o PGN colado perdido (15/9/2026).
+    try {
+      executarComando(historico.presente, { tipo: "IMPORTAR_JOGOS", relatorio, escolhidos }, positions);
+    } catch (erro) {
+      return erro instanceof Error ? erro.message : "não foi possível importar";
+    }
     aplicar({ tipo: "IMPORTAR_JOGOS", relatorio, escolhidos });
     if (primeiro?.capitulo) {
       setCapituloId(primeiro.capitulo.id);
       setNodeId(primeiro.capitulo.inicioNodeId);
     }
     fecharImportacao();
-  }, [aplicar, fecharImportacao]);
+    return null;
+  }, [aplicar, fecharImportacao, historico.presente, positions]);
 
   /**
    * §15.1: a prévia abre com o documento **de agora**, calculado uma vez.
@@ -783,6 +803,12 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
   const campoDoComentario = useRef<HTMLTextAreaElement>(null);
   const [abaDoLance, setAbaDoLance] = useState<"fala" | "nota">("fala");
   const [dicaDaVariante, setDicaDaVariante] = useState(false);
+  /** §10.1: o peão que chegou à última fileira espera a peça escolhida (15/9/2026: antes virava dama). */
+  const [promocaoPendente, setPromocaoPendente] = useState<{ orig: Key; dest: Key } | null>(null);
+  /** Quantas vezes a escolha da promoção foi cancelada: o tabuleiro devolve o peão à casa de saída. */
+  const [promocoesDesfeitas, setPromocoesDesfeitas] = useState(0);
+  /** §10.1: o lance novo onde já havia continuação cria uma variante, e a tela diz enquanto ele está selecionado. */
+  const [varianteNova, setVarianteNova] = useState<string | null>(null);
 
   const aoAcaoDoLance = useCallback((acao: AcaoDoLanceV2["id"], alvo: string) => {
     setNodeId(alvo);
@@ -871,19 +897,26 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
     setCortando(null);
   }, [analise, aplicar]);
 
-  const mover = (orig: Key, dest: Key) => {
-    setDicaDaVariante(false);
-    const peca = jogo.get(orig as Square);
-    const promocao = peca?.type === "p" && (dest[1] === "1" || dest[1] === "8") ? "q" : "";
-    const uci = `${orig}${dest}${promocao}`;
+  const jogarLance = (uci: string) => {
     const existente = selecionado.filhos.find((filho) => analise.nos[filho]?.uci === uci);
     if (existente) {
       setNodeId(existente);
       return;
     }
     const id = novoId();
+    setVarianteNova(selecionado.filhos.length > 0 ? id : null);
     aplicar({ tipo: "ADICIONAR_LANCE", analiseId: analise.id, nodeId: selecionado.id, uci, novoNodeId: id, capituloId: capitulo.id });
     setNodeId(id);
+  };
+
+  const mover = (orig: Key, dest: Key) => {
+    setDicaDaVariante(false);
+    const peca = jogo.get(orig as Square);
+    if (peca?.type === "p" && (dest[1] === "1" || dest[1] === "8")) {
+      setPromocaoPendente({ orig, dest });
+      return;
+    }
+    jogarLance(`${orig}${dest}`);
   };
 
   const desfazerTudo = () => {
@@ -897,6 +930,12 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
       setNodeId(primeiro.inicioNodeId);
     }
     setRecado(null);
+  };
+
+  /** Sair com a aula ainda sem gravar perderia a última mudança: pergunta antes. */
+  const confirmarSaida = (evento: EventoDeMouse) => {
+    if (estado === "salvo") return;
+    if (!window.confirm("A aula ainda não terminou de salvar. Sair mesmo assim? A última mudança pode se perder.")) evento.preventDefault();
   };
 
   const baixarCopia = () => {
@@ -1096,6 +1135,8 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
           Desfazer, Refazer, Ver como aluno e Publicar —, e o resto mora no "⋯ Mais ações". */}
       <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <div className="flex min-w-0 flex-1 items-baseline gap-3">
+          {/* Pedido do Doug de 16/9/2026: depois de publicar não havia como fechar a aula e voltar ao início. */}
+          <Link href="/editor" onClick={confirmarSaida} className="foco shrink-0 text-xs text-tinta-fraca hover:text-tinta">← Editor</Link>
           <h1 className="titulo min-w-0 flex-1">
             <input
               key={historico.presente.titulo}
@@ -1126,7 +1167,9 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
           <button
             type="button"
             ref={botaoPublicar}
-            disabled={estado !== "salvo" || conferindo}
+            // Com a janela de publicar aberta, o botão dela é o único Publicar ligado (teste de uso de 15/9/2026):
+            // este, atrás do véu, aparecia ligado ao lado de "Calculando o impacto…".
+            disabled={estado !== "salvo" || conferindo || publicandoAula || perguntandoAntesDePublicar}
             title={estado !== "salvo" ? "Espere a aula salvar para publicar" : conferindo ? "Conferindo a aula…" : "Confere a aula e publica"}
             onClick={() => {
               const verde = conferencia && conferencia.aula === historico.presente && conferencia.resultado.publicar.pode;
@@ -1180,13 +1223,17 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
       {publicada ? (
         <p role="status" className="rounded-lg border border-metodo-superficie bg-metodo-superficie/10 p-3 text-sm text-metodo-tinta-alta">
           Publicada neste computador ({publicada}). Os alunos do site recebem depois do commit, do push e do deploy.
-          <button type="button" className="foco ml-2 underline" onClick={() => setPublicada(null)}>Fechar</button>
+          {/* Numa linha própria, à esquerda: no fim do texto, o painel flutuante da conferência cobria os botões. */}
+          <span className="mt-2 flex flex-wrap gap-4">
+            <Link href="/editor" onClick={confirmarSaida} className="foco font-medium underline">Voltar ao início do editor</Link>
+            <button type="button" className="foco underline" onClick={() => setPublicada(null)}>Fechar aviso</button>
+          </span>
         </p>
       ) : null}
       {perguntandoAntesDePublicar ? (
         <Dialogo
           titulo="Antes de publicar, quer fazer a aula inteira como aluno?"
-          descricao="Introdução, capítulos, treinos e a prática, do jeito que o aluno vai fazer. Nada é gravado, e no fim aparece quanto tempo cada etapa levou."
+          descricao={`${oQueAAulaInteiraTem(historico.presente.fluxo)}, do jeito que o aluno vai fazer. Nada é gravado, e no fim aparece quanto tempo cada etapa levou.`}
           largura="max-w-lg"
           aoFechar={() => { setPerguntandoAntesDePublicar(false); queueMicrotask(() => botaoPublicar.current?.focus()); }}
           rodape={(
@@ -1428,6 +1475,10 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
             return null;
           }}
           aoPrever={setPreviaDaIntroducao}
+          aoResolverRevisao={(quadroId) => {
+            if (!editandoIntroducao.id) return;
+            aplicar({ tipo: "REVISAO_RESOLVIDA", alvo: { introducaoId: editandoIntroducao.id, quadroId } });
+          }}
           aoMudarModo={(quadroId) => {
             if (!editandoIntroducao.id) return;
             setMudandoModo({ tipo: "quadro", introducaoId: editandoIntroducao.id, quadroId });
@@ -1665,7 +1716,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
                       >
                         <span className="block leading-snug line-clamp-2 break-words">{treino.titulo}</span>
                         <span className="block text-xs text-tinta-fraca">
-                          {treino.ladoAluno === "white" ? "Brancas" : "Pretas"} · {treino.questoes.length} pergunta{treino.questoes.length === 1 ? "" : "s"}
+                          {treino.ladoAluno === "white" ? "Brancas" : "Pretas"} · {resultadoDoTreinoV2(treino) === "draw" ? "empate" : "vencer"} · {treino.questoes.length} pergunta{treino.questoes.length === 1 ? "" : "s"}
                           {treino.fonte !== "atual" ? <span className="text-aviso-tinta"> · a aula mudou</span> : null}
                         </span>
                       </button>
@@ -1718,7 +1769,7 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
                   tamanho quando o motor liga (§23.1). */}
               <div className="flex gap-1">
               <BarraDeAvaliacao altura={motor.estado.barra} orientacao={capitulo.orientacao} />
-              <div className="min-w-0 flex-1">
+              <div className="relative min-w-0 flex-1">
               <ChessBoard
                 fen={derivado.quadro.fen}
                 orientation={capitulo.orientacao}
@@ -1732,11 +1783,25 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
                 desenhavel={desenhavel}
                 desenhando={desenhando}
                 espessuraDeDesenhoUniforme
-                revision={historico.passados.length + historico.futuros.length}
+                revision={historico.passados.length + historico.futuros.length + promocoesDesfeitas}
                 overlay={qualidadeSelecionada && derivado.quadro.ultimoLance
                   ? <NagOverlay casa={derivado.quadro.ultimoLance[1] as Key} orientation={capitulo.orientacao} simbolo={SIMBOLOS_DE_QUALIDADE[qualidadeSelecionada]} />
                   : undefined}
               />
+              {promocaoPendente ? (
+                <PromotionPicker
+                  color={jogo.turn() === "w" ? "white" : "black"}
+                  onChoose={(peca: PromotionChoice) => {
+                    const { orig, dest } = promocaoPendente;
+                    setPromocaoPendente(null);
+                    jogarLance(`${orig}${dest}${peca}`);
+                  }}
+                  onCancel={() => {
+                    setPromocaoPendente(null);
+                    setPromocoesDesfeitas((n) => n + 1);
+                  }}
+                />
+              ) : null}
               </div>
               </div>
               {/* §11.3, "criar variante daqui": a ação não abre janela — ela
@@ -1748,6 +1813,11 @@ export function EditorV2({ aulaId, documentoInicial, hashInicial, positions: pos
               {dicaDaVariante && !desenhando ? (
                 <p role="status" className="rounded-md border border-metodo-superficie bg-metodo-superficie/10 p-2 text-center text-xs text-metodo-tinta">
                   Jogue no tabuleiro a partir de {nomeDoLance(nodeIdAtual)}: um lance diferente dos que já existem nasce como variante, e a continuação de agora fica onde está.
+                </p>
+              ) : null}
+              {varianteNova && varianteNova === nodeIdAtual ? (
+                <p role="status" className="rounded-md border border-metodo-superficie bg-metodo-superficie/10 p-2 text-center text-xs text-metodo-tinta">
+                  Nasceu uma variante: {nomeDoLance(nodeIdAtual)}. A continuação que já existia segue como a principal.
                 </p>
               ) : null}
               {/* §10.2 e §25: as ferramentas clicáveis, para o desenho ser descoberto

@@ -30,6 +30,11 @@ const eslintConfig = defineConfig([
     // pipeline de extração dos livros — código de outra sessão, com `any`, que
     // deixou o gate de lint vermelho sem que uma linha do site tivesse mudado.
     ".scratch/**",
+    // Rascunhos anotados de fontes do repertório (ex.: conversor da coleção
+    // Plichta): `.gitignore`d, fora do site e fora do CI. Lintá-los só
+    // reprova o gate com `require()`/`any` de scripts de conversão pontuais
+    // que nunca são commitados.
+    "content/repertorio/rascunhos-anotados/**",
   ]),
 ]);
 

@@ -24,6 +24,8 @@ test("importar, conferir e publicar o estudo", async ({ page }) => {
   await abrirImportar(page);
   const janela = page.getByRole("dialog", { name: "Importar do Lichess ou PGN" });
   await janela.locator('input[type="file"]').setInputFiles(FIXTURE_DO_ESTUDO);
+  // O 01 ("AULA DIAGNÓSTICO", sem lances) como quadro, o arranjo que o aluno percorre abaixo; pelo nome, viria capítulo parado.
+  await janela.getByRole("combobox", { name: /O que «AULA DIAGNÓSTICO/ }).selectOption("introducao");
   await janela.getByRole("checkbox", { name: /são meus, ou tenho direito/ }).check();
   await janela.getByRole("button", { name: "Importar o estudo" }).click();
   await expect(janela).toBeHidden({ timeout: 30_000 });
@@ -61,6 +63,12 @@ test("o aluno faz a aula inteira, e as tentativas chegam ao banco", async ({ alu
   // Capítulos: abrem com o título.
   await irPara(1);
   await expect(aluno.getByRole("heading", { name: "AULA EXPLICADA - O L e a caixa" })).toBeVisible();
+  // Achados do teste final de 15/9/2026: a quebra de linha do comentário aparece no balão, e o `!` da
+  // fonte (1. Qd3!) chega ao círculo da casa de destino — a regra dos símbolos vale até o aluno.
+  const balao = aluno.locator("div.rounded-lg").filter({ hasText: /Primeiro, esqueça a ideia/ }).last();
+  await expect(balao).toBeVisible();
+  expect(await balao.evaluate((e) => ({ quebra: (e.textContent ?? "").includes("\n"), estilo: getComputedStyle(e).whiteSpace }))).toEqual({ quebra: true, estilo: "pre-wrap" });
+  await expect(aluno.locator("span.rounded-full").filter({ hasText: /^!$/ }).first()).toBeVisible({ timeout: 60_000 });
   await irPara(2);
 
   // Treino 04: Dd5, (Rf6), De4.
@@ -104,9 +112,13 @@ test("o aluno faz a aula inteira, e as tentativas chegam ao banco", async ({ alu
   // Prática: contra o computador, até o mate.
   await irPara(7);
   await aluno.waitForTimeout(4000);
+  // O contador dos 50 lances aparece durante a partida e some com ela terminada (teste de uso de 15/9).
+  const contador = aluno.getByText(/^Sem progresso: \d+ de 50$/);
+  await expect(contador).toBeVisible();
   const partida = await jogarPraticaComMotor(aluno, tabuleiro(), "8/8/8/8/4k3/8/8/3QK3 w - - 0 1");
   console.log(`[e2e] prática do estudo: ${partida.fim} em ${partida.lances.length} meios-lances — ${partida.lances.join(" ")}`);
   expect(partida.fim).toBe("mate");
+  await expect(contador).toHaveCount(0);
   await aluno.waitForTimeout(3000);
 
   // No banco: uma linha por treino (e a prática), todas com a publicação.

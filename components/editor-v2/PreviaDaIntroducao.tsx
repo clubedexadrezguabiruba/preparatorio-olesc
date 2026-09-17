@@ -42,6 +42,7 @@ export function PreviaDaIntroducao({ aula, introducaoId, positions, aoFechar }: 
             stage={{ passos } as unknown as IntroStageData}
             position={{ fen: passos[0].fen } as unknown as Position}
             orientation={aula.metadados?.orientacaoPadrao ?? "white"}
+            quebrasDeLinha
           />
         ) : <p className="text-sm text-tinta-media">A introdução não pode ser mostrada: um quadro aponta para uma posição que não existe mais.</p>}
       </div>

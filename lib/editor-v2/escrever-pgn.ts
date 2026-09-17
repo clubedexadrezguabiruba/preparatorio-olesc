@@ -138,11 +138,15 @@ function comentarioDoNo(no: NoV2, perdas: PerdaExportacaoV2[], onde: string): st
   return partes.length > 0 ? `{ ${partes.join(" ")} }` : null;
 }
 
-/** O SAN com os símbolos colados e os outros NAGs como `$n`. */
+/**
+ * O SAN com o primeiro símbolo colado e os outros NAGs como `$n`.
+ *
+ * Só um símbolo cola: `!` e `?` juntos escreveriam `!?`, que é outro símbolo.
+ */
 function lanceEscrito(san: string, nags: number[] | undefined): string {
-  const simbolos = (nags ?? []).filter((nag) => SIMBOLO_POR_NAG[nag]).map((nag) => SIMBOLO_POR_NAG[nag]).join("");
-  const numericos = (nags ?? []).filter((nag) => !SIMBOLO_POR_NAG[nag]).map((nag) => ` $${nag}`).join("");
-  return `${san}${simbolos}${numericos}`;
+  const colado = (nags ?? []).find((nag) => SIMBOLO_POR_NAG[nag]);
+  const numericos = (nags ?? []).filter((nag) => nag !== colado).map((nag) => ` $${nag}`).join("");
+  return `${san}${colado === undefined ? "" : SIMBOLO_POR_NAG[colado]}${numericos}`;
 }
 
 /* ------------------------------------------------------------------ *

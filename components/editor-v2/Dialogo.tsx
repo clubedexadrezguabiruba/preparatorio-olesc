@@ -38,6 +38,7 @@ export function Dialogo({
   titulo,
   descricao,
   largura = "max-w-3xl",
+  contida = false,
   rodape,
   aoFechar,
   children,
@@ -46,6 +47,12 @@ export function Dialogo({
   descricao?: ReactNode;
   /** A classe de largura do Tailwind. Janelas com tabuleiro pedem mais. */
   largura?: string;
+  /**
+   * Em tela larga, a janela não passa da altura da tela: quem a usa põe
+   * `lg:min-h-0 lg:flex-1` no conteúdo e rola as colunas por dentro. Pedido do Doug
+   * de 16/9/2026 — «Editar treino» crescia para baixo a cada resposta acrescentada.
+   */
+  contida?: boolean;
   /** Os botões de fechar e confirmar. Ficam grudados embaixo. */
   rodape: ReactNode;
   aoFechar: () => void;
@@ -77,7 +84,7 @@ export function Dialogo({
         aria-labelledby={tituloId}
         ref={janela}
         onClick={(evento) => evento.stopPropagation()}
-        className={`my-8 flex w-full ${largura} flex-col gap-3 rounded-lg border border-borda bg-papel p-4`}
+        className={`my-8 flex w-full ${largura} ${contida ? "lg:my-0 lg:max-h-[calc(100dvh-2rem)] lg:overflow-hidden" : ""} flex-col gap-3 rounded-lg border border-borda bg-papel p-4`}
       >
         <header className="flex items-start justify-between gap-3">
           <div>

@@ -7,6 +7,7 @@ import test from "node:test";
 import { lessonSchema, positionSchema, type Position } from "../lesson/schema.ts";
 import { adaptarLessonV1 } from "./adaptar-v1.ts";
 import { aulaDoAlunoV2, etapasDoAlunoV2 } from "./fluxo-do-aluno.ts";
+import { percursoDoCapitulo, previaDoCapitulo } from "./previa.ts";
 import { montarPacoteV2 } from "./pacote.ts";
 
 const lesson = lessonSchema.parse(JSON.parse(readFileSync("content/lessons/N0-LADDER.json", "utf8")));
@@ -68,4 +69,30 @@ test("§12: comentário privado da análise não atravessa para o aluno", () => 
   aula.analises[0].nos[aula.analises[0].raizId].comentario = "NOTA PRIVADA DO PROFESSOR";
   const texto = JSON.stringify(aulaDoAlunoV2(montarPacoteV2(aula, positions)));
   assert.equal(texto.includes("NOTA PRIVADA DO PROFESSOR"), false);
+});
+
+test("o símbolo do lance chega ao passo do aluno e da prévia, também na segunda fala do mesmo lance", () => {
+  // Achado no teste final de 15/9/2026: os 29 `!` e 3 `??` do estudo do Doug apareciam no editor e
+  // sumiam na aula do aluno — a regra dos símbolos (AGENTS.md) vale até o aluno.
+  const aula = adaptarLessonV1(lesson, positions);
+  const capitulo = aula.capitulos[0];
+  const analise = aula.analises.find((item) => item.id === capitulo.analiseId)!;
+  const comLance = percursoDoCapitulo(capitulo).find((id) => analise.nos[id].uci)!;
+  analise.nos[comLance].nags = [3, 14];
+  capitulo.narracoes.push({ id: "narracao-segunda", nodeId: comLance, texto: "Segunda fala no mesmo lance.", pausa: "temporizada" });
+
+  const doAluno = etapasDoAlunoV2(aula, positions, montarPacoteV2(aula, positions).revisoes).find((e) => e.tipo === "capitulo");
+  assert.ok(doAluno && doAluno.tipo === "capitulo");
+  const indice = doAluno.passos.findIndex((passo) => passo.lance === analise.nos[comLance].uci);
+  assert.deepEqual(doAluno.passos[indice].nags, [3, 14]);
+  const segunda = doAluno.passos.find((passo) => passo.fala === "Segunda fala no mesmo lance.");
+  assert.deepEqual(segunda?.nags, [3, 14]);
+  assert.equal(doAluno.passos[0].nags, undefined);
+  // O aluno lê a aula pelo pacote publicado: o símbolo tem de atravessar a publicação também.
+  const publicado = aulaDoAlunoV2(montarPacoteV2(aula, positions)).etapas.find((e) => e.tipo === "capitulo");
+  assert.ok(publicado && publicado.tipo === "capitulo");
+  assert.deepEqual(publicado.passos.find((passo) => passo.lance === analise.nos[comLance].uci)?.nags, [3, 14]);
+
+  const daPrevia = previaDoCapitulo(aula, positions, capitulo.id).trechos[0].passos;
+  assert.deepEqual(daPrevia.filter((passo) => passo.nodeId === comLance).map((passo) => passo.nags), [[3, 14], [3, 14]]);
 });

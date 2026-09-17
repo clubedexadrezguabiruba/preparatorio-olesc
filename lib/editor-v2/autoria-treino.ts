@@ -1,7 +1,7 @@
 import { Chess } from "chess.js";
 import type { Position } from "../lesson/schema.ts";
 import { comoId, idsDaAulaV2 } from "./ids.ts";
-import type { AulaV2, RespostaTreinoV2, TreinoV2 } from "./modelo.ts";
+import type { AulaV2, QuestaoTreinoV2, RespostaTreinoV2, TreinoV2 } from "./modelo.ts";
 import { problemaDasDefesas } from "./defesas-do-treino.ts";
 import { comCopiaMaterializada, comOrigemHistoricaCompleta, fenDaQuestaoDoTreino } from "./propriedade-treino.ts";
 
@@ -223,6 +223,37 @@ export function efeitoAoTrocarTipo(
   if (tipo === "repete") return { tipo };
   if (tipo === "encerra") return { tipo, condicao: "objetivo-autoral" };
   return { tipo: "avanca", defesas: [{ move: "a1a2", proximaQuestaoId: contexto.proximaQuestaoId }] };
+}
+
+/**
+ * O lance que o professor joga no tabuleiro de «Editar treino», no formato de casas.
+ *
+ * Pedido do Doug de 16/9/2026: acrescentar uma resposta certa era digitar `d6e5` à mão.
+ * Promoção entra como dama — o campo de texto continua lá para trocar. Lance ilegal
+ * devolve `null`, e nada é preenchido.
+ */
+export function lanceDoTabuleiro(fen: string, orig: string, dest: string): string | null {
+  const jogo = new Chess(fen);
+  const lance = jogo.moves({ verbose: true }).find((item) => item.from === orig && item.to === dest);
+  if (!lance) return null;
+  return `${orig}${dest}${lance.promotion ? "q" : ""}`;
+}
+
+export type DestinoDoLanceDoTabuleiro =
+  | { tipo: "preencher"; respostaId: string }
+  | { tipo: "abrir"; respostaId: string }
+  | { tipo: "nova" };
+
+/**
+ * Para onde vai o lance jogado no tabuleiro: a resposta aberta recebe o lance; se ele já
+ * é de outra resposta da pergunta, essa se abre (a conferência recusa o mesmo lance em
+ * duas); sem resposta aberta, nasce uma resposta correta com ele.
+ */
+export function destinoDoLanceDoTabuleiro(questao: QuestaoTreinoV2, abertaId: string | null, lance: string): DestinoDoLanceDoTabuleiro {
+  const dona = questao.respostas.find((resposta) => resposta.moves.includes(lance));
+  if (dona) return { tipo: "abrir", respostaId: dona.id };
+  if (abertaId && questao.respostas.some((resposta) => resposta.id === abertaId)) return { tipo: "preencher", respostaId: abertaId };
+  return { tipo: "nova" };
 }
 
 export function proximoIdDeResposta(aula: AulaV2, treino: TreinoV2, questaoId: string): string {

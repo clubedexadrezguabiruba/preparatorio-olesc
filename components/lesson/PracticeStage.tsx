@@ -383,8 +383,10 @@ export function PracticeStage({
             )}
 
             <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rotulo text-tinta-fraca">
-              {/* O empate por falta de progresso deixa de cair do céu no lance 100. */}
-              <span>{PARTIDA.semProgresso(progress.used, progress.limit)}</span>
+              {/* O empate por falta de progresso deixa de cair do céu no lance 100. Com a partida
+                  terminada o contador não ameaça mais nada, e "sem progresso" ao lado do mate confunde
+                  (teste de uso de 15/9/2026). */}
+              {verdict.kind === "playing" && <span>{PARTIDA.semProgresso(progress.used, progress.limit)}</span>}
               {attempt > 1 && <span>· {TREINO.vez(attempt)}</span>}
               {thinking && <span className="text-metodo/80">· {PARTIDA.pensando}</span>}
             </p>

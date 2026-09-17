@@ -67,7 +67,7 @@ export function PainelDoEstudo({ aula, leitura, positions, obras, professor, apl
   return (
     <div className="flex flex-col gap-3">
       <p className="text-sm text-tinta">
-        Estudo {leitura.estudo.nome ? <strong>«{leitura.estudo.nome}»</strong> : null} com {leitura.capitulos.length} capítulos. Escolha o que cada um vira — a sugestão vem das pistas do Lichess.
+        Estudo {leitura.estudo.nome ? <strong>«{leitura.estudo.nome}»</strong> : null} com {leitura.capitulos.length} capítulos. Cada um já vem com o que parece ser — pelo nome do capítulo («Introdução», «Aula», «Treino», «Prática») ou, sem isso, pelas pistas do Lichess. Mude o que quiser.
       </p>
       <ul aria-label="Capítulos do estudo" className="flex max-h-80 flex-col gap-2 overflow-y-auto rounded-md border border-borda-fraca p-2">
         {leitura.capitulos.map((c) => (

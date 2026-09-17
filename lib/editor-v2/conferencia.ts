@@ -45,7 +45,8 @@ import { aulaDaTrilha } from "../finais/trilha.ts";
 import type { Position } from "../lesson/schema.ts";
 import type { RevisoesDaAulaV2 } from "./avaliacao.ts";
 import { hashDaPosicao } from "./hash.ts";
-import { problemasDaAulaV2, type AulaV2, type LocalizacaoProblemaV2, type ProblemaV2 } from "./modelo.ts";
+import { problemasDaAulaV2, resultadoDoTreinoV2, type AulaV2, type LocalizacaoProblemaV2, type ProblemaV2, type TreinoV2 } from "./modelo.ts";
+import { fenInicialDoTreino } from "./propriedade-treino.ts";
 import { analiseTemTexto, origemDeTerceiro } from "./proveniencia.ts";
 import { temEvidenciaCongelada } from "./treino-jogavel.ts";
 import { falasDoTreinoV2 } from "./voz-do-treino.ts";
@@ -75,6 +76,44 @@ const erro = (aula: AulaV2, codigo: string, mensagem: string, localizacao: Omit<
 });
 
 const ehExtra = (aula: AulaV2) => aula.id.startsWith("EX-");
+
+const semContadores = (fen: string) => fen.trim().split(/\s+/).slice(0, 4).join(" ");
+const COBRA = { win: "vencer", draw: "segurar o empate" } as const;
+const NO_ACERVO = { "win-white": "vitória das brancas", "win-black": "vitória das pretas", draw: "empate" } as const;
+
+/**
+ * Onde o treino × resultado da posição discordam (decisão do Doug, 15/9/2026). Duas fontes, as duas
+ * lidas no servidor, sem tablebase e sem motor:
+ *
+ * 1. **O acervo:** a posição de `content/positions/` com a mesma FEN (sem os contadores) de onde o
+ *    treino começa. Achar pela FEN, e não pelo `positionId` da análise, cobre o treino que começa no
+ *    meio da linha só quando aquela posição exata está no acervo — e o de FEN colada que por acaso é
+ *    uma posição do acervo. Sem posição igual, o acervo não tem o que dizer.
+ * 2. **A certificação antiga** (`certificacao.resultado`), dado congelado das aulas convertidas. Só
+ *    conta quando o professor declarou outro resultado: sem declaração, o cobrado já é o dela.
+ *
+ * O motor do professor não entra: ele roda no navegador, e a conferência não. A FEN colada fora do
+ * acervo e sem certificação fica sem aviso — não há resultado com que comparar, e a decisão é só do
+ * professor.
+ */
+function divergenciasDoResultado(aula: AulaV2, treino: TreinoV2, positions: Record<string, Position>): string[] {
+  const cobrado = resultadoDoTreinoV2(treino) ?? "win";
+  const partes: string[] = [];
+  let fen: string | null = null;
+  try {
+    fen = semContadores(fenInicialDoTreino(aula, treino, positions));
+  } catch {
+    // Início quebrado: a régua do rascunho já o aponta, com o nome certo.
+  }
+  const noAcervo = fen ? Object.values(positions).find((posicao) => semContadores(posicao.fen) === fen) : undefined;
+  if (noAcervo) {
+    const paraOAluno = noAcervo.expectedResult === "draw" ? "draw" : noAcervo.expectedResult === `win-${treino.ladoAluno}` ? "win" : "loss";
+    if (paraOAluno !== cobrado) partes.push(`no acervo, a posição onde ele começa dá ${NO_ACERVO[noAcervo.expectedResult]}`);
+  }
+  const certificado = treino.certificacao?.resultado;
+  if (treino.resultado && certificado && certificado !== cobrado) partes.push(`a certificação antiga guarda ${certificado === "win" ? "vitória" : "empate"}`);
+  return partes;
+}
 
 export const REGRAS_PUBLICACAO_V2: RegraDePublicacaoV2[] = [
   /*
@@ -115,6 +154,21 @@ export const REGRAS_PUBLICACAO_V2: RegraDePublicacaoV2[] = [
       : [],
   },
   { codigo: "REVISAO_PENDENTE", impede: "texto marcado para revisão depois de trocar a posição", promove: true },
+  /*
+   * Teste de uso de 15/9/2026: a cópia da N0-LADDER com o treino trocado para "Segurar o empate"
+   * publicava calada, e a escada de torres dá vitória. Aviso, nunca impedimento — trava 2: o
+   * professor declara o resultado, a máquina avisa e ele decide.
+   */
+  {
+    codigo: "TREINO_RESULTADO_DIVERGE",
+    impede: "aviso: treino que cobra um resultado diferente do que a posição dá — publica",
+    julgar: (aula, contexto) => aula.treinos.flatMap((treino) => {
+      const partes = divergenciasDoResultado(aula, treino, contexto.positions);
+      if (!partes.length) return [];
+      const cobrado = COBRA[resultadoDoTreinoV2(treino) ?? "win"];
+      return [{ ...erro(aula, "TREINO_RESULTADO_DIVERGE", `o treino «${treino.titulo}» cobra ${cobrado}, e ${partes.join("; e ")} — a aula publica assim; se não era isso, troque em «Editar treino»`, { treinoId: treino.id, campo: "resultado" }), severidade: "aviso" as const }];
+    }),
+  },
   /*
    * §12.3 e plano §12 (fatia 10): narração que chegou com uma posição de outra pessoa — obra, estudo
    * do Lichess, partida — sem a declaração do professor de que o texto é dele ou que ele tem direito

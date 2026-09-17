@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { exigirEditor } from "@/lib/editor/acesso";
+import { MenuAssistirAula } from "@/components/editor-v2/AssistirAula";
 import { BotaoExcluirAula, LixeiraDoEditor } from "@/components/editor-v2/ExcluirAula";
 import { lixeiraV2 } from "@/lib/editor-v2/excluir-aula";
 import { idsDeDocumentosV2, lerDocumentoV2 } from "@/lib/editor-v2/rascunhos";
@@ -101,6 +102,8 @@ export default async function IndiceDoEditor() {
                   </span>
                   <span aria-hidden className="text-tinta-fraca">✎</span>
                 </Link>
+                {/* Aula que só existe no v2 nunca foi publicada: não está em `idsDeAula()`. */}
+                <MenuAssistirAula aulaId={aula.id} titulo={aula.titulo} publicada={false} />
                 {aula.id.startsWith("EX-") ? <BotaoExcluirAula aulaId={aula.id} titulo={aula.titulo} /> : null}
               </li>
             ))}
@@ -137,6 +140,8 @@ export default async function IndiceDoEditor() {
               >
                 Abrir
               </Link>
+              {/* Assistir como aluno (16/9/2026): as duas versões moram no ⋯, para a lista não encher de botões. */}
+              <MenuAssistirAula aulaId={aula.id} titulo={aula.titulo} publicada />
               {/* Só extra se exclui pela tela; aula do curso nunca (excluir-aula.ts). */}
               {soNoEditorV2 ? <BotaoExcluirAula aulaId={aula.id} titulo={aula.titulo} /> : null}
             </li>

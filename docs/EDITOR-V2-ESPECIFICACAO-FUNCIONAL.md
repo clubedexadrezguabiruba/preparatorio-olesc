@@ -415,6 +415,14 @@ O sistema reconhece o formato e constrói endpoints conhecidos; não busca URL a
 Deve impor tamanho, timeout, cancelamento e redirecionamentos seguros. Conteúdo privado
 orienta exportar arquivo; OAuth é posterior.
 
+**Modo de cada capítulo do estudo (decisão do Doug, 16/09/2026).** Antes de aplicar, cada
+capítulo já vem com o destino preenchido — introdução, capítulo, treino, prática ou fora — e
+o professor pode trocá-lo ali ou depois, pelo "Mudar para…". O **nome do capítulo** decide
+primeiro ("Introdução", "Aula", "Treino", "Prática" e sinônimos, sem acento, a primeira palavra
+manda); sem palavra no nome, valem as pistas do Lichess (lição interativa, adversário
+computador, sem lances). Nome que pede o impossível cede à pista, com o motivo à vista.
+Capítulo sem lances pode virar capítulo de posição parada.
+
 ## 14. Exportação
 
 Deve oferecer:
@@ -851,9 +859,9 @@ Ao final de cada fatia:
 - [ ] Referenciar posição/variante e duplicar independente.
 - [x] Renomear, reordenar e excluir capítulo com impacto.
 - [ ] Jogar, promover, reordenar, substituir e excluir variantes.
-- [ ] Menu de contexto e `•••` equivalentes.
+- [x] Menu de contexto e `•••` equivalentes. *(15/09/2026: botão direito e `•••` com as mesmas 11 ações no lance e 7 na posição inicial, e o menu abre pelo teclado.)*
 - [ ] Comentário, símbolo, desenho e narração completos.
-- [ ] Importar PGN por texto/arquivo e URL Lichess.
+- [x] Importar PGN por texto/arquivo e URL Lichess. *(15/09/2026: estudo por link, por arquivo e colado; link de capítulo e de partida; recusas e Cancelar; 65 NAGs e 32 símbolos preservados até o aluno; seis defeitos consertados — ver o diário.)*
 - [ ] Exportar variante, capítulo, aula PGN e pacote v2.
 - [ ] Prévia real da aula, capítulo e daqui.
 - [x] Reprodução, pausa, repetição e três velocidades.
@@ -867,7 +875,7 @@ Ao final de cada fatia:
 - [ ] Práticas avaliativas configuráveis e versionadas.
 - [ ] Metadados, proveniência e exceções editáveis com segurança.
 - [x] Fluxo completo de introdução, capítulos, treinos e práticas.
-- [ ] Problemas localizados e corrigíveis pela tela.
+- [x] Problemas localizados e corrigíveis pela tela. *(15/09/2026: «Resolver» leva ao quadro da introdução e ao treino, e o problema some sem recarregar — o quadro ganhou o «Já reli» que faltava.)*
 - [x] Publicação atômica, snapshots e recuperação.
 - [x] Progresso por revisão e rejulgamento no servidor.
 - [x] Migração v1 explícita e conteúdo antigo preservado.
