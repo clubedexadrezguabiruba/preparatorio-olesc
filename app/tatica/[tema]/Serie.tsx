@@ -237,6 +237,14 @@ export function Serie({
   const puzzle = puzzles[indice];
 
   /**
+   * As gravações ainda em voo. O aquecimento e a série emendam na etapa
+   * seguinte sem tela de fim, e o `router.refresh` só pode pedir essa etapa
+   * depois que o servidor guardou a última tentativa — senão ele serve a mesma
+   * etapa de novo.
+   */
+  const gravandoRef = useRef<Promise<boolean>[]>([]);
+
+  /**
    * A decisão daquele puzzle chegou: manda ao servidor e soma no placar.
    *
    * O `acertou` que volta é o do **servidor**, não o da tela. Nas duas ele
@@ -244,8 +252,8 @@ export function Serie({
    * o do servidor: o número que o aluno lê no fim da rodada passa a ser,
    * literalmente, o que ficou gravado.
    */
-  const decidir = useCallback(
-    async (p: PuzzleServido, lances: string[], tempoMs: number) => {
+  const gravar = useCallback(
+    async (p: PuzzleServido, lances: string[], tempoMs: number): Promise<boolean> => {
       const resposta = await registrarTentativa({
         puzzleId: p.id,
         // Na revisao nao ha tema: a linha e gravada no tema de origem do
@@ -262,11 +270,19 @@ export function Serie({
         // entrou na conta, senão fecha a tarefa achando que fez 20 e o
         // relatório mostra 14.
         setFalhaAoGravar(resposta.erro);
-        return;
+        return false;
       }
       setPlacar((a) => ({ certos: a.certos + (resposta.acertou ? 1 : 0), total: a.total + 1 }));
+      return true;
     },
     [etapa, tema],
+  );
+
+  const decidir = useCallback(
+    (p: PuzzleServido, lances: string[], tempoMs: number) => {
+      gravandoRef.current.push(gravar(p, lances, tempoMs));
+    },
+    [gravar],
   );
 
   // O prêmio da rodada inteira, na tela do placar. Não é `setState` num efeito:
@@ -285,14 +301,27 @@ export function Serie({
      * inteira.
      */
     setDegrau(0);
-    setIndice((i) => {
-      if (i + 1 >= puzzles.length) {
-        setFim(true);
-        return i;
-      }
-      return i + 1;
-    });
-  }, [puzzles.length]);
+    if (indice + 1 < puzzles.length) {
+      setIndice(indice + 1);
+      return;
+    }
+    /*
+     * O aquecimento e a série não têm tela de fim (pedido do Doug, 16/9):
+     * parar para "Continuar" tirava o aluno do tabuleiro à toa. O tabuleiro
+     * fica onde está, e o `refresh` traz a etapa seguinte — a trilha acende a
+     * barra dela. A prova mantém a tela, que é o placar do tema inteiro. Se
+     * uma gravação falhou, a tela de fim aparece mesmo assim: é ela que conta
+     * ao aluno que um puzzle não entrou na conta.
+     */
+    if (etapa === "aquecimento" || etapa === "serie") {
+      void Promise.all(gravandoRef.current).then((gravou) => {
+        if (gravou.every(Boolean)) router.refresh();
+        else setFim(true);
+      });
+      return;
+    }
+    setFim(true);
+  }, [etapa, indice, puzzles.length, router]);
 
   if (fim || !puzzle) {
     return (
