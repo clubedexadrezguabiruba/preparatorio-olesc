@@ -5501,9 +5501,70 @@ rodado; o que **não** foi rodado está na última subseção.
 - **O repertório da Francesa não foi trocado nem as aulas da Francesa publicadas.** O estudo no Lichess continua igual à
   fixture (conferido em 17/9 baixando de novo): os 4 lances mudos reprovam o PGN gerado, e sem ele o move trainer das
   aulas A/B/C/E+F não publica (`TREINADOR_LINHA_AUSENTE`). É o Doug quem escreve esses 4 comentários.
-- **Ensaio de navegador e piloto final:** vêm a seguir nesta rodada (ver a próxima entrada).
+- **Ensaio de navegador:** feito em 17/9 — ver "Ensaio do curso de abertura no navegador" logo abaixo.
 - Pendências do estudo que o leitor **não** detecta sozinho e continuam só na lista da §13.3.8: `[PROXIMO]` apontando
   errado (E20, E21, C13), "Regra N" diferente entre C13 e E22O, "Golpe 4/5" não são táticas, "Ndb5" no E22N.
+
+---
+
+## Ensaio do curso de abertura no navegador (17/9/2026, madrugada)
+
+Playwright do MCP no `next dev` do Doug (porta 3000, viewport 1517 e 1366×768, zoom 0,9), RAM livre 1,6 GB. Sem
+imagem: tudo medido pelo texto da página e pelo banco.
+
+**Professor — `/editor/v2/curso-de-abertura`, arquivo `francesa-v15-pgn-local.pgn`:** a tabela deu A 9 etapas/2
+paradas/2 linhas, B 32/8/5 ramos/8, C 16/3/4/9, D 1, E+F 35/12/8/19 — igual aos testes. 22 avisos em "O que corrigir no
+Lichess". O PGN do repertório recusado com **12 itens** (os 4 mudos repetidos por linha). *Defeito achado e consertado:*
+os problemas chegavam num parágrafo só (o compilador junta tudo numa mensagem); a action agora quebra por linha.
+**Criar as aulas** → as 5 `AB-BRANCAS-FRANCESA-*` criadas em `.editor/v2/` (fora do Git; ficam para o piloto do Doug).
+Índice do editor mostra "Cursos de abertura" com as 5. O editor abre a aula B sem erro de console.
+
+**Prévia do professor, aula B (`/editor/v2/assistir/AB-BRANCAS-FRANCESA-B`):** 32 etapas, abas "Sua vez — B04",
+"… — depois de 4.e5" etc. Na parada B05A a pergunta aparece; 1.Nf3 errado não passa; **6.Be4 → "Isso: 6.Be4."** e o
+botão "Ver a técnica". O capítulo seguinte mostra o rótulo **PUNIÇÃO** acima da fala. Etapa 31 é o treino guiado
+("Jogue as linhas da aula…"); a 32, o move trainer, avisa que as 8 linhas não estão no compilado (o PGN não foi aplicado).
+
+**Aluno — aula de ensaio `AB-BRANCAS-ALAPIN-E2E`** (a aula A da Francesa com o move trainer trocado para a linha
+compilada `brancas-alapin-5eb647e6`), gravada e publicada por script com a conferência verde, conta `alunoteste`:
+
+1. `/aberturas/brancas/alapin` mostra a faixa **Aulas: E2E**; a aula abre com "← Alapin 2.c3".
+2. **1ª vez:** abas 2–9 desabilitadas; sem Pular; o botão de seguir só aparece no fim do capítulo; a aba seguinte abre
+   depois. Paradas A00 (3.Bd3) e A01 (4.Bxe4) com "Isso: …". Treino guiado jogado até 11.O-O-O ("PRONTO."). Move trainer:
+   a linha abriu **assistida** (seta → "Treinar sem a seta" → "Valendo" → "Terminar o move trainer"). Faixa "Aula
+   concluída!". **No banco:** rodada 1 com 9/9 etapas e `concluida_em`; `tentativas_aula` das 3 etapas de treino com
+   sucesso; `repertorio_progresso` da linha com 1 tentativa, 1 acerto.
+3. **2ª vez** (recarregar): abas trancadas até a primeira pendente; **Pular** no capítulo 1 e no 2; **nenhum Pular na
+   parada** (etapa 3).
+4. **Retomar:** recarregar no meio abriu na **etapa 3**, a primeira pendente.
+5. **3ª vez** (a rodada 2 foi marcada concluída direto no banco, para não jogar tudo de novo): tela "Esta é a sua 3ª vez
+   nesta aula" com **Ir ao move trainer** / **Fazer a aula inteira**; o atalho abriu a etapa 9 já no valendo.
+6. `/finais/AB-BRANCAS-ALAPIN-E2E` = **404**; `/finais` não cita a aula. Em 375 px, a aula e a página da abertura sem
+   rolagem horizontal (400 ≤ 416).
+
+**Limpeza conferida:** apagados `content/aulas-v2/AB-BRANCAS-ALAPIN-E2E`, o rascunho, a conferência, a transação e o
+snapshot; no banco, as 3 rodadas, as 3 tentativas e a linha da Alapin do `alunoteste`. `git status` só com a correção da
+action. **Zero erro de console** em todo o ensaio.
+
+**Achado de experiência, não consertado:** dentro do move trainer da aula a trilha das etapas não aparece (a `Passada`
+tem painel próprio); o aluno volta por "← Etapa anterior". Decisão de gosto — fica para o Doug ver na tela.
+
+### Roteiro numerado para o teste do Doug (piloto final)
+
+Antes: **escrever no Lichess os 4 comentários** que faltam no estudo `qq2xorDl` — 1.e4 (capítulo 00), 11.Nf3 (B05B),
+12.Qxf3 e 11.a3 (C12). O resto da lista "O que corrigir no Lichess" é opcional para o piloto.
+
+1. `/editor/v2/curso-de-abertura` → Francesa 3.Bd3 → colar `https://lichess.org/study/qq2xorDl` → **Buscar** → **Ler o
+   estudo**. Esperado: a seção 3 diz "nascem 19; morrem 1" (a linha escrita à mão `brancas-francesa-05eae3b2`).
+2. **Substituir as aulas** (as 5 já existem como rascunho; cada uma ganha cópia de segurança).
+3. **Aplicar o PGN do repertório** → **Sim, aplicar**. Esperado: "✓ brancas-francesa.pgn aplicado".
+4. No editor, abrir cada aula `AB-BRANCAS-FRANCESA-*` → Conferir → Publicar (a aula D não depende do passo 3).
+5. Entrar como `alunoteste` (PIN 112233) → `/aberturas/brancas/francesa` → faixa **Aulas** → **B**.
+6. Fazer a aula B inteira: paradas (B05A = 6.Be4), ramos do B08 com "Voltamos a…", B09 aceitando 5.dxc5, treino guiado,
+   move trainer (E22C → E22I, cada linha uma vez).
+7. Reabrir a aula B: 2ª vez, com Pular só nos capítulos. Concluir de novo.
+8. Reabrir: 3ª vez, "Ir ao move trainer".
+9. Abrir a aula D: só a partida; na 2ª vez, Pular livre.
+10. Commit do que o passo 3 mudou (`content/repertorio/`, `public/repertorio/`, `content/aulas-v2/AB-*`) só com o Doug.
 
 ---
 

@@ -67,7 +67,8 @@ export async function lerCursoDeAberturaAcao(pedido: PedidoDoCurso): Promise<Lei
     aulas: curso.aulas.map((item) => ({ ...diff.get(item.aula.id)!, bloco: item.bloco, paradas: item.paradas, ramos: item.ramos, linhasDoTreinador: item.linhasDoTreinador })),
     repertorio: preparo.ok
       ? { ok: true, linhas: curso.pgn.linhas, nascem: preparo.impacto.nascem.length, morrem: preparo.idsQueMorrem, textoMudou: preparo.impacto.textoMudou, impactoHash: preparo.impactoHash }
-      : { ok: false, motivo: preparo.motivo, problemas: preparo.problemas },
+      // O compilador junta os problemas do banco num texto só, uma linha por problema: a tela lista um por item.
+      : { ok: false, motivo: preparo.motivo, problemas: preparo.problemas.flatMap((p) => p.split("\n").map((linha) => linha.trim()).filter((linha) => linha && !/não passou na conferência:$/.test(linha))) },
   };
 }
 
