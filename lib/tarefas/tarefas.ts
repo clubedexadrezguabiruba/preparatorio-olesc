@@ -110,7 +110,7 @@ const Base = {
 const MetaSchema = z
   .object({
     /** Os blocos do currículo que contam. */
-    blocos: z.array(z.number().int().min(1).max(8)).min(1),
+    blocos: z.array(z.number().int().min(1).max(11)).min(1),
     /** Quantos puzzles fecham a tarefa. */
     puzzles: z.number().int().min(1),
     /**

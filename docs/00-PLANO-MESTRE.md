@@ -276,7 +276,7 @@ errada em duas frentes ao mesmo tempo — listava quatro temas que o currículo 
 tem (`operaMate`, `morphysMate`, `discoveredCheck`, `equality`) e as faixas
 estreitas de antes.
 
-O **teto é 2100 em todos os oito blocos**: o que muda de bloco para bloco é só o
+O **teto é 2100 em todos os onze blocos**: o que muda de bloco para bloco é só o
 piso, porque a série de cada tema é servida em rating crescente e ninguém
 encontra o puzzle de 2000 antes de passar pelos de baixo.
 
@@ -285,11 +285,20 @@ encontra o puzzle de 2000 antes de passar pelos de baixo.
 | 1. Mates curtos e peça de graça | `mateIn1`, `mateIn2`, `hangingPiece` (peça de graça — erro nº 1 em 1000–1400) | 700–2100 |
 | 2. Padrões de mate I | `backRankMate`, `smotheredMate`, `arabianMate`, `anastasiaMate`, `hookMate` | 800–2100 |
 | 3. Padrões de mate II | `bodenMate`, `doubleBishopMate`, `dovetailMate`, `mateIn3` | 1000–2100 |
-| 4. Táticas fundamentais | `fork`, `pin`, `skewer`, `discoveredAttack`, `doubleCheck` | 800–2100 |
+| 4. Táticas fundamentais | `fork`, `pin`, `skewer`, `discoveredAttack`, `doubleCheck`, `discoveredCheck` | 800–2100 |
 | 5. Remover a defesa | `capturingDefender`, `deflection`, `attraction`, `trappedPiece`, `xRayAttack` | 1000–2100 |
-| 6. Ataque ao rei | `exposedKing`, `attackingF2F7`, `kingsideAttack`, `sacrifice` | 1000–2100 |
-| 7. Lances finos | `intermezzo`, `quietMove`, `clearance`, `interference`, `zugzwang` | 1100–2100 |
+| 6. Ataque ao rei | `exposedKing`, `attackingF2F7`, `kingsideAttack`, `sacrifice`, `queensideAttack`, `greekGift`* | 1000–2100 |
+| 7. Lances finos | `intermezzo`, `quietMove`, `clearance`, `interference`, `zugzwang`, `counterCheck`* | 1100–2100 |
 | 8. Defesa e conversão | `defensiveMove`, `advancedPawn`, `promotion`, `underPromotion`, `enPassant` | 1000–2100 |
+| 9. Padrões de mate III | `operaMate`†, `pillsburysMate`†, `epauletteMate`†, `swallowstailMate`, `damianoMate`*, `lolliMate`* | 1000–2100 |
+| 10. Padrões de mate IV | `morphysMate`†, `cornerMate`†, `triangleMate`, `blindSwineMate`†, `killBoxMate`†, `anderssenMate`*, `pawnMate`*, `grecoMate`*, `suffocationMate`*, `mateIn4` | 1000–2100 |
+| 11. Mates raros e armadilhas | `vukovicMate`, `balestraMate`†, `blackburneMate`*, `retiMate`*, `maxLangeMate`*, `legalMate`*, `mateIn5` | 1000–2100 |
+
+\* tag nossa — o Lichess não a tem; quem a dá é `lib/tatica/padroes/detectores.ts`.
+† tag do Lichess que só fica se o nosso validador confirmar a figura. Os blocos 9 a
+11 e os temas novos dos blocos 4, 6 e 7 entraram em 16/9/2026; as definições e a
+precisão medida estão em `docs/TATICA-PADROES.md`. `dovetailMate` também recebe os
+mates de Cozio, que são a mesma figura.
 
 **Cada tema tem:** (1) explicação curta redigida — dois parágrafos, três
 perguntas de "procure" e uma linha de "cuidado", em `content/temas.json`. O

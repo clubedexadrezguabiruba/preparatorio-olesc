@@ -595,7 +595,49 @@ export const PARES: Par[] = [
   },
 
   // -------------------------------------------------------------------------
+  // Os metais dos níveis — os cartões de tema de /tatica (CartaoDoTema,
+  // IconeDoTema). Gerados pelo motivo das marcas do tabuleiro: um metal novo
+  // que só contrastasse numa das faces passaria sem ninguém medir.
+  // -------------------------------------------------------------------------
+  ...PARES_DOS_METAIS(),
+
+  // -------------------------------------------------------------------------
   // O tabuleiro — ver `NAS_DUAS_CASAS` logo acima
   // -------------------------------------------------------------------------
   ...NAS_DUAS_CASAS,
 ];
+
+function PARES_DOS_METAIS(): Par[] {
+  return [1, 2, 3, 4, 5].flatMap((n): Par[] => [
+    {
+      onde: `borda do cartão de tema do nível ${n}, contra a página (CartaoDoTema)`,
+      texto: `nivel-${n}-borda`,
+      fundo: PAGINA,
+      piso: AA_COMPONENTE,
+    },
+    {
+      onde: `setas e marcas da ilustração do nível ${n}, no quadro dela (IconeDoTema)`,
+      texto: `nivel-${n}-tinta`,
+      fundo: [`nivel-${n}-fundo`],
+      piso: AA_COMPONENTE,
+    },
+    {
+      onde: `nome do metal do nível ${n} escrito na pastilha do bloco (/tatica)`,
+      texto: `nivel-${n}-tinta`,
+      fundo: [`nivel-${n}-fundo`],
+      piso: AA_TEXTO,
+    },
+    {
+      onde: `peça clara, e o contorno claro da peça escura, no quadro do nível ${n} (IconeDoTema)`,
+      texto: "tinta",
+      fundo: [`nivel-${n}-fundo`],
+      piso: AA_COMPONENTE,
+    },
+    {
+      onde: `o X vermelho de peça capturada, no quadro do nível ${n} (IconeDoTema)`,
+      texto: "erro-texto",
+      fundo: [`nivel-${n}-fundo`],
+      piso: AA_COMPONENTE,
+    },
+  ]);
+}

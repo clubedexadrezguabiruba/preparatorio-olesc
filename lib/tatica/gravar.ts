@@ -68,7 +68,9 @@ const TEMPO_MAXIMO_MS = 30 * 60 * 1000;
 export async function gravarTentativa(aluno: string, tentativa: Tentativa): Promise<Resultado> {
   const { puzzleId, tema, origem, modo, lances, tempoMs } = tentativa;
 
-  if (!MODOS_GRAVAVEIS.includes(modo)) return { erro: "modo desconhecido" };
+  // O modo rating tem porta própria (`gravar-rating.ts`): aqui ele gravaria uma
+  // linha sem mexer no rating e sem exigir o problema pendente.
+  if (!MODOS_GRAVAVEIS.includes(modo) || modo === "rating") return { erro: "modo desconhecido" };
   if (typeof puzzleId !== "string" || typeof tema !== "string" || typeof origem !== "string") {
     return { erro: "tentativa malformada" };
   }

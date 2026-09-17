@@ -8,6 +8,9 @@ import { aulasComPratica, aulasExtras, aulasPublicadas } from "@/lib/finais/cont
 import { finaisDaTurma } from "@/lib/finais/progresso";
 import { aprendidasDaTrilha, aulasAbertas, CLASSES, daClasse } from "@/lib/finais/trilha";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
+import { formatarDelta } from "@/lib/tatica/rating";
+import { ultimaVez } from "@/lib/tatica/rating-historico";
+import { ratingsDaTurma } from "@/lib/tatica/rating-leitura";
 import { CadastroDeAluno } from "./CadastroDeAluno";
 
 export const metadata: Metadata = { title: "Professor — Preparatório OLESC" };
@@ -40,7 +43,12 @@ export default async function Professor() {
    */
   const abertas = aulasAbertas(aulasPublicadas(), aulasExtras());
   const comPratica = aulasComPratica();
-  const [finais, niveis] = await Promise.all([finaisDaTurma(), niveisDaTurma()]);
+  const [finais, niveis, ratings] = await Promise.all([finaisDaTurma(), niveisDaTurma(), ratingsDaTurma()]);
+  // Maior rating primeiro, e quem nunca jogou no fim. A ordem é do professor:
+  // o aluno não vê esta tabela, e não há ranking na tela dele.
+  const turmaNoRating = [...(alunos ?? [])].sort(
+    (a, b) => (ratings.get(b.id)?.rating ?? -1) - (ratings.get(a.id)?.rating ?? -1) || a.nome.localeCompare(b.nome),
+  );
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-5 py-10">
@@ -89,7 +97,7 @@ export default async function Professor() {
                   <Th>Usuário</Th>
                   <Th>Equipe</Th>
                   <Th>Tab.</Th>
-                  <Th>Rating</Th>
+                  <Th>Rating de entrada</Th>
                   <Th>Nível</Th>
                   <Th>Finais</Th>
                 </tr>
@@ -111,6 +119,9 @@ export default async function Professor() {
                     <Td mono>{aluno.usuario}</Td>
                     <Td>{aluno.equipe ? EQUIPE[aluno.equipe as "M" | "F"] : "—"}</Td>
                     <Td>{aluno.tabuleiro ?? "—"}</Td>
+                    {/* A célula tinha sumido em 394f75d (semana → nível) e o
+                        título ficou: o nível aparecia embaixo de "Rating". */}
+                    <Td>{aluno.rating ?? "—"}</Td>
                     {/* O degrau vem antes dos finais porque é a resposta de
                         uma palavra: é ele que diz o que o aluno está fazendo
                         hoje, e os finais são uma das três trilhas dele. */}
@@ -137,6 +148,75 @@ export default async function Professor() {
           </p>
         )}
       </section>
+
+      {alunos?.length ? (
+        <section className="flex flex-col gap-3">
+          <div className="flex flex-col gap-0.5">
+            <h2 className="rotulo text-tinta-fraca">Tática rating — a turma</h2>
+            <p className="text-sm text-tinta-media">
+              O rating de tática (todos começam em 600) e a semana de cada um: quanto o rating andou, quantos
+              problemas e o acerto nos últimos 7 dias. Só você vê esta tabela.
+            </p>
+          </div>
+          <div className="cartao overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-borda-fraca text-left text-tinta-fraca">
+                  <Th>Aluno</Th>
+                  <Th>Rating de tática</Th>
+                  <Th>7 dias</Th>
+                  <Th>Na semana</Th>
+                  <Th>Acerto na semana</Th>
+                  <Th>Última vez</Th>
+                  <Th>Resolvidos</Th>
+                </tr>
+              </thead>
+              <tbody>
+                {turmaNoRating.map((aluno) => {
+                  const r = ratings.get(aluno.id);
+                  const acerto = r?.semana.acerto ?? null;
+                  return (
+                    <tr key={aluno.id} className="border-b border-borda-fraca last:border-0">
+                      <Td>
+                        <Link href={`/professor/${aluno.id}`} className="foco font-medium text-metodo-tinta hover:underline">
+                          {aluno.nome}
+                        </Link>
+                      </Td>
+                      <Td>
+                        <span className="font-semibold tabular-nums">{r ? Math.round(r.rating) : "—"}</span>
+                      </Td>
+                      <Td>
+                        <span className={`tabular-nums ${!r ? "text-tinta-fraca" : r.semana.variacao < 0 ? "text-erro-texto" : ""}`}>
+                          {r ? formatarDelta(r.semana.variacao) : "—"}
+                        </span>
+                      </Td>
+                      {/* Sem os problemas ao lado, "±0" não separa quem ficou parado de quem jogou e empatou. */}
+                      <Td>
+                        <span className={`tabular-nums ${r?.semana.problemas ? "" : "text-tinta-fraca"}`}>
+                          {r ? r.semana.problemas : "—"}
+                        </span>
+                      </Td>
+                      <Td>
+                        <span className={`tabular-nums ${acerto === null ? "text-tinta-fraca" : ""}`}>
+                          {acerto === null ? "—" : `${acerto}%`}
+                        </span>
+                      </Td>
+                      <Td>
+                        <span className={r?.ultimaResposta ? "" : "text-tinta-fraca"}>
+                          {r?.ultimaResposta ? ultimaVez(r.ultimaResposta) : "—"}
+                        </span>
+                      </Td>
+                      <Td>
+                        <span className="tabular-nums">{r ? r.resolvidos : "—"}</span>
+                      </Td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ) : null}
     </main>
   );
 }

@@ -1,7 +1,9 @@
 import "server-only";
 import { hojeNoBrasil } from "@/lib/curso/calendario";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
-import { filaDeRevisao, type ItemDaFila, type LinhaDeTentativa } from "@/lib/tatica/revisao";
+import { idsVistos, linhasDeTentativasCom } from "@/lib/tatica/leituras";
+import { idsDoTema, origensDoBanco } from "@/lib/tatica/banco";
+import { filaDeRevisao, filaServivel, type ItemDaFila, type LinhaDeTentativa } from "@/lib/tatica/revisao";
 import { ETAPAS, type Etapa, type Feitos, type LinhaDoTema } from "@/lib/tatica/serie";
 
 /**
@@ -122,19 +124,37 @@ export async function linhasDoTema(tema: string): Promise<LinhaDoTema[]> {
  * dia são umas 500 linhas por mês, de seis colunas curtas — cabe.
  */
 export async function linhasDeTentativas(aluno?: string): Promise<LinhaDeTentativa[]> {
-  const supabase = await criarClienteServidor();
-  let consulta = supabase
-    .from("tentativas_puzzle")
-    .select("puzzle_id, tema, origem, modo, acertou, criada_em")
-    .order("criada_em");
-  if (aluno) consulta = consulta.eq("aluno", aluno);
-  const { data } = await consulta;
-  return (data ?? []) as LinhaDeTentativa[];
+  // Paginada (`lib/tatica/leituras.ts`): uma consulta só parava em 1.000 linhas
+  // e, em ordem de data, as que sumiam eram as mais novas.
+  return linhasDeTentativasCom(await criarClienteServidor(), aluno);
 }
 
-/** O que está devido hoje na revisão espaçada, do aluno pedido (ou de quem está logado). */
+/**
+ * O que está devido hoje na revisão espaçada, do aluno pedido (ou de quem está
+ * logado) — só o que o disco ainda serve (`filaServivel`).
+ *
+ * A revisão, o painel e a próxima ação leem daqui, e por isso contam a mesma
+ * fila: o painel não manda revisar um puzzle que a revisão não consegue abrir.
+ */
 export async function revisaoDeHoje(aluno?: string): Promise<ItemDaFila[]> {
-  return filaDeRevisao(await linhasDeTentativas(aluno), hojeNoBrasil());
+  return soOServivel(filaDeRevisao(await linhasDeTentativas(aluno), hojeNoBrasil()));
+}
+
+/**
+ * A fila sem os puzzles que saíram do banco, e com a origem corrigida dos que
+ * mudaram de arquivo. Lê os ids dos temas que a fila cita; o índice do modo
+ * rating só é aberto se algum item não estiver nem na origem nem no tema.
+ */
+export async function soOServivel(fila: readonly ItemDaFila[]): Promise<ItemDaFila[]> {
+  if (fila.length === 0) return [];
+  const tags = [...new Set(fila.flatMap((item) => [item.origem, item.tema]))];
+  const ids = new Map(await Promise.all(tags.map(async (tag) => [tag, await idsDoTema(tag)] as const)));
+  const estaEm = (tag: string, id: string) => ids.get(tag)?.has(id) ?? false;
+
+  const perdidos = fila.some((i) => !estaEm(i.origem, i.puzzleId) && !estaEm(i.tema, i.puzzleId));
+  const origens = perdidos ? await origensDoBanco() : null;
+
+  return filaServivel(fila, { estaEm, outraOrigem: (id) => origens?.get(id) });
 }
 
 /**
@@ -147,7 +167,6 @@ export async function revisaoDeHoje(aluno?: string): Promise<ItemDaFila[]> {
  * Quem limita ao próprio aluno é a RLS, como em toda consulta daqui.
  */
 export async function puzzlesJaVistos(): Promise<Set<string>> {
-  const supabase = await criarClienteServidor();
-  const { data } = await supabase.from("tentativas_puzzle").select("puzzle_id");
-  return new Set((data ?? []).map((l) => (l as { puzzle_id: string }).puzzle_id));
+  // Paginada pelo mesmo motivo: passado de 1.000, a série repetia problema.
+  return idsVistos(await criarClienteServidor());
 }

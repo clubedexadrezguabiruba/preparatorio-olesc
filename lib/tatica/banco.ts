@@ -1,7 +1,8 @@
 import "server-only";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import type { Indice, Puzzle, TemaNoIndice } from "./puzzles.ts";
+import type { Indice, Puzzle, PuzzleServido, TemaNoIndice } from "./puzzles.ts";
+import { ORIGEM_BASE, type LinhaDoIndice } from "./rating.ts";
 
 /**
  * O banco de puzzles, lido **do disco pelo servidor**.
@@ -33,6 +34,8 @@ import type { Indice, Puzzle, TemaNoIndice } from "./puzzles.ts";
 const RAIZ = path.join(process.cwd(), "public", "puzzles");
 
 let indiceEmMemoria: Promise<Indice> | null = null;
+let baseEmMemoria: Promise<TemaNoIndice> | null = null;
+let indiceDoRatingEmMemoria: Promise<LinhaDoIndice[]> | null = null;
 const faixasEmMemoria = new Map<string, Promise<Puzzle[]>>();
 
 async function lerJson<T>(relativo: string): Promise<T> {
@@ -59,7 +62,38 @@ export function lerFaixa(arquivo: string): Promise<Puzzle[]> {
   return promessa;
 }
 
+/**
+ * O "tema" dos problemas de 600–700 do modo rating, que não é tema nenhum.
+ *
+ * Mora fora do `index.json` de propósito: aquele índice é o currículo, e cada
+ * entrada dele vira cartão em `/tatica`, série e prova. Estes problemas não
+ * aparecem em lugar nenhum disso. Mas o formato é o mesmo (`TemaNoIndice`), e é
+ * isso que deixa `puzzlePorId(ORIGEM_BASE, id)` — e com ele a gravação, a
+ * revisão do dia e a conferência — funcionar sem caminho especial.
+ */
+function lerBase(): Promise<TemaNoIndice> {
+  baseEmMemoria ??= lerJson<TemaNoIndice>(`${ORIGEM_BASE}/indice.json`).catch((erro) => {
+    baseEmMemoria = null;
+    throw erro;
+  });
+  return baseEmMemoria;
+}
+
+/**
+ * O índice do modo rating: `[id, origem, rating]` de todo puzzle servível, em
+ * rating crescente (`npm run puzzles:indice-rating`). ~120 mil linhas em
+ * memória — o mesmo cache, e pelo mesmo motivo, dos arquivos de faixa.
+ */
+export function lerIndiceDoRating(): Promise<LinhaDoIndice[]> {
+  indiceDoRatingEmMemoria ??= lerJson<LinhaDoIndice[]>("rating-indice.json").catch((erro) => {
+    indiceDoRatingEmMemoria = null;
+    throw erro;
+  });
+  return indiceDoRatingEmMemoria;
+}
+
 export async function temaNoIndice(tag: string): Promise<TemaNoIndice | null> {
+  if (tag === ORIGEM_BASE) return lerBase();
   const indice = await lerIndice();
   return indice.temas.find((t) => t.tag === tag) ?? null;
 }
@@ -74,6 +108,44 @@ export async function puzzlesDoTema(tag: string): Promise<Puzzle[]> {
   if (!tema) return [];
   const faixas = await Promise.all(tema.faixas.map((f) => lerFaixa(f.arquivo)));
   return faixas.flat();
+}
+
+const idsEmMemoria = new Map<string, Promise<ReadonlySet<string>>>();
+let origensEmMemoria: Promise<ReadonlyMap<string, string>> | null = null;
+
+/**
+ * Os ids de um tema (ou de `rating-base`), para perguntar "ele ainda está
+ * aqui?" sem varrer as faixas a cada item da fila de revisão. Tag que não é do
+ * currículo dá conjunto vazio.
+ */
+export function idsDoTema(tag: string): Promise<ReadonlySet<string>> {
+  let promessa = idsEmMemoria.get(tag);
+  if (!promessa) {
+    promessa = puzzlesDoTema(tag).then(
+      (puzzles) => new Set(puzzles.map((p) => p.id)),
+      (erro) => {
+        idsEmMemoria.delete(tag);
+        throw erro;
+      },
+    );
+    idsEmMemoria.set(tag, promessa);
+  }
+  return promessa;
+}
+
+/**
+ * `id -> origem` de todo puzzle servível, tirado do índice do modo rating — que
+ * já lista cada puzzle do currículo uma vez, com um arquivo em que ele está.
+ */
+export function origensDoBanco(): Promise<ReadonlyMap<string, string>> {
+  origensEmMemoria ??= lerIndiceDoRating().then(
+    (linhas) => new Map(linhas.map((l) => [l[0], l[1]])),
+    (erro) => {
+      origensEmMemoria = null;
+      throw erro;
+    },
+  );
+  return origensEmMemoria;
 }
 
 /** Só a faixa mais fácil do tema. É de onde sai o aquecimento. */
@@ -109,14 +181,35 @@ export async function puzzlePorId(tag: string, id: string): Promise<Puzzle | nul
  * A faixa do meio, e não todas: carregar os quatro arquivos de sete temas
  * seriam 10 MB lidos para escolher cinco puzzles. A do meio é a dificuldade
  * média daquele tema, que é exatamente o que uma prova quer.
+ *
+ * ## A origem sai carimbada daqui, e cada id vem uma vez
+ *
+ * Quem lê o arquivo é quem sabe de onde o puzzle veio. A origem era deduzida
+ * depois, pela primeira tag do puzzle que estivesse na lista — e um garfo que
+ * também é `mateIn3` saía carimbado "mateIn3" sem morar no arquivo dele: a
+ * gravação o recusava como "puzzle desconhecido" (248 em 8.344 servidos, medido
+ * por `scripts/conferir-origens.ts`). E o mesmo id em dois arquivos entrava duas
+ * vezes: a prova de nível sorteava o repetido, e uma prova sem 12 ids distintos
+ * nunca é corrigida (38 em 100). Fica a primeira cópia, na ordem de `tags`.
  */
-export async function amostraDeTemas(tags: readonly string[]): Promise<Puzzle[]> {
+export async function amostraDeTemas(tags: readonly string[]): Promise<PuzzleServido[]> {
   const indice = await lerIndice();
-  const arquivos: string[] = [];
+  const escolhidas: { tag: string; arquivo: string }[] = [];
   for (const tag of tags) {
     const tema = indice.temas.find((t) => t.tag === tag);
     if (!tema || tema.faixas.length === 0) continue;
-    arquivos.push(tema.faixas[Math.floor(tema.faixas.length / 2)].arquivo);
+    escolhidas.push({ tag, arquivo: tema.faixas[Math.floor(tema.faixas.length / 2)].arquivo });
   }
-  return (await Promise.all(arquivos.map(lerFaixa))).flat();
+  const lidas = await Promise.all(escolhidas.map((e) => lerFaixa(e.arquivo)));
+
+  const vistos = new Set<string>();
+  const amostra: PuzzleServido[] = [];
+  for (const [i, puzzles] of lidas.entries()) {
+    for (const p of puzzles) {
+      if (vistos.has(p.id)) continue;
+      vistos.add(p.id);
+      amostra.push({ ...p, origem: escolhidas[i].tag });
+    }
+  }
+  return amostra;
 }

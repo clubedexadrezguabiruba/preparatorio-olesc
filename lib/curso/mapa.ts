@@ -1,5 +1,5 @@
 import { aprendeu, trilhaCompleta, type AulaDaTrilha, type ProgressoDaAula } from "../finais/trilha.ts";
-import { BLOCOS } from "../tatica/blocos.ts";
+import { BLOCOS, contaNoCurso } from "../tatica/blocos.ts";
 import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
 import {
   aulasDoNivel,
@@ -124,7 +124,7 @@ export function montarMapa(p: ProgressoParaOMapa): Map<Nivel, ModuloDoNivel[]> {
   };
 
   for (const bloco of BLOCOS) {
-    for (const tema of bloco.temas) {
+    for (const tema of bloco.temas.filter(contaNoCurso)) {
       // `Math.min` porque a prova serve puzzles repetidos e a revisão grava no
       // mesmo tema: o contador passa de 39 sem o aluno ter feito nada a mais.
       // Documentar em vez de filtrar é a decisão da F2 — mas uma barra em 130%

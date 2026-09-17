@@ -11,8 +11,10 @@ const nextConfig: NextConfig = {
    * repositório inteiro; na Vercel, a página do tema responderia
    * `ENOENT: index.json` no primeiro aluno que abrisse a tarefa.
    *
-   * São 33 MB no pacote do servidor, contra o teto de 250 MB. O que se compra
-   * com eles: o servidor escolhe os 24 puzzles da série (em vez de mandar 1,4
+   * São 62 MB no pacote do servidor (medido em 16/9: os 63 temas do dump de
+   * set/2026, mais o índice e os problemas de 600–700 do modo rating; eram 40
+   * MB com os 36 temas de jan/2026), contra o teto de 250 MB por função. O que
+   * se compra com eles: o servidor escolhe os 24 puzzles da série (em vez de mandar 1,4
    * MB ao celular para ele sortear) e reconfere o lance antes de gravar.
    */
   /**
@@ -41,6 +43,11 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/tatica/[tema]": ["./public/puzzles/**"],
     "/tatica/revisao": ["./public/puzzles/**"],
+    // A tática com rating lê o índice (`rating-indice.json`) e os problemas de
+    // 600–700 (`rating-base/`) por caminho — o mesmo glob já os pega. A
+    // evolução relê os problemas de 600–700 para contar os temas fracos.
+    "/tatica/rating": ["./public/puzzles/**"],
+    "/tatica/rating/evolucao": ["./public/puzzles/**"],
     "/finais": ["./content/**"],
     "/finais/[aula]": ["./content/**"],
     "/trilha": ["./content/**"],
@@ -64,8 +71,14 @@ const nextConfig: NextConfig = {
      * `ENOENT` aparecendo só na Vercel, no primeiro aluno que abrisse o site.
      * É exatamente a falha que o comentário do F2 acima descreve, e ela quase
      * entrou pela porta de um merge.
+     *
+     * **E, desde 16/9, lê também os puzzles.** A fila de revisão que o painel
+     * conta passa por `soOServivel` (`lib/tatica/progresso.ts`), que confere no
+     * disco se cada puzzle ainda existe — senão o painel mandaria revisar o que
+     * a revisão não consegue abrir. Sem esta entrada, a primeira leitura seria
+     * `ENOENT: index.json` na Vercel, na página inicial de todo aluno.
      */
-    "/painel": ["./content/**", "./public/repertorio/**"],
+    "/painel": ["./content/**", "./public/repertorio/**", "./public/puzzles/**"],
   },
   /**
    * **O selo de desenvolvimento do Next sai da tela.**

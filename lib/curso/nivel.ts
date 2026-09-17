@@ -1,5 +1,5 @@
 import { aprendeu, AULA_ZERADA, trilhaCompleta, type AulaDaTrilha, type ProgressoDaAula } from "../finais/trilha.ts";
-import { BLOCOS } from "../tatica/blocos.ts";
+import { BLOCOS, contaNoCurso } from "../tatica/blocos.ts";
 import { etapaAtual, type Feitos } from "../tatica/serie.ts";
 
 /**
@@ -85,7 +85,7 @@ export const NIVEL: Record<Nivel, DescricaoDoNivel> = {
   2: {
     numero: 2,
     fide: [800, 1000],
-    resumo: "Garfo, cravada, espeto, descoberto — o vocabulário que decide partida.",
+    resumo: "Garfo, cravada, espeto, ataque e xeque descoberto — o vocabulário que decide partida.",
     aulasParaFechar: 4,
   },
   3: {
@@ -97,15 +97,31 @@ export const NIVEL: Record<Nivel, DescricaoDoNivel> = {
   4: {
     numero: 4,
     fide: [1200, 1400],
-    resumo: "Mates de padrão avançado, e remover quem defende.",
+    resumo: "Mais padrões de mate, e remover quem defende.",
     aulasParaFechar: 4,
   },
   5: {
     numero: 5,
     fide: [1400, null],
-    resumo: "Ataque ao rei, lances finos, defesa e conversão.",
+    resumo: "Ataque ao rei, lances finos, defesa e conversão, e os mates raros.",
     aulasParaFechar: 4,
   },
+};
+
+/**
+ * O metal de cada nível — Madeira, Ferro, Bronze, Prata e Ouro (Doug, 16/9).
+ *
+ * Nasceu nos cartões de tema de `/tatica`, que ganharam a cor do nível, e é a
+ * escala que se lê sem legenda: ninguém precisa perguntar se prata vem antes de
+ * ouro. As cores moram em `app/globals.css` (`--color-nivel-N-*`), com o
+ * contraste medido em `lib/tema/pares.ts`.
+ */
+export const METAL: Record<Nivel, string> = {
+  1: "Madeira",
+  2: "Ferro",
+  3: "Bronze",
+  4: "Prata",
+  5: "Ouro",
 };
 
 /** Os níveis que são a meta declarada da OLESC de 2026. */
@@ -152,9 +168,9 @@ export const PROVA_DE_NIVEL = { puzzles: 12, paraPassar: 9 } as const;
  * O que cai em cada nível
  * ------------------------------------------------------------------ */
 
-/** As tags de tática do nível, na ordem dos blocos. */
+/** As tags de tática do nível, na ordem dos blocos — sem os temas em teste. */
 export function temasDoNivel(n: Nivel): readonly string[] {
-  return BLOCOS.filter((b) => b.nivel === n).flatMap((b) => b.temas.map((t) => t.tag));
+  return BLOCOS.filter((b) => b.nivel === n).flatMap((b) => b.temas.filter(contaNoCurso).map((t) => t.tag));
 }
 
 /**
@@ -185,9 +201,9 @@ export function temasDaProva(nivel: Nivel): string[] {
   return NIVEIS.filter((n) => n <= nivel).flatMap((n) => [...temasDoNivel(n)]);
 }
 
-/** Em que nível mora um tema de tática. `undefined` se a tag não é do currículo. */
+/** Em que nível mora um tema de tática. `undefined` se a tag não é do currículo (ou está em teste). */
 export function nivelDoTema(tag: string): Nivel | undefined {
-  return BLOCOS.find((b) => b.temas.some((t) => t.tag === tag))?.nivel;
+  return BLOCOS.find((b) => b.temas.some((t) => t.tag === tag && contaNoCurso(t)))?.nivel;
 }
 
 /* ------------------------------------------------------------------ *

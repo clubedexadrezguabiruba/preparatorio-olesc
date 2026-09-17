@@ -40,7 +40,7 @@ import { NIVEIS, type Nivel } from "./nivel.ts";
  * treinador. É por isso que {@link Selo} tem `falta` e não um booleano.
  */
 
-export type Familia = "tatica" | "finais" | "repertorio" | "nivel" | "hora" | "constante";
+export type Familia = "tatica" | "finais" | "repertorio" | "nivel" | "hora" | "constante" | "rating";
 
 export type Selo = {
   /** Único, e estável: ele vira `key` de lista e um dia vira linha de banco. */
@@ -63,13 +63,34 @@ export type Selo = {
  * "1 tema" — o que está certo hoje e vira um erro de compilação na primeira vez
  * que alguém acrescentar um degrau 1. O tipo declarado deixa a lista ser dado.
  */
-export const DEGRAUS: Record<"tatica" | "finais" | "constante", readonly number[]> = {
+export const DEGRAUS: Record<
+  "tatica" | "ratingAcimaDoInicio" | "rating" | "ratingSeguidos" | "finais" | "constante",
+  readonly number[]
+> = {
   /**
-   * **13 no lugar de 10**, e o motivo é o currículo: 13 é a meta da OLESC (os
-   * temas dos níveis 1 a 3), o número que a `/trilha` já celebra. Um selo em 13
-   * é *"cheguei ao torneio pronto"*; um selo em 10 é um número redondo.
+   * **14 no lugar de 10**, e o motivo é o currículo: 14 é a meta da OLESC (os
+   * temas dos níveis 1 a 3), o número que a `/trilha` já celebra. Um selo em 14
+   * é *"cheguei ao torneio pronto"*; um selo em 10 é um número redondo. Era 13
+   * até 16/9/2026, quando o xeque descoberto entrou no nível 2. O 29 é o fim do
+   * nível 4, e o 63 o currículo inteiro.
    */
-  tatica: [3, 7, 13, 24, 36],
+  tatica: [3, 7, 14, 29, 63],
+  /**
+   * Quanto o **recorde** subiu acima do rating com que o aluno começou o modo — o
+   * "+100". Conta a partir de `rating_inicial` guardado na linha do aluno (600
+   * para todos), e não de um número escrito aqui: quem jogou pela regra do
+   * primeiro dia começou em 400.
+   */
+  ratingAcimaDoInicio: [100],
+  /**
+   * O **máximo** já atingido na tática rating, e não o rating de agora: selo
+   * ganho não se perde num dia ruim (a mesma regra da `maiorSequencia`). Números
+   * propostos pelo Doug em 15/9. Exigem ao menos um problema resolvido: quem
+   * começa em 1300 não ganha o de 1000 só por abrir a página.
+   */
+  rating: [1000, 1200, 1400],
+  /** Acertos seguidos na tática rating — a **melhor** sequência, não a atual. */
+  ratingSeguidos: [10],
   /**
    * **O degrau 1 existe para ser alcançável hoje.** São 49 aulas na taxonomia e
    * 2 publicadas. Os degraus 5, 10, 25 e 49 já ficam escritos e acendem sozinhos
@@ -101,6 +122,17 @@ export type ParaOsSelos = {
   readonly diasComUmaHora: number;
   /** A **maior** sequência de dias seguidos já atingida — não a atual. */
   readonly maiorSequencia: number;
+  /**
+   * A tática rating, lida de `rating_tatica` — ou `null` se ele nunca jogou.
+   * `maximo` e `melhorSequencia` são os recordes, que só sobem.
+   */
+  readonly ratingTatica: {
+    readonly maximo: number;
+    readonly melhorSequencia: number;
+    /** O rating com que ele começou o modo. */
+    readonly inicio: number;
+    readonly resolvidos: number;
+  } | null;
 };
 
 function plural(n: number, um: string, muitos: string): string {
@@ -162,8 +194,8 @@ export function selos(p: ParaOsSelos): Selo[] {
         degrau,
         p.temasFechados,
         `${degrau} temas de tática`,
-        degrau === 13
-          ? "Os 13 temas dos níveis 1 a 3 — a meta da OLESC."
+        degrau === 14
+          ? "Os 14 temas dos níveis 1 a 3 — a meta da OLESC."
           : "Um tema fecha com aquecimento, série e prova.",
         ["tema", "temas"],
       ),
@@ -253,6 +285,61 @@ export function selos(p: ParaOsSelos): Selo[] {
         `${degrau} dias seguidos`,
         "Dias seguidos com 60 minutos de treino no site. A partida declarada não conta.",
         ["dia", "dias"],
+      ),
+    );
+  }
+
+  /*
+   * A tática rating vem **por último** de propósito. `proximos` mostra um selo
+   * por família, na ordem desta lista; no segundo lugar, o convite do rating
+   * tiraria do painel o próximo selo de finais, que o aluno via até 15/9. O
+   * convite para o modo já está no cartão do painel; os selos ganhos aparecem
+   * como os outros.
+   */
+  const maximo = Math.round(p.ratingTatica?.maximo ?? 0);
+  const jogou = (p.ratingTatica?.resolvidos ?? 0) > 0;
+  const faltaNoRecorde = (alvo: number) =>
+    p.ratingTatica === null || !jogou
+      ? "jogue a tática rating"
+      : `${alvo - maximo === 1 ? "falta 1 ponto" : `faltam ${alvo - maximo} pontos`} no seu recorde`;
+
+  for (const acima of DEGRAUS.ratingAcimaDoInicio) {
+    const alvo = Math.round(p.ratingTatica?.inicio ?? 0) + acima;
+    const ganho = jogou && maximo >= alvo;
+    lista.push({
+      id: `rating-mais-${acima}`,
+      familia: "rating",
+      nome: `+${acima} na tática rating`,
+      conta: `O recorde subiu ${acima} pontos acima do rating com que você começou o modo.`,
+      ganho,
+      falta: ganho ? null : faltaNoRecorde(alvo),
+    });
+  }
+
+  for (const degrau of DEGRAUS.rating) {
+    const ganho = jogou && maximo >= degrau;
+    lista.push({
+      id: `rating-${degrau}`,
+      familia: "rating",
+      nome: `Rating ${degrau} na tática`,
+      conta: `O recorde da tática rating chegou a ${degrau}. Um dia ruim não tira este selo.`,
+      ganho,
+      falta: ganho ? null : faltaNoRecorde(degrau),
+    });
+  }
+
+  for (const degrau of DEGRAUS.ratingSeguidos) {
+    const melhor = p.ratingTatica?.melhorSequencia ?? 0;
+    lista.push(
+      porCondicao(
+        "rating",
+        `rating-seguidos-${degrau}`,
+        melhor >= degrau,
+        `${degrau} seguidos na tática rating`,
+        `${degrau} problemas certos em sequência, sem nenhum erro no meio.`,
+        p.ratingTatica === null
+          ? "jogue a tática rating"
+          : `acerte ${degrau} em sequência (seu melhor: ${melhor})`,
       ),
     );
   }

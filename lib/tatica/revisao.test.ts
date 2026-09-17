@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { filaCompleta, filaDeRevisao, type LinhaDeTentativa } from "./revisao.ts";
+import { filaCompleta, filaDeRevisao, filaServivel, type LinhaDeTentativa } from "./revisao.ts";
 
 /**
  * A fila é uma função das linhas: estes testes montam o histórico à mão e
@@ -37,6 +37,18 @@ test("puzzle errado volta em dois dias, e não antes", () => {
   assert.deepEqual(ids(filaDeRevisao(linhas, "2026-09-16")), ["a"]);
   assert.equal(filaCompleta(linhas)[0].devidoEm, "2026-09-16");
   assert.equal(filaCompleta(linhas)[0].nivel, 1);
+});
+
+test("o erro do modo rating volta na revisão do dia, com a origem de onde ele sai", () => {
+  // Decisão do Doug de 15/9: o erro no modo rating vai para a revisão do dia (e
+  // não para a prova do tema). A fila reage a `acertou`, não ao modo — este
+  // teste é o que impede alguém de "consertar" isso filtrando por modo.
+  const linhas = [
+    linha("a", "2026-09-14", false, "rating", { tema: "rating-base", origem: "rating-base" }),
+  ];
+  const fila = filaDeRevisao(linhas, "2026-09-16");
+  assert.deepEqual(ids(fila), ["a"]);
+  assert.equal(fila[0].origem, "rating-base");
 });
 
 test("puzzle nunca errado não entra na fila", () => {
@@ -123,4 +135,27 @@ test("origem nula usa o tema, e a origem da prova é preservada", () => {
   const daProva = [linha("b", "2026-09-14", false, "prova", { origem: "fork", tema: "pin" })];
   assert.equal(filaCompleta(daProva)[0].origem, "fork");
   assert.equal(filaCompleta(daProva)[0].tema, "pin");
+});
+
+test("o puzzle que sumiu do banco não trava a fila, e o que mudou de arquivo é achado", () => {
+  // O banco foi refeito com o CSV de set/2026: "velho1".."velho12" saíram do
+  // recorte, "mudou" saiu do arquivo de `pin` e ficou só no de `fork`. Os
+  // órfãos são os mais atrasados — nunca vencem, porque ninguém os acerta — e
+  // por isso ocupavam as dez vagas do dia: a revisão dizia "nada para revisar"
+  // enquanto o painel mandava revisar 13.
+  const linhas = [
+    ...Array.from({ length: 12 }, (_, i) => linha(`velho${i + 1}`, "2026-09-01", false)),
+    linha("mudou", "2026-09-10", false, "prova", { tema: "pin", origem: "pin" }),
+    linha("vivo", "2026-09-12", false),
+  ];
+  const noDisco = new Map([["fork", new Set(["vivo", "mudou"])]]);
+  const banco = {
+    estaEm: (tag: string, id: string) => noDisco.get(tag)?.has(id) ?? false,
+    outraOrigem: (id: string) => (noDisco.get("fork")!.has(id) ? "fork" : undefined),
+  };
+
+  const servivel = filaServivel(filaDeRevisao(linhas, "2026-09-16"), banco);
+  assert.deepEqual(ids(servivel), ["mudou", "vivo"]);
+  assert.equal(servivel[0].origem, "fork", "a origem passa a ser o arquivo onde ele está");
+  assert.equal(servivel[0].tema, "pin", "o tema da tentativa não muda");
 });

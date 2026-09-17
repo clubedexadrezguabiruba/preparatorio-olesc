@@ -36,13 +36,17 @@ import {
 } from "@/lib/tarefas/agenda";
 import { AGENDA } from "@/lib/tarefas/conteudo";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
-import { BLOCOS } from "@/lib/tatica/blocos";
+import { BLOCOS, contaNoCurso } from "@/lib/tatica/blocos";
 import { progressoPorTema, revisaoDeHoje } from "@/lib/tatica/progresso";
+import { INICIO } from "@/lib/tatica/glicko2";
+import { serieDoGrafico } from "@/lib/tatica/rating-grafico";
+import { ratingDoAluno, tentativasDoRating } from "@/lib/tatica/rating-leitura";
 import { Agenda } from "./Agenda";
 import { Agora } from "./Agora";
 import { Escada } from "./Escada";
 import { Hoje } from "./Hoje";
 import { Modulos, Prova } from "./Nivel";
+import { RatingDeTatica } from "./RatingDeTatica";
 import { Selos } from "./Selos";
 
 export const metadata: Metadata = { title: "Painel — Preparatório OLESC" };
@@ -71,8 +75,9 @@ const EQUIPE = { M: "Equipe masculina", F: "Equipe feminina" } as const;
  * 2. **A escada** — cinco degraus, "você está aqui".
  * 3. **Hoje** — quanto do dia já foi. Contexto, não instrução.
  * 4. **Os três módulos** — quanto falta em cada frente.
- * 5. **A prova**, quando ela está fechada ou já passada.
- * 6. **Os selos** — o que ele já conquistou, e dois que estão perto.
+ * 5. **A tática rating** — o número e a minicurva de 30 dias (15/9). Contexto.
+ * 6. **A prova**, quando ela está fechada ou já passada.
+ * 7. **Os selos** — o que ele já conquistou, e dois que estão perto.
  * 7. **A agenda**, fechada: são 4 itens presos a data, e a data deixou de ser o
  *    eixo do site em 9/9.
  *
@@ -109,6 +114,8 @@ export default async function Painel() {
     indice,
     repertorio,
     conquistado,
+    ratingTatica,
+    tentativasNoRating,
   ] = await Promise.all([
     progressoPorTema(perfil.id),
     tarefasMarcadas(perfil.id),
@@ -129,6 +136,8 @@ export default async function Painel() {
     lerIndice(),
     progressoDoRepertorio(),
     nivelConquistado(perfil.id),
+    ratingDoAluno(perfil.id),
+    tentativasDoRating(perfil.id),
   ]);
 
   // A trilha de finais: o que está publicado, e o que dele já foi aprendido. As
@@ -225,7 +234,7 @@ export default async function Painel() {
    * um selo de "13 temas" que zerasse ao subir de nível não seria um selo.
    */
   const temasFechados = BLOCOS.flatMap((b) => b.temas).filter((t) =>
-    temaFechado(progresso.get(t.tag)?.feitos),
+    contaNoCurso(t) && temaFechado(progresso.get(t.tag)?.feitos),
   ).length;
 
   const aBase = (cor: "brancas" | "pretas") => {
@@ -240,6 +249,10 @@ export default async function Painel() {
     0,
   );
 
+  // Os últimos 30 dias; o recorte vem depois da conta, dentro de `serieDoGrafico`,
+  // para o recorde de cada ponto contar o pico de antes da janela.
+  const curvaDoRating = serieDoGrafico(tentativasNoRating, { dias: 30, hoje });
+
   const listaDeSelos = selos({
     temasFechados,
     aulasAprendidas: aprendidasDaTrilha(aulasDeFinais, finais, comPratica).size,
@@ -252,6 +265,15 @@ export default async function Painel() {
     conquistado,
     diasComUmaHora: diasComOMinimo(minutos),
     maiorSequencia: maiorSequenciaDeDias(minutos),
+    // O máximo e a melhor sequência, que só sobem: selo ganho não some.
+    ratingTatica: ratingTatica
+      ? {
+          maximo: ratingTatica.ratingMaximo,
+          melhorSequencia: ratingTatica.melhorSequencia,
+          inicio: ratingTatica.ratingInicial,
+          resolvidos: ratingTatica.resolvidos,
+        }
+      : null,
   });
   const grupos = agrupar(emOrdemDeData(AGENDA));
   const itensDaAgenda = grupos.reduce((n, g) => n + g.itens.length, 0);
@@ -300,6 +322,8 @@ export default async function Painel() {
           acerto={feitos ? Math.round((100 * certos) / feitos) : null}
           linhasARevisar={linhasARevisar}
         />
+
+        <RatingDeTatica estado={ratingTatica} serie={curvaDoRating} inicio={INICIO.rating} />
 
         <Prova nivel={nivel} fechado={fechamento.fechado} conquistado={conquistado} />
 

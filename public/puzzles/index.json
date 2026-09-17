@@ -1,6 +1,7 @@
 {
   "fonte": "lichess.org/training - banco público de puzzles, CC0",
-  "geradoEm": "2026-09-09",
+  "geradoEm": "2026-09-16",
+  "dumpDoLichess": "2026-09",
   "filtros": {
     "rating": [
       700,
@@ -11,11 +12,12 @@
     "desvioMaximo": 100,
     "tetoPorArquivo": 1000
   },
-  "totalNoSite": 175987,
+  "totalNoSite": 271924,
   "temas": [
     {
       "tag": "mateIn1",
       "bloco": 1,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 700,
@@ -27,7 +29,7 @@
           "de": 900,
           "ate": 1100,
           "arquivo": "mateIn1/900-1100.json",
-          "total": 1000
+          "total": 1005
         },
         {
           "de": 1100,
@@ -57,15 +59,16 @@
           "de": 1900,
           "ate": 2100,
           "arquivo": "mateIn1/1900-2100.json",
-          "total": 472
+          "total": 1000
         }
       ],
-      "total": 6472,
-      "noBanco": 103047
+      "total": 7005,
+      "noBanco": 456199
     },
     {
       "tag": "mateIn2",
       "bloco": 1,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 700,
@@ -77,13 +80,13 @@
           "de": 900,
           "ate": 1100,
           "arquivo": "mateIn2/900-1100.json",
-          "total": 1000
+          "total": 1021
         },
         {
           "de": 1100,
           "ate": 1300,
           "arquivo": "mateIn2/1100-1300.json",
-          "total": 1000
+          "total": 1075
         },
         {
           "de": 1300,
@@ -110,12 +113,13 @@
           "total": 1000
         }
       ],
-      "total": 7000,
-      "noBanco": 203685
+      "total": 7096,
+      "noBanco": 514280
     },
     {
       "tag": "hangingPiece",
       "bloco": 1,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 700,
@@ -161,11 +165,12 @@
         }
       ],
       "total": 7000,
-      "noBanco": 63171
+      "noBanco": 127309
     },
     {
       "tag": "backRankMate",
       "bloco": 2,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 800,
@@ -177,7 +182,7 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "backRankMate/1000-1200.json",
-          "total": 1000
+          "total": 1017
         },
         {
           "de": 1200,
@@ -189,7 +194,7 @@
           "de": 1400,
           "ate": 1600,
           "arquivo": "backRankMate/1400-1600.json",
-          "total": 1000
+          "total": 1064
         },
         {
           "de": 1600,
@@ -201,21 +206,22 @@
           "de": 1800,
           "ate": 2000,
           "arquivo": "backRankMate/1800-2000.json",
-          "total": 677
+          "total": 1000
         },
         {
           "de": 2000,
           "ate": 2100,
           "arquivo": "backRankMate/2000-2100.json",
-          "total": 168
+          "total": 249
         }
       ],
-      "total": 5845,
-      "noBanco": 34690
+      "total": 6330,
+      "noBanco": 66167
     },
     {
       "tag": "smotheredMate",
       "bloco": 2,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 800,
@@ -227,333 +233,340 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "smotheredMate/1000-1200.json",
-          "total": 757
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "smotheredMate/1200-1400.json",
-          "total": 1000
+          "total": 1114
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "smotheredMate/1400-1600.json",
-          "total": 618
+          "total": 1000
         },
         {
           "de": 1600,
           "ate": 1800,
           "arquivo": "smotheredMate/1600-1800.json",
-          "total": 196
+          "total": 544
         },
         {
           "de": 1800,
           "ate": 2000,
           "arquivo": "smotheredMate/1800-2000.json",
-          "total": 36
+          "total": 79
         },
         {
           "de": 2000,
           "ate": 2100,
           "arquivo": "smotheredMate/2000-2100.json",
-          "total": 6
+          "total": 14
         }
       ],
-      "total": 3613,
-      "noBanco": 4718
+      "total": 4751,
+      "noBanco": 16478
     },
     {
       "tag": "arabianMate",
       "bloco": 2,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 800,
           "ate": 1000,
           "arquivo": "arabianMate/800-1000.json",
-          "total": 551
+          "total": 1000
         },
         {
           "de": 1000,
           "ate": 1200,
           "arquivo": "arabianMate/1000-1200.json",
-          "total": 664
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "arabianMate/1200-1400.json",
-          "total": 430
+          "total": 793
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "arabianMate/1400-1600.json",
-          "total": 294
+          "total": 640
         },
         {
           "de": 1600,
           "ate": 1800,
           "arquivo": "arabianMate/1600-1800.json",
-          "total": 206
+          "total": 354
         },
         {
           "de": 1800,
           "ate": 2000,
           "arquivo": "arabianMate/1800-2000.json",
-          "total": 99
+          "total": 200
         },
         {
           "de": 2000,
           "ate": 2100,
           "arquivo": "arabianMate/2000-2100.json",
-          "total": 33
+          "total": 53
         }
       ],
-      "total": 2277,
-      "noBanco": 2277
+      "total": 4040,
+      "noBanco": 5331
     },
     {
       "tag": "anastasiaMate",
       "bloco": 2,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 800,
           "ate": 1000,
           "arquivo": "anastasiaMate/800-1000.json",
-          "total": 533
+          "total": 1000
         },
         {
           "de": 1000,
           "ate": 1200,
           "arquivo": "anastasiaMate/1000-1200.json",
-          "total": 430
+          "total": 765
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "anastasiaMate/1200-1400.json",
-          "total": 366
+          "total": 1000
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "anastasiaMate/1400-1600.json",
-          "total": 945
+          "total": 1000
         },
         {
           "de": 1600,
           "ate": 1800,
           "arquivo": "anastasiaMate/1600-1800.json",
-          "total": 114
+          "total": 230
         },
         {
           "de": 1800,
           "ate": 2000,
           "arquivo": "anastasiaMate/1800-2000.json",
-          "total": 51
+          "total": 91
         },
         {
           "de": 2000,
           "ate": 2100,
           "arquivo": "anastasiaMate/2000-2100.json",
-          "total": 7
+          "total": 21
         }
       ],
-      "total": 2446,
-      "noBanco": 2446
+      "total": 4107,
+      "noBanco": 5480
     },
     {
       "tag": "hookMate",
       "bloco": 2,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 800,
           "ate": 1000,
           "arquivo": "hookMate/800-1000.json",
-          "total": 357
+          "total": 1000
         },
         {
           "de": 1000,
           "ate": 1200,
           "arquivo": "hookMate/1000-1200.json",
-          "total": 718
+          "total": 1000
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "hookMate/1200-1400.json",
-          "total": 599
+          "total": 1000
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "hookMate/1400-1600.json",
-          "total": 532
+          "total": 1000
         },
         {
           "de": 1600,
           "ate": 1800,
           "arquivo": "hookMate/1600-1800.json",
-          "total": 355
+          "total": 723
         },
         {
           "de": 1800,
           "ate": 2000,
           "arquivo": "hookMate/1800-2000.json",
-          "total": 176
+          "total": 389
         },
         {
           "de": 2000,
           "ate": 2100,
           "arquivo": "hookMate/2000-2100.json",
-          "total": 58
+          "total": 85
         }
       ],
-      "total": 2795,
-      "noBanco": 2795
+      "total": 5197,
+      "noBanco": 8166
     },
     {
       "tag": "bodenMate",
       "bloco": 3,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
           "ate": 1200,
           "arquivo": "bodenMate/1000-1200.json",
-          "total": 101
+          "total": 427
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "bodenMate/1200-1400.json",
-          "total": 28
+          "total": 337
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "bodenMate/1400-1600.json",
-          "total": 37
+          "total": 158
         },
         {
           "de": 1600,
           "ate": 1800,
           "arquivo": "bodenMate/1600-1800.json",
-          "total": 39
-        },
-        {
-          "de": 1800,
-          "ate": 2000,
-          "arquivo": "bodenMate/1800-2000.json",
-          "total": 23
-        },
-        {
-          "de": 2000,
-          "ate": 2100,
-          "arquivo": "bodenMate/2000-2100.json",
-          "total": 3
-        }
-      ],
-      "total": 231,
-      "noBanco": 231
-    },
-    {
-      "tag": "doubleBishopMate",
-      "bloco": 3,
-      "faixas": [
-        {
-          "de": 1000,
-          "ate": 1200,
-          "arquivo": "doubleBishopMate/1000-1200.json",
-          "total": 11
-        },
-        {
-          "de": 1200,
-          "ate": 1400,
-          "arquivo": "doubleBishopMate/1200-1400.json",
-          "total": 11
-        },
-        {
-          "de": 1400,
-          "ate": 1600,
-          "arquivo": "doubleBishopMate/1400-1600.json",
-          "total": 29
-        },
-        {
-          "de": 1600,
-          "ate": 1800,
-          "arquivo": "doubleBishopMate/1600-1800.json",
-          "total": 13
-        },
-        {
-          "de": 1800,
-          "ate": 2000,
-          "arquivo": "doubleBishopMate/1800-2000.json",
-          "total": 12
-        },
-        {
-          "de": 2000,
-          "ate": 2100,
-          "arquivo": "doubleBishopMate/2000-2100.json",
-          "total": 3
-        }
-      ],
-      "total": 79,
-      "noBanco": 79
-    },
-    {
-      "tag": "dovetailMate",
-      "bloco": 3,
-      "faixas": [
-        {
-          "de": 1000,
-          "ate": 1200,
-          "arquivo": "dovetailMate/1000-1200.json",
-          "total": 234
-        },
-        {
-          "de": 1200,
-          "ate": 1400,
-          "arquivo": "dovetailMate/1200-1400.json",
-          "total": 225
-        },
-        {
-          "de": 1400,
-          "ate": 1600,
-          "arquivo": "dovetailMate/1400-1600.json",
-          "total": 206
-        },
-        {
-          "de": 1600,
-          "ate": 1800,
-          "arquivo": "dovetailMate/1600-1800.json",
           "total": 104
         },
         {
           "de": 1800,
           "ate": 2000,
+          "arquivo": "bodenMate/1800-2000.json",
+          "total": 43
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "bodenMate/2000-2100.json",
+          "total": 15
+        }
+      ],
+      "total": 1084,
+      "noBanco": 1084
+    },
+    {
+      "tag": "doubleBishopMate",
+      "bloco": 3,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "doubleBishopMate/1000-1200.json",
+          "total": 126
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "doubleBishopMate/1200-1400.json",
+          "total": 97
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "doubleBishopMate/1400-1600.json",
+          "total": 102
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "doubleBishopMate/1600-1800.json",
+          "total": 48
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "doubleBishopMate/1800-2000.json",
+          "total": 20
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "doubleBishopMate/2000-2100.json",
+          "total": 8
+        }
+      ],
+      "total": 401,
+      "noBanco": 401
+    },
+    {
+      "tag": "dovetailMate",
+      "bloco": 3,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "dovetailMate/1000-1200.json",
+          "total": 1000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "dovetailMate/1200-1400.json",
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "dovetailMate/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "dovetailMate/1600-1800.json",
+          "total": 930
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
           "arquivo": "dovetailMate/1800-2000.json",
-          "total": 84
+          "total": 503
         },
         {
           "de": 2000,
           "ate": 2100,
           "arquivo": "dovetailMate/2000-2100.json",
-          "total": 32
+          "total": 166
         }
       ],
-      "total": 885,
-      "noBanco": 885
+      "total": 4599,
+      "noBanco": 7667
     },
     {
       "tag": "mateIn3",
       "bloco": 3,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
           "ate": 1200,
           "arquivo": "mateIn3/1000-1200.json",
-          "total": 1000
+          "total": 1033
         },
         {
           "de": 1200,
@@ -577,7 +590,7 @@
           "de": 1800,
           "ate": 2000,
           "arquivo": "mateIn3/1800-2000.json",
-          "total": 1000
+          "total": 1080
         },
         {
           "de": 2000,
@@ -586,12 +599,13 @@
           "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 53469
+      "total": 6113,
+      "noBanco": 127851
     },
     {
       "tag": "fork",
       "bloco": 4,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 800,
@@ -627,7 +641,7 @@
           "de": 1800,
           "ate": 2000,
           "arquivo": "fork/1800-2000.json",
-          "total": 1000
+          "total": 1087
         },
         {
           "de": 2000,
@@ -636,12 +650,13 @@
           "total": 1000
         }
       ],
-      "total": 7000,
-      "noBanco": 256511
+      "total": 7087,
+      "noBanco": 517285
     },
     {
       "tag": "pin",
       "bloco": 4,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 800,
@@ -653,7 +668,7 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "pin/1000-1200.json",
-          "total": 1000
+          "total": 1182
         },
         {
           "de": 1200,
@@ -677,7 +692,7 @@
           "de": 1800,
           "ate": 2000,
           "arquivo": "pin/1800-2000.json",
-          "total": 1000
+          "total": 1048
         },
         {
           "de": 2000,
@@ -686,12 +701,13 @@
           "total": 1000
         }
       ],
-      "total": 7000,
-      "noBanco": 101067
+      "total": 7230,
+      "noBanco": 234663
     },
     {
       "tag": "skewer",
       "bloco": 4,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 800,
@@ -727,7 +743,7 @@
           "de": 1800,
           "ate": 2000,
           "arquivo": "skewer/1800-2000.json",
-          "total": 1000
+          "total": 1084
         },
         {
           "de": 2000,
@@ -736,12 +752,13 @@
           "total": 1000
         }
       ],
-      "total": 7000,
-      "noBanco": 36886
+      "total": 7084,
+      "noBanco": 89483
     },
     {
       "tag": "discoveredAttack",
       "bloco": 4,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 800,
@@ -753,7 +770,7 @@
           "de": 1000,
           "ate": 1200,
           "arquivo": "discoveredAttack/1000-1200.json",
-          "total": 1000
+          "total": 1006
         },
         {
           "de": 1200,
@@ -777,7 +794,7 @@
           "de": 1800,
           "ate": 2000,
           "arquivo": "discoveredAttack/1800-2000.json",
-          "total": 1000
+          "total": 1046
         },
         {
           "de": 2000,
@@ -786,30 +803,31 @@
           "total": 1000
         }
       ],
-      "total": 7000,
-      "noBanco": 102959
+      "total": 7052,
+      "noBanco": 211451
     },
     {
       "tag": "doubleCheck",
       "bloco": 4,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 800,
           "ate": 1000,
           "arquivo": "doubleCheck/800-1000.json",
-          "total": 470
+          "total": 1000
         },
         {
           "de": 1000,
           "ate": 1200,
           "arquivo": "doubleCheck/1000-1200.json",
-          "total": 1000
+          "total": 1053
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "doubleCheck/1200-1400.json",
-          "total": 1000
+          "total": 1015
         },
         {
           "de": 1400,
@@ -821,7 +839,7 @@
           "de": 1600,
           "ate": 1800,
           "arquivo": "doubleCheck/1600-1800.json",
-          "total": 1000
+          "total": 1047
         },
         {
           "de": 1800,
@@ -833,15 +851,67 @@
           "de": 2000,
           "ate": 2100,
           "arquivo": "doubleCheck/2000-2100.json",
-          "total": 725
+          "total": 1000
         }
       ],
-      "total": 6195,
-      "noBanco": 8411
+      "total": 7115,
+      "noBanco": 22347
+    },
+    {
+      "tag": "discoveredCheck",
+      "bloco": 4,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 800,
+          "ate": 1000,
+          "arquivo": "discoveredCheck/800-1000.json",
+          "total": 1000
+        },
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "discoveredCheck/1000-1200.json",
+          "total": 1000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "discoveredCheck/1200-1400.json",
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "discoveredCheck/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "discoveredCheck/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "discoveredCheck/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "discoveredCheck/2000-2100.json",
+          "total": 1000
+        }
+      ],
+      "total": 7000,
+      "noBanco": 70187
     },
     {
       "tag": "capturingDefender",
       "bloco": 5,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
@@ -859,33 +929,34 @@
           "de": 1400,
           "ate": 1600,
           "arquivo": "capturingDefender/1400-1600.json",
-          "total": 1000
+          "total": 1010
         },
         {
           "de": 1600,
           "ate": 1800,
           "arquivo": "capturingDefender/1600-1800.json",
-          "total": 1000
+          "total": 1002
         },
         {
           "de": 1800,
           "ate": 2000,
           "arquivo": "capturingDefender/1800-2000.json",
-          "total": 1000
+          "total": 1103
         },
         {
           "de": 2000,
           "ate": 2100,
           "arquivo": "capturingDefender/2000-2100.json",
-          "total": 996
+          "total": 1000
         }
       ],
-      "total": 5996,
-      "noBanco": 17884
+      "total": 6115,
+      "noBanco": 28356
     },
     {
       "tag": "deflection",
       "bloco": 5,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
@@ -915,7 +986,7 @@
           "de": 1800,
           "ate": 2000,
           "arquivo": "deflection/1800-2000.json",
-          "total": 1000
+          "total": 1110
         },
         {
           "de": 2000,
@@ -924,12 +995,13 @@
           "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 66950
+      "total": 6110,
+      "noBanco": 165252
     },
     {
       "tag": "attraction",
       "bloco": 5,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
@@ -941,25 +1013,25 @@
           "de": 1200,
           "ate": 1400,
           "arquivo": "attraction/1200-1400.json",
-          "total": 1000
+          "total": 1011
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "attraction/1400-1600.json",
-          "total": 1000
+          "total": 1023
         },
         {
           "de": 1600,
           "ate": 1800,
           "arquivo": "attraction/1600-1800.json",
-          "total": 1000
+          "total": 1016
         },
         {
           "de": 1800,
           "ate": 2000,
           "arquivo": "attraction/1800-2000.json",
-          "total": 1000
+          "total": 1127
         },
         {
           "de": 2000,
@@ -968,12 +1040,13 @@
           "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 62666
+      "total": 6177,
+      "noBanco": 148536
     },
     {
       "tag": "trappedPiece",
       "bloco": 5,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
@@ -991,7 +1064,7 @@
           "de": 1400,
           "ate": 1600,
           "arquivo": "trappedPiece/1400-1600.json",
-          "total": 1000
+          "total": 1017
         },
         {
           "de": 1600,
@@ -1003,7 +1076,7 @@
           "de": 1800,
           "ate": 2000,
           "arquivo": "trappedPiece/1800-2000.json",
-          "total": 1000
+          "total": 1036
         },
         {
           "de": 2000,
@@ -1012,12 +1085,13 @@
           "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 26834
+      "total": 6053,
+      "noBanco": 46512
     },
     {
       "tag": "xRayAttack",
       "bloco": 5,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
@@ -1035,7 +1109,7 @@
           "de": 1400,
           "ate": 1600,
           "arquivo": "xRayAttack/1400-1600.json",
-          "total": 1000
+          "total": 1061
         },
         {
           "de": 1600,
@@ -1047,21 +1121,22 @@
           "de": 1800,
           "ate": 2000,
           "arquivo": "xRayAttack/1800-2000.json",
-          "total": 641
+          "total": 1000
         },
         {
           "de": 2000,
           "ate": 2100,
           "arquivo": "xRayAttack/2000-2100.json",
-          "total": 260
+          "total": 567
         }
       ],
-      "total": 4901,
-      "noBanco": 6261
+      "total": 5628,
+      "noBanco": 14730
     },
     {
       "tag": "exposedKing",
       "bloco": 6,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
@@ -1079,19 +1154,19 @@
           "de": 1400,
           "ate": 1600,
           "arquivo": "exposedKing/1400-1600.json",
-          "total": 1000
+          "total": 1023
         },
         {
           "de": 1600,
           "ate": 1800,
           "arquivo": "exposedKing/1600-1800.json",
-          "total": 1000
+          "total": 1006
         },
         {
           "de": 1800,
           "ate": 2000,
           "arquivo": "exposedKing/1800-2000.json",
-          "total": 1000
+          "total": 1113
         },
         {
           "de": 2000,
@@ -1100,12 +1175,13 @@
           "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 33705
+      "total": 6142,
+      "noBanco": 101436
     },
     {
       "tag": "attackingF2F7",
       "bloco": 6,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
@@ -1141,15 +1217,16 @@
           "de": 2000,
           "ate": 2100,
           "arquivo": "attackingF2F7/2000-2100.json",
-          "total": 444
+          "total": 699
         }
       ],
-      "total": 5444,
-      "noBanco": 8654
+      "total": 5699,
+      "noBanco": 18671
     },
     {
       "tag": "kingsideAttack",
       "bloco": 6,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
@@ -1179,7 +1256,7 @@
           "de": 1800,
           "ate": 2000,
           "arquivo": "kingsideAttack/1800-2000.json",
-          "total": 1000
+          "total": 1080
         },
         {
           "de": 2000,
@@ -1188,12 +1265,13 @@
           "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 103782
+      "total": 6080,
+      "noBanco": 234577
     },
     {
       "tag": "sacrifice",
       "bloco": 6,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
@@ -1217,13 +1295,13 @@
           "de": 1600,
           "ate": 1800,
           "arquivo": "sacrifice/1600-1800.json",
-          "total": 1000
+          "total": 1025
         },
         {
           "de": 1800,
           "ate": 2000,
           "arquivo": "sacrifice/1800-2000.json",
-          "total": 1000
+          "total": 1107
         },
         {
           "de": 2000,
@@ -1232,12 +1310,103 @@
           "total": 1000
         }
       ],
+      "total": 6132,
+      "noBanco": 263034
+    },
+    {
+      "tag": "queensideAttack",
+      "bloco": 6,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "queensideAttack/1000-1200.json",
+          "total": 1000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "queensideAttack/1200-1400.json",
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "queensideAttack/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "queensideAttack/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "queensideAttack/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "queensideAttack/2000-2100.json",
+          "total": 1000
+        }
+      ],
       "total": 6000,
-      "noBanco": 105300
+      "noBanco": 44924
+    },
+    {
+      "tag": "greekGift",
+      "bloco": 6,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "greekGift/1000-1200.json",
+          "total": 41
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "greekGift/1200-1400.json",
+          "total": 75
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "greekGift/1400-1600.json",
+          "total": 217
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "greekGift/1600-1800.json",
+          "total": 430
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "greekGift/1800-2000.json",
+          "total": 352
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "greekGift/2000-2100.json",
+          "total": 127
+        }
+      ],
+      "total": 1242,
+      "noBanco": 1242
     },
     {
       "tag": "intermezzo",
       "bloco": 7,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1100,
@@ -1271,11 +1440,12 @@
         }
       ],
       "total": 5000,
-      "noBanco": 22627
+      "noBanco": 44328
     },
     {
       "tag": "quietMove",
       "bloco": 7,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1100,
@@ -1287,13 +1457,13 @@
           "de": 1300,
           "ate": 1500,
           "arquivo": "quietMove/1300-1500.json",
-          "total": 1000
+          "total": 1023
         },
         {
           "de": 1500,
           "ate": 1700,
           "arquivo": "quietMove/1500-1700.json",
-          "total": 1000
+          "total": 1086
         },
         {
           "de": 1700,
@@ -1308,12 +1478,13 @@
           "total": 1000
         }
       ],
-      "total": 5000,
-      "noBanco": 26587
+      "total": 5109,
+      "noBanco": 84230
     },
     {
       "tag": "clearance",
       "bloco": 7,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1100,
@@ -1331,7 +1502,7 @@
           "de": 1500,
           "ate": 1700,
           "arquivo": "clearance/1500-1700.json",
-          "total": 1000
+          "total": 1006
         },
         {
           "de": 1700,
@@ -1346,18 +1517,19 @@
           "total": 1000
         }
       ],
-      "total": 5000,
-      "noBanco": 17826
+      "total": 5006,
+      "noBanco": 38605
     },
     {
       "tag": "interference",
       "bloco": 7,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1100,
           "ate": 1300,
           "arquivo": "interference/1100-1300.json",
-          "total": 959
+          "total": 1000
         },
         {
           "de": 1300,
@@ -1369,7 +1541,7 @@
           "de": 1500,
           "ate": 1700,
           "arquivo": "interference/1500-1700.json",
-          "total": 1000
+          "total": 1004
         },
         {
           "de": 1700,
@@ -1384,12 +1556,13 @@
           "total": 1000
         }
       ],
-      "total": 4959,
-      "noBanco": 6027
+      "total": 5004,
+      "noBanco": 12976
     },
     {
       "tag": "zugzwang",
       "bloco": 7,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1100,
@@ -1407,7 +1580,7 @@
           "de": 1500,
           "ate": 1700,
           "arquivo": "zugzwang/1500-1700.json",
-          "total": 1000
+          "total": 1035
         },
         {
           "de": 1700,
@@ -1422,12 +1595,91 @@
           "total": 1000
         }
       ],
-      "total": 5000,
-      "noBanco": 7082
+      "total": 5035,
+      "noBanco": 26939
+    },
+    {
+      "tag": "counterCheck",
+      "bloco": 7,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1100,
+          "ate": 1300,
+          "arquivo": "counterCheck/1100-1300.json",
+          "total": 1000
+        },
+        {
+          "de": 1300,
+          "ate": 1500,
+          "arquivo": "counterCheck/1300-1500.json",
+          "total": 1000
+        },
+        {
+          "de": 1500,
+          "ate": 1700,
+          "arquivo": "counterCheck/1500-1700.json",
+          "total": 1000
+        },
+        {
+          "de": 1700,
+          "ate": 1900,
+          "arquivo": "counterCheck/1700-1900.json",
+          "total": 1000
+        },
+        {
+          "de": 1900,
+          "ate": 2100,
+          "arquivo": "counterCheck/1900-2100.json",
+          "total": 723
+        }
+      ],
+      "total": 4723,
+      "noBanco": 7016
+    },
+    {
+      "tag": "desperado",
+      "bloco": 7,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1100,
+          "ate": 1300,
+          "arquivo": "desperado/1100-1300.json",
+          "total": 8
+        },
+        {
+          "de": 1300,
+          "ate": 1500,
+          "arquivo": "desperado/1300-1500.json",
+          "total": 8
+        },
+        {
+          "de": 1500,
+          "ate": 1700,
+          "arquivo": "desperado/1500-1700.json",
+          "total": 8
+        },
+        {
+          "de": 1700,
+          "ate": 1900,
+          "arquivo": "desperado/1700-1900.json",
+          "total": 8
+        },
+        {
+          "de": 1900,
+          "ate": 2100,
+          "arquivo": "desperado/1900-2100.json",
+          "total": 7
+        }
+      ],
+      "total": 39,
+      "noBanco": 8102
     },
     {
       "tag": "defensiveMove",
       "bloco": 8,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
@@ -1451,13 +1703,13 @@
           "de": 1600,
           "ate": 1800,
           "arquivo": "defensiveMove/1600-1800.json",
-          "total": 1000
+          "total": 1003
         },
         {
           "de": 1800,
           "ate": 2000,
           "arquivo": "defensiveMove/1800-2000.json",
-          "total": 1000
+          "total": 1147
         },
         {
           "de": 2000,
@@ -1466,12 +1718,13 @@
           "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 53681
+      "total": 6150,
+      "noBanco": 148159
     },
     {
       "tag": "advancedPawn",
       "bloco": 8,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
@@ -1495,13 +1748,13 @@
           "de": 1600,
           "ate": 1800,
           "arquivo": "advancedPawn/1600-1800.json",
-          "total": 1000
+          "total": 1073
         },
         {
           "de": 1800,
           "ate": 2000,
           "arquivo": "advancedPawn/1800-2000.json",
-          "total": 1000
+          "total": 1142
         },
         {
           "de": 2000,
@@ -1510,12 +1763,13 @@
           "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 74486
+      "total": 6215,
+      "noBanco": 196090
     },
     {
       "tag": "promotion",
       "bloco": 8,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
@@ -1539,13 +1793,13 @@
           "de": 1600,
           "ate": 1800,
           "arquivo": "promotion/1600-1800.json",
-          "total": 1000
+          "total": 1023
         },
         {
           "de": 1800,
           "ate": 2000,
           "arquivo": "promotion/1800-2000.json",
-          "total": 1000
+          "total": 1141
         },
         {
           "de": 2000,
@@ -1554,96 +1808,1133 @@
           "total": 1000
         }
       ],
-      "total": 6000,
-      "noBanco": 27657
+      "total": 6164,
+      "noBanco": 74838
     },
     {
       "tag": "underPromotion",
       "bloco": 8,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
           "ate": 1200,
           "arquivo": "underPromotion/1000-1200.json",
-          "total": 37
+          "total": 36
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "underPromotion/1200-1400.json",
-          "total": 30
+          "total": 60
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "underPromotion/1400-1600.json",
-          "total": 19
+          "total": 68
         },
         {
           "de": 1600,
           "ate": 1800,
           "arquivo": "underPromotion/1600-1800.json",
-          "total": 18
+          "total": 41
         },
         {
           "de": 1800,
           "ate": 2000,
           "arquivo": "underPromotion/1800-2000.json",
-          "total": 58
+          "total": 141
         },
         {
           "de": 2000,
           "ate": 2100,
           "arquivo": "underPromotion/2000-2100.json",
-          "total": 48
+          "total": 100
         }
       ],
-      "total": 210,
-      "noBanco": 210
+      "total": 446,
+      "noBanco": 446
     },
     {
       "tag": "enPassant",
       "bloco": 8,
+      "origem": "lichess",
       "faixas": [
         {
           "de": 1000,
           "ate": 1200,
           "arquivo": "enPassant/1000-1200.json",
-          "total": 8
+          "total": 26
         },
         {
           "de": 1200,
           "ate": 1400,
           "arquivo": "enPassant/1200-1400.json",
-          "total": 50
+          "total": 117
         },
         {
           "de": 1400,
           "ate": 1600,
           "arquivo": "enPassant/1400-1600.json",
-          "total": 209
+          "total": 572
         },
         {
           "de": 1600,
           "ate": 1800,
           "arquivo": "enPassant/1600-1800.json",
-          "total": 443
+          "total": 1000
         },
         {
           "de": 1800,
           "ate": 2000,
           "arquivo": "enPassant/1800-2000.json",
-          "total": 609
+          "total": 1000
         },
         {
           "de": 2000,
           "ate": 2100,
           "arquivo": "enPassant/2000-2100.json",
-          "total": 320
+          "total": 684
         }
       ],
-      "total": 1639,
-      "noBanco": 1639
+      "total": 3399,
+      "noBanco": 3924
+    },
+    {
+      "tag": "operaMate",
+      "bloco": 9,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "operaMate/1000-1200.json",
+          "total": 1000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "operaMate/1200-1400.json",
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "operaMate/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "operaMate/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "operaMate/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "operaMate/2000-2100.json",
+          "total": 437
+        }
+      ],
+      "total": 5437,
+      "noBanco": 15224
+    },
+    {
+      "tag": "pillsburysMate",
+      "bloco": 9,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "pillsburysMate/1000-1200.json",
+          "total": 234
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "pillsburysMate/1200-1400.json",
+          "total": 140
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "pillsburysMate/1400-1600.json",
+          "total": 134
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "pillsburysMate/1600-1800.json",
+          "total": 102
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "pillsburysMate/1800-2000.json",
+          "total": 91
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "pillsburysMate/2000-2100.json",
+          "total": 142
+        }
+      ],
+      "total": 843,
+      "noBanco": 843
+    },
+    {
+      "tag": "epauletteMate",
+      "bloco": 9,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "epauletteMate/1000-1200.json",
+          "total": 1000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "epauletteMate/1200-1400.json",
+          "total": 695
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "epauletteMate/1400-1600.json",
+          "total": 678
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "epauletteMate/1600-1800.json",
+          "total": 448
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "epauletteMate/1800-2000.json",
+          "total": 274
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "epauletteMate/2000-2100.json",
+          "total": 95
+        }
+      ],
+      "total": 3190,
+      "noBanco": 3290
+    },
+    {
+      "tag": "swallowstailMate",
+      "bloco": 9,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "swallowstailMate/1000-1200.json",
+          "total": 1000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "swallowstailMate/1200-1400.json",
+          "total": 891
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "swallowstailMate/1400-1600.json",
+          "total": 687
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "swallowstailMate/1600-1800.json",
+          "total": 489
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "swallowstailMate/1800-2000.json",
+          "total": 413
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "swallowstailMate/2000-2100.json",
+          "total": 131
+        }
+      ],
+      "total": 3611,
+      "noBanco": 4217
+    },
+    {
+      "tag": "damianoMate",
+      "bloco": 9,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "damianoMate/1000-1200.json",
+          "total": 1000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "damianoMate/1200-1400.json",
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "damianoMate/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "damianoMate/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "damianoMate/1800-2000.json",
+          "total": 403
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "damianoMate/2000-2100.json",
+          "total": 85
+        }
+      ],
+      "total": 4488,
+      "noBanco": 9502
+    },
+    {
+      "tag": "lolliMate",
+      "bloco": 9,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "lolliMate/1000-1200.json",
+          "total": 1000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "lolliMate/1200-1400.json",
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "lolliMate/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "lolliMate/1600-1800.json",
+          "total": 713
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "lolliMate/1800-2000.json",
+          "total": 328
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "lolliMate/2000-2100.json",
+          "total": 93
+        }
+      ],
+      "total": 4134,
+      "noBanco": 9566
+    },
+    {
+      "tag": "morphysMate",
+      "bloco": 10,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "morphysMate/1000-1200.json",
+          "total": 498
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "morphysMate/1200-1400.json",
+          "total": 241
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "morphysMate/1400-1600.json",
+          "total": 197
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "morphysMate/1600-1800.json",
+          "total": 166
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "morphysMate/1800-2000.json",
+          "total": 123
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "morphysMate/2000-2100.json",
+          "total": 67
+        }
+      ],
+      "total": 1292,
+      "noBanco": 1292
+    },
+    {
+      "tag": "cornerMate",
+      "bloco": 10,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "cornerMate/1000-1200.json",
+          "total": 555
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "cornerMate/1200-1400.json",
+          "total": 298
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "cornerMate/1400-1600.json",
+          "total": 227
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "cornerMate/1600-1800.json",
+          "total": 243
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "cornerMate/1800-2000.json",
+          "total": 201
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "cornerMate/2000-2100.json",
+          "total": 54
+        }
+      ],
+      "total": 1578,
+      "noBanco": 1578
+    },
+    {
+      "tag": "triangleMate",
+      "bloco": 10,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "triangleMate/1000-1200.json",
+          "total": 1000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "triangleMate/1200-1400.json",
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "triangleMate/1400-1600.json",
+          "total": 996
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "triangleMate/1600-1800.json",
+          "total": 616
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "triangleMate/1800-2000.json",
+          "total": 368
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "triangleMate/2000-2100.json",
+          "total": 110
+        }
+      ],
+      "total": 4090,
+      "noBanco": 5206
+    },
+    {
+      "tag": "blindSwineMate",
+      "bloco": 10,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "blindSwineMate/1000-1200.json",
+          "total": 395
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "blindSwineMate/1200-1400.json",
+          "total": 73
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "blindSwineMate/1400-1600.json",
+          "total": 22
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "blindSwineMate/1600-1800.json",
+          "total": 11
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "blindSwineMate/1800-2000.json",
+          "total": 5
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "blindSwineMate/2000-2100.json",
+          "total": 1
+        }
+      ],
+      "total": 507,
+      "noBanco": 507
+    },
+    {
+      "tag": "killBoxMate",
+      "bloco": 10,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "killBoxMate/1000-1200.json",
+          "total": 407
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "killBoxMate/1200-1400.json",
+          "total": 284
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "killBoxMate/1400-1600.json",
+          "total": 472
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "killBoxMate/1600-1800.json",
+          "total": 567
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "killBoxMate/1800-2000.json",
+          "total": 313
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "killBoxMate/2000-2100.json",
+          "total": 98
+        }
+      ],
+      "total": 2141,
+      "noBanco": 2141
+    },
+    {
+      "tag": "anderssenMate",
+      "bloco": 10,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "anderssenMate/1000-1200.json",
+          "total": 425
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "anderssenMate/1200-1400.json",
+          "total": 302
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "anderssenMate/1400-1600.json",
+          "total": 225
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "anderssenMate/1600-1800.json",
+          "total": 146
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "anderssenMate/1800-2000.json",
+          "total": 72
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "anderssenMate/2000-2100.json",
+          "total": 28
+        }
+      ],
+      "total": 1198,
+      "noBanco": 1198
+    },
+    {
+      "tag": "pawnMate",
+      "bloco": 10,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "pawnMate/1000-1200.json",
+          "total": 1000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "pawnMate/1200-1400.json",
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "pawnMate/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "pawnMate/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "pawnMate/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "pawnMate/2000-2100.json",
+          "total": 490
+        }
+      ],
+      "total": 5490,
+      "noBanco": 17068
+    },
+    {
+      "tag": "grecoMate",
+      "bloco": 10,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "grecoMate/1000-1200.json",
+          "total": 1000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "grecoMate/1200-1400.json",
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "grecoMate/1400-1600.json",
+          "total": 940
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "grecoMate/1600-1800.json",
+          "total": 563
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "grecoMate/1800-2000.json",
+          "total": 298
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "grecoMate/2000-2100.json",
+          "total": 66
+        }
+      ],
+      "total": 3867,
+      "noBanco": 5319
+    },
+    {
+      "tag": "suffocationMate",
+      "bloco": 10,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "suffocationMate/1000-1200.json",
+          "total": 1000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "suffocationMate/1200-1400.json",
+          "total": 563
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "suffocationMate/1400-1600.json",
+          "total": 369
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "suffocationMate/1600-1800.json",
+          "total": 286
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "suffocationMate/1800-2000.json",
+          "total": 278
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "suffocationMate/2000-2100.json",
+          "total": 151
+        }
+      ],
+      "total": 2647,
+      "noBanco": 2753
+    },
+    {
+      "tag": "mateIn4",
+      "bloco": 10,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "mateIn4/1000-1200.json",
+          "total": 1000
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "mateIn4/1200-1400.json",
+          "total": 1000
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "mateIn4/1400-1600.json",
+          "total": 1000
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "mateIn4/1600-1800.json",
+          "total": 1000
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "mateIn4/1800-2000.json",
+          "total": 1000
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "mateIn4/2000-2100.json",
+          "total": 1000
+        }
+      ],
+      "total": 6000,
+      "noBanco": 20535
+    },
+    {
+      "tag": "vukovicMate",
+      "bloco": 11,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "vukovicMate/1000-1200.json",
+          "total": 323
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "vukovicMate/1200-1400.json",
+          "total": 342
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "vukovicMate/1400-1600.json",
+          "total": 508
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "vukovicMate/1600-1800.json",
+          "total": 539
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "vukovicMate/1800-2000.json",
+          "total": 266
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "vukovicMate/2000-2100.json",
+          "total": 61
+        }
+      ],
+      "total": 2039,
+      "noBanco": 2039
+    },
+    {
+      "tag": "balestraMate",
+      "bloco": 11,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "balestraMate/1000-1200.json",
+          "total": 115
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "balestraMate/1200-1400.json",
+          "total": 112
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "balestraMate/1400-1600.json",
+          "total": 147
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "balestraMate/1600-1800.json",
+          "total": 252
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "balestraMate/1800-2000.json",
+          "total": 135
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "balestraMate/2000-2100.json",
+          "total": 23
+        }
+      ],
+      "total": 784,
+      "noBanco": 784
+    },
+    {
+      "tag": "blackburneMate",
+      "bloco": 11,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "blackburneMate/1000-1200.json",
+          "total": 239
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "blackburneMate/1200-1400.json",
+          "total": 150
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "blackburneMate/1400-1600.json",
+          "total": 81
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "blackburneMate/1600-1800.json",
+          "total": 85
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "blackburneMate/1800-2000.json",
+          "total": 77
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "blackburneMate/2000-2100.json",
+          "total": 21
+        }
+      ],
+      "total": 653,
+      "noBanco": 653
+    },
+    {
+      "tag": "retiMate",
+      "bloco": 11,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "retiMate/1000-1200.json",
+          "total": 27
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "retiMate/1200-1400.json",
+          "total": 48
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "retiMate/1400-1600.json",
+          "total": 61
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "retiMate/1600-1800.json",
+          "total": 46
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "retiMate/1800-2000.json",
+          "total": 35
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "retiMate/2000-2100.json",
+          "total": 4
+        }
+      ],
+      "total": 221,
+      "noBanco": 221
+    },
+    {
+      "tag": "maxLangeMate",
+      "bloco": 11,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "maxLangeMate/1000-1200.json",
+          "total": 36
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "maxLangeMate/1200-1400.json",
+          "total": 6
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "maxLangeMate/1400-1600.json",
+          "total": 7
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "maxLangeMate/1600-1800.json",
+          "total": 10
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "maxLangeMate/1800-2000.json",
+          "total": 17
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "maxLangeMate/2000-2100.json",
+          "total": 9
+        }
+      ],
+      "total": 85,
+      "noBanco": 85
+    },
+    {
+      "tag": "legalMate",
+      "bloco": 11,
+      "origem": "nosso",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "legalMate/1000-1200.json",
+          "total": 75
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "legalMate/1200-1400.json",
+          "total": 111
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "legalMate/1400-1600.json",
+          "total": 129
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "legalMate/1600-1800.json",
+          "total": 97
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "legalMate/1800-2000.json",
+          "total": 57
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "legalMate/2000-2100.json",
+          "total": 9
+        }
+      ],
+      "total": 478,
+      "noBanco": 478
+    },
+    {
+      "tag": "mateIn5",
+      "bloco": 11,
+      "origem": "lichess",
+      "faixas": [
+        {
+          "de": 1000,
+          "ate": 1200,
+          "arquivo": "mateIn5/1000-1200.json",
+          "total": 157
+        },
+        {
+          "de": 1200,
+          "ate": 1400,
+          "arquivo": "mateIn5/1200-1400.json",
+          "total": 362
+        },
+        {
+          "de": 1400,
+          "ate": 1600,
+          "arquivo": "mateIn5/1400-1600.json",
+          "total": 436
+        },
+        {
+          "de": 1600,
+          "ate": 1800,
+          "arquivo": "mateIn5/1600-1800.json",
+          "total": 707
+        },
+        {
+          "de": 1800,
+          "ate": 2000,
+          "arquivo": "mateIn5/1800-2000.json",
+          "total": 965
+        },
+        {
+          "de": 2000,
+          "ate": 2100,
+          "arquivo": "mateIn5/2000-2100.json",
+          "total": 565
+        }
+      ],
+      "total": 3192,
+      "noBanco": 3192
     }
   ]
 }

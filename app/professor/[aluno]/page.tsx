@@ -27,8 +27,10 @@ import {
 } from "@/lib/finais/trilha";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { BLOCOS } from "@/lib/tatica/blocos";
-import { linhasDeTentativas, progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
+import { linhasDeTentativas, progressoPorTema, PUZZLES_POR_TEMA, soOServivel, temaZerado } from "@/lib/tatica/progresso";
 import { filaCompleta, INTERVALOS_DA_REVISAO } from "@/lib/tatica/revisao";
+import { evolucaoDoAluno } from "@/lib/tatica/rating-leitura";
+import { EvolucaoDoRating } from "@/components/tatica/EvolucaoDoRating";
 
 /**
  * O relatório de um aluno — a tela que o professor abre antes da conversa.
@@ -78,13 +80,14 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   const hoje = hojeNoBrasil();
   const desde = somarDias(hoje, -(DIAS - 1));
 
-  const [tatica, linhas, finais, minutos, partidas, conquistado] = await Promise.all([
+  const [tatica, linhas, finais, minutos, partidas, conquistado, evolucaoNoRating] = await Promise.all([
     progressoPorTema(id),
     linhasDeTentativas(id),
     progressoDeFinais(id),
     minutosPorDia(id, desde),
     partidasDeclaradas(id, desde),
     nivelConquistado(id),
+    evolucaoDoAluno(id),
   ]);
 
   const nivel = nivelDoAluno(conquistado);
@@ -95,7 +98,8 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   // número em voz alta com o aluno na frente, olhando outro número.
   const serie = serieDeDias(minutos, hoje, DIAS, partidas);
   const sequencia = sequenciaDeDias(minutos, hoje);
-  const fila = filaCompleta(linhas);
+  // Só o que o disco ainda serve — a mesma fila que o painel do aluno conta.
+  const fila = await soOServivel(filaCompleta(linhas));
   const devidosHoje = fila.filter((f) => f.devidoEm <= hoje);
   const pico = Math.max(META_DO_DIA_MIN, ...serie.map((d) => d.total));
 
@@ -131,7 +135,9 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
           <span className="font-mono text-xs">{aluno.usuario}</span>
           {aluno.equipe ? ` · equipe ${EQUIPE[aluno.equipe as "M" | "F"]}` : ""}
           {aluno.tabuleiro ? ` · tabuleiro ${aluno.tabuleiro}` : ""}
-          {aluno.rating ? ` · rating ${aluno.rating}` : ""}
+          {/* "de entrada", porque a página agora mostra também o rating de tática,
+              que é outro número: o que o professor anotou na matrícula não se mexe. */}
+          {aluno.rating ? ` · rating de entrada ${aluno.rating}` : ""}
         </p>
         <p className="text-xs text-tinta-fraca">
           Nível {nivel} de 5 · dados de {porExtenso(desde)} a {porExtenso(hoje)}.
@@ -303,6 +309,25 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
           duas repetições decide domínio nem tarefa — elas contam como trabalho, que é o que
           são.
         </p>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      <section className="flex flex-col gap-3">
+        <div className="flex flex-col gap-0.5">
+          <h2 className="rotulo text-tinta-fraca">Rating de tática</h2>
+          <p className="text-sm text-tinta-media">
+            O modo de problemas misturados (Glicko-2). Todo aluno começa em 600, e
+            a partir daí sobe e desce a cada problema, de 10 a 20 pontos. O erro dele volta na revisão do dia,
+            e não na prova do tema.
+          </p>
+        </div>
+        {evolucaoNoRating ? (
+          <EvolucaoDoRating evolucao={evolucaoNoRating} paraOAluno={false} />
+        ) : (
+          <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
+            Ainda não jogou a tática rating.
+          </p>
+        )}
       </section>
 
       {/* ---------------------------------------------------------------- */}

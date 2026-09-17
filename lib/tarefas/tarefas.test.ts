@@ -5,7 +5,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { NIVEIS } from "../curso/nivel.ts";
 import { CLASSES, TRILHA } from "../finais/trilha.ts";
-import { BLOCOS } from "../tatica/blocos.ts";
+import { BLOCOS, contaNoCurso } from "../tatica/blocos.ts";
 import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
 import { doNivel, niveisEscritos, validarTarefas } from "./tarefas.ts";
 
@@ -81,7 +81,7 @@ test("a meta de puzzles de cada nível é o tamanho real dos blocos dele", () =>
   for (const tarefa of validarTarefas(lerConteudo())) {
     if (tarefa.tipo !== "tatica") continue;
     const temas = BLOCOS.filter((b) => tarefa.meta.blocos.includes(b.id)).reduce(
-      (soma, b) => soma + b.temas.length,
+      (soma, b) => soma + b.temas.filter(contaNoCurso).length,
       0,
     );
     assert.equal(

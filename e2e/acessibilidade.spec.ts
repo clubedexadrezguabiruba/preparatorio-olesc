@@ -48,7 +48,7 @@ test("@a11y editor e as janelas", async ({ page }) => {
 
 test("@a11y telas do aluno", async ({ aluno }) => {
   const falhas: string[] = [];
-  for (const tela of ["/painel", "/trilha", "/finais", "/finais/N0-LADDER", "/aberturas", "/tatica"]) {
+  for (const tela of ["/painel", "/trilha", "/finais", "/finais/N0-LADDER", "/aberturas", "/tatica", "/tatica/damianoMate", "/tatica/revisao", "/tatica/rating/evolucao"]) {
     await aluno.goto(tela);
     await aluno.waitForTimeout(600);
     const v = await violacoesDoAxe(aluno);

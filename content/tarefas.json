@@ -51,13 +51,13 @@
   "id": "n2-tatica",
   "nivel": 2,
   "tipo": "tatica",
-  "titulo": "Os 195 puzzles do bloco 4 — garfo, cravada, espeto e descoberto",
-  "detalhe": "O vocabulário de que os outros blocos são feitos. Cinco temas de 39.",
+  "titulo": "Os 234 puzzles do bloco 4 — garfo, cravada, espeto, ataque e xeque descoberto",
+  "detalhe": "O vocabulário de que os outros blocos são feitos. Seis temas de 39.",
   "meta": {
    "blocos": [
     4
    ],
-   "puzzles": 195,
+   "puzzles": 234,
    "acerto": 70
   },
   "onde": null
@@ -116,14 +116,15 @@
   "id": "n4-tatica",
   "nivel": 4,
   "tipo": "tatica",
-  "titulo": "Os 351 puzzles dos blocos 3 e 5 — padrões de mate II e remover a defesa",
-  "detalhe": "Nove temas de 39. É o degrau mais longo da escada, e ele é declaradamente pós-OLESC.",
+  "titulo": "Os 585 puzzles dos blocos 3, 5 e 9 — padrões de mate II e III, e remover a defesa",
+  "detalhe": "Quinze temas de 39. É o degrau mais longo antes do último, e ele é declaradamente pós-OLESC.",
   "meta": {
    "blocos": [
     3,
-    5
+    5,
+    9
    ],
-   "puzzles": 351,
+   "puzzles": 585,
    "acerto": 65
   },
   "onde": null
@@ -140,15 +141,17 @@
   "id": "n5-tatica",
   "nivel": 5,
   "tipo": "tatica",
-  "titulo": "Os 546 puzzles dos blocos 6, 7 e 8 — ataque ao rei, lances finos, defesa e conversão",
-  "detalhe": "Quatorze temas de 39. O fim da escada, e o treino permanente do clube depois dela.",
+  "titulo": "Os 1.326 puzzles dos blocos 6, 7, 8, 10 e 11 — ataque ao rei, lances finos, defesa, conversão e os mates raros",
+  "detalhe": "Trinta e quatro temas de 39. O fim da escada, e o treino permanente do clube depois dela.",
   "meta": {
    "blocos": [
     6,
     7,
-    8
+    8,
+    10,
+    11
    ],
-   "puzzles": 546,
+   "puzzles": 1326,
    "acerto": 65
   },
   "onde": null

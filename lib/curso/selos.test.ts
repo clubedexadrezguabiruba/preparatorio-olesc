@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { TRILHA } from "../finais/trilha.ts";
-import { BLOCOS } from "../tatica/blocos.ts";
+import { BLOCOS, contaNoCurso } from "../tatica/blocos.ts";
 import { MINIMO_DA_SEQUENCIA_MIN, diasComOMinimo, maiorSequenciaDeDias, type MinutosDoDia } from "./hoje.ts";
 import { NIVEIS } from "./nivel.ts";
 import { DEGRAUS, ganhos, proximos, selos, type ParaOsSelos } from "./selos.ts";
@@ -25,6 +25,7 @@ const ZERADO: ParaOsSelos = {
   conquistado: 0,
   diasComUmaHora: 0,
   maiorSequencia: 0,
+  ratingTatica: null,
 };
 
 const com = (mudancas: Partial<ParaOsSelos>): ParaOsSelos => ({ ...ZERADO, ...mudancas });
@@ -84,8 +85,8 @@ test("um dia curto quebra a sequência, e a partida declarada não a sustenta", 
  * ------------------------------------------------------------------ */
 
 test("os degraus de tática cabem no currículo, e o último é o currículo inteiro", () => {
-  const temas = BLOCOS.flatMap((b) => b.temas).length;
-  assert.equal(DEGRAUS.tatica[DEGRAUS.tatica.length - 1], temas, "o último degrau são os 36");
+  const temas = BLOCOS.flatMap((b) => b.temas).filter(contaNoCurso).length;
+  assert.equal(DEGRAUS.tatica[DEGRAUS.tatica.length - 1], temas, "o último degrau são os 63");
   for (const d of DEGRAUS.tatica) assert.ok(d <= temas, `o degrau ${d} não existe no currículo`);
 });
 
@@ -102,12 +103,12 @@ test("os degraus sobem, e nunca repetem", () => {
   }
 });
 
-test("o degrau 13 de tática é a meta da OLESC, e não um número redondo", () => {
+test("o degrau 14 de tática é a meta da OLESC, e não um número redondo", () => {
   // Se alguém trocar por 10 achando que fica mais bonito, este teste pergunta
-  // por quê: 13 é o total de temas dos níveis 1 a 3, que é a meta declarada.
-  const ate3 = BLOCOS.filter((b) => b.nivel <= 3).flatMap((b) => b.temas).length;
-  assert.equal(ate3, 13);
-  assert.ok(DEGRAUS.tatica.includes(13));
+  // por quê: 14 é o total de temas dos níveis 1 a 3, que é a meta declarada.
+  const ate3 = BLOCOS.filter((b) => b.nivel <= 3).flatMap((b) => b.temas).filter(contaNoCurso).length;
+  assert.equal(ate3, 14);
+  assert.ok(DEGRAUS.tatica.includes(14));
 });
 
 test("o primeiro degrau de finais é alcançável com o que existe hoje", () => {
@@ -129,6 +130,7 @@ test("todo selo trancado diz o que falta, e nenhum ganho diz", () => {
     conquistado: 1,
     diasComUmaHora: 3,
     maiorSequencia: 4,
+    ratingTatica: { maximo: 730, melhorSequencia: 3, inicio: 650, resolvidos: 20 },
   });
   for (const s of selos(meio)) {
     if (s.ganho) assert.equal(s.falta, null, `${s.id} está ganho e ainda diz o que falta`);
@@ -147,7 +149,7 @@ test("o aluno zerado não tem selo nenhum, e o aluno completo tem todos", () => 
   assert.deepEqual(ganhos(selos(ZERADO)), []);
 
   const tudo: ParaOsSelos = {
-    temasFechados: 36,
+    temasFechados: 63,
     aulasAprendidas: 49,
     repertorio: {
       brancasCompletas: true,
@@ -158,6 +160,7 @@ test("o aluno zerado não tem selo nenhum, e o aluno completo tem todos", () => 
     conquistado: 5,
     diasComUmaHora: 40,
     maiorSequencia: 40,
+    ratingTatica: { maximo: 1400, melhorSequencia: 10, inicio: 600, resolvidos: 300 },
   };
   const lista = selos(tudo);
   assert.equal(ganhos(lista).length, lista.length, "sobrou selo trancado no aluno completo");
@@ -165,13 +168,13 @@ test("o aluno zerado não tem selo nenhum, e o aluno completo tem todos", () => 
 });
 
 test("os degraus acendem na ordem, e não pulam", () => {
-  const doze = selos(com({ temasFechados: 12 })).filter((s) => s.familia === "tatica");
+  const treze = selos(com({ temasFechados: 13 })).filter((s) => s.familia === "tatica");
   assert.deepEqual(
-    doze.map((s) => s.ganho),
+    treze.map((s) => s.ganho),
     [true, true, false, false, false],
-    "com 12 temas, os degraus 3 e 7 acendem e o 13 não",
+    "com 13 temas, os degraus 3 e 7 acendem e o 14 não",
   );
-  assert.equal(doze[2].falta, "falta 1 tema", "e o 13 diz que falta um");
+  assert.equal(treze[2].falta, "falta 1 tema", "e o 14 diz que falta um");
 });
 
 test("os níveis acendem até o conquistado, e o próximo diz o que fazer", () => {
@@ -201,7 +204,13 @@ test("os dois próximos vêm de famílias diferentes", () => {
 
 test("`proximos` pula a família que já está completa", () => {
   const lista = selos(
-    com({ temasFechados: 36, aulasAprendidas: 49, diasComUmaHora: 1, maiorSequencia: 30 }),
+    com({
+      temasFechados: 63,
+      aulasAprendidas: 49,
+      diasComUmaHora: 1,
+      maiorSequencia: 30,
+      ratingTatica: { maximo: 1500, melhorSequencia: 12, inicio: 600, resolvidos: 400 },
+    }),
   );
   for (const s of proximos(lista, 4)) {
     assert.ok(["repertorio", "nivel"].includes(s.familia), `${s.id} não devia estar pendente`);
@@ -217,4 +226,59 @@ test("o repertório tem os quatro selos declarados, e o Base é o portão", () =
     "repertorio-avancado",
   ]);
   assert.match(acha(ZERADO, "repertorio-base").conta, /abre o Avançado/);
+});
+
+/* ------------------------------------------------------------------ *
+ * A tática rating (15/9)
+ * ------------------------------------------------------------------ */
+
+const jogou = (maximo: number, extra: Partial<NonNullable<ParaOsSelos["ratingTatica"]>> = {}) =>
+  com({ ratingTatica: { maximo, melhorSequencia: 0, inicio: 600, resolvidos: 10, ...extra } });
+
+test("tática rating: +100 acima do início, 1000, 1200 e 1400 pelo máximo, e 10 seguidos", () => {
+  const ids = selos(ZERADO).filter((s) => s.familia === "rating").map((s) => s.id);
+  assert.deepEqual(ids, ["rating-mais-100", "rating-1000", "rating-1200", "rating-1400", "rating-seguidos-10"]);
+  assert.deepEqual(DEGRAUS.rating, [1000, 1200, 1400]);
+
+  const doRating = selos(jogou(1210.6, { melhorSequencia: 10 })).filter((s) => s.familia === "rating");
+  assert.deepEqual(doRating.map((s) => s.ganho), [true, true, true, false, true]);
+  assert.equal(acha(jogou(1210.6), "rating-1400").falta, "faltam 189 pontos no seu recorde");
+});
+
+test("tática rating: o +100 é contado do início guardado na linha do aluno", () => {
+  assert.equal(acha(jogou(699, { inicio: 600 }), "rating-mais-100").ganho, false);
+  assert.equal(acha(jogou(700, { inicio: 600 }), "rating-mais-100").ganho, true);
+  assert.equal(acha(jogou(1250, { inicio: 1200 }), "rating-mais-100").falta, "faltam 50 pontos no seu recorde");
+  assert.equal(acha(jogou(1300, { inicio: 1200 }), "rating-mais-100").ganho, true);
+});
+
+test("tática rating: é o máximo que conta — o selo não some quando o rating de agora cai", () => {
+  // O painel passa `rating_maximo`, e não o rating atual: um aluno que foi a 1003
+  // e hoje está em 940 continua com o selo de 1000.
+  assert.equal(acha(jogou(1003), "rating-1000").ganho, true);
+  assert.equal(acha(jogou(999.4), "rating-1000").ganho, false);
+  assert.equal(acha(jogou(999.6), "rating-1000").ganho, true, "arredonda como a tela");
+});
+
+test("tática rating: quem começou alto não ganha selo só por abrir a página", () => {
+  // Rating de entrada 1300: a linha nasce com máximo 1300, mas sem problema resolvido.
+  const semJogar = jogou(1300, { inicio: 1300, resolvidos: 0 });
+  assert.equal(acha(semJogar, "rating-1000").ganho, false);
+  assert.equal(acha(semJogar, "rating-1000").falta, "jogue a tática rating");
+  assert.equal(acha(jogou(1300, { inicio: 1300, resolvidos: 1 }), "rating-1200").ganho, true);
+});
+
+test("tática rating: quem nunca jogou tem os selos trancados e o convite escrito", () => {
+  for (const s of selos(ZERADO).filter((x) => x.familia === "rating")) {
+    assert.equal(s.ganho, false);
+    assert.equal(s.falta, "jogue a tática rating");
+  }
+  assert.equal(acha(jogou(600, { melhorSequencia: 7 }), "rating-seguidos-10").falta, "acerte 10 em sequência (seu melhor: 7)");
+  assert.equal(acha(jogou(999), "rating-1000").falta, "falta 1 ponto no seu recorde");
+});
+
+test("tática rating: vem por último, e não tira do painel o próximo selo de finais", () => {
+  const lista = selos(ZERADO);
+  assert.equal(lista.at(-1)?.id, "rating-seguidos-10");
+  assert.deepEqual(proximos(lista).map((s) => s.familia), ["tatica", "finais"]);
 });

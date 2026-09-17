@@ -1,5 +1,5 @@
 import { aulaDaTrilha, type AulaDaTrilha, type Classe } from "../finais/trilha.ts";
-import { BLOCOS } from "../tatica/blocos.ts";
+import { BLOCOS, contaNoCurso } from "../tatica/blocos.ts";
 import type { ProgressoDoTema } from "../tatica/progresso.ts";
 import type { Tarefa } from "./tarefas.ts";
 
@@ -55,7 +55,7 @@ export function somarBlocos(
   blocos: readonly number[],
 ): { feitos: number; certos: number } {
   const tags = new Set(
-    BLOCOS.filter((b) => blocos.includes(b.id)).flatMap((b) => b.temas.map((t) => t.tag)),
+    BLOCOS.filter((b) => blocos.includes(b.id)).flatMap((b) => b.temas.filter(contaNoCurso).map((t) => t.tag)),
   );
 
   let feitos = 0;

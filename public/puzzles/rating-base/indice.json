@@ -1,0 +1,20 @@
+{
+  "tag": "rating-base",
+  "bloco": 0,
+  "faixas": [
+    {
+      "de": 600,
+      "ate": 650,
+      "arquivo": "rating-base/600-650.json",
+      "total": 3000
+    },
+    {
+      "de": 650,
+      "ate": 700,
+      "arquivo": "rating-base/650-700.json",
+      "total": 3000
+    }
+  ],
+  "total": 6000,
+  "noBanco": 102159
+}
