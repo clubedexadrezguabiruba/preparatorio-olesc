@@ -7,7 +7,16 @@ import { COR_DO_NIVEL } from "@/components/tatica/SeloDoTema";
 import { GraficoRating } from "@/components/tatica/GraficoRating";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
-import { METAL, NIVEL, nivelDoAluno, podeAbrir, situacaoDoItem, temaFechado } from "@/lib/curso/nivel";
+import {
+  META_DA_OLESC,
+  METAL,
+  NIVEIS,
+  NIVEL,
+  nivelDoAluno,
+  podeAbrir,
+  situacaoDoItem,
+  temaFechado,
+} from "@/lib/curso/nivel";
 import { nivelConquistado } from "@/lib/curso/progresso";
 import { BLOCOS, contaNoCurso } from "@/lib/tatica/blocos";
 import { temaAberto } from "@/lib/tatica/conteudo";
@@ -26,7 +35,7 @@ export const metadata: Metadata = { title: "Tática — Preparatório OLESC" };
  * já estavam todos escritos, então `temaAberto()` devolvia `true` para todos e
  * este ramo nunca rodava. Era um portão desenhado numa parede sem porta.
  *
- * Hoje o cartão diz **"Pode adiantar"** (o nível está no cabeçalho do bloco), e o
+ * Hoje o cartão diz **"Pode adiantar"** (o nível está no título da seção), e o
  * tema **continua clicável**.
  * A trava é mole de propósito (`TRANCA_DURA` em `lib/curso/nivel.ts`): o nível
  * governa o que o site recomenda, não o que ele permite. O tracejado é o que
@@ -69,8 +78,8 @@ export default async function Tatica() {
         <header className="flex flex-col gap-2">
           <h1 className="titulo text-tinta">Curso de tática</h1>
           <p className="max-w-prose text-sm text-tinta-media">
-            Cada tema tem aquecimento, série e prova — {PUZZLES_POR_TEMA} puzzles ao todo. A dificuldade sobe sozinha:
-            você não escolhe o nível.
+            Cada tema tem aquecimento, série e prova — {PUZZLES_POR_TEMA} puzzles ao todo, e a dificuldade dos puzzles
+            sobe sozinha. Os temas estão em cinco níveis, do 1 ao 5: comece pelo seu.
           </p>
           {feitos > 0 ? (
             <p className="text-sm text-tinta-fraca tabular-nums">
@@ -103,49 +112,103 @@ export default async function Tatica() {
           </section>
         ) : null}
 
-        {BLOCOS.map((bloco) => {
-          // O tema em teste aparece, mas fica fora do "X de N concluídos".
-          const contam = bloco.temas.filter(contaNoCurso);
-          const fechados = contam.filter((t) => temaFechado(progresso.get(t.tag)?.feitos)).length;
+        {/*
+         * Por nível, e não na ordem dos blocos (Doug, 16/9: "tem prata no meio de
+         * dois ouros"). Os blocos 9 a 11 chegaram depois e caíram nos níveis 4 e
+         * 5, e o 4 (Táticas fundamentais) é do nível 2: na ordem do `id`, a página
+         * ia Madeira, Bronze, Prata, Ferro, Prata, Ouro, Ouro, Ouro, Prata, Ouro,
+         * Ouro. Agrupada, ela sobe como a escada do painel e a `/trilha` — com a
+         * mesma língua delas: "Nível N", a faixa FIDE, o resumo do degrau, "Você
+         * está aqui" e "Meta da OLESC". O número do bloco saiu do título: fora de
+         * ordem, "9." antes de "6." lia como erro.
+         */}
+        {NIVEIS.map((n) => {
+          const blocos = BLOCOS.filter((bloco) => bloco.nivel === n);
+          if (blocos.length === 0) return null;
           return (
-            <section key={bloco.id} aria-labelledby={`bloco-${bloco.id}`} className="flex flex-col gap-3">
-              <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                <h2 id={`bloco-${bloco.id}`} className="text-base font-semibold text-tinta">
-                  <span className="text-tinta-fraca tabular-nums">{bloco.id}.</span> {bloco.nome}
-                </h2>
-                <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-tinta-fraca tabular-nums">
-                  <span className={`rounded-full border px-2 py-0.5 font-semibold ${COR_DO_NIVEL[bloco.nivel].pastilha}`}>
-                    Nível {bloco.nivel} · {METAL[bloco.nivel]}
+            <section
+              key={n}
+              aria-labelledby={`nivel-${n}`}
+              aria-current={n === nivel ? "step" : undefined}
+              className="flex flex-col gap-5 border-t border-borda-fraca pt-6"
+            >
+              {/*
+               * O metal junto do título, e a faixa com as pastilhas numa linha só
+               * embaixo. Tudo numa linha, em 375 px a "Meta da OLESC" descia
+               * sozinha para a linha de baixo, solta sob o título.
+               */}
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-3">
+                  <h2 id={`nivel-${n}`} className="text-xl font-semibold text-tinta">
+                    Nível {n}
+                  </h2>
+                  <span className={`rounded-full border px-2 py-0.5 text-xs font-semibold ${COR_DO_NIVEL[n].pastilha}`}>
+                    {METAL[n]}
                   </span>
-                  FIDE {faixaFide(bloco.nivel)} · {fechados} de {contam.length}{" "}
-                  {contam.length === 1 ? "concluído" : "concluídos"}
-                </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-tinta-fraca tabular-nums">
+                  <span>FIDE {faixaFide(n)}</span>
+                  {n === nivel ? (
+                    <span className="rounded-full bg-metodo-cheio px-2 py-0.5 text-xs font-semibold text-tinta-inversa">
+                      Você está aqui
+                    </span>
+                  ) : null}
+                  {META_DA_OLESC.includes(n) ? (
+                    <span className="rounded-full border border-metodo-cheio px-2 py-0.5 text-xs font-medium text-metodo-tinta">
+                      Meta da OLESC
+                    </span>
+                  ) : null}
+                </div>
+                <p className="max-w-prose text-sm text-tinta-media">{NIVEL[n].resumo}</p>
               </div>
 
-              {/*
-               * Três colunas, salvo quando elas deixariam um cartão sozinho na
-               * última linha e duas colunas fecham certo: quatro temas (3 + 1 →
-               * 2 + 2) e dez (3 + 3 + 3 + 1 → cinco linhas de 2). Sete fica em três:
-               * em duas também sobraria um.
-               */}
-              <ul className={`grid gap-3 sm:grid-cols-2 ${duasColunas(bloco.temas.length) ? "" : "lg:grid-cols-3"}`}>
-                {bloco.temas.map((tema) => (
-                  <CartaoDoTema
-                    key={tema.tag}
-                    tema={tema}
-                    progresso={progresso.get(tema.tag) ?? temaZerado()}
-                    situacao={situacaoDe(bloco.nivel, tema.tag)}
-                    nivel={bloco.nivel}
-                  />
-                ))}
-              </ul>
+              {/* Mais espaço entre blocos que entre o resumo e o primeiro bloco:
+                  o resumo é de todos eles, e não só do de baixo. */}
+              <div className="flex flex-col gap-8">
+                {blocos.map((bloco) => {
+                  // O tema em teste aparece, mas fica fora do "X de N concluídos".
+                  const contam = bloco.temas.filter(contaNoCurso);
+                  const fechados = contam.filter((t) => temaFechado(progresso.get(t.tag)?.feitos)).length;
+                  return (
+                    <section key={bloco.id} aria-labelledby={`bloco-${bloco.id}`} className="flex flex-col gap-3">
+                      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                        <h3 id={`bloco-${bloco.id}`} className="text-base font-semibold text-tinta">
+                          {bloco.nome}
+                        </h3>
+                        <span className="text-xs text-tinta-fraca tabular-nums">
+                          {fechados} de {contam.length} {contam.length === 1 ? "concluído" : "concluídos"}
+                        </span>
+                      </div>
+  
+                      {/*
+                       * Três colunas, salvo quando elas deixariam um cartão sozinho na
+                       * última linha e duas colunas fecham certo: quatro temas (3 + 1 →
+                       * 2 + 2) e dez (3 + 3 + 3 + 1 → cinco linhas de 2). Sete fica em três:
+                       * em duas também sobraria um.
+                       */}
+                      <ul className={`grid gap-3 sm:grid-cols-2 ${duasColunas(bloco.temas.length) ? "" : "lg:grid-cols-3"}`}>
+                        {bloco.temas.map((tema) => (
+                          <CartaoDoTema
+                            key={tema.tag}
+                            tema={tema}
+                            progresso={progresso.get(tema.tag) ?? temaZerado()}
+                            situacao={situacaoDe(bloco.nivel, tema.tag)}
+                            nivel={bloco.nivel}
+                          />
+                        ))}
+                      </ul>
+                    </section>
+                  );
+                })}
+              </div>
             </section>
           );
         })}
 
         <p className="max-w-prose text-xs text-tinta-fraca">
           Os puzzles vêm do banco público do Lichess (CC0), recortados por tema e por faixa de rating. As faixas FIDE são
-          aproximadas — <strong>nada aqui é trancado por elas</strong>, e um tema de nível acima continua clicável.
+          aproximadas — <strong>nada aqui é trancado por elas</strong>, e um tema de um nível adiante do seu continua
+          clicável.
         </p>
       </Moldura>
     </>
