@@ -73,7 +73,7 @@ export function EvolucaoDoRating({ evolucao, paraOAluno }: { evolucao: EvolucaoD
           </h3>
           <p className="text-xs text-tinta-fraca">
             {fracos.length === 0
-              ? `Nenhum tema ainda com ${MINIMO_POR_TEMA} problemas neste modo. Com menos que isso, um erro é sorte, e não fraqueza.`
+              ? "Nada a revisar ainda!"
               : `Os de pior acerto no modo rating, entre os temas com ${MINIMO_POR_TEMA} problemas ou mais.`}
           </p>
         </div>

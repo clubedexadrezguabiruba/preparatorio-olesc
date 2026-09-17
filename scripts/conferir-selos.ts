@@ -28,12 +28,19 @@
  * conquistados. Isso acende exatamente cinco selos e nenhum outro:
  * `hora-1`, `constante-3`, `constante-7`, `nivel-1` e `nivel-2`. Os 40 dias são
  * a parte que importa: dentro da janela antiga, nenhum deles apareceria.
+ *
+ * ## E a view dos selos V2 (0018, 17/9/2026)
+ *
+ * `puzzles_do_aluno` conta os puzzles resolvidos e a melhor janela de 100 tentativas no banco,
+ * com função de janela. A regra está escrita também em TypeScript (`melhorJanelaDeAcertos`), com
+ * teste; este script lê **todas** as tentativas da conta de ensaio, refaz as duas contas em
+ * memória, e confere que a view dá o mesmo número. Só lê — não semeia nada a mais para isso.
  */
 
 import { createClient } from "@supabase/supabase-js";
 import { carregarEnv } from "./env-local.ts";
 import { diasComOMinimo, maiorSequenciaDeDias, type MinutosDoDia } from "../lib/curso/hoje.ts";
-import { selos, type ParaOsSelos } from "../lib/curso/selos.ts";
+import { melhorJanelaDeAcertos, selos, type ParaOsSelos } from "../lib/curso/selos.ts";
 
 carregarEnv();
 
@@ -95,6 +102,23 @@ try {
   const { error: erroPuzzle } = await admin.from("tentativas_puzzle").insert(linhas);
   if (erroPuzzle) throw new Error(`não consegui semear as tentativas: ${erroPuzzle.message}`);
 
+  // Para a view dos selos V2 ter uma janela de 100 a conferir: 120 tentativas de 0 ms, 50 dias
+  // atrás (antes dos sete dias acima, e sem mexer nos minutos), com a mesma marca para a limpeza.
+  // 20 erros e depois 100 com um erro a cada dez: a melhor janela tem 90 certos. O padrão repete
+  // o puzzle 10 em 10, para "resolvidos" (distintos) não ser igual a "certos".
+  const inicioDaJanela = diaAtras(50).getTime();
+  const paraAJanela = Array.from({ length: 120 }, (_, i) => ({
+    aluno,
+    puzzle_id: `${MARCA}-janela-${i % 60}`,
+    tema: MARCA,
+    acertou: i >= 20 && (i - 20) % 10 !== 9,
+    tempo_ms: 0,
+    modo: "serie",
+    criada_em: new Date(inicioDaJanela + i * 1000).toISOString(),
+  }));
+  const { error: erroJanela } = await admin.from("tentativas_puzzle").insert(paraAJanela);
+  if (erroJanela) throw new Error(`não consegui semear a janela: ${erroJanela.message}`);
+
   const { error: erroNivel } = await admin
     .from("nivel_conquistado")
     .upsert([
@@ -126,8 +150,7 @@ try {
     temasFechados: 0,
     aulasAprendidas: 0,
     repertorio: {
-      brancasCompletas: false,
-      pretasCompletas: false,
+      aberturas: [],
       baseCompleto: false,
       avancadoCompleto: false,
     },
@@ -137,6 +160,10 @@ try {
     // Este script confere os selos de tempo; os da tática rating têm teste puro
     // em `lib/curso/selos.test.ts` e dependem só de `rating_tatica`.
     ratingTatica: null,
+    // Os selos V2 e os de abertura têm teste puro; aqui ficam zerados para o conjunto de
+    // esperados continuar sendo só o de tempo e nível. A view é conferida mais abaixo.
+    puzzles: { resolvidos: 0, tentativas: 0, melhorJanela: null },
+    aberturas: { concluidas: 0, cursos: [] },
   };
 
   console.log("\nOs números que saíram do banco:");
@@ -167,6 +194,39 @@ try {
   afirmar(
     entrada.maiorSequencia === SEGUIDOS,
     `a maior sequência é ${SEGUIDOS} e não a corrente, que é 0`,
+  );
+
+  /* ---------------------------------------------------------------- *
+   * A view dos selos V2 contra a regra em TypeScript
+   * ---------------------------------------------------------------- */
+
+  console.log("\nA view `puzzles_do_aluno` contra a regra em TypeScript:\n");
+  const tentativas: { puzzle_id: string; acertou: boolean }[] = [];
+  for (let de = 0; ; de += 1000) {
+    const { data, error } = await admin
+      .from("tentativas_puzzle")
+      .select("puzzle_id, acertou")
+      .eq("aluno", aluno)
+      .order("criada_em")
+      .order("id")
+      .range(de, de + 999);
+    if (error) throw new Error(`não consegui ler as tentativas: ${error.message}`);
+    tentativas.push(...(data ?? []));
+    if ((data ?? []).length < 1000) break;
+  }
+  const { data: daView, error: erroView } = await admin
+    .from("puzzles_do_aluno")
+    .select("tentativas, resolvidos, melhor_janela")
+    .eq("aluno", aluno)
+    .maybeSingle();
+  afirmar(!erroView, `a view responde (${erroView?.message ?? "sem erro"})`);
+  const resolvidos = new Set(tentativas.filter((t) => t.acertou).map((t) => t.puzzle_id)).size;
+  const janela = melhorJanelaDeAcertos(tentativas.map((t) => t.acertou));
+  afirmar(daView?.tentativas === tentativas.length, `tentativas: view ${daView?.tentativas}, contadas ${tentativas.length}`);
+  afirmar(daView?.resolvidos === resolvidos, `resolvidos (distintos): view ${daView?.resolvidos}, contados ${resolvidos}`);
+  afirmar(
+    (daView?.melhor_janela ?? null) === janela,
+    `melhor janela de 100: view ${daView?.melhor_janela ?? "nula"}, calculada ${janela ?? "nula"}`,
   );
 
   const trancados = lista.filter((s) => !s.ganho);

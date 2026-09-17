@@ -272,7 +272,11 @@ export type ProgressoParaONivel = {
   readonly comPratica: ReadonlySet<string>;
   /** Quantas linhas do repertório estão aprendidas, no total. */
   readonly linhasAprendidas: number;
-  /** `baseCompleto()`, que é o requisito do nível 5 no lugar do número 20. */
+  /**
+   * `baseCompleto()`, que é o requisito do nível 5 no lugar do número 20. **Sem as linhas trancadas
+   * por aula** (17/9/2026): quem monta passa `travaDoAluno().trancadas`, e a linha de uma aula de
+   * abertura não concluída não segura o nível — ver `lib/aberturas/trava.ts`.
+   */
   readonly baseCompleto: boolean;
   /** As aulas extras publicadas (§22), que contam no nível delas. Ausente = nenhuma. */
   readonly extras?: readonly AulaDaTrilha[];

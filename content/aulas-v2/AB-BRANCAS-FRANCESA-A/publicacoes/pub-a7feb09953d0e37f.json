@@ -1,0 +1,1655 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-a7feb09953d0e37f",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "AB-BRANCAS-FRANCESA-A",
+    "titulo": "Francesa 3.Bd3 — aula A: A defesa e nossa arma",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "estadoEditorial": "rascunho",
+      "fonteDidatica": "estudo qq2xorDl v1.5 — Repertorio Contra a Francesa.v5",
+      "abertura": {
+        "cor": "brancas",
+        "abertura": "francesa",
+        "bloco": "A"
+      }
+    },
+    "proveniencia": [],
+    "excecoes": [],
+    "analises": [
+      {
+        "id": "analise-cap-00",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5",
+            "Site": "Lichess Study",
+            "Date": "2026.09.16",
+            "Round": "1",
+            "White": "00",
+            "Black": "Conhecendo a Francesa: avançar, trocar ou proteger",
+            "Result": "*",
+            "Annotator": "Projeto repertório completo - Francesa",
+            "Variant": "Standard",
+            "ECO": "C00",
+            "Opening": "French Defense",
+            "StudyName": "Repertorio Contra a Francesa.v5",
+            "ChapterName": "cap 00",
+            "ChapterURL": "https://lichess.org/study/qq2xorDl/wbbM9nYX",
+            "Orientation": "black"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-00-0",
+        "nos": {
+          "no-cap-00-0": {
+            "id": "no-cap-00-0",
+            "filhos": [
+              "no-cap-00-1"
+            ],
+            "comentario": "[SECAO] Conheça a Francesa | a ideia principal [OBJETIVO] Entender a ideia da Defesa Francesa e a primeira decisão das Brancas."
+          },
+          "no-cap-00-1": {
+            "id": "no-cap-00-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-00-2"
+            ],
+            "comentario": "É a nossa escolha: controla o centro e abre caminho para o bispo e a dama."
+          },
+          "no-cap-00-2": {
+            "id": "no-cap-00-2",
+            "uci": "e7e6",
+            "filhos": [
+              "no-cap-00-3"
+            ],
+            "comentario": "A Defesa Francesa começa com ...e6. As Pretas querem jogar ...d5 e atacar nosso peão de e4."
+          },
+          "no-cap-00-3": {
+            "id": "no-cap-00-3",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-00-4"
+            ],
+            "comentario": "Nós ocupamos o centro. As Pretas deixaram d4 livre, então colocamos o segundo peão lá. Dois peões no meio dão espaço às nossas peças."
+          },
+          "no-cap-00-4": {
+            "id": "no-cap-00-4",
+            "uci": "d7d5",
+            "filhos": [],
+            "comentario": "Agora e4 está atacado. Três caminhos: 3.e5, a Variante do Avanço; 3.exd5, a Variante das Trocas; ou proteger e4 com uma peça. As proteções mais conhecidas são Nc3 e Nd2. [ENTENDER] A Francesa é sólida, mas o bispo de c8 pode demorar a sair. [RESUMO] Avançar, trocar ou proteger. [PROXIMO] Agora veja o caminho que nós escolhemos."
+          }
+        }
+      },
+      {
+        "id": "analise-cap-a00",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5",
+            "Site": "Lichess Study",
+            "Date": "2026.09.16",
+            "Round": "2",
+            "White": "A00",
+            "Black": "Nossa arma: 3.Bd3 — simples e menos comum",
+            "Result": "*",
+            "Annotator": "Projeto repertório completo - Francesa",
+            "Variant": "Standard",
+            "ECO": "C00",
+            "Opening": "French Defense: Schlechter Variation",
+            "StudyName": "Repertorio Contra a Francesa.v5",
+            "ChapterName": "cap A00",
+            "ChapterURL": "https://lichess.org/study/qq2xorDl/GHbOA1UE",
+            "Orientation": "black"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-a00-0",
+        "nos": {
+          "no-cap-a00-0": {
+            "id": "no-cap-a00-0",
+            "filhos": [
+              "no-cap-a00-1"
+            ],
+            "comentario": "[SECAO] Nossa arma: 3.Bd3 | proteger e4 desenvolvendo uma peça [OBJETIVO] Entender por que escolhemos 3.Bd3."
+          },
+          "no-cap-a00-1": {
+            "id": "no-cap-a00-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-a00-2"
+            ]
+          },
+          "no-cap-a00-2": {
+            "id": "no-cap-a00-2",
+            "uci": "e7e6",
+            "filhos": [
+              "no-cap-a00-3"
+            ]
+          },
+          "no-cap-a00-3": {
+            "id": "no-cap-a00-3",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-a00-4"
+            ]
+          },
+          "no-cap-a00-4": {
+            "id": "no-cap-a00-4",
+            "uci": "d7d5",
+            "filhos": [
+              "no-cap-a00-5"
+            ],
+            "comentario": "Entre avançar, trocar e proteger, nós escolhemos proteger e4. [PERGUNTA] Como fazer isso desenvolvendo uma peça? [DICA] Um bispo pode sair e proteger e4 ao mesmo tempo."
+          },
+          "no-cap-a00-5": {
+            "id": "no-cap-a00-5",
+            "uci": "f1d3",
+            "filhos": [],
+            "comentario": "O bispo sai e protege e4: dois trabalhos com um lance. Esta é a nossa arma. [ENTENDER] 3.Bd3 é menos comum que as linhas principais. O adversário pode não conhecer, e nós conhecemos o plano. [PLANO] Desenvolver e proteger. Se for seguro, Qe2 e roque grande. [TRAIN] 3.Bd3. [RESUMO] Linha menos comum, plano claro. [PROXIMO] Agora vamos ver onde colocar cada peça.",
+            "nags": [
+              1
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-cap-a01",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5",
+            "Site": "Lichess Study",
+            "Date": "2026.09.16",
+            "Round": "3",
+            "White": "A01",
+            "Black": "Nosso plano: proteger, desenvolver e rocar grande",
+            "Result": "*",
+            "Annotator": "Projeto repertório completo - Francesa",
+            "Variant": "Standard",
+            "ECO": "C00",
+            "Opening": "French Defense: Schlechter Variation",
+            "StudyName": "Repertorio Contra a Francesa.v5",
+            "ChapterName": "cap A01",
+            "ChapterURL": "https://lichess.org/study/qq2xorDl/YaIvDkEG",
+            "Orientation": "black"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-a01-0",
+        "nos": {
+          "no-cap-a01-0": {
+            "id": "no-cap-a01-0",
+            "filhos": [
+              "no-cap-a01-1"
+            ],
+            "comentario": "[SECAO] Nosso plano | visão geral [OBJETIVO] Aprender onde colocar as peças e conhecer um dos nossos planos: rocar grande quando for seguro."
+          },
+          "no-cap-a01-1": {
+            "id": "no-cap-a01-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-a01-2"
+            ]
+          },
+          "no-cap-a01-2": {
+            "id": "no-cap-a01-2",
+            "uci": "e7e6",
+            "filhos": [
+              "no-cap-a01-3"
+            ]
+          },
+          "no-cap-a01-3": {
+            "id": "no-cap-a01-3",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-a01-4"
+            ]
+          },
+          "no-cap-a01-4": {
+            "id": "no-cap-a01-4",
+            "uci": "d7d5",
+            "filhos": [
+              "no-cap-a01-5"
+            ]
+          },
+          "no-cap-a01-5": {
+            "id": "no-cap-a01-5",
+            "uci": "f1d3",
+            "filhos": [
+              "no-cap-a01-6"
+            ]
+          },
+          "no-cap-a01-6": {
+            "id": "no-cap-a01-6",
+            "uci": "d5e4",
+            "filhos": [
+              "no-cap-a01-7"
+            ],
+            "comentario": "As Pretas tomam nosso peão de e4. [PERGUNTA] Como recuperar o peão e continuar desenvolvendo? [DICA] A peça que protegia e4 pode tomar o peão."
+          },
+          "no-cap-a01-7": {
+            "id": "no-cap-a01-7",
+            "uci": "d3e4",
+            "filhos": [
+              "no-cap-a01-8"
+            ],
+            "comentario": "Recuperamos com o bispo."
+          },
+          "no-cap-a01-8": {
+            "id": "no-cap-a01-8",
+            "uci": "g8f6",
+            "filhos": [
+              "no-cap-a01-9"
+            ],
+            "comentario": "As Pretas desenvolvem o cavalo e atacam nosso bispo."
+          },
+          "no-cap-a01-9": {
+            "id": "no-cap-a01-9",
+            "uci": "e4f3",
+            "filhos": [
+              "no-cap-a01-10"
+            ],
+            "comentario": "O bispo recua para uma casa segura. Agora o cavalo g1 pode ir a e2."
+          },
+          "no-cap-a01-10": {
+            "id": "no-cap-a01-10",
+            "uci": "c7c5",
+            "filhos": [
+              "no-cap-a01-11"
+            ],
+            "comentario": "...c5 ataca nosso peão de d4."
+          },
+          "no-cap-a01-11": {
+            "id": "no-cap-a01-11",
+            "uci": "g1e2",
+            "filhos": [
+              "no-cap-a01-12"
+            ],
+            "comentario": "Desenvolvemos o cavalo e protegemos d4."
+          },
+          "no-cap-a01-12": {
+            "id": "no-cap-a01-12",
+            "uci": "b8c6",
+            "filhos": [
+              "no-cap-a01-13"
+            ],
+            "comentario": "As Pretas desenvolvem outra peça e aumentam a pressão sobre d4."
+          },
+          "no-cap-a01-13": {
+            "id": "no-cap-a01-13",
+            "uci": "c1e3",
+            "filhos": [
+              "no-cap-a01-14"
+            ],
+            "comentario": "De novo fazemos duas coisas: desenvolvemos o bispo e protegemos d4. A casa d4 é o ponto central do nosso esquema. [PLANO] Nossa regra é simples: desenvolver sem deixar d4 cair.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gd4]"
+            ]
+          },
+          "no-cap-a01-14": {
+            "id": "no-cap-a01-14",
+            "uci": "c5d4",
+            "filhos": [
+              "no-cap-a01-15"
+            ],
+            "comentario": "As Pretas trocam em d4."
+          },
+          "no-cap-a01-15": {
+            "id": "no-cap-a01-15",
+            "uci": "e2d4",
+            "filhos": [
+              "no-cap-a01-16"
+            ],
+            "comentario": "Recuperamos o peão e colocamos o cavalo no centro."
+          },
+          "no-cap-a01-16": {
+            "id": "no-cap-a01-16",
+            "uci": "c6e5",
+            "filhos": [
+              "no-cap-a01-17"
+            ],
+            "comentario": "O cavalo preto sai do ataque e ataca nosso bispo em f3."
+          },
+          "no-cap-a01-17": {
+            "id": "no-cap-a01-17",
+            "uci": "b1c3",
+            "filhos": [
+              "no-cap-a01-18"
+            ],
+            "comentario": "Desenvolvemos a última peça menor."
+          },
+          "no-cap-a01-18": {
+            "id": "no-cap-a01-18",
+            "uci": "f8e7",
+            "filhos": [
+              "no-cap-a01-19"
+            ],
+            "comentario": "As Pretas preparam o roque curto."
+          },
+          "no-cap-a01-19": {
+            "id": "no-cap-a01-19",
+            "uci": "d1e2",
+            "filhos": [
+              "no-cap-a01-20"
+            ],
+            "comentario": "A dama sai de d1 e libera o caminho para o roque grande."
+          },
+          "no-cap-a01-20": {
+            "id": "no-cap-a01-20",
+            "uci": "e8g8",
+            "filhos": [
+              "no-cap-a01-21"
+            ],
+            "comentario": "O rei preto fica seguro no lado do rei."
+          },
+          "no-cap-a01-21": {
+            "id": "no-cap-a01-21",
+            "uci": "e1c1",
+            "filhos": [],
+            "comentario": "Se nosso rei estiver seguro, este é um plano importante: rocar grande. Com os reis em lados opostos, muitas vezes podemos atacar no lado do rei. [ATENCAO] Não avance peões no automático: primeiro confira a segurança do nosso rei. [TRAIN] Esquema: Bf3, Ne2, Be3, Nc3, Qe2 e O-O-O. [RESUMO] Desenvolva e proteja. Roque grande quando for seguro. [PROXIMO] Agora vamos reconhecer as respostas práticas mais importantes das Pretas."
+          }
+        }
+      },
+      {
+        "id": "analise-arvore-a",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "raizId": "no-arvore-a-0",
+        "nos": {
+          "no-arvore-a-0": {
+            "id": "no-arvore-a-0",
+            "filhos": [
+              "no-arvore-a-1"
+            ]
+          },
+          "no-arvore-a-1": {
+            "id": "no-arvore-a-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-arvore-a-2"
+            ],
+            "comentario": "É a nossa escolha: controla o centro e abre caminho para o bispo e a dama."
+          },
+          "no-arvore-a-2": {
+            "id": "no-arvore-a-2",
+            "uci": "e7e6",
+            "filhos": [
+              "no-arvore-a-3"
+            ],
+            "comentario": "A Defesa Francesa começa com ...e6. As Pretas querem jogar ...d5 e atacar nosso peão de e4."
+          },
+          "no-arvore-a-3": {
+            "id": "no-arvore-a-3",
+            "uci": "d2d4",
+            "filhos": [
+              "no-arvore-a-4"
+            ],
+            "comentario": "Nós ocupamos o centro. As Pretas deixaram d4 livre, então colocamos o segundo peão lá."
+          },
+          "no-arvore-a-4": {
+            "id": "no-arvore-a-4",
+            "uci": "d7d5",
+            "filhos": [
+              "no-arvore-a-5"
+            ],
+            "comentario": "Agora e4 está atacado."
+          },
+          "no-arvore-a-5": {
+            "id": "no-arvore-a-5",
+            "uci": "f1d3",
+            "filhos": [
+              "no-arvore-a-6"
+            ],
+            "comentario": "O bispo sai e protege e4: dois trabalhos com um lance. Esta é a nossa arma.",
+            "nags": [
+              1
+            ]
+          },
+          "no-arvore-a-6": {
+            "id": "no-arvore-a-6",
+            "uci": "d5e4",
+            "filhos": [
+              "no-arvore-a-7"
+            ],
+            "comentario": "As Pretas tomam nosso peão de e4. Como recuperar o peão e continuar desenvolvendo?"
+          },
+          "no-arvore-a-7": {
+            "id": "no-arvore-a-7",
+            "uci": "d3e4",
+            "filhos": [
+              "no-arvore-a-8"
+            ],
+            "comentario": "Recuperamos com o bispo."
+          },
+          "no-arvore-a-8": {
+            "id": "no-arvore-a-8",
+            "uci": "g8f6",
+            "filhos": [
+              "no-arvore-a-9"
+            ],
+            "comentario": "As Pretas desenvolvem o cavalo e atacam nosso bispo."
+          },
+          "no-arvore-a-9": {
+            "id": "no-arvore-a-9",
+            "uci": "e4f3",
+            "filhos": [
+              "no-arvore-a-10"
+            ],
+            "comentario": "O bispo recua para uma casa segura. Agora o cavalo g1 pode ir a e2."
+          },
+          "no-arvore-a-10": {
+            "id": "no-arvore-a-10",
+            "uci": "c7c5",
+            "filhos": [
+              "no-arvore-a-11"
+            ],
+            "comentario": "...c5 ataca nosso peão de d4."
+          },
+          "no-arvore-a-11": {
+            "id": "no-arvore-a-11",
+            "uci": "g1e2",
+            "filhos": [
+              "no-arvore-a-12"
+            ],
+            "comentario": "Desenvolvemos o cavalo e protegemos d4."
+          },
+          "no-arvore-a-12": {
+            "id": "no-arvore-a-12",
+            "uci": "b8c6",
+            "filhos": [
+              "no-arvore-a-13"
+            ],
+            "comentario": "As Pretas desenvolvem outra peça e aumentam a pressão sobre d4."
+          },
+          "no-arvore-a-13": {
+            "id": "no-arvore-a-13",
+            "uci": "c1e3",
+            "filhos": [
+              "no-arvore-a-14"
+            ],
+            "comentario": "De novo fazemos duas coisas: desenvolvemos o bispo e protegemos d4."
+          },
+          "no-arvore-a-14": {
+            "id": "no-arvore-a-14",
+            "uci": "c5d4",
+            "filhos": [
+              "no-arvore-a-15"
+            ],
+            "comentario": "As Pretas trocam em d4."
+          },
+          "no-arvore-a-15": {
+            "id": "no-arvore-a-15",
+            "uci": "e2d4",
+            "filhos": [
+              "no-arvore-a-16"
+            ],
+            "comentario": "Recuperamos o peão e colocamos o cavalo no centro."
+          },
+          "no-arvore-a-16": {
+            "id": "no-arvore-a-16",
+            "uci": "c6e5",
+            "filhos": [
+              "no-arvore-a-17"
+            ],
+            "comentario": "O cavalo preto sai do ataque e ataca nosso bispo em f3."
+          },
+          "no-arvore-a-17": {
+            "id": "no-arvore-a-17",
+            "uci": "b1c3",
+            "filhos": [
+              "no-arvore-a-18"
+            ],
+            "comentario": "Desenvolvemos a última peça menor."
+          },
+          "no-arvore-a-18": {
+            "id": "no-arvore-a-18",
+            "uci": "f8e7",
+            "filhos": [
+              "no-arvore-a-19"
+            ],
+            "comentario": "As Pretas preparam o roque curto."
+          },
+          "no-arvore-a-19": {
+            "id": "no-arvore-a-19",
+            "uci": "d1e2",
+            "filhos": [
+              "no-arvore-a-20"
+            ],
+            "comentario": "A dama sai de d1 e libera o caminho para o roque grande."
+          },
+          "no-arvore-a-20": {
+            "id": "no-arvore-a-20",
+            "uci": "e8g8",
+            "filhos": [
+              "no-arvore-a-21"
+            ],
+            "comentario": "O rei preto fica seguro no lado do rei."
+          },
+          "no-arvore-a-21": {
+            "id": "no-arvore-a-21",
+            "uci": "e1c1",
+            "filhos": [],
+            "comentario": "Se nosso rei estiver seguro, este é um plano importante: rocar grande."
+          }
+        }
+      }
+    ],
+    "introducoes": [],
+    "capitulos": [
+      {
+        "id": "cap-00",
+        "titulo": "Conhecendo a Francesa: avançar, trocar ou proteger",
+        "resumo": "Entender a ideia da Defesa Francesa e a primeira decisão das Brancas.",
+        "secao": {
+          "titulo": "Conheça a Francesa",
+          "subtitulo": "a ideia principal"
+        },
+        "analiseId": "analise-cap-00",
+        "inicioNodeId": "no-cap-00-0",
+        "caminho": [
+          "no-cap-00-1",
+          "no-cap-00-2",
+          "no-cap-00-3",
+          "no-cap-00-4"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-00-1",
+            "nodeId": "no-cap-00-1",
+            "texto": "É a nossa escolha: controla o centro e abre caminho para o bispo e a dama.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-00-2",
+            "nodeId": "no-cap-00-2",
+            "texto": "A Defesa Francesa começa com ...e6. As Pretas querem jogar ...d5 e atacar nosso peão de e4.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-00-3",
+            "nodeId": "no-cap-00-3",
+            "texto": "Nós ocupamos o centro. As Pretas deixaram d4 livre, então colocamos o segundo peão lá. Dois peões no meio dão espaço às nossas peças.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-00-4",
+            "nodeId": "no-cap-00-4",
+            "texto": "Agora e4 está atacado. Três caminhos: 3.e5, a Variante do Avanço; 3.exd5, a Variante das Trocas; ou proteger e4 com uma peça. As proteções mais conhecidas são Nc3 e Nd2.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-00-4-2",
+            "nodeId": "no-cap-00-4",
+            "texto": "A Francesa é sólida, mas o bispo de c8 pode demorar a sair.",
+            "pausa": "temporizada",
+            "rotulo": "Entender"
+          },
+          {
+            "id": "narracao-no-cap-00-4-3",
+            "nodeId": "no-cap-00-4",
+            "texto": "Avançar, trocar ou proteger.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          },
+          {
+            "id": "narracao-no-cap-00-4-4",
+            "nodeId": "no-cap-00-4",
+            "texto": "Agora veja o caminho que nós escolhemos.",
+            "pausa": "manual",
+            "rotulo": "A seguir"
+          }
+        ]
+      },
+      {
+        "id": "cap-a00",
+        "titulo": "Nossa arma: 3.Bd3 — simples e menos comum",
+        "resumo": "Entender por que escolhemos 3.Bd3.",
+        "secao": {
+          "titulo": "Nossa arma: 3.Bd3",
+          "subtitulo": "proteger e4 desenvolvendo uma peça"
+        },
+        "analiseId": "analise-cap-a00",
+        "inicioNodeId": "no-cap-a00-0",
+        "caminho": [
+          "no-cap-a00-1",
+          "no-cap-a00-2",
+          "no-cap-a00-3",
+          "no-cap-a00-4"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-a00-4",
+            "nodeId": "no-cap-a00-4",
+            "texto": "Entre avançar, trocar e proteger, nós escolhemos proteger e4.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "cap-a00-2",
+        "titulo": "Nossa arma: 3.Bd3 — simples e menos comum — depois de 3.Bd3",
+        "analiseId": "analise-cap-a00",
+        "inicioNodeId": "no-cap-a00-5",
+        "caminho": [],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-a00-5",
+            "nodeId": "no-cap-a00-5",
+            "texto": "O bispo sai e protege e4: dois trabalhos com um lance. Esta é a nossa arma.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a00-5-2",
+            "nodeId": "no-cap-a00-5",
+            "texto": "3.Bd3 é menos comum que as linhas principais. O adversário pode não conhecer, e nós conhecemos o plano.",
+            "pausa": "temporizada",
+            "rotulo": "Entender"
+          },
+          {
+            "id": "narracao-no-cap-a00-5-3",
+            "nodeId": "no-cap-a00-5",
+            "texto": "Desenvolver e proteger. Se for seguro, Qe2 e roque grande.",
+            "pausa": "temporizada",
+            "rotulo": "Plano"
+          },
+          {
+            "id": "narracao-no-cap-a00-5-4",
+            "nodeId": "no-cap-a00-5",
+            "texto": "Linha menos comum, plano claro.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          },
+          {
+            "id": "narracao-no-cap-a00-5-5",
+            "nodeId": "no-cap-a00-5",
+            "texto": "Agora vamos ver onde colocar cada peça.",
+            "pausa": "manual",
+            "rotulo": "A seguir"
+          }
+        ]
+      },
+      {
+        "id": "cap-a01",
+        "titulo": "Nosso plano: proteger, desenvolver e rocar grande",
+        "resumo": "Aprender onde colocar as peças e conhecer um dos nossos planos: rocar grande quando for seguro.",
+        "secao": {
+          "titulo": "Nosso plano",
+          "subtitulo": "visão geral"
+        },
+        "analiseId": "analise-cap-a01",
+        "inicioNodeId": "no-cap-a01-0",
+        "caminho": [
+          "no-cap-a01-1",
+          "no-cap-a01-2",
+          "no-cap-a01-3",
+          "no-cap-a01-4",
+          "no-cap-a01-5",
+          "no-cap-a01-6"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-a01-6",
+            "nodeId": "no-cap-a01-6",
+            "texto": "As Pretas tomam nosso peão de e4.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "cap-a01-2",
+        "titulo": "Nosso plano: proteger, desenvolver e rocar grande — depois de 4.Bxe4",
+        "analiseId": "analise-cap-a01",
+        "inicioNodeId": "no-cap-a01-7",
+        "caminho": [
+          "no-cap-a01-8",
+          "no-cap-a01-9",
+          "no-cap-a01-10",
+          "no-cap-a01-11",
+          "no-cap-a01-12",
+          "no-cap-a01-13",
+          "no-cap-a01-14",
+          "no-cap-a01-15",
+          "no-cap-a01-16",
+          "no-cap-a01-17",
+          "no-cap-a01-18",
+          "no-cap-a01-19",
+          "no-cap-a01-20",
+          "no-cap-a01-21"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-a01-7",
+            "nodeId": "no-cap-a01-7",
+            "texto": "Recuperamos com o bispo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-8",
+            "nodeId": "no-cap-a01-8",
+            "texto": "As Pretas desenvolvem o cavalo e atacam nosso bispo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-9",
+            "nodeId": "no-cap-a01-9",
+            "texto": "O bispo recua para uma casa segura. Agora o cavalo g1 pode ir a e2.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-10",
+            "nodeId": "no-cap-a01-10",
+            "texto": "...c5 ataca nosso peão de d4.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-11",
+            "nodeId": "no-cap-a01-11",
+            "texto": "Desenvolvemos o cavalo e protegemos d4.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-12",
+            "nodeId": "no-cap-a01-12",
+            "texto": "As Pretas desenvolvem outra peça e aumentam a pressão sobre d4.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-13",
+            "nodeId": "no-cap-a01-13",
+            "texto": "De novo fazemos duas coisas: desenvolvemos o bispo e protegemos d4. A casa d4 é o ponto central do nosso esquema.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-13-2",
+            "nodeId": "no-cap-a01-13",
+            "texto": "Nossa regra é simples: desenvolver sem deixar d4 cair.",
+            "pausa": "temporizada",
+            "rotulo": "Plano"
+          },
+          {
+            "id": "narracao-no-cap-a01-14",
+            "nodeId": "no-cap-a01-14",
+            "texto": "As Pretas trocam em d4.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-15",
+            "nodeId": "no-cap-a01-15",
+            "texto": "Recuperamos o peão e colocamos o cavalo no centro.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-16",
+            "nodeId": "no-cap-a01-16",
+            "texto": "O cavalo preto sai do ataque e ataca nosso bispo em f3.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-17",
+            "nodeId": "no-cap-a01-17",
+            "texto": "Desenvolvemos a última peça menor.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-18",
+            "nodeId": "no-cap-a01-18",
+            "texto": "As Pretas preparam o roque curto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-19",
+            "nodeId": "no-cap-a01-19",
+            "texto": "A dama sai de d1 e libera o caminho para o roque grande.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-20",
+            "nodeId": "no-cap-a01-20",
+            "texto": "O rei preto fica seguro no lado do rei.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-21",
+            "nodeId": "no-cap-a01-21",
+            "texto": "Se nosso rei estiver seguro, este é um plano importante: rocar grande. Com os reis em lados opostos, muitas vezes podemos atacar no lado do rei.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-21-2",
+            "nodeId": "no-cap-a01-21",
+            "texto": "Não avance peões no automático: primeiro confira a segurança do nosso rei.",
+            "pausa": "temporizada",
+            "rotulo": "Atenção"
+          },
+          {
+            "id": "narracao-no-cap-a01-21-3",
+            "nodeId": "no-cap-a01-21",
+            "texto": "Desenvolva e proteja. Roque grande quando for seguro.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          },
+          {
+            "id": "narracao-no-cap-a01-21-4",
+            "nodeId": "no-cap-a01-21",
+            "texto": "Agora vamos reconhecer as respostas práticas mais importantes das Pretas.",
+            "pausa": "manual",
+            "rotulo": "A seguir"
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-parada-a00-1",
+        "titulo": "Sua vez — A00",
+        "introducao": "Como fazer isso desenvolvendo uma peça?",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-a00",
+          "nodeId": "no-cap-a00-4"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Como fazer isso desenvolvendo uma peça?",
+        "questoes": [
+          {
+            "id": "questao-parada-a00-1",
+            "posicao": {
+              "analiseId": "analise-cap-a00",
+              "nodeId": "no-cap-a00-4"
+            },
+            "dica": "Um bispo pode sair e proteger e4 ao mesmo tempo.",
+            "respostas": [
+              {
+                "id": "resposta-parada-a00-1",
+                "moves": [
+                  "f1d3"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 3.Bd3.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+            "historicoUci": [
+              "e2e4",
+              "e7e6",
+              "d2d4",
+              "d7d5"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-a00",
+              "nodeId": "no-cap-a00-4"
+            }
+          },
+          "questoes": {
+            "questao-parada-a00-1": {
+              "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-a00",
+                "nodeId": "no-cap-a00-4"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 3.Bd3.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-parada-a01-1",
+        "titulo": "Sua vez — A01",
+        "introducao": "Como recuperar o peão e continuar desenvolvendo?",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-a01",
+          "nodeId": "no-cap-a01-6"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Como recuperar o peão e continuar desenvolvendo?",
+        "questoes": [
+          {
+            "id": "questao-parada-a01-1",
+            "posicao": {
+              "analiseId": "analise-cap-a01",
+              "nodeId": "no-cap-a01-6"
+            },
+            "dica": "A peça que protegia e4 pode tomar o peão.",
+            "respostas": [
+              {
+                "id": "resposta-parada-a01-1",
+                "moves": [
+                  "d3e4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 4.Bxe4.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "rnbqkbnr/ppp2ppp/4p3/8/3Pp3/3B4/PPP2PPP/RNBQK1NR w KQkq - 0 4",
+            "historicoUci": [
+              "e2e4",
+              "e7e6",
+              "d2d4",
+              "d7d5",
+              "f1d3",
+              "d5e4"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-a01",
+              "nodeId": "no-cap-a01-6"
+            }
+          },
+          "questoes": {
+            "questao-parada-a01-1": {
+              "fen": "rnbqkbnr/ppp2ppp/4p3/8/3Pp3/3B4/PPP2PPP/RNBQK1NR w KQkq - 0 4",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-a01",
+                "nodeId": "no-cap-a01-6"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 4.Bxe4.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-arvore-a",
+        "titulo": "Treino guiado — aula A",
+        "introducao": "Jogue as linhas da aula: a resposta do adversário muda a cada tentativa.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-arvore-a",
+          "nodeId": "no-arvore-a-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Jogar as linhas da aula de memória, contra as respostas que o repertório prevê.",
+        "questoes": [
+          {
+            "id": "questao-arvore-a-1",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-1",
+                "moves": [
+                  "e2e4"
+                ],
+                "julgamento": "correta",
+                "feedback": "É a nossa escolha: controla o centro e abre caminho para o bispo e a dama.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e7e6",
+                      "proximaQuestaoId": "questao-arvore-a-2",
+                      "texto": "A Defesa Francesa começa com ...e6. As Pretas querem jogar ...d5 e atacar nosso peão de e4."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-2",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-2"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-3",
+                "moves": [
+                  "d2d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Nós ocupamos o centro. As Pretas deixaram d4 livre, então colocamos o segundo peão lá.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d7d5",
+                      "proximaQuestaoId": "questao-arvore-a-3",
+                      "texto": "Agora e4 está atacado."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-3",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-4"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-5",
+                "moves": [
+                  "f1d3"
+                ],
+                "julgamento": "correta",
+                "feedback": "O bispo sai e protege e4: dois trabalhos com um lance. Esta é a nossa arma.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d5e4",
+                      "proximaQuestaoId": "questao-arvore-a-4",
+                      "texto": "As Pretas tomam nosso peão de e4. Como recuperar o peão e continuar desenvolvendo?"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-4",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-6"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-7",
+                "moves": [
+                  "d3e4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Recuperamos com o bispo.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g8f6",
+                      "proximaQuestaoId": "questao-arvore-a-5",
+                      "texto": "As Pretas desenvolvem o cavalo e atacam nosso bispo."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-5",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-8"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-9",
+                "moves": [
+                  "e4f3"
+                ],
+                "julgamento": "correta",
+                "feedback": "O bispo recua para uma casa segura. Agora o cavalo g1 pode ir a e2.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c7c5",
+                      "proximaQuestaoId": "questao-arvore-a-6",
+                      "texto": "...c5 ataca nosso peão de d4."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-6",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-10"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-11",
+                "moves": [
+                  "g1e2"
+                ],
+                "julgamento": "correta",
+                "feedback": "Desenvolvemos o cavalo e protegemos d4.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b8c6",
+                      "proximaQuestaoId": "questao-arvore-a-7",
+                      "texto": "As Pretas desenvolvem outra peça e aumentam a pressão sobre d4."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-7",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-12"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-13",
+                "moves": [
+                  "c1e3"
+                ],
+                "julgamento": "correta",
+                "feedback": "De novo fazemos duas coisas: desenvolvemos o bispo e protegemos d4.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c5d4",
+                      "proximaQuestaoId": "questao-arvore-a-8",
+                      "texto": "As Pretas trocam em d4."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-8",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-14"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-15",
+                "moves": [
+                  "e2d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Recuperamos o peão e colocamos o cavalo no centro.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c6e5",
+                      "proximaQuestaoId": "questao-arvore-a-9",
+                      "texto": "O cavalo preto sai do ataque e ataca nosso bispo em f3."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-9",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-16"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-17",
+                "moves": [
+                  "b1c3"
+                ],
+                "julgamento": "correta",
+                "feedback": "Desenvolvemos a última peça menor.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f8e7",
+                      "proximaQuestaoId": "questao-arvore-a-10",
+                      "texto": "As Pretas preparam o roque curto."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-10",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-18"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-19",
+                "moves": [
+                  "d1e2"
+                ],
+                "julgamento": "correta",
+                "feedback": "A dama sai de d1 e libera o caminho para o roque grande.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e8g8",
+                      "proximaQuestaoId": "questao-arvore-a-11",
+                      "texto": "O rei preto fica seguro no lado do rei."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-11",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-20"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-21",
+                "moves": [
+                  "e1c1"
+                ],
+                "julgamento": "correta",
+                "feedback": "Se nosso rei estiver seguro, este é um plano importante: rocar grande.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-0"
+            }
+          },
+          "questoes": {
+            "questao-arvore-a-1": {
+              "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-0"
+              }
+            },
+            "questao-arvore-a-2": {
+              "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+              "historicoUci": [
+                "e2e4",
+                "e7e6"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-2"
+              }
+            },
+            "questao-arvore-a-3": {
+              "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-4"
+              }
+            },
+            "questao-arvore-a-4": {
+              "fen": "rnbqkbnr/ppp2ppp/4p3/8/3Pp3/3B4/PPP2PPP/RNBQK1NR w KQkq - 0 4",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-6"
+              }
+            },
+            "questao-arvore-a-5": {
+              "fen": "rnbqkb1r/ppp2ppp/4pn2/8/3PB3/8/PPP2PPP/RNBQK1NR w KQkq - 1 5",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-8"
+              }
+            },
+            "questao-arvore-a-6": {
+              "fen": "rnbqkb1r/pp3ppp/4pn2/2p5/3P4/5B2/PPP2PPP/RNBQK1NR w KQkq - 0 6",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-10"
+              }
+            },
+            "questao-arvore-a-7": {
+              "fen": "r1bqkb1r/pp3ppp/2n1pn2/2p5/3P4/5B2/PPP1NPPP/RNBQK2R w KQkq - 2 7",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-12"
+              }
+            },
+            "questao-arvore-a-8": {
+              "fen": "r1bqkb1r/pp3ppp/2n1pn2/8/3p4/4BB2/PPP1NPPP/RN1QK2R w KQkq - 0 8",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-14"
+              }
+            },
+            "questao-arvore-a-9": {
+              "fen": "r1bqkb1r/pp3ppp/4pn2/4n3/3N4/4BB2/PPP2PPP/RN1QK2R w KQkq - 1 9",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-16"
+              }
+            },
+            "questao-arvore-a-10": {
+              "fen": "r1bqk2r/pp2bppp/4pn2/4n3/3N4/2N1BB2/PPP2PPP/R2QK2R w KQkq - 3 10",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5",
+                "b1c3",
+                "f8e7"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-18"
+              }
+            },
+            "questao-arvore-a-11": {
+              "fen": "r1bq1rk1/pp2bppp/4pn2/4n3/3N4/2N1BB2/PPP1QPPP/R3K2R w KQ - 5 11",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5",
+                "b1c3",
+                "f8e7",
+                "d1e2",
+                "e8g8"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-20"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      }
+    ],
+    "praticas": [],
+    "treinadores": [
+      {
+        "id": "treinador-a",
+        "titulo": "Move trainer — aula A",
+        "cor": "brancas",
+        "abertura": "francesa",
+        "linhaIds": [
+          "brancas-francesa-096972da",
+          "brancas-francesa-46e97af0"
+        ]
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-cap-00",
+        "tipo": "capitulo",
+        "entidadeId": "cap-00"
+      },
+      {
+        "id": "etapa-cap-a00",
+        "tipo": "capitulo",
+        "entidadeId": "cap-a00"
+      },
+      {
+        "id": "etapa-treino-parada-a00-1",
+        "tipo": "treino",
+        "entidadeId": "treino-parada-a00-1"
+      },
+      {
+        "id": "etapa-cap-a00-2",
+        "tipo": "capitulo",
+        "entidadeId": "cap-a00-2"
+      },
+      {
+        "id": "etapa-cap-a01",
+        "tipo": "capitulo",
+        "entidadeId": "cap-a01"
+      },
+      {
+        "id": "etapa-treino-parada-a01-1",
+        "tipo": "treino",
+        "entidadeId": "treino-parada-a01-1"
+      },
+      {
+        "id": "etapa-cap-a01-2",
+        "tipo": "capitulo",
+        "entidadeId": "cap-a01-2"
+      },
+      {
+        "id": "etapa-treino-arvore-a",
+        "tipo": "treino",
+        "entidadeId": "treino-arvore-a"
+      },
+      {
+        "id": "etapa-treinador-a",
+        "tipo": "treinador",
+        "entidadeId": "treinador-a"
+      }
+    ]
+  },
+  "posicoes": {},
+  "revisoes": {
+    "treino-parada-a00-1": {
+      "tipo": "treino",
+      "revisao": "ar_9beb04122f0acb829f38ce33332466f2ac77dda35e7d37838029b6fbcb10346a"
+    },
+    "treino-parada-a01-1": {
+      "tipo": "treino",
+      "revisao": "ar_5197225c5482d0445f3e14086bb577e93b64b1f6f260f28ddd139c551adfc183"
+    },
+    "treino-arvore-a": {
+      "tipo": "treino",
+      "revisao": "ar_158f24bb3e8ba638746cafd0744d6cfd311cb6a29083545463619a293f7f93f2"
+    }
+  },
+  "manifesto": {
+    "aulaId": "AB-BRANCAS-FRANCESA-A",
+    "aula": "48b3ef0da8c8bf8326a15a0d23a7ebb7ab861623469ff1bc3df0cd359ad6a7a9",
+    "posicoes": {},
+    "revisoes": "65f931077b950bc0ba25855e8c52c3f712c68a7797f87f0be31055c982b33e87",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

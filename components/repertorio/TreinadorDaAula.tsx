@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { Celebracao, useCelebracao } from "@/components/Celebracao";
 import { BotaoPrincipal, BotaoSecundario } from "@/components/lesson/BotoesDaAula";
 import type { Resultado, Treino } from "@/lib/repertorio/gravar";
 import type { Linha } from "@/lib/repertorio/linhas";
@@ -51,6 +52,9 @@ export function TreinadorDaAula({
   const [falha, setFalha] = useState<string | null>(null);
   const [linhaFechada, setLinhaFechada] = useState(false);
   const [placar, setPlacar] = useState<{ acertou: boolean; revelado: { san: string } | null } | null>(null);
+  // O fim de cada linha no valendo celebra (17/9/2026) — confete e o acorde, no lugar do som do
+  // prêmio. As etapas de dentro da linha (seta, treino) não disparam.
+  const { seq, celebrar } = useCelebracao();
 
   const decidir = useCallback(async (lances: string[]) => {
     if (!gravar || !linha) return;
@@ -84,10 +88,13 @@ export function TreinadorDaAula({
   );
 
   return (
+    <>
+    <Celebracao seq={seq} tela />
     <Passada
       key={`${linha.id}:${modo}:${rodada}`}
       linha={linha}
       modo={modo}
+      aoFecharLinha={celebrar}
       aoDecidir={(lances) => { void decidir(lances); }}
       aoTerminar={(fecho) => {
         if (modo !== "quiz") return;
@@ -126,5 +133,6 @@ export function TreinadorDaAula({
         </div>
       ) : null}
     />
+    </>
   );
 }

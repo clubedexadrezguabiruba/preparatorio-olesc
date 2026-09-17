@@ -24,8 +24,8 @@ import {
   type PracticeKey,
 } from "@/lib/lesson/store";
 import { restingDelay } from "@/lib/lesson/timing";
-import { playCheck, playComplete, playForMove, playRefusal } from "@/lib/sound";
-import { Confetti } from "./Confetti";
+import { playCheck, playForMove, playRefusal } from "@/lib/sound";
+import { Celebracao, useCelebracao } from "@/components/Celebracao";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { LessonButton } from "./LessonButton";
 import { PulseRing } from "./PulseRing";
@@ -83,7 +83,7 @@ export function PracticeStage({
   const practiceRestart = useLessonStore((s) => s.practiceRestart);
 
   const [revision, setRevision] = useState(0);
-  const [celebration, setCelebration] = useState(0);
+  const { seq: celebration, celebrar } = useCelebracao();
   /*
    * Os dois estados abaixo são **carimbados com a partida a que pertencem**, e
    * lidos pelos derivados logo adiante.
@@ -219,8 +219,7 @@ export function PracticeStage({
       }
 
       if (julgado.kind === "passed") {
-        playComplete();
-        setCelebration((c) => c + 1);
+        celebrar();
         practiceFinish(practiceKey, { result: fim.over ? fim.result : "draw", text: julgado.text, passed: true });
         say("good", julgado.text);
         useLessonStore.getState().celebrate(julgado.text);
@@ -239,7 +238,7 @@ export function PracticeStage({
       });
       say(julgado.tone, julgado.text);
     },
-    [practiceKey, practiceMove, practiceFinish, say, startFen, moves, goal, orientation],
+    [practiceKey, practiceMove, practiceFinish, say, startFen, moves, goal, orientation, celebrar],
   );
 
   /**
@@ -452,7 +451,7 @@ export function PracticeStage({
         }
       />
 
-      <Confetti seq={celebration} originRef={boardColumn} />
+      <Celebracao seq={celebration} originRef={boardColumn} />
     </div>
   );
 }

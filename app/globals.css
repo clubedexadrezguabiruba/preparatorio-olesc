@@ -348,10 +348,17 @@
   --color-seta-ensina: #81b64c;
 
   /* Os símbolos do veredito, no canto da casa de chegada. O desenho é nosso — a
-     estrela é traço próprio e os sinais são texto —, nunca o SVG deles. `?!`
-     (#F7C631) fica sem uso: o repertório não tem imprecisão, tem erro. */
+     estrela é traço próprio e os sinais são texto —, nunca o SVG deles.
+
+     **17/9/2026 (feedback do aluno):** as aulas passaram a desenhar os seis símbolos
+     do estudo com estas cores, como o Chess.com — `!!` turquesa, `!` azul, `!?` roxo
+     claro, `?!` amarelo, `?` laranja, `??` vermelho. Antes a aula pintava todos do
+     mesmo verde. `?!` (#F7C631) ganhou uso, e o `!?` virou roxo claro: a alternativa
+     do move trainer, que é o mesmo sinal, acompanha. */
   --color-simbolo-acerto: #81b64c;
-  --color-simbolo-alternativa: #7979a1;
+  --color-simbolo-alternativa: var(--color-simbolo-interessante);
+  --color-simbolo-interessante: #a67fdc;
+  --color-simbolo-imprecisao: #f7c631;
   --color-simbolo-erro: #ffa459;
   --color-simbolo-armadilha: #fa412d;
   --color-simbolo-brilhante: #26c2a3;
@@ -359,6 +366,36 @@
   /* A tinta que cobre a casa na entrada grande, a 0,8 por cima da peça. */
   --color-tinta-brilhante: rgb(27 172 166);
   --color-tinta-otimo: rgb(92 139 176);
+}
+
+/* --------------------------------------------------------------------------
+   Os avatares do aluno (17/9/2026)
+
+   Dez peças de xadrez com cara, desenhadas em `components/avatar/Avatares.tsx`.
+   Ficam fora do `@theme` pelo mesmo motivo dos pincéis: nenhuma utilitária as
+   usa — elas entram por `style` no SVG — e o v4 podaria a variável.
+
+   **Os avatares não seguem o tema escuro, e isso é decisão.** São adesivos: um
+   disco claro e saturado com a peça creme e contorno quase preto por cima. O
+   contorno escuro sobre fundo claro é o que os deixa legíveis a 32 px, e o disco
+   é o que os deixa legíveis em qualquer página — clara ou escura. Cinco fundos,
+   dois avatares em cada; o tom é o mesmo (claridade 72–78%) para nenhum saltar
+   mais que o outro na grade. */
+:root {
+  --color-avatar-contorno: oklch(24% 0.03 265);
+  --color-avatar-peca: oklch(97% 0.02 90);
+  --color-avatar-sombra: oklch(86% 0.04 80);
+  --color-avatar-brilho: oklch(100% 0 0);
+  --color-avatar-bochecha: oklch(80% 0.09 10);
+  --color-avatar-vermelho: oklch(62% 0.2 28);
+  --color-avatar-amarelo: oklch(86% 0.16 92);
+  --color-avatar-cafe: oklch(46% 0.08 55);
+  --color-avatar-gota: oklch(90% 0.06 225);
+  --color-avatar-fundo-azul: oklch(74% 0.1 235);
+  --color-avatar-fundo-verde: oklch(76% 0.12 160);
+  --color-avatar-fundo-lilas: oklch(72% 0.11 300);
+  --color-avatar-fundo-laranja: oklch(78% 0.13 60);
+  --color-avatar-fundo-rosa: oklch(76% 0.12 0);
 }
 
 /* --------------------------------------------------------------------------
@@ -1128,6 +1165,12 @@ cg-board square.check {
 .simbolo-cor-otimo {
   fill: var(--color-simbolo-otimo);
 }
+.simbolo-cor-interessante {
+  fill: var(--color-simbolo-interessante);
+}
+.simbolo-cor-imprecisao {
+  fill: var(--color-simbolo-imprecisao);
+}
 .tinta-brilhante {
   fill: var(--color-tinta-brilhante);
 }
@@ -1492,6 +1535,28 @@ cg-board square.check {
    caminho tem `pathLength="1"`, então o traço inteiro mede 1 e o deslocamento
    vai de 1 (nada desenhado) a 0 (tudo). Com o movimento desligado a linha
    simplesmente está lá, cheia. A área chega depois, para o olho seguir a ponta. */
+/* A capa de seção da aula de abertura (17/9/2026): o título sobe 12 px e aparece,
+   e o traço de cima se estica da esquerda. Nada no tabuleiro se mexe. */
+@keyframes capa-chega {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes capa-traco {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 @keyframes linha-desenha {
   from {
     stroke-dasharray: 1;
@@ -1509,6 +1574,21 @@ cg-board square.check {
   }
 }
 
+/* O aviso "Selo novo" (0018): o cartão sobe um pouco e a medalha chega depois, maior, e
+   assenta. Uma chegada só, com saída exponencial — o confete já é a festa. */
+@keyframes selo-novo-chega {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes selo-novo-medalha {
+  from {
+    transform: scale(0.55) rotate(-14deg);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .linha-desenha {
     animation: linha-desenha 800ms cubic-bezier(0.3, 0, 0.2, 1) both;
@@ -1516,6 +1596,23 @@ cg-board square.check {
 
   .area-surge {
     animation: area-surge 500ms ease-out 400ms both;
+  }
+
+  .selo-novo-chega {
+    animation: selo-novo-chega 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .selo-novo-medalha {
+    animation: selo-novo-medalha 700ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+  }
+
+  .capa-chega {
+    animation: capa-chega 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .capa-traco {
+    transform-origin: left center;
+    animation: capa-traco 520ms cubic-bezier(0.2, 0.7, 0.2, 1) 80ms both;
   }
 
   .anel-pulso {

@@ -460,8 +460,9 @@ export function aprendidasDaAbertura(
   progresso: Progresso,
   abertura: EntradaDoIndice,
   avancadoLiberado: boolean,
+  trancadas: ReadonlySet<string> = SEM_TRAVA,
 ): number {
-  return idsLiberados(abertura, avancadoLiberado).filter((id) =>
+  return idsLiberados(abertura, avancadoLiberado, trancadas).filter((id) =>
     aprendida(progressoDe(progresso, id)),
   ).length;
 }
@@ -472,8 +473,9 @@ export function aRevisarNaAbertura(
   abertura: EntradaDoIndice,
   agora: string,
   avancadoLiberado: boolean,
+  trancadas: ReadonlySet<string> = SEM_TRAVA,
 ): number {
-  return idsLiberados(abertura, avancadoLiberado).filter((id) =>
+  return idsLiberados(abertura, avancadoLiberado, trancadas).filter((id) =>
     vencida(progressoDe(progresso, id), agora),
   ).length;
 }
@@ -489,14 +491,26 @@ export function aRevisarNaAbertura(
  * o painel contar só o Base para sempre sem ninguém notar; um padrão `true`
  * mostraria as trancadas. Quem chama tem de dizer, e só há uma fonte para a
  * resposta: `baseCompleto`.
+ *
+ * **`trancadas` são as linhas da trava por aula** (17/9/2026): as do move trainer de uma aula de
+ * abertura que o aluno ainda não concluiu — ver `lib/aberturas/trava.ts`. Elas saem de toda conta
+ * pelo mesmo motivo do Avançado: um denominador que o aluno não pode alcançar. O padrão é vazio, e
+ * não "obrigatório" como o portão, porque quem lê o conjunto é o servidor (`travaDoAluno`) e há
+ * contas — as do teste, as de script — que não têm aluno nenhum.
  */
 export function idsLiberados(
   abertura: EntradaDoIndice,
   avancadoLiberado: boolean,
+  trancadas: ReadonlySet<string> = SEM_TRAVA,
 ): readonly string[] {
-  if (avancadoLiberado) return abertura.ids;
-  return abertura.ids.filter((id) => !abertura.idsAvancado.includes(id));
+  const visiveis = avancadoLiberado
+    ? abertura.ids
+    : abertura.ids.filter((id) => !abertura.idsAvancado.includes(id));
+  return trancadas.size === 0 ? visiveis : visiveis.filter((id) => !trancadas.has(id));
 }
+
+/** Nenhuma linha trancada — o padrão de quem não tem aluno à mão. */
+const SEM_TRAVA: ReadonlySet<string> = new Set();
 
 /**
  * Quantas linhas do **Base** ainda não estão aprendidas, no repertório inteiro.
@@ -514,15 +528,26 @@ export function idsLiberados(
  * cima), 20 linhas dão ~15 sessões. O tamanho do Base **é** o preço de entrada
  * do Avançado, e quem mexer num tem de olhar o outro.
  */
-export function faltamNoBase(progresso: Progresso, indice: readonly EntradaDoIndice[]): number {
+export function faltamNoBase(
+  progresso: Progresso,
+  indice: readonly EntradaDoIndice[],
+  trancadas: ReadonlySet<string> = SEM_TRAVA,
+): number {
   return indice
-    .flatMap((e) => idsLiberados(e, false))
+    .flatMap((e) => idsLiberados(e, false, trancadas))
     .filter((id) => !aprendida(progressoDe(progresso, id))).length;
 }
 
-/** O portão: o Avançado abre quando não falta nenhuma linha do Base. */
-export function baseCompleto(progresso: Progresso, indice: readonly EntradaDoIndice[]): boolean {
-  return faltamNoBase(progresso, indice) === 0;
+/**
+ * O portão: o Avançado abre quando não falta nenhuma linha do Base. É também o requisito de
+ * repertório do nível 5 (`ProgressoParaONivel.baseCompleto`), então as `trancadas` valem lá igual.
+ */
+export function baseCompleto(
+  progresso: Progresso,
+  indice: readonly EntradaDoIndice[],
+  trancadas: ReadonlySet<string> = SEM_TRAVA,
+): boolean {
+  return faltamNoBase(progresso, indice, trancadas) === 0;
 }
 
 /** Quantas linhas de Avançado existem — o que o aluno ganha ao destravar. */

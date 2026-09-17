@@ -122,21 +122,21 @@ const vezes = (temas: string[], certos: number, erros: number) => [
   ...Array.from({ length: erros }, () => ({ temas, acertou: false })),
 ];
 
-test("temas fracos: os 3 de pior acerto, só com 15 tentativas ou mais", () => {
+test("temas fracos: os 3 de pior acerto, só com 10 tentativas ou mais (Doug, 17/9/2026)", () => {
   const tentativas = [
-    ...vezes(["fork"], 12, 3), // 80%
-    ...vezes(["pin"], 3, 12), // 20%
-    ...vezes(["skewer"], 6, 9), // 40%
-    ...vezes(["mateIn1"], 9, 6), // 60%
-    ...vezes(["zugzwang"], 0, 14), // 0%, mas só 14: fica fora
+    ...vezes(["fork"], 8, 2), // 80%
+    ...vezes(["pin"], 2, 8), // 20%
+    ...vezes(["skewer"], 4, 6), // 40%
+    ...vezes(["mateIn1"], 6, 4), // 60%
+    ...vezes(["zugzwang"], 0, 9), // 0%, mas só 9: fica fora
   ];
   assert.deepEqual(
     temasFracos(tentativas).map((t) => [t.tag, t.acerto, t.tentativas]),
-    [["pin", 20, 15], ["skewer", 40, 15], ["mateIn1", 60, 15]],
+    [["pin", 20, 10], ["skewer", 40, 10], ["mateIn1", 60, 10]],
   );
 });
 
-test("temas fracos: 2 acertos em 5 não é fraqueza — abaixo de 15, o tema não entra", () => {
+test("temas fracos: 2 acertos em 5 não é fraqueza — abaixo de 10, o tema não entra", () => {
   assert.deepEqual(temasFracos(vezes(["fork"], 2, 3)), []);
 });
 

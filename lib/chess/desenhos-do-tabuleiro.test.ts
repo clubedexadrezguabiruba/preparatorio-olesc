@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { RECUO_DO_PULSO, setaQueEnsina, simboloNaCasa } from "./desenhos-do-tabuleiro.ts";
+import { RECUO_DO_PULSO, setaQueEnsina, simboloDoNag, simboloDoSinal, simboloNaCasa } from "./desenhos-do-tabuleiro.ts";
 
 /**
  * Os desenhos estilo Chess.com. O que se confere aqui é o que o olho erraria
@@ -50,4 +50,17 @@ test("cada veredito tem o seu desenho, e só Brilhante e Ótimo têm a entrada g
     assert.match(html(qual), new RegExp(`>${sinal}</text>`));
     assert.match(html(qual), new RegExp(`>${rotulo}</text>`));
   }
+});
+
+test("NAG → cor: os seis símbolos do estudo, cada um com a cor do Chess.com (feedback do aluno, 17/9/2026)", () => {
+  const esperado = [[1, "otimo", "!"], [2, "erro", "?"], [3, "brilhante", "!!"], [4, "armadilha", "??"], [5, "interessante", "!?"], [6, "imprecisao", "?!"]] as const;
+  for (const [nag, qual, sinal] of esperado) {
+    assert.equal(simboloDoNag([14, nag]), qual, `$${nag}`);
+    assert.equal(simboloDoSinal(sinal), qual, sinal);
+    const html = simboloNaCasa("d5", qual).customSvg!.html;
+    assert.match(html, new RegExp(`simbolo-cor-${qual}`));
+    assert.match(html, new RegExp(`>${sinal.replace(/[?]/g, "\\?")}</text>`));
+  }
+  assert.equal(simboloDoNag([14, 36]), null, "avaliação não tem círculo");
+  assert.equal(simboloDoNag(undefined), null);
 });

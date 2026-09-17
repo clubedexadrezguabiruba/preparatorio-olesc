@@ -4,7 +4,10 @@ import { TRILHA } from "../finais/trilha.ts";
 import { BLOCOS, contaNoCurso } from "../tatica/blocos.ts";
 import { MINIMO_DA_SEQUENCIA_MIN, diasComOMinimo, maiorSequenciaDeDias, type MinutosDoDia } from "./hoje.ts";
 import { NIVEIS } from "./nivel.ts";
-import { DEGRAUS, ganhos, proximos, selos, type ParaOsSelos } from "./selos.ts";
+import { aberturasDoRepertorio } from "./selos-repertorio.ts";
+import type { EntradaDoIndice } from "../repertorio/linhas.ts";
+import type { ProgressoDaLinha } from "../repertorio/treino.ts";
+import { corDoSelo, DEGRAUS, FAMILIAS_FORA_DA_VITRINE, familiaDoId, ganhos, melhorJanelaDeAcertos, proximos, selos, type AberturaParaOSelo, type ParaOsSelos } from "./selos.ts";
 
 /**
  * O que se cobra de um selo é que ele seja **permanente** e que, quando
@@ -17,8 +20,7 @@ const ZERADO: ParaOsSelos = {
   temasFechados: 0,
   aulasAprendidas: 0,
   repertorio: {
-    brancasCompletas: false,
-    pretasCompletas: false,
+    aberturas: [],
     baseCompleto: false,
     avancadoCompleto: false,
   },
@@ -26,7 +28,12 @@ const ZERADO: ParaOsSelos = {
   diasComUmaHora: 0,
   maiorSequencia: 0,
   ratingTatica: null,
+  puzzles: { resolvidos: 0, tentativas: 0, melhorJanela: null },
+  aberturas: { concluidas: 0, cursos: [] },
 };
+
+const FRANCESA_REP: AberturaParaOSelo = { cor: "brancas", abertura: "francesa", nome: "Francesa 3.Bd3", base: 3, aprendidas: 0, trancadas: 0 };
+const LONDRES_REP: AberturaParaOSelo = { cor: "pretas", abertura: "londres", nome: "Londres 2.Bf4", base: 1, aprendidas: 0, trancadas: 0 };
 
 const com = (mudancas: Partial<ParaOsSelos>): ParaOsSelos => ({ ...ZERADO, ...mudancas });
 const acha = (p: ParaOsSelos, id: string) => {
@@ -152,8 +159,10 @@ test("o aluno zerado não tem selo nenhum, e o aluno completo tem todos", () => 
     temasFechados: 63,
     aulasAprendidas: 49,
     repertorio: {
-      brancasCompletas: true,
-      pretasCompletas: true,
+      aberturas: [
+        { cor: "brancas", abertura: "francesa", nome: "Francesa 3.Bd3", base: 19, aprendidas: 19, trancadas: 0 },
+        { cor: "pretas", abertura: "londres", nome: "Londres 2.Bf4", base: 1, aprendidas: 1, trancadas: 0 },
+      ],
       baseCompleto: true,
       avancadoCompleto: true,
     },
@@ -161,6 +170,8 @@ test("o aluno zerado não tem selo nenhum, e o aluno completo tem todos", () => 
     diasComUmaHora: 40,
     maiorSequencia: 40,
     ratingTatica: { maximo: 1400, melhorSequencia: 10, inicio: 600, resolvidos: 300 },
+    puzzles: { resolvidos: 1000, tentativas: 1200, melhorJanela: 95 },
+    aberturas: { concluidas: 5, cursos: [{ chave: "brancas/francesa", nome: "Francesa", aulas: 5, concluidas: 5 }] },
   };
   const lista = selos(tudo);
   assert.equal(ganhos(lista).length, lista.length, "sobrou selo trancado no aluno completo");
@@ -210,6 +221,8 @@ test("`proximos` pula a família que já está completa", () => {
       diasComUmaHora: 1,
       maiorSequencia: 30,
       ratingTatica: { maximo: 1500, melhorSequencia: 12, inicio: 600, resolvidos: 400 },
+      // As famílias de 17/9 entram completas também: o teste é sobre pular o que acabou.
+      puzzles: { resolvidos: 1000, tentativas: 1000, melhorJanela: 100 },
     }),
   );
   for (const s of proximos(lista, 4)) {
@@ -217,15 +230,23 @@ test("`proximos` pula a família que já está completa", () => {
   }
 });
 
-test("o repertório tem os quatro selos declarados, e o Base é o portão", () => {
-  const doRepertorio = selos(ZERADO).filter((s) => s.familia === "repertorio");
+test("o repertório: um selo por abertura do índice, e o Base e o Avançado como os dois grandes", () => {
+  // 17/9/2026: "o selo repertório de brancas é muito longo — dividir por defesa; pretas também".
+  // Os dois selos de cor saíram; cada abertura do índice ganha o seu, por dados.
+  const doRepertorio = selos(com({ repertorio: { ...ZERADO.repertorio, aberturas: [FRANCESA_REP, LONDRES_REP] } })).filter(
+    (s) => s.familia === "repertorio",
+  );
   assert.deepEqual(doRepertorio.map((s) => s.id), [
-    "repertorio-brancas",
-    "repertorio-pretas",
+    "repertorio-brancas-francesa",
+    "repertorio-pretas-londres",
     "repertorio-base",
     "repertorio-avancado",
   ]);
   assert.match(acha(ZERADO, "repertorio-base").conta, /abre o Avançado/);
+  assert.equal(corDoSelo("repertorio-brancas-francesa"), "brancas");
+  assert.equal(corDoSelo("repertorio-pretas-londres"), "pretas");
+  assert.equal(corDoSelo("repertorio-base"), null);
+  assert.equal(corDoSelo("repertorio-brancas"), null, "o id antigo não é selo de abertura");
 });
 
 /* ------------------------------------------------------------------ *
@@ -281,4 +302,157 @@ test("tática rating: vem por último, e não tira do painel o próximo selo de 
   const lista = selos(ZERADO);
   assert.equal(lista.at(-1)?.id, "rating-seguidos-10");
   assert.deepEqual(proximos(lista).map((s) => s.familia), ["tatica", "finais"]);
+});
+
+/* ------------------------------------------------------------------ *
+ * Os selos V2 (17/9): puzzles resolvidos e pontaria
+ * ------------------------------------------------------------------ */
+
+const puzzles = (resolvidos: number, tentativas: number, melhorJanela: number | null) =>
+  com({ puzzles: { resolvidos, tentativas, melhorJanela } });
+
+test("puzzles resolvidos: 100, 250, 500 e 1000, acendendo no número exato", () => {
+  assert.deepEqual(DEGRAUS.puzzles, [100, 250, 500, 1000]);
+  const ids = selos(ZERADO).filter((s) => s.familia === "puzzles").map((s) => s.id);
+  assert.deepEqual(ids, ["puzzles-100", "puzzles-250", "puzzles-500", "puzzles-1000"]);
+
+  for (const degrau of DEGRAUS.puzzles) {
+    assert.equal(acha(puzzles(degrau - 1, degrau * 2, null), `puzzles-${degrau}`).ganho, false, `${degrau - 1} não vale ${degrau}`);
+    assert.equal(acha(puzzles(degrau, degrau * 2, null), `puzzles-${degrau}`).ganho, true, `${degrau} vale ${degrau}`);
+  }
+  assert.equal(acha(puzzles(99, 300, null), "puzzles-100").falta, "falta 1 puzzle");
+  assert.equal(acha(puzzles(0, 0, null), "puzzles-100").falta, "faltam 100 puzzles");
+});
+
+test("pontaria: 80 certos numa janela de 100 seguidos — 79 não vale, e sem 100 tentativas não há janela", () => {
+  assert.equal(acha(puzzles(90, 150, 79), "pontaria-80").ganho, false);
+  assert.equal(acha(puzzles(90, 150, 80), "pontaria-80").ganho, true);
+  assert.equal(acha(puzzles(90, 150, 100), "pontaria-80").ganho, true);
+
+  const semJanela = acha(puzzles(60, 60, null), "pontaria-80");
+  assert.equal(semJanela.ganho, false);
+  assert.equal(semJanela.falta, "faltam 40 puzzles para a primeira janela de 100");
+  assert.equal(acha(puzzles(98, 99, null), "pontaria-80").falta, "falta 1 puzzle para a primeira janela de 100");
+  assert.equal(acha(puzzles(90, 150, 71), "pontaria-80").falta, "acerte 80 de 100 seguidos (seu melhor: 71)");
+});
+
+/* ------------------------------------------------------------------ *
+ * A família das aulas de abertura (17/9) — por dados
+ * ------------------------------------------------------------------ */
+
+const FRANCESA = { chave: "brancas/francesa", nome: "Francesa", aulas: 5, concluidas: 0 };
+const CARO = { chave: "pretas/caro-kann", nome: "Caro-Kann", aulas: 2, concluidas: 0 };
+
+test("abertura: sem curso publicado não existe selo que ninguém pode ganhar", () => {
+  assert.deepEqual(selos(ZERADO).filter((s) => s.familia === "abertura"), []);
+});
+
+test("abertura: a primeira aula concluída acende no 1, e cada curso tem o seu selo, lido dos dados", () => {
+  const nada = com({ aberturas: { concluidas: 0, cursos: [FRANCESA, CARO] } });
+  assert.deepEqual(
+    selos(nada).filter((s) => s.familia === "abertura").map((s) => s.id),
+    ["abertura-aula-1", "abertura-curso-brancas-francesa", "abertura-curso-pretas-caro-kann"],
+  );
+  assert.equal(acha(nada, "abertura-aula-1").ganho, false);
+  assert.equal(acha(nada, "abertura-curso-brancas-francesa").falta, "faltam 5 aulas da Francesa");
+
+  const uma = com({ aberturas: { concluidas: 1, cursos: [{ ...FRANCESA, concluidas: 1 }, CARO] } });
+  assert.equal(acha(uma, "abertura-aula-1").ganho, true);
+  assert.equal(acha(uma, "abertura-curso-brancas-francesa").ganho, false);
+
+  const quase = com({ aberturas: { concluidas: 4, cursos: [{ ...FRANCESA, concluidas: 4 }, CARO] } });
+  assert.equal(acha(quase, "abertura-curso-brancas-francesa").falta, "falta 1 aula da Francesa");
+
+  const toda = com({ aberturas: { concluidas: 5, cursos: [{ ...FRANCESA, concluidas: 5 }, CARO] } });
+  assert.equal(acha(toda, "abertura-curso-brancas-francesa").ganho, true);
+  assert.match(acha(toda, "abertura-curso-brancas-francesa").nome, /Francesa/);
+  assert.equal(acha(toda, "abertura-curso-pretas-caro-kann").ganho, false, "o curso da outra abertura não acende junto");
+});
+
+test("a família de cada id sai do próprio id, e o rating é a única família fora da vitrine", () => {
+  const tudo = selos(com({ aberturas: { concluidas: 0, cursos: [FRANCESA] } }));
+  for (const s of tudo) assert.equal(familiaDoId(s.id), s.familia, s.id);
+  assert.equal(familiaDoId("inventado-1"), null);
+  assert.deepEqual([...FAMILIAS_FORA_DA_VITRINE], ["rating"]);
+});
+
+test("a janela da pontaria é a melhor de 100 seguidas, e não o total nem as últimas 100", () => {
+  // A regra que a view `puzzles_do_aluno` (0018) calcula no banco, escrita aqui para o teste
+  // alcançá-la. `npm run selos:ciclo` confere que as duas dão o mesmo número.
+  const erros = (n: number) => Array.from({ length: n }, () => false);
+  const certos = (n: number) => Array.from({ length: n }, () => true);
+  assert.equal(melhorJanelaDeAcertos(certos(99)), null, "99 tentativas não formam janela");
+  assert.equal(melhorJanelaDeAcertos([...erros(20), ...certos(80)]), 80);
+  // Começou mal (40 erros) e depois acertou 80 seguidos: o total é 80/180 = 44%, mas a melhor
+  // janela tem 80 — o selo é dele, e os erros de depois não o tiram.
+  assert.equal(melhorJanelaDeAcertos([...erros(40), ...certos(80), ...erros(60)]), 80);
+  assert.equal(melhorJanelaDeAcertos([...erros(21), ...certos(79)]), 79);
+});
+
+/* ------------------------------------------------------------------ *
+ * O repertório por abertura (17/9/2026)
+ * ------------------------------------------------------------------ */
+
+const comAbertura = (mudanca: Partial<AberturaParaOSelo>) =>
+  com({ repertorio: { ...ZERADO.repertorio, aberturas: [{ ...FRANCESA_REP, ...mudanca }] } });
+
+test("repertório por abertura: todas as linhas Base aprendidas ganham; uma faltando não", () => {
+  assert.equal(acha(comAbertura({ aprendidas: 3 }), "repertorio-brancas-francesa").ganho, true);
+  const quase = acha(comAbertura({ aprendidas: 2 }), "repertorio-brancas-francesa");
+  assert.equal(quase.ganho, false);
+  assert.equal(quase.falta, "falta 1 linha");
+  assert.equal(acha(comAbertura({ aprendidas: 0 }), "repertorio-brancas-francesa").falta, "faltam 3 linhas");
+  // O nome é o do índice, curto: a cor não entra no nome.
+  assert.equal(acha(comAbertura({}), "repertorio-brancas-francesa").nome, "Francesa 3.Bd3");
+  assert.match(acha(comAbertura({}), "repertorio-brancas-francesa").conta, /brancas/);
+});
+
+test("repertório por abertura: linha trancada pela aula impede o selo, mesmo com as abertas aprendidas", () => {
+  // Selo gravado não some: um selo ganho com 2 linhas abertas de 19 seria da Francesa para sempre.
+  const todasTrancadas = acha(comAbertura({ aprendidas: 0, trancadas: 3 }), "repertorio-brancas-francesa");
+  assert.equal(todasTrancadas.ganho, false);
+  assert.equal(todasTrancadas.falta, "3 linhas ainda trancadas — conclua as aulas do curso");
+  const umaTrancada = acha(comAbertura({ aprendidas: 2, trancadas: 1 }), "repertorio-brancas-francesa");
+  assert.equal(umaTrancada.ganho, false);
+  assert.equal(umaTrancada.falta, "1 linha ainda trancada — conclua as aulas do curso");
+});
+
+const linhaAprendida: ProgressoDaLinha = {
+  acertosSeguidos: 3, tentativas: 3, erros: 0, aprendidaEm: "2026-09-10T12:00:00Z", ultimaEm: "2026-09-10T12:00:00Z", degrau: 3, revisarEm: "2026-09-17T12:00:00Z",
+};
+const linhaEmTreino: ProgressoDaLinha = { ...linhaAprendida, aprendidaEm: null, degrau: 2, acertosSeguidos: 2 };
+
+const ENTRADA: EntradaDoIndice = {
+  cor: "brancas",
+  abertura: "caro-kann",
+  nome: "Caro-Kann Trocas",
+  linhas: 3,
+  ids: ["brancas-caro-kann-aaaaaaaa", "brancas-caro-kann-bbbbbbbb", "brancas-caro-kann-cccccccc"],
+  idsAvancado: ["brancas-caro-kann-cccccccc"],
+  arquivo: "/repertorio/brancas/caro-kann.json",
+};
+
+test("repertório por abertura, lido do índice: o Avançado não conta, e a trava conta como trancada", () => {
+  const progresso = new Map([
+    ["brancas-caro-kann-aaaaaaaa", linhaAprendida],
+    ["brancas-caro-kann-bbbbbbbb", linhaAprendida],
+    // A do Avançado nem começou: não pode segurar o selo da abertura.
+  ]);
+  const [caro] = aberturasDoRepertorio([ENTRADA], progresso, new Set());
+  assert.deepEqual(caro, { cor: "brancas", abertura: "caro-kann", nome: "Caro-Kann Trocas", base: 2, aprendidas: 2, trancadas: 0 });
+  assert.equal(acha(com({ repertorio: { ...ZERADO.repertorio, aberturas: [caro] } }), "repertorio-brancas-caro-kann").ganho, true);
+
+  const [emTreino] = aberturasDoRepertorio([ENTRADA], new Map([["brancas-caro-kann-aaaaaaaa", linhaAprendida], ["brancas-caro-kann-bbbbbbbb", linhaEmTreino]]), new Set());
+  assert.equal(emTreino.aprendidas, 1);
+
+  const [trancada] = aberturasDoRepertorio([ENTRADA], progresso, new Set(["brancas-caro-kann-bbbbbbbb", "brancas-caro-kann-cccccccc"]));
+  assert.equal(trancada.trancadas, 1, "a trancada do Avançado não entra na conta do Base");
+  assert.equal(acha(com({ repertorio: { ...ZERADO.repertorio, aberturas: [trancada] } }), "repertorio-brancas-caro-kann").ganho, false);
+});
+
+test("repertório por abertura: abertura sem linha Base não tem selo (ninguém poderia ganhar)", () => {
+  assert.equal(
+    selos(comAbertura({ base: 0 })).some((s) => s.id === "repertorio-brancas-francesa"),
+    false,
+  );
 });

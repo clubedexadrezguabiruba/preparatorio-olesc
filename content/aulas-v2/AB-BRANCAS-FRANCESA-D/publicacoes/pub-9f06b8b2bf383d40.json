@@ -1,0 +1,816 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-9f06b8b2bf383d40",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "AB-BRANCAS-FRANCESA-D",
+    "titulo": "Francesa 3.Bd3 — aula D: Partida modelo",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "estadoEditorial": "rascunho",
+      "fonteDidatica": "estudo qq2xorDl v1.5 — Repertorio Contra a Francesa.v5",
+      "abertura": {
+        "cor": "brancas",
+        "abertura": "francesa",
+        "bloco": "D"
+      }
+    },
+    "proveniencia": [],
+    "excecoes": [],
+    "analises": [
+      {
+        "id": "analise-cap-d17",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5",
+            "Site": "Lichess Study",
+            "Date": "2026.09.16",
+            "Round": "17",
+            "White": "D17",
+            "Black": "Partida modelo: nosso esquema funcionando — MVL x So",
+            "Result": "1-0",
+            "Annotator": "Projeto repertório completo - Francesa",
+            "Variant": "Standard",
+            "ECO": "C00",
+            "Opening": "French Defense: Schlechter Variation",
+            "StudyName": "Repertorio Contra a Francesa.v5",
+            "ChapterName": "cap D17",
+            "ChapterURL": "https://lichess.org/study/qq2xorDl/oKhboEMS",
+            "Orientation": "black"
+          },
+          "resultado": "1-0",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-d17-0",
+        "nos": {
+          "no-cap-d17-0": {
+            "id": "no-cap-d17-0",
+            "filhos": [
+              "no-cap-d17-1"
+            ],
+            "comentario": "[OBJETIVO] Ver o nosso esquema aparecer numa partida real entre dois jogadores de elite. [PARTIDA REAL] Maxime Vachier-Lagrave venceu Wesley So em Stavanger, no Norway Blitz de 2017. [COMO USAR] Observe principalmente o desenvolvimento inicial e a atividade das peças. A partida inteira é modelo de ideias, não uma linha para decorar lance por lance."
+          },
+          "no-cap-d17-1": {
+            "id": "no-cap-d17-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-d17-2"
+            ]
+          },
+          "no-cap-d17-2": {
+            "id": "no-cap-d17-2",
+            "uci": "e7e6",
+            "filhos": [
+              "no-cap-d17-3"
+            ]
+          },
+          "no-cap-d17-3": {
+            "id": "no-cap-d17-3",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-d17-4"
+            ]
+          },
+          "no-cap-d17-4": {
+            "id": "no-cap-d17-4",
+            "uci": "d7d5",
+            "filhos": [
+              "no-cap-d17-5"
+            ]
+          },
+          "no-cap-d17-5": {
+            "id": "no-cap-d17-5",
+            "uci": "f1d3",
+            "filhos": [
+              "no-cap-d17-6"
+            ],
+            "comentario": "Nossa arma aparece exatamente como no repertório."
+          },
+          "no-cap-d17-6": {
+            "id": "no-cap-d17-6",
+            "uci": "d5e4",
+            "filhos": [
+              "no-cap-d17-7"
+            ]
+          },
+          "no-cap-d17-7": {
+            "id": "no-cap-d17-7",
+            "uci": "d3e4",
+            "filhos": [
+              "no-cap-d17-8"
+            ]
+          },
+          "no-cap-d17-8": {
+            "id": "no-cap-d17-8",
+            "uci": "g8f6",
+            "filhos": [
+              "no-cap-d17-9"
+            ]
+          },
+          "no-cap-d17-9": {
+            "id": "no-cap-d17-9",
+            "uci": "e4f3",
+            "filhos": [
+              "no-cap-d17-10"
+            ]
+          },
+          "no-cap-d17-10": {
+            "id": "no-cap-d17-10",
+            "uci": "c7c5",
+            "filhos": [
+              "no-cap-d17-11"
+            ]
+          },
+          "no-cap-d17-11": {
+            "id": "no-cap-d17-11",
+            "uci": "g1e2",
+            "filhos": [
+              "no-cap-d17-12"
+            ]
+          },
+          "no-cap-d17-12": {
+            "id": "no-cap-d17-12",
+            "uci": "b8c6",
+            "filhos": [
+              "no-cap-d17-13"
+            ]
+          },
+          "no-cap-d17-13": {
+            "id": "no-cap-d17-13",
+            "uci": "c1e3",
+            "filhos": [
+              "no-cap-d17-14"
+            ],
+            "comentario": "[ESQUEMA] Aqui está a posição-base ensinada no curso: bispo em f3, cavalo em e2 e bispo em e3."
+          },
+          "no-cap-d17-14": {
+            "id": "no-cap-d17-14",
+            "uci": "c5d4",
+            "filhos": [
+              "no-cap-d17-15"
+            ]
+          },
+          "no-cap-d17-15": {
+            "id": "no-cap-d17-15",
+            "uci": "e2d4",
+            "filhos": [
+              "no-cap-d17-16"
+            ]
+          },
+          "no-cap-d17-16": {
+            "id": "no-cap-d17-16",
+            "uci": "c6e5",
+            "filhos": [
+              "no-cap-d17-17"
+            ],
+            "comentario": "[CONEXAO] Esta é a defesa crítica estudada no capítulo C12."
+          },
+          "no-cap-d17-17": {
+            "id": "no-cap-d17-17",
+            "uci": "e1g1",
+            "filhos": [
+              "no-cap-d17-18"
+            ],
+            "comentario": "[ATENCAO] Nesta partida, MVL escolheu 9.O-O. Nosso repertório oficial ensina 9.Nc3 contra ...Ne5. Portanto, não troque a linha do Move Trainer por esta escolha da partida modelo. Daqui em diante, estudamos planos e atividade, não memorização."
+          },
+          "no-cap-d17-18": {
+            "id": "no-cap-d17-18",
+            "uci": "e5f3",
+            "filhos": [
+              "no-cap-d17-19"
+            ]
+          },
+          "no-cap-d17-19": {
+            "id": "no-cap-d17-19",
+            "uci": "d1f3",
+            "filhos": [
+              "no-cap-d17-20"
+            ]
+          },
+          "no-cap-d17-20": {
+            "id": "no-cap-d17-20",
+            "uci": "e6e5",
+            "filhos": [
+              "no-cap-d17-21"
+            ]
+          },
+          "no-cap-d17-21": {
+            "id": "no-cap-d17-21",
+            "uci": "d4b5",
+            "filhos": [
+              "no-cap-d17-22"
+            ]
+          },
+          "no-cap-d17-22": {
+            "id": "no-cap-d17-22",
+            "uci": "a7a6",
+            "filhos": [
+              "no-cap-d17-23"
+            ]
+          },
+          "no-cap-d17-23": {
+            "id": "no-cap-d17-23",
+            "uci": "f1d1",
+            "filhos": [
+              "no-cap-d17-24"
+            ],
+            "comentario": "A torre ocupa imediatamente a coluna d aberta e ganha atividade."
+          },
+          "no-cap-d17-24": {
+            "id": "no-cap-d17-24",
+            "uci": "d8a5",
+            "filhos": [
+              "no-cap-d17-25"
+            ]
+          },
+          "no-cap-d17-25": {
+            "id": "no-cap-d17-25",
+            "uci": "b5c3",
+            "filhos": [
+              "no-cap-d17-26"
+            ]
+          },
+          "no-cap-d17-26": {
+            "id": "no-cap-d17-26",
+            "uci": "a5c7",
+            "filhos": [
+              "no-cap-d17-27"
+            ]
+          },
+          "no-cap-d17-27": {
+            "id": "no-cap-d17-27",
+            "uci": "e3g5",
+            "filhos": [
+              "no-cap-d17-28"
+            ]
+          },
+          "no-cap-d17-28": {
+            "id": "no-cap-d17-28",
+            "uci": "f8e7",
+            "filhos": [
+              "no-cap-d17-29"
+            ]
+          },
+          "no-cap-d17-29": {
+            "id": "no-cap-d17-29",
+            "uci": "g5f6",
+            "filhos": [
+              "no-cap-d17-30"
+            ]
+          },
+          "no-cap-d17-30": {
+            "id": "no-cap-d17-30",
+            "uci": "e7f6",
+            "filhos": [
+              "no-cap-d17-31"
+            ]
+          },
+          "no-cap-d17-31": {
+            "id": "no-cap-d17-31",
+            "uci": "c3d5",
+            "filhos": [
+              "no-cap-d17-32"
+            ]
+          },
+          "no-cap-d17-32": {
+            "id": "no-cap-d17-32",
+            "uci": "c7c6",
+            "filhos": [
+              "no-cap-d17-33"
+            ]
+          },
+          "no-cap-d17-33": {
+            "id": "no-cap-d17-33",
+            "uci": "f3a3",
+            "filhos": [
+              "no-cap-d17-34"
+            ],
+            "comentario": "A dama entra numa casa ativa e aumenta a pressão sobre as casas centrais."
+          },
+          "no-cap-d17-34": {
+            "id": "no-cap-d17-34",
+            "uci": "c8g4",
+            "filhos": [
+              "no-cap-d17-35"
+            ]
+          },
+          "no-cap-d17-35": {
+            "id": "no-cap-d17-35",
+            "uci": "d5f6",
+            "filhos": [
+              "no-cap-d17-36"
+            ]
+          },
+          "no-cap-d17-36": {
+            "id": "no-cap-d17-36",
+            "uci": "g7f6",
+            "filhos": [
+              "no-cap-d17-37"
+            ]
+          },
+          "no-cap-d17-37": {
+            "id": "no-cap-d17-37",
+            "uci": "f2f3",
+            "filhos": [
+              "no-cap-d17-38"
+            ]
+          },
+          "no-cap-d17-38": {
+            "id": "no-cap-d17-38",
+            "uci": "g4e6",
+            "filhos": [
+              "no-cap-d17-39"
+            ]
+          },
+          "no-cap-d17-39": {
+            "id": "no-cap-d17-39",
+            "uci": "b1c3",
+            "filhos": [
+              "no-cap-d17-40"
+            ]
+          },
+          "no-cap-d17-40": {
+            "id": "no-cap-d17-40",
+            "uci": "f6f5",
+            "filhos": [
+              "no-cap-d17-41"
+            ]
+          },
+          "no-cap-d17-41": {
+            "id": "no-cap-d17-41",
+            "uci": "d1d6",
+            "filhos": [
+              "no-cap-d17-42"
+            ],
+            "comentario": "Uma ideia temática de partida modelo: quando a coluna está aberta, a torre pode invadir a sexta fila."
+          },
+          "no-cap-d17-42": {
+            "id": "no-cap-d17-42",
+            "uci": "c6c7",
+            "filhos": [
+              "no-cap-d17-43"
+            ]
+          },
+          "no-cap-d17-43": {
+            "id": "no-cap-d17-43",
+            "uci": "c3d5",
+            "filhos": [
+              "no-cap-d17-44"
+            ]
+          },
+          "no-cap-d17-44": {
+            "id": "no-cap-d17-44",
+            "uci": "e6d5",
+            "filhos": [
+              "no-cap-d17-45"
+            ]
+          },
+          "no-cap-d17-45": {
+            "id": "no-cap-d17-45",
+            "uci": "d6d5",
+            "filhos": [
+              "no-cap-d17-46"
+            ]
+          },
+          "no-cap-d17-46": {
+            "id": "no-cap-d17-46",
+            "uci": "a8d8",
+            "filhos": [
+              "no-cap-d17-47"
+            ]
+          },
+          "no-cap-d17-47": {
+            "id": "no-cap-d17-47",
+            "uci": "a1d1",
+            "filhos": [
+              "no-cap-d17-48"
+            ]
+          },
+          "no-cap-d17-48": {
+            "id": "no-cap-d17-48",
+            "uci": "d8d5",
+            "filhos": [
+              "no-cap-d17-49"
+            ]
+          },
+          "no-cap-d17-49": {
+            "id": "no-cap-d17-49",
+            "uci": "d1d5",
+            "filhos": [
+              "no-cap-d17-50"
+            ]
+          },
+          "no-cap-d17-50": {
+            "id": "no-cap-d17-50",
+            "uci": "f7f6",
+            "filhos": [
+              "no-cap-d17-51"
+            ]
+          },
+          "no-cap-d17-51": {
+            "id": "no-cap-d17-51",
+            "uci": "a3d3",
+            "filhos": [
+              "no-cap-d17-52"
+            ]
+          },
+          "no-cap-d17-52": {
+            "id": "no-cap-d17-52",
+            "uci": "f5f4",
+            "filhos": [
+              "no-cap-d17-53"
+            ]
+          },
+          "no-cap-d17-53": {
+            "id": "no-cap-d17-53",
+            "uci": "d3f5",
+            "filhos": [
+              "no-cap-d17-54"
+            ]
+          },
+          "no-cap-d17-54": {
+            "id": "no-cap-d17-54",
+            "uci": "e8e7",
+            "filhos": [
+              "no-cap-d17-55"
+            ]
+          },
+          "no-cap-d17-55": {
+            "id": "no-cap-d17-55",
+            "uci": "h2h4",
+            "filhos": [
+              "no-cap-d17-56"
+            ]
+          },
+          "no-cap-d17-56": {
+            "id": "no-cap-d17-56",
+            "uci": "c7c8",
+            "filhos": [
+              "no-cap-d17-57"
+            ]
+          },
+          "no-cap-d17-57": {
+            "id": "no-cap-d17-57",
+            "uci": "f5d3",
+            "filhos": [
+              "no-cap-d17-58"
+            ]
+          },
+          "no-cap-d17-58": {
+            "id": "no-cap-d17-58",
+            "uci": "c8c7",
+            "filhos": [
+              "no-cap-d17-59"
+            ]
+          },
+          "no-cap-d17-59": {
+            "id": "no-cap-d17-59",
+            "uci": "h4h5",
+            "filhos": [
+              "no-cap-d17-60"
+            ],
+            "comentario": "As Brancas ganham espaço e mantêm o rei preto desconfortável."
+          },
+          "no-cap-d17-60": {
+            "id": "no-cap-d17-60",
+            "uci": "e7e6",
+            "filhos": [
+              "no-cap-d17-61"
+            ]
+          },
+          "no-cap-d17-61": {
+            "id": "no-cap-d17-61",
+            "uci": "c2c4",
+            "filhos": [
+              "no-cap-d17-62"
+            ]
+          },
+          "no-cap-d17-62": {
+            "id": "no-cap-d17-62",
+            "uci": "b7b6",
+            "filhos": [
+              "no-cap-d17-63"
+            ]
+          },
+          "no-cap-d17-63": {
+            "id": "no-cap-d17-63",
+            "uci": "b2b4",
+            "filhos": [
+              "no-cap-d17-64"
+            ]
+          },
+          "no-cap-d17-64": {
+            "id": "no-cap-d17-64",
+            "uci": "c7c6",
+            "filhos": [
+              "no-cap-d17-65"
+            ]
+          },
+          "no-cap-d17-65": {
+            "id": "no-cap-d17-65",
+            "uci": "d3e4",
+            "filhos": [
+              "no-cap-d17-66"
+            ]
+          },
+          "no-cap-d17-66": {
+            "id": "no-cap-d17-66",
+            "uci": "c6c7",
+            "filhos": [
+              "no-cap-d17-67"
+            ]
+          },
+          "no-cap-d17-67": {
+            "id": "no-cap-d17-67",
+            "uci": "c4c5",
+            "filhos": [
+              "no-cap-d17-68"
+            ]
+          },
+          "no-cap-d17-68": {
+            "id": "no-cap-d17-68",
+            "uci": "b6c5",
+            "filhos": [
+              "no-cap-d17-69"
+            ]
+          },
+          "no-cap-d17-69": {
+            "id": "no-cap-d17-69",
+            "uci": "d5c5",
+            "filhos": [
+              "no-cap-d17-70"
+            ]
+          },
+          "no-cap-d17-70": {
+            "id": "no-cap-d17-70",
+            "uci": "c7d7",
+            "filhos": [
+              "no-cap-d17-71"
+            ]
+          },
+          "no-cap-d17-71": {
+            "id": "no-cap-d17-71",
+            "uci": "e4c4",
+            "filhos": [
+              "no-cap-d17-72"
+            ]
+          },
+          "no-cap-d17-72": {
+            "id": "no-cap-d17-72",
+            "uci": "e6f5",
+            "filhos": [
+              "no-cap-d17-73"
+            ]
+          },
+          "no-cap-d17-73": {
+            "id": "no-cap-d17-73",
+            "uci": "c4c2",
+            "filhos": [
+              "no-cap-d17-74"
+            ]
+          },
+          "no-cap-d17-74": {
+            "id": "no-cap-d17-74",
+            "uci": "f5g5",
+            "filhos": [
+              "no-cap-d17-75"
+            ]
+          },
+          "no-cap-d17-75": {
+            "id": "no-cap-d17-75",
+            "uci": "c5c7",
+            "filhos": [
+              "no-cap-d17-76"
+            ]
+          },
+          "no-cap-d17-76": {
+            "id": "no-cap-d17-76",
+            "uci": "d7d4",
+            "filhos": [
+              "no-cap-d17-77"
+            ]
+          },
+          "no-cap-d17-77": {
+            "id": "no-cap-d17-77",
+            "uci": "g1h2",
+            "filhos": [
+              "no-cap-d17-78"
+            ]
+          },
+          "no-cap-d17-78": {
+            "id": "no-cap-d17-78",
+            "uci": "d4b4",
+            "filhos": [
+              "no-cap-d17-79"
+            ]
+          },
+          "no-cap-d17-79": {
+            "id": "no-cap-d17-79",
+            "uci": "c7g7",
+            "filhos": [],
+            "comentario": "O último lance mantém os xeques e a iniciativa; as Pretas abandonaram. [RESUMO] O valor didático está em reconhecer nosso desenvolvimento, ativar as torres em colunas abertas e continuar jogando com iniciativa. [TRAIN] A parte de abertura até 8...Ne5 já está coberta no Move Trainer. 9.O-O desta partida não substitui nossa resposta oficial 9.Nc3."
+          }
+        }
+      }
+    ],
+    "introducoes": [],
+    "capitulos": [
+      {
+        "id": "cap-d17",
+        "titulo": "Partida modelo: nosso esquema funcionando — MVL x So",
+        "resumo": "Ver o nosso esquema aparecer numa partida real entre dois jogadores de elite.",
+        "analiseId": "analise-cap-d17",
+        "inicioNodeId": "no-cap-d17-0",
+        "caminho": [
+          "no-cap-d17-1",
+          "no-cap-d17-2",
+          "no-cap-d17-3",
+          "no-cap-d17-4",
+          "no-cap-d17-5",
+          "no-cap-d17-6",
+          "no-cap-d17-7",
+          "no-cap-d17-8",
+          "no-cap-d17-9",
+          "no-cap-d17-10",
+          "no-cap-d17-11",
+          "no-cap-d17-12",
+          "no-cap-d17-13",
+          "no-cap-d17-14",
+          "no-cap-d17-15",
+          "no-cap-d17-16",
+          "no-cap-d17-17",
+          "no-cap-d17-18",
+          "no-cap-d17-19",
+          "no-cap-d17-20",
+          "no-cap-d17-21",
+          "no-cap-d17-22",
+          "no-cap-d17-23",
+          "no-cap-d17-24",
+          "no-cap-d17-25",
+          "no-cap-d17-26",
+          "no-cap-d17-27",
+          "no-cap-d17-28",
+          "no-cap-d17-29",
+          "no-cap-d17-30",
+          "no-cap-d17-31",
+          "no-cap-d17-32",
+          "no-cap-d17-33",
+          "no-cap-d17-34",
+          "no-cap-d17-35",
+          "no-cap-d17-36",
+          "no-cap-d17-37",
+          "no-cap-d17-38",
+          "no-cap-d17-39",
+          "no-cap-d17-40",
+          "no-cap-d17-41",
+          "no-cap-d17-42",
+          "no-cap-d17-43",
+          "no-cap-d17-44",
+          "no-cap-d17-45",
+          "no-cap-d17-46",
+          "no-cap-d17-47",
+          "no-cap-d17-48",
+          "no-cap-d17-49",
+          "no-cap-d17-50",
+          "no-cap-d17-51",
+          "no-cap-d17-52",
+          "no-cap-d17-53",
+          "no-cap-d17-54",
+          "no-cap-d17-55",
+          "no-cap-d17-56",
+          "no-cap-d17-57",
+          "no-cap-d17-58",
+          "no-cap-d17-59",
+          "no-cap-d17-60",
+          "no-cap-d17-61",
+          "no-cap-d17-62",
+          "no-cap-d17-63",
+          "no-cap-d17-64",
+          "no-cap-d17-65",
+          "no-cap-d17-66",
+          "no-cap-d17-67",
+          "no-cap-d17-68",
+          "no-cap-d17-69",
+          "no-cap-d17-70",
+          "no-cap-d17-71",
+          "no-cap-d17-72",
+          "no-cap-d17-73",
+          "no-cap-d17-74",
+          "no-cap-d17-75",
+          "no-cap-d17-76",
+          "no-cap-d17-77",
+          "no-cap-d17-78",
+          "no-cap-d17-79"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-d17-0",
+            "nodeId": "no-cap-d17-0",
+            "texto": "Maxime Vachier-Lagrave venceu Wesley So em Stavanger, no Norway Blitz de 2017.",
+            "pausa": "temporizada",
+            "rotulo": "Partida real"
+          },
+          {
+            "id": "narracao-no-cap-d17-0-2",
+            "nodeId": "no-cap-d17-0",
+            "texto": "Observe principalmente o desenvolvimento inicial e a atividade das peças. A partida inteira é modelo de ideias, não uma linha para decorar lance por lance.",
+            "pausa": "temporizada",
+            "rotulo": "Como usar"
+          },
+          {
+            "id": "narracao-no-cap-d17-5",
+            "nodeId": "no-cap-d17-5",
+            "texto": "Nossa arma aparece exatamente como no repertório.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d17-13",
+            "nodeId": "no-cap-d17-13",
+            "texto": "Aqui está a posição-base ensinada no curso: bispo em f3, cavalo em e2 e bispo em e3.",
+            "pausa": "temporizada",
+            "rotulo": "Esquema"
+          },
+          {
+            "id": "narracao-no-cap-d17-16",
+            "nodeId": "no-cap-d17-16",
+            "texto": "Esta é a defesa crítica estudada no capítulo C12.",
+            "pausa": "temporizada",
+            "rotulo": "Conexão"
+          },
+          {
+            "id": "narracao-no-cap-d17-17",
+            "nodeId": "no-cap-d17-17",
+            "texto": "Nesta partida, MVL escolheu 9.O-O. Nosso repertório oficial ensina 9.Nc3 contra ...Ne5. Portanto, não troque a linha do Move Trainer por esta escolha da partida modelo. Daqui em diante, estudamos planos e atividade, não memorização.",
+            "pausa": "temporizada",
+            "rotulo": "Atenção"
+          },
+          {
+            "id": "narracao-no-cap-d17-23",
+            "nodeId": "no-cap-d17-23",
+            "texto": "A torre ocupa imediatamente a coluna d aberta e ganha atividade.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d17-33",
+            "nodeId": "no-cap-d17-33",
+            "texto": "A dama entra numa casa ativa e aumenta a pressão sobre as casas centrais.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d17-41",
+            "nodeId": "no-cap-d17-41",
+            "texto": "Uma ideia temática de partida modelo: quando a coluna está aberta, a torre pode invadir a sexta fila.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d17-59",
+            "nodeId": "no-cap-d17-59",
+            "texto": "As Brancas ganham espaço e mantêm o rei preto desconfortável.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d17-79",
+            "nodeId": "no-cap-d17-79",
+            "texto": "O último lance mantém os xeques e a iniciativa; as Pretas abandonaram.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d17-79-2",
+            "nodeId": "no-cap-d17-79",
+            "texto": "O valor didático está em reconhecer nosso desenvolvimento, ativar as torres em colunas abertas e continuar jogando com iniciativa.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          }
+        ]
+      }
+    ],
+    "treinos": [],
+    "praticas": [],
+    "fluxo": [
+      {
+        "id": "etapa-cap-d17",
+        "tipo": "capitulo",
+        "entidadeId": "cap-d17"
+      }
+    ]
+  },
+  "posicoes": {},
+  "revisoes": {},
+  "manifesto": {
+    "aulaId": "AB-BRANCAS-FRANCESA-D",
+    "aula": "ce6e76d86ad3f6676e3a8fe07e3381a8dfa6fa69662de974f7a3154c6e65ac12",
+    "posicoes": {},
+    "revisoes": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

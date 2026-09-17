@@ -179,7 +179,7 @@ function conferirAnaliseSemCache(analise: AnaliseV2, formas?: FormasDosNags): Co
       // ficava vazia — "passa nas regras" — e Aplicar parecia possível (achado no roteiro 8F).
       itens.push({
         severidade: "erro",
-        mensagem: "este jogo ainda não tem nenhuma linha: jogue os lances no tabuleiro. A abertura só entra no repertório com ao menos uma linha completa — 12 lances nossos, o roque feito, as peças menores fora e todo lance nosso comentado.",
+        mensagem: "este jogo ainda não tem nenhuma linha: jogue os lances no tabuleiro. A abertura só entra no repertório com ao menos uma linha que termine num lance nosso.",
         analiseId: analise.id,
         nodeId: analise.raizId,
       });
@@ -197,16 +197,7 @@ function conferirAnaliseSemCache(analise: AnaliseV2, formas?: FormasDosNags): Co
       const ultimo = linha.lances.length - 1;
       const doFim = noDaLinha(analise, linha.lances, ultimo);
       for (const regra of conferirRegras([linha])) {
-        // O lance mudo mais cedo é para onde "Ir até a linha" leva quando a regra é essa.
-        const mudo = regra.erro.includes("sem comentário")
-          ? linha.meus.find((i) => !linha.comentarios[String(i)]?.trim())
-          : undefined;
-        itens.push({
-          severidade: "erro",
-          mensagem: `${linha.nome}: ${regra.erro}`,
-          analiseId: analise.id,
-          nodeId: mudo !== undefined ? noDaLinha(analise, linha.lances, mudo) : doFim,
-        });
+        itens.push({ severidade: "erro", mensagem: `${linha.nome}: ${regra.erro}`, analiseId: analise.id, nodeId: doFim });
       }
     }
   }

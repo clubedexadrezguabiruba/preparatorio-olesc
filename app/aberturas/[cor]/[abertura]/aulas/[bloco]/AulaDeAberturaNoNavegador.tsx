@@ -5,7 +5,7 @@ import { LessonPlayer } from "@/components/lesson/LessonPlayer";
 import type { AulaDoAlunoV2 } from "@/lib/editor-v2/fluxo-do-aluno";
 import type { ProgressoDaLinha } from "@/lib/repertorio/treino";
 import { registrarEtapaV2 } from "@/app/finais/acoes";
-import { registrarTreino } from "@/app/aberturas/acoes";
+import { registrarTreino, type Treino } from "@/app/aberturas/acoes";
 import { marcarEtapaDaAula } from "@/app/aberturas/aulas/acoes";
 
 /**
@@ -25,12 +25,18 @@ export function AulaDeAberturaNoNavegador({ aula, vez, feitas, progressoDasLinha
     const resposta = await marcarEtapaDaAula({ aula: aula.id, publicationId: aula.publicationId, etapaId });
     return resposta.ok ? { ok: true as const, concluida: resposta.concluida } : { ok: false as const, erro: resposta.erro };
   }, [aula.id, aula.publicationId]);
+  /*
+   * A passada leva o id da aula (17/9/2026): as linhas do move trainer desta aula estão trancadas
+   * até ela ser concluída, e o servidor só aceita gravá-las quando a passada vem daqui de dentro —
+   * ver `podeGravarLinha` em `lib/aberturas/trava.ts`.
+   */
+  const gravarTreino = useCallback((treino: Treino) => registrarTreino({ ...treino, deAula: aula.id }), [aula.id]);
   return (
     <LessonPlayer
       aulaV2={aula}
       onEtapaFeita={registrarEtapaV2}
       voltar={voltar}
-      progressao={{ vez, feitas, progressoDasLinhas, gravarTreino: registrarTreino, marcarEtapa }}
+      progressao={{ vez, feitas, progressoDasLinhas, gravarTreino, marcarEtapa }}
     />
   );
 }

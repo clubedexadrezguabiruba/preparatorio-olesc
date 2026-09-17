@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Avatar } from "@/components/avatar/Avatares";
+import { perfilAtual } from "@/lib/auth/perfil";
 import type { LarguraDaMoldura } from "./Moldura";
 
 /**
@@ -56,11 +58,33 @@ import type { LarguraDaMoldura } from "./Moldura";
  * inteira atravessaria a fronteira só para acender um item. Como ele já é
  * aplicado página a página, a página que o chama sabe quem ela é — e dizê-lo é
  * uma palavra.
+ *
+ * ## O avatar e o nome, no canto (17/9/2026)
+ *
+ * O aluno escolhe um avatar em `/perfil`, e ele aparece aqui, em toda tela. O
+ * cabeçalho **lê o perfil sozinho** em vez de recebê-lo por parâmetro: são nove
+ * páginas que o chamam, e acrescentar um parâmetro a cada uma seria nove lugares
+ * para esquecer. A leitura não custa consulta — `perfilAtual` tem `cache` do
+ * React, e toda página que desenha o cabeçalho já o chamou antes.
+ *
+ * **Só o avatar, sem o nome escrito.** Medido em 17/9 a 1366 px, na moldura
+ * `painel` (672 px): sem o avatar a navegação cabia numa linha (24 px); com
+ * avatar e nome ela quebrava em duas (52 px) e o topo de 44 px transbordava — e
+ * quebrava mesmo só com o avatar. O nome saiu (ele está no painel e em `/perfil`,
+ * e no `aria-label` e no `title` do link), e o vão entre os destinos desceu de
+ * 16 para 12 px: medido de novo, uma linha. A 640 px a navegação já quebrava
+ * antes do avatar, e continua como estava.
  */
 
-export type Destino = "painel" | "tatica" | "finais" | "aberturas" | "trilha" | "partidas";
+export type Destino = "painel" | "tatica" | "finais" | "aberturas" | "trilha" | "partidas" | "turma" | "perfil";
 
-type Item = { id: Destino; nome: string; href: string };
+type Item = {
+  id: Destino;
+  nome: string;
+  href: string;
+  /** Só na gaveta "Mais" do celular: no desktop o avatar do canto já é este link. */
+  soNoCelular?: boolean;
+};
 
 /** Os quatro que cabem na barra do celular, na ordem da rotina do dia. */
 const PRINCIPAIS: Item[] = [
@@ -72,6 +96,13 @@ const PRINCIPAIS: Item[] = [
 
 /** Os que entram no "Mais" no celular, e na linha inteira no desktop. */
 const SECUNDARIOS: Item[] = [
+  // "Meu perfil" (17/9/2026): o avatar, as conquistas e os graus numa página só — era
+  // "Progresso". No desktop ele não entra na linha: o avatar no canto já leva lá, e medido a
+  // 1366 px a linha com mais um nome quebrava em duas. No celular o avatar também está no topo,
+  // mas um aluno de 11 anos procura a palavra, e a gaveta tem lugar.
+  { id: "perfil", nome: "Meu perfil", href: "/perfil", soNoCelular: true },
+  // A turma: os colegas, em ordem alfabética, e a vitrine de cada um (17/9/2026).
+  { id: "turma", nome: "Turma", href: "/turma" },
   { id: "trilha", nome: "A trilha", href: "/trilha" },
   { id: "partidas", nome: "Partidas", href: "/partidas" },
 ];
@@ -92,7 +123,7 @@ const REGUA = {
   larga: "max-w-4xl",
 } as const;
 
-export function Cabecalho({
+export async function Cabecalho({
   atual,
   nivel,
   sequencia,
@@ -105,6 +136,7 @@ export function Cabecalho({
   /** Dias seguidos de treino. Zero não desenha nada — 🔥0 seria uma acusação. */
   sequencia: number;
 }) {
+  const perfil = await perfilAtual();
   return (
     <>
       {/* ------------------------------------------------------------------ *
@@ -120,8 +152,8 @@ export function Cabecalho({
           {/* A navegação inteira, só no desktop: lá cabe, e uma barra embaixo
               numa tela de 1366 px seria mobiliário sem função. */}
           <nav className="hidden min-w-0 flex-1 sm:block">
-            <ul className="flex flex-wrap items-center gap-x-4 gap-y-1">
-              {TODOS.map((item) => (
+            <ul className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              {TODOS.filter((item) => !item.soNoCelular).map((item) => (
                 <li key={item.id}>
                   <Link
                     href={item.href}
@@ -139,14 +171,23 @@ export function Cabecalho({
             </ul>
           </nav>
 
-          <p className="ml-auto flex shrink-0 items-center gap-3 text-xs tabular-nums">
+          <div className="ml-auto flex min-w-0 shrink-0 items-center gap-3 text-xs tabular-nums">
             <span className="text-tinta-media">Nível {nivel}</span>
             {sequencia > 0 ? (
               <span className="text-metodo-tinta" title={`${sequencia} dias seguidos de treino`}>
                 <span aria-hidden>🔥</span> {sequencia}
               </span>
             ) : null}
-          </p>
+            <Link
+              href="/perfil"
+              aria-current={atual === "perfil" ? "page" : undefined}
+              aria-label={`Meu perfil: ${perfil.nome}`}
+              title={perfil.nome}
+              className={`foco shrink-0 rounded-full ${atual === "perfil" ? "ring-2 ring-metodo-cheio" : ""}`}
+            >
+              <Avatar id={perfil.avatar} tamanho={28} decorativo />
+            </Link>
+          </div>
         </div>
       </header>
 

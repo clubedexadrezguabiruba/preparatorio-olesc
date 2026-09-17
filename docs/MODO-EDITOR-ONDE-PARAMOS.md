@@ -5566,6 +5566,249 @@ Antes: **escrever no Lichess os 4 comentários** que faltam no estudo `qq2xorDl`
 9. Abrir a aula D: só a partida; na 2ª vez, Pular livre.
 10. Commit do que o passo 3 mudou (`content/repertorio/`, `public/repertorio/`, `content/aulas-v2/AB-*`) só com o Doug.
 
+> **17/9/2026:** o "Antes" acima caiu. O comentário deixou de ser obrigatório (entrada seguinte), e o PGN gerado
+> compila com o estudo como está.
+
+---
+
+## Comentário opcional no move trainer — regra global (17/9/2026)
+
+**Decisão do Doug:** "não é necessário comentar em todo lance no Move Trainer, pois é a última etapa — nem aviso;
+quero que seja global". Eu tinha proposto rebaixar a erro para aviso; o Doug recusou o aviso também.
+
+**Medido antes da mudança:** o estudo `qq2xorDl` baixado de novo em 17/9 ainda tinha os 4 lances nossos sem
+comentário (1.e4, 11.Nf3, 12.Qxf3, 11.a3) e o impacto do PGN recusava com 20 itens. Os rascunhos das 5 aulas saíram
+"muda" contra o plano novo.
+
+**O que mudou:**
+
+| Onde | Antes | Agora |
+|---|---|---|
+| `lib/repertorio/linhas.ts` (`conferirRegras`) | erro no último lance sem comentário e em todo lance nosso sem comentário | nenhuma regra de comentário |
+| `lib/repertorio/editor/sessao.ts` | "Ir até a linha" levava ao lance mudo; texto da linha vazia citava régua velha | vai ao fim da linha; texto só pede linha que termine em lance nosso |
+| `lib/editor-v2/curso-de-abertura.ts` | aviso `LANCE_MUDO` + `lancesMudos` | apagados |
+| `lib/repertorio/banco.test.ts` | exigia comentário nos 351 lances nossos publicados | conta os 351, não exige |
+| `lib/repertorio/estudo-francesa-de-teste.ts` | comentava os 4 mudos para os testes | apagado; os testes usam a fixture como está |
+| testes de `compilar`, `aplicar`, `sessao`, `gerar-do-estudo`, `importar-curso`, `planejar-curso`, `curso-de-abertura` | provavam a recusa | provam que compila; "não compila" agora usa lance ilegal |
+| `AGENTS.md` | — | seção "Comentário de lance no move trainer é opcional" |
+| `REVISAO-FONTES` §1/§23.8, `REPERTORIO` (16/9), plano do curso (12 e lista), spec (12, lista, §21), plano final, `MODO-EDITOR-PLANO` | "todo lance nosso comentado" | marcado como revogado em 17/9 |
+
+As telas já tratavam a falta (conferido no código): `Comentario` do `Treino` devolve nada sem texto,
+`TreinadorDaAula` só mostra a caixa com texto, `Passada` não trava para ler quando o comentário é nulo.
+
+**Teste que falha antes e passa depois** (`linhas.test.ts`, "comentário é opcional…", rodado com o `linhas.ts` antigo
+por `git stash` e depois com o novo):
+
+```
+ANTES:  ✖ comentário é opcional: lance nosso sem texto, no meio ou no fim, passa (Doug, 17/9/2026)
+DEPOIS: ✔ comentário é opcional: lance nosso sem texto, no meio ou no fim, passa (Doug, 17/9/2026)
+        linhas.test.ts: tests 25, pass 25
+```
+
+Portões depois da mudança (17/9, `next dev` do Doug ligado, RAM livre 1,07 GB): `typecheck` ✓ 22 s · `lint` ✓ 79 s ·
+`test` **1578/1578** ✓ 32 s (eram 1580: dois pares de testes da regra antiga viraram um cada) · `build` ✓ 35 s ·
+`validate:content` ✓ 2 s · `validate:mutations` **36 de 36** ✓ 61 s · `repertorio --check` ✓ 1 s. Total 4 min 10 s.
+
+### Pergunta de reflexão (17/9/2026, mesma sessão)
+
+**Decisão do Doug**, vendo "C13: a [PERGUNTA] está antes do primeiro lance" em "O que corrigir no Lichess": "é um
+capítulo só para o aluno pensar… quero que exista isso na regra: um capítulo de reflexão, introdução para o próximo".
+
+O planejador **já** mantinha a pergunta sem lance como fala com rótulo "Pergunta" e pausa manual
+(`narracoesDoNo`, `planejar-curso.ts`); só o leitor a tratava como defeito. Agora `[PERGUNTA]` sem lance nosso para
+jogar — antes do 1º lance (C13) ou no fim do capítulo (B03) — é **pergunta de reflexão**: fala com pausa, sem parada,
+sem aviso. Saíram `PERGUNTA_ANTES_DO_PRIMEIRO_LANCE` e `PARADA_SEM_RESPOSTA`; `PERGUNTA_NO_LANCE_NOSSO` só avisa quando
+há lance para jogar (fica o B05B). Regra escrita na spec (§13.3 item 6, tabela, "Parada", lista da v1.5) e no plano do
+curso. Avisos do estudo: 23 → 19 (lance mudo) → **16**.
+
+```
+planejar-curso.test.ts "pergunta de reflexão…"
+ANTES:  ✖ AssertionError: @C13 — 'PERGUNTA_ANTES_DO_PRIMEIRO_LANCE@C13'
+DEPOIS: ✔ (C13 e B03 sem aviso; as duas perguntas chegam ao aluno com pausa "manual"; B05B continua avisando)
+```
+
+### Piloto: PGN aplicado e as 5 aulas publicadas (17/9/2026)
+
+1. **Tela `/editor/v2/curso-de-abertura`** (Playwright, 1517 px, zoom 0,9): link `qq2xorDl` → Buscar (47.498 caracteres)
+   → Ler: A 9/2/0/2, B 32/8/5/8, C 16/3/4/9, D 1, E+F 35/12/8/19; as 5 "muda — cópia de segurança antes";
+   "Nascem 19; morrem 1", zera `brancas-francesa-05eae3b2`.
+2. **Substituir as aulas** → 5 × "substituída, com cópia de segurança".
+3. **Aplicar o PGN** → "Sim, aplicar" → "✓ brancas-francesa.pgn aplicado, e o estudo guardado como rascunho da fonte".
+   `repertorio --check` coerente; `marcas-das-fontes` passa (nenhum símbolo perdido). O `banco.test.ts` mudou de
+   número de propósito: Base **20 → 38** linhas, lances nossos **351 → 499**, em **45** linhas. O
+   `importar-curso.test.ts` passou a usar a Francesa escrita à mão como fixture
+   (`e2e/fixtures/repertorio-brancas-francesa-escrita-a-mao.pgn`), para não depender do repositório já aplicado.
+4. **Conferir e publicar** (script com `conferirAulaV2` → `prepararPublicacaoV2` → `publicarAulaV2`, as funções da
+   tela): as 5 verdes, **0 erros**; avisos de voz A 6, B 11, C 8, D 3, E+F 13 (`VOZ_CARACTERES`, `VOZ_PROIBIDA`,
+   `VOZ_PALAVRAS`). Publicações `pub-ae8e8e5c…` (A), `pub-a56295f9…` (B), `pub-a07a70db…` (C), `pub-9f06b8b2…` (D),
+   `pub-2d9706c4…` (E+F).
+5. **Aluno** (`alunoteste`, contexto separado, 1366×768): `/aberturas/brancas/francesa` com a faixa Aulas A–E+F e
+   "linha 1 de 19"; a aula B abre na etapa 1 de 32, abas trancadas, zero erro de console. **Não** fiz a aula como
+   aluno — a 1ª vez fica para o Doug.
+6. **Prévia do professor, aula B:** etapa 32 = "Move trainer — aula B · linha 1 de 8 — Preparação: dama no centro"
+   (E22C), sem o aviso de linhas fora do compilado; etapa 28 (B09), **5.dxc5 → "5.dxc5 também vale, mas a aula
+   segue por 5.c3."**
+
+Nada disso tem commit: `content/repertorio/`, `public/repertorio/`, `content/aulas-v2/AB-*` e o código das duas
+regras esperam o Doug.
+
+**Portões de novo** (depois da reflexão e do PGN aplicado): 3 vermelhos no `escrever.test.ts`, que supunha 23 jogos
+escritos à mão. Medido: 41 jogos; reescrever os 11 arquivos continua sem perder nada (contagens antes = depois); o
+arquivo gerado já sai na forma do escritor (reescrita idêntica). Teste ajustado: 41 jogos, gerado ⇒ idêntico, escrito
+à mão ⇒ muda, e os números novos (298 comentários com quebra, 1068 quebras, 87 variações, 44 NAGs, 37 símbolos
+colados). `npm test` **1579/1579**; typecheck e lint ✓.
+
+### O painel da aula longa (17/9/2026, pedido do Doug no teste)
+
+**O que o Doug viu** na aula B como `alunoteste`: "os comentários do professor não cabem na tela; o painel lateral
+fica com a lista de todas as etapas e o painel do professor é empurrado para baixo. Deixar o mais clean possível."
+
+**Causa:** `TrilhaDaAula` (`components/lesson/LessonPlayer.tsx`) desenha um botão por etapa no topo do painel; com
+32 etapas de títulos longos a fileira ocupava a altura do painel.
+
+**Feito:** acima de **8 etapas** (as de finais têm até 5; a extra de teste, 8 — ficam iguais) a trilha vira
+`TrilhaCompacta`: uma barra fina com um segmento por etapa (feita / atual / adiante) e o botão **"Etapas 3/32"**, que
+abre a lista inteira **por cima** do painel (não empurra nada), com as trancadas desabilitadas; fecha ao escolher,
+clicando fora, ou com **Esc** numa camada de atalho própria (`useCamadaDeJanela`, como os menus do editor). *Defeito
+achado na medida e consertado:* a primeira versão escutava o Esc no `document`, e na prévia "Fazer a aula como
+aluno" o Esc também encerrava a aula.
+
+**Medido** (Playwright, sem imagem): na página do aluno, a trilha ocupa **36 px** (y 90–126); o texto do professor
+fica em 233–585 e os botões em 597–645, dentro da tela nas três janelas testadas. Na prévia: lista com 32 itens,
+512 px; escolher a 20 → "Etapa 20 de 32 · Laboratório", lista fechada; Esc fecha só a lista (sem "Aula
+interrompida"); clicar fora fecha. Nenhum e2e usa aula `AB-` (os que citam "Etapas da aula" usam aulas de finais,
+≤ 8 etapas); a suíte de navegador **não** foi rodada.
+
+### As 5 aulas da Francesa em ordem pedagógica (17/9/2026, tarde)
+
+**O que o Doug viu** na aula B: "muitos erros — texto vindo antes do lance, ordem pedagógica errada". Autorizou
+reescrever para ficar linear e com andaime.
+
+**Medido antes, com o aluno no Playwright:** B03 com a pergunta **depois** do "A seguir"; B04 com 6 lances mudos e a
+parada; o Resumo do Laboratório (B08) **antes** dos casos 2–5; B05B com Qxe6+ e ...Qxe6 mudos antes de "Podemos
+entregar a dama?"; a dica **na tela de entrada** da parada (entregava a resposta); errar dizia "linha treinada";
+depois de acertar, o botão dizia "Ver a técnica"; no C12, o ramo 9...Be7 repetia 19 lances sem "Voltamos a".
+
+**Código (só aulas `AB-`; finais não usam parada e ficam iguais), cada item com teste que falhou antes:**
+- `lerComentario` guarda a `sequencia` das falas; a pergunta sai onde foi escrita.
+- Com ramos, Resumo e A seguir da linha principal fecham o **último ramo** (`fecharNoUltimoRamo`).
+- Parada: dica fora da entrada; lance errado → "Ainda não. Dica: …" (`dicaSoNoErro`, `fluxo-do-aluno.ts`).
+- Comparação conta desde a raiz o capítulo que continua depois de uma parada (`percursoParaComparar`, `previa.ts`).
+- Treino guiado: só as frases iniciais do comentário (≤ 100 cada, as duas somadas cabem em 200).
+- Entre capítulos do curso o botão diz "Continuar". "tentativa" saiu da lista de proibidas (Doug).
+
+**Texto do estudo** (`content/repertorio/rascunhos/estudo-brancas-francesa.pgn`; cópia do anterior no scratchpad da
+sessão): fala de contexto antes de cada parada e `[DICA]` própria em todas; B03 mostra as três escolhas como ramos;
+B05B vira duas paradas (achar Qxe6+, achar Nxa7#); Laboratório com uma parada por caso; C12 ganha a parada do
+11.gxf3 (Qxf3/Nxf3 = "também vale"); frases de bastidor e "iniciativa" saíram; A seguir do C13 e do E20
+corrigidos. **Nenhum lance e nenhum símbolo mudou**; nenhuma linha do move trainer morre (19 textos mudam).
+
+**Republicado** (planejar → substituir com cópia → aplicar PGN → conferir → publicar): A 9 etapas/2 paradas, B 44/13,
+C 18/4, D 1, E+F 35/12; **0 erros e 0 avisos** nas 5. Aluno (`alunoteste` zerado): aula B jogada da etapa 1 à 43
+e aula C até a 14, sem travar. Portões: test 1583/1583, typecheck, lint, validate:content, 36/36 mutações,
+`repertorio --check` ✓. **Não rodado:** build depois das mudanças, treino guiado e move trainer inteiros, aulas A,
+D e E+F na tela, suíte e2e.
+
+**Pendência que morde:** o estudo do Lichess (`qq2xorDl`) ficou **para trás** do arquivo local. Reimportar pelo link
+desfaz tudo isto — importe pelo arquivo, ou leve o PGN local para o Lichess antes.
+
+---
+
+## Rodada do feedback do aluno — Francesa 3.Bd3 (17/9/2026, tarde)
+
+O Doug fez as aulas como `alunoteste` e mandou 12 pontos, mais graus no site todo e uma página de progresso. Plano em
+`~/.claude/plans/feedback-1-um-a-reactive-waterfall.md`. Dois donos de arquivo: um subagente (páginas, trava, graus,
+`/progresso`, move trainer) e a sessão principal (player da aula, estudo, republicação). Sem commit.
+
+**Decisões do Doug nesta rodada** (mudam a spec §18.1, emendada): trava **dura no servidor, por aula** — as linhas da
+aula X abrem ao concluir X, aulas em ordem, professor sempre livre, chave `TRAVA_POR_AULA` (`lib/aberturas/trava.ts`);
+linha trancada não conta em "faltam", no portão do Avançado nem no nível 5; cores Chess.com dos seis símbolos; grau
+visível por item no site todo; capa no início do capítulo. **Adiado para depois de 18/9:** barrinha de avaliação,
+porquê completo nos 38 capítulos + `[CURTO]`, símbolo do lance do adversário no move trainer.
+
+### O que mudou
+
+| # | Pedido | Causa medida | Feito |
+|---|---|---|---|
+| 1, 9 | Aluno caía direto no move trainer; sem página da abertura | faixa das aulas e `<Treino>` na mesma rota; aulas sem trava | página da abertura (Francesa: linha do tempo A→E+F com as linhas de cada aula; as outras 10: lista das linhas); move trainer em `/aberturas/[cor]/[abertura]/treino`; `gravarTreino` recusa linha de aula não concluída (exceto com rodada aberta da aula dona ou professor); aula trancada redireciona antes de abrir rodada |
+| 10 | Progresso do `alunoteste` não aparecia | banco: 4 linhas no degrau 1 (nenhuma aprendida) e 3 rodadas abertas (A 8/9, B 43/44, C 15/18); `/aberturas` só contava aprendidas e ninguém lia `aula_rodada` | cartão com aulas concluídas, em andamento e linhas começadas; `/progresso` |
+| 2 | Balão "Leia o comentário" grande; Espaço não andava no capítulo | `CartaoDeComando` `min-h-16`; `aluno-continuar` declarado e nunca ligado | cartão `min-h-12`, ícone 18 px, linha "Aperte Espaço para continuar"; comentário e feedback em `text-base`; Espaço no capítulo (completa → vira página → anda → segue), na capa e no fim do treino, com a guarda do botão focado (`lib/atalhos/foco.ts`) |
+| 3 | 1.e4 sem comentário, 2.d4 sem porquê | estudo | 1.e4 e 2.d4 explicados no capítulo 00 |
+| 4 | Símbolos todos da mesma cor, parados | capítulo usava `NagOverlay` verde fixo; treino não desenhava | `simboloNaCasa` no capítulo, com animação; NAG → desenho (`simboloDoNag`), tokens `simbolo-interessante` (roxo claro, `!?`) e `simbolo-imprecisao` (amarelo, `?!`); o treino desenha o símbolo do lance do adversário e do acerto do aluno (3.Bd3 → "Ótimo!") |
+| 5 | Sem transição | só um `h2` | marcador `[SECAO] Título \| subtítulo` (leitor → `capitulo.secao`/`introducao.secao` → etapa do aluno; fora das falas, dos desconhecidos e do PGN do move trainer); `CapaDeSecao` com "Parte N de M"; capas fixas no treino guiado e no move trainer |
+| 6 | Confete + som | peças existiam, faltavam nos fins | `components/Celebracao.tsx` (`useCelebracao`): aula de abertura concluída, fim de linha (aula e página), fim de série de tática e da rodada do rating (70 problemas); `TreeStage`/`PracticeStage` usam o mesmo; treinos intermediários da aula de abertura não festejam |
+| 8 | "Tente de novo" infinito no treino guiado | `treino-jogavel.ts` só devolvia `FORA_DA_LINHA` | escada no mesmo lance (`lib/lesson/ajuda-no-erro.ts`): dica → casa acesa → seta + "Rever o capítulo"; do 2º degrau em diante a tentativa grava `ajuda`; no move trainer, a mesma escada na fase treino e "Jogar com a seta" em destaque depois de 2 passadas erradas |
+| I | Graus | — | `lib/progresso/grau.ts` (Novato → Mestre): linha = degrau atual; aula de finais = escada; aula de abertura = menor grau das linhas; tática por tema em todos os modos, peso = rating/1000, Especialista e Mestre exigem acerto recente (80%/90% nos últimos 30) e caem; `SeloDoGrau` na página da abertura, fim do valendo ("Subiu para …"), `/finais`, `CartaoDoTema`, `/progresso` |
+
+**Calibração da tática** (acervo medido: 233.897 puzzles): 212 a 7.230 por tema; mediana de rating por tema de 1116 a
+1832; "difícil" = quartil de cima do tema (1184–1966). Réguas: Aprendiz 3 pontos, Intermediário 15, Experiente 35 +
+70%, Especialista 60 + 80% + 8 difíceis, Mestre 100 + 90% + 20 difíceis. O caminho do tema (39 puzzles a 75%) dá ~40.
+
+### Estudo e republicação
+
+Capas `[SECAO]` em 12 capítulos (00, A00, A01, B03, B04, B08, B09, C10, C13, D17, E20, F23). **Lances e símbolos
+idênticos** — impressão digital por capítulo (posição + lance + NAGs) antes = depois nos 38, 979 lances, avisos do
+leitor 7 = 7. Republicado pelo caminho da tela, por script: planejar 2× idêntico; repertório nascem 0, morrem 0 (os
+19 ids iguais), 19 textos mudam (o 1.e4); as 5 aulas **0 erros e 0 avisos** (a primeira fala de 2.d4 tinha 23 palavras
+e foi partida). Uma publicação da aula B falhou uma vez no registro (`publicar.ts:209`) e passou na repetição, "igual".
+
+### Testes que falham antes e passam depois
+
+```
+[SECAO]  antes: SyntaxError … does not provide an export named 'secaoDoTexto'; ✖ [SECAO] no capítulo vira a capa…
+         depois: curso-de-abertura + planejar-curso 41/41
+NAG→cor  antes: SyntaxError … does not provide an export named 'simboloDoNag'   depois: 4/4
+Espaço   sem a guarda: ✖ "com o botão focado, o atalho não age"   com a guarda: 1/1 (foco.test.ts)
+escada   ajuda-no-erro.test.ts 2/2 (módulo novo); símbolos do treino: planejar-curso 21/21
+trava    antes: ERR_MODULE_NOT_FOUND lib\aberturas\trava.ts   depois: 7/7
+contagens antes: ✖ linha trancada por aula não conta em nada (45/46)   depois: 46/46
+grau     antes: ERR_MODULE_NOT_FOUND grau.ts   depois: 11/11
+passada  antes: 41/45 (escada, só-treino, sugere a seta, cartão da leitura)   depois: 45/45
+```
+
+### Tela (Playwright, `alunoteste`, 1366×768 de CSS com `devicePixelRatio` 0,75)
+
+- Antes: `/aberturas/brancas/francesa` abria o move trainer; cartão de comando 64 px.
+- Depois: cartão 49,7 px. Aula A: capa "Parte 1 de 5 · Conheça a Francesa" → Espaço percorre o capítulo 00 inteiro
+  (fala nova de 1.e4 e 2.d4) e chega à parada da etapa 3 sem mouse. Parada com 3 erros: "Ainda não. Dica: …" → "Olhe a
+  peça da casa acesa." → "O lance é Bd3. Siga a seta." + seta + "Rever o capítulo". 3.Bd3 → entrada grande "Ótimo!",
+  disco azul `rgb(116,155,191)`. Espaço no fim da parada abre a etapa 4.
+- `/aberturas`, página da Francesa, `/treino`, `/progresso`, Alapin: 200, sem rolagem horizontal, zero erro de console;
+  `/aulas/c` → redireciona. Move trainer da aula A jogado por script (2 linhas, valendo) → "Aula concluída" com o
+  canvas do confete → na página, A "Concluída" com as 2 linhas em "Treinar", B vira "a aula de agora" e abre; o
+  `/treino` da Francesa serve as 2 linhas.
+
+**Portões** (17/9, `next dev` ligado, RAM livre 1,3 GB): `test` **1613/1613** · `typecheck` ✓ · `lint` ✓ ·
+`validate:content` ✓ · `validate:mutations` **36/36** · `repertorio --check` ✓. **Não rodados:** `build` (precisa do
+`next dev` desligado), suíte e2e (as rotas novas entraram em `e2e/linha-de-base.spec.ts` sem rodar), aula B inteira
+com o treino guiado depois da mudança, celular 375 px das telas da aula.
+
+**Pedidos que chegaram no meio da rodada** (fechados no mesmo dia):
+
+- **Design da `/progresso`** (skill impeccable): escada dos 6 graus com a contagem do aluno em cada um; títulos em
+  `rotulo`; nome à esquerda e grau à direita em Finais e Tática (o nome truncava a 375 px); estado vazio clicável
+  inteiro; "treinar antes conta como adiantamento" saiu (não é verdade: a escada só sobe no vencimento). Sem rolagem
+  horizontal em 375 e 1366; typecheck e lint ✓.
+- **Avatar de perfil** (`/perfil`): 20 ilustrações SVG por tokens (`components/avatar/Avatares.tsx`), sem nome visível
+  ("fica infantil", Doug); aparece no cabeçalho e no painel; o nome não é editável. Migrações **0016** e **0017**
+  aplicadas (coluna `perfis.avatar` com `check` dos 20 ids). **Achado de segurança:** desde a 0001 a RLS deixava o
+  aluno fazer `update` na própria linha de `perfis` inteira — medido no banco, a conta de teste virou "Hacker" com
+  `papel = professor`. A 0016 tirou a política; o avatar grava por server action que só escreve `avatar`.
+  `db:rls` "A RLS segura" com a seção 14 nova (antes da 0016: 5 falhas). `lib/avatar/avatares.test.ts` 5/5.
+  Portões depois de tudo: `test` **1618/1618**, typecheck, lint, `validate:content` ✓.
+- **Meu perfil, Turma e selos** (decisões do Doug: vitrine só com avatar, nome, nível e selos; página Turma sem
+  números; as quatro conquistas que faltavam; selos de repertório por abertura). `/progresso` → `/perfil`. `/turma`
+  em ordem alfabética, sem contas de ensaio para alunos; vitrine `/turma/[id]` lida por módulo `server-only` que
+  escolhe `id, nome, avatar` (sem rating, tabuleiro, equipe, `usuario`, datas; família rating omitida). Selos novos:
+  puzzles resolvidos distintos 100/250/500/1000; pontaria 80 na melhor janela de 100 tentativas; primeira aula de
+  abertura e curso inteiro por curso publicado; um selo por abertura do índice (Base toda aprendida **e nenhuma linha
+  trancada**), saindo "repertório de brancas/pretas". Migração **0018** aplicada (`selo_conquistado` com
+  `visto_em`, `selo_inicio`, view `puzzles_do_aluno`): selo gravado não some; primeira avaliação silenciosa; selo
+  novo com aviso e confete uma vez. Relatório do professor com avatar, selos com data, graus e aulas de abertura.
+  `db:rls` "A RLS segura" (seção 15); `selos:ciclo` view = TypeScript. Portões: `test` **1642/1642**, typecheck,
+  lint, `validate:mutations` 36/36, `repertorio --check` ✓. **Pendência de regra:** "O Base inteiro" (e o portão do
+  Avançado e do nível 5) ainda descontam as linhas trancadas por aula — dá para fechar o Base sem as aulas da Francesa.
+
 ---
 
 ## O teste humano da fatia 10 — o roteiro numerado

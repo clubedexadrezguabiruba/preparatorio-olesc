@@ -448,7 +448,8 @@ A numeração é a do plano, para as referências cruzadas baterem.
 4. **Uma aula por bloco.** Cada capítulo do estudo é uma etapa da aula do seu bloco.
 5. **Toda aula de abertura tem treino guiado** (o mesmo dos finais) **e move trainer** (o
    mesmo de `/aberturas`), **exceto a aula de partida modelo** (regra 18).
-6. **Cada `[PERGUNTA]` é uma parada:** o aluno joga o único lance certo (ex.: depois de
+6. **Cada `[PERGUNTA]` com lance nosso para jogar é uma parada** (a que não tem é pergunta de
+   reflexão, §13.3): o aluno joga o único lance certo (ex.: depois de
    5...Qxg2?? achar 6.Be4!). No E21 o aluno também responde jogando o lance; depois aparece
    o `[PLANO]`.
 7. **O move trainer tira as linhas do estudo.** `content/repertorio/brancas-francesa.pgn`
@@ -462,8 +463,8 @@ A numeração é a do plano, para as referências cruzadas baterem.
     estudo vira a fonte em `content/repertorio/rascunhos/`, e a trava `marcas-das-fontes`
     compara estudo → PGN gerado.
 12. **A régua de tamanho sai de vez, para todo o repertório:** sem mínimo, sem máximo, sem
-    exigir roque ou peças fora. Ficam: termina em lance nosso, todo lance nosso comentado,
-    sem linha repetida (ver §21).
+    exigir roque ou peças fora. Ficam: termina em lance nosso, sem linha repetida (ver §21).
+    *(17/9/2026: "todo lance nosso comentado" também saiu — comentário é opcional em todo lance do move trainer desde 17/9/2026 (decisão do Doug; ver `AGENTS.md`).)*
 13. **A aula B fica uma aula só, mesmo longa.** O aluno para e continua de onde parou.
 14. **Padrão e piloto: estudo v1.5**, importado pelos dois caminhos (link e arquivo) e
     visto na tela, localmente. *(Piloto 0 cumprido em 16/09: 38 de 38 etapas pelos dois
@@ -523,15 +524,20 @@ nome da §13.2 ("Treino", "Aula"…): num curso de abertura, o destino sai do pa
 |---|---|---|
 | aula | capítulo dos blocos 00, A, B, C, E sem código `E22` | `capitulo` narrado |
 | ramo | variante que ensina algo, dentro de um capítulo de aula | `capitulo` que começa no lance da bifurcação, com o passo "Voltamos a…" da comparação (§15.3) |
-| parada | cada `[PERGUNTA]` | três etapas (§18) |
+| parada | cada `[PERGUNTA]` com lance nosso depois | três etapas (§18); sem lance, pergunta de reflexão |
 | treinador | código `E22*` ou título "Move Trainer —" | linhas do banco do repertório, com `categoria` e `ordem`; **não** vira capítulo narrado |
 | partida modelo | bloco D com lances | `capitulo` narrado; as tags `Model*` viram o cabeçalho da partida |
 | revisão | bloco F | `introducao`, um quadro por trecho marcado e por nota de ramo |
 | vazio | capítulo sem lances onde o estudo pede partida | fica fora, com aviso |
 
 **Parada.** A parada é o **próximo lance nosso** depois da `[PERGUNTA]`. Pergunta escrita
-no próprio lance nosso, ou antes do 1º lance, gera aviso no relatório (não é recusada). Na
-parada:
+no próprio lance nosso gera aviso no relatório (não é recusada).
+
+**Pergunta de reflexão** *(decisão do Doug, 17/09/2026)*: `[PERGUNTA]` sem lance nosso para jogar — antes do
+1º lance (C13) ou no fim do capítulo (B03) — não é parada e não é aviso. O aluno lê a pergunta com o rótulo
+"Pergunta", a aula espera ele seguir, e o capítulo serve de introdução ao seguinte.
+
+Na parada:
 
 - irmão nosso com `!` ou `!?` → "vale, mas a aula segue por <lance principal>";
 - irmão nosso com `?`, `?!` ou `??` → erro nomeado;
@@ -551,7 +557,7 @@ Entender a ideia…" literalmente.)*
 | Marcador | Efeito |
 |---|---|
 | `[OBJETIVO]` | cartão no início do capítulo |
-| `[PERGUNTA]` | parada |
+| `[PERGUNTA]` | parada; sem lance nosso para jogar, pergunta de reflexão |
 | `[TRAIN]` | objetivo do treino; **não** seleciona linhas |
 | `[REFERENCIA]` | não é narrado; o lance fica e vale como "também vale" |
 | `[ENTENDER]`, `[PLANO]`, `[MEMORIZAR]`, `[ARMADILHA]`, `[PUNICAO]`, `[GOLPE]`, `[ERRO COMUM]`, `[NAO FUNCIONA]`, `[TEORIA]`, `[LINHA CRITICA]`, `[DEFESA]`, `[ESQUEMA]`, `[ATENCAO]`, `[CONEXAO]`, `[COMO USAR]`, `[PARTIDA REAL]` | fala própria, com rótulo |
@@ -601,12 +607,13 @@ relatório lista, sem bloquear a importação, o que o Doug corrige no Lichess. 
 
 - `Orientation "black"` nos 38 capítulos (ignorado; vale a cor do curso);
 - o Lichess perde o comentário final de **B09** e **C12** (depois da última variante);
-- `[PERGUNTA]` no lance nosso: B03, B05B (17.Qxe6+), C13 (antes do 1º lance);
+- `[PERGUNTA]` no lance nosso: B05B (17.Qxe6+) — B03 e C13 são perguntas de reflexão e saíram
+  da lista em 17/9/2026;
 - `[PROXIMO]` apontando errado: E20 (cita o treino-relâmpago removido), E21 ("árvore
   completa" só vem no E22P), C13 (o próximo é D17);
 - "Regra N" diferente entre C13 e E22O; "Golpe 4/5" não são táticas;
-- lances nossos sem comentário: 1.e4 (00), 11.Nf3 (B05B), 12.Qxf3 e 11.a3 (C12), que
-  reprovam no `/aberturas`;
+- lances nossos sem comentário: 1.e4 (00), 11.Nf3 (B05B), 12.Qxf3 e 11.a3 (C12) — não reprovam
+  mais desde 17/9/2026, e o leitor não avisa (comentário é opcional em todo lance do move trainer desde 17/9/2026 (decisão do Doug; ver `AGENTS.md`));
 - frases de bastidor fora de `[REFERENCIA]`: "curso atual" ×6, "draft antigo" (B09, C12);
 - D18 e D19 vazias; o `[RESUMO]` do E22N escreve "Ndb5" (o Lichess grava 10.Nb5).
 
@@ -863,8 +870,20 @@ A parada grava tentativa como os treinos de finais, e **não tem confete**.
 - **Partida modelo:** conclui ao assistir até o fim; da 2ª vez em diante, Pular é livre.
 - **Retomar:** o aluno que sai no meio volta à primeira etapa ainda não feita da rodada
   (regra 13).
-- Aulas de abertura não se trancam entre si: a trilha sugere a ordem, e o aluno abre
-  qualquer aula. *(Decisão do Doug, 16/09/2026.)*
+- ~~Aulas de abertura não se trancam entre si: a trilha sugere a ordem, e o aluno abre
+  qualquer aula. *(Decisão do Doug, 16/09/2026.)*~~ **Revogada em 17/09/2026**, depois do
+  feedback de um aluno que caiu direto no move trainer da Francesa:
+  - **As aulas vão em ordem**: B abre quando A está concluída (e assim até a E+F; a D, sem move
+    trainer, também conta). Aula trancada aberta pela URL volta para a página da abertura.
+  - **As linhas do move trainer da aula X destravam ao concluir X.** A linha é da primeira aula
+    (A → E+F) cujo `treinadores[].linhaIds` a lista. Dentro da própria aula (liberada, com rodada
+    aberta) o move trainer grava as linhas dela antes da conclusão — é assim que ela conclui.
+  - **A trava é dura, no servidor** (`gravarTreino` recusa; `lib/aberturas/trava.ts`), o
+    **professor é sempre livre**, e a chave `TRAVA_POR_AULA` desliga tudo numa linha.
+  - Linhas trancadas **não contam** em "faltam N", no portão do Avançado, no nível 5 nem no total
+    de `/aberturas`.
+  - A página `/aberturas/[cor]/[abertura]` é o mapa (linha do tempo das aulas, as linhas de cada
+    aula com cadeado e grau); o move trainer mora em `/aberturas/[cor]/[abertura]/treino`.
 
 ## 19. Problemas, conferência e correção
 
@@ -975,8 +994,9 @@ vinculado ao manifesto completo julgado; mudança posterior invalida a conferên
   candidato, mostrar os ids de linha que morrem e nascem e o progresso que se perde.
 - **Régua sem tamanho, para os 11 repertórios.** Saem a profundidade mínima, o teto de 14,
   a exigência de roque e de peças menores fora da casa, e a obrigação do bloco `[%plano]`.
-  Ficam: toda linha termina em lance nosso, todo lance nosso tem comentário, nenhuma linha
-  repetida. **Linha que é o começo de outra não é repetida** e fica como linha própria
+  Ficam: toda linha termina em lance nosso, nenhuma linha
+  repetida. **Comentário é opcional em todo lance** — nosso ou dele, no meio ou no fim; nem
+  erro nem aviso *(decisão do Doug, 17/09/2026, que tirou "todo lance nosso tem comentário")*. **Linha que é o começo de outra não é repetida** e fica como linha própria
   (E22A, só `3.Bd3`, e E22B, o esquema completo). *(Decisão do Doug, 16/09/2026.)*
 - **Linha com `categoria` e `ordem`.** Categorias: arma, esquema, preparacao, golpe,
   nao-funciona, defesa, linha-critica, desvio, se-esquecer, arvore. Linha nunca vista sai

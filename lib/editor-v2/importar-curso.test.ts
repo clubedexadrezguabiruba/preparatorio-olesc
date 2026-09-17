@@ -7,8 +7,10 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, 
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { compilarRepertorio } from "../repertorio/compilar.ts";
+import { escreverCompilado, lerFontesDoRepertorio } from "../repertorio/compilar-em-disco.ts";
+import { notas } from "../repertorio/conteudo.ts";
 import { compiladoCoerente } from "../repertorio/editor/aplicar.ts";
-import { estudoComOsMudosComentados } from "../repertorio/estudo-francesa-de-teste.ts";
 import { conferirMarcasDasFontes } from "../repertorio/marcas-das-fontes.ts";
 import { aplicarRepertorioDoCurso, caminhoDoEstudoCru, diffDoCurso, gravarAulasDoCurso, prepararRepertorioDoCurso } from "./importar-curso.ts";
 import { planejarCursoDeAbertura } from "./planejar-curso.ts";
@@ -24,7 +26,12 @@ function pastaDeTrabalho(): string {
   for (const nome of readdirSync("content/repertorio").filter((n) => n.endsWith(".pgn"))) {
     cpSync(path.join("content/repertorio", nome), path.join(raiz, "content", "repertorio", nome));
   }
-  cpSync("public/repertorio", path.join(raiz, "public", "repertorio"), { recursive: true });
+  // A Francesa de antes do curso (a linha escrita à mão), fixa: desde 17/9/2026 o repositório já tem
+  // o PGN gerado do estudo, e o teste precisa de um repertório em que aplicar o estudo mude algo.
+  cpSync("e2e/fixtures/repertorio-brancas-francesa-escrita-a-mao.pgn", path.join(raiz, "content", "repertorio", "brancas-francesa.pgn"));
+  const compilacao = compilarRepertorio(lerFontesDoRepertorio(path.join(raiz, "content", "repertorio")), notas());
+  assert.deepEqual(compilacao.problemas, []);
+  escreverCompilado(path.join(raiz, "public", "repertorio"), compilacao.saida);
   return raiz;
 }
 
@@ -61,14 +68,10 @@ test("reimportar um estudo mudado: diff «muda», cópia de segurança antes, e 
   }
 });
 
-test("o PGN do repertório: com os 4 mudos o impacto recusa; comentados, aplica, mostra o que morre e fica coerente", () => {
+test("o PGN do repertório: do estudo como está (com lances sem comentário), aplica, mostra o que morre e fica coerente", () => {
   const raiz = pastaDeTrabalho();
   try {
-    const comMudos = prepararRepertorioDoCurso(planejarCursoDeAbertura(LICHESS, OPCOES), "francesa", raiz);
-    assert.equal(comMudos.ok, false);
-    assert.ok(!comMudos.ok && comMudos.problemas.some((p) => /sem comentário/.test(p)));
-
-    const texto = estudoComOsMudosComentados(LICHESS);
+    const texto = LICHESS;
     const curso = planejarCursoDeAbertura(texto, OPCOES);
     const preparo = prepararRepertorioDoCurso(curso, "francesa", raiz);
     assert.ok(preparo.ok, JSON.stringify(preparo));

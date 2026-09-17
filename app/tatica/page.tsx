@@ -6,6 +6,7 @@ import { CartaoDoTema } from "@/components/tatica/CartaoDoTema";
 import { COR_DO_NIVEL } from "@/components/tatica/SeloDoTema";
 import { GraficoRating } from "@/components/tatica/GraficoRating";
 import { perfilAtual } from "@/lib/auth/perfil";
+import { grausDosTemas } from "@/lib/progresso/tatica-banco";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import {
   META_DA_OLESC,
@@ -51,12 +52,14 @@ export const metadata: Metadata = { title: "Tática — Preparatório OLESC" };
  */
 export default async function Tatica() {
   const perfil = await perfilAtual();
-  const [progresso, conquistado, cabecalho, rating, tentativasNoRating] = await Promise.all([
+  const [progresso, conquistado, cabecalho, rating, tentativasNoRating, graus] = await Promise.all([
     progressoPorTema(),
     nivelConquistado(perfil.id),
     dadosDoCabecalho(perfil.id),
     ratingDoAluno(perfil.id),
     tentativasDoRating(perfil.id),
+    // O grau de cada tema (17/9/2026), em todos os modos — ver `lib/progresso/grau.ts`.
+    grausDosTemas(perfil.id),
   ]);
   const nivel = nivelDoAluno(conquistado);
 
@@ -104,6 +107,7 @@ export default async function Tatica() {
               <CartaoDoTema
                 tema={continuar.tema}
                 progresso={continuar.p ?? temaZerado()}
+                grau={graus.get(continuar.tema.tag)?.grau ?? 0}
                 situacao={situacaoDe(continuar.bloco.nivel, continuar.tema.tag)}
                 nivel={continuar.bloco.nivel}
                 destaque
@@ -192,6 +196,7 @@ export default async function Tatica() {
                             key={tema.tag}
                             tema={tema}
                             progresso={progresso.get(tema.tag) ?? temaZerado()}
+                            grau={graus.get(tema.tag)?.grau ?? 0}
                             situacao={situacaoDe(bloco.nivel, tema.tag)}
                             nivel={bloco.nivel}
                           />

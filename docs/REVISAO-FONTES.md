@@ -19,6 +19,8 @@ pede mais. Uma linha só passa se cumprir os três:
 1. **Lance com fonte** — o lance é recomendação de alguém, não escolha de motor.
 2. **Motivo escrito na fonte** — a fonte diz *por quê*, e diz o plano. Fonte que
    dá o lance mudo reprova: o aluno só pode decorar.
+   *(17/9/2026: isto é critério para escolher a fonte. Não é trava do compilador —
+   comentário é opcional em todo lance do move trainer desde 17/9/2026 (decisão do Doug; ver `AGENTS.md`).)*
 3. **Nível adequado** — a recomendação serve para 12–15 anos de clube, e a
    explicação cabe em português de adolescente.
 
@@ -1862,6 +1864,11 @@ existem, e a conferência roda **antes** do `--check`, para valer também quando
 nada é escrito.
 
 ### 23.8 O gate dos lances mudos
+
+> **Revogado em 17/9/2026, por decisão do Doug, nos 11 repertórios.** O move trainer é a
+> última etapa, e o porquê do lance o aluno já ouviu antes dele. Lance sem comentário —
+> nosso ou dele, no meio ou no fim da linha — não é erro nem aviso; a caixa de texto só não
+> aparece. O `banco.test.ts` deixou de conferir comentário. O texto abaixo é o histórico.
 
 Até 7/9/2026 o `conferirRegras` (`lib/repertorio/linhas.ts`) cobrava comentário
 **só no último lance** de cada linha. É por isso que 80 dos 222 lances do aluno

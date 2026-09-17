@@ -313,31 +313,12 @@ export function conferirRegras(linhas: readonly Linha[]): Problema[] {
       });
     }
 
-    if (!linha.comentarios[String(ultimo)]?.trim()) {
-      problemas.push({
-        linha: ondeEstou,
-        erro: `o último lance ("${linha.sans[ultimo]}") está sem comentário. ` +
-          "É o que o aluno lê quando acerta.",
-      });
-    }
-
-    // NENHUM lance nosso pode ser mudo. A régua do repertório (§1 de
-    // `docs/REVISAO-FONTES.md`) é que o aluno aprenda o motivo de cada lance,
-    // não a sequência; um lance sem comentário é exatamente o contrário, e o
-    // treinador ainda assim o cobra. Até 7/9/2026 este gate olhava só o último
-    // lance, e por isso 80 dos 149 lances nossos estavam calados sem que nada
-    // reprovasse — a §23 conta a história. Os lances DELE seguem podendo ser
-    // mudos: o aluno não os joga, e comentar todos viraria ruído.
-    const mudos = linha.meus
-      .filter((i) => i !== ultimo && !linha.comentarios[String(i)]?.trim())
-      .map((i) => `${Math.floor(i / 2) + 1}${linha.cor === "brancas" ? "." : "..."}${linha.sans[i]}`);
-    if (mudos.length > 0) {
-      problemas.push({
-        linha: ondeEstou,
-        erro: `${mudos.length} lance(s) nosso(s) sem comentário: ${mudos.join(", ")}. ` +
-          "Todo lance que o aluno tem de jogar precisa dizer por quê.",
-      });
-    }
+    // Comentário é opcional em qualquer lance, nosso ou dele, no meio ou no fim
+    // da linha — nem erro nem aviso. Decisão do Doug, 17/9/2026, para os 11
+    // repertórios: o move trainer é a última etapa, e o porquê de cada lance o
+    // aluno já ouviu antes dele. De 7/9 a 17/9 todo lance nosso tinha de ser
+    // comentado (§23 de `docs/REVISAO-FONTES.md`), e antes disso o último.
+    // As telas já tratam a falta: sem texto, a caixa do comentário não aparece.
 
     // As regras do `[%plano]`, quando ele existe. Desde 16/9/2026 ele não é
     // obrigatório — a régua de tamanho saiu —, mas um plano ERRADO continua

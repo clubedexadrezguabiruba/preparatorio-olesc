@@ -1,5 +1,6 @@
 import "server-only";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
 
 export type Perfil = {
@@ -10,6 +11,8 @@ export type Perfil = {
   equipe: "M" | "F" | null;
   tabuleiro: number | null;
   rating: number | null;
+  /** O desenho escolhido (`lib/avatar/avatares.ts`), ou nulo. O único campo que o aluno muda. */
+  avatar: string | null;
 };
 
 /**
@@ -19,21 +22,26 @@ export type Perfil = {
  * fraca: "tem cookie de sessão?". Esta função responde "existe perfil?" — e as
  * duas se separam num caso real: a conta criada e o gatilho de perfil falhando.
  * O aluno entraria, e a página quebraria lendo `undefined`.
+ *
+ * **Com `cache` do React (17/9/2026).** O cabeçalho passou a mostrar o avatar e
+ * lê o perfil sozinho; sem o `cache`, toda página pagaria duas idas ao banco
+ * pela mesma linha. Dentro de uma renderização a segunda chamada devolve a
+ * primeira; numa server action, que não renderiza, nada muda.
  */
-export async function perfilAtual(): Promise<Perfil> {
+export const perfilAtual = cache(async (): Promise<Perfil> => {
   const supabase = await criarClienteServidor();
   const { data: sessao } = await supabase.auth.getUser();
   if (!sessao.user) redirect("/entrar");
 
   const { data: perfil } = await supabase
     .from("perfis")
-    .select("id, usuario, nome, papel, equipe, tabuleiro, rating")
+    .select("id, usuario, nome, papel, equipe, tabuleiro, rating, avatar")
     .eq("id", sessao.user.id)
     .single();
 
   if (!perfil) redirect("/entrar");
   return perfil as Perfil;
-}
+});
 
 /**
  * O mesmo, mas recusando quem não é professor.

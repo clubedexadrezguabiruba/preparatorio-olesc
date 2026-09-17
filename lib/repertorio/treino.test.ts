@@ -700,6 +700,28 @@ test("sem progresso nenhum o portão está fechado, e o número que falta é o B
   assert.equal(quantasNoAvancado(indice), 1);
 });
 
+test("linha trancada por aula não conta em nada: faltam, portão, aprendidas, a revisar e total", () => {
+  // Trava por aula (17/9/2026): as linhas do move trainer de uma aula não concluída não entram em
+  // "faltam N", no portão do Avançado (que é o nível 5) nem no "de {total}" de `/aberturas`. Contá-
+  // las seria cobrar do aluno uma linha que o site não o deixa treinar.
+  const livre = idDaLinha("brancas", "francesa", LANCES.slice(0, 3));
+  const daAula = idDaLinha("brancas", "francesa", LANCES.slice(0, 5));
+  const francesa = entrada("brancas", "francesa", [livre, daAula]);
+  const trancadas = new Set([daAula]);
+  const progresso = progressoDe({
+    [livre]: { aprendidaEm: T1, ultimaEm: T1, degrau: 3, revisarEm: DIA_3 },
+    [daAula]: { aprendidaEm: T1, ultimaEm: T1, degrau: 3, revisarEm: DIA_3 },
+  });
+  const soALivre = progressoDe({ [livre]: { aprendidaEm: T1, ultimaEm: T1 } });
+
+  assert.deepEqual(idsLiberados(francesa, true, trancadas), [livre]);
+  assert.equal(faltamNoBase(soALivre, [francesa], trancadas), 0, "a trancada não falta");
+  assert.equal(baseCompleto(soALivre, [francesa], trancadas), true, "e não segura o portão");
+  assert.equal(faltamNoBase(soALivre, [francesa]), 1, "sem a trava, ela faltaria");
+  assert.equal(aprendidasDaAbertura(progresso, francesa, true, trancadas), 1);
+  assert.equal(aRevisarNaAbertura(progresso, francesa, DIA_3, true, trancadas), 1);
+});
+
 /* ------------------------------------------------------------------ *
  * O SAN em português
  * ------------------------------------------------------------------ */

@@ -78,8 +78,8 @@ test("lance novo no lance do adversário: 'linha nova', e a linha nasce com o id
   assert.equal(conferido.linhas.length, antes.length + 1);
   const previsto = idDaLinha("brancas", "escocesa", [analise.nos[e4].uci!, uciDe(dele), uciDe(nosso)]);
   assert.ok(conferido.linhas.some((l) => l.id === previsto));
-  // "Lance nosso sem comentário" leva ao lance mudo.
-  assert.ok(conferido.itens.some((i) => /sem comentário/.test(i.mensagem) && i.nodeId === "n-nosso"));
+  // O lance nosso novo, sem comentário, não é erro: comentário é opcional (Doug, 17/9/2026).
+  assert.ok(!conferido.itens.some((i) => i.severidade === "erro" && i.nodeId === "n-nosso"), JSON.stringify(conferido.itens));
 });
 
 test("lance nosso ao lado do lance da linha: alternativa ou erro, e o símbolo diz o efeito", () => {

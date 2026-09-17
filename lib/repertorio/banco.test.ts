@@ -93,7 +93,10 @@ test("o Base publicado tem 20 linhas, e o primeiro lance é sempre das brancas",
   //
   // Este número é a meta pedagógica do Base; ele não tem relação com o `teto`
   // de `aberturasInchadas`, que conta linhas **por abertura** e continua em 40.
-  assert.equal(todas.filter((l) => l.nivel === "base").length, 20);
+  //
+  // **38 desde 17/9/2026:** a Francesa passou a vir do estudo do Lichess (curso de abertura) —
+  // a linha escrita à mão saiu e entraram as 19 do move trainer, todas no Base.
+  assert.equal(todas.filter((l) => l.nivel === "base").length, 38);
 
   for (const linha of todas) {
     // O contrato de que a tela depende para saber quando auto-jogar: `meus`
@@ -106,29 +109,19 @@ test("o Base publicado tem 20 linhas, e o primeiro lance é sempre das brancas",
   }
 });
 
-test("nenhum lance NOSSO do repertório publicado está sem comentário", () => {
-  // O número que a §23 de `docs/REVISAO-FONTES.md` fechou. `conferirRegras` já
-  // reprova isto — mas ele roda sobre o que o compilador acabou de montar, e
-  // este arquivo existe justamente para o caso da edição à mão no JSON
-  // publicado, que não passa pelo compilador. Aqui o número é conferido no que
-  // o servidor vai abrir no sábado.
+test("o repertório publicado tem 499 lances nossos", () => {
+  // Até 17/9/2026 este teste também exigia comentário em cada um deles; o Doug
+  // tornou o comentário opcional no move trainer, nos 11 repertórios.
   let nossos = 0;
   for (const entrada of indice) {
     const relativo = entrada.arquivo.replace(/^\/repertorio\//, "");
-    for (const linha of validarBanco(ler(relativo), relativo)) {
-      for (const ply of linha.meus) {
-        nossos++;
-        assert.ok(
-          linha.comentarios[String(ply)]?.trim(),
-          `${linha.id}: "${linha.sans[ply]}" (meio-lance ${ply}) está sem comentário`,
-        );
-      }
-    }
+    for (const linha of validarBanco(ler(relativo), relativo)) nossos += linha.meus.length;
   }
   // Se este número cair, alguém encurtou uma linha; se subir, alguém a alongou.
   // Ele SOBE de propósito enquanto a §24 estica as 27 linhas até o roque e as
-  // peças menores fora: era 222 no fim da §23, e o alvo é cerca de 340.
-  assert.equal(nossos, 351, "o repertório tem 351 lances nossos, em 27 linhas");
+  // peças menores fora: era 222 no fim da §23, e o alvo é cerca de 340. Foi 351 até
+  // 17/9/2026, quando as 19 linhas da Francesa geradas do estudo trocaram a escrita à mão.
+  assert.equal(nossos, 499, "o repertório tem 499 lances nossos, em 45 linhas");
 });
 
 test("as páginas de princípios ligadas a uma abertura apontam para abertura viva", () => {

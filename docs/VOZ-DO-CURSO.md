@@ -115,7 +115,6 @@ nenhum:** quem precisa deles os lê daqui.
   "alvoDePonteiroPx": 24,
   "proibidas": [
     "roteiro",
-    "tentativa",
     "teto",
     "etapa",
     "passada",
@@ -221,7 +220,6 @@ vez. É jargão de **professor e de desenvolvedor** que vazou para a tela.
 | Está na tela | Vira |
 |---|---|
 | "siga o roteiro" (e "o método da aula", só sugestão desde 15/9) | "o jeito certo", "o caminho da aula" |
-| "tentativa" | "de novo", "mais uma vez" |
 | "o teto de N lances acabou" | "acabaram os N lances" |
 | "Etapa concluída." | "Pronto." |
 | "critério de domínio", "passada", "degrau" | não aparecem ao aluno |

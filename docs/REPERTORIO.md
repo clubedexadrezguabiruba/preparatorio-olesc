@@ -60,8 +60,8 @@ sim **medir três e comparar**: §6.1.
 >
 > 1. **A régua perde o tamanho, nos 11 repertórios.** Sai a profundidade mínima, o
 >    teto de 14, a exigência de roque e de peças menores fora da casa, e o `[%plano]`
->    obrigatório. Ficam: toda linha termina em lance nosso, todo lance nosso tem
->    comentário, nenhuma linha repetida. (§4.)
+>    obrigatório. Ficam: toda linha termina em lance nosso, nenhuma linha repetida. (§4.)
+>    *17/9/2026: "todo lance nosso tem comentário" também saiu — comentário é opcional em todo lance do move trainer desde 17/9/2026 (decisão do Doug; ver `AGENTS.md`).*
 > 2. **A Francesa passa a vir do estudo do Lichess** (Francesa 3.Bd3 v1.5, `qq2xorDl`),
 >    e `brancas-francesa.pgn` passa a ser **gerado**, com as linhas dos capítulos "Move
 >    Trainer" — inclusive as de armadilha — em `[Categoria]` e `[Ordem]`. O rascunho do

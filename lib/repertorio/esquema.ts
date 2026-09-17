@@ -40,9 +40,8 @@ import type { Cor } from "./linhas.ts";
  * O bloco é retirado do texto antes de o comentário virar `comentarios[i]`.
  * Duas consequências, e as duas são o motivo de esta função existir separada:
  *
- * 1. o gate "o último lance está sem comentário" continua valendo sobre a
- *    **prosa** — um comentário que fosse só o bloco não passaria a valer como
- *    comentário escrito;
+ * 1. o que o aluno lê é só a **prosa** — um comentário que fosse só o bloco
+ *    vira comentário nulo, e a caixa de texto não aparece;
  * 2. `ehPergunta` não se engana com um `?` que apareça dentro de um motivo.
  *
  * Puro e sem estado: recebe texto e cor, devolve texto, plano e erros. A cor

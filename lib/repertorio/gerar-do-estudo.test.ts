@@ -1,6 +1,6 @@
 /**
  * O PGN do repertório gerado a partir do estudo v1.5 — parada medível da F2b (16/9/2026): as linhas
- * chegam na ordem do estudo, os símbolos não se perdem, e só os 4 lances mudos reprovam.
+ * chegam na ordem do estudo, os símbolos não se perdem, e lance sem comentário não reprova (17/9/2026).
  */
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -8,7 +8,6 @@ import test from "node:test";
 import { lerCursoDeAbertura } from "../editor-v2/curso-de-abertura.ts";
 import { compilarRepertorio } from "./compilar.ts";
 import { gerarPgnDoEstudo } from "./gerar-do-estudo.ts";
-import { estudoComOsMudosComentados } from "./estudo-francesa-de-teste.ts";
 import { conferirMarcasDasFontes } from "./marcas-das-fontes.ts";
 
 const DADOS = { abertura: "francesa", nome: "Francesa 3.Bd3", nivel: "base" } as const;
@@ -19,21 +18,12 @@ const compilar = (texto: string) => {
   return { gerado, compilacao: compilarRepertorio([{ nome: "brancas-francesa.pgn", texto: gerado.texto }], []) };
 };
 
-test("do estudo como está: 19 linhas, e só os 4 lances mudos reprovam", () => {
+test("do estudo como está, o repertório compila na ordem do estudo, com categoria", () => {
+  // O estudo tem 4 lances nossos sem comentário (1.e4, 11.Nf3, 12.Qxf3, 11.a3). Até 17/9/2026
+  // eles reprovavam; desde a decisão do Doug o comentário é opcional e o estudo compila como está.
   const { gerado, compilacao } = compilar(LICHESS);
   assert.equal(gerado.linhas, 19);
   assert.deepEqual(gerado.problemas, []);
-  const texto = compilacao.problemas.join("\n");
-  const noMeio = new Set(texto.match(/\d+\.(?:e4|Nf3|Qxf3)\b/g));
-  assert.deepEqual([...noMeio].sort(), ["1.e4", "11.Nf3", "12.Qxf3"]);
-  // 11.a3 é o último lance da linha do (10...a6): o compilador o diz com a outra frase.
-  assert.match(texto, /o último lance \("a3"\) está sem comentário/);
-  assert.equal(texto.match(/o último lance \("[^"]+"\) está sem comentário/g)?.length, 1, "nenhum outro fim de linha mudo");
-  assert.doesNotMatch(compilacao.problemas.join("\n"), /termina em|mesma sequência|não é lance legal/);
-});
-
-test("com os mudos comentados no Lichess, o repertório compila na ordem do estudo, com categoria", () => {
-  const { gerado, compilacao } = compilar(estudoComOsMudosComentados(LICHESS));
   assert.deepEqual(compilacao.problemas, []);
   const linhas = compilacao.linhas;
   assert.equal(linhas.length, 19);
@@ -53,7 +43,7 @@ test("com os mudos comentados no Lichess, o repertório compila na ordem do estu
 });
 
 test("marcas-das-fontes: estudo → PGN gerado, nenhum símbolo faltando e nenhum irmão nosso marcado cortado", () => {
-  const { gerado } = compilar(estudoComOsMudosComentados(LICHESS));
+  const { gerado } = compilar(LICHESS);
   const conferencia = conferirMarcasDasFontes(
     [{ nome: "estudo-brancas-francesa.pgn", texto: LICHESS }],
     [{ nome: "brancas-francesa.pgn", texto: gerado.texto }],

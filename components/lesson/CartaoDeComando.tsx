@@ -59,8 +59,14 @@ export function CartaoDeComando({
   comando,
   estado,
   tom,
+  espaco = false,
 }: {
   comando: string;
+  /**
+   * A fase aceita Espaço para seguir (feedback do aluno, 17/9/2026): o cartão diz isso numa linha
+   * própria, porque "Continue quando estiver pronto" não conta **como**.
+   */
+  espaco?: boolean;
   /** Onde a passada está. Opcional: na tática nem toda fase tem o que dizer. */
   estado?: string;
   tom: TomDoCartao;
@@ -71,21 +77,28 @@ export function CartaoDeComando({
       // sem ele, o leitor de tela do aluno não é avisado de que a instrução
       // mudou — e a instrução muda a cada lance.
       aria-live="polite"
-      className={`flex min-h-16 items-center gap-3 rounded-lg border-2 bg-tinta px-3.5 py-2.5 text-tinta-inversa ${BORDA[tom]}`}
+      // Mais baixo desde 17/9/2026: o aluno achou o balão grande demais para o que diz. Eram
+      // `min-h-16`, `py-2.5`, ícone de 24 e comando em `text-sm`.
+      className={`flex min-h-12 items-center gap-2.5 rounded-lg border-2 bg-tinta px-3 py-1.5 text-tinta-inversa ${BORDA[tom]}`}
     >
       <span className={`shrink-0 ${ICONE[tom]}`} aria-hidden>
         <Icone tom={tom} />
       </span>
       <span className="flex min-w-0 flex-col gap-0.5">
-        <span className="text-sm font-semibold leading-snug">{comando}</span>
+        <span className="text-xs font-semibold leading-snug">{comando}</span>
         {estado ? <span className="text-xs leading-snug opacity-90">{estado}</span> : null}
+        {espaco ? (
+          <span className="text-xs leading-snug opacity-90">
+            Aperte <kbd className="rounded border border-current/40 px-1 font-sans font-semibold">Espaço</kbd> para continuar
+          </span>
+        ) : null}
       </span>
     </div>
   );
 }
 
 /**
- * Quatro glifos, desenhados à mão em 24 px.
+ * Quatro glifos, desenhados à mão em 24 unidades e mostrados a 18 px (17/9/2026).
  *
  * Traço e não preenchimento: o cartão é escuro, e uma forma cheia neste
  * tamanho vira um borrão. `stroke-width` 2 é o mesmo peso da borda do cartão —
@@ -93,8 +106,8 @@ export function CartaoDeComando({
  */
 function Icone({ tom }: { tom: TomDoCartao }) {
   const comum = {
-    width: 24,
-    height: 24,
+    width: 18,
+    height: 18,
     viewBox: "0 0 24 24",
     fill: "none",
     stroke: "currentColor",

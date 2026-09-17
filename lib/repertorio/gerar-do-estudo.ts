@@ -16,9 +16,9 @@
  * ## O que vai em cada lance
  *
  * - **O comentário:** o primeiro que o estudo inteiro dá àquele lance naquela posição, sem os
- *   marcadores e sem `[TRAIN]`, `[PROXIMO]`, `[REFERENCIA]` (§21). Lance nosso sem comentário em
- *   capítulo nenhum sai mudo — e o compilador o reprova, que é o certo: a régua "todo lance nosso
- *   comentado" ficou (decisão 12).
+ *   marcadores e sem `[TRAIN]`, `[PROXIMO]`, `[REFERENCIA]` (§21). Lance sem comentário em
+ *   capítulo nenhum sai sem comentário, e compila: desde 17/9/2026 o comentário é opcional em todo
+ *   lance do move trainer (decisão do Doug, que substituiu a decisão 12).
  * - **Os símbolos:** todos os que o estudo dá ao lance, em qualquer capítulo (`AGENTS.md`, "Símbolos
  *   de lance"). O `3.Bd3!` da A00 vale na linha do esquema também.
  * - **Os irmãos nossos marcados:** em cada lance nosso, os irmãos que qualquer capítulo marca com

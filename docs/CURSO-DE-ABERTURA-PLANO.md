@@ -34,7 +34,8 @@ link do Lichess e pelo PGN, e o Doug vê a aula na tela, localmente. Finais não
 11. Rascunho antigo do Grigoryan (`french-with-bd3.pgn`) é **aposentado**; o export do estudo vira a
     fonte em `content/repertorio/rascunhos/`, e a trava `marcas-das-fontes` compara estudo → PGN gerado.
 12. **Régua de tamanho sai de vez, para todo o repertório:** sem mínimo, sem máximo, sem exigir
-    roque/peças fora. Ficam: termina em lance nosso, todo lance nosso comentado, sem linha repetida.
+    roque/peças fora. Ficam: termina em lance nosso, sem linha repetida. *(17/9/2026: "todo lance
+    nosso comentado" também saiu — comentário é opcional em todo lance do move trainer desde 17/9/2026 (decisão do Doug; ver `AGENTS.md`).)*
 13. Aula B fica uma aula só, mesmo longa — o aluno para e continua de onde parou.
 14. **Padrão e piloto: estudo v1.5** — Lichess `qq2xorDl` e
     `C:\Users\Lenovo\Downloads\Francesa_3Bd3_Lichess_FINAL_ESTRUTURA_MOVE_TRAINER_PARTIDA_MODELO_v1.5.pgn`.
@@ -90,8 +91,11 @@ Aula <bloco>
   `lib/editor-v2/previa.ts`.
 - Parada → **três etapas do fluxo**: capítulo até a pergunta → treino `linha-autoral` de uma questão
   (`TreeStage`) → capítulo a partir da resposta. Sem confete na parada.
-- A parada é o **próximo lance nosso** depois da pergunta. Pergunta escrita no nosso lance (B03 depois
-  de 3.Bd3, B05B em 17.Qxe6+, C13 antes do 1º lance) → aviso no relatório.
+- A parada é o **próximo lance nosso** depois da pergunta. Pergunta escrita no nosso lance (B05B em
+  17.Qxe6+) → aviso no relatório.
+- **Pergunta de reflexão** *(decisão do Doug, 17/09/2026)*: `[PERGUNTA]` sem lance nosso para jogar — antes do
+  1º lance (C13) ou no fim do capítulo (B03) — não é parada e não é aviso. O aluno lê a pergunta com o rótulo
+  "Pergunta", a aula espera ele seguir, e o capítulo serve de introdução ao seguinte.
 - Irmão nosso com `!`/`!?` (B09) → "vale, mas a aula segue por 5.c3"; com `?`/`?!`/`??` → erro nomeado.
 - F23 → `introducao`, um quadro por trecho marcado e por nota de ramo.
 - Capítulos "Move Trainer" (E22A–P) → **não viram capítulo narrado**; viram linhas do banco com
@@ -108,10 +112,11 @@ linhas) · [REFERENCIA] → não narrado; lance fica e é "também vale" · [ENT
 ## Pendências do estudo v1.5 (o relatório da importação lista; o Doug corrige no Lichess)
 - `Orientation "black"` nos 38 capítulos do export → o importador ignora e usa a cor do curso (brancas).
 - Lichess perde o comentário final de **B09** e **C12** (depois da última variante).
-- [PERGUNTA] no nosso lance: B03, B05B (17.Qxe6+), C13 (antes do 1º lance).
+- [PERGUNTA] no nosso lance: B05B (17.Qxe6+). B03 e C13 são perguntas de reflexão (17/9/2026), não defeito.
 - [PROXIMO] apontando errado: E20 (cita o treino-relâmpago removido), E21 ("árvore completa" vem só no E22P), C13 (próximo é D17).
 - "Regra N" diferente entre C13 e E22O. "Golpe 4/5" não são táticas.
-- Lances nossos sem comentário: 1.e4 (00), 11.Nf3 (B05B), 12.Qxf3 e 11.a3 (C12) — reprovam no `/aberturas`.
+- Lances nossos sem comentário: 1.e4 (00), 11.Nf3 (B05B), 12.Qxf3 e 11.a3 (C12) — **não reprovam mais**
+  desde 17/9/2026: comentário é opcional em todo lance do move trainer desde 17/9/2026 (decisão do Doug; ver `AGENTS.md`).
 - Frases de bastidor fora de [REFERENCIA]: "curso atual" ×6, "draft antigo" (B09, C12).
 - D18 e D19 vazias. `[RESUMO]` do E22N escreve "Ndb5" (Lichess grava 10.Nb5).
 
@@ -260,7 +265,9 @@ o diário `docs/MODO-EDITOR-ONDE-PARAMOS.md`.
 ## Padrões que assumi (fácil de mudar)
 - Dica da parada: `[DICA]`; sem ele, a pergunta.
 - Paradas e treino guiado gravam tentativa, como em finais.
-- Aula concluída = todas as etapas obrigatórias feitas na rodada; aulas não se trancam entre si.
+- Aula concluída = todas as etapas obrigatórias feitas na rodada. ~~Aulas não se trancam entre si.~~
+  **17/9/2026:** aulas em ordem e linhas do move trainer trancadas até a aula dona ser concluída,
+  com trava no servidor, professor livre e chave `TRAVA_POR_AULA` (spec §18.1, emenda de 17/9).
 - F23 antes do treino guiado na aula E+F.
 - [REFERENCIA] não é narrado.
 - Ordem dos ramos: a do PGN; no B08, a dos "CASO N".

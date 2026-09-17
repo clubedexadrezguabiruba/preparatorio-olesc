@@ -175,7 +175,7 @@ export function SeletorDeLinha({
               <div key={l.id} className="flex flex-col gap-1">
               {grupo ? <p className="rotulo px-1 pt-1 text-tinta-fraca">{grupo}</p> : null}
               <Link
-                href={`/aberturas/${cor}/${abertura}?linha=${l.id}`}
+                href={`/aberturas/${cor}/${abertura}/treino?linha=${l.id}`}
                 onClick={fechar}
                 aria-current={ehAtual ? "true" : undefined}
                 className={`foco flex min-h-11 items-center justify-between gap-3 rounded-lg border px-3 py-2 transition-colors ${

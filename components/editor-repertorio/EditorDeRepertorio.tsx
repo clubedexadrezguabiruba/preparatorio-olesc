@@ -51,7 +51,7 @@ import { DialogoAplicarRepertorio } from "./DialogoAplicarRepertorio";
  * ## As regras do repertório continuam valendo
  *
  * A conferência ao lado é a do compilador, rodando na casca a cada edição: linha que termina
- * no adversário, lance nosso sem comentário, régua do término, `[%plano]` torto. Aplicar só
+ * no adversário, régua do término, `[%plano]` torto (comentário é opcional desde 17/9/2026). Aplicar só
  * habilita com zero erros e o rascunho salvo — e o servidor compila os onze de novo antes de
  * tocar `content/`.
  */

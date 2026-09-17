@@ -14,6 +14,7 @@ import { Chess, type Square } from "chess.js";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color, Key } from "@lichess-org/chessground/types";
 import { BotaoDeSom } from "@/components/BotaoDeSom";
+import { Celebracao, useCelebracao } from "@/components/Celebracao";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { PromotionPicker, type PromotionChoice } from "@/components/board/PromotionPicker";
 import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
@@ -288,9 +289,14 @@ export function Serie({
   // O prêmio da rodada inteira, na tela do placar. Não é `setState` num efeito:
   // é um efeito colateral disparado por uma transição de estado que já
   // aconteceu, que é para isso que o `useEffect` serve.
+  //
+  // Desde 17/9/2026 é a celebração inteira — o mesmo acorde, agora com confete
+  // (`components/Celebracao.tsx`). O som sai de dentro do `celebrar`, e o
+  // `playComplete` solto que estava aqui saiu para não tocar duas vezes.
+  const { seq: celebracao, celebrar } = useCelebracao();
   useEffect(() => {
-    if (fim) playComplete();
-  }, [fim]);
+    if (fim) celebrar();
+  }, [celebrar, fim]);
 
   const avancar = useCallback(() => {
     /*
@@ -326,6 +332,7 @@ export function Serie({
   if (fim || !puzzle) {
     return (
       <div className="flex flex-col gap-4 cartao px-5 py-6">
+        <Celebracao seq={celebracao} tela />
         <p className="rotulo text-metodo-tinta">{NOME_DO_MODO[etapa]} — fim</p>
         <p className="titulo text-tinta tabular-nums">
           {placar.certos} de {placar.total} de primeira

@@ -80,7 +80,21 @@ export const TITULO_DA_AULA: Record<AulaDoCurso, string> = {
 // ---------------------------------------------------------------------------------------------
 
 /** Os marcadores que mudam o que a aula faz com o texto. */
-const FUNCIONAIS = new Set(["OBJETIVO", "PERGUNTA", "TRAIN", "REFERENCIA", "RESUMO", "PROXIMO", "DICA"]);
+const FUNCIONAIS = new Set(["OBJETIVO", "PERGUNTA", "TRAIN", "REFERENCIA", "RESUMO", "PROXIMO", "DICA", "SECAO"]);
+
+/**
+ * A capa de seção do capítulo (feedback do aluno, 17/9/2026): `[SECAO] Título | subtítulo`, no
+ * comentário de abertura. O aluno vê a capa antes da primeira fala; nunca vira fala nem vai ao
+ * repertório.
+ */
+export type SecaoDoCapitulo = { titulo: string; subtitulo?: string };
+
+export function secaoDoTexto(texto: string): SecaoDoCapitulo | null {
+  const [titulo, ...resto] = texto.split("|").map((parte) => parte.trim());
+  if (!titulo) return null;
+  const subtitulo = resto.join(" | ").trim();
+  return subtitulo ? { titulo, subtitulo } : { titulo };
+}
 
 /** Os marcadores que viram rótulo da fala. */
 export const ROTULOS: Record<string, string> = {
@@ -146,11 +160,15 @@ export type Fala = { texto: string; rotulo?: string; pausaManual: boolean };
 
 export type LeituraDoComentario = {
   falas: Fala[];
+  /** As falas e as perguntas na ordem em que o professor as escreveu. */
+  sequencia: Array<Fala & { pergunta?: true; fechamento?: true }>;
   objetivos: string[];
   perguntas: string[];
   dicas: string[];
   treinos: string[];
   referencias: string[];
+  /** O texto cru de cada `[SECAO]` (ver `secaoDoTexto`). */
+  secoes: string[];
   /** Marcadores que o leitor não conhece: o texto fica, e o relatório avisa. */
   desconhecidos: string[];
 };
@@ -160,24 +178,31 @@ const nomeDoRotulo = (marcador: string) =>
 
 /** O que o comentário vira na aula: falas com rótulo, objetivo, pergunta, dica, treino. */
 export function lerComentario(comentario: string | null): LeituraDoComentario {
-  const leitura: LeituraDoComentario = { falas: [], objetivos: [], perguntas: [], dicas: [], treinos: [], referencias: [], desconhecidos: [] };
+  const leitura: LeituraDoComentario = { falas: [], sequencia: [], objetivos: [], perguntas: [], dicas: [], treinos: [], referencias: [], secoes: [], desconhecidos: [] };
   for (const trecho of lerMarcadores(comentario)) {
     for (const marcador of trecho.rotulos) {
       if (!FUNCIONAIS.has(marcador) && !ROTULOS[marcador] && !leitura.desconhecidos.includes(marcador)) leitura.desconhecidos.push(marcador);
     }
     switch (trecho.marcador) {
       case "OBJETIVO": leitura.objetivos.push(trecho.texto); break;
-      case "PERGUNTA": leitura.perguntas.push(trecho.texto); break;
+      case "PERGUNTA":
+        leitura.perguntas.push(trecho.texto);
+        leitura.sequencia.push({ texto: trecho.texto, rotulo: "Pergunta", pausaManual: true, pergunta: true });
+        break;
       case "DICA": leitura.dicas.push(trecho.texto); break;
       case "TRAIN": leitura.treinos.push(trecho.texto); break;
       case "REFERENCIA": leitura.referencias.push(trecho.texto); break;
+      case "SECAO": leitura.secoes.push(trecho.texto); break;
       default: {
         const rotulos = trecho.rotulos.filter((m) => !FUNCIONAIS.has(m) || m === "RESUMO" || m === "PROXIMO").map(nomeDoRotulo);
-        leitura.falas.push({
+        const fechamento = trecho.marcador === "RESUMO" || trecho.marcador === "PROXIMO";
+        const fala: Fala = {
           texto: trecho.texto,
           ...(rotulos.length ? { rotulo: [...new Set(rotulos)].join(" · ") } : {}),
-          pausaManual: trecho.marcador === "RESUMO" || trecho.marcador === "PROXIMO",
-        });
+          pausaManual: fechamento,
+        };
+        leitura.falas.push(fala);
+        leitura.sequencia.push(fechamento ? { ...fala, fechamento: true } : fala);
       }
     }
   }
@@ -186,12 +211,12 @@ export function lerComentario(comentario: string | null): LeituraDoComentario {
 
 /**
  * O comentário como o repertório o guarda (§21): sem marcador nenhum, e sem o que é da aula —
- * `[TRAIN]`, `[PROXIMO]`, `[REFERENCIA]`, `[OBJETIVO]`, `[DICA]`. A pergunta fica: num lance nosso,
+ * `[TRAIN]`, `[PROXIMO]`, `[REFERENCIA]`, `[OBJETIVO]`, `[DICA]`, `[SECAO]`. A pergunta fica: num lance nosso,
  * ela costuma ser a explicação ("Podemos entregar a dama? Sim.").
  */
 export function comentarioDoRepertorio(comentario: string | null): string {
   return lerMarcadores(comentario)
-    .filter((t) => !["TRAIN", "PROXIMO", "REFERENCIA", "OBJETIVO", "DICA"].includes(t.marcador ?? ""))
+    .filter((t) => !["TRAIN", "PROXIMO", "REFERENCIA", "OBJETIVO", "DICA", "SECAO"].includes(t.marcador ?? ""))
     .map((t) => t.texto)
     .join(" ")
     .trim();
@@ -425,6 +450,8 @@ export type CapituloDoCurso = {
   partida: PartidaPgn;
   arvore: ArvoreDoEstudo;
   objetivo: string | null;
+  /** A capa de seção, quando o comentário de abertura traz `[SECAO]`. */
+  secao?: SecaoDoCapitulo;
   percursos: Percurso[];
   perguntas: number;
   paradas: Parada[];
@@ -485,6 +512,7 @@ export function lerCursoDeAbertura(texto: string, cor: CorDoCurso): LeituraDoCur
     for (const perda of arvore.perdas) avisos.push({ codigo: "LANCE_ILEGAL", capitulo: codigo, mensagem: perda });
     const intro = lerComentario(partida.intro);
     const objetivo = intro.objetivos[0] ?? null;
+    const secao = intro.secoes[0] ? secaoDoTexto(intro.secoes[0]) : null;
     const temPartidaReal = /\[PARTIDA REAL\]/.test(partida.intro ?? "") || (partida.resultado !== null && partida.resultado !== "*");
 
     const ehTreinador = /^E22/.test(codigo) || /^move trainer\s*[—–-]/i.test(titulo);
@@ -507,10 +535,8 @@ export function lerCursoDeAbertura(texto: string, cor: CorDoCurso): LeituraDoCur
       }
     };
     lerDesconhecidos(partida.intro);
-    if (papel === "aula" && intro.perguntas.length) {
-      perguntas += intro.perguntas.length;
-      avisos.push({ codigo: "PERGUNTA_ANTES_DO_PRIMEIRO_LANCE", capitulo: codigo, mensagem: `a [PERGUNTA] de «${titulo}» está antes do primeiro lance — não há lance a jogar, e ela fica fora das paradas` });
-    }
+    // Pergunta antes do primeiro lance é pergunta de reflexão: fala com pausa, sem parada e sem aviso.
+    if (papel === "aula") perguntas += intro.perguntas.length;
     percursos.forEach((percurso, p) => {
       for (let k = percurso.desde; k < percurso.lances.length; k++) {
         const lance = percurso.lances[k];
@@ -522,15 +548,13 @@ export function lerCursoDeAbertura(texto: string, cor: CorDoCurso): LeituraDoCur
           avisos.push({ codigo: "PERGUNTA_FORA_DE_AULA", capitulo: codigo, mensagem: `[PERGUNTA] em ${lanceEscrito(lance)} num capítulo de ${papel} — a partida modelo e a revisão não têm parada` });
           continue;
         }
-        let resposta = k + 1;
-        if (lance.nosso) {
-          resposta = k + 2;
-          avisos.push({ codigo: "PERGUNTA_NO_LANCE_NOSSO", capitulo: codigo, mensagem: `a [PERGUNTA] de ${lanceEscrito(lance)} está escrita no nosso lance — a parada fica no lance nosso seguinte${percurso.lances[resposta] ? ` (${lanceEscrito(percurso.lances[resposta])})` : ""}` });
-        }
+        const resposta = lance.nosso ? k + 2 : k + 1;
         const alvo = percurso.lances[resposta];
-        if (!alvo || !alvo.nosso) {
-          avisos.push({ codigo: "PARADA_SEM_RESPOSTA", capitulo: codigo, mensagem: `a [PERGUNTA] de ${lanceEscrito(lance)} não tem lance nosso depois dela — fica como fala, sem parada` });
-          continue;
+        // Pergunta sem lance nosso para jogar é pergunta de reflexão (Doug, 17/9/2026): o aluno lê,
+        // pensa e segue — ela prepara o capítulo seguinte. Fica como fala com pausa, sem parada e sem aviso.
+        if (!alvo || !alvo.nosso) continue;
+        if (lance.nosso) {
+          avisos.push({ codigo: "PERGUNTA_NO_LANCE_NOSSO", capitulo: codigo, mensagem: `a [PERGUNTA] de ${lanceEscrito(lance)} está escrita no nosso lance — a parada fica no lance nosso seguinte (${lanceEscrito(alvo)})` });
         }
         const irmaos = (alvo.pai ? alvo.pai.filhos : arvore.filhos).filter((item) => item !== alvo && item.nosso);
         const semMarca = irmaos.filter((item) => !marcaBoa(item) && !marcaRuim(item));
@@ -557,6 +581,7 @@ export function lerCursoDeAbertura(texto: string, cor: CorDoCurso): LeituraDoCur
     const t = partida.tags;
     capitulos.push({
       numero, codigo, titulo, aula, papel, partida, arvore, objetivo, percursos, perguntas, paradas, categoria, linhas,
+      ...(secao ? { secao } : {}),
       ...(papel === "partida-modelo" && t.ModelWhite && t.ModelBlack
         ? { partidaModelo: { brancas: t.ModelWhite, pretas: t.ModelBlack, ...(t.ModelEvent ? { evento: t.ModelEvent } : {}), ...(t.ModelDate ? { data: t.ModelDate } : {}) } }
         : {}),
@@ -636,19 +661,6 @@ export function lerCursoDeAbertura(texto: string, cor: CorDoCurso): LeituraDoCur
     comentarios,
     avisos,
   };
-  for (const mudo of lancesMudos(leitura)) {
-    avisos.push({ codigo: "LANCE_MUDO", mensagem: `${lanceEscrito(mudo)} é lance nosso do move trainer e nenhum capítulo o comenta — o repertório não compila sem comentário; escreva um no Lichess` });
-  }
+  // Lance do move trainer sem comentário não gera aviso: comentário é opcional (Doug, 17/9/2026).
   return leitura;
-}
-
-/** Os lances nossos das linhas do move trainer que nenhum capítulo comenta: reprovam no repertório. */
-export function lancesMudos(leitura: LeituraDoCurso): LanceDoEstudo[] {
-  const mudos = new Map<string, LanceDoEstudo>();
-  for (const linha of leitura.linhas) {
-    for (const lance of linha.lances) {
-      if (lance.nosso && !leitura.comentarios.has(chaveDoLance(lance)) && !mudos.has(chaveDoLance(lance))) mudos.set(chaveDoLance(lance), lance);
-    }
-  }
-  return [...mudos.values()];
 }

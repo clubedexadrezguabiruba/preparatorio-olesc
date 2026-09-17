@@ -120,6 +120,12 @@ export type PassadaProps = {
   painelDeFim?: React.ReactNode;
   /** Atalhos que o `Treino` acrescenta ao rodapé de botões do painel. */
   rodapeExtra?: React.ReactNode;
+  /**
+   * A linha fechou no valendo (17/9/2026): quem monta a passada celebra — confete e o som de
+   * conclusão, pelo `useCelebracao`. Quando vem, **substitui** o som do prêmio, para a mesma linha
+   * não tocar dois sons de vitória um em cima do outro.
+   */
+  aoFecharLinha?: () => void;
 };
 
 export function Passada({
@@ -132,6 +138,7 @@ export function Passada({
   cabecalho,
   painelDeFim,
   rodapeExtra,
+  aoFecharLinha,
 }: PassadaProps) {
   const [estado, setEstado] = useState(() => inicio(linha, modo));
   /**
@@ -191,7 +198,8 @@ export function Passada({
           playRefusal();
           break;
         case "som-premio":
-          playSuccess();
+          if (aoFecharLinha) aoFecharLinha();
+          else playSuccess();
           break;
         case "som-certo":
           playCorrect();
@@ -212,7 +220,7 @@ export function Passada({
         }
       }
     },
-    [agendar, aoDecidir, aoTerminar],
+    [agendar, aoDecidir, aoFecharLinha, aoTerminar],
   );
 
   const despachar = useCallback(
@@ -381,14 +389,16 @@ export function Passada({
     // Na assistida a seta fica **também** durante a recusa: o cartão daquele
     // instante diz "siga a seta", e uma seta que some enquanto o texto manda
     // segui-la é a tela contradizendo a si mesma. Medido no navegador em 6/9.
-    const recusando = modo === "assistido" && estado.fase === "mostrando";
+    const recusando = (modo === "assistido" || estado.setaNoPasso === estado.passo) && estado.fase === "mostrando";
 
     // Olhando para trás não há seta: ela aponta para o lance da FRENTE, e
     // desenhá-la sobre uma posição de três lances atrás mandaria o aluno jogar
     // uma peça que ainda nem está naquela casa.
     if (esperado && !estado.olhando && (estado.fase === "jogando" || recusando) && minhaVez) {
       const orig = esperado.slice(0, 2) as Key;
-      if (modo === "assistido") {
+      if (modo === "assistido" || estado.setaNoPasso === estado.passo) {
+        // A seta da assistida, e a do terceiro erro no mesmo lance do treino (a escada de ajuda de
+        // 17/9/2026 — ver `jogou` em `lib/repertorio/passada.ts`).
         lista.push({ orig, dest: esperado.slice(2, 4) as Key, brush: "blue" });
       } else if (estado.dicaNoPasso === estado.passo) {
         // Um nível só: a casa de origem, que é a pergunta "qual peça?". A seta
@@ -428,6 +438,7 @@ export function Passada({
     estado.fase,
     estado.olhando,
     estado.passo,
+    estado.setaNoPasso,
     jogo,
     linha.lances,
     linha.plano,
@@ -488,7 +499,14 @@ export function Passada({
             <FitaDoBoletim boletim={estado.boletim} acertos={placar.acertos} />
           ) : (
             <>
-              <CartaoDeComando {...estado.cartao} />
+              {/*
+               * "Aperte Espaço para continuar" nas fases em que o Espaço faz alguma coisa — a mesma
+               * condição do `aoTeclar` acima. Fora delas a linha mentiria.
+               */}
+              <CartaoDeComando
+                {...estado.cartao}
+                espaco={estado.fase === "lendo" || (estado.fase === "resolvido" && modo !== "quiz")}
+              />
               {/*
                * A trilha entra logo abaixo do cartão, e só na primeira passada.
                * Ver `ETAPAS_DA_PASSADA`, acima, para os dois "3" que ela existe

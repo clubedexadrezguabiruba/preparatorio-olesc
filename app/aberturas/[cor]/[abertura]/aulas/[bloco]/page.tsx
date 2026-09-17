@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { comLinhasDosTreinadores } from "@/lib/aberturas/linhas-da-aula";
 import { abrirRodada } from "@/lib/aberturas/rodada-banco";
+import { destinoDaAulaTrancada } from "@/lib/aberturas/trava";
+import { travaDoAluno } from "@/lib/aberturas/trava-banco";
 import { idDaAulaDeAbertura } from "@/lib/editor-v2/dominio";
 import { aulaDoAlunoV2 } from "@/lib/editor-v2/fluxo-do-aluno";
 import { pacoteAtivoDoAluno } from "@/lib/finais/conteudo-v2";
@@ -17,6 +19,11 @@ import { AulaDeAberturaNoNavegador } from "./AulaDeAberturaNoNavegador";
  * `/aberturas/brancas/francesa/aulas/b` abre `AB-BRANCAS-FRANCESA-B`. Dinâmica, e não estática como
  * `/finais/[aula]`: a aula de abertura depende do aluno já ao abrir — a vez dele decide o que se pula
  * e onde a aula retoma (regras 13 e 16), e a rodada nasce aqui.
+ *
+ * **Aula trancada volta para a página da abertura** (trava por aula, 17/9/2026): as aulas vão em
+ * ordem, e quem digita `/aulas/c` sem ter concluído A e B cai onde o cadeado diz o que falta. O
+ * redirecionamento vem **antes** de `abrirRodada`, senão a URL digitada deixaria uma rodada aberta
+ * — e rodada aberta é uma das condições para o servidor aceitar gravar as linhas da aula.
  */
 
 const ehCor = (valor: string): valor is Cor => (CORES as readonly string[]).includes(valor);
@@ -38,6 +45,17 @@ export default async function AulaDeAbertura({ params }: PageProps<"/aberturas/[
   if (!id || !pacote) notFound();
 
   const perfil = await perfilAtual();
+  const paginaDaAbertura = `/aberturas/${cor}/${abertura}`;
+  const trava = await travaDoAluno(perfil);
+  const destino = destinoDaAulaTrancada(
+    trava.cursos.get(`${cor}/${abertura}`) ?? [],
+    id,
+    new Set(trava.concluidas.keys()),
+    trava.quem,
+    paginaDaAbertura,
+  );
+  if (destino) redirect(destino);
+
   const [entrada, aula, progresso, rodada] = await Promise.all([
     aberturaNoIndice(cor, abertura),
     // O move trainer recebe as linhas do repertório compilado, na ordem que a aula declara.
@@ -55,7 +73,7 @@ export default async function AulaDeAbertura({ params }: PageProps<"/aberturas/[
         vez={rodada.vez}
         feitas={rodada.feitas}
         progressoDasLinhas={progressoDasLinhas}
-        voltar={{ href: `/aberturas/${cor}/${abertura}`, rotulo: `← ${entrada?.nome ?? "Abertura"}` }}
+        voltar={{ href: paginaDaAbertura, rotulo: `← ${entrada?.nome ?? "Abertura"}` }}
       />
     </main>
   );

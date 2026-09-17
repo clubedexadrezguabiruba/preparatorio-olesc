@@ -67,21 +67,13 @@ test("linha que termina em lance do adversário é reprovada", () => {
   assert.match(errosDe(torta), /termina em "Nc6", que é lance do adversário/);
 });
 
-test("último lance sem comentário é reprovado", () => {
-  assert.match(errosDe(boa({ comentarios: {} })), /está sem comentário/);
-  assert.match(errosDe(boa({ comentarios: { "4": "   " } })), /está sem comentário/);
-});
-
-test("lance NOSSO no meio da linha sem comentário é reprovado, com a lista", () => {
-  // A régua do repertório é o motivo de cada lance, não a sequência. Até
-  // 7/9/2026 este gate olhava só o último lance, e 80 dos 149 lances nossos
-  // estavam calados sem que nada reprovasse — a §23 de docs/REVISAO-FONTES.md.
-  const erro = errosDe(boa({ comentarios: { "2": "só o do meio", "4": "e o último" } }));
-  assert.match(erro, /1 lance\(s\) nosso\(s\) sem comentário: 1\.e4\./);
-  // Espaço em branco não conta como comentário, aqui como no último lance.
-  assert.match(errosDe(boa({ comentarios: { "0": " ", "2": "x", "4": "y" } })), /sem comentário: 1\.e4\./);
-  // E o lance DELE segue podendo ser mudo: o aluno não o joga.
-  assert.deepEqual(conferirRegras([boa()]), []);
+test("comentário é opcional: lance nosso sem texto, no meio ou no fim, passa (Doug, 17/9/2026)", () => {
+  // O move trainer é a última etapa; o porquê do lance o aluno já ouviu antes.
+  // De 7/9 a 17/9 isto reprovava — nem erro nem aviso agora, nos 11 repertórios.
+  assert.deepEqual(conferirRegras([boa({ comentarios: {} })]), []);
+  assert.deepEqual(conferirRegras([boa({ comentarios: { "4": "   " } })]), []);
+  assert.deepEqual(conferirRegras([boa({ comentarios: { "2": "só o do meio" } })]), []);
+  assert.equal(validarBanco([boa({ comentarios: {} })]).length, 1);
 });
 
 test("sem teto: a linha termina onde a fonte a termina (16/9/2026)", () => {
@@ -149,7 +141,8 @@ test("abertura acima de 40 linhas é aviso, não erro", () => {
 
 test("a mensagem de erro nomeia a linha, para a pessoa saber onde mexer", () => {
   assert.throws(
-    () => validarBanco([boa({ comentarios: {} })], "content/repertorio/brancas-escocesa.pgn"),
+    // A linha termina no lance do adversário — a regra que reprova.
+    () => validarBanco([boa({ lances: LANCES.slice(0, 4), sans: SANS.slice(0, 4), meus: [0, 2] })], "content/repertorio/brancas-escocesa.pgn"),
     /content\/repertorio\/brancas-escocesa\.pgn não passou[\s\S]*Escocesa — 3\.d4/,
   );
 });

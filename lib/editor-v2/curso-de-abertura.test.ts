@@ -7,7 +7,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import { lerPgnsDoEstudo } from "../repertorio/pgn.ts";
 import {
-  categoriaDoTitulo, codigoDoCapitulo, comNomeDoCapitulo, lanceEscrito, lancesMudos, lerComentario, lerCursoDeAbertura, lerMarcadores,
+  categoriaDoTitulo, codigoDoCapitulo, comentarioDoRepertorio, comNomeDoCapitulo, lanceEscrito, lerComentario, lerCursoDeAbertura, lerMarcadores, secaoDoTexto,
   type LanceDoEstudo, type LeituraDoCurso,
 } from "./curso-de-abertura.ts";
 
@@ -77,13 +77,14 @@ for (const [caminho, texto, leitura] of leituras) {
     assert.equal(leitura.linhas[0].chave, "e2e4 e7e6 d2d4 d7d5 f1d3", "E22A, só a arma, é linha própria");
   });
 
-  test(`${caminho}: os 4 lances mudos e os avisos do relatório`, () => {
-    assert.deepEqual(lancesMudos(leitura).map(lanceEscrito), ["1.e4", "11.Nf3", "12.Qxf3", "11.a3"]);
+  test(`${caminho}: os avisos do relatório`, () => {
     const codigos = leitura.avisos.map((a) => `${a.codigo}${a.capitulo ? `@${a.capitulo}` : ""}`);
-    for (const esperado of ["PERGUNTA_NO_LANCE_NOSSO@B03", "PERGUNTA_NO_LANCE_NOSSO@B05B", "PERGUNTA_ANTES_DO_PRIMEIRO_LANCE@C13", "CAPITULO_VAZIO@D18", "CAPITULO_VAZIO@D19"]) {
+    // B03 e C13 são perguntas de reflexão (sem lance nosso para jogar): não avisam desde 17/9/2026.
+    for (const esperado of ["PERGUNTA_NO_LANCE_NOSSO@B05B", "CAPITULO_VAZIO@D18", "CAPITULO_VAZIO@D19"]) {
       assert.ok(codigos.includes(esperado), `${esperado} em ${codigos.join(" ")}`);
     }
-    assert.equal(codigos.filter((c) => c.startsWith("LANCE_MUDO")).length, 4);
+    // Os 4 lances sem comentário (1.e4, 11.Nf3, 12.Qxf3, 11.a3) não avisam: comentário é opcional (Doug, 17/9/2026).
+    assert.equal(codigos.filter((c) => c.startsWith("LANCE_MUDO")).length, 0);
     assert.equal(codigos.filter((c) => c.startsWith("MARCADOR_DESCONHECIDO")).length, 4, "ARMA, ARMADILHA PRINCIPAL, ARMADILHA AVANÇADA, SE ESQUECER — um aviso por marcador");
     assert.ok(codigos.filter((c) => c.startsWith("FRASE_DE_BASTIDOR")).length >= 6, "«curso atual» ×6 e «draft antigo»");
   });
@@ -137,4 +138,22 @@ test("categoria pelo rótulo do título", () => {
   assert.equal(categoriaDoTitulo("Move Trainer — ...Ne5: desvio ...Be7"), "desvio");
   assert.equal(categoriaDoTitulo("Move Trainer — Linha mais difícil: ...Ne5 e ...a6"), "linha-critica");
   assert.equal(categoriaDoTitulo("Move Trainer — Árvore completa"), "arvore");
+});
+
+test("[SECAO] é a capa do capítulo: não vira fala, não é desconhecido, não vai ao repertório (feedback do aluno, 17/9/2026)", () => {
+  const lido = lerComentario("[SECAO] Nossa arma: 3.Bd3 | o bispo protege e4 [OBJETIVO] Entender 3.Bd3. A ideia é simples.");
+  assert.deepEqual(lido.secoes, ["Nossa arma: 3.Bd3 | o bispo protege e4"]);
+  assert.deepEqual(lido.desconhecidos, []);
+  assert.deepEqual(lido.falas.map((f) => f.texto), []);
+  assert.deepEqual(lido.objetivos, ["Entender 3.Bd3. A ideia é simples."]);
+  assert.equal(comentarioDoRepertorio("[SECAO] Capa | sub Texto do lance."), "");
+  assert.equal(comentarioDoRepertorio("Texto do lance. [SECAO] Capa"), "Texto do lance.");
+  assert.deepEqual(secaoDoTexto("Nossa arma: 3.Bd3 | o bispo protege e4"), { titulo: "Nossa arma: 3.Bd3", subtitulo: "o bispo protege e4" });
+  assert.deepEqual(secaoDoTexto("Laboratório"), { titulo: "Laboratório" });
+
+  const comCapa = LOCAL.replace("{[OBJETIVO] Entender a ideia da Defesa Francesa", "{[SECAO] Conheça a Francesa | a ideia principal [OBJETIVO] Entender a ideia da Defesa Francesa");
+  const leitura = lerCursoDeAbertura(comCapa, "brancas");
+  assert.deepEqual(capitulo(leitura, "00").secao, { titulo: "Conheça a Francesa", subtitulo: "a ideia principal" });
+  assert.equal(capitulo(leitura, "A00").secao, undefined);
+  assert.equal(leitura.avisos.filter((a) => /SECAO/.test(a.mensagem)).length, 0);
 });

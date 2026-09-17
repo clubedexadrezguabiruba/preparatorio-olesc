@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { SeloDoGrau } from "@/components/progresso/SeloDoGrau";
+import { NOME_DO_GRAU, type Grau } from "@/lib/progresso/grau";
 import { podeAbrir, temaFechado, type Nivel, type Situacao } from "@/lib/curso/nivel";
 import type { Tema } from "@/lib/tatica/blocos";
 import type { ProgressoDoTema } from "@/lib/tatica/progresso";
@@ -36,6 +38,12 @@ import { COR_DO_NIVEL, SeloDoTema } from "./SeloDoTema";
  *
  * O tema **em teste** (`Tema.emTeste`) ganha a pastilha âmbar "Em teste" ao lado
  * do nome: ele está aberto, mas não conta para nada.
+ *
+ * ## O grau (17/9/2026)
+ *
+ * Novato a Mestre, no rodapé, ao lado de onde o aluno está: acertos de **qualquer modo** pesados pela
+ * dificuldade, com o topo exigindo acerto recente (`lib/progresso/grau.ts`). Só aparece depois da
+ * primeira tentativa — um "Novato" em trinta cartões intocados seria o mesmo ruído do "Nível 2".
  */
 export function CartaoDoTema({
   tema,
@@ -43,6 +51,7 @@ export function CartaoDoTema({
   situacao,
   nivel,
   destaque = false,
+  grau,
 }: {
   tema: Tema;
   progresso: ProgressoDoTema;
@@ -50,6 +59,8 @@ export function CartaoDoTema({
   /** O nível do bloco do tema — a cor do metal. */
   nivel: Nivel;
   destaque?: boolean;
+  /** O grau do tema. Ausente, o cartão não o mostra. */
+  grau?: Grau;
 }) {
   const cor = COR_DO_NIVEL[nivel];
   if (!podeAbrir(situacao)) {
@@ -82,7 +93,7 @@ export function CartaoDoTema({
     <li className="h-full">
       <Link
         href={`/tatica/${tema.tag}`}
-        aria-label={`${tema.nome}${tema.emTeste ? " (em teste)" : ""}: ${feitos} de ${PUZZLES_POR_TEMA} puzzles${acerto === null ? "" : `, ${acerto}% de acerto`}. ${onde}.`}
+        aria-label={`${tema.nome}${tema.emTeste ? " (em teste)" : ""}: ${feitos} de ${PUZZLES_POR_TEMA} puzzles${acerto === null ? "" : `, ${acerto}% de acerto`}. ${onde}.${grau !== undefined && (grau > 0 || progresso.tentativas > 0) ? ` Grau ${NOME_DO_GRAU[grau]}.` : ""}`}
         className={`foco flex h-full gap-3 ${destaque ? "flex-wrap items-center px-4 py-4 sm:flex-nowrap sm:px-5" : "px-4 py-3.5"} ${
           adiante ? "cartao-vazio transition-colors hover:bg-carta-toque" : "cartao-alvo"
         } ${cor.borda}`}
@@ -116,6 +127,11 @@ export function CartaoDoTema({
                 {acerto === null ? "" : ` · acerto ${acerto}%`}
               </span>
             )}
+            {grau !== undefined && (grau > 0 || progresso.tentativas > 0) ? (
+              <span aria-hidden className="pt-1.5">
+                <SeloDoGrau grau={grau} />
+              </span>
+            ) : null}
           </p>
         </div>
         {destaque ? (

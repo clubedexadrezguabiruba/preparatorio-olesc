@@ -1,4 +1,5 @@
 import "server-only";
+import { travaDoAluno } from "@/lib/aberturas/trava-banco";
 import { aulasComPratica, aulasExtras, aulasPublicadas } from "@/lib/finais/conteudo";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import { lerIndice } from "@/lib/repertorio/banco";
@@ -31,16 +32,20 @@ import type { ProgressoParaONivel } from "./nivel";
  * mover.
  */
 export async function estadoParaONivel(aluno: string): Promise<ProgressoParaONivel> {
-  const [tatica, finais, indice, repertorio] = await Promise.all([
+  const [tatica, finais, indice, repertorio, trava] = await Promise.all([
     progressoPorTema(aluno),
     progressoDeFinais(aluno),
     lerIndice(),
     progressoDoRepertorio(aluno),
+    // A prova de nível é do aluno; o professor não a faz, então o papel aqui é sempre "aluno".
+    travaDoAluno({ id: aluno, papel: "aluno" }),
   ]);
 
-  const destravado = baseCompleto(repertorio, indice);
+  // As linhas trancadas por aula não contam no nível 5 (decisão do Doug, 17/9/2026) — a mesma
+  // conta do painel e de `/aberturas`.
+  const destravado = baseCompleto(repertorio, indice, trava.trancadas);
   const linhasAprendidas = indice.reduce(
-    (soma, e) => soma + aprendidasDaAbertura(repertorio, e, destravado),
+    (soma, e) => soma + aprendidasDaAbertura(repertorio, e, destravado, trava.trancadas),
     0,
   );
   return {

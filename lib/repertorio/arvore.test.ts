@@ -177,8 +177,7 @@ test("o [%plano] da ponta vira campo da linha, e some da prosa", () => {
   assert.deepEqual(linhas[0].plano, {
     c1: { casa: "g5", motivo: "sai depois do h3, para não levar o …h6 com tempo" },
   });
-  // A prosa chega limpa: é ela que o aluno lê, e é sobre ela que o gate do
-  // "último lance sem comentário" continua valendo.
+  // A prosa chega limpa: é ela que o aluno lê.
   assert.equal(linhas[0].comentarios["2"], "O cavalo ataca e5.");
 });
 

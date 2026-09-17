@@ -284,9 +284,16 @@ export const quadroIntroducaoV2Schema = z.strictObject({
   revisao: revisaoPendenteV2Schema.optional(),
 });
 
+/**
+ * A capa de seção do curso de abertura (feedback do aluno, 17/9/2026): o aluno a vê antes da
+ * primeira fala. Opcional e sem `default`, para o hash das aulas de finais não mudar.
+ */
+export const secaoV2Schema = z.strictObject({ titulo: z.string().min(1), subtitulo: z.string().min(1).optional() });
+
 export const introducaoV2Schema = z.strictObject({
   id: idV2Schema,
   titulo: z.string().min(1),
+  secao: secaoV2Schema.optional(),
   quadros: z.array(quadroIntroducaoV2Schema).min(1),
 });
 
@@ -326,6 +333,7 @@ export const capituloV2Schema = z.strictObject({
   titulo: z.string().min(1),
   /** A linha que resume a técnica (o `summary` do v1); o aluno a lê debaixo do título. */
   resumo: z.string().min(1).optional(),
+  secao: secaoV2Schema.optional(),
   analiseId: idV2Schema,
   inicioNodeId: idV2Schema,
   caminho: z.array(idV2Schema),

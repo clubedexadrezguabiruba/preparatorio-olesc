@@ -86,17 +86,40 @@ export function setaQueEnsina(orig: Key, dest: Key, orientacao: Color): DrawShap
 const ESTRELA =
   '<path d="M12 2.6l2.8 6 6.5.7-4.9 4.4 1.4 6.4L12 16.9l-5.8 3.2 1.4-6.4L2.7 9.3l6.5-.7z" fill="#fff" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/>';
 
-const SINAL: Record<Simbolo, string> = {
+/**
+ * O que o desenho sabe pintar: os vereditos do move trainer e mais dois símbolos que só o estudo
+ * usa — `!?` (interessante) e `?!` (imprecisão). As aulas passaram a desenhá-los em 17/9/2026, com
+ * as cores do Chess.com; o move trainer continua com os seus seis.
+ */
+export type SimboloDoDesenho = Simbolo | "interessante" | "imprecisao";
+
+const SINAL: Record<SimboloDoDesenho, string> = {
   acerto: "",
   brilhante: "!!",
   otimo: "!",
   alternativa: "!?",
+  interessante: "!?",
+  imprecisao: "?!",
   erro: "?",
   armadilha: "??",
 };
 
+const DO_NAG: Record<number, SimboloDoDesenho> = { 1: "otimo", 2: "erro", 3: "brilhante", 4: "armadilha", 5: "interessante", 6: "imprecisao" };
+const DO_SINAL: Record<string, SimboloDoDesenho> = { "!": "otimo", "?": "erro", "!!": "brilhante", "??": "armadilha", "!?": "interessante", "?!": "imprecisao" };
+
+/** O desenho do primeiro dos seis NAGs de qualidade (`$1`…`$6`); avaliação (`$14`…) não tem círculo. */
+export function simboloDoNag(nags: readonly number[] | undefined): SimboloDoDesenho | null {
+  const nag = nags?.find((item) => DO_NAG[item]);
+  return nag === undefined ? null : DO_NAG[nag];
+}
+
+/** O mesmo, a partir do sinal escrito (`"!?"`). */
+export function simboloDoSinal(sinal: string | null | undefined): SimboloDoDesenho | null {
+  return sinal ? DO_SINAL[sinal] ?? null : null;
+}
+
 /** O nome que a entrada grande escreve na etiqueta. */
-const ROTULO: Partial<Record<Simbolo, string>> = { brilhante: "Brilhante!", otimo: "Ótimo!" };
+const ROTULO: Partial<Record<SimboloDoDesenho, string>> = { brilhante: "Brilhante!", otimo: "Ótimo!" };
 
 /**
  * O disco no canto: 40% da casa, centro a 94% × 6%. Raio 20 e fonte de 23,5 são a
@@ -106,7 +129,7 @@ const ROTULO: Partial<Record<Simbolo, string>> = { brilhante: "Brilhante!", otim
  * isso que deixa a entrada grande reaproveitar o mesmo desenho, só que começando
  * no meio da casa e maior.
  */
-function disco(qual: Simbolo, raio: number, fonte: number, sombra: number, classe = ""): string {
+function disco(qual: SimboloDoDesenho, raio: number, fonte: number, sombra: number, classe = ""): string {
   const sinal = SINAL[qual];
   const miolo =
     qual === "acerto"
@@ -130,7 +153,7 @@ function disco(qual: Simbolo, raio: number, fonte: number, sombra: number, class
  * **estado final**, e é por isso que, com as animações desligadas no aparelho, o
  * aluno vê direto o disco no canto, sem tinta e sem etiqueta.
  */
-export function simboloNaCasa(casa: Key, qual: Simbolo): DrawShape {
+export function simboloNaCasa(casa: Key, qual: SimboloDoDesenho): DrawShape {
   const rotulo = ROTULO[qual];
   if (!rotulo) {
     const html = `<g class="simbolo-lance" transform="translate(94 6)">${disco(qual, 20, 23.5, 2)}</g>`;
