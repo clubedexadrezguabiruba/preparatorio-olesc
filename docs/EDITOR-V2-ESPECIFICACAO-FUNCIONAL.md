@@ -68,7 +68,10 @@ teste de uso concluídas sem ajuda.
 - **Capítulo:** percurso escolhido de uma análise, com orientação e narração próprias.
 - **Treino:** tarefa jogável, com respostas, feedback, defesa e término.
 - **Prática:** avaliação já existente contra o Stockfish, preservada no v2 (nenhuma, uma ou várias por aula desde 15/09/2026).
-- **Fluxo:** ordem única em que introduções, capítulos, treinos e práticas aparecem.
+- **Fluxo:** ordem única em que introduções, capítulos, treinos e práticas aparecem (e, no
+  curso de abertura, o move trainer — §18.1).
+- **Curso de abertura:** as aulas de uma abertura, uma por bloco do estudo (§13.3).
+- **Parada:** ponto da aula em que o aluno joga o lance pedido pela pergunta.
 
 O professor não precisa conhecer “nó”, “hash”, “manifesto” ou “AST”. Mensagens devem
 usar capítulo, lance, posição, treino, versão e publicação.
@@ -423,6 +426,210 @@ manda); sem palavra no nome, valem as pistas do Lichess (lição interativa, adv
 computador, sem lances). Nome que pede o impossível cede à pista, com o motivo à vista.
 Capítulo sem lances pode virar capítulo de posição parada.
 
+### 13.3 Curso de abertura (decisões do Doug, 16/09/2026)
+
+Um estudo do Lichess escrito na *Estrutura Didática Global v3.1* (blocos 00 → A → B → C → D
+→ E → F) vira um **curso de abertura**: aulas com o professor, no mesmo Lesson Engine dos
+finais, e as linhas do move trainer de `/aberturas`. O **padrão e piloto** é o estudo
+**Francesa 3.Bd3 v1.5**: Lichess `qq2xorDl` e o arquivo local
+`Francesa_3Bd3_Lichess_FINAL_ESTRUTURA_MOVE_TRAINER_PARTIDA_MODELO_v1.5.pgn`. As fixtures estão em
+`e2e/fixtures/lichess-francesa-v15-qq2xorDl.pgn` (export do Lichess) e
+`e2e/fixtures/francesa-v15-pgn-local.pgn` (arquivo local). O plano de implementação, com as
+fatias F1–F7, está em `docs/CURSO-DE-ABERTURA-PLANO.md`. Finais não mudam.
+
+#### 13.3.1 Decisões da aula
+
+A numeração é a do plano, para as referências cruzadas baterem.
+
+1. Entrega: proposta das etapas + plano em fatias. *(Cumprida: `docs/CURSO-DE-ABERTURA-PLANO.md`.)*
+2. **O estudo do Lichess é a fonte.** Reimportar substitui o curso, sempre com cópia de
+   segurança e diff mostrado antes de aplicar.
+3. **Só aberturas.** Aulas de finais mantêm as etapas de hoje.
+4. **Uma aula por bloco.** Cada capítulo do estudo é uma etapa da aula do seu bloco.
+5. **Toda aula de abertura tem treino guiado** (o mesmo dos finais) **e move trainer** (o
+   mesmo de `/aberturas`), **exceto a aula de partida modelo** (regra 18).
+6. **Cada `[PERGUNTA]` é uma parada:** o aluno joga o único lance certo (ex.: depois de
+   5...Qxg2?? achar 6.Be4!). No E21 o aluno também responde jogando o lance; depois aparece
+   o `[PLANO]`.
+7. **O move trainer tira as linhas do estudo.** `content/repertorio/brancas-francesa.pgn`
+   passa a ser **gerado** a partir do estudo (ver §21).
+8. **Lance nosso com `!?` e `[REFERENCIA]`** (5.dxc5, 5.Nf3, 11.Qxf3, 11.Nxf3) vale como
+   **"também vale"**.
+9. **As linhas de armadilha também entram em `/aberturas`.**
+10. Casa limpa antes de começar: portões, commit, merge no `main`, push, `modo-editor`
+    apagada, branch `curso-abertura` criada. *(Cumprida em 16/09; ver o diário.)*
+11. **O rascunho antigo do Grigoryan (`french-with-bd3.pgn`) é aposentado.** O export do
+    estudo vira a fonte em `content/repertorio/rascunhos/`, e a trava `marcas-das-fontes`
+    compara estudo → PGN gerado.
+12. **A régua de tamanho sai de vez, para todo o repertório:** sem mínimo, sem máximo, sem
+    exigir roque ou peças fora. Ficam: termina em lance nosso, todo lance nosso comentado,
+    sem linha repetida (ver §21).
+13. **A aula B fica uma aula só, mesmo longa.** O aluno para e continua de onde parou.
+14. **Padrão e piloto: estudo v1.5**, importado pelos dois caminhos (link e arquivo) e
+    visto na tela, localmente. *(Piloto 0 cumprido em 16/09: 38 de 38 etapas pelos dois
+    caminhos, com o importador de hoje; ver o diário.)*
+
+#### 13.3.2 Regras globais — valem para todas as aberturas, sem configuração por aula
+
+15. **O move trainer treina erros/armadilhas e linhas principais, em progressão.** As
+    linhas novas chegam na ordem dos capítulos "Move Trainer" do estudo (arma → esquema →
+    golpes/armadilhas → quando não funciona → defesas → linha crítica → desvios → se
+    esquecer → árvore completa). **É ordem sugerida, sem trava:** revisão vencida pode
+    entrar no meio.
+16. **Progressão da aula por vez:**
+    - **1ª vez:** todas as etapas, obrigatórias, na ordem. Não se avança de aba sem fechar
+      a etapa; voltar e ficar são livres.
+    - **2ª vez:** todas as etapas; botão **Pular** na explicação (introdução e capítulo).
+      Parada, treino guiado e move trainer não se pulam.
+    - **3ª vez em diante:** uma tela de entrada oferece **Ir ao move trainer** ou **Fazer
+      a aula inteira**.
+17. **O move trainer dentro da aula está feito** quando o aluno passou **uma vez por cada
+    linha do bloco**. Na primeira vez de cada linha, ela começa no modo assistido.
+    Aprender de verdade (3 acertos espaçados) segue nos dias seguintes em `/aberturas`.
+18. **A partida modelo é só para assistir:** sem pergunta, sem treino guiado, sem move
+    trainer. Conclui ao assistir; a partir da 2ª vez, Pular é livre.
+
+#### 13.3.3 Identidade da aula
+
+- Id **`AB-<COR>-<ABERTURA>-<BLOCO>`** (ex.: `AB-BRANCAS-FRANCESA-B`), com
+  `metadados.abertura = { cor, abertura, bloco }` conferido contra o id.
+- **Curso de abertura não tem classe de finais.** Criar ou importar uma aula `AB-` não pode
+  pedir E/D/C/B nem nível; a aula extra `EX-` (§22) continua exigindo. *(Achado da P0: a
+  importação só aceitou criar a aula depois de uma classe de finais.)*
+- Aula `AB-` nunca aparece em `/finais`, no índice de finais nem no progresso de níveis;
+  `/finais/AB-…` responde 404. No editor, o índice ganha a seção **Cursos de abertura**.
+- **A orientação do tabuleiro vem da cor do curso**, nunca do `Orientation` do export. O
+  export da v1.5 traz `Orientation "black"` nos 38 capítulos de um curso das brancas.
+  *(Achado da P0: a busca preencheu "Pretas embaixo".)*
+
+#### 13.3.4 Leitura do estudo
+
+**Código e título do capítulo.** O código (`00`, `A00`, `B05A`, `E22P`…) vem de, nesta
+ordem:
+
+1. `[ChapterName "B05A - título"]` (export do Lichess);
+2. `[White "B05A"]` com o título em `[Black "..."]` (arquivo local, que não tem
+   `ChapterName`).
+
+Quando só existir o par `White`/`Black`, o leitor sintetiza o `ChapterName` antes de
+importar, e o arquivo local passa a ser lido **como estudo**, igual ao link. O código
+**nunca se perde do título**, inclusive o `00`. *(Achados da P0: o arquivo local abriu como
+38 jogos com o mesmo título, e o capítulo 00 perdeu o "00 -".)* O código vence a regra do
+nome da §13.2 ("Treino", "Aula"…): num curso de abertura, o destino sai do papel.
+
+**Papel de cada capítulo:**
+
+| Papel | Como se reconhece | Vira |
+|---|---|---|
+| aula | capítulo dos blocos 00, A, B, C, E sem código `E22` | `capitulo` narrado |
+| ramo | variante que ensina algo, dentro de um capítulo de aula | `capitulo` que começa no lance da bifurcação, com o passo "Voltamos a…" da comparação (§15.3) |
+| parada | cada `[PERGUNTA]` | três etapas (§18) |
+| treinador | código `E22*` ou título "Move Trainer —" | linhas do banco do repertório, com `categoria` e `ordem`; **não** vira capítulo narrado |
+| partida modelo | bloco D com lances | `capitulo` narrado; as tags `Model*` viram o cabeçalho da partida |
+| revisão | bloco F | `introducao`, um quadro por trecho marcado e por nota de ramo |
+| vazio | capítulo sem lances onde o estudo pede partida | fica fora, com aviso |
+
+**Parada.** A parada é o **próximo lance nosso** depois da `[PERGUNTA]`. Pergunta escrita
+no próprio lance nosso, ou antes do 1º lance, gera aviso no relatório (não é recusada). Na
+parada:
+
+- irmão nosso com `!` ou `!?` → "vale, mas a aula segue por <lance principal>";
+- irmão nosso com `?`, `?!` ou `??` → erro nomeado;
+- errou → volta à posição + dica (`[DICA]`; sem ele, a própria pergunta);
+- acertou → a aula continua da resposta. **Sem confete na parada.**
+
+**Todos os símbolos viajam com o lance** (`AGENTS.md`, "Símbolos de lance"). Irmão sem
+símbolo não vira erro nem alternativa: sai no relatório, e quem decide é o Doug (mesma
+regra de `docs/REPERTORIO.md` §5). *(Achado da P0: no E20, c5 e dxe4 entraram como erro por
+não terem símbolo.)*
+
+#### 13.3.5 Marcadores
+
+Nenhum marcador aparece cru na fala do aluno. *(Achado da P0: o player mostrou "[OBJETIVO]
+Entender a ideia…" literalmente.)*
+
+| Marcador | Efeito |
+|---|---|
+| `[OBJETIVO]` | cartão no início do capítulo |
+| `[PERGUNTA]` | parada |
+| `[TRAIN]` | objetivo do treino; **não** seleciona linhas |
+| `[REFERENCIA]` | não é narrado; o lance fica e vale como "também vale" |
+| `[ENTENDER]`, `[PLANO]`, `[MEMORIZAR]`, `[ARMADILHA]`, `[PUNICAO]`, `[GOLPE]`, `[ERRO COMUM]`, `[NAO FUNCIONA]`, `[TEORIA]`, `[LINHA CRITICA]`, `[DEFESA]`, `[ESQUEMA]`, `[ATENCAO]`, `[CONEXAO]`, `[COMO USAR]`, `[PARTIDA REAL]` | fala própria, com rótulo |
+| `[RESUMO]`, `[PROXIMO]` | fala com pausa manual |
+| `[DICA]` | novo, opcional: dica da parada |
+| `CASO N —`, `Regra N:` | título do ramo |
+| marcador desconhecido | o texto fica; aviso uma vez no relatório |
+
+#### 13.3.6 O molde da aula
+
+**Aula de bloco (A, B, C, E+F):**
+
+```text
+Aula <bloco>
+  capítulo do bloco      ── [OBJETIVO] em cartão → narração, uma fala por ideia
+  (ramo do capítulo)     ── variante que ensina algo: "Voltamos a 3.Bd3… agora a outra escolha"
+  parada                 ── na [PERGUNTA] o aluno joga o lance certo; errou → retorno + dica;
+                            acertou → a aula continua da resposta
+  … (os outros capítulos do bloco)
+  Treino guiado do bloco ── árvore das linhas do bloco; a defesa das Pretas gira a cada tentativa
+  Move trainer do bloco  ── as linhas "Move Trainer" do bloco, na ordem do estudo, cada uma uma vez
+```
+
+**Aula de partida modelo (D):** só a partida narrada. Nada a responder, nada a treinar.
+
+O capítulo "Move Trainer" pertence à aula cujo capítulo didático ele copia (o estudo diz:
+"linhas duplicadas dos capítulos didáticos"). O `[OBJETIVO]` dele vira o título da linha no
+treinador. Na aula E+F, o F23 fica antes do treino guiado, para o molde terminar sempre em
+treino.
+
+#### 13.3.7 Mapa da Francesa 3.Bd3 v1.5 — 5 aulas
+
+| Aula | Etapas (capítulos) | Paradas | Move trainer (capítulos do estudo) |
+|---|---|---|---|
+| A — A defesa e nossa arma | 00 · A00 · A01 | 2 | E22A Arma · E22B Esquema base |
+| B — Armadilhas e punições | B03 · B04 · B05 · B05A · B05B · B06 · B07 · B08 (CASO 2–5 como ramos) · B09 | 9 | E22C Preparação · E22D–H Golpes 1–5 · E22I Quando não funciona |
+| C — Quando as Pretas jogam bem | C10 · C11 · C12 (+ ramos ...Be7, ...Bb4) · C13 | 4 | E22J–K Defesas · E22L Linha mais difícil · E22M–N desvios · E22O Se esquecer |
+| D — Partida modelo | D17 MVL x So (79 meios-lances) | — | — (regra 18) |
+| E+F — Treino final e revisão | E20 · E21 · F23 Cheat Sheet | 12 | E22A→P, todas na ordem, fechando na E22P Árvore completa |
+
+D18 e D19 estão vazias no estudo ("falta partida autorizada") e ficam fora, com aviso.
+
+#### 13.3.8 Relatório da importação
+
+Antes de aplicar, a tela mostra, por capítulo: código, aula, papel, ramos e paradas. O
+relatório lista, sem bloquear a importação, o que o Doug corrige no Lichess. Na v1.5:
+
+- `Orientation "black"` nos 38 capítulos (ignorado; vale a cor do curso);
+- o Lichess perde o comentário final de **B09** e **C12** (depois da última variante);
+- `[PERGUNTA]` no lance nosso: B03, B05B (17.Qxe6+), C13 (antes do 1º lance);
+- `[PROXIMO]` apontando errado: E20 (cita o treino-relâmpago removido), E21 ("árvore
+  completa" só vem no E22P), C13 (o próximo é D17);
+- "Regra N" diferente entre C13 e E22O; "Golpe 4/5" não são táticas;
+- lances nossos sem comentário: 1.e4 (00), 11.Nf3 (B05B), 12.Qxf3 e 11.a3 (C12), que
+  reprovam no `/aberturas`;
+- frases de bastidor fora de `[REFERENCIA]`: "curso atual" ×6, "draft antigo" (B09, C12);
+- D18 e D19 vazias; o `[RESUMO]` do E22N escreve "Ndb5" (o Lichess grava 10.Nb5).
+
+Reimportar mostra a cópia de segurança e o diff (aulas, etapas e linhas que mudam, e ids
+de linha que morrem e nascem) antes de substituir.
+
+#### 13.3.9 Critérios de aceite
+
+- Nas duas fixtures: 38 capítulos → 5 aulas; 27 paradas; 16 capítulos treinador → 19
+  caminhos distintos, 12 completos; ramos B08 4, B09 1, C12 2, C13 2, E20 8; D18/D19
+  avisadas; comentário final de B09/C12 perdido só no export do Lichess; 3 perguntas no
+  lance nosso; 4 lances mudos; nenhum símbolo perdido.
+- O link e o arquivo local dão o **mesmo** curso (exceto o que o Lichess perde).
+- Planejar duas vezes o mesmo estudo produz aulas idênticas (ids determinísticos pelo
+  código).
+- Aula B como aluno: B05A erro → dica → Be4; B08 "Voltamos a 3.Bd3…"; B09 5.dxc5 "vale,
+  mas…"; treino guiado; move trainer serve E22C → E22I na ordem, cada linha uma vez, e grava
+  em `repertorio_progresso`.
+- Regra 16 comprovada com `alunoteste`: 1ª vez sem Pular e sem avançar aba; 2ª com Pular só
+  na explicação; 3ª abre a tela de entrada; aula D com Pular livre na 2ª.
+- `/finais` e o índice de finais sem nenhuma aula `AB-`; `/aberturas` com o e2e verde antes
+  e depois.
+
 ## 14. Exportação
 
 Deve oferecer:
@@ -614,6 +821,48 @@ impacto antes de publicar. Reordenar ou renomear não invalida domínio.
 - Reordenação, título e narração não invalidam domínio; mudança semântica da avaliação
   cria nova revisão.
 
+### 18.1 Etapas do curso de abertura (decisões do Doug, 16/09/2026)
+
+Valem só para aulas `AB-` (§13.3). O fluxo das aulas de finais e extras não muda.
+
+**Etapa `treinador` (move trainer dentro da aula).**
+
+- Novo tipo de etapa, `fluxo.tipo: "treinador"`, apontando para
+  `treinadores: [{ id, titulo, cor, abertura, linhaIds }]`.
+- Reusa o `Treino` de `/aberturas` sem mudar o comportamento de lá: mesmo juiz, mesma
+  passada, mesma gravação em `repertorio_progresso`, que o servidor rejulga.
+- Serve as linhas do bloco pela `ordem` do estudo. Na primeira vez de cada linha, ela
+  começa no modo assistido; depois, no quiz.
+- **Está feita quando cada linha do bloco teve uma passada nesta rodada da aula** (regra 17).
+  Acertar três vezes espaçadas continua sendo assunto de `/aberturas`.
+- Publicar recusa etapa `treinador` com linha que não existe no repertório compilado
+  (`TREINADOR_LINHA_AUSENTE`), com a linha nomeada.
+
+**Parada em três etapas.** Cada `[PERGUNTA]` vira, no fluxo:
+
+1. capítulo narrado até a pergunta;
+2. treino `linha-autoral` de uma questão, cuja resposta é o próximo lance nosso (irmão com
+   `!`/`!?` = alternativa; com `?`/`?!`/`??` = erro nomeado; dica = `[DICA]` ou a pergunta);
+3. capítulo narrado a partir da resposta.
+
+A parada grava tentativa como os treinos de finais, e **não tem confete**.
+
+**Progressão por vez (regra 16).**
+
+- A aula registra **conclusão** quando a última etapa obrigatória da rodada fecha, gravada
+  no servidor (`aula_concluida`: aluno, aula, publicação, rodada, data). A vez é o número
+  de conclusões anteriores + 1.
+- **1ª vez:** as abas da trilha só deixam voltar ou ficar; avançar exige a etapa atual
+  feita. O rodapé do capítulo não funciona como "pular".
+- **2ª vez:** botão **Pular** em introdução e capítulo; parada, treino guiado e
+  `treinador` continuam travados até feitos.
+- **3ª vez em diante:** tela de entrada com **Ir ao move trainer** e **Fazer a aula
+  inteira**.
+- **Partida modelo:** conclui ao assistir até o fim; da 2ª vez em diante, Pular é livre.
+- **Retomar:** o aluno que sai no meio volta à primeira etapa ainda não feita da rodada
+  (regra 13).
+- Aulas de abertura não se trancam entre si. *(Padrão assumido no plano; fácil de mudar.)*
+
 ## 19. Problemas, conferência e correção
 
 ### 19.1 Metadados, proveniência e exceções
@@ -706,6 +955,33 @@ vinculado ao manifesto completo julgado; mudança posterior invalida a conferên
 - Critério de aceite: os 11 PGNs atuais compilam sem edição semântica involuntária.
 - Formulário de `notas.json` e botão de commit/push são opcionais, posteriores ao
   primeiro fechamento.
+
+**Emenda de 16/09/2026 (decisões do Doug; §13.3).**
+
+- **PGN gerado a partir do estudo.** Quando uma abertura tem curso (§13.3), o PGN do
+  repertório dela deixa de ser escrito à mão: é **gerado** do estudo, uma partida por
+  capítulo "Move Trainer", com preâmbulo "GERADO — não editar" e as tags `[Categoria]`,
+  `[Ordem]` e `[Fonte "estudo <id> <versão>"]`. Os comentários saem sem marcadores e sem
+  `[TRAIN]`, `[PROXIMO]` e `[REFERENCIA]`; os símbolos vão todos junto. Linha idêntica é
+  deduplicada. A fonte autoral dessa abertura passa a ser o estudo; o PGN gerado continua
+  sendo o que o compilador lê. O primeiro caso é `brancas-francesa.pgn`; as outras 10
+  aberturas seguem escritas à mão até ganharem estudo.
+- O export cru do estudo fica em `content/repertorio/rascunhos/` (ex.:
+  `estudo-brancas-francesa.pgn`), e `marcas-das-fontes` compara estudo → PGN gerado.
+- Aplicar o PGN gerado passa pelo mesmo caminho de impacto deste parágrafo: compilar
+  candidato, mostrar os ids de linha que morrem e nascem e o progresso que se perde.
+- **Régua sem tamanho, para os 11 repertórios.** Saem a profundidade mínima, o teto de 14,
+  a exigência de roque e de peças menores fora da casa, e a obrigação do bloco `[%plano]`.
+  Ficam: toda linha termina em lance nosso, todo lance nosso tem comentário, nenhuma linha
+  repetida. *(Aberto para a F2b: se "sem linha repetida" aceita linha que é prefixo de
+  outra, como E22A ⊂ E22B.)*
+- **Linha com `categoria` e `ordem`.** Categorias: arma, esquema, preparacao, golpe,
+  nao-funciona, defesa, linha-critica, desvio, se-esquecer, arvore. Linha nunca vista sai
+  pela menor `ordem` (regra 15, ordem sugerida, sem trava); o seletor de linhas agrupa por
+  categoria. Linha sem categoria (as aberturas sem estudo) mantém a ordem do arquivo.
+  *(Padrão assumido.)*
+- Critério de aceite desta emenda: os 11 repertórios compilam; na Francesa, linha nova é
+  servida de E22A a E22P; `marcas-das-fontes` sem nenhum símbolo faltando.
 
 ## 22. Aulas extras
 
@@ -881,6 +1157,9 @@ Ao final de cada fatia:
 - [x] Migração v1 explícita e conteúdo antigo preservado.
 - [x] Repertório editado pela fonte PGN e compilação coerente.
 - [x] Barra e linhas Stockfish isoladas do motor do aluno.
+- [ ] Curso de abertura: estudo → aulas `AB-` com paradas, treino guiado, `treinador` e
+  progressão por vez; PGN do repertório gerado do estudo (§13.3, §18.1, §21). *(Incluído em
+  16/09/2026; fatias F1–F7 do plano do curso.)*
 - [ ] Limites e metas de desempenho comprovados.
 - [ ] Acessibilidade e teste humano final aprovados.
 

@@ -5389,6 +5389,70 @@ por engano só sai excluindo e importando de novo. Teste humano do Doug com um e
 
 ---
 
+## Piloto 0 do curso de abertura — a Francesa 3.Bd3 v1.5 no editor atual (16/9/2026)
+
+Sem código novo, na branch `curso-abertura`, para ver o estudo v1.5 cru antes da F0. Plano em
+`~/.claude/plans/vamos-reestruturar-o-modo-fuzzy-hejlsberg.md`. O Doug entrou como professor; o resto foi pelo
+Playwright (viewport 1517×641, `devicePixelRatio` 0,9). RAM livre 1,24 GB ao subir o `next dev`.
+
+| Caminho | Contagem na busca | Aula criada | Etapas em `/editor/v2/assistir` |
+|---|---|---|---|
+| Link `lichess.org/study/qq2xorDl` | "38 capítulos" | `EX-P0-FRANCESA-V15-LICHESS` | **38 de 38** — 36 capítulos + 2 treinos (E20, E21 pelo nome) |
+| Arquivo `..._v1.5.pgn` (Downloads) | "38 capítulos" | `EX-P0-FRANCESA-V15-PGN` | **38 de 38** — 38 capítulos; 973 de 4.000 lances |
+
+Nenhum limite recusou nada; nenhuma prática, logo nada gravado em `content/positions/EX/`. Rascunhos só em
+`.editor/v2/` (ignorado pelo git). "Os textos são meus" ficou desmarcado — a declaração é do Doug.
+
+**O que a P0 mostrou, para as fatias:**
+- **O PGN local não é lido como estudo.** Não tem `[ChapterName]`: o código está em `[White]` ("A00") e o título
+  em `[Black]`. A tela abre a importação de 38 jogos sem o "Vira" por capítulo, e os 38 ficam com o mesmo título
+  (o `[Event]`), cada um com "origem da posição a revisar". É o que a F2 prevê (`codigoDoCapitulo` lê
+  `White`/`Black` e sintetiza `ChapterName`).
+- **Pelo link, o nome decide bem:** só E20 e E21 viraram treino; os 16 "Move Trainer" viraram capítulo narrado
+  (a F2 os tira da narração). O E20 trouxe dois "REVISAR": c5 e dxe4 sem símbolo entraram como erro.
+- **O capítulo 00 perde o código no título** ("Conhecendo a Francesa…", sem "00 -"); os demais o mantêm.
+- **A busca preencheu "Pretas embaixo"** (o `Orientation "black"` do export); troquei à mão para brancas.
+- **Aula extra exige classe de finais** (E/D/C/B) para criar — usei E. Curso de abertura não tem classe: a F1
+  (`AB-`, `metadados.abertura`) precisa não pedir isso.
+- **Marcadores crus na fala:** o player mostra "[OBJETIVO] Entender a ideia…" literalmente; o texto da página traz
+  essa fala duas vezes — não confirmei se as duas estão visíveis.
+- Sem erros no console ao abrir `/assistir`.
+
+---
+
+## F0 do curso de abertura — o contrato escrito (16/9/2026)
+
+Só documentação, na `curso-abertura`. Nenhum código mudou; nenhum portão de código foi rodado (não se aplica).
+
+| O que | Onde |
+|---|---|
+| **§13.3 "Curso de abertura"**: decisões 1–14 e regras globais 15–18 (numeração do plano), identidade `AB-`, leitura do estudo (código por `ChapterName` ou `White`/`Black`, papel de cada capítulo, parada), marcadores, molde da aula, mapa das 5 aulas da v1.5, relatório da importação, critérios de aceite | `docs/EDITOR-V2-ESPECIFICACAO-FUNCIONAL.md` |
+| **§18.1**: etapa `treinador` (feita = cada linha do bloco uma vez), parada em 3 etapas sem confete, progressão por vez (`aula_concluida`, 1ª/2ª/3ª vez, retomar) | idem |
+| **§21, emenda**: PGN do repertório gerado a partir do estudo; régua sem tamanho nos 11; `categoria`/`ordem` | idem |
+| §4 (vocabulário: curso de abertura, parada; fluxo com move trainer) e §28 (item novo no checklist, aberto) | idem |
+| **§15, emenda** (fonte autoral = estudo, `.pgn` gerado, `AB-`, `aula_concluida` aditiva) | `docs/EDITOR-V2-PLANO-FINAL.md` |
+| Aviso datado no topo; §2.7 substituída; §4 régua revogada; §5 caminho de abertura com curso | `docs/REPERTORIO.md` |
+| Plano versionado, com os achados da P0 no Modelo e no Leitor | `docs/CURSO-DE-ABERTURA-PLANO.md` |
+| Fixture do export do Lichess (`/api/study/qq2xorDl.pgn?orientation=true&clocks=false`, o mesmo endereço do importador; 48.201 bytes, 38 capítulos, 38 `ChapterName`, 38 `Orientation "black"`) | `e2e/fixtures/lichess-francesa-v15-qq2xorDl.pgn` |
+| Fixture do PGN local (cópia byte a byte do arquivo em Downloads, conferida com `cmp`; 41.392 bytes, 38 jogos) | `e2e/fixtures/francesa-v15-pgn-local.pgn` |
+
+**Achados da P0 que viraram contrato:** aula `AB-` não pede classe de finais; orientação vem da cor do curso;
+o leitor aceita `White`/`Black` como código/título e não perde o `00`; marcador nunca aparece cru; irmão sem
+símbolo sai no relatório e não vira erro.
+
+**Deixado aberto de propósito:** se "sem linha repetida" aceita linha prefixo de outra (E22A ⊂ E22B) — conferir
+na F2b. "Aulas não se trancam entre si" e "linha sem categoria mantém a ordem do arquivo" estão marcados como
+padrão assumido.
+
+**Para o Doug decidir antes de qualquer push:** as duas fixtures e o futuro `rascunhos/estudo-brancas-francesa.pgn`
+põem no Git público a prosa do estudo v1.5. O texto é redação própria, mas cita o curso do Grigoryan
+(`[Source "WhiteMood French — GM Avetik Grigoryan…"]`, "o curso atual marca 7...Nd5?!"). A §5 do REPERTORIO
+agora diz que o export do estudo entra com prosa porque o texto é do Doug.
+
+**Parada da F0:** o Doug lê a §13.3. Próxima fatia: F1 (schema `AB-`).
+
+---
+
 ## O teste humano da fatia 10 — o roteiro numerado
 
 > **Atualizado depois da revisão de experiência de 14/9/2026:** a tela foi reorganizada (ver "Revisão de
