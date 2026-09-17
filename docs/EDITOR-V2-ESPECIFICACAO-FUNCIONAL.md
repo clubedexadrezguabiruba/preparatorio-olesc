@@ -861,7 +861,8 @@ A parada grava tentativa como os treinos de finais, e **não tem confete**.
 - **Partida modelo:** conclui ao assistir até o fim; da 2ª vez em diante, Pular é livre.
 - **Retomar:** o aluno que sai no meio volta à primeira etapa ainda não feita da rodada
   (regra 13).
-- Aulas de abertura não se trancam entre si. *(Padrão assumido no plano; fácil de mudar.)*
+- Aulas de abertura não se trancam entre si: a trilha sugere a ordem, e o aluno abre
+  qualquer aula. *(Decisão do Doug, 16/09/2026.)*
 
 ## 19. Problemas, conferência e correção
 
@@ -973,13 +974,15 @@ vinculado ao manifesto completo julgado; mudança posterior invalida a conferên
 - **Régua sem tamanho, para os 11 repertórios.** Saem a profundidade mínima, o teto de 14,
   a exigência de roque e de peças menores fora da casa, e a obrigação do bloco `[%plano]`.
   Ficam: toda linha termina em lance nosso, todo lance nosso tem comentário, nenhuma linha
-  repetida. *(Aberto para a F2b: se "sem linha repetida" aceita linha que é prefixo de
-  outra, como E22A ⊂ E22B.)*
+  repetida. **Linha que é o começo de outra não é repetida** e fica como linha própria
+  (E22A, só `3.Bd3`, e E22B, o esquema completo). *(Decisão do Doug, 16/09/2026.)*
 - **Linha com `categoria` e `ordem`.** Categorias: arma, esquema, preparacao, golpe,
   nao-funciona, defesa, linha-critica, desvio, se-esquecer, arvore. Linha nunca vista sai
   pela menor `ordem` (regra 15, ordem sugerida, sem trava); o seletor de linhas agrupa por
-  categoria. Linha sem categoria (as aberturas sem estudo) mantém a ordem do arquivo.
-  *(Padrão assumido.)*
+  categoria. Linha sem categoria (as aberturas sem estudo) mantém a ordem do arquivo, como
+  hoje. *(Decisão do Doug, 16/09/2026.)*
+- As fixtures do estudo v1.5 (com a prosa do Doug) ficam no repositório público.
+  *(Decisão do Doug, 16/09/2026.)*
 - Critério de aceite desta emenda: os 11 repertórios compilam; na Francesa, linha nova é
   servida de E22A a E22P; `marcas-das-fontes` sem nenhum símbolo faltando.
 

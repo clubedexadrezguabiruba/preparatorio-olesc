@@ -252,7 +252,8 @@ o diário `docs/MODO-EDITOR-ONDE-PARAMOS.md`.
 - Travar as abas muda o comportamento do player — limitado a `AB-`, finais intactos.
 - Mover `Treino`/`Passada` pode quebrar `/aberturas` — e2e antes e depois.
 - Tirar a régua vale para os 11 repertórios: linhas futuras podem ficar curtas demais sem aviso.
-- Linha prefixo de outra (E22A ⊂ E22B) pode colidir com "sem linha repetida" — conferir na F2b.
+- Linha prefixo de outra (E22A ⊂ E22B) pode colidir com "sem linha repetida" — **Doug decidiu (16/9): as duas
+  ficam**; a F2b ajusta a regra se ela barrar.
 - Id da linha atual da Francesa muda → progresso de contas de teste zera (impacto mostrado antes).
 - `notas.json` `francesa-bd3` fica velha; revisar na F6.
 

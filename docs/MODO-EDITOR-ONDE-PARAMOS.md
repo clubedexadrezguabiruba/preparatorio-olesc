@@ -5440,14 +5440,12 @@ Só documentação, na `curso-abertura`. Nenhum código mudou; nenhum portão de
 o leitor aceita `White`/`Black` como código/título e não perde o `00`; marcador nunca aparece cru; irmão sem
 símbolo sai no relatório e não vira erro.
 
-**Deixado aberto de propósito:** se "sem linha repetida" aceita linha prefixo de outra (E22A ⊂ E22B) — conferir
-na F2b. "Aulas não se trancam entre si" e "linha sem categoria mantém a ordem do arquivo" estão marcados como
-padrão assumido.
-
-**Para o Doug decidir antes de qualquer push:** as duas fixtures e o futuro `rascunhos/estudo-brancas-francesa.pgn`
-põem no Git público a prosa do estudo v1.5. O texto é redação própria, mas cita o curso do Grigoryan
-(`[Source "WhiteMood French — GM Avetik Grigoryan…"]`, "o curso atual marca 7...Nd5?!"). A §5 do REPERTORIO
-agora diz que o export do estudo entra com prosa porque o texto é do Doug.
+**Decididas pelo Doug no mesmo dia (16/9), depois da F0** — registradas na spec §18.1 e §21:
+1. **Prosa do estudo no Git público: pode.** As fixtures e o futuro `rascunhos/estudo-brancas-francesa.pgn` ficam
+   no repositório, mesmo citando o curso do Grigoryan (o estudo já é público no Lichess).
+2. **Linha que é o começo de outra fica** (E22A ⊂ E22B): não conta como repetida. A F2b ajusta a regra se ela barrar.
+3. **Aulas não se trancam entre si:** todas abertas; a trilha só sugere a ordem.
+4. **Aberturas sem estudo mantêm a ordem do arquivo** no move trainer, como hoje.
 
 **Parada da F0:** o Doug lê a §13.3. Próxima fatia: F1 (schema `AB-`).
 
