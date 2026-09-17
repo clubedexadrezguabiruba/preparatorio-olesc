@@ -715,11 +715,32 @@ test("linha trancada por aula não conta em nada: faltam, portão, aprendidas, a
   const soALivre = progressoDe({ [livre]: { aprendidaEm: T1, ultimaEm: T1 } });
 
   assert.deepEqual(idsLiberados(francesa, true, trancadas), [livre]);
-  assert.equal(faltamNoBase(soALivre, [francesa], trancadas), 0, "a trancada não falta");
-  assert.equal(baseCompleto(soALivre, [francesa], trancadas), true, "e não segura o portão");
+  assert.equal(faltamNoBase(soALivre, [francesa], trancadas), 0, "a trancada não falta — o 'faltam N' continua sem contá-la");
   assert.equal(faltamNoBase(soALivre, [francesa]), 1, "sem a trava, ela faltaria");
   assert.equal(aprendidasDaAbertura(progresso, francesa, true, trancadas), 1);
   assert.equal(aRevisarNaAbertura(progresso, francesa, DIA_3, true, trancadas), 1);
+});
+
+test("Base completo exige NENHUMA linha trancada (Doug, 17/9/2026, revendo a mesma noite): a brecha do Avançado e do nível 5", () => {
+  // Antes desta revisão, uma linha trancada só saía de "faltam N" — e `baseCompleto` (que também é
+  // o portão do Avançado e o requisito de repertório do nível 5) usava o mesmo `faltamNoBase`, então
+  // um aluno com a Francesa inteira trancada por não ter feito as aulas via "Base completo" mesmo
+  // assim, se o resto do repertório estivesse aprendido. `baseCompleto` ganhou a exigência extra que
+  // o selo por abertura (`selos-repertorio.ts`) já tinha: zero linha trancada, em qualquer abertura.
+  const livre = idDaLinha("brancas", "francesa", LANCES.slice(0, 3));
+  const daAula = idDaLinha("brancas", "francesa", LANCES.slice(0, 5));
+  const francesa = entrada("brancas", "francesa", [livre, daAula]);
+  const trancadas = new Set([daAula]);
+  const soALivre = progressoDe({ [livre]: { aprendidaEm: T1, ultimaEm: T1 } });
+
+  assert.equal(baseCompleto(soALivre, [francesa], trancadas), false, "a Francesa tem uma linha trancada — o portão não abre");
+
+  const asDuas = progressoDe({
+    [livre]: { aprendidaEm: T1, ultimaEm: T1 },
+    [daAula]: { aprendidaEm: T1, ultimaEm: T1 },
+  });
+  assert.equal(baseCompleto(asDuas, [francesa], trancadas), false, "aprendida ou não, trancada ainda segura o portão");
+  assert.equal(baseCompleto(asDuas, [francesa], new Set()), true, "sem nenhuma trava, as duas aprendidas abrem o portão");
 });
 
 /* ------------------------------------------------------------------ *

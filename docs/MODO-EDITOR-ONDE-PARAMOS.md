@@ -5806,8 +5806,15 @@ com o treino guiado depois da mudança, celular 375 px das telas da aula.
   `visto_em`, `selo_inicio`, view `puzzles_do_aluno`): selo gravado não some; primeira avaliação silenciosa; selo
   novo com aviso e confete uma vez. Relatório do professor com avatar, selos com data, graus e aulas de abertura.
   `db:rls` "A RLS segura" (seção 15); `selos:ciclo` view = TypeScript. Portões: `test` **1642/1642**, typecheck,
-  lint, `validate:mutations` 36/36, `repertorio --check` ✓. **Pendência de regra:** "O Base inteiro" (e o portão do
-  Avançado e do nível 5) ainda descontam as linhas trancadas por aula — dá para fechar o Base sem as aulas da Francesa.
+  lint, `validate:mutations` 36/36, `repertorio --check` ✓.
+
+**Fechada a mesma noite:** a brecha do "Base inteiro" — o Doug decidiu por pop-up "exigir as aulas".
+`baseCompleto` (`lib/repertorio/treino.ts`) ganhou o crivo "nenhuma linha do Base trancada", no mesmo
+padrão do selo por abertura; vale para o selo, o portão do Avançado e o nível 5, todos pela mesma
+função. `faltamNoBase` e o "faltam N" da tela não mudaram (continuam ignorando a trancada, decisão
+de mais cedo na noite). Teste `treino.test.ts` "Base completo exige NENHUMA linha trancada": antes
+`baseCompleto(...) === true` com uma linha trancada; depois `false`. Portões: `test` **1643/1643**,
+typecheck, lint, `validate:mutations` 36/36.
 
 ---
 

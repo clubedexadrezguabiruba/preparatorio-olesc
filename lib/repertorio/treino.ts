@@ -539,14 +539,28 @@ export function faltamNoBase(
 }
 
 /**
- * O portão: o Avançado abre quando não falta nenhuma linha do Base. É também o requisito de
- * repertório do nível 5 (`ProgressoParaONivel.baseCompleto`), então as `trancadas` valem lá igual.
+ * O portão: o Avançado abre quando não falta nenhuma linha do Base **e** nenhuma linha do Base
+ * está trancada por aula. É também o requisito de repertório do nível 5
+ * (`ProgressoParaONivel.baseCompleto`) e do selo "O Base inteiro" (`lib/curso/selos.ts`), então a
+ * exigência vale nos três.
+ *
+ * **A exigência de "nenhuma trancada" é nova (Doug, 17/9/2026, revendo a mesma noite).** Antes, uma
+ * linha trancada só saía de `faltamNoBase` — e esse era o único crivo daqui —, então um aluno com a
+ * Francesa inteira trancada (por não ter feito as aulas) podia fechar o Base, abrir o Avançado e
+ * contar para o nível 5 sem nunca ter tocado o curso da abertura. `faltamNoBase` continua ignorando
+ * a trancada (é o número que a tela mostra em "faltam N", e esse não muda); é `baseCompleto` que
+ * ganha o segundo crivo, no mesmo padrão que o selo por abertura já usa
+ * (`lib/curso/selos-repertorio.ts`: `aprendidas === base && trancadas === 0`).
  */
 export function baseCompleto(
   progresso: Progresso,
   indice: readonly EntradaDoIndice[],
   trancadas: ReadonlySet<string> = SEM_TRAVA,
 ): boolean {
+  if (trancadas.size > 0) {
+    const algumaTrancadaNoBase = indice.some((e) => idsLiberados(e, false).some((id) => trancadas.has(id)));
+    if (algumaTrancadaNoBase) return false;
+  }
   return faltamNoBase(progresso, indice, trancadas) === 0;
 }
 
