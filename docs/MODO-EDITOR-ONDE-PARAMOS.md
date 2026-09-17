@@ -19,7 +19,7 @@
 > **As travas de 15/09/2026 (decisão do Doug):** tablebase, limite de 7 peças, livro-base, prática única, quatro
 > etapas e ficha obrigatória saíram do código; o treino declara o resultado que cobra. Ver a seção "As travas de 15/9".
 
-**Data:** 2026-09-14. **Branch:** `modo-editor`. A menção
+**Data:** 2026-09-15. **Branch:** `modo-editor`. A menção
 histórica a “Bloco 2 suspenso” nas seções antigas explica a interrupção que levou à
 nova arquitetura; não rege mais o trabalho.
 
@@ -160,6 +160,12 @@ cada linha aponta a seção que conta a história inteira.
   do quadro da introdução: introdução ↔ capítulo ↔ treino, com o que sai e o que fica à vista antes de
   confirmar e um Desfazer. A importação deixou de perder os lances de um capítulo marcado como introdução.
   6 testes, ensaio no navegador. **Prática fica para a parada 2.** Ver "Mudar o modo de uma parte".
+
+- **O modo de cada capítulo pelo nome, 16/9 (pedido do Doug)** — a importação do estudo lê o nome do capítulo
+  ("Introdução", "AULA", "TREINO", "PRÁTICA") antes das pistas do Lichess, e o capítulo sem lances pode virar
+  capítulo de posição parada. Os seletores **Vira** já chegam preenchidos; o professor muda antes de importar ou
+  pelo "Mudar para…" depois. **Sem build, conteúdo, mutações e repertório** (727 MB livres). Ver "O modo de cada
+  capítulo pelo nome".
 
 **Aberto, na ordem:**
 
@@ -5133,6 +5139,253 @@ outra sessão em `content/repertorio` — se acusar, conferir `git status` antes
 clicava na casa errada; (e) `getByLabel` num `<label>` com `<textarea>` dentro inclui o texto do campo no
 nome: usar `getByRole("textbox", { name, exact: true })`; (f) o perfil de CPU do navegador feito com
 localizadores do Playwright mede o Playwright (`visitNode`, `getElementLabels`), não o editor.
+
+## O teste final antes de fechar a branch (15/9/2026, noite)
+
+**O pedido:** o Doug quer saber se a branch `modo-editor` pode ser fechada (prazo 18/09/2026) e se o
+Editor v2 está pronto — arquitetura, funções e tela. O uso real dele é **importar do Lichess, por link
+ou PGN**; essa é a função que tinha de estar perfeita. O roteiro inteiro foi executado pelo agente, sem
+paradas: portões, suíte de navegador, importação, funções do §28 e tela comparada ao Lichess. Cada
+defeito de funcionamento foi consertado na hora, com teste que falha antes e passa depois. **Sem commit.**
+
+### O ambiente quase reprovou a rodada
+
+Com quatro sessões do Claude abertas e **575 MB de RAM livre** (máquina de 7,9 GB), o `next dev` foi
+paginado para o disco e parou de responder no meio da suíte: **36 falhas** que não eram do editor
+(`ERR_TOO_MANY_REDIRECTS`, abrir a árvore de 1.000 nós em 6.387 ms). O Doug liberou 7,4 GB de disco
+(cache do npm, navegadores antigos do Playwright, a cópia `../olesc-portoes`) e fechou sessões; com
+~1,5 GB livres a suíte passou. Fica a regra: **medir a RAM antes de rodar a suíte**. O agente não pode
+reiniciar o servidor nem apagar cache — o classificador de permissões recusa, e com razão; quem roda
+esses comandos é o Doug.
+
+### Bloco 1 — portões
+
+`typecheck` ✓ · `lint` ✓ (os 12 erros que apareceram são do script local `content/repertorio/
+rascunhos-anotados/fonte-plichta/converter.cjs`, que o git ignora; sem ele, limpo) · `npm test`
+**1.328/1.328** no começo da rodada e **1.336/1.336** no fim (8 testes novos) · `build` ✓ ·
+`validate:content` ✓ · `validate:mutations` **34/34** · `repertorio:compilar --check` ✓ · `db:rls`
+**52/52** · `db:finais:v2` **18/18**.
+
+### Bloco 2 — a suíte de navegador, duas vezes
+
+Primeira passada **51 passados, 4 falhas** (13,1 min); segunda **51 e 4** (38,1 min, máquina carregada).
+Das falhas, **3 são as metas de desempenho**, vermelhas pelo limite que o Doug registrou em 14/9 (abrir
+a árvore de 1.000 nós: 3.676–4.709 ms de mediana contra a meta de 2.000; com a máquina livre em 14/9
+eram 2.031). A quarta era **defeito do ensaio**, não do editor: `tabuleiro-deslocado.spec.ts` lia um
+pacote de publicação pelo id escrito à mão (`pub-55947670…`), e a fixture foi republicada. Agora lê a
+publicação ativa.
+
+```
+ANTES  tabuleiro-deslocado.spec  ENOENT … publicacoes\pub-55947670bbcd7bd0.json
+DEPOIS 1 passed (18,6 s)
+```
+
+Na segunda passada, `atalhos.spec` também falhou (o tabuleiro não carregou em 15 s) depois de o ensaio
+de desempenho pendurar 25 min; sozinho, **3/3**. Carga, não defeito. A limpeza fechou as duas passadas
+com "987 arquivos conferidos, todos iguais".
+
+### Bloco 3 — importar do Lichess: seis defeitos, todos consertados
+
+**Contagem independente das fontes** (tokenizador próprio, sem passar pelo importador): a Francesa tem
+**65 NAGs** (`$1`×31, `$4`×6, `$5`×8, `$6`×8, `$14`×4, `$36`×6, `$40`×2), 626 lances, 5 setas, 13 casas,
+168 comentários, 41 variantes; o estudo de mate de dama tem **32 símbolos** (29 `!`, 3 `??`), 45 setas,
+17 casas. Correção ao roteiro: os "47 sufixos" da Francesa estão **dentro do texto dos comentários**
+("3.Bd3!" escrito na frase), não nos lances.
+
+**O que passou:** importar o estudo inteiro por link, por arquivo e colado; link de capítulo; link de
+partida (com `/black` e `#ply`); recusa de host falso sem nenhum pedido de rede; Cancelar durante a
+busca sem tocar na aula; PGN de 21 jogos com seleção, contador e teto; recusas de Chess960, FEN
+impossível e lance impossível; um Ctrl+Z desfaz a importação inteira; F5 preserva; exportar e
+reimportar dá texto byte a byte igual; a página pública do Lichess bate com o editor nos nomes, na
+ordem, nas setas e nas casas dos capítulos 02 e 03; a aula publicada é jogada pelo aluno e as
+tentativas chegam ao banco.
+
+**Os seis defeitos, com a causa e a prova:**
+
+| # | O que estava errado | Causa | Antes → depois |
+|---|---|---|---|
+| D1 | Um segundo estudo, ou um capítulo avulso por link, era recusado com "parece já ter sido importado" — falso | o id do capítulo saía do número de ordem (`importar-pgn.ts`, `comoId(titulo, "jogo-N")`), e "02 - …" colidia | 3 testes: "a aula já tem uma parte chamada analise-jogo-3" → 27/27 passam; na tela, o 2º PGN entra |
+| D2 | Buscar o mesmo endereço duas vezes travava a janela em "lendo o arquivo…" e oferecia o estudo como 6 jogos soltos | `PainelDeImportacao.tsx`: o texto igual não dispara o efeito que lê | ensaio `@rede`: "na 2ª busca: esperado 9, recebido 0" → 9/9 |
+| D3 | Jogo sem lances sumia, ou emprestava FEN e comentário ao jogo seguinte | `lerPgns` só fecha o jogo depois de ver lance | `[A, C]` → `[A, B, C, D]`, com `JOGO_SEM_LANCES` à vista |
+| D4 | A recusa ao importar fechava a janela e perdia o PGN colado | `EditorV2.tsx`: `fecharImportacao()` mesmo na recusa | alerta não aparecia → aparece, e o texto fica |
+| D5 | **Os símbolos não chegavam ao aluno** (0 de 32) | o passo do aluno não levava `nags` (`previa.ts`, `fluxo-do-aluno.ts`) e o tabuleiro não os desenhava | `undefined` → `[3, 14]`, inclusive pelo pacote publicado; o círculo `!` aparece na tela do aluno |
+| D6 | Os parágrafos do professor colavam numa linha só na tela do aluno | `Comentario.tsx` desenhava com `white-space: normal` | `normal` → `pre-wrap`, **só nas aulas v2** |
+
+Dois outros, achados na conferência de biblioteca e consertados antes: a importação colava os parágrafos
+do comentário (`importar-pgn.ts`, `separarComentario`) e a exportação juntava dois símbolos do mesmo
+lance num terceiro (`$1 $2` saía `!?`, `escrever-pgn.ts`).
+
+**Por que o D6 não valeu para todo mundo:** o mesmo balão serve o repertório, que vem de PGN quebrado a
+80 colunas — 11 quebras só na Alapin, 27 na Caro-Kann, 41 na Escandinava, todas no meio da frase. A
+quebra passou a aparecer só onde o texto é do professor (aula v2), por uma opção do componente.
+
+### Bloco 4 — as funções do §28
+
+**Passaram, com evidência de tela nesta rodada:** Desfazer tudo (com a confirmação e o Cancelar que não
+muda nada); recuperação por F5 antes do "✓ salvo"; **duas abas em conflito**, com "Baixar minha cópia"
+e "Abrir versão do disco" provadas nos dois sentidos; tornar principal, substituir e excluir com
+impacto e Desfazer exato; menu do botão direito **igual** ao `•••` (11 ações no lance, 7 na posição
+inicial); as portas de Adicionar capítulo; duplicar como independente (0 ids repetidos, o original
+intocado por SHA); comentário × narração independentes; símbolo exclusivo; as quatro cores e apagar os
+desenhos da posição; exportações (variante, linha, capítulo, aula, pacote) com o texto de perdas;
+prévia de capítulo e "daqui"; práticas nenhuma/uma/várias; proveniência inteira com Ctrl+Z e F5; motor
+do professor (L, 1–3 linhas, seta, pausa com janela e com prévia, nada gravado no arquivo); teclado
+puro do índice até o "✓ salvo", com Tab preso no modal e Esc devolvendo o foco; nova aula vazia e
+Cancelar que não cria arquivo; erro nomeado, treino dos dois lados e "refazer com diff" com um Ctrl+Z.
+
+**Quatro defeitos, dois consertados aqui:**
+
+| # | O que estava errado | Causa | Antes → depois |
+|---|---|---|---|
+| D7 | A promoção virava dama sem perguntar | `EditorV2.tsx` fixava `"q"` | "Escolha a peça da promoção" não existia → janela com foco na dama, Esc desiste sem gravar, cavalo gravado |
+| D8 | O lance novo criava variante sem avisar | `EditorV2.tsx`, `ADICIONAR_LANCE` sem recado | nenhum aviso → "Nasceu uma variante: 1.Re2…" |
+| D9 | **Aula acima de 1 MB não salvava** ("Não foi possível salvar"), embora o editor deixe crescer até 2 MB | `next.config.ts` não declarava `experimental.serverActions.bodySizeLimit`, e o padrão do Next 16.3 é 1 MB | teste novo reprovava → `bodySizeLimit: "4mb"`, 10/10 |
+| D10 | O quadro da introdução marcado para revisão não tinha "Já reli" na própria janela | `EditorDeIntroducao.tsx` não tratava `quadro.revisao` | o aviso não existia → aviso + "Já reli", e a conferência para de acusar sem recarregar |
+
+**Ficou sem conserto, por decisão declarada:** o lance ilegal é recusado em silêncio pelo tabuleiro
+(o chessground não avisa quando a casa não é destino legal, e explicar exige mudar o componente); e
+fechar a aba antes do "✓ salvo" perde a edição (o conserto natural — o navegador perguntar ao fechar —
+dispara também em cada recarga dos ensaios e pode travá-los; §6.3 fala em recuperação "por aba").
+
+**Um defeito a mais, achado de raspão e consertado (D11):** recarregar a página **logo depois** de
+importar deixava a aula vazia — nem no disco, nem oferecida para recuperar. A gravação espera 600 ms
+(a espera que serve para a digitação) e a cópia de recuperação vai para o banco do navegador de forma
+assíncrona; recarregar antes cancelava as duas. Agora a importação grava **sem espera**.
+
+```
+ANTES  recarregar-depois-de-importar.spec  {"recuperar":0,"capitulosNaTela":0,"noDisco":0}
+DEPOIS {"recuperar":0,"capitulosNaTela":2,"noDisco":2} — 1 passed
+```
+
+### Bloco 5 — a tela, medida contra o editor de estudos do Lichess
+
+Mesma aula (o estudo do Doug importado), mesmo método, `conferirTamanho` antes de cada medida.
+
+| medida | 1366×768 editor | Lichess | 1366×630 (janela real) editor | Lichess | 1920×1080 editor | Lichess |
+|---|---|---|---|---|---|---|
+| tabuleiro | **564 px** | 571 | **564 px** | 454 | **564 px** | 835 |
+| % da altura útil | 73,4% | 74,4% | 89,5% | 72,1% | 52,2% | 77,3% |
+| margem vazia esq/dir | 55/59 | 14/13 | 55/59 | 71/71 | **332/336** | 158/158 |
+| lances inteiros à vista | **4 de 16** | 16 de 31 | **1 de 16** | 12 de 31 | 9 de 16 | 26 de 31 |
+| rolagem horizontal | 0 | 0 | 0 | 0 | 0 | 0 |
+| tela vazia | 51,0% | 47,8% | 45,5% | 52,9% | **72,5%** | 52,4% |
+| controles visíveis | 77 | 38 | 56 | 38 | 90 | 38 |
+
+**O diagnóstico, num número:** o tabuleiro tem **564 px nas três telas**. Ele é preso pela largura
+(`minmax(20rem,38rem)` dentro de um `max-w-7xl`), e a altura da janela não entra na conta; o Lichess faz
+o contrário (454 → 571 → 835 px, sempre 72–77% da altura). A 1920 sobram 668 px de margem morta e a tela
+fica 72,5% vazia. Na janela real do Doug (630 px úteis) acontece o oposto: o tabuleiro ocupa 89,5% da
+altura, a paleta de desenho inteira (12 controles) cai para fora da tela, e a lista de lances mostra
+**1 lance**.
+
+**Acabamento, o que está limpo:** axe sem nenhuma violação (inclusive contraste); 30 de 30 elementos
+alcançados por Tab com anel de foco; 0 botões cobertos nos três tamanhos; prosa fixa de interface com
+345 caracteres — a limpeza de 14/9 pegou. O cabeçalho tem 6 controles, menos que o Lichess. Falta
+esqueleto de carregamento (hoje é tela branca por 0,6–1,3 s).
+
+**Proposta de ajuste (para o Doug decidir; nada foi implementado):** 1) tabuleiro limitado pela
+**altura** da coluna, não pela largura — a 1920 vai de 564 para ~930 px, a 768 ganha ~36 px, e a 630
+encolhe para ~480 px, devolvendo a paleta à tela; 2) soltar o `max-w-7xl` (devolve 640 px a 1920);
+3) comentário fora da linha do lance (de 4 para ~10 lances à vista a 768, de 1 para ~5 a 630);
+4) "Fala/Nota" em gaveta (mais ~200 px para a lista); 5) cortar o `•••` por lance (16 botões a menos).
+As três primeiras mexem em poucas linhas; as duas últimas mexem na arquitetura da tela.
+
+### O que a especificação pede e a tela ainda não tem
+
+Nada disto foi implementado nesta rodada; é a lista para o Doug decidir, separada pelo que bloqueia.
+
+**Não bloqueia fechar a branch (pode ir depois de 18/09):**
+- **Reordenar variantes irmãs** (§11.3): só existe "Tornar principal".
+- **Desenho e pausa por narração**: o modelo guarda o campo, a tela não o edita.
+- **Restaurar o pacote v2** (§14 promete "trazer de volta ao editor"): não há tela; e o pacote sai sem
+  as posições do acervo.
+- **Prática (§17.1)**: obrigatoriedade, limite de lances, ajuda permitida e efeito no domínio não
+  existem nem na janela nem no schema.
+- **Metadados (§19.1)**: só nível e classe são editáveis; critério de domínio, estado editorial, fonte
+  didática, justificativa de etapa ausente e catálogo de erros não têm tela. **Exceção do professor**
+  (§19.1) não tem tela nenhuma.
+- **Dica sob demanda** (§16.3): hoje a dica aparece sozinha, sem o aluno pedir.
+- **Lance ilegal sem explicação**: o tabuleiro recusa em silêncio (mexer nisso é mexer no chessground).
+- **Fechar a aba antes do "✓ salvo"** perde a edição daquele instante; o conserto natural (o navegador
+  perguntar ao fechar) dispara também em cada recarga dos ensaios.
+- **Esqueleto de carregamento**: hoje a tela fica branca por 0,6–1,3 s.
+- **Ajustes de tela** do Bloco 5 (o tabuleiro preso pela largura).
+
+### Números finais
+
+- **Portões:** 9/9 — `typecheck`, `lint` (limpo fora do script ignorado do Plichta), `npm test`
+  **1.337/1.337**, `build`, `validate:content` (19 posições, 3 aulas), `validate:mutations` **34/34**,
+  `repertorio:compilar --check`, `db:rls` **52/52**, `db:finais:v2` **18/18**.
+- **Suíte de navegador, depois dos consertos:** **57 passados, 2 falhas** em 9,0 min. As duas: a meta de
+  desempenho das interações (p95 112 ms contra 100 — o limite registrado em 14/9) e a prática contra o
+  motor da `aula-do-zero`, que **sozinha passa** ("mate em 23 meios-lances"); foi carga. Com a máquina
+  livre, abrir a árvore de 1.000 lances caiu para **1.994 ms**, dentro da meta de 2.000 pela primeira vez.
+- **Importação:** 65 de 65 NAGs da Francesa e 32 de 32 símbolos do estudo chegam ao editor, à exportação
+  **e ao aluno**; 9 de 9 capítulos no destino certo; ida e volta byte a byte.
+- **Proteção:** `.editor/v2/N1-KPK.json` com o mesmo SHA-256 `4be602ca…` do começo; `content/` com o
+  mesmo `34a42e9f…`; todas as rodadas fecharam com "987 arquivos conferidos, todos iguais".
+
+---
+
+## O modo de cada capítulo pelo nome, na importação do estudo (16/9/2026, pedido do Doug)
+
+**O pedido:** "quando eu importar um estudo direto do Lichess, quero que o editor saiba sozinho se o capítulo é
+introdução, aula, treino ou prática, e preencha — mas que eu possa mudar depois."
+
+**O que já existia (10E e 15/9):** o seletor **Vira** por capítulo já vinha com uma sugestão, e o "Mudar para…"
+já trocava o modo depois de importar. Mas a sugestão só olhava pistas técnicas (lição interativa → treino,
+adversário "Engine" → prática, sem lances → introdução) e **nunca lia o nome**, que é onde o Doug escreve o modo:
+"00 - Introdução da aula", "01 - AULA DIAGNÓSTICO", "02 - AULA EXPLICADA", "04 - TREINO GUIADO 1", "08 - PRÁTICA
+LIVRE". O 01, sem lances, chegava como **introdução**, contra o nome.
+
+**O que mudou (`lib/editor-v2/importar-estudo.ts`):**
+
+- `destinoPeloNome`: introdução/apresentação/introduction → introdução; aula/lição/explicação/lesson → capítulo;
+  treino/exercício/training/exercise → treino; prática/pratique/practice → prática. Sem acento e sem diferença de
+  maiúscula; com duas palavras no nome, **manda a primeira**. "Capítulo" não conta: é o nome genérico que qualquer
+  estudo usa.
+- **O nome vence as pistas.** Quando o nome pede o impossível (um "Treino" sem lances), a pista técnica fica, e a
+  frase diz por quê ("o nome diz «treino», mas um treino sem lances não tem o que cobrar: …"). Quando o nome
+  vence uma pista diferente, a frase mostra as duas ("o nome diz «aula»; sem o nome, seria treino (é uma lição
+  interativa no Lichess)").
+- **Capítulo de posição parada na importação:** um capítulo sem lances, com posição válida, pode virar capítulo
+  (antes só introdução, prática ou fora). O texto vai para o comentário da posição e para uma narração com
+  **pausa manual** — o aluno lê a pergunta e clica em Continuar, o mesmo arranjo do "Mudar para capítulo" num
+  quadro. A análise guarda a origem do PGN, então importar o mesmo estudo de novo continua recusado.
+- `PainelDoEstudo.tsx`: a frase do topo diz de onde vem o preenchimento e que tudo pode ser mudado.
+
+**Os ensaios que escolhiam a sugestão antiga** (`aula-do-lichess.spec`, `mudar-modo.spec`, `mudar-modo.test`)
+agora escolhem "introdução" para o 01 **explicitamente**: eles testam o aluno e a mudança de modo sobre aquele
+arranjo, não a sugestão. O arranjo novo tem teste próprio.
+
+```
+ANTES   importar-estudo.test.ts: 3 falhas — sugestões ["introducao","introducao","capitulo",…] (esperado o 01
+        como capitulo); os nomes do estudo sintético ignorados; a aula importada com 7 etapas em vez de 8
+DEPOIS  importar-estudo.test.ts 6/6 · mudar-modo.test.ts 7/7 (1 novo: o 01 parado → introdução → capítulo, sem erro)
+```
+
+**Evidência:** estudo `hf09xMzS` com **9/9** sugestões pelo nome (`introducao, capitulo×3, treino×4, pratica`);
+importado como sugerido → fluxo `introducao, capitulo×3, treino×4`, **zero problemas de severidade erro**, e a
+prévia do aluno dá ao 01 **um passo, sem lance, com pausa manual** e a pergunta. Estudo sintético de 9 capítulos
+(sem acento, em inglês, duas palavras, nome impossível, sem palavra) → 9/9. **Navegador, 1366×768:**
+`importar-estudo.spec` (seletores `introducao, capitulo, capitulo, capitulo, treino×4, pratica`; "a aula ganha 1
+quadro(s) de introdução, 3 capítulo(s), 4 treino(s) e 1 prática(s)"; Conferir: "Pode publicar. 7 avisos") e
+`mudar-modo.spec` — **2 passed**; limpeza "989 arquivos conferidos, todos iguais".
+
+**Portões:** `typecheck` ✓, `lint` nos arquivos tocados ✓, `npm test` **1.341/1.341**. **Não rodaram:** `build`,
+`validate:content`, `validate:mutations`, `repertorio:compilar --check`, a suíte de navegador inteira e o
+`aula-do-lichess.spec` (que só ganhou a escolha explícita do 01) — a máquina estava com **727 MB livres** e duas
+outras sessões abertas, abaixo do 1 GB em que o `next dev` trava. Rodar antes do commit.
+
+**Portões completos, antes do commit (16/9, casa limpa do plano do curso de abertura):** `typecheck` ✓,
+`lint` ✓ (depois de excluir `content/repertorio/rascunhos-anotados/` — rascunho `.gitignore`d que nunca foi
+lintado antes; ver `eslint.config.mjs`), `npm test` **1.341/1.341**, `build` ✓, `validate:content` ✓ (19
+posições, 3 aulas, 27 obras), `validate:mutations` ✓ (34/34 mutações plantadas ficaram vermelhas),
+`repertorio:compilar -- --check` ✓ (27 linhas em 11 arquivos, compilado bate com a fonte). Todos verdes.
+RAM livre variou entre 0,68 GB e 1,4 GB durante a rodada; nenhum portão travou.
+
+**Não cobre:** "Mudar para…" **de e para prática** continua sendo a parada 2, aberta — hoje uma prática importada
+por engano só sai excluindo e importando de novo. Teste humano do Doug com um estudo novo dele.
 
 ---
 

@@ -5,6 +5,7 @@ import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color } from "@lichess-org/chessground/types";
 import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
 import { ChessBoard } from "@/components/board/ChessBoard";
+import { NagOverlay } from "@/components/board/NagOverlay";
 import { Comentario, useComentarioPaginado } from "@/components/lesson/Comentario";
 import { LessonButton } from "@/components/lesson/LessonButton";
 import { ProfessorSeApresenta } from "@/components/lesson/ProfessorSeApresenta";
@@ -85,7 +86,16 @@ export function ObjectiveStage({
   autoria,
   relogio: relogioDoPasso,
   marcasAutomaticas = true,
+  simbolo,
+  quebrasDeLinha = false,
 }: {
+  /**
+   * **A aula v2.** O símbolo do lance do passo (`!`, `??`…), no círculo da casa de destino — o mesmo
+   * que o editor mostra. A regra dos símbolos (AGENTS.md) vale até o aluno.
+   */
+  simbolo?: (passo: number) => string | null;
+  /** **A aula v2.** O balão mostra os parágrafos do professor (ver `Comentario`). */
+  quebrasDeLinha?: boolean;
   /**
    * O corte roxo e o aro da peça atacada, deduzidos da posição (`teachingShapes`). Ligado na aula
    * antiga, que não tem desenho do professor. **Desligado em toda aula do formato novo** — decisão do
@@ -318,6 +328,10 @@ export function ObjectiveStage({
           lastMove={quadro.lastMove}
           check={quadro.check}
           shapes={shapes}
+          overlay={(() => {
+            const sinal = quadro.lastMove ? simbolo?.(passo) : null;
+            return sinal && quadro.lastMove ? <NagOverlay casa={quadro.lastMove[1]} orientation={orientation} simbolo={sinal} /> : undefined;
+          })()}
           matedKing={quadro.matedColor}
           desenhavel={marcacao}
           animacaoMs={previa?.animacaoMs}
@@ -344,7 +358,7 @@ export function ObjectiveStage({
           {edicaoDaFala ? (
             edicaoDaFala(passo, atual.fala)
           ) : (
-            <Comentario paginacao={comentario} retrato={<ProfessorSeApresenta />} />
+            <Comentario paginacao={comentario} retrato={<ProfessorSeApresenta />} quebrasDeLinha={quebrasDeLinha} />
           )}
 
           <AulaRodape>

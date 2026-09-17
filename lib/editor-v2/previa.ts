@@ -49,6 +49,8 @@ export type PassoDaPrevia = {
   fala: string;
   /** Os desenhos da posição, com a cor da autoria. */
   desenhos?: DesenhoV2;
+  /** Os símbolos do lance que levou a esta posição (`!`, `??`, `$14`…) — a regra dos símbolos vale até o aluno. */
+  nags?: number[];
   /** §15.2: a pausa que exige "Continuar" em vez de andar sozinha. */
   pausaManual: boolean;
   /** A pausa extra da narração, somada à leitura (o `espera` do roteiro v1). */
@@ -154,8 +156,10 @@ function passosDoTrecho(aula: AulaV2, capitulo: CapituloV2, de: string): PassoDa
     if (!no) continue;
     const falas = capitulo.narracoes.filter((narracao) => narracao.nodeId === nodeId);
     const lance = i > inicio ? no.uci : undefined;
+    // O símbolo é do lance, e vale em toda fala parada na posição que ele criou.
+    const nags = i > inicio && no.nags?.length ? { nags: no.nags } : {};
     if (!falas.length) {
-      passos.push({ nodeId, lance, fala: "", desenhos: no.desenhos, pausaManual: false });
+      passos.push({ nodeId, lance, fala: "", desenhos: no.desenhos, pausaManual: false, ...nags });
       continue;
     }
     falas.forEach((narracao, ordem) => {
@@ -169,6 +173,7 @@ function passosDoTrecho(aula: AulaV2, capitulo: CapituloV2, de: string): PassoDa
         desenhos: narracao.desenhos ?? no.desenhos,
         pausaManual: narracao.pausa === "manual",
         ...(narracao.esperaMs ? { esperaMs: narracao.esperaMs } : {}),
+        ...nags,
       });
     });
   }

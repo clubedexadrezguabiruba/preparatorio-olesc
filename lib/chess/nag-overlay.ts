@@ -11,3 +11,14 @@ export function posicaoDoNag(casa: Key, orientation: Color): { left: number; top
     top: (linha + 0.08) * 12.5,
   };
 }
+
+const SIMBOLO_DE_QUALIDADE: Record<number, string> = { 1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!" };
+
+/**
+ * O que vai no círculo da casa de destino: o primeiro dos seis símbolos de qualidade do lance.
+ * `$14`, `$36` e os outros NAGs não têm círculo — aparecem na lista de lances, como no Lichess.
+ */
+export function simboloDoCirculo(nags: readonly number[] | undefined): string | null {
+  const nag = nags?.find((item) => SIMBOLO_DE_QUALIDADE[item]);
+  return nag === undefined ? null : SIMBOLO_DE_QUALIDADE[nag];
+}

@@ -163,3 +163,15 @@ function arquivosJson(pasta: string): string[] {
     return entrada.isDirectory() ? arquivosJson(caminho) : caminho.endsWith(".json") ? [caminho] : [];
   });
 }
+
+test("o servidor aceita um documento do tamanho do teto do editor (§24)", () => {
+  // Achado no teste final de 15/9/2026: a aula crescia até 2 MB pela tela, e a gravação falhava com
+  // "Body exceeded 1 MB limit" — o limite padrão das ações de servidor do Next, abaixo do nosso teto.
+  // Ver node_modules/next/dist/docs/01-app/03-api-reference/05-config/01-next-config-js/serverActions.md
+  const config = readFileSync("next.config.ts", "utf8");
+  const declarado = /bodySizeLimit:\s*["']?(\d+)(mb|kb)?["']?/i.exec(config);
+  assert.ok(declarado, "next.config.ts precisa declarar experimental.serverActions.bodySizeLimit");
+  const unidade = (declarado[2] ?? "").toLowerCase();
+  const bytes = Number(declarado[1]) * (unidade === "mb" ? 1024 * 1024 : unidade === "kb" ? 1024 : 1);
+  assert.ok(bytes >= LIMITES_V2.bytes, `o limite do servidor (${bytes}) precisa caber o teto do editor (${LIMITES_V2.bytes})`);
+});

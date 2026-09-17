@@ -1,14 +1,18 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Chess } from "chess.js";
 import type { DrawShape } from "@lichess-org/chessground/draw";
+import type { Key } from "@lichess-org/chessground/types";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
-import { quadroDoNo } from "@/lib/editor-v2/arvore";
+import { legalDests, toBoardColor } from "@/lib/chess/dests";
 import {
   catalogoComErro,
+  destinoDoLanceDoTabuleiro,
   efeitoAoTrocarTipo,
   FEEDBACK_DE_RESPOSTA_NOVA,
+  lanceDoTabuleiro,
   prepararEdicaoDeTreino,
   proximoIdDeResposta,
   type CatalogoV2,
@@ -22,6 +26,7 @@ import {
   tornarDefesaFixa,
 } from "@/lib/editor-v2/defesas-do-treino";
 import { desenhoDeFormas } from "@/lib/editor-v2/desenhos";
+import { fenDaQuestaoDoTreino } from "@/lib/editor-v2/propriedade-treino";
 import { resultadoDoTreinoV2, type AulaV2, type QuestaoTreinoV2, type RespostaTreinoV2, type TreinoV2 } from "@/lib/editor-v2/modelo";
 import { MAXIMO_DE_DEFESAS } from "@/lib/editor-v2/treino-jogavel";
 import { falasDoTreinoV2 } from "@/lib/editor-v2/voz-do-treino";
@@ -51,6 +56,24 @@ function movimentos(texto: string): string[] {
   return texto.split(/[\s,;]+/).map((item) => item.trim().toLowerCase()).filter(Boolean);
 }
 
+const NOMES_DO_JULGAMENTO: Record<RespostaTreinoV2["julgamento"], string> = {
+  correta: "Correta no método",
+  alternativa: "Correta fora do método",
+  erro: "Erro conhecido",
+};
+
+/** A linha de uma resposta fechada: o lance como o aluno lê, o julgamento e o que vem depois. */
+function resumoDaResposta(fen: string, resposta: RespostaTreinoV2): string {
+  const lances = resposta.moves.map((uci) => {
+    try { return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4) || undefined }).san; }
+    catch { return uci; }
+  });
+  const depois = resposta.efeito.tipo === "avanca" ? "avança"
+    : resposta.efeito.tipo === "repete" ? "repete a pergunta"
+    : `encerra: ${NOMES_DO_FIM[resposta.efeito.condicao]}`;
+  return [lances.join(", ") || "sem lance", NOMES_DO_JULGAMENTO[resposta.julgamento], resposta.julgamento === "erro" ? null : depois].filter(Boolean).join(" · ");
+}
+
 export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar, aoFechar }: {
   aula: AulaV2;
   treinoId: string;
@@ -68,7 +91,18 @@ export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar
   const [escolhendoFuga, setEscolhendoFuga] = useState<string | null>(null);
   const questao = treino.questoes.find((item) => item.id === questaoId) ?? treino.questoes[0];
   const indiceQuestao = treino.questoes.indexOf(questao);
-  const fen = quadroDoNo(aula, questao.posicao.analiseId, questao.posicao.nodeId, positions).fen;
+  /**
+   * Uma resposta aberta por vez (16/9/2026): com todas abertas, cada resposta ocupava um
+   * palmo de janela. A primeira da pergunta abre sozinha, e a recém-criada também.
+   */
+  const [respostaAberta, setRespostaAberta] = useState<string | null>(original.questoes[0].respostas[0]?.id ?? null);
+  /** O chessground move a peça antes de avisar; subir isto devolve o tabuleiro à pergunta. */
+  const [giroDoTabuleiro, setGiroDoTabuleiro] = useState(0);
+  const listaDeRespostas = useRef<HTMLElement>(null);
+  // A mesma posição que a conferência usa: a cópia do treino personalizado, se houver.
+  const fen = fenDaQuestaoDoTreino(aula, treino, questao, positions);
+  const jogo = useMemo(() => new Chess(fen), [fen]);
+  const destinos = useMemo(() => legalDests(jogo), [jogo]);
   const resultado = useMemo(() => prepararEdicaoDeTreino(aula, { treino, catalogo }, positions), [aula, catalogo, positions, treino]);
   /** §6 e §12: o que o aluno lê passa pela régua. Avisa, não impede salvar. */
   const avisosDeVoz = useMemo(() => regua ? reprovacoes(falasDoTreinoV2(treino), regua) : [], [regua, treino]);
@@ -80,24 +114,54 @@ export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar
     atualizarQuestao((atual) => ({ ...atual, respostas: atual.respostas.map((item) => item.id === respostaId ? muda(item) : item) }));
   };
 
-  const adicionarResposta = (julgamento: RespostaTreinoV2["julgamento"]) => {
+  // A resposta que abre rola para a vista: a nova nasce no fim da lista.
+  useEffect(() => {
+    if (!respostaAberta) return;
+    listaDeRespostas.current?.querySelector(`[data-resposta="${CSS.escape(respostaAberta)}"]`)?.scrollIntoView({ block: "nearest" });
+  }, [respostaAberta]);
+
+  const escolherQuestao = (id: string) => {
+    setQuestaoId(id);
+    setRespostaAberta(treino.questoes.find((item) => item.id === id)?.respostas[0]?.id ?? null);
+  };
+
+  /** Sem lance, a resposta nova espera o tabuleiro (ou o campo); a conferência pede o lance. */
+  const adicionarResposta = (julgamento: RespostaTreinoV2["julgamento"], moves: string[] = []) => {
     const id = proximoIdDeResposta(aula, treino, questao.id);
+    setRespostaAberta(id);
     if (julgamento === "erro") {
       const numero = (catalogo?.erros.length ?? aula.catalogo?.erros.length ?? 0) + 1;
       const novo = catalogoComErro(aula, catalogo, `Erro conhecido ${numero}`, "Explique por que este lance não serve.");
       setCatalogo(novo.catalogo);
       atualizarQuestao((atual) => ({ ...atual, respostas: [...atual.respostas, {
-        id, moves: ["a1a2"], julgamento: "erro", erroId: novo.erroId,
+        id, moves, julgamento: "erro", erroId: novo.erroId,
         feedback: FEEDBACK_DE_RESPOSTA_NOVA.erro, efeito: { tipo: "repete" },
       }] }));
       return;
     }
     atualizarQuestao((atual) => ({ ...atual, respostas: [...atual.respostas, {
-      id, moves: ["a1a2"], julgamento,
+      id, moves, julgamento,
       feedback: FEEDBACK_DE_RESPOSTA_NOVA[julgamento],
       efeito: efeitoModelo(atual),
     }] }));
   };
+
+  const jogarNoTabuleiro = (orig: Key, dest: Key) => {
+    setGiroDoTabuleiro((atual) => atual + 1);
+    const lance = lanceDoTabuleiro(fen, orig, dest);
+    if (!lance) return;
+    const destino = destinoDoLanceDoTabuleiro(questao, respostaAberta, lance);
+    if (destino.tipo === "nova") { adicionarResposta("correta", [lance]); return; }
+    if (destino.tipo === "preencher") atualizarResposta(destino.respostaId, (atual) => ({ ...atual, moves: [lance] }));
+    setRespostaAberta(destino.respostaId);
+  };
+
+  const removerResposta = (respostaId: string) => {
+    atualizarQuestao((atual) => ({ ...atual, respostas: atual.respostas.filter((item) => item.id !== respostaId) }));
+    if (respostaAberta === respostaId) setRespostaAberta(null);
+  };
+
+  const lanceAberto = questao.respostas.find((item) => item.id === respostaAberta)?.moves[0];
 
   const mudarJulgamento = (resposta: RespostaTreinoV2, julgamento: RespostaTreinoV2["julgamento"]) => {
     if (julgamento === "erro" && !resposta.erroId) {
@@ -117,6 +181,7 @@ export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar
       titulo={`Editar treino — ${original.titulo}`}
       descricao="As respostas que o aluno pode jogar, o que ele lê em cada uma, e como o adversário responde."
       largura="max-w-6xl"
+      contida
       aoFechar={aoFechar}
       rodape={(
         <>
@@ -129,8 +194,10 @@ export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar
         </>
       )}
     >
-      <div className="grid gap-4 lg:grid-cols-[16rem_minmax(0,1fr)]">
-        <aside className="flex flex-col gap-3">
+      {/* 16/9/2026: três colunas presas à altura da tela — o treino, a pergunta com o tabuleiro,
+          e as respostas. Cada uma rola sozinha; o tabuleiro não sai de vista ao descer a lista. */}
+      <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[15rem_18rem_minmax(0,1fr)] lg:grid-rows-[minmax(0,1fr)]">
+        <aside className="flex flex-col gap-3 lg:min-h-0 lg:overflow-y-auto lg:pr-1">
           <label className="flex flex-col gap-1 text-sm text-tinta">Título
             <input value={treino.titulo} onChange={(e) => setTreino({ ...treino, titulo: e.currentTarget.value })} className="foco rounded-md border border-borda bg-papel px-2 py-2" />
           </label>
@@ -181,7 +248,7 @@ export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar
             ) : null}
           </fieldset>
           <nav aria-label="Perguntas do treino" className="flex flex-col gap-1">
-            {treino.questoes.map((item, indice) => <button key={item.id} type="button" onClick={() => setQuestaoId(item.id)} className={`foco rounded-md border px-2 py-2 text-left text-sm ${item.id === questao.id ? "border-foco bg-metodo-superficie/25 text-metodo-tinta-alta" : "border-borda text-tinta"}`}>Pergunta {indice + 1} · {item.respostas.length} resposta{item.respostas.length === 1 ? "" : "s"}</button>)}
+            {treino.questoes.map((item, indice) => <button key={item.id} type="button" onClick={() => escolherQuestao(item.id)} className={`foco rounded-md border px-2 py-2 text-left text-sm ${item.id === questao.id ? "border-foco bg-metodo-superficie/25 text-metodo-tinta-alta" : "border-borda text-tinta"}`}>Pergunta {indice + 1} · {item.respostas.length} resposta{item.respostas.length === 1 ? "" : "s"}</button>)}
           </nav>
           {avisosDeVoz.length ? (
             <section aria-label="Régua de voz" className="rounded-md border border-borda p-2">
@@ -198,29 +265,32 @@ export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar
           ) : null}
         </aside>
 
-        <section className="flex min-w-0 flex-col gap-3">
-          {/* Um tabuleiro só (revisão de experiência, 14/9/2026): havia a pergunta e a dica em dois tabuleiros
-              iguais, o de baixo passava do rodapé, e o código da posição aparecia solto. */}
-          <div className="grid gap-3 md:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
-            <div className="flex flex-col gap-2">
-              <h3 className="text-sm font-semibold text-tinta">Pergunta {indiceQuestao + 1}</h3>
-              <ChessBoard
-                key={`dica-${questao.id}`}
-                fen={fen}
-                orientation={treino.ladoAluno}
-                desenhavel={{ shapes: desenhoDaAutoriaV2(questao.desenhos), onChange: (formas: DrawShape[]) => atualizarQuestao((atual) => ({ ...atual, desenhos: desenhoDeFormas(formas) })) }}
-                espessuraDeDesenhoUniforme
-              />
-              <p className="text-xs text-tinta-fraca">Botão direito no tabuleiro desenha a dica.</p>
-              <button type="button" onClick={() => atualizarQuestao((atual) => ({ ...atual, desenhos: undefined }))} className="foco w-fit rounded-md border border-borda px-2 py-1 text-xs text-tinta">Apagar desenho da dica</button>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="flex flex-col gap-1 text-sm text-tinta">Dica sob demanda
-                <textarea value={questao.dica ?? ""} onChange={(e) => { const valor = e.currentTarget.value; atualizarQuestao((atual) => ({ ...atual, dica: valor || undefined })); }} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2" />
-              </label>
-            </div>
+        {/* Um tabuleiro só (revisão de experiência, 14/9/2026): havia a pergunta e a dica em dois tabuleiros
+            iguais, o de baixo passava do rodapé, e o código da posição aparecia solto. */}
+        <section aria-label={`Pergunta ${indiceQuestao + 1}`} className="flex min-w-0 flex-col gap-2 lg:min-h-0 lg:overflow-y-auto">
+          <h3 className="text-sm font-semibold text-tinta">Pergunta {indiceQuestao + 1}</h3>
+          <div className="w-full max-w-80">
+            <ChessBoard
+              key={`dica-${questao.id}`}
+              fen={fen}
+              orientation={treino.ladoAluno}
+              turnColor={toBoardColor(jogo.turn())}
+              dests={destinos}
+              lastMove={lanceAberto ? [lanceAberto.slice(0, 2) as Key, lanceAberto.slice(2, 4) as Key] : null}
+              onMove={jogarNoTabuleiro}
+              revision={giroDoTabuleiro}
+              desenhavel={{ shapes: desenhoDaAutoriaV2(questao.desenhos), onChange: (formas: DrawShape[]) => atualizarQuestao((atual) => ({ ...atual, desenhos: desenhoDeFormas(formas) })) }}
+              espessuraDeDesenhoUniforme
+            />
           </div>
+          <p className="text-xs text-tinta-fraca">Jogue o lance no tabuleiro: ele entra na resposta aberta, ou vira uma resposta correta nova. Botão direito desenha a dica.</p>
+          <button type="button" onClick={() => atualizarQuestao((atual) => ({ ...atual, desenhos: undefined }))} className="foco w-fit rounded-md border border-borda px-2 py-1 text-xs text-tinta">Apagar desenho da dica</button>
+          <label className="flex flex-col gap-1 text-sm text-tinta">Dica sob demanda
+            <textarea value={questao.dica ?? ""} onChange={(e) => { const valor = e.currentTarget.value; atualizarQuestao((atual) => ({ ...atual, dica: valor || undefined })); }} rows={3} className="foco resize-y rounded-md border border-borda bg-papel p-2" />
+          </label>
+        </section>
 
+        <section ref={listaDeRespostas} aria-label="Respostas da pergunta" className="flex min-w-0 flex-col gap-3 lg:min-h-0 lg:overflow-y-auto lg:pr-1">
           <div className="flex flex-wrap gap-2">
             <button type="button" onClick={() => adicionarResposta("correta")} className="foco rounded-md border border-borda px-2 py-1 text-xs text-tinta">+ Resposta correta</button>
             <button type="button" onClick={() => adicionarResposta("alternativa")} className="foco rounded-md border border-borda px-2 py-1 text-xs text-tinta">+ Correta fora do método</button>
@@ -229,11 +299,22 @@ export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar
 
           {questao.respostas.map((resposta, indice) => {
             const erro = resposta.erroId ? catalogo?.erros.find((item) => item.id === resposta.erroId) : undefined;
-            return <article key={resposta.id} className="rounded-md border border-borda p-3">
-              <div className="flex items-center justify-between gap-2"><h4 className="text-sm font-semibold text-tinta">Resposta {indice + 1}</h4><button type="button" onClick={() => atualizarQuestao((atual) => ({ ...atual, respostas: atual.respostas.filter((item) => item.id !== resposta.id) }))} className="foco rounded-md border border-borda px-2 py-1 text-xs text-tinta">Remover</button></div>
+            const aberta = resposta.id === respostaAberta;
+            return <article key={resposta.id} data-resposta={resposta.id} className={`rounded-md border p-3 ${aberta ? "border-foco" : "border-borda"}`}>
+              <div className="flex items-center justify-between gap-2">
+                <h4 className="min-w-0 flex-1 text-sm font-semibold text-tinta">
+                  <button type="button" aria-expanded={aberta} onClick={() => setRespostaAberta(aberta ? null : resposta.id)} className="foco flex w-full min-w-0 items-baseline gap-2 rounded-md text-left">
+                    <span aria-hidden className="text-xs text-tinta-fraca">{aberta ? "▾" : "▸"}</span>
+                    <span className="shrink-0">Resposta {indice + 1}</span>
+                    <span className="truncate text-xs font-normal text-tinta-media">{resumoDaResposta(fen, resposta)}</span>
+                  </button>
+                </h4>
+                <button type="button" onClick={() => removerResposta(resposta.id)} className="foco rounded-md border border-borda px-2 py-1 text-xs text-tinta">Remover</button>
+              </div>
+              {aberta ? <>
               <div className="mt-2 grid gap-2 md:grid-cols-2">
                 <label className="flex flex-col gap-1 text-xs text-tinta">Lance(s) no formato de casas, como e2e4, separados por vírgula
-                  <input value={resposta.moves.join(", ")} onChange={(e) => { const valor = e.currentTarget.value; atualizarResposta(resposta.id, (atual) => ({ ...atual, moves: movimentos(valor) })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm" />
+                  <input value={resposta.moves.join(", ")} placeholder="Jogue no tabuleiro ou digite" onChange={(e) => { const valor = e.currentTarget.value; atualizarResposta(resposta.id, (atual) => ({ ...atual, moves: movimentos(valor) })); }} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm" />
                 </label>
                 <label className="flex flex-col gap-1 text-xs text-tinta">Julgamento
                   <select value={resposta.julgamento} onChange={(e) => mudarJulgamento(resposta, e.currentTarget.value as RespostaTreinoV2["julgamento"])} className="foco rounded-md border border-borda bg-papel px-2 py-2 text-sm"><option value="correta">Correta no método</option><option value="alternativa">Correta fora do método</option><option value="erro">Erro conhecido</option></select>
@@ -331,6 +412,7 @@ export function DialogoEditarTreino({ aula, treinoId, positions, regua, aoSalvar
                   </div> : null}
                 </div>
               )}
+              </> : null}
             </article>;
           })}
         </section>

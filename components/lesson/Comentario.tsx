@@ -376,9 +376,17 @@ export function Comentario({
   paginacao,
   retrato,
   compacto = false,
+  quebrasDeLinha = false,
 }: {
   paginacao: Paginacao;
   retrato?: ReactNode;
+  /**
+   * Mostra as quebras de linha do texto, como a sonda da paginação já mede.
+   *
+   * Ligado só na aula v2, cujo texto guarda os parágrafos do professor. **Desligado no
+   * repertório**, que vem de PGN quebrado a 80 colunas: lá a quebra cai no meio da frase.
+   */
+  quebrasDeLinha?: boolean;
   /**
    * O teto da linha cai de 22rem para 14rem.
    *
@@ -473,7 +481,7 @@ export function Comentario({
           ) : null}
           <div
             ref={caixaRef}
-            className="relative max-h-full overflow-hidden rounded-lg border border-borda-fraca bg-carta-alta px-4 py-3.5 text-sm leading-relaxed text-tinta-media empty:hidden"
+            className={`relative max-h-full overflow-hidden rounded-lg border border-borda-fraca bg-carta-alta px-4 py-3.5 text-sm leading-relaxed text-tinta-media empty:hidden${quebrasDeLinha ? " whitespace-pre-wrap" : ""}`}
           >
             {pagina ? (
               /*

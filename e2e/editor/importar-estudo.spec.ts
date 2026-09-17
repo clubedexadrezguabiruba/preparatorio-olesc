@@ -1,7 +1,8 @@
 /**
  * Importar o estudo do Doug, "Mate de Dama e Rei", com os modos — fatia 10, parada 10E (§13).
  *
- * Número da parada: 9/9 capítulos no destino certo (2 quadros, 2 capítulos, 4 treinos, 1 prática),
+ * Número da parada: 9/9 capítulos no destino certo pelo nome (1 quadro, 3 capítulos — o 01 parado —, 4 treinos,
+ * 1 prática; até 16/9/2026 o 01 entrava como quadro),
  * as variantes `Qg6??`, os 3 mates do treino 07, as perdas listadas — e o Conferir sem erro.
  * A passada `@rede` cola o link real e confere que chega o mesmo estudo.
  */
@@ -15,7 +16,7 @@ export const AULA_LICHESS = "EX-E2E-LICHESS";
 const FIXTURE = path.join(RAIZ, "e2e/fixtures/lichess-mate-dama-hf09xMzS.pgn");
 const arquivo = () => JSON.parse(readFileSync(path.join(RAIZ, ".editor/v2", `${AULA_LICHESS}.json`), "utf8")) as {
   introducoes: Array<{ quadros: Array<{ texto: string }> }>;
-  capitulos: Array<{ titulo: string }>;
+  capitulos: Array<{ titulo: string; caminho: string[] }>;
   treinos: Array<{ titulo: string; questoes: Array<{ respostas: Array<{ moves: string[]; julgamento: string }> }> }>;
   praticas: Array<{ positionId: string; objetivo: string }>;
   fluxo: Array<{ tipo: string }>;
@@ -40,9 +41,9 @@ test("o arquivo do estudo: seletor com as pistas, importar, e Conferir sem erro"
   const lista = janela.getByRole("list", { name: "Capítulos do estudo" });
   await expect(lista.getByRole("listitem")).toHaveCount(9);
   const destinos = await lista.getByRole("combobox", { name: /^O que «.*» vira$/ }).evaluateAll((selects) => selects.map((s) => (s as HTMLSelectElement).value));
-  expect(destinos).toEqual(["introducao", "introducao", "capitulo", "capitulo", "treino", "treino", "treino", "treino", "pratica"]);
+  expect(destinos).toEqual(["introducao", "capitulo", "capitulo", "capitulo", "treino", "treino", "treino", "treino", "pratica"]);
   await expect(janela.getByText(/dicas e os textos de desvio da lição interativa/).first()).toBeVisible();
-  await expect(janela.getByRole("status").filter({ hasText: "A aula ganha" })).toHaveText(/2 quadro\(s\) de introdução, 2 capítulo\(s\), 4 treino\(s\) e 1 prática\(s\)/);
+  await expect(janela.getByRole("status").filter({ hasText: "A aula ganha" })).toHaveText(/1 quadro\(s\) de introdução, 3 capítulo\(s\), 4 treino\(s\) e 1 prática\(s\)/);
   await expect(janela.getByText(/Qg7\+ não tem símbolo/)).toBeVisible();
 
   await janela.getByRole("checkbox", { name: /são meus, ou tenho direito/ }).check();
@@ -51,10 +52,11 @@ test("o arquivo do estudo: seletor com as pistas, importar, e Conferir sem erro"
 
   await expect.poll(() => arquivo().treinos.length).toBe(4);
   const aula = arquivo();
-  expect(aula.introducoes[0].quadros).toHaveLength(2);
+  expect(aula.introducoes[0].quadros).toHaveLength(1);
   expect(aula.introducoes[0].quadros[0].texto).toContain("\n");
-  expect(aula.capitulos.map((c) => c.titulo)).toEqual(["AULA EXPLICADA - O L e a caixa", "AULA EXPLICADA - O método completo"]);
-  expect(aula.fluxo.map((e) => e.tipo)).toEqual(["introducao", "capitulo", "capitulo", "treino", "treino", "treino", "treino", "pratica"]);
+  expect(aula.capitulos.map((c) => c.titulo)).toEqual(["AULA DIAGNÓSTICO - Como você começaria?", "AULA EXPLICADA - O L e a caixa", "AULA EXPLICADA - O método completo"]);
+  expect(aula.capitulos[0].caminho).toEqual([]);
+  expect(aula.fluxo.map((e) => e.tipo)).toEqual(["introducao", "capitulo", "capitulo", "capitulo", "treino", "treino", "treino", "treino", "pratica"]);
   const mates = aula.treinos[3].questoes.at(-1)!.respostas.filter((r) => r.julgamento === "correta").map((r) => r.moves[0]).sort();
   expect(mates).toEqual(["g4g6", "g4h3", "g4h4"]);
   // A posição nova da prática, ou — se o acervo já tem a mesma FEN, como depois que o Doug importou o
@@ -87,7 +89,7 @@ test("@rede o link real chega ao mesmo estudo", async ({ page }) => {
   const lista = janela.getByRole("list", { name: "Capítulos do estudo" });
   await expect(lista.getByRole("listitem")).toHaveCount(9, { timeout: 30_000 });
   const destinos = await lista.getByRole("combobox", { name: /^O que «.*» vira$/ }).evaluateAll((selects) => selects.map((s) => (s as HTMLSelectElement).value));
-  expect(destinos).toEqual(["introducao", "introducao", "capitulo", "capitulo", "treino", "treino", "treino", "treino", "pratica"]);
+  expect(destinos).toEqual(["introducao", "capitulo", "capitulo", "capitulo", "treino", "treino", "treino", "treino", "pratica"]);
 
   // Endereço de fora é recusado sem busca.
   await janela.getByLabel(/Endereço do Lichess/).fill("https://evil.example/study/hf09xMzS");

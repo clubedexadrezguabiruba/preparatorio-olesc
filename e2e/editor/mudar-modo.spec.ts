@@ -34,6 +34,8 @@ test("capítulo ↔ treino e quadro → capítulo pelo «Mudar para…», com o 
   const importar = page.getByRole("dialog", { name: "Importar do Lichess ou PGN" });
   await importar.locator('input[type="file"]').setInputFiles(FIXTURE);
   await importar.getByRole("combobox", { name: /O que «PRÁTICA LIVRE/ }).selectOption("fora");
+  // O 01 ("AULA DIAGNÓSTICO", sem lances) como quadro: é o quadro sem lances do passo 3; pelo nome, viria capítulo parado.
+  await importar.getByRole("combobox", { name: /O que «AULA DIAGNÓSTICO/ }).selectOption("introducao");
   await importar.getByRole("checkbox", { name: /são meus, ou tenho direito/ }).check();
   await importar.getByRole("button", { name: "Importar o estudo" }).click();
   await expect(importar).toBeHidden({ timeout: 30_000 });

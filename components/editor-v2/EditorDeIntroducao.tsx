@@ -30,7 +30,7 @@ const novoId = (prefixo: string) => `${prefixo}-${Date.now().toString(36)}-${Mat
  *
  * Cada gesto é um comando do editor, com Desfazer; a tela não guarda cópia do documento.
  */
-export function EditorDeIntroducao({ aula, introducaoId, quadroInicial, positions, aoComando, aoPrever, aoMudarModo, aoFechar }: {
+export function EditorDeIntroducao({ aula, introducaoId, quadroInicial, positions, aoComando, aoPrever, aoMudarModo, aoResolverRevisao, aoFechar }: {
   aula: AulaV2;
   introducaoId: string | null;
   quadroInicial?: string;
@@ -40,6 +40,12 @@ export function EditorDeIntroducao({ aula, introducaoId, quadroInicial, position
   aoPrever: (introducaoId: string) => void;
   /** "Mudar para…" capítulo ou treino, para o quadro aberto (pedido do Doug, 15/9/2026). */
   aoMudarModo?: (quadroId: string) => void;
+  /**
+   * §19.2: "Já reli" do quadro marcado, no mesmo lugar em que o texto se edita — como o comentário e
+   * a narração já têm. Sem isto, quem chegava pelo "Resolver" da conferência reescrevia o texto e a
+   * marca continuava (15/9/2026).
+   */
+  aoResolverRevisao?: (quadroId: string) => void;
   aoFechar: () => void;
 }) {
   const camada = useRef<HTMLDivElement>(null);
@@ -190,6 +196,14 @@ export function EditorDeIntroducao({ aula, introducaoId, quadroInicial, position
         {quadro ? (
           <section aria-label="Texto e posição do quadro" className="flex min-h-0 flex-col gap-3 lg:overflow-y-auto">
             <p className="text-sm font-semibold text-tinta">Quadro {indice + 1} de {introducao.quadros.length}</p>
+            {quadro.revisao && aoResolverRevisao ? (
+              <p className="flex flex-wrap items-center gap-2 rounded-md border border-aviso-superficie bg-aviso-superficie/10 p-2 text-xs text-aviso-tinta">
+                A posição inicial do capítulo mudou depois que este quadro foi escrito.
+                <button type="button" onClick={() => aoResolverRevisao(quadro.id)} className="foco rounded border border-aviso-superficie px-2 py-1">
+                  Já reli
+                </button>
+              </p>
+            ) : null}
             <label className="flex flex-col gap-1 text-xs text-tinta-fraca">
               Título do quadro (opcional)
               <input key={`${quadro.id}:${quadro.titulo ?? ""}`} defaultValue={quadro.titulo ?? ""} onBlur={(e) => executar({ tipo: "EDITAR_QUADRO", introducaoId: introducao.id, quadroId: quadro.id, titulo: e.currentTarget.value })} className={campo} />

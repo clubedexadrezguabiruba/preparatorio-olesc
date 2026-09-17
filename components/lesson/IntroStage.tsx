@@ -58,7 +58,10 @@ export function IntroStage({
   edicaoDaFala,
   aoAndar,
   marcacao,
+  quebrasDeLinha = false,
 }: {
+  /** **A aula v2.** O balão mostra os parágrafos do quadro (ver `Comentario`). */
+  quebrasDeLinha?: boolean;
   stage: IntroStageData;
   /** A posição da aula — o diagrama do passo que não declara FEN própria. */
   position: Position;
@@ -163,7 +166,7 @@ export function IntroStage({
           {edicaoDaFala ? (
             edicaoDaFala(passo, atual.fala)
           ) : (
-            <Comentario paginacao={comentario} retrato={<ProfessorSeApresenta />} />
+            <Comentario paginacao={comentario} retrato={<ProfessorSeApresenta />} quebrasDeLinha={quebrasDeLinha} />
           )}
 
           <AulaRodape>

@@ -5,6 +5,7 @@ import { usePrisaoDeFoco } from "@/components/editor-v2/foco";
 import { buscarPgnDoLichessAcao } from "@/app/editor/v2/acoes";
 import { PainelDoEstudo, type PedidoDeImportacaoDeEstudo } from "@/components/editor-v2/PainelDoEstudo";
 import type { ObraDoRegistro } from "@/lib/editor-v2/acervo-em-disco";
+import { idsDaAulaV2 } from "@/lib/editor-v2/ids";
 import { lerEstudo } from "@/lib/editor-v2/importar-estudo";
 import { lerImportacaoPgn, medirImportacao, type RelatorioImportacao } from "@/lib/editor-v2/importar-pgn";
 import type { Position } from "@/lib/lesson/schema";
@@ -56,7 +57,8 @@ export function PainelDeImportacao({
   nomeInicial = null,
 }: {
   aula: AulaV2;
-  aoAplicar: (relatorio: RelatorioImportacao, escolhidos: number[]) => void;
+  /** Devolve `null` quando entrou, ou a recusa — e então a janela fica aberta com o que o professor trouxe (§8.3). */
+  aoAplicar: (relatorio: RelatorioImportacao, escolhidos: number[]) => string | null;
   aoFechar: () => void;
   /** Fatia 10: aplica um estudo do Lichess com os modos. Devolve a recusa, ou `null`. */
   aoImportarEstudo?: (pedido: PedidoDeImportacaoDeEstudo) => Promise<string | null>;
@@ -75,11 +77,18 @@ export function PainelDeImportacao({
   const buscaAtual = useRef(0);
   const [aplicandoEstudo, setAplicandoEstudo] = useState(false);
   const [recusaDoEstudo, setRecusaDoEstudo] = useState<string | null>(null);
+  const [recusaDoLote, setRecusaDoLote] = useState<string | null>(null);
   const [texto, setTexto] = useState(textoInicial);
   const [nomeDoArquivo, setNomeDoArquivo] = useState<string | null>(nomeInicial);
   const [relatorio, setRelatorio] = useState<RelatorioImportacao | null>(null);
   const [escolhidos, setEscolhidos] = useState<number[]>([]);
   const [lendo, setLendo] = useState(textoInicial !== "");
+  /**
+   * Conta as leituras pedidas. Buscar o mesmo endereço (ou subir o mesmo arquivo) de novo põe o mesmo
+   * texto, que sozinho não dispara a leitura — e a janela ficava em "lendo o arquivo…" (15/9/2026).
+   */
+  const [leitura, setLeitura] = useState(0);
+  const idsDaAula = useMemo(() => idsDaAulaV2(aula), [aula]);
   const caixa = useRef<HTMLTextAreaElement>(null);
   const janela = useRef<HTMLElement>(null);
   const tituloId = useId();
@@ -114,20 +123,21 @@ export function PainelDeImportacao({
         setEscolhidos([]);
         return;
       }
-      const lido = lerImportacaoPgn(texto);
+      const lido = lerImportacaoPgn(texto, idsDaAula);
       setRelatorio(lido);
       // Tudo o que pode entrar já vem marcado: importar o arquivo inteiro é o que o
       // professor quer quase sempre, e desmarcar dois é menos trabalho que marcar dez.
       setEscolhidos(lido.jogos.filter((jogo) => jogo.recusa === null).map((jogo) => jogo.numero));
     }, 300);
     return () => clearTimeout(relogio);
-  }, [texto]);
+  }, [texto, leitura, idsDaAula]);
 
   const receberArquivo = useCallback(async (arquivo: File | null | undefined) => {
     if (!arquivo) return;
     setLendo(true);
     setNomeDoArquivo(arquivo.name);
     setTexto(await arquivo.text());
+    setLeitura((n) => n + 1);
   }, []);
 
   /*
@@ -146,11 +156,12 @@ export function PainelDeImportacao({
     setNomeDoArquivo(`${resposta.descricao} · ${Math.ceil(resposta.bytes / 1024)} KB`);
     setLendo(true);
     setTexto(resposta.pgn);
+    setLeitura((n) => n + 1);
   };
   const cancelarBusca = () => { buscaAtual.current += 1; setBuscando(false); setRecadoDaBusca("busca cancelada — nada foi importado"); };
 
   /** Um estudo do Lichess (tem capítulos): a leitura com os modos, em vez da lista de jogos. */
-  const estudo = useMemo(() => (!lendo && aoImportarEstudo && /\[(ChapterName|StudyName|ChapterMode) "/.test(texto) ? lerEstudo(texto) : null), [aoImportarEstudo, lendo, texto]);
+  const estudo = useMemo(() => (!lendo && aoImportarEstudo && /\[(ChapterName|StudyName|ChapterMode) "/.test(texto) ? lerEstudo(texto, idsDaAula) : null), [aoImportarEstudo, idsDaAula, lendo, texto]);
 
   const medida = relatorio ? medirImportacao(aula, relatorio, escolhidos) : null;
   const podeAplicar = relatorio !== null && escolhidos.length > 0 && medida !== null && medida.cabe;
@@ -301,13 +312,15 @@ export function PainelDeImportacao({
           </p>
         ) : null}
 
+        {recusaDoLote && !estudo ? <p role="alert" className="rounded-md border border-erro bg-erro-superficie/10 p-2 text-sm text-erro-texto">{recusaDoLote}</p> : null}
+
         <footer className="flex flex-wrap items-center justify-end gap-3 border-t border-borda-fraca pt-3">
           <button type="button" onClick={aoFechar} className="foco rounded-md border border-borda px-3 py-2 text-sm text-tinta hover:bg-carta-toque">Cancelar</button>
           <button
             type="button"
             hidden={Boolean(estudo)}
             disabled={!podeAplicar}
-            onClick={() => { if (relatorio) aoAplicar(relatorio, escolhidos); }}
+            onClick={() => { if (relatorio) setRecusaDoLote(aoAplicar(relatorio, escolhidos)); }}
             className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta disabled:opacity-40"
           >
             {escolhidos.length === 0 ? "Escolha um capítulo" : `Importar ${escolhidos.length} capítulo(s)`}

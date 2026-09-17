@@ -16,6 +16,7 @@ import { lessonSchema, positionSchema, type Position } from "../lesson/schema.ts
 import { adaptarLessonV1 } from "./adaptar-v1.ts";
 import { mapaDaAnalise } from "./arvore.ts";
 import { aplicarNoHistorico, desfazer, executarComando, iniciarHistorico } from "./comandos.ts";
+import { idsDaAulaV2 } from "./ids.ts";
 import { aplicarImportacaoPgn, lerImportacaoPgn, medirImportacao } from "./importar-pgn.ts";
 import { LIMITES_V2 } from "./limites.ts";
 import { problemasDaAulaV2, validarAulaV2, type AnaliseV2, type AulaV2 } from "./modelo.ts";
@@ -191,7 +192,8 @@ test("variante que não é xadrez padrão é recusada na porta, com o nome dela"
 });
 
 test("jogo sem lance e FEN impossível são recusados, cada um com o seu motivo", () => {
-  assert.equal(lerImportacaoPgn('[Event "vazio"]\n\n*').jogos.length, 0, "sem lance nenhum o leitor não devolve jogo");
+  // Até 15/9/2026 este jogo sumia do relatório em silêncio; agora aparece, recusado com o motivo.
+  assert.equal(lerImportacaoPgn('[Event "vazio"]\n\n*').jogos[0].recusa?.codigo, "JOGO_SEM_LANCES");
   const fenTorta = lerImportacaoPgn('[FEN "isto não é uma FEN"]\n[SetUp "1"]\n\n1. e4 *').jogos[0];
   assert.equal(fenTorta.recusa?.codigo, "POSICAO_INICIAL_INVALIDA");
 });
@@ -288,4 +290,53 @@ test("o comando estoura com a frase do importador, não com uma genérica", () =
     () => executarComando(aulaVazia(), { tipo: "IMPORTAR_JOGOS", relatorio, escolhidos: [1, 2] }, {}),
     /Nada foi aplicado/,
   );
+});
+
+test("o parágrafo do comentário atravessa inteiro até o comentário e a narração", () => {
+  // Achado no teste final de 15/9/2026: o capítulo 02 do estudo hf09xMzS tem dois parágrafos no
+  // comentário de abertura, e o editor os mostrava colados numa linha só.
+  const jogo = lerImportacaoPgn("1. e4 {Primeiro parágrafo,\ncontinua na linha de baixo.\n\n\n  Segundo   parágrafo. [%csl Ge4]} *").jogos[0];
+  const capitulo = jogo.capitulo!;
+  const esperado = "Primeiro parágrafo,\ncontinua na linha de baixo.\n\nSegundo parágrafo.";
+  assert.equal(jogo.analise!.nos[capitulo.caminho[0]].comentario, esperado);
+  assert.equal(capitulo.narracoes[0].texto, esperado);
+});
+
+test("dois PGNs importados um depois do outro, com título que começa por número, entram os dois", () => {
+  // Achado no teste final de 15/9/2026: "2017 Torneio A" e "2018 Torneio B" viravam `jogo-1` nas duas
+  // importações, e a segunda era recusada com "renomeie antes de importar".
+  let aula = aulaVazia();
+  for (const pgn of ['[Event "2017 Torneio A"]\n\n1. e4 e5 *\n', '[Event "2018 Torneio B"]\n\n1. d4 d5 *\n']) {
+    const relatorio = lerImportacaoPgn(pgn, idsDaAulaV2(aula));
+    const resultado = aplicarImportacaoPgn(aula, relatorio, [1]);
+    assert.ok(resultado.ok, resultado.ok ? "" : resultado.mensagem);
+    aula = resultado.aula;
+  }
+  assert.equal(aula.capitulos.length, 2);
+  assert.deepEqual(problemasDaAulaV2(aula).filter((p) => p.codigo === "ID_DUPLICADO"), []);
+});
+
+test("a mesma partida do Lichess importada de novo é recusada pelo endereço, e não duplica", () => {
+  const pgn = '[Event "Partida"]\n[Site "https://lichess.org/q7ZvsdUF"]\n\n1. e4 e5 *\n';
+  const primeira = aplicarImportacaoPgn(aulaVazia(), lerImportacaoPgn(pgn), [1]);
+  assert.ok(primeira.ok);
+  const segunda = aplicarImportacaoPgn(primeira.aula, lerImportacaoPgn(pgn, idsDaAulaV2(primeira.aula)), [1]);
+  assert.equal(segunda.ok, false);
+  assert.match(!segunda.ok ? segunda.mensagem : "", /já ter sido importad/);
+});
+
+test("jogo sem lances no meio do arquivo é recusado à vista, e não empresta FEN nem comentário ao seguinte", () => {
+  // Achado no teste final de 15/9/2026: o leitor só fechava um jogo depois de ver lance, e o jogo C
+  // herdava a FEN e o comentário do jogo vazio B; no fim do arquivo, o jogo vazio sumia.
+  const pgn = [
+    '[Event "A"]\n\n1. e4 e5 *',
+    '[Event "B"]\n[FEN "8/8/8/8/8/5k2/8/5K2 w - - 0 1"]\n[SetUp "1"]\n\n{ só um comentário } *',
+    '[Event "C"]\n\n{ o C começa do início } 1. d4 d5 *',
+    '[Event "D"]\n\n*',
+  ].join("\n\n");
+  const relatorio = lerImportacaoPgn(pgn);
+  assert.deepEqual(relatorio.jogos.map((jogo) => [jogo.titulo, jogo.recusa?.codigo ?? null]), [["A", null], ["B", "JOGO_SEM_LANCES"], ["C", null], ["D", "JOGO_SEM_LANCES"]]);
+  const c = relatorio.jogos[2].analise!;
+  assert.equal(c.inicio.tipo === "fen" ? c.inicio.fen.split(" ")[0] : "", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+  assert.equal(c.nos[c.raizId].comentario, "o C começa do início");
 });

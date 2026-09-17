@@ -39,7 +39,7 @@
  */
 import { indiceAntesDaPratica } from "./fluxo.ts";
 import { Chess } from "chess.js";
-import { lerPgns, type LancePgn, type PartidaPgn } from "../repertorio/pgn.ts";
+import { lerPgnsDoEstudo, type LancePgn, type PartidaPgn } from "../repertorio/pgn.ts";
 import { comoId } from "./ids.ts";
 import { LIMITES_V2, medidasDaAulaV2, problemasDeLimiteV2 } from "./limites.ts";
 import type { AnaliseV2, AulaV2, CapituloV2, CorDesenhoV2, CasaAcesaV2, NoV2, SetaV2 } from "./modelo.ts";
@@ -122,7 +122,8 @@ const COR_POR_LETRA: Record<string, CorDesenhoV2> = { G: "verde", R: "vermelho",
  */
 function separarComentario(bruto: string): { prosa: string; desenhos: Desenhos | undefined; diretivas: string[]; cores: string[] } {
   const diretivas = bruto.match(DIRETIVA) ?? [];
-  const prosa = bruto.replace(DIRETIVA, " ").replace(/\s+/g, " ").trim();
+  // O parágrafo é do professor: junta os espaços dentro da linha e guarda as quebras.
+  const prosa = bruto.replace(DIRETIVA, " ").split(/\r?\n/).map((linha) => linha.replace(/[ \t]+/g, " ").trim()).join("\n").replace(/\n{3,}/g, "\n\n").trim();
   const arrows: SetaV2[] = [];
   const highlights: CasaAcesaV2[] = [];
   /** As letras de cor que este importador **não** conhece — viram perda anunciada. */
@@ -278,8 +279,11 @@ export function importarJogo(partida: PartidaPgn, numero: number, idsUsados: Set
   // análise: importar 12 capítulos numerados `no-1`, `no-2`… produziu 153 colisões no
   // primeiro ensaio com o estudo real do Doug, e nenhuma delas era visível lendo o
   // código de um capítulo só.
+  // `idsUsados` traz também os ids da aula (15/9/2026): "02 - …" e "2017 …" viram `jogo-N` pela ordem
+  // no arquivo, e o capítulo de outra importação com o mesmo número colidia.
+  const ocupado = (candidato: string) => [candidato, `analise-${candidato}`, `capitulo-${candidato}`, `no-${candidato}-0`].some((id) => idsUsados.has(id));
   let sufixo = comoId(titulo, `jogo-${numero}`);
-  while (idsUsados.has(sufixo)) sufixo = `${sufixo}-${numero}`;
+  while (ocupado(sufixo)) sufixo = `${sufixo}-${numero}`;
   idsUsados.add(sufixo);
   const raizId = `no-${sufixo}-0`;
 
@@ -343,9 +347,11 @@ export function importarJogo(partida: PartidaPgn, numero: number, idsUsados: Set
  *
  * Não muda nada. É a metade "mostre antes" do plano (§11).
  */
-export function lerImportacaoPgn(texto: string): RelatorioImportacao {
-  const idsUsados = new Set<string>();
-  const jogos = lerPgns(texto).map((partida, indice) => importarJogo(partida, indice + 1, idsUsados));
+export function lerImportacaoPgn(texto: string, idsDaAula: ReadonlySet<string> = new Set()): RelatorioImportacao {
+  const idsUsados = new Set(idsDaAula);
+  // `lerPgnsDoEstudo`, e não `lerPgns`: esta fecha o jogo em qualquer corpo, e o jogo sem lance aparece
+  // recusado em vez de sumir ou emprestar a FEN e o comentário ao seguinte (15/9/2026).
+  const jogos = lerPgnsDoEstudo(texto).map((partida, indice) => importarJogo(partida, indice + 1, idsUsados));
   return { jogos, aproveitaveis: jogos.filter((jogo) => jogo.recusa === null).length };
 }
 
@@ -355,7 +361,23 @@ export function lerImportacaoPgn(texto: string): RelatorioImportacao {
 
 export type ResultadoAplicacao =
   | { ok: true; aula: AulaV2 }
-  | { ok: false; codigo: "NADA_SELECIONADO" | "JOGO_RECUSADO" | "GRANDE_DEMAIS" | "ID_EM_USO"; mensagem: string };
+  | { ok: false; codigo: "NADA_SELECIONADO" | "JOGO_RECUSADO" | "GRANDE_DEMAIS" | "ID_EM_USO" | "JA_IMPORTADO"; mensagem: string };
+
+/**
+ * O endereço do Lichess de onde o capítulo veio: `ChapterURL` do estudo, ou o `Site` da partida.
+ *
+ * É ele, e não o id, que diz "isto já está na aula": o id sai do título e da ordem no arquivo, e dois
+ * estudos diferentes produzem o mesmo.
+ */
+export function enderecoDaOrigem(tags: Record<string, string> | undefined): string | null {
+  const endereco = tags?.ChapterURL ?? tags?.GameURL ?? tags?.Site;
+  return endereco && /^https:\/\/lichess\.org\//.test(endereco) ? endereco.replace(/[?#].*$/, "") : null;
+}
+
+/** Os endereços de origem que a aula já tem. */
+export function enderecosDaAula(aula: AulaV2): Set<string> {
+  return new Set(aula.analises.map((analise) => enderecoDaOrigem(analise.origemPgn?.tags)).filter((endereco): endereco is string => endereco !== null));
+}
 
 /**
  * Junta os jogos escolhidos à aula — tudo, ou nada.
@@ -374,6 +396,10 @@ export function aplicarImportacaoPgn(aula: AulaV2, relatorio: RelatorioImportaca
 
   const recusado = jogos.find((jogo) => jogo.recusa !== null);
   if (recusado) return { ok: false, codigo: "JOGO_RECUSADO", mensagem: `o jogo ${recusado.numero} («${recusado.titulo}») não pode ser importado: ${recusado.recusa!.mensagem}. Nada foi aplicado.` };
+
+  const jaNaAula = enderecosDaAula(aula);
+  const repetido = jogos.find((jogo) => jaNaAula.has(enderecoDaOrigem(jogo.analise!.origemPgn?.tags) ?? ""));
+  if (repetido) return { ok: false, codigo: "JA_IMPORTADO", mensagem: `«${repetido.titulo}» (${enderecoDaOrigem(repetido.analise!.origemPgn?.tags)}) já está nesta aula — parece já ter sido importado. Nada foi aplicado.` };
 
   const idsDaAula = new Set([...aula.analises.map((a) => a.id), ...aula.capitulos.map((c) => c.id), ...aula.fluxo.map((e) => e.id)]);
   for (const jogo of jogos) {

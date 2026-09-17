@@ -93,6 +93,18 @@ const nextConfig: NextConfig = {
    * Isto é otimização, não requisito: se a hospedagem não honrar o cabeçalho
    * sobre `public/`, o padrão ainda devolve 304 com os bytes já em disco.
    */
+  /**
+   * O documento da aula viaja inteiro numa ação de servidor a cada salvamento.
+   *
+   * O padrão do Next é 1 MB (`serverActions.bodySizeLimit`), e o teto do editor é 2 MB
+   * (`LIMITES_V2.bytes`): entre os dois havia uma faixa em que a tela deixava editar e o
+   * servidor devolvia 500 "Body exceeded 1 MB limit" — §24 promete o contrário, rascunho
+   * salvo e publicação bloqueada. 4 MB dá folga para o JSON e o envelope da ação.
+   */
+  experimental: {
+    serverActions: { bodySizeLimit: "4mb" },
+  },
+
   async headers() {
     return [
       {

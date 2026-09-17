@@ -52,6 +52,8 @@ export type PassoDoCapituloDoAlunoV2 = {
   lance?: string;
   espera?: number;
   desenhos?: DesenhoV2;
+  /** Os símbolos do lance que levou a esta posição. */
+  nags?: number[];
   pausaManual: boolean;
 };
 
@@ -152,6 +154,7 @@ export function etapasDoAlunoV2(aula: AulaV2, positions: Record<string, Position
           ...(passo.lance ? { lance: passo.lance } : {}),
           ...(passo.esperaMs ? { espera: passo.esperaMs } : {}),
           ...(passo.desenhos ? { desenhos: passo.desenhos } : {}),
+          ...(passo.nags ? { nags: passo.nags } : {}),
           pausaManual: passo.pausaManual,
         })),
       });
