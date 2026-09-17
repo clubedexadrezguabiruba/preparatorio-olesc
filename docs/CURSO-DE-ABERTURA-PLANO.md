@@ -229,11 +229,11 @@ o diário `docs/MODO-EDITOR-ONDE-PARAMOS.md`.
 | P0 | Casa limpa (seção acima) + Piloto 0 na tela (sem código) | Doug vê a v1.5 em `/editor/v2/assistir`; nº de capítulos importados anotado |
 | F0 | Spec §13.3 "Curso de abertura" com as regras globais 15–18; §18 (etapa `treinador`, parada em 3 etapas, progressão por vez); emenda §21 e plano §15; `docs/REPERTORIO.md`; fixtures v1.5 (export Lichess + PGN local); cópia deste plano em `docs/` | Doug lê a §13.3 |
 | F1 | Schema: `AB-`, `metadados.abertura`, `treinadores`/`treinador`, `dominioDaAulaV2` | mutação por regra; `/finais/AB-…` = 404 |
-| F2 | Leitor puro | nas 2 fixtures: 38 capítulos → 5 aulas; 27 paradas; 16 capítulos treinador → 19 caminhos distintos, 12 completos; ramos B08 4, B09 1, C12 2, C13 2, E20 8; D18/D19 avisadas; B09/C12 perdidos só no Lichess; 3 perguntas no lance nosso; 4 lances mudos; NAGs preservados |
+| F2 | Leitor puro | nas 2 fixtures: 38 capítulos → 5 aulas; 27 paradas; 16 capítulos treinador → 19 caminhos distintos, 12 completos; ramos B08 4, B09 1, C12 2, C13 2, E20 7 (era 8; recontado); D18/D19 avisadas; B09/C12 perdidos só no Lichess; 3 perguntas no lance nosso; 4 lances mudos; NAGs preservados |
 | F2b | Régua sem tamanho; `categoria`/`ordem`; `proximaLinha` por ordem; gerador do PGN; rascunho aposentado | 11 repertórios compilam; linha nova servida E22A→P; `marcas-das-fontes`: 0 faltando; só os 4 mudos reprovam |
 | F3 | Planejador → 5 `AulaV2` | `problemasDaAulaV2` e limites vazios; planejar 2× = idêntico; B09 5.dxc5 = alternativa; D sem treino |
 | F4 | Aluno: rota, `voltar`, paradas, etapa `treinador` (feito = cada linha uma vez), sem confete na parada | e2e B05A: erro → dica; Be4 → continua; treinador grava em `repertorio_progresso`; e2e `/aberturas` verde antes e depois |
-| F5 | Progressão por vez: `aula_concluida`, travas das abas, Pular, tela da 3ª vez, retomar | e2e com `alunoteste`: 1ª vez sem Pular e sem avançar aba; 2ª com Pular só na explicação; 3ª abre direto no treinador; D pula livre na 2ª |
+| F5 | Progressão por vez: `aula_rodada` (era `aula_concluida` no plano), travas das abas, Pular, tela da 3ª vez, retomar | e2e com `alunoteste`: 1ª vez sem Pular e sem avançar aba; 2ª com Pular só na explicação; 3ª abre direto no treinador; D pula livre na 2ª |
 | F6 | Importar pela tela (link e PGN), painel por código, reimportar com snapshot + diff, PGN gerado + Aplicar | e2e `importar-curso`; `--check` verde; impacto exibido |
 | F7 | Rotas `/aberturas/.../aulas/[bloco]`, faixa do curso, publicação; **piloto final na tela** | e2e 1366 + `aluno-375` (`@layout`); Doug faz a aula B 3 vezes localmente; `/revisar-aula` na voz |
 

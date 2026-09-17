@@ -21,6 +21,10 @@
 
   "excluir": [
     {
+      "alvo": "French with Bd3.pgn",
+      "porque": "Aposentado em 16/9/2026 (decisão 11 do Doug, curso de abertura): a Francesa passa a vir do estudo do Lichess qq2xorDl (v1.5). O export cru do estudo é o rascunho (content/repertorio/rascunhos/estudo-brancas-francesa.pgn) e o brancas-francesa.pgn é gerado dele por lib/repertorio/gerar-do-estudo.ts."
+    },
+    {
       "alvo": "fora-do-repertorio",
       "porque": "Os 5 'Anti-Sicilian with Nc3' (5 partes de ataque de GM — o critério é 'poucas ideias, linhas curtas', e a Alapin é uma ideia só) e o 'Engine's match, French Be7.pgn', que é base de 72 partidas de motor, não repertório."
     },
@@ -69,15 +73,6 @@
       "nivel": "base",
       "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'Caro Kann'",
       "nota": "Só 4…Nc6. Falta 4…Nf6, que é 31% depois de 4.Bd3."
-    },
-    {
-      "arquivo": "French with Bd3.pgn",
-      "abertura": "francesa",
-      "nome": "Francesa 3.Bd3",
-      "cor": "brancas",
-      "nivel": "base",
-      "fonte": "GM Avetik Grigoryan (ChessMood) — draft 'French with 3.Bd3'",
-      "nota": "O tronco é 3…dxe4 (22%). A resposta mais comum, 3…c5 (38%), tem três lances nossos marcados !? e só um com continuação; 3…Nc6 (14%) não existe."
     },
     {
       "arquivo": "Scandinavian Defense.pgn",

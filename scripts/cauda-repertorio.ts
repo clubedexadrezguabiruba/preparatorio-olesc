@@ -69,10 +69,8 @@ import {
 import {
   estadoDe,
   fechamentoDe,
-  meiosLances,
   ORIGENS,
   pendenciasDe,
-  PROFUNDIDADE_MINIMA,
   CORES,
   NIVEIS,
   type Cor,
@@ -94,6 +92,14 @@ const numero = (bandeira: string, padrao: number): number => {
 };
 
 /** Fundo o bastante para separar candidatos, raso o bastante para 160 buscas. */
+/**
+ * A régua de tamanho de 8/9/2026 (piso de 12 lances nossos, teto de 14), que esta ferramenta foi
+ * escrita para cumprir. Ela saiu do repertório em 16/9/2026 (decisão do Doug, curso de abertura):
+ * mora só aqui, onde ainda é o critério da pesquisa de caudas.
+ */
+const PROFUNDIDADE_MINIMA = 12;
+const meiosLances = (_nivel: Nivel, cor: Cor): number => (cor === "brancas" ? 27 : 28);
+
 const PROFUNDIDADE_DO_MOTOR = numero("--profundidade", 16);
 
 const RECORTE = "lichess-1000-1999" as const;

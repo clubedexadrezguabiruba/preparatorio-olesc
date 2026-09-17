@@ -50,7 +50,7 @@ export type SituacaoDaEtapa = "concluida" | "nao-concluida" | "vista" | "nao-vis
 export type LinhaDoResumo = {
   etapaId: string;
   rotulo: string;
-  tipo: "introducao" | "capitulo" | "treino" | "pratica";
+  tipo: "introducao" | "capitulo" | "treino" | "pratica" | "treinador";
   ms: number;
   /** Só em treino e prática: a tentativa em que o professor estava (1 = de primeira). */
   tentativas?: number;
@@ -71,7 +71,8 @@ export function resumoDaAulaComoAluno(
 ): ResumoDaAulaComoAluno {
   const linhas = etapas.map((etapa): LinhaDoResumo => {
     const ms = gasto[etapa.id] ?? 0;
-    if (etapa.tipo === "introducao" || etapa.tipo === "capitulo") {
+    // O move trainer da aula de abertura (§18.1) não é jogado na prévia do professor: conta como visto.
+    if (etapa.tipo === "introducao" || etapa.tipo === "capitulo" || etapa.tipo === "treinador") {
       return { etapaId: etapa.id, rotulo: etapa.rotulo, tipo: etapa.tipo, ms, situacao: ms > 0 ? "vista" : "nao-visitada" };
     }
     const jogada = jogadas[etapa.id];

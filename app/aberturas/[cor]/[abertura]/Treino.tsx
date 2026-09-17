@@ -21,8 +21,8 @@ import {
 import { BotaoPrincipal, BotaoSecundario } from "@/components/lesson/BotoesDaAula";
 import { Bolinhas } from "@/components/Bolinhas";
 import { registrarTreino } from "../../acoes";
-import { Passada } from "./Passada";
-import { OQueAindaFalta } from "./OQueFalta";
+import { Passada } from "@/components/repertorio/Passada";
+import { OQueAindaFalta } from "@/components/repertorio/OQueFalta";
 import { SeletorDeLinha, type LinhaDoMenu } from "./SeletorDeLinha";
 
 /**

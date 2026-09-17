@@ -47,6 +47,7 @@ import type { RevisoesDaAulaV2 } from "./avaliacao.ts";
 import { hashDaPosicao } from "./hash.ts";
 import { problemasDaAulaV2, resultadoDoTreinoV2, type AulaV2, type LocalizacaoProblemaV2, type ProblemaV2, type TreinoV2 } from "./modelo.ts";
 import { fenInicialDoTreino } from "./propriedade-treino.ts";
+import { aberturaDoId, dominioDaAulaV2 } from "./dominio.ts";
 import { analiseTemTexto, origemDeTerceiro } from "./proveniencia.ts";
 import { temEvidenciaCongelada } from "./treino-jogavel.ts";
 import { falasDoTreinoV2 } from "./voz-do-treino.ts";
@@ -57,6 +58,12 @@ export type ContextoDePublicacaoV2 = {
   regua?: Regua;
   /** As revisões gravadas num pacote, para comparar com as recalculadas. */
   revisoes?: { gravadas: RevisoesDaAulaV2; recalculadas: RevisoesDaAulaV2 };
+  /**
+   * Os ids das linhas do repertório compilado (`public/repertorio/`), para o move trainer da aula
+   * de abertura (§18.1). Ausente numa aula que tem move trainer: a conferência não tem como dizer
+   * que as linhas existem, e isso impede publicar.
+   */
+  linhasDoRepertorio?: ReadonlySet<string>;
 };
 
 type RegraDePublicacaoV2 = {
@@ -75,7 +82,8 @@ const erro = (aula: AulaV2, codigo: string, mensagem: string, localizacao: Omit<
   localizacao: { aulaId: aula.id, ...localizacao },
 });
 
-const ehExtra = (aula: AulaV2) => aula.id.startsWith("EX-");
+const ehExtra = (aula: AulaV2) => dominioDaAulaV2(aula.id) === "extra";
+const ehAbertura = (aula: AulaV2) => dominioDaAulaV2(aula.id) === "abertura";
 
 const semContadores = (fen: string) => fen.trim().split(/\s+/).slice(0, 4).join(" ");
 const COBRA = { win: "vencer", draw: "segurar o empate" } as const;
@@ -149,9 +157,54 @@ export const REGRAS_PUBLICACAO_V2: RegraDePublicacaoV2[] = [
   {
     codigo: "AULA_FORA_DA_TRILHA",
     impede: "aviso: aula do curso que não está na trilha — publica, mas não conta para nível nenhum",
-    julgar: (aula) => !ehExtra(aula) && !aulaDaTrilha(aula.id)
+    julgar: (aula) => !ehExtra(aula) && !ehAbertura(aula) && !aulaDaTrilha(aula.id)
       ? [{ codigo: "AULA_FORA_DA_TRILHA", severidade: "aviso" as const, mensagem: "esta aula não está na trilha do curso: publicada, ela abre pelo endereço, mas não aparece em /finais nem conta para o fechamento de nível nenhum", localizacao: { aulaId: aula.id } }]
       : [],
+  },
+  /*
+   * §13.3.3 (16/9/2026): a aula de abertura diz de que curso é pelo id **e** pelos metadados, e os
+   * dois têm de contar a mesma história — é pelos metadados que a trilha do curso a acha, e é pelo
+   * id que o aluno a abre. O move trainer tem de ser da mesma abertura.
+   */
+  {
+    codigo: "ABERTURA_DIVERGE",
+    impede: "aula de abertura cujo id, metadados e move trainer não apontam para o mesmo curso",
+    julgar: (aula) => {
+      const doId = aberturaDoId(aula.id);
+      const declarada = aula.metadados?.abertura;
+      if (!doId) {
+        return declarada
+          ? [erro(aula, "ABERTURA_DIVERGE", "esta aula declara um curso de abertura, mas o id não é de aula de abertura (AB-<COR>-<ABERTURA>-<BLOCO>)", { campo: "metadados.abertura" })]
+          : [];
+      }
+      if (!declarada) return [erro(aula, "ABERTURA_DIVERGE", `o id diz ${doId.cor}/${doId.abertura}, bloco ${doId.bloco}, e a aula não declara o curso de abertura nos metadados`, { campo: "metadados.abertura" })];
+      const problemas: ProblemaV2[] = [];
+      if (declarada.cor !== doId.cor || declarada.abertura !== doId.abertura || declarada.bloco !== doId.bloco) {
+        problemas.push(erro(aula, "ABERTURA_DIVERGE", `o id diz ${doId.cor}/${doId.abertura}, bloco ${doId.bloco}, e os metadados dizem ${declarada.cor}/${declarada.abertura}, bloco ${declarada.bloco}`, { campo: "metadados.abertura" }));
+      }
+      for (const treinador of aula.treinadores ?? []) {
+        if (treinador.cor !== doId.cor || treinador.abertura !== doId.abertura) {
+          problemas.push(erro(aula, "ABERTURA_DIVERGE", `o move trainer «${treinador.titulo}» é de ${treinador.cor}/${treinador.abertura}, e a aula é de ${doId.cor}/${doId.abertura}`, { treinadorId: treinador.id, campo: "abertura" }));
+        }
+      }
+      return problemas;
+    },
+  },
+  /*
+   * §18.1: o move trainer grava pelo juiz de `/aberturas`, que só aceita linha do repertório
+   * compilado. Uma linha que não está lá deixaria o aluno preso numa etapa que nunca fecha.
+   */
+  {
+    codigo: "TREINADOR_LINHA_AUSENTE",
+    impede: "move trainer com linha que não existe no repertório compilado",
+    julgar: (aula, contexto) => (aula.treinadores ?? []).flatMap((treinador) => {
+      if (!contexto.linhasDoRepertorio) {
+        return [erro(aula, "TREINADOR_LINHA_AUSENTE", `o repertório compilado não foi lido, e sem ele não há como saber se as linhas do move trainer «${treinador.titulo}» existem`, { treinadorId: treinador.id, campo: "linhaIds" })];
+      }
+      return treinador.linhaIds
+        .filter((id) => !contexto.linhasDoRepertorio!.has(id))
+        .map((id) => erro(aula, "TREINADOR_LINHA_AUSENTE", `o move trainer «${treinador.titulo}» usa a linha ${id}, que não está no repertório compilado — gere e aplique o PGN do repertório antes de publicar`, { treinadorId: treinador.id, campo: "linhaIds" }));
+    }),
   },
   { codigo: "REVISAO_PENDENTE", impede: "texto marcado para revisão depois de trocar a posição", promove: true },
   /*

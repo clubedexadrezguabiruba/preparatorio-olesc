@@ -45,6 +45,7 @@ import { revisoesDaAulaV2, type RevisoesDaAulaV2 } from "../lib/editor-v2/avalia
 import { problemasParaPublicarV2 } from "../lib/editor-v2/conferencia.ts";
 import { posicoesDoPacoteV2, problemasDoPacoteV2, type PacoteV2 } from "../lib/editor-v2/pacote.ts";
 import { idsDeAulasV2, idsDePublicacoesV2, lerPonteiroV2, lerPublicacaoCruaV2 } from "../lib/editor-v2/publicacoes.ts";
+import { idsDoRepertorioCompilado } from "../lib/repertorio/ids-compilados.ts";
 
 /**
  * O gate de conteúdo (plano da F1, §3.4).
@@ -279,6 +280,11 @@ for (let i = 0; i < argv.length; i += 1) {
 }
 
 const contentDir = path.resolve(option("content", "content"));
+/**
+ * Onde está `public/repertorio/`: a raiz do repositório, mesmo quando `--content` aponta para a
+ * cópia temporária da checagem de mutações — o repertório compilado não é copiado para lá.
+ */
+const raizDoRepertorio = process.cwd();
 const writeBack = flag("write");
 /** Modo autor (B8): o que houver em `content/rascunhos/` sobrepõe por id. */
 const useRascunhos = flag("rascunhos");
@@ -1330,6 +1336,8 @@ function checkAulasV2() {
     const julgados = problemasParaPublicarV2(pacote.aula, {
       positions: posicoes,
       revisoes: { gravadas: pacote.revisoes, recalculadas },
+      // §18.1: o move trainer da aula de abertura só aponta para linha do repertório compilado.
+      ...(pacote.aula.treinadores?.length ? { linhasDoRepertorio: idsDoRepertorioCompilado(raizDoRepertorio) } : {}),
     });
     for (const problema of julgados) {
       if (problema.severidade !== "erro") continue;

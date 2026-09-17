@@ -1,5 +1,6 @@
 "use server";
 
+import { comLinhasDosTreinadores } from "@/lib/aberturas/linhas-da-aula";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { contarSoAlunos, contasDasLinhas } from "@/lib/curso/so-alunos";
@@ -34,7 +35,8 @@ export async function aulaComoAlunoV2Acao(aula: string, texto: string): Promise<
   if (!lida.success || lida.data.id !== aula) return { ok: false, motivo: "a aula enviada não tem a forma do editor — recarregue a página" };
   try {
     const pacote = montarPacoteV2(lida.data, lerPosicoesDoConteudoV2());
-    const doAluno = aulaDoAlunoV2(pacote);
+    // O move trainer da aula de abertura (§18.1) vem com as linhas do repertório compilado.
+    const doAluno = await comLinhasDosTreinadores(aulaDoAlunoV2(pacote));
     if (doAluno.etapas.length === 0) return { ok: false, motivo: "a aula ainda não tem nenhuma etapa que o aluno veja — crie um capítulo, um treino ou uma introdução" };
     return { ok: true, aula: doAluno };
   } catch (erro) {

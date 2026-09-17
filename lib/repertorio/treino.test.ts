@@ -716,3 +716,15 @@ test("o SAN vira português, e o bispo é o que não muda", () => {
   // A casa `b`, minúscula, não é o bispo: a troca é só na primeira letra.
   assert.equal(sanEmPortugues("nb4"), "nb4");
 });
+
+/*
+ * Regra 15 do curso de abertura (16/9/2026): as linhas novas chegam na ordem dos capítulos
+ * "Move Trainer" do estudo — e a revisão vencida continua podendo entrar no meio.
+ */
+test("regra 15: a linha nunca vista sai pela menor ordem do estudo, não pela ordem do arquivo", () => {
+  const [a, b, c] = tres();
+  const embaralhadas = [{ ...c, ordem: 3 }, { ...a, ordem: 1 }, { ...b, ordem: 2 }];
+  assert.equal(proximaLinha(embaralhadas, new Map())?.id, a.id);
+  // Sem ordem, vale a ordem do arquivo, como sempre.
+  assert.equal(proximaLinha([c, a, b], new Map())?.id, c.id);
+});

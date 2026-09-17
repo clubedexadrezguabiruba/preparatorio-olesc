@@ -2,7 +2,7 @@ import { Chess } from "chess.js";
 import type { AnaliseV2, AulaV2 } from "../../editor-v2/modelo.ts";
 import { expandir, type Aviso } from "../arvore.ts";
 import { separarPlano, type Plano } from "../esquema.ts";
-import { CORES, conferirRegras, fechamentosAbertos, NIVEIS, type Cor, type Linha, type Nivel } from "../linhas.ts";
+import { CORES, conferirRegras, NIVEIS, type Cor, type Linha, type Nivel } from "../linhas.ts";
 import { partidaDaAnalise, type FormasDosNags } from "./adaptar.ts";
 
 /**
@@ -207,9 +207,6 @@ function conferirAnaliseSemCache(analise: AnaliseV2, formas?: FormasDosNags): Co
           analiseId: analise.id,
           nodeId: mudo !== undefined ? noDaLinha(analise, linha.lances, mudo) : doFim,
         });
-      }
-      for (const aberta of fechamentosAbertos([linha])) {
-        itens.push({ severidade: "erro", mensagem: aberta.replace(`${linha.id} (`, "(").replace(/^\(([^)]*)\)/, "$1"), analiseId: analise.id, nodeId: doFim });
       }
     }
   }

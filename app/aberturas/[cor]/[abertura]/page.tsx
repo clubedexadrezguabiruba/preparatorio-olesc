@@ -18,6 +18,7 @@ import {
   type ProgressoDaLinha,
 } from "@/lib/repertorio/treino";
 import { Bolinhas } from "@/components/Bolinhas";
+import { aulasDoCurso, type AulaDoCurso } from "@/lib/aberturas/curso";
 import { Treino } from "./Treino";
 
 /** A cor veio da URL: ou é uma das duas, ou a rota não existe. */
@@ -109,7 +110,10 @@ export default async function Abertura({
    * para o menu desenhar onze nomes. Três campos por linha é o que o
    * `SeletorDeLinha` lê, e é o que sobe.
    */
-  const catalogo = linhas.map((l) => ({ id: l.id, nome: l.nome, progresso: de(l.id) }));
+  const catalogo = [...linhas]
+    // Com categoria (a abertura que vem do estudo), a lista segue a ordem do estudo, agrupada.
+    .sort((a, b) => (a.ordem ?? Number.MAX_SAFE_INTEGER) - (b.ordem ?? Number.MAX_SAFE_INTEGER))
+    .map((l) => ({ id: l.id, nome: l.nome, progresso: de(l.id), ...(l.categoria ? { categoria: l.categoria } : {}) }));
 
   // A linha pedida na URL só vale se ela existir **nesta** abertura — senão o
   // aluno cairia numa tela sem tabuleiro por causa de um link velho.
@@ -159,7 +163,7 @@ export default async function Abertura({
   // condição é o que impede este cartão de esconder o trabalho do dia.
   if (!escolhida && todasAprendidas(linhas, progresso, agora)) {
     return (
-      <Moldura nome={entrada.nome} cor={cor}>
+      <Moldura nome={entrada.nome} cor={cor} aulas={aulasDoCurso(cor, abertura)}>
         <div className="flex flex-col gap-3 cartao px-4 py-6 text-center">
           <p className="titulo text-tinta">Abertura em dia</p>
           <p className="text-sm text-tinta-media tabular-nums">
@@ -189,7 +193,7 @@ export default async function Abertura({
     // — apareceria como "não tem linhas publicadas", que soa a defeito do site.
     const trancada = todasAsLinhas.length > 0 && !avancadoLiberado;
     return (
-      <Moldura nome={entrada.nome} cor={cor}>
+      <Moldura nome={entrada.nome} cor={cor} aulas={aulasDoCurso(cor, abertura)}>
         <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
           {trancada
             ? "Esta abertura é do Avançado. Ela abre quando você tiver aprendido todas as linhas do Base."
@@ -203,7 +207,7 @@ export default async function Abertura({
   const indice = linhas.findIndex((l) => l.id === linha.id);
 
   return (
-    <Moldura nome={entrada.nome} cor={cor}>
+    <Moldura nome={entrada.nome} cor={cor} aulas={aulasDoCurso(cor, abertura)}>
       <Treino
         key={`${linha.id}:${p.tentativas}`}
         cor={cor}
@@ -336,10 +340,13 @@ function Podadas({ notas }: { notas: readonly Nota[] }) {
 function Moldura({
   nome,
   cor,
+  aulas = [],
   children,
 }: {
   nome: string;
   cor: Cor;
+  /** As aulas do curso desta abertura (§13.3), quando há. Ficam na mesma linha do cabeçalho. */
+  aulas?: readonly AulaDoCurso[];
   children: React.ReactNode;
 }) {
   return (
@@ -386,6 +393,20 @@ function Moldura({
         </Link>
         <h1 className="titulo text-tinta">{nome}</h1>
         <p className="text-xs text-tinta-fraca">Você joga de {cor}.</p>
+        {/*
+         * As aulas do curso (§13.3, 16/9/2026) na MESMA linha do cabeçalho, e não numa faixa
+         * própria: cada linha a mais aqui é altura que sai do tabuleiro (ver o comentário acima).
+         */}
+        {aulas.length > 0 ? (
+          <nav aria-label="Aulas do curso" className="flex flex-wrap items-baseline gap-1.5 sm:ml-auto">
+            <span className="rotulo text-tinta-fraca">Aulas</span>
+            {aulas.map((aula) => (
+              <Link key={aula.id} href={aula.href} title={aula.titulo} className="foco rounded-md px-2 py-1 text-xs font-medium text-metodo-tinta ring-1 ring-borda hover:bg-carta-toque">
+                {aula.rotulo}
+              </Link>
+            ))}
+          </nav>
+        ) : null}
       </header>
       {children}
     </main>

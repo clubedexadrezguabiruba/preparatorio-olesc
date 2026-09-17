@@ -2,6 +2,7 @@ import { z } from "zod";
 import { Chess } from "chess.js";
 import { problemasDeLimiteV2 } from "./limites.ts";
 import { fenSchema, generatedTemplatesSchema, lessonClassSchema, lessonIdSchema, uciSchema, type Position } from "../lesson/schema.ts";
+import { dominioDaAulaV2, ID_DE_ABERTURA } from "./dominio.ts";
 
 /** A posição inicial do xadrez padrão, como a `chess.js` a escreve. */
 export const FEN_INICIAL_PADRAO = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -10,6 +11,8 @@ export const idV2Schema = z.string().regex(/^[a-z][a-z0-9-]*$/, "id interno inv�
 export const aulaIdV2Schema = z.union([
   lessonIdSchema,
   z.string().regex(/^EX-[A-Z0-9-]+$/, "id de aula extra fora do padrão (ex.: EX-OPOSICAO)"),
+  // Curso de abertura, §13.3.3: uma aula por bloco do estudo.
+  z.string().regex(ID_DE_ABERTURA, "id de aula de abertura fora do padrão (ex.: AB-BRANCAS-FRANCESA-B)"),
 ]);
 export const referenciaNoSchema = z.strictObject({
   analiseId: idV2Schema,
@@ -88,6 +91,15 @@ export const metadadosAulaV2Schema = z.strictObject({
     praticas: z.string().min(1).optional(),
   }).optional(),
   professor: z.strictObject({ adaptouEm: z.string().min(1), nota: z.string().min(1).optional() }).optional(),
+  /**
+   * De que curso de abertura a aula é (§13.3.3, 16/9/2026). Só nas aulas `AB-`, e tem de bater
+   * com o id (`ABERTURA_DIVERGE`). Aula de abertura não tem classe nem nível de finais.
+   */
+  abertura: z.strictObject({
+    cor: z.enum(["brancas", "pretas"]),
+    abertura: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "slug da abertura inválido (ex.: francesa, caro-kann)"),
+    bloco: z.string().regex(/^[A-Z0-9]{1,3}$/, "bloco inválido (ex.: A, B, EF)"),
+  }).optional(),
 });
 
 export const referenciaProvenienciaV2Schema = z.strictObject({
@@ -301,6 +313,11 @@ export const narracaoV2Schema = z.strictObject({
    * porque é tempo de leitura (§15.2).
    */
   esperaMs: z.number().int().min(0).max(4000).optional(),
+  /**
+   * O rótulo da fala, quando o texto veio marcado no estudo — `[ARMADILHA]`, `[PLANO]`… (§13.3.5,
+   * 16/9/2026). O aluno o lê acima da fala; o marcador cru nunca aparece.
+   */
+  rotulo: z.string().min(1).max(40).optional(),
   revisao: revisaoPendenteV2Schema.optional(),
 });
 
@@ -454,6 +471,11 @@ export const treinoV2Schema = z.strictObject({
     })).optional(),
   }).optional(),
   explicacaoConclusao: z.string().min(1).optional(),
+  /**
+   * `parada`: o treino de uma questão que uma `[PERGUNTA]` do estudo produz no curso de abertura
+   * (§13.3.4, §18.1). O aluno joga o lance e a aula continua da resposta — sem confete.
+   */
+  papel: z.enum(["parada"]).optional(),
 }).superRefine((treino, ctx) => {
   if (treino.propriedade === "derivado" && !treino.origem) ctx.addIssue({ code: "custom", path: ["origem"], message: "treino derivado precisa declarar sua receita de origem" });
   if (treino.propriedade === "derivado" && treino.copia) ctx.addIssue({ code: "custom", path: ["copia"], message: "treino derivado usa a aula diretamente e não guarda cópia operacional" });
@@ -469,9 +491,27 @@ export const praticaV2Schema = z.strictObject({
   engine: z.strictObject({ skill: z.number().int().min(0).max(20), moveTimeMs: z.number().int().min(50).max(5000) }),
 });
 
+/** O id de uma linha do repertório compilado (`idDaLinha` em `lib/repertorio/linhas.ts`). */
+export const ID_DE_LINHA_DO_REPERTORIO = /^(brancas|pretas)-[a-z0-9-]+-[0-9a-f]{8}$/;
+
+/**
+ * O move trainer dentro da aula de abertura — §18.1 (decisões do Doug, 16/9/2026).
+ *
+ * Não guarda lance nenhum: aponta para as linhas do repertório compilado, na ordem em que o aluno
+ * as recebe. O juiz e a gravação são os de `/aberturas`; a publicação recusa linha que não existe
+ * no compilado (`TREINADOR_LINHA_AUSENTE`).
+ */
+export const treinadorV2Schema = z.strictObject({
+  id: idV2Schema,
+  titulo: z.string().min(1),
+  cor: z.enum(["brancas", "pretas"]),
+  abertura: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  linhaIds: z.array(z.string().regex(ID_DE_LINHA_DO_REPERTORIO, "id de linha do repertório inválido")).min(1),
+});
+
 export const etapaV2Schema = z.strictObject({
   id: idV2Schema,
-  tipo: z.enum(["introducao", "capitulo", "treino", "pratica"]),
+  tipo: z.enum(["introducao", "capitulo", "treino", "pratica", "treinador"]),
   entidadeId: idV2Schema,
 });
 
@@ -488,6 +528,11 @@ export const aulaV2Schema = z.strictObject({
   capitulos: z.array(capituloV2Schema),
   treinos: z.array(treinoV2Schema),
   praticas: z.array(praticaV2Schema).default([]),
+  /**
+   * Opcional, e não `default([])`: um valor padrão acrescentaria o campo a toda aula relida, e o
+   * hash das publicações de finais mudaria sem que nada nelas tivesse mudado.
+   */
+  treinadores: z.array(treinadorV2Schema).optional(),
   fluxo: z.array(etapaV2Schema),
   origem: z.strictObject({
     formato: z.literal("lesson-v1"),
@@ -529,6 +574,7 @@ export type RespostaTreinoV2 = z.infer<typeof respostaTreinoV2Schema>;
 export type QuestaoTreinoV2 = z.infer<typeof questaoTreinoV2Schema>;
 export type TreinoV2 = z.infer<typeof treinoV2Schema>;
 export type PraticaV2 = z.infer<typeof praticaV2Schema>;
+export type TreinadorV2 = z.infer<typeof treinadorV2Schema>;
 export type AulaV2 = z.infer<typeof aulaV2Schema>;
 
 export type LocalizacaoProblemaV2 = {
@@ -543,6 +589,7 @@ export type LocalizacaoProblemaV2 = {
   questaoId?: string;
   respostaId?: string;
   praticaId?: string;
+  treinadorId?: string;
   etapaId?: string;
   campo?: string;
 };
@@ -568,6 +615,7 @@ type ProblemaBrutoV2 = {
   questaoId?: string;
   respostaId?: string;
   praticaId?: string;
+  treinadorId?: string;
   etapaId?: string;
   campo?: string;
 };
@@ -866,6 +914,7 @@ export function problemasDaAulaV2(
     });
   });
   aula.praticas.forEach((p) => registrar(p.id, "prática", { praticaId: p.id }));
+  (aula.treinadores ?? []).forEach((t) => registrar(t.id, "move trainer", { treinadorId: t.id }));
   aula.fluxo.forEach((e) => registrar(e.id, "etapa", { etapaId: e.id }));
 
   const analises = new Map(aula.analises.map((a) => [a.id, a]));
@@ -1043,7 +1092,11 @@ export function problemasDaAulaV2(
   const capitulos = new Set(aula.capitulos.map((c) => c.id));
   const treinos = new Set(aula.treinos.map((t) => t.id));
   const praticas = new Set(aula.praticas.map((p) => p.id));
+  const treinadores = new Set((aula.treinadores ?? []).map((t) => t.id));
   const aparicoesNoFluxo = new Map<string, number>();
+  // §18.1: o move trainer só existe no curso de abertura — numa aula de finais ele não teria
+  // repertório a que pertencer.
+  if (aula.treinadores?.length && dominioDaAulaV2(aula.id) !== "abertura") problemas.push({ codigo: "TREINADOR_FORA_DE_ABERTURA", mensagem: "o move trainer só existe em aula de curso de abertura (AB-…)", campo: "treinadores" });
   for (const etapa of aula.fluxo) {
     aparicoesNoFluxo.set(etapa.entidadeId, (aparicoesNoFluxo.get(etapa.entidadeId) ?? 0) + 1);
     if ((aparicoesNoFluxo.get(etapa.entidadeId) ?? 0) > 1) problemas.push({ codigo: "FLUXO_REPETE_ENTIDADE", mensagem: `o fluxo repete a entidade ${etapa.entidadeId}`, etapaId: etapa.id, campo: "entidadeId" });
@@ -1051,7 +1104,9 @@ export function problemasDaAulaV2(
     if (etapa.tipo === "capitulo" && !capitulos.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_CAPITULO", mensagem: "o fluxo aponta para capítulo inexistente", etapaId: etapa.id, campo: "entidadeId" });
     if (etapa.tipo === "treino" && !treinos.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_TREINO", mensagem: "o fluxo aponta para treino inexistente", etapaId: etapa.id, campo: "entidadeId" });
     if (etapa.tipo === "pratica" && !praticas.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_PRATICA", mensagem: "o fluxo aponta para prática inexistente", etapaId: etapa.id, campo: "entidadeId" });
+    if (etapa.tipo === "treinador" && !treinadores.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_TREINADOR", mensagem: "o fluxo aponta para move trainer inexistente", etapaId: etapa.id, campo: "entidadeId" });
   }
+  for (const treinador of aula.treinadores ?? []) if (!aparicoesNoFluxo.has(treinador.id)) problemas.push({ codigo: "TREINADOR_FORA_DO_FLUXO", mensagem: "o move trainer não tem lugar no fluxo da aula", treinadorId: treinador.id });
   for (const introducao of aula.introducoes) if (!aparicoesNoFluxo.has(introducao.id)) problemas.push({ codigo: "INTRODUCAO_FORA_DO_FLUXO", mensagem: "a introdução não tem lugar no fluxo da aula", introducaoId: introducao.id });
   for (const capitulo of aula.capitulos) if (!aparicoesNoFluxo.has(capitulo.id)) problemas.push({ codigo: "CAPITULO_FORA_DO_FLUXO", mensagem: "o capítulo não tem lugar no fluxo da aula", capituloId: capitulo.id });
   for (const treino of aula.treinos) if (!aparicoesNoFluxo.has(treino.id)) problemas.push({ codigo: "TREINO_FORA_DO_FLUXO", mensagem: "o treino não tem lugar no fluxo da aula", treinoId: treino.id });

@@ -5,7 +5,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { Chess } from "chess.js";
 import { notas as NOTAS_FN } from "./conteudo.ts";
-import { estadoDe, IndiceSchema, meiosLances, validarBanco, type Linha } from "./linhas.ts";
+import { estadoDe, IndiceSchema, validarBanco, type Linha } from "./linhas.ts";
 
 /**
  * O que está publicado em `public/repertorio/` confere?
@@ -32,18 +32,6 @@ function ler(relativo: string): unknown {
 
 const indice = IndiceSchema.parse(ler("index.json"));
 
-/**
- * Quantas linhas publicadas ainda não fecham a régua do término: **zero**, desde
- * que a §24 terminou em 8/9/2026.
- *
- * Este teste ficou redundante no mesmo dia, e continua aqui de propósito. Desde
- * a Fase 4 quem reprova linha aberta é `validarBanco`, que roda no compilador,
- * no servidor a cada leitura e três vezes neste arquivo — então uma linha aberta
- * já estoura antes de chegar aqui. O que este teste guarda é o NÚMERO: se um dia
- * alguém afrouxar `fechamentosAbertos` para destravar uma build, o banco volta a
- * passar em silêncio e é esta linha que grita.
- */
-const ABERTAS = 0;
 
 test("o índice tem as onze aberturas, sem repetir cor e slug", () => {
   // Eram doze até 7/9/2026. A poda da §23 de `docs/REVISAO-FONTES.md` apagou
@@ -115,10 +103,6 @@ test("o Base publicado tem 20 linhas, e o primeiro lance é sempre das brancas",
     for (const ply of linha.meus) {
       assert.equal(ply % 2, esperado, `${linha.id}: o meio-lance ${ply} não é do aluno`);
     }
-    assert.ok(
-      linha.lances.length <= meiosLances(linha.nivel, linha.cor),
-      `${linha.id} passa do teto do nível`,
-    );
   }
 });
 
@@ -193,15 +177,14 @@ test("cada linha publicada se remonta no tabuleiro, e a FEN final bate", () => {
   }
 });
 
-test("o que a régua do término mede no publicado — o número da §24", () => {
-  // O placar que o compilador imprime, conferido aqui sobre o que o servidor
-  // vai abrir. Trocar estes números sem passar pela §24 é afrouxar a régua sem
-  // ninguém ver.
+test("o placar do fechamento cobre todo o publicado (retrato, sem régua desde 16/9/2026)", () => {
+  // Até 16/9/2026 este teste exigia zero linhas abertas. A régua de tamanho saiu
+  // (spec §21): o placar continua sendo impresso, e aqui só se confere que ele
+  // conta todas as linhas.
   const todas = indice.flatMap((e) =>
     validarBanco(ler(e.arquivo.replace(/^\/repertorio\//, "")), e.abertura),
   );
   const conta = { fecha: 0, "com-plano": 0, aberta: 0 };
   for (const linha of todas) conta[estadoDe(linha)] += 1;
   assert.equal(conta.fecha + conta["com-plano"] + conta.aberta, todas.length);
-  assert.equal(conta.aberta, ABERTAS, "linhas que ainda não fecham a régua do término");
 });

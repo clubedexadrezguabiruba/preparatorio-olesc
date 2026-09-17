@@ -53,6 +53,8 @@ export type PassoDaPrevia = {
   nags?: number[];
   /** §15.2: a pausa que exige "Continuar" em vez de andar sozinha. */
   pausaManual: boolean;
+  /** O rótulo da fala marcada no estudo (`[ARMADILHA]` → "Armadilha"), §13.3.5. */
+  rotulo?: string;
   /** A pausa extra da narração, somada à leitura (o `espera` do roteiro v1). */
   esperaMs?: number;
   /**
@@ -172,6 +174,7 @@ function passosDoTrecho(aula: AulaV2, capitulo: CapituloV2, de: string): PassoDa
         // A fala com desenho próprio manda nele; sem, vale o desenho da posição.
         desenhos: narracao.desenhos ?? no.desenhos,
         pausaManual: narracao.pausa === "manual",
+        ...(narracao.rotulo ? { rotulo: narracao.rotulo } : {}),
         ...(narracao.esperaMs ? { esperaMs: narracao.esperaMs } : {}),
         ...nags,
       });

@@ -1,5 +1,6 @@
 import "server-only";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
+import { ehAulaDeFinais } from "@/lib/editor-v2/dominio";
 import { idsDeAulasV2Ativas, pacoteAtivoDoAluno } from "@/lib/finais/conteudo-v2";
 import { juntarEscadas, zerada, type ProgressoDaEscada } from "@/lib/finais/escada";
 import { AULA_ZERADA, type ProgressoDaAula } from "@/lib/finais/trilha";
@@ -45,7 +46,7 @@ import { AULA_ZERADA, type ProgressoDaAula } from "@/lib/finais/trilha";
  */
 function revisoesAtivasDasPraticasV2(): Map<string, Array<{ entidadeId: string; revisao: string }>> {
   const ativas = new Map<string, Array<{ entidadeId: string; revisao: string }>>();
-  for (const aula of idsDeAulasV2Ativas()) {
+  for (const aula of idsDeAulasV2Ativas().filter(ehAulaDeFinais)) {
     try {
       const pacote = pacoteAtivoDoAluno(aula);
       if (!pacote) continue;

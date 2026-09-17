@@ -2,9 +2,11 @@ import Link from "next/link";
 import { exigirEditor } from "@/lib/editor/acesso";
 import { MenuAssistirAula } from "@/components/editor-v2/AssistirAula";
 import { BotaoExcluirAula, LixeiraDoEditor } from "@/components/editor-v2/ExcluirAula";
+import { aberturaDoId, dominioDaAulaV2 } from "@/lib/editor-v2/dominio";
 import { lixeiraV2 } from "@/lib/editor-v2/excluir-aula";
 import { idsDeDocumentosV2, lerDocumentoV2 } from "@/lib/editor-v2/rascunhos";
 import { aulasExtras, indiceDeAulas } from "@/lib/finais/conteudo";
+import { idsDeAulasV2Ativas } from "@/lib/finais/conteudo-v2";
 import { aulaDaTrilha } from "@/lib/finais/trilha";
 
 /**
@@ -40,8 +42,27 @@ export default async function IndiceDoEditor() {
    * para não ter (ver o comentário do topo).
    */
   const doCurso = new Set(aulas.map((aula) => aula.id));
+  /*
+   * ## Cursos de abertura (§13.3.3, 16/9/2026)
+   *
+   * As aulas `AB-` não são de finais: não entram em `indiceDeAulas()` nem na lista de baixo. Ficam
+   * numa seção própria, rascunho e publicada juntos, agrupadas pela abertura.
+   */
+  const publicadasDeAbertura = new Set(idsDeAulasV2Ativas().filter((id) => dominioDaAulaV2(id) === "abertura"));
+  const deAbertura = [...new Set([...idsDeDocumentosV2().filter((id) => dominioDaAulaV2(id) === "abertura"), ...publicadasDeAbertura])]
+    .sort()
+    .flatMap((id) => {
+      const curso = aberturaDoId(id);
+      if (!curso) return [];
+      try {
+        const documento = lerDocumentoV2(id);
+        return [{ id, curso, titulo: documento?.aula.titulo ?? id, publicada: publicadasDeAbertura.has(id) }];
+      } catch {
+        return [{ id, curso, titulo: id, publicada: publicadasDeAbertura.has(id) }];
+      }
+    });
   const soNoV2 = idsDeDocumentosV2()
-    .filter((id) => !doCurso.has(id))
+    .filter((id) => !doCurso.has(id) && dominioDaAulaV2(id) !== "abertura")
     .flatMap((id) => {
       try {
         const documento = lerDocumentoV2(id);
@@ -66,6 +87,12 @@ export default async function IndiceDoEditor() {
               Repertório de aberturas
             </Link>
             <Link
+              href="/editor/v2/curso-de-abertura"
+              className="foco rounded-md border border-borda px-3 py-2 text-sm font-medium text-tinta hover:bg-carta-toque"
+            >
+              Importar curso de abertura
+            </Link>
+            <Link
               href="/editor/v2/nova"
               className="foco rounded-md bg-metodo-superficie/25 px-3 py-2 text-sm font-medium text-metodo-tinta-alta"
             >
@@ -77,6 +104,32 @@ export default async function IndiceDoEditor() {
           Suas aulas. O aluno só vê uma mudança depois que você publica.
         </p>
       </header>
+
+      {deAbertura.length > 0 ? (
+        <section className="flex flex-col gap-2" aria-labelledby="cursos-de-abertura">
+          <h2 id="cursos-de-abertura" className="text-sm font-semibold text-tinta">Cursos de abertura</h2>
+          <ul className="flex flex-col gap-2">
+            {deAbertura.map((aula) => (
+              <li key={aula.id} className="cartao-vazio flex items-stretch gap-1 p-1">
+                <Link
+                  href={`/editor/v2/finais/${aula.id}`}
+                  className="foco flex min-w-0 flex-1 items-center gap-3 rounded-md px-3 py-2 transition-colors hover:bg-carta-toque"
+                >
+                  <span className="flex min-w-0 flex-1 flex-col gap-1">
+                    <span className="truncate text-sm font-medium text-tinta">{aula.titulo}</span>
+                    <span className="text-xs text-tinta-fraca tabular-nums">
+                      {aula.curso.cor} · {aula.curso.abertura} · bloco {aula.curso.bloco}
+                      {aula.publicada ? " · publicada" : " · rascunho"}
+                    </span>
+                  </span>
+                  <span aria-hidden className="text-tinta-fraca">✎</span>
+                </Link>
+                <MenuAssistirAula aulaId={aula.id} titulo={aula.titulo} publicada={aula.publicada} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {soNoV2.length > 0 ? (
         <section className="flex flex-col gap-2">

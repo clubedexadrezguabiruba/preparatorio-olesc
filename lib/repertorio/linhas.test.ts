@@ -5,9 +5,7 @@ import {
   conferirRegras,
   estadoDe,
   fechamentoDe,
-  fechamentosAbertos,
   idDaLinha,
-  meiosLances,
   placarDeFechamento,
   validarBanco,
   type Linha,
@@ -56,11 +54,10 @@ function boa(troca: Partial<Linha> = {}): Linha {
 const errosDe = (linha: Linha): string => conferirRegras([linha]).map((p) => p.erro).join(" | ");
 
 test("a linha boa passa", () => {
-  // `boa()` passa em `conferirRegras`, que é onde moram as regras de forma. Ela
-  // NÃO passa em `validarBanco` desde 8/9/2026: com três lances nossos ela é
-  // curta demais para a régua do término, e quem cobra isso é `fechamentosAbertos`
-  // — ver o teste "a régua do término reprova em validarBanco" no fim do arquivo.
+  // Desde 16/9/2026 (a régua de tamanho saiu) a linha curta de três lances nossos
+  // passa no banco inteiro, e não só em `conferirRegras`.
   assert.deepEqual(conferirRegras([boa()]), []);
+  assert.equal(validarBanco([boa()]).length, 1);
   assert.equal(validarBanco([longa()]).length, 1);
 });
 
@@ -87,22 +84,18 @@ test("lance NOSSO no meio da linha sem comentário é reprovado, com a lista", (
   assert.deepEqual(conferirRegras([boa()]), []);
 });
 
-test("linha mais funda que o nível é reprovada, com o número por cor", () => {
-  // 14 lances nossos = 27 meios-lances nas brancas, 28 nas pretas. Era 11/12
-  // até 8/9/2026; a §24 de docs/REVISAO-FONTES.md conta por que os dois níveis
-  // passaram a ter o mesmo teto.
-  assert.equal(meiosLances("base", "brancas"), 27);
-  assert.equal(meiosLances("base", "pretas"), 28);
-  assert.equal(meiosLances("avancado", "brancas"), 27);
-
-  const vinteEOito = Array.from({ length: 28 }, (_, i) => LANCES[i % 5]);
+test("sem teto: a linha termina onde a fonte a termina (16/9/2026)", () => {
+  // Até 16/9/2026, 28 meios-lances nas brancas passavam do teto de 14 lances
+  // nossos. A régua de tamanho saiu para os 11 repertórios (spec §21).
+  const vinteEOito = Array.from({ length: 29 }, (_, i) => LANCES[i % 5]);
   const funda = boa({
     lances: vinteEOito,
-    sans: Array.from({ length: 28 }, (_, i) => SANS[i % 5]),
-    meus: Array.from({ length: 14 }, (_, i) => i * 2),
-    comentarios: Object.fromEntries(Array.from({ length: 28 }, (_, i) => [String(i), "x"])),
+    sans: Array.from({ length: 29 }, (_, i) => SANS[i % 5]),
+    meus: Array.from({ length: 15 }, (_, i) => i * 2),
+    comentarios: Object.fromEntries(Array.from({ length: 29 }, (_, i) => [String(i), "x"])),
   });
-  assert.match(errosDe(funda), /28 meios-lances; o nível base das brancas vai até 27/);
+  assert.equal(errosDe(funda).includes("meios-lances"), false);
+  assert.equal(errosDe(funda).includes("vai até"), false);
 });
 
 test("id que não bate com os lances é reprovado", () => {
@@ -223,38 +216,19 @@ function longa(troca: Partial<Linha> = {}): Linha {
   });
 }
 
-test("uma linha que fecha a régua não vira aviso, e conta no placar", () => {
+test("o placar do fechamento continua sendo um retrato, e não uma regra", () => {
   const l = longa();
   assert.deepEqual(fechamentoDe(l), { rocou: true, emCasa: [] });
-  assert.deepEqual(fechamentosAbertos([l]), []);
   assert.equal(estadoDe(l), "fecha");
   assert.match(placarDeFechamento([l]), /1 de 1 fecham na linha; 0 fecham com \[%plano\]; 0 abertas/);
-});
-
-test("linha curta demais é aviso, com o número na cara", () => {
-  const curta = boa();
-  assert.match(fechamentosAbertos([curta])[0], /3 lances nossos; o mínimo é 12/);
-  assert.equal(estadoDe(curta), "aberta");
-});
-
-test("peça em casa sem plano é aviso; com plano declarado, deixa de ser", () => {
-  const comBispoEmCasa = longa({
-    fenFinal: "r1bqk2r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 12",
-  });
-  assert.match(fechamentosAbertos([comBispoEmCasa])[0], /a peça de c1 não saiu/);
 
   const declarado = longa({
     fenFinal: "r1bqk2r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 12",
     plano: { c1: { casa: "g5", motivo: "sai depois do h3, para não levar o …h6 com tempo" } },
   });
-  assert.deepEqual(fechamentosAbertos([declarado]), []);
   assert.equal(estadoDe(declarado), "com-plano");
-  assert.match(placarDeFechamento([declarado]), /0 de 1 fecham na linha; 1 fecham com \[%plano\]/);
-});
 
-test("sem roque e sem plano do rei é aviso", () => {
   const semRoque = longa({ sans: Array.from({ length: 23 }, (_, i) => SANS[i % 5]) });
-  assert.match(fechamentosAbertos([semRoque])[0], /o rei não rocou/);
   assert.match(placarDeFechamento([semRoque]), /1 abertas \(1 sem roque/);
 });
 
@@ -308,24 +282,20 @@ test("destino igual à origem, e chave que não é casa de peça menor, reprovam
 });
 
 /* ------------------------------------------------------------------ *
- * A trava da Fase 4 — 8/9/2026
+ * A régua de tamanho saiu — 16/9/2026
  *
- * Enquanto a §24 escrevia as caudas, `fechamentosAbertos` era AVISO: reprovar a
- * build em cima da lista de trabalho travaria a própria revisão que vinha
- * consertá-la. No dia em que as 27 linhas passaram a fechar, a escolha se
- * inverteu — e é este par de testes que a mantém invertida.
+ * De 8/9 a 16/9/2026 a régua do término reprovava em `validarBanco`: linha com
+ * menos de 12 lances nossos, sem roque ou com peça menor em casa. O Doug a tirou
+ * dos 11 repertórios junto com o curso de abertura (spec §21). Este par de testes
+ * prova que ela não volta calada.
  * ------------------------------------------------------------------ */
 
-test("a régua do término reprova em validarBanco, e não só em aviso", () => {
-  // Uma linha de 3 lances nossos passava em `validarBanco` até 8/9/2026. Hoje o
-  // banco inteiro é recusado, com o número na mensagem.
-  assert.throws(() => validarBanco([boa()]), /3 lances nossos; o mínimo é 12/);
-
-  // E a mesma coisa quando a linha é longa mas deixa peça em casa sem declarar.
+test("linha curta, sem roque e com peça em casa passa em validarBanco", () => {
+  assert.equal(validarBanco([boa()]).length, 1);
   const semBispo = longa({
     fenFinal: "r1bqk2r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 12",
   });
-  assert.throws(() => validarBanco([semBispo]), /a peça de c1 não saiu/);
+  assert.equal(validarBanco([semBispo]).length, 1);
 });
 
 test("a linha que fecha, e a que fecha por [%plano], passam as duas", () => {

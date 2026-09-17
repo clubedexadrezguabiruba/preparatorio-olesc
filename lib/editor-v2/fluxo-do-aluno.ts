@@ -23,6 +23,7 @@
  */
 import type { Position } from "../lesson/schema.ts";
 import { quadroDoNo } from "./arvore.ts";
+import type { Linha } from "../repertorio/linhas.ts";
 import type { AulaV2, DesenhoV2 } from "./modelo.ts";
 import type { PacoteV2 } from "./pacote.ts";
 import { posicoesDoPacoteV2 } from "./pacote.ts";
@@ -55,6 +56,8 @@ export type PassoDoCapituloDoAlunoV2 = {
   /** Os símbolos do lance que levou a esta posição. */
   nags?: number[];
   pausaManual: boolean;
+  /** O rótulo da fala, quando o estudo a marcou (§13.3.5). */
+  rotulo?: string;
 };
 
 export type EtapaDoAlunoV2 =
@@ -83,6 +86,8 @@ export type EtapaDoAlunoV2 =
       revisao: string;
       perfil: "final-certificado" | "linha-autoral";
       jogavel: TreinoJogavel;
+      /** Parada do curso de abertura (§18.1): o aluno joga o lance da pergunta, sem confete. */
+      parada?: true;
     }
   | {
       id: string;
@@ -95,6 +100,22 @@ export type EtapaDoAlunoV2 =
       lado: "white" | "black";
       goal: "win" | "draw";
       engine: { skill: number; moveTimeMs: number };
+    }
+  | {
+      id: string;
+      tipo: "treinador";
+      rotulo: string;
+      entidadeId: string;
+      titulo: string;
+      cor: "brancas" | "pretas";
+      abertura: string;
+      /** Na ordem em que o aluno as recebe. As linhas em si vêm do repertório compilado, no servidor. */
+      linhaIds: string[];
+      /**
+       * As linhas, lidas do repertório compilado pela página no servidor (`comLinhasDosTreinadores`).
+       * Ausentes: o player mostra o aviso de que o move trainer não pôde ser montado.
+       */
+      linhas?: Linha[];
     };
 
 export type AulaDoAlunoV2 = {
@@ -120,7 +141,7 @@ function desenhoCurto(desenho: DesenhoV2 | undefined): { arrows?: [string, strin
 /** Os rótulos da trilha: os nomes de sempre quando há um de cada, o título quando há vários. */
 function rotuloDe(aula: AulaV2, tipo: AulaV2["fluxo"][number]["tipo"], titulo: string): string {
   const quantos = aula.fluxo.filter((etapa) => etapa.tipo === tipo).length;
-  const padrao = { introducao: "Apresentação", capitulo: "Aula", treino: "Treino", pratica: "Prática real" }[tipo];
+  const padrao = { introducao: "Apresentação", capitulo: "Aula", treino: "Treino", pratica: "Prática real", treinador: "Move trainer" }[tipo];
   return quantos > 1 ? titulo : padrao;
 }
 
@@ -156,6 +177,7 @@ export function etapasDoAlunoV2(aula: AulaV2, positions: Record<string, Position
           ...(passo.desenhos ? { desenhos: passo.desenhos } : {}),
           ...(passo.nags ? { nags: passo.nags } : {}),
           pausaManual: passo.pausaManual,
+          ...(passo.rotulo ? { rotulo: passo.rotulo } : {}),
         })),
       });
     } else if (etapa.tipo === "treino") {
@@ -170,6 +192,20 @@ export function etapasDoAlunoV2(aula: AulaV2, positions: Record<string, Position
         revisao: revisao.revisao,
         perfil: treino.perfil,
         jogavel: treinoJogavel(aula, treino.id, positions),
+        ...(treino.papel === "parada" ? { parada: true as const } : {}),
+      });
+    } else if (etapa.tipo === "treinador") {
+      const treinador = aula.treinadores?.find((item) => item.id === etapa.entidadeId);
+      if (!treinador) continue;
+      etapas.push({
+        id: etapa.id,
+        tipo: "treinador",
+        rotulo: rotuloDe(aula, "treinador", treinador.titulo),
+        entidadeId: treinador.id,
+        titulo: treinador.titulo,
+        cor: treinador.cor,
+        abertura: treinador.abertura,
+        linhaIds: [...treinador.linhaIds],
       });
     } else {
       const pratica = aula.praticas.find((item) => item.id === etapa.entidadeId);

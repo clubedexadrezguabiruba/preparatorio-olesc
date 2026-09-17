@@ -16,7 +16,7 @@ import { sanEmPortugues, semQuebras, vereditoDoLance } from "./treino.ts";
  *
  * Aqui é `estado + evento → estado + efeitos`. Não há React, não há relógio e
  * não há tabuleiro: quem agenda os `setTimeout` e desenha é a casca em
- * `app/aberturas/[cor]/[abertura]/Passada.tsx`, e ela só sabe interpretar a
+ * `components/repertorio/Passada.tsx` (desde 16/9/2026; a aula de abertura também a usa), e ela só sabe interpretar a
  * lista de efeitos. É o mesmo princípio que o projeto já aplicou ao motor e à
  * aritmética do progresso — a regra num arquivo testável, a moldura fora.
  *

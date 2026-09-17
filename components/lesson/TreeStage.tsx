@@ -33,6 +33,7 @@ import { PulseRing } from "./PulseRing";
  * A chess.js entra só para dizer o que é legal e para mover as peças.
  */
 export function TreeStage({
+  semConfete = false,
   lesson,
   tree,
   treeKey,
@@ -79,6 +80,8 @@ export function TreeStage({
    */
   marcacao?: { shapes: DrawShape[] | null; onChange: (shapes: DrawShape[]) => void };
   onFinish?: () => void;
+  /** A parada do curso de abertura (§18.1): o aluno joga o lance e a aula segue — sem confete. */
+  semConfete?: boolean;
   finishLabel?: string;
   /**
    * Só o treino do Editor v2 (§16.4). A aula v1 não passa nada disto, e o caminho dela
@@ -548,7 +551,7 @@ export function TreeStage({
 
       {/* Último filho da raiz, e não da coluna do tabuleiro: o confete cobre a
           etapa inteira. As partículas continuam nascendo do tabuleiro. */}
-      <Confetti seq={celebration} originRef={boardColumn} />
+      {semConfete ? null : <Confetti seq={celebration} originRef={boardColumn} />}
     </div>
   );
 }

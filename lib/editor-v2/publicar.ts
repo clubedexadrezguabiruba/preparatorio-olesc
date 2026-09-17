@@ -32,6 +32,7 @@
  * Commit, push e deploy (§20.1). O pacote fica em `content/`, e chega ao aluno do site
  * quando o Doug fizer o deploy.
  */
+import { idsDoRepertorioCompilado } from "../repertorio/ids-compilados.ts";
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync } from "node:fs";
 import path from "node:path";
 import { destravarConferencia, travarConferencia } from "../editor/gate.ts";
@@ -221,6 +222,7 @@ export async function publicarAulaV2(id: string, opcoes: OpcoesDaPublicacaoV2 = 
     const impedem = doPacote.length ? [] : problemasParaPublicarV2(relido.aula, {
       positions: posicoes,
       revisoes: { gravadas: relido.revisoes, recalculadas: revisoesDaAulaV2(relido.aula, posicoes) },
+      ...(relido.aula.treinadores?.length ? { linhasDoRepertorio: idsDoRepertorioCompilado(raiz) } : {}),
     }).filter((problema) => problema.severidade === "erro");
     if (doPacote.length || impedem.length) {
       recuperarTransacaoV2(id, raiz);

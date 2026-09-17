@@ -296,7 +296,15 @@ function maisAntiga(a: ProgressoDaLinha, b: ProgressoDaLinha): number {
   return x === y ? 0 : x < y ? -1 : 1;
 }
 
-/** As linhas cuja data de revisão já passou, da mais vencida para a menos. */
+/**
+ * A ordem do estudo (regra 15 do curso de abertura, 16/9/2026): a linha com `ordem` menor vem
+ * antes. Linha sem `ordem` — as aberturas sem estudo — fica depois, na ordem do arquivo, porque o
+ * `sort` é estável.
+ */
+const SEM_ORDEM = Number.MAX_SAFE_INTEGER;
+const pelaOrdem = (a: Linha, b: Linha): number => (a.ordem ?? SEM_ORDEM) - (b.ordem ?? SEM_ORDEM);
+
+/** As linhas cuja data de revisão já passou, da mais vencida para a menos; empate, pela ordem do estudo. */
 export function vencidas(
   linhas: readonly Linha[],
   progresso: Progresso,
@@ -307,7 +315,7 @@ export function vencidas(
     .sort(
       (a, b) =>
         Date.parse(progressoDe(progresso, a.id).revisarEm!) -
-        Date.parse(progressoDe(progresso, b.id).revisarEm!),
+          Date.parse(progressoDe(progresso, b.id).revisarEm!) || pelaOrdem(a, b),
     );
 }
 
@@ -350,9 +358,11 @@ function foiRevisao(p: ProgressoDaLinha): boolean {
  *
  * Sem nenhuma vencida, valem os três grupos de sempre:
  *
- * 1. **Nunca vistas**, na ordem do arquivo. A ordem do arquivo é a ordem do
- *    PGN, que é pedagógica: o tronco primeiro, as variantes depois. Sortear
- *    aqui jogaria fora a única ordenação que um professor escreveu à mão.
+ * 1. **Nunca vistas**, pela `ordem` do estudo quando a linha a tem (regra 15,
+ *    16/9/2026: arma → esquema → golpes → … → árvore completa), e na ordem do
+ *    arquivo quando não tem. As duas são pedagógicas: o tronco primeiro, as
+ *    variantes depois. Sortear aqui jogaria fora a ordenação que o professor
+ *    escreveu. É ordem **sugerida**: a revisão vencida continua entrando no meio.
  * 2. **Não aprendidas**, pelas que estão mais longe do degrau 3, e entre
  *    empatadas a que faz mais tempo que não aparece.
  * 3. **Aprendidas**, a mais antiga primeiro. É a revisão.
@@ -381,7 +391,7 @@ export function proximaLinha(
   const pool =
     recente && linhas.length > 1 ? linhas.filter((l) => l.id !== recente.id) : [...linhas];
 
-  const nunca = pool.find((l) => de(l).tentativas === 0) ?? null;
+  const nunca = pool.filter((l) => de(l).tentativas === 0).sort(pelaOrdem)[0] ?? null;
   const devida = vencidas(pool, progresso, agora)[0] ?? null;
 
   if (recente && foiRevisao(de(recente)) && nunca) return nunca;

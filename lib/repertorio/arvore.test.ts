@@ -2,7 +2,6 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { ehPergunta, expandir, type Cabecalho } from "./arvore.ts";
 import { lerPgn } from "./pgn.ts";
-import { PROFUNDIDADE } from "./linhas.ts";
 
 /**
  * A expansão da árvore em linhas.
@@ -147,24 +146,13 @@ test("`[#]` sozinho não é pergunta, e `[%csl …]` não engana o detector", ()
   assert.equal(ehPergunta(null), false);
 });
 
-test("a profundidade é contada em lance nosso, e por isso muda com a cor", () => {
-  // O erro do plano: um número par de meios-lances numa árvore das brancas
-  // termina num lance das pretas. Contado em lance nosso, o 14º lance branco é
-  // o 27º meio-lance e o 14º preto é o 28º — o mesmo "lance 14" para os dois.
-  assert.equal(PROFUNDIDADE.base, 14);
-  const catorze =
+test("sem teto de profundidade: a linha de 15 lances nossos sai inteira, sem aviso (16/9/2026)", () => {
+  const quinze =
     "1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Bc5 5. Nb3 Bb6 6. Nc3 Nf6 7. Qe2 d6 8. Be3 O-O " +
-    "9. O-O-O Re8 10. f3 a6 11. g4 Be6 12. g5 Nd7 13. h4 Nc5 14. h5";
-  const brancas = expandirTexto(catorze);
-  assert.equal(brancas.linhas[0].lances.length, 27);
-  assert.equal(brancas.avisos.filter((a) => a.tipo === "acima-da-profundidade").length, 0);
-
-  const pretas = expandirTexto(`${catorze} Nxb3+`, PRETAS);
-  assert.equal(pretas.linhas[0].lances.length, 28);
-  assert.equal(pretas.avisos.filter((a) => a.tipo === "acima-da-profundidade").length, 0);
-
-  const longa = expandirTexto(`${catorze} Nxb3+ 15. axb3`);
-  assert.equal(longa.avisos.filter((a) => a.tipo === "acima-da-profundidade").length, 1);
+    "9. O-O-O Re8 10. f3 a6 11. g4 Be6 12. g5 Nd7 13. h4 Nc5 14. h5 Nxb3+ 15. axb3";
+  const longa = expandirTexto(quinze);
+  assert.equal(longa.linhas[0].lances.length, 29);
+  assert.deepEqual(longa.avisos.map((a) => a.tipo), []);
 });
 
 test("os rótulos de um ramo não vazam para o ramo irmão", () => {

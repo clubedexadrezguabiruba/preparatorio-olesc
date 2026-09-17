@@ -827,6 +827,25 @@ const MUTACOES: Mutation[] = [
       return "N0-LADDER (nível 1 na trilha) publicada com metadados.nivel 3";
     },
   },
+  // ---- Curso de abertura (§13.3.3 e §18.1, 16/9/2026) ---------------------------------------
+  {
+    titulo: "v2: aula de abertura com metadados de outro bloco",
+    codigo: "ABERTURA_DIVERGE",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => { p.aula.metadados!.abertura!.bloco = "B"; }, "tudo", "AB-BRANCAS-ALAPIN-A");
+      return "AB-BRANCAS-ALAPIN-A: metadados.abertura.bloco B num id de bloco A";
+    },
+  },
+  {
+    titulo: "v2: move trainer com linha fora do repertório compilado",
+    codigo: "TREINADOR_LINHA_AUSENTE",
+    fixtures: true,
+    aplicar: async (dir) => {
+      mutarPacoteV2(dir, (p) => { p.aula.treinadores![0].linhaIds = ["brancas-alapin-00000000"]; }, "tudo", "AB-BRANCAS-ALAPIN-A");
+      return "AB-BRANCAS-ALAPIN-A: o move trainer aponta para brancas-alapin-00000000, que não está em public/repertorio";
+    },
+  },
 ];
 
 function rodarValidador(dir: string, flags: string[] = []) {

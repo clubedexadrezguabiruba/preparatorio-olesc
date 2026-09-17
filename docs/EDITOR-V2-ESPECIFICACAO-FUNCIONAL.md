@@ -616,7 +616,8 @@ de linha que morrem e nascem) antes de substituir.
 #### 13.3.9 Critérios de aceite
 
 - Nas duas fixtures: 38 capítulos → 5 aulas; 27 paradas; 16 capítulos treinador → 19
-  caminhos distintos, 12 completos; ramos B08 4, B09 1, C12 2, C13 2, E20 8; D18/D19
+  caminhos distintos, 12 completos; ramos B08 4, B09 1, C12 2, C13 2, E20 7 *(era "8"; o PGN tem
+  7 variações no E20, todas comentadas — recontado em 16/9)*; D18/D19
   avisadas; comentário final de B09/C12 perdido só no export do Lichess; 3 perguntas no
   lance nosso; 4 lances mudos; nenhum símbolo perdido.
 - O link e o arquivo local dão o **mesmo** curso (exceto o que o Lichess perde).
@@ -850,7 +851,8 @@ A parada grava tentativa como os treinos de finais, e **não tem confete**.
 **Progressão por vez (regra 16).**
 
 - A aula registra **conclusão** quando a última etapa obrigatória da rodada fecha, gravada
-  no servidor (`aula_concluida`: aluno, aula, publicação, rodada, data). A vez é o número
+  no servidor (tabela `aula_rodada`, migração 0015: aluno, aula, rodada, publicação, etapas feitas,
+  início e conclusão — uma linha por passada, que é também o "retomar"). A vez é o número
   de conclusões anteriores + 1.
 - **1ª vez:** as abas da trilha só deixam voltar ou ficar; avançar exige a etapa atual
   feita. O rodapé do capítulo não funciona como "pular".

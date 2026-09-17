@@ -3,6 +3,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { aulaDoAlunoV2, type AulaDoAlunoV2 } from "../editor-v2/fluxo-do-aluno.ts";
 import type { PacoteV2 } from "../editor-v2/pacote.ts";
+import { ehAulaDeFinais } from "../editor-v2/dominio.ts";
 import { idsDeAulasV2Ativas, pacoteAtivoDoAluno } from "./conteudo-v2.ts";
 import { extrasPublicadas } from "./trilha-em-disco.ts";
 import type { AulaDaTrilha } from "./trilha.ts";
@@ -93,7 +94,8 @@ function idsDeAulaV1(): string[] {
  * publicação ativa (fatia 7). Uma aula que existe nas duas formas aparece uma vez.
  */
 export function idsDeAula(): string[] {
-  return [...new Set([...idsDeAulaV1(), ...idsDeAulasV2Ativas()])].sort();
+  // Aula de curso de abertura (`AB-`, §13.3.3) não é aula de finais: nem rota, nem índice, nem progresso.
+  return [...new Set([...idsDeAulaV1(), ...idsDeAulasV2Ativas().filter(ehAulaDeFinais)])].sort();
 }
 
 /**
@@ -104,6 +106,7 @@ export function lerPacoteDoAluno(id: string):
   | { versao: 1; pacote: PacoteDeAula }
   | { versao: 2; pacote: PacoteV2; aula: AulaDoAlunoV2 }
   | null {
+  if (!ehAulaDeFinais(id)) return null;
   const v2 = pacoteAtivoDoAluno(id);
   if (v2) return { versao: 2, pacote: v2, aula: aulaDoAlunoV2(v2) };
   const v1 = lerPacote(id);
@@ -167,7 +170,7 @@ export function indiceDeAulas(): Array<{
   temPratica: boolean;
   status: Lesson["status"];
 }> {
-  const v2 = new Set(idsDeAulasV2Ativas());
+  const v2 = new Set(idsDeAulasV2Ativas().filter(ehAulaDeFinais));
   return idsDeAula().map((id) => {
     // A v2 ativa vence a v1 do mesmo id (fatia 7): é ela que o aluno abre, e é o fluxo dela
     // que diz quantas etapas há e se há prática. Publicada no v2 é publicada.

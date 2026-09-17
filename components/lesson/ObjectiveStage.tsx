@@ -88,7 +88,13 @@ export function ObjectiveStage({
   marcasAutomaticas = true,
   simbolo,
   quebrasDeLinha = false,
+  aoTerminar,
+  rotulo,
 }: {
+  /** **A aula de abertura (§18.1).** Avisa quando o capítulo chegou ao fim — é o que fecha a etapa. */
+  aoTerminar?: () => void;
+  /** **A aula de abertura (§13.3.5).** O rótulo da fala do passo, lido acima dela. */
+  rotulo?: (passo: number) => string | null;
   /**
    * **A aula v2.** O símbolo do lance do passo (`!`, `??`…), no círculo da casa de destino — o mesmo
    * que o editor mostra. A regra dos símbolos (AGENTS.md) vale até o aluno.
@@ -242,9 +248,9 @@ export function ObjectiveStage({
    * o aviso não sair de novo a cada render do pai — e o efeito depende só de
    * `terminou`, que vira uma vez.
    */
-  const aoTerminarRef = useRef(previa?.aoTerminar);
+  const aoTerminarRef = useRef(previa?.aoTerminar ?? aoTerminar);
   useEffect(() => {
-    aoTerminarRef.current = previa?.aoTerminar;
+    aoTerminarRef.current = previa?.aoTerminar ?? aoTerminar;
   });
   useEffect(() => {
     if (terminou) aoTerminarRef.current?.();
@@ -355,6 +361,7 @@ export function ObjectiveStage({
             </div>
           </div>
 
+          {rotulo?.(passo) ? <p className="rotulo text-metodo-tinta">{rotulo(passo)}</p> : null}
           {edicaoDaFala ? (
             edicaoDaFala(passo, atual.fala)
           ) : (

@@ -40,7 +40,7 @@ export function excluirTreino(aula: AulaV2, treinoId: string): AulaV2 {
   };
 }
 
-const ROTULO_DO_TIPO: Record<Etapa["tipo"], string> = { introducao: "Introdução", capitulo: "Capítulo", treino: "Treino", pratica: "Prática" };
+const ROTULO_DO_TIPO: Record<Etapa["tipo"], string> = { introducao: "Introdução", capitulo: "Capítulo", treino: "Treino", pratica: "Prática", treinador: "Move trainer" };
 
 /** O nome da entidade de uma etapa, como o professor a escreveu. */
 export function nomeDaEtapa(aula: AulaV2, etapa: Etapa): string {
@@ -48,7 +48,8 @@ export function nomeDaEtapa(aula: AulaV2, etapa: Etapa): string {
     etapa.tipo === "introducao" ? aula.introducoes.find((item) => item.id === etapa.entidadeId)
       : etapa.tipo === "capitulo" ? aula.capitulos.find((item) => item.id === etapa.entidadeId)
         : etapa.tipo === "treino" ? aula.treinos.find((item) => item.id === etapa.entidadeId)
-          : aula.praticas.find((item) => item.id === etapa.entidadeId);
+          : etapa.tipo === "treinador" ? aula.treinadores?.find((item) => item.id === etapa.entidadeId)
+            : aula.praticas.find((item) => item.id === etapa.entidadeId);
   return entidade?.titulo ?? "(parte que não existe mais)";
 }
 

@@ -1,6 +1,6 @@
 import { Chess } from "chess.js";
 import type { LancePgn, PartidaPgn } from "./pgn.ts";
-import { idDaLinha, meiosLances, type Cor, type Linha, type Nivel } from "./linhas.ts";
+import { idDaLinha, type Cor, type Linha, type Nivel } from "./linhas.ts";
 import { separarPlano, type Plano } from "./esquema.ts";
 
 /**
@@ -60,14 +60,21 @@ export type Cabecalho = {
   fonte: string;
   /** De onde a partida começa. Padrão: a posição inicial. */
   fen?: string;
+  /**
+   * O que o PGN gerado a partir do estudo diz da linha (16/9/2026): o título do capítulo "Move
+   * Trainer", a categoria e a ordem em que ela chega ao aluno. Tags `[Linha]`, `[Categoria]` e
+   * `[Ordem]`; ausentes nos PGN escritos à mão.
+   */
+  titulo?: string;
+  categoria?: Linha["categoria"];
+  ordem?: number;
 };
 
 export type TipoDeAviso =
   | "irmao-sem-marca"
   | "erro-do-adversario-sem-refutacao"
   | "termina-no-adversario"
-  | "termina-em-pergunta"
-  | "acima-da-profundidade";
+  | "termina-em-pergunta";
 
 export type Aviso = { tipo: TipoDeAviso; onde: string; detalhe: string };
 
@@ -170,7 +177,6 @@ export function expandir(partida: PartidaPgn, cabecalho: Cabecalho): Expansao {
   /** Alternativas aceitas e erros nomeados, por meio-lance do caminho atual. */
   const alternativas = new Map<number, string[]>();
   const errosNomeados = new Map<number, string[]>();
-  const teto = meiosLances(cabecalho.nivel, cabecalho.cor);
 
   /** Onde estou, em texto, para o erro dizer alguma coisa útil. */
   const ondeEstou = (): string =>
@@ -216,7 +222,7 @@ export function expandir(partida: PartidaPgn, cabecalho: Cabecalho): Expansao {
       Object.fromEntries([...m].filter(([i]) => i < caminho.length).map(([i, v]) => [String(i), v]));
 
     const ponta = caminho[ultimo];
-    const nome = nomearLinha(cabecalho.nome, sans);
+    const nome = cabecalho.titulo ? `${cabecalho.nome} — ${cabecalho.titulo}` : nomearLinha(cabecalho.nome, sans);
 
     if (!ehMeu(ultimo, cabecalho.cor)) {
       avisos.push({
@@ -234,13 +240,6 @@ export function expandir(partida: PartidaPgn, cabecalho: Cabecalho): Expansao {
     }
     if (ehPergunta(ponta.comentario)) {
       avisos.push({ tipo: "termina-em-pergunta", onde: nome, detalhe: ponta.comentario ?? "" });
-    }
-    if (caminho.length > teto) {
-      avisos.push({
-        tipo: "acima-da-profundidade",
-        onde: nome,
-        detalhe: `${caminho.length} meios-lances; o nível ${cabecalho.nivel} vai até ${teto}`,
-      });
     }
 
     linhas.push({
@@ -261,6 +260,8 @@ export function expandir(partida: PartidaPgn, cabecalho: Cabecalho): Expansao {
       comentarios,
       plano: caminho[ultimo].plano,
       fonte: cabecalho.fonte,
+      ...(cabecalho.categoria ? { categoria: cabecalho.categoria } : {}),
+      ...(cabecalho.ordem ? { ordem: cabecalho.ordem } : {}),
     });
   }
 
