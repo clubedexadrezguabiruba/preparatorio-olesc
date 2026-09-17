@@ -1298,7 +1298,9 @@ function checkAulasV2() {
       continue;
     }
     if (!ponteiro) {
-      fail("PONTEIRO_V2_INVALIDO", where, "a pasta da aula v2 não tem ativa.json");
+      // Sem ativa.json e com publicações guardadas é a aula **desativada** (`desativarV2`): o aluno não a
+      // recebe, e os pacotes ficam para as tentativas antigas rejulgarem. Pasta vazia é que é defeito.
+      if (!idsDePublicacoesV2(contentDir, id).length) fail("PONTEIRO_V2_INVALIDO", where, "a pasta da aula v2 não tem ativa.json nem publicação");
       continue;
     }
     let ativo: unknown;

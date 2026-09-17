@@ -231,8 +231,12 @@ function quadroParaCapitulo(aula: AulaV2, introducao: IntroducaoV2, quadro: Quad
 
   const origem = quadro.posicao.tipo === "referencia" ? quadro.posicao.origem : null;
   const analiseDaOrigem = origem ? aula.analises.find((item) => item.id === origem.analiseId) : undefined;
+  // Os lances voltam se nenhum capítulo já mostra **esta linha**. Um capítulo de comparação (18/9/2026) usa a
+  // mesma análise por outra variante, e não impede; o vizinho que mostra a linha principal, sim.
+  const principal = origem && analiseDaOrigem ? linhaPrincipal(analiseDaOrigem, origem.nodeId) : [];
   const lancesGuardados = Boolean(origem && analiseDaOrigem?.nos[origem.nodeId]?.filhos.length)
-    && !aula.capitulos.some((capitulo) => capitulo.analiseId === analiseDaOrigem!.id);
+    && !aula.capitulos.some((capitulo) => capitulo.analiseId === analiseDaOrigem!.id
+      && ` ${[capitulo.inicioNodeId, ...capitulo.caminho].join(" ")} `.includes(` ${[origem!.nodeId, ...principal].join(" ")} `));
 
   let analises = aula.analises;
   let analiseId: string;

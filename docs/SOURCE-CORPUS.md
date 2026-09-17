@@ -37,6 +37,9 @@ Duas coisas tiram esse teto do caminho, e as duas estão logo abaixo: o **regime
 integral** (§1.1) o desliga por obra, por decisão escrita; e o **formato de uma
 posição só** (§1.2) o deixou **sem sujeito** no módulo de finais.
 
+> **2026-09-17:** para finais, a política de fontes está em `docs/COMO-FAZER-UMA-AULA-DE-FINAIS.md` §2.
+> Desta seção fica só a regra do texto: todo texto do curso é escrito do zero, em PT-BR.
+
 O que nenhuma obra autoriza, em qualquer volume: copiar texto, comentário,
 tradução, seleção completa de exercícios ou estrutura editorial. Todo texto do
 curso é escrito do zero, em PT-BR.

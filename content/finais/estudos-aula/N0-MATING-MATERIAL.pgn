@@ -1,0 +1,314 @@
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "00 - INTRODUÇÃO - Ganha, empata ou perde?"]
+[FEN "6k1/8/5NK1/4N3/8/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Brancas: rei e dois cavalos. Pretas: só o rei, e ele está em xeque.
+
+Ganha, empata ou perde? }
+ *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "00 - INTRODUÇÃO - A resposta"]
+[FEN "6k1/8/5NK1/4N3/8/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Empata — se o rei preto ficar longe do canto. Dois cavalos não conseguem forçar o mate.
+
+Hoje você descobre quais peças dão mate no rei sozinho, e quais não dão. }
+ *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "00 - INTRODUÇÃO - As que dão mate"]
+[FEN "4k3/8/8/8/8/8/8/R1B1KBNQ w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Estas dão mate junto com o rei: a dama, a torre, os dois bispos, e bispo com cavalo. } { [%csl Gh1,Ga1,Gc1,Gf1,Gg1] }
+ *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "00 - INTRODUÇÃO - As que não dão"]
+[FEN "4k3/8/8/8/8/8/8/1NB1K1N1 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Estas não dão: um bispo sozinho, um cavalo sozinho — e dois cavalos também não. } { [%csl Yc1,Yb1,Yg1] }
+ *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "00 - INTRODUÇÃO - A pergunta da aula"]
+[FEN "6k1/8/5NK1/4N3/8/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ A cada final, pergunte: com estas peças, dá para forçar o mate?
+
+No fim, você responde só de olhar o tabuleiro. }
+ *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "01 - AULA - Dama: dá"]
+[FEN "4k3/Q7/4K3/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Rei e dama contra o rei sozinho. O rei preto já está na borda, e o mate está a um lance. }
+1. Qa8# { A dama fecha a última fileira inteira. O rei branco fecha d7, e7 e f7. Mate. } { [%cal Ga8e8] [%csl Gd7,Ge7,Gf7,Re8] } *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "02 - AULA - Torre: dá"]
+[FEN "4k3/R7/4K3/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Agora uma torre no lugar da dama. O rei branco continua em e6, de frente para o rei preto. } { [%csl Ge6] }
+1. Ra8# { A torre fecha a fileira inteira, como a dama. O rei branco fecha d7, e7 e f7. Mate. } { [%cal Ga8e8] [%csl Gd7,Ge7,Gf7,Re8] } *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "03 - AULA - Bispo sozinho: não dá"]
+[FEN "7k/8/3B2K1/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Agora um bispo no lugar da torre. O rei preto está no canto, o pior lugar. Veja se ele fica preso. }
+1. Be5+ { Xeque na diagonal. } { [%cal Ge5h8] } 1... Kg8 { O rei sai por g8: casa branca, onde o bispo de casas pretas nunca chega. } { [%csl Yg8] } 2. Bd6 { O bispo fecha f8. O rei preto só tem uma casa. } { [%csl Gf8] } 2... Kh8 { De volta ao canto. E g8 continua aberta. } { [%csl Yg8] } 3. Be5+ { Xeque de novo. } { [%cal Ge5h8] } 3... Kg8 { E a saída de novo. Isso não acaba nunca: rei e bispo não dão mate. } { [%csl Yg8] } *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "04 - AULA - Cavalo sozinho: não dá"]
+[FEN "6k1/5N2/6K1/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Agora um cavalo. Ele pula e dá xeque — mas fecha a saída? }
+1. Ng5 { O cavalo se prepara para dar xeque. } 1... Kh8 { O rei preto foi para o canto, o pior lugar. } { [%csl Yh8] } 2. Nf7+ { Xeque. } { [%cal Gf7h8] } 2... Kg8 { E o rei sai por g8. Um cavalo não dá xeque em h8 e fecha g8 ao mesmo tempo. } { [%csl Yg8,Yh8] } 3. Nh6+ { Outro xeque, agora em g8. } { [%cal Gh6g8] } 3... Kf8 { E o rei sai por f8. Rei e cavalo não dão mate — nunca. } { [%csl Yf8] } *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "05 - AULA - Dois bispos: dá"]
+[FEN "7k/8/3BB1K1/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ A mesma posição do bispo sozinho — e chegou um bispo de casas brancas. Ele fecha g8. } { [%cal Ge6g8] }
+1. Be5# { Xeque na diagonal, e agora g8 está fechada pelo outro bispo. Mate. } { [%cal Ge5h8,Ge6g8] [%csl Gg8,Gg7,Gh7,Rh8] } *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "06 - AULA - Bispo e cavalo: dá"]
+[FEN "6k1/8/6K1/2B2N2/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Bispo com cavalo também dá mate. O caminho até aqui é difícil e fica para depois: hoje, olhe só o mate. }
+1. Nh6+ { Xeque. O rei preto tem uma casa só: o canto. } { [%cal Gh6g8] [%csl Yh8] } 1... Kh8 2. Bd4# { O bispo dá xeque na diagonal, e o cavalo fecha g8: o trabalho do segundo bispo. Mate. } { [%cal Gd4h8,Gh6g8] [%csl Gg7,Gh7,Rh8] } *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "07 - AULA - Dois cavalos: só se o rei ajudar"]
+[FEN "6k1/4N3/6K1/4N3/8/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Dois cavalos. O rei preto está em xeque e tem duas casas: f8 e h8. Uma delas perde. } { [%csl Yf8,Yh8] }
+1... Kf8! { Longe do canto. Os cavalos dão xeque, mas nunca fecham tudo. } { [%csl Gf8] } ( 1... Kh8? { O canto. Agora o cavalo de e5 pula para f7, e é mate. } { [%csl Rh8] [%cal Re5f7] } 2. Nf7# { Mate. Dois cavalos só dão mate quando o rei entra no canto sozinho. } { [%csl Rh8,Gg8,Gg7,Gh7] } ) 2. Kf6 Ke8 { O rei anda pela última fileira, longe dos cantos. } { [%csl Ge8] } 3. Nf7 Kd7 { Sem mate. Ninguém obriga o rei a entrar no canto: empate. } { [%csl Gd7] } *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "08 - AULA - Peão: pode virar dama"]
+[FEN "5k2/2K5/4P3/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ E um peão sozinho? Não dá mate. Mas, se chegar ao fim, vira dama — e nem sempre ele chega. }
+1. Kd7 { O rei branco fecha e8: o peão vai passar. } { [%csl Ge8] } 1... Kg7 2. e7 { O peão avança para e7. Ninguém para ele. } { [%cal Ge6e7] } 2... Kg8 3. e8=Q+ { O peão virou dama. Agora as brancas têm o que dá mate. } { [%csl Ge8] } *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "09 - AULA - LEMBRE-SE"]
+[FEN "4k3/8/8/8/8/8/8/R1B1KBNQ w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ LEMBRE-SE:
+
+1. Dão mate: dama, torre, dois bispos, bispo com cavalo.
+2. Não dão: um bispo, um cavalo, dois cavalos.
+3. Contra dois cavalos, fique longe do canto. }
+ *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "10 - TREINO 1 - Dama: dê o mate"]
+[FEN "3k4/8/3K4/8/8/8/8/7Q w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ Rei e dama. O rei preto está na borda, com duas saídas: c8 e e8. Feche as duas com um lance. } { [%csl Yc8,Ye8] }
+1. Qh8# { A dama fecha a fileira inteira, e o rei branco fecha c7, d7 e e7. Mate. } { [%csl Gc7,Gd7,Ge7,Rd8] } ( 1. Qa8# { Mate também: a dama fecha a fileira pelo outro lado. } ) ( 1. Qh4+? { Xeque, mas c8 e e8 continuam abertas: o rei sai. Xeque sem fechar a saída não é mate. } { [%csl Rc8,Re8] } ) *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "11 - TREINO 2 - Torre: sem ajuda"]
+[FEN "4k3/8/4K3/8/8/8/8/7R w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ Agora com a torre, e sem ajuda. Dê o mate em um lance. }
+1. Rh8# { A torre fecha a fileira, e o rei branco fecha d7, e7 e f7. Mate. } { [%csl Gd7,Ge7,Gf7,Re8] } ( 1. Rh7? { Sem xeque. O rei preto sai por d8 ou f8, e o mate escapa. } { [%csl Rd8,Rf8] } ) *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "12 - TREINO 3 - Dois bispos"]
+[FEN "k7/8/1K1B4/8/6B1/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ Dois bispos, e o rei preto no canto. Dê o mate em um lance. }
+1. Bf3# { O bispo de casas brancas dá xeque na diagonal do canto. O outro fecha b8, e o rei branco fecha a7 e b7. Mate. } { [%cal Gf3a8] [%csl Gb8,Ga7,Gb7,Ra8] } ( 1. Bf5?? { O rei preto não está em xeque e não tem casa para ir. Isso é afogamento: empate. } { [%csl Rb8,Ra7,Rb7] } ) ( 1. Be7? { O bispo largou b8, e o rei preto sai por lá. Sem xeque, o mate escapa. } { [%csl Rb8] } ) *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Brancas"]
+[Black "Aluno - Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "13 - TREINO 4 - Dois cavalos: você de pretas"]
+[FEN "6k1/8/5NK1/4N3/8/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[ChapterMode "gamebook"]
+
+{ Agora você joga de pretas, só com o rei. O cavalo dá xeque, e você tem duas casas. Uma delas perde. }
+1... Kf8! { Longe do canto. Os cavalos não têm como fechar o seu rei: empate. } ( 1... Kh8? { O canto. O cavalo de e5 pula para f7, e é mate. } { [%csl Rh8] [%cal Re5f7] } 2. Nf7# ) *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "14 - TREINO 5 - O peão vai virar o quê?"]
+[FEN "7k/5P2/6K1/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ O peão vai virar peça agora. Escolha uma que dê mate. }
+1. f8=Q# { Dama: fecha a fileira, e o rei branco fecha g7 e h7. Mate. } { [%csl Gg8,Gg7,Gh7,Rh8] } ( 1. f8=R# { Torre: também fecha a fileira. Mate. } ) ( 1. f8=B?? { Bispo sozinho não dá mate. O rei preto sai por g8, e a partida acaba empatada na hora. } { [%csl Rg8] } ) ( 1. f8=N?? { Cavalo sozinho não dá mate. O rei preto sai por g8, e a partida acaba empatada na hora. } { [%csl Rg8] } ) *
+
+[Event "Aula 1 - O que dá mate e o que não dá"]
+[Site "https://lichess.org/study/suMc7hgW"]
+[White "Engine"]
+[Black "Aluno - Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O que dá mate e o que não dá"]
+[ChapterName "15 - PRÁTICA - Segure o empate"]
+[FEN "6k1/8/5NK1/4N3/8/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+
+{ Dois cavalos contra o seu rei. Fique longe dos cantos e segure o empate. }
+ *

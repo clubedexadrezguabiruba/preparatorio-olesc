@@ -1,0 +1,20 @@
+{
+  "id": "pos-n1-direct-opposition-2",
+  "fen": "2k5/8/2P5/2K5/8/8/8/8 w - - 0 1",
+  "expectedResult": "draw",
+  "tags": [
+    "PRÁTICA - Feche a passagem"
+  ],
+  "status": "candidate",
+  "provenance": {
+    "externalHumanSource": "clubexadrezguabiruba",
+    "bibliographicSource": "Aula 08 Oposição Direta; posições do Silman (yk2b24vS), https://lichess.org/study/aCPHORnE",
+    "originalGame": "não se aplica",
+    "authorComposer": "clubexadrezguabiruba",
+    "license": "não informada — conferir antes de aprovar",
+    "editionFile": null,
+    "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+    "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+    "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+  }
+}

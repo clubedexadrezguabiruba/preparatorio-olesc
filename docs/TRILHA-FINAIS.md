@@ -6,6 +6,13 @@ o que `lib/finais/trilha.ts` copia campo a campo — **quando os dois discordare
 documento é que está certo** e o arquivo é que está desatualizado
 (`lib/finais/trilha.ts:14-20`).
 
+> **2026-09-17 — como se escreve uma aula mudou de lugar.** O mestre de autoria é
+> `docs/COMO-FAZER-UMA-AULA-DE-FINAIS.md`: a convenção dos capítulos do estudo
+> (INTRODUÇÃO / AULA / TREINO / PRÁTICA), a política de fontes e o caminho até publicar.
+> Ele **substitui** a §13 ("os PGN não entram no repositório" — o PGN com o nosso texto
+> entra) e a regra 7 da §14.7 (a IA pode adaptar uma posição, com aviso). Este documento
+> continua sendo o **currículo**: a lista (§5) e o "sai sabendo" (§5.1).
+
 A lista abaixo **não é o sumário de nenhum livro**. Isso importa juridicamente:
 uma posição de xadrez é fato e não se protege, mas a *seleção e a ordem* de um
 livro são obra do autor. A nossa seleção sai do cruzamento de três coisas que já
@@ -1132,6 +1139,10 @@ em `RESULTADO_ERRADO` um capítulo transcrito errado antes de ele chegar ao alun
 
 ### Os PGN não entram no repositório, e isto não é preferência
 
+> **2026-09-17 — substituída** por `docs/COMO-FAZER-UMA-AULA-DE-FINAIS.md` §2: o PGN
+> reescrito com o nosso texto entra em `content/finais/estudos-aula/`; o PGN de terceiros
+> baixado continua fora do repositório.
+
 Eles carregam o prefácio e os comentários do Silman transcritos por OCR — a
 expressão do autor, que nenhum regime integral autoriza copiar (`SOURCE-CORPUS §1`:
 *"o que nenhuma obra autoriza, em qualquer volume: copiar texto, comentário,
@@ -1398,6 +1409,10 @@ ela mataria os erros com nome do treino, que são justamente os lances que o liv
 não traz. *(Até 2026-09-15 esta regra dizia "até 7 peças, julgada pela tablebase;
 acima, só a fonte". Mudou com as decisões globais do topo: o Stockfish do editor
 confere, o professor decide, e o número de peças deixou de mudar quem julga.)*
+
+> **2026-09-17 — substituída** por `docs/COMO-FAZER-UMA-AULA-DE-FINAIS.md` §2: qualquer
+> fonte serve, e a IA **pode adaptar** uma posição (recuar peça, trocar a vez) quando registra a
+> mudança, o motor reconfere e a adaptação aparece no relatório para o Doug.
 
 **7. Procedência da posição — a regra do Doug, com uma definição.** Nenhuma
 posição é criada, espelhada, girada, recolorida, com o lado a jogar trocado ou com

@@ -269,6 +269,10 @@ Doug decidir com informação. O que é demérito é a lacuna não declarada.
 
 ### 7.5 Curso pago não entra
 
+> **2026-09-17 — para posição de finais, não vale mais.** Qualquer fonte serve, inclusive
+> curso (`docs/COMO-FAZER-UMA-AULA-DE-FINAIS.md` §2): posição é fato. O texto continua nosso.
+> Link para o aluno continua fora.
+
 Nem como fonte de posição, nem como link para o aluno. Já foram recusados por
 esse motivo: o ChessMood, o premium do chess.com, o Chessable pago e o curso de
 estratégia do Rafael Leitão — este último com a nota explícita de que a qualidade

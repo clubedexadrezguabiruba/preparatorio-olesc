@@ -1,0 +1,206 @@
+[Event "Aula 12 - Peão de torre"]
+[Site "?"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão de torre: o empate do canto"]
+[ChapterName "00 - INTRODUÇÃO - Ganha, empata ou perde?"]
+[Fonte "Silman, Complete Endgame Course - estudo yk2b24vS, cap. 20 (Rook-Pawns). Posição sem mudança."]
+[FEN "7k/8/6KP/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Brancas: rei em g6 e peão em h6. Pretas: só o rei, em h8. Brancas jogam.
+
+Ganha, empata ou perde? } { [%csl Yg6,Yh6,Yh8] }
+ *
+
+[Event "Aula 12 - Peão de torre"]
+[Site "?"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão de torre: o empate do canto"]
+[ChapterName "00 - INTRODUÇÃO - A resposta"]
+[Fonte "Silman, Complete Endgame Course - estudo yk2b24vS, cap. 20 (Rook-Pawns). Posição sem mudança."]
+[FEN "7k/8/6KP/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Empata. Se o peão vai a h7, o rei preto não está em xeque e não tem casa: afogamento.
+
+E qualquer outro lance também não ganha. } { [%csl Yh7,Rh8] }
+ *
+
+[Event "Aula 12 - Peão de torre"]
+[Site "?"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão de torre: o empate do canto"]
+[ChapterName "00 - INTRODUÇÃO - E com o peão em g6?"]
+[Fonte "Silman, Complete Endgame Course - estudo yk2b24vS, cap. 21 (Rook-Pawns 2). Posição sem mudança."]
+[FEN "6k1/8/5KP1/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Com o peão em g6, as brancas ganham. Depois de g7, o rei preto sai para h7, e o rei branco toma g8.
+
+Na coluna h, não existe casa do outro lado. } { [%csl Yg6,Yg7,Yh7,Gg8] }
+ *
+
+[Event "Aula 12 - Peão de torre"]
+[Site "?"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão de torre: o empate do canto"]
+[ChapterName "00 - INTRODUÇÃO - A pergunta da aula"]
+[Fonte "Silman, Complete Endgame Course - estudo yk2b24vS, cap. 20 (Rook-Pawns). Posição sem mudança."]
+[FEN "7k/8/6KP/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ O peão das colunas a e h se chama peão de torre. A cada lance, pergunte: o rei que defende chega ao canto?
+
+No fim, você defende e corre para o canto a tempo. }
+ *
+
+[Event "Aula 12 - Peão de torre"]
+[Site "?"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão de torre: o empate do canto"]
+[ChapterName "01 - AULA - O canto segura o peão"]
+[Fonte "Silman, Complete Endgame Course - estudo yk2b24vS, cap. 20 (Rook-Pawns). Adaptada: peão recuado de h6 para h4 e rei branco de g6 para g5, para as brancas tentarem de tudo. Motor: empate antes (0.00) e depois (0.00)."]
+[FEN "7k/8/8/6K1/7P/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+
+{ Você defende com as pretas. O seu rei já está no canto, em h8. Olhe as brancas tentarem de tudo. } { [%csl Gh8] }
+1. Kg6 { O rei branco tira g7 e h7 do seu rei. } { [%csl Rg7,Rh7] } 1... Kg8 { O seu rei vai a g8. Entre g8 e h8, ele fica na frente do peão. } { [%csl Gg8,Gh8] } 2. h5 Kh8 3. h6 Kg8 4. h7+ { Xeque. Só um lance segura o empate. } 4... Kh8! { De volta ao canto. O peão não tem por onde passar. } { [%csl Gh8] } ( 4... Kf8?? { O rei saiu do canto. O peão vira dama com xeque, e as brancas ganham. } { [%csl Rf8,Rh8] } 5. h8=Q+ ) 5. Kh6 { Afogamento! O rei preto não está em xeque e não tem casa. Empate. } { [%csl Rg7,Rg8] } ( 5. Kf6 { Se o rei branco se afasta, o seu rei come o peão. } 5... Kxh7 ) *
+
+[Event "Aula 12 - Peão de torre"]
+[Site "?"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão de torre: o empate do canto"]
+[ChapterName "02 - AULA - Corra para o canto"]
+[Fonte "Silman, Complete Endgame Course - estudo TW73iW6r, cap. 17 (Stalemating the Stronger Side 2). Posição sem mudança; a variante 1...Ke6 é nossa, conferida no motor."]
+[FEN "8/4k2K/8/8/7P/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+
+{ O rei branco está em h7, no canto. O seu rei, em e7, joga. Aonde ele vai? } { [%csl Yh7,Ye7] }
+1... Kf7! { f7! O rei branco fica preso no canto, na frente do próprio peão. } { [%csl Gf7,Yh7] } ( 1... Ke6?? { O rei foi para o lado errado. O rei branco vai a g7 e guarda h8. } { [%csl Re6,Rg7,Rh8] } 2. Kg7! Kf5 3. h5 Kg5 4. h6 Kh5 5. h7 Kg5 6. h8=Q { Dama. Longe do canto, o rei preto não segura o peão de torre. } ) 2. h5 { O peão anda, mas o rei branco continua preso. } 2... Kf8 { O seu rei fica entre f7 e f8. Assim o rei branco não sai de h7 e h8. } { [%csl Gf7,Gf8,Yh7,Yh8] } 3. Kh8 ( 3. Kg6 Kg8 { Se o rei branco sai por g6, o seu rei entra em g8, no canto. Empate também. } { [%csl Yg6,Gg8] } ) 3... Kf7 4. h6 Kf8 5. Kh7 Kf7 6. Kh8 Kf8 7. h7 Kf7 { Afogamento! As brancas não têm lance: o rei está preso, e o peão, travado. Empate. } { [%csl Rg7,Rg8] } *
+
+[Event "Aula 12 - Peão de torre"]
+[Site "?"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão de torre: o empate do canto"]
+[ChapterName "03 - AULA - Quando o rei branco chega antes"]
+[Fonte "Silman, Complete Endgame Course - estudo TW73iW6r, cap. 17 (Stalemating the Stronger Side 2). Mesma posição, com as brancas a jogar (o texto da fonte cita 1.Kg7). Motor: brancas ganham (mate em 16)."]
+[FEN "8/4k2K/8/8/7P/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ A mesma posição, mas agora as brancas jogam. Quem joga decide. }
+1. Kg7! { O rei branco entra em g7 e guarda h8. O rei preto nunca chega ao canto. } { [%csl Gg7,Gh8] } ( 1. h5?? { O peão andou, e o rei preto chega a f7. O rei branco fica preso no canto. } { [%csl Rf7] } 1... Kf7! 2. h6 Kf8 3. Kg6 Kg8 { O rei preto entrou em g8. Empate. } { [%csl Rg8] } ) ( 1. Kg6?? Kf8! 2. h5 Kg8 { O rei preto chegou a g8, no canto. Empate. } { [%csl Rg8] } ) 1... Ke6 2. h5 { Agora o peão corre. O rei em g7 guarda o caminho até h8. } { [%csl Gg7,Gh8] } 2... Kf5 3. h6 Kg5 4. h7 Kf5 5. h8=Q { Dama. O rei branco chegou antes ao canto, e o peão de torre ganhou. } *
+
+[Event "Aula 12 - Peão de torre"]
+[Site "?"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão de torre: o empate do canto"]
+[ChapterName "04 - AULA - LEMBRE-SE"]
+[Fonte "Silman, Complete Endgame Course - estudo TW73iW6r, cap. 17. Posição sem mudança."]
+[FEN "8/4k2K/8/8/7P/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+
+{ LEMBRE-SE:
+
+1. Peão de torre: se o rei que defende chega ao canto, é empate.
+2. Defendendo, corra para o canto, ou prenda o rei branco lá dentro.
+3. Atacando, chegue antes ao canto com o seu rei. }
+ *
+
+[Event "Aula 12 - Peão de torre"]
+[Site "?"]
+[White "Brancas"]
+[Black "Aluno - Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão de torre: o empate do canto"]
+[ChapterName "05 - TREINO 1 - Feche o canto"]
+[Fonte "Posição nossa, na régua de TW73iW6r cap. 16-18 (Silman). Motor: empate; só 1...Kf8 empata, e depois de 2.Kh7 só 2...Kf7."]
+[FEN "8/4k3/6K1/8/7P/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[ChapterMode "gamebook"]
+
+{ O rei branco quer ir a g7 e tomar o canto. Chegue antes dele. } { [%csl Yg7] }
+1... Kf8! { De f8, o seu rei guarda g7 e g8. O rei branco não entra. } { [%csl Gf8,Gg7,Gg8] } ( 1... Ke8?? { O rei branco entra em g7 e guarda h8. O peão passa. } { [%csl Rg7,Rh8] } ) ( 1... Kd7?? { O rei se afastou. O rei branco vai a f7, e o peão passa. } { [%csl Rf7] } ) ( 1... Ke6?? { O peão corre até h8, e o seu rei não alcança. } { [%csl Rh8] } ) 2. Kh7 { O rei branco entrou em h7. Feche a porta dele. } { [%csl Yh7] } 2... Kf7! { Preso: o rei branco está em h7, na frente do próprio peão. } { [%csl Gf7,Yh7] } ( 2... Ke7?? { A porta abriu: o rei branco sai por g7, e o peão passa. } { [%csl Rg7] } ) ( 2... Ke8?? { O rei branco sai por g8 e guarda h8. O peão passa. } { [%csl Rg8,Rh8] } ) *
+
+[Event "Aula 12 - Peão de torre"]
+[Site "?"]
+[White "Brancas"]
+[Black "Aluno - Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão de torre: o empate do canto"]
+[ChapterName "06 - TREINO 2 - Corra para o canto"]
+[Fonte "Posição nossa, na régua de TW73iW6r cap. 16-18 (Silman). Motor: empate; em cada lance das pretas só um empata (1...Kd6, 2...Ke7, 3...Kf8)."]
+[FEN "8/8/8/2k5/5K1P/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[ChapterMode "gamebook"]
+
+{ Agora sem ajuda. Leve o seu rei até o canto antes do rei branco. }
+1... Kd6! { Na diagonal, o rei anda rumo ao canto sem perder tempo. } ( 1... Kd5?? { Por aqui o rei perde tempo. O rei branco vai a f5 e chega antes ao canto. } { [%csl Rf5] } ) ( 1... Kd4?? { O rei se afastou do canto. O peão corre até h8, e ninguém alcança. } { [%csl Rh8] } ) ( 1... Kc6?? { Um passo que não aproxima. O rei branco vai a f5, f6 e g7. } { [%csl Rf5,Rf6,Rg7] } ) 2. Kf5 Ke7! { De e7, o rei chega a f8 no próximo lance. } { [%csl Ge7,Gf8] } ( 2... Kd7?? { O rei branco vai a g6 e depois a g7. O canto fica fechado. } { [%csl Rg6,Rg7] } ) ( 2... Kd5?? { O rei se afastou do canto. O peão corre até h8. } { [%csl Rh8] } ) 3. Kg6 Kf8! { f8! O rei branco não entra em g7, e o canto é seu. Empate. } { [%csl Gf8,Gg7] } ( 3... Ke8?? { O rei branco entra em g7 e guarda h8. O peão passa. } { [%csl Rg7,Rh8] } ) ( 3... Kd7?? { O rei branco vai a f7, e o peão passa. } { [%csl Rf7] } ) *
+
+[Event "Aula 12 - Peão de torre"]
+[Site "?"]
+[White "Brancas"]
+[Black "Aluno - Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão de torre: o empate do canto"]
+[ChapterName "07 - TREINO 3 - O outro canto"]
+[Fonte "Posição nossa, na régua de TW73iW6r cap. 16-18 (Silman), com peão na coluna a. Motor: empate; em cada lance das pretas só um empata (1...Ke6, 2...Kd7, 3...Kc8)."]
+[FEN "8/8/8/5k2/PK6/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[ChapterMode "gamebook"]
+
+{ Agora o peão está na coluna a. Leve o seu rei ao canto certo. }
+1... Ke6! { Na diagonal, rumo ao canto de a8. } { [%csl Ga8] } ( 1... Ke5?? { O rei branco vai a c5 e c6, e chega antes ao canto. } { [%csl Rc5,Rc6] } ) ( 1... Kf4?? { O rei se afastou do canto. O peão corre até a8, e ninguém alcança. } { [%csl Ra8] } ) ( 1... Kf6?? { Um passo para o lado errado. O peão corre até a8. } { [%csl Ra8] } ) 2. Kb5 Kd7! { De d7, o rei chega a c8 no próximo lance. } { [%csl Gd7,Gc8] } ( 2... Ke7?? { O rei branco vai a c6 e depois a b7. O canto fica fechado. } { [%csl Rc6,Rb7] } ) ( 2... Kd5?? { O rei se afastou do canto. O peão corre até a8. } { [%csl Ra8] } ) 3. Kb6 Kc8! { c8! O rei branco não entra em b7, e o canto é seu. Empate. } { [%csl Gc8,Gb7] } ( 3... Kd8?? { O rei branco entra em b7 e guarda a8. O peão passa. } { [%csl Rb7,Ra8] } ) ( 3... Kd6?? { O peão corre até a8, e o seu rei não alcança. } { [%csl Ra8] } ) *
+
+[Event "Aula 12 - Peão de torre"]
+[Site "?"]
+[White "Engine"]
+[Black "Aluno - Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão de torre: o empate do canto"]
+[ChapterName "08 - PRÁTICA - Segure o empate"]
+[Fonte "Posição nossa, na régua de TW73iW6r cap. 16-18 (Silman). Motor: empate (Kd7, Ke7 e Ke6 empatam; Kc7, Kd5, Kc5 e Kc6 perdem). Resultado declarado: empate."]
+[FEN "8/8/3k4/8/5K2/7P/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+
+{ Você defende com as pretas. Leve o rei ao canto e segure o empate. }
+ *

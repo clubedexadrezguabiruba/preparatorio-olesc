@@ -6631,6 +6631,78 @@ Três lições técnicas das rodadas antigas continuam valendo:
 
 ---
 
+## O bloco de finais para 18/9/2026 — 11 aulas publicadas via script, 17/9/2026
+
+Execução do plano de finais (`docs/COMO-FAZER-UMA-AULA-DE-FINAIS.md`, escrito nesta
+rodada). Feito numa cópia isolada, `git worktree` em `../olesc-finais-18-09`, branch
+`finais-18-09` a partir de `origin/main` — havia outra sessão editando
+`preparatorio-olesc` ao mesmo tempo (ver [[sessao-paralela-e-copia-isolada]]).
+
+**Código, cada mudança com teste que falhava antes e passa depois:**
+
+- `capitulosDasVariantes` (`lib/editor-v2/importar-estudo.ts`) — a variante que perde,
+  marcada com símbolo ou comentário, vira sozinha um capítulo "Comparação: …" logo
+  depois do capítulo-aula, reaproveitando `prepararMostrarVariante`. Antes da fatia 10E
+  a variante ficava invisível para o aluno.
+- `[Result "1/2-1/2"]` no cabeçalho do capítulo declara que aquele treino ou prática
+  cobra segurar o empate, não a vitória (`resultadoDeclarado` em `importar-estudo.ts`).
+- Os lances das comparações e do "Voltamos a…" saem em português (`sanEmPortugues`,
+  já existente em `lib/repertorio/treino.ts`, agora usado também em `previa.ts` e
+  `importar-estudo.ts`) — decisão do Doug de 17/9: notação sempre em português, em
+  todo o site.
+- `mudar-modo.ts`: "capítulo → quadro → capítulo" não confundia mais o capítulo
+  vizinho com o de comparação da mesma análise (o filtro agora compara o percurso
+  inteiro, não só o `analiseId`).
+- `scripts/validate-content.ts`: aula v2 **desativada** (sem `ativa.json`, com
+  publicações guardadas) parava de ser erro — só pasta vazia é defeito.
+
+**Dois scripts novos**, para publicar sem abrir a tela do editor:
+
+- `scripts/conferir-estudo-finais.ts <pgn>` — Stockfish confere legalidade, o
+  resultado de cada posição e cada lance marcado `!`/`??`; é aviso, não trava.
+- `scripts/publicar-aula-de-finais.ts <ID> <pgn> [--publicar --substituir --empate N
+  --so-conferir]` — o caminho `lerEstudo` → `planejarEstudo` → `executarComando` →
+  `conferirAulaV2` → `publicarAulaV2`, com o `--so-conferir` para os subagentes
+  reescreverem em paralelo sem gravar nada nem pegar a trava do repositório.
+
+**11 aulas publicadas como v2, com o id da trilha** (a v2 vence a v1 do mesmo id, o
+progresso do aluno continua): `N0-MATING-MATERIAL`, `N0-LADDER`, `N0-Q-MATE`,
+`N0-R-MATE`, `N0-STALEMATE`, `N1-KING-ACTIVITY`, `N1-SQUARE`,
+`N1-DIRECT-OPPOSITION`, `N1-KEY-SQUARES`, `N1-KPK-RANKS`, `N1-ROOK-PAWN`. Cada uma
+saiu com a conferência do motor e a do editor em **0 erro, 0 aviso**. A extra
+`EX-CAPITULO-0-3-MATE-DE-DAMA-E` foi desativada (a aula 3 a substitui). `N1-KPK`
+continua v1.
+
+Nove subagentes (oito Opus, um Fable no par 1/2 e no exemplo-modelo 8) reescreveram
+os PGN em paralelo, seguindo o doc-mestre; a thread principal conferiu e publicou uma
+aula por vez (a conferência trava o repositório). Erro de xadrez corrigido: na aula 8
+(oposição), a "defesa das Pretas" do ChatGPT começava numa posição já perdida — trocada
+por uma posição do Silman. Detalhes de cada aula (posições adaptadas, motor antes/depois,
+avisos) ficaram nos relatórios dos subagentes; as tabelas de comparação das aulas 1 e 2
+(site × ChatGPT) estão no scratchpad da sessão.
+
+**Portões, na cópia isolada:** `typecheck`, `lint`, `test` (1531/1531),
+`validate:content` verdes. `build` ainda não rodou (RAM apertada com várias sessões
+abertas — ver [[memoria-livre-antes-da-suite]]).
+
+**Pendências, declaradas para o Doug:**
+
+- Ver as quatro etapas no navegador (o Doug testou em `localhost:3001` a partir da
+  cópia isolada; falta a confirmação).
+- `npm run build`.
+- Decisões de símbolo: `1. Qf6?` da aula 5 (afogamento) fica `?` ou vira `??`;
+  `3. Re2+?! $1` da aula 2; `?` vs `??` nas torres/dama penduradas da aula 2; tirar o
+  prefixo "AULA - " do título na tela; a prática de dois cavalos da aula 1 pode empatar
+  só depois de 50 lances ou repetição — longa para uma criança.
+- Notação em português: só as telas de finais foram conferidas; o levantamento do
+  resto do site (editor, tática, aberturas) foi interrompido.
+- Diário, merge em `main` e push ainda por fazer nesta rodada.
+
+Ver [[finais-18-09-estado]], [[aula-de-finais-como-fazer]] e
+[[notacao-sempre-em-portugues]].
+
+---
+
 ## Onde cada coisa é escrita
 
 | O quê | Onde | Versionado? |

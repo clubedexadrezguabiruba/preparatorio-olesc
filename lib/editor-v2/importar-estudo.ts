@@ -58,6 +58,7 @@ import { comoId, idsDaAulaV2 } from "./ids.ts";
 import { enderecoDaOrigem, enderecosDaAula, importarJogo, prosaEDesenhos, type JogoImportado } from "./importar-pgn.ts";
 import { problemasDeLimiteV2 } from "./limites.ts";
 import type { AnaliseV2, AulaV2, CapituloV2, IntroducaoV2, RevisaoDaFenV2, TreinoV2 } from "./modelo.ts";
+import { sanEmPortugues } from "../repertorio/treino.ts";
 import { tornarTreinoIndependente } from "./propriedade-treino.ts";
 import { aplicarTreinosPreparados, prepararTreinosDaqui } from "./treinos.ts";
 
@@ -226,7 +227,14 @@ export function lerEstudo(texto: string, idsDaAula: ReadonlySet<string> = new Se
   };
 }
 
-export type PraticaDoEstudo = { numero: number; titulo: string; fen: string; lado: "white" | "black" };
+/** `resultado`: o que o `[Result]` do capítulo declara ("1/2-1/2" = empate); sem ele, o professor declara na janela. */
+export type PraticaDoEstudo = { numero: number; titulo: string; fen: string; lado: "white" | "black"; resultado?: "win" | "draw" };
+
+/** O resultado que o capítulo declara no `[Result]`: "1/2-1/2" é empate, "1-0"/"0-1" é vitória, "*" não diz nada (18/9/2026). */
+function resultadoDeclarado(c: CapituloDoEstudo): "win" | "draw" | undefined {
+  const r = c.partida.tags.Result?.trim();
+  return r === "1/2-1/2" ? "draw" : r === "1-0" || r === "0-1" ? "win" : undefined;
+}
 
 /** O que foi decidido na janela, pronto para o comando `IMPORTAR_ESTUDO` — tudo com ids. */
 export type PlanoDoEstudoV2 = {
@@ -249,6 +257,85 @@ export type PlanoDoEstudoV2 = {
 export type EscolhasDoEstudo = { destinos: Record<number, DestinoNoEstudo>; revisao?: RevisaoDaFenV2 };
 
 const SIMBOLO = { certo: new Set(["!", "!!", "$1", "$3"]), errado: new Set(["?", "??", "?!", "$2", "$4", "$6"]) };
+
+/** Os símbolos de lance (`!`, `?`, `!!`, `??`, `!?`, `?!`) — os que dizem que a variante foi escolhida para ser mostrada. */
+const NAGS_DE_LANCE = new Set([1, 2, 3, 4, 5, 6]);
+const GRAFIA_DO_NAG: Record<number, string> = { 1: "!", 2: "?", 3: "!!", 4: "??", 5: "!?", 6: "?!" };
+
+/**
+ * As variantes de um capítulo-aula como **capítulos de comparação** (18/9/2026).
+ *
+ * A aula de finais mostra o lance que ganha e, ao lado, o que perde. No estudo, o que perde é a
+ * variante (`1. Kd6! (1. Ke6? …)`); sem isto a importação levava só a linha principal e a variante
+ * ficava invisível para o aluno. Cada variante que o professor marcou — com símbolo ou comentário —
+ * vira um capítulo que percorre a mesma análise da raiz até ela, e a prévia (`previa.ts`) reconhece a
+ * bifurcação e diz "Voltamos a…". É o mesmo capítulo que "Mostrar esta variante na aula" cria
+ * (`prepararMostrarVariante`), agora feito pela importação.
+ *
+ * Só as falas **da variante** entram: o começo comum já foi narrado no capítulo de antes. Variante
+ * dentro de variante vira capítulo também, logo depois da mãe, e compara com ela.
+ */
+export function capitulosDasVariantes(analise: AnaliseV2, capitulo: CapituloV2, usados: Set<string>): CapituloV2[] {
+  const livre = (base: string) => { let id = base; for (let n = 2; usados.has(id); n += 1) id = `${base}-${n}`; usados.add(id); return id; };
+  const base = capitulo.id.replace(/^capitulo-/, "");
+  const sans = sansDoPercurso(analise);
+  const novos: CapituloV2[] = [];
+
+  const descer = (mae: CapituloV2, desde: number) => {
+    const percurso = [mae.inicioNodeId, ...mae.caminho];
+    for (let i = desde; i < percurso.length; i += 1) {
+      const pai = analise.nos[percurso[i]];
+      for (const filhoId of pai?.filhos ?? []) {
+        if (filhoId === percurso[i + 1]) continue;
+        const linha = [filhoId];
+        for (let no = analise.nos[filhoId]; no?.filhos.length; no = analise.nos[no.filhos[0]]) linha.push(no.filhos[0]);
+        const primeiro = analise.nos[filhoId];
+        const marcada = (primeiro?.nags ?? []).some((n) => NAGS_DE_LANCE.has(n)) || linha.some((id) => analise.nos[id]?.comentario);
+        if (!primeiro?.uci || !marcada) continue;
+        const simbolo = (primeiro.nags ?? []).map((n) => GRAFIA_DO_NAG[n]).find(Boolean) ?? "";
+        const id = livre(`capitulo-${base}-variante`);
+        const variante: CapituloV2 = {
+          id,
+          titulo: `Comparação: ${sans[filhoId] ?? "a outra escolha"}${simbolo}`,
+          analiseId: analise.id,
+          inicioNodeId: mae.inicioNodeId,
+          caminho: [...percurso.slice(1, i + 1), ...linha],
+          orientacao: mae.orientacao,
+          narracoes: linha.flatMap((noId) => {
+            const no = analise.nos[noId];
+            return no?.comentario ? [{ id: livre(`narracao-${id.replace(/^capitulo-/, "")}-${noId}`), nodeId: noId, texto: no.comentario, pausa: "temporizada" as const }] : [];
+          }),
+        };
+        novos.push(variante);
+        // A variante dentro desta começa depois da bifurcação; antes dela, as irmãs já são da mãe.
+        descer(variante, i + 1);
+      }
+    }
+  };
+  descer(capitulo, 0);
+  return novos;
+}
+
+/** "1. Re6", "1... Re8" de cada nó da análise, pela posição de partida dela — em português, que é o que o aluno lê. */
+function sansDoPercurso(analise: AnaliseV2): Record<string, string> {
+  if (analise.inicio.tipo !== "fen") return {};
+  const sans: Record<string, string> = {};
+  const andar = (noId: string, fen: string) => {
+    for (const filhoId of analise.nos[noId]?.filhos ?? []) {
+      const filho = analise.nos[filhoId];
+      if (!filho?.uci) continue;
+      try {
+        const jogo = new Chess(fen);
+        const [, vez, , , , numero] = fen.split(" ");
+        const lance = jogo.move({ from: filho.uci.slice(0, 2), to: filho.uci.slice(2, 4), promotion: filho.uci.slice(4) || undefined });
+        sans[filhoId] = `${numero}${vez === "w" ? "." : "..."} ${sanEmPortugues(lance.san)}`;
+        andar(filhoId, jogo.fen());
+      } catch { /* lance ilegal: a importação já recusou antes */ }
+    }
+  };
+  andar(analise.raizId, analise.inicio.fen);
+  return sans;
+}
 
 function primeiraFrase(texto: string): string {
   const frase = texto.split(/(?<=[.!?])\s/)[0]?.trim() ?? texto;
@@ -294,11 +381,17 @@ export function planejarEstudo(aula: AulaV2, leitura: LeituraDoEstudo, escolhas:
   const treinos: TreinoV2[] = [];
 
   // Os capítulos entram primeiro, para a introdução poder apontar a posição deles.
+  const idsReservados = new Set([...usados, ...leitura.capitulos.flatMap((c) => [c.jogo.capitulo?.id, c.parado?.capitulo.id].filter((id): id is string => Boolean(id)))]);
+  const comparacoes = new Map<string, string[]>();
   for (const c of escolhidos.filter((item) => destino(item) === "capitulo")) {
     // Sem lances, o capítulo é a posição parada (16/9/2026): "AULA DIAGNÓSTICO - Como você começaria?".
     const { analise, capitulo } = c.jogo.analise ? { analise: c.jogo.analise, capitulo: c.jogo.capitulo! } : c.parado!;
     analises.push(comRevisao(analise));
-    capitulos.push({ ...capitulo, titulo: c.titulo, orientacao: c.lado });
+    const principal = { ...capitulo, titulo: c.titulo, orientacao: c.lado };
+    capitulos.push(principal);
+    const variantes = capitulosDasVariantes(analise, principal, idsReservados);
+    capitulos.push(...variantes);
+    comparacoes.set(principal.id, variantes.map((v) => v.id));
   }
 
   // Treinos: derivados num rascunho da aula, e então independentes e completados.
@@ -314,7 +407,8 @@ export function planejarEstudo(aula: AulaV2, leitura: LeituraDoEstudo, escolhas:
     const treinoId = preparo.preparo.treinos[0].id;
     rascunho = tornarTreinoIndependente(rascunho, treinoId, positions);
     const completado = completarTreino(rascunho.treinos.find((t) => t.id === treinoId)!, analise, c, erros, avisos, new Set([...idsDaAulaV2(rascunho), ...erros.map((e) => e.id)]));
-    treinos.push({ ...completado, introducao: objetivo });
+    const resultado = resultadoDeclarado(c);
+    treinos.push({ ...completado, introducao: objetivo, ...(resultado ? { resultado } : {}) });
     analises.push(analise);
     etapas.push({ id: preparo.preparo.etapas[0].id, tipo: "treino", entidadeId: treinoId });
     // O capítulo temporário sai: a aula do estudo tem treino, não um capítulo repetido.
@@ -323,6 +417,8 @@ export function planejarEstudo(aula: AulaV2, leitura: LeituraDoEstudo, escolhas:
 
   // A ordem das etapas segue a do estudo.
   const ordem = new Map(escolhidos.map((c, i) => [c.jogo.capitulo?.id ?? c.parado?.capitulo.id ?? `#${c.numero}`, i]));
+  // As comparações vêm logo depois do capítulo delas, na ordem da árvore.
+  for (const [principalId, variantes] of comparacoes) variantes.forEach((id, k) => ordem.set(id, (ordem.get(principalId) ?? 0) + (k + 1) / 1000));
   for (const capitulo of capitulos) etapas.push({ id: `etapa-${capitulo.id}`, tipo: "capitulo", entidadeId: capitulo.id });
   const posicaoNoEstudo = (etapa: AulaV2["fluxo"][number]) => {
     if (etapa.tipo === "capitulo") return ordem.get(etapa.entidadeId) ?? 0;
@@ -365,7 +461,7 @@ export function planejarEstudo(aula: AulaV2, leitura: LeituraDoEstudo, escolhas:
     : undefined;
   if (quadros.length && aula.introducoes.length) avisos.push("a aula já tem introdução: os quadros do estudo não entraram — acrescente-os à mão");
 
-  const praticasDoPlano = praticas.map((c) => ({ numero: c.numero, titulo: c.titulo, fen: c.fen, lado: c.lado }));
+  const praticasDoPlano = praticas.map((c) => { const resultado = resultadoDeclarado(c); return { numero: c.numero, titulo: c.titulo, fen: c.fen, lado: c.lado, ...(resultado ? { resultado } : {}) }; });
   return { ok: true, plano: { analises, capitulos, treinos, erros, etapas, avisos, ...(introducao ? { introducao } : {}), praticas: praticasDoPlano } };
 }
 

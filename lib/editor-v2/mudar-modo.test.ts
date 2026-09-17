@@ -85,14 +85,16 @@ test("capítulo → treino → capítulo: as variantes viram respostas, e na vol
 
 test("capítulo → introdução → capítulo: o quadro entra no fim da introdução, e os lances voltam", () => {
   const aula = importada();
-  const original = aula.capitulos[1];
+  // Desde 18/9/2026 cada aula traz o capítulo de comparação do Qg6?? logo depois dela: a segunda aula é achada pelo título.
+  const original = aula.capitulos.find((c) => c.titulo === "AULA EXPLICADA - O método completo")!;
   const quadrosAntes = aula.introducoes[0].quadros.length;
+  const capitulosAntes = aula.fluxo.filter((e) => e.tipo === "capitulo").length;
 
   const paraQuadro = mudarModo(aula, { tipo: "capitulo", capituloId: original.id }, "introducao", {});
   assert.ok(paraQuadro.ok, !paraQuadro.ok ? paraQuadro.mensagem : "");
   const comQuadro = paraQuadro.mudanca.aula;
   assert.equal(comQuadro.introducoes[0].quadros.length, quadrosAntes + 1);
-  assert.equal(comQuadro.fluxo.filter((e) => e.tipo === "capitulo").length, 1);
+  assert.equal(comQuadro.fluxo.filter((e) => e.tipo === "capitulo").length, capitulosAntes - 1);
   assert.ok(comQuadro.analises.some((a) => a.id === original.analiseId), "a análise continua na aula");
   assert.ok(paraQuadro.mudanca.saem.some((s) => /deixa de ver/.test(s)), "a janela avisa que o aluno deixa de ver os lances");
   assert.deepEqual(erros(comQuadro), []);
@@ -101,7 +103,7 @@ test("capítulo → introdução → capítulo: o quadro entra no fim da introdu
   assert.equal(nova.tipo, "quadro");
   const deVolta = mudarModo(comQuadro, nova, "capitulo", {});
   assert.ok(deVolta.ok, !deVolta.ok ? deVolta.mensagem : "");
-  const capitulo = deVolta.mudanca.aula.capitulos.find((c) => c.analiseId === original.analiseId)!;
+  const capitulo = deVolta.mudanca.aula.capitulos.find((c) => c.analiseId === original.analiseId && !c.titulo.startsWith("Comparação"))!;
   assert.deepEqual(capitulo.caminho, original.caminho, "os lances voltaram");
   assert.deepEqual(erros(deVolta.mudanca.aula), []);
 });

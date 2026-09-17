@@ -1,0 +1,2373 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-41dcd39b14034c0e",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "N1-KING-ACTIVITY",
+    "titulo": "O rei é peça: use-o",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "classe": "E",
+      "estadoEditorial": "rascunho"
+    },
+    "proveniencia": [
+      {
+        "positionId": "pos-n1-king-activity-1",
+        "conteudoHash": "9c98e82c40f876d5f5f0077448caba3443dbfd49d10f55c1d3c112c546d3f20f",
+        "estado": "candidate"
+      }
+    ],
+    "excecoes": [],
+    "catalogo": {
+      "erros": [
+        {
+          "id": "erro-no-jogo-8-2",
+          "nome": "O peão andou, e o rei ficou parado.",
+          "julgamento": "perde-resultado",
+          "texto": "O peão andou, e o rei ficou parado. O peão de g6 come h5, e a vitória some."
+        },
+        {
+          "id": "erro-no-jogo-8-5",
+          "nome": "O peão andou, e o rei ficou parado.",
+          "julgamento": "perde-resultado",
+          "texto": "O peão andou, e o rei ficou parado. Chegar a f7 era o que ganhava."
+        },
+        {
+          "id": "erro-no-jogo-9-2",
+          "nome": "O peão andou, e o rei ficou parado.",
+          "julgamento": "perde-resultado",
+          "texto": "O peão andou, e o rei ficou parado. O peão de g6 come h5, e as Pretas ganham."
+        },
+        {
+          "id": "erro-no-jogo-9-5",
+          "nome": "O rei andou de lado e perdeu um lance.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei andou de lado e perdeu um lance. O rei preto chega a tempo de defender."
+        },
+        {
+          "id": "erro-no-jogo-10-2",
+          "nome": "O peão andou, e o rei ficou parado.",
+          "julgamento": "perde-resultado",
+          "texto": "O peão andou, e o rei ficou parado. O rei preto volta a tempo, e é empate."
+        },
+        {
+          "id": "erro-no-jogo-10-5",
+          "nome": "O rei perdeu um lance em d3.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei perdeu um lance em d3. O rei preto volta a tempo, e é empate."
+        }
+      ],
+      "mensagensPadrao": {
+        "vitoriaForaDoMetodo": "Este lance funciona, mas não é o caminho ensinado.",
+        "perdeResultado": "Este lance perde o resultado que a posição permitia.",
+        "alternativaDoMetodo": "Boa alternativa. Continue pela linha ensinada."
+      }
+    },
+    "analises": [
+      {
+        "id": "analise-jogo-5",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/5p1p/6p1/1k4P1/1P3P1P/8/6K1/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "piloto - Ative seu rei; posições adaptadas",
+            "link": "https://lichess.org/study/wtityoKq",
+            "fenRevisada": "8/5p1p/6p1/1k4P1/1P3P1P/8/6K1/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:45.012Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 6 - O rei é peça: use-o",
+            "Site": "https://lichess.org/study/wtityoKq",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O rei é peça: use-o",
+            "ChapterName": "01 - AULA - O rei vai pelo centro",
+            "FEN": "8/5p1p/6p1/1k4P1/1P3P1P/8/6K1/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "Adaptacao": "Posição da fonte (0.1A) com o rei branco de d5 para g2 e a vez das Brancas; substitui o contraste 0.1D (rei em a1). Motor: 1. Kf3 ganha; 1. Kg3 e 2. Ke3 empatam."
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-5-0",
+        "nos": {
+          "no-jogo-5-0": {
+            "id": "no-jogo-5-0",
+            "filhos": [
+              "no-jogo-5-1",
+              "no-jogo-5-2"
+            ],
+            "comentario": "Brancas jogam. O rei preto vai comer b4. O rei branco precisa chegar antes aos peões pretos.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "b4",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yb4]"
+            ]
+          },
+          "no-jogo-5-1": {
+            "id": "no-jogo-5-1",
+            "uci": "g2f3",
+            "filhos": [
+              "no-jogo-5-8"
+            ],
+            "comentario": "O rei vai para f3, na direção do centro. O caminho passa por e4.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g2",
+                  "para": "f3",
+                  "cor": "verde"
+                },
+                {
+                  "de": "f3",
+                  "para": "e4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg2f3,Gf3e4]"
+            ]
+          },
+          "no-jogo-5-2": {
+            "id": "no-jogo-5-2",
+            "uci": "g2g3",
+            "filhos": [
+              "no-jogo-5-3"
+            ],
+            "comentario": "O rei vai para g3, fora do caminho de e4.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g3",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg3]"
+            ]
+          },
+          "no-jogo-5-3": {
+            "id": "no-jogo-5-3",
+            "uci": "b5b4",
+            "filhos": [
+              "no-jogo-5-4"
+            ]
+          },
+          "no-jogo-5-4": {
+            "id": "no-jogo-5-4",
+            "uci": "g3f3",
+            "filhos": [
+              "no-jogo-5-5"
+            ]
+          },
+          "no-jogo-5-5": {
+            "id": "no-jogo-5-5",
+            "uci": "b4c5",
+            "filhos": [
+              "no-jogo-5-6"
+            ]
+          },
+          "no-jogo-5-6": {
+            "id": "no-jogo-5-6",
+            "uci": "f3e4",
+            "filhos": [
+              "no-jogo-5-7"
+            ]
+          },
+          "no-jogo-5-7": {
+            "id": "no-jogo-5-7",
+            "uci": "c5d6",
+            "filhos": [],
+            "comentario": "O rei preto chegou a d6 e fecha e5. Um lance perdido, e a vitória virou empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d6",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "e5",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rd6,Re5]"
+            ]
+          },
+          "no-jogo-5-8": {
+            "id": "no-jogo-5-8",
+            "uci": "b5b4",
+            "filhos": [
+              "no-jogo-5-9",
+              "no-jogo-5-10"
+            ],
+            "comentario": "O rei preto comeu b4. Agora conte: quem chega primeiro aos peões?"
+          },
+          "no-jogo-5-9": {
+            "id": "no-jogo-5-9",
+            "uci": "f3e4",
+            "filhos": [
+              "no-jogo-5-14"
+            ],
+            "comentario": "O rei entra em e4, no centro. Só este lance ganha.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ge4]"
+            ]
+          },
+          "no-jogo-5-10": {
+            "id": "no-jogo-5-10",
+            "uci": "f3e3",
+            "filhos": [
+              "no-jogo-5-11"
+            ],
+            "comentario": "O rei vai para e3 e perde um lance.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e3",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re3]"
+            ]
+          },
+          "no-jogo-5-11": {
+            "id": "no-jogo-5-11",
+            "uci": "b4c5",
+            "filhos": [
+              "no-jogo-5-12"
+            ]
+          },
+          "no-jogo-5-12": {
+            "id": "no-jogo-5-12",
+            "uci": "e3e4",
+            "filhos": [
+              "no-jogo-5-13"
+            ]
+          },
+          "no-jogo-5-13": {
+            "id": "no-jogo-5-13",
+            "uci": "c5d6",
+            "filhos": [],
+            "comentario": "De novo, o rei preto chega a d6 a tempo. É empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rd6]"
+            ]
+          },
+          "no-jogo-5-14": {
+            "id": "no-jogo-5-14",
+            "uci": "b4c4",
+            "filhos": [
+              "no-jogo-5-15"
+            ]
+          },
+          "no-jogo-5-15": {
+            "id": "no-jogo-5-15",
+            "uci": "e4e5",
+            "filhos": [
+              "no-jogo-5-16"
+            ],
+            "comentario": "De e5, o rei aponta para f6, ao lado dos peões pretos.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e5",
+                  "para": "f6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge5f6]"
+            ]
+          },
+          "no-jogo-5-16": {
+            "id": "no-jogo-5-16",
+            "uci": "c4d3",
+            "filhos": [
+              "no-jogo-5-17"
+            ]
+          },
+          "no-jogo-5-17": {
+            "id": "no-jogo-5-17",
+            "uci": "e5f6",
+            "filhos": [
+              "no-jogo-5-18"
+            ],
+            "comentario": "O rei chegou a f6. Agora ele ataca o peão de f7.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "f7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf6,Yf7]"
+            ]
+          },
+          "no-jogo-5-18": {
+            "id": "no-jogo-5-18",
+            "uci": "d3e3",
+            "filhos": [
+              "no-jogo-5-19"
+            ]
+          },
+          "no-jogo-5-19": {
+            "id": "no-jogo-5-19",
+            "uci": "f6f7",
+            "filhos": [],
+            "comentario": "O rei branco chegou primeiro. O peão de f7 caiu, e h7 é o próximo.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf7,Yh7]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-6",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/6Kp/6p1/6P1/5k1P/8/8/8 w - - 0 6",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "piloto - Ative seu rei; posições adaptadas",
+            "link": "https://lichess.org/study/wtityoKq",
+            "fenRevisada": "8/6Kp/6p1/6P1/5k1P/8/8/8 w - - 0 6",
+            "revisadoEm": "2026-09-17T16:19:45.012Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 6 - O rei é peça: use-o",
+            "Site": "https://lichess.org/study/wtityoKq",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O rei é peça: use-o",
+            "ChapterName": "02 - AULA - O rei come e protege",
+            "FEN": "8/6Kp/6p1/6P1/5k1P/8/8/8 w - - 0 6",
+            "SetUp": "1",
+            "Orientation": "white",
+            "Adaptacao": "Posição da fonte (0.1C) com a vez trocada: Brancas jogam, como na sequência de 0.1B. Motor antes (Pretas jogam): Brancas ganham; depois (Brancas jogam): Brancas ganham, e 6. Kf6 perde."
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-6-0",
+        "nos": {
+          "no-jogo-6-0": {
+            "id": "no-jogo-6-0",
+            "filhos": [
+              "no-jogo-6-1",
+              "no-jogo-6-2"
+            ],
+            "comentario": "Outra posição. O rei branco, em g7, está colado no peão de h7. O rei preto, em f4, quer o peão de h4.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "f4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "h4",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg7,Yh7,Yf4,Yh4]"
+            ]
+          },
+          "no-jogo-6-1": {
+            "id": "no-jogo-6-1",
+            "uci": "g7h7",
+            "filhos": [
+              "no-jogo-6-8"
+            ],
+            "comentario": "O rei come h7. Agora ele também ameaça g6.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gh7,Yg6]"
+            ]
+          },
+          "no-jogo-6-2": {
+            "id": "no-jogo-6-2",
+            "uci": "g7f6",
+            "filhos": [
+              "no-jogo-6-3"
+            ],
+            "comentario": "O rei vai para f6 só para defender g5.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rf6]"
+            ]
+          },
+          "no-jogo-6-3": {
+            "id": "no-jogo-6-3",
+            "uci": "f4g4",
+            "filhos": [
+              "no-jogo-6-4"
+            ]
+          },
+          "no-jogo-6-4": {
+            "id": "no-jogo-6-4",
+            "uci": "f6g7",
+            "filhos": [
+              "no-jogo-6-5"
+            ]
+          },
+          "no-jogo-6-5": {
+            "id": "no-jogo-6-5",
+            "uci": "g4h4",
+            "filhos": [
+              "no-jogo-6-6"
+            ]
+          },
+          "no-jogo-6-6": {
+            "id": "no-jogo-6-6",
+            "uci": "g7h7",
+            "filhos": [
+              "no-jogo-6-7"
+            ]
+          },
+          "no-jogo-6-7": {
+            "id": "no-jogo-6-7",
+            "uci": "h4g5",
+            "filhos": [],
+            "comentario": "O rei preto comeu h4 e g5. Agora quem tem peão são as Pretas.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g5",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "g6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg5,Rg6]"
+            ]
+          },
+          "no-jogo-6-8": {
+            "id": "no-jogo-6-8",
+            "uci": "f4g4",
+            "filhos": [
+              "no-jogo-6-9"
+            ]
+          },
+          "no-jogo-6-9": {
+            "id": "no-jogo-6-9",
+            "uci": "h7g6",
+            "filhos": [
+              "no-jogo-6-10"
+            ],
+            "comentario": "O rei come g6 e fica ao lado do seu peão de g5.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g6",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg6,Gg5]"
+            ]
+          },
+          "no-jogo-6-10": {
+            "id": "no-jogo-6-10",
+            "uci": "g4h4",
+            "filhos": [
+              "no-jogo-6-11"
+            ]
+          },
+          "no-jogo-6-11": {
+            "id": "no-jogo-6-11",
+            "uci": "g6f5",
+            "filhos": [
+              "no-jogo-6-12"
+            ],
+            "comentario": "Em f5, o rei fica colado no peão. O rei preto não chega a g4.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f5",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g4",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf5,Yg4]"
+            ]
+          },
+          "no-jogo-6-12": {
+            "id": "no-jogo-6-12",
+            "uci": "h4h5",
+            "filhos": [
+              "no-jogo-6-13"
+            ]
+          },
+          "no-jogo-6-13": {
+            "id": "no-jogo-6-13",
+            "uci": "g5g6",
+            "filhos": [
+              "no-jogo-6-14"
+            ]
+          },
+          "no-jogo-6-14": {
+            "id": "no-jogo-6-14",
+            "uci": "h5h6",
+            "filhos": [
+              "no-jogo-6-15",
+              "no-jogo-6-16"
+            ]
+          },
+          "no-jogo-6-15": {
+            "id": "no-jogo-6-15",
+            "uci": "f5f6",
+            "filhos": [
+              "no-jogo-6-20"
+            ],
+            "comentario": "O rei vai para f6 e protege g7, a próxima casa do peão.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf6,Yg7]"
+            ]
+          },
+          "no-jogo-6-16": {
+            "id": "no-jogo-6-16",
+            "uci": "g6g7",
+            "filhos": [
+              "no-jogo-6-17"
+            ],
+            "comentario": "O peão correu sozinho, sem o rei.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg7]"
+            ]
+          },
+          "no-jogo-6-17": {
+            "id": "no-jogo-6-17",
+            "uci": "h6h7",
+            "filhos": [
+              "no-jogo-6-18"
+            ]
+          },
+          "no-jogo-6-18": {
+            "id": "no-jogo-6-18",
+            "uci": "g7g8q",
+            "filhos": [
+              "no-jogo-6-19"
+            ]
+          },
+          "no-jogo-6-19": {
+            "id": "no-jogo-6-19",
+            "uci": "h7g8",
+            "filhos": [],
+            "comentario": "O rei preto come a dama. Sem peões, é empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg8]"
+            ]
+          },
+          "no-jogo-6-20": {
+            "id": "no-jogo-6-20",
+            "uci": "h6h5",
+            "filhos": [
+              "no-jogo-6-21"
+            ]
+          },
+          "no-jogo-6-21": {
+            "id": "no-jogo-6-21",
+            "uci": "g6g7",
+            "filhos": [
+              "no-jogo-6-22"
+            ]
+          },
+          "no-jogo-6-22": {
+            "id": "no-jogo-6-22",
+            "uci": "h5g4",
+            "filhos": [
+              "no-jogo-6-23"
+            ]
+          },
+          "no-jogo-6-23": {
+            "id": "no-jogo-6-23",
+            "uci": "g7g8q",
+            "filhos": [],
+            "comentario": "Dama! O rei comeu os peões pretos e levou o seu até g8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-7",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "6Q1/8/5K2/8/6k1/8/8/8 b - - 0 12",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "piloto - Ative seu rei; posições adaptadas",
+            "link": "https://lichess.org/study/wtityoKq",
+            "fenRevisada": "6Q1/8/5K2/8/6k1/8/8/8 b - - 0 12",
+            "revisadoEm": "2026-09-17T16:19:45.012Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 6 - O rei é peça: use-o",
+            "Site": "https://lichess.org/study/wtityoKq",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O rei é peça: use-o",
+            "ChapterName": "03 - AULA - LEMBRE-SE",
+            "FEN": "6Q1/8/5K2/8/6k1/8/8/8 b - - 0 12",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-7-0",
+        "nos": {
+          "no-jogo-7-0": {
+            "id": "no-jogo-7-0",
+            "filhos": [],
+            "comentario": "LEMBRE-SE:\n\n1. Saíram as damas e as torres? O rei vai para o centro.\n2. Conte os lances: um lance perdido vira empate.\n3. O rei come os peões dele e protege o seu."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-8",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/5p1p/6p1/3K2P1/1k3P1P/8/8/8 w - - 0 2",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "piloto - Ative seu rei; posições adaptadas",
+            "link": "https://lichess.org/study/wtityoKq",
+            "fenRevisada": "8/5p1p/6p1/3K2P1/1k3P1P/8/8/8 w - - 0 2",
+            "revisadoEm": "2026-09-17T16:19:45.012Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 6 - O rei é peça: use-o",
+            "Site": "https://lichess.org/study/wtityoKq",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O rei é peça: use-o",
+            "ChapterName": "04 - TREINO 1 - Leve o rei até f7",
+            "FEN": "8/5p1p/6p1/3K2P1/1k3P1P/8/8/8 w - - 0 2",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-8-0",
+        "nos": {
+          "no-jogo-8-0": {
+            "id": "no-jogo-8-0",
+            "filhos": [
+              "no-jogo-8-1",
+              "no-jogo-8-2"
+            ],
+            "comentario": "O rei preto comeu b4. O seu alvo é o peão de f7. Leve o rei até lá.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yf7]"
+            ]
+          },
+          "no-jogo-8-1": {
+            "id": "no-jogo-8-1",
+            "uci": "d5e5",
+            "filhos": [
+              "no-jogo-8-3"
+            ],
+            "comentario": "O rei vai para e5, mais perto de f7.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-8-2": {
+            "id": "no-jogo-8-2",
+            "uci": "h4h5",
+            "filhos": [],
+            "comentario": "O peão andou, e o rei ficou parado. O peão de g6 come h5, e a vitória some.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-8-3": {
+            "id": "no-jogo-8-3",
+            "uci": "b4c4",
+            "filhos": [
+              "no-jogo-8-4",
+              "no-jogo-8-5"
+            ]
+          },
+          "no-jogo-8-4": {
+            "id": "no-jogo-8-4",
+            "uci": "e5f6",
+            "filhos": [
+              "no-jogo-8-6"
+            ],
+            "comentario": "De f6, o rei já ataca f7.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-8-5": {
+            "id": "no-jogo-8-5",
+            "uci": "h4h5",
+            "filhos": [],
+            "comentario": "O peão andou, e o rei ficou parado. Chegar a f7 era o que ganhava.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-8-6": {
+            "id": "no-jogo-8-6",
+            "uci": "c4d4",
+            "filhos": [
+              "no-jogo-8-7"
+            ]
+          },
+          "no-jogo-8-7": {
+            "id": "no-jogo-8-7",
+            "uci": "f6f7",
+            "filhos": [],
+            "comentario": "O rei chegou primeiro e comeu f7."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-9",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/5p1p/1k4p1/6P1/5P1P/2K5/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "piloto - Ative seu rei; posições adaptadas",
+            "link": "https://lichess.org/study/wtityoKq",
+            "fenRevisada": "8/5p1p/1k4p1/6P1/5P1P/2K5/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:45.012Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 6 - O rei é peça: use-o",
+            "Site": "https://lichess.org/study/wtityoKq",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O rei é peça: use-o",
+            "ChapterName": "05 - TREINO 2 - Chegue antes, sem ajuda",
+            "FEN": "8/5p1p/1k4p1/6P1/5P1P/2K5/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook",
+            "Adaptacao": "Posição nova, da mesma família da fonte, sem o peão de b4. Motor: Brancas ganham, só com 1. Kd4; 1. h5 perde."
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-9-0",
+        "nos": {
+          "no-jogo-9-0": {
+            "id": "no-jogo-9-0",
+            "filhos": [
+              "no-jogo-9-1",
+              "no-jogo-9-2"
+            ],
+            "comentario": "Agora sem ajuda. Leve o rei aos peões pretos antes do rei preto."
+          },
+          "no-jogo-9-1": {
+            "id": "no-jogo-9-1",
+            "uci": "c3d4",
+            "filhos": [
+              "no-jogo-9-3"
+            ],
+            "comentario": "O rei vai para d4, no centro.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-9-2": {
+            "id": "no-jogo-9-2",
+            "uci": "h4h5",
+            "filhos": [],
+            "comentario": "O peão andou, e o rei ficou parado. O peão de g6 come h5, e as Pretas ganham.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-9-3": {
+            "id": "no-jogo-9-3",
+            "uci": "b6c6",
+            "filhos": [
+              "no-jogo-9-4",
+              "no-jogo-9-5"
+            ]
+          },
+          "no-jogo-9-4": {
+            "id": "no-jogo-9-4",
+            "uci": "d4e5",
+            "filhos": [
+              "no-jogo-9-6"
+            ],
+            "comentario": "Em e5, o rei fica mais perto de f7 que o rei preto.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e5",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "f7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ge5,Yf7]"
+            ]
+          },
+          "no-jogo-9-5": {
+            "id": "no-jogo-9-5",
+            "uci": "d4e4",
+            "filhos": [],
+            "comentario": "O rei andou de lado e perdeu um lance. O rei preto chega a tempo de defender.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-9-6": {
+            "id": "no-jogo-9-6",
+            "uci": "c6d7",
+            "filhos": [
+              "no-jogo-9-7"
+            ]
+          },
+          "no-jogo-9-7": {
+            "id": "no-jogo-9-7",
+            "uci": "e5f6",
+            "filhos": [
+              "no-jogo-9-8"
+            ],
+            "comentario": "O rei chegou a f6, colado em f7.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-9-8": {
+            "id": "no-jogo-9-8",
+            "uci": "d7e8",
+            "filhos": [
+              "no-jogo-9-9"
+            ]
+          },
+          "no-jogo-9-9": {
+            "id": "no-jogo-9-9",
+            "uci": "f6g7",
+            "filhos": [],
+            "comentario": "O peão de h7 vai cair. O rei preto chegou tarde.",
+            "nags": [
+              1
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-10",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/p1p5/1p6/1P4k1/P1P3P1/8/1K6/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "piloto - Ative seu rei; posições adaptadas",
+            "link": "https://lichess.org/study/wtityoKq",
+            "fenRevisada": "8/p1p5/1p6/1P4k1/P1P3P1/8/1K6/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:45.012Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 6 - O rei é peça: use-o",
+            "Site": "https://lichess.org/study/wtityoKq",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O rei é peça: use-o",
+            "ChapterName": "06 - TREINO 3 - Do outro lado",
+            "FEN": "8/p1p5/1p6/1P4k1/P1P3P1/8/1K6/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook",
+            "Adaptacao": "Posição nova: o espelho da posição de g2 (colunas a-h trocadas). Motor: Brancas ganham, só com 1. Kc3; 1. c5 e 2. Kd3 empatam."
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-10-0",
+        "nos": {
+          "no-jogo-10-0": {
+            "id": "no-jogo-10-0",
+            "filhos": [
+              "no-jogo-10-1",
+              "no-jogo-10-2"
+            ],
+            "comentario": "Agora do outro lado do tabuleiro. O rei preto vai comer g4. Leve o seu rei aos peões pretos."
+          },
+          "no-jogo-10-1": {
+            "id": "no-jogo-10-1",
+            "uci": "b2c3",
+            "filhos": [
+              "no-jogo-10-3"
+            ],
+            "comentario": "O rei vai para c3, na direção do centro.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-2": {
+            "id": "no-jogo-10-2",
+            "uci": "c4c5",
+            "filhos": [],
+            "comentario": "O peão andou, e o rei ficou parado. O rei preto volta a tempo, e é empate.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-10-3": {
+            "id": "no-jogo-10-3",
+            "uci": "g5g4",
+            "filhos": [
+              "no-jogo-10-4",
+              "no-jogo-10-5"
+            ]
+          },
+          "no-jogo-10-4": {
+            "id": "no-jogo-10-4",
+            "uci": "c3d4",
+            "filhos": [
+              "no-jogo-10-6"
+            ],
+            "comentario": "O rei entra em d4, no centro.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-5": {
+            "id": "no-jogo-10-5",
+            "uci": "c3d3",
+            "filhos": [],
+            "comentario": "O rei perdeu um lance em d3. O rei preto volta a tempo, e é empate.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-10-6": {
+            "id": "no-jogo-10-6",
+            "uci": "g4f4",
+            "filhos": [
+              "no-jogo-10-7"
+            ]
+          },
+          "no-jogo-10-7": {
+            "id": "no-jogo-10-7",
+            "uci": "d4d5",
+            "filhos": [
+              "no-jogo-10-8"
+            ],
+            "comentario": "O rei avança para d5.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-8": {
+            "id": "no-jogo-10-8",
+            "uci": "f4e3",
+            "filhos": [
+              "no-jogo-10-9"
+            ]
+          },
+          "no-jogo-10-9": {
+            "id": "no-jogo-10-9",
+            "uci": "d5c6",
+            "filhos": [],
+            "comentario": "O rei chegou a c6. O peão de c7 vai cair.",
+            "nags": [
+              1
+            ]
+          }
+        }
+      }
+    ],
+    "introducoes": [
+      {
+        "id": "introducao-estudo-1",
+        "titulo": "Introdução",
+        "quadros": [
+          {
+            "id": "quadro-estudo-1",
+            "titulo": "INTRODUÇÃO - Ganha, empata ou perde?",
+            "texto": "Só reis e peões. Pretas jogam. O rei branco está em d5, e o preto, em b5.\n\nGanha, empata ou perde?",
+            "posicao": {
+              "tipo": "fen",
+              "fen": "8/5p1p/6p1/1k1K2P1/1P3P1P/8/8/8 b - - 0 1"
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "b5",
+                  "cor": "amarelo"
+                }
+              ]
+            }
+          },
+          {
+            "id": "quadro-estudo-2",
+            "titulo": "INTRODUÇÃO - A resposta",
+            "texto": "As Brancas ganham. O rei preto come o peão de b4, mas fica longe.\n\nO rei branco chega antes aos peões de f7 e h7.",
+            "posicao": {
+              "tipo": "fen",
+              "fen": "8/5p1p/6p1/1k1K2P1/1P3P1P/8/8/8 b - - 0 1"
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d5",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "b4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "f7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "h7",
+                  "cor": "amarelo"
+                }
+              ]
+            }
+          },
+          {
+            "id": "quadro-estudo-3",
+            "titulo": "INTRODUÇÃO - Sem damas, o rei sai",
+            "texto": "Com damas e torres no tabuleiro, o rei fica escondido perto do canto.\n\nQuando elas saem, o rei vira peça. Aqui ele está em g2 e precisa sair.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-5",
+                "nodeId": "no-jogo-5-0"
+              }
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g2",
+                  "cor": "amarelo"
+                }
+              ]
+            }
+          },
+          {
+            "id": "quadro-estudo-4",
+            "titulo": "INTRODUÇÃO - A pergunta da aula",
+            "texto": "Hoje, a cada lance, pergunte: meu rei chegou mais perto dos peões?\n\nNo fim, você leva o rei para o centro assim que as peças fortes saem.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-5",
+                "nodeId": "no-jogo-5-0"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "capitulos": [
+      {
+        "id": "capitulo-jogo-5",
+        "titulo": "AULA - O rei vai pelo centro",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-8",
+          "no-jogo-5-9",
+          "no-jogo-5-14",
+          "no-jogo-5-15",
+          "no-jogo-5-16",
+          "no-jogo-5-17",
+          "no-jogo-5-18",
+          "no-jogo-5-19"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-5-0",
+            "nodeId": "no-jogo-5-0",
+            "texto": "Brancas jogam. O rei preto vai comer b4. O rei branco precisa chegar antes aos peões pretos.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-1",
+            "nodeId": "no-jogo-5-1",
+            "texto": "O rei vai para f3, na direção do centro. O caminho passa por e4.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-2",
+            "nodeId": "no-jogo-5-2",
+            "texto": "O rei vai para g3, fora do caminho de e4.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-7",
+            "nodeId": "no-jogo-5-7",
+            "texto": "O rei preto chegou a d6 e fecha e5. Um lance perdido, e a vitória virou empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-8",
+            "nodeId": "no-jogo-5-8",
+            "texto": "O rei preto comeu b4. Agora conte: quem chega primeiro aos peões?",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-9",
+            "nodeId": "no-jogo-5-9",
+            "texto": "O rei entra em e4, no centro. Só este lance ganha.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-10",
+            "nodeId": "no-jogo-5-10",
+            "texto": "O rei vai para e3 e perde um lance.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-13",
+            "nodeId": "no-jogo-5-13",
+            "texto": "De novo, o rei preto chega a d6 a tempo. É empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-15",
+            "nodeId": "no-jogo-5-15",
+            "texto": "De e5, o rei aponta para f6, ao lado dos peões pretos.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-17",
+            "nodeId": "no-jogo-5-17",
+            "texto": "O rei chegou a f6. Agora ele ataca o peão de f7.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-19",
+            "nodeId": "no-jogo-5-19",
+            "texto": "O rei branco chegou primeiro. O peão de f7 caiu, e h7 é o próximo.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5-variante",
+        "titulo": "Comparação: 1. Rg3??",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-5",
+          "no-jogo-5-6",
+          "no-jogo-5-7"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-2",
+            "nodeId": "no-jogo-5-2",
+            "texto": "O rei vai para g3, fora do caminho de e4.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-7",
+            "nodeId": "no-jogo-5-7",
+            "texto": "O rei preto chegou a d6 e fecha e5. Um lance perdido, e a vitória virou empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5-variante-2",
+        "titulo": "Comparação: 2. Re3??",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-8",
+          "no-jogo-5-10",
+          "no-jogo-5-11",
+          "no-jogo-5-12",
+          "no-jogo-5-13"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-5-variante-2-no-jogo-5-10",
+            "nodeId": "no-jogo-5-10",
+            "texto": "O rei vai para e3 e perde um lance.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-5-variante-2-no-jogo-5-13",
+            "nodeId": "no-jogo-5-13",
+            "texto": "De novo, o rei preto chega a d6 a tempo. É empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6",
+        "titulo": "AULA - O rei come e protege",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-1",
+          "no-jogo-6-8",
+          "no-jogo-6-9",
+          "no-jogo-6-10",
+          "no-jogo-6-11",
+          "no-jogo-6-12",
+          "no-jogo-6-13",
+          "no-jogo-6-14",
+          "no-jogo-6-15",
+          "no-jogo-6-20",
+          "no-jogo-6-21",
+          "no-jogo-6-22",
+          "no-jogo-6-23"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-6-0",
+            "nodeId": "no-jogo-6-0",
+            "texto": "Outra posição. O rei branco, em g7, está colado no peão de h7. O rei preto, em f4, quer o peão de h4.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-1",
+            "nodeId": "no-jogo-6-1",
+            "texto": "O rei come h7. Agora ele também ameaça g6.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-2",
+            "nodeId": "no-jogo-6-2",
+            "texto": "O rei vai para f6 só para defender g5.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-7",
+            "nodeId": "no-jogo-6-7",
+            "texto": "O rei preto comeu h4 e g5. Agora quem tem peão são as Pretas.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-9",
+            "nodeId": "no-jogo-6-9",
+            "texto": "O rei come g6 e fica ao lado do seu peão de g5.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-11",
+            "nodeId": "no-jogo-6-11",
+            "texto": "Em f5, o rei fica colado no peão. O rei preto não chega a g4.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-15",
+            "nodeId": "no-jogo-6-15",
+            "texto": "O rei vai para f6 e protege g7, a próxima casa do peão.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-16",
+            "nodeId": "no-jogo-6-16",
+            "texto": "O peão correu sozinho, sem o rei.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-19",
+            "nodeId": "no-jogo-6-19",
+            "texto": "O rei preto come a dama. Sem peões, é empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-23",
+            "nodeId": "no-jogo-6-23",
+            "texto": "Dama! O rei comeu os peões pretos e levou o seu até g8.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6-variante",
+        "titulo": "Comparação: 6. Rf6??",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-2",
+          "no-jogo-6-3",
+          "no-jogo-6-4",
+          "no-jogo-6-5",
+          "no-jogo-6-6",
+          "no-jogo-6-7"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-2",
+            "nodeId": "no-jogo-6-2",
+            "texto": "O rei vai para f6 só para defender g5.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-7",
+            "nodeId": "no-jogo-6-7",
+            "texto": "O rei preto comeu h4 e g5. Agora quem tem peão são as Pretas.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6-variante-2",
+        "titulo": "Comparação: 10. g7??",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-1",
+          "no-jogo-6-8",
+          "no-jogo-6-9",
+          "no-jogo-6-10",
+          "no-jogo-6-11",
+          "no-jogo-6-12",
+          "no-jogo-6-13",
+          "no-jogo-6-14",
+          "no-jogo-6-16",
+          "no-jogo-6-17",
+          "no-jogo-6-18",
+          "no-jogo-6-19"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-6-variante-2-no-jogo-6-16",
+            "nodeId": "no-jogo-6-16",
+            "texto": "O peão correu sozinho, sem o rei.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-2-no-jogo-6-19",
+            "nodeId": "no-jogo-6-19",
+            "texto": "O rei preto come a dama. Sem peões, é empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7",
+        "titulo": "AULA - LEMBRE-SE",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-7-0",
+            "nodeId": "no-jogo-7-0",
+            "texto": "LEMBRE-SE:\n\n1. Saíram as damas e as torres? O rei vai para o centro.\n2. Conte os lances: um lance perdido vira empate.\n3. O rei come os peões dele e protege o seu.",
+            "pausa": "manual"
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-capitulo-jogo-8-no-jogo-8-0-white",
+        "titulo": "TREINO 1 - Leve o rei até f7",
+        "introducao": "O rei preto comeu b4. O seu alvo é o peão de f7. Leve o rei até lá.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-8",
+          "nodeId": "no-jogo-8-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "O rei preto comeu b4. O seu alvo é o peão de f7. Leve o rei até lá.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-8-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-1-white",
+                "moves": [
+                  "d5e5"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei vai para e5, mais perto de f7.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b4c4",
+                      "proximaQuestaoId": "questao-no-jogo-8-3-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-8-2",
+                "moves": [
+                  "h4h5"
+                ],
+                "julgamento": "erro",
+                "feedback": "O peão andou, e o rei ficou parado. O peão de g6 come h5, e a vitória some.",
+                "erroId": "erro-no-jogo-8-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-8-3-white",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-3"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-4-white",
+                "moves": [
+                  "e5f6"
+                ],
+                "julgamento": "correta",
+                "feedback": "De f6, o rei já ataca f7.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c4d4",
+                      "proximaQuestaoId": "questao-no-jogo-8-6-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-8-5",
+                "moves": [
+                  "h4h5"
+                ],
+                "julgamento": "erro",
+                "feedback": "O peão andou, e o rei ficou parado. Chegar a f7 era o que ganhava.",
+                "erroId": "erro-no-jogo-8-5",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-8-6-white",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-6"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-7-white",
+                "moves": [
+                  "f6f7"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei chegou primeiro e comeu f7.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-8",
+          "nodeIds": [
+            "no-jogo-8-0",
+            "no-jogo-8-1",
+            "no-jogo-8-3",
+            "no-jogo-8-4",
+            "no-jogo-8-6",
+            "no-jogo-8-7"
+          ],
+          "hash": "v2-0c6ce5f3",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-8",
+          "inicioNodeId": "no-jogo-8-0",
+          "objetivo": "O rei preto comeu b4. O seu alvo é o peão de f7. Leve o rei até lá."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/5p1p/6p1/3K2P1/1k3P1P/8/8/8 w - - 0 2",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-8-0-white": {
+              "fen": "8/5p1p/6p1/3K2P1/1k3P1P/8/8/8 w - - 0 2",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-0"
+              }
+            },
+            "questao-no-jogo-8-3-white": {
+              "fen": "8/5p1p/6p1/4K1P1/2k2P1P/8/8/8 w - - 2 3",
+              "historicoUci": [
+                "d5e5",
+                "b4c4"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-3"
+              }
+            },
+            "questao-no-jogo-8-6-white": {
+              "fen": "8/5p1p/5Kp1/6P1/3k1P1P/8/8/8 w - - 4 4",
+              "historicoUci": [
+                "d5e5",
+                "b4c4",
+                "e5f6",
+                "c4d4"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-6"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "O rei chegou primeiro e comeu f7."
+      },
+      {
+        "id": "treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "titulo": "TREINO 2 - Chegue antes, sem ajuda",
+        "introducao": "Agora sem ajuda. Leve o rei aos peões pretos antes do rei preto.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-9",
+          "nodeId": "no-jogo-9-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Agora sem ajuda. Leve o rei aos peões pretos antes do rei preto.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-9-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-1-white",
+                "moves": [
+                  "c3d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei vai para d4, no centro.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b6c6",
+                      "proximaQuestaoId": "questao-no-jogo-9-3-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-2",
+                "moves": [
+                  "h4h5"
+                ],
+                "julgamento": "erro",
+                "feedback": "O peão andou, e o rei ficou parado. O peão de g6 come h5, e as Pretas ganham.",
+                "erroId": "erro-no-jogo-9-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-3-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-3"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-4-white",
+                "moves": [
+                  "d4e5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Em e5, o rei fica mais perto de f7 que o rei preto.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c6d7",
+                      "proximaQuestaoId": "questao-no-jogo-9-6-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-5",
+                "moves": [
+                  "d4e4"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei andou de lado e perdeu um lance. O rei preto chega a tempo de defender.",
+                "erroId": "erro-no-jogo-9-5",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-6-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-6"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-7-white",
+                "moves": [
+                  "e5f6"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei chegou a f6, colado em f7.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d7e8",
+                      "proximaQuestaoId": "questao-no-jogo-9-8-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-8-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-8"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-9-white",
+                "moves": [
+                  "f6g7"
+                ],
+                "julgamento": "correta",
+                "feedback": "O peão de h7 vai cair. O rei preto chegou tarde.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-9",
+          "nodeIds": [
+            "no-jogo-9-0",
+            "no-jogo-9-1",
+            "no-jogo-9-3",
+            "no-jogo-9-4",
+            "no-jogo-9-6",
+            "no-jogo-9-7",
+            "no-jogo-9-8",
+            "no-jogo-9-9"
+          ],
+          "hash": "v2-08aed875",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-9",
+          "inicioNodeId": "no-jogo-9-0",
+          "objetivo": "Agora sem ajuda. Leve o rei aos peões pretos antes do rei preto."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/5p1p/1k4p1/6P1/5P1P/2K5/8/8 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-9-0-white": {
+              "fen": "8/5p1p/1k4p1/6P1/5P1P/2K5/8/8 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-0"
+              }
+            },
+            "questao-no-jogo-9-3-white": {
+              "fen": "8/5p1p/2k3p1/6P1/3K1P1P/8/8/8 w - - 2 2",
+              "historicoUci": [
+                "c3d4",
+                "b6c6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-3"
+              }
+            },
+            "questao-no-jogo-9-6-white": {
+              "fen": "8/3k1p1p/6p1/4K1P1/5P1P/8/8/8 w - - 4 3",
+              "historicoUci": [
+                "c3d4",
+                "b6c6",
+                "d4e5",
+                "c6d7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-6"
+              }
+            },
+            "questao-no-jogo-9-8-white": {
+              "fen": "4k3/5p1p/5Kp1/6P1/5P1P/8/8/8 w - - 6 4",
+              "historicoUci": [
+                "c3d4",
+                "b6c6",
+                "d4e5",
+                "c6d7",
+                "e5f6",
+                "d7e8"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-8"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "O peão de h7 vai cair. O rei preto chegou tarde."
+      },
+      {
+        "id": "treino-capitulo-jogo-10-no-jogo-10-0-white",
+        "titulo": "TREINO 3 - Do outro lado",
+        "introducao": "Agora do outro lado do tabuleiro. O rei preto vai comer g4. Leve o seu rei aos peões pretos.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-10",
+          "nodeId": "no-jogo-10-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Agora do outro lado do tabuleiro. O rei preto vai comer g4. Leve o seu rei aos peões pretos.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-10-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-1-white",
+                "moves": [
+                  "b2c3"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei vai para c3, na direção do centro.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g5g4",
+                      "proximaQuestaoId": "questao-no-jogo-10-3-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-2",
+                "moves": [
+                  "c4c5"
+                ],
+                "julgamento": "erro",
+                "feedback": "O peão andou, e o rei ficou parado. O rei preto volta a tempo, e é empate.",
+                "erroId": "erro-no-jogo-10-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-3-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-3"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-4-white",
+                "moves": [
+                  "c3d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei entra em d4, no centro.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g4f4",
+                      "proximaQuestaoId": "questao-no-jogo-10-6-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-5",
+                "moves": [
+                  "c3d3"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei perdeu um lance em d3. O rei preto volta a tempo, e é empate.",
+                "erroId": "erro-no-jogo-10-5",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-6-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-6"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-7-white",
+                "moves": [
+                  "d4d5"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei avança para d5.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f4e3",
+                      "proximaQuestaoId": "questao-no-jogo-10-8-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-8-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-8"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-9-white",
+                "moves": [
+                  "d5c6"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei chegou a c6. O peão de c7 vai cair.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-10",
+          "nodeIds": [
+            "no-jogo-10-0",
+            "no-jogo-10-1",
+            "no-jogo-10-3",
+            "no-jogo-10-4",
+            "no-jogo-10-6",
+            "no-jogo-10-7",
+            "no-jogo-10-8",
+            "no-jogo-10-9"
+          ],
+          "hash": "v2-e8233234",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-10",
+          "inicioNodeId": "no-jogo-10-0",
+          "objetivo": "Agora do outro lado do tabuleiro. O rei preto vai comer g4. Leve o seu rei aos peões pretos."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/p1p5/1p6/1P4k1/P1P3P1/8/1K6/8 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-10-0-white": {
+              "fen": "8/p1p5/1p6/1P4k1/P1P3P1/8/1K6/8 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-0"
+              }
+            },
+            "questao-no-jogo-10-3-white": {
+              "fen": "8/p1p5/1p6/1P6/P1P3k1/2K5/8/8 w - - 0 2",
+              "historicoUci": [
+                "b2c3",
+                "g5g4"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-3"
+              }
+            },
+            "questao-no-jogo-10-6-white": {
+              "fen": "8/p1p5/1p6/1P6/P1PK1k2/8/8/8 w - - 2 3",
+              "historicoUci": [
+                "b2c3",
+                "g5g4",
+                "c3d4",
+                "g4f4"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-6"
+              }
+            },
+            "questao-no-jogo-10-8-white": {
+              "fen": "8/p1p5/1p6/1P1K4/P1P5/4k3/8/8 w - - 4 4",
+              "historicoUci": [
+                "b2c3",
+                "g5g4",
+                "c3d4",
+                "g4f4",
+                "d4d5",
+                "f4e3"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-8"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "O rei chegou a c6. O peão de c7 vai cair."
+      }
+    ],
+    "praticas": [
+      {
+        "id": "pratica-pratica-leve-o-rei-e-venca",
+        "titulo": "PRÁTICA - Leve o rei e vença",
+        "positionId": "pos-n1-king-activity-1",
+        "ladoAluno": "white",
+        "objetivo": "win",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-introducao-estudo-1",
+        "tipo": "introducao",
+        "entidadeId": "introducao-estudo-1"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5-variante-2",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5-variante-2"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6-variante-2",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6-variante-2"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-8-no-jogo-8-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-8-no-jogo-8-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-9-no-jogo-9-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-10-no-jogo-10-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-10-no-jogo-10-0-white"
+      },
+      {
+        "id": "etapa-pratica-pratica-leve-o-rei-e-venca",
+        "tipo": "pratica",
+        "entidadeId": "pratica-pratica-leve-o-rei-e-venca"
+      }
+    ]
+  },
+  "posicoes": {
+    "pos-n1-king-activity-1": {
+      "id": "pos-n1-king-activity-1",
+      "fen": "8/5p1p/2k3p1/6P1/1P3P1P/8/4K3/8 w - - 0 1",
+      "expectedResult": "win-white",
+      "tags": [
+        "PRÁTICA - Leve o rei e vença"
+      ],
+      "status": "candidate",
+      "provenance": {
+        "externalHumanSource": "clubexadrezguabiruba",
+        "bibliographicSource": "piloto - Ative seu rei; posições adaptadas, https://lichess.org/study/wtityoKq",
+        "originalGame": "não se aplica",
+        "authorComposer": "clubexadrezguabiruba",
+        "license": "não informada — conferir antes de aprovar",
+        "editionFile": null,
+        "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+        "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+        "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+      }
+    }
+  },
+  "revisoes": {
+    "treino-capitulo-jogo-8-no-jogo-8-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_90cea6d972238a56504cdffa04ad63af2ab527f496b32199ee6c2331b9d4b8c0"
+    },
+    "treino-capitulo-jogo-9-no-jogo-9-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_7b152ac479eb5e884f035a2bf849d07e0c063fb8b4deaea381d1cb1bd4374fbe"
+    },
+    "treino-capitulo-jogo-10-no-jogo-10-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_7266b7b680fc71dd66c0cb0d00d8e38c8e7ad0f338d4b738aea702b872a5cd8e"
+    },
+    "pratica-pratica-leve-o-rei-e-venca": {
+      "tipo": "pratica",
+      "revisao": "ar_09e050f2c2fd65c3f3d514414773cd1296a462847d713a1e72c26e53da4a3200"
+    }
+  },
+  "manifesto": {
+    "aulaId": "N1-KING-ACTIVITY",
+    "aula": "da0c6ca92ac12804bbbade95e8bc8c8eca6cbf30dab4452ec60c2dabf141065f",
+    "posicoes": {
+      "pos-n1-king-activity-1": "8a1566a75394b9f11d784a5db8e77251c1b98fa0086b548f5a81211c6146123a"
+    },
+    "revisoes": "477c3c8ab40723a21fae86d19edcb7dce1ee9b077d264ce055e1b387c8add206",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

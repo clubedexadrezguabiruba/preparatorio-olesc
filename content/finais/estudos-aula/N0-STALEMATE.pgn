@@ -1,0 +1,194 @@
+[Event "Aula 5 - Afogamento"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Afogamento: como não empatar a partida ganha"]
+[ChapterName "00 - INTRODUÇÃO - Ganha, empata ou perde?"]
+[FEN "4k3/8/3K4/8/8/2Q5/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Brancas: dama e rei. Pretas: só o rei. Brancas jogam.
+
+Ganha, empata ou perde? }
+ *
+
+[Event "Aula 5 - Afogamento"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Afogamento: como não empatar a partida ganha"]
+[ChapterName "00 - INTRODUÇÃO - A resposta"]
+[FEN "4k3/8/3K4/8/8/2Q5/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Ganha. Mas se a dama for para f6, o rei preto fica sem lance e sem xeque.
+
+Isso é afogamento, e a partida empata. } { [%cal Rc3f6] }
+ *
+
+[Event "Aula 5 - Afogamento"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Afogamento: como não empatar a partida ganha"]
+[ChapterName "00 - INTRODUÇÃO - A pergunta da aula"]
+[FEN "4k3/8/3K4/8/8/2Q5/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Hoje, antes de cada lance, pergunte: depois dele, o outro lado ainda tem um lance?
+
+No fim, você evita o afogamento quando ganha e procura o afogamento quando perde. }
+ *
+
+[Event "Aula 5 - Afogamento"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Afogamento: como não empatar a partida ganha"]
+[ChapterName "01 - AULA - Deixe uma casa para o rei"]
+[FEN "4k3/8/3K4/8/8/2Q5/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Pretas só têm o rei. Antes de mexer a dama, conte as casas que sobram para ele. }
+1. Qg7! { A dama em g7 tira f8 e f7. O rei preto ainda tem uma casa: d8. } { [%cal Gg7f8,Gg7f7] [%csl Yd8] } ( 1. Qf6? { O rei preto não está em xeque e não tem para onde ir. Afogamento: empate. } { [%csl Rf6,Re8] } ) 1... Kd8 { O único lance das pretas. } 2. Qd7# { Mate! O rei em d6 protege a dama em d7. } { [%csl Gd6,Gd7,Rd8] } *
+
+[Event "Aula 5 - Afogamento"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Afogamento: como não empatar a partida ganha"]
+[ChapterName "02 - AULA - Comer a peça pode afogar"]
+[FEN "k7/8/1K1b4/8/8/8/1Q6/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Agora as pretas têm um bispo. Enquanto o bispo pode andar, não há afogamento. }
+1. Ka6 { O rei vai para a6. Agora a dama ameaça mate em b7. } { [%csl Ga6] [%cal Gb2b7] } 1... Bb4 { Truque das pretas: o bispo se oferece em b4. O rei preto não tem lance, e o bispo é a última peça que anda. } { [%csl Yb4] } 2. Qh8+! { Xeque! O bispo precisa tapar em f8. } { [%cal Gh8a8] [%csl Yf8] } ( 2. Qxb4?? { A dama comeu o bispo, e as pretas ficam sem lance nenhum. Sem xeque, é afogamento: empate. } { [%csl Rb4,Ra8] } ) 2... Bf8 3. Qxf8# { Mate! A dama come o bispo em f8 com xeque, e o rei preto não tem casa. } { [%csl Gf8,Ra8] } *
+
+[Event "Aula 5 - Afogamento"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Afogamento: como não empatar a partida ganha"]
+[ChapterName "03 - AULA - O peão também tira casas"]
+[FEN "8/6Pk/5K2/6P1/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Brancas com dois peões. O rei preto em h7 só tem uma casa livre: g8. } { [%csl Yg8] }
+1. g8=Q+! { O peão vira dama e dá xeque. O rei preto não tem escolha: come a dama. } { [%csl Gg8] } ( 1. Kf7?? $10 { O rei em f7 tira g8. O rei preto não está em xeque e não tem lance. Afogamento: empate. } { [%csl Rf7,Rg8,Rh7] } ) 1... Kxg8 { O rei preto comeu, mas as brancas ainda têm o peão em g5 e ganham. } { [%csl Gg5] } *
+
+[Event "Aula 5 - Afogamento"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Afogamento: como não empatar a partida ganha"]
+[ChapterName "04 - AULA - Perdendo? Procure o afogamento"]
+[FEN "8/4k2K/8/8/7P/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+
+{ Agora você está do outro lado. Brancas têm um peão a mais. Pretas jogam. }
+1... Kf7! { O rei preto vai a f7 e prende o rei branco no canto: g8, g7 e g6 ficam tomadas. } { [%csl Gf7,Gg8,Gg7,Gg6] } ( 1... Ke6?? { O rei preto se afastou, e o rei branco sai do canto. } 2. Kg7 Kf5 3. h5 Kg5 4. h6 Kh5 5. h7 Kg5 6. h8=Q { O peão virou dama. Brancas ganham. } { [%csl Rh8] } ) 2. h5 Kf8 { O rei preto só anda entre f7 e f8, sempre perto de g8. } { [%csl Gf7,Gf8,Gg8] } 3. h6 Kf7 4. Kh8 Kf8 5. h7 { O peão chegou a h7 e não anda mais. Pretas jogam. } { [%csl Yh7] } 5... Kf7! { Afogamento! O rei branco não está em xeque e não tem lance. As pretas estavam perdendo e empatam. } { [%csl Gf7,Rh8] } ( 5... Ke7?? { O rei preto se afastou de g7. } 6. Kg7 { O rei branco sai do canto e protege h8. } { [%csl Rg7,Rh8] } 6... Ke6 7. h8=Q { Dama nova. Brancas ganham. } ) *
+
+[Event "Aula 5 - Afogamento"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Afogamento: como não empatar a partida ganha"]
+[ChapterName "05 - AULA - LEMBRE-SE"]
+[FEN "4k3/8/3K4/8/8/2Q5/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ LEMBRE-SE:
+
+1. Antes de cada lance, pergunte: o outro lado ainda tem lance?
+2. Ganhando: deixe um lance para ele, ou dê xeque.
+3. Perdendo: procure deixar o outro lado sem lance. }
+ *
+
+[Event "Aula 5 - Afogamento"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Afogamento: como não empatar a partida ganha"]
+[ChapterName "06 - TREINO 1 - Xeque, e não afogamento"]
+[FEN "kb5Q/8/1K6/8/8/8/8/8 w - - 0 2"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ O rei preto em a8 não tem casa, e o bispo em b8 não pode andar. Dê mate em um lance. } { [%csl Ya8,Yb8] }
+2. Qh1# { Mate! A dama dá xeque na diagonal, e o bispo não consegue tapar. } { [%cal Gh1a8] } ( 2. Ka6?? { O rei em a6 não dá xeque, e as pretas ficam sem lance. Afogamento: empate. } ) ( 2. Qc8?? { A dama segue prendendo o bispo, mas sem xeque. As pretas ficam sem lance: afogamento. } ) ( 2. Qg8?? { A dama segue prendendo o bispo, mas sem xeque. As pretas ficam sem lance: afogamento. } ) ( 2. Qxb8+?? { A dama come o bispo, e o rei preto come a dama. Só sobram os reis: empate. } ) *
+
+[Event "Aula 5 - Afogamento"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Afogamento: como não empatar a partida ganha"]
+[ChapterName "07 - TREINO 2 - O peão até a dama"]
+[FEN "6k1/8/5K2/6P1/8/8/8/8 w - - 0 2"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ Brancas jogam e ganham. Leve o peão até a dama, sem afogar. }
+2. Kg6! { O rei em g6 vai na frente do peão. O rei preto só tem f8 e h8. } { [%csl Gg6,Yf8,Yh8] } ( 2. g6?? { O peão andou cedo. O rei preto chega a g8, na frente do peão. Daí em diante, as brancas só empatam ou afogam. } ) 2... Kh8 3. Kf7! { O rei em f7 protege g8. Agora o peão pode andar. } { [%csl Gf7,Gg8] } ( 3. Kh6?! { Não perde, mas o rei preto volta a g8. Leve o rei a f7 e proteja g8. } ) 3... Kh7 4. g6+! { O peão anda com xeque, e o rei preto precisa sair de h7. } { [%csl Yh7] } 4... Kh8 5. g7+! { Xeque de novo, e o rei preto tem h7. O peão vai virar dama. } { [%csl Gg7,Yh7] } ( 5. Kf8?? { O rei preto não está em xeque e não tem lance. Afogamento: empate. } ) *
+
+[Event "Aula 5 - Afogamento"]
+[White "Brancas"]
+[Black "Aluno - Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Afogamento: como não empatar a partida ganha"]
+[ChapterName "08 - TREINO 3 - Três peões a mais, e empate"]
+[FEN "8/5k1K/7P/8/7P/8/7P/8 b - - 0 2"]
+[SetUp "1"]
+[Orientation "black"]
+[ChapterMode "gamebook"]
+
+{ Pretas jogam. As brancas têm três peões a mais. Mesmo assim, dá para empatar. }
+2... Kf8! { O rei preto fica perto de g7 e g8. O rei branco continua preso no canto. } { [%csl Gf8,Gg7,Gg8] } ( 2... Kf6?? { O rei preto largou g8. O rei branco sai por g8, e os peões correm. } ) ( 2... Ke7?? { O rei preto largou g7 e g8. O rei branco sai por g7, e os peões correm. } ) 3. Kh8 Kf7! { O rei branco não tem casa, e só os peões andam. Quando eles pararem, é afogamento. } { [%csl Gf7,Rh8] } ( 3... Ke7?? { O rei preto largou g7 e g8. O rei branco sai por g7, e os peões correm. } ) *
+
+[Event "Aula 5 - Afogamento"]
+[White "Aluno - Brancas"]
+[Black "Engine"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Afogamento: como não empatar a partida ganha"]
+[ChapterName "09 - PRÁTICA - Ganhe sem afogar"]
+[FEN "k7/8/1K1b4/8/8/8/1Q6/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Dê mate sem afogar. }
+ *
+
+[Event "Aula 5 - Afogamento"]
+[White "Engine"]
+[Black "Aluno - Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Afogamento: como não empatar a partida ganha"]
+[ChapterName "10 - PRÁTICA - Perdendo, busque o empate"]
+[FEN "8/4k2K/8/8/7P/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+
+{ Segure o empate com o rei preto. }
+ *
