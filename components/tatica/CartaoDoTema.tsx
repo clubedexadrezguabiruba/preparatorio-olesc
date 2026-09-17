@@ -18,7 +18,7 @@ import { COR_DO_NIVEL, SeloDoTema } from "./SeloDoTema";
  *
  * As três situações de `situacaoDoItem`: `aberto` é `cartao-alvo`; `adiante`
  * continua clicável e tracejado (adiantar é do aluno), com "Pode adiantar" — o
- * nível já está no cabeçalho do bloco, e "Nível 2 — você está no 1" repetido em
+ * nível já está no título da seção, e "Nível 2 — você está no 1" repetido em
  * trinta cartões quebrava a linha e virava ruído; `em-escrita` é o único que
  * fecha a porta — sem texto escrito não há o que abrir.
  *
