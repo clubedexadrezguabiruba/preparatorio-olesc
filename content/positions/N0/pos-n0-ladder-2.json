@@ -1,0 +1,20 @@
+{
+  "id": "pos-n0-ladder-2",
+  "fen": "8/8/2k5/8/8/8/R7/KQ6 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "PRÁTICA - Dama e torre"
+  ],
+  "status": "candidate",
+  "provenance": {
+    "externalHumanSource": "clubexadrezguabiruba",
+    "bibliographicSource": "Capítulo 0.5 Mate de duas torres (escadinha); posições adaptadas, https://lichess.org/study/aYNkulCR",
+    "originalGame": "não se aplica",
+    "authorComposer": "clubexadrezguabiruba",
+    "license": "não informada — conferir antes de aprovar",
+    "editionFile": null,
+    "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+    "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+    "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+  }
+}

@@ -1,0 +1,3393 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-e565f1778b5939c2",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "N1-DIRECT-OPPOSITION",
+    "titulo": "Oposição",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "classe": "D",
+      "estadoEditorial": "rascunho"
+    },
+    "proveniencia": [
+      {
+        "positionId": "pos-n1-direct-opposition-1",
+        "conteudoHash": "06b42ec38de9ee5994c85686335e9bceb492426c6e5985a36bea373969eb2b87",
+        "estado": "candidate"
+      },
+      {
+        "positionId": "pos-n1-direct-opposition-2",
+        "conteudoHash": "2264f594f83ea6475fb88c296e2cfdc042744d778d0a28b82c31d649bda64c90",
+        "estado": "candidate"
+      }
+    ],
+    "excecoes": [],
+    "catalogo": {
+      "erros": [
+        {
+          "id": "erro-no-jogo-9-2",
+          "nome": "O peão subiu antes do rei.",
+          "julgamento": "perde-resultado",
+          "texto": "O peão subiu antes do rei. O rei preto vai para e8, frente a frente, e você não passa: empate."
+        },
+        {
+          "id": "erro-no-jogo-9-5",
+          "nome": "Voltou para trás.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Voltou para trás. O rei preto retorna a d8, e você recomeça."
+        },
+        {
+          "id": "erro-no-jogo-9-8",
+          "nome": "O rei branco largou o peão.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei branco largou o peão. O rei preto vai a d6 e come em d5: empate."
+        },
+        {
+          "id": "erro-no-jogo-10-3",
+          "nome": "O seu rei saiu da frente.",
+          "julgamento": "perde-resultado",
+          "texto": "O seu rei saiu da frente. O rei branco passa por e7, e o peão vira dama."
+        },
+        {
+          "id": "erro-no-jogo-10-6",
+          "nome": "Longe do peão: ele vira dama com xeque.",
+          "julgamento": "perde-resultado",
+          "texto": "Longe do peão: ele vira dama com xeque."
+        },
+        {
+          "id": "erro-no-jogo-11-2",
+          "nome": "Saiu para d8.",
+          "julgamento": "perde-resultado",
+          "texto": "Saiu para d8. O rei branco passa por d6, e o peão sobe."
+        },
+        {
+          "id": "erro-no-jogo-11-3",
+          "nome": "Saiu para f8.",
+          "julgamento": "perde-resultado",
+          "texto": "Saiu para f8. O rei branco passa por f6, e o peão sobe."
+        },
+        {
+          "id": "erro-no-jogo-11-6",
+          "nome": "Longe do rei branco: ele entra em d7 e guarda…",
+          "julgamento": "perde-resultado",
+          "texto": "Longe do rei branco: ele entra em d7 e guarda e8. O peão vira dama."
+        },
+        {
+          "id": "erro-no-jogo-11-9",
+          "nome": "Longe do peão: ele vira dama.",
+          "julgamento": "perde-resultado",
+          "texto": "Longe do peão: ele vira dama."
+        },
+        {
+          "id": "erro-no-jogo-12-3",
+          "nome": "O peão subiu antes do rei.",
+          "julgamento": "perde-resultado",
+          "texto": "O peão subiu antes do rei. O rei preto volta para d7, frente a frente, e a vez é sua: empate."
+        },
+        {
+          "id": "erro-no-jogo-12-4",
+          "nome": "O rei branco recuou.",
+          "julgamento": "fora-do-metodo",
+          "texto": "O rei branco recuou. O rei preto volta para d7, e você recomeça."
+        }
+      ],
+      "mensagensPadrao": {
+        "vitoriaForaDoMetodo": "Este lance funciona, mas não é o caminho ensinado.",
+        "perdeResultado": "Este lance perde o resultado que a posição permitia.",
+        "alternativaDoMetodo": "Boa alternativa. Continue pela linha ensinada."
+      }
+    },
+    "analises": [
+      {
+        "id": "analise-jogo-5",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/3k4/8/3K4/8/8/8 b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 08 Oposição Direta; posições do Silman (yk2b24vS)",
+            "link": "https://lichess.org/study/aCPHORnE",
+            "fenRevisada": "8/8/3k4/8/3K4/8/8/8 b - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.036Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 8 - Oposição",
+            "Site": "https://lichess.org/study/aCPHORnE",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Oposição: frente a frente, quem tem a vez sai",
+            "ChapterName": "01 - AULA - Frente a frente",
+            "Fonte": "Silman yk2b24vS, Opposition (basics) e (basics 2): reis em d4 e d6, Pretas jogam; sem adaptação (o peão de h1 do diagrama do Silman não existe, como ele mesmo diz)",
+            "FEN": "8/8/3k4/8/3K4/8/8/8 b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-5-0",
+        "nos": {
+          "no-jogo-5-0": {
+            "id": "no-jogo-5-0",
+            "filhos": [
+              "no-jogo-5-1",
+              "no-jogo-5-2",
+              "no-jogo-5-4"
+            ],
+            "comentario": "Só os reis, para ver a ideia. Rei branco em d4, rei preto em d6: frente a frente, uma casa no meio. Vez das pretas.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yd4,Yd5,Yd6]"
+            ]
+          },
+          "no-jogo-5-1": {
+            "id": "no-jogo-5-1",
+            "uci": "d6c6",
+            "filhos": [
+              "no-jogo-5-6"
+            ],
+            "comentario": "O rei preto teve que sair da frente. Ele foi para c6, e a casa e5 ficou livre.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ge5]"
+            ]
+          },
+          "no-jogo-5-2": {
+            "id": "no-jogo-5-2",
+            "uci": "d6e6",
+            "filhos": [
+              "no-jogo-5-3"
+            ],
+            "comentario": "Saiu para e6. Agora é a casa c5 que ficou livre.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gc5]"
+            ]
+          },
+          "no-jogo-5-3": {
+            "id": "no-jogo-5-3",
+            "uci": "d4c5",
+            "filhos": [],
+            "comentario": "O rei branco passou pelo outro lado.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d4",
+                  "para": "c5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd4c5]"
+            ]
+          },
+          "no-jogo-5-4": {
+            "id": "no-jogo-5-4",
+            "uci": "d6d7",
+            "filhos": [
+              "no-jogo-5-5"
+            ],
+            "comentario": "Recuou para d7."
+          },
+          "no-jogo-5-5": {
+            "id": "no-jogo-5-5",
+            "uci": "d4d5",
+            "filhos": [],
+            "comentario": "Frente a frente de novo, e a vez é das pretas outra vez. O rei preto vai ter que sair.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yd5,Yd6,Yd7]"
+            ]
+          },
+          "no-jogo-5-6": {
+            "id": "no-jogo-5-6",
+            "uci": "d4e5",
+            "filhos": [
+              "no-jogo-5-7"
+            ],
+            "comentario": "O rei branco passou por e5. Isso tem nome: oposição.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d4",
+                  "para": "e5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd4e5]"
+            ]
+          },
+          "no-jogo-5-7": {
+            "id": "no-jogo-5-7",
+            "uci": "c6d7",
+            "filhos": [
+              "no-jogo-5-8"
+            ],
+            "comentario": "O rei preto volta para a frente."
+          },
+          "no-jogo-5-8": {
+            "id": "no-jogo-5-8",
+            "uci": "e5d5",
+            "filhos": [
+              "no-jogo-5-9"
+            ],
+            "comentario": "Frente a frente, e a vez é das pretas: as brancas tomaram a oposição.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yd5,Yd6,Yd7]"
+            ]
+          },
+          "no-jogo-5-9": {
+            "id": "no-jogo-5-9",
+            "uci": "d7c7",
+            "filhos": [
+              "no-jogo-5-10"
+            ],
+            "comentario": "De novo, o rei preto tem que sair."
+          },
+          "no-jogo-5-10": {
+            "id": "no-jogo-5-10",
+            "uci": "d5e6",
+            "filhos": [],
+            "comentario": "E de novo o rei branco passa. Quem toma a oposição, passa.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d5",
+                  "para": "e6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd5e6]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-6",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "3k4/8/2K5/3P4/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 08 Oposição Direta; posições do Silman (yk2b24vS)",
+            "link": "https://lichess.org/study/aCPHORnE",
+            "fenRevisada": "3k4/8/2K5/3P4/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.036Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 8 - Oposição",
+            "Site": "https://lichess.org/study/aCPHORnE",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Oposição: frente a frente, quem tem a vez sai",
+            "ChapterName": "02 - AULA - Passar com o rei",
+            "Fonte": "Silman yk2b24vS, opposition (basics 3), linha 1...Kc7?? ... 5.Kc6 Kd8 6.d5; adaptação: a vez passa para as Brancas, para existir a escolha Kd6! ou d6??",
+            "FEN": "3k4/8/2K5/3P4/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-6-0",
+        "nos": {
+          "no-jogo-6-0": {
+            "id": "no-jogo-6-0",
+            "filhos": [
+              "no-jogo-6-1",
+              "no-jogo-6-2"
+            ],
+            "comentario": "Agora com um peão em d5. O rei preto está em d8, na frente dele. Para o peão passar, primeiro passa o rei.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d5",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "d8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gd5,Yd8]"
+            ]
+          },
+          "no-jogo-6-1": {
+            "id": "no-jogo-6-1",
+            "uci": "c6d6",
+            "filhos": [
+              "no-jogo-6-7",
+              "no-jogo-6-8"
+            ],
+            "comentario": "Frente a frente, e a vez é das pretas: as brancas tomaram a oposição. O rei preto vai ter que sair.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "c6",
+                  "para": "d6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gc6d6]"
+            ]
+          },
+          "no-jogo-6-2": {
+            "id": "no-jogo-6-2",
+            "uci": "d5d6",
+            "filhos": [
+              "no-jogo-6-3"
+            ],
+            "comentario": "O peão subiu antes do rei. Olhe o que o rei preto faz agora.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rd6]"
+            ]
+          },
+          "no-jogo-6-3": {
+            "id": "no-jogo-6-3",
+            "uci": "d8c8",
+            "filhos": [
+              "no-jogo-6-4"
+            ],
+            "comentario": "Frente a frente, e a vez é das brancas: o rei preto tomou a oposição.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc6,Yc7,Yc8]"
+            ]
+          },
+          "no-jogo-6-4": {
+            "id": "no-jogo-6-4",
+            "uci": "d6d7",
+            "filhos": [
+              "no-jogo-6-5"
+            ],
+            "comentario": "O peão sobe com xeque, e o rei preto volta para a frente dele."
+          },
+          "no-jogo-6-5": {
+            "id": "no-jogo-6-5",
+            "uci": "c8d8",
+            "filhos": [
+              "no-jogo-6-6"
+            ]
+          },
+          "no-jogo-6-6": {
+            "id": "no-jogo-6-6",
+            "uci": "c6d6",
+            "filhos": [],
+            "comentario": "O rei preto não está em xeque e não tem casa: afogado. Empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d6",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "d7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rd6,Rd7]"
+            ]
+          },
+          "no-jogo-6-7": {
+            "id": "no-jogo-6-7",
+            "uci": "d8c8",
+            "filhos": [
+              "no-jogo-6-16"
+            ],
+            "comentario": "O rei preto saiu para c8. A casa e7 ficou livre.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ge7]"
+            ]
+          },
+          "no-jogo-6-8": {
+            "id": "no-jogo-6-8",
+            "uci": "d8e8",
+            "filhos": [
+              "no-jogo-6-9"
+            ],
+            "comentario": "Saiu para e8. Agora é a casa c7 que ficou livre.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gc7]"
+            ]
+          },
+          "no-jogo-6-9": {
+            "id": "no-jogo-6-9",
+            "uci": "d6c7",
+            "filhos": [
+              "no-jogo-6-10"
+            ],
+            "comentario": "O rei branco passou pelo outro lado. O peão sobe do mesmo jeito.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d6",
+                  "para": "c7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd6c7]"
+            ]
+          },
+          "no-jogo-6-10": {
+            "id": "no-jogo-6-10",
+            "uci": "e8e7",
+            "filhos": [
+              "no-jogo-6-11"
+            ]
+          },
+          "no-jogo-6-11": {
+            "id": "no-jogo-6-11",
+            "uci": "d5d6",
+            "filhos": [
+              "no-jogo-6-12"
+            ],
+            "comentario": "O peão sobe com xeque, protegido pelo rei em c7."
+          },
+          "no-jogo-6-12": {
+            "id": "no-jogo-6-12",
+            "uci": "e7e8",
+            "filhos": [
+              "no-jogo-6-13"
+            ]
+          },
+          "no-jogo-6-13": {
+            "id": "no-jogo-6-13",
+            "uci": "d6d7",
+            "filhos": [
+              "no-jogo-6-14"
+            ],
+            "comentario": "Mais um passo. A casa d8 é do rei branco.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gd8]"
+            ]
+          },
+          "no-jogo-6-14": {
+            "id": "no-jogo-6-14",
+            "uci": "e8f7",
+            "filhos": [
+              "no-jogo-6-15"
+            ]
+          },
+          "no-jogo-6-15": {
+            "id": "no-jogo-6-15",
+            "uci": "d7d8q",
+            "filhos": [],
+            "comentario": "Dama."
+          },
+          "no-jogo-6-16": {
+            "id": "no-jogo-6-16",
+            "uci": "d6e7",
+            "filhos": [
+              "no-jogo-6-17"
+            ],
+            "comentario": "O rei branco passou por e7. Agora d8 é dele, e o peão sobe sem ninguém na frente.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d6",
+                  "para": "e7",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "d8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd6e7]",
+              "[%csl Gd8]"
+            ]
+          },
+          "no-jogo-6-17": {
+            "id": "no-jogo-6-17",
+            "uci": "c8c7",
+            "filhos": [
+              "no-jogo-6-18"
+            ],
+            "comentario": "O rei preto tenta voltar."
+          },
+          "no-jogo-6-18": {
+            "id": "no-jogo-6-18",
+            "uci": "d5d6",
+            "filhos": [
+              "no-jogo-6-19"
+            ],
+            "comentario": "O peão sobe com xeque, protegido pelo rei em e7.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d5",
+                  "para": "d6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd5d6]"
+            ]
+          },
+          "no-jogo-6-19": {
+            "id": "no-jogo-6-19",
+            "uci": "c7c8",
+            "filhos": [
+              "no-jogo-6-20"
+            ]
+          },
+          "no-jogo-6-20": {
+            "id": "no-jogo-6-20",
+            "uci": "d6d7",
+            "filhos": [
+              "no-jogo-6-21"
+            ],
+            "comentario": "Mais um passo. A casa d8 é do rei branco.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d6",
+                  "para": "d7",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "d8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd6d7]",
+              "[%csl Gd8]"
+            ]
+          },
+          "no-jogo-6-21": {
+            "id": "no-jogo-6-21",
+            "uci": "c8b7",
+            "filhos": [
+              "no-jogo-6-22"
+            ]
+          },
+          "no-jogo-6-22": {
+            "id": "no-jogo-6-22",
+            "uci": "d7d8q",
+            "filhos": [],
+            "comentario": "Dama. O rei passou, e o peão virou dama.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d7",
+                  "para": "d8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd7d8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-7",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "3k4/8/3P4/3K4/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 08 Oposição Direta; posições do Silman (yk2b24vS)",
+            "link": "https://lichess.org/study/aCPHORnE",
+            "fenRevisada": "3k4/8/3P4/3K4/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.036Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 8 - Oposição",
+            "Site": "https://lichess.org/study/aCPHORnE",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Oposição: frente a frente, quem tem a vez sai",
+            "ChapterName": "03 - AULA - Fechar a passagem",
+            "Fonte": "Silman yk2b24vS, opposition (basics 3), posição depois de 7...Kd8 (8.Kc6 Kc8 9.d7+ Kd8 10.Kd6 empate); sem adaptação",
+            "FEN": "3k4/8/3P4/3K4/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "black"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-7-0",
+        "nos": {
+          "no-jogo-7-0": {
+            "id": "no-jogo-7-0",
+            "filhos": [
+              "no-jogo-7-1",
+              "no-jogo-7-2"
+            ],
+            "comentario": "Agora você defende com as pretas. O rei branco quer passar por c7 ou por e7, para o peão subir.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc7,Ye7]"
+            ]
+          },
+          "no-jogo-7-1": {
+            "id": "no-jogo-7-1",
+            "uci": "d5c6",
+            "filhos": [
+              "no-jogo-7-7",
+              "no-jogo-7-8"
+            ],
+            "comentario": "O rei branco foi para c6: ele quer entrar em c7.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc7]"
+            ]
+          },
+          "no-jogo-7-2": {
+            "id": "no-jogo-7-2",
+            "uci": "d5e6",
+            "filhos": [
+              "no-jogo-7-3"
+            ],
+            "comentario": "Pelo outro lado, é a mesma coisa."
+          },
+          "no-jogo-7-3": {
+            "id": "no-jogo-7-3",
+            "uci": "d8e8",
+            "filhos": [
+              "no-jogo-7-4"
+            ],
+            "comentario": "Frente a frente, e a vez é das brancas: você tomou a oposição.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ye6,Ye7,Ye8]"
+            ]
+          },
+          "no-jogo-7-4": {
+            "id": "no-jogo-7-4",
+            "uci": "d6d7",
+            "filhos": [
+              "no-jogo-7-5"
+            ]
+          },
+          "no-jogo-7-5": {
+            "id": "no-jogo-7-5",
+            "uci": "e8d8",
+            "filhos": [
+              "no-jogo-7-6"
+            ]
+          },
+          "no-jogo-7-6": {
+            "id": "no-jogo-7-6",
+            "uci": "e6d6",
+            "filhos": [],
+            "comentario": "Afogado. Empate."
+          },
+          "no-jogo-7-7": {
+            "id": "no-jogo-7-7",
+            "uci": "d8c8",
+            "filhos": [
+              "no-jogo-7-14"
+            ],
+            "comentario": "Frente a frente, e a vez é das brancas: você tomou a oposição. O rei branco não passa.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc6,Yc7,Yc8]"
+            ]
+          },
+          "no-jogo-7-8": {
+            "id": "no-jogo-7-8",
+            "uci": "d8e8",
+            "filhos": [
+              "no-jogo-7-9"
+            ],
+            "comentario": "O seu rei saiu da frente. A casa c7 ficou livre para o rei branco.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rc7]"
+            ]
+          },
+          "no-jogo-7-9": {
+            "id": "no-jogo-7-9",
+            "uci": "c6c7",
+            "filhos": [
+              "no-jogo-7-10"
+            ],
+            "comentario": "O rei branco passou. Agora d8 é dele, e o peão sobe.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "c6",
+                  "para": "c7",
+                  "cor": "vermelho"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "d8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Rc6c7]",
+              "[%csl Rd8]"
+            ]
+          },
+          "no-jogo-7-10": {
+            "id": "no-jogo-7-10",
+            "uci": "e8f7",
+            "filhos": [
+              "no-jogo-7-11"
+            ]
+          },
+          "no-jogo-7-11": {
+            "id": "no-jogo-7-11",
+            "uci": "d6d7",
+            "filhos": [
+              "no-jogo-7-12"
+            ],
+            "comentario": "O peão sobe protegido."
+          },
+          "no-jogo-7-12": {
+            "id": "no-jogo-7-12",
+            "uci": "f7e7",
+            "filhos": [
+              "no-jogo-7-13"
+            ]
+          },
+          "no-jogo-7-13": {
+            "id": "no-jogo-7-13",
+            "uci": "d7d8q",
+            "filhos": [],
+            "comentario": "Dama, com xeque. As brancas ganham."
+          },
+          "no-jogo-7-14": {
+            "id": "no-jogo-7-14",
+            "uci": "d6d7",
+            "filhos": [
+              "no-jogo-7-15",
+              "no-jogo-7-16"
+            ],
+            "comentario": "O peão sobe com xeque."
+          },
+          "no-jogo-7-15": {
+            "id": "no-jogo-7-15",
+            "uci": "c8d8",
+            "filhos": [
+              "no-jogo-7-18",
+              "no-jogo-7-19"
+            ],
+            "comentario": "De volta para a frente do peão."
+          },
+          "no-jogo-7-16": {
+            "id": "no-jogo-7-16",
+            "uci": "c8b8",
+            "filhos": [
+              "no-jogo-7-17"
+            ],
+            "comentario": "Longe do peão: ele vira dama.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-7-17": {
+            "id": "no-jogo-7-17",
+            "uci": "d7d8q",
+            "filhos": [],
+            "comentario": "Dama, com xeque. As brancas ganham."
+          },
+          "no-jogo-7-18": {
+            "id": "no-jogo-7-18",
+            "uci": "c6d6",
+            "filhos": [],
+            "comentario": "O seu rei não está em xeque e não tem casa: afogado. Empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yd8]"
+            ]
+          },
+          "no-jogo-7-19": {
+            "id": "no-jogo-7-19",
+            "uci": "c6b6",
+            "filhos": [
+              "no-jogo-7-20"
+            ],
+            "comentario": "Se o rei branco sai de perto, o peão fica sozinho."
+          },
+          "no-jogo-7-20": {
+            "id": "no-jogo-7-20",
+            "uci": "d8d7",
+            "filhos": [],
+            "comentario": "O peão caiu. Só os reis: empate."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-8",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "3k4/8/2K5/3P4/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 08 Oposição Direta; posições do Silman (yk2b24vS)",
+            "link": "https://lichess.org/study/aCPHORnE",
+            "fenRevisada": "3k4/8/2K5/3P4/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.036Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 8 - Oposição",
+            "Site": "https://lichess.org/study/aCPHORnE",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Oposição: frente a frente, quem tem a vez sai",
+            "ChapterName": "04 - AULA - LEMBRE-SE",
+            "FEN": "3k4/8/2K5/3P4/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-8-0",
+        "nos": {
+          "no-jogo-8-0": {
+            "id": "no-jogo-8-0",
+            "filhos": [],
+            "comentario": "LEMBRE-SE:\n\n1. Frente a frente, uma casa no meio: quem tem a vez sai.\n2. Para passar com o rei, tome a oposição. O peão espera.\n3. Para fechar a passagem, tome a oposição."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-9",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "3k4/8/4K3/3P4/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 08 Oposição Direta; posições do Silman (yk2b24vS)",
+            "link": "https://lichess.org/study/aCPHORnE",
+            "fenRevisada": "3k4/8/4K3/3P4/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.036Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 8 - Oposição",
+            "Site": "https://lichess.org/study/aCPHORnE",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Oposição: frente a frente, quem tem a vez sai",
+            "ChapterName": "05 - TREINO 1 - Passe com o rei",
+            "Fonte": "espelho da posição da aula 02 (rei branco em e6 em vez de c6)",
+            "FEN": "3k4/8/4K3/3P4/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-9-0",
+        "nos": {
+          "no-jogo-9-0": {
+            "id": "no-jogo-9-0",
+            "filhos": [
+              "no-jogo-9-1",
+              "no-jogo-9-2"
+            ],
+            "comentario": "O rei preto está em d8, na frente do peão. Fique frente a frente com ele — o peão espera.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yd8]"
+            ]
+          },
+          "no-jogo-9-1": {
+            "id": "no-jogo-9-1",
+            "uci": "e6d6",
+            "filhos": [
+              "no-jogo-9-3"
+            ],
+            "comentario": "Frente a frente, e a vez é das pretas: você tomou a oposição.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-9-2": {
+            "id": "no-jogo-9-2",
+            "uci": "d5d6",
+            "filhos": [],
+            "comentario": "O peão subiu antes do rei. O rei preto vai para e8, frente a frente, e você não passa: empate.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-9-3": {
+            "id": "no-jogo-9-3",
+            "uci": "d8e8",
+            "filhos": [
+              "no-jogo-9-4",
+              "no-jogo-9-5"
+            ],
+            "comentario": "Ele saiu para e8. Qual casa ficou livre?"
+          },
+          "no-jogo-9-4": {
+            "id": "no-jogo-9-4",
+            "uci": "d6c7",
+            "filhos": [
+              "no-jogo-9-6"
+            ],
+            "comentario": "Passou por c7. Agora d8 é sua, e o peão sobe.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gd8]"
+            ]
+          },
+          "no-jogo-9-5": {
+            "id": "no-jogo-9-5",
+            "uci": "d6e6",
+            "filhos": [],
+            "comentario": "Voltou para trás. O rei preto retorna a d8, e você recomeça.",
+            "nags": [
+              6
+            ]
+          },
+          "no-jogo-9-6": {
+            "id": "no-jogo-9-6",
+            "uci": "e8e7",
+            "filhos": [
+              "no-jogo-9-7",
+              "no-jogo-9-8"
+            ]
+          },
+          "no-jogo-9-7": {
+            "id": "no-jogo-9-7",
+            "uci": "d5d6",
+            "filhos": [
+              "no-jogo-9-9"
+            ],
+            "comentario": "O peão sobe com xeque, protegido pelo rei em c7."
+          },
+          "no-jogo-9-8": {
+            "id": "no-jogo-9-8",
+            "uci": "c7c8",
+            "filhos": [],
+            "comentario": "O rei branco largou o peão. O rei preto vai a d6 e come em d5: empate.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-9-9": {
+            "id": "no-jogo-9-9",
+            "uci": "e7e8",
+            "filhos": [
+              "no-jogo-9-10"
+            ]
+          },
+          "no-jogo-9-10": {
+            "id": "no-jogo-9-10",
+            "uci": "d6d7",
+            "filhos": [
+              "no-jogo-9-11"
+            ],
+            "comentario": "Mais um passo. A casa d8 é sua.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gd8]"
+            ]
+          },
+          "no-jogo-9-11": {
+            "id": "no-jogo-9-11",
+            "uci": "e8f7",
+            "filhos": [
+              "no-jogo-9-12"
+            ]
+          },
+          "no-jogo-9-12": {
+            "id": "no-jogo-9-12",
+            "uci": "d7d8q",
+            "filhos": [],
+            "comentario": "Dama. O rei passou, e o peão virou dama."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-10",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "3k4/8/3P4/3K4/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 08 Oposição Direta; posições do Silman (yk2b24vS)",
+            "link": "https://lichess.org/study/aCPHORnE",
+            "fenRevisada": "3k4/8/3P4/3K4/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.036Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 8 - Oposição",
+            "Site": "https://lichess.org/study/aCPHORnE",
+            "White": "Brancas",
+            "Black": "Aluno - Pretas",
+            "Result": "1/2-1/2",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Oposição: frente a frente, quem tem a vez sai",
+            "ChapterName": "06 - TREINO 2 - Feche a passagem",
+            "Fonte": "Silman yk2b24vS, opposition (basics 3), posição depois de 7...Kd8; sem adaptação",
+            "FEN": "3k4/8/3P4/3K4/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "black",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-10-0",
+        "nos": {
+          "no-jogo-10-0": {
+            "id": "no-jogo-10-0",
+            "filhos": [
+              "no-jogo-10-1"
+            ],
+            "comentario": "Agora sem ajuda, e você joga com as pretas. O rei branco quer passar. Não deixe."
+          },
+          "no-jogo-10-1": {
+            "id": "no-jogo-10-1",
+            "uci": "d5e6",
+            "filhos": [
+              "no-jogo-10-2",
+              "no-jogo-10-3"
+            ],
+            "comentario": "O rei branco foi para e6."
+          },
+          "no-jogo-10-2": {
+            "id": "no-jogo-10-2",
+            "uci": "d8e8",
+            "filhos": [
+              "no-jogo-10-4"
+            ],
+            "comentario": "Frente a frente, e a vez é das brancas: você tomou a oposição.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-3": {
+            "id": "no-jogo-10-3",
+            "uci": "d8c8",
+            "filhos": [],
+            "comentario": "O seu rei saiu da frente. O rei branco passa por e7, e o peão vira dama.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-10-4": {
+            "id": "no-jogo-10-4",
+            "uci": "d6d7",
+            "filhos": [
+              "no-jogo-10-5",
+              "no-jogo-10-6"
+            ],
+            "comentario": "O peão sobe com xeque."
+          },
+          "no-jogo-10-5": {
+            "id": "no-jogo-10-5",
+            "uci": "e8d8",
+            "filhos": [
+              "no-jogo-10-7"
+            ],
+            "comentario": "De volta para a frente do peão. Agora o rei branco não tem como passar.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-6": {
+            "id": "no-jogo-10-6",
+            "uci": "e8f8",
+            "filhos": [],
+            "comentario": "Longe do peão: ele vira dama com xeque.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-10-7": {
+            "id": "no-jogo-10-7",
+            "uci": "e6d6",
+            "filhos": [],
+            "comentario": "Afogado: o seu rei não tem casa e não está em xeque. Empate."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-11",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/4k3/4P3/4K3/8/8/8/8 b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 08 Oposição Direta; posições do Silman (yk2b24vS)",
+            "link": "https://lichess.org/study/aCPHORnE",
+            "fenRevisada": "8/4k3/4P3/4K3/8/8/8/8 b - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.036Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 8 - Oposição",
+            "Site": "https://lichess.org/study/aCPHORnE",
+            "White": "Brancas",
+            "Black": "Aluno - Pretas",
+            "Result": "1/2-1/2",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Oposição: frente a frente, quem tem a vez sai",
+            "ChapterName": "07 - TREINO 3 - Um lance antes",
+            "Fonte": "Silman yk2b24vS, opposition (basics 3), posição antes de 7...Kd8 (rei branco d5, peão d6, rei preto d7, Pretas jogam); adaptação: espelhada para a coluna e",
+            "FEN": "8/4k3/4P3/4K3/8/8/8/8 b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "black",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-11-0",
+        "nos": {
+          "no-jogo-11-0": {
+            "id": "no-jogo-11-0",
+            "filhos": [
+              "no-jogo-11-1",
+              "no-jogo-11-2",
+              "no-jogo-11-3"
+            ],
+            "comentario": "Posição nova: o peão está em e6, e é a sua vez. Não deixe o rei branco passar."
+          },
+          "no-jogo-11-1": {
+            "id": "no-jogo-11-1",
+            "uci": "e7e8",
+            "filhos": [
+              "no-jogo-11-4"
+            ],
+            "comentario": "Na frente do peão. Para onde o rei branco for, você fica frente a frente.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-11-2": {
+            "id": "no-jogo-11-2",
+            "uci": "e7d8",
+            "filhos": [],
+            "comentario": "Saiu para d8. O rei branco passa por d6, e o peão sobe.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-11-3": {
+            "id": "no-jogo-11-3",
+            "uci": "e7f8",
+            "filhos": [],
+            "comentario": "Saiu para f8. O rei branco passa por f6, e o peão sobe.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-11-4": {
+            "id": "no-jogo-11-4",
+            "uci": "e5d6",
+            "filhos": [
+              "no-jogo-11-5",
+              "no-jogo-11-6"
+            ],
+            "comentario": "O rei branco escolheu d6."
+          },
+          "no-jogo-11-5": {
+            "id": "no-jogo-11-5",
+            "uci": "e8d8",
+            "filhos": [
+              "no-jogo-11-7"
+            ],
+            "comentario": "Frente a frente, e a vez é das brancas: você tomou a oposição.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-11-6": {
+            "id": "no-jogo-11-6",
+            "uci": "e8f8",
+            "filhos": [],
+            "comentario": "Longe do rei branco: ele entra em d7 e guarda e8. O peão vira dama.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-11-7": {
+            "id": "no-jogo-11-7",
+            "uci": "e6e7",
+            "filhos": [
+              "no-jogo-11-8",
+              "no-jogo-11-9"
+            ],
+            "comentario": "O peão sobe com xeque."
+          },
+          "no-jogo-11-8": {
+            "id": "no-jogo-11-8",
+            "uci": "d8e8",
+            "filhos": [
+              "no-jogo-11-10"
+            ],
+            "comentario": "De volta para a frente do peão.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-11-9": {
+            "id": "no-jogo-11-9",
+            "uci": "d8c8",
+            "filhos": [],
+            "comentario": "Longe do peão: ele vira dama.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-11-10": {
+            "id": "no-jogo-11-10",
+            "uci": "d6e6",
+            "filhos": [],
+            "comentario": "Afogado. Empate."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-12",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/3k4/8/3K4/8/3P4/8/8 b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 08 Oposição Direta; posições do Silman (yk2b24vS)",
+            "link": "https://lichess.org/study/aCPHORnE",
+            "fenRevisada": "8/3k4/8/3K4/8/3P4/8/8 b - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.036Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 8 - Oposição",
+            "Site": "https://lichess.org/study/aCPHORnE",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Oposição: frente a frente, quem tem a vez sai",
+            "ChapterName": "08 - TREINO 4 - O peão atrás",
+            "Fonte": "posição montada para a transferência: rei branco d5, peão d3, rei preto d7, Pretas jogam (o mesmo desenho do Silman, King and Pawn Endgames 3, com o peão um passo à frente)",
+            "FEN": "8/3k4/8/3K4/8/3P4/8/8 b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-12-0",
+        "nos": {
+          "no-jogo-12-0": {
+            "id": "no-jogo-12-0",
+            "filhos": [
+              "no-jogo-12-1"
+            ],
+            "comentario": "Posição nova: o peão está atrás, em d3. O rei preto começa. Passe com o rei — o peão espera."
+          },
+          "no-jogo-12-1": {
+            "id": "no-jogo-12-1",
+            "uci": "d7c7",
+            "filhos": [
+              "no-jogo-12-2",
+              "no-jogo-12-3",
+              "no-jogo-12-4"
+            ],
+            "comentario": "O rei preto saiu para c7."
+          },
+          "no-jogo-12-2": {
+            "id": "no-jogo-12-2",
+            "uci": "d5e6",
+            "filhos": [
+              "no-jogo-12-5"
+            ],
+            "comentario": "Passou por e6. O rei preto ficou para trás, e o caminho do peão é seu.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-12-3": {
+            "id": "no-jogo-12-3",
+            "uci": "d3d4",
+            "filhos": [],
+            "comentario": "O peão subiu antes do rei. O rei preto volta para d7, frente a frente, e a vez é sua: empate.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-12-4": {
+            "id": "no-jogo-12-4",
+            "uci": "d5c5",
+            "filhos": [],
+            "comentario": "O rei branco recuou. O rei preto volta para d7, e você recomeça.",
+            "nags": [
+              6
+            ]
+          },
+          "no-jogo-12-5": {
+            "id": "no-jogo-12-5",
+            "uci": "c7d8",
+            "filhos": [
+              "no-jogo-12-6"
+            ],
+            "comentario": "O rei preto voltou para d8."
+          },
+          "no-jogo-12-6": {
+            "id": "no-jogo-12-6",
+            "uci": "e6d6",
+            "filhos": [
+              "no-jogo-12-7"
+            ],
+            "comentario": "Frente a frente, e a vez é das pretas: você tomou a oposição.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-12-7": {
+            "id": "no-jogo-12-7",
+            "uci": "d8c8",
+            "filhos": [
+              "no-jogo-12-8"
+            ],
+            "comentario": "Ele saiu para c8."
+          },
+          "no-jogo-12-8": {
+            "id": "no-jogo-12-8",
+            "uci": "d6e7",
+            "filhos": [],
+            "comentario": "Passou. Agora d8 é sua, e o peão sobe sozinho.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gd8]"
+            ]
+          }
+        }
+      }
+    ],
+    "introducoes": [
+      {
+        "id": "introducao-estudo-1",
+        "titulo": "Introdução",
+        "quadros": [
+          {
+            "id": "quadro-estudo-1",
+            "titulo": "INTRODUÇÃO - Ganha, empata ou perde?",
+            "texto": "Brancas: rei e peão. Pretas: só o rei. Brancas jogam.\n\nGanha, empata ou perde?",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-6",
+                "nodeId": "no-jogo-6-0"
+              }
+            }
+          },
+          {
+            "id": "quadro-estudo-2",
+            "titulo": "INTRODUÇÃO - A resposta",
+            "texto": "Ganha — com um lance de rei. Com um lance de peão, empata.\n\nHoje você vê os dois, um ao lado do outro.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-6",
+                "nodeId": "no-jogo-6-0"
+              }
+            }
+          },
+          {
+            "id": "quadro-estudo-3",
+            "titulo": "INTRODUÇÃO - O outro lado",
+            "texto": "Depois, você troca de lado. O peão branco já está em d6, e as brancas jogam.\n\nSe o seu rei ficar frente a frente com o rei branco, é empate.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-7",
+                "nodeId": "no-jogo-7-0"
+              }
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d6",
+                  "cor": "amarelo"
+                }
+              ]
+            }
+          },
+          {
+            "id": "quadro-estudo-4",
+            "titulo": "INTRODUÇÃO - A pergunta da aula",
+            "texto": "Hoje, a cada lance, pergunte: os reis estão frente a frente — e de quem é a vez?\n\nNo fim, você passa com o rei quando ataca, e fecha a passagem quando defende.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-6",
+                "nodeId": "no-jogo-6-0"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "capitulos": [
+      {
+        "id": "capitulo-jogo-5",
+        "titulo": "AULA - Frente a frente",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-6",
+          "no-jogo-5-7",
+          "no-jogo-5-8",
+          "no-jogo-5-9",
+          "no-jogo-5-10"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-5-0",
+            "nodeId": "no-jogo-5-0",
+            "texto": "Só os reis, para ver a ideia. Rei branco em d4, rei preto em d6: frente a frente, uma casa no meio. Vez das pretas.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-1",
+            "nodeId": "no-jogo-5-1",
+            "texto": "O rei preto teve que sair da frente. Ele foi para c6, e a casa e5 ficou livre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-2",
+            "nodeId": "no-jogo-5-2",
+            "texto": "Saiu para e6. Agora é a casa c5 que ficou livre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-3",
+            "nodeId": "no-jogo-5-3",
+            "texto": "O rei branco passou pelo outro lado.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-4",
+            "nodeId": "no-jogo-5-4",
+            "texto": "Recuou para d7.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-5",
+            "nodeId": "no-jogo-5-5",
+            "texto": "Frente a frente de novo, e a vez é das pretas outra vez. O rei preto vai ter que sair.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-6",
+            "nodeId": "no-jogo-5-6",
+            "texto": "O rei branco passou por e5. Isso tem nome: oposição.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-7",
+            "nodeId": "no-jogo-5-7",
+            "texto": "O rei preto volta para a frente.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-8",
+            "nodeId": "no-jogo-5-8",
+            "texto": "Frente a frente, e a vez é das pretas: as brancas tomaram a oposição.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-9",
+            "nodeId": "no-jogo-5-9",
+            "texto": "De novo, o rei preto tem que sair.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-10",
+            "nodeId": "no-jogo-5-10",
+            "texto": "E de novo o rei branco passa. Quem toma a oposição, passa.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5-variante",
+        "titulo": "Comparação: 1... Re6",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-2",
+          "no-jogo-5-3"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-2",
+            "nodeId": "no-jogo-5-2",
+            "texto": "Saiu para e6. Agora é a casa c5 que ficou livre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-3",
+            "nodeId": "no-jogo-5-3",
+            "texto": "O rei branco passou pelo outro lado.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5-variante-2",
+        "titulo": "Comparação: 1... Rd7",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-4",
+          "no-jogo-5-5"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-5-variante-2-no-jogo-5-4",
+            "nodeId": "no-jogo-5-4",
+            "texto": "Recuou para d7.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-5-variante-2-no-jogo-5-5",
+            "nodeId": "no-jogo-5-5",
+            "texto": "Frente a frente de novo, e a vez é das pretas outra vez. O rei preto vai ter que sair.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6",
+        "titulo": "AULA - Passar com o rei",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-1",
+          "no-jogo-6-7",
+          "no-jogo-6-16",
+          "no-jogo-6-17",
+          "no-jogo-6-18",
+          "no-jogo-6-19",
+          "no-jogo-6-20",
+          "no-jogo-6-21",
+          "no-jogo-6-22"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-6-0",
+            "nodeId": "no-jogo-6-0",
+            "texto": "Agora com um peão em d5. O rei preto está em d8, na frente dele. Para o peão passar, primeiro passa o rei.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-1",
+            "nodeId": "no-jogo-6-1",
+            "texto": "Frente a frente, e a vez é das pretas: as brancas tomaram a oposição. O rei preto vai ter que sair.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-2",
+            "nodeId": "no-jogo-6-2",
+            "texto": "O peão subiu antes do rei. Olhe o que o rei preto faz agora.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-3",
+            "nodeId": "no-jogo-6-3",
+            "texto": "Frente a frente, e a vez é das brancas: o rei preto tomou a oposição.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-4",
+            "nodeId": "no-jogo-6-4",
+            "texto": "O peão sobe com xeque, e o rei preto volta para a frente dele.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-6",
+            "nodeId": "no-jogo-6-6",
+            "texto": "O rei preto não está em xeque e não tem casa: afogado. Empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-7",
+            "nodeId": "no-jogo-6-7",
+            "texto": "O rei preto saiu para c8. A casa e7 ficou livre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-8",
+            "nodeId": "no-jogo-6-8",
+            "texto": "Saiu para e8. Agora é a casa c7 que ficou livre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-9",
+            "nodeId": "no-jogo-6-9",
+            "texto": "O rei branco passou pelo outro lado. O peão sobe do mesmo jeito.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-11",
+            "nodeId": "no-jogo-6-11",
+            "texto": "O peão sobe com xeque, protegido pelo rei em c7.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-13",
+            "nodeId": "no-jogo-6-13",
+            "texto": "Mais um passo. A casa d8 é do rei branco.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-15",
+            "nodeId": "no-jogo-6-15",
+            "texto": "Dama.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-16",
+            "nodeId": "no-jogo-6-16",
+            "texto": "O rei branco passou por e7. Agora d8 é dele, e o peão sobe sem ninguém na frente.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-17",
+            "nodeId": "no-jogo-6-17",
+            "texto": "O rei preto tenta voltar.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-18",
+            "nodeId": "no-jogo-6-18",
+            "texto": "O peão sobe com xeque, protegido pelo rei em e7.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-20",
+            "nodeId": "no-jogo-6-20",
+            "texto": "Mais um passo. A casa d8 é do rei branco.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-22",
+            "nodeId": "no-jogo-6-22",
+            "texto": "Dama. O rei passou, e o peão virou dama.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6-variante",
+        "titulo": "Comparação: 1. d6??",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-2",
+          "no-jogo-6-3",
+          "no-jogo-6-4",
+          "no-jogo-6-5",
+          "no-jogo-6-6"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-2",
+            "nodeId": "no-jogo-6-2",
+            "texto": "O peão subiu antes do rei. Olhe o que o rei preto faz agora.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-3",
+            "nodeId": "no-jogo-6-3",
+            "texto": "Frente a frente, e a vez é das brancas: o rei preto tomou a oposição.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-4",
+            "nodeId": "no-jogo-6-4",
+            "texto": "O peão sobe com xeque, e o rei preto volta para a frente dele.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-6",
+            "nodeId": "no-jogo-6-6",
+            "texto": "O rei preto não está em xeque e não tem casa: afogado. Empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6-variante-2",
+        "titulo": "Comparação: 1... Re8",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-1",
+          "no-jogo-6-8",
+          "no-jogo-6-9",
+          "no-jogo-6-10",
+          "no-jogo-6-11",
+          "no-jogo-6-12",
+          "no-jogo-6-13",
+          "no-jogo-6-14",
+          "no-jogo-6-15"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-6-variante-2-no-jogo-6-8",
+            "nodeId": "no-jogo-6-8",
+            "texto": "Saiu para e8. Agora é a casa c7 que ficou livre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-2-no-jogo-6-9",
+            "nodeId": "no-jogo-6-9",
+            "texto": "O rei branco passou pelo outro lado. O peão sobe do mesmo jeito.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-2-no-jogo-6-11",
+            "nodeId": "no-jogo-6-11",
+            "texto": "O peão sobe com xeque, protegido pelo rei em c7.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-2-no-jogo-6-13",
+            "nodeId": "no-jogo-6-13",
+            "texto": "Mais um passo. A casa d8 é do rei branco.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-2-no-jogo-6-15",
+            "nodeId": "no-jogo-6-15",
+            "texto": "Dama.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7",
+        "titulo": "AULA - Fechar a passagem",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [
+          "no-jogo-7-1",
+          "no-jogo-7-7",
+          "no-jogo-7-14",
+          "no-jogo-7-15",
+          "no-jogo-7-18"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-7-0",
+            "nodeId": "no-jogo-7-0",
+            "texto": "Agora você defende com as pretas. O rei branco quer passar por c7 ou por e7, para o peão subir.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-1",
+            "nodeId": "no-jogo-7-1",
+            "texto": "O rei branco foi para c6: ele quer entrar em c7.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-2",
+            "nodeId": "no-jogo-7-2",
+            "texto": "Pelo outro lado, é a mesma coisa.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-3",
+            "nodeId": "no-jogo-7-3",
+            "texto": "Frente a frente, e a vez é das brancas: você tomou a oposição.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-6",
+            "nodeId": "no-jogo-7-6",
+            "texto": "Afogado. Empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-7",
+            "nodeId": "no-jogo-7-7",
+            "texto": "Frente a frente, e a vez é das brancas: você tomou a oposição. O rei branco não passa.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-8",
+            "nodeId": "no-jogo-7-8",
+            "texto": "O seu rei saiu da frente. A casa c7 ficou livre para o rei branco.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-9",
+            "nodeId": "no-jogo-7-9",
+            "texto": "O rei branco passou. Agora d8 é dele, e o peão sobe.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-11",
+            "nodeId": "no-jogo-7-11",
+            "texto": "O peão sobe protegido.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-13",
+            "nodeId": "no-jogo-7-13",
+            "texto": "Dama, com xeque. As brancas ganham.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-14",
+            "nodeId": "no-jogo-7-14",
+            "texto": "O peão sobe com xeque.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-15",
+            "nodeId": "no-jogo-7-15",
+            "texto": "De volta para a frente do peão.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-16",
+            "nodeId": "no-jogo-7-16",
+            "texto": "Longe do peão: ele vira dama.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-17",
+            "nodeId": "no-jogo-7-17",
+            "texto": "Dama, com xeque. As brancas ganham.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-18",
+            "nodeId": "no-jogo-7-18",
+            "texto": "O seu rei não está em xeque e não tem casa: afogado. Empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-19",
+            "nodeId": "no-jogo-7-19",
+            "texto": "Se o rei branco sai de perto, o peão fica sozinho.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-20",
+            "nodeId": "no-jogo-7-20",
+            "texto": "O peão caiu. Só os reis: empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7-variante",
+        "titulo": "Comparação: 1. Re6",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [
+          "no-jogo-7-2",
+          "no-jogo-7-3",
+          "no-jogo-7-4",
+          "no-jogo-7-5",
+          "no-jogo-7-6"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-7-variante-no-jogo-7-2",
+            "nodeId": "no-jogo-7-2",
+            "texto": "Pelo outro lado, é a mesma coisa.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-7-variante-no-jogo-7-3",
+            "nodeId": "no-jogo-7-3",
+            "texto": "Frente a frente, e a vez é das brancas: você tomou a oposição.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-7-variante-no-jogo-7-6",
+            "nodeId": "no-jogo-7-6",
+            "texto": "Afogado. Empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7-variante-2",
+        "titulo": "Comparação: 1... Re8??",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [
+          "no-jogo-7-1",
+          "no-jogo-7-8",
+          "no-jogo-7-9",
+          "no-jogo-7-10",
+          "no-jogo-7-11",
+          "no-jogo-7-12",
+          "no-jogo-7-13"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-7-variante-2-no-jogo-7-8",
+            "nodeId": "no-jogo-7-8",
+            "texto": "O seu rei saiu da frente. A casa c7 ficou livre para o rei branco.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-7-variante-2-no-jogo-7-9",
+            "nodeId": "no-jogo-7-9",
+            "texto": "O rei branco passou. Agora d8 é dele, e o peão sobe.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-7-variante-2-no-jogo-7-11",
+            "nodeId": "no-jogo-7-11",
+            "texto": "O peão sobe protegido.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-7-variante-2-no-jogo-7-13",
+            "nodeId": "no-jogo-7-13",
+            "texto": "Dama, com xeque. As brancas ganham.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7-variante-3",
+        "titulo": "Comparação: 2... Rb8??",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [
+          "no-jogo-7-1",
+          "no-jogo-7-7",
+          "no-jogo-7-14",
+          "no-jogo-7-16",
+          "no-jogo-7-17"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-7-variante-3-no-jogo-7-16",
+            "nodeId": "no-jogo-7-16",
+            "texto": "Longe do peão: ele vira dama.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-7-variante-3-no-jogo-7-17",
+            "nodeId": "no-jogo-7-17",
+            "texto": "Dama, com xeque. As brancas ganham.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7-variante-4",
+        "titulo": "Comparação: 3. Rb6",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [
+          "no-jogo-7-1",
+          "no-jogo-7-7",
+          "no-jogo-7-14",
+          "no-jogo-7-15",
+          "no-jogo-7-19",
+          "no-jogo-7-20"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-7-variante-4-no-jogo-7-19",
+            "nodeId": "no-jogo-7-19",
+            "texto": "Se o rei branco sai de perto, o peão fica sozinho.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-7-variante-4-no-jogo-7-20",
+            "nodeId": "no-jogo-7-20",
+            "texto": "O peão caiu. Só os reis: empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-8",
+        "titulo": "AULA - LEMBRE-SE",
+        "analiseId": "analise-jogo-8",
+        "inicioNodeId": "no-jogo-8-0",
+        "caminho": [],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-8-0",
+            "nodeId": "no-jogo-8-0",
+            "texto": "LEMBRE-SE:\n\n1. Frente a frente, uma casa no meio: quem tem a vez sai.\n2. Para passar com o rei, tome a oposição. O peão espera.\n3. Para fechar a passagem, tome a oposição.",
+            "pausa": "manual"
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "titulo": "TREINO 1 - Passe com o rei",
+        "introducao": "O rei preto está em d8, na frente do peão. Fique frente a frente com ele — o peão espera.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-9",
+          "nodeId": "no-jogo-9-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "O rei preto está em d8, na frente do peão. Fique frente a frente com ele — o peão espera.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-9-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-1-white",
+                "moves": [
+                  "e6d6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Frente a frente, e a vez é das pretas: você tomou a oposição.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d8e8",
+                      "proximaQuestaoId": "questao-no-jogo-9-3-white",
+                      "texto": "Ele saiu para e8. Qual casa ficou livre?"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-2",
+                "moves": [
+                  "d5d6"
+                ],
+                "julgamento": "erro",
+                "feedback": "O peão subiu antes do rei. O rei preto vai para e8, frente a frente, e você não passa: empate.",
+                "erroId": "erro-no-jogo-9-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-3-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-3"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-4-white",
+                "moves": [
+                  "d6c7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Passou por c7. Agora d8 é sua, e o peão sobe.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e8e7",
+                      "proximaQuestaoId": "questao-no-jogo-9-6-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-5",
+                "moves": [
+                  "d6e6"
+                ],
+                "julgamento": "erro",
+                "feedback": "Voltou para trás. O rei preto retorna a d8, e você recomeça.",
+                "erroId": "erro-no-jogo-9-5",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-6-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-6"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-7-white",
+                "moves": [
+                  "d5d6"
+                ],
+                "julgamento": "correta",
+                "feedback": "O peão sobe com xeque, protegido pelo rei em c7.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e7e8",
+                      "proximaQuestaoId": "questao-no-jogo-9-9-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-8",
+                "moves": [
+                  "c7c8"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei branco largou o peão. O rei preto vai a d6 e come em d5: empate.",
+                "erroId": "erro-no-jogo-9-8",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-9-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-9"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-10-white",
+                "moves": [
+                  "d6d7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Mais um passo. A casa d8 é sua.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e8f7",
+                      "proximaQuestaoId": "questao-no-jogo-9-11-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-11-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-11"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-12-white",
+                "moves": [
+                  "d7d8q"
+                ],
+                "julgamento": "correta",
+                "feedback": "Dama. O rei passou, e o peão virou dama.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "promotion"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-9",
+          "nodeIds": [
+            "no-jogo-9-0",
+            "no-jogo-9-1",
+            "no-jogo-9-3",
+            "no-jogo-9-4",
+            "no-jogo-9-6",
+            "no-jogo-9-7",
+            "no-jogo-9-9",
+            "no-jogo-9-10",
+            "no-jogo-9-11",
+            "no-jogo-9-12"
+          ],
+          "hash": "v2-3c2a5bce",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-9",
+          "inicioNodeId": "no-jogo-9-0",
+          "objetivo": "O rei preto está em d8, na frente do peão. Fique frente a frente com ele — o peão espera."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "3k4/8/4K3/3P4/8/8/8/8 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-9-0-white": {
+              "fen": "3k4/8/4K3/3P4/8/8/8/8 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-0"
+              }
+            },
+            "questao-no-jogo-9-3-white": {
+              "fen": "4k3/8/3K4/3P4/8/8/8/8 w - - 2 2",
+              "historicoUci": [
+                "e6d6",
+                "d8e8"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-3"
+              }
+            },
+            "questao-no-jogo-9-6-white": {
+              "fen": "8/2K1k3/8/3P4/8/8/8/8 w - - 4 3",
+              "historicoUci": [
+                "e6d6",
+                "d8e8",
+                "d6c7",
+                "e8e7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-6"
+              }
+            },
+            "questao-no-jogo-9-9-white": {
+              "fen": "4k3/2K5/3P4/8/8/8/8/8 w - - 1 4",
+              "historicoUci": [
+                "e6d6",
+                "d8e8",
+                "d6c7",
+                "e8e7",
+                "d5d6",
+                "e7e8"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-9"
+              }
+            },
+            "questao-no-jogo-9-11-white": {
+              "fen": "8/2KP1k2/8/8/8/8/8/8 w - - 1 5",
+              "historicoUci": [
+                "e6d6",
+                "d8e8",
+                "d6c7",
+                "e8e7",
+                "d5d6",
+                "e7e8",
+                "d6d7",
+                "e8f7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-11"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      },
+      {
+        "id": "treino-capitulo-jogo-10-no-jogo-10-0-black",
+        "titulo": "TREINO 2 - Feche a passagem",
+        "introducao": "Agora sem ajuda, e você joga com as pretas. O rei branco quer passar. Não deixe.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-10",
+          "nodeId": "no-jogo-10-0"
+        },
+        "ladoAluno": "black",
+        "objetivo": "Agora sem ajuda, e você joga com as pretas. O rei branco quer passar. Não deixe.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-10-1-black",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-1"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-2-black",
+                "moves": [
+                  "d8e8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Frente a frente, e a vez é das brancas: você tomou a oposição.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d6d7",
+                      "proximaQuestaoId": "questao-no-jogo-10-4-black",
+                      "texto": "O peão sobe com xeque."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-3",
+                "moves": [
+                  "d8c8"
+                ],
+                "julgamento": "erro",
+                "feedback": "O seu rei saiu da frente. O rei branco passa por e7, e o peão vira dama.",
+                "erroId": "erro-no-jogo-10-3",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-4-black",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-4"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-5-black",
+                "moves": [
+                  "e8d8"
+                ],
+                "julgamento": "correta",
+                "feedback": "De volta para a frente do peão. Agora o rei branco não tem como passar.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "draw-secured",
+                  "defesaFinal": "e6d6"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-6",
+                "moves": [
+                  "e8f8"
+                ],
+                "julgamento": "erro",
+                "feedback": "Longe do peão: ele vira dama com xeque.",
+                "erroId": "erro-no-jogo-10-6",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "defesaInicial": {
+          "move": "d5e6",
+          "primeiraQuestaoId": "questao-no-jogo-10-1-black"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-10",
+          "nodeIds": [
+            "no-jogo-10-0",
+            "no-jogo-10-1",
+            "no-jogo-10-2",
+            "no-jogo-10-4",
+            "no-jogo-10-5",
+            "no-jogo-10-7"
+          ],
+          "hash": "v2-f252b090",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-10",
+          "inicioNodeId": "no-jogo-10-0",
+          "objetivo": "Agora sem ajuda, e você joga com as pretas. O rei branco quer passar. Não deixe."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "3k4/8/3P4/3K4/8/8/8/8 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-10-1-black": {
+              "fen": "3k4/8/3PK3/8/8/8/8/8 b - - 1 1",
+              "historicoUci": [
+                "d5e6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-1"
+              }
+            },
+            "questao-no-jogo-10-4-black": {
+              "fen": "4k3/3P4/4K3/8/8/8/8/8 b - - 0 2",
+              "historicoUci": [
+                "d5e6",
+                "d8e8",
+                "d6d7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-4"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "resultado": "draw"
+      },
+      {
+        "id": "treino-capitulo-jogo-11-no-jogo-11-0-black",
+        "titulo": "TREINO 3 - Um lance antes",
+        "introducao": "Posição nova: o peão está em e6, e é a sua vez. Não deixe o rei branco passar.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-11",
+          "nodeId": "no-jogo-11-0"
+        },
+        "ladoAluno": "black",
+        "objetivo": "Posição nova: o peão está em e6, e é a sua vez. Não deixe o rei branco passar.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-11-0-black",
+            "posicao": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-11-1-black",
+                "moves": [
+                  "e7e8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Na frente do peão. Para onde o rei branco for, você fica frente a frente.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e5d6",
+                      "proximaQuestaoId": "questao-no-jogo-11-4-black",
+                      "texto": "O rei branco escolheu d6."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-11-2",
+                "moves": [
+                  "e7d8"
+                ],
+                "julgamento": "erro",
+                "feedback": "Saiu para d8. O rei branco passa por d6, e o peão sobe.",
+                "erroId": "erro-no-jogo-11-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-11-3",
+                "moves": [
+                  "e7f8"
+                ],
+                "julgamento": "erro",
+                "feedback": "Saiu para f8. O rei branco passa por f6, e o peão sobe.",
+                "erroId": "erro-no-jogo-11-3",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-11-4-black",
+            "posicao": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-4"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-11-5-black",
+                "moves": [
+                  "e8d8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Frente a frente, e a vez é das brancas: você tomou a oposição.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e6e7",
+                      "proximaQuestaoId": "questao-no-jogo-11-7-black",
+                      "texto": "O peão sobe com xeque."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-11-6",
+                "moves": [
+                  "e8f8"
+                ],
+                "julgamento": "erro",
+                "feedback": "Longe do rei branco: ele entra em d7 e guarda e8. O peão vira dama.",
+                "erroId": "erro-no-jogo-11-6",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-11-7-black",
+            "posicao": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-7"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-11-8-black",
+                "moves": [
+                  "d8e8"
+                ],
+                "julgamento": "correta",
+                "feedback": "De volta para a frente do peão.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "draw-secured",
+                  "defesaFinal": "d6e6"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-11-9",
+                "moves": [
+                  "d8c8"
+                ],
+                "julgamento": "erro",
+                "feedback": "Longe do peão: ele vira dama.",
+                "erroId": "erro-no-jogo-11-9",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-11",
+          "nodeIds": [
+            "no-jogo-11-0",
+            "no-jogo-11-1",
+            "no-jogo-11-4",
+            "no-jogo-11-5",
+            "no-jogo-11-7",
+            "no-jogo-11-8",
+            "no-jogo-11-10"
+          ],
+          "hash": "v2-4dc82aa4",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-11",
+          "inicioNodeId": "no-jogo-11-0",
+          "objetivo": "Posição nova: o peão está em e6, e é a sua vez. Não deixe o rei branco passar."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/4k3/4P3/4K3/8/8/8/8 b - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-11-0-black": {
+              "fen": "8/4k3/4P3/4K3/8/8/8/8 b - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-11",
+                "nodeId": "no-jogo-11-0"
+              }
+            },
+            "questao-no-jogo-11-4-black": {
+              "fen": "4k3/8/3KP3/8/8/8/8/8 b - - 2 2",
+              "historicoUci": [
+                "e7e8",
+                "e5d6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-11",
+                "nodeId": "no-jogo-11-4"
+              }
+            },
+            "questao-no-jogo-11-7-black": {
+              "fen": "3k4/4P3/3K4/8/8/8/8/8 b - - 0 3",
+              "historicoUci": [
+                "e7e8",
+                "e5d6",
+                "e8d8",
+                "e6e7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-11",
+                "nodeId": "no-jogo-11-7"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "resultado": "draw"
+      },
+      {
+        "id": "treino-capitulo-jogo-12-no-jogo-12-0-white",
+        "titulo": "TREINO 4 - O peão atrás",
+        "introducao": "Posição nova: o peão está atrás, em d3. O rei preto começa. Passe com o rei — o peão espera.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-12",
+          "nodeId": "no-jogo-12-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Posição nova: o peão está atrás, em d3. O rei preto começa. Passe com o rei — o peão espera.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-12-1-white",
+            "posicao": {
+              "analiseId": "analise-jogo-12",
+              "nodeId": "no-jogo-12-1"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-12-2-white",
+                "moves": [
+                  "d5e6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Passou por e6. O rei preto ficou para trás, e o caminho do peão é seu.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c7d8",
+                      "proximaQuestaoId": "questao-no-jogo-12-5-white",
+                      "texto": "O rei preto voltou para d8."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-12-3",
+                "moves": [
+                  "d3d4"
+                ],
+                "julgamento": "erro",
+                "feedback": "O peão subiu antes do rei. O rei preto volta para d7, frente a frente, e a vez é sua: empate.",
+                "erroId": "erro-no-jogo-12-3",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-12-4",
+                "moves": [
+                  "d5c5"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei branco recuou. O rei preto volta para d7, e você recomeça.",
+                "erroId": "erro-no-jogo-12-4",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-12-5-white",
+            "posicao": {
+              "analiseId": "analise-jogo-12",
+              "nodeId": "no-jogo-12-5"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-12-6-white",
+                "moves": [
+                  "e6d6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Frente a frente, e a vez é das pretas: você tomou a oposição.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d8c8",
+                      "proximaQuestaoId": "questao-no-jogo-12-7-white",
+                      "texto": "Ele saiu para c8."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-12-7-white",
+            "posicao": {
+              "analiseId": "analise-jogo-12",
+              "nodeId": "no-jogo-12-7"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-12-8-white",
+                "moves": [
+                  "d6e7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Passou. Agora d8 é sua, e o peão sobe sozinho.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "defesaInicial": {
+          "move": "d7c7",
+          "primeiraQuestaoId": "questao-no-jogo-12-1-white"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-12",
+          "nodeIds": [
+            "no-jogo-12-0",
+            "no-jogo-12-1",
+            "no-jogo-12-2",
+            "no-jogo-12-5",
+            "no-jogo-12-6",
+            "no-jogo-12-7",
+            "no-jogo-12-8"
+          ],
+          "hash": "v2-c29035e1",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-12",
+          "inicioNodeId": "no-jogo-12-0",
+          "objetivo": "Posição nova: o peão está atrás, em d3. O rei preto começa. Passe com o rei — o peão espera."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/3k4/8/3K4/8/3P4/8/8 b - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-12",
+              "nodeId": "no-jogo-12-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-12-1-white": {
+              "fen": "8/2k5/8/3K4/8/3P4/8/8 w - - 1 2",
+              "historicoUci": [
+                "d7c7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-12",
+                "nodeId": "no-jogo-12-1"
+              }
+            },
+            "questao-no-jogo-12-5-white": {
+              "fen": "3k4/8/4K3/8/8/3P4/8/8 w - - 3 3",
+              "historicoUci": [
+                "d7c7",
+                "d5e6",
+                "c7d8"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-12",
+                "nodeId": "no-jogo-12-5"
+              }
+            },
+            "questao-no-jogo-12-7-white": {
+              "fen": "2k5/8/3K4/8/8/3P4/8/8 w - - 5 4",
+              "historicoUci": [
+                "d7c7",
+                "d5e6",
+                "c7d8",
+                "e6d6",
+                "d8c8"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-12",
+                "nodeId": "no-jogo-12-7"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Passou. Agora d8 é sua, e o peão sobe sozinho."
+      }
+    ],
+    "praticas": [
+      {
+        "id": "pratica-pratica-passe-com-o-rei",
+        "titulo": "PRÁTICA - Passe com o rei",
+        "positionId": "pos-n1-direct-opposition-1",
+        "ladoAluno": "white",
+        "objetivo": "win",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      },
+      {
+        "id": "pratica-pratica-feche-a-passagem",
+        "titulo": "PRÁTICA - Feche a passagem",
+        "positionId": "pos-n1-direct-opposition-2",
+        "ladoAluno": "black",
+        "objetivo": "draw",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-introducao-estudo-1",
+        "tipo": "introducao",
+        "entidadeId": "introducao-estudo-1"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5-variante-2",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5-variante-2"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6-variante-2",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6-variante-2"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7-variante-2",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7-variante-2"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7-variante-3",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7-variante-3"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7-variante-4",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7-variante-4"
+      },
+      {
+        "id": "etapa-capitulo-jogo-8",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-8"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-9-no-jogo-9-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-10-no-jogo-10-0-black",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-10-no-jogo-10-0-black"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-11-no-jogo-11-0-black",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-11-no-jogo-11-0-black"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-12-no-jogo-12-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-12-no-jogo-12-0-white"
+      },
+      {
+        "id": "etapa-pratica-pratica-passe-com-o-rei",
+        "tipo": "pratica",
+        "entidadeId": "pratica-pratica-passe-com-o-rei"
+      },
+      {
+        "id": "etapa-pratica-pratica-feche-a-passagem",
+        "tipo": "pratica",
+        "entidadeId": "pratica-pratica-feche-a-passagem"
+      }
+    ]
+  },
+  "posicoes": {
+    "pos-n1-direct-opposition-1": {
+      "id": "pos-n1-direct-opposition-1",
+      "fen": "3k4/8/2K5/3P4/8/8/8/8 w - - 0 1",
+      "expectedResult": "win-white",
+      "tags": [
+        "PRÁTICA - Passe com o rei"
+      ],
+      "status": "candidate",
+      "provenance": {
+        "externalHumanSource": "clubexadrezguabiruba",
+        "bibliographicSource": "Aula 08 Oposição Direta; posições do Silman (yk2b24vS), https://lichess.org/study/aCPHORnE",
+        "originalGame": "não se aplica",
+        "authorComposer": "clubexadrezguabiruba",
+        "license": "não informada — conferir antes de aprovar",
+        "editionFile": null,
+        "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+        "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+        "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+      }
+    },
+    "pos-n1-direct-opposition-2": {
+      "id": "pos-n1-direct-opposition-2",
+      "fen": "2k5/8/2P5/2K5/8/8/8/8 w - - 0 1",
+      "expectedResult": "draw",
+      "tags": [
+        "PRÁTICA - Feche a passagem"
+      ],
+      "status": "candidate",
+      "provenance": {
+        "externalHumanSource": "clubexadrezguabiruba",
+        "bibliographicSource": "Aula 08 Oposição Direta; posições do Silman (yk2b24vS), https://lichess.org/study/aCPHORnE",
+        "originalGame": "não se aplica",
+        "authorComposer": "clubexadrezguabiruba",
+        "license": "não informada — conferir antes de aprovar",
+        "editionFile": null,
+        "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+        "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+        "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+      }
+    }
+  },
+  "revisoes": {
+    "treino-capitulo-jogo-9-no-jogo-9-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_221f11a842a4bf509141d7615e6365a79efb3760986d277228ec2c119a0c0da6"
+    },
+    "treino-capitulo-jogo-10-no-jogo-10-0-black": {
+      "tipo": "treino",
+      "revisao": "ar_03cba4dfe6a26e585eeb73afc4044d69dd1ba6b59613b9c84c3d6cf8500f606e"
+    },
+    "treino-capitulo-jogo-11-no-jogo-11-0-black": {
+      "tipo": "treino",
+      "revisao": "ar_76bd55997607e47d5d6a05e4819e00b390571b56a499633cf4e38ea79db5940c"
+    },
+    "treino-capitulo-jogo-12-no-jogo-12-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_cddcfbea1ec9fbaa1779437b2d2e90c2004ede66cc3b037b5a1d2a2e29833ac1"
+    },
+    "pratica-pratica-passe-com-o-rei": {
+      "tipo": "pratica",
+      "revisao": "ar_6eabb0264e9a73987d5f32d72e44ea63b6a018f42bdd8d354bbb77e3de81b2b6"
+    },
+    "pratica-pratica-feche-a-passagem": {
+      "tipo": "pratica",
+      "revisao": "ar_4cc6da2dab9d9410100e9b981f901e2c71c0e37df1e939328bb1e083c344f3f5"
+    }
+  },
+  "manifesto": {
+    "aulaId": "N1-DIRECT-OPPOSITION",
+    "aula": "b33eb3f5bdc7fee6d440669adf78452c0d67c59982df5778f93c81dcec2c45fc",
+    "posicoes": {
+      "pos-n1-direct-opposition-1": "31f47cf2899f7f65646bdcb462f88182de8531b594003fa2feff55de29ef02db",
+      "pos-n1-direct-opposition-2": "da80880e5383ab27c44754e2c9c6783587a887494851cc284e30c14e20b0ce75"
+    },
+    "revisoes": "7092022d4c9abb25e809de69375b7e715d005773264ae2d473be7363845edc18",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

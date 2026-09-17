@@ -1,0 +1,20 @@
+{
+  "id": "pos-n1-key-squares-1",
+  "fen": "5k2/8/8/8/2K5/8/4P3/8 w - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "PRÁTICA - Leve o rei até a casa-chave"
+  ],
+  "status": "candidate",
+  "provenance": {
+    "externalHumanSource": "clubexadrezguabiruba",
+    "bibliographicSource": "Aula 09 Casas-Chave; posições do Silman, https://lichess.org/study/T81d9Yqq",
+    "originalGame": "não se aplica",
+    "authorComposer": "clubexadrezguabiruba",
+    "license": "não informada — conferir antes de aprovar",
+    "editionFile": null,
+    "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+    "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+    "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+  }
+}

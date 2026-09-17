@@ -1,0 +1,3939 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-21231128e840a84d",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "N0-LADDER",
+    "titulo": "Mate da escada: duas torres, e dama e torre",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "classe": "E",
+      "estadoEditorial": "rascunho"
+    },
+    "proveniencia": [
+      {
+        "positionId": "pos-n0-ladder-1",
+        "conteudoHash": "42ada9fe06b9d689d2f90f6b852d3ff0178ffdc0acc9082a5deb2db91f279869",
+        "estado": "candidate"
+      },
+      {
+        "positionId": "pos-n0-ladder-2",
+        "conteudoHash": "224313ae4c7686de6c5814a57c131043afa0e18915629cbbb0108d536176ee96",
+        "estado": "candidate"
+      }
+    ],
+    "excecoes": [],
+    "catalogo": {
+      "erros": [
+        {
+          "id": "erro-no-jogo-7-4",
+          "nome": "A parede saiu de c: a coluna c abriu de novo,…",
+          "julgamento": "fora-do-metodo",
+          "texto": "A parede saiu de c: a coluna c abriu de novo, e o rei volta por ela."
+        },
+        {
+          "id": "erro-no-jogo-7-7",
+          "nome": "O xeque de perto: o rei vai a f3 e ataca a to…",
+          "julgamento": "fora-do-metodo",
+          "texto": "O xeque de perto: o rei vai a f3 e ataca a torre. Dê o xeque de longe."
+        },
+        {
+          "id": "erro-no-jogo-8-4",
+          "nome": "Xeque colado no rei, sem defesa: o rei come a…",
+          "julgamento": "fora-do-metodo",
+          "texto": "Xeque colado no rei, sem defesa: o rei come a torre. Com uma torre só, o mate fica bem mais longe."
+        },
+        {
+          "id": "erro-no-jogo-8-5",
+          "nome": "As duas torres na mesma fileira: uma tapa o c…",
+          "julgamento": "fora-do-metodo",
+          "texto": "As duas torres na mesma fileira: uma tapa o caminho da outra. Escolha outra fileira."
+        },
+        {
+          "id": "erro-no-jogo-8-8",
+          "nome": "Xeque sem parede: a coluna f está aberta, e o…",
+          "julgamento": "fora-do-metodo",
+          "texto": "Xeque sem parede: a coluna f está aberta, e o rei volta por ela."
+        },
+        {
+          "id": "erro-no-jogo-8-11",
+          "nome": "Xeque sem parede: o rei sai pela coluna g.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Xeque sem parede: o rei sai pela coluna g."
+        },
+        {
+          "id": "erro-no-jogo-8-12",
+          "nome": "Xeque sem parede: o rei sai pela coluna g.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Xeque sem parede: o rei sai pela coluna g."
+        },
+        {
+          "id": "erro-no-jogo-9-2",
+          "nome": "Você continuou a escada e esqueceu a torre at…",
+          "julgamento": "fora-do-metodo",
+          "texto": "Você continuou a escada e esqueceu a torre atacada: o rei come a torre de e2."
+        },
+        {
+          "id": "erro-no-jogo-9-3",
+          "nome": "Xeque colado no rei, sem defesa: o rei come a…",
+          "julgamento": "fora-do-metodo",
+          "texto": "Xeque colado no rei, sem defesa: o rei come a torre."
+        },
+        {
+          "id": "erro-no-jogo-9-6",
+          "nome": "Xeque colado no rei: ele come a torre.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Xeque colado no rei: ele come a torre."
+        },
+        {
+          "id": "erro-no-jogo-10-4",
+          "nome": "Xeque colado no rei, sem defesa: o rei come a…",
+          "julgamento": "fora-do-metodo",
+          "texto": "Xeque colado no rei, sem defesa: o rei come a dama."
+        },
+        {
+          "id": "erro-no-jogo-10-7",
+          "nome": "Xeque sem parede: a coluna f está aberta, e o…",
+          "julgamento": "fora-do-metodo",
+          "texto": "Xeque sem parede: a coluna f está aberta, e o rei volta por ela."
+        },
+        {
+          "id": "erro-no-jogo-10-10",
+          "nome": "Xeque colado no rei, sem defesa: o rei come a…",
+          "julgamento": "fora-do-metodo",
+          "texto": "Xeque colado no rei, sem defesa: o rei come a dama."
+        },
+        {
+          "id": "erro-no-jogo-10-13",
+          "nome": "A dama tirou a casa h2 sem dar xeque.",
+          "julgamento": "perde-resultado",
+          "texto": "A dama tirou a casa h2 sem dar xeque. O rei não tem lance: afogamento, empate."
+        },
+        {
+          "id": "erro-no-jogo-10-14",
+          "nome": "Xeque colado no rei, sem defesa: o rei come a…",
+          "julgamento": "fora-do-metodo",
+          "texto": "Xeque colado no rei, sem defesa: o rei come a dama."
+        }
+      ],
+      "mensagensPadrao": {
+        "vitoriaForaDoMetodo": "Este lance funciona, mas não é o caminho ensinado.",
+        "perdeResultado": "Este lance perde o resultado que a posição permitia.",
+        "alternativaDoMetodo": "Boa alternativa. Continue pela linha ensinada."
+      }
+    },
+    "analises": [
+      {
+        "id": "analise-jogo-4",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/2k5/8/8/8/R7/KR6 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.5 Mate de duas torres (escadinha); posições adaptadas",
+            "link": "https://lichess.org/study/aYNkulCR",
+            "fenRevisada": "8/8/2k5/8/8/8/R7/KR6 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:42.703Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 2 - Mate da escada",
+            "Site": "https://lichess.org/study/aYNkulCR",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate da escada: duas torres, e dama e torre",
+            "ChapterName": "01 - AULA - A escada: parede e xeque",
+            "FEN": "8/8/2k5/8/8/8/R7/KR6 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-4-0",
+        "nos": {
+          "no-jogo-4-0": {
+            "id": "no-jogo-4-0",
+            "filhos": [
+              "no-jogo-4-1"
+            ],
+            "comentario": "A torre de b1 é a parede: o rei preto, em c6, não passa para a coluna b. A outra torre dá o xeque.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "b1",
+                  "para": "b8",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "c6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gb1b8]",
+              "[%csl Yc6]"
+            ]
+          },
+          "no-jogo-4-1": {
+            "id": "no-jogo-4-1",
+            "uci": "a2c2",
+            "filhos": [
+              "no-jogo-4-2"
+            ],
+            "comentario": "Xeque de longe, na coluna c. O rei só pode ir para a coluna d.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "c2",
+                  "para": "c8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "b1",
+                  "para": "b8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gc2c8,Gb1b8]"
+            ]
+          },
+          "no-jogo-4-2": {
+            "id": "no-jogo-4-2",
+            "uci": "c6d5",
+            "filhos": [
+              "no-jogo-4-3"
+            ],
+            "comentario": "O rei passou para a coluna d. Agora a torre de c2 é a parede.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "c2",
+                  "para": "c8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gc2c8]"
+            ]
+          },
+          "no-jogo-4-3": {
+            "id": "no-jogo-4-3",
+            "uci": "b1d1",
+            "filhos": [
+              "no-jogo-4-4"
+            ],
+            "comentario": "A torre de trás passa à frente: xeque na coluna d, de longe. As torres se alternam.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d1",
+                  "para": "d8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "c2",
+                  "para": "c8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd1d8,Gc2c8]"
+            ]
+          },
+          "no-jogo-4-4": {
+            "id": "no-jogo-4-4",
+            "uci": "d5e4",
+            "filhos": [
+              "no-jogo-4-5",
+              "no-jogo-4-6"
+            ],
+            "comentario": "O rei veio para perto das torres. Antes do xeque, olhe: ele alcança a torre?",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e4",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ye4]"
+            ]
+          },
+          "no-jogo-4-5": {
+            "id": "no-jogo-4-5",
+            "uci": "c2c8",
+            "filhos": [
+              "no-jogo-4-19"
+            ],
+            "comentario": "A torre vai para longe, c8, antes do xeque. De c8 ela dá xeque em e8, onde o rei não alcança.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "c2",
+                  "para": "c8",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "e8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gc2c8]",
+              "[%csl Ye8]"
+            ]
+          },
+          "no-jogo-4-6": {
+            "id": "no-jogo-4-6",
+            "uci": "c2e2",
+            "filhos": [
+              "no-jogo-4-7"
+            ],
+            "comentario": "Xeque de perto: também ganha, mas a torre ficou colada no rei.",
+            "nags": [
+              6,
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e2",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re2]"
+            ]
+          },
+          "no-jogo-4-7": {
+            "id": "no-jogo-4-7",
+            "uci": "e4f3",
+            "filhos": [
+              "no-jogo-4-8",
+              "no-jogo-4-9"
+            ],
+            "comentario": "O rei ataca a torre de e2. A escada para: agora é salvar a torre.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e2",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "f3",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re2,Yf3]"
+            ]
+          },
+          "no-jogo-4-8": {
+            "id": "no-jogo-4-8",
+            "uci": "e2e7",
+            "filhos": [
+              "no-jogo-4-11"
+            ],
+            "comentario": "A torre atacada foge para longe. Primeiro a torre, depois a escada.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e2",
+                  "para": "e7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge2e7]"
+            ]
+          },
+          "no-jogo-4-9": {
+            "id": "no-jogo-4-9",
+            "uci": "d1f1",
+            "filhos": [
+              "no-jogo-4-10"
+            ],
+            "comentario": "Continuou a escada e esqueceu a torre atacada.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e2",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re2]"
+            ]
+          },
+          "no-jogo-4-10": {
+            "id": "no-jogo-4-10",
+            "uci": "f3e2",
+            "filhos": [],
+            "comentario": "O rei comeu a torre. Com uma torre só, o mate fica bem mais longe.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e2",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re2]"
+            ]
+          },
+          "no-jogo-4-11": {
+            "id": "no-jogo-4-11",
+            "uci": "f3f2",
+            "filhos": [
+              "no-jogo-4-12"
+            ],
+            "comentario": "O rei vem atrás da torre de d1. Ela também vai para longe.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d1",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yd1]"
+            ]
+          },
+          "no-jogo-4-12": {
+            "id": "no-jogo-4-12",
+            "uci": "d1d8",
+            "filhos": [
+              "no-jogo-4-13"
+            ],
+            "comentario": "A torre de d1 vai para d8, longe do rei e ao lado da companheira. A escada recomeça.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d1",
+                  "para": "d8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd1d8]"
+            ]
+          },
+          "no-jogo-4-13": {
+            "id": "no-jogo-4-13",
+            "uci": "f2f3",
+            "filhos": [
+              "no-jogo-4-14"
+            ]
+          },
+          "no-jogo-4-14": {
+            "id": "no-jogo-4-14",
+            "uci": "d8f8",
+            "filhos": [
+              "no-jogo-4-15"
+            ],
+            "comentario": "Xeque na coluna f, de longe. A parede é a torre de e7.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "f8",
+                  "para": "f1",
+                  "cor": "verde"
+                },
+                {
+                  "de": "e7",
+                  "para": "e1",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gf8f1,Ge7e1]"
+            ]
+          },
+          "no-jogo-4-15": {
+            "id": "no-jogo-4-15",
+            "uci": "f3g4",
+            "filhos": [
+              "no-jogo-4-16"
+            ]
+          },
+          "no-jogo-4-16": {
+            "id": "no-jogo-4-16",
+            "uci": "e7g7",
+            "filhos": [
+              "no-jogo-4-17"
+            ],
+            "comentario": "A outra torre passa à frente: xeque na coluna g.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g7",
+                  "para": "g1",
+                  "cor": "verde"
+                },
+                {
+                  "de": "f8",
+                  "para": "f1",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg7g1,Gf8f1]"
+            ]
+          },
+          "no-jogo-4-17": {
+            "id": "no-jogo-4-17",
+            "uci": "g4h5",
+            "filhos": [
+              "no-jogo-4-18"
+            ],
+            "comentario": "O rei chegou à borda. Não tem mais coluna para fugir.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h5",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yh5]"
+            ]
+          },
+          "no-jogo-4-18": {
+            "id": "no-jogo-4-18",
+            "uci": "f8h8",
+            "filhos": [],
+            "comentario": "Xeque-mate: a torre de h8 dá xeque na coluna h, e a de g7 fecha a coluna g.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "h8",
+                  "para": "h1",
+                  "cor": "verde"
+                },
+                {
+                  "de": "g7",
+                  "para": "g1",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "h5",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gh8h1,Gg7g1]",
+              "[%csl Rh5]"
+            ]
+          },
+          "no-jogo-4-19": {
+            "id": "no-jogo-4-19",
+            "uci": "e4e3",
+            "filhos": [
+              "no-jogo-4-20"
+            ],
+            "comentario": "O rei ficou na coluna e. A torre de d1 está longe: ele não alcança.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e3",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ye3]"
+            ]
+          },
+          "no-jogo-4-20": {
+            "id": "no-jogo-4-20",
+            "uci": "c8e8",
+            "filhos": [
+              "no-jogo-4-21"
+            ],
+            "comentario": "Xeque na coluna e, de longe. A parede é a torre de d1: o rei só tem a coluna f.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e8",
+                  "para": "e1",
+                  "cor": "verde"
+                },
+                {
+                  "de": "d1",
+                  "para": "d8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge8e1,Gd1d8]"
+            ]
+          },
+          "no-jogo-4-21": {
+            "id": "no-jogo-4-21",
+            "uci": "e3f2",
+            "filhos": [
+              "no-jogo-4-22"
+            ],
+            "comentario": "O rei está em f2. Um xeque em f1 seria colado nele: primeiro a torre vai para longe.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f2",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yf2]"
+            ]
+          },
+          "no-jogo-4-22": {
+            "id": "no-jogo-4-22",
+            "uci": "d1d7",
+            "filhos": [
+              "no-jogo-4-23"
+            ],
+            "comentario": "A torre de d1 vai para d7, longe do rei. Não d8: na mesma fileira, uma torre tapa a outra.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d1",
+                  "para": "d7",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "d8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd1d7]",
+              "[%csl Yd8]"
+            ]
+          },
+          "no-jogo-4-23": {
+            "id": "no-jogo-4-23",
+            "uci": "f2g3",
+            "filhos": [
+              "no-jogo-4-24",
+              "no-jogo-4-25"
+            ],
+            "comentario": "O rei correu sozinho para a coluna g e deixou a coluna f aberta.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g3",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yg3]"
+            ]
+          },
+          "no-jogo-4-24": {
+            "id": "no-jogo-4-24",
+            "uci": "d7f7",
+            "filhos": [
+              "no-jogo-4-27"
+            ],
+            "comentario": "A parede fecha a coluna f, sem xeque. O rei não volta mais.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "f7",
+                  "para": "f1",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gf7f1]"
+            ]
+          },
+          "no-jogo-4-25": {
+            "id": "no-jogo-4-25",
+            "uci": "d7g7",
+            "filhos": [
+              "no-jogo-4-26"
+            ],
+            "comentario": "Xeque sem parede: a coluna f ficou aberta.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "f8",
+                  "para": "f1",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Rf8f1]"
+            ]
+          },
+          "no-jogo-4-26": {
+            "id": "no-jogo-4-26",
+            "uci": "g3f2",
+            "filhos": [],
+            "comentario": "O rei voltou pela coluna f. Feche a coluna antes do xeque.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f2",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yf2]"
+            ]
+          },
+          "no-jogo-4-27": {
+            "id": "no-jogo-4-27",
+            "uci": "g3h4",
+            "filhos": [
+              "no-jogo-4-28"
+            ],
+            "comentario": "O rei já está na borda, na coluna h. Falta fechar a coluna g.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h4",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yh4]"
+            ]
+          },
+          "no-jogo-4-28": {
+            "id": "no-jogo-4-28",
+            "uci": "e8g8",
+            "filhos": [
+              "no-jogo-4-29"
+            ],
+            "comentario": "A torre de e8 fecha a coluna g, sem xeque. O rei preto só anda na coluna h.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g8",
+                  "para": "g1",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg8g1]"
+            ]
+          },
+          "no-jogo-4-29": {
+            "id": "no-jogo-4-29",
+            "uci": "h4h3",
+            "filhos": [
+              "no-jogo-4-30"
+            ]
+          },
+          "no-jogo-4-30": {
+            "id": "no-jogo-4-30",
+            "uci": "f7h7",
+            "filhos": [],
+            "comentario": "Xeque-mate. A torre de h7 dá xeque na coluna h, e a de g8 fecha a coluna g.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "h7",
+                  "para": "h1",
+                  "cor": "verde"
+                },
+                {
+                  "de": "g8",
+                  "para": "g1",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "h3",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gh7h1,Gg8g1]",
+              "[%csl Rh3]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-5",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/2k5/8/8/8/R7/KQ6 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.5 Mate de duas torres (escadinha); posições adaptadas",
+            "link": "https://lichess.org/study/aYNkulCR",
+            "fenRevisada": "8/8/2k5/8/8/8/R7/KQ6 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:42.703Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 2 - Mate da escada",
+            "Site": "https://lichess.org/study/aYNkulCR",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate da escada: duas torres, e dama e torre",
+            "ChapterName": "02 - AULA - Dama e torre: a mesma escada",
+            "FEN": "8/8/2k5/8/8/8/R7/KQ6 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "Adaptacao": "Posição criada para a aula: a mesma do capítulo 01 com a torre de b1 trocada por dama. Motor: vitória das Brancas."
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-5-0",
+        "nos": {
+          "no-jogo-5-0": {
+            "id": "no-jogo-5-0",
+            "filhos": [
+              "no-jogo-5-1"
+            ],
+            "comentario": "Agora a torre de b1 virou dama. A dama anda como a torre e também na diagonal: a escada é a mesma.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "b1",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yb1]"
+            ]
+          },
+          "no-jogo-5-1": {
+            "id": "no-jogo-5-1",
+            "uci": "a2c2",
+            "filhos": [
+              "no-jogo-5-2"
+            ],
+            "comentario": "Xeque de longe na coluna c. A dama de b1 é a parede.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "c2",
+                  "para": "c8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "b1",
+                  "para": "b8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gc2c8,Gb1b8]"
+            ]
+          },
+          "no-jogo-5-2": {
+            "id": "no-jogo-5-2",
+            "uci": "c6d5",
+            "filhos": [
+              "no-jogo-5-3"
+            ]
+          },
+          "no-jogo-5-3": {
+            "id": "no-jogo-5-3",
+            "uci": "b1d1",
+            "filhos": [
+              "no-jogo-5-4"
+            ],
+            "comentario": "A dama passa à frente: xeque na coluna d, de longe.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d1",
+                  "para": "d8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "c2",
+                  "para": "c8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd1d8,Gc2c8]"
+            ]
+          },
+          "no-jogo-5-4": {
+            "id": "no-jogo-5-4",
+            "uci": "d5e4",
+            "filhos": [
+              "no-jogo-5-5"
+            ],
+            "comentario": "O rei veio para perto. A torre de c2 vai para longe antes do xeque.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e4",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ye4]"
+            ]
+          },
+          "no-jogo-5-5": {
+            "id": "no-jogo-5-5",
+            "uci": "c2c8",
+            "filhos": [
+              "no-jogo-5-6"
+            ],
+            "comentario": "Longe do rei. De c8, o xeque em e8 é seguro.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "c2",
+                  "para": "c8",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "e8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gc2c8]",
+              "[%csl Ye8]"
+            ]
+          },
+          "no-jogo-5-6": {
+            "id": "no-jogo-5-6",
+            "uci": "e4e3",
+            "filhos": [
+              "no-jogo-5-7"
+            ]
+          },
+          "no-jogo-5-7": {
+            "id": "no-jogo-5-7",
+            "uci": "c8e8",
+            "filhos": [
+              "no-jogo-5-8"
+            ],
+            "comentario": "Xeque na coluna e. A dama de d1 é a parede.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e8",
+                  "para": "e1",
+                  "cor": "verde"
+                },
+                {
+                  "de": "d1",
+                  "para": "d8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge8e1,Gd1d8]"
+            ]
+          },
+          "no-jogo-5-8": {
+            "id": "no-jogo-5-8",
+            "uci": "e3f2",
+            "filhos": [
+              "no-jogo-5-9"
+            ],
+            "comentario": "O rei quer a dama. Ela vai para longe, como a torre fez.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f2",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yf2]"
+            ]
+          },
+          "no-jogo-5-9": {
+            "id": "no-jogo-5-9",
+            "uci": "d1d7",
+            "filhos": [
+              "no-jogo-5-10"
+            ],
+            "comentario": "A dama foi para d7: longe do rei, e fora da fileira da torre.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d1",
+                  "para": "d7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd1d7]"
+            ]
+          },
+          "no-jogo-5-10": {
+            "id": "no-jogo-5-10",
+            "uci": "f2g2",
+            "filhos": [
+              "no-jogo-5-11"
+            ],
+            "comentario": "O rei correu para a coluna g. A coluna f ficou aberta.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g2",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yg2]"
+            ]
+          },
+          "no-jogo-5-11": {
+            "id": "no-jogo-5-11",
+            "uci": "e8f8",
+            "filhos": [
+              "no-jogo-5-12"
+            ],
+            "comentario": "A torre fecha a coluna f, sem xeque.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "f8",
+                  "para": "f1",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gf8f1]"
+            ]
+          },
+          "no-jogo-5-12": {
+            "id": "no-jogo-5-12",
+            "uci": "g2h2",
+            "filhos": [
+              "no-jogo-5-13"
+            ],
+            "comentario": "O rei está na borda. Falta fechar a coluna g.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h2",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yh2]"
+            ]
+          },
+          "no-jogo-5-13": {
+            "id": "no-jogo-5-13",
+            "uci": "d7g7",
+            "filhos": [
+              "no-jogo-5-14"
+            ],
+            "comentario": "A dama fecha a coluna g de longe, sem xeque.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g7",
+                  "para": "g1",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg7g1]"
+            ]
+          },
+          "no-jogo-5-14": {
+            "id": "no-jogo-5-14",
+            "uci": "h2h1",
+            "filhos": [
+              "no-jogo-5-15",
+              "no-jogo-5-16",
+              "no-jogo-5-17"
+            ],
+            "comentario": "O rei foi para o canto, h1. Só tem uma casa: h2.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h1",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "h2",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yh1,Yh2]"
+            ]
+          },
+          "no-jogo-5-15": {
+            "id": "no-jogo-5-15",
+            "uci": "f8h8",
+            "filhos": [],
+            "comentario": "Xeque-mate: xeque na coluna h, e a dama fecha a coluna g.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "h8",
+                  "para": "h1",
+                  "cor": "verde"
+                },
+                {
+                  "de": "g7",
+                  "para": "g1",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "h1",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gh8h1,Gg7g1]",
+              "[%csl Rh1]"
+            ]
+          },
+          "no-jogo-5-16": {
+            "id": "no-jogo-5-16",
+            "uci": "g7g3",
+            "filhos": [],
+            "comentario": "A dama chegou perto e tirou a casa h2. O rei não está em xeque e não tem lance: afogamento, empate.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g3",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "h1",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "h2",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg3,Rh1,Rh2]"
+            ]
+          },
+          "no-jogo-5-17": {
+            "id": "no-jogo-5-17",
+            "uci": "g7g2",
+            "filhos": [
+              "no-jogo-5-18"
+            ],
+            "comentario": "Xeque colado no rei, sem defesa.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g2",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg2]"
+            ]
+          },
+          "no-jogo-5-18": {
+            "id": "no-jogo-5-18",
+            "uci": "h1g2",
+            "filhos": [],
+            "comentario": "O rei comeu a dama. Com a torre sozinha, o mate fica bem mais longe.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g2",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg2]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-6",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "6R1/7R/8/8/8/7k/8/K7 b - - 15 8",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.5 Mate de duas torres (escadinha); posições adaptadas",
+            "link": "https://lichess.org/study/aYNkulCR",
+            "fenRevisada": "6R1/7R/8/8/8/7k/8/K7 b - - 15 8",
+            "revisadoEm": "2026-09-17T16:19:42.703Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 2 - Mate da escada",
+            "Site": "https://lichess.org/study/aYNkulCR",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate da escada: duas torres, e dama e torre",
+            "ChapterName": "03 - AULA - LEMBRE-SE",
+            "FEN": "6R1/7R/8/8/8/7k/8/K7 b - - 15 8",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-6-0",
+        "nos": {
+          "no-jogo-6-0": {
+            "id": "no-jogo-6-0",
+            "filhos": [],
+            "comentario": "LEMBRE-SE:\n\n1. A parede fica colada no rei; a outra torre fecha a coluna seguinte.\n2. Antes do lance: o rei alcança a torre? Leve-a para longe.\n3. Dama e torre: a mesma escada. No canto, não afogue."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-7",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/2k5/8/8/8/R7/KR6 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.5 Mate de duas torres (escadinha); posições adaptadas",
+            "link": "https://lichess.org/study/aYNkulCR",
+            "fenRevisada": "8/8/2k5/8/8/8/R7/KR6 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:42.703Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 2 - Mate da escada",
+            "Site": "https://lichess.org/study/aYNkulCR",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate da escada: duas torres, e dama e torre",
+            "ChapterName": "04 - TREINO 1 - Parede e xeque",
+            "FEN": "8/8/2k5/8/8/8/R7/KR6 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-7-0",
+        "nos": {
+          "no-jogo-7-0": {
+            "id": "no-jogo-7-0",
+            "filhos": [
+              "no-jogo-7-1"
+            ],
+            "comentario": "A torre de b1 é a parede. Dê xeque no rei preto, na coluna dele, de longe.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "b1",
+                  "para": "b8",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "c6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc6]",
+              "[%cal Gb1b8]"
+            ]
+          },
+          "no-jogo-7-1": {
+            "id": "no-jogo-7-1",
+            "uci": "a2c2",
+            "filhos": [
+              "no-jogo-7-2"
+            ],
+            "comentario": "Certo: xeque de longe na coluna c. O rei só tem a coluna d.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "c2",
+                  "para": "c8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gc2c8]"
+            ]
+          },
+          "no-jogo-7-2": {
+            "id": "no-jogo-7-2",
+            "uci": "c6d5",
+            "filhos": [
+              "no-jogo-7-3",
+              "no-jogo-7-4"
+            ],
+            "comentario": "O rei passou para a coluna d. Agora a torre de c2 é a parede.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d5",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yd5]"
+            ]
+          },
+          "no-jogo-7-3": {
+            "id": "no-jogo-7-3",
+            "uci": "b1d1",
+            "filhos": [
+              "no-jogo-7-5"
+            ],
+            "comentario": "A torre de trás passou à frente: xeque na coluna d.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d1",
+                  "para": "d8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd1d8]"
+            ]
+          },
+          "no-jogo-7-4": {
+            "id": "no-jogo-7-4",
+            "uci": "c2d2",
+            "filhos": [],
+            "comentario": "A parede saiu de c: a coluna c abriu de novo, e o rei volta por ela.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-7-5": {
+            "id": "no-jogo-7-5",
+            "uci": "d5e4",
+            "filhos": [
+              "no-jogo-7-6",
+              "no-jogo-7-7"
+            ],
+            "comentario": "O rei veio para perto. Antes do xeque, olhe: ele alcança a torre?",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e4",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ye4]"
+            ]
+          },
+          "no-jogo-7-6": {
+            "id": "no-jogo-7-6",
+            "uci": "c2c8",
+            "filhos": [],
+            "comentario": "Certo: a torre foi para longe. De c8, o xeque em e8 é seguro.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "c2",
+                  "para": "c8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gc2c8]"
+            ]
+          },
+          "no-jogo-7-7": {
+            "id": "no-jogo-7-7",
+            "uci": "c2e2",
+            "filhos": [],
+            "comentario": "O xeque de perto: o rei vai a f3 e ataca a torre. Dê o xeque de longe.",
+            "nags": [
+              6,
+              1
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-8",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "2R5/8/8/8/8/4k3/8/K2R4 w - - 6 4",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.5 Mate de duas torres (escadinha); posições adaptadas",
+            "link": "https://lichess.org/study/aYNkulCR",
+            "fenRevisada": "2R5/8/8/8/8/4k3/8/K2R4 w - - 6 4",
+            "revisadoEm": "2026-09-17T16:19:42.703Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 2 - Mate da escada",
+            "Site": "https://lichess.org/study/aYNkulCR",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate da escada: duas torres, e dama e torre",
+            "ChapterName": "05 - TREINO 2 - Continue sem ajuda",
+            "FEN": "2R5/8/8/8/8/4k3/8/K2R4 w - - 6 4",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-8-0",
+        "nos": {
+          "no-jogo-8-0": {
+            "id": "no-jogo-8-0",
+            "filhos": [
+              "no-jogo-8-1"
+            ],
+            "comentario": "Sem ajuda agora. Continue a escada até o mate."
+          },
+          "no-jogo-8-1": {
+            "id": "no-jogo-8-1",
+            "uci": "c8e8",
+            "filhos": [
+              "no-jogo-8-2"
+            ],
+            "comentario": "Xeque na coluna e, de longe. A parede é a torre de d1.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-8-2": {
+            "id": "no-jogo-8-2",
+            "uci": "e3f2",
+            "filhos": [
+              "no-jogo-8-3",
+              "no-jogo-8-4",
+              "no-jogo-8-5"
+            ],
+            "comentario": "O rei quer a torre de d1. O xeque em f1 seria colado nele."
+          },
+          "no-jogo-8-3": {
+            "id": "no-jogo-8-3",
+            "uci": "d1d7",
+            "filhos": [
+              "no-jogo-8-6"
+            ],
+            "comentario": "Certo: a torre foi para longe, numa fileira só dela.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-8-4": {
+            "id": "no-jogo-8-4",
+            "uci": "d1f1",
+            "filhos": [],
+            "comentario": "Xeque colado no rei, sem defesa: o rei come a torre. Com uma torre só, o mate fica bem mais longe.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-8-5": {
+            "id": "no-jogo-8-5",
+            "uci": "d1d8",
+            "filhos": [],
+            "comentario": "As duas torres na mesma fileira: uma tapa o caminho da outra. Escolha outra fileira.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-8-6": {
+            "id": "no-jogo-8-6",
+            "uci": "f2g3",
+            "filhos": [
+              "no-jogo-8-7",
+              "no-jogo-8-8"
+            ],
+            "comentario": "O rei correu para a coluna g. A coluna f ficou aberta."
+          },
+          "no-jogo-8-7": {
+            "id": "no-jogo-8-7",
+            "uci": "d7f7",
+            "filhos": [
+              "no-jogo-8-9"
+            ],
+            "comentario": "Certo: a parede fechou a coluna f, sem xeque.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-8-8": {
+            "id": "no-jogo-8-8",
+            "uci": "d7g7",
+            "filhos": [],
+            "comentario": "Xeque sem parede: a coluna f está aberta, e o rei volta por ela.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-8-9": {
+            "id": "no-jogo-8-9",
+            "uci": "g3h4",
+            "filhos": [
+              "no-jogo-8-10",
+              "no-jogo-8-11",
+              "no-jogo-8-12"
+            ],
+            "comentario": "O rei está na borda. Falta fechar a coluna g."
+          },
+          "no-jogo-8-10": {
+            "id": "no-jogo-8-10",
+            "uci": "e8g8",
+            "filhos": [
+              "no-jogo-8-13"
+            ],
+            "comentario": "A coluna g está fechada. O rei só anda na coluna h.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-8-11": {
+            "id": "no-jogo-8-11",
+            "uci": "e8h8",
+            "filhos": [],
+            "comentario": "Xeque sem parede: o rei sai pela coluna g.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-8-12": {
+            "id": "no-jogo-8-12",
+            "uci": "f7h7",
+            "filhos": [],
+            "comentario": "Xeque sem parede: o rei sai pela coluna g.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-8-13": {
+            "id": "no-jogo-8-13",
+            "uci": "h4h3",
+            "filhos": [
+              "no-jogo-8-14"
+            ]
+          },
+          "no-jogo-8-14": {
+            "id": "no-jogo-8-14",
+            "uci": "f7h7",
+            "filhos": [],
+            "comentario": "Xeque-mate: parede em g, xeque em h."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-9",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/8/8/8/5k2/4R3/K2R4 w - - 0 5",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.5 Mate de duas torres (escadinha); posições adaptadas",
+            "link": "https://lichess.org/study/aYNkulCR",
+            "fenRevisada": "8/8/8/8/8/5k2/4R3/K2R4 w - - 0 5",
+            "revisadoEm": "2026-09-17T16:19:42.703Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 2 - Mate da escada",
+            "Site": "https://lichess.org/study/aYNkulCR",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate da escada: duas torres, e dama e torre",
+            "ChapterName": "06 - TREINO 3 - Torre atacada",
+            "FEN": "8/8/8/8/8/5k2/4R3/K2R4 w - - 0 5",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-9-0",
+        "nos": {
+          "no-jogo-9-0": {
+            "id": "no-jogo-9-0",
+            "filhos": [
+              "no-jogo-9-1",
+              "no-jogo-9-2",
+              "no-jogo-9-3"
+            ],
+            "comentario": "Aqui o rei chegou perto: ele ataca a torre de e2. Salve a torre antes de qualquer xeque.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e2",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "f3",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ye2,Yf3]"
+            ]
+          },
+          "no-jogo-9-1": {
+            "id": "no-jogo-9-1",
+            "uci": "e2e7",
+            "filhos": [
+              "no-jogo-9-4"
+            ],
+            "comentario": "Certo: a torre atacada foi para longe. Agora ela é a parede da coluna e.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e7",
+                  "para": "e1",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge7e1]"
+            ]
+          },
+          "no-jogo-9-2": {
+            "id": "no-jogo-9-2",
+            "uci": "d1f1",
+            "filhos": [],
+            "comentario": "Você continuou a escada e esqueceu a torre atacada: o rei come a torre de e2.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-9-3": {
+            "id": "no-jogo-9-3",
+            "uci": "e2e3",
+            "filhos": [],
+            "comentario": "Xeque colado no rei, sem defesa: o rei come a torre.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-9-4": {
+            "id": "no-jogo-9-4",
+            "uci": "f3f2",
+            "filhos": [
+              "no-jogo-9-5",
+              "no-jogo-9-6"
+            ],
+            "comentario": "O rei vem atrás da torre de d1."
+          },
+          "no-jogo-9-5": {
+            "id": "no-jogo-9-5",
+            "uci": "d1d8",
+            "filhos": [
+              "no-jogo-9-7"
+            ],
+            "comentario": "Certo: a torre de d1 também foi para longe, ao lado da companheira.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-9-6": {
+            "id": "no-jogo-9-6",
+            "uci": "d1f1",
+            "filhos": [],
+            "comentario": "Xeque colado no rei: ele come a torre.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-9-7": {
+            "id": "no-jogo-9-7",
+            "uci": "f2f3",
+            "filhos": [
+              "no-jogo-9-8"
+            ]
+          },
+          "no-jogo-9-8": {
+            "id": "no-jogo-9-8",
+            "uci": "d8f8",
+            "filhos": [
+              "no-jogo-9-9"
+            ],
+            "comentario": "A escada recomeçou: xeque na coluna f, de longe.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-9-9": {
+            "id": "no-jogo-9-9",
+            "uci": "f3g4",
+            "filhos": [
+              "no-jogo-9-10"
+            ]
+          },
+          "no-jogo-9-10": {
+            "id": "no-jogo-9-10",
+            "uci": "e7g7",
+            "filhos": [
+              "no-jogo-9-11"
+            ],
+            "comentario": "A outra torre passa à frente: xeque na coluna g.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-9-11": {
+            "id": "no-jogo-9-11",
+            "uci": "g4h5",
+            "filhos": [
+              "no-jogo-9-12"
+            ]
+          },
+          "no-jogo-9-12": {
+            "id": "no-jogo-9-12",
+            "uci": "f8h8",
+            "filhos": [],
+            "comentario": "Xeque-mate na borda."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-10",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "2R5/8/8/8/8/4k3/8/K2Q4 w - - 6 4",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.5 Mate de duas torres (escadinha); posições adaptadas",
+            "link": "https://lichess.org/study/aYNkulCR",
+            "fenRevisada": "2R5/8/8/8/8/4k3/8/K2Q4 w - - 6 4",
+            "revisadoEm": "2026-09-17T16:19:42.703Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 2 - Mate da escada",
+            "Site": "https://lichess.org/study/aYNkulCR",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate da escada: duas torres, e dama e torre",
+            "ChapterName": "07 - TREINO 4 - Dama e torre",
+            "FEN": "2R5/8/8/8/8/4k3/8/K2Q4 w - - 6 4",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-10-0",
+        "nos": {
+          "no-jogo-10-0": {
+            "id": "no-jogo-10-0",
+            "filhos": [
+              "no-jogo-10-1"
+            ],
+            "comentario": "Agora com dama e torre, sem ajuda. A mesma escada, até o mate."
+          },
+          "no-jogo-10-1": {
+            "id": "no-jogo-10-1",
+            "uci": "c8e8",
+            "filhos": [
+              "no-jogo-10-2"
+            ],
+            "comentario": "Xeque na coluna e. A dama de d1 é a parede.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-2": {
+            "id": "no-jogo-10-2",
+            "uci": "e3f2",
+            "filhos": [
+              "no-jogo-10-3",
+              "no-jogo-10-4"
+            ],
+            "comentario": "O rei quer a dama."
+          },
+          "no-jogo-10-3": {
+            "id": "no-jogo-10-3",
+            "uci": "d1d7",
+            "filhos": [
+              "no-jogo-10-5"
+            ],
+            "comentario": "Certo: a dama foi para longe, fora da fileira da torre.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-4": {
+            "id": "no-jogo-10-4",
+            "uci": "d1f1",
+            "filhos": [],
+            "comentario": "Xeque colado no rei, sem defesa: o rei come a dama.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-10-5": {
+            "id": "no-jogo-10-5",
+            "uci": "f2g2",
+            "filhos": [
+              "no-jogo-10-6",
+              "no-jogo-10-7"
+            ],
+            "comentario": "O rei correu para a coluna g."
+          },
+          "no-jogo-10-6": {
+            "id": "no-jogo-10-6",
+            "uci": "e8f8",
+            "filhos": [
+              "no-jogo-10-8"
+            ],
+            "comentario": "Certo: a torre fechou a coluna f.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-7": {
+            "id": "no-jogo-10-7",
+            "uci": "d7g7",
+            "filhos": [],
+            "comentario": "Xeque sem parede: a coluna f está aberta, e o rei volta por ela.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-10-8": {
+            "id": "no-jogo-10-8",
+            "uci": "g2h2",
+            "filhos": [
+              "no-jogo-10-9",
+              "no-jogo-10-10"
+            ],
+            "comentario": "O rei está na borda."
+          },
+          "no-jogo-10-9": {
+            "id": "no-jogo-10-9",
+            "uci": "d7g7",
+            "filhos": [
+              "no-jogo-10-11"
+            ],
+            "comentario": "A dama fechou a coluna g, de longe.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-10": {
+            "id": "no-jogo-10-10",
+            "uci": "d7h3",
+            "filhos": [],
+            "comentario": "Xeque colado no rei, sem defesa: o rei come a dama.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-10-11": {
+            "id": "no-jogo-10-11",
+            "uci": "h2h1",
+            "filhos": [
+              "no-jogo-10-12",
+              "no-jogo-10-13",
+              "no-jogo-10-14"
+            ],
+            "comentario": "O rei foi para o canto: só tem a casa h2."
+          },
+          "no-jogo-10-12": {
+            "id": "no-jogo-10-12",
+            "uci": "f8h8",
+            "filhos": [],
+            "comentario": "Xeque-mate: xeque na coluna h, e a dama fecha a coluna g."
+          },
+          "no-jogo-10-13": {
+            "id": "no-jogo-10-13",
+            "uci": "g7g3",
+            "filhos": [],
+            "comentario": "A dama tirou a casa h2 sem dar xeque. O rei não tem lance: afogamento, empate.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-10-14": {
+            "id": "no-jogo-10-14",
+            "uci": "g7g2",
+            "filhos": [],
+            "comentario": "Xeque colado no rei, sem defesa: o rei come a dama.",
+            "nags": [
+              2
+            ]
+          }
+        }
+      }
+    ],
+    "introducoes": [
+      {
+        "id": "introducao-estudo-1",
+        "titulo": "Introdução",
+        "quadros": [
+          {
+            "id": "quadro-estudo-1",
+            "titulo": "INTRODUÇÃO - Ganha, empata ou perde?",
+            "texto": "Brancas: duas torres e rei. Pretas: só o rei. Brancas jogam.\n\nGanha, empata ou perde?",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-4",
+                "nodeId": "no-jogo-4-0"
+              }
+            }
+          },
+          {
+            "id": "quadro-estudo-2",
+            "titulo": "INTRODUÇÃO - A resposta",
+            "texto": "Ganha. Duas torres dão mate sozinhas, sem a ajuda do rei branco.\n\nMas só se o rei preto nunca alcançar uma torre.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-4",
+                "nodeId": "no-jogo-4-0"
+              }
+            }
+          },
+          {
+            "id": "quadro-estudo-3",
+            "titulo": "INTRODUÇÃO - A pergunta da aula",
+            "texto": "Hoje, a cada lance, pergunte: o rei preto alcança alguma torre?\n\nNo fim, você dá mate em escada — com duas torres, ou com dama e torre.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-4",
+                "nodeId": "no-jogo-4-0"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "capitulos": [
+      {
+        "id": "capitulo-jogo-4",
+        "titulo": "AULA - A escada: parede e xeque",
+        "analiseId": "analise-jogo-4",
+        "inicioNodeId": "no-jogo-4-0",
+        "caminho": [
+          "no-jogo-4-1",
+          "no-jogo-4-2",
+          "no-jogo-4-3",
+          "no-jogo-4-4",
+          "no-jogo-4-5",
+          "no-jogo-4-19",
+          "no-jogo-4-20",
+          "no-jogo-4-21",
+          "no-jogo-4-22",
+          "no-jogo-4-23",
+          "no-jogo-4-24",
+          "no-jogo-4-27",
+          "no-jogo-4-28",
+          "no-jogo-4-29",
+          "no-jogo-4-30"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-4-0",
+            "nodeId": "no-jogo-4-0",
+            "texto": "A torre de b1 é a parede: o rei preto, em c6, não passa para a coluna b. A outra torre dá o xeque.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-1",
+            "nodeId": "no-jogo-4-1",
+            "texto": "Xeque de longe, na coluna c. O rei só pode ir para a coluna d.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-2",
+            "nodeId": "no-jogo-4-2",
+            "texto": "O rei passou para a coluna d. Agora a torre de c2 é a parede.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-3",
+            "nodeId": "no-jogo-4-3",
+            "texto": "A torre de trás passa à frente: xeque na coluna d, de longe. As torres se alternam.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-4",
+            "nodeId": "no-jogo-4-4",
+            "texto": "O rei veio para perto das torres. Antes do xeque, olhe: ele alcança a torre?",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-5",
+            "nodeId": "no-jogo-4-5",
+            "texto": "A torre vai para longe, c8, antes do xeque. De c8 ela dá xeque em e8, onde o rei não alcança.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-6",
+            "nodeId": "no-jogo-4-6",
+            "texto": "Xeque de perto: também ganha, mas a torre ficou colada no rei.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-7",
+            "nodeId": "no-jogo-4-7",
+            "texto": "O rei ataca a torre de e2. A escada para: agora é salvar a torre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-8",
+            "nodeId": "no-jogo-4-8",
+            "texto": "A torre atacada foge para longe. Primeiro a torre, depois a escada.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-9",
+            "nodeId": "no-jogo-4-9",
+            "texto": "Continuou a escada e esqueceu a torre atacada.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-10",
+            "nodeId": "no-jogo-4-10",
+            "texto": "O rei comeu a torre. Com uma torre só, o mate fica bem mais longe.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-11",
+            "nodeId": "no-jogo-4-11",
+            "texto": "O rei vem atrás da torre de d1. Ela também vai para longe.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-12",
+            "nodeId": "no-jogo-4-12",
+            "texto": "A torre de d1 vai para d8, longe do rei e ao lado da companheira. A escada recomeça.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-14",
+            "nodeId": "no-jogo-4-14",
+            "texto": "Xeque na coluna f, de longe. A parede é a torre de e7.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-16",
+            "nodeId": "no-jogo-4-16",
+            "texto": "A outra torre passa à frente: xeque na coluna g.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-17",
+            "nodeId": "no-jogo-4-17",
+            "texto": "O rei chegou à borda. Não tem mais coluna para fugir.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-18",
+            "nodeId": "no-jogo-4-18",
+            "texto": "Xeque-mate: a torre de h8 dá xeque na coluna h, e a de g7 fecha a coluna g.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-19",
+            "nodeId": "no-jogo-4-19",
+            "texto": "O rei ficou na coluna e. A torre de d1 está longe: ele não alcança.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-20",
+            "nodeId": "no-jogo-4-20",
+            "texto": "Xeque na coluna e, de longe. A parede é a torre de d1: o rei só tem a coluna f.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-21",
+            "nodeId": "no-jogo-4-21",
+            "texto": "O rei está em f2. Um xeque em f1 seria colado nele: primeiro a torre vai para longe.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-22",
+            "nodeId": "no-jogo-4-22",
+            "texto": "A torre de d1 vai para d7, longe do rei. Não d8: na mesma fileira, uma torre tapa a outra.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-23",
+            "nodeId": "no-jogo-4-23",
+            "texto": "O rei correu sozinho para a coluna g e deixou a coluna f aberta.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-24",
+            "nodeId": "no-jogo-4-24",
+            "texto": "A parede fecha a coluna f, sem xeque. O rei não volta mais.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-25",
+            "nodeId": "no-jogo-4-25",
+            "texto": "Xeque sem parede: a coluna f ficou aberta.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-26",
+            "nodeId": "no-jogo-4-26",
+            "texto": "O rei voltou pela coluna f. Feche a coluna antes do xeque.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-27",
+            "nodeId": "no-jogo-4-27",
+            "texto": "O rei já está na borda, na coluna h. Falta fechar a coluna g.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-28",
+            "nodeId": "no-jogo-4-28",
+            "texto": "A torre de e8 fecha a coluna g, sem xeque. O rei preto só anda na coluna h.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-30",
+            "nodeId": "no-jogo-4-30",
+            "texto": "Xeque-mate. A torre de h7 dá xeque na coluna h, e a de g8 fecha a coluna g.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-4-variante",
+        "titulo": "Comparação: 3. Te2+?!",
+        "analiseId": "analise-jogo-4",
+        "inicioNodeId": "no-jogo-4-0",
+        "caminho": [
+          "no-jogo-4-1",
+          "no-jogo-4-2",
+          "no-jogo-4-3",
+          "no-jogo-4-4",
+          "no-jogo-4-6",
+          "no-jogo-4-7",
+          "no-jogo-4-8",
+          "no-jogo-4-11",
+          "no-jogo-4-12",
+          "no-jogo-4-13",
+          "no-jogo-4-14",
+          "no-jogo-4-15",
+          "no-jogo-4-16",
+          "no-jogo-4-17",
+          "no-jogo-4-18"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-6",
+            "nodeId": "no-jogo-4-6",
+            "texto": "Xeque de perto: também ganha, mas a torre ficou colada no rei.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-7",
+            "nodeId": "no-jogo-4-7",
+            "texto": "O rei ataca a torre de e2. A escada para: agora é salvar a torre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-8",
+            "nodeId": "no-jogo-4-8",
+            "texto": "A torre atacada foge para longe. Primeiro a torre, depois a escada.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-11",
+            "nodeId": "no-jogo-4-11",
+            "texto": "O rei vem atrás da torre de d1. Ela também vai para longe.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-12",
+            "nodeId": "no-jogo-4-12",
+            "texto": "A torre de d1 vai para d8, longe do rei e ao lado da companheira. A escada recomeça.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-14",
+            "nodeId": "no-jogo-4-14",
+            "texto": "Xeque na coluna f, de longe. A parede é a torre de e7.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-16",
+            "nodeId": "no-jogo-4-16",
+            "texto": "A outra torre passa à frente: xeque na coluna g.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-17",
+            "nodeId": "no-jogo-4-17",
+            "texto": "O rei chegou à borda. Não tem mais coluna para fugir.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-18",
+            "nodeId": "no-jogo-4-18",
+            "texto": "Xeque-mate: a torre de h8 dá xeque na coluna h, e a de g7 fecha a coluna g.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-4-variante-2",
+        "titulo": "Comparação: 4. Tf1+?",
+        "analiseId": "analise-jogo-4",
+        "inicioNodeId": "no-jogo-4-0",
+        "caminho": [
+          "no-jogo-4-1",
+          "no-jogo-4-2",
+          "no-jogo-4-3",
+          "no-jogo-4-4",
+          "no-jogo-4-6",
+          "no-jogo-4-7",
+          "no-jogo-4-9",
+          "no-jogo-4-10"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-4-variante-2-no-jogo-4-9",
+            "nodeId": "no-jogo-4-9",
+            "texto": "Continuou a escada e esqueceu a torre atacada.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-2-no-jogo-4-10",
+            "nodeId": "no-jogo-4-10",
+            "texto": "O rei comeu a torre. Com uma torre só, o mate fica bem mais longe.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-4-variante-3",
+        "titulo": "Comparação: 6. Tg7+?",
+        "analiseId": "analise-jogo-4",
+        "inicioNodeId": "no-jogo-4-0",
+        "caminho": [
+          "no-jogo-4-1",
+          "no-jogo-4-2",
+          "no-jogo-4-3",
+          "no-jogo-4-4",
+          "no-jogo-4-5",
+          "no-jogo-4-19",
+          "no-jogo-4-20",
+          "no-jogo-4-21",
+          "no-jogo-4-22",
+          "no-jogo-4-23",
+          "no-jogo-4-25",
+          "no-jogo-4-26"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-4-variante-3-no-jogo-4-25",
+            "nodeId": "no-jogo-4-25",
+            "texto": "Xeque sem parede: a coluna f ficou aberta.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-3-no-jogo-4-26",
+            "nodeId": "no-jogo-4-26",
+            "texto": "O rei voltou pela coluna f. Feche a coluna antes do xeque.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5",
+        "titulo": "AULA - Dama e torre: a mesma escada",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-5",
+          "no-jogo-5-6",
+          "no-jogo-5-7",
+          "no-jogo-5-8",
+          "no-jogo-5-9",
+          "no-jogo-5-10",
+          "no-jogo-5-11",
+          "no-jogo-5-12",
+          "no-jogo-5-13",
+          "no-jogo-5-14",
+          "no-jogo-5-15"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-5-0",
+            "nodeId": "no-jogo-5-0",
+            "texto": "Agora a torre de b1 virou dama. A dama anda como a torre e também na diagonal: a escada é a mesma.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-1",
+            "nodeId": "no-jogo-5-1",
+            "texto": "Xeque de longe na coluna c. A dama de b1 é a parede.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-3",
+            "nodeId": "no-jogo-5-3",
+            "texto": "A dama passa à frente: xeque na coluna d, de longe.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-4",
+            "nodeId": "no-jogo-5-4",
+            "texto": "O rei veio para perto. A torre de c2 vai para longe antes do xeque.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-5",
+            "nodeId": "no-jogo-5-5",
+            "texto": "Longe do rei. De c8, o xeque em e8 é seguro.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-7",
+            "nodeId": "no-jogo-5-7",
+            "texto": "Xeque na coluna e. A dama de d1 é a parede.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-8",
+            "nodeId": "no-jogo-5-8",
+            "texto": "O rei quer a dama. Ela vai para longe, como a torre fez.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-9",
+            "nodeId": "no-jogo-5-9",
+            "texto": "A dama foi para d7: longe do rei, e fora da fileira da torre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-10",
+            "nodeId": "no-jogo-5-10",
+            "texto": "O rei correu para a coluna g. A coluna f ficou aberta.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-11",
+            "nodeId": "no-jogo-5-11",
+            "texto": "A torre fecha a coluna f, sem xeque.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-12",
+            "nodeId": "no-jogo-5-12",
+            "texto": "O rei está na borda. Falta fechar a coluna g.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-13",
+            "nodeId": "no-jogo-5-13",
+            "texto": "A dama fecha a coluna g de longe, sem xeque.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-14",
+            "nodeId": "no-jogo-5-14",
+            "texto": "O rei foi para o canto, h1. Só tem uma casa: h2.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-15",
+            "nodeId": "no-jogo-5-15",
+            "texto": "Xeque-mate: xeque na coluna h, e a dama fecha a coluna g.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-16",
+            "nodeId": "no-jogo-5-16",
+            "texto": "A dama chegou perto e tirou a casa h2. O rei não está em xeque e não tem lance: afogamento, empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-17",
+            "nodeId": "no-jogo-5-17",
+            "texto": "Xeque colado no rei, sem defesa.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-18",
+            "nodeId": "no-jogo-5-18",
+            "texto": "O rei comeu a dama. Com a torre sozinha, o mate fica bem mais longe.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5-variante",
+        "titulo": "Comparação: 8. Dg3??",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-5",
+          "no-jogo-5-6",
+          "no-jogo-5-7",
+          "no-jogo-5-8",
+          "no-jogo-5-9",
+          "no-jogo-5-10",
+          "no-jogo-5-11",
+          "no-jogo-5-12",
+          "no-jogo-5-13",
+          "no-jogo-5-14",
+          "no-jogo-5-16"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-16",
+            "nodeId": "no-jogo-5-16",
+            "texto": "A dama chegou perto e tirou a casa h2. O rei não está em xeque e não tem lance: afogamento, empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5-variante-2",
+        "titulo": "Comparação: 8. Dg2+?",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-5",
+          "no-jogo-5-6",
+          "no-jogo-5-7",
+          "no-jogo-5-8",
+          "no-jogo-5-9",
+          "no-jogo-5-10",
+          "no-jogo-5-11",
+          "no-jogo-5-12",
+          "no-jogo-5-13",
+          "no-jogo-5-14",
+          "no-jogo-5-17",
+          "no-jogo-5-18"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-5-variante-2-no-jogo-5-17",
+            "nodeId": "no-jogo-5-17",
+            "texto": "Xeque colado no rei, sem defesa.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-5-variante-2-no-jogo-5-18",
+            "nodeId": "no-jogo-5-18",
+            "texto": "O rei comeu a dama. Com a torre sozinha, o mate fica bem mais longe.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6",
+        "titulo": "AULA - LEMBRE-SE",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-6-0",
+            "nodeId": "no-jogo-6-0",
+            "texto": "LEMBRE-SE:\n\n1. A parede fica colada no rei; a outra torre fecha a coluna seguinte.\n2. Antes do lance: o rei alcança a torre? Leve-a para longe.\n3. Dama e torre: a mesma escada. No canto, não afogue.",
+            "pausa": "manual"
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-capitulo-jogo-7-no-jogo-7-0-white",
+        "titulo": "TREINO 1 - Parede e xeque",
+        "introducao": "A torre de b1 é a parede. Dê xeque no rei preto, na coluna dele, de longe.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-7",
+          "nodeId": "no-jogo-7-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "A torre de b1 é a parede. Dê xeque no rei preto, na coluna dele, de longe.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-7-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-7",
+              "nodeId": "no-jogo-7-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-7-1-white",
+                "moves": [
+                  "a2c2"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: xeque de longe na coluna c. O rei só tem a coluna d.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c6d5",
+                      "proximaQuestaoId": "questao-no-jogo-7-2-white",
+                      "texto": "O rei passou para a coluna d. Agora a torre de c2 é a parede."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-7-2-white",
+            "posicao": {
+              "analiseId": "analise-jogo-7",
+              "nodeId": "no-jogo-7-2"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-7-3-white",
+                "moves": [
+                  "b1d1"
+                ],
+                "julgamento": "correta",
+                "feedback": "A torre de trás passou à frente: xeque na coluna d.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d5e4",
+                      "proximaQuestaoId": "questao-no-jogo-7-5-white",
+                      "texto": "O rei veio para perto. Antes do xeque, olhe: ele alcança a torre?"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-7-4",
+                "moves": [
+                  "c2d2"
+                ],
+                "julgamento": "erro",
+                "feedback": "A parede saiu de c: a coluna c abriu de novo, e o rei volta por ela.",
+                "erroId": "erro-no-jogo-7-4",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-7-5-white",
+            "posicao": {
+              "analiseId": "analise-jogo-7",
+              "nodeId": "no-jogo-7-5"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-7-6-white",
+                "moves": [
+                  "c2c8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: a torre foi para longe. De c8, o xeque em e8 é seguro.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-7-7",
+                "moves": [
+                  "c2e2"
+                ],
+                "julgamento": "erro",
+                "feedback": "O xeque de perto: o rei vai a f3 e ataca a torre. Dê o xeque de longe.",
+                "erroId": "erro-no-jogo-7-7",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-7",
+          "nodeIds": [
+            "no-jogo-7-0",
+            "no-jogo-7-1",
+            "no-jogo-7-2",
+            "no-jogo-7-3",
+            "no-jogo-7-5",
+            "no-jogo-7-6"
+          ],
+          "hash": "v2-d63ef4c0",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-7",
+          "inicioNodeId": "no-jogo-7-0",
+          "objetivo": "A torre de b1 é a parede. Dê xeque no rei preto, na coluna dele, de longe."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/8/2k5/8/8/8/R7/KR6 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-7",
+              "nodeId": "no-jogo-7-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-7-0-white": {
+              "fen": "8/8/2k5/8/8/8/R7/KR6 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-7",
+                "nodeId": "no-jogo-7-0"
+              }
+            },
+            "questao-no-jogo-7-2-white": {
+              "fen": "8/8/8/3k4/8/8/2R5/KR6 w - - 2 2",
+              "historicoUci": [
+                "a2c2",
+                "c6d5"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-7",
+                "nodeId": "no-jogo-7-2"
+              }
+            },
+            "questao-no-jogo-7-5-white": {
+              "fen": "8/8/8/8/4k3/8/2R5/K2R4 w - - 4 3",
+              "historicoUci": [
+                "a2c2",
+                "c6d5",
+                "b1d1",
+                "d5e4"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-7",
+                "nodeId": "no-jogo-7-5"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Certo: a torre foi para longe. De c8, o xeque em e8 é seguro."
+      },
+      {
+        "id": "treino-capitulo-jogo-8-no-jogo-8-0-white",
+        "titulo": "TREINO 2 - Continue sem ajuda",
+        "introducao": "Sem ajuda agora. Continue a escada até o mate.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-8",
+          "nodeId": "no-jogo-8-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Sem ajuda agora. Continue a escada até o mate.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-8-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-1-white",
+                "moves": [
+                  "c8e8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Xeque na coluna e, de longe. A parede é a torre de d1.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e3f2",
+                      "proximaQuestaoId": "questao-no-jogo-8-2-white",
+                      "texto": "O rei quer a torre de d1. O xeque em f1 seria colado nele."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-8-2-white",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-2"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-3-white",
+                "moves": [
+                  "d1d7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: a torre foi para longe, numa fileira só dela.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f2g3",
+                      "proximaQuestaoId": "questao-no-jogo-8-6-white",
+                      "texto": "O rei correu para a coluna g. A coluna f ficou aberta."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-8-4",
+                "moves": [
+                  "d1f1"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque colado no rei, sem defesa: o rei come a torre. Com uma torre só, o mate fica bem mais longe.",
+                "erroId": "erro-no-jogo-8-4",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-8-5",
+                "moves": [
+                  "d1d8"
+                ],
+                "julgamento": "erro",
+                "feedback": "As duas torres na mesma fileira: uma tapa o caminho da outra. Escolha outra fileira.",
+                "erroId": "erro-no-jogo-8-5",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-8-6-white",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-6"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-7-white",
+                "moves": [
+                  "d7f7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: a parede fechou a coluna f, sem xeque.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g3h4",
+                      "proximaQuestaoId": "questao-no-jogo-8-9-white",
+                      "texto": "O rei está na borda. Falta fechar a coluna g."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-8-8",
+                "moves": [
+                  "d7g7"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque sem parede: a coluna f está aberta, e o rei volta por ela.",
+                "erroId": "erro-no-jogo-8-8",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-8-9-white",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-9"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-10-white",
+                "moves": [
+                  "e8g8"
+                ],
+                "julgamento": "correta",
+                "feedback": "A coluna g está fechada. O rei só anda na coluna h.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "h4h3",
+                      "proximaQuestaoId": "questao-no-jogo-8-13-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-8-11",
+                "moves": [
+                  "e8h8"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque sem parede: o rei sai pela coluna g.",
+                "erroId": "erro-no-jogo-8-11",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-8-12",
+                "moves": [
+                  "f7h7"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque sem parede: o rei sai pela coluna g.",
+                "erroId": "erro-no-jogo-8-12",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-8-13-white",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-13"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-14-white",
+                "moves": [
+                  "f7h7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Xeque-mate: parede em g, xeque em h.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-8",
+          "nodeIds": [
+            "no-jogo-8-0",
+            "no-jogo-8-1",
+            "no-jogo-8-2",
+            "no-jogo-8-3",
+            "no-jogo-8-6",
+            "no-jogo-8-7",
+            "no-jogo-8-9",
+            "no-jogo-8-10",
+            "no-jogo-8-13",
+            "no-jogo-8-14"
+          ],
+          "hash": "v2-6294a0c8",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-8",
+          "inicioNodeId": "no-jogo-8-0",
+          "objetivo": "Sem ajuda agora. Continue a escada até o mate."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "2R5/8/8/8/8/4k3/8/K2R4 w - - 6 4",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-8-0-white": {
+              "fen": "2R5/8/8/8/8/4k3/8/K2R4 w - - 6 4",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-0"
+              }
+            },
+            "questao-no-jogo-8-2-white": {
+              "fen": "4R3/8/8/8/8/8/5k2/K2R4 w - - 8 5",
+              "historicoUci": [
+                "c8e8",
+                "e3f2"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-2"
+              }
+            },
+            "questao-no-jogo-8-6-white": {
+              "fen": "4R3/3R4/8/8/8/6k1/8/K7 w - - 10 6",
+              "historicoUci": [
+                "c8e8",
+                "e3f2",
+                "d1d7",
+                "f2g3"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-6"
+              }
+            },
+            "questao-no-jogo-8-9-white": {
+              "fen": "4R3/5R2/8/8/7k/8/8/K7 w - - 12 7",
+              "historicoUci": [
+                "c8e8",
+                "e3f2",
+                "d1d7",
+                "f2g3",
+                "d7f7",
+                "g3h4"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-9"
+              }
+            },
+            "questao-no-jogo-8-13-white": {
+              "fen": "6R1/5R2/8/8/8/7k/8/K7 w - - 14 8",
+              "historicoUci": [
+                "c8e8",
+                "e3f2",
+                "d1d7",
+                "f2g3",
+                "d7f7",
+                "g3h4",
+                "e8g8",
+                "h4h3"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-13"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      },
+      {
+        "id": "treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "titulo": "TREINO 3 - Torre atacada",
+        "introducao": "Aqui o rei chegou perto: ele ataca a torre de e2. Salve a torre antes de qualquer xeque.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-9",
+          "nodeId": "no-jogo-9-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Aqui o rei chegou perto: ele ataca a torre de e2. Salve a torre antes de qualquer xeque.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-9-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-1-white",
+                "moves": [
+                  "e2e7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: a torre atacada foi para longe. Agora ela é a parede da coluna e.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f3f2",
+                      "proximaQuestaoId": "questao-no-jogo-9-4-white",
+                      "texto": "O rei vem atrás da torre de d1."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-2",
+                "moves": [
+                  "d1f1"
+                ],
+                "julgamento": "erro",
+                "feedback": "Você continuou a escada e esqueceu a torre atacada: o rei come a torre de e2.",
+                "erroId": "erro-no-jogo-9-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-3",
+                "moves": [
+                  "e2e3"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque colado no rei, sem defesa: o rei come a torre.",
+                "erroId": "erro-no-jogo-9-3",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-4-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-4"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-5-white",
+                "moves": [
+                  "d1d8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: a torre de d1 também foi para longe, ao lado da companheira.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f2f3",
+                      "proximaQuestaoId": "questao-no-jogo-9-7-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-6",
+                "moves": [
+                  "d1f1"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque colado no rei: ele come a torre.",
+                "erroId": "erro-no-jogo-9-6",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-7-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-7"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-8-white",
+                "moves": [
+                  "d8f8"
+                ],
+                "julgamento": "correta",
+                "feedback": "A escada recomeçou: xeque na coluna f, de longe.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f3g4",
+                      "proximaQuestaoId": "questao-no-jogo-9-9-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-9-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-9"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-10-white",
+                "moves": [
+                  "e7g7"
+                ],
+                "julgamento": "correta",
+                "feedback": "A outra torre passa à frente: xeque na coluna g.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g4h5",
+                      "proximaQuestaoId": "questao-no-jogo-9-11-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-11-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-11"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-12-white",
+                "moves": [
+                  "f8h8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Xeque-mate na borda.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-9",
+          "nodeIds": [
+            "no-jogo-9-0",
+            "no-jogo-9-1",
+            "no-jogo-9-4",
+            "no-jogo-9-5",
+            "no-jogo-9-7",
+            "no-jogo-9-8",
+            "no-jogo-9-9",
+            "no-jogo-9-10",
+            "no-jogo-9-11",
+            "no-jogo-9-12"
+          ],
+          "hash": "v2-210f81e3",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-9",
+          "inicioNodeId": "no-jogo-9-0",
+          "objetivo": "Aqui o rei chegou perto: ele ataca a torre de e2. Salve a torre antes de qualquer xeque."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/8/8/8/8/5k2/4R3/K2R4 w - - 0 5",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-9-0-white": {
+              "fen": "8/8/8/8/8/5k2/4R3/K2R4 w - - 0 5",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-0"
+              }
+            },
+            "questao-no-jogo-9-4-white": {
+              "fen": "8/4R3/8/8/8/8/5k2/K2R4 w - - 2 6",
+              "historicoUci": [
+                "e2e7",
+                "f3f2"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-4"
+              }
+            },
+            "questao-no-jogo-9-7-white": {
+              "fen": "3R4/4R3/8/8/8/5k2/8/K7 w - - 4 7",
+              "historicoUci": [
+                "e2e7",
+                "f3f2",
+                "d1d8",
+                "f2f3"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-7"
+              }
+            },
+            "questao-no-jogo-9-9-white": {
+              "fen": "5R2/4R3/8/8/6k1/8/8/K7 w - - 6 8",
+              "historicoUci": [
+                "e2e7",
+                "f3f2",
+                "d1d8",
+                "f2f3",
+                "d8f8",
+                "f3g4"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-9"
+              }
+            },
+            "questao-no-jogo-9-11-white": {
+              "fen": "5R2/6R1/8/7k/8/8/8/K7 w - - 8 9",
+              "historicoUci": [
+                "e2e7",
+                "f3f2",
+                "d1d8",
+                "f2f3",
+                "d8f8",
+                "f3g4",
+                "e7g7",
+                "g4h5"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-11"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      },
+      {
+        "id": "treino-capitulo-jogo-10-no-jogo-10-0-white",
+        "titulo": "TREINO 4 - Dama e torre",
+        "introducao": "Agora com dama e torre, sem ajuda. A mesma escada, até o mate.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-10",
+          "nodeId": "no-jogo-10-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Agora com dama e torre, sem ajuda. A mesma escada, até o mate.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-10-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-1-white",
+                "moves": [
+                  "c8e8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Xeque na coluna e. A dama de d1 é a parede.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e3f2",
+                      "proximaQuestaoId": "questao-no-jogo-10-2-white",
+                      "texto": "O rei quer a dama."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-2-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-2"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-3-white",
+                "moves": [
+                  "d1d7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: a dama foi para longe, fora da fileira da torre.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f2g2",
+                      "proximaQuestaoId": "questao-no-jogo-10-5-white",
+                      "texto": "O rei correu para a coluna g."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-4",
+                "moves": [
+                  "d1f1"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque colado no rei, sem defesa: o rei come a dama.",
+                "erroId": "erro-no-jogo-10-4",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-5-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-5"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-6-white",
+                "moves": [
+                  "e8f8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: a torre fechou a coluna f.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g2h2",
+                      "proximaQuestaoId": "questao-no-jogo-10-8-white",
+                      "texto": "O rei está na borda."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-7",
+                "moves": [
+                  "d7g7"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque sem parede: a coluna f está aberta, e o rei volta por ela.",
+                "erroId": "erro-no-jogo-10-7",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-8-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-8"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-9-white",
+                "moves": [
+                  "d7g7"
+                ],
+                "julgamento": "correta",
+                "feedback": "A dama fechou a coluna g, de longe.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "h2h1",
+                      "proximaQuestaoId": "questao-no-jogo-10-11-white",
+                      "texto": "O rei foi para o canto: só tem a casa h2."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-10",
+                "moves": [
+                  "d7h3"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque colado no rei, sem defesa: o rei come a dama.",
+                "erroId": "erro-no-jogo-10-10",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-11-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-11"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-12-white",
+                "moves": [
+                  "f8h8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Xeque-mate: xeque na coluna h, e a dama fecha a coluna g.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-13",
+                "moves": [
+                  "g7g3"
+                ],
+                "julgamento": "erro",
+                "feedback": "A dama tirou a casa h2 sem dar xeque. O rei não tem lance: afogamento, empate.",
+                "erroId": "erro-no-jogo-10-13",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-14",
+                "moves": [
+                  "g7g2"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque colado no rei, sem defesa: o rei come a dama.",
+                "erroId": "erro-no-jogo-10-14",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-10",
+          "nodeIds": [
+            "no-jogo-10-0",
+            "no-jogo-10-1",
+            "no-jogo-10-2",
+            "no-jogo-10-3",
+            "no-jogo-10-5",
+            "no-jogo-10-6",
+            "no-jogo-10-8",
+            "no-jogo-10-9",
+            "no-jogo-10-11",
+            "no-jogo-10-12"
+          ],
+          "hash": "v2-30f10adb",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-10",
+          "inicioNodeId": "no-jogo-10-0",
+          "objetivo": "Agora com dama e torre, sem ajuda. A mesma escada, até o mate."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "2R5/8/8/8/8/4k3/8/K2Q4 w - - 6 4",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-10-0-white": {
+              "fen": "2R5/8/8/8/8/4k3/8/K2Q4 w - - 6 4",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-0"
+              }
+            },
+            "questao-no-jogo-10-2-white": {
+              "fen": "4R3/8/8/8/8/8/5k2/K2Q4 w - - 8 5",
+              "historicoUci": [
+                "c8e8",
+                "e3f2"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-2"
+              }
+            },
+            "questao-no-jogo-10-5-white": {
+              "fen": "4R3/3Q4/8/8/8/8/6k1/K7 w - - 10 6",
+              "historicoUci": [
+                "c8e8",
+                "e3f2",
+                "d1d7",
+                "f2g2"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-5"
+              }
+            },
+            "questao-no-jogo-10-8-white": {
+              "fen": "5R2/3Q4/8/8/8/8/7k/K7 w - - 12 7",
+              "historicoUci": [
+                "c8e8",
+                "e3f2",
+                "d1d7",
+                "f2g2",
+                "e8f8",
+                "g2h2"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-8"
+              }
+            },
+            "questao-no-jogo-10-11-white": {
+              "fen": "5R2/6Q1/8/8/8/8/8/K6k w - - 14 8",
+              "historicoUci": [
+                "c8e8",
+                "e3f2",
+                "d1d7",
+                "f2g2",
+                "e8f8",
+                "g2h2",
+                "d7g7",
+                "h2h1"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-11"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      }
+    ],
+    "praticas": [
+      {
+        "id": "pratica-pratica-duas-torres",
+        "titulo": "PRÁTICA - Duas torres",
+        "positionId": "pos-n0-ladder-1",
+        "ladoAluno": "white",
+        "objetivo": "win",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      },
+      {
+        "id": "pratica-pratica-dama-e-torre",
+        "titulo": "PRÁTICA - Dama e torre",
+        "positionId": "pos-n0-ladder-2",
+        "ladoAluno": "white",
+        "objetivo": "win",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-introducao-estudo-1",
+        "tipo": "introducao",
+        "entidadeId": "introducao-estudo-1"
+      },
+      {
+        "id": "etapa-capitulo-jogo-4",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-4"
+      },
+      {
+        "id": "etapa-capitulo-jogo-4-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-4-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-4-variante-2",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-4-variante-2"
+      },
+      {
+        "id": "etapa-capitulo-jogo-4-variante-3",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-4-variante-3"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5-variante-2",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5-variante-2"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-7-no-jogo-7-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-7-no-jogo-7-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-8-no-jogo-8-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-8-no-jogo-8-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-9-no-jogo-9-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-10-no-jogo-10-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-10-no-jogo-10-0-white"
+      },
+      {
+        "id": "etapa-pratica-pratica-duas-torres",
+        "tipo": "pratica",
+        "entidadeId": "pratica-pratica-duas-torres"
+      },
+      {
+        "id": "etapa-pratica-pratica-dama-e-torre",
+        "tipo": "pratica",
+        "entidadeId": "pratica-pratica-dama-e-torre"
+      }
+    ]
+  },
+  "posicoes": {
+    "pos-n0-ladder-1": {
+      "id": "pos-n0-ladder-1",
+      "fen": "8/8/2k5/8/8/8/R7/KR6 w - - 0 1",
+      "expectedResult": "win-white",
+      "tags": [
+        "PRÁTICA - Duas torres"
+      ],
+      "status": "candidate",
+      "provenance": {
+        "externalHumanSource": "clubexadrezguabiruba",
+        "bibliographicSource": "Capítulo 0.5 Mate de duas torres (escadinha); posições adaptadas, https://lichess.org/study/aYNkulCR",
+        "originalGame": "não se aplica",
+        "authorComposer": "clubexadrezguabiruba",
+        "license": "não informada — conferir antes de aprovar",
+        "editionFile": null,
+        "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+        "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+        "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+      }
+    },
+    "pos-n0-ladder-2": {
+      "id": "pos-n0-ladder-2",
+      "fen": "8/8/2k5/8/8/8/R7/KQ6 w - - 0 1",
+      "expectedResult": "win-white",
+      "tags": [
+        "PRÁTICA - Dama e torre"
+      ],
+      "status": "candidate",
+      "provenance": {
+        "externalHumanSource": "clubexadrezguabiruba",
+        "bibliographicSource": "Capítulo 0.5 Mate de duas torres (escadinha); posições adaptadas, https://lichess.org/study/aYNkulCR",
+        "originalGame": "não se aplica",
+        "authorComposer": "clubexadrezguabiruba",
+        "license": "não informada — conferir antes de aprovar",
+        "editionFile": null,
+        "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+        "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+        "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+      }
+    }
+  },
+  "revisoes": {
+    "treino-capitulo-jogo-7-no-jogo-7-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_f4a7423e000b761ae91709e676ba63bee9298071e04cdddbda388aa161cadc62"
+    },
+    "treino-capitulo-jogo-8-no-jogo-8-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_75617a1471b1d1dec752e12e7c3e08f5330d8210a2db97cc285562683438444e"
+    },
+    "treino-capitulo-jogo-9-no-jogo-9-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_9bce58e138b5b889005d27b1655f9ab6bbdc8a496c224753ded672d7d5ee4de5"
+    },
+    "treino-capitulo-jogo-10-no-jogo-10-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_a449c00684b0bbd543204fbf7994e97db1db26d3c58a81f64b520908f9b08b5c"
+    },
+    "pratica-pratica-duas-torres": {
+      "tipo": "pratica",
+      "revisao": "ar_6ea56af3601b784a6acbc47705eeeccf8d3c58f6bcef3baec2a5a9751ba86df5"
+    },
+    "pratica-pratica-dama-e-torre": {
+      "tipo": "pratica",
+      "revisao": "ar_295b80d64b7658a69e34f83b3107653568b92a82e668caa196b45680e487b55c"
+    }
+  },
+  "manifesto": {
+    "aulaId": "N0-LADDER",
+    "aula": "c3a8eab9a178e10f70f1699d7ba1f8dbdd1e4916804cbd96818dbcb15de085e6",
+    "posicoes": {
+      "pos-n0-ladder-1": "3ef04ab5fcb7597301ccc4a859d54a19ce25d3c8883c18e243a9fa63f6700a58",
+      "pos-n0-ladder-2": "da914fa29204ac2bc01df84d4cbbc0bd672a56b290d54afdb626a88f5bc2dfa3"
+    },
+    "revisoes": "42e8383de80991ac35f5b02f117d6606ba9faf48bbde9cbd11a65d9879c224b7",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

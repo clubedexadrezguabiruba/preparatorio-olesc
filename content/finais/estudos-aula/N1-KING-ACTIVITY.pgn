@@ -1,0 +1,185 @@
+[Event "Aula 6 - O rei é peça: use-o"]
+[Site "https://lichess.org/study/wtityoKq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O rei é peça: use-o"]
+[ChapterName "00 - INTRODUÇÃO - Ganha, empata ou perde?"]
+[FEN "8/5p1p/6p1/1k1K2P1/1P3P1P/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Só reis e peões. Pretas jogam. O rei branco está em d5, e o preto, em b5.
+
+Ganha, empata ou perde? } { [%csl Yd5,Yb5] }
+ *
+
+[Event "Aula 6 - O rei é peça: use-o"]
+[Site "https://lichess.org/study/wtityoKq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O rei é peça: use-o"]
+[ChapterName "00 - INTRODUÇÃO - A resposta"]
+[FEN "8/5p1p/6p1/1k1K2P1/1P3P1P/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ As Brancas ganham. O rei preto come o peão de b4, mas fica longe.
+
+O rei branco chega antes aos peões de f7 e h7. } { [%csl Gd5,Yb4,Yf7,Yh7] }
+ *
+
+[Event "Aula 6 - O rei é peça: use-o"]
+[Site "https://lichess.org/study/wtityoKq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O rei é peça: use-o"]
+[ChapterName "00 - INTRODUÇÃO - Sem damas, o rei sai"]
+[FEN "8/5p1p/6p1/1k4P1/1P3P1P/8/6K1/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Adaptacao "Posição nova no lugar da de meio-jogo da fonte: a mesma da fonte com o rei branco de d5 para g2 e a vez das Brancas. Motor: Brancas ganham, só com 1. Kf3."]
+
+{ Com damas e torres no tabuleiro, o rei fica escondido perto do canto.
+
+Quando elas saem, o rei vira peça. Aqui ele está em g2 e precisa sair. } { [%csl Yg2] }
+ *
+
+[Event "Aula 6 - O rei é peça: use-o"]
+[Site "https://lichess.org/study/wtityoKq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O rei é peça: use-o"]
+[ChapterName "00 - INTRODUÇÃO - A pergunta da aula"]
+[FEN "8/5p1p/6p1/1k4P1/1P3P1P/8/6K1/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Hoje, a cada lance, pergunte: meu rei chegou mais perto dos peões?
+
+No fim, você leva o rei para o centro assim que as peças fortes saem. }
+ *
+
+[Event "Aula 6 - O rei é peça: use-o"]
+[Site "https://lichess.org/study/wtityoKq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O rei é peça: use-o"]
+[ChapterName "01 - AULA - O rei vai pelo centro"]
+[FEN "8/5p1p/6p1/1k4P1/1P3P1P/8/6K1/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Adaptacao "Posição da fonte (0.1A) com o rei branco de d5 para g2 e a vez das Brancas; substitui o contraste 0.1D (rei em a1). Motor: 1. Kf3 ganha; 1. Kg3 e 2. Ke3 empatam."]
+
+{ Brancas jogam. O rei preto vai comer b4. O rei branco precisa chegar antes aos peões pretos. } { [%csl Yb4] }
+1. Kf3! { O rei vai para f3, na direção do centro. O caminho passa por e4. } { [%cal Gg2f3,Gf3e4] } ( 1. Kg3?? { O rei vai para g3, fora do caminho de e4. } { [%csl Rg3] } 1... Kxb4 2. Kf3 Kc5 3. Ke4 Kd6 { O rei preto chegou a d6 e fecha e5. Um lance perdido, e a vitória virou empate. } { [%csl Rd6,Re5] } ) 1... Kxb4 { O rei preto comeu b4. Agora conte: quem chega primeiro aos peões? } 2. Ke4! { O rei entra em e4, no centro. Só este lance ganha. } { [%csl Ge4] } ( 2. Ke3?? { O rei vai para e3 e perde um lance. } { [%csl Re3] } 2... Kc5 3. Ke4 Kd6 { De novo, o rei preto chega a d6 a tempo. É empate. } { [%csl Rd6] } ) 2... Kc4 3. Ke5! { De e5, o rei aponta para f6, ao lado dos peões pretos. } { [%cal Ge5f6] } 3... Kd3 4. Kf6! { O rei chegou a f6. Agora ele ataca o peão de f7. } { [%csl Gf6,Yf7] } 4... Ke3 5. Kxf7 { O rei branco chegou primeiro. O peão de f7 caiu, e h7 é o próximo. } { [%csl Gf7,Yh7] } *
+
+[Event "Aula 6 - O rei é peça: use-o"]
+[Site "https://lichess.org/study/wtityoKq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O rei é peça: use-o"]
+[ChapterName "02 - AULA - O rei come e protege"]
+[FEN "8/6Kp/6p1/6P1/5k1P/8/8/8 w - - 0 6"]
+[SetUp "1"]
+[Orientation "white"]
+[Adaptacao "Posição da fonte (0.1C) com a vez trocada: Brancas jogam, como na sequência de 0.1B. Motor antes (Pretas jogam): Brancas ganham; depois (Brancas jogam): Brancas ganham, e 6. Kf6 perde."]
+
+{ Outra posição. O rei branco, em g7, está colado no peão de h7. O rei preto, em f4, quer o peão de h4. } { [%csl Gg7,Yh7,Yf4,Yh4] }
+6. Kxh7! { O rei come h7. Agora ele também ameaça g6. } { [%csl Gh7,Yg6] } ( 6. Kf6?? { O rei vai para f6 só para defender g5. } { [%csl Rf6] } 6... Kg4 7. Kg7 Kxh4 8. Kxh7 Kxg5 { O rei preto comeu h4 e g5. Agora quem tem peão são as Pretas. } { [%csl Rg5,Rg6] } ) 6... Kg4 7. Kxg6! { O rei come g6 e fica ao lado do seu peão de g5. } { [%csl Gg6,Gg5] } 7... Kxh4 8. Kf5! { Em f5, o rei fica colado no peão. O rei preto não chega a g4. } { [%csl Gf5,Yg4] } 8... Kh5 9. g6 Kh6 10. Kf6! { O rei vai para f6 e protege g7, a próxima casa do peão. } { [%csl Gf6,Yg7] } ( 10. g7?? { O peão correu sozinho, sem o rei. } { [%csl Rg7] } 10... Kh7 11. g8=Q+ Kxg8 { O rei preto come a dama. Sem peões, é empate. } { [%csl Rg8] } ) 10... Kh5 11. g7 Kg4 12. g8=Q+ { Dama! O rei comeu os peões pretos e levou o seu até g8. } { [%csl Gg8] } *
+
+[Event "Aula 6 - O rei é peça: use-o"]
+[Site "https://lichess.org/study/wtityoKq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O rei é peça: use-o"]
+[ChapterName "03 - AULA - LEMBRE-SE"]
+[FEN "6Q1/8/5K2/8/6k1/8/8/8 b - - 0 12"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ LEMBRE-SE:
+
+1. Saíram as damas e as torres? O rei vai para o centro.
+2. Conte os lances: um lance perdido vira empate.
+3. O rei come os peões dele e protege o seu. }
+ *
+
+[Event "Aula 6 - O rei é peça: use-o"]
+[Site "https://lichess.org/study/wtityoKq"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O rei é peça: use-o"]
+[ChapterName "04 - TREINO 1 - Leve o rei até f7"]
+[FEN "8/5p1p/6p1/3K2P1/1k3P1P/8/8/8 w - - 0 2"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ O rei preto comeu b4. O seu alvo é o peão de f7. Leve o rei até lá. } { [%csl Yf7] }
+2. Ke5! { O rei vai para e5, mais perto de f7. } ( 2. h5?? { O peão andou, e o rei ficou parado. O peão de g6 come h5, e a vitória some. } ) 2... Kc4 3. Kf6! { De f6, o rei já ataca f7. } ( 3. h5?? { O peão andou, e o rei ficou parado. Chegar a f7 era o que ganhava. } ) 3... Kd4 4. Kxf7 { O rei chegou primeiro e comeu f7. } *
+
+[Event "Aula 6 - O rei é peça: use-o"]
+[Site "https://lichess.org/study/wtityoKq"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O rei é peça: use-o"]
+[ChapterName "05 - TREINO 2 - Chegue antes, sem ajuda"]
+[FEN "8/5p1p/1k4p1/6P1/5P1P/2K5/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+[Adaptacao "Posição nova, da mesma família da fonte, sem o peão de b4. Motor: Brancas ganham, só com 1. Kd4; 1. h5 perde."]
+
+{ Agora sem ajuda. Leve o rei aos peões pretos antes do rei preto. }
+1. Kd4! { O rei vai para d4, no centro. } ( 1. h5?? { O peão andou, e o rei ficou parado. O peão de g6 come h5, e as Pretas ganham. } ) 1... Kc6 2. Ke5! { Em e5, o rei fica mais perto de f7 que o rei preto. } { [%csl Ge5,Yf7] } ( 2. Ke4?? { O rei andou de lado e perdeu um lance. O rei preto chega a tempo de defender. } ) 2... Kd7 3. Kf6! { O rei chegou a f6, colado em f7. } 3... Ke8 4. Kg7! { O peão de h7 vai cair. O rei preto chegou tarde. } *
+
+[Event "Aula 6 - O rei é peça: use-o"]
+[Site "https://lichess.org/study/wtityoKq"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O rei é peça: use-o"]
+[ChapterName "06 - TREINO 3 - Do outro lado"]
+[FEN "8/p1p5/1p6/1P4k1/P1P3P1/8/1K6/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+[Adaptacao "Posição nova: o espelho da posição de g2 (colunas a-h trocadas). Motor: Brancas ganham, só com 1. Kc3; 1. c5 e 2. Kd3 empatam."]
+
+{ Agora do outro lado do tabuleiro. O rei preto vai comer g4. Leve o seu rei aos peões pretos. }
+1. Kc3! { O rei vai para c3, na direção do centro. } ( 1. c5?? { O peão andou, e o rei ficou parado. O rei preto volta a tempo, e é empate. } ) 1... Kxg4 2. Kd4! { O rei entra em d4, no centro. } ( 2. Kd3?? { O rei perdeu um lance em d3. O rei preto volta a tempo, e é empate. } ) 2... Kf4 3. Kd5! { O rei avança para d5. } 3... Ke3 4. Kc6! { O rei chegou a c6. O peão de c7 vai cair. } *
+
+[Event "Aula 6 - O rei é peça: use-o"]
+[Site "https://lichess.org/study/wtityoKq"]
+[White "Aluno - Brancas"]
+[Black "Engine"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "O rei é peça: use-o"]
+[ChapterName "07 - PRÁTICA - Leve o rei e vença"]
+[FEN "8/5p1p/2k3p1/6P1/1P3P1P/8/4K3/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[Adaptacao "Posição nova da família da fonte: rei branco em e2, rei preto em c6, Brancas jogam. Motor: Brancas ganham; recuar o rei empata."]
+
+{ Leve o rei para o centro e vença. }
+ *

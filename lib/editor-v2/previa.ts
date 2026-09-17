@@ -37,6 +37,7 @@
  */
 import { mapaDaAnalise } from "./arvore.ts";
 import { dominioDaAulaV2 } from "./dominio.ts";
+import { sanEmPortugues } from "../repertorio/treino.ts";
 import type { AulaV2, CapituloV2, DesenhoV2 } from "./modelo.ts";
 import type { Position } from "../lesson/schema.ts";
 
@@ -237,7 +238,8 @@ function comparacaoDoTrecho(
   const rotuloDoNo = (id: string) => {
     const san = mapa.sans[id];
     if (!san) return "a posição inicial";
-    return `${mapa.rotulos[id] ?? ""} ${san}`.trim();
+    // Em português (18/9/2026): a frase é lida pelo aluno, que conhece o rei como R e a dama como D.
+    return `${mapa.rotulos[id] ?? ""} ${sanEmPortugues(san)}`.trim();
   };
   const rotulo = rotuloDoNo(bifurcacao);
   const outraSegue = rotuloDoNo(seu[melhor.n]);

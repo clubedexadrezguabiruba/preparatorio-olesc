@@ -1,0 +1,20 @@
+{
+  "id": "pos-n1-square-2",
+  "fen": "8/8/8/8/3P4/7k/8/K7 b - - 0 1",
+  "expectedResult": "draw",
+  "tags": [
+    "PRÁTICA - Alcance o peão"
+  ],
+  "status": "candidate",
+  "provenance": {
+    "externalHumanSource": "clubexadrezguabiruba",
+    "bibliographicSource": "Aula 07 Regra do Quadrado, https://lichess.org/study/TI5KNg6U",
+    "originalGame": "não se aplica",
+    "authorComposer": "clubexadrezguabiruba",
+    "license": "não informada — conferir antes de aprovar",
+    "editionFile": null,
+    "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+    "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+    "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+  }
+}

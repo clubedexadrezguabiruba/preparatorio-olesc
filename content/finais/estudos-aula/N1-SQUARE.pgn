@@ -1,0 +1,192 @@
+[Event "Aula 7 - Regra do quadrado"]
+[Site "https://lichess.org/study/TI5KNg6U"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Regra do quadrado: o rei alcança o peão?"]
+[ChapterName "00 - INTRODUÇÃO - Ganha, empata ou perde?"]
+[FEN "8/6k1/8/8/8/8/P7/7K w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Brancas: rei e peão. Pretas: só o rei. Brancas jogam.
+
+Ganha, empata ou perde? }
+ *
+
+[Event "Aula 7 - Regra do quadrado"]
+[Site "https://lichess.org/study/TI5KNg6U"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Regra do quadrado: o rei alcança o peão?"]
+[ChapterName "00 - INTRODUÇÃO - A resposta"]
+[FEN "8/6k1/8/8/8/8/P7/7K w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Ganha, se o peão andar do jeito certo.
+
+Com o primeiro lance errado, o rei preto alcança o peão, e é empate. }
+ *
+
+[Event "Aula 7 - Regra do quadrado"]
+[Site "https://lichess.org/study/TI5KNg6U"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Regra do quadrado: o rei alcança o peão?"]
+[ChapterName "00 - INTRODUÇÃO - A pergunta da aula"]
+[FEN "8/6k1/8/8/8/8/P7/7K w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Hoje, diante de um peão sozinho, pergunte: o rei chega a tempo de parar o peão?
+
+No fim, você responde num olhar, sem contar lance por lance. }
+ *
+
+[Event "Aula 7 - Regra do quadrado"]
+[Site "https://lichess.org/study/TI5KNg6U"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Regra do quadrado: o rei alcança o peão?"]
+[ChapterName "01 - AULA - O quadrado do peão"]
+[FEN "8/8/5k2/8/P7/8/8/7K w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Brancas jogam. O peão em a4 está a quatro passos de a8. } { [%csl Ya4,Ya8] }
+1. a5! { Trace a diagonal de a5 até d8. Ela fecha um quadrado: a5, a8, d8 e d5. } { [%cal Ya5d8] [%csl Ya5,Ya8,Yd8,Yd5] } ( 1. Kg2? { O rei branco andou, e o peão ficou parado. Isso dá um lance ao rei preto. } 1... Ke5 { Rei em e5, dentro do quadrado de a4 até e8. } { [%cal Ya4e8] [%csl Ya4,Ya8,Ye8,Ye4,Re5] } 2. a5 Kd5 3. a6 Kc6 4. a7 Kb7 5. a8=Q+ Kxa8 { O rei preto come a dama nova. Empate. } { [%csl Ra8] } ) 1... Ke5 { O rei preto foi a e5, fora do quadrado. } { [%cal Ya5d8] [%csl Ya5,Ya8,Yd8,Yd5,Ye5] } 2. a6 { Isso tem nome: o quadrado do peão. A cada passo do peão, ele encolhe. } { [%cal Ya6c8] [%csl Ya6,Ya8,Yc8,Yc6] } 2... Kd6 { Rei em d6: ainda fora do quadrado de a6 até c8. } { [%cal Ya6c8] [%csl Ya6,Ya8,Yc8,Yc6,Yd6] } 3. a7 Kc7 4. a8=Q { Dama! Rei fora do quadrado não alcança o peão. } { [%csl Ga8] } *
+
+[Event "Aula 7 - Regra do quadrado"]
+[Site "https://lichess.org/study/TI5KNg6U"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Regra do quadrado: o rei alcança o peão?"]
+[ChapterName "02 - AULA - Quem joga decide"]
+[FEN "8/8/5k2/8/P7/8/8/7K b - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ A mesma posição, mas agora as Pretas jogam. O quadrado vai de a4 até e8. } { [%cal Ya4e8] [%csl Ya4,Ya8,Ye8,Ye4] }
+1... Ke6! { O rei preto pisa em e6 e entra no quadrado. } { [%csl Ya4,Ya8,Ye8,Ye4,Ge6] } ( 1... Kf5? { Rei em f5: fora do quadrado. } { [%csl Ya4,Ya8,Ye8,Ye4,Rf5] } 2. a5 Ke5 3. a6 Kd6 4. a7 Kc7 5. a8=Q { O peão vira dama. Um lance fora do quadrado, e o peão escapou. } ) 2. a5 Kd6 { O quadrado encolheu para a5 até d8. O rei continua dentro. } { [%cal Ya5d8] [%csl Ya5,Ya8,Yd8,Yd5,Gd6] } 3. a6 Kc7! { Rei em c7, dentro do quadrado de a6 até c8. } { [%cal Ya6c8] [%csl Ya6,Ya8,Yc8,Yc6,Gc7] } 4. a7 Kb7! { Rei em b7, colado em a8. } { [%csl Gb7,Ya8] } 5. a8=Q+ Kxa8 { O rei come a dama nova. Empate: na mesma posição, quem joga decide. } *
+
+[Event "Aula 7 - Regra do quadrado"]
+[Site "https://lichess.org/study/TI5KNg6U"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Regra do quadrado: o rei alcança o peão?"]
+[ChapterName "03 - AULA - Uma casa ou duas?"]
+[FEN "8/6k1/8/8/8/8/P7/7K w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Peão em a2, na casa inicial. Ele pode andar uma casa ou duas. } { [%csl Ya2] }
+1. a4! { Duas casas. O quadrado vai de a4 até e8, e o rei em g7 fica fora. } { [%cal Ya4e8] [%csl Ya4,Ya8,Ye8,Ye4,Yg7] } ( 1. a3? { Uma casa só. O quadrado ficou maior: vai de a3 até f8. } { [%cal Ya3f8] [%csl Ya3,Ya8,Yf8,Yf3] } 1... Kf6! { O rei entra no quadrado em f6. } { [%csl Ya3,Ya8,Yf8,Yf3,Rf6] } 2. a4 Ke5 3. a5 Kd5 4. a6 Kc6 5. a7 Kb7 6. a8=Q+ Kxa8 { O rei come a dama nova. Com uma casa só, empate. } ) 1... Kf6 { Rei em f6: ainda fora do quadrado. } { [%cal Ya4e8] [%csl Ya4,Ya8,Ye8,Ye4,Yf6] } 2. a5 Ke5 3. a6 Kd6 4. a7 Kc7 5. a8=Q { Dama! Na casa inicial, o peão anda duas casas — e o quadrado começa ali. } { [%csl Ga8] } *
+
+[Event "Aula 7 - Regra do quadrado"]
+[Site "https://lichess.org/study/TI5KNg6U"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Regra do quadrado: o rei alcança o peão?"]
+[ChapterName "04 - AULA - LEMBRE-SE"]
+[FEN "8/8/5k2/8/P7/8/8/7K w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ LEMBRE-SE:
+
+1. A diagonal do peão até a última fileira fecha o quadrado.
+2. O rei que entra no quadrado alcança o peão.
+3. Peão na casa inicial: conte a partir de duas casas à frente. }
+ *
+
+[Event "Aula 7 - Regra do quadrado"]
+[Site "https://lichess.org/study/TI5KNg6U"]
+[White "Brancas"]
+[Black "Aluno - Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Regra do quadrado: o rei alcança o peão?"]
+[ChapterName "05 - TREINO 1 - Entre no quadrado"]
+[FEN "8/8/8/1P6/5k2/8/8/7K b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[ChapterMode "gamebook"]
+
+{ Pretas jogam. O quadrado do peão vai de b5 até e8. Leve o rei para dentro dele. } { [%cal Yb5e8] [%csl Yb5,Yb8,Ye8,Ye5] }
+1... Ke5! { Rei em e5, dentro do quadrado. Agora ele acompanha o peão. } ( 1... Kf5? { Rei em f5, fora do quadrado. O peão anda para b6 e escapa. } ) ( 1... Ke4? { Rei em e4, abaixo do quadrado. O peão anda e escapa. } ) 2. b6 { O peão andou. O quadrado agora vai de b6 até d8. } { [%cal Yb6d8] [%csl Yb6,Yb8,Yd8,Yd6] } 2... Kd6! { Rei em d6, ainda dentro do quadrado. } ( 2... Ke6? { Rei em e6, fora do quadrado. O peão anda para b7 e escapa. } ) ( 2... Kd5? { Rei em d5, abaixo do quadrado. O peão anda para b7 e escapa. } ) 3. b7 { O quadrado encolheu: b7, b8, c8 e c7. } { [%csl Yb7,Yb8,Yc8,Yc7] } 3... Kc7! { Rei em c7, colado na casa b8. } 4. b8=Q+ Kxb8! { O rei come a dama nova. Empate: você alcançou o peão. } *
+
+[Event "Aula 7 - Regra do quadrado"]
+[Site "https://lichess.org/study/TI5KNg6U"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Regra do quadrado: o rei alcança o peão?"]
+[ChapterName "06 - TREINO 2 - Uma casa ou duas?"]
+[FEN "8/8/8/8/7k/8/1P6/7K w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ Brancas jogam. Leve o peão até a dama, sem deixar o rei preto alcançá-lo. }
+1. b4! { Duas casas. O rei em h4 ficou fora do quadrado de b4 até f8. } { [%cal Yb4f8] [%csl Yb4,Yb8,Yf8,Yf4,Yh4] } ( 1. b3? { Uma casa só. O rei entra no quadrado em g4 e alcança o peão. } ) ( 1. Kg2? { O peão ficou parado. O rei preto entra no quadrado em g4. } ) 1... Kg4 2. b5! { O quadrado encolhe, e o rei preto continua fora. } 2... Kf5 3. b6! { Mais um passo. O rei preto segue um lance atrasado. } 3... Ke6 4. b7! 4... Kd7 5. b8=Q! { Dama! O rei preto não entrou no quadrado a tempo. } *
+
+[Event "Aula 7 - Regra do quadrado"]
+[Site "https://lichess.org/study/TI5KNg6U"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Regra do quadrado: o rei alcança o peão?"]
+[ChapterName "07 - TREINO 3 - Agora o peão é preto"]
+[FEN "8/8/1K6/6p1/8/8/8/k7 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ Agora o peão é preto e desce até g1. Brancas jogam. Alcance o peão com o seu rei. }
+1. Kc5! { Rei em c5, dentro do quadrado de g5 até c1. } { [%cal Yg5c1] [%csl Yg5,Yg1,Yc1,Yc5] } ( 1. Kc6? { Rei em c6, acima do quadrado. O peão desce e vira dama. } ) ( 1. Kb5? { Rei em b5, fora do quadrado. O peão desce e vira dama. } ) 1... g4 2. Kd4! { O quadrado encolheu, e o rei continua dentro. } ( 2. Kd5? { Rei em d5, acima do quadrado. O peão desce e vira dama. } ) 2... g3 3. Ke3! 3... g2 4. Kf2! 4... g1=Q+ 5. Kxg1! { O rei come a dama nova. Empate: você alcançou o peão. } *
+
+[Event "Aula 7 - Regra do quadrado"]
+[Site "https://lichess.org/study/TI5KNg6U"]
+[White "Aluno - Brancas"]
+[Black "Engine"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Regra do quadrado: o rei alcança o peão?"]
+[ChapterName "08 - PRÁTICA - Promova o peão"]
+[FEN "8/8/8/8/8/8/2P4k/K7 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Promova o peão antes que o rei preto o alcance. }
+ *
+
+[Event "Aula 7 - Regra do quadrado"]
+[Site "https://lichess.org/study/TI5KNg6U"]
+[White "Engine"]
+[Black "Aluno - Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Regra do quadrado: o rei alcança o peão?"]
+[ChapterName "09 - PRÁTICA - Alcance o peão"]
+[FEN "8/8/8/8/3P4/7k/8/K7 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+
+{ Alcance o peão com o seu rei e empate. }
+ *

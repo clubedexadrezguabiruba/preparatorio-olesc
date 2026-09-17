@@ -271,11 +271,11 @@ test("dois capítulos que se separam num lance marcam esse lance como ponto de e
   assert.equal(comparacao.comTitulo, "A linha certa");
   assert.equal(comparacao.nodeId, "a1", "a bifurcação é o último lance em comum");
   assert.equal(comparacao.rotulo, "1. e4");
-  assert.equal(comparacao.outraSegue, "1… Kg2");
-  assert.equal(comparacao.estaSegue, "1… Kh2");
+  assert.equal(comparacao.outraSegue, "1… Rg2");
+  assert.equal(comparacao.estaSegue, "1… Rh2");
   assert.equal(
     comparacao.texto,
-    "Voltamos a 1. e4. Em «A linha certa» a partida seguiu com 1… Kg2; agora, a outra escolha: 1… Kh2.",
+    "Voltamos a 1. e4. Em «A linha certa» a partida seguiu com 1… Rg2; agora, a outra escolha: 1… Rh2.",
   );
   // O retorno é dito na bifurcação: depois do passo de `1. e4`, antes de `1… Kh2`.
   const passos = previa.trechos[1].passos;
@@ -412,8 +412,8 @@ test("caso de aceite §15.3: as duas linhas na mesma aula, com retorno ao ponto 
   assert.equal(comparacao.comTitulo, "A defesa certa: o empate");
   assert.equal(comparacao.rotulo, "a posição inicial");
   assert.equal(comparacao.fen, REI_E_PEAO);
-  assert.equal(comparacao.outraSegue, "1… Kd7");
-  assert.equal(comparacao.estaSegue, "1… Ke8");
+  assert.equal(comparacao.outraSegue, "1… Rd7");
+  assert.equal(comparacao.estaSegue, "1… Re8");
 
   // E ele é dito **no tabuleiro da bifurcação**, antes do primeiro lance diferente:
   // um passo a mais, sem lance, logo depois do último passo da posição de escolha.
@@ -423,7 +423,7 @@ test("caso de aceite §15.3: as duas linhas na mesma aula, com retorno ao ponto 
   assert.equal(erro.passos[retorno].lance, undefined);
   assert.equal(
     erro.passos[retorno].fala,
-    "Voltamos à posição inicial. Em «A defesa certa: o empate» a partida seguiu com 1… Kd7; agora, a outra escolha: 1… Ke8.",
+    "Voltamos à posição inicial. Em «A defesa certa: o empate» a partida seguiu com 1… Rd7; agora, a outra escolha: 1… Re8.",
   );
   assert.equal(erro.passos[retorno + 1].lance, O_ENGANO[0], "e logo depois vem o lance da outra linha");
   // Fora o passo do retorno, os lances são exatamente o percurso do capítulo.

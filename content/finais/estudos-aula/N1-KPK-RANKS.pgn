@@ -1,0 +1,207 @@
+[Event "Aula 11 - Peão na 6ª e na 7ª"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão na 6ª e na 7ª: quem joga decide"]
+[ChapterName "00 - INTRODUÇÃO - Ganha, empata ou perde?"]
+[Fonte "Silman TW73iW6r cap. 6, posição depois de 4...Kd8"]
+[FEN "3k4/8/3PK3/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Brancas: rei em e6 e peão em d6. Pretas: só o rei, em d8, na frente do peão. Brancas jogam.
+
+Ganha, empata ou perde? } { [%csl Ye6,Yd6,Yd8] }
+ *
+
+[Event "Aula 11 - Peão na 6ª e na 7ª"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão na 6ª e na 7ª: quem joga decide"]
+[ChapterName "00 - INTRODUÇÃO - A resposta"]
+[Fonte "Silman TW73iW6r cap. 6, posição depois de 4...Kd8"]
+[FEN "3k4/8/3PK3/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Ganha. Com as Brancas jogando, o peão chega a d8.
+
+Mas, se as Pretas jogassem, esta mesma posição seria empate. } { [%csl Gd8] }
+ *
+
+[Event "Aula 11 - Peão na 6ª e na 7ª"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão na 6ª e na 7ª: quem joga decide"]
+[ChapterName "00 - INTRODUÇÃO - A pergunta da aula"]
+[Fonte "Silman TW73iW6r cap. 6, posição depois de 4...Kd8"]
+[FEN "3k4/8/3PK3/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Hoje, a cada lance, pergunte: depois do meu lance, quem joga? Isso me ajuda?
+
+No fim, com o peão na 6ª ou na 7ª, você acha o lance certo dos dois lados. }
+ *
+
+[Event "Aula 11 - Peão na 6ª e na 7ª"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão na 6ª e na 7ª: quem joga decide"]
+[ChapterName "01 - AULA - Brancas jogam"]
+[Fonte "Silman TW73iW6r cap. 6, posição depois de 4...Kd8 (linha da fonte)"]
+[FEN "3k4/8/3PK3/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Brancas jogam. O rei preto está em d8, na frente do peão. } { [%csl Yd8] }
+1. d7! { O peão vai a d7 sem dar xeque. Agora as Pretas jogam, e o rei tem de sair da frente. } { [%csl Gd7] } ( 1. Kf7?? { O rei branco foi a f7 e se afastou do peão em d6. } { [%csl Rf7,Rd6] } 1... Kd7 { O rei preto ataca o peão, e ninguém o defende. } 2. Kf6 Kxd6 { Sem o peão, ninguém dá mate: empate. } ) 1... Kc7 { O rei preto só tinha c7. } { [%csl Yc7] } 2. Ke7! { O rei branco vai a e7 e segura d8. Ninguém para mais o peão. } { [%csl Gd8] [%cal Ge7d8] } ( 2. d8=Q+?? { Dama nova em d8, mas o rei preto está do lado, em c7. } { [%csl Rc7] } 2... Kxd8 { O rei preto come a dama: empate. } { [%csl Rd8] } ) 2... Kc6 3. d8=Q { Dama! O rei escoltou, e o peão chegou. } { [%csl Gd8] } *
+
+[Event "Aula 11 - Peão na 6ª e na 7ª"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão na 6ª e na 7ª: quem joga decide"]
+[ChapterName "02 - AULA - Pretas jogam"]
+[Fonte "Silman TW73iW6r cap. 6, posição depois de 4...Kd8, com a vez trocada (adaptação)"]
+[FEN "3k4/8/3PK3/8/8/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ A mesma posição, mas agora as Pretas jogam. O rei preto tem duas casas: c8 e e8. } { [%csl Yc8,Ye8] }
+1... Ke8! { O rei preto vai a e8, de frente para o rei branco em e6: a oposição é dele. } { [%csl Ge8,Ge6] } ( 1... Kc8?? { O rei preto foi a c8 e largou a casa e7. } { [%csl Re7] } 2. Ke7 { O rei branco entra em e7 e segura d8. } { [%csl Gd8] } 2... Kb7 3. d7 Kc7 4. d8=Q+ { O peão vira dama: as Brancas ganham. } ) 2. d7+ { Agora as Brancas jogam. O peão avança, mas chega a d7 com xeque. } { [%csl Yd7] } 2... Kd8 { O rei preto volta para a frente do peão. } { [%csl Gd8] } 3. Kd6 { Em d6, o rei branco segura o peão. O rei preto não tem casa e não está em xeque: afogamento. } { [%csl Yd8] } *
+
+[Event "Aula 11 - Peão na 6ª e na 7ª"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão na 6ª e na 7ª: quem joga decide"]
+[ChapterName "03 - AULA - Peão na 7ª, Pretas jogam"]
+[Fonte "Silman TW73iW6r cap. 6, posição depois de 5...Kc7, com a vez trocada (adaptação)"]
+[FEN "8/2kP4/4K3/8/8/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Peão na 7ª. Na primeira aula, nesta posição, as Brancas jogavam Re7 e ganhavam. Agora as Pretas jogam. } { [%csl Ye7] }
+1... Kd8! { O rei preto volta a d8, na frente do peão. } { [%csl Gd8] } ( 1... Kb7?? { O rei preto se afastou de d8. } { [%csl Rd8] } 2. Ke7 { O rei branco segura d8. } { [%csl Gd8] } 2... Kc7 3. d8=Q+ { O peão vira dama: as Brancas ganham. } ) 2. Kd6 { Em d6, o rei branco segura o peão. O rei preto não tem casa e não está em xeque: afogamento. } { [%csl Yd8] } *
+
+[Event "Aula 11 - Peão na 6ª e na 7ª"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão na 6ª e na 7ª: quem joga decide"]
+[ChapterName "04 - AULA - LEMBRE-SE"]
+[FEN "3k4/8/3PK3/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ LEMBRE-SE:
+
+1. Peão na 6ª ou na 7ª: quem tem o lance decide.
+2. Com o peão, leve-o à 7ª sem xeque.
+3. Sem o peão, tome a oposição: ele chega com xeque, e é afogamento. }
+ *
+
+[Event "Aula 11 - Peão na 6ª e na 7ª"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão na 6ª e na 7ª: quem joga decide"]
+[ChapterName "05 - TREINO 1 - Use a sua vez"]
+[Fonte "adaptação da posição da aula (Silman TW73iW6r cap. 6) para a coluna e"]
+[FEN "4k3/8/4PK2/8/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ Brancas jogam. O rei preto está em e8, na frente do peão. Use a sua vez. } { [%csl Ye8] }
+1. e7! { O peão chegou a e7 sem xeque. O rei preto tem de sair da frente. } { [%csl Ge7] } ( 1. Kf5?? { O seu rei deu a vez às Pretas. O rei preto vai a e7, na frente do peão: empate. } { [%csl Re7] } ) 1... Kd7 { O rei preto foi a d7. } 2. Kf7! { O rei em f7 segura e8. O peão vira dama no próximo lance. } { [%csl Ge8] } ( 2. e8=Q+?? { O rei preto em d7 come a dama nova: empate. } { [%csl Rd7] } ) *
+
+[Event "Aula 11 - Peão na 6ª e na 7ª"]
+[White "Brancas"]
+[Black "Aluno - Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão na 6ª e na 7ª: quem joga decide"]
+[ChapterName "06 - TREINO 2 - Agora você defende"]
+[Fonte "adaptação da posição da aula (Silman TW73iW6r cap. 6): rei branco em c6, Pretas jogam"]
+[FEN "3k4/8/2KP4/8/8/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[ChapterMode "gamebook"]
+
+{ Agora você é as Pretas, e a vez é sua. Segure o empate. }
+1... Kc8! { O rei em c8 fica de frente para o rei branco em c6: a oposição é sua. } { [%csl Gc8,Gc6] } ( 1... Ke8?? { O rei preto largou c7. O rei branco entra lá, segura d8, e o peão passa. } { [%csl Rc7] } ) 2. d7+ { O peão chegou a d7 com xeque. } { [%csl Yd7] } 2... Kd8! { O rei branco tem de jogar. Se largar o peão, você come. Se for a d6, é afogamento. } { [%csl Gd8,Yd6] } ( 2... Kb8?? { Longe de d8, o rei preto não para mais o peão: ele vira dama. } { [%csl Rd8] } ) *
+
+[Event "Aula 11 - Peão na 6ª e na 7ª"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão na 6ª e na 7ª: quem joga decide"]
+[ChapterName "07 - TREINO 3 - Chegue com a vez certa"]
+[Fonte "Silman TW73iW6r cap. 6, posição depois de 2...Kf8 (linha da fonte)"]
+[FEN "5k2/8/3P4/4K3/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ Brancas jogam e ganham. Cuidado com quem fica com o lance. }
+1. Kf6! { O rei vai a f6 e espera. Agora o rei preto tem de escolher primeiro. } { [%csl Gf6] } ( 1. Ke6?? { O rei preto vai a e8, de frente para o seu rei. A vez fica com você, e o peão só chega com xeque. } { [%csl Re8] } ) 1... Ke8 { O rei preto foi a e8. } 2. Ke6! { Rei em e6, rei em e8, e as Pretas jogam: a oposição é sua. } { [%csl Ge6,Ge8] } ( 2. d7+?? { O peão ficou sem defesa em d7, e o rei preto come. } { [%csl Rd7] } ) 2... Kd8 { O rei preto voltou para a frente do peão. } 3. d7! { Peão na 7ª, sem xeque. O rei preto tem de sair de d8. } { [%csl Gd7] } 3... Kc7 4. Ke7! { O rei em e7 segura d8. O peão vira dama. } { [%csl Gd8] } ( 4. d8=Q+?? { O rei preto come a dama em d8: empate. } { [%csl Rd8] } ) *
+
+[Event "Aula 11 - Peão na 6ª e na 7ª"]
+[White "Brancas"]
+[Black "Aluno - Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão na 6ª e na 7ª: quem joga decide"]
+[ChapterName "08 - TREINO 4 - Peão na 7ª"]
+[Fonte "adaptação da aula 03 (Silman TW73iW6r cap. 6) para a coluna e"]
+[FEN "8/3kP3/5K2/8/8/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+[ChapterMode "gamebook"]
+
+{ Você é as Pretas. O peão já está em e7, e a vez é sua. } { [%csl Ye7] }
+1... Ke8! { O rei preto volta para a frente do peão. O rei branco tem de jogar: ou larga o peão, ou vai a e6 e afoga. } { [%csl Ge8,Ye6] } ( 1... Kd6?? { O rei preto largou e8. O rei branco vai a f7, segura e8, e o peão vira dama. } { [%csl Re8] } ) *
+
+[Event "Aula 11 - Peão na 6ª e na 7ª"]
+[White "Aluno - Brancas"]
+[Black "Engine"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão na 6ª e na 7ª: quem joga decide"]
+[ChapterName "09 - PRÁTICA - Brancas jogam e ganham"]
+[Fonte "Silman TW73iW6r cap. 6, posição inicial"]
+[FEN "5k2/8/3P4/8/6K1/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Brancas jogam e ganham. Leve o peão até virar dama. }
+ *
+
+[Event "Aula 11 - Peão na 6ª e na 7ª"]
+[White "Engine"]
+[Black "Aluno - Pretas"]
+[Result "1/2-1/2"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Peão na 6ª e na 7ª: quem joga decide"]
+[ChapterName "10 - PRÁTICA - Pretas jogam e empatam"]
+[Fonte "Silman TW73iW6r cap. 13, posição inicial"]
+[FEN "8/4k3/4P3/3K4/8/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "black"]
+
+{ Pretas jogam. Segure o empate. }
+ *

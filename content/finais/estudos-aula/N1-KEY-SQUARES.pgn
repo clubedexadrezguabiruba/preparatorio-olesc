@@ -1,0 +1,192 @@
+[Event "Aula 9 - Casas-chave"]
+[Site "https://lichess.org/study/T81d9Yqq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Casas-chave: onde o rei tem de chegar"]
+[ChapterName "00 - INTRODUÇÃO - Ganha, empata ou perde?"]
+[FEN "8/8/3k4/8/3K4/8/3P4/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Brancas: rei e peão. Pretas: só o rei. Brancas jogam.
+
+Ganha, empata ou perde? }
+ *
+
+[Event "Aula 9 - Casas-chave"]
+[Site "https://lichess.org/study/T81d9Yqq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Casas-chave: onde o rei tem de chegar"]
+[ChapterName "00 - INTRODUÇÃO - A resposta"]
+[FEN "8/8/3k4/8/3K4/8/3P4/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Ganha. O segredo está na casa do rei branco: d4, duas fileiras à frente do peão.
+
+Com o rei ali, tanto faz quem joga. } { [%csl Gd4] }
+ *
+
+[Event "Aula 9 - Casas-chave"]
+[Site "https://lichess.org/study/T81d9Yqq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Casas-chave: onde o rei tem de chegar"]
+[ChapterName "00 - INTRODUÇÃO - A pergunta da aula"]
+[FEN "8/8/3k4/8/3K4/8/3P4/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Hoje, antes de mexer, pergunte: em que casa o meu rei garante a vitória do peão?
+
+No fim, você aponta essas casas e leva o rei até uma delas. }
+ *
+
+[Event "Aula 9 - Casas-chave"]
+[Site "https://lichess.org/study/T81d9Yqq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Casas-chave: onde o rei tem de chegar"]
+[ChapterName "01 - AULA - Duas fileiras à frente do peão"]
+[FEN "8/8/8/3k4/8/3K4/3P4/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ A posição da aula de oposição. As Pretas jogam, e o rei preto tem de sair da frente. }
+1... Ke5 { O rei preto foi para e5. A casa c4 ficou livre. } { [%csl Gc4] } 2. Kc4! { O rei branco entra em c4, duas fileiras à frente do peão. } { [%csl Gc4] } 2... Kd6 { O rei preto volta para a frente do peão. } 3. Kd4! { O rei passa para d4, também duas fileiras à frente. O peão continua seguro. } { [%csl Gd4] } ( 3. d4?? { O peão andou antes da hora. Agora o rei branco não está mais duas fileiras à frente dele. } { [%csl Rc4] } 3... Kc6 { O rei preto fica de frente para o rei branco. } { [%csl Rc6] } 4. d5+ Kd6 { O rei preto fica na frente do peão, e o peão não passa. Empate. } { [%csl Rd6] } ) 3... Ke6 { As casas c4, d4 e e4 têm nome: casas-chave. Com o rei numa delas, o peão ganha. } { [%csl Yc4,Yd4,Ye4] } *
+
+[Event "Aula 9 - Casas-chave"]
+[Site "https://lichess.org/study/T81d9Yqq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Casas-chave: onde o rei tem de chegar"]
+[ChapterName "02 - AULA - O peão anda, as casas-chave andam"]
+[FEN "8/8/3k4/8/3K4/8/3P4/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Peão em d2: casas-chave c4, d4 e e4. O rei já está em d4, e agora as Brancas jogam. } { [%csl Yc4,Yd4,Ye4] }
+1. d3! { O peão anda uma casa, e as casas-chave andam junto: agora são c5, d5 e e5. } { [%csl Yc5,Yd5,Ye5] } 1... Ke6 2. Kc5 { O rei entra em c5, uma das casas-chave novas. } { [%csl Yc5,Yd5,Ye5] } 2... Kd7 3. Kd5! { De c5 para d5: o rei continua numa casa-chave. } { [%csl Yc5,Yd5,Ye5] } 3... Kc7 4. Ke6 { O rei vai mais à frente, para e6. O rei preto não chega ao peão. } { [%csl Ge6] } 4... Kd8 5. d4 { Agora o peão anda. Com ele em d4, as casas-chave são c6, d6 e e6, e o rei já está em e6. } { [%csl Yc6,Yd6,Ye6] } 5... Ke8 6. d5 { Peão na 5ª fileira: são seis casas-chave, c6, d6, e6, c7, d7 e e7. } { [%csl Yc6,Yd6,Ye6,Yc7,Yd7,Ye7] } 6... Kd8 7. Kd6! { O rei vai para d6 e continua numa casa-chave. } { [%csl Gd6] } ( 7. d6?? { O peão correu. Com ele em d6, as casas-chave sobem para c7, d7, e7, c8, d8 e e8. } { [%csl Yc7,Yd7,Ye7,Yc8,Yd8,Ye8] } 7... Ke8 { O rei preto fica na frente, e o rei branco em e6 está fora das casas-chave. } { [%csl Re6] } 8. d7+ Kd8 9. Kd6 { Afogamento: o rei preto não está em xeque e não tem lance. Empate. } { [%csl Rd8] } ) 7... Ke8 8. Kc7 { c7 também é casa-chave. O caminho do peão até d8 está livre. } { [%csl Gc7] [%cal Gd5d8] } 8... Ke7 9. d6+ Ke6 10. d7 Ke7 11. d8=Q+ { O peão vira dama. } *
+
+[Event "Aula 9 - Casas-chave"]
+[Site "https://lichess.org/study/T81d9Yqq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Casas-chave: onde o rei tem de chegar"]
+[ChapterName "03 - AULA - O caminho até a casa-chave"]
+[FEN "7k/8/8/8/3P4/8/8/5K2 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Peão em d4: casas-chave c6, d6 e e6. O rei branco está longe, e o rei preto vem para e6. } { [%csl Yc6,Yd6,Ye6] }
+1. Ke2! { O rei sobe por e2 e vai para c4 e c5, o lado longe do rei preto. } { [%cal Ge2d3,Gd3c4,Gc4c5] } ( 1. Kf2?? { O rei vai pelo caminho mais curto, direto na direção do rei preto. } { [%cal Rf2e3,Re3e4] } 1... Kg7 2. Ke3 Kf6 3. Ke4 Ke6 { O rei preto chegou a e6 primeiro e ficou de frente para o rei branco. Empate. } { [%csl Re6] } ) 1... Kg7 2. Kd3! { O rei segue para c4. } { [%cal Gd3c4] } 2... Kf6 3. Kc4! { Agora para c5, ao lado das casas-chave. } { [%cal Gc4c5] } 3... Ke6 4. Kc5! { O rei preto guarda d6, mas não consegue guardar c6 ao mesmo tempo. } { [%csl Yc6,Yd6] } 4... Kd7 5. Kd5! { De frente para o rei preto, e é ele quem tem de sair. } 5... Kc7 6. Ke6 { O rei chegou a e6, uma casa-chave. Daqui, o peão ganha. } { [%csl Ge6] } *
+
+[Event "Aula 9 - Casas-chave"]
+[Site "https://lichess.org/study/T81d9Yqq"]
+[White "Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Casas-chave: onde o rei tem de chegar"]
+[ChapterName "04 - AULA - LEMBRE-SE"]
+[FEN "8/8/3k4/8/3K4/8/3P4/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ LEMBRE-SE:
+
+1. Peão na 2ª, 3ª ou 4ª fileira: três casas-chave, duas fileiras à frente.
+2. Peão na 5ª ou 6ª: mais três, logo à frente.
+3. O peão andou? Ache as casas-chave de novo. }
+ *
+
+[Event "Aula 9 - Casas-chave"]
+[Site "https://lichess.org/study/T81d9Yqq"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Casas-chave: onde o rei tem de chegar"]
+[ChapterName "05 - TREINO 1 - Ache a casa-chave"]
+[FEN "8/8/8/3k4/8/2K5/2P5/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ Peão em c2. As casas-chave estão acesas: b4, c4 e d4. Leve o rei até uma delas. } { [%csl Yb4,Yc4,Yd4] }
+1. Kb4! { b4 é casa-chave. O rei preto guarda c4 e d4, mas não chega em b4. } { [%csl Gb4,Yc4,Yd4] } 1... Kc6 { O rei preto foi para c6. Ache outra casa-chave. } { [%csl Yc6] } 2. Kc4! { c4: de frente para o rei preto e numa casa-chave. O peão ganha. } { [%csl Gc4] } ( 2. c4?? { O peão andou, e as casas-chave subiram para b6, c6 e d6. O rei preto chega nelas: empate. } { [%csl Rb6,Rc6,Rd6] } ) *
+
+[Event "Aula 9 - Casas-chave"]
+[Site "https://lichess.org/study/T81d9Yqq"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Casas-chave: onde o rei tem de chegar"]
+[ChapterName "06 - TREINO 2 - Rei ou peão?"]
+[FEN "4k3/8/5K2/4P3/8/8/8/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ Agora sem ajuda. As Brancas jogam e ganham. }
+1. Ke6! { e6 é casa-chave do peão em e5. O rei preto vai ter de sair da frente. } { [%csl Ge6] } ( 1. e6?? { O peão correu, e as casas-chave subiram para a 7ª e a 8ª fileira. O rei branco ficou fora delas: empate. } ) 1... Kd8 2. Kf7! { f7 também é casa-chave. O rei preto não volta mais para e8. } { [%csl Gf7,Ye8] } 2... Kd7 3. e6+! { Agora o peão anda. Com ele em e6, o rei em f7 continua numa casa-chave. } { [%csl Gf7] } *
+
+[Event "Aula 9 - Casas-chave"]
+[Site "https://lichess.org/study/T81d9Yqq"]
+[White "Aluno - Brancas"]
+[Black "Pretas"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Casas-chave: onde o rei tem de chegar"]
+[ChapterName "07 - TREINO 3 - O caminho mais longo"]
+[FEN "8/1k6/8/8/4P3/8/3K4/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+[ChapterMode "gamebook"]
+
+{ A última, sem ajuda. As Brancas jogam e ganham. O rei preto vem do outro lado. }
+1. Ke3! { O seu rei sobe pelo lado de onde o rei preto não vem. } ( 1. Kd3?? { O rei foi para a frente do peão. O rei preto chega a d6 a tempo e fecha a passagem: empate. } { [%csl Rd6] } ) 1... Kc6 2. Kf4! { Mais um passo pelo lado livre. } ( 2. Kd4?? { De frente para o rei preto, e com a vez: ele vai para d6 e segura. Empate. } { [%csl Rd6] } ) 2... Kd6 3. Kf5! { O rei chega a f5, ao lado das casas-chave. } { [%csl Gf5] } ( 3. e5+?? { O peão andou cedo. Com ele em e5, o seu rei fica longe das casas-chave: empate. } ) 3... Kd7 4. Kf6! { f6 é casa-chave do peão em e4. Agora o peão ganha. } { [%csl Gf6] } ( 4. Ke5?? { O rei ficou na frente do peão, fora das casas-chave. O rei preto vai para e7 e segura: empate. } { [%csl Re7] } ) *
+
+[Event "Aula 9 - Casas-chave"]
+[Site "https://lichess.org/study/T81d9Yqq"]
+[White "Aluno - Brancas"]
+[Black "Engine"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Casas-chave: onde o rei tem de chegar"]
+[ChapterName "08 - PRÁTICA - Leve o rei até a casa-chave"]
+[FEN "5k2/8/8/8/2K5/8/4P3/8 w - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ Ganhe a partida: primeiro o rei numa casa-chave, depois o peão. }
+ *
+
+[Event "Aula 9 - Casas-chave"]
+[Site "https://lichess.org/study/T81d9Yqq"]
+[White "Aluno - Brancas"]
+[Black "Engine"]
+[Result "*"]
+[Annotator "https://lichess.org/@/clubexadrezguabiruba"]
+[StudyName "Casas-chave: onde o rei tem de chegar"]
+[ChapterName "09 - PRÁTICA - Transfira a ideia"]
+[FEN "8/3k4/8/3K4/3P4/8/8/8 b - - 0 1"]
+[SetUp "1"]
+[Orientation "white"]
+
+{ As Pretas jogam primeiro. Ache as casas-chave do peão e ganhe a partida. }
+ *

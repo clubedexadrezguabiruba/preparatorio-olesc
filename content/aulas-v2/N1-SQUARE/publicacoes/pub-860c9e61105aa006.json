@@ -1,0 +1,3170 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-860c9e61105aa006",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "N1-SQUARE",
+    "titulo": "Regra do quadrado",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "classe": "D",
+      "estadoEditorial": "rascunho"
+    },
+    "proveniencia": [
+      {
+        "positionId": "pos-n1-square-1",
+        "conteudoHash": "baba432bcdd88ad081f5d412e1d58f6bae17018c1af90f8729a275ed47decda5",
+        "estado": "candidate"
+      },
+      {
+        "positionId": "pos-n1-square-2",
+        "conteudoHash": "1680ad54e3fba4cd932493daeacf87d4d8fb744e2ac077dd9a805cde8fd1a9f4",
+        "estado": "candidate"
+      }
+    ],
+    "excecoes": [],
+    "catalogo": {
+      "erros": [
+        {
+          "id": "erro-no-jogo-8-2",
+          "nome": "Rei em f5, fora do quadrado.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Rei em f5, fora do quadrado. O peão anda para b6 e escapa."
+        },
+        {
+          "id": "erro-no-jogo-8-3",
+          "nome": "Rei em e4, abaixo do quadrado.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Rei em e4, abaixo do quadrado. O peão anda e escapa."
+        },
+        {
+          "id": "erro-no-jogo-8-6",
+          "nome": "Rei em e6, fora do quadrado.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Rei em e6, fora do quadrado. O peão anda para b7 e escapa."
+        },
+        {
+          "id": "erro-no-jogo-8-7",
+          "nome": "Rei em d5, abaixo do quadrado.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Rei em d5, abaixo do quadrado. O peão anda para b7 e escapa."
+        },
+        {
+          "id": "erro-no-jogo-9-2",
+          "nome": "Uma casa só.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Uma casa só. O rei entra no quadrado em g4 e alcança o peão."
+        },
+        {
+          "id": "erro-no-jogo-9-3",
+          "nome": "O peão ficou parado.",
+          "julgamento": "fora-do-metodo",
+          "texto": "O peão ficou parado. O rei preto entra no quadrado em g4."
+        },
+        {
+          "id": "erro-no-jogo-10-2",
+          "nome": "Rei em c6, acima do quadrado.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Rei em c6, acima do quadrado. O peão desce e vira dama."
+        },
+        {
+          "id": "erro-no-jogo-10-3",
+          "nome": "Rei em b5, fora do quadrado.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Rei em b5, fora do quadrado. O peão desce e vira dama."
+        },
+        {
+          "id": "erro-no-jogo-10-6",
+          "nome": "Rei em d5, acima do quadrado.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Rei em d5, acima do quadrado. O peão desce e vira dama."
+        }
+      ],
+      "mensagensPadrao": {
+        "vitoriaForaDoMetodo": "Este lance funciona, mas não é o caminho ensinado.",
+        "perdeResultado": "Este lance perde o resultado que a posição permitia.",
+        "alternativaDoMetodo": "Boa alternativa. Continue pela linha ensinada."
+      }
+    },
+    "analises": [
+      {
+        "id": "analise-jogo-4",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/5k2/8/P7/8/8/7K w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 07 Regra do Quadrado",
+            "link": "https://lichess.org/study/TI5KNg6U",
+            "fenRevisada": "8/8/5k2/8/P7/8/8/7K w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:45.515Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 7 - Regra do quadrado",
+            "Site": "https://lichess.org/study/TI5KNg6U",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Regra do quadrado: o rei alcança o peão?",
+            "ChapterName": "01 - AULA - O quadrado do peão",
+            "FEN": "8/8/5k2/8/P7/8/8/7K w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-4-0",
+        "nos": {
+          "no-jogo-4-0": {
+            "id": "no-jogo-4-0",
+            "filhos": [
+              "no-jogo-4-1",
+              "no-jogo-4-2"
+            ],
+            "comentario": "Brancas jogam. O peão em a4 está a quatro passos de a8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ya4,Ya8]"
+            ]
+          },
+          "no-jogo-4-1": {
+            "id": "no-jogo-4-1",
+            "uci": "a4a5",
+            "filhos": [
+              "no-jogo-4-12"
+            ],
+            "comentario": "Trace a diagonal de a5 até d8. Ela fecha um quadrado: a5, a8, d8 e d5.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a5",
+                  "para": "d8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "a5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d5",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ya5d8]",
+              "[%csl Ya5,Ya8,Yd8,Yd5]"
+            ]
+          },
+          "no-jogo-4-2": {
+            "id": "no-jogo-4-2",
+            "uci": "h1g2",
+            "filhos": [
+              "no-jogo-4-3"
+            ],
+            "comentario": "O rei branco andou, e o peão ficou parado. Isso dá um lance ao rei preto.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-4-3": {
+            "id": "no-jogo-4-3",
+            "uci": "f6e5",
+            "filhos": [
+              "no-jogo-4-4"
+            ],
+            "comentario": "Rei em e5, dentro do quadrado de a4 até e8.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a4",
+                  "para": "e8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "a4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e5",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ya4e8]",
+              "[%csl Ya4,Ya8,Ye8,Ye4,Re5]"
+            ]
+          },
+          "no-jogo-4-4": {
+            "id": "no-jogo-4-4",
+            "uci": "a4a5",
+            "filhos": [
+              "no-jogo-4-5"
+            ]
+          },
+          "no-jogo-4-5": {
+            "id": "no-jogo-4-5",
+            "uci": "e5d5",
+            "filhos": [
+              "no-jogo-4-6"
+            ]
+          },
+          "no-jogo-4-6": {
+            "id": "no-jogo-4-6",
+            "uci": "a5a6",
+            "filhos": [
+              "no-jogo-4-7"
+            ]
+          },
+          "no-jogo-4-7": {
+            "id": "no-jogo-4-7",
+            "uci": "d5c6",
+            "filhos": [
+              "no-jogo-4-8"
+            ]
+          },
+          "no-jogo-4-8": {
+            "id": "no-jogo-4-8",
+            "uci": "a6a7",
+            "filhos": [
+              "no-jogo-4-9"
+            ]
+          },
+          "no-jogo-4-9": {
+            "id": "no-jogo-4-9",
+            "uci": "c6b7",
+            "filhos": [
+              "no-jogo-4-10"
+            ]
+          },
+          "no-jogo-4-10": {
+            "id": "no-jogo-4-10",
+            "uci": "a7a8q",
+            "filhos": [
+              "no-jogo-4-11"
+            ]
+          },
+          "no-jogo-4-11": {
+            "id": "no-jogo-4-11",
+            "uci": "b7a8",
+            "filhos": [],
+            "comentario": "O rei preto come a dama nova. Empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ra8]"
+            ]
+          },
+          "no-jogo-4-12": {
+            "id": "no-jogo-4-12",
+            "uci": "f6e5",
+            "filhos": [
+              "no-jogo-4-13"
+            ],
+            "comentario": "O rei preto foi a e5, fora do quadrado.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a5",
+                  "para": "d8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "a5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e5",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ya5d8]",
+              "[%csl Ya5,Ya8,Yd8,Yd5,Ye5]"
+            ]
+          },
+          "no-jogo-4-13": {
+            "id": "no-jogo-4-13",
+            "uci": "a5a6",
+            "filhos": [
+              "no-jogo-4-14"
+            ],
+            "comentario": "Isso tem nome: o quadrado do peão. A cada passo do peão, ele encolhe.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a6",
+                  "para": "c8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "a6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ya6c8]",
+              "[%csl Ya6,Ya8,Yc8,Yc6]"
+            ]
+          },
+          "no-jogo-4-14": {
+            "id": "no-jogo-4-14",
+            "uci": "e5d6",
+            "filhos": [
+              "no-jogo-4-15"
+            ],
+            "comentario": "Rei em d6: ainda fora do quadrado de a6 até c8.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a6",
+                  "para": "c8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "a6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ya6c8]",
+              "[%csl Ya6,Ya8,Yc8,Yc6,Yd6]"
+            ]
+          },
+          "no-jogo-4-15": {
+            "id": "no-jogo-4-15",
+            "uci": "a6a7",
+            "filhos": [
+              "no-jogo-4-16"
+            ]
+          },
+          "no-jogo-4-16": {
+            "id": "no-jogo-4-16",
+            "uci": "d6c7",
+            "filhos": [
+              "no-jogo-4-17"
+            ]
+          },
+          "no-jogo-4-17": {
+            "id": "no-jogo-4-17",
+            "uci": "a7a8q",
+            "filhos": [],
+            "comentario": "Dama! Rei fora do quadrado não alcança o peão.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ga8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-5",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/5k2/8/P7/8/8/7K b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 07 Regra do Quadrado",
+            "link": "https://lichess.org/study/TI5KNg6U",
+            "fenRevisada": "8/8/5k2/8/P7/8/8/7K b - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:45.515Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 7 - Regra do quadrado",
+            "Site": "https://lichess.org/study/TI5KNg6U",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Regra do quadrado: o rei alcança o peão?",
+            "ChapterName": "02 - AULA - Quem joga decide",
+            "FEN": "8/8/5k2/8/P7/8/8/7K b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-5-0",
+        "nos": {
+          "no-jogo-5-0": {
+            "id": "no-jogo-5-0",
+            "filhos": [
+              "no-jogo-5-1",
+              "no-jogo-5-2"
+            ],
+            "comentario": "A mesma posição, mas agora as Pretas jogam. O quadrado vai de a4 até e8.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a4",
+                  "para": "e8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "a4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e4",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ya4e8]",
+              "[%csl Ya4,Ya8,Ye8,Ye4]"
+            ]
+          },
+          "no-jogo-5-1": {
+            "id": "no-jogo-5-1",
+            "uci": "f6e6",
+            "filhos": [
+              "no-jogo-5-10"
+            ],
+            "comentario": "O rei preto pisa em e6 e entra no quadrado.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ya4,Ya8,Ye8,Ye4,Ge6]"
+            ]
+          },
+          "no-jogo-5-2": {
+            "id": "no-jogo-5-2",
+            "uci": "f6f5",
+            "filhos": [
+              "no-jogo-5-3"
+            ],
+            "comentario": "Rei em f5: fora do quadrado.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "f5",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ya4,Ya8,Ye8,Ye4,Rf5]"
+            ]
+          },
+          "no-jogo-5-3": {
+            "id": "no-jogo-5-3",
+            "uci": "a4a5",
+            "filhos": [
+              "no-jogo-5-4"
+            ]
+          },
+          "no-jogo-5-4": {
+            "id": "no-jogo-5-4",
+            "uci": "f5e5",
+            "filhos": [
+              "no-jogo-5-5"
+            ]
+          },
+          "no-jogo-5-5": {
+            "id": "no-jogo-5-5",
+            "uci": "a5a6",
+            "filhos": [
+              "no-jogo-5-6"
+            ]
+          },
+          "no-jogo-5-6": {
+            "id": "no-jogo-5-6",
+            "uci": "e5d6",
+            "filhos": [
+              "no-jogo-5-7"
+            ]
+          },
+          "no-jogo-5-7": {
+            "id": "no-jogo-5-7",
+            "uci": "a6a7",
+            "filhos": [
+              "no-jogo-5-8"
+            ]
+          },
+          "no-jogo-5-8": {
+            "id": "no-jogo-5-8",
+            "uci": "d6c7",
+            "filhos": [
+              "no-jogo-5-9"
+            ]
+          },
+          "no-jogo-5-9": {
+            "id": "no-jogo-5-9",
+            "uci": "a7a8q",
+            "filhos": [],
+            "comentario": "O peão vira dama. Um lance fora do quadrado, e o peão escapou."
+          },
+          "no-jogo-5-10": {
+            "id": "no-jogo-5-10",
+            "uci": "a4a5",
+            "filhos": [
+              "no-jogo-5-11"
+            ]
+          },
+          "no-jogo-5-11": {
+            "id": "no-jogo-5-11",
+            "uci": "e6d6",
+            "filhos": [
+              "no-jogo-5-12"
+            ],
+            "comentario": "O quadrado encolheu para a5 até d8. O rei continua dentro.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a5",
+                  "para": "d8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "a5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ya5d8]",
+              "[%csl Ya5,Ya8,Yd8,Yd5,Gd6]"
+            ]
+          },
+          "no-jogo-5-12": {
+            "id": "no-jogo-5-12",
+            "uci": "a5a6",
+            "filhos": [
+              "no-jogo-5-13"
+            ]
+          },
+          "no-jogo-5-13": {
+            "id": "no-jogo-5-13",
+            "uci": "d6c7",
+            "filhos": [
+              "no-jogo-5-14"
+            ],
+            "comentario": "Rei em c7, dentro do quadrado de a6 até c8.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a6",
+                  "para": "c8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "a6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ya6c8]",
+              "[%csl Ya6,Ya8,Yc8,Yc6,Gc7]"
+            ]
+          },
+          "no-jogo-5-14": {
+            "id": "no-jogo-5-14",
+            "uci": "a6a7",
+            "filhos": [
+              "no-jogo-5-15"
+            ]
+          },
+          "no-jogo-5-15": {
+            "id": "no-jogo-5-15",
+            "uci": "c7b7",
+            "filhos": [
+              "no-jogo-5-16"
+            ],
+            "comentario": "Rei em b7, colado em a8.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "b7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gb7,Ya8]"
+            ]
+          },
+          "no-jogo-5-16": {
+            "id": "no-jogo-5-16",
+            "uci": "a7a8q",
+            "filhos": [
+              "no-jogo-5-17"
+            ]
+          },
+          "no-jogo-5-17": {
+            "id": "no-jogo-5-17",
+            "uci": "b7a8",
+            "filhos": [],
+            "comentario": "O rei come a dama nova. Empate: na mesma posição, quem joga decide."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-6",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/6k1/8/8/8/8/P7/7K w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 07 Regra do Quadrado",
+            "link": "https://lichess.org/study/TI5KNg6U",
+            "fenRevisada": "8/6k1/8/8/8/8/P7/7K w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:45.515Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 7 - Regra do quadrado",
+            "Site": "https://lichess.org/study/TI5KNg6U",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Regra do quadrado: o rei alcança o peão?",
+            "ChapterName": "03 - AULA - Uma casa ou duas?",
+            "FEN": "8/6k1/8/8/8/8/P7/7K w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-6-0",
+        "nos": {
+          "no-jogo-6-0": {
+            "id": "no-jogo-6-0",
+            "filhos": [
+              "no-jogo-6-1",
+              "no-jogo-6-2"
+            ],
+            "comentario": "Peão em a2, na casa inicial. Ele pode andar uma casa ou duas.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a2",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ya2]"
+            ]
+          },
+          "no-jogo-6-1": {
+            "id": "no-jogo-6-1",
+            "uci": "a2a4",
+            "filhos": [
+              "no-jogo-6-14"
+            ],
+            "comentario": "Duas casas. O quadrado vai de a4 até e8, e o rei em g7 fica fora.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a4",
+                  "para": "e8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "a4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "g7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ya4e8]",
+              "[%csl Ya4,Ya8,Ye8,Ye4,Yg7]"
+            ]
+          },
+          "no-jogo-6-2": {
+            "id": "no-jogo-6-2",
+            "uci": "a2a3",
+            "filhos": [
+              "no-jogo-6-3"
+            ],
+            "comentario": "Uma casa só. O quadrado ficou maior: vai de a3 até f8.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a3",
+                  "para": "f8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "a3",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "f8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "f3",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ya3f8]",
+              "[%csl Ya3,Ya8,Yf8,Yf3]"
+            ]
+          },
+          "no-jogo-6-3": {
+            "id": "no-jogo-6-3",
+            "uci": "g7f6",
+            "filhos": [
+              "no-jogo-6-4"
+            ],
+            "comentario": "O rei entra no quadrado em f6.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a3",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "f8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "f3",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "f6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ya3,Ya8,Yf8,Yf3,Rf6]"
+            ]
+          },
+          "no-jogo-6-4": {
+            "id": "no-jogo-6-4",
+            "uci": "a3a4",
+            "filhos": [
+              "no-jogo-6-5"
+            ]
+          },
+          "no-jogo-6-5": {
+            "id": "no-jogo-6-5",
+            "uci": "f6e5",
+            "filhos": [
+              "no-jogo-6-6"
+            ]
+          },
+          "no-jogo-6-6": {
+            "id": "no-jogo-6-6",
+            "uci": "a4a5",
+            "filhos": [
+              "no-jogo-6-7"
+            ]
+          },
+          "no-jogo-6-7": {
+            "id": "no-jogo-6-7",
+            "uci": "e5d5",
+            "filhos": [
+              "no-jogo-6-8"
+            ]
+          },
+          "no-jogo-6-8": {
+            "id": "no-jogo-6-8",
+            "uci": "a5a6",
+            "filhos": [
+              "no-jogo-6-9"
+            ]
+          },
+          "no-jogo-6-9": {
+            "id": "no-jogo-6-9",
+            "uci": "d5c6",
+            "filhos": [
+              "no-jogo-6-10"
+            ]
+          },
+          "no-jogo-6-10": {
+            "id": "no-jogo-6-10",
+            "uci": "a6a7",
+            "filhos": [
+              "no-jogo-6-11"
+            ]
+          },
+          "no-jogo-6-11": {
+            "id": "no-jogo-6-11",
+            "uci": "c6b7",
+            "filhos": [
+              "no-jogo-6-12"
+            ]
+          },
+          "no-jogo-6-12": {
+            "id": "no-jogo-6-12",
+            "uci": "a7a8q",
+            "filhos": [
+              "no-jogo-6-13"
+            ]
+          },
+          "no-jogo-6-13": {
+            "id": "no-jogo-6-13",
+            "uci": "b7a8",
+            "filhos": [],
+            "comentario": "O rei come a dama nova. Com uma casa só, empate."
+          },
+          "no-jogo-6-14": {
+            "id": "no-jogo-6-14",
+            "uci": "g7f6",
+            "filhos": [
+              "no-jogo-6-15"
+            ],
+            "comentario": "Rei em f6: ainda fora do quadrado.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a4",
+                  "para": "e8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "a4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "f6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ya4e8]",
+              "[%csl Ya4,Ya8,Ye8,Ye4,Yf6]"
+            ]
+          },
+          "no-jogo-6-15": {
+            "id": "no-jogo-6-15",
+            "uci": "a4a5",
+            "filhos": [
+              "no-jogo-6-16"
+            ]
+          },
+          "no-jogo-6-16": {
+            "id": "no-jogo-6-16",
+            "uci": "f6e5",
+            "filhos": [
+              "no-jogo-6-17"
+            ]
+          },
+          "no-jogo-6-17": {
+            "id": "no-jogo-6-17",
+            "uci": "a5a6",
+            "filhos": [
+              "no-jogo-6-18"
+            ]
+          },
+          "no-jogo-6-18": {
+            "id": "no-jogo-6-18",
+            "uci": "e5d6",
+            "filhos": [
+              "no-jogo-6-19"
+            ]
+          },
+          "no-jogo-6-19": {
+            "id": "no-jogo-6-19",
+            "uci": "a6a7",
+            "filhos": [
+              "no-jogo-6-20"
+            ]
+          },
+          "no-jogo-6-20": {
+            "id": "no-jogo-6-20",
+            "uci": "d6c7",
+            "filhos": [
+              "no-jogo-6-21"
+            ]
+          },
+          "no-jogo-6-21": {
+            "id": "no-jogo-6-21",
+            "uci": "a7a8q",
+            "filhos": [],
+            "comentario": "Dama! Na casa inicial, o peão anda duas casas — e o quadrado começa ali.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ga8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-7",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/5k2/8/P7/8/8/7K w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 07 Regra do Quadrado",
+            "link": "https://lichess.org/study/TI5KNg6U",
+            "fenRevisada": "8/8/5k2/8/P7/8/8/7K w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:45.515Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 7 - Regra do quadrado",
+            "Site": "https://lichess.org/study/TI5KNg6U",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Regra do quadrado: o rei alcança o peão?",
+            "ChapterName": "04 - AULA - LEMBRE-SE",
+            "FEN": "8/8/5k2/8/P7/8/8/7K w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-7-0",
+        "nos": {
+          "no-jogo-7-0": {
+            "id": "no-jogo-7-0",
+            "filhos": [],
+            "comentario": "LEMBRE-SE:\n\n1. A diagonal do peão até a última fileira fecha o quadrado.\n2. O rei que entra no quadrado alcança o peão.\n3. Peão na casa inicial: conte a partir de duas casas à frente."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-8",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/8/1P6/5k2/8/8/7K b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 07 Regra do Quadrado",
+            "link": "https://lichess.org/study/TI5KNg6U",
+            "fenRevisada": "8/8/8/1P6/5k2/8/8/7K b - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:45.515Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 7 - Regra do quadrado",
+            "Site": "https://lichess.org/study/TI5KNg6U",
+            "White": "Brancas",
+            "Black": "Aluno - Pretas",
+            "Result": "1/2-1/2",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Regra do quadrado: o rei alcança o peão?",
+            "ChapterName": "05 - TREINO 1 - Entre no quadrado",
+            "FEN": "8/8/8/1P6/5k2/8/8/7K b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "black",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-8-0",
+        "nos": {
+          "no-jogo-8-0": {
+            "id": "no-jogo-8-0",
+            "filhos": [
+              "no-jogo-8-1",
+              "no-jogo-8-2",
+              "no-jogo-8-3"
+            ],
+            "comentario": "Pretas jogam. O quadrado do peão vai de b5 até e8. Leve o rei para dentro dele.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "b5",
+                  "para": "e8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "b5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "b8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e5",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Yb5e8]",
+              "[%csl Yb5,Yb8,Ye8,Ye5]"
+            ]
+          },
+          "no-jogo-8-1": {
+            "id": "no-jogo-8-1",
+            "uci": "f4e5",
+            "filhos": [
+              "no-jogo-8-4"
+            ],
+            "comentario": "Rei em e5, dentro do quadrado. Agora ele acompanha o peão.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-8-2": {
+            "id": "no-jogo-8-2",
+            "uci": "f4f5",
+            "filhos": [],
+            "comentario": "Rei em f5, fora do quadrado. O peão anda para b6 e escapa.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-8-3": {
+            "id": "no-jogo-8-3",
+            "uci": "f4e4",
+            "filhos": [],
+            "comentario": "Rei em e4, abaixo do quadrado. O peão anda e escapa.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-8-4": {
+            "id": "no-jogo-8-4",
+            "uci": "b5b6",
+            "filhos": [
+              "no-jogo-8-5",
+              "no-jogo-8-6",
+              "no-jogo-8-7"
+            ],
+            "comentario": "O peão andou. O quadrado agora vai de b6 até d8.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "b6",
+                  "para": "d8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "b6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "b8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Yb6d8]",
+              "[%csl Yb6,Yb8,Yd8,Yd6]"
+            ]
+          },
+          "no-jogo-8-5": {
+            "id": "no-jogo-8-5",
+            "uci": "e5d6",
+            "filhos": [
+              "no-jogo-8-8"
+            ],
+            "comentario": "Rei em d6, ainda dentro do quadrado.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-8-6": {
+            "id": "no-jogo-8-6",
+            "uci": "e5e6",
+            "filhos": [],
+            "comentario": "Rei em e6, fora do quadrado. O peão anda para b7 e escapa.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-8-7": {
+            "id": "no-jogo-8-7",
+            "uci": "e5d5",
+            "filhos": [],
+            "comentario": "Rei em d5, abaixo do quadrado. O peão anda para b7 e escapa.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-8-8": {
+            "id": "no-jogo-8-8",
+            "uci": "b6b7",
+            "filhos": [
+              "no-jogo-8-9"
+            ],
+            "comentario": "O quadrado encolheu: b7, b8, c8 e c7.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "b7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "b8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yb7,Yb8,Yc8,Yc7]"
+            ]
+          },
+          "no-jogo-8-9": {
+            "id": "no-jogo-8-9",
+            "uci": "d6c7",
+            "filhos": [
+              "no-jogo-8-10"
+            ],
+            "comentario": "Rei em c7, colado na casa b8.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-8-10": {
+            "id": "no-jogo-8-10",
+            "uci": "b7b8q",
+            "filhos": [
+              "no-jogo-8-11"
+            ]
+          },
+          "no-jogo-8-11": {
+            "id": "no-jogo-8-11",
+            "uci": "c7b8",
+            "filhos": [],
+            "comentario": "O rei come a dama nova. Empate: você alcançou o peão.",
+            "nags": [
+              1
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-9",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/8/8/7k/8/1P6/7K w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 07 Regra do Quadrado",
+            "link": "https://lichess.org/study/TI5KNg6U",
+            "fenRevisada": "8/8/8/8/7k/8/1P6/7K w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:45.515Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 7 - Regra do quadrado",
+            "Site": "https://lichess.org/study/TI5KNg6U",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Regra do quadrado: o rei alcança o peão?",
+            "ChapterName": "06 - TREINO 2 - Uma casa ou duas?",
+            "FEN": "8/8/8/8/7k/8/1P6/7K w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-9-0",
+        "nos": {
+          "no-jogo-9-0": {
+            "id": "no-jogo-9-0",
+            "filhos": [
+              "no-jogo-9-1",
+              "no-jogo-9-2",
+              "no-jogo-9-3"
+            ],
+            "comentario": "Brancas jogam. Leve o peão até a dama, sem deixar o rei preto alcançá-lo."
+          },
+          "no-jogo-9-1": {
+            "id": "no-jogo-9-1",
+            "uci": "b2b4",
+            "filhos": [
+              "no-jogo-9-4"
+            ],
+            "comentario": "Duas casas. O rei em h4 ficou fora do quadrado de b4 até f8.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "b4",
+                  "para": "f8",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "b4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "b8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "f8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "f4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "h4",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Yb4f8]",
+              "[%csl Yb4,Yb8,Yf8,Yf4,Yh4]"
+            ]
+          },
+          "no-jogo-9-2": {
+            "id": "no-jogo-9-2",
+            "uci": "b2b3",
+            "filhos": [],
+            "comentario": "Uma casa só. O rei entra no quadrado em g4 e alcança o peão.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-9-3": {
+            "id": "no-jogo-9-3",
+            "uci": "h1g2",
+            "filhos": [],
+            "comentario": "O peão ficou parado. O rei preto entra no quadrado em g4.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-9-4": {
+            "id": "no-jogo-9-4",
+            "uci": "h4g4",
+            "filhos": [
+              "no-jogo-9-5"
+            ]
+          },
+          "no-jogo-9-5": {
+            "id": "no-jogo-9-5",
+            "uci": "b4b5",
+            "filhos": [
+              "no-jogo-9-6"
+            ],
+            "comentario": "O quadrado encolhe, e o rei preto continua fora.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-9-6": {
+            "id": "no-jogo-9-6",
+            "uci": "g4f5",
+            "filhos": [
+              "no-jogo-9-7"
+            ]
+          },
+          "no-jogo-9-7": {
+            "id": "no-jogo-9-7",
+            "uci": "b5b6",
+            "filhos": [
+              "no-jogo-9-8"
+            ],
+            "comentario": "Mais um passo. O rei preto segue um lance atrasado.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-9-8": {
+            "id": "no-jogo-9-8",
+            "uci": "f5e6",
+            "filhos": [
+              "no-jogo-9-9"
+            ]
+          },
+          "no-jogo-9-9": {
+            "id": "no-jogo-9-9",
+            "uci": "b6b7",
+            "filhos": [
+              "no-jogo-9-10"
+            ],
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-9-10": {
+            "id": "no-jogo-9-10",
+            "uci": "e6d7",
+            "filhos": [
+              "no-jogo-9-11"
+            ]
+          },
+          "no-jogo-9-11": {
+            "id": "no-jogo-9-11",
+            "uci": "b7b8q",
+            "filhos": [],
+            "comentario": "Dama! O rei preto não entrou no quadrado a tempo.",
+            "nags": [
+              1
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-10",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/1K6/6p1/8/8/8/k7 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 07 Regra do Quadrado",
+            "link": "https://lichess.org/study/TI5KNg6U",
+            "fenRevisada": "8/8/1K6/6p1/8/8/8/k7 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:45.515Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 7 - Regra do quadrado",
+            "Site": "https://lichess.org/study/TI5KNg6U",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "1/2-1/2",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Regra do quadrado: o rei alcança o peão?",
+            "ChapterName": "07 - TREINO 3 - Agora o peão é preto",
+            "FEN": "8/8/1K6/6p1/8/8/8/k7 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-10-0",
+        "nos": {
+          "no-jogo-10-0": {
+            "id": "no-jogo-10-0",
+            "filhos": [
+              "no-jogo-10-1",
+              "no-jogo-10-2",
+              "no-jogo-10-3"
+            ],
+            "comentario": "Agora o peão é preto e desce até g1. Brancas jogam. Alcance o peão com o seu rei."
+          },
+          "no-jogo-10-1": {
+            "id": "no-jogo-10-1",
+            "uci": "b6c5",
+            "filhos": [
+              "no-jogo-10-4"
+            ],
+            "comentario": "Rei em c5, dentro do quadrado de g5 até c1.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g5",
+                  "para": "c1",
+                  "cor": "amarelo"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "g5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "g1",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c1",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c5",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Yg5c1]",
+              "[%csl Yg5,Yg1,Yc1,Yc5]"
+            ]
+          },
+          "no-jogo-10-2": {
+            "id": "no-jogo-10-2",
+            "uci": "b6c6",
+            "filhos": [],
+            "comentario": "Rei em c6, acima do quadrado. O peão desce e vira dama.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-10-3": {
+            "id": "no-jogo-10-3",
+            "uci": "b6b5",
+            "filhos": [],
+            "comentario": "Rei em b5, fora do quadrado. O peão desce e vira dama.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-10-4": {
+            "id": "no-jogo-10-4",
+            "uci": "g5g4",
+            "filhos": [
+              "no-jogo-10-5",
+              "no-jogo-10-6"
+            ]
+          },
+          "no-jogo-10-5": {
+            "id": "no-jogo-10-5",
+            "uci": "c5d4",
+            "filhos": [
+              "no-jogo-10-7"
+            ],
+            "comentario": "O quadrado encolheu, e o rei continua dentro.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-6": {
+            "id": "no-jogo-10-6",
+            "uci": "c5d5",
+            "filhos": [],
+            "comentario": "Rei em d5, acima do quadrado. O peão desce e vira dama.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-10-7": {
+            "id": "no-jogo-10-7",
+            "uci": "g4g3",
+            "filhos": [
+              "no-jogo-10-8"
+            ]
+          },
+          "no-jogo-10-8": {
+            "id": "no-jogo-10-8",
+            "uci": "d4e3",
+            "filhos": [
+              "no-jogo-10-9"
+            ],
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-9": {
+            "id": "no-jogo-10-9",
+            "uci": "g3g2",
+            "filhos": [
+              "no-jogo-10-10"
+            ]
+          },
+          "no-jogo-10-10": {
+            "id": "no-jogo-10-10",
+            "uci": "e3f2",
+            "filhos": [
+              "no-jogo-10-11"
+            ],
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-11": {
+            "id": "no-jogo-10-11",
+            "uci": "g2g1q",
+            "filhos": [
+              "no-jogo-10-12"
+            ]
+          },
+          "no-jogo-10-12": {
+            "id": "no-jogo-10-12",
+            "uci": "f2g1",
+            "filhos": [],
+            "comentario": "O rei come a dama nova. Empate: você alcançou o peão.",
+            "nags": [
+              1
+            ]
+          }
+        }
+      }
+    ],
+    "introducoes": [
+      {
+        "id": "introducao-estudo-1",
+        "titulo": "Introdução",
+        "quadros": [
+          {
+            "id": "quadro-estudo-1",
+            "titulo": "INTRODUÇÃO - Ganha, empata ou perde?",
+            "texto": "Brancas: rei e peão. Pretas: só o rei. Brancas jogam.\n\nGanha, empata ou perde?",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-6",
+                "nodeId": "no-jogo-6-0"
+              }
+            }
+          },
+          {
+            "id": "quadro-estudo-2",
+            "titulo": "INTRODUÇÃO - A resposta",
+            "texto": "Ganha, se o peão andar do jeito certo.\n\nCom o primeiro lance errado, o rei preto alcança o peão, e é empate.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-6",
+                "nodeId": "no-jogo-6-0"
+              }
+            }
+          },
+          {
+            "id": "quadro-estudo-3",
+            "titulo": "INTRODUÇÃO - A pergunta da aula",
+            "texto": "Hoje, diante de um peão sozinho, pergunte: o rei chega a tempo de parar o peão?\n\nNo fim, você responde num olhar, sem contar lance por lance.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-6",
+                "nodeId": "no-jogo-6-0"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "capitulos": [
+      {
+        "id": "capitulo-jogo-4",
+        "titulo": "AULA - O quadrado do peão",
+        "analiseId": "analise-jogo-4",
+        "inicioNodeId": "no-jogo-4-0",
+        "caminho": [
+          "no-jogo-4-1",
+          "no-jogo-4-12",
+          "no-jogo-4-13",
+          "no-jogo-4-14",
+          "no-jogo-4-15",
+          "no-jogo-4-16",
+          "no-jogo-4-17"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-4-0",
+            "nodeId": "no-jogo-4-0",
+            "texto": "Brancas jogam. O peão em a4 está a quatro passos de a8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-1",
+            "nodeId": "no-jogo-4-1",
+            "texto": "Trace a diagonal de a5 até d8. Ela fecha um quadrado: a5, a8, d8 e d5.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-2",
+            "nodeId": "no-jogo-4-2",
+            "texto": "O rei branco andou, e o peão ficou parado. Isso dá um lance ao rei preto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-3",
+            "nodeId": "no-jogo-4-3",
+            "texto": "Rei em e5, dentro do quadrado de a4 até e8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-11",
+            "nodeId": "no-jogo-4-11",
+            "texto": "O rei preto come a dama nova. Empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-12",
+            "nodeId": "no-jogo-4-12",
+            "texto": "O rei preto foi a e5, fora do quadrado.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-13",
+            "nodeId": "no-jogo-4-13",
+            "texto": "Isso tem nome: o quadrado do peão. A cada passo do peão, ele encolhe.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-14",
+            "nodeId": "no-jogo-4-14",
+            "texto": "Rei em d6: ainda fora do quadrado de a6 até c8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-17",
+            "nodeId": "no-jogo-4-17",
+            "texto": "Dama! Rei fora do quadrado não alcança o peão.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-4-variante",
+        "titulo": "Comparação: 1. Rg2?",
+        "analiseId": "analise-jogo-4",
+        "inicioNodeId": "no-jogo-4-0",
+        "caminho": [
+          "no-jogo-4-2",
+          "no-jogo-4-3",
+          "no-jogo-4-4",
+          "no-jogo-4-5",
+          "no-jogo-4-6",
+          "no-jogo-4-7",
+          "no-jogo-4-8",
+          "no-jogo-4-9",
+          "no-jogo-4-10",
+          "no-jogo-4-11"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-2",
+            "nodeId": "no-jogo-4-2",
+            "texto": "O rei branco andou, e o peão ficou parado. Isso dá um lance ao rei preto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-3",
+            "nodeId": "no-jogo-4-3",
+            "texto": "Rei em e5, dentro do quadrado de a4 até e8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-11",
+            "nodeId": "no-jogo-4-11",
+            "texto": "O rei preto come a dama nova. Empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5",
+        "titulo": "AULA - Quem joga decide",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-10",
+          "no-jogo-5-11",
+          "no-jogo-5-12",
+          "no-jogo-5-13",
+          "no-jogo-5-14",
+          "no-jogo-5-15",
+          "no-jogo-5-16",
+          "no-jogo-5-17"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-5-0",
+            "nodeId": "no-jogo-5-0",
+            "texto": "A mesma posição, mas agora as Pretas jogam. O quadrado vai de a4 até e8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-1",
+            "nodeId": "no-jogo-5-1",
+            "texto": "O rei preto pisa em e6 e entra no quadrado.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-2",
+            "nodeId": "no-jogo-5-2",
+            "texto": "Rei em f5: fora do quadrado.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-9",
+            "nodeId": "no-jogo-5-9",
+            "texto": "O peão vira dama. Um lance fora do quadrado, e o peão escapou.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-11",
+            "nodeId": "no-jogo-5-11",
+            "texto": "O quadrado encolheu para a5 até d8. O rei continua dentro.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-13",
+            "nodeId": "no-jogo-5-13",
+            "texto": "Rei em c7, dentro do quadrado de a6 até c8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-15",
+            "nodeId": "no-jogo-5-15",
+            "texto": "Rei em b7, colado em a8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-17",
+            "nodeId": "no-jogo-5-17",
+            "texto": "O rei come a dama nova. Empate: na mesma posição, quem joga decide.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5-variante",
+        "titulo": "Comparação: 1... Rf5?",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-5",
+          "no-jogo-5-6",
+          "no-jogo-5-7",
+          "no-jogo-5-8",
+          "no-jogo-5-9"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-2",
+            "nodeId": "no-jogo-5-2",
+            "texto": "Rei em f5: fora do quadrado.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-9",
+            "nodeId": "no-jogo-5-9",
+            "texto": "O peão vira dama. Um lance fora do quadrado, e o peão escapou.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6",
+        "titulo": "AULA - Uma casa ou duas?",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-1",
+          "no-jogo-6-14",
+          "no-jogo-6-15",
+          "no-jogo-6-16",
+          "no-jogo-6-17",
+          "no-jogo-6-18",
+          "no-jogo-6-19",
+          "no-jogo-6-20",
+          "no-jogo-6-21"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-6-0",
+            "nodeId": "no-jogo-6-0",
+            "texto": "Peão em a2, na casa inicial. Ele pode andar uma casa ou duas.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-1",
+            "nodeId": "no-jogo-6-1",
+            "texto": "Duas casas. O quadrado vai de a4 até e8, e o rei em g7 fica fora.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-2",
+            "nodeId": "no-jogo-6-2",
+            "texto": "Uma casa só. O quadrado ficou maior: vai de a3 até f8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-3",
+            "nodeId": "no-jogo-6-3",
+            "texto": "O rei entra no quadrado em f6.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-13",
+            "nodeId": "no-jogo-6-13",
+            "texto": "O rei come a dama nova. Com uma casa só, empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-14",
+            "nodeId": "no-jogo-6-14",
+            "texto": "Rei em f6: ainda fora do quadrado.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-21",
+            "nodeId": "no-jogo-6-21",
+            "texto": "Dama! Na casa inicial, o peão anda duas casas — e o quadrado começa ali.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6-variante",
+        "titulo": "Comparação: 1. a3?",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-2",
+          "no-jogo-6-3",
+          "no-jogo-6-4",
+          "no-jogo-6-5",
+          "no-jogo-6-6",
+          "no-jogo-6-7",
+          "no-jogo-6-8",
+          "no-jogo-6-9",
+          "no-jogo-6-10",
+          "no-jogo-6-11",
+          "no-jogo-6-12",
+          "no-jogo-6-13"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-2",
+            "nodeId": "no-jogo-6-2",
+            "texto": "Uma casa só. O quadrado ficou maior: vai de a3 até f8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-3",
+            "nodeId": "no-jogo-6-3",
+            "texto": "O rei entra no quadrado em f6.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-13",
+            "nodeId": "no-jogo-6-13",
+            "texto": "O rei come a dama nova. Com uma casa só, empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7",
+        "titulo": "AULA - LEMBRE-SE",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-7-0",
+            "nodeId": "no-jogo-7-0",
+            "texto": "LEMBRE-SE:\n\n1. A diagonal do peão até a última fileira fecha o quadrado.\n2. O rei que entra no quadrado alcança o peão.\n3. Peão na casa inicial: conte a partir de duas casas à frente.",
+            "pausa": "manual"
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-capitulo-jogo-8-no-jogo-8-0-black",
+        "titulo": "TREINO 1 - Entre no quadrado",
+        "introducao": "Pretas jogam. O quadrado do peão vai de b5 até e8. Leve o rei para dentro dele.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-8",
+          "nodeId": "no-jogo-8-0"
+        },
+        "ladoAluno": "black",
+        "objetivo": "Pretas jogam. O quadrado do peão vai de b5 até e8. Leve o rei para dentro dele.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-8-0-black",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-1-black",
+                "moves": [
+                  "f4e5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Rei em e5, dentro do quadrado. Agora ele acompanha o peão.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b5b6",
+                      "proximaQuestaoId": "questao-no-jogo-8-4-black",
+                      "texto": "O peão andou. O quadrado agora vai de b6 até d8."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-8-2",
+                "moves": [
+                  "f4f5"
+                ],
+                "julgamento": "erro",
+                "feedback": "Rei em f5, fora do quadrado. O peão anda para b6 e escapa.",
+                "erroId": "erro-no-jogo-8-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-8-3",
+                "moves": [
+                  "f4e4"
+                ],
+                "julgamento": "erro",
+                "feedback": "Rei em e4, abaixo do quadrado. O peão anda e escapa.",
+                "erroId": "erro-no-jogo-8-3",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-8-4-black",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-4"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-5-black",
+                "moves": [
+                  "e5d6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Rei em d6, ainda dentro do quadrado.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b6b7",
+                      "proximaQuestaoId": "questao-no-jogo-8-8-black",
+                      "texto": "O quadrado encolheu: b7, b8, c8 e c7."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-8-6",
+                "moves": [
+                  "e5e6"
+                ],
+                "julgamento": "erro",
+                "feedback": "Rei em e6, fora do quadrado. O peão anda para b7 e escapa.",
+                "erroId": "erro-no-jogo-8-6",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-8-7",
+                "moves": [
+                  "e5d5"
+                ],
+                "julgamento": "erro",
+                "feedback": "Rei em d5, abaixo do quadrado. O peão anda para b7 e escapa.",
+                "erroId": "erro-no-jogo-8-7",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-8-8-black",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-8"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-9-black",
+                "moves": [
+                  "d6c7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Rei em c7, colado na casa b8.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b7b8q",
+                      "proximaQuestaoId": "questao-no-jogo-8-10-black"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-8-10-black",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-10"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-11-black",
+                "moves": [
+                  "c7b8"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei come a dama nova. Empate: você alcançou o peão.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "draw-secured"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-8",
+          "nodeIds": [
+            "no-jogo-8-0",
+            "no-jogo-8-1",
+            "no-jogo-8-4",
+            "no-jogo-8-5",
+            "no-jogo-8-8",
+            "no-jogo-8-9",
+            "no-jogo-8-10",
+            "no-jogo-8-11"
+          ],
+          "hash": "v2-aa724a0d",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-8",
+          "inicioNodeId": "no-jogo-8-0",
+          "objetivo": "Pretas jogam. O quadrado do peão vai de b5 até e8. Leve o rei para dentro dele."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/8/8/1P6/5k2/8/8/7K b - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-8-0-black": {
+              "fen": "8/8/8/1P6/5k2/8/8/7K b - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-0"
+              }
+            },
+            "questao-no-jogo-8-4-black": {
+              "fen": "8/8/1P6/4k3/8/8/8/7K b - - 0 2",
+              "historicoUci": [
+                "f4e5",
+                "b5b6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-4"
+              }
+            },
+            "questao-no-jogo-8-8-black": {
+              "fen": "8/1P6/3k4/8/8/8/8/7K b - - 0 3",
+              "historicoUci": [
+                "f4e5",
+                "b5b6",
+                "e5d6",
+                "b6b7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-8"
+              }
+            },
+            "questao-no-jogo-8-10-black": {
+              "fen": "1Q6/2k5/8/8/8/8/8/7K b - - 0 4",
+              "historicoUci": [
+                "f4e5",
+                "b5b6",
+                "e5d6",
+                "b6b7",
+                "d6c7",
+                "b7b8q"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-10"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "resultado": "draw"
+      },
+      {
+        "id": "treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "titulo": "TREINO 2 - Uma casa ou duas?",
+        "introducao": "Brancas jogam. Leve o peão até a dama, sem deixar o rei preto alcançá-lo.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-9",
+          "nodeId": "no-jogo-9-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Brancas jogam. Leve o peão até a dama, sem deixar o rei preto alcançá-lo.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-9-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-1-white",
+                "moves": [
+                  "b2b4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Duas casas. O rei em h4 ficou fora do quadrado de b4 até f8.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "h4g4",
+                      "proximaQuestaoId": "questao-no-jogo-9-4-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-2",
+                "moves": [
+                  "b2b3"
+                ],
+                "julgamento": "erro",
+                "feedback": "Uma casa só. O rei entra no quadrado em g4 e alcança o peão.",
+                "erroId": "erro-no-jogo-9-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-3",
+                "moves": [
+                  "h1g2"
+                ],
+                "julgamento": "erro",
+                "feedback": "O peão ficou parado. O rei preto entra no quadrado em g4.",
+                "erroId": "erro-no-jogo-9-3",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-4-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-4"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-5-white",
+                "moves": [
+                  "b4b5"
+                ],
+                "julgamento": "correta",
+                "feedback": "O quadrado encolhe, e o rei preto continua fora.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g4f5",
+                      "proximaQuestaoId": "questao-no-jogo-9-6-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-6-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-6"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-7-white",
+                "moves": [
+                  "b5b6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Mais um passo. O rei preto segue um lance atrasado.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f5e6",
+                      "proximaQuestaoId": "questao-no-jogo-9-8-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-8-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-8"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-9-white",
+                "moves": [
+                  "b6b7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Boa. Continue pela linha ensinada.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e6d7",
+                      "proximaQuestaoId": "questao-no-jogo-9-10-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-10-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-10"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-11-white",
+                "moves": [
+                  "b7b8q"
+                ],
+                "julgamento": "correta",
+                "feedback": "Dama! O rei preto não entrou no quadrado a tempo.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "promotion"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-9",
+          "nodeIds": [
+            "no-jogo-9-0",
+            "no-jogo-9-1",
+            "no-jogo-9-4",
+            "no-jogo-9-5",
+            "no-jogo-9-6",
+            "no-jogo-9-7",
+            "no-jogo-9-8",
+            "no-jogo-9-9",
+            "no-jogo-9-10",
+            "no-jogo-9-11"
+          ],
+          "hash": "v2-b5d6451d",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-9",
+          "inicioNodeId": "no-jogo-9-0",
+          "objetivo": "Brancas jogam. Leve o peão até a dama, sem deixar o rei preto alcançá-lo."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/8/8/8/7k/8/1P6/7K w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-9-0-white": {
+              "fen": "8/8/8/8/7k/8/1P6/7K w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-0"
+              }
+            },
+            "questao-no-jogo-9-4-white": {
+              "fen": "8/8/8/8/1P4k1/8/8/7K w - - 1 2",
+              "historicoUci": [
+                "b2b4",
+                "h4g4"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-4"
+              }
+            },
+            "questao-no-jogo-9-6-white": {
+              "fen": "8/8/8/1P3k2/8/8/8/7K w - - 1 3",
+              "historicoUci": [
+                "b2b4",
+                "h4g4",
+                "b4b5",
+                "g4f5"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-6"
+              }
+            },
+            "questao-no-jogo-9-8-white": {
+              "fen": "8/8/1P2k3/8/8/8/8/7K w - - 1 4",
+              "historicoUci": [
+                "b2b4",
+                "h4g4",
+                "b4b5",
+                "g4f5",
+                "b5b6",
+                "f5e6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-8"
+              }
+            },
+            "questao-no-jogo-9-10-white": {
+              "fen": "8/1P1k4/8/8/8/8/8/7K w - - 1 5",
+              "historicoUci": [
+                "b2b4",
+                "h4g4",
+                "b4b5",
+                "g4f5",
+                "b5b6",
+                "f5e6",
+                "b6b7",
+                "e6d7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-10"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      },
+      {
+        "id": "treino-capitulo-jogo-10-no-jogo-10-0-white",
+        "titulo": "TREINO 3 - Agora o peão é preto",
+        "introducao": "Agora o peão é preto e desce até g1. Brancas jogam. Alcance o peão com o seu rei.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-10",
+          "nodeId": "no-jogo-10-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Agora o peão é preto e desce até g1. Brancas jogam. Alcance o peão com o seu rei.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-10-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-1-white",
+                "moves": [
+                  "b6c5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Rei em c5, dentro do quadrado de g5 até c1.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g5g4",
+                      "proximaQuestaoId": "questao-no-jogo-10-4-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-2",
+                "moves": [
+                  "b6c6"
+                ],
+                "julgamento": "erro",
+                "feedback": "Rei em c6, acima do quadrado. O peão desce e vira dama.",
+                "erroId": "erro-no-jogo-10-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-3",
+                "moves": [
+                  "b6b5"
+                ],
+                "julgamento": "erro",
+                "feedback": "Rei em b5, fora do quadrado. O peão desce e vira dama.",
+                "erroId": "erro-no-jogo-10-3",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-4-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-4"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-5-white",
+                "moves": [
+                  "c5d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "O quadrado encolheu, e o rei continua dentro.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g4g3",
+                      "proximaQuestaoId": "questao-no-jogo-10-7-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-6",
+                "moves": [
+                  "c5d5"
+                ],
+                "julgamento": "erro",
+                "feedback": "Rei em d5, acima do quadrado. O peão desce e vira dama.",
+                "erroId": "erro-no-jogo-10-6",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-7-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-7"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-8-white",
+                "moves": [
+                  "d4e3"
+                ],
+                "julgamento": "correta",
+                "feedback": "Boa. Continue pela linha ensinada.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g3g2",
+                      "proximaQuestaoId": "questao-no-jogo-10-9-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-9-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-9"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-10-white",
+                "moves": [
+                  "e3f2"
+                ],
+                "julgamento": "correta",
+                "feedback": "Boa. Continue pela linha ensinada.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g2g1q",
+                      "proximaQuestaoId": "questao-no-jogo-10-11-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-11-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-11"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-12-white",
+                "moves": [
+                  "f2g1"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei come a dama nova. Empate: você alcançou o peão.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "draw-secured"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-10",
+          "nodeIds": [
+            "no-jogo-10-0",
+            "no-jogo-10-1",
+            "no-jogo-10-4",
+            "no-jogo-10-5",
+            "no-jogo-10-7",
+            "no-jogo-10-8",
+            "no-jogo-10-9",
+            "no-jogo-10-10",
+            "no-jogo-10-11",
+            "no-jogo-10-12"
+          ],
+          "hash": "v2-d1e91667",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-10",
+          "inicioNodeId": "no-jogo-10-0",
+          "objetivo": "Agora o peão é preto e desce até g1. Brancas jogam. Alcance o peão com o seu rei."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/8/1K6/6p1/8/8/8/k7 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-10-0-white": {
+              "fen": "8/8/1K6/6p1/8/8/8/k7 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-0"
+              }
+            },
+            "questao-no-jogo-10-4-white": {
+              "fen": "8/8/8/2K5/6p1/8/8/k7 w - - 0 2",
+              "historicoUci": [
+                "b6c5",
+                "g5g4"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-4"
+              }
+            },
+            "questao-no-jogo-10-7-white": {
+              "fen": "8/8/8/8/3K4/6p1/8/k7 w - - 0 3",
+              "historicoUci": [
+                "b6c5",
+                "g5g4",
+                "c5d4",
+                "g4g3"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-7"
+              }
+            },
+            "questao-no-jogo-10-9-white": {
+              "fen": "8/8/8/8/8/4K3/6p1/k7 w - - 0 4",
+              "historicoUci": [
+                "b6c5",
+                "g5g4",
+                "c5d4",
+                "g4g3",
+                "d4e3",
+                "g3g2"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-9"
+              }
+            },
+            "questao-no-jogo-10-11-white": {
+              "fen": "8/8/8/8/8/8/5K2/k5q1 w - - 0 5",
+              "historicoUci": [
+                "b6c5",
+                "g5g4",
+                "c5d4",
+                "g4g3",
+                "d4e3",
+                "g3g2",
+                "e3f2",
+                "g2g1q"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-11"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "resultado": "draw"
+      }
+    ],
+    "praticas": [
+      {
+        "id": "pratica-pratica-promova-o-peao",
+        "titulo": "PRÁTICA - Promova o peão",
+        "positionId": "pos-n1-square-1",
+        "ladoAluno": "white",
+        "objetivo": "win",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      },
+      {
+        "id": "pratica-pratica-alcance-o-peao",
+        "titulo": "PRÁTICA - Alcance o peão",
+        "positionId": "pos-n1-square-2",
+        "ladoAluno": "black",
+        "objetivo": "draw",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-introducao-estudo-1",
+        "tipo": "introducao",
+        "entidadeId": "introducao-estudo-1"
+      },
+      {
+        "id": "etapa-capitulo-jogo-4",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-4"
+      },
+      {
+        "id": "etapa-capitulo-jogo-4-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-4-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-8-no-jogo-8-0-black",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-8-no-jogo-8-0-black"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-9-no-jogo-9-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-10-no-jogo-10-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-10-no-jogo-10-0-white"
+      },
+      {
+        "id": "etapa-pratica-pratica-promova-o-peao",
+        "tipo": "pratica",
+        "entidadeId": "pratica-pratica-promova-o-peao"
+      },
+      {
+        "id": "etapa-pratica-pratica-alcance-o-peao",
+        "tipo": "pratica",
+        "entidadeId": "pratica-pratica-alcance-o-peao"
+      }
+    ]
+  },
+  "posicoes": {
+    "pos-n1-square-1": {
+      "id": "pos-n1-square-1",
+      "fen": "8/8/8/8/8/8/2P4k/K7 w - - 0 1",
+      "expectedResult": "win-white",
+      "tags": [
+        "PRÁTICA - Promova o peão"
+      ],
+      "status": "candidate",
+      "provenance": {
+        "externalHumanSource": "clubexadrezguabiruba",
+        "bibliographicSource": "Aula 07 Regra do Quadrado, https://lichess.org/study/TI5KNg6U",
+        "originalGame": "não se aplica",
+        "authorComposer": "clubexadrezguabiruba",
+        "license": "não informada — conferir antes de aprovar",
+        "editionFile": null,
+        "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+        "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+        "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+      }
+    },
+    "pos-n1-square-2": {
+      "id": "pos-n1-square-2",
+      "fen": "8/8/8/8/3P4/7k/8/K7 b - - 0 1",
+      "expectedResult": "draw",
+      "tags": [
+        "PRÁTICA - Alcance o peão"
+      ],
+      "status": "candidate",
+      "provenance": {
+        "externalHumanSource": "clubexadrezguabiruba",
+        "bibliographicSource": "Aula 07 Regra do Quadrado, https://lichess.org/study/TI5KNg6U",
+        "originalGame": "não se aplica",
+        "authorComposer": "clubexadrezguabiruba",
+        "license": "não informada — conferir antes de aprovar",
+        "editionFile": null,
+        "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+        "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+        "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+      }
+    }
+  },
+  "revisoes": {
+    "treino-capitulo-jogo-8-no-jogo-8-0-black": {
+      "tipo": "treino",
+      "revisao": "ar_8dfb82153bd50df567fa4215117b951efeb4da0bce33079d2317afd6707580e1"
+    },
+    "treino-capitulo-jogo-9-no-jogo-9-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_c29e091823145c764b85387258ff6acec5668a540ddb9c24f7a5401e35a05c1e"
+    },
+    "treino-capitulo-jogo-10-no-jogo-10-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_2ba504438fd52db4531a4e9e8ae9e2412453a7820404e50d1d6ce9d82c4f13e1"
+    },
+    "pratica-pratica-promova-o-peao": {
+      "tipo": "pratica",
+      "revisao": "ar_ffb5aa1ac4e54db761ca03e472835779bfda68ccfbc367243fde983f2656a38a"
+    },
+    "pratica-pratica-alcance-o-peao": {
+      "tipo": "pratica",
+      "revisao": "ar_8081a2d3d7b2704bcf8fb982cc65cba21f4364a9649ed7d3f76ddb209635199d"
+    }
+  },
+  "manifesto": {
+    "aulaId": "N1-SQUARE",
+    "aula": "2af8a79d83fe8a28fe2d8318d5f1bb644d5b15d63bd6d4204fc678e275d2705e",
+    "posicoes": {
+      "pos-n1-square-1": "c29f768af7972a23c2e5d6c4ab16ce3a98ad864a097012e1561b4aa3f6576419",
+      "pos-n1-square-2": "baa600f7e75ecf2dc968f8725aa4ba18a98a83346f438a2d0851c099e05fb0bf"
+    },
+    "revisoes": "7c62f01cc06de416a53a36c31674bdd484ae41b32af322df0bfbec6ee22e7553",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

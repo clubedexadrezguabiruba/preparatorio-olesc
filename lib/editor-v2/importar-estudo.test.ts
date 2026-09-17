@@ -60,7 +60,8 @@ test("importado como sugerido: a AULA DIAGNÓSTICO entra como capítulo de posi�
   const plano = planejarEstudo(vazia(), leitura, { destinos: {}, revisao }, {});
   assert.ok(plano.ok, !plano.ok ? plano.mensagem : "");
   const aula = executarComando(vazia(), { tipo: "IMPORTAR_ESTUDO", plano: plano.plano }, {});
-  assert.deepEqual(aula.fluxo.map((e) => e.tipo), ["introducao", "capitulo", "capitulo", "capitulo", "treino", "treino", "treino", "treino"]);
+  // Os dois Qg6?? comentados viram capítulos de comparação, logo depois das aulas deles (18/9/2026).
+  assert.deepEqual(aula.fluxo.map((e) => e.tipo), ["introducao", "capitulo", "capitulo", "capitulo", "capitulo", "capitulo", "treino", "treino", "treino", "treino"]);
   assert.equal(aula.introducoes[0].quadros.length, 1);
   const diagnostico = aula.capitulos.find((c) => c.titulo === "AULA DIAGNÓSTICO - Como você começaria?");
   assert.ok(diagnostico, "o 01 virou capítulo");
@@ -91,14 +92,15 @@ test("aplicado com o 01 como introdução: 2 quadros, 2 capítulos com Qg6??, 4 
   assert.deepEqual(plano.plano.praticas, [{ numero: 9, titulo: "PRÁTICA LIVRE - Vença sem afogar", fen: "8/8/8/8/4k3/8/8/3QK3 w - - 0 1", lado: "white" }]);
   const aula = executarComando(vazia(), { tipo: "IMPORTAR_ESTUDO", plano: plano.plano }, {});
 
-  assert.deepEqual(aula.fluxo.map((e) => e.tipo), ["introducao", "capitulo", "capitulo", "treino", "treino", "treino", "treino"]);
+  assert.deepEqual(aula.fluxo.map((e) => e.tipo), ["introducao", "capitulo", "capitulo", "capitulo", "capitulo", "treino", "treino", "treino", "treino"]);
+  assert.deepEqual(aula.capitulos.map((c) => c.titulo), ["AULA EXPLICADA - O L e a caixa", "Comparação: 8. Dg6??", "AULA EXPLICADA - O método completo", "Comparação: 11. Dg6??"]);
   const intro = aula.introducoes[0];
   assert.equal(intro.quadros.length, 2);
   assert.match(intro.quadros[0].texto, /relógio\.\n\nVocê vai aprender|relógio\.\nVocê vai aprender/, "os parágrafos continuam parágrafos");
   assert.equal(intro.quadros[0].posicao.tipo, "referencia", "a posição do quadro aponta o capítulo 03, que tem a mesma");
   assert.equal(passosDaIntroducao(aula, intro, {})[0].fen, "8/8/8/8/4k3/8/8/3QK3 w - - 0 1");
 
-  for (const [i, lance] of [[0, "g5g6"], [1, "g4g6"]] as const) {
+  for (const [i, lance] of [[0, "g5g6"], [2, "g4g6"]] as const) {
     const analise = aula.analises.find((a) => a.id === aula.capitulos[i].analiseId)!;
     const variante = Object.values(analise.nos).find((no) => no.uci === lance && no.nags?.includes(4));
     assert.ok(variante, `capítulo ${i + 2}: a variante Qg6?? está na árvore`);
@@ -163,4 +165,34 @@ test("um segundo estudo, ou um capítulo avulso por link, entra na aula que já 
   const repetido = planejarEstudo(aula, lerEstudo(PGN, idsDaAulaV2(aula)), { destinos: { 9: "fora" }, revisao }, {});
   assert.equal(repetido.ok, false);
   assert.match(!repetido.ok ? repetido.mensagem : "", /já ter sido importado/);
+});
+
+test("a variante que perde, com símbolo ou comentário, vira capítulo de comparação logo depois da aula (18/9/2026)", () => {
+  const pgn = `[Event "E"]\n[StudyName "Oposição"]\n[ChapterName "01 - AULA A oposição"]\n[FEN "3k4/8/8/3PK3/8/8/8/8 w - - 0 1"]\n[SetUp "1"]\n\n`
+    + `{ Brancas jogam. } 1. Kd6! { Oposição. } ( 1. Ke6? { Agora as Pretas tomam a oposição. } 1... Ke8 { Empate. } ) ( 1. Kf6 ) 1... Ke8 2. Kc7 *\n\n`;
+  const plano = planejarEstudo(vazia(), lerEstudo(pgn), { destinos: {}, revisao }, {});
+  assert.ok(plano.ok, !plano.ok ? plano.mensagem : "");
+  const aula = executarComando(vazia(), { tipo: "IMPORTAR_ESTUDO", plano: plano.plano }, {});
+  assert.deepEqual(aula.fluxo.map((e) => e.tipo), ["capitulo", "capitulo"], "a variante sem símbolo e sem comentário (1. Kf6) não vira capítulo");
+  const [aulaPrincipal, comparacao] = aula.fluxo.map((e) => aula.capitulos.find((c) => c.id === e.entidadeId)!);
+  assert.equal(aulaPrincipal.titulo, "AULA A oposição");
+  assert.equal(comparacao.titulo, "Comparação: 1. Re6?", "em português: o rei é R");
+  assert.equal(comparacao.caminho.length, 2);
+  assert.deepEqual(comparacao.narracoes.map((n) => n.texto), ["Agora as Pretas tomam a oposição.", "Empate."], "só os comentários da variante, sem repetir os da aula");
+  const previa = previaDaAula(aula, {});
+  assert.match(previa.trechos[1].comparacao?.texto ?? "", /^Voltamos/);
+  assert.ok(previa.trechos[1].passos.some((p) => p.retorno), "o aluno vê o passo de retorno");
+  assert.deepEqual(problemasDaAulaV2(aula).filter((p) => p.severidade === "erro"), []);
+});
+
+test("[Result \"1/2-1/2\"] declara empate: o treino cobra segurar o empate, e a prática também (18/9/2026)", () => {
+  const cap = (nome: string, extra: string, corpo: string) => `[Event "E"]\n[StudyName "S"]\n[ChapterName "${nome}"]\n[FEN "3k4/8/3P4/3K4/8/8/8/8 b - - 0 1"]\n[SetUp "1"]\n[Orientation "black"]\n${extra}\n\n${corpo} *\n\n`;
+  const pgn = cap("01 - TREINO - Feche a passagem", '[White "Brancas"]\n[Black "Aluno - Pretas"]\n[ChapterMode "gamebook"]\n[Result "1/2-1/2"]', "1... Kc8 2. Kc6 Kd8")
+    + cap("02 - TREINO - Outra", '[White "Brancas"]\n[Black "Aluno - Pretas"]\n[ChapterMode "gamebook"]', "1... Kc8 2. Kc6 Kd8")
+    + cap("03 - PRÁTICA - Empate", '[White "Engine"]\n[Black "Aluno - Pretas"]\n[Result "1/2-1/2"]', "{ Jogue. }");
+  const leitura = lerEstudo(pgn);
+  const plano = planejarEstudo(vazia(), leitura, { destinos: {}, revisao }, {});
+  assert.ok(plano.ok, !plano.ok ? plano.mensagem : "");
+  assert.deepEqual(plano.plano.treinos.map((t) => t.resultado), ["draw", undefined]);
+  assert.deepEqual(plano.plano.praticas.map((p) => p.resultado), ["draw"]);
 });

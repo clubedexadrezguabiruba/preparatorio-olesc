@@ -137,7 +137,9 @@ test("parada: a dica não aparece antes de o aluno tentar; o lance errado traz a
 test("ramo que sai depois de uma parada também diz «Voltamos a…» (C12, 9...Be7)", () => {
   const c = aula(cursos[0][1], "C");
   const trecho = previaDaAula(c, {}).trechos.find((t) => t.capituloId === "cap-c12-ramo-1")!;
-  assert.match(trecho.comparacao?.texto ?? "", /^Voltamos a 9\. Nc3\./);
+  // Notação sempre em português no site (decisão do Doug, 17/9/2026): Nc3 vira Cc3 aqui, mas não no
+  // título do capítulo — esse é texto livre do professor, não SAN gerado.
+  assert.match(trecho.comparacao?.texto ?? "", /^Voltamos a 9\. Cc3\./);
   assert.ok(trecho.passos.some((p) => p.retorno));
 });
 

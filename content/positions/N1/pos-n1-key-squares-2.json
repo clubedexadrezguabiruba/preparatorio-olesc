@@ -1,0 +1,20 @@
+{
+  "id": "pos-n1-key-squares-2",
+  "fen": "8/3k4/8/3K4/3P4/8/8/8 b - - 0 1",
+  "expectedResult": "win-white",
+  "tags": [
+    "PRÁTICA - Transfira a ideia"
+  ],
+  "status": "candidate",
+  "provenance": {
+    "externalHumanSource": "clubexadrezguabiruba",
+    "bibliographicSource": "Aula 09 Casas-Chave; posições do Silman, https://lichess.org/study/T81d9Yqq",
+    "originalGame": "não se aplica",
+    "authorComposer": "clubexadrezguabiruba",
+    "license": "não informada — conferir antes de aprovar",
+    "editionFile": null,
+    "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+    "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+    "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+  }
+}

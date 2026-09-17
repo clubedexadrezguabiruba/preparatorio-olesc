@@ -1,0 +1,2761 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-d5bcb94eabfd69db",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "N1-KEY-SQUARES",
+    "titulo": "Casas-chave",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "classe": "D",
+      "estadoEditorial": "rascunho"
+    },
+    "proveniencia": [
+      {
+        "positionId": "pos-n1-key-squares-1",
+        "conteudoHash": "caa2edc3b9a024c8e4bffe9718cc97d0f2554d3bfb28c2761131123a7c2e2c72",
+        "estado": "candidate"
+      },
+      {
+        "positionId": "pos-n1-key-squares-2",
+        "conteudoHash": "d37de607f15e47ff00a79a4d7f222ed80b4a25cab970442950930db2de679211",
+        "estado": "candidate"
+      }
+    ],
+    "excecoes": [],
+    "catalogo": {
+      "erros": [
+        {
+          "id": "erro-no-jogo-8-4",
+          "nome": "O peão andou, e as casas-chave subiram para b…",
+          "julgamento": "perde-resultado",
+          "texto": "O peão andou, e as casas-chave subiram para b6, c6 e d6. O rei preto chega nelas: empate."
+        },
+        {
+          "id": "erro-no-jogo-9-2",
+          "nome": "O peão correu, e as casas-chave subiram para…",
+          "julgamento": "perde-resultado",
+          "texto": "O peão correu, e as casas-chave subiram para a 7ª e a 8ª fileira. O rei branco ficou fora delas: empate."
+        },
+        {
+          "id": "erro-no-jogo-10-2",
+          "nome": "O rei foi para a frente do peão.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei foi para a frente do peão. O rei preto chega a d6 a tempo e fecha a passagem: empate."
+        },
+        {
+          "id": "erro-no-jogo-10-5",
+          "nome": "De frente para o rei preto, e com a vez: ele…",
+          "julgamento": "perde-resultado",
+          "texto": "De frente para o rei preto, e com a vez: ele vai para d6 e segura. Empate."
+        },
+        {
+          "id": "erro-no-jogo-10-8",
+          "nome": "O peão andou cedo.",
+          "julgamento": "perde-resultado",
+          "texto": "O peão andou cedo. Com ele em e5, o seu rei fica longe das casas-chave: empate."
+        },
+        {
+          "id": "erro-no-jogo-10-11",
+          "nome": "O rei ficou na frente do peão, fora das casas…",
+          "julgamento": "perde-resultado",
+          "texto": "O rei ficou na frente do peão, fora das casas-chave. O rei preto vai para e7 e segura: empate."
+        }
+      ],
+      "mensagensPadrao": {
+        "vitoriaForaDoMetodo": "Este lance funciona, mas não é o caminho ensinado.",
+        "perdeResultado": "Este lance perde o resultado que a posição permitia.",
+        "alternativaDoMetodo": "Boa alternativa. Continue pela linha ensinada."
+      }
+    },
+    "analises": [
+      {
+        "id": "analise-jogo-4",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/8/3k4/8/3K4/3P4/8 b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 09 Casas-Chave; posições do Silman",
+            "link": "https://lichess.org/study/T81d9Yqq",
+            "fenRevisada": "8/8/8/3k4/8/3K4/3P4/8 b - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.541Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 9 - Casas-chave",
+            "Site": "https://lichess.org/study/T81d9Yqq",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Casas-chave: onde o rei tem de chegar",
+            "ChapterName": "01 - AULA - Duas fileiras à frente do peão",
+            "FEN": "8/8/8/3k4/8/3K4/3P4/8 b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-4-0",
+        "nos": {
+          "no-jogo-4-0": {
+            "id": "no-jogo-4-0",
+            "filhos": [
+              "no-jogo-4-1"
+            ],
+            "comentario": "A posição da aula de oposição. As Pretas jogam, e o rei preto tem de sair da frente."
+          },
+          "no-jogo-4-1": {
+            "id": "no-jogo-4-1",
+            "uci": "d5e5",
+            "filhos": [
+              "no-jogo-4-2"
+            ],
+            "comentario": "O rei preto foi para e5. A casa c4 ficou livre.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gc4]"
+            ]
+          },
+          "no-jogo-4-2": {
+            "id": "no-jogo-4-2",
+            "uci": "d3c4",
+            "filhos": [
+              "no-jogo-4-3"
+            ],
+            "comentario": "O rei branco entra em c4, duas fileiras à frente do peão.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gc4]"
+            ]
+          },
+          "no-jogo-4-3": {
+            "id": "no-jogo-4-3",
+            "uci": "e5d6",
+            "filhos": [
+              "no-jogo-4-4",
+              "no-jogo-4-5"
+            ],
+            "comentario": "O rei preto volta para a frente do peão."
+          },
+          "no-jogo-4-4": {
+            "id": "no-jogo-4-4",
+            "uci": "c4d4",
+            "filhos": [
+              "no-jogo-4-9"
+            ],
+            "comentario": "O rei passa para d4, também duas fileiras à frente. O peão continua seguro.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gd4]"
+            ]
+          },
+          "no-jogo-4-5": {
+            "id": "no-jogo-4-5",
+            "uci": "d2d4",
+            "filhos": [
+              "no-jogo-4-6"
+            ],
+            "comentario": "O peão andou antes da hora. Agora o rei branco não está mais duas fileiras à frente dele.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c4",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rc4]"
+            ]
+          },
+          "no-jogo-4-6": {
+            "id": "no-jogo-4-6",
+            "uci": "d6c6",
+            "filhos": [
+              "no-jogo-4-7"
+            ],
+            "comentario": "O rei preto fica de frente para o rei branco.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rc6]"
+            ]
+          },
+          "no-jogo-4-7": {
+            "id": "no-jogo-4-7",
+            "uci": "d4d5",
+            "filhos": [
+              "no-jogo-4-8"
+            ]
+          },
+          "no-jogo-4-8": {
+            "id": "no-jogo-4-8",
+            "uci": "c6d6",
+            "filhos": [],
+            "comentario": "O rei preto fica na frente do peão, e o peão não passa. Empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rd6]"
+            ]
+          },
+          "no-jogo-4-9": {
+            "id": "no-jogo-4-9",
+            "uci": "d6e6",
+            "filhos": [],
+            "comentario": "As casas c4, d4 e e4 têm nome: casas-chave. Com o rei numa delas, o peão ganha.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e4",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc4,Yd4,Ye4]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-5",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/3k4/8/3K4/8/3P4/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 09 Casas-Chave; posições do Silman",
+            "link": "https://lichess.org/study/T81d9Yqq",
+            "fenRevisada": "8/8/3k4/8/3K4/8/3P4/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.541Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 9 - Casas-chave",
+            "Site": "https://lichess.org/study/T81d9Yqq",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Casas-chave: onde o rei tem de chegar",
+            "ChapterName": "02 - AULA - O peão anda, as casas-chave andam",
+            "FEN": "8/8/3k4/8/3K4/8/3P4/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-5-0",
+        "nos": {
+          "no-jogo-5-0": {
+            "id": "no-jogo-5-0",
+            "filhos": [
+              "no-jogo-5-1"
+            ],
+            "comentario": "Peão em d2: casas-chave c4, d4 e e4. O rei já está em d4, e agora as Brancas jogam.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e4",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc4,Yd4,Ye4]"
+            ]
+          },
+          "no-jogo-5-1": {
+            "id": "no-jogo-5-1",
+            "uci": "d2d3",
+            "filhos": [
+              "no-jogo-5-2"
+            ],
+            "comentario": "O peão anda uma casa, e as casas-chave andam junto: agora são c5, d5 e e5.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e5",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc5,Yd5,Ye5]"
+            ]
+          },
+          "no-jogo-5-2": {
+            "id": "no-jogo-5-2",
+            "uci": "d6e6",
+            "filhos": [
+              "no-jogo-5-3"
+            ]
+          },
+          "no-jogo-5-3": {
+            "id": "no-jogo-5-3",
+            "uci": "d4c5",
+            "filhos": [
+              "no-jogo-5-4"
+            ],
+            "comentario": "O rei entra em c5, uma das casas-chave novas.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e5",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc5,Yd5,Ye5]"
+            ]
+          },
+          "no-jogo-5-4": {
+            "id": "no-jogo-5-4",
+            "uci": "e6d7",
+            "filhos": [
+              "no-jogo-5-5"
+            ]
+          },
+          "no-jogo-5-5": {
+            "id": "no-jogo-5-5",
+            "uci": "c5d5",
+            "filhos": [
+              "no-jogo-5-6"
+            ],
+            "comentario": "De c5 para d5: o rei continua numa casa-chave.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e5",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc5,Yd5,Ye5]"
+            ]
+          },
+          "no-jogo-5-6": {
+            "id": "no-jogo-5-6",
+            "uci": "d7c7",
+            "filhos": [
+              "no-jogo-5-7"
+            ]
+          },
+          "no-jogo-5-7": {
+            "id": "no-jogo-5-7",
+            "uci": "d5e6",
+            "filhos": [
+              "no-jogo-5-8"
+            ],
+            "comentario": "O rei vai mais à frente, para e6. O rei preto não chega ao peão.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ge6]"
+            ]
+          },
+          "no-jogo-5-8": {
+            "id": "no-jogo-5-8",
+            "uci": "c7d8",
+            "filhos": [
+              "no-jogo-5-9"
+            ]
+          },
+          "no-jogo-5-9": {
+            "id": "no-jogo-5-9",
+            "uci": "d3d4",
+            "filhos": [
+              "no-jogo-5-10"
+            ],
+            "comentario": "Agora o peão anda. Com ele em d4, as casas-chave são c6, d6 e e6, e o rei já está em e6.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc6,Yd6,Ye6]"
+            ]
+          },
+          "no-jogo-5-10": {
+            "id": "no-jogo-5-10",
+            "uci": "d8e8",
+            "filhos": [
+              "no-jogo-5-11"
+            ]
+          },
+          "no-jogo-5-11": {
+            "id": "no-jogo-5-11",
+            "uci": "d4d5",
+            "filhos": [
+              "no-jogo-5-12"
+            ],
+            "comentario": "Peão na 5ª fileira: são seis casas-chave, c6, d6, e6, c7, d7 e e7.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc6,Yd6,Ye6,Yc7,Yd7,Ye7]"
+            ]
+          },
+          "no-jogo-5-12": {
+            "id": "no-jogo-5-12",
+            "uci": "e8d8",
+            "filhos": [
+              "no-jogo-5-13",
+              "no-jogo-5-14"
+            ]
+          },
+          "no-jogo-5-13": {
+            "id": "no-jogo-5-13",
+            "uci": "e6d6",
+            "filhos": [
+              "no-jogo-5-19"
+            ],
+            "comentario": "O rei vai para d6 e continua numa casa-chave.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gd6]"
+            ]
+          },
+          "no-jogo-5-14": {
+            "id": "no-jogo-5-14",
+            "uci": "d5d6",
+            "filhos": [
+              "no-jogo-5-15"
+            ],
+            "comentario": "O peão correu. Com ele em d6, as casas-chave sobem para c7, d7, e7, c8, d8 e e8.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc7,Yd7,Ye7,Yc8,Yd8,Ye8]"
+            ]
+          },
+          "no-jogo-5-15": {
+            "id": "no-jogo-5-15",
+            "uci": "d8e8",
+            "filhos": [
+              "no-jogo-5-16"
+            ],
+            "comentario": "O rei preto fica na frente, e o rei branco em e6 está fora das casas-chave.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re6]"
+            ]
+          },
+          "no-jogo-5-16": {
+            "id": "no-jogo-5-16",
+            "uci": "d6d7",
+            "filhos": [
+              "no-jogo-5-17"
+            ]
+          },
+          "no-jogo-5-17": {
+            "id": "no-jogo-5-17",
+            "uci": "e8d8",
+            "filhos": [
+              "no-jogo-5-18"
+            ]
+          },
+          "no-jogo-5-18": {
+            "id": "no-jogo-5-18",
+            "uci": "e6d6",
+            "filhos": [],
+            "comentario": "Afogamento: o rei preto não está em xeque e não tem lance. Empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rd8]"
+            ]
+          },
+          "no-jogo-5-19": {
+            "id": "no-jogo-5-19",
+            "uci": "d8e8",
+            "filhos": [
+              "no-jogo-5-20"
+            ]
+          },
+          "no-jogo-5-20": {
+            "id": "no-jogo-5-20",
+            "uci": "d6c7",
+            "filhos": [
+              "no-jogo-5-21"
+            ],
+            "comentario": "c7 também é casa-chave. O caminho do peão até d8 está livre.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d5",
+                  "para": "d8",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "c7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gc7]",
+              "[%cal Gd5d8]"
+            ]
+          },
+          "no-jogo-5-21": {
+            "id": "no-jogo-5-21",
+            "uci": "e8e7",
+            "filhos": [
+              "no-jogo-5-22"
+            ]
+          },
+          "no-jogo-5-22": {
+            "id": "no-jogo-5-22",
+            "uci": "d5d6",
+            "filhos": [
+              "no-jogo-5-23"
+            ]
+          },
+          "no-jogo-5-23": {
+            "id": "no-jogo-5-23",
+            "uci": "e7e6",
+            "filhos": [
+              "no-jogo-5-24"
+            ]
+          },
+          "no-jogo-5-24": {
+            "id": "no-jogo-5-24",
+            "uci": "d6d7",
+            "filhos": [
+              "no-jogo-5-25"
+            ]
+          },
+          "no-jogo-5-25": {
+            "id": "no-jogo-5-25",
+            "uci": "e6e7",
+            "filhos": [
+              "no-jogo-5-26"
+            ]
+          },
+          "no-jogo-5-26": {
+            "id": "no-jogo-5-26",
+            "uci": "d7d8q",
+            "filhos": [],
+            "comentario": "O peão vira dama."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-6",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "7k/8/8/8/3P4/8/8/5K2 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 09 Casas-Chave; posições do Silman",
+            "link": "https://lichess.org/study/T81d9Yqq",
+            "fenRevisada": "7k/8/8/8/3P4/8/8/5K2 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.541Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 9 - Casas-chave",
+            "Site": "https://lichess.org/study/T81d9Yqq",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Casas-chave: onde o rei tem de chegar",
+            "ChapterName": "03 - AULA - O caminho até a casa-chave",
+            "FEN": "7k/8/8/8/3P4/8/8/5K2 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-6-0",
+        "nos": {
+          "no-jogo-6-0": {
+            "id": "no-jogo-6-0",
+            "filhos": [
+              "no-jogo-6-1",
+              "no-jogo-6-2"
+            ],
+            "comentario": "Peão em d4: casas-chave c6, d6 e e6. O rei branco está longe, e o rei preto vem para e6.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc6,Yd6,Ye6]"
+            ]
+          },
+          "no-jogo-6-1": {
+            "id": "no-jogo-6-1",
+            "uci": "f1e2",
+            "filhos": [
+              "no-jogo-6-8"
+            ],
+            "comentario": "O rei sobe por e2 e vai para c4 e c5, o lado longe do rei preto.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e2",
+                  "para": "d3",
+                  "cor": "verde"
+                },
+                {
+                  "de": "d3",
+                  "para": "c4",
+                  "cor": "verde"
+                },
+                {
+                  "de": "c4",
+                  "para": "c5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge2d3,Gd3c4,Gc4c5]"
+            ]
+          },
+          "no-jogo-6-2": {
+            "id": "no-jogo-6-2",
+            "uci": "f1f2",
+            "filhos": [
+              "no-jogo-6-3"
+            ],
+            "comentario": "O rei vai pelo caminho mais curto, direto na direção do rei preto.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "f2",
+                  "para": "e3",
+                  "cor": "vermelho"
+                },
+                {
+                  "de": "e3",
+                  "para": "e4",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Rf2e3,Re3e4]"
+            ]
+          },
+          "no-jogo-6-3": {
+            "id": "no-jogo-6-3",
+            "uci": "h8g7",
+            "filhos": [
+              "no-jogo-6-4"
+            ]
+          },
+          "no-jogo-6-4": {
+            "id": "no-jogo-6-4",
+            "uci": "f2e3",
+            "filhos": [
+              "no-jogo-6-5"
+            ]
+          },
+          "no-jogo-6-5": {
+            "id": "no-jogo-6-5",
+            "uci": "g7f6",
+            "filhos": [
+              "no-jogo-6-6"
+            ]
+          },
+          "no-jogo-6-6": {
+            "id": "no-jogo-6-6",
+            "uci": "e3e4",
+            "filhos": [
+              "no-jogo-6-7"
+            ]
+          },
+          "no-jogo-6-7": {
+            "id": "no-jogo-6-7",
+            "uci": "f6e6",
+            "filhos": [],
+            "comentario": "O rei preto chegou a e6 primeiro e ficou de frente para o rei branco. Empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re6]"
+            ]
+          },
+          "no-jogo-6-8": {
+            "id": "no-jogo-6-8",
+            "uci": "h8g7",
+            "filhos": [
+              "no-jogo-6-9"
+            ]
+          },
+          "no-jogo-6-9": {
+            "id": "no-jogo-6-9",
+            "uci": "e2d3",
+            "filhos": [
+              "no-jogo-6-10"
+            ],
+            "comentario": "O rei segue para c4.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d3",
+                  "para": "c4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd3c4]"
+            ]
+          },
+          "no-jogo-6-10": {
+            "id": "no-jogo-6-10",
+            "uci": "g7f6",
+            "filhos": [
+              "no-jogo-6-11"
+            ]
+          },
+          "no-jogo-6-11": {
+            "id": "no-jogo-6-11",
+            "uci": "d3c4",
+            "filhos": [
+              "no-jogo-6-12"
+            ],
+            "comentario": "Agora para c5, ao lado das casas-chave.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "c4",
+                  "para": "c5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gc4c5]"
+            ]
+          },
+          "no-jogo-6-12": {
+            "id": "no-jogo-6-12",
+            "uci": "f6e6",
+            "filhos": [
+              "no-jogo-6-13"
+            ]
+          },
+          "no-jogo-6-13": {
+            "id": "no-jogo-6-13",
+            "uci": "c4c5",
+            "filhos": [
+              "no-jogo-6-14"
+            ],
+            "comentario": "O rei preto guarda d6, mas não consegue guardar c6 ao mesmo tempo.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc6,Yd6]"
+            ]
+          },
+          "no-jogo-6-14": {
+            "id": "no-jogo-6-14",
+            "uci": "e6d7",
+            "filhos": [
+              "no-jogo-6-15"
+            ]
+          },
+          "no-jogo-6-15": {
+            "id": "no-jogo-6-15",
+            "uci": "c5d5",
+            "filhos": [
+              "no-jogo-6-16"
+            ],
+            "comentario": "De frente para o rei preto, e é ele quem tem de sair.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-6-16": {
+            "id": "no-jogo-6-16",
+            "uci": "d7c7",
+            "filhos": [
+              "no-jogo-6-17"
+            ]
+          },
+          "no-jogo-6-17": {
+            "id": "no-jogo-6-17",
+            "uci": "d5e6",
+            "filhos": [],
+            "comentario": "O rei chegou a e6, uma casa-chave. Daqui, o peão ganha.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ge6]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-7",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/3k4/8/3K4/8/3P4/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 09 Casas-Chave; posições do Silman",
+            "link": "https://lichess.org/study/T81d9Yqq",
+            "fenRevisada": "8/8/3k4/8/3K4/8/3P4/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.541Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 9 - Casas-chave",
+            "Site": "https://lichess.org/study/T81d9Yqq",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Casas-chave: onde o rei tem de chegar",
+            "ChapterName": "04 - AULA - LEMBRE-SE",
+            "FEN": "8/8/3k4/8/3K4/8/3P4/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-7-0",
+        "nos": {
+          "no-jogo-7-0": {
+            "id": "no-jogo-7-0",
+            "filhos": [],
+            "comentario": "LEMBRE-SE:\n\n1. Peão na 2ª, 3ª ou 4ª fileira: três casas-chave, duas fileiras à frente.\n2. Peão na 5ª ou 6ª: mais três, logo à frente.\n3. O peão andou? Ache as casas-chave de novo."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-8",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/8/3k4/8/2K5/2P5/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 09 Casas-Chave; posições do Silman",
+            "link": "https://lichess.org/study/T81d9Yqq",
+            "fenRevisada": "8/8/8/3k4/8/2K5/2P5/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.541Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 9 - Casas-chave",
+            "Site": "https://lichess.org/study/T81d9Yqq",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Casas-chave: onde o rei tem de chegar",
+            "ChapterName": "05 - TREINO 1 - Ache a casa-chave",
+            "FEN": "8/8/8/3k4/8/2K5/2P5/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-8-0",
+        "nos": {
+          "no-jogo-8-0": {
+            "id": "no-jogo-8-0",
+            "filhos": [
+              "no-jogo-8-1"
+            ],
+            "comentario": "Peão em c2. As casas-chave estão acesas: b4, c4 e d4. Leve o rei até uma delas.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "b4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "c4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d4",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yb4,Yc4,Yd4]"
+            ]
+          },
+          "no-jogo-8-1": {
+            "id": "no-jogo-8-1",
+            "uci": "c3b4",
+            "filhos": [
+              "no-jogo-8-2"
+            ],
+            "comentario": "b4 é casa-chave. O rei preto guarda c4 e d4, mas não chega em b4.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "b4",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "c4",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "d4",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gb4,Yc4,Yd4]"
+            ]
+          },
+          "no-jogo-8-2": {
+            "id": "no-jogo-8-2",
+            "uci": "d5c6",
+            "filhos": [
+              "no-jogo-8-3",
+              "no-jogo-8-4"
+            ],
+            "comentario": "O rei preto foi para c6. Ache outra casa-chave.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yc6]"
+            ]
+          },
+          "no-jogo-8-3": {
+            "id": "no-jogo-8-3",
+            "uci": "b4c4",
+            "filhos": [],
+            "comentario": "c4: de frente para o rei preto e numa casa-chave. O peão ganha.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gc4]"
+            ]
+          },
+          "no-jogo-8-4": {
+            "id": "no-jogo-8-4",
+            "uci": "c2c4",
+            "filhos": [],
+            "comentario": "O peão andou, e as casas-chave subiram para b6, c6 e d6. O rei preto chega nelas: empate.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "b6",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "c6",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "d6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rb6,Rc6,Rd6]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-9",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "4k3/8/5K2/4P3/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 09 Casas-Chave; posições do Silman",
+            "link": "https://lichess.org/study/T81d9Yqq",
+            "fenRevisada": "4k3/8/5K2/4P3/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.541Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 9 - Casas-chave",
+            "Site": "https://lichess.org/study/T81d9Yqq",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Casas-chave: onde o rei tem de chegar",
+            "ChapterName": "06 - TREINO 2 - Rei ou peão?",
+            "FEN": "4k3/8/5K2/4P3/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-9-0",
+        "nos": {
+          "no-jogo-9-0": {
+            "id": "no-jogo-9-0",
+            "filhos": [
+              "no-jogo-9-1",
+              "no-jogo-9-2"
+            ],
+            "comentario": "Agora sem ajuda. As Brancas jogam e ganham."
+          },
+          "no-jogo-9-1": {
+            "id": "no-jogo-9-1",
+            "uci": "f6e6",
+            "filhos": [
+              "no-jogo-9-3"
+            ],
+            "comentario": "e6 é casa-chave do peão em e5. O rei preto vai ter de sair da frente.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ge6]"
+            ]
+          },
+          "no-jogo-9-2": {
+            "id": "no-jogo-9-2",
+            "uci": "e5e6",
+            "filhos": [],
+            "comentario": "O peão correu, e as casas-chave subiram para a 7ª e a 8ª fileira. O rei branco ficou fora delas: empate.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-9-3": {
+            "id": "no-jogo-9-3",
+            "uci": "e8d8",
+            "filhos": [
+              "no-jogo-9-4"
+            ]
+          },
+          "no-jogo-9-4": {
+            "id": "no-jogo-9-4",
+            "uci": "e6f7",
+            "filhos": [
+              "no-jogo-9-5"
+            ],
+            "comentario": "f7 também é casa-chave. O rei preto não volta mais para e8.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "e8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf7,Ye8]"
+            ]
+          },
+          "no-jogo-9-5": {
+            "id": "no-jogo-9-5",
+            "uci": "d8d7",
+            "filhos": [
+              "no-jogo-9-6"
+            ]
+          },
+          "no-jogo-9-6": {
+            "id": "no-jogo-9-6",
+            "uci": "e5e6",
+            "filhos": [],
+            "comentario": "Agora o peão anda. Com ele em e6, o rei em f7 continua numa casa-chave.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf7]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-10",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/1k6/8/8/4P3/8/3K4/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Aula 09 Casas-Chave; posições do Silman",
+            "link": "https://lichess.org/study/T81d9Yqq",
+            "fenRevisada": "8/1k6/8/8/4P3/8/3K4/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T16:19:46.541Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 9 - Casas-chave",
+            "Site": "https://lichess.org/study/T81d9Yqq",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Casas-chave: onde o rei tem de chegar",
+            "ChapterName": "07 - TREINO 3 - O caminho mais longo",
+            "FEN": "8/1k6/8/8/4P3/8/3K4/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-10-0",
+        "nos": {
+          "no-jogo-10-0": {
+            "id": "no-jogo-10-0",
+            "filhos": [
+              "no-jogo-10-1",
+              "no-jogo-10-2"
+            ],
+            "comentario": "A última, sem ajuda. As Brancas jogam e ganham. O rei preto vem do outro lado."
+          },
+          "no-jogo-10-1": {
+            "id": "no-jogo-10-1",
+            "uci": "d2e3",
+            "filhos": [
+              "no-jogo-10-3"
+            ],
+            "comentario": "O seu rei sobe pelo lado de onde o rei preto não vem.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-2": {
+            "id": "no-jogo-10-2",
+            "uci": "d2d3",
+            "filhos": [],
+            "comentario": "O rei foi para a frente do peão. O rei preto chega a d6 a tempo e fecha a passagem: empate.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rd6]"
+            ]
+          },
+          "no-jogo-10-3": {
+            "id": "no-jogo-10-3",
+            "uci": "b7c6",
+            "filhos": [
+              "no-jogo-10-4",
+              "no-jogo-10-5"
+            ]
+          },
+          "no-jogo-10-4": {
+            "id": "no-jogo-10-4",
+            "uci": "e3f4",
+            "filhos": [
+              "no-jogo-10-6"
+            ],
+            "comentario": "Mais um passo pelo lado livre.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-5": {
+            "id": "no-jogo-10-5",
+            "uci": "e3d4",
+            "filhos": [],
+            "comentario": "De frente para o rei preto, e com a vez: ele vai para d6 e segura. Empate.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rd6]"
+            ]
+          },
+          "no-jogo-10-6": {
+            "id": "no-jogo-10-6",
+            "uci": "c6d6",
+            "filhos": [
+              "no-jogo-10-7",
+              "no-jogo-10-8"
+            ]
+          },
+          "no-jogo-10-7": {
+            "id": "no-jogo-10-7",
+            "uci": "f4f5",
+            "filhos": [
+              "no-jogo-10-9"
+            ],
+            "comentario": "O rei chega a f5, ao lado das casas-chave.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf5]"
+            ]
+          },
+          "no-jogo-10-8": {
+            "id": "no-jogo-10-8",
+            "uci": "e4e5",
+            "filhos": [],
+            "comentario": "O peão andou cedo. Com ele em e5, o seu rei fica longe das casas-chave: empate.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-10-9": {
+            "id": "no-jogo-10-9",
+            "uci": "d6d7",
+            "filhos": [
+              "no-jogo-10-10",
+              "no-jogo-10-11"
+            ]
+          },
+          "no-jogo-10-10": {
+            "id": "no-jogo-10-10",
+            "uci": "f5f6",
+            "filhos": [],
+            "comentario": "f6 é casa-chave do peão em e4. Agora o peão ganha.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf6]"
+            ]
+          },
+          "no-jogo-10-11": {
+            "id": "no-jogo-10-11",
+            "uci": "f5e5",
+            "filhos": [],
+            "comentario": "O rei ficou na frente do peão, fora das casas-chave. O rei preto vai para e7 e segura: empate.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re7]"
+            ]
+          }
+        }
+      }
+    ],
+    "introducoes": [
+      {
+        "id": "introducao-estudo-1",
+        "titulo": "Introdução",
+        "quadros": [
+          {
+            "id": "quadro-estudo-1",
+            "titulo": "INTRODUÇÃO - Ganha, empata ou perde?",
+            "texto": "Brancas: rei e peão. Pretas: só o rei. Brancas jogam.\n\nGanha, empata ou perde?",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-5",
+                "nodeId": "no-jogo-5-0"
+              }
+            }
+          },
+          {
+            "id": "quadro-estudo-2",
+            "titulo": "INTRODUÇÃO - A resposta",
+            "texto": "Ganha. O segredo está na casa do rei branco: d4, duas fileiras à frente do peão.\n\nCom o rei ali, tanto faz quem joga.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-5",
+                "nodeId": "no-jogo-5-0"
+              }
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d4",
+                  "cor": "verde"
+                }
+              ]
+            }
+          },
+          {
+            "id": "quadro-estudo-3",
+            "titulo": "INTRODUÇÃO - A pergunta da aula",
+            "texto": "Hoje, antes de mexer, pergunte: em que casa o meu rei garante a vitória do peão?\n\nNo fim, você aponta essas casas e leva o rei até uma delas.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-5",
+                "nodeId": "no-jogo-5-0"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "capitulos": [
+      {
+        "id": "capitulo-jogo-4",
+        "titulo": "AULA - Duas fileiras à frente do peão",
+        "analiseId": "analise-jogo-4",
+        "inicioNodeId": "no-jogo-4-0",
+        "caminho": [
+          "no-jogo-4-1",
+          "no-jogo-4-2",
+          "no-jogo-4-3",
+          "no-jogo-4-4",
+          "no-jogo-4-9"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-4-0",
+            "nodeId": "no-jogo-4-0",
+            "texto": "A posição da aula de oposição. As Pretas jogam, e o rei preto tem de sair da frente.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-1",
+            "nodeId": "no-jogo-4-1",
+            "texto": "O rei preto foi para e5. A casa c4 ficou livre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-2",
+            "nodeId": "no-jogo-4-2",
+            "texto": "O rei branco entra em c4, duas fileiras à frente do peão.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-3",
+            "nodeId": "no-jogo-4-3",
+            "texto": "O rei preto volta para a frente do peão.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-4",
+            "nodeId": "no-jogo-4-4",
+            "texto": "O rei passa para d4, também duas fileiras à frente. O peão continua seguro.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-5",
+            "nodeId": "no-jogo-4-5",
+            "texto": "O peão andou antes da hora. Agora o rei branco não está mais duas fileiras à frente dele.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-6",
+            "nodeId": "no-jogo-4-6",
+            "texto": "O rei preto fica de frente para o rei branco.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-8",
+            "nodeId": "no-jogo-4-8",
+            "texto": "O rei preto fica na frente do peão, e o peão não passa. Empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-9",
+            "nodeId": "no-jogo-4-9",
+            "texto": "As casas c4, d4 e e4 têm nome: casas-chave. Com o rei numa delas, o peão ganha.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-4-variante",
+        "titulo": "Comparação: 3. d4??",
+        "analiseId": "analise-jogo-4",
+        "inicioNodeId": "no-jogo-4-0",
+        "caminho": [
+          "no-jogo-4-1",
+          "no-jogo-4-2",
+          "no-jogo-4-3",
+          "no-jogo-4-5",
+          "no-jogo-4-6",
+          "no-jogo-4-7",
+          "no-jogo-4-8"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-5",
+            "nodeId": "no-jogo-4-5",
+            "texto": "O peão andou antes da hora. Agora o rei branco não está mais duas fileiras à frente dele.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-6",
+            "nodeId": "no-jogo-4-6",
+            "texto": "O rei preto fica de frente para o rei branco.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-8",
+            "nodeId": "no-jogo-4-8",
+            "texto": "O rei preto fica na frente do peão, e o peão não passa. Empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5",
+        "titulo": "AULA - O peão anda, as casas-chave andam",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-5",
+          "no-jogo-5-6",
+          "no-jogo-5-7",
+          "no-jogo-5-8",
+          "no-jogo-5-9",
+          "no-jogo-5-10",
+          "no-jogo-5-11",
+          "no-jogo-5-12",
+          "no-jogo-5-13",
+          "no-jogo-5-19",
+          "no-jogo-5-20",
+          "no-jogo-5-21",
+          "no-jogo-5-22",
+          "no-jogo-5-23",
+          "no-jogo-5-24",
+          "no-jogo-5-25",
+          "no-jogo-5-26"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-5-0",
+            "nodeId": "no-jogo-5-0",
+            "texto": "Peão em d2: casas-chave c4, d4 e e4. O rei já está em d4, e agora as Brancas jogam.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-1",
+            "nodeId": "no-jogo-5-1",
+            "texto": "O peão anda uma casa, e as casas-chave andam junto: agora são c5, d5 e e5.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-3",
+            "nodeId": "no-jogo-5-3",
+            "texto": "O rei entra em c5, uma das casas-chave novas.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-5",
+            "nodeId": "no-jogo-5-5",
+            "texto": "De c5 para d5: o rei continua numa casa-chave.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-7",
+            "nodeId": "no-jogo-5-7",
+            "texto": "O rei vai mais à frente, para e6. O rei preto não chega ao peão.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-9",
+            "nodeId": "no-jogo-5-9",
+            "texto": "Agora o peão anda. Com ele em d4, as casas-chave são c6, d6 e e6, e o rei já está em e6.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-11",
+            "nodeId": "no-jogo-5-11",
+            "texto": "Peão na 5ª fileira: são seis casas-chave, c6, d6, e6, c7, d7 e e7.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-13",
+            "nodeId": "no-jogo-5-13",
+            "texto": "O rei vai para d6 e continua numa casa-chave.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-14",
+            "nodeId": "no-jogo-5-14",
+            "texto": "O peão correu. Com ele em d6, as casas-chave sobem para c7, d7, e7, c8, d8 e e8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-15",
+            "nodeId": "no-jogo-5-15",
+            "texto": "O rei preto fica na frente, e o rei branco em e6 está fora das casas-chave.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-18",
+            "nodeId": "no-jogo-5-18",
+            "texto": "Afogamento: o rei preto não está em xeque e não tem lance. Empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-20",
+            "nodeId": "no-jogo-5-20",
+            "texto": "c7 também é casa-chave. O caminho do peão até d8 está livre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-26",
+            "nodeId": "no-jogo-5-26",
+            "texto": "O peão vira dama.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5-variante",
+        "titulo": "Comparação: 7. d6??",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-5",
+          "no-jogo-5-6",
+          "no-jogo-5-7",
+          "no-jogo-5-8",
+          "no-jogo-5-9",
+          "no-jogo-5-10",
+          "no-jogo-5-11",
+          "no-jogo-5-12",
+          "no-jogo-5-14",
+          "no-jogo-5-15",
+          "no-jogo-5-16",
+          "no-jogo-5-17",
+          "no-jogo-5-18"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-14",
+            "nodeId": "no-jogo-5-14",
+            "texto": "O peão correu. Com ele em d6, as casas-chave sobem para c7, d7, e7, c8, d8 e e8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-15",
+            "nodeId": "no-jogo-5-15",
+            "texto": "O rei preto fica na frente, e o rei branco em e6 está fora das casas-chave.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-18",
+            "nodeId": "no-jogo-5-18",
+            "texto": "Afogamento: o rei preto não está em xeque e não tem lance. Empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6",
+        "titulo": "AULA - O caminho até a casa-chave",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-1",
+          "no-jogo-6-8",
+          "no-jogo-6-9",
+          "no-jogo-6-10",
+          "no-jogo-6-11",
+          "no-jogo-6-12",
+          "no-jogo-6-13",
+          "no-jogo-6-14",
+          "no-jogo-6-15",
+          "no-jogo-6-16",
+          "no-jogo-6-17"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-6-0",
+            "nodeId": "no-jogo-6-0",
+            "texto": "Peão em d4: casas-chave c6, d6 e e6. O rei branco está longe, e o rei preto vem para e6.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-1",
+            "nodeId": "no-jogo-6-1",
+            "texto": "O rei sobe por e2 e vai para c4 e c5, o lado longe do rei preto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-2",
+            "nodeId": "no-jogo-6-2",
+            "texto": "O rei vai pelo caminho mais curto, direto na direção do rei preto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-7",
+            "nodeId": "no-jogo-6-7",
+            "texto": "O rei preto chegou a e6 primeiro e ficou de frente para o rei branco. Empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-9",
+            "nodeId": "no-jogo-6-9",
+            "texto": "O rei segue para c4.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-11",
+            "nodeId": "no-jogo-6-11",
+            "texto": "Agora para c5, ao lado das casas-chave.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-13",
+            "nodeId": "no-jogo-6-13",
+            "texto": "O rei preto guarda d6, mas não consegue guardar c6 ao mesmo tempo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-15",
+            "nodeId": "no-jogo-6-15",
+            "texto": "De frente para o rei preto, e é ele quem tem de sair.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-17",
+            "nodeId": "no-jogo-6-17",
+            "texto": "O rei chegou a e6, uma casa-chave. Daqui, o peão ganha.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6-variante",
+        "titulo": "Comparação: 1. Rf2??",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-2",
+          "no-jogo-6-3",
+          "no-jogo-6-4",
+          "no-jogo-6-5",
+          "no-jogo-6-6",
+          "no-jogo-6-7"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-2",
+            "nodeId": "no-jogo-6-2",
+            "texto": "O rei vai pelo caminho mais curto, direto na direção do rei preto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-7",
+            "nodeId": "no-jogo-6-7",
+            "texto": "O rei preto chegou a e6 primeiro e ficou de frente para o rei branco. Empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7",
+        "titulo": "AULA - LEMBRE-SE",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-7-0",
+            "nodeId": "no-jogo-7-0",
+            "texto": "LEMBRE-SE:\n\n1. Peão na 2ª, 3ª ou 4ª fileira: três casas-chave, duas fileiras à frente.\n2. Peão na 5ª ou 6ª: mais três, logo à frente.\n3. O peão andou? Ache as casas-chave de novo.",
+            "pausa": "manual"
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-capitulo-jogo-8-no-jogo-8-0-white",
+        "titulo": "TREINO 1 - Ache a casa-chave",
+        "introducao": "Peão em c2. As casas-chave estão acesas: b4, c4 e d4. Leve o rei até uma delas.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-8",
+          "nodeId": "no-jogo-8-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Peão em c2. As casas-chave estão acesas: b4, c4 e d4. Leve o rei até uma delas.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-8-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-1-white",
+                "moves": [
+                  "c3b4"
+                ],
+                "julgamento": "correta",
+                "feedback": "b4 é casa-chave. O rei preto guarda c4 e d4, mas não chega em b4.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d5c6",
+                      "proximaQuestaoId": "questao-no-jogo-8-2-white",
+                      "texto": "O rei preto foi para c6. Ache outra casa-chave."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-8-2-white",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-2"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-3-white",
+                "moves": [
+                  "b4c4"
+                ],
+                "julgamento": "correta",
+                "feedback": "c4: de frente para o rei preto e numa casa-chave. O peão ganha.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-8-4",
+                "moves": [
+                  "c2c4"
+                ],
+                "julgamento": "erro",
+                "feedback": "O peão andou, e as casas-chave subiram para b6, c6 e d6. O rei preto chega nelas: empate.",
+                "erroId": "erro-no-jogo-8-4",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-8",
+          "nodeIds": [
+            "no-jogo-8-0",
+            "no-jogo-8-1",
+            "no-jogo-8-2",
+            "no-jogo-8-3"
+          ],
+          "hash": "v2-a8ec9244",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-8",
+          "inicioNodeId": "no-jogo-8-0",
+          "objetivo": "Peão em c2. As casas-chave estão acesas: b4, c4 e d4. Leve o rei até uma delas."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/8/8/3k4/8/2K5/2P5/8 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-8-0-white": {
+              "fen": "8/8/8/3k4/8/2K5/2P5/8 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-0"
+              }
+            },
+            "questao-no-jogo-8-2-white": {
+              "fen": "8/8/2k5/8/1K6/8/2P5/8 w - - 2 2",
+              "historicoUci": [
+                "c3b4",
+                "d5c6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-2"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "c4: de frente para o rei preto e numa casa-chave. O peão ganha."
+      },
+      {
+        "id": "treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "titulo": "TREINO 2 - Rei ou peão?",
+        "introducao": "Agora sem ajuda. As Brancas jogam e ganham.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-9",
+          "nodeId": "no-jogo-9-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Agora sem ajuda. As Brancas jogam e ganham.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-9-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-1-white",
+                "moves": [
+                  "f6e6"
+                ],
+                "julgamento": "correta",
+                "feedback": "e6 é casa-chave do peão em e5. O rei preto vai ter de sair da frente.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e8d8",
+                      "proximaQuestaoId": "questao-no-jogo-9-3-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-2",
+                "moves": [
+                  "e5e6"
+                ],
+                "julgamento": "erro",
+                "feedback": "O peão correu, e as casas-chave subiram para a 7ª e a 8ª fileira. O rei branco ficou fora delas: empate.",
+                "erroId": "erro-no-jogo-9-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-3-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-3"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-4-white",
+                "moves": [
+                  "e6f7"
+                ],
+                "julgamento": "correta",
+                "feedback": "f7 também é casa-chave. O rei preto não volta mais para e8.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d8d7",
+                      "proximaQuestaoId": "questao-no-jogo-9-5-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-5-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-5"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-6-white",
+                "moves": [
+                  "e5e6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Agora o peão anda. Com ele em e6, o rei em f7 continua numa casa-chave.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-9",
+          "nodeIds": [
+            "no-jogo-9-0",
+            "no-jogo-9-1",
+            "no-jogo-9-3",
+            "no-jogo-9-4",
+            "no-jogo-9-5",
+            "no-jogo-9-6"
+          ],
+          "hash": "v2-a8b557f3",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-9",
+          "inicioNodeId": "no-jogo-9-0",
+          "objetivo": "Agora sem ajuda. As Brancas jogam e ganham."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "4k3/8/5K2/4P3/8/8/8/8 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-9-0-white": {
+              "fen": "4k3/8/5K2/4P3/8/8/8/8 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-0"
+              }
+            },
+            "questao-no-jogo-9-3-white": {
+              "fen": "3k4/8/4K3/4P3/8/8/8/8 w - - 2 2",
+              "historicoUci": [
+                "f6e6",
+                "e8d8"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-3"
+              }
+            },
+            "questao-no-jogo-9-5-white": {
+              "fen": "8/3k1K2/8/4P3/8/8/8/8 w - - 4 3",
+              "historicoUci": [
+                "f6e6",
+                "e8d8",
+                "e6f7",
+                "d8d7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-5"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Agora o peão anda. Com ele em e6, o rei em f7 continua numa casa-chave."
+      },
+      {
+        "id": "treino-capitulo-jogo-10-no-jogo-10-0-white",
+        "titulo": "TREINO 3 - O caminho mais longo",
+        "introducao": "A última, sem ajuda. As Brancas jogam e ganham. O rei preto vem do outro lado.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-10",
+          "nodeId": "no-jogo-10-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "A última, sem ajuda. As Brancas jogam e ganham. O rei preto vem do outro lado.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-10-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-1-white",
+                "moves": [
+                  "d2e3"
+                ],
+                "julgamento": "correta",
+                "feedback": "O seu rei sobe pelo lado de onde o rei preto não vem.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b7c6",
+                      "proximaQuestaoId": "questao-no-jogo-10-3-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-2",
+                "moves": [
+                  "d2d3"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei foi para a frente do peão. O rei preto chega a d6 a tempo e fecha a passagem: empate.",
+                "erroId": "erro-no-jogo-10-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-3-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-3"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-4-white",
+                "moves": [
+                  "e3f4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Mais um passo pelo lado livre.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c6d6",
+                      "proximaQuestaoId": "questao-no-jogo-10-6-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-5",
+                "moves": [
+                  "e3d4"
+                ],
+                "julgamento": "erro",
+                "feedback": "De frente para o rei preto, e com a vez: ele vai para d6 e segura. Empate.",
+                "erroId": "erro-no-jogo-10-5",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-6-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-6"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-7-white",
+                "moves": [
+                  "f4f5"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei chega a f5, ao lado das casas-chave.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d6d7",
+                      "proximaQuestaoId": "questao-no-jogo-10-9-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-8",
+                "moves": [
+                  "e4e5"
+                ],
+                "julgamento": "erro",
+                "feedback": "O peão andou cedo. Com ele em e5, o seu rei fica longe das casas-chave: empate.",
+                "erroId": "erro-no-jogo-10-8",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-9-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-9"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-10-white",
+                "moves": [
+                  "f5f6"
+                ],
+                "julgamento": "correta",
+                "feedback": "f6 é casa-chave do peão em e4. Agora o peão ganha.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-11",
+                "moves": [
+                  "f5e5"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei ficou na frente do peão, fora das casas-chave. O rei preto vai para e7 e segura: empate.",
+                "erroId": "erro-no-jogo-10-11",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-10",
+          "nodeIds": [
+            "no-jogo-10-0",
+            "no-jogo-10-1",
+            "no-jogo-10-3",
+            "no-jogo-10-4",
+            "no-jogo-10-6",
+            "no-jogo-10-7",
+            "no-jogo-10-9",
+            "no-jogo-10-10"
+          ],
+          "hash": "v2-60fa91e4",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-10",
+          "inicioNodeId": "no-jogo-10-0",
+          "objetivo": "A última, sem ajuda. As Brancas jogam e ganham. O rei preto vem do outro lado."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/1k6/8/8/4P3/8/3K4/8 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-10-0-white": {
+              "fen": "8/1k6/8/8/4P3/8/3K4/8 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-0"
+              }
+            },
+            "questao-no-jogo-10-3-white": {
+              "fen": "8/8/2k5/8/4P3/4K3/8/8 w - - 2 2",
+              "historicoUci": [
+                "d2e3",
+                "b7c6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-3"
+              }
+            },
+            "questao-no-jogo-10-6-white": {
+              "fen": "8/8/3k4/8/4PK2/8/8/8 w - - 4 3",
+              "historicoUci": [
+                "d2e3",
+                "b7c6",
+                "e3f4",
+                "c6d6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-6"
+              }
+            },
+            "questao-no-jogo-10-9-white": {
+              "fen": "8/3k4/8/5K2/4P3/8/8/8 w - - 6 4",
+              "historicoUci": [
+                "d2e3",
+                "b7c6",
+                "e3f4",
+                "c6d6",
+                "f4f5",
+                "d6d7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-9"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "f6 é casa-chave do peão em e4. Agora o peão ganha."
+      }
+    ],
+    "praticas": [
+      {
+        "id": "pratica-pratica-leve-o-rei-ate-a-casa-chave",
+        "titulo": "PRÁTICA - Leve o rei até a casa-chave",
+        "positionId": "pos-n1-key-squares-1",
+        "ladoAluno": "white",
+        "objetivo": "win",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      },
+      {
+        "id": "pratica-pratica-transfira-a-ideia",
+        "titulo": "PRÁTICA - Transfira a ideia",
+        "positionId": "pos-n1-key-squares-2",
+        "ladoAluno": "white",
+        "objetivo": "win",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-introducao-estudo-1",
+        "tipo": "introducao",
+        "entidadeId": "introducao-estudo-1"
+      },
+      {
+        "id": "etapa-capitulo-jogo-4",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-4"
+      },
+      {
+        "id": "etapa-capitulo-jogo-4-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-4-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-8-no-jogo-8-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-8-no-jogo-8-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-9-no-jogo-9-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-10-no-jogo-10-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-10-no-jogo-10-0-white"
+      },
+      {
+        "id": "etapa-pratica-pratica-leve-o-rei-ate-a-casa-chave",
+        "tipo": "pratica",
+        "entidadeId": "pratica-pratica-leve-o-rei-ate-a-casa-chave"
+      },
+      {
+        "id": "etapa-pratica-pratica-transfira-a-ideia",
+        "tipo": "pratica",
+        "entidadeId": "pratica-pratica-transfira-a-ideia"
+      }
+    ]
+  },
+  "posicoes": {
+    "pos-n1-key-squares-1": {
+      "id": "pos-n1-key-squares-1",
+      "fen": "5k2/8/8/8/2K5/8/4P3/8 w - - 0 1",
+      "expectedResult": "win-white",
+      "tags": [
+        "PRÁTICA - Leve o rei até a casa-chave"
+      ],
+      "status": "candidate",
+      "provenance": {
+        "externalHumanSource": "clubexadrezguabiruba",
+        "bibliographicSource": "Aula 09 Casas-Chave; posições do Silman, https://lichess.org/study/T81d9Yqq",
+        "originalGame": "não se aplica",
+        "authorComposer": "clubexadrezguabiruba",
+        "license": "não informada — conferir antes de aprovar",
+        "editionFile": null,
+        "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+        "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+        "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+      }
+    },
+    "pos-n1-key-squares-2": {
+      "id": "pos-n1-key-squares-2",
+      "fen": "8/3k4/8/3K4/3P4/8/8/8 b - - 0 1",
+      "expectedResult": "win-white",
+      "tags": [
+        "PRÁTICA - Transfira a ideia"
+      ],
+      "status": "candidate",
+      "provenance": {
+        "externalHumanSource": "clubexadrezguabiruba",
+        "bibliographicSource": "Aula 09 Casas-Chave; posições do Silman, https://lichess.org/study/T81d9Yqq",
+        "originalGame": "não se aplica",
+        "authorComposer": "clubexadrezguabiruba",
+        "license": "não informada — conferir antes de aprovar",
+        "editionFile": null,
+        "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+        "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+        "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+      }
+    }
+  },
+  "revisoes": {
+    "treino-capitulo-jogo-8-no-jogo-8-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_783c7874b39c7675411d9299ceb9dc5c8bae543cd62d76143c3bf23dcfe19a4d"
+    },
+    "treino-capitulo-jogo-9-no-jogo-9-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_d0ad01e6b3fe889c98285726b76e85b93b58d344e0dfe3a5b6371059de66d873"
+    },
+    "treino-capitulo-jogo-10-no-jogo-10-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_feb578ea2d60b8925e7b268b870d61b6e6af9f21903c3b1cdfcc3e1c864980a4"
+    },
+    "pratica-pratica-leve-o-rei-ate-a-casa-chave": {
+      "tipo": "pratica",
+      "revisao": "ar_ed49e345eaf27efac7aa9547b586bc836e42b98836b9c6cce975f6a0cc3434b2"
+    },
+    "pratica-pratica-transfira-a-ideia": {
+      "tipo": "pratica",
+      "revisao": "ar_6ff3dd71deda583ebc9d59daf6a2c967d6b641357b9c81db3bb0670c95409e7c"
+    }
+  },
+  "manifesto": {
+    "aulaId": "N1-KEY-SQUARES",
+    "aula": "8432a4b151e6c1b7e95f72532205462ae4e47dc974a4d47e0018c0c8a2d4a77b",
+    "posicoes": {
+      "pos-n1-key-squares-1": "a0bca9b0f4e94003bdc8e20bd221a9fa96d55faec393620c6d793298f1d6aa35",
+      "pos-n1-key-squares-2": "a67ddbc96e45e448f372527c459eac631dbddd6a5b7a6d95cc7a44b35592491e"
+    },
+    "revisoes": "d563b21d199ad7aed9beb804130f100348681191a60641ff18d85b47376c36e9",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}
