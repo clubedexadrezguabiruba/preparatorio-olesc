@@ -2,6 +2,10 @@ import { notFound } from "next/navigation";
 import { AssistirVersaoPublicada } from "@/components/editor-v2/AssistirAula";
 import { exigirEditor } from "@/lib/editor/acesso";
 import { aulaIdV2Schema } from "@/lib/editor-v2/modelo";
+import { comLinhasDosTreinadores } from "@/lib/aberturas/linhas-da-aula";
+import { dominioDaAulaV2 } from "@/lib/editor-v2/dominio";
+import { aulaDoAlunoV2 } from "@/lib/editor-v2/fluxo-do-aluno";
+import { pacoteAtivoDoAluno } from "@/lib/finais/conteudo-v2";
 import { lerPacoteDoAluno } from "@/lib/finais/conteudo";
 
 /**
@@ -19,6 +23,12 @@ export default async function AssistirPublicada({ params }: { params: Promise<{ 
   await exigirEditor();
   const { aula } = await params;
   if (!aulaIdV2Schema.safeParse(aula).success) notFound();
+  // A aula de abertura não é de /finais (§13.3.3): ela vem do pacote ativo, com as linhas do move trainer.
+  if (dominioDaAulaV2(aula) === "abertura") {
+    const pacote = pacoteAtivoDoAluno(aula);
+    if (!pacote) notFound();
+    return <AssistirVersaoPublicada aulaId={aula} aulaV2={await comLinhasDosTreinadores(aulaDoAlunoV2(pacote))} />;
+  }
   const doAluno = lerPacoteDoAluno(aula);
   if (!doAluno) notFound();
   return doAluno.versao === 2

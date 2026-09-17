@@ -31,6 +31,7 @@ import { editorLigado } from "../editor/local.ts";
 import { caminhoDeAula, escreverAtomico, lerConteudo, serializar } from "../editor/rascunhos.ts";
 import { positionSchema, type Position } from "../lesson/schema.ts";
 import { lerRegua, type Regua } from "../lesson/voz.ts";
+import { idsDoRepertorioCompilado } from "../repertorio/ids-compilados.ts";
 import { VERSAO_JUIZ_PRATICA_V2, VERSAO_JUIZ_TREINO_V2 } from "./avaliacao.ts";
 import { contarProblemasV2, problemasParaPublicarV2, type ContagemDaConferenciaV2 } from "./conferencia.ts";
 import { hashCanonico } from "./hash.ts";
@@ -99,8 +100,10 @@ function caminhoDoEstado(id: string, raiz: string): string {
 }
 
 /** Julga o documento em disco, sem escrever nada. Usado pelo Conferir e pelo validador. */
-export function julgarDocumentoV2(aula: AulaV2, positions: Record<string, Position>, regua?: Regua): ProblemaV2[] {
-  return problemasParaPublicarV2(aula, { positions, regua });
+export function julgarDocumentoV2(aula: AulaV2, positions: Record<string, Position>, regua?: Regua, raiz = process.cwd()): ProblemaV2[] {
+  // O repertório compilado só é lido quando a aula tem move trainer (§18.1).
+  const linhasDoRepertorio = aula.treinadores?.length ? idsDoRepertorioCompilado(raiz) : undefined;
+  return problemasParaPublicarV2(aula, { positions, regua, ...(linhasDoRepertorio ? { linhasDoRepertorio } : {}) });
 }
 
 export async function conferirAulaV2(id: string, opcoes: OpcoesDoGateV2 = {}): Promise<ConferenciaV2> {
@@ -125,7 +128,7 @@ export async function conferirAulaV2(id: string, opcoes: OpcoesDoGateV2 = {}): P
     }
     if (!lido) return vazia("esta aula não tem documento v2 em disco");
 
-    const problemas = julgarDocumentoV2(lido.aula, positions, regua);
+    const problemas = julgarDocumentoV2(lido.aula, positions, regua, raiz);
     const contagem = contarProblemasV2(problemas);
     const conferencia: ConferenciaV2 = {
       aula: id,

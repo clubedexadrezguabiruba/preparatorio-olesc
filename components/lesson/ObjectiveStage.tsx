@@ -5,11 +5,13 @@ import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color } from "@lichess-org/chessground/types";
 import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
 import { ChessBoard } from "@/components/board/ChessBoard";
-import { NagOverlay } from "@/components/board/NagOverlay";
+import { useAtalho } from "@/components/atalhos/Atalhos";
+import { focoEmControle } from "@/lib/atalhos/foco";
 import { Comentario, useComentarioPaginado } from "@/components/lesson/Comentario";
 import { LessonButton } from "@/components/lesson/LessonButton";
 import { ProfessorSeApresenta } from "@/components/lesson/ProfessorSeApresenta";
 import { desenhoDaAutoria, teachingShapes } from "@/lib/chess/annotations";
+import { simboloDoSinal, simboloNaCasa } from "@/lib/chess/desenhos-do-tabuleiro";
 import { montarQuadros, pausaDoPasso } from "@/lib/lesson/roteiro";
 import type { ObjectiveStage as ObjectiveStageData, Position } from "@/lib/lesson/schema";
 import { playForMove } from "@/lib/sound";
@@ -88,7 +90,19 @@ export function ObjectiveStage({
   marcasAutomaticas = true,
   simbolo,
   quebrasDeLinha = false,
+  aoTerminar,
+  aoContinuar,
+  rotulo,
 }: {
+  /**
+   * **A aula v2 do aluno.** O que o Espaço faz quando o capítulo acabou: o mesmo que o botão de
+   * seguir do rodapé. Ausente, o Espaço no fim não faz nada.
+   */
+  aoContinuar?: () => void;
+  /** **A aula de abertura (§18.1).** Avisa quando o capítulo chegou ao fim — é o que fecha a etapa. */
+  aoTerminar?: () => void;
+  /** **A aula de abertura (§13.3.5).** O rótulo da fala do passo, lido acima dela. */
+  rotulo?: (passo: number) => string | null;
   /**
    * **A aula v2.** O símbolo do lance do passo (`!`, `??`…), no círculo da casa de destino — o mesmo
    * que o editor mostra. A regra dos símbolos (AGENTS.md) vale até o aluno.
@@ -242,9 +256,9 @@ export function ObjectiveStage({
    * o aviso não sair de novo a cada render do pai — e o efeito depende só de
    * `terminou`, que vira uma vez.
    */
-  const aoTerminarRef = useRef(previa?.aoTerminar);
+  const aoTerminarRef = useRef(previa?.aoTerminar ?? aoTerminar);
   useEffect(() => {
-    aoTerminarRef.current = previa?.aoTerminar;
+    aoTerminarRef.current = previa?.aoTerminar ?? aoTerminar;
   });
   useEffect(() => {
     if (terminou) aoTerminarRef.current?.();
@@ -288,16 +302,25 @@ export function ObjectiveStage({
    * Elas trocam a cada passo em vez de somar: três passos empilhados chegariam
    * ao aluno como um tabuleiro de nove setas.
    */
+  /**
+   * O símbolo do lance (`!`, `?!`…) no canto da casa de chegada, com a cor e a animação do move
+   * trainer (feedback do aluno, 17/9/2026: antes era um círculo verde igual para todos, parado).
+   * Entra pelo canal automático, como a seta que ensina: o chessground o desenha acima das peças.
+   */
+  const sinal = quadro.lastMove ? simbolo?.(passo) ?? null : null;
+  const desenhoDoSinal = sinal && quadro.lastMove ? simboloDoSinal(sinal) : null;
+
   const shapes = useMemo(
     () => [
       ...(marcasAutomaticas ? teachingShapes(quadro.fen, quadro.lastMove) : []),
+      ...(desenhoDoSinal && quadro.lastMove ? [simboloNaCasa(quadro.lastMove[1], desenhoDoSinal)] : []),
       // Com o editor ligado, o desenho da autoria vive na camada do usuário
       // (por `marcacao`) — repeti-lo aqui o desenharia duas vezes. Os
       // destaques deduzidos ficam: o professor precisa ver o mesmo tabuleiro
       // que o aluno vai ver, e eles não são dele para apagar.
       ...(marcacao ? [] : previa ? previa.autoria(passo) : autoria ? autoria(passo) : desenhoDaAutoria(atual)),
     ],
-    [quadro, atual, marcacao, previa, autoria, passo, marcasAutomaticas],
+    [quadro, atual, marcacao, previa, autoria, passo, marcasAutomaticas, desenhoDoSinal],
   );
 
   /** O passo de pausa manual da aula v2: o relógio não anda, e quem anda é o aluno. */
@@ -311,6 +334,46 @@ export function ObjectiveStage({
     setPasso(0);
     setTocando(true);
   };
+
+  /**
+   * **Espaço continua** (feedback do aluno, 17/9/2026; o atalho `aluno-continuar` estava na tabela
+   * desde a fatia 10 e nunca tinha sido ligado). Na ordem em que um exclui o outro: completa a
+   * digitação, vira a página da fala, anda o passo, e no fim segue para a etapa seguinte.
+   *
+   * Com o foco num botão, o navegador já aperta o botão com o Espaço — a mesma guarda da `Passada`:
+   * devolver `false` deixa o gesto com ele e evita o clique duplo.
+   */
+  const aoContinuarRef = useRef(aoContinuar);
+  useEffect(() => {
+    aoContinuarRef.current = aoContinuar;
+  });
+  useAtalho(
+    "aluno-continuar",
+    () => {
+      const foco = typeof document !== "undefined" ? document.activeElement : null;
+      if (focoEmControle(foco)) return false;
+      const fala = comentarioRef.current;
+      if (fala.digitando) {
+        fala.completar();
+        return;
+      }
+      if (!fala.naUltima) {
+        fala.virar();
+        return;
+      }
+      if (!ultimo) {
+        setPasso((p) => Math.min(p + 1, stage.roteiro.length - 1));
+        return;
+      }
+      if (aoContinuarRef.current) {
+        aoContinuarRef.current();
+        return;
+      }
+      return false;
+    },
+    { ativo: !previa && !edicaoDaFala && !marcacao },
+  );
+  const aceitaEspaco = !previa && !edicaoDaFala && !marcacao && (pausaManual || (terminou && Boolean(aoContinuar)));
 
   const irPara = (n: number) => {
     setPasso(Math.min(Math.max(n, 0), stage.roteiro.length - 1));
@@ -328,10 +391,6 @@ export function ObjectiveStage({
           lastMove={quadro.lastMove}
           check={quadro.check}
           shapes={shapes}
-          overlay={(() => {
-            const sinal = quadro.lastMove ? simbolo?.(passo) : null;
-            return sinal && quadro.lastMove ? <NagOverlay casa={quadro.lastMove[1]} orientation={orientation} simbolo={sinal} /> : undefined;
-          })()}
           matedKing={quadro.matedColor}
           desenhavel={marcacao}
           animacaoMs={previa?.animacaoMs}
@@ -355,6 +414,7 @@ export function ObjectiveStage({
             </div>
           </div>
 
+          {rotulo?.(passo) ? <p className="rotulo text-metodo-tinta">{rotulo(passo)}</p> : null}
           {edicaoDaFala ? (
             edicaoDaFala(passo, atual.fala)
           ) : (
@@ -390,6 +450,11 @@ export function ObjectiveStage({
               </>
             )}
             {rodape}
+            {aceitaEspaco ? (
+              <p className="hidden text-xs text-tinta-fraca lg:block" aria-hidden>
+                Aperte <kbd className="rounded border border-borda px-1 font-sans font-semibold">Espaço</kbd> para continuar
+              </p>
+            ) : null}
           </AulaRodape>
         </>
       }

@@ -165,11 +165,11 @@ export function ultimaVez(quando: string, agora: Date = new Date()): string {
  * Abaixo disto, um tema não entra na conta.
  *
  * Era 5 até a revisão de 15/9: com 5 problemas, 2 acertos contra 3 é ruído, e o
- * aluno era mandado estudar um tema por causa de um dia ruim. Com 15 a taxa já
- * diz alguma coisa — e, como o problema agora conta por todos os temas que
- * traz, os temas comuns chegam a 15 depressa.
+ * aluno era mandado estudar um tema por causa de um dia ruim. Foi para 15 naquele
+ * dia, e para **10** em 17/9/2026 (Doug): 15 demorava a mostrar qualquer tema, e
+ * como o problema conta por todos os temas que traz, 10 já separa tema de sorte.
  */
-export const MINIMO_POR_TEMA = 15;
+export const MINIMO_POR_TEMA = 10;
 
 /** Quantos temas fracos a tela mostra. */
 export const TEMAS_FRACOS = 3;

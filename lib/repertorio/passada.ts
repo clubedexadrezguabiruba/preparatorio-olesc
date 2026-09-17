@@ -16,7 +16,7 @@ import { sanEmPortugues, semQuebras, vereditoDoLance } from "./treino.ts";
  *
  * Aqui é `estado + evento → estado + efeitos`. Não há React, não há relógio e
  * não há tabuleiro: quem agenda os `setTimeout` e desenha é a casca em
- * `app/aberturas/[cor]/[abertura]/Passada.tsx`, e ela só sabe interpretar a
+ * `components/repertorio/Passada.tsx` (desde 16/9/2026; a aula de abertura também a usa), e ela só sabe interpretar a
  * lista de efeitos. É o mesmo princípio que o projeto já aplicou ao motor e à
  * aritmética do progresso — a regra num arquivo testável, a moldura fora.
  *
@@ -134,6 +134,16 @@ export type EstadoDaPassada = {
   readonly boletim: readonly (Selo | null)[];
   /** Em que meio-lance a casa da dica está acesa, se alguma. */
   readonly dicaNoPasso: number | null;
+  /**
+   * Em que meio-lance a seta do lance certo está desenhada — o terceiro degrau da escada de ajuda
+   * do treino (17/9/2026). Nulo fora dela.
+   */
+  readonly setaNoPasso: number | null;
+  /**
+   * Quantas vezes o aluno errou **o lance da vez**, no treino. É o que sobe a escada de ajuda:
+   * 1 → a dica em texto, 2 → a casa da peça, 3 → a seta. Volta a zero quando o lance entra.
+   */
+  readonly errosNoLance: number;
   /** A dica já foi pedida nesta passada — o que decide se ela custa. */
   readonly dicaPedida: boolean;
   /** O erro que **contou**. A recusa do treino e da assistida não acende isto. */
@@ -259,7 +269,9 @@ function emRepouso(linha: Linha, estado: EstadoDaPassada): Cartao {
   if (fase === "lendo") {
     return {
       comando: "Leia o comentário",
-      estado: "Continue quando estiver pronto.",
+      // Vazio desde 17/9/2026: o cartão ganhou a linha "Aperte Espaço para continuar"
+      // (`CartaoDeComando espaco`), e as duas juntas diriam a mesma coisa duas vezes.
+      estado: "",
       tom: "calma",
     };
   }
@@ -282,6 +294,12 @@ function emRepouso(linha: Linha, estado: EstadoDaPassada): Cartao {
   // cartão é o único lugar em que a diferença chega ao aluno: "não conta" de
   // um lado, "valendo" do outro.
   const qual = linha.meus.indexOf(passo) + 1;
+  if (modo === "treino" && estado.setaNoPasso === passo) {
+    return { comando: "Siga a seta", estado: `A seta é o lance da linha. Lance ${qual} de ${linha.meus.length}; errar aqui não conta.`, tom: "calma" };
+  }
+  if (modo === "treino" && estado.errosNoLance >= 2 && estado.dicaNoPasso === passo) {
+    return { comando: "Jogue o lance certo", estado: "A casa acesa é a peça que joga. Errar aqui não conta.", tom: "calma" };
+  }
   return modo === "treino"
     ? {
         comando: "Jogue o lance certo",
@@ -309,6 +327,8 @@ export function inicio(linha: Linha, modo: Modo): EstadoDaPassada {
     jogados: [],
     boletim: linha.meus.map(() => null),
     dicaNoPasso: null,
+    setaNoPasso: null,
+    errosNoLance: 0,
     dicaPedida: false,
     errou: false,
     decidido: false,
@@ -409,6 +429,8 @@ function aplicar(
     passo: passo + 1,
     pendente: null,
     dicaNoPasso: null,
+    setaNoPasso: null,
+    errosNoLance: 0,
     simbolo: simbolo ? { casa: noTabuleiro.slice(2, 4), qual: simbolo } : null,
     // Nas etapas de memória o comentário não aparece — nem sem travar, como o
     // quiz fazia até 8/9. O texto de um lance costuma nomear o plano e o lance
@@ -652,27 +674,55 @@ function jogou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
     // a assistida de novo, sem a seta. Quem precisa de ajuda tem a dica, que
     // nesta etapa é de graça e mostra só a peça. A alternativa é recusada pelo
     // mesmo motivo da assistida: o que se decora é a linha do clube.
+    //
+    // **A escada de ajuda (17/9/2026).** O "tente de novo" sem fim foi o defeito do feedback do
+    // aluno: quem não lembra erra dez vezes o mesmo lance sem ganhar nada. No mesmo lance, cada
+    // erro dá um pouco mais — 1.º a dica em texto (a primeira frase do comentário do lance certo),
+    // 2.º a casa da peça acesa, 3.º a seta com o lance. Nada disso grava: é o treino.
+    const erros = estado.errosNoLance + 1;
+    const dica = erros === 1 ? dicaDoLance(linha, passo) : null;
     const jogadoEmPortugues = sanEmPortugues(sanDe(estado.fen, uci));
     const cartao: Cartao =
-      veredito === "erro-nomeado"
+      erros >= 3
         ? {
-            comando: `${jogadoEmPortugues} é a armadilha`,
-            estado: "A fonte mostra esse lance de propósito como errado. Errar aqui não conta — tente de novo.",
+            comando: "Siga a seta",
+            estado: "Três tentativas: a seta mostra o lance da linha. Errar aqui não conta.",
             tom: "aviso",
           }
-        : veredito === "alternativa"
+        : veredito === "erro-nomeado"
           ? {
-              comando: "Bom lance, mas não é o da linha",
-              estado: "Aqui você decora o lance do clube. Errar não conta — tente de novo.",
+              comando: `${jogadoEmPortugues} é a armadilha`,
+              estado: "A fonte mostra esse lance de propósito como errado. Errar aqui não conta — tente de novo.",
               tom: "aviso",
             }
-          : {
-              comando: "Não é esse",
-              estado: "Errar aqui não conta. Tente de novo.",
-              tom: "aviso",
-            };
+          : veredito === "alternativa"
+            ? {
+                comando: "Bom lance, mas não é o da linha",
+                estado: "Aqui você decora o lance do clube. Errar não conta — tente de novo.",
+                tom: "aviso",
+              }
+            : erros === 2
+              ? {
+                  comando: "Não é esse",
+                  estado: "A casa acesa é a peça que joga. Errar aqui não conta.",
+                  tom: "aviso",
+                }
+              : {
+                  comando: "Não é esse",
+                  estado: "Errar aqui não conta. Tente de novo.",
+                  tom: "aviso",
+                };
+    const recusado = mostrar(linha, estado, cartao, null);
     return {
-      estado: mostrar(linha, estado, cartao, null),
+      estado: {
+        ...recusado,
+        errosNoLance: erros,
+        // A dica do primeiro erro fica no painel enquanto ele tenta; a do segundo e a do terceiro
+        // estão no tabuleiro, e o texto da primeira continua valendo embaixo.
+        comentario: dica ?? estado.comentario,
+        dicaNoPasso: erros >= 2 ? passo : estado.dicaNoPasso,
+        setaNoPasso: erros >= 3 ? passo : null,
+      },
       efeitos: [{ tipo: "som-recusa" }, esperaAVolta],
     };
   }
@@ -759,6 +809,32 @@ function acertou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
 /** O SAN de um lance qualquer nesta posição — para nomear o que o aluno fez. */
 function sanDe(fen: string, uci: string): string {
   return applyUci(fen, uci)?.game.history().at(-1) ?? uci;
+}
+
+/**
+ * A dica em texto do primeiro erro no treino: a **primeira frase** do comentário do professor no
+ * lance certo, com "Dica:" na frente. Uma frase, e não o comentário inteiro: o resto costuma nomear
+ * o plano e o lance seguinte, e isso já é a resposta da próxima pergunta. Sem comentário, sem dica
+ * — o segundo erro acende a casa de qualquer jeito (regra do comentário opcional, `AGENTS.md`).
+ */
+function dicaDoLance(linha: Linha, passo: number): string | null {
+  const texto = comentarioDe(linha, passo);
+  if (!texto) return null;
+  const frase = texto.match(/^.+?[.!?](?=\s|$)/)?.[0] ?? texto;
+  const curta = frase.length > 160 ? `${frase.slice(0, 157).trimEnd()}…` : frase;
+  return `Dica: ${curta}`;
+}
+
+/** Depois de quantas passadas valendo erradas seguidas o painel de fim oferece a seta primeiro. */
+export const PASSADAS_ERRADAS_PARA_A_SETA = 2;
+
+/**
+ * O fim do valendo sugere "Jogar com a seta" como botão principal? Sim a partir da segunda passada
+ * errada seguida (17/9/2026): errar duas vezes a mesma linha de memória é sinal de que ela não foi
+ * vista o bastante, e insistir no valendo só acumula erro gravado.
+ */
+export function sugereASeta(passadasErradasSeguidas: number): boolean {
+  return passadasErradasSeguidas >= PASSADAS_ERRADAS_PARA_A_SETA;
 }
 
 /* ------------------------------------------------------------------ *

@@ -245,7 +245,7 @@ async function erroESolucao(pagina: Page, aluno: { id: string }, tela: string): 
     // por tema, e por isso é aqui que o mínimo dos temas fracos se vê.
     await pagina.goto(`${BASE}/tatica/rating/evolucao`);
     afirmar(
-      (await pagina.getByText(`Nenhum tema ainda com ${MINIMO_POR_TEMA} problemas`).count()) === 1,
+      (await pagina.getByText("Nada a revisar ainda!").count()) === 1,
       `a evolução pede ${MINIMO_POR_TEMA} problemas por tema`,
     );
   }

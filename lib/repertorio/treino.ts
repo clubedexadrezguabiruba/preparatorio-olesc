@@ -296,7 +296,15 @@ function maisAntiga(a: ProgressoDaLinha, b: ProgressoDaLinha): number {
   return x === y ? 0 : x < y ? -1 : 1;
 }
 
-/** As linhas cuja data de revisão já passou, da mais vencida para a menos. */
+/**
+ * A ordem do estudo (regra 15 do curso de abertura, 16/9/2026): a linha com `ordem` menor vem
+ * antes. Linha sem `ordem` — as aberturas sem estudo — fica depois, na ordem do arquivo, porque o
+ * `sort` é estável.
+ */
+const SEM_ORDEM = Number.MAX_SAFE_INTEGER;
+const pelaOrdem = (a: Linha, b: Linha): number => (a.ordem ?? SEM_ORDEM) - (b.ordem ?? SEM_ORDEM);
+
+/** As linhas cuja data de revisão já passou, da mais vencida para a menos; empate, pela ordem do estudo. */
 export function vencidas(
   linhas: readonly Linha[],
   progresso: Progresso,
@@ -307,7 +315,7 @@ export function vencidas(
     .sort(
       (a, b) =>
         Date.parse(progressoDe(progresso, a.id).revisarEm!) -
-        Date.parse(progressoDe(progresso, b.id).revisarEm!),
+          Date.parse(progressoDe(progresso, b.id).revisarEm!) || pelaOrdem(a, b),
     );
 }
 
@@ -350,9 +358,11 @@ function foiRevisao(p: ProgressoDaLinha): boolean {
  *
  * Sem nenhuma vencida, valem os três grupos de sempre:
  *
- * 1. **Nunca vistas**, na ordem do arquivo. A ordem do arquivo é a ordem do
- *    PGN, que é pedagógica: o tronco primeiro, as variantes depois. Sortear
- *    aqui jogaria fora a única ordenação que um professor escreveu à mão.
+ * 1. **Nunca vistas**, pela `ordem` do estudo quando a linha a tem (regra 15,
+ *    16/9/2026: arma → esquema → golpes → … → árvore completa), e na ordem do
+ *    arquivo quando não tem. As duas são pedagógicas: o tronco primeiro, as
+ *    variantes depois. Sortear aqui jogaria fora a ordenação que o professor
+ *    escreveu. É ordem **sugerida**: a revisão vencida continua entrando no meio.
  * 2. **Não aprendidas**, pelas que estão mais longe do degrau 3, e entre
  *    empatadas a que faz mais tempo que não aparece.
  * 3. **Aprendidas**, a mais antiga primeiro. É a revisão.
@@ -381,7 +391,7 @@ export function proximaLinha(
   const pool =
     recente && linhas.length > 1 ? linhas.filter((l) => l.id !== recente.id) : [...linhas];
 
-  const nunca = pool.find((l) => de(l).tentativas === 0) ?? null;
+  const nunca = pool.filter((l) => de(l).tentativas === 0).sort(pelaOrdem)[0] ?? null;
   const devida = vencidas(pool, progresso, agora)[0] ?? null;
 
   if (recente && foiRevisao(de(recente)) && nunca) return nunca;
@@ -450,8 +460,9 @@ export function aprendidasDaAbertura(
   progresso: Progresso,
   abertura: EntradaDoIndice,
   avancadoLiberado: boolean,
+  trancadas: ReadonlySet<string> = SEM_TRAVA,
 ): number {
-  return idsLiberados(abertura, avancadoLiberado).filter((id) =>
+  return idsLiberados(abertura, avancadoLiberado, trancadas).filter((id) =>
     aprendida(progressoDe(progresso, id)),
   ).length;
 }
@@ -462,8 +473,9 @@ export function aRevisarNaAbertura(
   abertura: EntradaDoIndice,
   agora: string,
   avancadoLiberado: boolean,
+  trancadas: ReadonlySet<string> = SEM_TRAVA,
 ): number {
-  return idsLiberados(abertura, avancadoLiberado).filter((id) =>
+  return idsLiberados(abertura, avancadoLiberado, trancadas).filter((id) =>
     vencida(progressoDe(progresso, id), agora),
   ).length;
 }
@@ -479,14 +491,26 @@ export function aRevisarNaAbertura(
  * o painel contar só o Base para sempre sem ninguém notar; um padrão `true`
  * mostraria as trancadas. Quem chama tem de dizer, e só há uma fonte para a
  * resposta: `baseCompleto`.
+ *
+ * **`trancadas` são as linhas da trava por aula** (17/9/2026): as do move trainer de uma aula de
+ * abertura que o aluno ainda não concluiu — ver `lib/aberturas/trava.ts`. Elas saem de toda conta
+ * pelo mesmo motivo do Avançado: um denominador que o aluno não pode alcançar. O padrão é vazio, e
+ * não "obrigatório" como o portão, porque quem lê o conjunto é o servidor (`travaDoAluno`) e há
+ * contas — as do teste, as de script — que não têm aluno nenhum.
  */
 export function idsLiberados(
   abertura: EntradaDoIndice,
   avancadoLiberado: boolean,
+  trancadas: ReadonlySet<string> = SEM_TRAVA,
 ): readonly string[] {
-  if (avancadoLiberado) return abertura.ids;
-  return abertura.ids.filter((id) => !abertura.idsAvancado.includes(id));
+  const visiveis = avancadoLiberado
+    ? abertura.ids
+    : abertura.ids.filter((id) => !abertura.idsAvancado.includes(id));
+  return trancadas.size === 0 ? visiveis : visiveis.filter((id) => !trancadas.has(id));
 }
+
+/** Nenhuma linha trancada — o padrão de quem não tem aluno à mão. */
+const SEM_TRAVA: ReadonlySet<string> = new Set();
 
 /**
  * Quantas linhas do **Base** ainda não estão aprendidas, no repertório inteiro.
@@ -504,15 +528,26 @@ export function idsLiberados(
  * cima), 20 linhas dão ~15 sessões. O tamanho do Base **é** o preço de entrada
  * do Avançado, e quem mexer num tem de olhar o outro.
  */
-export function faltamNoBase(progresso: Progresso, indice: readonly EntradaDoIndice[]): number {
+export function faltamNoBase(
+  progresso: Progresso,
+  indice: readonly EntradaDoIndice[],
+  trancadas: ReadonlySet<string> = SEM_TRAVA,
+): number {
   return indice
-    .flatMap((e) => idsLiberados(e, false))
+    .flatMap((e) => idsLiberados(e, false, trancadas))
     .filter((id) => !aprendida(progressoDe(progresso, id))).length;
 }
 
-/** O portão: o Avançado abre quando não falta nenhuma linha do Base. */
-export function baseCompleto(progresso: Progresso, indice: readonly EntradaDoIndice[]): boolean {
-  return faltamNoBase(progresso, indice) === 0;
+/**
+ * O portão: o Avançado abre quando não falta nenhuma linha do Base. É também o requisito de
+ * repertório do nível 5 (`ProgressoParaONivel.baseCompleto`), então as `trancadas` valem lá igual.
+ */
+export function baseCompleto(
+  progresso: Progresso,
+  indice: readonly EntradaDoIndice[],
+  trancadas: ReadonlySet<string> = SEM_TRAVA,
+): boolean {
+  return faltamNoBase(progresso, indice, trancadas) === 0;
 }
 
 /** Quantas linhas de Avançado existem — o que o aluno ganha ao destravar. */

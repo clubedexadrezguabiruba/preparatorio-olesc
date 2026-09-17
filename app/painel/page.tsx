@@ -1,33 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { sair } from "@/app/entrar/acoes";
+import { Avatar } from "@/components/avatar/Avatares";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Moldura } from "@/components/Moldura";
+import { travaDoAluno } from "@/lib/aberturas/trava-banco";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { proximaAcao } from "@/lib/curso/acao";
 import { hojeNoBrasil, somarDias } from "@/lib/curso/calendario";
-import {
-  diasComOMinimo,
-  maiorSequenciaDeDias,
-  minutosDeHoje,
-  sequenciaDeDias,
-} from "@/lib/curso/hoje";
-import { fechamentoDoNivel, nivelDoAluno, temaFechado } from "@/lib/curso/nivel";
-import { selos } from "@/lib/curso/selos";
+import { minutosDeHoje, sequenciaDeDias } from "@/lib/curso/hoje";
+import { fechamentoDoNivel, nivelDoAluno } from "@/lib/curso/nivel";
+import { entradaDosSelos, puzzlesDoAluno, sincronizarSelos } from "@/lib/curso/selos-banco";
 import { minutosPorDia, partidasDeclaradas } from "@/lib/curso/minutos";
 import { nivelConquistado } from "@/lib/curso/progresso";
 import { aulasComPratica, aulasExtras, aulasPublicadas } from "@/lib/finais/conteudo";
 import { aulasVencidas } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
-import { aprendidasDaTrilha, aulasAbertas } from "@/lib/finais/trilha";
+import { aulasAbertas } from "@/lib/finais/trilha";
 import { lerIndice } from "@/lib/repertorio/banco";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
-import {
-  aprendidasDaAbertura,
-  aRevisarNaAbertura,
-  baseCompleto,
-  idsLiberados,
-} from "@/lib/repertorio/treino";
+import { aprendidasDaAbertura, aRevisarNaAbertura, baseCompleto } from "@/lib/repertorio/treino";
 import {
   emOrdemDeData,
   quandoPorExtenso,
@@ -36,11 +28,11 @@ import {
 } from "@/lib/tarefas/agenda";
 import { AGENDA } from "@/lib/tarefas/conteudo";
 import { tarefasMarcadas } from "@/lib/tarefas/progresso";
-import { BLOCOS, contaNoCurso } from "@/lib/tatica/blocos";
 import { progressoPorTema, revisaoDeHoje } from "@/lib/tatica/progresso";
 import { INICIO } from "@/lib/tatica/glicko2";
 import { serieDoGrafico } from "@/lib/tatica/rating-grafico";
 import { ratingDoAluno, tentativasDoRating } from "@/lib/tatica/rating-leitura";
+import { AvisoDeSeloNovo } from "@/components/selos/AvisoDeSeloNovo";
 import { Agenda } from "./Agenda";
 import { Agora } from "./Agora";
 import { Escada } from "./Escada";
@@ -116,6 +108,8 @@ export default async function Painel() {
     conquistado,
     ratingTatica,
     tentativasNoRating,
+    trava,
+    puzzles,
   ] = await Promise.all([
     progressoPorTema(perfil.id),
     tarefasMarcadas(perfil.id),
@@ -138,6 +132,11 @@ export default async function Painel() {
     nivelConquistado(perfil.id),
     ratingDoAluno(perfil.id),
     tentativasDoRating(perfil.id),
+    // As linhas das aulas de abertura não concluídas (trava por aula, 17/9/2026) saem das contas,
+    // como em `/aberturas`: o painel e a lista não podem ter denominadores diferentes.
+    travaDoAluno(perfil),
+    // Os números dos selos V2 — puzzles resolvidos e pontaria —, da view da 0018.
+    puzzlesDoAluno(perfil.id),
   ]);
 
   // A trilha de finais: o que está publicado, e o que dele já foi aprendido. As
@@ -176,14 +175,14 @@ export default async function Painel() {
   // fechado, as linhas trancadas não entram no total nem na conta de aprendidas.
   // Duas telas com denominadores diferentes para o mesmo repertório seria o bug
   // de 6/9/2026 de novo, por outra porta.
-  const avancadoLiberado = baseCompleto(repertorio, indice);
+  const avancadoLiberado = baseCompleto(repertorio, indice, trava.trancadas);
   const linhasAprendidas = indice.reduce(
-    (soma, e) => soma + aprendidasDaAbertura(repertorio, e, avancadoLiberado),
+    (soma, e) => soma + aprendidasDaAbertura(repertorio, e, avancadoLiberado, trava.trancadas),
     0,
   );
   const agoraNoRepertorio = new Date().toISOString();
   const linhasARevisar = indice.reduce(
-    (soma, e) => soma + aRevisarNaAbertura(repertorio, e, agoraNoRepertorio, avancadoLiberado),
+    (soma, e) => soma + aRevisarNaAbertura(repertorio, e, agoraNoRepertorio, avancadoLiberado, trava.trancadas),
     0,
   );
 
@@ -227,54 +226,35 @@ export default async function Painel() {
   const minutosDoDia = minutosDeHoje(minutosRecentes, hoje, partidas.has(hoje));
   const sequencia = sequenciaDeDias(minutosRecentes, hoje);
 
-  /*
-   * Os selos, do histórico inteiro e sem uma consulta a mais.
-   *
-   * Os números de tática e de finais são do **curso inteiro**, e não do degrau:
-   * um selo de "13 temas" que zerasse ao subir de nível não seria um selo.
-   */
-  const temasFechados = BLOCOS.flatMap((b) => b.temas).filter((t) =>
-    contaNoCurso(t) && temaFechado(progresso.get(t.tag)?.feitos),
-  ).length;
-
-  const aBase = (cor: "brancas" | "pretas") => {
-    const daCor = indice.filter((e) => e.cor === cor);
-    const total = daCor.reduce((n, e) => n + idsLiberados(e, false).length, 0);
-    const feitas = daCor.reduce((n, e) => n + aprendidasDaAbertura(repertorio, e, false), 0);
-    return total > 0 && feitas >= total;
-  };
-  const linhasTodas = indice.reduce((n, e) => n + e.ids.length, 0);
-  const aprendidasTodas = indice.reduce(
-    (n, e) => n + aprendidasDaAbertura(repertorio, e, true),
-    0,
-  );
-
   // Os últimos 30 dias; o recorte vem depois da conta, dentro de `serieDoGrafico`,
   // para o recorde de cada ponto contar o pico de antes da janela.
   const curvaDoRating = serieDoGrafico(tentativasNoRating, { dias: 30, hoje });
 
-  const listaDeSelos = selos({
-    temasFechados,
-    aulasAprendidas: aprendidasDaTrilha(aulasDeFinais, finais, comPratica).size,
-    repertorio: {
-      brancasCompletas: aBase("brancas"),
-      pretasCompletas: aBase("pretas"),
-      baseCompleto: avancadoLiberado,
-      avancadoCompleto: linhasTodas > 0 && aprendidasTodas >= linhasTodas,
-    },
-    conquistado,
-    diasComUmaHora: diasComOMinimo(minutos),
-    maiorSequencia: maiorSequenciaDeDias(minutos),
-    // O máximo e a melhor sequência, que só sobem: selo ganho não some.
-    ratingTatica: ratingTatica
-      ? {
-          maximo: ratingTatica.ratingMaximo,
-          melhorSequencia: ratingTatica.melhorSequencia,
-          inicio: ratingTatica.ratingInicial,
-          resolvidos: ratingTatica.resolvidos,
-        }
-      : null,
-  });
+  /*
+   * Os selos, do histórico inteiro, e **gravados com a data** (0018, 17/9/2026).
+   *
+   * A entrada é montada por `entradaDosSelos` — a mesma função de "Meu perfil", para as duas
+   * telas não discordarem — sobre o que o painel já leu, mais a view de puzzles. Os números de
+   * tática e de finais são do curso inteiro, e não do degrau. `sincronizarSelos` grava o que é
+   * novo e devolve os que o aviso "Selo novo" tem de mostrar; se o banco falhar, o painel mostra
+   * os derivados sem data e segue.
+   */
+  const { lista: listaDeSelos, novos: selosNovos } = await sincronizarSelos(
+    perfil.id,
+    entradaDosSelos({
+      progresso,
+      finais,
+      aulasDeFinais,
+      comPratica,
+      indice,
+      repertorio,
+      trava,
+      conquistado,
+      minutos,
+      ratingTatica,
+      puzzles,
+    }),
+  );
   const grupos = agrupar(emOrdemDeData(AGENDA));
   const itensDaAgenda = grupos.reduce((n, g) => n + g.itens.length, 0);
 
@@ -290,9 +270,24 @@ export default async function Painel() {
             grande: medido, o nome em `titulo` ainda comia ~60 px da dobra que o
             cartão AGORA disputa. O título desta página não é quem o aluno é —
             é o que ele tem para fazer. */}
-        <header className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-          <h1 className="text-base font-semibold text-tinta">{perfil.nome}</h1>
+        <header className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+          {/* O avatar ao lado do nome (17/9/2026), e o avatar é o atalho para trocá-lo. 40 px e
+              não mais: é a mesma linha baixa de antes, e não um cartão de perfil. */}
+          <div className="flex min-w-0 items-center gap-3">
+            <Link href="/perfil" aria-label="Meu perfil" className="foco shrink-0 rounded-full">
+              <Avatar id={perfil.avatar} tamanho={40} decorativo />
+            </Link>
+            <h1 className="truncate text-base font-semibold text-tinta">{perfil.nome}</h1>
+          </div>
           <div className="flex items-center gap-3 text-xs">
+            {/* "Meu perfil" (17/9/2026): conquistas com data, graus e o avatar numa página só — era
+                "Meu progresso". E a turma: os colegas, em ordem alfabética, sem número nenhum. */}
+            <Link href="/perfil" className="foco -my-3 inline-flex min-h-11 items-center font-medium text-metodo-tinta hover:underline">
+              Meu perfil
+            </Link>
+            <Link href="/turma" className="foco -my-3 inline-flex min-h-11 items-center font-medium text-metodo-tinta hover:underline">
+              Turma
+            </Link>
             <span className="text-tinta-fraca">
               {perfil.equipe ? EQUIPE[perfil.equipe] : "Professor"}
               {perfil.tabuleiro ? ` · tabuleiro ${perfil.tabuleiro}` : ""}
@@ -309,6 +304,11 @@ export default async function Painel() {
             </form>
           </div>
         </header>
+
+        {/* O selo novo antes do AGORA: é a notícia do dia, e aparece uma vez só. */}
+        {selosNovos.length > 0 ? (
+          <AvisoDeSeloNovo selos={selosNovos.map(({ id, familia, nome, conta }) => ({ id, familia, nome, conta }))} />
+        ) : null}
 
         <Agora acao={acao} />
 

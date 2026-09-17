@@ -19,6 +19,9 @@
  *   regras de publicação precisa — nenhuma regra de trilha a alcança.
  * - `EX-FIXTURE-V2` (fatia 8, §22): a mesma aula como **extra**, com nível 1 e classe E
  *   declarados. É nela que as mutações `EXTRA_SEM_NIVEL` e `EXTRA_SEM_CLASSE` mordem.
+ * - `AB-BRANCAS-ALAPIN-A` (curso de abertura, §13.3.3 e §18.1, 16/9/2026): a mesma aula como aula de
+ *   abertura, com um move trainer apontando para a linha compilada da Alapin — que a régua sem
+ *   tamanho não muda. É nela que `ABERTURA_DIVERGE` e `TREINADOR_LINHA_AUSENTE` mordem.
  *
  * A data do ponteiro é fixa para a fixture sair byte a byte igual em toda execução.
  */
@@ -42,6 +45,16 @@ const FIXTURES: Array<{ id: string; aula: (base: AulaV2) => AulaV2 }> = [
   {
     id: "EX-FIXTURE-V2",
     aula: (base) => ({ ...base, id: "EX-FIXTURE-V2", metadados: { ...base.metadados!, nivel: 1, classe: "E" } }),
+  },
+  {
+    id: "AB-BRANCAS-ALAPIN-A",
+    aula: (base) => ({
+      ...base,
+      id: "AB-BRANCAS-ALAPIN-A",
+      metadados: { ...base.metadados!, abertura: { cor: "brancas", abertura: "alapin", bloco: "A" } },
+      treinadores: [{ id: "treinador-fixture", titulo: "Move trainer da fixture", cor: "brancas", abertura: "alapin", linhaIds: ["brancas-alapin-5eb647e6"] }],
+      fluxo: [...base.fluxo, { id: "etapa-treinador-fixture", tipo: "treinador", entidadeId: "treinador-fixture" }],
+    }),
   },
 ];
 

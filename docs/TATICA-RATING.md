@@ -310,7 +310,8 @@ que ela dizia de útil.
   teto). Os cartões de `/tatica` e do painel dizem "Depois da revisão e da série do tema: até
   70 problemas por dia"; a tela de jogo conta "hoje 7 de 70" e, no 70º, troca para
   "70 hoje · já pode parar". Não trava nada.
-- **Item 9 — temas fracos.** O mínimo por tema vai de 5 para **15**, e cada problema conta
+- **Item 9 — temas fracos.** O mínimo por tema vai de 5 para **15** (e para **10** em 17/9/2026, decisão do
+  Doug; sem tema com o mínimo, a tela diz só "Nada a revisar ainda!"), e cada problema conta
   por **todos** os temas do currículo que traz. Para isso, a migration aditiva
   **`0014_tatica_rating_temas.sql`** (aplicada no banco de teste) guarda `temas` na tentativa:
   a alternativa era abrir ~33 MB de arquivos a cada abertura da evolução. Tentativa antiga,

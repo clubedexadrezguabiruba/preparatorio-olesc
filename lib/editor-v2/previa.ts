@@ -36,6 +36,7 @@
  * próximo, e é a bifurcação que o professor acabou de criar.
  */
 import { mapaDaAnalise } from "./arvore.ts";
+import { dominioDaAulaV2 } from "./dominio.ts";
 import { sanEmPortugues } from "../repertorio/treino.ts";
 import type { AulaV2, CapituloV2, DesenhoV2 } from "./modelo.ts";
 import type { Position } from "../lesson/schema.ts";
@@ -54,6 +55,8 @@ export type PassoDaPrevia = {
   nags?: number[];
   /** §15.2: a pausa que exige "Continuar" em vez de andar sozinha. */
   pausaManual: boolean;
+  /** O rótulo da fala marcada no estudo (`[ARMADILHA]` → "Armadilha"), §13.3.5. */
+  rotulo?: string;
   /** A pausa extra da narração, somada à leitura (o `espera` do roteiro v1). */
   esperaMs?: number;
   /**
@@ -173,6 +176,7 @@ function passosDoTrecho(aula: AulaV2, capitulo: CapituloV2, de: string): PassoDa
         // A fala com desenho próprio manda nele; sem, vale o desenho da posição.
         desenhos: narracao.desenhos ?? no.desenhos,
         pausaManual: narracao.pausa === "manual",
+        ...(narracao.rotulo ? { rotulo: narracao.rotulo } : {}),
         ...(narracao.esperaMs ? { esperaMs: narracao.esperaMs } : {}),
         ...nags,
       });
@@ -193,6 +197,22 @@ function comecoComum(a: readonly string[], b: readonly string[]): number {
   return n;
 }
 
+/**
+ * No curso de abertura, o capítulo que continua depois de uma parada começa no meio da árvore: para
+ * comparar, ele conta desde a raiz — senão o ramo que sai depois da parada perde o "Voltamos a…".
+ */
+function percursoParaComparar(aula: AulaV2, capitulo: CapituloV2): string[] {
+  const percurso = percursoDoCapitulo(capitulo);
+  if (dominioDaAulaV2(aula.id) !== "abertura") return percurso;
+  const analise = aula.analises.find((item) => item.id === capitulo.analiseId);
+  if (!analise || capitulo.inicioNodeId === analise.raizId) return percurso;
+  const pais = new Map<string, string>();
+  for (const no of Object.values(analise.nos)) for (const filho of no.filhos) pais.set(filho, no.id);
+  const antes: string[] = [];
+  for (let atual = pais.get(capitulo.inicioNodeId); atual; atual = pais.get(atual)) antes.unshift(atual);
+  return antes[0] === analise.raizId ? [...antes, ...percurso] : percurso;
+}
+
 function comparacaoDoTrecho(
   aula: AulaV2,
   capitulo: CapituloV2,
@@ -203,7 +223,7 @@ function comparacaoDoTrecho(
   let melhor: { outro: CapituloV2; n: number } | null = null;
   for (const outro of anteriores) {
     if (outro.analiseId !== capitulo.analiseId) continue;
-    const seu = percursoDoCapitulo(outro);
+    const seu = percursoParaComparar(aula, outro);
     const n = comecoComum(meu, seu);
     // `n < meu.length` e `n < seu.length`: as duas linhas precisam **seguir** dali,
     // ou não há escolha nenhuma para comparar — uma é só o começo da outra.
@@ -214,7 +234,7 @@ function comparacaoDoTrecho(
 
   const mapa = mapaDaAnalise(aula, capitulo.analiseId, positions);
   const bifurcacao = meu[melhor.n - 1];
-  const seu = percursoDoCapitulo(melhor.outro);
+  const seu = percursoParaComparar(aula, melhor.outro);
   const rotuloDoNo = (id: string) => {
     const san = mapa.sans[id];
     if (!san) return "a posição inicial";

@@ -1,4 +1,6 @@
 import "server-only";
+import { travaDoAluno } from "../aberturas/trava-banco.ts";
+import { podeGravarLinha, TRAVA_POR_AULA } from "../aberturas/trava.ts";
 import { criarClienteAdmin } from "../supabase/admin.ts";
 import { linhaPorId } from "./banco.ts";
 import { CORES, type Cor } from "./linhas.ts";
@@ -16,6 +18,12 @@ export type Treino = {
   linhaId: string;
   /** Os lances do aluno, em UCI, na ordem de `meus`. */
   lances: string[];
+  /**
+   * A aula de abertura de onde a passada veio, quando veio de dentro de uma (17/9/2026). É o que
+   * deixa o move trainer da aula gravar as linhas dela antes de a aula estar concluída — ver
+   * `podeGravarLinha` em `lib/aberturas/trava.ts`. A página de treino não manda.
+   */
+  deAula?: string;
 };
 
 export type Resultado = { acertou: boolean; progresso: ProgressoDaLinha } | { erro: string };
@@ -63,9 +71,18 @@ const UCI = /^[a-h][1-8][a-h][1-8][qrbn]?$/;
  * no meio não é acertar a linha —, então o custo da dica não precisou de uma
  * linha de código deste lado. É a mesma disciplina do resto do arquivo: o
  * servidor julga lances, e nada mais.
+ *
+ * ## A trava por aula
+ *
+ * Linha de aula de abertura não concluída é recusada, com a exceção da passada que vem de dentro
+ * da própria aula (`deAula`). O professor passa sempre. A regra é `podeGravarLinha`, pura e testada.
  */
-export async function gravarTreino(aluno: string, treino: Treino): Promise<Resultado> {
-  const { cor, abertura, linhaId, lances } = treino;
+export async function gravarTreino(
+  aluno: string,
+  treino: Treino,
+  papel: "aluno" | "professor" = "aluno",
+): Promise<Resultado> {
+  const { cor, abertura, linhaId, lances, deAula } = treino;
 
   if (!CORES.includes(cor)) return { erro: "cor desconhecida" };
   if (typeof abertura !== "string" || !ABERTURA.test(abertura)) return { erro: "treino malformado" };
@@ -80,6 +97,23 @@ export async function gravarTreino(aluno: string, treino: Treino): Promise<Resul
   if (!linha) return { erro: "linha desconhecida" };
   // O teto antes de conferir: uma lista gigante não deve chegar ao juiz.
   if (lances.length > linha.meus.length) return { erro: "treino malformado" };
+  if (deAula !== undefined && typeof deAula !== "string") return { erro: "treino malformado" };
+
+  // A trava por aula (17/9/2026), no servidor: esconder o botão não tranca, porque a URL e esta
+  // action ficam ao alcance de qualquer aba. O papel vem do perfil lido pela server action.
+  if (TRAVA_POR_AULA) {
+    const trava = await travaDoAluno({ id: aluno, papel });
+    const aulas = trava.cursos.get(`${cor}/${abertura}`) ?? [];
+    const liberada = podeGravarLinha({
+      aulas,
+      linhaId: linha.id,
+      concluidas: new Set(trava.concluidas.keys()),
+      quem: trava.quem,
+      deAula,
+      rodadasAbertas: new Set(trava.abertas.keys()),
+    });
+    if (!liberada) return { erro: "esta linha abre quando você concluir a aula dela" };
+  }
 
   const acertou = conferirLinha(linha, lances);
 

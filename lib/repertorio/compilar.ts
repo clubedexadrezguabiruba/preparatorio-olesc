@@ -37,6 +37,9 @@ import { lerPgns } from "./pgn.ts";
  */
 
 /** Um `.pgn` de `content/repertorio/`, pelo nome do arquivo e o texto. */
+
+/** As categorias que a tag `[Categoria]` aceita — as do `LinhaSchema`. */
+const CATEGORIAS_DA_LINHA: readonly NonNullable<Linha["categoria"]>[] = ["arma", "esquema", "preparacao", "golpe", "nao-funciona", "defesa", "linha-critica", "desvio", "se-esquecer", "arvore"];
 export type FonteDoRepertorio = { nome: string; texto: string };
 
 export type ResumoDoArquivo = { nome: string; linhas: number; base: number; avancado: number };
@@ -116,12 +119,26 @@ export function compilarRepertorio(
         continue;
       }
 
+      // O PGN gerado a partir do estudo (16/9/2026) diz a categoria e a ordem de cada linha.
+      const { Categoria: categoria, Ordem: ordemEmTexto, Linha: titulo } = jogo.tags;
+      if (categoria && !CATEGORIAS_DA_LINHA.includes(categoria as NonNullable<Linha["categoria"]>)) {
+        problemas.push(`${emQual}: [Categoria "${categoria}"] — tem de ser uma de ${CATEGORIAS_DA_LINHA.join(", ")}.`);
+        continue;
+      }
+      const ordem = ordemEmTexto === undefined ? undefined : Number(ordemEmTexto);
+      if (ordem !== undefined && (!Number.isInteger(ordem) || ordem < 1)) {
+        problemas.push(`${emQual}: [Ordem "${ordemEmTexto}"] — tem de ser um número inteiro a partir de 1.`);
+        continue;
+      }
       const expansao = expandir(jogo, {
         abertura: abertura!,
         nome: nomeDaArvore!,
         cor: cor!,
         nivel: nivel!,
         fonte: fonte!,
+        ...(titulo ? { titulo } : {}),
+        ...(categoria ? { categoria: categoria as NonNullable<Linha["categoria"]> } : {}),
+        ...(ordem !== undefined ? { ordem } : {}),
       });
       problemas.push(...expansao.problemas.map((p) => `${emQual}: ${p}`));
       for (const aviso of expansao.avisos) {

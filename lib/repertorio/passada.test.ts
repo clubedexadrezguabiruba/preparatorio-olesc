@@ -6,6 +6,7 @@ import {
   inicio,
   reduzir,
   simboloNaTela,
+  sugereASeta,
   type EstadoDaPassada,
   type Efeito,
   type Evento,
@@ -699,4 +700,64 @@ test("o adversário espera a entrada grande do Brilhante e do Ótimo acabar ante
 
   const comum = linha();
   assert.deepEqual(esperaDele(reduzir(comum, inicio(comum, "quiz"), jogou("e2e4")).efeitos), [480], "sem marca, o ritmo não muda");
+});
+
+/* ------------------------------------------------------------------ *
+ * A escada de ajuda do treino (feedback do aluno, 17/9/2026)
+ *
+ * "Tente de novo" infinito era o defeito: o aluno que não lembrava errava dez
+ * vezes o mesmo lance sem ganhar nada. No mesmo lance, cada erro dá um pouco
+ * mais: a dica em texto, depois a casa da peça, depois a seta com o lance.
+ * ------------------------------------------------------------------ */
+
+test("treino: 1.º erro dá a dica do lance, 2.º acende a casa, 3.º desenha a seta — e acertar zera", () => {
+  const l = linha({ comentarios: { "2": "O cavalo ataca e5 e desenvolve. Depois vem o bispo.", "6": "fecha." } });
+  let estado = correr(l, inicio(l, "treino"), [jogou("e2e4"), responde]).estado;
+
+  ({ estado } = correr(l, estado, [jogou("d1h5")]));
+  assert.equal(estado.errosNoLance, 1);
+  assert.equal(estado.comentario, "Dica: O cavalo ataca e5 e desenvolve.", "a primeira frase do comentário do lance certo");
+  assert.equal(estado.dicaNoPasso, null, "a casa ainda não acende");
+  assert.equal(estado.setaNoPasso, null);
+  ({ estado } = correr(l, estado, [segue]));
+  assert.equal(estado.comentario, "Dica: O cavalo ataca e5 e desenvolve.", "a dica fica enquanto ele tenta");
+
+  ({ estado } = correr(l, estado, [jogou("d1h5"), segue]));
+  assert.equal(estado.errosNoLance, 2);
+  assert.equal(estado.dicaNoPasso, 2, "o segundo erro acende a casa de origem");
+  assert.equal(estado.setaNoPasso, null);
+
+  ({ estado } = correr(l, estado, [jogou("d1h5")]));
+  assert.equal(estado.setaNoPasso, 2, "o terceiro mostra o lance com a seta");
+  assert.match(estado.cartao.comando, /seta/i);
+  ({ estado } = correr(l, estado, [segue]));
+  assert.equal(estado.setaNoPasso, 2, "e a seta fica até ele jogar");
+
+  const { estado: depois, efeitos } = correr(l, estado, [jogou("g1f3")]);
+  assert.equal(depois.passo, 3, "o lance certo anda");
+  assert.equal(depois.errosNoLance, 0, "o contador é por lance");
+  assert.equal(depois.setaNoPasso, null);
+  assert.deepEqual(decisoes(efeitos), [], "e nada disso grava: o treino continua sem nota");
+});
+
+test("a escada de ajuda é só do treino: no quiz o erro continua parando a passada", () => {
+  const l = linha({ comentarios: { "2": "O cavalo ataca e5." } });
+  const { estado } = correr(l, inicio(l, "quiz"), [jogou("e2e4"), responde, jogou("d1h5")]);
+  assert.equal(estado.errou, true);
+  assert.equal(estado.setaNoPasso, null);
+  assert.equal(estado.errosNoLance, 0);
+});
+
+test("o fim do valendo sugere a seta depois de duas passadas erradas seguidas", () => {
+  assert.equal(sugereASeta(0), false);
+  assert.equal(sugereASeta(1), false);
+  assert.equal(sugereASeta(2), true);
+  assert.equal(sugereASeta(5), true);
+});
+
+test("na leitura o cartão não repete o botão: o estado fica vazio", () => {
+  const l = linha({ comentarios: { "0": "e4 toma o centro.", "6": "fecha." } });
+  const { estado } = correr(l, inicio(l, "assistido"), [jogou("e2e4")]);
+  assert.equal(estado.fase, "lendo");
+  assert.equal(estado.cartao.estado, "");
 });

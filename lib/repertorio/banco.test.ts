@@ -5,7 +5,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { Chess } from "chess.js";
 import { notas as NOTAS_FN } from "./conteudo.ts";
-import { estadoDe, IndiceSchema, meiosLances, validarBanco, type Linha } from "./linhas.ts";
+import { estadoDe, IndiceSchema, validarBanco, type Linha } from "./linhas.ts";
 
 /**
  * O que está publicado em `public/repertorio/` confere?
@@ -32,18 +32,6 @@ function ler(relativo: string): unknown {
 
 const indice = IndiceSchema.parse(ler("index.json"));
 
-/**
- * Quantas linhas publicadas ainda não fecham a régua do término: **zero**, desde
- * que a §24 terminou em 8/9/2026.
- *
- * Este teste ficou redundante no mesmo dia, e continua aqui de propósito. Desde
- * a Fase 4 quem reprova linha aberta é `validarBanco`, que roda no compilador,
- * no servidor a cada leitura e três vezes neste arquivo — então uma linha aberta
- * já estoura antes de chegar aqui. O que este teste guarda é o NÚMERO: se um dia
- * alguém afrouxar `fechamentosAbertos` para destravar uma build, o banco volta a
- * passar em silêncio e é esta linha que grita.
- */
-const ABERTAS = 0;
 
 test("o índice tem as onze aberturas, sem repetir cor e slug", () => {
   // Eram doze até 7/9/2026. A poda da §23 de `docs/REVISAO-FONTES.md` apagou
@@ -105,7 +93,10 @@ test("o Base publicado tem 20 linhas, e o primeiro lance é sempre das brancas",
   //
   // Este número é a meta pedagógica do Base; ele não tem relação com o `teto`
   // de `aberturasInchadas`, que conta linhas **por abertura** e continua em 40.
-  assert.equal(todas.filter((l) => l.nivel === "base").length, 20);
+  //
+  // **38 desde 17/9/2026:** a Francesa passou a vir do estudo do Lichess (curso de abertura) —
+  // a linha escrita à mão saiu e entraram as 19 do move trainer, todas no Base.
+  assert.equal(todas.filter((l) => l.nivel === "base").length, 38);
 
   for (const linha of todas) {
     // O contrato de que a tela depende para saber quando auto-jogar: `meus`
@@ -115,36 +106,22 @@ test("o Base publicado tem 20 linhas, e o primeiro lance é sempre das brancas",
     for (const ply of linha.meus) {
       assert.equal(ply % 2, esperado, `${linha.id}: o meio-lance ${ply} não é do aluno`);
     }
-    assert.ok(
-      linha.lances.length <= meiosLances(linha.nivel, linha.cor),
-      `${linha.id} passa do teto do nível`,
-    );
   }
 });
 
-test("nenhum lance NOSSO do repertório publicado está sem comentário", () => {
-  // O número que a §23 de `docs/REVISAO-FONTES.md` fechou. `conferirRegras` já
-  // reprova isto — mas ele roda sobre o que o compilador acabou de montar, e
-  // este arquivo existe justamente para o caso da edição à mão no JSON
-  // publicado, que não passa pelo compilador. Aqui o número é conferido no que
-  // o servidor vai abrir no sábado.
+test("o repertório publicado tem 499 lances nossos", () => {
+  // Até 17/9/2026 este teste também exigia comentário em cada um deles; o Doug
+  // tornou o comentário opcional no move trainer, nos 11 repertórios.
   let nossos = 0;
   for (const entrada of indice) {
     const relativo = entrada.arquivo.replace(/^\/repertorio\//, "");
-    for (const linha of validarBanco(ler(relativo), relativo)) {
-      for (const ply of linha.meus) {
-        nossos++;
-        assert.ok(
-          linha.comentarios[String(ply)]?.trim(),
-          `${linha.id}: "${linha.sans[ply]}" (meio-lance ${ply}) está sem comentário`,
-        );
-      }
-    }
+    for (const linha of validarBanco(ler(relativo), relativo)) nossos += linha.meus.length;
   }
   // Se este número cair, alguém encurtou uma linha; se subir, alguém a alongou.
   // Ele SOBE de propósito enquanto a §24 estica as 27 linhas até o roque e as
-  // peças menores fora: era 222 no fim da §23, e o alvo é cerca de 340.
-  assert.equal(nossos, 351, "o repertório tem 351 lances nossos, em 27 linhas");
+  // peças menores fora: era 222 no fim da §23, e o alvo é cerca de 340. Foi 351 até
+  // 17/9/2026, quando as 19 linhas da Francesa geradas do estudo trocaram a escrita à mão.
+  assert.equal(nossos, 499, "o repertório tem 499 lances nossos, em 45 linhas");
 });
 
 test("as páginas de princípios ligadas a uma abertura apontam para abertura viva", () => {
@@ -193,15 +170,14 @@ test("cada linha publicada se remonta no tabuleiro, e a FEN final bate", () => {
   }
 });
 
-test("o que a régua do término mede no publicado — o número da §24", () => {
-  // O placar que o compilador imprime, conferido aqui sobre o que o servidor
-  // vai abrir. Trocar estes números sem passar pela §24 é afrouxar a régua sem
-  // ninguém ver.
+test("o placar do fechamento cobre todo o publicado (retrato, sem régua desde 16/9/2026)", () => {
+  // Até 16/9/2026 este teste exigia zero linhas abertas. A régua de tamanho saiu
+  // (spec §21): o placar continua sendo impresso, e aqui só se confere que ele
+  // conta todas as linhas.
   const todas = indice.flatMap((e) =>
     validarBanco(ler(e.arquivo.replace(/^\/repertorio\//, "")), e.abertura),
   );
   const conta = { fecha: 0, "com-plano": 0, aberta: 0 };
   for (const linha of todas) conta[estadoDe(linha)] += 1;
   assert.equal(conta.fecha + conta["com-plano"] + conta.aberta, todas.length);
-  assert.equal(conta.aberta, ABERTAS, "linhas que ainda não fecham a régua do término");
 });

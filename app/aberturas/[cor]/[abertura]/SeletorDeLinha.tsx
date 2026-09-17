@@ -47,6 +47,22 @@ export type LinhaDoMenu = {
   readonly id: string;
   readonly nome: string;
   readonly progresso: ProgressoDaLinha;
+  /** A categoria da linha gerada do estudo (16/9/2026): o menu agrupa por ela. */
+  readonly categoria?: string;
+};
+
+/** Como o aluno lê cada categoria (spec §21, emenda de 16/9/2026). */
+const NOME_DA_CATEGORIA: Record<string, string> = {
+  arma: "A arma",
+  esquema: "O esquema",
+  preparacao: "Preparação",
+  golpe: "Golpes e armadilhas",
+  "nao-funciona": "Quando não funciona",
+  defesa: "Defesas",
+  "linha-critica": "Linha crítica",
+  desvio: "Desvios",
+  "se-esquecer": "Se esquecer a teoria",
+  arvore: "Árvore completa",
 };
 
 /** As teclas que a aula usa, e que o menu aberto tem de engolir. */
@@ -151,12 +167,15 @@ export function SeletorDeLinha({
           <p className="rotulo px-1 pb-1 text-tinta-fraca">
             {linhas.length === 1 ? "A linha" : `As ${linhas.length} linhas`}
           </p>
-          {linhas.map((l) => {
+          {linhas.map((l, i) => {
             const ehAtual = l.id === atual;
+            // Um título a cada categoria nova — só nas aberturas que vêm do estudo.
+            const grupo = l.categoria && l.categoria !== linhas[i - 1]?.categoria ? NOME_DA_CATEGORIA[l.categoria] ?? l.categoria : null;
             return (
+              <div key={l.id} className="flex flex-col gap-1">
+              {grupo ? <p className="rotulo px-1 pt-1 text-tinta-fraca">{grupo}</p> : null}
               <Link
-                key={l.id}
-                href={`/aberturas/${cor}/${abertura}?linha=${l.id}`}
+                href={`/aberturas/${cor}/${abertura}/treino?linha=${l.id}`}
                 onClick={fechar}
                 aria-current={ehAtual ? "true" : undefined}
                 className={`foco flex min-h-11 items-center justify-between gap-3 rounded-lg border px-3 py-2 transition-colors ${
@@ -182,6 +201,7 @@ export function SeletorDeLinha({
                   </span>
                 )}
               </Link>
+              </div>
             );
           })}
         </div>

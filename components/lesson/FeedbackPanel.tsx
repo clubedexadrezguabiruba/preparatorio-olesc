@@ -60,7 +60,7 @@ export function FeedbackPanel({
       aria-live="polite"
       role="status"
       data-enfase={done ? "conclusao" : undefined}
-      className={`min-h-16 rounded-lg border px-4 py-3 text-sm leading-relaxed transition-colors ${
+      className={`min-h-16 rounded-lg border px-4 py-3 text-base leading-relaxed transition-colors ${
         message ? TONE[done ? "conclusao" : message.tone] : TONE.neutral
       }`}
     >

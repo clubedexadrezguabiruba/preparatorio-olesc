@@ -481,7 +481,7 @@ export function Comentario({
           ) : null}
           <div
             ref={caixaRef}
-            className={`relative max-h-full overflow-hidden rounded-lg border border-borda-fraca bg-carta-alta px-4 py-3.5 text-sm leading-relaxed text-tinta-media empty:hidden${quebrasDeLinha ? " whitespace-pre-wrap" : ""}`}
+            className={`relative max-h-full overflow-hidden rounded-lg border border-borda-fraca bg-carta-alta px-4 py-3.5 text-base leading-relaxed text-tinta-media empty:hidden${quebrasDeLinha ? " whitespace-pre-wrap" : ""}`}
           >
             {pagina ? (
               /*

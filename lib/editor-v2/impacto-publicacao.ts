@@ -7,6 +7,7 @@
  * Os **alunos** afetados vêm do banco e são contados na action, por fora — o banco pode não
  * responder, e o impacto do conteúdo não pode depender disso.
  */
+import { dominioDaAulaV2 } from "./dominio.ts";
 import { fechamentoDoNivel, type Nivel } from "../curso/nivel.ts";
 import { aulaDaTrilha, extrasDaTrilha, type AulaDaTrilha } from "../finais/trilha.ts";
 import type { PacoteV2 } from "./pacote.ts";
@@ -114,21 +115,25 @@ export function impactoDaPublicacaoV2(anterior: PacoteV2 | null, novo: PacoteV2,
 export function frasesDoImpactoV2(impacto: ImpactoDaPublicacaoV2, alunos: { comProgresso: number | null }): string[] {
   if (impacto.mesmoConteudo) return ["Esta publicação é igual à que está ativa: nada muda para os alunos."];
   const frases: string[] = [];
+  const deAbertura = dominioDaAulaV2(impacto.aulaId) === "abertura";
   frases.push(impacto.publicationIdAnterior
     ? "Substitui a publicação v2 ativa; ela continua guardada e pode ser reativada."
+    // Curso de abertura (§13.3.3, 16/9/2026): nunca teve versão v1 e não mora em /finais.
+    : deAbertura
+      ? "É a primeira publicação desta aula do curso de abertura: ela passa a aparecer na abertura, em /aberturas."
     // Uma extra nunca teve versão v1: dizer que os alunos "deixam de receber a versão antiga"
     // era falso para ela (achado no roteiro da 8F).
     : impacto.aulaId.startsWith("EX-")
       ? "É a primeira publicação desta aula extra: ela passa a existir para os alunos."
       : "É a primeira publicação v2 desta aula: os alunos deixam de receber a versão antiga.");
-  frases.push(...frasesDoFechamento(impacto));
+  frases.push(...(deAbertura ? ["Aula de curso de abertura: não conta para o fechamento de nenhum nível de finais."] : frasesDoFechamento(impacto)));
   for (const avaliacao of impacto.avaliacoes) {
     const nome = `${avaliacao.tipo === "pratica" ? "Prática" : "Treino"} «${avaliacao.titulo}»`;
     if (avaliacao.situacao === "nova") frases.push(`${nome}: avaliação nova${avaliacao.tipo === "pratica" ? " — o domínio da aula passa a depender dela" : ""}.`);
     if (avaliacao.situacao === "mudou") frases.push(`${nome}: a tarefa mudou. O domínio conquistado na versão anterior fica no histórico e não vale para a nova.`);
     if (avaliacao.situacao === "removida") frases.push(`${nome}: sai da aula. As tentativas antigas continuam guardadas.`);
   }
-  if (!impacto.temPratica) frases.push("A aula não tem prática: ninguém consegue dominá-la.");
+  if (!impacto.temPratica && !deAbertura) frases.push("A aula não tem prática: ninguém consegue dominá-la.");
   if (alunos.comProgresso === null) frases.push("Não foi possível contar os alunos com progresso nesta aula agora (o banco não respondeu).");
   else frases.push(alunos.comProgresso === 0 ? "Nenhum aluno tem progresso registrado nesta aula." : `${alunos.comProgresso} aluno(s) têm progresso registrado nesta aula.`);
   return frases;

@@ -8,6 +8,7 @@ import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color, Key } from "@lichess-org/chessground/types";
 import { useAtalho } from "@/components/atalhos/Atalhos";
 import { BotaoDeSom } from "@/components/BotaoDeSom";
+import { Celebracao, useCelebracao } from "@/components/Celebracao";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { PromotionPicker, type PromotionChoice } from "@/components/board/PromotionPicker";
 import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
@@ -128,12 +129,24 @@ export function Rodada({
   const [delta, setDelta] = useState<number | null>(null);
   const [feitosHoje, setFeitosHoje] = useState(feitosAoAbrir);
   const [acabou, setAcabou] = useState(false);
+  const { seq, celebrar } = useCelebracao();
 
+  /*
+   * O fim da "série" do modo rating é a conta do dia (17/9/2026): o problema que leva a
+   * `PROBLEMAS_POR_DIA` solta o confete, uma vez. **Sem som**: o próprio problema já tocou o dele
+   * (acerto ou mate) no lance final, e o veredito chega do servidor logo depois — dois sons de
+   * vitória em meio segundo eram barulho. O mate de cada problema continua com o `playComplete` de
+   * sempre: é o fim de um problema, e não da série.
+   */
   const aoVeredito = useCallback((r: VereditoDoRating) => {
     setEstado({ rating: r.rating, sequencia: r.sequencia, melhorSequencia: r.melhorSequencia });
     setDelta(r.delta);
     setFeitosHoje((n) => n + 1);
   }, []);
+  // Só quando a conta **chega** ao teto nesta sessão — abrir a página já com 70 feitos não celebra.
+  useEffect(() => {
+    if (feitosHoje === PROBLEMAS_POR_DIA && feitosAoAbrir < PROBLEMAS_POR_DIA) celebrar({ som: false });
+  }, [celebrar, feitosAoAbrir, feitosHoje]);
 
   const aoProximo = useCallback(
     (proximo: PuzzleServido | null) => {
@@ -163,6 +176,8 @@ export function Rodada({
   }
 
   return (
+    <>
+    <Celebracao seq={seq} tela />
     <Problema
       key={puzzle.id}
       aluno={aluno}
@@ -173,6 +188,7 @@ export function Rodada({
       aoVeredito={aoVeredito}
       aoProximo={aoProximo}
     />
+    </>
   );
 }
 

@@ -16,5 +16,6 @@ export type { Treino } from "@/lib/repertorio/gravar";
  */
 export async function registrarTreino(treino: Treino): Promise<Resultado> {
   const perfil = await perfilAtual();
-  return gravarTreino(perfil.id, treino);
+  // O papel vai junto porque a trava por aula deixa o professor sempre livre (17/9/2026).
+  return gravarTreino(perfil.id, treino, perfil.papel);
 }

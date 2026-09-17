@@ -49,7 +49,12 @@
  *      o aluno escrevendo o próprio relatório.
  *  13. na tática com rating (0011) o aluno lê só a própria linha de
  *      `rating_tatica`, não a atualiza e não a cria — o rating não pode morar
- *      em `perfis`, que o aluno atualiza.
+ *      em `perfis`, que o aluno atualizava até a 0016.
+ *  14. no perfil (0016) o aluno não dá `update` nenhum pela chave pública — nem
+ *      nome, nem papel, nem avatar —, e o `check` recusa avatar fora da lista.
+ *  15. nos selos gravados (0018) o aluno não se dá selo, não mexe na data nem no
+ *      "visto", não apaga, e lê só os dele; a view `puzzles_do_aluno` mostra a
+ *      cada um só a própria linha (`security_invoker`).
  *
  * O `with check` é a linha inteira da defesa nas tabelas em que o aluno
  * escreve — sem ele, um `insert` com o `aluno` trocado passaria, a política de
@@ -628,6 +633,85 @@ try {
   );
   const { error: erroRatingForjado } = await alunoB.from("rating_tatica").insert({ aluno: criados[1], rating: 3000 });
   afirmar(Boolean(erroRatingForjado), `B não cria linha de rating por conta própria (${erroRatingForjado?.code ?? "PASSOU!"})`);
+
+  // O avatar (0016). A política `perfis_atualiza_o_seu` saiu: o aluno não dá `update` em
+  // `perfis` pela chave pública — nem no nome, nem no papel, nem no próprio avatar. Quem
+  // grava o avatar é a server action `escolherAvatar`, com a chave de serviço.
+  console.log("\n14. O perfil: o aluno não se renomeia, não se promove, e o avatar só entra da lista");
+  // Dois `update` separados de propósito: o de nome e papel não depende da coluna nova, e
+  // é ele que mostra a porta que a 0001 deixava aberta.
+  await alunoA.from("perfis").update({ nome: "Hacker", papel: "professor" }).eq("id", criados[0]);
+  await alunoA.from("perfis").update({ avatar: "cavalo-dj" }).eq("id", criados[0]);
+  const { data: perfilDeADepois } = await admin
+    .from("perfis")
+    .select("nome, papel")
+    .eq("id", criados[0])
+    .single();
+  afirmar(perfilDeADepois?.nome === "Cobaia A", `A não troca o próprio nome (ficou "${perfilDeADepois?.nome}")`);
+  afirmar(perfilDeADepois?.papel === "aluno", `A não se promove a professor (ficou "${perfilDeADepois?.papel}")`);
+  const { data: avatarDeA, error: erroLerAvatar } = await admin
+    .from("perfis")
+    .select("avatar")
+    .eq("id", criados[0])
+    .single();
+  afirmar(
+    !erroLerAvatar && avatarDeA?.avatar === null,
+    `A não grava o avatar pela chave pública (ficou ${avatarDeA?.avatar}${erroLerAvatar ? `; ${erroLerAvatar.message}` : ""})`,
+  );
+
+  // Um da primeira leva (0016) e um da segunda (0017): a troca da lista não pode ter perdido ninguém.
+  for (const avatar of ["bispo-soneca", "rei-pipoca"]) {
+    const { error: erroAvatarValido } = await admin.from("perfis").update({ avatar }).eq("id", criados[0]);
+    afirmar(!erroAvatarValido, `a chave de serviço grava o avatar ${avatar} (${erroAvatarValido?.message ?? "sem erro"})`);
+  }
+  const { error: erroAvatarInventado } = await admin.from("perfis").update({ avatar: "dragao" }).eq("id", criados[0]);
+  afirmar(erroAvatarInventado?.code === "23514", `o banco recusa avatar fora da lista (${erroAvatarInventado?.code ?? "PASSOU!"})`);
+
+  // Os selos gravados (0018). O molde do item 11: quem concede é o servidor, cada um lê o seu, e
+  // nada se desfaz pela chave pública — nem a data, nem o "visto", nem o selo. A vitrine de um
+  // colega não abre esta política: ela lê pelo servidor (`lib/turma/vitrine.ts`).
+  console.log("\n15. Selos gravados: ninguém se dá selo, cada um lê o seu, e a view de puzzles mostra só a linha dele");
+  const { error: erroSeloDeA } = await alunoA.from("selo_conquistado").insert({ aluno: criados[0], selo: "tatica-63" });
+  afirmar(Boolean(erroSeloDeA), `A não se dá um selo (${erroSeloDeA?.code ?? "PASSOU! O ALUNO SE DÁ SELO."})`);
+  const { error: erroInicioDeA } = await alunoA.from("selo_inicio").insert({ aluno: criados[0] });
+  afirmar(Boolean(erroInicioDeA), `A não grava a própria marca de início (${erroInicioDeA?.code ?? "PASSOU!"})`);
+
+  for (const id of criados) {
+    const { error } = await admin.from("selo_conquistado").insert({ aluno: id, selo: "hora-1", visto_em: null });
+    afirmar(!error, `a chave de serviço grava um selo (${error?.message ?? "sem erro"})`);
+  }
+  const { data: selosPorA } = await alunoA.from("selo_conquistado").select("aluno, selo");
+  afirmar(selosPorA?.length === 1 && selosPorA[0].aluno === criados[0], `A lê 1 selo, o dele (viu ${selosPorA?.length})`);
+  const { data: selosDeAPorB } = await alunoB.from("selo_conquistado").select("aluno").eq("aluno", criados[0]);
+  afirmar(selosDeAPorB?.length === 0, `B não lê os selos de A (viu ${selosDeAPorB?.length})`);
+
+  // `update` e `delete` sem política somem calados: a prova é reler pelo admin.
+  await alunoA.from("selo_conquistado").update({ visto_em: "2030-01-01T00:00:00.000Z", conquistado_em: "2000-01-01T00:00:00.000Z" }).eq("aluno", criados[0]);
+  await alunoA.from("selo_conquistado").delete().eq("aluno", criados[0]);
+  const { data: seloDeADepois } = await admin
+    .from("selo_conquistado")
+    .select("visto_em, conquistado_em")
+    .eq("aluno", criados[0])
+    .eq("selo", "hora-1")
+    .maybeSingle();
+  afirmar(seloDeADepois !== null, "A não apaga o próprio selo");
+  afirmar(
+    seloDeADepois?.visto_em === null && !String(seloDeADepois?.conquistado_em).startsWith("2000"),
+    `A não mexe na data nem no "visto" (visto ${seloDeADepois?.visto_em}, data ${seloDeADepois?.conquistado_em})`,
+  );
+
+  const { error: erroSeloTorto } = await admin.from("selo_conquistado").insert({ aluno: criados[0], selo: "Selo; drop" });
+  afirmar(erroSeloTorto?.code === "23514", `o banco recusa id de selo fora do formato (${erroSeloTorto?.code ?? "PASSOU!"})`);
+
+  // As tentativas semeadas na seção 9 (uma para cada cobaia) alimentam a view.
+  const { data: puzzlesPorA, error: erroPuzzlesView } = await alunoA.from("puzzles_do_aluno").select("aluno, resolvidos");
+  afirmar(!erroPuzzlesView, `A lê a view de puzzles (${erroPuzzlesView?.message ?? "sem erro"})`);
+  afirmar(
+    puzzlesPorA?.length === 1 && puzzlesPorA[0].aluno === criados[0],
+    `A vê 1 linha na view de puzzles, a dele (viu ${puzzlesPorA?.length})`,
+  );
+  const { data: puzzlesPeloAdmin } = await admin.from("puzzles_do_aluno").select("aluno").in("aluno", criados);
+  afirmar(puzzlesPeloAdmin?.length === 2, `o admin vê as duas linhas: a de B existe, e A não a alcança (viu ${puzzlesPeloAdmin?.length})`);
 
 } finally {
   await limpar();

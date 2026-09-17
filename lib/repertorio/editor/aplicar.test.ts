@@ -128,10 +128,12 @@ test("candidato que não compila não muda nada, e a fonte nunca recebe o PGN re
   try {
     const original = readFileSync(caminhoDaFonte(ARQUIVO, raiz), "utf8");
     const antesJson = lerCompilado(path.join(raiz, "public", "repertorio"));
-    const mudo = original.replace(/1\. e4 \{[^}]*\}/, "1. e4");
-    const resultado = aplicarRepertorio(ARQUIVO, mudo, { raiz, env: ligada });
+    // Um lance ilegal no começo: o candidato não compila.
+    const ilegal = original.replace(/1\. e4 /, "1. Ke3 ");
+    assert.notEqual(ilegal, original);
+    const resultado = aplicarRepertorio(ARQUIVO, ilegal, { raiz, env: ligada });
     assert.equal(resultado.ok, false);
-    assert.ok(!resultado.ok && resultado.problemas!.some((p) => p.includes("sem comentário")));
+    assert.ok(!resultado.ok && resultado.problemas!.length > 0);
     assert.equal(readFileSync(caminhoDaFonte(ARQUIVO, raiz), "utf8"), original);
     assert.deepEqual([...lerCompilado(path.join(raiz, "public", "repertorio"))], [...antesJson]);
     assert.deepEqual(restoDeTransacao(raiz), []);

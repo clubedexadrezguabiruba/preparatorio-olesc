@@ -35,8 +35,7 @@ test("o bloco sai da prosa, e o que sobra é o texto do professor", () => {
 });
 
 test("comentário que é SÓ o bloco devolve prosa nula", () => {
-  // Isto é o que faz o gate "o último lance está sem comentário" continuar
-  // valendo: um bloco não vale como comentário escrito.
+  // Um bloco não vale como comentário escrito: sem prosa, a caixa de texto não aparece.
   const { prosa, plano } = separarPlano("[%plano\nrei-fica: com as damas fora o rei fica melhor no centro\n]", "brancas");
   assert.equal(prosa, null);
   assert.deepEqual(plano, { rei: { casa: null, motivo: "com as damas fora o rei fica melhor no centro" } });

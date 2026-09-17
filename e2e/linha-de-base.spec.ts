@@ -41,7 +41,23 @@ test("@base editor em 375 px", async ({ page }) => {
   medidas["editor-375"] = { largura: await larguraDaPagina(page), culpados: await culpadosDaLargura(page) };
 });
 
-const TELAS_DO_ALUNO = ["/painel", "/trilha", "/finais", "/finais/N0-LADDER", "/aberturas", "/tatica", "/tatica/rating/evolucao"];
+/*
+ * 17/9/2026: a página da abertura virou o mapa das aulas e das linhas (com a trilha da Francesa), o
+ * move trainer foi para `/treino` e nasceu `/progresso`. As três entram na medida — a Alapin no
+ * treino porque não tem curso, e o aluno de ensaio abre a linha sem depender de aula concluída.
+ */
+const TELAS_DO_ALUNO = [
+  "/painel",
+  "/trilha",
+  "/finais",
+  "/finais/N0-LADDER",
+  "/aberturas",
+  "/aberturas/brancas/francesa",
+  "/aberturas/brancas/alapin/treino",
+  "/progresso",
+  "/tatica",
+  "/tatica/rating/evolucao",
+];
 
 for (const tela of TELAS_DO_ALUNO) {
   test(`@base aluno em 375 px: ${tela}`, async ({ aluno }) => {

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Barra } from "@/components/Barra";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Moldura } from "@/components/Moldura";
+import { travaDoAluno } from "@/lib/aberturas/trava-banco";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import { LINHAS_POR_NIVEL, nivelDoAluno } from "@/lib/curso/nivel";
@@ -51,11 +52,12 @@ const RESUMO: Record<Cor, string> = {
  */
 export default async function Aberturas() {
   const perfil = await perfilAtual();
-  const [indice, progresso, conquistado, cabecalho] = await Promise.all([
+  const [indice, progresso, conquistado, cabecalho, trava] = await Promise.all([
     lerIndice(),
     progressoDoRepertorio(),
     nivelConquistado(perfil.id),
     dadosDoCabecalho(perfil.id),
+    travaDoAluno(perfil),
   ]);
   const nivel = nivelDoAluno(conquistado);
 
@@ -63,17 +65,21 @@ export default async function Aberturas() {
   // O portão: enquanto o Base não fecha, as linhas do Avançado não entram em
   // conta nenhuma desta tela — nem no total, nem na barra, nem no "a revisar".
   // Contá-las daria ao aluno um denominador que ele não pode alcançar.
-  const destravado = baseCompleto(progresso, indice);
+  //
+  // A trava por aula (17/9/2026) entra do mesmo jeito: as linhas do move trainer de uma aula de
+  // abertura não concluída saem do total, do "faltam" e do portão — ver `lib/aberturas/trava.ts`.
+  const { trancadas } = trava;
+  const destravado = baseCompleto(progresso, indice, trancadas);
   const aprendidas = indice.reduce(
-    (soma, e) => soma + aprendidasDaAbertura(progresso, e, destravado),
+    (soma, e) => soma + aprendidasDaAbertura(progresso, e, destravado, trancadas),
     0,
   );
   const aRevisar = indice.reduce(
-    (soma, e) => soma + aRevisarNaAbertura(progresso, e, agora, destravado),
+    (soma, e) => soma + aRevisarNaAbertura(progresso, e, agora, destravado, trancadas),
     0,
   );
-  const total = indice.reduce((soma, e) => soma + idsLiberados(e, destravado).length, 0);
-  const faltam = faltamNoBase(progresso, indice);
+  const total = indice.reduce((soma, e) => soma + idsLiberados(e, destravado, trancadas).length, 0);
+  const faltam = faltamNoBase(progresso, indice, trancadas);
   const noAvancado = quantasNoAvancado(indice);
 
   /*
@@ -135,13 +141,30 @@ export default async function Aberturas() {
 
             <ul className="flex flex-col gap-2">
               {daCor.map((abertura) => {
-                const visiveis = idsLiberados(abertura, destravado).length;
+                const aulas = trava.cursos.get(`${cor}/${abertura.abertura}`) ?? [];
+                const visiveis = idsLiberados(abertura, destravado, trancadas).length;
                 // Uma abertura inteiramente de Avançado some da lista enquanto o
                 // portão está fechado: um cartão "0/0" não é informação, é ruído.
-                if (visiveis === 0) return null;
-                const feitas = aprendidasDaAbertura(progresso, abertura, destravado);
-                const vencendo = aRevisarNaAbertura(progresso, abertura, agora, destravado);
-                const completa = feitas >= visiveis && vencendo === 0;
+                // A que tem curso fica, mesmo com todas as linhas trancadas: é
+                // por ela que o aluno chega à aula A.
+                if (visiveis === 0 && aulas.length === 0) return null;
+                const feitas = aprendidasDaAbertura(progresso, abertura, destravado, trancadas);
+                const vencendo = aRevisarNaAbertura(progresso, abertura, agora, destravado, trancadas);
+                const completa = visiveis > 0 && feitas >= visiveis && vencendo === 0;
+                /*
+                 * O que o cartão contava só "aprendidas" (#10 do feedback de 17/9): o
+                 * alunoteste tinha 4 linhas treinadas hoje, degrau 1, e três aulas
+                 * em andamento — e o cartão dizia 0/19. Aprendida pede três dias;
+                 * no primeiro dia o trabalho aparece como **começadas** e como
+                 * **aulas concluídas**, que é o que a linha de baixo passa a dizer.
+                 */
+                // Começadas conta também as trancadas: o que o aluno treinou antes da
+                // trava é trabalho dele, e o cartão não pode apagá-lo.
+                const comecadas = idsLiberados(abertura, destravado).filter(
+                  (id) => (progresso.get(id)?.tentativas ?? 0) > 0,
+                ).length;
+                const aulasFeitas = aulas.filter((a) => trava.concluidas.has(a.id)).length;
+                const emAndamento = aulas.filter((a) => trava.abertas.has(a.id) && !trava.concluidas.has(a.id)).length;
 
                 return (
                   <li key={`${cor}/${abertura.abertura}`}>
@@ -151,17 +174,35 @@ export default async function Aberturas() {
                     >
                       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                         <p className="truncate text-sm font-medium text-tinta">{abertura.nome}</p>
-                        <Barra
-                          feitos={feitas}
-                          de={visiveis}
-                          tom={completa ? "completo" : "metodo"}
-                        />
+                        {aulas.length > 0 ? (
+                          <Barra feitos={aulasFeitas} de={aulas.length} tom={aulasFeitas === aulas.length ? "completo" : "metodo"} />
+                        ) : (
+                          <Barra
+                            feitos={feitas}
+                            de={visiveis}
+                            tom={completa ? "completo" : "metodo"}
+                          />
+                        )}
+                        {aulas.length > 0 || comecadas > feitas ? (
+                          <p className="text-xs text-tinta-fraca tabular-nums">
+                            {aulas.length > 0
+                              ? `${aulasFeitas} de ${aulas.length} aulas concluídas${emAndamento > 0 ? ` · ${emAndamento} em andamento` : ""}`
+                              : ""}
+                            {aulas.length > 0 && comecadas > 0 ? " · " : ""}
+                            {comecadas > 0 ? `${comecadas} ${comecadas === 1 ? "linha começada" : "linhas começadas"}` : ""}
+                          </p>
+                        ) : null}
                       </div>
                       <div className="flex w-20 shrink-0 flex-col items-end">
+                        {visiveis === 0 ? (
+                          <span className="text-right text-xs text-tinta-fraca">linhas abrem com as aulas</span>
+                        ) : (
                         <span className="text-sm font-semibold text-tinta tabular-nums">
                           {feitas}
                           <span className="text-tinta-fraca">/{visiveis}</span>
                         </span>
+                        )}
+                        {visiveis === 0 ? null : (
                         <span
                           className={`text-xs ${vencendo > 0 ? "text-aviso-tinta" : "text-tinta-fraca"}`}
                         >
@@ -173,6 +214,7 @@ export default async function Aberturas() {
                                 ? "1 linha"
                                 : "linhas"}
                         </span>
+                        )}
                       </div>
                     </Link>
                   </li>

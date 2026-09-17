@@ -1,0 +1,3431 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-92162ad4f0e17211",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "AB-BRANCAS-FRANCESA-C",
+    "titulo": "Francesa 3.Bd3 — aula C: Quando as Pretas jogam bem",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "estadoEditorial": "rascunho",
+      "fonteDidatica": "estudo qq2xorDl v1.5 — Repertorio Contra a Francesa.v5",
+      "abertura": {
+        "cor": "brancas",
+        "abertura": "francesa",
+        "bloco": "C"
+      }
+    },
+    "proveniencia": [],
+    "excecoes": [],
+    "analises": [
+      {
+        "id": "analise-cap-c10",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5",
+            "Site": "Lichess Study",
+            "Date": "2026.09.16",
+            "Round": "13",
+            "White": "C10",
+            "Black": "Se ...cxd4 vier cedo: Qxd4",
+            "Result": "*",
+            "Annotator": "Projeto repertório completo - Francesa",
+            "Variant": "Standard",
+            "ECO": "C00",
+            "Opening": "French Defense: Schlechter Variation",
+            "StudyName": "Repertorio Contra a Francesa.v5",
+            "ChapterName": "cap C10",
+            "ChapterURL": "https://lichess.org/study/qq2xorDl/eB8XxPf1",
+            "Orientation": "black"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-c10-0",
+        "nos": {
+          "no-cap-c10-0": {
+            "id": "no-cap-c10-0",
+            "filhos": [
+              "no-cap-c10-1"
+            ],
+            "comentario": "[OBJETIVO] Saber quem recaptura em d4 nesta ordem de lances."
+          },
+          "no-cap-c10-1": {
+            "id": "no-cap-c10-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-c10-2"
+            ]
+          },
+          "no-cap-c10-2": {
+            "id": "no-cap-c10-2",
+            "uci": "e7e6",
+            "filhos": [
+              "no-cap-c10-3"
+            ]
+          },
+          "no-cap-c10-3": {
+            "id": "no-cap-c10-3",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-c10-4"
+            ]
+          },
+          "no-cap-c10-4": {
+            "id": "no-cap-c10-4",
+            "uci": "d7d5",
+            "filhos": [
+              "no-cap-c10-5"
+            ]
+          },
+          "no-cap-c10-5": {
+            "id": "no-cap-c10-5",
+            "uci": "f1d3",
+            "filhos": [
+              "no-cap-c10-6"
+            ]
+          },
+          "no-cap-c10-6": {
+            "id": "no-cap-c10-6",
+            "uci": "d5e4",
+            "filhos": [
+              "no-cap-c10-7"
+            ]
+          },
+          "no-cap-c10-7": {
+            "id": "no-cap-c10-7",
+            "uci": "d3e4",
+            "filhos": [
+              "no-cap-c10-8"
+            ]
+          },
+          "no-cap-c10-8": {
+            "id": "no-cap-c10-8",
+            "uci": "g8f6",
+            "filhos": [
+              "no-cap-c10-9"
+            ]
+          },
+          "no-cap-c10-9": {
+            "id": "no-cap-c10-9",
+            "uci": "e4f3",
+            "filhos": [
+              "no-cap-c10-10"
+            ]
+          },
+          "no-cap-c10-10": {
+            "id": "no-cap-c10-10",
+            "uci": "c7c5",
+            "filhos": [
+              "no-cap-c10-11"
+            ]
+          },
+          "no-cap-c10-11": {
+            "id": "no-cap-c10-11",
+            "uci": "g1e2",
+            "filhos": [
+              "no-cap-c10-12"
+            ]
+          },
+          "no-cap-c10-12": {
+            "id": "no-cap-c10-12",
+            "uci": "c5d4",
+            "filhos": [
+              "no-cap-c10-13"
+            ],
+            "comentario": "O curso atual marca 6...cxd4?!; [PERGUNTA] quem deve recuperar em d4?",
+            "nags": [
+              6
+            ]
+          },
+          "no-cap-c10-13": {
+            "id": "no-cap-c10-13",
+            "uci": "d1d4",
+            "filhos": [],
+            "comentario": "A dama recupera. Assim o cavalo b1 fica livre para se desenvolver. [TRAIN] 6...cxd4 = 7.Qxd4. [RESUMO] Se ...cxd4 vier antes de ...Nc6, recapture com a dama. [PROXIMO] Outra boa tentativa é ...e5."
+          }
+        }
+      },
+      {
+        "id": "analise-cap-c11",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5",
+            "Site": "Lichess Study",
+            "Date": "2026.09.16",
+            "Round": "14",
+            "White": "C11",
+            "Black": "Contra ...e5: troque e simplifique",
+            "Result": "*",
+            "Annotator": "Projeto repertório completo - Francesa",
+            "Variant": "Standard",
+            "ECO": "C00",
+            "Opening": "French Defense: Schlechter Variation",
+            "StudyName": "Repertorio Contra a Francesa.v5",
+            "ChapterName": "cap C11",
+            "ChapterURL": "https://lichess.org/study/qq2xorDl/2dLZqFxX",
+            "Orientation": "black"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-c11-0",
+        "nos": {
+          "no-cap-c11-0": {
+            "id": "no-cap-c11-0",
+            "filhos": [
+              "no-cap-c11-1"
+            ],
+            "comentario": "[OBJETIVO] Saber o que fazer quando as Pretas jogam ...e5."
+          },
+          "no-cap-c11-1": {
+            "id": "no-cap-c11-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-c11-2"
+            ]
+          },
+          "no-cap-c11-2": {
+            "id": "no-cap-c11-2",
+            "uci": "e7e6",
+            "filhos": [
+              "no-cap-c11-3"
+            ]
+          },
+          "no-cap-c11-3": {
+            "id": "no-cap-c11-3",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-c11-4"
+            ]
+          },
+          "no-cap-c11-4": {
+            "id": "no-cap-c11-4",
+            "uci": "d7d5",
+            "filhos": [
+              "no-cap-c11-5"
+            ]
+          },
+          "no-cap-c11-5": {
+            "id": "no-cap-c11-5",
+            "uci": "f1d3",
+            "filhos": [
+              "no-cap-c11-6"
+            ]
+          },
+          "no-cap-c11-6": {
+            "id": "no-cap-c11-6",
+            "uci": "d5e4",
+            "filhos": [
+              "no-cap-c11-7"
+            ]
+          },
+          "no-cap-c11-7": {
+            "id": "no-cap-c11-7",
+            "uci": "d3e4",
+            "filhos": [
+              "no-cap-c11-8"
+            ]
+          },
+          "no-cap-c11-8": {
+            "id": "no-cap-c11-8",
+            "uci": "g8f6",
+            "filhos": [
+              "no-cap-c11-9"
+            ]
+          },
+          "no-cap-c11-9": {
+            "id": "no-cap-c11-9",
+            "uci": "e4f3",
+            "filhos": [
+              "no-cap-c11-10"
+            ]
+          },
+          "no-cap-c11-10": {
+            "id": "no-cap-c11-10",
+            "uci": "c7c5",
+            "filhos": [
+              "no-cap-c11-11"
+            ]
+          },
+          "no-cap-c11-11": {
+            "id": "no-cap-c11-11",
+            "uci": "g1e2",
+            "filhos": [
+              "no-cap-c11-12"
+            ]
+          },
+          "no-cap-c11-12": {
+            "id": "no-cap-c11-12",
+            "uci": "b8c6",
+            "filhos": [
+              "no-cap-c11-13"
+            ]
+          },
+          "no-cap-c11-13": {
+            "id": "no-cap-c11-13",
+            "uci": "c1e3",
+            "filhos": [
+              "no-cap-c11-14"
+            ]
+          },
+          "no-cap-c11-14": {
+            "id": "no-cap-c11-14",
+            "uci": "e6e5",
+            "filhos": [
+              "no-cap-c11-15"
+            ],
+            "comentario": "As Pretas atacam nosso centro imediatamente. [PERGUNTA] Precisamos segurar tudo? Não. Podemos trocar e deixar a posição mais simples."
+          },
+          "no-cap-c11-15": {
+            "id": "no-cap-c11-15",
+            "uci": "f3c6",
+            "filhos": [
+              "no-cap-c11-16"
+            ],
+            "comentario": "Primeiro tiramos o cavalo de c6."
+          },
+          "no-cap-c11-16": {
+            "id": "no-cap-c11-16",
+            "uci": "b7c6",
+            "filhos": [
+              "no-cap-c11-17"
+            ],
+            "comentario": "O peão b recaptura. Agora o cavalo c6 saiu da posição."
+          },
+          "no-cap-c11-17": {
+            "id": "no-cap-c11-17",
+            "uci": "d4e5",
+            "filhos": [
+              "no-cap-c11-18"
+            ],
+            "comentario": "Só então tomamos o peão de e5."
+          },
+          "no-cap-c11-18": {
+            "id": "no-cap-c11-18",
+            "uci": "d8d1",
+            "filhos": [
+              "no-cap-c11-19"
+            ],
+            "comentario": "As Pretas trocam as damas."
+          },
+          "no-cap-c11-19": {
+            "id": "no-cap-c11-19",
+            "uci": "e1d1",
+            "filhos": [
+              "no-cap-c11-20"
+            ],
+            "comentario": "O rei recaptura. Sem damas no tabuleiro, ele pode ficar no centro por enquanto."
+          },
+          "no-cap-c11-20": {
+            "id": "no-cap-c11-20",
+            "uci": "f6g4",
+            "filhos": [
+              "no-cap-c11-21"
+            ],
+            "comentario": "O cavalo ataca nosso bispo de e3."
+          },
+          "no-cap-c11-21": {
+            "id": "no-cap-c11-21",
+            "uci": "b1d2",
+            "filhos": [],
+            "comentario": "Desenvolvemos o último cavalo. A fonte marca pequena vantagem para as Brancas. [PLANO] Depois das trocas, complete o desenvolvimento e jogue com calma. [TRAIN] Lembre da ordem: Bxc6+ antes de dxe5. [RESUMO] Contra ...e5, tire o cavalo de c6 e aceite as trocas. [PROXIMO] Agora vem a defesa que exige mais atenção: ...Ne5.",
+            "nags": [
+              14
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-cap-c12",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5",
+            "Site": "Lichess Study",
+            "Date": "2026.09.16",
+            "Round": "15",
+            "White": "C12",
+            "Black": "A linha mais difícil: ...Ne5",
+            "Result": "*",
+            "Annotator": "Projeto repertório completo - Francesa",
+            "Variant": "Standard",
+            "ECO": "C00",
+            "Opening": "French Defense: Schlechter Variation",
+            "StudyName": "Repertorio Contra a Francesa.v5",
+            "ChapterName": "cap C12",
+            "ChapterURL": "https://lichess.org/study/qq2xorDl/g7etvn9r",
+            "Orientation": "black"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-c12-0",
+        "nos": {
+          "no-cap-c12-0": {
+            "id": "no-cap-c12-0",
+            "filhos": [
+              "no-cap-c12-1"
+            ],
+            "comentario": "[OBJETIVO] Reconhecer ...Ne5 e saber nossa resposta. [TEORIA] [LINHA CRITICA] Esta é a defesa que exige mais atenção."
+          },
+          "no-cap-c12-1": {
+            "id": "no-cap-c12-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-c12-2"
+            ]
+          },
+          "no-cap-c12-2": {
+            "id": "no-cap-c12-2",
+            "uci": "e7e6",
+            "filhos": [
+              "no-cap-c12-3"
+            ]
+          },
+          "no-cap-c12-3": {
+            "id": "no-cap-c12-3",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-c12-4"
+            ]
+          },
+          "no-cap-c12-4": {
+            "id": "no-cap-c12-4",
+            "uci": "d7d5",
+            "filhos": [
+              "no-cap-c12-5"
+            ]
+          },
+          "no-cap-c12-5": {
+            "id": "no-cap-c12-5",
+            "uci": "f1d3",
+            "filhos": [
+              "no-cap-c12-6"
+            ]
+          },
+          "no-cap-c12-6": {
+            "id": "no-cap-c12-6",
+            "uci": "d5e4",
+            "filhos": [
+              "no-cap-c12-7"
+            ]
+          },
+          "no-cap-c12-7": {
+            "id": "no-cap-c12-7",
+            "uci": "d3e4",
+            "filhos": [
+              "no-cap-c12-8"
+            ]
+          },
+          "no-cap-c12-8": {
+            "id": "no-cap-c12-8",
+            "uci": "g8f6",
+            "filhos": [
+              "no-cap-c12-9"
+            ]
+          },
+          "no-cap-c12-9": {
+            "id": "no-cap-c12-9",
+            "uci": "e4f3",
+            "filhos": [
+              "no-cap-c12-10"
+            ]
+          },
+          "no-cap-c12-10": {
+            "id": "no-cap-c12-10",
+            "uci": "c7c5",
+            "filhos": [
+              "no-cap-c12-11"
+            ]
+          },
+          "no-cap-c12-11": {
+            "id": "no-cap-c12-11",
+            "uci": "g1e2",
+            "filhos": [
+              "no-cap-c12-12"
+            ]
+          },
+          "no-cap-c12-12": {
+            "id": "no-cap-c12-12",
+            "uci": "b8c6",
+            "filhos": [
+              "no-cap-c12-13"
+            ]
+          },
+          "no-cap-c12-13": {
+            "id": "no-cap-c12-13",
+            "uci": "c1e3",
+            "filhos": [
+              "no-cap-c12-14"
+            ]
+          },
+          "no-cap-c12-14": {
+            "id": "no-cap-c12-14",
+            "uci": "c5d4",
+            "filhos": [
+              "no-cap-c12-15"
+            ]
+          },
+          "no-cap-c12-15": {
+            "id": "no-cap-c12-15",
+            "uci": "e2d4",
+            "filhos": [
+              "no-cap-c12-16"
+            ],
+            "comentario": "Nosso cavalo ataca o cavalo c6."
+          },
+          "no-cap-c12-16": {
+            "id": "no-cap-c12-16",
+            "uci": "c6e5",
+            "filhos": [
+              "no-cap-c12-17"
+            ],
+            "comentario": "[PERGUNTA] O cavalo atacou nosso bispo. Como continuar sem complicar? Boa defesa: o cavalo sai do ataque e ataca nosso bispo em f3."
+          },
+          "no-cap-c12-17": {
+            "id": "no-cap-c12-17",
+            "uci": "b1c3",
+            "filhos": [
+              "no-cap-c12-18",
+              "no-cap-c12-19",
+              "no-cap-c12-27"
+            ],
+            "comentario": "Sem complicar: desenvolvemos outra peça."
+          },
+          "no-cap-c12-18": {
+            "id": "no-cap-c12-18",
+            "uci": "a7a6",
+            "filhos": [
+              "no-cap-c12-33"
+            ],
+            "comentario": "...a6 controla b5. O curso atual apresenta 9...a6!? como uma defesa interessante.",
+            "nags": [
+              5
+            ]
+          },
+          "no-cap-c12-19": {
+            "id": "no-cap-c12-19",
+            "uci": "f8e7",
+            "filhos": [
+              "no-cap-c12-20"
+            ]
+          },
+          "no-cap-c12-20": {
+            "id": "no-cap-c12-20",
+            "uci": "d1e2",
+            "filhos": [
+              "no-cap-c12-21"
+            ],
+            "comentario": "A dama sai e prepara o roque grande."
+          },
+          "no-cap-c12-21": {
+            "id": "no-cap-c12-21",
+            "uci": "e8g8",
+            "filhos": [
+              "no-cap-c12-22"
+            ]
+          },
+          "no-cap-c12-22": {
+            "id": "no-cap-c12-22",
+            "uci": "e1c1",
+            "filhos": [
+              "no-cap-c12-23"
+            ],
+            "comentario": "Aqui vemos nosso plano completo: se estiver seguro, roque grande."
+          },
+          "no-cap-c12-23": {
+            "id": "no-cap-c12-23",
+            "uci": "e5f3",
+            "filhos": [
+              "no-cap-c12-24"
+            ],
+            "comentario": "As Pretas trocam o cavalo pelo nosso bispo."
+          },
+          "no-cap-c12-24": {
+            "id": "no-cap-c12-24",
+            "uci": "e2f3",
+            "filhos": [
+              "no-cap-c12-25"
+            ]
+          },
+          "no-cap-c12-25": {
+            "id": "no-cap-c12-25",
+            "uci": "d8a5",
+            "filhos": [
+              "no-cap-c12-26"
+            ]
+          },
+          "no-cap-c12-26": {
+            "id": "no-cap-c12-26",
+            "uci": "g2g4",
+            "filhos": [],
+            "comentario": "Com os reis em lados opostos, podemos avançar peões contra o rei preto. A fonte indica ataque para as Brancas.",
+            "nags": [
+              40
+            ]
+          },
+          "no-cap-c12-27": {
+            "id": "no-cap-c12-27",
+            "uci": "f8b4",
+            "filhos": [
+              "no-cap-c12-28"
+            ]
+          },
+          "no-cap-c12-28": {
+            "id": "no-cap-c12-28",
+            "uci": "d4b5",
+            "filhos": [
+              "no-cap-c12-29",
+              "no-cap-c12-30"
+            ],
+            "comentario": "O cavalo entra em b5 e pressiona c7."
+          },
+          "no-cap-c12-29": {
+            "id": "no-cap-c12-29",
+            "uci": "c8d7",
+            "filhos": [
+              "no-cap-c12-32"
+            ]
+          },
+          "no-cap-c12-30": {
+            "id": "no-cap-c12-30",
+            "uci": "a7a6",
+            "filhos": [
+              "no-cap-c12-31"
+            ]
+          },
+          "no-cap-c12-31": {
+            "id": "no-cap-c12-31",
+            "uci": "a2a3",
+            "filhos": []
+          },
+          "no-cap-c12-32": {
+            "id": "no-cap-c12-32",
+            "uci": "d1d4",
+            "filhos": [],
+            "comentario": "A dama fica ativa no centro."
+          },
+          "no-cap-c12-33": {
+            "id": "no-cap-c12-33",
+            "uci": "d1e2",
+            "filhos": [
+              "no-cap-c12-34"
+            ],
+            "comentario": "A dama sai de d1 e deixa o roque grande disponível para depois."
+          },
+          "no-cap-c12-34": {
+            "id": "no-cap-c12-34",
+            "uci": "e5f3",
+            "filhos": [
+              "no-cap-c12-35",
+              "no-cap-c12-36",
+              "no-cap-c12-37"
+            ],
+            "comentario": "As Pretas trocam o cavalo pelo nosso bispo e dão xeque."
+          },
+          "no-cap-c12-35": {
+            "id": "no-cap-c12-35",
+            "uci": "g2f3",
+            "filhos": [],
+            "comentario": "[MEMORIZAR] Nossa resposta oficial é 11.gxf3!. O draft antigo marcava 11.gxf3!?, mas a seção avançada do curso atual é intitulada “11.gf!”, então adotamos ! como marcação mais recente.",
+            "nags": [
+              1
+            ]
+          },
+          "no-cap-c12-36": {
+            "id": "no-cap-c12-36",
+            "uci": "e2f3",
+            "filhos": [],
+            "comentario": "[REFERENCIA] O draft também marca 11.Qxf3!? como possibilidade; não é nossa escolha oficial nem entra no Trainer.",
+            "nags": [
+              5
+            ]
+          },
+          "no-cap-c12-37": {
+            "id": "no-cap-c12-37",
+            "uci": "d4f3",
+            "filhos": [],
+            "comentario": "[REFERENCIA] O draft também marca 11.Nxf3!? e traz esta seta e3-d4. É referência editorial, não linha de treino.",
+            "nags": [
+              5
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e3",
+                  "para": "d4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge3d4]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-cap-c13",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5",
+            "Site": "Lichess Study",
+            "Date": "2026.09.16",
+            "Round": "16",
+            "White": "C13",
+            "Black": "Esqueci a teoria: três regras simples",
+            "Result": "*",
+            "Annotator": "Projeto repertório completo - Francesa",
+            "Variant": "Standard",
+            "ECO": "C00",
+            "Opening": "French Defense: Schlechter Variation",
+            "StudyName": "Repertorio Contra a Francesa.v5",
+            "ChapterName": "cap C13",
+            "ChapterURL": "https://lichess.org/study/qq2xorDl/BoXXiM11",
+            "Orientation": "black"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-c13-0",
+        "nos": {
+          "no-cap-c13-0": {
+            "id": "no-cap-c13-0",
+            "filhos": [
+              "no-cap-c13-1"
+            ],
+            "comentario": "[OBJETIVO] Continuar jogando bem mesmo sem lembrar a variante. [PERGUNTA] Qual das três respostas das Pretas apareceu? [TRAIN] Estas três decisões já aparecem nos capítulos do Move Trainer."
+          },
+          "no-cap-c13-1": {
+            "id": "no-cap-c13-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-c13-2"
+            ]
+          },
+          "no-cap-c13-2": {
+            "id": "no-cap-c13-2",
+            "uci": "e7e6",
+            "filhos": [
+              "no-cap-c13-3"
+            ]
+          },
+          "no-cap-c13-3": {
+            "id": "no-cap-c13-3",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-c13-4"
+            ]
+          },
+          "no-cap-c13-4": {
+            "id": "no-cap-c13-4",
+            "uci": "d7d5",
+            "filhos": [
+              "no-cap-c13-5"
+            ]
+          },
+          "no-cap-c13-5": {
+            "id": "no-cap-c13-5",
+            "uci": "f1d3",
+            "filhos": [
+              "no-cap-c13-6",
+              "no-cap-c13-7",
+              "no-cap-c13-9"
+            ]
+          },
+          "no-cap-c13-6": {
+            "id": "no-cap-c13-6",
+            "uci": "d5e4",
+            "filhos": [
+              "no-cap-c13-11"
+            ],
+            "comentario": "Regra 1: se as Pretas tomarem e4, recupere com Bxe4 e monte nosso esquema."
+          },
+          "no-cap-c13-7": {
+            "id": "no-cap-c13-7",
+            "uci": "g8f6",
+            "filhos": [
+              "no-cap-c13-8"
+            ]
+          },
+          "no-cap-c13-8": {
+            "id": "no-cap-c13-8",
+            "uci": "e4e5",
+            "filhos": [],
+            "comentario": "Regra 2: ...Nf6 cedo = e5."
+          },
+          "no-cap-c13-9": {
+            "id": "no-cap-c13-9",
+            "uci": "c7c5",
+            "filhos": [
+              "no-cap-c13-10"
+            ]
+          },
+          "no-cap-c13-10": {
+            "id": "no-cap-c13-10",
+            "uci": "e4d5",
+            "filhos": [],
+            "comentario": "Regra 3: ...c5 = exd5 e depois veja como as Pretas recapturam."
+          },
+          "no-cap-c13-11": {
+            "id": "no-cap-c13-11",
+            "uci": "d3e4",
+            "filhos": [
+              "no-cap-c13-12"
+            ]
+          },
+          "no-cap-c13-12": {
+            "id": "no-cap-c13-12",
+            "uci": "g8f6",
+            "filhos": [
+              "no-cap-c13-13"
+            ]
+          },
+          "no-cap-c13-13": {
+            "id": "no-cap-c13-13",
+            "uci": "e4f3",
+            "filhos": [
+              "no-cap-c13-14"
+            ]
+          },
+          "no-cap-c13-14": {
+            "id": "no-cap-c13-14",
+            "uci": "c7c5",
+            "filhos": [
+              "no-cap-c13-15"
+            ]
+          },
+          "no-cap-c13-15": {
+            "id": "no-cap-c13-15",
+            "uci": "g1e2",
+            "filhos": [
+              "no-cap-c13-16"
+            ]
+          },
+          "no-cap-c13-16": {
+            "id": "no-cap-c13-16",
+            "uci": "b8c6",
+            "filhos": [
+              "no-cap-c13-17"
+            ]
+          },
+          "no-cap-c13-17": {
+            "id": "no-cap-c13-17",
+            "uci": "c1e3",
+            "filhos": [],
+            "comentario": "[PLANO] Depois de ...dxe4: desenvolva e proteja d4. Se puder fazer as duas coisas no mesmo lance, melhor. Quando as peças estiverem prontas, considere o roque grande se for seguro. [RESUMO] ...Nf6 = e5. ...c5 = exd5. ...dxe4 = Bxe4 e monte o esquema. [PROXIMO] Depois das aulas, passamos para treino e revisão."
+          }
+        }
+      },
+      {
+        "id": "analise-arvore-c",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "raizId": "no-arvore-c-0",
+        "nos": {
+          "no-arvore-c-0": {
+            "id": "no-arvore-c-0",
+            "filhos": [
+              "no-arvore-c-1"
+            ]
+          },
+          "no-arvore-c-1": {
+            "id": "no-arvore-c-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-arvore-c-2"
+            ]
+          },
+          "no-arvore-c-2": {
+            "id": "no-arvore-c-2",
+            "uci": "e7e6",
+            "filhos": [
+              "no-arvore-c-3"
+            ],
+            "comentario": "A Defesa Francesa começa com ...e6. As Pretas querem jogar ...d5 e atacar nosso peão de e4."
+          },
+          "no-arvore-c-3": {
+            "id": "no-arvore-c-3",
+            "uci": "d2d4",
+            "filhos": [
+              "no-arvore-c-4"
+            ],
+            "comentario": "Nós ocupamos o centro."
+          },
+          "no-arvore-c-4": {
+            "id": "no-arvore-c-4",
+            "uci": "d7d5",
+            "filhos": [
+              "no-arvore-c-5"
+            ],
+            "comentario": "Agora e4 está atacado. Três caminhos: 3.e5, a Variante do Avanço; 3.exd5, a Variante das Trocas; ou proteger e4 com uma peça. As proteções mais conhecidas são Nc3 e Nd2."
+          },
+          "no-arvore-c-5": {
+            "id": "no-arvore-c-5",
+            "uci": "f1d3",
+            "filhos": [
+              "no-arvore-c-6",
+              "no-arvore-c-46",
+              "no-arvore-c-48"
+            ],
+            "comentario": "O bispo sai e protege e4: dois trabalhos com um lance. O curso atual de Grigoryan apresenta 3.Bd3! como a arma do repertório. 3.Bd3 é menos comum que as linhas principais."
+          },
+          "no-arvore-c-6": {
+            "id": "no-arvore-c-6",
+            "uci": "d5e4",
+            "filhos": [
+              "no-arvore-c-7"
+            ],
+            "comentario": "As Pretas tomam nosso peão de e4. Como recuperar o peão e continuar desenvolvendo?"
+          },
+          "no-arvore-c-7": {
+            "id": "no-arvore-c-7",
+            "uci": "d3e4",
+            "filhos": [
+              "no-arvore-c-8"
+            ],
+            "comentario": "Recuperamos com o bispo."
+          },
+          "no-arvore-c-8": {
+            "id": "no-arvore-c-8",
+            "uci": "g8f6",
+            "filhos": [
+              "no-arvore-c-9"
+            ],
+            "comentario": "As Pretas desenvolvem o cavalo e atacam nosso bispo."
+          },
+          "no-arvore-c-9": {
+            "id": "no-arvore-c-9",
+            "uci": "e4f3",
+            "filhos": [
+              "no-arvore-c-10"
+            ],
+            "comentario": "O bispo recua para uma casa segura. Agora o cavalo g1 pode ir a e2."
+          },
+          "no-arvore-c-10": {
+            "id": "no-arvore-c-10",
+            "uci": "c7c5",
+            "filhos": [
+              "no-arvore-c-11"
+            ],
+            "comentario": "...c5 ataca nosso peão de d4."
+          },
+          "no-arvore-c-11": {
+            "id": "no-arvore-c-11",
+            "uci": "g1e2",
+            "filhos": [
+              "no-arvore-c-12",
+              "no-arvore-c-14"
+            ],
+            "comentario": "Desenvolvemos o cavalo e protegemos d4."
+          },
+          "no-arvore-c-12": {
+            "id": "no-arvore-c-12",
+            "uci": "c5d4",
+            "filhos": [
+              "no-arvore-c-13"
+            ],
+            "comentario": "O curso atual marca 6...cxd4?!; quem deve recuperar em d4?",
+            "nags": [
+              6
+            ]
+          },
+          "no-arvore-c-13": {
+            "id": "no-arvore-c-13",
+            "uci": "d1d4",
+            "filhos": [],
+            "comentario": "A dama recupera. Assim o cavalo b1 fica livre para se desenvolver. Se ...cxd4 vier antes de ...Nc6, recapture com a dama."
+          },
+          "no-arvore-c-14": {
+            "id": "no-arvore-c-14",
+            "uci": "b8c6",
+            "filhos": [
+              "no-arvore-c-15"
+            ],
+            "comentario": "As Pretas desenvolvem outra peça e aumentam a pressão sobre d4."
+          },
+          "no-arvore-c-15": {
+            "id": "no-arvore-c-15",
+            "uci": "c1e3",
+            "filhos": [
+              "no-arvore-c-16",
+              "no-arvore-c-24"
+            ],
+            "comentario": "De novo fazemos duas coisas: desenvolvemos o bispo e protegemos d4. A casa d4 é o ponto central do nosso esquema. Nossa regra é simples: desenvolver sem deixar d4 cair."
+          },
+          "no-arvore-c-16": {
+            "id": "no-arvore-c-16",
+            "uci": "e6e5",
+            "filhos": [
+              "no-arvore-c-17"
+            ],
+            "comentario": "As Pretas atacam nosso centro imediatamente. Precisamos segurar tudo? Não. Podemos trocar e deixar a posição mais simples."
+          },
+          "no-arvore-c-17": {
+            "id": "no-arvore-c-17",
+            "uci": "f3c6",
+            "filhos": [
+              "no-arvore-c-18"
+            ],
+            "comentario": "Primeiro tiramos o cavalo de c6."
+          },
+          "no-arvore-c-18": {
+            "id": "no-arvore-c-18",
+            "uci": "b7c6",
+            "filhos": [
+              "no-arvore-c-19"
+            ],
+            "comentario": "O peão b recaptura. Agora o cavalo c6 saiu da posição."
+          },
+          "no-arvore-c-19": {
+            "id": "no-arvore-c-19",
+            "uci": "d4e5",
+            "filhos": [
+              "no-arvore-c-20"
+            ],
+            "comentario": "Só então tomamos o peão de e5."
+          },
+          "no-arvore-c-20": {
+            "id": "no-arvore-c-20",
+            "uci": "d8d1",
+            "filhos": [
+              "no-arvore-c-21"
+            ],
+            "comentario": "As Pretas trocam as damas."
+          },
+          "no-arvore-c-21": {
+            "id": "no-arvore-c-21",
+            "uci": "e1d1",
+            "filhos": [
+              "no-arvore-c-22"
+            ],
+            "comentario": "O rei recaptura. Sem damas no tabuleiro, ele pode ficar no centro por enquanto."
+          },
+          "no-arvore-c-22": {
+            "id": "no-arvore-c-22",
+            "uci": "f6g4",
+            "filhos": [
+              "no-arvore-c-23"
+            ],
+            "comentario": "O cavalo ataca nosso bispo de e3."
+          },
+          "no-arvore-c-23": {
+            "id": "no-arvore-c-23",
+            "uci": "b1d2",
+            "filhos": [],
+            "comentario": "Desenvolvemos o último cavalo. A fonte marca pequena vantagem para as Brancas. Depois das trocas, complete o desenvolvimento e jogue com calma. Contra ...e5, tire o cavalo de c6 e aceite as trocas.",
+            "nags": [
+              14
+            ]
+          },
+          "no-arvore-c-24": {
+            "id": "no-arvore-c-24",
+            "uci": "c5d4",
+            "filhos": [
+              "no-arvore-c-25"
+            ],
+            "comentario": "As Pretas trocam em d4."
+          },
+          "no-arvore-c-25": {
+            "id": "no-arvore-c-25",
+            "uci": "e2d4",
+            "filhos": [
+              "no-arvore-c-26"
+            ],
+            "comentario": "Recuperamos o peão e colocamos o cavalo no centro."
+          },
+          "no-arvore-c-26": {
+            "id": "no-arvore-c-26",
+            "uci": "c6e5",
+            "filhos": [
+              "no-arvore-c-27"
+            ],
+            "comentario": "O cavalo preto sai do ataque e ataca nosso bispo em f3."
+          },
+          "no-arvore-c-27": {
+            "id": "no-arvore-c-27",
+            "uci": "b1c3",
+            "filhos": [
+              "no-arvore-c-28",
+              "no-arvore-c-32",
+              "no-arvore-c-40"
+            ],
+            "comentario": "Desenvolvemos a última peça menor."
+          },
+          "no-arvore-c-28": {
+            "id": "no-arvore-c-28",
+            "uci": "a7a6",
+            "filhos": [
+              "no-arvore-c-29"
+            ],
+            "comentario": "...a6 controla b5. O curso atual apresenta 9...a6!? como uma defesa interessante.",
+            "nags": [
+              5
+            ]
+          },
+          "no-arvore-c-29": {
+            "id": "no-arvore-c-29",
+            "uci": "d1e2",
+            "filhos": [
+              "no-arvore-c-30"
+            ],
+            "comentario": "A dama sai de d1 e deixa o roque grande disponível para depois."
+          },
+          "no-arvore-c-30": {
+            "id": "no-arvore-c-30",
+            "uci": "e5f3",
+            "filhos": [
+              "no-arvore-c-31"
+            ],
+            "comentario": "As Pretas trocam o cavalo pelo nosso bispo e dão xeque."
+          },
+          "no-arvore-c-31": {
+            "id": "no-arvore-c-31",
+            "uci": "g2f3",
+            "filhos": [],
+            "comentario": "Nossa resposta oficial é 11.gxf3!. O draft antigo marcava 11.gxf3!?, mas a seção avançada do curso atual é intitulada “11.gf!”, então adotamos ! como marcação mais recente.",
+            "nags": [
+              1
+            ]
+          },
+          "no-arvore-c-32": {
+            "id": "no-arvore-c-32",
+            "uci": "f8e7",
+            "filhos": [
+              "no-arvore-c-33"
+            ],
+            "comentario": "As Pretas preparam o roque curto."
+          },
+          "no-arvore-c-33": {
+            "id": "no-arvore-c-33",
+            "uci": "d1e2",
+            "filhos": [
+              "no-arvore-c-34"
+            ],
+            "comentario": "A dama sai de d1 e libera o caminho para o roque grande."
+          },
+          "no-arvore-c-34": {
+            "id": "no-arvore-c-34",
+            "uci": "e8g8",
+            "filhos": [
+              "no-arvore-c-35"
+            ],
+            "comentario": "O rei preto fica seguro no lado do rei."
+          },
+          "no-arvore-c-35": {
+            "id": "no-arvore-c-35",
+            "uci": "e1c1",
+            "filhos": [
+              "no-arvore-c-36"
+            ],
+            "comentario": "Se nosso rei estiver seguro, este é um plano importante: rocar grande. Com os reis em lados opostos, muitas vezes podemos atacar no lado do rei."
+          },
+          "no-arvore-c-36": {
+            "id": "no-arvore-c-36",
+            "uci": "e5f3",
+            "filhos": [
+              "no-arvore-c-37"
+            ],
+            "comentario": "As Pretas trocam o cavalo pelo nosso bispo."
+          },
+          "no-arvore-c-37": {
+            "id": "no-arvore-c-37",
+            "uci": "e2f3",
+            "filhos": [
+              "no-arvore-c-38"
+            ]
+          },
+          "no-arvore-c-38": {
+            "id": "no-arvore-c-38",
+            "uci": "d8a5",
+            "filhos": [
+              "no-arvore-c-39"
+            ]
+          },
+          "no-arvore-c-39": {
+            "id": "no-arvore-c-39",
+            "uci": "g2g4",
+            "filhos": [],
+            "comentario": "Com os reis em lados opostos, podemos avançar peões contra o rei preto. A fonte indica ataque para as Brancas.",
+            "nags": [
+              40
+            ]
+          },
+          "no-arvore-c-40": {
+            "id": "no-arvore-c-40",
+            "uci": "f8b4",
+            "filhos": [
+              "no-arvore-c-41"
+            ]
+          },
+          "no-arvore-c-41": {
+            "id": "no-arvore-c-41",
+            "uci": "d4b5",
+            "filhos": [
+              "no-arvore-c-42",
+              "no-arvore-c-44"
+            ],
+            "comentario": "O cavalo entra em b5 e pressiona c7."
+          },
+          "no-arvore-c-42": {
+            "id": "no-arvore-c-42",
+            "uci": "c8d7",
+            "filhos": [
+              "no-arvore-c-43"
+            ]
+          },
+          "no-arvore-c-43": {
+            "id": "no-arvore-c-43",
+            "uci": "d1d4",
+            "filhos": [],
+            "comentario": "A dama fica ativa no centro."
+          },
+          "no-arvore-c-44": {
+            "id": "no-arvore-c-44",
+            "uci": "a7a6",
+            "filhos": [
+              "no-arvore-c-45"
+            ]
+          },
+          "no-arvore-c-45": {
+            "id": "no-arvore-c-45",
+            "uci": "a2a3",
+            "filhos": []
+          },
+          "no-arvore-c-46": {
+            "id": "no-arvore-c-46",
+            "uci": "g8f6",
+            "filhos": [
+              "no-arvore-c-47"
+            ],
+            "comentario": "Primeira escolha: ...Nf6. O cavalo ataca nosso peão de e4."
+          },
+          "no-arvore-c-47": {
+            "id": "no-arvore-c-47",
+            "uci": "e4e5",
+            "filhos": [],
+            "comentario": "Contra ...Nf6, o peão avança para e5 e expulsa o cavalo."
+          },
+          "no-arvore-c-48": {
+            "id": "no-arvore-c-48",
+            "uci": "c7c5",
+            "filhos": [
+              "no-arvore-c-49"
+            ],
+            "comentario": "Segunda escolha: ...c5. O peão preto ataca d4."
+          },
+          "no-arvore-c-49": {
+            "id": "no-arvore-c-49",
+            "uci": "e4d5",
+            "filhos": [],
+            "comentario": "Contra ...c5, trocamos em d5 e olhamos como as Pretas recapturam."
+          }
+        }
+      }
+    ],
+    "introducoes": [],
+    "capitulos": [
+      {
+        "id": "cap-c10",
+        "titulo": "Se ...cxd4 vier cedo: Qxd4",
+        "resumo": "Saber quem recaptura em d4 nesta ordem de lances.",
+        "analiseId": "analise-cap-c10",
+        "inicioNodeId": "no-cap-c10-0",
+        "caminho": [
+          "no-cap-c10-1",
+          "no-cap-c10-2",
+          "no-cap-c10-3",
+          "no-cap-c10-4",
+          "no-cap-c10-5",
+          "no-cap-c10-6",
+          "no-cap-c10-7",
+          "no-cap-c10-8",
+          "no-cap-c10-9",
+          "no-cap-c10-10",
+          "no-cap-c10-11",
+          "no-cap-c10-12"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-c10-12",
+            "nodeId": "no-cap-c10-12",
+            "texto": "O curso atual marca 6...cxd4?!;",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "cap-c10-2",
+        "titulo": "Se ...cxd4 vier cedo: Qxd4 — depois de 7.Qxd4",
+        "analiseId": "analise-cap-c10",
+        "inicioNodeId": "no-cap-c10-13",
+        "caminho": [],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-c10-13",
+            "nodeId": "no-cap-c10-13",
+            "texto": "A dama recupera. Assim o cavalo b1 fica livre para se desenvolver.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c10-13-2",
+            "nodeId": "no-cap-c10-13",
+            "texto": "Se ...cxd4 vier antes de ...Nc6, recapture com a dama.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          },
+          {
+            "id": "narracao-no-cap-c10-13-3",
+            "nodeId": "no-cap-c10-13",
+            "texto": "Outra boa tentativa é ...e5.",
+            "pausa": "manual",
+            "rotulo": "A seguir"
+          }
+        ]
+      },
+      {
+        "id": "cap-c11",
+        "titulo": "Contra ...e5: troque e simplifique",
+        "resumo": "Saber o que fazer quando as Pretas jogam ...e5.",
+        "analiseId": "analise-cap-c11",
+        "inicioNodeId": "no-cap-c11-0",
+        "caminho": [
+          "no-cap-c11-1",
+          "no-cap-c11-2",
+          "no-cap-c11-3",
+          "no-cap-c11-4",
+          "no-cap-c11-5",
+          "no-cap-c11-6",
+          "no-cap-c11-7",
+          "no-cap-c11-8",
+          "no-cap-c11-9",
+          "no-cap-c11-10",
+          "no-cap-c11-11",
+          "no-cap-c11-12",
+          "no-cap-c11-13",
+          "no-cap-c11-14"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-c11-14",
+            "nodeId": "no-cap-c11-14",
+            "texto": "As Pretas atacam nosso centro imediatamente.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "cap-c11-2",
+        "titulo": "Contra ...e5: troque e simplifique — depois de 8.Bxc6+",
+        "analiseId": "analise-cap-c11",
+        "inicioNodeId": "no-cap-c11-15",
+        "caminho": [
+          "no-cap-c11-16",
+          "no-cap-c11-17",
+          "no-cap-c11-18",
+          "no-cap-c11-19",
+          "no-cap-c11-20",
+          "no-cap-c11-21"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-c11-15",
+            "nodeId": "no-cap-c11-15",
+            "texto": "Primeiro tiramos o cavalo de c6.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c11-16",
+            "nodeId": "no-cap-c11-16",
+            "texto": "O peão b recaptura. Agora o cavalo c6 saiu da posição.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c11-17",
+            "nodeId": "no-cap-c11-17",
+            "texto": "Só então tomamos o peão de e5.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c11-18",
+            "nodeId": "no-cap-c11-18",
+            "texto": "As Pretas trocam as damas.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c11-19",
+            "nodeId": "no-cap-c11-19",
+            "texto": "O rei recaptura. Sem damas no tabuleiro, ele pode ficar no centro por enquanto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c11-20",
+            "nodeId": "no-cap-c11-20",
+            "texto": "O cavalo ataca nosso bispo de e3.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c11-21",
+            "nodeId": "no-cap-c11-21",
+            "texto": "Desenvolvemos o último cavalo. A fonte marca pequena vantagem para as Brancas.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c11-21-2",
+            "nodeId": "no-cap-c11-21",
+            "texto": "Depois das trocas, complete o desenvolvimento e jogue com calma.",
+            "pausa": "temporizada",
+            "rotulo": "Plano"
+          },
+          {
+            "id": "narracao-no-cap-c11-21-3",
+            "nodeId": "no-cap-c11-21",
+            "texto": "Contra ...e5, tire o cavalo de c6 e aceite as trocas.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          },
+          {
+            "id": "narracao-no-cap-c11-21-4",
+            "nodeId": "no-cap-c11-21",
+            "texto": "Agora vem a defesa que exige mais atenção: ...Ne5.",
+            "pausa": "manual",
+            "rotulo": "A seguir"
+          }
+        ]
+      },
+      {
+        "id": "cap-c12",
+        "titulo": "A linha mais difícil: ...Ne5",
+        "resumo": "Reconhecer ...Ne5 e saber nossa resposta.",
+        "analiseId": "analise-cap-c12",
+        "inicioNodeId": "no-cap-c12-0",
+        "caminho": [
+          "no-cap-c12-1",
+          "no-cap-c12-2",
+          "no-cap-c12-3",
+          "no-cap-c12-4",
+          "no-cap-c12-5",
+          "no-cap-c12-6",
+          "no-cap-c12-7",
+          "no-cap-c12-8",
+          "no-cap-c12-9",
+          "no-cap-c12-10",
+          "no-cap-c12-11",
+          "no-cap-c12-12",
+          "no-cap-c12-13",
+          "no-cap-c12-14",
+          "no-cap-c12-15",
+          "no-cap-c12-16"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-c12-0",
+            "nodeId": "no-cap-c12-0",
+            "texto": "Esta é a defesa que exige mais atenção.",
+            "pausa": "temporizada",
+            "rotulo": "Teoria · Linha crítica"
+          },
+          {
+            "id": "narracao-no-cap-c12-15",
+            "nodeId": "no-cap-c12-15",
+            "texto": "Nosso cavalo ataca o cavalo c6.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "cap-c12-2",
+        "titulo": "A linha mais difícil: ...Ne5 — depois de 9.Nc3",
+        "analiseId": "analise-cap-c12",
+        "inicioNodeId": "no-cap-c12-17",
+        "caminho": [
+          "no-cap-c12-18",
+          "no-cap-c12-33",
+          "no-cap-c12-34",
+          "no-cap-c12-35"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-c12-17",
+            "nodeId": "no-cap-c12-17",
+            "texto": "Sem complicar: desenvolvemos outra peça.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c12-18",
+            "nodeId": "no-cap-c12-18",
+            "texto": "...a6 controla b5. O curso atual apresenta 9...a6!? como uma defesa interessante.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c12-33",
+            "nodeId": "no-cap-c12-33",
+            "texto": "A dama sai de d1 e deixa o roque grande disponível para depois.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c12-34",
+            "nodeId": "no-cap-c12-34",
+            "texto": "As Pretas trocam o cavalo pelo nosso bispo e dão xeque.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c12-35",
+            "nodeId": "no-cap-c12-35",
+            "texto": "Nossa resposta oficial é 11.gxf3!. O draft antigo marcava 11.gxf3!?, mas a seção avançada do curso atual é intitulada “11.gf!”, então adotamos ! como marcação mais recente.",
+            "pausa": "temporizada",
+            "rotulo": "Memorizar"
+          }
+        ]
+      },
+      {
+        "id": "cap-c12-ramo-1",
+        "titulo": "A linha mais difícil: ...Ne5 — se 9...Be7",
+        "analiseId": "analise-cap-c12",
+        "inicioNodeId": "no-cap-c12-0",
+        "caminho": [
+          "no-cap-c12-1",
+          "no-cap-c12-2",
+          "no-cap-c12-3",
+          "no-cap-c12-4",
+          "no-cap-c12-5",
+          "no-cap-c12-6",
+          "no-cap-c12-7",
+          "no-cap-c12-8",
+          "no-cap-c12-9",
+          "no-cap-c12-10",
+          "no-cap-c12-11",
+          "no-cap-c12-12",
+          "no-cap-c12-13",
+          "no-cap-c12-14",
+          "no-cap-c12-15",
+          "no-cap-c12-16",
+          "no-cap-c12-17",
+          "no-cap-c12-19",
+          "no-cap-c12-20",
+          "no-cap-c12-21",
+          "no-cap-c12-22",
+          "no-cap-c12-23",
+          "no-cap-c12-24",
+          "no-cap-c12-25",
+          "no-cap-c12-26"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-c12-20",
+            "nodeId": "no-cap-c12-20",
+            "texto": "A dama sai e prepara o roque grande.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c12-22",
+            "nodeId": "no-cap-c12-22",
+            "texto": "Aqui vemos nosso plano completo: se estiver seguro, roque grande.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c12-23",
+            "nodeId": "no-cap-c12-23",
+            "texto": "As Pretas trocam o cavalo pelo nosso bispo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c12-26",
+            "nodeId": "no-cap-c12-26",
+            "texto": "Com os reis em lados opostos, podemos avançar peões contra o rei preto. A fonte indica ataque para as Brancas.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "cap-c12-ramo-2",
+        "titulo": "A linha mais difícil: ...Ne5 — se 9...Bb4",
+        "analiseId": "analise-cap-c12",
+        "inicioNodeId": "no-cap-c12-0",
+        "caminho": [
+          "no-cap-c12-1",
+          "no-cap-c12-2",
+          "no-cap-c12-3",
+          "no-cap-c12-4",
+          "no-cap-c12-5",
+          "no-cap-c12-6",
+          "no-cap-c12-7",
+          "no-cap-c12-8",
+          "no-cap-c12-9",
+          "no-cap-c12-10",
+          "no-cap-c12-11",
+          "no-cap-c12-12",
+          "no-cap-c12-13",
+          "no-cap-c12-14",
+          "no-cap-c12-15",
+          "no-cap-c12-16",
+          "no-cap-c12-17",
+          "no-cap-c12-27",
+          "no-cap-c12-28",
+          "no-cap-c12-29",
+          "no-cap-c12-32"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-c12-28",
+            "nodeId": "no-cap-c12-28",
+            "texto": "O cavalo entra em b5 e pressiona c7.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c12-32",
+            "nodeId": "no-cap-c12-32",
+            "texto": "A dama fica ativa no centro.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "cap-c13",
+        "titulo": "Esqueci a teoria: três regras simples",
+        "resumo": "Continuar jogando bem mesmo sem lembrar a variante.",
+        "analiseId": "analise-cap-c13",
+        "inicioNodeId": "no-cap-c13-0",
+        "caminho": [
+          "no-cap-c13-1",
+          "no-cap-c13-2",
+          "no-cap-c13-3",
+          "no-cap-c13-4",
+          "no-cap-c13-5",
+          "no-cap-c13-6",
+          "no-cap-c13-11",
+          "no-cap-c13-12",
+          "no-cap-c13-13",
+          "no-cap-c13-14",
+          "no-cap-c13-15",
+          "no-cap-c13-16",
+          "no-cap-c13-17"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-c13-0",
+            "nodeId": "no-cap-c13-0",
+            "texto": "Qual das três respostas das Pretas apareceu?",
+            "pausa": "manual",
+            "rotulo": "Pergunta"
+          },
+          {
+            "id": "narracao-no-cap-c13-6",
+            "nodeId": "no-cap-c13-6",
+            "texto": "Regra 1: se as Pretas tomarem e4, recupere com Bxe4 e monte nosso esquema.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c13-17",
+            "nodeId": "no-cap-c13-17",
+            "texto": "Depois de ...dxe4: desenvolva e proteja d4. Se puder fazer as duas coisas no mesmo lance, melhor. Quando as peças estiverem prontas, considere o roque grande se for seguro.",
+            "pausa": "temporizada",
+            "rotulo": "Plano"
+          }
+        ]
+      },
+      {
+        "id": "cap-c13-ramo-1",
+        "titulo": "Regra 2",
+        "analiseId": "analise-cap-c13",
+        "inicioNodeId": "no-cap-c13-0",
+        "caminho": [
+          "no-cap-c13-1",
+          "no-cap-c13-2",
+          "no-cap-c13-3",
+          "no-cap-c13-4",
+          "no-cap-c13-5",
+          "no-cap-c13-7",
+          "no-cap-c13-8"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-c13-8",
+            "nodeId": "no-cap-c13-8",
+            "texto": "Regra 2: ...Nf6 cedo = e5.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "cap-c13-ramo-2",
+        "titulo": "Regra 3",
+        "analiseId": "analise-cap-c13",
+        "inicioNodeId": "no-cap-c13-0",
+        "caminho": [
+          "no-cap-c13-1",
+          "no-cap-c13-2",
+          "no-cap-c13-3",
+          "no-cap-c13-4",
+          "no-cap-c13-5",
+          "no-cap-c13-9",
+          "no-cap-c13-10"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-c13-10",
+            "nodeId": "no-cap-c13-10",
+            "texto": "Regra 3: ...c5 = exd5 e depois veja como as Pretas recapturam.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-c13-17-2",
+            "nodeId": "no-cap-c13-10",
+            "texto": "...Nf6 = e5. ...c5 = exd5. ...dxe4 = Bxe4 e monte o esquema.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          },
+          {
+            "id": "narracao-no-cap-c13-17-3",
+            "nodeId": "no-cap-c13-10",
+            "texto": "Depois das aulas, passamos para treino e revisão.",
+            "pausa": "manual",
+            "rotulo": "A seguir"
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-parada-c10-1",
+        "titulo": "Sua vez — C10",
+        "introducao": "quem deve recuperar em d4?",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-c10",
+          "nodeId": "no-cap-c10-12"
+        },
+        "ladoAluno": "white",
+        "objetivo": "quem deve recuperar em d4?",
+        "questoes": [
+          {
+            "id": "questao-parada-c10-1",
+            "posicao": {
+              "analiseId": "analise-cap-c10",
+              "nodeId": "no-cap-c10-12"
+            },
+            "dica": "quem deve recuperar em d4?",
+            "respostas": [
+              {
+                "id": "resposta-parada-c10-1",
+                "moves": [
+                  "d1d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 7.Qxd4.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "rnbqkb1r/pp3ppp/4pn2/8/3p4/5B2/PPP1NPPP/RNBQK2R w KQkq - 0 7",
+            "historicoUci": [
+              "e2e4",
+              "e7e6",
+              "d2d4",
+              "d7d5",
+              "f1d3",
+              "d5e4",
+              "d3e4",
+              "g8f6",
+              "e4f3",
+              "c7c5",
+              "g1e2",
+              "c5d4"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-c10",
+              "nodeId": "no-cap-c10-12"
+            }
+          },
+          "questoes": {
+            "questao-parada-c10-1": {
+              "fen": "rnbqkb1r/pp3ppp/4pn2/8/3p4/5B2/PPP1NPPP/RNBQK2R w KQkq - 0 7",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "c5d4"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-c10",
+                "nodeId": "no-cap-c10-12"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 7.Qxd4.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-parada-c11-1",
+        "titulo": "Sua vez — C11",
+        "introducao": "Precisamos segurar tudo? Não. Podemos trocar e deixar a posição mais simples.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-c11",
+          "nodeId": "no-cap-c11-14"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Precisamos segurar tudo? Não. Podemos trocar e deixar a posição mais simples.",
+        "questoes": [
+          {
+            "id": "questao-parada-c11-1",
+            "posicao": {
+              "analiseId": "analise-cap-c11",
+              "nodeId": "no-cap-c11-14"
+            },
+            "dica": "Precisamos segurar tudo? Não. Podemos trocar e deixar a posição mais simples.",
+            "respostas": [
+              {
+                "id": "resposta-parada-c11-1",
+                "moves": [
+                  "f3c6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 8.Bxc6+.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "r1bqkb1r/pp3ppp/2n2n2/2p1p3/3P4/4BB2/PPP1NPPP/RN1QK2R w KQkq - 0 8",
+            "historicoUci": [
+              "e2e4",
+              "e7e6",
+              "d2d4",
+              "d7d5",
+              "f1d3",
+              "d5e4",
+              "d3e4",
+              "g8f6",
+              "e4f3",
+              "c7c5",
+              "g1e2",
+              "b8c6",
+              "c1e3",
+              "e6e5"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-c11",
+              "nodeId": "no-cap-c11-14"
+            }
+          },
+          "questoes": {
+            "questao-parada-c11-1": {
+              "fen": "r1bqkb1r/pp3ppp/2n2n2/2p1p3/3P4/4BB2/PPP1NPPP/RN1QK2R w KQkq - 0 8",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "e6e5"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-c11",
+                "nodeId": "no-cap-c11-14"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 8.Bxc6+.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-parada-c12-1",
+        "titulo": "Sua vez — C12",
+        "introducao": "O cavalo atacou nosso bispo. Como continuar sem complicar? Boa defesa: o cavalo sai do ataque e ataca nosso bispo em f3.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-c12",
+          "nodeId": "no-cap-c12-16"
+        },
+        "ladoAluno": "white",
+        "objetivo": "O cavalo atacou nosso bispo. Como continuar sem complicar? Boa defesa: o cavalo sai do ataque e ataca nosso bispo em f3.",
+        "questoes": [
+          {
+            "id": "questao-parada-c12-1",
+            "posicao": {
+              "analiseId": "analise-cap-c12",
+              "nodeId": "no-cap-c12-16"
+            },
+            "dica": "O cavalo atacou nosso bispo. Como continuar sem complicar? Boa defesa: o cavalo sai do ataque e ataca nosso bispo em f3.",
+            "respostas": [
+              {
+                "id": "resposta-parada-c12-1",
+                "moves": [
+                  "b1c3"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 9.Nc3.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "r1bqkb1r/pp3ppp/4pn2/4n3/3N4/4BB2/PPP2PPP/RN1QK2R w KQkq - 1 9",
+            "historicoUci": [
+              "e2e4",
+              "e7e6",
+              "d2d4",
+              "d7d5",
+              "f1d3",
+              "d5e4",
+              "d3e4",
+              "g8f6",
+              "e4f3",
+              "c7c5",
+              "g1e2",
+              "b8c6",
+              "c1e3",
+              "c5d4",
+              "e2d4",
+              "c6e5"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-c12",
+              "nodeId": "no-cap-c12-16"
+            }
+          },
+          "questoes": {
+            "questao-parada-c12-1": {
+              "fen": "r1bqkb1r/pp3ppp/4pn2/4n3/3N4/4BB2/PPP2PPP/RN1QK2R w KQkq - 1 9",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-c12",
+                "nodeId": "no-cap-c12-16"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 9.Nc3.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-arvore-c",
+        "titulo": "Treino guiado — aula C",
+        "introducao": "Jogue as linhas da aula: a resposta do adversário muda a cada tentativa.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-arvore-c",
+          "nodeId": "no-arvore-c-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Jogar as linhas da aula de memória, contra as respostas que o repertório prevê.",
+        "questoes": [
+          {
+            "id": "questao-arvore-c-1",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-1",
+                "moves": [
+                  "e2e4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e7e6",
+                      "proximaQuestaoId": "questao-arvore-c-2",
+                      "texto": "A Defesa Francesa começa com ...e6. As Pretas querem jogar ...d5 e atacar nosso peão de e4."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-2",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-2"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-3",
+                "moves": [
+                  "d2d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Nós ocupamos o centro.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d7d5",
+                      "proximaQuestaoId": "questao-arvore-c-3",
+                      "texto": "Agora e4 está atacado. Três caminhos: 3.e5, a Variante do Avanço; 3.exd5, a Variante das Trocas; ou proteger e4 com uma peça. As proteções mais conhecidas são Nc3 e Nd2."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-3",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-4"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-5",
+                "moves": [
+                  "f1d3"
+                ],
+                "julgamento": "correta",
+                "feedback": "O bispo sai e protege e4: dois trabalhos com um lance. O curso atual de Grigoryan apresenta 3.Bd3! como a arma do repertório. 3.Bd3 é menos comum que as linhas principais.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d5e4",
+                      "proximaQuestaoId": "questao-arvore-c-4",
+                      "texto": "As Pretas tomam nosso peão de e4. Como recuperar o peão e continuar desenvolvendo?"
+                    },
+                    {
+                      "move": "g8f6",
+                      "proximaQuestaoId": "questao-arvore-c-24",
+                      "texto": "Primeira escolha: ...Nf6. O cavalo ataca nosso peão de e4."
+                    },
+                    {
+                      "move": "c7c5",
+                      "proximaQuestaoId": "questao-arvore-c-25",
+                      "texto": "Segunda escolha: ...c5. O peão preto ataca d4."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-4",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-6"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-7",
+                "moves": [
+                  "d3e4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Recuperamos com o bispo.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g8f6",
+                      "proximaQuestaoId": "questao-arvore-c-5",
+                      "texto": "As Pretas desenvolvem o cavalo e atacam nosso bispo."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-5",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-8"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-9",
+                "moves": [
+                  "e4f3"
+                ],
+                "julgamento": "correta",
+                "feedback": "O bispo recua para uma casa segura. Agora o cavalo g1 pode ir a e2.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c7c5",
+                      "proximaQuestaoId": "questao-arvore-c-6",
+                      "texto": "...c5 ataca nosso peão de d4."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-6",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-10"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-11",
+                "moves": [
+                  "g1e2"
+                ],
+                "julgamento": "correta",
+                "feedback": "Desenvolvemos o cavalo e protegemos d4.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c5d4",
+                      "proximaQuestaoId": "questao-arvore-c-7",
+                      "texto": "O curso atual marca 6...cxd4?!; quem deve recuperar em d4?"
+                    },
+                    {
+                      "move": "b8c6",
+                      "proximaQuestaoId": "questao-arvore-c-8",
+                      "texto": "As Pretas desenvolvem outra peça e aumentam a pressão sobre d4."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-7",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-12"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-13",
+                "moves": [
+                  "d1d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "A dama recupera. Assim o cavalo b1 fica livre para se desenvolver. Se ...cxd4 vier antes de ...Nc6, recapture com a dama.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-8",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-14"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-15",
+                "moves": [
+                  "c1e3"
+                ],
+                "julgamento": "correta",
+                "feedback": "De novo fazemos duas coisas: desenvolvemos o bispo e protegemos d4. A casa d4 é o ponto central do nosso esquema. Nossa regra é simples: desenvolver sem deixar d4 cair.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e6e5",
+                      "proximaQuestaoId": "questao-arvore-c-9",
+                      "texto": "As Pretas atacam nosso centro imediatamente. Precisamos segurar tudo? Não. Podemos trocar e deixar a posição mais simples."
+                    },
+                    {
+                      "move": "c5d4",
+                      "proximaQuestaoId": "questao-arvore-c-13",
+                      "texto": "As Pretas trocam em d4."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-9",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-16"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-17",
+                "moves": [
+                  "f3c6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Primeiro tiramos o cavalo de c6.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b7c6",
+                      "proximaQuestaoId": "questao-arvore-c-10",
+                      "texto": "O peão b recaptura. Agora o cavalo c6 saiu da posição."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-10",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-18"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-19",
+                "moves": [
+                  "d4e5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Só então tomamos o peão de e5.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d8d1",
+                      "proximaQuestaoId": "questao-arvore-c-11",
+                      "texto": "As Pretas trocam as damas."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-11",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-20"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-21",
+                "moves": [
+                  "e1d1"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei recaptura. Sem damas no tabuleiro, ele pode ficar no centro por enquanto.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f6g4",
+                      "proximaQuestaoId": "questao-arvore-c-12",
+                      "texto": "O cavalo ataca nosso bispo de e3."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-12",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-22"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-23",
+                "moves": [
+                  "b1d2"
+                ],
+                "julgamento": "correta",
+                "feedback": "Desenvolvemos o último cavalo. A fonte marca pequena vantagem para as Brancas. Depois das trocas, complete o desenvolvimento e jogue com calma. Contra ...e5, tire o cavalo de c6 e aceite as trocas.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-13",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-24"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-25",
+                "moves": [
+                  "e2d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Recuperamos o peão e colocamos o cavalo no centro.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c6e5",
+                      "proximaQuestaoId": "questao-arvore-c-14",
+                      "texto": "O cavalo preto sai do ataque e ataca nosso bispo em f3."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-14",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-26"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-27",
+                "moves": [
+                  "b1c3"
+                ],
+                "julgamento": "correta",
+                "feedback": "Desenvolvemos a última peça menor.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "a7a6",
+                      "proximaQuestaoId": "questao-arvore-c-15",
+                      "texto": "...a6 controla b5. O curso atual apresenta 9...a6!? como uma defesa interessante."
+                    },
+                    {
+                      "move": "f8e7",
+                      "proximaQuestaoId": "questao-arvore-c-17",
+                      "texto": "As Pretas preparam o roque curto."
+                    },
+                    {
+                      "move": "f8b4",
+                      "proximaQuestaoId": "questao-arvore-c-21"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-15",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-28"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-29",
+                "moves": [
+                  "d1e2"
+                ],
+                "julgamento": "correta",
+                "feedback": "A dama sai de d1 e deixa o roque grande disponível para depois.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e5f3",
+                      "proximaQuestaoId": "questao-arvore-c-16",
+                      "texto": "As Pretas trocam o cavalo pelo nosso bispo e dão xeque."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-16",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-30"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-31",
+                "moves": [
+                  "g2f3"
+                ],
+                "julgamento": "correta",
+                "feedback": "Nossa resposta oficial é 11.gxf3!. O draft antigo marcava 11.gxf3!?, mas a seção avançada do curso atual é intitulada “11.gf!”, então adotamos ! como marcação mais recente.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              },
+              {
+                "id": "resposta-arvore-c-e2f3",
+                "moves": [
+                  "e2f3"
+                ],
+                "julgamento": "alternativa",
+                "feedback": "11.Qxf3 também vale, mas o repertório segue por 11.gxf3.",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-arvore-c-d4f3",
+                "moves": [
+                  "d4f3"
+                ],
+                "julgamento": "alternativa",
+                "feedback": "11.Nxf3 também vale, mas o repertório segue por 11.gxf3.",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-17",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-32"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-33",
+                "moves": [
+                  "d1e2"
+                ],
+                "julgamento": "correta",
+                "feedback": "A dama sai de d1 e libera o caminho para o roque grande.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e8g8",
+                      "proximaQuestaoId": "questao-arvore-c-18",
+                      "texto": "O rei preto fica seguro no lado do rei."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-18",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-34"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-35",
+                "moves": [
+                  "e1c1"
+                ],
+                "julgamento": "correta",
+                "feedback": "Se nosso rei estiver seguro, este é um plano importante: rocar grande. Com os reis em lados opostos, muitas vezes podemos atacar no lado do rei.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e5f3",
+                      "proximaQuestaoId": "questao-arvore-c-19",
+                      "texto": "As Pretas trocam o cavalo pelo nosso bispo."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-19",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-36"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-37",
+                "moves": [
+                  "e2f3"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d8a5",
+                      "proximaQuestaoId": "questao-arvore-c-20"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-20",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-38"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-39",
+                "moves": [
+                  "g2g4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Com os reis em lados opostos, podemos avançar peões contra o rei preto. A fonte indica ataque para as Brancas.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-21",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-40"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-41",
+                "moves": [
+                  "d4b5"
+                ],
+                "julgamento": "correta",
+                "feedback": "O cavalo entra em b5 e pressiona c7.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c8d7",
+                      "proximaQuestaoId": "questao-arvore-c-22"
+                    },
+                    {
+                      "move": "a7a6",
+                      "proximaQuestaoId": "questao-arvore-c-23"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-22",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-42"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-43",
+                "moves": [
+                  "d1d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "A dama fica ativa no centro.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-23",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-44"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-45",
+                "moves": [
+                  "a2a3"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-24",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-46"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-47",
+                "moves": [
+                  "e4e5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Contra ...Nf6, o peão avança para e5 e expulsa o cavalo.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-c-25",
+            "posicao": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-48"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-c-49",
+                "moves": [
+                  "e4d5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Contra ...c5, trocamos em d5 e olhamos como as Pretas recapturam.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-arvore-c",
+              "nodeId": "no-arvore-c-0"
+            }
+          },
+          "questoes": {
+            "questao-arvore-c-1": {
+              "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-0"
+              }
+            },
+            "questao-arvore-c-2": {
+              "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+              "historicoUci": [
+                "e2e4",
+                "e7e6"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-2"
+              }
+            },
+            "questao-arvore-c-3": {
+              "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-4"
+              }
+            },
+            "questao-arvore-c-4": {
+              "fen": "rnbqkbnr/ppp2ppp/4p3/8/3Pp3/3B4/PPP2PPP/RNBQK1NR w KQkq - 0 4",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-6"
+              }
+            },
+            "questao-arvore-c-5": {
+              "fen": "rnbqkb1r/ppp2ppp/4pn2/8/3PB3/8/PPP2PPP/RNBQK1NR w KQkq - 1 5",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-8"
+              }
+            },
+            "questao-arvore-c-6": {
+              "fen": "rnbqkb1r/pp3ppp/4pn2/2p5/3P4/5B2/PPP2PPP/RNBQK1NR w KQkq - 0 6",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-10"
+              }
+            },
+            "questao-arvore-c-7": {
+              "fen": "rnbqkb1r/pp3ppp/4pn2/8/3p4/5B2/PPP1NPPP/RNBQK2R w KQkq - 0 7",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "c5d4"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-12"
+              }
+            },
+            "questao-arvore-c-8": {
+              "fen": "r1bqkb1r/pp3ppp/2n1pn2/2p5/3P4/5B2/PPP1NPPP/RNBQK2R w KQkq - 2 7",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-14"
+              }
+            },
+            "questao-arvore-c-9": {
+              "fen": "r1bqkb1r/pp3ppp/2n2n2/2p1p3/3P4/4BB2/PPP1NPPP/RN1QK2R w KQkq - 0 8",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "e6e5"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-16"
+              }
+            },
+            "questao-arvore-c-10": {
+              "fen": "r1bqkb1r/p4ppp/2p2n2/2p1p3/3P4/4B3/PPP1NPPP/RN1QK2R w KQkq - 0 9",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "e6e5",
+                "f3c6",
+                "b7c6"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-18"
+              }
+            },
+            "questao-arvore-c-11": {
+              "fen": "r1b1kb1r/p4ppp/2p2n2/2p1P3/8/4B3/PPP1NPPP/RN1qK2R w KQkq - 0 10",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "e6e5",
+                "f3c6",
+                "b7c6",
+                "d4e5",
+                "d8d1"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-20"
+              }
+            },
+            "questao-arvore-c-12": {
+              "fen": "r1b1kb1r/p4ppp/2p5/2p1P3/6n1/4B3/PPP1NPPP/RN1K3R w kq - 1 11",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "e6e5",
+                "f3c6",
+                "b7c6",
+                "d4e5",
+                "d8d1",
+                "e1d1",
+                "f6g4"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-22"
+              }
+            },
+            "questao-arvore-c-13": {
+              "fen": "r1bqkb1r/pp3ppp/2n1pn2/8/3p4/4BB2/PPP1NPPP/RN1QK2R w KQkq - 0 8",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-24"
+              }
+            },
+            "questao-arvore-c-14": {
+              "fen": "r1bqkb1r/pp3ppp/4pn2/4n3/3N4/4BB2/PPP2PPP/RN1QK2R w KQkq - 1 9",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-26"
+              }
+            },
+            "questao-arvore-c-15": {
+              "fen": "r1bqkb1r/1p3ppp/p3pn2/4n3/3N4/2N1BB2/PPP2PPP/R2QK2R w KQkq - 0 10",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5",
+                "b1c3",
+                "a7a6"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-28"
+              }
+            },
+            "questao-arvore-c-16": {
+              "fen": "r1bqkb1r/1p3ppp/p3pn2/8/3N4/2N1Bn2/PPP1QPPP/R3K2R w KQkq - 0 11",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5",
+                "b1c3",
+                "a7a6",
+                "d1e2",
+                "e5f3"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-30"
+              }
+            },
+            "questao-arvore-c-17": {
+              "fen": "r1bqk2r/pp2bppp/4pn2/4n3/3N4/2N1BB2/PPP2PPP/R2QK2R w KQkq - 3 10",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5",
+                "b1c3",
+                "f8e7"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-32"
+              }
+            },
+            "questao-arvore-c-18": {
+              "fen": "r1bq1rk1/pp2bppp/4pn2/4n3/3N4/2N1BB2/PPP1QPPP/R3K2R w KQ - 5 11",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5",
+                "b1c3",
+                "f8e7",
+                "d1e2",
+                "e8g8"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-34"
+              }
+            },
+            "questao-arvore-c-19": {
+              "fen": "r1bq1rk1/pp2bppp/4pn2/8/3N4/2N1Bn2/PPP1QPPP/2KR3R w - - 0 12",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5",
+                "b1c3",
+                "f8e7",
+                "d1e2",
+                "e8g8",
+                "e1c1",
+                "e5f3"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-36"
+              }
+            },
+            "questao-arvore-c-20": {
+              "fen": "r1b2rk1/pp2bppp/4pn2/q7/3N4/2N1BQ2/PPP2PPP/2KR3R w - - 1 13",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5",
+                "b1c3",
+                "f8e7",
+                "d1e2",
+                "e8g8",
+                "e1c1",
+                "e5f3",
+                "e2f3",
+                "d8a5"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-38"
+              }
+            },
+            "questao-arvore-c-21": {
+              "fen": "r1bqk2r/pp3ppp/4pn2/4n3/1b1N4/2N1BB2/PPP2PPP/R2QK2R w KQkq - 3 10",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5",
+                "b1c3",
+                "f8b4"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-40"
+              }
+            },
+            "questao-arvore-c-22": {
+              "fen": "r2qk2r/pp1b1ppp/4pn2/1N2n3/1b6/2N1BB2/PPP2PPP/R2QK2R w KQkq - 5 11",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5",
+                "b1c3",
+                "f8b4",
+                "d4b5",
+                "c8d7"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-42"
+              }
+            },
+            "questao-arvore-c-23": {
+              "fen": "r1bqk2r/1p3ppp/p3pn2/1N2n3/1b6/2N1BB2/PPP2PPP/R2QK2R w KQkq - 0 11",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "d5e4",
+                "d3e4",
+                "g8f6",
+                "e4f3",
+                "c7c5",
+                "g1e2",
+                "b8c6",
+                "c1e3",
+                "c5d4",
+                "e2d4",
+                "c6e5",
+                "b1c3",
+                "f8b4",
+                "d4b5",
+                "a7a6"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-44"
+              }
+            },
+            "questao-arvore-c-24": {
+              "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/3B4/PPP2PPP/RNBQK1NR w KQkq - 2 4",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "g8f6"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-46"
+              }
+            },
+            "questao-arvore-c-25": {
+              "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/3B4/PPP2PPP/RNBQK1NR w KQkq - 0 4",
+              "historicoUci": [
+                "e2e4",
+                "e7e6",
+                "d2d4",
+                "d7d5",
+                "f1d3",
+                "c7c5"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-c",
+                "nodeId": "no-arvore-c-48"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      }
+    ],
+    "praticas": [],
+    "treinadores": [
+      {
+        "id": "treinador-c",
+        "titulo": "Move trainer — aula C",
+        "cor": "brancas",
+        "abertura": "francesa",
+        "linhaIds": [
+          "brancas-francesa-0852df7d",
+          "brancas-francesa-923c45d0",
+          "brancas-francesa-1683acf6",
+          "brancas-francesa-45e1602b",
+          "brancas-francesa-b992df2e",
+          "brancas-francesa-06a70829",
+          "brancas-francesa-f46440ff",
+          "brancas-francesa-0a70c0c0",
+          "brancas-francesa-4ef51eba"
+        ]
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-cap-c10",
+        "tipo": "capitulo",
+        "entidadeId": "cap-c10"
+      },
+      {
+        "id": "etapa-treino-parada-c10-1",
+        "tipo": "treino",
+        "entidadeId": "treino-parada-c10-1"
+      },
+      {
+        "id": "etapa-cap-c10-2",
+        "tipo": "capitulo",
+        "entidadeId": "cap-c10-2"
+      },
+      {
+        "id": "etapa-cap-c11",
+        "tipo": "capitulo",
+        "entidadeId": "cap-c11"
+      },
+      {
+        "id": "etapa-treino-parada-c11-1",
+        "tipo": "treino",
+        "entidadeId": "treino-parada-c11-1"
+      },
+      {
+        "id": "etapa-cap-c11-2",
+        "tipo": "capitulo",
+        "entidadeId": "cap-c11-2"
+      },
+      {
+        "id": "etapa-cap-c12",
+        "tipo": "capitulo",
+        "entidadeId": "cap-c12"
+      },
+      {
+        "id": "etapa-treino-parada-c12-1",
+        "tipo": "treino",
+        "entidadeId": "treino-parada-c12-1"
+      },
+      {
+        "id": "etapa-cap-c12-2",
+        "tipo": "capitulo",
+        "entidadeId": "cap-c12-2"
+      },
+      {
+        "id": "etapa-cap-c12-ramo-1",
+        "tipo": "capitulo",
+        "entidadeId": "cap-c12-ramo-1"
+      },
+      {
+        "id": "etapa-cap-c12-ramo-2",
+        "tipo": "capitulo",
+        "entidadeId": "cap-c12-ramo-2"
+      },
+      {
+        "id": "etapa-cap-c13",
+        "tipo": "capitulo",
+        "entidadeId": "cap-c13"
+      },
+      {
+        "id": "etapa-cap-c13-ramo-1",
+        "tipo": "capitulo",
+        "entidadeId": "cap-c13-ramo-1"
+      },
+      {
+        "id": "etapa-cap-c13-ramo-2",
+        "tipo": "capitulo",
+        "entidadeId": "cap-c13-ramo-2"
+      },
+      {
+        "id": "etapa-treino-arvore-c",
+        "tipo": "treino",
+        "entidadeId": "treino-arvore-c"
+      },
+      {
+        "id": "etapa-treinador-c",
+        "tipo": "treinador",
+        "entidadeId": "treinador-c"
+      }
+    ]
+  },
+  "posicoes": {},
+  "revisoes": {
+    "treino-parada-c10-1": {
+      "tipo": "treino",
+      "revisao": "ar_33e1b7bde52c1de25946e0b1c3f5e01440daf84c3e4084b191e4721cb519ddd5"
+    },
+    "treino-parada-c11-1": {
+      "tipo": "treino",
+      "revisao": "ar_61b5a037e71a48368daff188f583a6e5fe4167280a6ffae4005f1c5f8c5b3465"
+    },
+    "treino-parada-c12-1": {
+      "tipo": "treino",
+      "revisao": "ar_6a559002af1fc8ca3bc6f5333dc4ffa5b49f31d172784b7ce6234dcda3e44128"
+    },
+    "treino-arvore-c": {
+      "tipo": "treino",
+      "revisao": "ar_25259c188b415f548f9df1548c26528f9dfe25f66655f1bbc5e243d93af02ee0"
+    }
+  },
+  "manifesto": {
+    "aulaId": "AB-BRANCAS-FRANCESA-C",
+    "aula": "527e302dff767e9a1dcff6009f9110751980849f856dd08a5b66b11c1385f7df",
+    "posicoes": {},
+    "revisoes": "333d02ccaf7a1574378e05c13d03a7f270903921be0dd7778e2e286c8f920f2e",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

@@ -55,6 +55,25 @@ sim **medir três e comparar**: §6.1.
   lances que o aluno joga** está sem comentário. Era 80 antes desta sessão, e
   quem impede a volta é o `conferirRegras` de `lib/repertorio/linhas.ts`.
 
+> **16/9/2026 — curso de abertura (decisões do Doug).** Três mudanças valem a partir
+> daqui, e as seções abaixo que dizem o contrário estão marcadas:
+>
+> 1. **A régua perde o tamanho, nos 11 repertórios.** Sai a profundidade mínima, o
+>    teto de 14, a exigência de roque e de peças menores fora da casa, e o `[%plano]`
+>    obrigatório. Ficam: toda linha termina em lance nosso, nenhuma linha repetida. (§4.)
+>    *17/9/2026: "todo lance nosso tem comentário" também saiu — comentário é opcional em todo lance do move trainer desde 17/9/2026 (decisão do Doug; ver `AGENTS.md`).*
+> 2. **A Francesa passa a vir do estudo do Lichess** (Francesa 3.Bd3 v1.5, `qq2xorDl`),
+>    e `brancas-francesa.pgn` passa a ser **gerado**, com as linhas dos capítulos "Move
+>    Trainer" — inclusive as de armadilha — em `[Categoria]` e `[Ordem]`. O rascunho do
+>    Grigoryan (`french-with-bd3.pgn`) é aposentado. (§2.7, §5.)
+> 3. **Linha nova chega na ordem do estudo** (arma → esquema → golpes → quando não
+>    funciona → defesas → linha crítica → desvios → se esquecer → árvore completa),
+>    sem trava: revisão vencida pode entrar no meio.
+>
+> O contrato está em `docs/EDITOR-V2-ESPECIFICACAO-FUNCIONAL.md` §13.3 e §21, e o plano
+> em `docs/CURSO-DE-ABERTURA-PLANO.md`. Nada disso está implementado ainda: o estado
+> fica no diário `docs/MODO-EDITOR-ONDE-PARAMOS.md`.
+
 ---
 
 ## 1. A decisão
@@ -263,6 +282,13 @@ livro + motor: `4.Nf3 dxe4 5.Bxe4 Nf6 6.Bg5`, cravando o cavalo na dama.
 Esta linha era 2 até 5/9. Subiu para 3 por decisão do Doug: `3…Nc6` é 14 %, mais
 frequente que respostas que já tinham linha, e a fonte não a cobre.
 
+> **Substituído em 16/9/2026.** A Francesa passa a vir do estudo v1.5 do Lichess
+> (`qq2xorDl`): as linhas são as dos 16 capítulos "Move Trainer" (E22A–E22P), e o
+> `brancas-francesa.pgn` é gerado delas. No `3…c5`, `5.c3` segue como o principal, e
+> `5.dxc5` e `5.Nf3` (marcados `!?` com `[REFERENCIA]` no estudo) passam a valer como
+> **"também vale"**. Os ids das três linhas atuais mudam, e o progresso das contas de
+> teste nelas zera — o impacto aparece antes de aplicar.
+
 ### 2.8 Na Caro falta a segunda resposta mais comum
 
 Depois de `4.Bd3`: Nc6 57,5 %, **Nf6 30,9 %**. O arquivo só tem 4…Nc6. O plano-mãe
@@ -367,6 +393,14 @@ regra "toda linha termina num lance nosso": numa árvore das brancas o 16º
 meio-lance é **das pretas**. Contado em lance nosso o número é um só — 14 — e os
 meios-lances saem por cor: 27 nas brancas, 28 nas pretas.
 
+> **Revogado em 16/9/2026 (decisão do Doug).** A régua de tamanho sai para os 11
+> repertórios: nem mínimo de 12, nem teto de 14, nem roque, nem peças menores fora da
+> casa, nem `[%plano]` obrigatório. A linha termina onde a fonte a termina, desde que
+> termine em lance nosso, com comentário, e não repita outra linha. `PROFUNDIDADE_MINIMA`,
+> o teto e os `fechamentosAbertos` saem de `lib/repertorio/linhas.ts` na fatia F2b, com
+> os testes e mutações dessas regras. **Risco aceito:** linha futura pode ficar curta
+> demais sem aviso automático.
+
 ### O corte por frequência, definido
 
 O plano dizia "≥ 10 %" sem dizer **de quê**. Medido contra o nó pai, esse corte
@@ -426,6 +460,17 @@ comentários do B6, e a §9 conta o preço.
 Cabeçalho de cada PGN revisado: `[Abertura]` (o slug, igual ao nome do arquivo),
 `[Nome]`, `[Cor]` (a cor que **o aluno** joga), `[Nivel]`, `[Fonte]`
 (obrigatória), `[Result "*"]`.
+
+> **Abertura com curso (16/9/2026).** Quando a abertura tem estudo do Lichess escrito na
+> Estrutura Didática v3.1, o caminho muda: o estudo é a fonte, o export cru vai para
+> `content/repertorio/rascunhos/estudo-<cor>-<abertura>.pgn`, e o
+> `<cor>-<abertura>.pgn` é **gerado** — preâmbulo "GERADO — não editar", uma partida por
+> capítulo "Move Trainer", tags `[Categoria]`, `[Ordem]` e `[Fonte "estudo <id> <versão>"]`,
+> comentários sem os marcadores do estudo e com todos os símbolos. Correção se faz no
+> Lichess e reimportando, nunca no PGN gerado. O texto do estudo é do Doug, escrito com as
+> nossas palavras; por isso o export entra no Git com a prosa, ao contrário do rascunho de
+> curso pago acima. A regra de símbolos do `AGENTS.md` vale igual, e a trava
+> `marcas-das-fontes` compara estudo → PGN gerado.
 
 **Como a árvore vira linhas** — um arquivo é uma árvore, uma linha é um caminho
 da raiz até uma ponta:

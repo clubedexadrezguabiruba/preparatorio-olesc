@@ -4,6 +4,8 @@ import { Barra } from "@/components/Barra";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Moldura } from "@/components/Moldura";
 import { Bolinhas } from "@/components/Bolinhas";
+import { SeloDoGrau } from "@/components/progresso/SeloDoGrau";
+import { grauDaAulaDeFinais } from "@/lib/progresso/grau";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { editorLigado } from "@/lib/editor/local";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
@@ -300,7 +302,16 @@ function Cartao({
         {temPratica && <Bolinhas progresso={progresso.escada} total={DEGRAU_APRENDIDA} />}
       </div>
 
-      <Estado estado={estado} />
+      {/*
+        O grau (17/9/2026) no lugar de "Praticando" e "Aprendida": é o degrau **atual** da escada, e
+        ele desce quando a partida da revisão é perdida — o que "Aprendida", que nunca volta, não
+        dizia. "Não começou" fica em palavra: um "Novato" em quarenta cartões intocados é ruído.
+      */}
+      {estado === "nao-comecou" ? (
+        <Estado estado={estado} />
+      ) : (
+        <SeloDoGrau grau={grauDaAulaDeFinais(temPratica, progresso)} />
+      )}
     </Link>
   );
 }

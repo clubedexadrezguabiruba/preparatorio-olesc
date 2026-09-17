@@ -17,8 +17,12 @@ import type { Lesson, MoveTree, Position } from "@/lib/lesson/schema";
 import { aplicarUci, isPraise, judgeMove, throwsWinAway, toUci } from "@/lib/lesson/tree";
 import { restingMessage, useLessonStore, type PanelMessage, type TreeKey } from "@/lib/lesson/store";
 import { REPLY_DELAY_MS } from "@/lib/lesson/timing";
-import { playComplete, playForMove, playRefusal, playSuccess } from "@/lib/sound";
-import { Confetti } from "./Confetti";
+import { playForMove, playRefusal, playSuccess } from "@/lib/sound";
+import { Celebracao, useCelebracao } from "@/components/Celebracao";
+import { setaQueEnsina, simboloNaCasa, type SimboloDoDesenho } from "@/lib/chess/desenhos-do-tabuleiro";
+import { ajudaNoErro } from "@/lib/lesson/ajuda-no-erro";
+import { useAtalho } from "@/components/atalhos/Atalhos";
+import { focoEmControle } from "@/lib/atalhos/foco";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { LessonButton } from "./LessonButton";
 import { PulseRing } from "./PulseRing";
@@ -33,6 +37,7 @@ import { PulseRing } from "./PulseRing";
  * A chess.js entra só para dizer o que é legal e para mover as peças.
  */
 export function TreeStage({
+  semConfete = false,
   lesson,
   tree,
   treeKey,
@@ -48,7 +53,10 @@ export function TreeStage({
   onFinish,
   finishLabel,
   v2,
+  aoRever,
 }: {
+  /** Curso de abertura: o botão "Rever o capítulo" do último degrau da escada de ajuda. */
+  aoRever?: () => void;
   lesson: Lesson;
   tree: MoveTree;
   treeKey: TreeKey;
@@ -79,6 +87,8 @@ export function TreeStage({
    */
   marcacao?: { shapes: DrawShape[] | null; onChange: (shapes: DrawShape[]) => void };
   onFinish?: () => void;
+  /** A parada do curso de abertura (§18.1): o aluno joga o lance e a aula segue — sem confete. */
+  semConfete?: boolean;
   finishLabel?: string;
   /**
    * Só o treino do Editor v2 (§16.4). A aula v1 não passa nada disto, e o caminho dela
@@ -104,6 +114,14 @@ export function TreeStage({
      * a rotação usa esta, a mesma da prévia e do rejulgamento no servidor.
      */
     arvoreDoDefensor?: string;
+    /**
+     * Curso de abertura (feedback do aluno, 17/9/2026): o símbolo (`?`, `!?`…) do lance que o
+     * adversário joga sozinho e do lance certo do aluno, na casa de chegada, com a cor e a animação
+     * do move trainer.
+     */
+    simboloDoLance?: (fenAntes: string, uci: string) => SimboloDoDesenho | null;
+    /** Curso de abertura: a escada de ajuda no erro repetido (`lib/lesson/ajuda-no-erro.ts`). */
+    ajudaNoErro?: boolean;
   };
 }) {
   const state = useLessonStore((s) => s.trees[treeKey]);
@@ -125,12 +143,19 @@ export function TreeStage({
     fen: string;
     lastMove: [Key, Key];
     attempt: number;
+    /** O símbolo do lance do adversário que acabou de entrar (curso de abertura). */
+    simbolo?: SimboloDoDesenho | null;
   } | null>(null);
   const [busy, setBusy] = useState(false);
   const [revision, setRevision] = useState(0);
   const [promotion, setPromotion] = useState<{ orig: Key; dest: Key } | null>(null);
-  /** Sobe uma vez a cada mate: é o que dispara o confete. */
-  const [celebration, setCelebration] = useState(0);
+  /** O confete e o som de conclusão, juntos (`components/Celebracao.tsx`). */
+  const { seq: celebration, celebrar } = useCelebracao();
+  /**
+   * Os erros no mesmo lance, para a escada de ajuda: a chave é a tentativa e o nó, e por isso
+   * acertar (o nó muda) ou recomeçar (a tentativa muda) zera sem efeito nenhum.
+   */
+  const [erros, setErros] = useState<{ chave: string; n: number }>({ chave: "", n: 0 });
   /** A tentativa cuja abertura do defensor já foi jogada. Só o treino v2 a usa. */
   const [abertura, setAbertura] = useState(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -158,6 +183,10 @@ export function TreeStage({
   const lanceDaAbertura = aberturaDoDefensor && !abrindo && naRaiz
     ? [aberturaDoDefensor.uci.slice(0, 2), aberturaDoDefensor.uci.slice(2, 4)]
     : null;
+  const simboloDaAbertura = lanceDaAbertura && aberturaDoDefensor ? v2?.simboloDoLance?.(aberturaDoDefensor.fen, aberturaDoDefensor.uci) ?? null : null;
+  const chaveDosErros = state ? `${attempt}|${state.nodeId}` : "";
+  const errosNoLance = erros.chave === chaveDosErros ? erros.n : 0;
+  const ajuda = v2?.ajudaNoErro && node && status === "playing" ? ajudaNoErro(node, errosNoLance, node.hint) : null;
   const boardFen = abrindo ? aberturaDoDefensor!.fen : overlay?.fen ?? end?.fen ?? node?.fen ?? position.fen;
   const lastMove = (abrindo ? null : overlay?.lastMove ?? end?.lastMove ?? lanceDaAbertura ?? null) as [Key, Key] | null;
   /**
@@ -255,8 +284,16 @@ export function TreeStage({
       list.push(...(v2?.desenhoDoNo ? v2.desenhoDoNo(state.nodeId) : desenhoDaAutoria(node)));
     }
     if (message?.square) list.push({ orig: message.square as Key, brush: "red" });
+    // O símbolo do lance do adversário: o que acabou de entrar, ou o que abriu a linha.
+    const simbolo = overlay?.simbolo ?? (overlay ? null : simboloDaAbertura);
+    if (simbolo && lastMove) list.push(simboloNaCasa(lastMove[1], simbolo));
+    // A escada de ajuda: a casa de saída acesa (2º erro) e a seta com o lance (3º).
+    if (ajuda && !overlay && !busy) {
+      if (ajuda.casa) list.push({ orig: ajuda.casa as Key, brush: "green" });
+      if (ajuda.seta) list.push(setaQueEnsina(ajuda.seta[0] as Key, ajuda.seta[1] as Key, orientation));
+    }
     return list;
-  }, [allowHelp, marcasAutomaticas, boardFen, lastMove, marcacao, overlay, abrindo, status, node, state, v2, message]);
+  }, [allowHelp, marcasAutomaticas, boardFen, lastMove, marcacao, overlay, abrindo, status, node, state, v2, message, simboloDaAbertura, ajuda, busy, orientation]);
 
   /** O desenho que o arquivo guarda para este nó, no formato do tabuleiro. */
   const daAutoria: DrawShape[] = useMemo(() => desenhoDaAutoria(node), [node]);
@@ -294,7 +331,13 @@ export function TreeStage({
           treeFail(treeKey, { tone: "bad", text });
           say("bad", text, dest);
         } else {
-          say(verdict.preservesWin ? "warn" : "bad", verdict.text, dest);
+          // A escada de ajuda (curso de abertura): o erro sobe um degrau no mesmo lance.
+          const degrau = v2?.ajudaNoErro ? ajudaNoErro(node, errosNoLance + 1, node.hint) : null;
+          if (v2?.ajudaNoErro) setErros({ chave: `${attempt}|${state.nodeId}`, n: errosNoLance + 1 });
+          if (degrau?.contaComoAjuda) treeHelp(treeKey, state.nodeId);
+          // A parada já diz "Ainda não. Dica: …" no próprio erro; a escada não repete a dica.
+          const extra = degrau?.texto && !(degrau.degrau === 1 && verdict.text.includes("Dica:")) ? ` ${degrau.texto}` : "";
+          say(verdict.preservesWin ? "warn" : "bad", `${verdict.text}${extra}`, dest);
         }
         return;
       }
@@ -302,7 +345,9 @@ export function TreeStage({
       const game = new Chess(node.fen);
       const played = game.move({ from: orig, to: dest, promotion: promoted });
       const afterFen = game.fen();
-      setDrawn({ fen: afterFen, lastMove: [orig, dest], attempt });
+      // O símbolo que o estudo deu ao lance certo (3.Bd3!, 6.Be4!): o acerto do aluno ganha o
+      // "Ótimo!" na casa, como no move trainer.
+      setDrawn({ fen: afterFen, lastMove: [orig, dest], attempt, simbolo: v2?.simboloDoLance?.(node.fen, uci) ?? null });
 
       // Nó terminal: o lance deu mate (o gate provou que dá) — a etapa acaba.
       // A posição do mate vai junto para a store: é a única cópia dela, porque
@@ -320,17 +365,18 @@ export function TreeStage({
             const fecho = aplicarUci(afterFen, final);
             const ultimo = fecho.lastMove as [Key, Key];
             playForMove({ capture: fecho.captura, check: fecho.xeque });
-            setDrawn({ fen: fecho.fen, lastMove: ultimo, attempt });
-            playComplete();
-            setCelebration((c) => c + 1);
+            setDrawn({ fen: fecho.fen, lastMove: ultimo, attempt, simbolo: v2?.simboloDoLance?.(afterFen, final) ?? null });
+            if (semConfete) playSuccess();
+            else celebrar();
             treeAdvance(treeKey, null, { fen: fecho.fen, lastMove: ultimo, text: conclusao });
             celebrate(conclusao);
             setBusy(false);
           }, REPLY_DELAY_MS);
           return;
         }
-        playComplete();
-        setCelebration((c) => c + 1);
+        // A parada não festeja (§18.1): o som de acerto marca o lance, e a aula segue.
+        if (semConfete) playSuccess();
+        else celebrar();
         treeAdvance(treeKey, null, {
           fen: afterFen,
           lastMove: [orig, dest],
@@ -363,6 +409,7 @@ export function TreeStage({
           fen: resposta.fen,
           lastMove: resposta.lastMove as [Key, Key],
           attempt,
+          simbolo: v2?.simboloDoLance?.(afterFen, reply) ?? null,
         });
         treeAdvance(treeKey, next);
         setBusy(false);
@@ -380,6 +427,10 @@ export function TreeStage({
     [
       attempt,
       busy,
+      celebrar,
+      errosNoLance,
+      semConfete,
+      treeHelp,
       celebrate,
       lesson,
       moveLimit,
@@ -420,6 +471,16 @@ export function TreeStage({
       play(orig, dest);
     },
     [boardFen, interactive, play, say],
+  );
+
+  // Espaço segue no fim do treino, como no capítulo (feedback do aluno, 17/9/2026).
+  useAtalho(
+    "aluno-continuar",
+    () => {
+      if (focoEmControle(typeof document !== "undefined" ? document.activeElement : null)) return false;
+      onFinish?.();
+    },
+    { ativo: status === "done" && Boolean(onFinish) && !marcacao },
   );
 
   if (!state || !node) return null;
@@ -533,6 +594,9 @@ export function TreeStage({
                * Ele fica em `primary` no fracasso porque ali é a única saída, e
                * neutro no resto, onde a saída é o avanço.
                */}
+              {ajuda?.rever && aoRever ? (
+                <LessonButton onClick={aoRever}>Rever o capítulo</LessonButton>
+              ) : null}
               {(status !== "playing" || state.studentMoves > 0) && (
                 <LessonButton
                   variant={status === "failed" ? "primary" : "default"}
@@ -548,7 +612,7 @@ export function TreeStage({
 
       {/* Último filho da raiz, e não da coluna do tabuleiro: o confete cobre a
           etapa inteira. As partículas continuam nascendo do tabuleiro. */}
-      <Confetti seq={celebration} originRef={boardColumn} />
+      {semConfete ? null : <Celebracao seq={celebration} originRef={boardColumn} />}
     </div>
   );
 }

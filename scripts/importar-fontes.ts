@@ -168,7 +168,6 @@ const zerado = (): Record<TipoDeAviso, number> => ({
   "erro-do-adversario-sem-refutacao": 0,
   "termina-no-adversario": 0,
   "termina-em-pergunta": 0,
-  "acima-da-profundidade": 0,
 });
 
 const medidas: Medida[] = [];
@@ -342,7 +341,7 @@ const tabela = (linhas: string[][]): string => {
 
 console.log(`\nFontes lidas de:\n${pastas.map((p) => `  ${p}`).join("\n")}\n`);
 
-const cabecalho = ["arquivo", "jogos", "linhas", "no adv.", "pergunta", "armadilha", "s/ marca", "fundo", "ilegal"];
+const cabecalho = ["arquivo", "jogos", "linhas", "no adv.", "pergunta", "armadilha", "s/ marca", "ilegal"];
 const corpo = medidas.map((m) => [
   m.entrada.arquivo.length > 44 ? `${m.entrada.arquivo.slice(0, 41)}...` : m.entrada.arquivo,
   String(m.jogos),
@@ -351,13 +350,12 @@ const corpo = medidas.map((m) => [
   String(m.contagem["termina-em-pergunta"]),
   String(m.contagem["erro-do-adversario-sem-refutacao"]),
   String(m.contagem["irmao-sem-marca"]),
-  String(m.contagem["acima-da-profundidade"]),
   String(m.problemas.length),
 ]);
 
 const soma = (i: number): string =>
   String(corpo.reduce((t, l) => t + Number(l[i]), 0));
-corpo.push(["TOTAL", soma(1), soma(2), soma(3), soma(4), soma(5), soma(6), soma(7), soma(8)]);
+corpo.push(["TOTAL", soma(1), soma(2), soma(3), soma(4), soma(5), soma(6), soma(7)]);
 
 console.log(tabela([cabecalho, ...corpo]));
 

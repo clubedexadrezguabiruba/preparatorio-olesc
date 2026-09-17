@@ -10,6 +10,11 @@ import { NIVEIS, type Nivel } from "./nivel.ts";
  * `fechamentoDoNivel` e `proximaAcao`, e pelo mesmo motivo: uma regra que fala
  * com o banco é uma regra que o `node --test` não cobre.
  *
+ * **Desde 17/9/2026 (0018) o selo ganho é também gravado**, com a data — mas a
+ * derivação continua aqui, pura. A gravação, o "Selo novo" e o selo que não some
+ * moram em `selos-gravados.ts` (a regra) e `selos-banco.ts` (a execução). Os
+ * selos V2 leem a view `puzzles_do_aluno`, da mesma migração.
+ *
  * ## A armadilha da janela de 30 dias
  *
  * O painel lia os minutos de **apenas 30 dias**, e o comentário explicava por
@@ -27,8 +32,9 @@ import { NIVEIS, type Nivel } from "./nivel.ts";
  * ## Por que a V1 é pequena
  *
  * Porque ainda não sabemos se os alunos vão olhar para os selos. Seis famílias,
- * e o resto fica escrito no plano: puzzles resolvidos (100/250/500/1000) e
- * pontaria (80% em 100+) ficam para a V2. **Cortado de vez:** "Sem rede" —
+ * e o resto ficou escrito no plano: puzzles resolvidos (100/250/500/1000) e
+ * pontaria (80% em 100+) ficaram para a V2 — que entrou em 17/9/2026, junto com
+ * a família das aulas de abertura (ver {@link selos}). **Cortado de vez:** "Sem rede" —
  * passar a prova de primeira —, porque `ultimaProvaDeNivel()` devolve
  * `{acertos, total, passou, erros}` e **não** o número da tentativa. Um selo
  * raro não vale uma migration.
@@ -40,7 +46,60 @@ import { NIVEIS, type Nivel } from "./nivel.ts";
  * treinador. É por isso que {@link Selo} tem `falta` e não um booleano.
  */
 
-export type Familia = "tatica" | "finais" | "repertorio" | "nivel" | "hora" | "constante" | "rating";
+export type Familia =
+  | "tatica"
+  | "finais"
+  | "repertorio"
+  | "nivel"
+  | "hora"
+  | "constante"
+  | "puzzles"
+  | "pontaria"
+  | "abertura"
+  | "rating";
+
+/** Todas as famílias, na ordem da lista. É daqui que `familiaDoId` reconhece um id gravado. */
+export const FAMILIAS: readonly Familia[] = [
+  "tatica",
+  "finais",
+  "repertorio",
+  "nivel",
+  "hora",
+  "constante",
+  "puzzles",
+  "pontaria",
+  "abertura",
+  "rating",
+];
+
+/**
+ * As famílias que **não** aparecem na vitrine de um colega (`/turma/[id]`).
+ *
+ * Só a tática rating: "Rating 1200 na tática" é o rating escrito com outras palavras, e o
+ * colega não vê rating de ninguém (Doug, 17/9/2026 — o aluno não tem ranking). As outras
+ * famílias dizem o que o aluno **fez**, e não onde ele está numa régua contra os outros.
+ */
+export const FAMILIAS_FORA_DA_VITRINE: ReadonlySet<Familia> = new Set<Familia>(["rating"]);
+
+/**
+ * A família de um id de selo, lida do próprio id — `tatica-14` é de `tatica`,
+ * `abertura-curso-brancas-francesa` é de `abertura`. Todo id nasce `familia-…`, e o teste
+ * confere isso selo a selo. `null` para o que não é selo.
+ */
+export function familiaDoId(id: string): Familia | null {
+  const prefixo = id.split("-", 1)[0];
+  return FAMILIAS.find((f) => f === prefixo && id.length > f.length + 1) ?? null;
+}
+
+/**
+ * A cor de um selo de repertório por abertura (`repertorio-brancas-francesa` é de brancas).
+ * `null` para os outros — inclusive `repertorio-brancas` e `repertorio-pretas`, os dois selos de
+ * cor que existiram até 17/9 e continuam gravados para quem os ganhou.
+ */
+export function corDoSelo(id: string): "brancas" | "pretas" | null {
+  const achado = /^repertorio-(brancas|pretas)-[a-z0-9-]+$/.exec(id);
+  return achado ? (achado[1] as "brancas" | "pretas") : null;
+}
 
 export type Selo = {
   /** Único, e estável: ele vira `key` de lista e um dia vira linha de banco. */
@@ -64,7 +123,7 @@ export type Selo = {
  * que alguém acrescentar um degrau 1. O tipo declarado deixa a lista ser dado.
  */
 export const DEGRAUS: Record<
-  "tatica" | "ratingAcimaDoInicio" | "rating" | "ratingSeguidos" | "finais" | "constante",
+  "tatica" | "ratingAcimaDoInicio" | "rating" | "ratingSeguidos" | "finais" | "constante" | "puzzles",
   readonly number[]
 > = {
   /**
@@ -100,6 +159,82 @@ export const DEGRAUS: Record<
   finais: [1, 5, 10, 25, 49],
   /** Dias seguidos de treino **medido**. A partida declarada não os sustenta. */
   constante: [3, 7, 14, 30],
+  /**
+   * Puzzles **diferentes** resolvidos, em qualquer modo (V2, 17/9/2026). "Resolvido" é o
+   * puzzle com ao menos uma tentativa certa, contado uma vez só — e não cada tentativa certa:
+   * a revisão e a prova servem de novo o mesmo puzzle, e acertar três vezes o mesmo problema
+   * não é ter resolvido três. A conta é da view `puzzles_do_aluno` (0018).
+   */
+  puzzles: [100, 250, 500, 1000],
+};
+
+/**
+ * A pontaria (V2, 17/9/2026): **80 certos em 100 tentativas seguidas**, em qualquer modo.
+ *
+ * ## A janela, e por que ela
+ *
+ * - **Seguidas, e não o total da vida.** Pelo total, os erros do primeiro dia — quando o
+ *   aluno ainda nem sabia mexer no tabuleiro — pesariam para sempre. Na janela, o que conta é
+ *   ele ter jogado bem por 100 puzzles em algum momento.
+ * - **A melhor janela, e não as últimas 100.** É a regra de `maiorSequencia` e do máximo do
+ *   rating: selo ganho não some num dia ruim. (Desde a 0018 o selo gravado não some de jeito
+ *   nenhum; a derivação pela melhor janela só garante que ela concorde com o gravado.)
+ * - **Tentativas, e não puzzles distintos.** Pontaria é acertar o que aparece na frente,
+ *   inclusive o puzzle que ele já errou e voltou na revisão.
+ * - **Todos os modos, na ordem de data.** O aquecimento é mais fácil e o rating é mais
+ *   difícil (ele serve problemas no limite do aluno); misturados, é a pontaria de quem usa o
+ *   site inteiro. Empate de instante desempata pelo id da tentativa, que é a ordem de gravação.
+ *
+ * Menos de 100 tentativas: não há janela, e o selo diz quantas faltam para a primeira.
+ */
+export const PONTARIA = { janela: 100, certos: 80 } as const;
+
+/**
+ * A melhor janela de `janela` tentativas seguidas: quantos certos ela teve. `null` se não há
+ * tentativas suficientes. Recebe os acertos **em ordem de data**.
+ *
+ * O banco faz a mesma conta na view `puzzles_do_aluno` (0018), com uma função de janela; esta
+ * versão existe para o teste alcançar a regra, e `npm run selos:ciclo` confere que as duas
+ * dão o mesmo número sobre as tentativas de verdade da conta de ensaio.
+ */
+export function melhorJanelaDeAcertos(acertos: readonly boolean[], janela: number = PONTARIA.janela): number | null {
+  if (acertos.length < janela) return null;
+  let naJanela = 0;
+  for (let i = 0; i < janela; i += 1) if (acertos[i]) naJanela += 1;
+  let melhor = naJanela;
+  for (let i = janela; i < acertos.length; i += 1) {
+    if (acertos[i]) naJanela += 1;
+    if (acertos[i - janela]) naJanela -= 1;
+    if (naJanela > melhor) melhor = naJanela;
+  }
+  return melhor;
+}
+
+/** Uma abertura do repertório, como o selo dela a vê — montada por `aberturasDoRepertorio`. */
+export type AberturaParaOSelo = {
+  readonly cor: "brancas" | "pretas";
+  /** O id da abertura no índice (`francesa`): é o fim do id do selo. */
+  readonly abertura: string;
+  /** O nome no índice ("Francesa 3.Bd3"). É o nome do selo, curto: a cor vai no desenho. */
+  readonly nome: string;
+  /** Linhas do Base da abertura (o Avançado não conta). */
+  readonly base: number;
+  /** Delas, quantas aprendidas. */
+  readonly aprendidas: number;
+  /** Delas, quantas a trava por aula ainda tranca. */
+  readonly trancadas: number;
+};
+
+/** Um curso de abertura, como os selos o veem — lido dos dados publicados (`aulasDoCurso`). */
+export type CursoParaOSelo = {
+  /** `cor/abertura`, a chave de `cursosDeAbertura`. */
+  readonly chave: string;
+  /** O nome da abertura no índice do repertório ("Francesa"). */
+  readonly nome: string;
+  /** Aulas publicadas do curso. */
+  readonly aulas: number;
+  /** Delas, quantas o aluno já concluiu ao menos uma vez. */
+  readonly concluidas: number;
 };
 
 /**
@@ -111,8 +246,8 @@ export type ParaOsSelos = {
   /** Aulas de finais aprendidas, entre as publicadas. */
   readonly aulasAprendidas: number;
   readonly repertorio: {
-    readonly brancasCompletas: boolean;
-    readonly pretasCompletas: boolean;
+    /** Uma entrada por abertura do índice — cada uma é um selo (`selos-repertorio.ts`). */
+    readonly aberturas: readonly AberturaParaOSelo[];
     readonly baseCompleto: boolean;
     readonly avancadoCompleto: boolean;
   };
@@ -133,7 +268,50 @@ export type ParaOsSelos = {
     readonly inicio: number;
     readonly resolvidos: number;
   } | null;
+  /** Os puzzles, lidos da view `puzzles_do_aluno` (0018). */
+  readonly puzzles: {
+    /** Puzzles distintos com ao menos uma tentativa certa, em qualquer modo. */
+    readonly resolvidos: number;
+    /** Tentativas, em qualquer modo — só para dizer quanto falta para a primeira janela. */
+    readonly tentativas: number;
+    /** Os certos da melhor janela de 100 tentativas seguidas; `null` com menos de 100. */
+    readonly melhorJanela: number | null;
+  };
+  /** As aulas de abertura (curso de abertura, 17/9/2026), por dados. */
+  readonly aberturas: {
+    /** Aulas de abertura publicadas concluídas ao menos uma vez, somando todos os cursos. */
+    readonly concluidas: number;
+    readonly cursos: readonly CursoParaOSelo[];
+  };
 };
+
+/**
+ * A entrada de um aluno que não fez nada — com os cursos publicados de hoje.
+ *
+ * É o **catálogo**: `selos(entradaZerada(cursos))` devolve todos os selos que existem, com
+ * nome e explicação. A vitrine e o relatório do professor o usam para dar nome aos selos
+ * gravados sem ler o progresso inteiro do aluno.
+ */
+export function entradaZerada(
+  cursos: readonly CursoParaOSelo[] = [],
+  aberturasDoRepertorio: readonly AberturaParaOSelo[] = [],
+): ParaOsSelos {
+  return {
+    temasFechados: 0,
+    aulasAprendidas: 0,
+    repertorio: {
+      aberturas: aberturasDoRepertorio.map((a) => ({ ...a, aprendidas: 0, trancadas: 0 })),
+      baseCompleto: false,
+      avancadoCompleto: false,
+    },
+    conquistado: 0,
+    diasComUmaHora: 0,
+    maiorSequencia: 0,
+    ratingTatica: null,
+    puzzles: { resolvidos: 0, tentativas: 0, melhorJanela: null },
+    aberturas: { concluidas: 0, cursos: cursos.map((c) => ({ ...c, concluidas: 0 })) },
+  };
+}
 
 function plural(n: number, um: string, muitos: string): string {
   return `${n} ${n === 1 ? um : muitos}`;
@@ -177,7 +355,7 @@ function porCondicao(
 }
 
 /**
- * Todos os selos da V1, na ordem em que eles aparecem na tela.
+ * Todos os selos, na ordem em que eles aparecem na tela.
  *
  * A lista sai **inteira**, ganhos e trancados juntos: quem recorta é a tela, e é
  * ela que decide mostrar os ganhos e os dois próximos. Uma função que já
@@ -215,23 +393,35 @@ export function selos(p: ParaOsSelos): Selo[] {
     );
   }
 
+  /*
+   * O repertório, **uma abertura por selo** (Doug, 17/9/2026: "o selo repertório de brancas é
+   * muito longo — dividir por defesa; pretas também"). Saíram `repertorio-brancas` e
+   * `repertorio-pretas`; ficam o Base e o Avançado como os dois grandes. A regra de cada um —
+   * todo o Base da abertura aprendido e nenhuma linha trancada pela aula — está em
+   * `selos-repertorio.ts`. Abertura sem linha no Base não tem selo: ninguém poderia ganhá-lo.
+   */
+  for (const a of p.repertorio.aberturas) {
+    if (a.base === 0) continue;
+    const faltam = Math.max(0, a.base - a.aprendidas);
+    const ganho = a.trancadas === 0 && faltam === 0;
+    lista.push({
+      id: `repertorio-${a.cor}-${a.abertura}`,
+      familia: "repertorio",
+      nome: a.nome,
+      conta:
+        a.base === 1
+          ? `A linha do Base de ${a.cor} na ${a.nome}, aprendida.`
+          : `As ${a.base} linhas do Base de ${a.cor} na ${a.nome}, aprendidas.`,
+      ganho,
+      falta: ganho
+        ? null
+        : a.trancadas > 0
+          ? `${a.trancadas === 1 ? "1 linha ainda trancada" : `${a.trancadas} linhas ainda trancadas`} — conclua as aulas do curso`
+          : `${faltam === 1 ? "falta 1 linha" : `faltam ${faltam} linhas`}`,
+    });
+  }
+
   lista.push(
-    porCondicao(
-      "repertorio",
-      "repertorio-brancas",
-      p.repertorio.brancasCompletas,
-      "Repertório de brancas",
-      "Todas as linhas de brancas do Base, aprendidas.",
-      "termine as linhas de brancas do Base",
-    ),
-    porCondicao(
-      "repertorio",
-      "repertorio-pretas",
-      p.repertorio.pretasCompletas,
-      "Repertório de pretas",
-      "Todas as linhas de pretas do Base, aprendidas.",
-      "termine as linhas de pretas do Base",
-    ),
     porCondicao(
       "repertorio",
       "repertorio-base",
@@ -287,6 +477,69 @@ export function selos(p: ParaOsSelos): Selo[] {
         ["dia", "dias"],
       ),
     );
+  }
+
+  /*
+   * Os selos V2 e a família das aulas de abertura (17/9/2026) entram **antes** do rating e
+   * depois de tudo o que já existia: `proximos` escolhe as famílias na ordem desta lista, e o
+   * painel continua mostrando os mesmos dois próximos (tática e finais) de antes.
+   */
+  for (const degrau of DEGRAUS.puzzles) {
+    lista.push(
+      porDegrau(
+        "puzzles",
+        degrau,
+        p.puzzles.resolvidos,
+        `${degrau} puzzles resolvidos`,
+        "Puzzles diferentes que você acertou, em qualquer parte do site. Acertar de novo o mesmo não conta duas vezes.",
+        ["puzzle", "puzzles"],
+      ),
+    );
+  }
+
+  const faltamParaAJanela = Math.max(1, PONTARIA.janela - p.puzzles.tentativas);
+  lista.push(
+    porCondicao(
+      "pontaria",
+      `pontaria-${PONTARIA.certos}`,
+      p.puzzles.melhorJanela !== null && p.puzzles.melhorJanela >= PONTARIA.certos,
+      "Pontaria",
+      `${PONTARIA.certos} acertos em ${PONTARIA.janela} puzzles seguidos, em qualquer parte do site.`,
+      p.puzzles.melhorJanela === null
+        ? `${faltamParaAJanela === 1 ? "falta 1 puzzle" : `faltam ${faltamParaAJanela} puzzles`} para a primeira janela de ${PONTARIA.janela}`
+        : `acerte ${PONTARIA.certos} de ${PONTARIA.janela} seguidos (seu melhor: ${p.puzzles.melhorJanela})`,
+    ),
+  );
+
+  /*
+   * As aulas de abertura, **por dados**: um curso publicado amanhã ganha o selo dele sem mudar
+   * esta função. Sem curso publicado não há selo nenhum — um selo que ninguém pode ganhar é a
+   * armadilha que o degrau 1 de finais existe para evitar.
+   */
+  if (p.aberturas.cursos.length > 0) {
+    lista.push(
+      porCondicao(
+        "abertura",
+        "abertura-aula-1",
+        p.aberturas.concluidas >= 1,
+        "Primeira aula de abertura",
+        "Uma aula do curso de abertura, do começo ao fim.",
+        "conclua uma aula de abertura",
+      ),
+    );
+    for (const curso of p.aberturas.cursos) {
+      const faltam = Math.max(0, curso.aulas - curso.concluidas);
+      lista.push(
+        porCondicao(
+          "abertura",
+          `abertura-curso-${curso.chave.replace("/", "-")}`,
+          curso.aulas > 0 && faltam === 0,
+          `Curso da ${curso.nome}`,
+          `Todas as aulas do curso da ${curso.nome}, concluídas.`,
+          `${faltam === 1 ? "falta 1 aula" : `faltam ${faltam} aulas`} da ${curso.nome}`,
+        ),
+      );
+    }
   }
 
   /*
@@ -348,7 +601,7 @@ export function selos(p: ParaOsSelos): Selo[] {
 }
 
 /** Os que ele já tem. */
-export function ganhos(lista: readonly Selo[]): Selo[] {
+export function ganhos<T extends Selo>(lista: readonly T[]): T[] {
   return lista.filter((s) => s.ganho);
 }
 
@@ -361,9 +614,9 @@ export function ganhos(lista: readonly Selo[]): Selo[] {
  * mostrar o **leque**, não o próximo passo — quem responde "o próximo passo" é o
  * cartão AGORA, e ele não divide esse trabalho com ninguém.
  */
-export function proximos(lista: readonly Selo[], quantos = 2): Selo[] {
+export function proximos<T extends Selo>(lista: readonly T[], quantos = 2): T[] {
   const vistas = new Set<Familia>();
-  const escolhidos: Selo[] = [];
+  const escolhidos: T[] = [];
   for (const selo of lista) {
     if (selo.ganho || vistas.has(selo.familia)) continue;
     vistas.add(selo.familia);

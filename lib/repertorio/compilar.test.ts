@@ -59,12 +59,12 @@ test("a comparação acusa arquivo desatualizado, faltando e sobrando", () => {
 });
 
 test("candidato que não passa na régua não produz saída nenhuma", () => {
-  // Apaga o comentário do primeiro lance da Alapin: um lance nosso mudo.
+  // Troca o primeiro lance da Alapin por um lance ilegal.
   const candidatas = fontes.map((f) =>
-    f.nome === "brancas-alapin.pgn" ? { ...f, texto: f.texto.replace(/1\. e4 \{[^}]*\}/, "1. e4") } : f,
+    f.nome === "brancas-alapin.pgn" ? { ...f, texto: f.texto.replace(/1\. e4 /, "1. Ke3 ") } : f,
   );
   const reprovada = compilarRepertorio(candidatas, notas());
-  assert.ok(reprovada.problemas.some((p) => p.includes("sem comentário")), reprovada.problemas.join("\n"));
+  assert.ok(reprovada.problemas.length > 0, "o lance ilegal reprova");
   assert.equal(reprovada.saida.size, 0);
   assert.match(reprovada.placar, /^Fechamento:/, "o placar sai mesmo quando reprova");
 });

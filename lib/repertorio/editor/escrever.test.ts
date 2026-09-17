@@ -18,7 +18,7 @@ import { escreverArquivo, escreverJogo } from "./escrever.ts";
  * ciclo ingênuo (§11 do plano final):
  *
  * - **sem edição, os mesmos bytes**: nada é reimpresso sem pedido;
- * - **os 23 jogos forçados a reescrever**: `expandir` idêntico jogo a jogo, e a
+ * - **os 41 jogos forçados a reescrever** (eram 23 até a Francesa vir do estudo, 17/9/2026): `expandir` idêntico jogo a jogo, e a
  *   compilação dos onze idêntica ao JSON de hoje;
  * - **expectativas contadas no texto, sem o leitor**: quebras de linha dentro de
  *   comentário, blocos `[%plano]`, NAG `$n`, variações e comentário depois de `)`.
@@ -58,7 +58,7 @@ function tudoTocado(nome: string, texto: string) {
   return escreverArquivo(texto, casca.aula, new Set(casca.aula.analises.map((a) => a.id)));
 }
 
-test("os onze arquivos abrem como casca sem problema, 23 jogos", () => {
+test("os onze arquivos abrem como casca sem problema, 41 jogos", () => {
   let jogos = 0;
   for (const { nome, texto } of fontes) {
     const casca = cascaDoArquivo(nome, texto);
@@ -66,7 +66,8 @@ test("os onze arquivos abrem como casca sem problema, 23 jogos", () => {
     jogos += casca.aula.analises.length;
     assert.equal(casca.intervalos.jogos.length, lerPgns(texto).length, nome);
   }
-  assert.equal(jogos, 23);
+  // 23 até 17/9/2026; a Francesa gerada do estudo trocou 1 jogo escrito à mão por 19.
+  assert.equal(jogos, 41);
 });
 
 test("(a) sem edição, os onze arquivos saem byte a byte", () => {
@@ -81,7 +82,7 @@ test("(a) sem edição, os onze arquivos saem byte a byte", () => {
   assert.equal(iguais, 11);
 });
 
-test("(b) os 23 jogos reescritos expandem igual ao original — linhas, ids, avisos e problemas", () => {
+test("(b) os 41 jogos reescritos expandem igual ao original — linhas, ids, avisos e problemas", () => {
   let jogos = 0;
   for (const { nome, texto } of fontes) {
     const escrito = tudoTocado(nome, texto);
@@ -96,9 +97,13 @@ test("(b) os 23 jogos reescritos expandem igual ao original — linhas, ids, avi
       assert.deepEqual(e2, e1, `${nome} jogo ${i + 1}`);
       jogos += 1;
     }
-    assert.notEqual(escrito.texto, texto, `${nome}: forçar a reescrita tem de reescrever alguma coisa`);
+    // O arquivo gerado do estudo (`gerar-do-estudo.ts`) já sai na forma do escritor: reescrever não muda
+    // um byte. Os escritos à mão mudam alguma coisa — é o que prova que a reescrita foi forçada.
+    if (texto.startsWith("; GERADO")) assert.equal(escrito.texto, texto, `${nome}: gerado já está na forma do escritor`);
+    else assert.notEqual(escrito.texto, texto, `${nome}: forçar a reescrita tem de reescrever alguma coisa`);
   }
-  assert.equal(jogos, 23);
+  // 23 até 17/9/2026; a Francesa gerada do estudo trocou 1 jogo escrito à mão por 19.
+  assert.equal(jogos, 41);
 });
 
 test("(b) a compilação dos onze reescritos é byte a byte a de hoje", () => {
@@ -135,19 +140,21 @@ test("(c) expectativas independentes contadas no texto sobrevivem à reescrita",
   assert.deepEqual(depois, antes);
   // Os números medidos em 13/9/2026, para o teste não passar calado com um corpus vazio.
   assert.deepEqual(antes, {
-    comentariosComQuebra: 311,
-    quebrasDentroDeComentario: 1109,
+    // 311 e 1109 até 17/9/2026, quando a Francesa passou a vir do estudo do Lichess.
+    comentariosComQuebra: 298,
+    quebrasDentroDeComentario: 1068,
     blocosDePlano: 10,
     // Eram 6 NAGs e 77 variações até 14/9/2026, quando as marcas das fontes originais
     // voltaram (regra "Símbolos de lance" do AGENTS.md): 26 nos lances das linhas e 7
     // irmãos nossos marcados, cada um numa variação nova. Ver `marcas-das-fontes.ts`.
     nagsNumericos: [
       "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1", "$1",
-      "$14", "$16", "$16", "$16", "$16", "$2", "$2", "$2", "$2", "$37", "$4",
+      "$14", "$14", "$16", "$16", "$16", "$16", "$2", "$2", "$2", "$2", "$36", "$36", "$37", "$4", "$40",
       "$5", "$5", "$5", "$5", "$5", "$5", "$5", "$6", "$6", "$6", "$6",
     ],
-    simbolosColados: ["!"],
-    variacoes: 84,
+    // Até 17/9/2026 só um "!"; a Francesa gerada traz os símbolos do estudo colados ao lance.
+    simbolosColados: [...Array(28).fill("!"), "!?", "!?", "!?", "!?", "!?", "?", "?!", "?!", "??"],
+    variacoes: 87,
   });
 });
 

@@ -6,7 +6,7 @@ import type { Linha } from "@/lib/repertorio/linhas";
 import type { Modo } from "@/lib/repertorio/passada";
 import { semQuebras } from "@/lib/repertorio/treino";
 import { armAudioOnFirstGesture } from "@/lib/sound";
-import { Passada } from "@/app/aberturas/[cor]/[abertura]/Passada";
+import { Passada } from "@/components/repertorio/Passada";
 
 /**
  * **TESTE.** A casca de uma sessão numa partida instrutiva.

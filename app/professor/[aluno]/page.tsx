@@ -1,7 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Avatar } from "@/components/avatar/Avatares";
 import { Barra } from "@/components/Barra";
+import { DegrausDoGrau } from "@/components/progresso/SeloDoGrau";
+import { ListaDeSelos } from "@/components/selos/ListaDeSelos";
+import { travaDoAluno } from "@/lib/aberturas/trava-banco";
+import { cursosParaOsSelos, selosGravados } from "@/lib/curso/selos-banco";
+import { comDatas } from "@/lib/curso/selos-gravados";
+import { aberturasDoRepertorio } from "@/lib/curso/selos-repertorio";
+import { entradaZerada, selos } from "@/lib/curso/selos";
+import { GRAUS, NOME_DO_GRAU } from "@/lib/progresso/grau";
+import { resumoDosGraus } from "@/lib/progresso/resumo";
+import { grausDosTemas } from "@/lib/progresso/tatica-banco";
+import { lerIndice } from "@/lib/repertorio/banco";
+import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
 import { professorAtual } from "@/lib/auth/perfil";
 import { hojeNoBrasil, porExtenso, somarDias } from "@/lib/curso/calendario";
 import { nivelDoAluno } from "@/lib/curso/nivel";
@@ -72,7 +85,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   const supabase = await criarClienteServidor();
   const { data: aluno } = await supabase
     .from("perfis")
-    .select("id, usuario, nome, equipe, tabuleiro, rating, papel")
+    .select("id, usuario, nome, equipe, tabuleiro, rating, papel, avatar")
     .eq("id", id)
     .maybeSingle();
   if (!aluno || aluno.papel !== "aluno") notFound();
@@ -80,7 +93,20 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   const hoje = hojeNoBrasil();
   const desde = somarDias(hoje, -(DIAS - 1));
 
-  const [tatica, linhas, finais, minutos, partidas, conquistado, evolucaoNoRating] = await Promise.all([
+  const [
+    tatica,
+    linhas,
+    finais,
+    minutos,
+    partidas,
+    conquistado,
+    evolucaoNoRating,
+    gravados,
+    trava,
+    indice,
+    repertorio,
+    grausDeTatica,
+  ] = await Promise.all([
     progressoPorTema(id),
     linhasDeTentativas(id),
     progressoDeFinais(id),
@@ -88,6 +114,16 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
     partidasDeclaradas(id, desde),
     nivelConquistado(id),
     evolucaoDoAluno(id),
+    // 17/9/2026: selos com data, graus e aulas de abertura — o que o aluno vê em "Meu perfil".
+    // Os selos são **só lidos**: o relatório não deriva nem grava nada no nome do aluno (a
+    // derivação completa pediria o progresso inteiro dele, e quem grava é a tela do próprio aluno).
+    selosGravados(id),
+    // `papel: "aluno"`, e não o de quem olha: a trava e as aulas concluídas são as do aluno.
+    travaDoAluno({ id, papel: "aluno" }),
+    lerIndice(),
+    // Com o id, sempre: na sessão do professor, sem ele, a leitura devolveria a turma inteira.
+    progressoDoRepertorio(id),
+    grausDosTemas(id),
   ]);
 
   const nivel = nivelDoAluno(conquistado);
@@ -120,6 +156,20 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
     .filter((r): r is { aula: (typeof abertas)[number]; dias: number } => r.dias !== null)
     .sort((a, b) => a.dias - b.dias);
 
+  const catalogo = selos(entradaZerada(cursosParaOsSelos(trava, indice), aberturasDoRepertorio(indice, new Map(), new Set())));
+  const selosDoAluno = comDatas(catalogo, gravados).filter((s) => s.ganho);
+  const graus = resumoDosGraus({
+    indice,
+    repertorio,
+    trava,
+    finais,
+    abertasDeFinais: abertas,
+    comPratica,
+    grausDeTatica,
+    agora: agoraNosFinais,
+  });
+  const aulasDeAbertura = trava.aulas.filter((a) => trava.concluidas.has(a.id));
+
   const temasComTrabalho = BLOCOS.flatMap((bloco) =>
     bloco.temas.map((tema) => ({ bloco, tema, p: tatica.get(tema.tag) ?? temaZerado() })),
   ).filter((t) => t.p.tentativas > 0);
@@ -130,7 +180,10 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         <Link href="/professor" className="foco rotulo w-fit text-metodo-tinta hover:underline">
           ← Alunos
         </Link>
-        <h1 className="titulo text-tinta">{aluno.nome}</h1>
+        <div className="flex items-center gap-4">
+          <Avatar id={aluno.avatar as string | null} tamanho={56} />
+          <h1 className="titulo text-tinta">{aluno.nome}</h1>
+        </div>
         <p className="text-sm text-tinta-media">
           <span className="font-mono text-xs">{aluno.usuario}</span>
           {aluno.equipe ? ` · equipe ${EQUIPE[aluno.equipe as "M" | "F"]}` : ""}
@@ -143,6 +196,112 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
           Nível {nivel} de 5 · dados de {porExtenso(desde)} a {porExtenso(hoje)}.
         </p>
       </header>
+
+      {/* ---------------------------------------------------------------- *
+       * O que o aluno vê em "Meu perfil" (17/9/2026): selos com data, graus e
+       * aulas de abertura. Antes da rotina, porque é por aqui que a conversa de
+       * sábado costuma começar — pelo que ele conquistou.
+       * ---------------------------------------------------------------- */}
+      <section className="flex flex-col gap-3">
+        <div className="flex flex-col gap-0.5">
+          <h2 className="rotulo text-tinta-fraca">Conquistas</h2>
+          <p className="text-sm text-tinta-media">
+            Os selos gravados, com o dia em que apareceram para o aluno. Selo gravado não some, mesmo se o
+            conteúdo mudar depois.
+          </p>
+        </div>
+        {selosDoAluno.length === 0 ? (
+          <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
+            Nenhum selo gravado ainda. Eles são gravados quando o aluno abre o painel ou o perfil.
+          </p>
+        ) : (
+          <div className="cartao px-4 py-4">
+            <ListaDeSelos selos={selosDoAluno} rotulo={`Selos de ${aluno.nome}`} />
+          </div>
+        )}
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <div className="flex flex-col gap-0.5">
+          <h2 className="rotulo text-tinta-fraca">Graus</h2>
+          <p className="text-sm text-tinta-media">
+            O grau de cada linha treinada, aula de finais começada e tema de tática — a mesma régua que o
+            aluno vê. Sobe com acerto no dia da revisão e desce com erro.
+          </p>
+        </div>
+        {/* Uma tabela, e não três escadas: o professor compara as frentes linha a linha, e seis
+            colunas de grau cabem numa tabela de 4xl, não em três cartões de um terço. */}
+        <div className="cartao overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-borda-fraca text-left text-tinta-fraca">
+                <Th>Frente</Th>
+                {GRAUS.map((g) => (
+                  <th key={g} className="px-3 py-2 font-medium">
+                    <span className="inline-flex items-end gap-1.5">
+                      <DegrausDoGrau grau={g} />
+                      {NOME_DO_GRAU[g]}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {(
+                [
+                  ["Aberturas", graus.porFrente.aberturas, "linhas treinadas"],
+                  ["Finais", graus.porFrente.finais, "aulas começadas"],
+                  ["Tática", graus.porFrente.tatica, "temas tocados"],
+                ] as const
+              ).map(([nome, contagem, unidade]) => (
+                <tr key={nome} className="border-b border-borda-fraca last:border-0">
+                  <Td>
+                    <span className="text-tinta">{nome}</span>
+                    <span className="block text-xs text-tinta-fraca tabular-nums">
+                      {[...contagem.values()].reduce((a, b) => a + b, 0)} {unidade}
+                    </span>
+                  </Td>
+                  {GRAUS.map((g) => (
+                    <Td key={g}>
+                      <span className={`tabular-nums ${contagem.get(g) ? "font-semibold text-tinta" : "text-tinta-fraca"}`}>
+                        {contagem.get(g) ?? 0}
+                      </span>
+                    </Td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <div className="flex flex-col gap-0.5">
+          <h2 className="rotulo text-tinta-fraca">Aulas de abertura concluídas</h2>
+          <p className="text-sm text-tinta-media">
+            {aulasDeAbertura.length} de {trava.aulas.length} aulas publicadas. Enquanto uma aula não é concluída, as
+            linhas dela ficam trancadas no treino.
+          </p>
+        </div>
+        {aulasDeAbertura.length === 0 ? (
+          <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">Nenhuma aula de abertura concluída.</p>
+        ) : (
+          <ul className="flex flex-wrap gap-1.5">
+            {aulasDeAbertura.map((aula) => {
+              const vezes = trava.concluidas.get(aula.id) ?? 0;
+              return (
+                <li
+                  key={aula.id}
+                  className="rounded-full border border-metodo-cheio bg-metodo-superficie/14 px-2.5 py-0.5 text-xs text-metodo-tinta-alta"
+                >
+                  {aula.titulo}
+                  {vezes > 1 ? <span className="text-tinta-fraca tabular-nums"> · {vezes} vezes</span> : null}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
 
       {/* ---------------------------------------------------------------- */}
       <section className="flex flex-col gap-3">

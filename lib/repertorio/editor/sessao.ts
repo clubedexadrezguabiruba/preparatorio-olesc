@@ -2,7 +2,7 @@ import { Chess } from "chess.js";
 import type { AnaliseV2, AulaV2 } from "../../editor-v2/modelo.ts";
 import { expandir, type Aviso } from "../arvore.ts";
 import { separarPlano, type Plano } from "../esquema.ts";
-import { CORES, conferirRegras, fechamentosAbertos, NIVEIS, type Cor, type Linha, type Nivel } from "../linhas.ts";
+import { CORES, conferirRegras, NIVEIS, type Cor, type Linha, type Nivel } from "../linhas.ts";
 import { partidaDaAnalise, type FormasDosNags } from "./adaptar.ts";
 
 /**
@@ -179,7 +179,7 @@ function conferirAnaliseSemCache(analise: AnaliseV2, formas?: FormasDosNags): Co
       // ficava vazia — "passa nas regras" — e Aplicar parecia possível (achado no roteiro 8F).
       itens.push({
         severidade: "erro",
-        mensagem: "este jogo ainda não tem nenhuma linha: jogue os lances no tabuleiro. A abertura só entra no repertório com ao menos uma linha completa — 12 lances nossos, o roque feito, as peças menores fora e todo lance nosso comentado.",
+        mensagem: "este jogo ainda não tem nenhuma linha: jogue os lances no tabuleiro. A abertura só entra no repertório com ao menos uma linha que termine num lance nosso.",
         analiseId: analise.id,
         nodeId: analise.raizId,
       });
@@ -197,19 +197,7 @@ function conferirAnaliseSemCache(analise: AnaliseV2, formas?: FormasDosNags): Co
       const ultimo = linha.lances.length - 1;
       const doFim = noDaLinha(analise, linha.lances, ultimo);
       for (const regra of conferirRegras([linha])) {
-        // O lance mudo mais cedo é para onde "Ir até a linha" leva quando a regra é essa.
-        const mudo = regra.erro.includes("sem comentário")
-          ? linha.meus.find((i) => !linha.comentarios[String(i)]?.trim())
-          : undefined;
-        itens.push({
-          severidade: "erro",
-          mensagem: `${linha.nome}: ${regra.erro}`,
-          analiseId: analise.id,
-          nodeId: mudo !== undefined ? noDaLinha(analise, linha.lances, mudo) : doFim,
-        });
-      }
-      for (const aberta of fechamentosAbertos([linha])) {
-        itens.push({ severidade: "erro", mensagem: aberta.replace(`${linha.id} (`, "(").replace(/^\(([^)]*)\)/, "$1"), analiseId: analise.id, nodeId: doFim });
+        itens.push({ severidade: "erro", mensagem: `${linha.nome}: ${regra.erro}`, analiseId: analise.id, nodeId: doFim });
       }
     }
   }

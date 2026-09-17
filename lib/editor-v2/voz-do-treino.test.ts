@@ -55,7 +55,7 @@ test("régua: o painel lê feedback e texto da defesa juntos, e a soma paga o te
 test("régua: palavra de bastidor no texto da defesa inicial e da defesa final é apontada", () => {
   const { pretas } = comTreinos();
   const treino = structuredClone(pretas);
-  treino.defesaInicial!.texto = "Nesta tentativa as brancas começam.";
+  treino.defesaInicial!.texto = "Nesta etapa as brancas começam.";
   const fecho = treino.questoes.at(-1)!.respostas[0];
   if (fecho.efeito.tipo !== "encerra") assert.fail("a última resposta deveria encerrar");
   // "método" saiu da lista em 15/9/2026; "roteiro" continua nela.
@@ -77,10 +77,10 @@ test("régua: dica, objetivo e explicação ao concluir entram na conta", () => 
   assert.ok(onde.some((texto) => /Pergunta 1 · dica/.test(texto)), onde.join("\n"));
 });
 
-test("régua de 15/9: objetivo, método, avaliação, teoria e estrutura passam; roteiro continua apontada", () => {
-  const liberadas = ["objetivo", "método", "avaliação", "teoria", "estrutura"];
+test("régua de 15/9 e 17/9: objetivo, método, avaliação, teoria, estrutura e tentativa passam; roteiro continua apontada", () => {
+  const liberadas = ["objetivo", "método", "avaliação", "teoria", "estrutura", "tentativa"];
   for (const palavra of liberadas) assert.ok(!regua.proibidas.includes(palavra), `${palavra} ainda está na lista`);
-  assert.equal(regua.proibidas.length, 15);
+  assert.equal(regua.proibidas.length, 14);
   const falas = [
     { onde: "liberada", texto: "O objetivo é dar mate, e o método é a escada.", tipo: "fala" as const },
     { onde: "presa", texto: "Siga o roteiro.", tipo: "fala" as const },

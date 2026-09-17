@@ -54,13 +54,24 @@ const nextConfig: NextConfig = {
     "/meio-jogo": ["./content/**"],
     "/meio-jogo/[dica]": ["./content/**"],
     "/professor": ["./content/**"],
-    "/professor/[aluno]": ["./content/**", "./public/puzzles/**"],
+    // Desde 17/9/2026 o relatório mostra também os graus e as aulas de abertura do aluno, que leem
+    // o repertório (`lerIndice`) e os pacotes das aulas por caminho.
+    "/professor/[aluno]": ["./content/**", "./public/puzzles/**", "./public/repertorio/**"],
     // As 42 linhas do repertório entram pelo mesmo motivo:
     // `lib/repertorio/banco.ts` as lê por caminho, então o Next não as enxerga.
     // São poucos KB — o que se compra com eles é o servidor julgar os lances
     // antes de gravar, em vez de acreditar num "acertei" vindo do navegador.
-    "/aberturas": ["./public/repertorio/**"],
-    "/aberturas/[cor]/[abertura]": ["./public/repertorio/**"],
+    // Desde 17/9/2026 as três leem também `content/`: a trava por aula (`lib/aberturas/trava-banco.ts`)
+    // abre os pacotes das aulas de abertura para saber de quem é cada linha. "Meu perfil" (`/perfil`, que
+    // absorveu `/progresso` em 17/9) lê as três pastas — repertório, aulas e o acervo de puzzles (o
+    // peso da dificuldade no grau da tática). A vitrine de um colega lê o repertório e as aulas só
+    // para dar nome aos selos de curso de abertura.
+    "/aberturas": ["./content/**", "./public/repertorio/**"],
+    "/aberturas/[cor]/[abertura]": ["./content/**", "./public/repertorio/**"],
+    "/aberturas/[cor]/[abertura]/treino": ["./content/**", "./public/repertorio/**"],
+    "/aberturas/[cor]/[abertura]/aulas/[bloco]": ["./content/**", "./public/repertorio/**"],
+    "/perfil": ["./content/**", "./public/repertorio/**", "./public/puzzles/**"],
+    "/turma/[id]": ["./content/**", "./public/repertorio/**"],
     /*
      * **O painel lê os dois, e por isso ele é uma linha só com os dois.**
      *

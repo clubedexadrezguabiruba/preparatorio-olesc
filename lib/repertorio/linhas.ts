@@ -22,58 +22,16 @@ export type Cor = (typeof CORES)[number];
 export type Nivel = (typeof NIVEIS)[number];
 
 /**
- * Até que lance **nosso** cada nível vai.
+ * **A régua de tamanho saiu em 16/9/2026, para os 11 repertórios** (decisão do Doug, curso de
+ * abertura — `docs/EDITOR-V2-ESPECIFICACAO-FUNCIONAL.md` §21). Não há mais piso de 12 lances nossos,
+ * teto de 14, roque nem peças menores fora exigidos: a linha termina onde a fonte a termina. Ficam
+ * as três regras que dizem se a linha ensina — termina em lance nosso, todo lance nosso tem
+ * comentário, nenhuma linha repetida. O `[%plano]` continua valendo quando existe, e deixa de ser
+ * obrigatório.
  *
- * Contado em lances nossos, não em meios-lances, e isto é correção de um erro
- * do plano. O plano trazia três números para a mesma coisa — "até o lance 8"
- * no texto, "16 meios-lances" no importador, "≤ 24" no validador — e o de 16
- * é aritmeticamente incompatível com a regra "toda linha termina num lance
- * nosso": numa árvore das brancas o 16º meio-lance é **das pretas**. Medido
- * antes de corrigir: 24 das 25 linhas da Escocesa terminavam no adversário
- * depois da poda.
- *
- * Contando em lance nosso o número é um só, e os meios-lances saem dele por
- * cor: as brancas jogam nos meios-lances ímpares (o 11º lance branco é o 21º
- * meio-lance), as pretas nos pares (o 11º lance preto é o 22º).
- *
- * **O Base foi de 8 para 11 em 7/9/2026**, e o motivo é medido, não de gosto.
- * O bloco de "cauda de verdade" (seção 21 de `docs/REVISAO-FONTES.md`) trocou
- * cinco linhas de motor por linhas de curso, e as variantes dos cursos não
- * param no lance 8: cortar ali deixava a Alapin e o Gambito Morra terminando
- * com **as brancas um peão à frente**, porque a recaptura `…Bxd6` só acontece
- * no lance 11. Uma linha que acaba com o aluno um peão atrás ensina o
- * contrário do que devia. O 11 é o menor número em que as cinco caem num ponto
- * de material igual ou de plano completo.
- *
- * **E em 8/9/2026 os dois foram para 14, iguais.** A §24 conta a decisão; o
- * resumo é que o teto de 11/12 continuava sendo o teto de quando a régua era
- * "até onde a fonte vai", e a régua mudou: **a abertura acaba quando o aluno
- * rocou e as quatro peças menores saíram**. Medido nas 27 linhas de então:
- * nenhuma fechava esse critério, 17 terminavam com o rei no meio e havia 30
- * peças menores paradas na casa de origem. Um aluno que termina a linha assim
- * não terminou a abertura — decorou um pedaço dela.
- *
- * Os dois níveis são iguais **de propósito**, e isso também mudou na §24: o
- * Avançado deixou de ser "mais fundo" e passou a ser "os ramos que o Base
- * deixou de lado". Profundidade diferente por nível seria dizer que a abertura
- * acaba mais cedo para quem sabe menos, que é o contrário do que se quer.
+ * O histórico de 8/9/2026 (a régua do término, §24 de `docs/REVISAO-FONTES.md`) fica no diário e
+ * em `scripts/cauda-repertorio.ts`, a ferramenta que esticava as linhas até ela.
  */
-export const PROFUNDIDADE: Record<Nivel, number> = { base: 14, avancado: 14 };
-
-/**
- * O piso: nenhuma linha para antes do lance nosso 12.
- *
- * Não é meta de tamanho, é consequência da régua. Contando os lances que uma
- * abertura precisa para rocar e soltar as quatro peças menores — quatro peões
- * de centro e desenvolvimento, dois cavalos, dois bispos, o roque —, doze é o
- * primeiro número em que isso cabe sem apertar. Abaixo dele a linha termina
- * necessariamente com alguém em casa.
- *
- * O teto de 14 é a folga: dois lances a mais para o aluno que precisou gastar
- * um tempo respondendo a alguma coisa. Passou de 14, o que faltou vai escrito
- * num bloco `[%plano]` — ver `lib/repertorio/esquema.ts`.
- */
-export const PROFUNDIDADE_MINIMA = 12;
 
 /**
  * As casas de origem das peças menores, por cor, com a letra que elas têm na FEN.
@@ -86,11 +44,6 @@ export const ORIGENS: Record<Cor, Record<string, string>> = {
   brancas: { b1: "N", g1: "N", c1: "B", f1: "B" },
   pretas: { b8: "n", g8: "n", c8: "b", f8: "b" },
 };
-
-/** Quantos meios-lances uma linha daquele nível e daquela cor pode ter. */
-export function meiosLances(nivel: Nivel, cor: Cor): number {
-  return cor === "brancas" ? PROFUNDIDADE[nivel] * 2 - 1 : PROFUNDIDADE[nivel] * 2;
-}
 
 /**
  * A posição em cada casa, lida da parte de peças da FEN.
@@ -243,6 +196,17 @@ export const LinhaSchema = z
       .default({}),
     /** Proveniência. Obrigatória: nenhum lance entra sem dizer de onde veio. */
     fonte: z.string().min(3),
+    /**
+     * De que tipo é a linha no move trainer (16/9/2026): arma, esquema, golpe, defesa… Vem da tag
+     * `[Categoria]` do PGN gerado a partir do estudo; o seletor agrupa por ela. Opcional, e sem
+     * padrão, pelo mesmo motivo de `marcas`: as aberturas sem estudo não ganham um campo vazio.
+     */
+    categoria: z.enum(["arma", "esquema", "preparacao", "golpe", "nao-funciona", "defesa", "linha-critica", "desvio", "se-esquecer", "arvore"]).optional(),
+    /**
+     * A ordem em que a linha **nova** chega ao aluno (regra 15): a do estudo. Sem trava — revisão
+     * vencida pode entrar no meio. Tag `[Ordem]` do PGN gerado.
+     */
+    ordem: z.number().int().positive().optional(),
   })
   .strict();
 
@@ -349,47 +313,16 @@ export function conferirRegras(linhas: readonly Linha[]): Problema[] {
       });
     }
 
-    if (!linha.comentarios[String(ultimo)]?.trim()) {
-      problemas.push({
-        linha: ondeEstou,
-        erro: `o último lance ("${linha.sans[ultimo]}") está sem comentário. ` +
-          "É o que o aluno lê quando acerta.",
-      });
-    }
+    // Comentário é opcional em qualquer lance, nosso ou dele, no meio ou no fim
+    // da linha — nem erro nem aviso. Decisão do Doug, 17/9/2026, para os 11
+    // repertórios: o move trainer é a última etapa, e o porquê de cada lance o
+    // aluno já ouviu antes dele. De 7/9 a 17/9 todo lance nosso tinha de ser
+    // comentado (§23 de `docs/REVISAO-FONTES.md`), e antes disso o último.
+    // As telas já tratam a falta: sem texto, a caixa do comentário não aparece.
 
-    // NENHUM lance nosso pode ser mudo. A régua do repertório (§1 de
-    // `docs/REVISAO-FONTES.md`) é que o aluno aprenda o motivo de cada lance,
-    // não a sequência; um lance sem comentário é exatamente o contrário, e o
-    // treinador ainda assim o cobra. Até 7/9/2026 este gate olhava só o último
-    // lance, e por isso 80 dos 149 lances nossos estavam calados sem que nada
-    // reprovasse — a §23 conta a história. Os lances DELE seguem podendo ser
-    // mudos: o aluno não os joga, e comentar todos viraria ruído.
-    const mudos = linha.meus
-      .filter((i) => i !== ultimo && !linha.comentarios[String(i)]?.trim())
-      .map((i) => `${Math.floor(i / 2) + 1}${linha.cor === "brancas" ? "." : "..."}${linha.sans[i]}`);
-    if (mudos.length > 0) {
-      problemas.push({
-        linha: ondeEstou,
-        erro: `${mudos.length} lance(s) nosso(s) sem comentário: ${mudos.join(", ")}. ` +
-          "Todo lance que o aluno tem de jogar precisa dizer por quê.",
-      });
-    }
-
-    const teto = meiosLances(linha.nivel, linha.cor);
-    if (linha.lances.length > teto) {
-      problemas.push({
-        linha: ondeEstou,
-        erro: `${linha.lances.length} meios-lances; o nível ${linha.nivel} das ` +
-          `${linha.cor} vai até ${teto} (lance ${PROFUNDIDADE[linha.nivel]}).`,
-      });
-    }
-
-    // As duas regras do `[%plano]` que são erro DESDE SEMPRE, e não aviso.
-    //
-    // A diferença com `fechamentosAbertos` é de quem paga o preço. "Esta linha
-    // ainda não fecha" é trabalho por fazer, e reprovar a build por isso
-    // travaria a própria revisão que vem consertá-lo — por isso é aviso até a
-    // Fase 4. Já um plano ERRADO é pior que plano nenhum: ele promete ao aluno
+    // As regras do `[%plano]`, quando ele existe. Desde 16/9/2026 ele não é
+    // obrigatório — a régua de tamanho saiu —, mas um plano ERRADO continua
+    // pior que plano nenhum: ele promete ao aluno
     // uma casa para uma peça que já saiu, ou um roque que já aconteceu. Isso
     // nunca é trabalho em andamento; é texto velho que sobrou, e o único jeito
     // de ele não chegar à tela é reprovar na hora.
@@ -496,43 +429,9 @@ export function pendenciasDe(linha: Linha): { faltando: string[]; declaradas: st
 export type Estado = "fecha" | "com-plano" | "aberta";
 
 export function estadoDe(linha: Linha): Estado {
-  if (linha.meus.length < PROFUNDIDADE_MINIMA) return "aberta";
   const { faltando, declaradas } = pendenciasDe(linha);
   if (faltando.length > 0) return "aberta";
   return declaradas.length === 0 ? "fecha" : "com-plano";
-}
-
-/**
- * As linhas que ainda não fecham a régua do término.
- *
- * **Era aviso até 8/9/2026; hoje é ERRO.** Enquanto o conteúdo da §24 estava
- * sendo escrito, uma linha por esticar era a lista de trabalho, e uma build
- * vermelha em cima dela atrapalharia a própria revisão que vinha consertá-la —
- * a mesma escolha que `aberturasInchadas` faz até hoje. No dia em que as 27
- * linhas passaram a fechar, `validarBanco` passou a somar esta lista aos
- * problemas. Agora encurtar uma linha quebra a build, e é isso que impede a
- * régua de se afrouxar sozinha — que foi o que aconteceu com o teto de 8 lances
- * entre a §1 e a §21, sem ninguém decidir nada.
- */
-export function fechamentosAbertos(linhas: readonly Linha[]): string[] {
-  const abertas: string[] = [];
-  for (const linha of linhas) {
-    const onde = `${linha.id} (${linha.nome})`;
-    if (linha.meus.length < PROFUNDIDADE_MINIMA) {
-      abertas.push(
-        `${onde}: ${linha.meus.length} lances nossos; o mínimo é ${PROFUNDIDADE_MINIMA} — ` +
-          "a abertura só termina com o roque feito e as peças menores fora.",
-      );
-      continue;
-    }
-    const { faltando } = pendenciasDe(linha);
-    if (faltando.length === 0) continue;
-    const emPalavras = faltando.map((c) => (c === "rei" ? "o rei não rocou" : `a peça de ${c} não saiu`));
-    abertas.push(
-      `${onde}: ${emPalavras.join("; ")}. Ou a linha estica, ou o [%plano] diz por quê.`,
-    );
-  }
-  return abertas;
 }
 
 /** O placar que o compilador imprime a cada rodada, mesmo quando reprova. */
@@ -574,15 +473,6 @@ export function validarBanco(dados: unknown, onde = "o banco de linhas"): Linha[
   }
 
   const problemas = conferirRegras(lido.data).map((p) => `${p.linha}: ${p.erro}`);
-
-  // A régua do término entrou aqui na Fase 4 da §24, no dia em que as 27 linhas
-  // passaram a fechá-la. Enquanto o conteúdo estava sendo escrito ela era aviso,
-  // porque uma build vermelha em cima da lista de trabalho travaria a própria
-  // revisão que vinha consertá-la. Terminado o trabalho, a escolha se inverte:
-  // agora quem encurtar uma linha quebra a build, e é isso que impede a régua de
-  // se afrouxar sozinha daqui a seis meses — que foi exatamente o que aconteceu
-  // com o teto de 8 lances entre a §1 e a §21, sem ninguém decidir nada.
-  problemas.push(...fechamentosAbertos(lido.data));
 
   if (problemas.length > 0) {
     const lista = problemas.map((p) => `  ${p}`).join("\n");

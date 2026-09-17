@@ -21,6 +21,21 @@ Não trate o piloto atual como editor concluído. Não reduza o checklist funcio
 refaça entregas que o diário comprova. Implemente em fatias completas, atualize o diário
 e execute os portões do projeto antes de cada commit de código.
 
+## Comentário de lance no move trainer é opcional
+
+Regra do Doug, de 17/9/2026, **global**: vale para os 11 repertórios (`content/repertorio/`,
+`/aberturas`), para o PGN gerado do estudo do curso de abertura e para o editor do repertório.
+
+1. **Nenhum lance precisa de comentário** — nosso ou do adversário, no meio ou no fim da linha.
+   O move trainer é a última etapa: o porquê do lance o aluno já ouviu antes dele.
+2. **Nem erro, nem aviso.** Não reintroduzir a trava ("todo lance nosso comentado", "o último
+   lance está sem comentário") no compilador (`lib/repertorio/linhas.ts`), no leitor do estudo
+   (`lib/editor-v2/curso-de-abertura.ts`), em teste de banco ou em script de importação.
+3. Sem texto, a tela só não mostra a caixa do comentário. Não inventar texto de preenchimento.
+4. Isto não mexe nos **símbolos** (seção abaixo): `!`, `?`, `$n` continuam obrigatoriamente junto
+   do lance. E não mexe nas outras regras que continuam: linha termina em lance nosso, sem linha
+   repetida, `[%plano]` coerente quando existe.
+
 ## Símbolos de lance: sempre vão junto com o lance
 
 Regra do Doug, de 14/9/2026. **Leia antes de importar, revisar ou reescrever qualquer PGN

@@ -42,12 +42,24 @@ test("§19.3: a N0-LADDER, sem estrago e sem tablebase, pode publicar", () => {
 
 type Estrago = { codigo: string; aviso?: true; estragar: (aula: AulaV2) => ContextoDePublicacaoV2 | void };
 
+/** A N0-LADDER vestida de aula de abertura (§13.3.3): id `AB-`, metadados e um move trainer. */
+const LINHA = "brancas-francesa-0123abcd";
+function comoAulaDeAbertura(a: AulaV2): void {
+  a.id = "AB-BRANCAS-FRANCESA-B";
+  a.metadados = { ...a.metadados!, abertura: { cor: "brancas", abertura: "francesa", bloco: "B" } };
+  a.treinadores = [{ id: "treinador-b", titulo: "Move trainer do bloco B", cor: "brancas", abertura: "francesa", linhaIds: [LINHA] }];
+  a.fluxo.push({ id: "etapa-treinador-b", tipo: "treinador", entidadeId: "treinador-b" });
+}
+
 const ESTRAGOS: Estrago[] = [
   // Fatia 8, §22: aula extra e trilha. A N0-LADDER vira extra trocando o id.
   { codigo: "EXTRA_SEM_NIVEL", estragar: (a) => { a.id = "EX-LADDER-TESTE"; a.metadados = { ...a.metadados!, classe: "E" }; delete a.metadados.nivel; } },
   { codigo: "EXTRA_SEM_CLASSE", estragar: (a) => { a.id = "EX-LADDER-TESTE"; a.metadados = { ...a.metadados!, nivel: 1 }; delete a.metadados.classe; } },
   { codigo: "NIVEL_DIVERGE", estragar: (a) => { a.metadados = { ...a.metadados!, nivel: 3 }; } },
   { codigo: "AULA_FORA_DA_TRILHA", aviso: true, estragar: (a) => { a.id = "N0-FORA-DA-TRILHA"; } },
+  // Curso de abertura, §13.3.3 e §18.1 (16/9/2026).
+  { codigo: "ABERTURA_DIVERGE", estragar: (a) => { comoAulaDeAbertura(a); a.metadados!.abertura!.bloco = "C"; return contexto({ linhasDoRepertorio: new Set([LINHA]) }); } },
+  { codigo: "TREINADOR_LINHA_AUSENTE", estragar: (a) => { comoAulaDeAbertura(a); return contexto({ linhasDoRepertorio: new Set(["brancas-francesa-ffffffff"]) }); } },
   {
     codigo: "TEXTO_SEM_DIREITO_DECLARADO",
     aviso: true,
@@ -72,6 +84,32 @@ const ESTRAGOS: Estrago[] = [
     },
   },
 ];
+
+test("§13.3.3: aula de abertura inteira publica, sem classe, sem nível e fora da trilha de finais", () => {
+  const aula = aulaConferida();
+  comoAulaDeAbertura(aula);
+  delete aula.metadados!.nivel;
+  delete aula.metadados!.classe;
+  const problemas = problemasParaPublicarV2(aula, contexto({ linhasDoRepertorio: new Set([LINHA]) }));
+  assert.deepEqual(problemas.filter((p) => p.severidade === "erro").map((p) => p.codigo), []);
+  assert.ok(!problemas.some((p) => p.codigo === "AULA_FORA_DA_TRILHA"), "a trilha de finais não é da conta dela");
+});
+
+test("§18.1: sem o repertório compilado lido, o move trainer impede publicar", () => {
+  const aula = aulaConferida();
+  comoAulaDeAbertura(aula);
+  assert.ok(erros(aula, contexto()).includes("TREINADOR_LINHA_AUSENTE"));
+});
+
+test("§13.3.3: id de finais com metadados de abertura diverge; move trainer de outra abertura também", () => {
+  const extra = aulaConferida();
+  extra.metadados = { ...extra.metadados!, abertura: { cor: "brancas", abertura: "francesa", bloco: "B" } };
+  assert.ok(erros(extra, contexto()).includes("ABERTURA_DIVERGE"));
+  const outra = aulaConferida();
+  comoAulaDeAbertura(outra);
+  outra.treinadores![0].abertura = "caro-kann";
+  assert.ok(erros(outra, contexto({ linhasDoRepertorio: new Set([LINHA]) })).includes("ABERTURA_DIVERGE"));
+});
 
 test("§19: toda regra da lista tem um estrago que a prova", () => {
   assert.deepEqual(ESTRAGOS.map((e) => e.codigo).sort(), REGRAS_PUBLICACAO_V2.map((r) => r.codigo).sort());

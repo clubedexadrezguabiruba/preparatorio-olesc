@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color, Key } from "@lichess-org/chessground/types";
 import { AulaRodape, AulaShell } from "@/components/lesson/AulaShell";
@@ -59,7 +59,10 @@ export function IntroStage({
   aoAndar,
   marcacao,
   quebrasDeLinha = false,
+  aoChegarAoFim,
 }: {
+  /** **A aula de abertura (§18.1).** Avisa quando o aluno chegou ao último quadro — é o que fecha a etapa. */
+  aoChegarAoFim?: () => void;
   /** **A aula v2.** O balão mostra os parágrafos do quadro (ver `Comentario`). */
   quebrasDeLinha?: boolean;
   stage: IntroStageData;
@@ -106,6 +109,13 @@ export function IntroStage({
   const extra = atual as typeof atual & { titulo?: string; lance?: string };
   const primeiro = passo === 0;
   const ultimo = passo >= stage.passos.length - 1;
+  const aoChegarAoFimRef = useRef(aoChegarAoFim);
+  useEffect(() => {
+    aoChegarAoFimRef.current = aoChegarAoFim;
+  });
+  useEffect(() => {
+    if (ultimo) aoChegarAoFimRef.current?.();
+  }, [ultimo]);
 
   const comentario = useComentarioPaginado(atual.fala);
 

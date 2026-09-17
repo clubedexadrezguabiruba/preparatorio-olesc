@@ -1,0 +1,760 @@
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "1"]
+[White "00"]
+[Black "Conhecendo a Francesa: avançar, trocar ou proteger"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "00 - Conhecendo a Francesa: avançar, trocar ou proteger"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/wbbM9nYX"]
+[Orientation "black"]
+
+{ [SECAO] Conheça a Francesa | a ideia principal [OBJETIVO] Entender a ideia da Defesa Francesa e a primeira decisão das Brancas. }
+1. e4 { É a nossa escolha: controla o centro e abre caminho para o bispo e a dama. } 1... e6 { A Defesa Francesa começa com ...e6. As Pretas querem jogar ...d5 e atacar nosso peão de e4. } 2. d4 { Nós ocupamos o centro. As Pretas deixaram d4 livre, então colocamos o segundo peão lá. Dois peões no meio dão espaço às nossas peças. } 2... d5 { Agora e4 está atacado. Três caminhos: 3.e5, a Variante do Avanço; 3.exd5, a Variante das Trocas; ou proteger e4 com uma peça. As proteções mais conhecidas são Nc3 e Nd2. [ENTENDER] A Francesa é sólida, mas o bispo de c8 pode demorar a sair. [RESUMO] Avançar, trocar ou proteger. [PROXIMO] Agora veja o caminho que nós escolhemos. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "2"]
+[White "A00"]
+[Black "Nossa arma: 3.Bd3 — simples e menos comum"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "A00 - Nossa arma: 3.Bd3 — simples e menos comum"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/GHbOA1UE"]
+[Orientation "black"]
+
+{ [SECAO] Nossa arma: 3.Bd3 | proteger e4 desenvolvendo uma peça [OBJETIVO] Entender por que escolhemos 3.Bd3. }
+1. e4 e6 2. d4 d5 { Entre avançar, trocar e proteger, nós escolhemos proteger e4. [PERGUNTA] Como fazer isso desenvolvendo uma peça? [DICA] Um bispo pode sair e proteger e4 ao mesmo tempo. } 3. Bd3! { O bispo sai e protege e4: dois trabalhos com um lance. Esta é a nossa arma. [ENTENDER] 3.Bd3 é menos comum que as linhas principais. O adversário pode não conhecer, e nós conhecemos o plano. [PLANO] Desenvolver e proteger. Se for seguro, Qe2 e roque grande. [TRAIN] 3.Bd3. [RESUMO] Linha menos comum, plano claro. [PROXIMO] Agora vamos ver onde colocar cada peça. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "3"]
+[White "A01"]
+[Black "Nosso plano: proteger, desenvolver e rocar grande"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "A01 - Nosso plano: proteger, desenvolver e rocar grande"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/YaIvDkEG"]
+[Orientation "black"]
+
+{ [SECAO] Nosso plano | visão geral [OBJETIVO] Aprender onde colocar as peças e conhecer um dos nossos planos: rocar grande quando for seguro. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 { As Pretas tomam nosso peão de e4. [PERGUNTA] Como recuperar o peão e continuar desenvolvendo? [DICA] A peça que protegia e4 pode tomar o peão. } 4. Bxe4 { Recuperamos com o bispo. } 4... Nf6 { As Pretas desenvolvem o cavalo e atacam nosso bispo. } 5. Bf3 { O bispo recua para uma casa segura. Agora o cavalo g1 pode ir a e2. } 5... c5 { ...c5 ataca nosso peão de d4. } 6. Ne2 { Desenvolvemos o cavalo e protegemos d4. } 6... Nc6 { As Pretas desenvolvem outra peça e aumentam a pressão sobre d4. } 7. Be3 { De novo fazemos duas coisas: desenvolvemos o bispo e protegemos d4. A casa d4 é o ponto central do nosso esquema. [PLANO] Nossa regra é simples: desenvolver sem deixar d4 cair. } { [%csl Gd4] } 7... cxd4 { As Pretas trocam em d4. } 8. Nxd4 { Recuperamos o peão e colocamos o cavalo no centro. } 8... Ne5 { O cavalo preto sai do ataque e ataca nosso bispo em f3. } 9. Nc3 { Desenvolvemos a última peça menor. } 9... Be7 { As Pretas preparam o roque curto. } 10. Qe2 { A dama sai de d1 e libera o caminho para o roque grande. } 10... O-O { O rei preto fica seguro no lado do rei. } 11. O-O-O { Se nosso rei estiver seguro, este é um plano importante: rocar grande. Com os reis em lados opostos, muitas vezes podemos atacar no lado do rei. [ATENCAO] Não avance peões no automático: primeiro confira a segurança do nosso rei. [TRAIN] Esquema: Bf3, Ne2, Be3, Nc3, Qe2 e O-O-O. [RESUMO] Desenvolva e proteja. Roque grande quando for seguro. [PROXIMO] Agora vamos reconhecer as respostas práticas mais importantes das Pretas. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "4"]
+[White "B03"]
+[Black "Três respostas das Pretas, três ideias"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "B03 - Três respostas das Pretas, três ideias"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/ffFlmNGc"]
+[Orientation "black"]
+
+{ [SECAO] As três respostas das Pretas [OBJETIVO] Saber qual ideia usar depois de 3.Bd3. }
+1. e4 e6 2. d4 d5 3. Bd3 { [ENTENDER] Esta é a nossa arma. Agora as Pretas escolhem, e cada escolha pede uma ideia diferente. Vamos ver as três. } 3... Nf6 { Primeira escolha: ...Nf6. O cavalo ataca nosso peão de e4. } (3... c5 { Segunda escolha: ...c5. O peão preto ataca d4. } 4. exd5 { Contra ...c5, trocamos em d5 e olhamos como as Pretas recapturam. }) (3... dxe4 { Terceira escolha: ...dxe4. As Pretas trocam no centro. } 4. Bxe4 { Contra ...dxe4, recapturamos com o bispo e montamos nosso esquema. [RESUMO] Primeiro veja o que as Pretas jogaram; depois escolha a ideia. [PROXIMO] Começamos por ...Nf6. }) 4. e5 { Contra ...Nf6, o peão avança para e5 e expulsa o cavalo. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "5"]
+[White "B04"]
+[Black "Cavalo em f6 cedo? Jogue e5"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "B04 - Cavalo em f6 cedo? Jogue e5"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/gxNMCTZf"]
+[Orientation "black"]
+
+{ [SECAO] Erros e armadilhas | como punir [OBJETIVO] Aprender a resposta simples contra 3...Nf6. }
+1. e4 e6 2. d4 d5 3. Bd3 Nf6 { O cavalo preto ataca nosso peão de e4. [PERGUNTA] Qual lance ganha espaço e ataca o cavalo? [DICA] Um peão pode avançar e expulsar o cavalo. } 4. e5 { e5 faz as duas coisas: ganha espaço e obriga o cavalo a jogar outra vez. Esta é a casa-chave desta reação. } { [%csl Ge5] } 4... Nfd7 { O cavalo recua. Já ganhamos espaço e fizemos a mesma peça preta jogar duas vezes. } 5. Ne2! { Desenvolvemos o cavalo e deixamos f3 livre. } 5... c5 { ...c5 ataca nosso peão de d4. } 6. c3 { Protegemos d4 com outro peão. } 6... Nc6 { As Pretas aumentam a pressão em d4. } 7. a3! { a3 tira a casa b4 do cavalo preto e ajuda a manter nosso bispo em d3. [TRAIN] e5, Ne2, c3 e a3. [RESUMO] ...Nf6 cedo? e5, e depois cuide de d4. [PROXIMO] Agora a dama preta vai entrar cedo no centro. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "6"]
+[White "B05"]
+[Black "Dama no centro: desenvolva atacando"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "B05 - Dama no centro: desenvolva atacando"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/eZM0cetD"]
+[Orientation "black"]
+
+{ [OBJETIVO] Aprender a ganhar tempo quando a dama preta sai cedo. }
+1. e4 e6 2. d4 d5 3. Bd3 c5 { Agora as Pretas atacam d4 com o peão de c5. } 4. exd5 { Trocamos em d5. } 4... Qxd5 { A dama preta recaptura e sai cedo para o centro. [PERGUNTA] Qual peça podemos desenvolver atacando a dama? [DICA] Procure um cavalo que ataque a casa d5. } 5. Nc3 { Perfeito: desenvolvemos o cavalo e atacamos a dama. } 5... Qxd4 { A dama pega outro peão, mas continua exposta. } 6. Nb5 { Atacamos a dama outra vez e também olhamos para c7. } { [%csl Gc7] } 6... Qd8 { A dama volta para casa. Enquanto ela passeou, nós desenvolvemos peças. } 7. Bf4 { Mais uma peça entra no jogo, e c7 continua na mira. } 7... Na6 { O cavalo preto sai para defender c7. } 8. Qe2! $36 { Nossa dama também entra no jogo. As peças brancas estão mais ativas. [TRAIN] Nc3, Nb5, Bf4 e Qe2. [RESUMO] Dama saiu cedo? Desenvolva peças atacando a dama. [PROXIMO] Mas e se a dama ficar gananciosa e pegar g2? } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "7"]
+[White "B05A"]
+[Black "Armadilha principal: ...Qxg2? prende a dama"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "B05A - Armadilha principal: ...Qxg2? prende a dama"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/wYQNwrcy"]
+[Orientation "black"]
+
+{ [OBJETIVO] Memorizar nossa armadilha mais importante contra uma dama gananciosa. }
+1. e4 e6 2. d4 d5 3. Bd3 c5 4. exd5 Qxd5 { A mesma posição do capítulo anterior: a dama preta saiu cedo. } 5. Nc3 { Desenvolvemos o cavalo e atacamos a dama. } 5... Qxg2?? { [ARMADILHA] As Pretas enxergam um peão grátis, mas a dama foi longe demais. [PERGUNTA] Qual lance de bispo ataca a dama e fecha sua saída? [DICA] O bispo de d3 pode ir para uma casa do centro e atacar g2. } 6. Be4 { [PUNICAO] Isso! O bispo vai para e4 e ataca a dama em g2. A dama ficou presa. [MEMORIZAR] Se aparecer ...Qxg2? nesta posição, procure Be4! [TRAIN] ...Qxg2? = Be4. [RESUMO] Dama em g2 cedo demais? Be4 prende a dama. [PROXIMO] Na próxima armadilha, nós é que entregamos a nossa dama para dar mate. Não misture os dois padrões. } { [%csl Ge4,Rg2] } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "8"]
+[White "B05B"]
+[Black "Armadilha avançada: sacrifique a dama e dê mate"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "B05B - Armadilha avançada: sacrifique a dama e dê mate"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/i3E6rVnN"]
+[Orientation "black"]
+
+{ [OBJETIVO] Entender uma segunda armadilha, diferente da armadilha de Be4. Aqui nós entregamos a nossa dama para dar mate. Não tente decorar todos os lances de uma vez; acompanhe os xeques. }
+1. e4 e6 2. d4 d5 3. Bd3 c5 4. exd5 Qxd5 { A dama preta saiu cedo, como no capítulo da dama. } 5. Nc3 Qxd4 6. Nb5 Qd8 7. Bf4 Na6 8. Qe2! $36 { Até aqui, o plano é conhecido: desenvolver peças enquanto atacamos a dama. } 8... Nf6 { [ARMADILHA] A partir daqui, acompanhe a sequência forçada e os xeques. } 9. O-O-O { Rocamos grande. A torre já aparece em d1. } 9... Qb6 { A dama preta sai de novo. } 10. Bc4 { O bispo entra no ataque e mira e6. } 10... Bd7 11. Nf3 { Mais uma peça entra no jogo. } 11... O-O-O { Agora os dois reis estão na ala da dama. Os xeques ficam muito importantes. } 12. Ne5 { O cavalo entra no ataque e pressiona f7. } 12... Be8 13. Rxd8+ { Primeiro, xeque: trocamos as torres em d8. } 13... Kxd8 14. Rd1+ { Outra torre entra com xeque. } 14... Kc8 15. Nxf7 { Continuamos forçando o rei e suas peças. } 15... Bxf7 16. Bxe6+ { Mais um xeque. } 16... Bxe6 { Agora vem o golpe. [PERGUNTA] Podemos entregar a nossa dama com xeque? Qual é o lance? [DICA] A dama pode tomar o bispo em e6 com xeque. } 17. Qxe6+ { Sim! A ideia é puxar a dama preta para e6 e deixar a7 sem defesa. } 17... Qxe6 { A dama preta tomou, e a casa a7 ficou sem defesa. [PERGUNTA] Qual é o mate? [DICA] O cavalo de b5 pode dar xeque em a7. } 18. Nxa7# { [GOLPE] [PUNICAO] Mate! [MEMORIZAR] O desenho final é Qxe6+ → ...Qxe6 → Nxa7#. [TRAIN] Treine a linha completa até o mate. [RESUMO] Esta é uma armadilha avançada. Primeiro entenda o mate; a memorização da linha completa pode vir depois. [PROXIMO] Agora veremos um golpe diferente: usar xeques antes de recuperar material. } { [%csl Ga7] } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "9"]
+[White "B06"]
+[Black "Antes de mexer no centro, procure o xeque"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "B06 - Antes de mexer no centro, procure o xeque"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/ZeyX8u0w"]
+[Orientation "black"]
+
+{ [OBJETIVO] Enxergar Bb5+ na hora certa e continuar até a recompensa. }
+1. e4 e6 2. d4 d5 3. Bd3 c5 4. exd5 { Trocamos em d5, como no capítulo da dama. } 4... cxd4 { Desta vez as Pretas não recapturam: tomam o nosso peão de d4. [PERGUNTA] Antes de responder ao peão em d4, existe um xeque útil? [DICA] Procure um xeque com o bispo. } 5. Bb5+! { [GOLPE] [PUNICAO] Sim. Primeiro o xeque. As Pretas precisam responder. } 5... Bd7 { O bispo bloqueia o xeque. } 6. dxe6 { Agora tomamos e6. } 6... Bxb5 { As Pretas pegam nosso bispo, mas ainda temos xeques. } 7. exf7+ { O peão avança com xeque e tira o rei do lugar. } 7... Kxf7 { O rei toma o peão e fica exposto. } 8. Qh5+ { Mais um xeque. Não damos tempo para as Pretas se organizarem. } 8... g6 { O peão bloqueia o xeque. } 9. Qxb5 { Agora nossa dama pega o bispo de b5. [TRAIN] Ordem: Bb5+, dxe6, exf7+, Qh5+ e Qxb5. [RESUMO] Primeiro os xeques; só depois pegue o material. [PROXIMO] Agora veremos outra dama gananciosa, desta vez na linha com ...dxe4. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "10"]
+[White "B07"]
+[Black "Dama gananciosa: ative suas peças"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "B07 - Dama gananciosa: ative suas peças"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/Ke85BD1o"]
+[Orientation "black"]
+
+{ [OBJETIVO] Saber reagir quando a dama preta pega peões em g2 e h2. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 { Agora as Pretas trocam no centro. } 4. Bxe4 { Recapturamos com o bispo. } 4... Nf6 { O cavalo ataca nosso bispo. } 5. Bf3 { O bispo recua para f3 e continua olhando o centro. } 5... c5 6. Ne2 { Desenvolvemos o cavalo sem tapar o bispo. } 6... Nc6 7. Be3 { Mais uma peça sai e protege d4. } 7... Nd5?! { [ERRO COMUM] Parece ativo, mas permite que ganhemos tempo sobre a dama. O cavalo preto entra em d5 e ataca nosso bispo de e3. } 8. Bxd5 { Trocamos esse cavalo. } 8... Qxd5 { A dama preta recaptura e vai para o centro. } 9. Nbc3 { Desenvolvemos o outro cavalo e atacamos a dama. } 9... Qxg2 { A dama foi longe: pegou g2 e agora ataca nossa torre em h1. [PERGUNTA] Qual lance salva a torre e ataca a dama? [DICA] Use a própria torre que está sendo atacada. } 10. Rg1 { [PUNICAO] A torre sai de h1 e entra no jogo atacando a dama. } 10... Qxh2 { A dama pega mais um peão e fica ainda mais longe das outras peças. } 11. Bf4 { O bispo ataca a dama de novo e prepara Nc3-b5. A seta mostra a ideia. [PLANO] Enquanto a dama preta está longe, melhoramos nossas peças e criamos ameaças. [TRAIN] Nbc3, Rg1 e Bf4. [RESUMO] Dama gananciosa? Ative suas peças e faça elas trabalharem juntas. [PROXIMO] No laboratório, vamos separar visualmente todos esses padrões. } { [%cal Gc3b5] } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "11"]
+[White "B08"]
+[Black "Laboratório: reconheça cada armadilha"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "B08 - Laboratório: reconheça cada armadilha"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/40kFYHGZ"]
+[Orientation "black"]
+
+{ [SECAO] Laboratório | reconheça cada armadilha [OBJETIVO] Reconhecer cada padrão sem misturar as armadilhas. [TRAIN] Cada caso abaixo terá um capítulo próprio no Move Trainer. }
+1. e4 e6 2. d4 d5 3. Bd3 c5 (3... Nf6 { CASO 4 — CAVALO EM f6 CEDO. O cavalo ataca e4. [PERGUNTA] Qual é a resposta? [DICA] Um peão avança e expulsa o cavalo. } 4. e5 { Isso: e5 ganha espaço e expulsa o cavalo. } 4... Nfd7 5. Ne2! c5 6. c3 Nc6 7. a3! { Depois, c3 protege d4 e a3 tira a casa b4 do cavalo. }) (3... dxe4 { CASO 5 — DAMA CAÇANDO PEÕES MAIS TARDE. Aqui a dama preta só sai depois. } 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 7. Be3 Nd5?! 8. Bxd5 Qxd5 { Só agora a dama preta vai para o centro. } 9. Nbc3 Qxg2 { A dama pegou g2 e ataca a torre. Aqui não temos bispo para ir a e4. [PERGUNTA] Qual é o lance? [DICA] Use a torre atacada. } 10. Rg1 { Isso: a torre ataca a dama. } 10... Qxh2 11. Bf4 { Ative as peças enquanto a dama está longe. } { [%cal Gc3b5] }) 4. exd5 Qxd5 { A dama preta saiu cedo. } (4... cxd4 { CASO 3 — XEQUES PRIMEIRO. As Pretas tomam em d4. [PERGUNTA] Qual é o lance? [DICA] Procure um xeque com o bispo. } 5. Bb5+! { Isso: primeiro o xeque. } 5... Bd7 6. dxe6 Bxb5 7. exf7+ Kxf7 8. Qh5+ g6 9. Qxb5 { Use os xeques antes de pegar material. }) 5. Nc3 { Atacamos a dama. } 5... Qxg2?? { CASO 1 — ARMADILHA PRINCIPAL: a dama pegou g2 cedo. [PERGUNTA] Qual é o lance? [DICA] Lembre do bispo que prende a dama. } (5... Qxd4 { CASO 2 — SACRIFÍCIO DE DAMA: a dama não pegou g2. Esta é outra armadilha. } 6. Nb5 Qd8 7. Bf4 Na6 8. Qe2! $36 Nf6 9. O-O-O { Mesmo plano de antes: peças ativas e roque grande. } 9... Qb6 10. Bc4 Bd7 11. Nf3 O-O-O 12. Ne5 { O cavalo entra no ataque. Agora vêm os xeques. } 12... Be8 13. Rxd8+ Kxd8 14. Rd1+ Kc8 15. Nxf7 Bxf7 16. Bxe6+ Bxe6 { Depois dos xeques, chega a hora do golpe. [PERGUNTA] Qual é o lance? [DICA] Entregue a dama com xeque. } 17. Qxe6+ { Isso: entregamos a dama. } 17... Qxe6 18. Nxa7# { Padrão final: Qxe6+ e Nxa7#. } { [%csl Ga7] }) 6. Be4 { Be4! A dama fica presa. Guarde este padrão primeiro. [RESUMO] Cinco padrões, cinco respostas: não misture os desenhos. [PROXIMO] Antes das boas defesas, veremos quando a ideia de atacar a dama não funciona. } { [%csl Ge4,Rg2] } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "12"]
+[White "B09"]
+[Black "Quando a ideia não funciona: onde está a dama?"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "B09 - Quando a ideia não funciona: onde está a dama?"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/lg8TYpGZ"]
+[Orientation "black"]
+
+{ [SECAO] Quando a ideia não funciona [OBJETIVO] Não copiar Nc3-Nb5 quando a dama preta não está exposta. }
+1. e4 e6 2. d4 d5 3. Bd3 c5 { De novo ...c5 contra d4. } 4. exd5 { Trocamos em d5. } 4... exd5 { [NAO FUNCIONA] Desta vez as Pretas recapturam com o peão. A dama preta continua em d8: não há dama para atacar. [PERGUNTA] Qual lance simples protege d4? [DICA] Um peão pode proteger d4. } (4... Qxd5 5. Nc3 { Compare: aqui a dama está em d5. Nc3 desenvolve e ataca a dama. }) 5. c3! { Isso: protegemos d4 e continuamos o desenvolvimento. [TRAIN] Compare ...Qxd5 com ...exd5. [RESUMO] Dama preta no centro? Ataque a dama. Sem dama exposta? Proteja d4 e desenvolva. [PROXIMO] Agora é a sua vez de treinar as linhas desta aula. } (5. dxc5!? { [REFERENCIA] O draft também marca 5.dxc5!? como possibilidade. Não é nossa linha oficial. }) (5. Nf3!? c4 6. Be2 Nf6 7. b3 cxb3 8. axb3 Nc6 9. O-O Be7 10. c4 O-O 11. Nc3 { [REFERENCIA] Outra alternativa do draft, iniciada por 5.Nf3!?. Mantemos como referência editorial; não entra no Trainer. }) *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "13"]
+[White "C10"]
+[Black "Se ...cxd4 vier cedo: Qxd4"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "C10 - Se ...cxd4 vier cedo: Qxd4"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/eB8XxPf1"]
+[Orientation "black"]
+
+{ [SECAO] As defesas das Pretas [OBJETIVO] Saber quem recaptura em d4 nesta ordem de lances. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5. Bf3 c5 { Nosso esquema de sempre, e ...c5 ataca d4. } 6. Ne2 cxd4?! { As Pretas trocam em d4 cedo, antes de jogar ...Nc6. [PERGUNTA] Quem deve recapturar em d4? [DICA] O cavalo b1 ainda nem saiu. Pense na dama. } 7. Qxd4 { A dama recupera. Assim o cavalo b1 fica livre para se desenvolver. [TRAIN] 6...cxd4 = 7.Qxd4. [RESUMO] Se ...cxd4 vier antes de ...Nc6, recapture com a dama. [PROXIMO] Outra boa tentativa é ...e5. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "14"]
+[White "C11"]
+[Black "Contra ...e5: troque e simplifique"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "C11 - Contra ...e5: troque e simplifique"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/2dLZqFxX"]
+[Orientation "black"]
+
+{ [OBJETIVO] Saber o que fazer quando as Pretas jogam ...e5. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 7. Be3 { Nosso esquema de sempre: Bf3, Ne2 e Be3. } 7... e5 { As Pretas atacam nosso centro imediatamente. Não precisamos segurar tudo: podemos trocar e simplificar. [PERGUNTA] Qual troca vem primeiro? [DICA] Tire primeiro o cavalo de c6, com xeque. } 8. Bxc6+ { Primeiro tiramos o cavalo de c6. } 8... bxc6 { O peão b recaptura. Agora o cavalo c6 saiu da posição. } 9. dxe5 { Só então tomamos o peão de e5. } 9... Qxd1+ { As Pretas trocam as damas. } 10. Kxd1 { O rei recaptura. Sem damas no tabuleiro, ele pode ficar no centro por enquanto. } 10... Ng4 { O cavalo ataca nosso bispo de e3. } 11. Nd2 $14 { Desenvolvemos o último cavalo. As Brancas ficam um pouco melhor. [PLANO] Depois das trocas, complete o desenvolvimento e jogue com calma. [TRAIN] Lembre da ordem: Bxc6+ antes de dxe5. [RESUMO] Contra ...e5, tire o cavalo de c6 e aceite as trocas. [PROXIMO] Agora vem a defesa que exige mais atenção: ...Ne5. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "15"]
+[White "C12"]
+[Black "A linha mais difícil: ...Ne5"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "C12 - A linha mais difícil: ...Ne5"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/g7etvn9r"]
+[Orientation "black"]
+
+{ [OBJETIVO] Reconhecer ...Ne5 e saber nossa resposta. [TEORIA] [LINHA CRITICA] Esta é a defesa que exige mais atenção. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 7. Be3 { Nosso esquema de sempre: Bf3, Ne2 e Be3. } 7... cxd4 { As Pretas trocam em d4. } 8. Nxd4 { Nosso cavalo recaptura e ataca o cavalo c6. } 8... Ne5 { Boa defesa: o cavalo sai do ataque e ataca nosso bispo em f3. [PERGUNTA] Como continuar sem complicar? [DICA] Desenvolva a última peça menor. } 9. Nc3 { Sem complicar: desenvolvemos outra peça. } 9... a6!? { ...a6 controla b5. É uma defesa interessante. } (9... Be7 10. Qe2 { A dama sai e prepara o roque grande. } 10... O-O 11. O-O-O { Aqui vemos nosso plano completo: se estiver seguro, roque grande. } 11... Nxf3 { As Pretas trocam o cavalo pelo nosso bispo. } 12. Qxf3 Qa5 13. g4 $40 { Com os reis em lados opostos, podemos avançar peões contra o rei preto. As Brancas têm ataque. }) (9... Bb4 10. Nb5 { O cavalo entra em b5 e pressiona c7. } 10... Bd7 (10... a6 11. a3) 11. Qd4 { A dama fica ativa no centro. }) 10. Qe2 { A dama sai de d1 e deixa o roque grande disponível para depois. } 10... Nxf3+ { As Pretas trocam o cavalo pelo nosso bispo e dão xeque. [PERGUNTA] Com qual peça recapturamos em f3? [DICA] Nossa resposta é com um peão. } 11. gxf3! { [MEMORIZAR] Nossa resposta é 11.gxf3!, tomando com o peão. [RESUMO] Contra ...Ne5: Nc3, depois Qe2 e, se vier ...Nxf3+, gxf3. [PROXIMO] E se você esquecer a teoria? Três regras simples ajudam. } (11. Qxf3!? { [REFERENCIA] O draft também marca 11.Qxf3!? como possibilidade; não é nossa escolha oficial nem entra no Trainer. }) (11. Nxf3!? { [REFERENCIA] O draft também marca 11.Nxf3!? e traz esta seta e3-d4. É referência editorial, não linha de treino. } { [%cal Ge3d4] }) *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "16"]
+[White "C13"]
+[Black "Esqueci a teoria: três regras simples"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "C13 - Esqueci a teoria: três regras simples"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/BoXXiM11"]
+[Orientation "black"]
+
+{ [SECAO] Esqueci a teoria | três regras simples [OBJETIVO] Continuar jogando bem mesmo sem lembrar a variante. [PERGUNTA] Qual das três respostas das Pretas apareceu? [TRAIN] Estas três decisões já aparecem nos capítulos do Move Trainer. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 { Regra 1: se as Pretas tomarem e4, recupere com Bxe4 e monte nosso esquema. } (3... Nf6 4. e5 { Regra 2: ...Nf6 cedo = e5. }) (3... c5 4. exd5 { Regra 3: ...c5 = exd5 e depois veja como as Pretas recapturam. }) 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 7. Be3 { [PLANO] Depois de ...dxe4: desenvolva e proteja d4. Se puder fazer as duas coisas no mesmo lance, melhor. Quando as peças estiverem prontas, considere o roque grande se for seguro. [RESUMO] ...Nf6 = e5. ...c5 = exd5. ...dxe4 = Bxe4 e monte o esquema. [PROXIMO] Na próxima aula, veja nosso esquema numa partida de verdade. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "17"]
+[White "D17"]
+[Black "Partida modelo: nosso esquema funcionando — MVL x So"]
+[Result "1-0"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "D17 - Partida modelo: nosso esquema funcionando — MVL x So"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/oKhboEMS"]
+[Orientation "black"]
+
+{ [SECAO] Partida-modelo | nosso esquema numa partida real [OBJETIVO] Ver o nosso esquema aparecer numa partida real entre dois jogadores de elite. [PARTIDA REAL] Maxime Vachier-Lagrave venceu Wesley So em Stavanger, no Norway Blitz de 2017. [COMO USAR] Observe principalmente o desenvolvimento inicial e a atividade das peças. A partida inteira é modelo de ideias, não uma linha para decorar lance por lance. }
+1. e4 e6 2. d4 d5 3. Bd3 { Nossa arma aparece exatamente como no repertório. } 3... dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 7. Be3 { [ESQUEMA] Aqui está a posição-base ensinada no curso: bispo em f3, cavalo em e2 e bispo em e3. } 7... cxd4 8. Nxd4 Ne5 { [CONEXAO] Esta é a defesa crítica estudada no capítulo C12. } 9. O-O { [ATENCAO] Nesta partida, MVL escolheu 9.O-O. Nosso repertório ensina 9.Nc3 contra ...Ne5. [COMO USAR] Não troque a linha do Move Trainer por esta escolha. Daqui em diante, estude planos e atividade, não lances decorados. } 9... Nxf3+ 10. Qxf3 e5 11. Nb5 a6 12. Rd1 { A torre ocupa imediatamente a coluna d aberta e ganha atividade. } 12... Qa5 13. N5c3 Qc7 14. Bg5 Be7 15. Bxf6 Bxf6 16. Nd5 Qc6 17. Qa3 { A dama entra numa casa ativa e aumenta a pressão sobre as casas centrais. } 17... Bg4 18. Nxf6+ gxf6 19. f3 Be6 20. Nc3 f5 21. Rd6 { Uma ideia temática de partida modelo: quando a coluna está aberta, a torre pode invadir a sexta fila. } 21... Qc7 22. Nd5 Bxd5 23. Rxd5 Rd8 24. Rad1 Rxd5 25. Rxd5 f6 26. Qd3 f4 27. Qf5 Ke7 28. h4 Qc8 29. Qd3 Qc7 30. h5 { As Brancas ganham espaço e mantêm o rei preto desconfortável. } 30... Ke6 31. c4 b6 32. b4 Qc6 33. Qe4 Qc7 34. c5 bxc5 35. Rxc5 Qd7 36. Qc4+ Kf5 37. Qc2+ Kg5 38. Rc7 Qd4+ 39. Kh2 Qxb4 40. Rg7+ { O último lance mantém os xeques e o ataque; as Pretas abandonaram. [RESUMO] O valor didático está em reconhecer nosso desenvolvimento, ativar as torres em colunas abertas e continuar atacando. [TRAIN] A parte de abertura até 8...Ne5 já está coberta no Move Trainer. 9.O-O desta partida não substitui nossa resposta oficial 9.Nc3. } 1-0
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "18"]
+[White "D18"]
+[Black "Partida modelo: um erro é punido"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "D18 - Partida modelo: um erro é punido"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/4az1c9FL"]
+[Orientation "black"]
+
+{ [OBJETIVO] Reservar o capítulo de partida modelo em que um erro das Pretas é punido. [REFERENCIA] Falta uma partida completa autorizada nos arquivos-fonte atuais. O capítulo fica marcado sem completar lances por inferência. }
+1. e4 e6 2. d4 d5 3. Bd3 *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "19"]
+[White "D19"]
+[Black "Partida modelo: contra uma boa defesa"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "D19 - Partida modelo: contra uma boa defesa"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/oaaSu7jH"]
+[Orientation "black"]
+
+{ [OBJETIVO] Reservar o capítulo de partida modelo contra uma boa defesa. [REFERENCIA] Os arquivos-fonte atuais não fornecem uma partida completa autorizada. Nenhuma linha adicional foi criada sem fonte. }
+1. e4 e6 2. d4 d5 3. Bd3 *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "20"]
+[White "E20"]
+[Black "Treino: encontre o lance"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E20 - Treino: encontre o lance"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/FXmm6cXv"]
+[Orientation "black"]
+
+{ [SECAO] Encontre o lance e o plano [OBJETIVO] Encontrar os lances mais importantes sem ajuda. [TRAIN] Pare em cada pergunta antes de avançar. }
+1. e4 e6 2. d4 d5 3. Bd3 Nf6 { [PERGUNTA] Lance das Brancas? [DICA] Contra ...Nf6 cedo, um peão avança e expulsa o cavalo. } (3... c5 4. exd5 Qxd5 { [PERGUNTA] Como desenvolver atacando a dama? [DICA] Um cavalo pode atacar a dama em d5. } (4... cxd4 { [PERGUNTA] Existe um xeque antes de mexer no centro? [DICA] Procure um xeque com o bispo. } 5. Bb5+! Bd7 6. dxe6 Bxb5 7. exf7+ Kxf7 8. Qh5+ g6 9. Qxb5 { Boa: os xeques vieram antes do material. }) (4... exd5 5. c3! { Sem dama exposta, apenas proteja d4. }) 5. Nc3 Qxg2?? { [PERGUNTA] ARMADILHA PRINCIPAL: a dama pegou g2. Qual lance a prende? [DICA] O bispo de d3 pode atacar g2. } (5... Qxd4 { ARMADILHA AVANÇADA — outra linha. } 6. Nb5 Qd8 7. Bf4 Na6 8. Qe2! $36 Nf6 9. O-O-O Qb6 10. Bc4 Bd7 11. Nf3 O-O-O 12. Ne5 Be8 13. Rxd8+ Kxd8 14. Rd1+ Kc8 15. Nxf7 Bxf7 16. Bxe6+ Bxe6 { [PERGUNTA] Qual é o golpe final das Brancas? [DICA] Entregue a dama com xeque. } 17. Qxe6+ Qxe6 18. Nxa7# { Mate. }) 6. Be4 { Exato: Be4! } { [%csl Ge4,Rg2] }) (3... dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 (6... cxd4?! { [PERGUNTA] Quem recaptura em d4 nesta ordem? [DICA] O cavalo b1 ainda nem saiu. Pense na dama. } 7. Qxd4) 7. Be3 cxd4 (7... e5 { [PERGUNTA] Qual troca vem primeiro? [DICA] Tire primeiro o cavalo de c6, com xeque. } 8. Bxc6+ bxc6 9. dxe5 Qxd1+ 10. Kxd1 Ng4 11. Nd2 $14) 8. Nxd4 Ne5 { [PERGUNTA] Como responder a ...Ne5? [DICA] Desenvolva a última peça menor. } 9. Nc3 a6!? 10. Qe2 Nxf3+ { [PERGUNTA] Com qual peça recapturamos em f3? [DICA] Nossa resposta é com um peão. } 11. gxf3!) 4. e5 Nfd7 5. Ne2! c5 6. c3 Nc6 7. a3! { [RESUMO] Prioridade: reconheça imediatamente ...Qxg2? → Be4. As outras táticas são padrões separados. [PROXIMO] Agora treine os planos, não só os lances. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "21"]
+[White "E21"]
+[Black "Treino: encontre o plano"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E21 - Treino: encontre o plano"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/n3qFMgAE"]
+[Orientation "black"]
+
+{ [OBJETIVO] Treinar ideias, não só lances. [TRAIN] Pare antes de avançar e responda com suas palavras. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 { [PERGUNTA] O que queremos fazer com o bispo c1? [DICA] Desenvolva o bispo e proteja d4 no mesmo lance. } 7. Be3 { [PLANO] Desenvolver o bispo e proteger d4 ao mesmo tempo. } 7... cxd4 (7... Nd5?! 8. Bxd5 Qxd5 9. Nbc3 Qxg2 { [PERGUNTA] A dama preta foi caçar peões. Qual deve ser nossa ideia? [DICA] Ataque a dama com a torre que ela ameaça. } 10. Rg1 Qxh2 11. Bf4 { [PLANO] Ganhar atividade: atacar a dama e melhorar nossas peças enquanto ela está longe. } { [%cal Gc3b5] }) 8. Nxd4 Ne5 9. Nc3 Be7 10. Qe2 O-O { [PERGUNTA] As Pretas rocaram curto. Se nosso rei estiver seguro, qual é um dos planos do repertório? [DICA] Pense no roque. } 11. O-O-O { [PLANO] Rocar grande. O rei fica seguro na ala da dama e podemos jogar contra o rei preto do outro lado. [RESUMO] Três planos para guardar. Desenvolver e proteger. Rocar grande quando for seguro. Ganhar atividade quando a dama preta sair para caçar peões. [PROXIMO] Agora revise o resumo do repertório e jogue a árvore completa. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "22"]
+[White "E22A"]
+[Black "Move Trainer — Arma: 3.Bd3"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22A - Move Trainer — Arma: 3.Bd3"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/Ec1b4W4g"]
+[Orientation "black"]
+
+{ [OBJETIVO] Treinar nossa primeira decisão. [TRAIN] Faça o lance das Brancas. }
+1. e4 e6 2. d4 d5 { [PERGUNTA] Qual é nossa arma? } 3. Bd3! { [RESUMO] 3.Bd3 desenvolve e protege e4. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "23"]
+[White "E22B"]
+[Black "Move Trainer — Esquema base"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22B - Move Trainer — Esquema base"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/KpsF2TMp"]
+[Orientation "black"]
+
+{ [OBJETIVO] Reproduzir o esquema-base completo. [TRAIN] Jogue todos os lances das Brancas. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 7. Be3 cxd4 8. Nxd4 Ne5 9. Nc3 Be7 10. Qe2 O-O 11. O-O-O { [RESUMO] Bf3, Ne2, Be3, Nc3, Qe2 e roque grande quando for seguro. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "24"]
+[White "E22C"]
+[Black "Move Trainer — Preparação: dama no centro"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22C - Move Trainer — Preparação: dama no centro"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/l2mKssQR"]
+[Orientation "black"]
+
+{ [OBJETIVO] Treinar o desenvolvimento com ganho de tempo sobre a dama. [TRAIN] Reproduza a sequência completa. }
+1. e4 e6 2. d4 d5 3. Bd3 c5 4. exd5 Qxd5 5. Nc3 Qxd4 6. Nb5 Qd8 7. Bf4 Na6 8. Qe2! $36 { [RESUMO] Nc3, Nb5, Bf4 e Qe2. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "25"]
+[White "E22D"]
+[Black "Move Trainer — Golpe 1: ...Qxg2? → Be4!"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22D - Move Trainer — Golpe 1: ...Qxg2? → Be4!"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/7LdAnbKd"]
+[Orientation "black"]
+
+{ [OBJETIVO] Fixar o Golpe 1: prender a dama. [TRAIN] Pare antes do lance das Brancas. }
+1. e4 e6 2. d4 d5 3. Bd3 c5 4. exd5 Qxd5 5. Nc3 Qxg2?? { [PERGUNTA] Como prender a dama? } 6. Be4 { [MEMORIZAR] ...Qxg2? = Be4. [RESUMO] Golpe 1: Be4 prende a dama. } { [%csl Ge4,Rg2] } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "26"]
+[White "E22E"]
+[Black "Move Trainer — Golpe 2: sacrifício de dama e Nxa7#"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22E - Move Trainer — Golpe 2: sacrifício de dama e Nxa7#"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/iGCeHihR"]
+[Orientation "black"]
+
+{ [OBJETIVO] Reproduzir o Golpe 2 completo até o mate. [TRAIN] Jogue a linha inteira. }
+1. e4 e6 2. d4 d5 3. Bd3 c5 4. exd5 Qxd5 5. Nc3 Qxd4 6. Nb5 Qd8 7. Bf4 Na6 8. Qe2! $36 Nf6 9. O-O-O Qb6 10. Bc4 Bd7 11. Nf3 O-O-O 12. Ne5 Be8 13. Rxd8+ Kxd8 14. Rd1+ Kc8 15. Nxf7 Bxf7 16. Bxe6+ Bxe6 17. Qxe6+ Qxe6 18. Nxa7# { [MEMORIZAR] Qxe6+ → ...Qxe6 → Nxa7#. [RESUMO] Golpe 2 termina em mate. } { [%csl Ga7] } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "27"]
+[White "E22F"]
+[Black "Move Trainer — Golpe 3: xeques primeiro"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22F - Move Trainer — Golpe 3: xeques primeiro"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/QIcvpkm6"]
+[Orientation "black"]
+
+{ [OBJETIVO] Reproduzir o Golpe 3 sem inverter a ordem. [TRAIN] Procure os xeques antes do material. }
+1. e4 e6 2. d4 d5 3. Bd3 c5 4. exd5 cxd4 { [PERGUNTA] Qual é o primeiro golpe? } 5. Bb5+! Bd7 6. dxe6 Bxb5 7. exf7+ Kxf7 8. Qh5+ g6 9. Qxb5 { [RESUMO] Golpe 3: Bb5+ e xeques antes de recuperar material. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "28"]
+[White "E22G"]
+[Black "Move Trainer — Golpe 4: ...Nf6 cedo → e5"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22G - Move Trainer — Golpe 4: ...Nf6 cedo → e5"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/89UqwNxX"]
+[Orientation "black"]
+
+{ [OBJETIVO] Reproduzir o Golpe 4 contra ...Nf6 cedo. [TRAIN] Jogue a sequência completa. }
+1. e4 e6 2. d4 d5 3. Bd3 Nf6 { [PERGUNTA] Como ganhar espaço? } 4. e5 Nfd7 5. Ne2! c5 6. c3 Nc6 7. a3! { [RESUMO] Golpe 4: e5, Ne2, c3 e a3. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "29"]
+[White "E22H"]
+[Black "Move Trainer — Golpe 5: dama gananciosa → atividade"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22H - Move Trainer — Golpe 5: dama gananciosa → atividade"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/flvABBVj"]
+[Orientation "black"]
+
+{ [OBJETIVO] Reproduzir o Golpe 5 quando a dama caça peões. [TRAIN] Ative as peças com tempo. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 7. Be3 Nd5?! 8. Bxd5 Qxd5 9. Nbc3 Qxg2 10. Rg1 Qxh2 11. Bf4 { [RESUMO] Golpe 5: Nbc3, Rg1 e Bf4; a atividade vem antes dos peões. } { [%cal Gc3b5] } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "30"]
+[White "E22I"]
+[Black "Move Trainer — Quando o golpe não funciona"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22I - Move Trainer — Quando o golpe não funciona"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/BqEQcWtp"]
+[Orientation "black"]
+
+{ [OBJETIVO] Distinguir a posição com dama exposta da posição sem alvo. [TRAIN] Escolha a reação correta. }
+1. e4 e6 2. d4 d5 3. Bd3 c5 4. exd5 exd5 { [PERGUNTA] A dama saiu? Não. } (4... Qxd5 5. Nc3 { Aqui Nc3 ganha tempo sobre a dama. }) 5. c3! { [RESUMO] Sem dama exposta, proteja d4 e desenvolva. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "31"]
+[White "E22J"]
+[Black "Move Trainer — Defesa 1: ...cxd4 cedo → Qxd4"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22J - Move Trainer — Defesa 1: ...cxd4 cedo → Qxd4"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/ohta6G1I"]
+[Orientation "black"]
+
+{ [OBJETIVO] Treinar a recaptura correta quando ...cxd4 vem cedo. [TRAIN] Faça a escolha oficial. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 cxd4?! { [PERGUNTA] Quem recaptura? } 7. Qxd4 { [RESUMO] ...cxd4 antes de ...Nc6 = Qxd4. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "32"]
+[White "E22K"]
+[Black "Move Trainer — Defesa 2: ...e5 → Bxc6+ primeiro"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22K - Move Trainer — Defesa 2: ...e5 → Bxc6+ primeiro"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/VbU9QsTI"]
+[Orientation "black"]
+
+{ [OBJETIVO] Treinar a ordem correta contra ...e5. [TRAIN] Reproduza até a posição simples. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 7. Be3 e5 { [PERGUNTA] Qual troca vem primeiro? } 8. Bxc6+ bxc6 9. dxe5 Qxd1+ 10. Kxd1 Ng4 11. Nd2 $14 { [RESUMO] Contra ...e5, Bxc6+ antes de dxe5. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "33"]
+[White "E22L"]
+[Black "Move Trainer — Linha mais difícil: ...Ne5 e ...a6"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22L - Move Trainer — Linha mais difícil: ...Ne5 e ...a6"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/Ye7VvWQ2"]
+[Orientation "black"]
+
+{ [OBJETIVO] Treinar a linha principal da defesa mais difícil. [TRAIN] Reproduza a escolha oficial. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 7. Be3 cxd4 8. Nxd4 Ne5 9. Nc3 a6!? 10. Qe2 Nxf3+ { [PERGUNTA] Com qual peça recapturamos em f3? [DICA] Nossa resposta é com um peão. } 11. gxf3! { [RESUMO] ...Ne5 = Nc3; ...a6 e ...Nxf3+ = gxf3. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "34"]
+[White "E22M"]
+[Black "Move Trainer — ...Ne5: desvio ...Be7"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22M - Move Trainer — ...Ne5: desvio ...Be7"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/qO5kjU8G"]
+[Orientation "black"]
+
+{ [OBJETIVO] Treinar o desvio ...Be7 da linha mais difícil. [TRAIN] Reproduza a continuação completa estudada. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 7. Be3 cxd4 8. Nxd4 Ne5 9. Nc3 Be7 10. Qe2 O-O 11. O-O-O Nxf3 12. Qxf3 Qa5 13. g4 $40 { [RESUMO] Contra ...Be7, complete o plano e use g4 quando a linha chegar a esta posição. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "35"]
+[White "E22N"]
+[Black "Move Trainer — ...Ne5: desvio ...Bb4"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22N - Move Trainer — ...Ne5: desvio ...Bb4"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/UdLAa6bc"]
+[Orientation "black"]
+
+{ [OBJETIVO] Treinar o desvio ...Bb4 da linha mais difícil. [TRAIN] Reproduza a continuação e o ramo ...a6. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 7. Be3 cxd4 8. Nxd4 Ne5 9. Nc3 Bb4 10. Nb5 Bd7 (10... a6 11. a3) 11. Qd4 { [RESUMO] Contra ...Bb4, Ndb5 e Qd4; se ...a6, a3. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "36"]
+[White "E22O"]
+[Black "Move Trainer — Se eu esquecer a teoria"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22O - Move Trainer — Se eu esquecer a teoria"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/L02PIawp"]
+[Orientation "black"]
+
+{ [OBJETIVO] Treinar as três decisões de emergência. [TRAIN] Reconheça a resposta preta. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 (3... Nf6 4. e5 { Regra 1: ...Nf6 = e5. }) (3... c5 4. exd5 { Regra 2: ...c5 = exd5. }) 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 7. Be3 { [RESUMO] ...dxe4 = Bxe4 e monte o esquema. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "37"]
+[White "E22P"]
+[Black "Move Trainer — Árvore completa"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "E22P - Move Trainer — Árvore completa"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/54P4ZiGz"]
+[Orientation "black"]
+
+{ [OBJETIVO] Reproduzir todas as linhas que estudamos em uma única árvore. [TRAIN] Temos uma escolha oficial das Brancas em cada decisão. }
+1. e4 e6 2. d4 d5 3. Bd3 dxe4 (3... c5 4. exd5 Qxd5 (4... exd5 5. c3!) (4... cxd4 5. Bb5+! Bd7 6. dxe6 Bxb5 7. exf7+ Kxf7 8. Qh5+ g6 9. Qxb5) 5. Nc3 Qxg2?? (5... Qxd4 6. Nb5 Qd8 7. Bf4 Na6 8. Qe2! $36 Nf6 9. O-O-O Qb6 10. Bc4 Bd7 11. Nf3 O-O-O 12. Ne5 Be8 13. Rxd8+ Kxd8 14. Rd1+ Kc8 15. Nxf7 Bxf7 16. Bxe6+ Bxe6 17. Qxe6+ Qxe6 18. Nxa7#) 6. Be4) (3... Nf6 4. e5 Nfd7 5. Ne2! c5 6. c3 Nc6 7. a3!) 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 (6... cxd4?! 7. Qxd4) 7. Be3 cxd4 (7... e5 8. Bxc6+ bxc6 9. dxe5 Qxd1+ 10. Kxd1 Ng4 11. Nd2 $14) (7... Nd5?! 8. Bxd5 Qxd5 9. Nbc3 Qxg2 10. Rg1 Qxh2 11. Bf4 { [%cal Gc3b5] }) 8. Nxd4 Ne5 9. Nc3 a6!? (9... Be7 10. Qe2 O-O 11. O-O-O Nxf3 12. Qxf3 Qa5 13. g4 $40) (9... Bb4 10. Nb5 Bd7 (10... a6 11. a3) 11. Qd4) 10. Qe2 Nxf3+ 11. gxf3! { [RESUMO] A armadilha ...Qxg2? → Be4 aparece como padrão próprio. O sacrifício Qxe6+ → Nxa7# é outra linha, separada. } *
+
+
+[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
+[Site "Lichess Study"]
+[Date "2026.09.16"]
+[Round "38"]
+[White "F23"]
+[Black "Cheat Sheet: revisão rápida"]
+[Result "*"]
+[Annotator "Projeto repertório completo - Francesa"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Schlechter Variation"]
+[StudyName "Repertorio Contra a Francesa.v5"]
+[ChapterName "F23 - Cheat Sheet: revisão rápida"]
+[ChapterURL "https://lichess.org/study/qq2xorDl/tLp6XuVU"]
+[Orientation "black"]
+
+{ [SECAO] Revisão | o repertório em poucos minutos [OBJETIVO] Revisar o repertório em poucos minutos. [DEFESA] Defesa Francesa: 1.e4 e6 2.d4 d5. [ARMA] 3.Bd3: desenvolve o bispo, protege e4 e leva o jogo para uma linha menos comum. [PLANO] Desenvolver + proteger. Cuidar de d4. Preparar Qe2 e rocar grande quando for seguro. [ARMADILHA] Se a dama pegar g2 cedo depois de ...Qxd5 e Nc3, lembre imediatamente: Be4! prende a dama. }
+1. e4 e6 2. d4 d5 3. Bd3! dxe4 { Se ...dxe4: Bxe4 e monte nosso esquema. } (3... Nf6 4. e5 Nfd7 5. Ne2! c5 6. c3 Nc6 7. a3! { ...Nf6 cedo = e5. }) (3... c5 4. exd5 Qxd5 (4... exd5 5. c3! { Sem dama exposta, apenas proteja d4. }) (4... cxd4 5. Bb5+! Bd7 6. dxe6 Bxb5 7. exf7+ Kxf7 8. Qh5+ g6 9. Qxb5 { ...cxd4? = procure os xeques primeiro. }) 5. Nc3 Qxg2?? { [ARMADILHA PRINCIPAL] ...Qxg2? = Be4 e a dama fica presa. } (5... Qxd4 6. Nb5 Qd8 7. Bf4 Na6 8. Qe2! $36 { [ARMADILHA AVANÇADA] Em outra linha, o tema final é Qxe6+ seguido de Nxa7#. Não confunda com Be4. }) 6. Be4) 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 (6... cxd4?! 7. Qxd4 { Se ...cxd4 vier cedo, Qxd4. }) 7. Be3 cxd4 (7... e5 8. Bxc6+ bxc6 9. dxe5 Qxd1+ 10. Kxd1 Ng4 11. Nd2 $14 { Contra ...e5: Bxc6+ antes de dxe5. }) 8. Nxd4 Ne5 9. Nc3 a6!? { ...Ne5 = desenvolva com Nc3. } (9... Be7 10. Qe2 O-O 11. O-O-O { Se estiver seguro, roque grande. }) 10. Qe2 Nxf3+ 11. gxf3! { [SE ESQUECER] ...Nf6 = e5. ...c5 = exd5 e veja a recaptura. ...dxe4 = Bxe4 e monte Bf3, Ne2, Be3 e Nc3. [RESUMO] Primeiro memorize ...Qxg2? → Be4. Depois, as armadilhas longas. Desenvolva e proteja. } *
+
+

@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Cor, Linha } from "@/lib/repertorio/linhas";
-import type { Modo } from "@/lib/repertorio/passada";
+import { sugereASeta, type Modo } from "@/lib/repertorio/passada";
+import { grauDaEscada, NOME_DO_GRAU, subiuPara, type Grau } from "@/lib/progresso/grau";
 import {
   DEGRAU_APRENDIDA,
   diasAteRevisar,
@@ -14,15 +15,16 @@ import {
 import {
   armAudioOnFirstGesture,
   isSoundOn,
-  playComplete,
   setSoundOn,
   subscribeSound,
 } from "@/lib/sound";
+import { Celebracao, useCelebracao } from "@/components/Celebracao";
+import { SeloDoGrau } from "@/components/progresso/SeloDoGrau";
 import { BotaoPrincipal, BotaoSecundario } from "@/components/lesson/BotoesDaAula";
 import { Bolinhas } from "@/components/Bolinhas";
 import { registrarTreino } from "../../acoes";
-import { Passada } from "./Passada";
-import { OQueAindaFalta } from "./OQueFalta";
+import { Passada } from "@/components/repertorio/Passada";
+import { OQueAindaFalta } from "@/components/repertorio/OQueFalta";
 import { SeletorDeLinha, type LinhaDoMenu } from "./SeletorDeLinha";
 
 /**
@@ -113,6 +115,16 @@ export function Treino({
   } | null>(null);
   const [falhaAoGravar, setFalhaAoGravar] = useState<string | null>(null);
   /**
+   * Quantas passadas valendo seguidas terminaram sem acerto — nesta tela, nesta linha. Duas seguidas
+   * e o painel de fim oferece a seta primeiro (`sugereASeta`, 17/9/2026).
+   */
+  const [erradasSeguidas, setErradasSeguidas] = useState(0);
+  /** O grau novo, quando a passada que acabou de gravar o fez subir. */
+  const [subiu, setSubiu] = useState<Grau | null>(null);
+  /** O último progresso que o servidor confirmou — de onde se mede se o grau subiu. */
+  const ultimoRef = useRef(progresso);
+  const { seq, celebrar } = useCelebracao();
+  /**
    * Por que a passada foi decidida, e como ela terminou.
    *
    * Nada disto muda o que se grava — o servidor julga os lances e mais nada.
@@ -155,6 +167,9 @@ export function Treino({
         setFalhaAoGravar(resposta.erro);
         return;
       }
+      setSubiu(subiuPara(grauDaEscada(ultimoRef.current), grauDaEscada(resposta.progresso)));
+      ultimoRef.current = resposta.progresso;
+      setErradasSeguidas((n) => (resposta.acertou ? 0 : n + 1));
       setResultado(resposta);
     },
     [abertura, cor, linha.id],
@@ -162,16 +177,14 @@ export function Treino({
 
   const atual = resultado?.progresso ?? progresso;
 
-  // A linha acabou de virar "aprendida": o prêmio toca uma vez. Não é
-  // `setState` num efeito — é um efeito colateral disparado por uma transição
-  // que já aconteceu, que é para isso que o `useEffect` serve.
+  // A linha acabou de virar "aprendida". O som que tocava aqui (`playComplete`) saiu em 17/9/2026:
+  // a celebração do fim da linha (`aoFecharLinha`) já toca o mesmo acorde com o confete, no
+  // instante em que a linha fecha — e dois acordes, um antes e outro depois da resposta do
+  // servidor, eram barulho.
   const virouAprendida =
     resultado !== null &&
     resultado.progresso.aprendidaEm !== null &&
     progresso.aprendidaEm === null;
-  useEffect(() => {
-    if (virouAprendida) playComplete();
-  }, [virouAprendida]);
 
   /**
    * Zera tudo o que é de uma passada e entra na etapa pedida.
@@ -187,6 +200,7 @@ export function Treino({
     setModo(proximo);
     setPorQue("fim");
     setPlacar(null);
+    setSubiu(null);
     setRodada((r) => r + 1);
   }, []);
 
@@ -224,10 +238,11 @@ export function Treino({
    * A próxima linha vem do servidor, e não daqui: `proximaLinha` sabe a ordem —
    * inclusive a alternância entre revisar e avançar —, e a tela não precisa
    * saber. O `replace` tira o `?linha=` da URL: sem isso um link velho prenderia
-   * o aluno na mesma linha para sempre.
+   * o aluno na mesma linha para sempre. O move trainer mora em `/treino` desde
+   * 17/9/2026 — a página da abertura virou a trilha das aulas e das linhas.
    */
   const proxima = useCallback(() => {
-    router.replace(`/aberturas/${cor}/${abertura}`);
+    router.replace(`/aberturas/${cor}/${abertura}/treino`);
     router.refresh();
   }, [abertura, cor, router]);
 
@@ -294,13 +309,17 @@ export function Treino({
       </>
     ) : null;
 
+  const setaPrimeiro = sugereASeta(erradasSeguidas);
+
   return (
     <>
+      <Celebracao seq={seq} tela />
       <Passada
         key={`${modo}:${linha.id}:${rodada}`}
         linha={linha}
         modo={modo}
         aoDecidir={decidir}
+        aoFecharLinha={celebrar}
         aoTerminar={(fechou) => {
           setPlacar(fechou);
           setTerminou(true);
@@ -366,12 +385,41 @@ export function Treino({
             }
           />
 
+          {/*
+           * O grau da linha depois desta passada (17/9/2026). Quando subiu, é a notícia e vem
+           * grande; quando não, fica pequeno ao lado — o aluno vê onde a linha está sem ler número.
+           */}
+          {resultado ? (
+            subiu !== null ? (
+              <p className="flex flex-wrap items-end gap-2 text-sm font-semibold text-metodo-tinta">
+                <SeloDoGrau grau={subiu} tamanho="grande" />
+                <span>Subiu para {NOME_DO_GRAU[subiu]}.</span>
+              </p>
+            ) : (
+              <p className="flex flex-wrap items-end gap-2 text-xs text-tinta-fraca">
+                <span>Esta linha está em</span>
+                <SeloDoGrau grau={grauDaEscada(resultado.progresso)} />
+              </p>
+            )
+          ) : null}
+
           {/* Só aparece quando a linha não fechou a régua — ver `OQueFalta.tsx`. */}
           <OQueAindaFalta linha={linha} />
 
           <ProximaPratica progresso={resultado?.progresso ?? null} agora={agora} />
 
+          {setaPrimeiro ? (
+            <p className="text-sm text-tinta-media">
+              Duas passadas seguidas com erro. Jogue uma vez com a seta, e depois tente de memória.
+            </p>
+          ) : null}
+
           <div className="flex flex-wrap gap-2">
+            {setaPrimeiro ? (
+              <BotaoPrincipal onClick={comASeta} esperando={gravando}>
+                Jogar com a seta
+              </BotaoPrincipal>
+            ) : null}
             {resultado?.acertou === false ? (
               <>
                 {/*
@@ -398,9 +446,11 @@ export function Treino({
                 </BotaoSecundario>
               </>
             )}
-            <BotaoSecundario onClick={comASeta} esperando={false}>
-              Jogar com a seta
-            </BotaoSecundario>
+            {setaPrimeiro ? null : (
+              <BotaoSecundario onClick={comASeta} esperando={false}>
+                Jogar com a seta
+              </BotaoSecundario>
+            )}
           </div>
             </div>
           ) : null
