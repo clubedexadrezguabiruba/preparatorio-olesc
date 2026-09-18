@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Barra } from "@/components/Barra";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Moldura } from "@/components/Moldura";
@@ -8,6 +8,7 @@ import { SeloDoGrau } from "@/components/progresso/SeloDoGrau";
 import type { AulaDoCurso } from "@/lib/aberturas/curso";
 import { estadoDasAulas, donaDaLinha, type EstadoDaAulaNaTrilha } from "@/lib/aberturas/trava";
 import { travaDoAluno } from "@/lib/aberturas/trava-banco";
+import { podeAbrir } from "@/lib/aberturas/vitrine";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import { grauDaAulaDeAbertura, grauDaEscada } from "@/lib/progresso/grau";
@@ -68,6 +69,8 @@ export default async function Abertura({ params }: PageProps<"/aberturas/[cor]/[
   if (!entrada) notFound();
 
   const perfil = await perfilAtual();
+  // A abertura "em breve" não abre para o aluno, nem pela URL (`lib/aberturas/vitrine.ts`).
+  if (!podeAbrir(cor, abertura, perfil.papel)) redirect("/aberturas");
   const [todasAsLinhas, progresso, indiceInteiro, trava, cabecalho] = await Promise.all([
     linhasDaAbertura(cor, abertura),
     progressoDoRepertorio(),

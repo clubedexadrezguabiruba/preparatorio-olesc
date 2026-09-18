@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
+import { podeAbrir } from "@/lib/aberturas/vitrine";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { comLinhasDosTreinadores } from "@/lib/aberturas/linhas-da-aula";
 import { abrirRodada } from "@/lib/aberturas/rodada-banco";
@@ -45,6 +46,8 @@ export default async function AulaDeAbertura({ params }: PageProps<"/aberturas/[
   if (!id || !pacote) notFound();
 
   const perfil = await perfilAtual();
+  // A abertura "em breve" não abre para o aluno, nem pela URL (`lib/aberturas/vitrine.ts`).
+  if (!podeAbrir(cor, abertura, perfil.papel)) redirect("/aberturas");
   const paginaDaAbertura = `/aberturas/${cor}/${abertura}`;
   const trava = await travaDoAluno(perfil);
   const destino = destinoDaAulaTrancada(

@@ -1950,3 +1950,83 @@ li + li > .escada-degrau {
   background-position: center;
   pointer-events: none;
 }
+
+/* --------------------------------------------------------------------------
+   O tabuleirinho da lista de `/aberturas` (18/9/2026)
+
+   As peças vêm do mesmo sprite do tabuleiro grande, pelo mesmo caminho da
+   paleta acima: contêiner `.cg-wrap`, peça `piece.<papel>.<cor>`. Daqui ele
+   herda o rebordo e a sombra do tabuleiro — e fica com eles, porque é um
+   tabuleiro. O raio é pequeno de propósito: numa miniatura, canto redondo
+   demais come a casa a1 e a h8.
+   -------------------------------------------------------------------------- */
+/* Os dois nomes juntos de propósito: o `.cg-wrap { display: block }` do
+   chessground fica fora de camada e ganharia do `grid` do Tailwind — as 64
+   casas empilhavam e só a a8 aparecia (medido em 18/9/2026). */
+.cg-wrap.tabuleiro-mini {
+  --lado-mini: 3.5rem;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-rows: repeat(8, minmax(0, 1fr));
+  flex-shrink: 0;
+  width: var(--lado-mini);
+  height: var(--lado-mini);
+  overflow: hidden;
+  border-radius: 0.25rem;
+}
+@media (width >= 40rem) {
+  .cg-wrap.tabuleiro-mini {
+    --lado-mini: 5.5rem;
+  }
+}
+.tabuleiro-mini-casa {
+  position: relative;
+  background: var(--color-casa-escura);
+}
+.tabuleiro-mini-casa[data-clara] {
+  background: var(--color-casa-clara);
+}
+.tabuleiro-mini-casa[data-ultimo]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-ultimo-lance);
+}
+/* O peão da cor (`PeaoDaCor`): uma casa só do tabuleiro, com o peão de pé.
+   Os dois nomes juntos pelo mesmo motivo do tabuleirinho: o `.cg-wrap` do
+   chessground fica fora de camada. O rebordo do tabuleiro ele herda e mantém. */
+.cg-wrap.peao-da-cor {
+  /* O lado vem por fora (`[--lado-peao:…]`); declarado aqui, fora de camada,
+     ganharia da utilitária e o tamanho nunca mudaria. */
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--lado-peao, 2.5rem);
+  height: var(--lado-peao, 2.5rem);
+  border-radius: 0.625rem;
+  background: var(--color-casa-escura);
+}
+.cg-wrap.peao-da-cor[data-cor="pretas"] {
+  background: var(--color-casa-clara);
+}
+.cg-wrap.peao-da-cor piece {
+  position: static;
+  display: block;
+  width: 82%;
+  height: 82%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+}
+
+.cg-wrap.tabuleiro-mini piece {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+}
