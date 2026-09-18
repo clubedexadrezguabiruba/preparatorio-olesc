@@ -1,5 +1,5 @@
 {
- "sobre": "Golpe × Imprecisão (Doug, 18/9/2026): a nota no fim da linha principal de cada capítulo das aulas B, C e E+F, do ponto de vista do curso. Golpe ou Armadilha só com +2 ou mais; abaixo, Imprecisão. Confere: lib/editor-v2/abertura-direta.test.ts.",
+ "sobre": "Golpe × Imprecisão (Doug, 18/9/2026): a nota no fim da linha principal de cada capítulo das aulas B, C e E+F, do ponto de vista do curso. Golpe ou Armadilha só com +2 ou mais; abaixo, Imprecisão. Confere: lib/editor-v2/abertura-direta.test.ts. Exceção só por decisão do Doug, registrada no capítulo em \"decisaoDoDoug\".",
  "motor": "Stockfish 18 (public/engine), profundidade 22",
  "medidoEm": "2026-09-18",
  "capitulos": [
@@ -246,15 +246,16 @@
   {
    "estudo": "estudo-pretas-siciliana.pgn",
    "codigo": "B03",
-   "titulo": "Imprecisão 1 — f3 e Dd2: ...d5, e o xeque em h4",
+   "titulo": "Golpe 1 — f3 e Dd2: ...d5, e o xeque em h4",
    "fim": "13...Dh4+",
    "nota": "1.91",
-   "valor": 1.91
+   "valor": 1.91,
+   "decisaoDoDoug": "18/9/2026: +1,91 fica \"Golpe\" — perto dos +2, decisão do Doug"
   },
   {
    "estudo": "estudo-pretas-siciliana.pgn",
    "codigo": "B06",
-   "titulo": "Imprecisão 2 — Bc4 e roque cedo: ...Cxe4!",
+   "titulo": "Imprecisão 1 — Bc4 e roque cedo: ...Cxe4!",
    "fim": "10...h6",
    "nota": "0.00",
    "valor": 0
@@ -262,7 +263,7 @@
   {
    "estudo": "estudo-pretas-siciliana.pgn",
    "codigo": "B08",
-   "titulo": "Golpe 1 — 5.Cxc6 e Dd4: não tema a dama",
+   "titulo": "Golpe 2 — 5.Cxc6 e Dd4: não tema a dama",
    "fim": "14...Dxe8+",
    "nota": "5.25",
    "valor": 5.25
@@ -270,7 +271,7 @@
   {
    "estudo": "estudo-pretas-siciliana.pgn",
    "codigo": "B09",
-   "titulo": "Imprecisão 3 — 5.c3: tome o centro",
+   "titulo": "Imprecisão 2 — 5.c3: tome o centro",
    "fim": "8...d5",
    "nota": "0.24",
    "valor": 0.24
@@ -278,7 +279,7 @@
   {
    "estudo": "estudo-pretas-siciliana.pgn",
    "codigo": "B10",
-   "titulo": "Imprecisão 4 — ataque cedo em f7: feche a porta",
+   "titulo": "Imprecisão 3 — ataque cedo em f7: feche a porta",
    "fim": "5...d5",
    "nota": "0.97",
    "valor": 0.97

@@ -11,7 +11,8 @@
  * - o passo da pergunta é seguido do lance-resposta, e a volta da fita cai na posição da escolha;
  * - todo capítulo chamado "Golpe" ou "Armadilha" tem medida de +2 ou mais registrada em
  *   `content/repertorio/medidas-dos-golpes.json` (Stockfish 18, profundidade 22, no fim da linha
- *   principal). Abaixo disso, o nome é "Imprecisão".
+ *   principal). Abaixo disso, o nome é "Imprecisão" — salvo decisão do Doug registrada no capítulo
+ *   (`decisaoDoDoug`).
  */
 import assert from "node:assert/strict";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
@@ -96,7 +97,7 @@ test("toda aula de abertura publicada é direta — o que o aluno abre (Doug, 18
 });
 
 test("Golpe e Armadilha só com +2 ou mais medidos no Stockfish; abaixo disso, Imprecisão (Doug, 18/9/2026)", () => {
-  const medidas = JSON.parse(readFileSync(MEDIDAS, "utf8")) as { capitulos: Array<{ estudo: string; titulo: string; nota: string; valor: number }> };
+  const medidas = JSON.parse(readFileSync(MEDIDAS, "utf8")) as { capitulos: Array<{ estudo: string; titulo: string; nota: string; valor: number; decisaoDoDoug?: string }> };
   const doEstudo = (estudo: string, titulo: string) => medidas.capitulos.find((m) => m.estudo === estudo && m.titulo === titulo);
   let golpes = 0;
   for (const { estudo, aula } of planejadas) {
@@ -106,7 +107,8 @@ test("Golpe e Armadilha só com +2 ou mais medidos no Stockfish; abaixo disso, I
       golpes += 1;
       const medida = doEstudo(estudo, titulo);
       assert.ok(medida, `${estudo}: «${titulo}» não tem medida registrada em ${MEDIDAS}`);
-      assert.ok(medida.valor >= 2, `${estudo}: «${titulo}» mede ${medida.nota}; abaixo de +2 o nome é "Imprecisão"`);
+      // A única saída abaixo de +2 é a decisão do Doug, escrita no próprio registro (Siciliana Golpe 1, +1,91).
+      assert.ok(medida.valor >= 2 || medida.decisaoDoDoug, `${estudo}: «${titulo}» mede ${medida.nota}; abaixo de +2 o nome é "Imprecisão"`);
     }
   }
   assert.ok(golpes > 0);

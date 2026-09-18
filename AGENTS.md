@@ -72,6 +72,8 @@ o planejador (`lib/editor-v2/planejar-curso.ts`), a prévia (`lib/editor-v2/prev
 6. **Golpe × Imprecisão.** O capítulo só se chama "Golpe" ou "Armadilha" se o Stockfish 18,
    profundidade 22, no fim da linha principal, der **+2 ou mais** para nós (peça, qualidade, dama presa,
    mate). Abaixo de +2, o nome é "Imprecisão". A medida fica em `content/repertorio/medidas-dos-golpes.json`.
+   Exceção **só por decisão do Doug**, escrita no capítulo do registro (`decisaoDoDoug`). A primeira foi o
+   Golpe 1 da Siciliana, +1,91, em 18/9/2026.
 7. **O treino guiado não tem comentário**: nem o texto do acerto nem o da resposta do adversário. O
    aluno já ouviu o porquê na aula; ali ele só joga.
 8. **"Pular"** (da 2ª vez em diante) num capítulo com perguntas passa a fala depressa, mas mantém as

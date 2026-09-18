@@ -199,7 +199,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Imprecisão 1: f3 e Dd2 — Qh4+",
+    "nome": "Siciliana: Dragão Acelerado — Golpe 1: f3 e Dd2 — Qh4+",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1b2rk1/p4pbp/2p1p1p1/3pP3/N6q/4B3/PPPQ2PP/R3KB1R w KQ - 1 14",
     "lances": [
@@ -319,7 +319,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Imprecisão 1: f3 e Dd2 — d5",
+    "nome": "Siciliana: Dragão Acelerado — Golpe 1: f3 e Dd2 — d5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bq1rk1/pp2ppbp/2n2np1/3p4/3NP3/2N1BP2/PPPQ2PP/R3KB1R w KQ - 0 9",
     "lances": [
@@ -398,7 +398,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Imprecisão 2: roque cedo com o bispo em c4 — h6",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 1: roque cedo com o bispo em c4 — h6",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bq2k1/pp1pprb1/2n3pp/8/3NN3/4B3/PPP2PPP/R2Q1RK1 w - - 0 11",
     "lances": [
@@ -492,7 +492,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Imprecisão 2: roque cedo com o bispo em c4 — d5",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 1: roque cedo com o bispo em c4 — d5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bq1rk1/pp2ppbp/2n3p1/3p4/2BNN3/4B3/PPP2PPP/R2Q1RK1 w - - 0 10",
     "lances": [
@@ -578,7 +578,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Imprecisão 2: roque cedo com o bispo em c4 — Qb6",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 1: roque cedo com o bispo em c4 — Qb6",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1b2rk1/pp1pppbp/1qn2np1/8/2BNP3/2N1BP2/PPP3PP/R2QK2R w KQ - 1 9",
     "lances": [
@@ -658,7 +658,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Golpe 1: 5.Cxc6 e Dd4 — Qxe8+",
+    "nome": "Siciliana: Dragão Acelerado — Golpe 2: 5.Cxc6 e Dd4 — Qxe8+",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1b1q3/p4k1p/2p2np1/3p4/1b6/1BP5/PP3PPP/RNB1K2R w KQ - 0 15",
     "lances": [
@@ -782,7 +782,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Golpe 1: 5.Cxc6 e Dd4 — Qb6",
+    "nome": "Siciliana: Dragão Acelerado — Golpe 2: 5.Cxc6 e Dd4 — Qb6",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1b1kb1r/p2ppp1p/1qp3p1/3nP3/2PQ4/8/PP3PPP/RNB1KB1R w KQkq - 1 9",
     "lances": [
@@ -868,7 +868,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Imprecisão 3: 5.c3",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 2: 5.c3",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bq1rk1/pp2ppbp/2n2np1/3p4/3NP3/2PBB3/PP3PPP/RN1Q1RK1 w - - 0 9",
     "lances": [
@@ -942,7 +942,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Imprecisão 4: ataque cedo em f7 — d5",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 3: ataque cedo em f7 — d5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2B1P2Q/5N2/PPPP1PPP/RNB1K2R w KQkq - 0 6",
     "lances": [
@@ -1002,7 +1002,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Imprecisão 4: ataque cedo em f7 — d5",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 3: ataque cedo em f7 — d5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bqkb1r/pp2pppp/5n2/2pp4/2Q1P3/2P5/PP1P1PPP/RNB1K1NR w KQkq - 0 7",
     "lances": [
@@ -1063,7 +1063,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Imprecisão 4: ataque cedo em f7 — d5",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 3: ataque cedo em f7 — d5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bqkb1r/pp2pppp/5n2/2pp4/2BnP3/3P4/PPP2PPP/RNBQK1NR w KQkq - 0 6",
     "lances": [
@@ -1115,7 +1115,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Imprecisão 4: ataque cedo em f7 — d5",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 3: ataque cedo em f7 — d5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bq1b1r/pp2pk1p/2n2np1/2Qp4/4P3/5N2/PPPP1PPP/RNB1K2R w KQ - 0 7",
     "lances": [

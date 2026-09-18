@@ -7707,11 +7707,15 @@ Registro completo em `content/repertorio/medidas-dos-golpes.json` (48 capítulos
 | Escocesa | Golpe 7 — ...Dh4 | +0,60 | **Imprecisão 3** |
 | Francesa | Armadilha principal: ...Qxg2? | +4,14 | Armadilha |
 | Francesa | Armadilha avançada: sacrifício de dama | mate | Armadilha |
-| Siciliana | Golpe 1 — f3 e Dd2 | +1,91 | **Imprecisão 1** |
-| Siciliana | Golpe 2 — Bc4 e roque cedo | 0,00 | **Imprecisão 2** |
-| Siciliana | Golpe 3 — 5.Cxc6 e Dd4 | +5,25 | Golpe 1 |
-| Siciliana | Golpe 4 — 5.c3 | +0,24 | **Imprecisão 3** |
-| Siciliana | Golpe 5 — ataque cedo em f7 | +0,97 | **Imprecisão 4** |
+| Siciliana | Golpe 1 — f3 e Dd2 | +1,91 | Golpe 1 (**decisão do Doug**: perto dos +2) |
+| Siciliana | Golpe 2 — Bc4 e roque cedo | 0,00 | **Imprecisão 1** |
+| Siciliana | Golpe 3 — 5.Cxc6 e Dd4 | +5,25 | Golpe 2 |
+| Siciliana | Golpe 4 — 5.c3 | +0,24 | **Imprecisão 2** |
+| Siciliana | Golpe 5 — ataque cedo em f7 | +0,97 | **Imprecisão 3** |
+
+**Exceção (Doug, 18/9/2026, depois da medida):** o Golpe 1 da Siciliana mede +1,91 e fica "Golpe". A
+decisão está no registro (`decisaoDoDoug`), e a trava só aceita abaixo de +2 com ela escrita. A Siciliana B
+foi republicada (`pub-a0ec9035352682f0`), e o `[GOLPE]` do capítulo voltou.
 
 Os capítulos "Move Trainer — …" e os textos que diziam "golpe" nesses capítulos acompanham ("reconheça cada
 erro", "Sete erros, sete respostas"). Nos capítulos que viraram Imprecisão, o rótulo `[GOLPE]` virou `[PUNICAO]`.
