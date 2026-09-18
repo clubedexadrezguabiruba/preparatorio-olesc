@@ -7844,3 +7844,9 @@ Sem aumentar a estrutura do cartão, a entrada do modo rating ganhou uma ilustra
 alta, borda do método, convite “Aceite o desafio”, a promessa de superar o próprio recorde e a
 ação explícita “Jogar agora”. Para quem já jogou, o ícone e o título “Seu desafio” reforçam a
 continuidade sem esconder o rating nem a evolução.
+
+# Painel recebe o aluno pelo nome — 18/9/2026
+
+O cabeçalho do painel agora diz “Bem-vindo, [nome]!” e completa com “Vamos treinar e praticar
+seu xadrez.”. O avatar, o nível e os atalhos de perfil continuam no mesmo lugar; a mudança dá
+identidade e transforma a primeira linha da página em convite para começar.

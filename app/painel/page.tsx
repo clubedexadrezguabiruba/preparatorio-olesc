@@ -310,7 +310,8 @@ export default async function Painel() {
               <Avatar id={perfil.avatar} tamanho={56} decorativo />
             </Link>
             <div className="flex min-w-0 flex-col items-start gap-1.5">
-              <h1 className="titulo truncate text-tinta">{perfil.nome}</h1>
+              <h1 className="titulo truncate text-tinta">Bem-vindo, {perfil.nome}!</h1>
+              <p className="text-sm text-tinta-media">Vamos treinar e praticar seu xadrez.</p>
               <span
                 className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${COR_DO_NIVEL[nivel].pastilha}`}
               >
