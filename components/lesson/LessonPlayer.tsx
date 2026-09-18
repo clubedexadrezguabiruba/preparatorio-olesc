@@ -4,6 +4,7 @@ import { useAtalho, useCamadaDeJanela, VistaDoTabuleiro } from "@/components/ata
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { PacoteDeAula } from "@/lib/finais/conteudo";
 import type { TentativaDeAula } from "@/lib/finais/gravar";
 import type { TentativaDeAulaV2 } from "@/lib/finais/tentativa-v2";
@@ -17,6 +18,7 @@ import { CapaDeSecao, type Capa } from "./CapaDeSecao";
 import { dominioDaAulaV2 } from "@/lib/editor-v2/dominio";
 import { ganchosDoTreinoV2 } from "@/lib/editor-v2/ganchos-do-treino";
 import { AVANCO, PARTIDA } from "@/lib/lesson/falas";
+import { fimDoTreinador } from "@/lib/lesson/fim-do-treinador";
 import { masteryReport } from "@/lib/lesson/mastery";
 import { pausaDoPasso } from "@/lib/lesson/roteiro";
 import type { IntroStage as IntroStageData, ObjectiveStage as ObjectiveStageData, Position, RoteiroPasso } from "@/lib/lesson/schema";
@@ -651,6 +653,7 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
 }) {
   // ---- curso de abertura: a rodada (regras 16 e 17) ---------------------------------------
   const [feitas, setFeitas] = useState<string[]>(() => progressao?.feitas ?? []);
+  const router = useRouter();
   const [concluida, setConcluida] = useState(false);
   /** Aula concluída: confete e som, uma vez (pedido 6 do feedback do aluno, 17/9/2026). */
   const { seq: festa, celebrar } = useCelebracao();
@@ -759,6 +762,14 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
   );
   // Regra 16: até a 2ª vez, avançar exige a etapa atual feita; da 2ª em diante a explicação se pula.
   const atualFeita = !rodada || !atual || feitas.includes(atual.id) || rodada.vez >= 3;
+  /*
+   * O botão do fim do move trainer. Sem `progressao` não há o que marcar, e a etapa conta como
+   * feita: o botão já nasce com a saída. **Não** é o `atualFeita` de cima, que também vale "da 3ª
+   * vez em diante" — com ele o aluno sairia da aula sem a etapa ser marcada.
+   */
+  const fimDoTreino = atual?.tipo === "treinador"
+    ? fimDoTreinador({ proxima: proxima ? avancoPara(proxima, aula.id) : null, feita: !progressao || feitas.includes(atual.id) })
+    : null;
   const pular = rodada && atual && proxima && !atualFeita && podePular(rodada, atual)
     ? (
       <button
@@ -872,8 +883,11 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
               linhas={atual.linhas}
               progressoInicial={progressao?.progressoDasLinhas ?? {}}
               gravar={progressao?.gravarTreino}
-              rotuloDoFim={proxima ? avancoPara(proxima, aula.id) : "Terminar o move trainer"}
+              rotuloDoFim={fimDoTreino?.rotulo ?? AVANCO.padrao}
               aoTerminar={() => {
+                // Sem etapa depois, o botão tinha rótulo e não tinha destino (18/9/2026) — ver
+                // `lib/lesson/fim-do-treinador.ts`.
+                if (fimDoTreino?.acao === "sair") { router.push(voltar?.href ?? "/finais"); return; }
                 fazer(atual.id);
                 if (proxima) goToStage(proxima.id);
               }}
