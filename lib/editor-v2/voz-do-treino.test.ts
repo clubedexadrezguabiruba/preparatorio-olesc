@@ -80,7 +80,8 @@ test("régua: dica, objetivo e explicação ao concluir entram na conta", () => 
 test("régua de 15/9 e 17/9: objetivo, método, avaliação, teoria, estrutura e tentativa passam; roteiro continua apontada", () => {
   const liberadas = ["objetivo", "método", "avaliação", "teoria", "estrutura", "tentativa"];
   for (const palavra of liberadas) assert.ok(!regua.proibidas.includes(palavra), `${palavra} ainda está na lista`);
-  assert.equal(regua.proibidas.length, 14);
+  // 15 desde 18/9/2026: "valendo" entrou (`VOZ-DO-CURSO` §4.3).
+  assert.equal(regua.proibidas.length, 15);
   const falas = [
     { onde: "liberada", texto: "O objetivo é dar mate, e o método é a escada.", tipo: "fala" as const },
     { onde: "presa", texto: "Siga o roteiro.", tipo: "fala" as const },

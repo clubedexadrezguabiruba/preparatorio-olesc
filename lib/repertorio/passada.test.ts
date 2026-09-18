@@ -199,7 +199,7 @@ test("errar no treino recusa e não conta, e o cartão não fala em seta", () =>
   assert.deepEqual(estado.jogados, ["e2e4"], "o lance errado não entrou na lista");
   assert.deepEqual(estado.boletim, [null, null, null, null], "e não deixou selo — nem de acerto");
   assert.equal(estado.errou, false, "errar aqui não é o erro que conta");
-  assert.match(estado.cartao.estado, /não conta/, "o cartão tem de dizer que não contou");
+  assert.match(estado.cartao.estado, /é normal/, "o cartão tranquiliza: errar aqui é normal (Doug, 18/9/2026)");
   assert.doesNotMatch(
     `${estado.cartao.comando} ${estado.cartao.estado}`,
     /seta/i,
@@ -219,7 +219,7 @@ test("no treino a alternativa e o erro nomeado são recusados com o aviso certo"
   const boa = correr(l, inicio(l, "treino"), [...ate, jogou("f1b5")]).estado;
   assert.equal(boa.passo, 4, "a alternativa não anda: aqui se decora a linha do clube");
   assert.match(boa.cartao.comando, /Bom lance/);
-  assert.match(boa.cartao.estado, /não conta/);
+  assert.match(boa.cartao.estado, /é normal/);
 
   const armadilha = correr(l, inicio(l, "treino"), [...ate, jogou("b1c3")]).estado;
   assert.equal(armadilha.passo, 4);
@@ -586,7 +586,7 @@ test("o cartão em repouso é o único lugar em que treino e quiz diferem para o
   const treino = inicio(l, "treino").cartao;
   const quiz = inicio(l, "quiz").cartao;
   assert.equal(treino.comando, quiz.comando, "a instrução é a mesma");
-  assert.match(treino.estado, /não conta/);
+  assert.match(treino.estado, /é normal/);
   assert.match(quiz.estado, /de memória/);
 });
 

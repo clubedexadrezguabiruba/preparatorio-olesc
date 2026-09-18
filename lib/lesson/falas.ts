@@ -58,8 +58,14 @@ export const AVANCO = {
   paraAula: "Ver a técnica",
   /** Do fim da aula assistida para o treino. */
   paraTreino: "Agora é a sua vez",
-  /** Do fim do treino para a partida que vale. */
-  paraValendo: "Jogar valendo",
+  /**
+   * Do fim do treino para a partida que vale.
+   *
+   * Era "Jogar valendo" até 18/9/2026, quando "valendo" entrou na lista de
+   * palavras proibidas (`VOZ-DO-CURSO` §4.3). Aqui a etapa é a **partida** —
+   * contra o motor, do começo ao fim —, e é isso que o botão passa a dizer.
+   */
+  paraValendo: "Jogar a partida",
   /** Quando não há próxima etapa nomeada. */
   padrao: "Continuar",
 } as const;

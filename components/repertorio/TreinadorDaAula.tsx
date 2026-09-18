@@ -17,8 +17,8 @@ import { Passada } from "./Passada";
  * um só, dentro e fora da aula.
  *
  * **A etapa está feita quando cada linha teve uma passada nesta rodada.** Na primeira vez de uma
- * linha (`tentativas = 0`), ela começa assistida — seta, treino e valendo, como em `Treino.tsx`; da
- * segunda em diante, direto no valendo. Aprender de verdade (três acertos espaçados) continua sendo
+ * linha (`tentativas = 0`), ela começa assistida — seta, treino e memória, como em `Treino.tsx`; da
+ * segunda em diante, direto na de memória. Aprender de verdade (três acertos espaçados) continua sendo
  * trabalho de `/aberturas`, nos dias seguintes.
  *
  * As linhas chegam na ordem do estudo, que é a ordem de `linhas`.

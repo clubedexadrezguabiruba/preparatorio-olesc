@@ -1,5 +1,5 @@
 /**
- * As etapas de uma sessão, em barras com nome: `seta · treino · valendo` na
+ * As etapas de uma sessão, em barras com nome: `seta · treino · memória` na
  * abertura, `aquecimento · série · prova` na tática.
  *
  * Círculo é progresso de memória (as `Bolinhas` da revisão espaçada); **barra é

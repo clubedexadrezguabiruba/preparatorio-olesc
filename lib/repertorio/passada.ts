@@ -297,7 +297,7 @@ function emRepouso(linha: Linha, estado: EstadoDaPassada): Cartao {
 
   /*
    * Treino e quiz são iguais no tabuleiro — sem seta, sem comentário —, e o
-   * cartão é o único lugar em que a diferença chega ao aluno: "errar não conta"
+   * cartão é o único lugar em que a diferença chega ao aluno: "errar é normal"
    * de um lado, "de memória" do outro.
    *
    * **"Valendo" saiu em 18/9/2026, a pedido do Doug.** Era a palavra da casa
@@ -309,15 +309,15 @@ function emRepouso(linha: Linha, estado: EstadoDaPassada): Cartao {
    */
   const qual = linha.meus.indexOf(passo) + 1;
   if (modo === "treino" && estado.setaNoPasso === passo) {
-    return { comando: "Siga a seta", estado: `A seta mostra o lance. Lance ${qual} de ${linha.meus.length}; errar aqui não conta.`, tom: "calma" };
+    return { comando: "Siga a seta", estado: `A seta mostra o lance. Lance ${qual} de ${linha.meus.length}; errar é normal.`, tom: "calma" };
   }
   if (modo === "treino" && estado.errosNoLance >= 2 && estado.dicaNoPasso === passo) {
-    return { comando: "Jogue o lance certo", estado: "A casa acesa é a peça que joga. Errar aqui não conta.", tom: "calma" };
+    return { comando: "Jogue o lance certo", estado: "A casa acesa é a peça que joga. Errar é normal.", tom: "calma" };
   }
   return modo === "treino"
     ? {
         comando: "Jogue o lance certo",
-        estado: `Lance ${qual} de ${linha.meus.length}. Errar aqui não conta.`,
+        estado: `Lance ${qual} de ${linha.meus.length}, sem a seta. Errar não tem problema — é normal.`,
         tom: "calma",
       }
     : {
@@ -700,30 +700,30 @@ function jogou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
       erros >= 3
         ? {
             comando: "Siga a seta",
-            estado: "Três tentativas — a seta mostra o lance. Errar aqui não conta.",
+            estado: "Três tentativas — a seta mostra o lance. Errar é normal.",
             tom: "aviso",
           }
         : veredito === "erro-nomeado"
           ? {
               comando: `${jogadoEmPortugues} é a armadilha`,
-              estado: "Esse lance parece bom e não é. Errar aqui não conta — tente de novo.",
+              estado: "Esse lance parece bom e não é. Errar é normal — tente de novo.",
               tom: "aviso",
             }
           : veredito === "alternativa"
             ? {
                 comando: "Bom lance — mas não é o nosso",
-                estado: "Aqui você decora o lance do clube. Errar não conta — tente de novo.",
+                estado: "Aqui você decora o lance do clube. Errar é normal — tente de novo.",
                 tom: "aviso",
               }
             : erros === 2
               ? {
                   comando: "Não é esse",
-                  estado: "A casa acesa é a peça que joga. Errar aqui não conta.",
+                  estado: "A casa acesa é a peça que joga. Errar é normal.",
                   tom: "aviso",
                 }
               : {
                   comando: "Não é esse",
-                  estado: "Errar aqui não conta. Tente de novo.",
+                  estado: "Errar não tem problema — é normal. Tente de novo.",
                   tom: "aviso",
                 };
     const recusado = mostrar(linha, estado, cartao, null);

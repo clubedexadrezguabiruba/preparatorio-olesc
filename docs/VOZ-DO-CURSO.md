@@ -133,17 +133,22 @@ nenhum:** quem precisa deles os lê daqui.
 }
 ```
 
-A lista tem **duas metades e um propósito só**. As dez primeiras são jargão de
+A lista tem **duas metades e um propósito só**. As nove primeiras são jargão de
 bastidor — palavra nossa que vazou para a tela (§4). As seis últimas são o
 **português de manual de xadrez para adulto** (§4.2). A máquina não distingue as
-duas, e não precisa: as dezesseis têm em comum serem palavras que um professor
-não diria a uma criança de doze anos com o tabuleiro na frente.
+duas, e não precisa: as quinze têm em comum serem palavras que um professor não
+diria a uma criança de doze anos com o tabuleiro na frente.
 
-> **2026-09-18 — "valendo" entrou na lista, por decisão do Doug.** Eram quinze,
-> ficam dezesseis. Ela era palavra da casa desde 9/9 e estava na tela do
+> **2026-09-18 — "valendo" entrou na lista, por decisão do Doug.** Eram
+> quatorze, ficam quinze. Ela era palavra da casa desde 9/9 e estava na tela do
 > repertório em três lugares; a §4.3 conta por que saiu e o que entrou no lugar.
 > Nenhuma fala das dezesseis aulas publicadas a usava, então a trava entrou sem
-> reprovar conteúdo nenhum.
+> reprovar conteúdo nenhum — só o rótulo de um botão, `AVANCO.paraValendo`, que
+> a própria trava apontou e virou "Jogar a partida".
+>
+> O texto acima dizia "quinze" desde 15/9 com quatorze palavras na lista: o
+> parágrafo foi escrito contando a lista antiga e não acompanhou o corte. Agora
+> as duas contas batem — nove mais seis, quinze.
 
 > **2026-09-15 — cinco palavras saíram da lista, por decisão do Doug:**
 > **objetivo, método, avaliação, teoria e estrutura.** Eram vinte, ficam quinze.

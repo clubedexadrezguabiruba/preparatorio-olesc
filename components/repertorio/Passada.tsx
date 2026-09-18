@@ -31,7 +31,7 @@ import { FaixaDeSans, FitaDoBoletim } from "./FitaDeLances";
 import { OQueAindaFalta } from "./OQueFalta";
 
 /**
- * As três etapas de uma passada: `com a seta · sem a seta · de memória`.
+ * As três etapas de uma passada: `seta · treino · memória`.
  *
  * ## Por que a trilha existe, e é uma questão de não mentir
  *
@@ -49,9 +49,9 @@ import { OQueAindaFalta } from "./OQueFalta";
  *
  * ## Ela só aparece na primeira passada
  *
- * Da segunda em diante o aluno entra direto no "valendo" (`page.tsx` escolhe o
- * modo inicial por `tentativas === 0`), e uma trilha de três com duas etapas
- * apagadas para sempre prometeria um caminho que não existe mais.
+ * Da segunda em diante o aluno entra direto na etapa de memória (`page.tsx`
+ * escolhe o modo inicial por `tentativas === 0`), e uma trilha de três com duas
+ * etapas apagadas para sempre prometeria um caminho que não existe mais.
  */
 /*
  * **"Valendo" saiu em 18/9/2026, a pedido do Doug**, e com ele o "sem valer" do
@@ -64,8 +64,8 @@ import { OQueAindaFalta } from "./OQueFalta";
  */
 const ETAPAS_DA_PASSADA = [
   { nome: "seta", diz: "com a seta" },
-  { nome: "treino", diz: "sem a seta" },
-  { nome: "memoria", diz: "de memória" },
+  { nome: "treino", diz: "sem a seta, e errar não tem problema, é normal" },
+  { nome: "memória", diz: "de memória" },
 ] as const satisfies readonly EtapaDaTrilha[];
 
 /** Em que barra da trilha o modo corrente acende. */
