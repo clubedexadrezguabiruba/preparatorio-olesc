@@ -56,6 +56,11 @@ export type ProgressaoDaAulaDeAbertura = {
   marcarEtapa: (etapaId: string) => Promise<{ ok: true; concluida: boolean } | { ok: false; erro: string }>;
 };
 
+export type NavegacaoEntreAulas = {
+  anterior?: { href: string; titulo: string };
+  proxima?: { href: string; titulo: string };
+};
+
 /**
  * Orquestra a aula: qual etapa está aberta, o avanço entre elas e a montagem
  * do componente de cada uma. Toda a leitura de xadrez vem do arquivo da aula —
@@ -86,6 +91,8 @@ export function LessonPlayer(props: Parameters<typeof LessonPlayerV1>[0] | {
   voltar?: { href: string; rotulo: string };
   /** Só a aula de curso de abertura publicada, para o aluno. */
   progressao?: ProgressaoDaAulaDeAbertura;
+  /** Aula anterior e próxima no curso de finais. */
+  navegacaoEntreAulas?: NavegacaoEntreAulas;
 }) {
   // Fatia 10: x vira a vista e ? mostra os atalhos em toda etapa com tabuleiro.
   if ("aulaV2" in props) return <VistaDoTabuleiro escopos={["aluno-introducao", "aluno-capitulo", "aluno-treino", "aluno-pratica"]} camada={props.camadaDeAtalhos}><PlayerDoFluxoV2 {...props} /></VistaDoTabuleiro>;
@@ -645,7 +652,7 @@ function avancoPara(proxima: EtapaDoAlunoV2 | undefined, aulaId: string): string
  * do v1 — só sobe o que foi jogado, os lances, e quem julga é o servidor —, com a publicação,
  * a revisão e o id idempotente da tentativa junto.
  */
-function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEtapaFeita, aoSair, leitura, voltar, progressao }: {
+function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEtapaFeita, aoSair, leitura, voltar, progressao, navegacaoEntreAulas }: {
   aulaV2: AulaDoAlunoV2;
   revisao?: boolean;
   /** Com várias práticas, a que o cartão de revisão pediu (a entidade). Ausente: a primeira. */
@@ -656,6 +663,7 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
   aoSair?: () => void;
   voltar?: { href: string; rotulo: string };
   progressao?: ProgressaoDaAulaDeAbertura;
+  navegacaoEntreAulas?: NavegacaoEntreAulas;
 }) {
   // ---- curso de abertura: a rodada (regras 16 e 17) ---------------------------------------
   const [feitas, setFeitas] = useState<string[]>(() => progressao?.feitas ?? []);
@@ -978,6 +986,7 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
               />
             }
             saida={saida}
+            acoesDeConclusao={!proxima && navegacaoEntreAulas ? <BotoesEntreAulas navegacao={navegacaoEntreAulas} /> : undefined}
           />
         ) : null}
         </>}
@@ -991,6 +1000,32 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
         </footer>
       ) : null}
     </div>
+  );
+}
+
+/** As duas direções ficam juntas no desfecho; o centro continua voltando para `/finais`. */
+function BotoesEntreAulas({ navegacao }: { navegacao: NavegacaoEntreAulas }) {
+  return (
+    <>
+      {navegacao.anterior ? (
+        <Link
+          href={navegacao.anterior.href}
+          title={navegacao.anterior.titulo}
+          className="foco min-h-11 rounded-md px-4 py-2 text-sm font-medium text-tinta-media ring-1 ring-borda hover:bg-carta-alta"
+        >
+          ← Aula anterior
+        </Link>
+      ) : null}
+      {navegacao.proxima ? (
+        <Link
+          href={navegacao.proxima.href}
+          title={navegacao.proxima.titulo}
+          className="foco min-h-11 rounded-md bg-metodo-cheio px-4 py-2 text-sm font-medium text-tinta-inversa ring-1 ring-metodo/30 hover:bg-metodo-cheio-toque"
+        >
+          Próxima aula →
+        </Link>
+      ) : null}
+    </>
   );
 }
 

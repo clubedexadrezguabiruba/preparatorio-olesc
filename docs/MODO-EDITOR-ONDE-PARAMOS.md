@@ -7786,3 +7786,22 @@ apoio do treino 1, e o original repetia a posição da aula. (c) "tira g8" e "fe
 reforçado no título do capítulo 07, no mate do erro, no fim da defesa certa, no LEMBRE-SE, no TREINO 5 e na
 prática. Publicada `pub-61423f0c18fd49b0` com `REVISAO_PGN=dispensada` (só texto, pedido do Doug; os cinco
 revisores não rodaram de novo). `npm test` 1721/1721.
+
+## Progresso e navegação das aulas de finais — 18/9/2026
+
+O contador de `/finais` e os medalhões de `/trilha` confundiam **concluir uma aula** com
+**aprendê-la na revisão espaçada**. A primeira vitória era gravada e levava a escada ao degrau 1,
+mas a tela continuava em `0/6` até o degrau 3. Agora `ProgressoDaAula.concluida` registra, na leitura,
+uma primeira vitória em cada prática ativa; contador, próxima aula e mapa usam conclusão. Graus,
+revisões e fechamento do nível continuam usando `aprendeu`, sem reduzir os três dias.
+
+As Server Actions de tentativa invalidam `/finais` e `/trilha`, para a navegação seguinte não
+reaproveitar o payload prefetched anterior. O desfecho da última prática ganhou **Aula anterior** e
+**Próxima aula**, além de **Voltar às aulas**. A aula `N0-STALEMATE` trocou "tapar" por "cobrir"
+no balão do TREINO 1 e foi republicada como `pub-ca8b8581b0e94b4f`; ela também recebeu o rewind já
+vigente, reduzindo o menu de 16 para 11 etapas sem itens `Comparação:`.
+
+Evidência curta: `npm run typecheck`; `node --test lib/finais/trilha.test.ts lib/curso/mapa.test.ts`
+(35/35); publicação verde da `N0-STALEMATE` (0 erros, 4 avisos de desenho já conhecidos). A chamada
+acidental de `npm test -- --runInBand ...` rodou a suíte inteira por causa do script do projeto:
+1738/1739; a única falha era a expectativa antiga de `proximaAula`, corrigida e coberta no recorte verde.

@@ -60,6 +60,7 @@ export function PracticeStage({
   onFinish,
   finishLabel,
   saida,
+  acoesDeConclusao,
 }: {
   practiceKey: PracticeKey;
   /** A trilha das etapas, montada pelo `LessonPlayer` e servida no painel. */
@@ -79,6 +80,8 @@ export function PracticeStage({
    * tinha botão nenhum para voltar às aulas. Aparece com a partida decidida, ganha ou não.
    */
   saida?: { rotulo: string; acao: () => void };
+  /** Navegação entre aulas, mostrada somente depois que a partida termina. */
+  acoesDeConclusao?: ReactNode;
 }) {
   const state = useLessonStore((s) => s.practices[practiceKey]);
   const message = useLessonStore((s) => s.message);
@@ -457,6 +460,7 @@ export function PracticeStage({
                   {saida.rotulo}
                 </LessonButton>
               )}
+              {verdict.kind !== "playing" ? acoesDeConclusao : null}
             </AulaRodape>
           </>
         }

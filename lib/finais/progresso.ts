@@ -126,6 +126,8 @@ async function ler(aluno?: string): Promise<Map<string, Map<string, ProgressoDaA
       ...AULA_ZERADA,
       soloOk: linha.solo_ok === true,
       praticaOk: linha.pratica_ok === true,
+      // Nas aulas v1 há uma prática: a primeira vitória conclui a aula.
+      concluida: linha.pratica_ok === true,
       tentativas: linha.tentativas ?? 0,
       ultima: linha.ultima,
     });
@@ -193,6 +195,12 @@ async function ler(aluno?: string): Promise<Map<string, Map<string, ProgressoDaA
         aulas.set(aula, {
           ...(aulas.get(aula) ?? AULA_ZERADA),
           escada,
+          // Várias práticas: a aula conclui só depois de ao menos uma
+          // vitória em cada prática ativa. A escada continua independente.
+          concluida: (ativasV2.get(aula) ?? []).every((pratica) => {
+            const daPratica = porPratica.get(pratica.entidadeId);
+            return Boolean(daPratica && daPratica.tentativas > daPratica.erros);
+          }),
           ...(praticaParaRevisar ? { praticaParaRevisar } : {}),
         });
       }

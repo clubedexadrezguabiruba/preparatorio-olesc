@@ -336,6 +336,15 @@ export type ProgressoDaAula = {
   readonly soloOk: boolean;
   /** Alguma partida vencida, em algum dia. **Não é "aprendida"** — ver `escada`. */
   readonly praticaOk: boolean;
+  /**
+   * A aula foi concluída ao menos uma vez na versão ativa?
+   *
+   * É diferente de "aprendida": concluir pede uma primeira vitória em cada
+   * prática (ou marcar a aula sem prática como assistida); aprender continua
+   * pedindo os três dias da escada. A página e a trilha mostram conclusão,
+   * enquanto graus e fechamento do nível continuam mostrando memória.
+   */
+  readonly concluida: boolean;
   readonly tentativas: number;
   readonly lida: boolean;
   /** Quando foi a última tentativa nesta aula (ISO), ou `null`. */
@@ -359,6 +368,7 @@ export type ProgressoDaAula = {
 export const AULA_ZERADA: ProgressoDaAula = {
   soloOk: false,
   praticaOk: false,
+  concluida: false,
   tentativas: 0,
   lida: false,
   ultima: null,
@@ -410,6 +420,11 @@ export function aprendeu(temPratica: boolean, p: ProgressoDaAula): boolean {
   return aprendida(p.escada);
 }
 
+/** Terminou a aula ao menos uma vez, sem confundir conclusão com revisão espaçada. */
+export function concluiu(temPratica: boolean, p: ProgressoDaAula): boolean {
+  return temPratica ? p.concluida : p.lida;
+}
+
 export function estadoDaAula(temPratica: boolean, p: ProgressoDaAula): EstadoDeAula {
   if (aprendeu(temPratica, p)) return "aprendida";
   return p.tentativas > 0 ? "praticando" : "nao-comecou";
@@ -436,11 +451,26 @@ export function aprendidasDaTrilha(
   return feitas;
 }
 
+/** Os ids concluídos ao menos uma vez, para o contador e o caminho do curso. */
+export function concluidasDaTrilha(
+  aulas: readonly AulaDaTrilha[],
+  progresso: ReadonlyMap<string, ProgressoDaAula>,
+  comPratica: ReadonlySet<string>,
+): Set<string> {
+  const feitas = new Set<string>();
+  for (const aula of aulas) {
+    if (concluiu(comPratica.has(aula.id), progresso.get(aula.id) ?? AULA_ZERADA)) {
+      feitas.add(aula.id);
+    }
+  }
+  return feitas;
+}
+
 /**
- * A próxima aula a estudar: a primeira aberta que ainda não foi aprendida.
+ * A próxima aula a estudar: a primeira aberta que ainda não foi concluída.
  *
  * Na ordem da trilha, que é ordem de pré-requisito — não na ordem em que o
- * aluno abriu as abas. `undefined` quer dizer que ele aprendeu tudo o que está
+ * aluno abriu as abas. `undefined` quer dizer que ele concluiu tudo o que está
  * aberto, e o painel diz isso em vez de sugerir coisa nenhuma.
  */
 export function proximaAula(
@@ -449,6 +479,6 @@ export function proximaAula(
   comPratica: ReadonlySet<string>,
 ): AulaDaTrilha | undefined {
   return abertas.find(
-    (aula) => !aprendeu(comPratica.has(aula.id), progresso.get(aula.id) ?? AULA_ZERADA),
+    (aula) => !concluiu(comPratica.has(aula.id), progresso.get(aula.id) ?? AULA_ZERADA),
   );
 }

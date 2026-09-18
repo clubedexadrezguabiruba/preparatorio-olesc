@@ -8,16 +8,19 @@ Ordem: o de cima é o que o Doug quer primeiro, não o mais urgente.
 
 ---
 
-## 1. Republicar as 11 aulas de finais com o rewind — **o código está feito (18/9/2026)**
+## 1. Republicar as 10 aulas de finais restantes com o rewind — **o código está feito (18/9/2026)**
 
 A montagem e a fita foram feitas e commitadas em 18/9/2026 (`088bbd1`): a variante toca dentro do
 capítulo e a fita volta até a escolha. A história e os números estão no `MODO-EDITOR-ONDE-PARAMOS.md`, em
 "O rewind das comparações". Desde a mesma data, a regra vale também para as aulas de abertura (`AGENTS.md`,
 "Aula de abertura é direta"), que já foram republicadas.
 
-**O que falta:** republicar as 11 aulas de finais (`node scripts/publicar-aula-de-finais.ts <ID> <estudo.pgn>
+**O que falta:** republicar as 10 aulas de finais restantes (`node scripts/publicar-aula-de-finais.ts <ID> <estudo.pgn>
 --publicar`), medir no navegador e o Doug olhar a velocidade da fita (`RECUO` em `lib/lesson/roteiro.ts`).
 **Critério de aceite:** o menu "Etapas" de nenhuma aula de finais tem item começando com `Comparação:`.
+
+**Já republicada:** `N0-STALEMATE`, em 18/9/2026 (`pub-ca8b8581b0e94b4f`), junto da troca
+de "tapar" por "cobrir" no TREINO 1.
 
 ---
 

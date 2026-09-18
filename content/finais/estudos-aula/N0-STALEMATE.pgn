@@ -133,7 +133,7 @@ No fim, você evita o afogamento quando ganha e procura o afogamento quando perd
 [ChapterMode "gamebook"]
 
 { O rei preto em a8 não tem casa, e o bispo em b8 não pode andar. Dê mate em um lance. } { [%csl Ya8,Yb8] }
-2. Qh1# { Mate! A dama dá xeque na diagonal, e o bispo não consegue tapar. } { [%cal Gh1a8] } ( 2. Ka6?? { O rei em a6 não dá xeque, e as pretas ficam sem lance. Afogamento: empate. } ) ( 2. Qc8?? { A dama segue prendendo o bispo, mas sem xeque. As pretas ficam sem lance: afogamento. } ) ( 2. Qg8?? { A dama segue prendendo o bispo, mas sem xeque. As pretas ficam sem lance: afogamento. } ) ( 2. Qxb8+?? { A dama come o bispo, e o rei preto come a dama. Só sobram os reis: empate. } ) *
+2. Qh1# { Mate! A dama dá xeque na diagonal, e o bispo não consegue cobrir. } { [%cal Gh1a8] } ( 2. Ka6?? { O rei em a6 não dá xeque, e as pretas ficam sem lance. Afogamento: empate. } ) ( 2. Qc8?? { A dama segue prendendo o bispo, mas sem xeque. As pretas ficam sem lance: afogamento. } ) ( 2. Qg8?? { A dama segue prendendo o bispo, mas sem xeque. As pretas ficam sem lance: afogamento. } ) ( 2. Qxb8+?? { A dama come o bispo, e o rei preto come a dama. Só sobram os reis: empate. } ) *
 
 [Event "Aula 5 - Afogamento"]
 [White "Aluno - Brancas"]

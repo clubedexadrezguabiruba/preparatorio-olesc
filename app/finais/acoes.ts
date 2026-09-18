@@ -21,7 +21,10 @@ export type { TentativaDeAula } from "@/lib/finais/gravar";
  */
 export async function registrarEtapa(tentativa: TentativaDeAula): Promise<ResultadoDeAula> {
   const perfil = await perfilAtual();
-  return gravarTentativaDeAula(perfil.id, tentativa);
+  const resultado = await gravarTentativaDeAula(perfil.id, tentativa);
+  revalidatePath("/finais");
+  revalidatePath("/trilha");
+  return resultado;
 }
 
 /**
@@ -31,7 +34,10 @@ export async function registrarEtapa(tentativa: TentativaDeAula): Promise<Result
  */
 export async function registrarEtapaV2(tentativa: TentativaDeAulaV2): Promise<ResultadoDeAulaV2> {
   const perfil = await perfilAtual();
-  return gravarTentativaV2NoBanco(perfil.id, tentativa);
+  const resultado = await gravarTentativaV2NoBanco(perfil.id, tentativa);
+  revalidatePath("/finais");
+  revalidatePath("/trilha");
+  return resultado;
 }
 
 /**
@@ -68,6 +74,7 @@ export async function marcarLeitura(aula: string, lida: boolean): Promise<void> 
   }
 
   revalidatePath("/finais");
+  revalidatePath("/trilha");
 }
 
 /**

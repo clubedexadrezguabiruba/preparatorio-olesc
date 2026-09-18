@@ -19,7 +19,7 @@ import { progressoDeFinais } from "@/lib/finais/progresso";
 import {
   AULA_ZERADA,
   aulasAbertas,
-  aprendidasDaTrilha,
+  concluidasDaTrilha,
   proximaAula,
   trilhaCompleta,
 } from "@/lib/finais/trilha";
@@ -95,7 +95,7 @@ export default async function Finais() {
     nivelAberto(a.nivel, { papel: perfil.papel, nivelDoAluno: aqui }),
   );
   const pronto = prontoParaProva(estado);
-  const feitas = aprendidasDaTrilha(abertas, progresso, comPratica);
+  const feitas = concluidasDaTrilha(abertas, progresso, comPratica);
   const proxima = proximaAula(abertas, progresso, comPratica);
 
   const mapa = montarMapa({
@@ -174,11 +174,11 @@ export default async function Finais() {
             <p className="text-xs text-tinta-fraca">
               {feitas.size === 0
                 ? acao === "Começar"
-                  ? "Nenhuma aprendida ainda. Comece pela primeira!"
-                  : "Nenhuma aprendida ainda."
+                  ? "Nenhuma concluída ainda. Comece pela primeira!"
+                  : "Nenhuma concluída ainda."
                 : feitas.size === 1
-                  ? "Aula aprendida."
-                  : "Aulas aprendidas."}
+                  ? "Aula concluída."
+                  : "Aulas concluídas."}
             </p>
           </>
         ) : (

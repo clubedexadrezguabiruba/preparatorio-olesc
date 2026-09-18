@@ -5,8 +5,8 @@ import { perfilAtual } from "@/lib/auth/perfil";
 import { nivelAberto } from "@/lib/curso/liberado";
 import { nivelDoAluno as nivelDoAlunoDe } from "@/lib/curso/nivel";
 import { nivelConquistado } from "@/lib/curso/progresso";
-import { idsDeAula, lerPacoteDoAluno, aulasExtras } from "@/lib/finais/conteudo";
-import { aulaDaTrilha } from "@/lib/finais/trilha";
+import { idsDeAula, lerPacoteDoAluno, aulasExtras, aulasPublicadas } from "@/lib/finais/conteudo";
+import { aulaDaTrilha, aulasAbertas } from "@/lib/finais/trilha";
 import { AulaNoNavegador } from "./AulaNoNavegador";
 import { Leitura } from "./Leitura";
 
@@ -53,6 +53,15 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
   const doAluno = lerPacoteDoAluno(aula);
   if (!doAluno) notFound();
 
+  const abertas = aulasAbertas(aulasPublicadas(), aulasExtras());
+  const indiceDaAula = abertas.findIndex((item) => item.id === aula);
+  const anterior = indiceDaAula > 0 ? abertas[indiceDaAula - 1] : undefined;
+  const proxima = indiceDaAula >= 0 ? abertas[indiceDaAula + 1] : undefined;
+  const navegacaoEntreAulas = {
+    ...(anterior ? { anterior: { href: `/finais/${anterior.id}`, titulo: anterior.nome } } : {}),
+    ...(proxima ? { proxima: { href: `/finais/${proxima.id}`, titulo: proxima.nome } } : {}),
+  };
+
   // Só o nível liberado abre (`lib/curso/liberado.ts`); o professor entra em tudo. O nível 1 abre
   // para todos e não lê a sessão — as aulas dele continuam pré-montadas no build.
   const nivel = aulaDaTrilha(aula, aulasExtras())?.nivel;
@@ -74,7 +83,7 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
     return (
       <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-3 px-4 py-4 sm:px-5 lg:max-w-343 lg:py-5">
         <Suspense fallback={null}>
-          <AulaNoNavegador aulaV2={doAluno.aula} leitura={semPratica && naTrilhaV2 ? <Leitura key="leitura" aula={aula} /> : undefined} />
+          <AulaNoNavegador aulaV2={doAluno.aula} leitura={semPratica && naTrilhaV2 ? <Leitura key="leitura" aula={aula} /> : undefined} navegacaoEntreAulas={navegacaoEntreAulas} />
         </Suspense>
       </main>
     );
@@ -123,6 +132,7 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
         <AulaNoNavegador
           pacote={pacote}
           leitura={deLeitura ? <Leitura key="leitura" aula={aula} /> : undefined}
+          navegacaoEntreAulas={navegacaoEntreAulas}
         />
       </Suspense>
     </main>

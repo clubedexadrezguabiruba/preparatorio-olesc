@@ -7,6 +7,8 @@ import { depoisDaPassada, juntarEscadas, vencida, zerada } from "./escada.ts";
 import {
   aprendeu,
   aprendidasDaTrilha,
+  concluiu,
+  concluidasDaTrilha,
   aulaDaTrilha,
   aulasAbertas,
   AULA_ZERADA,
@@ -193,6 +195,13 @@ test("uma vitória não aprende a aula: o degrau 1 é só o começo da escada", 
   assert.equal(aprendeu(COM_PRATICA, noDegrau(3)), true);
 });
 
+test("uma primeira vitória conclui a aula sem antecipar o aprendizado", () => {
+  const primeira = noDegrau(1);
+  const concluida = { ...primeira, concluida: true };
+  assert.equal(concluiu(COM_PRATICA, concluida), true);
+  assert.equal(aprendeu(COM_PRATICA, concluida), false);
+});
+
 test("`praticaOk` sozinho não aprende nada — ele é histórico, não critério", () => {
   // A coluna continua no banco com as linhas antigas dos alunos, e continua no
   // tipo. O que ela deixou de fazer é decidir.
@@ -288,15 +297,23 @@ test("aprendidasDaTrilha conta só entre as aulas dadas", () => {
   assert.deepEqual([...aprendidasDaTrilha(abertas, mapa, TODAS_COM_PRATICA)], ["N0-R-MATE"]);
 });
 
+test("concluidasDaTrilha alimenta o contador logo na primeira conclusão", () => {
+  const abertas = aulasAbertas(new Set(["N0-Q-MATE", "N0-R-MATE"]));
+  const mapa = new Map<string, ProgressoDaAula>([
+    ["N0-Q-MATE", { ...noDegrau(1), concluida: true }],
+  ]);
+  assert.deepEqual([...concluidasDaTrilha(abertas, mapa, TODAS_COM_PRATICA)], ["N0-Q-MATE"]);
+});
+
 test("a próxima aula é a primeira aberta que falta, na ordem da trilha", () => {
   const abertas = aulasAbertas(new Set(["N0-Q-MATE", "N0-R-MATE"]));
-  const mapa = new Map<string, ProgressoDaAula>([["N0-Q-MATE", noDegrau(3)]]);
+  const mapa = new Map<string, ProgressoDaAula>([["N0-Q-MATE", { ...noDegrau(3), concluida: true }]]);
   assert.equal(proximaAula(abertas, mapa, TODAS_COM_PRATICA)?.id, "N0-R-MATE");
 
-  // Uma vitória não basta: a aula continua sendo a próxima até o degrau 3.
-  mapa.set("N0-R-MATE", noDegrau(1));
-  assert.equal(proximaAula(abertas, mapa, TODAS_COM_PRATICA)?.id, "N0-R-MATE");
+  // A primeira conclusão já leva o aluno à aula seguinte; aprender continua no degrau 3.
+  mapa.set("N0-R-MATE", { ...noDegrau(1), concluida: true });
+  assert.equal(proximaAula(abertas, mapa, TODAS_COM_PRATICA), undefined);
 
-  mapa.set("N0-R-MATE", noDegrau(3));
+  mapa.set("N0-R-MATE", { ...noDegrau(3), concluida: true });
   assert.equal(proximaAula(abertas, mapa, TODAS_COM_PRATICA), undefined);
 });

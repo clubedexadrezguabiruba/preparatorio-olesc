@@ -1,4 +1,4 @@
-import { aprendeu, trilhaCompleta, type AulaDaTrilha, type ProgressoDaAula } from "../finais/trilha.ts";
+import { concluiu, trilhaCompleta, type AulaDaTrilha, type ProgressoDaAula } from "../finais/trilha.ts";
 import { BLOCOS, contaNoCurso } from "../tatica/blocos.ts";
 import type { EstadoDoTema } from "../tatica/ordem.ts";
 import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
@@ -160,7 +160,9 @@ export function montarMapa(p: ProgressoParaOMapa): Map<Nivel, ModuloDoNivel[]> {
       nome: aula.nome,
       href: `/finais/${aula.id}`,
       total: 1,
-      feitos: progresso && aprendeu(p.aulasComPratica.has(aula.id), progresso) ? 1 : 0,
+      // O caminho mostra que a aula foi concluída; o grau continua mostrando
+      // a revisão espaçada e o fechamento do nível continua usando `aprendeu`.
+      feitos: progresso && concluiu(p.aulasComPratica.has(aula.id), progresso) ? 1 : 0,
       situacao: situacaoDoItem(aula.nivel, p.nivelDoAluno, p.aulasPublicadas.has(aula.id), p.papel),
       nivel: aula.nivel,
     });
