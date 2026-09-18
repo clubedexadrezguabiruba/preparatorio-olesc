@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    "Preparatório de torneio para a 25ª OLESC: tática, repertório e o ofício de jogar.",
+    "Clube de Xadrez Guabiruba (CXG) — preparatório de torneio para a 25ª OLESC: tática, repertório e o ofício de jogar.",
 };
 
 export const viewport: Viewport = {

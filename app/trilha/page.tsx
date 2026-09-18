@@ -176,7 +176,7 @@ export default async function Trilha() {
                   id={`nivel-${nivel}`}
                   aria-labelledby={`titulo-nivel-${nivel}`}
                   aria-current={aqui === nivel ? "step" : undefined}
-                  className="flex scroll-mt-6 flex-col gap-4"
+                  className="flex scroll-mt-20 flex-col gap-4"
                 >
                   <FaixaDoNivel
                     nivel={nivel}
@@ -205,7 +205,7 @@ export default async function Trilha() {
             })}
           </div>
 
-          <aside className="hidden flex-col gap-6 lg:sticky lg:top-16 lg:flex">
+          <aside className="hidden flex-col gap-6 lg:sticky lg:top-20 lg:flex">
             <Escada aqui={aqui} conquistado={conquistado} />
           </aside>
         </div>

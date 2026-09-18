@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Avatar } from "@/components/avatar/Avatares";
 import { perfilAtual } from "@/lib/auth/perfil";
@@ -142,13 +143,29 @@ export async function Cabecalho({
   return (
     <>
       {/* ------------------------------------------------------------------ *
-       * O topo. `h-11` são os 44 px medidos, e ele é `sticky` porque o nível
-       * é a informação que o aluno mais reprocura enquanto rola.
+       * O topo, numa linha só de 56 px (`h-14`), `sticky` porque o nível é a
+       * informação que o aluno mais reprocura enquanto rola.
+       *
+       * A marca do clube (18/9/2026): o cavalo do logo — o logo inteiro fica
+       * ilegível nesta altura — e o nome. **Por extenso no celular, a sigla CXG
+       * no desktop**, decisão do Doug: no desktop a navegação mora ao lado, e
+       * numa página de 672 px o nome inteiro a fazia quebrar e vazar. Ele
+       * provou e recusou o topo em dois andares. No celular a navegação está
+       * embaixo, e o nome cabe em duas linhas.
        * ------------------------------------------------------------------ */}
       <header className="sticky top-0 z-30 border-b border-borda-fraca bg-papel/95 backdrop-blur">
-        <div className={`mx-auto flex h-11 w-full items-center gap-4 px-5 ${REGUA[largura]}`}>
-          <Link href="/painel" className="foco rotulo shrink-0 text-metodo-tinta">
-            OLESC
+        <div className={`mx-auto flex h-14 w-full items-center gap-4 px-5 ${REGUA[largura]}`}>
+          <Link
+            href="/painel"
+            aria-label="Clube de Xadrez Guabiruba — painel"
+            title="Clube de Xadrez Guabiruba"
+            className="foco flex min-w-0 items-center gap-2 sm:shrink-0"
+          >
+            <Image src="/cxg-cavalo.webp" alt="" width={32} height={40} className="shrink-0" />
+            <span className="font-serif text-sm leading-tight font-semibold text-balance text-tinta min-[360px]:text-base sm:hidden">
+              Clube de Xadrez Guabiruba
+            </span>
+            <span className="rotulo hidden text-metodo-tinta sm:inline">CXG</span>
           </Link>
 
           {/* A navegação inteira, só no desktop: lá cabe, e uma barra embaixo
@@ -173,7 +190,7 @@ export async function Cabecalho({
             </ul>
           </nav>
 
-          <div className="ml-auto flex min-w-0 shrink-0 items-center gap-3 text-xs tabular-nums">
+          <div className="ml-auto flex shrink-0 items-center gap-3 text-xs tabular-nums">
             <span className="text-tinta-media">Nível {nivel}</span>
             {sequencia > 0 ? (
               <span className="text-metodo-tinta" title={`${sequencia} dias seguidos de treino`}>
@@ -187,7 +204,7 @@ export async function Cabecalho({
               title={perfil.nome}
               className={`foco shrink-0 rounded-full ${atual === "perfil" ? "ring-2 ring-metodo-cheio" : ""}`}
             >
-              <Avatar id={perfil.avatar} tamanho={28} decorativo />
+              <Avatar id={perfil.avatar} tamanho={32} decorativo />
             </Link>
           </div>
         </div>
