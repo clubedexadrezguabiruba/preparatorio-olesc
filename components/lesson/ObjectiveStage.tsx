@@ -16,6 +16,11 @@ import { montarQuadros, pausaDoPasso, RECUO, type PassoDoQuadro } from "@/lib/le
 import type { ObjectiveStage as ObjectiveStageData, Position } from "@/lib/lesson/schema";
 import { playForMove } from "@/lib/sound";
 
+/** O passo do "Pular" com perguntas: a fala entra inteira e o tabuleiro anda neste compasso. */
+const DEPRESSA_MS = 350;
+/** Quanto a pergunta espera o lance do passo chegar antes de o treino abrir. */
+const ESPERA_DO_LANCE_ANTES_DA_PERGUNTA_MS = 700;
+
 /**
  * Etapa 1 — **a aula assistida**: o tabuleiro toca sozinho e o professor
  * comenta, um passo por vez.
@@ -93,7 +98,29 @@ export function ObjectiveStage({
   aoTerminar,
   aoContinuar,
   rotulo,
+  paradaNoPasso,
+  aoParar,
+  somNoInicio = true,
+  depressa = false,
 }: {
+  /**
+   * **A aula de abertura (Doug, 18/9/2026).** Este passo é uma pergunta que o aluno joga na mesma
+   * tela: o relógio não anda, o Espaço não conta, e quando a fala da pergunta termina de entrar
+   * (e o lance do passo, se houver, termina de andar) o player chama `aoParar` — quem troca o
+   * tabuleiro pelo treino é o pai.
+   */
+  paradaNoPasso?: (passo: number) => boolean;
+  aoParar?: (passo: number) => void;
+  /**
+   * O som do lance do passo em que o player abre. Falso quando ele volta depois de uma pergunta: o
+   * lance-resposta já soou na mão do aluno, e soar de novo diria que foi jogado duas vezes.
+   */
+  somNoInicio?: boolean;
+  /**
+   * **"Pular" da 2ª vez em diante, num capítulo com perguntas (Doug, 18/9/2026):** a fala entra
+   * inteira e o passo anda depressa, mas as perguntas continuam — o aluno ainda joga os lances.
+   */
+  depressa?: boolean;
   /**
    * **A aula v2 do aluno.** O que o Espaço faz quando o capítulo acabou: o mesmo que o botão de
    * seguir do rodapé. Ausente, o Espaço no fim não faz nada.
@@ -231,6 +258,8 @@ export function ObjectiveStage({
   /** A fita voltando até o ponto de escolha (aula v2, 18/9/2026): rápido, mudo e sem desenho. */
   const recuando = Boolean((atual as PassoDoQuadro).recuo);
   const ultimo = passo >= stage.roteiro.length - 1;
+  /** A pergunta deste passo, que o aluno joga (curso de abertura): o relógio para, e o pai assume. */
+  const perguntando = Boolean(paradaNoPasso?.(passo));
 
   const comentario = useComentarioPaginado(atual.fala);
   const { digitando, naUltima } = comentario;
@@ -269,11 +298,14 @@ export function ObjectiveStage({
   /** O relógio: a fala acaba, o aluno lê, e o próximo passo entra. */
   useEffect(() => {
     if (!tocando || digitando) return;
+    if (perguntando) return;
     if (ultimo && naUltima) return;
     // Na prévia o relógio é o de §15.2: a leitura fica intacta, o intervalo obedece à
     // velocidade, e `null` é a pausa manual — que não anda até o professor mandar.
     // A fita voltando tem relógio próprio, curto e fixo: não há fala para ler (18/9/2026).
-    const espera = recuando ? RECUO.msPorLance : previa ? previa.relogio(passo) : relogioDoPasso ? relogioDoPasso(passo) : pausaDoPasso(atual);
+    const normal = recuando ? RECUO.msPorLance : previa ? previa.relogio(passo) : relogioDoPasso ? relogioDoPasso(passo) : pausaDoPasso(atual);
+    // Depressa (o "Pular" com perguntas), até a pausa manual anda: o aluno já leu esta aula uma vez.
+    const espera = depressa ? Math.min(DEPRESSA_MS, normal ?? DEPRESSA_MS) : normal;
     if (espera === null) return;
     const relogio = setTimeout(() => {
       // Página antes de passo: uma fala partida é lida inteira, e só então o
@@ -282,7 +314,28 @@ export function ObjectiveStage({
       else setPasso((p) => Math.min(p + 1, stage.roteiro.length - 1));
     }, espera);
     return () => clearTimeout(relogio);
-  }, [tocando, digitando, naUltima, ultimo, atual, passo, previa, relogioDoPasso, stage.roteiro.length, recuando]);
+  }, [tocando, digitando, naUltima, ultimo, atual, passo, previa, relogioDoPasso, stage.roteiro.length, recuando, perguntando, depressa]);
+
+  /** Depressa, a fala entra inteira de uma vez, sem a digitação. */
+  useEffect(() => {
+    if (depressa && digitando) comentarioRef.current.completar();
+  }, [depressa, digitando, passo]);
+
+  /**
+   * A pergunta: quando a fala dela terminou de entrar, o pai troca o tabuleiro pelo treino. Se o
+   * passo trouxe lance (a pergunta sem fala antes), espera a peça chegar — senão o aluno veria o
+   * treino abrir numa posição que ainda não viu nascer.
+   */
+  const aoPararRef = useRef(aoParar);
+  useEffect(() => {
+    aoPararRef.current = aoParar;
+  });
+  useEffect(() => {
+    if (!perguntando || digitando || !tocando) return;
+    const espera = quadros[passo]?.lastMove && passo > 0 ? ESPERA_DO_LANCE_ANTES_DA_PERGUNTA_MS : 0;
+    const relogio = setTimeout(() => aoPararRef.current?.(passo), espera);
+    return () => clearTimeout(relogio);
+  }, [perguntando, digitando, tocando, passo, quadros]);
 
   /**
    * O som do lance, por passo.
@@ -291,10 +344,13 @@ export function ObjectiveStage({
    * primeira vez. O passo que não move peça (`lastMove` nulo) é mudo — não há
    * lance para soar.
    */
+  const passoSemSom = useRef(somNoInicio ? -1 : passo);
   useEffect(() => {
     const q = quadros[passo];
     // A fita voltando é muda: o som diria que um lance foi jogado.
     if (!q?.lastMove || (stage.roteiro[passo] as PassoDoQuadro | undefined)?.recuo) return;
+    // O passo de reabertura depois de uma pergunta: o lance já soou quando o aluno o jogou.
+    if (passoSemSom.current === passo) { passoSemSom.current = -1; return; }
     playForMove({ capture: q.capture, check: q.check });
   }, [passo, quadros, stage.roteiro]);
 
@@ -328,7 +384,7 @@ export function ObjectiveStage({
   );
 
   /** O passo de pausa manual da aula v2: o relógio não anda, e quem anda é o aluno. */
-  const pausaManual = Boolean(relogioDoPasso && !previa && !terminou && relogioDoPasso(passo) === null && !digitando);
+  const pausaManual = Boolean(relogioDoPasso && !previa && !terminou && !perguntando && !depressa && relogioDoPasso(passo) === null && !digitando);
   const continuar = () => {
     if (!comentarioRef.current.naUltima) comentarioRef.current.virar();
     else setPasso((p) => Math.min(p + 1, stage.roteiro.length - 1));
@@ -348,14 +404,18 @@ export function ObjectiveStage({
    * devolver `false` deixa o gesto com ele e evita o clique duplo.
    */
   const aoContinuarRef = useRef(aoContinuar);
+  const perguntandoRef = useRef(perguntando);
   useEffect(() => {
     aoContinuarRef.current = aoContinuar;
+    perguntandoRef.current = perguntando;
   });
   useAtalho(
     "aluno-continuar",
     () => {
       const foco = typeof document !== "undefined" ? document.activeElement : null;
       if (focoEmControle(foco)) return false;
+      // Na pergunta, quem anda é o lance do aluno, e não o Espaço.
+      if (perguntandoRef.current) return;
       const fala = comentarioRef.current;
       if (fala.digitando) {
         fala.completar();
@@ -377,7 +437,7 @@ export function ObjectiveStage({
     },
     { ativo: !previa && !edicaoDaFala && !marcacao },
   );
-  const aceitaEspaco = !previa && !edicaoDaFala && !marcacao && (pausaManual || (terminou && Boolean(aoContinuar)));
+  const aceitaEspaco = !previa && !edicaoDaFala && !marcacao && !perguntando && (pausaManual || (terminou && Boolean(aoContinuar)));
 
   const irPara = (n: number) => {
     setPasso(Math.min(Math.max(n, 0), stage.roteiro.length - 1));
@@ -443,7 +503,7 @@ export function ObjectiveStage({
                   <LessonButton variant="primary" onClick={continuar}>
                     Continuar
                   </LessonButton>
-                ) : !terminou && (
+                ) : !terminou && !perguntando && (
                   <LessonButton onClick={() => setTocando((t) => !t)}>
                     {tocando ? "Pausar" : "Continuar"}
                   </LessonButton>

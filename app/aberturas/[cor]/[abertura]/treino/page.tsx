@@ -199,7 +199,7 @@ function Moldura({ nome, voltar, children }: { nome: string; voltar: string; chi
         <Link href={voltar} className="foco rotulo text-metodo-tinta hover:underline">
           ← {nome}
         </Link>
-        <h1 className="text-sm font-medium text-tinta-media">Move trainer</h1>
+        <h1 className="text-sm font-medium text-tinta-media">Treinador de lances</h1>
       </header>
       {children}
     </main>

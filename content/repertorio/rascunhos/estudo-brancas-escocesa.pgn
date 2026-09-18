@@ -1,0 +1,464 @@
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "1"]
+[White "00"]
+[Black "Conheça a Escocesa: abrir o centro cedo"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [SECAO] Conheça a Escocesa | abrir o centro cedo [OBJETIVO] Entender a ideia da Escocesa: abrir o centro no terceiro lance e pôr o cavalo em d4. } 1. e4 { Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama. } 1... e5 2. Nf3 { O cavalo ataca o peão de e5 e prepara o roque. } 2... Nc6 { As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5. } 3. d4 $1 { Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. [ENTENDER] Este é o lance da Escocesa. } 3... exd4 { O caminho mais comum: as Pretas trocam o peão. } 4. Nxd4 { [ENTENDER] O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. [RESUMO] 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio. [PROXIMO] Agora, a nossa arma, lance a lance. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "2"]
+[White "A00"]
+[Black "Nossa arma: 3.d4 e o cavalo em d4"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [SECAO] Nossa arma | 3.d4 e 4.Cxd4 [OBJETIVO] Jogar os dois lances da nossa arma: 3.d4 e 4.Cxd4. } 1. e4 e5 2. Nf3 Nc6 { O cavalo preto defende e5. [PERGUNTA] Qual peão abre o centro agora? [DICA] O peão da dama anda duas casas. } 3. d4 $1 { Isso: 3.d4. Batemos em e5 mesmo defendido, para abrir o jogo cedo. } 3... exd4 { [PERGUNTA] As Pretas trocaram. Qual peça recaptura? [DICA] A peça que já está de olho em d4. } 4. Nxd4 { Isso: o cavalo toma e fica no centro. [MEMORIZAR] 3.d4 e 4.Cxd4. [RESUMO] Dois lances e estamos na Escocesa. [PROXIMO] Agora, onde cada peça vai morar. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "3"]
+[White "A01"]
+[Black "Nosso plano: Cc3, bispo, roque grande"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [SECAO] Nosso plano | Cc3, bispo e roque grande [OBJETIVO] Montar o esquema: Cc3, bispo em f4, roque grande e f3. [ENTENDER] A resposta mais comum é trocar os cavalos. A nossa dama recaptura e fica no centro, mirando g7. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4? 5. Qxd4 5... d6 { [PERGUNTA] Qual peça defende e4 e sai da fileira de trás? [DICA] O cavalo da ala da dama. } 6. Nc3 { Isso: o cavalo defende e4 e abre caminho para o roque grande. } 6... Nf6 { [PERGUNTA] Qual bispo sai e mira o peão de d6? [DICA] O bispo de casas escuras. } 7. Bf4 $1 { Isso: o bispo mira d6 e libera c1 para o rei. } 7... Be7 { [PERGUNTA] Rei no centro ainda. Para que lado ele vai? [DICA] O lado onde já não há peças. } 8. O-O-O { [ESQUEMA] Roque grande: a torre cai na coluna d, na frente do peão de d6. } 8... O-O 9. f3 { [PLANO] O f3 guarda e4 para sempre e prepara g4. [RESUMO] Cc3, Bf4, roque grande e f3. [PROXIMO] No próximo bloco: os erros das Pretas e como puni-los. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "5"]
+[White "B03"]
+[Black "Golpe 1 — cavalo em f6 cedo? Jogue e5"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [SECAO] Erros e armadilhas | como punir [OBJETIVO] Punir 5...Cf6?: o peão vai a e5 e o cavalo fica sem casa boa. [REFERENCIA] Grigoryan ('Scotch Game + Homework'): 5...Cf6? 6.e5!. As continuações são do Stockfish 18, profundidade 20, em 18/9/2026: 6...Ch5 7.g4 +3,54; 6...Cg8 7.Bf4 +1,70; 6...De7 7.Be3 +2,36; 6...c5 7.De3 +1,67. No banco do Lichess (1000–1800), 5...Cf6 é 8% das partidas depois de 3.d4. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4? 5. Qxd4 5... Nf6? { [ERRO COMUM] O cavalo ataca e4, mas o peão de d7 ainda não saiu. [PERGUNTA] Qual lance ataca o cavalo? [DICA] Um peão avança. } 6. e5! { [PUNICAO] Isso: o cavalo tem de fugir, e não há casa boa. } 6... Nh5? { [PERGUNTA] O cavalo foi para a borda. Como prendê-lo? [DICA] Um peão da ala do rei. } ( 6... Ng8 { O cavalo volta para casa. Perdeu dois lances. } 7. Bf4 { Desenvolvemos com calma. Estamos bem à frente. } ) ( 6... Qe7?! { A dama segura o cavalo pelo ataque em e5. } 7. Be3 { Desenvolvemos. O cavalo continua sem casa. } ) ( 6... c5 { O peão ataca a nossa dama. } 7. Qe3 { A dama vai para e3 e continua de olho em e5. } ) 7. g4! { [GOLPE] O cavalo em h5 não tem para onde ir. [MEMORIZAR] Cavalo em f6 sem apoio: e5. [RESUMO] ...Cf6? cedo: 6.e5!. Se ...Ch5: 7.g4!. [PROXIMO] Outro golpe com a dama em d4: o peão de g7. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "6"]
+[White "B04"]
+[Black "Golpe 2 — ...b6 e ...Bc5? A dama toma g7"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Punir 5...b6 e 6...Bc5?: a dama toma g7. [REFERENCIA] Stockfish 18, profundidade 20, em 18/9/2026: 7.Dxg7 +2,28. No banco do Lichess (1000–1800), as Brancas fazem 62% depois de 6...Bc5. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4? 5. Qxd4 5... b6?! { O bispo quer sair por b7. } 6. Nc3 { Desenvolvemos e defendemos e4. } 6... Bc5? { [ARMADILHA] O bispo ataca a nossa dama. [PERGUNTA] A dama foge para onde? [DICA] Onde ela ganha um peão e ataca a torre. } 7. Qxg7! { [PUNICAO] Isso: a dama toma g7 e ataca a torre de h8. } 7... Qf6 8. Qxf6 Nxf6 9. Bg5 { Trocamos as damas com um peão a mais, e o bispo prega o cavalo. [RESUMO] Bispo em c5 atacando a dama? Olhe o peão de g7. [PROXIMO] Agora, quando as Pretas não trocam em d4. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "7"]
+[White "B05"]
+[Black "Golpe 3 — 3...Cf6? e a dama em d5"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Punir 3...Cf6?: tomar e5 e usar o bispo e a dama contra f7. [REFERENCIA] Krikor (curso 2025): 3...Cf6? 4.dxe5! Cxe4 5.Bc4!; contra 5...d6, 6.Bxf7+! (6.Dd5? Be6!); contra 5...Cc5, 6.Cc3 (6.De2!?). Contra 5...Bc5, 6.Dd5! é do Stockfish 18, profundidade 20, em 18/9/2026 (+3,31). } 1. e4 e5 2. Nf3 Nc6 3. d4 3... Nf6? { [ERRO COMUM] O cavalo ataca e4, mas deixa e5 sem defesa. [PERGUNTA] Qual peão pode ser tomado? [DICA] O nosso peão de d4 toma. } 4. dxe5! { Isso: tomamos e5. } 4... Nxe4 { O cavalo pega o nosso peão de volta. } 5. Bc4! { O bispo mira f7. A ameaça é a dama em d5. } 5... Bc5? { [ARMADILHA] O bispo também mira f7. [PERGUNTA] Qual lance ataca f7 e o cavalo de uma vez? [DICA] A dama vai ao centro. } ( 5... d6 { O peão abre caminho para o bispo, mas f7 fica sem defesa. } 6. Bxf7+! ( 6. Qd5? Be6! { Aqui o bispo defende. } ) 6... Kxf7 7. Qd5+ Be6 8. Qxe4 { Recuperamos a peça, e o rei preto ficou sem roque. } ) ( 5... Nc5 6. Nc3 ( 6. Qe2!? ) ) 6. Qd5! { [GOLPE] A dama ataca f7 e o cavalo de e4 ao mesmo tempo. } 6... Bxf2+ 7. Kf1 Qe7 8. Qxe4 { [PUNICAO] Ganhamos o cavalo. [RESUMO] 3...Cf6?: dxe5, Bc4 e a dama em d5. [PROXIMO] Outro erro das Pretas no terceiro lance: ...f6. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "8"]
+[White "B06"]
+[Black "Imprecisão 1 — 3...f6? O bispo mira g8"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Punir 3...f6?: o bispo em c4 mira a diagonal que o peão de f abriu. [REFERENCIA] Krikor (curso 2025): 3...f6? 4.Bc4! +−. O resto é do Stockfish 18, profundidade 20, em 18/9/2026: 4...exd4 5.Cxd4 +1,42. No banco do Lichess (1000–1800), as Brancas fazem 62% contra 3...f6. } 1. e4 e5 2. Nf3 Nc6 3. d4 3... f6? { [ERRO COMUM] O peão segura e5, mas tira a casa do cavalo e abre a diagonal do rei. [PERGUNTA] Qual bispo aproveita a diagonal aberta? [DICA] O bispo das casas claras. } 4. Bc4! $16 { Isso: o bispo mira g8. O rei preto não consegue rocar pequeno com calma. } 4... exd4 ( 4... Nxd4 5. Nxd4 exd4 6. Qxd4 ) 5. Nxd4 Nxd4 6. Qxd4 { [PLANO] Dama no centro, bispo em c4 e o rei preto preso. Desenvolva e role os peões. [RESUMO] ...f6?: Bc4!. [PROXIMO] Mais três respostas que não brigam pelo centro. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "9"]
+[White "B07"]
+[Black "Imprecisão 2 — ...d5?, ...Bb4+? e ...Bd6?: o centro é nosso"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Punir três respostas que não trocam em d4: ...d5?, ...Bb4+? e ...Bd6?. [REFERENCIA] Krikor (curso 2025): 3...d5? 4.Cxe5! Cxe5 5.dxe5 dxe4 6.Dxd8+ Rxd8 7.Cc3 Bf5 8.Bc4 +−; 3...Bd6?. Os outros lances são do Stockfish 18, profundidade 20, em 18/9/2026: 4...dxe4 5.Bb5 (+1,02); 3...Bb4+ 4.c3 (+1,50), 4...Ba5 5.d5 (+2,09), 4...Bd6 5.Bd3; 3...Bd6 4.Cc3 (+0,69). } 1. e4 e5 2. Nf3 Nc6 3. d4 3... d5? { [ERRO COMUM] As Pretas abrem o centro, mas o peão de e5 fica sem defesa. [PERGUNTA] Qual peça toma e5? [DICA] O cavalo. } ( 3... Bb4+? { O bispo dá xeque. O peão de c o expulsa com tempo. } 4. c3! Ba5?! ( 4... Bd6 5. Bd3 ) 5. d5! { O peão ataca o cavalo, e e5 fica sem defesa. } ) ( 3... Bd6? 4. Nc3 $5 $16 ( 4. dxe5!? Nxe5 5. Nc3 $16 ) ) 4. Nxe5! { Isso: o cavalo toma e5 e ataca c6. } 4... Nxe5 ( 4... dxe4 5. Bb5 ) 5. dxe5 dxe4 6. Qxd8+ Kxd8 7. Nc3 Bf5 8. Bc4 $18 { Um peão a mais, e o rei preto perdeu o roque. [RESUMO] Quem não briga pelo centro, entrega o centro. [PROXIMO] Agora um sacrifício que não funciona: ...Bxf2+. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "10"]
+[White "B08"]
+[Black "Golpe 4 — ...Bxf2+? Tome o bispo"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Não ter medo de ...Bxf2+?: tomar o bispo e desenvolver. [REFERENCIA] Stockfish 18, profundidade 20, em 18/9/2026: depois de 6.Rxf2, brancas +3,05; depois de 7...Dxe4, 8.Cc3 +3,59. No banco do Lichess (1000–1800), as Brancas fazem 62% contra 5...Bxf2+. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 4... Bc5 { O bispo ataca o cavalo de d4. } 5. Nb3 { O cavalo recua e ataca o bispo. } 5... Bxf2+? { [ARMADILHA] O bispo se entrega para dar xeque. [PERGUNTA] Tomamos o bispo? [DICA] Conte: é uma peça por um peão. } 6. Kxf2 { Isso: tomamos. O rei fica bem com as peças por perto. } 6... Qh4+ { Xeque. O rei vai para o canto, longe da dama. } 7. Kg1 Qxe4 { A dama pegou um peão. Agora um cavalo sai atacando a dama. } 8. Nc3 { [PUNICAO] Desenvolvemos com tempo. Estamos uma peça à frente. [RESUMO] ...Bxf2+?: tome o bispo e desenvolva. [PROXIMO] Agora a dama que vai a h4. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "11"]
+[White "B09"]
+[Black "Imprecisão 3 — ...Dh4: desenvolva, não defenda"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Responder 4...Dh4 sem medo: desenvolver o cavalo, mesmo que e4 caia. [REFERENCIA] Grigoryan ('Scotch Game + Homework'): 4...Dh4? 5.Cc3! (5.Cb5!?) Bb4 6.Be2 Dxe4 7.Cdb5 Bxc3+ 8.bxc3 Rd8 9.O-O +−. O 7...Dxg2? 8.Bf3 é do Stockfish 18, profundidade 20, em 18/9/2026 (+1,41). No banco do Lichess (1000–1800), as Brancas fazem só 44% contra 4...Dh4: quem não conhece a resposta sofre. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 4... Qh4? { [ATENCAO] A dama ataca e4. Parece forte, e muita gente se assusta. [PERGUNTA] Qual peça defende e4 e se desenvolve? [DICA] Um cavalo. } 5. Nc3! { Isso: o cavalo defende e4. } ( 5. Nb5!? ) 5... Bb4 { O bispo prega o cavalo. O bispo das casas claras sai, e o roque fica pronto. } 6. Be2 6... Qxe4 { A dama pegou o peão. O cavalo do centro vai a b5, mirando c7. } 7. Ndb5 { O cavalo mira c7: xeque, e a torre de a8. } 7... Bxc3+ ( 7... Qxg2? 8. Bf3 { A dama fica sem casa, e c7 continua na mira. } ) 8. bxc3 Kd8 9. O-O $16 { [PUNICAO] O rei preto perdeu o roque, e as nossas peças estão todas prontas. [RESUMO] ...Dh4: Cc3 e Be2. Um peão vale menos que o desenvolvimento. [PROXIMO] No laboratório, os sete erros lado a lado. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "12"]
+[White "B10"]
+[Black "Laboratório: reconheça cada erro"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [SECAO] Laboratório | reconheça cada erro [OBJETIVO] Reconhecer cada erro sem misturar os desenhos. } 1. e4 e5 2. Nf3 Nc6 3. d4 3... exd4 ( 3... Nf6? { CASO 3 — CAVALO EM f6 NO TERCEIRO LANCE. [PERGUNTA] Qual é o lance? [DICA] Tome o peão que ficou sem defesa. } 4. dxe5! Nxe4 5. Bc4! Bc5? 6. Qd5! { Isso: a dama ataca f7 e o cavalo. } ) ( 3... f6? { CASO 4 — PEÃO EM f6. [PERGUNTA] Qual é o lance? [DICA] Olhe a diagonal que se abriu. } 4. Bc4! $16 { Isso: o bispo mira g8. } ) ( 3... d5? { CASO 5 — O PEÃO DE e5 SEM DEFESA. [PERGUNTA] Qual é o lance? [DICA] O cavalo toma. } 4. Nxe5! { Isso: o cavalo toma e5. } ) 4. Nxd4 Nxd4? ( 4... Bc5 { CASO 6 — O BISPO QUE SE ENTREGA. } 5. Nb3 Bxf2+? { [PERGUNTA] Qual é o lance? [DICA] Tome a peça. } 6. Kxf2 { Isso: uma peça a mais. } ) ( 4... Qh4? { CASO 7 — A DAMA EM h4. [PERGUNTA] Qual é o lance? [DICA] Desenvolva e defenda e4. } 5. Nc3! { Isso: o cavalo defende e4 e sai. } ) 5. Qxd4 Nf6? { CASO 1 — CAVALO EM f6 CEDO. [PERGUNTA] Qual é o lance? [DICA] Um peão avança. } ( 5... b6?! { CASO 2 — O PEÃO DE g7. } 6. Nc3 Bc5? { [PERGUNTA] Qual é o lance? [DICA] A dama foge ganhando um peão. } 7. Qxg7! { Isso: a dama toma g7. } ) 6. e5! { Isso: e5, e o cavalo fica sem casa. [RESUMO] Sete erros, sete respostas: não misture os desenhos. [PROXIMO] Agora, quando o e5 não funciona. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "13"]
+[White "B11"]
+[Black "Quando o golpe não funciona: e5 só com o cavalo solto"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [SECAO] Quando a ideia não funciona [OBJETIVO] Não empurrar e5 quando o peão de d6 pode tomar. [REFERENCIA] Stockfish 18, profundidade 20, em 18/9/2026: 7.e5?! dxe5 deixa a posição igual; 7.Bf4 vale +0,99. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4? 5. Qxd4 5... d6 { Desta vez o peão de d7 saiu antes do cavalo. } ( 5... Nf6? 6. e5! { Compare: sem o peão em d6, o e5 ganha espaço e tempo. } ) 6. Nc3 Nf6 { [NAO FUNCIONA] O cavalo está em f6, mas agora o peão de d6 defende e5. [PERGUNTA] Seguimos o esquema. Qual é o lance? [DICA] O bispo mira d6. } 7. Bf4! { Isso: seguimos o esquema. [RESUMO] Cavalo em f6 sem o peão em d6: e5. Com o peão em d6: Bf4 e roque grande. [PROXIMO] Agora, quando as Pretas jogam bem. } ( 7. e5?! dxe5 { O peão toma, e a vantagem some. } ) *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "14"]
+[White "C12"]
+[Black "5...d6: a montagem completa"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [SECAO] Quando as Pretas jogam bem [OBJETIVO] Jogar a montagem inteira contra 5...d6, até o final com um peão a mais. [REFERENCIA] Grigoryan ('Scotch Game + Homework'): 5...d6 6.Cc3 Cf6 7.Bf4! Be7 8.O-O-O O-O 9.f3. Os mesmos lances brancos estão no Short & Sweet: Scotch (Chess.com). Do 9...c5 em diante: banco do Lichess (1000–1999), degrau 1 da régua do término, 8/9/2026. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4? 5. Qxd4 5... d6 { A resposta mais comum depois da troca: 11% das partidas. } 6. Nc3 Nf6 7. Bf4! Be7 8. O-O-O O-O 9. f3 { O peão guarda e4 e prepara g4. } 9... c5 { [PERGUNTA] O peão atacou a dama. Para onde ela vai? [DICA] Fique atrás do bispo, mirando d6. } 10. Qd2 { Isso: a dama e o bispo miram juntos o peão de d6. } 10... Be6 { [PERGUNTA] O peão de d6 perdeu o apoio do peão de c7. Quem toma? [DICA] O bispo. } 11. Bxd6 Bxd6 12. Qxd6 Qxd6 13. Rxd6 Rad8 14. Rxd8 { [PLANO] Um peão a mais num final. Troque peças: o peão vale mais com o tabuleiro vazio. [RESUMO] Cc3, Bf4, roque grande, f3, e o peão de d6 cai. [PROXIMO] E se as Pretas atacarem a dama? } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "15"]
+[White "C13"]
+[Black "5...c5, 5...Df6 e 5...b6: duas regras"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Responder às outras jogadas contra a dama em d4 com duas regras. [REFERENCIA] Página de princípios do site ('Escocesa — a dama em d4'). Lances do Stockfish 18, profundidade 20, em 18/9/2026: 5...c5 6.De3 +1,26 e 6...Cf6 7.e5 +1,62; 5...Df6 6.e5 +0,44, 6...De6 7.Bc4 +1,32; 5...b6 6.Cc3 Bb7 7.Bf4 +1,26. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4? 5. Qxd4 5... c5 { [PERGUNTA] O peão ataca a dama. Para onde ela vai? [DICA] Para a coluna e. } ( 5... Qf6 { A dama preta encara a nossa. O peão de e a ataca com tempo. } 6. e5 Qb6 ( 6... Qe6 7. Bc4 ) 7. Qxb6 axb6 8. Nc3 { Trocamos as damas e temos o centro. } ) ( 5... b6?! 6. Nc3 Bb7 7. Bf4 { A montagem de sempre: Bf4 e roque grande. } ) 6. Qe3 { Regra 1: dama atacada por peão vai para e3. } 6... Nf6 { [PERGUNTA] Cavalo em f6, peão de d7 em casa. Qual é o lance? [DICA] Você já viu este desenho. } ( 6... d6 7. Nc3 { Com o peão em d6, desenvolvemos. } ) 7. e5 { Regra 2: cavalo em f6 sem apoio, e5. [RESUMO] Dama atacada: e3. Cavalo em f6 sem apoio: e5. O resto: Cc3, Bf4, roque grande. [PROXIMO] Agora o bispo em c5. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "16"]
+[White "C14"]
+[Black "4...Bc5: a Potter"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Contra 4...Bc5, recuar para b3 e montar Cc3, De2, Be3 e roque grande. [REFERENCIA] Grigoryan ('Scotch Game + Homework'): 5.Cb3 Bb6 6.Cc3 e as três respostas. Short & Sweet: Scotch (Chess.com), variantes 'Classical'. Do 8...O-O em diante: banco do Lichess (1000–1999), 8/9/2026. Contra 6...Df6, o 10.Rb1 é do Stockfish 18, profundidade 20, em 18/9/2026 (+1,04). } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 4... Bc5 { O bispo ataca o nosso cavalo. 13% das partidas. [PERGUNTA] Para onde o cavalo recua? [DICA] Uma casa de onde ele ataca o bispo. } 5. Nb3 { Isso: a Potter. O bispo tem de andar de novo. } 5... Bb6 6. Nc3 Nf6 { A dama vai guardar f2 e liberar o roque grande. } ( 6... Qf6 7. Qe2 Nge7 8. Be3 O-O 9. O-O-O d6 10. Kb1 { O mesmo esquema. O rei vai para b1, longe da diagonal. } ) ( 6... d6 7. Qe2 Nge7 8. Be3 O-O 9. O-O-O f5 10. f4 fxe4 11. g3! { O mesmo esquema, e g3 segura o peão de f4. } ) 7. Qe2 { Isso: a dama guarda f2 e sai da coluna d. } 7... d6 8. Be3 { O nosso bispo desafia o melhor bispo dele. } 8... O-O 9. O-O-O Re8 10. f3 Be6 11. g4 { [PLANO] Reis em lados opostos: os nossos peões andam contra o rei dele. } 11... Bxb3 { [PERGUNTA] Qual peão recaptura? [DICA] Abra a coluna do lado do rei dele, não do nosso. } 12. axb3 { Isso: a coluna a abre para a nossa torre, e c2 fica protegendo o nosso rei. } 12... Bxe3+ 13. Qxe3 a5 14. Bb5 { O último bispo sai e prega o cavalo. [RESUMO] Potter: Cb3, Cc3, De2, Be3, roque grande, e os peões andam. [PROXIMO] Agora o cavalo em f6 no quarto lance. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "17"]
+[White "C15"]
+[Black "4...Cf6: troque em c6"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Contra 4...Cf6, trocar em c6 e jogar contra o bispo de casas escuras dele. [REFERENCIA] Short & Sweet: Scotch (Chess.com), variantes 'Schmidt'. Contra 5...dxc6, o 8.Bd2 é do Stockfish 18, profundidade 20, em 18/9/2026 (+0,60). } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 4... Nf6 { O cavalo ataca e4. [PERGUNTA] Qual troca estraga os peões dele? [DICA] O nosso cavalo do centro. } 5. Nxc6 { Isso: depois de ...bxc6, ele fica com peões dobrados. } 5... bxc6 ( 5... dxc6 6. Qxd8+ Kxd8 7. Nc3 Bb4 8. Bd2 { As damas saíram, e o rei preto perdeu o roque. } ) 6. Nc3 Bb4 7. Bd3 { O bispo defende e4. Se ele trocar em c3, ficamos com os dois bispos. } 7... d5 8. exd5 cxd5 9. O-O O-O { [PERGUNTA] Os peões dele estão em casas claras. Qual bispo dele precisamos trocar? [DICA] Prepare o caminho com um peão. } 10. h3 { O h3 tira a casa g4 do bispo dele. } 10... c6 11. Qf3 Bd6 12. Bf4 { [PLANO] Trocamos o bispo de casas escuras dele. Os peões dele ficam fracos nas casas claras. [RESUMO] 4...Cf6: Cxc6, Cc3, Bd3, roque, h3, Df3 e Bf4. [PROXIMO] E se as Pretas não trocarem em d4? } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "18"]
+[White "C16"]
+[Black "3...d6: desenvolva e deixe a decisão com ele"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Contra 3...d6, desenvolver com Cc3 e manter a tensão. [REFERENCIA] Krikor (curso 2025): 3...d6 4.Cc3 (4.d5!?) Cf6 5.Bb5 exd4 6.Cxd4 Bd7 7.O-O Be7 8.Cxc6! bxc6 9.Bd3 10.f4!; 4...exd4 5.Cxd4. Do 10...Tb8 em diante: Short & Sweet: Scotch (Chess.com). Stockfish 18, profundidade 20, em 18/9/2026: 4...Bg4 5.Bb5 +0,90; 4...Be6? 5.d5! +3,69. } 1. e4 e5 2. Nf3 Nc6 3. d4 3... d6 { As Pretas seguram e5 com peão. 10% das partidas. [PERGUNTA] Trocamos, avançamos ou desenvolvemos? [DICA] Uma peça que defende e4. } 4. Nc3 { Isso: desenvolvemos e deixamos a tensão com ele. } ( 4. d5!? { Ganha espaço, mas fecha o centro, e centro fechado ajuda quem está apertado. } ) 4... Nf6 ( 4... exd4 5. Nxd4 $14 Nxd4 6. Qxd4 { [CONEXAO] É a mesma posição da montagem de 5...d6. } ) ( 4... Bg4 { O bispo prega o nosso cavalo. } 5. Bb5 exd4 6. Qxd4 { A dama recaptura, e o cavalo de c6 está pregado. } ) ( 4... Be6?? 5. d5! Bd7 6. dxc6 { O peão ataca dois: o bispo e o cavalo. Ganhamos uma peça. } ) 5. Bb5 { O bispo prega o cavalo que segura e5. } 5... exd4 6. Nxd4 Bd7 7. O-O Be7 { [PERGUNTA] Qual troca estraga os peões dele? [DICA] Em c6. } 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $16 { [PLANO] Os peões de e4 e f4 andam juntos. A ameaça é e5. } 10... Rb8 11. h3 Re8 12. b3 Bf8 13. Bb2 { O bispo vai para a diagonal grande, mirando o rei. [RESUMO] 3...d6: Cc3, Bb5, Cxc6, Bd3, f4 e Bb2. [PROXIMO] As respostas raras depois de 4.Cxd4. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "19"]
+[White "C17"]
+[Black "Respostas raras: desenvolva com tempo"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Contra as respostas raras, desenvolver com tempo. [REFERENCIA] Grigoryan ('Scotch Game + Homework'): 4...Df6 5.Cf3 Bc5 6.Cc3 Cge7 7.Cb5 Bb6 8.Be3!; 4...Bb4+ 5.c3 Bc5 6.Be3 Bb6 7.Cf5. Stockfish 18, profundidade 20, em 18/9/2026: 9.fxe3 +0,53; 4...d6 5.Cc3 Cf6 6.Bf4 +0,67; 4...Ce5 5.f4 Cc6 6.Cc3 +1,13. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 ( 3... Nxd4 $6 { Resposta rara: as Pretas trocam o cavalo antes de tomar em d4. } 4. Nxd4 exd4 5. Qxd4 $16 { A dama recaptura no centro, e nenhuma peça preta a incomoda. } ) 4. Nxd4 4... Qf6 { A dama ataca o nosso cavalo. [PERGUNTA] Para onde ele recua? [DICA] Para a casa de onde saiu. } ( 4... d6 5. Nc3 Nf6 6. Bf4 { A mesma montagem: Cc3, Bf4 e roque grande. } ) ( 4... Ne5 5. f4 Nc6 6. Nc3 { O peão expulsa o cavalo, e ganhamos espaço. } ) ( 4... Bb4+ 5. c3 Bc5 6. Be3 Bb6 7. Nf5 { O cavalo salta e ameaça trocar o bispo dele. } ) 5. Nf3 { O cavalo volta e fica seguro. } 5... Bc5 6. Nc3 Nge7 7. Nb5 Bb6 8. Be3! Bxe3 9. fxe3 { A coluna f abre, e a dama preta fica exposta. [RESUMO] Resposta rara: desenvolva, e cada peça que sai deve ameaçar alguma coisa. [PROXIMO] E se você esquecer a teoria? } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "20"]
+[White "C18"]
+[Black "Esqueci a teoria: cinco regras"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [SECAO] Esqueci a teoria | cinco regras [OBJETIVO] Continuar jogando bem mesmo sem lembrar a linha. } 1. e4 e5 2. Nf3 Nc6 3. d4 3... exd4 { Regra 1: se ele trocar em d4, o cavalo recaptura. } ( 3... d6 4. Nc3 { Regra 5: se ele não trocar, desenvolva e deixe a decisão com ele. } ) 4. Nxd4 Nxd4? ( 4... Bc5 5. Nb3 { Regra 4: bispo atacando o cavalo? Cb3, e o bispo anda de novo. } ) 5. Qxd4 { Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande. } 5... Nf6? ( 5... c5 6. Qe3 { Regra 3: dama atacada por peão vai para e3. } ) 6. e5! { Regra 3 também: cavalo em f6 sem o peão em d6? e5. [RESUMO] Cavalo recaptura; dama recaptura; dama atacada vai a e3; cavalo solto, e5; bispo em c5, Cb3; sem troca, desenvolva. [PROXIMO] Agora uma partida de verdade. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "21"]
+[White "D19"]
+[Black "Partida modelo: Radjabov × Tomashevsky, 2012"]
+[Result "1-0"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+[ModelWhite "Teimour Radjabov"]
+[ModelBlack "Evgeny Tomashevsky"]
+[ModelEvent "Memorial Tal 2012, Moscou"]
+[ModelDate "2012.06.08"]
+
+{ [SECAO] Partida modelo | Radjabov × Tomashevsky, 2012 [OBJETIVO] Ver a Potter numa partida de verdade: De2, Be3, roque grande e ataque. [PARTIDA REAL] Teimour Radjabov (2784) venceu Evgeny Tomashevsky (2738) no Memorial Tal, em Moscou, 2012. Partida do banco de mestres do Lichess. [REFERENCIA] explorer.lichess.ovh/masters, partida HLYnhawF. A avaliação final é do Stockfish 18, profundidade 20, em 18/9/2026: brancas +5,07. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 4... Bc5 5. Nb3 Bb6 6. Nc3 d6 7. Qe2 Nge7 8. Be3 O-O 9. O-O-O { [CONEXAO] É o nosso esquema da Potter, lance a lance. } 9... f5 10. exf5 { [ATENCAO] Aqui a partida sai da nossa linha: nós jogamos 10.f4. Daqui em diante, estude as ideias, não os lances. } 10... Bxf5 11. h3 Bd7 12. Qd2 Bxe3 13. Qxe3 { O bispo que mais incomodava saiu do tabuleiro. } 13... Kh8 14. Bd3 Qe8 15. f4 { O peão de f avança: mais espaço e a coluna f para a torre. } 15... Qf7 16. Rhf1 Rae8 17. Qd2 Nb4 18. Be4 Bc6 19. Rde1 { As duas torres nas colunas abertas. } 19... Bxe4 20. Nxe4 Qc4 21. a3 Nbc6 22. Qc3 Qd5 23. Nbd2 Nf5 24. g4 { Os peões expulsam o cavalo. } 24... Nfd4 25. Qd3 b5 26. Kb1 b4 27. a4 h6 28. Nb3 Re7 29. Ned2 Rxe1+ 30. Rxe1 g5 31. f5 { As Pretas abandonaram: o peão de f5 abre caminho para a torre e o cavalo de d4 vai cair. [RESUMO] Cb3, Cc3, De2, Be3, roque grande e depois os peões da ala do rei. } 1-0
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "23"]
+[White "E21"]
+[Black "Treino: encontre o plano"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [SECAO] Treino final | encontre o plano [OBJETIVO] Treinar ideias, não só lances. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 4... Bc5 ( 4... Nxd4? 5. Qxd4 d6 6. Nc3 Nf6 { [PERGUNTA] Qual bispo mira d6 e abre c1 para o rei? [DICA] O de casas escuras. } 7. Bf4! Be7 { [PERGUNTA] Para que lado vai o nosso rei? [DICA] O lado da dama. } 8. O-O-O { [PLANO] Rei na ala da dama, torre na coluna d, mirando d6. } ) 5. Nb3 Bb6 6. Nc3 Nf6 { [PERGUNTA] Qual peça guarda f2 e libera o roque grande? [DICA] A dama. } 7. Qe2 d6 8. Be3 O-O { [PERGUNTA] Qual é o plano com os reis em lados opostos? [DICA] Primeiro o nosso rei. } 9. O-O-O { [PLANO] Roque grande, e depois f3 e g4 contra o rei dele. [RESUMO] Dois planos: Bf4 e roque grande contra a troca; De2, Be3 e roque grande contra ...Bc5. [PROXIMO] Agora o treinador de lances. } *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "24"]
+[White "E22A"]
+[Black "Move Trainer — Arma: 3.d4 e 4.Cxd4"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Treinar a nossa arma. [TRAIN] Faça os lances das Brancas. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "25"]
+[White "E22B"]
+[Black "Move Trainer — Esquema: dama em d4 e roque grande"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Reproduzir a montagem completa contra 5...d6. [TRAIN] Faça os lances das Brancas. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4? 5. Qxd4 d6 6. Nc3 Nf6 7. Bf4! Be7 8. O-O-O O-O 9. f3 c5 10. Qd2 Be6 11. Bxd6 Bxd6 12. Qxd6 Qxd6 13. Rxd6 Rad8 14. Rxd8 *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "26"]
+[White "E22C"]
+[Black "Move Trainer — Golpe 1 e 2: a dama em d4"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Fixar os golpes com a dama em d4. [TRAIN] Faça os lances das Brancas. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4? 5. Qxd4 Nf6? ( 5... b6?! 6. Nc3 Bc5? 7. Qxg7! Qf6 8. Qxf6 Nxf6 9. Bg5 ) 6. e5! Nh5? ( 6... Ng8 7. Bf4 ) ( 6... Qe7?! 7. Be3 ) ( 6... c5 7. Qe3 ) 7. g4! *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "27"]
+[White "E22D"]
+[Black "Move Trainer — Golpe 3 e Imprecisões 1 e 2: sem trocar em d4"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Fixar as punições quando as Pretas não trocam em d4. [TRAIN] Faça os lances das Brancas. } 1. e4 e5 2. Nf3 Nc6 3. d4 Nf6? ( 3... f6? 4. Bc4! $16 exd4 5. Nxd4 Nxd4 6. Qxd4 ) ( 3... d5? 4. Nxe5! Nxe5 ( 4... dxe4 5. Bb5 ) 5. dxe5 dxe4 6. Qxd8+ Kxd8 7. Nc3 Bf5 8. Bc4 $18 ) ( 3... Bb4+? 4. c3! Ba5?! ( 4... Bd6 5. Bd3 ) 5. d5! ) ( 3... Bd6? 4. Nc3 $5 $16 ) 4. dxe5! Nxe4 5. Bc4! Bc5? ( 5... d6 6. Bxf7+! Kxf7 7. Qd5+ Be6 8. Qxe4 ) ( 5... Nc5 6. Nc3 Be7 7. Be3 O-O 8. O-O Ne6 9. Qe2 d6 10. Rad1 Qe8 11. exd6 Bxd6 12. Rfe1 ) 6. Qd5! Bxf2+ 7. Kf1 Qe7 8. Qxe4 *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "28"]
+[White "E22E"]
+[Black "Move Trainer — Golpe 4 e Imprecisão 3: ...Bxf2+? e ...Dh4"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Fixar as punições contra ...Bxf2+ e ...Dh4. [TRAIN] Faça os lances das Brancas. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Bc5 ( 4... Qh4? 5. Nc3! Bb4 6. Be2 Qxe4 7. Ndb5 Bxc3+ ( 7... Qxg2? 8. Bf3 ) 8. bxc3 Kd8 9. O-O $16 ) 5. Nb3 Bxf2+? 6. Kxf2 Qh4+ 7. Kg1 Qxe4 8. Nc3 *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "29"]
+[White "E22F"]
+[Black "Move Trainer — Defesa 1: ...c5, ...Df6 e ...b6"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Treinar as duas regras da dama em d4. [TRAIN] Faça os lances das Brancas. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nxd4? 5. Qxd4 c5 ( 5... Qf6 6. e5 Qb6 ( 6... Qe6 7. Bc4 ) 7. Qxb6 axb6 8. Nc3 ) ( 5... b6?! 6. Nc3 Bb7 7. Bf4 ) 6. Qe3 Nf6 ( 6... d6 7. Nc3 ) 7. e5 *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "30"]
+[White "E22G"]
+[Black "Move Trainer — Defesa 2: 4...Bc5 e a Potter"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Treinar a Potter completa. [TRAIN] Faça os lances das Brancas. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Bc5 5. Nb3 Bb6 6. Nc3 Nf6 ( 6... Qf6 7. Qe2 Nge7 8. Be3 O-O 9. O-O-O d6 10. Kb1 ) ( 6... d6 7. Qe2 Nge7 8. Be3 O-O 9. O-O-O f5 10. f4 fxe4 11. g3! ) 7. Qe2 d6 8. Be3 O-O 9. O-O-O Re8 10. f3 Be6 11. g4 Bxb3 12. axb3 Bxe3+ 13. Qxe3 a5 14. Bb5 *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "31"]
+[White "E22H"]
+[Black "Move Trainer — Defesa 3: 4...Cf6 e a troca em c6"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Treinar a troca em c6 e o plano. [TRAIN] Faça os lances das Brancas. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 ( 5... dxc6 6. Qxd8+ Kxd8 7. Nc3 Bb4 8. Bd2 ) 6. Nc3 Bb4 7. Bd3 d5 8. exd5 cxd5 9. O-O O-O 10. h3 c6 11. Qf3 Bd6 12. Bf4 *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "32"]
+[White "E22I"]
+[Black "Move Trainer — Defesa 4: 3...d6"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Treinar a resposta a 3...d6. [TRAIN] Faça os lances das Brancas. } 1. e4 e5 2. Nf3 Nc6 3. d4 d6 4. Nc3 Nf6 ( 4... exd4 5. Nxd4 $14 Nxd4 6. Qxd4 ) ( 4... Bg4 5. Bb5 exd4 6. Qxd4 ) ( 4... Be6?? 5. d5! Bd7 6. dxc6 ) 5. Bb5 exd4 6. Nxd4 Bd7 7. O-O Be7 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $16 Rb8 11. h3 Re8 12. b3 Bf8 13. Bb2 *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "33"]
+[White "E22J"]
+[Black "Move Trainer — Desvio: as respostas raras"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Treinar as respostas raras. [TRAIN] Faça os lances das Brancas. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Qf6 ( 4... d6 5. Nc3 Nf6 6. Bf4 ) ( 4... Ne5 5. f4 Nc6 6. Nc3 ) ( 4... Bb4+ 5. c3 Bc5 6. Be3 Bb6 7. Nf5 ) 5. Nf3 Bc5 6. Nc3 Nge7 7. Nb5 Bb6 8. Be3! Bxe3 9. fxe3 *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "34"]
+[White "E22K"]
+[Black "Move Trainer — Se eu esquecer a teoria"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [OBJETIVO] Treinar as regras de emergência. [TRAIN] Faça os lances das Brancas. } 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 ( 3... d6 4. Nc3 ) 4. Nxd4 Nxd4? ( 4... Bc5 5. Nb3 ) 5. Qxd4 Nf6? ( 5... c5 6. Qe3 ) 6. e5! *
+
+
+[Event "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0"]
+[Site "Estudo local"]
+[Date "2026.09.18"]
+[Round "35"]
+[White "F23"]
+[Black "Revisão: a Escocesa em um minuto"]
+[Result "*"]
+[Annotator "Projeto repertório — Escocesa"]
+[StudyName "Escocesa: a dama em d4 e a Potter"]
+[Orientation "white"]
+
+{ [SECAO] Revisão | a Escocesa em um minuto [ENTENDER] 3.d4 e 4.Cxd4: o centro abre cedo e o cavalo fica no meio. [PLANO] Contra a troca de cavalos: dama em d4, Cc3, Bf4, roque grande e f3. Contra ...Bc5: Cb3, Cc3, De2, Be3 e roque grande. [MEMORIZAR] ...Cf6 com o peão em d7: e5. Dama atacada por peão: e3. ...Bc5 e ...b6: Dxg7. [ATENCAO] ...Dh4: Cc3 e Be2, sem medo de perder e4. [RESUMO] Sem trocar em d4: ...Cf6? dxe5 e Bc4; ...f6? Bc4; ...d5? Cxe5; ...d6: Cc3 e Bb5. } 1. e4 e5 2. Nf3 Nc6 3. d4 3... exd4 4. Nxd4 Nxd4? 5. Qxd4 { A dama no centro. } 5... d6 6. Nc3 Nf6 7. Bf4! Be7 8. O-O-O { O roque grande da Escocesa. } *

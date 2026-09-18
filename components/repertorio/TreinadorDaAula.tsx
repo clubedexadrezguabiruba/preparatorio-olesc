@@ -75,7 +75,7 @@ export function TreinadorDaAula({
   }, [linhas, progressoInicial]);
 
   if (!linha) {
-    return <p className="cartao px-4 py-3 text-sm text-tinta-media">Este move trainer não tem linha para treinar.</p>;
+    return <p className="cartao px-4 py-3 text-sm text-tinta-media">Este treinador de lances não tem linha para treinar.</p>;
   }
 
   const ultima = indice === linhas.length - 1;

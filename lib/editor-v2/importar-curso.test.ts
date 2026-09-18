@@ -56,8 +56,9 @@ test("reimportar um estudo mudado: diff «muda», cópia de segurança antes, e 
     gravarAulasDoCurso(planejarCursoDeAbertura(LICHESS, OPCOES), raiz, ligada);
     const mudado = planejarCursoDeAbertura(LICHESS.replace("Qual lance de bispo ataca a dama e fecha sua saída?", "Qual lance de bispo prende a dama?"), OPCOES);
     const diff = diffDoCurso(mudado, raiz);
-    // B e E+F: o texto de 5...Qxg2 da B05A também é a fala da defesa no treino guiado da E+F.
-    assert.deepEqual(diff.map((d) => d.situacao), ["igual", "muda", "igual", "igual", "muda"]);
+    // Só a B: desde 18/9/2026 o treino guiado da E+F não copia comentário do estudo (Doug: sem
+    // comentários no treino guiado), e a pergunta da B05A deixou de ser a fala de uma defesa lá.
+    assert.deepEqual(diff.map((d) => d.situacao), ["igual", "muda", "igual", "igual", "igual"]);
     const gravacao = gravarAulasDoCurso(mudado, raiz, ligada);
     const b = gravacao.find((g) => g.id === "AB-BRANCAS-FRANCESA-B")!;
     assert.ok(b.ok && b.copia && existsSync(b.copia), "a cópia de segurança existe");

@@ -21,7 +21,8 @@ import { Chess } from "chess.js";
 export type Vez = "brancas" | "pretas";
 
 /** Uma variante que o motor devolveu: a avaliação e a linha principal em UCI. */
-export type Variante = { centesimos: number | null; pv: string };
+/** `mate`: lances até o mate, do ponto de vista de quem joga (negativo: ele leva o mate). */
+export type Variante = { centesimos: number | null; pv: string; mate?: number };
 
 /* ------------------------------------------------------------------ *
  * Os lances

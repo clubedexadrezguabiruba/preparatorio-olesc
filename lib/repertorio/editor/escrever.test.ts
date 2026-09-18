@@ -58,7 +58,7 @@ function tudoTocado(nome: string, texto: string) {
   return escreverArquivo(texto, casca.aula, new Set(casca.aula.analises.map((a) => a.id)));
 }
 
-test("os onze arquivos abrem como casca sem problema, 91 jogos", () => {
+test("os onze arquivos abrem como casca sem problema, 130 jogos", () => {
   let jogos = 0;
   for (const { nome, texto } of fontes) {
     const casca = cascaDoArquivo(nome, texto);
@@ -68,7 +68,8 @@ test("os onze arquivos abrem como casca sem problema, 91 jogos", () => {
   }
   // 23 até 17/9/2026; a Francesa gerada do estudo trocou 1 jogo escrito à mão por 19.
   // 41 até 18/9/2026; a Siciliana gerada do estudo trocou 6 jogos escritos à mão por 56.
-  assert.equal(jogos, 91);
+  // 91 até 18/9/2026; a Escocesa gerada do estudo trocou 3 jogos escritos à mão por 41.
+  assert.equal(jogos, 130);
 });
 
 test("(a) sem edição, os onze arquivos saem byte a byte", () => {
@@ -83,7 +84,7 @@ test("(a) sem edição, os onze arquivos saem byte a byte", () => {
   assert.equal(iguais, 11);
 });
 
-test("(b) os 91 jogos reescritos expandem igual ao original — linhas, ids, avisos e problemas", () => {
+test("(b) os 130 jogos reescritos expandem igual ao original — linhas, ids, avisos e problemas", () => {
   let jogos = 0;
   for (const { nome, texto } of fontes) {
     const escrito = tudoTocado(nome, texto);
@@ -105,7 +106,8 @@ test("(b) os 91 jogos reescritos expandem igual ao original — linhas, ids, avi
   }
   // 23 até 17/9/2026; a Francesa gerada do estudo trocou 1 jogo escrito à mão por 19.
   // 41 até 18/9/2026; a Siciliana gerada do estudo trocou 6 jogos escritos à mão por 56.
-  assert.equal(jogos, 91);
+  // 91 até 18/9/2026; a Escocesa gerada do estudo trocou 3 jogos escritos à mão por 41.
+  assert.equal(jogos, 130);
 });
 
 test("(b) a compilação dos onze reescritos é byte a byte a de hoje", () => {
@@ -145,35 +147,42 @@ test("(c) expectativas independentes contadas no texto sobrevivem à reescrita",
     // 311 e 1109 até 17/9/2026, quando a Francesa passou a vir do estudo do Lichess; 298, 1068 e 10
     // até 18/9/2026, quando a Siciliana também passou (os comentários do estudo são de uma linha só, e
     // as três linhas com [%plano] escritas à mão saíram).
-    comentariosComQuebra: 234,
-    quebrasDentroDeComentario: 835,
-    blocosDePlano: 7,
+    // 234, 835 e 7 até 18/9/2026, quando a Escocesa também passou a vir do estudo (o [%plano] do
+    // bispo de f1 da linha do 5...d6 saiu com a escrita à mão).
+    comentariosComQuebra: 182,
+    quebrasDentroDeComentario: 647,
+    blocosDePlano: 6,
     // Eram 6 NAGs e 77 variações até 14/9/2026, quando as marcas das fontes originais
     // voltaram (regra "Símbolos de lance" do AGENTS.md). 45 NAGs e 87 variações até 18/9/2026:
-    // a Siciliana gerada do estudo traz os símbolos do Plichta em cada uma das 56 linhas.
+    // a Siciliana gerada do estudo traz os símbolos do Plichta em cada uma das 56 linhas. Desde
+    // 18/9/2026 a Escocesa também: os símbolos do Grigoryan e do Krikor em cada uma das 41 linhas.
     nagsNumericos: [
-      ...Array(126).fill("$1"),
+      // 160 "$1" e 19 "$6" até 18/9/2026 (tarde): a Siciliana ganhou 8.f3 Db6! (Golpe 2, hoje Imprecisão 2) e o
+      // 3...Cxd4 da Escocesa saiu do mapa B02 para o C17, com o $6 escrito como NAG numérico (Doug, 18/9/2026).
+      ...Array(164).fill("$1"),
       ...Array(1).fill("$10"),
-      ...Array(2).fill("$14"),
+      ...Array(3).fill("$14"),
       ...Array(1).fill("$146"),
       ...Array(1).fill("$15"),
-      ...Array(4).fill("$16"),
+      ...Array(7).fill("$16"),
+      ...Array(1).fill("$18"),
       ...Array(1).fill("$19"),
-      ...Array(34).fill("$2"),
+      ...Array(32).fill("$2"),
       ...Array(2).fill("$36"),
       ...Array(1).fill("$37"),
       ...Array(8).fill("$4"),
       ...Array(1).fill("$40"),
-      ...Array(22).fill("$5"),
-      ...Array(19).fill("$6"),
+      ...Array(21).fill("$5"),
+      ...Array(20).fill("$6"),
     ],
     // Até 17/9/2026 só um "!"; a Francesa gerada traz os símbolos do estudo colados ao lance.
     // 28 "!" até 18/9/2026; a Siciliana escrita à mão tinha um, que agora sai como $1.
+    // Desde 18/9/2026 a Escocesa gerada cola o primeiro símbolo de cada lance (o `?` de 4...Cxd4, o
+    // `!?` de 4.d5), e as variações escritas à mão viram irmãos de um lance.
     // Desde 18/9/2026 (manhã) os lances do adversário nas armadilhas levam ?!, ? ou ?? pela perda medida no
-    // Stockfish 18 (regra global do AGENTS.md): 4 "?", 10 "?!" e 2 "??" a mais na Francesa e na Siciliana, e o
-    // $6 de 7.f3 da Siciliana sai colado como ?!.
-    simbolosColados: [...Array(27).fill("!"), ...Array(5).fill("!?"), ...Array(5).fill("?"), ...Array(12).fill("?!"), ...Array(3).fill("??")],
-    variacoes: 126,
+    // Stockfish 18 (pedido do Doug): 5...b6?!, 6...Ch5?, 4...Be6?? na Escocesa, e o mesmo na Siciliana e na Francesa.
+    simbolosColados: [...Array(55).fill("!"), ...Array(14).fill("!?"), ...Array(43).fill("?"), ...Array(16).fill("?!"), ...Array(4).fill("??")],
+    variacoes: 120,
   });
 });
 

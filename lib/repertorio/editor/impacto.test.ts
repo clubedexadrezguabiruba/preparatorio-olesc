@@ -16,7 +16,9 @@ import type { AnaliseV2 } from "../../editor-v2/modelo.ts";
  * faria pela tela, e não uma lista de linhas fabricada à mão.
  */
 
-const texto = readFileSync("content/repertorio/brancas-escocesa.pgn", "utf8");
+// A amostra é um arquivo ESCRITO À MÃO, com um jogo do Avançado. Foi a Escocesa até 18/9/2026, quando
+// ela passou a ser gerada do estudo (tudo no Base).
+const texto = readFileSync("content/repertorio/brancas-escandinava.pgn", "utf8");
 
 function linhasDe(analises: AnaliseV2[]): Linha[] {
   return analises.flatMap((analise) => {
@@ -51,14 +53,14 @@ function acrescentar(analise: AnaliseV2, paiId: string, uci: string, novoId: str
 const uciDe = (m: { from: string; to: string; promotion?: string }) => `${m.from}${m.to}${m.promotion ?? ""}`;
 
 test("sem edição: nada muda, e a frase diz isso", () => {
-  const casca = cascaDoArquivo("brancas-escocesa", texto);
+  const casca = cascaDoArquivo("brancas-escandinava", texto);
   const impacto = impactoDoRepertorio(linhasDe(casca.aula.analises), linhasDe(structuredClone(casca.aula.analises)));
   assert.equal(impacto.semMudanca, true);
   assert.deepEqual(frasesDoImpactoDoRepertorio(impacto), ["Nada muda para o aluno: as linhas, os ids e os textos são os mesmos de hoje."]);
 });
 
 test("esticar a linha principal mata 1 id e cria 1; o Base fica do mesmo tamanho e mesmo assim re-tranca", () => {
-  const casca = cascaDoArquivo("brancas-escocesa", texto);
+  const casca = cascaDoArquivo("brancas-escandinava", texto);
   const antes = linhasDe(casca.aula.analises);
   const depois = structuredClone(casca.aula.analises);
   const { id, jogo } = pontaPrincipal(depois[0]);
@@ -83,7 +85,7 @@ test("esticar a linha principal mata 1 id e cria 1; o Base fica do mesmo tamanho
 });
 
 test("uma resposta nova do adversário no Base cria uma linha e re-tranca o Avançado, o nível 5 e o selo", () => {
-  const casca = cascaDoArquivo("brancas-escocesa", texto);
+  const casca = cascaDoArquivo("brancas-escandinava", texto);
   const antes = linhasDe(casca.aula.analises);
   const depois = structuredClone(casca.aula.analises);
   const analise = depois[0];
@@ -107,7 +109,7 @@ test("uma resposta nova do adversário no Base cria uma linha e re-tranca o Avan
 });
 
 test("editar um comentário: mesmo id, texto mudou, progresso fica", () => {
-  const casca = cascaDoArquivo("brancas-escocesa", texto);
+  const casca = cascaDoArquivo("brancas-escandinava", texto);
   const antes = linhasDe(casca.aula.analises);
   const depois = structuredClone(casca.aula.analises);
   const no = Object.values(depois[1].nos).find((n) => n.comentario)!;
@@ -119,7 +121,7 @@ test("editar um comentário: mesmo id, texto mudou, progresso fica", () => {
 });
 
 test("trocar o nível de um jogo inteiro: os ids ficam e a mudança é dita linha a linha", () => {
-  const casca = cascaDoArquivo("brancas-escocesa", texto);
+  const casca = cascaDoArquivo("brancas-escandinava", texto);
   const antes = linhasDe(casca.aula.analises);
   const depois = structuredClone(casca.aula.analises);
   const avancado = depois.find((a) => a.origemPgn!.tags.Nivel === "avancado")!;

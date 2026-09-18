@@ -8,6 +8,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import { adaptarLessonV1 } from "../editor-v2/adaptar-v1.ts";
 import { montarPacoteV2, type PacoteV2 } from "../editor-v2/pacote.ts";
+import { planejarCursoDeAbertura } from "../editor-v2/planejar-curso.ts";
 import { lessonSchema, positionSchema, type Position } from "../lesson/schema.ts";
 import type { ProgressoDaEscada } from "./escada.ts";
 import { gravarTentativaDeAulaV2, type BancoDasTentativasV2, type LinhaDeTentativaV2 } from "./gravar-v2.ts";
@@ -125,4 +126,21 @@ test("plano §10: o treino grava a política do snapshot e a ajuda, e não mexe 
   assert.equal(b.linhas[0].politica_defensor, "deterministica", "a política é a do snapshot, não a do navegador");
   assert.equal(b.linhas[0].ajuda, true);
   assert.equal(b.gravacoesDeEscada(), 0);
+});
+
+test("curso de abertura: a pergunta dentro do capítulo sobe pela etapa do capítulo; outra entidade não (18/9/2026)", async () => {
+  const curso = planejarCursoDeAbertura(readFileSync("e2e/fixtures/francesa-v15-pgn-local.pgn", "utf8"), { cor: "brancas", abertura: "francesa", nomeDaAbertura: "Francesa 3.Bd3", agora: new Date("2026-09-16T00:00:00Z") });
+  const pacote = montarPacoteV2(curso.aulas.find((a) => a.bloco === "B")!.aula, {});
+  const etapa = pacote.aula.fluxo.find((e) => e.paradas?.some((id) => id.startsWith("treino-parada-b05a")))!;
+  const treinoId = etapa.paradas!.find((id) => id.startsWith("treino-parada-b05a"))!;
+  const b = bancoDeMentira();
+  const tentativa: TentativaDeAulaV2 = {
+    aula: pacote.aula.id, publicationId: pacote.publicationId, etapaId: etapa.id, entidadeId: treinoId, tipo: "treino",
+    assessmentRevision: pacote.revisoes[treinoId].revisao, tentativaId: randomUUID(), tentativaNumero: 1, lances: ["d3e4"], tempoMs: 5_000,
+  };
+  assert.deepEqual(await gravarTentativaDeAulaV2(ALUNO, tentativa, publicacoes(pacote), b.banco), { sucesso: true, conta: "registro" });
+  assert.equal(b.linhas[0].entidade_id, treinoId);
+  const outra = pacote.aula.treinos.find((t) => t.id.startsWith("treino-arvore"))!;
+  const forjada = { ...tentativa, tentativaId: randomUUID(), entidadeId: outra.id, assessmentRevision: pacote.revisoes[outra.id].revisao };
+  assert.match(((await gravarTentativaDeAulaV2(ALUNO, forjada, publicacoes(pacote), b.banco)) as { erro?: string }).erro ?? "", /etapa não é desta aula/);
 });

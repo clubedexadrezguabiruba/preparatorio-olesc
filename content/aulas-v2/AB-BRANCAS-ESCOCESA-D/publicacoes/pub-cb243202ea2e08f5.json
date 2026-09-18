@@ -1,0 +1,661 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-cb243202ea2e08f5",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "AB-BRANCAS-ESCOCESA-D",
+    "titulo": "Escocesa — aula D: Partida modelo",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "estadoEditorial": "rascunho",
+      "fonteDidatica": "estudo local v1.0 — Escocesa: a dama em d4 e a Potter",
+      "abertura": {
+        "cor": "brancas",
+        "abertura": "escocesa",
+        "bloco": "D"
+      }
+    },
+    "proveniencia": [],
+    "excecoes": [],
+    "analises": [
+      {
+        "id": "analise-cap-d19",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0",
+            "Site": "Estudo local",
+            "Date": "2026.09.18",
+            "Round": "21",
+            "White": "D19",
+            "Black": "Partida modelo: Radjabov × Tomashevsky, 2012",
+            "Result": "1-0",
+            "Annotator": "Projeto repertório — Escocesa",
+            "StudyName": "Escocesa: a dama em d4 e a Potter",
+            "Orientation": "white",
+            "ModelWhite": "Teimour Radjabov",
+            "ModelBlack": "Evgeny Tomashevsky",
+            "ModelEvent": "Memorial Tal 2012, Moscou",
+            "ModelDate": "2012.06.08",
+            "ChapterName": "cap D19"
+          },
+          "resultado": "1-0",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-d19-0",
+        "nos": {
+          "no-cap-d19-0": {
+            "id": "no-cap-d19-0",
+            "filhos": [
+              "no-cap-d19-1"
+            ],
+            "comentario": "[SECAO] Partida modelo | Radjabov × Tomashevsky, 2012 [OBJETIVO] Ver a Potter numa partida de verdade: De2, Be3, roque grande e ataque. [PARTIDA REAL] Teimour Radjabov (2784) venceu Evgeny Tomashevsky (2738) no Memorial Tal, em Moscou, 2012. Partida do banco de mestres do Lichess. [REFERENCIA] explorer.lichess.ovh/masters, partida HLYnhawF. A avaliação final é do Stockfish 18, profundidade 20, em 18/9/2026: brancas +5,07."
+          },
+          "no-cap-d19-1": {
+            "id": "no-cap-d19-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-d19-2"
+            ]
+          },
+          "no-cap-d19-2": {
+            "id": "no-cap-d19-2",
+            "uci": "e7e5",
+            "filhos": [
+              "no-cap-d19-3"
+            ]
+          },
+          "no-cap-d19-3": {
+            "id": "no-cap-d19-3",
+            "uci": "g1f3",
+            "filhos": [
+              "no-cap-d19-4"
+            ]
+          },
+          "no-cap-d19-4": {
+            "id": "no-cap-d19-4",
+            "uci": "b8c6",
+            "filhos": [
+              "no-cap-d19-5"
+            ]
+          },
+          "no-cap-d19-5": {
+            "id": "no-cap-d19-5",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-d19-6"
+            ]
+          },
+          "no-cap-d19-6": {
+            "id": "no-cap-d19-6",
+            "uci": "e5d4",
+            "filhos": [
+              "no-cap-d19-7"
+            ]
+          },
+          "no-cap-d19-7": {
+            "id": "no-cap-d19-7",
+            "uci": "f3d4",
+            "filhos": [
+              "no-cap-d19-8"
+            ]
+          },
+          "no-cap-d19-8": {
+            "id": "no-cap-d19-8",
+            "uci": "f8c5",
+            "filhos": [
+              "no-cap-d19-9"
+            ]
+          },
+          "no-cap-d19-9": {
+            "id": "no-cap-d19-9",
+            "uci": "d4b3",
+            "filhos": [
+              "no-cap-d19-10"
+            ]
+          },
+          "no-cap-d19-10": {
+            "id": "no-cap-d19-10",
+            "uci": "c5b6",
+            "filhos": [
+              "no-cap-d19-11"
+            ]
+          },
+          "no-cap-d19-11": {
+            "id": "no-cap-d19-11",
+            "uci": "b1c3",
+            "filhos": [
+              "no-cap-d19-12"
+            ]
+          },
+          "no-cap-d19-12": {
+            "id": "no-cap-d19-12",
+            "uci": "d7d6",
+            "filhos": [
+              "no-cap-d19-13"
+            ]
+          },
+          "no-cap-d19-13": {
+            "id": "no-cap-d19-13",
+            "uci": "d1e2",
+            "filhos": [
+              "no-cap-d19-14"
+            ]
+          },
+          "no-cap-d19-14": {
+            "id": "no-cap-d19-14",
+            "uci": "g8e7",
+            "filhos": [
+              "no-cap-d19-15"
+            ]
+          },
+          "no-cap-d19-15": {
+            "id": "no-cap-d19-15",
+            "uci": "c1e3",
+            "filhos": [
+              "no-cap-d19-16"
+            ]
+          },
+          "no-cap-d19-16": {
+            "id": "no-cap-d19-16",
+            "uci": "e8g8",
+            "filhos": [
+              "no-cap-d19-17"
+            ]
+          },
+          "no-cap-d19-17": {
+            "id": "no-cap-d19-17",
+            "uci": "e1c1",
+            "filhos": [
+              "no-cap-d19-18"
+            ],
+            "comentario": "[CONEXAO] É o nosso esquema da Potter, lance a lance."
+          },
+          "no-cap-d19-18": {
+            "id": "no-cap-d19-18",
+            "uci": "f7f5",
+            "filhos": [
+              "no-cap-d19-19"
+            ]
+          },
+          "no-cap-d19-19": {
+            "id": "no-cap-d19-19",
+            "uci": "e4f5",
+            "filhos": [
+              "no-cap-d19-20"
+            ],
+            "comentario": "[ATENCAO] Aqui a partida sai da nossa linha: nós jogamos 10.f4. Daqui em diante, estude as ideias, não os lances."
+          },
+          "no-cap-d19-20": {
+            "id": "no-cap-d19-20",
+            "uci": "c8f5",
+            "filhos": [
+              "no-cap-d19-21"
+            ]
+          },
+          "no-cap-d19-21": {
+            "id": "no-cap-d19-21",
+            "uci": "h2h3",
+            "filhos": [
+              "no-cap-d19-22"
+            ]
+          },
+          "no-cap-d19-22": {
+            "id": "no-cap-d19-22",
+            "uci": "f5d7",
+            "filhos": [
+              "no-cap-d19-23"
+            ]
+          },
+          "no-cap-d19-23": {
+            "id": "no-cap-d19-23",
+            "uci": "e2d2",
+            "filhos": [
+              "no-cap-d19-24"
+            ]
+          },
+          "no-cap-d19-24": {
+            "id": "no-cap-d19-24",
+            "uci": "b6e3",
+            "filhos": [
+              "no-cap-d19-25"
+            ]
+          },
+          "no-cap-d19-25": {
+            "id": "no-cap-d19-25",
+            "uci": "d2e3",
+            "filhos": [
+              "no-cap-d19-26"
+            ],
+            "comentario": "O bispo que mais incomodava saiu do tabuleiro."
+          },
+          "no-cap-d19-26": {
+            "id": "no-cap-d19-26",
+            "uci": "g8h8",
+            "filhos": [
+              "no-cap-d19-27"
+            ]
+          },
+          "no-cap-d19-27": {
+            "id": "no-cap-d19-27",
+            "uci": "f1d3",
+            "filhos": [
+              "no-cap-d19-28"
+            ]
+          },
+          "no-cap-d19-28": {
+            "id": "no-cap-d19-28",
+            "uci": "d8e8",
+            "filhos": [
+              "no-cap-d19-29"
+            ]
+          },
+          "no-cap-d19-29": {
+            "id": "no-cap-d19-29",
+            "uci": "f2f4",
+            "filhos": [
+              "no-cap-d19-30"
+            ],
+            "comentario": "O peão de f avança: mais espaço e a coluna f para a torre."
+          },
+          "no-cap-d19-30": {
+            "id": "no-cap-d19-30",
+            "uci": "e8f7",
+            "filhos": [
+              "no-cap-d19-31"
+            ]
+          },
+          "no-cap-d19-31": {
+            "id": "no-cap-d19-31",
+            "uci": "h1f1",
+            "filhos": [
+              "no-cap-d19-32"
+            ]
+          },
+          "no-cap-d19-32": {
+            "id": "no-cap-d19-32",
+            "uci": "a8e8",
+            "filhos": [
+              "no-cap-d19-33"
+            ]
+          },
+          "no-cap-d19-33": {
+            "id": "no-cap-d19-33",
+            "uci": "e3d2",
+            "filhos": [
+              "no-cap-d19-34"
+            ]
+          },
+          "no-cap-d19-34": {
+            "id": "no-cap-d19-34",
+            "uci": "c6b4",
+            "filhos": [
+              "no-cap-d19-35"
+            ]
+          },
+          "no-cap-d19-35": {
+            "id": "no-cap-d19-35",
+            "uci": "d3e4",
+            "filhos": [
+              "no-cap-d19-36"
+            ]
+          },
+          "no-cap-d19-36": {
+            "id": "no-cap-d19-36",
+            "uci": "d7c6",
+            "filhos": [
+              "no-cap-d19-37"
+            ]
+          },
+          "no-cap-d19-37": {
+            "id": "no-cap-d19-37",
+            "uci": "d1e1",
+            "filhos": [
+              "no-cap-d19-38"
+            ],
+            "comentario": "As duas torres nas colunas abertas."
+          },
+          "no-cap-d19-38": {
+            "id": "no-cap-d19-38",
+            "uci": "c6e4",
+            "filhos": [
+              "no-cap-d19-39"
+            ]
+          },
+          "no-cap-d19-39": {
+            "id": "no-cap-d19-39",
+            "uci": "c3e4",
+            "filhos": [
+              "no-cap-d19-40"
+            ]
+          },
+          "no-cap-d19-40": {
+            "id": "no-cap-d19-40",
+            "uci": "f7c4",
+            "filhos": [
+              "no-cap-d19-41"
+            ]
+          },
+          "no-cap-d19-41": {
+            "id": "no-cap-d19-41",
+            "uci": "a2a3",
+            "filhos": [
+              "no-cap-d19-42"
+            ]
+          },
+          "no-cap-d19-42": {
+            "id": "no-cap-d19-42",
+            "uci": "b4c6",
+            "filhos": [
+              "no-cap-d19-43"
+            ]
+          },
+          "no-cap-d19-43": {
+            "id": "no-cap-d19-43",
+            "uci": "d2c3",
+            "filhos": [
+              "no-cap-d19-44"
+            ]
+          },
+          "no-cap-d19-44": {
+            "id": "no-cap-d19-44",
+            "uci": "c4d5",
+            "filhos": [
+              "no-cap-d19-45"
+            ]
+          },
+          "no-cap-d19-45": {
+            "id": "no-cap-d19-45",
+            "uci": "b3d2",
+            "filhos": [
+              "no-cap-d19-46"
+            ]
+          },
+          "no-cap-d19-46": {
+            "id": "no-cap-d19-46",
+            "uci": "e7f5",
+            "filhos": [
+              "no-cap-d19-47"
+            ]
+          },
+          "no-cap-d19-47": {
+            "id": "no-cap-d19-47",
+            "uci": "g2g4",
+            "filhos": [
+              "no-cap-d19-48"
+            ],
+            "comentario": "Os peões expulsam o cavalo."
+          },
+          "no-cap-d19-48": {
+            "id": "no-cap-d19-48",
+            "uci": "f5d4",
+            "filhos": [
+              "no-cap-d19-49"
+            ]
+          },
+          "no-cap-d19-49": {
+            "id": "no-cap-d19-49",
+            "uci": "c3d3",
+            "filhos": [
+              "no-cap-d19-50"
+            ]
+          },
+          "no-cap-d19-50": {
+            "id": "no-cap-d19-50",
+            "uci": "b7b5",
+            "filhos": [
+              "no-cap-d19-51"
+            ]
+          },
+          "no-cap-d19-51": {
+            "id": "no-cap-d19-51",
+            "uci": "c1b1",
+            "filhos": [
+              "no-cap-d19-52"
+            ]
+          },
+          "no-cap-d19-52": {
+            "id": "no-cap-d19-52",
+            "uci": "b5b4",
+            "filhos": [
+              "no-cap-d19-53"
+            ]
+          },
+          "no-cap-d19-53": {
+            "id": "no-cap-d19-53",
+            "uci": "a3a4",
+            "filhos": [
+              "no-cap-d19-54"
+            ]
+          },
+          "no-cap-d19-54": {
+            "id": "no-cap-d19-54",
+            "uci": "h7h6",
+            "filhos": [
+              "no-cap-d19-55"
+            ]
+          },
+          "no-cap-d19-55": {
+            "id": "no-cap-d19-55",
+            "uci": "d2b3",
+            "filhos": [
+              "no-cap-d19-56"
+            ]
+          },
+          "no-cap-d19-56": {
+            "id": "no-cap-d19-56",
+            "uci": "e8e7",
+            "filhos": [
+              "no-cap-d19-57"
+            ]
+          },
+          "no-cap-d19-57": {
+            "id": "no-cap-d19-57",
+            "uci": "e4d2",
+            "filhos": [
+              "no-cap-d19-58"
+            ]
+          },
+          "no-cap-d19-58": {
+            "id": "no-cap-d19-58",
+            "uci": "e7e1",
+            "filhos": [
+              "no-cap-d19-59"
+            ]
+          },
+          "no-cap-d19-59": {
+            "id": "no-cap-d19-59",
+            "uci": "f1e1",
+            "filhos": [
+              "no-cap-d19-60"
+            ]
+          },
+          "no-cap-d19-60": {
+            "id": "no-cap-d19-60",
+            "uci": "g7g5",
+            "filhos": [
+              "no-cap-d19-61"
+            ]
+          },
+          "no-cap-d19-61": {
+            "id": "no-cap-d19-61",
+            "uci": "f4f5",
+            "filhos": [],
+            "comentario": "As Pretas abandonaram: o peão de f5 abre caminho para a torre e o cavalo de d4 vai cair. [RESUMO] Cb3, Cc3, De2, Be3, roque grande e depois os peões da ala do rei."
+          }
+        }
+      }
+    ],
+    "introducoes": [],
+    "capitulos": [
+      {
+        "id": "cap-d19",
+        "titulo": "Partida modelo: Radjabov × Tomashevsky, 2012",
+        "resumo": "Ver a Potter numa partida de verdade: De2, Be3, roque grande e ataque.",
+        "secao": {
+          "titulo": "Partida modelo",
+          "subtitulo": "Radjabov × Tomashevsky, 2012"
+        },
+        "analiseId": "analise-cap-d19",
+        "inicioNodeId": "no-cap-d19-0",
+        "caminho": [
+          "no-cap-d19-1",
+          "no-cap-d19-2",
+          "no-cap-d19-3",
+          "no-cap-d19-4",
+          "no-cap-d19-5",
+          "no-cap-d19-6",
+          "no-cap-d19-7",
+          "no-cap-d19-8",
+          "no-cap-d19-9",
+          "no-cap-d19-10",
+          "no-cap-d19-11",
+          "no-cap-d19-12",
+          "no-cap-d19-13",
+          "no-cap-d19-14",
+          "no-cap-d19-15",
+          "no-cap-d19-16",
+          "no-cap-d19-17",
+          "no-cap-d19-18",
+          "no-cap-d19-19",
+          "no-cap-d19-20",
+          "no-cap-d19-21",
+          "no-cap-d19-22",
+          "no-cap-d19-23",
+          "no-cap-d19-24",
+          "no-cap-d19-25",
+          "no-cap-d19-26",
+          "no-cap-d19-27",
+          "no-cap-d19-28",
+          "no-cap-d19-29",
+          "no-cap-d19-30",
+          "no-cap-d19-31",
+          "no-cap-d19-32",
+          "no-cap-d19-33",
+          "no-cap-d19-34",
+          "no-cap-d19-35",
+          "no-cap-d19-36",
+          "no-cap-d19-37",
+          "no-cap-d19-38",
+          "no-cap-d19-39",
+          "no-cap-d19-40",
+          "no-cap-d19-41",
+          "no-cap-d19-42",
+          "no-cap-d19-43",
+          "no-cap-d19-44",
+          "no-cap-d19-45",
+          "no-cap-d19-46",
+          "no-cap-d19-47",
+          "no-cap-d19-48",
+          "no-cap-d19-49",
+          "no-cap-d19-50",
+          "no-cap-d19-51",
+          "no-cap-d19-52",
+          "no-cap-d19-53",
+          "no-cap-d19-54",
+          "no-cap-d19-55",
+          "no-cap-d19-56",
+          "no-cap-d19-57",
+          "no-cap-d19-58",
+          "no-cap-d19-59",
+          "no-cap-d19-60",
+          "no-cap-d19-61"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-d19-0",
+            "nodeId": "no-cap-d19-0",
+            "texto": "Teimour Radjabov × Evgeny Tomashevsky — Memorial Tal 2012, Moscou.",
+            "pausa": "temporizada",
+            "rotulo": "Partida"
+          },
+          {
+            "id": "narracao-no-cap-d19-0-2",
+            "nodeId": "no-cap-d19-0",
+            "texto": "Teimour Radjabov (2784) venceu Evgeny Tomashevsky (2738) no Memorial Tal, em Moscou, 2012. Partida do banco de mestres do Lichess.",
+            "pausa": "temporizada",
+            "rotulo": "Partida real"
+          },
+          {
+            "id": "narracao-no-cap-d19-17",
+            "nodeId": "no-cap-d19-17",
+            "texto": "É o nosso esquema da Potter, lance a lance.",
+            "pausa": "temporizada",
+            "rotulo": "Conexão"
+          },
+          {
+            "id": "narracao-no-cap-d19-19",
+            "nodeId": "no-cap-d19-19",
+            "texto": "Aqui a partida sai da nossa linha: nós jogamos 10.f4. Daqui em diante, estude as ideias, não os lances.",
+            "pausa": "temporizada",
+            "rotulo": "Atenção"
+          },
+          {
+            "id": "narracao-no-cap-d19-25",
+            "nodeId": "no-cap-d19-25",
+            "texto": "O bispo que mais incomodava saiu do tabuleiro.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d19-29",
+            "nodeId": "no-cap-d19-29",
+            "texto": "O peão de f avança: mais espaço e a coluna f para a torre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d19-37",
+            "nodeId": "no-cap-d19-37",
+            "texto": "As duas torres nas colunas abertas.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d19-47",
+            "nodeId": "no-cap-d19-47",
+            "texto": "Os peões expulsam o cavalo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d19-61",
+            "nodeId": "no-cap-d19-61",
+            "texto": "As Pretas abandonaram: o peão de f5 abre caminho para a torre e o cavalo de d4 vai cair.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d19-61-2",
+            "nodeId": "no-cap-d19-61",
+            "texto": "Cb3, Cc3, De2, Be3, roque grande e depois os peões da ala do rei.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          }
+        ]
+      }
+    ],
+    "treinos": [],
+    "praticas": [],
+    "fluxo": [
+      {
+        "id": "etapa-cap-d19",
+        "tipo": "capitulo",
+        "entidadeId": "cap-d19"
+      }
+    ]
+  },
+  "posicoes": {},
+  "revisoes": {},
+  "manifesto": {
+    "aulaId": "AB-BRANCAS-ESCOCESA-D",
+    "aula": "59bc6de27cab1a09d0dde4b2c67ed09c9e9a8b53e763a4c1e0527e8e4ec960f1",
+    "posicoes": {},
+    "revisoes": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

@@ -424,15 +424,22 @@ export const CATEGORIAS: CategoriaDaLinha[] = ["arma", "esquema", "preparacao", 
 
 const normalizar = (texto: string) => texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
+/**
+ * O prefixo do capítulo de treinador no estudo: "Move Trainer — …" (o nome antigo, que os estudos
+ * publicados usam) ou "Treinador de lances — …" (o nome do site desde 18/9/2026). Os dois valem.
+ */
+const PREFIXO_DO_TREINADOR = /^(move trainer|treinador de lances)\s*[—–-]\s*/i;
+
 /** A categoria sai do rótulo do título: "Move Trainer — Golpe 1: …" é golpe. */
 export function categoriaDoTitulo(titulo: string): CategoriaDaLinha | null {
-  const rotulo = normalizar(titulo.replace(/^move trainer\s*[—–-]\s*/i, ""));
+  const rotulo = normalizar(titulo.replace(PREFIXO_DO_TREINADOR, ""));
   if (/nao funciona/.test(rotulo)) return "nao-funciona";
   if (/desvio/.test(rotulo)) return "desvio";
   if (/^arma\b/.test(rotulo)) return "arma";
   if (/^esquema\b/.test(rotulo)) return "esquema";
   if (/^preparacao\b/.test(rotulo)) return "preparacao";
-  if (/^golpe\b/.test(rotulo)) return "golpe";
+  // "Imprecisão" é o golpe que o motor mede abaixo de +2 (Doug, 18/9/2026): a mesma categoria de linha.
+  if (/^(golpe|imprecis(ao|oes))\b/.test(rotulo)) return "golpe";
   if (/^defesa\b/.test(rotulo)) return "defesa";
   if (/linha (mais dificil|critica)/.test(rotulo)) return "linha-critica";
   if (/esquecer/.test(rotulo)) return "se-esquecer";
@@ -535,7 +542,7 @@ export function lerCursoDeAbertura(texto: string, cor: CorDoCurso): LeituraDoCur
     const secao = intro.secoes[0] ? secaoDoTexto(intro.secoes[0]) : null;
     const temPartidaReal = /\[PARTIDA REAL\]/.test(partida.intro ?? "") || (partida.resultado !== null && partida.resultado !== "*");
 
-    const ehTreinador = /^E22/.test(codigo) || /^move trainer\s*[—–-]/i.test(titulo);
+    const ehTreinador = /^E22/.test(codigo) || PREFIXO_DO_TREINADOR.test(titulo);
     const papel: PapelDoCapitulo = !arvore.filhos.length ? "vazio"
       : ehTreinador ? "treinador"
         : aula === "D" ? (temPartidaReal ? "partida-modelo" : "vazio")
@@ -637,7 +644,7 @@ export function lerCursoDeAbertura(texto: string, cor: CorDoCurso): LeituraDoCur
     for (const lances of capitulo.linhas) {
       const chave = chaveDe(lances);
       if (vistas.has(chave)) continue;
-      const linha: LinhaDoCurso = { chave, lances, capitulo: capitulo.codigo, titulo: capitulo.titulo.replace(/^move trainer\s*[—–-]\s*/i, ""), objetivo: capitulo.objetivo, categoria: capitulo.categoria, ordem: linhas.length + 1, completa: true };
+      const linha: LinhaDoCurso = { chave, lances, capitulo: capitulo.codigo, titulo: capitulo.titulo.replace(PREFIXO_DO_TREINADOR, ""), objetivo: capitulo.objetivo, categoria: capitulo.categoria, ordem: linhas.length + 1, completa: true };
       vistas.set(chave, linha);
       linhas.push(linha);
     }

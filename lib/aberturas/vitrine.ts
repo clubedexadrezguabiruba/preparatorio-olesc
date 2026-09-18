@@ -37,7 +37,7 @@ export type NaVitrine = {
 };
 
 export const VITRINE: readonly NaVitrine[] = [
-  { cor: "brancas", abertura: "escocesa", sans: ["e4", "e5", "Nf3", "Nc6", "d4"], lances: "1.e4 e5 2.Cf3 Cc6 3.d4", frequencia: "39% das respostas a 1.e4", liberada: false },
+  { cor: "brancas", abertura: "escocesa", sans: ["e4", "e5", "Nf3", "Nc6", "d4"], lances: "1.e4 e5 2.Cf3 Cc6 3.d4", frequencia: "39% das respostas a 1.e4", liberada: true },
   { cor: "brancas", abertura: "alapin", sans: ["e4", "c5", "c3"], lances: "1.e4 c5 2.c3", frequencia: "10% das respostas a 1.e4", liberada: false },
   { cor: "brancas", abertura: "escandinava", sans: ["e4", "d5"], lances: "1.e4 d5", frequencia: "9% das respostas a 1.e4", liberada: false },
   { cor: "brancas", abertura: "philidor", sans: ["e4", "e5", "Nf3", "d6"], lances: "1.e4 e5 2.Cf3 d6", frequencia: "8% das respostas a 1.e4", liberada: false },

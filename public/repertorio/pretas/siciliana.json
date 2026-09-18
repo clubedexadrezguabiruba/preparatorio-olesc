@@ -199,7 +199,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Golpe 1: f3 e Dd2 — Qh4+",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 1: f3 e Dd2 — Qh4+",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1b2rk1/p4pbp/2p1p1p1/3pP3/N6q/4B3/PPPQ2PP/R3KB1R w KQ - 1 14",
     "lances": [
@@ -298,8 +298,8 @@
       "7": "Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.",
       "9": "O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.",
       "11": "O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.",
-      "12": "7.f3 é o lance mais jogado. Ele copia o ataque do Dragão comum, mas aqui o nosso peão ainda está em d7.",
-      "13": "Rei primeiro. Depois vem ...d5. Três respostas, uma regra: roque antes de tudo. Os golpes vêm depois.",
+      "12": "7.f3 prepara o ataque.",
+      "13": "Rei primeiro.",
       "14": "As Brancas querem rocar grande e atacar. Qual é o nosso lance?",
       "15": "O centro abre enquanto o rei dele ainda está em e1.",
       "16": "Troca natural, mas ela melhora a nossa estrutura.",
@@ -319,7 +319,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Golpe 1: f3 e Dd2 — d5",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 1: f3 e Dd2 — d5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bq1rk1/pp2ppbp/2n2np1/3p4/3NP3/2N1BP2/PPPQ2PP/R3KB1R w KQ - 0 9",
     "lances": [
@@ -398,7 +398,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Golpe 2: roque cedo com o bispo em c4 — h6",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 2: roque cedo com o bispo em c4 — h6",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bq2k1/pp1pprb1/2n3pp/8/3NN3/4B3/PPP2PPP/R2Q1RK1 w - - 0 11",
     "lances": [
@@ -477,8 +477,7 @@
       "7": "Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.",
       "9": "O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.",
       "11": "O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.",
-      "12": "Com o bispo em c4, ele mira f7.",
-      "13": "Rei primeiro, também aqui. Depois olhamos o peão de e4.",
+      "12": "O lance certo das Brancas.",
       "14": "O rei dele rocou antes de guardar o bispo. Qual peão ficou fraco?",
       "15": "O cavalo come o peão. Se 9.Cxe4, vem ...d5 e atacamos duas peças.",
       "19": "...h6 tira g5 do cavalo. Ficamos com os dois bispos. Bispo em c4 e roque cedo: ...Cxe4!. Depois ...d5 ou ...h6."
@@ -493,7 +492,7 @@
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Golpe 2: roque cedo com o bispo em c4 — d5",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 2: roque cedo com o bispo em c4 — d5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bq1rk1/pp2ppbp/2n3p1/3p4/2BNN3/4B3/PPP2PPP/R2Q1RK1 w - - 0 10",
     "lances": [
@@ -563,8 +562,7 @@
       "7": "Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.",
       "9": "O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.",
       "11": "O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.",
-      "12": "Com o bispo em c4, ele mira f7.",
-      "13": "Rei primeiro, também aqui. Depois olhamos o peão de e4.",
+      "12": "O lance certo das Brancas.",
       "14": "O rei dele rocou antes de guardar o bispo. Qual peão ficou fraco?",
       "15": "O cavalo come o peão. Se 9.Cxe4, vem ...d5 e atacamos duas peças.",
       "16": "Ele recuperou a peça? Ainda não. Qual peão ataca duas peças?",
@@ -576,11 +574,91 @@
     "ordem": 7
   },
   {
+    "id": "pretas-siciliana-ab7a297a",
+    "cor": "pretas",
+    "abertura": "siciliana",
+    "nivel": "base",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 2: roque cedo com o bispo em c4 — Qb6",
+    "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "fenFinal": "r1b2rk1/pp1pppbp/1qn2np1/8/2BNP3/2N1BP2/PPP3PP/R2QK2R w KQ - 1 9",
+    "lances": [
+      "e2e4",
+      "c7c5",
+      "g1f3",
+      "b8c6",
+      "d2d4",
+      "c5d4",
+      "f3d4",
+      "g7g6",
+      "b1c3",
+      "f8g7",
+      "c1e3",
+      "g8f6",
+      "f1c4",
+      "e8g8",
+      "f2f3",
+      "d8b6"
+    ],
+    "sans": [
+      "e4",
+      "c5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "cxd4",
+      "Nxd4",
+      "g6",
+      "Nc3",
+      "Bg7",
+      "Be3",
+      "Nf6",
+      "Bc4",
+      "O-O",
+      "f3",
+      "Qb6"
+    ],
+    "meus": [
+      1,
+      3,
+      5,
+      7,
+      9,
+      11,
+      13,
+      15
+    ],
+    "alternativas": {},
+    "errosNomeados": {},
+    "marcas": {
+      "11": "!",
+      "13": "!",
+      "15": "!"
+    },
+    "comentarios": {
+      "1": "A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.",
+      "2": "A resposta mais comum das Brancas. Qual peça sai agora?",
+      "3": "O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.",
+      "4": "As Brancas abriram o centro. O que fazemos?",
+      "5": "Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.",
+      "6": "Qual lance dá nome à nossa abertura?",
+      "7": "Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.",
+      "9": "O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.",
+      "11": "O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.",
+      "12": "O lance certo das Brancas.",
+      "14": "O peão guarda e4, mas o rei branco ficou no centro e o peão de b2 ficou sem defesa. Qual lance da dama ameaça b2?",
+      "15": "Isso: a dama ameaça ...Dxb2 e pressiona o cavalo de d4. Aqui não ganhamos material: 8.f3 é só uma imprecisão."
+    },
+    "plano": {},
+    "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
+    "categoria": "golpe",
+    "ordem": 8
+  },
+  {
     "id": "pretas-siciliana-e5b86926",
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Golpe 3: 5.Cxc6 e Dd4 — Qxe8+",
+    "nome": "Siciliana: Dragão Acelerado — Golpe 1: 5.Cxc6 e Dd4 — Qxe8+",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1b1q3/p4k1p/2p2np1/3p4/1b6/1BP5/PP3PPP/RNB1K2R w KQ - 0 15",
     "lances": [
@@ -697,14 +775,14 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "golpe",
-    "ordem": 8
+    "ordem": 9
   },
   {
     "id": "pretas-siciliana-6bf72d7e",
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Golpe 3: 5.Cxc6 e Dd4 — Qb6",
+    "nome": "Siciliana: Dragão Acelerado — Golpe 1: 5.Cxc6 e Dd4 — Qb6",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1b1kb1r/p2ppp1p/1qp3p1/3nP3/2PQ4/8/PP3PPP/RNB1KB1R w KQkq - 1 9",
     "lances": [
@@ -783,14 +861,14 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "golpe",
-    "ordem": 9
+    "ordem": 10
   },
   {
     "id": "pretas-siciliana-3fd82f8d",
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Golpe 4: 5.c3",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 3: 5.c3",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bq1rk1/pp2ppbp/2n2np1/3p4/3NP3/2PBB3/PP3PPP/RN1Q1RK1 w - - 0 9",
     "lances": [
@@ -857,14 +935,14 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "golpe",
-    "ordem": 10
+    "ordem": 11
   },
   {
     "id": "pretas-siciliana-a0c4ff8c",
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Golpe 5: ataque cedo em f7 — d5",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 4: ataque cedo em f7 — d5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2B1P2Q/5N2/PPPP1PPP/RNB1K2R w KQkq - 0 6",
     "lances": [
@@ -917,14 +995,14 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "golpe",
-    "ordem": 11
+    "ordem": 12
   },
   {
     "id": "pretas-siciliana-6224038c",
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Golpe 5: ataque cedo em f7 — d5",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 4: ataque cedo em f7 — d5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bqkb1r/pp2pppp/5n2/2pp4/2Q1P3/2P5/PP1P1PPP/RNB1K1NR w KQkq - 0 7",
     "lances": [
@@ -978,14 +1056,14 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "golpe",
-    "ordem": 12
+    "ordem": 13
   },
   {
     "id": "pretas-siciliana-3940532b",
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Golpe 5: ataque cedo em f7 — d5",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 4: ataque cedo em f7 — d5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bqkb1r/pp2pppp/5n2/2pp4/2BnP3/3P4/PPP2PPP/RNBQK1NR w KQkq - 0 6",
     "lances": [
@@ -1030,14 +1108,14 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "golpe",
-    "ordem": 13
+    "ordem": 14
   },
   {
     "id": "pretas-siciliana-e47208ee",
     "cor": "pretas",
     "abertura": "siciliana",
     "nivel": "base",
-    "nome": "Siciliana: Dragão Acelerado — Golpe 5: ataque cedo em f7 — d5",
+    "nome": "Siciliana: Dragão Acelerado — Imprecisão 4: ataque cedo em f7 — d5",
     "fenInicial": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     "fenFinal": "r1bq1b1r/pp2pk1p/2n2np1/2Qp4/4P3/5N2/PPPP1PPP/RNB1K2R w KQ - 0 7",
     "lances": [
@@ -1087,7 +1165,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "golpe",
-    "ordem": 14
+    "ordem": 15
   },
   {
     "id": "pretas-siciliana-91140ca9",
@@ -1213,7 +1291,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 15
+    "ordem": 16
   },
   {
     "id": "pretas-siciliana-5f1686b1",
@@ -1326,7 +1404,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 16
+    "ordem": 17
   },
   {
     "id": "pretas-siciliana-50abf9be",
@@ -1429,7 +1507,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 17
+    "ordem": 18
   },
   {
     "id": "pretas-siciliana-3a34144f",
@@ -1539,7 +1617,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 18
+    "ordem": 19
   },
   {
     "id": "pretas-siciliana-a3827ee0",
@@ -1628,7 +1706,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 19
+    "ordem": 20
   },
   {
     "id": "pretas-siciliana-edec7f4c",
@@ -1706,7 +1784,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 20
+    "ordem": 21
   },
   {
     "id": "pretas-siciliana-4639d076",
@@ -1810,8 +1888,7 @@
       "7": "Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.",
       "9": "O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.",
       "11": "O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.",
-      "12": "Com o bispo em c4, ele mira f7.",
-      "13": "Rei primeiro, também aqui. Depois olhamos o peão de e4.",
+      "12": "O lance certo das Brancas.",
       "14": "O lance certo. Aqui ...Cxe4 não funciona: veja o capítulo do bispo em b3, no bloco C.",
       "15": "A torre espera. Aqui ...Cxe4 não funciona: o bispo saiu de c4 e o rei dele não rocou.",
       "16": "Ele rocou pequeno. Agora um passo só: ...d6, e ameaçamos ...Cg4.",
@@ -1823,7 +1900,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 21
+    "ordem": 22
   },
   {
     "id": "pretas-siciliana-68027bfe",
@@ -1923,8 +2000,7 @@
       "7": "Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.",
       "9": "O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.",
       "11": "O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.",
-      "12": "Com o bispo em c4, ele mira f7.",
-      "13": "Rei primeiro, também aqui. Depois olhamos o peão de e4.",
+      "12": "O lance certo das Brancas.",
       "14": "O lance certo. Aqui ...Cxe4 não funciona: veja o capítulo do bispo em b3, no bloco C.",
       "15": "A torre espera. Aqui ...Cxe4 não funciona: o bispo saiu de c4 e o rei dele não rocou.",
       "16": "Ele rocou pequeno. Agora um passo só: ...d6, e ameaçamos ...Cg4.",
@@ -1934,7 +2010,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 22
+    "ordem": 23
   },
   {
     "id": "pretas-siciliana-19343264",
@@ -2054,15 +2130,14 @@
       "7": "Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.",
       "9": "O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.",
       "11": "O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.",
-      "12": "Com o bispo em c4, ele mira f7.",
-      "13": "Rei primeiro, também aqui. Depois olhamos o peão de e4.",
+      "12": "O lance certo das Brancas.",
       "14": "O lance certo. Aqui ...Cxe4 não funciona: veja o capítulo do bispo em b3, no bloco C.",
       "15": "A torre espera. Aqui ...Cxe4 não funciona: o bispo saiu de c4 e o rei dele não rocou."
     },
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 23
+    "ordem": 24
   },
   {
     "id": "pretas-siciliana-bf67548a",
@@ -2170,15 +2245,14 @@
       "7": "Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.",
       "9": "O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.",
       "11": "O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.",
-      "12": "Com o bispo em c4, ele mira f7.",
-      "13": "Rei primeiro, também aqui. Depois olhamos o peão de e4.",
+      "12": "O lance certo das Brancas.",
       "14": "O lance certo. Aqui ...Cxe4 não funciona: veja o capítulo do bispo em b3, no bloco C.",
       "15": "A torre espera. Aqui ...Cxe4 não funciona: o bispo saiu de c4 e o rei dele não rocou."
     },
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 24
+    "ordem": 25
   },
   {
     "id": "pretas-siciliana-5a29853c",
@@ -2277,15 +2351,14 @@
       "7": "Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.",
       "9": "O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.",
       "11": "O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.",
-      "12": "Com o bispo em c4, ele mira f7.",
-      "13": "Rei primeiro, também aqui. Depois olhamos o peão de e4.",
+      "12": "O lance certo das Brancas.",
       "14": "O lance certo. Aqui ...Cxe4 não funciona: veja o capítulo do bispo em b3, no bloco C.",
       "15": "A torre espera. Aqui ...Cxe4 não funciona: o bispo saiu de c4 e o rei dele não rocou."
     },
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 25
+    "ordem": 26
   },
   {
     "id": "pretas-siciliana-98639cdd",
@@ -2409,7 +2482,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 26
+    "ordem": 27
   },
   {
     "id": "pretas-siciliana-25e5b0f7",
@@ -2542,7 +2615,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 27
+    "ordem": 28
   },
   {
     "id": "pretas-siciliana-0e2cd710",
@@ -2643,7 +2716,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "defesa",
-    "ordem": 28
+    "ordem": 29
   },
   {
     "id": "pretas-siciliana-b31aeeda",
@@ -2703,7 +2776,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 29
+    "ordem": 30
   },
   {
     "id": "pretas-siciliana-cc67ed72",
@@ -2761,7 +2834,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 30
+    "ordem": 31
   },
   {
     "id": "pretas-siciliana-85efffb1",
@@ -2823,7 +2896,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 31
+    "ordem": 32
   },
   {
     "id": "pretas-siciliana-8c38c01c",
@@ -2885,7 +2958,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 32
+    "ordem": 33
   },
   {
     "id": "pretas-siciliana-4dbdc305",
@@ -2947,7 +3020,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 33
+    "ordem": 34
   },
   {
     "id": "pretas-siciliana-c632f4e8",
@@ -2991,7 +3064,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 34
+    "ordem": 35
   },
   {
     "id": "pretas-siciliana-63c825a8",
@@ -3104,7 +3177,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 35
+    "ordem": 36
   },
   {
     "id": "pretas-siciliana-4c9c1e64",
@@ -3211,7 +3284,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 36
+    "ordem": 37
   },
   {
     "id": "pretas-siciliana-f6e74697",
@@ -3302,7 +3375,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 37
+    "ordem": 38
   },
   {
     "id": "pretas-siciliana-2dda9a0d",
@@ -3403,7 +3476,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 38
+    "ordem": 39
   },
   {
     "id": "pretas-siciliana-dea476ce",
@@ -3450,7 +3523,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 39
+    "ordem": 40
   },
   {
     "id": "pretas-siciliana-2439f9a0",
@@ -3556,7 +3629,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 40
+    "ordem": 41
   },
   {
     "id": "pretas-siciliana-ee494bc0",
@@ -3609,7 +3682,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 41
+    "ordem": 42
   },
   {
     "id": "pretas-siciliana-5c31a328",
@@ -3692,7 +3765,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 42
+    "ordem": 43
   },
   {
     "id": "pretas-siciliana-ed10f7b7",
@@ -3770,7 +3843,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 43
+    "ordem": 44
   },
   {
     "id": "pretas-siciliana-ec5b66dd",
@@ -3818,7 +3891,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 44
+    "ordem": 45
   },
   {
     "id": "pretas-siciliana-bc96b3f0",
@@ -3864,7 +3937,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 45
+    "ordem": 46
   },
   {
     "id": "pretas-siciliana-8295fa57",
@@ -3910,7 +3983,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 46
+    "ordem": 47
   },
   {
     "id": "pretas-siciliana-807836d5",
@@ -3956,7 +4029,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 47
+    "ordem": 48
   },
   {
     "id": "pretas-siciliana-cd141ada",
@@ -4013,7 +4086,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 48
+    "ordem": 49
   },
   {
     "id": "pretas-siciliana-52224521",
@@ -4068,7 +4141,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 49
+    "ordem": 50
   },
   {
     "id": "pretas-siciliana-70ef3515",
@@ -4120,7 +4193,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 50
+    "ordem": 51
   },
   {
     "id": "pretas-siciliana-289146be",
@@ -4167,7 +4240,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 51
+    "ordem": 52
   },
   {
     "id": "pretas-siciliana-2ad8bc86",
@@ -4219,7 +4292,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "desvio",
-    "ordem": 52
+    "ordem": 53
   },
   {
     "id": "pretas-siciliana-85fe2d02",
@@ -4297,7 +4370,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "se-esquecer",
-    "ordem": 53
+    "ordem": 54
   },
   {
     "id": "pretas-siciliana-0d87dddf",
@@ -4360,7 +4433,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "se-esquecer",
-    "ordem": 54
+    "ordem": 55
   },
   {
     "id": "pretas-siciliana-b6be3ef9",
@@ -4409,7 +4482,7 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "se-esquecer",
-    "ordem": 55
+    "ordem": 56
   },
   {
     "id": "pretas-siciliana-4f8f36e6",
@@ -4463,6 +4536,6 @@
     "plano": {},
     "fonte": "estudo local v1.0 — Siciliana: Dragão Acelerado",
     "categoria": "se-esquecer",
-    "ordem": 56
+    "ordem": 57
   }
 ]

@@ -7601,3 +7601,146 @@ escrito à mão no `[TRAIN]` do estudo ("Nbc3, Rg1 e Bf4"), virou "Cbc3, Tg1 e B
 `notacao-em-portugues.test.ts` passou de "dez torres" para "nenhuma torre em inglês".
 
 **Pendente:** o Doug olhar na tela uma armadilha de cada curso (o círculo do `??` no lance do adversário).
+
+## Escocesa no modelo da Francesa — 18/9/2026 (madrugada e manhã)
+
+Passo 4 do plano `~/.claude/plans/quero-arrumar-as-aberturas-quiet-hamster.md`. O Doug pediu para a Escocesa a mesma
+crítica que o ChatGPT fez ao Dragão (menos linhas, uma ideia por capítulo, estrutura da Francesa, escolhas pelo que
+se joga no Lichess 1000–1800) e aprovou a estrutura de **35 capítulos**, com os lances só do motor marcados.
+
+**Levantamento** (banco do Lichess 1000–1800, blitz+rápida+clássica; % das partidas do NOSSO aluno depois de 3.d4):
+3...exd4 4.Cxd4 Cxd4 5.Dxd4 **35,6%** (5...d6 11,2 · Cf6 8,4 · c5 5,4 · b6 3,5 · Df6 3,3); 4...Bc5 13,1%; 3...d6 10%
+(4.Cc3 exd4 transpõe para a espinha; 4...Bg4 26% das respostas, sem fonte); 4...Cf6 8,2%; 3...Cf6 4,3; 3...f6 3,2
+(Brancas 62%); 4...Dh4 1,1% com as Brancas fazendo só **43,7%**. Stockfish 18, profundidade 20, nos golpes:
+5...Cf6 6.e5 Ch5 7.g4 +3,54; 5...b6 6.Cc3 Bc5 7.Dxg7 +2,28; 3...Cf6 4.dxe5 Cxe4 5.Bc4 Bc5 6.Dd5 +3,31; 4...Bc5
+5.Cb3 Bxf2+ 6.Rxf2 +3,05; 3...d6 4.Cc3 Be6 5.d5 +3,69; 5...d6 6.Cc3 Cf6 7.e5?! zera a vantagem (7.Bf4 +0,99).
+Partida-modelo do banco de mestres: Radjabov × Tomashevsky, Memorial Tal 2012 (`HLYnhawF`), a Potter lance a lance.
+
+**O estudo.** `content/repertorio/rascunhos/estudo-brancas-escocesa.pgn`, 35 capítulos: A (00, A00, A01), B (B02
+respostas; B03–B09 sete golpes; B10 laboratório com 7 CASOS; B11 quando o e5 não funciona), C (C12 montagem contra
+5...d6; C13 duas regras contra ...c5/...Df6/...b6; C14 Potter com as três respostas no mesmo capítulo; C15 4...Cf6;
+C16 3...d6; C17 raras; C18 esqueci a teoria), D19, E20–E21, E22A–K (11 move trainers), F23. Lances das fontes
+(Grigoryan, Krikor, Short & Sweet); o que é só do motor vai em `[REFERENCIA]` com o número. Prosa em notação
+portuguesa (a primeira versão tinha `Kxd8`/`Nxe5` nas referências e `notacao-em-portugues` reprovou).
+Símbolos: o Krikor marca, pela Philidor, 4.Cc3 $5 $16 e 4.dxe5 $5 depois de 3...Bd6 — `marcas-das-fontes` cobrou os
+dois, e eles entraram. Pedido do Doug pela outra sessão (f8): lances do adversário nas armadilhas com ?!/?/?? pela
+perda no Stockfish — 6...Ch5?, 5...Bc5? (linha 3...Cf6), 5...b6?!, 4...Ba5?!, 6...De7?!, 4...Be6?? (a marca era nossa).
+Depois, a regra da Siciliana: no máximo 1–2 perguntas por capítulo e ramos raros sem narração (B 84 → 62 etapas,
+C 51 → 46).
+
+**Números.** Leitor: **0 lances ilegais, 0 marcadores desconhecidos**, 5 avisos `DEFESAS_DEMAIS` informativos;
+planejar 2× idêntico. Move trainer **5 → 41 linhas, morrem 0** (as 5 antigas entram lance a lance; a do 3...Cf6 saiu
+do Avançado para o Base, e o `[%plano]` do bispo de f1 da linha do 5...d6 saiu, porque o gerador não o escreve).
+Conferência das 5 aulas: **verde, 0 erros, 0 avisos**. Etapas: A 15, B 62, C 46, D 1, E+F 33. Publicações finais:
+A `pub-ebf4623010f65162`, B `pub-66cdb47c1fb2f093`, C `pub-cac8814f77677025`, D `pub-cb243202ea2e08f5`, EF
+`pub-8c10980d12773d8a`. `liberada: true` na vitrine. Testes ajustados pela contagem nova: `banco` (Base 89 → 126,
+lances nossos 886 → 1133), `escrever` (91 → 129 jogos e as contagens do corpus), `notacao-em-portugues` (reis 45,
+desempate 10 com os nomes novos `Rfe1`/`Kb1`), e `impacto`/`sessao` passaram a usar a Escandinava como amostra de
+arquivo escrito à mão (a Escocesa gerada não tem Avançado nem ramo do adversário). Portões: `npm test` 1702/1702,
+typecheck, lint, `validate:content`, `validate:mutations` 36/36, `repertorio:compilar -- --check`.
+
+**Playwright, a aula toda, local** (`alunoteste`, 1366 px, `innerWidth` 1366 sem rolagem lateral; os lances arrastados
+com o mouse, lidos da árvore do pacote e do repertório compilado): **A** 15/15 etapas e **Aula concluída!**; **B** 62/62,
+treinador de lances com as 21 linhas (417 lances nossos) e **Aula concluída!**; **C** 46/46, treino guiado 10 lances,
+treinador com 19 linhas (492 lances) e **Aula concluída!**; zero erro de console nas três. D e E+F: a rodada estava em
+andamento quando o Doug abriu o plano `~/.claude/plans/ai-est-um-problema-majestic-flame.md` numa sessão paralela.
+O servidor local travou uma vez com 0,45 GB livres (laço `/painel` ↔ `/entrar`, a página não via o perfil) e voltou
+depois de reiniciado.
+
+**Passagem de bastão (18/9, ~09h):** a Escocesa segue com o plano "Aulas de abertura diretas". Daqui em diante o
+`estudo-brancas-escocesa.pgn` é a fonte e se edita direto: o gerador em Python ficou no scratchpad desta sessão e
+**não** deve ser rodado de novo. Nada da Escocesa foi commitado (o plano novo faz um commit só, já reorganizado).
+
+**Pendente:** o Doug testar com a mão; o título da aula A diz "A defesa e nossa arma" (é o texto das Brancas, feito
+para a Francesa); 41 linhas passam da meta de 40 do Base.
+
+## Aula de abertura direta — 18/9/2026 (tarde)
+
+Plano aprovado pelo Doug: `~/.claude/plans/ai-est-um-problema-majestic-flame.md`. A regra está em `AGENTS.md`,
+"Aula de abertura é direta", e vale para todo curso, publicado ou futuro. **Um ponto ficou pela metade:** o
+treino guiado ficou sem comentário, mas o "Continuar" do fim dele não mudou. O plano pedia avanço automático
+depois do lance certo e, ao mesmo tempo, que o fim pedisse confirmação. No meio do treino já não havia Espaço
+(o adversário responde sozinho), e o único Espaço é o do fim, que o plano manda manter.
+
+### O que mudou
+
+- **Montagem** (`planejar-curso.ts`): cada capítulo vira **uma etapa**. Os ramos vão em `comparacoes`, e as
+  perguntas no campo novo `etapaV2Schema.paradas` (opcional, sem default: o hash das aulas de finais não
+  muda). A ordem da fita vem de `ordemDaFita` (`previa.ts`): a principal até o fim, depois os ramos, do mais
+  fundo ao mais raso. O Laboratório toca na ordem dos casos. O Resumo e o A seguir vão para o fim da última
+  linha tocada. O diagnóstico ganhou `PARADA_INVALIDA`. Apagar um treino tira ele das `paradas`
+  (`fluxoSemTreino`), e a "Ordem da aula" do editor diz "(N perguntas dentro)".
+- **Prévia** (`passosPelaFita`, só no domínio abertura; finais seguem com `passosNaHora`): a volta vai do que
+  está na tela até o começo comum com a linha seguinte. "A outra escolha: X" aparece só quando a linha se
+  separa ali; no Laboratório, indo a um caso mais adiante, a fala diz só "Voltamos a …" e a fita avança. O
+  passo da pergunta (`parada: treinoId`) vem depois das falas do nó, e o passo seguinte é o lance-resposta.
+  O `percursoParaComparar` saiu.
+- **Player**: `ObjectiveStage` ganhou `paradaNoPasso`, `aoParar`, `somNoInicio` e `depressa`. `TreeStage`
+  ganhou o modo `embutido` (o mesmo juiz, a mesma escada; no acerto, 800 ms e a narração volta).
+  `CapituloDoAlunoV2` alterna os dois na mesma etapa. A tentativa sobe com o id da etapa do capítulo, e
+  `fazer()` espera as tentativas pendentes antes de marcar a etapa.
+- **Servidor**: `gravar-v2.ts` aceita o treino que está nas `paradas` da etapa. `rodada-banco.ts` exige acerto
+  em cada pergunta nesta rodada. `comoPular` (`rodada.ts`): num capítulo com perguntas, o Pular **corre** a
+  fala e para em cada pergunta.
+- **Estudos**: saíram o mapa (Escocesa B02, Francesa B03, Siciliana B02) e o "Encontre o lance" (E20, E20, E27).
+  O `[SECAO]` passou para o capítulo seguinte. O `3...Cxd4 $6 … 5.Dxd4 $16`, que só existia no mapa da
+  Escocesa, foi como ramo para o C17 com os dois símbolos. A Siciliana ganhou `8.f3 Db6!` no capítulo (ramo com
+  pergunta) e no treinador.
+- **Nome**: "Treinador de lances" em todo texto visível. O leitor do estudo aceita os dois prefixos.
+- **Página do curso**: as aulas com os tópicos (`AulaDoCurso.topicos`) e, no fim, o bloco "Treinador de lances"
+  com o contador e o botão. Nenhuma linha listada quando há curso.
+- **Script**: `scripts/publicar-curso-de-abertura.ts <cor> <abertura> "<nome>" [--publicar]` faz ler → gravar →
+  aplicar o repertório → Conferir → Publicar, e sem `--publicar` mostra o impacto no repertório.
+
+### Golpe × Imprecisão — Stockfish 18, profundidade 22, fim da linha principal
+
+Registro completo em `content/repertorio/medidas-dos-golpes.json` (48 capítulos das aulas B, C e E+F).
+
+| Curso | Capítulo | Nota | Nome agora |
+|---|---|---|---|
+| Escocesa | Golpe 1 — cavalo em f6 cedo | +3,61 | Golpe 1 |
+| Escocesa | Golpe 2 — ...b6 e ...Bc5? | +2,26 | Golpe 2 |
+| Escocesa | Golpe 3 — 3...Cf6? e a dama em d5 | +3,63 | Golpe 3 |
+| Escocesa | Golpe 4 — 3...f6? | +1,32 | **Imprecisão 1** |
+| Escocesa | Golpe 5 — ...d5?, ...Bb4+?, ...Bd6? | +1,72 | **Imprecisão 2** |
+| Escocesa | Golpe 6 — ...Bxf2+? | +3,51 | Golpe 4 |
+| Escocesa | Golpe 7 — ...Dh4 | +0,60 | **Imprecisão 3** |
+| Francesa | Armadilha principal: ...Qxg2? | +4,14 | Armadilha |
+| Francesa | Armadilha avançada: sacrifício de dama | mate | Armadilha |
+| Siciliana | Golpe 1 — f3 e Dd2 | +1,91 | **Imprecisão 1** |
+| Siciliana | Golpe 2 — Bc4 e roque cedo | 0,00 | **Imprecisão 2** |
+| Siciliana | Golpe 3 — 5.Cxc6 e Dd4 | +5,25 | Golpe 1 |
+| Siciliana | Golpe 4 — 5.c3 | +0,24 | **Imprecisão 3** |
+| Siciliana | Golpe 5 — ataque cedo em f7 | +0,97 | **Imprecisão 4** |
+
+Os capítulos "Move Trainer — …" e os textos que diziam "golpe" nesses capítulos acompanham ("reconheça cada
+erro", "Sete erros, sete respostas"). Nos capítulos que viraram Imprecisão, o rótulo `[GOLPE]` virou `[PUNICAO]`.
+A categoria da linha continua "golpe" (`categoriaDoTitulo` lê "Imprecisão" como golpe).
+
+**Símbolos (regra das armadilhas, agora também na Imprecisão):** os lances do adversário desses capítulos já
+tinham marca. As duas medidas novas ficaram **sem símbolo**, porque perdem menos de 0,5: `8.f3` da Siciliana
+(+0,38 com 8.Bb3 → −0,02; a ameaça de ...Db6 é ...Dxb2, +3,07 se as Brancas passarem) e `8.O-O` (perda de 0,26).
+
+### Números
+
+- **Etapas** (antes → agora): Escocesa 15/62/46/1/33 → **5/11/9/1/4**; Francesa 9/44/18/1/35 → **5/10/6/1/4**;
+  Siciliana 16/49/60/1/17 → **5/8/14/1/3**. A tabela do plano bate aula por aula.
+- **Perguntas** preservadas: Escocesa 5/17/11/0/4, Francesa 2/13/4/0/3, Siciliana 5/15/16/0/0 (a Siciliana B ganhou
+  a do ...Db6). As perguntas da E20/E27 saíram junto com o "Encontre o lance".
+- **15 aulas republicadas**, conferência verde, 0 erro, 0 aviso. As D da Escocesa e da Francesa saíram com o
+  mesmo conteúdo.
+- **Repertório**: nenhuma linha morre. Nasce 1 (Siciliana, ...Db6), e com ela o **Avançado volta a trancar**
+  para quem tinha o Base completo (só contas de teste). O comentário mostrado no treinador muda em 36 linhas
+  da Escocesa, 9 da Francesa e 53 da Siciliana: sem o mapa, o lance mostra o comentário do próximo capítulo
+  em que aparece (ex.: some "A resposta mais comum: trocar os cavalos" de 13 linhas da Escocesa).
+- **Portões**: `npm test` 1716/1716, typecheck, lint e validate verdes. Testes que falham antes e passam
+  depois: "a fita" (`planejar-curso.test.ts`, o ramo que rejogava o lance da escolha), `comoPular`
+  (`rodada.test.ts`) e a pergunta dentro do capítulo (`gravar-v2.test.ts`).
+
+### O que não foi conferido
+
+- **No navegador**: o `next dev` caiu ("Jest worker encountered 2 child process exceptions") com 0,7 GB de RAM
+  livre, e toda página com player devolve 500, inclusive a de finais. A página do curso abre. O ensaio
+  `tmp-ensaio-abertura.mjs` está pronto para rodar quando o servidor voltar.
+- **O arrasto** só se prova com a mão: o Doug joga as perguntas.
+- As 11 aulas de finais continuam na fila (`FILA-DO-DOUG.md` §1): falta republicar.

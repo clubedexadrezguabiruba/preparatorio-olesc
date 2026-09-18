@@ -149,6 +149,7 @@ export class Motor {
         profundidade: profundidadeDaLinha,
         variante: {
           centesimos: casou[3] === "mate" ? null : Number(casou[4]),
+          ...(casou[3] === "mate" ? { mate: Number(casou[4]) } : {}),
           pv: casou[5],
         },
       });

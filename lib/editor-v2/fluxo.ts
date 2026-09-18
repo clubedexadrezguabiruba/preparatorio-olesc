@@ -70,11 +70,26 @@ export function excluirTreino(aula: AulaV2, treinoId: string): AulaV2 {
   return {
     ...aula,
     treinos: aula.treinos.filter((treino) => treino.id !== treinoId),
-    fluxo: aula.fluxo.filter((etapa) => !(etapa.tipo === "treino" && etapa.entidadeId === treinoId)),
+    fluxo: fluxoSemTreino(aula.fluxo, treinoId),
   };
 }
 
-const ROTULO_DO_TIPO: Record<Etapa["tipo"], string> = { introducao: "Introdução", capitulo: "Capítulo", treino: "Treino", pratica: "Prática", treinador: "Move trainer" };
+/**
+ * O fluxo sem este treino: sai a etapa dele e sai a menção nas `paradas` de um capítulo — a pergunta
+ * que some do cadastro não pode continuar sendo feita dentro da etapa (18/9/2026).
+ */
+export function fluxoSemTreino(fluxo: Etapa[], treinoId: string): Etapa[] {
+  return fluxo
+    .filter((etapa) => !(etapa.tipo === "treino" && etapa.entidadeId === treinoId))
+    .map((etapa) => {
+      if (!etapa.paradas?.includes(treinoId)) return etapa;
+      const { paradas, ...resto } = etapa;
+      const ficam = paradas.filter((id) => id !== treinoId);
+      return ficam.length ? { ...resto, paradas: ficam } : resto;
+    });
+}
+
+const ROTULO_DO_TIPO: Record<Etapa["tipo"], string> = { introducao: "Introdução", capitulo: "Capítulo", treino: "Treino", pratica: "Prática", treinador: "Treinador de lances" };
 
 /** O nome da entidade de uma etapa, como o professor a escreveu. */
 export function nomeDaEtapa(aula: AulaV2, etapa: Etapa): string {
@@ -97,6 +112,9 @@ export function etapasNaOrdem(aula: AulaV2): Array<{ etapa: Etapa; rotulo: strin
       : capituloAntes
         ? `depois do capítulo «${nomeDaEtapa(aula, capituloAntes)}»`
         : `depois ${anterior.tipo === "introducao" ? "da introdução" : `de «${nomeDaEtapa(aula, anterior)}»`}`;
-    return { etapa, rotulo: ROTULO_DO_TIPO[etapa.tipo], nome: nomeDaEtapa(aula, etapa), lugar };
+    // As perguntas jogadas dentro do capítulo não têm etapa: o nome diz quantas são.
+    const perguntas = etapa.paradas?.length ?? 0;
+    const nome = `${nomeDaEtapa(aula, etapa)}${perguntas ? ` (${perguntas} ${perguntas === 1 ? "pergunta" : "perguntas"} dentro)` : ""}`;
+    return { etapa, rotulo: ROTULO_DO_TIPO[etapa.tipo], nome, lugar };
   });
 }

@@ -99,7 +99,10 @@ test("o Base publicado tem 20 linhas, e o primeiro lance é sempre das brancas",
   // **89 desde 18/9/2026:** a Siciliana também passou a vir do estudo (Dragão Acelerado) — as 6
   // linhas escritas à mão continuam, com os mesmos ids, e o move trainer dela tem 56, todas no Base
   // (eram 74; o Doug mandou cortar os capítulos mais raros na faixa 1000–1800).
-  assert.equal(todas.filter((l) => l.nivel === "base").length, 89);
+  // **126 desde 18/9/2026:** a Escocesa também veio do estudo — as 5 linhas escritas à mão continuam,
+  // com os mesmos ids, e o move trainer dela tem 41, todas no Base (a do 3...Cf6 saiu do Avançado).
+  // **127 desde 18/9/2026 (tarde):** a Siciliana ganhou a linha 8.f3 Db6! no treinador (Doug).
+  assert.equal(todas.filter((l) => l.nivel === "base").length, 127);
 
   for (const linha of todas) {
     // O contrato de que a tela depende para saber quando auto-jogar: `meus`
@@ -112,7 +115,7 @@ test("o Base publicado tem 20 linhas, e o primeiro lance é sempre das brancas",
   }
 });
 
-test("o repertório publicado tem 886 lances nossos", () => {
+test("o repertório publicado tem 1141 lances nossos", () => {
   // Até 17/9/2026 este teste também exigia comentário em cada um deles; o Doug
   // tornou o comentário opcional no move trainer, nos 11 repertórios.
   let nossos = 0;
@@ -124,8 +127,10 @@ test("o repertório publicado tem 886 lances nossos", () => {
   // Ele SOBE de propósito enquanto a §24 estica as 27 linhas até o roque e as
   // peças menores fora: era 222 no fim da §23, e o alvo é cerca de 340. Foi 351 até
   // 17/9/2026, quando as 19 linhas da Francesa geradas do estudo trocaram a escrita à mão; 499 até
-  // 18/9/2026, quando a Siciliana passou de 6 linhas para as 56 do estudo do Dragão Acelerado.
-  assert.equal(nossos, 886, "o repertório tem 886 lances nossos, em 95 linhas");
+  // 18/9/2026, quando a Siciliana passou de 6 linhas para as 56 do estudo do Dragão Acelerado; 886
+  // até 18/9/2026, quando a Escocesa passou de 5 linhas para as 41 do estudo.
+  // 1133 até 18/9/2026 (tarde): a linha 8.f3 Db6! da Siciliana trouxe mais 8.
+  assert.equal(nossos, 1141, "o repertório tem 1141 lances nossos, em 132 linhas");
 });
 
 test("as páginas de princípios ligadas a uma abertura apontam para abertura viva", () => {

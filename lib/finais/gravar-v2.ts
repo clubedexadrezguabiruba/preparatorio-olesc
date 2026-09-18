@@ -100,7 +100,10 @@ export async function gravarTentativaDeAulaV2(
   }
 
   const etapa = pacote.aula.fluxo.find((item) => item.id === tentativa.etapaId);
-  if (!etapa || etapa.entidadeId !== tentativa.entidadeId || etapa.tipo !== tentativa.tipo) return { erro: "a etapa não é desta aula" };
+  // A pergunta jogada dentro do capítulo (curso de abertura, 18/9/2026) sobe como treino da etapa do capítulo.
+  const daEtapa = etapa && ((etapa.entidadeId === tentativa.entidadeId && etapa.tipo === tentativa.tipo)
+    || (etapa.tipo === "capitulo" && tentativa.tipo === "treino" && Boolean(etapa.paradas?.includes(tentativa.entidadeId))));
+  if (!daEtapa) return { erro: "a etapa não é desta aula" };
   const revisao = pacote.revisoes[tentativa.entidadeId];
   if (!revisao || revisao.revisao !== tentativa.assessmentRevision) return { erro: "a revisão enviada não é a desta publicação" };
 

@@ -22,7 +22,7 @@ import type { GravacaoDoCurso } from "@/lib/editor-v2/importar-curso";
 
 type Abertura = { cor: string; abertura: string; nome: string };
 
-const PAPEL: Record<string, string> = { aula: "aula", treinador: "move trainer", "partida-modelo": "partida modelo", revisao: "revisão", vazio: "fora" };
+const PAPEL: Record<string, string> = { aula: "aula", treinador: "treinador de lances", "partida-modelo": "partida modelo", revisao: "revisão", vazio: "fora" };
 const SITUACAO: Record<string, string> = { nova: "nova", igual: "igual ao rascunho", muda: "muda — cópia de segurança antes" };
 
 export function ImportarCursoDeAbertura({ aberturas }: { aberturas: Abertura[] }) {
@@ -168,7 +168,7 @@ export function ImportarCursoDeAbertura({ aberturas }: { aberturas: Abertura[] }
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead className="text-xs text-tinta-fraca">
-                  <tr><th className="py-1 pr-3 font-medium">Aula</th><th className="py-1 pr-3 font-medium">Etapas</th><th className="py-1 pr-3 font-medium">Paradas</th><th className="py-1 pr-3 font-medium">Ramos</th><th className="py-1 pr-3 font-medium">Move trainer</th><th className="py-1 font-medium">Situação</th></tr>
+                  <tr><th className="py-1 pr-3 font-medium">Aula</th><th className="py-1 pr-3 font-medium">Etapas</th><th className="py-1 pr-3 font-medium">Paradas</th><th className="py-1 pr-3 font-medium">Ramos</th><th className="py-1 pr-3 font-medium">Treinador de lances</th><th className="py-1 font-medium">Situação</th></tr>
                 </thead>
                 <tbody className="tabular-nums text-tinta">
                   {leitura.aulas.map((aula) => (
@@ -265,7 +265,7 @@ export function ImportarCursoDeAbertura({ aberturas }: { aberturas: Abertura[] }
                 <ul className="flex list-disc flex-col gap-1 pl-5 text-xs text-erro-texto">
                   {leitura.repertorio.problemas.slice(0, 12).map((problema, i) => <li key={i}>{problema}</li>)}
                 </ul>
-                <p className="text-xs text-tinta-fraca">Corrija no Lichess, busque de novo e leia outra vez. As aulas podem ser criadas antes; o move trainer delas só publica depois.</p>
+                <p className="text-xs text-tinta-fraca">Corrija no Lichess, busque de novo e leia outra vez. As aulas podem ser criadas antes; o treinador de lances delas só publica depois.</p>
               </>
             )}
           </section>

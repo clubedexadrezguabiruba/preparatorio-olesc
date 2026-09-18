@@ -61,26 +61,6 @@
 [Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
 [Site "Lichess Study"]
 [Date "2026.09.16"]
-[Round "4"]
-[White "B03"]
-[Black "Três respostas das Pretas, três ideias"]
-[Result "*"]
-[Annotator "Projeto repertório completo - Francesa"]
-[Variant "Standard"]
-[ECO "C00"]
-[Opening "French Defense: Schlechter Variation"]
-[StudyName "Repertorio Contra a Francesa.v5"]
-[ChapterName "B03 - Três respostas das Pretas, três ideias"]
-[ChapterURL "https://lichess.org/study/qq2xorDl/ffFlmNGc"]
-[Orientation "black"]
-
-{ [SECAO] As três respostas das Pretas [OBJETIVO] Saber qual ideia usar depois de 3.Bd3. }
-1. e4 e6 2. d4 d5 3. Bd3 { [ENTENDER] Esta é a nossa arma. Agora as Pretas escolhem, e cada escolha pede uma ideia diferente. Vamos ver as três. } 3... Nf6?! { Primeira escolha: ...Nf6. O cavalo ataca nosso peão de e4. } (3... c5 { Segunda escolha: ...c5. O peão preto ataca d4. } 4. exd5 { Contra ...c5, trocamos em d5 e olhamos como as Pretas recapturam. }) (3... dxe4 { Terceira escolha: ...dxe4. As Pretas trocam no centro. } 4. Bxe4 { Contra ...dxe4, recapturamos com o bispo e montamos nosso esquema. [RESUMO] Primeiro veja o que as Pretas jogaram; depois escolha a ideia. [PROXIMO] Começamos por ...Nf6. }) 4. e5 { Contra ...Nf6, o peão avança para e5 e expulsa o cavalo. } *
-
-
-[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
-[Site "Lichess Study"]
-[Date "2026.09.16"]
 [Round "5"]
 [White "B04"]
 [Black "Cavalo em f6 cedo? Jogue e5"]
@@ -381,26 +361,6 @@
 [Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
 [Site "Lichess Study"]
 [Date "2026.09.16"]
-[Round "20"]
-[White "E20"]
-[Black "Treino: encontre o lance"]
-[Result "*"]
-[Annotator "Projeto repertório completo - Francesa"]
-[Variant "Standard"]
-[ECO "C00"]
-[Opening "French Defense: Schlechter Variation"]
-[StudyName "Repertorio Contra a Francesa.v5"]
-[ChapterName "E20 - Treino: encontre o lance"]
-[ChapterURL "https://lichess.org/study/qq2xorDl/FXmm6cXv"]
-[Orientation "black"]
-
-{ [SECAO] Encontre o lance e o plano [OBJETIVO] Encontrar os lances mais importantes sem ajuda. [TRAIN] Pare em cada pergunta antes de avançar. }
-1. e4 e6 2. d4 d5 3. Bd3 Nf6?! { [PERGUNTA] Lance das Brancas? [DICA] Contra ...Nf6 cedo, um peão avança e expulsa o cavalo. } (3... c5 4. exd5 Qxd5 { [PERGUNTA] Como desenvolver atacando a dama? [DICA] Um cavalo pode atacar a dama em d5. } (4... cxd4 { [PERGUNTA] Existe um xeque antes de mexer no centro? [DICA] Procure um xeque com o bispo. } 5. Bb5+! Bd7 6. dxe6 Bxb5?! 7. exf7+ Kxf7 8. Qh5+ g6 9. Qxb5 { Boa: os xeques vieram antes do material. }) (4... exd5 5. c3! { Sem dama exposta, apenas proteja d4. }) 5. Nc3 Qxg2?? { [PERGUNTA] ARMADILHA PRINCIPAL: a dama pegou g2. Qual lance a prende? [DICA] O bispo de d3 pode atacar g2. } (5... Qxd4 { ARMADILHA AVANÇADA — outra linha. } 6. Nb5 Qd8 7. Bf4 Na6 8. Qe2! $36 Nf6 9. O-O-O Qb6 10. Bc4 Bd7 11. Nf3 O-O-O 12. Ne5 Be8?? 13. Rxd8+ Kxd8 14. Rd1+ Kc8? 15. Nxf7 Bxf7?? 16. Bxe6+ Bxe6 { [PERGUNTA] Qual é o golpe final das Brancas? [DICA] Entregue a dama com xeque. } 17. Qxe6+ Qxe6 18. Nxa7# { Mate. }) 6. Be4 { Exato: Be4! } { [%csl Ge4,Rg2] }) (3... dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 (6... cxd4?! { [PERGUNTA] Quem recaptura em d4 nesta ordem? [DICA] O cavalo b1 ainda nem saiu. Pense na dama. } 7. Qxd4) 7. Be3 cxd4 (7... e5 { [PERGUNTA] Qual troca vem primeiro? [DICA] Tire primeiro o cavalo de c6, com xeque. } 8. Bxc6+ bxc6 9. dxe5 Qxd1+ 10. Kxd1 Ng4 11. Nd2 $14) 8. Nxd4 Ne5 { [PERGUNTA] Como responder a ...Ne5? [DICA] Desenvolva a última peça menor. } 9. Nc3 a6!? 10. Qe2 Nxf3+ { [PERGUNTA] Com qual peça recapturamos em f3? [DICA] Nossa resposta é com um peão. } 11. gxf3!) 4. e5 Nfd7 5. Ne2! c5 6. c3 Nc6 7. a3! { [RESUMO] Prioridade: reconheça imediatamente ...Qxg2? → Be4. As outras táticas são padrões separados. [PROXIMO] Agora treine os planos, não só os lances. } *
-
-
-[Event "Repertório Francesa 3.Bd3 — FINAL — estrutura, Move Trainer e partida modelo v1.5"]
-[Site "Lichess Study"]
-[Date "2026.09.16"]
 [Round "21"]
 [White "E21"]
 [Black "Treino: encontre o plano"]
@@ -414,7 +374,7 @@
 [ChapterURL "https://lichess.org/study/qq2xorDl/n3qFMgAE"]
 [Orientation "black"]
 
-{ [OBJETIVO] Treinar ideias, não só lances. [TRAIN] Pare antes de avançar e responda com suas palavras. }
+{ [SECAO] Treino final | encontre o plano [OBJETIVO] Treinar ideias, não só lances. [TRAIN] Pare antes de avançar e responda com suas palavras. }
 1. e4 e6 2. d4 d5 3. Bd3 dxe4 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 { [PERGUNTA] O que queremos fazer com o bispo c1? [DICA] Desenvolva o bispo e proteja d4 no mesmo lance. } 7. Be3 { [PLANO] Desenvolver o bispo e proteger d4 ao mesmo tempo. } 7... cxd4 (7... Nd5?! 8. Bxd5 Qxd5 9. Nbc3 Qxg2 { [PERGUNTA] A dama preta foi caçar peões. Qual deve ser nossa ideia? [DICA] Ataque a dama com a torre que ela ameaça. } 10. Rg1 Qxh2 11. Bf4 { [PLANO] Ganhar atividade: atacar a dama e melhorar nossas peças enquanto ela está longe. } { [%cal Gc3b5] }) 8. Nxd4 Ne5 9. Nc3 Be7 10. Qe2 O-O { [PERGUNTA] As Pretas rocaram curto. Se nosso rei estiver seguro, qual é um dos planos do repertório? [DICA] Pense no roque. } 11. O-O-O { [PLANO] Rocar grande. O rei fica seguro na ala da dama e podemos jogar contra o rei preto do outro lado. [RESUMO] Três planos para guardar. Desenvolver e proteger. Rocar grande quando for seguro. Ganhar atividade quando a dama preta sair para caçar peões. [PROXIMO] Agora revise o resumo do repertório e jogue a árvore completa. } *
 
 

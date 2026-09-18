@@ -1,0 +1,1809 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-6b3d2a7e6db059d0",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "AB-PRETAS-SICILIANA-A",
+    "titulo": "Siciliana: Dragão Acelerado — aula A: Nossa defesa e nossa arma",
+    "metadados": {
+      "orientacaoPadrao": "black",
+      "criterioDominio": "D1",
+      "estadoEditorial": "rascunho",
+      "fonteDidatica": "estudo local v1.0 — Siciliana: Dragão Acelerado",
+      "abertura": {
+        "cor": "pretas",
+        "abertura": "siciliana",
+        "bloco": "A"
+      }
+    },
+    "proveniencia": [],
+    "excecoes": [],
+    "analises": [
+      {
+        "id": "analise-cap-00",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Siciliana pelas Pretas: Dragão Acelerado v1.0",
+            "Site": "Estudo local",
+            "Date": "2026.09.18",
+            "Round": "1",
+            "White": "00",
+            "Black": "Conheça o Dragão Acelerado: por que o peão fica em d7",
+            "Result": "*",
+            "Annotator": "Projeto repertório — Siciliana",
+            "StudyName": "Siciliana: Dragão Acelerado",
+            "Orientation": "black",
+            "ChapterName": "cap 00"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-00-0",
+        "nos": {
+          "no-cap-00-0": {
+            "id": "no-cap-00-0",
+            "filhos": [
+              "no-cap-00-1"
+            ],
+            "comentario": "[SECAO] Conheça o Dragão Acelerado | por que o peão fica em d7 [OBJETIVO] Entender a ideia do Dragão Acelerado: bispo em g7 e o peão de d7 pronto para ir direto a d5."
+          },
+          "no-cap-00-1": {
+            "id": "no-cap-00-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-00-2"
+            ]
+          },
+          "no-cap-00-2": {
+            "id": "no-cap-00-2",
+            "uci": "c7c5",
+            "filhos": [
+              "no-cap-00-3"
+            ],
+            "comentario": "A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo."
+          },
+          "no-cap-00-3": {
+            "id": "no-cap-00-3",
+            "uci": "g1f3",
+            "filhos": [
+              "no-cap-00-4"
+            ]
+          },
+          "no-cap-00-4": {
+            "id": "no-cap-00-4",
+            "uci": "b8c6",
+            "filhos": [
+              "no-cap-00-5"
+            ],
+            "comentario": "O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa."
+          },
+          "no-cap-00-5": {
+            "id": "no-cap-00-5",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-00-6"
+            ]
+          },
+          "no-cap-00-6": {
+            "id": "no-cap-00-6",
+            "uci": "c5d4",
+            "filhos": [
+              "no-cap-00-7"
+            ],
+            "comentario": "Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas."
+          },
+          "no-cap-00-7": {
+            "id": "no-cap-00-7",
+            "uci": "f3d4",
+            "filhos": [
+              "no-cap-00-8"
+            ]
+          },
+          "no-cap-00-8": {
+            "id": "no-cap-00-8",
+            "uci": "g7g6",
+            "filhos": [],
+            "comentario": "[ENTENDER] Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. [PLANO] Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». [RESUMO] Bispo em g7 e o peão de d7 esperando a hora do ...d5. [PROXIMO] Agora, a nossa ordem de lances, passo a passo.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "f8",
+                  "para": "g7",
+                  "cor": "verde"
+                },
+                {
+                  "de": "d7",
+                  "para": "d5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gf8g7,Gd7d5]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-cap-a00",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Siciliana pelas Pretas: Dragão Acelerado v1.0",
+            "Site": "Estudo local",
+            "Date": "2026.09.18",
+            "Round": "2",
+            "White": "A00",
+            "Black": "Nossa arma: ...Cc6, a troca em d4 e ...g6",
+            "Result": "*",
+            "Annotator": "Projeto repertório — Siciliana",
+            "StudyName": "Siciliana: Dragão Acelerado",
+            "Orientation": "black",
+            "ChapterName": "cap A00"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-a00-0",
+        "nos": {
+          "no-cap-a00-0": {
+            "id": "no-cap-a00-0",
+            "filhos": [
+              "no-cap-a00-1"
+            ],
+            "comentario": "[SECAO] Nossa arma | a ordem dos lances [OBJETIVO] Chegar ao Dragão Acelerado na ordem certa: ...c5, ...Cc6, trocar em d4 e ...g6."
+          },
+          "no-cap-a00-1": {
+            "id": "no-cap-a00-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-a00-2"
+            ]
+          },
+          "no-cap-a00-2": {
+            "id": "no-cap-a00-2",
+            "uci": "c7c5",
+            "filhos": [
+              "no-cap-a00-3"
+            ]
+          },
+          "no-cap-a00-3": {
+            "id": "no-cap-a00-3",
+            "uci": "g1f3",
+            "filhos": [
+              "no-cap-a00-4"
+            ],
+            "comentario": "A resposta mais comum das Brancas. [PERGUNTA] Qual peça sai agora? [DICA] Um cavalo que também olha para d4."
+          },
+          "no-cap-a00-4": {
+            "id": "no-cap-a00-4",
+            "uci": "b8c6",
+            "filhos": [
+              "no-cap-a00-5"
+            ],
+            "comentario": "Isso: ...Cc6. Nesta ordem o cavalo sai antes do peão de g."
+          },
+          "no-cap-a00-5": {
+            "id": "no-cap-a00-5",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-a00-6"
+            ],
+            "comentario": "[PERGUNTA] As Brancas abriram o centro. O que fazemos? [DICA] Troque o peão de c5."
+          },
+          "no-cap-a00-6": {
+            "id": "no-cap-a00-6",
+            "uci": "c5d4",
+            "filhos": [
+              "no-cap-a00-7"
+            ]
+          },
+          "no-cap-a00-7": {
+            "id": "no-cap-a00-7",
+            "uci": "f3d4",
+            "filhos": [
+              "no-cap-a00-8"
+            ],
+            "comentario": "[PERGUNTA] Qual lance dá nome à nossa abertura? [DICA] Prepare a casa g7 para o bispo."
+          },
+          "no-cap-a00-8": {
+            "id": "no-cap-a00-8",
+            "uci": "g7g6",
+            "filhos": [],
+            "comentario": "[MEMORIZAR] ...c5, ...Cc6, ...cxd4 e ...g6. [RESUMO] Quatro lances e estamos no Dragão Acelerado. [PROXIMO] Agora o esquema: onde cada peça vai morar."
+          }
+        }
+      },
+      {
+        "id": "analise-cap-a01",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Siciliana pelas Pretas: Dragão Acelerado v1.0",
+            "Site": "Estudo local",
+            "Date": "2026.09.18",
+            "Round": "3",
+            "White": "A01",
+            "Black": "Nosso esquema: ...Bg7, ...Cf6, roque e ...d5",
+            "Result": "*",
+            "Annotator": "Projeto repertório — Siciliana",
+            "StudyName": "Siciliana: Dragão Acelerado",
+            "Orientation": "black",
+            "ChapterName": "cap A01"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-a01-0",
+        "nos": {
+          "no-cap-a01-0": {
+            "id": "no-cap-a01-0",
+            "filhos": [
+              "no-cap-a01-1"
+            ],
+            "comentario": "[SECAO] Nosso esquema | bispo, cavalo, roque e ...d5 [OBJETIVO] Montar o esquema: ...Bg7, ...Cf6, roque, e só então ...d5."
+          },
+          "no-cap-a01-1": {
+            "id": "no-cap-a01-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-a01-2"
+            ]
+          },
+          "no-cap-a01-2": {
+            "id": "no-cap-a01-2",
+            "uci": "c7c5",
+            "filhos": [
+              "no-cap-a01-3"
+            ]
+          },
+          "no-cap-a01-3": {
+            "id": "no-cap-a01-3",
+            "uci": "g1f3",
+            "filhos": [
+              "no-cap-a01-4"
+            ]
+          },
+          "no-cap-a01-4": {
+            "id": "no-cap-a01-4",
+            "uci": "b8c6",
+            "filhos": [
+              "no-cap-a01-5"
+            ]
+          },
+          "no-cap-a01-5": {
+            "id": "no-cap-a01-5",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-a01-6"
+            ]
+          },
+          "no-cap-a01-6": {
+            "id": "no-cap-a01-6",
+            "uci": "c5d4",
+            "filhos": [
+              "no-cap-a01-7"
+            ]
+          },
+          "no-cap-a01-7": {
+            "id": "no-cap-a01-7",
+            "uci": "f3d4",
+            "filhos": [
+              "no-cap-a01-8"
+            ]
+          },
+          "no-cap-a01-8": {
+            "id": "no-cap-a01-8",
+            "uci": "g7g6",
+            "filhos": [
+              "no-cap-a01-9",
+              "no-cap-a01-10"
+            ]
+          },
+          "no-cap-a01-9": {
+            "id": "no-cap-a01-9",
+            "uci": "b1c3",
+            "filhos": [
+              "no-cap-a01-14"
+            ]
+          },
+          "no-cap-a01-10": {
+            "id": "no-cap-a01-10",
+            "uci": "c1e3",
+            "filhos": [
+              "no-cap-a01-11"
+            ],
+            "comentario": "A ordem muda, a posição não."
+          },
+          "no-cap-a01-11": {
+            "id": "no-cap-a01-11",
+            "uci": "f8g7",
+            "filhos": [
+              "no-cap-a01-12"
+            ]
+          },
+          "no-cap-a01-12": {
+            "id": "no-cap-a01-12",
+            "uci": "b1c3",
+            "filhos": [
+              "no-cap-a01-13"
+            ]
+          },
+          "no-cap-a01-13": {
+            "id": "no-cap-a01-13",
+            "uci": "g8f6",
+            "filhos": [],
+            "comentario": "A mesma posição da linha principal."
+          },
+          "no-cap-a01-14": {
+            "id": "no-cap-a01-14",
+            "uci": "f8g7",
+            "filhos": [
+              "no-cap-a01-15"
+            ],
+            "comentario": "[ESQUEMA] O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3."
+          },
+          "no-cap-a01-15": {
+            "id": "no-cap-a01-15",
+            "uci": "c1e3",
+            "filhos": [
+              "no-cap-a01-16"
+            ]
+          },
+          "no-cap-a01-16": {
+            "id": "no-cap-a01-16",
+            "uci": "g8f6",
+            "filhos": [
+              "no-cap-a01-17"
+            ],
+            "comentario": "O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.",
+            "nags": [
+              1
+            ]
+          },
+          "no-cap-a01-17": {
+            "id": "no-cap-a01-17",
+            "uci": "f1e2",
+            "filhos": [
+              "no-cap-a01-18"
+            ],
+            "comentario": "[PERGUNTA] Qual é o próximo lance do nosso esquema? [DICA] Primeiro o rei."
+          },
+          "no-cap-a01-18": {
+            "id": "no-cap-a01-18",
+            "uci": "e8g8",
+            "filhos": [
+              "no-cap-a01-19"
+            ],
+            "comentario": "Isso: rei seguro antes de abrir o centro."
+          },
+          "no-cap-a01-19": {
+            "id": "no-cap-a01-19",
+            "uci": "e1g1",
+            "filhos": [
+              "no-cap-a01-20"
+            ],
+            "comentario": "[PERGUNTA] O rei está seguro. Qual lance o Dragão Acelerado procura? [DICA] O peão de d7 vai dois passos."
+          },
+          "no-cap-a01-20": {
+            "id": "no-cap-a01-20",
+            "uci": "d7d5",
+            "filhos": [],
+            "comentario": "[PLANO] ...d5 em um lance só. Agora é ele quem tem de resolver o centro. [RESUMO] ...Bg7, ...Cf6, roque, ...d5. [PROXIMO] No próximo bloco: os erros das Brancas e como puni-los.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d7",
+                  "para": "d5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd7d5]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-arvore-a",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "raizId": "no-arvore-a-0",
+        "nos": {
+          "no-arvore-a-0": {
+            "id": "no-arvore-a-0",
+            "filhos": [
+              "no-arvore-a-1"
+            ]
+          },
+          "no-arvore-a-1": {
+            "id": "no-arvore-a-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-arvore-a-2"
+            ]
+          },
+          "no-arvore-a-2": {
+            "id": "no-arvore-a-2",
+            "uci": "c7c5",
+            "filhos": [
+              "no-arvore-a-3"
+            ]
+          },
+          "no-arvore-a-3": {
+            "id": "no-arvore-a-3",
+            "uci": "g1f3",
+            "filhos": [
+              "no-arvore-a-4"
+            ]
+          },
+          "no-arvore-a-4": {
+            "id": "no-arvore-a-4",
+            "uci": "b8c6",
+            "filhos": [
+              "no-arvore-a-5"
+            ]
+          },
+          "no-arvore-a-5": {
+            "id": "no-arvore-a-5",
+            "uci": "d2d4",
+            "filhos": [
+              "no-arvore-a-6"
+            ]
+          },
+          "no-arvore-a-6": {
+            "id": "no-arvore-a-6",
+            "uci": "c5d4",
+            "filhos": [
+              "no-arvore-a-7"
+            ]
+          },
+          "no-arvore-a-7": {
+            "id": "no-arvore-a-7",
+            "uci": "f3d4",
+            "filhos": [
+              "no-arvore-a-8"
+            ]
+          },
+          "no-arvore-a-8": {
+            "id": "no-arvore-a-8",
+            "uci": "g7g6",
+            "filhos": [
+              "no-arvore-a-9",
+              "no-arvore-a-17"
+            ]
+          },
+          "no-arvore-a-9": {
+            "id": "no-arvore-a-9",
+            "uci": "b1c3",
+            "filhos": [
+              "no-arvore-a-10"
+            ]
+          },
+          "no-arvore-a-10": {
+            "id": "no-arvore-a-10",
+            "uci": "f8g7",
+            "filhos": [
+              "no-arvore-a-11"
+            ]
+          },
+          "no-arvore-a-11": {
+            "id": "no-arvore-a-11",
+            "uci": "c1e3",
+            "filhos": [
+              "no-arvore-a-12"
+            ]
+          },
+          "no-arvore-a-12": {
+            "id": "no-arvore-a-12",
+            "uci": "g8f6",
+            "filhos": [
+              "no-arvore-a-13"
+            ]
+          },
+          "no-arvore-a-13": {
+            "id": "no-arvore-a-13",
+            "uci": "f1e2",
+            "filhos": [
+              "no-arvore-a-14"
+            ]
+          },
+          "no-arvore-a-14": {
+            "id": "no-arvore-a-14",
+            "uci": "e8g8",
+            "filhos": [
+              "no-arvore-a-15"
+            ]
+          },
+          "no-arvore-a-15": {
+            "id": "no-arvore-a-15",
+            "uci": "e1g1",
+            "filhos": [
+              "no-arvore-a-16"
+            ]
+          },
+          "no-arvore-a-16": {
+            "id": "no-arvore-a-16",
+            "uci": "d7d5",
+            "filhos": []
+          },
+          "no-arvore-a-17": {
+            "id": "no-arvore-a-17",
+            "uci": "c1e3",
+            "filhos": [
+              "no-arvore-a-18"
+            ]
+          },
+          "no-arvore-a-18": {
+            "id": "no-arvore-a-18",
+            "uci": "f8g7",
+            "filhos": [
+              "no-arvore-a-19"
+            ]
+          },
+          "no-arvore-a-19": {
+            "id": "no-arvore-a-19",
+            "uci": "b1c3",
+            "filhos": [
+              "no-arvore-a-20"
+            ]
+          },
+          "no-arvore-a-20": {
+            "id": "no-arvore-a-20",
+            "uci": "g8f6",
+            "filhos": []
+          }
+        }
+      }
+    ],
+    "introducoes": [],
+    "capitulos": [
+      {
+        "id": "cap-00",
+        "titulo": "Conheça o Dragão Acelerado: por que o peão fica em d7",
+        "resumo": "Entender a ideia do Dragão Acelerado: bispo em g7 e o peão de d7 pronto para ir direto a d5.",
+        "secao": {
+          "titulo": "Conheça o Dragão Acelerado",
+          "subtitulo": "por que o peão fica em d7"
+        },
+        "analiseId": "analise-cap-00",
+        "inicioNodeId": "no-cap-00-0",
+        "caminho": [
+          "no-cap-00-1",
+          "no-cap-00-2",
+          "no-cap-00-3",
+          "no-cap-00-4",
+          "no-cap-00-5",
+          "no-cap-00-6",
+          "no-cap-00-7",
+          "no-cap-00-8"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-00-2",
+            "nodeId": "no-cap-00-2",
+            "texto": "A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-00-4",
+            "nodeId": "no-cap-00-4",
+            "texto": "O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-00-6",
+            "nodeId": "no-cap-00-6",
+            "texto": "Trocamos. Sai um peão nosso da lateral e sai um peão central dele: bom negócio para as Pretas.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-00-8",
+            "nodeId": "no-cap-00-8",
+            "texto": "Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa.",
+            "pausa": "temporizada",
+            "rotulo": "Entender"
+          },
+          {
+            "id": "narracao-no-cap-00-8-2",
+            "nodeId": "no-cap-00-8",
+            "texto": "Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado».",
+            "pausa": "temporizada",
+            "rotulo": "Plano"
+          },
+          {
+            "id": "narracao-no-cap-00-8-3",
+            "nodeId": "no-cap-00-8",
+            "texto": "Bispo em g7 e o peão de d7 esperando a hora do ...d5.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          },
+          {
+            "id": "narracao-no-cap-00-8-4",
+            "nodeId": "no-cap-00-8",
+            "texto": "Agora, a nossa ordem de lances, passo a passo.",
+            "pausa": "manual",
+            "rotulo": "A seguir"
+          }
+        ]
+      },
+      {
+        "id": "cap-a00",
+        "titulo": "Nossa arma: ...Cc6, a troca em d4 e ...g6",
+        "resumo": "Chegar ao Dragão Acelerado na ordem certa: ...c5, ...Cc6, trocar em d4 e ...g6.",
+        "secao": {
+          "titulo": "Nossa arma",
+          "subtitulo": "a ordem dos lances"
+        },
+        "analiseId": "analise-cap-a00",
+        "inicioNodeId": "no-cap-a00-0",
+        "caminho": [
+          "no-cap-a00-1",
+          "no-cap-a00-2",
+          "no-cap-a00-3",
+          "no-cap-a00-4",
+          "no-cap-a00-5",
+          "no-cap-a00-6",
+          "no-cap-a00-7",
+          "no-cap-a00-8"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-a00-3",
+            "nodeId": "no-cap-a00-3",
+            "texto": "A resposta mais comum das Brancas.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a00-4",
+            "nodeId": "no-cap-a00-4",
+            "texto": "Isso: ...Cc6. Nesta ordem o cavalo sai antes do peão de g.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a00-8",
+            "nodeId": "no-cap-a00-8",
+            "texto": "...c5, ...Cc6, ...cxd4 e ...g6.",
+            "pausa": "temporizada",
+            "rotulo": "Memorizar"
+          },
+          {
+            "id": "narracao-no-cap-a00-8-2",
+            "nodeId": "no-cap-a00-8",
+            "texto": "Quatro lances e estamos no Dragão Acelerado.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          },
+          {
+            "id": "narracao-no-cap-a00-8-3",
+            "nodeId": "no-cap-a00-8",
+            "texto": "Agora o esquema: onde cada peça vai morar.",
+            "pausa": "manual",
+            "rotulo": "A seguir"
+          }
+        ]
+      },
+      {
+        "id": "cap-a01",
+        "titulo": "Nosso esquema: ...Bg7, ...Cf6, roque e ...d5",
+        "resumo": "Montar o esquema: ...Bg7, ...Cf6, roque, e só então ...d5.",
+        "secao": {
+          "titulo": "Nosso esquema",
+          "subtitulo": "bispo, cavalo, roque e ...d5"
+        },
+        "analiseId": "analise-cap-a01",
+        "inicioNodeId": "no-cap-a01-0",
+        "caminho": [
+          "no-cap-a01-1",
+          "no-cap-a01-2",
+          "no-cap-a01-3",
+          "no-cap-a01-4",
+          "no-cap-a01-5",
+          "no-cap-a01-6",
+          "no-cap-a01-7",
+          "no-cap-a01-8",
+          "no-cap-a01-9",
+          "no-cap-a01-14",
+          "no-cap-a01-15",
+          "no-cap-a01-16",
+          "no-cap-a01-17",
+          "no-cap-a01-18",
+          "no-cap-a01-19",
+          "no-cap-a01-20"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-a01-14",
+            "nodeId": "no-cap-a01-14",
+            "texto": "O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.",
+            "pausa": "temporizada",
+            "rotulo": "Esquema"
+          },
+          {
+            "id": "narracao-no-cap-a01-16",
+            "nodeId": "no-cap-a01-16",
+            "texto": "O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-18",
+            "nodeId": "no-cap-a01-18",
+            "texto": "Isso: rei seguro antes de abrir o centro.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-20",
+            "nodeId": "no-cap-a01-20",
+            "texto": "...d5 em um lance só. Agora é ele quem tem de resolver o centro.",
+            "pausa": "temporizada",
+            "rotulo": "Plano"
+          }
+        ]
+      },
+      {
+        "id": "cap-a01-ramo-1",
+        "titulo": "Nosso esquema: ...Bg7, ...Cf6, roque e ...d5 — se 5.Be3",
+        "analiseId": "analise-cap-a01",
+        "inicioNodeId": "no-cap-a01-0",
+        "caminho": [
+          "no-cap-a01-1",
+          "no-cap-a01-2",
+          "no-cap-a01-3",
+          "no-cap-a01-4",
+          "no-cap-a01-5",
+          "no-cap-a01-6",
+          "no-cap-a01-7",
+          "no-cap-a01-8",
+          "no-cap-a01-10",
+          "no-cap-a01-11",
+          "no-cap-a01-12",
+          "no-cap-a01-13"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-a01-10",
+            "nodeId": "no-cap-a01-10",
+            "texto": "A ordem muda, a posição não.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-13",
+            "nodeId": "no-cap-a01-13",
+            "texto": "A mesma posição da linha principal.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-20-2",
+            "nodeId": "no-cap-a01-13",
+            "texto": "...Bg7, ...Cf6, roque, ...d5.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          },
+          {
+            "id": "narracao-no-cap-a01-20-3",
+            "nodeId": "no-cap-a01-13",
+            "texto": "No próximo bloco: os erros das Brancas e como puni-los.",
+            "pausa": "manual",
+            "rotulo": "A seguir"
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-parada-a00-1",
+        "titulo": "Sua vez — A00",
+        "introducao": "Qual peça sai agora?",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-a00",
+          "nodeId": "no-cap-a00-3"
+        },
+        "ladoAluno": "black",
+        "objetivo": "Qual peça sai agora?",
+        "questoes": [
+          {
+            "id": "questao-parada-a00-1",
+            "posicao": {
+              "analiseId": "analise-cap-a00",
+              "nodeId": "no-cap-a00-3"
+            },
+            "dica": "Um cavalo que também olha para d4.",
+            "respostas": [
+              {
+                "id": "resposta-parada-a00-1",
+                "moves": [
+                  "b8c6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 2...Cc6.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+            "historicoUci": [
+              "e2e4",
+              "c7c5",
+              "g1f3"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-a00",
+              "nodeId": "no-cap-a00-3"
+            }
+          },
+          "questoes": {
+            "questao-parada-a00-1": {
+              "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-a00",
+                "nodeId": "no-cap-a00-3"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 2...Cc6.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-parada-a00-2",
+        "titulo": "Sua vez — A00",
+        "introducao": "As Brancas abriram o centro. O que fazemos?",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-a00",
+          "nodeId": "no-cap-a00-5"
+        },
+        "ladoAluno": "black",
+        "objetivo": "As Brancas abriram o centro. O que fazemos?",
+        "questoes": [
+          {
+            "id": "questao-parada-a00-2",
+            "posicao": {
+              "analiseId": "analise-cap-a00",
+              "nodeId": "no-cap-a00-5"
+            },
+            "dica": "Troque o peão de c5.",
+            "respostas": [
+              {
+                "id": "resposta-parada-a00-2",
+                "moves": [
+                  "c5d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 3...cxd4.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+            "historicoUci": [
+              "e2e4",
+              "c7c5",
+              "g1f3",
+              "b8c6",
+              "d2d4"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-a00",
+              "nodeId": "no-cap-a00-5"
+            }
+          },
+          "questoes": {
+            "questao-parada-a00-2": {
+              "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3",
+                "b8c6",
+                "d2d4"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-a00",
+                "nodeId": "no-cap-a00-5"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 3...cxd4.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-parada-a00-3",
+        "titulo": "Sua vez — A00",
+        "introducao": "Qual lance dá nome à nossa abertura?",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-a00",
+          "nodeId": "no-cap-a00-7"
+        },
+        "ladoAluno": "black",
+        "objetivo": "Qual lance dá nome à nossa abertura?",
+        "questoes": [
+          {
+            "id": "questao-parada-a00-3",
+            "posicao": {
+              "analiseId": "analise-cap-a00",
+              "nodeId": "no-cap-a00-7"
+            },
+            "dica": "Prepare a casa g7 para o bispo.",
+            "respostas": [
+              {
+                "id": "resposta-parada-a00-3",
+                "moves": [
+                  "g7g6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 4...g6.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+            "historicoUci": [
+              "e2e4",
+              "c7c5",
+              "g1f3",
+              "b8c6",
+              "d2d4",
+              "c5d4",
+              "f3d4"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-a00",
+              "nodeId": "no-cap-a00-7"
+            }
+          },
+          "questoes": {
+            "questao-parada-a00-3": {
+              "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "c5d4",
+                "f3d4"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-a00",
+                "nodeId": "no-cap-a00-7"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 4...g6.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-parada-a01-1",
+        "titulo": "Sua vez — A01",
+        "introducao": "Qual é o próximo lance do nosso esquema?",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-a01",
+          "nodeId": "no-cap-a01-17"
+        },
+        "ladoAluno": "black",
+        "objetivo": "Qual é o próximo lance do nosso esquema?",
+        "questoes": [
+          {
+            "id": "questao-parada-a01-1",
+            "posicao": {
+              "analiseId": "analise-cap-a01",
+              "nodeId": "no-cap-a01-17"
+            },
+            "dica": "Primeiro o rei.",
+            "respostas": [
+              {
+                "id": "resposta-parada-a01-1",
+                "moves": [
+                  "e8g8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 7...O-O.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP1BPPP/R2QK2R b KQkq - 5 7",
+            "historicoUci": [
+              "e2e4",
+              "c7c5",
+              "g1f3",
+              "b8c6",
+              "d2d4",
+              "c5d4",
+              "f3d4",
+              "g7g6",
+              "b1c3",
+              "f8g7",
+              "c1e3",
+              "g8f6",
+              "f1e2"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-a01",
+              "nodeId": "no-cap-a01-17"
+            }
+          },
+          "questoes": {
+            "questao-parada-a01-1": {
+              "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP1BPPP/R2QK2R b KQkq - 5 7",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "c5d4",
+                "f3d4",
+                "g7g6",
+                "b1c3",
+                "f8g7",
+                "c1e3",
+                "g8f6",
+                "f1e2"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-a01",
+                "nodeId": "no-cap-a01-17"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 7...O-O.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-parada-a01-2",
+        "titulo": "Sua vez — A01",
+        "introducao": "O rei está seguro. Qual lance o Dragão Acelerado procura?",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-a01",
+          "nodeId": "no-cap-a01-19"
+        },
+        "ladoAluno": "black",
+        "objetivo": "O rei está seguro. Qual lance o Dragão Acelerado procura?",
+        "questoes": [
+          {
+            "id": "questao-parada-a01-2",
+            "posicao": {
+              "analiseId": "analise-cap-a01",
+              "nodeId": "no-cap-a01-19"
+            },
+            "dica": "O peão de d7 vai dois passos.",
+            "respostas": [
+              {
+                "id": "resposta-parada-a01-2",
+                "moves": [
+                  "d7d5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 8...d5.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP1BPPP/R2Q1RK1 b - - 7 8",
+            "historicoUci": [
+              "e2e4",
+              "c7c5",
+              "g1f3",
+              "b8c6",
+              "d2d4",
+              "c5d4",
+              "f3d4",
+              "g7g6",
+              "b1c3",
+              "f8g7",
+              "c1e3",
+              "g8f6",
+              "f1e2",
+              "e8g8",
+              "e1g1"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-a01",
+              "nodeId": "no-cap-a01-19"
+            }
+          },
+          "questoes": {
+            "questao-parada-a01-2": {
+              "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP1BPPP/R2Q1RK1 b - - 7 8",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "c5d4",
+                "f3d4",
+                "g7g6",
+                "b1c3",
+                "f8g7",
+                "c1e3",
+                "g8f6",
+                "f1e2",
+                "e8g8",
+                "e1g1"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-a01",
+                "nodeId": "no-cap-a01-19"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 8...d5.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-arvore-a",
+        "titulo": "Treino guiado — aula A",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-arvore-a",
+          "nodeId": "no-arvore-a-0"
+        },
+        "ladoAluno": "black",
+        "objetivo": "Jogar as linhas da aula de memória, contra as respostas que o repertório prevê.",
+        "questoes": [
+          {
+            "id": "questao-arvore-a-1",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-1"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-2",
+                "moves": [
+                  "c7c5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g1f3",
+                      "proximaQuestaoId": "questao-arvore-a-2"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-2",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-3"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-4",
+                "moves": [
+                  "b8c6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "d2d4",
+                      "proximaQuestaoId": "questao-arvore-a-3"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-3",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-5"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-6",
+                "moves": [
+                  "c5d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f3d4",
+                      "proximaQuestaoId": "questao-arvore-a-4"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-4",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-7"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-8",
+                "moves": [
+                  "g7g6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b1c3",
+                      "proximaQuestaoId": "questao-arvore-a-5"
+                    },
+                    {
+                      "move": "c1e3",
+                      "proximaQuestaoId": "questao-arvore-a-9"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-5",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-9"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-10",
+                "moves": [
+                  "f8g7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c1e3",
+                      "proximaQuestaoId": "questao-arvore-a-6"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-6",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-11"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-12",
+                "moves": [
+                  "g8f6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f1e2",
+                      "proximaQuestaoId": "questao-arvore-a-7"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-7",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-13"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-14",
+                "moves": [
+                  "e8g8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e1g1",
+                      "proximaQuestaoId": "questao-arvore-a-8"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-8",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-15"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-16",
+                "moves": [
+                  "d7d5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-9",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-17"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-18",
+                "moves": [
+                  "f8g7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b1c3",
+                      "proximaQuestaoId": "questao-arvore-a-10"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-10",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-19"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-20",
+                "moves": [
+                  "g8f6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "defesaInicial": {
+          "move": "e2e4",
+          "primeiraQuestaoId": "questao-arvore-a-1"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-0"
+            }
+          },
+          "questoes": {
+            "questao-arvore-a-1": {
+              "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+              "historicoUci": [
+                "e2e4"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-1"
+              }
+            },
+            "questao-arvore-a-2": {
+              "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-3"
+              }
+            },
+            "questao-arvore-a-3": {
+              "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3",
+                "b8c6",
+                "d2d4"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-5"
+              }
+            },
+            "questao-arvore-a-4": {
+              "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "c5d4",
+                "f3d4"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-7"
+              }
+            },
+            "questao-arvore-a-5": {
+              "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 5",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "c5d4",
+                "f3d4",
+                "g7g6",
+                "b1c3"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-9"
+              }
+            },
+            "questao-arvore-a-6": {
+              "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 3 6",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "c5d4",
+                "f3d4",
+                "g7g6",
+                "b1c3",
+                "f8g7",
+                "c1e3"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-11"
+              }
+            },
+            "questao-arvore-a-7": {
+              "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP1BPPP/R2QK2R b KQkq - 5 7",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "c5d4",
+                "f3d4",
+                "g7g6",
+                "b1c3",
+                "f8g7",
+                "c1e3",
+                "g8f6",
+                "f1e2"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-13"
+              }
+            },
+            "questao-arvore-a-8": {
+              "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP1BPPP/R2Q1RK1 b - - 7 8",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "c5d4",
+                "f3d4",
+                "g7g6",
+                "b1c3",
+                "f8g7",
+                "c1e3",
+                "g8f6",
+                "f1e2",
+                "e8g8",
+                "e1g1"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-15"
+              }
+            },
+            "questao-arvore-a-9": {
+              "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/4B3/PPP2PPP/RN1QKB1R b KQkq - 1 5",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "c5d4",
+                "f3d4",
+                "g7g6",
+                "c1e3"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-17"
+              }
+            },
+            "questao-arvore-a-10": {
+              "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 3 6",
+              "historicoUci": [
+                "e2e4",
+                "c7c5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "c5d4",
+                "f3d4",
+                "g7g6",
+                "c1e3",
+                "f8g7",
+                "b1c3"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-19"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      }
+    ],
+    "praticas": [],
+    "treinadores": [
+      {
+        "id": "treinador-a",
+        "titulo": "Treinador de lances — aula A",
+        "cor": "pretas",
+        "abertura": "siciliana",
+        "linhaIds": [
+          "pretas-siciliana-bce190ed",
+          "pretas-siciliana-87426847",
+          "pretas-siciliana-14cf84fb"
+        ]
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-cap-00",
+        "tipo": "capitulo",
+        "entidadeId": "cap-00"
+      },
+      {
+        "id": "etapa-cap-a00",
+        "tipo": "capitulo",
+        "entidadeId": "cap-a00",
+        "paradas": [
+          "treino-parada-a00-1",
+          "treino-parada-a00-2",
+          "treino-parada-a00-3"
+        ]
+      },
+      {
+        "id": "etapa-cap-a01",
+        "tipo": "capitulo",
+        "entidadeId": "cap-a01",
+        "comparacoes": [
+          "cap-a01-ramo-1"
+        ],
+        "paradas": [
+          "treino-parada-a01-1",
+          "treino-parada-a01-2"
+        ]
+      },
+      {
+        "id": "etapa-treino-arvore-a",
+        "tipo": "treino",
+        "entidadeId": "treino-arvore-a"
+      },
+      {
+        "id": "etapa-treinador-a",
+        "tipo": "treinador",
+        "entidadeId": "treinador-a"
+      }
+    ]
+  },
+  "posicoes": {},
+  "revisoes": {
+    "treino-parada-a00-1": {
+      "tipo": "treino",
+      "revisao": "ar_01088e55ca329f87ec9453fe13a35c7a8400ca9bd70e8620ec6bf317a565f1f4"
+    },
+    "treino-parada-a00-2": {
+      "tipo": "treino",
+      "revisao": "ar_8f6ff5d339541f5e5907557471256baba6ba7b8aefd6f73dd69595f9e11403b9"
+    },
+    "treino-parada-a00-3": {
+      "tipo": "treino",
+      "revisao": "ar_4ae73eb33095444fee2edea4341c06f3ea02e6d78ddb9ba03ed205ec426c38dd"
+    },
+    "treino-parada-a01-1": {
+      "tipo": "treino",
+      "revisao": "ar_9f37bf87e9c73fc9059720a3424a0190bc4d8d50bc36b19264d0db8f776c64b8"
+    },
+    "treino-parada-a01-2": {
+      "tipo": "treino",
+      "revisao": "ar_9531089c215957ee41ba605e516efef10a93b63f667bf1626763dc3b7797c1b6"
+    },
+    "treino-arvore-a": {
+      "tipo": "treino",
+      "revisao": "ar_ed4dd6f12219d091c0db4c8ba187c501aec693fe73b74739626a5c13417c75df"
+    }
+  },
+  "manifesto": {
+    "aulaId": "AB-PRETAS-SICILIANA-A",
+    "aula": "b7bcb5822b8b5c38d6969e8227a078cbb82b49e33f49638ac4f0aafb4d59155c",
+    "posicoes": {},
+    "revisoes": "b0aa11924ace3da8e85343941817a72fb74416c00a2544814958dee4b948a7ca",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

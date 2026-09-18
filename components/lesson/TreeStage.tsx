@@ -27,6 +27,9 @@ import { FeedbackPanel } from "./FeedbackPanel";
 import { LessonButton } from "./LessonButton";
 import { PulseRing } from "./PulseRing";
 
+/** Embutido no capítulo: quanto o lance certo fica na tela antes de a narração voltar. */
+const ACERTO_EMBUTIDO_MS = 800;
+
 /**
  * Etapas 3 e 4 — a árvore de lances (plano da F1, §3). A mesma mecânica serve
  * às duas; o que muda é a configuração: a etapa 3 tem dica, destaques e
@@ -54,7 +57,15 @@ export function TreeStage({
   finishLabel,
   v2,
   aoRever,
+  embutido,
 }: {
+  /**
+   * **A pergunta dentro do capítulo (curso de abertura, Doug, 18/9/2026).** O treino aparece no
+   * lugar da narração, na mesma etapa: o `cabecalho` é o título do capítulo, que continua no painel,
+   * e no acerto o treino chama `aoAcertar` sozinho, depois de o aluno ver o lance — sem botão, sem
+   * Espaço e sem confete. O juiz, a escada de ajuda e a gravação são os mesmos do treino de sempre.
+   */
+  embutido?: { cabecalho?: ReactNode; aoAcertar: () => void };
   /** Curso de abertura: o botão "Rever o capítulo" do último degrau da escada de ajuda. */
   aoRever?: () => void;
   lesson: Lesson;
@@ -197,6 +208,25 @@ export function TreeStage({
   const panel: PanelMessage | null = message ?? restingMessage(state);
 
   useEffect(() => () => (timer.current ? clearTimeout(timer.current) : undefined), []);
+
+  // Embutido: a fala que ficou no painel é da narração, não deste treino — o painel abre limpo.
+  const clearMessage = useLessonStore((s) => s.clearMessage);
+  const embutidoNaMontagem = useRef(Boolean(embutido));
+  useEffect(() => {
+    if (embutidoNaMontagem.current) clearMessage();
+  }, [clearMessage]);
+
+  // Embutido: acertou, o aluno vê o lance e a aula segue sozinha.
+  const aoAcertarRef = useRef(embutido?.aoAcertar);
+  useEffect(() => {
+    aoAcertarRef.current = embutido?.aoAcertar;
+  });
+  const embutidoAtivo = Boolean(embutido);
+  useEffect(() => {
+    if (!embutidoAtivo || status !== "done") return;
+    const handle = setTimeout(() => aoAcertarRef.current?.(), ACERTO_EMBUTIDO_MS);
+    return () => clearTimeout(handle);
+  }, [embutidoAtivo, status]);
 
   /**
    * A dica apareceu na tela (fatia 7): ela é o `placeholder` do painel, visível enquanto não
@@ -480,7 +510,7 @@ export function TreeStage({
       if (focoEmControle(typeof document !== "undefined" ? document.activeElement : null)) return false;
       onFinish?.();
     },
-    { ativo: status === "done" && Boolean(onFinish) && !marcacao },
+    { ativo: status === "done" && Boolean(onFinish) && !marcacao && !embutido },
   );
 
   if (!state || !node) return null;
@@ -541,6 +571,8 @@ export function TreeStage({
           <>
             {trilha}
 
+            {embutido?.cabecalho}
+
             {intro && status === "playing" && (
               <p className="text-sm leading-relaxed text-tinta-media">{intro}</p>
             )}
@@ -575,7 +607,7 @@ export function TreeStage({
             />
 
             <AulaRodape>
-              {status === "done" && onFinish && (
+              {status === "done" && onFinish && !embutido && (
                 <LessonButton variant="primary" onClick={onFinish}>
                   {finishLabel ?? AVANCO.padrao}
                 </LessonButton>
@@ -612,7 +644,7 @@ export function TreeStage({
 
       {/* Último filho da raiz, e não da coluna do tabuleiro: o confete cobre a
           etapa inteira. As partículas continuam nascendo do tabuleiro. */}
-      {semConfete ? null : <Celebracao seq={celebration} originRef={boardColumn} />}
+      {semConfete || embutido ? null : <Celebracao seq={celebration} originRef={boardColumn} />}
     </div>
   );
 }

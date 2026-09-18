@@ -8,9 +8,11 @@
  * ## O molde de cada aula (§13.3.6)
  *
  * ```text
- * capítulo do bloco     ── [OBJETIVO] no resumo → falas, uma por marcador
- * (ramo do capítulo)    ── começa na raiz da mesma análise: a prévia diz "Voltamos a…"
- * parada                ── capítulo até a pergunta → treino de uma questão → capítulo da resposta
+ * capítulo do bloco     ── UMA etapa (Doug, 18/9/2026): [OBJETIVO] no resumo → falas, uma por marcador
+ *   (ramos)             ── na mesma etapa (`comparacoes`): a principal até o fim, e a fita volta a
+ *                          cada ramo (`ordemDaFita`); o Laboratório toca na ordem dos casos
+ *   (paradas)           ── na mesma etapa (`paradas`): o tabuleiro para na pergunta, o aluno joga,
+ *                          e a narração segue — sem etapa própria, sem Espaço
  * …
  * revisão (F)           ── introdução, um quadro por trecho comentado
  * treino guiado         ── a árvore das linhas do bloco; a defesa gira a cada tentativa
@@ -30,10 +32,11 @@ import { lerPgnsDoEstudo } from "../repertorio/pgn.ts";
 import { idDaLinha } from "../repertorio/linhas.ts";
 import { gerarPgnDoEstudo, type PgnGerado } from "../repertorio/gerar-do-estudo.ts";
 import {
-  AULAS_DO_CURSO, adversarioDo, chaveDoLance, comentarioDoRepertorio, lanceEscrito, lerComentario, lerCursoDeAbertura, marcaBoa, marcaRuim, semContadores, tituloDaAula,
+  AULAS_DO_CURSO, adversarioDo, comentarioDoRepertorio, lanceEscrito, lerComentario, lerCursoDeAbertura, marcaBoa, marcaRuim, semContadores, tituloDaAula,
   type AulaDoCurso, type AvisoDoCurso, type CapituloDoCurso, type LanceDoEstudo, type LeituraDoCurso, type Parada, type Percurso,
 } from "./curso-de-abertura.ts";
 import { idDaAulaDeAbertura, type CorDoCurso } from "./dominio.ts";
+import { ordemDaFita } from "./previa.ts";
 import { importarJogo } from "./importar-pgn.ts";
 import type {
   AnaliseV2, AulaV2, CapituloV2, IntroducaoV2, NarracaoV2, QuestaoTreinoV2, RespostaTreinoV2, TreinadorV2, TreinoV2,
@@ -159,92 +162,76 @@ function montarCapituloDeAula(m: Montagem, leitura: LeituraDoCurso, capitulo: Ca
   m.usados.add(analise.id);
   m.analises.push(analise);
   const orientacao = leitura.cor === "brancas" ? "white" as const : "black" as const;
-  const lado = orientacao;
   let paradas = 0;
   const fechamentos = new Set<string>();
+  // Uma linha por percurso: o capítulo dela (da raiz até a ponta) e as perguntas que ela faz.
+  const linhas: Array<{ capitulo: CapituloV2; nodeIds: string[]; paradas: string[] }> = [];
 
   capitulo.percursos.forEach((percurso: Percurso, indice) => {
     const nodeIds = nosDoPercurso(analise, percurso.lances);
     const dasParadas = capitulo.paradas.filter((p) => p.percurso === indice).sort((a, b) => a.resposta - b.resposta);
     const perguntasJogaveis = new Set(dasParadas.map((p) => p.pergunta));
-    const baseDoTitulo = percurso.tipo === "principal"
-      ? capitulo.titulo
-      : percurso.titulo ?? `${capitulo.titulo} — se ${lanceEscrito(percurso.lances[percurso.desde])}`;
-    // Um trecho por parada: [início, fim] em índices de `nodeIds` (0 é a raiz).
-    let inicio = 0;
-    const trechos: Array<{ inicio: number; fim: number; parada: Parada | null }> = [];
-    for (const parada of dasParadas) {
-      trechos.push({ inicio, fim: parada.resposta, parada });
-      inicio = parada.resposta + 1;
+    // Na principal a raiz é narrada (a introdução do capítulo); num ramo, só os lances próprios dele —
+    // o começo comum já foi narrado na linha de onde ele saiu.
+    const primeiroNarrado = percurso.tipo === "ramo" ? percurso.desde + 1 : 0;
+    const narracoes: NarracaoV2[] = [];
+    if (percurso.tipo === "principal") {
+      const cabecalho = cabecalhoDaPartida(capitulo);
+      if (cabecalho) narracoes.push({ id: livre(m, `narracao-${nodeIds[0]}`), nodeId: nodeIds[0], texto: cabecalho, pausa: "temporizada", rotulo: "Partida" });
     }
-    trechos.push({ inicio, fim: nodeIds.length - 1, parada: null });
-
-    trechos.forEach((trecho, t) => {
-      // Na principal, o primeiro trecho narra a raiz (a introdução do capítulo); num ramo, só os
-      // lances próprios dele — o começo comum já foi narrado na linha de onde ele saiu.
-      const primeiroNarrado = percurso.tipo === "ramo" ? Math.max(trecho.inicio, percurso.desde + 1) : trecho.inicio;
-      const narracoes: NarracaoV2[] = [];
-      if (percurso.tipo === "principal" && trecho.inicio === 0) {
-        const cabecalho = cabecalhoDaPartida(capitulo);
-        if (cabecalho) narracoes.push({ id: livre(m, `narracao-${nodeIds[0]}`), nodeId: nodeIds[0], texto: cabecalho, pausa: "temporizada", rotulo: "Partida" });
-      }
-      for (let k = primeiroNarrado; k <= trecho.fim; k += 1) {
-        const comentario = k === 0 ? capitulo.partida.intro : percurso.lances[k - 1].comentario;
-        // A pergunta que vira parada sai da fala: quem a faz é o treino. A que não tem lance fica.
-        const semPergunta = k > 0 && perguntasJogaveis.has(k - 1);
-        narracoes.push(...narracoesDoNo(m, nodeIds[k], comentario, { semPergunta, ...(percurso.tipo === "principal" ? { fechamentos } : {}) }));
-      }
-      const caminho = nodeIds.slice(trecho.inicio + 1, trecho.fim + 1);
-      if (caminho.length || narracoes.length) {
-        const sufixo = t === 0 ? "" : ` — depois de ${lanceEscrito(percurso.lances[trecho.inicio - 1])}`;
-        const id = livre(m, `${idDe(capitulo.codigo)}${percurso.tipo === "ramo" ? `-ramo-${indice}` : ""}${t ? `-${t + 1}` : ""}`);
-        m.capitulos.push({
-          id,
-          titulo: `${baseDoTitulo}${sufixo}`,
-          ...(t === 0 && percurso.tipo === "principal" && capitulo.objetivo ? { resumo: capitulo.objetivo } : {}),
-          ...(t === 0 && percurso.tipo === "principal" && capitulo.secao ? { secao: capitulo.secao } : {}),
-          analiseId: analise.id,
-          inicioNodeId: nodeIds[trecho.inicio],
-          caminho,
-          orientacao,
-          narracoes,
-        });
-        m.fluxo.push({ id: livre(m, `etapa-${id}`), tipo: "capitulo", entidadeId: id });
-      }
-      if (trecho.parada) {
-        paradas += 1;
-        montarParada(m, capitulo, analise, nodeIds, percurso, trecho.parada, lado, paradas);
-      }
-    });
+    for (let k = primeiroNarrado; k < nodeIds.length; k += 1) {
+      const comentario = k === 0 ? capitulo.partida.intro : percurso.lances[k - 1].comentario;
+      // A pergunta que vira parada sai da fala: quem a faz é o passo da pergunta. A que não tem lance fica.
+      const semPergunta = k > 0 && perguntasJogaveis.has(k - 1);
+      narracoes.push(...narracoesDoNo(m, nodeIds[k], comentario, { semPergunta, ...(percurso.tipo === "principal" ? { fechamentos } : {}) }));
+    }
+    const id = livre(m, `${idDe(capitulo.codigo)}${percurso.tipo === "ramo" ? `-ramo-${indice}` : ""}`);
+    const titulo = percurso.tipo === "principal" ? capitulo.titulo : percurso.titulo ?? `${capitulo.titulo} — se ${lanceEscrito(percurso.lances[percurso.desde])}`;
+    const doCapitulo: CapituloV2 = {
+      id,
+      titulo,
+      ...(percurso.tipo === "principal" && capitulo.objetivo ? { resumo: capitulo.objetivo } : {}),
+      ...(percurso.tipo === "principal" && capitulo.secao ? { secao: capitulo.secao } : {}),
+      analiseId: analise.id,
+      inicioNodeId: nodeIds[0],
+      caminho: nodeIds.slice(1),
+      orientacao,
+      narracoes,
+    };
+    m.capitulos.push(doCapitulo);
+    const idsDasParadas: string[] = [];
+    for (const parada of dasParadas) {
+      paradas += 1;
+      idsDasParadas.push(montarParada(m, capitulo, analise, nodeIds, percurso, parada, orientacao, paradas));
+    }
+    linhas.push({ capitulo: doCapitulo, nodeIds, paradas: idsDasParadas });
   });
-  if (capitulo.percursos.length > 1 && fechamentos.size) fecharNoUltimoRamo(m, capitulo, analise, orientacao, fechamentos);
+
+  // A ordem da fita: o Laboratório (todo ramo é um CASO, já em ordem de número) toca pela lista; o
+  // resto, a principal até o fim e cada ramo depois, do mais fundo ao mais raso.
+  const laboratorio = linhas.length > 1 && capitulo.percursos.slice(1).every((p) => p.caso !== null);
+  const ordem = laboratorio ? linhas.map((_, i) => i) : ordemDaFita(linhas.map((l) => l.nodeIds));
+  const [principal, ...ramos] = ordem.map((i) => linhas[i]);
+  // O Resumo e o A seguir fecham a etapa inteira: vão para o último lance da última linha tocada.
+  if (ramos.length && fechamentos.size) {
+    const ultima = ramos.at(-1)!;
+    const fechos = principal.capitulo.narracoes.filter((n) => fechamentos.has(n.id));
+    principal.capitulo.narracoes = principal.capitulo.narracoes.filter((n) => !fechamentos.has(n.id));
+    ultima.capitulo.narracoes.push(...fechos.map((n) => ({ ...n, nodeId: ultima.nodeIds.at(-1)! })));
+  }
+  const todasAsParadas = ordem.flatMap((i) => linhas[i].paradas);
+  m.fluxo.push({
+    id: livre(m, `etapa-${principal.capitulo.id}`),
+    tipo: "capitulo",
+    entidadeId: principal.capitulo.id,
+    ...(ramos.length ? { comparacoes: ramos.map((l) => l.capitulo.id) } : {}),
+    ...(todasAsParadas.length ? { paradas: todasAsParadas } : {}),
+  });
   return { paradas, ramos: capitulo.percursos.length - 1 };
 }
 
-/**
- * O Resumo e o A seguir da linha principal fecham o capítulo inteiro: com ramos, eles vão para o último
- * lance do último ramo — antes, o aluno lia "cinco padrões" depois do primeiro.
- */
-function fecharNoUltimoRamo(m: Montagem, capitulo: CapituloDoCurso, analise: AnaliseV2, orientacao: "white" | "black", ids: Set<string>) {
-  const doCapitulo = new Set(m.fluxo.filter((e) => e.tipo === "capitulo").map((e) => e.entidadeId));
-  const narracoes = m.capitulos.flatMap((c) => c.narracoes.filter((n) => ids.has(n.id)));
-  for (const c of m.capitulos) c.narracoes = c.narracoes.filter((n) => !ids.has(n.id));
-  const ultimo = m.fluxo.at(-1)!;
-  const alvo = ultimo.tipo === "capitulo" && doCapitulo.has(ultimo.entidadeId) ? m.capitulos.find((c) => c.id === ultimo.entidadeId)! : null;
-  if (alvo) {
-    const fim = alvo.caminho.at(-1) ?? alvo.inicioNodeId;
-    alvo.narracoes.push(...narracoes.map((n) => ({ ...n, nodeId: fim })));
-    return;
-  }
-  // O último ramo termina numa parada: o fechamento ganha uma etapa própria, parada na posição da resposta.
-  const percurso = capitulo.percursos.at(-1)!;
-  const fim = nosDoPercurso(analise, percurso.lances).at(-1)!;
-  const id = livre(m, `${idDe(capitulo.codigo)}-fim`);
-  m.capitulos.push({ id, titulo: `${capitulo.titulo} — resumo`, analiseId: analise.id, inicioNodeId: fim, caminho: [], orientacao, narracoes: narracoes.map((n) => ({ ...n, nodeId: fim })) });
-  m.fluxo.push({ id: livre(m, `etapa-${id}`), tipo: "capitulo", entidadeId: id });
-}
-
-function montarParada(m: Montagem, capitulo: CapituloDoCurso, analise: AnaliseV2, nodeIds: string[], percurso: Percurso, parada: Parada, lado: "white" | "black", numero: number) {
+/** A pergunta de uma parada: um treino de uma questão, jogado dentro da etapa do capítulo. Devolve o id. */
+function montarParada(m: Montagem, capitulo: CapituloDoCurso, analise: AnaliseV2, nodeIds: string[], percurso: Percurso, parada: Parada, lado: "white" | "black", numero: number): string {
   const resposta = percurso.lances[parada.resposta];
   const posicaoId = nodeIds[parada.resposta];
   const base = `parada-${capitulo.codigo.toLowerCase()}-${numero}`;
@@ -290,7 +277,7 @@ function montarParada(m: Montagem, capitulo: CapituloDoCurso, analise: AnaliseV2
     explicacaoConclusao: `Isso: ${principal}.`,
     papel: "parada",
   });
-  m.fluxo.push({ id: livre(m, `etapa-${treinoId}`), tipo: "treino", entidadeId: treinoId });
+  return treinoId;
 }
 
 /** A revisão (bloco F): uma introdução com um quadro por trecho comentado. */
@@ -349,8 +336,7 @@ function montarTreinoGuiado(m: Montagem, leitura: LeituraDoCurso, bloco: AulaDoC
       if (existente) { atual = existente; continue; }
       contador += 1;
       const id = livre(m, `no-${prefixo}-${contador}`);
-      const comentario = curto(leitura.comentarios.get(chaveDoLance(lance)));
-      nos[id] = { id, uci: lance.uci, filhos: [], ...(lance.nags.length ? { nags: nagsNumericos(lance.nags) } : {}), ...(comentario ? { comentario } : {}) };
+      nos[id] = { id, uci: lance.uci, filhos: [], ...(lance.nags.length ? { nags: nagsNumericos(lance.nags) } : {}) };
       nos[atual].filhos.push(id);
       lanceDoNo.set(id, lance);
       atual = id;
@@ -375,13 +361,14 @@ function montarTreinoGuiado(m: Montagem, leitura: LeituraDoCurso, bloco: AulaDoC
     const nossos = nos[nodeId].filhos;
     nossos.forEach((filhoId, i) => {
       const lance = lanceDoNo.get(filhoId)!;
-      const feedback = nos[filhoId].comentario ?? "Isso.";
+      // Sem comentário (Doug, 18/9/2026): o porquê o aluno já ouviu na aula; aqui ele só joga.
+      const feedback = "Isso.";
       const defesas = nos[filhoId].filhos;
       if (defesas.length > 4) avisos.push({ codigo: "DEFESAS_DEMAIS", mensagem: `no treino guiado da aula ${ROTULO_DA_AULA[bloco]}, depois de ${lanceEscrito(lance)} há ${defesas.length} respostas das ${adversarioDo(leitura.cor)}; o defensor gira só entre as 4 primeiras` });
       const jogo = new Chess(copia[id].fen);
       jogo.move({ from: lance.uci.slice(0, 2), to: lance.uci.slice(2, 4), promotion: lance.uci.slice(4) || undefined });
       const efeito: RespostaTreinoV2["efeito"] = defesas.length
-        ? { tipo: "avanca", defesas: defesas.slice(0, 4).map((defesaId) => ({ move: nos[defesaId].uci!, proximaQuestaoId: perguntar(defesaId), ...(nos[defesaId].comentario ? { texto: nos[defesaId].comentario } : {}) })) }
+        ? { tipo: "avanca", defesas: defesas.slice(0, 4).map((defesaId) => ({ move: nos[defesaId].uci!, proximaQuestaoId: perguntar(defesaId) })) }
         : { tipo: "encerra", condicao: jogo.isCheckmate() ? "mate" : "objetivo-autoral" };
       questao.respostas.push({ id: livre(m, `resposta-${filhoId}`), moves: [lance.uci], julgamento: i === 0 ? "correta" : "alternativa", feedback: i === 0 ? feedback : `${lanceEscrito(lance)} também está no repertório.`, efeito: i === 0 ? efeito : { tipo: "repete" } });
     });
@@ -413,7 +400,6 @@ function montarTreinoGuiado(m: Montagem, leitura: LeituraDoCurso, bloco: AulaDoC
   m.treinos.push({
     id,
     titulo: `Treino guiado — aula ${ROTULO_DA_AULA[bloco]}`,
-    introducao: "Jogue as linhas da aula: a resposta do adversário muda a cada tentativa.",
     perfil: "linha-autoral",
     inicio: { analiseId: analise.id, nodeId: raizId },
     ladoAluno: leitura.cor === "brancas" ? "white" : "black",
@@ -429,21 +415,6 @@ function montarTreinoGuiado(m: Montagem, leitura: LeituraDoCurso, bloco: AulaDoC
     revisaoAvaliacao: "pendente",
   });
   m.fluxo.push({ id: livre(m, `etapa-${id}`), tipo: "treino", entidadeId: id });
-}
-
-/**
- * No treino guiado o comentário aparece a cada lance, enquanto o aluno joga de memória: só as frases
- * iniciais. O painel junta a frase do nosso lance à da resposta, e as duas cabem numa fala de 200.
- */
-function curto(texto: string | undefined): string | undefined {
-  if (!texto) return texto;
-  const frases = texto.split(/(?<=[.!?])\s+/);
-  let saida = frases[0];
-  for (const frase of frases.slice(1)) {
-    if (saida.length + 1 + frase.length > 100) break;
-    saida = `${saida} ${frase}`;
-  }
-  return saida;
 }
 
 const NUMERO: Record<string, number> = { "!": 1, "?": 2, "!!": 3, "??": 4, "!?": 5, "?!": 6 };
@@ -493,7 +464,7 @@ export function planejarCursoDeAbertura(texto: string, opcoes: OpcoesDoCurso): C
       montarTreinoGuiado(m, leitura, bloco, linhas, avisos);
       if (linhas.length) {
         const id = livre(m, `treinador-${bloco.toLowerCase()}`);
-        m.treinadores.push({ id, titulo: `Move trainer — aula ${ROTULO_DA_AULA[bloco]}`, cor: opcoes.cor, abertura: opcoes.abertura, linhaIds: linhas.map((linha) => idDaLinha(opcoes.cor, opcoes.abertura, linha.lances.map((l) => l.uci))) });
+        m.treinadores.push({ id, titulo: `Treinador de lances — aula ${ROTULO_DA_AULA[bloco]}`, cor: opcoes.cor, abertura: opcoes.abertura, linhaIds: linhas.map((linha) => idDaLinha(opcoes.cor, opcoes.abertura, linha.lances.map((l) => l.uci))) });
         m.fluxo.push({ id: livre(m, `etapa-${id}`), tipo: "treinador", entidadeId: id });
       }
     }

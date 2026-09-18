@@ -688,7 +688,9 @@ const PECAS_NA_PROSA: Record<string, string> = { N: "C", B: "B", Q: "D", K: "R" 
  * Medido em 17/9/2026 nos doze arquivos de `public/repertorio/`: **os onze
  * tokens com `R` ou `K` nos nomes de linha estão todos na lista de lances da
  * própria linha** — `Re1` e `Rfe1` na Escandinava, `Rxd6`, `Rad8` e `Rxd8` na
- * Escocesa, `Kxd7` na Caro-Kann. Nenhum ficou sem desempate.
+ * Escocesa, `Kxd7` na Caro-Kann. Nenhum ficou sem desempate. (Em 18/9/2026 a Escocesa
+ * passou a vir do estudo e os nomes dela mudaram — agora `Rfe1` e `Kb1` —; a conta é dez,
+ * e continua valendo: todos estão nos lances da própria linha.)
  *
  * A decisão de cada lance é tomada **uma vez**, na passada única do `replace`.
  * Em duas passadas um `Kxd7` viraria `Rxd7` na primeira e correria o risco de

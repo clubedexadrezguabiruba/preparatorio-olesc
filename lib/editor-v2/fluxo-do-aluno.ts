@@ -66,6 +66,25 @@ export type PassoDoCapituloDoAlunoV2 = {
   rotulo?: string;
   /** A fita voltando um lance até o ponto de escolha (18/9/2026) — ver `PassoDaPrevia.recuo`. */
   recuo?: true;
+  /**
+   * A pergunta deste passo (curso de abertura, 18/9/2026): a `chave` de uma das `paradas` da etapa.
+   * O tabuleiro para aqui e o aluno joga; o passo seguinte é o lance-resposta.
+   */
+  parada?: string;
+};
+
+/**
+ * Uma pergunta jogada dentro da etapa de capítulo. Leva o que a etapa de treino levava — a revisão, o
+ * treino jogável, os símbolos e a escada de ajuda —, e a `chave` é a da árvore na store do player:
+ * `${etapa.id}#${treinoId}`.
+ */
+export type ParadaDoCapituloDoAlunoV2 = {
+  chave: string;
+  entidadeId: string;
+  revisao: string;
+  jogavel: TreinoJogavel;
+  simbolos?: Record<string, number>;
+  ajudaNoErro?: true;
 };
 
 export type EtapaDoAlunoV2 =
@@ -89,6 +108,8 @@ export type EtapaDoAlunoV2 =
       fen: string;
       orientacao: "white" | "black";
       passos: PassoDoCapituloDoAlunoV2[];
+      /** As perguntas que o aluno joga dentro desta etapa, na ordem em que aparecem. */
+      paradas?: ParadaDoCapituloDoAlunoV2[];
     }
   | {
       id: string;
@@ -161,7 +182,7 @@ function desenhoCurto(desenho: DesenhoV2 | undefined): { arrows?: [string, strin
 /** Os rótulos da trilha: os nomes de sempre quando há um de cada, o título quando há vários. */
 function rotuloDe(aula: AulaV2, tipo: AulaV2["fluxo"][number]["tipo"], titulo: string): string {
   const quantos = aula.fluxo.filter((etapa) => etapa.tipo === tipo).length;
-  const padrao = { introducao: "Apresentação", capitulo: "Aula", treino: "Treino", pratica: "Prática real", treinador: "Move trainer" }[tipo];
+  const padrao = { introducao: "Apresentação", capitulo: "Aula", treino: "Treino", pratica: "Prática real", treinador: "Treinador de lances" }[tipo];
   return quantos > 1 ? titulo : padrao;
 }
 
@@ -228,6 +249,20 @@ export function etapasDoAlunoV2(aula: AulaV2, positions: Record<string, Position
       const capitulo = aula.capitulos.find((item) => item.id === etapa.entidadeId);
       const trecho = capitulo ? trechos.get(capitulo.id) : undefined;
       if (!capitulo || !trecho || !trecho.passos.length) continue;
+      // A pergunta sem revisão publicada não se joga: o passo fica só com a fala.
+      const paradas: ParadaDoCapituloDoAlunoV2[] = (etapa.paradas ?? []).flatMap((treinoId) => {
+        const treino = aula.treinos.find((item) => item.id === treinoId);
+        const revisao = revisoes[treinoId];
+        if (!treino || !revisao) return [];
+        return [{
+          chave: `${etapa.id}#${treinoId}`,
+          entidadeId: treinoId,
+          revisao: revisao.revisao,
+          jogavel: dicaSoNoErro(treinoJogavel(aula, treinoId, positions), treino),
+          ...(doCurso ? { simbolos: simbolosDoCurso(), ajudaNoErro: true as const } : {}),
+        }];
+      });
+      const chaveDa = new Map(paradas.map((parada) => [parada.entidadeId, parada.chave]));
       etapas.push({
         id: etapa.id,
         tipo: "capitulo",
@@ -246,7 +281,9 @@ export function etapasDoAlunoV2(aula: AulaV2, positions: Record<string, Position
           pausaManual: passo.pausaManual,
           ...(passo.rotulo ? { rotulo: passo.rotulo } : {}),
           ...(passo.recuo ? { recuo: true as const } : {}),
+          ...(passo.parada && chaveDa.has(passo.parada) ? { parada: chaveDa.get(passo.parada)! } : {}),
         })),
+        ...(paradas.length ? { paradas } : {}),
       });
     } else if (etapa.tipo === "treino") {
       const treino = aula.treinos.find((item) => item.id === etapa.entidadeId);

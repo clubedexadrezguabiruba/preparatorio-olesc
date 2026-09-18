@@ -3,7 +3,7 @@
  */
 import assert from "node:assert/strict";
 import test from "node:test";
-import { podeAbrir, podePular, primeiraPendente, rodadaConcluida, temAtalhoDoTreinador, type EtapaDaRodada } from "./rodada.ts";
+import { comoPular, podeAbrir, podePular, primeiraPendente, rodadaConcluida, temAtalhoDoTreinador, type EtapaDaRodada } from "./rodada.ts";
 
 const AULA_B: EtapaDaRodada[] = [
   { id: "cap-1", tipo: "capitulo" },
@@ -43,4 +43,13 @@ test("até a 2ª vez, a rodada só conclui com todas as etapas feitas; retoma na
   assert.equal(rodadaConcluida({ vez: 3, feitas: [] }, AULA_D), false);
   assert.equal(primeiraPendente(AULA_B, ["cap-1", "parada-1"]), 2);
   assert.equal(primeiraPendente(AULA_B, AULA_B.map((e) => e.id)), AULA_B.length);
+});
+
+test("Pular num capítulo com perguntas corre a fala e para em cada pergunta (Doug, 18/9/2026)", () => {
+  const rodada = { vez: 2, feitas: [] };
+  const comPerguntas = { id: "cap-golpe", tipo: "capitulo" as const, perguntas: 2 };
+  assert.equal(podePular(rodada, comPerguntas), true);
+  assert.equal(comoPular(comPerguntas), "corre", "o aluno ainda joga os lances");
+  assert.equal(comoPular({ id: "cap-a", tipo: "capitulo", perguntas: 0 }), "pula");
+  assert.equal(comoPular({ id: "intro", tipo: "introducao" }), "pula");
 });

@@ -169,7 +169,7 @@ export const REGRAS_PUBLICACAO_V2: RegraDePublicacaoV2[] = [
    */
   {
     codigo: "ABERTURA_DIVERGE",
-    impede: "aula de abertura cujo id, metadados e move trainer não apontam para o mesmo curso",
+    impede: "aula de abertura cujo id, metadados e treinador de lances não apontam para o mesmo curso",
     julgar: (aula) => {
       const doId = aberturaDoId(aula.id);
       const declarada = aula.metadados?.abertura;
@@ -185,7 +185,7 @@ export const REGRAS_PUBLICACAO_V2: RegraDePublicacaoV2[] = [
       }
       for (const treinador of aula.treinadores ?? []) {
         if (treinador.cor !== doId.cor || treinador.abertura !== doId.abertura) {
-          problemas.push(erro(aula, "ABERTURA_DIVERGE", `o move trainer «${treinador.titulo}» é de ${treinador.cor}/${treinador.abertura}, e a aula é de ${doId.cor}/${doId.abertura}`, { treinadorId: treinador.id, campo: "abertura" }));
+          problemas.push(erro(aula, "ABERTURA_DIVERGE", `o treinador de lances «${treinador.titulo}» é de ${treinador.cor}/${treinador.abertura}, e a aula é de ${doId.cor}/${doId.abertura}`, { treinadorId: treinador.id, campo: "abertura" }));
         }
       }
       return problemas;
@@ -197,14 +197,14 @@ export const REGRAS_PUBLICACAO_V2: RegraDePublicacaoV2[] = [
    */
   {
     codigo: "TREINADOR_LINHA_AUSENTE",
-    impede: "move trainer com linha que não existe no repertório compilado",
+    impede: "treinador de lances com linha que não existe no repertório compilado",
     julgar: (aula, contexto) => (aula.treinadores ?? []).flatMap((treinador) => {
       if (!contexto.linhasDoRepertorio) {
-        return [erro(aula, "TREINADOR_LINHA_AUSENTE", `o repertório compilado não foi lido, e sem ele não há como saber se as linhas do move trainer «${treinador.titulo}» existem`, { treinadorId: treinador.id, campo: "linhaIds" })];
+        return [erro(aula, "TREINADOR_LINHA_AUSENTE", `o repertório compilado não foi lido, e sem ele não há como saber se as linhas do treinador de lances «${treinador.titulo}» existem`, { treinadorId: treinador.id, campo: "linhaIds" })];
       }
       return treinador.linhaIds
         .filter((id) => !contexto.linhasDoRepertorio!.has(id))
-        .map((id) => erro(aula, "TREINADOR_LINHA_AUSENTE", `o move trainer «${treinador.titulo}» usa a linha ${id}, que não está no repertório compilado — gere e aplique o PGN do repertório antes de publicar`, { treinadorId: treinador.id, campo: "linhaIds" }));
+        .map((id) => erro(aula, "TREINADOR_LINHA_AUSENTE", `o treinador de lances «${treinador.titulo}» usa a linha ${id}, que não está no repertório compilado — gere e aplique o PGN do repertório antes de publicar`, { treinadorId: treinador.id, campo: "linhaIds" }));
     }),
   },
   { codigo: "REVISAO_PENDENTE", impede: "texto marcado para revisão depois de trocar a posição", promove: true },

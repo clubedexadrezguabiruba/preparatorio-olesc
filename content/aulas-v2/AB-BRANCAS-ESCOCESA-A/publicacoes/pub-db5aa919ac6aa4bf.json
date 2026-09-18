@@ -1,0 +1,1366 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-db5aa919ac6aa4bf",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "AB-BRANCAS-ESCOCESA-A",
+    "titulo": "Escocesa — aula A: A defesa e nossa arma",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "estadoEditorial": "rascunho",
+      "fonteDidatica": "estudo local v1.0 — Escocesa: a dama em d4 e a Potter",
+      "abertura": {
+        "cor": "brancas",
+        "abertura": "escocesa",
+        "bloco": "A"
+      }
+    },
+    "proveniencia": [],
+    "excecoes": [],
+    "analises": [
+      {
+        "id": "analise-cap-00",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0",
+            "Site": "Estudo local",
+            "Date": "2026.09.18",
+            "Round": "1",
+            "White": "00",
+            "Black": "Conheça a Escocesa: abrir o centro cedo",
+            "Result": "*",
+            "Annotator": "Projeto repertório — Escocesa",
+            "StudyName": "Escocesa: a dama em d4 e a Potter",
+            "Orientation": "white",
+            "ChapterName": "cap 00"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-00-0",
+        "nos": {
+          "no-cap-00-0": {
+            "id": "no-cap-00-0",
+            "filhos": [
+              "no-cap-00-1"
+            ],
+            "comentario": "[SECAO] Conheça a Escocesa | abrir o centro cedo [OBJETIVO] Entender a ideia da Escocesa: abrir o centro no terceiro lance e pôr o cavalo em d4."
+          },
+          "no-cap-00-1": {
+            "id": "no-cap-00-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-00-2"
+            ],
+            "comentario": "Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama."
+          },
+          "no-cap-00-2": {
+            "id": "no-cap-00-2",
+            "uci": "e7e5",
+            "filhos": [
+              "no-cap-00-3"
+            ]
+          },
+          "no-cap-00-3": {
+            "id": "no-cap-00-3",
+            "uci": "g1f3",
+            "filhos": [
+              "no-cap-00-4"
+            ],
+            "comentario": "O cavalo ataca o peão de e5 e prepara o roque."
+          },
+          "no-cap-00-4": {
+            "id": "no-cap-00-4",
+            "uci": "b8c6",
+            "filhos": [
+              "no-cap-00-5"
+            ],
+            "comentario": "As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5."
+          },
+          "no-cap-00-5": {
+            "id": "no-cap-00-5",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-00-6"
+            ],
+            "comentario": "Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. [ENTENDER] Este é o lance da Escocesa.",
+            "nags": [
+              1
+            ]
+          },
+          "no-cap-00-6": {
+            "id": "no-cap-00-6",
+            "uci": "e5d4",
+            "filhos": [
+              "no-cap-00-7"
+            ],
+            "comentario": "O caminho mais comum: as Pretas trocam o peão."
+          },
+          "no-cap-00-7": {
+            "id": "no-cap-00-7",
+            "uci": "f3d4",
+            "filhos": [],
+            "comentario": "[ENTENDER] O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. [RESUMO] 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio. [PROXIMO] Agora, a nossa arma, lance a lance."
+          }
+        }
+      },
+      {
+        "id": "analise-cap-a00",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0",
+            "Site": "Estudo local",
+            "Date": "2026.09.18",
+            "Round": "2",
+            "White": "A00",
+            "Black": "Nossa arma: 3.d4 e o cavalo em d4",
+            "Result": "*",
+            "Annotator": "Projeto repertório — Escocesa",
+            "StudyName": "Escocesa: a dama em d4 e a Potter",
+            "Orientation": "white",
+            "ChapterName": "cap A00"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-a00-0",
+        "nos": {
+          "no-cap-a00-0": {
+            "id": "no-cap-a00-0",
+            "filhos": [
+              "no-cap-a00-1"
+            ],
+            "comentario": "[SECAO] Nossa arma | 3.d4 e 4.Cxd4 [OBJETIVO] Jogar os dois lances da nossa arma: 3.d4 e 4.Cxd4."
+          },
+          "no-cap-a00-1": {
+            "id": "no-cap-a00-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-a00-2"
+            ]
+          },
+          "no-cap-a00-2": {
+            "id": "no-cap-a00-2",
+            "uci": "e7e5",
+            "filhos": [
+              "no-cap-a00-3"
+            ]
+          },
+          "no-cap-a00-3": {
+            "id": "no-cap-a00-3",
+            "uci": "g1f3",
+            "filhos": [
+              "no-cap-a00-4"
+            ]
+          },
+          "no-cap-a00-4": {
+            "id": "no-cap-a00-4",
+            "uci": "b8c6",
+            "filhos": [
+              "no-cap-a00-5"
+            ],
+            "comentario": "O cavalo preto defende e5. [PERGUNTA] Qual peão abre o centro agora? [DICA] O peão da dama anda duas casas."
+          },
+          "no-cap-a00-5": {
+            "id": "no-cap-a00-5",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-a00-6"
+            ],
+            "comentario": "Isso: 3.d4. Batemos em e5 mesmo defendido, para abrir o jogo cedo.",
+            "nags": [
+              1
+            ]
+          },
+          "no-cap-a00-6": {
+            "id": "no-cap-a00-6",
+            "uci": "e5d4",
+            "filhos": [
+              "no-cap-a00-7"
+            ],
+            "comentario": "[PERGUNTA] As Pretas trocaram. Qual peça recaptura? [DICA] A peça que já está de olho em d4."
+          },
+          "no-cap-a00-7": {
+            "id": "no-cap-a00-7",
+            "uci": "f3d4",
+            "filhos": [],
+            "comentario": "Isso: o cavalo toma e fica no centro. [MEMORIZAR] 3.d4 e 4.Cxd4. [RESUMO] Dois lances e estamos na Escocesa. [PROXIMO] Agora, onde cada peça vai morar."
+          }
+        }
+      },
+      {
+        "id": "analise-cap-a01",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Escocesa pelas Brancas: a dama em d4 e a Potter v1.0",
+            "Site": "Estudo local",
+            "Date": "2026.09.18",
+            "Round": "3",
+            "White": "A01",
+            "Black": "Nosso plano: Cc3, bispo, roque grande",
+            "Result": "*",
+            "Annotator": "Projeto repertório — Escocesa",
+            "StudyName": "Escocesa: a dama em d4 e a Potter",
+            "Orientation": "white",
+            "ChapterName": "cap A01"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-a01-0",
+        "nos": {
+          "no-cap-a01-0": {
+            "id": "no-cap-a01-0",
+            "filhos": [
+              "no-cap-a01-1"
+            ],
+            "comentario": "[SECAO] Nosso plano | Cc3, bispo e roque grande [OBJETIVO] Montar o esquema: Cc3, bispo em f4, roque grande e f3. [ENTENDER] A resposta mais comum é trocar os cavalos. A nossa dama recaptura e fica no centro, mirando g7."
+          },
+          "no-cap-a01-1": {
+            "id": "no-cap-a01-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-a01-2"
+            ]
+          },
+          "no-cap-a01-2": {
+            "id": "no-cap-a01-2",
+            "uci": "e7e5",
+            "filhos": [
+              "no-cap-a01-3"
+            ]
+          },
+          "no-cap-a01-3": {
+            "id": "no-cap-a01-3",
+            "uci": "g1f3",
+            "filhos": [
+              "no-cap-a01-4"
+            ]
+          },
+          "no-cap-a01-4": {
+            "id": "no-cap-a01-4",
+            "uci": "b8c6",
+            "filhos": [
+              "no-cap-a01-5"
+            ]
+          },
+          "no-cap-a01-5": {
+            "id": "no-cap-a01-5",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-a01-6"
+            ]
+          },
+          "no-cap-a01-6": {
+            "id": "no-cap-a01-6",
+            "uci": "e5d4",
+            "filhos": [
+              "no-cap-a01-7"
+            ]
+          },
+          "no-cap-a01-7": {
+            "id": "no-cap-a01-7",
+            "uci": "f3d4",
+            "filhos": [
+              "no-cap-a01-8"
+            ]
+          },
+          "no-cap-a01-8": {
+            "id": "no-cap-a01-8",
+            "uci": "c6d4",
+            "filhos": [
+              "no-cap-a01-9"
+            ],
+            "nags": [
+              2
+            ]
+          },
+          "no-cap-a01-9": {
+            "id": "no-cap-a01-9",
+            "uci": "d1d4",
+            "filhos": [
+              "no-cap-a01-10"
+            ]
+          },
+          "no-cap-a01-10": {
+            "id": "no-cap-a01-10",
+            "uci": "d7d6",
+            "filhos": [
+              "no-cap-a01-11"
+            ],
+            "comentario": "[PERGUNTA] Qual peça defende e4 e sai da fileira de trás? [DICA] O cavalo da ala da dama."
+          },
+          "no-cap-a01-11": {
+            "id": "no-cap-a01-11",
+            "uci": "b1c3",
+            "filhos": [
+              "no-cap-a01-12"
+            ],
+            "comentario": "Isso: o cavalo defende e4 e abre caminho para o roque grande."
+          },
+          "no-cap-a01-12": {
+            "id": "no-cap-a01-12",
+            "uci": "g8f6",
+            "filhos": [
+              "no-cap-a01-13"
+            ],
+            "comentario": "[PERGUNTA] Qual bispo sai e mira o peão de d6? [DICA] O bispo de casas escuras."
+          },
+          "no-cap-a01-13": {
+            "id": "no-cap-a01-13",
+            "uci": "c1f4",
+            "filhos": [
+              "no-cap-a01-14"
+            ],
+            "comentario": "Isso: o bispo mira d6 e libera c1 para o rei.",
+            "nags": [
+              1
+            ]
+          },
+          "no-cap-a01-14": {
+            "id": "no-cap-a01-14",
+            "uci": "f8e7",
+            "filhos": [
+              "no-cap-a01-15"
+            ],
+            "comentario": "[PERGUNTA] Rei no centro ainda. Para que lado ele vai? [DICA] O lado onde já não há peças."
+          },
+          "no-cap-a01-15": {
+            "id": "no-cap-a01-15",
+            "uci": "e1c1",
+            "filhos": [
+              "no-cap-a01-16"
+            ],
+            "comentario": "[ESQUEMA] Roque grande: a torre cai na coluna d, na frente do peão de d6."
+          },
+          "no-cap-a01-16": {
+            "id": "no-cap-a01-16",
+            "uci": "e8g8",
+            "filhos": [
+              "no-cap-a01-17"
+            ]
+          },
+          "no-cap-a01-17": {
+            "id": "no-cap-a01-17",
+            "uci": "f2f3",
+            "filhos": [],
+            "comentario": "[PLANO] O f3 guarda e4 para sempre e prepara g4. [RESUMO] Cc3, Bf4, roque grande e f3. [PROXIMO] No próximo bloco: os erros das Pretas e como puni-los."
+          }
+        }
+      },
+      {
+        "id": "analise-arvore-a",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "raizId": "no-arvore-a-0",
+        "nos": {
+          "no-arvore-a-0": {
+            "id": "no-arvore-a-0",
+            "filhos": [
+              "no-arvore-a-1"
+            ]
+          },
+          "no-arvore-a-1": {
+            "id": "no-arvore-a-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-arvore-a-2"
+            ]
+          },
+          "no-arvore-a-2": {
+            "id": "no-arvore-a-2",
+            "uci": "e7e5",
+            "filhos": [
+              "no-arvore-a-3"
+            ]
+          },
+          "no-arvore-a-3": {
+            "id": "no-arvore-a-3",
+            "uci": "g1f3",
+            "filhos": [
+              "no-arvore-a-4"
+            ]
+          },
+          "no-arvore-a-4": {
+            "id": "no-arvore-a-4",
+            "uci": "b8c6",
+            "filhos": [
+              "no-arvore-a-5"
+            ]
+          },
+          "no-arvore-a-5": {
+            "id": "no-arvore-a-5",
+            "uci": "d2d4",
+            "filhos": [
+              "no-arvore-a-6"
+            ]
+          },
+          "no-arvore-a-6": {
+            "id": "no-arvore-a-6",
+            "uci": "e5d4",
+            "filhos": [
+              "no-arvore-a-7"
+            ]
+          },
+          "no-arvore-a-7": {
+            "id": "no-arvore-a-7",
+            "uci": "f3d4",
+            "filhos": []
+          }
+        }
+      }
+    ],
+    "introducoes": [],
+    "capitulos": [
+      {
+        "id": "cap-00",
+        "titulo": "Conheça a Escocesa: abrir o centro cedo",
+        "resumo": "Entender a ideia da Escocesa: abrir o centro no terceiro lance e pôr o cavalo em d4.",
+        "secao": {
+          "titulo": "Conheça a Escocesa",
+          "subtitulo": "abrir o centro cedo"
+        },
+        "analiseId": "analise-cap-00",
+        "inicioNodeId": "no-cap-00-0",
+        "caminho": [
+          "no-cap-00-1",
+          "no-cap-00-2",
+          "no-cap-00-3",
+          "no-cap-00-4",
+          "no-cap-00-5",
+          "no-cap-00-6",
+          "no-cap-00-7"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-00-1",
+            "nodeId": "no-cap-00-1",
+            "texto": "Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-00-3",
+            "nodeId": "no-cap-00-3",
+            "texto": "O cavalo ataca o peão de e5 e prepara o roque.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-00-4",
+            "nodeId": "no-cap-00-4",
+            "texto": "As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-00-5",
+            "nodeId": "no-cap-00-5",
+            "texto": "Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-00-5-2",
+            "nodeId": "no-cap-00-5",
+            "texto": "Este é o lance da Escocesa.",
+            "pausa": "temporizada",
+            "rotulo": "Entender"
+          },
+          {
+            "id": "narracao-no-cap-00-6",
+            "nodeId": "no-cap-00-6",
+            "texto": "O caminho mais comum: as Pretas trocam o peão.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-00-7",
+            "nodeId": "no-cap-00-7",
+            "texto": "O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir.",
+            "pausa": "temporizada",
+            "rotulo": "Entender"
+          },
+          {
+            "id": "narracao-no-cap-00-7-2",
+            "nodeId": "no-cap-00-7",
+            "texto": "3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          },
+          {
+            "id": "narracao-no-cap-00-7-3",
+            "nodeId": "no-cap-00-7",
+            "texto": "Agora, a nossa arma, lance a lance.",
+            "pausa": "manual",
+            "rotulo": "A seguir"
+          }
+        ]
+      },
+      {
+        "id": "cap-a00",
+        "titulo": "Nossa arma: 3.d4 e o cavalo em d4",
+        "resumo": "Jogar os dois lances da nossa arma: 3.d4 e 4.Cxd4.",
+        "secao": {
+          "titulo": "Nossa arma",
+          "subtitulo": "3.d4 e 4.Cxd4"
+        },
+        "analiseId": "analise-cap-a00",
+        "inicioNodeId": "no-cap-a00-0",
+        "caminho": [
+          "no-cap-a00-1",
+          "no-cap-a00-2",
+          "no-cap-a00-3",
+          "no-cap-a00-4",
+          "no-cap-a00-5",
+          "no-cap-a00-6",
+          "no-cap-a00-7"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-a00-4",
+            "nodeId": "no-cap-a00-4",
+            "texto": "O cavalo preto defende e5.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a00-5",
+            "nodeId": "no-cap-a00-5",
+            "texto": "Isso: 3.d4. Batemos em e5 mesmo defendido, para abrir o jogo cedo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a00-7",
+            "nodeId": "no-cap-a00-7",
+            "texto": "Isso: o cavalo toma e fica no centro.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a00-7-2",
+            "nodeId": "no-cap-a00-7",
+            "texto": "3.d4 e 4.Cxd4.",
+            "pausa": "temporizada",
+            "rotulo": "Memorizar"
+          },
+          {
+            "id": "narracao-no-cap-a00-7-3",
+            "nodeId": "no-cap-a00-7",
+            "texto": "Dois lances e estamos na Escocesa.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          },
+          {
+            "id": "narracao-no-cap-a00-7-4",
+            "nodeId": "no-cap-a00-7",
+            "texto": "Agora, onde cada peça vai morar.",
+            "pausa": "manual",
+            "rotulo": "A seguir"
+          }
+        ]
+      },
+      {
+        "id": "cap-a01",
+        "titulo": "Nosso plano: Cc3, bispo, roque grande",
+        "resumo": "Montar o esquema: Cc3, bispo em f4, roque grande e f3.",
+        "secao": {
+          "titulo": "Nosso plano",
+          "subtitulo": "Cc3, bispo e roque grande"
+        },
+        "analiseId": "analise-cap-a01",
+        "inicioNodeId": "no-cap-a01-0",
+        "caminho": [
+          "no-cap-a01-1",
+          "no-cap-a01-2",
+          "no-cap-a01-3",
+          "no-cap-a01-4",
+          "no-cap-a01-5",
+          "no-cap-a01-6",
+          "no-cap-a01-7",
+          "no-cap-a01-8",
+          "no-cap-a01-9",
+          "no-cap-a01-10",
+          "no-cap-a01-11",
+          "no-cap-a01-12",
+          "no-cap-a01-13",
+          "no-cap-a01-14",
+          "no-cap-a01-15",
+          "no-cap-a01-16",
+          "no-cap-a01-17"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-a01-0",
+            "nodeId": "no-cap-a01-0",
+            "texto": "A resposta mais comum é trocar os cavalos. A nossa dama recaptura e fica no centro, mirando g7.",
+            "pausa": "temporizada",
+            "rotulo": "Entender"
+          },
+          {
+            "id": "narracao-no-cap-a01-11",
+            "nodeId": "no-cap-a01-11",
+            "texto": "Isso: o cavalo defende e4 e abre caminho para o roque grande.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-13",
+            "nodeId": "no-cap-a01-13",
+            "texto": "Isso: o bispo mira d6 e libera c1 para o rei.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-a01-15",
+            "nodeId": "no-cap-a01-15",
+            "texto": "Roque grande: a torre cai na coluna d, na frente do peão de d6.",
+            "pausa": "temporizada",
+            "rotulo": "Esquema"
+          },
+          {
+            "id": "narracao-no-cap-a01-17",
+            "nodeId": "no-cap-a01-17",
+            "texto": "O f3 guarda e4 para sempre e prepara g4.",
+            "pausa": "temporizada",
+            "rotulo": "Plano"
+          },
+          {
+            "id": "narracao-no-cap-a01-17-2",
+            "nodeId": "no-cap-a01-17",
+            "texto": "Cc3, Bf4, roque grande e f3.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          },
+          {
+            "id": "narracao-no-cap-a01-17-3",
+            "nodeId": "no-cap-a01-17",
+            "texto": "No próximo bloco: os erros das Pretas e como puni-los.",
+            "pausa": "manual",
+            "rotulo": "A seguir"
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-parada-a00-1",
+        "titulo": "Sua vez — A00",
+        "introducao": "Qual peão abre o centro agora?",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-a00",
+          "nodeId": "no-cap-a00-4"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Qual peão abre o centro agora?",
+        "questoes": [
+          {
+            "id": "questao-parada-a00-1",
+            "posicao": {
+              "analiseId": "analise-cap-a00",
+              "nodeId": "no-cap-a00-4"
+            },
+            "dica": "O peão da dama anda duas casas.",
+            "respostas": [
+              {
+                "id": "resposta-parada-a00-1",
+                "moves": [
+                  "d2d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 3.d4.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+            "historicoUci": [
+              "e2e4",
+              "e7e5",
+              "g1f3",
+              "b8c6"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-a00",
+              "nodeId": "no-cap-a00-4"
+            }
+          },
+          "questoes": {
+            "questao-parada-a00-1": {
+              "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+              "historicoUci": [
+                "e2e4",
+                "e7e5",
+                "g1f3",
+                "b8c6"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-a00",
+                "nodeId": "no-cap-a00-4"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 3.d4.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-parada-a00-2",
+        "titulo": "Sua vez — A00",
+        "introducao": "As Pretas trocaram. Qual peça recaptura?",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-a00",
+          "nodeId": "no-cap-a00-6"
+        },
+        "ladoAluno": "white",
+        "objetivo": "As Pretas trocaram. Qual peça recaptura?",
+        "questoes": [
+          {
+            "id": "questao-parada-a00-2",
+            "posicao": {
+              "analiseId": "analise-cap-a00",
+              "nodeId": "no-cap-a00-6"
+            },
+            "dica": "A peça que já está de olho em d4.",
+            "respostas": [
+              {
+                "id": "resposta-parada-a00-2",
+                "moves": [
+                  "f3d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 4.Cxd4.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "r1bqkbnr/pppp1ppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+            "historicoUci": [
+              "e2e4",
+              "e7e5",
+              "g1f3",
+              "b8c6",
+              "d2d4",
+              "e5d4"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-a00",
+              "nodeId": "no-cap-a00-6"
+            }
+          },
+          "questoes": {
+            "questao-parada-a00-2": {
+              "fen": "r1bqkbnr/pppp1ppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+              "historicoUci": [
+                "e2e4",
+                "e7e5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "e5d4"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-a00",
+                "nodeId": "no-cap-a00-6"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 4.Cxd4.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-parada-a01-1",
+        "titulo": "Sua vez — A01",
+        "introducao": "Qual peça defende e4 e sai da fileira de trás?",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-a01",
+          "nodeId": "no-cap-a01-10"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Qual peça defende e4 e sai da fileira de trás?",
+        "questoes": [
+          {
+            "id": "questao-parada-a01-1",
+            "posicao": {
+              "analiseId": "analise-cap-a01",
+              "nodeId": "no-cap-a01-10"
+            },
+            "dica": "O cavalo da ala da dama.",
+            "respostas": [
+              {
+                "id": "resposta-parada-a01-1",
+                "moves": [
+                  "b1c3"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 6.Cc3.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "r1bqkbnr/ppp2ppp/3p4/8/3QP3/8/PPP2PPP/RNB1KB1R w KQkq - 0 6",
+            "historicoUci": [
+              "e2e4",
+              "e7e5",
+              "g1f3",
+              "b8c6",
+              "d2d4",
+              "e5d4",
+              "f3d4",
+              "c6d4",
+              "d1d4",
+              "d7d6"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-a01",
+              "nodeId": "no-cap-a01-10"
+            }
+          },
+          "questoes": {
+            "questao-parada-a01-1": {
+              "fen": "r1bqkbnr/ppp2ppp/3p4/8/3QP3/8/PPP2PPP/RNB1KB1R w KQkq - 0 6",
+              "historicoUci": [
+                "e2e4",
+                "e7e5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "e5d4",
+                "f3d4",
+                "c6d4",
+                "d1d4",
+                "d7d6"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-a01",
+                "nodeId": "no-cap-a01-10"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 6.Cc3.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-parada-a01-2",
+        "titulo": "Sua vez — A01",
+        "introducao": "Qual bispo sai e mira o peão de d6?",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-a01",
+          "nodeId": "no-cap-a01-12"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Qual bispo sai e mira o peão de d6?",
+        "questoes": [
+          {
+            "id": "questao-parada-a01-2",
+            "posicao": {
+              "analiseId": "analise-cap-a01",
+              "nodeId": "no-cap-a01-12"
+            },
+            "dica": "O bispo de casas escuras.",
+            "respostas": [
+              {
+                "id": "resposta-parada-a01-2",
+                "moves": [
+                  "c1f4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 7.Bf4.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "r1bqkb1r/ppp2ppp/3p1n2/8/3QP3/2N5/PPP2PPP/R1B1KB1R w KQkq - 2 7",
+            "historicoUci": [
+              "e2e4",
+              "e7e5",
+              "g1f3",
+              "b8c6",
+              "d2d4",
+              "e5d4",
+              "f3d4",
+              "c6d4",
+              "d1d4",
+              "d7d6",
+              "b1c3",
+              "g8f6"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-a01",
+              "nodeId": "no-cap-a01-12"
+            }
+          },
+          "questoes": {
+            "questao-parada-a01-2": {
+              "fen": "r1bqkb1r/ppp2ppp/3p1n2/8/3QP3/2N5/PPP2PPP/R1B1KB1R w KQkq - 2 7",
+              "historicoUci": [
+                "e2e4",
+                "e7e5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "e5d4",
+                "f3d4",
+                "c6d4",
+                "d1d4",
+                "d7d6",
+                "b1c3",
+                "g8f6"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-a01",
+                "nodeId": "no-cap-a01-12"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 7.Bf4.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-parada-a01-3",
+        "titulo": "Sua vez — A01",
+        "introducao": "Rei no centro ainda. Para que lado ele vai?",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-cap-a01",
+          "nodeId": "no-cap-a01-14"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Rei no centro ainda. Para que lado ele vai?",
+        "questoes": [
+          {
+            "id": "questao-parada-a01-3",
+            "posicao": {
+              "analiseId": "analise-cap-a01",
+              "nodeId": "no-cap-a01-14"
+            },
+            "dica": "O lado onde já não há peças.",
+            "respostas": [
+              {
+                "id": "resposta-parada-a01-3",
+                "moves": [
+                  "e1c1"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: 8.O-O-O.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "r1bqk2r/ppp1bppp/3p1n2/8/3QPB2/2N5/PPP2PPP/R3KB1R w KQkq - 4 8",
+            "historicoUci": [
+              "e2e4",
+              "e7e5",
+              "g1f3",
+              "b8c6",
+              "d2d4",
+              "e5d4",
+              "f3d4",
+              "c6d4",
+              "d1d4",
+              "d7d6",
+              "b1c3",
+              "g8f6",
+              "c1f4",
+              "f8e7"
+            ],
+            "origem": {
+              "analiseId": "analise-cap-a01",
+              "nodeId": "no-cap-a01-14"
+            }
+          },
+          "questoes": {
+            "questao-parada-a01-3": {
+              "fen": "r1bqk2r/ppp1bppp/3p1n2/8/3QPB2/2N5/PPP2PPP/R3KB1R w KQkq - 4 8",
+              "historicoUci": [
+                "e2e4",
+                "e7e5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "e5d4",
+                "f3d4",
+                "c6d4",
+                "d1d4",
+                "d7d6",
+                "b1c3",
+                "g8f6",
+                "c1f4",
+                "f8e7"
+              ],
+              "origem": {
+                "analiseId": "analise-cap-a01",
+                "nodeId": "no-cap-a01-14"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Isso: 8.O-O-O.",
+        "papel": "parada"
+      },
+      {
+        "id": "treino-arvore-a",
+        "titulo": "Treino guiado — aula A",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-arvore-a",
+          "nodeId": "no-arvore-a-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Jogar as linhas da aula de memória, contra as respostas que o repertório prevê.",
+        "questoes": [
+          {
+            "id": "questao-arvore-a-1",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-1",
+                "moves": [
+                  "e2e4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e7e5",
+                      "proximaQuestaoId": "questao-arvore-a-2"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-2",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-2"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-3",
+                "moves": [
+                  "g1f3"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b8c6",
+                      "proximaQuestaoId": "questao-arvore-a-3"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-3",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-4"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-5",
+                "moves": [
+                  "d2d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e5d4",
+                      "proximaQuestaoId": "questao-arvore-a-4"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-arvore-a-4",
+            "posicao": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-6"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-arvore-a-7",
+                "moves": [
+                  "f3d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "copia": {
+          "inicio": {
+            "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-arvore-a",
+              "nodeId": "no-arvore-a-0"
+            }
+          },
+          "questoes": {
+            "questao-arvore-a-1": {
+              "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-0"
+              }
+            },
+            "questao-arvore-a-2": {
+              "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+              "historicoUci": [
+                "e2e4",
+                "e7e5"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-2"
+              }
+            },
+            "questao-arvore-a-3": {
+              "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+              "historicoUci": [
+                "e2e4",
+                "e7e5",
+                "g1f3",
+                "b8c6"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-4"
+              }
+            },
+            "questao-arvore-a-4": {
+              "fen": "r1bqkbnr/pppp1ppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+              "historicoUci": [
+                "e2e4",
+                "e7e5",
+                "g1f3",
+                "b8c6",
+                "d2d4",
+                "e5d4"
+              ],
+              "origem": {
+                "analiseId": "analise-arvore-a",
+                "nodeId": "no-arvore-a-6"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      }
+    ],
+    "praticas": [],
+    "treinadores": [
+      {
+        "id": "treinador-a",
+        "titulo": "Treinador de lances — aula A",
+        "cor": "brancas",
+        "abertura": "escocesa",
+        "linhaIds": [
+          "brancas-escocesa-2a916fe8"
+        ]
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-cap-00",
+        "tipo": "capitulo",
+        "entidadeId": "cap-00"
+      },
+      {
+        "id": "etapa-cap-a00",
+        "tipo": "capitulo",
+        "entidadeId": "cap-a00",
+        "paradas": [
+          "treino-parada-a00-1",
+          "treino-parada-a00-2"
+        ]
+      },
+      {
+        "id": "etapa-cap-a01",
+        "tipo": "capitulo",
+        "entidadeId": "cap-a01",
+        "paradas": [
+          "treino-parada-a01-1",
+          "treino-parada-a01-2",
+          "treino-parada-a01-3"
+        ]
+      },
+      {
+        "id": "etapa-treino-arvore-a",
+        "tipo": "treino",
+        "entidadeId": "treino-arvore-a"
+      },
+      {
+        "id": "etapa-treinador-a",
+        "tipo": "treinador",
+        "entidadeId": "treinador-a"
+      }
+    ]
+  },
+  "posicoes": {},
+  "revisoes": {
+    "treino-parada-a00-1": {
+      "tipo": "treino",
+      "revisao": "ar_bf51fc27b58c09f1f5ae87dda241092ca02704e442b5cbb305b0e12d45e801fb"
+    },
+    "treino-parada-a00-2": {
+      "tipo": "treino",
+      "revisao": "ar_1b928fc8b64511ad9981cf4d048573a7a1faeb269232d87a80b2ab68f7bac126"
+    },
+    "treino-parada-a01-1": {
+      "tipo": "treino",
+      "revisao": "ar_12f6f6f24589949a36da052cf85c91d3f1a199182b822b6abc56f19adae34ba8"
+    },
+    "treino-parada-a01-2": {
+      "tipo": "treino",
+      "revisao": "ar_48f5b8efbe3674acc68a3d632dd070e9761c2096c204f3b0afffa2ad4934b5de"
+    },
+    "treino-parada-a01-3": {
+      "tipo": "treino",
+      "revisao": "ar_5d2cbccc1db53d5e3d5a0ea461c96d80ec30e7a5945ac74ec642a45c11457dcc"
+    },
+    "treino-arvore-a": {
+      "tipo": "treino",
+      "revisao": "ar_f35e0a5b70ee41d5d8381a4208a2c97c5dccc42f624347f178a282e083fdf0be"
+    }
+  },
+  "manifesto": {
+    "aulaId": "AB-BRANCAS-ESCOCESA-A",
+    "aula": "fefcba29bf2223202a016d817df7b3dff8d750a092950d4d12e21c00e87f23a5",
+    "posicoes": {},
+    "revisoes": "90f1b7f53d0e273fc38fe2fd6fb1c0e2d7646d52fbbd412185ed7a1db0b4f5c5",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

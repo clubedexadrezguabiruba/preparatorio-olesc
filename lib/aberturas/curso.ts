@@ -1,6 +1,7 @@
 import path from "node:path";
 import { aberturaDoId, dominioDaAulaV2 } from "../editor-v2/dominio.ts";
 import { idsDeAulasV2Ativas, pacoteAtivoDoAluno } from "../finais/conteudo-v2.ts";
+import { textoEmPortugues } from "../repertorio/treino.ts";
 import type { EtapaDaRodada } from "./rodada.ts";
 
 /**
@@ -30,6 +31,12 @@ export type AulaDoCurso = {
   linhaIds: readonly string[];
   /** As etapas do fluxo publicado — o que a rodada conta para dizer "8 de 9". */
   etapas: readonly EtapaDaRodada[];
+  /**
+   * Os tópicos da aula, na ordem do fluxo: o título de cada capítulo e de cada introdução, em
+   * português. É o que a página do curso mostra embaixo da aula (Doug, 18/9/2026), no lugar da lista
+   * de linhas do treinador de lances.
+   */
+  topicos: readonly string[];
 };
 
 const ORDEM = ["A", "B", "C", "D", "EF"];
@@ -48,11 +55,19 @@ export function todasAsAulasDeAbertura(contentDir = path.join(process.cwd(), "co
       let titulo = id;
       let linhaIds: string[] = [];
       let etapas: EtapaDaRodada[] = [];
+      let topicos: string[] = [];
       try {
         const pacote = pacoteAtivoDoAluno(id, contentDir);
         titulo = pacote?.aula.titulo ?? id;
         linhaIds = [...new Set((pacote?.aula.treinadores ?? []).flatMap((t) => t.linhaIds))];
-        etapas = (pacote?.aula.fluxo ?? []).map((etapa) => ({ id: etapa.id, tipo: etapa.tipo }));
+        etapas = (pacote?.aula.fluxo ?? []).map((etapa) => ({ id: etapa.id, tipo: etapa.tipo, ...(etapa.paradas?.length ? { perguntas: etapa.paradas.length } : {}) }));
+        const aula = pacote?.aula;
+        topicos = (aula?.fluxo ?? []).flatMap((etapa) => {
+          const titulo = etapa.tipo === "capitulo" ? aula?.capitulos.find((c) => c.id === etapa.entidadeId)?.titulo
+            : etapa.tipo === "introducao" ? aula?.introducoes.find((i) => i.id === etapa.entidadeId)?.titulo
+              : undefined;
+          return titulo ? [textoEmPortugues(titulo)] : [];
+        });
       } catch {
         // Pacote quebrado: a página da aula acusa; a faixa só não mostra o título.
       }
@@ -67,6 +82,7 @@ export function todasAsAulasDeAbertura(contentDir = path.join(process.cwd(), "co
         href: `/aberturas/${cor}/${abertura}/aulas/${bloco.toLowerCase()}`,
         linhaIds,
         etapas,
+        topicos,
       }];
     })
     .sort((a, b) =>

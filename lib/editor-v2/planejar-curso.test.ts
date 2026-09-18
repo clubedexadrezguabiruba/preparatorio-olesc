@@ -108,23 +108,64 @@ test("as falas de um lance saem na ordem em que o professor as escreveu, com a p
 
 test("capítulo com ramos: Resumo e A seguir fecham o último ramo, não a linha principal (Doug, 17/9/2026)", () => {
   const b = aula(cursos[0][1], "B");
-  const etapaDe = (trecho: string) => b.fluxo.findIndex((e) => b.capitulos.find((c) => c.id === e.entidadeId)?.narracoes.some((n) => n.texto.includes(trecho)));
-  const resumo = etapaDe("Cinco padrões, cinco respostas");
-  const ultimoCaso = b.fluxo.findIndex((e) => e.entidadeId === "cap-b08-ramo-4");
-  assert.equal(resumo, ultimoCaso, "o Resumo do B08 fica no Caso 5, o último");
+  // O Laboratório (B08) é uma etapa só, com os casos em ordem de número (Doug, 18/9/2026).
+  const etapa = b.fluxo.find((e) => e.entidadeId === "cap-b08")!;
+  assert.deepEqual(etapa.comparacoes, ["cap-b08-ramo-1", "cap-b08-ramo-2", "cap-b08-ramo-3", "cap-b08-ramo-4"]);
   const caso5 = b.capitulos.find((c) => c.id === "cap-b08-ramo-4")!;
   assert.deepEqual(caso5.narracoes.slice(-2).map((n) => n.rotulo), ["Resumo", "A seguir"]);
   assert.equal(caso5.narracoes.at(-1)!.nodeId, caso5.caminho.at(-1), "no último lance do caso");
-  const principal = b.capitulos.find((c) => c.id === "cap-b08-2")!;
+  const principal = b.capitulos.find((c) => c.id === "cap-b08")!;
   assert.ok(!principal.narracoes.some((n) => n.rotulo === "Resumo" || n.rotulo === "A seguir"));
+  // E na tela o Resumo é a última fala da etapa.
+  const passos = previaDaAula(b, {}).trechos.find((t) => t.capituloId === "cap-b08")!.passos;
+  assert.match(passos.filter((p) => p.fala).at(-2)!.fala, /Cinco padrões, cinco respostas/);
+});
+
+test("uma etapa por capítulo: a pergunta e os ramos ficam dentro dela (Doug, 18/9/2026)", () => {
+  for (const { aula: a } of cursos[0][1].aulas) {
+    // Nenhuma etapa aponta para parada nem para ramo, e todo capítulo que sobra é ramo tocado dentro.
+    for (const e of a.fluxo) {
+      assert.ok(!(e.tipo === "treino" && a.treinos.find((t) => t.id === e.entidadeId)?.papel === "parada"), `${a.id}: ${e.id}`);
+      assert.doesNotMatch(e.entidadeId, /-ramo-/, `${a.id}: ${e.id}`);
+    }
+    const titulos = a.fluxo.map((e) => a.capitulos.find((c) => c.id === e.entidadeId)?.titulo ?? "");
+    for (const titulo of titulos) assert.doesNotMatch(titulo, / — (depois de|se |resumo)/, `${a.id}: ${titulo}`);
+    // Cada pergunta está numa etapa só, e o passo dela vem seguido do lance-resposta.
+    const noFluxo = a.fluxo.flatMap((e) => e.paradas ?? []);
+    assert.deepEqual([...noFluxo].sort(), a.treinos.filter((t) => t.papel === "parada").map((t) => t.id).sort(), a.id);
+    for (const trecho of previaDaAula(a, {}).trechos) {
+      trecho.passos.forEach((passo, i) => {
+        if (!passo.parada) return;
+        const treino = a.treinos.find((t) => t.id === passo.parada)!;
+        const resposta = treino.questoes[0].respostas.find((r) => r.julgamento === "correta")!.moves[0];
+        assert.equal(trecho.passos[i + 1]?.lance, resposta, `${a.id}: ${treino.id}`);
+      });
+    }
+  }
+});
+
+test("a fita: a principal até o fim, e a volta cai exatamente na posição da escolha (Doug, 18/9/2026)", () => {
+  for (const { aula: a } of cursos[0][1].aulas) {
+    for (const trecho of previaDaAula(a, {}).trechos) {
+      trecho.passos.forEach((passo, i) => {
+        if (!passo.retorno) return;
+        const antes = trecho.passos[i - 1];
+        // O retorno vem logo depois do último recuo, parado no mesmo nó.
+        if (antes?.recuo) assert.equal(antes.nodeId, passo.nodeId, `${a.id}: ${passo.fala}`);
+        // E a linha seguinte sai dali: o próximo passo é um filho do ponto de escolha, e não ele de novo.
+        const analise = a.analises.find((x) => x.nos[passo.nodeId])!;
+        assert.ok(analise.nos[passo.nodeId].filhos.includes(trecho.passos[i + 1]?.nodeId ?? ""), `${a.id}: depois de «${passo.fala}»`);
+      });
+    }
+  }
 });
 
 test("parada: a dica não aparece antes de o aluno tentar; o lance errado traz a dica (Doug, 17/9/2026)", () => {
   const b = aula(cursos[0][1], "B");
   const revisoes = Object.fromEntries(b.treinos.map((t) => [t.id, { tipo: "treino" as const, revisao: "ar_teste" }]));
   const etapas = etapasDoAlunoV2(b, {}, revisoes as never);
-  const parada = etapas.find((e) => e.tipo === "treino" && e.entidadeId.startsWith("treino-parada-b05a"));
-  assert.ok(parada && parada.tipo === "treino");
+  const parada = etapas.flatMap((e) => (e.tipo === "capitulo" ? e.paradas ?? [] : [])).find((p) => p.entidadeId.startsWith("treino-parada-b05a"));
+  assert.ok(parada);
   const dica = b.treinos.find((t) => t.id === parada.entidadeId)!.questoes[0].dica!;
   for (const node of Object.values(parada.jogavel.tree.nodes)) assert.equal(node.hint, undefined, "a dica não fica na tela de entrada");
   assert.equal(parada.jogavel.lesson.fallbacks.winningOffMethod, `Ainda não. Dica: ${dica}`);
@@ -136,11 +177,27 @@ test("parada: a dica não aparece antes de o aluno tentar; o lance errado traz a
 
 test("ramo que sai depois de uma parada também diz «Voltamos a…» (C12, 9...Be7)", () => {
   const c = aula(cursos[0][1], "C");
-  const trecho = previaDaAula(c, {}).trechos.find((t) => t.capituloId === "cap-c12-ramo-1")!;
-  // Notação sempre em português no site (decisão do Doug, 17/9/2026): Nc3 vira Cc3 aqui, mas não no
-  // título do capítulo — esse é texto livre do professor, não SAN gerado.
-  assert.match(trecho.comparacao?.texto ?? "", /^Voltamos a 9\. Cc3\./);
-  assert.ok(trecho.passos.some((p) => p.retorno));
+  const trecho = previaDaAula(c, {}).trechos.find((t) => t.capituloId === "cap-c12")!;
+  // Notação sempre em português no site (decisão do Doug, 17/9/2026): Nc3 vira Cc3 aqui.
+  assert.ok(trecho.passos.some((p) => p.retorno && /^Voltamos a 9\. Cc3\. A outra escolha: 9\. \.\.\. Be7|^Voltamos a 9\. Cc3\./.test(p.fala)), trecho.passos.filter((p) => p.retorno).map((p) => p.fala).join(" | "));
+  // A parada vem antes do ramo: a principal toca até o fim primeiro.
+  const pergunta = trecho.passos.findIndex((p) => p.parada);
+  const volta = trecho.passos.findIndex((p) => p.retorno);
+  assert.ok(pergunta >= 0 && pergunta < volta);
+});
+
+test("treino guiado sem comentários: o aluno só joga (Doug, 18/9/2026)", () => {
+  for (const { aula: a } of cursos[0][1].aulas) {
+    for (const treino of a.treinos.filter((t) => t.id.startsWith("treino-arvore-"))) {
+      assert.equal(treino.introducao, undefined, treino.id);
+      for (const questao of treino.questoes) {
+        for (const resposta of questao.respostas) {
+          if (resposta.julgamento === "correta") assert.equal(resposta.feedback, "Isso.", `${treino.id}: ${resposta.id}`);
+          if (resposta.efeito.tipo === "avanca") for (const defesa of resposta.efeito.defesas) assert.equal(defesa.texto, undefined, `${treino.id}: ${resposta.id}`);
+        }
+      }
+    }
+  }
 });
 
 test("planejar duas vezes o mesmo estudo dá aulas idênticas", () => {
@@ -162,7 +219,8 @@ test("com o repertório gerado aplicado, as 5 aulas podem publicar", () => {
   const revisoes = Object.fromEntries(b.treinos.map((t) => [t.id, { tipo: "treino" as const, revisao: "ar_teste" }]));
   const etapas = etapasDoAlunoV2(b, {}, revisoes as never);
   assert.equal(etapas.at(-1)?.tipo, "treinador");
-  assert.equal(etapas.filter((e) => e.tipo === "treino" && e.parada).length, 8);
+  assert.equal(etapas.flatMap((e) => (e.tipo === "capitulo" ? e.paradas ?? [] : [])).length, 8);
+  assert.equal(etapas.filter((e) => e.tipo === "treino" && e.parada).length, 0, "nenhuma pergunta é etapa");
 });
 
 test("[SECAO] no capítulo vira a capa da etapa do aluno, e nunca vai ao PGN do move trainer (17/9/2026)", () => {

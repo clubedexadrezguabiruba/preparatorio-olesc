@@ -14,6 +14,7 @@ import { rodadaConcluida, type EtapaDaRodada, type RodadaDaAula } from "./rodada
  *
  * - a aula é de abertura e a etapa existe no fluxo da publicação;
  * - **treino** (parada ou treino guiado): há tentativa com sucesso gravada **nesta rodada**;
+ * - **capítulo com perguntas dentro**: cada pergunta tem tentativa com sucesso nesta rodada;
  * - **move trainer**: cada linha dele tem passada gravada nesta rodada (regra 17).
  *
  * Capítulo e introdução não têm lance a conferir — como `aula_lida`, valem pela palavra do aluno.
@@ -74,9 +75,21 @@ export async function marcarEtapaDaRodada(
     if (error) return { ok: false, erro: error.message };
     if (!count) return { ok: false, erro: "o treino ainda não foi concluído nesta rodada" };
   }
+  // O capítulo com perguntas dentro (18/9/2026): cada pergunta com acerto gravado nesta rodada.
+  if (etapa.tipo === "capitulo" && etapa.paradas?.length) {
+    const { data, error } = await admin
+      .from("tentativas_aula")
+      .select("entidade_id")
+      .eq("aluno", aluno).eq("aula", aula).in("entidade_id", etapa.paradas).eq("sucesso", true)
+      .gte("criada_em", rodada.iniciadaEm);
+    if (error) return { ok: false, erro: error.message };
+    const acertadas = new Set((data ?? []).map((linha: { entidade_id: string }) => linha.entidade_id));
+    const faltam = etapa.paradas.filter((id) => !acertadas.has(id));
+    if (faltam.length) return { ok: false, erro: `faltam ${faltam.length} pergunta(s) deste capítulo nesta rodada` };
+  }
   if (etapa.tipo === "treinador") {
     const treinador = pacote.aula.treinadores?.find((item) => item.id === etapa.entidadeId);
-    if (!treinador) return { ok: false, erro: "o move trainer desta etapa não existe" };
+    if (!treinador) return { ok: false, erro: "o treinador de lances desta etapa não existe" };
     const { data, error } = await admin
       .from("repertorio_progresso")
       .select("linha")
@@ -85,7 +98,7 @@ export async function marcarEtapaDaRodada(
     if (error) return { ok: false, erro: error.message };
     const passadas = new Set((data ?? []).map((linha: { linha: string }) => linha.linha));
     const faltam = treinador.linhaIds.filter((id) => !passadas.has(id));
-    if (faltam.length) return { ok: false, erro: `faltam ${faltam.length} linha(s) do move trainer nesta rodada` };
+    if (faltam.length) return { ok: false, erro: `faltam ${faltam.length} linha(s) do treinador de lances nesta rodada` };
   }
 
   const feitas = rodada.feitas.includes(etapaId) ? rodada.feitas : [...rodada.feitas, etapaId];

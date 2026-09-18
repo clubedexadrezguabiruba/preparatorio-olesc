@@ -529,6 +529,13 @@ export const etapaV2Schema = z.strictObject({
    * o ramo como capítulo separado e não usa (`previa.ts`).
    */
   comparacoes: z.array(idV2Schema).optional(),
+  /**
+   * As perguntas que o aluno joga **dentro** desta etapa de capítulo (curso de abertura, Doug,
+   * 18/9/2026): os ids dos treinos `papel: "parada"`. Quando a aula chega à posição da pergunta, o
+   * tabuleiro para, o aluno joga, e a narração segue na mesma tela — sem etapa própria para a
+   * pergunta. Opcional e sem default: as aulas que não o usam (finais) guardam o mesmo hash.
+   */
+  paradas: z.array(idV2Schema).optional(),
 });
 
 export const aulaV2Schema = z.strictObject({
@@ -930,7 +937,7 @@ export function problemasDaAulaV2(
     });
   });
   aula.praticas.forEach((p) => registrar(p.id, "prática", { praticaId: p.id }));
-  (aula.treinadores ?? []).forEach((t) => registrar(t.id, "move trainer", { treinadorId: t.id }));
+  (aula.treinadores ?? []).forEach((t) => registrar(t.id, "treinador de lances", { treinadorId: t.id }));
   aula.fluxo.forEach((e) => registrar(e.id, "etapa", { etapaId: e.id }));
 
   const analises = new Map(aula.analises.map((a) => [a.id, a]));
@@ -1112,7 +1119,7 @@ export function problemasDaAulaV2(
   const aparicoesNoFluxo = new Map<string, number>();
   // §18.1: o move trainer só existe no curso de abertura — numa aula de finais ele não teria
   // repertório a que pertencer.
-  if (aula.treinadores?.length && dominioDaAulaV2(aula.id) !== "abertura") problemas.push({ codigo: "TREINADOR_FORA_DE_ABERTURA", mensagem: "o move trainer só existe em aula de curso de abertura (AB-…)", campo: "treinadores" });
+  if (aula.treinadores?.length && dominioDaAulaV2(aula.id) !== "abertura") problemas.push({ codigo: "TREINADOR_FORA_DE_ABERTURA", mensagem: "o treinador de lances só existe em aula de curso de abertura (AB-…)", campo: "treinadores" });
   for (const etapa of aula.fluxo) {
     aparicoesNoFluxo.set(etapa.entidadeId, (aparicoesNoFluxo.get(etapa.entidadeId) ?? 0) + 1);
     if ((aparicoesNoFluxo.get(etapa.entidadeId) ?? 0) > 1) problemas.push({ codigo: "FLUXO_REPETE_ENTIDADE", mensagem: `o fluxo repete a entidade ${etapa.entidadeId}`, etapaId: etapa.id, campo: "entidadeId" });
@@ -1120,7 +1127,7 @@ export function problemasDaAulaV2(
     if (etapa.tipo === "capitulo" && !capitulos.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_CAPITULO", mensagem: "o fluxo aponta para capítulo inexistente", etapaId: etapa.id, campo: "entidadeId" });
     if (etapa.tipo === "treino" && !treinos.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_TREINO", mensagem: "o fluxo aponta para treino inexistente", etapaId: etapa.id, campo: "entidadeId" });
     if (etapa.tipo === "pratica" && !praticas.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_PRATICA", mensagem: "o fluxo aponta para prática inexistente", etapaId: etapa.id, campo: "entidadeId" });
-    if (etapa.tipo === "treinador" && !treinadores.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_TREINADOR", mensagem: "o fluxo aponta para move trainer inexistente", etapaId: etapa.id, campo: "entidadeId" });
+    if (etapa.tipo === "treinador" && !treinadores.has(etapa.entidadeId)) problemas.push({ codigo: "FLUXO_SEM_TREINADOR", mensagem: "o fluxo aponta para treinador de lances inexistente", etapaId: etapa.id, campo: "entidadeId" });
     // A variante tocada dentro da etapa conta como "no fluxo": ela tem lugar, só não tem etapa própria.
     const mae = etapa.tipo === "capitulo" ? aula.capitulos.find((c) => c.id === etapa.entidadeId) : undefined;
     for (const id of etapa.comparacoes ?? []) {
@@ -1129,8 +1136,19 @@ export function problemasDaAulaV2(
       const variante = aula.capitulos.find((c) => c.id === id);
       if (!variante || !mae || variante.analiseId !== mae.analiseId) problemas.push({ codigo: "COMPARACAO_INVALIDA", mensagem: variante ? `a variante ${id} é de outra análise, e não sai da linha desta etapa` : `a etapa toca a variante ${id}, que não existe`, etapaId: etapa.id, campo: "comparacoes" });
     }
+    // A pergunta jogada dentro da etapa também tem lugar no fluxo: é uma parada da mesma análise.
+    for (const id of etapa.paradas ?? []) {
+      aparicoesNoFluxo.set(id, (aparicoesNoFluxo.get(id) ?? 0) + 1);
+      if ((aparicoesNoFluxo.get(id) ?? 0) > 1) problemas.push({ codigo: "FLUXO_REPETE_ENTIDADE", mensagem: `o fluxo repete a entidade ${id}`, etapaId: etapa.id, campo: "paradas" });
+      const treino = aula.treinos.find((t) => t.id === id);
+      const motivo = !treino ? `a etapa pergunta pelo treino ${id}, que não existe`
+        : treino.papel !== "parada" ? `o treino ${id} não é uma parada, e só parada é jogada dentro do capítulo`
+          : !mae || treino.inicio.analiseId !== mae.analiseId ? `a parada ${id} é de outra análise, e não está na linha desta etapa`
+            : null;
+      if (motivo) problemas.push({ codigo: "PARADA_INVALIDA", mensagem: motivo, etapaId: etapa.id, campo: "paradas" });
+    }
   }
-  for (const treinador of aula.treinadores ?? []) if (!aparicoesNoFluxo.has(treinador.id)) problemas.push({ codigo: "TREINADOR_FORA_DO_FLUXO", mensagem: "o move trainer não tem lugar no fluxo da aula", treinadorId: treinador.id });
+  for (const treinador of aula.treinadores ?? []) if (!aparicoesNoFluxo.has(treinador.id)) problemas.push({ codigo: "TREINADOR_FORA_DO_FLUXO", mensagem: "o treinador de lances não tem lugar no fluxo da aula", treinadorId: treinador.id });
   for (const introducao of aula.introducoes) if (!aparicoesNoFluxo.has(introducao.id)) problemas.push({ codigo: "INTRODUCAO_FORA_DO_FLUXO", mensagem: "a introdução não tem lugar no fluxo da aula", introducaoId: introducao.id });
   for (const capitulo of aula.capitulos) if (!aparicoesNoFluxo.has(capitulo.id)) problemas.push({ codigo: "CAPITULO_FORA_DO_FLUXO", mensagem: "o capítulo não tem lugar no fluxo da aula", capituloId: capitulo.id });
   for (const treino of aula.treinos) if (!aparicoesNoFluxo.has(treino.id)) problemas.push({ codigo: "TREINO_FORA_DO_FLUXO", mensagem: "o treino não tem lugar no fluxo da aula", treinoId: treino.id });

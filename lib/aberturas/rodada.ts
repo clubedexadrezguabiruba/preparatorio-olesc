@@ -13,7 +13,8 @@
  */
 
 export type TipoDaEtapa = "introducao" | "capitulo" | "treino" | "pratica" | "treinador";
-export type EtapaDaRodada = { id: string; tipo: TipoDaEtapa };
+/** `perguntas`: quantas perguntas o capítulo tem dentro dele (curso de abertura, 18/9/2026). */
+export type EtapaDaRodada = { id: string; tipo: TipoDaEtapa; perguntas?: number };
 
 export type RodadaDaAula = {
   /** 1, 2, 3… — a vez que o aluno faz esta aula. */
@@ -37,6 +38,15 @@ export function podeAbrir(rodada: RodadaDaAula, etapas: readonly EtapaDaRodada[]
 /** A etapa pode ser pulada? Só a explicação, e só da 2ª vez em diante. */
 export function podePular(rodada: RodadaDaAula, etapa: EtapaDaRodada): boolean {
   return rodada.vez >= 2 && (etapa.tipo === "introducao" || etapa.tipo === "capitulo");
+}
+
+/**
+ * O que o "Pular" faz (Doug, 18/9/2026): na explicação sem pergunta, **pula** — a etapa conta como
+ * feita e a aula segue. No capítulo com perguntas dentro, **corre**: a fala passa depressa, mas o
+ * tabuleiro para em cada pergunta e o aluno ainda joga o lance.
+ */
+export function comoPular(etapa: EtapaDaRodada): "pula" | "corre" {
+  return etapa.tipo === "capitulo" && (etapa.perguntas ?? 0) > 0 ? "corre" : "pula";
 }
 
 /** A tela de entrada da 3ª vez: só quando a aula tem move trainer. */

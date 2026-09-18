@@ -94,7 +94,10 @@ test("lance nosso ao lado do lance da linha: alternativa ou erro, e o símbolo d
 });
 
 test("excluir um ramo: os ids que morrem são os que o impacto mostra", () => {
-  const { casca, aula } = abrir();
+  // Precisa de um ramo do ADVERSÁRIO dentro do jogo: um arquivo escrito à mão. Foi a Escocesa até
+  // 18/9/2026, quando ela passou a ser gerada do estudo (um jogo por linha, sem ramo dele).
+  const casca = cascaDoArquivo("brancas-escandinava", readFileSync("content/repertorio/brancas-escandinava.pgn", "utf8"));
+  const aula = casca.aula;
   const analise = aula.analises[0];
   // O primeiro nó com mais de um filho é um ramo do adversário: excluir a variante.
   const pai = Object.values(analise.nos).find((n) => n.filhos.length > 1)!;

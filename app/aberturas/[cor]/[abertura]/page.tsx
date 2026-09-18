@@ -33,7 +33,11 @@ export async function generateMetadata({
 }
 
 /**
- * A página de uma abertura: o caminho até o move trainer (17/9/2026).
+ * A página de uma abertura: o caminho até o treinador de lances (17/9/2026).
+ *
+ * **Desde 18/9/2026 (Doug):** com curso, a página mostra só as aulas e os tópicos de cada uma; no fim,
+ * um bloco "Treinador de lances" com o contador e o botão Treinar. As linhas não são listadas: quem
+ * as mostra é o treinador, uma de cada vez.
  *
  * ## O que ela era, e o defeito
  *
@@ -131,10 +135,11 @@ export default async function Abertura({ params }: PageProps<"/aberturas/[cor]/[
             <p className="text-sm text-tinta-media">
               Você joga de {cor}.{" "}
               {aulas.length > 0
-                ? "Primeiro as aulas, na ordem; cada aula concluída abre as linhas dela no move trainer."
+                ? "Primeiro as aulas, na ordem; cada aula concluída abre as linhas dela no treinador de lances."
                 : "Cada linha vai até o roque e as peças fora, e é aprendida quando você a acerta em três dias diferentes."}
             </p>
           </div>
+          {aulas.length > 0 ? null : <>
           <p className="text-sm text-tinta-fraca tabular-nums">
             {aulas.length > 0
               ? `${abertas.length} de ${linhas.length} ${linhas.length === 1 ? "linha aberta" : "linhas abertas"} · `
@@ -159,6 +164,7 @@ export default async function Abertura({ params }: PageProps<"/aberturas/[cor]/[
               {aRevisar > 0 ? "Revisar as linhas de hoje" : "Treinar as linhas"}
             </Link>
           ) : null}
+          </>}
         </header>
 
         {aulas.length > 0 ? (
@@ -177,17 +183,27 @@ export default async function Abertura({ params }: PageProps<"/aberturas/[cor]/[
                   vezes={trava.concluidas.get(aula.id) ?? 0}
                   feitas={trava.abertas.get(aula.id)?.length ?? 0}
                   linhas={linhasDaAula.get(aula.id) ?? []}
-                  treino={treino}
                 />
               ))}
             </ol>
           </section>
         ) : null}
 
-        {semAula.length > 0 ? (
+        {aulas.length > 0 && linhas.length > 0 ? (
+          <BlocoDoTreinador
+            abertas={abertas.length}
+            total={linhas.length}
+            aprendidas={aprendidas}
+            aRevisar={aRevisar}
+            treino={treino}
+            destaque={!daVez}
+          />
+        ) : null}
+
+        {aulas.length === 0 && semAula.length > 0 ? (
           <section aria-labelledby="titulo-das-linhas" className="flex flex-col gap-3">
             <h2 id="titulo-das-linhas" className="text-base font-semibold text-tinta">
-              {aulas.length > 0 ? "Outras linhas" : semAula.length === 1 ? "A linha" : `As ${semAula.length} linhas`}
+              {semAula.length === 1 ? "A linha" : `As ${semAula.length} linhas`}
             </h2>
             <ListaDeLinhas linhas={semAula} treino={treino} />
           </section>
@@ -240,7 +256,6 @@ function NaLinhaDoTempo({
   vezes,
   feitas,
   linhas,
-  treino,
 }: {
   aula: AulaDoCurso;
   estado: EstadoDaAulaNaTrilha;
@@ -248,8 +263,8 @@ function NaLinhaDoTempo({
   ultima: boolean;
   vezes: number;
   feitas: number;
+  /** As linhas que a aula possui: só para o grau da aula, que continua no cartão. */
   linhas: readonly ItemDeLinha[];
-  treino: string;
 }) {
   const total = aula.etapas.length;
   const trancada = estado === "trancada";
@@ -323,18 +338,12 @@ function NaLinhaDoTempo({
           )}
         </div>
 
-        {linhas.length > 0 ? (
-          <div className="flex flex-col gap-1.5">
-            <p className="text-xs text-tinta-fraca">
-              {linhas.length === 1 ? "A linha desta aula" : `As ${linhas.length} linhas desta aula`}
-              {linhas.some((l) => l.trancada) ? ", no move trainer depois que você concluir a aula" : ", no move trainer"}
-            </p>
-            <ListaDeLinhas linhas={linhas} treino={treino} />
-          </div>
-        ) : aula.linhaIds.length > 0 ? (
-          <p className="text-xs text-tinta-fraca tabular-nums">
-            Revisa {aula.linhaIds.length} linhas das aulas anteriores no move trainer.
-          </p>
+        {aula.topicos.length > 0 ? (
+          <ol className={`flex flex-col gap-1 border-l border-borda pl-3 text-sm leading-snug ${trancada ? "text-tinta-fraca" : "text-tinta-media"}`}>
+            {aula.topicos.map((topico, i) => (
+              <li key={`${i}-${topico}`}>{topico}</li>
+            ))}
+          </ol>
         ) : null}
       </div>
     </li>
@@ -369,6 +378,55 @@ function No({ estado, rotulo }: { estado: EstadoDaAulaNaTrilha; rotulo: string }
       {rotulo}
       {estado === "agora" ? <span className="sr-only"> — a aula de agora</span> : null}
     </span>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * O treinador de lances, no fim do curso
+ * ------------------------------------------------------------------ */
+
+/**
+ * O bloco do fim da página do curso (Doug, 18/9/2026): o contador das linhas e o botão Treinar, sem
+ * listar as linhas. É destaque — botão cheio — só quando não há aula "de agora": com aula pendente,
+ * a aula é a única coisa que chama atenção na página.
+ */
+function BlocoDoTreinador({ abertas, total, aprendidas, aRevisar, treino, destaque }: {
+  abertas: number;
+  total: number;
+  aprendidas: number;
+  aRevisar: number;
+  treino: string;
+  destaque: boolean;
+}) {
+  return (
+    <section aria-labelledby="titulo-do-treinador" className="cartao flex flex-col gap-2 px-4 py-3.5">
+      <h2 id="titulo-do-treinador" className="text-base font-semibold text-tinta">
+        Treinador de lances
+      </h2>
+      <p className="text-sm text-tinta-fraca tabular-nums">
+        {abertas} de {total} {total === 1 ? "linha aberta" : "linhas abertas"} · {aprendidas} {aprendidas === 1 ? "aprendida" : "aprendidas"}
+        {aRevisar > 0 ? (
+          <>
+            {" · "}
+            <strong className="font-semibold text-aviso-tinta">{aRevisar} a revisar hoje</strong>
+          </>
+        ) : null}
+      </p>
+      {abertas > 0 ? (
+        <Link
+          href={treino}
+          className={`foco inline-flex min-h-11 w-fit items-center rounded-lg px-4 text-sm font-semibold transition-colors ${
+            destaque
+              ? "bg-metodo-cheio text-tinta-inversa hover:bg-metodo-cheio-toque"
+              : "border border-borda-forte text-tinta hover:bg-carta-toque"
+          }`}
+        >
+          {aRevisar > 0 ? "Revisar as linhas de hoje" : "Treinar"}
+        </Link>
+      ) : (
+        <p className="text-xs text-tinta-fraca">As linhas abrem quando você concluir a aula A.</p>
+      )}
+    </section>
   );
 }
 

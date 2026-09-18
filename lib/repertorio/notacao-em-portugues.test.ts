@@ -158,7 +158,7 @@ test("a tela devolve a prosa das aulas sem nenhum N, Q ou K sobrando", () => {
  * décimo, escrito à mão no `[TRAIN]` do estudo, virou `Tg1` no estudo. Zero
  * torre em inglês; uma nova quebra este teste.
  */
-test("o `R` da prosa: nenhuma torre em inglês, trinta e cinco reis em português", () => {
+test("o `R` da prosa: nenhuma torre em inglês, quarenta e três reis em português", () => {
   const comR = prosaDasAulasPublicadas().filter((t) => t.lance.startsWith("R"));
   // Só a Francesa escreve a prosa em inglês. A Siciliana (18/9/2026) já nasceu em português: o `R`
   // dela é rei (14.Rd2, 10...Rxf7), como nas aulas de finais.
@@ -166,8 +166,12 @@ test("o `R` da prosa: nenhuma torre em inglês, trinta e cinco reis em portuguê
   const reis = comR.filter((t) => !t.aula.startsWith("AB-BRANCAS-FRANCESA"));
 
   assert.deepEqual(torres.map((t) => `${t.aula}: ${t.lance} — «${t.frase}»`), [], "torre em inglês na prosa: o aluno lê R como rei");
-  // 29 até 18/9/2026, só os de finais; mais 6 reis da Siciliana.
-  assert.equal(reis.length, 35, "os reis das aulas de finais e da Siciliana já estão em português e passam intactos");
+  // 29 até 18/9/2026, só os de finais; mais 6 reis da Siciliana; mais 10 da Escocesa (18/9/2026, também
+  // nascida em português: 6.Rxf2, 10.Rb1, 8...Rd8 nas referências das aulas B, C e E+F; eram 13 antes de a
+  // B e a C perderem as paradas extras, que repetiam a fala).
+  // 45 até 18/9/2026 (tarde): o mapa das respostas (Escocesa B02, Siciliana B02) saiu das aulas, e com
+  // ele dois comentários que falavam do rei ("Rei primeiro, também aqui") deixaram o treinador.
+  assert.equal(reis.length, 43, "os reis das aulas de finais, da Siciliana e da Escocesa já estão em português e passam intactos");
   assert.ok(reis.length > torres.length, "enquanto houver mais rei que torre, a tela não troca o R");
 
   for (const rei of reis) assert.equal(textoEmPortugues(rei.lance), rei.lance, `${rei.aula}: ${rei.lance} é rei e tem de passar inteiro`);
@@ -232,11 +236,12 @@ test("os nomes que tinham torre e rei em inglês saem certos, um por um", () => 
   const esperado: Array<[string, string]> = [
     // Torre: o `R` inglês vira `T`.
     ["Escandinava — 11.Re1 O-O 12.Bg5", "Escandinava — 11.Te1 O-O 12.Bg5"],
-    ["Escocesa — 13.Rxd6 Rad8 14.Rxd8", "Escocesa — 13.Txd6 Tad8 14.Txd8"],
-    ["Escocesa — 3...Cf6 — 11.exd6 Bxd6 12.Rfe1", "Escocesa — 3...Cf6 — 11.exd6 Bxd6 12.Tfe1"],
+    // Desde 18/9/2026 os nomes da Escocesa vêm dos títulos do estudo, com o último lance quando o capítulo tem várias linhas.
+    ["Escocesa — Golpe 3 e Imprecisões 1 e 2: sem trocar em d4 — Rfe1", "Escocesa — Golpe 3 e Imprecisões 1 e 2: sem trocar em d4 — Tfe1"],
     // Rei: o `K` inglês vira `R`, e esse `R` fica.
     ["Petroff — 11.Kb1 a4 12.a3", "Petroff — 11.Rb1 a4 12.a3"],
     ["Caro-Kann Trocas — 13.Bxd7+ Kxd7 14.Qxb7+", "Caro-Kann Trocas — 13.Bxd7+ Rxd7 14.Dxb7+"],
+    ["Escocesa — Defesa 2: 4...Bc5 e a Potter — Kb1", "Escocesa — Defesa 2: 4...Bc5 e a Potter — Rb1"],
   ];
   for (const [antes, depois] of esperado) {
     assert.ok(porNome.has(antes), `o repertório mudou: sumiu a linha «${antes}»`);
@@ -244,15 +249,16 @@ test("os nomes que tinham torre e rei em inglês saem certos, um por um", () => 
   }
 });
 
-test("o desempate do nome de linha cobre os doze `R` e `K` do repertório", () => {
+test("o desempate do nome de linha cobre os dez `R` e `K` do repertório", () => {
   const comRouK = linhasCompiladas().flatMap(({ arquivo, linha }) =>
     (linha.nome.match(LANCE_QUALQUER) ?? [])
       .filter((l) => /^[RK]/.test(l))
       .map((lance) => ({ arquivo, lance, nosSans: new Set(linha.sans).has(lance), nome: linha.nome })),
   );
 
-  // 11 em 17/9/2026; 12 desde 18/9/2026, com as 56 linhas da Siciliana. Todos seguem nos lances da própria linha.
-  assert.equal(comRouK.length, 12, "a conta de 18/9/2026; mudou, releia o cabeçalho de `textoEmPortugues`");
+  // 11 em 17/9/2026; 12 com as 56 linhas da Siciliana; 10 desde 18/9/2026, quando a Escocesa passou a vir do
+  // estudo (saíram Rxd6, Rad8, Rxd8 e Rfe1 dos nomes antigos; entraram Rfe1 e Kb1). Todos seguem nos lances da própria linha.
+  assert.equal(comRouK.length, 10, "a conta de 18/9/2026; mudou, releia o cabeçalho de `textoEmPortugues`");
   assert.deepEqual(
     comRouK.filter((t) => !t.nosSans).map((t) => `${t.arquivo}: ${t.lance} em «${t.nome}»`),
     [],

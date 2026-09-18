@@ -12,7 +12,7 @@ import { IntroStage } from "@/components/lesson/IntroStage";
 import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
 import { simboloDoCirculo } from "@/lib/chess/nag-overlay";
 import { simboloDoNag } from "@/lib/chess/desenhos-do-tabuleiro";
-import { chaveDoSimbolo, type AulaDoAlunoV2, type EtapaDoAlunoV2 } from "@/lib/editor-v2/fluxo-do-aluno";
+import { chaveDoSimbolo, type AulaDoAlunoV2, type EtapaDoAlunoV2, type ParadaDoCapituloDoAlunoV2 } from "@/lib/editor-v2/fluxo-do-aluno";
 import { Celebracao, useCelebracao } from "@/components/Celebracao";
 import { CapaDeSecao, type Capa } from "./CapaDeSecao";
 import { adversarioDaAulaDeAbertura, dominioDaAulaV2 } from "@/lib/editor-v2/dominio";
@@ -37,7 +37,7 @@ import { ObjectiveStage } from "./ObjectiveStage";
 import { PracticeStage } from "./PracticeStage";
 import { TreeStage } from "./TreeStage";
 import { TreinadorDaAula } from "@/components/repertorio/TreinadorDaAula";
-import { podeAbrir, podePular, primeiraPendente, temAtalhoDoTreinador } from "@/lib/aberturas/rodada";
+import { comoPular, podeAbrir, podePular, primeiraPendente, temAtalhoDoTreinador } from "@/lib/aberturas/rodada";
 import type { Resultado as ResultadoDoTreino, Treino as TreinoDaLinha } from "@/lib/repertorio/gravar";
 import type { ProgressoDaLinha } from "@/lib/repertorio/treino";
 
@@ -606,7 +606,7 @@ export function capaDaEtapa(etapa: EtapaDoAlunoV2, aulaId: string): Capa | null 
   if (etapa.tipo === "treino" && !etapa.parada) return { titulo: "Hora de treinar", subtitulo: `Jogue as linhas da aula. As ${adversarioDaAulaDeAbertura(aulaId) ?? "Pretas"} mudam de defesa a cada vez.` };
   // "depois sozinho" saiu em 18/9/2026 junto com "Ele joga sozinho": as duas
   // usavam "sozinho" para dizer coisas diferentes, e nenhuma das duas era clara.
-  if (etapa.tipo === "treinador") return { titulo: "Move trainer", subtitulo: "Cada linha da aula uma vez: primeiro com a seta, depois de memória." };
+  if (etapa.tipo === "treinador") return { titulo: "Treinador de lances", subtitulo: "Cada linha da aula uma vez: primeiro com a seta, depois de memória." };
   return null;
 }
 
@@ -660,18 +660,25 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
   /** As capas que o aluno já abriu nesta visita — voltar a uma etapa não repete a capa. */
   const [capasVistas, setCapasVistas] = useState<string[]>([]);
   const [falhaDaRodada, setFalhaDaRodada] = useState<string | null>(null);
+  /** A etapa que o "Pular" está correndo (capítulo com perguntas): fala depressa, perguntas de pé. */
+  const [correndo, setCorrendo] = useState<string | null>(null);
   const rodada = progressao ? { vez: progressao.vez, feitas } : null;
   const [naEntrada, setNaEntrada] = useState(() => Boolean(rodada && temAtalhoDoTreinador(rodada, aula.etapas)));
   const feitasRef = useRef(feitas);
   useEffect(() => {
     feitasRef.current = feitas;
   });
+  /**
+   * As tentativas ainda subindo. O capítulo com perguntas só é aceito pelo servidor depois que cada
+   * pergunta tem tentativa gravada nesta rodada — marcar a etapa espera as que estão a caminho.
+   */
+  const pendentes = useRef(new Set<Promise<unknown>>());
   const fazer = useCallback((etapaId: string) => {
     if (!progressao || feitasRef.current.includes(etapaId)) return;
     const antes = feitasRef.current;
     feitasRef.current = [...antes, etapaId];
     setFeitas(feitasRef.current);
-    void progressao.marcarEtapa(etapaId).then((resposta) => {
+    void Promise.allSettled([...pendentes.current]).then(() => progressao.marcarEtapa(etapaId)).then((resposta) => {
       if (resposta.ok) {
         setFalhaDaRodada(null);
         if (resposta.concluida) {
@@ -702,6 +709,8 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
     const partidas: Array<{ key: PracticeKey; positionId: string; startFen: string }> = [];
     for (const etapa of aula.etapas) {
       if (etapa.tipo === "treino") roots[etapa.id] = etapa.jogavel.tree.root;
+      // As perguntas jogadas dentro do capítulo têm árvore própria na store, pela chave delas.
+      if (etapa.tipo === "capitulo") for (const parada of etapa.paradas ?? []) roots[parada.chave] = parada.jogavel.tree.root;
       if (etapa.tipo === "pratica") partidas.push({ key: etapa.id, positionId: etapa.positionId, startFen: etapa.fen });
     }
     const praticas = aula.etapas.filter((etapa) => etapa.tipo === "pratica");
@@ -722,7 +731,9 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
       enviadas.current.add(tentativa.tentativaId);
       // O treino da aula de abertura conta para a rodada só depois que a tentativa foi gravada:
       // é ela que o servidor confere antes de aceitar a etapa.
-      void Promise.resolve(onEtapaFeita(tentativa)).then(() => { if (feita) fazer(feita); });
+      const envio = Promise.resolve(onEtapaFeita(tentativa));
+      pendentes.current.add(envio);
+      void envio.finally(() => pendentes.current.delete(envio)).then(() => { if (feita) fazer(feita); }, () => undefined);
     };
     for (const etapa of aula.etapas) {
       if (etapa.tipo === "pratica") {
@@ -743,6 +754,20 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
           lances: arvore.moves, tempoMs: Date.now() - arvore.startedAt,
           politicaDefensor: etapa.jogavel.politica, ajuda: arvore.ajudas.length > 0,
         }, arvore.status === "done" ? etapa.id : undefined);
+      }
+      // A pergunta dentro do capítulo sobe como treino da etapa do capítulo; quem fecha a etapa é o
+      // fim da narração, e não o acerto.
+      if (etapa.tipo === "capitulo") {
+        for (const parada of etapa.paradas ?? []) {
+          const arvore = trees[parada.chave];
+          if (!arvore || arvore.status === "playing") continue;
+          enviar({
+            aula: aula.id, publicationId: aula.publicationId, etapaId: etapa.id, entidadeId: parada.entidadeId, tipo: "treino",
+            assessmentRevision: parada.revisao, tentativaId: arvore.tentativaId, tentativaNumero: arvore.attempt,
+            lances: arvore.moves, tempoMs: Date.now() - arvore.startedAt,
+            politicaDefensor: parada.jogavel.politica, ajuda: arvore.ajudas.length > 0,
+          });
+        }
       }
     }
   }, [aula, fazer, idNaStore, lessonId, onEtapaFeita, practices, trees]);
@@ -770,11 +795,13 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
   const fimDoTreino = atual?.tipo === "treinador"
     ? fimDoTreinador({ proxima: proxima ? avancoPara(proxima, aula.id) : null, feita: !progressao || feitas.includes(atual.id) })
     : null;
-  const pular = rodada && atual && proxima && !atualFeita && podePular(rodada, atual)
+  const pularCorre = atual ? comoPular({ id: atual.id, tipo: atual.tipo, perguntas: atual.tipo === "capitulo" ? atual.paradas?.length ?? 0 : 0 }) === "corre" : false;
+  const pular = rodada && atual && proxima && !atualFeita && podePular(rodada, atual) && !(pularCorre && correndo === atual.id)
     ? (
       <button
         type="button"
-        onClick={() => { fazer(atual.id); goToStage(proxima.id); }}
+        // Com pergunta dentro, o Pular corre a fala e para em cada pergunta (Doug, 18/9/2026).
+        onClick={() => { if (pularCorre) { setCorrendo(atual.id); return; } fazer(atual.id); goToStage(proxima.id); }}
         className="foco ml-auto min-h-11 rounded-md px-4 py-2 text-sm font-medium text-tinta-media ring-1 ring-borda hover:bg-carta-alta"
       >
         Pular
@@ -819,7 +846,7 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
 
       {rodada && concluida ? (
         <p role="status" className="cartao px-4 py-3 text-sm font-semibold text-metodo-tinta-alta">
-          Aula concluída! {rodada.vez === 1 ? "Na próxima vez, dá para pular a explicação." : "Da próxima vez, dá para ir direto ao move trainer."}
+          Aula concluída! {rodada.vez === 1 ? "Na próxima vez, dá para pular a explicação." : "Da próxima vez, dá para ir direto ao treinador de lances."}
         </p>
       ) : null}
       {falhaDaRodada ? (
@@ -833,7 +860,7 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
           <p className="text-sm text-tinta-media">Você já fez a aula inteira duas vezes. Pode ir direto treinar as linhas, ou rever tudo.</p>
           <div className="flex flex-wrap gap-2">
             <button type="button" onClick={() => { setNaEntrada(false); goToStage(treinadorDaAula.id); }} className="foco min-h-11 rounded-md bg-metodo-cheio px-4 py-2 text-sm font-medium text-tinta-inversa ring-1 ring-metodo/30 hover:bg-metodo-cheio-toque">
-              Ir ao move trainer
+              Ir ao treinador de lances
             </button>
             <button type="button" onClick={() => setNaEntrada(false)} className="foco min-h-11 rounded-md px-4 py-2 text-sm font-medium text-tinta-media ring-1 ring-borda hover:bg-carta-alta">
               Fazer a aula inteira
@@ -870,7 +897,19 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
         ) : null}
 
         {atual?.tipo === "capitulo" ? (
-          <CapituloDoAlunoV2 key={atual.id} etapa={atual} trilha={trilha} rodape={rodape} aoTerminar={() => fazer(atual.id)} aoContinuar={aoContinuarDoCapitulo} />
+          <CapituloDoAlunoV2
+            key={`${atual.id}${correndo === atual.id ? "@depressa" : ""}`}
+            etapa={atual}
+            trilha={trilha}
+            rodape={rodape}
+            depressa={correndo === atual.id}
+            aoTerminar={() => {
+              fazer(atual.id);
+              // O Pular que correu a fala segue sozinho para a etapa seguinte, como o Pular de sempre.
+              if (correndo === atual.id) { setCorrendo(null); if (proxima) goToStage(proxima.id); }
+            }}
+            aoContinuar={aoContinuarDoCapitulo}
+          />
         ) : null}
 
         {atual?.tipo === "treinador" ? (
@@ -896,7 +935,7 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
             <div className="cartao flex flex-col gap-2 px-4 py-4">
               {trilha}
               <p className="text-sm text-tinta-media">
-                O move trainer desta aula usa {atual.linhaIds.length} linha(s) do repertório compilado, e elas não estão disponíveis aqui.
+                O treinador de lances desta aula usa {atual.linhaIds.length} linha(s) do repertório compilado, e elas não estão disponíveis aqui.
               </p>
               {rodape}
             </div>
@@ -946,8 +985,16 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
   );
 }
 
-/** O capítulo v2 no `ObjectiveStage` do aluno: desenho com cor, pausa extra e pausa manual. */
-function CapituloDoAlunoV2({ etapa, trilha, rodape, aoTerminar, aoContinuar }: { etapa: Extract<EtapaDoAlunoV2, { tipo: "capitulo" }>; trilha: ReactNode; rodape: ReactNode; aoTerminar?: () => void; aoContinuar?: () => void }) {
+/**
+ * O capítulo v2 no `ObjectiveStage` do aluno: desenho com cor, pausa extra e pausa manual.
+ *
+ * **As perguntas dentro do capítulo** (curso de abertura, Doug, 18/9/2026): quando a narração chega
+ * ao passo de uma pergunta, o tabuleiro vira o treino da pergunta — na mesma etapa, com o mesmo
+ * título no painel —, o aluno joga, e a narração volta no passo seguinte, que é o lance-resposta.
+ * Pergunta já acertada (a árvore dela está `done` na store) não para de novo: "Ver de novo" e a volta
+ * ao capítulo só mostram a fala.
+ */
+function CapituloDoAlunoV2({ etapa, trilha, rodape, aoTerminar, aoContinuar, depressa = false }: { etapa: Extract<EtapaDoAlunoV2, { tipo: "capitulo" }>; trilha: ReactNode; rodape: ReactNode; aoTerminar?: () => void; aoContinuar?: () => void; depressa?: boolean }) {
   const stage = useMemo(() => ({
     technique: { name: etapa.titulo, summary: etapa.resumo },
     roteiro: etapa.passos.map((passo) => ({ fala: passo.fala, ...(passo.lance ? { lance: passo.lance } : {}), ...(passo.espera ? { espera: passo.espera } : {}), ...(passo.recuo ? { recuo: true } : {}) })),
@@ -961,8 +1008,87 @@ function CapituloDoAlunoV2({ etapa, trilha, rodape, aoTerminar, aoContinuar }: {
     if (!passo) return null;
     return passo.pausaManual ? null : pausaDoPasso({ fala: passo.fala, espera: passo.espera } as RoteiroPasso);
   }, [etapa]);
+
+  const trees = useLessonStore((s) => s.trees);
+  /** A pergunta na tela: a chave dela e o passo em que a narração parou. */
+  const [emParada, setEmParada] = useState<{ chave: string; passo: number } | null>(null);
+  /** De onde a narração recomeça depois de uma pergunta (a `key` remonta o palco nesse passo). */
+  const [retomada, setRetomada] = useState<number | null>(null);
+  const paradaNoPasso = useCallback((n: number) => {
+    const chave = etapa.passos[n]?.parada;
+    return Boolean(chave && trees[chave] && trees[chave].status !== "done");
+  }, [etapa, trees]);
+  const aoParar = useCallback((n: number) => {
+    const chave = etapa.passos[n]?.parada;
+    if (chave) setEmParada({ chave, passo: n });
+  }, [etapa]);
+
+  const parada = emParada ? etapa.paradas?.find((item) => item.chave === emParada.chave) : undefined;
+  if (emParada && parada) {
+    return (
+      <ParadaNoCapituloV2
+        parada={parada}
+        trilha={trilha}
+        cabecalho={<h2 className="text-lg font-semibold text-tinta">{etapa.titulo}</h2>}
+        aoAcertar={() => { setRetomada(emParada.passo + 1); setEmParada(null); }}
+      />
+    );
+  }
   return (
-    <ObjectiveStage stage={stage} position={position} orientation={etapa.orientacao} trilha={trilha} rodape={rodape} autoria={autoria} relogio={relogio} marcasAutomaticas={false} simbolo={simbolo} rotulo={rotulo} aoTerminar={aoTerminar} aoContinuar={aoContinuar} quebrasDeLinha />
+    <ObjectiveStage
+      key={retomada ?? "inicio"}
+      stage={stage}
+      position={position}
+      orientation={etapa.orientacao}
+      trilha={trilha}
+      rodape={rodape}
+      autoria={autoria}
+      relogio={relogio}
+      marcasAutomaticas={false}
+      simbolo={simbolo}
+      rotulo={rotulo}
+      aoTerminar={aoTerminar}
+      aoContinuar={aoContinuar}
+      quebrasDeLinha
+      passoInicial={retomada ?? 0}
+      somNoInicio={retomada === null}
+      paradaNoPasso={etapa.paradas?.length ? paradaNoPasso : undefined}
+      aoParar={aoParar}
+      depressa={depressa}
+    />
+  );
+}
+
+/** A pergunta do capítulo no `TreeStage`, embutida: o mesmo juiz e a mesma escada do treino. */
+function ParadaNoCapituloV2({ parada, trilha, cabecalho, aoAcertar }: { parada: ParadaDoCapituloDoAlunoV2; trilha: ReactNode; cabecalho: ReactNode; aoAcertar: () => void }) {
+  const { jogavel } = parada;
+  const position = useMemo(() => ({ fen: jogavel.fenInicial }) as unknown as Position, [jogavel.fenInicial]);
+  const v2 = useMemo(() => {
+    const ganchos = ganchosDoTreinoV2(jogavel);
+    const { simbolos, ajudaNoErro } = parada;
+    return {
+      ...ganchos,
+      ...(simbolos ? { simboloDoLance: (fenAntes: string, uci: string) => simboloDoNag([simbolos[chaveDoSimbolo(fenAntes, uci)]].filter((n) => n !== undefined)) } : {}),
+      ...(ajudaNoErro ? { ajudaNoErro: true } : {}),
+    };
+  }, [jogavel, parada]);
+  const embutido = useMemo(() => ({ cabecalho, aoAcertar }), [cabecalho, aoAcertar]);
+  return (
+    <TreeStage
+      lesson={jogavel.lesson}
+      tree={jogavel.tree}
+      treeKey={parada.chave}
+      trilha={trilha}
+      position={position}
+      orientation={jogavel.orientacao}
+      allowHelp
+      marcasAutomaticas={false}
+      moveLimit={jogavel.moveLimit}
+      intro={jogavel.intro}
+      v2={v2}
+      semConfete
+      embutido={embutido}
+    />
   );
 }
 
