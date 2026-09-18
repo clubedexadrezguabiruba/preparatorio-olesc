@@ -8,6 +8,7 @@ import {
   montarQuadros,
   MS_POR_CARACTERE_DIGITADO,
   pausaDoPasso,
+  pausaDoPassoDeAbertura,
 } from "./roteiro.ts";
 
 /**
@@ -60,6 +61,15 @@ test("a pausa tem piso, e o `espera` do autor soma por cima", () => {
   assert.equal(pausaDoPasso({ ...curto, espera: 900 }), 1900);
   const longo = passo({ fala: "x".repeat(100) });
   assert.equal(pausaDoPasso(longo), 4500);
+});
+
+test("a abertura dá tempo de leitura maior sem mudar a régua geral", () => {
+  const curta = passo({ fala: "Olhe o centro." });
+  assert.equal(pausaDoPassoDeAbertura(curta), 2500);
+  assert.equal(pausaDoPasso(curta), 1000, "finais continuam na régua anterior");
+
+  const longa = passo({ fala: "x".repeat(100), espera: 700 });
+  assert.equal(pausaDoPassoDeAbertura(longa), 8700, "100 caracteres têm 8 s de leitura, mais a espera autoral");
 });
 
 /*

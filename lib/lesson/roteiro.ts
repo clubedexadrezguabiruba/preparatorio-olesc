@@ -126,6 +126,14 @@ const MS_DE_LEITURA_POR_CARACTERE = 45;
 const PAUSA_MINIMA_MS = 1000;
 
 /**
+ * A abertura exige que o aluno acompanhe texto e posição ao mesmo tempo. A régua geral
+ * ainda serve às aulas curtas de finais; aqui a fala fica tempo suficiente para uma
+ * leitura deliberada: 12,5 caracteres por segundo, com 2,5 s até nas frases curtas.
+ */
+const MS_DE_LEITURA_DE_ABERTURA_POR_CARACTERE = 80;
+const PAUSA_MINIMA_DE_ABERTURA_MS = 2500;
+
+/**
  * Quanto o passo espera depois que a fala terminou de aparecer.
  *
  * `espera` é o ajuste do autor, somado por cima — o passo em que a posição
@@ -134,6 +142,15 @@ const PAUSA_MINIMA_MS = 1000;
  */
 export function pausaDoPasso(passo: RoteiroPasso): number {
   const leitura = Math.max(PAUSA_MINIMA_MS, passo.fala.length * MS_DE_LEITURA_POR_CARACTERE);
+  return leitura + (passo.espera ?? 0);
+}
+
+/** O relógio mais calmo dos capítulos de abertura, sem alterar o ritmo dos finais. */
+export function pausaDoPassoDeAbertura(passo: RoteiroPasso): number {
+  const leitura = Math.max(
+    PAUSA_MINIMA_DE_ABERTURA_MS,
+    passo.fala.length * MS_DE_LEITURA_DE_ABERTURA_POR_CARACTERE,
+  );
   return leitura + (passo.espera ?? 0);
 }
 

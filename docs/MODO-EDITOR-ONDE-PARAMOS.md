@@ -7805,3 +7805,11 @@ Evidência curta: `npm run typecheck`; `node --test lib/finais/trilha.test.ts li
 (35/35); publicação verde da `N0-STALEMATE` (0 erros, 4 avisos de desenho já conhecidos). A chamada
 acidental de `npm test -- --runInBand ...` rodou a suíte inteira por causa do script do projeto:
 1738/1739; a única falha era a expectativa antiga de `proximaAula`, corrigida e coberta no recorte verde.
+
+# Ritmo de leitura das aulas de abertura — 18/9/2026
+
+As falas dos capítulos de abertura deixaram de usar a régua geral de 45 ms por caractere,
+que avançava antes de um aluno conseguir conciliar a leitura com o tabuleiro. Só nas
+aberturas, o avanço automático agora espera 80 ms por caractere, com piso de 2,5 s; a
+espera autoral continua somada. Finais mantêm o ritmo anterior, e o rewind e o “Pular” das
+repetições continuam rápidos. A conta ficou coberta em `lib/lesson/roteiro.test.ts`.

@@ -20,7 +20,7 @@ import { ganchosDoTreinoV2 } from "@/lib/editor-v2/ganchos-do-treino";
 import { AVANCO, PARTIDA } from "@/lib/lesson/falas";
 import { fimDoTreinador } from "@/lib/lesson/fim-do-treinador";
 import { masteryReport } from "@/lib/lesson/mastery";
-import { pausaDoPasso } from "@/lib/lesson/roteiro";
+import { pausaDoPasso, pausaDoPassoDeAbertura } from "@/lib/lesson/roteiro";
 import type { IntroStage as IntroStageData, ObjectiveStage as ObjectiveStageData, Position, RoteiroPasso } from "@/lib/lesson/schema";
 import {
   STAGE_LABEL,
@@ -919,6 +919,7 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
             trilha={trilha}
             rodape={rodape}
             depressa={correndo === atual.id}
+            ritmoDeAbertura={dominioDaAulaV2(aula.id) === "abertura"}
             aoTerminar={() => {
               fazer(atual.id);
               // O Pular que correu a fala segue sozinho para a etapa seguinte, como o Pular de sempre.
@@ -1038,7 +1039,7 @@ function BotoesEntreAulas({ navegacao }: { navegacao: NavegacaoEntreAulas }) {
  * Pergunta já acertada (a árvore dela está `done` na store) não para de novo: "Ver de novo" e a volta
  * ao capítulo só mostram a fala.
  */
-function CapituloDoAlunoV2({ etapa, trilha, rodape, aoTerminar, aoContinuar, depressa = false }: { etapa: Extract<EtapaDoAlunoV2, { tipo: "capitulo" }>; trilha: ReactNode; rodape: ReactNode; aoTerminar?: () => void; aoContinuar?: () => void; depressa?: boolean }) {
+function CapituloDoAlunoV2({ etapa, trilha, rodape, aoTerminar, aoContinuar, depressa = false, ritmoDeAbertura = false }: { etapa: Extract<EtapaDoAlunoV2, { tipo: "capitulo" }>; trilha: ReactNode; rodape: ReactNode; aoTerminar?: () => void; aoContinuar?: () => void; depressa?: boolean; ritmoDeAbertura?: boolean }) {
   const stage = useMemo(() => ({
     technique: { name: etapa.titulo, summary: etapa.resumo },
     roteiro: etapa.passos.map((passo) => ({ fala: passo.fala, ...(passo.lance ? { lance: passo.lance } : {}), ...(passo.espera ? { espera: passo.espera } : {}), ...(passo.recuo ? { recuo: true } : {}) })),
@@ -1050,8 +1051,10 @@ function CapituloDoAlunoV2({ etapa, trilha, rodape, aoTerminar, aoContinuar, dep
   const relogio = useCallback((n: number): number | null => {
     const passo = etapa.passos[n];
     if (!passo) return null;
-    return passo.pausaManual ? null : pausaDoPasso({ fala: passo.fala, espera: passo.espera } as RoteiroPasso);
-  }, [etapa]);
+    if (passo.pausaManual) return null;
+    const dado = { fala: passo.fala, espera: passo.espera } as RoteiroPasso;
+    return ritmoDeAbertura ? pausaDoPassoDeAbertura(dado) : pausaDoPasso(dado);
+  }, [etapa, ritmoDeAbertura]);
 
   const trees = useLessonStore((s) => s.trees);
   /** A pergunta na tela: a chave dela e o passo em que a narração parou. */
