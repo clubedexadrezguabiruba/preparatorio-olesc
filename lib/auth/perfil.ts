@@ -2,6 +2,7 @@ import "server-only";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import { criarClienteServidor } from "@/lib/supabase/servidor";
+import type { Turma } from "@/lib/turma/turma";
 
 export type Perfil = {
   id: string;
@@ -9,6 +10,8 @@ export type Perfil = {
   nome: string;
   papel: "aluno" | "professor";
   equipe: "M" | "F" | null;
+  /** `olesc` ou `testadores` (migration 0019). O aluno só vê colegas da mesma turma. */
+  turma: Turma;
   tabuleiro: number | null;
   rating: number | null;
   /** O desenho escolhido (`lib/avatar/avatares.ts`), ou nulo. O único campo que o aluno muda. */
@@ -35,7 +38,7 @@ export const perfilAtual = cache(async (): Promise<Perfil> => {
 
   const { data: perfil } = await supabase
     .from("perfis")
-    .select("id, usuario, nome, papel, equipe, tabuleiro, rating, avatar")
+    .select("id, usuario, nome, papel, equipe, turma, tabuleiro, rating, avatar")
     .eq("id", sessao.user.id)
     .single();
 

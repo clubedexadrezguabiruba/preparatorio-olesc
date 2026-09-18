@@ -5,6 +5,7 @@ import { Cabecalho } from "@/components/Cabecalho";
 import { Moldura } from "@/components/Moldura";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
+import type { ColegaNaTurma } from "@/lib/turma/turma";
 import { turmaVisivel } from "@/lib/turma/vitrine";
 
 export const metadata: Metadata = { title: "A turma — Preparatório OLESC" };
@@ -24,6 +25,9 @@ export const metadata: Metadata = { title: "A turma — Preparatório OLESC" };
  *
  * A conta de ensaio (`alunoteste`) não aparece para os alunos e aparece para o professor; a
  * regra e o porquê estão em `lib/turma/turma.ts`.
+ *
+ * **Duas turmas (18/9/2026)**: OLESC e testadores. O aluno vê só a dele, sem título — para ele
+ * a outra não existe. O professor vê as duas, cada uma com o nome em cima.
  */
 export default async function Turma() {
   const perfil = await perfilAtual();
@@ -38,7 +42,7 @@ export default async function Turma() {
           <h1 className="titulo text-tinta">A turma</h1>
           <p className="max-w-prose text-sm text-tinta-media">
             {professor
-              ? "Os alunos em ordem alfabética, como eles se veem. A conta de ensaio só aparece para você."
+              ? "Os alunos em ordem alfabética, como eles se veem, separados por turma: cada aluno só vê a própria. A conta de ensaio só aparece para você."
               : "Quem treina com você, em ordem alfabética. Toque num colega para ver as conquistas de cada um."}
           </p>
         </header>
@@ -46,25 +50,37 @@ export default async function Turma() {
         {turma.length === 0 ? (
           <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">Nenhum aluno cadastrado ainda.</p>
         ) : (
-          <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3">
-            {turma.map((colega) => (
-              <li key={colega.id}>
-                <Link
-                  href={colega.ehVoce ? "/perfil" : `/turma/${colega.id}`}
-                  aria-label={colega.ehVoce ? `${colega.nome} (você): Meu perfil` : colega.nome}
-                  className={`foco cartao-alvo flex h-full flex-col items-center gap-2 px-2 pt-4 pb-3 text-center ${
-                    colega.ehVoce ? "ring-2 ring-metodo-cheio" : ""
-                  }`}
-                >
-                  <Avatar id={colega.avatar} tamanho={64} decorativo className="sm:size-18" />
-                  <span className="line-clamp-2 text-sm leading-snug font-medium break-words text-tinta">{colega.nome}</span>
-                  {colega.ehVoce ? <span className="text-xs font-semibold text-metodo-tinta">você</span> : null}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          turma.map((grupo) => (
+            <section key={grupo.turma} aria-label={professor ? grupo.nome : undefined} className="flex flex-col gap-3">
+              {/* O nome da turma só para o professor: o aluno vê uma só, e não precisa saber da outra. */}
+              {professor ? <h2 className="rotulo text-tinta-fraca">{grupo.nome}</h2> : null}
+              <Grade colegas={grupo.colegas} />
+            </section>
+          ))
         )}
       </Moldura>
     </>
+  );
+}
+
+function Grade({ colegas }: { colegas: readonly ColegaNaTurma[] }) {
+  return (
+    <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3">
+      {colegas.map((colega) => (
+        <li key={colega.id}>
+          <Link
+            href={colega.ehVoce ? "/perfil" : `/turma/${colega.id}`}
+            aria-label={colega.ehVoce ? `${colega.nome} (você): Meu perfil` : colega.nome}
+            className={`foco cartao-alvo flex h-full flex-col items-center gap-2 px-2 pt-4 pb-3 text-center ${
+              colega.ehVoce ? "ring-2 ring-metodo-cheio" : ""
+            }`}
+          >
+            <Avatar id={colega.avatar} tamanho={64} decorativo className="sm:size-18" />
+            <span className="line-clamp-2 text-sm leading-snug font-medium break-words text-tinta">{colega.nome}</span>
+            {colega.ehVoce ? <span className="text-xs font-semibold text-metodo-tinta">você</span> : null}
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }

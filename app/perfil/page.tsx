@@ -124,7 +124,13 @@ export default async function Perfil() {
 
   const detalhes = [
     `usuário ${perfil.usuario}`,
-    perfil.equipe ? EQUIPE[perfil.equipe] : perfil.papel === "professor" ? "Professor" : null,
+    perfil.equipe
+      ? EQUIPE[perfil.equipe]
+      : perfil.papel === "professor"
+        ? "Professor"
+        : perfil.turma === "testadores"
+          ? "Turma de testadores"
+          : null,
     perfil.tabuleiro ? `tabuleiro ${perfil.tabuleiro}` : null,
   ].filter(Boolean);
 

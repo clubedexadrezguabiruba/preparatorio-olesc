@@ -11,6 +11,7 @@ import { criarClienteServidor } from "@/lib/supabase/servidor";
 import { formatarDelta } from "@/lib/tatica/rating";
 import { ultimaVez } from "@/lib/tatica/rating-historico";
 import { ratingsDaTurma } from "@/lib/tatica/rating-leitura";
+import { NOME_DA_TURMA } from "@/lib/turma/turma";
 import { CadastroDeAluno } from "./CadastroDeAluno";
 
 export const metadata: Metadata = { title: "Professor — Preparatório OLESC" };
@@ -25,8 +26,10 @@ export default async function Professor() {
   // de `select` — a mesma consulta feita por um aluno devolve uma linha só.
   const { data: alunos } = await supabase
     .from("perfis")
-    .select("id, usuario, nome, equipe, tabuleiro, rating")
+    .select("id, usuario, nome, equipe, turma, tabuleiro, rating")
     .eq("papel", "aluno")
+    // "olesc" antes de "testadores": os alunos em cima, as contas de teste dos colegas embaixo.
+    .order("turma")
     .order("equipe", { nullsFirst: false })
     .order("nome");
 
@@ -95,7 +98,7 @@ export default async function Professor() {
                 <tr className="border-b border-borda-fraca text-left text-tinta-fraca">
                   <Th>Nome</Th>
                   <Th>Usuário</Th>
-                  <Th>Equipe</Th>
+                  <Th>Equipe / turma</Th>
                   <Th>Tab.</Th>
                   <Th>Rating de entrada</Th>
                   <Th>Nível</Th>
@@ -117,7 +120,13 @@ export default async function Professor() {
                       </Link>
                     </Td>
                     <Td mono>{aluno.usuario}</Td>
-                    <Td>{aluno.equipe ? EQUIPE[aluno.equipe as "M" | "F"] : "—"}</Td>
+                    <Td>
+                      {aluno.turma === "testadores"
+                        ? NOME_DA_TURMA.testadores
+                        : aluno.equipe
+                          ? EQUIPE[aluno.equipe as "M" | "F"]
+                          : "—"}
+                    </Td>
                     <Td>{aluno.tabuleiro ?? "—"}</Td>
                     {/* A célula tinha sumido em 394f75d (semana → nível) e o
                         título ficou: o nível aparecia embaixo de "Rating". */}

@@ -10,10 +10,11 @@ import { criarClienteAdmin } from "@/lib/supabase/admin";
 import {
   COLUNAS_DO_COLEGA,
   ehIdDeConta,
+  ehTurma,
   FILTRO_DE_ENSAIO,
   montarVitrine,
-  turmaEmOrdem,
-  type ColegaNaTurma,
+  turmasEmOrdem,
+  type GrupoDaTurma,
   type Vitrine,
 } from "./turma.ts";
 
@@ -40,44 +41,69 @@ import {
  * ## O que nunca se lê de um colega
  *
  * `usuario`, `rating`, `equipe`, `tabuleiro`, graus, tentativas, minutos. O filtro de conta de
- * ensaio usa `usuario` **dentro do `where`** — o PostgREST filtra por ele sem devolvê-lo.
+ * ensaio usa `usuario` **dentro do `where`** — o PostgREST filtra por ele sem devolvê-lo. A turma
+ * (18/9/2026) também vai no `where` para o aluno: ele só vê a própria. Só o professor, que vê as
+ * duas separadas, lê a coluna `turma` — e dela sai o nome do grupo, nada mais.
  */
 
 type LinhaDoColega = { id: string; nome: string; avatar: string | null };
 
-/** Os alunos da turma que `quem` pode ver, em ordem alfabética, sem número nenhum. */
-export async function turmaVisivel(quem: Pick<Perfil, "id" | "papel" | "nome" | "avatar">): Promise<ColegaNaTurma[]> {
-  let consulta = criarClienteAdmin().from("perfis").select(COLUNAS_DO_COLEGA).eq("papel", "aluno");
-  if (quem.papel !== "professor") {
+/** O `not in` das contas de ensaio, na forma do PostgREST. */
+const ENSAIO_EM_LISTA = `(${FILTRO_DE_ENSAIO.usuarios.map((u) => `"${u}"`).join(",")})`;
+
+/**
+ * Os alunos que `quem` pode ver, por turma e em ordem alfabética, sem número nenhum. O aluno
+ * recebe um grupo só, o dele; o professor, um por turma que tenha gente.
+ */
+export async function turmaVisivel(
+  quem: Pick<Perfil, "id" | "papel" | "nome" | "avatar" | "turma">,
+): Promise<GrupoDaTurma[]> {
+  const professor = quem.papel === "professor";
+  let consulta = criarClienteAdmin()
+    .from("perfis")
+    .select(professor ? `${COLUNAS_DO_COLEGA}, turma` : COLUNAS_DO_COLEGA)
+    .eq("papel", "aluno");
+  if (!professor) {
+    // Aluno: só a própria turma, sem as contas de ensaio.
     consulta = consulta
-      .not("usuario", "in", `(${FILTRO_DE_ENSAIO.usuarios.map((u) => `"${u}"`).join(",")})`)
+      .eq("turma", quem.turma)
+      .not("usuario", "in", ENSAIO_EM_LISTA)
       .not("usuario", "like", FILTRO_DE_ENSAIO.prefixo);
   }
   const { data, error } = await consulta;
   if (error) throw new Error(`não foi possível ler a turma: ${error.message}`);
 
-  const linhas = (data ?? []) as LinhaDoColega[];
+  const linhas = ((data ?? []) as unknown as (LinhaDoColega & { turma?: unknown })[]).map((l) => ({
+    id: l.id,
+    nome: l.nome,
+    avatar: l.avatar,
+    // Para o aluno a coluna nem é lida: todas as linhas já são da turma dele.
+    turma: professor && ehTurma(l.turma) ? l.turma : quem.turma,
+  }));
   // O próprio aluno sempre se vê — inclusive logado na conta de ensaio, que o filtro tirou.
   if (quem.papel === "aluno" && !linhas.some((l) => l.id === quem.id)) {
-    linhas.push({ id: quem.id, nome: quem.nome, avatar: quem.avatar });
+    linhas.push({ id: quem.id, nome: quem.nome, avatar: quem.avatar, turma: quem.turma });
   }
-  return turmaEmOrdem(linhas, quem.id);
+  return turmasEmOrdem(linhas, quem.id);
 }
 
 /**
  * A vitrine de um colega, ou `null` (a página responde 404): id que não é conta, conta que não
- * existe, conta de professor, ou conta de ensaio vista por um aluno.
+ * existe, conta de professor, conta de ensaio vista por um aluno, ou conta de outra turma vista
+ * por um aluno.
  *
  * Quem chama já conferiu a sessão (`perfilAtual`) e já mandou o próprio aluno para `/perfil`.
  */
-export async function vitrineDoColega(quem: Pick<Perfil, "id" | "papel">, id: string): Promise<Vitrine | null> {
+export async function vitrineDoColega(quem: Pick<Perfil, "id" | "papel" | "turma">, id: string): Promise<Vitrine | null> {
   if (!ehIdDeConta(id)) return null;
   const admin = criarClienteAdmin();
 
   let consulta = admin.from("perfis").select(COLUNAS_DO_COLEGA).eq("id", id).eq("papel", "aluno");
   if (quem.papel !== "professor" && id !== quem.id) {
+    // Aluno: só a própria turma, sem as contas de ensaio — de outra turma é 404, como conta que não existe.
     consulta = consulta
-      .not("usuario", "in", `(${FILTRO_DE_ENSAIO.usuarios.map((u) => `"${u}"`).join(",")})`)
+      .eq("turma", quem.turma)
+      .not("usuario", "in", ENSAIO_EM_LISTA)
       .not("usuario", "like", FILTRO_DE_ENSAIO.prefixo);
   }
   const { data: linha, error } = await consulta.maybeSingle();

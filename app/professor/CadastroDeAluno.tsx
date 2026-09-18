@@ -1,10 +1,11 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { criarAluno, type EstadoDoCadastro } from "./acoes";
 
 export function CadastroDeAluno() {
   const [estado, agir, pendente] = useActionState<EstadoDoCadastro, FormData>(criarAluno, {});
+  const [turma, setTurma] = useState("olesc");
 
   return (
     <div className="flex flex-col gap-4">
@@ -18,17 +19,33 @@ export function CadastroDeAluno() {
             dica="Em branco, sai do nome."
           />
           <label className="flex flex-col gap-1.5">
-            <span className="rotulo text-tinta-fraca">Equipe</span>
+            <span className="rotulo text-tinta-fraca">Turma</span>
             <select
-              name="equipe"
-              defaultValue=""
+              name="turma"
+              value={turma}
+              onChange={(e) => setTurma(e.target.value)}
               className="foco rounded-lg border border-borda bg-papel px-3 py-2.5 text-base text-tinta"
             >
-              <option value="">Sem equipe</option>
-              <option value="M">Masculina</option>
-              <option value="F">Feminina</option>
+              <option value="olesc">OLESC</option>
+              <option value="testadores">Testadores</option>
             </select>
+            <span className="text-xs text-tinta-fraca">Cada turma só vê os colegas dela.</span>
           </label>
+          {/* Testador não tem equipe: as equipes M e F são da OLESC. */}
+          {turma === "olesc" ? (
+            <label className="flex flex-col gap-1.5">
+              <span className="rotulo text-tinta-fraca">Equipe</span>
+              <select
+                name="equipe"
+                defaultValue=""
+                className="foco rounded-lg border border-borda bg-papel px-3 py-2.5 text-base text-tinta"
+              >
+                <option value="">Sem equipe</option>
+                <option value="M">Masculina</option>
+                <option value="F">Feminina</option>
+              </select>
+            </label>
+          ) : null}
           <Campo
             rotulo="Rating estimado"
             nome="rating"
@@ -68,6 +85,8 @@ export function CadastroDeAluno() {
           <dl className="mt-1 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
             <dt className="text-tinta-fraca">Aluno</dt>
             <dd className="font-medium text-tinta">{estado.criado.nome}</dd>
+            <dt className="text-tinta-fraca">Turma</dt>
+            <dd className="font-medium text-tinta">{estado.criado.turma}</dd>
             <dt className="text-tinta-fraca">Usuário</dt>
             <dd className="font-mono font-medium text-tinta">{estado.criado.usuario}</dd>
             <dt className="text-tinta-fraca">PIN</dt>

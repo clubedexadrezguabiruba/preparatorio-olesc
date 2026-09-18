@@ -10,10 +10,11 @@ import {
   sortearPin,
 } from "@/lib/auth/usuario";
 import { criarClienteAdmin } from "@/lib/supabase/admin";
+import { ehTurma, NOME_DA_TURMA } from "@/lib/turma/turma";
 
 export type EstadoDoCadastro = {
   erro?: string;
-  criado?: { nome: string; usuario: string; pin: string };
+  criado?: { nome: string; usuario: string; pin: string; turma: string };
 };
 
 /**
@@ -49,7 +50,11 @@ export async function criarAluno(
   const problemaPin = problemaDoPin(pin);
   if (problemaPin) return { erro: `PIN: ${problemaPin}.` };
 
-  const equipe = equipeBruta === "M" || equipeBruta === "F" ? equipeBruta : null;
+  const turmaBruta = String(dados.get("turma") ?? "olesc");
+  if (!ehTurma(turmaBruta)) return { erro: "Escolha a turma: OLESC ou Testadores." };
+  const turma = turmaBruta;
+  // Testador não tem equipe (o `check` da migration 0019 recusaria de qualquer jeito).
+  const equipe = turma === "olesc" && (equipeBruta === "M" || equipeBruta === "F") ? equipeBruta : null;
   const rating = ratingBruto ? Number(ratingBruto) : null;
   if (rating !== null && (!Number.isFinite(rating) || rating < 100 || rating > 3000)) {
     return { erro: "O rating estimado precisa ficar entre 100 e 3000 — ou fique em branco." };
@@ -67,6 +72,7 @@ export async function criarAluno(
       nome,
       papel: "aluno",
       equipe: equipe ?? "",
+      turma,
       rating: rating === null ? "" : String(rating),
     },
   });
@@ -81,5 +87,5 @@ export async function criarAluno(
   }
 
   revalidatePath("/professor");
-  return { criado: { nome, usuario, pin } };
+  return { criado: { nome, usuario, pin, turma: NOME_DA_TURMA[turma] } };
 }

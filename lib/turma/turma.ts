@@ -38,7 +38,24 @@ import {
  * de verdade. Para o professor ela aparece — é justamente a conta que ele usa para conferir a
  * turma. E quem está logado nela sempre se vê, senão o ensaio da página não ensaiaria nada.
  * As cobaias de `npm run db:rls` (`zz.teste.*`) seguem a mesma regra.
+ *
+ * ## Duas turmas que não se enxergam (Doug, 18/9/2026)
+ *
+ * Toda conta é da turma `olesc` (os alunos, com as equipes M e F) ou `testadores` (contas de
+ * teste de colegas do Doug, sem equipe). O aluno só vê quem é da **mesma** turma — na grade e na
+ * vitrine. O professor vê as duas, separadas. A coluna `turma` é lida de quem olha e usada no
+ * `where` da consulta: ela não sai para a tela do colega.
  */
+
+/** As turmas, na ordem em que o professor as vê. A mesma lista do `check` da migration 0019. */
+export const TURMAS = ["olesc", "testadores"] as const;
+export type Turma = (typeof TURMAS)[number];
+
+export const NOME_DA_TURMA: Readonly<Record<Turma, string>> = { olesc: "OLESC", testadores: "Testadores" };
+
+export function ehTurma(valor: unknown): valor is Turma {
+  return typeof valor === "string" && (TURMAS as readonly string[]).includes(valor);
+}
 
 /** As colunas de `perfis` que a turma e a vitrine leem de um colega. Nenhuma outra. */
 export const COLUNAS_DO_COLEGA = "id, nome, avatar";
@@ -49,6 +66,7 @@ export const CAMPOS_PROIBIDOS: readonly string[] = [
   "rating",
   "equipe",
   "tabuleiro",
+  "turma",
   "papel",
   "graus",
   "erros",
@@ -73,12 +91,20 @@ export const FILTRO_DE_ENSAIO = {
   prefixo: `${PREFIXO_DAS_COBAIAS}%`,
 } as const;
 
-export type QuemOlha = { readonly id: string; readonly papel: "aluno" | "professor" };
+export type QuemOlha = { readonly id: string; readonly papel: "aluno" | "professor"; readonly turma: Turma };
 
-/** Se uma conta aparece para quem olha. Professor vê todas; aluno não vê as de ensaio, menos a própria. */
-export function quemAparece(quem: QuemOlha, conta: { readonly id: string; readonly usuario: string }): boolean {
+/**
+ * Se uma conta aparece para quem olha. Professor vê todas; aluno vê só as da própria turma, e
+ * nelas não vê as de ensaio — menos a própria, que ele sempre vê.
+ *
+ * É a regra por extenso; `vitrine.ts` a aplica no `where` da consulta, e o teste confere as duas.
+ */
+export function quemAparece(
+  quem: QuemOlha,
+  conta: { readonly id: string; readonly usuario: string; readonly turma: Turma },
+): boolean {
   if (quem.papel === "professor" || conta.id === quem.id) return true;
-  return !ehContaDeEnsaio(conta.usuario);
+  return conta.turma === quem.turma && !ehContaDeEnsaio(conta.usuario);
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -108,6 +134,26 @@ export function turmaEmOrdem(
   return linhas
     .map((l) => ({ id: l.id, nome: l.nome, avatar: l.avatar, ehVoce: l.id === eu }))
     .sort((a, b) => ordem.compare(a.nome, b.nome) || a.id.localeCompare(b.id));
+}
+
+export type GrupoDaTurma = { readonly turma: Turma; readonly nome: string; readonly colegas: ColegaNaTurma[] };
+
+/**
+ * A grade separada por turma, na ordem de {@link TURMAS}, cada uma em ordem alfabética. Turma
+ * vazia não sai. Para o aluno as linhas já chegam filtradas, e sai um grupo só.
+ */
+export function turmasEmOrdem(
+  linhas: readonly { readonly id: string; readonly nome: string; readonly avatar: string | null; readonly turma: Turma }[],
+  eu: string,
+): GrupoDaTurma[] {
+  return TURMAS.map((turma) => ({
+    turma,
+    nome: NOME_DA_TURMA[turma],
+    colegas: turmaEmOrdem(
+      linhas.filter((l) => l.turma === turma),
+      eu,
+    ),
+  })).filter((g) => g.colegas.length > 0);
 }
 
 export type SeloDaVitrine = {

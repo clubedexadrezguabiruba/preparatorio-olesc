@@ -85,7 +85,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
   const supabase = await criarClienteServidor();
   const { data: aluno } = await supabase
     .from("perfis")
-    .select("id, usuario, nome, equipe, tabuleiro, rating, papel, avatar")
+    .select("id, usuario, nome, equipe, turma, tabuleiro, rating, papel, avatar")
     .eq("id", id)
     .maybeSingle();
   if (!aluno || aluno.papel !== "aluno") notFound();
@@ -186,6 +186,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         </div>
         <p className="text-sm text-tinta-media">
           <span className="font-mono text-xs">{aluno.usuario}</span>
+          {aluno.turma === "testadores" ? " · turma de testadores" : ""}
           {aluno.equipe ? ` · equipe ${EQUIPE[aluno.equipe as "M" | "F"]}` : ""}
           {aluno.tabuleiro ? ` · tabuleiro ${aluno.tabuleiro}` : ""}
           {/* "de entrada", porque a página agora mostra também o rating de tática,

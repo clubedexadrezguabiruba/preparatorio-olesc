@@ -334,7 +334,13 @@ export default async function Painel() {
               Turma
             </Link>
             <span className="text-tinta-fraca">
-              {perfil.equipe ? EQUIPE[perfil.equipe] : "Professor"}
+              {perfil.equipe
+                ? EQUIPE[perfil.equipe]
+                : perfil.papel === "professor"
+                  ? "Professor"
+                  : perfil.turma === "testadores"
+                    ? "Turma de testadores"
+                    : "Aluno"}
               {perfil.tabuleiro ? ` · tabuleiro ${perfil.tabuleiro}` : ""}
             </span>
             {perfil.papel === "professor" ? (
