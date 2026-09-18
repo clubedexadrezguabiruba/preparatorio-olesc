@@ -1,0 +1,3045 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-6106f4e65aef3c53",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "N0-MATING-MATERIAL",
+    "titulo": "O que dá mate e o que não dá",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "classe": "E",
+      "estadoEditorial": "rascunho"
+    },
+    "proveniencia": [
+      {
+        "positionId": "pos-n0-mating-material-silman-38",
+        "conteudoHash": "1afde4dc4fb21dc9e1cfbd4c3c6c0a58ac987a05d8f52ed674d9308b6d277983",
+        "estado": "approved"
+      }
+    ],
+    "excecoes": [],
+    "catalogo": {
+      "erros": [
+        {
+          "id": "erro-no-jogo-12-3",
+          "nome": "Xeque, mas o rei sai por d8 ou f8.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Xeque, mas o rei sai por d8 ou f8. Xeque sem fechar as saídas não é mate."
+        },
+        {
+          "id": "erro-no-jogo-13-2",
+          "nome": "Sem xeque.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Sem xeque. O rei sai por d8 ou f8, e o mate em um lance escapa."
+        },
+        {
+          "id": "erro-no-jogo-14-2",
+          "nome": "O rei preto não está em xeque e não tem casa.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei preto não está em xeque e não tem casa. Isso é afogamento: empate."
+        },
+        {
+          "id": "erro-no-jogo-15-2",
+          "nome": "Sem xeque.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Sem xeque. O rei sai por f8, e o mate em dois lances escapa."
+        },
+        {
+          "id": "erro-no-jogo-16-2",
+          "nome": "O canto perde: o cavalo pula para f7, e é mate.",
+          "julgamento": "fora-do-metodo",
+          "texto": "O canto perde: o cavalo pula para f7, e é mate."
+        },
+        {
+          "id": "erro-no-jogo-17-2",
+          "nome": "Xeque, mas o rei preto toma o peão.",
+          "julgamento": "perde-resultado",
+          "texto": "Xeque, mas o rei preto toma o peão. Sem o peão, é empate."
+        },
+        {
+          "id": "erro-no-jogo-18-3",
+          "nome": "Bispo sozinho não dá mate.",
+          "julgamento": "perde-resultado",
+          "texto": "Bispo sozinho não dá mate. O rei preto sai por g8, e a partida empata na hora."
+        },
+        {
+          "id": "erro-no-jogo-18-4",
+          "nome": "Cavalo sozinho não dá mate.",
+          "julgamento": "perde-resultado",
+          "texto": "Cavalo sozinho não dá mate. O rei preto sai por g8, e a partida empata na hora."
+        }
+      ],
+      "mensagensPadrao": {
+        "vitoriaForaDoMetodo": "Este lance funciona, mas não é o caminho ensinado.",
+        "perdeResultado": "Este lance perde o resultado que a posição permitia.",
+        "alternativaDoMetodo": "Boa alternativa. Continue pela linha ensinada."
+      }
+    },
+    "analises": [
+      {
+        "id": "analise-jogo-3",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "6k1/5N2/6K1/8/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "6k1/5N2/6K1/8/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "01 - AULA - Rei e cavalo: não dá",
+            "FEN": "6k1/5N2/6K1/8/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-3-0",
+        "nos": {
+          "no-jogo-3-0": {
+            "id": "no-jogo-3-0",
+            "filhos": [
+              "no-jogo-3-1"
+            ],
+            "comentario": "Primeiro caso: rei e cavalo. Acompanhe os xeques e veja se o rei preto sempre acha uma saída."
+          },
+          "no-jogo-3-1": {
+            "id": "no-jogo-3-1",
+            "uci": "f7g5",
+            "filhos": [
+              "no-jogo-3-2"
+            ]
+          },
+          "no-jogo-3-2": {
+            "id": "no-jogo-3-2",
+            "uci": "g8h8",
+            "filhos": [
+              "no-jogo-3-3"
+            ]
+          },
+          "no-jogo-3-3": {
+            "id": "no-jogo-3-3",
+            "uci": "g5f7",
+            "filhos": [
+              "no-jogo-3-4"
+            ],
+            "comentario": "Xeque. Mas o rei ainda tem g8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yg8]"
+            ]
+          },
+          "no-jogo-3-4": {
+            "id": "no-jogo-3-4",
+            "uci": "h8g8",
+            "filhos": [
+              "no-jogo-3-5"
+            ]
+          },
+          "no-jogo-3-5": {
+            "id": "no-jogo-3-5",
+            "uci": "f7h6",
+            "filhos": [
+              "no-jogo-3-6"
+            ],
+            "comentario": "Outro xeque. E o rei ainda tem f8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yf8]"
+            ]
+          },
+          "no-jogo-3-6": {
+            "id": "no-jogo-3-6",
+            "uci": "g8f8",
+            "filhos": [],
+            "comentario": "O rei escapou de novo. Guarde isto: rei e cavalo não dão mate."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-4",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "6k1/8/8/4B1K1/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "6k1/8/8/4B1K1/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "02 - AULA - Rei e bispo: não dá",
+            "FEN": "6k1/8/8/4B1K1/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-4-0",
+        "nos": {
+          "no-jogo-4-0": {
+            "id": "no-jogo-4-0",
+            "filhos": [
+              "no-jogo-4-1"
+            ],
+            "comentario": "Agora troque o cavalo por um bispo. Rei e bispo dão mate no rei sozinho?"
+          },
+          "no-jogo-4-1": {
+            "id": "no-jogo-4-1",
+            "uci": "e5f6",
+            "filhos": [
+              "no-jogo-4-2"
+            ]
+          },
+          "no-jogo-4-2": {
+            "id": "no-jogo-4-2",
+            "uci": "g8f8",
+            "filhos": [
+              "no-jogo-4-3"
+            ]
+          },
+          "no-jogo-4-3": {
+            "id": "no-jogo-4-3",
+            "uci": "g5f5",
+            "filhos": [
+              "no-jogo-4-4"
+            ]
+          },
+          "no-jogo-4-4": {
+            "id": "no-jogo-4-4",
+            "uci": "f8g8",
+            "filhos": [
+              "no-jogo-4-5"
+            ]
+          },
+          "no-jogo-4-5": {
+            "id": "no-jogo-4-5",
+            "uci": "f6e7",
+            "filhos": [
+              "no-jogo-4-6"
+            ],
+            "comentario": "O bispo tira f8. O rei preto fica perto do canto.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf8]"
+            ]
+          },
+          "no-jogo-4-6": {
+            "id": "no-jogo-4-6",
+            "uci": "g8h8",
+            "filhos": [
+              "no-jogo-4-7"
+            ]
+          },
+          "no-jogo-4-7": {
+            "id": "no-jogo-4-7",
+            "uci": "f5g6",
+            "filhos": [
+              "no-jogo-4-8"
+            ]
+          },
+          "no-jogo-4-8": {
+            "id": "no-jogo-4-8",
+            "uci": "h8g8",
+            "filhos": [
+              "no-jogo-4-9"
+            ]
+          },
+          "no-jogo-4-9": {
+            "id": "no-jogo-4-9",
+            "uci": "e7d6",
+            "filhos": [
+              "no-jogo-4-10"
+            ]
+          },
+          "no-jogo-4-10": {
+            "id": "no-jogo-4-10",
+            "uci": "g8h8",
+            "filhos": [
+              "no-jogo-4-11"
+            ]
+          },
+          "no-jogo-4-11": {
+            "id": "no-jogo-4-11",
+            "uci": "d6e5",
+            "filhos": [
+              "no-jogo-4-12"
+            ],
+            "comentario": "Xeque no canto. Mas g8 é casa branca, e este bispo só anda nas pretas.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yg8]"
+            ]
+          },
+          "no-jogo-4-12": {
+            "id": "no-jogo-4-12",
+            "uci": "h8g8",
+            "filhos": [
+              "no-jogo-4-13"
+            ]
+          },
+          "no-jogo-4-13": {
+            "id": "no-jogo-4-13",
+            "uci": "e5f6",
+            "filhos": [
+              "no-jogo-4-14"
+            ]
+          },
+          "no-jogo-4-14": {
+            "id": "no-jogo-4-14",
+            "uci": "g8f8",
+            "filhos": [],
+            "comentario": "O rei sai de novo. Guarde isto: rei e bispo não dão mate."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-5",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "4k3/Q7/4K3/8/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "4k3/Q7/4K3/8/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "03 - AULA - Rei e dama: dá",
+            "FEN": "4k3/Q7/4K3/8/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-5-0",
+        "nos": {
+          "no-jogo-5-0": {
+            "id": "no-jogo-5-0",
+            "filhos": [
+              "no-jogo-5-1",
+              "no-jogo-5-2"
+            ],
+            "comentario": "Agora a dama. Com ela, a resposta muda: rei e dama dão mate no rei sozinho. Aqui, o mate está a um lance."
+          },
+          "no-jogo-5-1": {
+            "id": "no-jogo-5-1",
+            "uci": "a7a8",
+            "filhos": [],
+            "comentario": "Mate. A dama fecha a última fileira, e o rei branco fecha d7, e7 e f7. Guarde isto: rei e dama dão mate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "e7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "f7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gd7,Ge7,Gf7]"
+            ]
+          },
+          "no-jogo-5-2": {
+            "id": "no-jogo-5-2",
+            "uci": "a7e7",
+            "filhos": [],
+            "comentario": "Também é mate: a dama encosta no rei preto, e o rei branco protege a dama."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-6",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "4k3/R7/4K3/8/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "4k3/R7/4K3/8/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "04 - AULA - Rei e torre: dá",
+            "FEN": "4k3/R7/4K3/8/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-6-0",
+        "nos": {
+          "no-jogo-6-0": {
+            "id": "no-jogo-6-0",
+            "filhos": [
+              "no-jogo-6-1"
+            ],
+            "comentario": "Rei e torre também dão mate. Veja como o rei branco ajuda a torre."
+          },
+          "no-jogo-6-1": {
+            "id": "no-jogo-6-1",
+            "uci": "a7a8",
+            "filhos": [],
+            "comentario": "Mate. A torre fecha a última fileira, e o rei branco fecha d7, e7 e f7. Guarde isto: rei e torre dão mate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "e7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "f7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gd7,Ge7,Gf7]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-7",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "6k1/8/3BB1K1/8/8/8/8/8 b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "6k1/8/3BB1K1/8/8/8/8/8 b - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "05 - AULA - Rei e dois bispos: dá",
+            "FEN": "6k1/8/3BB1K1/8/8/8/8/8 b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-7-0",
+        "nos": {
+          "no-jogo-7-0": {
+            "id": "no-jogo-7-0",
+            "filhos": [
+              "no-jogo-7-1"
+            ],
+            "comentario": "Rei e dois bispos, um de cada cor. As pretas estão em xeque e só têm h8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yh8]"
+            ]
+          },
+          "no-jogo-7-1": {
+            "id": "no-jogo-7-1",
+            "uci": "g8h8",
+            "filhos": [
+              "no-jogo-7-2"
+            ]
+          },
+          "no-jogo-7-2": {
+            "id": "no-jogo-7-2",
+            "uci": "d6e5",
+            "filhos": [],
+            "comentario": "Mate. Um bispo dá o xeque, o outro fecha g8, e o rei branco fecha h7. Guarde isto: dois bispos dão mate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg8,Gh7]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-8",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "6k1/8/6K1/2B2N2/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "6k1/8/6K1/2B2N2/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "06 - AULA - Rei, bispo e cavalo: dá",
+            "FEN": "6k1/8/6K1/2B2N2/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-8-0",
+        "nos": {
+          "no-jogo-8-0": {
+            "id": "no-jogo-8-0",
+            "filhos": [
+              "no-jogo-8-1"
+            ],
+            "comentario": "Bispo e cavalo também dão mate. Chegar até aqui é difícil e fica para depois. Hoje, só reconheça o mate."
+          },
+          "no-jogo-8-1": {
+            "id": "no-jogo-8-1",
+            "uci": "f5h6",
+            "filhos": [
+              "no-jogo-8-2"
+            ],
+            "comentario": "O cavalo dá xeque e tira g8. O rei só tem h8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg8,Yh8]"
+            ]
+          },
+          "no-jogo-8-2": {
+            "id": "no-jogo-8-2",
+            "uci": "g8h8",
+            "filhos": [
+              "no-jogo-8-3"
+            ]
+          },
+          "no-jogo-8-3": {
+            "id": "no-jogo-8-3",
+            "uci": "c5d4",
+            "filhos": [],
+            "comentario": "Mate. O bispo dá o xeque, e o cavalo fecha g8. Guarde isto: bispo e cavalo dão mate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-9",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "6k1/4N3/6K1/4N3/8/8/8/8 b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "6k1/4N3/6K1/4N3/8/8/8/8 b - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "07 - AULA - Dois cavalos: o caso especial",
+            "FEN": "6k1/4N3/6K1/4N3/8/8/8/8 b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-9-0",
+        "nos": {
+          "no-jogo-9-0": {
+            "id": "no-jogo-9-0",
+            "filhos": [
+              "no-jogo-9-1",
+              "no-jogo-9-2"
+            ],
+            "comentario": "Dois cavalos. As pretas estão em xeque e têm duas casas: f8 e h8. Compare as duas.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yf8,Yh8]"
+            ]
+          },
+          "no-jogo-9-1": {
+            "id": "no-jogo-9-1",
+            "uci": "g8h8",
+            "filhos": [
+              "no-jogo-9-7"
+            ],
+            "comentario": "O rei entra sozinho no canto, em h8.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rh8]"
+            ]
+          },
+          "no-jogo-9-2": {
+            "id": "no-jogo-9-2",
+            "uci": "g8f8",
+            "filhos": [
+              "no-jogo-9-3"
+            ],
+            "comentario": "A defesa certa: f8, longe do canto.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf8]"
+            ]
+          },
+          "no-jogo-9-3": {
+            "id": "no-jogo-9-3",
+            "uci": "g6f6",
+            "filhos": [
+              "no-jogo-9-4"
+            ]
+          },
+          "no-jogo-9-4": {
+            "id": "no-jogo-9-4",
+            "uci": "f8e8",
+            "filhos": [
+              "no-jogo-9-5"
+            ]
+          },
+          "no-jogo-9-5": {
+            "id": "no-jogo-9-5",
+            "uci": "e5f7",
+            "filhos": [
+              "no-jogo-9-6"
+            ]
+          },
+          "no-jogo-9-6": {
+            "id": "no-jogo-9-6",
+            "uci": "e8d7",
+            "filhos": [],
+            "comentario": "Sem mate. Guarde isto: dois cavalos não forçam o mate. Fique longe do canto."
+          },
+          "no-jogo-9-7": {
+            "id": "no-jogo-9-7",
+            "uci": "e5f7",
+            "filhos": [],
+            "comentario": "Mate. Mas só porque as pretas erraram: ninguém obrigou o rei a ir para h8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rh8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-10",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "5k2/2K5/4P3/8/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "5k2/2K5/4P3/8/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "08 - AULA - Rei e peão: depende",
+            "FEN": "5k2/2K5/4P3/8/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-10-0",
+        "nos": {
+          "no-jogo-10-0": {
+            "id": "no-jogo-10-0",
+            "filhos": [
+              "no-jogo-10-1"
+            ],
+            "comentario": "E rei e peão? Aqui não há uma resposta só. O peão pode virar dama, ou pode ser parado. Nesta posição, ele vira dama."
+          },
+          "no-jogo-10-1": {
+            "id": "no-jogo-10-1",
+            "uci": "c7d7",
+            "filhos": [
+              "no-jogo-10-2"
+            ],
+            "comentario": "O rei branco protege o peão e fecha e8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ge8]"
+            ]
+          },
+          "no-jogo-10-2": {
+            "id": "no-jogo-10-2",
+            "uci": "f8g7",
+            "filhos": [
+              "no-jogo-10-3"
+            ]
+          },
+          "no-jogo-10-3": {
+            "id": "no-jogo-10-3",
+            "uci": "e6e7",
+            "filhos": [
+              "no-jogo-10-4"
+            ]
+          },
+          "no-jogo-10-4": {
+            "id": "no-jogo-10-4",
+            "uci": "g7g8",
+            "filhos": [
+              "no-jogo-10-5"
+            ]
+          },
+          "no-jogo-10-5": {
+            "id": "no-jogo-10-5",
+            "uci": "e7e8q",
+            "filhos": [],
+            "comentario": "O peão virou dama. Agora as brancas têm o que dá mate. Guarde isto: rei e peão, depende. Nem todo peão chega, e isso fica para outra aula."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-11",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "4Q1k1/3K4/8/8/8/8/8/8 b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "4Q1k1/3K4/8/8/8/8/8/8 b - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "09 - AULA - LEMBRE-SE",
+            "FEN": "4Q1k1/3K4/8/8/8/8/8/8 b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-11-0",
+        "nos": {
+          "no-jogo-11-0": {
+            "id": "no-jogo-11-0",
+            "filhos": [],
+            "comentario": "LEMBRE-SE:\n\n1. Não forçam o mate: um bispo, um cavalo, dois cavalos.\n2. Forçam o mate: dama, torre, dois bispos, bispo e cavalo.\n3. Rei e peão: depende. Se o peão vira dama, força o mate."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-12",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "4k3/Q7/4K3/8/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "4k3/Q7/4K3/8/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "10 - TREINO 1 - Rei e dama",
+            "FEN": "4k3/Q7/4K3/8/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-12-0",
+        "nos": {
+          "no-jogo-12-0": {
+            "id": "no-jogo-12-0",
+            "filhos": [
+              "no-jogo-12-1",
+              "no-jogo-12-2",
+              "no-jogo-12-3"
+            ],
+            "comentario": "Rei e dama, como na aula. Dê o mate em um lance. A casa a8 é o caminho.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ga8]"
+            ]
+          },
+          "no-jogo-12-1": {
+            "id": "no-jogo-12-1",
+            "uci": "a7a8",
+            "filhos": [],
+            "comentario": "Mate. Rei e dama dão mate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re8]"
+            ]
+          },
+          "no-jogo-12-2": {
+            "id": "no-jogo-12-2",
+            "uci": "a7e7",
+            "filhos": [],
+            "comentario": "Mate também: o rei branco protege a dama.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re8]"
+            ]
+          },
+          "no-jogo-12-3": {
+            "id": "no-jogo-12-3",
+            "uci": "a7a4",
+            "filhos": [],
+            "comentario": "Xeque, mas o rei sai por d8 ou f8. Xeque sem fechar as saídas não é mate.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d8",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "f8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rd8,Rf8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-13",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "4k3/R7/4K3/8/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "4k3/R7/4K3/8/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "11 - TREINO 2 - Rei e torre",
+            "FEN": "4k3/R7/4K3/8/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-13-0",
+        "nos": {
+          "no-jogo-13-0": {
+            "id": "no-jogo-13-0",
+            "filhos": [
+              "no-jogo-13-1",
+              "no-jogo-13-2"
+            ],
+            "comentario": "Agora com a torre, e sem ajuda. Dê o mate em um lance."
+          },
+          "no-jogo-13-1": {
+            "id": "no-jogo-13-1",
+            "uci": "a7a8",
+            "filhos": [],
+            "comentario": "Mate. A torre fecha a última fileira, e o rei branco fecha o resto.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re8]"
+            ]
+          },
+          "no-jogo-13-2": {
+            "id": "no-jogo-13-2",
+            "uci": "a7h7",
+            "filhos": [],
+            "comentario": "Sem xeque. O rei sai por d8 ou f8, e o mate em um lance escapa.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d8",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "f8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rd8,Rf8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-14",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "7k/8/3BB1K1/8/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "7k/8/3BB1K1/8/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "12 - TREINO 3 - Rei e dois bispos",
+            "FEN": "7k/8/3BB1K1/8/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-14-0",
+        "nos": {
+          "no-jogo-14-0": {
+            "id": "no-jogo-14-0",
+            "filhos": [
+              "no-jogo-14-1",
+              "no-jogo-14-2"
+            ],
+            "comentario": "Dois bispos, e o rei preto no canto. Dê o mate em um lance."
+          },
+          "no-jogo-14-1": {
+            "id": "no-jogo-14-1",
+            "uci": "d6e5",
+            "filhos": [],
+            "comentario": "Mate. Um bispo dá o xeque, e o outro fecha g8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg8,Rh8]"
+            ]
+          },
+          "no-jogo-14-2": {
+            "id": "no-jogo-14-2",
+            "uci": "e6f7",
+            "filhos": [],
+            "comentario": "O rei preto não está em xeque e não tem casa. Isso é afogamento: empate.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rh8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-15",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "6k1/8/6K1/2B2N2/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "6k1/8/6K1/2B2N2/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "13 - TREINO 4 - Rei, bispo e cavalo",
+            "FEN": "6k1/8/6K1/2B2N2/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-15-0",
+        "nos": {
+          "no-jogo-15-0": {
+            "id": "no-jogo-15-0",
+            "filhos": [
+              "no-jogo-15-1",
+              "no-jogo-15-2"
+            ],
+            "comentario": "Bispo e cavalo. Dê o mate em dois lances, como na aula."
+          },
+          "no-jogo-15-1": {
+            "id": "no-jogo-15-1",
+            "uci": "f5h6",
+            "filhos": [
+              "no-jogo-15-3"
+            ],
+            "comentario": "Xeque. O rei preto só tem h8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yh8]"
+            ]
+          },
+          "no-jogo-15-2": {
+            "id": "no-jogo-15-2",
+            "uci": "c5d4",
+            "filhos": [],
+            "comentario": "Sem xeque. O rei sai por f8, e o mate em dois lances escapa.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rf8]"
+            ]
+          },
+          "no-jogo-15-3": {
+            "id": "no-jogo-15-3",
+            "uci": "g8h8",
+            "filhos": [
+              "no-jogo-15-4"
+            ]
+          },
+          "no-jogo-15-4": {
+            "id": "no-jogo-15-4",
+            "uci": "c5d4",
+            "filhos": [],
+            "comentario": "Mate. O cavalo fecha g8, e o bispo dá o xeque.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg8,Rh8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-16",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "6k1/4N3/6K1/4N3/8/8/8/8 b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "6k1/4N3/6K1/4N3/8/8/8/8 b - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Brancas",
+            "Black": "Aluno - Pretas",
+            "Result": "1/2-1/2",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "14 - TREINO 5 - Dois cavalos: você de pretas",
+            "FEN": "6k1/4N3/6K1/4N3/8/8/8/8 b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "black",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-16-0",
+        "nos": {
+          "no-jogo-16-0": {
+            "id": "no-jogo-16-0",
+            "filhos": [
+              "no-jogo-16-1",
+              "no-jogo-16-2"
+            ],
+            "comentario": "Você joga de pretas e está em xeque. Escolha a casa certa e segure o empate."
+          },
+          "no-jogo-16-1": {
+            "id": "no-jogo-16-1",
+            "uci": "g8f8",
+            "filhos": [],
+            "comentario": "Longe do canto. Os cavalos não conseguem fechar o seu rei: empate.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-16-2": {
+            "id": "no-jogo-16-2",
+            "uci": "g8h8",
+            "filhos": [
+              "no-jogo-16-3"
+            ],
+            "comentario": "O canto perde: o cavalo pula para f7, e é mate.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "f7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rh8,Rf7]"
+            ]
+          },
+          "no-jogo-16-3": {
+            "id": "no-jogo-16-3",
+            "uci": "e5f7",
+            "filhos": []
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-17",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "5k2/2K5/4P3/8/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "5k2/2K5/4P3/8/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "15 - TREINO 6 - Rei e peão",
+            "FEN": "5k2/2K5/4P3/8/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-17-0",
+        "nos": {
+          "no-jogo-17-0": {
+            "id": "no-jogo-17-0",
+            "filhos": [
+              "no-jogo-17-1",
+              "no-jogo-17-2"
+            ],
+            "comentario": "Leve o peão até virar dama."
+          },
+          "no-jogo-17-1": {
+            "id": "no-jogo-17-1",
+            "uci": "c7d7",
+            "filhos": [
+              "no-jogo-17-4"
+            ],
+            "comentario": "O rei protege o peão e fecha e8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ge8]"
+            ]
+          },
+          "no-jogo-17-2": {
+            "id": "no-jogo-17-2",
+            "uci": "e6e7",
+            "filhos": [
+              "no-jogo-17-3"
+            ],
+            "comentario": "Xeque, mas o rei preto toma o peão. Sem o peão, é empate.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re7]"
+            ]
+          },
+          "no-jogo-17-3": {
+            "id": "no-jogo-17-3",
+            "uci": "f8e7",
+            "filhos": []
+          },
+          "no-jogo-17-4": {
+            "id": "no-jogo-17-4",
+            "uci": "f8g7",
+            "filhos": [
+              "no-jogo-17-5"
+            ]
+          },
+          "no-jogo-17-5": {
+            "id": "no-jogo-17-5",
+            "uci": "e6e7",
+            "filhos": [
+              "no-jogo-17-6"
+            ]
+          },
+          "no-jogo-17-6": {
+            "id": "no-jogo-17-6",
+            "uci": "g7g8",
+            "filhos": [
+              "no-jogo-17-7"
+            ]
+          },
+          "no-jogo-17-7": {
+            "id": "no-jogo-17-7",
+            "uci": "e7e8q",
+            "filhos": [],
+            "comentario": "O peão virou dama. Agora as brancas dão mate."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-18",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "7k/5P2/6K1/8/8/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "o que dá mate - Aula piloto; posição Silman Diagram 38",
+            "link": "https://lichess.org/study/suMc7hgW",
+            "fenRevisada": "7k/5P2/6K1/8/8/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-18T14:31:38.030Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 1 - O que dá mate e o que não dá",
+            "Site": "https://lichess.org/study/suMc7hgW",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "O que dá mate e o que não dá",
+            "ChapterName": "16 - TREINO 7 - O peão vai virar o quê?",
+            "FEN": "7k/5P2/6K1/8/8/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-18-0",
+        "nos": {
+          "no-jogo-18-0": {
+            "id": "no-jogo-18-0",
+            "filhos": [
+              "no-jogo-18-1",
+              "no-jogo-18-2",
+              "no-jogo-18-3",
+              "no-jogo-18-4"
+            ],
+            "comentario": "O peão vai virar peça agora. Escolha uma que dê mate."
+          },
+          "no-jogo-18-1": {
+            "id": "no-jogo-18-1",
+            "uci": "f7f8q",
+            "filhos": [],
+            "comentario": "Dama: fecha a última fileira, e o rei branco fecha g7 e h7. Mate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg7,Gh7,Rh8]"
+            ]
+          },
+          "no-jogo-18-2": {
+            "id": "no-jogo-18-2",
+            "uci": "f7f8r",
+            "filhos": [],
+            "comentario": "Torre: também fecha a fileira. Mate."
+          },
+          "no-jogo-18-3": {
+            "id": "no-jogo-18-3",
+            "uci": "f7f8b",
+            "filhos": [],
+            "comentario": "Bispo sozinho não dá mate. O rei preto sai por g8, e a partida empata na hora.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg8]"
+            ]
+          },
+          "no-jogo-18-4": {
+            "id": "no-jogo-18-4",
+            "uci": "f7f8n",
+            "filhos": [],
+            "comentario": "Cavalo sozinho não dá mate. O rei preto sai por g8, e a partida empata na hora.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg8]"
+            ]
+          }
+        }
+      }
+    ],
+    "introducoes": [
+      {
+        "id": "introducao-estudo-1",
+        "titulo": "Introdução",
+        "quadros": [
+          {
+            "id": "quadro-estudo-1",
+            "titulo": "INTRODUÇÃO - Dá mate?",
+            "texto": "Brancas: rei e cavalo. Pretas: só o rei.\n\nAs brancas conseguem forçar o mate?",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-3",
+                "nodeId": "no-jogo-3-0"
+              }
+            }
+          },
+          {
+            "id": "quadro-estudo-2",
+            "titulo": "INTRODUÇÃO - A pergunta da aula",
+            "texto": "Hoje, uma peça de cada vez: quais dão mate no rei sozinho, e quais não dão.\n\nA cada final, pergunte: com estas peças, dá para forçar o mate?",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-3",
+                "nodeId": "no-jogo-3-0"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "capitulos": [
+      {
+        "id": "capitulo-jogo-3",
+        "titulo": "AULA - Rei e cavalo: não dá",
+        "analiseId": "analise-jogo-3",
+        "inicioNodeId": "no-jogo-3-0",
+        "caminho": [
+          "no-jogo-3-1",
+          "no-jogo-3-2",
+          "no-jogo-3-3",
+          "no-jogo-3-4",
+          "no-jogo-3-5",
+          "no-jogo-3-6"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-3-0",
+            "nodeId": "no-jogo-3-0",
+            "texto": "Primeiro caso: rei e cavalo. Acompanhe os xeques e veja se o rei preto sempre acha uma saída.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-3-3",
+            "nodeId": "no-jogo-3-3",
+            "texto": "Xeque. Mas o rei ainda tem g8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-3-5",
+            "nodeId": "no-jogo-3-5",
+            "texto": "Outro xeque. E o rei ainda tem f8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-3-6",
+            "nodeId": "no-jogo-3-6",
+            "texto": "O rei escapou de novo. Guarde isto: rei e cavalo não dão mate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-4",
+        "titulo": "AULA - Rei e bispo: não dá",
+        "analiseId": "analise-jogo-4",
+        "inicioNodeId": "no-jogo-4-0",
+        "caminho": [
+          "no-jogo-4-1",
+          "no-jogo-4-2",
+          "no-jogo-4-3",
+          "no-jogo-4-4",
+          "no-jogo-4-5",
+          "no-jogo-4-6",
+          "no-jogo-4-7",
+          "no-jogo-4-8",
+          "no-jogo-4-9",
+          "no-jogo-4-10",
+          "no-jogo-4-11",
+          "no-jogo-4-12",
+          "no-jogo-4-13",
+          "no-jogo-4-14"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-4-0",
+            "nodeId": "no-jogo-4-0",
+            "texto": "Agora troque o cavalo por um bispo. Rei e bispo dão mate no rei sozinho?",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-5",
+            "nodeId": "no-jogo-4-5",
+            "texto": "O bispo tira f8. O rei preto fica perto do canto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-11",
+            "nodeId": "no-jogo-4-11",
+            "texto": "Xeque no canto. Mas g8 é casa branca, e este bispo só anda nas pretas.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-14",
+            "nodeId": "no-jogo-4-14",
+            "texto": "O rei sai de novo. Guarde isto: rei e bispo não dão mate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5",
+        "titulo": "AULA - Rei e dama: dá",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-5-0",
+            "nodeId": "no-jogo-5-0",
+            "texto": "Agora a dama. Com ela, a resposta muda: rei e dama dão mate no rei sozinho. Aqui, o mate está a um lance.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-1",
+            "nodeId": "no-jogo-5-1",
+            "texto": "Mate. A dama fecha a última fileira, e o rei branco fecha d7, e7 e f7. Guarde isto: rei e dama dão mate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-2",
+            "nodeId": "no-jogo-5-2",
+            "texto": "Também é mate: a dama encosta no rei preto, e o rei branco protege a dama.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5-variante",
+        "titulo": "Comparação: 1. De7#",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-2"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-2",
+            "nodeId": "no-jogo-5-2",
+            "texto": "Também é mate: a dama encosta no rei preto, e o rei branco protege a dama.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6",
+        "titulo": "AULA - Rei e torre: dá",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-1"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-6-0",
+            "nodeId": "no-jogo-6-0",
+            "texto": "Rei e torre também dão mate. Veja como o rei branco ajuda a torre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-1",
+            "nodeId": "no-jogo-6-1",
+            "texto": "Mate. A torre fecha a última fileira, e o rei branco fecha d7, e7 e f7. Guarde isto: rei e torre dão mate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7",
+        "titulo": "AULA - Rei e dois bispos: dá",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [
+          "no-jogo-7-1",
+          "no-jogo-7-2"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-7-0",
+            "nodeId": "no-jogo-7-0",
+            "texto": "Rei e dois bispos, um de cada cor. As pretas estão em xeque e só têm h8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-2",
+            "nodeId": "no-jogo-7-2",
+            "texto": "Mate. Um bispo dá o xeque, o outro fecha g8, e o rei branco fecha h7. Guarde isto: dois bispos dão mate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-8",
+        "titulo": "AULA - Rei, bispo e cavalo: dá",
+        "analiseId": "analise-jogo-8",
+        "inicioNodeId": "no-jogo-8-0",
+        "caminho": [
+          "no-jogo-8-1",
+          "no-jogo-8-2",
+          "no-jogo-8-3"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-8-0",
+            "nodeId": "no-jogo-8-0",
+            "texto": "Bispo e cavalo também dão mate. Chegar até aqui é difícil e fica para depois. Hoje, só reconheça o mate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-8-1",
+            "nodeId": "no-jogo-8-1",
+            "texto": "O cavalo dá xeque e tira g8. O rei só tem h8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-8-3",
+            "nodeId": "no-jogo-8-3",
+            "texto": "Mate. O bispo dá o xeque, e o cavalo fecha g8. Guarde isto: bispo e cavalo dão mate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-9",
+        "titulo": "AULA - Dois cavalos: o caso especial",
+        "analiseId": "analise-jogo-9",
+        "inicioNodeId": "no-jogo-9-0",
+        "caminho": [
+          "no-jogo-9-1",
+          "no-jogo-9-7"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-9-0",
+            "nodeId": "no-jogo-9-0",
+            "texto": "Dois cavalos. As pretas estão em xeque e têm duas casas: f8 e h8. Compare as duas.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-9-1",
+            "nodeId": "no-jogo-9-1",
+            "texto": "O rei entra sozinho no canto, em h8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-9-2",
+            "nodeId": "no-jogo-9-2",
+            "texto": "A defesa certa: f8, longe do canto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-9-6",
+            "nodeId": "no-jogo-9-6",
+            "texto": "Sem mate. Guarde isto: dois cavalos não forçam o mate. Fique longe do canto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-9-7",
+            "nodeId": "no-jogo-9-7",
+            "texto": "Mate. Mas só porque as pretas erraram: ninguém obrigou o rei a ir para h8.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-9-variante",
+        "titulo": "Comparação: 1... Rf8!",
+        "analiseId": "analise-jogo-9",
+        "inicioNodeId": "no-jogo-9-0",
+        "caminho": [
+          "no-jogo-9-2",
+          "no-jogo-9-3",
+          "no-jogo-9-4",
+          "no-jogo-9-5",
+          "no-jogo-9-6"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-9-variante-no-jogo-9-2",
+            "nodeId": "no-jogo-9-2",
+            "texto": "A defesa certa: f8, longe do canto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-9-variante-no-jogo-9-6",
+            "nodeId": "no-jogo-9-6",
+            "texto": "Sem mate. Guarde isto: dois cavalos não forçam o mate. Fique longe do canto.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-10",
+        "titulo": "AULA - Rei e peão: depende",
+        "analiseId": "analise-jogo-10",
+        "inicioNodeId": "no-jogo-10-0",
+        "caminho": [
+          "no-jogo-10-1",
+          "no-jogo-10-2",
+          "no-jogo-10-3",
+          "no-jogo-10-4",
+          "no-jogo-10-5"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-10-0",
+            "nodeId": "no-jogo-10-0",
+            "texto": "E rei e peão? Aqui não há uma resposta só. O peão pode virar dama, ou pode ser parado. Nesta posição, ele vira dama.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-10-1",
+            "nodeId": "no-jogo-10-1",
+            "texto": "O rei branco protege o peão e fecha e8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-10-5",
+            "nodeId": "no-jogo-10-5",
+            "texto": "O peão virou dama. Agora as brancas têm o que dá mate. Guarde isto: rei e peão, depende. Nem todo peão chega, e isso fica para outra aula.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-11",
+        "titulo": "AULA - LEMBRE-SE",
+        "analiseId": "analise-jogo-11",
+        "inicioNodeId": "no-jogo-11-0",
+        "caminho": [],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-11-0",
+            "nodeId": "no-jogo-11-0",
+            "texto": "LEMBRE-SE:\n\n1. Não forçam o mate: um bispo, um cavalo, dois cavalos.\n2. Forçam o mate: dama, torre, dois bispos, bispo e cavalo.\n3. Rei e peão: depende. Se o peão vira dama, força o mate.",
+            "pausa": "manual"
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-capitulo-jogo-12-no-jogo-12-0-white",
+        "titulo": "TREINO 1 - Rei e dama",
+        "introducao": "Rei e dama, como na aula. Dê o mate em um lance. A casa a8 é o caminho.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-12",
+          "nodeId": "no-jogo-12-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Rei e dama, como na aula. Dê o mate em um lance. A casa a8 é o caminho.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-12-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-12",
+              "nodeId": "no-jogo-12-0"
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-12-1-white",
+                "moves": [
+                  "a7a8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Mate. Rei e dama dão mate.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-12-2",
+                "moves": [
+                  "a7e7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Mate também: o rei branco protege a dama.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-12-3",
+                "moves": [
+                  "a7a4"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque, mas o rei sai por d8 ou f8. Xeque sem fechar as saídas não é mate.",
+                "erroId": "erro-no-jogo-12-3",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-12",
+          "nodeIds": [
+            "no-jogo-12-0",
+            "no-jogo-12-1"
+          ],
+          "hash": "v2-8f981396",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-12",
+          "inicioNodeId": "no-jogo-12-0",
+          "objetivo": "Rei e dama, como na aula. Dê o mate em um lance. A casa a8 é o caminho."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "4k3/Q7/4K3/8/8/8/8/8 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-12",
+              "nodeId": "no-jogo-12-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-12-0-white": {
+              "fen": "4k3/Q7/4K3/8/8/8/8/8 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-12",
+                "nodeId": "no-jogo-12-0"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      },
+      {
+        "id": "treino-capitulo-jogo-13-no-jogo-13-0-white",
+        "titulo": "TREINO 2 - Rei e torre",
+        "introducao": "Agora com a torre, e sem ajuda. Dê o mate em um lance.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-13",
+          "nodeId": "no-jogo-13-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Agora com a torre, e sem ajuda. Dê o mate em um lance.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-13-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-13",
+              "nodeId": "no-jogo-13-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-13-1-white",
+                "moves": [
+                  "a7a8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Mate. A torre fecha a última fileira, e o rei branco fecha o resto.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-13-2",
+                "moves": [
+                  "a7h7"
+                ],
+                "julgamento": "erro",
+                "feedback": "Sem xeque. O rei sai por d8 ou f8, e o mate em um lance escapa.",
+                "erroId": "erro-no-jogo-13-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-13",
+          "nodeIds": [
+            "no-jogo-13-0",
+            "no-jogo-13-1"
+          ],
+          "hash": "v2-b80c38f4",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-13",
+          "inicioNodeId": "no-jogo-13-0",
+          "objetivo": "Agora com a torre, e sem ajuda. Dê o mate em um lance."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "4k3/R7/4K3/8/8/8/8/8 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-13",
+              "nodeId": "no-jogo-13-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-13-0-white": {
+              "fen": "4k3/R7/4K3/8/8/8/8/8 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-13",
+                "nodeId": "no-jogo-13-0"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      },
+      {
+        "id": "treino-capitulo-jogo-14-no-jogo-14-0-white",
+        "titulo": "TREINO 3 - Rei e dois bispos",
+        "introducao": "Dois bispos, e o rei preto no canto. Dê o mate em um lance.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-14",
+          "nodeId": "no-jogo-14-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Dois bispos, e o rei preto no canto. Dê o mate em um lance.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-14-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-14",
+              "nodeId": "no-jogo-14-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-14-1-white",
+                "moves": [
+                  "d6e5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Mate. Um bispo dá o xeque, e o outro fecha g8.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-14-2",
+                "moves": [
+                  "e6f7"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei preto não está em xeque e não tem casa. Isso é afogamento: empate.",
+                "erroId": "erro-no-jogo-14-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-14",
+          "nodeIds": [
+            "no-jogo-14-0",
+            "no-jogo-14-1"
+          ],
+          "hash": "v2-80e56b78",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-14",
+          "inicioNodeId": "no-jogo-14-0",
+          "objetivo": "Dois bispos, e o rei preto no canto. Dê o mate em um lance."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "7k/8/3BB1K1/8/8/8/8/8 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-14",
+              "nodeId": "no-jogo-14-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-14-0-white": {
+              "fen": "7k/8/3BB1K1/8/8/8/8/8 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-14",
+                "nodeId": "no-jogo-14-0"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      },
+      {
+        "id": "treino-capitulo-jogo-15-no-jogo-15-0-white",
+        "titulo": "TREINO 4 - Rei, bispo e cavalo",
+        "introducao": "Bispo e cavalo. Dê o mate em dois lances, como na aula.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-15",
+          "nodeId": "no-jogo-15-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Bispo e cavalo. Dê o mate em dois lances, como na aula.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-15-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-15",
+              "nodeId": "no-jogo-15-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-15-1-white",
+                "moves": [
+                  "f5h6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Xeque. O rei preto só tem h8.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g8h8",
+                      "proximaQuestaoId": "questao-no-jogo-15-3-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-15-2",
+                "moves": [
+                  "c5d4"
+                ],
+                "julgamento": "erro",
+                "feedback": "Sem xeque. O rei sai por f8, e o mate em dois lances escapa.",
+                "erroId": "erro-no-jogo-15-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-15-3-white",
+            "posicao": {
+              "analiseId": "analise-jogo-15",
+              "nodeId": "no-jogo-15-3"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-15-4-white",
+                "moves": [
+                  "c5d4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Mate. O cavalo fecha g8, e o bispo dá o xeque.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-15",
+          "nodeIds": [
+            "no-jogo-15-0",
+            "no-jogo-15-1",
+            "no-jogo-15-3",
+            "no-jogo-15-4"
+          ],
+          "hash": "v2-5dd292c1",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-15",
+          "inicioNodeId": "no-jogo-15-0",
+          "objetivo": "Bispo e cavalo. Dê o mate em dois lances, como na aula."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "6k1/8/6K1/2B2N2/8/8/8/8 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-15",
+              "nodeId": "no-jogo-15-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-15-0-white": {
+              "fen": "6k1/8/6K1/2B2N2/8/8/8/8 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-15",
+                "nodeId": "no-jogo-15-0"
+              }
+            },
+            "questao-no-jogo-15-3-white": {
+              "fen": "7k/8/6KN/2B5/8/8/8/8 w - - 2 2",
+              "historicoUci": [
+                "f5h6",
+                "g8h8"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-15",
+                "nodeId": "no-jogo-15-3"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      },
+      {
+        "id": "treino-capitulo-jogo-16-no-jogo-16-0-black",
+        "titulo": "TREINO 5 - Dois cavalos: você de pretas",
+        "introducao": "Você joga de pretas e está em xeque. Escolha a casa certa e segure o empate.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-16",
+          "nodeId": "no-jogo-16-0"
+        },
+        "ladoAluno": "black",
+        "objetivo": "Você joga de pretas e está em xeque. Escolha a casa certa e segure o empate.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-16-0-black",
+            "posicao": {
+              "analiseId": "analise-jogo-16",
+              "nodeId": "no-jogo-16-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-16-1-black",
+                "moves": [
+                  "g8f8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Longe do canto. Os cavalos não conseguem fechar o seu rei: empate.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-16-2",
+                "moves": [
+                  "g8h8"
+                ],
+                "julgamento": "erro",
+                "feedback": "O canto perde: o cavalo pula para f7, e é mate.",
+                "erroId": "erro-no-jogo-16-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-16",
+          "nodeIds": [
+            "no-jogo-16-0",
+            "no-jogo-16-1"
+          ],
+          "hash": "v2-aece9e6b",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-16",
+          "inicioNodeId": "no-jogo-16-0",
+          "objetivo": "Você joga de pretas e está em xeque. Escolha a casa certa e segure o empate."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "6k1/4N3/6K1/4N3/8/8/8/8 b - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-16",
+              "nodeId": "no-jogo-16-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-16-0-black": {
+              "fen": "6k1/4N3/6K1/4N3/8/8/8/8 b - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-16",
+                "nodeId": "no-jogo-16-0"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "resultado": "draw",
+        "explicacaoConclusao": "Longe do canto. Os cavalos não conseguem fechar o seu rei: empate."
+      },
+      {
+        "id": "treino-capitulo-jogo-17-no-jogo-17-0-white",
+        "titulo": "TREINO 6 - Rei e peão",
+        "introducao": "Leve o peão até virar dama.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-17",
+          "nodeId": "no-jogo-17-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Leve o peão até virar dama.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-17-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-17",
+              "nodeId": "no-jogo-17-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-17-1-white",
+                "moves": [
+                  "c7d7"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei protege o peão e fecha e8.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f8g7",
+                      "proximaQuestaoId": "questao-no-jogo-17-4-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-17-2",
+                "moves": [
+                  "e6e7"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque, mas o rei preto toma o peão. Sem o peão, é empate.",
+                "erroId": "erro-no-jogo-17-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-17-4-white",
+            "posicao": {
+              "analiseId": "analise-jogo-17",
+              "nodeId": "no-jogo-17-4"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-17-5-white",
+                "moves": [
+                  "e6e7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Boa. Continue pela linha ensinada.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g7g8",
+                      "proximaQuestaoId": "questao-no-jogo-17-6-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-17-6-white",
+            "posicao": {
+              "analiseId": "analise-jogo-17",
+              "nodeId": "no-jogo-17-6"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-17-7-white",
+                "moves": [
+                  "e7e8q"
+                ],
+                "julgamento": "correta",
+                "feedback": "O peão virou dama. Agora as brancas dão mate.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "promotion"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-17",
+          "nodeIds": [
+            "no-jogo-17-0",
+            "no-jogo-17-1",
+            "no-jogo-17-4",
+            "no-jogo-17-5",
+            "no-jogo-17-6",
+            "no-jogo-17-7"
+          ],
+          "hash": "v2-49de1a97",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-17",
+          "inicioNodeId": "no-jogo-17-0",
+          "objetivo": "Leve o peão até virar dama."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "5k2/2K5/4P3/8/8/8/8/8 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-17",
+              "nodeId": "no-jogo-17-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-17-0-white": {
+              "fen": "5k2/2K5/4P3/8/8/8/8/8 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-17",
+                "nodeId": "no-jogo-17-0"
+              }
+            },
+            "questao-no-jogo-17-4-white": {
+              "fen": "8/3K2k1/4P3/8/8/8/8/8 w - - 2 2",
+              "historicoUci": [
+                "c7d7",
+                "f8g7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-17",
+                "nodeId": "no-jogo-17-4"
+              }
+            },
+            "questao-no-jogo-17-6-white": {
+              "fen": "6k1/3KP3/8/8/8/8/8/8 w - - 1 3",
+              "historicoUci": [
+                "c7d7",
+                "f8g7",
+                "e6e7",
+                "g7g8"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-17",
+                "nodeId": "no-jogo-17-6"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      },
+      {
+        "id": "treino-capitulo-jogo-18-no-jogo-18-0-white",
+        "titulo": "TREINO 7 - O peão vai virar o quê?",
+        "introducao": "O peão vai virar peça agora. Escolha uma que dê mate.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-18",
+          "nodeId": "no-jogo-18-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "O peão vai virar peça agora. Escolha uma que dê mate.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-18-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-18",
+              "nodeId": "no-jogo-18-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-18-1-white",
+                "moves": [
+                  "f7f8q"
+                ],
+                "julgamento": "correta",
+                "feedback": "Dama: fecha a última fileira, e o rei branco fecha g7 e h7. Mate.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-18-2",
+                "moves": [
+                  "f7f8r"
+                ],
+                "julgamento": "correta",
+                "feedback": "Torre: também fecha a fileira. Mate.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-18-3",
+                "moves": [
+                  "f7f8b"
+                ],
+                "julgamento": "erro",
+                "feedback": "Bispo sozinho não dá mate. O rei preto sai por g8, e a partida empata na hora.",
+                "erroId": "erro-no-jogo-18-3",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-18-4",
+                "moves": [
+                  "f7f8n"
+                ],
+                "julgamento": "erro",
+                "feedback": "Cavalo sozinho não dá mate. O rei preto sai por g8, e a partida empata na hora.",
+                "erroId": "erro-no-jogo-18-4",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-18",
+          "nodeIds": [
+            "no-jogo-18-0",
+            "no-jogo-18-1"
+          ],
+          "hash": "v2-96548fb7",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-18",
+          "inicioNodeId": "no-jogo-18-0",
+          "objetivo": "O peão vai virar peça agora. Escolha uma que dê mate."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "7k/5P2/6K1/8/8/8/8/8 w - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-18",
+              "nodeId": "no-jogo-18-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-18-0-white": {
+              "fen": "7k/5P2/6K1/8/8/8/8/8 w - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-18",
+                "nodeId": "no-jogo-18-0"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      }
+    ],
+    "praticas": [
+      {
+        "id": "pratica-pratica-segure-o-empate",
+        "titulo": "PRÁTICA - Segure o empate",
+        "positionId": "pos-n0-mating-material-silman-38",
+        "ladoAluno": "black",
+        "objetivo": "draw",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-introducao-estudo-1",
+        "tipo": "introducao",
+        "entidadeId": "introducao-estudo-1"
+      },
+      {
+        "id": "etapa-capitulo-jogo-3",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-3"
+      },
+      {
+        "id": "etapa-capitulo-jogo-4",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-4"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5",
+        "comparacoes": [
+          "capitulo-jogo-5-variante"
+        ]
+      },
+      {
+        "id": "etapa-capitulo-jogo-6",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7"
+      },
+      {
+        "id": "etapa-capitulo-jogo-8",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-8"
+      },
+      {
+        "id": "etapa-capitulo-jogo-9",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-9",
+        "comparacoes": [
+          "capitulo-jogo-9-variante"
+        ]
+      },
+      {
+        "id": "etapa-capitulo-jogo-10",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-10"
+      },
+      {
+        "id": "etapa-capitulo-jogo-11",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-11"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-12-no-jogo-12-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-12-no-jogo-12-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-13-no-jogo-13-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-13-no-jogo-13-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-14-no-jogo-14-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-14-no-jogo-14-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-15-no-jogo-15-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-15-no-jogo-15-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-16-no-jogo-16-0-black",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-16-no-jogo-16-0-black"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-17-no-jogo-17-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-17-no-jogo-17-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-18-no-jogo-18-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-18-no-jogo-18-0-white"
+      },
+      {
+        "id": "etapa-pratica-pratica-segure-o-empate",
+        "tipo": "pratica",
+        "entidadeId": "pratica-pratica-segure-o-empate"
+      }
+    ]
+  },
+  "posicoes": {
+    "pos-n0-mating-material-silman-38": {
+      "id": "pos-n0-mating-material-silman-38",
+      "fen": "6k1/8/5NK1/4N3/8/8/8/8 b - - 0 1",
+      "expectedResult": "draw",
+      "tags": [
+        "KNNK",
+        "material-de-mate",
+        "canto",
+        "ensino"
+      ],
+      "status": "approved",
+      "provenance": {
+        "externalHumanSource": "Jeremy Silman, que a publica como Diagram 38 sob a legenda impressa 'One move draws, one loses'",
+        "bibliographicSource": "Silman, Silman's Complete Endgame Course, Siles Press, Los Angeles, 2007, p. impressa 34 (PDF p. 48, offset 14), Parte Dois 'Endgames for Class E (1000-1199)', seção 'What Can (or Cannot) Mate vs. Lone King' (impressas 33-34), Diagram 38 — o único diagrama da seção",
+        "originalGame": "não se aplica — posição de ensino de manual, não vem de partida",
+        "authorComposer": "não se aplica — é o quadro que ilustra uma regra de final (dois cavalos não forçam mate contra rei solitário), e não uma composição autoral",
+        "license": "obra protegida por direito autoral, em regime integral desde 2026-09-08 (§1.1 do SOURCE-CORPUS): o módulo de finais segue este livro, e por isso o teto de citação da §12.7 e a rotação da §4 não se aplicam a ele. O texto da aula é original em português; nada da prosa do autor é reproduzido. A legenda do diagrama é citada acima como fato bibliográfico — o rótulo que identifica a figura —, não como conteúdo trazido para a tela do aluno.",
+        "editionFile": "silman-complete-endgame-course.pdf",
+        "fenMethod": "Transcrição do diagrama impresso, sustentada por duas leituras de imagem independentes que convergiram e por uma falsificação por geometria. (1) Leitura A, feita junto com o levantamento da seção no sumário. (2) Leitura B, feita às cegas por outro leitor, que recebeu apenas 'leia as casas do Diagram 38 na página 48 do PDF' — sem a posição esperada, sem a lista de candidatas e sem o texto da seção. As duas devolveram a mesma posição: rei preto em g8; rei branco em g6, cavalos brancos em f6 e e5. Duas coisas tornam esta leitura mais barata que as do Freeborough: o diagrama IMPRIME COORDENADAS nas bordas (8 a 1 na esquerda, a a h embaixo), então a orientação foi lida e não deduzida, o que dispensa o argumento de paridade do canto; e o sombreado das casas confere com o tabuleiro real — g8 e g6 em casa clara, f6 e e5 em casa escura —, que é um teste independente das coordenadas. (3) Falsificação por geometria (`.scratch/falsificar-38.mjs`): varredura de todas as posições de rei e dois cavalos contra rei preto em g8 com um cavalo em f6, filtradas pelas marcas que a página IMPRIME e que não dependem de ler casa nenhuma — exatamente dois lances legais (a legenda diz que um empata e um perde), o lance a h8 perdendo para mate em 1 por cavalo indo a f7, e o lance a f8 não perdendo. Sobraram OITO candidatas, e a posição lida é uma delas. A geometria portanto não escolhe sozinha: ela reduz o campo e confirma que a leitura é compatível com tudo o que está impresso. Quem escolhe é a convergência das duas leituras.",
+        "qaApplied": "garimpo de 2026-09-09, na reordenação do nível 1. A chess.js confere a posição sem usar a legenda: as pretas estão em xeque do cavalo de f6 e têm exatamente dois lances legais, Kf8 e Kh8; Kh8 perde para Nf7#, que é o único mate em 1 do tabuleiro, e Kf8 não perde. Isso reproduz 'One move draws, one loses' por cálculo, e não por leitura. Terceira via, independente das duas anteriores: o Stockfish 18 a profundidade 65 avalia a posição em 0.00 e separa as duas linhas — 1...Kf8 em 0.00 e 1...Kh8 em M1. O expectedResult é julgado pela Syzygy no npm run validate:content.",
+        "pendingRisk": "a leitura veio de imagem, não de camada de dados: o tabuleiro do PDF é figura e o OCR não devolve as casas. O que sustenta a transcrição são duas leituras independentes que convergiram, as coordenadas impressas nas bordas e o sombreado das casas — e não uma medição de pixel por perfil de peça, como nas posições do Freeborough. A falsificação por geometria deixou oito posições compatíveis com tudo o que a página imprime, e a escolha entre elas é da leitura, não do cálculo. Vale registrar que as oito ensinam a mesma coisa: em todas, um lance empata e o outro perde para Nf7#."
+      }
+    }
+  },
+  "revisoes": {
+    "treino-capitulo-jogo-12-no-jogo-12-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_0a9f0895731e61ac5440f4289a30001cb11f2daf206fe393764f0aadbf730d6c"
+    },
+    "treino-capitulo-jogo-13-no-jogo-13-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_861d580cbad7313b02ea28aac85247e739dc41d7629c7e9f413b94f035d004e2"
+    },
+    "treino-capitulo-jogo-14-no-jogo-14-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_634e605b69a57a8db351619dccd8a33d973b56a06215c703b1f99fcb8e0d96b3"
+    },
+    "treino-capitulo-jogo-15-no-jogo-15-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_8e6fbc17c687b5b380b011d342d0ae70565754c52fe11c723c8001021ec51834"
+    },
+    "treino-capitulo-jogo-16-no-jogo-16-0-black": {
+      "tipo": "treino",
+      "revisao": "ar_b3354bac618081c43ea25622222971456694dc9a64c045946a585dd6bc0854c1"
+    },
+    "treino-capitulo-jogo-17-no-jogo-17-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_fd98d48ab071ac5a3ec37bdae2fc7a1f0cbd3362ea8b7672321b736ecda393e4"
+    },
+    "treino-capitulo-jogo-18-no-jogo-18-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_17a44b5c2f04697852e85149a0c2d5b3d51ae75cc01b270afa3b6688f0baef86"
+    },
+    "pratica-pratica-segure-o-empate": {
+      "tipo": "pratica",
+      "revisao": "ar_d2e56f8e1380c086955e6c936fbe4e0cf64d97b8d6b2b1cb1363fe26fbb44769"
+    }
+  },
+  "manifesto": {
+    "aulaId": "N0-MATING-MATERIAL",
+    "aula": "0c2404a5418697e0329d45b1530717fc252e8ad4cd4e43b95b4170d6a4ad6540",
+    "posicoes": {
+      "pos-n0-mating-material-silman-38": "1f2be01bcb3138cbc9976724bff1e981f666659b3e20a4397325a987388f67e3"
+    },
+    "revisoes": "d412c93881ccf7e95724b2fe34fd2713207536b473f35d9ab3de73d07e2d9406",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

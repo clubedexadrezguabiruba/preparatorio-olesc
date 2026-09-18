@@ -7748,3 +7748,35 @@ tinham marca. As duas medidas novas ficaram **sem símbolo**, porque perdem meno
   `tmp-ensaio-abertura.mjs` está pronto para rodar quando o servidor voltar.
 - **O arrasto** só se prova com a mão: o Doug joga as perguntas.
 - As 11 aulas de finais continuam na fila (`FILA-DO-DOUG.md` §1): falta republicar.
+
+## N0-MATING-MATERIAL refeita fiel ao estudo do Doug — 18/9/2026 (noite)
+
+O Doug reprovou a aula no ar ("horrível"): a introdução mostrava todas as peças enfileiradas no tabuleiro
+e dizia "estas dão mate", tudo junto. Pediu a aula parecida com o estudo dele, `suMc7hgW`. A reescrita de
+17/9 tinha se afastado do original: cinco quadros de introdução, a ordem trocada (dama primeiro) e só cinco
+treinos.
+
+**O que ficou (fiel ao original):** introdução em dois quadros, só com a pergunta (rei e cavalo contra o rei
+sozinho: dá para forçar o mate?) e o objetivo. Depois um caso por capítulo, na ordem do Doug: cavalo, bispo,
+dama, torre, dois bispos, bispo e cavalo, dois cavalos (o erro `1...Rh8?` com mate e, com a fita voltando,
+`1...Rf8!`) e peão. Cada caso fecha com "Guarde isto". O LEMBRE-SE usa "forçam / não forçam o mate", como o
+original. Os treinos passaram a ser um por caso (dama, torre, dois bispos, bispo e cavalo, dois cavalos, peão),
+mais o da promoção, que cobre o "cavalo e bispo não dão". Os quizzes Sim/Não do original não entram, porque o
+player não tem pergunta de múltipla escolha. A prática continua "Segure o empate" com dois cavalos.
+
+**Posições que não estão no original:** TREINO 3 (`7k/8/3BB1K1/8/8/8/8/8 w`, a aula 05 depois de `1...Rh8`),
+TREINO 7 (promoção, `7k/5P2/6K1/8/8/8/8/8 w`) e a PRÁTICA (a de antes). O motor confere as três.
+
+**Os cinco revisores** rodaram em série, com a trava de camada verde entre cada dois. O arquiteto e o scaffolding
+não mudaram nada. O de símbolos passou a marca de `1.e7+` (TREINO 6) de `?` para `??`, porque o lance joga a
+vitória fora (a marca era nossa, não da fonte). O de voz reescreveu 5 falas: o "o mate escapa" dos treinos 2 e 4
+era falso (o motor ainda acha mate em 5 e em 19), e o LEMBRE-SE dizia "dois cavalos não dão mate" logo depois
+de a aula mostrar um. O de desenho acendeu f7 no erro do TREINO 5.
+
+**Números:** conferidor 19 capítulos, 30 conferências, 0 erro, 0 aviso. `--so-conferir` 0/0. Publicada como
+`pub-6106f4e65aef3c53` (antes: `pub-ea2fbddf7aada1e8`), com a conferência verde.
+
+**Para o Doug decidir:** (a) a prática testa só "dois cavalos não forçam"; uma segunda posição (dar mate com a
+torre, por exemplo) testaria o resto da frase. (b) No TREINO 1, a casa a8 acesa entrega metade da resposta. É o
+apoio do treino 1, e o original repetia a posição da aula. (c) "tira g8" e "fecha g8" aparecem em falas vizinhas;
+"tira" é palavra do original.
