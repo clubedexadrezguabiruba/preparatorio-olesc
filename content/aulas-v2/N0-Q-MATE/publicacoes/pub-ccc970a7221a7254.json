@@ -1,0 +1,2669 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-ccc970a7221a7254",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "N0-Q-MATE",
+    "titulo": "Mate de dama e rei: a técnica do L",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "classe": "E",
+      "estadoEditorial": "rascunho"
+    },
+    "proveniencia": [
+      {
+        "positionId": "pos-ex-capitulo-0-3-mate-de-dama-e-1",
+        "conteudoHash": "108bf5cc268d8522a3b55821d56d4d2071f0c06759c4d50e6da94edf4276a21d",
+        "estado": "candidate"
+      }
+    ],
+    "excecoes": [],
+    "catalogo": {
+      "erros": [
+        {
+          "id": "erro-no-jogo-7-2",
+          "nome": "A dama ficou colada no rei, sem proteção: o r…",
+          "julgamento": "perde-resultado",
+          "texto": "A dama ficou colada no rei, sem proteção: o rei come a dama. Sem dama, não há mate."
+        },
+        {
+          "id": "erro-no-jogo-8-2",
+          "nome": "Xeque não prende o rei.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Xeque não prende o rei. Procure a casa a um salto de cavalo dele."
+        },
+        {
+          "id": "erro-no-jogo-9-4",
+          "nome": "Afogamento!",
+          "julgamento": "perde-resultado",
+          "texto": "Afogamento! Você tirou a última casa sem dar xeque."
+        },
+        {
+          "id": "erro-no-jogo-10-8",
+          "nome": "Só xeque: o rei foge para h5.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Só xeque: o rei foge para h5. Aqui há mate em um lance."
+        }
+      ],
+      "mensagensPadrao": {
+        "vitoriaForaDoMetodo": "Este lance funciona, mas não é o caminho ensinado.",
+        "perdeResultado": "Este lance perde o resultado que a posição permitia.",
+        "alternativaDoMetodo": "Boa alternativa. Continue pela linha ensinada."
+      }
+    },
+    "analises": [
+      {
+        "id": "analise-jogo-4",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/8/4k3/8/8/8/3QK3 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.3 Mate de Dama e Rei",
+            "link": "https://lichess.org/study/hf09xMzS",
+            "fenRevisada": "8/8/8/4k3/8/8/8/3QK3 w - - 0 1",
+            "revisadoEm": "2026-09-17T23:42:06.606Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 3 - Mate de dama e rei",
+            "Site": "https://lichess.org/study/hf09xMzS",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate de dama e rei: a técnica do L",
+            "ChapterName": "01 - AULA - O L e a caixa",
+            "FEN": "8/8/8/4k3/8/8/8/3QK3 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-4-0",
+        "nos": {
+          "no-jogo-4-0": {
+            "id": "no-jogo-4-0",
+            "filhos": [
+              "no-jogo-4-1"
+            ],
+            "comentario": "Primeira tarefa: tirar espaço do rei preto. Nada de xeques."
+          },
+          "no-jogo-4-1": {
+            "id": "no-jogo-4-1",
+            "uci": "d1d3",
+            "filhos": [
+              "no-jogo-4-2"
+            ],
+            "comentario": "A dama fica a um salto de cavalo do rei. Ela corta a coluna d e a 3ª fileira.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d3",
+                  "para": "d8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "d3",
+                  "para": "h3",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd3d8,Gd3h3]"
+            ]
+          },
+          "no-jogo-4-2": {
+            "id": "no-jogo-4-2",
+            "uci": "e5e6",
+            "filhos": [
+              "no-jogo-4-3"
+            ],
+            "comentario": "O rei procura espaço. Não corra atrás dele com xeques."
+          },
+          "no-jogo-4-3": {
+            "id": "no-jogo-4-3",
+            "uci": "d3d4",
+            "filhos": [
+              "no-jogo-4-4"
+            ],
+            "comentario": "A dama acompanha. Veja o L entre d4 e e6: a caixa diminuiu.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d4",
+                  "para": "d8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "d4",
+                  "para": "h4",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "e6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd4d8,Gd4h4]",
+              "[%csl Ye6]"
+            ]
+          },
+          "no-jogo-4-4": {
+            "id": "no-jogo-4-4",
+            "uci": "e6f7",
+            "filhos": [
+              "no-jogo-4-5"
+            ]
+          },
+          "no-jogo-4-5": {
+            "id": "no-jogo-4-5",
+            "uci": "d4e5",
+            "filhos": [
+              "no-jogo-4-6"
+            ],
+            "comentario": "O rei mudou de lugar, e a dama muda junto. De novo, um salto de cavalo.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e5",
+                  "para": "e8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "e5",
+                  "para": "h5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge5e8,Ge5h5]"
+            ]
+          },
+          "no-jogo-4-6": {
+            "id": "no-jogo-4-6",
+            "uci": "f7f8",
+            "filhos": [
+              "no-jogo-4-7"
+            ]
+          },
+          "no-jogo-4-7": {
+            "id": "no-jogo-4-7",
+            "uci": "e5e6",
+            "filhos": [
+              "no-jogo-4-8"
+            ],
+            "comentario": "Sem pressa. A dama não precisa dar xeque para empurrar o rei.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e6",
+                  "para": "e8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "e6",
+                  "para": "h6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge6e8,Ge6h6]"
+            ]
+          },
+          "no-jogo-4-8": {
+            "id": "no-jogo-4-8",
+            "uci": "f8g7",
+            "filhos": [
+              "no-jogo-4-9"
+            ]
+          },
+          "no-jogo-4-9": {
+            "id": "no-jogo-4-9",
+            "uci": "e6f5",
+            "filhos": [
+              "no-jogo-4-10"
+            ],
+            "comentario": "Siga o rei mantendo o L. A caixa continua encolhendo.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "f5",
+                  "para": "f8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "f5",
+                  "para": "h5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gf5f8,Gf5h5]"
+            ]
+          },
+          "no-jogo-4-10": {
+            "id": "no-jogo-4-10",
+            "uci": "g7g8",
+            "filhos": [
+              "no-jogo-4-11"
+            ]
+          },
+          "no-jogo-4-11": {
+            "id": "no-jogo-4-11",
+            "uci": "f5f6",
+            "filhos": [
+              "no-jogo-4-12"
+            ],
+            "comentario": "Pouco espaço para o rei preto. Não mude de jeito agora.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "f6",
+                  "para": "f8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "f6",
+                  "para": "h6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gf6f8,Gf6h6]"
+            ]
+          },
+          "no-jogo-4-12": {
+            "id": "no-jogo-4-12",
+            "uci": "g8h7",
+            "filhos": [
+              "no-jogo-4-13"
+            ]
+          },
+          "no-jogo-4-13": {
+            "id": "no-jogo-4-13",
+            "uci": "f6g5",
+            "filhos": [
+              "no-jogo-4-14"
+            ],
+            "comentario": "O rei preto está na borda. Agora vem a parte difícil: saber a hora de parar.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g5",
+                  "para": "g8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "g5",
+                  "para": "h5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg5g8,Gg5h5]"
+            ]
+          },
+          "no-jogo-4-14": {
+            "id": "no-jogo-4-14",
+            "uci": "h7h8",
+            "filhos": [
+              "no-jogo-4-15",
+              "no-jogo-4-16"
+            ],
+            "comentario": "O rei chegou ao canto e só tem h7. Tire h7 sem dar xeque, e é afogamento.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h8",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "h7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yh8,Yh7]"
+            ]
+          },
+          "no-jogo-4-15": {
+            "id": "no-jogo-4-15",
+            "uci": "e1f2",
+            "filhos": [],
+            "comentario": "Isso: a dama espera, e o seu rei começa a caminhar.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-4-16": {
+            "id": "no-jogo-4-16",
+            "uci": "g5g6",
+            "filhos": [],
+            "comentario": "Afogamento! O rei preto não está em xeque e não tem casa. A partida acaba empatada.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g6",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg6,Rh8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-5",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/8/8/4k3/8/8/3QK3 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.3 Mate de Dama e Rei",
+            "link": "https://lichess.org/study/hf09xMzS",
+            "fenRevisada": "8/8/8/8/4k3/8/8/3QK3 w - - 0 1",
+            "revisadoEm": "2026-09-17T23:42:06.606Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 3 - Mate de dama e rei",
+            "Site": "https://lichess.org/study/hf09xMzS",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate de dama e rei: a técnica do L",
+            "ChapterName": "02 - AULA - Do começo ao mate",
+            "FEN": "8/8/8/8/4k3/8/8/3QK3 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-5-0",
+        "nos": {
+          "no-jogo-5-0": {
+            "id": "no-jogo-5-0",
+            "filhos": [
+              "no-jogo-5-1"
+            ],
+            "comentario": "Agora outra defesa. Não decore lances: a cada jogada, prenda o rei com o L."
+          },
+          "no-jogo-5-1": {
+            "id": "no-jogo-5-1",
+            "uci": "d1d2",
+            "filhos": [
+              "no-jogo-5-2"
+            ],
+            "comentario": "Comece a caixa: a dama corta a coluna d e a 2ª fileira.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d2",
+                  "para": "d8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "d2",
+                  "para": "h2",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd2d8,Gd2h2]"
+            ]
+          },
+          "no-jogo-5-2": {
+            "id": "no-jogo-5-2",
+            "uci": "e4e5",
+            "filhos": [
+              "no-jogo-5-3"
+            ]
+          },
+          "no-jogo-5-3": {
+            "id": "no-jogo-5-3",
+            "uci": "d2d3",
+            "filhos": [
+              "no-jogo-5-4"
+            ],
+            "comentario": "O rei subiu. A dama acompanha, a um salto de cavalo.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d3",
+                  "para": "d8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "d3",
+                  "para": "h3",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd3d8,Gd3h3]"
+            ]
+          },
+          "no-jogo-5-4": {
+            "id": "no-jogo-5-4",
+            "uci": "e5f6",
+            "filhos": [
+              "no-jogo-5-5"
+            ]
+          },
+          "no-jogo-5-5": {
+            "id": "no-jogo-5-5",
+            "uci": "d3e4",
+            "filhos": [
+              "no-jogo-5-6"
+            ],
+            "comentario": "O rei mudou de lado. A dama vai junto, sem dar xeque.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e4",
+                  "para": "e8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "e4",
+                  "para": "h4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge4e8,Ge4h4]"
+            ]
+          },
+          "no-jogo-5-6": {
+            "id": "no-jogo-5-6",
+            "uci": "f6f7",
+            "filhos": [
+              "no-jogo-5-7"
+            ]
+          },
+          "no-jogo-5-7": {
+            "id": "no-jogo-5-7",
+            "uci": "e4e5",
+            "filhos": [
+              "no-jogo-5-8"
+            ],
+            "comentario": "Mesmo plano: acompanhe e corte casas.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e5",
+                  "para": "e8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "e5",
+                  "para": "h5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge5e8,Ge5h5]"
+            ]
+          },
+          "no-jogo-5-8": {
+            "id": "no-jogo-5-8",
+            "uci": "f7g6",
+            "filhos": [
+              "no-jogo-5-9"
+            ]
+          },
+          "no-jogo-5-9": {
+            "id": "no-jogo-5-9",
+            "uci": "e5f4",
+            "filhos": [
+              "no-jogo-5-10"
+            ],
+            "comentario": "A caixa encolhe. Até aqui, a dama trabalhou sozinha.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "f4",
+                  "para": "f8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "f4",
+                  "para": "h4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gf4f8,Gf4h4]"
+            ]
+          },
+          "no-jogo-5-10": {
+            "id": "no-jogo-5-10",
+            "uci": "g6g7",
+            "filhos": [
+              "no-jogo-5-11"
+            ]
+          },
+          "no-jogo-5-11": {
+            "id": "no-jogo-5-11",
+            "uci": "f4f5",
+            "filhos": [
+              "no-jogo-5-12"
+            ],
+            "comentario": "Mais um passo. O rei preto é empurrado para a borda.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "f5",
+                  "para": "f8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "f5",
+                  "para": "h5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gf5f8,Gf5h5]"
+            ]
+          },
+          "no-jogo-5-12": {
+            "id": "no-jogo-5-12",
+            "uci": "g7h6",
+            "filhos": [
+              "no-jogo-5-13"
+            ]
+          },
+          "no-jogo-5-13": {
+            "id": "no-jogo-5-13",
+            "uci": "f5g4",
+            "filhos": [
+              "no-jogo-5-14"
+            ],
+            "comentario": "Pronto: o rei está preso perto do canto. A dama não chega mais perto.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g4",
+                  "para": "g8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "g4",
+                  "para": "h4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg4g8,Gg4h4]"
+            ]
+          },
+          "no-jogo-5-14": {
+            "id": "no-jogo-5-14",
+            "uci": "h6h7",
+            "filhos": [
+              "no-jogo-5-15"
+            ]
+          },
+          "no-jogo-5-15": {
+            "id": "no-jogo-5-15",
+            "uci": "e1e2",
+            "filhos": [
+              "no-jogo-5-16"
+            ],
+            "comentario": "Segunda parte: traga o rei. A dama segura a caixa sozinha.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e2",
+                  "para": "e3",
+                  "cor": "verde"
+                },
+                {
+                  "de": "e3",
+                  "para": "f4",
+                  "cor": "verde"
+                },
+                {
+                  "de": "f4",
+                  "para": "f5",
+                  "cor": "verde"
+                },
+                {
+                  "de": "f5",
+                  "para": "f6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge2e3,Ge3f4,Gf4f5,Gf5f6]"
+            ]
+          },
+          "no-jogo-5-16": {
+            "id": "no-jogo-5-16",
+            "uci": "h7h6",
+            "filhos": [
+              "no-jogo-5-17"
+            ]
+          },
+          "no-jogo-5-17": {
+            "id": "no-jogo-5-17",
+            "uci": "e2e3",
+            "filhos": [
+              "no-jogo-5-18"
+            ],
+            "comentario": "Continue com o rei. Nada de xeques soltos.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-5-18": {
+            "id": "no-jogo-5-18",
+            "uci": "h6h7",
+            "filhos": [
+              "no-jogo-5-19"
+            ]
+          },
+          "no-jogo-5-19": {
+            "id": "no-jogo-5-19",
+            "uci": "e3f4",
+            "filhos": [
+              "no-jogo-5-20"
+            ],
+            "comentario": "O rei branco se aproxima de f6, a casa que vai apoiar o mate.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yf6]"
+            ]
+          },
+          "no-jogo-5-20": {
+            "id": "no-jogo-5-20",
+            "uci": "h7h8",
+            "filhos": [
+              "no-jogo-5-21",
+              "no-jogo-5-22"
+            ]
+          },
+          "no-jogo-5-21": {
+            "id": "no-jogo-5-21",
+            "uci": "f4f5",
+            "filhos": [
+              "no-jogo-5-23"
+            ],
+            "comentario": "Certo: em vez de apertar com a dama, aproxime o rei.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-5-22": {
+            "id": "no-jogo-5-22",
+            "uci": "g4g6",
+            "filhos": [],
+            "comentario": "A dama chegou perto demais e tirou a última casa. Sem xeque, é afogamento: empate.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g6",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg6,Rh8]"
+            ]
+          },
+          "no-jogo-5-23": {
+            "id": "no-jogo-5-23",
+            "uci": "h8h7",
+            "filhos": [
+              "no-jogo-5-24"
+            ]
+          },
+          "no-jogo-5-24": {
+            "id": "no-jogo-5-24",
+            "uci": "f5f6",
+            "filhos": [
+              "no-jogo-5-25"
+            ],
+            "comentario": "O rei branco controla g7. Agora a dama pode dar mate protegida.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf6,Gg7]"
+            ]
+          },
+          "no-jogo-5-25": {
+            "id": "no-jogo-5-25",
+            "uci": "h7h8",
+            "filhos": [
+              "no-jogo-5-26"
+            ]
+          },
+          "no-jogo-5-26": {
+            "id": "no-jogo-5-26",
+            "uci": "g4g7",
+            "filhos": [],
+            "comentario": "Mate! A dama ataca o rei, e o rei branco protege a dama.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf6,Gg7,Rh8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-6",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "7k/6Q1/5K2/8/8/8/8/8 b - - 1 13",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.3 Mate de Dama e Rei",
+            "link": "https://lichess.org/study/hf09xMzS",
+            "fenRevisada": "7k/6Q1/5K2/8/8/8/8/8 b - - 1 13",
+            "revisadoEm": "2026-09-17T23:42:06.606Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 3 - Mate de dama e rei",
+            "Site": "https://lichess.org/study/hf09xMzS",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate de dama e rei: a técnica do L",
+            "ChapterName": "03 - AULA - LEMBRE-SE",
+            "FEN": "7k/6Q1/5K2/8/8/8/8/8 b - - 1 13",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-6-0",
+        "nos": {
+          "no-jogo-6-0": {
+            "id": "no-jogo-6-0",
+            "filhos": [],
+            "comentario": "LEMBRE-SE:\n\n1. Dama a um salto de cavalo do rei: a caixa encolhe.\n2. Rei no canto: pare a dama e traga o seu rei.\n3. Mate com a dama protegida, sem afogar."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-7",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/4k3/8/8/2KQ4/8/8/8 w - - 25 13",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.3 Mate de Dama e Rei",
+            "link": "https://lichess.org/study/hf09xMzS",
+            "fenRevisada": "8/4k3/8/8/2KQ4/8/8/8 w - - 25 13",
+            "revisadoEm": "2026-09-17T23:42:06.606Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 3 - Mate de dama e rei",
+            "Site": "https://lichess.org/study/hf09xMzS",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate de dama e rei: a técnica do L",
+            "ChapterName": "04 - TREINO 1 - Feche a caixa",
+            "FEN": "8/4k3/8/8/2KQ4/8/8/8 w - - 25 13",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-7-0",
+        "nos": {
+          "no-jogo-7-0": {
+            "id": "no-jogo-7-0",
+            "filhos": [
+              "no-jogo-7-1",
+              "no-jogo-7-2"
+            ],
+            "comentario": "O rei preto está em e7. Ponha a dama a um salto de cavalo dele.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ye7]"
+            ]
+          },
+          "no-jogo-7-1": {
+            "id": "no-jogo-7-1",
+            "uci": "d4d5",
+            "filhos": [
+              "no-jogo-7-3"
+            ],
+            "comentario": "Certo: um salto de cavalo do rei, e a caixa ficou menor.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d5",
+                  "para": "d8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "d5",
+                  "para": "h5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd5d8,Gd5h5]"
+            ]
+          },
+          "no-jogo-7-2": {
+            "id": "no-jogo-7-2",
+            "uci": "d4d6",
+            "filhos": [],
+            "comentario": "A dama ficou colada no rei, sem proteção: o rei come a dama. Sem dama, não há mate.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rd6]"
+            ]
+          },
+          "no-jogo-7-3": {
+            "id": "no-jogo-7-3",
+            "uci": "e7f6",
+            "filhos": [
+              "no-jogo-7-4"
+            ],
+            "comentario": "O rei foi para f6. Siga com o L.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yf6]"
+            ]
+          },
+          "no-jogo-7-4": {
+            "id": "no-jogo-7-4",
+            "uci": "d5e4",
+            "filhos": [],
+            "comentario": "Muito bem: o rei mudou, e você manteve o L.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e4",
+                  "para": "e8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "e4",
+                  "para": "h4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge4e8,Ge4h4]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-8",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/6k1/8/3K4/5Q2/8/8/8 w - - 25 13",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.3 Mate de Dama e Rei",
+            "link": "https://lichess.org/study/hf09xMzS",
+            "fenRevisada": "8/6k1/8/3K4/5Q2/8/8/8 w - - 25 13",
+            "revisadoEm": "2026-09-17T23:42:06.606Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 3 - Mate de dama e rei",
+            "Site": "https://lichess.org/study/hf09xMzS",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate de dama e rei: a técnica do L",
+            "ChapterName": "05 - TREINO 2 - Continue sem ajuda",
+            "FEN": "8/6k1/8/3K4/5Q2/8/8/8 w - - 25 13",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-8-0",
+        "nos": {
+          "no-jogo-8-0": {
+            "id": "no-jogo-8-0",
+            "filhos": [
+              "no-jogo-8-1",
+              "no-jogo-8-2"
+            ],
+            "comentario": "Agora sem ajuda. Siga o rei com a dama e encolha a caixa."
+          },
+          "no-jogo-8-1": {
+            "id": "no-jogo-8-1",
+            "uci": "f4f5",
+            "filhos": [
+              "no-jogo-8-3"
+            ],
+            "comentario": "Isso: o L continua, e o espaço diminui.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "f5",
+                  "para": "f8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "f5",
+                  "para": "h5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gf5f8,Gf5h5]"
+            ]
+          },
+          "no-jogo-8-2": {
+            "id": "no-jogo-8-2",
+            "uci": "f4g5",
+            "filhos": [],
+            "comentario": "Xeque não prende o rei. Procure a casa a um salto de cavalo dele.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-8-3": {
+            "id": "no-jogo-8-3",
+            "uci": "g7h6",
+            "filhos": [
+              "no-jogo-8-4"
+            ]
+          },
+          "no-jogo-8-4": {
+            "id": "no-jogo-8-4",
+            "uci": "f5g4",
+            "filhos": [],
+            "comentario": "Perfeito: o rei preto está na borda.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g4",
+                  "para": "g8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "g4",
+                  "para": "h4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg4g8,Gg4h4]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-9",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/7k/8/8/3K1Q2/8/8/8 w - - 25 13",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.3 Mate de Dama e Rei",
+            "link": "https://lichess.org/study/hf09xMzS",
+            "fenRevisada": "8/7k/8/8/3K1Q2/8/8/8 w - - 25 13",
+            "revisadoEm": "2026-09-17T23:42:06.606Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 3 - Mate de dama e rei",
+            "Site": "https://lichess.org/study/hf09xMzS",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate de dama e rei: a técnica do L",
+            "ChapterName": "06 - TREINO 3 - A hora de parar",
+            "FEN": "8/7k/8/8/3K1Q2/8/8/8 w - - 25 13",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-9-0",
+        "nos": {
+          "no-jogo-9-0": {
+            "id": "no-jogo-9-0",
+            "filhos": [
+              "no-jogo-9-1"
+            ],
+            "comentario": "Feche a caixa. Quando o rei chegar ao canto, a dama para."
+          },
+          "no-jogo-9-1": {
+            "id": "no-jogo-9-1",
+            "uci": "f4g5",
+            "filhos": [
+              "no-jogo-9-2"
+            ],
+            "comentario": "Certo: a caixa ficou mínima, e o rei ainda tem uma casa.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g5",
+                  "para": "g8",
+                  "cor": "verde"
+                },
+                {
+                  "de": "g5",
+                  "para": "h5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg5g8,Gg5h5]"
+            ]
+          },
+          "no-jogo-9-2": {
+            "id": "no-jogo-9-2",
+            "uci": "h7h8",
+            "filhos": [
+              "no-jogo-9-3",
+              "no-jogo-9-4"
+            ],
+            "comentario": "Agora pare a dama e traga o rei."
+          },
+          "no-jogo-9-3": {
+            "id": "no-jogo-9-3",
+            "uci": "d4e5",
+            "filhos": [
+              "no-jogo-9-5"
+            ],
+            "comentario": "Exatamente: a dama segura, e o rei se aproxima.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e5",
+                  "para": "f6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge5f6]"
+            ]
+          },
+          "no-jogo-9-4": {
+            "id": "no-jogo-9-4",
+            "uci": "g5g6",
+            "filhos": [],
+            "comentario": "Afogamento! Você tirou a última casa sem dar xeque.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-9-5": {
+            "id": "no-jogo-9-5",
+            "uci": "h8h7",
+            "filhos": [
+              "no-jogo-9-6"
+            ]
+          },
+          "no-jogo-9-6": {
+            "id": "no-jogo-9-6",
+            "uci": "e5f6",
+            "filhos": [
+              "no-jogo-9-7"
+            ],
+            "comentario": "O rei chegou para apoiar. Agora, o lance final.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf6,Gg7]"
+            ]
+          },
+          "no-jogo-9-7": {
+            "id": "no-jogo-9-7",
+            "uci": "h7h8",
+            "filhos": [
+              "no-jogo-9-8"
+            ]
+          },
+          "no-jogo-9-8": {
+            "id": "no-jogo-9-8",
+            "uci": "g5g7",
+            "filhos": [],
+            "comentario": "Mate! Dama e rei trabalhando juntos."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-10",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/7k/8/3K2Q1/8/8/8 w - - 25 13",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.3 Mate de Dama e Rei",
+            "link": "https://lichess.org/study/hf09xMzS",
+            "fenRevisada": "8/8/7k/8/3K2Q1/8/8/8 w - - 25 13",
+            "revisadoEm": "2026-09-17T23:42:06.606Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 3 - Mate de dama e rei",
+            "Site": "https://lichess.org/study/hf09xMzS",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate de dama e rei: a técnica do L",
+            "ChapterName": "07 - TREINO 4 - Traga o rei e dê mate",
+            "FEN": "8/8/7k/8/3K2Q1/8/8/8 w - - 25 13",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-10-0",
+        "nos": {
+          "no-jogo-10-0": {
+            "id": "no-jogo-10-0",
+            "filhos": [
+              "no-jogo-10-1"
+            ],
+            "comentario": "O rei preto já está preso. A dama não aperta mais: agora é a vez do seu rei."
+          },
+          "no-jogo-10-1": {
+            "id": "no-jogo-10-1",
+            "uci": "d4e5",
+            "filhos": [
+              "no-jogo-10-2"
+            ],
+            "comentario": "Boa: o rei se aproxima enquanto a dama segura.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-2": {
+            "id": "no-jogo-10-2",
+            "uci": "h6h7",
+            "filhos": [
+              "no-jogo-10-3"
+            ]
+          },
+          "no-jogo-10-3": {
+            "id": "no-jogo-10-3",
+            "uci": "e5f6",
+            "filhos": [
+              "no-jogo-10-4"
+            ],
+            "comentario": "O seu rei já apoia o mate. Ache o lance final.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf6]"
+            ]
+          },
+          "no-jogo-10-4": {
+            "id": "no-jogo-10-4",
+            "uci": "h7h6",
+            "filhos": [
+              "no-jogo-10-5",
+              "no-jogo-10-6",
+              "no-jogo-10-7",
+              "no-jogo-10-8"
+            ]
+          },
+          "no-jogo-10-5": {
+            "id": "no-jogo-10-5",
+            "uci": "g4g6",
+            "filhos": [],
+            "comentario": "Mate!",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g6",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf6,Gg6,Rh6]"
+            ]
+          },
+          "no-jogo-10-6": {
+            "id": "no-jogo-10-6",
+            "uci": "g4h3",
+            "filhos": [],
+            "comentario": "Mate também!"
+          },
+          "no-jogo-10-7": {
+            "id": "no-jogo-10-7",
+            "uci": "g4h4",
+            "filhos": [],
+            "comentario": "Mate também!"
+          },
+          "no-jogo-10-8": {
+            "id": "no-jogo-10-8",
+            "uci": "g4g7",
+            "filhos": [],
+            "comentario": "Só xeque: o rei foge para h5. Aqui há mate em um lance.",
+            "nags": [
+              2
+            ]
+          }
+        }
+      }
+    ],
+    "introducoes": [
+      {
+        "id": "introducao-estudo-1",
+        "titulo": "Introdução",
+        "quadros": [
+          {
+            "id": "quadro-estudo-1",
+            "titulo": "INTRODUÇÃO - Ganha, empata ou perde?",
+            "texto": "Brancas: dama e rei. Pretas: só o rei. Brancas jogam.\n\nGanha, empata ou perde?",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-5",
+                "nodeId": "no-jogo-5-0"
+              }
+            }
+          },
+          {
+            "id": "quadro-estudo-2",
+            "titulo": "INTRODUÇÃO - A resposta",
+            "texto": "Ganha. Dama e rei dão mate no rei sozinho.\n\nMas só com o jeito certo. Sem ele, a partida vira empate por afogamento.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-5",
+                "nodeId": "no-jogo-5-0"
+              }
+            }
+          },
+          {
+            "id": "quadro-estudo-3",
+            "titulo": "INTRODUÇÃO - A pergunta da aula",
+            "texto": "Hoje, a cada lance, pergunte: minha dama está a um salto de cavalo do rei preto?\n\nNo fim, você prende o rei, traz o seu rei e dá mate sem afogar.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-5",
+                "nodeId": "no-jogo-5-0"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "capitulos": [
+      {
+        "id": "capitulo-jogo-4",
+        "titulo": "AULA - O L e a caixa",
+        "analiseId": "analise-jogo-4",
+        "inicioNodeId": "no-jogo-4-0",
+        "caminho": [
+          "no-jogo-4-1",
+          "no-jogo-4-2",
+          "no-jogo-4-3",
+          "no-jogo-4-4",
+          "no-jogo-4-5",
+          "no-jogo-4-6",
+          "no-jogo-4-7",
+          "no-jogo-4-8",
+          "no-jogo-4-9",
+          "no-jogo-4-10",
+          "no-jogo-4-11",
+          "no-jogo-4-12",
+          "no-jogo-4-13",
+          "no-jogo-4-14",
+          "no-jogo-4-15"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-4-0",
+            "nodeId": "no-jogo-4-0",
+            "texto": "Primeira tarefa: tirar espaço do rei preto. Nada de xeques.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-1",
+            "nodeId": "no-jogo-4-1",
+            "texto": "A dama fica a um salto de cavalo do rei. Ela corta a coluna d e a 3ª fileira.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-2",
+            "nodeId": "no-jogo-4-2",
+            "texto": "O rei procura espaço. Não corra atrás dele com xeques.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-3",
+            "nodeId": "no-jogo-4-3",
+            "texto": "A dama acompanha. Veja o L entre d4 e e6: a caixa diminuiu.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-5",
+            "nodeId": "no-jogo-4-5",
+            "texto": "O rei mudou de lugar, e a dama muda junto. De novo, um salto de cavalo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-7",
+            "nodeId": "no-jogo-4-7",
+            "texto": "Sem pressa. A dama não precisa dar xeque para empurrar o rei.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-9",
+            "nodeId": "no-jogo-4-9",
+            "texto": "Siga o rei mantendo o L. A caixa continua encolhendo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-11",
+            "nodeId": "no-jogo-4-11",
+            "texto": "Pouco espaço para o rei preto. Não mude de jeito agora.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-13",
+            "nodeId": "no-jogo-4-13",
+            "texto": "O rei preto está na borda. Agora vem a parte difícil: saber a hora de parar.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-14",
+            "nodeId": "no-jogo-4-14",
+            "texto": "O rei chegou ao canto e só tem h7. Tire h7 sem dar xeque, e é afogamento.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-15",
+            "nodeId": "no-jogo-4-15",
+            "texto": "Isso: a dama espera, e o seu rei começa a caminhar.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-4-16",
+            "nodeId": "no-jogo-4-16",
+            "texto": "Afogamento! O rei preto não está em xeque e não tem casa. A partida acaba empatada.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-4-variante",
+        "titulo": "Comparação: 8. Dg6??",
+        "analiseId": "analise-jogo-4",
+        "inicioNodeId": "no-jogo-4-0",
+        "caminho": [
+          "no-jogo-4-1",
+          "no-jogo-4-2",
+          "no-jogo-4-3",
+          "no-jogo-4-4",
+          "no-jogo-4-5",
+          "no-jogo-4-6",
+          "no-jogo-4-7",
+          "no-jogo-4-8",
+          "no-jogo-4-9",
+          "no-jogo-4-10",
+          "no-jogo-4-11",
+          "no-jogo-4-12",
+          "no-jogo-4-13",
+          "no-jogo-4-14",
+          "no-jogo-4-16"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-4-variante-no-jogo-4-16",
+            "nodeId": "no-jogo-4-16",
+            "texto": "Afogamento! O rei preto não está em xeque e não tem casa. A partida acaba empatada.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5",
+        "titulo": "AULA - Do começo ao mate",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-5",
+          "no-jogo-5-6",
+          "no-jogo-5-7",
+          "no-jogo-5-8",
+          "no-jogo-5-9",
+          "no-jogo-5-10",
+          "no-jogo-5-11",
+          "no-jogo-5-12",
+          "no-jogo-5-13",
+          "no-jogo-5-14",
+          "no-jogo-5-15",
+          "no-jogo-5-16",
+          "no-jogo-5-17",
+          "no-jogo-5-18",
+          "no-jogo-5-19",
+          "no-jogo-5-20",
+          "no-jogo-5-21",
+          "no-jogo-5-23",
+          "no-jogo-5-24",
+          "no-jogo-5-25",
+          "no-jogo-5-26"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-5-0",
+            "nodeId": "no-jogo-5-0",
+            "texto": "Agora outra defesa. Não decore lances: a cada jogada, prenda o rei com o L.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-1",
+            "nodeId": "no-jogo-5-1",
+            "texto": "Comece a caixa: a dama corta a coluna d e a 2ª fileira.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-3",
+            "nodeId": "no-jogo-5-3",
+            "texto": "O rei subiu. A dama acompanha, a um salto de cavalo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-5",
+            "nodeId": "no-jogo-5-5",
+            "texto": "O rei mudou de lado. A dama vai junto, sem dar xeque.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-7",
+            "nodeId": "no-jogo-5-7",
+            "texto": "Mesmo plano: acompanhe e corte casas.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-9",
+            "nodeId": "no-jogo-5-9",
+            "texto": "A caixa encolhe. Até aqui, a dama trabalhou sozinha.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-11",
+            "nodeId": "no-jogo-5-11",
+            "texto": "Mais um passo. O rei preto é empurrado para a borda.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-13",
+            "nodeId": "no-jogo-5-13",
+            "texto": "Pronto: o rei está preso perto do canto. A dama não chega mais perto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-15",
+            "nodeId": "no-jogo-5-15",
+            "texto": "Segunda parte: traga o rei. A dama segura a caixa sozinha.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-17",
+            "nodeId": "no-jogo-5-17",
+            "texto": "Continue com o rei. Nada de xeques soltos.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-19",
+            "nodeId": "no-jogo-5-19",
+            "texto": "O rei branco se aproxima de f6, a casa que vai apoiar o mate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-21",
+            "nodeId": "no-jogo-5-21",
+            "texto": "Certo: em vez de apertar com a dama, aproxime o rei.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-22",
+            "nodeId": "no-jogo-5-22",
+            "texto": "A dama chegou perto demais e tirou a última casa. Sem xeque, é afogamento: empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-24",
+            "nodeId": "no-jogo-5-24",
+            "texto": "O rei branco controla g7. Agora a dama pode dar mate protegida.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-26",
+            "nodeId": "no-jogo-5-26",
+            "texto": "Mate! A dama ataca o rei, e o rei branco protege a dama.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5-variante",
+        "titulo": "Comparação: 11. Dg6??",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-5",
+          "no-jogo-5-6",
+          "no-jogo-5-7",
+          "no-jogo-5-8",
+          "no-jogo-5-9",
+          "no-jogo-5-10",
+          "no-jogo-5-11",
+          "no-jogo-5-12",
+          "no-jogo-5-13",
+          "no-jogo-5-14",
+          "no-jogo-5-15",
+          "no-jogo-5-16",
+          "no-jogo-5-17",
+          "no-jogo-5-18",
+          "no-jogo-5-19",
+          "no-jogo-5-20",
+          "no-jogo-5-22"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-22",
+            "nodeId": "no-jogo-5-22",
+            "texto": "A dama chegou perto demais e tirou a última casa. Sem xeque, é afogamento: empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6",
+        "titulo": "AULA - LEMBRE-SE",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-6-0",
+            "nodeId": "no-jogo-6-0",
+            "texto": "LEMBRE-SE:\n\n1. Dama a um salto de cavalo do rei: a caixa encolhe.\n2. Rei no canto: pare a dama e traga o seu rei.\n3. Mate com a dama protegida, sem afogar.",
+            "pausa": "manual"
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-capitulo-jogo-7-no-jogo-7-0-white",
+        "titulo": "TREINO 1 - Feche a caixa",
+        "introducao": "O rei preto está em e7. Ponha a dama a um salto de cavalo dele.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-7",
+          "nodeId": "no-jogo-7-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "O rei preto está em e7. Ponha a dama a um salto de cavalo dele.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-7-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-7",
+              "nodeId": "no-jogo-7-0"
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-7-1-white",
+                "moves": [
+                  "d4d5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: um salto de cavalo do rei, e a caixa ficou menor.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "e7f6",
+                      "proximaQuestaoId": "questao-no-jogo-7-3-white",
+                      "texto": "O rei foi para f6. Siga com o L."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-7-2",
+                "moves": [
+                  "d4d6"
+                ],
+                "julgamento": "erro",
+                "feedback": "A dama ficou colada no rei, sem proteção: o rei come a dama. Sem dama, não há mate.",
+                "erroId": "erro-no-jogo-7-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-7-3-white",
+            "posicao": {
+              "analiseId": "analise-jogo-7",
+              "nodeId": "no-jogo-7-3"
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-7-4-white",
+                "moves": [
+                  "d5e4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Muito bem: o rei mudou, e você manteve o L.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-7",
+          "nodeIds": [
+            "no-jogo-7-0",
+            "no-jogo-7-1",
+            "no-jogo-7-3",
+            "no-jogo-7-4"
+          ],
+          "hash": "v2-cbdfca1a",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-7",
+          "inicioNodeId": "no-jogo-7-0",
+          "objetivo": "O rei preto está em e7. Ponha a dama a um salto de cavalo dele."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/4k3/8/8/2KQ4/8/8/8 w - - 25 13",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-7",
+              "nodeId": "no-jogo-7-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-7-0-white": {
+              "fen": "8/4k3/8/8/2KQ4/8/8/8 w - - 25 13",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-7",
+                "nodeId": "no-jogo-7-0"
+              }
+            },
+            "questao-no-jogo-7-3-white": {
+              "fen": "8/8/5k2/3Q4/2K5/8/8/8 w - - 27 14",
+              "historicoUci": [
+                "d4d5",
+                "e7f6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-7",
+                "nodeId": "no-jogo-7-3"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Muito bem: o rei mudou, e você manteve o L."
+      },
+      {
+        "id": "treino-capitulo-jogo-8-no-jogo-8-0-white",
+        "titulo": "TREINO 2 - Continue sem ajuda",
+        "introducao": "Agora sem ajuda. Siga o rei com a dama e encolha a caixa.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-8",
+          "nodeId": "no-jogo-8-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Agora sem ajuda. Siga o rei com a dama e encolha a caixa.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-8-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-1-white",
+                "moves": [
+                  "f4f5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Isso: o L continua, e o espaço diminui.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g7h6",
+                      "proximaQuestaoId": "questao-no-jogo-8-3-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-8-2",
+                "moves": [
+                  "f4g5"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque não prende o rei. Procure a casa a um salto de cavalo dele.",
+                "erroId": "erro-no-jogo-8-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-8-3-white",
+            "posicao": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-3"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-8-4-white",
+                "moves": [
+                  "f5g4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Perfeito: o rei preto está na borda.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-8",
+          "nodeIds": [
+            "no-jogo-8-0",
+            "no-jogo-8-1",
+            "no-jogo-8-3",
+            "no-jogo-8-4"
+          ],
+          "hash": "v2-5e88c4fc",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-8",
+          "inicioNodeId": "no-jogo-8-0",
+          "objetivo": "Agora sem ajuda. Siga o rei com a dama e encolha a caixa."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/6k1/8/3K4/5Q2/8/8/8 w - - 25 13",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-8",
+              "nodeId": "no-jogo-8-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-8-0-white": {
+              "fen": "8/6k1/8/3K4/5Q2/8/8/8 w - - 25 13",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-0"
+              }
+            },
+            "questao-no-jogo-8-3-white": {
+              "fen": "8/8/7k/3K1Q2/8/8/8/8 w - - 27 14",
+              "historicoUci": [
+                "f4f5",
+                "g7h6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-8",
+                "nodeId": "no-jogo-8-3"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Perfeito: o rei preto está na borda."
+      },
+      {
+        "id": "treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "titulo": "TREINO 3 - A hora de parar",
+        "introducao": "Feche a caixa. Quando o rei chegar ao canto, a dama para.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-9",
+          "nodeId": "no-jogo-9-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Feche a caixa. Quando o rei chegar ao canto, a dama para.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-9-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-1-white",
+                "moves": [
+                  "f4g5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: a caixa ficou mínima, e o rei ainda tem uma casa.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "h7h8",
+                      "proximaQuestaoId": "questao-no-jogo-9-2-white",
+                      "texto": "Agora pare a dama e traga o rei."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-2-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-2"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-3-white",
+                "moves": [
+                  "d4e5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Exatamente: a dama segura, e o rei se aproxima.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "h8h7",
+                      "proximaQuestaoId": "questao-no-jogo-9-5-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-4",
+                "moves": [
+                  "g5g6"
+                ],
+                "julgamento": "erro",
+                "feedback": "Afogamento! Você tirou a última casa sem dar xeque.",
+                "erroId": "erro-no-jogo-9-4",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-5-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-5"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-6-white",
+                "moves": [
+                  "e5f6"
+                ],
+                "julgamento": "correta",
+                "feedback": "O rei chegou para apoiar. Agora, o lance final.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "h7h8",
+                      "proximaQuestaoId": "questao-no-jogo-9-7-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-7-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-7"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-8-white",
+                "moves": [
+                  "g5g7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Mate! Dama e rei trabalhando juntos.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-9",
+          "nodeIds": [
+            "no-jogo-9-0",
+            "no-jogo-9-1",
+            "no-jogo-9-2",
+            "no-jogo-9-3",
+            "no-jogo-9-5",
+            "no-jogo-9-6",
+            "no-jogo-9-7",
+            "no-jogo-9-8"
+          ],
+          "hash": "v2-cd6c0a9a",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-9",
+          "inicioNodeId": "no-jogo-9-0",
+          "objetivo": "Feche a caixa. Quando o rei chegar ao canto, a dama para."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/7k/8/8/3K1Q2/8/8/8 w - - 25 13",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-9-0-white": {
+              "fen": "8/7k/8/8/3K1Q2/8/8/8 w - - 25 13",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-0"
+              }
+            },
+            "questao-no-jogo-9-2-white": {
+              "fen": "7k/8/8/6Q1/3K4/8/8/8 w - - 27 14",
+              "historicoUci": [
+                "f4g5",
+                "h7h8"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-2"
+              }
+            },
+            "questao-no-jogo-9-5-white": {
+              "fen": "8/7k/8/4K1Q1/8/8/8/8 w - - 29 15",
+              "historicoUci": [
+                "f4g5",
+                "h7h8",
+                "d4e5",
+                "h8h7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-5"
+              }
+            },
+            "questao-no-jogo-9-7-white": {
+              "fen": "7k/8/5K2/6Q1/8/8/8/8 w - - 31 16",
+              "historicoUci": [
+                "f4g5",
+                "h7h8",
+                "d4e5",
+                "h8h7",
+                "e5f6",
+                "h7h8"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-7"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      },
+      {
+        "id": "treino-capitulo-jogo-10-no-jogo-10-0-white",
+        "titulo": "TREINO 4 - Traga o rei e dê mate",
+        "introducao": "O rei preto já está preso. A dama não aperta mais: agora é a vez do seu rei.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-10",
+          "nodeId": "no-jogo-10-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "O rei preto já está preso. A dama não aperta mais: agora é a vez do seu rei.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-10-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-1-white",
+                "moves": [
+                  "d4e5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Boa: o rei se aproxima enquanto a dama segura.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "h6h7",
+                      "proximaQuestaoId": "questao-no-jogo-10-2-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-2-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-2"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-3-white",
+                "moves": [
+                  "e5f6"
+                ],
+                "julgamento": "correta",
+                "feedback": "O seu rei já apoia o mate. Ache o lance final.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "h7h6",
+                      "proximaQuestaoId": "questao-no-jogo-10-4-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-4-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-4"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-5-white",
+                "moves": [
+                  "g4g6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Mate!",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-6",
+                "moves": [
+                  "g4h3"
+                ],
+                "julgamento": "correta",
+                "feedback": "Mate também!",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-7",
+                "moves": [
+                  "g4h4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Mate também!",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-8",
+                "moves": [
+                  "g4g7"
+                ],
+                "julgamento": "erro",
+                "feedback": "Só xeque: o rei foge para h5. Aqui há mate em um lance.",
+                "erroId": "erro-no-jogo-10-8",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-10",
+          "nodeIds": [
+            "no-jogo-10-0",
+            "no-jogo-10-1",
+            "no-jogo-10-2",
+            "no-jogo-10-3",
+            "no-jogo-10-4",
+            "no-jogo-10-5"
+          ],
+          "hash": "v2-a0eac361",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-10",
+          "inicioNodeId": "no-jogo-10-0",
+          "objetivo": "O rei preto já está preso. A dama não aperta mais: agora é a vez do seu rei."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/8/7k/8/3K2Q1/8/8/8 w - - 25 13",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-10-0-white": {
+              "fen": "8/8/7k/8/3K2Q1/8/8/8 w - - 25 13",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-0"
+              }
+            },
+            "questao-no-jogo-10-2-white": {
+              "fen": "8/7k/8/4K3/6Q1/8/8/8 w - - 27 14",
+              "historicoUci": [
+                "d4e5",
+                "h6h7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-2"
+              }
+            },
+            "questao-no-jogo-10-4-white": {
+              "fen": "8/8/5K1k/8/6Q1/8/8/8 w - - 29 15",
+              "historicoUci": [
+                "d4e5",
+                "h6h7",
+                "e5f6",
+                "h7h6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-4"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      }
+    ],
+    "praticas": [
+      {
+        "id": "pratica-pratica-venca-sem-afogar",
+        "titulo": "PRÁTICA - Vença sem afogar",
+        "positionId": "pos-ex-capitulo-0-3-mate-de-dama-e-1",
+        "ladoAluno": "white",
+        "objetivo": "win",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-introducao-estudo-1",
+        "tipo": "introducao",
+        "entidadeId": "introducao-estudo-1"
+      },
+      {
+        "id": "etapa-capitulo-jogo-4",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-4"
+      },
+      {
+        "id": "etapa-capitulo-jogo-4-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-4-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-7-no-jogo-7-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-7-no-jogo-7-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-8-no-jogo-8-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-8-no-jogo-8-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-9-no-jogo-9-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-10-no-jogo-10-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-10-no-jogo-10-0-white"
+      },
+      {
+        "id": "etapa-pratica-pratica-venca-sem-afogar",
+        "tipo": "pratica",
+        "entidadeId": "pratica-pratica-venca-sem-afogar"
+      }
+    ]
+  },
+  "posicoes": {
+    "pos-ex-capitulo-0-3-mate-de-dama-e-1": {
+      "id": "pos-ex-capitulo-0-3-mate-de-dama-e-1",
+      "fen": "8/8/8/8/4k3/8/8/3QK3 w - - 0 1",
+      "expectedResult": "win-white",
+      "tags": [
+        "PRÁTICA LIVRE - Vença sem afogar"
+      ],
+      "status": "candidate",
+      "provenance": {
+        "externalHumanSource": "clubexadrezguabiruba",
+        "bibliographicSource": "Capitulo 0.3 Mate de Dama e Rei v1, https://lichess.org/study/hf09xMzS",
+        "originalGame": "não se aplica",
+        "authorComposer": "clubexadrezguabiruba",
+        "license": "não informada — conferir antes de aprovar",
+        "editionFile": "posicoes-do-preparatorio",
+        "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-16 (origem: estudo-lichess)",
+        "qaApplied": "proveniência registrada por Douglas Vieira em 2026-09-16 no Editor v2; resultado declarado pelo professor",
+        "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+      }
+    }
+  },
+  "revisoes": {
+    "treino-capitulo-jogo-7-no-jogo-7-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_822e19b8707dcfeba38f1c01d9a8296180888584f11b88df23688d6338b20889"
+    },
+    "treino-capitulo-jogo-8-no-jogo-8-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_3b9649de3ae6a4ea09ac6b0b4a428480bf3c148058af56a2da0df7270741afce"
+    },
+    "treino-capitulo-jogo-9-no-jogo-9-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_cbd18eceb788d983bb459bbe3a066a455bd1f07162e0de5d08ad3955249abe06"
+    },
+    "treino-capitulo-jogo-10-no-jogo-10-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_2e641a83a6f728772ab9e5622da362960173c43d81785089d8f21be08a507a9d"
+    },
+    "pratica-pratica-venca-sem-afogar": {
+      "tipo": "pratica",
+      "revisao": "ar_2f3a5e6ab0bfc67a37b055ce53970900e53847c94d9714a44081885144fdf182"
+    }
+  },
+  "manifesto": {
+    "aulaId": "N0-Q-MATE",
+    "aula": "8419c6ee471df80280493fd3b129020a742298dd62ce443056c1eca29868dba2",
+    "posicoes": {
+      "pos-ex-capitulo-0-3-mate-de-dama-e-1": "4f2478f1b58ef01b6b0b44d680ab9ebae68bb7f8d136646c8e4d305cceabdeeb"
+    },
+    "revisoes": "de542457eb4735292eed3e25ca185031ef662c143ffe6be09157963a8cb178a6",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

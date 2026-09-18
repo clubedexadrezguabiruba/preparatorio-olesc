@@ -84,7 +84,7 @@ No fim, você defende e corre para o canto a tempo. }
 [Orientation "black"]
 
 { Você defende com as pretas. O seu rei já está no canto, em h8. Olhe as brancas tentarem de tudo. } { [%csl Gh8] }
-1. Kg6 { O rei branco tira g7 e h7 do seu rei. } { [%csl Rg7,Rh7] } 1... Kg8 { O seu rei vai a g8. Entre g8 e h8, ele fica na frente do peão. } { [%csl Gg8,Gh8] } 2. h5 Kh8 3. h6 Kg8 4. h7+ { Xeque. Só um lance segura o empate. } 4... Kh8! { De volta ao canto. O peão não tem por onde passar. } { [%csl Gh8] } ( 4... Kf8?? { O rei saiu do canto. O peão vira dama com xeque, e as brancas ganham. } { [%csl Rf8,Rh8] } 5. h8=Q+ ) 5. Kh6 { Afogamento! O rei preto não está em xeque e não tem casa. Empate. } { [%csl Rg7,Rg8] } ( 5. Kf6 { Se o rei branco se afasta, o seu rei come o peão. } 5... Kxh7 ) *
+1. Kg6 { O rei branco tira g7 e h7 do seu rei. } { [%csl Rg7,Rh7] } 1... Kg8 { O seu rei vai a g8. Entre g8 e h8, ele fica na frente do peão. } { [%csl Gg8,Gh8] } 2. h5 Kh8 3. h6 Kg8 4. h7+ { Xeque. Só um lance segura o empate. } 4... Kh8! { De volta ao canto. O peão não tem por onde passar. } ( 4... Kf8?? { O rei saiu do canto. O peão vira dama com xeque, e as brancas ganham. } { [%csl Rh8] } 5. h8=Q+ ) 5. Kh6 { Afogamento! O rei preto não está em xeque e não tem casa. Empate. } { [%csl Rg7,Rg8] } ( 5. Kf6 { Se o rei branco se afasta, o seu rei come o peão. } 5... Kxh7 ) *
 
 [Event "Aula 12 - Peão de torre"]
 [Site "?"]
@@ -100,7 +100,7 @@ No fim, você defende e corre para o canto a tempo. }
 [Orientation "black"]
 
 { O rei branco está em h7, no canto. O seu rei, em e7, joga. Aonde ele vai? } { [%csl Yh7,Ye7] }
-1... Kf7! { f7! O rei branco fica preso no canto, na frente do próprio peão. } { [%csl Gf7,Yh7] } ( 1... Ke6?? { O rei foi para o lado errado. O rei branco vai a g7 e guarda h8. } { [%csl Re6,Rg7,Rh8] } 2. Kg7! Kf5 3. h5 Kg5 4. h6 Kh5 5. h7 Kg5 6. h8=Q { Dama. Longe do canto, o rei preto não segura o peão de torre. } ) 2. h5 { O peão anda, mas o rei branco continua preso. } 2... Kf8 { O seu rei fica entre f7 e f8. Assim o rei branco não sai de h7 e h8. } { [%csl Gf7,Gf8,Yh7,Yh8] } 3. Kh8 ( 3. Kg6 Kg8 { Se o rei branco sai por g6, o seu rei entra em g8, no canto. Empate também. } { [%csl Yg6,Gg8] } ) 3... Kf7 4. h6 Kf8 5. Kh7 Kf7 6. Kh8 Kf8 7. h7 Kf7 { Afogamento! As brancas não têm lance: o rei está preso, e o peão, travado. Empate. } { [%csl Rg7,Rg8] } *
+1... Kf7! { f7! O rei branco fica preso no canto, na frente do próprio peão. } { [%csl Gf7,Yh7] } ( 1... Ke6?? { O rei foi para o lado errado. O rei branco vai a g7 e guarda h8. } { [%csl Rg7,Rh8] } 2. Kg7! Kf5 3. h5 Kg5 4. h6 Kh5 5. h7 Kg5 6. h8=Q { Dama. Longe do canto, o rei preto não segura o peão de torre. } ) 2. h5 { O peão anda, mas o rei branco continua preso. } 2... Kf8 { O seu rei fica entre f7 e f8. Assim o rei branco não sai de h7 e h8. } { [%csl Yh7,Yh8] } 3. Kh8 ( 3. Kg6 Kg8 { Se o rei branco sai por g6, o seu rei entra em g8, no canto. Empate também. } { [%csl Yg6,Gg8] } ) 3... Kf7 4. h6 Kf8 5. Kh7 Kf7 6. Kh8 Kf8 7. h7 Kf7 { Afogamento! As brancas não têm lance: o rei está preso, e o peão, travado. Empate. } { [%csl Rg7,Rg8] } *
 
 [Event "Aula 12 - Peão de torre"]
 [Site "?"]

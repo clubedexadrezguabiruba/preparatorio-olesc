@@ -7132,6 +7132,221 @@ Ver [[finais-18-09-estado]], [[aula-de-finais-como-fazer]] e
 
 ---
 
+## O grupo de revisores das aulas de finais — 18/9/2026
+
+Cinco revisores no PGN **antes** de publicar, mais as máquinas embaixo deles, mais um aluno
+de Playwright que joga a aula **errando de propósito**. Nada commitado nesta rodada; o
+`git diff` desfaz qualquer linha.
+
+### O que estava quebrado, e foi o achado que mudou o resto
+
+**Nenhum desenho de treino chegava à tela do aluno.** `lib/editor-v2/treinos.ts` montava cada
+pergunta só com `posicao` e `respostas`, e `treino-jogavel.ts:227` lia exatamente
+`questao.desenhos` — campo que nunca era preenchido. Todo `[%csl]` escrito num capítulo de
+treino ficava preso na análise.
+
+Consequências, e nenhuma é pequena: na prática **todos** os treinos eram "sem ajuda",
+inclusive o primeiro; um revisor de desenho, sem isso consertado, acenderia casas que
+ninguém vê; e a trava nova de desenho reprovaria as 11 aulas por um defeito que não é delas.
+
+Conserto em `treinos.ts` (`desenhoDaPergunta`), com o desenho entrando também na **receita do
+hash** — e em `propriedade-treino.ts`, que tem de dizer exatamente a mesma coisa, senão mexer
+num desenho não envelheceria o treino derivado. Teste que falha antes e passa depois:
+`treinos.test.ts`, "o desenho do nó da posição chega à pergunta do treino".
+
+**Número:** as 11 aulas republicadas com `--substituir --publicar`, preservando título, obra,
+link e autor da publicação anterior. **0 → 22 de 117 perguntas com desenho.** 11 conferências
+verdes, 0 erros; nenhuma prática mudou de objetivo.
+
+### A régua do apoio decrescente (passo 0, decisão delegada pelo Doug)
+
+`COMO-FAZER` §1 dizia "treino 2 sem ajuda"; `TRILHA` §14.3 dizia "todo nó do treino aponta o
+alvo". **A contradição era de época, não de princípio:** a §14.3 foi escrita quando a aula
+tinha **um** treino só, e a razão dela (voz §6.2) continua boa. Com vários treinos, o apoio
+cai por degraus:
+
+| Onde | O apoio antes do lance |
+|---|---|
+| Treino 1 | todo nó aponta o alvo — seta **ou** casa acesa |
+| Treino 2 em diante | nenhum alvo apontado |
+| Último treino | nenhum alvo, e posição nova |
+| Prática real | nada |
+
+"Sem ajuda" é **sem a resposta marcada antes de o aluno mexer**, não aluno sozinho no
+silêncio: o apoio *depois* do lance fica em todos. Com a casa acesa ele **reconhece**; sem
+ela, **busca** — e é buscar que fixa. Os dois documentos foram ajustados (`TRILHA` §14.3
+ganhou a tabela e a nota do cano quebrado; `COMO-FAZER` ganhou a §1.1 e o passo 3.1).
+
+### As máquinas — `lib/editor-v2/regua-de-desenho.ts`
+
+Nove regras, **uma por código**, registradas em `REGRAS_PUBLICACAO_V2`. Todas **avisam e
+nenhuma impede**: a régua é nova e as aulas no ar são velhas, e promovê-las a erro travaria a
+publicação de tudo por uma dívida que não é de nenhuma aula em particular.
+
+`DESENHO_TREINO_SEM_ALVO`, `DESENHO_TREINO_COM_ALVO`, `DESENHO_ENTREGA_O_LANCE`,
+`CASA_CITADA_SEM_DESENHO`, `CASA_ACESA_SEM_CITACAO`, `DESENHO_DEMAIS`,
+`VARIANTE_SEM_SIMBOLO`, `LEMBRE_SE_REGRAS`, `QUADRO_1_NAO_PERGUNTA`.
+
+**Duas correções que a medida contra as 11 aulas obrigou, e as duas eram da régua:**
+
+1. **A seta é uma linha, não duas casas.** A primeira versão cobrava a citação das **pontas
+   da seta** e devolveu 183 achados do tipo "o 2º passo desenha c2, c8, b1, b8 sem que a fala
+   cite" — que são **duas setas de coluna** da escada de torres, com a fala dizendo "a torre
+   fecha a coluna b". Exigir que a fala soletre as pontas é o contrário de "uma palavra por
+   ideia". O teto passou a valer para a casa **acesa**; a ponta da seta continua confirmando
+   a casa citada. **309 → 171 achados.**
+2. **A linha-título do `LEMBRE-SE` não é regra.** A conta somava `LEMBRE-SE:` como quarta
+   regra, e todas as 11 aulas reprovavam por isso. Dois revisores acharam o defeito no mesmo
+   dia. **171 → 160 achados**, e `LEMBRE_SE_REGRAS` foi de 11 para zero.
+
+**Número do bloco: 160 achados, em 11 de 11 aulas** — 104 `CASA_ACESA_SEM_CITACAO`, 34
+`DESENHO_DEMAIS`, 11 `CASA_CITADA_SEM_DESENHO`, 8 `DESENHO_TREINO_SEM_ALVO`, 3
+`DESENHO_TREINO_COM_ALVO`. Régua nova encontrando dívida velha: vira lista, não conserto às
+pressas. A lista inteira está em `.editor/regua-de-desenho-18-09.txt`.
+
+### Os cinco revisores e a assinatura
+
+`.claude/agents/finais-{arquiteto,scaffolding,simbolos,voz,desenho}.md`, orquestrados por
+`.claude/skills/revisar-pgn-de-finais/SKILL.md`. Cada um escreve numa camada e só nela.
+
+**O que impede dois revisores de se desfazerem não é boa vontade: é a assinatura.** O
+`--so-conferir` sozinho não basta — ele conta só os problemas do julgamento e deixa `PERDA` e
+`FORA` apenas impressos. `scripts/assinatura-da-aula.ts` guarda capítulos, FENs, lances,
+símbolos, textos, desenhos, questões por treino, problemas, perdas e fora; `--contra X.json
+--camada voz` sai com **código 1** e diz o nome do campo quando alguém escreve fora da sua.
+
+**Prova, medida:** um "agente de voz" que troca uma fala (permitido) **e** apaga um `??`
+(proibido) → `X FORA DA CAMADA capitulos`, `X FORA DA CAMADA simbolos`, saída 1. Só a troca da
+fala → 1 campo, saída 0.
+
+### Os hooks — `.claude/hooks/`
+
+| Quando | O que roda |
+|---|---|
+| ao salvar um PGN de `content/finais/estudos-aula/` | as máquinas, e a marca de revisão daquele PGN é apagada |
+| ao publicar (`--publicar`) | **o portão**: recusa e manda rodar `/revisar-pgn-de-finais` |
+
+O portão compara o **hash** do PGN com o gravado em `.editor/revisao-pgn/<ID>.ok`. Cinco casos
+provados: sem marca → recusa; marca certa → passa; PGN mudou depois → recusa; `--so-conferir`
+→ passa; `REVISAO_PGN=dispensada` → passa. A dispensa é explícita de propósito: ninguém
+dispensa uma revisão sem escrever que dispensou.
+
+### O aluno de Playwright — `.claude/skills/aluno-de-ensaio/`
+
+Abre a aula, **erra de propósito**, e mede o que a tela responde. É o único teste que teria
+pego o cano furado: o arquivo estava bom, quem perdia o desenho era a montagem.
+
+**Ele achou um segundo defeito, e nele mesmo:** a aula v2 **não tem abas**. A v1 tinha quatro
+("Apresentação · Aula · Treino · Prática real"); a v2 tem um passo a passo com um botão
+"Etapas N/M" que abre a lista, e os itens não têm `role="menuitem"` — são `<button>` dentro de
+`<li>`. Procurando aba, o script não achava etapa nenhuma em nenhuma das 11 aulas. O
+`medir.mjs` tinha o mesmo defeito, e os dois foram consertados.
+
+**O porte do `medir.mjs` para v2** entrou junto: ele lia `stages.objective.roteiro`,
+`stages.intro` e `stages.guided`, que são a forma v1, e devolvia "sem apresentação / sem
+treino" nas 11 aulas — a `/revisar-aula` estava **cega para o módulo inteiro**. A tradução usa
+`pacoteAtivoDoAluno` + `aulaDoAlunoV2`, que é o que o site usa (`conteudo.ts` não serve: abre
+com `import "server-only"`).
+
+**Número: 11 aulas jogadas com o mouse, ~220 quesitos, 2 reprovados** — os dois o mesmo caso,
+um treino 2+ que ainda acende alvo, agora confirmado na tela e não só no arquivo. Saída em
+`.editor/aluno-de-ensaio-18-09.txt`.
+
+### A calibração contra o piloto — o que os cinco acharam na `N0-Q-MATE`
+
+O piloto **não é padrão-ouro**, e calibrar esperando poucos achados seria circular. Os cinco
+rodaram **sem editar nada**. O que voltou está na lista de decisões para o Doug, e o resumo é:
+
+- **voz:** 9 elogios vazios em 55 falas, em **seis** grafias (`Certo:`, `Muito bem:`, `Isso:`,
+  `Perfeito:`, `Exatamente:`, `Boa:`). Não é ruído de borda, é padrão. Ou as aulas se
+  corrigem, ou a `VOZ-DO-CURSO` §2 muda — a régua não se afrouxa para caber numa aula;
+- **arquiteto:** o capítulo `01 - AULA - O L e a caixa` talvez deva sair (o `02` é
+  superconjunto dele); a prática é a mesma posição do `02`, caractere por caractere; o erro do
+  treino 1 (`Dd6+??`, "o rei come a dama") não tem cobertura na aula;
+- **scaffolding:** "a caixa" é usada 9 vezes e **nunca é mostrada** — a aula seguinte da
+  trilha (`N0-R-MATE`) tem esse quadro, e esta não; a rampa T3 → T4 está invertida;
+- **símbolos:** comparado com a fonte `hf09xMzS`, **nenhum símbolo se perdeu**. Esta aula é o
+  contraexemplo do incidente de setembro;
+- **desenho:** a escada de apoio da aula está inteira e correta; 5 casas acesas são redundantes
+  com o `lastMove` do chessground; a rota do rei em 4 setas é uma ideia desenhada quatro vezes.
+
+### A corrida corretiva nas 11 — o que ela fez
+
+**A camada de voz, decidida pelo Doug em 18/9:** tira-se o rótulo de elogio do começo da fala
+e mantém-se a frase. **28 falas em 3 das 11 aulas** (N0-LADDER 8, N0-Q-MATE 9, N0-R-MATE 11);
+as outras oito já estavam limpas. A assinatura confirmou que só `textos` mudou nas três. Junto
+saiu o `"Boa, também funciona."` que `importar-estudo.ts` injetava por código.
+
+**A camada de desenho, um revisor por aula:**
+
+| Aula | Régua antes → depois | O que ele fez |
+|---|---|---|
+| N0-LADDER | 24 → 5 | 13 casas que eram o destino do próprio lance; 1 alvo tirado do treino 3 |
+| N0-MATING-MATERIAL | 18 → 4 | 23 formas em 16 nós; a rede de mate que a fala não conta |
+| N0-Q-MATE | 7 → 2 | a rota do rei em 4 setas virou 1; `h7` aceso nas duas variantes de afogamento |
+| N0-R-MATE | 13 → 5 | o par de reis acendia **um lance antes** de eles estarem frente a frente |
+| N0-STALEMATE | 13 → 4 | **o vermelho estava no afogamento que a aula quer**, em 4 lugares |
+| N1-DIRECT-OPPOSITION | 15 → 9 | uma forma só para "frente a frente"; alvo em todo nó do treino 1 |
+| N1-KEY-SQUARES | 11 → 9 | 7 dos 9 são o tema: casas-chave **são** um conjunto de casas |
+| N1-KING-ACTIVITY | 10 → 1 | 4 pontos viraram 2 relações; alvo em todo nó do treino 1 |
+| N1-KPK-RANKS | 9 → 2 | os **dois** treinos que ainda acendiam alvo (o aluno tinha achado um) |
+| N1-ROOK-PAWN | 8 → 4 | poda, não acréscimo: a aula já tinha o que a régua pede |
+| N1-SQUARE | 32 → 28 | **os 28 são o quadrado** — exceção de tema declarada, decisão do Doug |
+
+**Número: 160 → 73 achados**, e **zero** em `DESENHO_TREINO_SEM_ALVO`,
+`DESENHO_TREINO_COM_ALVO`, `DESENHO_ENTREGA_O_LANCE`, `VARIANTE_SEM_SIMBOLO`,
+`LEMBRE_SE_REGRAS` e `QUADRO_1_NAO_PERGUNTA`. A escada do apoio está de pé nas 11.
+
+**A trava de camada: 0 de 11 reprovaram.** Nenhum revisor tocou texto, símbolo, lance ou
+estrutura — só `[%cal]` e `[%csl]`.
+
+**Republicadas:** 11 conferências verdes, 0 erros. **22 → 27 de 117** perguntas com desenho.
+
+**O aluno de Playwright, depois: 11 aulas, ~220 quesitos, ZERO reprovados.** Antes eram 2.
+
+### Uma terceira correção da régua, e também era minha
+
+**A régua não lia casa em notação portuguesa.** `\b[a-h][1-8]\b` não casa com `Re7`: entre o
+`R` e o `e` não há fronteira de palavra. Numa aula que escreve os lances em português — e
+todas escrevem, é a regra de 17/9 — ela acusava "casa acesa sem citação" em passos onde a fala
+citara a casa. Achado por um revisor, no meio da corrida; consertado em `regua-de-desenho.ts` e
+em `medir.mjs`, com teste para `Re7`, `Dg6`, `Txf1`, `exd5` e `d8=D`.
+
+### Um susto, e o que ele ensina sobre rodar revisores em paralelo
+
+Um dos revisores rodou um `git stash` por engano e **reverteu a árvore inteira** no meio da
+corrida; ele restaurou tudo, e a conferência depois mostrou o trabalho de todos de pé. Fica a
+lição, porque ela vai morder de novo: **revisores em paralelo compartilham o repositório e o
+scratchpad.** Os temporários precisam de nome com o id da aula, e o disco precisa ser
+reconferido depois de cada agente — dois deles tiveram de reaplicar edições por isso.
+
+Restou um `stash@{0}` no repositório. Ele é inofensivo parado, mas um `git stash pop`
+acidental reverteria dois PGN. Apagá-lo é decisão do Doug (`git stash drop`).
+
+### Portões
+
+`typecheck`, `lint`, `test` (**1668, 0 falhas**) e `validate:content` verdes.
+
+### Pendências declaradas
+
+- **Os revisores 1, 2 e 3 (arquiteto, scaffolding, símbolos) rodaram só no piloto**, em modo
+  calibração. Nas outras dez, rodou a camada de desenho e a de voz. O que eles acharam no
+  piloto está na lista de decisões acima.
+- **A seta vermelha do perigo no feedback do treino não tem tela** — `treino-jogavel.ts`
+  mostra o feedback só como texto. Fica declarado; não se promete o que não aparece.
+- O `medir.mjs` portado **não foi rodado de ponta a ponta** nas duas telas; quem rodou nas 11
+  aulas foi o `aluno-de-ensaio`. A tradução v1/v2 dele está conferida nas quatro aulas de
+  ensaio, e a navegação pelo menu "Etapas" é a mesma que o aluno usa.
+- **Os 73 achados que sobram esperam decisão**, e quase todos são de **fala**, não de desenho:
+  49 `CASA_ACESA_SEM_CITACAO` (a casa ensina e a fala não a nomeia), 22 `DESENHO_DEMAIS` (15
+  deles são o quadrado da N1-SQUARE) e 2 `CASA_CITADA_SEM_DESENHO` conscientes.
+- **Duas decisões de uma vez, que valem para uma aula inteira cada:** o quadrado da N1-SQUARE
+  é exceção de tema (amarelo = o quadrado, o pacote de 5 é uma ideia só)? E o vermelho no rei
+  matado é convenção da trilha, nas três aulas de mate?
+- Commit e push desta rodada ainda por fazer. Nada foi commitado.
+
+---
+
 ## Onde cada coisa é escrita
 
 | O quê | Onde | Versionado? |
@@ -7157,3 +7372,82 @@ npm run validate:content
 npm run validate:mutations
 npm run repertorio:compilar -- --check
 ```
+
+
+## O Doug olhou as 11 aulas na tela — 18/9/2026
+
+Cinco perguntas de decisão, medidas no navegador com a conta de ensaio (`aluno-de-ensaio` e a sonda
+`.editor/sondar.mjs`, que amostra o tabuleiro **ao longo da animação** — medir só no fim não serve,
+porque no fim a etapa já apagou tudo e sobra o `last-move`). **Nada de imagem:** a decisão saiu de
+número e de cor convertida, e o Doug dispensou a folha de contato.
+
+### O achado que não estava na lista: 45 etapas "Comparação"
+
+Ao sondar a `N1-SQUARE` o menu "Etapas" veio assim: `2.AULA - O quadrado do peão`,
+**`3.Comparação: 1. Rg2?`**, `4.AULA - Quem joga decide`, **`5.Comparação: 1... Rf5?`**… Cada
+variante de aula virava **etapa própria**. Não era do PGN — as variantes estão dentro do capítulo,
+em `( … )` — era da montagem: `lib/editor-v2/importar-estudo.ts:299` cria um `CapituloV2` com o
+título `Comparação: <lance>`.
+
+**Contado nos pacotes publicados: 45 etapas de comparação nas 11 aulas** (N1-DIRECT-OPPOSITION 8,
+N1-ROOK-PAWN 6, N0-LADDER 5, N0-STALEMATE 5, N0-R-MATE 4, N1-KING-ACTIVITY 4, N1-KPK-RANKS 4,
+N1-KEY-SQUARES 3, N1-SQUARE 3, N0-Q-MATE 2, N0-MATING-MATERIAL 1).
+
+**Regra global nova do Doug, 18/9:** duas opções da mesma posição ficam na **mesma etapa**, e a
+passagem de uma para a outra é um **rewind** — o tabuleiro desfaz os lances para trás, mais rápido
+do que os fez, até o ponto onde a linha se abriu, e só então joga a opção 2; automático, sem botão.
+"Como se estivesse recapitulando, rewind the tape."
+
+Escrita em `AGENTS.md` (seção própria) e em `COMO-FAZER` §1.2, que **revoga** o "a variante vira
+capítulo de comparação sozinha" do §1. Como se confere de fora: o menu "Etapas" de qualquer aula
+não pode ter item começando com "Comparação:". **Nada disso foi implementado ainda** — é a próxima
+fatia, e ela tem duas pontas: a montagem (`importar-estudo.ts`) e a animação de volta no player v2.
+
+**O Doug adiou a implementação no mesmo dia**, por ter outra prioridade, e pediu que ficasse
+registrada para ele não repetir a ideia. A fatia inteira — as duas pontas, os testes que mudam junto,
+o critério de aceite e as ferramentas que já existem — está em **`docs/FILA-DO-DOUG.md` §1**, que
+nasceu para isso.
+
+### As cinco decisões
+
+| # | Pergunta | O que a medida devolveu | Decisão do Doug |
+|---|---|---|---|
+| 1 | o apoio decrescente, `N0-Q-MATE` | treino 1: **1** desenho antes do lance; treinos 2, 3, 4 e prática: **0**. Errando no treino 2 o professor dá direção sem entregar a casa | fica como está |
+| 2 | o quadrado, `N1-SQUARE` | **5 formas ao mesmo tempo** (`a5`, `a8`, `d8`, `d5` + seta `a5→d8`), **todas amarelas**, formando uma figura só | fica; o defeito é da régua, que conta casa solta e não sabe ler conjunto |
+| 3 | o vermelho no rei mateado | as três aulas **discordavam**: LADDER 3 mates em vermelho, Q-MATE 1, R-MATE **nenhum** (o revisor apagara o `Rg8`) | **o vermelho fica**, e volta no `N0-R-MATE` |
+| 4 | o "Certo:" que saiu, `N0-R-MATE` | as 11 falas são todas de treino; e **não existe outro sinal de acerto** — `lib/lesson/falas.ts` não tem elogio genérico, só "Pronto." no fim | ficou melhor; mantém |
+| 5 | o afogamento, `N0-STALEMATE` | o capítulo `04 - AULA - Perdendo? Procure o afogamento` está **todo em verde** (`Gg8,Gg7,Gg6` → `Gf7,Gf8,Gg8` → `Gh8`); os 5 vermelhos que sobraram estão **todos em linha de erro** | coerente, nada a fazer |
+
+**As cores do tabuleiro, medidas e convertidas de `lab()` para rgb:** vermelho `#570000`
+(`--color-pincel-pendurada`, oklch 22%), verde `#006724`, amarelo `#834500`. O vermelho é o mais
+escuro dos três, e é assim de propósito — há conta de contraste no `globals.css`.
+
+### O que a decisão 3 obrigou
+
+1. **`Rg8` devolvido** ao mate de `26. Rb8#` em `N0-R-MATE`, `03 - AULA - O mate na borda`;
+2. **a régua mudou, e não em silêncio:** `COMO-FAZER` §1 dizia "vermelho = perigo (só no erro)" e
+   passou a dizer **duas coisas e só estas duas** — perigo na linha do erro, *ou* o rei que tomou o
+   mate;
+3. **o revisor de desenho aprendeu:** `.claude/agents/finais-desenho.md` ganhou "o rei mateado em
+   vermelho é decisão do Doug — não apague", com o caso de 18/9 nomeado. Sem isso a próxima corrida
+   apagaria de novo;
+4. **a publicação foi com `REVISAO_PGN=dispensada`, e dita em voz alta** — o portão recusou, e
+   rodar os cinco revisores devolveria o problema, porque foi o revisor de desenho quem apagou.
+   `pub-9b03f3bbf2624ce0` (antes: `pub-ee4e87448c3c0d17`), conferência VERDE, 0 erros.
+
+**Custo honesto:** devolver o vermelho subiu de 5 para 6 os avisos da aula. O aviso **novo** é um só —
+`CASA_ACESA_SEM_CITACAO` em `g8`, porque a fala do mate não nomeia a casa do rei. O `DESENHO_DEMAIS`
+daquele passo **já existia** (eram 4 formas, o teto é 3; com o vermelho são 5). Resolve-se com **uma**
+frase — "o rei preto em g8 não tem casa" —, que é mudança de fala e não foi pedida.
+
+### Os mates que continuam sem marca, e são decisão a tomar
+
+| Aula | Capítulo | Mate | Marca hoje |
+|---|---|---|---|
+| N0-Q-MATE | `02 - AULA - Do começo ao mate` | `Dg7#` | só a seta verde `Gf6g7` |
+| N0-R-MATE | `07 - TREINO 3 - Do outro lado, até o mate` | `Tg8#` | só a seta verde `Gg8a8` |
+| N0-LADDER | treinos 2, 3 e 4 | `Th7#`, `Th8#`, `Th8#` | nenhuma |
+| N0-Q-MATE | treino 3 e dois finais do treino 4 | `Dg7#`, `Dh3#`, `Dh4#` | nenhuma |
+
+Com a regra nova, o rei mateado devia estar em vermelho nos oito. **Não foi feito:** pôr os oito é
+autoria, não restauração, e o Doug decidiu um caso nomeado. Fica a lista.

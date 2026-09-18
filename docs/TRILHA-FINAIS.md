@@ -1239,10 +1239,41 @@ desenho naquele passo. É a §5.3 da voz virada máquina, e ela casa com o segun
 dos cinco movimentos (§2.1 de lá): *diga a casa, não a ideia*.
 
 Mais três regras de desenho que a revisão cobra: os desenhos **trocam** a cada
-passo e não se acumulam; **todo nó do treino aponta o alvo — com seta ou com casa
-acesa**, e **nenhuma seta pode ligar a origem ao destino do lance certo**, que
-seria meio lance entregue; e a **prática real** tem **zero** desenho, porque ali o
-juiz é o resultado.
+passo e não se acumulam; **nenhuma seta pode ligar a origem ao destino do lance
+certo**, que seria meio lance entregue; e a **prática real** tem **zero** desenho,
+porque ali o juiz é o resultado.
+
+#### O apoio nos treinos cai por degraus (17/9/2026)
+
+Esta seção dizia **"todo nó do treino aponta o alvo"**, e o `COMO-FAZER` §1 dizia
+"treino 2 sem ajuda". **A contradição era de época, não de princípio:** a regra
+antiga foi escrita quando a aula tinha **um** treino só, e a razão dela (voz §6.2)
+continua boa — *aquecimento em que a criança trava não aquece nada*. Com vários
+treinos, dá para tirar o apoio aos poucos sem deixar o aluno no escuro. O que era
+proteção virou muleta.
+
+| Onde | O apoio antes do lance |
+|---|---|
+| **Treino 1** | todo nó aponta o alvo — seta **ou** casa acesa |
+| **Treino 2 em diante** | nenhum alvo apontado |
+| **Último treino** | nenhum alvo, e posição nova: é a transferência |
+| **Prática real** | nada |
+
+Aula com **um** treino só cai na primeira linha e não muda.
+
+**"Sem ajuda" é sem a resposta marcada antes de o aluno mexer**, não aluno sozinho
+no silêncio. Sai o apoio *antes do lance*; fica, em todos os treinos, o apoio
+*depois do lance* — a fala e o erro com nome. Didaticamente é o que separa
+**reconhecer** de **lembrar**: com a casa acesa ele reconhece a resposta; sem ela,
+ele busca — e é buscar que fixa.
+
+E há um **teto**, não só um piso: **desenho que a fala não cita é ruído**. A régua
+vale nos dois sentidos — casa citada é casa desenhada, e casa desenhada é casa
+citada. Um alvo por nó de treino, não três; se um passo precisa de mais de três
+desenhos, o problema é a fala, que tem duas ideias.
+
+*(Pendência declarada: "a seta vermelha do perigo" no feedback do treino **ainda
+não tem tela** — `treino-jogavel.ts` mostra o feedback só como texto.)*
 
 **O desenho do treino não se escreve no treino.** A etapa 3 é derivada, e o que
 ela desenha vem de `objective.roteiro[…].treino.arrows` e `.highlights` — o bloco
@@ -1250,6 +1281,15 @@ que mora no passo da aula. E ele **não herda** o desenho do próprio passo: o d
 passo acompanha o lance *acontecendo*, o do nó aponta o alvo *antes* de o aluno
 mexer. Na `N1-KPK` a seta do primeiro nó é `e7→c8`, que é a ideia do passo que só
 aponta, e não a do passo seguinte, que carrega `c6c7`.
+
+**Na aula v2 o caminho é outro, e ele estava quebrado até 17/9/2026.** O desenho
+mora no **nó da análise** (o `[%cal]`/`[%csl]` do comentário daquele lance no PGN),
+e `treinos.ts` o copia para a pergunta cuja posição é aquele nó. Antes de 17/9 esse
+campo nunca era preenchido: `treino-jogavel.ts` lia `questao.desenhos` e recebia
+sempre `undefined`, de modo que **todo `[%csl]` de capítulo de treino ficava preso
+na análise e nenhum treino, na prática, apontava alvo nenhum**. A prova está em
+`lib/editor-v2/treinos.test.ts` ("o desenho do nó da posição chega à pergunta do
+treino").
 
 ### 14.4 O aviso não vem antes do erro — e isso decide o formato
 

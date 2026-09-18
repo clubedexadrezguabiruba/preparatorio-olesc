@@ -15,23 +15,70 @@ A primeira palavra do nome do capítulo decide a etapa (`destinoPeloNome`, em
 |---|---|---|
 | `00 - INTRODUÇÃO - …` (sem lances) | Introdução | Um capítulo por quadro, 2 a 6 quadros. **Quadro 1 = a pergunta** ("Ganha, empata ou perde?"); a resposta vem no quadro seguinte. Um quadro com a **pergunta mental** da aula e o que o aluno vai saber fazer no fim |
 | `NN - AULA - …` | Aula assistida | Linha principal com o lance que ganha (`!`). Toda decisão crítica tem **a variante que perde** (`?`/`??`), que vai até a consequência aparecer. Um comentário curto por lance, e só se ajudar (é opcional). O último capítulo-aula é `NN - AULA - LEMBRE-SE`, **sem lances**, com 1 a 3 regras |
-| `NN - TREINO N - …` | Treino guiado | `[ChapterMode "gamebook"]`, `[White "Aluno - Brancas"]` (ou Black). **Apoio decrescente**: treino 1 com o alvo apontado (`[%csl]` na posição), treino 2 sem ajuda, o último de transferência (posição nova ou sem apoio). Os erros previsíveis entram como variante com `?`/`??` e comentário — viram erro com nome. **Treino de empate leva `[Result "1/2-1/2"]`** (sem ele, o aluno lê "não jogue a vitória fora") |
+| `NN - TREINO N - …` | Treino guiado | `[ChapterMode "gamebook"]`, `[White "Aluno - Brancas"]` (ou Black). **Apoio decrescente** (régua do §1.1): treino 1 com o alvo apontado em **todo** nó, treino 2 em diante sem alvo, o último de transferência. Os erros previsíveis entram como variante com `?`/`??` e comentário — viram erro com nome. **Treino de empate leva `[Result "1/2-1/2"]`** (sem ele, o aluno lê "não jogue a vitória fora") |
 | `NN - PRÁTICA - …` (sem lances) | Prática livre | `[Black "Engine"]`. Uma ou mais posições contra o computador, sem desenho, que testam a frase "sai sabendo". Prática de empate leva `[Result "1/2-1/2"]` |
 
-**A variante vira capítulo de comparação sozinha.** Na importação, cada variante de um capítulo-aula
-que tem símbolo (`!`, `?`, `!!`, `??`, `!?`, `?!`) ou comentário vira o capítulo
-"Comparação: 8. Qg6??", logo depois da aula dela. O aluno vê a linha, e no ponto da escolha a tela diz
-"Voltamos a 7… Kh8. Em «…» a partida seguiu com 8. Kf2; agora, a outra escolha: 8. Qg6." Variante sem
-símbolo e sem comentário fica só na análise.
+**A variante fica no capítulo dela — ver §1.2.** Cada variante de um capítulo-aula que tem símbolo
+(`!`, `?`, `!!`, `??`, `!?`, `?!`) ou comentário é mostrada **dentro da mesma etapa**, depois da linha
+principal, com a posição rebobinando até o ponto da escolha. Variante sem símbolo e sem comentário fica
+só na análise.
 
-**Desenhos:** verde = o que se quer; vermelho = perigo (só no erro); amarelo = casa crítica. Casa citada
-é casa desenhada. Treino: nenhuma seta liga a origem ao destino do lance certo. Prática: nenhum desenho.
+**Desenhos:** verde = o que se quer; amarelo = casa crítica; vermelho = **duas coisas, e só estas
+duas** (decisão do Doug, 18/9/2026): (a) perigo, na linha do erro, e (b) **o rei que tomou o mate**, na
+posição de mate — ali ele não lê "cuidado", lê "aqui está o mate". Fora desses dois casos, vermelho é
+defeito. Casa citada
+é casa desenhada — **e casa desenhada é casa citada**, que é o teto contra a poluição visual. Treino:
+nenhuma seta liga a origem ao destino do lance certo. Prática: nenhum desenho. O desenho de um nó de
+treino escreve-se **no comentário daquele lance no PGN** (`{ [%csl Gd6] }`); desde 17/9/2026 ele chega à
+pergunta do treino na tela (`lib/editor-v2/treinos.ts`).
+
+## 1.1 A régua do apoio decrescente (17/9/2026)
+
+Substitui "todo nó do treino aponta o alvo" da `TRILHA-FINAIS` §14.3, que foi escrita quando a aula tinha
+um treino só.
+
+| Onde | O apoio antes do lance |
+|---|---|
+| **Treino 1** | todo nó aponta o alvo — seta **ou** casa acesa |
+| **Treino 2 em diante** | nenhum alvo apontado |
+| **Último treino** | nenhum alvo, e posição nova: é a transferência |
+| **Prática real** | nada |
+
+Aula com **um** treino só cai na primeira linha. "Sem ajuda" é **sem a resposta marcada antes de o aluno
+mexer**, não aluno sozinho no silêncio: o apoio *depois do lance* — a fala e o erro com nome — fica em
+todos os treinos. Com a casa acesa ele **reconhece** a resposta; sem ela, ele **busca** — e é buscar que
+fixa.
+
+Teto, no mesmo fôlego: **um alvo por nó**, e se um passo precisa de mais de três desenhos o problema é a
+fala, que tem duas ideias.
 
 **Voz:** fala ≤ 200 caracteres, frase ≤ 20 palavras, uma ideia por fala, palavras proibidas da
 `VOZ-DO-CURSO §3`. É aviso, não trava — mas a aula boa não tem aviso.
 
 **Símbolos:** o `!`, `?`, `$n` que a fonte deu a um lance fica. Acrescentar é permitido; tirar é decisão
 do Doug (`AGENTS.md`).
+
+## 1.2 Duas opções, um capítulo só — e a fita volta (18/9/2026)
+
+**Regra global do Doug, e ela revoga o "Comparação vira capítulo" que este documento mandava fazer até
+18/9/2026.** Vale para toda aula de finais, nova ou republicada.
+
+**Quando a aula mostra duas escolhas a partir da mesma posição — "se a dama for para f6, afoga; agora
+veja o que devia ter feito" —, as duas ficam na MESMA etapa.** Nunca uma etapa nova, nunca um capítulo
+novo, nunca um item novo no menu "Etapas".
+
+**E a passagem de uma para a outra é um rewind.** O tabuleiro **desfaz os lances para trás**, mais
+rápido do que os fez, até o ponto onde a linha se abriu; só então joga a opção 2. Automático, no fim da
+opção 1 — sem botão e sem clique do aluno.
+
+**Por quê.** O capítulo novo faz a opção 2 parecer assunto novo, e o aluno perde justamente o que a
+comparação ensina: que as duas saem da **mesma** posição. O corte seco de volta tem o mesmo defeito —
+parece outra posição, e não a mesma voltando. A fita rebobinando é o que diz "é aqui que você escolheu".
+
+**Onde isso mora no código.** `lib/editor-v2/importar-estudo.ts` criava um `CapituloV2` com o título
+`Comparação: <lance>` por variante; era ele que enchia o menu de etapas. A comparação passa a ser parte
+da etapa da aula, e a animação de volta é do player v2. **O menu "Etapas" de uma aula não tem mais
+nenhum item começando com "Comparação:"** — é assim que se confere de fora.
 
 ## 2. Fontes — a política de 17/9/2026
 
@@ -66,12 +113,21 @@ node scripts/conferir-estudo-finais.ts estudo.pgn
 # 3. reescrever na convenção acima → content/finais/estudos-aula/<ID-DA-TRILHA>.pgn
 #    e conferir de novo
 
+# 3.1 os cinco revisores, em série, corrigindo o PGN (arquiteto → scaffolding →
+#     símbolos → voz → desenho). Roda sozinha ao publicar; à mão é assim:
+#     /revisar-pgn-de-finais <ID-DA-TRILHA>
+
 # 4. montar e conferir sem publicar (grava .editor/v2/<ID>.json, cria a posição da prática no acervo)
 node scripts/publicar-aula-de-finais.ts <ID-DA-TRILHA> content/finais/estudos-aula/<ID>.pgn --link <url> --obra "<nome>"
 
 # 5. publicar (só com a conferência verde); --substituir refaz um documento que já existe
 node scripts/publicar-aula-de-finais.ts <ID-DA-TRILHA> content/finais/estudos-aula/<ID>.pgn --substituir --publicar
 ```
+
+**Duas passadas de revisão, e elas não se substituem.** A do passo 3.1 lê o **PGN**, antes de a aula
+existir, e **corrige** — cada revisor escreve na sua camada. A `/revisar-aula` lê a **tela** da aula já
+publicada, com o navegador. O que a primeira não vê é a montagem; o que a segunda não vê é a decisão
+didática antes de o arquivo virar aula.
 
 Treino ou prática de empate: `[Result "1/2-1/2"]` no capítulo (ou `--empate <número do capítulo>`, só para a prática). A publicação cria
 `content/aulas-v2/<ID>/`; uma v2 com o mesmo id de uma aula v1 **vence a v1** e o progresso do aluno

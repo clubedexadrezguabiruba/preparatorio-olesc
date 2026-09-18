@@ -1,6 +1,36 @@
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { IndiceSchema, validarBanco, type Cor, type EntradaDoIndice, type Linha } from "./linhas.ts";
+import { textoEmPortugues } from "./treino.ts";
+
+/**
+ * O nome da linha na língua do aluno — regra do Doug de 17/9/2026.
+ *
+ * O nome é prosa que o professor escreveu no PGN: "Golpe 1: ...Dxg2? → Be4!",
+ * "Linha mais difícil: ...Ce5 e ...a6". Ele aparece na página da abertura, no
+ * seletor de linha e no alto do move trainer, e era o último texto do site
+ * ainda em inglês fora das aulas.
+ *
+ * **Depois do `validarBanco`, e não dentro dele.** O validador também roda no
+ * compilador, e `compilar.test.ts` cobra que `public/repertorio/` seja byte a
+ * byte o que a fonte produz; traduzir lá dentro faria a leitura discordar do
+ * arquivo. Aqui é leitura pura — o disco continua igual.
+ *
+ * Só o `nome`. O `comentario` de cada lance chega traduzido pelo
+ * `useComentarioPaginado`, e os `sans` pela `FaixaDeSans`; `lances`, `meus` e
+ * `fenInicial` são dado e não se traduzem nunca.
+ *
+ * **Os `sans` da linha entram como desempate do `R`.** Boa parte destes nomes
+ * termina num trecho que o compilador escreveu a partir da `chess.js` —
+ * "Escandinava — 11.Re1 O-O 12.Bg5", "Escocesa — 13.Rxd6 Rad8 14.Rxd8" —, e ali
+ * o `R` é torre. Passando a lista de lances da própria linha, `textoEmPortugues`
+ * confere em vez de adivinhar: `Re1` que está na lista vira `Te1`; um `Re1` que
+ * o professor tenha escrito à mão querendo dizer rei não está na lista e fica.
+ * Ver o cabeçalho de `textoEmPortugues`.
+ */
+function comNomeEmPortugues(linhas: Linha[]): Linha[] {
+  return linhas.map((linha) => ({ ...linha, nome: textoEmPortugues(linha.nome, new Set(linha.sans)) }));
+}
 
 /**
  * O leitor do banco de linhas com o cache — separado de `banco.ts` para poder ser testado
@@ -63,7 +93,7 @@ export function criarLeitorDoBanco(pasta: string): LeitorDoBanco {
     // O `arquivo` do índice é URL a partir da raiz do site, porque foi escrito
     // pensando no navegador. Em disco, a raiz é `public/repertorio/`.
     const relativo = entrada.arquivo.replace(/^\/repertorio\//, "");
-    return lerComCache(relativo, (dados) => validarBanco(dados, `public/repertorio/${relativo}`));
+    return lerComCache(relativo, (dados) => comNomeEmPortugues(validarBanco(dados, `public/repertorio/${relativo}`)));
   }
 
   async function linhaPorId(cor: Cor, abertura: string, id: string): Promise<Linha | null> {

@@ -69,6 +69,7 @@ export function retratoDaFonteDoTreino(aula: AulaV2, treino: TreinoV2): unknown 
       id,
       uci: analise.nos[id]?.uci ?? null,
       comentario: analise.nos[id]?.comentario ?? null,
+      desenhos: analise.nos[id]?.desenhos ?? null,
     })),
     narracoes: capitulo.narracoes
       .filter((item) => origem.nodeIds.includes(item.nodeId))

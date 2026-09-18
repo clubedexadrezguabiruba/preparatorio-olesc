@@ -21,6 +21,41 @@ Não trate o piloto atual como editor concluído. Não reduza o checklist funcio
 refaça entregas que o diário comprova. Implemente em fatias completas, atualize o diário
 e execute os portões do projeto antes de cada commit de código.
 
+## Duas opções ficam no mesmo capítulo, e a fita volta
+
+Regra do Doug, de 18/9/2026, **global** para as aulas de finais — `content/finais/estudos-aula/`,
+`content/aulas-v2/`, a importação de estudo (`lib/editor-v2/importar-estudo.ts`) e o player v2.
+**Ela revoga** o "a variante vira capítulo de comparação sozinha" que o
+`docs/COMO-FAZER-UMA-AULA-DE-FINAIS.md` §1 mandava fazer até 18/9/2026.
+
+1. **Quando a aula mostra duas escolhas da mesma posição, as duas ficam na MESMA etapa.** "Se a dama
+   for para f6, afoga; agora veja o que devia ter feito" é um capítulo só. Nunca criar capítulo novo,
+   etapa nova, nem item novo no menu "Etapas" para a opção 2.
+2. **A passagem de uma opção para a outra é um rewind.** O tabuleiro desfaz os lances para trás, mais
+   rápido do que os fez, até o ponto onde a linha se abriu, e só então joga a opção 2. Automático, no
+   fim da opção 1 — sem botão e sem clique do aluno. "Como se estivesse recapitulando, rewind the tape."
+3. **Por quê:** o capítulo novo faz a opção 2 parecer assunto novo, e o aluno perde o que a comparação
+   ensina — que as duas saem da **mesma** posição. O corte seco de volta tem o mesmo defeito: parece
+   outra posição, não a mesma voltando.
+4. **Como se confere de fora:** o menu "Etapas" de qualquer aula de finais **não pode ter nenhum item
+   começando com "Comparação:"**. Em 18/9/2026 a `N1-SQUARE` tinha três (`Comparação: 1. Rg2?`,
+   `Comparação: 1... Rf5?`, `Comparação: 1. a3?`), e era a montagem que os criava — não o PGN.
+5. Isto não mexe nas outras regras: os **símbolos** continuam junto do lance (seção abaixo), o
+   comentário continua **opcional**, e o apoio dos treinos continua caindo por degraus
+   (`COMO-FAZER` §1.1).
+
+**O código disto está na fila, não feito.** Em 18/9/2026 o Doug decidiu a regra e adiou a
+implementação — ele tinha outra prioridade. A fatia inteira, com as duas pontas, os testes que mudam
+junto e o critério de aceite, está em **`docs/FILA-DO-DOUG.md` §1**. Leia lá antes de planejar, e não
+refaça o levantamento.
+
+## `docs/FILA-DO-DOUG.md` — o que o Doug quer e ainda não foi feito
+
+Antes de propor trabalho novo nas aulas de finais ou no Editor v2, **leia `docs/FILA-DO-DOUG.md`**. É
+a lista do que ele já decidiu fazer e adiou, e do que ficou esperando decisão dele. Serve para ele não
+repetir a ideia e para você não redescobrir. Item feito sai de lá e vira seção no
+`docs/MODO-EDITOR-ONDE-PARAMOS.md`.
+
 ## Comentário de lance no move trainer é opcional
 
 Regra do Doug, de 17/9/2026, **global**: vale para os 11 repertórios (`content/repertorio/`,

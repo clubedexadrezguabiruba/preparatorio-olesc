@@ -3,7 +3,7 @@ import type { Position } from "../lesson/schema.ts";
 import { caminhoAte, quadroDoNo } from "./arvore.ts";
 import { idsDaAulaV2 } from "./ids.ts";
 import { LIMITES_V2 } from "./limites.ts";
-import type { AulaV2, CapituloV2, QuestaoTreinoV2, TreinoV2 } from "./modelo.ts";
+import type { AulaV2, CapituloV2, DesenhoV2, NoV2, QuestaoTreinoV2, TreinoV2 } from "./modelo.ts";
 
 export const VERSAO_DERIVADOR_TREINO_V2 = 1;
 
@@ -75,6 +75,31 @@ function percursoDoCapitulo(capitulo: CapituloV2): string[] {
   return [capitulo.inicioNodeId, ...capitulo.caminho];
 }
 
+/**
+ * O desenho que a pergunta do treino mostra — o da **posição que o aluno vê**, não o do lance
+ * que ele ainda vai jogar.
+ *
+ * ## Por que esta função existe (17/9/2026)
+ *
+ * Até aqui a derivação montava a pergunta só com `posicao` e `respostas`, e `treino-jogavel.ts`
+ * lia `questao.desenhos` para desenhar: o campo nunca era preenchido, então **todo `[%csl]` que
+ * o professor escreveu num capítulo de treino ficava preso na análise e não chegava à tela**. Na
+ * prática todos os treinos eram "sem ajuda", inclusive o primeiro, que devia apontar o alvo.
+ *
+ * **Quem manda é o nó, e só ele.** O `desenhos` da narração (`previa.ts:177`) é o desenho de uma
+ * *fala*, e um nó pode ter várias falas apontando coisas diferentes — na pergunta do treino não há
+ * fala nenhuma antes do lance, só a posição. Escolher "a primeira narração daquele nó" seria uma
+ * escolha arbitrária entre desenhos que o professor fez para outro momento.
+ *
+ * Desenho vazio (`{}`, ou sem seta e sem casa) não vira campo: a tela trata ausência e vazio igual,
+ * e o campo ausente deixa o JSON da aula menor e o diff legível.
+ */
+function desenhoDaPergunta(no: NoV2 | undefined): DesenhoV2 | undefined {
+  const escolhido = no?.desenhos;
+  if (!escolhido) return undefined;
+  return !escolhido.arrows?.length && !escolhido.highlights?.length ? undefined : escolhido;
+}
+
 function tituloDoLado(titulo: string, lado: "white" | "black", ambos: boolean): string {
   if (!ambos) return titulo;
   return `${titulo} — ${lado === "white" ? "brancas" : "pretas"}`;
@@ -112,11 +137,13 @@ function prepararUmLado(
     const respostaId = idLivre(usados, `resposta-${nodeIdDoLance}-${lado}`);
     const narracao = capitulo.narracoes.find((item) => item.nodeId === nodeIdDoLance)?.texto;
     const feedback = narracao ?? no.comentario ?? "Boa. Continue pela linha ensinada.";
+    const desenhos = desenhoDaPergunta(analise.nos[posicaoNodeId]);
     perguntas.push({
       indiceDoLance: indice,
       questao: {
         id: questaoId,
         posicao: { analiseId: analise.id, nodeId: posicaoNodeId },
+        ...(desenhos ? { desenhos } : {}),
         respostas: [{
           id: respostaId,
           moves: [no.uci],
@@ -172,6 +199,9 @@ function prepararUmLado(
       id,
       uci: analise.nos[id]?.uci ?? null,
       comentario: analise.nos[id]?.comentario ?? null,
+      // Desde 17/9/2026 o desenho do nó chega à pergunta: se ele muda, o treino derivado
+      // envelhece junto. Ver `retratoDaFonteDoTreino`, que tem de dizer exatamente isto.
+      desenhos: analise.nos[id]?.desenhos ?? null,
     })),
     narracoes: capitulo.narracoes
       .filter((item) => origemIds.includes(item.nodeId))

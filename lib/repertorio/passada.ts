@@ -255,15 +255,15 @@ function emRepouso(linha: Linha, estado: EstadoDaPassada): Cartao {
     if (estado.revelado) {
       return {
         comando: "Parou aqui",
-        estado: `A linha joga ${estado.revelado.san}. De novo, do começo.`,
+        estado: `Aqui o lance é ${estado.revelado.san}. Comece de novo.`,
         tom: "ruim",
       };
     }
     // Sem "muito bom": um aluno de 14 anos fareja elogio de máquina, e
     // seguir setas não é ter aprendido nada ainda.
     if (modo === "assistido") return { comando: "Pronto.", estado: "Agora sem a seta.", tom: "bom" };
-    if (modo === "treino") return { comando: "Pronto.", estado: "Agora valendo.", tom: "bom" };
-    return { comando: "Linha completa", estado: "", tom: "bom" };
+    if (modo === "treino") return { comando: "Pronto.", estado: "Agora de memória.", tom: "bom" };
+    return { comando: "Você chegou ao fim.", estado: "", tom: "bom" };
   }
 
   if (fase === "lendo") {
@@ -277,9 +277,14 @@ function emRepouso(linha: Linha, estado: EstadoDaPassada): Cartao {
   }
 
   if (!minhaVez(linha, passo)) {
+    /*
+     * "Ele joga sozinho." saiu em 18/9/2026, a pedido do Doug: a frase queria
+     * dizer "não espere, o adversário anda por conta" e o aluno lia "ele joga
+     * sem mim". Quem é o dono do lance resolve isso melhor do que quem o move.
+     */
     return passo === 0
       ? { comando: "Ele começa", estado: "Olhe o primeiro lance.", tom: "calma" }
-      : { comando: "Veja a resposta dele", estado: "Ele joga sozinho.", tom: "calma" };
+      : { comando: "Agora é a vez dele", estado: "Olhe o lance que ele faz.", tom: "calma" };
   }
 
   if (modo === "assistido") {
@@ -290,12 +295,21 @@ function emRepouso(linha: Linha, estado: EstadoDaPassada): Cartao {
     };
   }
 
-  // Treino e quiz são iguais no tabuleiro — sem seta, sem comentário —, e o
-  // cartão é o único lugar em que a diferença chega ao aluno: "não conta" de
-  // um lado, "valendo" do outro.
+  /*
+   * Treino e quiz são iguais no tabuleiro — sem seta, sem comentário —, e o
+   * cartão é o único lugar em que a diferença chega ao aluno: "errar não conta"
+   * de um lado, "de memória" do outro.
+   *
+   * **"Valendo" saiu em 18/9/2026, a pedido do Doug.** Era a palavra da casa
+   * desde 9/9 (ver `VOZ-DO-CURSO` §4), e o problema dela é que ela nomeia a
+   * **aposta** e não o que o aluno faz: "valendo" só quer dizer alguma coisa
+   * para quem já sabe que existe um placar por trás. "De memória" nomeia a
+   * tarefa — e já era o que o site dizia em `/aberturas` ("depois cobra de
+   * memória") e no fim da partida ("Partida inteira, de memória, sem erro").
+   */
   const qual = linha.meus.indexOf(passo) + 1;
   if (modo === "treino" && estado.setaNoPasso === passo) {
-    return { comando: "Siga a seta", estado: `A seta é o lance da linha. Lance ${qual} de ${linha.meus.length}; errar aqui não conta.`, tom: "calma" };
+    return { comando: "Siga a seta", estado: `A seta mostra o lance. Lance ${qual} de ${linha.meus.length}; errar aqui não conta.`, tom: "calma" };
   }
   if (modo === "treino" && estado.errosNoLance >= 2 && estado.dicaNoPasso === passo) {
     return { comando: "Jogue o lance certo", estado: "A casa acesa é a peça que joga. Errar aqui não conta.", tom: "calma" };
@@ -308,7 +322,7 @@ function emRepouso(linha: Linha, estado: EstadoDaPassada): Cartao {
       }
     : {
         comando: "Jogue o lance certo",
-        estado: `Lance ${qual} de ${linha.meus.length}, valendo.`,
+        estado: `Lance ${qual} de ${linha.meus.length}, de memória.`,
         tom: "calma",
       };
 }
@@ -657,7 +671,7 @@ function jogou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
       estado: mostrar(
         linha,
         estado,
-        { comando: "Siga a seta", estado: `Aqui a linha joga ${san}.`, tom: "aviso" },
+        { comando: "Siga a seta", estado: `Aqui o lance é ${san}.`, tom: "aviso" },
         null,
       ),
       efeitos: [{ tipo: "som-recusa" }, esperaAVolta],
@@ -686,18 +700,18 @@ function jogou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
       erros >= 3
         ? {
             comando: "Siga a seta",
-            estado: "Três tentativas: a seta mostra o lance da linha. Errar aqui não conta.",
+            estado: "Três tentativas — a seta mostra o lance. Errar aqui não conta.",
             tom: "aviso",
           }
         : veredito === "erro-nomeado"
           ? {
               comando: `${jogadoEmPortugues} é a armadilha`,
-              estado: "A fonte mostra esse lance de propósito como errado. Errar aqui não conta — tente de novo.",
+              estado: "Esse lance parece bom e não é. Errar aqui não conta — tente de novo.",
               tom: "aviso",
             }
           : veredito === "alternativa"
             ? {
-                comando: "Bom lance, mas não é o da linha",
+                comando: "Bom lance — mas não é o nosso",
                 estado: "Aqui você decora o lance do clube. Errar não conta — tente de novo.",
                 tom: "aviso",
               }
@@ -739,8 +753,8 @@ function jogou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
           {
             comando: "Também vale",
             estado: ultimoPly
-              ? `A linha do clube termina com ${san}.`
-              : `A linha do clube joga ${san}.`,
+              ? `O lance do clube termina com ${san}.`
+              : `O lance do clube aqui é ${san}.`,
             tom: "aviso",
           },
           { noTabuleiro: principal, doAluno: uci },
@@ -761,12 +775,12 @@ function jogou(linha: Linha, estado: EstadoDaPassada, uci: string): Passo {
     veredito === "erro-nomeado"
       ? {
           comando: `${jogadoEmPortugues} é a armadilha`,
-          estado: `A fonte mostra esse lance de propósito como errado. A linha joga ${san}.`,
+          estado: `Esse lance parece bom e não é. Aqui o lance é ${san}.`,
           tom: "ruim",
         }
       : {
           comando: "Não é esse",
-          estado: `A linha joga ${san}. Esta passada já contou.`,
+          estado: `Aqui o lance é ${san}. Esta tentativa já contou.`,
           tom: "ruim",
         };
 
@@ -876,10 +890,12 @@ function pediuDica(linha: Linha, estado: EstadoDaPassada): Passo {
       cartao: {
         comando: "Jogue o lance certo",
         estado: cobrou
-          ? "Você pediu ajuda: esta passada conta como treino, não como acerto."
+          // A casa acesa é dita aqui também: sem isso o aluno pede a dica, vê o
+          // tabuleiro mudar e não sabe que a mudança foi a resposta ao pedido.
+          ? "A casa acesa é a peça que joga. Com ajuda, esta tentativa não conta como acerto."
           : estado.modo === "treino"
-            ? "A casa acesa é a peça que resolve. Aqui a dica é de graça."
-            : "A casa acesa é a peça que resolve.",
+            ? "A casa acesa é a peça que joga. Aqui a dica não custa nada."
+            : "A casa acesa é a peça que joga.",
         tom: "aviso",
       },
     },

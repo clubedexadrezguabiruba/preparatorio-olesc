@@ -83,7 +83,7 @@ export function TreinadorDaAula({
     <div className="flex flex-col gap-1">
       <p className="rotulo text-tinta-fraca">{titulo} · linha {indice + 1} de {linhas.length}</p>
       <p className="truncate text-sm font-medium text-tinta">{linha.nome}</p>
-      {falha ? <p role="alert" className="text-sm text-aviso-tinta">Esta passada não foi gravada: {falha}. Tente de novo.</p> : null}
+      {falha ? <p role="alert" className="text-sm text-aviso-tinta">Não deu para guardar esta linha: {falha}. Tente de novo.</p> : null}
     </div>
   );
 
@@ -110,15 +110,24 @@ export function TreinadorDaAula({
       painelDeFim={linhaFechada ? (
         <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto cartao px-4 py-4">
           <p className="text-sm font-semibold text-tinta">
-            {placar?.revelado ? `Não era esse lance: a linha joga ${placar.revelado.san}.` : placar?.acertou ? "Linha inteira, sem erro." : "Você chegou ao fim da linha."}
+            {placar?.revelado ? `Não era esse lance: aqui o lance é ${placar.revelado.san}.` : placar?.acertou ? "Linha inteira, sem erro." : "Você chegou ao fim da linha."}
           </p>
           {linha.comentarios[String(linha.lances.length - 1)]?.trim() ? (
             <p className="rounded-lg bg-metodo-superficie/15 px-3 py-2.5 text-sm text-metodo-tinta-alta">
               {semQuebras(linha.comentarios[String(linha.lances.length - 1)])}
             </p>
           ) : null}
+          {/*
+           * Reescrito em 18/9/2026. Três defeitos numa frase só: "linha(s)", que
+           * é marca de código e não de professor; o caminho cru `/aberturas`, que
+           * o aluno não tem como clicar nem entender; e "para aprender de vez",
+           * que prometia sem dizer o que fazer.
+           */}
           <p className="text-xs text-tinta-fraca">
-            {ultima ? "Esta era a última linha do move trainer da aula." : `Faltam ${linhas.length - indice - 1} linha(s) nesta aula.`} Para aprender de vez, a linha volta em /aberturas nos próximos dias.
+            {ultima
+              ? "Esta era a última linha desta aula."
+              : `${linhas.length - indice - 1 === 1 ? "Falta 1 linha" : `Faltam ${linhas.length - indice - 1} linhas`} nesta aula.`}{" "}
+            Ela volta aqui nos próximos dias, até você acertar sem pensar.
           </p>
           <div className="flex flex-wrap gap-2">
             {ultima ? (

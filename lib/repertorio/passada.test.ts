@@ -246,7 +246,7 @@ test("o treino termina sem prêmio, com o comentário final na tela e o cartão 
   assert.equal(quantos(efeitos, "terminou"), 1);
   assert.equal(estado.comentario, "c3 prepara d4 e monta o centro.", "não há painel de fim aqui");
   assert.equal(estado.cartao.comando, "Pronto.");
-  assert.match(estado.cartao.estado, /valendo/, "a próxima etapa é a prova, e o cartão avisa");
+  assert.match(estado.cartao.estado, /de memória/, "a próxima etapa é a prova, e o cartão avisa");
 });
 
 /* ------------------------------------------------------------------ *
@@ -418,8 +418,8 @@ test("no treino a dica é de graça, acende a casa, e o cartão diz isso", () =>
   assert.equal(estado.dicaNoPasso, 2, "a casa acende no lance da vez");
   assert.deepEqual(decisoes(efeitos), [], "e nada sobe");
   assert.equal(estado.decidido, false);
-  assert.match(estado.cartao.estado, /de graça/, "o aluno precisa saber que aqui pode pedir");
-  assert.doesNotMatch(estado.cartao.estado, /conta como treino/);
+  assert.match(estado.cartao.estado, /não custa nada/, "o aluno precisa saber que aqui pode pedir");
+  assert.doesNotMatch(estado.cartao.estado, /não conta como acerto/);
 });
 
 test("pedir dica de novo no mesmo lance não escalona nem grava outra vez", () => {
@@ -587,7 +587,7 @@ test("o cartão em repouso é o único lugar em que treino e quiz diferem para o
   const quiz = inicio(l, "quiz").cartao;
   assert.equal(treino.comando, quiz.comando, "a instrução é a mesma");
   assert.match(treino.estado, /não conta/);
-  assert.match(quiz.estado, /valendo/);
+  assert.match(quiz.estado, /de memória/);
 });
 
 /* ------------------------------------------------------------------ *

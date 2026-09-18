@@ -1,4 +1,5 @@
 import { Chess } from "chess.js";
+import { sanEmPortugues } from "../repertorio/treino.ts";
 import type { TreeNode } from "./schema.ts";
 
 /**
@@ -40,9 +41,17 @@ export function primeiraFrase(texto: string | undefined | null): string | null {
   return corte ? limpo.slice(0, corte.index + 1) : limpo;
 }
 
+/**
+ * O lance do terceiro degrau, escrito como o aluno o lê.
+ *
+ * A `chess.js` devolve SAN inglês, e aqui isso é **certeza** — o lance sai do
+ * tabuleiro, não de um texto. Por isso vale o `sanEmPortugues` inteiro, com o
+ * `R` de *rook* virando `T`; a dúvida que faz `textoEmPortugues` deixar o `R`
+ * quieto só existe em prosa. Regra do Doug de 17/9/2026.
+ */
 function sanDoLance(fen: string, uci: string): string | null {
   try {
-    return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4) || undefined }).san;
+    return sanEmPortugues(new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4) || undefined }).san);
   } catch {
     return null;
   }

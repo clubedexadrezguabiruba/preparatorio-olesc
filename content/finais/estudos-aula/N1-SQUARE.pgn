@@ -62,7 +62,7 @@ No fim, você responde num olhar, sem contar lance por lance. }
 [Orientation "white"]
 
 { Brancas jogam. O peão em a4 está a quatro passos de a8. } { [%csl Ya4,Ya8] }
-1. a5! { Trace a diagonal de a5 até d8. Ela fecha um quadrado: a5, a8, d8 e d5. } { [%cal Ya5d8] [%csl Ya5,Ya8,Yd8,Yd5] } ( 1. Kg2? { O rei branco andou, e o peão ficou parado. Isso dá um lance ao rei preto. } 1... Ke5 { Rei em e5, dentro do quadrado de a4 até e8. } { [%cal Ya4e8] [%csl Ya4,Ya8,Ye8,Ye4,Re5] } 2. a5 Kd5 3. a6 Kc6 4. a7 Kb7 5. a8=Q+ Kxa8 { O rei preto come a dama nova. Empate. } { [%csl Ra8] } ) 1... Ke5 { O rei preto foi a e5, fora do quadrado. } { [%cal Ya5d8] [%csl Ya5,Ya8,Yd8,Yd5,Ye5] } 2. a6 { Isso tem nome: o quadrado do peão. A cada passo do peão, ele encolhe. } { [%cal Ya6c8] [%csl Ya6,Ya8,Yc8,Yc6] } 2... Kd6 { Rei em d6: ainda fora do quadrado de a6 até c8. } { [%cal Ya6c8] [%csl Ya6,Ya8,Yc8,Yc6,Yd6] } 3. a7 Kc7 4. a8=Q { Dama! Rei fora do quadrado não alcança o peão. } { [%csl Ga8] } *
+1. a5! { Trace a diagonal de a5 até d8. Ela fecha um quadrado: a5, a8, d8 e d5. } { [%cal Ya5d8] [%csl Ya5,Ya8,Yd8,Yd5] } ( 1. Kg2? { O rei branco andou, e o peão ficou parado. Isso dá um lance ao rei preto. } 1... Ke5 { Rei em e5, dentro do quadrado de a4 até e8. } { [%cal Ya4e8] [%csl Ya4,Ya8,Ye8,Ye4,Re5] } 2. a5 Kd5 3. a6 Kc6 4. a7 Kb7 5. a8=Q+ Kxa8 { O rei preto come a dama nova. Empate. } ) 1... Ke5 { O rei preto foi a e5, fora do quadrado. } { [%cal Ya5d8] [%csl Ya5,Ya8,Yd8,Yd5] } 2. a6 { Isso tem nome: o quadrado do peão. A cada passo do peão, ele encolhe. } { [%cal Ya6c8] [%csl Ya6,Ya8,Yc8,Yc6] } 2... Kd6 { Rei em d6: ainda fora do quadrado de a6 até c8. } { [%cal Ya6c8] [%csl Ya6,Ya8,Yc8,Yc6] } 3. a7 Kc7 4. a8=Q { Dama! Rei fora do quadrado não alcança o peão. } *
 
 [Event "Aula 7 - Regra do quadrado"]
 [Site "https://lichess.org/study/TI5KNg6U"]
@@ -92,7 +92,7 @@ No fim, você responde num olhar, sem contar lance por lance. }
 [Orientation "white"]
 
 { Peão em a2, na casa inicial. Ele pode andar uma casa ou duas. } { [%csl Ya2] }
-1. a4! { Duas casas. O quadrado vai de a4 até e8, e o rei em g7 fica fora. } { [%cal Ya4e8] [%csl Ya4,Ya8,Ye8,Ye4,Yg7] } ( 1. a3? { Uma casa só. O quadrado ficou maior: vai de a3 até f8. } { [%cal Ya3f8] [%csl Ya3,Ya8,Yf8,Yf3] } 1... Kf6! { O rei entra no quadrado em f6. } { [%csl Ya3,Ya8,Yf8,Yf3,Rf6] } 2. a4 Ke5 3. a5 Kd5 4. a6 Kc6 5. a7 Kb7 6. a8=Q+ Kxa8 { O rei come a dama nova. Com uma casa só, empate. } ) 1... Kf6 { Rei em f6: ainda fora do quadrado. } { [%cal Ya4e8] [%csl Ya4,Ya8,Ye8,Ye4,Yf6] } 2. a5 Ke5 3. a6 Kd6 4. a7 Kc7 5. a8=Q { Dama! Na casa inicial, o peão anda duas casas — e o quadrado começa ali. } { [%csl Ga8] } *
+1. a4! { Duas casas. O quadrado vai de a4 até e8, e o rei em g7 fica fora. } { [%cal Ya4e8] [%csl Ya4,Ya8,Ye8,Ye4,Yg7] } ( 1. a3? { Uma casa só. O quadrado ficou maior: vai de a3 até f8. } { [%cal Ya3f8] [%csl Ya3,Ya8,Yf8,Yf3] } 1... Kf6! { O rei entra no quadrado em f6. } { [%csl Ya3,Ya8,Yf8,Yf3,Rf6] } 2. a4 Ke5 3. a5 Kd5 4. a6 Kc6 5. a7 Kb7 6. a8=Q+ Kxa8 { O rei come a dama nova. Com uma casa só, empate. } ) 1... Kf6 { Rei em f6: ainda fora do quadrado. } { [%cal Ya4e8] [%csl Ya4,Ya8,Ye8,Ye4] } 2. a5 Ke5 3. a6 Kd6 4. a7 Kc7 5. a8=Q { Dama! Na casa inicial, o peão anda duas casas — e o quadrado começa ali. } *
 
 [Event "Aula 7 - Regra do quadrado"]
 [Site "https://lichess.org/study/TI5KNg6U"]
@@ -127,7 +127,7 @@ No fim, você responde num olhar, sem contar lance por lance. }
 [ChapterMode "gamebook"]
 
 { Pretas jogam. O quadrado do peão vai de b5 até e8. Leve o rei para dentro dele. } { [%cal Yb5e8] [%csl Yb5,Yb8,Ye8,Ye5] }
-1... Ke5! { Rei em e5, dentro do quadrado. Agora ele acompanha o peão. } ( 1... Kf5? { Rei em f5, fora do quadrado. O peão anda para b6 e escapa. } ) ( 1... Ke4? { Rei em e4, abaixo do quadrado. O peão anda e escapa. } ) 2. b6 { O peão andou. O quadrado agora vai de b6 até d8. } { [%cal Yb6d8] [%csl Yb6,Yb8,Yd8,Yd6] } 2... Kd6! { Rei em d6, ainda dentro do quadrado. } ( 2... Ke6? { Rei em e6, fora do quadrado. O peão anda para b7 e escapa. } ) ( 2... Kd5? { Rei em d5, abaixo do quadrado. O peão anda para b7 e escapa. } ) 3. b7 { O quadrado encolheu: b7, b8, c8 e c7. } { [%csl Yb7,Yb8,Yc8,Yc7] } 3... Kc7! { Rei em c7, colado na casa b8. } 4. b8=Q+ Kxb8! { O rei come a dama nova. Empate: você alcançou o peão. } *
+1... Ke5! { Rei em e5, dentro do quadrado. Agora ele acompanha o peão. } ( 1... Kf5? { Rei em f5, fora do quadrado. O peão anda para b6 e escapa. } ) ( 1... Ke4? { Rei em e4, abaixo do quadrado. O peão anda e escapa. } ) 2. b6 { O peão andou. O quadrado agora vai de b6 até d8. } { [%cal Yb6d8] [%csl Yb6,Yb8,Yd8,Yd6] } 2... Kd6! { Rei em d6, ainda dentro do quadrado. } ( 2... Ke6? { Rei em e6, fora do quadrado. O peão anda para b7 e escapa. } ) ( 2... Kd5? { Rei em d5, abaixo do quadrado. O peão anda para b7 e escapa. } ) 3. b7 { O quadrado encolheu: b7, b8, c8 e c7. } { [%csl Yb7,Yb8,Yc8,Yc7] } 3... Kc7! { Rei em c7, colado na casa b8. } 4. b8=Q+ { [%csl Yb8] } Kxb8! { O rei come a dama nova. Empate: você alcançou o peão. } *
 
 [Event "Aula 7 - Regra do quadrado"]
 [Site "https://lichess.org/study/TI5KNg6U"]

@@ -20,10 +20,16 @@
  * O resultado vai do servidor para o navegador como props. Por isso ele leva só o que o
  * aluno vê: nada de comentário privado de análise (§12), nada de receita, proveniência ou
  * catálogo inteiro — só as frases e posições de cada etapa.
+ *
+ * ## E na língua do aluno
+ *
+ * Esta é também a fronteira da notação (Doug, 17/9/2026): o que sai daqui já saiu em
+ * português. Ver `naLinguaDoAluno`, no fim do arquivo.
  */
 import type { Position } from "../lesson/schema.ts";
 import { mapaDaAnalise, quadroDoNo } from "./arvore.ts";
 import type { Linha } from "../repertorio/linhas.ts";
+import { textoEmPortugues } from "../repertorio/treino.ts";
 import type { AulaV2, DesenhoV2 } from "./modelo.ts";
 import type { PacoteV2 } from "./pacote.ts";
 import { posicoesDoPacoteV2 } from "./pacote.ts";
@@ -289,15 +295,66 @@ export function etapasDoAlunoV2(aula: AulaV2, positions: Record<string, Position
   return etapas;
 }
 
+/**
+ * Os campos que o aluno **lê**. Tudo o que não está aqui é dado, e dado fica em
+ * inglês: `lance` e `moves` são UCI que vão ao tabuleiro, `fen` é posição,
+ * `positionId` e `entidadeId` são chave. Traduzir um deles quebraria a aula em
+ * silêncio, e é por isso que a lista é de permissão e não de proibição.
+ *
+ * Levantada do texto real das dezesseis aulas publicadas em 17/9/2026: as que
+ * hoje carregam lance são `titulo`, `rotulo`, `resumo`, `fala`, `feedback`,
+ * `intro`, `winningOffMethod` e `losesWin`, mais o mapa `falasDoDefensor`. As
+ * outras entram porque são prosa e podem carregar amanhã — a trava que confere
+ * é `notacao-na-aula-do-aluno.test.ts`, que varre a **saída** desta função
+ * atrás de um lance inglês em qualquer campo que não seja dado.
+ */
+const CAMPOS_QUE_O_ALUNO_LE = new Set([
+  "titulo", "subtitulo", "rotulo", "resumo", "fala", "feedback", "intro", "hint",
+  "dica", "texto", "comentario", "nome", "objetivo", "explicacaoConclusao",
+  "winningOffMethod", "losesWin", "methodAlternative",
+]);
+
+/** O mapa cujas **chaves** são id e cujos **valores** são fala do professor. */
+const MAPAS_DE_FALA = new Set(["falasDoDefensor"]);
+
+/**
+ * A aula inteira na língua do aluno — regra do Doug de 17/9/2026.
+ *
+ * **Aqui, porque aqui é a fronteira.** Deste ponto para baixo o pacote deixa de
+ * ser arquivo e vira tela: o cabeçalho, a lista de etapas, a capa de seção, a
+ * fala do professor e o "Isso: 5.Cc3." do treino saem todos daqui. Traduzir na
+ * fronteira vale para a abertura, para os finais e para a prévia do editor de
+ * uma vez só, e vale para a tela que ainda não foi escrita.
+ *
+ * **O arquivo não muda, e isso é de propósito.** O pacote publicado é selado
+ * por SHA-256 no `manifesto`; e o inglês no disco é o que deixa o teste provar
+ * que o lance escrito existe no tabuleiro. Ver o cabeçalho de
+ * `textoEmPortugues`, que também explica por que o `R` não é traduzido em prosa.
+ */
+function naLinguaDoAluno<T>(valor: T, campo: string): T {
+  if (typeof valor === "string") return (CAMPOS_QUE_O_ALUNO_LE.has(campo) ? textoEmPortugues(valor) : valor) as T;
+  if (Array.isArray(valor)) return valor.map((item) => naLinguaDoAluno(item, campo)) as T;
+  if (valor && typeof valor === "object") {
+    return Object.fromEntries(
+      Object.entries(valor).map(([chave, dentro]) => [
+        chave,
+        // Num mapa de fala a chave é id e o valor é prosa: o campo passa a ser o mapa, e não a chave.
+        MAPAS_DE_FALA.has(campo) && typeof dentro === "string" ? textoEmPortugues(dentro) : naLinguaDoAluno(dentro, chave),
+      ]),
+    ) as T;
+  }
+  return valor;
+}
+
 /** O pacote publicado, pronto para o player do aluno. */
 export function aulaDoAlunoV2(pacote: PacoteV2): AulaDoAlunoV2 {
   const positions = posicoesDoPacoteV2(pacote);
-  return {
+  return naLinguaDoAluno({
     id: pacote.aula.id,
     titulo: pacote.aula.titulo,
     publicationId: pacote.publicationId,
     orientacao: pacote.aula.metadados?.orientacaoPadrao ?? "white",
     etapas: etapasDoAlunoV2(pacote.aula, positions, pacote.revisoes),
     ...(creditosDaAula(pacote.aula).length ? { creditos: creditosDaAula(pacote.aula) } : {}),
-  };
+  }, "raiz");
 }

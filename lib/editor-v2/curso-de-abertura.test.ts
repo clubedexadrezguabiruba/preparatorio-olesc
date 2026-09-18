@@ -44,15 +44,16 @@ for (const [caminho, texto, leitura] of leituras) {
     assert.deepEqual(["A", "B", "C", "EF"].map((a) => soma(a, "paradas")), [2, 8, 3, 12], "B03 e C13 não têm lance nosso depois da pergunta");
     const b05a = capitulo(leitura, "B05A");
     const [parada] = b05a.paradas;
+    // `lanceEscrito` escreve na língua do aluno (Doug, 17/9/2026): o bispo não muda, o cavalo sim.
     assert.equal(lanceEscrito(b05a.percursos[parada.percurso].lances[parada.resposta]), "6.Be4");
     assert.equal(parada.texto, "Qual lance de bispo ataca a dama e fecha sua saída?");
     const b05b = capitulo(leitura, "B05B");
-    assert.equal(lanceEscrito(b05b.percursos[0].lances[b05b.paradas[0].resposta]), "18.Nxa7#", "pergunta no nosso lance: a parada é o lance nosso seguinte");
+    assert.equal(lanceEscrito(b05b.percursos[0].lances[b05b.paradas[0].resposta]), "18.Cxa7#", "pergunta no nosso lance: a parada é o lance nosso seguinte");
   });
 
-  test(`${caminho}: B09 aceita 5.dxc5 e 5.Nf3 como «também vale»`, () => {
+  test(`${caminho}: B09 aceita 5.dxc5 e 5.Cf3 como «também vale»`, () => {
     const [parada] = capitulo(leitura, "B09").paradas;
-    assert.deepEqual(parada.alternativas.map(lanceEscrito), ["5.dxc5", "5.Nf3"]);
+    assert.deepEqual(parada.alternativas.map(lanceEscrito), ["5.dxc5", "5.Cf3"]);
     assert.deepEqual(parada.erros, []);
   });
 

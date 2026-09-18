@@ -74,6 +74,58 @@ const ESTRAGOS: Estrago[] = [
   { codigo: "REVISAO_PENDENTE", estragar: (a) => { a.capitulos[0].narracoes[0].revisao = { motivo: "posicao-inicial-trocada" }; } },
   // Teste de uso de 15/9: a cópia da N0-LADDER com o treino trocado para "Segurar o empate".
   { codigo: "TREINO_RESULTADO_DIVERGE", aviso: true, estragar: (a) => { a.treinos[0].resultado = "draw"; } },
+  /*
+   * A régua de desenho, símbolo e convenção de finais (17/9/2026). Todas avisam e nenhuma
+   * impede — a régua é nova e as aulas no ar são velhas; quem conserta é um dos cinco
+   * revisores de `/revisar-pgn-de-finais`.
+   *
+   * **A prova forte de cada uma está em `regua-de-desenho.test.ts`**, que cobra os dois lados:
+   * a regra pega o estrago e **cala** quando ele é desfeito. Aqui o que se prova é o contrato
+   * desta lista — a regra existe, aparece como aviso, e desligada some.
+   */
+  { codigo: "DESENHO_TREINO_SEM_ALVO", aviso: true, estragar: (a) => { for (const questao of a.treinos[0].questoes) delete questao.desenhos; } },
+  {
+    codigo: "DESENHO_TREINO_COM_ALVO",
+    aviso: true,
+    // Um segundo treino, que na régua do apoio decrescente não pode apontar alvo nenhum.
+    estragar: (a) => {
+      const copia = structuredClone(a.treinos[0]);
+      copia.id = "treino-segundo-teste";
+      copia.questoes = copia.questoes.slice(0, 1).map((questao) => ({ ...questao, id: "questao-segunda-teste", desenhos: { highlights: [{ casa: "b8", cor: "verde" as const }] }, respostas: questao.respostas.map((r) => ({ ...r, id: `${r.id}-2`, efeito: { tipo: "encerra" as const, condicao: "objetivo-autoral" as const } })) }));
+      delete copia.origem;
+      a.treinos.push(copia);
+      a.fluxo.push({ id: "etapa-treino-segundo-teste", tipo: "treino", entidadeId: copia.id });
+    },
+  },
+  {
+    codigo: "DESENHO_ENTREGA_O_LANCE",
+    aviso: true,
+    estragar: (a) => {
+      const questao = a.treinos[0].questoes[0];
+      const certo = questao.respostas[0].moves[0];
+      questao.desenhos = { arrows: [[certo.slice(0, 2), certo.slice(2, 4)]] };
+    },
+  },
+  { codigo: "CASA_CITADA_SEM_DESENHO", aviso: true, estragar: (a) => { a.capitulos[0].narracoes[0].texto = "O rei vai para h7."; a.capitulos[0].narracoes[0].desenhos = {}; } },
+  {
+    codigo: "CASA_ACESA_SEM_CITACAO",
+    aviso: true,
+    estragar: (a) => { a.capitulos[0].narracoes[0].texto = "Olhe o tabuleiro."; a.capitulos[0].narracoes[0].desenhos = { highlights: [{ casa: "h1", cor: "amarelo" }] }; },
+  },
+  {
+    codigo: "DESENHO_DEMAIS",
+    aviso: true,
+    estragar: (a) => { a.capitulos[0].narracoes[0].desenhos = { highlights: ["a1", "a2", "a3", "a4", "a5"] }; },
+  },
+  {
+    codigo: "VARIANTE_SEM_SIMBOLO",
+    aviso: true,
+    estragar: (a) => {
+      a.treinos[0].questoes[0].respostas.push({ id: "resposta-muda-teste", moves: ["a1a2"], julgamento: "erro", feedback: "Este lance não é o da lição. Tente de novo.", efeito: { tipo: "repete" } });
+    },
+  },
+  { codigo: "LEMBRE_SE_REGRAS", aviso: true, estragar: (a) => { a.capitulos[0].titulo = "LEMBRE-SE"; a.capitulos[0].narracoes[0].texto = "Uma.\nDuas.\nTrês.\nQuatro."; } },
+  { codigo: "QUADRO_1_NAO_PERGUNTA", aviso: true, estragar: (a) => { a.introducoes[0].quadros[0].texto = "As brancas ganham."; } },
   {
     codigo: "AVALIACAO_REVISAO_DIVERGE",
     estragar: (a) => {

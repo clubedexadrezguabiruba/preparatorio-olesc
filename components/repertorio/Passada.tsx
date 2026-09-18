@@ -31,7 +31,7 @@ import { FaixaDeSans, FitaDoBoletim } from "./FitaDeLances";
 import { OQueAindaFalta } from "./OQueFalta";
 
 /**
- * As três etapas de uma passada: `seta · treino · valendo`.
+ * As três etapas de uma passada: `com a seta · sem a seta · de memória`.
  *
  * ## Por que a trilha existe, e é uma questão de não mentir
  *
@@ -53,10 +53,19 @@ import { OQueAindaFalta } from "./OQueFalta";
  * modo inicial por `tentativas === 0`), e uma trilha de três com duas etapas
  * apagadas para sempre prometeria um caminho que não existe mais.
  */
+/*
+ * **"Valendo" saiu em 18/9/2026, a pedido do Doug**, e com ele o "sem valer" do
+ * meio. As três etapas passam a ser nomeadas pelo que o aluno **faz**, e não
+ * pelo que a etapa vale: ver a `VOZ-DO-CURSO` §4, que registra a troca.
+ *
+ * Os rótulos continuam curtos pelo motivo medido em 9/9/2026 e escrito lá: em
+ * 390 px a linha de abas quebra em duas e rouba 52 px do comentário. "De
+ * memória" tem o mesmo comprimento de "sem a seta", que já cabia.
+ */
 const ETAPAS_DA_PASSADA = [
   { nome: "seta", diz: "com a seta" },
-  { nome: "treino", diz: "sem a seta, sem valer" },
-  { nome: "valendo", diz: "valendo" },
+  { nome: "treino", diz: "sem a seta" },
+  { nome: "memoria", diz: "de memória" },
 ] as const satisfies readonly EtapaDaTrilha[];
 
 /** Em que barra da trilha o modo corrente acende. */

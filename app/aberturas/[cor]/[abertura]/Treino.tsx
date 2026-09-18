@@ -357,14 +357,14 @@ export function Treino({
              * seguidos. É o que faz o registro querer dizer alguma coisa.
              */
             <p className="text-sm font-semibold text-tinta">
-              Não era esse lance. A linha joga{" "}
+              Não era esse lance. Aqui o lance é{" "}
               <span className="text-metodo-tinta-alta">{placar.revelado.san}</span> — e os
               acertos seguidos voltaram a zero.
             </p>
           ) : resultado && !resultado.acertou ? (
             <p className="text-sm font-semibold text-tinta">
               {porQue === "dica" && placar?.acertou
-                ? "Você chegou ao fim, e todos os lances saíram certos — mas com ajuda. Esta passada conta como treino, e os acertos seguidos voltaram a zero."
+                ? "Você chegou ao fim, e todos os lances saíram certos — mas com ajuda. Esta vez conta como treino, e os acertos seguidos voltaram a zero."
                 : "Você chegou ao fim — mas houve um erro no caminho, e os acertos seguidos voltaram a zero."}
             </p>
           ) : (
@@ -410,7 +410,7 @@ export function Treino({
 
           {setaPrimeiro ? (
             <p className="text-sm text-tinta-media">
-              Duas passadas seguidas com erro. Jogue uma vez com a seta, e depois tente de memória.
+              Duas vezes seguidas com erro. Jogue uma vez com a seta, e depois tente de memória.
             </p>
           ) : null}
 

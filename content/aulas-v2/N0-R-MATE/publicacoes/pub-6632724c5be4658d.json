@@ -1,0 +1,3312 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-6632724c5be4658d",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "N0-R-MATE",
+    "titulo": "Mate de torre e rei: a caixa",
+    "metadados": {
+      "orientacaoPadrao": "white",
+      "criterioDominio": "D1",
+      "classe": "E",
+      "estadoEditorial": "rascunho"
+    },
+    "proveniencia": [
+      {
+        "positionId": "pos-n0-r-mate-1",
+        "conteudoHash": "27513fff40ee498d2669dc6edc1f90dc9e5ffaef42abc2ff012cf9cbdd64abdb",
+        "estado": "candidate"
+      }
+    ],
+    "excecoes": [],
+    "catalogo": {
+      "erros": [
+        {
+          "id": "erro-no-jogo-9-2",
+          "nome": "Os reis já estavam frente a frente.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Os reis já estavam frente a frente. Era a hora do xeque da torre."
+        },
+        {
+          "id": "erro-no-jogo-9-5",
+          "nome": "Xeque à toa.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Xeque à toa. A torre largou a 5ª fileira, e o rei preto pode descer."
+        },
+        {
+          "id": "erro-no-jogo-10-2",
+          "nome": "Torre sem defesa.",
+          "julgamento": "perde-resultado",
+          "texto": "Torre sem defesa. O rei preto come a torre, e é empate."
+        },
+        {
+          "id": "erro-no-jogo-10-3",
+          "nome": "Caixa aberta.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Caixa aberta. A torre ficou segura, mas largou a 5ª fileira."
+        },
+        {
+          "id": "erro-no-jogo-10-6",
+          "nome": "Cedo demais.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Cedo demais. O rei preto vai para d6, e os reis não ficam frente a frente."
+        },
+        {
+          "id": "erro-no-jogo-11-6",
+          "nome": "Frente a frente, mas a vez é das pretas.",
+          "julgamento": "fora-do-metodo",
+          "texto": "Frente a frente, mas a vez é das pretas. O rei preto sai para c8."
+        },
+        {
+          "id": "erro-no-jogo-11-9",
+          "nome": "Afogamento!",
+          "julgamento": "perde-resultado",
+          "texto": "Afogamento! O rei preto não está em xeque e não tem casa."
+        }
+      ],
+      "mensagensPadrao": {
+        "vitoriaForaDoMetodo": "Este lance funciona, mas não é o caminho ensinado.",
+        "perdeResultado": "Este lance perde o resultado que a posição permitia.",
+        "alternativaDoMetodo": "Boa alternativa. Continue pela linha ensinada."
+      }
+    },
+    "analises": [
+      {
+        "id": "analise-jogo-5",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/8/4k3/R7/8/3K4/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.4 Mate de Torre e Rei",
+            "link": "https://lichess.org/study/BiRHLXMc",
+            "fenRevisada": "8/8/8/4k3/R7/8/3K4/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T23:42:07.074Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 4 - Mate de torre e rei",
+            "Site": "https://lichess.org/study/BiRHLXMc",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate de torre e rei: a caixa",
+            "ChapterName": "01 - AULA - Corte e traga o rei",
+            "FEN": "8/8/8/4k3/R7/8/3K4/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-5-0",
+        "nos": {
+          "no-jogo-5-0": {
+            "id": "no-jogo-5-0",
+            "filhos": [
+              "no-jogo-5-1"
+            ],
+            "comentario": "A torre já fez a caixa. Agora o seu rei entra no jogo. Nada de xeques ainda.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a4",
+                  "para": "h4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ga4h4]"
+            ]
+          },
+          "no-jogo-5-1": {
+            "id": "no-jogo-5-1",
+            "uci": "d2d3",
+            "filhos": [
+              "no-jogo-5-2"
+            ],
+            "comentario": "O rei sobe para d3. A torre continua cortando a 4ª fileira.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d2",
+                  "para": "d3",
+                  "cor": "verde"
+                },
+                {
+                  "de": "a4",
+                  "para": "h4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd2d3,Ga4h4]"
+            ]
+          },
+          "no-jogo-5-2": {
+            "id": "no-jogo-5-2",
+            "uci": "e5f5",
+            "filhos": [
+              "no-jogo-5-3"
+            ]
+          },
+          "no-jogo-5-3": {
+            "id": "no-jogo-5-3",
+            "uci": "d3e3",
+            "filhos": [
+              "no-jogo-5-4"
+            ],
+            "comentario": "O rei preto foge para o lado. O seu rei vai atrás dele.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d3",
+                  "para": "e3",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd3e3]"
+            ]
+          },
+          "no-jogo-5-4": {
+            "id": "no-jogo-5-4",
+            "uci": "f5g5",
+            "filhos": [
+              "no-jogo-5-5",
+              "no-jogo-5-6"
+            ]
+          },
+          "no-jogo-5-5": {
+            "id": "no-jogo-5-5",
+            "uci": "e3f3",
+            "filhos": [
+              "no-jogo-5-8"
+            ],
+            "comentario": "Mais um passo. Os reis ainda não estão frente a frente.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e3",
+                  "para": "f3",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge3f3]"
+            ]
+          },
+          "no-jogo-5-6": {
+            "id": "no-jogo-5-6",
+            "uci": "a4a5",
+            "filhos": [
+              "no-jogo-5-7"
+            ],
+            "comentario": "Xeque com os reis longe um do outro.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a5",
+                  "para": "h5",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ra5h5]"
+            ]
+          },
+          "no-jogo-5-7": {
+            "id": "no-jogo-5-7",
+            "uci": "g5g4",
+            "filhos": [],
+            "comentario": "O rei preto passou por baixo da torre, para g4. O xeque soltou o rei.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g4",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg4]"
+            ]
+          },
+          "no-jogo-5-8": {
+            "id": "no-jogo-5-8",
+            "uci": "g5h5",
+            "filhos": [
+              "no-jogo-5-9"
+            ]
+          },
+          "no-jogo-5-9": {
+            "id": "no-jogo-5-9",
+            "uci": "f3g3",
+            "filhos": [
+              "no-jogo-5-10"
+            ],
+            "comentario": "O seu rei chegou perto do rei preto.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g3",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h5",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg3,Yh5]"
+            ]
+          },
+          "no-jogo-5-10": {
+            "id": "no-jogo-5-10",
+            "uci": "h5g5",
+            "filhos": [
+              "no-jogo-5-11"
+            ],
+            "comentario": "Rei em g3, rei em g5: frente a frente, com uma casa no meio.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g3",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g5",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg3,Yg5]"
+            ]
+          },
+          "no-jogo-5-11": {
+            "id": "no-jogo-5-11",
+            "uci": "a4a5",
+            "filhos": [
+              "no-jogo-5-12"
+            ],
+            "comentario": "Agora o xeque tira espaço. O seu rei cobre f4, g4 e h4, e o rei preto tem de subir.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a5",
+                  "para": "h5",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "f4",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g4",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ga5h5]",
+              "[%csl Gf4,Gg4,Gh4]"
+            ]
+          },
+          "no-jogo-5-12": {
+            "id": "no-jogo-5-12",
+            "uci": "g5f6",
+            "filhos": [
+              "no-jogo-5-13"
+            ]
+          },
+          "no-jogo-5-13": {
+            "id": "no-jogo-5-13",
+            "uci": "g3g4",
+            "filhos": [
+              "no-jogo-5-14"
+            ],
+            "comentario": "A caixa encolheu uma fileira. Agora o seu rei volta a andar.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g3",
+                  "para": "g4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg3g4]"
+            ]
+          },
+          "no-jogo-5-14": {
+            "id": "no-jogo-5-14",
+            "uci": "f6e6",
+            "filhos": [
+              "no-jogo-5-15"
+            ]
+          },
+          "no-jogo-5-15": {
+            "id": "no-jogo-5-15",
+            "uci": "g4f4",
+            "filhos": [
+              "no-jogo-5-16"
+            ],
+            "comentario": "A torre segura a 5ª fileira enquanto o rei se aproxima.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a5",
+                  "para": "h5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ga5h5]"
+            ]
+          },
+          "no-jogo-5-16": {
+            "id": "no-jogo-5-16",
+            "uci": "e6d6",
+            "filhos": [
+              "no-jogo-5-17"
+            ]
+          },
+          "no-jogo-5-17": {
+            "id": "no-jogo-5-17",
+            "uci": "f4e4",
+            "filhos": [
+              "no-jogo-5-18"
+            ],
+            "comentario": "O mesmo jeito: siga o rei preto.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-5-18": {
+            "id": "no-jogo-5-18",
+            "uci": "d6c6",
+            "filhos": [
+              "no-jogo-5-19"
+            ]
+          },
+          "no-jogo-5-19": {
+            "id": "no-jogo-5-19",
+            "uci": "e4d4",
+            "filhos": [
+              "no-jogo-5-20"
+            ],
+            "comentario": "O seu rei continua perto dele.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "e4",
+                  "para": "d4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ge4d4]"
+            ]
+          },
+          "no-jogo-5-20": {
+            "id": "no-jogo-5-20",
+            "uci": "c6b6",
+            "filhos": [],
+            "comentario": "O rei preto ataca a torre em a5.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "b6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ya5,Rb6]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-6",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/1k6/R7/3K4/8/8/8 w - - 0 10",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.4 Mate de Torre e Rei",
+            "link": "https://lichess.org/study/BiRHLXMc",
+            "fenRevisada": "8/8/1k6/R7/3K4/8/8/8 w - - 0 10",
+            "revisadoEm": "2026-09-17T23:42:07.074Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 4 - Mate de torre e rei",
+            "Site": "https://lichess.org/study/BiRHLXMc",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate de torre e rei: a caixa",
+            "ChapterName": "02 - AULA - Salve a torre, espere e repita",
+            "FEN": "8/8/1k6/R7/3K4/8/8/8 w - - 0 10",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-6-0",
+        "nos": {
+          "no-jogo-6-0": {
+            "id": "no-jogo-6-0",
+            "filhos": [
+              "no-jogo-6-1",
+              "no-jogo-6-2"
+            ],
+            "comentario": "O rei preto ataca a torre. Salve a torre sem abrir a caixa.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a5",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "b6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ya5,Rb6]"
+            ]
+          },
+          "no-jogo-6-1": {
+            "id": "no-jogo-6-1",
+            "uci": "a5h5",
+            "filhos": [
+              "no-jogo-6-4"
+            ],
+            "comentario": "A torre foge para h5, longe do rei, e continua na 5ª fileira.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "h5",
+                  "para": "a5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gh5a5]"
+            ]
+          },
+          "no-jogo-6-2": {
+            "id": "no-jogo-6-2",
+            "uci": "d4c4",
+            "filhos": [
+              "no-jogo-6-3"
+            ],
+            "comentario": "De c4, o seu rei não defende a torre.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-6-3": {
+            "id": "no-jogo-6-3",
+            "uci": "b6a5",
+            "filhos": [],
+            "comentario": "O rei preto come a torre. Sem a torre, não há mate: empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a5",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ra5]"
+            ]
+          },
+          "no-jogo-6-4": {
+            "id": "no-jogo-6-4",
+            "uci": "b6c6",
+            "filhos": [
+              "no-jogo-6-5",
+              "no-jogo-6-6"
+            ],
+            "comentario": "Rei em d4, rei em c6: não estão frente a frente.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d4",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "c6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gd4,Yc6]"
+            ]
+          },
+          "no-jogo-6-5": {
+            "id": "no-jogo-6-5",
+            "uci": "h5g5",
+            "filhos": [
+              "no-jogo-6-10"
+            ],
+            "comentario": "A torre só anda na 5ª fileira. A caixa fica igual, e o rei preto tem de andar.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g5",
+                  "para": "a5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg5a5]"
+            ]
+          },
+          "no-jogo-6-6": {
+            "id": "no-jogo-6-6",
+            "uci": "d4c4",
+            "filhos": [
+              "no-jogo-6-7"
+            ],
+            "comentario": "O rei sobe para c4 cedo demais.",
+            "nags": [
+              6
+            ]
+          },
+          "no-jogo-6-7": {
+            "id": "no-jogo-6-7",
+            "uci": "c6d6",
+            "filhos": [
+              "no-jogo-6-8"
+            ],
+            "comentario": "O rei preto vai para d6. Os reis não ficam frente a frente.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c4",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "d6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gc4,Yd6]"
+            ]
+          },
+          "no-jogo-6-8": {
+            "id": "no-jogo-6-8",
+            "uci": "h5h6",
+            "filhos": [
+              "no-jogo-6-9"
+            ],
+            "comentario": "Este xeque não empurra o rei. A torre largou a 5ª fileira.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "h6",
+                  "para": "a6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Rh6a6]"
+            ]
+          },
+          "no-jogo-6-9": {
+            "id": "no-jogo-6-9",
+            "uci": "d6e5",
+            "filhos": [],
+            "comentario": "O rei preto desceu para e5. A caixa abriu.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e5",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re5]"
+            ]
+          },
+          "no-jogo-6-10": {
+            "id": "no-jogo-6-10",
+            "uci": "c6b6",
+            "filhos": [
+              "no-jogo-6-11"
+            ],
+            "comentario": "Isso tem nome: lance de espera. A torre não mexeu na caixa, e o rei preto teve de andar.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "b6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yb6]"
+            ]
+          },
+          "no-jogo-6-11": {
+            "id": "no-jogo-6-11",
+            "uci": "d4c4",
+            "filhos": [
+              "no-jogo-6-12"
+            ],
+            "comentario": "Agora o seu rei se aproxima de novo.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d4",
+                  "para": "c4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd4c4]"
+            ]
+          },
+          "no-jogo-6-12": {
+            "id": "no-jogo-6-12",
+            "uci": "b6a6",
+            "filhos": [
+              "no-jogo-6-13"
+            ]
+          },
+          "no-jogo-6-13": {
+            "id": "no-jogo-6-13",
+            "uci": "c4b4",
+            "filhos": [
+              "no-jogo-6-14"
+            ],
+            "comentario": "O seu rei segue o rei preto.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "b4",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "a6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gb4,Ya6]"
+            ]
+          },
+          "no-jogo-6-14": {
+            "id": "no-jogo-6-14",
+            "uci": "a6b6",
+            "filhos": [
+              "no-jogo-6-15"
+            ],
+            "comentario": "Rei em b4, rei em b6: frente a frente. É a mesma imagem de antes do primeiro xeque.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "b4",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "b6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gb4,Yb6]"
+            ]
+          },
+          "no-jogo-6-15": {
+            "id": "no-jogo-6-15",
+            "uci": "g5g6",
+            "filhos": [
+              "no-jogo-6-16"
+            ],
+            "comentario": "Agora o xeque. A caixa encolhe mais uma fileira.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g6",
+                  "para": "a6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg6a6]"
+            ]
+          },
+          "no-jogo-6-16": {
+            "id": "no-jogo-6-16",
+            "uci": "b6c7",
+            "filhos": [
+              "no-jogo-6-17"
+            ]
+          },
+          "no-jogo-6-17": {
+            "id": "no-jogo-6-17",
+            "uci": "b4b5",
+            "filhos": [
+              "no-jogo-6-18"
+            ],
+            "comentario": "A torre segura a 6ª fileira, e o rei volta a andar.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g6",
+                  "para": "a6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg6a6]"
+            ]
+          },
+          "no-jogo-6-18": {
+            "id": "no-jogo-6-18",
+            "uci": "c7d7",
+            "filhos": [
+              "no-jogo-6-19"
+            ]
+          },
+          "no-jogo-6-19": {
+            "id": "no-jogo-6-19",
+            "uci": "b5c5",
+            "filhos": [
+              "no-jogo-6-20"
+            ],
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-6-20": {
+            "id": "no-jogo-6-20",
+            "uci": "d7e7",
+            "filhos": [
+              "no-jogo-6-21"
+            ]
+          },
+          "no-jogo-6-21": {
+            "id": "no-jogo-6-21",
+            "uci": "c5d5",
+            "filhos": [
+              "no-jogo-6-22"
+            ],
+            "comentario": "Nada de novo: siga o rei preto.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-6-22": {
+            "id": "no-jogo-6-22",
+            "uci": "e7f7",
+            "filhos": [
+              "no-jogo-6-23"
+            ],
+            "comentario": "O rei preto ataca a torre em g6.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "f7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yg6,Rf7]"
+            ]
+          },
+          "no-jogo-6-23": {
+            "id": "no-jogo-6-23",
+            "uci": "g6a6",
+            "filhos": [
+              "no-jogo-6-24"
+            ],
+            "comentario": "A torre foge para a6, longe do rei, sem largar a 6ª fileira.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a6",
+                  "para": "h6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ga6h6]"
+            ]
+          },
+          "no-jogo-6-24": {
+            "id": "no-jogo-6-24",
+            "uci": "f7e7",
+            "filhos": [
+              "no-jogo-6-25"
+            ]
+          },
+          "no-jogo-6-25": {
+            "id": "no-jogo-6-25",
+            "uci": "a6b6",
+            "filhos": [
+              "no-jogo-6-26"
+            ],
+            "comentario": "Outro lance de espera. O rei preto tem de andar de novo.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "b6",
+                  "para": "h6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gb6h6]"
+            ]
+          },
+          "no-jogo-6-26": {
+            "id": "no-jogo-6-26",
+            "uci": "e7f7",
+            "filhos": [
+              "no-jogo-6-27"
+            ]
+          },
+          "no-jogo-6-27": {
+            "id": "no-jogo-6-27",
+            "uci": "d5e5",
+            "filhos": [
+              "no-jogo-6-28"
+            ],
+            "comentario": "O seu rei volta a avançar.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "d5",
+                  "para": "e5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gd5e5]"
+            ]
+          },
+          "no-jogo-6-28": {
+            "id": "no-jogo-6-28",
+            "uci": "f7g7",
+            "filhos": [
+              "no-jogo-6-29"
+            ]
+          },
+          "no-jogo-6-29": {
+            "id": "no-jogo-6-29",
+            "uci": "e5f5",
+            "filhos": [
+              "no-jogo-6-30"
+            ],
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-6-30": {
+            "id": "no-jogo-6-30",
+            "uci": "g7h7",
+            "filhos": [
+              "no-jogo-6-31"
+            ]
+          },
+          "no-jogo-6-31": {
+            "id": "no-jogo-6-31",
+            "uci": "f5g5",
+            "filhos": [
+              "no-jogo-6-32"
+            ],
+            "comentario": "O rei preto está quase na borda.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g5",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg5,Yh7]"
+            ]
+          },
+          "no-jogo-6-32": {
+            "id": "no-jogo-6-32",
+            "uci": "h7g7",
+            "filhos": [
+              "no-jogo-6-33"
+            ],
+            "comentario": "Rei em g5, rei em g7: frente a frente de novo.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g5",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg5,Yg7]"
+            ]
+          },
+          "no-jogo-6-33": {
+            "id": "no-jogo-6-33",
+            "uci": "b6b7",
+            "filhos": [
+              "no-jogo-6-34"
+            ],
+            "comentario": "Xeque. A torre corta a 7ª fileira, e o rei preto vai para a borda.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "b7",
+                  "para": "h7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gb7h7]"
+            ]
+          },
+          "no-jogo-6-34": {
+            "id": "no-jogo-6-34",
+            "uci": "g7g8",
+            "filhos": [
+              "no-jogo-6-35"
+            ]
+          },
+          "no-jogo-6-35": {
+            "id": "no-jogo-6-35",
+            "uci": "g5f6",
+            "filhos": [],
+            "comentario": "A caixa chegou à borda. Agora falta o mate.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g5",
+                  "para": "f6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg5f6]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-7",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "6k1/1R6/5K2/8/8/8/8/8 b - - 0 24",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.4 Mate de Torre e Rei",
+            "link": "https://lichess.org/study/BiRHLXMc",
+            "fenRevisada": "6k1/1R6/5K2/8/8/8/8/8 b - - 0 24",
+            "revisadoEm": "2026-09-17T23:42:07.074Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 4 - Mate de torre e rei",
+            "Site": "https://lichess.org/study/BiRHLXMc",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate de torre e rei: a caixa",
+            "ChapterName": "03 - AULA - O mate na borda",
+            "FEN": "6k1/1R6/5K2/8/8/8/8/8 b - - 0 24",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-7-0",
+        "nos": {
+          "no-jogo-7-0": {
+            "id": "no-jogo-7-0",
+            "filhos": [
+              "no-jogo-7-1"
+            ],
+            "comentario": "O rei preto está preso na 8ª fileira. Pretas jogam.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "b7",
+                  "para": "h7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gb7h7]"
+            ]
+          },
+          "no-jogo-7-1": {
+            "id": "no-jogo-7-1",
+            "uci": "g8h8",
+            "filhos": [
+              "no-jogo-7-2",
+              "no-jogo-7-3"
+            ],
+            "comentario": "O rei preto foi para o canto, em h8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yh8]"
+            ]
+          },
+          "no-jogo-7-2": {
+            "id": "no-jogo-7-2",
+            "uci": "f6g6",
+            "filhos": [
+              "no-jogo-7-4"
+            ],
+            "comentario": "O seu rei vai para g6. O rei preto só tem g8.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g6",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg6,Yg8]"
+            ]
+          },
+          "no-jogo-7-3": {
+            "id": "no-jogo-7-3",
+            "uci": "b7g7",
+            "filhos": [],
+            "comentario": "Afogamento! A torre em g7 tira as casas do rei preto, mas não dá xeque. Empate.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg7,Rh8]"
+            ]
+          },
+          "no-jogo-7-4": {
+            "id": "no-jogo-7-4",
+            "uci": "h8g8",
+            "filhos": [
+              "no-jogo-7-5"
+            ],
+            "comentario": "Rei em g6, rei em g8: frente a frente.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g6",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg6,Yg8]"
+            ]
+          },
+          "no-jogo-7-5": {
+            "id": "no-jogo-7-5",
+            "uci": "b7b8",
+            "filhos": [],
+            "comentario": "Mate! A torre ataca a 8ª fileira, e o seu rei cobre f7, g7 e h7.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "b8",
+                  "para": "h8",
+                  "cor": "verde"
+                }
+              ],
+              "highlights": [
+                {
+                  "casa": "f7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gb8h8]",
+              "[%csl Gf7,Gg7,Gh7,Rg8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-8",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "1R4k1/8/6K1/8/8/8/8/8 b - - 1 26",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.4 Mate de Torre e Rei",
+            "link": "https://lichess.org/study/BiRHLXMc",
+            "fenRevisada": "1R4k1/8/6K1/8/8/8/8/8 b - - 1 26",
+            "revisadoEm": "2026-09-17T23:42:07.074Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 4 - Mate de torre e rei",
+            "Site": "https://lichess.org/study/BiRHLXMc",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate de torre e rei: a caixa",
+            "ChapterName": "04 - AULA - LEMBRE-SE",
+            "FEN": "1R4k1/8/6K1/8/8/8/8/8 b - - 1 26",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-8-0",
+        "nos": {
+          "no-jogo-8-0": {
+            "id": "no-jogo-8-0",
+            "filhos": [],
+            "comentario": "LEMBRE-SE:\n\n1. A torre corta, e o seu rei se aproxima. Nada de xeques à toa.\n2. Reis frente a frente: xeque da torre, e a caixa encolhe.\n3. Torre atacada: afaste a torre na mesma fileira."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-9",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/8/6k1/R7/6K1/8/8 w - - 0 5",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.4 Mate de Torre e Rei",
+            "link": "https://lichess.org/study/BiRHLXMc",
+            "fenRevisada": "8/8/8/6k1/R7/6K1/8/8 w - - 0 5",
+            "revisadoEm": "2026-09-17T23:42:07.074Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 4 - Mate de torre e rei",
+            "Site": "https://lichess.org/study/BiRHLXMc",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate de torre e rei: a caixa",
+            "ChapterName": "05 - TREINO 1 - O xeque na hora certa",
+            "FEN": "8/8/8/6k1/R7/6K1/8/8 w - - 0 5",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-9-0",
+        "nos": {
+          "no-jogo-9-0": {
+            "id": "no-jogo-9-0",
+            "filhos": [
+              "no-jogo-9-1",
+              "no-jogo-9-2"
+            ],
+            "comentario": "Rei em g3, rei em g5. Encontre o lance que encolhe a caixa.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g3",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "g5",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yg3,Yg5]"
+            ]
+          },
+          "no-jogo-9-1": {
+            "id": "no-jogo-9-1",
+            "uci": "a4a5",
+            "filhos": [
+              "no-jogo-9-3"
+            ],
+            "comentario": "Certo: os reis estavam frente a frente, e a caixa encolheu uma fileira.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a5",
+                  "para": "h5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Ga5h5]"
+            ]
+          },
+          "no-jogo-9-2": {
+            "id": "no-jogo-9-2",
+            "uci": "g3f3",
+            "filhos": [],
+            "comentario": "Os reis já estavam frente a frente. Era a hora do xeque da torre.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-9-3": {
+            "id": "no-jogo-9-3",
+            "uci": "g5f6",
+            "filhos": [
+              "no-jogo-9-4",
+              "no-jogo-9-5"
+            ],
+            "comentario": "O rei preto subiu para f6.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yf6]"
+            ]
+          },
+          "no-jogo-9-4": {
+            "id": "no-jogo-9-4",
+            "uci": "g3g4",
+            "filhos": [],
+            "comentario": "Certo: depois do xeque, o seu rei volta a andar.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g4",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg4]"
+            ]
+          },
+          "no-jogo-9-5": {
+            "id": "no-jogo-9-5",
+            "uci": "a5a6",
+            "filhos": [],
+            "comentario": "Xeque à toa. A torre largou a 5ª fileira, e o rei preto pode descer.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ra6]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-10",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/1k6/R7/3K4/8/8/8 w - - 0 10",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.4 Mate de Torre e Rei",
+            "link": "https://lichess.org/study/BiRHLXMc",
+            "fenRevisada": "8/8/1k6/R7/3K4/8/8/8 w - - 0 10",
+            "revisadoEm": "2026-09-17T23:42:07.074Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 4 - Mate de torre e rei",
+            "Site": "https://lichess.org/study/BiRHLXMc",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Mate de torre e rei: a caixa",
+            "ChapterName": "06 - TREINO 2 - Salve a torre e espere",
+            "FEN": "8/8/1k6/R7/3K4/8/8/8 w - - 0 10",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-10-0",
+        "nos": {
+          "no-jogo-10-0": {
+            "id": "no-jogo-10-0",
+            "filhos": [
+              "no-jogo-10-1",
+              "no-jogo-10-2",
+              "no-jogo-10-3"
+            ],
+            "comentario": "Agora sem ajuda. O rei preto ataca a torre."
+          },
+          "no-jogo-10-1": {
+            "id": "no-jogo-10-1",
+            "uci": "a5h5",
+            "filhos": [
+              "no-jogo-10-4"
+            ],
+            "comentario": "Certo: a torre saiu do ataque e segura a 5ª fileira.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "h5",
+                  "para": "a5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gh5a5]"
+            ]
+          },
+          "no-jogo-10-2": {
+            "id": "no-jogo-10-2",
+            "uci": "d4c4",
+            "filhos": [],
+            "comentario": "Torre sem defesa. O rei preto come a torre, e é empate.",
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-10-3": {
+            "id": "no-jogo-10-3",
+            "uci": "a5a1",
+            "filhos": [],
+            "comentario": "Caixa aberta. A torre ficou segura, mas largou a 5ª fileira.",
+            "nags": [
+              2
+            ]
+          },
+          "no-jogo-10-4": {
+            "id": "no-jogo-10-4",
+            "uci": "b6c6",
+            "filhos": [
+              "no-jogo-10-5",
+              "no-jogo-10-6"
+            ]
+          },
+          "no-jogo-10-5": {
+            "id": "no-jogo-10-5",
+            "uci": "h5g5",
+            "filhos": [
+              "no-jogo-10-7"
+            ],
+            "comentario": "Certo: lance de espera. A caixa fica igual, e o rei preto tem de andar.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g5",
+                  "para": "a5",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg5a5]"
+            ]
+          },
+          "no-jogo-10-6": {
+            "id": "no-jogo-10-6",
+            "uci": "d4c4",
+            "filhos": [],
+            "comentario": "Cedo demais. O rei preto vai para d6, e os reis não ficam frente a frente.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rd6]"
+            ]
+          },
+          "no-jogo-10-7": {
+            "id": "no-jogo-10-7",
+            "uci": "c6b6",
+            "filhos": [
+              "no-jogo-10-8"
+            ]
+          },
+          "no-jogo-10-8": {
+            "id": "no-jogo-10-8",
+            "uci": "d4c4",
+            "filhos": [
+              "no-jogo-10-9"
+            ],
+            "comentario": "Certo: agora o seu rei se aproxima.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-9": {
+            "id": "no-jogo-10-9",
+            "uci": "b6a6",
+            "filhos": [
+              "no-jogo-10-10"
+            ]
+          },
+          "no-jogo-10-10": {
+            "id": "no-jogo-10-10",
+            "uci": "c4b4",
+            "filhos": [
+              "no-jogo-10-11"
+            ],
+            "comentario": "Certo: o seu rei segue o rei preto.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-11": {
+            "id": "no-jogo-10-11",
+            "uci": "a6b6",
+            "filhos": [
+              "no-jogo-10-12"
+            ]
+          },
+          "no-jogo-10-12": {
+            "id": "no-jogo-10-12",
+            "uci": "g5g6",
+            "filhos": [],
+            "comentario": "Certo: reis frente a frente, xeque, e a caixa encolhe de novo.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g6",
+                  "para": "a6",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg6a6]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-11",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/k7/6R1/2K5/8/8/8/8 w - - 0 22",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Capítulo 0.4 Mate de Torre e Rei",
+            "link": "https://lichess.org/study/BiRHLXMc",
+            "fenRevisada": "8/k7/6R1/2K5/8/8/8/8 w - - 0 22",
+            "revisadoEm": "2026-09-17T23:42:07.074Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 4 - Mate de torre e rei",
+            "Site": "https://lichess.org/study/BiRHLXMc",
+            "White": "Aluno - Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba - posição espelhada (coluna a<->h) da fonte, capítulo 03, lance 22",
+            "StudyName": "Mate de torre e rei: a caixa",
+            "ChapterName": "07 - TREINO 3 - Do outro lado, até o mate",
+            "FEN": "8/k7/6R1/2K5/8/8/8/8 w - - 0 22",
+            "SetUp": "1",
+            "Orientation": "white",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-11-0",
+        "nos": {
+          "no-jogo-11-0": {
+            "id": "no-jogo-11-0",
+            "filhos": [
+              "no-jogo-11-1"
+            ],
+            "comentario": "Agora do outro lado do tabuleiro. Leve o rei preto até a borda e dê mate."
+          },
+          "no-jogo-11-1": {
+            "id": "no-jogo-11-1",
+            "uci": "c5b5",
+            "filhos": [
+              "no-jogo-11-2"
+            ],
+            "comentario": "Certo: o seu rei segue o rei preto, e a torre segura a 6ª fileira.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-11-2": {
+            "id": "no-jogo-11-2",
+            "uci": "a7b7",
+            "filhos": [
+              "no-jogo-11-3"
+            ]
+          },
+          "no-jogo-11-3": {
+            "id": "no-jogo-11-3",
+            "uci": "g6g7",
+            "filhos": [
+              "no-jogo-11-4"
+            ],
+            "comentario": "Certo: reis frente a frente, e a caixa chegou à borda.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g7",
+                  "para": "a7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg7a7]"
+            ]
+          },
+          "no-jogo-11-4": {
+            "id": "no-jogo-11-4",
+            "uci": "b7b8",
+            "filhos": [
+              "no-jogo-11-5",
+              "no-jogo-11-6"
+            ]
+          },
+          "no-jogo-11-5": {
+            "id": "no-jogo-11-5",
+            "uci": "b5c6",
+            "filhos": [
+              "no-jogo-11-7"
+            ],
+            "comentario": "Certo: o seu rei chega perto sem ficar na frente do rei preto.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-11-6": {
+            "id": "no-jogo-11-6",
+            "uci": "b5b6",
+            "filhos": [],
+            "comentario": "Frente a frente, mas a vez é das pretas. O rei preto sai para c8.",
+            "nags": [
+              2
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rc8]"
+            ]
+          },
+          "no-jogo-11-7": {
+            "id": "no-jogo-11-7",
+            "uci": "b8a8",
+            "filhos": [
+              "no-jogo-11-8",
+              "no-jogo-11-9"
+            ]
+          },
+          "no-jogo-11-8": {
+            "id": "no-jogo-11-8",
+            "uci": "c6b6",
+            "filhos": [
+              "no-jogo-11-10"
+            ],
+            "comentario": "Certo: agora o rei preto só tem b8.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-11-9": {
+            "id": "no-jogo-11-9",
+            "uci": "g7b7",
+            "filhos": [],
+            "comentario": "Afogamento! O rei preto não está em xeque e não tem casa.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "b7",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rb7,Ra8]"
+            ]
+          },
+          "no-jogo-11-10": {
+            "id": "no-jogo-11-10",
+            "uci": "a8b8",
+            "filhos": [
+              "no-jogo-11-11"
+            ]
+          },
+          "no-jogo-11-11": {
+            "id": "no-jogo-11-11",
+            "uci": "g7g8",
+            "filhos": [],
+            "comentario": "Mate! Torre e rei trabalhando juntos.",
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "g8",
+                  "para": "a8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%cal Gg8a8]"
+            ]
+          }
+        }
+      }
+    ],
+    "introducoes": [
+      {
+        "id": "introducao-estudo-1",
+        "titulo": "Introdução",
+        "quadros": [
+          {
+            "id": "quadro-estudo-1",
+            "titulo": "INTRODUÇÃO - Ganha, empata ou perde?",
+            "texto": "Brancas: torre e rei. Pretas: só o rei. Brancas jogam.\n\nGanha, empata ou perde?",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-5",
+                "nodeId": "no-jogo-5-0"
+              }
+            }
+          },
+          {
+            "id": "quadro-estudo-2",
+            "titulo": "INTRODUÇÃO - A resposta",
+            "texto": "Ganha. Torre e rei dão mate no rei sozinho.\n\nMas a torre não faz isso sozinha. O seu rei precisa ajudar.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-5",
+                "nodeId": "no-jogo-5-0"
+              }
+            }
+          },
+          {
+            "id": "quadro-estudo-3",
+            "titulo": "INTRODUÇÃO - A caixa da torre",
+            "texto": "A torre em a4 corta a 4ª fileira. O rei preto não passa para baixo dela.\n\nEle está numa caixa. Dar xeques ou trazer o rei?",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-5",
+                "nodeId": "no-jogo-5-0"
+              }
+            },
+            "desenhos": {
+              "arrows": [
+                {
+                  "de": "a4",
+                  "para": "h4",
+                  "cor": "verde"
+                }
+              ]
+            }
+          },
+          {
+            "id": "quadro-estudo-4",
+            "titulo": "INTRODUÇÃO - A pergunta da aula",
+            "texto": "Hoje, a cada lance, pergunte: os reis estão frente a frente?\n\nNo fim, você corta o rei com a torre, traz o seu rei e encolhe a caixa até a borda.",
+            "posicao": {
+              "tipo": "referencia",
+              "origem": {
+                "analiseId": "analise-jogo-5",
+                "nodeId": "no-jogo-5-0"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "capitulos": [
+      {
+        "id": "capitulo-jogo-5",
+        "titulo": "AULA - Corte e traga o rei",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-5",
+          "no-jogo-5-8",
+          "no-jogo-5-9",
+          "no-jogo-5-10",
+          "no-jogo-5-11",
+          "no-jogo-5-12",
+          "no-jogo-5-13",
+          "no-jogo-5-14",
+          "no-jogo-5-15",
+          "no-jogo-5-16",
+          "no-jogo-5-17",
+          "no-jogo-5-18",
+          "no-jogo-5-19",
+          "no-jogo-5-20"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-5-0",
+            "nodeId": "no-jogo-5-0",
+            "texto": "A torre já fez a caixa. Agora o seu rei entra no jogo. Nada de xeques ainda.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-1",
+            "nodeId": "no-jogo-5-1",
+            "texto": "O rei sobe para d3. A torre continua cortando a 4ª fileira.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-3",
+            "nodeId": "no-jogo-5-3",
+            "texto": "O rei preto foge para o lado. O seu rei vai atrás dele.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-5",
+            "nodeId": "no-jogo-5-5",
+            "texto": "Mais um passo. Os reis ainda não estão frente a frente.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-6",
+            "nodeId": "no-jogo-5-6",
+            "texto": "Xeque com os reis longe um do outro.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-7",
+            "nodeId": "no-jogo-5-7",
+            "texto": "O rei preto passou por baixo da torre, para g4. O xeque soltou o rei.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-9",
+            "nodeId": "no-jogo-5-9",
+            "texto": "O seu rei chegou perto do rei preto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-10",
+            "nodeId": "no-jogo-5-10",
+            "texto": "Rei em g3, rei em g5: frente a frente, com uma casa no meio.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-11",
+            "nodeId": "no-jogo-5-11",
+            "texto": "Agora o xeque tira espaço. O seu rei cobre f4, g4 e h4, e o rei preto tem de subir.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-13",
+            "nodeId": "no-jogo-5-13",
+            "texto": "A caixa encolheu uma fileira. Agora o seu rei volta a andar.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-15",
+            "nodeId": "no-jogo-5-15",
+            "texto": "A torre segura a 5ª fileira enquanto o rei se aproxima.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-17",
+            "nodeId": "no-jogo-5-17",
+            "texto": "O mesmo jeito: siga o rei preto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-19",
+            "nodeId": "no-jogo-5-19",
+            "texto": "O seu rei continua perto dele.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-20",
+            "nodeId": "no-jogo-5-20",
+            "texto": "O rei preto ataca a torre em a5.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5-variante",
+        "titulo": "Comparação: 3. Ta5+?",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-6",
+          "no-jogo-5-7"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-6",
+            "nodeId": "no-jogo-5-6",
+            "texto": "Xeque com os reis longe um do outro.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-7",
+            "nodeId": "no-jogo-5-7",
+            "texto": "O rei preto passou por baixo da torre, para g4. O xeque soltou o rei.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6",
+        "titulo": "AULA - Salve a torre, espere e repita",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-1",
+          "no-jogo-6-4",
+          "no-jogo-6-5",
+          "no-jogo-6-10",
+          "no-jogo-6-11",
+          "no-jogo-6-12",
+          "no-jogo-6-13",
+          "no-jogo-6-14",
+          "no-jogo-6-15",
+          "no-jogo-6-16",
+          "no-jogo-6-17",
+          "no-jogo-6-18",
+          "no-jogo-6-19",
+          "no-jogo-6-20",
+          "no-jogo-6-21",
+          "no-jogo-6-22",
+          "no-jogo-6-23",
+          "no-jogo-6-24",
+          "no-jogo-6-25",
+          "no-jogo-6-26",
+          "no-jogo-6-27",
+          "no-jogo-6-28",
+          "no-jogo-6-29",
+          "no-jogo-6-30",
+          "no-jogo-6-31",
+          "no-jogo-6-32",
+          "no-jogo-6-33",
+          "no-jogo-6-34",
+          "no-jogo-6-35"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-6-0",
+            "nodeId": "no-jogo-6-0",
+            "texto": "O rei preto ataca a torre. Salve a torre sem abrir a caixa.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-1",
+            "nodeId": "no-jogo-6-1",
+            "texto": "A torre foge para h5, longe do rei, e continua na 5ª fileira.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-2",
+            "nodeId": "no-jogo-6-2",
+            "texto": "De c4, o seu rei não defende a torre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-3",
+            "nodeId": "no-jogo-6-3",
+            "texto": "O rei preto come a torre. Sem a torre, não há mate: empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-4",
+            "nodeId": "no-jogo-6-4",
+            "texto": "Rei em d4, rei em c6: não estão frente a frente.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-5",
+            "nodeId": "no-jogo-6-5",
+            "texto": "A torre só anda na 5ª fileira. A caixa fica igual, e o rei preto tem de andar.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-6",
+            "nodeId": "no-jogo-6-6",
+            "texto": "O rei sobe para c4 cedo demais.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-7",
+            "nodeId": "no-jogo-6-7",
+            "texto": "O rei preto vai para d6. Os reis não ficam frente a frente.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-8",
+            "nodeId": "no-jogo-6-8",
+            "texto": "Este xeque não empurra o rei. A torre largou a 5ª fileira.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-9",
+            "nodeId": "no-jogo-6-9",
+            "texto": "O rei preto desceu para e5. A caixa abriu.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-10",
+            "nodeId": "no-jogo-6-10",
+            "texto": "Isso tem nome: lance de espera. A torre não mexeu na caixa, e o rei preto teve de andar.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-11",
+            "nodeId": "no-jogo-6-11",
+            "texto": "Agora o seu rei se aproxima de novo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-13",
+            "nodeId": "no-jogo-6-13",
+            "texto": "O seu rei segue o rei preto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-14",
+            "nodeId": "no-jogo-6-14",
+            "texto": "Rei em b4, rei em b6: frente a frente. É a mesma imagem de antes do primeiro xeque.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-15",
+            "nodeId": "no-jogo-6-15",
+            "texto": "Agora o xeque. A caixa encolhe mais uma fileira.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-17",
+            "nodeId": "no-jogo-6-17",
+            "texto": "A torre segura a 6ª fileira, e o rei volta a andar.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-21",
+            "nodeId": "no-jogo-6-21",
+            "texto": "Nada de novo: siga o rei preto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-22",
+            "nodeId": "no-jogo-6-22",
+            "texto": "O rei preto ataca a torre em g6.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-23",
+            "nodeId": "no-jogo-6-23",
+            "texto": "A torre foge para a6, longe do rei, sem largar a 6ª fileira.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-25",
+            "nodeId": "no-jogo-6-25",
+            "texto": "Outro lance de espera. O rei preto tem de andar de novo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-27",
+            "nodeId": "no-jogo-6-27",
+            "texto": "O seu rei volta a avançar.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-31",
+            "nodeId": "no-jogo-6-31",
+            "texto": "O rei preto está quase na borda.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-32",
+            "nodeId": "no-jogo-6-32",
+            "texto": "Rei em g5, rei em g7: frente a frente de novo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-33",
+            "nodeId": "no-jogo-6-33",
+            "texto": "Xeque. A torre corta a 7ª fileira, e o rei preto vai para a borda.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-35",
+            "nodeId": "no-jogo-6-35",
+            "texto": "A caixa chegou à borda. Agora falta o mate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6-variante",
+        "titulo": "Comparação: 10. Rc4??",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-2",
+          "no-jogo-6-3"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-2",
+            "nodeId": "no-jogo-6-2",
+            "texto": "De c4, o seu rei não defende a torre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-3",
+            "nodeId": "no-jogo-6-3",
+            "texto": "O rei preto come a torre. Sem a torre, não há mate: empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6-variante-2",
+        "titulo": "Comparação: 11. Rc4?!",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-1",
+          "no-jogo-6-4",
+          "no-jogo-6-6",
+          "no-jogo-6-7",
+          "no-jogo-6-8",
+          "no-jogo-6-9"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-6-variante-2-no-jogo-6-6",
+            "nodeId": "no-jogo-6-6",
+            "texto": "O rei sobe para c4 cedo demais.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-2-no-jogo-6-7",
+            "nodeId": "no-jogo-6-7",
+            "texto": "O rei preto vai para d6. Os reis não ficam frente a frente.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-2-no-jogo-6-8",
+            "nodeId": "no-jogo-6-8",
+            "texto": "Este xeque não empurra o rei. A torre largou a 5ª fileira.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-2-no-jogo-6-9",
+            "nodeId": "no-jogo-6-9",
+            "texto": "O rei preto desceu para e5. A caixa abriu.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7",
+        "titulo": "AULA - O mate na borda",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [
+          "no-jogo-7-1",
+          "no-jogo-7-2",
+          "no-jogo-7-4",
+          "no-jogo-7-5"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-7-0",
+            "nodeId": "no-jogo-7-0",
+            "texto": "O rei preto está preso na 8ª fileira. Pretas jogam.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-1",
+            "nodeId": "no-jogo-7-1",
+            "texto": "O rei preto foi para o canto, em h8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-2",
+            "nodeId": "no-jogo-7-2",
+            "texto": "O seu rei vai para g6. O rei preto só tem g8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-3",
+            "nodeId": "no-jogo-7-3",
+            "texto": "Afogamento! A torre em g7 tira as casas do rei preto, mas não dá xeque. Empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-4",
+            "nodeId": "no-jogo-7-4",
+            "texto": "Rei em g6, rei em g8: frente a frente.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-5",
+            "nodeId": "no-jogo-7-5",
+            "texto": "Mate! A torre ataca a 8ª fileira, e o seu rei cobre f7, g7 e h7.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7-variante",
+        "titulo": "Comparação: 25. Tg7??",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [
+          "no-jogo-7-1",
+          "no-jogo-7-3"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-7-variante-no-jogo-7-3",
+            "nodeId": "no-jogo-7-3",
+            "texto": "Afogamento! A torre em g7 tira as casas do rei preto, mas não dá xeque. Empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-8",
+        "titulo": "AULA - LEMBRE-SE",
+        "analiseId": "analise-jogo-8",
+        "inicioNodeId": "no-jogo-8-0",
+        "caminho": [],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-8-0",
+            "nodeId": "no-jogo-8-0",
+            "texto": "LEMBRE-SE:\n\n1. A torre corta, e o seu rei se aproxima. Nada de xeques à toa.\n2. Reis frente a frente: xeque da torre, e a caixa encolhe.\n3. Torre atacada: afaste a torre na mesma fileira.",
+            "pausa": "manual"
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "titulo": "TREINO 1 - O xeque na hora certa",
+        "introducao": "Rei em g3, rei em g5. Encontre o lance que encolhe a caixa.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-9",
+          "nodeId": "no-jogo-9-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Rei em g3, rei em g5. Encontre o lance que encolhe a caixa.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-9-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g3",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "g5",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-1-white",
+                "moves": [
+                  "a4a5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: os reis estavam frente a frente, e a caixa encolheu uma fileira.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g5f6",
+                      "proximaQuestaoId": "questao-no-jogo-9-3-white",
+                      "texto": "O rei preto subiu para f6."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-2",
+                "moves": [
+                  "g3f3"
+                ],
+                "julgamento": "erro",
+                "feedback": "Os reis já estavam frente a frente. Era a hora do xeque da torre.",
+                "erroId": "erro-no-jogo-9-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-3-white",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-3"
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f6",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-4-white",
+                "moves": [
+                  "g3g4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: depois do xeque, o seu rei volta a andar.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-5",
+                "moves": [
+                  "a5a6"
+                ],
+                "julgamento": "erro",
+                "feedback": "Xeque à toa. A torre largou a 5ª fileira, e o rei preto pode descer.",
+                "erroId": "erro-no-jogo-9-5",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-9",
+          "nodeIds": [
+            "no-jogo-9-0",
+            "no-jogo-9-1",
+            "no-jogo-9-3",
+            "no-jogo-9-4"
+          ],
+          "hash": "v2-c1f49e87",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-9",
+          "inicioNodeId": "no-jogo-9-0",
+          "objetivo": "Rei em g3, rei em g5. Encontre o lance que encolhe a caixa."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/8/8/6k1/R7/6K1/8/8 w - - 0 5",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-9-0-white": {
+              "fen": "8/8/8/6k1/R7/6K1/8/8 w - - 0 5",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-0"
+              }
+            },
+            "questao-no-jogo-9-3-white": {
+              "fen": "8/8/5k2/R7/8/6K1/8/8 w - - 2 6",
+              "historicoUci": [
+                "a4a5",
+                "g5f6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-3"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Certo: depois do xeque, o seu rei volta a andar."
+      },
+      {
+        "id": "treino-capitulo-jogo-10-no-jogo-10-0-white",
+        "titulo": "TREINO 2 - Salve a torre e espere",
+        "introducao": "Agora sem ajuda. O rei preto ataca a torre.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-10",
+          "nodeId": "no-jogo-10-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Agora sem ajuda. O rei preto ataca a torre.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-10-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-1-white",
+                "moves": [
+                  "a5h5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: a torre saiu do ataque e segura a 5ª fileira.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b6c6",
+                      "proximaQuestaoId": "questao-no-jogo-10-4-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-2",
+                "moves": [
+                  "d4c4"
+                ],
+                "julgamento": "erro",
+                "feedback": "Torre sem defesa. O rei preto come a torre, e é empate.",
+                "erroId": "erro-no-jogo-10-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-3",
+                "moves": [
+                  "a5a1"
+                ],
+                "julgamento": "erro",
+                "feedback": "Caixa aberta. A torre ficou segura, mas largou a 5ª fileira.",
+                "erroId": "erro-no-jogo-10-3",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-4-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-4"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-5-white",
+                "moves": [
+                  "h5g5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: lance de espera. A caixa fica igual, e o rei preto tem de andar.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "c6b6",
+                      "proximaQuestaoId": "questao-no-jogo-10-7-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-6",
+                "moves": [
+                  "d4c4"
+                ],
+                "julgamento": "erro",
+                "feedback": "Cedo demais. O rei preto vai para d6, e os reis não ficam frente a frente.",
+                "erroId": "erro-no-jogo-10-6",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-7-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-7"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-8-white",
+                "moves": [
+                  "d4c4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: agora o seu rei se aproxima.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b6a6",
+                      "proximaQuestaoId": "questao-no-jogo-10-9-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-9-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-9"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-10-white",
+                "moves": [
+                  "c4b4"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: o seu rei segue o rei preto.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "a6b6",
+                      "proximaQuestaoId": "questao-no-jogo-10-11-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-11-white",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-11"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-12-white",
+                "moves": [
+                  "g5g6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: reis frente a frente, xeque, e a caixa encolhe de novo.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-10",
+          "nodeIds": [
+            "no-jogo-10-0",
+            "no-jogo-10-1",
+            "no-jogo-10-4",
+            "no-jogo-10-5",
+            "no-jogo-10-7",
+            "no-jogo-10-8",
+            "no-jogo-10-9",
+            "no-jogo-10-10",
+            "no-jogo-10-11",
+            "no-jogo-10-12"
+          ],
+          "hash": "v2-6f7d080e",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-10",
+          "inicioNodeId": "no-jogo-10-0",
+          "objetivo": "Agora sem ajuda. O rei preto ataca a torre."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/8/1k6/R7/3K4/8/8/8 w - - 0 10",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-10-0-white": {
+              "fen": "8/8/1k6/R7/3K4/8/8/8 w - - 0 10",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-0"
+              }
+            },
+            "questao-no-jogo-10-4-white": {
+              "fen": "8/8/2k5/7R/3K4/8/8/8 w - - 2 11",
+              "historicoUci": [
+                "a5h5",
+                "b6c6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-4"
+              }
+            },
+            "questao-no-jogo-10-7-white": {
+              "fen": "8/8/1k6/6R1/3K4/8/8/8 w - - 4 12",
+              "historicoUci": [
+                "a5h5",
+                "b6c6",
+                "h5g5",
+                "c6b6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-7"
+              }
+            },
+            "questao-no-jogo-10-9-white": {
+              "fen": "8/8/k7/6R1/2K5/8/8/8 w - - 6 13",
+              "historicoUci": [
+                "a5h5",
+                "b6c6",
+                "h5g5",
+                "c6b6",
+                "d4c4",
+                "b6a6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-9"
+              }
+            },
+            "questao-no-jogo-10-11-white": {
+              "fen": "8/8/1k6/6R1/1K6/8/8/8 w - - 8 14",
+              "historicoUci": [
+                "a5h5",
+                "b6c6",
+                "h5g5",
+                "c6b6",
+                "d4c4",
+                "b6a6",
+                "c4b4",
+                "a6b6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-11"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "explicacaoConclusao": "Certo: reis frente a frente, xeque, e a caixa encolhe de novo."
+      },
+      {
+        "id": "treino-capitulo-jogo-11-no-jogo-11-0-white",
+        "titulo": "TREINO 3 - Do outro lado, até o mate",
+        "introducao": "Agora do outro lado do tabuleiro. Leve o rei preto até a borda e dê mate.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-11",
+          "nodeId": "no-jogo-11-0"
+        },
+        "ladoAluno": "white",
+        "objetivo": "Agora do outro lado do tabuleiro. Leve o rei preto até a borda e dê mate.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-11-0-white",
+            "posicao": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-11-1-white",
+                "moves": [
+                  "c5b5"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: o seu rei segue o rei preto, e a torre segura a 6ª fileira.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "a7b7",
+                      "proximaQuestaoId": "questao-no-jogo-11-2-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-11-2-white",
+            "posicao": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-2"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-11-3-white",
+                "moves": [
+                  "g6g7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: reis frente a frente, e a caixa chegou à borda.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b7b8",
+                      "proximaQuestaoId": "questao-no-jogo-11-4-white"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-11-4-white",
+            "posicao": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-4"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-11-5-white",
+                "moves": [
+                  "b5c6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: o seu rei chega perto sem ficar na frente do rei preto.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b8a8",
+                      "proximaQuestaoId": "questao-no-jogo-11-7-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-11-6",
+                "moves": [
+                  "b5b6"
+                ],
+                "julgamento": "erro",
+                "feedback": "Frente a frente, mas a vez é das pretas. O rei preto sai para c8.",
+                "erroId": "erro-no-jogo-11-6",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-11-7-white",
+            "posicao": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-7"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-11-8-white",
+                "moves": [
+                  "c6b6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Certo: agora o rei preto só tem b8.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "a8b8",
+                      "proximaQuestaoId": "questao-no-jogo-11-10-white"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-11-9",
+                "moves": [
+                  "g7b7"
+                ],
+                "julgamento": "erro",
+                "feedback": "Afogamento! O rei preto não está em xeque e não tem casa.",
+                "erroId": "erro-no-jogo-11-9",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-11-10-white",
+            "posicao": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-10"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-11-11-white",
+                "moves": [
+                  "g7g8"
+                ],
+                "julgamento": "correta",
+                "feedback": "Mate! Torre e rei trabalhando juntos.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "mate"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-11",
+          "nodeIds": [
+            "no-jogo-11-0",
+            "no-jogo-11-1",
+            "no-jogo-11-2",
+            "no-jogo-11-3",
+            "no-jogo-11-4",
+            "no-jogo-11-5",
+            "no-jogo-11-7",
+            "no-jogo-11-8",
+            "no-jogo-11-10",
+            "no-jogo-11-11"
+          ],
+          "hash": "v2-1cefbba3",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-11",
+          "inicioNodeId": "no-jogo-11-0",
+          "objetivo": "Agora do outro lado do tabuleiro. Leve o rei preto até a borda e dê mate."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/k7/6R1/2K5/8/8/8/8 w - - 0 22",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-11-0-white": {
+              "fen": "8/k7/6R1/2K5/8/8/8/8 w - - 0 22",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-11",
+                "nodeId": "no-jogo-11-0"
+              }
+            },
+            "questao-no-jogo-11-2-white": {
+              "fen": "8/1k6/6R1/1K6/8/8/8/8 w - - 2 23",
+              "historicoUci": [
+                "c5b5",
+                "a7b7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-11",
+                "nodeId": "no-jogo-11-2"
+              }
+            },
+            "questao-no-jogo-11-4-white": {
+              "fen": "1k6/6R1/8/1K6/8/8/8/8 w - - 4 24",
+              "historicoUci": [
+                "c5b5",
+                "a7b7",
+                "g6g7",
+                "b7b8"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-11",
+                "nodeId": "no-jogo-11-4"
+              }
+            },
+            "questao-no-jogo-11-7-white": {
+              "fen": "k7/6R1/2K5/8/8/8/8/8 w - - 6 25",
+              "historicoUci": [
+                "c5b5",
+                "a7b7",
+                "g6g7",
+                "b7b8",
+                "b5c6",
+                "b8a8"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-11",
+                "nodeId": "no-jogo-11-7"
+              }
+            },
+            "questao-no-jogo-11-10-white": {
+              "fen": "1k6/6R1/1K6/8/8/8/8/8 w - - 8 26",
+              "historicoUci": [
+                "c5b5",
+                "a7b7",
+                "g6g7",
+                "b7b8",
+                "b5c6",
+                "b8a8",
+                "c6b6",
+                "a8b8"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-11",
+                "nodeId": "no-jogo-11-10"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente"
+      }
+    ],
+    "praticas": [
+      {
+        "id": "pratica-pratica-encolha-a-caixa-ate-o-mate",
+        "titulo": "PRÁTICA - Encolha a caixa até o mate",
+        "positionId": "pos-n0-r-mate-1",
+        "ladoAluno": "white",
+        "objetivo": "win",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-introducao-estudo-1",
+        "tipo": "introducao",
+        "entidadeId": "introducao-estudo-1"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6-variante-2",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6-variante-2"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-8",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-8"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-9-no-jogo-9-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-9-no-jogo-9-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-10-no-jogo-10-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-10-no-jogo-10-0-white"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-11-no-jogo-11-0-white",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-11-no-jogo-11-0-white"
+      },
+      {
+        "id": "etapa-pratica-pratica-encolha-a-caixa-ate-o-mate",
+        "tipo": "pratica",
+        "entidadeId": "pratica-pratica-encolha-a-caixa-ate-o-mate"
+      }
+    ]
+  },
+  "posicoes": {
+    "pos-n0-r-mate-1": {
+      "id": "pos-n0-r-mate-1",
+      "fen": "8/8/8/4k3/R7/8/3K4/8 w - - 0 1",
+      "expectedResult": "win-white",
+      "tags": [
+        "PRÁTICA - Encolha a caixa até o mate"
+      ],
+      "status": "candidate",
+      "provenance": {
+        "externalHumanSource": "clubexadrezguabiruba",
+        "bibliographicSource": "Capítulo 0.4 Mate de Torre e Rei, https://lichess.org/study/BiRHLXMc",
+        "originalGame": "não se aplica",
+        "authorComposer": "clubexadrezguabiruba",
+        "license": "não informada — conferir antes de aprovar",
+        "editionFile": null,
+        "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+        "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+        "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+      }
+    }
+  },
+  "revisoes": {
+    "treino-capitulo-jogo-9-no-jogo-9-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_a2af1f3e74cc8fd4968aac408f346b0be1f78ef87e062ad5f9dbc0b4f38584e9"
+    },
+    "treino-capitulo-jogo-10-no-jogo-10-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_d3b78006a98b0134e1295814687bed4435f54fd53bd7380be35c18f7a8fad9bf"
+    },
+    "treino-capitulo-jogo-11-no-jogo-11-0-white": {
+      "tipo": "treino",
+      "revisao": "ar_829e418c8beb73d3de378d46fb63e64b6fd13d09fa7d489f577f9b5635c71488"
+    },
+    "pratica-pratica-encolha-a-caixa-ate-o-mate": {
+      "tipo": "pratica",
+      "revisao": "ar_52fac54953bed3fa576a3e4087634dbff57dbd18c916fc34e514d36aac8e056d"
+    }
+  },
+  "manifesto": {
+    "aulaId": "N0-R-MATE",
+    "aula": "67fd78c7e41d04cbde60c5fb1e4549bdd35841439cd41f8a2c0cd9e05aa1a6e4",
+    "posicoes": {
+      "pos-n0-r-mate-1": "3d6377192ac659d9fe403ed72514e9bcaf2cf06868c3065f6c631978c3d088c2"
+    },
+    "revisoes": "ae0545456e075ec8a404506660d24f206869108c41a5ea1fe5fd58fbabc1dcd2",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

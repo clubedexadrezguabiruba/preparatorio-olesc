@@ -607,3 +607,100 @@ export function sanEmPortugues(san: string): string {
     .replace(/^[NBRQK]/, (letra) => PECAS[letra])
     .replace(/=([NBRQK])/, (_, letra: string) => `=${PECAS[letra]}`);
 }
+
+/**
+ * Um lance dentro de uma frase, nas duas formas que importam:
+ *
+ * - **lance de peça** — `Nc3`, `3...Nf6`, `Qxe6+`, `Nbc3`, `Re1`;
+ * - **promoção de peão** — `e8=Q`, `exd8=N+`, que não tem inicial na frente.
+ *
+ * Só a forma completa conta — inicial de peça, casa de destino, e o que houver
+ * entre as duas. `Nós` não é lance porque `ós` não é casa; `Roque` não é lance
+ * porque `oque` não é casa. É esse formato fechado que deixa a troca rodar em
+ * prosa solta sem mastigar palavra.
+ *
+ * O `R` **entra na peneira** e sai ou não na decisão de `textoEmPortugues`.
+ */
+const LANCE_NA_PROSA =
+  /(?<![A-Za-z0-9])(?:[NBRQK][a-h1-8]?x?[a-h][1-8]|[a-h](?:x[a-h])?[1-8]=[NBRQ])[+#]?(?![A-Za-z0-9])/g;
+
+/** Em prosa sem desempate, `R` fica de fora: as duas línguas disputam a letra. */
+const PECAS_NA_PROSA: Record<string, string> = { N: "C", B: "B", Q: "D", K: "R" };
+
+/**
+ * O texto do professor na língua do aluno: "Contra ...Nf6, o peão avança" sai
+ * "Contra ...Cf6, o peão avança".
+ *
+ * **Por que na tela, e não no arquivo.** O pacote publicado é selado por
+ * SHA-256 (o `manifesto` de cada `publicacoes/pub-*.json`), então reescrever a
+ * prosa no disco quebraria o selo das dezesseis aulas já no ar. E o projeto já
+ * escolheu este lado uma vez, em `lancesEmPortugues` (`notas.ts`): **o JSON
+ * guarda SAN inglês de propósito, porque é o que a `chess.js` produz e é o que
+ * deixa o teste provar que o lance escrito existe no tabuleiro.** Um `Cf3`
+ * digitado errado passaria batido; um `Nf3` errado reprova. Traduzir na leitura
+ * dá as duas coisas — dado conferido e tela em português.
+ *
+ * **O símbolo nunca é tocado**, e isso é a regra do Doug de 14/9/2026: a troca
+ * mexe só na inicial da peça, e `!`, `?`, `!?` e `$n` ficam onde estavam —
+ * `...Qxg2?` sai `...Dxg2?`.
+ *
+ * **Roda duas vezes sem estragar.** As aulas de finais já escrevem em português
+ * na prosa (`Comparação: 3. Te2+?!`), e `T`, `C` e `D` não estão na tabela: o
+ * texto já certo passa inteiro.
+ *
+ * ---
+ *
+ * **Por que o `R` fica de fora, e por que isto não é preguiça.**
+ *
+ * `R` é *rook* na entrada e **rei** na saída. Uma tabela que traduzisse `R → T`
+ * em prosa precisaria saber, sem tabuleiro nenhum na mão, se aquele `Re7` foi
+ * escrito em inglês ou em português — e o texto não diz.
+ *
+ * Contado nas dezesseis aulas publicadas em 17/9/2026: **39 tokens com `R`, e os
+ * dois sentidos convivem.** Dez são `Rg1` em inglês, a torre das aulas B e E+F
+ * da Francesa. Os outros **vinte e nove são rei, já escritos em português**,
+ * espalhados por nove aulas de finais — `Re7` na KPK-RANKS, `Rg6` na ROOK-PAWN,
+ * `Rf2` na KEY-SQUARES. Traduzir `R` transformaria esses vinte e nove reis em
+ * torres, numa trilha inteira que hoje está certa, para consertar dez.
+ *
+ * Então a linha é esta: **quem sabe a peça traduz tudo; quem só tem texto não
+ * adivinha.** O `sanEmPortugues` logo acima recebe SAN da `chess.js` — inglês
+ * garantido — e troca o `R` sem medo. Aqui não há essa garantia, e os dez `Rg1`
+ * se resolvem onde o autor escreve: no estudo, virando `Tg1`.
+ *
+ * A trava é `notacao-em-portugues.test.ts`, que conta os dois lados e reprova se
+ * um `K` aparecer na prosa — porque aí as duas letras passariam a colidir na
+ * saída, e esta decisão teria de ser refeita.
+ *
+ * **Na promoção o `R` volta**, e não é exceção esperta: ninguém promove a rei,
+ * então `e8=R` só pode ser *rook*. É o único lugar da prosa onde a letra não tem
+ * dois donos.
+ *
+ * ---
+ *
+ * **`lancesEmIngles` é a chave que destrava o `R`.**
+ *
+ * Quando quem chama tem em mãos a lista de SAN daquele texto — e ela veio da
+ * `chess.js`, então é inglês garantido —, a dúvida acaba: um `Re1` que está na
+ * lista é a torre que a lista diz, e sai `Te1`; um `Re1` que não está fica como
+ * está. É o caso do nome da linha do repertório, que anda junto dos `sans` dela.
+ *
+ * Medido em 17/9/2026 nos doze arquivos de `public/repertorio/`: **os onze
+ * tokens com `R` ou `K` nos nomes de linha estão todos na lista de lances da
+ * própria linha** — `Re1` e `Rfe1` na Escandinava, `Rxd6`, `Rad8` e `Rxd8` na
+ * Escocesa, `Kxd7` na Caro-Kann. Nenhum ficou sem desempate.
+ *
+ * A decisão de cada lance é tomada **uma vez**, na passada única do `replace`.
+ * Em duas passadas um `Kxd7` viraria `Rxd7` na primeira e correria o risco de
+ * ser lido como torre na segunda, numa linha que tivesse as duas peças indo à
+ * mesma casa.
+ */
+export function textoEmPortugues(texto: string, lancesEmIngles?: ReadonlySet<string>): string {
+  return texto.replace(LANCE_NA_PROSA, (lance) => {
+    const inicial = lance[0];
+    if (inicial === "R") return lancesEmIngles?.has(lance) ? sanEmPortugues(lance) : lance;
+    return lance
+      .replace(/^[NBQK]/, (letra) => PECAS_NA_PROSA[letra])
+      .replace(/=([NBRQ])/, (_, letra: string) => `=${PECAS[letra]}`);
+  });
+}

@@ -47,6 +47,7 @@ import type { RevisoesDaAulaV2 } from "./avaliacao.ts";
 import { hashDaPosicao } from "./hash.ts";
 import { problemasDaAulaV2, resultadoDoTreinoV2, type AulaV2, type LocalizacaoProblemaV2, type ProblemaV2, type TreinoV2 } from "./modelo.ts";
 import { fenInicialDoTreino } from "./propriedade-treino.ts";
+import { REGRAS_DE_DESENHO_V2 } from "./regua-de-desenho.ts";
 import { aberturaDoId, dominioDaAulaV2 } from "./dominio.ts";
 import { analiseTemTexto, origemDeTerceiro } from "./proveniencia.ts";
 import { temEvidenciaCongelada } from "./treino-jogavel.ts";
@@ -238,6 +239,19 @@ export const REGRAS_PUBLICACAO_V2: RegraDePublicacaoV2[] = [
       return [{ ...erro(aula, "TEXTO_SEM_DIREITO_DECLARADO", `as narrações ${capitulo ? `do capítulo «${capitulo.titulo}» ` : ""}vieram de outra pessoa — a aula publica, mas em «De onde veio a posição» vale marcar que os textos são seus ou que você pode usá-los`, { analiseId: analise.id, campo: "inicio.revisao" }), severidade: "aviso" as const }];
     }),
   },
+  /*
+   * A régua de desenho, símbolo e convenção de finais (17/9/2026) — `regua-de-desenho.ts`.
+   *
+   * As contas moram num arquivo próprio porque este aqui é a **lista** de regras: uma lista com
+   * duzentas linhas de conta dentro de um item deixa de ser lista. O que entra aqui é o
+   * registro — uma entrada por código, para o teste de §19 poder desligar uma só.
+   *
+   * **Só avisos, e de propósito**: a régua é nova e as 11 aulas de finais no ar são velhas.
+   * Promovê-las a erro travaria a publicação de tudo por uma dívida que não é de nenhuma aula
+   * em particular. Quem conserta é um dos cinco revisores de `/revisar-pgn-de-finais`; o que
+   * sobra é decisão do professor. A régua de voz entrou por este mesmo caminho em 13/9.
+   */
+  ...REGRAS_DE_DESENHO_V2,
   {
     codigo: "AVALIACAO_REVISAO_DIVERGE",
     impede: "revisão de avaliação gravada diferente da que o conteúdo produz",

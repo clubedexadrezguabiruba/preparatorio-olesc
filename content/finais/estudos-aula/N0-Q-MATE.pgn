@@ -62,7 +62,7 @@ No fim, você prende o rei, traz o seu rei e dá mate sem afogar. }
 [Orientation "white"]
 
 { Primeira tarefa: tirar espaço do rei preto. Nada de xeques. }
-1. Qd3! { A dama fica a um salto de cavalo do rei. Ela corta a coluna d e a 3ª fileira. } { [%cal Gd3d8,Gd3h3] } 1... Ke6 { O rei procura espaço. Não corra atrás dele com xeques. } 2. Qd4! { A dama acompanha. Veja o L entre d4 e e6: a caixa diminuiu. } { [%cal Gd4d8,Gd4h4] [%csl Ye6] } 2... Kf7 3. Qe5! { O rei mudou de lugar, e a dama muda junto. De novo, um salto de cavalo. } { [%cal Ge5e8,Ge5h5] } 3... Kf8 4. Qe6! { Sem pressa. A dama não precisa dar xeque para empurrar o rei. } { [%cal Ge6e8,Ge6h6] } 4... Kg7 5. Qf5! { Siga o rei mantendo o L. A caixa continua encolhendo. } { [%cal Gf5f8,Gf5h5] } 5... Kg8 6. Qf6! { Pouco espaço para o rei preto. Não mude de jeito agora. } { [%cal Gf6f8,Gf6h6] } 6... Kh7 7. Qg5! { O rei preto está na borda. Agora vem a parte difícil: saber a hora de parar. } { [%cal Gg5g8,Gg5h5] } 7... Kh8 { O rei chegou ao canto e só tem h7. Tire h7 sem dar xeque, e é afogamento. } { [%csl Yh8,Yh7] } 8. Kf2! { Isso: a dama espera, e o seu rei começa a caminhar. } ( 8. Qg6?? { Afogamento! O rei preto não está em xeque e não tem casa. A partida acaba empatada. } { [%csl Rg6,Rh8] } ) *
+1. Qd3! { A dama fica a um salto de cavalo do rei. Ela corta a coluna d e a 3ª fileira. } { [%cal Gd3d8,Gd3h3] } 1... Ke6 { O rei procura espaço. Não corra atrás dele com xeques. } 2. Qd4! { A dama acompanha. Veja o L entre d4 e e6: a caixa diminuiu. } { [%cal Gd4d8,Gd4h4] [%csl Ye6] } 2... Kf7 3. Qe5! { O rei mudou de lugar, e a dama muda junto. De novo, um salto de cavalo. } { [%cal Ge5e8,Ge5h5] } 3... Kf8 4. Qe6! { Sem pressa. A dama não precisa dar xeque para empurrar o rei. } { [%cal Ge6e8,Ge6h6] } 4... Kg7 5. Qf5! { Siga o rei mantendo o L. A caixa continua encolhendo. } { [%cal Gf5f8,Gf5h5] } 5... Kg8 6. Qf6! { Pouco espaço para o rei preto. Não mude de jeito agora. } { [%cal Gf6f8,Gf6h6] } 6... Kh7 7. Qg5! { O rei preto está na borda. Agora vem a parte difícil: saber a hora de parar. } { [%cal Gg5g8,Gg5h5] } 7... Kh8 { O rei chegou ao canto e só tem h7. Tire h7 sem dar xeque, e é afogamento. } { [%csl Yh7] } 8. Kf2! { A dama espera, e o seu rei começa a caminhar. } ( 8. Qg6?? { Afogamento! O rei preto não está em xeque e não tem casa. A partida acaba empatada. } { [%csl Rh7] } ) *
 
 [Event "Aula 3 - Mate de dama e rei"]
 [Site "https://lichess.org/study/hf09xMzS"]
@@ -77,7 +77,7 @@ No fim, você prende o rei, traz o seu rei e dá mate sem afogar. }
 [Orientation "white"]
 
 { Agora outra defesa. Não decore lances: a cada jogada, prenda o rei com o L. }
-1. Qd2! { Comece a caixa: a dama corta a coluna d e a 2ª fileira. } { [%cal Gd2d8,Gd2h2] } 1... Ke5 2. Qd3! { O rei subiu. A dama acompanha, a um salto de cavalo. } { [%cal Gd3d8,Gd3h3] } 2... Kf6 3. Qe4! { O rei mudou de lado. A dama vai junto, sem dar xeque. } { [%cal Ge4e8,Ge4h4] } 3... Kf7 4. Qe5! { Mesmo plano: acompanhe e corte casas. } { [%cal Ge5e8,Ge5h5] } 4... Kg6 5. Qf4! { A caixa encolhe. Até aqui, a dama trabalhou sozinha. } { [%cal Gf4f8,Gf4h4] } 5... Kg7 6. Qf5! { Mais um passo. O rei preto é empurrado para a borda. } { [%cal Gf5f8,Gf5h5] } 6... Kh6 7. Qg4! { Pronto: o rei está preso perto do canto. A dama não chega mais perto. } { [%cal Gg4g8,Gg4h4] } 7... Kh7 8. Ke2! { Segunda parte: traga o rei. A dama segura a caixa sozinha. } { [%cal Ge2e3,Ge3f4,Gf4f5,Gf5f6] } 8... Kh6 9. Ke3! { Continue com o rei. Nada de xeques soltos. } 9... Kh7 10. Kf4! { O rei branco se aproxima de f6, a casa que vai apoiar o mate. } { [%csl Yf6] } 10... Kh8 11. Kf5! { Certo: em vez de apertar com a dama, aproxime o rei. } ( 11. Qg6?? { A dama chegou perto demais e tirou a última casa. Sem xeque, é afogamento: empate. } { [%csl Rg6,Rh8] } ) 11... Kh7 12. Kf6! { O rei branco controla g7. Agora a dama pode dar mate protegida. } { [%csl Gf6,Gg7] } 12... Kh8 13. Qg7# { Mate! A dama ataca o rei, e o rei branco protege a dama. } { [%csl Gf6,Gg7,Rh8] } *
+1. Qd2! { Comece a caixa: a dama corta a coluna d e a 2ª fileira. } { [%cal Gd2d8,Gd2h2] } 1... Ke5 2. Qd3! { O rei subiu. A dama acompanha, a um salto de cavalo. } { [%cal Gd3d8,Gd3h3] } 2... Kf6 3. Qe4! { O rei mudou de lado. A dama vai junto, sem dar xeque. } { [%cal Ge4e8,Ge4h4] } 3... Kf7 4. Qe5! { Mesmo plano: acompanhe e corte casas. } { [%cal Ge5e8,Ge5h5] } 4... Kg6 5. Qf4! { A caixa encolhe. Até aqui, a dama trabalhou sozinha. } { [%cal Gf4f8,Gf4h4] } 5... Kg7 6. Qf5! { Mais um passo. O rei preto é empurrado para a borda. } { [%cal Gf5f8,Gf5h5] } 6... Kh6 7. Qg4! { Pronto: o rei está preso perto do canto. A dama não chega mais perto. } { [%cal Gg4g8,Gg4h4] } 7... Kh7 8. Ke2! { Segunda parte: traga o rei. A dama segura a caixa sozinha. } { [%cal Ge2f6] } 8... Kh6 9. Ke3! { Continue com o rei. Nada de xeques soltos. } 9... Kh7 10. Kf4! { O rei branco se aproxima de f6, a casa que vai apoiar o mate. } { [%csl Yf6] } 10... Kh8 11. Kf5! { Em vez de apertar com a dama, aproxime o rei. } ( 11. Qg6?? { A dama chegou perto demais e tirou a última casa. Sem xeque, é afogamento: empate. } { [%csl Rh7] } ) 11... Kh7 12. Kf6! { O rei branco controla g7. Agora a dama pode dar mate protegida. } { [%csl Gg7] } 12... Kh8 13. Qg7# { Mate! A dama ataca o rei, e o rei branco protege a dama. } { [%cal Gf6g7] } *
 
 [Event "Aula 3 - Mate de dama e rei"]
 [Site "https://lichess.org/study/hf09xMzS"]
@@ -112,7 +112,7 @@ No fim, você prende o rei, traz o seu rei e dá mate sem afogar. }
 [ChapterMode "gamebook"]
 
 { O rei preto está em e7. Ponha a dama a um salto de cavalo dele. } { [%csl Ye7] }
-13. Qd5! { Certo: um salto de cavalo do rei, e a caixa ficou menor. } { [%cal Gd5d8,Gd5h5] } ( 13. Qd6+?? { A dama ficou colada no rei, sem proteção: o rei come a dama. Sem dama, não há mate. } { [%csl Rd6] } ) 13... Kf6 { O rei foi para f6. Siga com o L. } { [%csl Yf6] } 14. Qe4! { Muito bem: o rei mudou, e você manteve o L. } { [%cal Ge4e8,Ge4h4] } *
+13. Qd5! { Um salto de cavalo do rei, e a caixa ficou menor. } { [%cal Gd5d8,Gd5h5] } ( 13. Qd6+?? { A dama ficou colada no rei, sem proteção: o rei come a dama. Sem dama, não há mate. } { [%csl Rd6] } ) 13... Kf6 { O rei foi para f6. Siga com o L. } { [%csl Yf6] } 14. Qe4! { O rei mudou, e você manteve o L. } { [%cal Ge4e8,Ge4h4] } *
 
 [Event "Aula 3 - Mate de dama e rei"]
 [Site "https://lichess.org/study/hf09xMzS"]
@@ -128,7 +128,7 @@ No fim, você prende o rei, traz o seu rei e dá mate sem afogar. }
 [ChapterMode "gamebook"]
 
 { Agora sem ajuda. Siga o rei com a dama e encolha a caixa. }
-13. Qf5! { Isso: o L continua, e o espaço diminui. } { [%cal Gf5f8,Gf5h5] } ( 13. Qg5+? { Xeque não prende o rei. Procure a casa a um salto de cavalo dele. } ) 13... Kh6 14. Qg4! { Perfeito: o rei preto está na borda. } { [%cal Gg4g8,Gg4h4] } *
+13. Qf5! { O L continua, e o espaço diminui. } { [%cal Gf5f8,Gf5h5] } ( 13. Qg5+? { Xeque não prende o rei. Procure a casa a um salto de cavalo dele. } ) 13... Kh6 14. Qg4! { O rei preto está na borda. } { [%cal Gg4g8,Gg4h4] } *
 
 [Event "Aula 3 - Mate de dama e rei"]
 [Site "https://lichess.org/study/hf09xMzS"]
@@ -144,7 +144,7 @@ No fim, você prende o rei, traz o seu rei e dá mate sem afogar. }
 [ChapterMode "gamebook"]
 
 { Feche a caixa. Quando o rei chegar ao canto, a dama para. }
-13. Qg5! { Certo: a caixa ficou mínima, e o rei ainda tem uma casa. } { [%cal Gg5g8,Gg5h5] } 13... Kh8 { Agora pare a dama e traga o rei. } 14. Ke5! { Exatamente: a dama segura, e o rei se aproxima. } { [%cal Ge5f6] } ( 14. Qg6?? { Afogamento! Você tirou a última casa sem dar xeque. } ) 14... Kh7 15. Kf6! { O rei chegou para apoiar. Agora, o lance final. } { [%csl Gf6,Gg7] } 15... Kh8 16. Qg7# { Mate! Dama e rei trabalhando juntos. } *
+13. Qg5! { A caixa ficou mínima, e o rei ainda tem uma casa. } { [%cal Gg5g8,Gg5h5] } 13... Kh8 { Agora pare a dama e traga o rei. } 14. Ke5! { A dama segura, e o rei se aproxima. } { [%cal Ge5f6] } ( 14. Qg6?? { Afogamento! Você tirou a última casa sem dar xeque. } ) 14... Kh7 15. Kf6! { O rei chegou para apoiar. Agora, o lance final. } { [%csl Gf6,Gg7] } 15... Kh8 16. Qg7# { Mate! Dama e rei trabalhando juntos. } *
 
 [Event "Aula 3 - Mate de dama e rei"]
 [Site "https://lichess.org/study/hf09xMzS"]
@@ -160,7 +160,7 @@ No fim, você prende o rei, traz o seu rei e dá mate sem afogar. }
 [ChapterMode "gamebook"]
 
 { O rei preto já está preso. A dama não aperta mais: agora é a vez do seu rei. }
-13. Ke5! { Boa: o rei se aproxima enquanto a dama segura. } 13... Kh7 14. Kf6! { O seu rei já apoia o mate. Ache o lance final. } { [%csl Gf6] } 14... Kh6 15. Qg6# { Mate! } { [%csl Gf6,Gg6,Rh6] } ( 15. Qh3# { Mate também! } ) ( 15. Qh4# { Mate também! } ) ( 15. Qg7+? { Só xeque: o rei foge para h5. Aqui há mate em um lance. } ) *
+13. Ke5! { O rei se aproxima enquanto a dama segura. } 13... Kh7 14. Kf6! { O seu rei já apoia o mate. Ache o lance final. } { [%csl Gf6] } 14... Kh6 15. Qg6# { Mate! } { [%csl Gf6,Gg6,Rh6] } ( 15. Qh3# { Mate também! } ) ( 15. Qh4# { Mate também! } ) ( 15. Qg7+? { Só xeque: o rei foge para h5. Aqui há mate em um lance. } ) *
 
 [Event "Aula 3 - Mate de dama e rei"]
 [Site "https://lichess.org/study/hf09xMzS"]

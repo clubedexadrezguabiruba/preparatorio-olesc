@@ -119,6 +119,7 @@ nenhum:** quem precisa deles os lê daqui.
     "etapa",
     "passada",
     "degrau",
+    "valendo",
     "critério",
     "domínio",
     "mostrando",
@@ -132,11 +133,17 @@ nenhum:** quem precisa deles os lê daqui.
 }
 ```
 
-A lista tem **duas metades e um propósito só**. As nove primeiras são jargão de
+A lista tem **duas metades e um propósito só**. As dez primeiras são jargão de
 bastidor — palavra nossa que vazou para a tela (§4). As seis últimas são o
 **português de manual de xadrez para adulto** (§4.2). A máquina não distingue as
-duas, e não precisa: as quinze têm em comum serem palavras que um professor não
-diria a uma criança de doze anos com o tabuleiro na frente.
+duas, e não precisa: as dezesseis têm em comum serem palavras que um professor
+não diria a uma criança de doze anos com o tabuleiro na frente.
+
+> **2026-09-18 — "valendo" entrou na lista, por decisão do Doug.** Eram quinze,
+> ficam dezesseis. Ela era palavra da casa desde 9/9 e estava na tela do
+> repertório em três lugares; a §4.3 conta por que saiu e o que entrou no lugar.
+> Nenhuma fala das dezesseis aulas publicadas a usava, então a trava entrou sem
+> reprovar conteúdo nenhum.
 
 > **2026-09-15 — cinco palavras saíram da lista, por decisão do Doug:**
 > **objetivo, método, avaliação, teoria e estrutura.** Eram vinte, ficam quinze.
@@ -226,11 +233,58 @@ vez. É jargão de **professor e de desenvolvedor** que vazou para a tela.
 | "Objetivo / Com ajuda / Sem ajuda" (como nome das abas) | **"Apresentação / Aula / Treino / Prática real"** |
 | "A técnica, em 3 passos" | (some — vira a fala do professor) |
 | "Mostrando: …" | (some) |
+| "valendo", "sem valer" *(desde 18/9)* | **"de memória"** — ver a §4.3 |
+| "Ele joga sozinho." *(desde 18/9)* | "Agora é a vez dele." |
+| "A linha joga X." *(desde 18/9)* | "Aqui o lance é X." |
+| "a fonte mostra esse lance como errado" *(desde 18/9)* | "esse lance parece bom e não é" |
+| "linha(s)", "N linha(s)" | "1 linha" / "3 linhas", escrito por extenso |
+| um caminho de URL na frase ("volta em /aberturas") | o lugar, em português ("volta aqui") |
 
 **"Aula · treino" não é invenção.** É a mesma família que o módulo de aberturas
-já usa nas três abas dele — "seta · treino · valendo", `TrilhaDeEtapas.tsx`. O
-site tem um vocabulário só, e o aluno que sai do repertório e entra nos finais
-reconhece onde está.
+já usa nas três abas dele — "com a seta · sem a seta · de memória",
+`TrilhaDeEtapas.tsx`. O site tem um vocabulário só, e o aluno que sai do
+repertório e entra nos finais reconhece onde está.
+
+### 4.3 "Valendo" saiu, e "de memória" entrou
+
+**Decisão do Doug, 18/9/2026.** "Valendo" era palavra da casa desde 9/9 — estava
+na terceira aba do repertório, no cartão de comando ("Lance 3 de 11, valendo.") e
+no fim do treino ("Agora valendo."). Ela sai inteira, e com ela o "sem valer" da
+aba do meio.
+
+**O que havia de errado com ela.** "Valendo" não nomeia o que o aluno faz: nomeia
+**a aposta**. Ela só quer dizer alguma coisa para quem já sabe que existe um
+placar por trás — e a §2 diz que o aluno não precisa saber que existe um placar.
+É a mesma falha de "passada" e "degrau", com a diferença de que esta passou
+despercebida por nove dias por soar coloquial.
+
+**Por que "de memória", e não outra coisa.** Porque já era o que o site dizia em
+três lugares, sem ninguém ter combinado: `/aberturas` promete que "depois cobra
+de memória", o fim de uma partida diz "Partida inteira, de memória, sem erro", e
+o próprio treino do repertório já mandava "tente de memória" depois de dois
+erros. A palavra nova não é nova — é a que já estava certa nas bordas e faltava
+no meio.
+
+E ela nomeia a **tarefa**: sem a seta, sem a dica, o lance sai da sua cabeça.
+
+**O custo de largura continua pago.** O comentário de 9/9 mediu que em 390 px uma
+linha de abas comprida quebra em duas e rouba 52 px do comentário. "De memória"
+tem o mesmo comprimento de "sem a seta", que já cabia.
+
+### 4.4 "Ele joga sozinho" — quando a frase certa diz a coisa errada
+
+Junto com "valendo" saiu `"Ele joga sozinho."`, o cartão que aparecia enquanto o
+adversário respondia. A frase queria dizer *"não espere por você, o tabuleiro
+anda sozinho"*. O aluno lia *"ele joga sem mim"*.
+
+Fica **"Agora é a vez dele. / Olhe o lance que ele faz."** — que diz de quem é o
+lance, que é a informação, e manda o aluno olhar, que é o que ele tem a fazer.
+
+**A lição geral, porque ela vale para a próxima frase.** Nenhuma palavra de
+"Ele joga sozinho" é técnica; a frase passava por qualquer régua de vocabulário.
+O que ela tinha era **um sujeito ambíguo e um advérbio fazendo o trabalho do
+verbo**. Régua de palavra proibida não pega isto — só pega quem lê a frase
+imaginando um aluno de dez anos lendo-a pela primeira vez.
 
 **Os quatro rótulos são do Doug, de 9/9/2026, e o preço deles está medido.** Eram
 três — "Aula · Treino · Valendo" —, e a apresentação entrou na frente. Em 390 px a

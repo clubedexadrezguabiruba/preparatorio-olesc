@@ -81,7 +81,7 @@ No fim, você leva o rei para o centro assim que as peças fortes saem. }
 [Adaptacao "Posição da fonte (0.1A) com o rei branco de d5 para g2 e a vez das Brancas; substitui o contraste 0.1D (rei em a1). Motor: 1. Kf3 ganha; 1. Kg3 e 2. Ke3 empatam."]
 
 { Brancas jogam. O rei preto vai comer b4. O rei branco precisa chegar antes aos peões pretos. } { [%csl Yb4] }
-1. Kf3! { O rei vai para f3, na direção do centro. O caminho passa por e4. } { [%cal Gg2f3,Gf3e4] } ( 1. Kg3?? { O rei vai para g3, fora do caminho de e4. } { [%csl Rg3] } 1... Kxb4 2. Kf3 Kc5 3. Ke4 Kd6 { O rei preto chegou a d6 e fecha e5. Um lance perdido, e a vitória virou empate. } { [%csl Rd6,Re5] } ) 1... Kxb4 { O rei preto comeu b4. Agora conte: quem chega primeiro aos peões? } 2. Ke4! { O rei entra em e4, no centro. Só este lance ganha. } { [%csl Ge4] } ( 2. Ke3?? { O rei vai para e3 e perde um lance. } { [%csl Re3] } 2... Kc5 3. Ke4 Kd6 { De novo, o rei preto chega a d6 a tempo. É empate. } { [%csl Rd6] } ) 2... Kc4 3. Ke5! { De e5, o rei aponta para f6, ao lado dos peões pretos. } { [%cal Ge5f6] } 3... Kd3 4. Kf6! { O rei chegou a f6. Agora ele ataca o peão de f7. } { [%csl Gf6,Yf7] } 4... Ke3 5. Kxf7 { O rei branco chegou primeiro. O peão de f7 caiu, e h7 é o próximo. } { [%csl Gf7,Yh7] } *
+1. Kf3! { O rei vai para f3, na direção do centro. O caminho passa por e4. } { [%cal Gf3e4] } ( 1. Kg3?? { O rei vai para g3, fora do caminho de e4. } { [%csl Rg3,Ye4] } 1... Kxb4 2. Kf3 Kc5 3. Ke4 Kd6 { O rei preto chegou a d6 e fecha e5. Um lance perdido, e a vitória virou empate. } { [%csl Rd6,Re5] } ) 1... Kxb4 { O rei preto comeu b4. Agora conte: quem chega primeiro aos peões? } 2. Ke4! { O rei entra em e4, no centro. Só este lance ganha. } { [%csl Ge4] } ( 2. Ke3?? { O rei vai para e3 e perde um lance. } { [%csl Re3] } 2... Kc5 3. Ke4 Kd6 { De novo, o rei preto chega a d6 a tempo. É empate. } { [%csl Rd6] } ) 2... Kc4 3. Ke5! { De e5, o rei aponta para f6, ao lado dos peões pretos. } { [%cal Ge5f6] } 3... Kd3 4. Kf6! { O rei chegou a f6. Agora ele ataca o peão de f7. } { [%csl Gf6,Yf7] } 4... Ke3 5. Kxf7 { O rei branco chegou primeiro. O peão de f7 caiu, e h7 é o próximo. } { [%csl Gf7,Yh7] } *
 
 [Event "Aula 6 - O rei é peça: use-o"]
 [Site "https://lichess.org/study/wtityoKq"]
@@ -96,8 +96,8 @@ No fim, você leva o rei para o centro assim que as peças fortes saem. }
 [Orientation "white"]
 [Adaptacao "Posição da fonte (0.1C) com a vez trocada: Brancas jogam, como na sequência de 0.1B. Motor antes (Pretas jogam): Brancas ganham; depois (Brancas jogam): Brancas ganham, e 6. Kf6 perde."]
 
-{ Outra posição. O rei branco, em g7, está colado no peão de h7. O rei preto, em f4, quer o peão de h4. } { [%csl Gg7,Yh7,Yf4,Yh4] }
-6. Kxh7! { O rei come h7. Agora ele também ameaça g6. } { [%csl Gh7,Yg6] } ( 6. Kf6?? { O rei vai para f6 só para defender g5. } { [%csl Rf6] } 6... Kg4 7. Kg7 Kxh4 8. Kxh7 Kxg5 { O rei preto comeu h4 e g5. Agora quem tem peão são as Pretas. } { [%csl Rg5,Rg6] } ) 6... Kg4 7. Kxg6! { O rei come g6 e fica ao lado do seu peão de g5. } { [%csl Gg6,Gg5] } 7... Kxh4 8. Kf5! { Em f5, o rei fica colado no peão. O rei preto não chega a g4. } { [%csl Gf5,Yg4] } 8... Kh5 9. g6 Kh6 10. Kf6! { O rei vai para f6 e protege g7, a próxima casa do peão. } { [%csl Gf6,Yg7] } ( 10. g7?? { O peão correu sozinho, sem o rei. } { [%csl Rg7] } 10... Kh7 11. g8=Q+ Kxg8 { O rei preto come a dama. Sem peões, é empate. } { [%csl Rg8] } ) 10... Kh5 11. g7 Kg4 12. g8=Q+ { Dama! O rei comeu os peões pretos e levou o seu até g8. } { [%csl Gg8] } *
+{ Outra posição. O rei branco, em g7, está colado no peão de h7. O rei preto, em f4, quer o peão de h4. } { [%cal Gg7h7,Yf4h4] }
+6. Kxh7! { O rei come h7. Agora ele também ameaça g6. } { [%csl Gh7,Yg6] } ( 6. Kf6?? { O rei vai para f6 só para defender g5. } { [%csl Rf6,Yg5] } 6... Kg4 7. Kg7 Kxh4 8. Kxh7 Kxg5 { O rei preto comeu h4 e g5. Agora quem tem peão são as Pretas. } { [%csl Rg6] } ) 6... Kg4 7. Kxg6! { O rei come g6 e fica ao lado do seu peão de g5. } { [%csl Gg6,Gg5] } 7... Kxh4 8. Kf5! { Em f5, o rei fica colado no peão. O rei preto não chega a g4. } { [%csl Gf5,Yg4] } 8... Kh5 9. g6 Kh6 10. Kf6! { O rei vai para f6 e protege g7, a próxima casa do peão. } { [%csl Gf6,Yg7] } ( 10. g7?? { O peão correu sozinho, sem o rei. } 10... Kh7 11. g8=Q+ Kxg8 { O rei preto come a dama. Sem peões, é empate. } ) 10... Kh5 11. g7 Kg4 12. g8=Q+ { Dama! O rei comeu os peões pretos e levou o seu até g8. } { [%csl Gg8] } *
 
 [Event "Aula 6 - O rei é peça: use-o"]
 [Site "https://lichess.org/study/wtityoKq"]
@@ -132,7 +132,7 @@ No fim, você leva o rei para o centro assim que as peças fortes saem. }
 [ChapterMode "gamebook"]
 
 { O rei preto comeu b4. O seu alvo é o peão de f7. Leve o rei até lá. } { [%csl Yf7] }
-2. Ke5! { O rei vai para e5, mais perto de f7. } ( 2. h5?? { O peão andou, e o rei ficou parado. O peão de g6 come h5, e a vitória some. } ) 2... Kc4 3. Kf6! { De f6, o rei já ataca f7. } ( 3. h5?? { O peão andou, e o rei ficou parado. Chegar a f7 era o que ganhava. } ) 3... Kd4 4. Kxf7 { O rei chegou primeiro e comeu f7. } *
+2. Ke5! { O rei vai para e5, mais perto de f7. } ( 2. h5?? { O peão andou, e o rei ficou parado. O peão de g6 come h5, e a vitória some. } ) 2... Kc4 { [%csl Yf7] } 3. Kf6! { De f6, o rei já ataca f7. } ( 3. h5?? { O peão andou, e o rei ficou parado. Chegar a f7 era o que ganhava. } ) 3... Kd4 { [%csl Yf7] } 4. Kxf7 { O rei chegou primeiro e comeu f7. } *
 
 [Event "Aula 6 - O rei é peça: use-o"]
 [Site "https://lichess.org/study/wtityoKq"]

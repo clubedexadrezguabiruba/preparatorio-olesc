@@ -21,6 +21,7 @@
  */
 import { Chess } from "chess.js";
 import { lerPgnsDoEstudo, type LancePgn, type PartidaPgn } from "../repertorio/pgn.ts";
+import { sanEmPortugues } from "../repertorio/treino.ts";
 import type { CorDoCurso } from "./dominio.ts";
 
 export const FEN_INICIAL = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -292,10 +293,22 @@ function linhaPrincipal(lance: LanceDoEstudo): LanceDoEstudo[] {
   return linha;
 }
 
-/** O número do lance como o professor escreve: `9...Be7`, `11.gxf3`. */
+/**
+ * O número do lance como o professor escreve: `9...Be7`, `11.gxf3`, `5.Cc3`.
+ *
+ * **Em português, e aqui vale o `R` também** (Doug, 17/9/2026). O `lance.san`
+ * vem da `chess.js`, que só produz inglês — então `Rg1` é torre com certeza, e
+ * sai `Tg1`. A dúvida entre *rook* e rei que faz `textoEmPortugues` deixar o
+ * `R` quieto é da prosa solta, onde não há tabuleiro para desempatar; aqui há.
+ *
+ * Isto alimenta o que o aluno lê ao acertar uma parada ("Isso: 5.Cc3."), o
+ * "também vale" do lance irmão e o `— depois de 5.Cc3` do título do capítulo.
+ * Vale **da próxima publicação em diante**; o que já está publicado é traduzido
+ * na leitura, em `naLinguaDoAluno` (`fluxo-do-aluno.ts`).
+ */
 export function lanceEscrito(lance: LanceDoEstudo): string {
   const [, vez, , , , numero] = lance.fenAntes.split(" ");
-  return vez === "w" ? `${numero}.${lance.san}` : `${numero}...${lance.san}`;
+  return vez === "w" ? `${numero}.${sanEmPortugues(lance.san)}` : `${numero}...${sanEmPortugues(lance.san)}`;
 }
 
 // ---------------------------------------------------------------------------------------------

@@ -1,0 +1,3131 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-7d500cb6a1a33d97",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "N1-ROOK-PAWN",
+    "titulo": "Peão de torre: o empate do canto",
+    "metadados": {
+      "orientacaoPadrao": "black",
+      "criterioDominio": "D1",
+      "classe": "D",
+      "estadoEditorial": "rascunho"
+    },
+    "proveniencia": [
+      {
+        "positionId": "pos-n1-rook-pawn-1",
+        "conteudoHash": "67c030dca5b06be5ec98c1fbbc4dd2ad5e156a6388ba0c4582958e0406f06889",
+        "estado": "candidate"
+      }
+    ],
+    "excecoes": [],
+    "catalogo": {
+      "erros": [
+        {
+          "id": "erro-no-jogo-9-2",
+          "nome": "O rei branco entra em g7 e guarda h8.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei branco entra em g7 e guarda h8. O peão passa."
+        },
+        {
+          "id": "erro-no-jogo-9-3",
+          "nome": "O rei se afastou.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei se afastou. O rei branco vai a f7, e o peão passa."
+        },
+        {
+          "id": "erro-no-jogo-9-4",
+          "nome": "O peão corre até h8, e o seu rei não alcança.",
+          "julgamento": "perde-resultado",
+          "texto": "O peão corre até h8, e o seu rei não alcança."
+        },
+        {
+          "id": "erro-no-jogo-9-7",
+          "nome": "A porta abriu: o rei branco sai por g7, e o p…",
+          "julgamento": "perde-resultado",
+          "texto": "A porta abriu: o rei branco sai por g7, e o peão passa."
+        },
+        {
+          "id": "erro-no-jogo-9-8",
+          "nome": "O rei branco sai por g8 e guarda h8.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei branco sai por g8 e guarda h8. O peão passa."
+        },
+        {
+          "id": "erro-no-jogo-10-2",
+          "nome": "Por aqui o rei perde tempo.",
+          "julgamento": "perde-resultado",
+          "texto": "Por aqui o rei perde tempo. O rei branco vai a f5 e chega antes ao canto."
+        },
+        {
+          "id": "erro-no-jogo-10-3",
+          "nome": "O rei se afastou do canto.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei se afastou do canto. O peão corre até h8, e ninguém alcança."
+        },
+        {
+          "id": "erro-no-jogo-10-4",
+          "nome": "Um passo que não aproxima.",
+          "julgamento": "perde-resultado",
+          "texto": "Um passo que não aproxima. O rei branco vai a f5, f6 e g7."
+        },
+        {
+          "id": "erro-no-jogo-10-7",
+          "nome": "O rei branco vai a g6 e depois a g7.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei branco vai a g6 e depois a g7. O canto fica fechado."
+        },
+        {
+          "id": "erro-no-jogo-10-8",
+          "nome": "O rei se afastou do canto.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei se afastou do canto. O peão corre até h8."
+        },
+        {
+          "id": "erro-no-jogo-10-11",
+          "nome": "O rei branco entra em g7 e guarda h8.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei branco entra em g7 e guarda h8. O peão passa."
+        },
+        {
+          "id": "erro-no-jogo-10-12",
+          "nome": "O rei branco vai a f7, e o peão passa.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei branco vai a f7, e o peão passa."
+        },
+        {
+          "id": "erro-no-jogo-11-2",
+          "nome": "O rei branco vai a c5 e c6, e chega antes ao…",
+          "julgamento": "perde-resultado",
+          "texto": "O rei branco vai a c5 e c6, e chega antes ao canto."
+        },
+        {
+          "id": "erro-no-jogo-11-3",
+          "nome": "O rei se afastou do canto.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei se afastou do canto. O peão corre até a8, e ninguém alcança."
+        },
+        {
+          "id": "erro-no-jogo-11-4",
+          "nome": "Um passo para o lado errado.",
+          "julgamento": "perde-resultado",
+          "texto": "Um passo para o lado errado. O peão corre até a8."
+        },
+        {
+          "id": "erro-no-jogo-11-7",
+          "nome": "O rei branco vai a c6 e depois a b7.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei branco vai a c6 e depois a b7. O canto fica fechado."
+        },
+        {
+          "id": "erro-no-jogo-11-8",
+          "nome": "O rei se afastou do canto.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei se afastou do canto. O peão corre até a8."
+        },
+        {
+          "id": "erro-no-jogo-11-11",
+          "nome": "O rei branco entra em b7 e guarda a8.",
+          "julgamento": "perde-resultado",
+          "texto": "O rei branco entra em b7 e guarda a8. O peão passa."
+        },
+        {
+          "id": "erro-no-jogo-11-12",
+          "nome": "O peão corre até a8, e o seu rei não alcança.",
+          "julgamento": "perde-resultado",
+          "texto": "O peão corre até a8, e o seu rei não alcança."
+        }
+      ],
+      "mensagensPadrao": {
+        "vitoriaForaDoMetodo": "Este lance funciona, mas não é o caminho ensinado.",
+        "perdeResultado": "Este lance perde o resultado que a posição permitia.",
+        "alternativaDoMetodo": "Boa alternativa. Continue pela linha ensinada."
+      }
+    },
+    "analises": [
+      {
+        "id": "analise-jogo-5",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "7k/8/8/6K1/7P/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Silman's Complete Endgame Course (posições; estudos do Lichess)",
+            "link": "https://lichess.org/study/yk2b24vS",
+            "fenRevisada": "7k/8/8/6K1/7P/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T23:42:09.866Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 12 - Peão de torre",
+            "Site": "?",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Peão de torre: o empate do canto",
+            "ChapterName": "01 - AULA - O canto segura o peão",
+            "Fonte": "Silman, Complete Endgame Course - estudo yk2b24vS, cap. 20 (Rook-Pawns). Adaptada: peão recuado de h6 para h4 e rei branco de g6 para g5, para as brancas tentarem de tudo. Motor: empate antes (0.00) e depois (0.00).",
+            "FEN": "7k/8/8/6K1/7P/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "black"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-5-0",
+        "nos": {
+          "no-jogo-5-0": {
+            "id": "no-jogo-5-0",
+            "filhos": [
+              "no-jogo-5-1"
+            ],
+            "comentario": "Você defende com as pretas. O seu rei já está no canto, em h8. Olhe as brancas tentarem de tudo.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gh8]"
+            ]
+          },
+          "no-jogo-5-1": {
+            "id": "no-jogo-5-1",
+            "uci": "g5g6",
+            "filhos": [
+              "no-jogo-5-2"
+            ],
+            "comentario": "O rei branco tira g7 e h7 do seu rei.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "h7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg7,Rh7]"
+            ]
+          },
+          "no-jogo-5-2": {
+            "id": "no-jogo-5-2",
+            "uci": "h8g8",
+            "filhos": [
+              "no-jogo-5-3"
+            ],
+            "comentario": "O seu rei vai a g8. Entre g8 e h8, ele fica na frente do peão.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg8,Gh8]"
+            ]
+          },
+          "no-jogo-5-3": {
+            "id": "no-jogo-5-3",
+            "uci": "h4h5",
+            "filhos": [
+              "no-jogo-5-4"
+            ]
+          },
+          "no-jogo-5-4": {
+            "id": "no-jogo-5-4",
+            "uci": "g8h8",
+            "filhos": [
+              "no-jogo-5-5"
+            ]
+          },
+          "no-jogo-5-5": {
+            "id": "no-jogo-5-5",
+            "uci": "h5h6",
+            "filhos": [
+              "no-jogo-5-6"
+            ]
+          },
+          "no-jogo-5-6": {
+            "id": "no-jogo-5-6",
+            "uci": "h8g8",
+            "filhos": [
+              "no-jogo-5-7"
+            ]
+          },
+          "no-jogo-5-7": {
+            "id": "no-jogo-5-7",
+            "uci": "h6h7",
+            "filhos": [
+              "no-jogo-5-8",
+              "no-jogo-5-9"
+            ],
+            "comentario": "Xeque. Só um lance segura o empate."
+          },
+          "no-jogo-5-8": {
+            "id": "no-jogo-5-8",
+            "uci": "g8h8",
+            "filhos": [
+              "no-jogo-5-11",
+              "no-jogo-5-12"
+            ],
+            "comentario": "De volta ao canto. O peão não tem por onde passar.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gh8]"
+            ]
+          },
+          "no-jogo-5-9": {
+            "id": "no-jogo-5-9",
+            "uci": "g8f8",
+            "filhos": [
+              "no-jogo-5-10"
+            ],
+            "comentario": "O rei saiu do canto. O peão vira dama com xeque, e as brancas ganham.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f8",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rf8,Rh8]"
+            ]
+          },
+          "no-jogo-5-10": {
+            "id": "no-jogo-5-10",
+            "uci": "h7h8q",
+            "filhos": []
+          },
+          "no-jogo-5-11": {
+            "id": "no-jogo-5-11",
+            "uci": "g6h6",
+            "filhos": [],
+            "comentario": "Afogamento! O rei preto não está em xeque e não tem casa. Empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "g8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg7,Rg8]"
+            ]
+          },
+          "no-jogo-5-12": {
+            "id": "no-jogo-5-12",
+            "uci": "g6f6",
+            "filhos": [
+              "no-jogo-5-13"
+            ],
+            "comentario": "Se o rei branco se afasta, o seu rei come o peão."
+          },
+          "no-jogo-5-13": {
+            "id": "no-jogo-5-13",
+            "uci": "h8h7",
+            "filhos": []
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-6",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/4k2K/8/8/7P/8/8/8 b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Silman's Complete Endgame Course (posições; estudos do Lichess)",
+            "link": "https://lichess.org/study/yk2b24vS",
+            "fenRevisada": "8/4k2K/8/8/7P/8/8/8 b - - 0 1",
+            "revisadoEm": "2026-09-17T23:42:09.866Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 12 - Peão de torre",
+            "Site": "?",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Peão de torre: o empate do canto",
+            "ChapterName": "02 - AULA - Corra para o canto",
+            "Fonte": "Silman, Complete Endgame Course - estudo TW73iW6r, cap. 17 (Stalemating the Stronger Side 2). Posição sem mudança; a variante 1...Ke6 é nossa, conferida no motor.",
+            "FEN": "8/4k2K/8/8/7P/8/8/8 b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "black"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-6-0",
+        "nos": {
+          "no-jogo-6-0": {
+            "id": "no-jogo-6-0",
+            "filhos": [
+              "no-jogo-6-1",
+              "no-jogo-6-2"
+            ],
+            "comentario": "O rei branco está em h7, no canto. O seu rei, em e7, joga. Aonde ele vai?",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "e7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yh7,Ye7]"
+            ]
+          },
+          "no-jogo-6-1": {
+            "id": "no-jogo-6-1",
+            "uci": "e7f7",
+            "filhos": [
+              "no-jogo-6-12"
+            ],
+            "comentario": "f7! O rei branco fica preso no canto, na frente do próprio peão.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf7,Yh7]"
+            ]
+          },
+          "no-jogo-6-2": {
+            "id": "no-jogo-6-2",
+            "uci": "e7e6",
+            "filhos": [
+              "no-jogo-6-3"
+            ],
+            "comentario": "O rei foi para o lado errado. O rei branco vai a g7 e guarda h8.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e6",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "g7",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Re6,Rg7,Rh8]"
+            ]
+          },
+          "no-jogo-6-3": {
+            "id": "no-jogo-6-3",
+            "uci": "h7g7",
+            "filhos": [
+              "no-jogo-6-4"
+            ],
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-6-4": {
+            "id": "no-jogo-6-4",
+            "uci": "e6f5",
+            "filhos": [
+              "no-jogo-6-5"
+            ]
+          },
+          "no-jogo-6-5": {
+            "id": "no-jogo-6-5",
+            "uci": "h4h5",
+            "filhos": [
+              "no-jogo-6-6"
+            ]
+          },
+          "no-jogo-6-6": {
+            "id": "no-jogo-6-6",
+            "uci": "f5g5",
+            "filhos": [
+              "no-jogo-6-7"
+            ]
+          },
+          "no-jogo-6-7": {
+            "id": "no-jogo-6-7",
+            "uci": "h5h6",
+            "filhos": [
+              "no-jogo-6-8"
+            ]
+          },
+          "no-jogo-6-8": {
+            "id": "no-jogo-6-8",
+            "uci": "g5h5",
+            "filhos": [
+              "no-jogo-6-9"
+            ]
+          },
+          "no-jogo-6-9": {
+            "id": "no-jogo-6-9",
+            "uci": "h6h7",
+            "filhos": [
+              "no-jogo-6-10"
+            ]
+          },
+          "no-jogo-6-10": {
+            "id": "no-jogo-6-10",
+            "uci": "h5g5",
+            "filhos": [
+              "no-jogo-6-11"
+            ]
+          },
+          "no-jogo-6-11": {
+            "id": "no-jogo-6-11",
+            "uci": "h7h8q",
+            "filhos": [],
+            "comentario": "Dama. Longe do canto, o rei preto não segura o peão de torre."
+          },
+          "no-jogo-6-12": {
+            "id": "no-jogo-6-12",
+            "uci": "h4h5",
+            "filhos": [
+              "no-jogo-6-13"
+            ],
+            "comentario": "O peão anda, mas o rei branco continua preso."
+          },
+          "no-jogo-6-13": {
+            "id": "no-jogo-6-13",
+            "uci": "f7f8",
+            "filhos": [
+              "no-jogo-6-14",
+              "no-jogo-6-15"
+            ],
+            "comentario": "O seu rei fica entre f7 e f8. Assim o rei branco não sai de h7 e h8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "f8",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf7,Gf8,Yh7,Yh8]"
+            ]
+          },
+          "no-jogo-6-14": {
+            "id": "no-jogo-6-14",
+            "uci": "h7h8",
+            "filhos": [
+              "no-jogo-6-17"
+            ]
+          },
+          "no-jogo-6-15": {
+            "id": "no-jogo-6-15",
+            "uci": "h7g6",
+            "filhos": [
+              "no-jogo-6-16"
+            ]
+          },
+          "no-jogo-6-16": {
+            "id": "no-jogo-6-16",
+            "uci": "f8g8",
+            "filhos": [],
+            "comentario": "Se o rei branco sai por g6, o seu rei entra em g8, no canto. Empate também.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "g8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yg6,Gg8]"
+            ]
+          },
+          "no-jogo-6-17": {
+            "id": "no-jogo-6-17",
+            "uci": "f8f7",
+            "filhos": [
+              "no-jogo-6-18"
+            ]
+          },
+          "no-jogo-6-18": {
+            "id": "no-jogo-6-18",
+            "uci": "h5h6",
+            "filhos": [
+              "no-jogo-6-19"
+            ]
+          },
+          "no-jogo-6-19": {
+            "id": "no-jogo-6-19",
+            "uci": "f7f8",
+            "filhos": [
+              "no-jogo-6-20"
+            ]
+          },
+          "no-jogo-6-20": {
+            "id": "no-jogo-6-20",
+            "uci": "h8h7",
+            "filhos": [
+              "no-jogo-6-21"
+            ]
+          },
+          "no-jogo-6-21": {
+            "id": "no-jogo-6-21",
+            "uci": "f8f7",
+            "filhos": [
+              "no-jogo-6-22"
+            ]
+          },
+          "no-jogo-6-22": {
+            "id": "no-jogo-6-22",
+            "uci": "h7h8",
+            "filhos": [
+              "no-jogo-6-23"
+            ]
+          },
+          "no-jogo-6-23": {
+            "id": "no-jogo-6-23",
+            "uci": "f7f8",
+            "filhos": [
+              "no-jogo-6-24"
+            ]
+          },
+          "no-jogo-6-24": {
+            "id": "no-jogo-6-24",
+            "uci": "h6h7",
+            "filhos": [
+              "no-jogo-6-25"
+            ]
+          },
+          "no-jogo-6-25": {
+            "id": "no-jogo-6-25",
+            "uci": "f8f7",
+            "filhos": [],
+            "comentario": "Afogamento! As brancas não têm lance: o rei está preso, e o peão, travado. Empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "g8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg7,Rg8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-7",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/4k2K/8/8/7P/8/8/8 w - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Silman's Complete Endgame Course (posições; estudos do Lichess)",
+            "link": "https://lichess.org/study/yk2b24vS",
+            "fenRevisada": "8/4k2K/8/8/7P/8/8/8 w - - 0 1",
+            "revisadoEm": "2026-09-17T23:42:09.866Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 12 - Peão de torre",
+            "Site": "?",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Peão de torre: o empate do canto",
+            "ChapterName": "03 - AULA - Quando o rei branco chega antes",
+            "Fonte": "Silman, Complete Endgame Course - estudo TW73iW6r, cap. 17 (Stalemating the Stronger Side 2). Mesma posição, com as brancas a jogar (o texto da fonte cita 1.Kg7). Motor: brancas ganham (mate em 16).",
+            "FEN": "8/4k2K/8/8/7P/8/8/8 w - - 0 1",
+            "SetUp": "1",
+            "Orientation": "white"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-7-0",
+        "nos": {
+          "no-jogo-7-0": {
+            "id": "no-jogo-7-0",
+            "filhos": [
+              "no-jogo-7-1",
+              "no-jogo-7-2",
+              "no-jogo-7-8"
+            ],
+            "comentario": "A mesma posição, mas agora as brancas jogam. Quem joga decide."
+          },
+          "no-jogo-7-1": {
+            "id": "no-jogo-7-1",
+            "uci": "h7g7",
+            "filhos": [
+              "no-jogo-7-12"
+            ],
+            "comentario": "O rei branco entra em g7 e guarda h8. O rei preto nunca chega ao canto.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg7,Gh8]"
+            ]
+          },
+          "no-jogo-7-2": {
+            "id": "no-jogo-7-2",
+            "uci": "h4h5",
+            "filhos": [
+              "no-jogo-7-3"
+            ],
+            "comentario": "O peão andou, e o rei preto chega a f7. O rei branco fica preso no canto.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rf7]"
+            ]
+          },
+          "no-jogo-7-3": {
+            "id": "no-jogo-7-3",
+            "uci": "e7f7",
+            "filhos": [
+              "no-jogo-7-4"
+            ],
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-7-4": {
+            "id": "no-jogo-7-4",
+            "uci": "h5h6",
+            "filhos": [
+              "no-jogo-7-5"
+            ]
+          },
+          "no-jogo-7-5": {
+            "id": "no-jogo-7-5",
+            "uci": "f7f8",
+            "filhos": [
+              "no-jogo-7-6"
+            ]
+          },
+          "no-jogo-7-6": {
+            "id": "no-jogo-7-6",
+            "uci": "h7g6",
+            "filhos": [
+              "no-jogo-7-7"
+            ]
+          },
+          "no-jogo-7-7": {
+            "id": "no-jogo-7-7",
+            "uci": "f8g8",
+            "filhos": [],
+            "comentario": "O rei preto entrou em g8. Empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg8]"
+            ]
+          },
+          "no-jogo-7-8": {
+            "id": "no-jogo-7-8",
+            "uci": "h7g6",
+            "filhos": [
+              "no-jogo-7-9"
+            ],
+            "nags": [
+              4
+            ]
+          },
+          "no-jogo-7-9": {
+            "id": "no-jogo-7-9",
+            "uci": "e7f8",
+            "filhos": [
+              "no-jogo-7-10"
+            ],
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-7-10": {
+            "id": "no-jogo-7-10",
+            "uci": "h4h5",
+            "filhos": [
+              "no-jogo-7-11"
+            ]
+          },
+          "no-jogo-7-11": {
+            "id": "no-jogo-7-11",
+            "uci": "f8g8",
+            "filhos": [],
+            "comentario": "O rei preto chegou a g8, no canto. Empate.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg8]"
+            ]
+          },
+          "no-jogo-7-12": {
+            "id": "no-jogo-7-12",
+            "uci": "e7e6",
+            "filhos": [
+              "no-jogo-7-13"
+            ]
+          },
+          "no-jogo-7-13": {
+            "id": "no-jogo-7-13",
+            "uci": "h4h5",
+            "filhos": [
+              "no-jogo-7-14"
+            ],
+            "comentario": "Agora o peão corre. O rei em g7 guarda o caminho até h8.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gg7,Gh8]"
+            ]
+          },
+          "no-jogo-7-14": {
+            "id": "no-jogo-7-14",
+            "uci": "e6f5",
+            "filhos": [
+              "no-jogo-7-15"
+            ]
+          },
+          "no-jogo-7-15": {
+            "id": "no-jogo-7-15",
+            "uci": "h5h6",
+            "filhos": [
+              "no-jogo-7-16"
+            ]
+          },
+          "no-jogo-7-16": {
+            "id": "no-jogo-7-16",
+            "uci": "f5g5",
+            "filhos": [
+              "no-jogo-7-17"
+            ]
+          },
+          "no-jogo-7-17": {
+            "id": "no-jogo-7-17",
+            "uci": "h6h7",
+            "filhos": [
+              "no-jogo-7-18"
+            ]
+          },
+          "no-jogo-7-18": {
+            "id": "no-jogo-7-18",
+            "uci": "g5f5",
+            "filhos": [
+              "no-jogo-7-19"
+            ]
+          },
+          "no-jogo-7-19": {
+            "id": "no-jogo-7-19",
+            "uci": "h7h8q",
+            "filhos": [],
+            "comentario": "Dama. O rei branco chegou antes ao canto, e o peão de torre ganhou."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-8",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/4k2K/8/8/7P/8/8/8 b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Silman's Complete Endgame Course (posições; estudos do Lichess)",
+            "link": "https://lichess.org/study/yk2b24vS",
+            "fenRevisada": "8/4k2K/8/8/7P/8/8/8 b - - 0 1",
+            "revisadoEm": "2026-09-17T23:42:09.866Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 12 - Peão de torre",
+            "Site": "?",
+            "White": "Brancas",
+            "Black": "Pretas",
+            "Result": "*",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Peão de torre: o empate do canto",
+            "ChapterName": "04 - AULA - LEMBRE-SE",
+            "Fonte": "Silman, Complete Endgame Course - estudo TW73iW6r, cap. 17. Posição sem mudança.",
+            "FEN": "8/4k2K/8/8/7P/8/8/8 b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "black"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-8-0",
+        "nos": {
+          "no-jogo-8-0": {
+            "id": "no-jogo-8-0",
+            "filhos": [],
+            "comentario": "LEMBRE-SE:\n\n1. Peão de torre: se o rei que defende chega ao canto, é empate.\n2. Defendendo, corra para o canto, ou prenda o rei branco lá dentro.\n3. Atacando, chegue antes ao canto com o seu rei."
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-9",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/4k3/6K1/8/7P/8/8/8 b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Silman's Complete Endgame Course (posições; estudos do Lichess)",
+            "link": "https://lichess.org/study/yk2b24vS",
+            "fenRevisada": "8/4k3/6K1/8/7P/8/8/8 b - - 0 1",
+            "revisadoEm": "2026-09-17T23:42:09.866Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 12 - Peão de torre",
+            "Site": "?",
+            "White": "Brancas",
+            "Black": "Aluno - Pretas",
+            "Result": "1/2-1/2",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Peão de torre: o empate do canto",
+            "ChapterName": "05 - TREINO 1 - Feche o canto",
+            "Fonte": "Posição nossa, na régua de TW73iW6r cap. 16-18 (Silman). Motor: empate; só 1...Kf8 empata, e depois de 2.Kh7 só 2...Kf7.",
+            "FEN": "8/4k3/6K1/8/7P/8/8/8 b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "black",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-9-0",
+        "nos": {
+          "no-jogo-9-0": {
+            "id": "no-jogo-9-0",
+            "filhos": [
+              "no-jogo-9-1",
+              "no-jogo-9-2",
+              "no-jogo-9-3",
+              "no-jogo-9-4"
+            ],
+            "comentario": "O rei branco quer ir a g7 e tomar o canto. Chegue antes dele.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yg7]"
+            ]
+          },
+          "no-jogo-9-1": {
+            "id": "no-jogo-9-1",
+            "uci": "e7f8",
+            "filhos": [
+              "no-jogo-9-5"
+            ],
+            "comentario": "De f8, o seu rei guarda g7 e g8. O rei branco não entra.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f8",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf8,Gg7,Gg8]"
+            ]
+          },
+          "no-jogo-9-2": {
+            "id": "no-jogo-9-2",
+            "uci": "e7e8",
+            "filhos": [],
+            "comentario": "O rei branco entra em g7 e guarda h8. O peão passa.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg7,Rh8]"
+            ]
+          },
+          "no-jogo-9-3": {
+            "id": "no-jogo-9-3",
+            "uci": "e7d7",
+            "filhos": [],
+            "comentario": "O rei se afastou. O rei branco vai a f7, e o peão passa.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rf7]"
+            ]
+          },
+          "no-jogo-9-4": {
+            "id": "no-jogo-9-4",
+            "uci": "e7e6",
+            "filhos": [],
+            "comentario": "O peão corre até h8, e o seu rei não alcança.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rh8]"
+            ]
+          },
+          "no-jogo-9-5": {
+            "id": "no-jogo-9-5",
+            "uci": "g6h7",
+            "filhos": [
+              "no-jogo-9-6",
+              "no-jogo-9-7",
+              "no-jogo-9-8"
+            ],
+            "comentario": "O rei branco entrou em h7. Feche a porta dele.",
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Yh7]"
+            ]
+          },
+          "no-jogo-9-6": {
+            "id": "no-jogo-9-6",
+            "uci": "f8f7",
+            "filhos": [],
+            "comentario": "Preso: o rei branco está em h7, na frente do próprio peão.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "h7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf7,Yh7]"
+            ]
+          },
+          "no-jogo-9-7": {
+            "id": "no-jogo-9-7",
+            "uci": "f8e7",
+            "filhos": [],
+            "comentario": "A porta abriu: o rei branco sai por g7, e o peão passa.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg7]"
+            ]
+          },
+          "no-jogo-9-8": {
+            "id": "no-jogo-9-8",
+            "uci": "f8e8",
+            "filhos": [],
+            "comentario": "O rei branco sai por g8 e guarda h8. O peão passa.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g8",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg8,Rh8]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-10",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/8/2k5/5K1P/8/8/8 b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Silman's Complete Endgame Course (posições; estudos do Lichess)",
+            "link": "https://lichess.org/study/yk2b24vS",
+            "fenRevisada": "8/8/8/2k5/5K1P/8/8/8 b - - 0 1",
+            "revisadoEm": "2026-09-17T23:42:09.866Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 12 - Peão de torre",
+            "Site": "?",
+            "White": "Brancas",
+            "Black": "Aluno - Pretas",
+            "Result": "1/2-1/2",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Peão de torre: o empate do canto",
+            "ChapterName": "06 - TREINO 2 - Corra para o canto",
+            "Fonte": "Posição nossa, na régua de TW73iW6r cap. 16-18 (Silman). Motor: empate; em cada lance das pretas só um empata (1...Kd6, 2...Ke7, 3...Kf8).",
+            "FEN": "8/8/8/2k5/5K1P/8/8/8 b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "black",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-10-0",
+        "nos": {
+          "no-jogo-10-0": {
+            "id": "no-jogo-10-0",
+            "filhos": [
+              "no-jogo-10-1",
+              "no-jogo-10-2",
+              "no-jogo-10-3",
+              "no-jogo-10-4"
+            ],
+            "comentario": "Agora sem ajuda. Leve o seu rei até o canto antes do rei branco."
+          },
+          "no-jogo-10-1": {
+            "id": "no-jogo-10-1",
+            "uci": "c5d6",
+            "filhos": [
+              "no-jogo-10-5"
+            ],
+            "comentario": "Na diagonal, o rei anda rumo ao canto sem perder tempo.",
+            "nags": [
+              1
+            ]
+          },
+          "no-jogo-10-2": {
+            "id": "no-jogo-10-2",
+            "uci": "c5d5",
+            "filhos": [],
+            "comentario": "Por aqui o rei perde tempo. O rei branco vai a f5 e chega antes ao canto.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f5",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rf5]"
+            ]
+          },
+          "no-jogo-10-3": {
+            "id": "no-jogo-10-3",
+            "uci": "c5d4",
+            "filhos": [],
+            "comentario": "O rei se afastou do canto. O peão corre até h8, e ninguém alcança.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rh8]"
+            ]
+          },
+          "no-jogo-10-4": {
+            "id": "no-jogo-10-4",
+            "uci": "c5c6",
+            "filhos": [],
+            "comentario": "Um passo que não aproxima. O rei branco vai a f5, f6 e g7.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f5",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "f6",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "g7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rf5,Rf6,Rg7]"
+            ]
+          },
+          "no-jogo-10-5": {
+            "id": "no-jogo-10-5",
+            "uci": "f4f5",
+            "filhos": [
+              "no-jogo-10-6",
+              "no-jogo-10-7",
+              "no-jogo-10-8"
+            ]
+          },
+          "no-jogo-10-6": {
+            "id": "no-jogo-10-6",
+            "uci": "d6e7",
+            "filhos": [
+              "no-jogo-10-9"
+            ],
+            "comentario": "De e7, o rei chega a f8 no próximo lance.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "e7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "f8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ge7,Gf8]"
+            ]
+          },
+          "no-jogo-10-7": {
+            "id": "no-jogo-10-7",
+            "uci": "d6d7",
+            "filhos": [],
+            "comentario": "O rei branco vai a g6 e depois a g7. O canto fica fechado.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g6",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "g7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg6,Rg7]"
+            ]
+          },
+          "no-jogo-10-8": {
+            "id": "no-jogo-10-8",
+            "uci": "d6d5",
+            "filhos": [],
+            "comentario": "O rei se afastou do canto. O peão corre até h8.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rh8]"
+            ]
+          },
+          "no-jogo-10-9": {
+            "id": "no-jogo-10-9",
+            "uci": "f5g6",
+            "filhos": [
+              "no-jogo-10-10",
+              "no-jogo-10-11",
+              "no-jogo-10-12"
+            ]
+          },
+          "no-jogo-10-10": {
+            "id": "no-jogo-10-10",
+            "uci": "e7f8",
+            "filhos": [],
+            "comentario": "f8! O rei branco não entra em g7, e o canto é seu. Empate.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f8",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "g7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gf8,Gg7]"
+            ]
+          },
+          "no-jogo-10-11": {
+            "id": "no-jogo-10-11",
+            "uci": "e7e8",
+            "filhos": [],
+            "comentario": "O rei branco entra em g7 e guarda h8. O peão passa.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rg7,Rh8]"
+            ]
+          },
+          "no-jogo-10-12": {
+            "id": "no-jogo-10-12",
+            "uci": "e7d7",
+            "filhos": [],
+            "comentario": "O rei branco vai a f7, e o peão passa.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "f7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rf7]"
+            ]
+          }
+        }
+      },
+      {
+        "id": "analise-jogo-11",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "8/8/8/5k2/PK6/8/8/8 b - - 0 1",
+          "revisao": {
+            "origem": "estudo-lichess",
+            "autor": "clubexadrezguabiruba",
+            "obra": "Silman's Complete Endgame Course (posições; estudos do Lichess)",
+            "link": "https://lichess.org/study/yk2b24vS",
+            "fenRevisada": "8/8/8/5k2/PK6/8/8/8 b - - 0 1",
+            "revisadoEm": "2026-09-17T23:42:09.866Z",
+            "professor": "Doug",
+            "mostrarCredito": false,
+            "direitoDosTextos": true
+          }
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Aula 12 - Peão de torre",
+            "Site": "?",
+            "White": "Brancas",
+            "Black": "Aluno - Pretas",
+            "Result": "1/2-1/2",
+            "Annotator": "https://lichess.org/@/clubexadrezguabiruba",
+            "StudyName": "Peão de torre: o empate do canto",
+            "ChapterName": "07 - TREINO 3 - O outro canto",
+            "Fonte": "Posição nossa, na régua de TW73iW6r cap. 16-18 (Silman), com peão na coluna a. Motor: empate; em cada lance das pretas só um empata (1...Ke6, 2...Kd7, 3...Kc8).",
+            "FEN": "8/8/8/5k2/PK6/8/8/8 b - - 0 1",
+            "SetUp": "1",
+            "Orientation": "black",
+            "ChapterMode": "gamebook"
+          },
+          "resultado": "*",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-jogo-11-0",
+        "nos": {
+          "no-jogo-11-0": {
+            "id": "no-jogo-11-0",
+            "filhos": [
+              "no-jogo-11-1",
+              "no-jogo-11-2",
+              "no-jogo-11-3",
+              "no-jogo-11-4"
+            ],
+            "comentario": "Agora o peão está na coluna a. Leve o seu rei ao canto certo."
+          },
+          "no-jogo-11-1": {
+            "id": "no-jogo-11-1",
+            "uci": "f5e6",
+            "filhos": [
+              "no-jogo-11-5"
+            ],
+            "comentario": "Na diagonal, rumo ao canto de a8.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ga8]"
+            ]
+          },
+          "no-jogo-11-2": {
+            "id": "no-jogo-11-2",
+            "uci": "f5e5",
+            "filhos": [],
+            "comentario": "O rei branco vai a c5 e c6, e chega antes ao canto.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c5",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "c6",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rc5,Rc6]"
+            ]
+          },
+          "no-jogo-11-3": {
+            "id": "no-jogo-11-3",
+            "uci": "f5f4",
+            "filhos": [],
+            "comentario": "O rei se afastou do canto. O peão corre até a8, e ninguém alcança.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ra8]"
+            ]
+          },
+          "no-jogo-11-4": {
+            "id": "no-jogo-11-4",
+            "uci": "f5f6",
+            "filhos": [],
+            "comentario": "Um passo para o lado errado. O peão corre até a8.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ra8]"
+            ]
+          },
+          "no-jogo-11-5": {
+            "id": "no-jogo-11-5",
+            "uci": "b4b5",
+            "filhos": [
+              "no-jogo-11-6",
+              "no-jogo-11-7",
+              "no-jogo-11-8"
+            ]
+          },
+          "no-jogo-11-6": {
+            "id": "no-jogo-11-6",
+            "uci": "e6d7",
+            "filhos": [
+              "no-jogo-11-9"
+            ],
+            "comentario": "De d7, o rei chega a c8 no próximo lance.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "d7",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "c8",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gd7,Gc8]"
+            ]
+          },
+          "no-jogo-11-7": {
+            "id": "no-jogo-11-7",
+            "uci": "e6e7",
+            "filhos": [],
+            "comentario": "O rei branco vai a c6 e depois a b7. O canto fica fechado.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c6",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "b7",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rc6,Rb7]"
+            ]
+          },
+          "no-jogo-11-8": {
+            "id": "no-jogo-11-8",
+            "uci": "e6d5",
+            "filhos": [],
+            "comentario": "O rei se afastou do canto. O peão corre até a8.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ra8]"
+            ]
+          },
+          "no-jogo-11-9": {
+            "id": "no-jogo-11-9",
+            "uci": "b5b6",
+            "filhos": [
+              "no-jogo-11-10",
+              "no-jogo-11-11",
+              "no-jogo-11-12"
+            ]
+          },
+          "no-jogo-11-10": {
+            "id": "no-jogo-11-10",
+            "uci": "d7c8",
+            "filhos": [],
+            "comentario": "c8! O rei branco não entra em b7, e o canto é seu. Empate.",
+            "nags": [
+              1
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "c8",
+                  "cor": "verde"
+                },
+                {
+                  "casa": "b7",
+                  "cor": "verde"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Gc8,Gb7]"
+            ]
+          },
+          "no-jogo-11-11": {
+            "id": "no-jogo-11-11",
+            "uci": "d7d8",
+            "filhos": [],
+            "comentario": "O rei branco entra em b7 e guarda a8. O peão passa.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "b7",
+                  "cor": "vermelho"
+                },
+                {
+                  "casa": "a8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Rb7,Ra8]"
+            ]
+          },
+          "no-jogo-11-12": {
+            "id": "no-jogo-11-12",
+            "uci": "d7d6",
+            "filhos": [],
+            "comentario": "O peão corre até a8, e o seu rei não alcança.",
+            "nags": [
+              4
+            ],
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "a8",
+                  "cor": "vermelho"
+                }
+              ]
+            },
+            "diretivas": [
+              "[%csl Ra8]"
+            ]
+          }
+        }
+      }
+    ],
+    "introducoes": [
+      {
+        "id": "introducao-estudo-1",
+        "titulo": "Introdução",
+        "quadros": [
+          {
+            "id": "quadro-estudo-1",
+            "titulo": "INTRODUÇÃO - Ganha, empata ou perde?",
+            "texto": "Brancas: rei em g6 e peão em h6. Pretas: só o rei, em h8. Brancas jogam.\n\nGanha, empata ou perde?",
+            "posicao": {
+              "tipo": "fen",
+              "fen": "7k/8/6KP/8/8/8/8/8 w - - 0 1"
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "h6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "amarelo"
+                }
+              ]
+            }
+          },
+          {
+            "id": "quadro-estudo-2",
+            "titulo": "INTRODUÇÃO - A resposta",
+            "texto": "Empata. Se o peão vai a h7, o rei preto não está em xeque e não tem casa: afogamento.\n\nE qualquer outro lance também não ganha.",
+            "posicao": {
+              "tipo": "fen",
+              "fen": "7k/8/6KP/8/8/8/8/8 w - - 0 1"
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "h8",
+                  "cor": "vermelho"
+                }
+              ]
+            }
+          },
+          {
+            "id": "quadro-estudo-3",
+            "titulo": "INTRODUÇÃO - E com o peão em g6?",
+            "texto": "Com o peão em g6, as brancas ganham. Depois de g7, o rei preto sai para h7, e o rei branco toma g8.\n\nNa coluna h, não existe casa do outro lado.",
+            "posicao": {
+              "tipo": "fen",
+              "fen": "6k1/8/5KP1/8/8/8/8/8 w - - 0 1"
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g6",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "g7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "h7",
+                  "cor": "amarelo"
+                },
+                {
+                  "casa": "g8",
+                  "cor": "verde"
+                }
+              ]
+            }
+          },
+          {
+            "id": "quadro-estudo-4",
+            "titulo": "INTRODUÇÃO - A pergunta da aula",
+            "texto": "O peão das colunas a e h se chama peão de torre. A cada lance, pergunte: o rei que defende chega ao canto?\n\nNo fim, você defende e corre para o canto a tempo.",
+            "posicao": {
+              "tipo": "fen",
+              "fen": "7k/8/6KP/8/8/8/8/8 w - - 0 1"
+            }
+          }
+        ]
+      }
+    ],
+    "capitulos": [
+      {
+        "id": "capitulo-jogo-5",
+        "titulo": "AULA - O canto segura o peão",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-5",
+          "no-jogo-5-6",
+          "no-jogo-5-7",
+          "no-jogo-5-8",
+          "no-jogo-5-11"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-5-0",
+            "nodeId": "no-jogo-5-0",
+            "texto": "Você defende com as pretas. O seu rei já está no canto, em h8. Olhe as brancas tentarem de tudo.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-1",
+            "nodeId": "no-jogo-5-1",
+            "texto": "O rei branco tira g7 e h7 do seu rei.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-2",
+            "nodeId": "no-jogo-5-2",
+            "texto": "O seu rei vai a g8. Entre g8 e h8, ele fica na frente do peão.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-7",
+            "nodeId": "no-jogo-5-7",
+            "texto": "Xeque. Só um lance segura o empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-8",
+            "nodeId": "no-jogo-5-8",
+            "texto": "De volta ao canto. O peão não tem por onde passar.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-9",
+            "nodeId": "no-jogo-5-9",
+            "texto": "O rei saiu do canto. O peão vira dama com xeque, e as brancas ganham.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-11",
+            "nodeId": "no-jogo-5-11",
+            "texto": "Afogamento! O rei preto não está em xeque e não tem casa. Empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-5-12",
+            "nodeId": "no-jogo-5-12",
+            "texto": "Se o rei branco se afasta, o seu rei come o peão.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5-variante",
+        "titulo": "Comparação: 4... Rf8??",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-5",
+          "no-jogo-5-6",
+          "no-jogo-5-7",
+          "no-jogo-5-9",
+          "no-jogo-5-10"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-5-variante-no-jogo-5-9",
+            "nodeId": "no-jogo-5-9",
+            "texto": "O rei saiu do canto. O peão vira dama com xeque, e as brancas ganham.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-5-variante-2",
+        "titulo": "Comparação: 5. Rf6",
+        "analiseId": "analise-jogo-5",
+        "inicioNodeId": "no-jogo-5-0",
+        "caminho": [
+          "no-jogo-5-1",
+          "no-jogo-5-2",
+          "no-jogo-5-3",
+          "no-jogo-5-4",
+          "no-jogo-5-5",
+          "no-jogo-5-6",
+          "no-jogo-5-7",
+          "no-jogo-5-8",
+          "no-jogo-5-12",
+          "no-jogo-5-13"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-5-variante-2-no-jogo-5-12",
+            "nodeId": "no-jogo-5-12",
+            "texto": "Se o rei branco se afasta, o seu rei come o peão.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6",
+        "titulo": "AULA - Corra para o canto",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-1",
+          "no-jogo-6-12",
+          "no-jogo-6-13",
+          "no-jogo-6-14",
+          "no-jogo-6-17",
+          "no-jogo-6-18",
+          "no-jogo-6-19",
+          "no-jogo-6-20",
+          "no-jogo-6-21",
+          "no-jogo-6-22",
+          "no-jogo-6-23",
+          "no-jogo-6-24",
+          "no-jogo-6-25"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-6-0",
+            "nodeId": "no-jogo-6-0",
+            "texto": "O rei branco está em h7, no canto. O seu rei, em e7, joga. Aonde ele vai?",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-1",
+            "nodeId": "no-jogo-6-1",
+            "texto": "f7! O rei branco fica preso no canto, na frente do próprio peão.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-2",
+            "nodeId": "no-jogo-6-2",
+            "texto": "O rei foi para o lado errado. O rei branco vai a g7 e guarda h8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-11",
+            "nodeId": "no-jogo-6-11",
+            "texto": "Dama. Longe do canto, o rei preto não segura o peão de torre.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-12",
+            "nodeId": "no-jogo-6-12",
+            "texto": "O peão anda, mas o rei branco continua preso.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-13",
+            "nodeId": "no-jogo-6-13",
+            "texto": "O seu rei fica entre f7 e f8. Assim o rei branco não sai de h7 e h8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-16",
+            "nodeId": "no-jogo-6-16",
+            "texto": "Se o rei branco sai por g6, o seu rei entra em g8, no canto. Empate também.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-6-25",
+            "nodeId": "no-jogo-6-25",
+            "texto": "Afogamento! As brancas não têm lance: o rei está preso, e o peão, travado. Empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6-variante",
+        "titulo": "Comparação: 1... Re6??",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-2",
+          "no-jogo-6-3",
+          "no-jogo-6-4",
+          "no-jogo-6-5",
+          "no-jogo-6-6",
+          "no-jogo-6-7",
+          "no-jogo-6-8",
+          "no-jogo-6-9",
+          "no-jogo-6-10",
+          "no-jogo-6-11"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-2",
+            "nodeId": "no-jogo-6-2",
+            "texto": "O rei foi para o lado errado. O rei branco vai a g7 e guarda h8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-6-variante-no-jogo-6-11",
+            "nodeId": "no-jogo-6-11",
+            "texto": "Dama. Longe do canto, o rei preto não segura o peão de torre.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-6-variante-2",
+        "titulo": "Comparação: 3. Rg6",
+        "analiseId": "analise-jogo-6",
+        "inicioNodeId": "no-jogo-6-0",
+        "caminho": [
+          "no-jogo-6-1",
+          "no-jogo-6-12",
+          "no-jogo-6-13",
+          "no-jogo-6-15",
+          "no-jogo-6-16"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-6-variante-2-no-jogo-6-16",
+            "nodeId": "no-jogo-6-16",
+            "texto": "Se o rei branco sai por g6, o seu rei entra em g8, no canto. Empate também.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7",
+        "titulo": "AULA - Quando o rei branco chega antes",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [
+          "no-jogo-7-1",
+          "no-jogo-7-12",
+          "no-jogo-7-13",
+          "no-jogo-7-14",
+          "no-jogo-7-15",
+          "no-jogo-7-16",
+          "no-jogo-7-17",
+          "no-jogo-7-18",
+          "no-jogo-7-19"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-7-0",
+            "nodeId": "no-jogo-7-0",
+            "texto": "A mesma posição, mas agora as brancas jogam. Quem joga decide.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-1",
+            "nodeId": "no-jogo-7-1",
+            "texto": "O rei branco entra em g7 e guarda h8. O rei preto nunca chega ao canto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-2",
+            "nodeId": "no-jogo-7-2",
+            "texto": "O peão andou, e o rei preto chega a f7. O rei branco fica preso no canto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-7",
+            "nodeId": "no-jogo-7-7",
+            "texto": "O rei preto entrou em g8. Empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-11",
+            "nodeId": "no-jogo-7-11",
+            "texto": "O rei preto chegou a g8, no canto. Empate.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-13",
+            "nodeId": "no-jogo-7-13",
+            "texto": "Agora o peão corre. O rei em g7 guarda o caminho até h8.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-jogo-7-19",
+            "nodeId": "no-jogo-7-19",
+            "texto": "Dama. O rei branco chegou antes ao canto, e o peão de torre ganhou.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7-variante",
+        "titulo": "Comparação: 1. h5??",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [
+          "no-jogo-7-2",
+          "no-jogo-7-3",
+          "no-jogo-7-4",
+          "no-jogo-7-5",
+          "no-jogo-7-6",
+          "no-jogo-7-7"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-7-variante-no-jogo-7-2",
+            "nodeId": "no-jogo-7-2",
+            "texto": "O peão andou, e o rei preto chega a f7. O rei branco fica preso no canto.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-jogo-7-variante-no-jogo-7-7",
+            "nodeId": "no-jogo-7-7",
+            "texto": "O rei preto entrou em g8. Empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-7-variante-2",
+        "titulo": "Comparação: 1. Rg6??",
+        "analiseId": "analise-jogo-7",
+        "inicioNodeId": "no-jogo-7-0",
+        "caminho": [
+          "no-jogo-7-8",
+          "no-jogo-7-9",
+          "no-jogo-7-10",
+          "no-jogo-7-11"
+        ],
+        "orientacao": "white",
+        "narracoes": [
+          {
+            "id": "narracao-jogo-7-variante-2-no-jogo-7-11",
+            "nodeId": "no-jogo-7-11",
+            "texto": "O rei preto chegou a g8, no canto. Empate.",
+            "pausa": "temporizada"
+          }
+        ]
+      },
+      {
+        "id": "capitulo-jogo-8",
+        "titulo": "AULA - LEMBRE-SE",
+        "analiseId": "analise-jogo-8",
+        "inicioNodeId": "no-jogo-8-0",
+        "caminho": [],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-no-jogo-8-0",
+            "nodeId": "no-jogo-8-0",
+            "texto": "LEMBRE-SE:\n\n1. Peão de torre: se o rei que defende chega ao canto, é empate.\n2. Defendendo, corra para o canto, ou prenda o rei branco lá dentro.\n3. Atacando, chegue antes ao canto com o seu rei.",
+            "pausa": "manual"
+          }
+        ]
+      }
+    ],
+    "treinos": [
+      {
+        "id": "treino-capitulo-jogo-9-no-jogo-9-0-black",
+        "titulo": "TREINO 1 - Feche o canto",
+        "introducao": "O rei branco quer ir a g7 e tomar o canto. Chegue antes dele.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-9",
+          "nodeId": "no-jogo-9-0"
+        },
+        "ladoAluno": "black",
+        "objetivo": "O rei branco quer ir a g7 e tomar o canto. Chegue antes dele.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-9-0-black",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "g7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-1-black",
+                "moves": [
+                  "e7f8"
+                ],
+                "julgamento": "correta",
+                "feedback": "De f8, o seu rei guarda g7 e g8. O rei branco não entra.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "g6h7",
+                      "proximaQuestaoId": "questao-no-jogo-9-5-black",
+                      "texto": "O rei branco entrou em h7. Feche a porta dele."
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-2",
+                "moves": [
+                  "e7e8"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei branco entra em g7 e guarda h8. O peão passa.",
+                "erroId": "erro-no-jogo-9-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-3",
+                "moves": [
+                  "e7d7"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei se afastou. O rei branco vai a f7, e o peão passa.",
+                "erroId": "erro-no-jogo-9-3",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-4",
+                "moves": [
+                  "e7e6"
+                ],
+                "julgamento": "erro",
+                "feedback": "O peão corre até h8, e o seu rei não alcança.",
+                "erroId": "erro-no-jogo-9-4",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-9-5-black",
+            "posicao": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-5"
+            },
+            "desenhos": {
+              "highlights": [
+                {
+                  "casa": "h7",
+                  "cor": "amarelo"
+                }
+              ]
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-9-6-black",
+                "moves": [
+                  "f8f7"
+                ],
+                "julgamento": "correta",
+                "feedback": "Preso: o rei branco está em h7, na frente do próprio peão.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-7",
+                "moves": [
+                  "f8e7"
+                ],
+                "julgamento": "erro",
+                "feedback": "A porta abriu: o rei branco sai por g7, e o peão passa.",
+                "erroId": "erro-no-jogo-9-7",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-9-8",
+                "moves": [
+                  "f8e8"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei branco sai por g8 e guarda h8. O peão passa.",
+                "erroId": "erro-no-jogo-9-8",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-9",
+          "nodeIds": [
+            "no-jogo-9-0",
+            "no-jogo-9-1",
+            "no-jogo-9-5",
+            "no-jogo-9-6"
+          ],
+          "hash": "v2-5ec35749",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-9",
+          "inicioNodeId": "no-jogo-9-0",
+          "objetivo": "O rei branco quer ir a g7 e tomar o canto. Chegue antes dele."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/4k3/6K1/8/7P/8/8/8 b - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-9",
+              "nodeId": "no-jogo-9-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-9-0-black": {
+              "fen": "8/4k3/6K1/8/7P/8/8/8 b - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-0"
+              }
+            },
+            "questao-no-jogo-9-5-black": {
+              "fen": "5k2/7K/8/8/7P/8/8/8 b - - 2 2",
+              "historicoUci": [
+                "e7f8",
+                "g6h7"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-9",
+                "nodeId": "no-jogo-9-5"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "resultado": "draw",
+        "explicacaoConclusao": "Preso: o rei branco está em h7, na frente do próprio peão."
+      },
+      {
+        "id": "treino-capitulo-jogo-10-no-jogo-10-0-black",
+        "titulo": "TREINO 2 - Corra para o canto",
+        "introducao": "Agora sem ajuda. Leve o seu rei até o canto antes do rei branco.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-10",
+          "nodeId": "no-jogo-10-0"
+        },
+        "ladoAluno": "black",
+        "objetivo": "Agora sem ajuda. Leve o seu rei até o canto antes do rei branco.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-10-0-black",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-1-black",
+                "moves": [
+                  "c5d6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Na diagonal, o rei anda rumo ao canto sem perder tempo.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f4f5",
+                      "proximaQuestaoId": "questao-no-jogo-10-5-black"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-2",
+                "moves": [
+                  "c5d5"
+                ],
+                "julgamento": "erro",
+                "feedback": "Por aqui o rei perde tempo. O rei branco vai a f5 e chega antes ao canto.",
+                "erroId": "erro-no-jogo-10-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-3",
+                "moves": [
+                  "c5d4"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei se afastou do canto. O peão corre até h8, e ninguém alcança.",
+                "erroId": "erro-no-jogo-10-3",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-4",
+                "moves": [
+                  "c5c6"
+                ],
+                "julgamento": "erro",
+                "feedback": "Um passo que não aproxima. O rei branco vai a f5, f6 e g7.",
+                "erroId": "erro-no-jogo-10-4",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-5-black",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-5"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-6-black",
+                "moves": [
+                  "d6e7"
+                ],
+                "julgamento": "correta",
+                "feedback": "De e7, o rei chega a f8 no próximo lance.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "f5g6",
+                      "proximaQuestaoId": "questao-no-jogo-10-9-black"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-7",
+                "moves": [
+                  "d6d7"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei branco vai a g6 e depois a g7. O canto fica fechado.",
+                "erroId": "erro-no-jogo-10-7",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-8",
+                "moves": [
+                  "d6d5"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei se afastou do canto. O peão corre até h8.",
+                "erroId": "erro-no-jogo-10-8",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-10-9-black",
+            "posicao": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-9"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-10-10-black",
+                "moves": [
+                  "e7f8"
+                ],
+                "julgamento": "correta",
+                "feedback": "f8! O rei branco não entra em g7, e o canto é seu. Empate.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-11",
+                "moves": [
+                  "e7e8"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei branco entra em g7 e guarda h8. O peão passa.",
+                "erroId": "erro-no-jogo-10-11",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-10-12",
+                "moves": [
+                  "e7d7"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei branco vai a f7, e o peão passa.",
+                "erroId": "erro-no-jogo-10-12",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-10",
+          "nodeIds": [
+            "no-jogo-10-0",
+            "no-jogo-10-1",
+            "no-jogo-10-5",
+            "no-jogo-10-6",
+            "no-jogo-10-9",
+            "no-jogo-10-10"
+          ],
+          "hash": "v2-c596c55a",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-10",
+          "inicioNodeId": "no-jogo-10-0",
+          "objetivo": "Agora sem ajuda. Leve o seu rei até o canto antes do rei branco."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/8/8/2k5/5K1P/8/8/8 b - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-10",
+              "nodeId": "no-jogo-10-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-10-0-black": {
+              "fen": "8/8/8/2k5/5K1P/8/8/8 b - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-0"
+              }
+            },
+            "questao-no-jogo-10-5-black": {
+              "fen": "8/8/3k4/5K2/7P/8/8/8 b - - 2 2",
+              "historicoUci": [
+                "c5d6",
+                "f4f5"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-5"
+              }
+            },
+            "questao-no-jogo-10-9-black": {
+              "fen": "8/4k3/6K1/8/7P/8/8/8 b - - 4 3",
+              "historicoUci": [
+                "c5d6",
+                "f4f5",
+                "d6e7",
+                "f5g6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-10",
+                "nodeId": "no-jogo-10-9"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "resultado": "draw",
+        "explicacaoConclusao": "f8! O rei branco não entra em g7, e o canto é seu. Empate."
+      },
+      {
+        "id": "treino-capitulo-jogo-11-no-jogo-11-0-black",
+        "titulo": "TREINO 3 - O outro canto",
+        "introducao": "Agora o peão está na coluna a. Leve o seu rei ao canto certo.",
+        "perfil": "linha-autoral",
+        "inicio": {
+          "analiseId": "analise-jogo-11",
+          "nodeId": "no-jogo-11-0"
+        },
+        "ladoAluno": "black",
+        "objetivo": "Agora o peão está na coluna a. Leve o seu rei ao canto certo.",
+        "questoes": [
+          {
+            "id": "questao-no-jogo-11-0-black",
+            "posicao": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-0"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-11-1-black",
+                "moves": [
+                  "f5e6"
+                ],
+                "julgamento": "correta",
+                "feedback": "Na diagonal, rumo ao canto de a8.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b4b5",
+                      "proximaQuestaoId": "questao-no-jogo-11-5-black"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-11-2",
+                "moves": [
+                  "f5e5"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei branco vai a c5 e c6, e chega antes ao canto.",
+                "erroId": "erro-no-jogo-11-2",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-11-3",
+                "moves": [
+                  "f5f4"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei se afastou do canto. O peão corre até a8, e ninguém alcança.",
+                "erroId": "erro-no-jogo-11-3",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-11-4",
+                "moves": [
+                  "f5f6"
+                ],
+                "julgamento": "erro",
+                "feedback": "Um passo para o lado errado. O peão corre até a8.",
+                "erroId": "erro-no-jogo-11-4",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-11-5-black",
+            "posicao": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-5"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-11-6-black",
+                "moves": [
+                  "e6d7"
+                ],
+                "julgamento": "correta",
+                "feedback": "De d7, o rei chega a c8 no próximo lance.",
+                "efeito": {
+                  "tipo": "avanca",
+                  "defesas": [
+                    {
+                      "move": "b5b6",
+                      "proximaQuestaoId": "questao-no-jogo-11-9-black"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "resposta-no-jogo-11-7",
+                "moves": [
+                  "e6e7"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei branco vai a c6 e depois a b7. O canto fica fechado.",
+                "erroId": "erro-no-jogo-11-7",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-11-8",
+                "moves": [
+                  "e6d5"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei se afastou do canto. O peão corre até a8.",
+                "erroId": "erro-no-jogo-11-8",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          },
+          {
+            "id": "questao-no-jogo-11-9-black",
+            "posicao": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-9"
+            },
+            "respostas": [
+              {
+                "id": "resposta-no-jogo-11-10-black",
+                "moves": [
+                  "d7c8"
+                ],
+                "julgamento": "correta",
+                "feedback": "c8! O rei branco não entra em b7, e o canto é seu. Empate.",
+                "efeito": {
+                  "tipo": "encerra",
+                  "condicao": "objetivo-autoral"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-11-11",
+                "moves": [
+                  "d7d8"
+                ],
+                "julgamento": "erro",
+                "feedback": "O rei branco entra em b7 e guarda a8. O peão passa.",
+                "erroId": "erro-no-jogo-11-11",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              },
+              {
+                "id": "resposta-no-jogo-11-12",
+                "moves": [
+                  "d7d6"
+                ],
+                "julgamento": "erro",
+                "feedback": "O peão corre até a8, e o seu rei não alcança.",
+                "erroId": "erro-no-jogo-11-12",
+                "efeito": {
+                  "tipo": "repete"
+                }
+              }
+            ]
+          }
+        ],
+        "defensor": {
+          "politica": "deterministica"
+        },
+        "termino": {
+          "tipo": "objetivo"
+        },
+        "propriedade": "independente",
+        "fonte": "atual",
+        "origem": {
+          "analiseId": "analise-jogo-11",
+          "nodeIds": [
+            "no-jogo-11-0",
+            "no-jogo-11-1",
+            "no-jogo-11-5",
+            "no-jogo-11-6",
+            "no-jogo-11-9",
+            "no-jogo-11-10"
+          ],
+          "hash": "v2-26de161d",
+          "derivadorVersao": 1,
+          "capituloId": "capitulo-jogo-11",
+          "inicioNodeId": "no-jogo-11-0",
+          "objetivo": "Agora o peão está na coluna a. Leve o seu rei ao canto certo."
+        },
+        "copia": {
+          "inicio": {
+            "fen": "8/8/8/5k2/PK6/8/8/8 b - - 0 1",
+            "historicoUci": [],
+            "origem": {
+              "analiseId": "analise-jogo-11",
+              "nodeId": "no-jogo-11-0"
+            }
+          },
+          "questoes": {
+            "questao-no-jogo-11-0-black": {
+              "fen": "8/8/8/5k2/PK6/8/8/8 b - - 0 1",
+              "historicoUci": [],
+              "origem": {
+                "analiseId": "analise-jogo-11",
+                "nodeId": "no-jogo-11-0"
+              }
+            },
+            "questao-no-jogo-11-5-black": {
+              "fen": "8/8/4k3/1K6/P7/8/8/8 b - - 2 2",
+              "historicoUci": [
+                "f5e6",
+                "b4b5"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-11",
+                "nodeId": "no-jogo-11-5"
+              }
+            },
+            "questao-no-jogo-11-9-black": {
+              "fen": "8/3k4/1K6/8/P7/8/8/8 b - - 4 3",
+              "historicoUci": [
+                "f5e6",
+                "b4b5",
+                "e6d7",
+                "b5b6"
+              ],
+              "origem": {
+                "analiseId": "analise-jogo-11",
+                "nodeId": "no-jogo-11-9"
+              }
+            }
+          }
+        },
+        "obrigatorio": true,
+        "revisaoAvaliacao": "pendente",
+        "resultado": "draw",
+        "explicacaoConclusao": "c8! O rei branco não entra em b7, e o canto é seu. Empate."
+      }
+    ],
+    "praticas": [
+      {
+        "id": "pratica-pratica-segure-o-empate",
+        "titulo": "PRÁTICA - Segure o empate",
+        "positionId": "pos-n1-rook-pawn-1",
+        "ladoAluno": "black",
+        "objetivo": "draw",
+        "engine": {
+          "skill": 20,
+          "moveTimeMs": 300
+        }
+      }
+    ],
+    "fluxo": [
+      {
+        "id": "etapa-introducao-estudo-1",
+        "tipo": "introducao",
+        "entidadeId": "introducao-estudo-1"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-5-variante-2",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-5-variante-2"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-6-variante-2",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-6-variante-2"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7-variante",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7-variante"
+      },
+      {
+        "id": "etapa-capitulo-jogo-7-variante-2",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-7-variante-2"
+      },
+      {
+        "id": "etapa-capitulo-jogo-8",
+        "tipo": "capitulo",
+        "entidadeId": "capitulo-jogo-8"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-9-no-jogo-9-0-black",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-9-no-jogo-9-0-black"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-10-no-jogo-10-0-black",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-10-no-jogo-10-0-black"
+      },
+      {
+        "id": "etapa-treino-capitulo-jogo-11-no-jogo-11-0-black",
+        "tipo": "treino",
+        "entidadeId": "treino-capitulo-jogo-11-no-jogo-11-0-black"
+      },
+      {
+        "id": "etapa-pratica-pratica-segure-o-empate",
+        "tipo": "pratica",
+        "entidadeId": "pratica-pratica-segure-o-empate"
+      }
+    ]
+  },
+  "posicoes": {
+    "pos-n1-rook-pawn-1": {
+      "id": "pos-n1-rook-pawn-1",
+      "fen": "8/8/3k4/8/5K2/7P/8/8 b - - 0 1",
+      "expectedResult": "draw",
+      "tags": [
+        "PRÁTICA - Segure o empate"
+      ],
+      "status": "candidate",
+      "provenance": {
+        "externalHumanSource": "clubexadrezguabiruba",
+        "bibliographicSource": "Silman's Complete Endgame Course (posições; estudos do Lichess), https://lichess.org/study/yk2b24vS",
+        "originalGame": "não se aplica",
+        "authorComposer": "clubexadrezguabiruba",
+        "license": "não informada — conferir antes de aprovar",
+        "editionFile": null,
+        "fenMethod": "FEN registrada pelo Editor v2 em 2026-09-17 (origem: estudo-lichess)",
+        "qaApplied": "proveniência registrada por Doug em 2026-09-17 no Editor v2; resultado declarado pelo professor",
+        "pendingRisk": "candidata: falta a conferência humana de QA para aprovar"
+      }
+    }
+  },
+  "revisoes": {
+    "treino-capitulo-jogo-9-no-jogo-9-0-black": {
+      "tipo": "treino",
+      "revisao": "ar_110a36b29095dc3106946c4c3bf64ab5cd53a0fba6e7e2ffdcf49b226d05595c"
+    },
+    "treino-capitulo-jogo-10-no-jogo-10-0-black": {
+      "tipo": "treino",
+      "revisao": "ar_81550f41cf8cc889c2f90c273dfdc85e3546cb2882c5e0c5c3e5f9c55e6266bb"
+    },
+    "treino-capitulo-jogo-11-no-jogo-11-0-black": {
+      "tipo": "treino",
+      "revisao": "ar_26da0c9366d0dc24c353e96a2b4f06dc94f94260931d81111dc8c929ecd56897"
+    },
+    "pratica-pratica-segure-o-empate": {
+      "tipo": "pratica",
+      "revisao": "ar_07f3bd8e7994e34dcb3a7707de07bfe6f2972f719b39e9d8bf03a96792b7ef8b"
+    }
+  },
+  "manifesto": {
+    "aulaId": "N1-ROOK-PAWN",
+    "aula": "9b44cfa0e8f4e64cc3dc7f32e770ad161993351c25928b391a67ea337b261b7e",
+    "posicoes": {
+      "pos-n1-rook-pawn-1": "888fbc086d672939d8b0f5ff52e2e233da21c573bd3cfb80eac74628e252bc45"
+    },
+    "revisoes": "7e98590c6330cef124d7c33d0e342172962985da6be1c8584a3587a4039a29c5",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

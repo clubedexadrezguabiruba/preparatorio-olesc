@@ -11,7 +11,7 @@
  * **Nenhum número mora aqui.** Os tetos vêm de `docs/VOZ-DO-CURSO.md` §3, pelo
  * `lerRegua`. Duas cópias de um teto seriam duas opiniões sobre a régua.
  */
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright";
 import { lerRegua } from "../../../lib/lesson/voz.ts";
@@ -27,9 +27,119 @@ const TELAS = [
 ];
 
 const regua = lerRegua();
-const lesson = JSON.parse(
-  readFileSync(path.join(process.cwd(), "content/lessons", `${AULA}.json`), "utf8"),
-);
+
+/* ------------------------------------------------------------------ *
+ * v1 ou v2 — a mesma medida, duas formas de arquivo (porte de 18/9/2026)
+ *
+ * Este script lia `lesson.stages.objective.roteiro`, `stages.intro` e
+ * `stages.guided`, que são a forma **v1**. As 11 aulas de finais publicadas em
+ * 17/9 são **v2**, e nelas nada disso existe — o script devolvia "sem
+ * apresentação / sem treino" em todas, e a `/revisar-aula` estava cega para o
+ * módulo inteiro.
+ *
+ * O porte não reescreve as medidas: ele traduz o pacote v2 para a mesma forma
+ * que as medidas já sabiam ler, usando `lerPacoteDoAluno`, que é **a função que
+ * o site usa** para montar a aula. Medir por uma tradução própria seria medir
+ * uma aula que ninguém vê.
+ * ------------------------------------------------------------------ */
+
+/** Os nomes das abas da v1, onde há uma etapa de cada tipo e o rótulo é sempre o mesmo. */
+const ABAS_V1 = { intro: ["Apresentação"], capitulo: ["Aula"], treino: ["Treino"], pratica: ["Prática real"] };
+
+/** A aula na forma que as medidas leem: `{ orientation, intro, objective, guided, abas }`. */
+async function lerAulaParaMedir(id) {
+  const v1 = path.join(process.cwd(), "content/lessons", `${id}.json`);
+  const temV2 = existsSync(path.join(process.cwd(), "content/aulas-v2", id));
+  if (!temV2 && existsSync(v1)) {
+    const lesson = JSON.parse(readFileSync(v1, "utf8"));
+    return { versao: 1, orientation: lesson.orientation, ...lesson.stages, abas: ABAS_V1 };
+  }
+
+  /*
+   * `conteudo.ts` (o `lerPacoteDoAluno` que a página usa) abre com `import "server-only"`, e
+   * fora do Next isso estoura na hora. `conteudo-v2.ts` é o irmão dele sem essa importação,
+   * escrito exatamente para este caso — e é o mesmo `pacoteAtivoDoAluno` que a página chama.
+   */
+  const { pacoteAtivoDoAluno } = await import("../../../lib/finais/conteudo-v2.ts");
+  const { aulaDoAlunoV2 } = await import("../../../lib/editor-v2/fluxo-do-aluno.ts");
+  const pacote = pacoteAtivoDoAluno(id);
+  if (!pacote) throw new Error(`${id}: nem v1 em content/lessons/ nem v2 publicada em content/aulas-v2/`);
+  const doAluno = aulaDoAlunoV2(pacote);
+
+  const etapas = doAluno.etapas;
+  const capitulos = etapas.filter((e) => e.tipo === "capitulo");
+  const introducoes = etapas.filter((e) => e.tipo === "introducao");
+  const treinos = etapas.filter((e) => e.tipo === "treino");
+
+  /*
+   * A v2 tem **vários** capítulos e **vários** treinos, e a v1 tinha um de cada. As medidas de
+   * passo (casa citada, desenho mudo) valem para todos, então o `roteiro` é a concatenação, com
+   * o nome do capítulo na frente de cada passo para o relatório dizer onde.
+   */
+  const roteiro = capitulos.flatMap((capitulo) => capitulo.passos.map((passo) => ({
+    onde: capitulo.titulo,
+    fala: passo.fala,
+    ...(passo.lance ? { lance: passo.lance } : {}),
+    ...(passo.espera ? { espera: passo.espera } : {}),
+    arrows: (passo.desenhos?.arrows ?? []).map((s) => (Array.isArray(s) ? s : [s.de, s.para])),
+    highlights: (passo.desenhos?.highlights ?? []).map((c) => (typeof c === "string" ? c : c.casa)),
+  })));
+
+  /*
+   * Os treinos, na forma do `guided` da v1: `nodes[id] = { arrows, highlights, expects }`. A
+   * **ordem** importa — é ela que diz qual é o treino 1 —, e por isso o id do nó leva o número
+   * do treino na frente.
+   */
+  const nodes = {};
+  const linhaDosTreinos = [];
+  treinos.forEach((treino, n) => {
+    const jogavel = treino.jogavel;
+    const doTreino = [];
+    for (const [questaoId, node] of Object.entries(jogavel.tree.nodes)) {
+      const desenho = jogavel.desenhos?.[questaoId];
+      nodes[`t${n + 1}/${questaoId}`] = {
+        arrows: (desenho?.arrows ?? []).map((s) => (Array.isArray(s) ? s : [s.de, s.para])),
+        highlights: (desenho?.highlights ?? []).map((c) => (typeof c === "string" ? c : c.casa)),
+        expects: node.expects,
+        treino: n + 1,
+      };
+    }
+    // A linha do método deste treino, para o Playwright jogá-la com o mouse.
+    let id = jogavel.tree.root;
+    const vistos = new Set();
+    while (id && jogavel.tree.nodes[id] && !vistos.has(id)) {
+      vistos.add(id);
+      const expect = jogavel.tree.nodes[id].expects[0];
+      if (!expect) break;
+      doTreino.push(expect.moves[0]);
+      id = expect.next;
+    }
+    linhaDosTreinos.push({ rotulo: treino.rotulo, orientacao: jogavel.orientacao, lances: doTreino });
+  });
+
+  return {
+    versao: 2,
+    orientation: doAluno.orientacao,
+    intro: introducoes.length ? { passos: introducoes.flatMap((i) => i.passos) } : undefined,
+    objective: roteiro.length ? { roteiro } : undefined,
+    guided: Object.keys(nodes).length ? { nodes, root: null } : undefined,
+    linhaDosTreinos,
+    /*
+     * **Os rótulos das abas não são fixos na v2.** `rotuloDe` (em `fluxo-do-aluno.ts`) usa
+     * "Aula"/"Treino"/"Prática real" só quando há **um** de cada; com vários, a aba leva o
+     * título do capítulo. As 11 aulas de finais têm vários — procurar a aba "Aula" nelas não
+     * acha nada. Então quem diz o nome da aba é a própria aula.
+     */
+    abas: {
+      intro: introducoes.map((e) => e.rotulo),
+      capitulo: capitulos.map((e) => e.rotulo),
+      treino: treinos.map((e) => e.rotulo),
+      pratica: etapas.filter((e) => e.tipo === "pratica").map((e) => e.rotulo),
+    },
+  };
+}
+
+const lesson = await lerAulaParaMedir(AULA);
 
 const linhas = [];
 const diz = (s) => {
@@ -42,7 +152,15 @@ const veredito = (ok, texto) => diz(`${ok ? "  ok " : "  ✗  "} ${texto}`);
  * Estático — o que se mede no arquivo, sem abrir navegador
  * ------------------------------------------------------------------ */
 
-const CASA = /\b[a-h][1-8]\b/g;
+/**
+ * A casa citada numa fala — **inclusive dentro de um lance escrito em português**.
+ *
+ * `\b[a-h][1-8]\b` não lê `Re7`: entre o `R` e o `e` não há fronteira de palavra. Numa aula
+ * que escreve os lances em português, isso acusava a fala de não citar a casa que ela citou.
+ * É a mesma expressão de `lib/editor-v2/regua-de-desenho.ts`, pelo mesmo motivo.
+ */
+const CASA = /(?<![\p{L}\p{N}])(?:[RDTBCKQN]|[a-h])?x?([a-h][1-8])(?![\p{L}\p{N}])/gu;
+const casasCitadas = (fala) => [...new Set([...fala.matchAll(CASA)].map((m) => m[1]))];
 
 /** As casas que um desenho acende ou aponta. */
 const casasDoDesenho = (d) => [
@@ -50,9 +168,9 @@ const casasDoDesenho = (d) => [
   ...(d.arrows ?? []).flatMap(([de, para]) => [de, para]),
 ];
 
-diz(`\n## ${AULA} — o que o arquivo diz\n`);
+diz(`\n## ${AULA} — o que o arquivo diz (aula v${lesson.versao})\n`);
 
-const objective = lesson.stages.objective;
+const objective = lesson.objective;
 if (objective) {
   // **Observação, e não veredito** (2026-09-09). A faixa de 40 a 70 s saiu da
   // régua a pedido do Doug: a aula dura o que precisar. O número continua
@@ -65,37 +183,55 @@ if (objective) {
   // citado. É o quesito "flechas e casas", e é o que impede o texto de apontar
   // para um tabuleiro que não confirma.
   for (const [i, passo] of objective.roteiro.entries()) {
-    const citadas = [...new Set(passo.fala.match(CASA) ?? [])];
+    const citadas = casasCitadas(passo.fala);
     const desenhadas = new Set([
       ...casasDoDesenho(passo),
       // O lance do passo desenha a si mesmo: a peça anda, e o chessground acende
       // a origem e o destino como `lastMove`.
       ...(passo.lance ? [passo.lance.slice(0, 2), passo.lance.slice(2, 4)] : []),
     ]);
+    const onde = passo.onde ? `${passo.onde}, passo ${i + 1}` : `passo ${i + 1}`;
     const orfas = citadas.filter((c) => !desenhadas.has(c));
-    const mudas = casasDoDesenho(passo).filter((c) => !citadas.includes(c));
-    if (orfas.length) veredito(false, `passo ${i + 1}: cita ${orfas.join(", ")} e não desenha`);
+    // Só a casa **acesa** paga o teto da citação: uma seta é uma linha, e a fala que diz
+    // "a torre fecha a coluna b" não tem de soletrar b1 e b8 (medido em 18/9, ver
+    // `lib/editor-v2/regua-de-desenho.ts`).
+    const mudas = (passo.highlights ?? []).filter((c) => !citadas.includes(c));
+    if (orfas.length) veredito(false, `${onde}: cita ${orfas.join(", ")} e não desenha`);
     if (mudas.length)
-      diz(`  ·   passo ${i + 1}: desenha ${mudas.join(", ")} sem citar — conferir no tabuleiro`);
+      diz(`  ·   ${onde}: acende ${mudas.join(", ")} sem citar — conferir no tabuleiro`);
   }
 }
 
-const intro = lesson.stages.intro;
-const guided = lesson.stages.guided;
+const intro = lesson.intro;
+const guided = lesson.guided;
 if (guided) {
-  // Flecha **ou** casa acesa: as duas apontam o alvo, e o passo que só precisa
-  // dizer "olhe esta casa" não deve ser obrigado a inventar uma origem para a
-  // seta sair de algum lugar. É a mesma régua que a `superRefine` cobra.
-  const semDesenho = Object.entries(guided.nodes)
-    .filter(([, n]) => !(n.arrows ?? []).length && !(n.highlights ?? []).length)
-    .map(([id]) => id);
+  /*
+   * **O apoio cai por degraus** (`COMO-FAZER` §1.1, 17/9/2026), e esta medida mudou com ele.
+   * Antes ela cobrava "todo nó do treino aponta o alvo", que foi escrito quando a aula tinha um
+   * treino só. Hoje: treino 1 aponta em todo nó; do treino 2 em diante, nenhum aponta.
+   *
+   * Flecha **ou** casa acesa: as duas apontam o alvo, e o passo que só precisa dizer "olhe esta
+   * casa" não deve ser obrigado a inventar uma origem para a seta sair de algum lugar.
+   */
+  const aponta = (n) => (n.arrows ?? []).length > 0 || (n.highlights ?? []).length > 0;
+  const nos = Object.entries(guided.nodes);
+  const numeros = [...new Set(nos.map(([, n]) => n.treino ?? 1))].sort((a, b) => a - b);
+  const primeiro = numeros[0] ?? 1;
+
+  const nusNoPrimeiro = nos.filter(([, n]) => (n.treino ?? 1) === primeiro && !aponta(n)).map(([id]) => id);
   veredito(
-    semDesenho.length === 0,
-    `desenho: ${semDesenho.length ? `sem seta nem casa acesa em ${semDesenho.join(", ")} — conserta-se em objective.roteiro[…].treino` : "toda posição do treino aponta o alvo"}`,
+    nusNoPrimeiro.length === 0,
+    `desenho: ${nusNoPrimeiro.length ? `no treino 1, sem seta nem casa acesa em ${nusNoPrimeiro.join(", ")} — o desenho mora no comentário daquele lance no PGN` : "no treino 1, toda posição aponta o alvo"}`,
+  );
+
+  const apontamDepois = nos.filter(([, n]) => (n.treino ?? 1) !== primeiro && aponta(n)).map(([id]) => id);
+  veredito(
+    apontamDepois.length === 0,
+    `desenho: ${apontamDepois.length ? `do treino 2 em diante o alvo não é apontado, e ${apontamDepois.join(", ")} apontam` : "do treino 2 em diante, o aluno busca sem alvo aceso"}`,
   );
 
   // A seta que liga a origem ao destino do lance certo é meio lance entregue.
-  const entregam = Object.entries(guided.nodes).filter(([, n]) =>
+  const entregam = nos.filter(([, n]) =>
     (n.arrows ?? []).some(([de, para]) =>
       n.expects.some((e) => e.moves.some((m) => m.startsWith(de + para))),
     ),
@@ -160,8 +296,16 @@ const jogar = async (pg, uci, orientacao) => {
   await pg.waitForTimeout(900);
 };
 
-/** A linha do método, do nó raiz até a ponta: só os lances do aluno. */
-function lancesDoAluno(guided) {
+/**
+ * A linha do método de cada treino, do nó raiz até a ponta: só os lances do aluno.
+ *
+ * Na v2 ela já vem montada em `lesson.linhaDosTreinos` (a aula tem vários treinos, e cada um
+ * tem a sua orientação). Na v1 há um treino só, e ele nasce aqui.
+ */
+function linhasParaJogar(lesson) {
+  if (lesson.linhaDosTreinos) return lesson.linhaDosTreinos;
+  const guided = lesson.guided;
+  if (!guided?.root) return [];
   const lances = [];
   let id = guided.root;
   while (id) {
@@ -169,19 +313,53 @@ function lancesDoAluno(guided) {
     lances.push(expect.moves[0]);
     id = expect.next;
   }
-  return lances;
+  return [{ rotulo: "Treino", orientacao: lesson.orientation, lances }];
 }
 
-const irParaAba = async (pg, nome) => {
-  const abas = pg.locator("nav[aria-label] button");
-  for (let i = 0; i < (await abas.count()); i += 1) {
-    if (((await abas.nth(i).textContent()) ?? "").includes(nome)) {
-      await abas.nth(i).click();
-      await pg.waitForTimeout(500);
-      return;
+/**
+ * Vai para a primeira etapa cujo rótulo esteja em `nomes`. Recebe uma **lista** porque na v2 o
+ * rótulo é o título do capítulo quando há mais de um (ver `abas`, acima).
+ *
+ * **A v2 não tem abas, e isto quase passou em branco.** A v1 tem uma linha de quatro abas
+ * ("Apresentação · Aula · Treino · Prática real"); a v2 tem um **passo a passo** com um botão
+ * "Etapas N/M" que abre a lista inteira. Quem descobriu foi o `aluno-de-ensaio`, em 18/9: ele
+ * procurava aba e não achava etapa nenhuma em nenhuma das 11 aulas. Os itens da lista não têm
+ * `role="menuitem"` — são `<button>` dentro de `<li>`.
+ */
+const irParaAba = async (pg, nomes) => {
+  const lista = Array.isArray(nomes) ? nomes : [nomes];
+  const abridor = pg.locator("nav[aria-label] button").first();
+  if (!(await abridor.count())) { diz(`  ·   sem navegação de etapas na tela — "${lista.join(" / ")}" não foi medida`); return false; }
+
+  // v1: as abas são os próprios botões do `nav`, sem menu para abrir.
+  const direto = pg.locator("nav[aria-label] button");
+  for (const nome of lista) {
+    for (let i = 0; i < (await direto.count()); i += 1) {
+      const texto = (await direto.nth(i).textContent()) ?? "";
+      if (texto.includes(nome) && !/^Etapas\s/.test(texto.trim())) {
+        await direto.nth(i).click();
+        await pg.waitForTimeout(700);
+        return true;
+      }
     }
   }
-  throw new Error(`aba "${nome}" não encontrada`);
+
+  // v2: abrir o menu "Etapas" e escolher lá dentro.
+  if ((await abridor.getAttribute("aria-expanded")) !== "true") await abridor.click();
+  await pg.waitForTimeout(400);
+  const itens = pg.locator("nav[aria-label] li button, nav[aria-label] [role='menuitem']");
+  for (const nome of lista) {
+    for (let i = 0; i < (await itens.count()); i += 1) {
+      if (((await itens.nth(i).textContent()) ?? "").includes(nome)) {
+        await itens.nth(i).click();
+        await pg.waitForTimeout(1500);
+        return true;
+      }
+    }
+  }
+  if ((await abridor.getAttribute("aria-expanded")) === "true") await abridor.click();
+  diz(`  ·   etapa "${lista.join(" / ")}" não encontrada — esta etapa não foi medida`);
+  return false;
 };
 
 for (const tela of TELAS) {
@@ -241,7 +419,7 @@ for (const tela of TELAS) {
     veredito(primeiraFala !== segundaFala, "a apresentação anda com `→`");
     veredito(deVolta === primeiraFala, "a apresentação volta com `←`");
 
-    await irParaAba(pg, "Aula");
+    await irParaAba(pg, lesson.abas.capitulo);
   } else {
     diz("  ·   sem apresentação: a aula declara a ausência dela no arquivo");
   }
@@ -277,7 +455,7 @@ for (const tela of TELAS) {
    * ausência dela passou a ser rara: ela existe sempre que a aula tiver aula.
    */
   if (guided) {
-    await irParaAba(pg, "Treino");
+    await irParaAba(pg, lesson.abas.treino);
     const setas = await pg.$$eval("cg-container svg line", (n) => n.length);
     const dica = await pg.$$eval("button", (b) => b.filter((x) => /dica/i.test(x.textContent ?? "")).length);
     const r2 = await rolagem(pg);
@@ -293,24 +471,33 @@ for (const tela of TELAS) {
      * um seletor, e um `expects` mal escrito só aparece quando alguém arrasta a
      * peça. Aqui alguém arrasta.
      */
-    for (const uci of lancesDoAluno(guided)) await jogar(pg, uci, lesson.orientation);
-    const fim = await pg.evaluate(() => document.querySelector('[role="status"]')?.textContent?.trim() ?? "");
-    veredito(
-      fim.startsWith("Pronto."),
-      `coerência: o treino foi jogado até o fim — "${fim.slice(0, 100)}"`,
-    );
+    const linhas = linhasParaJogar(lesson);
+    const primeira = linhas[0];
+    if (primeira) {
+      for (const uci of primeira.lances) await jogar(pg, uci, primeira.orientacao ?? lesson.orientation);
+      const fim = await pg.evaluate(() => document.querySelector('[role="status"]')?.textContent?.trim() ?? "");
+      veredito(
+        fim.startsWith("Pronto."),
+        `coerência: «${primeira.rotulo}» foi jogado até o fim — "${fim.slice(0, 100)}"`,
+      );
+    }
+    // Os outros treinos existem e têm linha montada; quem os joga com a mão é o
+    // `aluno-de-ensaio`, que erra de propósito. Aqui fica o número, para o relatório.
+    if (linhas.length > 1) diz(`  ·   a aula tem ${linhas.length} treinos; este script joga o 1º — o resto é do /aluno-de-ensaio`);
   } else {
     diz("  ·   sem treino: a aula é curta — objetivo e prática, e a aba não existe");
   }
 
   // --- etapa 4: continua nua ---
-  await irParaAba(pg, "Prática real");
-  await pg.waitForTimeout(1500);
-  const nua = await pg.$$eval("cg-container svg line, cg-container svg circle", (n) => n.length);
-  const r3 = await rolagem(pg);
-  veredito(nua === 0, `flechas: ${nua} desenho(s) na prática real — tem de ser zero`);
-  veredito(r3.pagina === 0 && r3.dentro.length === 0,
-    `experiência: rolagem na prática real ${r3.pagina} px${r3.dentro.length ? ` · rola por dentro: ${r3.dentro.join(", ")}` : ""}`);
+  // Desde 15/9 a aula pode não ter prática (trava 9): etapa ausente não é defeito.
+  if (await irParaAba(pg, lesson.abas.pratica)) {
+    await pg.waitForTimeout(1500);
+    const nua = await pg.$$eval("cg-container svg line, cg-container svg circle", (n) => n.length);
+    const r3 = await rolagem(pg);
+    veredito(nua === 0, `flechas: ${nua} desenho(s) na prática real — tem de ser zero`);
+    veredito(r3.pagina === 0 && r3.dentro.length === 0,
+      `experiência: rolagem na prática real ${r3.pagina} px${r3.dentro.length ? ` · rola por dentro: ${r3.dentro.join(", ")}` : ""}`);
+  }
 
   /*
    * Alvos: **só botão, e o mínimo muda com o que aponta**. 44 px onde há dedo

@@ -62,7 +62,7 @@ No fim, você aponta essas casas e leva o rei até uma delas. }
 [Orientation "white"]
 
 { A posição da aula de oposição. As Pretas jogam, e o rei preto tem de sair da frente. }
-1... Ke5 { O rei preto foi para e5. A casa c4 ficou livre. } { [%csl Gc4] } 2. Kc4! { O rei branco entra em c4, duas fileiras à frente do peão. } { [%csl Gc4] } 2... Kd6 { O rei preto volta para a frente do peão. } 3. Kd4! { O rei passa para d4, também duas fileiras à frente. O peão continua seguro. } { [%csl Gd4] } ( 3. d4?? { O peão andou antes da hora. Agora o rei branco não está mais duas fileiras à frente dele. } { [%csl Rc4] } 3... Kc6 { O rei preto fica de frente para o rei branco. } { [%csl Rc6] } 4. d5+ Kd6 { O rei preto fica na frente do peão, e o peão não passa. Empate. } { [%csl Rd6] } ) 3... Ke6 { As casas c4, d4 e e4 têm nome: casas-chave. Com o rei numa delas, o peão ganha. } { [%csl Yc4,Yd4,Ye4] } *
+1... Ke5 { O rei preto foi para e5. A casa c4 ficou livre. } { [%csl Gc4] } 2. Kc4! { O rei branco entra em c4, duas fileiras à frente do peão. } { [%csl Gc4] } 2... Kd6 { O rei preto volta para a frente do peão. } 3. Kd4! { O rei passa para d4, também duas fileiras à frente. O peão continua seguro. } { [%csl Gd4] } ( 3. d4?? { O peão andou antes da hora. Agora o rei branco não está mais duas fileiras à frente dele. } { [%csl Rc4] } 3... Kc6 { O rei preto fica de frente para o rei branco. } 4. d5+ Kd6 { O rei preto fica na frente do peão, e o peão não passa. Empate. } ) 3... Ke6 { As casas c4, d4 e e4 têm nome: casas-chave. Com o rei numa delas, o peão ganha. } { [%csl Yc4,Yd4,Ye4] } *
 
 [Event "Aula 9 - Casas-chave"]
 [Site "https://lichess.org/study/T81d9Yqq"]

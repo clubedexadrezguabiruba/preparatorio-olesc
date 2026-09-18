@@ -92,7 +92,7 @@ No fim, você responde só de olhar o tabuleiro. }
 [Orientation "white"]
 
 { Rei e dama contra o rei sozinho. O rei preto já está na borda, e o mate está a um lance. }
-1. Qa8# { A dama fecha a última fileira inteira. O rei branco fecha d7, e7 e f7. Mate. } { [%cal Ga8e8] [%csl Gd7,Ge7,Gf7,Re8] } *
+1. Qa8# { A dama fecha a última fileira inteira. O rei branco fecha d7, e7 e f7. Mate. } { [%cal Ga8e8] [%csl Gd7,Ge7,Gf7] } *
 
 [Event "Aula 1 - O que dá mate e o que não dá"]
 [Site "https://lichess.org/study/suMc7hgW"]
@@ -107,7 +107,7 @@ No fim, você responde só de olhar o tabuleiro. }
 [Orientation "white"]
 
 { Agora uma torre no lugar da dama. O rei branco continua em e6, de frente para o rei preto. } { [%csl Ge6] }
-1. Ra8# { A torre fecha a fileira inteira, como a dama. O rei branco fecha d7, e7 e f7. Mate. } { [%cal Ga8e8] [%csl Gd7,Ge7,Gf7,Re8] } *
+1. Ra8# { A torre fecha a fileira inteira, como a dama. O rei branco fecha d7, e7 e f7. Mate. } { [%cal Ga8e8] [%csl Gd7,Ge7,Gf7] } *
 
 [Event "Aula 1 - O que dá mate e o que não dá"]
 [Site "https://lichess.org/study/suMc7hgW"]
@@ -122,7 +122,7 @@ No fim, você responde só de olhar o tabuleiro. }
 [Orientation "white"]
 
 { Agora um bispo no lugar da torre. O rei preto está no canto, o pior lugar. Veja se ele fica preso. }
-1. Be5+ { Xeque na diagonal. } { [%cal Ge5h8] } 1... Kg8 { O rei sai por g8: casa branca, onde o bispo de casas pretas nunca chega. } { [%csl Yg8] } 2. Bd6 { O bispo fecha f8. O rei preto só tem uma casa. } { [%csl Gf8] } 2... Kh8 { De volta ao canto. E g8 continua aberta. } { [%csl Yg8] } 3. Be5+ { Xeque de novo. } { [%cal Ge5h8] } 3... Kg8 { E a saída de novo. Isso não acaba nunca: rei e bispo não dão mate. } { [%csl Yg8] } *
+1. Be5+ { Xeque na diagonal. } { [%cal Ge5h8] } 1... Kg8 { O rei sai por g8: casa branca, onde o bispo de casas pretas nunca chega. } 2. Bd6 { O bispo fecha f8. O rei preto só tem uma casa. } { [%csl Gf8] } 2... Kh8 { De volta ao canto. E g8 continua aberta. } { [%csl Yg8] } 3. Be5+ { Xeque de novo. } { [%cal Ge5h8] } 3... Kg8 { E a saída de novo. Isso não acaba nunca: rei e bispo não dão mate. } *
 
 [Event "Aula 1 - O que dá mate e o que não dá"]
 [Site "https://lichess.org/study/suMc7hgW"]
@@ -137,7 +137,7 @@ No fim, você responde só de olhar o tabuleiro. }
 [Orientation "white"]
 
 { Agora um cavalo. Ele pula e dá xeque — mas fecha a saída? }
-1. Ng5 { O cavalo se prepara para dar xeque. } 1... Kh8 { O rei preto foi para o canto, o pior lugar. } { [%csl Yh8] } 2. Nf7+ { Xeque. } { [%cal Gf7h8] } 2... Kg8 { E o rei sai por g8. Um cavalo não dá xeque em h8 e fecha g8 ao mesmo tempo. } { [%csl Yg8,Yh8] } 3. Nh6+ { Outro xeque, agora em g8. } { [%cal Gh6g8] } 3... Kf8 { E o rei sai por f8. Rei e cavalo não dão mate — nunca. } { [%csl Yf8] } *
+1. Ng5 { O cavalo se prepara para dar xeque. } 1... Kh8 { O rei preto foi para o canto, o pior lugar. } 2. Nf7+ { Xeque. } { [%cal Gf7h8] } 2... Kg8 { E o rei sai por g8. Um cavalo não dá xeque em h8 e fecha g8 ao mesmo tempo. } { [%csl Yh8] } 3. Nh6+ { Outro xeque, agora em g8. } { [%cal Gh6g8] } 3... Kf8 { E o rei sai por f8. Rei e cavalo não dão mate — nunca. } *
 
 [Event "Aula 1 - O que dá mate e o que não dá"]
 [Site "https://lichess.org/study/suMc7hgW"]
@@ -152,7 +152,7 @@ No fim, você responde só de olhar o tabuleiro. }
 [Orientation "white"]
 
 { A mesma posição do bispo sozinho — e chegou um bispo de casas brancas. Ele fecha g8. } { [%cal Ge6g8] }
-1. Be5# { Xeque na diagonal, e agora g8 está fechada pelo outro bispo. Mate. } { [%cal Ge5h8,Ge6g8] [%csl Gg8,Gg7,Gh7,Rh8] } *
+1. Be5# { Xeque na diagonal, e agora g8 está fechada pelo outro bispo. Mate. } { [%cal Ge5h8,Ge6g8] } *
 
 [Event "Aula 1 - O que dá mate e o que não dá"]
 [Site "https://lichess.org/study/suMc7hgW"]
@@ -167,7 +167,7 @@ No fim, você responde só de olhar o tabuleiro. }
 [Orientation "white"]
 
 { Bispo com cavalo também dá mate. O caminho até aqui é difícil e fica para depois: hoje, olhe só o mate. }
-1. Nh6+ { Xeque. O rei preto tem uma casa só: o canto. } { [%cal Gh6g8] [%csl Yh8] } 1... Kh8 2. Bd4# { O bispo dá xeque na diagonal, e o cavalo fecha g8: o trabalho do segundo bispo. Mate. } { [%cal Gd4h8,Gh6g8] [%csl Gg7,Gh7,Rh8] } *
+1. Nh6+ { Xeque. O rei preto tem uma casa só: o canto. } { [%cal Gh6g8] [%csl Yh8] } 1... Kh8 2. Bd4# { O bispo dá xeque na diagonal, e o cavalo fecha g8: o trabalho do segundo bispo. Mate. } { [%cal Gd4h8,Gh6g8] } *
 
 [Event "Aula 1 - O que dá mate e o que não dá"]
 [Site "https://lichess.org/study/suMc7hgW"]
@@ -182,7 +182,7 @@ No fim, você responde só de olhar o tabuleiro. }
 [Orientation "white"]
 
 { Dois cavalos. O rei preto está em xeque e tem duas casas: f8 e h8. Uma delas perde. } { [%csl Yf8,Yh8] }
-1... Kf8! { Longe do canto. Os cavalos dão xeque, mas nunca fecham tudo. } { [%csl Gf8] } ( 1... Kh8? { O canto. Agora o cavalo de e5 pula para f7, e é mate. } { [%csl Rh8] [%cal Re5f7] } 2. Nf7# { Mate. Dois cavalos só dão mate quando o rei entra no canto sozinho. } { [%csl Rh8,Gg8,Gg7,Gh7] } ) 2. Kf6 Ke8 { O rei anda pela última fileira, longe dos cantos. } { [%csl Ge8] } 3. Nf7 Kd7 { Sem mate. Ninguém obriga o rei a entrar no canto: empate. } { [%csl Gd7] } *
+1... Kf8! { Longe do canto. Os cavalos dão xeque, mas nunca fecham tudo. } ( 1... Kh8? { O canto. Agora o cavalo de e5 pula para f7, e é mate. } { [%cal Re5f7] } 2. Nf7# { Mate. Dois cavalos só dão mate quando o rei entra no canto sozinho. } { [%csl Rh8] } ) 2. Kf6 Ke8 { O rei anda pela última fileira, longe dos cantos. } 3. Nf7 Kd7 { Sem mate. Ninguém obriga o rei a entrar no canto: empate. } *
 
 [Event "Aula 1 - O que dá mate e o que não dá"]
 [Site "https://lichess.org/study/suMc7hgW"]
@@ -197,7 +197,7 @@ No fim, você responde só de olhar o tabuleiro. }
 [Orientation "white"]
 
 { E um peão sozinho? Não dá mate. Mas, se chegar ao fim, vira dama — e nem sempre ele chega. }
-1. Kd7 { O rei branco fecha e8: o peão vai passar. } { [%csl Ge8] } 1... Kg7 2. e7 { O peão avança para e7. Ninguém para ele. } { [%cal Ge6e7] } 2... Kg8 3. e8=Q+ { O peão virou dama. Agora as brancas têm o que dá mate. } { [%csl Ge8] } *
+1. Kd7 { O rei branco fecha e8: o peão vai passar. } { [%csl Ge8] } 1... Kg7 2. e7 { O peão avança para e7. Ninguém para ele. } 2... Kg8 3. e8=Q+ { O peão virou dama. Agora as brancas têm o que dá mate. } *
 
 [Event "Aula 1 - O que dá mate e o que não dá"]
 [Site "https://lichess.org/study/suMc7hgW"]

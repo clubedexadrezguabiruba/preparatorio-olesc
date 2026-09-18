@@ -4,12 +4,14 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   useSyncExternalStore,
   type ReactNode,
   type RefObject,
 } from "react";
+import { textoEmPortugues } from "@/lib/repertorio/treino";
 
 /**
  * O comentário do professor, no painel — **paginado, nunca rolado**.
@@ -119,7 +121,20 @@ function usePrefereSemMovimento(): boolean {
   );
 }
 
-export function useComentarioPaginado(texto: string | null): Paginacao {
+/**
+ * A fala do professor, sempre na língua do aluno.
+ *
+ * **Aqui, e não em cada chamador.** Este gancho é a porta única por onde passa
+ * todo texto falado do site — a introdução e o capítulo da aula v2, o cartão do
+ * move trainer e a reação da tática. Traduzir na porta é o que faz a regra do
+ * Doug de 17/9/2026 valer em tela que ainda nem existe.
+ *
+ * **E antes da paginação, que é o detalhe que importa.** A paginação mede o
+ * texto para decidir onde cortar; medir `Nf6` e mostrar `Cf6` daria corte no
+ * lugar errado. O texto medido e o texto mostrado têm de ser o mesmo.
+ */
+export function useComentarioPaginado(textoOriginal: string | null): Paginacao {
+  const texto = useMemo(() => (textoOriginal === null ? null : textoEmPortugues(textoOriginal)), [textoOriginal]);
   const espacoRef = useRef<HTMLDivElement | null>(null);
   const caixaRef = useRef<HTMLDivElement | null>(null);
 

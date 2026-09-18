@@ -486,7 +486,11 @@ export function completarTreino(treino: TreinoV2, analise: AnaliseV2, c: Pick<Ca
       const simbolos = (filho.nags ?? []).map((n) => `$${n}`);
       const certo = mate || simbolos.some((s) => SIMBOLO.certo.has(s));
       const errado = simbolos.some((s) => SIMBOLO.errado.has(s));
-      const texto = filho.comentario ?? (certo ? "Boa, também funciona." : "Este lance não é o da lição. Tente de novo.");
+      // A frase de reserva de uma variante aceita **não elogia**: "Boa, também funciona." era elogio
+      // vazio injetado por código, invisível para quem lê o PGN, e a `VOZ-DO-CURSO` §2 o proíbe com
+      // todas as letras — "o que substitui o elogio é dizer o que o lance conseguiu". Aqui o código
+      // não sabe o que o lance conseguiu; então ele diz o fato, e cala (decisão do Doug, 18/9/2026).
+      const texto = filho.comentario ?? (certo ? "Este lance também chega lá." : "Este lance não é o da lição. Tente de novo.");
       const san = (() => { try { return new Chess(treino.copia?.questoes[questao.id]?.fen ?? "").move({ from: filho.uci.slice(0, 2), to: filho.uci.slice(2, 4), promotion: filho.uci.slice(4) || undefined }).san; } catch { return filho.uci; } })();
       if (certo && !errado) {
         if (filho.filhos.length) c.perdas.push(`a continuação depois de ${san} (resposta aceita no treino «${c.titulo}») não entrou: o treino aceita o lance e encerra ali — revise`);

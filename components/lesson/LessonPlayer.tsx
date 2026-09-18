@@ -602,7 +602,9 @@ export function capaDaEtapa(etapa: EtapaDoAlunoV2, aulaId: string): Capa | null 
   if (dominioDaAulaV2(aulaId) !== "abertura") return null;
   if ((etapa.tipo === "capitulo" || etapa.tipo === "introducao") && etapa.secao) return etapa.secao;
   if (etapa.tipo === "treino" && !etapa.parada) return { titulo: "Hora de treinar", subtitulo: "Jogue as linhas da aula. As Pretas mudam de defesa a cada vez." };
-  if (etapa.tipo === "treinador") return { titulo: "Move trainer", subtitulo: "Cada linha da aula uma vez: primeiro com a seta, depois sozinho." };
+  // "depois sozinho" saiu em 18/9/2026 junto com "Ele joga sozinho": as duas
+  // usavam "sozinho" para dizer coisas diferentes, e nenhuma das duas era clara.
+  if (etapa.tipo === "treinador") return { titulo: "Move trainer", subtitulo: "Cada linha da aula uma vez: primeiro com a seta, depois de memória." };
   return null;
 }
 

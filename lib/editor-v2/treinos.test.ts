@@ -78,6 +78,46 @@ test("§16.1: a linha real de ensaio N0-LADDER vira cinco perguntas e termina em
   });
 });
 
+/*
+ * O cano do desenho (17/9/2026). `treino-jogavel.ts` lê `questao.desenhos` para acender a casa
+ * na tela do aluno, e a derivação nunca preenchia o campo: todo `[%csl]` de capítulo de treino
+ * morria na análise. O teste acende uma casa no nó da posição e cobra que ela chegue à pergunta.
+ */
+test("§14.3: o desenho do nó da posição chega à pergunta do treino", () => {
+  const aula = aulaBase();
+  const capitulo = aula.capitulos[0];
+  const percurso = [capitulo.inicioNodeId, ...capitulo.caminho];
+  const analise = aula.analises.find((item) => item.id === capitulo.analiseId)!;
+  analise.nos[percurso[0]] = { ...analise.nos[percurso[0]], desenhos: { highlights: [{ casa: "c7", cor: "verde" }] } };
+  analise.nos[percurso[2]] = { ...analise.nos[percurso[2]], desenhos: { arrows: [{ de: "c6", para: "d6", cor: "amarelo" }] } };
+
+  const pedido = {
+    capituloId: capitulo.id,
+    nodeId: capitulo.inicioNodeId,
+    titulo: "Pratique a oposição",
+    objetivo: "Leve o peão até a promoção.",
+    lado: "white" as const,
+    colocacao: "depois-do-capitulo" as const,
+    obrigatorio: true,
+  };
+  const comDesenho = prepararTreinosDaqui(aula, pedido, positions);
+  assert.equal(comDesenho.ok, true);
+  if (!comDesenho.ok) throw new Error("o preparo esperado foi recusado");
+  const questoes = comDesenho.preparo.treinos[0].questoes;
+  assert.deepEqual(questoes[0].desenhos, { highlights: [{ casa: "c7", cor: "verde" }] });
+  assert.deepEqual(questoes[1].desenhos, { arrows: [{ de: "c6", para: "d6", cor: "amarelo" }] });
+  assert.equal(questoes[2].desenhos, undefined, "nó sem desenho não inventa desenho");
+  assert.deepEqual(validarAulaV2(aplicarTreinosPreparados(aula, comDesenho.preparo), positions).ok, true);
+
+  // Desenho vazio não vira campo, e mexer no desenho envelhece o treino derivado (o hash o vê).
+  analise.nos[percurso[0]] = { ...analise.nos[percurso[0]], desenhos: {} };
+  const vazio = prepararTreinosDaqui(aula, pedido, positions);
+  assert.equal(vazio.ok, true);
+  if (!vazio.ok) throw new Error("o preparo esperado foi recusado");
+  assert.equal(vazio.preparo.treinos[0].questoes[0].desenhos, undefined);
+  assert.notEqual(vazio.preparo.treinos[0].origem?.hash, comDesenho.preparo.treinos[0].origem?.hash);
+});
+
 test("§16: o modelo recusa defesa inicial que aponta para pergunta inexistente", () => {
   const { aula, preparo } = preparar("black");
   const aplicada = aplicarTreinosPreparados(aula, preparo);

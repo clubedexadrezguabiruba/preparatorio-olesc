@@ -1,5 +1,6 @@
 import type { Linha } from "@/lib/repertorio/linhas";
 import type { Selo } from "@/lib/repertorio/passada";
+import { sanEmPortugues } from "@/lib/repertorio/treino";
 
 /**
  * As duas fitas do treinador: a dos lances jogados, e a do boletim.
@@ -22,10 +23,19 @@ import type { Selo } from "@/lib/repertorio/passada";
  * **Só os lances já jogados.** A faixa inteira daria a resposta de graça — e é
  * justamente ela que serve para o aluno ver *onde* errou depois.
  *
- * Os SAN ficam em inglês aqui, e é deliberado: a faixa é registro, não
- * comando. O cartão, que dá a ordem, traduz (`sanEmPortugues`); traduzir os
- * dois deixaria o aluno sem nenhuma âncora quando ele abrisse o mesmo lance
- * num site de xadrez.
+ * **Os SAN saem em português, como em toda tela do site** (Doug, 17/9/2026).
+ *
+ * Até essa data ficavam em inglês aqui, de propósito, e o argumento era este: a
+ * faixa é registro e não comando, o cartão logo acima já traduz, e o inglês
+ * daria ao aluno uma âncora para reconhecer o mesmo lance quando abrisse o
+ * Lichess. O Doug desfez, e a razão pesa mais: o aluno tem dez anos, a faixa
+ * fica **três centímetros** abaixo de um cartão que diz "Jogue Cf6", e ler
+ * `Nf6` e `Cf6` lado a lado na mesma tela não ensina duas notações — ensina que
+ * a tela não sabe qual é a certa. A âncora para o site de xadrez é assunto da
+ * aula, não de uma fita de oito quadradinhos.
+ *
+ * O `Linha.sans` continua em inglês no disco: quem traduz é a leitura. Ver o
+ * cabeçalho de `textoEmPortugues`, em `lib/repertorio/treino.ts`.
  */
 export function FaixaDeSans({ linha, ate, atual }: { linha: Linha; ate: number; atual: number }) {
   if (ate <= 0) {
@@ -42,7 +52,7 @@ export function FaixaDeSans({ linha, ate, atual }: { linha: Linha; ate: number; 
               i === atual ? "rounded bg-metodo-superficie/20 px-1 text-metodo-tinta-alta" : ""
             }`}
           >
-            {san}
+            {sanEmPortugues(san)}
           </span>
         </span>
       ))}
