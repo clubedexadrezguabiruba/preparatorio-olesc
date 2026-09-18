@@ -49,8 +49,17 @@ export type DescricaoDoNivel = {
   readonly numero: Nivel;
   /** A faixa FIDE. Teto `null` = sem teto. */
   readonly fide: readonly [number, number | null];
-  /** Uma linha: o que o aluno deste nível está aprendendo a fazer. */
+  /** Uma linha: o que o aluno deste nível está aprendendo a fazer em tática. */
   readonly resumo: string;
+  /**
+   * Uma linha: o que o aluno deste nível está aprendendo a fazer em finais.
+   *
+   * Existe porque `resumo` (acima) é só tática, e a `/finais` mostrava esse
+   * texto — o aluno lia "ver o mate em um lance" numa página de finais que
+   * ensina outra coisa (Doug, 18/9/2026). A `/trilha` combina os dois; a
+   * `/finais` mostra só este.
+   */
+  readonly resumoFinais: string;
   /**
    * Quantas aulas de finais o nível pede — **declarado, não derivado**.
    *
@@ -81,30 +90,35 @@ export const NIVEL: Record<Nivel, DescricaoDoNivel> = {
     numero: 1,
     fide: [0, 800],
     resumo: "Ver o mate em um lance e não entregar peça de graça.",
+    resumoFinais: "Dar mate com o que sobrou no tabuleiro, sem afogar quem já ganhou.",
     aulasParaFechar: 4,
   },
   2: {
     numero: 2,
     fide: [800, 1000],
     resumo: "Garfo, cravada, espeto, ataque e xeque descoberto — o vocabulário que decide partida.",
+    resumoFinais: "Rei e peão contra rei — a oposição e a casa-chave que decidem se promove.",
     aulasParaFechar: 4,
   },
   3: {
     numero: 3,
     fide: [1000, 1200],
     resumo: "Os padrões de mate que se reconhecem de longe.",
+    resumoFinais: "Contar a corrida de peões e travar o passado do adversário.",
     aulasParaFechar: 4,
   },
   4: {
     numero: 4,
     fide: [1200, 1400],
     resumo: "Mais padrões de mate, e remover quem defende.",
+    resumoFinais: "Lucena e Filidor — a ponte que ganha e a fila que segura, torre contra peão passado.",
     aulasParaFechar: 4,
   },
   5: {
     numero: 5,
     fide: [1400, null],
     resumo: "Ataque ao rei, lances finos, defesa e conversão, e os mates raros.",
+    resumoFinais: "Triangulação, ruptura e a sétima fila — as finuras que decidem o final parelho.",
     aulasParaFechar: 4,
   },
 };

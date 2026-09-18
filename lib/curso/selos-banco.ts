@@ -1,5 +1,6 @@
 import "server-only";
 import type { TravaDoAluno } from "@/lib/aberturas/trava-banco";
+import { naVitrine } from "@/lib/aberturas/vitrine";
 import { diasComOMinimo, maiorSequenciaDeDias, type MinutosDoDia } from "@/lib/curso/hoje";
 import { temaFechado, type Nivel } from "@/lib/curso/nivel";
 import { comDatas, planoDosSelos, type SeloComData, type SeloGravado } from "@/lib/curso/selos-gravados";
@@ -84,11 +85,18 @@ export function entradaDosSelos(d: {
   const linhasTodas = d.indice.reduce((n, e) => n + e.ids.length, 0);
   const aprendidasTodas = d.indice.reduce((n, e) => n + aprendidasDaAbertura(repertorio, e, true), 0);
 
+  // Só as abertas: o selo por abertura é do que o aluno consegue treinar hoje. A Alapin (1 linha
+  // só no Base) tinha o menor Base do índice e aparecia como o selo "mais perto" no painel — mas
+  // o curso dela está bloqueado (`lib/aberturas/vitrine.ts`), e `/aberturas/.../treino` redireciona
+  // quem tenta abri-la. Um selo que ninguém consegue ganhar não é "mais perto", é enganoso (Doug,
+  // 18/9/2026).
+  const indiceLiberado = d.indice.filter((e) => naVitrine(e.cor, e.abertura)?.liberada === true);
+
   return {
     temasFechados,
     aulasAprendidas: aprendidasDaTrilha(d.aulasDeFinais, d.finais, d.comPratica).size,
     repertorio: {
-      aberturas: aberturasDoRepertorio(d.indice, repertorio, d.trava.trancadas),
+      aberturas: aberturasDoRepertorio(indiceLiberado, repertorio, d.trava.trancadas),
       baseCompleto: baseCompleto(repertorio, d.indice, d.trava.trancadas),
       avancadoCompleto: linhasTodas > 0 && aprendidasTodas >= linhasTodas,
     },

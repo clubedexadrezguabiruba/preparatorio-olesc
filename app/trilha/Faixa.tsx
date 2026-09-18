@@ -22,6 +22,23 @@ export function faixaFide(nivel: Nivel): string {
 }
 
 /**
+ * O resumo do degrau, na página que o mostra.
+ *
+ * `/finais` só desenha a barra de finais (`mostrar = ["finais"]`): o resumo
+ * tem de ser o de finais, não o de tática — era o que a tela mostrava até
+ * 18/9/2026. A `/trilha` desenha as duas barras, então o resumo junta as duas
+ * frases; nenhuma tela hoje mostra só tática por este componente (a `/tatica`
+ * lê `NIVEL[n].resumo` direto).
+ */
+function resumoDoNivel(nivel: Nivel, mostrar: readonly ModuloDoNivel["modulo"][]): string {
+  const temTatica = mostrar.includes("tatica");
+  const temFinais = mostrar.includes("finais");
+  if (temFinais && !temTatica) return NIVEL[nivel].resumoFinais;
+  if (temTatica && !temFinais) return NIVEL[nivel].resumo;
+  return `${NIVEL[nivel].resumo} ${NIVEL[nivel].resumoFinais}`;
+}
+
+/**
  * O nome, a faixa FIDE, o resumo, e uma barra por módulo — cada uma com a sua
  * unidade, porque puzzle e aula não se somam.
  */
@@ -71,7 +88,7 @@ export function FaixaDoNivel({
             ) : null}
           </div>
           <p className="max-w-prose text-sm text-tinta-media">
-            {NIVEL[nivel].resumo}
+            {resumoDoNivel(nivel, mostrar)}
           </p>
         </div>
         <span
