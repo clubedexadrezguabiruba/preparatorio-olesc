@@ -166,8 +166,8 @@ export function cartaoDaFase({
  * um "o que procurar" possível, mas a ordem de busca continua sendo a mesma.
  */
 export const REPOUSO_DA_TATICA =
-  "Em toda posição, procure nesta ordem: xeques, capturas e ameaças. " +
-  "É esse hábito que acha o lance tático.";
+  "O que ele ameaça? Procure xeques, capturas e ameaças. " +
+  "Antes de jogar, confira a melhor resposta dele.";
 
 /**
  * O primeiro degrau da dica: o que procurar **neste** tema.

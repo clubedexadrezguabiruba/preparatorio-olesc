@@ -120,7 +120,7 @@ export function idsErradosParaAProva(linhas: readonly LinhaDoTema[]): string[] {
   const vistos = new Set<string>();
   const errados: string[] = [];
   for (const l of linhas) {
-    if (l.acertou || l.modo === "prova" || l.modo === "revisao" || l.modo === "rating") continue;
+    if (l.acertou || (l.modo !== "aquecimento" && l.modo !== "serie")) continue;
     if (naProva.has(l.puzzle_id) || vistos.has(l.puzzle_id)) continue;
     vistos.add(l.puzzle_id);
     errados.push(l.puzzle_id);
@@ -198,6 +198,8 @@ export function misturar<T extends Puzzle>(puzzles: readonly T[], semente: strin
  * aquecimento vira "os mais fáceis que existem aqui".
  */
 export function candidatosDeAquecimento<T extends Puzzle>(faixaMaisFacil: readonly T[]): readonly T[] {
+  const deUmLance = faixaMaisFacil.filter((p) => p.temas.includes("oneMove"));
+  if (deUmLance.length >= METAS.aquecimento) return deUmLance;
   const curtos = faixaMaisFacil.filter(
     (p) => p.temas.includes("oneMove") || p.temas.includes("short"),
   );

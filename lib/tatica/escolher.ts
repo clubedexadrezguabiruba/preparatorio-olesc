@@ -83,7 +83,7 @@ export async function escolherPuzzles({
   const anteriores = outrosTemas.slice(0, 3);
   const quantosDaqui = anteriores.length ? Math.ceil(restantes / 2) : restantes;
 
-  const doTema = sortear(doDisco, quantosDaqui, semente, jaVistos).map((p) => ({
+  const doTema = sortear(doDisco.filter((p) => !repetir.some((r) => r.id === p.id)), quantosDaqui, semente, jaVistos).map((p) => ({
     ...p,
     origem: tag,
   }));
@@ -93,7 +93,7 @@ export async function escolherPuzzles({
   // recusaria a tentativa como "puzzle desconhecido".
   const deOutros = anteriores.length
     ? sortear(
-        await amostraDeTemas(anteriores),
+        (await amostraDeTemas(anteriores)).filter((p) => !repetir.some((r) => r.id === p.id) && !doTema.some((r) => r.id === p.id)),
         restantes - doTema.length,
         `${semente}:mistura`,
         jaVistos,

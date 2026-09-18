@@ -108,8 +108,14 @@ test("o erro do modo rating não vai para a prova do tema (decisão do Doug, 15/
   const linhas = [
     { puzzle_id: "a", modo: "rating", acertou: false },
     { puzzle_id: "b", modo: "serie", acertou: false },
+    { puzzle_id: "c", modo: "prova-de-nivel", acertou: false },
   ];
   assert.deepEqual(idsErradosParaAProva(linhas), ["b"]);
+});
+
+test("aquecimento prefere um lance a dois quando há cinco disponíveis", () => {
+  const curtos = banco(20, true).map((p) => ({ ...p, temas: p.temas.includes("oneMove") ? p.temas : ["fork", "short"] }));
+  assert.ok(candidatosDeAquecimento(curtos).every((p) => p.temas.includes("oneMove")));
 });
 
 test("os errados ocupam no máximo metade da prova", () => {

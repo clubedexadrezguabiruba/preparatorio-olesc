@@ -2,7 +2,7 @@
   {
     "tag": "mateIn1",
     "explicacao": [
-      "Mate em 1 é o exercício mais simples do xadrez, e o mais mal treinado. A posição já está ganha. Falta achar a peça sua que encosta no rei dele sem poder ser capturada, com todas as casas de fuga fechadas.",
+      "Mate em 1 é o exercício mais simples do xadrez, e o mais mal treinado. A posição já está ganha. Falta achar o lance que dá xeque sem permitir fuga, captura da peça atacante ou bloqueio do xeque. A peça pode dar mate de perto ou de longe.",
       "Treinar isto não é decorar mates. É acostumar o olho a olhar primeiro para o rei do adversário. Em torneio, quem tem esse hábito ganha partidas que o relógio já ia decidir."
     ],
     "procure": [
@@ -28,7 +28,7 @@
   {
     "tag": "hangingPiece",
     "explicacao": [
-      "Peça de graça é a peça que ninguém defende, e é o erro número um em partidas entre 1000 e 1400. Metade das partidas do seu torneio vai ser decidida por isto: alguém deixou uma peça e o outro pegou — ou não viu.",
+      "Peça de graça é uma peça sem defesa suficiente que você pode capturar com ganho. Vale procurar em toda partida: às vezes alguém deixa uma peça, e o outro não vê.",
       "Este tema treina os dois lados da mesma coisa. Olhar as peças dele que estão sem defesa, e olhar as suas antes de mover. É a primeira das três perguntas que você faz antes de cada lance."
     ],
     "procure": [
@@ -36,7 +36,7 @@
       "Alguma peça dele está atacada mais vezes do que defendida?",
       "Antes de mover: a peça que eu vou tirar dali defendia alguém?"
     ],
-    "cuidado": "Capturar de graça só vale se a peça que captura não for capturada de volta por algo maior. Conte antes."
+    "cuidado": "Antes de capturar, veja as recapturas e as ameaças dele. Compare tudo o que você ganha com tudo o que entrega."
   },
   {
     "tag": "backRankMate",
@@ -106,7 +106,7 @@
   {
     "tag": "bodenMate",
     "explicacao": [
-      "Dois bispos, cada um numa diagonal, e as duas diagonais se cruzam em cima do rei. Um bispo dá o xeque, o outro tapa a única casa por onde ele sairia. As peças dele fazem o resto do trabalho, sem querer.",
+      "Dois bispos, cada um numa diagonal, e um bispo dá xeque e o outro controla as casas de fuga. Um bispo dá o xeque, o outro tapa a única casa por onde ele sairia. As peças dele fazem o resto do trabalho, sem querer.",
       "Aparece quase sempre contra quem rocou para o lado da dama, com o peão e a torre ainda parados ali. Se você tem os dois bispos e ele rocou desse lado, vale olhar isto antes de qualquer outro plano."
     ],
     "procure": [
@@ -146,7 +146,7 @@
     "tag": "mateIn3",
     "explicacao": [
       "Três lances forçados até o mate. É a mesma busca do mate em 2, com um degrau a mais: o primeiro obriga, o segundo obriga, e o terceiro fecha. O que muda é que você segura a posição inteira na cabeça até o fim.",
-      "É aqui que o cálculo começa a doer, e é aqui que ele começa a servir. Quem enxerga três lances à frente num puzzle enxerga dois numa partida de torneio, com o relógio andando e o adversário do outro lado da mesa."
+      "É aqui que o cálculo começa a doer, e é aqui que ele começa a servir. Treine conferir as respostas dele antes de mover. É esse cuidado que você também vai usar na partida, com o relógio andando."
     ],
     "procure": [
       "Quais lances ele é obrigado a fazer depois do seu xeque?",
@@ -166,13 +166,13 @@
       "Alguma casa sua alcança as duas de uma vez?",
       "Se você der xeque, o rei sai — e o que fica sozinho atrás dele?"
     ],
-    "cuidado": "Garfo em casa defendida não é garfo: ele captura a sua peça e acabou. Antes de pousar, veja quem está olhando aquela casa."
+    "cuidado": "Antes de dar o garfo, confira se ele pode capturar sua peça e o que acontece depois. Uma casa atacada pode servir, mas o ganho precisa resistir à melhor resposta dele."
   },
   {
     "tag": "pin",
     "explicacao": [
-      "Cravada é quando a peça dele não pode sair do lugar, porque atrás dela está o rei ou uma peça maior. Ela fica ali parada, sem poder defender ninguém. É a única peça do tabuleiro que você ataca de novo sem medo.",
-      "Contra o rei ela nem pode sair, porque seria lance ilegal. Contra peça grande ela pode, mas sair custa caro. Num torneio, quem crava e depois empilha ataque em cima da peça cravada ganha peça sem calcular nada."
+      "Cravada é quando a peça dele não pode sair do lugar, porque atrás dela está o rei ou uma peça maior. Ela perde liberdade, mas ainda pode defender casas e, em alguns casos, mover-se pela linha da cravada. Atacá-la de novo pode ganhar material; confira as respostas.",
+      "Contra o rei ela não pode fazer um lance que o deixe em xeque. Contra peça grande ela pode, mas sair custa caro. Depois de cravar, procure aumentar a pressão e calcule as trocas antes de capturar."
     ],
     "procure": [
       "Alguma peça dele está bem na frente do rei dele?",
@@ -192,7 +192,7 @@
       "Você tem torre, bispo ou dama que alcance essa reta?",
       "Se ele fugir com a da frente, o que fica sozinho atrás?"
     ],
-    "cuidado": "Se a peça de trás estiver defendida, o espeto não ganha nada: você come e ele recaptura. Confira quem defende antes."
+    "cuidado": "Se a peça de trás estiver defendida, conte a troca inteira. Um bispo que captura uma torre pode ganhar material mesmo sendo recapturado."
   },
   {
     "tag": "discoveredAttack",
@@ -211,14 +211,14 @@
     "tag": "doubleCheck",
     "explicacao": [
       "Duas peças suas dão xeque no mesmo lance. Isso só acontece num descoberto: a que sai dá xeque, e a que estava atrás dela também dá. O rei não consegue capturar as duas nem tapar as duas — só resta andar.",
-      "É o lance mais forte do xadrez, e o único em que não importa quanta peça você deu para chegar lá. Se o rei não tem casa para onde ir, é mate — e é assim que quase todo sacrifício grande termina."
+      "É um recurso forte porque obriga uma resposta do rei. Mesmo assim, confira se o ataque compensa o material que você entregou. Se o rei não tem casa para onde ir, é mate — e é assim que quase todo sacrifício grande termina."
     ],
     "procure": [
       "Você tem duas peças que dão xeque no mesmo lance?",
       "Quantas casas o rei dele tem depois desse xeque?",
       "Se ele só pode andar, você alcança onde ele vai parar?"
     ],
-    "cuidado": "No xeque duplo o rei anda, e nada mais: capturar e tapar são ilegais. Não perca lance procurando o que ele não pode fazer."
+    "cuidado": "No xeque duplo, a resposta tem de ser um lance do rei. Ele pode até capturar um atacante, desde que a casa de destino esteja livre dos dois xeques."
   },
   {
     "tag": "capturingDefender",
@@ -315,7 +315,7 @@
     "tag": "kingsideAttack",
     "explicacao": [
       "Ele rocou para o lado do rei, e é para lá que as suas peças vão. É o plano mais simples do xadrez de ataque: juntar torre, bispo, cavalo e dama na mesma metade do tabuleiro e empurrar os peões atrás delas.",
-      "O que decide não é a beleza do lance, é a contagem: quantas peças suas atacam contra quantas peças dele defendem. Quando esse número vira a seu favor, o sacrifício que abre a posição passa a funcionar sozinho."
+      "O que decide não é a beleza do lance, é a contagem: quantas peças suas atacam contra quantas peças dele defendem. Ter mais atacantes é uma pista, não uma garantia. Antes de sacrificar, confira como as peças chegam ao rei e qual é a melhor defesa dele."
     ],
     "procure": [
       "Quantas peças suas já estão do lado do rei dele?",
@@ -328,14 +328,14 @@
     "tag": "sacrifice",
     "explicacao": [
       "Sacrifício é dar peça de propósito, porque o que vem depois vale mais do que ela. Não é chute nem coragem: é uma conta que termina em mate, em peça de volta com juros, ou no rei dele sem casa nenhuma.",
-      "Todo sacrifício que funciona tem uma coisa em comum: os lances seguintes são obrigados. Se depois de dar a peça ele ainda tem três respostas boas, aquilo não era sacrifício — era uma peça a menos."
+      "Nestes exercícios, procure a continuação concreta que justifica entregar material. Pode haver mais de uma resposta: confira as relevantes. Em outras posições também existem sacrifícios por compensação duradoura, sem ganho imediato."
     ],
     "procure": [
       "Depois que eu der a peça, os lances dele são obrigados?",
       "Quantas peças minhas chegam ao rei dele em dois lances?",
       "Se não der mate, eu recupero a peça — e de que jeito?"
     ],
-    "cuidado": "Sacrifício sem sequência forçada é só peça a menos. Se você não consegue dizer o lance seguinte, ainda não é a hora."
+    "cuidado": "Antes de sacrificar, diga o que você ganha em troca e confira a melhor resposta dele. Não entregue material só esperando que ele erre."
   },
   {
     "tag": "intermezzo",
@@ -743,7 +743,7 @@
   {
     "tag": "mateIn5",
     "explicacao": [
-      "Cinco lances seus até o mate — nove, contando os dele. Ninguém segura isso na cabeça decorando. Você segura porque cada lance seu é xeque ou ameaça, e deixa uma resposta só.",
+      "Cinco lances seus ou mais até o mate. Procure o desenho final e calcule como chegar até ele. Um lance pode permitir várias respostas: a combinação precisa funcionar contra todas as defesas relevantes.",
       "Num mate longo, o lance que deixa uma saída só vale mais que o lance bonito. Onde ele tiver duas respostas, a linha dobra de tamanho. Aí você confere as duas, até o mate."
     ],
     "procure": [

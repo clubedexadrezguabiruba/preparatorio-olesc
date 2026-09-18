@@ -16,6 +16,7 @@ import {
 } from "@/lib/tatica/progresso";
 import { etapaAtual, idsErradosParaAProva, METAS, quantosFaltam } from "@/lib/tatica/serie";
 import { Serie } from "./Serie";
+import { obterRodada, puzzlesPendentes } from "@/lib/tatica/rodadas";
 
 export async function generateMetadata({ params }: PageProps<"/tatica/[tema]">): Promise<Metadata> {
   const { tema } = await params;
@@ -88,22 +89,29 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
   // inteira mora em `lib/tatica/escolher.ts`, que o script `db:tatica` prova.
   const errados = etapa === "prova" ? idsErradosParaAProva(await linhasDoTema(tag)) : [];
 
-  const puzzles = await escolherPuzzles({
-    tag,
-    etapa,
-    faltam,
-    semente,
-    jaVistos,
-    // Tema em teste não se mistura na prova dos outros.
-    outrosTemas: [...todosOsProgressos.keys()].filter((t) => {
-      const outro = temaPorTag(t);
-      return t !== tag && temaAberto(t) && outro !== undefined && contaNoCurso(outro);
+  const rodada = await obterRodada({
+    aluno: perfil.id,
+    chave: `tema:${tag}:${etapa}`,
+    modo: etapa,
+    tema: tag,
+    selecionar: () => escolherPuzzles({
+      tag,
+      etapa,
+      faltam,
+      semente,
+      jaVistos,
+      // Tema em teste não se mistura na prova dos outros.
+      outrosTemas: [...todosOsProgressos.keys()].filter((t) => {
+        const outro = temaPorTag(t);
+        return t !== tag && temaAberto(t) && outro !== undefined && contaNoCurso(outro);
     }),
     errados,
+    }),
   });
+  const puzzles = await puzzlesPendentes(rodada);
 
   return (
-    <Moldura tema={tema.nome} bloco={bloco.nome} emTeste={tema.emTeste}>
+    <Moldura tema={etapa === "prova" ? "Prova — temas misturados" : tema.nome} bloco={etapa === "prova" ? "" : bloco.nome} emTeste={tema.emTeste}>
       {/* Fatia 10: x vira a vista e ? mostra os atalhos. */}
       <VistaDoTabuleiro escopos={[]}>
       <Serie
@@ -116,7 +124,9 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
          * da rodada anterior. Etapa e quantos já foram mudam sempre que uma
          * rodada termina, e é isso que remonta.
          */
-        key={`${etapa}:${progresso.feitos[etapa]}`}
+        key={`${rodada.id}:${progresso.feitos[etapa]}`}
+        rodadaId={rodada.id}
+        acertosAnteriores={progresso.acertos[etapa]}
         tema={tag}
         nomeDoTema={tema.nome}
         etapa={etapa}
@@ -125,9 +135,9 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
         metaDaEtapa={METAS[etapa]}
         feitosNoTema={progresso.tentativas}
         totalNoTema={PUZZLES_POR_TEMA}
-        explicacao={escrito.explicacao}
-        procure={escrito.procure}
-        cuidado={escrito.cuidado ?? null}
+        explicacao={etapa === "prova" ? [] : escrito.explicacao}
+        procure={etapa === "prova" ? [] : escrito.procure}
+        cuidado={etapa === "prova" ? null : escrito.cuidado ?? null}
       />
       </VistaDoTabuleiro>
     </Moldura>

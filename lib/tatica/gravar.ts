@@ -3,9 +3,12 @@ import { criarClienteAdmin } from "../supabase/admin.ts";
 import { puzzlePorId } from "./banco.ts";
 import { conferirSolucao } from "./conferir.ts";
 import { MODOS_GRAVAVEIS, type Modo } from "./serie.ts";
+import { lerRodada } from "./rodadas.ts";
 
 /** O que o navegador manda: o que foi **jogado**, nunca um "acertei". */
 export type Tentativa = {
+  /** Seleção persistida: primeira resposta por puzzle, mesmo em duas abas. */
+  rodadaId?: string;
   puzzleId: string;
   /** O tema em que o aluno estava — é ele que conta no progresso. */
   tema: string;
@@ -78,6 +81,17 @@ export async function gravarTentativa(aluno: string, tentativa: Tentativa): Prom
     return { erro: "tentativa malformada" };
   }
 
+  if (tentativa.rodadaId) {
+    if (!/^[0-9a-f-]{36}$/i.test(tentativa.rodadaId)) return { erro: "rodada inválida" };
+    const rodada = await lerRodada(aluno, tentativa.rodadaId);
+    if (!rodada || rodada.modo !== modo || (rodada.tema ?? origem) !== tema ||
+        !rodada.puzzles.some((p) => p.id === puzzleId && p.origem === origem)) {
+      return { erro: "este puzzle não pertence à sua rodada" };
+    }
+    const anterior = rodada.respostas.find((r) => r.puzzle_id === puzzleId);
+    if (anterior) return { acertou: anterior.acertou };
+  }
+
   const puzzle = await puzzlePorId(origem, puzzleId);
   // Puzzle que não existe naquele tema: ou o recorte mudou embaixo de uma aba
   // aberta, ou alguém inventou o id. Nos dois casos, não vira linha no banco.
@@ -95,8 +109,14 @@ export async function gravarTentativa(aluno: string, tentativa: Tentativa): Prom
     acertou,
     tempo_ms: Math.min(Math.max(0, Math.round(tempoMs) || 0), TEMPO_MAXIMO_MS),
     modo,
+    rodada_id: tentativa.rodadaId ?? null,
   });
 
+  if (error?.code === "23505" && tentativa.rodadaId) {
+    const rodada = await lerRodada(aluno, tentativa.rodadaId);
+    const anterior = rodada?.respostas.find((r) => r.puzzle_id === puzzleId);
+    if (anterior) return { acertou: anterior.acertou };
+  }
   if (error) return { erro: error.message };
   return { acertou };
 }

@@ -6,7 +6,9 @@ import { estadoParaONivel } from "@/lib/curso/estado";
 import { NIVEIS, PROVA_DE_NIVEL, prontoParaProva, fechamentoDoNivel } from "@/lib/curso/nivel";
 import { nivelConquistado } from "@/lib/curso/progresso";
 import { temaPorTag } from "@/lib/tatica/blocos";
-import { sortearProvaDeNivel, tentativasCompletas, ultimaProvaDeNivel } from "@/lib/tatica/prova";
+import { abrirProvaDeNivel, ultimaProvaDeNivel } from "@/lib/tatica/prova";
+import { puzzlesPendentes } from "@/lib/tatica/rodadas";
+import { refazerProvaDeNivel } from "@/app/nivel/acoes";
 import { Serie } from "@/app/tatica/[tema]/Serie";
 import { EncerrarProva } from "./Encerrar";
 
@@ -87,32 +89,36 @@ export default async function ProvaDeNivel({ params }: PageProps<"/nivel/[n]/pro
     );
   }
 
-  const tentativa = await tentativasCompletas(perfil.id);
   const resultado = await ultimaProvaDeNivel(perfil.id, nivel);
 
   // Uma prova acabou de fechar 12 linhas: a tela é o resultado, e não uma
   // rodada nova. O `conquistado` já vem atualizado — a ação de encerrar rodou
   // antes do `router.refresh()` que trouxe o aluno de volta aqui.
-  if (resultado && tentativa > 0 && (conquistado >= nivel || !resultado.passou)) {
+  if (resultado) {
     return (
       <Moldura nivel={nivel}>
-        <Resultado nivel={nivel} resultado={resultado} passou={conquistado >= nivel} />
+        {resultado.passou && conquistado < nivel
+          ? <EncerrarProva nivel={nivel} />
+          : <Resultado nivel={nivel} resultado={resultado} passou={conquistado >= nivel} />}
       </Moldura>
     );
   }
 
-  const puzzles = await sortearProvaDeNivel(perfil.id, nivel, tentativa);
+  const rodada = await abrirProvaDeNivel(perfil.id, nivel);
+  const puzzles = await puzzlesPendentes(rodada);
 
   return (
     <Moldura nivel={nivel}>
       <Serie
-        key={`prova-de-nivel:${nivel}:${tentativa}`}
+        key={`${rodada.id}:${rodada.respostas.length}`}
+        rodadaId={rodada.id}
+        acertosAnteriores={rodada.respostas.filter((r) => r.acertou).length}
         tema={null}
         nomeDoTema={`Prova do nível ${nivel}`}
         etapa="prova-de-nivel"
         puzzles={puzzles}
-        jaFeitosNaEtapa={0}
-        metaDaEtapa={puzzles.length}
+        jaFeitosNaEtapa={rodada.respostas.length}
+        metaDaEtapa={rodada.puzzles.length}
         feitosNoTema={null}
         totalNoTema={null}
         explicacao={[]}
@@ -189,7 +195,7 @@ function Resultado({
             <span className="tabular-nums">
               {PROVA_DE_NIVEL.paraPassar - resultado.acertos}
             </span>
-            . Nada foi perdido: os 12 entraram na fila de revisão, e a prova pode ser
+            . Nada foi perdido: os erros entraram na fila de revisão, e a prova pode ser
             refeita quantas vezes você quiser — com sorteio novo a cada vez.
           </p>
           {nomes.length > 0 ? (
@@ -211,6 +217,13 @@ function Resultado({
       )}
 
       <div className="flex flex-wrap gap-3">
+        {!passou ? (
+          <form action={refazerProvaDeNivel.bind(null, nivel)}>
+            <button type="submit" className="foco rounded-lg bg-metodo-cheio px-4 py-2.5 text-sm font-semibold text-tinta-inversa">
+              Refazer prova
+            </button>
+          </form>
+        ) : null}
         <Link
           href="/painel"
           className="foco rounded-lg bg-metodo-cheio px-4 py-2.5 text-sm font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque"

@@ -53,6 +53,8 @@ import {
   VOLTA_MS,
 } from "@/lib/tatica/tempos";
 import { registrarTentativa } from "../acoes";
+import { armazemDoNavegador } from "@/lib/tatica/rating-guardada";
+import { esquecerRespostaDaRodada, guardarRespostaDaRodada, respostasPendentes } from "@/lib/tatica/rodada-guardada";
 
 /**
  * A série de puzzles: o tabuleiro, o juiz e a gravação.
@@ -153,6 +155,8 @@ const ETAPAS_DA_SERIE = [
 const BARRA_DA_ETAPA: Record<Etapa, number> = { aquecimento: 0, serie: 1, prova: 2 };
 
 export type SerieProps = {
+  rodadaId?: string;
+  acertosAnteriores?: number;
   /**
    * O tema em que o aluno está, ou `null` na **revisao do dia**, que mistura
    * temas: ali cada tentativa e gravada no tema de origem do proprio puzzle.
@@ -181,6 +185,8 @@ export type SerieProps = {
 };
 
 export function Serie({
+  rodadaId,
+  acertosAnteriores = 0,
   tema,
   nomeDoTema,
   etapa,
@@ -201,9 +207,11 @@ export function Serie({
   useEffect(() => armAudioOnFirstGesture(), []);
 
   const [indice, setIndice] = useState(0);
-  const [placar, setPlacar] = useState({ certos: 0, total: 0 });
+  const [placar, setPlacar] = useState({ certos: acertosAnteriores, total: jaFeitosNaEtapa });
   const [falhaAoGravar, setFalhaAoGravar] = useState<string | null>(null);
   const [fim, setFim] = useState(false);
+  const [recuperando, setRecuperando] = useState(Boolean(rodadaId));
+  const recuperacaoIniciada = useRef(false);
 
   /**
    * Os dois degraus da ajuda pedida, e o `cuidado` no fim do segundo.
@@ -255,29 +263,57 @@ export function Serie({
    */
   const gravar = useCallback(
     async (p: PuzzleServido, lances: string[], tempoMs: number): Promise<boolean> => {
-      const resposta = await registrarTentativa({
-        puzzleId: p.id,
-        // Na revisao nao ha tema: a linha e gravada no tema de origem do
-        // puzzle, que e onde ele conta desde a primeira vez.
-        tema: tema ?? p.origem,
-        origem: p.origem,
-        modo: etapa,
-        lances,
-        tempoMs,
-      });
+      const armazem = armazemDoNavegador();
+      if (rodadaId) guardarRespostaDaRodada(armazem, rodadaId, { puzzleId: p.id, origem: p.origem, lances, tempoMs });
+      try {
+        const resposta = await registrarTentativa({
+          rodadaId,
+          puzzleId: p.id,
+          // Na revisao nao ha tema: a linha e gravada no tema de origem do
+          // puzzle, que e onde ele conta desde a primeira vez.
+          tema: tema ?? p.origem,
+          origem: p.origem,
+          modo: etapa,
+          lances,
+          tempoMs,
+        });
 
-      if ("erro" in resposta) {
-        // Falar em vez de fingir: o aluno tem de saber que aquele puzzle não
-        // entrou na conta, senão fecha a tarefa achando que fez 20 e o
-        // relatório mostra 14.
-        setFalhaAoGravar(resposta.erro);
+        if ("erro" in resposta) {
+          // Falar em vez de fingir: o aluno tem de saber que aquele puzzle não
+          // entrou na conta, senão fecha a tarefa achando que fez 20 e o
+          // relatório mostra 14.
+          setFalhaAoGravar(resposta.erro);
+          return false;
+        }
+        if (rodadaId) esquecerRespostaDaRodada(armazem, rodadaId, p.id);
+        setPlacar((a) => ({ certos: a.certos + (resposta.acertou ? 1 : 0), total: a.total + 1 }));
+        return true;
+      } catch {
+        setFalhaAoGravar("A conexão falhou. Reconecte e recarregue para reenviar a resposta guardada.");
         return false;
       }
-      setPlacar((a) => ({ certos: a.certos + (resposta.acertou ? 1 : 0), total: a.total + 1 }));
-      return true;
     },
-    [etapa, tema],
+    [etapa, tema, rodadaId],
   );
+
+  // Reenvia a resposta guardada antes de oferecer outra tentativa no mesmo puzzle.
+  // A chave única da rodada torna reenvios e duas abas idempotentes.
+  useEffect(() => {
+    if (!rodadaId || recuperacaoIniciada.current) return;
+    recuperacaoIniciada.current = true;
+    const armazem = armazemDoNavegador();
+    const guardadas = respostasPendentes(armazem, rodadaId);
+    const pendentes = guardadas.filter((r) => {
+      if (puzzles.some((p) => p.id === r.puzzleId && p.origem === r.origem)) return true;
+      esquecerRespostaDaRodada(armazem, rodadaId, r.puzzleId);
+      return false;
+    });
+    void Promise.all(pendentes.map((r) => gravar(puzzles.find((p) => p.id === r.puzzleId)!, r.lances, r.tempoMs)))
+      .then((salvas) => {
+        if (pendentes.length && salvas.every(Boolean)) router.refresh();
+        else if (salvas.every(Boolean)) setRecuperando(false);
+      });
+  }, [gravar, puzzles, rodadaId, router]);
 
   const decidir = useCallback(
     (p: PuzzleServido, lances: string[], tempoMs: number) => {
@@ -295,8 +331,8 @@ export function Serie({
   // `playComplete` solto que estava aqui saiu para não tocar duas vezes.
   const { seq: celebracao, celebrar } = useCelebracao();
   useEffect(() => {
-    if (fim) celebrar();
-  }, [celebrar, fim]);
+    if (fim && !falhaAoGravar) celebrar();
+  }, [celebrar, fim, falhaAoGravar]);
 
   const avancar = useCallback(() => {
     /*
@@ -319,15 +355,17 @@ export function Serie({
      * uma gravação falhou, a tela de fim aparece mesmo assim: é ela que conta
      * ao aluno que um puzzle não entrou na conta.
      */
-    if (etapa === "aquecimento" || etapa === "serie") {
-      void Promise.all(gravandoRef.current).then((gravou) => {
-        if (gravou.every(Boolean)) router.refresh();
-        else setFim(true);
-      });
-      return;
-    }
-    setFim(true);
+    void Promise.all(gravandoRef.current).then((gravou) => {
+      if (gravou.every(Boolean) && (etapa === "aquecimento" || etapa === "serie")) router.refresh();
+      else setFim(true);
+    });
   }, [etapa, indice, puzzles.length, router]);
+
+  if (recuperando) {
+    return <div className="cartao px-5 py-6" role="status">
+      {falhaAoGravar ? <><Falha erro={falhaAoGravar} /><button type="button" className="foco mt-3 underline" onClick={() => window.location.reload()}>Tentar salvar novamente</button></> : "Retomando sua rodada…"}
+    </div>;
+  }
 
   if (fim || !puzzle) {
     return (
@@ -342,7 +380,7 @@ export function Serie({
             ? "Nenhum puzzle entrou na conta."
             : placar.certos === placar.total
               ? etapa === "revisao"
-                ? "Nenhum erro. Os certos voltam daqui a uma semana, para provar que ficaram."
+                ? "Nenhum erro. A próxima revisão depende do seu histórico: 7 dias, 14 dias ou saída da fila."
                 : etapa === "prova-de-nivel"
                   ? "Nenhum erro. Conferindo o resultado…"
                   : "Nenhum erro. Pode seguir."
@@ -354,22 +392,22 @@ export function Serie({
                  * fila espacada (`lib/tatica/revisao.ts`).
                  */
                 etapa === "revisao"
-                ? "Os que você errou voltam em 2 dias; os certos, em uma semana."
+                ? "Os erros voltam em 2 dias. Os acertos avançam na revisão conforme seu histórico."
                 : etapa === "prova"
                   ? "Os que você errou voltam na revisão do dia, daqui a 2 dias."
                   : etapa === "prova-de-nivel"
                     ? "Os que você errou entraram na fila de revisão. Conferindo o resultado…"
-                    : "Os que você errou voltam misturados na prova deste tema."}
+                    : "Parte dos erros volta na prova deste tema. Os erros também entram na revisão do dia."}
         </p>
         {falhaAoGravar ? <Falha erro={falhaAoGravar} /> : null}
-        {noFim ?? (
+        {!falhaAoGravar && noFim ? noFim : (
           <div className="flex flex-wrap gap-3">
             <button
               type="button"
-              onClick={() => router.refresh()}
+              onClick={() => falhaAoGravar ? window.location.reload() : router.refresh()}
               className="foco rounded-lg bg-metodo-cheio px-4 py-2.5 text-sm font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque"
             >
-              Continuar
+              {falhaAoGravar ? "Tentar salvar novamente" : "Continuar"}
             </button>
             <Link
               href={etapa === "revisao" ? "/painel" : "/tatica"}

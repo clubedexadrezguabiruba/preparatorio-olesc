@@ -16,5 +16,8 @@ export type { Tentativa } from "@/lib/tatica/gravar";
  */
 export async function registrarTentativa(tentativa: Tentativa): Promise<Resultado> {
   const perfil = await perfilAtual();
+  if (tentativa.modo !== "revisao" && !tentativa.rodadaId) {
+    return { erro: "A rodada foi atualizada. Recarregue a página para continuar." };
+  }
   return gravarTentativa(perfil.id, tentativa);
 }

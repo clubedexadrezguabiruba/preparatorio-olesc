@@ -5,7 +5,17 @@ import { perfilAtual } from "@/lib/auth/perfil";
 import { NIVEIS, prontoParaProva } from "@/lib/curso/nivel";
 import { estadoParaONivel } from "@/lib/curso/estado";
 import { criarClienteAdmin } from "@/lib/supabase/admin";
-import { ultimaProvaDeNivel } from "@/lib/tatica/prova";
+import { abrirProvaDeNivel, ultimaProvaDeNivel } from "@/lib/tatica/prova";
+
+export async function refazerProvaDeNivel(nivel: number): Promise<void> {
+  const perfil = await perfilAtual();
+  const alvo = NIVEIS.find((n) => n === nivel);
+  if (!alvo || prontoParaProva(await estadoParaONivel(perfil.id)) < alvo) return;
+  const resultado = await ultimaProvaDeNivel(perfil.id, alvo);
+  if (!resultado || resultado.passou) return;
+  await abrirProvaDeNivel(perfil.id, alvo, true);
+  revalidatePath(`/nivel/${alvo}/prova`);
+}
 
 /**
  * Encerra a prova de nível: reconfere, corrige, e concede se passou.
@@ -57,9 +67,10 @@ export async function encerrarProvaDeNivel(nivel: number): Promise<void> {
   const admin = criarClienteAdmin();
   // `ignoreDuplicates` porque a tabela é log e a chave é `(aluno, nivel)`:
   // encerrar duas vezes a mesma prova não pode virar erro na tela do aluno.
-  await admin
+  const { error } = await admin
     .from("nivel_conquistado")
     .upsert({ aluno: perfil.id, nivel: alvo }, { onConflict: "aluno,nivel", ignoreDuplicates: true });
+  if (error) throw new Error("Não foi possível guardar a conclusão do nível.");
 
   revalidatePath("/painel");
   revalidatePath("/trilha");

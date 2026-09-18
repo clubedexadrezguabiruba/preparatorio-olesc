@@ -267,7 +267,7 @@ export const BLOCOS: readonly Bloco[] = [
       { tag: "retiMate", nome: "Mate de Réti", resumo: "O bispo colado dá o mate, apoiado pela torre de longe, com o rei cercado pelas próprias peças.", origem: "nosso" },
       { tag: "maxLangeMate", nome: "Mate de Max Lange", resumo: "A dama encosta no rei na borda, pela diagonal, apoiada pelo bispo colado nela.", origem: "nosso" },
       { tag: "legalMate", nome: "Mate de Légal", resumo: "O fim da armadilha de Légal: o cavalo dá o mate, com o bispo colado no rei e o outro cavalo.", origem: "nosso" },
-      { tag: "mateIn5", nome: "Mate em 5", resumo: "Cinco lances seus até o mate: cálculo longo, e cada resposta dele conferida." },
+      { tag: "mateIn5", nome: "Mate em 5 ou mais", resumo: "Cinco lances seus ou mais até o mate, com cada defesa conferida." },
     ],
   },
 ] as const;
