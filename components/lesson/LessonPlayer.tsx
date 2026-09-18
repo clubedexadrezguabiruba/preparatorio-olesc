@@ -197,6 +197,7 @@ function LessonPlayerV1({
   leitura?: ReactNode;
 }) {
   const { lesson, positions } = bundle;
+  const router = useRouter();
   const stage = useLessonStore((s) => s.stage);
   const lessonId = useLessonStore((s) => s.lessonId);
   const open = useLessonStore((s) => s.open);
@@ -440,6 +441,8 @@ function LessonPlayerV1({
                 })}
               />
             }
+            // O editor (marcação e edição) não sai da aula: ali não há "às aulas" para onde voltar.
+            saida={edicao || marcacao ? undefined : { rotulo: VOLTAR_AS_AULAS, acao: () => router.push("/finais") }}
           />
         )}
 
@@ -465,6 +468,9 @@ function posicaoDaApresentacao(lesson: PacoteDeAula["lesson"], positions: Pacote
  * comentário do professor para fora da tela (Doug, 17/9/2026).
  */
 const TRILHA_ABERTA_ATE = 8;
+
+/** O botão do fim da aula, na última etapa (Doug, 18/9/2026). O mesmo rótulo do fim do treinador de lances. */
+const VOLTAR_AS_AULAS = "Voltar às aulas";
 
 /** A trilha das etapas — a mesma peça nas aulas v1 e v2. Ver o comentário em `trilha`. */
 function TrilhaDaAula({ itens, ativa, aoIr, trancada }: {
@@ -816,6 +822,8 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
   const aoRever = capituloAnterior ? () => goToStage(capituloAnterior.id) : undefined;
   const comCapa = aula.etapas.filter((etapa) => capaDaEtapa(etapa, aula.id));
   const capa = atual && !capasVistas.includes(atual.id) ? capaDaEtapa(atual, aula.id) : null;
+  // O fim da aula (Doug, 18/9/2026). A prévia do editor (`aoSair`) já tem a saída dela no cabeçalho.
+  const saida = !proxima && !aoSair ? { rotulo: VOLTAR_AS_AULAS, acao: () => router.push(voltar?.href ?? "/finais") } : undefined;
 
   return (
     <div className="flex w-full flex-1 flex-col gap-3">
@@ -947,8 +955,8 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
             key={atual.id}
             etapa={atual}
             trilha={trilha}
-            onFinish={proxima ? () => goToStage(proxima.id) : undefined}
-            finishLabel={avancoPara(proxima, aula.id)}
+            onFinish={proxima ? () => goToStage(proxima.id) : saida?.acao}
+            finishLabel={saida ? saida.rotulo : avancoPara(proxima, aula.id)}
             semConfete={atual.parada === true || dominioDaAulaV2(aula.id) === "abertura"}
             aoRever={aoRever}
           />
@@ -969,6 +977,7 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
                 report={masteryReport({ hasPractice: true, practiceWon: Boolean(cleared[atual.id]), practiceGoal: atual.goal })}
               />
             }
+            saida={saida}
           />
         ) : null}
         </>}

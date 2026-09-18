@@ -59,6 +59,7 @@ export function PracticeStage({
   seal,
   onFinish,
   finishLabel,
+  saida,
 }: {
   practiceKey: PracticeKey;
   /** A trilha das etapas, montada pelo `LessonPlayer` e servida no painel. */
@@ -73,6 +74,11 @@ export function PracticeStage({
   seal?: ReactNode;
   onFinish?: () => void;
   finishLabel?: string;
+  /**
+   * A saída do fim da aula (Doug, 18/9/2026): a prática é a última etapa, e a partida acabada não
+   * tinha botão nenhum para voltar às aulas. Aparece com a partida decidida, ganha ou não.
+   */
+  saida?: { rotulo: string; acao: () => void };
 }) {
   const state = useLessonStore((s) => s.practices[practiceKey]);
   const message = useLessonStore((s) => s.message);
@@ -444,6 +450,11 @@ export function PracticeStage({
                   onClick={restart}
                 >
                   {PARTIDA.recomecar}
+                </LessonButton>
+              )}
+              {verdict.kind !== "playing" && saida && (
+                <LessonButton variant={verdict.kind === "passed" && !onFinish ? "primary" : "default"} onClick={saida.acao}>
+                  {saida.rotulo}
                 </LessonButton>
               )}
             </AulaRodape>
