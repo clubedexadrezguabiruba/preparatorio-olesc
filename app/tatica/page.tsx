@@ -240,21 +240,22 @@ function CartaoDoRating({ rating, serie, inicio }: { rating: EstadoDoRating | nu
       prefetch={false}
       className="foco inline-flex min-h-11 items-center justify-center rounded-lg bg-metodo-cheio px-6 py-2.5 text-sm font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque"
     >
-      Jogar
+      Jogar agora
     </Link>
   );
 
   if (!rating) {
     return (
-      <section aria-labelledby="rating-titulo" className="flex flex-wrap items-center justify-between gap-4 cartao-vazio px-4 py-4 sm:px-6">
-        <div className="flex flex-col gap-1">
-          <h2 id="rating-titulo" className="text-base font-semibold text-tinta">
-            Tática rating
-          </h2>
+      <section aria-labelledby="rating-titulo" className="flex flex-wrap items-center justify-between gap-4 cartao border-metodo-cheio px-4 py-4 sm:px-6">
+        <div className="flex items-center gap-3">
+          <IconeRating />
+          <div className="flex flex-col gap-1">
+          <h2 id="rating-titulo" className="text-base font-semibold text-tinta">Aceite o desafio da tática rating</h2>
           <p className="max-w-prose text-sm text-tinta-media">
-            Problemas misturados, e o rating sobe e desce a cada um. Você começa em {inicio}.
+            Jogue problemas misturados, descubra sua força e tente superar seu próprio recorde. Você começa em {inicio}.
           </p>
           <p className="text-xs text-tinta-fraca">{quando}</p>
+          </div>
         </div>
         {jogar}
       </section>
@@ -266,9 +267,10 @@ function CartaoDoRating({ rating, serie, inicio }: { rating: EstadoDoRating | nu
     <section aria-labelledby="rating-titulo" className="flex flex-col gap-4 cartao px-4 py-5 sm:px-6">
       <div className="grid items-center gap-x-6 gap-y-4 sm:grid-cols-[auto_1fr_auto]">
         <div className="flex flex-col">
-          <h2 id="rating-titulo" className="text-sm text-tinta-fraca">
-            Tática rating
-          </h2>
+          <div className="flex items-center gap-2">
+            <IconeRating pequeno />
+            <h2 id="rating-titulo" className="text-sm font-semibold text-metodo-tinta">Seu desafio de tática rating</h2>
+          </div>
           <p className="font-serif text-5xl leading-none font-semibold text-tinta tabular-nums">
             {Math.round(rating.rating)}
           </p>
@@ -304,6 +306,19 @@ function CartaoDoRating({ rating, serie, inicio }: { rating: EstadoDoRating | nu
       </div>
       <p className="text-xs text-tinta-fraca">{quando}</p>
     </section>
+  );
+}
+
+function IconeRating({ pequeno = false }: { pequeno?: boolean }) {
+  const tamanho = pequeno ? 28 : 46;
+  return (
+    <span aria-hidden className="grid shrink-0 place-items-center rounded-full bg-metodo-superficie/20 text-metodo-tinta" style={{ width: tamanho, height: tamanho }}>
+      <svg viewBox="0 0 32 32" width={pequeno ? 18 : 28} height={pequeno ? 18 : 28} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 23 13 16l5 4 8-11" />
+        <path d="M20 9h6v6" />
+        <circle cx="7" cy="23" r="2" fill="currentColor" stroke="none" />
+      </svg>
+    </span>
   );
 }
 

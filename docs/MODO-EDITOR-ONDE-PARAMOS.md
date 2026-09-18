@@ -7837,3 +7837,10 @@ havia botão para chegar à prática seguinte. Isso bloqueava Afogamento entre �
 e “Perdendo, busque o empate”, e Mate da escada entre “Duas torres” e “Dama e torre”. Agora a
 vitória intermediária oferece o avanço; a última prática preserva “Voltar às aulas” e os botões
 de aula anterior/próxima. Um teste pontual lê os dois fluxos publicados e o contrato do player.
+
+# Cartão da tática rating virou convite — 18/9/2026
+
+Sem aumentar a estrutura do cartão, a entrada do modo rating ganhou uma ilustração de curva em
+alta, borda do método, convite “Aceite o desafio”, a promessa de superar o próprio recorde e a
+ação explícita “Jogar agora”. Para quem já jogou, o ícone e o título “Seu desafio” reforçam a
+continuidade sem esconder o rating nem a evolução.
