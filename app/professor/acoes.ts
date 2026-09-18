@@ -1,6 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { problemaParaExcluir, problemaParaNovoPin, type ContaAlvo } from "@/lib/auth/gerir-conta";
 import { professorAtual } from "@/lib/auth/perfil";
 import {
   emailDoUsuario,
@@ -10,7 +12,7 @@ import {
   sortearPin,
 } from "@/lib/auth/usuario";
 import { criarClienteAdmin } from "@/lib/supabase/admin";
-import { ehTurma, NOME_DA_TURMA } from "@/lib/turma/turma";
+import { ehIdDeConta, ehTurma, NOME_DA_TURMA } from "@/lib/turma/turma";
 
 export type EstadoDoCadastro = {
   erro?: string;
@@ -88,4 +90,59 @@ export async function criarAluno(
 
   revalidatePath("/professor");
   return { criado: { nome, usuario, pin, turma: NOME_DA_TURMA[turma] } };
+}
+
+export type EstadoDaConta = { erro?: string; pinNovo?: string };
+
+/** A conta que o formulário aponta, lida com a chave de serviço — ou `null`. */
+async function contaDoFormulario(dados: FormData): Promise<ContaAlvo | null> {
+  const id = String(dados.get("id") ?? "");
+  if (!ehIdDeConta(id)) return null;
+  const { data, error } = await criarClienteAdmin().from("perfis").select("id, usuario, papel").eq("id", id).maybeSingle();
+  if (error) throw new Error(`não foi possível ler a conta: ${error.message}`);
+  return data;
+}
+
+/**
+ * Gera um PIN novo para o aluno que esqueceu o dele. Como no cadastro, o PIN volta em claro
+ * **uma vez só**; o antigo deixa de valer na hora. Em branco, o PIN é sorteado.
+ */
+export async function gerarNovoPin(_anterior: EstadoDaConta, dados: FormData): Promise<EstadoDaConta> {
+  await professorAtual();
+
+  const conta = await contaDoFormulario(dados);
+  const problema = problemaParaNovoPin(conta);
+  if (problema || !conta) return { erro: problema ?? "Essa conta não existe mais." };
+
+  const pin = String(dados.get("pin") ?? "").trim() || sortearPin();
+  const problemaPin = problemaDoPin(pin);
+  if (problemaPin) return { erro: `PIN: ${problemaPin}.` };
+
+  const { error } = await criarClienteAdmin().auth.admin.updateUserById(conta.id, { password: pin });
+  if (error) return { erro: `O Supabase recusou: ${error.message}` };
+  return { pinNovo: pin };
+}
+
+/**
+ * Exclui a conta do aluno **e tudo o que é dele no banco** — sem lixeira. As regras e o porquê
+ * de o apagamento ir junto estão em `lib/auth/gerir-conta.ts`.
+ */
+export async function excluirConta(_anterior: EstadoDaConta, dados: FormData): Promise<EstadoDaConta> {
+  const professor = await professorAtual();
+
+  const conta = await contaDoFormulario(dados);
+  const problema = problemaParaExcluir(conta, professor.id, String(dados.get("confirmacao") ?? ""));
+  if (problema || !conta) return { erro: problema ?? "Essa conta não existe mais." };
+
+  const admin = criarClienteAdmin();
+  const { error } = await admin.auth.admin.deleteUser(conta.id);
+  if (error) return { erro: `O Supabase recusou: ${error.message}` };
+
+  // O cascade é do banco; aqui só se confere que ele aconteceu, em vez de supor.
+  const { data: sobrou } = await admin.from("perfis").select("id").eq("id", conta.id).maybeSingle();
+  if (sobrou) return { erro: "O login da conta foi apagado, mas o perfil ficou no banco. O aluno já não entra; os dados dele continuam lá." };
+
+  revalidatePath("/professor");
+  revalidatePath("/turma");
+  redirect("/professor");
 }

@@ -44,6 +44,7 @@ import { linhasDeTentativas, progressoPorTema, PUZZLES_POR_TEMA, soOServivel, te
 import { filaCompleta, INTERVALOS_DA_REVISAO } from "@/lib/tatica/revisao";
 import { evolucaoDoAluno } from "@/lib/tatica/rating-leitura";
 import { EvolucaoDoRating } from "@/components/tatica/EvolucaoDoRating";
+import { GerirConta } from "./GerirConta";
 
 /**
  * O relatório de um aluno — a tela que o professor abre antes da conversa.
@@ -600,6 +601,7 @@ export default async function RelatorioDoAluno({ params }: PageProps<"/professor
         </div>
       </section>
 
+      <GerirConta id={aluno.id} nome={aluno.nome} usuario={aluno.usuario} />
     </main>
   );
 }
