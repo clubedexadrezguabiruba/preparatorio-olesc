@@ -14,6 +14,7 @@ import { Chess, type Square } from "chess.js";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Color, Key } from "@lichess-org/chessground/types";
 import { BotaoDeSom } from "@/components/BotaoDeSom";
+import { ExplicacaoDaEtapa } from "@/components/tatica/ExplicacaoDaEtapa";
 import { Celebracao, useCelebracao } from "@/components/Celebracao";
 import { ChessBoard } from "@/components/board/ChessBoard";
 import { PromotionPicker, type PromotionChoice } from "@/components/board/PromotionPicker";
@@ -449,6 +450,9 @@ export function Serie({
                 ? ` · tema ${feitosNoTema + indice + 1}/${totalNoTema}`
                 : ""}
             </p>
+            {etapa === "aquecimento" || etapa === "serie" || etapa === "prova" ? (
+              <ExplicacaoDaEtapa etapa={etapa} />
+            ) : null}
             <BotaoDeSom />
           </div>
         </div>

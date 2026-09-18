@@ -7863,3 +7863,11 @@ O nome global da aula B deixou de tratar toda resposta inferior como erro: agora
 e punições”. A capa da seção também usa esse nome e “como responder”. Escocesa, Francesa e
 Siciliana foram republicadas; os capítulos continuam separados pela medição já registrada:
 “Golpe” ou “Armadilha” apenas com vantagem próxima ou superior a +2, e “Imprecisão” abaixo disso.
+
+# Tática explica Aquecimento, Série e Prova — 18/9/2026
+
+Ao entrar pela primeira vez em cada uma das três etapas de um tema, o aluno precisa confirmar uma
+explicação curta antes de começar. Aquecimento apresenta os 5 problemas mais fáceis; Série explica
+os 24 problemas em dificuldade crescente; Prova deixa claro que mistura o tema atual com temas já
+estudados para treinar o reconhecimento sem pista, como numa partida. Depois da primeira leitura,
+a janela não abre sozinha e o ícone “?” no cabeçalho permite reler a explicação quando quiser.
