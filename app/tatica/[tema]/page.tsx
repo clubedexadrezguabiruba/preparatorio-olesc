@@ -1,12 +1,13 @@
 import { VistaDoTabuleiro } from "@/components/atalhos/Atalhos";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { EmTeste } from "@/components/tatica/CartaoDoTema";
 import { BLOCOS, contaNoCurso, temaPorTag } from "@/lib/tatica/blocos";
 import { temaAberto, temaEscrito } from "@/lib/tatica/conteudo";
 import { escolherPuzzles } from "@/lib/tatica/escolher";
+import { temaLiberado } from "@/lib/tatica/ordem";
 import {
   linhasDoTema,
   progressoPorTema,
@@ -61,6 +62,8 @@ export default async function Tema({ params }: PageProps<"/tatica/[tema]">) {
   }
 
   const todosOsProgressos = await progressoPorTema();
+  const feitosPorTema = new Map([...todosOsProgressos].map(([t, p]) => [t, p.feitos]));
+  if (!temaLiberado(tag, feitosPorTema, perfil.papel === "professor")) redirect("/tatica");
   const progresso = todosOsProgressos.get(tag) ?? temaZerado();
   const etapa = etapaAtual(progresso.feitos);
 

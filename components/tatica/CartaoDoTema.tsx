@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { SeloDoGrau } from "@/components/progresso/SeloDoGrau";
 import { NOME_DO_GRAU, type Grau } from "@/lib/progresso/grau";
-import { podeAbrir, temaFechado, type Nivel, type Situacao } from "@/lib/curso/nivel";
+import { temaFechado, type Nivel } from "@/lib/curso/nivel";
 import type { Tema } from "@/lib/tatica/blocos";
+import type { EstadoDoTema } from "@/lib/tatica/ordem";
 import type { ProgressoDoTema } from "@/lib/tatica/progresso";
 import { ETAPAS, etapaAtual, METAS, NOME_DA_ETAPA, PUZZLES_POR_TEMA } from "@/lib/tatica/serie";
 import { COR_DO_NIVEL, SeloDoTema } from "./SeloDoTema";
@@ -18,10 +19,8 @@ import { COR_DO_NIVEL, SeloDoTema } from "./SeloDoTema";
  * - **Fechado** é `temaFechado`, a mesma régua do painel e dos selos: as três
  *   etapas acabaram. Sem piso de acerto, pelo motivo escrito lá.
  *
- * As três situações de `situacaoDoItem`: `aberto` é `cartao-alvo`; `adiante`
- * continua clicável e tracejado (adiantar é do aluno), com "Pode adiantar" — o
- * nível já está no título da seção, e "Nível 2 — você está no 1" repetido em
- * trinta cartões quebrava a linha e virava ruído; `em-escrita` é o único que
+ * O estado vem da corrente (`lib/tatica/ordem.ts`, 18/9/2026): os temas abrem em
+ * ordem, e o trancado é tracejado, com cadeado e sem link. `em-escrita` também
  * fecha a porta — sem texto escrito não há o que abrir.
  *
  * ## A ilustração e o metal (Doug, 16/9)
@@ -30,11 +29,10 @@ import { COR_DO_NIVEL, SeloDoTema } from "./SeloDoTema";
  * progresso na moldura. A **borda do cartão** é do metal — Madeira, Ferro,
  * Bronze, Prata, Ouro —, então a página se lê de longe como uma escalada. O
  * concluído, que antes tinha borda verde, agora é o ✓ no canto do selo: a borda
- * já tem dono. O tracejado do adiante continua, na cor do metal.
+ * já tem dono. O tracejado do trancado é na cor do metal.
  *
  * `destaque` é o "Continue de onde parou" do topo: largo, com borda do método e
- * o botão "Continuar", tracejado nunca — mesmo quando o tema é de nível adiante,
- * ali ele é o próximo passo, e não um desvio.
+ * o botão "Continuar".
  *
  * O tema **em teste** (`Tema.emTeste`) ganha a pastilha âmbar "Em teste" ao lado
  * do nome: ele está aberto, mas não conta para nada.
@@ -48,14 +46,15 @@ import { COR_DO_NIVEL, SeloDoTema } from "./SeloDoTema";
 export function CartaoDoTema({
   tema,
   progresso,
-  situacao,
+  estado,
   nivel,
   destaque = false,
   grau,
 }: {
   tema: Tema;
   progresso: ProgressoDoTema;
-  situacao: Situacao;
+  /** O estado na corrente (`lib/tatica/ordem.ts`), ou `em-escrita` para o tema sem texto. */
+  estado: EstadoDoTema | "em-escrita";
   /** O nível do bloco do tema — a cor do metal. */
   nivel: Nivel;
   destaque?: boolean;
@@ -63,19 +62,25 @@ export function CartaoDoTema({
   grau?: Grau;
 }) {
   const cor = COR_DO_NIVEL[nivel];
-  if (!podeAbrir(situacao)) {
+  if (estado === "em-escrita" || estado === "trancado") {
     return (
       <li className={`flex h-full items-center gap-3 cartao-vazio px-4 py-3 ${cor.borda}`}>
         <SeloDoTema tag={tema.tag} nivel={nivel} feitos={0} de={PUZZLES_POR_TEMA} />
         <div className="flex min-w-0 flex-col gap-0.5">
           <p className="text-sm font-semibold text-tinta-fraca">{tema.nome}</p>
-          <p className="text-xs text-tinta-fraca">Este tema ainda não foi escrito.</p>
+          {estado === "trancado" ? (
+            <p className="flex items-center gap-1.5 text-xs text-tinta-fraca">
+              <IconeCadeado />
+              Abre quando você concluir o tema anterior.
+            </p>
+          ) : (
+            <p className="text-xs text-tinta-fraca">Este tema ainda não foi escrito.</p>
+          )}
         </div>
       </li>
     );
   }
 
-  const adiante = situacao === "adiante" && !destaque;
   const fechado = temaFechado(progresso.feitos);
   const feitos = ETAPAS.reduce((soma, etapa) => soma + Math.min(progresso.feitos[etapa], METAS[etapa]), 0);
   const etapa = etapaAtual(progresso.feitos);
@@ -83,24 +88,20 @@ export function CartaoDoTema({
 
   const onde = fechado
     ? "Concluído"
-    : adiante && feitos === 0
-      ? "Pode adiantar"
-      : feitos === 0 || etapa === null
-        ? "Começar"
-        : `${NOME_DA_ETAPA[etapa]} · ${Math.min(progresso.feitos[etapa], METAS[etapa])} de ${METAS[etapa]}`;
+    : feitos === 0 || etapa === null
+      ? "Começar"
+      : `${NOME_DA_ETAPA[etapa]} · ${Math.min(progresso.feitos[etapa], METAS[etapa])} de ${METAS[etapa]}`;
 
   return (
     <li className="h-full">
       <Link
         href={`/tatica/${tema.tag}`}
         aria-label={`${tema.nome}${tema.emTeste ? " (em teste)" : ""}: ${feitos} de ${PUZZLES_POR_TEMA} puzzles${acerto === null ? "" : `, ${acerto}% de acerto`}. ${onde}.${grau !== undefined && (grau > 0 || progresso.tentativas > 0) ? ` Grau ${NOME_DO_GRAU[grau]}.` : ""}`}
-        className={`foco flex h-full gap-3 ${destaque ? "flex-wrap items-center px-4 py-4 sm:flex-nowrap sm:px-5" : "px-4 py-3.5"} ${
-          adiante ? "cartao-vazio transition-colors hover:bg-carta-toque" : "cartao-alvo"
-        } ${cor.borda}`}
+        className={`foco flex h-full gap-3 ${destaque ? "flex-wrap items-center px-4 py-4 sm:flex-nowrap sm:px-5" : "px-4 py-3.5"} cartao-alvo ${cor.borda}`}
       >
         <SeloDoTema tag={tema.tag} nivel={nivel} feitos={feitos} de={PUZZLES_POR_TEMA} tamanho={destaque ? 72 : 64} />
         <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <p className={`${destaque ? "text-base" : "text-sm"} leading-snug font-semibold ${adiante ? "text-tinta-media" : "text-tinta"}`}>
+          <p className={`${destaque ? "text-base" : "text-sm"} leading-snug font-semibold text-tinta`}>
             {tema.nome}
             {tema.emTeste ? (
               <>
@@ -116,7 +117,7 @@ export function CartaoDoTema({
           <p className="mt-auto flex flex-col pt-1 text-xs tabular-nums">
             <span
               className={
-                fechado ? "font-medium text-metodo-tinta" : feitos > 0 && !adiante ? "font-medium text-tinta-media" : "text-tinta-fraca"
+                fechado ? "font-medium text-metodo-tinta" : feitos > 0 ? "font-medium text-tinta-media" : "text-tinta-fraca"
               }
             >
               {onde}
@@ -141,6 +142,15 @@ export function CartaoDoTema({
         ) : null}
       </Link>
     </li>
+  );
+}
+
+function IconeCadeado() {
+  return (
+    <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden className="shrink-0">
+      <rect x="5" y="11" width="14" height="10" rx="2" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </svg>
   );
 }
 

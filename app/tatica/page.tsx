@@ -8,19 +8,11 @@ import { GraficoRating } from "@/components/tatica/GraficoRating";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { grausDosTemas } from "@/lib/progresso/tatica-banco";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
-import {
-  META_DA_OLESC,
-  METAL,
-  NIVEIS,
-  NIVEL,
-  nivelDoAluno,
-  podeAbrir,
-  situacaoDoItem,
-  temaFechado,
-} from "@/lib/curso/nivel";
+import { META_DA_OLESC, METAL, NIVEIS, NIVEL, nivelDoAluno, temaFechado } from "@/lib/curso/nivel";
 import { nivelConquistado } from "@/lib/curso/progresso";
 import { BLOCOS, contaNoCurso } from "@/lib/tatica/blocos";
 import { temaAberto } from "@/lib/tatica/conteudo";
+import { estadoDosTemas } from "@/lib/tatica/ordem";
 import { progressoPorTema, temaZerado } from "@/lib/tatica/progresso";
 import { INICIO } from "@/lib/tatica/glicko2";
 import { formatarDelta, PROBLEMAS_POR_DIA, type EstadoDoRating } from "@/lib/tatica/rating";
@@ -30,17 +22,11 @@ import { ratingDoAluno, tentativasDoRating } from "@/lib/tatica/rating-leitura";
 export const metadata: Metadata = { title: "Tática — Preparatório OLESC" };
 
 /**
- * ## A pastilha trancada era código morto, e agora diz outra coisa
+ * ## Os temas abrem em ordem (Doug, 18/9/2026)
  *
- * Até 2026-09-09 ela dizia *"Abre no Sábado 2"*, e nunca aparecia: os 36 temas
- * já estavam todos escritos, então `temaAberto()` devolvia `true` para todos e
- * este ramo nunca rodava. Era um portão desenhado numa parede sem porta.
- *
- * Hoje o cartão diz **"Pode adiantar"** (o nível está no título da seção), e o
- * tema **continua clicável**.
- * A trava é mole de propósito (`TRANCA_DURA` em `lib/curso/nivel.ts`): o nível
- * governa o que o site recomenda, não o que ele permite. O tracejado é o que
- * diz "isto é adiantar", e adiantar é do aluno.
+ * Como as aulas de abertura: fechar um tema abre o próximo (`lib/tatica/ordem.ts`).
+ * O nível não tranca a tática — a corrente vai até o último tema. O trancado é
+ * tracejado, com cadeado e sem link; a URL dele redireciona para cá.
  *
  * ## Cartões, e não lista (Doug, 16/9)
  *
@@ -66,12 +52,19 @@ export default async function Tatica() {
   const feitos = [...progresso.values()].reduce((s, p) => s + p.tentativas, 0);
   const certos = [...progresso.values()].reduce((s, p) => s + p.certos, 0);
 
-  const situacaoDe = (nivelDoBloco: (typeof BLOCOS)[number]["nivel"], tag: string) =>
-    situacaoDoItem(nivelDoBloco, nivel, temaAberto(tag));
+  // A corrente (18/9/2026): fechar um tema abre o próximo. Tema fora dela — em teste — fica aberto.
+  const corrente = estadoDosTemas(
+    new Map([...progresso].map(([tag, p]) => [tag, p.feitos])),
+    perfil.papel === "professor",
+  );
+  const estadoDe = (tag: string) => (temaAberto(tag) ? (corrente.get(tag) ?? "aberto") : "em-escrita");
 
   // O tema tocado por último que ainda não fechou — o "de onde parou".
   const continuar = BLOCOS.flatMap((bloco) => bloco.temas.map((tema) => ({ bloco, tema, p: progresso.get(tema.tag) })))
-    .filter(({ bloco, tema, p }) => p?.ultima && !temaFechado(p.feitos) && podeAbrir(situacaoDe(bloco.nivel, tema.tag)))
+    .filter(({ tema, p }) => {
+      const estado = estadoDe(tema.tag);
+      return p?.ultima && !temaFechado(p.feitos) && estado !== "trancado" && estado !== "em-escrita";
+    })
     .sort((a, b) => (b.p!.ultima! > a.p!.ultima! ? 1 : -1))[0];
 
   return (
@@ -111,7 +104,7 @@ export default async function Tatica() {
                 tema={continuar.tema}
                 progresso={continuar.p ?? temaZerado()}
                 grau={graus.get(continuar.tema.tag)?.grau ?? 0}
-                situacao={situacaoDe(continuar.bloco.nivel, continuar.tema.tag)}
+                estado={estadoDe(continuar.tema.tag)}
                 nivel={continuar.bloco.nivel}
                 destaque
               />
@@ -200,7 +193,7 @@ export default async function Tatica() {
                             tema={tema}
                             progresso={progresso.get(tema.tag) ?? temaZerado()}
                             grau={graus.get(tema.tag)?.grau ?? 0}
-                            situacao={situacaoDe(bloco.nivel, tema.tag)}
+                            estado={estadoDe(tema.tag)}
                             nivel={bloco.nivel}
                           />
                         ))}
@@ -214,9 +207,9 @@ export default async function Tatica() {
         })}
 
         <p className="max-w-prose text-xs text-tinta-fraca">
-          Os puzzles vêm do banco público do Lichess (CC0), recortados por tema e por faixa de rating. As faixas FIDE são
-          aproximadas — <strong>nada aqui é trancado por elas</strong>, e um tema de um nível adiante do seu continua
-          clicável.
+          Os puzzles vêm do banco público do Lichess (CC0), recortados por tema e por faixa de rating. Os temas abrem em
+          ordem: <strong>fechar um tema abre o próximo</strong> — aquecimento, série e prova. As faixas FIDE são
+          aproximadas.
         </p>
       </Moldura>
     </>
