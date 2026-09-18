@@ -1452,6 +1452,26 @@ a.trilha-no:active {
   background: var(--color-metodo-cheio);
 }
 
+/* O botão da próxima aula no cartão "Suas aulas" de `/finais`: o verde do
+   balão, com o mesmo lábio — afunda quando o cartão inteiro é apertado. */
+.finais-botao {
+  display: block;
+  border-radius: 0.75rem;
+  background: var(--color-metodo-cheio);
+  color: var(--color-tinta-inversa);
+  box-shadow: 0 4px 0 color-mix(in oklab, var(--color-metodo-cheio) 45%, black);
+  transition:
+    transform 120ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 120ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+a:hover > .finais-botao {
+  background: var(--color-metodo-cheio-toque);
+}
+a:active > .finais-botao {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 color-mix(in oklab, var(--color-metodo-cheio) 45%, black);
+}
+
 /* Os degraus da escada ao lado: um bloco por nível, cada um mais alto. */
 .escada-degrau {
   border: 2px solid var(--metal-borda);

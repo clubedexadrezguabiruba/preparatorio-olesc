@@ -205,7 +205,7 @@ export default async function Trilha() {
             })}
           </div>
 
-          <aside className="hidden flex-col gap-6 lg:sticky lg:top-6 lg:flex">
+          <aside className="hidden flex-col gap-6 lg:sticky lg:top-16 lg:flex">
             <Escada aqui={aqui} conquistado={conquistado} />
           </aside>
         </div>

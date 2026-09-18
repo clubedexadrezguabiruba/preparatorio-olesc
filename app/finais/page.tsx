@@ -3,69 +3,72 @@ import Link from "next/link";
 import { Barra } from "@/components/Barra";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Moldura } from "@/components/Moldura";
-import { Bolinhas } from "@/components/Bolinhas";
-import { SeloDoGrau } from "@/components/progresso/SeloDoGrau";
-import { grauDaAulaDeFinais } from "@/lib/progresso/grau";
+import { DegrausDoGrau } from "@/components/progresso/SeloDoGrau";
+import { IconeDoSelo } from "@/components/selos/Medalha";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { editorLigado } from "@/lib/editor/local";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
+import { estadoParaONivel } from "@/lib/curso/estado";
+import { montarMapa, type ItemDoNivel } from "@/lib/curso/mapa";
+import { NIVEIS, nivelDoAluno, prontoParaProva, type Nivel } from "@/lib/curso/nivel";
+import { nivelConquistado } from "@/lib/curso/progresso";
+import { grauDaAulaDeFinais, type Grau } from "@/lib/progresso/grau";
 import { aulasComPratica, aulasExtras, aulasPublicadas, indiceDeAulas } from "@/lib/finais/conteudo";
-import { DEGRAU_APRENDIDA } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import {
   AULA_ZERADA,
   aulasAbertas,
-  CLASSE,
-  CLASSES,
   aprendidasDaTrilha,
-  daClasse,
-  estadoDaAula,
   proximaAula,
-  TRILHA,
   trilhaCompleta,
-  type AulaDaTrilha,
-  type EstadoDeAula,
-  type ProgressoDaAula,
 } from "@/lib/finais/trilha";
+import { Caminho, type Trofeu } from "../trilha/Caminho";
+import { Escada } from "../trilha/Escada";
+import { FaixaDoNivel, Seta } from "../trilha/Faixa";
+import { RolarAteOProximo } from "../trilha/RolarAteOProximo";
+import { trofeuDoNivel } from "../trilha/trofeu";
 
 /**
- * A trilha de finais na tela: quatro classes, e em cada uma as 49 aulas, com o
- * estado do aluno em cada uma.
+ * O curso de finais na tela: os cinco níveis, e em cada um o caminho das aulas.
  *
  * ## O que a tela **não** decide
  *
- * Nada. Quais aulas existem, em que classe, em que formato e em que nível é
- * `lib/finais/trilha.ts`; o que passou pelo gate é o `status` do
- * arquivo; o que o aluno fez é `lib/finais/progresso.ts`; e o que "dominada"
- * quer dizer em cada formato é `dominou()`. Esta página junta as quatro coisas
- * e as desenha — é o mesmo desenho de `/tatica`, e é o que impede a trilha de
- * dizer 6 e o painel dizer 5 com o aluno na frente.
+ * Nada. Quais aulas existem e em que nível é `lib/finais/trilha.ts`; o que
+ * passou pelo gate é o `status` do arquivo; o que o aluno fez é
+ * `lib/finais/progresso.ts`; o que "aprendida" quer dizer é `aprendeu()`; e o
+ * que cada item do caminho é, `montarMapa` — o mesmo mapa da `/trilha`, então
+ * as duas páginas não podem discordar sobre uma aula.
+ *
+ * ## O caminho do Duolingo, como a `/trilha` (17/9/2026)
+ *
+ * Eram quatro listas de cartões, uma por classe USCF (E a B). Virou o desenho
+ * da `/trilha` com só as aulas de finais: cada nível é uma faixa do seu metal
+ * (Madeira a Ouro), as aulas são medalhões em onda, e o fim do nível é o troféu
+ * da prova. Ao lado, a escada dos cinco níveis com o "você". A classe saiu da
+ * tela: ela não cabe nos cinco níveis (o corte do mapa já é o `nivel` da aula),
+ * e duas réguas de força na mesma página o aluno de doze anos não converte.
+ *
+ * O que cada nó tem a mais que na `/trilha` é o **grau** da aula, embaixo do
+ * nome — Aprendiz a Mestre, a escadinha que sobe com a prática vencida e desce
+ * com a revisão perdida. É o "subir e descer os degraus" da aula; o medalhão
+ * aceso é o "aprendida", que não volta.
  *
  * ## A trilha inteira aparece — decisão revista na F2
  *
- * Até aqui esta lista mostrava só o que estava aberto, com o argumento de que
- * 39 cartões cinzas ensinam a criança a medir o que falta. A turma real
- * respondeu o contrário: o aluno quer **saber o que vem depois**, e um curso
- * que esconde o próprio tamanho não deixa ninguém planejar o mês. Então as 49
- * aparecem, numeradas, por classe de força, e cada uma diz em que estado está.
+ * O aluno quer **saber o que vem depois**: as 49 aparecem, e a que não existe
+ * em disco fica com o cadeado e "em escrita". A barra do topo continua contando
+ * sobre as **publicadas** — medir o aluno contra 49 aulas quando existe uma
+ * seria dizer-lhe que ele está em 2%.
  *
- * O que **não** mudou: a barra de progresso conta sobre as **publicadas**.
- * Medir o aluno contra 49 aulas quando existe uma seria dizer-lhe que ele está
- * em 2%.
+ * ## Os níveis longe do aluno começam fechados
  *
- * ## O sábado saiu daqui em 2026-09-09
- *
- * A aula fechada tinha dois motivos — "abre no Sábado 3" e "em escrita" — e o
- * primeiro nunca chegou a valer: `/finais/[aula]` não checava semana nenhuma, e
- * o cadeado só existia nesta lista. Com a data fora do portão sobrou um motivo
- * só, e ele é o que sempre foi verdade: a aula não existe em disco.
+ * A regra da `/trilha`: abertos ficam o nível do aluno, o seguinte e o do
+ * próximo passo. É um `<details>`, e a faixa continua dizendo o que tem dentro.
  *
  * ## A bancada do professor
  *
  * O rascunho continua alcançável, mas só para quem publica: é nele que o Doug
- * revisa a aula no celular antes do sábado, e é dessa revisão que sai o número
- * de horas por aula que dimensiona as fases seguintes. Para o aluno, rascunho
- * não existe.
+ * revisa a aula no celular antes do sábado. Para o aluno, rascunho não existe.
  */
 
 export const metadata: Metadata = { title: "Finais — Preparatório OLESC" };
@@ -75,17 +78,58 @@ export default async function Finais() {
 
   const publicadas = aulasPublicadas();
   const comPratica = aulasComPratica();
-  // As aulas extras publicadas (§22 do Editor v2) entram na classe e no nível que declaram.
+  // As aulas extras publicadas (§22 do Editor v2) entram no nível que declaram.
   const extras = aulasExtras();
   const trilha = trilhaCompleta(extras);
   const abertas = aulasAbertas(publicadas, extras);
-  const idsAbertos = new Set(abertas.map((a) => a.id));
-  const [progresso, cabecalho] = await Promise.all([
+
+  const [progresso, conquistado, cabecalho, estado] = await Promise.all([
     progressoDeFinais(perfil.id),
+    nivelConquistado(perfil.id),
     dadosDoCabecalho(perfil.id),
+    estadoParaONivel(perfil.id),
   ]);
+  const aqui = nivelDoAluno(conquistado);
+  const pronto = prontoParaProva(estado);
   const feitas = aprendidasDaTrilha(abertas, progresso, comPratica);
   const proxima = proximaAula(abertas, progresso, comPratica);
+
+  const mapa = montarMapa({
+    // A tática não entra nesta página: o mapa só precisa dela para os itens que descartamos.
+    tatica: new Map(),
+    temaAberto: () => false,
+    finais: progresso,
+    aulasPublicadas: publicadas,
+    aulasComPratica: comPratica,
+    nivelDoAluno: aqui,
+    extras,
+  });
+  const caminhos = new Map<Nivel, readonly ItemDoNivel[]>(
+    NIVEIS.map((n) => [n, (mapa.get(n) ?? []).find((m) => m.modulo === "finais")?.itens ?? []]),
+  );
+
+  // O grau de hoje de cada aula tocada; a intocada é Novato, e o caminho não o escreve.
+  const graus = new Map<string, Grau>(
+    trilha.map((a) => [a.id, grauDaAulaDeFinais(comPratica.has(a.id), progresso.get(a.id) ?? AULA_ZERADA)]),
+  );
+
+  const trofeus = new Map<Nivel, Trofeu>(
+    NIVEIS.map((n) => [n, trofeuDoNivel(n, conquistado, pronto, estado)]),
+  );
+
+  // Um próximo passo só: a primeira aula aberta e por aprender; sem nenhuma, a prova pronta.
+  let proximo: { nivel: Nivel; id: string } | null = null;
+  for (const n of NIVEIS) {
+    const item = caminhos.get(n)!.find((i) => i.situacao === "aberto" && i.feitos < i.total);
+    if (item) {
+      proximo = { nivel: n, id: item.id };
+      break;
+    }
+    if (trofeus.get(n)!.estado === "pronto") {
+      proximo = { nivel: n, id: "trofeu" };
+      break;
+    }
+  }
 
   const naTrilha = new Set(trilha.map((a) => a.id));
   // O editor não existe em produção, e o link para ele também não. A conta é a
@@ -96,267 +140,212 @@ export default async function Finais() {
       ? indiceDeAulas().filter((a) => !abertas.some((aberta) => aberta.id === a.id))
       : [];
 
+  // A próxima aula, no metal do nível dela. "Continuar" pela mesma regra do balão do caminho.
+  const acao = proxima && (graus.get(proxima.id) ?? 0) > 0 ? "Continuar" : "Começar";
+
+  // Desenhado duas vezes (celular em cima, desktop ao lado), então o id leva o lugar.
+  const resumo = (onde: string) => (
+    <section aria-labelledby={`suas-aulas-${onde}`} className="flex flex-col gap-4 cartao px-4 py-4">
+      <div className="flex flex-col gap-2">
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 id={`suas-aulas-${onde}`} className="text-base font-semibold text-tinta">
+            Suas aulas
+          </h2>
+          {abertas.length > 0 ? (
+            <p className="text-sm text-tinta-media tabular-nums">
+              <span className="font-serif text-2xl leading-none font-semibold text-tinta">{feitas.size}</span>
+              <span className="text-tinta-fraca"> de {abertas.length}</span>
+            </p>
+          ) : null}
+        </div>
+        {abertas.length > 0 ? (
+          <>
+            <Barra
+              feitos={feitas.size}
+              de={abertas.length}
+              tom={feitas.size === abertas.length ? "completo" : "metodo"}
+            />
+            <p className="text-xs text-tinta-fraca">
+              {feitas.size === 0
+                ? acao === "Começar"
+                  ? "Nenhuma aprendida ainda. Comece pela primeira!"
+                  : "Nenhuma aprendida ainda."
+                : feitas.size === 1
+                  ? "Aula aprendida."
+                  : "Aulas aprendidas."}
+            </p>
+          </>
+        ) : (
+          <p className="text-sm text-tinta-media">
+            Nenhuma aula foi publicada ainda. O caminho é o curso inteiro, e ele vai acendendo.
+          </p>
+        )}
+      </div>
+
+      {proxima ? (
+        <Link
+          href={`/finais/${proxima.id}`}
+          aria-label={`${acao}: ${proxima.nome}`}
+          className="foco group flex flex-col gap-3 rounded-2xl border border-borda bg-papel/40 p-3 transition-colors hover:bg-carta-toque"
+        >
+          <span className="flex items-center gap-3">
+            <span
+              aria-hidden
+              className={`trilha-no metal-${proxima.nivel} shrink-0`}
+              style={{ "--lado": "2.75rem" } as React.CSSProperties}
+            >
+              <IconeDoSelo familia="finais" tamanho={22} />
+            </span>
+            <span className="text-sm leading-snug font-semibold text-pretty text-tinta">{proxima.nome}</span>
+          </span>
+          <span aria-hidden className="finais-botao py-2 text-center text-sm font-bold tracking-wide uppercase">
+            {acao}
+          </span>
+        </Link>
+      ) : abertas.length > 0 ? (
+        <p className="text-sm text-metodo-tinta">
+          Você aprendeu tudo o que já foi publicado. O curso continua sendo escrito.
+        </p>
+      ) : null}
+
+      <p className="flex items-center gap-2.5 border-t border-borda-fraca pt-3 text-xs text-tinta-fraca">
+        <DegrausDoGrau grau={0} />
+        <span>O grau de cada aula sobe quando você vence a prática e desce se perder a revisão.</span>
+      </p>
+    </section>
+  );
+
   return (
     <>
-      <Cabecalho atual="finais" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} />
-      <Moldura largura="painel" barraInferior>
-      <header className="flex flex-col gap-2">
-        <h1 className="titulo text-tinta">Curso de finais</h1>
-        {/*
-          * **Esta frase era falsa, e voltou a ser verdadeira.**
-          *
-          * Ela promete "um exemplo animado" desde sempre. Em 8/9/2026 a animação
-          * saiu do formato das aulas e ninguém mexeu aqui: por um dia o índice
-          * prometeu ao aluno uma coisa que nenhuma aula fazia. A etapa 1 voltou a
-          * animar (ver `ObjectiveStage`), e a promessa voltou a se cumprir — o
-          * que ela precisava era de redação nova, não de remoção.
-          */}
-        <p className="text-sm text-tinta-media">
-          Cada aula mostra a técnica jogada no tabuleiro e depois devolve as peças para
-          você. As aulas vêm em classes de força: comece pela E e suba.
-        </p>
-      </header>
+      <Cabecalho atual="finais" nivel={cabecalho.nivel} sequencia={cabecalho.sequencia} largura="larga" />
+      <Moldura largura="larga" barraInferior>
+        <header className="flex flex-col gap-2">
+          <h1 className="titulo text-tinta">Curso de finais</h1>
+          {/* A frase do topo, no mesmo desenho da `/trilha` (Kasparov lá, Capablanca aqui):
+              ouvir de um campeão mundial que o final vem antes de tudo vale mais que instrução. */}
+          <figure className="flex max-w-prose flex-col gap-1">
+            <blockquote className="font-serif text-lg leading-snug text-tinta-media italic">
+              “Para melhorar o seu jogo, você precisa estudar os finais antes de tudo.”
+            </blockquote>
+            <figcaption className="text-xs text-tinta-fraca">
+              José Raúl Capablanca, campeão mundial
+            </figcaption>
+          </figure>
+        </header>
 
-      {/* Sem aula publicada, o aviso substitui a barra — mas a lista das 49
-          continua embaixo. É justamente quando o aluno mais quer ver o que vem. */}
-      {abertas.length === 0 ? (
-        <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
-          Nenhuma aula de finais foi publicada ainda. A lista abaixo é o curso inteiro, e
-          ela vai enchendo.
-        </p>
-      ) : (
-        <section className="flex flex-col gap-2 cartao px-4 py-3">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-            <span className="rotulo text-tinta-fraca">Aulas aprendidas</span>
-            <span className="text-sm text-tinta-media tabular-nums">
-              {feitas.size} de {abertas.length} publicadas
-            </span>
-          </div>
-          <Barra
-            feitos={feitas.size}
-            de={abertas.length}
-            tom={feitas.size === abertas.length ? "completo" : "metodo"}
-          />
-          {proxima ? (
-            <p className="text-xs text-tinta-fraca">
-              Próxima da trilha: <span className="text-tinta-media">{proxima.nome}</span>
-            </p>
-          ) : (
-            <p className="text-xs text-metodo-tinta">
-              Você aprendeu tudo o que já foi publicado. O curso continua sendo escrito.
-            </p>
-          )}
-        </section>
-      )}
-
-      {CLASSES.map((classe) => {
-        // A classe inteira, aberta ou não: é o mapa do curso. A contagem ao
-        // lado continua sobre as abertas, que é o que dá para fazer hoje.
-        const aulas = daClasse(trilha, classe);
-        const abertasAqui = aulas.filter((a) => idsAbertos.has(a.id));
-        const aprendidasAqui = abertasAqui.filter((a) => feitas.has(a.id)).length;
-
-        return (
-          <section key={classe} className="flex flex-col gap-3">
-            <div className="flex flex-col gap-0.5">
-              <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-                <h2 className="rotulo text-tinta-fraca">
-                  {CLASSE[classe].nome} · {CLASSE[classe].faixa}
-                </h2>
-                <span className="text-xs text-tinta-fraca tabular-nums">
-                  {aprendidasAqui} de {abertasAqui.length} aprendidas
-                  {abertasAqui.length < aulas.length ? ` · ${aulas.length} no total` : ""}
-                </span>
-              </div>
-              <p className="text-sm text-tinta-media">{CLASSE[classe].resumo}</p>
+        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_17rem]">
+          <div className="flex min-w-0 flex-col gap-12">
+            <div className="flex flex-col gap-4 lg:hidden">
+              {resumo("celular")}
+              <Escada aqui={aqui} conquistado={conquistado} />
             </div>
 
-            <ul className="flex flex-col gap-2">
-              {aulas.map((aula) => (
-                <li key={aula.id}>
-                  {idsAbertos.has(aula.id) ? (
-                    <Cartao
-                      aula={aula}
-                      progresso={progresso.get(aula.id) ?? AULA_ZERADA}
-                      temPratica={comPratica.has(aula.id)}
-                    />
-                  ) : (
-                    <Fechado aula={aula} publicada={publicadas.has(aula.id)} />
-                  )}
-                </li>
-              ))}
-            </ul>
-          </section>
-        );
-      })}
-
-      <p className="rounded-lg bg-dica-superficie/12 px-3 py-2 text-sm text-dica-tinta">
-        São {TRILHA.length} aulas em quatro classes de força, e você vê todas: as que ainda não
-        abriram dizem quando abrem.{" "}
-        <Link href="/trilha" className="font-medium underline">
-          Veja a trilha do curso inteiro
-        </Link>{" "}
-        — tática e finais, por nível.
-      </p>
-
-      {comEditor ? (
-        <p className="text-sm text-tinta-media">
-          <Link href="/editor" className="foco underline">
-            Editar as aulas
-          </Link>{" "}
-          — só na sua máquina, em <code>npm run dev</code>.
-        </p>
-      ) : null}
-
-      {bancada.length > 0 ? (
-        <section className="flex flex-col gap-3">
-          <div className="flex flex-col gap-0.5">
-            <h2 className="rotulo text-tinta-fraca">Bancada do professor</h2>
-            <p className="text-sm text-tinta-media">
-              Aulas que o aluno ainda não enxerga: rascunho, ou publicada fora da trilha
-              das 49. Abrem normalmente por este link, e o que você jogar nelas grava.
-            </p>
-          </div>
-          <ul className="flex flex-col gap-2">
-            {bancada.map((aula) => (
-              <li key={aula.id}>
-                <Link
-                  href={`/finais/${aula.id}`}
-                  className="foco flex items-center gap-3 cartao-vazio px-4 py-3 transition-colors hover:bg-carta-toque"
+            {NIVEIS.map((nivel) => {
+              const aberto = nivel === aqui || nivel === aqui + 1 || proximo?.nivel === nivel;
+              const itens = caminhos.get(nivel)!;
+              return (
+                <section
+                  key={nivel}
+                  id={`nivel-${nivel}`}
+                  aria-labelledby={`titulo-nivel-${nivel}`}
+                  aria-current={aqui === nivel ? "step" : undefined}
+                  className="flex scroll-mt-6 flex-col gap-4"
                 >
-                  <div className="flex min-w-0 flex-1 flex-col gap-1">
-                    <p className="truncate text-sm font-medium text-tinta">{aula.titulo}</p>
-                    <p className="text-xs text-tinta-fraca tabular-nums">
-                      {aula.etapas} {aula.etapas === 1 ? "etapa" : "etapas"}
-                      {aula.status === "draft" ? " · rascunho" : " · publicada"}
-                      {naTrilha.has(aula.id) ? "" : " · fora da trilha"}
-                    </p>
-                  </div>
-                </Link>
-                {/* Irmão do link da aula, e não filho: link dentro de link é
-                    HTML inválido, e o leitor de tela anuncia um alvo só. */}
-                {comEditor ? (
-                  <Link
-                    // A aula extra só existe no Editor v2: o editor v1 responde 404 para `EX-`.
-                    href={aula.id.startsWith("EX-") ? `/editor/v2/finais/${aula.id}` : `/editor/finais/${aula.id}`}
-                    className="foco rotulo mt-1 inline-block px-4 text-tinta-fraca underline"
-                  >
-                    Editar
-                  </Link>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
+                  <FaixaDoNivel
+                    nivel={nivel}
+                    modulos={mapa.get(nivel) ?? []}
+                    voceEstaAqui={aqui === nivel}
+                    conquistado={nivel <= conquistado}
+                    mostrar={["finais"]}
+                  />
+                  <details open={aberto} className="group">
+                    <summary className="trilha-abrir foco mx-auto flex w-fit cursor-pointer list-none items-center gap-2 rounded-full border border-borda px-4 py-2 text-sm font-medium text-tinta-media transition-colors select-none hover:bg-carta-toque group-open:hidden">
+                      Ver o caminho
+                      <span className="text-tinta-fraca tabular-nums">
+                        · {itens.length} {itens.length === 1 ? "aula" : "aulas"} e a prova
+                      </span>
+                      <Seta />
+                    </summary>
+                    <Caminho
+                      nivel={nivel}
+                      itens={itens}
+                      trofeu={trofeus.get(nivel)!}
+                      proximo={proximo?.nivel === nivel ? proximo.id : null}
+                      graus={graus}
+                    />
+                  </details>
+                </section>
+              );
+            })}
+
+            <p className="max-w-prose text-sm text-tinta-media">
+              São {trilha.length} aulas nos cinco níveis, e você vê todas: a do cadeado ainda está
+              sendo escrita, e a tracejada é de um nível acima do seu — dá para adiantar.{" "}
+              <Link href="/trilha" className="foco font-medium text-metodo-tinta underline">
+                Veja a trilha do curso inteiro
+              </Link>{" "}
+              — tática e finais juntos.
+            </p>
+
+            {comEditor ? (
+              <p className="text-sm text-tinta-media">
+                <Link href="/editor" className="foco underline">
+                  Editar as aulas
+                </Link>{" "}
+                — só na sua máquina, em <code>npm run dev</code>.
+              </p>
+            ) : null}
+
+            {bancada.length > 0 ? (
+              <section className="flex flex-col gap-3">
+                <div className="flex flex-col gap-0.5">
+                  <h2 className="text-base font-semibold text-tinta">Bancada do professor</h2>
+                  <p className="text-sm text-tinta-media">
+                    Aulas que o aluno ainda não enxerga: rascunho, ou publicada fora da trilha
+                    das 49. Abrem normalmente por este link, e o que você jogar nelas grava.
+                  </p>
+                </div>
+                <ul className="grid gap-2 sm:grid-cols-2">
+                  {bancada.map((aula) => (
+                    <li key={aula.id}>
+                      <Link
+                        href={`/finais/${aula.id}`}
+                        className="foco flex items-center gap-3 cartao-vazio px-4 py-3 transition-colors hover:bg-carta-toque"
+                      >
+                        <div className="flex min-w-0 flex-1 flex-col gap-1">
+                          <p className="truncate text-sm font-medium text-tinta">{aula.titulo}</p>
+                          <p className="text-xs text-tinta-fraca tabular-nums">
+                            {aula.etapas} {aula.etapas === 1 ? "etapa" : "etapas"}
+                            {aula.status === "draft" ? " · rascunho" : " · publicada"}
+                            {naTrilha.has(aula.id) ? "" : " · fora da trilha"}
+                          </p>
+                        </div>
+                      </Link>
+                      {/* Irmão do link da aula, e não filho: link dentro de link é
+                          HTML inválido, e o leitor de tela anuncia um alvo só. */}
+                      {comEditor ? (
+                        <Link
+                          // A aula extra só existe no Editor v2: o editor v1 responde 404 para `EX-`.
+                          href={aula.id.startsWith("EX-") ? `/editor/v2/finais/${aula.id}` : `/editor/finais/${aula.id}`}
+                          className="foco rotulo mt-1 inline-block px-4 text-tinta-fraca underline"
+                        >
+                          Editar
+                        </Link>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+          </div>
+
+          <aside className="hidden flex-col gap-6 lg:sticky lg:top-16 lg:flex">
+            {resumo("lado")}
+            <Escada aqui={aqui} conquistado={conquistado} />
+          </aside>
+        </div>
+        <RolarAteOProximo />
       </Moldura>
     </>
   );
-}
-
-function Cartao({
-  aula,
-  progresso,
-  temPratica,
-}: {
-  aula: AulaDaTrilha;
-  progresso: ProgressoDaAula;
-  /** A aula tem a etapa 4? É o que decide o critério e as bolinhas. */
-  temPratica: boolean;
-}) {
-  const estado = estadoDaAula(temPratica, progresso);
-
-  return (
-    <Link
-      href={`/finais/${aula.id}`}
-      className="foco flex items-center gap-3 cartao-alvo px-4 py-3"
-    >
-      <span
-        aria-hidden
-        className={`flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-bold tabular-nums ${
-          estado === "aprendida"
-            ? "border-metodo-cheio bg-metodo-cheio text-tinta-inversa"
-            : "border-borda-forte text-tinta-fraca"
-        }`}
-      >
-        {estado === "aprendida" ? "✓" : aula.extra ? "+" : aula.ordem}
-      </span>
-
-      <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <p className="truncate text-sm font-medium text-tinta">
-          {aula.nome}
-          {aula.extra ? <span className="ml-2 rounded-full border border-borda px-1.5 py-0.5 text-[0.65rem] font-medium text-tinta-media">extra · nível {aula.nivel}</span> : null}
-        </p>
-        {/*
-          **A linha de formato saiu daqui em 9/9/2026, com os formatos.** Ela
-          dizia "Aula completa · objetivo, com ajuda e sem ajuda". Com um
-          formato só, ela repetiria a mesma frase em 49 cartões — e a lista de
-          etapas que ela recitava é justamente o que as abas da aula mostram
-          quando o aluno entra.
-
-          As bolinhas ficam, e só onde há escada: a aula sem prática não tem
-          partida para vencer, e três círculos vazios ao lado dela prometeriam
-          um caminho que ela não tem — o dela é a declaração, e o `Estado` ao
-          lado já a diz.
-        */}
-        {temPratica && <Bolinhas progresso={progresso.escada} total={DEGRAU_APRENDIDA} />}
-      </div>
-
-      {/*
-        O grau (17/9/2026) no lugar de "Praticando" e "Aprendida": é o degrau **atual** da escada, e
-        ele desce quando a partida da revisão é perdida — o que "Aprendida", que nunca volta, não
-        dizia. "Não começou" fica em palavra: um "Novato" em quarenta cartões intocados é ruído.
-      */}
-      {estado === "nao-comecou" ? (
-        <Estado estado={estado} />
-      ) : (
-        <SeloDoGrau grau={grauDaAulaDeFinais(temPratica, progresso)} />
-      )}
-    </Link>
-  );
-}
-
-/**
- * A aula que ainda não existe: sem link, e dizendo **por quê**.
- *
- * Eram duas razões — o sábado por chegar e o texto por escrever —, e a primeira
- * saiu com o calendário em 2026-09-09. Sobrou "em escrita", que é a única que
- * de fato fecha a porta: não há o que abrir num arquivo que não existe. O
- * `nível N` ao lado é informação, e não tranca — a trava é mole.
- */
-function Fechado({ aula, publicada }: { aula: AulaDaTrilha; publicada: boolean }) {
-  return (
-    <div className="flex items-center gap-3 cartao-vazio px-4 py-3">
-      <span
-        aria-hidden
-        className="flex size-6 shrink-0 items-center justify-center rounded-full border border-borda text-xs font-bold text-tinta-fraca tabular-nums"
-      >
-        {aula.ordem}
-      </span>
-
-      <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <p className="truncate text-sm font-medium text-tinta-fraca">{aula.nome}</p>
-        <p className="text-xs text-tinta-fraca">
-          {publicada ? `Nível ${aula.nivel}` : "Em escrita"}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-/**
- * O estado em palavras, ao lado do numeral.
- *
- * "Não começou" fica em `tinta-fraca` e sem moldura de propósito: é o estado de
- * quase tudo no primeiro dia, e um selo cinza repetido dez vezes desenha uma
- * coluna de reprovação onde não houve nem tentativa.
- */
-function Estado({ estado }: { estado: EstadoDeAula }) {
-  if (estado === "aprendida") {
-    return <span className="shrink-0 text-xs font-medium text-metodo-tinta">Aprendida</span>;
-  }
-  if (estado === "praticando") {
-    return <span className="shrink-0 text-xs font-medium text-aviso-tinta">Praticando</span>;
-  }
-  return <span className="shrink-0 text-xs text-tinta-fraca">Não começou</span>;
 }

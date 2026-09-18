@@ -101,10 +101,12 @@ const SECUNDARIOS: Item[] = [
   // 1366 px a linha com mais um nome quebrava em duas. No celular o avatar também está no topo,
   // mas um aluno de 11 anos procura a palavra, e a gaveta tem lugar.
   { id: "perfil", nome: "Meu perfil", href: "/perfil", soNoCelular: true },
-  // A turma: os colegas, em ordem alfabética, e a vitrine de cada um (17/9/2026).
-  { id: "turma", nome: "Turma", href: "/turma" },
+  // A ordem (17/9/2026): o estudo primeiro — a trilha é o mapa das três matérias e vem logo
+  // depois delas —, depois o jogo, e por último o social.
   { id: "trilha", nome: "A trilha", href: "/trilha" },
   { id: "partidas", nome: "Partidas", href: "/partidas" },
+  // A turma: os colegas, em ordem alfabética, e a vitrine de cada um (17/9/2026).
+  { id: "turma", nome: "Turma", href: "/turma" },
 ];
 
 const TODOS = [...PRINCIPAIS, ...SECUNDARIOS];

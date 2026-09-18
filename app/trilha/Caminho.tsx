@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { Professor } from "@/components/lesson/Professor";
+import { SeloDoGrau } from "@/components/progresso/SeloDoGrau";
 import { IconeDoSelo } from "@/components/selos/Medalha";
 import { IconeDoTema } from "@/components/tatica/IconeDoTema";
 import type { ItemDoNivel } from "@/lib/curso/mapa";
 import { METAL, type Nivel } from "@/lib/curso/nivel";
+import { NOME_DO_GRAU, type Grau } from "@/lib/progresso/grau";
 import { Trilho } from "./Trilho";
 
 /**
@@ -31,6 +33,14 @@ import { Trilho } from "./Trilho";
  * Um nó por página ganha o balão ("Começar", "Continuar", "Fazer a prova") e
  * o professor do outro lado do rótulo. Quem escolhe qual é a página; aqui só
  * se desenha. O `id="proximo"` é o alvo do `RolarAteOProximo`.
+ *
+ * ## O grau embaixo do nome (17/9/2026, `/finais`)
+ *
+ * Quem passa `graus` ganha, no rótulo de cada aula tocada, a escadinha do grau
+ * (Novato a Mestre) no lugar da legenda — o degrau **de hoje**, que sobe com a
+ * prática vencida e desce com a revisão perdida. O medalhão aceso diz
+ * "aprendida uma vez"; a escadinha diz onde a memória está agora. Novato não
+ * aparece: em quarenta nós intocados ele seria ruído.
  */
 
 const ONDA = [0, 1, 1.6, 1, 0, -1, -1.6, -1] as const;
@@ -47,12 +57,15 @@ export function Caminho({
   itens,
   trofeu,
   proximo,
+  graus,
 }: {
   nivel: Nivel;
   itens: readonly ItemDoNivel[];
   trofeu: Trofeu;
   /** O id do item que é o próximo passo, `"trofeu"`, ou nada neste nível. */
   proximo: string | null;
+  /** O grau de cada item, por id. Sem ele, o rótulo leva só a legenda. */
+  graus?: ReadonlyMap<string, Grau>;
 }) {
   return (
     <div className={`trilha-caminho metal-${nivel} relative`}>
@@ -67,7 +80,7 @@ export function Caminho({
           return (
             <li key={item.id} className={`flex justify-center ${eProximo ? "pt-9" : ""}`}>
               <div className="trilha-linha relative" style={{ "--onda": onda } as React.CSSProperties}>
-                <No item={item} proximo={eProximo} lado={lado} />
+                <No item={item} proximo={eProximo} lado={lado} grau={graus?.get(item.id)} />
                 {eProximo ? <ProfessorAoLado lado={lado === "esquerda" ? "direita" : "esquerda"} /> : null}
               </div>
             </li>
@@ -107,7 +120,7 @@ function Balao({ children }: { children: React.ReactNode }) {
   );
 }
 
-function No({ item, proximo, lado }: { item: ItemDoNivel; proximo: boolean; lado: Lado }) {
+function No({ item, proximo, lado, grau }: { item: ItemDoNivel; proximo: boolean; lado: Lado; grau?: Grau }) {
   const tatica = item.href.startsWith("/tatica");
   const feito = item.feitos >= item.total;
   const estado = item.situacao === "aberto" ? (feito ? "feito" : "aberto") : item.situacao;
@@ -129,6 +142,7 @@ function No({ item, proximo, lado }: { item: ItemDoNivel; proximo: boolean; lado
             : "finais";
   // A linha de baixo só aparece quando diz algo que o desenho não diz sozinho.
   const mostraLegenda = feito || proximo || item.feitos > 0 || item.situacao === "em-escrita";
+  const mostraGrau = grau !== undefined && grau > 0 && item.situacao !== "em-escrita";
 
   const icone =
     item.situacao === "em-escrita" ? (
@@ -149,18 +163,20 @@ function No({ item, proximo, lado }: { item: ItemDoNivel; proximo: boolean; lado
 
   const rotulo = (
     <span
-      className={`absolute top-1/2 flex w-28 -translate-y-1/2 flex-col sm:w-44 ${
+      className={`absolute top-1/2 flex w-32 -translate-y-1/2 flex-col sm:w-44 ${
         lado === "esquerda" ? "right-full mr-3 items-end text-right" : "left-full ml-3 items-start text-left"
       }`}
     >
       <span
-        className={`line-clamp-3 text-sm leading-tight font-semibold sm:line-clamp-2 ${
+        className={`line-clamp-4 text-sm leading-tight font-semibold text-pretty sm:line-clamp-3 ${
           item.situacao === "aberto" ? "text-tinta" : "text-tinta-fraca"
         }`}
       >
         {item.nome}
       </span>
-      {mostraLegenda ? (
+      {mostraGrau ? (
+        <SeloDoGrau grau={grau} className="mt-1" />
+      ) : mostraLegenda ? (
         <span className={`mt-0.5 text-xs tabular-nums ${feito ? "font-medium text-metodo-tinta" : "text-tinta-fraca"}`}>
           {legenda}
         </span>
@@ -177,12 +193,13 @@ function No({ item, proximo, lado }: { item: ItemDoNivel; proximo: boolean; lado
     );
   }
 
-  const acao = item.feitos > 0 ? "Continuar" : "Começar";
+  // A aula de finais tocada tem grau antes de ser aprendida; é ela que "continua".
+  const acao = item.feitos > 0 || (grau ?? 0) > 0 ? "Continuar" : "Começar";
   return (
     <Link
       href={item.href}
       id={proximo ? "proximo" : undefined}
-      aria-label={`${item.nome} — ${tatica ? "tática" : "finais"}, ${legenda}${proximo ? `. ${acao} aqui` : ""}`}
+      aria-label={`${item.nome} — ${tatica ? "tática" : "finais"}, ${legenda}${mostraGrau ? `, grau ${NOME_DO_GRAU[grau]}` : ""}${proximo ? `. ${acao} aqui` : ""}`}
       className="foco relative block scroll-mt-40 rounded-full"
     >
       {proximo ? <Balao>{acao}</Balao> : null}

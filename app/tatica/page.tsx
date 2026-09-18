@@ -21,7 +21,7 @@ import {
 import { nivelConquistado } from "@/lib/curso/progresso";
 import { BLOCOS, contaNoCurso } from "@/lib/tatica/blocos";
 import { temaAberto } from "@/lib/tatica/conteudo";
-import { progressoPorTema, PUZZLES_POR_TEMA, temaZerado } from "@/lib/tatica/progresso";
+import { progressoPorTema, temaZerado } from "@/lib/tatica/progresso";
 import { INICIO } from "@/lib/tatica/glicko2";
 import { formatarDelta, PROBLEMAS_POR_DIA, type EstadoDoRating } from "@/lib/tatica/rating";
 import { serieDoGrafico, type SerieDoGrafico } from "@/lib/tatica/rating-grafico";
@@ -80,10 +80,13 @@ export default async function Tatica() {
       <Moldura largura="larga" barraInferior>
         <header className="flex flex-col gap-2">
           <h1 className="titulo text-tinta">Curso de tática</h1>
-          <p className="max-w-prose text-sm text-tinta-media">
-            Cada tema tem aquecimento, série e prova — {PUZZLES_POR_TEMA} puzzles ao todo, e a dificuldade dos puzzles
-            sobe sozinha. Os temas estão em cinco níveis, do 1 ao 5: comece pelo seu.
-          </p>
+          {/* A frase do topo, no desenho da `/trilha` e de `/finais` (Kasparov, Capablanca, Teichmann). */}
+          <figure className="flex max-w-prose flex-col gap-1">
+            <blockquote className="font-serif text-lg leading-snug text-tinta-media italic">
+              “O xadrez é 99% tática.”
+            </blockquote>
+            <figcaption className="text-xs text-tinta-fraca">Richard Teichmann, mestre alemão</figcaption>
+          </figure>
           {feitos > 0 ? (
             <p className="text-sm text-tinta-fraca tabular-nums">
               {feitos} {feitos === 1 ? "puzzle resolvido" : "puzzles resolvidos"} nos temas ·{" "}
