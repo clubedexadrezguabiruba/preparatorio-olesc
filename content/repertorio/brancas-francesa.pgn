@@ -1,5 +1,5 @@
 ; GERADO — não editar. Sai de estudo qq2xorDl v1.5 — Repertorio Contra a Francesa.v5 (https://lichess.org/study/qq2xorDl),
-; por lib/repertorio/gerar-do-estudo.ts, em 2026-09-17.
+; por lib/repertorio/gerar-do-estudo.ts, em 2026-09-18.
 ; Para mudar uma linha, um comentário ou um símbolo: corrija o estudo no Lichess e
 ; reimporte em /editor/v2/curso-de-abertura. Editar aqui se perde na próxima importação.
 
@@ -119,9 +119,9 @@
 8... Nf6 {A partir daqui, acompanhe a sequência forçada e os xeques.} 9. O-O-O {Rocamos grande. A torre já aparece em d1.}
 9... Qb6 {A dama preta sai de novo.} 10. Bc4 {O bispo entra no ataque e mira e6.}
 10... Bd7 11. Nf3 {Mais uma peça entra no jogo.} 11... O-O-O {Agora os dois reis estão na ala da dama. Os xeques ficam muito importantes.}
-12. Ne5 {O cavalo entra no ataque e pressiona f7.} 12... Be8 13. Rxd8+ {Primeiro, xeque: trocamos as torres em d8.}
-13... Kxd8 14. Rd1+ {Outra torre entra com xeque.} 14... Kc8 15. Nxf7 {Continuamos forçando o rei e suas peças.}
-15... Bxf7 16. Bxe6+ {Mais um xeque.} 16... Bxe6 {Agora vem o golpe. Podemos entregar a nossa dama com xeque? Qual é o lance?}
+12. Ne5 {O cavalo entra no ataque e pressiona f7.} 12... Be8?? 13. Rxd8+ {Primeiro, xeque: trocamos as torres em d8.}
+13... Kxd8 14. Rd1+ {Outra torre entra com xeque.} 14... Kc8? 15. Nxf7 {Continuamos forçando o rei e suas peças.}
+15... Bxf7?? 16. Bxe6+ {Mais um xeque.} 16... Bxe6 {Agora vem o golpe. Podemos entregar a nossa dama com xeque? Qual é o lance?}
 17. Qxe6+ {Sim! A ideia é puxar a dama preta para e6 e deixar a7 sem defesa.}
 17... Qxe6 {A dama preta tomou, e a casa a7 ficou sem defesa. Qual é o mate?}
 18. Nxa7# {Mate! O desenho final é Qxe6+ → ...Qxe6 → Nxa7#. Esta é uma armadilha avançada. Primeiro entenda o mate; a memorização da linha completa pode vir depois.}
@@ -146,7 +146,7 @@
 3... c5 {Segunda escolha: ...c5. O peão preto ataca d4.} 4. exd5 {Contra ...c5, trocamos em d5 e olhamos como as Pretas recapturam.}
 4... cxd4 {Desta vez as Pretas não recapturam: tomam o nosso peão de d4. Antes de responder ao peão em d4, existe um xeque útil?}
 5. Bb5+! {Sim. Primeiro o xeque. As Pretas precisam responder.} 5... Bd7 {O bispo bloqueia o xeque.}
-6. dxe6 {Agora tomamos e6.} 6... Bxb5 {As Pretas pegam nosso bispo, mas ainda temos xeques.}
+6. dxe6 {Agora tomamos e6.} 6... Bxb5?! {As Pretas pegam nosso bispo, mas ainda temos xeques.}
 7. exf7+ {O peão avança com xeque e tira o rei do lugar.} 7... Kxf7 {O rei toma o peão e fica exposto.}
 8. Qh5+ {Mais um xeque. Não damos tempo para as Pretas se organizarem.} 8... g6 {O peão bloqueia o xeque.}
 9. Qxb5 {Agora nossa dama pega o bispo de b5. Primeiro os xeques; só depois pegue o material.}
@@ -168,7 +168,7 @@
 2. d4 {Nós ocupamos o centro. As Pretas deixaram d4 livre, então colocamos o segundo peão lá. Dois peões no meio dão espaço às nossas peças.}
 2... d5 {Agora e4 está atacado. Três caminhos: 3.e5, a Variante do Avanço; 3.exd5, a Variante das Trocas; ou proteger e4 com uma peça. As proteções mais conhecidas são Nc3 e Nd2. A Francesa é sólida, mas o bispo de c8 pode demorar a sair. Avançar, trocar ou proteger.}
 3. Bd3! {O bispo sai e protege e4: dois trabalhos com um lance. Esta é a nossa arma. 3.Bd3 é menos comum que as linhas principais. O adversário pode não conhecer, e nós conhecemos o plano. Desenvolver e proteger. Se for seguro, Qe2 e roque grande. Linha menos comum, plano claro.}
-3... Nf6 {Primeira escolha: ...Nf6. O cavalo ataca nosso peão de e4.} 4. e5 {Contra ...Nf6, o peão avança para e5 e expulsa o cavalo.}
+3... Nf6?! {Primeira escolha: ...Nf6. O cavalo ataca nosso peão de e4.} 4. e5 {Contra ...Nf6, o peão avança para e5 e expulsa o cavalo.}
 4... Nfd7 {O cavalo recua. Já ganhamos espaço e fizemos a mesma peça preta jogar duas vezes.}
 5. Ne2! {Desenvolvemos o cavalo e deixamos f3 livre.} 5... c5 {...c5 ataca nosso peão de d4.}
 6. c3 {Protegemos d4 com outro peão.} 6... Nc6 {As Pretas aumentam a pressão em d4.}
@@ -442,7 +442,7 @@
 2. d4 {Nós ocupamos o centro. As Pretas deixaram d4 livre, então colocamos o segundo peão lá. Dois peões no meio dão espaço às nossas peças.}
 2... d5 {Agora e4 está atacado. Três caminhos: 3.e5, a Variante do Avanço; 3.exd5, a Variante das Trocas; ou proteger e4 com uma peça. As proteções mais conhecidas são Nc3 e Nd2. A Francesa é sólida, mas o bispo de c8 pode demorar a sair. Avançar, trocar ou proteger.}
 3. Bd3! {O bispo sai e protege e4: dois trabalhos com um lance. Esta é a nossa arma. 3.Bd3 é menos comum que as linhas principais. O adversário pode não conhecer, e nós conhecemos o plano. Desenvolver e proteger. Se for seguro, Qe2 e roque grande. Linha menos comum, plano claro.}
-3... Nf6 {Primeira escolha: ...Nf6. O cavalo ataca nosso peão de e4.} 4. e5 {Contra ...Nf6, o peão avança para e5 e expulsa o cavalo.}
+3... Nf6?! {Primeira escolha: ...Nf6. O cavalo ataca nosso peão de e4.} 4. e5 {Contra ...Nf6, o peão avança para e5 e expulsa o cavalo.}
 *
 
 [Abertura "francesa"]

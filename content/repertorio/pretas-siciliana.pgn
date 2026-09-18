@@ -76,7 +76,7 @@
 4. Nxd4 {Qual lance dá nome à nossa abertura?} 4... g6 {Este é o Dragão Acelerado. O bispo vai para g7, e o peão de d7 fica em casa. Quando for seguro, esse peão vai direto para d5, em um lance só. É daí que vem o nome «acelerado». Bispo em g7 e o peão de d7 esperando a hora do ...d5.}
 5. Nc3 Bg7 {O bispo vai para a diagonal grande. De g7 ele mira o centro e o cavalo de c3.}
 6. Be3 Nf6 $1 {O cavalo sai e ataca o peão de e4. Repare: não jogamos ...d6. O peão de d7 continua esperando.}
-7. f3 $6 {7.f3 é o lance mais jogado. Ele copia o ataque do Dragão comum, mas aqui o nosso peão ainda está em d7.}
+7. f3?! {7.f3 é o lance mais jogado. Ele copia o ataque do Dragão comum, mas aqui o nosso peão ainda está em d7.}
 7... O-O {Rei primeiro. Depois vem ...d5. Três respostas, uma regra: roque antes de tudo. Os golpes vêm depois.}
 (7... d5 $2 {Cedo demais: 8.Bb5! prega o nosso cavalo e o peão de d5 fica sem apoio. Primeiro o roque.})
 8. Qd2 {As Brancas querem rocar grande e atacar. Qual é o nosso lance?} 8... d5
@@ -174,7 +174,7 @@ $1 {O centro abre enquanto o rei dele ainda está em e1.} 9. Nxc6 $2 {Troca natu
 9. exf7+ Kxf7 {O rei está seguro em f7: as Brancas quase não desenvolveram.} 10. Bc4+
 $2 d5 {...d5 tapa o xeque e ocupa o centro.} 11. Bb3 e5 $1 {O segundo peão central, e uma isca para a dama.}
 12. Qxe5 $2 {Ela comeu o peão. Qual peça entra com xeque?} 12... Bb4+ {Xeque, e no lance seguinte a torre vai para e8.}
-13. c3 Re8 {A dama está cravada na coluna e.} 14. Qxe8+ Qxe8+ {Dama por torre. Contra 5.Cxc6 e Dd4: ...bxc6, ...Cf6 e cobrar a dama com lances de tempo.}
+13. c3? Re8 {A dama está cravada na coluna e.} 14. Qxe8+ Qxe8+ {Dama por torre. Contra 5.Cxc6 e Dd4: ...bxc6, ...Cf6 e cobrar a dama com lances de tempo.}
 *
 
 [Abertura "siciliana"]
@@ -229,7 +229,7 @@ $2 d5 {...d5 tapa o xeque e ocupa o centro.} 11. Bb3 e5 $1 {O segundo peão cent
 [Result "*"]
 
 1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
-2. Bc4 Nc6 3. Qh5 {Ameaça mate em f7. Como defendemos?} 3... e6 {Isso: ...e6 fecha a diagonal do bispo. Agora f7 está seguro.}
+2. Bc4 Nc6 3. Qh5? {Ameaça mate em f7. Como defendemos?} 3... e6 {Isso: ...e6 fecha a diagonal do bispo. Agora f7 está seguro.}
 (3... g6 $6 {Defende f7, mas 4.Dxc5 pega o peão de c5. O ...e6 defende sem perder nada.})
 4. Nf3 Nf6 {Desenvolvemos com tempo na dama.} 5. Qh4 d5 $1 {O centro é nosso, e o bispo de c4 está atacado. Ataque cedo em f7: feche com ...e6 ou ...Cf6 e ganhe tempo atacando a dama. Se ele sacrificar em f7, conte: é uma peça a mais para nós.}
 *
@@ -246,8 +246,8 @@ $2 d5 {...d5 tapa o xeque e ocupa o centro.} 11. Bb3 e5 $1 {O segundo peão cent
 [Result "*"]
 
 1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
-2. Bc4 Nc6 3. Qf3 {Dama em f3, de novo mirando f7. Qual peça tapa a coluna f?}
-3... Nf6 {Isso: o cavalo em f6 tapa a coluna e desenvolve.} 4. c3 Ne5 $1 {O cavalo ataca a dama e o bispo de c4.}
+2. Bc4 Nc6 3. Qf3?! {Dama em f3, de novo mirando f7. Qual peça tapa a coluna f?}
+3... Nf6 {Isso: o cavalo em f6 tapa a coluna e desenvolve.} 4. c3?! Ne5 $1 {O cavalo ataca a dama e o bispo de c4.}
 5. Qe2 Nxc4 6. Qxc4 d5 {Ficamos com os dois bispos e o centro.} *
 
 [Abertura "siciliana"]
@@ -262,7 +262,7 @@ $2 d5 {...d5 tapa o xeque e ocupa o centro.} 11. Bb3 e5 $1 {O segundo peão cent
 [Result "*"]
 
 1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
-2. Bc4 Nc6 3. Qf3 {Dama em f3, de novo mirando f7. Qual peça tapa a coluna f?}
+2. Bc4 Nc6 3. Qf3?! {Dama em f3, de novo mirando f7. Qual peça tapa a coluna f?}
 3... Nf6 {Isso: o cavalo em f6 tapa a coluna e desenvolve.} 4. d3 Nd4 {O cavalo pula para d4 com ameaça na dama e em c2.}
 5. Qd1 d5 *
 
@@ -671,7 +671,7 @@ $1 9. bxc3 Nf6 10. f3 d6 $1 11. Be2 O-O $1 *
 1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
 2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
 3. Bc4 {O bispo mira f7. Qual peça sai atacando e4?} 3... Nf6 {Isso: ...Cf6 desenvolve e ataca e4.}
-(3... e6 $5 {Também vale: fecha a diagonal primeiro.}) 4. Ng5 {O cavalo ataca f7 junto com o bispo. Como defendemos?}
+(3... e6 $5 {Também vale: fecha a diagonal primeiro.}) 4. Ng5?! {O cavalo ataca f7 junto com o bispo. Como defendemos?}
 4... e6 $1 {Isso: f7 está seguro, e ...d5 vem com tempo no bispo.} 5. d3 d5 *
 
 [Abertura "siciliana"]
@@ -706,7 +706,7 @@ $1 9. bxc3 Nf6 10. f3 d6 $1 11. Be2 O-O $1 *
 2. Nf3 {A resposta mais comum das Brancas. Qual peça sai agora?} 2... Nc6 {O cavalo sai e também mira d4. São duas peças nossas de olho na mesma casa.}
 3. Bc4 {O bispo mira f7. Qual peça sai atacando e4?} 3... Nf6 {Isso: ...Cf6 desenvolve e ataca e4.}
 (3... e6 $5 {Também vale: fecha a diagonal primeiro.}) 4. e5 {O peão ataca o cavalo. Há algo melhor do que recuar?}
-4... d5 $1 {Isso: ...d5 ataca o bispo.} 5. exf6 dxc4 *
+4... d5 $1 {Isso: ...d5 ataca o bispo.} 5. exf6? dxc4 *
 
 [Abertura "siciliana"]
 [Nome "Siciliana: Dragão Acelerado"]
@@ -997,7 +997,7 @@ dxc3 9. bxc3 Bg7 *
 
 1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
 2. d4 cxd4 3. c3 {Ele oferece um peão para ganhar tempo. Qual lance ataca e4 e recusa o gambito?}
-3... Nf6 4. cxd4 {Ele recapturou e deixou e4 sem defesa.} 4... Nxe4 {O cavalo come: ganhamos o peão central.}
+3... Nf6 4. cxd4?! {Ele recapturou e deixou e4 sem defesa.} 4... Nxe4 {O cavalo come: ganhamos o peão central.}
 5. Bd3 Nf6 *
 
 [Abertura "siciliana"]
@@ -1102,5 +1102,5 @@ $5 {Jogável, mas ...Cf6 rende mais na faixa de vocês.}) (2... g6 $6 {Deixa 3.d
 
 1. e4 c5 {A Siciliana. O peão de c5 não ocupa o centro: ele vigia a casa d4. Os dois lados ficam com peões diferentes, e a partida fica desequilibrada desde o começo.}
 2. Bc4 Nc6 3. Nf3 Nf6 {Isso: ...Cf6 desenvolve e ataca e4.} (3... e6 $5 {Também vale: fecha a diagonal primeiro.})
-4. Ng5 {O cavalo ataca f7 junto com o bispo. Como defendemos?} 4... e6 $1 {Isso: f7 está seguro, e ...d5 vem com tempo no bispo.}
+4. Ng5?! {O cavalo ataca f7 junto com o bispo. Como defendemos?} 4... e6 $1 {Isso: f7 está seguro, e ...d5 vem com tempo no bispo.}
 *

@@ -96,3 +96,30 @@ A trava automática é `lib/repertorio/marcas-das-fontes.test.ts`, que roda no `
 reprova se um lance que está nas fontes e no repertório perdeu o símbolo, ou se um lance
 nosso marcado na fonte saiu da árvore. As marcas em lance do adversário cortado e em ramos
 fora do repertório não reprovam — o teste imprime quantas são, para a decisão ficar à vista.
+
+## O erro do adversário nas armadilhas leva símbolo
+
+Regra do Doug, de 18/9/2026, **global para todas as aberturas** — as que estão no ar (Francesa,
+Siciliana, Escocesa) e **todo curso novo**: o estudo em `content/repertorio/rascunhos/estudo-*.pgn`,
+o script que gera um estudo, as aulas `AB-*` e o move trainer que sai delas.
+
+1. **Nos golpes e armadilhas, o lance do adversário que cai neles leva símbolo de erro.** O aluno
+   precisa ver que o lance foi ruim, não só a punição que vem depois. Isso vale para o lance que
+   abre a armadilha e para os erros do meio de um golpe longo: no sacrifício de dama da Francesa
+   eram três (`12...Be8??`, `14...Rc8?`, `15...Bxf7??`).
+2. **A régua é a perda medida no Stockfish 18** (`scripts/motor.ts`, profundidade 22), a partir do
+   ponto de vista de quem joga o lance:
+   - `?!` imprecisão: de 0,5 a 0,99 peão;
+   - `?` erro: de 1 a 2,99 peões;
+   - `??` blunder: 3 peões ou mais, ou um lance que permite mate.
+3. **Mesmo símbolo em toda ocorrência** da mesma posição e do mesmo lance: aula, laboratório,
+   treino, "esqueci a teoria" e move trainer. Confira pela posição (FEN), não pelo nome do lance:
+   `5.c3` da Siciliana é erro no Golpe 4 e lance normal na Rossolimo.
+4. **Se a fonte já marcou o lance, vale a marca da fonte**, mesmo que o motor meça outra coisa
+   (Siciliana: `11.Bxd5` e `13.dxe6` são `$4` = `??` na fonte). Trocar a marca da fonte é decisão
+   do Doug — regra dos símbolos acima.
+5. **Escopo:** golpes, armadilhas e os capítulos que repetem essas linhas. Capítulos de defesa
+   normal e partidas modelo ficam como estão, até o Doug pedir.
+6. **Curso novo de abertura só é publicado depois desta passada.** O player já mostra os seis
+   símbolos no círculo da casa de destino (`lib/chess/nag-overlay.ts`); o que falta é o símbolo
+   estar no estudo.

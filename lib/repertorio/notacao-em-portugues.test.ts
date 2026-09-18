@@ -153,19 +153,19 @@ test("a tela devolve a prosa das aulas sem nenhum N, Q ou K sobrando", () => {
  * mandou deixar a letra quieta; se um dia as torres passarem dos reis, a troca
  * automática passa a valer a pena e alguém tem de vir aqui refazer a conta.
  *
- * Quando os dez `Rg1` virarem `Tg1` no estudo e as aulas B e E+F forem
- * republicadas, `torres` cai para zero — e aí este teste é o que avisa que a
- * pendência fechou.
+ * A pendência fechou em 18/9/2026: a republicação da Francesa (símbolos nas
+ * armadilhas) trouxe nove dos dez `Rg1` já como `Tg1` pelo planejador, e o
+ * décimo, escrito à mão no `[TRAIN]` do estudo, virou `Tg1` no estudo. Zero
+ * torre em inglês; uma nova quebra este teste.
  */
-test("o `R` da prosa: dez torres em inglês contra trinta e cinco reis em português", () => {
+test("o `R` da prosa: nenhuma torre em inglês, trinta e cinco reis em português", () => {
   const comR = prosaDasAulasPublicadas().filter((t) => t.lance.startsWith("R"));
   // Só a Francesa escreve a prosa em inglês. A Siciliana (18/9/2026) já nasceu em português: o `R`
   // dela é rei (14.Rd2, 10...Rxf7), como nas aulas de finais.
   const torres = comR.filter((t) => t.aula.startsWith("AB-BRANCAS-FRANCESA"));
   const reis = comR.filter((t) => !t.aula.startsWith("AB-BRANCAS-FRANCESA"));
 
-  assert.deepEqual([...new Set(torres.map((t) => t.lance))], ["Rg1"], "a única torre escrita em inglês na prosa");
-  assert.equal(torres.length, 10, "pendência: viram Tg1 no estudo, e as aulas B e E+F republicam");
+  assert.deepEqual(torres.map((t) => `${t.aula}: ${t.lance} — «${t.frase}»`), [], "torre em inglês na prosa: o aluno lê R como rei");
   // 29 até 18/9/2026, só os de finais; mais 6 reis da Siciliana.
   assert.equal(reis.length, 35, "os reis das aulas de finais e da Siciliana já estão em português e passam intactos");
   assert.ok(reis.length > torres.length, "enquanto houver mais rei que torre, a tela não troca o R");

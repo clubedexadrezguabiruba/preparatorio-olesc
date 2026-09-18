@@ -51,7 +51,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-{ [SECAO] Erros e armadilhas | o que as Brancas erram [OBJETIVO] Conhecer as respostas mais comuns das Brancas e a regra que vale contra todas: rei primeiro. [ENTENDER] Esta é a posição que mais vai aparecer. No nível de vocês, as Brancas jogam aqui 7.f3, 7.Bc4, 7.Dd2 ou 7.Be2. } 1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. f3 { [ENTENDER] 7.f3 é o lance mais jogado. Ele copia o ataque do Dragão comum, mas aqui o nosso peão ainda está em d7. } ( 7. Bc4 { Com o bispo em c4, ele mira f7. } 7... O-O { Rei primeiro, também aqui. Depois olhamos o peão de e4. } ) ( 7. Be2 { O desenvolvimento mais calmo. } 7... O-O { Rei primeiro, e na sequência ...d5. } ) 7... O-O { Rei primeiro. Depois vem ...d5. [RESUMO] Três respostas, uma regra: roque antes de tudo. Os golpes vêm depois. [PROXIMO] Primeiro golpe: contra 7.f3 e Dd2. } *
+{ [SECAO] Erros e armadilhas | o que as Brancas erram [OBJETIVO] Conhecer as respostas mais comuns das Brancas e a regra que vale contra todas: rei primeiro. [ENTENDER] Esta é a posição que mais vai aparecer. No nível de vocês, as Brancas jogam aqui 7.f3, 7.Bc4, 7.Dd2 ou 7.Be2. } 1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. f3?! { [ENTENDER] 7.f3 é o lance mais jogado. Ele copia o ataque do Dragão comum, mas aqui o nosso peão ainda está em d7. } ( 7. Bc4 { Com o bispo em c4, ele mira f7. } 7... O-O { Rei primeiro, também aqui. Depois olhamos o peão de e4. } ) ( 7. Be2 { O desenvolvimento mais calmo. } 7... O-O { Rei primeiro, e na sequência ...d5. } ) 7... O-O { Rei primeiro. Depois vem ...d5. [RESUMO] Três respostas, uma regra: roque antes de tudo. Os golpes vêm depois. [PROXIMO] Primeiro golpe: contra 7.f3 e Dd2. } *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -93,7 +93,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-{ [OBJETIVO] Contra 5.Cxc6 e 6.Dd4: recapturar com o peão b, desenvolver e cobrar a dama que saiu cedo. } 1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nxc6 { Ele trocou o nosso cavalo. } 5... bxc6 { Recapturamos com o peão b. O peão de c6 segura d5, e a coluna b abre para a torre. } ( 5... dxc6 $6 { Com ...dxc6 as damas se trocam cedo e o nosso rei perde o roque. Recapture com o peão b. } ) 6. Qd4 { [PERGUNTA] A dama ataca a torre de h8. Como defendemos? [DICA] Desenvolva uma peça que tape a diagonal. } 6... Nf6 { Isso: o cavalo tapa a diagonal e desenvolve. } ( 6... f6 $2 { Enfraquece o nosso rei de graça. Desenvolva o cavalo. } ) 7. e5 Nd5 { O cavalo vai para o centro. } 8. e6 { Ele avança o mesmo peão pela terceira vez. } ( 8. c4 Qb6 $1 { A dama oferece a troca e mira f2 e b2. } ) 8... Nf6 { Tapamos a diagonal de novo. } 9. exf7+ Kxf7 { O rei está seguro em f7: as Brancas quase não desenvolveram. } 10. Bc4+ $2 10... d5 { ...d5 tapa o xeque e ocupa o centro. } 11. Bb3 e5 $1 { O segundo peão central, e uma isca para a dama. } 12. Qxe5 $2 { [PERGUNTA] Ela comeu o peão. Qual peça entra com xeque? [DICA] O bispo de f8. } 12... Bb4+ { [GOLPE] Xeque, e no lance seguinte a torre vai para e8. } 13. c3 13... Re8 { [%cal Ge8e1] [PUNICAO] A dama está cravada na coluna e. } 14. Qxe8+ Qxe8+ { [RESUMO] Dama por torre. Contra 5.Cxc6 e Dd4: ...bxc6, ...Cf6 e cobrar a dama com lances de tempo. [PROXIMO] Agora um lance lento: 5.c3. } *
+{ [OBJETIVO] Contra 5.Cxc6 e 6.Dd4: recapturar com o peão b, desenvolver e cobrar a dama que saiu cedo. } 1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nxc6 { Ele trocou o nosso cavalo. } 5... bxc6 { Recapturamos com o peão b. O peão de c6 segura d5, e a coluna b abre para a torre. } ( 5... dxc6 $6 { Com ...dxc6 as damas se trocam cedo e o nosso rei perde o roque. Recapture com o peão b. } ) 6. Qd4 { [PERGUNTA] A dama ataca a torre de h8. Como defendemos? [DICA] Desenvolva uma peça que tape a diagonal. } 6... Nf6 { Isso: o cavalo tapa a diagonal e desenvolve. } ( 6... f6 $2 { Enfraquece o nosso rei de graça. Desenvolva o cavalo. } ) 7. e5 Nd5 { O cavalo vai para o centro. } 8. e6 { Ele avança o mesmo peão pela terceira vez. } ( 8. c4 Qb6 $1 { A dama oferece a troca e mira f2 e b2. } ) 8... Nf6 { Tapamos a diagonal de novo. } 9. exf7+ Kxf7 { O rei está seguro em f7: as Brancas quase não desenvolveram. } 10. Bc4+ $2 10... d5 { ...d5 tapa o xeque e ocupa o centro. } 11. Bb3 e5 $1 { O segundo peão central, e uma isca para a dama. } 12. Qxe5 $2 { [PERGUNTA] Ela comeu o peão. Qual peça entra com xeque? [DICA] O bispo de f8. } 12... Bb4+ { [GOLPE] Xeque, e no lance seguinte a torre vai para e8. } 13. c3? 13... Re8 { [%cal Ge8e1] [PUNICAO] A dama está cravada na coluna e. } 14. Qxe8+ Qxe8+ { [RESUMO] Dama por torre. Contra 5.Cxc6 e Dd4: ...bxc6, ...Cf6 e cobrar a dama com lances de tempo. [PROXIMO] Agora um lance lento: 5.c3. } *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -121,7 +121,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-{ [OBJETIVO] Contra o bispo em c4 com a dama em h5 ou f3: fechar f7 e ganhar tempo atacando a dama. [REFERENCIA] Nenhuma fonte do site cobre estas linhas; são do Stockfish 18, profundidade 20, em 18/9/2026: 3.Dh5 e6 pretas +0,93 (3...g6 igual); 3.Df3 Cf6 4.c3 Ce5 pretas +1,24; 3.Bxf7+ Rxf7 pretas +2,52. No banco do Lichess (1000–1800), 3.Dh5 e 3.Df3 são 19% das respostas a 2.Bc4 Cc6. } 1. e4 c5 2. Bc4 Nc6 3. Qh5 { [PERGUNTA] Ameaça mate em f7. Como defendemos? [DICA] Um peão que tapa a diagonal do bispo. } ( 3. Qf3 { [PERGUNTA] Dama em f3, de novo mirando f7. Qual peça tapa a coluna f? [DICA] Um cavalo que sai atacando e4. } 3... Nf6 { Isso: o cavalo em f6 tapa a coluna e desenvolve. } 4. c3 ( 4. d3 Nd4 { O cavalo pula para d4 com ameaça na dama e em c2. } 5. Qd1 d5 ) 4... Ne5 $1 { [GOLPE] O cavalo ataca a dama e o bispo de c4. } 5. Qe2 Nxc4 6. Qxc4 d5 { Ficamos com os dois bispos e o centro. } ) ( 3. Bxf7+ $2 { O sacrifício: ele entrega o bispo por um peão. } 3... Kxf7 4. Qh5+ g6 5. Qxc5 { Ele recuperou um peão. } 5... Nf6 { O rei está seguro em f7, e temos uma peça a mais. } 6. Nf3 d5 ) 3... e6 { Isso: ...e6 fecha a diagonal do bispo. Agora f7 está seguro. } ( 3... g6 $6 { Defende f7, mas 4.Dxc5 pega o peão de c5. O ...e6 defende sem perder nada. } 4. Qxc5 ) 4. Nf3 4... Nf6 { Desenvolvemos com tempo na dama. } 5. Qh4 d5 $1 { O centro é nosso, e o bispo de c4 está atacado. [RESUMO] Ataque cedo em f7: feche com ...e6 ou ...Cf6 e ganhe tempo atacando a dama. Se ele sacrificar em f7, conte: é uma peça a mais para nós. [PROXIMO] O laboratório: todos os golpes lado a lado. } *
+{ [OBJETIVO] Contra o bispo em c4 com a dama em h5 ou f3: fechar f7 e ganhar tempo atacando a dama. [REFERENCIA] Nenhuma fonte do site cobre estas linhas; são do Stockfish 18, profundidade 20, em 18/9/2026: 3.Dh5 e6 pretas +0,93 (3...g6 igual); 3.Df3 Cf6 4.c3 Ce5 pretas +1,24; 3.Bxf7+ Rxf7 pretas +2,52. No banco do Lichess (1000–1800), 3.Dh5 e 3.Df3 são 19% das respostas a 2.Bc4 Cc6. } 1. e4 c5 2. Bc4 Nc6 3. Qh5? { [PERGUNTA] Ameaça mate em f7. Como defendemos? [DICA] Um peão que tapa a diagonal do bispo. } ( 3. Qf3?! { [PERGUNTA] Dama em f3, de novo mirando f7. Qual peça tapa a coluna f? [DICA] Um cavalo que sai atacando e4. } 3... Nf6 { Isso: o cavalo em f6 tapa a coluna e desenvolve. } 4. c3?! ( 4. d3 Nd4 { O cavalo pula para d4 com ameaça na dama e em c2. } 5. Qd1 d5 ) 4... Ne5 $1 { [GOLPE] O cavalo ataca a dama e o bispo de c4. } 5. Qe2 Nxc4 6. Qxc4 d5 { Ficamos com os dois bispos e o centro. } ) ( 3. Bxf7+ $2 { O sacrifício: ele entrega o bispo por um peão. } 3... Kxf7 4. Qh5+ g6 5. Qxc5 { Ele recuperou um peão. } 5... Nf6 { O rei está seguro em f7, e temos uma peça a mais. } 6. Nf3 d5 ) 3... e6 { Isso: ...e6 fecha a diagonal do bispo. Agora f7 está seguro. } ( 3... g6 $6 { Defende f7, mas 4.Dxc5 pega o peão de c5. O ...e6 defende sem perder nada. } 4. Qxc5 ) 4. Nf3 4... Nf6 { Desenvolvemos com tempo na dama. } 5. Qh4 d5 $1 { O centro é nosso, e o bispo de c4 está atacado. [RESUMO] Ataque cedo em f7: feche com ...e6 ou ...Cf6 e ganhe tempo atacando a dama. Se ele sacrificar em f7, conte: é uma peça a mais para nós. [PROXIMO] O laboratório: todos os golpes lado a lado. } *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -135,7 +135,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-{ [SECAO] Laboratório | reconheça cada golpe [OBJETIVO] Reconhecer cada golpe pela posição, sem misturar os padrões. [TRAIN] Cada caso tem a sua linha no move trainer. } 1. e4 c5 2. Nf3 ( 2. Bc4 Nc6 3. Qh5 { CASO 5 — DAMA EM H5. A dama e o bispo miram f7. [PERGUNTA] Qual é a defesa? [DICA] Um peão fecha a diagonal. } 3... e6 { Isso: ...e6. } ) 2... Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 ( 5. Nxc6 bxc6 6. Qd4 Nf6 7. e5 Nd5 8. e6 Nf6 9. exf7+ Kxf7 10. Bc4+ d5 11. Bb3 e5 12. Qxe5 { CASO 4 — A DAMA COMEU EM E5. [PERGUNTA] Qual é o golpe? [DICA] Um xeque de bispo, e depois a coluna e. } 12... Bb4+ { Isso: ...Bb4+ e ...Te8. } ) 5... Bg7 6. Be3 Nf6 7. f3 ( 7. Bc4 O-O 8. O-O { CASO 3 — ROQUE CEDO COM O BISPO EM C4. [PERGUNTA] Qual é o golpe? [DICA] O peão de e4. } 8... Nxe4 { Isso: ...Cxe4, e o garfo ...d5 se ele tomar. } ) 7... O-O 8. Qd2 { CASO 1 — PEÃO EM F3 E DAMA EM D2. [PERGUNTA] Qual é o lance? [DICA] O peão de d7. } 8... d5 { Isso: ...d5. } 9. Nxc6 bxc6 10. e5 Nd7 11. f4 e6 12. Na4 { CASO 2 — O CAVALO FOI PARA A BORDA. [PERGUNTA] Qual é o golpe? [DICA] O peão de e5 só tem um defensor. } 12... Nxe5 { Isso: ...Cxe5 e ...Dh4+. [RESUMO] Cinco casos, cinco golpes. Reconheça a posição antes de calcular. [PROXIMO] No próximo bloco, as Brancas jogam bem. } *
+{ [SECAO] Laboratório | reconheça cada golpe [OBJETIVO] Reconhecer cada golpe pela posição, sem misturar os padrões. [TRAIN] Cada caso tem a sua linha no move trainer. } 1. e4 c5 2. Nf3 ( 2. Bc4 Nc6 3. Qh5? { CASO 5 — DAMA EM H5. A dama e o bispo miram f7. [PERGUNTA] Qual é a defesa? [DICA] Um peão fecha a diagonal. } 3... e6 { Isso: ...e6. } ) 2... Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 ( 5. Nxc6 bxc6 6. Qd4 Nf6 7. e5 Nd5 8. e6 Nf6 9. exf7+ Kxf7 10. Bc4+? d5 11. Bb3 e5 12. Qxe5? { CASO 4 — A DAMA COMEU EM E5. [PERGUNTA] Qual é o golpe? [DICA] Um xeque de bispo, e depois a coluna e. } 12... Bb4+ { Isso: ...Bb4+ e ...Te8. } ) 5... Bg7 6. Be3 Nf6 7. f3?! ( 7. Bc4 O-O 8. O-O { CASO 3 — ROQUE CEDO COM O BISPO EM C4. [PERGUNTA] Qual é o golpe? [DICA] O peão de e4. } 8... Nxe4 { Isso: ...Cxe4, e o garfo ...d5 se ele tomar. } ) 7... O-O 8. Qd2 { CASO 1 — PEÃO EM F3 E DAMA EM D2. [PERGUNTA] Qual é o lance? [DICA] O peão de d7. } 8... d5 { Isso: ...d5. } 9. Nxc6? bxc6 10. e5 Nd7 11. f4 e6 12. Na4? { CASO 2 — O CAVALO FOI PARA A BORDA. [PERGUNTA] Qual é o golpe? [DICA] O peão de e5 só tem um defensor. } 12... Nxe5 { Isso: ...Cxe5 e ...Dh4+. [RESUMO] Cinco casos, cinco golpes. Reconheça a posição antes de calcular. [PROXIMO] No próximo bloco, as Brancas jogam bem. } *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -191,7 +191,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-{ [SECAO] Anti-sicilianas | quando ele não joga 3.d4 [OBJETIVO] Contra o bispo em c4 cedo: ...Cf6 e ...e6. O peão de e6 fecha f7 e prepara ...d5. [REFERENCIA] Fonte: GM Avetik Grigoryan (ChessMood), 'Sicilian Sidelines Homework': 2.Bc4 Cc6 3.Cf3 Cf6 (3...e6). Daí em diante, Stockfish 18, profundidade 18, em 18/9/2026: 4.d3 e6 igual; 4.Cc3 e6 igual; 4.Cg5 e6 pretas +1,07; 4.e5 d5 igual (5.exf6 dxc4 pretas +1,36). No banco do Lichess (1000–1800): 4.d3 27%, 4.Cc3 24%, 4.Cg5 19%, 4.e5 12%. } 1. e4 c5 2. Nf3 ( 2. Bc4 Nc6 3. Nf3 Nf6 ) 2... Nc6 3. Bc4 { [PERGUNTA] O bispo mira f7. Qual peça sai atacando e4? [DICA] Um cavalo. } 3... Nf6 { Isso: ...Cf6 desenvolve e ataca e4. } ( 3... e6 $5 { Também vale: fecha a diagonal primeiro. } ) 4. d3 { Ele protegeu e4. } ( 4. Nc3 e6 { A mesma regra: ...e6, e depois ...d5. } 5. d4 d5 ) ( 4. Ng5 { [PERGUNTA] O cavalo ataca f7 junto com o bispo. Como defendemos? [DICA] A mesma parede de peão. } 4... e6 $1 { Isso: f7 está seguro, e ...d5 vem com tempo no bispo. } 5. d3 d5 ) ( 4. e5 { [PERGUNTA] O peão ataca o cavalo. Há algo melhor do que recuar? [DICA] Um peão central ataca o bispo de c4. } 4... d5 $1 { Isso: ...d5 ataca o bispo. } 5. Bb5 ( 5. exf6 dxc4 ) 5... Nd7 ) 4... e6 { ...e6: o bispo de c4 bate na parede, e ...d5 vem a seguir. } 5. O-O d5 { O centro é nosso, e o bispo tem de andar de novo. [RESUMO] Bispo em c4: ...Cf6 e ...e6, depois ...d5. Se o peão vier a e5: ...d5 na hora. [PROXIMO] Agora a Alapin, 2.c3. } *
+{ [SECAO] Anti-sicilianas | quando ele não joga 3.d4 [OBJETIVO] Contra o bispo em c4 cedo: ...Cf6 e ...e6. O peão de e6 fecha f7 e prepara ...d5. [REFERENCIA] Fonte: GM Avetik Grigoryan (ChessMood), 'Sicilian Sidelines Homework': 2.Bc4 Cc6 3.Cf3 Cf6 (3...e6). Daí em diante, Stockfish 18, profundidade 18, em 18/9/2026: 4.d3 e6 igual; 4.Cc3 e6 igual; 4.Cg5 e6 pretas +1,07; 4.e5 d5 igual (5.exf6 dxc4 pretas +1,36). No banco do Lichess (1000–1800): 4.d3 27%, 4.Cc3 24%, 4.Cg5 19%, 4.e5 12%. } 1. e4 c5 2. Nf3 ( 2. Bc4 Nc6 3. Nf3 Nf6 ) 2... Nc6 3. Bc4 { [PERGUNTA] O bispo mira f7. Qual peça sai atacando e4? [DICA] Um cavalo. } 3... Nf6 { Isso: ...Cf6 desenvolve e ataca e4. } ( 3... e6 $5 { Também vale: fecha a diagonal primeiro. } ) 4. d3 { Ele protegeu e4. } ( 4. Nc3 e6 { A mesma regra: ...e6, e depois ...d5. } 5. d4 d5 ) ( 4. Ng5?! { [PERGUNTA] O cavalo ataca f7 junto com o bispo. Como defendemos? [DICA] A mesma parede de peão. } 4... e6 $1 { Isso: f7 está seguro, e ...d5 vem com tempo no bispo. } 5. d3 d5 ) ( 4. e5 { [PERGUNTA] O peão ataca o cavalo. Há algo melhor do que recuar? [DICA] Um peão central ataca o bispo de c4. } 4... d5 $1 { Isso: ...d5 ataca o bispo. } 5. Bb5 ( 5. exf6? dxc4 ) 5... Nd7 ) 4... e6 { ...e6: o bispo de c4 bate na parede, e ...d5 vem a seguir. } 5. O-O d5 { O centro é nosso, e o bispo tem de andar de novo. [RESUMO] Bispo em c4: ...Cf6 e ...e6, depois ...d5. Se o peão vier a e5: ...d5 na hora. [PROXIMO] Agora a Alapin, 2.c3. } *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -275,7 +275,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-{ [OBJETIVO] Contra o gambito 3.c3: recusar com ...Cf6. Depois de 4.e5 Cd5, é a Alapin que você já conhece. [REFERENCIA] Recomendação de fonte pública, não de curso do site: Chess.com, 'Sicilian Defense: Smith-Morra Gambit Declined, Alapin Formation' (https://www.chess.com/openings/Sicilian-Defense-Smith-Morra-Gambit-Declined-Alapin-Formation), e Chessable Blog (https://www.chessable.com/blog/smith-morra/). O 4.cxd4 Cxe4 e o 5.Dxd4 e6 são do Stockfish 18, profundidade 18, em 18/9/2026 (pretas +0,64 e igual). } 1. e4 c5 2. d4 cxd4 3. c3 { [PERGUNTA] Ele oferece um peão para ganhar tempo. Qual lance ataca e4 e recusa o gambito? [DICA] O mesmo lance da Alapin. } 3... Nf6 4. e5 ( 4. cxd4 { Ele recapturou e deixou e4 sem defesa. } 4... Nxe4 { O cavalo come: ganhamos o peão central. } 5. Bd3 Nf6 ) 4... Nd5 5. cxd4 ( 5. Qxd4 e6 6. Nf3 Nc6 ) 5... d6 6. Nf3 Nc6 { A mesma posição da Alapin. [RESUMO] Smith-Morra: ...Cf6. Depois de e5: ...Cd5 e o plano da Alapin. [PROXIMO] Agora 2.f4. } *
+{ [OBJETIVO] Contra o gambito 3.c3: recusar com ...Cf6. Depois de 4.e5 Cd5, é a Alapin que você já conhece. [REFERENCIA] Recomendação de fonte pública, não de curso do site: Chess.com, 'Sicilian Defense: Smith-Morra Gambit Declined, Alapin Formation' (https://www.chess.com/openings/Sicilian-Defense-Smith-Morra-Gambit-Declined-Alapin-Formation), e Chessable Blog (https://www.chessable.com/blog/smith-morra/). O 4.cxd4 Cxe4 e o 5.Dxd4 e6 são do Stockfish 18, profundidade 18, em 18/9/2026 (pretas +0,64 e igual). } 1. e4 c5 2. d4 cxd4 3. c3 { [PERGUNTA] Ele oferece um peão para ganhar tempo. Qual lance ataca e4 e recusa o gambito? [DICA] O mesmo lance da Alapin. } 3... Nf6 4. e5 ( 4. cxd4?! { Ele recapturou e deixou e4 sem defesa. } 4... Nxe4 { O cavalo come: ganhamos o peão central. } 5. Bd3 Nf6 ) 4... Nd5 5. cxd4 ( 5. Qxd4 e6 6. Nf3 Nc6 ) 5... d6 6. Nf3 Nc6 { A mesma posição da Alapin. [RESUMO] Smith-Morra: ...Cf6. Depois de e5: ...Cd5 e o plano da Alapin. [PROXIMO] Agora 2.f4. } *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -303,7 +303,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-{ [OBJETIVO] Cinco regras para quando a teoria sumir da cabeça. [REFERENCIA] O 7.Dd2 O-O 8.O-O-O d5 é do Stockfish 18, profundidade 18, em 18/9/2026 (brancas +0,28, praticamente igual). } 1. e4 c5 2. Nf3 ( 2. c3 Nf6 { Regra 4: sem o Cf3, ataque e4 com ...Cf6. } ) ( 2. Bc4 Nc6 3. Nf3 Nf6 4. Ng5 e6 { Regra 5: f7 atacado? ...e6 fecha a porta. } ) 2... Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 ( 5. c4 Bg7 6. Be3 Qb6 { Regra 3: peão em c4? Não force ...d5. Ataque b2 e d4. } ) 5... Bg7 6. Be3 Nf6 7. Qd2 O-O { Regra 1: bispo em g7, cavalo em f6, rei rocado. } 8. O-O-O d5 { Regra 2: rei seguro? Procure ...d5. Aqui ele rocou grande, e o ...d5 abre o centro na frente do rei dele. [RESUMO] Rei primeiro; ...d5 quando der; ...Db6 contra c4; ...Cf6 contra c3; ...e6 contra f7. [PROXIMO] Agora uma partida de verdade. } *
+{ [OBJETIVO] Cinco regras para quando a teoria sumir da cabeça. [REFERENCIA] O 7.Dd2 O-O 8.O-O-O d5 é do Stockfish 18, profundidade 18, em 18/9/2026 (brancas +0,28, praticamente igual). } 1. e4 c5 2. Nf3 ( 2. c3 Nf6 { Regra 4: sem o Cf3, ataque e4 com ...Cf6. } ) ( 2. Bc4 Nc6 3. Nf3 Nf6 4. Ng5?! e6 { Regra 5: f7 atacado? ...e6 fecha a porta. } ) 2... Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 ( 5. c4 Bg7 6. Be3 Qb6 { Regra 3: peão em c4? Não force ...d5. Ataque b2 e d4. } ) 5... Bg7 6. Be3 Nf6 7. Qd2 O-O { Regra 1: bispo em g7, cavalo em f6, rei rocado. } 8. O-O-O d5 { Regra 2: rei seguro? Procure ...d5. Aqui ele rocou grande, e o ...d5 abre o centro na frente do rei dele. [RESUMO] Rei primeiro; ...d5 quando der; ...Db6 contra c4; ...Cf6 contra c3; ...e6 contra f7. [PROXIMO] Agora uma partida de verdade. } *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -321,7 +321,7 @@
 [ModelEvent "Campeonato austríaco por equipes 1997/98"]
 [ModelDate "1997.12.07"]
 
-{ [SECAO] Partida modelo | Mazi × Mohr, 1997 [OBJETIVO] Ver o ...d5 contra f3 e Dd2 numa partida de verdade, até o ataque ao rei. [PARTIDA REAL] Leon Mazi (2365) × Georg Mohr (2480), campeonato austríaco por equipes, 1997. Partida do banco de mestres do Lichess. [REFERENCIA] explorer.lichess.ovh/masters, partida oCjpswlb. A avaliação final é do Stockfish 18, profundidade 18, em 18/9/2026: pretas +4,30. } 1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. f3 O-O 8. Qd2 d5 { [CONEXAO] O golpe 1: contra f3 e Dd2, ...d5 na hora. } 9. Nxc6 bxc6 10. e5 Nd7 11. f4 e6 { [CONEXAO] O mesmo ...e6 do golpe 1, segurando d5. } 12. g3 { [ATENCAO] Aqui a partida sai da nossa linha: em vez de 12.Ca4?, ele jogou 12.g3. Sem o golpe ...Cxe5, o plano é outro: atacar com as peças da ala da dama. } 12... c5 { O peão de c5 abre caminho para os nossos peões e para a coluna b. } 13. Bg2 Ba6 { [PLANO] O bispo em a6 corta a casa f1: o rei dele não pode mais rocar pequeno. } 14. Bf2 Rb8 { A torre na coluna b aberta, mirando b2. } 15. O-O-O { O rei foi para o lado onde as nossas peças já estão. } 15... Qa5 { A dama entra no ataque e mira a2. } 16. b3 Nb6 17. a4 Nd7 { O cavalo volta: os peões dele avançaram e deixaram casas para trás. } 18. Kb1 Rfc8 { As duas torres na ala da dama. } 19. Bh3 Qc7 20. Ka2 c4 { [GOLPE] O peão abre as linhas contra o rei. } 21. Bd4 { As Brancas abandonaram. Depois de ...cxb3+, o rei em a2 fica sem defesa. [RESUMO] ...d5 contra f3 e Dd2, ...e6 para segurar o centro, e depois todas as peças contra o rei que rocou grande. } 0-1
+{ [SECAO] Partida modelo | Mazi × Mohr, 1997 [OBJETIVO] Ver o ...d5 contra f3 e Dd2 numa partida de verdade, até o ataque ao rei. [PARTIDA REAL] Leon Mazi (2365) × Georg Mohr (2480), campeonato austríaco por equipes, 1997. Partida do banco de mestres do Lichess. [REFERENCIA] explorer.lichess.ovh/masters, partida oCjpswlb. A avaliação final é do Stockfish 18, profundidade 18, em 18/9/2026: pretas +4,30. } 1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. f3?! O-O 8. Qd2 d5 { [CONEXAO] O golpe 1: contra f3 e Dd2, ...d5 na hora. } 9. Nxc6? bxc6 10. e5 Nd7 11. f4 e6 { [CONEXAO] O mesmo ...e6 do golpe 1, segurando d5. } 12. g3 { [ATENCAO] Aqui a partida sai da nossa linha: em vez de 12.Ca4?, ele jogou 12.g3. Sem o golpe ...Cxe5, o plano é outro: atacar com as peças da ala da dama. } 12... c5 { O peão de c5 abre caminho para os nossos peões e para a coluna b. } 13. Bg2 Ba6 { [PLANO] O bispo em a6 corta a casa f1: o rei dele não pode mais rocar pequeno. } 14. Bf2 Rb8 { A torre na coluna b aberta, mirando b2. } 15. O-O-O { O rei foi para o lado onde as nossas peças já estão. } 15... Qa5 { A dama entra no ataque e mira a2. } 16. b3 Nb6 17. a4 Nd7 { O cavalo volta: os peões dele avançaram e deixaram casas para trás. } 18. Kb1 Rfc8 { As duas torres na ala da dama. } 19. Bh3 Qc7 20. Ka2 c4 { [GOLPE] O peão abre as linhas contra o rei. } 21. Bd4 { As Brancas abandonaram. Depois de ...cxb3+, o rei em a2 fica sem defesa. [RESUMO] ...d5 contra f3 e Dd2, ...e6 para segurar o centro, e depois todas as peças contra o rei que rocou grande. } 0-1
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -335,7 +335,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-{ [SECAO] Treino final | encontre o lance [OBJETIVO] Achar o lance certo em cada posição do curso. } 1. e4 c5 2. Nf3 ( 2. c3 { [PERGUNTA] Alapin. Qual é o lance? [DICA] Ataque e4. } 2... Nf6 ) ( 2. Bc4 Nc6 3. Qh5 { [PERGUNTA] Dama em h5. Qual é o lance? [DICA] Feche a diagonal do bispo. } 3... e6 ) 2... Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 ( 5. c4 Bg7 6. Be3 { [PERGUNTA] Maróczy com Be3. Qual é o lance? [DICA] Ataque d4 e b2. } 6... Qb6 ) 5... Bg7 6. Be3 Nf6 7. f3 ( 7. Bc4 O-O 8. O-O { [PERGUNTA] Roque cedo com o bispo em c4. Qual é o golpe? [DICA] O peão de e4. } 8... Nxe4 ) ( 7. Be2 O-O 8. O-O { [PERGUNTA] Os dois reis rocados. Qual é o lance? [DICA] Dois passos. } 8... d5 ) 7... O-O 8. Qd2 { [PERGUNTA] Peão em f3 e dama em d2. Qual é o lance? [DICA] O centro. } 8... d5 { [RESUMO] Seis posições, seis respostas. [PROXIMO] Agora o move trainer. } *
+{ [SECAO] Treino final | encontre o lance [OBJETIVO] Achar o lance certo em cada posição do curso. } 1. e4 c5 2. Nf3 ( 2. c3 { [PERGUNTA] Alapin. Qual é o lance? [DICA] Ataque e4. } 2... Nf6 ) ( 2. Bc4 Nc6 3. Qh5? { [PERGUNTA] Dama em h5. Qual é o lance? [DICA] Feche a diagonal do bispo. } 3... e6 ) 2... Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 ( 5. c4 Bg7 6. Be3 { [PERGUNTA] Maróczy com Be3. Qual é o lance? [DICA] Ataque d4 e b2. } 6... Qb6 ) 5... Bg7 6. Be3 Nf6 7. f3?! ( 7. Bc4 O-O 8. O-O { [PERGUNTA] Roque cedo com o bispo em c4. Qual é o golpe? [DICA] O peão de e4. } 8... Nxe4 ) ( 7. Be2 O-O 8. O-O { [PERGUNTA] Os dois reis rocados. Qual é o lance? [DICA] Dois passos. } 8... d5 ) 7... O-O 8. Qd2 { [PERGUNTA] Peão em f3 e dama em d2. Qual é o lance? [DICA] O centro. } 8... d5 { [RESUMO] Seis posições, seis respostas. [PROXIMO] Agora o move trainer. } *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -377,7 +377,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. f3 ( 7. Qd2 O-O 8. f3 d5 ) 7... O-O 8. Qd2 d5 9. Nxc6 bxc6 10. e5 Nd7 11. f4 e6 12. Na4 Nxe5 13. fxe5 Qh4+ *
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. f3?! ( 7. Qd2 O-O 8. f3 d5 ) 7... O-O 8. Qd2 d5 9. Nxc6? bxc6 10. e5 Nd7 11. f4 e6 12. Na4? Nxe5 13. fxe5 Qh4+ *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -405,7 +405,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nxc6 bxc6 6. Qd4 Nf6 7. e5 Nd5 8. e6 ( 8. c4 Qb6 ) 8... Nf6 9. exf7+ Kxf7 10. Bc4+ d5 11. Bb3 e5 12. Qxe5 Bb4+ 13. c3 Re8 14. Qxe8+ Qxe8+ *
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nxc6 bxc6 6. Qd4 Nf6 7. e5 Nd5 8. e6 ( 8. c4 Qb6 ) 8... Nf6 9. exf7+ Kxf7 10. Bc4+? d5 11. Bb3 e5 12. Qxe5? Bb4+ 13. c3? Re8 14. Qxe8+ Qxe8+ *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -419,7 +419,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. c3 Nf6 6. Bd3 Bg7 7. O-O O-O 8. Be3 d5 *
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. c3?! Nf6 6. Bd3 Bg7 7. O-O O-O 8. Be3 d5 *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -433,7 +433,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-1. e4 c5 2. Bc4 Nc6 3. Qh5 ( 3. Qf3 Nf6 4. c3 ( 4. d3 Nd4 5. Qd1 d5 ) 4... Ne5 5. Qe2 Nxc4 6. Qxc4 d5 ) ( 3. Bxf7+ Kxf7 4. Qh5+ g6 5. Qxc5 Nf6 6. Nf3 d5 ) 3... e6 4. Nf3 Nf6 5. Qh4 d5 *
+1. e4 c5 2. Bc4 Nc6 3. Qh5? ( 3. Qf3?! Nf6 4. c3?! ( 4. d3 Nd4 5. Qd1 d5 ) 4... Ne5 5. Qe2 Nxc4 6. Qxc4 d5 ) ( 3. Bxf7+? Kxf7 4. Qh5+ g6 5. Qxc5 Nf6 6. Nf3 d5 ) 3... e6 4. Nf3 Nf6 5. Qh4 d5 *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -447,7 +447,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 ( 5. Nxc6 bxc6 6. Qd4 Nf6 7. Nc3 d6 ) 5... Bg7 6. Be3 Nf6 7. Nxc6 bxc6 8. e5 Ng8 9. Bd4 ( 9. f4 Nh6 10. Qd2 O-O 11. O-O-O d6 12. exd6 Nf5 13. Bf2 Rb8 ) ( 9. Bf4 Qa5 ) 9... Qa5 10. e6 Nf6 11. exf7+ ( 11. exd7+ Bxd7 ) 11... Kxf7 12. Bc4+ d5 13. Bb3 ( 13. Be2 Re8 ) 13... e5 14. Bxe5 Re8 15. f4 Qb6 *
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 ( 5. Nxc6 bxc6 6. Qd4 Nf6 7. Nc3 d6 ) 5... Bg7 6. Be3 Nf6 7. Nxc6 bxc6 8. e5 Ng8 9. Bd4 ( 9. f4 Nh6 10. Qd2 O-O 11. O-O-O d6 12. exd6 Nf5 13. Bf2 Rb8 ) ( 9. Bf4? Qa5 ) 9... Qa5 10. e6?! Nf6 11. exf7+ ( 11. exd7+ Bxd7 ) 11... Kxf7 12. Bc4+ d5 13. Bb3 ( 13. Be2 Re8 ) 13... e5 14. Bxe5?! Re8 15. f4 Qb6 *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -461,7 +461,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. Bc4 O-O 8. Bb3 Re8 9. O-O ( 9. f3 d5 10. Nxd5 ( 10. exd5 Nb4 11. Nde2 e6 ) 10... Nxd5 11. exd5 ( 11. Bxd5 Nxd4 12. Bxd4 Bxd4 13. Qxd4 e6 ) 11... Nb4 12. c4 e6 13. dxe6 Bxe6 14. O-O Bxc4 15. Bxc4 Rxe3 ) 9... d6 10. h3 Na5 11. Qd2 ( 11. f4 b6 ) 11... a6 12. Rad1 b5 *
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. Bc4 O-O 8. Bb3 Re8 9. O-O ( 9. f3 d5 10. Nxd5 ( 10. exd5 Nb4 11. Nde2 e6 ) 10... Nxd5 11. exd5 ( 11. Bxd5?? Nxd4 12. Bxd4 Bxd4 13. Qxd4 e6 ) 11... Nb4 12. c4 e6 13. dxe6?? Bxe6 14. O-O Bxc4 15. Bxc4 Rxe3 ) 9... d6 10. h3 Na5 11. Qd2 ( 11. f4 b6 ) 11... a6 12. Rad1 b5 *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -489,7 +489,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-1. e4 c5 2. Nf3 ( 2. Bc4 Nc6 3. Nf3 Nf6 ) 2... Nc6 3. Bc4 Nf6 4. d3 ( 4. Nc3 e6 5. d4 d5 ) ( 4. Ng5 e6 5. d3 d5 ) ( 4. e5 d5 5. Bb5 ( 5. exf6 dxc4 ) 5... Nd7 ) 4... e6 5. O-O d5 *
+1. e4 c5 2. Nf3 ( 2. Bc4 Nc6 3. Nf3 Nf6 ) 2... Nc6 3. Bc4 Nf6 4. d3 ( 4. Nc3 e6 5. d4 d5 ) ( 4. Ng5?! e6 5. d3 d5 ) ( 4. e5 d5 5. Bb5 ( 5. exf6? dxc4 ) 5... Nd7 ) 4... e6 5. O-O d5 *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -573,7 +573,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-1. e4 c5 2. d4 cxd4 3. c3 Nf6 4. e5 ( 4. cxd4 Nxe4 5. Bd3 Nf6 ) 4... Nd5 5. cxd4 ( 5. Qxd4 e6 6. Nf3 Nc6 ) 5... d6 6. Nf3 Nc6 *
+1. e4 c5 2. d4 cxd4 3. c3 Nf6 4. e5 ( 4. cxd4?! Nxe4 5. Bd3 Nf6 ) 4... Nd5 5. cxd4 ( 5. Qxd4 e6 6. Nf3 Nc6 ) 5... d6 6. Nf3 Nc6 *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]
@@ -601,7 +601,7 @@
 [StudyName "Siciliana: Dragão Acelerado"]
 [Orientation "black"]
 
-1. e4 c5 2. Nf3 ( 2. c3 Nf6 ) ( 2. Bc4 Nc6 3. Nf3 Nf6 4. Ng5 e6 ) 2... Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 ( 5. c4 Bg7 6. Be3 Qb6 ) 5... Bg7 6. Be3 Nf6 7. Qd2 O-O 8. O-O-O d5 *
+1. e4 c5 2. Nf3 ( 2. c3 Nf6 ) ( 2. Bc4 Nc6 3. Nf3 Nf6 4. Ng5?! e6 ) 2... Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 ( 5. c4 Bg7 6. Be3 Qb6 ) 5... Bg7 6. Be3 Nf6 7. Qd2 O-O 8. O-O-O d5 *
 
 
 [Event "Siciliana pelas Pretas: Dragão Acelerado v1.0"]

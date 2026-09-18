@@ -165,11 +165,14 @@ test("(c) expectativas independentes contadas no texto sobrevivem à reescrita",
       ...Array(8).fill("$4"),
       ...Array(1).fill("$40"),
       ...Array(22).fill("$5"),
-      ...Array(20).fill("$6"),
+      ...Array(19).fill("$6"),
     ],
     // Até 17/9/2026 só um "!"; a Francesa gerada traz os símbolos do estudo colados ao lance.
     // 28 "!" até 18/9/2026; a Siciliana escrita à mão tinha um, que agora sai como $1.
-    simbolosColados: [...Array(27).fill("!"), "!?", "!?", "!?", "!?", "!?", "?", "?!", "?!", "??"],
+    // Desde 18/9/2026 (manhã) os lances do adversário nas armadilhas levam ?!, ? ou ?? pela perda medida no
+    // Stockfish 18 (regra global do AGENTS.md): 4 "?", 10 "?!" e 2 "??" a mais na Francesa e na Siciliana, e o
+    // $6 de 7.f3 da Siciliana sai colado como ?!.
+    simbolosColados: [...Array(27).fill("!"), ...Array(5).fill("!?"), ...Array(5).fill("?"), ...Array(12).fill("?!"), ...Array(3).fill("??")],
     variacoes: 126,
   });
 });

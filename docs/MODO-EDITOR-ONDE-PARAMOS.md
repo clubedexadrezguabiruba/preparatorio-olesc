@@ -7510,3 +7510,41 @@ cortados; os 6 ids antigos continuam); `marcas-das-fontes` verde; contagens de `
 `notacao-em-portugues` ajustadas. Publicações: B `pub-bf56e6a91a8da82e`, C `pub-918f740b16236d10`, D
 `pub-8f5e6a563f077b8d`, EF `pub-609249955ff62e50` (A igual). Aviso que continua: 56 linhas passam da meta de 40 por
 abertura do Base.
+
+## O erro do adversário nas armadilhas leva símbolo — 18/9/2026 (manhã)
+
+Pedido do Doug: "falta nas aulas de abertura incluir símbolos de erro e blunder nos golpes e armadilhas, em todas as
+aberturas", e depois "coloca o símbolo de imprecisão". Virou regra global em `AGENTS.md` ("O erro do adversário nas
+armadilhas leva símbolo").
+
+**Levantamento.** Os símbolos já viajavam do estudo até a aula (campo `nags`) e o player já desenhava os seis no
+círculo (`lib/chess/nag-overlay.ts`); faltava o símbolo no estudo. Um script percorreu os três estudos, lance a lance
+e variante a variante, e pediu ao Stockfish 18 (`scripts/motor.ts`) a perda de cada lance do adversário: varredura
+em profundidade 14, e os candidatos reconferidos em 22. Régua: `?!` 0,5–0,99 peão, `?` 1–2,99, `??` ≥3 ou permite
+mate. Aplicado pela posição (FEN + lance), em toda ocorrência; quando a fonte já tinha marcado o lance num capítulo,
+valeu a marca da fonte (Siciliana `11.Bxd5` e `13.dxe6` `$4` → `??`; `12.Dxe5`, `9.Bf4`, `10.Bc4+`, `12.Ca4` `$2` →
+`?`; `5.c3` `$6` → `?!`, só na posição do Golpe 4 — na Rossolimo o mesmo lance não perde nada).
+
+**Francesa — 30 símbolos:** `3...Cf6?!` (0,71) ×9, `6...Bxb5?!` (0,75) ×6, e o golpe do sacrifício de dama, que não
+tinha nenhum: `12...Be8??` (3,77), `14...Rc8?` (1,68), `15...Bxf7??` (permite o mate) ×5 cada.
+**Siciliana — 39 símbolos:** `13.c3?` (1,93), `3.Bxf7+?` (2,74), `11.Bxd5??`, `5.exf6?` (1,88), `13.dxe6??`, `3.Dh5?`
+(1,15), `4.Cg5?!` (0,95), `4.c3?!` (0,75), `4.cxd4?!` (0,76), `3.Df3?!` (0,68), mais as marcas da fonte copiadas para os
+capítulos que as tinham esquecido (`7.f3?!` ×5, `9.Cxc6?` ×3, `10.e6?!`, `14.Bxe5?!`).
+**Escocesa:** aplicada pela sessão paralela no gerador dela, com a lista daqui (`6...Ch5?`, `5...Bc5?` só na linha
+3...Cf6, `5...b6?!`, `4...Ba5?!`, `6...De7?!`), no commit dela.
+Fora do escopo, à espera do Doug: erros em capítulos de defesa normal (`12...Dxd6` 0,78 e `6...De6` 0,98 na
+Escocesa; `7...e5` e `10...a6` na Francesa) e nas partidas modelo (`28...Te7` 2,7 na Radjabov; `18.Rb1`, `20.Ra2` na
+Mazi × Mohr).
+
+**Republicado.** Antes de tocar no estudo, planejar do estudo atual deu a Siciliana **igual** ao disco, e a Francesa
+B, C e E+F diferentes só pela notação em português nas falas (`7.Dxd4`, `9.Cc3`, `11.Cxf3`) — a regra de 17/9, que
+veio junto. Etapas, capítulos e treinos iguais nas 10 aulas. Conferência verde e publicadas: Francesa B
+`pub-1c7babf235efc4f4`, C `pub-816961f1ba448b43`, EF `pub-c8fe4521f14c440d`; Siciliana B `pub-1fef182250f597dd`,
+C `pub-c22fa20051129b84`, D `pub-4a1ecf1c4eea4d50`, EF `pub-cc5ea57eb991faed` (A e D da Francesa e A da Siciliana
+iguais). Move trainer: nascem 0, morrem 0.
+
+**A torre em inglês fechou.** A republicação trouxe 9 dos 10 `Rg1` da prosa da Francesa já como `Tg1`; o décimo,
+escrito à mão no `[TRAIN]` do estudo ("Nbc3, Rg1 e Bf4"), virou "Cbc3, Tg1 e Bf4". O teste do `R` da prosa em
+`notacao-em-portugues.test.ts` passou de "dez torres" para "nenhuma torre em inglês".
+
+**Pendente:** o Doug olhar na tela uma armadilha de cada curso (o círculo do `??` no lance do adversário).
