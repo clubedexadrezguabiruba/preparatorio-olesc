@@ -1,0 +1,539 @@
+{
+  "formato": "pacote-aula-v2",
+  "versao": 1,
+  "publicationId": "pub-8f5e6a563f077b8d",
+  "aula": {
+    "schemaVersion": 2,
+    "id": "AB-PRETAS-SICILIANA-D",
+    "titulo": "Siciliana: Dragão Acelerado — aula D: Partida modelo",
+    "metadados": {
+      "orientacaoPadrao": "black",
+      "criterioDominio": "D1",
+      "estadoEditorial": "rascunho",
+      "fonteDidatica": "estudo local v1.0 — Siciliana: Dragão Acelerado",
+      "abertura": {
+        "cor": "pretas",
+        "abertura": "siciliana",
+        "bloco": "D"
+      }
+    },
+    "proveniencia": [],
+    "excecoes": [],
+    "analises": [
+      {
+        "id": "analise-cap-d26",
+        "inicio": {
+          "tipo": "fen",
+          "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        },
+        "origemPgn": {
+          "tags": {
+            "Event": "Siciliana pelas Pretas: Dragão Acelerado v1.0",
+            "Site": "Estudo local",
+            "Date": "2026.09.18",
+            "Round": "23",
+            "White": "D26",
+            "Black": "Partida modelo: Mazi × Mohr, 1997",
+            "Result": "0-1",
+            "Annotator": "Projeto repertório — Siciliana",
+            "StudyName": "Siciliana: Dragão Acelerado",
+            "Orientation": "black",
+            "ModelWhite": "Leon Mazi",
+            "ModelBlack": "Georg Mohr",
+            "ModelEvent": "Campeonato austríaco por equipes 1997/98",
+            "ModelDate": "1997.12.07",
+            "ChapterName": "cap D26"
+          },
+          "resultado": "0-1",
+          "naoReconhecidos": []
+        },
+        "raizId": "no-cap-d26-0",
+        "nos": {
+          "no-cap-d26-0": {
+            "id": "no-cap-d26-0",
+            "filhos": [
+              "no-cap-d26-1"
+            ],
+            "comentario": "[SECAO] Partida modelo | Mazi × Mohr, 1997 [OBJETIVO] Ver o ...d5 contra f3 e Dd2 numa partida de verdade, até o ataque ao rei. [PARTIDA REAL] Leon Mazi (2365) × Georg Mohr (2480), campeonato austríaco por equipes, 1997. Partida do banco de mestres do Lichess. [REFERENCIA] explorer.lichess.ovh/masters, partida oCjpswlb. A avaliação final é do Stockfish 18, profundidade 18, em 18/9/2026: pretas +4,30."
+          },
+          "no-cap-d26-1": {
+            "id": "no-cap-d26-1",
+            "uci": "e2e4",
+            "filhos": [
+              "no-cap-d26-2"
+            ]
+          },
+          "no-cap-d26-2": {
+            "id": "no-cap-d26-2",
+            "uci": "c7c5",
+            "filhos": [
+              "no-cap-d26-3"
+            ]
+          },
+          "no-cap-d26-3": {
+            "id": "no-cap-d26-3",
+            "uci": "g1f3",
+            "filhos": [
+              "no-cap-d26-4"
+            ]
+          },
+          "no-cap-d26-4": {
+            "id": "no-cap-d26-4",
+            "uci": "b8c6",
+            "filhos": [
+              "no-cap-d26-5"
+            ]
+          },
+          "no-cap-d26-5": {
+            "id": "no-cap-d26-5",
+            "uci": "d2d4",
+            "filhos": [
+              "no-cap-d26-6"
+            ]
+          },
+          "no-cap-d26-6": {
+            "id": "no-cap-d26-6",
+            "uci": "c5d4",
+            "filhos": [
+              "no-cap-d26-7"
+            ]
+          },
+          "no-cap-d26-7": {
+            "id": "no-cap-d26-7",
+            "uci": "f3d4",
+            "filhos": [
+              "no-cap-d26-8"
+            ]
+          },
+          "no-cap-d26-8": {
+            "id": "no-cap-d26-8",
+            "uci": "g7g6",
+            "filhos": [
+              "no-cap-d26-9"
+            ]
+          },
+          "no-cap-d26-9": {
+            "id": "no-cap-d26-9",
+            "uci": "b1c3",
+            "filhos": [
+              "no-cap-d26-10"
+            ]
+          },
+          "no-cap-d26-10": {
+            "id": "no-cap-d26-10",
+            "uci": "f8g7",
+            "filhos": [
+              "no-cap-d26-11"
+            ]
+          },
+          "no-cap-d26-11": {
+            "id": "no-cap-d26-11",
+            "uci": "c1e3",
+            "filhos": [
+              "no-cap-d26-12"
+            ]
+          },
+          "no-cap-d26-12": {
+            "id": "no-cap-d26-12",
+            "uci": "g8f6",
+            "filhos": [
+              "no-cap-d26-13"
+            ]
+          },
+          "no-cap-d26-13": {
+            "id": "no-cap-d26-13",
+            "uci": "f2f3",
+            "filhos": [
+              "no-cap-d26-14"
+            ]
+          },
+          "no-cap-d26-14": {
+            "id": "no-cap-d26-14",
+            "uci": "e8g8",
+            "filhos": [
+              "no-cap-d26-15"
+            ]
+          },
+          "no-cap-d26-15": {
+            "id": "no-cap-d26-15",
+            "uci": "d1d2",
+            "filhos": [
+              "no-cap-d26-16"
+            ]
+          },
+          "no-cap-d26-16": {
+            "id": "no-cap-d26-16",
+            "uci": "d7d5",
+            "filhos": [
+              "no-cap-d26-17"
+            ],
+            "comentario": "[CONEXAO] O golpe 1: contra f3 e Dd2, ...d5 na hora."
+          },
+          "no-cap-d26-17": {
+            "id": "no-cap-d26-17",
+            "uci": "d4c6",
+            "filhos": [
+              "no-cap-d26-18"
+            ]
+          },
+          "no-cap-d26-18": {
+            "id": "no-cap-d26-18",
+            "uci": "b7c6",
+            "filhos": [
+              "no-cap-d26-19"
+            ]
+          },
+          "no-cap-d26-19": {
+            "id": "no-cap-d26-19",
+            "uci": "e4e5",
+            "filhos": [
+              "no-cap-d26-20"
+            ]
+          },
+          "no-cap-d26-20": {
+            "id": "no-cap-d26-20",
+            "uci": "f6d7",
+            "filhos": [
+              "no-cap-d26-21"
+            ]
+          },
+          "no-cap-d26-21": {
+            "id": "no-cap-d26-21",
+            "uci": "f3f4",
+            "filhos": [
+              "no-cap-d26-22"
+            ]
+          },
+          "no-cap-d26-22": {
+            "id": "no-cap-d26-22",
+            "uci": "e7e6",
+            "filhos": [
+              "no-cap-d26-23"
+            ],
+            "comentario": "[CONEXAO] O mesmo ...e6 do golpe 1, segurando d5."
+          },
+          "no-cap-d26-23": {
+            "id": "no-cap-d26-23",
+            "uci": "g2g3",
+            "filhos": [
+              "no-cap-d26-24"
+            ],
+            "comentario": "[ATENCAO] Aqui a partida sai da nossa linha: em vez de 12.Ca4?, ele jogou 12.g3. Sem o golpe ...Cxe5, o plano é outro: atacar com as peças da ala da dama."
+          },
+          "no-cap-d26-24": {
+            "id": "no-cap-d26-24",
+            "uci": "c6c5",
+            "filhos": [
+              "no-cap-d26-25"
+            ],
+            "comentario": "O peão de c5 abre caminho para os nossos peões e para a coluna b."
+          },
+          "no-cap-d26-25": {
+            "id": "no-cap-d26-25",
+            "uci": "f1g2",
+            "filhos": [
+              "no-cap-d26-26"
+            ]
+          },
+          "no-cap-d26-26": {
+            "id": "no-cap-d26-26",
+            "uci": "c8a6",
+            "filhos": [
+              "no-cap-d26-27"
+            ],
+            "comentario": "[PLANO] O bispo em a6 corta a casa f1: o rei dele não pode mais rocar pequeno."
+          },
+          "no-cap-d26-27": {
+            "id": "no-cap-d26-27",
+            "uci": "e3f2",
+            "filhos": [
+              "no-cap-d26-28"
+            ]
+          },
+          "no-cap-d26-28": {
+            "id": "no-cap-d26-28",
+            "uci": "a8b8",
+            "filhos": [
+              "no-cap-d26-29"
+            ],
+            "comentario": "A torre na coluna b aberta, mirando b2."
+          },
+          "no-cap-d26-29": {
+            "id": "no-cap-d26-29",
+            "uci": "e1c1",
+            "filhos": [
+              "no-cap-d26-30"
+            ],
+            "comentario": "O rei foi para o lado onde as nossas peças já estão."
+          },
+          "no-cap-d26-30": {
+            "id": "no-cap-d26-30",
+            "uci": "d8a5",
+            "filhos": [
+              "no-cap-d26-31"
+            ],
+            "comentario": "A dama entra no ataque e mira a2."
+          },
+          "no-cap-d26-31": {
+            "id": "no-cap-d26-31",
+            "uci": "b2b3",
+            "filhos": [
+              "no-cap-d26-32"
+            ]
+          },
+          "no-cap-d26-32": {
+            "id": "no-cap-d26-32",
+            "uci": "d7b6",
+            "filhos": [
+              "no-cap-d26-33"
+            ]
+          },
+          "no-cap-d26-33": {
+            "id": "no-cap-d26-33",
+            "uci": "a2a4",
+            "filhos": [
+              "no-cap-d26-34"
+            ]
+          },
+          "no-cap-d26-34": {
+            "id": "no-cap-d26-34",
+            "uci": "b6d7",
+            "filhos": [
+              "no-cap-d26-35"
+            ],
+            "comentario": "O cavalo volta: os peões dele avançaram e deixaram casas para trás."
+          },
+          "no-cap-d26-35": {
+            "id": "no-cap-d26-35",
+            "uci": "c1b1",
+            "filhos": [
+              "no-cap-d26-36"
+            ]
+          },
+          "no-cap-d26-36": {
+            "id": "no-cap-d26-36",
+            "uci": "f8c8",
+            "filhos": [
+              "no-cap-d26-37"
+            ],
+            "comentario": "As duas torres na ala da dama."
+          },
+          "no-cap-d26-37": {
+            "id": "no-cap-d26-37",
+            "uci": "g2h3",
+            "filhos": [
+              "no-cap-d26-38"
+            ]
+          },
+          "no-cap-d26-38": {
+            "id": "no-cap-d26-38",
+            "uci": "a5c7",
+            "filhos": [
+              "no-cap-d26-39"
+            ]
+          },
+          "no-cap-d26-39": {
+            "id": "no-cap-d26-39",
+            "uci": "b1a2",
+            "filhos": [
+              "no-cap-d26-40"
+            ]
+          },
+          "no-cap-d26-40": {
+            "id": "no-cap-d26-40",
+            "uci": "c5c4",
+            "filhos": [
+              "no-cap-d26-41"
+            ],
+            "comentario": "[GOLPE] O peão abre as linhas contra o rei."
+          },
+          "no-cap-d26-41": {
+            "id": "no-cap-d26-41",
+            "uci": "f2d4",
+            "filhos": [],
+            "comentario": "As Brancas abandonaram. Depois de ...cxb3+, o rei em a2 fica sem defesa. [RESUMO] ...d5 contra f3 e Dd2, ...e6 para segurar o centro, e depois todas as peças contra o rei que rocou grande."
+          }
+        }
+      }
+    ],
+    "introducoes": [],
+    "capitulos": [
+      {
+        "id": "cap-d26",
+        "titulo": "Partida modelo: Mazi × Mohr, 1997",
+        "resumo": "Ver o ...d5 contra f3 e Dd2 numa partida de verdade, até o ataque ao rei.",
+        "secao": {
+          "titulo": "Partida modelo",
+          "subtitulo": "Mazi × Mohr, 1997"
+        },
+        "analiseId": "analise-cap-d26",
+        "inicioNodeId": "no-cap-d26-0",
+        "caminho": [
+          "no-cap-d26-1",
+          "no-cap-d26-2",
+          "no-cap-d26-3",
+          "no-cap-d26-4",
+          "no-cap-d26-5",
+          "no-cap-d26-6",
+          "no-cap-d26-7",
+          "no-cap-d26-8",
+          "no-cap-d26-9",
+          "no-cap-d26-10",
+          "no-cap-d26-11",
+          "no-cap-d26-12",
+          "no-cap-d26-13",
+          "no-cap-d26-14",
+          "no-cap-d26-15",
+          "no-cap-d26-16",
+          "no-cap-d26-17",
+          "no-cap-d26-18",
+          "no-cap-d26-19",
+          "no-cap-d26-20",
+          "no-cap-d26-21",
+          "no-cap-d26-22",
+          "no-cap-d26-23",
+          "no-cap-d26-24",
+          "no-cap-d26-25",
+          "no-cap-d26-26",
+          "no-cap-d26-27",
+          "no-cap-d26-28",
+          "no-cap-d26-29",
+          "no-cap-d26-30",
+          "no-cap-d26-31",
+          "no-cap-d26-32",
+          "no-cap-d26-33",
+          "no-cap-d26-34",
+          "no-cap-d26-35",
+          "no-cap-d26-36",
+          "no-cap-d26-37",
+          "no-cap-d26-38",
+          "no-cap-d26-39",
+          "no-cap-d26-40",
+          "no-cap-d26-41"
+        ],
+        "orientacao": "black",
+        "narracoes": [
+          {
+            "id": "narracao-no-cap-d26-0",
+            "nodeId": "no-cap-d26-0",
+            "texto": "Leon Mazi × Georg Mohr — Campeonato austríaco por equipes 1997/98.",
+            "pausa": "temporizada",
+            "rotulo": "Partida"
+          },
+          {
+            "id": "narracao-no-cap-d26-0-2",
+            "nodeId": "no-cap-d26-0",
+            "texto": "Leon Mazi (2365) × Georg Mohr (2480), campeonato austríaco por equipes, 1997. Partida do banco de mestres do Lichess.",
+            "pausa": "temporizada",
+            "rotulo": "Partida real"
+          },
+          {
+            "id": "narracao-no-cap-d26-16",
+            "nodeId": "no-cap-d26-16",
+            "texto": "O golpe 1: contra f3 e Dd2, ...d5 na hora.",
+            "pausa": "temporizada",
+            "rotulo": "Conexão"
+          },
+          {
+            "id": "narracao-no-cap-d26-22",
+            "nodeId": "no-cap-d26-22",
+            "texto": "O mesmo ...e6 do golpe 1, segurando d5.",
+            "pausa": "temporizada",
+            "rotulo": "Conexão"
+          },
+          {
+            "id": "narracao-no-cap-d26-23",
+            "nodeId": "no-cap-d26-23",
+            "texto": "Aqui a partida sai da nossa linha: em vez de 12.Ca4?, ele jogou 12.g3. Sem o golpe ...Cxe5, o plano é outro: atacar com as peças da ala da dama.",
+            "pausa": "temporizada",
+            "rotulo": "Atenção"
+          },
+          {
+            "id": "narracao-no-cap-d26-24",
+            "nodeId": "no-cap-d26-24",
+            "texto": "O peão de c5 abre caminho para os nossos peões e para a coluna b.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d26-26",
+            "nodeId": "no-cap-d26-26",
+            "texto": "O bispo em a6 corta a casa f1: o rei dele não pode mais rocar pequeno.",
+            "pausa": "temporizada",
+            "rotulo": "Plano"
+          },
+          {
+            "id": "narracao-no-cap-d26-28",
+            "nodeId": "no-cap-d26-28",
+            "texto": "A torre na coluna b aberta, mirando b2.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d26-29",
+            "nodeId": "no-cap-d26-29",
+            "texto": "O rei foi para o lado onde as nossas peças já estão.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d26-30",
+            "nodeId": "no-cap-d26-30",
+            "texto": "A dama entra no ataque e mira a2.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d26-34",
+            "nodeId": "no-cap-d26-34",
+            "texto": "O cavalo volta: os peões dele avançaram e deixaram casas para trás.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d26-36",
+            "nodeId": "no-cap-d26-36",
+            "texto": "As duas torres na ala da dama.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d26-40",
+            "nodeId": "no-cap-d26-40",
+            "texto": "O peão abre as linhas contra o rei.",
+            "pausa": "temporizada",
+            "rotulo": "Golpe"
+          },
+          {
+            "id": "narracao-no-cap-d26-41",
+            "nodeId": "no-cap-d26-41",
+            "texto": "As Brancas abandonaram. Depois de ...cxb3+, o rei em a2 fica sem defesa.",
+            "pausa": "temporizada"
+          },
+          {
+            "id": "narracao-no-cap-d26-41-2",
+            "nodeId": "no-cap-d26-41",
+            "texto": "...d5 contra f3 e Dd2, ...e6 para segurar o centro, e depois todas as peças contra o rei que rocou grande.",
+            "pausa": "manual",
+            "rotulo": "Resumo"
+          }
+        ]
+      }
+    ],
+    "treinos": [],
+    "praticas": [],
+    "fluxo": [
+      {
+        "id": "etapa-cap-d26",
+        "tipo": "capitulo",
+        "entidadeId": "cap-d26"
+      }
+    ]
+  },
+  "posicoes": {},
+  "revisoes": {},
+  "manifesto": {
+    "aulaId": "AB-PRETAS-SICILIANA-D",
+    "aula": "9a9e98da4bb901646803a0c007751a9f37cd710e45d4e410366eaf44ab457088",
+    "posicoes": {},
+    "revisoes": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "juizes": {
+      "pratica": 1,
+      "treino": 1
+    }
+  }
+}

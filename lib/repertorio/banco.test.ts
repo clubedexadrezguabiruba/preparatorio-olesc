@@ -96,9 +96,10 @@ test("o Base publicado tem 20 linhas, e o primeiro lance é sempre das brancas",
   //
   // **38 desde 17/9/2026:** a Francesa passou a vir do estudo do Lichess (curso de abertura) —
   // a linha escrita à mão saiu e entraram as 19 do move trainer, todas no Base.
-  // **107 desde 18/9/2026:** a Siciliana também passou a vir do estudo (Dragão Acelerado) — as 6
-  // linhas escritas à mão continuam, com os mesmos ids, e o move trainer dela tem 74, todas no Base.
-  assert.equal(todas.filter((l) => l.nivel === "base").length, 107);
+  // **89 desde 18/9/2026:** a Siciliana também passou a vir do estudo (Dragão Acelerado) — as 6
+  // linhas escritas à mão continuam, com os mesmos ids, e o move trainer dela tem 56, todas no Base
+  // (eram 74; o Doug mandou cortar os capítulos mais raros na faixa 1000–1800).
+  assert.equal(todas.filter((l) => l.nivel === "base").length, 89);
 
   for (const linha of todas) {
     // O contrato de que a tela depende para saber quando auto-jogar: `meus`
@@ -111,7 +112,7 @@ test("o Base publicado tem 20 linhas, e o primeiro lance é sempre das brancas",
   }
 });
 
-test("o repertório publicado tem 1109 lances nossos", () => {
+test("o repertório publicado tem 886 lances nossos", () => {
   // Até 17/9/2026 este teste também exigia comentário em cada um deles; o Doug
   // tornou o comentário opcional no move trainer, nos 11 repertórios.
   let nossos = 0;
@@ -123,8 +124,8 @@ test("o repertório publicado tem 1109 lances nossos", () => {
   // Ele SOBE de propósito enquanto a §24 estica as 27 linhas até o roque e as
   // peças menores fora: era 222 no fim da §23, e o alvo é cerca de 340. Foi 351 até
   // 17/9/2026, quando as 19 linhas da Francesa geradas do estudo trocaram a escrita à mão; 499 até
-  // 18/9/2026, quando a Siciliana passou de 6 linhas para as 74 do estudo do Dragão Acelerado.
-  assert.equal(nossos, 1109, "o repertório tem 1109 lances nossos, em 113 linhas");
+  // 18/9/2026, quando a Siciliana passou de 6 linhas para as 56 do estudo do Dragão Acelerado.
+  assert.equal(nossos, 886, "o repertório tem 886 lances nossos, em 95 linhas");
 });
 
 test("as páginas de princípios ligadas a uma abertura apontam para abertura viva", () => {

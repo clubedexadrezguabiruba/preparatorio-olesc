@@ -58,7 +58,7 @@ function tudoTocado(nome: string, texto: string) {
   return escreverArquivo(texto, casca.aula, new Set(casca.aula.analises.map((a) => a.id)));
 }
 
-test("os onze arquivos abrem como casca sem problema, 109 jogos", () => {
+test("os onze arquivos abrem como casca sem problema, 91 jogos", () => {
   let jogos = 0;
   for (const { nome, texto } of fontes) {
     const casca = cascaDoArquivo(nome, texto);
@@ -67,8 +67,8 @@ test("os onze arquivos abrem como casca sem problema, 109 jogos", () => {
     assert.equal(casca.intervalos.jogos.length, lerPgns(texto).length, nome);
   }
   // 23 até 17/9/2026; a Francesa gerada do estudo trocou 1 jogo escrito à mão por 19.
-  // 41 até 18/9/2026; a Siciliana gerada do estudo trocou 6 jogos escritos à mão por 74.
-  assert.equal(jogos, 109);
+  // 41 até 18/9/2026; a Siciliana gerada do estudo trocou 6 jogos escritos à mão por 56.
+  assert.equal(jogos, 91);
 });
 
 test("(a) sem edição, os onze arquivos saem byte a byte", () => {
@@ -83,7 +83,7 @@ test("(a) sem edição, os onze arquivos saem byte a byte", () => {
   assert.equal(iguais, 11);
 });
 
-test("(b) os 109 jogos reescritos expandem igual ao original — linhas, ids, avisos e problemas", () => {
+test("(b) os 91 jogos reescritos expandem igual ao original — linhas, ids, avisos e problemas", () => {
   let jogos = 0;
   for (const { nome, texto } of fontes) {
     const escrito = tudoTocado(nome, texto);
@@ -104,8 +104,8 @@ test("(b) os 109 jogos reescritos expandem igual ao original — linhas, ids, av
     else assert.notEqual(escrito.texto, texto, `${nome}: forçar a reescrita tem de reescrever alguma coisa`);
   }
   // 23 até 17/9/2026; a Francesa gerada do estudo trocou 1 jogo escrito à mão por 19.
-  // 41 até 18/9/2026; a Siciliana gerada do estudo trocou 6 jogos escritos à mão por 74.
-  assert.equal(jogos, 109);
+  // 41 até 18/9/2026; a Siciliana gerada do estudo trocou 6 jogos escritos à mão por 56.
+  assert.equal(jogos, 91);
 });
 
 test("(b) a compilação dos onze reescritos é byte a byte a de hoje", () => {
@@ -150,28 +150,27 @@ test("(c) expectativas independentes contadas no texto sobrevivem à reescrita",
     blocosDePlano: 7,
     // Eram 6 NAGs e 77 variações até 14/9/2026, quando as marcas das fontes originais
     // voltaram (regra "Símbolos de lance" do AGENTS.md). 45 NAGs e 87 variações até 18/9/2026:
-    // a Siciliana gerada do estudo traz os símbolos do Plichta em cada uma das 74 linhas.
+    // a Siciliana gerada do estudo traz os símbolos do Plichta em cada uma das 56 linhas.
     nagsNumericos: [
-      ...Array(198).fill("$1"),
+      ...Array(126).fill("$1"),
       ...Array(1).fill("$10"),
       ...Array(2).fill("$14"),
-      ...Array(2).fill("$146"),
+      ...Array(1).fill("$146"),
       ...Array(1).fill("$15"),
       ...Array(4).fill("$16"),
       ...Array(1).fill("$19"),
-      ...Array(59).fill("$2"),
-      ...Array(3).fill("$3"),
+      ...Array(34).fill("$2"),
       ...Array(2).fill("$36"),
       ...Array(1).fill("$37"),
-      ...Array(14).fill("$4"),
+      ...Array(8).fill("$4"),
       ...Array(1).fill("$40"),
-      ...Array(29).fill("$5"),
-      ...Array(37).fill("$6"),
+      ...Array(22).fill("$5"),
+      ...Array(20).fill("$6"),
     ],
     // Até 17/9/2026 só um "!"; a Francesa gerada traz os símbolos do estudo colados ao lance.
     // 28 "!" até 18/9/2026; a Siciliana escrita à mão tinha um, que agora sai como $1.
     simbolosColados: [...Array(27).fill("!"), "!?", "!?", "!?", "!?", "!?", "?", "?!", "?!", "??"],
-    variacoes: 149,
+    variacoes: 126,
   });
 });
 

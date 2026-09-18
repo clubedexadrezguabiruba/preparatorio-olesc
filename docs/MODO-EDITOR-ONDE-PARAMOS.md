@@ -7489,3 +7489,24 @@ palavras e foram encurtadas). Paradas por aula: A 5, B 35, C 45, D 0, E+F 6; lin
 
 **Pendente:** o Doug testar com a mão (arrastar só se prova com a mão); a aula C é longa (13 capítulos, 45 paradas) —
 decidir se divide; Escocesa (passo 4) para a `FILA-DO-DOUG.md`.
+
+### Siciliana: o ensaio na Vercel e o corte por raridade (18/9/2026, madrugada)
+
+O Doug pediu Playwright no site publicado. Jogado como `alunoteste` (cliques reais nas casas): a aula A inteira, com
+as 3 linhas do move trainer; a B destravou ao concluir a A e foi jogada até a etapa 104 de 105 — todas as paradas
+aceitaram o lance certo, zero erro de console ou de rede. Achados: (1) a capa do treino guiado dizia "As **Pretas**
+mudam de defesa" num curso das Pretas — `adversarioDaAulaDeAbertura` em `dominio.ts`, teste que falha antes e passa
+depois, commit `eabcdb2`; (2) B com **105** etapas e C com **132** (Francesa: 44 e 18).
+
+Decisão do Doug: menos perguntas e cortar por ordem de raridade. Medida a frequência **condicional** na faixa
+1000–1800 (o produto das frequências dos lances das Brancas, dados os nossos): os golpes profundos são raríssimos —
+B04 roque grande 0,07%, B12 e C15 bispo em b3 0,11%, B07 Be2+Dd2 0,16%, C14 Be2 e roque 0,26%, B05 f3+Bc4 0,27% —
+e as anti-sicilianas dominam (bispo em c4 11,9%, Rossolimo 6,4%, 5.Cxc6 4,9%, Alapin 4,8%, 2.f4 4,5%, 3.Dxd4 4,4%).
+Saíram os cinco capítulos abaixo de 0,3% (B04, B05, B07, B12, C14) e os trainers deles; o C15 ficou, enxuto e com os
+erros do B12, por ser dono de uma das 6 linhas antigas. Perguntas: no máximo 1–2 por capítulo, no lance-chave; ramos
+raros deixam de ser narrados mas ficam na árvore (lances e símbolos). Resultado: **A 16, B 49, C 60, D 1, E+F 17
+etapas**; conferência verde 0/0 nas cinco; move trainer **74 → 56 linhas** (as 18 que saíram são dos capítulos
+cortados; os 6 ids antigos continuam); `marcas-das-fontes` verde; contagens de `banco`, `escrever` e
+`notacao-em-portugues` ajustadas. Publicações: B `pub-bf56e6a91a8da82e`, C `pub-918f740b16236d10`, D
+`pub-8f5e6a563f077b8d`, EF `pub-609249955ff62e50` (A igual). Aviso que continua: 56 linhas passam da meta de 40 por
+abertura do Base.
