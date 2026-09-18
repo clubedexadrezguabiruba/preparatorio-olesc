@@ -75,7 +75,7 @@ export const adversarioDo = (cor: CorDoCurso) => (cor === "brancas" ? "Pretas" :
 export function tituloDaAula(bloco: AulaDoCurso, cor: CorDoCurso): string {
   const titulos: Record<AulaDoCurso, string> = {
     A: cor === "brancas" ? "A defesa e nossa arma" : "Nossa defesa e nossa arma",
-    B: "Armadilhas e punições",
+    B: "Imprecisões e punições",
     C: `Quando as ${adversarioDo(cor)} jogam bem`,
     D: "Partida modelo",
     EF: "Treino final e revisão",

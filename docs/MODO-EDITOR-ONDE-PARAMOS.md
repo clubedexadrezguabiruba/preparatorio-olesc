@@ -7856,3 +7856,10 @@ identidade e transforma a primeira linha da página em convite para começar.
 “Meio-jogo” aparece imediatamente depois de “Partidas” no topo e na gaveta “Mais” do celular.
 A rota `/meio-jogo` já existe, preserva cabeçalho e progresso do aluno e mostra apenas “Em breve”
 enquanto o conteúdo ainda está sendo preparado.
+
+# Aula B de aberturas: imprecisões e punições — 18/9/2026
+
+O nome global da aula B deixou de tratar toda resposta inferior como erro: agora é “Imprecisões
+e punições”. A capa da seção também usa esse nome e “como responder”. Escocesa, Francesa e
+Siciliana foram republicadas; os capítulos continuam separados pela medição já registrada:
+“Golpe” ou “Armadilha” apenas com vantagem próxima ou superior a +2, e “Imprecisão” abaixo disso.

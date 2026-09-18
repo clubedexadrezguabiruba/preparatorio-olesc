@@ -74,7 +74,7 @@
 [ChapterURL "https://lichess.org/study/qq2xorDl/gxNMCTZf"]
 [Orientation "black"]
 
-{ [SECAO] Erros e armadilhas | como punir [OBJETIVO] Aprender a resposta simples contra 3...Nf6. }
+{ [SECAO] Imprecisões e punições | como responder [OBJETIVO] Aprender a resposta simples contra 3...Nf6. }
 1. e4 e6 2. d4 d5 3. Bd3 Nf6?! { O cavalo preto ataca nosso peão de e4. [PERGUNTA] Qual lance ganha espaço e ataca o cavalo? [DICA] Um peão pode avançar e expulsar o cavalo. } 4. e5 { e5 faz as duas coisas: ganha espaço e obriga o cavalo a jogar outra vez. Esta é a casa-chave desta reação. } { [%csl Ge5] } 4... Nfd7 { O cavalo recua. Já ganhamos espaço e fizemos a mesma peça preta jogar duas vezes. } 5. Ne2! { Desenvolvemos o cavalo e deixamos f3 livre. } 5... c5 { ...c5 ataca nosso peão de d4. } 6. c3 { Protegemos d4 com outro peão. } 6... Nc6 { As Pretas aumentam a pressão em d4. } 7. a3! { a3 tira a casa b4 do cavalo preto e ajuda a manter nosso bispo em d3. [TRAIN] e5, Ne2, c3 e a3. [RESUMO] ...Nf6 cedo? e5, e depois cuide de d4. [PROXIMO] Agora a dama preta vai entrar cedo no centro. } *
 
 
@@ -716,5 +716,4 @@
 
 { [SECAO] Revisão | o repertório em poucos minutos [OBJETIVO] Revisar o repertório em poucos minutos. [DEFESA] Defesa Francesa: 1.e4 e6 2.d4 d5. [ARMA] 3.Bd3: desenvolve o bispo, protege e4 e leva o jogo para uma linha menos comum. [PLANO] Desenvolver + proteger. Cuidar de d4. Preparar Qe2 e rocar grande quando for seguro. [ARMADILHA] Se a dama pegar g2 cedo depois de ...Qxd5 e Nc3, lembre imediatamente: Be4! prende a dama. }
 1. e4 e6 2. d4 d5 3. Bd3! dxe4 { Se ...dxe4: Bxe4 e monte nosso esquema. } (3... Nf6?! 4. e5 Nfd7 5. Ne2! c5 6. c3 Nc6 7. a3! { ...Nf6 cedo = e5. }) (3... c5 4. exd5 Qxd5 (4... exd5 5. c3! { Sem dama exposta, apenas proteja d4. }) (4... cxd4 5. Bb5+! Bd7 6. dxe6 Bxb5?! 7. exf7+ Kxf7 8. Qh5+ g6 9. Qxb5 { ...cxd4? = procure os xeques primeiro. }) 5. Nc3 Qxg2?? { [ARMADILHA PRINCIPAL] ...Qxg2? = Be4 e a dama fica presa. } (5... Qxd4 6. Nb5 Qd8 7. Bf4 Na6 8. Qe2! $36 { [ARMADILHA AVANÇADA] Em outra linha, o tema final é Qxe6+ seguido de Nxa7#. Não confunda com Be4. }) 6. Be4) 4. Bxe4 Nf6 5. Bf3 c5 6. Ne2 Nc6 (6... cxd4?! 7. Qxd4 { Se ...cxd4 vier cedo, Qxd4. }) 7. Be3 cxd4 (7... e5 8. Bxc6+ bxc6 9. dxe5 Qxd1+ 10. Kxd1 Ng4 11. Nd2 $14 { Contra ...e5: Bxc6+ antes de dxe5. }) 8. Nxd4 Ne5 9. Nc3 a6!? { ...Ne5 = desenvolva com Nc3. } (9... Be7 10. Qe2 O-O 11. O-O-O { Se estiver seguro, roque grande. }) 10. Qe2 Nxf3+ 11. gxf3! { [SE ESQUECER] ...Nf6 = e5. ...c5 = exd5 e veja a recaptura. ...dxe4 = Bxe4 e monte Bf3, Ne2, Be3 e Nc3. [RESUMO] Primeiro memorize ...Qxg2? → Be4. Depois, as armadilhas longas. Desenvolva e proteja. } *
-
 
