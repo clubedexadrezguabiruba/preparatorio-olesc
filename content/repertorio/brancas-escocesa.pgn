@@ -15,9 +15,12 @@
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
 *
 
 [Abertura "escocesa"]
@@ -32,17 +35,27 @@
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nxd4? 5. Qxd4 {Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande.}
-5... d6 {Qual peça defende e4 e sai da fileira de trás?} 6. Nc3 {Isso: o cavalo defende e4 e abre caminho para o roque grande.}
-6... Nf6 {Qual bispo sai e mira o peão de d6?} 7. Bf4 $1 {Isso: o bispo mira d6 e libera c1 para o rei.}
-(7. e5?!) 7... Be7 {Rei no centro ainda. Para que lado ele vai?} 8. O-O-O {Roque grande: a torre cai na coluna d, na frente do peão de d6.}
-8... O-O 9. f3 {O f3 guarda e4 para sempre e prepara g4. Cc3, Bf4, roque grande e f3.}
-9... c5 {O peão atacou a dama. Para onde ela vai?} 10. Qd2 {Isso: a dama e o bispo miram juntos o peão de d6.}
-10... Be6 {O peão de d6 perdeu o apoio do peão de c7. Quem toma?} 11. Bxd6 Bxd6
-12. Qxd6 Qxd6 13. Rxd6 Rad8 14. Rxd8 {Um peão a mais num final. Troque peças: o peão vale mais com o tabuleiro vazio. Cc3, Bf4, roque grande, f3, e o peão de d6 cai.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nxd4? {As Pretas trocam os cavalos. Parece natural, mas traz a nossa dama para o centro sem perder tempo.}
+5. Qxd4 {A dama recaptura em d4. Sem o cavalo de c6, nenhuma peça preta consegue expulsá-la dali com tempo.}
+5... d6 {O peão vai a d6: segura a casa e5 e abre a diagonal do bispo de c8. Qual peça defende e4 e sai da fileira de trás?}
+6. Nc3 {O cavalo vai a c3 e defende e4. E a fileira de trás começa a esvaziar para o roque grande.}
+6... Nf6 {O cavalo preto ataca e4. O peão continua defendido pelo cavalo e pela dama. Qual bispo sai e mira o peão de d6?}
+7. Bf4 $1 {O bispo vai a f4 e mira o peão de d6. E a casa c1 fica livre para o rei.}
+(7. e5?!) 7... Be7 {O bispo preto defende d6 e prepara o roque. O nosso rei ainda está no centro. Para que lado ele vai?}
+8. O-O-O {Roque grande: o rei vai a c1. A torre cai na coluna d, de frente para o peão de d6.}
+8... O-O {O rei preto vai para o outro lado. Reis em lados opostos: cada lado pode avançar os peões contra o rei do outro, sem abrir o próprio.}
+9. f3 {O f3 guarda e4 para sempre. Com e4 firme, o cavalo de f6 fica sem alvo, e os peões de g e h podem andar. Cc3, Bf4, roque grande e f3.}
+9... c5 {O peão de c ataca a nossa dama. Para onde ela vai?} 10. Qd2 {A dama vai a d2. Agora a dama, o bispo e a torre miram juntos o peão de d6.}
+10... Be6 {O bispo sai, mas não ajuda d6. Com o peão de c em c5, o peão de d6 perdeu o apoio que tinha em c7. Quem toma d6?}
+11. Bxd6 {O bispo toma o peão.} 11... Bxd6 12. Qxd6 {A dama recaptura. Temos um peão a mais.}
+12... Qxd6 13. Rxd6 {A torre recaptura na coluna d, a coluna que o roque grande nos deu.}
+13... Rad8 14. Rxd8 {Um peão a mais num final. Troque peças: o peão vale mais com o tabuleiro vazio. Cc3, Bf4, roque grande, f3, e o peão de d6 cai.}
 *
 
 [Abertura "escocesa"]
@@ -57,13 +70,17 @@
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nxd4? 5. Qxd4 {Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande.}
-5... Nf6? {O cavalo ataca e4, mas o peão de d7 ainda não saiu. Qual lance ataca o cavalo?}
-6. e5! {Isso: o cavalo tem de fugir, e não há casa boa.} 6... Nh5? {O cavalo foi para a borda. Como prendê-lo?}
-7. g4! {O cavalo em h5 não tem para onde ir. Cavalo em f6 sem apoio: e5. ...Cf6? cedo: 6.e5!. Se ...Ch5: 7.g4!.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nxd4? {As Pretas trocam os cavalos. Parece natural, mas traz a nossa dama para o centro sem perder tempo.}
+5. Qxd4 {A dama recaptura em d4. Sem o cavalo de c6, nenhuma peça preta consegue expulsá-la dali com tempo.}
+5... Nf6? {O cavalo sai para f6 e ataca e4. Parece um lance normal. Mas o peão de d7 ainda está em casa. Com ele em d6, um peão nosso que chegasse a e5 seria tomado. Qual lance ataca o cavalo?}
+6. e5! {O peão chega a e5 e ataca o cavalo. Ele precisa fugir, e as casas d5 e e4 estão na mira da nossa dama.}
+6... Nh5? {O cavalo foge para a borda, em h5. Como prendê-lo?} 7. g4! {O peão de g ataca o cavalo. Conte as casas dele. f6 é do peão de e5, f4 é do bispo de c1, g3 é dos nossos peões. O cavalo não tem para onde ir e vai cair. Cavalo em f6 sem o peão em d6: e5. ...Cf6? cedo: 6.e5!. Se ...Ch5: 7.g4!.}
 *
 
 [Abertura "escocesa"]
@@ -78,13 +95,19 @@
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nxd4? 5. Qxd4 {Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande.}
-5... Nf6? {O cavalo ataca e4, mas o peão de d7 ainda não saiu. Qual lance ataca o cavalo?}
-6. e5! {Isso: o cavalo tem de fugir, e não há casa boa.} 6... Ng8 {O cavalo volta para casa. Perdeu dois lances.}
-7. Bf4 {Desenvolvemos com calma. Estamos bem à frente.} *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nxd4? {As Pretas trocam os cavalos. Parece natural, mas traz a nossa dama para o centro sem perder tempo.}
+5. Qxd4 {A dama recaptura em d4. Sem o cavalo de c6, nenhuma peça preta consegue expulsá-la dali com tempo.}
+5... Nf6? {O cavalo sai para f6 e ataca e4. Parece um lance normal. Mas o peão de d7 ainda está em casa. Com ele em d6, um peão nosso que chegasse a e5 seria tomado. Qual lance ataca o cavalo?}
+6. e5! {O peão chega a e5 e ataca o cavalo. Ele precisa fugir, e as casas d5 e e4 estão na mira da nossa dama.}
+6... Ng8 {O cavalo volta para g8. Gastou dois lances para voltar ao lugar de onde saiu.}
+7. Bf4 {O bispo sai e segura e5. Nós temos peças fora, e as Pretas estão como no começo.}
+*
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -98,13 +121,18 @@
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nxd4? 5. Qxd4 {Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande.}
-5... Nf6? {O cavalo ataca e4, mas o peão de d7 ainda não saiu. Qual lance ataca o cavalo?}
-6. e5! {Isso: o cavalo tem de fugir, e não há casa boa.} 6... Qe7?! {A dama segura o cavalo pelo ataque em e5.}
-7. Be3 {Desenvolvemos. O cavalo continua sem casa.} *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nxd4? {As Pretas trocam os cavalos. Parece natural, mas traz a nossa dama para o centro sem perder tempo.}
+5. Qxd4 {A dama recaptura em d4. Sem o cavalo de c6, nenhuma peça preta consegue expulsá-la dali com tempo.}
+5... Nf6? {O cavalo sai para f6 e ataca e4. Parece um lance normal. Mas o peão de d7 ainda está em casa. Com ele em d6, um peão nosso que chegasse a e5 seria tomado. Qual lance ataca o cavalo?}
+6. e5! {O peão chega a e5 e ataca o cavalo. Ele precisa fugir, e as casas d5 e e4 estão na mira da nossa dama.}
+6... Qe7?! {A dama vai a e7 e ataca e5. Se o peão cair, o cavalo fica livre.} 7. Be3 {O bispo sai, e a dama continua defendendo e5. O cavalo continua sem casa boa.}
+*
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -118,13 +146,18 @@
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nxd4? 5. Qxd4 {Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande.}
-5... Nf6? {O cavalo ataca e4, mas o peão de d7 ainda não saiu. Qual lance ataca o cavalo?}
-6. e5! {Isso: o cavalo tem de fugir, e não há casa boa.} 6... c5 {O peão ataca a nossa dama.}
-7. Qe3 {A dama vai para e3 e continua de olho em e5.} *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nxd4? {As Pretas trocam os cavalos. Parece natural, mas traz a nossa dama para o centro sem perder tempo.}
+5. Qxd4 {A dama recaptura em d4. Sem o cavalo de c6, nenhuma peça preta consegue expulsá-la dali com tempo.}
+5... Nf6? {O cavalo sai para f6 e ataca e4. Parece um lance normal. Mas o peão de d7 ainda está em casa. Com ele em d6, um peão nosso que chegasse a e5 seria tomado. Qual lance ataca o cavalo?}
+6. e5! {O peão chega a e5 e ataca o cavalo. Ele precisa fugir, e as casas d5 e e4 estão na mira da nossa dama.}
+6... c5 {O peão de c ataca a nossa dama.} 7. Qe3 {A dama vai a e3 e continua defendendo e5. Guarde esta casa: ela volta mais adiante.}
+*
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -138,13 +171,18 @@
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nxd4? 5. Qxd4 {Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande.}
-5... b6?! {O bispo quer sair por b7.} 6. Nc3 {Desenvolvemos e defendemos e4.}
-6... Bc5? {O bispo ataca a nossa dama. A dama foge para onde?} 7. Qxg7! {Isso: a dama toma g7 e ataca a torre de h8.}
-7... Qf6 8. Qxf6 Nxf6 9. Bg5 {Trocamos as damas com um peão a mais, e o bispo prega o cavalo. Bispo em c5 atacando a dama? Olhe o peão de g7.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nxd4? {As Pretas trocam os cavalos. Parece natural, mas traz a nossa dama para o centro sem perder tempo.}
+5. Qxd4 {A dama recaptura em d4. Sem o cavalo de c6, nenhuma peça preta consegue expulsá-la dali com tempo.}
+5... b6?! {O bispo de c8 quer sair por b7. Mas o lance não briga pelo centro e não desenvolve peça nenhuma.}
+6. Nc3 {O cavalo sai e defende e4.} 6... Bc5? {O bispo sai atacando a nossa dama. Parece que as Pretas ganham tempo. Mas olhe quem defendia g7: o bispo de f8, que acabou de sair. A dama foge para onde?}
+7. Qxg7! {A dama foge tomando o peão de g7, e agora ataca a torre de h8.} 7... Qf6 {A dama preta vem a f6, defende a torre e oferece a troca.}
+8. Qxf6 {Trocamos as damas.} 8... Nxf6 9. Bg5 {O bispo vai a g5 e ataca o cavalo de f6, que ninguém defende. Temos um peão a mais, e sem as damas ele pesa ainda mais: cada troca deixa a vantagem mais clara. Bispo em c5 atacando a dama? Olhe o peão de g7.}
 *
 
 [Abertura "escocesa"]
@@ -159,13 +197,19 @@
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... Nf6? {O cavalo ataca e4, mas deixa e5 sem defesa. Qual peão pode ser tomado?}
-4. dxe5! {Isso: tomamos e5.} 4... Nxe4 {O cavalo pega o nosso peão de volta.} 5. Bc4! {O bispo mira f7. A ameaça é a dama em d5.}
-5... Bc5? {O bispo também mira f7. Qual lance ataca f7 e o cavalo de uma vez?}
-6. Qd5! {A dama ataca f7 e o cavalo de e4 ao mesmo tempo.} 6... Bxf2+ 7. Kf1 Qe7
-8. Qxe4 {Ganhamos o cavalo. 3...Cf6?: dxe5, Bc4 e a dama em d5.} *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... Nf6? {O cavalo sai e ataca e4, em vez de cuidar de e5. O peão de e5 está atacado duas vezes: pelo peão de d4 e pelo cavalo de f3. Só o cavalo de c6 o defende. Qual peão pode ser tomado?}
+4. dxe5! {O peão de d4 toma em e5. Agora ele ataca o cavalo de f6.} 4... Nxe4 {O cavalo foge tomando o nosso peão de e4. O material fica igual, mas o cavalo está longe de casa e sem apoio.}
+5. Bc4! {O bispo vai a c4 e mira f7. A ameaça é Dd5: a dama atacaria o cavalo de e4 e, junto com o bispo, o peão de f7.}
+5... Bc5? {O bispo preto sai para c5 e mira o nosso f2. Parece um contra-ataque. Mas f7 e o cavalo de e4 continuam do jeito que estavam. Qual lance ataca f7 e o cavalo de uma vez?}
+6. Qd5! {A dama ataca f7 e o cavalo de e4 ao mesmo tempo.} 6... Bxf2+ {As Pretas tentam o contra-ataque: o bispo toma f2 com xeque.}
+7. Kf1 {O rei não pode tomar o bispo: o cavalo de e4 o defende. Ele sai do xeque em f1.}
+7... Qe7 {A dama preta defende f7. Mas ela não consegue defender o cavalo também.}
+8. Qxe4 {Ganhamos o cavalo: uma peça a mais. 3...Cf6?: dxe5, Bc4 e a dama em d5.}
+*
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -179,12 +223,17 @@
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... Nf6? {O cavalo ataca e4, mas deixa e5 sem defesa. Qual peão pode ser tomado?}
-4. dxe5! {Isso: tomamos e5.} 4... Nxe4 {O cavalo pega o nosso peão de volta.} 5. Bc4! {O bispo mira f7. A ameaça é a dama em d5.}
-5... d6 {O peão abre caminho para o bispo, mas f7 fica sem defesa.} 6. Bxf7+! (6. Qd5?)
-6... Kxf7 7. Qd5+ Be6 8. Qxe4 {Recuperamos a peça, e o rei preto ficou sem roque.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... Nf6? {O cavalo sai e ataca e4, em vez de cuidar de e5. O peão de e5 está atacado duas vezes: pelo peão de d4 e pelo cavalo de f3. Só o cavalo de c6 o defende. Qual peão pode ser tomado?}
+4. dxe5! {O peão de d4 toma em e5. Agora ele ataca o cavalo de f6.} 4... Nxe4 {O cavalo foge tomando o nosso peão de e4. O material fica igual, mas o cavalo está longe de casa e sem apoio.}
+5. Bc4! {O bispo vai a c4 e mira f7. A ameaça é Dd5: a dama atacaria o cavalo de e4 e, junto com o bispo, o peão de f7.}
+5... d6 {O peão ataca e5 e abre a diagonal do bispo de c8. Mas f7 continua defendido só pelo rei.}
+6. Bxf7+! {O bispo se entrega em f7, com xeque. Olhe o que vem depois.} (6. Qd5?)
+6... Kxf7 7. Qd5+ {A dama dá xeque e ataca o cavalo de e4 ao mesmo tempo.} 7... Be6
+8. Qxe4 {Demos o bispo e levamos o peão de f7 e o cavalo. Temos um peão a mais, e o rei preto não pode mais rocar.}
 *
 
 [Abertura "escocesa"]
@@ -199,12 +248,16 @@
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... Nf6? {O cavalo ataca e4, mas deixa e5 sem defesa. Qual peão pode ser tomado?}
-4. dxe5! {Isso: tomamos e5.} 4... Nxe4 {O cavalo pega o nosso peão de volta.} 5. Bc4! {O bispo mira f7. A ameaça é a dama em d5.}
-5... Nc5 6. Nc3 (6. Qe2!?) 6... Be7 7. Be3 O-O 8. O-O Ne6 9. Qe2 d6 10. Rad1 Qe8
-11. exd6 Bxd6 12. Rfe1 *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... Nf6? {O cavalo sai e ataca e4, em vez de cuidar de e5. O peão de e5 está atacado duas vezes: pelo peão de d4 e pelo cavalo de f3. Só o cavalo de c6 o defende. Qual peão pode ser tomado?}
+4. dxe5! {O peão de d4 toma em e5. Agora ele ataca o cavalo de f6.} 4... Nxe4 {O cavalo foge tomando o nosso peão de e4. O material fica igual, mas o cavalo está longe de casa e sem apoio.}
+5. Bc4! {O bispo vai a c4 e mira f7. A ameaça é Dd5: a dama atacaria o cavalo de e4 e, junto com o bispo, o peão de f7.}
+5... Nc5 {O cavalo recua para c5, perto das peças dele.} 6. Nc3 {Aqui não há golpe: nós desenvolvemos mais uma peça e seguimos o jogo.}
+(6. Qe2!?) 6... Be7 7. Be3 O-O 8. O-O Ne6 9. Qe2 d6 10. Rad1 Qe8 11. exd6 Bxd6
+12. Rfe1 *
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -218,11 +271,13 @@
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... f6? {O peão segura e5, mas tira a casa do cavalo e abre a diagonal do rei. Qual bispo aproveita a diagonal aberta?}
-4. Bc4! $16 {Isso: o bispo mira g8. O rei preto não consegue rocar pequeno com calma.}
-4... exd4 5. Nxd4 Nxd4 6. Qxd4 {Dama no centro, bispo em c4 e o rei preto preso. Desenvolva e role os peões. ...f6?: Bc4!.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... f6? {O peão de f vai a f6 para segurar e5. Mas ele tira a melhor casa do cavalo de g8 e abre a diagonal que vai até o rei. Qual bispo aproveita a diagonal aberta?}
+4. Bc4! $16 {O bispo vai a c4 e mira g8. Enquanto ele olhar para g8, o rei preto não pode rocar pequeno: o rei não roca para uma casa atacada.}
+4... exd4 {As Pretas trocam em d4.} 5. Nxd4 {O cavalo recaptura.} 5... Nxd4 6. Qxd4 {Dama no centro, bispo em c4 e o rei preto preso. Desenvolva e avance os peões. ...f6?: Bc4!.}
 *
 
 [Abertura "escocesa"]
@@ -237,11 +292,16 @@
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... d5? {As Pretas abrem o centro, mas o peão de e5 fica sem defesa. Qual peça toma e5?}
-4. Nxe5! {Isso: o cavalo toma e5 e ataca c6.} 4... Nxe5 5. dxe5 dxe4 6. Qxd8+
-Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem não briga pelo centro, entrega o centro.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... d5? {As Pretas também abrem o centro. Mas o peão de e5 continua atacado duas vezes e defendido uma só. Qual peça toma e5?}
+4. Nxe5! {O cavalo toma o peão de e5 e ataca o cavalo de c6.} 4... Nxe5 {As Pretas trocam os cavalos.}
+5. dxe5 {O peão recaptura. Agora a coluna d está aberta entre as duas damas.}
+5... dxe4 6. Qxd8+ {Trocamos as damas com xeque.} 6... Kxd8 {O rei toma e perde o direito de rocar.}
+7. Nc3 {O cavalo sai e ataca o peão de e4.} 7... Bf5 {O bispo defende e4.} 8. Bc4
+$18 {O bispo vai a c4 e mira f7. O material está igual, mas o rei preto não roca, e um peão preto vai cair: f7 ou b7. Quem não briga pelo centro, entrega o centro.}
 *
 
 [Abertura "escocesa"]
@@ -256,10 +316,14 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... d5? {As Pretas abrem o centro, mas o peão de e5 fica sem defesa. Qual peça toma e5?}
-4. Nxe5! {Isso: o cavalo toma e5 e ataca c6.} 4... dxe4 5. Bb5 *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... d5? {As Pretas também abrem o centro. Mas o peão de e5 continua atacado duas vezes e defendido uma só. Qual peça toma e5?}
+4. Nxe5! {O cavalo toma o peão de e5 e ataca o cavalo de c6.} 4... dxe4 {As Pretas tomam o nosso peão de e4.}
+5. Bb5 {O bispo vai a b5. O cavalo de c6 não pode sair: o rei está atrás dele. Peça que não pode sair porque protege outra atrás dela tem nome: está pregada.}
+*
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -273,9 +337,12 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... Bb4+? {O bispo dá xeque. O peão de c o expulsa com tempo.} 4. c3! Ba5?! 5. d5! {O peão ataca o cavalo, e e5 fica sem defesa.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... Bb4+? {O bispo sai com xeque. Parece ativo, mas o peão de c o expulsa com tempo.}
+4. c3! {O peão ataca o bispo, e ele tem de andar de novo.} 4... Ba5?! 5. d5! {O peão ataca o cavalo. Quando ele sair, e5 fica sem defesa.}
 *
 
 [Abertura "escocesa"]
@@ -290,10 +357,13 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... Bb4+? {O bispo dá xeque. O peão de c o expulsa com tempo.} 4. c3! Bd6 5. Bd3
-*
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... Bb4+? {O bispo sai com xeque. Parece ativo, mas o peão de c o expulsa com tempo.}
+4. c3! {O peão ataca o bispo, e ele tem de andar de novo.} 4... Bd6 {O bispo em d6 fica na frente do peão de d7, e o bispo de c8 não sai.}
+5. Bd3 {Nós desenvolvemos normalmente.} *
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -307,9 +377,13 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... Bd6? 4. Nc3 $5 $16 (4. dxe5!?) *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... Bd6? {O bispo tranca o peão de d7, e o bispo de c8 fica preso atrás dele.}
+4. Nc3 $5 $16 {Nós desenvolvemos mais uma peça. As Pretas vão gastar lances para soltar as delas.}
+(4. dxe5!?) *
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -323,13 +397,18 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Bc5 {O bispo ataca o cavalo de d4.} 5. Nb3 {O cavalo recua e ataca o bispo.}
-5... Bxf2+? {O bispo se entrega para dar xeque. Tomamos o bispo?} 6. Kxf2 {Isso: tomamos. O rei fica bem com as peças por perto.}
-6... Qh4+ {Xeque. O rei vai para o canto, longe da dama.} 7. Kg1 Qxe4 {A dama pegou um peão. Agora um cavalo sai atacando a dama.}
-8. Nc3 {Desenvolvemos com tempo. Estamos uma peça à frente. ...Bxf2+?: tome o bispo e desenvolva.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Bc5 {O bispo sai para c5 e ataca o cavalo de d4. Agora o cavalo está atacado duas vezes, pelo bispo e pelo cavalo de c6. Só a nossa dama o defende.}
+5. Nb3 {O cavalo recua para b3 e ataca o bispo.} 5... Bxf2+? {O bispo toma f2 com xeque. Parece perigoso: o nosso rei sai de casa. Mas o bispo vale muito mais do que o peão que ele levou. Tomamos o bispo?}
+6. Kxf2 {O rei toma o bispo. Uma peça vale três peões, e nós a ganhamos por um.}
+6... Qh4+ {A dama dá xeque e mira o nosso peão de e4.} 7. Kg1 {O rei sai do xeque e vai a g1. Ali os peões de g e h o protegem.}
+7... Qxe4 {A dama pega o peão de e4. As Pretas têm dois peões pela peça, e só a dama delas saiu.}
+8. Nc3 {O cavalo sai atacando a dama, e ela vai ter de andar de novo. Temos uma peça por dois peões, e as nossas peças saem com tempo. ...Bxf2+?: tome o bispo e desenvolva.}
 *
 
 [Abertura "escocesa"]
@@ -344,13 +423,20 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Qh4? {A dama ataca e4. Parece forte, e muita gente se assusta. Qual peça defende e4 e se desenvolve?}
-5. Nc3! {Isso: o cavalo defende e4.} (5. Nb5!?) 5... Bb4 {O bispo prega o cavalo. O bispo das casas claras sai, e o roque fica pronto.}
-6. Be2 Qxe4 {A dama pegou o peão. O cavalo do centro vai a b5, mirando c7.} 7. Nb5 {O cavalo mira c7: xeque, e a torre de a8.}
-7... Bxc3+ 8. bxc3 Kd8 9. O-O $16 {O rei preto perdeu o roque, e as nossas peças estão todas prontas. ...Dh4: Cc3 e Be2. Um peão vale menos que o desenvolvimento.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Qh4? {A dama preta sai cedo, para h4. Ela ataca e4. Parece forte, e muita gente se assusta. Qual peça defende e4 e sai para o jogo?}
+5. Nc3! {O cavalo vai a c3 e defende e4. Ele protege o peão e entra no jogo com o mesmo lance.}
+(5. Nb5!?) 5... Bb4 {O bispo prega o nosso cavalo de c3: atrás dele está o rei. Pregado, o cavalo não defende e4 de verdade.}
+6. Be2 {Nós não seguramos o peão. O bispo sai para e2, fecha a coluna e, e o roque pequeno fica pronto.}
+6... Qxe4 {A dama pega o peão de e4. As Pretas têm um peão a mais, mas só a dama e o bispo saíram.}
+7. Nb5 {O cavalo de d4 salta para b5 e mira c7. Em c7 ele daria xeque e atacaria a torre de a8.}
+7... Bxc3+ {O bispo troca pelo cavalo de c3, com xeque.} 8. bxc3 {O peão recaptura. O cavalo de b5 ameaça c7 outra vez.}
+8... Kd8 {O rei preto defende c7 e perde o direito de rocar.} 9. O-O $16 {Nós rocamos, e as nossas peças estão prontas. O rei preto ficou no meio. ...Dh4: Cc3 e Be2. Um peão vale menos que o desenvolvimento.}
 *
 
 [Abertura "escocesa"]
@@ -365,13 +451,20 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Qh4? {A dama ataca e4. Parece forte, e muita gente se assusta. Qual peça defende e4 e se desenvolve?}
-5. Nc3! {Isso: o cavalo defende e4.} (5. Nb5!?) 5... Bb4 {O bispo prega o cavalo. O bispo das casas claras sai, e o roque fica pronto.}
-6. Be2 Qxe4 {A dama pegou o peão. O cavalo do centro vai a b5, mirando c7.} 7. Nb5 {O cavalo mira c7: xeque, e a torre de a8.}
-7... Qxg2? 8. Bf3 {A dama fica sem casa, e c7 continua na mira.} *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Qh4? {A dama preta sai cedo, para h4. Ela ataca e4. Parece forte, e muita gente se assusta. Qual peça defende e4 e sai para o jogo?}
+5. Nc3! {O cavalo vai a c3 e defende e4. Ele protege o peão e entra no jogo com o mesmo lance.}
+(5. Nb5!?) 5... Bb4 {O bispo prega o nosso cavalo de c3: atrás dele está o rei. Pregado, o cavalo não defende e4 de verdade.}
+6. Be2 {Nós não seguramos o peão. O bispo sai para e2, fecha a coluna e, e o roque pequeno fica pronto.}
+6... Qxe4 {A dama pega o peão de e4. As Pretas têm um peão a mais, mas só a dama e o bispo saíram.}
+7. Nb5 {O cavalo de d4 salta para b5 e mira c7. Em c7 ele daria xeque e atacaria a torre de a8.}
+7... Qxg2? {A dama pega mais um peão, em g2.} 8. Bf3 {O bispo ataca a dama, que tem de fugir de novo. E c7 continua na mira.}
+*
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -385,12 +478,16 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nxd4? 5. Qxd4 {Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande.}
-5... c5 {O peão ataca a dama. Para onde ela vai?} 6. Qe3 {Regra 1: dama atacada por peão vai para e3.}
-6... Nf6 {Cavalo em f6, peão de d7 em casa. Qual é o lance?} 7. e5 {Regra 2: cavalo em f6 sem apoio, e5. Dama atacada: e3. Cavalo em f6 sem apoio: e5. O resto: Cc3, Bf4, roque grande.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nxd4? {As Pretas trocam os cavalos. Parece natural, mas traz a nossa dama para o centro sem perder tempo.}
+5. Qxd4 {A dama recaptura em d4. Sem o cavalo de c6, nenhuma peça preta consegue expulsá-la dali com tempo.}
+5... c5 {O peão de c ataca a nossa dama. Para onde ela vai?} 6. Qe3 {Primeira regra: dama atacada por peão vai a e3. Dali ela defende e4 e vigia a casa e5.}
+6... Nf6 {O cavalo ataca e4, com o peão de d7 ainda em casa. Qual é o lance?} 7. e5 {Segunda regra: cavalo em f6 sem o peão em d6, e5. O cavalo tem de sair de novo, e as Pretas perdem mais um lance. Dama atacada: e3. Cavalo em f6 sem apoio: e5. O resto: Cc3, Bf4, roque grande.}
 *
 
 [Abertura "escocesa"]
@@ -405,12 +502,16 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nxd4? 5. Qxd4 {Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande.}
-5... c5 {O peão ataca a dama. Para onde ela vai?} 6. Qe3 {Regra 1: dama atacada por peão vai para e3.}
-6... d6 7. Nc3 {Com o peão em d6, desenvolvemos.} *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nxd4? {As Pretas trocam os cavalos. Parece natural, mas traz a nossa dama para o centro sem perder tempo.}
+5. Qxd4 {A dama recaptura em d4. Sem o cavalo de c6, nenhuma peça preta consegue expulsá-la dali com tempo.}
+5... c5 {O peão de c ataca a nossa dama. Para onde ela vai?} 6. Qe3 {Primeira regra: dama atacada por peão vai a e3. Dali ela defende e4 e vigia a casa e5.}
+6... d6 7. Nc3 {Com o peão em d6, o e5 não funciona: desenvolvemos.} *
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -424,12 +525,17 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nxd4? 5. Qxd4 {Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande.}
-5... Qf6 {A dama preta encara a nossa. O peão de e a ataca com tempo.} 6. e5 Qb6
-7. Qxb6 axb6 8. Nc3 {Trocamos as damas e temos o centro.} *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nxd4? {As Pretas trocam os cavalos. Parece natural, mas traz a nossa dama para o centro sem perder tempo.}
+5. Qxd4 {A dama recaptura em d4. Sem o cavalo de c6, nenhuma peça preta consegue expulsá-la dali com tempo.}
+5... Qf6 {A dama preta vem a f6 e oferece a troca de damas.} 6. e5 {O peão avança e ataca a dama, com tempo.}
+6... Qb6 {A dama preta insiste na troca.} 7. Qxb6 axb6 8. Nc3 {Trocamos as damas. As Pretas ficaram com dois peões na coluna b, e o centro é nosso.}
+*
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -443,12 +549,16 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nxd4? 5. Qxd4 {Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande.}
-5... Qf6 {A dama preta encara a nossa. O peão de e a ataca com tempo.} 6. e5 Qe6
-7. Bc4 *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nxd4? {As Pretas trocam os cavalos. Parece natural, mas traz a nossa dama para o centro sem perder tempo.}
+5. Qxd4 {A dama recaptura em d4. Sem o cavalo de c6, nenhuma peça preta consegue expulsá-la dali com tempo.}
+5... Qf6 {A dama preta vem a f6 e oferece a troca de damas.} 6. e5 {O peão avança e ataca a dama, com tempo.}
+6... Qe6 7. Bc4 {O bispo sai atacando a dama outra vez.} *
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -462,12 +572,17 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nxd4? 5. Qxd4 {Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande.}
-5... b6?! {O bispo quer sair por b7.} 6. Nc3 {Desenvolvemos e defendemos e4.}
-6... Bb7 7. Bf4 {A montagem de sempre: Bf4 e roque grande.} *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nxd4? {As Pretas trocam os cavalos. Parece natural, mas traz a nossa dama para o centro sem perder tempo.}
+5. Qxd4 {A dama recaptura em d4. Sem o cavalo de c6, nenhuma peça preta consegue expulsá-la dali com tempo.}
+5... b6?! {O bispo de c8 quer sair por b7. Mas o lance não briga pelo centro e não desenvolve peça nenhuma.}
+6. Nc3 {O cavalo sai e defende e4.} 6... Bb7 {Desta vez o bispo vai a b7, e não a c5: não há golpe em g7.}
+7. Bf4 {A montagem de sempre: Bf4 e roque grande.} *
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -481,16 +596,23 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Bc5 {O bispo ataca o cavalo de d4.} 5. Nb3 {O cavalo recua e ataca o bispo.}
-5... Bb6 6. Nc3 Nf6 {A dama vai guardar f2 e liberar o roque grande.} 7. Qe2 {Isso: a dama guarda f2 e sai da coluna d.}
-7... d6 8. Be3 {O nosso bispo desafia o melhor bispo dele.} 8... O-O {Qual é o plano com os reis em lados opostos?}
-9. O-O-O {Roque grande, e depois f3 e g4 contra o rei dele. Dois planos: Bf4 e roque grande contra a troca; De2, Be3 e roque grande contra ...Bc5.}
-9... Re8 10. f3 Be6 11. g4 {Reis em lados opostos: os nossos peões andam contra o rei dele.}
-11... Bxb3 {Qual peão recaptura?} 12. axb3 {Isso: a coluna a abre para a nossa torre, e c2 fica protegendo o nosso rei.}
-12... Bxe3+ 13. Qxe3 a5 14. Bb5 {O último bispo sai e prega o cavalo. Potter: Cb3, Cc3, De2, Be3, roque grande, e os peões andam.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Bc5 {O bispo sai para c5 e ataca o cavalo de d4. Agora o cavalo está atacado duas vezes, pelo bispo e pelo cavalo de c6. Só a nossa dama o defende.}
+5. Nb3 {O cavalo recua para b3 e ataca o bispo.} 5... Bb6 {O bispo recua para b6 e continua mirando f2.}
+6. Nc3 {O cavalo sai e defende e4.} 6... Nf6 {O cavalo preto ataca e4. E o bispo de b6 continua de olho em f2.}
+7. Qe2 {A dama vai a e2. Ela defende e4 e f2, e deixa d1 livre para a torre do roque grande.}
+7... d6 {O peão abre a diagonal do bispo de c8.} 8. Be3 {O nosso bispo desafia o bispo de b6, a melhor peça das Pretas.}
+8... O-O {Qual é o plano com os reis em lados opostos?} 9. O-O-O {Roque grande: os reis ficam em lados opostos.}
+9... Re8 {A torre preta vai para a coluna e, contra a nossa dama.} 10. f3 {O f3 segura e4 e prepara g4.}
+10... Be6 {O bispo sai e mira o nosso cavalo de b3.} 11. g4 {Reis em lados opostos: os nossos peões andam contra o rei dele.}
+11... Bxb3 {O bispo tomou o nosso cavalo. Qual peão recaptura?} 12. axb3 {O peão de a recaptura. O peão de c2 fica onde está, protegendo o rei em c1. Tomar com o peão de c abriria a coluna c bem na frente do nosso rei.}
+12... Bxe3+ {O bispo troca pelo nosso bispo, com xeque.} 13. Qxe3 {A dama recaptura e agora olha para o peão de a7.}
+13... a5 {O peão sai da mira da dama.} 14. Bb5 {O último bispo sai e prega o cavalo de c6 contra a torre de e8. Potter: Cb3, Cc3, De2, Be3, roque grande, e os peões andam.}
 *
 
 [Abertura "escocesa"]
@@ -505,12 +627,17 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Bc5 {O bispo ataca o cavalo de d4.} 5. Nb3 {O cavalo recua e ataca o bispo.}
-5... Bb6 6. Nc3 Qf6 7. Qe2 Nge7 8. Be3 O-O 9. O-O-O d6 10. Kb1 {O mesmo esquema. O rei vai para b1, longe da diagonal.}
-*
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Bc5 {O bispo sai para c5 e ataca o cavalo de d4. Agora o cavalo está atacado duas vezes, pelo bispo e pelo cavalo de c6. Só a nossa dama o defende.}
+5. Nb3 {O cavalo recua para b3 e ataca o bispo.} 5... Bb6 {O bispo recua para b6 e continua mirando f2.}
+6. Nc3 {O cavalo sai e defende e4.} 6... Qf6 {A dama preta se junta ao bispo contra f2.}
+7. Qe2 {A dama guarda f2, como na linha principal.} 7... Nge7 8. Be3 O-O 9. O-O-O
+d6 10. Kb1 {O mesmo esquema. O rei vai a b1, uma casa mais longe do centro.} *
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -524,12 +651,17 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Bc5 {O bispo ataca o cavalo de d4.} 5. Nb3 {O cavalo recua e ataca o bispo.}
-5... Bb6 6. Nc3 d6 7. Qe2 Nge7 8. Be3 O-O 9. O-O-O {É o nosso esquema da Potter, lance a lance.}
-9... f5 10. f4 fxe4 11. g3! {O mesmo esquema, e g3 segura o peão de f4.} *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Bc5 {O bispo sai para c5 e ataca o cavalo de d4. Agora o cavalo está atacado duas vezes, pelo bispo e pelo cavalo de c6. Só a nossa dama o defende.}
+5. Nb3 {O cavalo recua para b3 e ataca o bispo.} 5... Bb6 {O bispo recua para b6 e continua mirando f2.}
+6. Nc3 {O cavalo sai e defende e4.} 6... d6 7. Qe2 Nge7 8. Be3 O-O 9. O-O-O {É o nosso esquema da Potter, lance a lance.}
+9... f5 {O peão de f ataca o nosso peão de e4.} 10. f4 fxe4 11. g3! {O mesmo esquema, e g3 segura o peão de f4.}
+*
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -543,13 +675,20 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nf6 {O cavalo ataca e4. Qual troca estraga os peões dele?} 5. Nxc6 {Isso: depois de ...bxc6, ele fica com peões dobrados.}
-5... bxc6 6. Nc3 Bb4 7. Bd3 {O bispo defende e4. Se ele trocar em c3, ficamos com os dois bispos.}
-7... d5 8. exd5 cxd5 9. O-O O-O {Os peões dele estão em casas claras. Qual bispo dele precisamos trocar?}
-10. h3 {O h3 tira a casa g4 do bispo dele.} 10... c6 11. Qf3 Bd6 12. Bf4 {Trocamos o bispo de casas escuras dele. Os peões dele ficam fracos nas casas claras. 4...Cf6: Cxc6, Cc3, Bd3, roque, h3, Df3 e Bf4.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nf6 {O cavalo ataca e4. Qual troca estraga os peões dele?} 5. Nxc6 {O cavalo troca em c6. Se as Pretas tomarem com o peão de b, ficam com dois peões na coluna c.}
+5... bxc6 {Foi o que aconteceu: dois peões na mesma coluna. Isso tem nome: peões dobrados. Eles não se defendem um ao outro.}
+6. Nc3 {O cavalo defende e4.} 6... Bb4 {O bispo prega o cavalo de c3, e e4 fica atacado de novo.}
+7. Bd3 {O bispo defende e4. Se as Pretas trocarem em c3, ficamos com os dois bispos.}
+7... d5 {O peão de d ataca e4.} 8. exd5 {Nós trocamos.} 8... cxd5 9. O-O {O nosso rei vai para o lado do rei.}
+9... O-O {Antes do plano, tire uma casa do bispo de c8. Qual peão faz isso?} 10. h3 {O h3 tira a casa g4 do bispo de c8.}
+10... c6 {O peão vai a c6 e apoia d5. Agora os peões do centro dele, c6 e d5, estão em casas claras.}
+11. Qf3 {A dama sai para f3.} 11... Bd6 {O bispo recua para d6.} 12. Bf4 {O bispo oferece a troca do bispo de casas escuras dele. Sem esse bispo, as casas escuras dele ficam sem guarda. 4...Cf6: Cxc6, Cc3, Bd3, roque, h3, Df3 e Bf4.}
 *
 
 [Abertura "escocesa"]
@@ -564,12 +703,15 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nf6 {O cavalo ataca e4. Qual troca estraga os peões dele?} 5. Nxc6 {Isso: depois de ...bxc6, ele fica com peões dobrados.}
-5... dxc6 6. Qxd8+ Kxd8 7. Nc3 Bb4 8. Bd2 {As damas saíram, e o rei preto perdeu o roque.}
-*
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nf6 {O cavalo ataca e4. Qual troca estraga os peões dele?} 5. Nxc6 {O cavalo troca em c6. Se as Pretas tomarem com o peão de b, ficam com dois peões na coluna c.}
+5... dxc6 {As Pretas tomam com o peão de d, e a coluna d se abre.} 6. Qxd8+ {Trocamos as damas com xeque.}
+6... Kxd8 7. Nc3 Bb4 8. Bd2 {As damas saíram, e o rei preto perdeu o roque.} *
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -583,13 +725,20 @@ Kxd8 7. Nc3 Bf5 8. Bc4 $18 {Um peão a mais, e o rei preto perdeu o roque. Quem 
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... d6 {As Pretas seguram e5 com peão. 10% das partidas. Trocamos, avançamos ou desenvolvemos?}
-4. Nc3 {Isso: desenvolvemos e deixamos a tensão com ele.} (4. d5!? {Ganha espaço, mas fecha o centro, e centro fechado ajuda quem está apertado.})
-4... Nf6 5. Bb5 {O bispo prega o cavalo que segura e5.} 5... exd4 6. Nxd4 Bd7 7. O-O
-Be7 {Qual troca estraga os peões dele?} 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $16 {Os peões de e4 e f4 andam juntos. A ameaça é e5.}
-10... Rb8 11. h3 Re8 12. b3 Bf8 13. Bb2 {O bispo vai para a diagonal grande, mirando o rei. 3...d6: Cc3, Bb5, Cxc6, Bd3, f4 e Bb2.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... d6 {As Pretas seguram e5 com um peão. Trocamos, avançamos ou desenvolvemos?}
+4. Nc3 {O cavalo sai e defende e4. A decisão de trocar em d4 fica com as Pretas.}
+(4. d5!? {Ganha espaço, mas fecha o centro, e centro fechado ajuda quem está apertado.})
+4... Nf6 {O cavalo ataca e4, que está defendido.} 5. Bb5 {O bispo prega o cavalo de c6, a peça que segura e5.}
+5... exd4 {As Pretas trocam em d4.} 6. Nxd4 {O cavalo recaptura.} 6... Bd7 {O bispo defende o cavalo de c6.}
+7. O-O {O nosso rei vai para o lado do rei.} 7... Be7 {Qual troca estraga os peões dele?}
+8. Nxc6! {O cavalo troca em c6, como contra 4...Cf6.} 8... bxc6 9. Bd3 $16 {O bispo recua para d3 e defende e4.}
+9... O-O 10. f4! $16 {Os peões de e4 e f4 andam juntos. A ameaça é e5.} 10... Rb8 {A torre preta vai para a coluna b, que ficou aberta para ela.}
+11. h3 {O h3 tira a casa g4 das peças pretas.} 11... Re8 {A torre preta mira o nosso peão de e4.}
+12. b3 {O peão abre caminho para o bispo de c1.} 12... Bf8 13. Bb2 {O bispo vai para a diagonal grande, mirando o rei. 3...d6: Cc3, Bb5, Cxc6, Bd3, f4 e Bb2.}
 *
 
 [Abertura "escocesa"]
@@ -604,10 +753,13 @@ Be7 {Qual troca estraga os peões dele?} 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $1
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... d6 {As Pretas seguram e5 com peão. 10% das partidas. Trocamos, avançamos ou desenvolvemos?}
-4. Nc3 {Isso: desenvolvemos e deixamos a tensão com ele.} (4. d5!? {Ganha espaço, mas fecha o centro, e centro fechado ajuda quem está apertado.})
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... d6 {As Pretas seguram e5 com um peão. Trocamos, avançamos ou desenvolvemos?}
+4. Nc3 {O cavalo sai e defende e4. A decisão de trocar em d4 fica com as Pretas.}
+(4. d5!? {Ganha espaço, mas fecha o centro, e centro fechado ajuda quem está apertado.})
 4... exd4 5. Nxd4 $14 Nxd4 6. Qxd4 {É a mesma posição da montagem de 5...d6.} *
 
 [Abertura "escocesa"]
@@ -622,11 +774,15 @@ Be7 {Qual troca estraga os peões dele?} 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $1
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... d6 {As Pretas seguram e5 com peão. 10% das partidas. Trocamos, avançamos ou desenvolvemos?}
-4. Nc3 {Isso: desenvolvemos e deixamos a tensão com ele.} (4. d5!? {Ganha espaço, mas fecha o centro, e centro fechado ajuda quem está apertado.})
-4... Bg4 {O bispo prega o nosso cavalo.} 5. Bb5 exd4 6. Qxd4 {A dama recaptura, e o cavalo de c6 está pregado.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... d6 {As Pretas seguram e5 com um peão. Trocamos, avançamos ou desenvolvemos?}
+4. Nc3 {O cavalo sai e defende e4. A decisão de trocar em d4 fica com as Pretas.}
+(4. d5!? {Ganha espaço, mas fecha o centro, e centro fechado ajuda quem está apertado.})
+4... Bg4 {O bispo prega o nosso cavalo de f3 contra a dama.} 5. Bb5 {Nós respondemos do mesmo jeito: o bispo prega o cavalo de c6 contra o rei.}
+5... exd4 6. Qxd4 {A dama recaptura, porque o cavalo de f3 está pregado. E o cavalo de c6 também está.}
 *
 
 [Abertura "escocesa"]
@@ -641,12 +797,15 @@ Be7 {Qual troca estraga os peões dele?} 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $1
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... d6 {As Pretas seguram e5 com peão. 10% das partidas. Trocamos, avançamos ou desenvolvemos?}
-4. Nc3 {Isso: desenvolvemos e deixamos a tensão com ele.} (4. d5!? {Ganha espaço, mas fecha o centro, e centro fechado ajuda quem está apertado.})
-4... Be6?? 5. d5! Bd7 6. dxc6 {O peão ataca dois: o bispo e o cavalo. Ganhamos uma peça.}
-*
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... d6 {As Pretas seguram e5 com um peão. Trocamos, avançamos ou desenvolvemos?}
+4. Nc3 {O cavalo sai e defende e4. A decisão de trocar em d4 fica com as Pretas.}
+(4. d5!? {Ganha espaço, mas fecha o centro, e centro fechado ajuda quem está apertado.})
+4... Be6?? 5. d5! {O peão avança e ataca duas peças: o bispo de e6 e o cavalo de c6.}
+5... Bd7 6. dxc6 {Ganhamos uma peça.} *
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -660,11 +819,16 @@ Be7 {Qual troca estraga os peões dele?} 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $1
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Qf6 {A dama ataca o nosso cavalo. Para onde ele recua?} 5. Nf3 {O cavalo volta e fica seguro.}
-5... Bc5 6. Nc3 Nge7 7. Nb5 Bb6 8. Be3! Bxe3 9. fxe3 {A coluna f abre, e a dama preta fica exposta. Resposta rara: desenvolva, e cada peça que sai deve ameaçar alguma coisa.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Qf6 {A dama preta ataca o nosso cavalo. Agora o cavalo de d4 está atacado duas vezes, pela dama e pelo cavalo de c6. Para onde ele recua?}
+5. Nf3 {O cavalo volta e fica seguro.} 5... Bc5 {O bispo preto mira f2.} 6. Nc3 {O cavalo sai e defende e4.}
+6... Nge7 7. Nb5 {O cavalo vai a b5 e mira c7.} 7... Bb6 8. Be3! {O bispo desafia o bispo de b6.}
+8... Bxe3 9. fxe3 {A coluna f abre, e a dama preta fica exposta. Resposta rara: desenvolva, e cada peça que sai deve ameaçar alguma coisa.}
 *
 
 [Abertura "escocesa"]
@@ -679,9 +843,12 @@ Be7 {Qual troca estraga os peões dele?} 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $1
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
 4... d6 5. Nc3 Nf6 6. Bf4 {A mesma montagem: Cc3, Bf4 e roque grande.} *
 
 [Abertura "escocesa"]
@@ -696,10 +863,14 @@ Be7 {Qual troca estraga os peões dele?} 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $1
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Ne5 5. f4 Nc6 6. Nc3 {O peão expulsa o cavalo, e ganhamos espaço.} *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Ne5 5. f4 {O peão expulsa o cavalo, e ganhamos espaço.} 5... Nc6 6. Nc3 {Desenvolvemos o cavalo, com os peões na frente.}
+*
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -713,10 +884,13 @@ Be7 {Qual troca estraga os peões dele?} 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $1
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Bb4+ 5. c3 Bc5 6. Be3 Bb6 7. Nf5 {O cavalo salta e ameaça trocar o bispo dele.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Bb4+ 5. c3 {O peão expulsa o bispo com tempo.} 5... Bc5 6. Be3 Bb6 7. Nf5 {O cavalo salta para f5 e mira o peão de g7, que ficou sem o bispo para defendê-lo.}
 *
 
 [Abertura "escocesa"]
@@ -731,12 +905,17 @@ Be7 {Qual troca estraga os peões dele?} 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $1
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nxd4? 5. Qxd4 {Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande.}
-5... Nf6? {O cavalo ataca e4, mas o peão de d7 ainda não saiu. Qual lance ataca o cavalo?}
-6. e5! {Isso: o cavalo tem de fugir, e não há casa boa.} *
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nxd4? {As Pretas trocam os cavalos. Parece natural, mas traz a nossa dama para o centro sem perder tempo.}
+5. Qxd4 {A dama recaptura em d4. Sem o cavalo de c6, nenhuma peça preta consegue expulsá-la dali com tempo.}
+5... Nf6? {O cavalo sai para f6 e ataca e4. Parece um lance normal. Mas o peão de d7 ainda está em casa. Com ele em d6, um peão nosso que chegasse a e5 seria tomado. Qual lance ataca o cavalo?}
+6. e5! {O peão chega a e5 e ataca o cavalo. Ele precisa fugir, e as casas d5 e e4 estão na mira da nossa dama.}
+*
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -750,11 +929,15 @@ Be7 {Qual troca estraga os peões dele?} 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $1
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Nxd4? 5. Qxd4 {Regra 2: trocou os cavalos? A dama recaptura e vêm Cc3, Bf4 e roque grande.}
-5... c5 {O peão ataca a dama. Para onde ela vai?} 6. Qe3 {Regra 1: dama atacada por peão vai para e3.}
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Nxd4? {As Pretas trocam os cavalos. Parece natural, mas traz a nossa dama para o centro sem perder tempo.}
+5. Qxd4 {A dama recaptura em d4. Sem o cavalo de c6, nenhuma peça preta consegue expulsá-la dali com tempo.}
+5... c5 {O peão de c ataca a nossa dama. Para onde ela vai?} 6. Qe3 {Primeira regra: dama atacada por peão vai a e3. Dali ela defende e4 e vigia a casa e5.}
 *
 
 [Abertura "escocesa"]
@@ -769,11 +952,14 @@ Be7 {Qual troca estraga os peões dele?} 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $1
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... exd4 {O caminho mais comum: as Pretas trocam o peão.} 4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Nossas peças têm casas livres, e as Pretas precisam reagir. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
-4... Bc5 {O bispo ataca o cavalo de d4.} 5. Nb3 {O cavalo recua e ataca o bispo.}
-*
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... exd4 {O peão de e5 estava atacado duas vezes e defendido uma só. As Pretas trocam: é o caminho mais comum.}
+4. Nxd4 {O cavalo recaptura e fica no meio do tabuleiro. Olhe o que mudou: as Pretas não têm mais peão no centro. O nosso peão de e4 ficou, e as nossas peças têm caminho livre. O preço: o cavalo de d4 e o peão de e4 viram alvos. A aula mostra como cuidar dos dois. 3.d4 abre o centro; 4.Cxd4 põe o cavalo no meio.}
+4... Bc5 {O bispo sai para c5 e ataca o cavalo de d4. Agora o cavalo está atacado duas vezes, pelo bispo e pelo cavalo de c6. Só a nossa dama o defende.}
+5. Nb3 {O cavalo recua para b3 e ataca o bispo.} *
 
 [Abertura "escocesa"]
 [Nome "Escocesa"]
@@ -787,8 +973,11 @@ Be7 {Qual troca estraga os peões dele?} 8. Nxc6! bxc6 9. Bd3 $16 O-O 10. f4! $1
 [Result "*"]
 
 1. e4 {Abrimos com o peão do rei. Ele ocupa o centro e solta o bispo e a dama.}
-1... e5 2. Nf3 {O cavalo ataca o peão de e5 e prepara o roque.} 2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo joga 3.Bc4 ou 3.Bb5.}
-3. d4 $1 {Nós não. 3.d4 abre o centro já, enquanto as peças pretas ainda estão em casa. Este é o lance da Escocesa.}
-3... d6 {As Pretas seguram e5 com peão. 10% das partidas. Trocamos, avançamos ou desenvolvemos?}
-4. Nc3 {Isso: desenvolvemos e deixamos a tensão com ele.} (4. d5!? {Ganha espaço, mas fecha o centro, e centro fechado ajuda quem está apertado.})
+1... e5 {As Pretas respondem do mesmo jeito. O peão delas também vai ao centro e trava o nosso.}
+2. Nf3 {O cavalo sai para f3 e ataca o peão de e5. Ele também abre caminho para o roque pequeno.}
+2... Nc6 {As Pretas defendem e5 com o cavalo. Aqui quase todo mundo desenvolve um bispo: 3.Bc4, a Italiana, ou 3.Bb5, a Espanhola. O centro fica para depois.}
+3. d4 $1 {Nós não esperamos. O peão vai a d4 e ataca e5 pela segunda vez. Este é o lance da Escocesa. O nome vem de uma partida entre Edimburgo e Londres, em 1824.}
+3... d6 {As Pretas seguram e5 com um peão. Trocamos, avançamos ou desenvolvemos?}
+4. Nc3 {O cavalo sai e defende e4. A decisão de trocar em d4 fica com as Pretas.}
+(4. d5!? {Ganha espaço, mas fecha o centro, e centro fechado ajuda quem está apertado.})
 *

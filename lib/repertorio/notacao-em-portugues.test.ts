@@ -158,7 +158,7 @@ test("a tela devolve a prosa das aulas sem nenhum N, Q ou K sobrando", () => {
  * décimo, escrito à mão no `[TRAIN]` do estudo, virou `Tg1` no estudo. Zero
  * torre em inglês; uma nova quebra este teste.
  */
-test("o `R` da prosa: nenhuma torre em inglês, quarenta e três reis em português", () => {
+test("o `R` da prosa: nenhuma torre em inglês, quarenta e quatro reis em português", () => {
   const comR = prosaDasAulasPublicadas().filter((t) => t.lance.startsWith("R"));
   // Só a Francesa escreve a prosa em inglês. A Siciliana (18/9/2026) já nasceu em português: o `R`
   // dela é rei (14.Rd2, 10...Rxf7), como nas aulas de finais.
@@ -171,7 +171,10 @@ test("o `R` da prosa: nenhuma torre em inglês, quarenta e três reis em portugu
   // B e a C perderem as paradas extras, que repetiam a fala).
   // 45 até 18/9/2026 (tarde): o mapa das respostas (Escocesa B02, Siciliana B02) saiu das aulas, e com
   // ele dois comentários que falavam do rei ("Rei primeiro, também aqui") deixaram o treinador.
-  assert.equal(reis.length, 43, "os reis das aulas de finais, da Siciliana e da Escocesa já estão em português e passam intactos");
+  // 44 em 18/9/2026 (revisão de pedagogia): a referência do Golpe 3 (B05) ganhou uma frase nova —
+  // "O 7.Rxf2 é ilegal: o cavalo de e4 defende f2." — para explicar por que o rei não pode tomar o
+  // bispo ali. Mais um rei, na mesma aula que já tinha o Rxf2 de "Isso: 6.Rxf2.".
+  assert.equal(reis.length, 44, "os reis das aulas de finais, da Siciliana e da Escocesa já estão em português e passam intactos");
   assert.ok(reis.length > torres.length, "enquanto houver mais rei que torre, a tela não troca o R");
 
   for (const rei of reis) assert.equal(textoEmPortugues(rei.lance), rei.lance, `${rei.aula}: ${rei.lance} é rei e tem de passar inteiro`);
