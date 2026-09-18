@@ -129,13 +129,13 @@ A cada final, pergunte: com estas peças, dá para forçar o mate? }
 [Result "*"]
 [Annotator "https://lichess.org/@/clubexadrezguabiruba"]
 [StudyName "O que dá mate e o que não dá"]
-[ChapterName "07 - AULA - Dois cavalos: o caso especial"]
+[ChapterName "07 - AULA - Dois cavalos: não forçam o mate"]
 [FEN "6k1/4N3/6K1/4N3/8/8/8/8 b - - 0 1"]
 [SetUp "1"]
 [Orientation "white"]
 
 { Dois cavalos. As pretas estão em xeque e têm duas casas: f8 e h8. Compare as duas. } { [%csl Yf8,Yh8] }
-1... Kh8? { O rei entra sozinho no canto, em h8. } { [%csl Rh8] } ( 1... Kf8! { A defesa certa: f8, longe do canto. } { [%csl Gf8] } 2. Kf6 Ke8 3. Nf7 Kd7 { Sem mate. Guarde isto: dois cavalos não forçam o mate. Fique longe do canto. } ) 2. Nf7# { Mate. Mas só porque as pretas erraram: ninguém obrigou o rei a ir para h8. } { [%csl Rh8] } *
+1... Kh8? { O rei entra sozinho no canto, em h8. } { [%csl Rh8] } ( 1... Kf8! { A defesa certa: f8, longe do canto. } { [%csl Gf8] } 2. Kf6 Ke8 3. Nf7 Kd7 { Sem mate, e nunca vai ter. Guarde isto: dois cavalos não forçam o mate. Com a defesa certa, é empate. } ) 2. Nf7# { Mate. Mas só porque as pretas erraram: ninguém obrigou o rei a ir para h8. Com a defesa certa, é empate. } { [%csl Rh8] } *
 
 [Event "Aula 1 - O que dá mate e o que não dá"]
 [Site "https://lichess.org/study/suMc7hgW"]
@@ -166,9 +166,9 @@ A cada final, pergunte: com estas peças, dá para forçar o mate? }
 
 { LEMBRE-SE:
 
-1. Não forçam o mate: um bispo, um cavalo, dois cavalos.
+1. Não forçam o mate: bispo, cavalo, dois cavalos. Com defesa certa, é empate.
 2. Forçam o mate: dama, torre, dois bispos, bispo e cavalo.
-3. Rei e peão: depende. Se o peão vira dama, força o mate. }
+3. Peão: depende. Se vira dama, força. }
  *
 
 [Event "Aula 1 - O que dá mate e o que não dá"]
@@ -184,7 +184,7 @@ A cada final, pergunte: com estas peças, dá para forçar o mate? }
 [Orientation "white"]
 [ChapterMode "gamebook"]
 
-{ Rei e dama, como na aula. Dê o mate em um lance. A casa a8 é o caminho. } { [%csl Ga8] }
+{ Rei e dama, como na aula. Dê o mate em um lance. }
 1. Qa8# { Mate. Rei e dama dão mate. } { [%csl Re8] } ( 1. Qe7# { Mate também: o rei branco protege a dama. } { [%csl Re8] } ) ( 1. Qa4+? { Xeque, mas o rei sai por d8 ou f8. Xeque sem fechar as saídas não é mate. } { [%csl Rd8,Rf8] } ) *
 
 [Event "Aula 1 - O que dá mate e o que não dá"]
@@ -249,7 +249,7 @@ A cada final, pergunte: com estas peças, dá para forçar o mate? }
 [ChapterMode "gamebook"]
 
 { Você joga de pretas e está em xeque. Escolha a casa certa e segure o empate. }
-1... Kf8! { Longe do canto. Os cavalos não conseguem fechar o seu rei: empate. } ( 1... Kh8? { O canto perde: o cavalo pula para f7, e é mate. } { [%csl Rh8,Rf7] } 2. Nf7# ) *
+1... Kf8! { Longe do canto. Dois cavalos não forçam o mate: com a defesa certa, é empate. } ( 1... Kh8? { O canto perde: o cavalo pula para f7, e é mate. } { [%csl Rh8,Rf7] } 2. Nf7# ) *
 
 [Event "Aula 1 - O que dá mate e o que não dá"]
 [Site "https://lichess.org/study/suMc7hgW"]
@@ -295,5 +295,5 @@ A cada final, pergunte: com estas peças, dá para forçar o mate? }
 [SetUp "1"]
 [Orientation "black"]
 
-{ Dois cavalos contra o seu rei. Fique longe dos cantos e segure o empate. }
+{ Dois cavalos não forçam o mate. Fique longe dos cantos e segure o empate. }
  *

@@ -7780,3 +7780,9 @@ de a aula mostrar um. O de desenho acendeu f7 no erro do TREINO 5.
 torre, por exemplo) testaria o resto da frase. (b) No TREINO 1, a casa a8 acesa entrega metade da resposta. É o
 apoio do treino 1, e o original repetia a posição da aula. (c) "tira g8" e "fecha g8" aparecem em falas vizinhas;
 "tira" é palavra do original.
+
+**Ajuste do Doug, mesma noite:** (1) o TREINO 1 não acende mais a8 (decisão dele; o aviso
+`DESENHO_TREINO_SEM_ALVO` fica, declarado). (2) "Dois cavalos não forçam o mate: com a defesa certa, é empate"
+reforçado no título do capítulo 07, no mate do erro, no fim da defesa certa, no LEMBRE-SE, no TREINO 5 e na
+prática. Publicada `pub-61423f0c18fd49b0` com `REVISAO_PGN=dispensada` (só texto, pedido do Doug; os cinco
+revisores não rodaram de novo). `npm test` 1721/1721.
