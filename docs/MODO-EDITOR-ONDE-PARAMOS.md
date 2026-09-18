@@ -7821,3 +7821,11 @@ direta. Depois de fechar tática, finais e repertório, o aluno vê no troféu a
 terminou o nível 1, deve aguardar o professor liberar a prova e o nível 2, e pode continuar
 praticando tática e jogando partidas de treino anotadas. A primeira exibição nesse navegador
 solta o confete; visitas seguintes mantêm a orientação sem repetir a festa.
+
+# Variantes visíveis nas aulas de abertura — 18/9/2026
+
+No ponto em que uma linha se divide, o player de abertura agora desenha setas e acende as
+casas de destino das alternativas que serão comparadas. Depois do rewind, a fala diz que a
+aula está revisitando a outra escolha e o tabuleiro aponta somente o lance que vem a seguir.
+Os metadados nascem na fita de `previa.ts`, atravessam o pacote do aluno e viram desenho no
+mesmo runtime; a trava de abertura direta confere as duas metades.

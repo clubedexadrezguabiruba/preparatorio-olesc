@@ -76,6 +76,10 @@ export type PassoDaPrevia = {
    * posição a que ele volta. Como o retorno, nasce aqui e nunca entra no documento.
    */
   recuo?: boolean;
+  /** Lances que saem desta posição: o player acende as alternativas antes de comparar. */
+  opcoes?: string[];
+  /** Lance que será revisto depois do rewind: fica apontado no passo de retorno. */
+  opcaoRevista?: string;
   /**
    * A pergunta jogada **dentro** do capítulo (curso de abertura, 18/9/2026): o id do treino
    * `papel: "parada"` da etapa. O tabuleiro está na posição da pergunta, a fala é a pergunta, e o
@@ -274,6 +278,17 @@ function passosPelaFita(
   const passos: PassoDaPrevia[] = [];
   let naTela: string[] = [];
   const linhas = [capitulo, ...variantes];
+  const opcoesPorNo = new Map<string, string[]>();
+  for (const linha of linhas) {
+    const percurso = percursoDoCapitulo(linha);
+    for (let i = 0; i < percurso.length - 1; i += 1) {
+      const uci = analise.nos[percurso[i + 1]]?.uci;
+      if (!uci) continue;
+      const opcoes = opcoesPorNo.get(percurso[i]) ?? [];
+      if (!opcoes.includes(uci)) opcoesPorNo.set(percurso[i], [...opcoes, uci]);
+    }
+  }
+  const escolhasJaMostradas = new Set<string>();
   linhas.forEach((linha, k) => {
     const percurso = percursoDoCapitulo(linha);
     let desde = Math.max(0, percurso.indexOf(de));
@@ -289,10 +304,25 @@ function passosPelaFita(
       // "A outra escolha" só quando a linha nova se separa das já tocadas exatamente aqui. Senão (o
       // Laboratório indo a um caso que sai mais adiante), a fita volta e avança até ele.
       const separaAqui = linhas.slice(0, k).every((antes) => comecoComum(percursoDoCapitulo(antes), percurso) <= comum);
-      passos.push({ nodeId: percurso[desde], fala: separaAqui ? `Voltamos ${onde}. A outra escolha: ${rotuloDoNo(seguinte)}${simbolo}.` : `Voltamos ${onde}.`, pausaManual: false, retorno: true });
+      passos.push({
+        nodeId: percurso[desde],
+        fala: separaAqui ? `Voltamos ${onde}. Agora revisitamos a outra escolha: ${rotuloDoNo(seguinte)}${simbolo}.` : `Voltamos ${onde}.`,
+        pausaManual: false,
+        retorno: true,
+        ...(analise.nos[seguinte]?.uci ? { opcaoRevista: analise.nos[seguinte].uci } : {}),
+      });
     }
     // Depois da volta o tabuleiro já está no ponto de escolha: a linha nova começa no lance seguinte.
-    for (let i = k > 0 ? desde + 1 : desde; i < percurso.length; i += 1) passos.push(...passosDoNo(analise, linha, percurso[i], i > desde, paradas));
+    for (let i = k > 0 ? desde + 1 : desde; i < percurso.length; i += 1) {
+      const nodeId = percurso[i];
+      const doNo = passosDoNo(analise, linha, nodeId, i > desde, paradas);
+      const opcoes = opcoesPorNo.get(nodeId) ?? [];
+      if (opcoes.length > 1 && !escolhasJaMostradas.has(nodeId) && doNo.length > 0) {
+        doNo[doNo.length - 1] = { ...doNo[doNo.length - 1], opcoes };
+        escolhasJaMostradas.add(nodeId);
+      }
+      passos.push(...doNo);
+    }
     naTela = percurso;
   });
   return passos;

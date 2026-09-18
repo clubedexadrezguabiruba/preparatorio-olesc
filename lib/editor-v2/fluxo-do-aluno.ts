@@ -66,6 +66,10 @@ export type PassoDoCapituloDoAlunoV2 = {
   rotulo?: string;
   /** A fita voltando um lance até o ponto de escolha (18/9/2026) — ver `PassoDaPrevia.recuo`. */
   recuo?: true;
+  /** Alternativas que o capítulo vai comparar a partir desta posição. */
+  opcoes?: string[];
+  /** A alternativa apontada depois que a fita voltou. */
+  opcaoRevista?: string;
   /**
    * A pergunta deste passo (curso de abertura, 18/9/2026): a `chave` de uma das `paradas` da etapa.
    * O tabuleiro para aqui e o aluno joga; o passo seguinte é o lance-resposta.
@@ -281,6 +285,8 @@ export function etapasDoAlunoV2(aula: AulaV2, positions: Record<string, Position
           pausaManual: passo.pausaManual,
           ...(passo.rotulo ? { rotulo: passo.rotulo } : {}),
           ...(passo.recuo ? { recuo: true as const } : {}),
+          ...(passo.opcoes ? { opcoes: passo.opcoes } : {}),
+          ...(passo.opcaoRevista ? { opcaoRevista: passo.opcaoRevista } : {}),
           ...(passo.parada && chaveDa.has(passo.parada) ? { parada: chaveDa.get(passo.parada)! } : {}),
         })),
         ...(paradas.length ? { paradas } : {}),

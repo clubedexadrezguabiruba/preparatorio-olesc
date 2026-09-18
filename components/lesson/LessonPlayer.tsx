@@ -9,7 +9,7 @@ import type { PacoteDeAula } from "@/lib/finais/conteudo";
 import type { TentativaDeAula } from "@/lib/finais/gravar";
 import type { TentativaDeAulaV2 } from "@/lib/finais/tentativa-v2";
 import { IntroStage } from "@/components/lesson/IntroStage";
-import { desenhoDaAutoriaV2 } from "@/lib/chess/annotations";
+import { desenhoDaAutoriaV2, desenhoDasOpcoesDeVariante } from "@/lib/chess/annotations";
 import { simboloDoCirculo } from "@/lib/chess/nag-overlay";
 import { simboloDoNag } from "@/lib/chess/desenhos-do-tabuleiro";
 import { chaveDoSimbolo, type AulaDoAlunoV2, type EtapaDoAlunoV2, type ParadaDoCapituloDoAlunoV2 } from "@/lib/editor-v2/fluxo-do-aluno";
@@ -1045,7 +1045,13 @@ function CapituloDoAlunoV2({ etapa, trilha, rodape, aoTerminar, aoContinuar, dep
     roteiro: etapa.passos.map((passo) => ({ fala: passo.fala, ...(passo.lance ? { lance: passo.lance } : {}), ...(passo.espera ? { espera: passo.espera } : {}), ...(passo.recuo ? { recuo: true } : {}) })),
   }) as unknown as ObjectiveStageData, [etapa]);
   const position = useMemo(() => ({ fen: etapa.fen }) as unknown as Position, [etapa.fen]);
-  const autoria = useCallback((n: number): DrawShape[] => desenhoDaAutoriaV2(etapa.passos[n]?.desenhos), [etapa]);
+  const autoria = useCallback((n: number): DrawShape[] => {
+    const passo = etapa.passos[n];
+    return [
+      ...desenhoDaAutoriaV2(passo?.desenhos),
+      ...desenhoDasOpcoesDeVariante(passo?.opcoes, passo?.opcaoRevista),
+    ];
+  }, [etapa]);
   const simbolo = useCallback((n: number) => simboloDoCirculo(etapa.passos[n]?.nags), [etapa]);
   const rotulo = useCallback((n: number) => etapa.passos[n]?.rotulo ?? null, [etapa]);
   const relogio = useCallback((n: number): number | null => {

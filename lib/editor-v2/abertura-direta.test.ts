@@ -69,6 +69,9 @@ function conferirAula(origem: string, aula: AulaV2) {
   for (const capitulo of aula.capitulos.filter((c) => /-ramo-/.test(c.id))) assert.ok(ramos.includes(capitulo.id), `${onde}: o ramo ${capitulo.id} não é tocado`);
 
   for (const trecho of previaDaAula(aula, {}).trechos) {
+    const escolhas = trecho.passos.filter((passo) => (passo.opcoes?.length ?? 0) > 1);
+    const ramosDoTrecho = aula.fluxo.find((etapa) => etapa.tipo === "capitulo" && etapa.entidadeId === trecho.capituloId)?.comparacoes ?? [];
+    if (ramosDoTrecho.length > 0) assert.ok(escolhas.length > 0, `${onde}: as alternativas do ramo não foram iluminadas`);
     trecho.passos.forEach((passo, i) => {
       if (passo.parada) {
         const treino = aula.treinos.find((t) => t.id === passo.parada)!;
@@ -80,6 +83,7 @@ function conferirAula(origem: string, aula: AulaV2) {
         if (antes?.recuo) assert.equal(antes.nodeId, passo.nodeId, `${onde}: a fita não voltou à posição da escolha («${passo.fala}»)`);
         const analise = aula.analises.find((a) => a.nos[passo.nodeId])!;
         assert.ok(analise.nos[passo.nodeId].filhos.includes(trecho.passos[i + 1]?.nodeId ?? ""), `${onde}: depois de «${passo.fala}» a linha não sai do ponto de escolha`);
+        assert.equal(passo.opcaoRevista, trecho.passos[i + 1]?.lance, `${onde}: o retorno não aponta a opção que será revisitada`);
       }
     });
   }

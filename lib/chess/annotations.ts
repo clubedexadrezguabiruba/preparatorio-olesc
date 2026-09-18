@@ -128,6 +128,23 @@ export function desenhoDaAutoriaV2(desenho: {
 }
 
 /**
+ * Sinalização das escolhas de uma variante: antes da análise, todas as casas possíveis;
+ * depois do rewind, a seta da alternativa que a fita vai revisitar.
+ */
+export function desenhoDasOpcoesDeVariante(opcoes?: readonly string[], opcaoRevista?: string): DrawShape[] {
+  const lances = opcaoRevista ? [opcaoRevista] : [...(opcoes ?? [])];
+  return lances.flatMap((uci) => {
+    if (uci.length < 4) return [];
+    const origem = uci.slice(0, 2) as Key;
+    const destino = uci.slice(2, 4) as Key;
+    return [
+      { orig: origem, dest: destino, brush: "plano" },
+      { orig: destino, brush: "yellow" },
+    ];
+  });
+}
+
+/**
  * A peça que acabou de mexer está pendurada?
  *
  * É a pergunta que o aluno da N0 mais erra: a torre chega perto do rei preto e

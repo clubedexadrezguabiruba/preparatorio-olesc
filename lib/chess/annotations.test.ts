@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { autoriaDoDesenho, desenhoDaAutoria, desenhoDaAutoriaV2, PINCEL_POR_COR, teachingShapes } from "./annotations.ts";
+import { autoriaDoDesenho, desenhoDaAutoria, desenhoDaAutoriaV2, desenhoDasOpcoesDeVariante, PINCEL_POR_COR, teachingShapes } from "./annotations.ts";
 import type { DrawShape } from "@lichess-org/chessground/draw";
 import type { Key } from "@lichess-org/chessground/types";
 import { desenhoSchema } from "../lesson/schema.ts";
@@ -153,6 +153,19 @@ test("as duas formas convivem no mesmo nó", () => {
       { orig: "d1", dest: "h5", brush: "red" },
     ],
   );
+});
+
+test("as variantes acendem todas as opções e, no retorno, apontam só a revisitada", () => {
+  assert.deepEqual(desenhoDasOpcoesDeVariante(["f6h5", "f6g8"]), [
+    { orig: "f6", dest: "h5", brush: "plano" },
+    { orig: "h5", brush: "yellow" },
+    { orig: "f6", dest: "g8", brush: "plano" },
+    { orig: "g8", brush: "yellow" },
+  ]);
+  assert.deepEqual(desenhoDasOpcoesDeVariante(["f6h5", "f6g8"], "f6g8"), [
+    { orig: "f6", dest: "g8", brush: "plano" },
+    { orig: "g8", brush: "yellow" },
+  ]);
 });
 
 test("a paleta do autor só nomeia pincéis que a folha de estilo define", () => {

@@ -179,7 +179,7 @@ test("ramo que sai depois de uma parada também diz «Voltamos a…» (C12, 9...
   const c = aula(cursos[0][1], "C");
   const trecho = previaDaAula(c, {}).trechos.find((t) => t.capituloId === "cap-c12")!;
   // Notação sempre em português no site (decisão do Doug, 17/9/2026): Nc3 vira Cc3 aqui.
-  assert.ok(trecho.passos.some((p) => p.retorno && /^Voltamos a 9\. Cc3\. A outra escolha: 9\. \.\.\. Be7|^Voltamos a 9\. Cc3\./.test(p.fala)), trecho.passos.filter((p) => p.retorno).map((p) => p.fala).join(" | "));
+  assert.ok(trecho.passos.some((p) => p.retorno && /^Voltamos a 9\. Cc3\. Agora revisitamos a outra escolha: 9\. \.\.\. Be7|^Voltamos a 9\. Cc3\./.test(p.fala)), trecho.passos.filter((p) => p.retorno).map((p) => p.fala).join(" | "));
   // A parada vem antes do ramo: a principal toca até o fim primeiro.
   const pergunta = trecho.passos.findIndex((p) => p.parada);
   const volta = trecho.passos.findIndex((p) => p.retorno);
