@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { travaDoAluno } from "@/lib/aberturas/trava-banco";
 import { podeAbrir } from "@/lib/aberturas/vitrine";
+import { nivelDoAluno } from "@/lib/curso/nivel";
+import { nivelConquistado } from "@/lib/curso/progresso";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { aberturaNoIndice, lerIndice, linhasDaAbertura } from "@/lib/repertorio/banco";
 import { CORES, type Cor } from "@/lib/repertorio/linhas";
@@ -69,7 +71,7 @@ export default async function TreinoDaAbertura({
 
   const perfil = await perfilAtual();
   // A abertura "em breve" não abre para o aluno, nem pela URL (`lib/aberturas/vitrine.ts`).
-  if (!podeAbrir(cor, abertura, perfil.papel)) redirect("/aberturas");
+  if (!podeAbrir(cor, abertura, perfil.papel, nivelDoAluno(await nivelConquistado(perfil.id)))) redirect("/aberturas");
   const [todasAsLinhas, progresso, indiceInteiro, trava] = await Promise.all([
     linhasDaAbertura(cor, abertura),
     progressoDoRepertorio(),

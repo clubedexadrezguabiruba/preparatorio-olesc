@@ -9,6 +9,7 @@ import { perfilAtual } from "@/lib/auth/perfil";
 import { editorLigado } from "@/lib/editor/local";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import { estadoParaONivel } from "@/lib/curso/estado";
+import { nivelAberto } from "@/lib/curso/liberado";
 import { montarMapa, type ItemDoNivel } from "@/lib/curso/mapa";
 import { NIVEIS, nivelDoAluno, prontoParaProva, type Nivel } from "@/lib/curso/nivel";
 import { nivelConquistado } from "@/lib/curso/progresso";
@@ -81,7 +82,6 @@ export default async function Finais() {
   // As aulas extras publicadas (§22 do Editor v2) entram no nível que declaram.
   const extras = aulasExtras();
   const trilha = trilhaCompleta(extras);
-  const abertas = aulasAbertas(publicadas, extras);
 
   const [progresso, conquistado, cabecalho, estado] = await Promise.all([
     progressoDeFinais(perfil.id),
@@ -90,6 +90,10 @@ export default async function Finais() {
     estadoParaONivel(perfil.id),
   ]);
   const aqui = nivelDoAluno(conquistado);
+  // As que o aluno pode abrir: publicadas e do nível liberado (`lib/curso/liberado.ts`).
+  const abertas = aulasAbertas(publicadas, extras).filter((a) =>
+    nivelAberto(a.nivel, { papel: perfil.papel, nivelDoAluno: aqui }),
+  );
   const pronto = prontoParaProva(estado);
   const feitas = aprendidasDaTrilha(abertas, progresso, comPratica);
   const proxima = proximaAula(abertas, progresso, comPratica);
@@ -102,6 +106,8 @@ export default async function Finais() {
     aulasPublicadas: publicadas,
     aulasComPratica: comPratica,
     nivelDoAluno: aqui,
+    papel: perfil.papel,
+    corrente: new Map(),
     extras,
   });
   const caminhos = new Map<Nivel, readonly ItemDoNivel[]>(
@@ -279,8 +285,8 @@ export default async function Finais() {
             })}
 
             <p className="max-w-prose text-sm text-tinta-media">
-              São {trilha.length} aulas nos cinco níveis, e você vê todas: a do cadeado ainda está
-              sendo escrita, e a tracejada é de um nível acima do seu — dá para adiantar.{" "}
+              São {trilha.length} aulas nos cinco níveis, e você vê todas: as do cadeado ainda
+              estão trancadas — o nível delas abre depois — ou sendo escritas.{" "}
               <Link href="/trilha" className="foco font-medium text-metodo-tinta underline">
                 Veja a trilha do curso inteiro
               </Link>{" "}

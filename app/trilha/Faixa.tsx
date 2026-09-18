@@ -101,7 +101,7 @@ export function FaixaDoNivel({
 
 /** Uma barra por módulo, na unidade dele. Sem nada aberto, conta os itens. */
 function Contagem({ modulo }: { modulo: ModuloDoNivel }) {
-  const { feitos, total, adiante, emEscrita } = contarAberto(modulo);
+  const { feitos, total, trancados, emEscrita } = contarAberto(modulo);
   const rotulo = MODULO[modulo.modulo];
   const itens = modulo.itens.length;
   const completos = modulo.itens.filter((i) => i.feitos >= i.total).length;
@@ -110,8 +110,8 @@ function Contagem({ modulo }: { modulo: ModuloDoNivel }) {
       ? rotulo.vazio
       : total > 0
         ? `${feitos} de ${total} ${rotulo.unidade}`
-        : adiante > 0
-          ? `${completos} de ${itens} · ${adiante} adiante`
+        : trancados > 0
+          ? `${itens} ${itens === 1 ? "trancado" : "trancados"}`
           : `${emEscrita} em escrita`;
   return (
     <div className="flex flex-col gap-1.5">

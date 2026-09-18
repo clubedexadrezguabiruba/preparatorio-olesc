@@ -1,6 +1,8 @@
 import { aprendeu, trilhaCompleta, type AulaDaTrilha, type ProgressoDaAula } from "../finais/trilha.ts";
 import { BLOCOS, contaNoCurso } from "../tatica/blocos.ts";
+import type { EstadoDoTema } from "../tatica/ordem.ts";
 import { PUZZLES_POR_TEMA } from "../tatica/serie.ts";
+import type { Papel } from "./liberado.ts";
 import {
   aulasDoNivel,
   NIVEIS,
@@ -48,16 +50,13 @@ import {
  * tela mostra as duas lado a lado **e** escreve o que cada barra conta — é a
  * mesma disciplina do selo de domínio.
  *
- * ## O que "aberto" quer dizer em cada um
+ * ## O que "aberto" quer dizer em cada um (18/9/2026)
  *
- * O item fechado diz **qual** dos dois motivos o fecha — o nível que o aluno
- * ainda não alcançou, ou o texto que ainda não existe. É a regra de
- * {@link situacaoDoItem}, e ela mora em `nivel.ts` porque é a mesma nos dois
- * módulos: quem sabe o nível do aluno é a página, quem sabe o que aquilo
- * significa é a regra.
+ * - **Finais:** {@link situacaoDoItem} — o nível liberado e alcançado abre
+ *   (`lib/curso/liberado.ts`); acima dele, `trancado`; sem JSON, `em-escrita`.
+ * - **Tática:** a corrente (`lib/tatica/ordem.ts`) — o nível não tranca tema.
  *
- * "Adiante" **continua clicável** — a trava é mole, e `podeAbrir` é quem
- * responde isso.
+ * O professor entra em tudo.
  */
 
 export type ProgressoParaOMapa = {
@@ -76,6 +75,10 @@ export type ProgressoParaOMapa = {
   readonly aulasComPratica: ReadonlySet<string>;
   /** O degrau em que o aluno está, de `nivelDoAluno()`. */
   readonly nivelDoAluno: Nivel;
+  /** O professor entra em tudo. */
+  readonly papel: Papel;
+  /** O estado de cada tema na corrente da tática, de `estadoDosTemas`. Tema fora dela: aberto. */
+  readonly corrente: ReadonlyMap<string, EstadoDoTema>;
   /** As aulas extras publicadas (§22): aparecem no nível delas, depois das do curso. */
   readonly extras?: readonly AulaDaTrilha[];
 };
@@ -136,7 +139,11 @@ export function montarMapa(p: ProgressoParaOMapa): Map<Nivel, ModuloDoNivel[]> {
         href: `/tatica/${tema.tag}`,
         total: PUZZLES_POR_TEMA,
         feitos,
-        situacao: situacaoDoItem(bloco.nivel, p.nivelDoAluno, p.temaAberto(tema.tag)),
+        situacao: !p.temaAberto(tema.tag)
+          ? "em-escrita"
+          : p.corrente.get(tema.tag) === "trancado"
+            ? "trancado"
+            : "aberto",
         nivel: bloco.nivel,
       });
     }
@@ -154,7 +161,7 @@ export function montarMapa(p: ProgressoParaOMapa): Map<Nivel, ModuloDoNivel[]> {
       href: `/finais/${aula.id}`,
       total: 1,
       feitos: progresso && aprendeu(p.aulasComPratica.has(aula.id), progresso) ? 1 : 0,
-      situacao: situacaoDoItem(aula.nivel, p.nivelDoAluno, p.aulasPublicadas.has(aula.id)),
+      situacao: situacaoDoItem(aula.nivel, p.nivelDoAluno, p.aulasPublicadas.has(aula.id), p.papel),
       nivel: aula.nivel,
     });
   }
@@ -183,8 +190,8 @@ export function montarMapa(p: ProgressoParaOMapa): Map<Nivel, ModuloDoNivel[]> {
 export function contarAberto(modulo: ModuloDoNivel): {
   feitos: number;
   total: number;
-  /** Fechados porque o degrau deles ainda não chegou. Clicáveis mesmo assim. */
-  adiante: number;
+  /** Fechados pelo nível (finais) ou pela corrente (tática). */
+  trancados: number;
   /** Fechados porque o texto ainda não existe. */
   emEscrita: number;
 } {
@@ -192,7 +199,7 @@ export function contarAberto(modulo: ModuloDoNivel): {
   return {
     feitos: abertos.reduce((s, i) => s + i.feitos, 0),
     total: abertos.reduce((s, i) => s + i.total, 0),
-    adiante: modulo.itens.filter((i) => i.situacao === "adiante").length,
+    trancados: modulo.itens.filter((i) => i.situacao === "trancado").length,
     emEscrita: modulo.itens.filter((i) => i.situacao === "em-escrita").length,
   };
 }

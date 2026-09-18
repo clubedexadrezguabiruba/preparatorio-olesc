@@ -268,16 +268,21 @@ test("`nivelDoAluno` é o degrau seguinte ao conquistado, e para no 5", () => {
  * A trava mole
  * ------------------------------------------------------------------ */
 
-test("nível antes de texto: um item adiante não anuncia que está em escrita", () => {
-  assert.equal(situacaoDoItem(5, 1, false), "adiante");
-  assert.equal(situacaoDoItem(5, 1, true), "adiante");
+test("nível antes de texto: um item trancado não anuncia que está em escrita", () => {
+  assert.equal(situacaoDoItem(5, 1, false), "trancado");
+  assert.equal(situacaoDoItem(5, 1, true), "trancado");
   assert.equal(situacaoDoItem(1, 1, false), "em-escrita");
   assert.equal(situacaoDoItem(1, 3, true), "aberto", "o que ficou para trás continua aberto");
 });
 
-test("a trava é mole: `adiante` continua clicável", () => {
+test("acima do nível liberado é trancado, mesmo para quem passou na prova", () => {
+  assert.equal(situacaoDoItem(2, 3, true), "trancado");
+  assert.equal(situacaoDoItem(2, 1, true, "professor"), "aberto", "o professor entra em tudo");
+});
+
+test("só o aberto é clicável", () => {
   assert.equal(podeAbrir("aberto"), true);
-  assert.equal(podeAbrir("adiante"), true, "endurecer é mudar TRANCA_DURA, não este teste");
+  assert.equal(podeAbrir("trancado"), false);
   assert.equal(podeAbrir("em-escrita"), false, "não há o que abrir num item que não existe");
 });
 

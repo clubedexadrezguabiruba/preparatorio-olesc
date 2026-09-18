@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
+import { perfilAtual } from "@/lib/auth/perfil";
+import { nivelAberto } from "@/lib/curso/liberado";
+import { nivelDoAluno as nivelDoAlunoDe } from "@/lib/curso/nivel";
+import { nivelConquistado } from "@/lib/curso/progresso";
 import { idsDeAula, lerPacoteDoAluno, aulasExtras } from "@/lib/finais/conteudo";
 import { aulaDaTrilha } from "@/lib/finais/trilha";
 import { AulaNoNavegador } from "./AulaNoNavegador";
@@ -48,6 +52,15 @@ export default async function AulaDeFinais({ params }: PageProps<"/finais/[aula]
   const { aula } = await params;
   const doAluno = lerPacoteDoAluno(aula);
   if (!doAluno) notFound();
+
+  // Só o nível liberado abre (`lib/curso/liberado.ts`); o professor entra em tudo. O nível 1 abre
+  // para todos e não lê a sessão — as aulas dele continuam pré-montadas no build.
+  const nivel = aulaDaTrilha(aula, aulasExtras())?.nivel;
+  if (nivel !== undefined && nivel > 1) {
+    const perfil = await perfilAtual();
+    const nivelDoAluno = nivelDoAlunoDe(await nivelConquistado(perfil.id));
+    if (!nivelAberto(nivel, { papel: perfil.papel, nivelDoAluno })) redirect("/finais");
+  }
 
   /*
    * **A aula v2 publicada vence a v1 do mesmo id (fatia 7).** O aluno segue o fluxo dela, no

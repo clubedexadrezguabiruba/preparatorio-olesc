@@ -1,4 +1,6 @@
 import type { Cor } from "@/lib/repertorio/linhas";
+import { nivelAberto, type Papel } from "../curso/liberado.ts";
+import type { Nivel } from "../curso/nivel.ts";
 
 /**
  * A vitrine de `/aberturas`: em que ordem as aberturas aparecem, e quais o aluno já pode abrir
@@ -22,6 +24,12 @@ import type { Cor } from "@/lib/repertorio/linhas";
  * pela URL. O professor continua entrando, porque é ele quem revisa.
  *
  * **Para liberar uma abertura, é só pôr `liberada: true` na linha dela.**
+ *
+ * ## E cada uma mora num nível (18/9/2026)
+ *
+ * Liberada não basta: o aluno entra só nas do nível liberado (`lib/curso/liberado.ts`). O nível 1
+ * tem a Escocesa e a Siciliana; a Francesa foi para o 2. O resto é proposta, em ordem de frequência,
+ * para o Doug corrigir.
  */
 export type NaVitrine = {
   readonly cor: Cor;
@@ -34,20 +42,21 @@ export type NaVitrine = {
   /** Quanto ela aparece, em frase curta — é o porquê da ordem. */
   readonly frequencia: string;
   readonly liberada: boolean;
+  readonly nivel: Nivel;
 };
 
 export const VITRINE: readonly NaVitrine[] = [
-  { cor: "brancas", abertura: "escocesa", sans: ["e4", "e5", "Nf3", "Nc6", "d4"], lances: "1.e4 e5 2.Cf3 Cc6 3.d4", frequencia: "39% das respostas a 1.e4", liberada: true },
-  { cor: "brancas", abertura: "alapin", sans: ["e4", "c5", "c3"], lances: "1.e4 c5 2.c3", frequencia: "10% das respostas a 1.e4", liberada: false },
-  { cor: "brancas", abertura: "escandinava", sans: ["e4", "d5"], lances: "1.e4 d5", frequencia: "9% das respostas a 1.e4", liberada: false },
-  { cor: "brancas", abertura: "philidor", sans: ["e4", "e5", "Nf3", "d6"], lances: "1.e4 e5 2.Cf3 d6", frequencia: "8% das respostas a 1.e4", liberada: false },
-  { cor: "brancas", abertura: "francesa", sans: ["e4", "e6"], lances: "1.e4 e6", frequencia: "7% das respostas a 1.e4", liberada: true },
-  { cor: "brancas", abertura: "petroff", sans: ["e4", "e5", "Nf3", "Nf6"], lances: "1.e4 e5 2.Cf3 Cf6", frequencia: "7% das respostas a 1.e4", liberada: false },
-  { cor: "brancas", abertura: "caro-kann", sans: ["e4", "c6"], lances: "1.e4 c6", frequencia: "5% das respostas a 1.e4", liberada: false },
-  { cor: "pretas", abertura: "siciliana", sans: ["e4", "c5"], lances: "1.e4 c5", frequencia: "1.e4 é 7 em cada 10 partidas", liberada: true },
-  { cor: "pretas", abertura: "manhattan", sans: ["d4", "d5", "c4", "e6"], lances: "1.d4 d5 2.c4 e6", frequencia: "30% depois de 1.d4 d5", liberada: false },
-  { cor: "pretas", abertura: "colle", sans: ["d4", "d5", "e3"], lances: "1.d4 d5 2.e3 · 2.Cc3", frequencia: "25% depois de 1.d4 d5", liberada: false },
-  { cor: "pretas", abertura: "londres", sans: ["d4", "d5", "Bf4"], lances: "1.d4 d5 2.Bf4", frequencia: "22% depois de 1.d4 d5", liberada: false },
+  { cor: "brancas", abertura: "escocesa", sans: ["e4", "e5", "Nf3", "Nc6", "d4"], lances: "1.e4 e5 2.Cf3 Cc6 3.d4", frequencia: "39% das respostas a 1.e4", liberada: true, nivel: 1 },
+  { cor: "brancas", abertura: "alapin", sans: ["e4", "c5", "c3"], lances: "1.e4 c5 2.c3", frequencia: "10% das respostas a 1.e4", liberada: false, nivel: 2 },
+  { cor: "brancas", abertura: "escandinava", sans: ["e4", "d5"], lances: "1.e4 d5", frequencia: "9% das respostas a 1.e4", liberada: false, nivel: 3 },
+  { cor: "brancas", abertura: "philidor", sans: ["e4", "e5", "Nf3", "d6"], lances: "1.e4 e5 2.Cf3 d6", frequencia: "8% das respostas a 1.e4", liberada: false, nivel: 4 },
+  { cor: "brancas", abertura: "francesa", sans: ["e4", "e6"], lances: "1.e4 e6", frequencia: "7% das respostas a 1.e4", liberada: true, nivel: 2 },
+  { cor: "brancas", abertura: "petroff", sans: ["e4", "e5", "Nf3", "Nf6"], lances: "1.e4 e5 2.Cf3 Cf6", frequencia: "7% das respostas a 1.e4", liberada: false, nivel: 4 },
+  { cor: "brancas", abertura: "caro-kann", sans: ["e4", "c6"], lances: "1.e4 c6", frequencia: "5% das respostas a 1.e4", liberada: false, nivel: 3 },
+  { cor: "pretas", abertura: "siciliana", sans: ["e4", "c5"], lances: "1.e4 c5", frequencia: "1.e4 é 7 em cada 10 partidas", liberada: true, nivel: 1 },
+  { cor: "pretas", abertura: "manhattan", sans: ["d4", "d5", "c4", "e6"], lances: "1.d4 d5 2.c4 e6", frequencia: "30% depois de 1.d4 d5", liberada: false, nivel: 2 },
+  { cor: "pretas", abertura: "colle", sans: ["d4", "d5", "e3"], lances: "1.d4 d5 2.e3 · 2.Cc3", frequencia: "25% depois de 1.d4 d5", liberada: false, nivel: 4 },
+  { cor: "pretas", abertura: "londres", sans: ["d4", "d5", "Bf4"], lances: "1.d4 d5 2.Bf4", frequencia: "22% depois de 1.d4 d5", liberada: false, nivel: 3 },
 ];
 
 /** A posição na vitrine; a abertura que não está nela vai para o fim, na ordem do índice. */
@@ -60,12 +69,9 @@ export function naVitrine(cor: Cor, abertura: string): NaVitrine | null {
   return VITRINE.find((v) => v.cor === cor && v.abertura === abertura) ?? null;
 }
 
-/** Abertura fora da vitrine é abertura nova, ainda não revisada: fica trancada. */
-export function aberturaLiberada(cor: Cor, abertura: string): boolean {
-  return naVitrine(cor, abertura)?.liberada ?? false;
-}
-
-/** Quem pode entrar numa abertura: a liberada, para todos; qualquer uma, para o professor. */
-export function podeAbrir(cor: Cor, abertura: string, papel: "aluno" | "professor"): boolean {
-  return papel === "professor" || aberturaLiberada(cor, abertura);
+/** Quem pode entrar numa abertura: a liberada e do nível aberto; qualquer uma, para o professor. */
+export function podeAbrir(cor: Cor, abertura: string, papel: Papel, nivelDoAluno: Nivel): boolean {
+  if (papel === "professor") return true;
+  const item = naVitrine(cor, abertura);
+  return item !== null && item.liberada && nivelAberto(item.nivel, { papel, nivelDoAluno });
 }

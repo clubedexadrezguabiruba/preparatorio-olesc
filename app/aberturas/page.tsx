@@ -5,7 +5,7 @@ import { Cabecalho } from "@/components/Cabecalho";
 import { Moldura } from "@/components/Moldura";
 import { PeaoDaCor, TabuleiroDaAbertura } from "@/components/repertorio/TabuleiroDaAbertura";
 import { travaDoAluno } from "@/lib/aberturas/trava-banco";
-import { naVitrine, posicaoNaVitrine } from "@/lib/aberturas/vitrine";
+import { naVitrine, podeAbrir, posicaoNaVitrine } from "@/lib/aberturas/vitrine";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import { LINHAS_POR_NIVEL, nivelDoAluno } from "@/lib/curso/nivel";
@@ -75,7 +75,8 @@ export default async function Aberturas() {
   const indice = [...indiceInteiro].sort(
     (a, b) => posicaoNaVitrine(a.cor, a.abertura) - posicaoNaVitrine(b.cor, b.abertura),
   );
-  const abertas = indice.filter((e) => naVitrine(e.cor, e.abertura)?.liberada);
+  // Abre a liberada do nível aberto (`lib/curso/liberado.ts`); o professor entra em todas.
+  const abertas = indice.filter((e) => podeAbrir(e.cor, e.abertura, perfil.papel, nivel));
   const emBreve = indice.length - abertas.length;
 
   const agora = new Date().toISOString();
@@ -111,7 +112,7 @@ export default async function Aberturas() {
     ).length;
     const aulasFeitas = aulas.filter((a) => trava.concluidas.has(a.id)).length;
     const emAndamento = aulas.filter((a) => trava.abertas.has(a.id) && !trava.concluidas.has(a.id)).length;
-    const liberada = vitrine?.liberada ?? false;
+    const liberada = podeAbrir(cor, abertura, perfil.papel, nivel);
     const cursoFeito = aulas.length === 0 || aulasFeitas === aulas.length;
     const linhasFeitas = visiveis === 0 || (feitas >= visiveis && vencendo === 0);
     return {

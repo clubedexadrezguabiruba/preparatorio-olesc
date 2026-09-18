@@ -13,8 +13,8 @@ import { Trilho } from "./Trilho";
  *
  * É o desenho do Duolingo com a língua da `/tatica`: cada nó é um medalhão do
  * metal do nível, com o desenho do tema (tática) ou a coroa (finais); o
- * concluído acende o metal inteiro, o parcial ganha o anel verde do método, o
- * adiante fica tracejado e continua clicável, e o que está em escrita não abre.
+ * concluído acende o metal inteiro, o parcial ganha o anel verde do método, e o
+ * trancado e o que está em escrita ficam com cadeado, sem link.
  *
  * ## O rótulo vai ao lado, e não embaixo (Doug, 18/9: "tem que rolar muito")
  *
@@ -122,15 +122,19 @@ function Balao({ children }: { children: React.ReactNode }) {
 
 function No({ item, proximo, lado, grau }: { item: ItemDoNivel; proximo: boolean; lado: Lado; grau?: Grau }) {
   const tatica = item.href.startsWith("/tatica");
-  const feito = item.feitos >= item.total;
-  const estado = item.situacao === "aberto" ? (feito ? "feito" : "aberto") : item.situacao;
+  const fechado = item.situacao !== "aberto";
+  const feito = item.feitos >= item.total && !fechado;
+  // O trancado usa o desenho do nó fechado, o mesmo do "em escrita".
+  const estado = fechado ? "em-escrita" : feito ? "feito" : "aberto";
   const parte = item.total > 0 ? Math.min(1, item.feitos / item.total) : 0;
 
   const legenda =
     item.situacao === "em-escrita"
       ? "em escrita"
-      : item.situacao === "adiante" && !feito
-        ? "pode adiantar"
+      : item.situacao === "trancado"
+        ? tatica
+          ? "abre ao concluir o tema anterior"
+          : "trancado"
         : tatica
           ? feito
             ? "tema concluído"
@@ -142,10 +146,10 @@ function No({ item, proximo, lado, grau }: { item: ItemDoNivel; proximo: boolean
             : "finais";
   // A linha de baixo só aparece quando diz algo que o desenho não diz sozinho.
   const mostraLegenda = feito || proximo || item.feitos > 0 || item.situacao === "em-escrita";
-  const mostraGrau = grau !== undefined && grau > 0 && item.situacao !== "em-escrita";
+  const mostraGrau = grau !== undefined && grau > 0 && !fechado;
 
   const icone =
-    item.situacao === "em-escrita" ? (
+    fechado ? (
       <Cadeado />
     ) : tatica ? (
       <IconeDoTema tag={item.id} tamanho={46} />
@@ -156,7 +160,7 @@ function No({ item, proximo, lado, grau }: { item: ItemDoNivel; proximo: boolean
   const medalhao = (
     <span className={`trilha-no metal-${item.nivel}`} data-estado={estado} data-proximo={proximo || undefined}>
       {icone}
-      {parte > 0 && !feito && item.situacao !== "em-escrita" ? <Anel parte={parte} /> : null}
+      {parte > 0 && !feito && !fechado ? <Anel parte={parte} /> : null}
       {feito ? <Marca /> : null}
     </span>
   );
@@ -184,9 +188,9 @@ function No({ item, proximo, lado, grau }: { item: ItemDoNivel; proximo: boolean
     </span>
   );
 
-  if (item.situacao === "em-escrita") {
+  if (fechado) {
     return (
-      <div className="relative" title={`${item.nome} — ainda não foi escrita`}>
+      <div className="relative" title={`${item.nome} — ${item.situacao === "trancado" ? legenda : "ainda não foi escrita"}`}>
         {medalhao}
         {rotulo}
       </div>

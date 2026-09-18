@@ -14,6 +14,7 @@ import {
 } from "@/lib/finais/conteudo";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import { temaAberto } from "@/lib/tatica/conteudo";
+import { estadoDosTemas } from "@/lib/tatica/ordem";
 import { progressoPorTema } from "@/lib/tatica/progresso";
 import { Caminho, type Trofeu } from "./Caminho";
 import { Escada } from "./Escada";
@@ -47,14 +48,11 @@ import { trofeuDoNivel } from "./trofeu";
  * saberia defender com o aluno na frente — então cada faixa tem uma barra por
  * módulo, na unidade dela (`MODULO` em `lib/curso/mapa.ts`).
  *
- * ## O tracejado
+ * ## O cadeado (18/9/2026)
  *
- * O tracejado **não** significa "trancado". Ele diz qual dos dois motivos
- * segura o item: o degrau que o aluno ainda não alcançou (e que ele pode
- * adiantar, porque a trava é mole) ou o texto por escrever (que não existe, e
- * aí não há o que abrir). O card "Como ler o caminho", que nomeava as
- * aparências, saiu a pedido do Doug (18/9): o "pode adiantar" e o "em
- * escrita" escritos ao lado do nó já dizem isso.
+ * O nó com cadeado não abre, e a legenda diz por quê: o tema anterior por
+ * concluir (a tática abre em corrente), o nível ainda não liberado
+ * (`lib/curso/liberado.ts`), ou o texto por escrever.
  *
  * ## A escada em caminho (17/9/2026)
  *
@@ -100,6 +98,11 @@ export default async function Trilha() {
     aulasPublicadas: aulasPublicadas(),
     aulasComPratica: aulasComPratica(),
     nivelDoAluno: aqui,
+    papel: perfil.papel,
+    corrente: estadoDosTemas(
+      new Map([...tatica].map(([tema, p]) => [tema, p.feitos])),
+      perfil.papel === "professor",
+    ),
     extras: aulasExtras(),
   });
 

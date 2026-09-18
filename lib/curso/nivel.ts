@@ -1,6 +1,7 @@
 import { aprendeu, AULA_ZERADA, trilhaCompleta, type AulaDaTrilha, type ProgressoDaAula } from "../finais/trilha.ts";
 import { BLOCOS, contaNoCurso } from "../tatica/blocos.ts";
 import { etapaAtual, type Feitos } from "../tatica/serie.ts";
+import { nivelAberto, type Papel } from "./liberado.ts";
 
 /**
  * A escada de níveis — o eixo do site, no lugar do calendário.
@@ -207,47 +208,35 @@ export function nivelDoTema(tag: string): Nivel | undefined {
 }
 
 /* ------------------------------------------------------------------ *
- * A trava mole
+ * A trava de nível
  * ------------------------------------------------------------------ */
 
 /**
- * A situação de um item na tela. A data saiu; entrou o nível.
+ * A situação de um item de finais ou de abertura na tela.
+ *
+ * ## A trava deixou de ser mole (Doug, 18/9/2026)
+ *
+ * Até aqui o item de nível acima era "adiante": tracejado, e abria se o aluno
+ * clicasse. Agora abre só o nível liberado e já alcançado (`nivelAberto`, em
+ * `lib/curso/liberado.ts`); o resto é **trancado** — cadeado, sem link, e a URL
+ * redireciona. O professor entra em tudo. A tática não passa por aqui: ela abre
+ * em corrente (`lib/tatica/ordem.ts`).
  *
  * ## Ordem: nível antes de texto
  *
- * O `lib/curso/trilha.ts` que morreu tinha a mesma ordem por outro argumento —
- * *"a data é o que o aluno controla: esperar"*. O argumento novo é mais forte:
- * o **nível** é o que ele controla ainda mais, porque ele o alcança fazendo
- * trabalho, e não esperando o relógio. "Em escrita" continua sendo o que ele
- * não controla. Anunciar "em escrita" num item três níveis acima expõe o
- * calendário de autoria a quem não tem o que fazer com ele.
- *
- * `"adiante"` **continua clicável**: ver {@link TRANCA_DURA}.
+ * Anunciar "em escrita" num item três níveis acima expõe o calendário de
+ * autoria a quem não tem o que fazer com ele.
  */
-export type Situacao = "aberto" | "adiante" | "em-escrita";
+export type Situacao = "aberto" | "trancado" | "em-escrita";
 
-/**
- * A trava é mole: o nível governa o que o site **recomenda**, o que entra na
- * lista de casa e o que fecha o degrau — mas não bloqueia rota.
- *
- * Um item de nível acima aparece como "adiante", tracejado, e abre se o aluno
- * clicar. Não há prova de saída: todos percorrem o conteúdo inteiro, e a trava
- * mole é o que absorve isso — o aluno forte não fica preso, apenas não é
- * dirigido para frente.
- *
- * Este `false` existe para que endurecer depois de observar uma semana de dados
- * seja **uma linha**, e não uma caçada a `if`s pelas telas.
- */
-export const TRANCA_DURA = false;
-
-export function situacaoDoItem(doItem: Nivel, doAluno: Nivel, escrito: boolean): Situacao {
-  if (doItem > doAluno) return "adiante";
+export function situacaoDoItem(doItem: Nivel, doAluno: Nivel, escrito: boolean, papel: Papel = "aluno"): Situacao {
+  if (!nivelAberto(doItem, { papel, nivelDoAluno: doAluno })) return "trancado";
   return escrito ? "aberto" : "em-escrita";
 }
 
 /** Clicável hoje. Existe para que nenhuma tela compare a string à mão. */
 export function podeAbrir(s: Situacao): boolean {
-  return TRANCA_DURA ? s === "aberto" : s !== "em-escrita";
+  return s === "aberto";
 }
 
 /* ------------------------------------------------------------------ *

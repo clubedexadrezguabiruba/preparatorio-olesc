@@ -16,10 +16,12 @@ import { NIVEIS } from "./nivel.ts";
  * dicas que faziam a soma passar de cem.
  */
 
-// Um aluno no nível 5 com tudo publicado: nenhum item fica "adiante", e o que
-// sobra fechado é só o que não tem texto. É a base certa para os testes que não
-// são sobre a trava.
+// O professor com tudo publicado: nenhum item fica trancado, e o que sobra
+// fechado é só o que não tem texto. É a base certa para os testes que não são
+// sobre a trava.
 const VAZIO: ProgressoParaOMapa = {
+  papel: "professor",
+  corrente: new Map(),
   tatica: new Map(),
   temaAberto: () => true,
   finais: new Map(),
@@ -154,6 +156,7 @@ test("os dois motivos de estar fechado não se confundem, e o nível vem antes",
   // aluno — uma ele alcança fazendo trabalho, a outra não existe.
   const doNivel1 = montarMapa({
     ...VAZIO,
+    papel: "aluno",
     nivelDoAluno: 1,
     temaAberto: () => false,
     aulasPublicadas: new Set(),
@@ -170,19 +173,20 @@ test("os dois motivos de estar fechado não se confundem, e o nível vem antes",
   }
   for (const id of adiante) {
     const item = aulas.find((i) => i.id === id);
-    assert.equal(item?.situacao, "adiante", `${id}: é de um nível acima`);
+    assert.equal(item?.situacao, "trancado", `${id}: é de um nível acima do liberado`);
   }
 
   // E o nível vem antes do texto: uma aula publicada de um nível acima continua
-  // "adiante", e não anuncia o calendário de autoria a quem não chegou lá.
+  // "trancado", e não anuncia o calendário de autoria a quem não chegou lá.
   const laEmCima = TRILHA.find((a) => a.nivel === 5);
   assert.ok(laEmCima);
   const comJson = montarMapa({
     ...VAZIO,
+    papel: "aluno",
     nivelDoAluno: 1,
     aulasPublicadas: new Set([laEmCima.id]),
   });
-  assert.equal(itens(comJson, "finais").find((i) => i.id === laEmCima.id)?.situacao, "adiante");
+  assert.equal(itens(comJson, "finais").find((i) => i.id === laEmCima.id)?.situacao, "trancado");
 });
 
 test("toda pastilha sabe de que degrau ela é", () => {
@@ -195,15 +199,35 @@ test("toda pastilha sabe de que degrau ela é", () => {
   }
 });
 
-test("a trava é mole: o que está adiante é contado à parte, não escondido", () => {
-  const mapa = montarMapa({ ...VAZIO, nivelDoAluno: 1 });
-  const tatica = mapa.get(5)?.find((m) => m.modulo === "tatica");
-  assert.ok(tatica);
-  const conta = contarAberto(tatica);
-  assert.equal(conta.adiante, tamanhoDoNivel(5).tatica, "os 14 temas do nível 5 estão adiante");
-  assert.equal(conta.total, 0, "e nenhum deles entra no denominador do degrau");
-  assert.equal(tatica.itens.length, tamanhoDoNivel(5).tatica, "mas todos continuam na tela");
+test("acima do nível liberado, as aulas de finais ficam trancadas e fora do denominador", () => {
+  const mapa = montarMapa({ ...VAZIO, papel: "aluno", nivelDoAluno: 1 });
+  const finais = mapa.get(5)?.find((m) => m.modulo === "finais");
+  assert.ok(finais);
+  const conta = contarAberto(finais);
+  assert.equal(conta.trancados, tamanhoDoNivel(5).finais);
+  assert.equal(conta.total, 0, "nenhuma entra no denominador do degrau");
+  assert.equal(finais.itens.length, tamanhoDoNivel(5).finais, "mas todas continuam na tela");
 });
+
+test("a tática não tem trava de nível: segue a corrente", () => {
+  const [primeiro, segundo] = [...mapa5Temas()];
+  const mapa = montarMapa({
+    ...VAZIO,
+    papel: "aluno",
+    nivelDoAluno: 1,
+    corrente: new Map([[primeiro, "agora"], [segundo, "trancado"]]),
+  });
+  const temas = [...mapa.values()].flat().filter((m) => m.modulo === "tatica").flatMap((m) => m.itens);
+  assert.equal(temas.find((i) => i.id === primeiro)?.situacao, "aberto");
+  assert.equal(temas.find((i) => i.id === segundo)?.situacao, "trancado");
+  const doNivel5 = temas.filter((i) => i.nivel === 5 && i.id !== segundo);
+  assert.ok(doNivel5.every((i) => i.situacao === "aberto"), "o nível 5 não tranca tema");
+});
+
+function mapa5Temas(): string[] {
+  const mapa = montarMapa(VAZIO);
+  return [...mapa.values()].flat().filter((m) => m.modulo === "tatica").flatMap((m) => m.itens.map((i) => i.id));
+}
 
 test("todo módulo tem rótulo e diz o que a barra dele conta", () => {
   // A tela põe as duas barras lado a lado, e elas contam coisas diferentes —

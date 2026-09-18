@@ -88,6 +88,8 @@ test("o próximo passo e o mapa enxergam a extra", () => {
     aulasPublicadas: p.publicadas,
     aulasComPratica: p.comPratica,
     nivelDoAluno: 2,
+    papel: "professor",
+    corrente: new Map(),
     extras: p.extras,
   });
   const finaisDoNivel2 = mapa.get(2)!.find((m) => m.modulo === "finais")!;
