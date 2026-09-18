@@ -7,6 +7,7 @@ import type { ItemDoNivel } from "@/lib/curso/mapa";
 import { METAL, type Nivel } from "@/lib/curso/nivel";
 import { NOME_DO_GRAU, type Grau } from "@/lib/progresso/grau";
 import { Trilho } from "./Trilho";
+import { AvisoDeNivelConcluido } from "./AvisoDeNivelConcluido";
 
 /**
  * O caminho de um nível — os medalhões em onda, e o troféu no fim (17/9/2026).
@@ -48,6 +49,7 @@ const ONDA = [0, 1, 1.6, 1, 0, -1, -1.6, -1] as const;
 export type Trofeu =
   | { readonly estado: "conquistado" }
   | { readonly estado: "pronto" }
+  | { readonly estado: "aguardando" }
   | { readonly estado: "fechado"; readonly falta: readonly string[] };
 
 type Lado = "esquerda" | "direita";
@@ -220,6 +222,8 @@ function NoDoTrofeu({ nivel, trofeu, proximo }: { nivel: Nivel; trofeu: Trofeu; 
       ? `Medalha de ${METAL[nivel]} conquistada`
       : trofeu.estado === "pronto"
         ? "Pronta: 12 puzzles, passa com 9"
+        : trofeu.estado === "aguardando"
+          ? "Bloqueada: aguarde o professor liberar"
         : trofeu.falta.length > 0
           ? `Falta ${trofeu.falta.join(", ")}`
           : "Abre quando o nível fechar";
@@ -249,6 +253,7 @@ function NoDoTrofeu({ nivel, trofeu, proximo }: { nivel: Nivel; trofeu: Trofeu; 
       <div className="flex flex-col items-center">
         {medalhao}
         {rotulo}
+        {trofeu.estado === "aguardando" ? <AvisoDeNivelConcluido nivel={nivel} /> : null}
       </div>
     );
   }

@@ -1,8 +1,9 @@
 import {
   fechamentoDoNivel,
+  provaDeNivelDisponivel,
   type Nivel,
   type ProgressoParaONivel,
-} from "@/lib/curso/nivel";
+} from "../../lib/curso/nivel.ts";
 import type { Trofeu } from "./Caminho";
 
 /**
@@ -18,7 +19,9 @@ export function trofeuDoNivel(
   estado: ProgressoParaONivel,
 ): Trofeu {
   if (n <= conquistado) return { estado: "conquistado" };
-  if (n <= pronto && n === conquistado + 1) return { estado: "pronto" };
+  if (n <= pronto && n === conquistado + 1) {
+    return provaDeNivelDisponivel(n) ? { estado: "pronto" } : { estado: "aguardando" };
+  }
   const f = fechamentoDoNivel(n, estado);
   const falta = [
     f.tatica.feitos < f.tatica.total

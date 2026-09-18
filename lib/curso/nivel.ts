@@ -179,6 +179,11 @@ export const REVISAO_ANTES_DO_AVANCO = 20;
 /** Quantos puzzles a prova de nível serve, e quantos passam. */
 export const PROVA_DE_NIVEL = { puzzles: 12, paraPassar: 9 } as const;
 
+/** A prova do nível 1 ainda não foi preparada pelo professor (Doug, 18/9/2026). */
+export function provaDeNivelDisponivel(nivel: Nivel): boolean {
+  return nivel !== 1;
+}
+
 /* ------------------------------------------------------------------ *
  * O que cai em cada nível
  * ------------------------------------------------------------------ */

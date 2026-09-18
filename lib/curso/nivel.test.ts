@@ -15,6 +15,7 @@ import {
   PROVA_DE_NIVEL,
   prontoParaProva,
   proximoPasso,
+  provaDeNivelDisponivel,
   REVISAO_ANTES_DO_AVANCO,
   situacaoDoItem,
   temaFechado,
@@ -321,6 +322,11 @@ test("fechados tática e finais, o passo vira as linhas que faltam", () => {
 test("a prova é a última coisa do nível, e só depois das três trilhas", () => {
   const p = { ...comTaticaAte(1), linhasAprendidas: LINHAS_POR_NIVEL };
   assert.deepEqual(proximoPasso(1, p, 0, 0), { tipo: "prova-de-nivel", nivel: 1 });
+});
+
+test("a prova do nível 1 fica indisponível enquanto não foi preparada", () => {
+  assert.equal(provaDeNivelDisponivel(1), false);
+  assert.equal(provaDeNivelDisponivel(2), true);
 });
 
 test("quem já passou na prova do nível não é mandado fazê-la de novo", () => {

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { estadoParaONivel } from "@/lib/curso/estado";
-import { NIVEIS, PROVA_DE_NIVEL, prontoParaProva, fechamentoDoNivel } from "@/lib/curso/nivel";
+import { NIVEIS, PROVA_DE_NIVEL, prontoParaProva, fechamentoDoNivel, provaDeNivelDisponivel } from "@/lib/curso/nivel";
 import { nivelConquistado } from "@/lib/curso/progresso";
 import { temaPorTag } from "@/lib/tatica/blocos";
 import { abrirProvaDeNivel, ultimaProvaDeNivel } from "@/lib/tatica/prova";
@@ -48,6 +48,24 @@ export default async function ProvaDeNivel({ params }: PageProps<"/nivel/[n]/pro
   const { n } = await params;
   const nivel = NIVEIS.find((v) => String(v) === n);
   if (nivel === undefined) notFound();
+
+  if (!provaDeNivelDisponivel(nivel)) {
+    return (
+      <Moldura nivel={nivel}>
+        <div className="flex flex-col gap-3 cartao-vazio px-5 py-6">
+          <p className="text-sm font-semibold text-tinta">A prova do nível {nivel} está bloqueada.</p>
+          <p className="text-sm leading-relaxed text-tinta-media">
+            Ela ainda não está pronta. Quando você concluir tudo o que o nível pede, aguarde o
+            professor liberar a prova e o nível 2. Pode continuar praticando os temas de tática e
+            jogar partidas de treino — anote suas partidas!
+          </p>
+          <Link href="/trilha" className="foco w-fit text-sm font-medium text-metodo-tinta underline">
+            Voltar à trilha
+          </Link>
+        </div>
+      </Moldura>
+    );
+  }
 
   const perfil = await perfilAtual();
   const [progresso, conquistado] = await Promise.all([

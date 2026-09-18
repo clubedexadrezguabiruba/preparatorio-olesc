@@ -7813,3 +7813,11 @@ que avançava antes de um aluno conseguir conciliar a leitura com o tabuleiro. S
 aberturas, o avanço automático agora espera 80 ms por caractere, com piso de 2,5 s; a
 espera autoral continua somada. Finais mantêm o ritmo anterior, e o rewind e o “Pular” das
 repetições continuam rápidos. A conta ficou coberta em `lib/lesson/roteiro.test.ts`.
+
+# Prova do nível 1 bloqueada e conclusão celebrada — 18/9/2026
+
+A prova do nível 1 ainda não está pronta e deixou de abrir tanto pelo troféu quanto pela URL
+direta. Depois de fechar tática, finais e repertório, o aluno vê no troféu a mensagem de que
+terminou o nível 1, deve aguardar o professor liberar a prova e o nível 2, e pode continuar
+praticando tática e jogando partidas de treino anotadas. A primeira exibição nesse navegador
+solta o confete; visitas seguintes mantêm a orientação sem repetir a festa.
