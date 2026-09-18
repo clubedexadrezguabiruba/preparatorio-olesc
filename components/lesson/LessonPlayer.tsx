@@ -986,6 +986,8 @@ function PlayerDoFluxoV2({ aulaV2: aula, revisao = false, praticaDaRevisao, onEt
                 report={masteryReport({ hasPractice: true, practiceWon: Boolean(cleared[atual.id]), practiceGoal: atual.goal })}
               />
             }
+            onFinish={proxima ? () => goToStage(proxima.id) : undefined}
+            finishLabel={proxima ? avancoPara(proxima, aula.id) : undefined}
             saida={saida}
             acoesDeConclusao={!proxima && navegacaoEntreAulas ? <BotoesEntreAulas navegacao={navegacaoEntreAulas} /> : undefined}
           />

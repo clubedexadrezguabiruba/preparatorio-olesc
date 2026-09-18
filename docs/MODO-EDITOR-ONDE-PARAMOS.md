@@ -7829,3 +7829,11 @@ casas de destino das alternativas que serão comparadas. Depois do rewind, a fal
 aula está revisitando a outra escolha e o tabuleiro aponta somente o lance que vem a seguir.
 Os metadados nascem na fita de `previa.ts`, atravessam o pacote do aluno e viram desenho no
 mesmo runtime; a trava de abertura direta confere as duas metades.
+
+# Práticas consecutivas de finais voltam a avançar — 18/9/2026
+
+O `PracticeStage` de uma prática intermediária não recebia `onFinish`: depois da vitória, não
+havia botão para chegar à prática seguinte. Isso bloqueava Afogamento entre “Ganhe sem afogar”
+e “Perdendo, busque o empate”, e Mate da escada entre “Duas torres” e “Dama e torre”. Agora a
+vitória intermediária oferece o avanço; a última prática preserva “Voltar às aulas” e os botões
+de aula anterior/próxima. Um teste pontual lê os dois fluxos publicados e o contrato do player.
