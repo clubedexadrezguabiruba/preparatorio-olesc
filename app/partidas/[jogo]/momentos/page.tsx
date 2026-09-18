@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { perfilAtual } from "@/lib/auth/perfil";
 import { carregar } from "@/lib/partidas/carregar";
+import { podeAbrirPartidas } from "@/lib/partidas/liberadas";
 import { momentosDa } from "@/lib/partidas/momentos";
 import { Momentos } from "./Momentos";
 
@@ -25,6 +27,8 @@ export default async function MomentosDaPartida({
   params,
   searchParams,
 }: PageProps<"/partidas/[jogo]/momentos">) {
+  // Enquanto as partidas estiverem "em breve", o aluno não entra nem pela URL.
+  if (!podeAbrirPartidas((await perfilAtual()).papel)) redirect("/partidas");
   const { jogo } = await params;
   const partida = await carregar(jogo);
   if (!partida) notFound();

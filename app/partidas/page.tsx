@@ -5,6 +5,7 @@ import { Moldura } from "@/components/Moldura";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { dadosDoCabecalho } from "@/lib/curso/cabecalho";
 import { listarPartidas } from "@/lib/partidas/carregar";
+import { PARTIDAS_LIBERADAS, podeAbrirPartidas } from "@/lib/partidas/liberadas";
 import { quantosMomentos } from "@/lib/partidas/momentos";
 
 export const metadata: Metadata = { title: "Partidas instrutivas — Preparatório OLESC" };
@@ -27,8 +28,9 @@ export const metadata: Metadata = { title: "Partidas instrutivas — Preparatór
  */
 export default async function Partidas() {
   const perfil = await perfilAtual();
+  const aberta = podeAbrirPartidas(perfil.papel);
   const [partidas, cabecalho] = await Promise.all([
-    listarPartidas(),
+    aberta ? listarPartidas() : Promise.resolve([]),
     dadosDoCabecalho(perfil.id),
   ]);
 
@@ -43,12 +45,27 @@ export default async function Partidas() {
       <Moldura largura="larga" barraInferior className="gap-5">
       <header className="flex flex-col gap-1">
         <h1 className="titulo text-tinta">Partidas instrutivas</h1>
-        <p className="text-xs text-tinta-fraca">
-          Teste das fichas-piloto. Nada aqui é gravado.
-        </p>
+        {aberta ? (
+          <p className="text-xs text-tinta-fraca">
+            {PARTIDAS_LIBERADAS
+              ? "Teste das fichas-piloto. Nada aqui é gravado."
+              : "Em breve para o aluno — você entra para revisar. Nada aqui é gravado."}
+          </p>
+        ) : null}
       </header>
 
-      {partidas.length === 0 ? (
+      {!aberta ? (
+        <div className="cartao-vazio flex flex-col items-center gap-2 px-4 py-8 text-center">
+          <span className="rounded-full border border-dashed border-borda px-2.5 py-1 text-xs font-medium text-tinta-fraca">
+            Em breve
+          </span>
+          <p className="max-w-prose text-sm text-tinta-media">
+            As partidas instrutivas estão sendo preparadas: partidas de mestres para você jogar
+            no lugar de um deles, e os momentos de decisão de cada uma. Esta seção abre assim
+            que ficar pronta.
+          </p>
+        </div>
+      ) : partidas.length === 0 ? (
         <p className="cartao-vazio px-4 py-6 text-center text-sm text-tinta-fraca">
           Nenhum PGN em <code>content/partidas/</code>.
         </p>
