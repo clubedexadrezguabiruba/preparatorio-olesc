@@ -4,22 +4,36 @@ import { sair } from "@/app/entrar/acoes";
 import { Avatar } from "@/components/avatar/Avatares";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Moldura } from "@/components/Moldura";
+import { COR_DO_NIVEL } from "@/components/tatica/SeloDoTema";
+import { Seta } from "@/app/trilha/Faixa";
 import { travaDoAluno } from "@/lib/aberturas/trava-banco";
 import { perfilAtual } from "@/lib/auth/perfil";
 import { proximaAcao } from "@/lib/curso/acao";
 import { hojeNoBrasil, somarDias } from "@/lib/curso/calendario";
 import { minutosDeHoje, sequenciaDeDias } from "@/lib/curso/hoje";
-import { fechamentoDoNivel, nivelDoAluno } from "@/lib/curso/nivel";
-import { entradaDosSelos, puzzlesDoAluno, sincronizarSelos } from "@/lib/curso/selos-banco";
+import { fechamentoDoNivel, METAL, nivelDoAluno } from "@/lib/curso/nivel";
+import {
+  entradaDosSelos,
+  puzzlesDoAluno,
+  sincronizarSelos,
+} from "@/lib/curso/selos-banco";
 import { minutosPorDia, partidasDeclaradas } from "@/lib/curso/minutos";
 import { nivelConquistado } from "@/lib/curso/progresso";
-import { aulasComPratica, aulasExtras, aulasPublicadas } from "@/lib/finais/conteudo";
+import {
+  aulasComPratica,
+  aulasExtras,
+  aulasPublicadas,
+} from "@/lib/finais/conteudo";
 import { aulasVencidas } from "@/lib/finais/escada";
 import { progressoDeFinais } from "@/lib/finais/progresso";
 import { aulasAbertas } from "@/lib/finais/trilha";
 import { lerIndice } from "@/lib/repertorio/banco";
 import { progressoDoRepertorio } from "@/lib/repertorio/progresso";
-import { aprendidasDaAbertura, aRevisarNaAbertura, baseCompleto } from "@/lib/repertorio/treino";
+import {
+  aprendidasDaAbertura,
+  aRevisarNaAbertura,
+  baseCompleto,
+} from "@/lib/repertorio/treino";
 import {
   emOrdemDeData,
   quandoPorExtenso,
@@ -168,7 +182,9 @@ export default async function Painel() {
     id,
     nome: aulasDeFinais.find((a) => a.id === id)?.nome ?? id,
     // Aula v2 com várias práticas: o cartão abre a que venceu (trava 9, 15/9/2026).
-    ...(finais.get(id)?.praticaParaRevisar ? { pratica: finais.get(id)!.praticaParaRevisar } : {}),
+    ...(finais.get(id)?.praticaParaRevisar
+      ? { pratica: finais.get(id)!.praticaParaRevisar }
+      : {}),
   }));
 
   // O painel conta o mesmo que `/aberturas`: enquanto o portão do Avançado está
@@ -177,12 +193,22 @@ export default async function Painel() {
   // de 6/9/2026 de novo, por outra porta.
   const avancadoLiberado = baseCompleto(repertorio, indice, trava.trancadas);
   const linhasAprendidas = indice.reduce(
-    (soma, e) => soma + aprendidasDaAbertura(repertorio, e, avancadoLiberado, trava.trancadas),
+    (soma, e) =>
+      soma +
+      aprendidasDaAbertura(repertorio, e, avancadoLiberado, trava.trancadas),
     0,
   );
   const agoraNoRepertorio = new Date().toISOString();
   const linhasARevisar = indice.reduce(
-    (soma, e) => soma + aRevisarNaAbertura(repertorio, e, agoraNoRepertorio, avancadoLiberado, trava.trancadas),
+    (soma, e) =>
+      soma +
+      aRevisarNaAbertura(
+        repertorio,
+        e,
+        agoraNoRepertorio,
+        avancadoLiberado,
+        trava.trancadas,
+      ),
     0,
   );
 
@@ -260,32 +286,51 @@ export default async function Painel() {
 
   return (
     <>
-      <Cabecalho atual="painel" nivel={nivel} sequencia={sequencia} />
-      <Moldura largura="painel" barraInferior className="gap-6">
-        {/* O nome do aluno, e nada mais — **em corpo pequeno**.
+      <Cabecalho
+        atual="painel"
+        nivel={nivel}
+        sequencia={sequencia}
+        largura="larga"
+      />
+      <Moldura largura="larga" barraInferior>
+        {/* **O cabeçalho no desenho de "Meu perfil" (18/9/2026).**
 
-            Ele era um cabeçalho de três linhas com equipe, tabuleiro e dois
-            botões; 96 px da primeira dobra gastos em informação que o aluno já
-            sabe sobre si mesmo. Saíram as linhas, e depois saiu também a serifa
-            grande: medido, o nome em `titulo` ainda comia ~60 px da dobra que o
-            cartão AGORA disputa. O título desta página não é quem o aluno é —
-            é o que ele tem para fazer. */}
-        <header className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-          {/* O avatar ao lado do nome (17/9/2026), e o avatar é o atalho para trocá-lo. 40 px e
-              não mais: é a mesma linha baixa de antes, e não um cartão de perfil. */}
-          <div className="flex min-w-0 items-center gap-3">
-            <Link href="/perfil" aria-label="Meu perfil" className="foco shrink-0 rounded-full">
-              <Avatar id={perfil.avatar} tamanho={40} decorativo />
+            Ele era uma linha de 40 px com o nome em corpo 16 — medido em 9/9, o nome
+            em `titulo` comia a dobra que o cartão AGORA disputa. Mas era a única página
+            do site sem o título em serifa, e o painel parecia de outro site. Voltou a
+            serifa, numa linha só com o avatar e a pastilha do metal (a mesma do perfil),
+            e os links foram para a direita: são ~20 px a mais, não os 96 de antes. */}
+        <header className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+          <div className="flex min-w-0 items-center gap-4">
+            <Link
+              href="/perfil"
+              aria-label="Meu perfil"
+              className="foco shrink-0 rounded-full"
+            >
+              <Avatar id={perfil.avatar} tamanho={56} decorativo />
             </Link>
-            <h1 className="truncate text-base font-semibold text-tinta">{perfil.nome}</h1>
+            <div className="flex min-w-0 flex-col items-start gap-1.5">
+              <h1 className="titulo truncate text-tinta">{perfil.nome}</h1>
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${COR_DO_NIVEL[nivel].pastilha}`}
+              >
+                Nível {nivel} · {METAL[nivel]}
+              </span>
+            </div>
           </div>
-          <div className="flex items-center gap-3 text-xs">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
             {/* "Meu perfil" (17/9/2026): conquistas com data, graus e o avatar numa página só — era
                 "Meu progresso". E a turma: os colegas, em ordem alfabética, sem número nenhum. */}
-            <Link href="/perfil" className="foco -my-3 inline-flex min-h-11 items-center font-medium text-metodo-tinta hover:underline">
+            <Link
+              href="/perfil"
+              className="foco -my-3 inline-flex min-h-11 items-center font-medium text-metodo-tinta hover:underline"
+            >
               Meu perfil
             </Link>
-            <Link href="/turma" className="foco -my-3 inline-flex min-h-11 items-center font-medium text-metodo-tinta hover:underline">
+            <Link
+              href="/turma"
+              className="foco -my-3 inline-flex min-h-11 items-center font-medium text-metodo-tinta hover:underline"
+            >
               Turma
             </Link>
             <span className="text-tinta-fraca">
@@ -293,12 +338,18 @@ export default async function Painel() {
               {perfil.tabuleiro ? ` · tabuleiro ${perfil.tabuleiro}` : ""}
             </span>
             {perfil.papel === "professor" ? (
-              <Link href="/professor" className="foco font-medium text-metodo-tinta hover:underline">
+              <Link
+                href="/professor"
+                className="foco font-medium text-metodo-tinta hover:underline"
+              >
                 Professor
               </Link>
             ) : null}
             <form action={sair}>
-              <button type="submit" className="foco text-tinta-fraca hover:text-tinta">
+              <button
+                type="submit"
+                className="foco text-tinta-fraca hover:text-tinta"
+              >
                 Sair
               </button>
             </form>
@@ -307,29 +358,63 @@ export default async function Painel() {
 
         {/* O selo novo antes do AGORA: é a notícia do dia, e aparece uma vez só. */}
         {selosNovos.length > 0 ? (
-          <AvisoDeSeloNovo selos={selosNovos.map(({ id, familia, nome, conta }) => ({ id, familia, nome, conta }))} />
+          <AvisoDeSeloNovo
+            selos={selosNovos.map(({ id, familia, nome, conta }) => ({
+              id,
+              familia,
+              nome,
+              conta,
+            }))}
+          />
         ) : null}
 
-        <Agora acao={acao} />
+        {/* **Duas colunas, como `/trilha` e `/finais` (18/9/2026).** À esquerda, o que se
+            faz — AGORA, o dia, as frentes, o rating; à direita, onde se está — a escada, as
+            conquistas, a agenda. No celular a escada sobe para logo depois do AGORA (a
+            ordem de prioridade de sempre) e o resto da coluna do lado desce para o fim. */}
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-10">
+          <div className="flex min-w-0 flex-col gap-8">
+            <Agora acao={acao} nivel={nivel} />
 
-        <Escada nivel={nivel} conquistado={conquistado} />
+            <div className="lg:hidden">
+              <Escada nivel={nivel} conquistado={conquistado} />
+            </div>
 
-        <Hoje minutos={minutosDoDia} sequencia={sequencia} partidaFeita={partidas.has(hoje)} />
+            <Hoje
+              minutos={minutosDoDia}
+              sequencia={sequencia}
+              partidaFeita={partidas.has(hoje)}
+            />
 
-        <Modulos
-          fechamento={fechamento}
-          puzzles={feitos}
-          acerto={feitos ? Math.round((100 * certos) / feitos) : null}
-          linhasARevisar={linhasARevisar}
-        />
+            <Modulos
+              nivel={nivel}
+              fechamento={fechamento}
+              puzzles={feitos}
+              acerto={feitos ? Math.round((100 * certos) / feitos) : null}
+              linhasARevisar={linhasARevisar}
+            />
 
-        <RatingDeTatica estado={ratingTatica} serie={curvaDoRating} inicio={INICIO.rating} />
+            <Prova
+              nivel={nivel}
+              fechado={fechamento.fechado}
+              conquistado={conquistado}
+            />
 
-        <Prova nivel={nivel} fechado={fechamento.fechado} conquistado={conquistado} />
+            <RatingDeTatica
+              estado={ratingTatica}
+              serie={curvaDoRating}
+              inicio={INICIO.rating}
+            />
+          </div>
 
-        <Selos lista={listaDeSelos} />
+          <aside className="flex flex-col gap-6 lg:sticky lg:top-20">
+            <div className="hidden lg:block">
+              <Escada nivel={nivel} conquistado={conquistado} />
+            </div>
 
-        {/* A agenda no fim, e **fechada**.
+            <Selos lista={listaDeSelos} />
+
+            {/* A agenda no fim, e **fechada**.
 
             Medida: aberta ela ocupava 612 px dos 2.022 do painel — 30% da
             página para quatro itens que não mudam o que fazer agora. A data
@@ -339,20 +424,29 @@ export default async function Painel() {
             `<details>` e não um link para outra página: o conteúdo continua
             **nesta** tela, a um toque, com o próximo encontro dito no resumo. Um
             link levaria o aluno para fora do painel para ler quatro linhas. */}
-        {grupos.length > 0 ? (
-          <details className="cartao px-4 py-3">
-            <summary className="foco flex cursor-pointer list-none flex-wrap items-baseline justify-between gap-x-3 gap-y-1 [&::-webkit-details-marker]:hidden">
-              <span className="rotulo text-tinta-fraca">A agenda</span>
-              <span className="text-xs text-tinta-fraca">
-                {itensDaAgenda} {itensDaAgenda === 1 ? "item" : "itens"} · o próximo é{" "}
-                {grupos[0].rotulo} ▾
-              </span>
-            </summary>
-            <div className="mt-3 border-t border-borda-fraca pt-3">
-              <Agenda grupos={grupos} marcadas={[...marcadas]} />
-            </div>
-          </details>
-        ) : null}
+            {grupos.length > 0 ? (
+              <details className="group cartao px-4 py-4">
+                <summary className="foco flex cursor-pointer list-none items-start justify-between gap-3 [&::-webkit-details-marker]:hidden">
+                  <span className="flex min-w-0 flex-col gap-0.5">
+                    <span className="text-base font-semibold text-tinta">
+                      Agenda
+                    </span>
+                    <span className="text-xs text-tinta-fraca">
+                      {itensDaAgenda} {itensDaAgenda === 1 ? "item" : "itens"} ·
+                      o próximo é {grupos[0].rotulo}
+                    </span>
+                  </span>
+                  <span className="mt-1 shrink-0 text-tinta-fraca transition-transform group-open:rotate-180">
+                    <Seta />
+                  </span>
+                </summary>
+                <div className="mt-3 border-t border-borda-fraca pt-3">
+                  <Agenda grupos={grupos} marcadas={[...marcadas]} />
+                </div>
+              </details>
+            ) : null}
+          </aside>
+        </div>
       </Moldura>
     </>
   );
@@ -369,11 +463,17 @@ export default async function Painel() {
 function agrupar(
   itens: readonly ItemDaAgenda[],
 ): { rotulo: string; itens: ItemDaAgenda[] }[] {
-  const grupos: { quando: Quando; rotulo: string; itens: ItemDaAgenda[] }[] = [];
+  const grupos: { quando: Quando; rotulo: string; itens: ItemDaAgenda[] }[] =
+    [];
   for (const item of itens) {
     const ultimo = grupos[grupos.length - 1];
     if (ultimo && ultimo.quando === item.quando) ultimo.itens.push(item);
-    else grupos.push({ quando: item.quando, rotulo: quandoPorExtenso(item.quando), itens: [item] });
+    else
+      grupos.push({
+        quando: item.quando,
+        rotulo: quandoPorExtenso(item.quando),
+        itens: [item],
+      });
   }
   return grupos.map(({ rotulo, itens: doDia }) => ({ rotulo, itens: doDia }));
 }

@@ -2,7 +2,11 @@
 
 import { useOptimistic, useTransition } from "react";
 import { Barra } from "@/components/Barra";
-import { META_DO_DIA_MIN, MINIMO_DA_SEQUENCIA_MIN, type MinutosDeHoje } from "@/lib/curso/hoje";
+import {
+  META_DO_DIA_MIN,
+  MINIMO_DA_SEQUENCIA_MIN,
+  type MinutosDeHoje,
+} from "@/lib/curso/hoje";
 import { marcarPartidaDoDia } from "./acoes";
 
 /**
@@ -46,7 +50,10 @@ export function Hoje({
   sequencia: number;
   partidaFeita: boolean;
 }) {
-  const [jogou, aplicar] = useOptimistic(partidaFeita, (_atual, novo: boolean) => novo);
+  const [jogou, aplicar] = useOptimistic(
+    partidaFeita,
+    (_atual, novo: boolean) => novo,
+  );
   const [, transicao] = useTransition();
 
   function alternar(marcar: boolean) {
@@ -59,16 +66,24 @@ export function Hoje({
   const bateu = minutos.total >= META_DO_DIA_MIN;
 
   return (
-    <section aria-labelledby="hoje" className="cartao flex flex-col gap-3 px-4 py-4">
+    <section
+      aria-labelledby="hoje"
+      className="cartao flex flex-col gap-3 px-4 py-4 sm:px-5"
+    >
+      {/* O cabeçalho no desenho de "Suas aulas" em `/finais` (18/9/2026): o título, e o
+          número em serifa do lado — e não um rótulo em caixa alta. */}
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <h2 id="hoje" className="rotulo text-tinta-fraca">
+        <h2 id="hoje" className="text-base font-semibold text-tinta">
           Hoje
         </h2>
-        <span
-          className={`text-sm tabular-nums ${bateu ? "font-semibold text-metodo-tinta" : "text-tinta-media"}`}
-        >
-          {minutos.total} de {META_DO_DIA_MIN} min
-        </span>
+        <p className="text-sm tabular-nums">
+          <span
+            className={`font-serif text-2xl leading-none font-semibold ${bateu ? "text-metodo-tinta" : "text-tinta"}`}
+          >
+            {minutos.total}
+          </span>
+          <span className="text-tinta-fraca"> de {META_DO_DIA_MIN} min</span>
+        </p>
       </div>
 
       {/* O medido cheio, a partida hachurada. A hachura é a honestidade da
@@ -82,7 +97,9 @@ export function Hoje({
 
       <p className="text-xs text-tinta-fraca tabular-nums">
         Tática {minutos.tatica} min · Finais {minutos.finais} min
-        {minutos.partida > 0 ? ` · Partida ${minutos.partida} min declarados` : ""}
+        {minutos.partida > 0
+          ? ` · Partida ${minutos.partida} min declarados`
+          : ""}
         {sequencia > 0
           ? ` · a sequência pede ${MINIMO_DA_SEQUENCIA_MIN} min de treino no site`
           : ""}
@@ -103,7 +120,8 @@ export function Hoje({
         <span
           className={`text-xs ${jogou ? "text-tinta-fraca line-through" : "text-tinta-media"}`}
         >
-          Joguei uma partida de 15+10, anotada, e procurei o lance que a decidiu.
+          Joguei uma partida de 15+10, anotada, e procurei o lance que a
+          decidiu.
         </span>
       </label>
     </section>

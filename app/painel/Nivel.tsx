@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { Barra } from "@/components/Barra";
-import { PROVA_DE_NIVEL, type FechamentoDoNivel, type Nivel } from "@/lib/curso/nivel";
+import { IconeDoSelo } from "@/components/selos/Medalha";
+import type { Familia } from "@/lib/curso/selos";
+import {
+  PROVA_DE_NIVEL,
+  type FechamentoDoNivel,
+  type Nivel,
+} from "@/lib/curso/nivel";
 
 /**
  * Os três módulos do degrau: tática, finais e repertório.
@@ -42,11 +48,13 @@ import { PROVA_DE_NIVEL, type FechamentoDoNivel, type Nivel } from "@/lib/curso/
  * baixo é a fila de revisão, que já existe e já derruba.
  */
 export function Modulos({
+  nivel,
   fechamento,
   puzzles,
   acerto,
   linhasARevisar,
 }: {
+  nivel: Nivel;
   fechamento: FechamentoDoNivel;
   /** Puzzles tentados no curso inteiro. */
   puzzles: number;
@@ -56,15 +64,23 @@ export function Modulos({
 }) {
   return (
     <section aria-labelledby="modulos" className="flex flex-col gap-3">
-      <h2 id="modulos" className="rotulo text-tinta-fraca">
-        O degrau, em três frentes
-      </h2>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+        <h2 id="modulos" className="text-base font-semibold text-tinta">
+          O nível {nivel}, em três frentes
+        </h2>
+        <span className="text-xs text-tinta-fraca">
+          o que falta para fechar o degrau
+        </span>
+      </div>
 
-      {/* Grade no desktop, empilhados no celular: três cartões numa coluna de
-          360 px viram três telas de rolagem, e três numa de 1366 px viram uma
-          coluna estreita com dois terços de vazio ao lado. */}
-      <ul className="grid gap-3 sm:grid-cols-3">
+      {/* **Uma lista, e não três cartões (18/9/2026).** Na coluna larga do painel, ao lado
+          da escada, três cartões lado a lado ficavam com ~190 px cada e a nota quebrava em
+          quatro linhas. Uma linha por frente, com o medalhão no metal do nível — o mesmo da
+          trilha —, lê como a lista de aulas de `/aberturas`. */}
+      <ul className="cartao divide-y divide-borda-fraca overflow-hidden">
         <Modulo
+          nivel={nivel}
+          familia="tatica"
           nome="Tática"
           href="/tatica"
           feitos={fechamento.tatica.feitos}
@@ -79,6 +95,8 @@ export function Modulos({
           }
         />
         <Modulo
+          nivel={nivel}
+          familia="finais"
           nome="Finais"
           href="/finais"
           feitos={fechamento.finais.feitos}
@@ -97,9 +115,14 @@ export function Modulos({
           }
         />
         <Modulo
+          nivel={nivel}
+          familia="repertorio"
           nome="Repertório"
           href="/aberturas"
-          feitos={Math.min(fechamento.repertorio.feitas, fechamento.repertorio.exigidas)}
+          feitos={Math.min(
+            fechamento.repertorio.feitas,
+            fechamento.repertorio.exigidas,
+          )}
           de={fechamento.repertorio.exigidas}
           conta={`${fechamento.repertorio.feitas} de ${fechamento.repertorio.exigidas} ${
             fechamento.repertorio.exigidas === 1 ? "linha" : "linhas"
@@ -117,6 +140,8 @@ export function Modulos({
 }
 
 function Modulo({
+  nivel,
+  familia,
   nome,
   href,
   feitos,
@@ -125,6 +150,8 @@ function Modulo({
   nota,
   alerta = false,
 }: {
+  nivel: Nivel;
+  familia: Familia;
   nome: string;
   href: string;
   feitos: number;
@@ -141,24 +168,39 @@ function Modulo({
 
   return (
     <li>
-      {/* A ordem é título → barra → nota, e a nota leva `mt-auto`.
-
-          Na primeira versão a contagem dividia a linha do título, e a dos finais
-          ("nada publicado neste nível") quebrava em duas: a barra daquele cartão
-          descia 18 px e a fileira das três entortava no meio. Com o título
-          sozinho na primeira linha, as três barras caem no mesmo `y` por
-          construção — e o `mt-auto` da nota faz os três cartões terminarem
-          juntos por mais linhas que ela ocupe. */}
-      <Link href={href} className="cartao-alvo foco flex h-full flex-col gap-2 px-4 py-3.5">
-        <span className="flex items-baseline justify-between gap-x-2">
-          <span className="text-sm font-semibold text-tinta">{nome}</span>
-          <span className="shrink-0 text-xs text-tinta-fraca tabular-nums">{conta}</span>
-        </span>
-        <Barra feitos={feitos} de={de} tom={completo ? "completo" : "metodo"} />
+      {/* Medalhão → nome e conta → barra → nota. O medalhão acende inteiro quando a
+          frente fecha, como o nó concluído da trilha. */}
+      <Link
+        href={href}
+        className="foco flex items-center gap-4 px-4 py-3.5 transition-colors hover:bg-carta-toque sm:px-5"
+      >
         <span
-          className={`mt-auto text-xs ${alerta ? "font-semibold text-aviso-tinta" : "text-tinta-fraca"}`}
+          aria-hidden
+          className={`trilha-no metal-${nivel} shrink-0`}
+          data-estado={completo ? "feito" : undefined}
+          style={
+            { "--lado": "2.75rem", boxShadow: "none" } as React.CSSProperties
+          }
         >
-          {nota}
+          <IconeDoSelo familia={familia} tamanho={20} />
+        </span>
+        <span className="flex min-w-0 flex-1 flex-col gap-1.5">
+          <span className="flex items-baseline justify-between gap-x-2">
+            <span className="text-sm font-semibold text-tinta">{nome}</span>
+            <span className="shrink-0 text-xs text-tinta-media tabular-nums">
+              {conta}
+            </span>
+          </span>
+          <Barra
+            feitos={feitos}
+            de={de}
+            tom={completo ? "completo" : "metodo"}
+          />
+          <span
+            className={`text-xs ${alerta ? "font-semibold text-aviso-tinta" : "text-tinta-fraca"}`}
+          >
+            {nota}
+          </span>
         </span>
       </Link>
     </li>

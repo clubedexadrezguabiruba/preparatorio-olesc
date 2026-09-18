@@ -1,5 +1,9 @@
 import Link from "next/link";
-import type { Acao } from "@/lib/curso/acao";
+import { IconeDoSelo } from "@/components/selos/Medalha";
+import { COR_DO_NIVEL } from "@/components/tatica/SeloDoTema";
+import type { Acao, TipoDeAcao } from "@/lib/curso/acao";
+import type { Nivel } from "@/lib/curso/nivel";
+import type { Familia } from "@/lib/curso/selos";
 
 /**
  * **AGORA** — o primeiro elemento da página, e a única coisa que ela manda fazer.
@@ -35,27 +39,58 @@ import type { Acao } from "@/lib/curso/acao";
  * que ele abriu o site para não ter de fazer. O resto do site continua a um
  * toque, na barra de baixo.
  */
-export function Agora({ acao }: { acao: Acao }) {
+export function Agora({ acao, nivel }: { acao: Acao; nivel: Nivel }) {
+  const cor = COR_DO_NIVEL[nivel];
   return (
+    // **No metal do degrau, como a faixa da `/trilha` (18/9/2026).** O cartão era cinza com
+    // uma borda verde, e o rótulo "AGORA" em caixa alta em cima do título — o único cartão
+    // do site com esse desenho. Agora ele é a faixa do nível atual, com o medalhão da
+    // frente (tática, finais, repertório) e o botão verde com lábio de `/finais`: é a
+    // mesma peça que o aluno já aperta lá para "Começar" uma aula.
     <section
       aria-labelledby="agora"
-      className="cartao flex flex-col gap-3 border-metodo-cheio px-4 py-4 sm:px-5 sm:py-5"
+      className={`trilha-faixa metal-${nivel} flex flex-col gap-4 px-5 py-5 sm:px-6`}
     >
-      <h2 id="agora" className="rotulo text-metodo-tinta">
-        Agora
-      </h2>
+      <div className="flex items-center gap-4">
+        <span
+          aria-hidden
+          className={`trilha-no metal-${nivel} shrink-0`}
+          style={{ "--lado": "3.5rem" } as React.CSSProperties}
+        >
+          <IconeDoSelo familia={FAMILIA[acao.tipo]} tamanho={26} />
+        </span>
+        <h2
+          id="agora"
+          className={`min-w-0 flex-1 font-serif text-2xl leading-tight font-semibold text-pretty sm:text-3xl ${cor.tinta}`}
+        >
+          {acao.titulo}
+        </h2>
+      </div>
 
-      <p className="titulo text-tinta">{acao.titulo}</p>
-      <p className="text-sm leading-relaxed text-tinta-media">{acao.motivo}</p>
+      <p className="max-w-prose text-sm leading-relaxed text-tinta-media">
+        {acao.motivo}
+      </p>
 
       {acao.href ? (
-        <Link
-          href={acao.href}
-          className="foco mt-1 flex min-h-12 items-center justify-center rounded-xl bg-metodo-cheio px-4 text-base font-semibold text-tinta-inversa transition-colors hover:bg-metodo-cheio-toque sm:w-fit sm:min-w-64 sm:px-8"
-        >
-          {acao.botao}
+        <Link href={acao.href} className="foco block rounded-xl sm:w-fit">
+          {/* `py` e não `flex items-center`: o `.finais-botao` declara `display: block` fora
+              das camadas do Tailwind, e ele ganha de qualquer `flex` utilitário. */}
+          <span className="finais-botao px-6 py-3.5 text-center text-sm font-bold tracking-wide uppercase sm:min-w-64">
+            {acao.botao}
+          </span>
         </Link>
       ) : null}
     </section>
   );
 }
+
+/** O desenho do medalhão: a frente de onde a ação vem, com os ícones dos selos. */
+const FAMILIA: Record<TipoDeAcao, Familia> = {
+  "revisao-tatica": "tatica",
+  tema: "tatica",
+  "revisao-finais": "finais",
+  aula: "finais",
+  linha: "repertorio",
+  prova: "nivel",
+  nada: "constante",
+};

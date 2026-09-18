@@ -58,9 +58,13 @@ export function Selos({ lista }: { lista: readonly SeloComData[] }) {
   if (tem.length === 0 && perto.length === 0) return null;
 
   return (
-    <section aria-labelledby="selos" className="flex flex-col gap-3">
+    // Um cartão na coluna do lado, embaixo da escada (18/9/2026).
+    <section
+      aria-labelledby="selos"
+      className="cartao flex flex-col gap-3 px-4 py-4"
+    >
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <h2 id="selos" className="rotulo text-tinta-fraca">
+        <h2 id="selos" className="text-base font-semibold text-tinta">
           Conquistas
         </h2>
         {/* O único link da seção leva às conquistas inteiras, com data — não a um lugar de treino. */}
@@ -68,7 +72,10 @@ export function Selos({ lista }: { lista: readonly SeloComData[] }) {
           <span className="text-tinta-fraca tabular-nums">
             {tem.length} de {lista.length}
           </span>
-          <Link href="/perfil" className="foco -my-3 inline-flex min-h-11 items-center font-medium text-metodo-tinta hover:underline">
+          <Link
+            href="/perfil"
+            className="foco -my-3 inline-flex min-h-11 items-center font-medium text-metodo-tinta hover:underline"
+          >
             Ver todas
           </Link>
         </span>
@@ -78,7 +85,11 @@ export function Selos({ lista }: { lista: readonly SeloComData[] }) {
         {recentes.map((selo, i) => (
           <li
             key={selo.id}
-            title={selo.conquistadoEm ? `${selo.conta} Ganho em ${dataDoSelo(selo.conquistadoEm)}.` : selo.conta}
+            title={
+              selo.conquistadoEm
+                ? `${selo.conta} Ganho em ${dataDoSelo(selo.conquistadoEm)}.`
+                : selo.conta
+            }
             className={`${i >= RECENTES_NO_CELULAR ? "hidden sm:flex" : "flex"} items-center gap-1.5 rounded-full border border-metodo-cheio bg-metodo-superficie/12 px-3 py-1.5 text-xs font-medium text-metodo-tinta-alta`}
           >
             <IconeDoSelo familia={selo.familia} id={selo.id} tamanho={14} />
@@ -90,11 +101,15 @@ export function Selos({ lista }: { lista: readonly SeloComData[] }) {
           <li
             key={selo.id}
             title={selo.conta}
-            className="flex items-center gap-1.5 rounded-full border border-dashed border-borda px-3 py-1.5 text-xs text-tinta-fraca"
+            // Duas linhas, o nome e o que falta: na coluna de 17rem a frase numa linha só
+            // quebrava no meio da pastilha redonda (18/9/2026).
+            className="flex w-full items-start gap-2 rounded-xl border border-dashed border-borda px-3 py-2 text-xs text-tinta-fraca"
           >
-            <IconeDoSelo familia={selo.familia} id={selo.id} tamanho={14} />
-            {selo.nome}
-            <span className="text-tinta-fraca">— {selo.falta}</span>
+            <IconeDoSelo familia={selo.familia} id={selo.id} tamanho={14} className="mt-px shrink-0" />
+            <span className="flex flex-col">
+              <span className="font-medium text-tinta-media">{selo.nome}</span>
+              <span>{selo.falta}</span>
+            </span>
           </li>
         ))}
       </ul>
