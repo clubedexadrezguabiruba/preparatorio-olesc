@@ -3,7 +3,7 @@
  */
 import assert from "node:assert/strict";
 import test from "node:test";
-import { aberturaDoId, dominioDaAulaV2, ehAulaDeFinais, idDaAulaDeAbertura } from "./dominio.ts";
+import { aberturaDoId, adversarioDaAulaDeAbertura, dominioDaAulaV2, ehAulaDeFinais, idDaAulaDeAbertura } from "./dominio.ts";
 import { aulaIdV2Schema } from "./modelo.ts";
 
 test("os três domínios saem do prefixo do id", () => {
@@ -26,4 +26,10 @@ test("o schema aceita AB- no padrão e recusa o que foge dele", () => {
   for (const ruim of ["AB-VERDES-FRANCESA-B", "AB-BRANCAS-B", "AB-brancas-francesa-b", "AB-BRANCAS-FRANCESA-BLOCO"]) {
     assert.equal(aulaIdV2Schema.safeParse(ruim).success, false, ruim);
   }
+});
+
+test("o adversário da aula de abertura sai da cor do curso: a capa do treino guiado da Siciliana fala das Brancas (18/9/2026)", () => {
+  assert.equal(adversarioDaAulaDeAbertura("AB-BRANCAS-FRANCESA-B"), "Pretas");
+  assert.equal(adversarioDaAulaDeAbertura("AB-PRETAS-SICILIANA-B"), "Brancas");
+  assert.equal(adversarioDaAulaDeAbertura("N1-KPK"), null);
 });

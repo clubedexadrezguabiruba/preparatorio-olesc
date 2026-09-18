@@ -37,6 +37,12 @@ export function aberturaDoId(id: string): AberturaDaAula | null {
   return { cor: casou[1].toLowerCase() as CorDoCurso, abertura: casou[2].toLowerCase(), bloco: casou[3] };
 }
 
+/** Quem joga contra o aluno numa aula de abertura: as Pretas num curso das brancas, e vice-versa. */
+export function adversarioDaAulaDeAbertura(id: string): "Brancas" | "Pretas" | null {
+  const curso = aberturaDoId(id);
+  return curso ? (curso.cor === "brancas" ? "Pretas" : "Brancas") : null;
+}
+
 /** O id de uma aula de abertura. O slug `caro-kann` vira `CARO-KANN`. */
 export function idDaAulaDeAbertura({ cor, abertura, bloco }: AberturaDaAula): string {
   return `AB-${cor.toUpperCase()}-${abertura.toUpperCase()}-${bloco.toUpperCase()}`;

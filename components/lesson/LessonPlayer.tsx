@@ -15,7 +15,7 @@ import { simboloDoNag } from "@/lib/chess/desenhos-do-tabuleiro";
 import { chaveDoSimbolo, type AulaDoAlunoV2, type EtapaDoAlunoV2 } from "@/lib/editor-v2/fluxo-do-aluno";
 import { Celebracao, useCelebracao } from "@/components/Celebracao";
 import { CapaDeSecao, type Capa } from "./CapaDeSecao";
-import { dominioDaAulaV2 } from "@/lib/editor-v2/dominio";
+import { adversarioDaAulaDeAbertura, dominioDaAulaV2 } from "@/lib/editor-v2/dominio";
 import { ganchosDoTreinoV2 } from "@/lib/editor-v2/ganchos-do-treino";
 import { AVANCO, PARTIDA } from "@/lib/lesson/falas";
 import { fimDoTreinador } from "@/lib/lesson/fim-do-treinador";
@@ -603,7 +603,7 @@ const FEN_INICIAL = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 export function capaDaEtapa(etapa: EtapaDoAlunoV2, aulaId: string): Capa | null {
   if (dominioDaAulaV2(aulaId) !== "abertura") return null;
   if ((etapa.tipo === "capitulo" || etapa.tipo === "introducao") && etapa.secao) return etapa.secao;
-  if (etapa.tipo === "treino" && !etapa.parada) return { titulo: "Hora de treinar", subtitulo: "Jogue as linhas da aula. As Pretas mudam de defesa a cada vez." };
+  if (etapa.tipo === "treino" && !etapa.parada) return { titulo: "Hora de treinar", subtitulo: `Jogue as linhas da aula. As ${adversarioDaAulaDeAbertura(aulaId) ?? "Pretas"} mudam de defesa a cada vez.` };
   // "depois sozinho" saiu em 18/9/2026 junto com "Ele joga sozinho": as duas
   // usavam "sozinho" para dizer coisas diferentes, e nenhuma das duas era clara.
   if (etapa.tipo === "treinador") return { titulo: "Move trainer", subtitulo: "Cada linha da aula uma vez: primeiro com a seta, depois de memória." };
