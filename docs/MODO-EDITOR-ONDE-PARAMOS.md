@@ -7850,3 +7850,9 @@ continuidade sem esconder o rating nem a evolução.
 O cabeçalho do painel agora diz “Bem-vindo, [nome]!” e completa com “Vamos treinar e praticar
 seu xadrez.”. O avatar, o nível e os atalhos de perfil continuam no mesmo lugar; a mudança dá
 identidade e transforma a primeira linha da página em convite para começar.
+
+# Meio-jogo entrou na navegação — 18/9/2026
+
+“Meio-jogo” aparece imediatamente depois de “Partidas” no topo e na gaveta “Mais” do celular.
+A rota `/meio-jogo` já existe, preserva cabeçalho e progresso do aluno e mostra apenas “Em breve”
+enquanto o conteúdo ainda está sendo preparado.

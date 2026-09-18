@@ -34,7 +34,7 @@ import type { LarguraDaMoldura } from "./Moldura";
  *
  * ## O celular, especificado
  *
- * Marca + 6 destinos + nível + sequência não é uma "barra fina", e cada pixel
+ * Marca + 7 destinos + nível + sequência não é uma "barra fina", e cada pixel
  * dela sai da primeira dobra — que é a outra meta do redesenho. Então a 360 px
  * a navegação se parte em duas:
  *
@@ -49,7 +49,7 @@ import type { LarguraDaMoldura } from "./Moldura";
  * ```
  *
  * Quatro destinos principais embaixo e um "Mais" com Aberturas, Trilha e
- * Partidas. O "Mais" é um `<details>`, e não um menu de JavaScript: ele abre
+ * Partidas e Meio-jogo. O "Mais" é um `<details>`, e não um menu de JavaScript: ele abre
  * sem estado, sem hidratação e sem componente de cliente, e o teclado já sabe
  * operá-lo. Um menu de três itens não paga um `useState`.
  *
@@ -77,7 +77,7 @@ import type { LarguraDaMoldura } from "./Moldura";
  * antes do avatar, e continua como estava.
  */
 
-export type Destino = "painel" | "tatica" | "finais" | "aberturas" | "trilha" | "partidas" | "turma" | "perfil";
+export type Destino = "painel" | "tatica" | "finais" | "aberturas" | "trilha" | "partidas" | "meio-jogo" | "turma" | "perfil";
 
 type Item = {
   id: Destino;
@@ -106,6 +106,7 @@ const SECUNDARIOS: Item[] = [
   // depois delas —, depois o jogo, e por último o social.
   { id: "trilha", nome: "A trilha", href: "/trilha" },
   { id: "partidas", nome: "Partidas", href: "/partidas" },
+  { id: "meio-jogo", nome: "Meio-jogo", href: "/meio-jogo" },
   // A turma: os colegas, em ordem alfabética, e a vitrine de cada um (17/9/2026).
   { id: "turma", nome: "Turma", href: "/turma" },
 ];
